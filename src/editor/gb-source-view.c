@@ -168,7 +168,7 @@ get_filename (GbSourceView *view)
   file = gb_editor_document_get_file (GB_EDITOR_DOCUMENT (buffer));
 
   if (!file)
-    return g_strdup_printf ("%s", _ ("Unsaved File"));
+    return g_strdup ("");
 
   return g_file_get_basename (file);
 }
