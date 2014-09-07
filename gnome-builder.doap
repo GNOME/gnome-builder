@@ -13,6 +13,7 @@
   <bug-database rdf:resource="https://bugzilla.gnome.org/browse.cgi?product=gnome-builder" />
 
   <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
+  <programming-language>C</programming-language>
 
   <maintainer>
     <foaf:Person>
