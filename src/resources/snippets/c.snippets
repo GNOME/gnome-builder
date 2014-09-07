@@ -69,46 +69,7 @@ snippet inc
 	#include "${1}"$0
 snippet Inc
 	#include <${1}>$0
-snippet hobject
-	#ifndef ${$1|functify|upper}_H
-	#define ${$1|functify|upper}_H
-
-	#include <${3:glib-object.h}>
-
-	G_BEGIN_DECLS
-
-	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}            (${$1|functify}_get_type())
-	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1))
-	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1 const))
-	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1Class))
-	#define ${$1|functify|namespace|upper}_IS_${$1|class|functify|upper}(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}))
-	#define ${$1|functify|namespace|upper}_IS_${$1|class|functify|upper}_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}))
-	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1Class))
-
-	typedef struct _$1        $1;
-	typedef struct _$1Class   $1Class;
-	typedef struct _$1Private $1Private;
-
-	struct _${1:MyObject}
-	{
-		${2:GObject} parent;
-
-		/*< private >*/
-		$1Private *priv;
-	};
-
-	struct _$1Class
-	{
-		$2Class parent;
-	};
-
-	GType ${$1|functify}_get_type (void) G_GNUC_CONST;
-	$1 *${$1|functify}_new (void);
-	$0
-	G_END_DECLS
-
-	#endif /* ${$1|functify|upper}_H */
-snippet cobject
+snippet gobject
 	#include "${1}.h"
 
 	struct _${2:$1|camelize}Private
