@@ -595,7 +595,7 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
                        _ ("The indent width."),
                        1,
                        100,
-                       3,
+                       2,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_INDENT_WIDTH,
                                    gParamSpecs[PROP_INDENT_WIDTH]);
@@ -606,7 +606,7 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
                        _ ("The width of tabs."),
                        1,
                        32,
-                       3,
+                       2,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_TAB_WIDTH,
                                    gParamSpecs[PROP_TAB_WIDTH]);
@@ -650,8 +650,8 @@ gb_editor_settings_init (GbEditorSettings *settings)
   settings->priv->show_line_numbers = TRUE;
   settings->priv->right_margin_position = 80;
   settings->priv->insert_spaces_instead_of_tabs = TRUE;
-  settings->priv->tab_width = 3;
-  settings->priv->indent_width = 3;
+  settings->priv->tab_width = 2;
+  settings->priv->indent_width = 2;
   settings->priv->font_desc = font_desc;
   settings->priv->style_scheme = scheme;
 }
