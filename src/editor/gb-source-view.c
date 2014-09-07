@@ -367,6 +367,7 @@ gb_source_view_push_snippet (GbSourceView    *view,
   GtkTextMark *mark;
   GtkTextIter iter;
   gboolean has_more_tab_stops;
+  gboolean insert_spaces;
   gchar *name;
 
   g_return_if_fail (GB_IS_SOURCE_VIEW (view));
@@ -384,6 +385,9 @@ gb_source_view_push_snippet (GbSourceView    *view,
     gb_source_snippet_pause (previous);
 
   g_queue_push_head (priv->snippets, g_object_ref (snippet));
+
+  insert_spaces = gtk_source_view_get_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (view));
+  gb_source_snippet_set_insert_spaces_instead_of_tabs (snippet, insert_spaces);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
   mark = gtk_text_buffer_get_insert (buffer);

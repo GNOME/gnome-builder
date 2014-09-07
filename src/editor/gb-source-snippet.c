@@ -38,12 +38,14 @@ struct _GbSourceSnippetPrivate
   gint                    tab_stop;
   gint                    max_tab_stop;
   gint                    current_chunk;
-  gboolean                inserted;
+  guint                   inserted : 1;
+  guint                   insert_spaces_instead_of_tabs : 1;
 };
 
 enum {
   PROP_0,
   PROP_BUFFER,
+  PROP_INSERT_SPACES_INSTEAD_OF_TABS,
   PROP_MARK_BEGIN,
   PROP_MARK_END,
   PROP_TAB_STOP,
@@ -73,6 +75,7 @@ gb_source_snippet_copy (GbSourceSnippet *snippet)
   GbSourceSnippetPrivate *priv;
   GbSourceSnippetChunk *chunk;
   GbSourceSnippet *ret;
+  gboolean spaces;
   gint i;
 
   ENTRY;
@@ -81,7 +84,10 @@ gb_source_snippet_copy (GbSourceSnippet *snippet)
 
   priv = snippet->priv;
 
+  spaces = snippet->priv->insert_spaces_instead_of_tabs;
+
   ret = g_object_new (GB_TYPE_SOURCE_SNIPPET,
+                      "insert-spaces-instead-of-tabs", spaces,
                       "trigger", snippet->priv->trigger,
                       NULL);
 
@@ -94,6 +100,26 @@ gb_source_snippet_copy (GbSourceSnippet *snippet)
     }
 
   RETURN (ret);
+}
+
+gboolean
+gb_source_snippet_get_insert_spaces_instead_of_tabs (GbSourceSnippet *snippet)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_SNIPPET (snippet), FALSE);
+
+  return snippet->priv->insert_spaces_instead_of_tabs;
+}
+
+void
+gb_source_snippet_set_insert_spaces_instead_of_tabs (GbSourceSnippet *snippet,
+                                                     gboolean         insert_spaces_instead_of_tabs)
+{
+  g_return_if_fail (GB_IS_SOURCE_SNIPPET (snippet));
+
+  snippet->priv->insert_spaces_instead_of_tabs =
+    insert_spaces_instead_of_tabs;
+  g_object_notify_by_pspec (G_OBJECT (snippet),
+                            gParamSpecs [PROP_INSERT_SPACES_INSTEAD_OF_TABS]);
 }
 
 gint
@@ -893,6 +919,10 @@ gb_source_snippet_get_property (GObject    *object,
       g_value_set_object (value, snippet->priv->buffer);
       break;
 
+    case PROP_INSERT_SPACES_INSTEAD_OF_TABS:
+      g_value_set_boolean (value, snippet->priv->insert_spaces_instead_of_tabs);
+      break;
+
     case PROP_MARK_BEGIN:
       g_value_set_object (value, snippet->priv->mark_begin);
       break;
@@ -924,6 +954,11 @@ gb_source_snippet_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_INSERT_SPACES_INSTEAD_OF_TABS:
+      gb_source_snippet_set_insert_spaces_instead_of_tabs (snippet,
+                                                           g_value_get_boolean (value));
+      break;
+
     case PROP_TRIGGER:
       gb_source_snippet_set_trigger (snippet, g_value_get_string (value));
       break;
@@ -954,6 +989,15 @@ gb_source_snippet_class_init (GbSourceSnippetClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_BUFFER,
                                    gParamSpecs[PROP_BUFFER]);
+
+  gParamSpecs [PROP_INSERT_SPACES_INSTEAD_OF_TABS] =
+     g_param_spec_boolean ("insert-spaces-instead-of-tabs",
+                          _("Insert Spaces Instead of Tabs"),
+                          _("Insert Spaces Instead of Tabs"),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_INSERT_SPACES_INSTEAD_OF_TABS,
+                                   gParamSpecs [PROP_INSERT_SPACES_INSTEAD_OF_TABS]);
 
   gParamSpecs[PROP_MARK_BEGIN] =
     g_param_spec_object ("mark-begin",
