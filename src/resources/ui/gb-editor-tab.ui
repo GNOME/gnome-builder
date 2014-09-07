@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbEditorTab" parent="GbTab">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkOverlay" id="overlay">
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkScrolledWindow" id="scroller">
+            <property name="visible">True</property>
+            <property name="vexpand">True</property>
+            <child>
+              <object class="GbSourceView" id="source_view">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="show_line_numbers">True</property>
+                <property name="show_right_margin">True</property>
+                <property name="right_margin_position">80</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkProgressBar" id="progress_bar">
+            <property name="visible">False</property>
+            <property name="halign">fill</property>
+            <property name="valign">start</property>
+            <property name="fraction">0.0</property>
+	    <style>
+              <class name="osd"/>
+            </style>
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="NautilusFloatingBar" id="floating_bar">
+            <property name="visible">True</property>
+            <property name="halign">end</property>
+            <property name="valign">end</property>
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkRevealer" id="revealer">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="valign">start</property>
+            <child>
+              <object class="GtkFrame" id="frame">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_end">12</property>
+                <style>
+                  <class name="gb-search-slider"/>
+                </style>
+                <child>
+                  <object class="GtkBox" id="hbox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">horizontal</property>
+                    <style>
+                      <class name="linked"/>
+                    </style>
+                    <child>
+                      <object class="GdTaggedEntry" id="search_entry">
+                        <property name="visible">True</property>
+                        <property name="tag-close-visible">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="width-request">260</property>
+                        <property name="primary-icon-activatable">True</property>
+                        <property name="primary-icon-sensitive">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="go_up_button">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkImage" id="up_image">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_size">1</property>
+                            <property name="icon_name">go-up-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="go_down_button">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkImage" id="down_image">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_size">1</property>
+                            <property name="icon_name">go-down-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GbSourceSnippetCompletionProvider" id="snippets_provider">
+    <property name="source-view">source_view</property>
+  </object>
+  <object class="GtkSourceSearchSettings" id="search_settings">
+  </object>
+</interface>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder">
+    <file>css/builder.Adwaita.css</file>
+    <file>editor/uncrustify.c.cfg</file>
+    <file>keybindings/default.ini</file>
+    <file>snippets/c.snippets</file>
+    <file>ui/gb-devhelp-tab.ui</file>
+    <file>ui/gb-editor-tab.ui</file>
+    <file>ui/gb-workbench.ui</file>
+  </gresource>
+</gresources>

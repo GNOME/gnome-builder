@@ -1,0 +1,6 @@
+m4_define([project_name],[gnome-builder])
+m4_define([project_major_version],[0])
+m4_define([project_minor_version],[1])
+m4_define([project_micro_version],[0])
+m4_define([project_interface_age],[0])
+m4_define([project_bugreport_url],[https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder])

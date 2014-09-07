@@ -1,0 +1,28 @@
+Builder - Develop software for GNOME
+====================================
+
+Bugs: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder
+Design: https://live.gnome.org/Design/Apps/Builder
+Download: http://download.gnome.org/sources/gnome-builder
+Git: http://git.gnome.org/browse/gnome-builder
+Website: https://wiki.gnome.org/Apps/Builder
+IRC: irc.gimp.net #gnome-builder
+
+----
+
+Builder attempts to be an IDE for writing software for GNOME. It does not try
+to be a generic IDE, but one specialized for writing GNOME software. We believe
+this this focus will help us to build something great.
+
+If you would like to help in this effort, join our IRC channel and we will help
+you find something to work on.
+
+Builder is written in C, but some aspects of Builder may be written in another
+language if it makes sense.
+
+----
+
+Builder is licensed under the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
+

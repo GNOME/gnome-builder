@@ -1,0 +1,1 @@
+AM_CONDITIONAL([ENABLE_TRACING], [test "$enable_tracing" = "yes"])

@@ -1,0 +1,9 @@
+# Define the minimum version of Clang compiler.
+m4_define(clang_major_required_version, 3)
+m4_define(clang_minor_required_version, 3)
+
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
+#if !(defined(__clang__) && ((__clang_major__ > clang_major_required_version) || ((__clang_major__ == clang_major_required_version) && (__clang_minor__ >= clang_minor_required_version))))
+#error Not a supported Clang compiler
+#endif
+])], [c_compiler="clang"], [])
