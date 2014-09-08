@@ -356,6 +356,44 @@ animate_in (GbSourceView      *view,
 #undef Y_GROW
 }
 
+static gchar *
+gb_source_view_get_line_prefix (GbSourceView      *view,
+                                const GtkTextIter *iter)
+{
+  GtkTextIter begin;
+  GString *str;
+
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), NULL);
+  g_return_val_if_fail (iter, NULL);
+
+  gtk_text_iter_assign (&begin, iter);
+  gtk_text_iter_set_line_offset (&begin, 0);
+
+  str = g_string_new (NULL);
+
+  do
+    {
+      gunichar c;
+
+      c = gtk_text_iter_get_char (&begin);
+
+      switch (c)
+        {
+        case '\t':
+        case ' ':
+          g_string_append_unichar (str, c);
+          break;
+        default:
+          g_string_append_c (str, ' ');
+          break;
+        }
+    }
+  while (gtk_text_iter_forward_char (&begin) &&
+         (gtk_text_iter_compare (&begin, iter) < 0));
+
+  return g_string_free (str, FALSE);
+}
+
 void
 gb_source_view_push_snippet (GbSourceView    *view,
                              GbSourceSnippet *snippet)
@@ -369,6 +407,7 @@ gb_source_view_push_snippet (GbSourceView    *view,
   gboolean has_more_tab_stops;
   gboolean insert_spaces;
   gchar *name;
+  gchar *line_prefix;
   guint tab_width;
 
   g_return_if_fail (GB_IS_SOURCE_VIEW (view));
@@ -387,15 +426,19 @@ gb_source_view_push_snippet (GbSourceView    *view,
 
   g_queue_push_head (priv->snippets, g_object_ref (snippet));
 
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  mark = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+
   insert_spaces = gtk_source_view_get_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (view));
   gb_source_snippet_context_set_use_spaces (context, insert_spaces);
 
   tab_width = gtk_source_view_get_tab_width (GTK_SOURCE_VIEW (view));
   gb_source_snippet_context_set_tab_width (context, tab_width);
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-  mark = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+  line_prefix = gb_source_view_get_line_prefix (view, &iter);
+  gb_source_snippet_context_set_line_prefix (context, line_prefix);
+  g_free (line_prefix);
 
   gb_source_view_block_handlers (view);
   has_more_tab_stops = gb_source_snippet_begin (snippet, buffer, &iter);
