@@ -43,7 +43,7 @@ struct _GbSourceSnippetContextPrivate
   GHashTable *shared;
   GHashTable *variables;
   gchar      *line_prefix;
-  gint        tab_size;
+  gint        tab_width;
   gboolean    use_spaces;
 };
 
@@ -460,7 +460,7 @@ gb_source_snippet_context_expand (GbSourceSnippetContext *context,
       else if (c == '\t')
         {
           if (priv->use_spaces)
-            for (i = 0; i < priv->tab_size; i++)
+            for (i = 0; i < priv->tab_width; i++)
               g_string_append_c (str, ' ');
 
           else
@@ -481,11 +481,11 @@ gb_source_snippet_context_expand (GbSourceSnippetContext *context,
 }
 
 void
-gb_source_snippet_context_set_tab_size (GbSourceSnippetContext *context,
-                                        gint                    tab_size)
+gb_source_snippet_context_set_tab_width (GbSourceSnippetContext *context,
+                                         gint                    tab_width)
 {
   g_return_if_fail (GB_IS_SOURCE_SNIPPET_CONTEXT (context));
-  context->priv->tab_size = tab_size;
+  context->priv->tab_width = tab_width;
 }
 
 void
