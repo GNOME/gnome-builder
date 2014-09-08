@@ -701,18 +701,9 @@ void
 gb_editor_tab_set_font_desc (GbEditorTab                *tab,
                              const PangoFontDescription *font_desc)
 {
-  ENTRY;
-
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
-  /*
-   * TODO: This causes the popup window to change font too. There needs
-   *       to be a better way to set the font in Gtk for the textview.
-   */
-
   gtk_widget_override_font (GTK_WIDGET (tab->priv->source_view), font_desc);
-
-  EXIT;
 }
 
 static void
