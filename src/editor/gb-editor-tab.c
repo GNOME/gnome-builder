@@ -206,6 +206,7 @@ gb_editor_tab_reformat (GbEditorTab *tab)
 {
   GbEditorTabPrivate *priv;
   GbSourceFormatter *formatter;
+  GtkSourceLanguage *language;
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
@@ -236,7 +237,8 @@ gb_editor_tab_reformat (GbEditorTab *tab)
   char_offset = gtk_text_iter_get_line_offset (&iter);
   line_number = gtk_text_iter_get_line (&iter);
 
-  formatter = gb_source_formatter_new_from_language (NULL);
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+  formatter = gb_source_formatter_new_from_language (language);
 
   if (!gb_source_formatter_format (formatter,
                                    input,
@@ -247,7 +249,7 @@ gb_editor_tab_reformat (GbEditorTab *tab)
     {
       g_warning ("%s", error->message);
       g_clear_error (&error);
-      goto cleanup;
+      GOTO (cleanup);
     }
 
   gtk_text_buffer_begin_user_action (buffer);
@@ -255,7 +257,9 @@ gb_editor_tab_reformat (GbEditorTab *tab)
   gb_source_view_clear_snippets (priv->source_view);
 
   /* TODO: Keep the cursor on same CXCursor from Clang instead of the
-   *       same character offset within the buffer.
+   *       same character offset within the buffer. We probably want
+   *       to defer this to the formatter API since it will be language
+   *       specific.
    */
 
   gtk_text_buffer_set_text (buffer, output, -1);

@@ -31,6 +31,7 @@ struct _GbSourceFormatterPrivate
 
 enum {
   PROP_0,
+  PROP_CAN_FORMAT,
   PROP_LANGUAGE,
   LAST_PROP
 };
@@ -49,6 +50,46 @@ gb_source_formatter_new_from_language (GtkSourceLanguage *language)
                        NULL);
 }
 
+static gchar *
+get_config_path (const gchar *lang_id)
+{
+  gchar *path;
+  gchar *name;
+
+  name = g_strdup_printf ("uncrustify.%s.cfg", lang_id);
+  path = g_build_filename (g_get_user_config_dir (),
+                           "gnome-builder", "uncrustify", name,
+                           NULL);
+  g_free (name);
+
+  return path;
+}
+
+gboolean
+gb_source_formatter_get_can_format (GbSourceFormatter *formatter)
+{
+  GtkSourceLanguage *language;
+  const gchar *lang_id;
+  gboolean ret;
+  gchar *path;
+
+  g_return_val_if_fail (GB_IS_SOURCE_FORMATTER (formatter), FALSE);
+
+  language = formatter->priv->language;
+
+  if (!language)
+    return FALSE;
+
+  lang_id = gtk_source_language_get_id (language);
+  path = get_config_path (lang_id);
+
+  ret = g_file_test (path, G_FILE_TEST_IS_REGULAR);
+
+  g_free (path);
+
+  return ret;
+}
+
 gboolean
 gb_source_formatter_format (GbSourceFormatter *formatter,
                             const gchar       *input,
@@ -57,17 +98,28 @@ gb_source_formatter_format (GbSourceFormatter *formatter,
                             gchar            **output,
                             GError           **error)
 {
+  GbSourceFormatterPrivate *priv;
   GSubprocessFlags flags;
   GSubprocess *proc;
   gboolean ret = FALSE;
-  char *stderr_buf = NULL;
+  gchar *stderr_buf = NULL;
+  gchar *config_path;
 
   g_return_val_if_fail (GB_IS_SOURCE_FORMATTER (formatter), FALSE);
   g_return_val_if_fail (input, FALSE);
 
-  /*
-   * TODO: Only format C-like code for now.
-   */
+  priv = formatter->priv;
+
+  if (!gb_source_formatter_get_can_format (formatter))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "Failed to locate uncrustify configuration.");
+      return FALSE;
+    }
+
+  config_path = get_config_path (gtk_source_language_get_id (priv->language));
 
   flags = (G_SUBPROCESS_FLAGS_STDIN_PIPE |
            G_SUBPROCESS_FLAGS_STDOUT_PIPE |
@@ -77,7 +129,7 @@ gb_source_formatter_format (GbSourceFormatter *formatter,
                            error,
                            "uncrustify",
                            "-c",
-                           "clutter-uncrustify.cfg",
+                           config_path,
                            is_fragment ? "--frag" : NULL,
                            NULL);
 
@@ -99,6 +151,7 @@ gb_source_formatter_format (GbSourceFormatter *formatter,
 finish:
   g_clear_object (&proc);
   g_free (stderr_buf);
+  g_free (config_path);
 
   return ret;
 }
@@ -130,6 +183,7 @@ gb_source_formatter_set_language (GbSourceFormatter *formatter,
   priv->language = language;
 
   g_object_notify_by_pspec (G_OBJECT (formatter), gParamSpecs[PROP_LANGUAGE]);
+  g_object_notify_by_pspec (G_OBJECT (formatter), gParamSpecs[PROP_CAN_FORMAT]);
 }
 
 static void
@@ -226,8 +280,13 @@ gb_source_formatter_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CAN_FORMAT:
+      g_value_set_boolean (value,
+                           gb_source_formatter_get_can_format (formatter));
+      break;
     case PROP_LANGUAGE:
-      g_value_set_object (value, gb_source_formatter_get_language (formatter));
+      g_value_set_object (value,
+                          gb_source_formatter_get_language (formatter));
       break;
 
     default:
@@ -263,6 +322,15 @@ gb_source_formatter_class_init (GbSourceFormatterClass *klass)
   object_class->finalize = gb_source_formatter_finalize;
   object_class->get_property = gb_source_formatter_get_property;
   object_class->set_property = gb_source_formatter_set_property;
+
+  gParamSpecs [PROP_CAN_FORMAT] =
+    g_param_spec_boolean ("can-format",
+                          _("Can Format"),
+                          _("If the source language can be formatted."),
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_CAN_FORMAT,
+                                   gParamSpecs [PROP_CAN_FORMAT]);
 
   gParamSpecs[PROP_LANGUAGE] =
     g_param_spec_object ("language",
