@@ -52,6 +52,7 @@ struct _GbEditorTabClass
 
 GType             gb_editor_tab_get_type      (void) G_GNUC_CONST;
 GbEditorDocument *gb_editor_tab_get_document  (GbEditorTab                *tab);
+GtkSourceFile    *gb_editor_tab_get_file      (GbEditorTab                *tab);
 GbEditorSettings *gb_editor_tab_get_settings  (GbEditorTab                *tab);
 void              gb_editor_tab_set_settings  (GbEditorTab                *tab,
                                                GbEditorSettings           *settings);

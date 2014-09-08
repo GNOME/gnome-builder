@@ -96,6 +96,11 @@ struct _GbEditorTabPrivate
   GdTaggedEntryTag    *search_entry_tag;
 
   /*
+   * Information about our target file and encoding.
+   */
+  GtkSourceFile *file;
+
+  /*
    * If we are an unsaved document,
    * track our unsaved file number.
    */
@@ -105,6 +110,7 @@ struct _GbEditorTabPrivate
 enum {
   PROP_0,
   PROP_DOCUMENT,
+  PROP_FILE,
   PROP_FONT_DESC,
   PROP_SETTINGS,
   LAST_PROP
@@ -112,7 +118,7 @@ enum {
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorTab, gb_editor_tab, GB_TYPE_TAB)
 
-static guint gUnsaved;
+static guint       gUnsaved;
 static GParamSpec *gParamSpecs[LAST_PROP];
 
 /**
@@ -130,6 +136,41 @@ gb_editor_tab_get_document (GbEditorTab *tab)
 
   return tab->priv->document;
 }
+
+/**
+ * gb_editor_tab_get_file:
+ * @tab: A #GbEditorTab.
+ *
+ * Returns the current file for this tab, if there is one.
+ * If no file has been specified, then NULL is returned.
+ *
+ * Returns: (transfer none): A #GtkSourceFile.
+ */
+GtkSourceFile *
+gb_editor_tab_get_file (GbEditorTab *tab)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), NULL);
+
+  return tab->priv->file;
+}
+
+static void
+gb_editor_tab_set_file (GbEditorTab   *tab,
+                        GtkSourceFile *file)
+{
+  GbEditorTabPrivate *priv;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+  g_return_if_fail (!file || GTK_SOURCE_IS_FILE (file));
+  g_return_if_fail (!tab->priv->file);
+
+  priv = tab->priv;
+
+  priv->file = file ? g_object_ref (file) : NULL;
+
+  g_object_notify_by_pspec (G_OBJECT (tab), gParamSpecs [PROP_FILE]);
+}
+
 
 /**
  * gb_editor_tab_go_to_start:
@@ -1081,10 +1122,18 @@ on_source_view_push_snippet (GbSourceView           *source_view,
   g_return_if_fail (iter);
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
-  /*
-   * TODO: Get filename from GtkSourceFile.
-   */
-  gb_source_snippet_context_add_variable (context, "filename", "");
+  if (tab->priv->file)
+    {
+      GFile *file = gtk_source_file_get_location (tab->priv->file);
+
+      if (file)
+        {
+          gchar *name = g_file_get_basename (file);
+          gb_source_snippet_context_add_variable (context, "filename", name);
+          g_free (name);
+          g_object_unref (file);
+        }
+    }
 }
 
 static void
@@ -1185,6 +1234,7 @@ gb_editor_tab_dispose (GObject *object)
 
   g_clear_object (&tab->priv->document);
   g_clear_object (&tab->priv->search_entry_tag);
+  g_clear_object (&tab->priv->file);
 
   EXIT;
 }
@@ -1193,7 +1243,9 @@ static void
 gb_editor_tab_finalize (GObject *object)
 {
   ENTRY;
+
   G_OBJECT_CLASS (gb_editor_tab_parent_class)->finalize (object);
+
   EXIT;
 }
 
@@ -1209,6 +1261,10 @@ gb_editor_tab_get_property (GObject    *object,
     {
     case PROP_DOCUMENT:
       g_value_set_object (value, gb_editor_tab_get_document (tab));
+      break;
+
+    case PROP_FILE:
+      g_value_set_object (value, gb_editor_tab_get_file (tab));
       break;
 
     case PROP_SETTINGS:
@@ -1232,6 +1288,10 @@ gb_editor_tab_set_property (GObject      *object,
     {
     case PROP_DOCUMENT:
       gb_editor_tab_set_document (tab, g_value_get_object (value));
+      break;
+
+    case PROP_FILE:
+      gb_editor_tab_set_file (tab, g_value_get_object (value));
       break;
 
     case PROP_FONT_DESC:
@@ -1265,7 +1325,7 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
   tab_class->freeze_drag = gb_editor_tab_freeze_drag;
   tab_class->thaw_drag = gb_editor_tab_thaw_drag;
 
-  gParamSpecs[PROP_DOCUMENT] =
+  gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
                          _ ("Document"),
                          _ ("The document to edit."),
@@ -1276,7 +1336,18 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
   g_object_class_install_property (object_class, PROP_DOCUMENT,
                                    gParamSpecs[PROP_DOCUMENT]);
 
-  gParamSpecs[PROP_FONT_DESC] =
+  gParamSpecs [PROP_FILE] =
+      g_param_spec_object ("file",
+                           _("File"),
+                           _("The file for the tab."),
+                           GTK_SOURCE_TYPE_FILE,
+                           (G_PARAM_READWRITE |
+                            G_PARAM_CONSTRUCT_ONLY |
+                            G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_FILE,
+                                   gParamSpecs [PROP_FILE]);
+
+  gParamSpecs [PROP_FONT_DESC] =
     g_param_spec_boxed ("font-desc",
                         _ ("Font Description"),
                         _ ("The Pango Font Description to use in the editor."),
@@ -1285,7 +1356,7 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
   g_object_class_install_property (object_class, PROP_FONT_DESC,
                                    gParamSpecs[PROP_FONT_DESC]);
 
-  gParamSpecs[PROP_SETTINGS] =
+  gParamSpecs [PROP_SETTINGS] =
     g_param_spec_object ("settings",
                          _ ("Settings"),
                          _ ("The editor settings."),
