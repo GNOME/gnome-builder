@@ -16,8 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "formatter"
+#define UNCRUSTIFY_CONFIG_DIRECTORY "/org/gnome/builder/editor/uncrustify/"
+
 #include <glib/gi18n.h>
 
+#include "gb-log.h"
 #include "gb-source-formatter.h"
 
 struct _GbSourceFormatterPrivate
@@ -129,6 +133,78 @@ gb_source_formatter_set_language (GbSourceFormatter *formatter,
 }
 
 static void
+gb_source_formatter_extract_configs (void)
+{
+  GError *error = NULL;
+  gchar **names;
+  gchar *target_dir;
+  guint i;
+
+  ENTRY;
+
+  target_dir = g_build_filename (g_get_user_config_dir (),
+                                 "gnome-builder", "uncrustify",
+                                 NULL);
+
+  if (!g_file_test (target_dir, G_FILE_TEST_IS_DIR))
+    {
+      g_mkdir_with_parents (target_dir, 0750);
+    }
+
+  names = g_resources_enumerate_children (UNCRUSTIFY_CONFIG_DIRECTORY,
+					  G_RESOURCE_LOOKUP_FLAGS_NONE,
+					  &error);
+
+  if (!names)
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+      GOTO (cleanup);
+    }
+
+  for (i = 0; names [i]; i++)
+    {
+      GFile *file;
+      gchar *target_path;
+      gchar *uri;
+
+      uri = g_strdup_printf ("resource://"UNCRUSTIFY_CONFIG_DIRECTORY"%s",
+                             names [i]);
+      file = g_file_new_for_uri (uri);
+
+      target_path = g_build_filename (g_get_user_config_dir (),
+                                      "gnome-builder", "uncrustify", names [i],
+                                      NULL);
+
+      if (!g_file_test (target_path, G_FILE_TEST_IS_REGULAR))
+        {
+          GFile *target_file;
+
+          target_file = g_file_new_for_path (target_path);
+          if (!g_file_copy (file, target_file, G_FILE_COPY_NONE, NULL, NULL,
+                            NULL, &error))
+            {
+              g_warning ("Failure copying to \"%s\": %s", target_path,
+                         error->message);
+              g_clear_error (&error);
+            }
+
+          g_clear_object (&target_file);
+        }
+
+      g_clear_object (&file);
+      g_free (uri);
+      g_free (target_path);
+    }
+
+cleanup:
+  g_strfreev (names);
+  g_free (target_dir);
+
+  EXIT;
+}
+
+static void
 gb_source_formatter_finalize (GObject *object)
 {
   GbSourceFormatterPrivate *priv;
@@ -196,6 +272,8 @@ gb_source_formatter_class_init (GbSourceFormatterClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_LANGUAGE,
                                    gParamSpecs[PROP_LANGUAGE]);
+
+  gb_source_formatter_extract_configs ();
 }
 
 static void
