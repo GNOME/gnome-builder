@@ -163,23 +163,6 @@ gb_source_view_set_show_shadow (GbSourceView *view,
   invalidate_window (view);
 }
 
-static gchar *
-get_filename (GbSourceView *view)
-{
-  GtkTextBuffer *buffer;
-  GFile *file;
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-  g_assert (GB_IS_EDITOR_DOCUMENT (buffer));
-
-  file = gb_editor_document_get_file (GB_EDITOR_DOCUMENT (buffer));
-
-  if (!file)
-    return g_strdup ("");
-
-  return g_file_get_basename (file);
-}
-
 static void
 get_rect_for_iters (GtkTextView       *text_view,
                     const GtkTextIter *iter1,
@@ -417,7 +400,6 @@ gb_source_view_push_snippet (GbSourceView    *view,
   GtkTextIter iter;
   gboolean has_more_tab_stops;
   gboolean insert_spaces;
-  gchar *name;
   gchar *line_prefix;
   guint tab_width;
 
@@ -427,10 +409,6 @@ gb_source_view_push_snippet (GbSourceView    *view,
   priv = view->priv;
 
   context = gb_source_snippet_get_context (snippet);
-
-  name = get_filename (view);
-  gb_source_snippet_context_add_variable (context, "filename", name);
-  g_free (name);
 
   if ((previous = g_queue_peek_head (priv->snippets)))
     gb_source_snippet_pause (previous);
