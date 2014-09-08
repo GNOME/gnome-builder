@@ -70,9 +70,6 @@ void                    gb_source_snippet_get_chunk_range (GbSourceSnippet      
 GtkTextMark            *gb_source_snippet_get_mark_begin  (GbSourceSnippet      *snippet);
 GtkTextMark            *gb_source_snippet_get_mark_end    (GbSourceSnippet      *snippet);
 GbSourceSnippetContext *gb_source_snippet_get_context     (GbSourceSnippet      *snippet);
-void                    gb_source_snippet_set_insert_spaces_instead_of_tabs
-                                                          (GbSourceSnippet      *snippet,
-                                                           gboolean              insert_spaces_instead_of_tabs);
 
 G_END_DECLS
 
