@@ -784,6 +784,7 @@ gb_editor_tab_do_save (GbEditorTab *tab)
 
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
   g_return_if_fail (tab->priv->file);
+  g_return_if_fail (gtk_source_file_get_location (tab->priv->file));
 
   priv = tab->priv;
 
@@ -853,6 +854,20 @@ gb_editor_tab_save_as (GbEditorTab *tab)
     }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+void
+gb_editor_tab_save (GbEditorTab *tab)
+{
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  if (!gtk_source_file_get_location (tab->priv->file))
+    {
+      gb_editor_tab_save_as (tab);
+      return;
+    }
+
+  gb_editor_tab_do_save (tab);
 }
 
 static void

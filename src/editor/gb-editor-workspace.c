@@ -104,6 +104,25 @@ on_reformat_activate (GSimpleAction *action,
 }
 
 static void
+on_save_activate (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  GbEditorWorkspace *workspace = user_data;
+  GbTab *tab;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+
+  tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
+
+  if (tab)
+    {
+      g_assert (GB_IS_EDITOR_TAB (tab));
+      gb_editor_tab_save (GB_EDITOR_TAB (tab));
+    }
+}
+
+static void
 on_save_as_activate (GSimpleAction *action,
                      GVariant      *parameter,
                      gpointer       user_data)
@@ -207,6 +226,7 @@ gb_editor_workspace_init (GbEditorWorkspace *workspace)
     { "go-to-end", on_go_to_end_activate },
     { "go-to-start", on_go_to_start_activate },
     { "reformat", on_reformat_activate },
+    { "save", on_save_activate },
     { "save-as", on_save_as_activate },
   };
   GbEditorWorkspacePrivate *priv;
