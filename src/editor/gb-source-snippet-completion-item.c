@@ -21,15 +21,6 @@
 
 #include "gb-source-snippet-completion-item.h"
 
-static void init_proposal_iface (GtkSourceCompletionProposalIface *iface);
-
-G_DEFINE_TYPE_EXTENDED (GbSourceSnippetCompletionItem,
-                        gb_source_snippet_completion_item,
-                        G_TYPE_OBJECT,
-                        0,
-                        G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL,
-                                               init_proposal_iface))
-
 struct _GbSourceSnippetCompletionItemPrivate
 {
   GbSourceSnippet *snippet;
@@ -41,8 +32,17 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs[LAST_PROP];
-static GdkPixbuf *gPixbuf;
+static GParamSpec *gParamSpecs [LAST_PROP];
+
+static void init_proposal_iface (GtkSourceCompletionProposalIface *iface);
+
+G_DEFINE_TYPE_EXTENDED (GbSourceSnippetCompletionItem,
+                        gb_source_snippet_completion_item,
+                        G_TYPE_OBJECT,
+                        0,
+                        G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL,
+                                               init_proposal_iface)
+                        G_ADD_PRIVATE (GbSourceSnippetCompletionItem))
 
 GtkSourceCompletionProposal *
 gb_source_snippet_completion_item_new (GbSourceSnippet *snippet)
@@ -123,13 +123,11 @@ gb_source_snippet_completion_item_set_property (GObject      *object,
 static void
 gb_source_snippet_completion_item_class_init (GbSourceSnippetCompletionItemClass *klass)
 {
-  GObjectClass *object_class;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = gb_source_snippet_completion_item_finalize;
   object_class->get_property = gb_source_snippet_completion_item_get_property;
   object_class->set_property = gb_source_snippet_completion_item_set_property;
-  g_type_class_add_private (object_class, sizeof (GbSourceSnippetCompletionItemPrivate));
 
   gParamSpecs[PROP_SNIPPET] =
     g_param_spec_object ("snippet",
@@ -139,17 +137,12 @@ gb_source_snippet_completion_item_class_init (GbSourceSnippetCompletionItemClass
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SNIPPET,
                                    gParamSpecs[PROP_SNIPPET]);
-
-  gPixbuf = gdk_pixbuf_new_from_resource ("/org/gnome/builder/icons/template-16x.png", NULL);
 }
 
 static void
 gb_source_snippet_completion_item_init (GbSourceSnippetCompletionItem *item)
 {
-  item->priv =
-    G_TYPE_INSTANCE_GET_PRIVATE (item,
-                                 GB_TYPE_SOURCE_SNIPPET_COMPLETION_ITEM,
-                                 GbSourceSnippetCompletionItemPrivate);
+  item->priv = gb_source_snippet_completion_item_get_instance_private (item);
 }
 
 static gchar *
@@ -167,7 +160,11 @@ get_label (GtkSourceCompletionProposal *p)
 static GdkPixbuf *
 get_icon (GtkSourceCompletionProposal *proposal)
 {
-  return g_object_ref (gPixbuf);
+  /*
+   * TODO: Load pixbufs from resources, assign based on completion type.
+   */
+
+  return NULL;
 }
 
 static void
