@@ -63,6 +63,7 @@ void              gb_editor_tab_set_show_find (GbEditorTab                *tab,
 void              gb_editor_tab_reformat      (GbEditorTab                *tab);
 void              gb_editor_tab_go_to_end     (GbEditorTab                *tab);
 void              gb_editor_tab_go_to_start   (GbEditorTab                *tab);
+void              gb_editor_tab_save_as       (GbEditorTab                *tab);
 
 G_END_DECLS
 
