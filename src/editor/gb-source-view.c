@@ -388,10 +388,10 @@ gb_source_view_push_snippet (GbSourceView    *view,
   g_queue_push_head (priv->snippets, g_object_ref (snippet));
 
   insert_spaces = gtk_source_view_get_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (view));
-  gb_source_snippet_set_insert_spaces_instead_of_tabs (snippet, insert_spaces);
+  gb_source_snippet_context_set_use_spaces (context, insert_spaces);
 
   tab_width = gtk_source_view_get_tab_width (GTK_SOURCE_VIEW (view));
-  gb_source_snippet_set_tab_width (snippet, tab_width);
+  gb_source_snippet_context_set_tab_width (context, tab_width);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
   mark = gtk_text_buffer_get_insert (buffer);
