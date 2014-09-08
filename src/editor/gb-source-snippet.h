@@ -73,6 +73,9 @@ GbSourceSnippetContext *gb_source_snippet_get_context     (GbSourceSnippet      
 void                    gb_source_snippet_set_insert_spaces_instead_of_tabs
                                                           (GbSourceSnippet      *snippet,
                                                            gboolean              insert_spaces_instead_of_tabs);
+guint                   gb_source_snippet_get_tab_width   (GbSourceSnippet      *snippet);
+void                    gb_source_snippet_set_tab_width   (GbSourceSnippet      *snippet,
+                                                           guint                 tab_width);
 
 G_END_DECLS
 

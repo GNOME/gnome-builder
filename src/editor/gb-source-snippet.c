@@ -38,6 +38,7 @@ struct _GbSourceSnippetPrivate
   gint                    tab_stop;
   gint                    max_tab_stop;
   gint                    current_chunk;
+  guint                   tab_width;
   guint                   inserted : 1;
   guint                   insert_spaces_instead_of_tabs : 1;
 };
@@ -49,6 +50,7 @@ enum {
   PROP_MARK_BEGIN,
   PROP_MARK_END,
   PROP_TAB_STOP,
+  PROP_TAB_WIDTH,
   PROP_TRIGGER,
   LAST_PROP
 };
@@ -100,6 +102,26 @@ gb_source_snippet_copy (GbSourceSnippet *snippet)
     }
 
   RETURN (ret);
+}
+
+guint
+gb_source_snippet_get_tab_width (GbSourceSnippet *snippet)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_SNIPPET (snippet), 0);
+
+  return snippet->priv->tab_width;
+}
+
+void
+gb_source_snippet_set_tab_width (GbSourceSnippet *snippet,
+                                 guint            tab_width)
+{
+  g_return_if_fail (GB_IS_SOURCE_SNIPPET (snippet));
+  g_return_if_fail (tab_width > 0);
+  g_return_if_fail (tab_width <= 32);
+
+  snippet->priv->tab_width = tab_width;
+  g_object_notify_by_pspec (G_OBJECT (snippet), gParamSpecs [PROP_TAB_WIDTH]);
 }
 
 gboolean
@@ -939,6 +961,10 @@ gb_source_snippet_get_property (GObject    *object,
       g_value_set_uint (value, snippet->priv->tab_stop);
       break;
 
+    case PROP_TAB_WIDTH:
+      g_value_set_uint (value, snippet->priv->tab_width);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -957,6 +983,10 @@ gb_source_snippet_set_property (GObject      *object,
     case PROP_INSERT_SPACES_INSTEAD_OF_TABS:
       gb_source_snippet_set_insert_spaces_instead_of_tabs (snippet,
                                                            g_value_get_boolean (value));
+      break;
+
+    case PROP_TAB_WIDTH:
+      gb_source_snippet_set_tab_width (snippet, g_value_get_uint (value));
       break;
 
     case PROP_TRIGGER:
@@ -1037,6 +1067,17 @@ gb_source_snippet_class_init (GbSourceSnippetClass *klass)
   g_object_class_install_property (object_class, PROP_TAB_STOP,
                                    gParamSpecs[PROP_TAB_STOP]);
 
+  gParamSpecs [PROP_TAB_WIDTH] =
+    g_param_spec_uint ("tab-width",
+                       _("Tab Width"),
+                       _("Tab Width in Spaces"),
+                       1,
+                       32,
+                       2,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_TAB_WIDTH,
+                                   gParamSpecs [PROP_TAB_WIDTH]);
+
   EXIT;
 }
 
@@ -1047,6 +1088,8 @@ gb_source_snippet_init (GbSourceSnippet *snippet)
 
   snippet->priv = gb_source_snippet_get_instance_private (snippet);
 
+  snippet->priv->insert_spaces_instead_of_tabs = FALSE;
+  snippet->priv->tab_width = 2;
   snippet->priv->tab_stop = 0;
   snippet->priv->max_tab_stop = -1;
   snippet->priv->chunks = g_ptr_array_new_with_free_func (g_object_unref);
