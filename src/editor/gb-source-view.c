@@ -59,7 +59,14 @@ enum {
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs[LAST_PROP];
+enum {
+  PUSH_SNIPPET,
+  POP_SNIPPET,
+  LAST_SIGNAL
+};
+
+static GParamSpec *gParamSpecs [LAST_PROP];
+static guint       gSignals [LAST_SIGNAL];
 
 static void
 on_search_highlighter_changed (GbSourceSearchHighlighter *highlighter,
@@ -288,6 +295,7 @@ gb_source_view_pop_snippet (GbSourceView *view)
   if ((snippet = g_queue_pop_head (priv->snippets)))
     {
       gb_source_snippet_finish (snippet);
+      g_signal_emit (view, gSignals [POP_SNIPPET], 0, snippet);
       g_object_unref (snippet);
     }
 
@@ -442,6 +450,9 @@ gb_source_view_push_snippet (GbSourceView    *view,
   line_prefix = gb_source_view_get_line_prefix (view, &iter);
   gb_source_snippet_context_set_line_prefix (context, line_prefix);
   g_free (line_prefix);
+
+  g_signal_emit (view, gSignals [PUSH_SNIPPET], 0,
+                 snippet, context, &iter);
 
   gb_source_view_block_handlers (view);
   has_more_tab_stops = gb_source_snippet_begin (snippet, buffer, &iter);
@@ -1055,6 +1066,32 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SEARCH_HIGHLIGHTER,
                                    gParamSpecs[PROP_SEARCH_HIGHLIGHTER]);
+
+  gSignals [PUSH_SNIPPET] =
+    g_signal_new ("push-snippet",
+                  GB_TYPE_SOURCE_VIEW,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSourceViewClass, push_snippet),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  3,
+                  GB_TYPE_SOURCE_SNIPPET,
+                  GB_TYPE_SOURCE_SNIPPET_CONTEXT,
+                  GTK_TYPE_TEXT_ITER);
+
+  gSignals [POP_SNIPPET] =
+    g_signal_new ("pop-snippet",
+                  GB_TYPE_SOURCE_VIEW,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSourceViewClass, pop_snippet),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  GB_TYPE_SOURCE_SNIPPET);
 }
 
 static void

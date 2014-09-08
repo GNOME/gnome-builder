@@ -48,6 +48,13 @@ struct _GbSourceView
 struct _GbSourceViewClass
 {
   GtkSourceViewClass parent_class;
+
+  void (*push_snippet) (GbSourceView           *view,
+                        GbSourceSnippet        *snippet,
+                        GbSourceSnippetContext *context,
+                        GtkTextIter            *location);
+  void (*pop_snippet)  (GbSourceView           *view,
+                        GbSourceSnippet        *snippet);
 };
 
 GType gb_source_view_get_type       (void) G_GNUC_CONST;
