@@ -50,40 +50,8 @@ struct _GbEditorDocumentClass
   void (*cursor_moved) (GbEditorDocument *document);
 };
 
-GbEditorDocument *gb_editor_document_new            (void);
-GType             gb_editor_document_get_type       (void) G_GNUC_CONST;
-GFile            *gb_editor_document_get_file       (GbEditorDocument      *document);
-void              gb_editor_document_set_file       (GbEditorDocument      *document,
-                                                     GFile                 *file);
-void              gb_editor_document_load_async     (GbEditorDocument      *document,
-                                                     GFile                 *file,
-                                                     GCancellable          *cancellable,
-                                                     GFileProgressCallback  progress_callback,
-                                                     gpointer               progress_callback_data,
-                                                     GAsyncReadyCallback    callback,
-                                                     gpointer               user_data);
-gboolean          gb_editor_document_load_finish    (GbEditorDocument      *document,
-                                                     GAsyncResult          *result,
-                                                     GError               **error);
-void              gb_editor_document_save_async     (GbEditorDocument      *document,
-                                                     GCancellable          *cancellable,
-                                                     GFileProgressCallback  progress_callback,
-                                                     gpointer               progress_callback_data,
-                                                     GAsyncReadyCallback    callback,
-                                                     gpointer               user_data);
-gboolean          gb_editor_document_save_finish    (GbEditorDocument      *document,
-                                                     GAsyncResult          *result,
-                                                     GError               **error);
-void              gb_editor_document_save_as_async  (GbEditorDocument      *document,
-                                                     GFile                 *file,
-                                                     GCancellable          *cancellable,
-                                                     GFileProgressCallback  progress_callback,
-                                                     gpointer               progress_callback_data,
-                                                     GAsyncReadyCallback    callback,
-                                                     gpointer               user_data);
-gboolean          gb_editor_document_save_as_finish (GbEditorDocument      *document,
-                                                     GAsyncResult          *result,
-                                                     GError               **error);
+GbEditorDocument *gb_editor_document_new      (void);
+GType             gb_editor_document_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
