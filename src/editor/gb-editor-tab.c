@@ -472,35 +472,6 @@ gb_editor_tab_set_settings (GbEditorTab      *tab,
   EXIT;
 }
 
-static gboolean
-transform_file_to_title (GBinding     *binding,
-                         const GValue *src_value,
-                         GValue       *dst_value,
-                         gpointer      user_data)
-{
-  GbEditorTabPrivate *priv;
-  GbEditorTab *tab = user_data;
-  gchar *title;
-  GFile *file;
-
-  g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), FALSE);
-  g_return_val_if_fail (G_VALUE_HOLDS (src_value, G_TYPE_FILE), FALSE);
-  g_return_val_if_fail (G_VALUE_HOLDS (dst_value, G_TYPE_STRING), FALSE);
-
-  priv = tab->priv;
-
-  file = g_value_get_object (src_value);
-
-  if (file)
-    title = g_file_get_basename (file);
-  else
-    title = g_strdup_printf (_ ("Unsaved File %u"), priv->unsaved_number);
-
-  g_value_take_string (dst_value, title);
-
-  return TRUE;
-}
-
 static void
 set_search_position_label (GbEditorTab *tab,
                            const gchar *text)
@@ -647,10 +618,6 @@ gb_editor_tab_set_document (GbEditorTab      *tab,
 
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (priv->source_view),
                             GTK_TEXT_BUFFER (priv->document));
-
-  g_object_bind_property_full (priv->document, "file", tab, "title",
-                               G_BINDING_SYNC_CREATE, transform_file_to_title,
-                               NULL, tab, NULL);
 
   g_signal_connect_swapped (priv->document,
                             "cursor-moved",
