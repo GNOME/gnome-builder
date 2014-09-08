@@ -371,25 +371,28 @@ gb_source_view_get_line_prefix (GbSourceView      *view,
 
   str = g_string_new (NULL);
 
-  do
+  if (gtk_text_iter_compare (&begin, iter) != 0)
     {
-      gunichar c;
-
-      c = gtk_text_iter_get_char (&begin);
-
-      switch (c)
+      do
         {
-        case '\t':
-        case ' ':
-          g_string_append_unichar (str, c);
-          break;
-        default:
-          g_string_append_c (str, ' ');
-          break;
+          gunichar c;
+
+          c = gtk_text_iter_get_char (&begin);
+
+          switch (c)
+            {
+            case '\t':
+            case ' ':
+              g_string_append_unichar (str, c);
+              break;
+            default:
+              g_string_append_c (str, ' ');
+              break;
+            }
         }
+      while (gtk_text_iter_forward_char (&begin) &&
+             (gtk_text_iter_compare (&begin, iter) < 0));
     }
-  while (gtk_text_iter_forward_char (&begin) &&
-         (gtk_text_iter_compare (&begin, iter) < 0));
 
   return g_string_free (str, FALSE);
 }
