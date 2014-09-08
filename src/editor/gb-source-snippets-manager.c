@@ -17,6 +17,7 @@
  */
 
 #define G_LOG_DOMAIN "snippets"
+#define SNIPPETS_DIRECTORY "/org/gnome/builder/snippets/"
 
 #include <glib/gi18n.h>
 
@@ -196,10 +197,9 @@ gb_source_snippets_manager_init (GbSourceSnippetsManager *manager)
                            g_free,
                            g_object_unref);
 
-  names = g_resources_enumerate_children (
-    "/org/gnome/builder/snippets/",
-    G_RESOURCE_LOOKUP_FLAGS_NONE,
-    &error);
+  names = g_resources_enumerate_children (SNIPPETS_DIRECTORY,
+                                          G_RESOURCE_LOOKUP_FLAGS_NONE,
+                                          &error);
 
   if (!names)
     {
@@ -210,7 +210,7 @@ gb_source_snippets_manager_init (GbSourceSnippetsManager *manager)
 
   for (i = 0; names[i]; i++)
     {
-      path = g_strdup_printf ("resource:///org/gnome/builder/snippets/%s", names[i]);
+      path = g_strdup_printf ("resource://"SNIPPETS_DIRECTORY"%s", names[i]);
       file = g_file_new_for_uri (path);
       if (!gb_source_snippets_manager_load_file (manager, file, &error))
         {
