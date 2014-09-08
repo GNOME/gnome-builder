@@ -1098,6 +1098,25 @@ on_source_view_populate_popup (GtkTextView *text_view,
 }
 
 static void
+on_source_view_push_snippet (GbSourceView           *source_view,
+                             GbSourceSnippet        *snippet,
+                             GbSourceSnippetContext *context,
+                             GtkTextIter            *iter,
+                             GbEditorTab            *tab)
+{
+  g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
+  g_return_if_fail (GB_IS_SOURCE_SNIPPET (snippet));
+  g_return_if_fail (GB_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_return_if_fail (iter);
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  /*
+   * TODO: Get filename from GtkSourceFile.
+   */
+  gb_source_snippet_context_add_variable (context, "filename", "");
+}
+
+static void
 gb_editor_tab_constructed (GObject *object)
 {
   GtkSourceCompletion *comp;
@@ -1133,6 +1152,10 @@ gb_editor_tab_constructed (GObject *object)
   g_signal_connect (priv->source_view,
                     "populate-popup",
                     G_CALLBACK (on_source_view_populate_popup),
+                    tab);
+  g_signal_connect (priv->source_view,
+                    "push-snippet",
+                    G_CALLBACK (on_source_view_push_snippet),
                     tab);
 
   g_signal_connect_swapped (priv->go_down_button,
