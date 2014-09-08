@@ -186,19 +186,11 @@ get_rect_for_iters (GtkTextView       *text_view,
   do
     {
       gtk_text_view_get_iter_location (text_view, &iter, &tmp);
-
-      area.x = MIN (area.x, tmp.x);
-      area.y = MIN (area.y, tmp.y);
-      area.width = MAX (area.width, (tmp.x + tmp.width) - area.x);
-      area.height = MAX (area.height, (tmp.y + tmp.height) - area.y);
+      gdk_rectangle_union (&area, &tmp, &area);
 
       gtk_text_iter_forward_to_line_end (&iter);
       gtk_text_view_get_iter_location (text_view, &iter, &tmp);
-
-      area.x = MIN (area.x, tmp.x);
-      area.y = MIN (area.y, tmp.y);
-      area.width = MAX (area.width, (tmp.x + tmp.width) - area.x);
-      area.height = MAX (area.height, (tmp.y + tmp.height) - area.y);
+      gdk_rectangle_union (&area, &tmp, &area);
 
       if (!gtk_text_iter_forward_char (&iter))
         break;
