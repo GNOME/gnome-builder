@@ -25,6 +25,7 @@
 #include "gb-box-theatric.h"
 #include "gb-editor-tab.h"
 #include "gb-log.h"
+#include "gb-notebook.h"
 #include "gb-rgba.h"
 #include "gb-source-formatter.h"
 #include "gb-source-search-highlighter.h"
@@ -1357,6 +1358,7 @@ gb_editor_tab_constructed (GObject *object)
   ENTRY;
 
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (tab->priv->document));
 
   priv = tab->priv;
 
@@ -1460,6 +1462,43 @@ gb_editor_tab_constructed (GObject *object)
 }
 
 static void
+gb_editor_tab_close (GbTab *tab)
+{
+  GbEditorTabPrivate *priv;
+  GtkTextBuffer *buffer;
+  GtkWidget *parent;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  priv = GB_EDITOR_TAB (tab)->priv;
+
+  buffer = GTK_TEXT_BUFFER (priv->document);
+
+  if (gtk_text_buffer_get_modified (buffer))
+    {
+      g_message ("TODO: handle dirty editor state.");
+    }
+
+  /*
+   * WORKAROUND:
+   *
+   * The search entry seems to have some sort of idle task that is causing
+   * this to segfault while it is still around.
+   */
+  g_clear_pointer (&priv->search_entry, gtk_widget_destroy);
+
+  /*
+   * Remove the tab from the notebook.
+   */
+  parent = gtk_widget_get_parent (GTK_WIDGET (tab));
+  gtk_container_remove (GTK_CONTAINER (parent), GTK_WIDGET (tab));
+
+  EXIT;
+}
+
+static void
 gb_editor_tab_dispose (GObject *object)
 {
   GbEditorTab *tab = (GbEditorTab *) object;
@@ -1552,6 +1591,7 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
 
   widget_class->grab_focus = gb_editor_tab_grab_focus;
 
+  tab_class->close = gb_editor_tab_close;
   tab_class->freeze_drag = gb_editor_tab_freeze_drag;
   tab_class->thaw_drag = gb_editor_tab_thaw_drag;
 
