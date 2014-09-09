@@ -305,11 +305,9 @@ gb_animation_get_offset (GbAnimation *animation)
 
   priv = animation->priv;
 
-  if (GTK_IS_WIDGET (priv->target))
-    {
-      frame_clock = gtk_widget_get_frame_clock (priv->target);
-      frame_msec = gdk_frame_clock_get_frame_time (frame_clock) / 1000UL;
-    }
+  if (GTK_IS_WIDGET (priv->target) &&
+      (frame_clock = gtk_widget_get_frame_clock (priv->target)))
+    frame_msec = gdk_frame_clock_get_frame_time (frame_clock) / 1000UL;
   else
     frame_msec = g_get_monotonic_time () / 1000UL;
 
