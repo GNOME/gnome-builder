@@ -980,6 +980,17 @@ on_create_window (GtkNotebook     *notebook,
 }
 
 static void
+on_remove (GtkContainer    *container,
+           GtkWidget       *widget,
+           GbMultiNotebook *mnb)
+{
+  g_return_if_fail (GB_IS_MULTI_NOTEBOOK (mnb));
+  g_return_if_fail (GB_IS_NOTEBOOK (container));
+
+  remove_unused_notebooks (mnb);
+}
+
+static void
 connect_notebook_signals (GbMultiNotebook *self,
                           GbNotebook      *notebook)
 {
@@ -995,6 +1006,7 @@ connect_notebook_signals (GbMultiNotebook *self,
   g_signal_connect (notebook, "switch-page", G_CALLBACK (on_switch_page), self);
   g_signal_connect (notebook, "set-focus-child", G_CALLBACK (on_set_focus_child), self);
   g_signal_connect (notebook, "create-window", G_CALLBACK (on_create_window), self);
+  g_signal_connect (notebook, "remove", G_CALLBACK (on_remove), self);
 }
 
 void
