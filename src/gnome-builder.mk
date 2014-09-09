@@ -60,6 +60,7 @@ gnome_builder_SOURCES = \
 	src/tabs/gb-notebook.h \
 	src/tabs/gb-tab-label.c \
 	src/tabs/gb-tab-label.h \
+	src/tabs/gb-tab-label-private.h \
 	src/tabs/gb-tab.c \
 	src/tabs/gb-tab.h \
 	src/theatrics/gb-box-theatric.c \

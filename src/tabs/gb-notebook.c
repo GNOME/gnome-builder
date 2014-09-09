@@ -23,6 +23,7 @@
 #include "gb-log.h"
 #include "gb-notebook.h"
 #include "gb-tab-label.h"
+#include "gb-tab-label-private.h"
 #include "gb-widget.h"
 
 G_DEFINE_TYPE (GbNotebook, gb_notebook, GTK_TYPE_NOTEBOOK)
@@ -84,27 +85,27 @@ gb_notebook_add_tab (GbNotebook *notebook,
    g_return_if_fail (GB_IS_NOTEBOOK (notebook));
    g_return_if_fail (GB_IS_TAB (tab));
 
-   gtk_container_add_with_properties (GTK_CONTAINER (notebook),
-                                      GTK_WIDGET (tab),
-                                      "detachable", TRUE,
-                                      "reorderable", TRUE,
-                                      "tab-expand", TRUE,
-                                      "tab-fill", TRUE,
-                                      NULL);
-
    tab_label = g_object_new (GB_TYPE_TAB_LABEL,
                              "tab", tab,
                              "visible", TRUE,
                              NULL);
    g_object_set_data (G_OBJECT (tab_label), "GB_TAB", tab);
-   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook),
-                               GTK_WIDGET (tab),
-                               GTK_WIDGET (tab_label));
    g_signal_connect_object (tab_label,
                             "close-clicked",
                             G_CALLBACK (gb_notebook_tab_label_close_clicked),
                             notebook,
                             G_CONNECT_SWAPPED);
+
+   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
+                             GTK_WIDGET (tab),
+                             GTK_WIDGET (tab_label));
+
+   gtk_container_child_set (GTK_CONTAINER (notebook), GTK_WIDGET (tab),
+                            "detachable", TRUE,
+                            "reorderable", TRUE,
+                            "tab-expand", TRUE,
+                            "tab-fill", TRUE,
+                            NULL);
 }
 
 static void
@@ -131,11 +132,42 @@ gb_notebook_drag_begin (GtkWidget      *widget,
 }
 
 static void
+gb_notebook_switch_page (GtkNotebook *notebook,
+                         GtkWidget   *page,
+                         guint        page_num)
+{
+  GtkWidget *tab_label;
+  GtkWidget *prev_page;
+  gint prev_page_num;
+
+  g_return_if_fail (GB_IS_NOTEBOOK (notebook));
+
+  prev_page_num = gtk_notebook_get_current_page (notebook);
+
+  if (prev_page_num != -1)
+    {
+      prev_page = gtk_notebook_get_nth_page (notebook, prev_page_num);
+      tab_label = gtk_notebook_get_tab_label (notebook, prev_page);
+      _gb_tab_label_set_show_close_button (GB_TAB_LABEL (tab_label), FALSE);
+    }
+
+  GTK_NOTEBOOK_CLASS (gb_notebook_parent_class)->switch_page (notebook,
+                                                              page,
+                                                              page_num);
+
+  tab_label = gtk_notebook_get_tab_label (notebook, page);
+  _gb_tab_label_set_show_close_button (GB_TAB_LABEL (tab_label), TRUE);
+}
+
+static void
 gb_notebook_class_init (GbNotebookClass *klass)
 {
    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+   GtkNotebookClass *notebook_class = GTK_NOTEBOOK_CLASS (klass);
 
    widget_class->drag_begin = gb_notebook_drag_begin;
+
+   notebook_class->switch_page = gb_notebook_switch_page;
 }
 
 static void

@@ -60,6 +60,15 @@ gb_tab_label_new (GbTab *tab)
   return g_object_new (GB_TYPE_TAB_LABEL, "tab", tab, NULL);
 }
 
+void
+_gb_tab_label_set_show_close_button (GbTabLabel *tab_label,
+                                     gboolean    show_close_button)
+{
+  g_return_if_fail (GB_IS_TAB_LABEL (tab_label));
+
+  gtk_widget_set_visible (tab_label->priv->close_button, show_close_button);
+}
+
 GbTab *
 gb_tab_label_get_tab (GbTabLabel *label)
 {
