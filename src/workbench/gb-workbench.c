@@ -23,6 +23,7 @@
 #include "gb-devhelp-workspace.h"
 #include "gb-editor-workspace.h"
 #include "gb-log.h"
+#include "gb-widget.h"
 #include "gb-workbench.h"
 
 #define UI_RESOURCE_PATH "/org/gnome/builder/ui/gb-workbench.ui"
@@ -200,6 +201,17 @@ load_actions (GbWorkbench *workbench,
 }
 
 static void
+gb_workbench_realize (GtkWidget *widget)
+{
+  GbWorkbench *workbench = (GbWorkbench *)widget;
+
+  if (GTK_WIDGET_CLASS (gb_workbench_parent_class)->realize)
+    GTK_WIDGET_CLASS (gb_workbench_parent_class)->realize (widget);
+
+  gtk_widget_grab_focus (GTK_WIDGET (workbench->priv->editor));
+}
+
+static void
 gb_workbench_finalize (GObject *object)
 {
   ENTRY;
@@ -243,9 +255,11 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   object_class->get_property = gb_workbench_get_property;
   object_class->set_property = gb_workbench_set_property;
 
+  widget_class->realize = gb_workbench_realize;
+
   klass->workspace_changed = gb_workbench_workspace_changed;
 
-  gSignals[WORKSPACE_CHANGED] =
+  gSignals [WORKSPACE_CHANGED] =
     g_signal_new ("workspace-changed",
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_FIRST,
@@ -309,6 +323,4 @@ gb_workbench_init (GbWorkbench *workbench)
 
   load_actions (workbench, GB_WORKSPACE (priv->editor));
   load_actions (workbench, GB_WORKSPACE (priv->devhelp));
-
-  gtk_widget_grab_focus (GTK_WIDGET (priv->editor));
 }
