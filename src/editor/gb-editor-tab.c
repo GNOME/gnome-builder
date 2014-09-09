@@ -627,6 +627,22 @@ on_search_occurrences_notify (GbEditorTab            *tab,
 }
 
 static void
+gb_editor_tab_langauge_changed (GbEditorTab      *tab,
+                                GParamSpec       *pspec,
+                                GbEditorDocument *document)
+{
+  GtkSourceLanguage *language;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (document));
+
+  gb_editor_tab_reload_snippets (tab, language);
+}
+
+
+static void
 gb_editor_tab_cursor_moved (GbEditorTab      *tab,
                             GbEditorDocument *document)
 {
@@ -1339,6 +1355,41 @@ on_source_view_push_snippet (GbSourceView           *source_view,
 }
 
 static gboolean
+transform_file_to_language (GBinding     *binding,
+                            const GValue *src_value,
+                            GValue       *dst_value,
+                            gpointer      user_data)
+{
+  GtkSourceLanguage *language = NULL;
+  GFile *location;
+
+  location = g_value_get_object (src_value);
+
+  if (location)
+    {
+      GtkSourceLanguageManager *manager;
+      gchar *filename;
+      gchar *content_type = NULL;
+
+      filename = g_file_get_basename (location);
+
+      /*
+       * TODO: Load content_type using g_file_query_info().
+       */
+
+      manager = gtk_source_language_manager_get_default ();
+      language = gtk_source_language_manager_guess_language (manager, filename, content_type);
+
+      g_free (filename);
+      g_free (content_type);
+    }
+
+  g_value_set_object (dst_value, language);
+
+  return TRUE;
+}
+
+static gboolean
 transform_file_to_title (GBinding     *binding,
                          const GValue *src_value,
                          GValue       *dst_value,
@@ -1388,6 +1439,10 @@ gb_editor_tab_constructed (GObject *object)
   g_signal_connect_swapped (priv->document,
                             "cursor-moved",
                             G_CALLBACK (gb_editor_tab_cursor_moved),
+                            tab);
+  g_signal_connect_swapped (priv->document,
+                            "notify::language",
+                            G_CALLBACK (gb_editor_tab_langauge_changed),
                             tab);
 
   g_signal_connect (priv->source_view,
@@ -1462,19 +1517,9 @@ gb_editor_tab_constructed (GObject *object)
   g_object_bind_property_full (priv->file, "location", tab, "title",
                                G_BINDING_SYNC_CREATE, transform_file_to_title,
                                NULL, tab, NULL);
-
-#if 1
-  {
-    /*
-     * TODO: Remove me once we have file open/save/etc plumbed.
-     */
-
-    GtkSourceLanguageManager *lm = gtk_source_language_manager_get_default ();
-    GtkSourceLanguage *l = gtk_source_language_manager_get_language (lm, "c");
-    g_object_set (priv->document, "language", l, NULL);
-    gb_editor_tab_reload_snippets (tab, l);
-  }
-#endif
+  g_object_bind_property_full (priv->file, "location", priv->document,
+                               "language", G_BINDING_SYNC_CREATE,
+                               transform_file_to_language, NULL, tab, NULL);
 
   gb_editor_tab_cursor_moved (tab, priv->document);
 
