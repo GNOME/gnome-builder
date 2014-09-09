@@ -52,6 +52,9 @@ update_show_tabs (GbDevhelpWorkspace *workspace)
   show_tabs = (g_list_length (tabs) > 1);
   g_list_free (tabs);
 
+  if (!show_tabs && gb_multi_notebook_get_n_notebooks (priv->multi_notebook))
+    show_tabs = TRUE;
+
   gb_multi_notebook_set_show_tabs (priv->multi_notebook, show_tabs);
 }
 
