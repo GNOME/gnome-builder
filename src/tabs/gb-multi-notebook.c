@@ -979,6 +979,18 @@ on_create_window (GtkNotebook     *notebook,
   RETURN (ret);
 }
 
+static gboolean
+remove_unused_notebooks_cb (gpointer data)
+{
+  GbMultiNotebook *mnb = data;
+
+  g_return_val_if_fail (GB_IS_MULTI_NOTEBOOK (mnb), G_SOURCE_REMOVE);
+
+  remove_unused_notebooks (mnb);
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 on_remove (GtkContainer    *container,
            GtkWidget       *widget,
@@ -987,7 +999,15 @@ on_remove (GtkContainer    *container,
   g_return_if_fail (GB_IS_MULTI_NOTEBOOK (mnb));
   g_return_if_fail (GB_IS_NOTEBOOK (container));
 
-  remove_unused_notebooks (mnb);
+  /*
+   * WORKAROUND:
+   *
+   * We delay the cleanup here of unused notebooks since we could be
+   * in the process of dropping back onto ourselves. Probably just need
+   * to avoid the drag'n'drop code altogether when that happens by
+   * cancelling the drag upon drop.
+   */
+  g_timeout_add (0, remove_unused_notebooks_cb, g_object_ref (mnb));
 }
 
 static void
