@@ -400,6 +400,7 @@ gb_source_snippet_context_expand (GbSourceSnippetContext *context,
   GbSourceSnippetContextPrivate *priv;
   const gchar *expand;
   gunichar c;
+  gboolean is_dynamic;
   GString *str;
   gchar key[12];
   gint n;
@@ -409,6 +410,8 @@ gb_source_snippet_context_expand (GbSourceSnippetContext *context,
   g_return_val_if_fail (input, NULL);
 
   priv = context->priv;
+
+  is_dynamic = (*input == '$');
 
   str = g_string_new (NULL);
 
@@ -422,7 +425,7 @@ gb_source_snippet_context_expand (GbSourceSnippetContext *context,
             break;
           c = g_utf8_get_char (input);
         }
-      else if (c == '$')
+      else if (is_dynamic && c == '$')
         {
           input = g_utf8_next_char (input);
           if (!*input)
@@ -473,7 +476,7 @@ gb_source_snippet_context_expand (GbSourceSnippetContext *context,
               continue;
             }
         }
-      else if (c == '|')
+      else if (is_dynamic && c == '|')
         return apply_filters (str, input + 1);
       else if (c == '\t')
         {
