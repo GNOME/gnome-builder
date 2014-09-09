@@ -627,7 +627,7 @@ on_search_occurrences_notify (GbEditorTab            *tab,
 }
 
 static void
-gb_editor_tab_langauge_changed (GbEditorTab      *tab,
+gb_editor_tab_language_changed (GbEditorTab      *tab,
                                 GParamSpec       *pspec,
                                 GbEditorDocument *document)
 {
@@ -1442,7 +1442,7 @@ gb_editor_tab_constructed (GObject *object)
                             tab);
   g_signal_connect_swapped (priv->document,
                             "notify::language",
-                            G_CALLBACK (gb_editor_tab_langauge_changed),
+                            G_CALLBACK (gb_editor_tab_language_changed),
                             tab);
 
   g_signal_connect (priv->source_view,
