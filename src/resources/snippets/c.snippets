@@ -147,3 +147,23 @@ snippet gobject
 	}
 snippet pr
 	${$filename|stripsuffix|functify|camelize}Private *priv;$0
+snippet prop
+	gParamSpecs [PROP_${1:NAME}] =
+		g_param_spec_${2:object} ("${3:name}",
+		             ${$2|space}  _("${4:Name}"),
+		             ${$2|space}  _("${5:Name}"),
+		             ${$2|space}  ${6}
+		             ${$2|space}  (G_PARAM_${7:READWRITE} |
+		             ${$2|space}   G_PARAM_STATIC_STRINGS));
+	g_object_class_install_property (object_class, PROP_$1,
+	                                 gParamSpecs [PROP_$1]);
+snippet doc
+	/**
+	 * ${$filename|stripsuffix|functify}_${1:func}:
+	 *
+	 * ${3}
+	 *
+	 * Returns: ${2}
+	 */$0
+snippet C
+	${$filename|stripsuffix|functify|camelize} $0
