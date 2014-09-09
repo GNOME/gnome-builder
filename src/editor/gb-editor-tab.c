@@ -657,6 +657,19 @@ gb_editor_tab_cursor_moved (GbEditorTab      *tab,
   update_search_position_label (tab);
 }
 
+static void
+gb_editor_tab_modified_changed (GbEditorTab   *tab,
+                                GtkTextBuffer *buffer)
+{
+  gboolean dirty;
+
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  dirty = gtk_text_buffer_get_modified (buffer);
+  gb_tab_set_dirty (GB_TAB (tab), dirty);
+}
+
 void
 gb_editor_tab_set_font_desc (GbEditorTab                *tab,
                              const PangoFontDescription *font_desc)
@@ -802,6 +815,9 @@ on_save_cb (GtkSourceFileSaver *saver,
       g_warning ("%s", error->message);
       g_clear_error (&error);
     }
+  else
+    gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (tab->priv->document),
+                                  FALSE);
 
   g_object_unref (tab);
 }
@@ -1365,6 +1381,10 @@ gb_editor_tab_constructed (GObject *object)
   if (!priv->settings)
     gb_editor_tab_set_settings (tab, NULL);
 
+  g_signal_connect_swapped (priv->document,
+                            "modified-changed",
+                            G_CALLBACK (gb_editor_tab_modified_changed),
+                            tab);
   g_signal_connect_swapped (priv->document,
                             "cursor-moved",
                             G_CALLBACK (gb_editor_tab_cursor_moved),
