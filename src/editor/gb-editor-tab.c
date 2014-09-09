@@ -126,6 +126,37 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbEditorTab, gb_editor_tab, GB_TYPE_TAB)
 static guint       gUnsaved;
 static GParamSpec *gParamSpecs[LAST_PROP];
 
+GtkWidget *
+gb_editor_tab_new (void)
+{
+  return g_object_new (GB_TYPE_EDITOR_TAB, NULL);
+}
+
+gboolean
+gb_editor_tab_get_is_default (GbEditorTab *tab)
+{
+  GbEditorTabPrivate *priv;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), FALSE);
+
+  priv = tab->priv;
+
+  if (gtk_source_file_get_location (priv->file))
+    return FALSE;
+
+  if (gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (priv->document)))
+    return FALSE;
+
+  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (priv->document), &begin, &end);
+
+  if (gtk_text_iter_compare (&begin, &end) != 0)
+    return FALSE;
+
+  return TRUE;
+}
+
 /**
  * gb_editor_tab_get_document:
  * @tab: A #GbEditorTab.
@@ -749,6 +780,63 @@ hide_progress_bar_cb (gpointer data)
 }
 
 static void
+on_load_cb (GtkSourceFileLoader *loader,
+            GAsyncResult        *result,
+            GbEditorTab         *tab)
+{
+  GError *error = NULL;
+
+  g_return_if_fail (GTK_SOURCE_IS_FILE_LOADER (loader));
+  g_return_if_fail (G_IS_ASYNC_RESULT (result));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  /*
+   * Hide the progress bar after a timeout period.
+   */
+  g_timeout_add (350, hide_progress_bar_cb, g_object_ref (tab));
+
+  if (!gtk_source_file_loader_load_finish (loader, result, &error))
+    {
+      /*
+       * TODO: Propagate error to tab.
+       */
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+
+  g_object_unref (tab);
+}
+
+void
+gb_editor_tab_open_file (GbEditorTab *tab,
+                         GFile       *file)
+{
+  GbEditorTabPrivate *priv;
+  GtkSourceFileLoader *loader;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+  g_return_if_fail (G_IS_FILE (file));
+
+  priv = tab->priv;
+
+  gtk_source_file_set_location (priv->file, file);
+
+  loader = gtk_source_file_loader_new (GTK_SOURCE_BUFFER (priv->document),
+                                       priv->file);
+
+  gtk_source_file_loader_load_async (loader,
+                                     G_PRIORITY_DEFAULT,
+                                     NULL, /* TODO: Cancellable */
+                                     (GFileProgressCallback)file_progress_cb,
+                                     tab,
+                                     NULL,
+                                     (GAsyncReadyCallback)on_load_cb,
+                                     g_object_ref (tab));
+
+  g_object_unref (loader);
+}
+
+static void
 on_save_cb (GtkSourceFileSaver *saver,
             GAsyncResult       *result,
             GbEditorTab        *tab)
@@ -807,6 +895,8 @@ gb_editor_tab_do_save (GbEditorTab *tab)
                                     NULL,
                                     (GAsyncReadyCallback)on_save_cb,
                                     g_object_ref (tab));
+
+  g_object_unref (saver);
 }
 
 void

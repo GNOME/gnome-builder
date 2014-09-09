@@ -31,6 +31,29 @@ gb_notebook_new (void)
 }
 
 void
+gb_notebook_raise_tab (GbNotebook *notebook,
+                       GbTab      *tab)
+{
+  gint page = -1;
+
+  g_return_if_fail (GB_IS_NOTEBOOK (notebook));
+  g_return_if_fail (GB_IS_TAB (tab));
+
+  if (gtk_widget_get_parent (GTK_WIDGET (tab)) != GTK_WIDGET (notebook))
+    {
+      g_warning ("Cannot raise tab, does not belong to requested notebook.");
+      return;
+    }
+
+  gtk_container_child_get (GTK_CONTAINER (notebook), GTK_WIDGET (tab),
+                           "position", &page,
+                           NULL);
+
+  if (page != -1)
+    gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page);
+}
+
+void
 gb_notebook_add_tab (GbNotebook *notebook,
                      GbTab      *tab)
 {

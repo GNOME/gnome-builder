@@ -104,6 +104,74 @@ on_reformat_activate (GSimpleAction *action,
 }
 
 static void
+on_open_activate (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  GbEditorWorkspacePrivate *priv;
+  GbEditorWorkspace *workspace = user_data;
+  GtkFileChooserDialog *dialog;
+  GtkWidget *toplevel;
+  GtkWidget *suggested;
+  GtkResponseType response;
+  GbNotebook *notebook;
+  GbTab *tab;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+
+  priv = workspace->priv;
+
+  tab = gb_multi_notebook_get_active_tab (priv->multi_notebook);
+  notebook = gb_multi_notebook_get_active_notebook (priv->multi_notebook);
+
+  g_assert (!tab || GB_IS_EDITOR_TAB (tab));
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tab));
+
+  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                         "action", GTK_FILE_CHOOSER_ACTION_OPEN,
+                         "local-only", FALSE,
+                         "select-multiple", FALSE,
+                         "show-hidden", FALSE,
+                         "transient-for", toplevel,
+                         "title", _("Open"),
+                         NULL);
+
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("Cancel"), GTK_RESPONSE_CANCEL,
+                          _("Open"), GTK_RESPONSE_OK,
+                          NULL);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog),
+                                                  GTK_RESPONSE_OK);
+  gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
+                               GTK_STYLE_CLASS_SUGGESTED_ACTION);
+
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  if (response == GTK_RESPONSE_OK)
+    {
+      GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+
+      if (!gb_editor_tab_get_is_default (GB_EDITOR_TAB (tab)))
+        {
+          tab = GB_TAB (gb_editor_tab_new ());
+          gb_notebook_add_tab (notebook, tab);
+          gtk_widget_show (GTK_WIDGET (tab));
+        }
+
+      gb_editor_tab_open_file (GB_EDITOR_TAB (tab), file);
+      gb_notebook_raise_tab (notebook, tab);
+
+      g_clear_object (&file);
+    }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
 on_save_activate (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
@@ -225,6 +293,7 @@ gb_editor_workspace_init (GbEditorWorkspace *workspace)
   static const GActionEntry action_entries[] = {
     { "go-to-end", on_go_to_end_activate },
     { "go-to-start", on_go_to_start_activate },
+    { "open", on_open_activate },
     { "reformat", on_reformat_activate },
     { "save", on_save_activate },
     { "save-as", on_save_as_activate },

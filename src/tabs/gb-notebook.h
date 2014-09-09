@@ -50,12 +50,12 @@ struct _GbNotebookClass
   GtkNotebookClass parent_class;
 };
 
-GType      gb_notebook_get_type (void) G_GNUC_CONST;
-GtkWidget *gb_notebook_new      (void);
-void       gb_notebook_add_tab  (GbNotebook *notebook,
-                                 GbTab      *tab);
-void       gb_notebook_move     (GbNotebook *notebook,
-                                 GbNotebook *new_notebook);
+GType      gb_notebook_get_type  (void) G_GNUC_CONST;
+GtkWidget *gb_notebook_new       (void);
+void       gb_notebook_add_tab   (GbNotebook *notebook,
+                                  GbTab      *tab);
+void       gb_notebook_raise_tab (GbNotebook *notebook,
+                                  GbTab      *tab);
 
 G_END_DECLS
 

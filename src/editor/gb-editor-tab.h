@@ -50,21 +50,25 @@ struct _GbEditorTabClass
   GbTabClass parent_class;
 };
 
-GType             gb_editor_tab_get_type      (void) G_GNUC_CONST;
-GbEditorDocument *gb_editor_tab_get_document  (GbEditorTab                *tab);
-GtkSourceFile    *gb_editor_tab_get_file      (GbEditorTab                *tab);
-GbEditorSettings *gb_editor_tab_get_settings  (GbEditorTab                *tab);
-void              gb_editor_tab_set_settings  (GbEditorTab                *tab,
-                                               GbEditorSettings           *settings);
-void              gb_editor_tab_set_font_desc (GbEditorTab                *tab,
-                                               const PangoFontDescription *font_desc);
-void              gb_editor_tab_set_show_find (GbEditorTab                *tab,
-                                               gboolean                    show_find);
-void              gb_editor_tab_reformat      (GbEditorTab                *tab);
-void              gb_editor_tab_go_to_end     (GbEditorTab                *tab);
-void              gb_editor_tab_go_to_start   (GbEditorTab                *tab);
-void              gb_editor_tab_save_as       (GbEditorTab                *tab);
-void              gb_editor_tab_save          (GbEditorTab                *tab);
+GType             gb_editor_tab_get_type       (void) G_GNUC_CONST;
+GtkWidget        *gb_editor_tab_new            (void);
+GbEditorDocument *gb_editor_tab_get_document   (GbEditorTab                *tab);
+GtkSourceFile    *gb_editor_tab_get_file       (GbEditorTab                *tab);
+GbEditorSettings *gb_editor_tab_get_settings   (GbEditorTab                *tab);
+void              gb_editor_tab_set_settings   (GbEditorTab                *tab,
+                                                GbEditorSettings           *settings);
+void              gb_editor_tab_set_font_desc  (GbEditorTab                *tab,
+                                                const PangoFontDescription *font_desc);
+void              gb_editor_tab_set_show_find  (GbEditorTab                *tab,
+                                                gboolean                    show_find);
+gboolean          gb_editor_tab_get_is_default (GbEditorTab                *tab);
+void              gb_editor_tab_reformat       (GbEditorTab                *tab);
+void              gb_editor_tab_go_to_end      (GbEditorTab                *tab);
+void              gb_editor_tab_go_to_start    (GbEditorTab                *tab);
+void              gb_editor_tab_save_as        (GbEditorTab                *tab);
+void              gb_editor_tab_save           (GbEditorTab                *tab);
+void              gb_editor_tab_open_file      (GbEditorTab                *tab,
+                                                GFile                      *file);
 
 G_END_DECLS
 
