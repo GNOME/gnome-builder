@@ -27,15 +27,12 @@
 
 struct _GbTabLabelPrivate
 {
-  GbTab          *tab;
+  GbTab     *tab;
 
-  GBinding       *title_binding;
-
-  GtkWidget      *hbox;
-  GtkWidget      *label;
-  GtkWidget      *close_button;
-
-  guint           button_pressed : 1;
+  GtkWidget *close_button;
+  GtkWidget *hbox;
+  GtkWidget *label;
+  GtkWidget *modified_label;
 };
 
 enum {
@@ -69,6 +66,20 @@ _gb_tab_label_set_show_close_button (GbTabLabel *tab_label,
   gtk_widget_set_visible (tab_label->priv->close_button, show_close_button);
 }
 
+static gboolean
+transform_dirty_to_label (GBinding     *binding,
+                          const GValue *src_value,
+                          GValue       *dst_value,
+                          gpointer      user_data)
+{
+  if (g_value_get_boolean (src_value))
+    g_value_set_static_string (dst_value, "•");
+  else
+    g_value_set_static_string (dst_value, "");
+
+  return TRUE;
+}
+
 GbTab *
 gb_tab_label_get_tab (GbTabLabel *label)
 {
@@ -88,8 +99,6 @@ gb_tab_label_set_tab (GbTabLabel *label,
 
   priv = label->priv;
 
-  g_clear_object (&priv->title_binding);
-
   if (priv->tab)
     {
       g_object_remove_weak_pointer (G_OBJECT (priv->tab),
@@ -101,12 +110,13 @@ gb_tab_label_set_tab (GbTabLabel *label,
     {
       priv->tab = tab;
       g_object_add_weak_pointer (G_OBJECT (tab), (gpointer *) &priv->tab);
-
-      priv->title_binding =
-        g_object_bind_property (tab, "title", priv->label, "label",
-                                G_BINDING_SYNC_CREATE);
-      g_object_add_weak_pointer (G_OBJECT (priv->title_binding),
-                                 (gpointer *) &priv->title_binding);
+      g_object_bind_property_full (tab, "dirty",
+                                   priv->modified_label, "label",
+                                   G_BINDING_SYNC_CREATE,
+                                   transform_dirty_to_label,
+                                   NULL, NULL, NULL);
+      g_object_bind_property (tab, "title", priv->label, "label",
+                              G_BINDING_SYNC_CREATE);
     }
 }
 
@@ -142,8 +152,6 @@ static void
 gb_tab_label_finalize (GObject *object)
 {
   GbTabLabelPrivate *priv = GB_TAB_LABEL (object)->priv;
-
-  g_clear_object (&priv->title_binding);
 
   if (priv->tab)
     {
@@ -204,7 +212,7 @@ gb_tab_label_class_init (GbTabLabelClass *klass)
   object_class->get_property = gb_tab_label_get_property;
   object_class->set_property = gb_tab_label_set_property;
 
-  gParamSpecs[PROP_TAB] =
+  gParamSpecs [PROP_TAB] =
     g_param_spec_object ("tab",
                          _ ("Tab"),
                          _ ("The tab the label is observing."),
@@ -215,7 +223,7 @@ gb_tab_label_class_init (GbTabLabelClass *klass)
   g_object_class_install_property (object_class, PROP_TAB,
                                    gParamSpecs[PROP_TAB]);
 
-  gSignals[CLOSE_CLICKED] =
+  gSignals [CLOSE_CLICKED] =
     g_signal_new ("close-clicked",
                   GB_TYPE_TAB_LABEL,
                   G_SIGNAL_RUN_LAST,
@@ -228,9 +236,10 @@ gb_tab_label_class_init (GbTabLabelClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-tab-label.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GbTabLabel, close_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbTabLabel, hbox);
   gtk_widget_class_bind_template_child_private (widget_class, GbTabLabel, label);
-  gtk_widget_class_bind_template_child_private (widget_class, GbTabLabel, close_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GbTabLabel, modified_label);
 
   g_type_ensure (GEDIT_TYPE_CLOSE_BUTTON);
 }

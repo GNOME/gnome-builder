@@ -9,13 +9,29 @@
         <property name="spacing">3</property>
         <property name="orientation">horizontal</property>
         <child>
-          <object class="GtkLabel" id="label">
-            <property name="ellipsize">end</property>
-            <property name="hexpand">True</property>
-            <property name="use-markup">False</property>
-            <property name="use-underline">False</property>
-            <property name="valign">baseline</property>
+          <object class="GtkBox" id="label_container">
             <property name="visible">True</property>
+            <property name="hexpand">True</property>
+            <property name="halign">center</property>
+            <property name="orientation">horizontal</property>
+            <child>
+              <object class="GtkLabel" id="modified_label">
+                <property name="use-markup">False</property>
+                <property name="use-underline">False</property>
+                <property name="valign">baseline</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label">
+                <property name="ellipsize">end</property>
+                <property name="hexpand">False</property>
+                <property name="use-markup">False</property>
+                <property name="use-underline">False</property>
+                <property name="valign">baseline</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
