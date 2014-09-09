@@ -999,6 +999,11 @@ gb_object_animatev (gpointer        object,
   g_return_val_if_fail (first_property != NULL, NULL);
   g_return_val_if_fail (mode < GB_ANIMATION_LAST, NULL);
 
+  if (!frame_clock && GTK_IS_WIDGET (object))
+    {
+      frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (object));
+    }
+
   name = first_property;
   type = G_TYPE_FROM_INSTANCE (object);
   klass = G_OBJECT_GET_CLASS (object);
