@@ -17,51 +17,60 @@
  */
 
 #define G_LOG_DOMAIN "snippets"
-#define SNIPPETS_DIRECTORY "/org/gnome/builder/snippets/"
 
 #include <glib/gi18n.h>
 
 #include "gb-source-snippets-manager.h"
-
-G_DEFINE_TYPE (GbSourceSnippetsManager,
-               gb_source_snippets_manager,
-               G_TYPE_OBJECT)
 
 struct _GbSourceSnippetsManagerPrivate
 {
   GHashTable *by_language_id;
 };
 
+G_DEFINE_TYPE_WITH_PRIVATE (GbSourceSnippetsManager,
+                            gb_source_snippets_manager,
+                            G_TYPE_OBJECT)
+
+#define SNIPPETS_DIRECTORY "/org/gnome/builder/snippets/"
+
 static gboolean
 gb_source_snippets_manager_load_file (GbSourceSnippetsManager *manager,
                                       GFile                   *file,
+                                      const gchar             *force_lang,
                                       GError                 **error)
 {
   GbSourceSnippets *snippets;
-  gchar *base;
+  gchar *base = NULL;
 
   g_return_val_if_fail (GB_IS_SOURCE_SNIPPETS_MANAGER (manager), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
 
-  base = g_file_get_basename (file);
-  if (!base)
+  if (!force_lang)
     {
-      g_set_error (error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_INVAL,
-                   _ ("The file is invalid."));
-      return FALSE;
+      base = g_file_get_basename (file);
+
+      if (!base)
+        {
+          g_set_error (error,
+                       G_IO_ERROR,
+                       G_IO_ERROR_INVAL,
+                       _("The file is invalid."));
+          return FALSE;
+        }
+
+      if (strstr (base, "."))
+        *strstr (base, ".") = '\0';
+
+      force_lang = base;
     }
 
-  if (strstr (base, "."))
-    *strstr (base, ".") = '\0';
+  snippets = g_hash_table_lookup (manager->priv->by_language_id, force_lang);
 
-  snippets = g_hash_table_lookup (manager->priv->by_language_id, base);
   if (!snippets)
     {
       snippets = gb_source_snippets_new ();
       g_hash_table_insert (manager->priv->by_language_id,
-                           g_strdup (base),
+                           g_strdup (force_lang),
                            snippets);
     }
 
@@ -86,7 +95,8 @@ gb_source_snippets_manager_load_directory (GbSourceSnippetsManager *manager,
   dir = g_dir_open (path, 0, &error);
   if (!dir)
     {
-      g_warning ("Failed to open directory: %s", error->message);
+      g_warning (_("Failed to open directory: %s"),
+                 error->message);
       g_error_free (error);
       return;
     }
@@ -97,9 +107,10 @@ gb_source_snippets_manager_load_directory (GbSourceSnippetsManager *manager,
         {
           filename = g_build_filename (path, name, NULL);
           file = g_file_new_for_path (filename);
-          if (!gb_source_snippets_manager_load_file (manager, file, &error))
+          if (!gb_source_snippets_manager_load_file (manager, file,
+                                                     NULL, &error))
             {
-              g_warning ("Failed to load file: %s: %s",
+              g_warning (_("Failed to load file: %s: %s"),
                          filename, error->message);
               g_clear_error (&error);
             }
@@ -157,45 +168,45 @@ gb_source_snippets_manager_get_for_language (GbSourceSnippetsManager *manager,
 }
 
 static void
-gb_source_snippets_manager_finalize (GObject *object)
+gb_source_snippets_manager_preload_c (GbSourceSnippetsManager *manager)
 {
-  GbSourceSnippetsManagerPrivate *priv;
+  GFile *file;
+  gchar *path;
 
-  priv = GB_SOURCE_SNIPPETS_MANAGER (object)->priv;
+  g_return_if_fail (GB_IS_SOURCE_SNIPPETS_MANAGER (manager));
 
-  g_clear_pointer (&priv->by_language_id, g_hash_table_unref);
+  file = g_file_new_for_uri ("resource://"SNIPPETS_DIRECTORY"c.snippets");
+  if (g_file_query_exists (file, NULL))
+    gb_source_snippets_manager_load_file (manager, file, "chdr", NULL);
+  g_clear_object (&file);
 
-  G_OBJECT_CLASS (gb_source_snippets_manager_parent_class)->finalize (object);
+  path = g_build_filename (g_get_user_config_dir (), "gnome-builder",
+                           "snippets", "c.snippets", NULL);
+  file = g_file_new_for_path (path);
+  if (g_file_query_exists (file, NULL))
+    gb_source_snippets_manager_load_file (manager, file, "chdr", NULL);
+  g_clear_object (&file);
+  g_free (path);
 }
 
 static void
-gb_source_snippets_manager_class_init (GbSourceSnippetsManagerClass *klass)
+gb_source_snippets_manager_constructed (GObject *object)
 {
-  GObjectClass *object_class;
-
-  object_class = G_OBJECT_CLASS (klass);
-  object_class->finalize = gb_source_snippets_manager_finalize;
-  g_type_class_add_private (object_class, sizeof (GbSourceSnippetsManagerPrivate));
-}
-
-static void
-gb_source_snippets_manager_init (GbSourceSnippetsManager *manager)
-{
+  GbSourceSnippetsManager *manager = (GbSourceSnippetsManager *)object;
   GError *error = NULL;
   GFile *file;
   gchar *path;
   gchar **names;
   guint i;
 
-  manager->priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
-                                               GB_TYPE_SOURCE_SNIPPETS_MANAGER,
-                                               GbSourceSnippetsManagerPrivate);
+  g_assert (GB_IS_SOURCE_SNIPPETS_MANAGER (manager));
 
-  manager->priv->by_language_id =
-    g_hash_table_new_full (g_str_hash,
-                           g_str_equal,
-                           g_free,
-                           g_object_unref);
+  /*
+   * We need to preload chdr so that it is the combination of the "c"
+   * snippets and the chdr snippets on top of that. This way, you don't
+   * need to write all of your snippets twice, for both "c" and "chdr".
+   */
+  gb_source_snippets_manager_preload_c (manager);
 
   names = g_resources_enumerate_children (SNIPPETS_DIRECTORY,
                                           G_RESOURCE_LOOKUP_FLAGS_NONE,
@@ -212,7 +223,7 @@ gb_source_snippets_manager_init (GbSourceSnippetsManager *manager)
     {
       path = g_strdup_printf ("resource://"SNIPPETS_DIRECTORY"%s", names[i]);
       file = g_file_new_for_uri (path);
-      if (!gb_source_snippets_manager_load_file (manager, file, &error))
+      if (!gb_source_snippets_manager_load_file (manager, file, NULL, &error))
         {
           g_message ("%s", error->message);
           g_clear_error (&error);
@@ -222,4 +233,37 @@ gb_source_snippets_manager_init (GbSourceSnippetsManager *manager)
     }
 
   g_strfreev (names);
+}
+
+static void
+gb_source_snippets_manager_finalize (GObject *object)
+{
+  GbSourceSnippetsManagerPrivate *priv;
+
+  priv = GB_SOURCE_SNIPPETS_MANAGER (object)->priv;
+
+  g_clear_pointer (&priv->by_language_id, g_hash_table_unref);
+
+  G_OBJECT_CLASS (gb_source_snippets_manager_parent_class)->finalize (object);
+}
+
+static void
+gb_source_snippets_manager_class_init (GbSourceSnippetsManagerClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->constructed = gb_source_snippets_manager_constructed;
+  object_class->finalize = gb_source_snippets_manager_finalize;
+}
+
+static void
+gb_source_snippets_manager_init (GbSourceSnippetsManager *manager)
+{
+  manager->priv = gb_source_snippets_manager_get_instance_private (manager);
+
+  manager->priv->by_language_id =
+    g_hash_table_new_full (g_str_hash,
+                           g_str_equal,
+                           g_free,
+                           g_object_unref);
 }
