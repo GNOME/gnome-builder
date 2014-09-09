@@ -123,7 +123,6 @@ enum {
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorTab, gb_editor_tab, GB_TYPE_TAB)
 
-static guint       gUnsaved;
 static GParamSpec *gParamSpecs[LAST_PROP];
 
 GtkWidget *
@@ -664,65 +663,6 @@ gb_editor_tab_cursor_moved (GbEditorTab      *tab,
   g_free (text);
 
   update_search_position_label (tab);
-}
-
-static void
-gb_editor_tab_set_document (GbEditorTab      *tab,
-                            GbEditorDocument *document)
-{
-  GbEditorTabPrivate *priv;
-  GtkSourceBuffer *buffer;
-
-  ENTRY;
-
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-  g_return_if_fail (!document || GB_IS_EDITOR_DOCUMENT (document));
-  g_return_if_fail (!tab->priv->document);
-
-  priv = tab->priv;
-
-  if (!document)
-    {
-      priv->document = gb_editor_document_new ();
-      priv->unsaved_number = ++gUnsaved;
-    }
-  else
-    priv->document = g_object_ref (document);
-
-  gtk_text_view_set_buffer (GTK_TEXT_VIEW (priv->source_view),
-                            GTK_TEXT_BUFFER (priv->document));
-
-  g_signal_connect_swapped (priv->document,
-                            "cursor-moved",
-                            G_CALLBACK (gb_editor_tab_cursor_moved),
-                            tab);
-
-#if 1
-  {
-    /*
-     * TODO: Remove me once we have file open/save/etc plumbed.
-     */
-
-    GtkSourceLanguageManager *lm = gtk_source_language_manager_get_default ();
-    GtkSourceLanguage *l = gtk_source_language_manager_get_language (lm, "c");
-    g_object_set (priv->document, "language", l, NULL);
-    gb_editor_tab_reload_snippets (tab, l);
-  }
-#endif
-
-  buffer = GTK_SOURCE_BUFFER (priv->document);
-  priv->search_context =
-    gtk_source_search_context_new (buffer, priv->search_settings);
-  g_signal_connect_swapped (priv->search_context,
-                            "notify::occurrences-count",
-                            G_CALLBACK (on_search_occurrences_notify),
-                            tab);
-
-  gb_editor_tab_cursor_moved (tab, priv->document);
-
-  g_object_notify_by_pspec (G_OBJECT (tab), gParamSpecs[PROP_DOCUMENT]);
-
-  EXIT;
 }
 
 void
@@ -1371,23 +1311,22 @@ on_source_view_push_snippet (GbSourceView           *source_view,
                              GtkTextIter            *iter,
                              GbEditorTab            *tab)
 {
+  GFile *file;
+
   g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
   g_return_if_fail (GB_IS_SOURCE_SNIPPET (snippet));
   g_return_if_fail (GB_IS_SOURCE_SNIPPET_CONTEXT (context));
   g_return_if_fail (iter);
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
-  if (tab->priv->file)
-    {
-      GFile *file = gtk_source_file_get_location (tab->priv->file);
+  file = gtk_source_file_get_location (tab->priv->file);
+  g_assert (!file || G_IS_FILE (file));
 
-      if (file)
-        {
-          gchar *name = g_file_get_basename (file);
-          gb_source_snippet_context_add_variable (context, "filename", name);
-          g_free (name);
-          g_object_unref (file);
-        }
+  if (file)
+    {
+      gchar *name = g_file_get_basename (file);
+      gb_source_snippet_context_add_variable (context, "filename", name);
+      g_free (name);
     }
 }
 
@@ -1407,15 +1346,11 @@ gb_editor_tab_constructed (GObject *object)
   if (!priv->settings)
     gb_editor_tab_set_settings (tab, NULL);
 
-  priv->search_highlighter = g_object_new (GB_TYPE_SOURCE_SEARCH_HIGHLIGHTER,
-                                           "source-view", priv->source_view,
-                                           "search-settings", priv->search_settings,
-                                           "search-context", priv->search_context,
-                                           NULL);
+  g_signal_connect_swapped (priv->document,
+                            "cursor-moved",
+                            G_CALLBACK (gb_editor_tab_cursor_moved),
+                            tab);
 
-  g_object_set (priv->source_view,
-                "search-highlighter", priv->search_highlighter,
-                NULL);
   g_signal_connect (priv->source_view,
                     "key-press-event",
                     G_CALLBACK (on_source_view_key_press_event),
@@ -1442,8 +1377,20 @@ gb_editor_tab_constructed (GObject *object)
                             G_CALLBACK (gb_editor_tab_move_previous_match),
                             tab);
 
+  g_signal_connect_swapped (priv->search_context,
+                            "notify::occurrences-count",
+                            G_CALLBACK (on_search_occurrences_notify),
+                            tab);
+
   comp = gtk_source_view_get_completion (GTK_SOURCE_VIEW (priv->source_view));
   gtk_source_completion_add_provider (comp, priv->snippets_provider, NULL);
+
+  /*
+   * WORKAROUND:
+
+   * Once GtkSourceView exports this as an internal child, we can do this from
+   * the gb-editor-tab.ui file.
+   */
   g_object_set (comp,
                 "show-headers", FALSE,
                 "select-on-show", TRUE,
@@ -1472,6 +1419,21 @@ gb_editor_tab_constructed (GObject *object)
   g_object_bind_property (priv->revealer, "reveal-child",
                           priv->source_view, "show-shadow",
                           G_BINDING_SYNC_CREATE);
+
+#if 1
+  {
+    /*
+     * TODO: Remove me once we have file open/save/etc plumbed.
+     */
+
+    GtkSourceLanguageManager *lm = gtk_source_language_manager_get_default ();
+    GtkSourceLanguage *l = gtk_source_language_manager_get_language (lm, "c");
+    g_object_set (priv->document, "language", l, NULL);
+    gb_editor_tab_reload_snippets (tab, l);
+  }
+#endif
+
+  gb_editor_tab_cursor_moved (tab, priv->document);
 
   EXIT;
 }
@@ -1541,10 +1503,6 @@ gb_editor_tab_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_DOCUMENT:
-      gb_editor_tab_set_document (tab, g_value_get_object (value));
-      break;
-
     case PROP_FONT_DESC:
       gb_editor_tab_set_font_desc (tab, g_value_get_boxed (value));
       break;
@@ -1581,8 +1539,7 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
                          _ ("Document"),
                          _ ("The document to edit."),
                          GB_TYPE_EDITOR_DOCUMENT,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
+                         (G_PARAM_READABLE |
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_DOCUMENT,
                                    gParamSpecs[PROP_DOCUMENT]);
@@ -1615,33 +1572,28 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
   g_object_class_install_property (object_class, PROP_SETTINGS,
                                    gParamSpecs[PROP_SETTINGS]);
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               GB_EDITOR_TAB_UI_RESOURCE);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                floating_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                go_down_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                go_up_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                overlay);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                progress_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                revealer);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                scroller);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                search_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                search_settings);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                snippets_provider);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                source_view);
+  gtk_widget_class_set_template_from_resource (widget_class, GB_EDITOR_TAB_UI_RESOURCE);
 
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, floating_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, document);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, file);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, go_down_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, go_up_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, overlay);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, progress_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, revealer);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, scroller);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, search_context);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, search_highlighter);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, search_settings);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, snippets_provider);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, source_view);
+
+  g_type_ensure (GB_TYPE_EDITOR_DOCUMENT);
   g_type_ensure (GB_TYPE_SOURCE_VIEW);
   g_type_ensure (GB_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER);
+  g_type_ensure (GB_TYPE_SOURCE_SEARCH_HIGHLIGHTER);
   g_type_ensure (GD_TYPE_TAGGED_ENTRY);
   g_type_ensure (NAUTILUS_TYPE_FLOATING_BAR);
 }
@@ -1652,6 +1604,4 @@ gb_editor_tab_init (GbEditorTab *tab)
   tab->priv = gb_editor_tab_get_instance_private (tab);
 
   gtk_widget_init_template (GTK_WIDGET (tab));
-
-  tab->priv->file = gtk_source_file_new ();
 }
