@@ -70,7 +70,7 @@ snippet inc
 snippet Inc
 	#include <${1}>$0
 snippet gobject
-	#include "${1}.h"
+	#include "${1:$filename|stripsuffix}.h"
 
 	struct _${2:$1|camelize}Private
 	{
