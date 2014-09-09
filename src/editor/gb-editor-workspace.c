@@ -79,9 +79,10 @@ gb_editor_workspace_find (GbWorkspace *workspace)
   priv = GB_EDITOR_WORKSPACE (workspace)->priv;
 
   tab = gb_multi_notebook_get_active_tab (priv->multi_notebook);
+  g_assert (GB_IS_EDITOR_TAB (tab));
 
   if (tab)
-    gb_editor_tab_set_show_find (GB_EDITOR_TAB (tab), TRUE);
+    gb_editor_tab_focus_search (GB_EDITOR_TAB (tab));
 }
 
 static void

@@ -362,8 +362,7 @@ cleanup:
 }
 
 void
-gb_editor_tab_set_show_find (GbEditorTab *tab,
-                             gboolean     show_find)
+gb_editor_tab_focus_search (GbEditorTab *tab)
 {
   GbEditorTabPrivate *priv;
 
@@ -373,11 +372,9 @@ gb_editor_tab_set_show_find (GbEditorTab *tab,
 
   priv = tab->priv;
 
-  gtk_revealer_set_reveal_child (priv->revealer, show_find);
-  gtk_source_search_context_set_highlight (priv->search_context, show_find);
-
-  if (show_find)
-    gtk_widget_grab_focus (GTK_WIDGET (priv->search_entry));
+  gtk_revealer_set_reveal_child (priv->revealer, TRUE);
+  gtk_source_search_context_set_highlight (priv->search_context, TRUE);
+  gtk_widget_grab_focus (GTK_WIDGET (priv->search_entry));
 
   EXIT;
 }
