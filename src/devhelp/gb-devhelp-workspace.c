@@ -169,9 +169,6 @@ gb_devhelp_workspace_init (GbDevhelpWorkspace *workspace)
 
   priv = workspace->priv;
 
-  gb_workspace_set_icon_name (GB_WORKSPACE (workspace), "devhelp");
-  gb_workspace_set_title (GB_WORKSPACE (workspace), _ ("Documentation"));
-
   priv->book_manager = dh_book_manager_new ();
 
   priv->paned = g_object_new (GTK_TYPE_PANED,
