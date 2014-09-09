@@ -344,6 +344,20 @@ filter_space (const gchar *input)
 }
 
 static gchar *
+filter_stripsuffix (const gchar *input)
+{
+  const gchar *endpos;
+
+  g_return_val_if_fail (input, NULL);
+
+  endpos = strrchr (input, '.');
+  if (endpos)
+    return g_strndup (input, (endpos - input));
+
+  return g_strdup (input);
+}
+
+static gchar *
 apply_filter (gchar       *input,
               const gchar *filter)
 {
@@ -580,6 +594,7 @@ gb_source_snippet_context_class_init (GbSourceSnippetContextClass *klass)
   g_hash_table_insert (gFilters, (gpointer) "namespace", filter_namespace);
   g_hash_table_insert (gFilters, (gpointer) "class", filter_class);
   g_hash_table_insert (gFilters, (gpointer) "space", filter_space);
+  g_hash_table_insert (gFilters, (gpointer) "stripsuffix", filter_stripsuffix);
 }
 
 static void
