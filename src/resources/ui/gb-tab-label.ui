@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbTabLabel" parent="GtkBin">
+    <property name="visible">True</property>
+    <child>
+      <object class="GtkBox" id="hbox">
+        <property name="visible">True</property>
+        <property name="spacing">3</property>
+        <property name="orientation">horizontal</property>
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="ellipsize">end</property>
+            <property name="hexpand">True</property>
+            <property name="use-markup">False</property>
+            <property name="use-underline">False</property>
+            <property name="valign">baseline</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GeditCloseButton" id="close_button">
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

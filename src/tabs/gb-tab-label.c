@@ -25,12 +25,10 @@
 struct _GbTabLabelPrivate
 {
   GbTab          *tab;
-  GBinding       *icon_name_binding;
+
   GBinding       *title_binding;
 
-  GtkWidget      *event_box;
   GtkWidget      *hbox;
-  GtkWidget      *image;
   GtkWidget      *label;
   GtkWidget      *close_button;
 
@@ -78,7 +76,6 @@ gb_tab_label_set_tab (GbTabLabel *label,
 
   priv = label->priv;
 
-  g_clear_object (&priv->icon_name_binding);
   g_clear_object (&priv->title_binding);
 
   if (priv->tab)
@@ -93,12 +90,6 @@ gb_tab_label_set_tab (GbTabLabel *label,
       priv->tab = tab;
       g_object_add_weak_pointer (G_OBJECT (tab), (gpointer *) &priv->tab);
 
-      priv->icon_name_binding =
-        g_object_bind_property (tab, "icon-name", priv->image, "icon-name",
-                                G_BINDING_SYNC_CREATE);
-      g_object_add_weak_pointer (G_OBJECT (priv->icon_name_binding),
-                                 (gpointer *) &priv->icon_name_binding);
-
       priv->title_binding =
         g_object_bind_property (tab, "title", priv->label, "label",
                                 G_BINDING_SYNC_CREATE);
@@ -112,7 +103,6 @@ gb_tab_label_finalize (GObject *object)
 {
   GbTabLabelPrivate *priv = GB_TAB_LABEL (object)->priv;
 
-  g_clear_object (&priv->icon_name_binding);
   g_clear_object (&priv->title_binding);
 
   if (priv->tab)
@@ -166,9 +156,9 @@ gb_tab_label_set_property (GObject      *object,
 static void
 gb_tab_label_class_init (GbTabLabelClass *klass)
 {
-  GObjectClass *object_class;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = gb_tab_label_finalize;
   object_class->get_property = gb_tab_label_get_property;
   object_class->set_property = gb_tab_label_set_property;
@@ -194,48 +184,20 @@ gb_tab_label_class_init (GbTabLabelClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+
+  gtk_widget_class_set_template_from_resource (widget_class,
+                                               "/org/gnome/builder/ui/gb-tab-label.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GbTabLabel, hbox);
+  gtk_widget_class_bind_template_child_private (widget_class, GbTabLabel, label);
+  gtk_widget_class_bind_template_child_private (widget_class, GbTabLabel, close_button);
+
+  g_type_ensure (GEDIT_TYPE_CLOSE_BUTTON);
 }
 
 static void
 gb_tab_label_init (GbTabLabel *label)
 {
-  GbTabLabelPrivate *priv;
+  label->priv = gb_tab_label_get_instance_private (label);
 
-  priv = label->priv = gb_tab_label_get_instance_private (label);
-
-  priv->event_box = g_object_new (GTK_TYPE_EVENT_BOX,
-                                  "visible", TRUE,
-                                  "visible-window", FALSE,
-                                  NULL);
-  gtk_container_add (GTK_CONTAINER (label), priv->event_box);
-
-  priv->hbox = g_object_new (GTK_TYPE_BOX,
-                             "orientation", GTK_ORIENTATION_HORIZONTAL,
-                             "spacing", 3,
-                             "visible", TRUE,
-                             NULL);
-  gtk_container_add (GTK_CONTAINER (priv->event_box), priv->hbox);
-
-  priv->image = g_object_new (GTK_TYPE_IMAGE,
-                              "icon-size", GTK_ICON_SIZE_MENU,
-                              "visible", FALSE,
-                              NULL);
-  gtk_container_add (GTK_CONTAINER (priv->hbox), priv->image);
-
-  priv->label = g_object_new (GTK_TYPE_LABEL,
-                              "ellipsize", PANGO_ELLIPSIZE_END,
-                              "hexpand", TRUE,
-                              "use-markup", FALSE,
-                              "use-underline", FALSE,
-                              "valign", GTK_ALIGN_BASELINE,
-                              "visible", TRUE,
-                              NULL);
-  gtk_container_add (GTK_CONTAINER (priv->hbox), priv->label);
-
-  priv->close_button = g_object_new (GEDIT_TYPE_CLOSE_BUTTON,
-                                     "hexpand", FALSE,
-                                     "vexpand", FALSE,
-                                     "visible", TRUE,
-                                     NULL);
-  gtk_container_add (GTK_CONTAINER (priv->hbox), priv->close_button);
+  gtk_widget_init_template (GTK_WIDGET (label));
 }

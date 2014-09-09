@@ -12,6 +12,7 @@
 
     <file>ui/gb-devhelp-tab.ui</file>
     <file>ui/gb-editor-tab.ui</file>
+    <file>ui/gb-tab-label.ui</file>
     <file>ui/gb-workbench.ui</file>
   </gresource>
 </gresources>
