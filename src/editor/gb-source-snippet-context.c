@@ -451,8 +451,12 @@ gb_source_snippet_context_expand (GbSourceSnippetContext *context,
                   lkey = g_strndup (input, strchr (input, '|') - input);
                   expand = gb_source_snippet_context_get_variable (context, lkey);
                   if (expand)
-                    g_string_append (str, expand);
-                  input = strchr (input, '|');
+                    {
+                      g_string_append (str, expand);
+                      input = strchr (input, '|') - 1;
+                    }
+                  else
+                    input += strlen (input) - 1;
                 }
               else
                 {
