@@ -311,9 +311,6 @@ gb_editor_workspace_init (GbEditorWorkspace *workspace)
                                    G_N_ELEMENTS (action_entries),
                                    workspace);
 
-  gb_workspace_set_icon_name (GB_WORKSPACE (workspace), "text-x-generic");
-  gb_workspace_set_title (GB_WORKSPACE (workspace), _ ("Editor"));
-
   priv->multi_notebook = g_object_new (GB_TYPE_MULTI_NOTEBOOK,
                                        "visible", TRUE,
                                        "group-name", "GB_EDITOR_WORKSPACE",

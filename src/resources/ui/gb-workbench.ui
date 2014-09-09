@@ -136,7 +136,7 @@
                 <property name="visible">True</property>
               </object>
               <packing>
-                <property name="icon_name">text-x-generic</property>
+                <property name="icon_name">text-editor-symbolic</property>
                 <property name="name">editor</property>
                 <property name="title" translatable="yes">Editor</property>
               </packing>
