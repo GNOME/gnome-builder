@@ -146,4 +146,4 @@ snippet gobject
 		self->priv = $3_get_instance_private (self);
 	}
 snippet pr
-	${1:MyObject}Private *priv;$0
+	${$filename|stripsuffix|functify|camelize}Private *priv;$0
