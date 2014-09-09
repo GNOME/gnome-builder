@@ -389,25 +389,7 @@ gb_editor_tab_reload_snippets (GbEditorTab       *tab,
   if (language)
     {
       manager = gb_source_snippets_manager_get_default ();
-
-      if (g_str_equal (gtk_source_language_get_id (language), "chdr"))
-        {
-          GtkSourceLanguageManager *lm;
-          GtkSourceLanguage *l;
-          GbSourceSnippets *other;
-
-          lm = gtk_source_language_manager_get_default ();
-          l = gtk_source_language_manager_get_language (lm, "c");
-          snippets = gb_source_snippets_manager_get_for_language (manager, l);
-          other = gb_source_snippets_manager_get_for_language (manager,
-                                                               language);
-
-          gb_source_snippets_merge (snippets, other);
-        }
-      else
-        snippets = gb_source_snippets_manager_get_for_language (manager,
-                                                                language);
-
+      snippets = gb_source_snippets_manager_get_for_language (manager, language);
     }
 
   g_object_set (priv->snippets_provider, "snippets", snippets, NULL);

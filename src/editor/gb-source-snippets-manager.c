@@ -150,6 +150,9 @@ gb_source_snippets_manager_get_for_language (GbSourceSnippetsManager *manager,
   language_id = gtk_source_language_get_id (language);
   snippets = g_hash_table_lookup (priv->by_language_id, language_id);
 
+  if (!snippets && g_str_equal (language_id, "chdr"))
+    snippets = g_hash_table_lookup (priv->by_language_id, "c");
+
   return snippets;
 }
 
