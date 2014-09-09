@@ -22,12 +22,14 @@
 
 struct _GbTabPrivate
 {
-  gchar *icon_name;
-  gchar *title;
+  gchar    *icon_name;
+  gchar    *title;
+  gboolean  dirty;
 };
 
 enum {
   PROP_0,
+  PROP_DIRTY,
   PROP_ICON_NAME,
   PROP_TITLE,
   LAST_PROP
@@ -44,6 +46,24 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbTab, gb_tab, GTK_TYPE_BOX)
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
+
+gboolean
+gb_tab_get_dirty (GbTab *tab)
+{
+  g_return_val_if_fail (GB_IS_TAB (tab), FALSE);
+
+  return tab->priv->dirty;
+}
+
+void
+gb_tab_set_dirty (GbTab    *tab,
+                  gboolean  dirty)
+{
+  g_return_if_fail (GB_IS_TAB (tab));
+
+  tab->priv->dirty = dirty;
+  g_object_notify_by_pspec (G_OBJECT (tab), gParamSpecs [PROP_DIRTY]);
+}
 
 void
 gb_tab_close (GbTab *tab)
@@ -130,6 +150,10 @@ gb_tab_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_DIRTY:
+      g_value_set_boolean (value, gb_tab_get_dirty (tab));
+      break;
+
     case PROP_ICON_NAME:
       g_value_set_string (value, gb_tab_get_icon_name (tab));
       break;
@@ -153,6 +177,10 @@ gb_tab_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_DIRTY:
+      gb_tab_set_dirty (tab, g_value_get_boolean (value));
+      break;
+
     case PROP_ICON_NAME:
       gb_tab_set_icon_name (tab, g_value_get_string (value));
       break;
@@ -175,6 +203,15 @@ gb_tab_class_init (GbTabClass *klass)
   object_class->finalize = gb_tab_finalize;
   object_class->get_property = gb_tab_get_property;
   object_class->set_property = gb_tab_set_property;
+
+  gParamSpecs [PROP_DIRTY] =
+    g_param_spec_boolean ("dirty",
+                         _("Dirty"),
+                         _("If the tab has dirty state."),
+                         FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_DIRTY,
+                                   gParamSpecs [PROP_DIRTY]);
 
   gParamSpecs[PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
