@@ -21,6 +21,7 @@
 #include <webkit2/webkit2.h>
 
 #include "gb-devhelp-tab.h"
+#include "gb-multi-notebook.h"
 #include "gd-tagged-entry.h"
 
 struct _GbDevhelpTabPrivate
@@ -37,6 +38,25 @@ enum {
 G_DEFINE_TYPE_WITH_PRIVATE (GbDevhelpTab, gb_devhelp_tab, GB_TYPE_TAB)
 
 static GParamSpec *gParamSpecs[LAST_PROP];
+
+static void
+gb_devhelp_tab_close (GbTab *tab)
+{
+  GtkWidget *parent = (GtkWidget *)tab;
+  GList *list;
+
+  g_return_if_fail (GB_IS_DEVHELP_TAB (tab));
+
+  while (!GB_IS_MULTI_NOTEBOOK (parent))
+    parent = gtk_widget_get_parent (parent);
+
+  list = gb_multi_notebook_get_all_tabs (GB_MULTI_NOTEBOOK (parent));
+
+  if (list->next)
+    gtk_widget_destroy (GTK_WIDGET (tab));
+
+  g_list_free (list);
+}
 
 static void
 gb_devhelp_tab_freeze_drag (GbTab *tab)
@@ -126,6 +146,7 @@ gb_devhelp_tab_class_init (GbDevhelpTabClass *klass)
   object_class->finalize = gb_devhelp_tab_finalize;
   object_class->set_property = gb_devhelp_tab_set_property;
 
+  tab_class->close = gb_devhelp_tab_close;
   tab_class->freeze_drag = gb_devhelp_tab_freeze_drag;
   tab_class->thaw_drag = gb_devhelp_tab_thaw_drag;
 
