@@ -16,8 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "tab-label"
+
 #include <glib/gi18n.h>
 
+#include "gb-log.h"
 #include "gb-tab.h"
 #include "gb-tab-label.h"
 #include "gedit-close-button.h"
@@ -99,6 +102,34 @@ gb_tab_label_set_tab (GbTabLabel *label,
 }
 
 static void
+on_close_button_clicked (GbTabLabel       *tab_label,
+                         GeditCloseButton *close_button)
+{
+  ENTRY;
+
+  g_return_if_fail (GB_IS_TAB_LABEL (tab_label));
+  g_return_if_fail (GEDIT_IS_CLOSE_BUTTON (close_button));
+
+  g_signal_emit (tab_label, gSignals [CLOSE_CLICKED], 0);
+
+  EXIT;
+}
+
+static void
+gb_tab_label_constructed (GObject *object)
+{
+  GbTabLabel *tab_label = (GbTabLabel *)object;
+
+  g_return_if_fail (GB_IS_TAB_LABEL (tab_label));
+
+  g_signal_connect_object (tab_label->priv->close_button,
+                           "clicked",
+                           G_CALLBACK (on_close_button_clicked),
+                           tab_label,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
 gb_tab_label_finalize (GObject *object)
 {
   GbTabLabelPrivate *priv = GB_TAB_LABEL (object)->priv;
@@ -159,6 +190,7 @@ gb_tab_label_class_init (GbTabLabelClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = gb_tab_label_constructed;
   object_class->finalize = gb_tab_label_finalize;
   object_class->get_property = gb_tab_label_get_property;
   object_class->set_property = gb_tab_label_set_property;
