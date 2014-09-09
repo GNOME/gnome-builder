@@ -34,6 +34,7 @@ enum {
 };
 
 enum {
+  CLOSE,
   FREEZE_DRAG,
   THAW_DRAG,
   LAST_SIGNAL
@@ -41,8 +42,16 @@ enum {
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbTab, gb_tab, GTK_TYPE_BOX)
 
-static GParamSpec * gParamSpecs[LAST_PROP];
-static guint gSignals[LAST_SIGNAL];
+static GParamSpec *gParamSpecs [LAST_PROP];
+static guint       gSignals [LAST_SIGNAL];
+
+void
+gb_tab_close (GbTab *tab)
+{
+  g_return_if_fail (GB_IS_TAB (tab));
+
+  g_signal_emit (tab, gSignals [CLOSE], 0);
+}
 
 const gchar *
 gb_tab_get_icon_name (GbTab *tab)
@@ -187,25 +196,38 @@ gb_tab_class_init (GbTabClass *klass)
   g_object_class_install_property (object_class, PROP_TITLE,
                                    gParamSpecs[PROP_TITLE]);
 
-  gSignals[FREEZE_DRAG] = g_signal_new ("freeze-drag",
-                                        GB_TYPE_TAB,
-                                        G_SIGNAL_RUN_LAST,
-                                        G_STRUCT_OFFSET (GbTabClass, freeze_drag),
-                                        NULL,
-                                        NULL,
-                                        g_cclosure_marshal_VOID__VOID,
-                                        G_TYPE_NONE,
-                                        0);
+  gSignals [CLOSE] =
+    g_signal_new ("close",
+                  GB_TYPE_TAB,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbTabClass, close),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
-  gSignals[THAW_DRAG] = g_signal_new ("thaw-drag",
-                                      GB_TYPE_TAB,
-                                      G_SIGNAL_RUN_LAST,
-                                      G_STRUCT_OFFSET (GbTabClass, thaw_drag),
-                                      NULL,
-                                      NULL,
-                                      g_cclosure_marshal_VOID__VOID,
-                                      G_TYPE_NONE,
-                                      0);
+  gSignals [FREEZE_DRAG] =
+    g_signal_new ("freeze-drag",
+                  GB_TYPE_TAB,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbTabClass, freeze_drag),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  gSignals [THAW_DRAG] =
+    g_signal_new ("thaw-drag",
+                  GB_TYPE_TAB,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbTabClass, thaw_drag),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 static void

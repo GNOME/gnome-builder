@@ -49,8 +49,7 @@ struct _GbTabClass
 
   void (*freeze_drag) (GbTab *tab);
   void (*thaw_drag)   (GbTab *tab);
-
-  gpointer padding[8];
+  void (*close)       (GbTab *tab);
 };
 
 GType        gb_tab_get_type      (void) G_GNUC_CONST;
@@ -63,6 +62,7 @@ void         gb_tab_set_icon_name (GbTab       *tab,
 
 void         gb_tab_freeze_drag   (GbTab       *tab);
 void         gb_tab_thaw_drag     (GbTab       *tab);
+void         gb_tab_close         (GbTab       *tab);
 
 G_END_DECLS
 
