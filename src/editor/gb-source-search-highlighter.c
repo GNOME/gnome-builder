@@ -49,14 +49,6 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbSourceSearchHighlighter,
 static GParamSpec * gParamSpecs[LAST_PROP];
 static guint gSignals[LAST_SIGNAL];
 
-GbSourceSearchHighlighter *
-gb_source_search_highlighter_new (GtkSourceView *source_view)
-{
-  return g_object_new (GB_TYPE_SOURCE_SEARCH_HIGHLIGHTER,
-                       "source-view", source_view,
-                       NULL);
-}
-
 static void
 add_match (GtkTextView       *text_view,
            cairo_region_t    *region,
@@ -166,6 +158,7 @@ draw_bezel (cairo_t                     *cr,
 
 void
 gb_source_search_highlighter_draw (GbSourceSearchHighlighter *highlighter,
+                                   GtkTextView               *text_view,
                                    cairo_t                   *cr)
 {
   GbSourceSearchHighlighterPrivate *priv;
@@ -175,7 +168,6 @@ gb_source_search_highlighter_draw (GbSourceSearchHighlighter *highlighter,
   GtkSourceStyle *style;
   GtkTextBuffer *buffer;
   GdkRectangle area;
-  GtkTextView *text_view;
   GtkTextIter begin;
   GtkTextIter end;
   GdkRGBA color;
@@ -183,16 +175,15 @@ gb_source_search_highlighter_draw (GbSourceSearchHighlighter *highlighter,
   GdkRGBA color2;
 
   g_return_if_fail (GB_IS_SOURCE_SEARCH_HIGHLIGHTER (highlighter));
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (cr);
 
   priv = highlighter->priv;
 
   if (!priv->search_context ||
-      !priv->source_view ||
       !gtk_source_search_context_get_highlight (priv->search_context))
     return;
 
-  text_view = GTK_TEXT_VIEW (priv->source_view);
   buffer = gtk_text_view_get_buffer (text_view);
   scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
   style = gtk_source_style_scheme_get_style (scheme, "search-match");
@@ -263,22 +254,6 @@ gb_source_search_highlighter_draw (GbSourceSearchHighlighter *highlighter,
   cairo_region_destroy (match_region);
 }
 
-static void
-gb_source_search_highlighter_set_source_view (GbSourceSearchHighlighter *highlighter,
-                                              GtkSourceView             *source_view)
-{
-  GbSourceSearchHighlighterPrivate *priv;
-
-  g_return_if_fail (GB_IS_SOURCE_SEARCH_HIGHLIGHTER (highlighter));
-  g_return_if_fail (GTK_SOURCE_IS_VIEW (source_view));
-
-  priv = highlighter->priv;
-
-  priv->source_view = source_view;
-  g_object_add_weak_pointer (G_OBJECT (source_view),
-                             (gpointer *) &priv->source_view);
-}
-
 void
 gb_source_search_highlighter_set_search_context (GbSourceSearchHighlighter *highlighter,
                                                  GtkSourceSearchContext    *search_context)
@@ -319,13 +294,6 @@ gb_source_search_highlighter_finalize (GObject *object)
   g_clear_object (&priv->search_context);
   g_clear_object (&priv->search_settings);
 
-  if (priv->source_view)
-    {
-      g_object_remove_weak_pointer (G_OBJECT (priv->source_view),
-                                    (gpointer *) &priv->source_view);
-      priv->source_view = NULL;
-    }
-
   G_OBJECT_CLASS (gb_source_search_highlighter_parent_class)->finalize (object);
 }
 
@@ -345,10 +313,6 @@ gb_source_search_highlighter_set_property (GObject      *object,
 
     case PROP_SEARCH_SETTINGS:
       gb_source_search_highlighter_set_search_settings (highlighter, g_value_get_object (value));
-      break;
-
-    case PROP_SOURCE_VIEW:
-      gb_source_search_highlighter_set_source_view (highlighter, g_value_get_object (value));
       break;
 
     default:
@@ -382,17 +346,6 @@ gb_source_search_highlighter_class_init (GbSourceSearchHighlighterClass *klass)
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SEARCH_SETTINGS,
                                    gParamSpecs[PROP_SEARCH_SETTINGS]);
-
-  gParamSpecs[PROP_SOURCE_VIEW] =
-    g_param_spec_object ("source-view",
-                         _ ("Source View"),
-                         _ ("Source View"),
-                         GTK_SOURCE_TYPE_VIEW,
-                         (G_PARAM_WRITABLE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SOURCE_VIEW,
-                                   gParamSpecs[PROP_SOURCE_VIEW]);
 
   gSignals[CHANGED] = g_signal_new ("changed",
                                     GB_TYPE_SOURCE_SEARCH_HIGHLIGHTER,

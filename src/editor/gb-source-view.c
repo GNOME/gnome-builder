@@ -930,7 +930,8 @@ gb_source_view_draw_layer (GtkTextView     *text_view,
       if (priv->show_shadow && priv->search_highlighter)
         {
           cairo_save (cr);
-          gb_source_search_highlighter_draw (priv->search_highlighter, cr);
+          gb_source_search_highlighter_draw (priv->search_highlighter,
+                                             text_view, cr);
           cairo_restore (cr);
         }
     }

@@ -51,12 +51,12 @@ struct _GbSourceSearchHighlighterClass
 };
 
 GType                      gb_source_search_highlighter_get_type            (void) G_GNUC_CONST;
-GbSourceSearchHighlighter *gb_source_search_highlighter_new                 (GtkSourceView             *source_view);
 void                       gb_source_search_highlighter_set_search_context  (GbSourceSearchHighlighter *highlighter,
                                                                              GtkSourceSearchContext    *search_context);
 void                       gb_source_search_highlighter_set_search_settings (GbSourceSearchHighlighter *highlighter,
                                                                              GtkSourceSearchSettings   *search_settings);
 void                       gb_source_search_highlighter_draw                (GbSourceSearchHighlighter *highlighter,
+                                                                             GtkTextView               *text_view,
                                                                              cairo_t                   *cr);
 
 G_END_DECLS
