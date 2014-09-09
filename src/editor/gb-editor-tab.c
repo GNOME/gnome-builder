@@ -101,12 +101,6 @@ struct _GbEditorTabPrivate
   GtkSourceFile *file;
 
   /*
-   * If we are an unsaved document,
-   * track our unsaved file number.
-   */
-  guint unsaved_number;
-
-  /*
    * Animation for save progress.
    */
   GbAnimation *save_animation;
@@ -1327,6 +1321,32 @@ on_source_view_push_snippet (GbSourceView           *source_view,
     }
 }
 
+static gboolean
+transform_file_to_title (GBinding     *binding,
+                         const GValue *src_value,
+                         GValue       *dst_value,
+                         gpointer      user_data)
+{
+  GbEditorTab *tab = user_data;
+  gchar *title;
+  GFile *file;
+
+  g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), FALSE);
+  g_return_val_if_fail (G_VALUE_HOLDS (src_value, G_TYPE_FILE), FALSE);
+  g_return_val_if_fail (G_VALUE_HOLDS (dst_value, G_TYPE_STRING), FALSE);
+
+  file = g_value_get_object (src_value);
+
+  if (file)
+    title = g_file_get_basename (file);
+  else
+    title = g_strdup (_("Unsaved File"));
+
+  g_value_take_string (dst_value, title);
+
+  return TRUE;
+}
+
 static void
 gb_editor_tab_constructed (GObject *object)
 {
@@ -1416,6 +1436,10 @@ gb_editor_tab_constructed (GObject *object)
   g_object_bind_property (priv->revealer, "reveal-child",
                           priv->source_view, "show-shadow",
                           G_BINDING_SYNC_CREATE);
+
+  g_object_bind_property_full (priv->file, "location", tab, "title",
+                               G_BINDING_SYNC_CREATE, transform_file_to_title,
+                               NULL, tab, NULL);
 
 #if 1
   {
