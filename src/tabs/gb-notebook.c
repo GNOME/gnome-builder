@@ -16,8 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "notebook"
+
 #include <glib/gi18n.h>
 
+#include "gb-log.h"
 #include "gb-notebook.h"
 #include "gb-tab-label.h"
 #include "gb-widget.h"
@@ -53,6 +56,25 @@ gb_notebook_raise_tab (GbNotebook *notebook,
     gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page);
 }
 
+static void
+gb_notebook_tab_label_close_clicked (GbNotebook *notebook,
+                                     GbTabLabel *tab_label)
+{
+  GbTab *tab;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_NOTEBOOK (notebook));
+  g_return_if_fail (GB_IS_TAB_LABEL (tab_label));
+
+  tab = g_object_get_data (G_OBJECT (tab_label), "GB_TAB");
+  g_assert (GB_IS_TAB (tab));
+
+  gb_tab_close (tab);
+
+  EXIT;
+}
+
 void
 gb_notebook_add_tab (GbNotebook *notebook,
                      GbTab      *tab)
@@ -78,6 +100,11 @@ gb_notebook_add_tab (GbNotebook *notebook,
    gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook),
                                GTK_WIDGET (tab),
                                GTK_WIDGET (tab_label));
+   g_signal_connect_object (tab_label,
+                            "close-clicked",
+                            G_CALLBACK (gb_notebook_tab_label_close_clicked),
+                            notebook,
+                            G_CONNECT_SWAPPED);
 }
 
 static void
