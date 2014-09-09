@@ -132,6 +132,16 @@ gb_editor_tab_new (void)
   return g_object_new (GB_TYPE_EDITOR_TAB, NULL);
 }
 
+/**
+ * gb_editor_tab_get_is_default:
+ * @tab: A #GbEditorTab.
+ *
+ * Returns #TRUE if the tab has not been modified since being created
+ * from an empty state. This means the tab is a candidate to be
+ * dropped or repurposed for loading a new file.
+ *
+ * Returns: #TRUE if tab is in default state.
+ */
 gboolean
 gb_editor_tab_get_is_default (GbEditorTab *tab)
 {
