@@ -53,7 +53,8 @@ struct _GbWorkbenchClass
                              GbWorkspace *workspace);
 };
 
-GType gb_workbench_get_type (void) G_GNUC_CONST;
+GType        gb_workbench_get_type             (void) G_GNUC_CONST;
+GbWorkspace *gb_workbench_get_active_workspace (GbWorkbench *workbench);
 
 G_END_DECLS
 

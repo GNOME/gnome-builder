@@ -91,6 +91,18 @@ gb_workbench_action_set (GbWorkbench *workbench,
   va_end (args);
 }
 
+GbWorkspace *
+gb_workbench_get_active_workspace (GbWorkbench *workbench)
+{
+   GtkWidget *child;
+
+   g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
+
+   child = gtk_stack_get_visible_child (workbench->priv->stack);
+
+   return GB_WORKSPACE (child);
+}
+
 static void
 gb_workbench_workspace_changed (GbWorkbench *workbench,
                                 GbWorkspace *workspace)
