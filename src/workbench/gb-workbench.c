@@ -143,6 +143,31 @@ load_actions (GbWorkbench *workbench,
 }
 
 static void
+fixup_stack_switcher_buttons_func (GtkWidget *widget,
+                                   gpointer   user_data)
+{
+  GtkStyleContext *context;
+
+  g_assert (GTK_IS_RADIO_BUTTON (widget));
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_FLAT);
+}
+
+static void
+fixup_stack_switcher_buttons (GtkStackSwitcher *switcher)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (switcher));
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_LINKED);
+
+  gtk_container_forall (GTK_CONTAINER (switcher),
+                        (GtkCallback)fixup_stack_switcher_buttons_func,
+                        NULL);
+}
+
+static void
 gb_workbench_realize (GtkWidget *widget)
 {
   GbWorkbench *workbench = (GbWorkbench *)widget;
@@ -166,6 +191,8 @@ gb_workbench_constructed (GObject *object)
   ENTRY;
 
   priv = workbench->priv;
+
+  fixup_stack_switcher_buttons (priv->switcher);
 
   load_actions (workbench, GB_WORKSPACE (priv->editor));
   load_actions (workbench, GB_WORKSPACE (priv->devhelp));

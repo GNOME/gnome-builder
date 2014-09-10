@@ -124,6 +124,7 @@
             <property name="stack">stack</property>
             <property name="orientation">vertical</property>
             <property name="border_width">3</property>
+            <property name="spacing">4</property>
           </object>
         </child>
         <child>
