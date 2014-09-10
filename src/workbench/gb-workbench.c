@@ -25,22 +25,24 @@
 #include "gb-log.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
+#include "gedit-menu-stack-switcher.h"
 
 #define UI_RESOURCE_PATH "/org/gnome/builder/ui/gb-workbench.ui"
 
 struct _GbWorkbenchPrivate
 {
-  GbWorkspace      *active_workspace;
-  GbWorkspace      *devhelp;
-  GbWorkspace      *editor;
-  GtkMenuButton    *add_button;
-  GtkButton        *back_button;
-  GtkButton        *new_tab;
-  GtkButton        *next_button;
-  GtkButton        *run_button;
-  GtkHeaderBar     *header_bar;
-  GtkStack         *stack;
-  GtkStackSwitcher *switcher;
+  GbWorkspace            *active_workspace;
+  GbWorkspace            *devhelp;
+  GbWorkspace            *editor;
+  GtkMenuButton          *add_button;
+  GtkButton              *back_button;
+  GeditMenuStackSwitcher *gear_menu_button;
+  GtkButton              *new_tab;
+  GtkButton              *next_button;
+  GtkButton              *run_button;
+  GtkHeaderBar           *header_bar;
+  GtkStack               *stack;
+  GtkStackSwitcher       *switcher;
 };
 
 enum {
@@ -281,6 +283,8 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
                                                 back_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
+                                                gear_menu_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
                                                 new_tab);
   gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
                                                 next_button);
@@ -295,6 +299,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 
   g_type_ensure (GB_TYPE_EDITOR_WORKSPACE);
   g_type_ensure (GB_TYPE_DEVHELP_WORKSPACE);
+  g_type_ensure (GEDIT_TYPE_MENU_STACK_SWITCHER);
 }
 
 static void

@@ -46,6 +46,8 @@ gnome_builder_SOURCES = \
 	src/gd/gd-tagged-entry.h \
 	src/gedit/gedit-close-button.c \
 	src/gedit/gedit-close-button.h \
+	src/gedit/gedit-menu-stack-switcher.c \
+	src/gedit/gedit-menu-stack-switcher.h \
 	src/keybindings/gb-keybindings.c \
 	src/keybindings/gb-keybindings.h \
 	src/log/gb-log.c \
