@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Builder
+Comment=Build software for GNOME
+Exec=gnome-builder
+Icon=gnome-builder
+DBusActivatable=true
+StartupNotify=true
+Terminal=false
+Type=Application
+OnlyShowIn=GNOME;
+Categories=GNOME;GTK;
+Keywords=Build;Develop;

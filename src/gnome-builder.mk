@@ -126,3 +126,7 @@ src/resources/gb-resources.h: src/resources/gnome-builder.gresource.xml $(resour
 	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/src/resources --generate-header --c-name gb $(top_srcdir)/src/resources/gnome-builder.gresource.xml
 
 EXTRA_DIST += $(resource_files)
+
+data_desktopdir = $(datadir)/applications
+data_desktop_DATA = src/org.gnome.Builder.desktop
+EXTRA_DIST += $(data_desktop_DATA)
