@@ -23,23 +23,23 @@ gnome_builder_SOURCES = \
 	src/editor/gb-source-formatter.h \
 	src/editor/gb-source-search-highlighter.h \
 	src/editor/gb-source-search-highlighter.c \
-	src/editor/gb-source-snippet-chunk.c \
-	src/editor/gb-source-snippet-chunk.h \
-	src/editor/gb-source-snippet-completion-item.c \
-	src/editor/gb-source-snippet-completion-item.h \
-	src/editor/gb-source-snippet-completion-provider.c \
-	src/editor/gb-source-snippet-completion-provider.h \
-	src/editor/gb-source-snippet-context.c \
-	src/editor/gb-source-snippet-context.h \
-	src/editor/gb-source-snippet.c \
-	src/editor/gb-source-snippet.h \
-	src/editor/gb-source-snippet-parser.c \
-	src/editor/gb-source-snippet-parser.h \
-	src/editor/gb-source-snippet-private.h \
-	src/editor/gb-source-snippets.c \
-	src/editor/gb-source-snippets.h \
-	src/editor/gb-source-snippets-manager.c \
-	src/editor/gb-source-snippets-manager.h \
+	src/snippets/gb-source-snippet-chunk.c \
+	src/snippets/gb-source-snippet-chunk.h \
+	src/snippets/gb-source-snippet-completion-item.c \
+	src/snippets/gb-source-snippet-completion-item.h \
+	src/snippets/gb-source-snippet-completion-provider.c \
+	src/snippets/gb-source-snippet-completion-provider.h \
+	src/snippets/gb-source-snippet-context.c \
+	src/snippets/gb-source-snippet-context.h \
+	src/snippets/gb-source-snippet.c \
+	src/snippets/gb-source-snippet.h \
+	src/snippets/gb-source-snippet-parser.c \
+	src/snippets/gb-source-snippet-parser.h \
+	src/snippets/gb-source-snippet-private.h \
+	src/snippets/gb-source-snippets.c \
+	src/snippets/gb-source-snippets.h \
+	src/snippets/gb-source-snippets-manager.c \
+	src/snippets/gb-source-snippets-manager.h \
 	src/editor/gb-source-view.c \
 	src/editor/gb-source-view.h \
 	src/gd/gd-tagged-entry.c \
@@ -109,6 +109,7 @@ gnome_builder_CFLAGS = \
 	-I$(top_srcdir)/src/log \
 	-I$(top_srcdir)/src/nautilus \
 	-I$(top_srcdir)/src/resources \
+	-I$(top_srcdir)/src/snippets \
 	-I$(top_srcdir)/src/tabs \
 	-I$(top_srcdir)/src/trie \
 	-I$(top_srcdir)/src/theatrics \
