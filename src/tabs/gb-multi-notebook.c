@@ -334,7 +334,7 @@ remove_unused_notebooks (GbMultiNotebook *mnb)
       g_assert (list);
 
       g_object_unref (list->data);
-      list = g_slist_remove (list, list);
+      list = g_slist_remove_link (list, list);
     }
 
   has_unused = !!list;
