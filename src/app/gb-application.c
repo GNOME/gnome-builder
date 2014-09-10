@@ -29,6 +29,12 @@
 
 G_DEFINE_TYPE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
 
+GbApplication *
+gb_application_new (void)
+{
+  return g_object_new (GB_TYPE_APPLICATION, NULL);
+}
+
 static void
 theme_changed (GtkSettings *settings)
 {
@@ -185,13 +191,25 @@ gb_application_startup (GApplication *app)
 }
 
 static void
+gb_application_constructed (GObject *object)
+{
+  if (G_OBJECT_CLASS (gb_application_parent_class)->constructed)
+    G_OBJECT_CLASS (gb_application_parent_class)->constructed (object);
+
+  g_application_set_resource_base_path (G_APPLICATION (object),
+                                        "/org/gnome/builder");
+}
+
+static void
 gb_application_class_init (GbApplicationClass *klass)
 {
-  GApplicationClass *app_class;
+  GApplicationClass *app_class = G_APPLICATION_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   ENTRY;
 
-  app_class = G_APPLICATION_CLASS (klass);
+  object_class->constructed = gb_application_constructed;
+
   app_class->activate = gb_application_activate;
   app_class->startup = gb_application_startup;
 
@@ -202,5 +220,7 @@ static void
 gb_application_init (GbApplication *application)
 {
   ENTRY;
+  g_application_set_application_id (G_APPLICATION (application),
+                                    "org.gnome.Builder");
   EXIT;
 }
