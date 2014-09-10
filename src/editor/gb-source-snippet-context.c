@@ -344,7 +344,7 @@ filter_instance (const gchar *input)
       input = funct;
     }
 
-  if ((tmp = strchr (input, '_')))
+  if ((tmp = strrchr (input, '_')))
     ret = g_strdup (tmp+1);
   else
     ret = g_strdup (input);
