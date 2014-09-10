@@ -97,6 +97,8 @@ connect_bindings (GbWorkbenchActions *actions,
                                            action, "enabled",
                                            G_BINDING_SYNC_CREATE);
          priv->bindings = g_slist_prepend (priv->bindings, binding);
+      } else {
+          g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
       }
    }
 }
