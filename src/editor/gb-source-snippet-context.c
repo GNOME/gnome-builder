@@ -416,6 +416,29 @@ apply_filters (GString     *str,
   return input;
 }
 
+static gchar *
+scan_forward (const gchar  *input,
+              const gchar **endpos,
+              gunichar      needle)
+{
+  const gchar *begin = input;
+
+  for (; *input; input = g_utf8_next_char (input))
+    {
+      gunichar c = g_utf8_get_char (input);
+
+      if (c == needle)
+        {
+          *endpos = input;
+          return g_strndup (begin, (input - begin));
+        }
+    }
+
+  *endpos = NULL;
+
+  return NULL;
+}
+
 gchar *
 gb_source_snippet_context_expand (GbSourceSnippetContext *context,
                                   const gchar            *input)
@@ -501,6 +524,29 @@ gb_source_snippet_context_expand (GbSourceSnippetContext *context,
         }
       else if (is_dynamic && c == '|')
         return apply_filters (str, input + 1);
+      else if (c == '`')
+        {
+          const gchar *endpos = NULL;
+          gchar *slice;
+
+          slice = scan_forward (input + 1, &endpos, '`');
+
+          if (slice)
+            {
+              gchar *expanded;
+
+              input = endpos;
+
+              expanded = gb_source_snippet_context_expand (context, slice);
+
+              g_string_append (str, expanded);
+
+              g_free (expanded);
+              g_free (slice);
+
+              continue;
+            }
+        }
       else if (c == '\t')
         {
           if (priv->use_spaces)
