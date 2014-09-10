@@ -191,11 +191,27 @@ gb_application_startup (GApplication *app)
 }
 
 static void
+on_quit_activate (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  g_application_quit (g_application_get_default ());
+}
+
+static void
 gb_application_constructed (GObject *object)
 {
+  static const GActionEntry action_entries[] = {
+    { "quit", on_quit_activate },
+  };
+
   if (G_OBJECT_CLASS (gb_application_parent_class)->constructed)
     G_OBJECT_CLASS (gb_application_parent_class)->constructed (object);
 
+  g_action_map_add_action_entries (G_ACTION_MAP (object),
+                                   action_entries,
+                                   G_N_ELEMENTS (action_entries),
+                                   object);
   g_application_set_resource_base_path (G_APPLICATION (object),
                                         "/org/gnome/builder");
 }
