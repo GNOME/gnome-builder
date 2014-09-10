@@ -125,6 +125,9 @@
             <property name="orientation">vertical</property>
             <property name="border_width">4</property>
             <property name="spacing">4</property>
+            <style>
+              <class name="gb-workspace-switcher"/>
+            </style>
           </object>
         </child>
         <child>
