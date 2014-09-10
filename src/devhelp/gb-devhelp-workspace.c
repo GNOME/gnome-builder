@@ -60,6 +60,21 @@ update_show_tabs (GbDevhelpWorkspace *workspace)
 }
 
 static void
+on_close_tab_activated (GSimpleAction *action,
+                        GVariant      *parameter,
+                        gpointer       user_data)
+{
+  GbDevhelpWorkspace *workspace = user_data;
+  GbTab *tab;
+
+  g_return_if_fail (GB_IS_DEVHELP_WORKSPACE (workspace));
+
+  tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
+  if (tab)
+    gb_tab_close (tab);
+}
+
+static void
 on_new_tab_activated (GSimpleAction *action,
                       GVariant      *parameter,
                       gpointer       user_data)
@@ -136,6 +151,7 @@ gb_devhelp_workspace_constructed (GObject *object)
 {
   GbDevhelpWorkspacePrivate *priv = GB_DEVHELP_WORKSPACE (object)->priv;
   static const GActionEntry action_entries[] = {
+     { "close-tab", on_close_tab_activated },
      { "new-tab", on_new_tab_activated },
   };
 
