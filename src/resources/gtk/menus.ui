@@ -84,11 +84,11 @@
       <attribute name="id">close-section</attribute>
       <item>
         <attribute name="label" translatable="yes">_Close All</attribute>
-        <attribute name="action">win.close-all</attribute>
+        <attribute name="action">workbench.close-all</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Close</attribute>
-        <attribute name="action">win.close</attribute>
+        <attribute name="action">workbench.close-tab</attribute>
       </item>
     </section>
   </menu>

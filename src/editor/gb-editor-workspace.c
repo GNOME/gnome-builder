@@ -72,6 +72,21 @@ on_new_tab_activate (GSimpleAction *action,
 }
 
 static void
+on_close_tab_activate (GSimpleAction *action,
+                       GVariant      *parameter,
+                       gpointer       user_data)
+{
+  GbEditorWorkspace *workspace = user_data;
+  GbTab *tab;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+
+  tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
+  if (tab)
+    gb_tab_close (tab);
+}
+
+static void
 on_find_activate (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
@@ -294,6 +309,7 @@ static void
 gb_editor_workspace_init (GbEditorWorkspace *workspace)
 {
   static const GActionEntry action_entries[] = {
+    { "close-tab", on_close_tab_activate },
     { "find", on_find_activate },
     { "go-to-end", on_go_to_end_activate },
     { "go-to-start", on_go_to_start_activate },
