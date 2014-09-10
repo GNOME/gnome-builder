@@ -25,12 +25,15 @@
 #include "gb-log.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
+#include "gb-workbench-actions.h"
 #include "gedit-menu-stack-switcher.h"
 
 #define UI_RESOURCE_PATH "/org/gnome/builder/ui/gb-workbench.ui"
 
 struct _GbWorkbenchPrivate
 {
+  GbWorkbenchActions     *actions;
+
   GbWorkspace            *active_workspace;
   GbWorkspace            *devhelp;
   GbWorkspace            *editor;
@@ -61,36 +64,6 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbWorkbench,
 
 static guint gSignals[LAST_SIGNAL];
 
-static void gb_workbench_action_set (GbWorkbench *workbench,
-                                     const gchar *action_name,
-                                     const gchar *first_property,
-                                     ...) G_GNUC_NULL_TERMINATED;
-
-static void
-gb_workbench_action_set (GbWorkbench *workbench,
-                         const gchar *action_name,
-                         const gchar *first_property,
-                         ...)
-{
-  GAction *action;
-  va_list args;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (action_name);
-  g_return_if_fail (first_property);
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (workbench), action_name);
-  if (!action)
-    {
-      g_warning ("No such action: \"%s\"", action_name);
-      return;
-    }
-
-  va_start (args, first_property);
-  g_object_set_valist (G_OBJECT (action), first_property, args);
-  va_end (args);
-}
-
 GbWorkspace *
 gb_workbench_get_active_workspace (GbWorkbench *workbench)
 {
@@ -108,8 +81,6 @@ gb_workbench_workspace_changed (GbWorkbench *workbench,
                                 GbWorkspace *workspace)
 {
   GbWorkbenchPrivate *priv;
-  gboolean new_tab_enabled = FALSE;
-  gboolean find_enabled = FALSE;
 
   ENTRY;
 
@@ -128,54 +99,11 @@ gb_workbench_workspace_changed (GbWorkbench *workbench,
   if (workspace)
     {
       priv->active_workspace = workspace;
-      new_tab_enabled = !!GB_WORKSPACE_GET_CLASS (workspace)->new_tab;
-      find_enabled = !!GB_WORKSPACE_GET_CLASS (workspace)->find;
       g_object_add_weak_pointer (G_OBJECT (priv->active_workspace),
                                  (gpointer *) &priv->active_workspace);
     }
 
-  gb_workbench_action_set (workbench, "new-tab",
-                           "enabled", new_tab_enabled,
-                           NULL);
-  gb_workbench_action_set (workbench, "find",
-                           "enabled", find_enabled,
-                           NULL);
-
   EXIT;
-}
-
-static void
-gb_workbench_activate_new_tab (GSimpleAction *action,
-                               GVariant      *parameters,
-                               gpointer       user_data)
-{
-  GbWorkbench *workbench = user_data;
-  GbWorkspace *workspace;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (workbench->priv->active_workspace);
-
-  workspace = workbench->priv->active_workspace;
-
-  if (GB_WORKSPACE_GET_CLASS (workspace)->new_tab)
-    GB_WORKSPACE_GET_CLASS (workspace)->new_tab (workspace);
-}
-
-static void
-gb_workbench_activate_find (GSimpleAction *action,
-                            GVariant      *parameters,
-                            gpointer       user_data)
-{
-  GbWorkbench *workbench = user_data;
-  GbWorkspace *workspace;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (workbench->priv->active_workspace);
-
-  workspace = workbench->priv->active_workspace;
-
-  if (GB_WORKSPACE_GET_CLASS (workspace)->find)
-    GB_WORKSPACE_GET_CLASS (workspace)->find (workspace);
 }
 
 static void
@@ -225,11 +153,6 @@ gb_workbench_realize (GtkWidget *widget)
   gtk_widget_grab_focus (GTK_WIDGET (workbench->priv->editor));
 }
 
-static const GActionEntry gActionEntries[] = {
-  { "new-tab", gb_workbench_activate_new_tab },
-  { "find", gb_workbench_activate_find },
-};
-
 static void
 gb_workbench_constructed (GObject *object)
 {
@@ -243,9 +166,6 @@ gb_workbench_constructed (GObject *object)
   ENTRY;
 
   priv = workbench->priv;
-
-  g_action_map_add_action_entries (G_ACTION_MAP (workbench), gActionEntries,
-                                   G_N_ELEMENTS (gActionEntries), workbench);
 
   load_actions (workbench, GB_WORKSPACE (priv->editor));
   load_actions (workbench, GB_WORKSPACE (priv->devhelp));
@@ -269,10 +189,18 @@ gb_workbench_constructed (GObject *object)
 }
 
 static void
-gb_workbench_finalize (GObject *object)
+gb_workbench_dispose (GObject *object)
 {
+  GbWorkbenchPrivate *priv;
+
   ENTRY;
-  G_OBJECT_CLASS (gb_workbench_parent_class)->finalize (object);
+
+  priv = GB_WORKBENCH (object)->priv;
+
+  g_clear_object (&priv->actions);
+
+  G_OBJECT_CLASS (gb_workbench_parent_class)->dispose (object);
+
   EXIT;
 }
 
@@ -309,7 +237,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gb_workbench_constructed;
-  object_class->finalize = gb_workbench_finalize;
+  object_class->dispose = gb_workbench_dispose;
   object_class->get_property = gb_workbench_get_property;
   object_class->set_property = gb_workbench_set_property;
 
@@ -364,4 +292,9 @@ gb_workbench_init (GbWorkbench *workbench)
   workbench->priv = gb_workbench_get_instance_private (workbench);
 
   gtk_widget_init_template (GTK_WIDGET (workbench));
+
+  workbench->priv->actions = gb_workbench_actions_new (workbench);
+  gtk_widget_insert_action_group (GTK_WIDGET (workbench),
+                                  "workbench",
+                                  G_ACTION_GROUP (workbench->priv->actions));
 }

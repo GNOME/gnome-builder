@@ -45,16 +45,19 @@ gb_editor_workspace_get_actions (GbWorkspace * workspace)
 }
 
 static void
-gb_editor_workspace_new_tab (GbWorkspace *workspace)
+on_new_tab_activate (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       user_data)
 {
   GbEditorWorkspacePrivate *priv;
+  GbEditorWorkspace *workspace = user_data;
   GbNotebook *notebook;
   GbTab *tab;
   gint page;
 
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
 
-  priv = GB_EDITOR_WORKSPACE (workspace)->priv;
+  priv = workspace->priv;
 
   notebook = gb_multi_notebook_get_active_notebook (priv->multi_notebook);
   tab = g_object_new (GB_TYPE_EDITOR_TAB,
@@ -69,18 +72,19 @@ gb_editor_workspace_new_tab (GbWorkspace *workspace)
 }
 
 static void
-gb_editor_workspace_find (GbWorkspace *workspace)
+on_find_activate (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
 {
   GbEditorWorkspacePrivate *priv;
+  GbEditorWorkspace *workspace = user_data;
   GbTab *tab;
 
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
 
-  priv = GB_EDITOR_WORKSPACE (workspace)->priv;
+  priv = workspace->priv;
 
   tab = gb_multi_notebook_get_active_tab (priv->multi_notebook);
-  g_assert (GB_IS_EDITOR_TAB (tab));
-
   if (tab)
     gb_editor_tab_focus_search (GB_EDITOR_TAB (tab));
 }
@@ -281,8 +285,6 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 
   object_class->finalize = gb_editor_workspace_finalize;
 
-  workspace_class->find = gb_editor_workspace_find;
-  workspace_class->new_tab = gb_editor_workspace_new_tab;
   workspace_class->get_actions = gb_editor_workspace_get_actions;
 
   widget_class->grab_focus = gb_editor_workspace_grab_focus;
@@ -292,8 +294,10 @@ static void
 gb_editor_workspace_init (GbEditorWorkspace *workspace)
 {
   static const GActionEntry action_entries[] = {
+    { "find", on_find_activate },
     { "go-to-end", on_go_to_end_activate },
     { "go-to-start", on_go_to_start_activate },
+    { "new-tab", on_new_tab_activate },
     { "open", on_open_activate },
     { "reformat", on_reformat_activate },
     { "save", on_save_activate },

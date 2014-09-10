@@ -48,9 +48,6 @@ struct _GbWorkspaceClass
   GtkBinClass parent_class;
 
   GActionGroup *(*get_actions) (GbWorkspace *workspace);
-
-  void (*new_tab) (GbWorkspace *workspace);
-  void (*find)    (GbWorkspace *workspace);
 };
 
 GType         gb_workspace_get_type      (void) G_GNUC_CONST;

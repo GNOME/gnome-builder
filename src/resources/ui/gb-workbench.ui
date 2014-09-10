@@ -51,7 +51,7 @@
         <child>
           <object class="GtkButton" id="new_tab">
             <property name="visible">True</property>
-            <property name="action_name">win.new-tab</property>
+            <property name="action_name">workbench.new-tab</property>
             <style>
               <class name="image-button"/>
             </style>

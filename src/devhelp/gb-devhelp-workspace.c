@@ -26,11 +26,12 @@
 
 struct _GbDevhelpWorkspacePrivate
 {
-  DhBookManager   *book_manager;
+  DhBookManager      *book_manager;
+  GSimpleActionGroup *actions;
 
-  GtkPaned        *paned;
-  DhSidebar       *sidebar;
-  GbMultiNotebook *multi_notebook;
+  GtkPaned           *paned;
+  DhSidebar          *sidebar;
+  GbMultiNotebook    *multi_notebook;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbDevhelpWorkspace,
@@ -59,16 +60,19 @@ update_show_tabs (GbDevhelpWorkspace *workspace)
 }
 
 static void
-gb_devhelp_workspace_new_tab (GbWorkspace *workspace)
+on_new_tab_activated (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
 {
   GbDevhelpWorkspacePrivate *priv;
+  GbDevhelpWorkspace *workspace = user_data;
   GbNotebook *notebook;
   GbTab *tab;
   gint page = -1;
 
   g_return_if_fail (GB_IS_DEVHELP_WORKSPACE (workspace));
 
-  priv = GB_DEVHELP_WORKSPACE (workspace)->priv;
+  priv = workspace->priv;
 
   tab = g_object_new (GB_TYPE_DEVHELP_TAB,
                       "title", _ ("Empty Page"),
@@ -131,10 +135,30 @@ static void
 gb_devhelp_workspace_constructed (GObject *object)
 {
   GbDevhelpWorkspacePrivate *priv = GB_DEVHELP_WORKSPACE (object)->priv;
+  static const GActionEntry action_entries[] = {
+     { "new-tab", on_new_tab_activated },
+  };
 
   g_return_if_fail (GB_IS_DEVHELP_WORKSPACE (object));
 
   dh_book_manager_populate (priv->book_manager);
+
+  priv->actions = g_simple_action_group_new ();
+
+  g_action_map_add_action_entries (G_ACTION_MAP (priv->actions),
+                                   action_entries,
+                                   G_N_ELEMENTS (action_entries),
+                                   object);
+}
+
+static GActionGroup *
+gb_devhelp_workspace_get_actions (GbWorkspace *workspace)
+{
+   GbDevhelpWorkspacePrivate *priv = GB_DEVHELP_WORKSPACE (workspace)->priv;
+
+   g_assert (GB_IS_DEVHELP_WORKSPACE (workspace));
+
+   return G_ACTION_GROUP (priv->actions);
 }
 
 static void
@@ -144,6 +168,7 @@ gb_devhelp_workspace_finalize (GObject *object)
 
   priv = GB_DEVHELP_WORKSPACE (object)->priv;
 
+  g_clear_object (&priv->actions);
   g_clear_object (&priv->book_manager);
 
   G_OBJECT_CLASS (gb_devhelp_workspace_parent_class)->finalize (object);
@@ -158,7 +183,7 @@ gb_devhelp_workspace_class_init (GbDevhelpWorkspaceClass *klass)
   object_class->constructed = gb_devhelp_workspace_constructed;
   object_class->finalize = gb_devhelp_workspace_finalize;
 
-  workspace_class->new_tab = gb_devhelp_workspace_new_tab;
+  workspace_class->get_actions = gb_devhelp_workspace_get_actions;
 }
 
 static void
