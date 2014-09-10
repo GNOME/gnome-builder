@@ -332,6 +332,29 @@ filter_class (const gchar *input)
 }
 
 static gchar *
+filter_instance (const gchar *input)
+{
+  const gchar *tmp;
+  gchar *funct = NULL;
+  gchar *ret;
+
+  if (!strchr (input, '_'))
+    {
+      funct = filter_functify (input);
+      input = funct;
+    }
+
+  if ((tmp = strchr (input, '_')))
+    ret = g_strdup (tmp+1);
+  else
+    ret = g_strdup (input);
+
+  g_free (funct);
+
+  return ret;
+}
+
+static gchar *
 filter_space (const gchar *input)
 {
   GString *str;
@@ -602,6 +625,7 @@ gb_source_snippet_context_class_init (GbSourceSnippetContextClass *klass)
   g_hash_table_insert (gFilters, (gpointer) "class", filter_class);
   g_hash_table_insert (gFilters, (gpointer) "space", filter_space);
   g_hash_table_insert (gFilters, (gpointer) "stripsuffix", filter_stripsuffix);
+  g_hash_table_insert (gFilters, (gpointer) "instance", filter_instance);
 }
 
 static void
