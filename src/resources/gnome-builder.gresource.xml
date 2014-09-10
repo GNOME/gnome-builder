@@ -5,6 +5,8 @@
 
     <file>editor/uncrustify/uncrustify.c.cfg</file>
 
+    <file>gtk/menus.ui</file>
+
     <file>keybindings/default.ini</file>
 
     <file>snippets/c.snippets</file>

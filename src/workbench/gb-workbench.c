@@ -213,6 +213,49 @@ gb_workbench_realize (GtkWidget *widget)
   gtk_widget_grab_focus (GTK_WIDGET (workbench->priv->editor));
 }
 
+static const GActionEntry gActionEntries[] = {
+  { "new-tab", gb_workbench_activate_new_tab },
+  { "find", gb_workbench_activate_find },
+};
+
+static void
+gb_workbench_constructed (GObject *object)
+{
+  GbWorkbenchPrivate *priv;
+  GbWorkbench *workbench = (GbWorkbench *)object;
+  GtkApplication *app;
+  GMenu *menu;
+
+  g_assert (GB_IS_WORKBENCH (workbench));
+
+  ENTRY;
+
+  priv = workbench->priv;
+
+  g_action_map_add_action_entries (G_ACTION_MAP (workbench), gActionEntries,
+                                   G_N_ELEMENTS (gActionEntries), workbench);
+
+  load_actions (workbench, GB_WORKSPACE (priv->editor));
+  load_actions (workbench, GB_WORKSPACE (priv->devhelp));
+
+  app = GTK_APPLICATION (g_application_get_default ());
+  menu = gtk_application_get_menu_by_id (app, "gear-menu");
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (priv->gear_menu_button),
+                                  G_MENU_MODEL (menu));
+
+  g_signal_connect_object (priv->stack,
+                           "notify::visible-child",
+                           G_CALLBACK (gb_workbench_stack_child_changed),
+                           workbench,
+                           (G_CONNECT_SWAPPED | G_CONNECT_AFTER));
+
+  gb_workbench_stack_child_changed (workbench, NULL, priv->stack);
+
+  G_OBJECT_CLASS (gb_workbench_parent_class)->constructed (object);
+
+  EXIT;
+}
+
 static void
 gb_workbench_finalize (GObject *object)
 {
@@ -253,6 +296,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = gb_workbench_constructed;
   object_class->finalize = gb_workbench_finalize;
   object_class->get_property = gb_workbench_get_property;
   object_class->set_property = gb_workbench_set_property;
@@ -305,27 +349,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 static void
 gb_workbench_init (GbWorkbench *workbench)
 {
-  static const GActionEntry action_entries[] = {
-    { "new-tab", gb_workbench_activate_new_tab },
-    { "find", gb_workbench_activate_find },
-  };
-  GbWorkbenchPrivate *priv;
-
-  priv = workbench->priv = gb_workbench_get_instance_private (workbench);
-
-  g_action_map_add_action_entries (G_ACTION_MAP (workbench), action_entries,
-                                   G_N_ELEMENTS (action_entries), workbench);
+  workbench->priv = gb_workbench_get_instance_private (workbench);
 
   gtk_widget_init_template (GTK_WIDGET (workbench));
-
-  g_signal_connect_object (priv->stack,
-                           "notify::visible-child",
-                           G_CALLBACK (gb_workbench_stack_child_changed),
-                           workbench,
-                           (G_CONNECT_SWAPPED | G_CONNECT_AFTER));
-
-  gb_workbench_stack_child_changed (workbench, NULL, priv->stack);
-
-  load_actions (workbench, GB_WORKSPACE (priv->editor));
-  load_actions (workbench, GB_WORKSPACE (priv->devhelp));
 }
