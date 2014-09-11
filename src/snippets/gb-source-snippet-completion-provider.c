@@ -192,9 +192,10 @@ gb_source_snippet_completion_provider_init (GbSourceSnippetCompletionProvider *p
 }
 
 static gboolean
-is_stop_char (gunichar c)
+stop_on_predicate (gunichar ch,
+                   gpointer data)
 {
-  switch (c)
+  switch (ch)
     {
     case '_':
       return FALSE;
@@ -215,7 +216,7 @@ is_stop_char (gunichar c)
       return TRUE;
 
     default:
-      return !g_unichar_isalnum (c);
+      return !g_unichar_isalnum (ch);
     }
 }
 
@@ -223,28 +224,18 @@ static gchar *
 get_word (GtkSourceCompletionProvider *provider,
           GtkTextIter                 *iter)
 {
+  GtkTextBuffer *buffer;
   GtkTextIter end;
-  gboolean moved = FALSE;
-  gunichar c;
-  gchar *word;
 
   gtk_text_iter_assign (&end, iter);
+  buffer = gtk_text_iter_get_buffer (iter);
 
-  do
-    {
-      if (!gtk_text_iter_backward_char (iter))
-        break;
-      c = gtk_text_iter_get_char (iter);
-      moved = TRUE;
-    }
-  while (!is_stop_char (c));
+  if (!gtk_text_iter_backward_find_char (iter, stop_on_predicate, NULL, NULL))
+    return gtk_text_buffer_get_text (buffer, iter, &end, TRUE);
 
-  if (moved && !gtk_text_iter_is_start (iter))
-    gtk_text_iter_forward_char (iter);
+  gtk_text_iter_forward_char (iter);
 
-  word = g_strstrip (gtk_text_iter_get_text (iter, &end));
-
-  return word;
+  return gtk_text_iter_get_text (iter, &end);
 }
 
 static GdkPixbuf *
