@@ -223,12 +223,12 @@ static gchar *
 get_word (GtkSourceCompletionProvider *provider,
           GtkTextIter                 *iter)
 {
-  GtkTextIter *end;
+  GtkTextIter end;
   gboolean moved = FALSE;
   gunichar c;
   gchar *word;
 
-  end = gtk_text_iter_copy (iter);
+  gtk_text_iter_assign (&end, iter);
 
   do
     {
@@ -242,9 +242,7 @@ get_word (GtkSourceCompletionProvider *provider,
   if (moved && !gtk_text_iter_is_start (iter))
     gtk_text_iter_forward_char (iter);
 
-  word = g_strstrip (gtk_text_iter_get_text (iter, end));
-
-  gtk_text_iter_free (end);
+  word = g_strstrip (gtk_text_iter_get_text (iter, &end));
 
   return word;
 }
