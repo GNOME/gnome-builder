@@ -82,7 +82,6 @@ gb_markdown_preview_load_html (GbMarkdownPreview *preview,
                                 (gchar *)css_data, html);
 
   /*
-   * TODO: Load CSS
    * TODO: Set base_uri based on a GFile or something.
    */
   webkit_web_view_load_html (WEBKIT_WEB_VIEW (preview),
