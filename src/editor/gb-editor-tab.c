@@ -277,6 +277,7 @@ gb_editor_tab_reformat (GbEditorTab *tab)
   GtkTextIter end;
   GtkTextIter iter;
   GtkTextMark *insert;
+  gboolean fragment = TRUE;
   GError *error = NULL;
   gchar *input = NULL;
   gchar *output = NULL;
@@ -294,7 +295,15 @@ gb_editor_tab_reformat (GbEditorTab *tab)
   priv = tab->priv;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (priv->source_view));
-  gtk_text_buffer_get_bounds (buffer, &begin, &end);
+
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  if (gtk_text_iter_compare (&begin, &end) == 0)
+    {
+      gtk_text_buffer_get_bounds (buffer, &begin, &end);
+      fragment = FALSE;
+    }
+
   input = gtk_text_buffer_get_text (buffer, &begin, &end, TRUE);
 
   insert = gtk_text_buffer_get_insert (buffer);
@@ -305,11 +314,7 @@ gb_editor_tab_reformat (GbEditorTab *tab)
   language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
   formatter = gb_source_formatter_new_from_language (language);
 
-  if (!gb_source_formatter_format (formatter,
-                                   input,
-                                   FALSE,
-                                   NULL,
-                                   &output,
+  if (!gb_source_formatter_format (formatter, input, fragment, NULL, &output,
                                    &error))
     {
       g_warning ("%s", error->message);
@@ -327,7 +332,8 @@ gb_editor_tab_reformat (GbEditorTab *tab)
    *       specific.
    */
 
-  gtk_text_buffer_set_text (buffer, output, -1);
+  gtk_text_buffer_delete (buffer, &begin, &end);
+  gtk_text_buffer_insert (buffer, &begin, output, -1);
 
   if (line_number >= gtk_text_buffer_get_line_count (buffer))
     {
