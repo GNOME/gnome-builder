@@ -68,6 +68,7 @@ void              gb_editor_tab_save_as        (GbEditorTab                *tab)
 void              gb_editor_tab_save           (GbEditorTab                *tab);
 void              gb_editor_tab_open_file      (GbEditorTab                *tab,
                                                 GFile                      *file);
+void              gb_editor_tab_toggle_preview (GbEditorTab                *tab);
 
 G_END_DECLS
 

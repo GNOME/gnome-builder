@@ -25,6 +25,7 @@
 #include "gb-box-theatric.h"
 #include "gb-editor-tab.h"
 #include "gb-log.h"
+#include "gb-markdown-preview.h"
 #include "gb-notebook.h"
 #include "gb-rgba.h"
 #include "gb-source-formatter.h"
@@ -89,6 +90,7 @@ struct _GbEditorTabPrivate
   GtkButton           *go_down_button;
   GtkButton           *go_up_button;
   GtkOverlay          *overlay;
+  GtkBox              *preview_container;
   GtkProgressBar      *progress_bar;
   GtkRevealer         *revealer;
   GtkScrolledWindow   *scroller;
@@ -372,6 +374,53 @@ gb_editor_tab_focus_search (GbEditorTab *tab)
   gtk_widget_grab_focus (GTK_WIDGET (priv->search_entry));
 
   EXIT;
+}
+
+void
+gb_editor_tab_toggle_preview (GbEditorTab *tab)
+{
+  GbEditorTabPrivate *priv;
+  GtkSourceLanguage *lang;
+  GtkWidget *child;
+  GList *children;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  priv = tab->priv;
+
+  children = gtk_container_get_children (GTK_CONTAINER (priv->preview_container));
+
+  if (children)
+    {
+      child = children->data;
+      g_list_free (children);
+
+      gtk_container_remove (GTK_CONTAINER (priv->preview_container), child);
+      gtk_widget_hide (GTK_WIDGET (priv->preview_container));
+
+      return;
+    }
+
+  lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (priv->document));
+
+  if (lang)
+    {
+      const gchar *lang_id;
+
+      lang_id = gtk_source_language_get_id (lang);
+
+      if (g_strcmp0 (lang_id, "markdown") == 0)
+        {
+          child = g_object_new (GB_TYPE_MARKDOWN_PREVIEW,
+                                "buffer", priv->document,
+                                "width-request", 100,
+                                "hexpand", TRUE,
+                                "visible", TRUE,
+                                NULL);
+          gtk_container_add (GTK_CONTAINER (priv->preview_container), child);
+          gtk_widget_show (GTK_WIDGET (priv->preview_container));
+        }
+    }
 }
 
 static void
@@ -1706,6 +1755,7 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, go_down_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, go_up_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, overlay);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, preview_container);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, progress_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, revealer);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, scroller);

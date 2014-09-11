@@ -268,6 +268,22 @@ on_go_to_end_activate (GSimpleAction *action,
 }
 
 static void
+on_preview_activate (GSimpleAction *action,
+                     GVariant      *variant,
+                     gpointer       user_data)
+{
+  GbEditorWorkspace *workspace = user_data;
+  GbTab *tab;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+
+  tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
+
+  if (tab)
+    gb_editor_tab_toggle_preview (GB_EDITOR_TAB (tab));
+}
+
+static void
 gb_editor_workspace_grab_focus (GtkWidget *widget)
 {
   GbEditorWorkspace *workspace = GB_EDITOR_WORKSPACE (widget);
@@ -318,6 +334,7 @@ gb_editor_workspace_init (GbEditorWorkspace *workspace)
     { "reformat", on_reformat_activate },
     { "save", on_save_activate },
     { "save-as", on_save_as_activate },
+    { "preview", on_preview_activate },
   };
   GbEditorWorkspacePrivate *priv;
   GbNotebook *notebook;

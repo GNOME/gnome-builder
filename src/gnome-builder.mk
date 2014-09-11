@@ -30,6 +30,8 @@ gnome_builder_SOURCES = \
 	src/editor/gb-source-search-highlighter.c \
 	src/markdown/gs-markdown.c \
 	src/markdown/gs-markdown.h \
+	src/markdown/gb-markdown-preview.c \
+	src/markdown/gb-markdown-preview.h \
 	src/snippets/gb-source-snippet-chunk.c \
 	src/snippets/gb-source-snippet-chunk.h \
 	src/snippets/gb-source-snippet-completion-item.c \

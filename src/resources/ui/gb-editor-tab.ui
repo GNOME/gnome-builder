@@ -4,14 +4,15 @@
   <template class="GbEditorTab" parent="GbTab">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="orientation">vertical</property>
+    <property name="orientation">horizontal</property>
+    <property name="expand">True</property>
     <child>
       <object class="GtkOverlay" id="overlay">
         <property name="visible">True</property>
         <child>
           <object class="GtkScrolledWindow" id="scroller">
             <property name="visible">True</property>
-            <property name="vexpand">True</property>
+            <property name="expand">True</property>
             <child>
               <object class="GbSourceView" id="source_view">
                 <property name="buffer">document</property>
@@ -109,6 +110,13 @@
             </child>
           </object>
         </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="preview_container">
+        <property name="orientation">horizontal</property>
+        <property name="visible">False</property>
+        <property name="hexpand">True</property>
       </object>
     </child>
   </template>

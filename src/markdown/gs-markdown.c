@@ -19,10 +19,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#define G_LOG_DOMAIN "markdown"
+
 #include <string.h>
 #include <glib.h>
 
 #include "gs-markdown.h"
+
+#if 0
+# define DEBUG g_debug
+#else
+# define DEBUG(...)
+#endif
 
 /*******************************************************************************
  *
@@ -735,7 +743,7 @@ gs_markdown_flush_pending (GsMarkdown *self)
 					priv->tags.codeblock_end);
 	}
 
-	g_debug ("adding '%s'", temp);
+	DEBUG ("adding '%s'", temp);
 
 	/* clear */
 	g_string_truncate (priv->pending, 0);
@@ -754,7 +762,7 @@ gs_markdown_to_text_line_process (GsMarkdown *self, const gchar *line)
 
 	/* inside code */
 	if (priv->mode == GS_MARKDOWN_MODE_CODE) {
-		g_debug ("code: '%s'", line);
+		DEBUG ("code: '%s'", line);
 		ret = gs_markdown_to_text_line_is_code (line);
 		if (ret) {
 			gs_markdown_flush_pending (self);
@@ -772,7 +780,7 @@ gs_markdown_to_text_line_process (GsMarkdown *self, const gchar *line)
 	/* code */
 	ret = gs_markdown_to_text_line_is_code (line);
 	if (ret) {
-		g_debug ("code: '%s'", line);
+		DEBUG ("code: '%s'", line);
 		gs_markdown_flush_pending (self);
 		priv->mode = GS_MARKDOWN_MODE_CODE;
 		goto out;
@@ -781,7 +789,7 @@ gs_markdown_to_text_line_process (GsMarkdown *self, const gchar *line)
 	/* blank */
 	ret = gs_markdown_to_text_line_is_blank (line);
 	if (ret) {
-		g_debug ("blank: '%s'", line);
+		DEBUG ("blank: '%s'", line);
 		gs_markdown_flush_pending (self);
 		/* a new line after a list is the end of list, not a gap */
 		if (priv->mode != GS_MARKDOWN_MODE_BULLETT)
@@ -793,7 +801,7 @@ gs_markdown_to_text_line_process (GsMarkdown *self, const gchar *line)
 	/* header1_type2 */
 	ret = gs_markdown_to_text_line_is_header1_type2 (line);
 	if (ret) {
-		g_debug ("header1_type2: '%s'", line);
+		DEBUG ("header1_type2: '%s'", line);
 		if (priv->mode == GS_MARKDOWN_MODE_PARA)
 			priv->mode = GS_MARKDOWN_MODE_H1;
 		goto out;
@@ -802,7 +810,7 @@ gs_markdown_to_text_line_process (GsMarkdown *self, const gchar *line)
 	/* header2_type2 */
 	ret = gs_markdown_to_text_line_is_header2_type2 (line);
 	if (ret) {
-		g_debug ("header2_type2: '%s'", line);
+		DEBUG ("header2_type2: '%s'", line);
 		if (priv->mode == GS_MARKDOWN_MODE_PARA)
 			priv->mode = GS_MARKDOWN_MODE_H2;
 		goto out;
@@ -811,7 +819,7 @@ gs_markdown_to_text_line_process (GsMarkdown *self, const gchar *line)
 	/* rule */
 	ret = gs_markdown_to_text_line_is_rule (line);
 	if (ret) {
-		g_debug ("rule: '%s'", line);
+		DEBUG ("rule: '%s'", line);
 		gs_markdown_flush_pending (self);
 		priv->mode = GS_MARKDOWN_MODE_RULE;
 		ret = gs_markdown_add_pending (self, priv->tags.rule);
@@ -821,7 +829,7 @@ gs_markdown_to_text_line_process (GsMarkdown *self, const gchar *line)
 	/* bullet */
 	ret = gs_markdown_to_text_line_is_bullet (line);
 	if (ret) {
-		g_debug ("bullet: '%s'", line);
+		DEBUG ("bullet: '%s'", line);
 		gs_markdown_flush_pending (self);
 		priv->mode = GS_MARKDOWN_MODE_BULLETT;
 		ret = gs_markdown_add_pending (self, &line[2]);
@@ -831,7 +839,7 @@ gs_markdown_to_text_line_process (GsMarkdown *self, const gchar *line)
 	/* header1 */
 	ret = gs_markdown_to_text_line_is_header1 (line);
 	if (ret) {
-		g_debug ("header1: '%s'", line);
+		DEBUG ("header1: '%s'", line);
 		gs_markdown_flush_pending (self);
 		priv->mode = GS_MARKDOWN_MODE_H1;
 		ret = gs_markdown_add_pending_header (self, &line[2]);
@@ -841,7 +849,7 @@ gs_markdown_to_text_line_process (GsMarkdown *self, const gchar *line)
 	/* header2 */
 	ret = gs_markdown_to_text_line_is_header2 (line);
 	if (ret) {
-		g_debug ("header2: '%s'", line);
+		DEBUG ("header2: '%s'", line);
 		gs_markdown_flush_pending (self);
 		priv->mode = GS_MARKDOWN_MODE_H2;
 		ret = gs_markdown_add_pending_header (self, &line[3]);
@@ -851,7 +859,7 @@ gs_markdown_to_text_line_process (GsMarkdown *self, const gchar *line)
 	/* header3 */
 	ret = gs_markdown_to_text_line_is_header3 (line);
 	if (ret) {
-		g_debug ("header3: '%s'", line);
+		DEBUG ("header3: '%s'", line);
 		gs_markdown_flush_pending (self);
 		priv->mode = GS_MARKDOWN_MODE_H3;
 		ret = gs_markdown_add_pending_header (self, &line[4]);
@@ -866,7 +874,7 @@ gs_markdown_to_text_line_process (GsMarkdown *self, const gchar *line)
 	}
 
 	/* add to pending */
-	g_debug ("continue: '%s'", line);
+	DEBUG ("continue: '%s'", line);
 	ret = gs_markdown_add_pending (self, line);
 out:
 	/* if we failed to add, we don't know the mode */
@@ -1034,7 +1042,7 @@ gs_markdown_parse (GsMarkdown *self, const gchar *markdown)
 
 	g_return_val_if_fail (GS_IS_MARKDOWN (self), NULL);
 
-	g_debug ("input='%s'", markdown);
+	DEBUG ("input='%s'", markdown);
 
 	/* process */
 	priv->mode = GS_MARKDOWN_MODE_UNKNOWN;
@@ -1062,7 +1070,7 @@ gs_markdown_parse (GsMarkdown *self, const gchar *markdown)
 	g_string_truncate (priv->pending, 0);
 	g_string_truncate (priv->processed, 0);
 
-	g_debug ("output='%s'", temp);
+	DEBUG ("output='%s'", temp);
 
 	return temp;
 }
