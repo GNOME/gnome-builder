@@ -101,6 +101,7 @@ gb_workbench_workspace_changed (GbWorkbench *workbench,
       priv->active_workspace = workspace;
       g_object_add_weak_pointer (G_OBJECT (priv->active_workspace),
                                  (gpointer *) &priv->active_workspace);
+      gtk_widget_grab_focus (GTK_WIDGET (workspace));
     }
 
   EXIT;
