@@ -28,6 +28,8 @@ gnome_builder_SOURCES = \
 	src/editor/gb-source-formatter.h \
 	src/editor/gb-source-search-highlighter.h \
 	src/editor/gb-source-search-highlighter.c \
+	src/markdown/gs-markdown.c \
+	src/markdown/gs-markdown.h \
 	src/snippets/gb-source-snippet-chunk.c \
 	src/snippets/gb-source-snippet-chunk.h \
 	src/snippets/gb-source-snippet-completion-item.c \
@@ -110,6 +112,7 @@ gnome_builder_CFLAGS = \
 	-I$(top_srcdir)/src/gedit \
 	-I$(top_srcdir)/src/keybindings \
 	-I$(top_srcdir)/src/log \
+	-I$(top_srcdir)/src/markdown \
 	-I$(top_srcdir)/src/nautilus \
 	-I$(top_srcdir)/src/resources \
 	-I$(top_srcdir)/src/snippets \
