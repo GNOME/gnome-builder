@@ -71,7 +71,6 @@ gb_markdown_preview_load_html (GbMarkdownPreview *preview,
 
   css = g_resources_lookup_data ("/org/gnome/builder/css/markdown.css", 0, NULL);
   css_data = g_bytes_get_data (css, NULL);
-  g_print (">> %s\n", (gchar *)css_data);
   built_html = g_strdup_printf ("<html>\n"
                                 " <style>%s</style>\n"
                                 " <body>\n"
