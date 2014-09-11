@@ -1,6 +1,11 @@
 bin_PROGRAMS += gnome-builder
 
+BUILT_FILES = \
+	src/resources/gb-resources.c \
+	src/resources/gb-resources.h
+
 gnome_builder_SOURCES = \
+	$(BUILT_FILES) \
 	src/animation/gb-animation.c \
 	src/animation/gb-animation.h \
 	src/animation/gb-frame-source.c \
@@ -54,8 +59,6 @@ gnome_builder_SOURCES = \
 	src/log/gb-log.h \
 	src/nautilus/nautilus-floating-bar.c \
 	src/nautilus/nautilus-floating-bar.h \
-	src/resources/gb-resources.c \
-	src/resources/gb-resources.h \
 	src/tabs/gb-multi-notebook.c \
 	src/tabs/gb-multi-notebook.h \
 	src/tabs/gb-notebook.c \
@@ -120,8 +123,12 @@ if ENABLE_TRACING
 gnome_builder_CFLAGS += -DGB_ENABLE_TRACE
 endif
 
+# XXX: Workaround for now, need to find a more automated way to do this
+# in how we build projects inside of Builder.
+src/app/gnome_builder-gb-application.$(OBJEXT): $(BUILT_FILES)
+
 resource_files = $(shell glib-compile-resources --sourcedir=$(srcdir)/src/resources --generate-dependencies $(top_srcdir)/src/resources/gnome-builder.gresource.xml)
-src/resources/gb-resources.c: src/resources/gb-resources.h src/resources/gnome-builder.gresource.xml $(resource_files)
+src/resources/gb-resources.c: src/resources/gnome-builder.gresource.xml $(resource_files)
 	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/src/resources --generate-source --c-name gb $(top_srcdir)/src/resources/gnome-builder.gresource.xml
 src/resources/gb-resources.h: src/resources/gnome-builder.gresource.xml $(resource_files)
 	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/src/resources --generate-header --c-name gb $(top_srcdir)/src/resources/gnome-builder.gresource.xml
