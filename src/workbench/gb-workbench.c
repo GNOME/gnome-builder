@@ -124,8 +124,8 @@ gb_workbench_stack_child_changed (GbWorkbench *workbench,
 }
 
 static void
-load_actions (GbWorkbench *workbench,
-              GbWorkspace *workspace)
+gb_workbench_load_workspace_actions (GbWorkbench *workbench,
+                                     GbWorkspace *workspace)
 {
   GActionGroup *group;
   const gchar *name;
@@ -154,8 +154,34 @@ gb_workbench_realize (GtkWidget *widget)
 }
 
 static void
+on_workspace1_activate (GSimpleAction *action,
+                        GVariant      *variant,
+                        gpointer       user_data)
+{
+  GbWorkbenchPrivate *priv = GB_WORKBENCH (user_data)->priv;
+  GtkWidget *child = gtk_stack_get_child_by_name (priv->stack, "editor");
+  gtk_stack_set_visible_child (priv->stack, child);
+  gtk_widget_grab_focus (child);
+}
+
+static void
+on_workspace2_activate (GSimpleAction *action,
+                        GVariant      *variant,
+                        gpointer       user_data)
+{
+  GbWorkbenchPrivate *priv = GB_WORKBENCH (user_data)->priv;
+  GtkWidget *child = gtk_stack_get_child_by_name (priv->stack, "devhelp");
+  gtk_stack_set_visible_child (priv->stack, child);
+  gtk_widget_grab_focus (child);
+}
+
+static void
 gb_workbench_constructed (GObject *object)
 {
+  static const GActionEntry actions[] = {
+    { "workspace1", on_workspace1_activate },
+    { "workspace2", on_workspace2_activate },
+  };
   GbWorkbenchPrivate *priv;
   GbWorkbench *workbench = (GbWorkbench *)object;
   GtkApplication *app;
@@ -167,8 +193,8 @@ gb_workbench_constructed (GObject *object)
 
   priv = workbench->priv;
 
-  load_actions (workbench, GB_WORKSPACE (priv->editor));
-  load_actions (workbench, GB_WORKSPACE (priv->devhelp));
+  gb_workbench_load_workspace_actions (workbench, GB_WORKSPACE (priv->editor));
+  gb_workbench_load_workspace_actions (workbench, GB_WORKSPACE (priv->devhelp));
 
   app = GTK_APPLICATION (g_application_get_default ());
   menu = gtk_application_get_menu_by_id (app, "gear-menu");
@@ -182,6 +208,9 @@ gb_workbench_constructed (GObject *object)
                            (G_CONNECT_SWAPPED | G_CONNECT_AFTER));
 
   gb_workbench_stack_child_changed (workbench, NULL, priv->stack);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (workbench), actions,
+                                   G_N_ELEMENTS (actions), workbench);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->constructed (object);
 
