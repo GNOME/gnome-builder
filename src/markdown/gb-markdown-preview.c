@@ -65,16 +65,22 @@ static void
 gb_markdown_preview_load_html (GbMarkdownPreview *preview,
                                const gchar       *html)
 {
+  GBytes *css;
   gchar *built_html;
-  const gchar *css = "";
+  const guint8 *css_data;
 
+  css = g_resources_lookup_data ("/org/gnome/builder/css/markdown.css", 0, NULL);
+  css_data = g_bytes_get_data (css, NULL);
+  g_print (">> %s\n", (gchar *)css_data);
   built_html = g_strdup_printf ("<html>\n"
                                 " <style>%s</style>\n"
                                 " <body>\n"
+                                "  <div class=\"markdown-body\">\n"
                                 "   %s\n"
+                                "  </div>\n"
                                 " </body>\n"
                                 "</html>",
-                                css, html);
+                                (gchar *)css_data, html);
 
   /*
    * TODO: Load CSS
@@ -83,6 +89,7 @@ gb_markdown_preview_load_html (GbMarkdownPreview *preview,
   webkit_web_view_load_html (WEBKIT_WEB_VIEW (preview),
                              built_html, NULL);
 
+  g_bytes_unref (css);
   g_free (built_html);
 }
 

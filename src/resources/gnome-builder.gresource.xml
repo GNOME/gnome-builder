@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/org/gnome/builder">
     <file>css/builder.Adwaita.css</file>
+    <file>css/markdown.css</file>
 
     <file>editor/uncrustify/uncrustify.c.cfg</file>
 
