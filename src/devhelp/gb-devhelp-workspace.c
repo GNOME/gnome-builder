@@ -178,6 +178,14 @@ gb_devhelp_workspace_get_actions (GbWorkspace *workspace)
 }
 
 static void
+gb_devhelp_workspace_grab_focus (GtkWidget *widget)
+{
+  g_assert (GB_IS_DEVHELP_WORKSPACE (widget));
+
+  dh_sidebar_set_search_focus (GB_DEVHELP_WORKSPACE (widget)->priv->sidebar);
+}
+
+static void
 gb_devhelp_workspace_finalize (GObject *object)
 {
   GbDevhelpWorkspacePrivate *priv;
@@ -194,10 +202,13 @@ static void
 gb_devhelp_workspace_class_init (GbDevhelpWorkspaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GbWorkspaceClass *workspace_class = GB_WORKSPACE_CLASS (klass);
 
   object_class->constructed = gb_devhelp_workspace_constructed;
   object_class->finalize = gb_devhelp_workspace_finalize;
+
+  widget_class->grab_focus = gb_devhelp_workspace_grab_focus;
 
   workspace_class->get_actions = gb_devhelp_workspace_get_actions;
 }
