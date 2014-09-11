@@ -31,15 +31,13 @@ main (int   argc,
   int ret;
 
   g_set_prgname ("gnome-builder");
-  g_set_application_name (_ ("Builder"));
+  g_set_application_name (_("Builder"));
 
   gb_log_init (TRUE, NULL);
 
   app = gb_application_new ();
   g_application_set_default (G_APPLICATION (app));
-
   ret = g_application_run (G_APPLICATION (app), argc, argv);
-
   g_clear_object (&app);
 
   gb_log_shutdown ();

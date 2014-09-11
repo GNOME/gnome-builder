@@ -2,7 +2,7 @@
 Name=Builder
 Comment=Build software for GNOME
 Exec=gnome-builder
-Icon=gnome-builder
+Icon=builder
 DBusActivatable=true
 StartupNotify=true
 Terminal=false

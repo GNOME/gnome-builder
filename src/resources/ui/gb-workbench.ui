@@ -2,6 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.8 -->
   <template class="GbWorkbench" parent="GtkApplicationWindow">
+    <property name="icon-name">builder</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
         <property name="visible">True</property>
