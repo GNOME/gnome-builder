@@ -93,6 +93,10 @@
           <attribute name="label" translatable="yes">Autoformat Code</attribute>
           <attribute name="action">editor.reformat</attribute>
         </item>
+        <item>
+          <attribute name="label" translatable="yes">Trim Trailing Space</attribute>
+          <attribute name="action">editor.trim-trailing-space</attribute>
+        </item>
       </submenu>
     </section>
     <section>

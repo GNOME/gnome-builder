@@ -635,6 +635,58 @@ gb_editor_commands_new_tab (GbEditorWorkspace *workspace,
   gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page);
 }
 
+static gboolean
+non_space_predicate (gunichar ch,
+                     gpointer user_data)
+{
+  return !g_unichar_isspace (ch);
+}
+
+static void
+gb_editor_commands_trim_trailing_space (GbEditorWorkspace *workspace,
+                                        GbEditorTab       *tab)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter line_end;
+  GtkTextIter line_begin;
+  GtkTextIter iter;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  buffer = GTK_TEXT_BUFFER (tab->priv->document);
+
+  /*
+   * For each line of the document buffer, move to the end of the line
+   * and then walk backwards until we reach a non-whitespace character.
+   * Then we can trim up to the line end.
+   */
+
+  gtk_text_buffer_get_bounds (buffer, &iter, &end);
+
+  while (gtk_text_iter_compare (&iter, &end) < 0)
+    {
+      gtk_text_iter_assign (&line_begin, &iter);
+      gtk_text_iter_forward_to_line_end (&iter);
+      gtk_text_iter_assign (&line_end, &iter);
+
+      if (gtk_text_iter_backward_find_char (&iter, non_space_predicate, NULL,
+                                            &line_begin))
+        {
+          gtk_text_iter_forward_char (&iter);
+          gtk_text_buffer_delete (buffer, &iter, &line_end);
+          gtk_text_buffer_get_bounds (buffer, &begin, &end);
+        }
+      else
+        gtk_text_iter_assign (&iter, &line_end);
+
+      if (!gtk_text_iter_forward_char (&iter))
+        break;
+    }
+}
+
 static void
 gb_editor_commands_activate (GSimpleAction *action,
                              GVariant      *variant,
@@ -675,16 +727,17 @@ void
 gb_editor_commands_init (GbEditorWorkspace *workspace)
 {
   static const GbEditorCommandsEntry commands[] = {
-    { "close-tab",      gb_editor_commands_close_tab,      TRUE },
-    { "find",           gb_editor_commands_find,           TRUE },
-    { "go-to-start",    gb_editor_commands_go_to_start,    TRUE },
-    { "go-to-end",      gb_editor_commands_go_to_end,      TRUE },
-    { "new-tab",        gb_editor_commands_new_tab,        FALSE },
-    { "open",           gb_editor_commands_open,           FALSE },
-    { "toggle-preview", gb_editor_commands_toggle_preview, TRUE },
-    { "reformat",       gb_editor_commands_reformat,       TRUE },
-    { "save",           gb_editor_commands_save,           TRUE },
-    { "save-as",        gb_editor_commands_save_as,        TRUE },
+    { "close-tab",           gb_editor_commands_close_tab,           TRUE },
+    { "find",                gb_editor_commands_find,                TRUE },
+    { "go-to-start",         gb_editor_commands_go_to_start,         TRUE },
+    { "go-to-end",           gb_editor_commands_go_to_end,           TRUE },
+    { "new-tab",             gb_editor_commands_new_tab,             FALSE },
+    { "open",                gb_editor_commands_open,                FALSE },
+    { "toggle-preview",      gb_editor_commands_toggle_preview,      TRUE },
+    { "reformat",            gb_editor_commands_reformat,            TRUE },
+    { "save",                gb_editor_commands_save,                TRUE },
+    { "save-as",             gb_editor_commands_save_as,             TRUE },
+    { "trim-trailing-space", gb_editor_commands_trim_trailing_space, TRUE },
     { NULL }
   };
   guint i;
