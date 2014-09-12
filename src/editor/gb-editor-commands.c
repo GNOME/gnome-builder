@@ -350,13 +350,52 @@ gb_editor_commands_new_tab (GbEditorWorkspace *workspace,
 }
 
 static void
-gb_editor_commands_preview (GbEditorWorkspace *workspace,
-                            GbEditorTab       *tab)
+gb_editor_commands_toggle_preview (GbEditorWorkspace *workspace,
+                                   GbEditorTab       *tab)
 {
+  GbEditorTabPrivate *priv;
+  GtkSourceLanguage *lang;
+  GtkWidget *child;
+  GList *children;
+
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
-  gb_editor_tab_toggle_preview (tab);
+  priv = tab->priv;
+
+  children = gtk_container_get_children (GTK_CONTAINER (priv->preview_container));
+
+  if (children)
+    {
+      child = children->data;
+      g_list_free (children);
+
+      gtk_container_remove (GTK_CONTAINER (priv->preview_container), child);
+      gtk_widget_hide (GTK_WIDGET (priv->preview_container));
+
+      return;
+    }
+
+  lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (priv->document));
+
+  if (lang)
+    {
+      const gchar *lang_id;
+
+      lang_id = gtk_source_language_get_id (lang);
+
+      if (g_strcmp0 (lang_id, "markdown") == 0)
+        {
+          child = g_object_new (GB_TYPE_MARKDOWN_PREVIEW,
+                                "buffer", priv->document,
+                                "width-request", 100,
+                                "hexpand", TRUE,
+                                "visible", TRUE,
+                                NULL);
+          gtk_container_add (GTK_CONTAINER (priv->preview_container), child);
+          gtk_widget_show (GTK_WIDGET (priv->preview_container));
+        }
+    }
 }
 
 
@@ -400,16 +439,16 @@ void
 gb_editor_commands_init (GbEditorWorkspace *workspace)
 {
   static const GbEditorCommandsEntry commands[] = {
-    { "close-tab",   gb_editor_commands_close_tab,   TRUE },
-    { "find",        gb_editor_commands_find,        TRUE },
-    { "go-to-start", gb_editor_commands_go_to_start, TRUE },
-    { "go-to-end",   gb_editor_commands_go_to_end,   TRUE },
-    { "new-tab",     gb_editor_commands_new_tab,     FALSE },
-    { "open",        gb_editor_commands_open,        FALSE },
-    { "preview",     gb_editor_commands_preview,     TRUE },
-    { "reformat",    gb_editor_commands_reformat,    TRUE },
-    { "save",        gb_editor_commands_save,        TRUE },
-    { "save-as",     gb_editor_commands_save_as,     TRUE },
+    { "close-tab",      gb_editor_commands_close_tab,      TRUE },
+    { "find",           gb_editor_commands_find,           TRUE },
+    { "go-to-start",    gb_editor_commands_go_to_start,    TRUE },
+    { "go-to-end",      gb_editor_commands_go_to_end,      TRUE },
+    { "new-tab",        gb_editor_commands_new_tab,        FALSE },
+    { "open",           gb_editor_commands_open,           FALSE },
+    { "toggle-preview", gb_editor_commands_toggle_preview, TRUE },
+    { "reformat",       gb_editor_commands_reformat,       TRUE },
+    { "save",           gb_editor_commands_save,           TRUE },
+    { "save-as",        gb_editor_commands_save_as,        TRUE },
     { NULL }
   };
   guint i;

@@ -122,48 +122,6 @@ gb_editor_tab_get_file (GbEditorTab *tab)
 void
 gb_editor_tab_toggle_preview (GbEditorTab *tab)
 {
-  GbEditorTabPrivate *priv;
-  GtkSourceLanguage *lang;
-  GtkWidget *child;
-  GList *children;
-
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-
-  priv = tab->priv;
-
-  children = gtk_container_get_children (GTK_CONTAINER (priv->preview_container));
-
-  if (children)
-    {
-      child = children->data;
-      g_list_free (children);
-
-      gtk_container_remove (GTK_CONTAINER (priv->preview_container), child);
-      gtk_widget_hide (GTK_WIDGET (priv->preview_container));
-
-      return;
-    }
-
-  lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (priv->document));
-
-  if (lang)
-    {
-      const gchar *lang_id;
-
-      lang_id = gtk_source_language_get_id (lang);
-
-      if (g_strcmp0 (lang_id, "markdown") == 0)
-        {
-          child = g_object_new (GB_TYPE_MARKDOWN_PREVIEW,
-                                "buffer", priv->document,
-                                "width-request", 100,
-                                "hexpand", TRUE,
-                                "visible", TRUE,
-                                NULL);
-          gtk_container_add (GTK_CONTAINER (priv->preview_container), child);
-          gtk_widget_show (GTK_WIDGET (priv->preview_container));
-        }
-    }
 }
 
 static void
