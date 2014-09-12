@@ -237,16 +237,302 @@ gb_editor_commands_close_tab (GbEditorWorkspace *workspace,
   gb_tab_close (GB_TAB (tab));
 }
 
+static void
+gb_editor_commands_toggle_preview (GbEditorWorkspace *workspace,
+                                   GbEditorTab       *tab)
+{
+  GbEditorTabPrivate *priv;
+  GtkSourceLanguage *lang;
+  GtkWidget *child;
+  GList *children;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  priv = tab->priv;
+
+  children = gtk_container_get_children (GTK_CONTAINER (priv->preview_container));
+
+  if (children)
+    {
+      child = children->data;
+      g_list_free (children);
+
+      gtk_container_remove (GTK_CONTAINER (priv->preview_container), child);
+      gtk_widget_hide (GTK_WIDGET (priv->preview_container));
+
+      return;
+    }
+
+  lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (priv->document));
+
+  if (lang)
+    {
+      const gchar *lang_id;
+
+      lang_id = gtk_source_language_get_id (lang);
+
+      if (g_strcmp0 (lang_id, "markdown") == 0)
+        {
+          child = g_object_new (GB_TYPE_MARKDOWN_PREVIEW,
+                                "buffer", priv->document,
+                                "width-request", 100,
+                                "hexpand", TRUE,
+                                "visible", TRUE,
+                                NULL);
+          gtk_container_add (GTK_CONTAINER (priv->preview_container), child);
+          gtk_widget_show (GTK_WIDGET (priv->preview_container));
+        }
+    }
+}
+
+static void
+file_progress_cb (goffset      current_num_bytes,
+                  goffset      total_num_bytes,
+                  GbEditorTab *tab)
+{
+  GbEditorTabPrivate *priv;
+  gdouble fraction;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  priv = tab->priv;
+
+  if (priv->save_animation)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->save_animation),
+                                    (gpointer *)&priv->save_animation);
+      gb_animation_stop (priv->save_animation);
+      priv->save_animation = NULL;
+    }
+
+  fraction = total_num_bytes
+           ? ((gdouble)current_num_bytes / (gdouble)total_num_bytes)
+           : 1.0;
+
+  priv->save_animation = gb_object_animate (priv->progress_bar,
+                                            GB_ANIMATION_LINEAR,
+                                            250,
+                                            NULL,
+                                            "fraction", fraction,
+                                            NULL);
+  g_object_add_weak_pointer (G_OBJECT (priv->save_animation),
+                             (gpointer *)&priv->save_animation);
+}
+
+static gboolean
+hide_progress_bar_cb (gpointer data)
+{
+  GbEditorTab *tab = data;
+
+  g_assert (GB_IS_EDITOR_TAB (tab));
+
+  gb_object_animate_full (tab->priv->progress_bar,
+                          GB_ANIMATION_EASE_OUT_CUBIC,
+                          250,
+                          NULL,
+                          (GDestroyNotify)gtk_widget_hide,
+                          tab->priv->progress_bar,
+                          "opacity", 0.0,
+                          NULL);
+
+  g_object_unref (tab);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+on_load_cb (GtkSourceFileLoader *loader,
+            GAsyncResult        *result,
+            GbEditorTab         *tab)
+{
+  GError *error = NULL;
+
+  g_return_if_fail (GTK_SOURCE_IS_FILE_LOADER (loader));
+  g_return_if_fail (G_IS_ASYNC_RESULT (result));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  /*
+   * Hide the progress bar after a timeout period.
+   */
+  g_timeout_add (350, hide_progress_bar_cb, g_object_ref (tab));
+
+  if (!gtk_source_file_loader_load_finish (loader, result, &error))
+    {
+      /*
+       * TODO: Propagate error to tab.
+       */
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+
+  g_object_unref (tab);
+}
+
+void
+gb_editor_tab_open_file (GbEditorTab *tab,
+                         GFile       *file)
+{
+  GbEditorTabPrivate *priv;
+  GtkSourceFileLoader *loader;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+  g_return_if_fail (G_IS_FILE (file));
+
+  priv = tab->priv;
+
+  gtk_source_file_set_location (priv->file, file);
+
+  loader = gtk_source_file_loader_new (GTK_SOURCE_BUFFER (priv->document),
+                                       priv->file);
+
+  gtk_source_file_loader_load_async (loader,
+                                     G_PRIORITY_DEFAULT,
+                                     NULL, /* TODO: Cancellable */
+                                     (GFileProgressCallback)file_progress_cb,
+                                     tab,
+                                     NULL,
+                                     (GAsyncReadyCallback)on_load_cb,
+                                     g_object_ref (tab));
+
+  g_object_unref (loader);
+}
+
+static void
+on_save_cb (GtkSourceFileSaver *saver,
+            GAsyncResult       *result,
+            GbEditorTab        *tab)
+{
+  GError *error = NULL;
+
+  g_return_if_fail (GTK_SOURCE_IS_FILE_SAVER (saver));
+  g_return_if_fail (G_IS_ASYNC_RESULT (result));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  /*
+   * Hide the progress bar after a timeout period.
+   */
+  g_timeout_add (350, hide_progress_bar_cb, g_object_ref (tab));
+
+  if (!gtk_source_file_saver_save_finish (saver, result, &error))
+    {
+      /*
+       * TODO: Propagate error to tab.
+       */
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+  else
+    gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (tab->priv->document),
+                                  FALSE);
+
+  g_object_unref (tab);
+}
+
+static void
+gb_editor_tab_do_save (GbEditorTab *tab)
+{
+  GbEditorTabPrivate *priv;
+  GtkSourceFileSaver *saver;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+  g_return_if_fail (tab->priv->file);
+  g_return_if_fail (gtk_source_file_get_location (tab->priv->file));
+
+  priv = tab->priv;
+
+  /*
+   * TODO: Tab needs a state machine for what are valid operations.
+   */
+
+  gtk_progress_bar_set_fraction (priv->progress_bar, 0.0);
+  gtk_widget_set_opacity (GTK_WIDGET (priv->progress_bar), 1.0);
+  gtk_widget_show (GTK_WIDGET (priv->progress_bar));
+
+  saver = gtk_source_file_saver_new (GTK_SOURCE_BUFFER (priv->document),
+                                     priv->file);
+
+  gtk_source_file_saver_save_async (saver,
+                                    G_PRIORITY_DEFAULT,
+                                    NULL, /* TODO: Cancellable */
+                                    (GFileProgressCallback)file_progress_cb,
+                                    tab,
+                                    NULL,
+                                    (GAsyncReadyCallback)on_save_cb,
+                                    g_object_ref (tab));
+
+  g_object_unref (saver);
+}
+
+void
+gb_editor_tab_save_as (GbEditorTab *tab)
+{
+  GtkFileChooserDialog *dialog;
+  GtkWidget *toplevel;
+  GtkWidget *suggested;
+  GtkResponseType response;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tab));
+
+  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                         "action", GTK_FILE_CHOOSER_ACTION_SAVE,
+                         "do-overwrite-confirmation", TRUE,
+                         "local-only", FALSE,
+                         "select-multiple", FALSE,
+                         "show-hidden", FALSE,
+                         "transient-for", toplevel,
+                         "title", _("Save"),
+                         NULL);
+
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("Cancel"), GTK_RESPONSE_CANCEL,
+                          _("Save"), GTK_RESPONSE_OK,
+                          NULL);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog),
+                                                  GTK_RESPONSE_OK);
+  gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
+                               GTK_STYLE_CLASS_SUGGESTED_ACTION);
+
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  if (response == GTK_RESPONSE_OK)
+    {
+      GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      gtk_source_file_set_location (tab->priv->file, file);
+      gb_editor_tab_do_save (tab);
+      g_clear_object (&file);
+    }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
 void
 gb_editor_commands_save (GbEditorWorkspace *workspace,
                          GbEditorTab       *tab)
 {
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  if (!gtk_source_file_get_location (tab->priv->file))
+    {
+      gb_editor_tab_save_as (tab);
+      return;
+    }
+
+  gb_editor_tab_do_save (tab);
 }
 
 void
 gb_editor_commands_save_as (GbEditorWorkspace *workspace,
                             GbEditorTab       *tab)
 {
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  gb_editor_tab_save_as (tab);
 }
 
 static void
@@ -348,56 +634,6 @@ gb_editor_commands_new_tab (GbEditorWorkspace *workspace,
                            NULL);
   gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page);
 }
-
-static void
-gb_editor_commands_toggle_preview (GbEditorWorkspace *workspace,
-                                   GbEditorTab       *tab)
-{
-  GbEditorTabPrivate *priv;
-  GtkSourceLanguage *lang;
-  GtkWidget *child;
-  GList *children;
-
-  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-
-  priv = tab->priv;
-
-  children = gtk_container_get_children (GTK_CONTAINER (priv->preview_container));
-
-  if (children)
-    {
-      child = children->data;
-      g_list_free (children);
-
-      gtk_container_remove (GTK_CONTAINER (priv->preview_container), child);
-      gtk_widget_hide (GTK_WIDGET (priv->preview_container));
-
-      return;
-    }
-
-  lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (priv->document));
-
-  if (lang)
-    {
-      const gchar *lang_id;
-
-      lang_id = gtk_source_language_get_id (lang);
-
-      if (g_strcmp0 (lang_id, "markdown") == 0)
-        {
-          child = g_object_new (GB_TYPE_MARKDOWN_PREVIEW,
-                                "buffer", priv->document,
-                                "width-request", 100,
-                                "hexpand", TRUE,
-                                "visible", TRUE,
-                                NULL);
-          gtk_container_add (GTK_CONTAINER (priv->preview_container), child);
-          gtk_widget_show (GTK_WIDGET (priv->preview_container));
-        }
-    }
-}
-
 
 static void
 gb_editor_commands_activate (GSimpleAction *action,

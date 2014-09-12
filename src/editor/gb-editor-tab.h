@@ -59,15 +59,7 @@ void              gb_editor_tab_set_settings   (GbEditorTab                *tab,
                                                 GbEditorSettings           *settings);
 void              gb_editor_tab_set_font_desc  (GbEditorTab                *tab,
                                                 const PangoFontDescription *font_desc);
-void              gb_editor_tab_focus_search   (GbEditorTab                *tab);
 gboolean          gb_editor_tab_get_is_default (GbEditorTab                *tab);
-void              gb_editor_tab_go_to_end      (GbEditorTab                *tab);
-void              gb_editor_tab_go_to_start    (GbEditorTab                *tab);
-void              gb_editor_tab_save_as        (GbEditorTab                *tab);
-void              gb_editor_tab_save           (GbEditorTab                *tab);
-void              gb_editor_tab_open_file      (GbEditorTab                *tab,
-                                                GFile                      *file);
-void              gb_editor_tab_toggle_preview (GbEditorTab                *tab);
 
 G_END_DECLS
 
