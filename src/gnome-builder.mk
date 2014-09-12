@@ -22,6 +22,7 @@ gnome_builder_SOURCES = \
 	src/editor/gb-editor-settings.h \
 	src/editor/gb-editor-tab.c \
 	src/editor/gb-editor-tab.h \
+	src/editor/gb-editor-tab-private.h \
 	src/editor/gb-editor-workspace.c \
 	src/editor/gb-editor-workspace.h \
 	src/editor/gb-source-formatter.c \

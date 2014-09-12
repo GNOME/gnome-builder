@@ -19,95 +19,19 @@
 #define G_LOG_DOMAIN "editor"
 
 #include <glib/gi18n.h>
-#include <gtksourceview/gtksource.h>
 
-#include "gb-animation.h"
-#include "gb-box-theatric.h"
 #include "gb-editor-tab.h"
+#include "gb-editor-tab-private.h"
 #include "gb-log.h"
-#include "gb-markdown-preview.h"
-#include "gb-notebook.h"
 #include "gb-rgba.h"
 #include "gb-source-formatter.h"
-#include "gb-source-search-highlighter.h"
-#include "gb-source-snippet-completion-provider.h"
 #include "gb-source-snippet.h"
 #include "gb-source-snippets-manager.h"
 #include "gb-source-snippets.h"
-#include "gb-source-view.h"
 #include "gb-string.h"
 #include "gb-widget.h"
-#include "gd-tagged-entry.h"
-#include "nautilus-floating-bar.h"
 
 #define GB_EDITOR_TAB_UI_RESOURCE "/org/gnome/builder/ui/gb-editor-tab.ui"
-
-struct _GbEditorTabPrivate
-{
-  /*
-   * Our underlying document, the GtkTextBuffer.
-   */
-  GbEditorDocument *document;
-
-  /*
-   * Snippet related components.
-   */
-  GtkSourceCompletionProvider *snippets_provider;
-
-  /*
-   * Search releated components.
-   */
-  GbSourceSearchHighlighter *search_highlighter;
-  GtkSourceSearchSettings   *search_settings;
-  GtkSourceSearchContext    *search_context;
-
-  /*
-   * Tab related settings.
-   */
-  GbEditorSettings *settings;
-
-  /*
-   * Weak reference bindings for tracking settings.
-   */
-  GBinding *auto_indent_binding;
-  GBinding *font_desc_binding;
-  GBinding *highlight_current_line_binding;
-  GBinding *indent_on_tab_binding;
-  GBinding *indent_width_binding;
-  GBinding *insert_spaces_instead_of_tabs_binding;
-  GBinding *right_margin_position_binding;
-  GBinding *show_line_marks_binding;
-  GBinding *show_line_numbers_binding;
-  GBinding *show_right_margin_binding;
-  GBinding *smart_home_end_binding;
-  GBinding *style_scheme_binding;
-  GBinding *tab_width_binding;
-
-  /*
-   * Tab related widgets, filled in with GtkBuilder templates.
-   */
-  NautilusFloatingBar *floating_bar;
-  GtkButton           *go_down_button;
-  GtkButton           *go_up_button;
-  GtkOverlay          *overlay;
-  GtkBox              *preview_container;
-  GtkProgressBar      *progress_bar;
-  GtkRevealer         *revealer;
-  GtkScrolledWindow   *scroller;
-  GbSourceView        *source_view;
-  GdTaggedEntry       *search_entry;
-  GdTaggedEntryTag    *search_entry_tag;
-
-  /*
-   * Information about our target file and encoding.
-   */
-  GtkSourceFile *file;
-
-  /*
-   * Animation for save progress.
-   */
-  GbAnimation *save_animation;
-};
 
 enum {
   PROP_0,
