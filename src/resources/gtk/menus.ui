@@ -78,6 +78,10 @@
       </submenu>
       <submenu>
         <attribute name="label" translatable="yes">Tools</attribute>
+        <item>
+          <attribute name="label" translatable="yes">Autoformat Code</attribute>
+          <attribute name="action">editor.reformat</attribute>
+        </item>
       </submenu>
     </section>
     <section>
