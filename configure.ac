@@ -20,7 +20,7 @@ m4_include([build/autotools/autoconf.d/post-lt.m4])
 # Initialize automake and things that go with it.
 # We would put AM initialization in a file but autoreconf requires it.
 m4_include([build/autotools/autoconf.d/pre-am.m4])
-AM_INIT_AUTOMAKE([foreign subdir-objects tar-ustar])
+AM_INIT_AUTOMAKE([foreign subdir-objects tar-ustar no-dist-gzip dist-xz])
 AM_MAINTAINER_MODE([enable])
 m4_include([build/autotools/autoconf.d/post-am.m4])
 
