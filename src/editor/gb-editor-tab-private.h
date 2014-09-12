@@ -24,6 +24,8 @@
 
 #include "gb-animation.h"
 #include "gb-box-theatric.h"
+#include "gb-editor-document.h"
+#include "gb-editor-settings.h"
 #include "gb-markdown-preview.h"
 #include "gb-notebook.h"
 #include "gb-source-search-highlighter.h"
