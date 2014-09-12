@@ -16,6 +16,8 @@ gnome_builder_SOURCES = \
 	src/devhelp/gb-devhelp-workspace.h \
 	src/devhelp/gb-devhelp-tab.c \
 	src/devhelp/gb-devhelp-tab.h \
+	src/editor/gb-editor-commands.c \
+	src/editor/gb-editor-commands.h \
 	src/editor/gb-editor-document.c \
 	src/editor/gb-editor-document.h \
 	src/editor/gb-editor-settings.c \

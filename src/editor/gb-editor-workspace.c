@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 
+#include "gb-editor-commands.h"
 #include "gb-editor-tab.h"
 #include "gb-editor-workspace.h"
 #include "gb-multi-notebook.h"
@@ -117,10 +118,7 @@ on_reformat_activate (GSimpleAction *action,
   tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
 
   if (tab)
-    {
-      g_assert (GB_IS_EDITOR_TAB (tab));
-      gb_editor_tab_reformat (GB_EDITOR_TAB (tab));
-    }
+    gb_editor_commands_reformat (GB_EDITOR_TAB (tab));
 }
 
 static void
