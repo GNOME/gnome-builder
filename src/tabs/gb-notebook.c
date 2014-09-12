@@ -28,6 +28,10 @@
 
 G_DEFINE_TYPE (GbNotebook, gb_notebook, GTK_TYPE_NOTEBOOK)
 
+#if 0
+# define HIDE_CLOSE_Button
+#endif
+
 GtkWidget *
 gb_notebook_new (void)
 {
@@ -136,12 +140,15 @@ gb_notebook_switch_page (GtkNotebook *notebook,
                          GtkWidget   *page,
                          guint        page_num)
 {
+#ifdef HIDE_CLOSE_Button
   GtkWidget *tab_label;
   GtkWidget *prev_page;
   gint prev_page_num;
+#endif
 
   g_return_if_fail (GB_IS_NOTEBOOK (notebook));
 
+#ifdef HIDE_CLOSE_Button
   prev_page_num = gtk_notebook_get_current_page (notebook);
 
   if (prev_page_num != -1)
@@ -150,13 +157,16 @@ gb_notebook_switch_page (GtkNotebook *notebook,
       tab_label = gtk_notebook_get_tab_label (notebook, prev_page);
       _gb_tab_label_set_show_close_button (GB_TAB_LABEL (tab_label), FALSE);
     }
+#endif
 
   GTK_NOTEBOOK_CLASS (gb_notebook_parent_class)->switch_page (notebook,
                                                               page,
                                                               page_num);
 
+#ifdef HIDE_CLOSE_Button
   tab_label = gtk_notebook_get_tab_label (notebook, page);
   _gb_tab_label_set_show_close_button (GB_TAB_LABEL (tab_label), TRUE);
+#endif
 }
 
 static void
