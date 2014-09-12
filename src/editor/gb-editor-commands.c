@@ -591,7 +591,7 @@ gb_editor_commands_open (GbEditorWorkspace *workspace,
         {
           GFile *file = iter->data;
 
-          if (!gb_editor_tab_get_is_default (GB_EDITOR_TAB (active_tab)))
+          if (!tab || !gb_editor_tab_get_is_default (GB_EDITOR_TAB (active_tab)))
             {
               tab = GB_EDITOR_TAB (gb_editor_tab_new ());
               gb_notebook_add_tab (notebook, GB_TAB (tab));
