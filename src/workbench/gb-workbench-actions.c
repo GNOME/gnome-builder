@@ -180,6 +180,9 @@ gb_workbench_actions_constructed (GObject *object)
       { "close-tab", proxy_action },
       { "find", proxy_action },
       { "new-tab", proxy_action },
+      { "open", proxy_action },
+      { "save", proxy_action },
+      { "save-as", proxy_action },
    };
 
    g_assert (GB_IS_WORKBENCH_ACTIONS (actions));
