@@ -151,7 +151,7 @@ on_open_activate (GSimpleAction *action,
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
                          "action", GTK_FILE_CHOOSER_ACTION_OPEN,
                          "local-only", FALSE,
-                         "select-multiple", FALSE,
+                         "select-multiple", TRUE,
                          "show-hidden", FALSE,
                          "transient-for", toplevel,
                          "title", _("Open"),
@@ -173,19 +173,29 @@ on_open_activate (GSimpleAction *action,
 
   if (response == GTK_RESPONSE_OK)
     {
-      GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      GSList *files;
+      GSList *iter;
 
-      if (!gb_editor_tab_get_is_default (GB_EDITOR_TAB (tab)))
+      files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (dialog));
+
+      for (iter = files; iter; iter = iter->next)
         {
-          tab = GB_TAB (gb_editor_tab_new ());
-          gb_notebook_add_tab (notebook, tab);
-          gtk_widget_show (GTK_WIDGET (tab));
+          GFile *file = iter->data;
+
+          if (!gb_editor_tab_get_is_default (GB_EDITOR_TAB (tab)))
+            {
+              tab = GB_TAB (gb_editor_tab_new ());
+              gb_notebook_add_tab (notebook, tab);
+              gtk_widget_show (GTK_WIDGET (tab));
+            }
+
+          gb_editor_tab_open_file (GB_EDITOR_TAB (tab), file);
+          gb_notebook_raise_tab (notebook, tab);
+
+          g_clear_object (&file);
         }
 
-      gb_editor_tab_open_file (GB_EDITOR_TAB (tab), file);
-      gb_notebook_raise_tab (notebook, tab);
-
-      g_clear_object (&file);
+      g_slist_free (files);
     }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
