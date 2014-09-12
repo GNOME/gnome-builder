@@ -19,16 +19,8 @@
 #include <glib/gi18n.h>
 
 #include "gb-editor-commands.h"
-#include "gb-editor-tab.h"
 #include "gb-editor-workspace.h"
-#include "gb-multi-notebook.h"
-#include "gb-notebook.h"
-
-struct _GbEditorWorkspacePrivate
-{
-  GSimpleActionGroup *actions;
-  GbMultiNotebook    *multi_notebook;
-};
+#include "gb-editor-workspace-private.h"
 
 enum {
   PROP_0,
@@ -43,252 +35,6 @@ gb_editor_workspace_get_actions (GbWorkspace * workspace)
   g_return_val_if_fail (GB_IS_EDITOR_WORKSPACE (workspace), NULL);
 
   return G_ACTION_GROUP (GB_EDITOR_WORKSPACE (workspace)->priv->actions);
-}
-
-static void
-on_new_tab_activate (GSimpleAction *action,
-                     GVariant      *parameter,
-                     gpointer       user_data)
-{
-  GbEditorWorkspacePrivate *priv;
-  GbEditorWorkspace *workspace = user_data;
-  GbNotebook *notebook;
-  GbTab *tab;
-  gint page;
-
-  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-
-  priv = workspace->priv;
-
-  notebook = gb_multi_notebook_get_active_notebook (priv->multi_notebook);
-  tab = g_object_new (GB_TYPE_EDITOR_TAB,
-                      "visible", TRUE,
-                      NULL);
-  gb_notebook_add_tab (notebook, tab);
-
-  gtk_container_child_get (GTK_CONTAINER (notebook), GTK_WIDGET (tab),
-                           "position", &page,
-                           NULL);
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page);
-}
-
-static void
-on_close_tab_activate (GSimpleAction *action,
-                       GVariant      *parameter,
-                       gpointer       user_data)
-{
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-
-  tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
-  if (tab)
-    gb_tab_close (tab);
-}
-
-static void
-on_find_activate (GSimpleAction *action,
-                  GVariant      *parameter,
-                  gpointer       user_data)
-{
-  GbEditorWorkspacePrivate *priv;
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-
-  priv = workspace->priv;
-
-  tab = gb_multi_notebook_get_active_tab (priv->multi_notebook);
-  if (tab)
-    gb_editor_tab_focus_search (GB_EDITOR_TAB (tab));
-}
-
-static void
-on_reformat_activate (GSimpleAction *action,
-                      GVariant      *parameter,
-                      gpointer       user_data)
-{
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-
-  tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
-
-  if (tab)
-    gb_editor_commands_reformat (GB_EDITOR_TAB (tab));
-}
-
-static void
-on_open_activate (GSimpleAction *action,
-                  GVariant      *parameter,
-                  gpointer       user_data)
-{
-  GbEditorWorkspacePrivate *priv;
-  GbEditorWorkspace *workspace = user_data;
-  GtkFileChooserDialog *dialog;
-  GtkWidget *toplevel;
-  GtkWidget *suggested;
-  GtkResponseType response;
-  GbNotebook *notebook;
-  GbTab *tab;
-
-  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-
-  priv = workspace->priv;
-
-  tab = gb_multi_notebook_get_active_tab (priv->multi_notebook);
-  notebook = gb_multi_notebook_get_active_notebook (priv->multi_notebook);
-
-  g_assert (!tab || GB_IS_EDITOR_TAB (tab));
-
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tab));
-
-  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
-                         "action", GTK_FILE_CHOOSER_ACTION_OPEN,
-                         "local-only", FALSE,
-                         "select-multiple", TRUE,
-                         "show-hidden", FALSE,
-                         "transient-for", toplevel,
-                         "title", _("Open"),
-                         NULL);
-
-  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          _("Cancel"), GTK_RESPONSE_CANCEL,
-                          _("Open"), GTK_RESPONSE_OK,
-                          NULL);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-
-  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog),
-                                                  GTK_RESPONSE_OK);
-  gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
-                               GTK_STYLE_CLASS_SUGGESTED_ACTION);
-
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-  if (response == GTK_RESPONSE_OK)
-    {
-      GSList *files;
-      GSList *iter;
-
-      files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (dialog));
-
-      for (iter = files; iter; iter = iter->next)
-        {
-          GFile *file = iter->data;
-
-          if (!gb_editor_tab_get_is_default (GB_EDITOR_TAB (tab)))
-            {
-              tab = GB_TAB (gb_editor_tab_new ());
-              gb_notebook_add_tab (notebook, tab);
-              gtk_widget_show (GTK_WIDGET (tab));
-            }
-
-          gb_editor_tab_open_file (GB_EDITOR_TAB (tab), file);
-          gb_notebook_raise_tab (notebook, tab);
-
-          g_clear_object (&file);
-        }
-
-      g_slist_free (files);
-    }
-
-  gtk_widget_destroy (GTK_WIDGET (dialog));
-}
-
-static void
-on_save_activate (GSimpleAction *action,
-                  GVariant      *parameter,
-                  gpointer       user_data)
-{
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-
-  tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
-
-  if (tab)
-    {
-      g_assert (GB_IS_EDITOR_TAB (tab));
-      gb_editor_tab_save (GB_EDITOR_TAB (tab));
-    }
-}
-
-static void
-on_save_as_activate (GSimpleAction *action,
-                     GVariant      *parameter,
-                     gpointer       user_data)
-{
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-
-  tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
-
-  if (tab)
-    {
-      g_assert (GB_IS_EDITOR_TAB (tab));
-      gb_editor_tab_save_as (GB_EDITOR_TAB (tab));
-    }
-}
-
-static void
-on_go_to_start_activate (GSimpleAction *action,
-                         GVariant      *parameter,
-                         gpointer       user_data)
-{
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-
-  tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
-
-  if (tab)
-    {
-      g_assert (GB_IS_EDITOR_TAB (tab));
-      gb_editor_tab_go_to_start (GB_EDITOR_TAB (tab));
-    }
-}
-
-static void
-on_go_to_end_activate (GSimpleAction *action,
-                       GVariant      *parameter,
-                       gpointer       user_data)
-{
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-
-  tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
-
-  if (tab)
-    {
-      g_assert (GB_IS_EDITOR_TAB (tab));
-      gb_editor_tab_go_to_end (GB_EDITOR_TAB (tab));
-    }
-}
-
-static void
-on_preview_activate (GSimpleAction *action,
-                     GVariant      *variant,
-                     gpointer       user_data)
-{
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-
-  tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
-
-  if (tab)
-    gb_editor_tab_toggle_preview (GB_EDITOR_TAB (tab));
 }
 
 static void
@@ -311,6 +57,7 @@ gb_editor_workspace_finalize (GObject *object)
   GbEditorWorkspacePrivate *priv = GB_EDITOR_WORKSPACE (object)->priv;
 
   g_clear_object (&priv->actions);
+  g_clear_pointer (&priv->command_map, g_hash_table_unref);
 
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->finalize (object);
 }
@@ -332,41 +79,21 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 static void
 gb_editor_workspace_init (GbEditorWorkspace *workspace)
 {
-  static const GActionEntry action_entries[] = {
-    { "close-tab", on_close_tab_activate },
-    { "find", on_find_activate },
-    { "go-to-end", on_go_to_end_activate },
-    { "go-to-start", on_go_to_start_activate },
-    { "new-tab", on_new_tab_activate },
-    { "open", on_open_activate },
-    { "reformat", on_reformat_activate },
-    { "save", on_save_activate },
-    { "save-as", on_save_as_activate },
-    { "preview", on_preview_activate },
-  };
-  GbEditorWorkspacePrivate *priv;
-  GbNotebook *notebook;
-  GbTab *tab;
+  workspace->priv = gb_editor_workspace_get_instance_private (workspace);
 
-  priv = workspace->priv = gb_editor_workspace_get_instance_private (workspace);
+  workspace->priv->actions = g_simple_action_group_new ();
+  workspace->priv->command_map = g_hash_table_new (g_str_hash, g_str_equal);
 
-  priv->actions = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (priv->actions),
-                                   action_entries,
-                                   G_N_ELEMENTS (action_entries),
-                                   workspace);
-
-  priv->multi_notebook = g_object_new (GB_TYPE_MULTI_NOTEBOOK,
-                                       "visible", TRUE,
-                                       "group-name", "GB_EDITOR_WORKSPACE",
-                                       NULL);
+  /*
+   * TODO: make this be done with GtkBuilder.
+   */
+  workspace->priv->multi_notebook =
+      g_object_new (GB_TYPE_MULTI_NOTEBOOK,
+                    "visible", TRUE,
+                    "group-name", "GB_EDITOR_WORKSPACE",
+                    NULL);
   gtk_container_add (GTK_CONTAINER (workspace),
-                     GTK_WIDGET (priv->multi_notebook));
+                     GTK_WIDGET (workspace->priv->multi_notebook));
 
-  notebook = gb_multi_notebook_get_active_notebook (priv->multi_notebook);
-
-  tab = g_object_new (GB_TYPE_EDITOR_TAB,
-                      "visible", TRUE,
-                      NULL);
-  gb_notebook_add_tab (notebook, tab);
+  gb_editor_commands_init (workspace);
 }

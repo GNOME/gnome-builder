@@ -1,4 +1,4 @@
-/* gb-editor-commands.h
+/* gb-editor-workspace-private.h
  *
  * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
  *
@@ -16,15 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_EDITOR_COMMANDS_H
-#define GB_EDITOR_COMMANDS_H
+#ifndef GB_EDITOR_WORKSPACE_PRIVATE_H
+#define GB_EDITOR_WORKSPACE_PRIVATE_H
 
-#include "gb-editor-workspace.h"
+#include <gtk/gtk.h>
+
+#include "gb-editor-tab.h"
+#include "gb-multi-notebook.h"
+#include "gb-notebook.h"
 
 G_BEGIN_DECLS
 
-void gb_editor_commands_init (GbEditorWorkspace *workspace);
+struct _GbEditorWorkspacePrivate
+{
+  GSimpleActionGroup *actions;
+  GHashTable         *command_map;
+  GbMultiNotebook    *multi_notebook;
+};
 
 G_END_DECLS
 
-#endif /* GB_EDITOR_COMMANDS_H */
+#endif /* GB_EDITOR_WORKSPACE_PRIVATE_H */
