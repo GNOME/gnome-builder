@@ -27,6 +27,7 @@ gnome_builder_SOURCES = \
 	src/editor/gb-editor-tab-private.h \
 	src/editor/gb-editor-workspace.c \
 	src/editor/gb-editor-workspace.h \
+	src/editor/gb-editor-workspace-private.h \
 	src/editor/gb-source-formatter.c \
 	src/editor/gb-source-formatter.h \
 	src/editor/gb-source-search-highlighter.h \
@@ -142,4 +143,5 @@ src/resources/gb-resources.h: src/resources/gnome-builder.gresource.xml $(resour
 	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/src/resources --generate-header --c-name gb $(top_srcdir)/src/resources/gnome-builder.gresource.xml
 
 EXTRA_DIST += $(resource_files)
+EXTRA_DIST += src/resources/gnome-builder.gresource.xml
 
