@@ -89,8 +89,8 @@ gb_keybindings_load_bytes (GbKeybindings *keybindings,
 
   ENTRY;
 
-  g_return_if_fail (GB_IS_KEYBINDINGS (keybindings));
-  g_return_if_fail (bytes);
+  g_return_val_if_fail (GB_IS_KEYBINDINGS (keybindings), FALSE);
+  g_return_val_if_fail (bytes, FALSE);
 
   key_file = g_key_file_new ();
   data = g_bytes_get_data (bytes, &len);

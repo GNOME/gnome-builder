@@ -233,7 +233,7 @@ GbSourceChangeFlags
 gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
                                    guint                  lineno)
 {
-  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+  g_return_val_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor), 0);
 
   if (lineno < monitor->priv->state->len)
     return monitor->priv->state->data [lineno];
