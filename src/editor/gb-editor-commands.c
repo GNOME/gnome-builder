@@ -428,8 +428,12 @@ on_save_cb (GtkSourceFileSaver *saver,
       g_clear_error (&error);
     }
   else
-    gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (tab->priv->document),
-                                  FALSE);
+    {
+      gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (tab->priv->document),
+                                    FALSE);
+      gb_source_change_monitor_saved (tab->priv->change_monitor);
+      gtk_widget_queue_draw (GTK_WIDGET (tab->priv->source_view));
+    }
 
   g_object_unref (tab);
 }

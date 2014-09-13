@@ -244,6 +244,25 @@ gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
 }
 
 void
+gb_source_change_monitor_saved (GbSourceChangeMonitor *monitor)
+{
+  GbSourceChangeMonitorPrivate *priv;
+  GbSourceChangeFlags flags;
+  guint i;
+
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+
+  priv = monitor->priv;
+
+  for (i = 0; i < priv->state->len; i++)
+    {
+      flags = g_array_index (priv->state, guint8, i);
+      flags &= ~GB_SOURCE_CHANGE_DIRTY;
+      g_array_index (priv->state, guint8, i) = flags;
+    }
+}
+
+void
 gb_source_change_monitor_reset (GbSourceChangeMonitor *monitor)
 {
   GbSourceChangeMonitorPrivate *priv;

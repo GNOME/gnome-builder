@@ -60,6 +60,7 @@ GbSourceChangeMonitor *gb_source_change_monitor_new      (GtkTextBuffer         
 GbSourceChangeFlags    gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
                                                           guint                  lineno);
 void                   gb_source_change_monitor_reset    (GbSourceChangeMonitor *monitor);
+void                   gb_source_change_monitor_saved    (GbSourceChangeMonitor *monitor);
 
 G_END_DECLS
 
