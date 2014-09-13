@@ -28,6 +28,7 @@
 #include "gb-editor-settings.h"
 #include "gb-markdown-preview.h"
 #include "gb-notebook.h"
+#include "gb-source-change-monitor.h"
 #include "gb-source-search-highlighter.h"
 #include "gb-source-snippet-completion-provider.h"
 #include "gb-source-view.h"
@@ -54,6 +55,12 @@ struct _GbEditorTabPrivate
   GbSourceSearchHighlighter *search_highlighter;
   GtkSourceSearchSettings   *search_settings;
   GtkSourceSearchContext    *search_context;
+
+  /*
+   * Change (add, change, etc) tracking of the editor.
+   */
+  GbSourceChangeMonitor *change_monitor;
+  GtkSourceGutterRenderer *change_renderer;
 
   /*
    * Tab related settings.

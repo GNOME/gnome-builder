@@ -28,8 +28,12 @@ gnome_builder_SOURCES = \
 	src/editor/gb-editor-workspace.c \
 	src/editor/gb-editor-workspace.h \
 	src/editor/gb-editor-workspace-private.h \
+	src/editor/gb-source-change-monitor.c \
+	src/editor/gb-source-change-monitor.h \
 	src/editor/gb-source-formatter.c \
 	src/editor/gb-source-formatter.h \
+	src/editor/gb-source-change-gutter-renderer.c \
+	src/editor/gb-source-change-gutter-renderer.h \
 	src/editor/gb-source-search-highlighter.h \
 	src/editor/gb-source-search-highlighter.c \
 	src/markdown/gs-markdown.c \

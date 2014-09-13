@@ -24,6 +24,7 @@
 #include "gb-editor-tab-private.h"
 #include "gb-log.h"
 #include "gb-rgba.h"
+#include "gb-source-change-gutter-renderer.h"
 #include "gb-source-snippet.h"
 #include "gb-source-snippets-manager.h"
 #include "gb-source-snippets.h"
@@ -1027,6 +1028,21 @@ gb_editor_tab_constructed (GObject *object)
                                "language", G_BINDING_SYNC_CREATE,
                                transform_file_to_language, NULL, tab, NULL);
 
+  {
+    GtkSourceGutter *gutter;
+
+    gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (priv->source_view),
+                                         GTK_TEXT_WINDOW_LEFT);
+    priv->change_renderer =
+        g_object_new (GB_TYPE_SOURCE_CHANGE_GUTTER_RENDERER,
+                      "change-monitor", priv->change_monitor,
+                      "size", 3,
+                      "visible", TRUE,
+                      "xpad", 3,
+                      NULL);
+    gtk_source_gutter_insert (gutter, priv->change_renderer, 0);
+  }
+
   gb_editor_tab_cursor_moved (tab, priv->document);
 
   EXIT;
@@ -1208,6 +1224,7 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
 
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, floating_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, document);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, change_monitor);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, file);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, go_down_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, go_up_button);
@@ -1224,6 +1241,7 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, source_view);
 
   g_type_ensure (GB_TYPE_EDITOR_DOCUMENT);
+  g_type_ensure (GB_TYPE_SOURCE_CHANGE_MONITOR);
   g_type_ensure (GB_TYPE_SOURCE_VIEW);
   g_type_ensure (GB_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER);
   g_type_ensure (GB_TYPE_SOURCE_SEARCH_HIGHLIGHTER);

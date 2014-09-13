@@ -366,6 +366,9 @@ on_load_cb (GtkSourceFileLoader *loader,
       g_clear_error (&error);
     }
 
+  gb_source_change_monitor_reset (tab->priv->change_monitor);
+  gtk_source_gutter_renderer_set_visible (tab->priv->change_renderer, TRUE);
+
   g_object_unref (tab);
 }
 
@@ -385,6 +388,8 @@ gb_editor_tab_open_file (GbEditorTab *tab,
 
   loader = gtk_source_file_loader_new (GTK_SOURCE_BUFFER (priv->document),
                                        priv->file);
+
+  gtk_source_gutter_renderer_set_visible (priv->change_renderer, FALSE);
 
   gtk_source_file_loader_load_async (loader,
                                      G_PRIORITY_DEFAULT,
@@ -633,6 +638,8 @@ gb_editor_commands_new_tab (GbEditorWorkspace *workspace,
                            "position", &page,
                            NULL);
   gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page);
+
+  gtk_widget_grab_focus (GTK_WIDGET (tab));
 }
 
 static gboolean

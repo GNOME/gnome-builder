@@ -124,6 +124,9 @@
   </object>
   <object class="GbEditorDocument" id="document">
   </object>
+  <object class="GbSourceChangeMonitor" id="change_monitor">
+    <property name="buffer">document</property>
+  </object>
   <object class="GbSourceSnippetCompletionProvider" id="snippets_provider">
     <property name="source-view">source_view</property>
   </object>
