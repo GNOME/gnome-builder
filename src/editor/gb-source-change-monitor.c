@@ -64,6 +64,16 @@ gb_source_change_monitor_insert (GbSourceChangeMonitor *monitor,
 }
 
 static void
+gb_source_change_monitor_remove (GbSourceChangeMonitor *monitor,
+                                 guint                  line)
+{
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+  g_return_if_fail (line < monitor->priv->state->len);
+
+  g_array_remove_index (monitor->priv->state, line);
+}
+
+static void
 gb_source_change_monitor_set_line (GbSourceChangeMonitor *monitor,
                                    guint                  line,
                                    GbSourceChangeFlags    flags)
@@ -115,8 +125,29 @@ on_delete_range_before_cb (GbSourceChangeMonitor *monitor,
                            GtkTextIter           *end,
                            GtkTextBuffer         *buffer)
 {
+  GbSourceChangeFlags flags;
+  guint begin_line;
+  guint end_line;
+  guint i;
+
   g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+
+  if (gtk_text_iter_compare (begin, end) == 0)
+    return;
+
+  begin_line = gtk_text_iter_get_line (begin);
+  end_line = gtk_text_iter_get_line (end);
+
+  if (begin_line == end_line)
+    {
+      flags = (GB_SOURCE_CHANGE_CHANGED | GB_SOURCE_CHANGE_DIRTY);
+      gb_source_change_monitor_set_line (monitor, begin_line, flags);
+      return;
+    }
+
+  for (i = begin_line; i < end_line; i++)
+    gb_source_change_monitor_remove (monitor, i);
 }
 
 static void
