@@ -205,6 +205,8 @@ gb_application_constructed (GObject *object)
     { "quit", on_quit_activate },
   };
 
+  static const gchar *quit_accels[] = { "<Control>q", NULL };
+
   if (G_OBJECT_CLASS (gb_application_parent_class)->constructed)
     G_OBJECT_CLASS (gb_application_parent_class)->constructed (object);
 
@@ -214,6 +216,9 @@ gb_application_constructed (GObject *object)
                                    object);
   g_application_set_resource_base_path (G_APPLICATION (object),
                                         "/org/gnome/builder");
+
+  gtk_application_set_accels_for_action (GTK_APPLICATION (object),
+                                         "app.quit", quit_accels);
 }
 
 static void
