@@ -146,8 +146,8 @@ on_delete_range_before_cb (GbSourceChangeMonitor *monitor,
       return;
     }
 
-  for (i = begin_line; i < end_line; i++)
-    gb_source_change_monitor_remove (monitor, i);
+  for (i = end_line; i > 0; i--)
+    gb_source_change_monitor_remove (monitor, i - 1);
 }
 
 static void
