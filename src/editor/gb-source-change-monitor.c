@@ -200,13 +200,15 @@ on_insert_text_after_cb (GbSourceChangeMonitor *monitor,
     {
       GtkTextIter end;
       GtkTextIter iter;
-      guint last_line = line;
+      guint last_line;
 
       len = g_utf8_strlen (text, len);
 
       gtk_text_iter_assign (&iter, location);
       gtk_text_iter_assign (&end, location);
       gtk_text_iter_backward_chars (&iter, len);
+
+      last_line = gtk_text_iter_get_line (&iter);
 
       while (gtk_text_iter_compare (&iter, &end) <= 0)
         {
