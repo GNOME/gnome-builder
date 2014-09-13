@@ -939,7 +939,7 @@ gs_markdown_set_output_kind (GsMarkdown *self, GsMarkdownOutputKind output)
 		priv->tags.h3_end = "</h3>";
 		priv->tags.bullet_start = "<li>";
 		priv->tags.bullet_end = "</li>";
-		priv->tags.rule = "<hr>";
+		priv->tags.rule = "<hr/>";
 		priv->escape = TRUE;
 		priv->autolinkify = TRUE;
 		break;

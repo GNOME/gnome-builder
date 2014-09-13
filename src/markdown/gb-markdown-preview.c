@@ -111,6 +111,8 @@ gb_markdown_preview_reload (GbMarkdownPreview *preview)
   text = gtk_text_buffer_get_text (priv->buffer, &begin, &end, TRUE);
 
   markdown = gs_markdown_new (GS_MARKDOWN_OUTPUT_HTML);
+  gs_markdown_set_autolinkify (markdown, TRUE);
+  gs_markdown_set_escape (markdown, FALSE);
 
   if (!(html = gs_markdown_parse (markdown, text)))
     {
