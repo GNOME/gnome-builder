@@ -21,6 +21,7 @@
 
 #include <glib/gi18n.h>
 
+#include "gb-about-window.h"
 #include "gb-application.h"
 #include "gb-log.h"
 #include "gb-keybindings.h"
@@ -199,10 +200,26 @@ on_quit_activate (GSimpleAction *action,
 }
 
 static void
+on_about_activate (GSimpleAction *action,
+                   GVariant      *parameter,
+                   gpointer       user_data)
+{
+  GtkWindow *window;
+
+  window = g_object_new (GB_TYPE_ABOUT_WINDOW,
+                         "title", _("About Builder"),
+                         "window-position", GTK_WIN_POS_CENTER,
+                         NULL);
+
+  gtk_window_present (window);
+}
+
+static void
 gb_application_constructed (GObject *object)
 {
   static const GActionEntry action_entries[] = {
     { "quit", on_quit_activate },
+    { "about", on_about_activate },
   };
 
   static const gchar *quit_accels[] = { "<Control>q", NULL };
