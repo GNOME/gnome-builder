@@ -32,6 +32,9 @@ struct _GbSourceChangeMonitorPrivate
   guint delete_range_after_handler;
   guint insert_text_before_handler;
   guint insert_text_after_handler;
+
+  guint insert_begin_line;
+  guint insert_begin_offset;
 };
 
 enum
@@ -249,11 +252,17 @@ on_insert_text_before_cb (GbSourceChangeMonitor *monitor,
                           gint                   len,
                           GtkTextBuffer         *buffer)
 {
+  GbSourceChangeMonitorPrivate *priv;
   GtkTextIter begin;
   GtkTextIter end;
 
   g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+
+  priv = monitor->priv;
+
+  priv->insert_begin_line = gtk_text_iter_get_line (location);
+  priv->insert_begin_offset = gtk_text_iter_get_line_offset (location);
 
   gtk_text_buffer_get_bounds (buffer, &begin, &end);
 
@@ -277,18 +286,24 @@ on_insert_text_after_cb (GbSourceChangeMonitor *monitor,
                          gint                   len,
                          GtkTextBuffer         *buffer)
 {
+  GbSourceChangeMonitorPrivate *priv;
   GbSourceChangeFlags flags = 0;
   guint line;
 
   g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
+  priv = monitor->priv;
+
   line = gtk_text_iter_get_line (location);
 
   if (g_strcmp0 (text, "\n") == 0)
     {
       flags = (GB_SOURCE_CHANGE_ADDED | GB_SOURCE_CHANGE_DIRTY);
-      gb_source_change_monitor_insert (monitor, line, flags);
+      if (priv->insert_begin_offset == 0)
+        gb_source_change_monitor_insert (monitor, line-1, flags);
+      else
+        gb_source_change_monitor_insert (monitor, line, flags);
     }
   else if (strchr (text, '\n') == NULL)
     {
