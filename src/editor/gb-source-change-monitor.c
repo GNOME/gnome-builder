@@ -188,8 +188,23 @@ on_insert_text_after_cb (GbSourceChangeMonitor *monitor,
 
   if (g_strcmp0 (text, "\n") == 0)
     {
+      GtkTextIter begin;
+      GtkTextIter end;
+
       flags = (GB_SOURCE_CHANGE_ADDED | GB_SOURCE_CHANGE_DIRTY);
       gb_source_change_monitor_insert (monitor, line, flags);
+
+      /*
+       * WORKAROUND:
+       *
+       * The following allows us to mark the first line as "added" when we
+       * edit a new buffer and type \n on the first line. Otherwise the first
+       * line shows nothing and the following lines would show "added". While
+       * technically accurate, it's not very helpful.
+       */
+      gtk_text_buffer_get_bounds (buffer, &begin, &end);
+      if (gtk_text_iter_get_line (&end) == 1)
+        gb_source_change_monitor_set_line (monitor, 0, flags);
     }
   else if (strchr (text, '\n') == NULL)
     {
