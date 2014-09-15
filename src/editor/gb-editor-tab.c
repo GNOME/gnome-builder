@@ -1036,7 +1036,7 @@ gb_editor_tab_constructed (GObject *object)
     priv->change_renderer =
         g_object_new (GB_TYPE_SOURCE_CHANGE_GUTTER_RENDERER,
                       "change-monitor", priv->change_monitor,
-                      "size", 3,
+                      "size", 2,
                       "visible", TRUE,
                       "xpad", 3,
                       NULL);
