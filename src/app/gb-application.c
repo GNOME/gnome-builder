@@ -17,7 +17,11 @@
  */
 
 #define G_LOG_DOMAIN "app"
-#define ADWAITA_CSS "resource:///org/gnome/builder/css/builder.Adwaita.css"
+#define ADWAITA_CSS  "resource:///org/gnome/builder/css/builder.Adwaita.css"
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include <glib/gi18n.h>
 
@@ -205,13 +209,48 @@ on_about_activate (GSimpleAction *action,
                    gpointer       user_data)
 {
   GtkWindow *window;
+  GList *list;
+  GBytes *bytes;
+  gchar **authors;
+  gchar **artists;
+  gchar *translators;
 
-  window = g_object_new (GB_TYPE_ABOUT_WINDOW,
-                         "title", _("About Builder"),
+  list = gtk_application_get_windows (GTK_APPLICATION (user_data));
+
+  bytes = g_resources_lookup_data ("/org/gnome/builder/AUTHORS", 0, NULL);
+  authors = g_strsplit (g_bytes_get_data (bytes, NULL), "\n", 0);
+  g_bytes_unref (bytes);
+
+  bytes = g_resources_lookup_data ("/org/gnome/builder/ARTISTS", 0, NULL);
+  artists = g_strsplit (g_bytes_get_data (bytes, NULL), "\n", 0);
+  g_bytes_unref (bytes);
+
+  bytes = g_resources_lookup_data ("/org/gnome/builder/TRANSLATORS", 0, NULL);
+  translators = g_strdup (g_bytes_get_data (bytes, NULL));
+  g_bytes_unref (bytes);
+
+  window = g_object_new (GTK_TYPE_ABOUT_DIALOG,
+                         "artists", artists,
+                         "authors", authors,
+                         "comments", _("Builder is an IDE for writing GNOME applications."),
+                         "copyright", "Copyright © 2014 Christian Hergert",
+                         "license-type", GTK_LICENSE_GPL_3_0,
+                         "logo-icon-name", "builder",
+                         "modal", TRUE,
+                         "program-name", _("GNOME Builder"),
+                         "transient-for", list ? list->data : NULL,
+                         "translator-credits", translators,
+                         "version", PACKAGE_VERSION,
+                         "website", "https://live.gnome.org/Apps/Builder",
+                         "website-label", _("Builder Website"),
                          "window-position", GTK_WIN_POS_CENTER,
                          NULL);
 
   gtk_window_present (window);
+
+  g_strfreev (authors);
+  g_strfreev (artists);
+  g_free (translators);
 }
 
 static void
