@@ -120,12 +120,77 @@ gb_source_change_monitor_ensure_bounds (GbSourceChangeMonitor *monitor)
 }
 
 static void
+get_line_mutation (const GtkTextIter *begin,
+                   const GtkTextIter *end,
+                   guint              line,
+                   gboolean          *delete_line,
+                   gboolean          *is_changed)
+{
+  guint begin_line = gtk_text_iter_get_line (begin);
+  guint begin_offset = gtk_text_iter_get_line_offset (begin);
+  guint end_line = gtk_text_iter_get_line (end);
+  guint end_offset = gtk_text_iter_get_line_offset (end);
+
+  if (begin_line == end_line)
+    {
+      *delete_line = FALSE;
+      *is_changed = TRUE;
+    }
+  else if ((line == begin_line) &&
+           ((begin_line + 1) == end_line) &&
+           gtk_text_iter_ends_line (begin) &&
+           gtk_text_iter_starts_line (end))
+    {
+      *delete_line = FALSE;
+      *is_changed = FALSE;
+    }
+  else if ((begin_offset != 0) && (line == begin_line))
+    {
+      *delete_line = FALSE;
+      *is_changed = TRUE;
+    }
+  else if ((begin_offset == 0) && (end_offset == 0))
+    {
+      *delete_line = (line != begin_line);
+      *is_changed = TRUE;
+    }
+  else if ((begin_offset == 0) && (line == begin_line) && (begin_line != end_line))
+    {
+      *delete_line = TRUE;
+      *is_changed = FALSE;
+    }
+  else if ((line != begin_line) && (line != end_line))
+    {
+      *delete_line = TRUE;
+      *is_changed = FALSE;
+    }
+  else if ((line != begin_line) && (line == end_line) && (begin_offset != 0))
+    {
+      *delete_line = TRUE;
+      *is_changed = FALSE;
+    }
+  else if ((line != begin_line) && (line == end_line) && (begin_offset == 0))
+    {
+      *delete_line = FALSE;
+      *is_changed = TRUE;
+    }
+  else
+    {
+      g_warning ("Unknown outcome: begin=%d:%d line=%d end_line=%d:%d",
+                 begin_line, begin_offset, line, end_line, end_offset);
+
+      *is_changed = TRUE;
+      *delete_line = FALSE;
+    }
+}
+
+static void
 on_delete_range_before_cb (GbSourceChangeMonitor *monitor,
                            GtkTextIter           *begin,
                            GtkTextIter           *end,
                            GtkTextBuffer         *buffer)
 {
-  GbSourceChangeFlags flags;
+  GArray *ar;
   guint begin_line;
   guint end_line;
   guint i;
@@ -139,15 +204,32 @@ on_delete_range_before_cb (GbSourceChangeMonitor *monitor,
   begin_line = gtk_text_iter_get_line (begin);
   end_line = gtk_text_iter_get_line (end);
 
-  if (begin_line == end_line)
+  ar = g_array_new (FALSE, FALSE, sizeof (guint));
+
+  for (i = begin_line; i <= end_line; i++)
     {
-      flags = (GB_SOURCE_CHANGE_CHANGED | GB_SOURCE_CHANGE_DIRTY);
-      gb_source_change_monitor_set_line (monitor, begin_line, flags);
-      return;
+      gboolean delete_line;
+      gboolean is_changed;
+
+      get_line_mutation (begin, end, i, &delete_line, &is_changed);
+
+      if (delete_line)
+        g_array_append_val (ar, i);
+      else if (is_changed)
+        gb_source_change_monitor_set_line (monitor, i,
+                                           (GB_SOURCE_CHANGE_CHANGED |
+                                            GB_SOURCE_CHANGE_DIRTY));
     }
 
-  for (i = end_line; i > 0; i--)
-    gb_source_change_monitor_remove (monitor, i - 1);
+  for (i = ar->len; i > 0; i--)
+    {
+      guint line;
+
+      line = g_array_index (ar, guint, i - 1);
+      gb_source_change_monitor_remove (monitor, line);
+    }
+
+  g_array_unref (ar);
 }
 
 static void
