@@ -148,6 +148,15 @@ get_line_mutation (const GtkTextIter *begin,
       EXIT;
     }
   else if ((line == begin_line) &&
+           gtk_text_iter_starts_line (begin) &&
+           gtk_text_iter_starts_line (end) &&
+           !gtk_text_iter_ends_line (end))
+    {
+      *delete_line = TRUE;
+      *is_changed = FALSE;
+      EXIT;
+    }
+  else if ((line == begin_line) &&
            ((begin_line + 1) == end_line) &&
            gtk_text_iter_ends_line (begin) &&
            gtk_text_iter_starts_line (end))
@@ -162,10 +171,10 @@ get_line_mutation (const GtkTextIter *begin,
       *is_changed = TRUE;
       EXIT;
     }
-  else if ((begin_offset == 0) && (end_offset == 0))
+  else if ((line == end_line) && (end_offset == 0))
     {
-      *delete_line = (line != begin_line);
-      *is_changed = TRUE;
+      *delete_line = FALSE;
+      *is_changed = FALSE;
       EXIT;
     }
   else if ((begin_offset == 0) && (line == begin_line) && (begin_line != end_line))
