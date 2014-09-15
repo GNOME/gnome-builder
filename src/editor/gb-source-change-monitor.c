@@ -129,15 +129,23 @@ get_line_mutation (const GtkTextIter *begin,
                    gboolean          *delete_line,
                    gboolean          *is_changed)
 {
-  guint begin_line = gtk_text_iter_get_line (begin);
-  guint begin_offset = gtk_text_iter_get_line_offset (begin);
-  guint end_line = gtk_text_iter_get_line (end);
-  guint end_offset = gtk_text_iter_get_line_offset (end);
+  guint begin_line;
+  guint begin_offset;
+  guint end_line;
+  guint end_offset;
+
+  ENTRY;
+
+  begin_line = gtk_text_iter_get_line (begin);
+  begin_offset = gtk_text_iter_get_line_offset (begin);
+  end_line = gtk_text_iter_get_line (end);
+  end_offset = gtk_text_iter_get_line_offset (end);
 
   if (begin_line == end_line)
     {
       *delete_line = FALSE;
       *is_changed = TRUE;
+      EXIT;
     }
   else if ((line == begin_line) &&
            ((begin_line + 1) == end_line) &&
@@ -146,36 +154,43 @@ get_line_mutation (const GtkTextIter *begin,
     {
       *delete_line = FALSE;
       *is_changed = FALSE;
+      EXIT;
     }
   else if ((begin_offset != 0) && (line == begin_line))
     {
       *delete_line = FALSE;
       *is_changed = TRUE;
+      EXIT;
     }
   else if ((begin_offset == 0) && (end_offset == 0))
     {
       *delete_line = (line != begin_line);
       *is_changed = TRUE;
+      EXIT;
     }
   else if ((begin_offset == 0) && (line == begin_line) && (begin_line != end_line))
     {
       *delete_line = TRUE;
       *is_changed = FALSE;
+      EXIT;
     }
   else if ((line != begin_line) && (line != end_line))
     {
       *delete_line = TRUE;
       *is_changed = FALSE;
+      EXIT;
     }
   else if ((line != begin_line) && (line == end_line) && (begin_offset != 0))
     {
       *delete_line = TRUE;
       *is_changed = FALSE;
+      EXIT;
     }
   else if ((line != begin_line) && (line == end_line) && (begin_offset == 0))
     {
       *delete_line = FALSE;
       *is_changed = TRUE;
+      EXIT;
     }
   else
     {
@@ -184,7 +199,10 @@ get_line_mutation (const GtkTextIter *begin,
 
       *is_changed = TRUE;
       *delete_line = FALSE;
+      EXIT;
     }
+
+  EXIT;
 }
 
 static void
