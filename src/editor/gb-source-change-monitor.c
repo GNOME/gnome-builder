@@ -167,8 +167,25 @@ on_insert_text_before_cb (GbSourceChangeMonitor *monitor,
                           gint                   len,
                           GtkTextBuffer         *buffer)
 {
+  GtkTextIter begin;
+  GtkTextIter end;
+
   g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+
+  gtk_text_buffer_get_bounds (buffer, &begin, &end);
+
+  /*
+   * WORKAROUND:
+   *
+   * Mark the first line as added if we are typing our first character.
+   * We should consider removing this GSignal handler after it has
+   * hit this to save on signal emission.
+   */
+  if (G_UNLIKELY (gtk_text_iter_compare (&begin, &end) == 0))
+    gb_source_change_monitor_set_line (monitor, 0,
+                                       (GB_SOURCE_CHANGE_ADDED |
+                                        GB_SOURCE_CHANGE_DIRTY));
 }
 
 static void
@@ -188,23 +205,8 @@ on_insert_text_after_cb (GbSourceChangeMonitor *monitor,
 
   if (g_strcmp0 (text, "\n") == 0)
     {
-      GtkTextIter begin;
-      GtkTextIter end;
-
       flags = (GB_SOURCE_CHANGE_ADDED | GB_SOURCE_CHANGE_DIRTY);
       gb_source_change_monitor_insert (monitor, line, flags);
-
-      /*
-       * WORKAROUND:
-       *
-       * The following allows us to mark the first line as "added" when we
-       * edit a new buffer and type \n on the first line. Otherwise the first
-       * line shows nothing and the following lines would show "added". While
-       * technically accurate, it's not very helpful.
-       */
-      gtk_text_buffer_get_bounds (buffer, &begin, &end);
-      if (gtk_text_iter_get_line (&end) == 1)
-        gb_source_change_monitor_set_line (monitor, 0, flags);
     }
   else if (strchr (text, '\n') == NULL)
     {
