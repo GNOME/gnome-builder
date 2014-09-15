@@ -25,7 +25,6 @@
 
 #include <glib/gi18n.h>
 
-#include "gb-about-window.h"
 #include "gb-application.h"
 #include "gb-log.h"
 #include "gb-keybindings.h"

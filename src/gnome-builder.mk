@@ -6,8 +6,6 @@ BUILT_FILES = \
 
 gnome_builder_SOURCES = \
 	$(BUILT_FILES) \
-	src/about/gb-about-window.c \
-	src/about/gb-about-window.h \
 	src/animation/gb-animation.c \
 	src/animation/gb-animation.h \
 	src/animation/gb-frame-source.c \
@@ -116,7 +114,6 @@ gnome_builder_CFLAGS = \
 	$(GTK_CFLAGS) \
 	$(MAINTAINER_CFLAGS) \
 	$(WEBKIT_CFLAGS) \
-	-I$(top_srcdir)/src/about \
 	-I$(top_srcdir)/src/animation \
 	-I$(top_srcdir)/src/app \
 	-I$(top_srcdir)/src/devhelp \
