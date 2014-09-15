@@ -346,6 +346,8 @@ on_load_cb (GtkSourceFileLoader *loader,
             GAsyncResult        *result,
             GbEditorTab         *tab)
 {
+  GtkTextIter begin;
+  GtkTextIter end;
   GError *error = NULL;
 
   g_return_if_fail (GTK_SOURCE_IS_FILE_LOADER (loader));
@@ -365,6 +367,11 @@ on_load_cb (GtkSourceFileLoader *loader,
       g_warning ("%s", error->message);
       g_clear_error (&error);
     }
+
+  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (tab->priv->document),
+                              &begin, &end);
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (tab->priv->document),
+                                &begin, &begin);
 
   gb_source_change_monitor_reset (tab->priv->change_monitor);
   gtk_source_gutter_renderer_set_visible (tab->priv->change_renderer, TRUE);
