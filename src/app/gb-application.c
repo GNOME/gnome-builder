@@ -118,7 +118,7 @@ setup_keybindings (GbApplication *application)
    * Load bundled keybindings.
    */
   bytes = g_resources_lookup_data ("/org/gnome/builder/keybindings/default.ini",
-                                   G_RESOURCE_FLAGS_NONE, NULL);
+                                   G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   if (!gb_keybindings_load_bytes (keybindings, bytes, &error))
     {
       g_warning ("Failed to load default keybindings: %s", error->message);

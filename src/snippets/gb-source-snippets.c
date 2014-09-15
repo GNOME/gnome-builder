@@ -79,8 +79,8 @@ gb_source_snippets_merge (GbSourceSnippets *snippets,
 
   trie_traverse (other->priv->snippets,
                  "",
-                 G_TRAVERSE_LEAVES,
                  G_PRE_ORDER,
+                 G_TRAVERSE_LEAVES,
                  -1,
                  copy_into,
                  snippets->priv->snippets);

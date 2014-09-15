@@ -512,7 +512,7 @@ on_search_entry_key_press_event (GdTaggedEntry *entry,
   g_assert (GD_IS_TAGGED_ENTRY (entry));
   g_assert (GB_IS_EDITOR_TAB (tab));
 
-  if ((event->keyval == GDK_KEY_Escape))
+  if (event->keyval == GDK_KEY_Escape)
     {
       gtk_revealer_set_reveal_child (tab->priv->revealer, FALSE);
       gb_source_view_set_show_shadow (tab->priv->source_view, FALSE);

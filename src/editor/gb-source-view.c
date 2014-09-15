@@ -567,7 +567,7 @@ on_mark_set (GtkTextBuffer *buffer,
 
   gb_source_view_block_handlers (view);
 
-  if ((mark == gtk_text_buffer_get_insert (buffer)))
+  if (mark == gtk_text_buffer_get_insert (buffer))
     {
 again:
       if ((snippet = g_queue_peek_head (priv->snippets)))
