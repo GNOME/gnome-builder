@@ -158,7 +158,7 @@ gb_source_snippet_parser_do_part_named (GbSourceSnippetParser *parser,
 
 static gboolean
 parse_variable (const gchar  *line,
-                gint         *n,
+                glong        *n,
                 gchar       **inner,
                 const gchar **endptr,
                 gchar       **name)
@@ -264,7 +264,7 @@ gb_source_snippet_parser_do_part (GbSourceSnippetParser *parser,
   gchar *str;
   gchar *inner;
   gchar *name;
-  gint n;
+  glong n;
 
   g_assert (line);
   g_assert (*line == '\t');

@@ -840,7 +840,7 @@ on_drag_data_received (GbNotebook       *notebook,
       g_assert (priv->drag_drop_target);
       g_assert (GB_IS_NOTEBOOK (priv->drag_drop_target));
 
-      tabptr = (GbTab * *) gtk_selection_data_get_data (data);
+      tabptr = (GbTab **)(gpointer)gtk_selection_data_get_data (data);
       g_assert (tabptr);
 
       tab = *tabptr;

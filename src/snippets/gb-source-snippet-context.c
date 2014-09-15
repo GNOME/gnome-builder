@@ -449,7 +449,7 @@ gb_source_snippet_context_expand (GbSourceSnippetContext *context,
   gboolean is_dynamic;
   GString *str;
   gchar key[12];
-  gint n;
+  glong n;
   gint i;
 
   g_return_val_if_fail (GB_IS_SOURCE_SNIPPET_CONTEXT (context), NULL);
@@ -484,7 +484,7 @@ gb_source_snippet_context_expand (GbSourceSnippetContext *context,
               if (((n == LONG_MIN) || (n == LONG_MAX)) && errno == ERANGE)
                 break;
               input--;
-              g_snprintf (key, sizeof key, "%d", n);
+              g_snprintf (key, sizeof key, "%ld", n);
               key[sizeof key - 1] = '\0';
               expand = gb_source_snippet_context_get_variable (context, key);
               if (expand)
