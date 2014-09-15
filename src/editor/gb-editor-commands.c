@@ -407,6 +407,8 @@ gb_editor_tab_open_file (GbEditorTab *tab,
                                      (GAsyncReadyCallback)on_load_cb,
                                      g_object_ref (tab));
 
+  gtk_widget_grab_focus (GTK_WIDGET (tab->priv->source_view));
+
   g_object_unref (loader);
 }
 
