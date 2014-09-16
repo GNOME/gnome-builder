@@ -861,6 +861,29 @@ on_source_view_push_snippet (GbSourceView           *source_view,
     }
 }
 
+static gchar *
+on_source_view_query_auto_indent (GbSourceView *source_view,
+                                  GtkTextIter  *iter,
+                                  GbEditorTab  *tab)
+{
+  GtkTextBuffer *buffer;
+  GtkTextView *text_view = (GtkTextView *)source_view;
+  gchar *ret = NULL;
+
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
+  g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), NULL);
+  g_return_val_if_fail (iter, NULL);
+
+  if (tab->priv->auto_indenter)
+    {
+      buffer = gtk_text_view_get_buffer (text_view);
+      ret = gb_source_auto_indenter_query (tab->priv->auto_indenter, text_view,
+                                           buffer, iter);
+    }
+
+  return ret;
+}
+
 static gboolean
 transform_file_to_language (GBinding     *binding,
                             const GValue *src_value,
@@ -968,6 +991,11 @@ gb_editor_tab_constructed (GObject *object)
                     "push-snippet",
                     G_CALLBACK (on_source_view_push_snippet),
                     tab);
+  g_signal_connect (priv->source_view,
+                    "query-auto-indent",
+                    G_CALLBACK (on_source_view_query_auto_indent),
+                    tab);
+  g_print ("Connected\n");
 
   g_signal_connect_swapped (priv->go_down_button,
                             "clicked",
@@ -1043,6 +1071,8 @@ gb_editor_tab_constructed (GObject *object)
     gtk_source_gutter_insert (gutter, priv->change_renderer, 0);
   }
 
+  priv->auto_indenter = gb_source_auto_indenter_c_new ();
+
   gb_editor_tab_cursor_moved (tab, priv->document);
 
   EXIT;
@@ -1099,6 +1129,12 @@ gb_editor_tab_dispose (GObject *object)
   g_clear_object (&tab->priv->document);
   g_clear_object (&tab->priv->search_entry_tag);
   g_clear_object (&tab->priv->file);
+  g_clear_object (&tab->priv->snippets_provider);
+  g_clear_object (&tab->priv->search_highlighter);
+  g_clear_object (&tab->priv->search_settings);
+  g_clear_object (&tab->priv->search_context);
+  g_clear_object (&tab->priv->auto_indenter);
+  g_clear_object (&tab->priv->settings);
 
   EXIT;
 }

@@ -28,6 +28,10 @@ gnome_builder_SOURCES = \
 	src/editor/gb-editor-workspace.c \
 	src/editor/gb-editor-workspace.h \
 	src/editor/gb-editor-workspace-private.h \
+	src/editor/gb-source-auto-indenter.c \
+	src/editor/gb-source-auto-indenter.h \
+	src/editor/gb-source-auto-indenter-c.c \
+	src/editor/gb-source-auto-indenter-c.h \
 	src/editor/gb-source-change-monitor.c \
 	src/editor/gb-source-change-monitor.h \
 	src/editor/gb-source-formatter.c \

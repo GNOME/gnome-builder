@@ -28,6 +28,8 @@
 #include "gb-editor-settings.h"
 #include "gb-markdown-preview.h"
 #include "gb-notebook.h"
+#include "gb-source-auto-indenter.h"
+#include "gb-source-auto-indenter-c.h"
 #include "gb-source-change-monitor.h"
 #include "gb-source-search-highlighter.h"
 #include "gb-source-snippet-completion-provider.h"
@@ -61,6 +63,11 @@ struct _GbEditorTabPrivate
    */
   GbSourceChangeMonitor *change_monitor;
   GtkSourceGutterRenderer *change_renderer;
+
+  /*
+   * Auto-indentation support for a given language.
+   */
+  GbSourceAutoIndenter *auto_indenter;
 
   /*
    * Tab related settings.
