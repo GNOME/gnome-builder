@@ -22,12 +22,13 @@
 
 struct _GbSourceAutoIndenterCPrivate
 {
-  gpointer foo;
+  guint brace_indent;
 };
 
 enum
 {
   PROP_0,
+  PROP_BRACE_INDENT,
   LAST_PROP
 };
 
@@ -49,12 +50,13 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
                                  GtkTextIter          *iter)
 {
   GbSourceAutoIndenterC *c = (GbSourceAutoIndenterC *)indenter;
+  GString *str;
 
   g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER_C (c), NULL);
 
-  g_printerr ("QUERY:\n");
+  str = g_string_new (NULL);
 
-  return NULL;
+  return g_string_free (str, FALSE);
 }
 
 static void
@@ -66,6 +68,9 @@ gb_source_auto_indenter_c_get_property (GObject    *object,
   GbSourceAutoIndenterC *c = GB_SOURCE_AUTO_INDENTER_C (object);
 
   switch (prop_id) {
+  case PROP_BRACE_INDENT:
+    g_value_set_uint (value, c->priv->brace_indent);
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
@@ -80,9 +85,14 @@ gb_source_auto_indenter_c_set_property (GObject      *object,
   GbSourceAutoIndenterC *c = GB_SOURCE_AUTO_INDENTER_C (object);
 
   switch (prop_id) {
+  case PROP_BRACE_INDENT:
+    c->priv->brace_indent = g_value_get_uint (value);
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
+
+  g_object_notify_by_pspec (object, pspec);
 }
 
 static void
@@ -95,10 +105,23 @@ gb_source_auto_indenter_c_class_init (GbSourceAutoIndenterCClass *klass)
   object_class->set_property = gb_source_auto_indenter_c_set_property;
 
   indenter_class->query = gb_source_auto_indenter_c_query;
+
+  gParamSpecs [PROP_BRACE_INDENT] =
+    g_param_spec_uint ("brace-indent",
+                       _("Name"),
+                       _("Name"),
+                       0,
+                       32,
+                       2,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_BRACE_INDENT,
+                                   gParamSpecs [PROP_BRACE_INDENT]);
 }
 
 static void
 gb_source_auto_indenter_c_init (GbSourceAutoIndenterC *c)
 {
   c->priv = gb_source_auto_indenter_c_get_instance_private (c);
+
+  c->priv->brace_indent = 2;
 }
