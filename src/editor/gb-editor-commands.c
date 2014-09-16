@@ -659,7 +659,47 @@ static gboolean
 non_space_predicate (gunichar ch,
                      gpointer user_data)
 {
-  return !g_unichar_isspace (ch);
+  return g_unichar_isspace (ch);
+}
+
+static gboolean
+iter_backward_find_char_greedy (GtkTextIter          *iter,
+                                GtkTextCharPredicate  predicate,
+                                gpointer              user_data,
+                                const GtkTextIter    *limit)
+{
+  gboolean found_char = FALSE;
+
+  g_return_val_if_fail (iter, FALSE);
+  g_return_val_if_fail (predicate, FALSE);
+  g_return_val_if_fail (limit, FALSE);
+
+  if (gtk_text_iter_compare (iter, limit) == 0)
+    return FALSE;
+
+  do {
+    gunichar ch;
+
+    if (!gtk_text_iter_backward_char (iter))
+      return found_char;
+
+    ch = gtk_text_iter_get_char (iter);
+
+    if (!predicate (ch, user_data))
+      {
+        if (found_char)
+          {
+            gtk_text_iter_forward_char (iter);
+            return TRUE;
+          }
+
+        return FALSE;
+      }
+
+    found_char = TRUE;
+  } while (gtk_text_iter_compare (iter, limit) >= 0);
+
+  return found_char;
 }
 
 static void
@@ -672,6 +712,8 @@ gb_editor_commands_trim_trailing_space (GbEditorWorkspace *workspace,
   GtkTextIter iter;
   GtkTextIter begin;
   GtkTextIter end;
+
+  ENTRY;
 
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
@@ -692,8 +734,8 @@ gb_editor_commands_trim_trailing_space (GbEditorWorkspace *workspace,
       gtk_text_iter_forward_to_line_end (&iter);
       gtk_text_iter_assign (&line_end, &iter);
 
-      if (gtk_text_iter_backward_find_char (&iter, non_space_predicate, NULL,
-                                            &line_begin))
+      if (iter_backward_find_char_greedy (&iter, non_space_predicate, NULL,
+                                          &line_begin))
         {
           gtk_text_iter_forward_char (&iter);
           gtk_text_buffer_delete (buffer, &iter, &line_end);
@@ -705,6 +747,8 @@ gb_editor_commands_trim_trailing_space (GbEditorWorkspace *workspace,
       if (!gtk_text_iter_forward_char (&iter))
         break;
     }
+
+  EXIT;
 }
 
 static void
