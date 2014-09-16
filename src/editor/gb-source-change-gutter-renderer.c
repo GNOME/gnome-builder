@@ -110,8 +110,7 @@ gb_source_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
 
   if ((flags & GB_SOURCE_CHANGE_DIRTY) == 0)
     {
-      gdk_rgba_parse (&rgba, "#729fcf");
-      rgba.alpha = 0.8;
+      gdk_rgba_parse (&rgba, "rgb(179,208,238)");
     }
 
   gdk_cairo_rectangle (cr, cell_area);
