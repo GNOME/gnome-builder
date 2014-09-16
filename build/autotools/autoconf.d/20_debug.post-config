@@ -1,1 +1,1 @@
-echo "  Debug ............................ : ${enable_debug}"
+echo "  Tracing .......................... : ${enable_tracing}"
