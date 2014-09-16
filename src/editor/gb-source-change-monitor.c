@@ -149,8 +149,7 @@ get_line_mutation (const GtkTextIter *begin,
     }
   else if ((line == begin_line) &&
            gtk_text_iter_starts_line (begin) &&
-           gtk_text_iter_starts_line (end) &&
-           !gtk_text_iter_ends_line (end))
+           gtk_text_iter_starts_line (end))
     {
       *delete_line = TRUE;
       *is_changed = FALSE;
