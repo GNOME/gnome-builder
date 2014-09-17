@@ -159,7 +159,7 @@ backward_find_stmt_expr (GtkTextIter *iter)
 }
 
 static guint
-backward_first_char (GtkTextIter *iter)
+backward_to_line_first_char (GtkTextIter *iter)
 {
   GtkTextIter tmp;
 
@@ -180,6 +180,13 @@ backward_first_char (GtkTextIter *iter)
   gtk_text_iter_assign (iter, &tmp);
 
   return gtk_text_iter_get_line_offset (iter);
+}
+
+static gboolean
+non_space_predicate (gunichar ch,
+                     gpointer user_data)
+{
+  return !g_unichar_isspace (ch);
 }
 
 static gboolean
@@ -255,11 +262,11 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
   str = g_string_new (NULL);
 
   /*
-   * Move back to the character before the \n that was inserted.
-   *
-   * TODO: This assumption may change.
+   * Move backwards to the last non-space character inserted. We need to
+   * start by moving back one character to get to the pre-newline insertion
+   * point.
    */
-  if (!gtk_text_iter_backward_char (iter))
+  if (!gtk_text_iter_backward_find_char (iter, non_space_predicate, NULL, NULL))
     GOTO (cleanup);
 
   /*
@@ -321,7 +328,7 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
       if (!backward_find_stmt_expr (iter))
         {
           gtk_text_iter_assign (iter, &cur);
-          offset = backward_first_char (iter);
+          offset = backward_to_line_first_char (iter);
           build_indent (c, offset, iter, str);
         }
       else
