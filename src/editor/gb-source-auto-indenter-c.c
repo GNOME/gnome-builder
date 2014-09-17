@@ -16,8 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "indent"
+
 #include <glib/gi18n.h>
 
+#include "gb-log.h"
 #include "gb-source-auto-indenter-c.h"
 
 struct _GbSourceAutoIndenterCPrivate
@@ -43,6 +46,80 @@ gb_source_auto_indenter_c_new (void)
   return g_object_new (GB_TYPE_SOURCE_AUTO_INDENTER_C, NULL);
 }
 
+static inline void
+build_indent (GbSourceAutoIndenterC *c,
+              guint                  line_offset,
+              GtkTextIter           *matching_line,
+              GString               *str)
+{
+  GtkTextIter iter;
+  gunichar ch;
+  guint i;
+
+  gtk_text_iter_assign (&iter, matching_line);
+  while (!gtk_text_iter_starts_line (&iter))
+    if (!gtk_text_iter_backward_char (&iter))
+      goto fallback;
+
+  do {
+    ch = gtk_text_iter_get_char (&iter);
+
+    switch (ch) {
+    case '\t':
+    case ' ':
+      g_string_append_unichar (str, ch);
+      break;
+    default:
+      g_string_append_c (str, ' ');
+      break;
+    }
+  } while (gtk_text_iter_forward_char (&iter) &&
+           gtk_text_iter_get_line_offset (&iter) <= line_offset);
+
+fallback:
+  for (i = str->len; i <= line_offset; i++)
+    g_string_append_c (str, ' ');
+}
+
+static gboolean
+backward_find_matching_char (GtkTextIter *iter,
+                             gunichar     ch)
+{
+  gunichar match;
+  gunichar cur;
+  guint count = 1;
+
+  switch (ch) {
+  case ')':
+    match = '(';
+    break;
+  case '}':
+    match = '{';
+    break;
+  case '[':
+    match = ']';
+    break;
+  default:
+    g_assert_not_reached ();
+    break;
+  }
+
+  while (gtk_text_iter_backward_char (iter))
+    {
+      cur = gtk_text_iter_get_char (iter);
+
+      if (cur == match)
+        {
+          if (--count == 0)
+            return TRUE;
+        }
+      else if (cur == ch)
+        count++;
+    }
+
+  return FALSE;
+}
+
 static gchar *
 gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
                                  GtkTextView          *view,
@@ -50,13 +127,71 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
                                  GtkTextIter          *iter)
 {
   GbSourceAutoIndenterC *c = (GbSourceAutoIndenterC *)indenter;
+  GtkTextIter cur;
+  gunichar ch;
   GString *str;
+  gchar *ret;
+
+  ENTRY;
 
   g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER_C (c), NULL);
 
+  gtk_text_iter_assign (&cur, iter);
+
   str = g_string_new (NULL);
 
-  return g_string_free (str, FALSE);
+  /*
+   * Move back to the character before the \n that was inserted.
+   *
+   * TODO: This assumption may change.
+   */
+  if (!gtk_text_iter_backward_char (iter))
+    GOTO (cleanup);
+
+  /*
+   * Get our last non \n character entered.
+   */
+  ch = gtk_text_iter_get_char (iter);
+
+  /*
+   * If we just placed a terminating parenthesis, we need to work our way back
+   * to it's match. That way we can peak at what it was and determine
+   * indentation from that.
+   */
+  if (ch == ')' || ch == ']' || ch == '}')
+    {
+      if (!backward_find_matching_char (iter, ch))
+        GOTO (cleanup);
+    }
+
+  /*
+   * We are probably in a a function call or parameter list.  Let's try to work
+   * our way back to the opening parenthesis. This should work when the target
+   * is for, parameter lists, or function arguments.
+   */
+  if (ch == ',')
+    {
+      if (!backward_find_matching_char (iter, ')'))
+        GOTO (cleanup);
+
+      build_indent (c, gtk_text_iter_get_line_offset (iter), iter, str);
+      GOTO (cleanup);
+    }
+
+  /*
+   * Looks like the last line was a statement or expression. Let's try to
+   * find the beginning of it.
+   */
+  if (ch == ';')
+    {
+    }
+
+cleanup:
+  gtk_text_iter_assign (iter, &cur);
+
+  ret = g_string_free (str, FALSE);
+
+  RETURN (ret);
 }
 
 static void
