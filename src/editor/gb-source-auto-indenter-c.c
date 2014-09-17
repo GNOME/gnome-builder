@@ -56,6 +56,9 @@ build_indent (GbSourceAutoIndenterC *c,
   GtkTextIter iter;
   gunichar ch;
 
+  if (!line_offset)
+    return;
+
   gtk_text_buffer_get_iter_at_line (gtk_text_iter_get_buffer (matching_line),
                                     &iter,
                                     gtk_text_iter_get_line (matching_line));
@@ -153,6 +156,30 @@ static gboolean
 backward_find_stmt_expr (GtkTextIter *iter)
 {
   return FALSE;
+}
+
+static guint
+backward_first_char (GtkTextIter *iter)
+{
+  GtkTextIter tmp;
+
+  gtk_text_buffer_get_iter_at_line (gtk_text_iter_get_buffer (iter),
+                                    &tmp,
+                                    gtk_text_iter_get_line (iter));
+
+  do {
+    gunichar ch;
+
+    ch = gtk_text_iter_get_char (&tmp);
+
+    if (!g_unichar_isspace (ch))
+      break;
+  } while (!gtk_text_iter_ends_line (&tmp) &&
+           gtk_text_iter_forward_char (&tmp));
+
+  gtk_text_iter_assign (iter, &tmp);
+
+  return gtk_text_iter_get_line_offset (iter);
 }
 
 static gboolean
@@ -294,7 +321,8 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
       if (!backward_find_stmt_expr (iter))
         {
           gtk_text_iter_assign (iter, &cur);
-          build_indent (c, 0, iter, str);
+          offset = backward_first_char (iter);
+          build_indent (c, offset, iter, str);
         }
       else
         {
