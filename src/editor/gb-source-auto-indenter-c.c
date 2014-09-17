@@ -25,13 +25,14 @@
 
 struct _GbSourceAutoIndenterCPrivate
 {
-  guint brace_indent;
+  gint scope_indent;     /* after { */
+  gint condition_indent; /* for, if, while, switch, etc */
 };
 
 enum
 {
   PROP_0,
-  PROP_BRACE_INDENT,
+  PROP_SCOPE_INDENT,
   LAST_PROP
 };
 
@@ -54,12 +55,10 @@ build_indent (GbSourceAutoIndenterC *c,
 {
   GtkTextIter iter;
   gunichar ch;
-  guint i;
 
-  gtk_text_iter_assign (&iter, matching_line);
-  while (!gtk_text_iter_starts_line (&iter))
-    if (!gtk_text_iter_backward_char (&iter))
-      goto fallback;
+  gtk_text_buffer_get_iter_at_line (gtk_text_iter_get_buffer (matching_line),
+                                    &iter,
+                                    gtk_text_iter_get_line (matching_line));
 
   do {
     ch = gtk_text_iter_get_char (&iter);
@@ -74,10 +73,9 @@ build_indent (GbSourceAutoIndenterC *c,
       break;
     }
   } while (gtk_text_iter_forward_char (&iter) &&
-           gtk_text_iter_get_line_offset (&iter) <= line_offset);
+           gtk_text_iter_compare (&iter, matching_line) <= 0);
 
-fallback:
-  for (i = str->len; i <= line_offset; i++)
+  while (str->len < line_offset)
     g_string_append_c (str, ' ');
 }
 
@@ -120,12 +118,49 @@ backward_find_matching_char (GtkTextIter *iter,
   return FALSE;
 }
 
+static gboolean
+line_is_space (GtkTextIter *iter)
+{
+  GtkTextIter begin;
+
+  gtk_text_buffer_get_iter_at_line (gtk_text_iter_get_buffer (iter),
+                                    &begin,
+                                    gtk_text_iter_get_line (iter));
+
+  while (!gtk_text_iter_equal (iter, &begin))
+    {
+      gunichar ch;
+
+      if (!gtk_text_iter_forward_char (&begin))
+        break;
+
+      ch = gtk_text_iter_get_char (&begin);
+
+      switch (ch) {
+      case '\t':
+      case ' ':
+        break;
+      default:
+        return FALSE;
+      }
+    }
+
+  return TRUE;
+}
+
+static gboolean
+backward_find_stmt_expr (GtkTextIter *iter)
+{
+  return FALSE;
+}
+
 static gchar *
 gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
                                  GtkTextView          *view,
                                  GtkTextBuffer        *buffer,
                                  GtkTextIter          *iter)
 {
+  GbSourceAutoIndenterCPrivate *priv;
   GbSourceAutoIndenterC *c = (GbSourceAutoIndenterC *)indenter;
   GtkTextIter cur;
   gunichar ch;
@@ -136,8 +171,16 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
 
   g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER_C (c), NULL);
 
+  priv = c->priv;
+
+  /*
+   * Save our current iter position to restore it later.
+   */
   gtk_text_iter_assign (&cur, iter);
 
+  /*
+   * Create the buffer for our indentation string.
+   */
   str = g_string_new (NULL);
 
   /*
@@ -152,6 +195,22 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
    * Get our last non \n character entered.
    */
   ch = gtk_text_iter_get_char (iter);
+
+  /*
+   * We just started a new scope. Try to find the indentation of the previous
+   * scope and our indentation past it.
+   */
+  if (ch == '{')
+    {
+      if (line_is_space (iter))
+        {
+          guint offset;
+
+          offset = gtk_text_iter_get_line_offset (iter);
+          build_indent (c, offset + priv->scope_indent, iter, str);
+          GOTO (cleanup);
+        }
+    }
 
   /*
    * If we just placed a terminating parenthesis, we need to work our way back
@@ -184,6 +243,20 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
    */
   if (ch == ';')
     {
+      guint offset;
+
+      if (!backward_find_stmt_expr (iter))
+        {
+          gtk_text_iter_assign (iter, &cur);
+          build_indent (c, 0, iter, str);
+        }
+      else
+        {
+          offset = gtk_text_iter_get_line_offset (iter);
+          build_indent (c, offset, iter, str);
+        }
+
+      GOTO (cleanup);
     }
 
 cleanup:
@@ -203,8 +276,8 @@ gb_source_auto_indenter_c_get_property (GObject    *object,
   GbSourceAutoIndenterC *c = GB_SOURCE_AUTO_INDENTER_C (object);
 
   switch (prop_id) {
-  case PROP_BRACE_INDENT:
-    g_value_set_uint (value, c->priv->brace_indent);
+  case PROP_SCOPE_INDENT:
+    g_value_set_uint (value, c->priv->scope_indent);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -220,8 +293,8 @@ gb_source_auto_indenter_c_set_property (GObject      *object,
   GbSourceAutoIndenterC *c = GB_SOURCE_AUTO_INDENTER_C (object);
 
   switch (prop_id) {
-  case PROP_BRACE_INDENT:
-    c->priv->brace_indent = g_value_get_uint (value);
+  case PROP_SCOPE_INDENT:
+    c->priv->scope_indent = g_value_get_uint (value);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -241,16 +314,16 @@ gb_source_auto_indenter_c_class_init (GbSourceAutoIndenterCClass *klass)
 
   indenter_class->query = gb_source_auto_indenter_c_query;
 
-  gParamSpecs [PROP_BRACE_INDENT] =
-    g_param_spec_uint ("brace-indent",
-                       _("Name"),
-                       _("Name"),
-                       0,
-                       32,
-                       2,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BRACE_INDENT,
-                                   gParamSpecs [PROP_BRACE_INDENT]);
+  gParamSpecs [PROP_SCOPE_INDENT] =
+    g_param_spec_int ("scope-indent",
+                      _("Name"),
+                      _("Name"),
+                      -32,
+                      32,
+                      2,
+                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SCOPE_INDENT,
+                                   gParamSpecs [PROP_SCOPE_INDENT]);
 }
 
 static void
@@ -258,5 +331,6 @@ gb_source_auto_indenter_c_init (GbSourceAutoIndenterC *c)
 {
   c->priv = gb_source_auto_indenter_c_get_instance_private (c);
 
-  c->priv->brace_indent = 2;
+  c->priv->condition_indent = 2;
+  c->priv->scope_indent = 2;
 }
