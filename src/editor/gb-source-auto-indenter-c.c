@@ -155,6 +155,49 @@ backward_find_stmt_expr (GtkTextIter *iter)
   return FALSE;
 }
 
+static gboolean
+in_c89_comment (GtkTextIter *iter)
+{
+  GtkTextIter cur;
+  GtkTextIter after_cur;
+  GtkTextIter match_begin;
+  GtkTextIter match_end;
+
+  gtk_text_iter_assign (&cur, iter);
+
+  gtk_text_iter_assign (&after_cur, iter);
+  gtk_text_iter_forward_char (&after_cur);
+
+  /*
+   * This works by first looking for the end of a comment. Afterwards,
+   * we then walk forward looking for the beginning of a comment. If we
+   * find one, then we are still in a comment.
+   *
+   * Not perfect, since we could be in a string, but it's a good start.
+   */
+
+  if (gtk_text_iter_backward_search (&after_cur, "*/",
+                                     GTK_TEXT_SEARCH_TEXT_ONLY, &match_begin,
+                                     &match_end, NULL))
+    gtk_text_iter_assign (iter, &match_end);
+  else
+    gtk_text_buffer_get_start_iter (gtk_text_iter_get_buffer (iter), iter);
+
+  /*
+   * Walk forwards until we find begin of a comment.
+   */
+  if (gtk_text_iter_forward_search (iter, "/*", GTK_TEXT_SEARCH_TEXT_ONLY,
+                                    &match_begin, &match_end, &after_cur))
+    {
+      gtk_text_iter_assign (iter, &match_begin);
+      return TRUE;
+    }
+
+  gtk_text_iter_assign (iter, &cur);
+
+  return FALSE;
+}
+
 static gchar *
 gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
                                  GtkTextView          *view,
@@ -196,6 +239,21 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
    * Get our last non \n character entered.
    */
   ch = gtk_text_iter_get_char (iter);
+
+  /*
+   * If we are in a c89 multi-line comment, try to match the previous comment
+   * line. Function will leave iter at original position unless it matched.
+   * If so, it will be at the beginning of the comment.
+   */
+  if (in_c89_comment (iter))
+    {
+      guint offset;
+
+      offset = gtk_text_iter_get_line_offset (iter);
+      build_indent (c, offset + 1, iter, str);
+      g_string_append (str, "* ");
+      GOTO (cleanup);
+    }
 
   /*
    * If we just placed a terminating parenthesis, we need to work our way back
