@@ -339,6 +339,34 @@ animate_in (GbSourceView      *view,
 #undef Y_GROW
 }
 
+static void
+gb_source_view_invalidate_range_mark (GbSourceView *view,
+                                      GtkTextMark  *mark_begin,
+                                      GtkTextMark  *mark_end)
+{
+  GtkTextBuffer *buffer;
+  GdkRectangle rect;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GdkWindow *window;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+  g_return_if_fail (GTK_IS_TEXT_MARK (mark_begin));
+  g_return_if_fail (GTK_IS_TEXT_MARK (mark_end));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &begin, mark_begin);
+  gtk_text_buffer_get_iter_at_mark (buffer, &end, mark_end);
+
+  get_rect_for_iters (GTK_TEXT_VIEW (view), &begin, &end, &rect,
+                      GTK_TEXT_WINDOW_TEXT);
+
+  window = gtk_text_view_get_window (GTK_TEXT_VIEW (view),
+                                     GTK_TEXT_WINDOW_TEXT);
+  gdk_window_invalidate_rect (window, &rect, FALSE);
+}
+
 static gchar *
 gb_source_view_get_line_prefix (GbSourceView      *view,
                                 const GtkTextIter *iter)
@@ -497,12 +525,19 @@ on_insert_text_after (GtkTextBuffer *buffer,
 
   priv = view->priv;
 
-  gb_source_view_block_handlers (view);
-
   if ((snippet = g_queue_peek_head (priv->snippets)))
-    gb_source_snippet_after_insert_text (snippet, buffer, iter, text, len);
+    {
+      GtkTextMark *begin;
+      GtkTextMark *end;
 
-  gb_source_view_unblock_handlers (view);
+      gb_source_view_block_handlers (view);
+      gb_source_snippet_after_insert_text (snippet, buffer, iter, text, len);
+      gb_source_view_unblock_handlers (view);
+
+      begin = gb_source_snippet_get_mark_begin (snippet);
+      end = gb_source_snippet_get_mark_end (snippet);
+      gb_source_view_invalidate_range_mark (view, begin, end);
+    }
 }
 
 static void
