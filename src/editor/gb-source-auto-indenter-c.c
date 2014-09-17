@@ -189,6 +189,39 @@ non_space_predicate (gunichar ch,
   return !g_unichar_isspace (ch);
 }
 
+static void
+backward_before_c89_comment (GtkTextIter *iter)
+{
+  GtkTextIter copy;
+  GtkTextIter match_start;
+  GtkTextIter match_end;
+  gunichar ch;
+
+  gtk_text_iter_assign (&copy, iter);
+
+  while (g_unichar_isspace (gtk_text_iter_get_char (iter)))
+    if (!gtk_text_iter_backward_char (iter))
+      GOTO (cleanup);
+
+  if (!(ch = gtk_text_iter_get_char (iter)) ||
+      (ch != '/') ||
+      !gtk_text_iter_backward_char (iter) ||
+      !(ch = gtk_text_iter_get_char (iter)) ||
+      (ch != '*') ||
+      !gtk_text_iter_backward_search (iter, "/*",
+                                      GTK_TEXT_SEARCH_TEXT_ONLY,
+                                      &match_start, &match_end, NULL) ||
+      !gtk_text_iter_backward_find_char (&match_start, non_space_predicate,
+                                         NULL, NULL))
+    GOTO (cleanup);
+
+  gtk_text_iter_assign (iter, &match_start);
+  return;
+
+cleanup:
+  gtk_text_iter_assign (iter, &copy);
+}
+
 static gboolean
 in_c89_comment (GtkTextIter *iter)
 {
@@ -288,6 +321,18 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
       g_string_append (str, "* ");
       GOTO (cleanup);
     }
+
+  /*
+   * If the next thing looking backwards is a complete c89 comment, let's
+   * move the iter to before the comment so that we can work with the syntax
+   * that is before it.
+   */
+  backward_before_c89_comment (iter);
+
+  /*
+   * Get our new character as we possibely moved.
+   */
+  ch = gtk_text_iter_get_char (iter);
 
   /*
    * If we just placed a terminating parenthesis, we need to work our way back
