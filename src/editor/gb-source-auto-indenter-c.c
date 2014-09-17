@@ -73,7 +73,8 @@ build_indent (GbSourceAutoIndenterC *c,
       break;
     }
   } while (gtk_text_iter_forward_char (&iter) &&
-           gtk_text_iter_compare (&iter, matching_line) <= 0);
+           (gtk_text_iter_compare (&iter, matching_line) <= 0) &&
+           (str->len < line_offset));
 
   while (str->len < line_offset)
     g_string_append_c (str, ' ');
@@ -197,22 +198,6 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
   ch = gtk_text_iter_get_char (iter);
 
   /*
-   * We just started a new scope. Try to find the indentation of the previous
-   * scope and our indentation past it.
-   */
-  if (ch == '{')
-    {
-      if (line_is_space (iter))
-        {
-          guint offset;
-
-          offset = gtk_text_iter_get_line_offset (iter);
-          build_indent (c, offset + priv->scope_indent, iter, str);
-          GOTO (cleanup);
-        }
-    }
-
-  /*
    * If we just placed a terminating parenthesis, we need to work our way back
    * to it's match. That way we can peak at what it was and determine
    * indentation from that.
@@ -230,10 +215,13 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
    */
   if (ch == ',')
     {
+      guint offset;
+
       if (!backward_find_matching_char (iter, ')'))
         GOTO (cleanup);
 
-      build_indent (c, gtk_text_iter_get_line_offset (iter), iter, str);
+      offset = gtk_text_iter_get_line_offset (iter);
+      build_indent (c, offset + 1, iter, str);
       GOTO (cleanup);
     }
 
@@ -257,6 +245,29 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
         }
 
       GOTO (cleanup);
+    }
+
+  /*
+   * Work our way back to the most recent scope. Then apply our scope
+   * indentation to that.
+   */
+  if (ch == '{' || backward_find_matching_char (iter, '}'))
+    {
+      if (line_is_space (iter))
+        {
+          guint offset;
+
+          offset = gtk_text_iter_get_line_offset (iter);
+          build_indent (c, offset + priv->scope_indent, iter, str);
+          GOTO (cleanup);
+        }
+      else
+        {
+          /*
+           * XXX: We need to determine where the beginning of a prefixed
+           *      condition is.
+           */
+        }
     }
 
 cleanup:
