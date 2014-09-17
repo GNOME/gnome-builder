@@ -554,12 +554,19 @@ on_delete_range (GtkTextBuffer *buffer,
 
   priv = view->priv;
 
-  gb_source_view_block_handlers (view);
-
   if ((snippet = g_queue_peek_head (priv->snippets)))
-    gb_source_snippet_before_delete_range (snippet, buffer, begin, end);
+    {
+      GtkTextMark *begin_mark;
+      GtkTextMark *end_mark;
 
-  gb_source_view_unblock_handlers (view);
+      gb_source_view_block_handlers (view);
+      gb_source_snippet_before_delete_range (snippet, buffer, begin, end);
+      gb_source_view_unblock_handlers (view);
+
+      begin_mark = gb_source_snippet_get_mark_begin (snippet);
+      end_mark = gb_source_snippet_get_mark_end (snippet);
+      gb_source_view_invalidate_range_mark (view, begin_mark, end_mark);
+    }
 }
 
 static void
