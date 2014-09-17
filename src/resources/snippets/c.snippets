@@ -177,3 +177,9 @@ snippet comment
 	/*
 	 * $0
 	 */
+snippet ref
+	g_object_ref (${1});$0
+snippet unref
+	g_object_unref (${1});$0
+snippet clear
+	g_clear_object (&${1});$0
