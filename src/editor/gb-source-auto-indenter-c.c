@@ -189,7 +189,7 @@ non_space_predicate (gunichar ch,
   return !g_unichar_isspace (ch);
 }
 
-static void
+static gboolean
 backward_before_c89_comment (GtkTextIter *iter)
 {
   GtkTextIter copy;
@@ -216,10 +216,13 @@ backward_before_c89_comment (GtkTextIter *iter)
     GOTO (cleanup);
 
   gtk_text_iter_assign (iter, &match_start);
-  return;
+
+  return TRUE;
 
 cleanup:
   gtk_text_iter_assign (iter, &copy);
+
+  return FALSE;
 }
 
 static gboolean
@@ -327,7 +330,8 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
    * move the iter to before the comment so that we can work with the syntax
    * that is before it.
    */
-  backward_before_c89_comment (iter);
+  if (backward_before_c89_comment (iter))
+    gtk_text_iter_assign (&cur, iter);
 
   /*
    * Get our new character as we possibely moved.
