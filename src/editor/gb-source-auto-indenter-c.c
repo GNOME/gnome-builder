@@ -177,6 +177,26 @@ line_is_space (GtkTextIter *iter)
 }
 
 static gboolean
+starts_line_space_ok (GtkTextIter *iter)
+{
+  GtkTextIter tmp;
+
+  gtk_text_buffer_get_iter_at_line (gtk_text_iter_get_buffer (iter),
+                                    &tmp,
+                                    gtk_text_iter_get_line (iter));
+
+  for (;
+       gtk_text_iter_compare (&tmp, iter) < 0;
+       gtk_text_iter_forward_char (&tmp))
+    {
+      if (!g_unichar_isspace (gtk_text_iter_get_char (&tmp)))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
 backward_find_stmt_expr (GtkTextIter *iter)
 {
   return FALSE;
@@ -590,6 +610,13 @@ maybe_unindent_brace (GbSourceAutoIndenterC *c,
     {
       GString *str;
       guint offset;
+
+      /*
+       * Handle the case where { is not the first non-whitespace
+       * character on the line.
+       */
+      if (!starts_line_space_ok (begin))
+        backward_to_line_first_char (begin);
 
       offset = gtk_text_iter_get_line_offset (begin);
       str = g_string_new (NULL);
