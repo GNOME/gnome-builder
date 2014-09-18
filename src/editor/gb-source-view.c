@@ -764,9 +764,9 @@ gb_source_view_key_press_event (GtkWidget   *widget,
           return TRUE;
 
       /*
-       * Insert into the buffer so the auto-indenter sees it. If
-       * GtkSourceView:auto-indent is set, then we will end up with
-       * very unpredictable results.
+       * Insert into the buffer so the auto-indenter can see it. If
+       * GtkSourceView:auto-indent is set, then we will end up with very
+       * unpredictable results.
        */
       GTK_WIDGET_CLASS (gb_source_view_parent_class)->key_press_event (widget, event);
 

@@ -228,14 +228,15 @@ cleanup:
 }
 
 static gboolean
-in_c89_comment (GtkTextIter *iter)
+in_c89_comment (GtkTextIter *iter,
+                GtkTextIter *match_begin)
 {
-  GtkTextIter cur;
+  GtkTextIter saved;
   GtkTextIter after_cur;
-  GtkTextIter match_begin;
   GtkTextIter match_end;
+  gboolean ret;
 
-  gtk_text_iter_assign (&cur, iter);
+  gtk_text_iter_assign (&saved, iter);
 
   gtk_text_iter_assign (&after_cur, iter);
   gtk_text_iter_forward_char (&after_cur);
@@ -249,7 +250,7 @@ in_c89_comment (GtkTextIter *iter)
    */
 
   if (gtk_text_iter_backward_search (&after_cur, "*/",
-                                     GTK_TEXT_SEARCH_TEXT_ONLY, &match_begin,
+                                     GTK_TEXT_SEARCH_TEXT_ONLY, match_begin,
                                      &match_end, NULL))
     gtk_text_iter_assign (iter, &match_end);
   else
@@ -258,16 +259,12 @@ in_c89_comment (GtkTextIter *iter)
   /*
    * Walk forwards until we find begin of a comment.
    */
-  if (gtk_text_iter_forward_search (iter, "/*", GTK_TEXT_SEARCH_TEXT_ONLY,
-                                    &match_begin, &match_end, &after_cur))
-    {
-      gtk_text_iter_assign (iter, &match_begin);
-      return TRUE;
-    }
+  ret = gtk_text_iter_forward_search (iter, "/*", GTK_TEXT_SEARCH_TEXT_ONLY,
+                                      match_begin, &match_end, &after_cur);
 
-  gtk_text_iter_assign (iter, &cur);
+  gtk_text_iter_assign (iter, &saved);
 
-  return FALSE;
+  return ret;
 }
 
 static gchar *
@@ -278,6 +275,7 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
 {
   GbSourceAutoIndenterCPrivate *priv;
   GtkTextIter cur;
+  GtkTextIter match_begin;
   gunichar ch;
   GString *str;
   gchar *ret = NULL;
@@ -317,10 +315,11 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
    * line. Function will leave iter at original position unless it matched.
    * If so, it will be at the beginning of the comment.
    */
-  if (in_c89_comment (iter))
+  if (in_c89_comment (iter, &match_begin))
     {
       guint offset;
 
+      gtk_text_iter_assign (iter, &match_begin);
       offset = gtk_text_iter_get_line_offset (iter);
       build_indent (c, offset + 1, iter, str);
       g_string_append (str, "* ");
@@ -415,6 +414,39 @@ cleanup:
   RETURN (ret);
 }
 
+static gchar *
+gb_source_auto_indenter_c_maybe_close_comment (GbSourceAutoIndenterC *c,
+                                               GtkTextIter           *begin,
+                                               GtkTextIter           *end)
+{
+  GtkTextIter copy;
+  GtkTextIter begin_comment;
+  gchar *ret = NULL;
+
+  g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER_C (c), NULL);
+  g_return_val_if_fail (begin, NULL);
+  g_return_val_if_fail (end, NULL);
+
+  gtk_text_iter_assign (&copy, begin);
+
+  /*
+   * Walk backwards ensuring we just inserted a '/' and that it was after
+   * a '* ' sequence.
+   */
+  if (in_c89_comment (begin, &begin_comment) &&
+      gtk_text_iter_backward_char (begin) &&
+      ('/' == gtk_text_iter_get_char (begin)) &&
+      gtk_text_iter_backward_char (begin) &&
+      (' ' == gtk_text_iter_get_char (begin)) &&
+      gtk_text_iter_backward_char (begin) &&
+      ('*' == gtk_text_iter_get_char (begin)))
+    ret = g_strdup ("*/");
+  else
+    gtk_text_iter_assign (begin, &copy);
+
+  return ret;
+}
+
 static gboolean
 gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
                                       GdkEventKey          *event)
@@ -483,12 +515,10 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
 
   case GDK_KEY_slash:
     /*
-     * TODO:
-     *
-     * If we are at the " * " beginning of a multi-line comment, let's just
-     * close the comment.
+     * Check to see if we are right after a "* " and typing "/" while inside
+     * of a multi-line comment. Probably just want to close the comment.
      */
-    g_debug ("TODO: close current multi-line comment.");
+    ret = gb_source_auto_indenter_c_maybe_close_comment (c, begin, end);
     break;
 
   default:
