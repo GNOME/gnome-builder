@@ -377,8 +377,8 @@ gb_editor_tab_language_changed (GbEditorTab      *tab,
                                 GParamSpec       *pspec,
                                 GbEditorDocument *document)
 {
-  GtkSourceLanguage *language;
   GbSourceAutoIndenter *indenter = NULL;
+  GtkSourceLanguage *language;
 
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));

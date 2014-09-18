@@ -338,6 +338,8 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
    */
   ch = gtk_text_iter_get_char (iter);
 
+  g_print ("char is now: %c\n", ch);
+
   /*
    * If we just placed a terminating parenthesis, we need to work our way back
    * to it's match. That way we can peak at what it was and determine
@@ -454,6 +456,7 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
   case GDK_KEY_KP_Enter:
     gtk_text_iter_assign (&begin_copy, begin);
     ret = gb_source_auto_indenter_c_indent (c, view, buffer, begin);
+    g_print ("INDENT: \"%s\"\n", ret);
     gtk_text_iter_assign (begin, &begin_copy);
     break;
 
