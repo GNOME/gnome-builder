@@ -385,7 +385,15 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
       if (gtk_text_iter_get_char (iter) == '(')
         offset++;
       else if (gtk_text_iter_get_char (iter) == '{')
-        offset += priv->scope_indent;
+        {
+          /*
+           * Handle the case where { is not the first character,
+           * like "enum {".
+           */
+          if (backward_to_line_first_char (iter))
+            offset = gtk_text_iter_get_line_offset (iter);
+          offset += priv->scope_indent;
+        }
 
       build_indent (c, offset, iter, str);
       GOTO (cleanup);
