@@ -27,6 +27,7 @@ struct _GbSourceAutoIndenterCPrivate
 {
   gint scope_indent;     /* after { */
   gint condition_indent; /* for, if, while, switch, etc */
+  gint directive_indent;
 };
 
 enum
@@ -520,6 +521,42 @@ gb_source_auto_indenter_c_maybe_unindent_brace (GbSourceAutoIndenterC *c,
   RETURN (ret);
 }
 
+static gchar *
+maybe_unindent_hash (GbSourceAutoIndenterC *c,
+                     GtkTextIter           *begin,
+                     GtkTextIter           *end)
+{
+  GtkTextIter saved;
+  gchar *ret = NULL;
+
+  g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER_C (c), NULL);
+  g_return_val_if_fail (begin, NULL);
+  g_return_val_if_fail (end, NULL);
+
+  gtk_text_iter_assign (&saved, begin);
+
+  if (gtk_text_iter_backward_char (begin) &&
+      ('#' == gtk_text_iter_get_char (begin)) &&
+      line_is_whitespace_until (begin))
+    {
+      if (c->priv->directive_indent == G_MININT)
+        {
+          while (!gtk_text_iter_starts_line (begin))
+            gtk_text_iter_backward_char (begin);
+          ret = g_strdup ("#");
+        }
+      else
+        {
+          /* TODO: Handle indent when not fully unindenting. */
+        }
+    }
+
+  if (!ret)
+    gtk_text_iter_assign (begin, &saved);
+
+  return ret;
+}
+
 static gboolean
 gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
                                       GdkEventKey          *event)
@@ -577,6 +614,7 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
     /*
      * If this is a preprocessor directive, adjust indentation.
      */
+    ret = maybe_unindent_hash (c, begin, end);
     break;
 
   case GDK_KEY_parenright:
@@ -668,4 +706,5 @@ gb_source_auto_indenter_c_init (GbSourceAutoIndenterC *c)
 
   c->priv->condition_indent = 2;
   c->priv->scope_indent = 2;
+  c->priv->directive_indent = G_MININT;
 }
