@@ -106,6 +106,10 @@ backward_find_matching_char (GtkTextIter *iter,
     break;
   }
 
+  /*
+   * TODO: Make this skip past comment blocks!
+   */
+
   while (gtk_text_iter_backward_char (iter))
     {
       cur = gtk_text_iter_get_char (iter);
@@ -414,6 +418,26 @@ cleanup:
   RETURN (ret);
 }
 
+static gboolean
+line_is_whitespace_until (GtkTextIter *iter)
+{
+  GtkTextIter cur;
+
+  gtk_text_buffer_get_iter_at_line (gtk_text_iter_get_buffer (iter),
+                                    &cur,
+                                    gtk_text_iter_get_line (iter));
+
+  for (;
+       gtk_text_iter_compare (&cur, iter) < 0;
+       gtk_text_iter_forward_char (&cur))
+    {
+      if (!g_unichar_isspace (gtk_text_iter_get_char (&cur)))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static gchar *
 gb_source_auto_indenter_c_maybe_close_comment (GbSourceAutoIndenterC *c,
                                                GtkTextIter           *begin,
@@ -445,6 +469,55 @@ gb_source_auto_indenter_c_maybe_close_comment (GbSourceAutoIndenterC *c,
     gtk_text_iter_assign (begin, &copy);
 
   return ret;
+}
+
+static gchar *
+gb_source_auto_indenter_c_maybe_unindent_brace (GbSourceAutoIndenterC *c,
+                                                GtkTextIter           *begin,
+                                                GtkTextIter           *end)
+{
+  GtkTextIter saved;
+  gchar *ret = NULL;
+
+  ENTRY;
+
+  g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER_C (c), NULL);
+  g_return_val_if_fail (begin, NULL);
+  g_return_val_if_fail (end, NULL);
+
+  gtk_text_iter_assign (&saved, begin);
+
+  if (gtk_text_iter_backward_char (begin) &&
+      gtk_text_iter_backward_char (end) &&
+      backward_find_matching_char (begin, '}') &&
+      line_is_whitespace_until (end) &&
+      ((gtk_text_iter_get_offset (begin) + 1) !=
+        gtk_text_iter_get_offset (end)))
+    {
+      GString *str;
+      guint offset;
+
+      offset = gtk_text_iter_get_line_offset (begin);
+      str = g_string_new (NULL);
+      build_indent (c, offset, begin, str);
+      g_string_append_c (str, '}');
+
+      gtk_text_iter_assign (begin, &saved);
+      while (!gtk_text_iter_starts_line (begin))
+        gtk_text_iter_backward_char (begin);
+
+      gtk_text_iter_assign (end, &saved);
+
+      ret = g_string_free (str, FALSE);
+    }
+
+  if (!ret)
+    {
+      gtk_text_iter_assign (begin, &saved);
+      gtk_text_iter_assign (end, &saved);
+    }
+
+  RETURN (ret);
 }
 
 static gboolean
@@ -491,7 +564,7 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
     /*
      * Probably need to unindent this line.
      */
-    g_debug ("TODO: unindent the curly brace if needed.");
+    ret = gb_source_auto_indenter_c_maybe_unindent_brace (c, begin, end);
     break;
 
   case GDK_KEY_colon:
