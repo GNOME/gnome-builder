@@ -48,6 +48,30 @@ gb_source_auto_indenter_c_new (void)
   return g_object_new (GB_TYPE_SOURCE_AUTO_INDENTER_C, NULL);
 }
 
+static gboolean
+word_is_conditional (const gchar *word)
+{
+  static GHashTable *words;
+
+  if (!words)
+    {
+#define ADD_WORD(w) g_hash_table_insert (words, (char *)w, (char *)w)
+
+      words = g_hash_table_new (g_str_hash, g_str_equal);
+
+      ADD_WORD ("if");
+      ADD_WORD ("else");
+      ADD_WORD ("do");
+      ADD_WORD ("while");
+      ADD_WORD ("switch");
+      ADD_WORD ("for");
+
+#undef ADD_WORD
+    }
+
+  return !!g_hash_table_lookup (words, word);
+}
+
 static inline void
 build_indent (GbSourceAutoIndenterC *c,
               guint                  line_offset,
@@ -378,6 +402,10 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
    */
   if (ch == '}')
     {
+      GtkTextIter copy;
+
+      gtk_text_iter_assign (&copy, iter);
+
       if (gtk_text_iter_forward_char (iter))
         {
           guint offset = gtk_text_iter_get_line_offset (iter);
@@ -391,6 +419,43 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
           build_indent (c, offset, iter, str);
           GOTO (cleanup);
         }
+
+      gtk_text_iter_assign (iter, &copy);
+    }
+
+  /*
+   * Check to see if we just finished a conditional.
+   */
+  if (ch == ')')
+    {
+      GtkTextIter copy;
+
+      gtk_text_iter_assign (&copy, iter);
+
+      if (backward_find_matching_char (iter, ')') &&
+          gtk_text_iter_backward_word_start (iter))
+        {
+          GtkTextIter end;
+
+          gtk_text_iter_assign (&end, iter);
+
+          if (gtk_text_iter_forward_word_end (&end))
+            {
+              gchar *word = gtk_text_iter_get_slice (iter, &end);
+              gboolean is_cond = word_is_conditional (word);
+
+              g_free (word);
+
+              if (is_cond)
+                {
+                  guint offset = gtk_text_iter_get_line_offset (iter);
+                  build_indent (c, offset + priv->condition_indent, iter, str);
+                  GOTO (cleanup);
+                }
+            }
+        }
+
+      gtk_text_iter_assign (iter, &copy);
     }
 
   /*
