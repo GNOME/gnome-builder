@@ -424,6 +424,7 @@ gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
   case GDK_KEY_KP_Enter:
   case GDK_KEY_slash:
   case GDK_KEY_braceright:
+  case GDK_KEY_numbersign:
     return TRUE;
   default:
     return FALSE;
