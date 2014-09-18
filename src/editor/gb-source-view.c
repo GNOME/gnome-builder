@@ -26,6 +26,7 @@
 #include "gb-cairo.h"
 #include "gb-editor-document.h"
 #include "gb-log.h"
+#include "gb-source-auto-indenter.h"
 #include "gb-source-search-highlighter.h"
 #include "gb-source-snippet-context.h"
 #include "gb-source-snippet-private.h"
@@ -37,11 +38,14 @@ struct _GbSourceViewPrivate
   GQueue                    *snippets;
   GbSourceSearchHighlighter *search_highlighter;
   GtkTextBuffer             *buffer;
+  GbSourceAutoIndenter      *auto_indenter;
+
   guint                      buffer_insert_text_handler;
   guint                      buffer_insert_text_after_handler;
   guint                      buffer_delete_range_handler;
   guint                      buffer_delete_range_after_handler;
   guint                      buffer_mark_set_handler;
+
   guint                      show_shadow : 1;
 };
 
@@ -54,6 +58,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbSourceView, gb_source_view, GTK_SOURCE_TYPE_VIEW)
 
 enum {
   PROP_0,
+  PROP_AUTO_INDENTER,
   PROP_SEARCH_HIGHLIGHTER,
   PROP_SHOW_SHADOW,
   LAST_PROP
@@ -76,8 +81,6 @@ on_search_highlighter_changed (GbSourceSearchHighlighter *highlighter,
 
   g_return_if_fail (GB_IS_SOURCE_VIEW (view));
   g_return_if_fail (GB_IS_SOURCE_SEARCH_HIGHLIGHTER (highlighter));
-
-  g_print ("%s()\n", G_STRFUNC);
 
   EXIT;
 }
@@ -714,6 +717,9 @@ gb_source_view_key_press_event (GtkWidget   *widget,
 
   priv = view->priv;
 
+  /*
+   * Handle movement through the tab stops of the current snippet if needed.
+   */
   if ((snippet = g_queue_peek_head (priv->snippets)))
     {
       switch ((gint) event->keyval)
@@ -743,6 +749,59 @@ gb_source_view_key_press_event (GtkWidget   *widget,
         default:
           break;
         }
+    }
+
+  if (priv->auto_indenter &&
+      gb_source_auto_indenter_is_trigger (priv->auto_indenter, event))
+    {
+      GtkTextMark *insert;
+      GtkTextIter begin;
+      GtkTextIter end;
+      gunichar ch;
+      GString *str;
+      gchar *indent;
+
+      if ((event->keyval == GDK_KEY_Return) || (event->keyval == GDK_KEY_KP_Enter))
+        if (gtk_text_view_im_context_filter_keypress (GTK_TEXT_VIEW (view), event))
+          return TRUE;
+
+      gtk_text_buffer_begin_user_action (priv->buffer);
+
+      /*
+       * Insert the current keypress into the buffer.
+       */
+      str = g_string_new (NULL);
+      ch = gdk_keyval_to_unicode (event->keyval);
+      g_string_append_unichar (str, ch);
+      gtk_text_buffer_insert_at_cursor (priv->buffer, str->str, str->len);
+      g_string_free (str, TRUE);
+
+      /*
+       * Set begin and end to the position of the new insertion point.
+       */
+      insert = gtk_text_buffer_get_insert (priv->buffer);
+      gtk_text_buffer_get_iter_at_mark (priv->buffer, &begin, insert);
+      gtk_text_buffer_get_iter_at_mark (priv->buffer, &end, insert);
+
+      /*
+       * Let the formatter potentially set the replacement text.
+       */
+      indent = gb_source_auto_indenter_format (priv->auto_indenter,
+                                               GTK_TEXT_VIEW (view),
+                                               priv->buffer, &begin, &end,
+                                               event);
+
+      if (indent)
+        {
+          if (!gtk_text_iter_equal (&begin, &end))
+            gtk_text_buffer_delete (priv->buffer, &begin, &end);
+          gtk_text_buffer_insert (priv->buffer, &begin, indent, -1);
+          g_free (indent);
+        }
+
+      gtk_text_buffer_end_user_action (priv->buffer);
+
+      return TRUE;
     }
 
   return GTK_WIDGET_CLASS (gb_source_view_parent_class)->key_press_event (widget, event);
@@ -994,10 +1053,49 @@ gb_source_view_finalize (GObject *object)
 
   priv = GB_SOURCE_VIEW (object)->priv;
 
+  if (priv->buffer)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->buffer),
+                                    (gpointer *)&priv->buffer);
+      priv->buffer = NULL;
+    }
+
   g_clear_pointer (&priv->snippets, g_queue_free);
   g_clear_object (&priv->search_highlighter);
+  g_clear_object (&priv->auto_indenter);
 
   G_OBJECT_CLASS (gb_source_view_parent_class)->finalize (object);
+}
+
+GbSourceAutoIndenter *
+gb_source_view_get_auto_indenter (GbSourceView *view)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), NULL);
+
+  return view->priv->auto_indenter;
+}
+
+void
+gb_source_view_set_auto_indenter (GbSourceView         *view,
+                                  GbSourceAutoIndenter *auto_indenter)
+{
+  GbSourceViewPrivate *priv;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+  g_return_if_fail (!auto_indenter ||
+                    GB_IS_SOURCE_AUTO_INDENTER (auto_indenter));
+
+  priv = view->priv;
+
+  if (priv->auto_indenter != auto_indenter)
+    {
+      g_clear_object (&priv->auto_indenter);
+      priv->auto_indenter = auto_indenter
+                          ? g_object_ref (auto_indenter)
+                          : NULL;
+      g_object_notify_by_pspec (G_OBJECT (view),
+                                gParamSpecs [PROP_AUTO_INDENTER]);
+    }
 }
 
 static void
@@ -1010,6 +1108,10 @@ gb_source_view_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_AUTO_INDENTER:
+      g_value_set_object (value, gb_source_view_get_auto_indenter (view));
+      break;
+
     case PROP_SEARCH_HIGHLIGHTER:
       g_value_set_object (value, gb_source_view_get_search_highlighter (view));
       break;
@@ -1033,6 +1135,10 @@ gb_source_view_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_AUTO_INDENTER:
+      gb_source_view_set_auto_indenter (view, g_value_get_object (value));
+      break;
+
     case PROP_SEARCH_HIGHLIGHTER:
       gb_source_view_set_search_highlighter (view, g_value_get_object (value));
       break;
@@ -1061,6 +1167,22 @@ gb_source_view_class_init (GbSourceViewClass *klass)
   widget_class->key_press_event = gb_source_view_key_press_event;
 
   text_view_class->draw_layer = gb_source_view_draw_layer;
+
+  /**
+   * GbSourceView:auto-indenter:
+   *
+   * Sets the #GbSourceAutoIndenter to use while typing in the source view.
+   *
+   * %NULL to unset the auto-indenter.
+   */
+  gParamSpecs [PROP_AUTO_INDENTER] =
+    g_param_spec_object ("auto-indenter",
+                         _("Auto Indenter"),
+                         _("The indenter to use when auto_indent is set."),
+                         GB_TYPE_SOURCE_AUTO_INDENTER,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_AUTO_INDENTER,
+                                   gParamSpecs [PROP_AUTO_INDENTER]);
 
   gParamSpecs[PROP_SHOW_SHADOW] =
     g_param_spec_boolean ("show-shadow",

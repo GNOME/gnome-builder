@@ -47,10 +47,64 @@ gb_source_auto_indenter_query (GbSourceAutoIndenter *indenter,
                                                               buffer, iter);
 }
 
+static gboolean
+gb_source_auto_indenter_real_is_trigger (GbSourceAutoIndenter *indenter,
+                                         GdkEventKey          *event)
+{
+  return FALSE;
+}
+
+gboolean
+gb_source_auto_indenter_is_trigger (GbSourceAutoIndenter *indenter,
+                                    GdkEventKey          *event)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER (indenter), FALSE);
+  g_return_val_if_fail (event, FALSE);
+
+  return GB_SOURCE_AUTO_INDENTER_GET_CLASS (indenter)->is_trigger (indenter,
+                                                                   event);
+}
+
+gchar *
+gb_source_auto_indenter_format (GbSourceAutoIndenter *indenter,
+                                GtkTextView          *view,
+                                GtkTextBuffer        *buffer,
+                                GtkTextIter          *begin,
+                                GtkTextIter          *end,
+                                GdkEventKey          *event)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER (indenter), NULL);
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (view), NULL);
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
+  g_return_val_if_fail (begin, NULL);
+  g_return_val_if_fail (end, NULL);
+  g_return_val_if_fail (event, NULL);
+
+  return GB_SOURCE_AUTO_INDENTER_GET_CLASS (indenter)->format (indenter,
+                                                               view,
+                                                               buffer,
+                                                               begin,
+                                                               end,
+                                                               event);
+}
+
+gchar *
+gb_source_auto_indenter_real_format (GbSourceAutoIndenter *indenter,
+                                     GtkTextView          *view,
+                                     GtkTextBuffer        *buffer,
+                                     GtkTextIter          *begin,
+                                     GtkTextIter          *end,
+                                     GdkEventKey          *event)
+{
+  return NULL;
+}
+
 static void
 gb_source_auto_indenter_class_init (GbSourceAutoIndenterClass *klass)
 {
   klass->query = gb_source_auto_indenter_real_query;
+  klass->is_trigger = gb_source_auto_indenter_real_is_trigger;
+  klass->format = gb_source_auto_indenter_real_format;
 }
 
 static void

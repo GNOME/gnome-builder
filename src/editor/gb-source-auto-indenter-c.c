@@ -269,17 +269,16 @@ in_c89_comment (GtkTextIter *iter)
 }
 
 static gchar *
-gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
-                                 GtkTextView          *view,
-                                 GtkTextBuffer        *buffer,
-                                 GtkTextIter          *iter)
+gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
+                                  GtkTextView           *view,
+                                  GtkTextBuffer         *buffer,
+                                  GtkTextIter           *iter)
 {
   GbSourceAutoIndenterCPrivate *priv;
-  GbSourceAutoIndenterC *c = (GbSourceAutoIndenterC *)indenter;
   GtkTextIter cur;
   gunichar ch;
   GString *str;
-  gchar *ret;
+  gchar *ret = NULL;
 
   ENTRY;
 
@@ -302,8 +301,9 @@ gb_source_auto_indenter_c_query (GbSourceAutoIndenter *indenter,
    * start by moving back one character to get to the pre-newline insertion
    * point.
    */
-  if (!gtk_text_iter_backward_find_char (iter, non_space_predicate, NULL, NULL))
-    GOTO (cleanup);
+  if (!g_unichar_isspace (gtk_text_iter_get_char (iter)))
+    if (!gtk_text_iter_backward_find_char (iter, non_space_predicate, NULL, NULL))
+      GOTO (cleanup);
 
   /*
    * Get our last non \n character entered.
@@ -420,6 +420,67 @@ cleanup:
   RETURN (ret);
 }
 
+static gboolean
+gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
+                                      GdkEventKey          *event)
+{
+  switch (event->keyval) {
+  case GDK_KEY_Return:
+  case GDK_KEY_KP_Enter:
+  case GDK_KEY_slash:
+  case GDK_KEY_braceright:
+    return TRUE;
+  default:
+    return FALSE;
+  }
+}
+
+static gchar *
+gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
+                                  GtkTextView          *view,
+                                  GtkTextBuffer        *buffer,
+                                  GtkTextIter          *begin,
+                                  GtkTextIter          *end,
+                                  GdkEventKey          *event)
+{
+  GbSourceAutoIndenterC *c = (GbSourceAutoIndenterC *)indenter;
+  GtkTextIter begin_copy;
+  gchar *ret = NULL;
+
+  g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER_C (c), NULL);
+
+  switch (event->keyval) {
+  case GDK_KEY_Return:
+  case GDK_KEY_KP_Enter:
+    gtk_text_iter_assign (&begin_copy, begin);
+    ret = gb_source_auto_indenter_c_indent (c, view, buffer, begin);
+    gtk_text_iter_assign (begin, &begin_copy);
+    break;
+
+  case GDK_KEY_braceright:
+    /*
+     * Probably need to unindent this line.
+     */
+    g_debug ("TODO: unindent the curly brace if needed.");
+    break;
+
+  case GDK_KEY_slash:
+    /*
+     * TODO:
+     *
+     * If we are at the " * " beginning of a multi-line comment, let's just
+     * close the comment.
+     */
+    g_debug ("TODO: close current multi-line comment.");
+    break;
+
+  default:
+    break;
+  }
+
+  return ret;
+}
+
 static void
 gb_source_auto_indenter_c_get_property (GObject    *object,
                                         guint       prop_id,
@@ -465,7 +526,8 @@ gb_source_auto_indenter_c_class_init (GbSourceAutoIndenterCClass *klass)
   object_class->get_property = gb_source_auto_indenter_c_get_property;
   object_class->set_property = gb_source_auto_indenter_c_set_property;
 
-  indenter_class->query = gb_source_auto_indenter_c_query;
+  indenter_class->is_trigger = gb_source_auto_indenter_c_is_trigger;
+  indenter_class->format = gb_source_auto_indenter_c_format;
 
   gParamSpecs [PROP_SCOPE_INDENT] =
     g_param_spec_int ("scope-indent",

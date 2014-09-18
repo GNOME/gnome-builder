@@ -21,6 +21,7 @@
 
 #include <gtksourceview/gtksourceview.h>
 
+#include "gb-source-auto-indenter.h"
 #include "gb-source-snippet.h"
 
 G_BEGIN_DECLS
@@ -65,6 +66,10 @@ void  gb_source_view_clear_snippets (GbSourceView      *view);
 gboolean gb_source_view_get_show_shadow (GbSourceView *view); /* XXX: Remove this */
 void     gb_source_view_set_show_shadow (GbSourceView *view, /* XXX: Remove this */
                                          gboolean      show_shadow);
+
+GbSourceAutoIndenter *gb_source_view_get_auto_indenter (GbSourceView         *view);
+void                  gb_source_view_set_auto_indenter (GbSourceView         *view,
+                                                        GbSourceAutoIndenter *auto_indenter);
 
 G_END_DECLS
 

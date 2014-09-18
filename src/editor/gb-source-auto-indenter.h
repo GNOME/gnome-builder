@@ -53,14 +53,32 @@ struct _GbSourceAutoIndenterClass
                    GtkTextBuffer        *buffer,
                    GtkTextIter          *iter);
 
-  gpointer padding[7];
+  gchar *(*format) (GbSourceAutoIndenter *indenter,
+                    GtkTextView          *view,
+                    GtkTextBuffer        *buffer,
+                    GtkTextIter          *begin,
+                    GtkTextIter          *end,
+                    GdkEventKey          *trigger);
+
+  gboolean (*is_trigger) (GbSourceAutoIndenter *indenter,
+                          GdkEventKey          *event);
+
+  gpointer padding[6];
 };
 
-GType  gb_source_auto_indenter_get_type (void) G_GNUC_CONST;
-gchar *gb_source_auto_indenter_query    (GbSourceAutoIndenter *indenter,
-                                         GtkTextView          *view,
-                                         GtkTextBuffer        *buffer,
-                                         GtkTextIter          *iter);
+GType     gb_source_auto_indenter_get_type   (void) G_GNUC_CONST;
+gchar    *gb_source_auto_indenter_query      (GbSourceAutoIndenter *indenter,
+                                              GtkTextView          *view,
+                                              GtkTextBuffer        *buffer,
+                                              GtkTextIter          *iter);
+gboolean  gb_source_auto_indenter_is_trigger (GbSourceAutoIndenter *indenter,
+                                              GdkEventKey          *event);
+gchar    *gb_source_auto_indenter_format     (GbSourceAutoIndenter *indenter,
+                                              GtkTextView          *view,
+                                              GtkTextBuffer        *buffer,
+                                              GtkTextIter          *begin,
+                                              GtkTextIter          *end,
+                                              GdkEventKey          *event);
 
 G_END_DECLS
 

@@ -65,11 +65,6 @@ struct _GbEditorTabPrivate
   GtkSourceGutterRenderer *change_renderer;
 
   /*
-   * Auto-indentation support for a given language.
-   */
-  GbSourceAutoIndenter *auto_indenter;
-
-  /*
    * Tab related settings.
    */
   GbEditorSettings *settings;
