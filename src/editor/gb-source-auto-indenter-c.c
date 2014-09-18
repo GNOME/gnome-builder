@@ -420,11 +420,13 @@ gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
                                       GdkEventKey          *event)
 {
   switch (event->keyval) {
-  case GDK_KEY_Return:
   case GDK_KEY_KP_Enter:
-  case GDK_KEY_slash:
+  case GDK_KEY_Return:
   case GDK_KEY_braceright:
+  case GDK_KEY_colon:
   case GDK_KEY_numbersign:
+  case GDK_KEY_parenright:
+  case GDK_KEY_slash:
     return TRUE;
   default:
     return FALSE;
@@ -458,6 +460,25 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
      * Probably need to unindent this line.
      */
     g_debug ("TODO: unindent the curly brace if needed.");
+    break;
+
+  case GDK_KEY_colon:
+    /*
+     * If this is a label or a case, adjust indentation.
+     */
+    break;
+
+  case GDK_KEY_numbersign:
+    /*
+     * If this is a preprocessor directive, adjust indentation.
+     */
+    break;
+
+  case GDK_KEY_parenright:
+    /*
+     * If we are closing a function declaration, adjust the spacing of
+     * parameters so that *'s are aligned.
+     */
     break;
 
   case GDK_KEY_slash:
