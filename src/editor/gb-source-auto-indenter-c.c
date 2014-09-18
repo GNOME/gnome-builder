@@ -440,9 +440,9 @@ line_is_whitespace_until (GtkTextIter *iter)
 }
 
 static gchar *
-gb_source_auto_indenter_c_maybe_close_comment (GbSourceAutoIndenterC *c,
-                                               GtkTextIter           *begin,
-                                               GtkTextIter           *end)
+maybe_close_comment (GbSourceAutoIndenterC *c,
+                     GtkTextIter           *begin,
+                     GtkTextIter           *end)
 {
   GtkTextIter copy;
   GtkTextIter begin_comment;
@@ -473,9 +473,9 @@ gb_source_auto_indenter_c_maybe_close_comment (GbSourceAutoIndenterC *c,
 }
 
 static gchar *
-gb_source_auto_indenter_c_maybe_unindent_brace (GbSourceAutoIndenterC *c,
-                                                GtkTextIter           *begin,
-                                                GtkTextIter           *end)
+maybe_unindent_brace (GbSourceAutoIndenterC *c,
+                      GtkTextIter           *begin,
+                      GtkTextIter           *end)
 {
   GtkTextIter saved;
   gchar *ret = NULL;
@@ -601,7 +601,7 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
     /*
      * Probably need to unindent this line.
      */
-    ret = gb_source_auto_indenter_c_maybe_unindent_brace (c, begin, end);
+    ret = maybe_unindent_brace (c, begin, end);
     break;
 
   case GDK_KEY_colon:
@@ -629,7 +629,7 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
      * Check to see if we are right after a "* " and typing "/" while inside
      * of a multi-line comment. Probably just want to close the comment.
      */
-    ret = gb_source_auto_indenter_c_maybe_close_comment (c, begin, end);
+    ret = maybe_close_comment (c, begin, end);
     break;
 
   default:
