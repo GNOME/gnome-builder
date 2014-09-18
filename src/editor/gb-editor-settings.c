@@ -644,7 +644,7 @@ gb_editor_settings_init (GbEditorSettings *settings)
 
   font_desc = pango_font_description_from_string (DEFAULT_FONT);
 
-  settings->priv->auto_indent = TRUE;
+  settings->priv->auto_indent = FALSE;
   settings->priv->show_right_margin = TRUE;
   settings->priv->highlight_current_line = TRUE;
   settings->priv->show_line_numbers = TRUE;

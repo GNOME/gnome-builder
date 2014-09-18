@@ -757,24 +757,18 @@ gb_source_view_key_press_event (GtkWidget   *widget,
       GtkTextMark *insert;
       GtkTextIter begin;
       GtkTextIter end;
-      gunichar ch;
-      GString *str;
       gchar *indent;
 
       if ((event->keyval == GDK_KEY_Return) || (event->keyval == GDK_KEY_KP_Enter))
         if (gtk_text_view_im_context_filter_keypress (GTK_TEXT_VIEW (view), event))
           return TRUE;
 
-      gtk_text_buffer_begin_user_action (priv->buffer);
-
       /*
-       * Insert the current keypress into the buffer.
+       * Insert into the buffer so the auto-indenter sees it. If
+       * GtkSourceView:auto-indent is set, then we will end up with
+       * very unpredictable results.
        */
-      str = g_string_new (NULL);
-      ch = gdk_keyval_to_unicode (event->keyval);
-      g_string_append_unichar (str, ch);
-      gtk_text_buffer_insert_at_cursor (priv->buffer, str->str, str->len);
-      g_string_free (str, TRUE);
+      GTK_WIDGET_CLASS (gb_source_view_parent_class)->key_press_event (widget, event);
 
       /*
        * Set begin and end to the position of the new insertion point.
@@ -793,13 +787,13 @@ gb_source_view_key_press_event (GtkWidget   *widget,
 
       if (indent)
         {
+          gtk_text_buffer_begin_user_action (priv->buffer);
           if (!gtk_text_iter_equal (&begin, &end))
             gtk_text_buffer_delete (priv->buffer, &begin, &end);
           gtk_text_buffer_insert (priv->buffer, &begin, indent, -1);
           g_free (indent);
+          gtk_text_buffer_end_user_action (priv->buffer);
         }
-
-      gtk_text_buffer_end_user_action (priv->buffer);
 
       return TRUE;
     }

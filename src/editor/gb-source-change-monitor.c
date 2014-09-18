@@ -316,6 +316,8 @@ on_insert_text_after_cb (GbSourceChangeMonitor *monitor,
   GbSourceChangeFlags flags = 0;
   guint line;
 
+  ENTRY;
+
   g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
@@ -367,6 +369,8 @@ on_insert_text_after_cb (GbSourceChangeMonitor *monitor,
     }
 
   gb_source_change_monitor_ensure_bounds (monitor);
+
+  EXIT;
 }
 
 GbSourceChangeFlags
