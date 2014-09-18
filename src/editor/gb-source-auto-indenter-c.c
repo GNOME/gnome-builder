@@ -136,22 +136,12 @@ line_is_space (GtkTextIter *iter)
                                     &begin,
                                     gtk_text_iter_get_line (iter));
 
-  while (!gtk_text_iter_equal (iter, &begin))
+  for (;
+       gtk_text_iter_compare (&begin, iter) < 0;
+       gtk_text_iter_forward_char (&begin))
     {
-      gunichar ch;
-
-      if (!gtk_text_iter_forward_char (&begin))
-        break;
-
-      ch = gtk_text_iter_get_char (&begin);
-
-      switch (ch) {
-      case '\t':
-      case ' ':
-        break;
-      default:
+      if (!g_unichar_isspace (gtk_text_iter_get_char (&begin)))
         return FALSE;
-      }
     }
 
   return TRUE;
@@ -297,6 +287,11 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
   gtk_text_iter_assign (&cur, iter);
 
   /*
+   * Move to before the character just inserted.
+   */
+  gtk_text_iter_backward_char (iter);
+
+  /*
    * Create the buffer for our indentation string.
    */
   str = g_string_new (NULL);
@@ -306,7 +301,7 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
    * start by moving back one character to get to the pre-newline insertion
    * point.
    */
-  if (!g_unichar_isspace (gtk_text_iter_get_char (iter)))
+  if (g_unichar_isspace (gtk_text_iter_get_char (iter)))
     if (!gtk_text_iter_backward_find_char (iter, non_space_predicate, NULL, NULL))
       GOTO (cleanup);
 
@@ -345,17 +340,6 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
   ch = gtk_text_iter_get_char (iter);
 
   /*
-   * If we just placed a terminating parenthesis, we need to work our way back
-   * to it's match. That way we can peak at what it was and determine
-   * indentation from that.
-   */
-  if (ch == ')' || ch == ']' || ch == '}')
-    {
-      if (!backward_find_matching_char (iter, ch))
-        GOTO (cleanup);
-    }
-
-  /*
    * We are probably in a a function call or parameter list.  Let's try to work
    * our way back to the opening parenthesis. This should work when the target
    * is for, parameter lists, or function arguments.
@@ -383,6 +367,27 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
       if (backward_find_stmt_expr (iter))
         {
           offset = gtk_text_iter_get_line_offset (iter);
+          build_indent (c, offset, iter, str);
+          GOTO (cleanup);
+        }
+    }
+
+  /*
+   * If we just ended a scope, we need to look for the matching scope
+   * before it.
+   */
+  if (ch == '}')
+    {
+      if (gtk_text_iter_forward_char (iter))
+        {
+          guint offset = gtk_text_iter_get_line_offset (iter);
+
+          if (backward_find_matching_char (iter, '}'))
+            {
+              offset = gtk_text_iter_get_line_offset (iter);
+              offset += priv->scope_indent;
+            }
+
           build_indent (c, offset, iter, str);
           GOTO (cleanup);
         }
