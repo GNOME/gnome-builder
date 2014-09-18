@@ -112,6 +112,7 @@ static gboolean
 backward_find_matching_char (GtkTextIter *iter,
                              gunichar     ch)
 {
+  GtkTextIter copy;
   gunichar match;
   gunichar cur;
   guint count = 1;
@@ -135,6 +136,8 @@ backward_find_matching_char (GtkTextIter *iter,
    * TODO: Make this skip past comment blocks!
    */
 
+  gtk_text_iter_assign (&copy, iter);
+
   while (gtk_text_iter_backward_char (iter))
     {
       cur = gtk_text_iter_get_char (iter);
@@ -147,6 +150,8 @@ backward_find_matching_char (GtkTextIter *iter,
       else if (cur == ch)
         count++;
     }
+
+  gtk_text_iter_assign (iter, &copy);
 
   return FALSE;
 }
@@ -177,8 +182,7 @@ backward_find_stmt_expr (GtkTextIter *iter)
   return FALSE;
 }
 
-#if 0
-static guint
+static gboolean
 backward_to_line_first_char (GtkTextIter *iter)
 {
   GtkTextIter tmp;
@@ -187,21 +191,19 @@ backward_to_line_first_char (GtkTextIter *iter)
                                     &tmp,
                                     gtk_text_iter_get_line (iter));
 
-  do {
-    gunichar ch;
+  for (;
+       gtk_text_iter_compare (&tmp, iter) < 0;
+       gtk_text_iter_forward_char (&tmp))
+    {
+      if (!g_unichar_isspace (gtk_text_iter_get_char (iter)))
+        {
+          gtk_text_iter_assign (iter, &tmp);
+          return TRUE;
+        }
+    }
 
-    ch = gtk_text_iter_get_char (&tmp);
-
-    if (!g_unichar_isspace (ch))
-      break;
-  } while (!gtk_text_iter_ends_line (&tmp) &&
-           gtk_text_iter_forward_char (&tmp));
-
-  gtk_text_iter_assign (iter, &tmp);
-
-  return gtk_text_iter_get_line_offset (iter);
+  return FALSE;
 }
-#endif
 
 static gboolean
 non_space_predicate (gunichar ch,
@@ -364,19 +366,28 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
   ch = gtk_text_iter_get_char (iter);
 
   /*
-   * We are probably in a a function call or parameter list.  Let's try to work
-   * our way back to the opening parenthesis. This should work when the target
-   * is for, parameter lists, or function arguments.
+   * We could be:
+   *   - In a parameter list for a function declaration.
+   *   - In an argument list for a function call.
+   *   - Defining enum fields.
+   *   - XXX: bunch more.
    */
   if (ch == ',')
     {
       guint offset;
 
-      if (!backward_find_matching_char (iter, ')'))
+      if (!backward_find_matching_char (iter, ')') &&
+          !backward_find_matching_char (iter, '}'))
         GOTO (cleanup);
 
       offset = gtk_text_iter_get_line_offset (iter);
-      build_indent (c, offset + 1, iter, str);
+
+      if (gtk_text_iter_get_char (iter) == '(')
+        offset++;
+      else if (gtk_text_iter_get_char (iter) == '{')
+        offset += priv->scope_indent;
+
+      build_indent (c, offset, iter, str);
       GOTO (cleanup);
     }
 
@@ -474,10 +485,14 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
         }
       else
         {
-          /*
-           * XXX: We need to determine where the beginning of a prefixed
-           *      condition is.
-           */
+          if (backward_to_line_first_char (iter))
+            {
+              guint offset;
+
+              offset = gtk_text_iter_get_line_offset (iter);
+              build_indent (c, offset + priv->scope_indent, iter, str);
+              GOTO (cleanup);
+            }
         }
     }
 
