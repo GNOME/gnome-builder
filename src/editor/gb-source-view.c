@@ -167,6 +167,198 @@ gb_source_view_set_show_shadow (GbSourceView *view,
 }
 
 static void
+gb_source_view_indent_selection (GbSourceView *view)
+{
+  GbSourceViewPrivate *priv;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GtkTextIter iter;
+  GtkTextMark *mark_begin;
+  GtkTextMark *mark_end;
+  gboolean use_spaces = FALSE;
+  guint tab_width = 0;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  priv = view->priv;
+
+  g_object_get (view,
+                "insert-spaces-instead-of-tabs", &use_spaces,
+                "tab-width", &tab_width,
+                NULL);
+
+  if (!gtk_text_buffer_get_has_selection (priv->buffer))
+    return;
+
+  gtk_text_buffer_get_selection_bounds (priv->buffer, &begin, &end);
+
+  /*
+   * Expand the iters to the beginning of the first line and the
+   * end of the last line.
+   */
+  while (!gtk_text_iter_starts_line (&begin))
+    gtk_text_iter_backward_char (&begin);
+  while (!gtk_text_iter_ends_line (&end))
+    gtk_text_iter_forward_char (&end);
+
+  /*
+   * Set marks so we can track our end position after every edit.
+   * Also allows us to reselect the whole range at the end.
+   */
+  mark_begin = gtk_text_buffer_create_mark (priv->buffer,
+                                            "tab-selection-begin",
+                                            &begin, TRUE);
+  mark_end = gtk_text_buffer_create_mark (priv->buffer,
+                                          "tab-selection-end",
+                                          &end, FALSE);
+  gtk_text_iter_assign (&iter, &begin);
+
+  /*
+   * Walk through each selected line, adding a tab or the proper number of
+   * spaces at the beginning of each line.
+   */
+  gtk_text_buffer_begin_user_action (priv->buffer);
+  do
+    {
+      if (use_spaces)
+        {
+          guint i;
+
+          for (i = 0; i < tab_width; i++)
+            gtk_text_buffer_insert (priv->buffer, &iter, " ", 1);
+        }
+      else
+        gtk_text_buffer_insert (priv->buffer, &iter, "\t", 1);
+
+      if (!gtk_text_iter_forward_line (&iter))
+        break;
+
+      gtk_text_buffer_get_iter_at_mark (priv->buffer, &end, mark_end);
+    }
+  while (gtk_text_iter_compare (&iter, &end) < 0);
+  gtk_text_buffer_end_user_action (priv->buffer);
+
+  /*
+   * Reselect our expanded range.
+   */
+  gtk_text_buffer_get_iter_at_mark (priv->buffer, &begin, mark_begin);
+  gtk_text_buffer_get_iter_at_mark (priv->buffer, &end, mark_end);
+  gtk_text_buffer_select_range (priv->buffer, &begin, &end);
+
+  /*
+   * Remove our temporary marks.
+   */
+  gtk_text_buffer_delete_mark (priv->buffer, mark_begin);
+  gtk_text_buffer_delete_mark (priv->buffer, mark_end);
+
+  EXIT;
+}
+
+static void
+gb_source_view_unindent_selection (GbSourceView *view)
+{
+  GbSourceViewPrivate *priv;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GtkTextIter iter;
+  GtkTextMark *mark_begin;
+  GtkTextMark *mark_end;
+  gboolean use_spaces = FALSE;
+  guint tab_width = 0;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  priv = view->priv;
+
+  g_object_get (view,
+                "insert-spaces-instead-of-tabs", &use_spaces,
+                "tab-width", &tab_width,
+                NULL);
+
+  if (!gtk_text_buffer_get_has_selection (priv->buffer))
+    return;
+
+  gtk_text_buffer_get_selection_bounds (priv->buffer, &begin, &end);
+
+  /*
+   * Expand the iters to the beginning of the first line and the
+   * end of the last line.
+   */
+  while (!gtk_text_iter_starts_line (&begin))
+    gtk_text_iter_backward_char (&begin);
+  while (!gtk_text_iter_ends_line (&end))
+    gtk_text_iter_forward_char (&end);
+
+  /*
+   * Set marks so we can track our end position after every edit.
+   * Also allows us to reselect the whole range at the end.
+   */
+  mark_begin = gtk_text_buffer_create_mark (priv->buffer,
+                                            "tab-selection-begin",
+                                            &begin, TRUE);
+  mark_end = gtk_text_buffer_create_mark (priv->buffer,
+                                          "tab-selection-end",
+                                          &end, FALSE);
+  gtk_text_iter_assign (&iter, &begin);
+
+  /*
+   * Walk through each selected line, removing up to `tab_width`
+   * spaces from the beginning of the line, or a single tab.
+   */
+  gtk_text_buffer_begin_user_action (priv->buffer);
+  do
+    {
+      GtkTextIter next;
+      gboolean found_tab = FALSE;
+      guint n_spaces = 0;
+      gunichar ch;
+
+      while (!found_tab && (n_spaces < tab_width))
+        {
+          ch = gtk_text_iter_get_char (&iter);
+
+          if ((ch == '\t') || (ch == ' '))
+            {
+              gtk_text_iter_assign (&next, &iter);
+              gtk_text_iter_forward_char (&next);
+              gtk_text_buffer_delete (priv->buffer, &iter, &next);
+
+              found_tab = (ch == '\t');
+              n_spaces += (ch == ' ');
+            }
+          else
+            break;
+        }
+
+      if (!gtk_text_iter_forward_line (&iter))
+        break;
+
+      gtk_text_buffer_get_iter_at_mark (priv->buffer, &end, mark_end);
+    }
+  while (gtk_text_iter_compare (&iter, &end) < 0);
+  gtk_text_buffer_end_user_action (priv->buffer);
+
+  /*
+   * Reselect our expanded range.
+   */
+  gtk_text_buffer_get_iter_at_mark (priv->buffer, &begin, mark_begin);
+  gtk_text_buffer_get_iter_at_mark (priv->buffer, &end, mark_end);
+  gtk_text_buffer_select_range (priv->buffer, &begin, &end);
+
+  /*
+   * Remove our temporary marks.
+   */
+  gtk_text_buffer_delete_mark (priv->buffer, mark_begin);
+  gtk_text_buffer_delete_mark (priv->buffer, mark_end);
+
+  EXIT;
+}
+
+static void
 get_rect_for_iters (GtkTextView       *text_view,
                     const GtkTextIter *iter1,
                     const GtkTextIter *iter2,
@@ -731,6 +923,7 @@ gb_source_view_key_press_event (GtkWidget   *widget,
           gb_source_view_unblock_handlers (view);
           return TRUE;
 
+        case GDK_KEY_KP_Tab:
         case GDK_KEY_Tab:
           gb_source_view_block_handlers (view);
           if (!gb_source_snippet_move_next (snippet))
@@ -744,6 +937,28 @@ gb_source_view_key_press_event (GtkWidget   *widget,
           gb_source_snippet_move_previous (snippet);
           gb_source_view_scroll_to_insert (view);
           gb_source_view_unblock_handlers (view);
+          return TRUE;
+
+        default:
+          break;
+        }
+    }
+
+  /*
+   * If we come across tab or shift tab (left tab) while we have a selection,
+   * try to (un)indent the selected lines.
+   */
+  if (gtk_text_buffer_get_has_selection (priv->buffer))
+    {
+      switch ((gint) event->keyval)
+        {
+        case GDK_KEY_KP_Tab:
+        case GDK_KEY_Tab:
+          gb_source_view_indent_selection (view);
+          return TRUE;
+
+        case GDK_KEY_ISO_Left_Tab:
+          gb_source_view_unindent_selection (view);
           return TRUE;
 
         default:
