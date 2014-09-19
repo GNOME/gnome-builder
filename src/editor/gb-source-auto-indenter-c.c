@@ -538,6 +538,20 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
     }
 
   /*
+   * Check to see if we are after else or do
+   */
+  last_word = backward_last_word (iter, &match_begin);
+  if ((g_strcmp0 (last_word, "else") == 0) ||
+      (g_strcmp0 (last_word, "do") == 0))
+    {
+      guint offset;
+
+      offset = gtk_text_iter_get_line_offset (&match_begin);
+      build_indent (c, offset + priv->scope_indent, iter, str);
+      GOTO (cleanup);
+    }
+
+  /*
    * Work our way back to the most recent scope. Then apply our scope
    * indentation to that.
    */
@@ -562,17 +576,6 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
               GOTO (cleanup);
             }
         }
-    }
-
-  last_word = backward_last_word (iter, &match_begin);
-
-  if (g_strcmp0 (last_word, "else") == 0)
-    {
-      guint offset;
-
-      offset = gtk_text_iter_get_line_offset (&match_begin);
-      build_indent (c, offset + priv->scope_indent, iter, str);
-      GOTO (cleanup);
     }
 
 cleanup:
