@@ -42,34 +42,16 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbSourceAutoIndenterC, gb_source_auto_indenter_c,
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+#define ITER_INIT_LINE_START(iter, other) \
+  gtk_text_buffer_get_iter_at_line( \
+    gtk_text_iter_get_buffer(other), \
+    (iter), \
+    gtk_text_iter_get_line(other))
+
 GbSourceAutoIndenter *
 gb_source_auto_indenter_c_new (void)
 {
   return g_object_new (GB_TYPE_SOURCE_AUTO_INDENTER_C, NULL);
-}
-
-static gboolean
-word_is_conditional (const gchar *word)
-{
-  static GHashTable *words;
-
-  if (!words)
-    {
-#define ADD_WORD(w) g_hash_table_insert (words, (char *)w, (char *)w)
-
-      words = g_hash_table_new (g_str_hash, g_str_equal);
-
-      ADD_WORD ("if");
-      ADD_WORD ("else");
-      ADD_WORD ("do");
-      ADD_WORD ("while");
-      ADD_WORD ("switch");
-      ADD_WORD ("for");
-
-#undef ADD_WORD
-    }
-
-  return !!g_hash_table_lookup (words, word);
 }
 
 static inline void
@@ -106,6 +88,58 @@ build_indent (GbSourceAutoIndenterC *c,
 
   while (str->len < line_offset)
     g_string_append_c (str, ' ');
+}
+
+static gboolean
+backward_find_keyword (GtkTextIter *iter,
+                       const gchar *keyword,
+                       GtkTextIter *limit)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  /*
+   * If we find the keyword, check to see that the character before it
+   * is either a newline or some other space character. (ie, not part of a
+   * function name like foo_do().
+   */
+  if (gtk_text_iter_backward_search (iter, keyword, GTK_TEXT_SEARCH_TEXT_ONLY,
+                                     &begin, &end, limit))
+    {
+      GtkTextIter copy;
+      gunichar ch;
+
+      gtk_text_iter_assign (&copy, &begin);
+
+      if (!gtk_text_iter_backward_char (&copy) ||
+          !(ch = gtk_text_iter_get_char (&copy)) ||
+          g_unichar_isspace (ch))
+        {
+          gtk_text_iter_assign (iter, &begin);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+backward_find_condition_keyword (GtkTextIter *iter)
+{
+  GtkTextIter line_start;
+
+  ITER_INIT_LINE_START (&line_start, iter);
+
+  if (backward_find_keyword (iter, "else if", &line_start) ||
+      backward_find_keyword (iter, "else", &line_start) ||
+      backward_find_keyword (iter, "if", &line_start) ||
+      backward_find_keyword (iter, "do", &line_start) ||
+      backward_find_keyword (iter, "while", &line_start) ||
+      backward_find_keyword (iter, "switch", &line_start) ||
+      backward_find_keyword (iter, "for", &line_start))
+    return TRUE;
+
+  return FALSE;
 }
 
 static gboolean
@@ -472,26 +506,11 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
       gtk_text_iter_assign (&copy, iter);
 
       if (backward_find_matching_char (iter, ')') &&
-          gtk_text_iter_backward_word_start (iter))
+          backward_find_condition_keyword (iter))
         {
-          GtkTextIter end;
-
-          gtk_text_iter_assign (&end, iter);
-
-          if (gtk_text_iter_forward_word_end (&end))
-            {
-              gchar *word = gtk_text_iter_get_slice (iter, &end);
-              gboolean is_cond = word_is_conditional (word);
-
-              g_free (word);
-
-              if (is_cond)
-                {
-                  guint offset = gtk_text_iter_get_line_offset (iter);
-                  build_indent (c, offset + priv->condition_indent, iter, str);
-                  GOTO (cleanup);
-                }
-            }
+          guint offset = gtk_text_iter_get_line_offset (iter);
+          build_indent (c, offset + priv->condition_indent, iter, str);
+          GOTO (cleanup);
         }
 
       gtk_text_iter_assign (iter, &copy);
