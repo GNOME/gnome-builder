@@ -538,11 +538,13 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
     }
 
   /*
-   * Check to see if we are after else or do
+   * Check to see if we are after else or do. Skip if we see '{'
+   * so that we can fallback to regular scoping rules.
    */
   last_word = backward_last_word (iter, &match_begin);
-  if ((g_strcmp0 (last_word, "else") == 0) ||
-      (g_strcmp0 (last_word, "do") == 0))
+  if ((ch != '{') &&
+      ((g_strcmp0 (last_word, "else") == 0) ||
+       (g_strcmp0 (last_word, "do") == 0)))
     {
       guint offset;
 
