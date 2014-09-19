@@ -447,7 +447,7 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
 
       if (gtk_text_iter_forward_char (iter))
         {
-          guint offset = gtk_text_iter_get_line_offset (iter);
+          guint offset = gtk_text_iter_get_line_offset (iter) - 1;
 
           if (backward_find_matching_char (iter, '}'))
             {
