@@ -128,7 +128,7 @@ gnome_builder_CFLAGS = \
 	-I$(top_srcdir)/src/log \
 	-I$(top_srcdir)/src/markdown \
 	-I$(top_srcdir)/src/nautilus \
-	-I$(top_srcdir)/src/resources \
+	-I$(top_builddir)/src/resources \
 	-I$(top_srcdir)/src/snippets \
 	-I$(top_srcdir)/src/tabs \
 	-I$(top_srcdir)/src/trie \
