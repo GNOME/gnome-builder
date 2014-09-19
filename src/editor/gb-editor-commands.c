@@ -501,7 +501,7 @@ gb_editor_tab_save_as (GbEditorTab *tab)
                          "select-multiple", FALSE,
                          "show-hidden", FALSE,
                          "transient-for", toplevel,
-                         "title", _("Save"),
+                         "title", _("Save Document As"),
                          NULL);
 
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
