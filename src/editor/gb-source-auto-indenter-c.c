@@ -28,6 +28,8 @@ struct _GbSourceAutoIndenterCPrivate
   gint scope_indent;     /* after { */
   gint condition_indent; /* for, if, while, switch, etc */
   gint directive_indent;
+
+  guint space_before_paren : 1;
 };
 
 enum
@@ -734,6 +736,43 @@ maybe_unindent_hash (GbSourceAutoIndenterC *c,
   return ret;
 }
 
+static gchar *
+maybe_space_before_paren (GbSourceAutoIndenterC *c,
+                          GtkTextIter           *begin,
+                          GtkTextIter           *end)
+{
+  GtkTextIter copy;
+  gunichar ch;
+
+  g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER_C (c), NULL);
+  g_return_val_if_fail (begin, NULL);
+  g_return_val_if_fail (end, NULL);
+
+  if (!c->priv->space_before_paren)
+    return NULL;
+
+  gtk_text_iter_assign (&copy, begin);
+
+  /*
+   * Move back to the character just inserted.
+   */
+  if (gtk_text_iter_backward_char (begin) &&
+      (ch = gtk_text_iter_get_char (begin)) &&
+      (ch == '(') &&
+      gtk_text_iter_backward_char (begin) &&
+      (ch = gtk_text_iter_get_char (begin)) &&
+      !g_unichar_isspace (ch) &&
+      g_unichar_isalnum (ch))
+    {
+      gtk_text_iter_forward_char (begin);
+      return g_strdup (" (");
+    }
+
+  gtk_text_iter_assign (begin, &copy);
+
+  return NULL;
+}
+
 static gboolean
 gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
                                       GdkEventKey          *event)
@@ -745,6 +784,7 @@ gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
   case GDK_KEY_colon:
   case GDK_KEY_numbersign:
   case GDK_KEY_parenright:
+  case GDK_KEY_parenleft:
   case GDK_KEY_slash:
     return TRUE;
   default:
@@ -792,6 +832,13 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
      * If this is a preprocessor directive, adjust indentation.
      */
     ret = maybe_unindent_hash (c, begin, end);
+    break;
+
+  case GDK_KEY_parenleft:
+    /*
+     * Possibly add a space before the ( if our config requests so.
+     */
+    ret = maybe_space_before_paren (c, begin, end);
     break;
 
   case GDK_KEY_parenright:
@@ -884,4 +931,5 @@ gb_source_auto_indenter_c_init (GbSourceAutoIndenterC *c)
   c->priv->condition_indent = 2;
   c->priv->scope_indent = 2;
   c->priv->directive_indent = G_MININT;
+  c->priv->space_before_paren = TRUE;
 }
