@@ -91,6 +91,13 @@ build_indent (GbSourceAutoIndenterC *c,
 }
 
 static gboolean
+non_space_predicate (gunichar ch,
+                     gpointer user_data)
+{
+  return !g_unichar_isspace (ch);
+}
+
+static gboolean
 backward_find_keyword (GtkTextIter *iter,
                        const gchar *keyword,
                        GtkTextIter *limit)
@@ -140,6 +147,26 @@ backward_find_condition_keyword (GtkTextIter *iter)
     return TRUE;
 
   return FALSE;
+}
+
+static gchar *
+backward_last_word (GtkTextIter *iter,
+                    GtkTextIter *begin)
+{
+  gtk_text_iter_assign (begin, iter);
+
+  if (gtk_text_iter_backward_word_start (begin))
+    {
+      GtkTextIter end;
+
+      gtk_text_iter_assign (&end, begin);
+
+      if (gtk_text_iter_ends_word (&end) ||
+          gtk_text_iter_forward_word_end (&end))
+        return gtk_text_iter_get_slice (begin, &end);
+    }
+
+  return NULL;
 }
 
 static gboolean
@@ -260,13 +287,6 @@ backward_to_line_first_char (GtkTextIter *iter)
 }
 
 static gboolean
-non_space_predicate (gunichar ch,
-                     gpointer user_data)
-{
-  return !g_unichar_isspace (ch);
-}
-
-static gboolean
 backward_before_c89_comment (GtkTextIter *iter)
 {
   GtkTextIter copy;
@@ -354,6 +374,7 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
   gunichar ch;
   GString *str;
   gchar *ret = NULL;
+  gchar *last_word = NULL;
 
   ENTRY;
 
@@ -543,8 +564,20 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
         }
     }
 
+  last_word = backward_last_word (iter, &match_begin);
+
+  if (g_strcmp0 (last_word, "else") == 0)
+    {
+      guint offset;
+
+      offset = gtk_text_iter_get_line_offset (&match_begin);
+      build_indent (c, offset + priv->scope_indent, iter, str);
+      GOTO (cleanup);
+    }
+
 cleanup:
   gtk_text_iter_assign (iter, &cur);
+  g_free (last_word);
 
   ret = g_string_free (str, FALSE);
 
