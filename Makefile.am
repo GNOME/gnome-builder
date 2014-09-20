@@ -9,4 +9,4 @@ include data/data.mk
 
 # XXX: Not happy about this, need to come up with a good way to do
 # icon installation that doesn't require subdirs.
-SUBDIRS = . data/icons
+SUBDIRS = . data/icons tests

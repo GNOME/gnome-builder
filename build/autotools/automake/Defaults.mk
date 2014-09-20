@@ -5,3 +5,4 @@ bin_PROGRAMS =
 lib_LTLIBRARIES =
 noinst_LTLIBRARIES =
 noinst_PROGRAMS =
+TEST_PROGS =

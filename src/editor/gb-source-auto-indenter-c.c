@@ -23,12 +23,13 @@
 #include "gb-log.h"
 #include "gb-source-auto-indenter-c.h"
 
+#include "c-parse-helper.h"
+
 struct _GbSourceAutoIndenterCPrivate
 {
-  gint scope_indent;     /* after { */
-  gint condition_indent; /* for, if, while, switch, etc */
-  gint directive_indent;
-
+  gint  scope_indent;
+  gint  condition_indent;
+  gint  directive_indent;
   guint space_before_paren : 1;
 };
 
@@ -773,6 +774,56 @@ maybe_space_before_paren (GbSourceAutoIndenterC *c,
   return NULL;
 }
 
+static gchar *
+maybe_align_parameters (GbSourceAutoIndenterC *c,
+                        GtkTextIter           *begin,
+                        GtkTextIter           *end)
+{
+  GtkTextIter copy;
+  GSList *params = NULL;
+  gchar *ret = NULL;
+  gchar *text = NULL;
+
+  ENTRY;
+
+  g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER_C (c), NULL);
+  g_return_val_if_fail (begin, NULL);
+  g_return_val_if_fail (end, NULL);
+
+  gtk_text_iter_assign (&copy, begin);
+
+  if (gtk_text_iter_backward_char (begin) &&
+      backward_find_matching_char (begin, ')') &&
+      gtk_text_iter_forward_char (begin) &&
+      gtk_text_iter_backward_char (end) &&
+      (gtk_text_iter_compare (begin, end) < 0) &&
+      (text = gtk_text_iter_get_slice (begin, end)) &&
+      (params = parse_parameters (text)))
+    {
+      GSList *iter;
+
+      for (iter = params; iter; iter = iter->next)
+        {
+          Parameter *p = iter->data;
+
+          g_print (">%s<  >%s<\n", p->type, p->name);
+        }
+    }
+
+  g_slist_foreach (params, (GFunc)parameter_free, NULL);
+  g_slist_free (params);
+
+  if (!ret)
+    {
+      gtk_text_iter_assign (begin, &copy);
+      gtk_text_iter_assign (end, &copy);
+    }
+
+  g_free (text);
+
+  RETURN (ret);
+}
+
 static gboolean
 gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
                                       GdkEventKey          *event)
@@ -846,6 +897,7 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
      * If we are closing a function declaration, adjust the spacing of
      * parameters so that *'s are aligned.
      */
+    ret = maybe_align_parameters (c, begin, end);
     break;
 
   case GDK_KEY_slash:
