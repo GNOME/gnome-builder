@@ -43,6 +43,7 @@ parameter_copy (const Parameter *src)
   copy->name = g_strdup (src->name);
   copy->type = g_strdup (src->type);
   copy->ellipsis = src->ellipsis;
+  copy->n_star = src->n_star;
 
   return copy;
 }
@@ -96,6 +97,45 @@ parameter_validate (Parameter *param)
     }
 
   return TRUE;
+}
+
+static void
+parameter_compute (Parameter *param)
+{
+  const gchar *tmp;
+  gchar *rev;
+  guint n_star = 0;
+
+  rev = g_utf8_strreverse (param->type, -1);
+
+  for (tmp = rev; tmp; tmp = g_utf8_next_char (tmp))
+    {
+      switch (g_utf8_get_char (tmp))
+        {
+        case ' ':
+          break;
+
+        case '*':
+          n_star++;
+          break;
+
+        default:
+          if (n_star)
+            {
+              gchar *cleaned;
+
+              cleaned = g_strstrip (g_utf8_strreverse (tmp, -1));
+              g_free (param->type);
+              param->type = cleaned;
+            }
+          goto finish;
+        }
+    }
+
+finish:
+  param->n_star = n_star;
+
+  g_free (rev);
 }
 
 GSList *
@@ -178,6 +218,8 @@ parse_parameters (const gchar *text)
 
               param.name = g_strstrip (g_utf8_strreverse (name_rev, -1));
               param.type = g_strstrip (g_utf8_strreverse (name_sep, -1));
+
+              parameter_compute (&param);
 
               if (parameter_validate (&param))
                 {

@@ -775,6 +775,95 @@ maybe_space_before_paren (GbSourceAutoIndenterC *c,
 }
 
 static gchar *
+format_parameter (const Parameter *param,
+                  guint            max_type,
+                  guint            max_star)
+{
+  GString *str;
+  guint i;
+
+  if (param->ellipsis)
+    return g_strdup ("...");
+
+  str = g_string_new (param->type);
+
+  for (i = str->len; i < max_type; i++)
+    g_string_append_c (str, ' ');
+
+  g_string_append_c (str, ' ');
+
+  for (i = max_star; i > 0; i--)
+    {
+      if (i <= param->n_star)
+        g_string_append_c (str, '*');
+      else
+        g_string_append_c (str, ' ');
+    }
+
+  g_string_append (str, param->name);
+
+  return g_string_free (str, FALSE);
+}
+
+static gchar *
+format_parameters (GtkTextIter *begin,
+                   GSList      *params)
+{
+  GtkTextIter line_start;
+  GtkTextIter first_char;
+  GString *str;
+  GSList *iter;
+  gchar *slice;
+  gchar *join_str;
+  guint max_star = 0;
+  guint max_type = 0;
+
+  for (iter = params; iter; iter = iter->next)
+    {
+      Parameter *p = iter->data;
+      max_star = MAX (max_star, p->n_star);
+      max_type = MAX (max_type, strlen (p->type));
+    }
+
+  str = g_string_new (NULL);
+
+  ITER_INIT_LINE_START (&line_start, begin);
+
+  gtk_text_iter_assign (&first_char, begin);
+  backward_to_line_first_char (&first_char);
+
+  slice = gtk_text_iter_get_slice (&line_start, &first_char);
+  str = g_string_new ("\n");
+  g_string_append (str, slice);
+  g_free (slice);
+
+  while (gtk_text_iter_compare (&first_char, begin) < 0)
+    {
+      g_string_append (str, " ");
+      if (!gtk_text_iter_forward_char (&first_char))
+        break;
+    }
+
+  join_str = g_string_free (str, FALSE);
+  str = g_string_new (NULL);
+
+  for (iter = params; iter; iter = iter->next)
+    {
+      gchar *param_str;
+
+      if (iter != params)
+        g_string_append (str, join_str);
+
+      param_str = format_parameter (iter->data, max_type, max_star);
+      g_string_append (str, param_str);
+    }
+
+  g_free (join_str);
+
+  return g_string_free (str, FALSE);
+}
+
+static gchar *
 maybe_align_parameters (GbSourceAutoIndenterC *c,
                         GtkTextIter           *begin,
                         GtkTextIter           *end)
@@ -799,16 +888,7 @@ maybe_align_parameters (GbSourceAutoIndenterC *c,
       (gtk_text_iter_compare (begin, end) < 0) &&
       (text = gtk_text_iter_get_slice (begin, end)) &&
       (params = parse_parameters (text)))
-    {
-      GSList *iter;
-
-      for (iter = params; iter; iter = iter->next)
-        {
-          Parameter *p = iter->data;
-
-          g_print (">%s<  >%s<\n", p->type, p->name);
-        }
-    }
+    ret = format_parameters (begin, params);
 
   g_slist_foreach (params, (GFunc)parameter_free, NULL);
   g_slist_free (params);

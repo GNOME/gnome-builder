@@ -28,6 +28,7 @@ typedef struct
   gchar *type;
   gchar *name;
   guint  ellipsis : 1;
+  guint  n_star   : 4;
 } Parameter;
 
 gboolean   parameter_validate (Parameter       *param);
