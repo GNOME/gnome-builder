@@ -31,25 +31,29 @@ test_parse_parameters1 (void)
   iter = ret;
 
   p = iter->data;
-  g_assert_cmpstr (p->type, ==, "Item *");
+  g_assert_cmpstr (p->type, ==, "Item");
+  g_assert_cmpint (p->n_star, ==, 1);
   g_assert_cmpstr (p->name, ==, "a");
   g_assert_cmpint (p->ellipsis, ==, 0);
   iter = iter->next;
 
   p = iter->data;
-  g_assert_cmpstr (p->type, ==, "Item **");
+  g_assert_cmpstr (p->type, ==, "Item");
+  g_assert_cmpint (p->n_star, ==, 2);
   g_assert_cmpstr (p->name, ==, "b");
   g_assert_cmpint (p->ellipsis, ==, 0);
   iter = iter->next;
 
   p = iter->data;
   g_assert_cmpstr (p->type, ==, "gpointer");
+  g_assert_cmpint (p->n_star, ==, 0);
   g_assert_cmpstr (p->name, ==, "u");
   g_assert_cmpint (p->ellipsis, ==, 0);
   iter = iter->next;
 
   p = iter->data;
-  g_assert_cmpstr (p->type, ==, "GError **");
+  g_assert_cmpstr (p->type, ==, "GError");
+  g_assert_cmpint (p->n_star, ==, 2);
   g_assert_cmpstr (p->name, ==, "error");
   g_assert_cmpint (p->ellipsis, ==, 0);
   iter = iter->next;
