@@ -17,3 +17,4 @@ Makefile.in
 *.o
 stamp-h1
 *.swp
+test-c-parse-helper

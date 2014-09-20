@@ -18,9 +18,10 @@
 
 #define G_LOG_DOMAIN "c-parser"
 
-#include "gb-log.h"
+#include <string.h>
 
 #include "c-parse-helper.h"
+#include "gb-log.h"
 
 void
 parameter_free (Parameter *p)
@@ -68,9 +69,12 @@ parameter_validate (Parameter *param)
         continue;
 
       default:
-        if (!g_unichar_isalnum (ch))
-          return FALSE;
+        if (g_unichar_isalnum (ch))
+          continue;
+        break;
       }
+
+      return FALSE;
     }
 
   for (tmp = param->type; *tmp; tmp = g_utf8_next_char (tmp))
@@ -79,14 +83,16 @@ parameter_validate (Parameter *param)
 
       switch (ch) {
       case '*':
-      case '[':
-      case ']':
+      case ' ':
         continue;
 
       default:
-        if (!g_unichar_isalnum (ch))
-          return FALSE;
+        if (g_unichar_isalnum (ch))
+          continue;
+        break;
       }
+
+      return FALSE;
     }
 
   return TRUE;
@@ -105,11 +111,8 @@ parse_parameters (const gchar *text)
 
   for (i = 0; parts [i]; i++)
     {
-      Parameter param = { 0 };
       const gchar *tmp;
       const gchar *word;
-      gboolean success = FALSE;
-      gchar *reversed = NULL;
 
       word = g_strstrip (parts [i]);
 
@@ -118,7 +121,7 @@ parse_parameters (const gchar *text)
 
       if (g_strcmp0 (word, "...") == 0)
         {
-          param.ellipsis = TRUE;
+          Parameter param = { NULL, NULL, TRUE };
           ret = g_slist_append (ret, parameter_copy (&param));
           continue;
         }
@@ -151,57 +154,42 @@ parse_parameters (const gchar *text)
             }
         }
 
-      /*
-       * Extract the variable name and type. We do this by reversing the
-       * string so that it is more convenient to walk. After we get the
-       * name, the rest should be the type info.
-       */
-      reversed = g_utf8_strreverse (word, -1);
-      for (tmp = reversed; *tmp; tmp = g_utf8_next_char (tmp))
+      if (strchr (word, '[') && strchr (word, ']'))
         {
-          gunichar ch = g_utf8_get_char (tmp);
-
           /*
-           * If we are past our alnum characters that are valid for a name,
-           * go ahead and add the parameter to the list. Validate it first
-           * though so we only continue if we are absolutely sure it's okay.
-           *
-           * Note that the name can have [] in it like so:
-           *   "void foo (char name[32]);"
+           * TODO: Special case parsing of parameters that have [] after the
+           *       name. Such as "char foo[12]" or "char foo[static 12]".
            */
-          if (!g_unichar_isalnum (ch) && (ch != '[') && (ch != ']'))
-            {
-              gchar *name;
-              gchar *type;
-
-              if (tmp == reversed)
-                GOTO (failure);
-
-              name = g_strndup (reversed, tmp - 1 - reversed);
-              type = g_strdup (tmp - 1);
-
-              param.name = g_strstrip (g_utf8_strreverse (name, -1));
-              param.type = g_strstrip (g_utf8_strreverse (type, -1));
-
-              if (parameter_validate (&param))
-                {
-                  ret = g_slist_append (ret, parameter_copy (&param));
-                  success = TRUE;
-                }
-
-              g_print ("name: %s type: %s\n", name, type);
-
-              g_free (param.name);
-              g_free (param.type);
-              g_free (name);
-              g_free (type);
-            }
         }
+      else
+        {
+          const gchar *name_sep;
+          Parameter param = { 0 };
+          gboolean success = FALSE;
+          gchar *reversed;
+          gchar *name_rev;
 
-      g_free (reversed);
+          reversed = g_utf8_strreverse (word, -1);
+          name_sep = strpbrk (reversed, "\t\n *");
+          name_rev = g_strndup (reversed, name_sep - reversed);
 
-      if (success)
-        continue;
+          param.name = g_strstrip (g_utf8_strreverse (name_rev, -1));
+          param.type = g_strstrip (g_utf8_strreverse (name_sep, -1));
+
+          if (parameter_validate (&param))
+            {
+              ret = g_slist_append (ret, parameter_copy (&param));
+              success = TRUE;
+            }
+
+          g_free (reversed);
+          g_free (name_rev);
+          g_free (param.name);
+          g_free (param.type);
+
+          if (success)
+            continue;
+        }
 
       GOTO (failure);
     }
@@ -214,17 +202,6 @@ failure:
 
 cleanup:
   g_strfreev (parts);
-
-    {
-      GSList *iter;
-
-      for (iter = ret; iter; iter = iter->next)
-        {
-          Parameter *p = iter->data;
-
-          g_print ("PARAM: Type(%s) Name(%s)\n", p->type, p->name);
-        }
-    }
 
   RETURN (ret);
 }

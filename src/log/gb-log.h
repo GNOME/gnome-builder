@@ -28,6 +28,9 @@ G_BEGIN_DECLS
 #endif
 
 #ifdef GB_ENABLE_TRACE
+#define TRACE_MSG(fmt, ...)                                            \
+   g_log(G_LOG_DOMAIN, G_LOG_LEVEL_TRACE, "TRACE: %s():%d: "fmt,       \
+         G_STRFUNC, __LINE__, ##__VA_ARGS__)
 #define TRACE                                                          \
    g_log(G_LOG_DOMAIN, G_LOG_LEVEL_TRACE, "TRACE: %s():%d",            \
          G_STRFUNC, __LINE__)
@@ -58,6 +61,7 @@ G_BEGIN_DECLS
 #else
 #define TODO(_msg)
 #define TRACE
+#define TRACE_MSG(fmt, ...)
 #define ENTRY
 #define GOTO(_l)   goto _l
 #define EXIT       return
