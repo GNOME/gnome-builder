@@ -10,7 +10,6 @@ AS_IF([test "x$enable_maintainer_flags" = "xyes" && test "x$GCC" = "xyes"],
        AX_CHECK_COMPILE_FLAG([-Wformat-nonliteral],           [MAINTAINER_CFLAGS="$MAINTAINER_CFLAGS -Wformat-nonliteral"])
        AX_CHECK_COMPILE_FLAG([-Wformat-security],             [MAINTAINER_CFLAGS="$MAINTAINER_CFLAGS -Wformat-security"])
        AX_CHECK_COMPILE_FLAG([-Winit-self],                   [MAINTAINER_CFLAGS="$MAINTAINER_CFLAGS -Winit-self"])
-       AX_CHECK_COMPILE_FLAG([-Winline],                      [MAINTAINER_CFLAGS="$MAINTAINER_CFLAGS -Winline"])
        AX_CHECK_COMPILE_FLAG([-Wmissing-include-dirs],        [MAINTAINER_CFLAGS="$MAINTAINER_CFLAGS -Wmissing-include-dirs"])
        AX_CHECK_COMPILE_FLAG([-Wno-strict-aliasing],          [MAINTAINER_CFLAGS="$MAINTAINER_CFLAGS -Wno-strict-aliasing"])
        AX_CHECK_COMPILE_FLAG([-Wno-uninitialized],            [MAINTAINER_CFLAGS="$MAINTAINER_CFLAGS -Wno-uninitialized"])
