@@ -160,6 +160,10 @@ gb_application_activate (GApplication *application)
 
   ENTRY;
 
+  /*
+   * Determine 3/4's the screen width for the default size. We will maximize
+   * the window anyway, but handy when unmaximizing.
+   */
   screen = gdk_screen_get_default ();
   primary = gdk_screen_get_primary_monitor (screen);
   gdk_screen_get_monitor_geometry (screen, primary, &geom);
@@ -173,9 +177,10 @@ gb_application_activate (GApplication *application)
                          "window-position", GTK_WIN_POS_CENTER,
                          NULL);
 
-  gtk_application_add_window (GTK_APPLICATION (application), window);
-
+  gtk_window_maximize (window);
   gtk_window_present (window);
+
+  gtk_application_add_window (GTK_APPLICATION (application), window);
 
   EXIT;
 }
