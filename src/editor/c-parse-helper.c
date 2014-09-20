@@ -166,26 +166,31 @@ parse_parameters (const gchar *text)
           const gchar *name_sep;
           Parameter param = { 0 };
           gboolean success = FALSE;
-          gchar *reversed;
-          gchar *name_rev;
+          gchar *reversed = NULL;
+          gchar *name_rev = NULL;
 
           reversed = g_utf8_strreverse (word, -1);
           name_sep = strpbrk (reversed, "\t\n *");
-          name_rev = g_strndup (reversed, name_sep - reversed);
 
-          param.name = g_strstrip (g_utf8_strreverse (name_rev, -1));
-          param.type = g_strstrip (g_utf8_strreverse (name_sep, -1));
-
-          if (parameter_validate (&param))
+          if (name_sep && *name_sep && *(name_sep + 1))
             {
-              ret = g_slist_append (ret, parameter_copy (&param));
-              success = TRUE;
+              name_rev = g_strndup (reversed, name_sep - reversed);
+
+              param.name = g_strstrip (g_utf8_strreverse (name_rev, -1));
+              param.type = g_strstrip (g_utf8_strreverse (name_sep, -1));
+
+              if (parameter_validate (&param))
+                {
+                  ret = g_slist_append (ret, parameter_copy (&param));
+                  success = TRUE;
+                }
+
+              g_free (param.name);
+              g_free (param.type);
+              g_free (name_rev);
             }
 
           g_free (reversed);
-          g_free (name_rev);
-          g_free (param.name);
-          g_free (param.type);
 
           if (success)
             continue;

@@ -60,11 +60,21 @@ test_parse_parameters1 (void)
   g_slist_free (ret);
 }
 
+static void
+test_parse_parameters2 (void)
+{
+  GSList *ret;
+
+  ret = parse_parameters ("abc, def, ghi");
+  g_assert (!ret);
+}
+
 int
 main (int argc,
       char *argv[])
 {
   g_test_init (&argc, &argv, NULL);
   g_test_add_func ("/Parser/C/parse_parameters1", test_parse_parameters1);
+  g_test_add_func ("/Parser/C/parse_parameters2", test_parse_parameters2);
   return g_test_run ();
 }
