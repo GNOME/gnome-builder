@@ -837,7 +837,7 @@ format_parameters (GtkTextIter *begin,
   backward_to_line_first_char (&first_char);
 
   slice = gtk_text_iter_get_slice (&line_start, &first_char);
-  str = g_string_new ("\n");
+  str = g_string_new (",\n");
   g_string_append (str, slice);
   g_free (slice);
 
