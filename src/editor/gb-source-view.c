@@ -903,6 +903,7 @@ gb_source_view_key_press_event (GtkWidget   *widget,
   GbSourceViewPrivate *priv;
   GbSourceSnippet *snippet;
   GbSourceView *view = (GbSourceView *) widget;
+  gboolean ret;
 
   g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), FALSE);
   g_return_val_if_fail (event, FALSE);
@@ -966,6 +967,18 @@ gb_source_view_key_press_event (GtkWidget   *widget,
         }
     }
 
+  /*
+   * Allow the Input Method Context to potentially filter this keystroke.
+   */
+  if ((event->keyval == GDK_KEY_Return) || (event->keyval == GDK_KEY_KP_Enter))
+    if (gtk_text_view_im_context_filter_keypress (GTK_TEXT_VIEW (view), event))
+      return TRUE;
+
+  /*
+   * If we have an auto-indenter and the event is for a trigger key, then we
+   * chain up to the parent class to insert the character, and then let the
+   * auto-indenter fix things up.
+   */
   if (priv->auto_indenter &&
       gb_source_auto_indenter_is_trigger (priv->auto_indenter, event))
     {
@@ -973,10 +986,6 @@ gb_source_view_key_press_event (GtkWidget   *widget,
       GtkTextIter begin;
       GtkTextIter end;
       gchar *indent;
-
-      if ((event->keyval == GDK_KEY_Return) || (event->keyval == GDK_KEY_KP_Enter))
-        if (gtk_text_view_im_context_filter_keypress (GTK_TEXT_VIEW (view), event))
-          return TRUE;
 
       /*
        * Insert into the buffer so the auto-indenter can see it. If
@@ -1013,7 +1022,9 @@ gb_source_view_key_press_event (GtkWidget   *widget,
       return TRUE;
     }
 
-  return GTK_WIDGET_CLASS (gb_source_view_parent_class)->key_press_event (widget, event);
+  ret = GTK_WIDGET_CLASS (gb_source_view_parent_class)->key_press_event (widget, event);
+
+  return ret;
 }
 
 static cairo_region_t *
