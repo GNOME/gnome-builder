@@ -872,6 +872,7 @@ maybe_align_parameters (GbSourceAutoIndenterC *c,
                         GtkTextIter           *begin,
                         GtkTextIter           *end)
 {
+  GtkTextIter match_begin;
   GtkTextIter copy;
   GSList *params = NULL;
   gchar *ret = NULL;
@@ -882,6 +883,9 @@ maybe_align_parameters (GbSourceAutoIndenterC *c,
   g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER_C (c), NULL);
   g_return_val_if_fail (begin, NULL);
   g_return_val_if_fail (end, NULL);
+
+  if (in_c89_comment (begin, &match_begin))
+    RETURN (NULL);
 
   gtk_text_iter_assign (&copy, begin);
 
