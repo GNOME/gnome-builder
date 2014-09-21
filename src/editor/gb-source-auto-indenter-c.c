@@ -904,6 +904,27 @@ maybe_align_parameters (GbSourceAutoIndenterC *c,
   RETURN (ret);
 }
 
+static gchar *
+maybe_add_brace (GbSourceAutoIndenterC *c,
+                 GtkTextIter           *begin,
+                 GtkTextIter           *end,
+                 gint                  *cursor_offset)
+{
+  GtkTextIter iter;
+
+  gtk_text_iter_assign (&iter, begin);
+
+  if (gtk_text_iter_backward_char (&iter) &&
+      (gtk_text_iter_get_char (&iter) == '{') &&
+      (gtk_text_iter_get_char (begin) != '}'))
+    {
+      *cursor_offset = -1;
+      return g_strdup ("}");
+    }
+
+  return NULL;
+}
+
 static gboolean
 gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
                                       GdkEventKey          *event)
@@ -911,6 +932,7 @@ gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
   switch (event->keyval) {
   case GDK_KEY_KP_Enter:
   case GDK_KEY_Return:
+  case GDK_KEY_braceleft:
   case GDK_KEY_braceright:
   case GDK_KEY_colon:
   case GDK_KEY_numbersign:
@@ -929,6 +951,7 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
                                   GtkTextBuffer        *buffer,
                                   GtkTextIter          *begin,
                                   GtkTextIter          *end,
+                                  gint                 *cursor_offset,
                                   GdkEventKey          *event)
 {
   GbSourceAutoIndenterC *c = (GbSourceAutoIndenterC *)indenter;
@@ -943,11 +966,47 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
     gtk_text_iter_assign (&begin_copy, begin);
     ret = gb_source_auto_indenter_c_indent (c, view, buffer, begin);
     gtk_text_iter_assign (begin, &begin_copy);
+
+    /*
+     * If we are inserting a newline right before a closing brace (for example
+     * after {<cursor>}, we need to indent and then maybe unindent the }.
+     */
+    if (gtk_text_iter_get_char (begin) == '}')
+      {
+        GtkTextIter iter;
+        GString *str;
+        gchar *tmp = ret;
+        guint offset;
+
+        str = g_string_new (NULL);
+
+        gtk_text_iter_assign (&iter, begin);
+        gtk_text_iter_backward_char (&iter);
+        gtk_text_iter_backward_char (&iter);
+        offset = gtk_text_iter_get_line_offset (&iter);
+        build_indent (c, offset, &iter, str);
+        g_string_prepend (str, "\n");
+        g_string_prepend (str, ret);
+
+        *cursor_offset = -(str->len - strlen (ret));
+
+        ret = g_string_free (str, FALSE);
+        g_free (tmp);
+      }
+
+    break;
+
+  case GDK_KEY_braceleft:
+    /*
+     * If we are starting a new scope, maybe add a match closing brace.
+     */
+    ret = maybe_add_brace (c, begin, end, cursor_offset);
     break;
 
   case GDK_KEY_braceright:
     /*
      * Probably need to unindent this line.
+     * TODO: Maybe overwrite character.
      */
     ret = maybe_unindent_brace (c, begin, end);
     break;

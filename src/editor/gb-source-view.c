@@ -986,6 +986,7 @@ gb_source_view_key_press_event (GtkWidget   *widget,
       GtkTextIter begin;
       GtkTextIter end;
       gchar *indent;
+      gint cursor_offset = 0;
 
       /*
        * Insert into the buffer so the auto-indenter can see it. If
@@ -1007,16 +1008,29 @@ gb_source_view_key_press_event (GtkWidget   *widget,
       indent = gb_source_auto_indenter_format (priv->auto_indenter,
                                                GTK_TEXT_VIEW (view),
                                                priv->buffer, &begin, &end,
-                                               event);
+                                               &cursor_offset, event);
 
       if (indent)
         {
+          /*
+           * Insert the indention text.
+           */
           gtk_text_buffer_begin_user_action (priv->buffer);
           if (!gtk_text_iter_equal (&begin, &end))
             gtk_text_buffer_delete (priv->buffer, &begin, &end);
           gtk_text_buffer_insert (priv->buffer, &begin, indent, -1);
           g_free (indent);
           gtk_text_buffer_end_user_action (priv->buffer);
+
+          /*
+           * Place the cursor, as it could be somewhere within our indent text.
+           */
+          gtk_text_buffer_get_iter_at_mark (priv->buffer, &begin, insert);
+          if (cursor_offset > 0)
+            gtk_text_iter_forward_chars (&begin, cursor_offset);
+          else if (cursor_offset < 0)
+            gtk_text_iter_backward_chars (&begin, ABS (cursor_offset));
+          gtk_text_buffer_select_range (priv->buffer, &begin, &begin);
         }
 
       return TRUE;

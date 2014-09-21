@@ -48,6 +48,9 @@ struct _GbSourceAutoIndenterClass
 {
   GObjectClass parent_class;
 
+  /*
+   * TODO: Remove "query".
+   */
   gchar *(*query) (GbSourceAutoIndenter *indenter,
                    GtkTextView          *view,
                    GtkTextBuffer        *buffer,
@@ -58,6 +61,7 @@ struct _GbSourceAutoIndenterClass
                     GtkTextBuffer        *buffer,
                     GtkTextIter          *begin,
                     GtkTextIter          *end,
+                    gint                 *cursor_offset,
                     GdkEventKey          *trigger);
 
   gboolean (*is_trigger) (GbSourceAutoIndenter *indenter,
@@ -78,6 +82,7 @@ gchar    *gb_source_auto_indenter_format     (GbSourceAutoIndenter *indenter,
                                               GtkTextBuffer        *buffer,
                                               GtkTextIter          *begin,
                                               GtkTextIter          *end,
+                                              gint                 *cursor_offset,
                                               GdkEventKey          *event);
 
 G_END_DECLS

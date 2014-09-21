@@ -71,8 +71,11 @@ gb_source_auto_indenter_format (GbSourceAutoIndenter *indenter,
                                 GtkTextBuffer        *buffer,
                                 GtkTextIter          *begin,
                                 GtkTextIter          *end,
+                                gint                 *cursor_offset,
                                 GdkEventKey          *event)
 {
+  gint dummy;
+
   g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER (indenter), NULL);
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (view), NULL);
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
@@ -80,11 +83,17 @@ gb_source_auto_indenter_format (GbSourceAutoIndenter *indenter,
   g_return_val_if_fail (end, NULL);
   g_return_val_if_fail (event, NULL);
 
+  if (cursor_offset)
+    *cursor_offset = 0;
+  else
+    cursor_offset = &dummy;
+
   return GB_SOURCE_AUTO_INDENTER_GET_CLASS (indenter)->format (indenter,
                                                                view,
                                                                buffer,
                                                                begin,
                                                                end,
+                                                               cursor_offset,
                                                                event);
 }
 
@@ -94,6 +103,7 @@ gb_source_auto_indenter_real_format (GbSourceAutoIndenter *indenter,
                                      GtkTextBuffer        *buffer,
                                      GtkTextIter          *begin,
                                      GtkTextIter          *end,
+                                     gint                 *cursor_offset,
                                      GdkEventKey          *event)
 {
   return NULL;
