@@ -930,6 +930,115 @@ maybe_add_brace (GbSourceAutoIndenterC *c,
 }
 
 static gboolean
+line_starts_with_fuzzy (const GtkTextIter *iter,
+                        const gchar       *prefix)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+  gboolean ret;
+  gchar *line;
+
+  ITER_INIT_LINE_START (&begin, iter);
+  ITER_INIT_LINE_START (&end, iter);
+
+  while (!gtk_text_iter_ends_line (&end))
+    if (!gtk_text_iter_forward_char (&end))
+      return FALSE;
+
+  line = g_strstrip (gtk_text_iter_get_slice (&begin, &end));
+  ret = g_str_has_prefix (line, prefix);
+  g_free (line);
+
+  return ret;
+}
+
+static gboolean
+line_is_case (const GtkTextIter *line)
+{
+  return line_starts_with_fuzzy (line, "case ");
+}
+
+static gboolean
+line_is_label (const GtkTextIter *line)
+{
+  GtkTextIter iter;
+  gboolean found_char = FALSE;
+  gboolean found_colon = FALSE;
+
+  gtk_text_iter_assign (&iter, line);
+
+  while (!gtk_text_iter_starts_line (&iter))
+    {
+      gunichar ch;
+
+      ch = gtk_text_iter_get_char (&iter);
+
+      switch (ch)
+        {
+        case ' ':
+          break;
+        case ':':
+          found_colon = TRUE;
+          break;
+        case '_':
+          found_char = TRUE;
+          break;
+        default:
+          if (g_unichar_isalnum (ch))
+            {
+              found_char = TRUE;
+              break;
+            }
+          return FALSE;
+        }
+
+      if (!gtk_text_iter_backward_char (&iter))
+        return FALSE;
+    }
+
+  return (found_char && found_colon);
+}
+
+static gchar *
+maybe_unindent_case_label (GbSourceAutoIndenterC *c,
+                           GtkTextIter           *begin,
+                           GtkTextIter           *end)
+{
+  GtkTextIter match_begin;
+  GtkTextIter iter;
+
+  ENTRY;
+
+  gtk_text_iter_assign (&iter, begin);
+
+  if (in_c89_comment (begin, &match_begin))
+    RETURN (NULL);
+
+  if (!gtk_text_iter_backward_char (&iter))
+    RETURN (NULL);
+
+  if (line_is_case (&iter))
+    {
+      TODO ("Implement unindent for case");
+    }
+  else if (line_is_label (&iter))
+    {
+      TODO ("allow configurable label indent");
+
+      ITER_INIT_LINE_START (begin, &iter);
+      ITER_INIT_LINE_START (end, &iter);
+
+      while (g_unichar_isspace (gtk_text_iter_get_char (end)))
+        if (!gtk_text_iter_forward_char (end))
+          return NULL;
+
+      return g_strdup ("");
+    }
+
+  RETURN (NULL);
+}
+
+static gboolean
 gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
                                       GdkEventKey          *event)
 {
@@ -1019,6 +1128,7 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
     /*
      * If this is a label or a case, adjust indentation.
      */
+    ret = maybe_unindent_case_label (c, begin, end);
     break;
 
   case GDK_KEY_numbersign:
