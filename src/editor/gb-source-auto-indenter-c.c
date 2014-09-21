@@ -742,6 +742,7 @@ maybe_space_before_paren (GbSourceAutoIndenterC *c,
                           GtkTextIter           *begin,
                           GtkTextIter           *end)
 {
+  GtkTextIter match_begin;
   GtkTextIter copy;
   gunichar ch;
 
@@ -750,6 +751,9 @@ maybe_space_before_paren (GbSourceAutoIndenterC *c,
   g_return_val_if_fail (end, NULL);
 
   if (!c->priv->space_before_paren)
+    return NULL;
+
+  if (in_c89_comment (begin, &match_begin))
     return NULL;
 
   gtk_text_iter_assign (&copy, begin);
