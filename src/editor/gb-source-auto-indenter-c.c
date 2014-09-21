@@ -1020,6 +1020,33 @@ maybe_unindent_case_label (GbSourceAutoIndenterC *c,
   if (line_is_case (&iter))
     {
       TODO ("Implement unindent for case");
+
+      if (backward_find_matching_char (&iter, '}'))
+        {
+          if (line_is_whitespace_until (&iter))
+            {
+              GString *str;
+              guint offset;
+
+              str = g_string_new (NULL);
+              offset = gtk_text_iter_get_line_offset (&iter);
+              build_indent (c, offset, &iter, str);
+              while (!gtk_text_iter_starts_line (begin))
+                gtk_text_iter_backward_char (begin);
+              gtk_text_iter_assign (end, begin);
+              while (g_unichar_isspace (gtk_text_iter_get_char (end)))
+                if (!gtk_text_iter_forward_char (end))
+                  RETURN (NULL);
+              return g_string_free (str, FALSE);
+            }
+          else
+            {
+              if (backward_to_line_first_char (&iter))
+                {
+                  TODO ("Deal with nested {");
+                }
+            }
+        }
     }
   else if (line_is_label (&iter))
     {
