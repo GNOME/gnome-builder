@@ -1,9 +1,5 @@
 bin_PROGRAMS += gnome-builder
 
-BUILT_FILES = \
-	src/resources/gb-resources.c \
-	src/resources/gb-resources.h
-
 gnome_builder_SOURCES = \
 	$(BUILT_FILES) \
 	src/animation/gb-animation.c \
@@ -144,14 +140,27 @@ endif
 
 # XXX: Workaround for now, need to find a more automated way to do this
 # in how we build projects inside of Builder.
-src/app/gnome_builder-gb-application.$(OBJEXT): $(BUILT_FILES)
+gnome_builder_built_sources = \
+	src/resources/gb-resources.c \
+	src/resources/gb-resources.h
 
-resource_files = $(shell glib-compile-resources --sourcedir=$(srcdir)/src/resources --generate-dependencies $(top_srcdir)/src/resources/gnome-builder.gresource.xml)
+BUILT_SOURCES = \
+	$(gnome_builder_built_sources) \
+	$(NULL)
+
+# src/app/gnome_builder-gb-application.$(OBJEXT): $(gnome_builder_built_sources)
+
+resource_files = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/src/resources --generate-dependencies $(top_srcdir)/src/resources/gnome-builder.gresource.xml)
 src/resources/gb-resources.c: src/resources/gnome-builder.gresource.xml $(resource_files)
 	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/src/resources --generate-source --c-name gb $(top_srcdir)/src/resources/gnome-builder.gresource.xml
 src/resources/gb-resources.h: src/resources/gnome-builder.gresource.xml $(resource_files)
 	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/src/resources --generate-header --c-name gb $(top_srcdir)/src/resources/gnome-builder.gresource.xml
 
+nodist_gnome_builder_SOURCES = \
+	$(gnome_builder_built_sources) \
+	$(NULL)
+
 EXTRA_DIST += $(resource_files)
 EXTRA_DIST += src/resources/gnome-builder.gresource.xml
 
+CLEANFILES += $(BUILT_SOURCES)
