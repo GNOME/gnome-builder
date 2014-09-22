@@ -1051,7 +1051,7 @@ gb_editor_tab_constructed (GObject *object)
                       "change-monitor", priv->change_monitor,
                       "size", 2,
                       "visible", TRUE,
-                      "xpad", 3,
+                      "xpad", 1,
                       NULL);
     gtk_source_gutter_insert (gutter, priv->change_renderer, 0);
   }
