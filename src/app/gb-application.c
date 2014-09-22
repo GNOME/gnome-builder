@@ -26,6 +26,7 @@
 #include <glib/gi18n.h>
 
 #include "gb-application.h"
+#include "gb-editor-workspace.h"
 #include "gb-log.h"
 #include "gb-keybindings.h"
 #include "gb-resources.h"
@@ -148,8 +149,8 @@ setup_keybindings (GbApplication *application)
   EXIT;
 }
 
-static void
-gb_application_activate (GApplication *application)
+static GtkWindow *
+create_window (GApplication *application)
 {
   GtkWindow *window;
   GdkScreen *screen;
@@ -182,7 +183,54 @@ gb_application_activate (GApplication *application)
 
   gtk_application_add_window (GTK_APPLICATION (application), window);
 
-  EXIT;
+  RETURN (window);
+}
+
+static void
+gb_application_activate (GApplication *application)
+{
+  create_window (application);
+}
+
+static void
+gb_application_open (GApplication   *application,
+                     GFile         **files,
+                     gint            n_files,
+                     const gchar    *hint)
+{
+  GbWorkbench *workbench = NULL;
+  GbWorkspace *workspace;
+  GList *list;
+
+  /*
+   * TODO: We should plumb this through so we are executing an action
+   *       with a "filename" parameter.
+   */
+
+  list = gtk_application_get_windows (GTK_APPLICATION (application));
+
+  for (; list; list = list->next)
+    {
+      if (GB_IS_WORKBENCH (list->data))
+        {
+          workbench = GB_WORKBENCH (list->data);
+          break;
+        }
+    }
+
+  if (!workbench)
+    workbench = GB_WORKBENCH (create_window (application));
+
+  workspace = gb_workbench_get_workspace (workbench,
+                                          GB_TYPE_EDITOR_WORKSPACE);
+
+  if (workspace)
+  {
+    guint i;
+
+    for (i = 0; i < n_files; i++)
+      gb_editor_workspace_open (GB_EDITOR_WORKSPACE (workspace), files [i]);
+  }
 }
 
 static void
@@ -293,6 +341,7 @@ gb_application_class_init (GbApplicationClass *klass)
 
   app_class->activate = gb_application_activate;
   app_class->startup = gb_application_startup;
+  app_class->open = gb_application_open;
 
   EXIT;
 }
@@ -301,7 +350,11 @@ static void
 gb_application_init (GbApplication *application)
 {
   ENTRY;
+
   g_application_set_application_id (G_APPLICATION (application),
                                     "org.gnome.Builder");
+  g_application_set_flags (G_APPLICATION (application),
+                           G_APPLICATION_HANDLES_OPEN);
+
   EXIT;
 }

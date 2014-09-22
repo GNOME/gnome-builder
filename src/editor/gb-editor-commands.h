@@ -20,10 +20,13 @@
 #define GB_EDITOR_COMMANDS_H
 
 #include "gb-editor-workspace.h"
+#include "gb-editor-tab.h"
 
 G_BEGIN_DECLS
 
 void gb_editor_commands_init (GbEditorWorkspace *workspace);
+void gb_editor_tab_open_file (GbEditorTab *tab,
+                              GFile       *file);
 
 G_END_DECLS
 

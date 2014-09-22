@@ -49,6 +49,8 @@ struct _GbEditorWorkspaceClass
 };
 
 GType gb_editor_workspace_get_type (void) G_GNUC_CONST;
+void  gb_editor_workspace_open     (GbEditorWorkspace *workspace,
+                                    GFile             *file);
 
 G_END_DECLS
 

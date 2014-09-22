@@ -76,6 +76,21 @@ gb_workbench_get_active_workspace (GbWorkbench *workbench)
    return GB_WORKSPACE (child);
 }
 
+GbWorkspace *
+gb_workbench_get_workspace (GbWorkbench *workbench,
+                            GType        type)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
+  g_return_val_if_fail (g_type_is_a (type, GB_TYPE_WORKSPACE), NULL);
+
+  if (type == GB_TYPE_EDITOR_WORKSPACE)
+    return GB_WORKSPACE (workbench->priv->editor);
+  else if (type == GB_TYPE_DEVHELP_WORKSPACE)
+    return GB_WORKSPACE (workbench->priv->devhelp);
+
+  return NULL;
+}
+
 static void
 gb_workbench_workspace_changed (GbWorkbench *workbench,
                                 GbWorkspace *workspace)

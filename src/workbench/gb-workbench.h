@@ -55,6 +55,8 @@ struct _GbWorkbenchClass
 
 GType        gb_workbench_get_type             (void) G_GNUC_CONST;
 GbWorkspace *gb_workbench_get_active_workspace (GbWorkbench *workbench);
+GbWorkspace *gb_workbench_get_workspace        (GbWorkbench *workbench,
+                                                GType        type);
 
 G_END_DECLS
 

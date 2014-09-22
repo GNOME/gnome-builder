@@ -29,6 +29,34 @@ enum {
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorWorkspace, gb_editor_workspace, GB_TYPE_WORKSPACE)
 
+void
+gb_editor_workspace_open (GbEditorWorkspace *workspace,
+                          GFile             *file)
+{
+  GbEditorTab *tab;
+  GbNotebook *notebook;
+  gint page;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_return_if_fail (G_IS_FILE (file));
+
+  notebook = gb_multi_notebook_get_active_notebook (workspace->priv->multi_notebook);
+
+  tab = g_object_new (GB_TYPE_EDITOR_TAB,
+                      "visible", TRUE,
+                      NULL);
+  gb_notebook_add_tab (notebook, GB_TAB (tab));
+
+  gtk_container_child_get (GTK_CONTAINER (notebook), GTK_WIDGET (tab),
+                           "position", &page,
+                           NULL);
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page);
+
+  gb_editor_tab_open_file (tab, file);
+
+  gtk_widget_grab_focus (GTK_WIDGET (tab));
+}
+
 static GActionGroup *
 gb_editor_workspace_get_actions (GbWorkspace * workspace)
 {
