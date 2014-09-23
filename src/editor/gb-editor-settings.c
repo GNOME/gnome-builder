@@ -30,7 +30,7 @@
 
 #include "gb-editor-settings.h"
 
-#define DEFAULT_FONT "Monospace 10"
+#define DEFAULT_FONT "Monospace 11"
 #define DEFAULT_SCHEME "tango"
 
 struct _GbEditorSettingsPrivate
