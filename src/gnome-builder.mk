@@ -42,6 +42,10 @@ gnome_builder_SOURCES = \
 	src/markdown/gs-markdown.h \
 	src/markdown/gb-markdown-preview.c \
 	src/markdown/gb-markdown-preview.h \
+	src/navigation/gb-navigation-list.h \
+	src/navigation/gb-navigation-list.c \
+	src/navigation/gb-navigation-item.h \
+	src/navigation/gb-navigation-item.c \
 	src/snippets/gb-source-snippet-chunk.c \
 	src/snippets/gb-source-snippet-chunk.h \
 	src/snippets/gb-source-snippet-completion-item.c \
@@ -126,6 +130,7 @@ gnome_builder_CFLAGS = \
 	-I$(top_srcdir)/src/log \
 	-I$(top_srcdir)/src/markdown \
 	-I$(top_srcdir)/src/nautilus \
+	-I$(top_srcdir)/src/navigation \
 	-I$(top_builddir)/src/resources \
 	-I$(top_srcdir)/src/snippets \
 	-I$(top_srcdir)/src/tabs \

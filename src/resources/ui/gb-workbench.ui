@@ -17,6 +17,7 @@
             </style>
             <child>
               <object class="GtkButton" id="back_button">
+                <property name="action-name">workbench.go-backward</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <style>
@@ -36,6 +37,7 @@
                 <style>
                   <class name="image-button"/>
                 </style>
+                <property name="action-name">workbench.go-forward</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <child>

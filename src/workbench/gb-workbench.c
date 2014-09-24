@@ -23,6 +23,7 @@
 #include "gb-devhelp-workspace.h"
 #include "gb-editor-workspace.h"
 #include "gb-log.h"
+#include "gb-navigation-list.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 #include "gb-workbench-actions.h"
@@ -33,6 +34,7 @@
 struct _GbWorkbenchPrivate
 {
   GbWorkbenchActions     *actions;
+  GbNavigationList       *navigation_list;
 
   GbWorkspace            *active_workspace;
   GbWorkspace            *devhelp;
@@ -50,6 +52,7 @@ struct _GbWorkbenchPrivate
 
 enum {
   PROP_0,
+  PROP_NAVIGATION_LIST,
   LAST_PROP
 };
 
@@ -62,7 +65,24 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbWorkbench,
                             gb_workbench,
                             GTK_TYPE_APPLICATION_WINDOW)
 
-static guint gSignals[LAST_SIGNAL];
+static GParamSpec *gParamSpecs [LAST_PROP];
+static guint       gSignals [LAST_SIGNAL];
+
+/**
+ * gb_workbench_get_navigation_list:
+ *
+ * Fetches the navigation list for the workbench. This can be used to move
+ * between edit points between workspaces.
+ *
+ * Returns: (transfer none): A #GbNavigationlist.
+ */
+GbNavigationList *
+gb_workbench_get_navigation_list (GbWorkbench *workbench)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
+
+  return workbench->priv->navigation_list;
+}
 
 GbWorkspace *
 gb_workbench_get_active_workspace (GbWorkbench *workbench)
@@ -192,15 +212,32 @@ on_workspace2_activate (GSimpleAction *action,
 }
 
 static void
+on_go_forward_activate (GSimpleAction *action,
+                        GVariant      *variant,
+                        gpointer       user_data)
+{
+}
+
+static void
+on_go_backward_activate (GSimpleAction *action,
+                         GVariant      *variant,
+                         gpointer       user_data)
+{
+}
+
+static void
 gb_workbench_constructed (GObject *object)
 {
   static const GActionEntry actions[] = {
     { "workspace1", on_workspace1_activate },
     { "workspace2", on_workspace2_activate },
+    { "go-backward", on_go_backward_activate },
+    { "go-forward", on_go_forward_activate },
   };
   GbWorkbenchPrivate *priv;
   GbWorkbench *workbench = (GbWorkbench *)object;
   GtkApplication *app;
+  GAction *action;
   GMenu *menu;
 
   g_assert (GB_IS_WORKBENCH (workbench));
@@ -228,6 +265,14 @@ gb_workbench_constructed (GObject *object)
   g_action_map_add_action_entries (G_ACTION_MAP (workbench), actions,
                                    G_N_ELEMENTS (actions), workbench);
 
+  action = g_action_map_lookup_action (G_ACTION_MAP (workbench), "go-backward");
+  g_object_bind_property (priv->navigation_list, "can-go-backward",
+                          action, "enabled", G_BINDING_SYNC_CREATE);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (workbench), "go-forward");
+  g_object_bind_property (priv->navigation_list, "can-go-forward",
+                          action, "enabled", G_BINDING_SYNC_CREATE);
+
   G_OBJECT_CLASS (gb_workbench_parent_class)->constructed (object);
 
   EXIT;
@@ -243,6 +288,7 @@ gb_workbench_dispose (GObject *object)
   priv = GB_WORKBENCH (object)->priv;
 
   g_clear_object (&priv->actions);
+  g_clear_object (&priv->navigation_list);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->dispose (object);
 
@@ -289,6 +335,16 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   widget_class->realize = gb_workbench_realize;
 
   klass->workspace_changed = gb_workbench_workspace_changed;
+
+  gParamSpecs [PROP_NAVIGATION_LIST] =
+    g_param_spec_object ("navigation-list",
+                         _("Navigation List"),
+                         _("The navigation list for the workbench."),
+                         GB_TYPE_NAVIGATION_LIST,
+                         (G_PARAM_READABLE |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_NAVIGATION_LIST,
+                                   gParamSpecs [PROP_NAVIGATION_LIST]);
 
   gSignals [WORKSPACE_CHANGED] =
     g_signal_new ("workspace-changed",
@@ -338,6 +394,7 @@ gb_workbench_init (GbWorkbench *workbench)
 
   gtk_widget_init_template (GTK_WIDGET (workbench));
 
+  workbench->priv->navigation_list = gb_navigation_list_new ();
   workbench->priv->actions = gb_workbench_actions_new (workbench);
   gtk_widget_insert_action_group (GTK_WIDGET (workbench),
                                   "workbench",
