@@ -9,8 +9,10 @@ configure
 *.deps
 .dirstamp
 gnome-builder
+libgnome-builder.la
 *.libs
 libtool
+*.lo
 Makefile
 Makefile.in
 Makefile.in
@@ -18,3 +20,10 @@ Makefile.in
 stamp-h1
 *.swp
 test-c-parse-helper
+test-c-parse-helper
+test-c-parse-helper.log
+test-c-parse-helper.trs
+test-navigation-list
+test-navigation-list.log
+test-navigation-list.trs
+test-suite.log

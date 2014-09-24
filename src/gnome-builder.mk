@@ -1,7 +1,8 @@
 bin_PROGRAMS += gnome-builder
+noinst_LTLIBRARIES += libgnome-builder.la
 
-gnome_builder_SOURCES = \
-	$(BUILT_FILES) \
+libgnome_builder_la_SOURCES = \
+	$(gnome_builder_built_sources) \
 	src/animation/gb-animation.c \
 	src/animation/gb-animation.h \
 	src/animation/gb-frame-source.c \
@@ -104,10 +105,9 @@ gnome_builder_SOURCES = \
 	src/workbench/gb-workbench-actions.c \
 	src/workbench/gb-workbench-actions.h \
 	src/workbench/gb-workspace.c \
-	src/workbench/gb-workspace.h \
-	src/main.c
+	src/workbench/gb-workspace.h
 
-gnome_builder_LDADD = \
+libgnome_builder_la_LIBADD = \
 	$(DEVHELP_LIBS) \
 	$(GIO_LIBS) \
 	$(GTKSOURCEVIEW_LIBS) \
@@ -115,7 +115,7 @@ gnome_builder_LDADD = \
 	$(WEBKIT_LIBS) \
 	-lm
 
-gnome_builder_CFLAGS = \
+libgnome_builder_la_CFLAGS = \
 	$(DEVHELP_CFLAGS) \
 	$(GIO_CFLAGS) \
 	$(GTKSOURCEVIEW_CFLAGS) \
@@ -142,8 +142,12 @@ gnome_builder_CFLAGS = \
 	-I$(top_srcdir)/src/workbench
 
 if ENABLE_TRACING
-gnome_builder_CFLAGS += -DGB_ENABLE_TRACE
+libgnome_builder_la_CFLAGS += -DGB_ENABLE_TRACE
 endif
+
+gnome_builder_SOURCES = src/main.c
+gnome_builder_CFLAGS = $(libgnome_builder_la_CFLAGS)
+gnome_builder_LDADD = libgnome-builder.la
 
 # XXX: Workaround for now, need to find a more automated way to do this
 # in how we build projects inside of Builder.
@@ -151,11 +155,7 @@ gnome_builder_built_sources = \
 	src/resources/gb-resources.c \
 	src/resources/gb-resources.h
 
-BUILT_SOURCES = \
-	$(gnome_builder_built_sources) \
-	$(NULL)
-
-# src/app/gnome_builder-gb-application.$(OBJEXT): $(gnome_builder_built_sources)
+src/app/libgnome_builder_la-gb-application.$(OBJEXT): $(gnome_builder_built_sources)
 
 resource_files = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/src/resources --generate-dependencies $(top_srcdir)/src/resources/gnome-builder.gresource.xml)
 src/resources/gb-resources.c: src/resources/gnome-builder.gresource.xml $(resource_files)
@@ -170,4 +170,4 @@ nodist_gnome_builder_SOURCES = \
 EXTRA_DIST += $(resource_files)
 EXTRA_DIST += src/resources/gnome-builder.gresource.xml
 
-CLEANFILES += $(BUILT_SOURCES)
+CLEANFILES += $(gnome_builder_built_sources)

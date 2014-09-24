@@ -37,6 +37,7 @@ enum {
   PROP_CAN_GO_BACKWARD,
   PROP_CAN_GO_FORWARD,
   PROP_CURRENT_ITEM,
+  PROP_DEPTH,
   LAST_PROP
 };
 
@@ -46,6 +47,14 @@ GbNavigationList *
 gb_navigation_list_new (void)
 {
   return g_object_new (GB_TYPE_NAVIGATION_LIST, NULL);
+}
+
+guint
+gb_navigation_list_get_depth (GbNavigationList *list)
+{
+  g_return_val_if_fail (GB_IS_NAVIGATION_LIST (list), 0);
+
+  return list->priv->items->len;
 }
 
 gboolean

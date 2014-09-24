@@ -35,7 +35,6 @@ AC_CONFIG_FILES([
 	Makefile
 	data/icons/Makefile
 	data/org.gnome.Builder.service
-	tests/Makefile
 ])
 
 # Last change to configure things and write configuration files.

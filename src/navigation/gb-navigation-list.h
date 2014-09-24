@@ -59,6 +59,7 @@ void                  gb_navigation_list_append              (GbNavigationList *
                                                               GbNavigationItem *item);
 void                  gb_navigation_list_go_backward         (GbNavigationList *list);
 void                  gb_navigation_list_go_forward          (GbNavigationList *list);
+guint                 gb_navigation_list_get_depth           (GbNavigationList *list);
 
 G_END_DECLS
 
