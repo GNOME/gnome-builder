@@ -34,12 +34,6 @@
 
 G_DEFINE_TYPE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
 
-GbApplication *
-gb_application_new (void)
-{
-  return g_object_new (GB_TYPE_APPLICATION, NULL);
-}
-
 static void
 gb_application_on_theme_changed (GbApplication *self,
                                  GParamSpec    *pspec,
@@ -155,8 +149,8 @@ gb_application_register_keybindings (GbApplication *self)
   EXIT;
 }
 
-static GtkWindow *
-create_window (GApplication *application)
+static GbWorkbench *
+gb_application_create_workbench (GApplication *application)
 {
   GtkWindow *window;
   GdkScreen *screen;
@@ -189,13 +183,13 @@ create_window (GApplication *application)
 
   gtk_application_add_window (GTK_APPLICATION (application), window);
 
-  RETURN (window);
+  RETURN (GB_WORKBENCH (window));
 }
 
 static void
 gb_application_activate (GApplication *application)
 {
-  create_window (application);
+  (void)gb_application_create_workbench (application);
 }
 
 static void
@@ -223,7 +217,7 @@ gb_application_open (GApplication   *application,
     }
 
   if (!workbench)
-    workbench = GB_WORKBENCH (create_window (application));
+    workbench = GB_WORKBENCH (gb_application_create_workbench (application));
 
   workspace = gb_workbench_get_workspace (workbench,
                                           GB_TYPE_EDITOR_WORKSPACE);

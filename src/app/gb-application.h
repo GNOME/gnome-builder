@@ -48,8 +48,7 @@ struct _GbApplicationClass
   GtkApplicationClass parent_class;
 };
 
-GbApplication *gb_application_new      (void);
-GType          gb_application_get_type (void) G_GNUC_CONST;
+GType gb_application_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
