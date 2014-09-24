@@ -70,12 +70,11 @@ gb_navigation_item_set_label (GbNavigationItem *item,
 }
 
 void
-gb_navigation_item_emit_activate (GbNavigationItem *item,
-                                  GbWorkbench      *workbench)
+gb_navigation_item_emit_activate (GbNavigationItem *item)
 {
   g_return_if_fail (GB_IS_NAVIGATION_ITEM (item));
   
-  g_signal_emit (item, gSignals [ACTIVATE], 0, workbench);
+  g_signal_emit (item, gSignals [ACTIVATE], 0);
 }
 
 static void

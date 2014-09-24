@@ -114,13 +114,11 @@ gb_editor_navigation_item_set_line_offset (GbEditorNavigationItem *item,
 }
 
 static void
-gb_editor_navigation_item_activate (GbNavigationItem *item,
-                                    GbWorkbench      *workbench)
+gb_editor_navigation_item_activate (GbNavigationItem *item)
 {
   GbEditorNavigationItem *self = (GbEditorNavigationItem *)item;
 
   g_return_if_fail (GB_IS_EDITOR_NAVIGATION_ITEM (self));
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
 
   g_print ("Activate item\n");
 }

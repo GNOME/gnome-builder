@@ -23,7 +23,6 @@
 #include "gb-devhelp-workspace.h"
 #include "gb-editor-workspace.h"
 #include "gb-log.h"
-#include "gb-navigation-list.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 #include "gb-workbench-actions.h"
@@ -216,6 +215,12 @@ on_go_forward_activate (GSimpleAction *action,
                         GVariant      *variant,
                         gpointer       user_data)
 {
+  GbWorkbench *workbench = user_data;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  if (gb_navigation_list_get_can_go_forward (workbench->priv->navigation_list))
+    gb_navigation_list_go_forward (workbench->priv->navigation_list);
 }
 
 static void
@@ -223,6 +228,12 @@ on_go_backward_activate (GSimpleAction *action,
                          GVariant      *variant,
                          gpointer       user_data)
 {
+  GbWorkbench *workbench = user_data;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  if (gb_navigation_list_get_can_go_backward (workbench->priv->navigation_list))
+    gb_navigation_list_go_backward (workbench->priv->navigation_list);
 }
 
 static void

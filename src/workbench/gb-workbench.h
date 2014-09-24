@@ -21,6 +21,7 @@
 
 #include <gtk/gtk.h>
 
+#include "gb-navigation-list.h"
 #include "gb-workspace.h"
 
 G_BEGIN_DECLS
@@ -53,10 +54,11 @@ struct _GbWorkbenchClass
                              GbWorkspace *workspace);
 };
 
-GType        gb_workbench_get_type             (void) G_GNUC_CONST;
-GbWorkspace *gb_workbench_get_active_workspace (GbWorkbench *workbench);
-GbWorkspace *gb_workbench_get_workspace        (GbWorkbench *workbench,
-                                                GType        type);
+GType             gb_workbench_get_type             (void) G_GNUC_CONST;
+GbNavigationList *gb_workbench_get_navigation_list  (GbWorkbench *workbench);
+GbWorkspace      *gb_workbench_get_active_workspace (GbWorkbench *workbench);
+GbWorkspace      *gb_workbench_get_workspace        (GbWorkbench *workbench,
+                                                     GType        type);
 
 G_END_DECLS
 

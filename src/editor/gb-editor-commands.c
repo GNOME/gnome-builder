@@ -21,12 +21,15 @@
 #include <glib/gi18n.h>
 
 #include "gb-editor-commands.h"
+#include "gb-editor-navigation-item.h"
 #include "gb-editor-tab.h"
 #include "gb-editor-tab-private.h"
 #include "gb-editor-workspace.h"
 #include "gb-editor-workspace-private.h"
 #include "gb-log.h"
+#include "gb-navigation-list.h"
 #include "gb-source-formatter.h"
+#include "gb-workbench.h"
 
 typedef void (*GbEditorCommand) (GbEditorWorkspace *workspace,
                                  GbEditorTab       *tab);
@@ -463,13 +466,46 @@ gb_editor_tab_do_save (GbEditorTab *tab)
    * TODO: Tab needs a state machine for what are valid operations.
    */
 
+  /*
+   * Save the buffer position as an edit point in the global navigation.
+   */
+  {
+    GbWorkbench *workbench;
+    GbNavigationItem *item;
+    GbNavigationList *list = NULL;
+    GtkTextMark *insert;
+    GtkTextIter iter;
+    guint line;
+    guint line_offset;
+
+    workbench = GB_WORKBENCH (gtk_widget_get_toplevel (GTK_WIDGET (priv->source_view)));
+    list = gb_workbench_get_navigation_list (workbench);
+
+    insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->document));
+    gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->document),
+                                      &iter, insert);
+    line = gtk_text_iter_get_line (&iter);
+    line_offset = gtk_text_iter_get_line_offset (&iter);
+    item = g_object_new (GB_TYPE_EDITOR_NAVIGATION_ITEM,
+                         "file", gtk_source_file_get_location (priv->file),
+                         "line", line,
+                         "line-offset", line_offset,
+                         NULL);
+    gb_navigation_list_append (list, item);
+  }
+
+  /*
+   * Reset progress bar to 0%.
+   */
   gtk_progress_bar_set_fraction (priv->progress_bar, 0.0);
   gtk_widget_set_opacity (GTK_WIDGET (priv->progress_bar), 1.0);
   gtk_widget_show (GTK_WIDGET (priv->progress_bar));
 
+  /*
+   * Use file saver to save the buffer to disk.
+   */
   saver = gtk_source_file_saver_new (GTK_SOURCE_BUFFER (priv->document),
                                      priv->file);
-
   gtk_source_file_saver_save_async (saver,
                                     G_PRIORITY_DEFAULT,
                                     NULL, /* TODO: Cancellable */
@@ -478,7 +514,6 @@ gb_editor_tab_do_save (GbEditorTab *tab)
                                     NULL,
                                     (GAsyncReadyCallback)on_save_cb,
                                     g_object_ref (tab));
-
   g_object_unref (saver);
 }
 
