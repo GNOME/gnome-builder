@@ -770,32 +770,6 @@ on_search_entry_activate (GdTaggedEntry *search_entry,
 }
 
 static gboolean
-on_source_view_key_press_event (GbSourceView *view,
-                                GdkEventKey  *event,
-                                GbEditorTab  *tab)
-{
-#if 0
-  GbEditorTabPrivate *priv;
-
-  g_assert (GB_IS_SOURCE_VIEW (view));
-  g_assert (GB_IS_EDITOR_TAB (tab));
-
-  priv = tab->priv;
-
-  if ((event->keyval == GDK_KEY_Escape))
-    {
-      if (gtk_source_search_context_get_highlight (priv->search_context))
-        {
-          gtk_source_search_context_set_highlight (priv->search_context, FALSE);
-          return TRUE;
-        }
-    }
-#endif
-
-  return FALSE;
-}
-
-static gboolean
 on_source_view_focus_in_event (GbSourceView *view,
                                GdkEvent     *event,
                                GbEditorTab  *tab)
@@ -965,10 +939,6 @@ gb_editor_tab_constructed (GObject *object)
                             G_CALLBACK (gb_editor_tab_language_changed),
                             tab);
 
-  g_signal_connect (priv->source_view,
-                    "key-press-event",
-                    G_CALLBACK (on_source_view_key_press_event),
-                    tab);
   g_signal_connect (priv->source_view,
                     "focus-in-event",
                     G_CALLBACK (on_source_view_focus_in_event),
