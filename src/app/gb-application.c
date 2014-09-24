@@ -370,11 +370,5 @@ static void
 gb_application_init (GbApplication *application)
 {
   ENTRY;
-
-  g_application_set_application_id (G_APPLICATION (application),
-                                    "org.gnome.Builder");
-  g_application_set_flags (G_APPLICATION (application),
-                           G_APPLICATION_HANDLES_OPEN);
-
   EXIT;
 }

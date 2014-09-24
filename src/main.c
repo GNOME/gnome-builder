@@ -27,7 +27,7 @@ int
 main (int   argc,
       char *argv[])
 {
-  GbApplication *app;
+  GApplication *app;
   int ret;
 
   g_set_prgname ("gnome-builder");
@@ -35,9 +35,12 @@ main (int   argc,
 
   gb_log_init (TRUE, NULL);
 
-  app = gb_application_new ();
-  g_application_set_default (G_APPLICATION (app));
-  ret = g_application_run (G_APPLICATION (app), argc, argv);
+  app = g_object_new (GB_TYPE_APPLICATION,
+                      "application-id", "org.gnome.Builder",
+                      "flags", G_APPLICATION_HANDLES_OPEN,
+                      NULL);
+  g_application_set_default (app);
+  ret = g_application_run (app, argc, argv);
   g_clear_object (&app);
 
   gb_log_shutdown ();

@@ -31,7 +31,12 @@ GTK_DOC_CHECK
 ])
 
 # Define our known config files.
-AC_CONFIG_FILES([Makefile data/icons/Makefile tests/Makefile])
+AC_CONFIG_FILES([
+	Makefile
+	data/icons/Makefile
+	data/org.gnome.Builder.service
+	tests/Makefile
+])
 
 # Last change to configure things and write configuration files.
 m4_include([build/autotools/autoconf.d/pre-output.m4])
