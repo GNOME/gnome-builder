@@ -31,8 +31,8 @@ snippet gobject
 		$2Class parent;
 	};
 
-	GType ${$1|functify}_get_type (void) G_GNUC_CONST;
-	$1 *${$1|functify}_new (void);
+	GType ${$1|space}${$1|functify}_get_type (void) G_GNUC_CONST;
+	$1     *${$1|functify}_new      (void);
 	$0
 	G_END_DECLS
 
