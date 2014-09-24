@@ -41,13 +41,18 @@ gb_application_new (void)
 }
 
 static void
-theme_changed (GtkSettings *settings)
+gb_application_on_theme_changed (GbApplication *self,
+                                 GParamSpec    *pspec,
+                                 GtkSettings   *settings)
 {
   static GtkCssProvider *provider = NULL;
   GdkScreen *screen;
   gchar *theme;
 
   ENTRY;
+
+  g_assert (GB_IS_APPLICATION (self));
+  g_assert (GTK_IS_SETTINGS (settings));
 
   g_object_get (settings, "gtk-theme-name", &theme, NULL);
   screen = gdk_screen_get_default ();
@@ -81,7 +86,7 @@ theme_changed (GtkSettings *settings)
 }
 
 static void
-setup_theme_extensions (void)
+gb_application_register_theme_overrides (GbApplication *application)
 {
   GtkSettings *settings;
 
@@ -92,17 +97,18 @@ setup_theme_extensions (void)
    * for a more automatic solution that is still under discussion.
    */
   settings = gtk_settings_get_default ();
-  g_signal_connect (settings,
-                    "notify::gtk-theme-name",
-                    G_CALLBACK (theme_changed),
-                    NULL);
-  theme_changed (settings);
+  g_signal_connect_object (settings,
+                           "notify::gtk-theme-name",
+                           G_CALLBACK (gb_application_on_theme_changed),
+                           application,
+                           G_CONNECT_SWAPPED);
+  gb_application_on_theme_changed (application, NULL, settings);
 
   EXIT;
 }
 
 static void
-setup_keybindings (GbApplication *application)
+gb_application_register_keybindings (GbApplication *self)
 {
   GbKeybindings *keybindings;
   GError *error = NULL;
@@ -111,7 +117,7 @@ setup_keybindings (GbApplication *application)
 
   ENTRY;
 
-  g_assert (GB_IS_APPLICATION (application));
+  g_assert (GB_IS_APPLICATION (self));
 
   keybindings = gb_keybindings_new ();
 
@@ -142,7 +148,7 @@ setup_keybindings (GbApplication *application)
     }
   g_free (path);
 
-  gb_keybindings_register (keybindings, GTK_APPLICATION (application));
+  gb_keybindings_register (keybindings, GTK_APPLICATION (self));
 
   g_object_unref (keybindings);
 
@@ -201,11 +207,9 @@ gb_application_open (GApplication   *application,
   GbWorkbench *workbench = NULL;
   GbWorkspace *workspace;
   GList *list;
+  guint i;
 
-  /*
-   * TODO: We should plumb this through so we are executing an action
-   *       with a "filename" parameter.
-   */
+  g_assert (GB_IS_APPLICATION (application));
 
   list = gtk_application_get_windows (GTK_APPLICATION (application));
 
@@ -224,41 +228,29 @@ gb_application_open (GApplication   *application,
   workspace = gb_workbench_get_workspace (workbench,
                                           GB_TYPE_EDITOR_WORKSPACE);
 
-  if (workspace)
-  {
-    guint i;
+  g_assert (GB_IS_EDITOR_WORKSPACE (workspace));
 
-    for (i = 0; i < n_files; i++)
+  for (i = 0; i < n_files; i++)
+    {
+      g_return_if_fail (G_IS_FILE (files [i]));
       gb_editor_workspace_open (GB_EDITOR_WORKSPACE (workspace), files [i]);
-  }
+    }
 }
 
 static void
-gb_application_startup (GApplication *app)
+gb_application_activate_quit_action (GSimpleAction *action,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
 {
-  ENTRY;
+  g_return_if_fail (GB_IS_APPLICATION (user_data));
 
-  G_APPLICATION_CLASS (gb_application_parent_class)->startup (app);
-
-  g_resources_register (gb_get_resource ());
-  setup_theme_extensions ();
-  setup_keybindings (GB_APPLICATION (app));
-
-  EXIT;
+  g_application_quit (G_APPLICATION (user_data));
 }
 
 static void
-on_quit_activate (GSimpleAction *action,
-                  GVariant      *parameter,
-                  gpointer       user_data)
-{
-  g_application_quit (g_application_get_default ());
-}
-
-static void
-on_about_activate (GSimpleAction *action,
-                   GVariant      *parameter,
-                   gpointer       user_data)
+gb_application_activate_about_action (GSimpleAction *action,
+                                      GVariant      *parameter,
+                                      gpointer       user_data)
 {
   GtkWindow *window;
   GList *list;
@@ -266,6 +258,8 @@ on_about_activate (GSimpleAction *action,
   gchar **authors;
   gchar **artists;
   gchar *translators;
+
+  g_return_if_fail (GB_IS_APPLICATION (user_data));
 
   list = gtk_application_get_windows (GTK_APPLICATION (user_data));
 
@@ -306,27 +300,53 @@ on_about_activate (GSimpleAction *action,
 }
 
 static void
-gb_application_constructed (GObject *object)
+gb_application_register_actions (GbApplication *self)
 {
   static const GActionEntry action_entries[] = {
-    { "quit", on_quit_activate },
-    { "about", on_about_activate },
+    { "about", gb_application_activate_about_action },
+    { "quit", gb_application_activate_quit_action },
   };
 
-  static const gchar *quit_accels[] = { "<Control>q", NULL };
+  g_return_if_fail (GB_IS_APPLICATION (self));
+
+  g_action_map_add_action_entries (G_ACTION_MAP (self),
+                                   action_entries,
+                                   G_N_ELEMENTS (action_entries),
+                                   self);
+}
+
+static void
+gb_application_startup (GApplication *app)
+{
+  GbApplication *self;
+
+  ENTRY;
+
+  self = GB_APPLICATION (app);
+
+  g_resources_register (gb_get_resource ());
+
+  G_APPLICATION_CLASS (gb_application_parent_class)->startup (app);
+
+  gb_application_register_actions (self);
+  gb_application_register_keybindings (self);
+  gb_application_register_theme_overrides (self);
+
+  EXIT;
+}
+
+static void
+gb_application_constructed (GObject *object)
+{
+  ENTRY;
 
   if (G_OBJECT_CLASS (gb_application_parent_class)->constructed)
     G_OBJECT_CLASS (gb_application_parent_class)->constructed (object);
 
-  g_action_map_add_action_entries (G_ACTION_MAP (object),
-                                   action_entries,
-                                   G_N_ELEMENTS (action_entries),
-                                   object);
   g_application_set_resource_base_path (G_APPLICATION (object),
                                         "/org/gnome/builder");
 
-  gtk_application_set_accels_for_action (GTK_APPLICATION (object),
-                                         "app.quit", quit_accels);
+  EXIT;
 }
 
 static void
