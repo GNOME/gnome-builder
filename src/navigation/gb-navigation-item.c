@@ -25,7 +25,8 @@ struct _GbNavigationItemPrivate
   gchar *label;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbNavigationItem, gb_navigation_item, G_TYPE_INITIALLY_UNOWNED)
+G_DEFINE_TYPE_WITH_PRIVATE (GbNavigationItem, gb_navigation_item,
+                            G_TYPE_INITIALLY_UNOWNED)
 
 enum {
   PROP_0,
@@ -69,11 +70,12 @@ gb_navigation_item_set_label (GbNavigationItem *item,
 }
 
 void
-gb_navigation_item_emit_activate (GbNavigationItem *item)
+gb_navigation_item_emit_activate (GbNavigationItem *item,
+                                  GbWorkbench      *workbench)
 {
   g_return_if_fail (GB_IS_NAVIGATION_ITEM (item));
   
-  g_signal_emit (item, gSignals [ACTIVATE], 0);
+  g_signal_emit (item, gSignals [ACTIVATE], 0, workbench);
 }
 
 static void

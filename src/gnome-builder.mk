@@ -18,6 +18,8 @@ gnome_builder_SOURCES = \
 	src/editor/gb-editor-commands.h \
 	src/editor/gb-editor-document.c \
 	src/editor/gb-editor-document.h \
+	src/editor/gb-editor-navigation-item.c \
+	src/editor/gb-editor-navigation-item.h \
 	src/editor/gb-editor-settings.c \
 	src/editor/gb-editor-settings.h \
 	src/editor/gb-editor-tab.c \

@@ -67,6 +67,8 @@ gb_navigation_list_go_backward (GbNavigationList *list)
 
   if (gb_navigation_list_get_can_go_backward (list))
     {
+      list->priv->current--;
+
       g_object_notify_by_pspec (G_OBJECT (list),
                                 gParamSpecs [PROP_CURRENT_ITEM]);
       g_object_notify_by_pspec (G_OBJECT (list),
@@ -83,6 +85,8 @@ gb_navigation_list_go_forward (GbNavigationList *list)
 
   if (gb_navigation_list_get_can_go_forward (list))
     {
+      list->priv->current++;
+
       g_object_notify_by_pspec (G_OBJECT (list),
                                 gParamSpecs [PROP_CURRENT_ITEM]);
       g_object_notify_by_pspec (G_OBJECT (list),
@@ -101,6 +105,30 @@ gb_navigation_list_get_current_item (GbNavigationList *list)
     return g_ptr_array_index (list->priv->items, list->priv->current);
 
   return NULL;
+}
+
+void
+gb_navigation_list_append (GbNavigationList *list,
+                           GbNavigationItem *item)
+{
+  guint position;
+
+  g_return_if_fail (GB_IS_NAVIGATION_LIST (list));
+  g_return_if_fail (GB_IS_NAVIGATION_ITEM (item));
+
+  position = list->priv->current + 1;
+
+  if (list->priv->items->len)
+    g_ptr_array_remove_range (list->priv->items, position,
+                              list->priv->items->len - 1);
+
+  g_ptr_array_add (list->priv->items, g_object_ref_sink (item));
+
+  list->priv->current++;
+
+  g_object_notify_by_pspec (G_OBJECT (list), gParamSpecs [PROP_CURRENT_ITEM]);
+  g_object_notify_by_pspec (G_OBJECT (list), gParamSpecs [PROP_CAN_GO_BACKWARD]);
+  g_object_notify_by_pspec (G_OBJECT (list), gParamSpecs [PROP_CAN_GO_FORWARD]);
 }
 
 static void
@@ -124,11 +152,13 @@ gb_navigation_list_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_CAN_GO_BACKWARD:
-      g_value_set_boolean (value, gb_navigation_list_get_can_go_backward (self));
+      g_value_set_boolean (value,
+                           gb_navigation_list_get_can_go_backward (self));
       break;
 
     case PROP_CAN_GO_FORWARD:
-      g_value_set_boolean (value, gb_navigation_list_get_can_go_forward (self));
+      g_value_set_boolean (value,
+                           gb_navigation_list_get_can_go_forward (self));
       break;
 
     case PROP_CURRENT_ITEM:
@@ -184,4 +214,5 @@ gb_navigation_list_init (GbNavigationList *self)
 {
   self->priv = gb_navigation_list_get_instance_private (self);
   self->priv->items = g_ptr_array_new_with_free_func (g_object_unref);
+  self->priv->current = -1;
 }
