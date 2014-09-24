@@ -16,9 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "navigation"
+
 #include <glib/gi18n.h>
 
 #include "gb-navigation-list.h"
+
+#define NAVIGATION_MAX_ITEMS 32
 
 struct _GbNavigationListPrivate
 {
@@ -118,17 +122,26 @@ gb_navigation_list_append (GbNavigationList *list,
 
   position = list->priv->current + 1;
 
-  if (list->priv->items->len)
+  if (list->priv->items->len > (list->priv->current + 1))
     g_ptr_array_remove_range (list->priv->items, position,
                               list->priv->items->len - 1);
+
+  if (list->priv->items->len == NAVIGATION_MAX_ITEMS)
+    {
+      g_ptr_array_remove_index (list->priv->items, 0);
+      list->priv->current--;
+    }
 
   g_ptr_array_add (list->priv->items, g_object_ref_sink (item));
 
   list->priv->current++;
 
-  g_object_notify_by_pspec (G_OBJECT (list), gParamSpecs [PROP_CURRENT_ITEM]);
-  g_object_notify_by_pspec (G_OBJECT (list), gParamSpecs [PROP_CAN_GO_BACKWARD]);
-  g_object_notify_by_pspec (G_OBJECT (list), gParamSpecs [PROP_CAN_GO_FORWARD]);
+  g_object_notify_by_pspec (G_OBJECT (list),
+                            gParamSpecs [PROP_CURRENT_ITEM]);
+  g_object_notify_by_pspec (G_OBJECT (list),
+                            gParamSpecs [PROP_CAN_GO_BACKWARD]);
+  g_object_notify_by_pspec (G_OBJECT (list),
+                            gParamSpecs [PROP_CAN_GO_FORWARD]);
 }
 
 static void
