@@ -135,7 +135,8 @@ gb_editor_tab_reload_snippets (GbEditorTab       *tab,
   if (language)
     {
       manager = gb_source_snippets_manager_get_default ();
-      snippets = gb_source_snippets_manager_get_for_language (manager, language);
+      snippets = gb_source_snippets_manager_get_for_language (manager,
+                                                              language);
     }
 
   g_object_set (priv->snippets_provider, "snippets", snippets, NULL);
@@ -567,6 +568,7 @@ do_delayed_animation (gpointer data)
 {
   GbEditorTabPrivate *priv;
   GbBoxTheatric *theatric;
+  GdkFrameClock *frame_clock;
   GbEditorTab *tab = data;
   GtkTextView *text_view;
   GtkTextBuffer *buffer;
@@ -638,10 +640,12 @@ do_delayed_animation (gpointer data)
                            "alpha", 0.5,
                            NULL);
 
+  frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (priv->source_view));
+
   gb_object_animate (theatric,
                      GB_ANIMATION_EASE_OUT_CUBIC,
                      250,
-                     gtk_widget_get_frame_clock (GTK_WIDGET (priv->source_view)),
+                     frame_clock,
                      "alpha", 0.0,
                      "height", end_rect.height,
                      "width", end_rect.width,
@@ -872,7 +876,8 @@ transform_file_to_language (GBinding     *binding,
        */
 
       manager = gtk_source_language_manager_get_default ();
-      language = gtk_source_language_manager_guess_language (manager, filename, content_type);
+      language = gtk_source_language_manager_guess_language (manager, filename,
+                                                             content_type);
 
       g_free (filename);
       g_free (content_type);
@@ -1205,25 +1210,43 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
   g_object_class_install_property (object_class, PROP_SETTINGS,
                                    gParamSpecs[PROP_SETTINGS]);
 
-  gtk_widget_class_set_template_from_resource (widget_class, GB_EDITOR_TAB_UI_RESOURCE);
+  gtk_widget_class_set_template_from_resource (widget_class,
+                                               GB_EDITOR_TAB_UI_RESOURCE);
 
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, floating_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, document);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, change_monitor);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, file);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, go_down_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, go_up_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, overlay);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, preview_container);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, progress_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, revealer);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, scroller);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, search_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, search_context);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, search_highlighter);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, search_settings);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, snippets_provider);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, source_view);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                floating_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                document);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                change_monitor);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                file);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                go_down_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                go_up_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                overlay);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                preview_container);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                progress_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                revealer);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                scroller);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                search_context);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                search_highlighter);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                search_settings);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, 
+                                                snippets_provider);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                source_view);
 
   g_type_ensure (GB_TYPE_EDITOR_DOCUMENT);
   g_type_ensure (GB_TYPE_SOURCE_CHANGE_MONITOR);
