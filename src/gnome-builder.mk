@@ -171,4 +171,4 @@ EXTRA_DIST += $(resource_files)
 EXTRA_DIST += src/resources/gnome-builder.gresource.xml
 EXTRA_DIST += $(gnome_builder_built_sources)
 
-CLEANFILES += $(gnome_builder_built_sources)
+DISTCLEANFILES += $(gnome_builder_built_sources)
