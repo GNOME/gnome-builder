@@ -915,6 +915,7 @@ gb_editor_tab_constructed (GObject *object)
   GtkSourceCompletion *comp;
   GbEditorTabPrivate *priv;
   GbEditorTab *tab = (GbEditorTab *) object;
+  GtkSourceGutter *gutter;
 
   ENTRY;
 
@@ -1011,20 +1012,16 @@ gb_editor_tab_constructed (GObject *object)
                                "language", G_BINDING_SYNC_CREATE,
                                transform_file_to_language, NULL, tab, NULL);
 
-  {
-    GtkSourceGutter *gutter;
-
-    gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (priv->source_view),
-                                         GTK_TEXT_WINDOW_LEFT);
-    priv->change_renderer =
-        g_object_new (GB_TYPE_SOURCE_CHANGE_GUTTER_RENDERER,
-                      "change-monitor", priv->change_monitor,
-                      "size", 2,
-                      "visible", TRUE,
-                      "xpad", 1,
-                      NULL);
-    gtk_source_gutter_insert (gutter, priv->change_renderer, 0);
-  }
+  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (priv->source_view),
+                                       GTK_TEXT_WINDOW_LEFT);
+  priv->change_renderer =
+      g_object_new (GB_TYPE_SOURCE_CHANGE_GUTTER_RENDERER,
+                    "change-monitor", priv->change_monitor,
+                    "size", 2,
+                    "visible", TRUE,
+                    "xpad", 1,
+                    NULL);
+  gtk_source_gutter_insert (gutter, priv->change_renderer, 0);
 
   gb_editor_tab_cursor_moved (tab, priv->document);
 
