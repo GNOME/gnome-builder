@@ -16,13 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "devhelp-workspace"
+
 #include <devhelp/devhelp.h>
 #include <glib/gi18n.h>
 
+#include "gb-devhelp-navigation-item.h"
 #include "gb-devhelp-tab.h"
 #include "gb-devhelp-workspace.h"
+#include "gb-log.h"
 #include "gb-multi-notebook.h"
+#include "gb-navigation-list.h"
 #include "gb-notebook.h"
+#include "gb-workbench.h"
 
 struct _GbDevhelpWorkspacePrivate
 {
@@ -110,9 +116,14 @@ gb_devhelp_workspace_link_selected (GbDevhelpWorkspace *workspace,
                                     DhSidebar          *sidebar)
 {
   GbDevhelpWorkspacePrivate *priv;
+  GbNavigationList *list;
+  GbNavigationItem *item;
+  GbWorkbench *workbench;
   const gchar *uri;
   GbNotebook *notebook;
   GbTab *tab;
+
+  ENTRY;
 
   g_return_if_fail (GB_IS_DEVHELP_WORKSPACE (workspace));
   g_return_if_fail (link_);
@@ -133,6 +144,17 @@ gb_devhelp_workspace_link_selected (GbDevhelpWorkspace *workspace,
     }
 
   gb_devhelp_tab_set_uri (GB_DEVHELP_TAB (tab), uri);
+
+  workbench = GB_WORKBENCH (gtk_widget_get_toplevel (GTK_WIDGET (workspace)));
+  list = gb_workbench_get_navigation_list (workbench);
+  item = g_object_new (GB_TYPE_DEVHELP_NAVIGATION_ITEM,
+                       "label", "",
+                       "workspace", workspace,
+                       "uri", uri,
+                       NULL);
+  gb_navigation_list_append (list, item);
+
+  EXIT;
 }
 
 static void
@@ -144,6 +166,24 @@ on_n_notebooks_changed (GbMultiNotebook    *mnb,
   g_return_if_fail (GB_IS_DEVHELP_WORKSPACE (workspace));
 
   update_show_tabs (workspace);
+}
+
+void
+gb_devhelp_workspace_open_uri (GbDevhelpWorkspace *workspace,
+                               const gchar        *uri)
+{
+  GbDevhelpWorkspacePrivate *priv;
+  GbTab *tab;
+
+  g_return_if_fail (GB_IS_DEVHELP_WORKSPACE (workspace));
+  g_return_if_fail (uri);
+
+  priv = workspace->priv;
+
+  tab = gb_multi_notebook_get_active_tab (priv->multi_notebook);
+
+  if (GB_IS_DEVHELP_TAB (tab))
+    gb_devhelp_tab_set_uri (GB_DEVHELP_TAB (tab), uri);
 }
 
 static void

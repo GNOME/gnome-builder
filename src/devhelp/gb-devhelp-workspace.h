@@ -49,6 +49,8 @@ struct _GbDevhelpWorkspaceClass
 };
 
 GType gb_devhelp_workspace_get_type (void) G_GNUC_CONST;
+void  gb_devhelp_workspace_open_uri (GbDevhelpWorkspace *workspace,
+                                     const gchar        *uri);
 
 G_END_DECLS
 
