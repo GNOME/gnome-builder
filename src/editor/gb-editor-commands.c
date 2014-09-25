@@ -231,13 +231,33 @@ gb_editor_commands_find (GbEditorWorkspace *workspace,
   EXIT;
 }
 
+static gboolean
+object_unref_timeout (gpointer data)
+{
+  GbEditorTab *tab = data;
+  g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), FALSE);
+  g_object_unref (tab);
+  return G_SOURCE_REMOVE;
+}
+
 void
 gb_editor_commands_close_tab (GbEditorWorkspace *workspace,
                               GbEditorTab       *tab)
 {
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
+  /*
+   * WORKAROUND:
+   *
+   * I seem to be seeing some issues with ATK getting a segfault if we lose
+   * our reference here. Delaying the disposal for a bit seems to fix the
+   * issue. Apparently atk exports some paths on D-Bus, and perhaps that is
+   * holding a weak pointer that has gone invalid during the focus changes.
+   */
+
+  g_object_ref (tab);
   gb_tab_close (GB_TAB (tab));
+  g_timeout_add (100, object_unref_timeout, tab);
 }
 
 static void
