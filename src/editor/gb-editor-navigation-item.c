@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "editor-navigation"
+
 #include <glib/gi18n.h>
 
 #include "gb-editor-navigation-item.h"
@@ -177,7 +179,9 @@ gb_editor_navigation_item_activate (GbNavigationItem *item)
                                    "position", &page,
                                    NULL);
           gtk_notebook_set_current_page (GTK_NOTEBOOK (parent), page);
-          gb_editor_tab_scroll_to_line (self->priv->tab, self->priv->line);
+          gb_editor_tab_scroll_to_line (self->priv->tab,
+                                        self->priv->line,
+                                        self->priv->line_offset);
           gtk_widget_grab_focus (GTK_WIDGET (self->priv->tab));
         }
     }

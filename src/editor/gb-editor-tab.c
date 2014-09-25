@@ -854,7 +854,8 @@ on_source_view_push_snippet (GbSourceView           *source_view,
 
 void
 gb_editor_tab_scroll_to_line (GbEditorTab *tab,
-                              guint        line)
+                              guint        line,
+                              guint        line_offset)
 {
   GtkTextIter iter;
 
@@ -862,6 +863,7 @@ gb_editor_tab_scroll_to_line (GbEditorTab *tab,
 
   gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (tab->priv->document),
                                     &iter, line);
+  gtk_text_iter_set_line_offset (&iter, line_offset);
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (tab->priv->document),
                                 &iter, &iter);
   gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (tab->priv->source_view), &iter,
