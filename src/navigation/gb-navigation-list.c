@@ -181,8 +181,7 @@ gb_navigation_list_append (GbNavigationList *list,
     }
 
   g_ptr_array_add (list->priv->items, g_object_ref_sink (item));
-
-  list->priv->current++;
+  list->priv->current = list->priv->items->len - 1;
 
   g_object_notify_by_pspec (G_OBJECT (list),
                             gParamSpecs [PROP_CURRENT_ITEM]);
