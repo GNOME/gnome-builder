@@ -34,7 +34,7 @@ static gboolean
 gb_frame_source_prepare (GSource *source,
                          gint    *timeout_)
 {
-   GbFrameSource *fsource = (GbFrameSource *)source;
+   GbFrameSource *fsource = (GbFrameSource *)(gpointer)source;
    gint64 current_time;
    guint elapsed_time;
    guint new_frame_num;
@@ -81,7 +81,7 @@ gb_frame_source_dispatch (GSource     *source,
                           GSourceFunc  source_func,
                           gpointer     user_data)
 {
-   GbFrameSource *fsource = (GbFrameSource *)source;
+   GbFrameSource *fsource = (GbFrameSource *)(gpointer)source;
    gboolean ret;
 
    if ((ret = source_func(user_data)))
@@ -120,7 +120,7 @@ gb_frame_source_add (guint       frames_per_sec,
    g_return_val_if_fail(frames_per_sec < 120, 0);
 
    source = g_source_new(&source_funcs, sizeof(GbFrameSource));
-   fsource = (GbFrameSource *)source;
+   fsource = (GbFrameSource *)(gpointer)source;
    fsource->fps = frames_per_sec;
    fsource->frame_count = 0;
    fsource->start_time = g_get_monotonic_time() / 1000;
