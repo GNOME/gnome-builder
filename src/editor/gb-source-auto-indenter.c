@@ -23,30 +23,6 @@
 G_DEFINE_ABSTRACT_TYPE (GbSourceAutoIndenter, gb_source_auto_indenter,
                         G_TYPE_OBJECT)
 
-static gchar *
-gb_source_auto_indenter_real_query (GbSourceAutoIndenter *indenter,
-                                    GtkTextView          *view,
-                                    GtkTextBuffer        *buffer,
-                                    GtkTextIter          *iter)
-{
-  return NULL;
-}
-
-gchar *
-gb_source_auto_indenter_query (GbSourceAutoIndenter *indenter,
-                               GtkTextView          *view,
-                               GtkTextBuffer        *buffer,
-                               GtkTextIter          *iter)
-{
-  g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER (indenter), NULL);
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (view), NULL);
-  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
-  g_return_val_if_fail (iter, NULL);
-
-  return GB_SOURCE_AUTO_INDENTER_GET_CLASS (indenter)->query (indenter, view,
-                                                              buffer, iter);
-}
-
 static gboolean
 gb_source_auto_indenter_real_is_trigger (GbSourceAutoIndenter *indenter,
                                          GdkEventKey          *event)
@@ -112,7 +88,6 @@ gb_source_auto_indenter_real_format (GbSourceAutoIndenter *indenter,
 static void
 gb_source_auto_indenter_class_init (GbSourceAutoIndenterClass *klass)
 {
-  klass->query = gb_source_auto_indenter_real_query;
   klass->is_trigger = gb_source_auto_indenter_real_is_trigger;
   klass->format = gb_source_auto_indenter_real_format;
 }
