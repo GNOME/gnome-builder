@@ -917,6 +917,117 @@ gb_editor_commands_scroll_up (GbEditorWorkspace *workspace,
 }
 
 static void
+gb_editor_commands_move_forward (GbEditorWorkspace *workspace,
+                                 GbEditorTab       *tab)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextMark *insert;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  buffer = GTK_TEXT_BUFFER (tab->priv->document);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  if (!gtk_text_iter_ends_line (&iter) && gtk_text_iter_forward_char (&iter))
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+}
+
+static void
+gb_editor_commands_move_backward (GbEditorWorkspace *workspace,
+                                  GbEditorTab       *tab)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextMark *insert;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  buffer = GTK_TEXT_BUFFER (tab->priv->document);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  if (!gtk_text_iter_starts_line (&iter) && gtk_text_iter_backward_char (&iter))
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (tab->priv->source_view),
+                                      insert);
+}
+
+static void
+gb_editor_commands_move_up (GbEditorWorkspace *workspace,
+                            GbEditorTab       *tab)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextMark *insert;
+  guint line;
+  guint line_offset;
+  guint i;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  buffer = GTK_TEXT_BUFFER (tab->priv->document);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  line = gtk_text_iter_get_line (&iter);
+  line_offset = gtk_text_iter_get_line_offset (&iter);
+
+  if (line == 0)
+    return;
+
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, line - 1);
+  for (i = 0; i < line_offset; i++)
+    if (gtk_text_iter_ends_line (&iter) ||
+        !gtk_text_iter_forward_char (&iter))
+      break;
+
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (tab->priv->source_view),
+                                      insert);
+}
+
+static void
+gb_editor_commands_move_down (GbEditorWorkspace *workspace,
+                              GbEditorTab       *tab)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextMark *insert;
+  guint line;
+  guint line_offset;
+  guint i;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  buffer = GTK_TEXT_BUFFER (tab->priv->document);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  line = gtk_text_iter_get_line (&iter);
+  line_offset = gtk_text_iter_get_line_offset (&iter);
+
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, line + 1);
+  if (gtk_text_iter_get_line (&iter) == (line + 1))
+    for (i = 0; i < line_offset; i++)
+      if (gtk_text_iter_ends_line (&iter) ||
+          !gtk_text_iter_forward_char (&iter))
+        break;
+
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (tab->priv->source_view),
+                                      insert);
+}
+
+static void
 gb_editor_commands_highlight_mode (GSimpleAction     *action,
                                    GVariant          *parameter,
                                    GbEditorWorkspace *workspace)
@@ -1001,6 +1112,10 @@ gb_editor_commands_init (GbEditorWorkspace *workspace)
     { "trim-trailing-space", gb_editor_commands_trim_trailing_space, TRUE },
     { "scroll-down",         gb_editor_commands_scroll_down,         TRUE },
     { "scroll-up",           gb_editor_commands_scroll_up,           TRUE },
+    { "move-forward",        gb_editor_commands_move_forward,        TRUE },
+    { "move-backward",       gb_editor_commands_move_backward,       TRUE },
+    { "move-up",             gb_editor_commands_move_up,             TRUE },
+    { "move-down",           gb_editor_commands_move_down,           TRUE },
     { NULL }
   };
   GSimpleAction *action;
