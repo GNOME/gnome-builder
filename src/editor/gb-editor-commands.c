@@ -917,6 +917,37 @@ gb_editor_commands_scroll_up (GbEditorWorkspace *workspace,
 }
 
 static void
+gb_editor_commands_highlight_mode (GSimpleAction     *action,
+                                   GVariant          *parameter,
+                                   GbEditorWorkspace *workspace)
+{
+  GbTab *tab;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (workspace));
+
+  tab = gb_multi_notebook_get_active_tab (workspace->priv->multi_notebook);
+
+  if (GB_IS_TAB (tab))
+    {
+      const gchar *name;
+      gsize len = 0;
+
+      if ((name = g_variant_get_string (parameter, &len)))
+        {
+          GtkSourceLanguageManager *lm;
+          GtkSourceLanguage *l;
+
+          lm = gtk_source_language_manager_get_default ();
+          l = gtk_source_language_manager_get_language (lm, name);
+
+          if (l)
+            gtk_source_buffer_set_language (
+                GTK_SOURCE_BUFFER (GB_EDITOR_TAB (tab)->priv->document), l);
+        }
+    }
+}
+
+static void
 gb_editor_commands_activate (GSimpleAction *action,
                              GVariant      *variant,
                              gpointer       user_data)
@@ -972,6 +1003,7 @@ gb_editor_commands_init (GbEditorWorkspace *workspace)
     { "scroll-up",           gb_editor_commands_scroll_up,           TRUE },
     { NULL }
   };
+  GSimpleAction *action;
   guint i;
 
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
@@ -988,4 +1020,13 @@ gb_editor_commands_init (GbEditorWorkspace *workspace)
       g_action_map_add_action_entries (G_ACTION_MAP (workspace->priv->actions),
                                        &entry, 1, workspace);
     }
+
+  action = g_simple_action_new ("highlight-mode", G_VARIANT_TYPE_STRING);
+  g_signal_connect (action,
+                    "activate",
+                    G_CALLBACK (gb_editor_commands_highlight_mode),
+                    workspace);
+  g_action_map_add_action (G_ACTION_MAP (workspace->priv->actions),
+                           G_ACTION (action));
+  g_object_unref (action);
 }

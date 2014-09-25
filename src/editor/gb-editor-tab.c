@@ -25,11 +25,13 @@
 #include "gb-log.h"
 #include "gb-rgba.h"
 #include "gb-source-change-gutter-renderer.h"
+#include "gb-source-highlight-menu.h"
 #include "gb-source-snippet.h"
 #include "gb-source-snippets-manager.h"
 #include "gb-source-snippets.h"
 #include "gb-string.h"
 #include "gb-widget.h"
+#include "gb-workbench.h"
 
 #define GB_EDITOR_TAB_UI_RESOURCE "/org/gnome/builder/ui/gb-editor-tab.ui"
 
@@ -791,6 +793,9 @@ on_source_view_populate_popup (GtkTextView *text_view,
                                GtkWidget   *popup,
                                GbEditorTab *tab)
 {
+  GbWorkbench *workbench;
+  GbWorkspace *workspace;
+
   g_return_if_fail (GB_IS_SOURCE_VIEW (text_view));
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
@@ -798,6 +803,13 @@ on_source_view_populate_popup (GtkTextView *text_view,
     {
       PangoFontDescription *font = NULL;
       GtkStyleContext *context;
+      GMenuModel *model;
+      GtkWidget *menu_item;
+      GtkWidget *menu;
+      GtkWidget *separator;
+
+      workbench = GB_WORKBENCH (gtk_widget_get_toplevel (GTK_WIDGET (text_view)));
+      workspace = gb_workbench_get_active_workspace (workbench);
 
       /*
        * WORKAROUND:
@@ -821,8 +833,27 @@ on_source_view_populate_popup (GtkTextView *text_view,
 
       /*
        * TODO: Add menu for controlling font size.
-       *       Add menu for controlling highlight.
        */
+
+      /*
+       * Add separator.
+       */
+      separator = gtk_separator_menu_item_new ();
+      gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), GTK_WIDGET (separator));
+      gtk_widget_show (separator);
+
+      /*
+       * Add menu for highlight mode.
+       */
+      model = gb_source_highlight_menu_new ();
+      menu = gtk_menu_new_from_model (model);
+      menu_item = gtk_menu_item_new_with_label (_("Highlight Mode"));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), menu);
+      gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), GTK_WIDGET (menu_item));
+      gtk_widget_insert_action_group (GTK_WIDGET (menu_item), "editor",
+                                      gb_workspace_get_actions (workspace));
+      gtk_widget_show (GTK_WIDGET (menu_item));
+      g_object_unref (model);
     }
 }
 

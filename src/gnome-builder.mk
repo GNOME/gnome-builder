@@ -41,6 +41,8 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-source-formatter.h \
 	src/editor/gb-source-change-gutter-renderer.c \
 	src/editor/gb-source-change-gutter-renderer.h \
+	src/editor/gb-source-highlight-menu.c \
+	src/editor/gb-source-highlight-menu.h \
 	src/editor/gb-source-search-highlighter.h \
 	src/editor/gb-source-search-highlighter.c \
 	src/markdown/gs-markdown.c \
