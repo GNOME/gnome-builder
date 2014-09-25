@@ -51,7 +51,6 @@ struct _GbNavigationListClass
 };
 
 GType                 gb_navigation_list_get_type            (void) G_GNUC_CONST;
-GbNavigationList     *gb_navigation_list_new                 (void);
 gboolean              gb_navigation_list_get_can_go_backward (GbNavigationList *list);
 gboolean              gb_navigation_list_get_can_go_forward  (GbNavigationList *list);
 GbNavigationItem     *gb_navigation_list_get_current_item    (GbNavigationList *list);

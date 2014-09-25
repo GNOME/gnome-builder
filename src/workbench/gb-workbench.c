@@ -215,12 +215,15 @@ on_go_forward_activate (GSimpleAction *action,
                         GVariant      *variant,
                         gpointer       user_data)
 {
+  GbWorkbenchPrivate *priv;
   GbWorkbench *workbench = user_data;
 
   g_return_if_fail (GB_IS_WORKBENCH (workbench));
 
-  if (gb_navigation_list_get_can_go_forward (workbench->priv->navigation_list))
-    gb_navigation_list_go_forward (workbench->priv->navigation_list);
+  priv = workbench->priv;
+
+  if (gb_navigation_list_get_can_go_forward (priv->navigation_list))
+    gb_navigation_list_go_forward (priv->navigation_list);
 }
 
 static void
@@ -228,12 +231,41 @@ on_go_backward_activate (GSimpleAction *action,
                          GVariant      *variant,
                          gpointer       user_data)
 {
+  GbWorkbenchPrivate *priv;
   GbWorkbench *workbench = user_data;
 
   g_return_if_fail (GB_IS_WORKBENCH (workbench));
 
-  if (gb_navigation_list_get_can_go_backward (workbench->priv->navigation_list))
-    gb_navigation_list_go_backward (workbench->priv->navigation_list);
+  priv = workbench->priv;
+
+  if (gb_navigation_list_get_can_go_backward (priv->navigation_list))
+    gb_navigation_list_go_backward (priv->navigation_list);
+}
+
+static void
+gb_workbench_navigation_changed (GbWorkbench      *workbench,
+                                 GParamSpec       *pspec,
+                                 GbNavigationList *list)
+{
+  GbWorkbenchPrivate *priv;
+  GbNavigationItem *item;
+  GbWorkspace *workspace;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (GB_IS_NAVIGATION_LIST (list));
+
+  priv = workbench->priv;
+
+  item = gb_navigation_list_get_current_item (list);
+
+  if (item)
+    {
+      workspace = gb_navigation_item_get_workspace (item);
+      if (workspace)
+        gtk_stack_set_visible_child (priv->stack, GTK_WIDGET (workspace));
+
+      gb_navigation_item_emit_activate (item);
+    }
 }
 
 static void
@@ -275,6 +307,12 @@ gb_workbench_constructed (GObject *object)
 
   g_action_map_add_action_entries (G_ACTION_MAP (workbench), actions,
                                    G_N_ELEMENTS (actions), workbench);
+
+  g_signal_connect_object (priv->navigation_list,
+                           "notify::current-item",
+                           G_CALLBACK (gb_workbench_navigation_changed),
+                           workbench,
+                           G_CONNECT_SWAPPED);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (workbench), "go-backward");
   g_object_bind_property (priv->navigation_list, "can-go-backward",
@@ -405,7 +443,9 @@ gb_workbench_init (GbWorkbench *workbench)
 
   gtk_widget_init_template (GTK_WIDGET (workbench));
 
-  workbench->priv->navigation_list = gb_navigation_list_new ();
+  workbench->priv->navigation_list = g_object_new (GB_TYPE_NAVIGATION_LIST,
+                                                   "workbench", workbench,
+                                                   NULL);
   workbench->priv->actions = gb_workbench_actions_new (workbench);
   gtk_widget_insert_action_group (GTK_WIDGET (workbench),
                                   "workbench",

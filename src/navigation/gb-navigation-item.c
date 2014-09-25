@@ -22,7 +22,8 @@
 
 struct _GbNavigationItemPrivate
 {
-  gchar *label;
+  gchar       *label;
+  GbWorkspace *workspace;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbNavigationItem, gb_navigation_item,
@@ -31,6 +32,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbNavigationItem, gb_navigation_item,
 enum {
   PROP_0,
   PROP_LABEL,
+  PROP_WORKSPACE,
   LAST_PROP
 };
 
@@ -54,7 +56,7 @@ const gchar *
 gb_navigation_item_get_label (GbNavigationItem *item)
 {
   g_return_val_if_fail (GB_IS_NAVIGATION_ITEM (item), NULL);
-  
+
   return item->priv->label;
 }
 
@@ -63,17 +65,51 @@ gb_navigation_item_set_label (GbNavigationItem *item,
                               const gchar      *label)
 {
   g_return_if_fail (GB_IS_NAVIGATION_ITEM (item));
-  
+
   g_free (item->priv->label);
   item->priv->label = g_strdup (label);
   g_object_notify_by_pspec (G_OBJECT (item), gParamSpecs [PROP_LABEL]);
 }
 
+GbWorkspace *
+gb_navigation_item_get_workspace (GbNavigationItem *item)
+{
+  g_return_val_if_fail (GB_IS_NAVIGATION_ITEM (item), NULL);
+
+  return item->priv->workspace;
+}
+
+static void
+gb_navigation_item_set_workspace (GbNavigationItem *item,
+                                  GbWorkspace      *workspace)
+{
+  g_return_if_fail (GB_IS_NAVIGATION_ITEM (item));
+  g_return_if_fail (!workspace || GB_IS_WORKSPACE (workspace));
+
+  if (item->priv->workspace)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (item),
+                                    (gpointer *)&item->priv->workspace);
+      item->priv->workspace = NULL;
+    }
+
+  if (workspace)
+    {
+      item->priv->workspace = workspace;
+      g_object_add_weak_pointer (G_OBJECT (workspace),
+                                 (gpointer *)&item->priv->workspace);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (item), gParamSpecs [PROP_WORKSPACE]);
+}
+
+
+
 void
 gb_navigation_item_emit_activate (GbNavigationItem *item)
 {
   g_return_if_fail (GB_IS_NAVIGATION_ITEM (item));
-  
+
   g_signal_emit (item, gSignals [ACTIVATE], 0);
 }
 
@@ -81,8 +117,15 @@ static void
 gb_navigation_item_finalize (GObject *object)
 {
   GbNavigationItemPrivate *priv = GB_NAVIGATION_ITEM (object)->priv;
-  
+
   g_clear_pointer (&priv->label, g_free);
+
+  if (priv->workspace)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->workspace),
+                                    (gpointer *)&priv->workspace);
+      priv->workspace = NULL;
+    }
 
   G_OBJECT_CLASS (gb_navigation_item_parent_class)->finalize (object);
 }
@@ -100,7 +143,11 @@ gb_navigation_item_get_property (GObject    *object,
     case PROP_LABEL:
       g_value_set_string (value, gb_navigation_item_get_label (self));
       break;
-      
+
+    case PROP_WORKSPACE:
+      g_value_set_object (value, gb_navigation_item_get_workspace (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -119,7 +166,11 @@ gb_navigation_item_set_property (GObject      *object,
     case PROP_LABEL:
       gb_navigation_item_set_label (self, g_value_get_string (value));
       break;
-      
+
+    case PROP_WORKSPACE:
+      gb_navigation_item_set_workspace (self, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -133,10 +184,10 @@ gb_navigation_item_class_init (GbNavigationItemClass *klass)
   object_class->finalize = gb_navigation_item_finalize;
   object_class->get_property = gb_navigation_item_get_property;
   object_class->set_property = gb_navigation_item_set_property;
-  
+
   /**
    * GbNavigationItem:label:
-   * 
+   *
    * The "label" for the item within the navigation list.
    */
   gParamSpecs [PROP_LABEL] =
@@ -147,10 +198,21 @@ gb_navigation_item_class_init (GbNavigationItemClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_LABEL,
                                    gParamSpecs [PROP_LABEL]);
-  
+
+  gParamSpecs [PROP_WORKSPACE] =
+    g_param_spec_object ("workspace",
+                         _("Workspace"),
+                         _("The workspace to ensure is focused."),
+                         GB_TYPE_WORKSPACE,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_WORKSPACE,
+                                   gParamSpecs [PROP_WORKSPACE]);
+
   /**
    * GbNavigationItem::activate:
-   * 
+   *
    * This signal is emitted when the navigation item should be navigated
    * to. The subscriber should change to their respective workspace and focus
    * anything necessary to view the represented state.

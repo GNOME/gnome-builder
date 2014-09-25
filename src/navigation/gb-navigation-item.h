@@ -21,6 +21,8 @@
 
 #include <glib-object.h>
 
+#include "gb-workspace.h"
+
 G_BEGIN_DECLS
 
 #define GB_TYPE_NAVIGATION_ITEM            (gb_navigation_item_get_type())
@@ -46,7 +48,7 @@ struct _GbNavigationItem
 struct _GbNavigationItemClass
 {
   GInitiallyUnownedClass parent;
-  
+
   void (*activate) (GbNavigationItem *item);
 };
 
@@ -56,7 +58,7 @@ void              gb_navigation_item_emit_activate (GbNavigationItem *item);
 const gchar      *gb_navigation_item_get_label     (GbNavigationItem *item);
 void              gb_navigation_item_set_label     (GbNavigationItem *item,
                                                     const gchar      *label);
-
+GbWorkspace      *gb_navigation_item_get_workspace (GbNavigationItem *item);
 
 G_END_DECLS
 

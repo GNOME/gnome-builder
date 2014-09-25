@@ -8,7 +8,7 @@ test_navigation_list_basic (void)
   GbNavigationItem *item;
   guint i;
 
-  list = gb_navigation_list_new ();
+  list = g_object_new (GB_TYPE_NAVIGATION_LIST, NULL);
 
   g_assert_cmpint (0, ==, gb_navigation_list_get_depth (list));
 

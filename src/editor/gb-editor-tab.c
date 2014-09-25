@@ -852,6 +852,22 @@ on_source_view_push_snippet (GbSourceView           *source_view,
     }
 }
 
+void
+gb_editor_tab_scroll_to_line (GbEditorTab *tab,
+                              guint        line)
+{
+  GtkTextIter iter;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (tab->priv->document),
+                                    &iter, line);
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (tab->priv->document),
+                                &iter, &iter);
+  gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (tab->priv->source_view), &iter,
+                                0.0, FALSE, 0.0, 0.5);
+}
+
 static gboolean
 transform_file_to_language (GBinding     *binding,
                             const GValue *src_value,
@@ -1243,7 +1259,7 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
                                                 search_highlighter);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
                                                 search_settings);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, 
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
                                                 snippets_provider);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
                                                 source_view);

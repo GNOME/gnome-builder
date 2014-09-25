@@ -19,6 +19,9 @@
 #include <glib/gi18n.h>
 
 #include "gb-editor-navigation-item.h"
+#include "gb-log.h"
+#include "gb-notebook.h"
+#include "gb-workbench.h"
 
 struct _GbEditorNavigationItemPrivate
 {
@@ -156,9 +159,37 @@ gb_editor_navigation_item_activate (GbNavigationItem *item)
 {
   GbEditorNavigationItem *self = (GbEditorNavigationItem *)item;
 
+  ENTRY;
+
   g_return_if_fail (GB_IS_EDITOR_NAVIGATION_ITEM (self));
 
-  g_print ("Activate item\n");
+  if (self->priv->tab)
+    {
+      GtkWidget *parent;
+      guint page;
+
+      parent = gtk_widget_get_parent (GTK_WIDGET (self->priv->tab));
+
+      if (GB_IS_NOTEBOOK (parent))
+        {
+          gtk_container_child_get (GTK_CONTAINER (parent),
+                                   GTK_WIDGET (self->priv->tab),
+                                   "position", &page,
+                                   NULL);
+          gtk_notebook_set_current_page (GTK_NOTEBOOK (parent), page);
+          gb_editor_tab_scroll_to_line (self->priv->tab, self->priv->line);
+          gtk_widget_grab_focus (GTK_WIDGET (self->priv->tab));
+        }
+    }
+  else
+    {
+      /*
+       * TODO: We will need to implement this once we handle closing files
+       *       properly as well as saving state between application loads.
+       */
+    }
+
+  EXIT;
 }
 
 static void

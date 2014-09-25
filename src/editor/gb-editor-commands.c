@@ -471,6 +471,7 @@ gb_editor_tab_do_save (GbEditorTab *tab)
    */
   {
     GbWorkbench *workbench;
+    GbWorkspace *workspace;
     GbNavigationItem *item;
     GbNavigationList *list = NULL;
     GtkTextMark *insert;
@@ -479,6 +480,7 @@ gb_editor_tab_do_save (GbEditorTab *tab)
     guint line_offset;
 
     workbench = GB_WORKBENCH (gtk_widget_get_toplevel (GTK_WIDGET (priv->source_view)));
+    workspace = gb_workbench_get_workspace (workbench, GB_TYPE_EDITOR_WORKSPACE);
     list = gb_workbench_get_navigation_list (workbench);
 
     insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->document));
@@ -491,6 +493,7 @@ gb_editor_tab_do_save (GbEditorTab *tab)
                          "line", line,
                          "line-offset", line_offset,
                          "tab", tab,
+                         "workspace", workspace,
                          NULL);
     gb_navigation_list_append (list, item);
   }

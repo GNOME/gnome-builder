@@ -60,6 +60,8 @@ GbWorkspace      *gb_workbench_get_active_workspace (GbWorkbench *workbench);
 GbWorkspace      *gb_workbench_get_workspace        (GbWorkbench *workbench,
                                                      GType        type);
 
+GbWorkbench      *gb_navigation_list_get_workbench  (GbNavigationList *list);
+
 G_END_DECLS
 
 #endif /* GB_WORKBENCH_H */

@@ -21,13 +21,15 @@
 #include <glib/gi18n.h>
 
 #include "gb-navigation-list.h"
+#include "gb-workbench.h"
 
 #define NAVIGATION_MAX_ITEMS 32
 
 struct _GbNavigationListPrivate
 {
-  GPtrArray *items;
-  gint       current;
+  GbWorkbench *workbench;
+  GPtrArray   *items;
+  gint         current;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbNavigationList, gb_navigation_list, G_TYPE_OBJECT)
@@ -38,6 +40,7 @@ enum {
   PROP_CAN_GO_FORWARD,
   PROP_CURRENT_ITEM,
   PROP_DEPTH,
+  PROP_WORKBENCH,
   LAST_PROP
 };
 
@@ -47,6 +50,42 @@ GbNavigationList *
 gb_navigation_list_new (void)
 {
   return g_object_new (GB_TYPE_NAVIGATION_LIST, NULL);
+}
+
+GbWorkbench *
+gb_navigation_list_get_workbench (GbNavigationList *list)
+{
+  g_return_val_if_fail (GB_IS_NAVIGATION_LIST (list), NULL);
+
+  return list->priv->workbench;
+}
+
+static void
+gb_navigation_list_set_workbench (GbNavigationList *list,
+                                  GbWorkbench      *workbench)
+{
+  GbNavigationListPrivate *priv;
+
+  g_return_if_fail (GB_IS_NAVIGATION_LIST (list));
+  g_return_if_fail (!workbench || GB_IS_WORKBENCH (workbench));
+
+  priv = list->priv;
+
+  if (priv->workbench)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->workbench),
+                                    (gpointer *)&priv->workbench);
+      priv->workbench = NULL;
+    }
+
+  if (workbench)
+    {
+      priv->workbench = workbench;
+      g_object_add_weak_pointer (G_OBJECT (priv->workbench),
+                                 (gpointer *)&priv->workbench);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (list), gParamSpecs [PROP_WORKBENCH]);
 }
 
 guint
@@ -187,8 +226,31 @@ gb_navigation_list_get_property (GObject    *object,
       g_value_set_object (value, gb_navigation_list_get_current_item (self));
       break;
 
+    case PROP_WORKBENCH:
+      g_value_set_object (value, gb_navigation_list_get_workbench (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gb_navigation_list_set_property (GObject      *object,
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
+{
+  GbNavigationList *list = GB_NAVIGATION_LIST(object);
+
+  switch (prop_id)
+    {
+    case PROP_WORKBENCH:
+      gb_navigation_list_set_workbench (list, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
 }
 
@@ -199,6 +261,7 @@ gb_navigation_list_class_init (GbNavigationListClass *klass)
 
   object_class->finalize = gb_navigation_list_finalize;
   object_class->get_property = gb_navigation_list_get_property;
+  object_class->set_property = gb_navigation_list_set_property;
 
   gParamSpecs [PROP_CAN_GO_BACKWARD] =
     g_param_spec_boolean ("can-go-backward",
@@ -229,6 +292,17 @@ gb_navigation_list_class_init (GbNavigationListClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_CURRENT_ITEM,
                                    gParamSpecs [PROP_CURRENT_ITEM]);
+
+  gParamSpecs [PROP_WORKBENCH] =
+    g_param_spec_object ("workbench",
+                         _("Workbench"),
+                         _("The workbench the navigation list is for."),
+                         GB_TYPE_WORKBENCH,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_WORKBENCH,
+                                   gParamSpecs [PROP_WORKBENCH]);
 }
 
 static void

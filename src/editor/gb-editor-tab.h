@@ -60,6 +60,8 @@ void              gb_editor_tab_set_settings   (GbEditorTab                *tab,
 void              gb_editor_tab_set_font_desc  (GbEditorTab                *tab,
                                                 const PangoFontDescription *font_desc);
 gboolean          gb_editor_tab_get_is_default (GbEditorTab                *tab);
+void              gb_editor_tab_scroll_to_line (GbEditorTab                *tab,
+                                                guint                       line);
 
 G_END_DECLS
 
