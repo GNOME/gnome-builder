@@ -820,6 +820,83 @@ gb_editor_commands_select_line (GbEditorWorkspace *workspace,
 }
 
 static void
+gb_editor_commands_move_by (GbEditorWorkspace *workspace,
+                            GbEditorTab       *tab,
+                            gdouble            amount)
+{
+  GtkAdjustment *vadj;
+  gdouble value;
+  gdouble upper;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_assert (GB_IS_EDITOR_TAB (tab));
+
+  /*
+   * Move the editor by the requested amount.
+   */
+  vadj = gtk_scrolled_window_get_vadjustment (tab->priv->scroller);
+  value = gtk_adjustment_get_value (vadj);
+  upper = gtk_adjustment_get_upper (vadj);
+  gtk_adjustment_set_value (vadj, CLAMP (value + amount, 0, upper));
+}
+
+static void
+gb_editor_commands_scroll_down (GbEditorWorkspace *workspace,
+                                GbEditorTab       *tab)
+{
+  GbEditorTabPrivate *priv;
+  GtkTextBuffer *buffer;
+  GdkRectangle rect;
+  GtkTextView *view;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_assert (GB_IS_EDITOR_TAB (tab));
+
+  priv = tab->priv;
+
+  view = GTK_TEXT_VIEW (priv->source_view);
+  buffer = GTK_TEXT_BUFFER (priv->document);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  gtk_text_view_get_iter_location (view, &iter, &rect);
+
+  gb_editor_commands_move_by (workspace, tab, rect.height);
+
+  gtk_text_view_place_cursor_onscreen (view);
+}
+
+static void
+gb_editor_commands_scroll_up (GbEditorWorkspace *workspace,
+                              GbEditorTab       *tab)
+{
+  GbEditorTabPrivate *priv;
+  GtkTextBuffer *buffer;
+  GdkRectangle rect;
+  GtkTextView *view;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_assert (GB_IS_EDITOR_TAB (tab));
+
+  priv = tab->priv;
+
+  view = GTK_TEXT_VIEW (priv->source_view);
+  buffer = GTK_TEXT_BUFFER (priv->document);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  gtk_text_view_get_iter_location (view, &iter, &rect);
+
+  gb_editor_commands_move_by (workspace, tab, -rect.height);
+
+  gtk_text_view_place_cursor_onscreen (view);
+}
+
+static void
 gb_editor_commands_activate (GSimpleAction *action,
                              GVariant      *variant,
                              gpointer       user_data)
@@ -871,6 +948,8 @@ gb_editor_commands_init (GbEditorWorkspace *workspace)
     { "save-as",             gb_editor_commands_save_as,             TRUE },
     { "select-line",         gb_editor_commands_select_line,         TRUE },
     { "trim-trailing-space", gb_editor_commands_trim_trailing_space, TRUE },
+    { "scroll-down",         gb_editor_commands_scroll_down,         TRUE },
+    { "scroll-up",           gb_editor_commands_scroll_up,           TRUE },
     { NULL }
   };
   guint i;
