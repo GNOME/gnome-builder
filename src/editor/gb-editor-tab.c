@@ -956,7 +956,7 @@ transform_file_to_title (GBinding     *binding,
   if (file)
     title = g_file_get_basename (file);
   else
-    title = g_strdup (_("Unsaved File"));
+    title = g_strdup (_("unsaved file"));
 
   g_value_take_string (dst_value, title);
 
