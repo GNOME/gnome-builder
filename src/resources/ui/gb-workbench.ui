@@ -19,6 +19,7 @@
               <object class="GtkButton" id="back_button">
                 <property name="action-name">win.go-backward</property>
                 <property name="visible">True</property>
+                <property name="tooltip-text" translatable="yes">Go back in history</property>
                 <style>
                   <class name="image-button"/>
                 </style>
@@ -38,6 +39,7 @@
                 </style>
                 <property name="action-name">win.go-forward</property>
                 <property name="visible">True</property>
+                <property name="tooltip-text" translatable="yes">Go forward in history</property>
                 <child>
                   <object class="GtkImage" id="next_buton_image">
                     <property name="visible">True</property>
@@ -53,6 +55,7 @@
           <object class="GtkButton" id="new_tab">
             <property name="visible">True</property>
             <property name="action_name">workbench.new-tab</property>
+            <property name="tooltip-text" translatable="yes">Open new tab</property>
             <style>
               <class name="image-button"/>
             </style>
