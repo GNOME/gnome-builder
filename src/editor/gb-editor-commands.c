@@ -791,6 +791,35 @@ gb_editor_commands_trim_trailing_space (GbEditorWorkspace *workspace,
 }
 
 static void
+gb_editor_commands_select_line (GbEditorWorkspace *workspace,
+                                GbEditorTab       *tab)
+{
+  GbEditorTabPrivate *priv;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  GtkTextIter end;
+  guint line;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_assert (GB_IS_EDITOR_TAB (tab));
+
+  priv = tab->priv;
+
+  buffer = GTK_TEXT_BUFFER (priv->document);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  line = gtk_text_iter_get_line (&iter);
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
+  gtk_text_buffer_get_iter_at_line (buffer, &end, line);
+  while (!gtk_text_iter_ends_line (&end))
+    if (!gtk_text_iter_forward_char (&end))
+      break;
+  gtk_text_buffer_select_range (buffer, &iter, &end);
+}
+
+static void
 gb_editor_commands_activate (GSimpleAction *action,
                              GVariant      *variant,
                              gpointer       user_data)
@@ -840,6 +869,7 @@ gb_editor_commands_init (GbEditorWorkspace *workspace)
     { "reformat",            gb_editor_commands_reformat,            TRUE },
     { "save",                gb_editor_commands_save,                TRUE },
     { "save-as",             gb_editor_commands_save_as,             TRUE },
+    { "select-line",         gb_editor_commands_select_line,         TRUE },
     { "trim-trailing-space", gb_editor_commands_trim_trailing_space, TRUE },
     { NULL }
   };
