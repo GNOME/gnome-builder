@@ -392,7 +392,8 @@ gb_editor_tab_language_changed (GbEditorTab      *tab,
     {
       const gchar *lang_id = gtk_source_language_get_id (language);
 
-      if (lang_id)
+      if ((g_strcmp0 (lang_id, "c") == 0) ||
+          (g_strcmp0 (lang_id, "chdr") == 0))
         indenter = gb_source_auto_indenter_c_new ();
     }
 
