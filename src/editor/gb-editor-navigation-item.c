@@ -22,9 +22,10 @@
 
 struct _GbEditorNavigationItemPrivate
 {
-  GFile *file;
-  guint  line;
-  guint  line_offset;
+  GFile       *file;
+  guint        line;
+  guint        line_offset;
+  GbEditorTab *tab;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorNavigationItem, gb_editor_navigation_item,
@@ -35,6 +36,7 @@ enum {
   PROP_FILE,
   PROP_LINE,
   PROP_LINE_OFFSET,
+  PROP_TAB,
   LAST_PROP
 };
 
@@ -52,6 +54,42 @@ gb_editor_navigation_item_new (GFile *file,
                        "line", line,
                        "line-offset", line_offset,
                        NULL);
+}
+
+GbEditorTab *
+gb_editor_navigation_item_get_tab (GbEditorNavigationItem *item)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_NAVIGATION_ITEM (item), NULL);
+
+  return item->priv->tab;
+}
+
+static void
+gb_editor_navigation_item_set_tab (GbEditorNavigationItem *item,
+                                   GbEditorTab            *tab)
+{
+  GbEditorNavigationItemPrivate *priv;
+
+  g_return_if_fail (GB_IS_EDITOR_NAVIGATION_ITEM (item));
+  g_return_if_fail (!tab || GB_IS_EDITOR_TAB (tab));
+
+  priv = item->priv;
+
+  if (priv->tab)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->tab),
+                                    (gpointer *)&priv->tab);
+      priv->tab = NULL;
+    }
+
+  if (tab)
+    {
+      priv->tab = tab;
+      g_object_add_weak_pointer (G_OBJECT (priv->tab),
+                                 (gpointer *)&priv->tab);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (item), gParamSpecs [PROP_TAB]);
 }
 
 GFile *
@@ -85,7 +123,7 @@ gb_editor_navigation_item_get_line (GbEditorNavigationItem *item)
   return item->priv->line;
 }
 
-void
+static void
 gb_editor_navigation_item_set_line (GbEditorNavigationItem *item,
                                     guint                   line)
 {
@@ -155,6 +193,10 @@ gb_editor_navigation_item_get_property (GObject    *object,
       g_value_set_uint (value, gb_editor_navigation_item_get_line_offset (self));
       break;
 
+    case PROP_TAB:
+      g_value_set_object (value, gb_editor_navigation_item_get_tab (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -180,6 +222,10 @@ gb_editor_navigation_item_set_property (GObject      *object,
 
     case PROP_LINE_OFFSET:
       gb_editor_navigation_item_set_line_offset (self, g_value_get_uint (value));
+      break;
+
+    case PROP_TAB:
+      gb_editor_navigation_item_set_tab (self, g_value_get_object (value));
       break;
 
     default:
@@ -235,6 +281,17 @@ gb_editor_navigation_item_class_init (GbEditorNavigationItemClass *klass)
                         G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_LINE_OFFSET,
                                    gParamSpecs [PROP_LINE_OFFSET]);
+
+  gParamSpecs [PROP_TAB] =
+    g_param_spec_object ("tab",
+                         _("Tab"),
+                         _("The editor tab."),
+                         GB_TYPE_EDITOR_TAB,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_TAB,
+                                   gParamSpecs [PROP_TAB]);
 }
 
 static void

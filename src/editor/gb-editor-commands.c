@@ -490,6 +490,7 @@ gb_editor_tab_do_save (GbEditorTab *tab)
                          "file", gtk_source_file_get_location (priv->file),
                          "line", line,
                          "line-offset", line_offset,
+                         "tab", tab,
                          NULL);
     gb_navigation_list_append (list, item);
   }
