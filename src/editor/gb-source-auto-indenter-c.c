@@ -1127,6 +1127,7 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
         gtk_text_iter_assign (&iter, begin);
         gtk_text_iter_backward_char (&iter);
         gtk_text_iter_backward_char (&iter);
+        backward_to_line_first_char (&iter);
         offset = gtk_text_iter_get_line_offset (&iter);
         build_indent (c, offset, &iter, str);
         g_string_prepend (str, "\n");
