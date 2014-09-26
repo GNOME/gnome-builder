@@ -965,42 +965,38 @@ line_is_case (const GtkTextIter *line)
 static gboolean
 line_is_label (const GtkTextIter *line)
 {
-  GtkTextIter iter;
-  gboolean found_char = FALSE;
-  gboolean found_colon = FALSE;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gchar *text;
+  gchar **parts;
+  guint i;
+  guint count = 0;
 
-  gtk_text_iter_assign (&iter, line);
+  gtk_text_iter_assign (&begin, line);
+  while (!gtk_text_iter_starts_line (&begin))
+    if (!gtk_text_iter_backward_char (&begin))
+      return FALSE;
 
-  while (!gtk_text_iter_starts_line (&iter))
+  gtk_text_iter_assign (&end, line);
+  while (!gtk_text_iter_ends_line (&end))
+    if (!gtk_text_iter_forward_char (&end))
+      return FALSE;
+
+  text = gtk_text_iter_get_slice (&begin, &end);
+  g_strdelimit (text, "\t", ' ');
+  parts = g_strsplit (text, " ", 0);
+
+  for (i = 0; parts [i]; i++)
     {
-      gunichar ch;
-
-      ch = gtk_text_iter_get_char (&iter);
-
-      switch (ch)
-        {
-        case ' ':
-          break;
-        case ':':
-          found_colon = TRUE;
-          break;
-        case '_':
-          found_char = TRUE;
-          break;
-        default:
-          if (g_unichar_isalnum (ch))
-            {
-              found_char = TRUE;
-              break;
-            }
-          return FALSE;
-        }
-
-      if (!gtk_text_iter_backward_char (&iter))
-        return FALSE;
+      g_strstrip (parts [i]);
+      if (*parts [i] && (g_strcmp0 (parts [i], ":") != 0))
+        count++;
     }
 
-  return (found_char && found_colon);
+  g_free (text);
+  g_strfreev (parts);
+
+  return (count == 1);
 }
 
 static gchar *
@@ -1023,8 +1019,6 @@ maybe_unindent_case_label (GbSourceAutoIndenterC *c,
 
   if (line_is_case (&iter))
     {
-      TODO ("Implement unindent for case");
-
       if (backward_find_matching_char (&iter, '}'))
         {
           if (line_is_whitespace_until (&iter))
