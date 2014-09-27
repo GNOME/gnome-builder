@@ -19,6 +19,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <libgit2-glib/ggit.h>
 
 #include "gb-application.h"
 #include "gb-log.h"
@@ -34,6 +35,7 @@ main (int   argc,
   g_set_application_name (_("Builder"));
 
   gb_log_init (TRUE, NULL);
+  ggit_init ();
 
   app = g_object_new (GB_TYPE_APPLICATION,
                       "application-id", "org.gnome.Builder",

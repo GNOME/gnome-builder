@@ -19,28 +19,29 @@
 #define G_LOG_DOMAIN "change-monitor"
 
 #include <glib/gi18n.h>
+#include <gtksourceview/gtksource.h>
+#include <libgit2-glib/ggit.h>
 
 #include "gb-log.h"
 #include "gb-source-change-monitor.h"
 
+#define PARSE_TIMEOUT_MSEC 1000
+
 struct _GbSourceChangeMonitorPrivate
 {
-  GtkTextBuffer *buffer;
-  GArray        *state;
-
-  guint delete_range_before_handler;
-  guint delete_range_after_handler;
-  guint insert_text_before_handler;
-  guint insert_text_after_handler;
-
-  guint insert_begin_line;
-  guint insert_begin_offset;
+  GtkTextBuffer  *buffer;
+  GFile          *file;
+  GgitRepository *repo;
+  GHashTable     *state;
+  guint           changed_handler;
+  guint           parse_timeout;
 };
 
 enum
 {
   PROP_0,
   PROP_BUFFER,
+  PROP_FILE,
   LAST_PROP
 };
 
@@ -50,381 +51,208 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbSourceChangeMonitor,
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-
-static void
-gb_source_change_monitor_insert (GbSourceChangeMonitor *monitor,
-                                 guint                  line,
-                                 GbSourceChangeFlags    flags)
-{
-  guint8 byte = (guint8)flags;
-
-  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
-
-  if (line == monitor->priv->state->len)
-    g_array_append_val (monitor->priv->state, byte);
-  else
-    g_array_insert_val (monitor->priv->state, line, byte);
-}
-
-static void
-gb_source_change_monitor_remove (GbSourceChangeMonitor *monitor,
-                                 guint                  line)
-{
-  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
-  g_return_if_fail (line < monitor->priv->state->len);
-
-  g_array_remove_index (monitor->priv->state, line);
-}
-
-static void
-gb_source_change_monitor_set_line (GbSourceChangeMonitor *monitor,
-                                   guint                  line,
-                                   GbSourceChangeFlags    flags)
-{
-  GbSourceChangeFlags old_flags;
-
-  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
-  g_return_if_fail (line < monitor->priv->state->len);
-
-  old_flags = g_array_index (monitor->priv->state, guint8, line);
-
-  /*
-   * Don't allow ourselves to go from "added" to "changed" unless we
-   * previously did not have a dirty bit.
-   */
-  if (((old_flags & GB_SOURCE_CHANGE_ADDED) != 0) &&
-      ((old_flags & GB_SOURCE_CHANGE_DIRTY) != 0))
-    {
-      flags &= ~GB_SOURCE_CHANGE_CHANGED;
-      flags |= GB_SOURCE_CHANGE_ADDED;
-    }
-
-  g_array_index (monitor->priv->state, guint8, line) = (guint8)flags;
-}
-
-static void
-gb_source_change_monitor_ensure_bounds (GbSourceChangeMonitor *monitor)
-{
-  GbSourceChangeMonitorPrivate *priv;
-  GtkTextIter begin;
-  GtkTextIter end;
-  guint line;
-
-  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
-
-  priv = monitor->priv;
-
-  gtk_text_buffer_get_bounds (priv->buffer, &begin, &end);
-
-  line = gtk_text_iter_get_line (&end);
-
-  if (line + 1 > priv->state->len)
-    g_array_set_size (priv->state, line + 1);
-}
-
-static void
-get_line_mutation (const GtkTextIter *begin,
-                   const GtkTextIter *end,
-                   guint              line,
-                   gboolean          *delete_line,
-                   gboolean          *is_changed)
-{
-  guint begin_line;
-  guint begin_offset;
-  guint end_line;
-  guint end_offset;
-
-  ENTRY;
-
-  begin_line = gtk_text_iter_get_line (begin);
-  begin_offset = gtk_text_iter_get_line_offset (begin);
-  end_line = gtk_text_iter_get_line (end);
-  end_offset = gtk_text_iter_get_line_offset (end);
-
-  if (begin_line == end_line)
-    {
-      *delete_line = FALSE;
-      *is_changed = TRUE;
-      EXIT;
-    }
-  else if ((line == begin_line) &&
-           gtk_text_iter_starts_line (begin) &&
-           gtk_text_iter_starts_line (end))
-    {
-      *delete_line = TRUE;
-      *is_changed = FALSE;
-      EXIT;
-    }
-  else if ((line == begin_line) &&
-           ((begin_line + 1) == end_line) &&
-           gtk_text_iter_ends_line (begin) &&
-           gtk_text_iter_starts_line (end))
-    {
-      *delete_line = FALSE;
-      *is_changed = FALSE;
-      EXIT;
-    }
-  else if ((begin_offset != 0) && (line == begin_line))
-    {
-      *delete_line = FALSE;
-      *is_changed = TRUE;
-      EXIT;
-    }
-  else if ((line == end_line) && (end_offset == 0))
-    {
-      *delete_line = FALSE;
-      *is_changed = FALSE;
-      EXIT;
-    }
-  else if ((begin_offset == 0) && (line == begin_line) && (begin_line != end_line))
-    {
-      *delete_line = TRUE;
-      *is_changed = FALSE;
-      EXIT;
-    }
-  else if ((line != begin_line) && (line != end_line))
-    {
-      *delete_line = TRUE;
-      *is_changed = FALSE;
-      EXIT;
-    }
-  else if ((line != begin_line) && (line == end_line) && (begin_offset != 0))
-    {
-      *delete_line = TRUE;
-      *is_changed = FALSE;
-      EXIT;
-    }
-  else if ((line != begin_line) && (line == end_line) && (begin_offset == 0))
-    {
-      *delete_line = FALSE;
-      *is_changed = TRUE;
-      EXIT;
-    }
-  else
-    {
-      g_warning ("Unknown outcome: begin=%d:%d line=%d end_line=%d:%d",
-                 begin_line, begin_offset, line, end_line, end_offset);
-
-      *is_changed = TRUE;
-      *delete_line = FALSE;
-      EXIT;
-    }
-
-  EXIT;
-}
-
-static void
-on_delete_range_before_cb (GbSourceChangeMonitor *monitor,
-                           GtkTextIter           *begin,
-                           GtkTextIter           *end,
-                           GtkTextBuffer         *buffer)
-{
-  GArray *ar;
-  guint begin_line;
-  guint end_line;
-  guint i;
-
-  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
-  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
-
-  if (gtk_text_iter_compare (begin, end) == 0)
-    return;
-
-  begin_line = gtk_text_iter_get_line (begin);
-  end_line = gtk_text_iter_get_line (end);
-
-  ar = g_array_new (FALSE, FALSE, sizeof (guint));
-
-  for (i = begin_line; i <= end_line; i++)
-    {
-      gboolean delete_line;
-      gboolean is_changed;
-
-      get_line_mutation (begin, end, i, &delete_line, &is_changed);
-
-      if (delete_line)
-        g_array_append_val (ar, i);
-      else if (is_changed)
-        gb_source_change_monitor_set_line (monitor, i,
-                                           (GB_SOURCE_CHANGE_CHANGED |
-                                            GB_SOURCE_CHANGE_DIRTY));
-    }
-
-  for (i = ar->len; i > 0; i--)
-    {
-      guint line;
-
-      line = g_array_index (ar, guint, i - 1);
-      gb_source_change_monitor_remove (monitor, line);
-    }
-
-  g_array_unref (ar);
-}
-
-static void
-on_delete_range_after_cb (GbSourceChangeMonitor *monitor,
-                          GtkTextIter           *begin,
-                          GtkTextIter           *end,
-                          GtkTextBuffer         *buffer)
-{
-  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
-  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
-}
-
-static void
-on_insert_text_before_cb (GbSourceChangeMonitor *monitor,
-                          GtkTextIter           *location,
-                          gchar                 *text,
-                          gint                   len,
-                          GtkTextBuffer         *buffer)
-{
-  GbSourceChangeMonitorPrivate *priv;
-  GtkTextIter begin;
-  GtkTextIter end;
-
-  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
-  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
-
-  priv = monitor->priv;
-
-  priv->insert_begin_line = gtk_text_iter_get_line (location);
-  priv->insert_begin_offset = gtk_text_iter_get_line_offset (location);
-
-  gtk_text_buffer_get_bounds (buffer, &begin, &end);
-
-  /*
-   * WORKAROUND:
-   *
-   * Mark the first line as added if we are typing our first character.
-   * We should consider removing this GSignal handler after it has
-   * hit this to save on signal emission.
-   */
-  if (G_UNLIKELY (gtk_text_iter_compare (&begin, &end) == 0))
-    gb_source_change_monitor_set_line (monitor, 0,
-                                       (GB_SOURCE_CHANGE_ADDED |
-                                        GB_SOURCE_CHANGE_DIRTY));
-}
-
-static void
-on_insert_text_after_cb (GbSourceChangeMonitor *monitor,
-                         GtkTextIter           *location,
-                         gchar                 *text,
-                         gint                   len,
-                         GtkTextBuffer         *buffer)
-{
-  GbSourceChangeMonitorPrivate *priv;
-  GbSourceChangeFlags flags = 0;
-  guint line;
-
-  ENTRY;
-
-  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
-  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
-
-  priv = monitor->priv;
-
-  line = gtk_text_iter_get_line (location);
-
-  if (g_strcmp0 (text, "\n") == 0)
-    {
-      flags = (GB_SOURCE_CHANGE_ADDED | GB_SOURCE_CHANGE_DIRTY);
-      if (priv->insert_begin_offset == 0)
-        gb_source_change_monitor_insert (monitor, line-1, flags);
-      else
-        gb_source_change_monitor_insert (monitor, line, flags);
-    }
-  else if (strchr (text, '\n') == NULL)
-    {
-      flags = (GB_SOURCE_CHANGE_CHANGED | GB_SOURCE_CHANGE_DIRTY);
-      gb_source_change_monitor_set_line (monitor, line, flags);
-    }
-  else
-    {
-      GtkTextIter end;
-      GtkTextIter iter;
-      guint last_line;
-
-      len = g_utf8_strlen (text, len);
-
-      gtk_text_iter_assign (&iter, location);
-      gtk_text_iter_assign (&end, location);
-      gtk_text_iter_backward_chars (&iter, len);
-
-      last_line = gtk_text_iter_get_line (&iter);
-
-      while (gtk_text_iter_compare (&iter, &end) <= 0)
-        {
-          line = gtk_text_iter_get_line (&iter);
-
-          if (line != last_line)
-            {
-              flags = (GB_SOURCE_CHANGE_ADDED | GB_SOURCE_CHANGE_DIRTY);
-              gb_source_change_monitor_insert (monitor, line, flags);
-              last_line = line;
-            }
-
-          if (!gtk_text_iter_forward_char (&iter))
-            break;
-        }
-    }
-
-  gb_source_change_monitor_ensure_bounds (monitor);
-
-  EXIT;
-}
-
 GbSourceChangeFlags
 gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
                                    guint                  lineno)
 {
   g_return_val_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor), 0);
 
-  if (lineno < monitor->priv->state->len)
-    return monitor->priv->state->data [lineno];
+  if (monitor->priv->state)
+    {
+      gpointer value;
 
-  g_warning ("No such line: %u", lineno);
+      value = g_hash_table_lookup (monitor->priv->state,
+                                   GINT_TO_POINTER (lineno));
+      return GPOINTER_TO_INT (value);
+    }
 
-  return 0;
+  return GB_SOURCE_CHANGE_NONE;
 }
 
-void
-gb_source_change_monitor_saved (GbSourceChangeMonitor *monitor)
+static gboolean
+on_parse_timeout (GbSourceChangeMonitor *monitor)
 {
   GbSourceChangeMonitorPrivate *priv;
-  GbSourceChangeFlags flags;
-  guint i;
+  GgitOId *entry_oid = NULL;
+  GgitOId *oid = NULL;
+  GgitObject *blob = NULL;
+  GgitObject *commit = NULL;
+  GgitRef *head = NULL;
+  GgitTree *tree = NULL;
+  GgitTreeEntry *entry = NULL;
+  GFile *workdir = NULL;
+  GError *error = NULL;
+  gchar *relpath = NULL;
+
+  ENTRY;
+
+  g_assert (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+
+  priv = monitor->priv;
+
+  /*
+   * First, disable this so any side-effects cause a new parse to occur.
+   */
+  priv->parse_timeout = 0;
+
+  /*
+   * We are about to invalidate everything, so just clear out the hash table.
+   */
+  g_hash_table_remove_all (priv->state);
+
+  /*
+   * Double check we have everything we need.
+   */
+  if (!priv->repo)
+    RETURN (G_SOURCE_REMOVE);
+
+  /*
+   * Work our way through ggit to get to the original blog we care about.
+   */
+  head = ggit_repository_get_head (priv->repo, &error);
+  if (!head)
+    GOTO (cleanup);
+
+  oid = ggit_ref_get_target (head);
+  if (!oid)
+    GOTO (cleanup);
+
+  commit = ggit_repository_lookup (priv->repo, oid, GGIT_TYPE_COMMIT, &error);
+  if (!commit)
+    GOTO (cleanup);
+
+  tree = ggit_commit_get_tree (GGIT_COMMIT (commit));
+  if (!tree)
+    GOTO (cleanup);
+
+  workdir = ggit_repository_get_workdir (priv->repo);
+  if (!workdir)
+    GOTO (cleanup);
+
+  relpath = g_file_get_relative_path (workdir, priv->file);
+  if (!relpath)
+    GOTO (cleanup);
+
+  entry = ggit_tree_get_by_path (tree, relpath, &error);
+  if (!entry)
+    GOTO (cleanup);
+
+  entry_oid = ggit_tree_entry_get_id (entry);
+  if (!entry_oid)
+    GOTO (cleanup);
+
+  blob = ggit_repository_lookup (priv->repo, entry_oid, GGIT_TYPE_BLOB, &error);
+  if (!blob)
+    GOTO (cleanup);
+
+cleanup:
+  if (error)
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+  g_clear_object (&blob);
+  g_clear_object (&commit);
+  g_clear_object (&entry);
+  g_clear_object (&entry_oid);
+  g_clear_object (&head);
+  g_clear_object (&oid);
+  g_clear_object (&tree);
+  g_clear_object (&workdir);
+  g_clear_pointer (&relpath, g_free);
+
+  RETURN (G_SOURCE_REMOVE);
+}
+
+static void
+gb_source_change_monitor_queue_parse (GbSourceChangeMonitor *monitor)
+{
+  GbSourceChangeMonitorPrivate *priv;
 
   g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
 
   priv = monitor->priv;
 
-  for (i = 0; i < priv->state->len; i++)
+  if (priv->parse_timeout)
     {
-      flags = g_array_index (priv->state, guint8, i);
-      flags &= ~GB_SOURCE_CHANGE_DIRTY;
-      g_array_index (priv->state, guint8, i) = flags;
+      g_source_remove (priv->parse_timeout);
+      priv->parse_timeout = 0;
     }
+
+  priv->parse_timeout = g_timeout_add (PARSE_TIMEOUT_MSEC,
+                                       (GSourceFunc)on_parse_timeout,
+                                       monitor);
 }
 
-void
-gb_source_change_monitor_reset (GbSourceChangeMonitor *monitor)
+static void
+on_change_cb (GbSourceChangeMonitor *monitor,
+              GtkTextBuffer         *buffer)
+{
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+
+  gb_source_change_monitor_queue_parse (monitor);
+}
+
+static void
+discover_repository (GbSourceChangeMonitor *monitor)
 {
   GbSourceChangeMonitorPrivate *priv;
-  GtkTextIter begin;
-  GtkTextIter end;
-  guint line;
+
+  ENTRY;
 
   g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
 
+  /*
+   * TODO: This makes a lot of assumptions.
+   *   - that we are local
+   *   - that checking disk is free
+   *   - that we don't need to cache anything.
+   *
+   *  and all of those are probably wrong.
+   */
+
   priv = monitor->priv;
 
-  if (priv->buffer)
+  g_clear_object (&priv->repo);
+
+  if (priv->file)
     {
-      gtk_text_buffer_get_bounds (priv->buffer, &begin, &end);
-      line = gtk_text_iter_get_line (&end);
-      g_array_set_size (priv->state, line + 1);
-      memset (priv->state->data, 0, priv->state->len);
+      GFile *repo_file;
+      GError *error = NULL;
+
+      repo_file = ggit_repository_discover (priv->file, &error);
+
+      TRACE;
+
+      if (!repo_file)
+        {
+          g_message ("%s", error->message);
+          g_clear_error (&error);
+          EXIT;
+        }
+
+      priv->repo = ggit_repository_open (repo_file, &error);
+      TRACE;
+
+      if (!priv->repo)
+        {
+          g_message ("%s", error->message);
+          g_clear_error (&error);
+        }
+      else
+        {
+          gchar *uri;
+
+          uri = g_file_get_uri (repo_file);
+          g_message ("Discovered Git repository at \"%s\"", uri);
+          g_free (uri);
+        }
+
+      g_clear_object (&repo_file);
     }
+
+  EXIT;
 }
 
 GtkTextBuffer *
@@ -437,8 +265,7 @@ gb_source_change_monitor_get_buffer (GbSourceChangeMonitor *monitor)
 
 static void
 gb_source_change_monitor_set_buffer (GbSourceChangeMonitor *monitor,
-                                     GtkTextBuffer         *buffer,
-                                     gboolean               notify)
+                                     GtkTextBuffer         *buffer)
 {
   GbSourceChangeMonitorPrivate *priv;
 
@@ -451,54 +278,53 @@ gb_source_change_monitor_set_buffer (GbSourceChangeMonitor *monitor,
 
   if (priv->buffer)
     {
-      g_signal_handler_disconnect (priv->buffer,
-                                   priv->delete_range_before_handler);
-      g_signal_handler_disconnect (priv->buffer,
-                                   priv->delete_range_after_handler);
-      g_signal_handler_disconnect (priv->buffer,
-                                   priv->insert_text_before_handler);
-      g_signal_handler_disconnect (priv->buffer,
-                                   priv->insert_text_after_handler);
-      priv->delete_range_before_handler = 0;
-      priv->delete_range_after_handler = 0;
-      priv->insert_text_before_handler = 0;
-      priv->insert_text_after_handler = 0;
+      g_signal_handler_disconnect (priv->buffer, priv->changed_handler);
+      priv->changed_handler = 0;
       g_clear_object (&priv->buffer);
     }
 
   if (buffer)
     {
       priv->buffer = g_object_ref (buffer);
-      priv->delete_range_before_handler =
+      priv->changed_handler =
         g_signal_connect_object (priv->buffer,
-                                 "delete-range",
-                                 G_CALLBACK (on_delete_range_before_cb),
+                                 "changed",
+                                 G_CALLBACK (on_change_cb),
                                  monitor,
                                  G_CONNECT_SWAPPED);
-      priv->delete_range_after_handler =
-        g_signal_connect_object (priv->buffer,
-                                 "delete-range",
-                                 G_CALLBACK (on_delete_range_after_cb),
-                                 monitor,
-                                 (G_CONNECT_SWAPPED | G_CONNECT_AFTER));
-      priv->insert_text_before_handler =
-        g_signal_connect_object (priv->buffer,
-                                 "insert-text",
-                                 G_CALLBACK (on_insert_text_before_cb),
-                                 monitor,
-                                 G_CONNECT_SWAPPED);
-      priv->insert_text_after_handler =
-        g_signal_connect_object (priv->buffer,
-                                 "insert-text",
-                                 G_CALLBACK (on_insert_text_after_cb),
-                                 monitor,
-                                 (G_CONNECT_SWAPPED | G_CONNECT_AFTER));
-
-      gb_source_change_monitor_ensure_bounds (monitor);
     }
 
-  if (notify)
-    g_object_notify_by_pspec (G_OBJECT (monitor), gParamSpecs [PROP_BUFFER]);
+  EXIT;
+}
+
+GFile *
+gb_source_change_monitor_get_file (GbSourceChangeMonitor *monitor)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor), NULL);
+
+  return monitor->priv->file;
+}
+
+void
+gb_source_change_monitor_set_file (GbSourceChangeMonitor *monitor,
+                                   GFile                 *file)
+{
+  GbSourceChangeMonitorPrivate *priv;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+  g_return_if_fail (!file || G_IS_FILE (file));
+
+  priv = monitor->priv;
+
+  if (file == priv->file)
+    EXIT;
+
+  g_clear_object (&priv->file);
+  monitor->priv->file = file ? g_object_ref (file) : NULL;
+  discover_repository (monitor);
+  g_object_notify_by_pspec (G_OBJECT (monitor), gParamSpecs [PROP_FILE]);
 
   EXIT;
 }
@@ -506,10 +332,20 @@ gb_source_change_monitor_set_buffer (GbSourceChangeMonitor *monitor,
 static void
 gb_source_change_monitor_dispose (GObject *object)
 {
+  GbSourceChangeMonitor *monitor = (GbSourceChangeMonitor *)object;
+
   ENTRY;
 
-  gb_source_change_monitor_set_buffer (GB_SOURCE_CHANGE_MONITOR (object),
-                                       NULL, FALSE);
+  gb_source_change_monitor_set_buffer (monitor, NULL);
+  gb_source_change_monitor_set_file (monitor, NULL);
+
+  g_clear_object (&monitor->priv->repo);
+
+  if (monitor->priv->parse_timeout)
+    {
+      g_source_remove (monitor->priv->parse_timeout);
+      monitor->priv->parse_timeout = 0;
+    }
 
   G_OBJECT_CLASS (gb_source_change_monitor_parent_class)->dispose (object);
 
@@ -519,17 +355,11 @@ gb_source_change_monitor_dispose (GObject *object)
 static void
 gb_source_change_monitor_finalize (GObject *object)
 {
-  GbSourceChangeMonitorPrivate *priv;
+  GbSourceChangeMonitorPrivate *priv = GB_SOURCE_CHANGE_MONITOR (object)->priv;
 
-  ENTRY;
-
-  priv = GB_SOURCE_CHANGE_MONITOR (object)->priv;
-
-  g_clear_pointer (&priv->state, g_array_unref);
+  g_clear_pointer (&priv->state, g_hash_table_unref);
 
   G_OBJECT_CLASS (gb_source_change_monitor_parent_class)->finalize (object);
-
-  EXIT;
 }
 
 static void
@@ -540,14 +370,21 @@ gb_source_change_monitor_get_property (GObject    *object,
 {
   GbSourceChangeMonitor *monitor = GB_SOURCE_CHANGE_MONITOR (object);
 
-  switch (prop_id) {
-  case PROP_BUFFER:
-    g_value_set_object (value,
-                        gb_source_change_monitor_get_buffer (monitor));
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-  }
+  switch (prop_id)
+    {
+    case PROP_BUFFER:
+      g_value_set_object (value,
+                          gb_source_change_monitor_get_buffer (monitor));
+      break;
+
+    case PROP_FILE:
+      g_value_set_object (value,
+                          gb_source_change_monitor_get_file (monitor));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -558,15 +395,20 @@ gb_source_change_monitor_set_property (GObject      *object,
 {
   GbSourceChangeMonitor *monitor = GB_SOURCE_CHANGE_MONITOR (object);
 
-  switch (prop_id) {
-  case PROP_BUFFER:
-    gb_source_change_monitor_set_buffer (monitor,
-                                         g_value_get_object (value),
-                                         TRUE);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-  }
+  switch (prop_id)
+    {
+    case PROP_BUFFER:
+      gb_source_change_monitor_set_buffer (monitor,
+                                           g_value_get_object (value));
+      break;
+
+    case PROP_FILE:
+      gb_source_change_monitor_set_file (monitor, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -590,17 +432,23 @@ gb_source_change_monitor_class_init (GbSourceChangeMonitorClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_BUFFER,
                                    gParamSpecs [PROP_BUFFER]);
+
+  gParamSpecs [PROP_FILE] =
+    g_param_spec_object ("file",
+                         _("File"),
+                         _("The file for the buffer."),
+                         G_TYPE_FILE,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_FILE,
+                                   gParamSpecs [PROP_FILE]);
 }
 
 static void
 gb_source_change_monitor_init (GbSourceChangeMonitor *monitor)
 {
   ENTRY;
-
   monitor->priv = gb_source_change_monitor_get_instance_private (monitor);
-
-  monitor->priv->state = g_array_new (FALSE, TRUE, sizeof (guint8));
-  g_array_set_size (monitor->priv->state, 1);
-
+  monitor->priv->state = g_hash_table_new (g_direct_hash, g_direct_equal);
   EXIT;
 }

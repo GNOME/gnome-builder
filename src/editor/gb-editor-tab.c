@@ -1060,6 +1060,9 @@ gb_editor_tab_constructed (GObject *object)
                           priv->source_view, "show-shadow",
                           G_BINDING_SYNC_CREATE);
 
+  g_object_bind_property (priv->file, "location",
+                          priv->change_monitor, "file",
+                          G_BINDING_SYNC_CREATE);
   g_object_bind_property_full (priv->file, "location", tab, "title",
                                G_BINDING_SYNC_CREATE, transform_file_to_title,
                                NULL, tab, NULL);

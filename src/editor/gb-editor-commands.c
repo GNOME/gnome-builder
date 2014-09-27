@@ -396,7 +396,6 @@ on_load_cb (GtkSourceFileLoader *loader,
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (tab->priv->document),
                                 &begin, &begin);
 
-  gb_source_change_monitor_reset (tab->priv->change_monitor);
   gtk_source_gutter_renderer_set_visible (tab->priv->change_renderer, TRUE);
 
   g_object_unref (tab);
@@ -463,7 +462,6 @@ on_save_cb (GtkSourceFileSaver *saver,
     {
       gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (tab->priv->document),
                                     FALSE);
-      gb_source_change_monitor_saved (tab->priv->change_monitor);
       gtk_widget_queue_draw (GTK_WIDGET (tab->priv->source_view));
     }
 

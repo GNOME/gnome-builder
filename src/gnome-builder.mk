@@ -113,6 +113,7 @@ libgnome_builder_la_SOURCES = \
 
 libgnome_builder_la_LIBADD = \
 	$(DEVHELP_LIBS) \
+	$(GGIT_LIBS) \
 	$(GIO_LIBS) \
 	$(GTKSOURCEVIEW_LIBS) \
 	$(GTK_LIBS) \
@@ -121,6 +122,7 @@ libgnome_builder_la_LIBADD = \
 
 libgnome_builder_la_CFLAGS = \
 	$(DEVHELP_CFLAGS) \
+	$(GGIT_CFLAGS) \
 	$(GIO_CFLAGS) \
 	$(GTKSOURCEVIEW_CFLAGS) \
 	$(GTK_CFLAGS) \

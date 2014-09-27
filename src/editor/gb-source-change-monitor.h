@@ -37,6 +37,7 @@ typedef struct _GbSourceChangeMonitorPrivate GbSourceChangeMonitorPrivate;
 
 typedef enum
 {
+  GB_SOURCE_CHANGE_NONE    = 0,
   GB_SOURCE_CHANGE_DIRTY   = 1 << 0,
   GB_SOURCE_CHANGE_ADDED   = 1 << 1,
   GB_SOURCE_CHANGE_CHANGED = 1 << 2,
@@ -57,9 +58,11 @@ struct _GbSourceChangeMonitorClass
 
 GType                  gb_source_change_monitor_get_type (void) G_GNUC_CONST;
 GbSourceChangeMonitor *gb_source_change_monitor_new      (GtkTextBuffer         *buffer);
+GFile                 *gb_source_change_monitor_get_file (GbSourceChangeMonitor *monitor);
+void                   gb_source_change_monitor_set_file (GbSourceChangeMonitor *monitor,
+                                                          GFile                 *file);
 GbSourceChangeFlags    gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
                                                           guint                  lineno);
-void                   gb_source_change_monitor_reset    (GbSourceChangeMonitor *monitor);
 void                   gb_source_change_monitor_saved    (GbSourceChangeMonitor *monitor);
 
 G_END_DECLS
