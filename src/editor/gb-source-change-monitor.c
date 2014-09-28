@@ -151,15 +151,16 @@ cleanup:
       g_warning ("%s", error->message);
       g_clear_error (&error);
     }
+
   g_clear_object (&blob);
-  g_clear_object (&commit);
-  g_clear_object (&entry);
-  g_clear_object (&entry_oid);
-  g_clear_object (&head);
-  g_clear_object (&oid);
-  g_clear_object (&tree);
-  g_clear_object (&workdir);
+  g_clear_pointer (&entry_oid, ggit_oid_free);
+  g_clear_pointer (&entry, ggit_tree_entry_unref);
   g_clear_pointer (&relpath, g_free);
+  g_clear_object (&workdir);
+  g_clear_object (&tree);
+  g_clear_object (&commit);
+  g_clear_pointer (&oid, ggit_oid_free);
+  g_clear_object (&head);
 
   RETURN (G_SOURCE_REMOVE);
 }
