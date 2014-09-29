@@ -87,10 +87,17 @@ gb_editor_settings_set_style_scheme (GbEditorSettings     *settings,
                                      GtkSourceStyleScheme *style_scheme)
 {
   g_return_if_fail (GB_IS_EDITOR_SETTINGS (settings));
-  g_return_if_fail (GTK_SOURCE_IS_STYLE_SCHEME (style_scheme));
+  g_return_if_fail (!style_scheme || GTK_SOURCE_IS_STYLE_SCHEME (style_scheme));
 
-  g_clear_object (&settings->priv->style_scheme);
-  settings->priv->style_scheme = g_object_ref (style_scheme);
+  if (style_scheme == settings->priv->style_scheme)
+    return;
+
+  if (settings->priv->style_scheme)
+    g_clear_object (&settings->priv->style_scheme);
+
+  if (style_scheme)
+    settings->priv->style_scheme = g_object_ref (style_scheme);
+
   g_object_notify_by_pspec (G_OBJECT (settings),
                             gParamSpecs[PROP_STYLE_SCHEME]);
 }
