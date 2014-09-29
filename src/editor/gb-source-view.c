@@ -175,7 +175,7 @@ gb_source_view_set_show_shadow (GbSourceView *view,
   invalidate_window (view);
 }
 
-static void
+void
 gb_source_view_indent_selection (GbSourceView *view)
 {
   GbSourceViewPrivate *priv;
@@ -265,7 +265,7 @@ gb_source_view_indent_selection (GbSourceView *view)
   EXIT;
 }
 
-static void
+void
 gb_source_view_unindent_selection (GbSourceView *view)
 {
   GbSourceViewPrivate *priv;

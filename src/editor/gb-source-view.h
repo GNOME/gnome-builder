@@ -59,17 +59,19 @@ struct _GbSourceViewClass
   void (*begin_search) (GbSourceView           *view);
 };
 
-GType                 gb_source_view_get_type          (void) G_GNUC_CONST;
-void                  gb_source_view_push_snippet      (GbSourceView         *view,
-                                                        GbSourceSnippet      *snippet);
-void                  gb_source_view_clear_snippets    (GbSourceView         *view);
-gboolean              gb_source_view_get_show_shadow   (GbSourceView         *view);
-void                  gb_source_view_set_show_shadow   (GbSourceView         *view,
-                                                        gboolean              show_shadow);
-GbSourceAutoIndenter *gb_source_view_get_auto_indenter (GbSourceView         *view);
-void                  gb_source_view_set_auto_indenter (GbSourceView         *view,
-                                                        GbSourceAutoIndenter *auto_indenter);
-void                  gb_source_view_begin_search      (GbSourceView         *view);
+GType                 gb_source_view_get_type           (void) G_GNUC_CONST;
+void                  gb_source_view_push_snippet       (GbSourceView         *view,
+                                                         GbSourceSnippet      *snippet);
+void                  gb_source_view_clear_snippets     (GbSourceView         *view);
+gboolean              gb_source_view_get_show_shadow    (GbSourceView         *view);
+void                  gb_source_view_set_show_shadow    (GbSourceView         *view,
+                                                         gboolean              show_shadow);
+GbSourceAutoIndenter *gb_source_view_get_auto_indenter  (GbSourceView         *view);
+void                  gb_source_view_set_auto_indenter  (GbSourceView         *view,
+                                                         GbSourceAutoIndenter *auto_indenter);
+void                  gb_source_view_begin_search       (GbSourceView         *view);
+void                  gb_source_view_indent_selection   (GbSourceView         *view);
+void                  gb_source_view_unindent_selection (GbSourceView         *view);
 
 G_END_DECLS
 
