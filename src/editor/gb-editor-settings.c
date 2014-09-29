@@ -66,6 +66,7 @@ enum {
   PROP_SHOW_RIGHT_MARGIN,
   PROP_SMART_HOME_END,
   PROP_STYLE_SCHEME,
+  PROP_STYLE_SCHEME_NAME,
   PROP_TAB_WIDTH,
   LAST_PROP
 };
@@ -100,6 +101,35 @@ gb_editor_settings_set_style_scheme (GbEditorSettings     *settings,
 
   g_object_notify_by_pspec (G_OBJECT (settings),
                             gParamSpecs[PROP_STYLE_SCHEME]);
+}
+
+const gchar *
+gb_editor_settings_get_style_scheme_name (GbEditorSettings *settings)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_SETTINGS (settings), NULL);
+
+  if (settings->priv->style_scheme)
+    return gtk_source_style_scheme_get_name (settings->priv->style_scheme);
+
+  return NULL;
+}
+
+void
+gb_editor_settings_set_style_scheme_name (GbEditorSettings *settings,
+                                          const gchar      *name)
+{
+  GtkSourceStyleSchemeManager *manager;
+  GtkSourceStyleScheme *scheme = NULL;
+
+  g_return_if_fail (GB_IS_EDITOR_SETTINGS (settings));
+
+  if (name)
+    {
+      manager = gtk_source_style_scheme_manager_get_default ();
+      scheme = gtk_source_style_scheme_manager_get_scheme (manager, name);
+    }
+
+  gb_editor_settings_set_style_scheme (settings, scheme);
 }
 
 const PangoFontDescription *
@@ -153,7 +183,6 @@ gb_editor_settings_set_auto_indent (GbEditorSettings *settings,
                             gParamSpecs[PROP_AUTO_INDENT]);
 }
 
-
 gboolean
 gb_editor_settings_get_highlight_current_line (GbEditorSettings *settings)
 {
@@ -172,7 +201,6 @@ gb_editor_settings_set_highlight_current_line (GbEditorSettings *settings,
   g_object_notify_by_pspec (G_OBJECT (settings),
                             gParamSpecs[PROP_HIGHLIGHT_CURRENT_LINE]);
 }
-
 
 gboolean
 gb_editor_settings_get_indent_on_tab (GbEditorSettings *settings)
@@ -193,7 +221,6 @@ gb_editor_settings_set_indent_on_tab (GbEditorSettings *settings,
                             gParamSpecs[PROP_INDENT_ON_TAB]);
 }
 
-
 gboolean
 gb_editor_settings_get_insert_spaces_instead_of_tabs (GbEditorSettings *settings)
 {
@@ -212,7 +239,6 @@ gb_editor_settings_set_insert_spaces_instead_of_tabs (GbEditorSettings *settings
   g_object_notify_by_pspec (G_OBJECT (settings),
                             gParamSpecs[PROP_INSERT_SPACES_INSTEAD_OF_TABS]);
 }
-
 
 gboolean
 gb_editor_settings_get_show_line_marks (GbEditorSettings *settings)
@@ -233,7 +259,6 @@ gb_editor_settings_set_show_line_marks (GbEditorSettings *settings,
                             gParamSpecs[PROP_SHOW_LINE_MARKS]);
 }
 
-
 gboolean
 gb_editor_settings_get_show_line_numbers (GbEditorSettings *settings)
 {
@@ -253,7 +278,6 @@ gb_editor_settings_set_show_line_numbers (GbEditorSettings *settings,
                             gParamSpecs[PROP_SHOW_LINE_NUMBERS]);
 }
 
-
 gboolean
 gb_editor_settings_get_show_right_margin (GbEditorSettings *settings)
 {
@@ -272,7 +296,6 @@ gb_editor_settings_set_show_right_margin (GbEditorSettings *settings,
   g_object_notify_by_pspec (G_OBJECT (settings),
                             gParamSpecs[PROP_SHOW_RIGHT_MARGIN]);
 }
-
 
 gboolean
 gb_editor_settings_get_smart_home_end (GbEditorSettings *settings)
@@ -425,6 +448,10 @@ gb_editor_settings_get_property (GObject    *object,
       g_value_set_object (value, gb_editor_settings_get_style_scheme (settings));
       break;
 
+    case PROP_STYLE_SCHEME_NAME:
+      g_value_set_string (value, gb_editor_settings_get_style_scheme_name (settings));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -492,6 +519,10 @@ gb_editor_settings_set_property (GObject      *object,
       gb_editor_settings_set_style_scheme (settings, g_value_get_object (value));
       break;
 
+    case PROP_STYLE_SCHEME_NAME:
+      gb_editor_settings_set_style_scheme_name (settings, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -516,7 +547,6 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
   g_object_class_install_property (object_class, PROP_AUTO_INDENT,
                                    gParamSpecs[PROP_AUTO_INDENT]);
 
-
   gParamSpecs[PROP_HIGHLIGHT_CURRENT_LINE] =
     g_param_spec_boolean ("highlight-current-line",
                           _ ("highlight current line"),
@@ -525,7 +555,6 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_HIGHLIGHT_CURRENT_LINE,
                                    gParamSpecs[PROP_HIGHLIGHT_CURRENT_LINE]);
-
 
   gParamSpecs[PROP_INDENT_ON_TAB] =
     g_param_spec_boolean ("indent-on-tab",
@@ -536,7 +565,6 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
   g_object_class_install_property (object_class, PROP_INDENT_ON_TAB,
                                    gParamSpecs[PROP_INDENT_ON_TAB]);
 
-
   gParamSpecs[PROP_INSERT_SPACES_INSTEAD_OF_TABS] =
     g_param_spec_boolean ("insert-spaces-instead-of-tabs",
                           _ ("insert spaces instead of tabs"),
@@ -545,7 +573,6 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_INSERT_SPACES_INSTEAD_OF_TABS,
                                    gParamSpecs[PROP_INSERT_SPACES_INSTEAD_OF_TABS]);
-
 
   gParamSpecs[PROP_SHOW_LINE_MARKS] =
     g_param_spec_boolean ("show-line-marks",
@@ -556,7 +583,6 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
   g_object_class_install_property (object_class, PROP_SHOW_LINE_MARKS,
                                    gParamSpecs[PROP_SHOW_LINE_MARKS]);
 
-
   gParamSpecs[PROP_SHOW_LINE_NUMBERS] =
     g_param_spec_boolean ("show-line-numbers",
                           _ ("show line numbers"),
@@ -566,7 +592,6 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
   g_object_class_install_property (object_class, PROP_SHOW_LINE_NUMBERS,
                                    gParamSpecs[PROP_SHOW_LINE_NUMBERS]);
 
-
   gParamSpecs[PROP_SHOW_RIGHT_MARGIN] =
     g_param_spec_boolean ("show-right-margin",
                           _ ("show right margin"),
@@ -575,7 +600,6 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SHOW_RIGHT_MARGIN,
                                    gParamSpecs[PROP_SHOW_RIGHT_MARGIN]);
-
 
   gParamSpecs[PROP_SMART_HOME_END] =
     g_param_spec_boolean ("smart-home-end",
@@ -636,6 +660,16 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_STYLE_SCHEME,
                                    gParamSpecs[PROP_STYLE_SCHEME]);
+
+  gParamSpecs [PROP_STYLE_SCHEME_NAME] =
+    g_param_spec_string ("style-scheme-name",
+                         _("Style Scheme Name"),
+                         _("The name of the style scheme."),
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_STYLE_SCHEME_NAME,
+                                   gParamSpecs [PROP_STYLE_SCHEME_NAME]);
 }
 
 static void
