@@ -25,7 +25,7 @@
 #include "gb-log.h"
 #include "gb-source-change-monitor.h"
 
-#define PARSE_TIMEOUT_MSEC       100
+#define PARSE_TIMEOUT_MSEC       25
 #define GB_SOURCE_CHANGE_DELETED (1 << 3)
 #define GB_SOURCE_CHANGE_MASK    (0x7)
 
@@ -59,8 +59,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbSourceChangeMonitor,
                             gb_source_change_monitor,
                             G_TYPE_OBJECT)
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
+static GParamSpec  *gParamSpecs [LAST_PROP];
+static guint        gSignals [LAST_SIGNAL];
 
 GbSourceChangeFlags
 gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
@@ -146,20 +146,76 @@ diff_line_cb (GgitDiffDelta *delta,
   return 0;
 }
 
+static void
+gb_source_change_monitor_parse_cb (GObject      *source,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  GbSourceChangeMonitor *monitor = (GbSourceChangeMonitor *)source;
+  GSimpleAsyncResult *simple = (GSimpleAsyncResult *)result;
+  GHashTable *ret;
+
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+  g_return_if_fail (G_IS_SIMPLE_ASYNC_RESULT (simple));
+
+  ret = g_simple_async_result_get_op_res_gpointer (simple);
+
+  if (ret)
+    {
+      g_clear_pointer (&monitor->priv->state, g_hash_table_unref);
+      monitor->priv->state = g_hash_table_ref (ret);
+      g_signal_emit (monitor, gSignals [CHANGED], 0);
+    }
+}
+
+static void
+gb_source_change_monitor_worker (GSimpleAsyncResult *async,
+                                 GObject            *object,
+                                 GCancellable       *cancellable)
+{
+  GHashTable *state;
+  GgitBlob *blob;
+  GError *error = NULL;
+  const guint8 *text;
+  const gchar *relative_path;
+
+  g_return_if_fail (G_IS_SIMPLE_ASYNC_RESULT (async));
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (object));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  text = g_object_get_data (G_OBJECT (async), "text");
+  relative_path = g_object_get_data (G_OBJECT (async), "path");
+  blob = g_object_get_data (G_OBJECT (async), "blob");
+
+  g_return_if_fail (text);
+  g_return_if_fail (relative_path);
+  g_return_if_fail (GGIT_IS_BLOB (blob));
+
+  state = g_hash_table_new (g_direct_hash, g_direct_equal);
+  ggit_diff_blob_to_buffer (blob, relative_path, text, -1, relative_path,
+                            NULL, NULL, NULL, diff_line_cb, (gpointer)state,
+                            &error);
+
+  if (error)
+    g_simple_async_result_take_error (async, error);
+  else
+    g_simple_async_result_set_op_res_gpointer (async,
+                                               g_hash_table_ref (state),
+                                               (GDestroyNotify)g_hash_table_unref);
+
+  g_hash_table_unref (state);
+
+  g_simple_async_result_complete_in_idle (async);
+}
+
 static gboolean
 on_parse_timeout (GbSourceChangeMonitor *monitor)
 {
   GbSourceChangeMonitorPrivate *priv;
+  GSimpleAsyncResult *async;
   GtkTextIter begin;
   GtkTextIter end;
-  GError *error = NULL;
   gchar *text = NULL;
-
-  /*
-   * TODO: Move this to a worker thread!
-   *       We probably want to generate the ghashtable and then pass back that
-   *       new state to the main thread via an async worker func/cb.
-   */
 
   g_assert (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
 
@@ -174,39 +230,42 @@ on_parse_timeout (GbSourceChangeMonitor *monitor)
   priv->parse_timeout = 0;
 
   /*
-   * We are about to invalidate everything, so just clear out the hash table.
+   * Create an async handle for the context. When our callback is executed
+   * in the main thread (after diff'ing in a worker thread), we will notify
+   * listeners of the changes after applying new state.
    */
-  g_hash_table_remove_all (priv->state);
+  async = g_simple_async_result_new (G_OBJECT (monitor),
+                                     gb_source_change_monitor_parse_cb,
+                                     NULL,
+                                     on_parse_timeout);
 
   /*
-   * Load the contents of the buffer from the GtkTextBuffer.
+   * Fetch the contents of the text buffer.
    */
   gtk_text_buffer_get_bounds (priv->buffer, &begin, &end);
   text = gtk_text_buffer_get_text (priv->buffer, &begin, &end, TRUE);
 
   /*
-   * Ask ggit to diff the buffer for us. We will get a callback for all of
-   * the changes that we can then turn into Add/Change line statuses.
+   * Set the required fields for our worker.
    */
-  ggit_diff_blob_to_buffer (priv->blob, priv->relative_path,
-                            (const guint8 *)text, -1, priv->relative_path,
-                            NULL, NULL, NULL, diff_line_cb,
-                            priv->state, &error);
-
-  if (error)
-    {
-      g_message ("Failed to generate diff: %s", error->message);
-      g_clear_error (&error);
-      GOTO (cleanup);
-    }
+  g_object_set_data_full (G_OBJECT (async), "text", text, g_free);
+  g_object_set_data_full (G_OBJECT (async), "blob", g_object_ref (priv->blob),
+                          g_object_unref);
+  g_object_set_data_full (G_OBJECT (async), "path",
+                          g_strdup (priv->relative_path), g_free);
 
   /*
-   * Notify any listeners (such as the gutter renderer) of potential changes.
+   * Run the async operation in a worker thread.
    */
-  g_signal_emit (monitor, gSignals [CHANGED], 0);
+  g_simple_async_result_run_in_thread (async,
+                                       gb_source_change_monitor_worker,
+                                       G_PRIORITY_DEFAULT,
+                                       NULL);
 
-cleanup:
-  g_free (text);
+  /*
+   * We are all done with our reference in this thread.
+   */
+  g_object_unref (async);
 
   return G_SOURCE_REMOVE;
 }
