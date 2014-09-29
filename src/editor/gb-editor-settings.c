@@ -653,5 +653,5 @@ gb_editor_settings_init (GbEditorSettings *settings)
   settings->priv->tab_width = 2;
   settings->priv->indent_width = 2;
   settings->priv->font_desc = font_desc;
-  settings->priv->style_scheme = scheme;
+  settings->priv->style_scheme = g_object_ref (scheme);
 }
