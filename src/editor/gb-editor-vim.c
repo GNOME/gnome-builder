@@ -573,7 +573,7 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 
     case GDK_KEY_a:
       /*
-       * Start insert mode at the beginning of the line.
+       * Start insert mode after the current character.
        */
       gb_editor_vim_move_forward (vim);
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
