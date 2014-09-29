@@ -239,7 +239,7 @@ on_parse_timeout (GbSourceChangeMonitor *monitor)
 
   ggit_diff_blob_to_buffer (GGIT_BLOB (blob), relpath, (const guint8 *)text,
                             -1, relpath, NULL, NULL, NULL, diff_line_cb,
-                            (gpointer *)priv->state, &error);
+                            priv->state, &error);
 
   if (error)
     GOTO (cleanup);
