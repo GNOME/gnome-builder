@@ -216,18 +216,9 @@ void
 gb_editor_commands_find (GbEditorWorkspace *workspace,
                          GbEditorTab       *tab)
 {
-  GbEditorTabPrivate *priv;
-
   ENTRY;
-
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-
-  priv = tab->priv;
-
-  gtk_revealer_set_reveal_child (priv->revealer, TRUE);
-  gtk_source_search_context_set_highlight (priv->search_context, TRUE);
-  gtk_widget_grab_focus (GTK_WIDGET (priv->search_entry));
-
+  gb_source_view_begin_search (tab->priv->source_view);
   EXIT;
 }
 

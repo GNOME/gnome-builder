@@ -884,6 +884,22 @@ on_source_view_push_snippet (GbSourceView           *source_view,
     }
 }
 
+static void
+on_source_view_begin_search (GbSourceView *source_view,
+                             GbEditorTab  *tab)
+{
+  GbEditorTabPrivate *priv;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+  g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
+
+  priv = tab->priv;
+
+  gtk_revealer_set_reveal_child (priv->revealer, TRUE);
+  gtk_source_search_context_set_highlight (priv->search_context, TRUE);
+  gtk_widget_grab_focus (GTK_WIDGET (priv->search_entry));
+}
+
 void
 gb_editor_tab_scroll_to_line (GbEditorTab *tab,
                               guint        line,
@@ -1006,6 +1022,10 @@ gb_editor_tab_constructed (GObject *object)
   g_signal_connect (priv->source_view,
                     "push-snippet",
                     G_CALLBACK (on_source_view_push_snippet),
+                    tab);
+  g_signal_connect (priv->source_view,
+                    "begin-search",
+                    G_CALLBACK (on_source_view_begin_search),
                     tab);
 
   g_signal_connect_swapped (priv->go_down_button,

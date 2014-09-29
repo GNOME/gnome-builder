@@ -67,11 +67,20 @@ enum {
 enum {
   PUSH_SNIPPET,
   POP_SNIPPET,
+  BEGIN_SEARCH,
   LAST_SIGNAL
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
+
+void
+gb_source_view_begin_search (GbSourceView *view)
+{
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  g_signal_emit (view, gSignals [BEGIN_SEARCH], 0);
+}
 
 static void
 on_search_highlighter_changed (GbSourceSearchHighlighter *highlighter,
@@ -1461,6 +1470,17 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   GB_TYPE_SOURCE_SNIPPET);
+
+  gSignals [BEGIN_SEARCH] =
+    g_signal_new ("begin-search",
+                  GB_TYPE_SOURCE_VIEW,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSourceViewClass, begin_search),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 static void
