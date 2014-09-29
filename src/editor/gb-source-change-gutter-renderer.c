@@ -48,6 +48,18 @@ gb_source_change_gutter_renderer_get_change_monitor (GbSourceChangeGutterRendere
 }
 
 static void
+on_changed (GbSourceChangeMonitor        *monitor,
+            GbSourceChangeGutterRenderer *renderer)
+{
+  GtkTextView *text_view;
+
+  g_return_val_if_fail (GB_IS_SOURCE_CHANGE_GUTTER_RENDERER (renderer), NULL);
+
+  text_view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (renderer));
+  gtk_widget_queue_draw (GTK_WIDGET (text_view));
+}
+
+static void
 gb_source_change_gutter_renderer_set_change_monitor (GbSourceChangeGutterRenderer *renderer,
                                                      GbSourceChangeMonitor        *monitor)
 {
@@ -60,6 +72,9 @@ gb_source_change_gutter_renderer_set_change_monitor (GbSourceChangeGutterRendere
 
   if (priv->change_monitor)
     {
+      g_signal_handlers_disconnect_by_func (priv->change_monitor,
+                                            G_CALLBACK (on_changed),
+                                            renderer);
       g_object_remove_weak_pointer (G_OBJECT (monitor),
                                     (gpointer *)&priv->change_monitor);
       priv->change_monitor = NULL;
@@ -70,6 +85,10 @@ gb_source_change_gutter_renderer_set_change_monitor (GbSourceChangeGutterRendere
       priv->change_monitor = monitor;
       g_object_add_weak_pointer (G_OBJECT (monitor),
                                  (gpointer *)&priv->change_monitor);
+      g_signal_connect (priv->change_monitor,
+                        "changed",
+                        G_CALLBACK (on_changed),
+                        renderer);
     }
 }
 
@@ -107,11 +126,6 @@ gb_source_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
 
   if ((flags & GB_SOURCE_CHANGE_CHANGED) != 0)
     gdk_rgba_parse (&rgba, "#fcaf3e");
-
-  if ((flags & GB_SOURCE_CHANGE_DIRTY) == 0)
-    {
-      gdk_rgba_parse (&rgba, "rgb(179,208,238)");
-    }
 
   gdk_cairo_rectangle (cr, cell_area);
   gdk_cairo_set_source_rgba (cr, &rgba);

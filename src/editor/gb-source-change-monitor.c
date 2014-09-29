@@ -25,7 +25,9 @@
 #include "gb-log.h"
 #include "gb-source-change-monitor.h"
 
-#define PARSE_TIMEOUT_MSEC 1000
+#define PARSE_TIMEOUT_MSEC       100
+#define GB_SOURCE_CHANGE_DELETED (1 << 3)
+#define GB_SOURCE_CHANGE_MASK    (0x7)
 
 struct _GbSourceChangeMonitorPrivate
 {
@@ -45,11 +47,18 @@ enum
   LAST_PROP
 };
 
+enum
+{
+  CHANGED,
+  LAST_SIGNAL
+};
+
 G_DEFINE_TYPE_WITH_PRIVATE (GbSourceChangeMonitor,
                             gb_source_change_monitor,
                             G_TYPE_OBJECT)
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint       gSignals [LAST_SIGNAL];
 
 GbSourceChangeFlags
 gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
@@ -57,22 +66,95 @@ gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
 {
   g_return_val_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor), 0);
 
+  /*
+   * We store line numbers as 1 based to simply the diff code.
+   */
+  lineno++;
+
   if (monitor->priv->state)
     {
       gpointer value;
 
       value = g_hash_table_lookup (monitor->priv->state,
                                    GINT_TO_POINTER (lineno));
-      return GPOINTER_TO_INT (value);
+      return (GPOINTER_TO_INT (value) & GB_SOURCE_CHANGE_MASK);
     }
 
   return GB_SOURCE_CHANGE_NONE;
+}
+
+static gint
+diff_line_cb (GgitDiffDelta *delta,
+              GgitDiffHunk  *hunk,
+              GgitDiffLine  *line,
+              gpointer       user_data)
+{
+  GgitDiffLineType type;
+  GHashTable *hash = user_data;
+  gint new_lineno;
+  gint old_lineno;
+  gint adjust;
+
+  g_return_val_if_fail (delta, GGIT_ERROR_GIT_ERROR);
+  g_return_val_if_fail (hunk, GGIT_ERROR_GIT_ERROR);
+  g_return_val_if_fail (line, GGIT_ERROR_GIT_ERROR);
+  g_return_val_if_fail (hash, GGIT_ERROR_GIT_ERROR);
+
+  type = ggit_diff_line_get_origin (line);
+
+  if ((type != GGIT_DIFF_LINE_ADDITION) && (type != GGIT_DIFF_LINE_DELETION))
+    return 0;
+
+  new_lineno = ggit_diff_line_get_new_lineno (line);
+  old_lineno = ggit_diff_line_get_old_lineno (line);
+
+  switch (type)
+    {
+    case GGIT_DIFF_LINE_ADDITION:
+      if (g_hash_table_lookup (hash, GINT_TO_POINTER (new_lineno)))
+        g_hash_table_replace (hash,
+                              GINT_TO_POINTER (new_lineno),
+                              GINT_TO_POINTER (GB_SOURCE_CHANGE_CHANGED));
+      else
+        g_hash_table_insert (hash,
+                             GINT_TO_POINTER (new_lineno),
+                             GINT_TO_POINTER (GB_SOURCE_CHANGE_ADDED));
+      break;
+
+    case GGIT_DIFF_LINE_DELETION:
+      adjust = (ggit_diff_hunk_get_new_start (hunk) -
+                ggit_diff_hunk_get_old_start (hunk));
+      old_lineno += adjust;
+      if (g_hash_table_lookup (hash, GINT_TO_POINTER (old_lineno)))
+        g_hash_table_replace (hash,
+                              GINT_TO_POINTER (old_lineno),
+                              GINT_TO_POINTER (GB_SOURCE_CHANGE_CHANGED));
+      else
+        g_hash_table_insert (hash,
+                             GINT_TO_POINTER (old_lineno),
+                             GINT_TO_POINTER (GB_SOURCE_CHANGE_DELETED));
+      break;
+
+    case GGIT_DIFF_LINE_CONTEXT:
+    case GGIT_DIFF_LINE_CONTEXT_EOFNL:
+    case GGIT_DIFF_LINE_ADD_EOFNL:
+    case GGIT_DIFF_LINE_DEL_EOFNL:
+    case GGIT_DIFF_LINE_FILE_HDR:
+    case GGIT_DIFF_LINE_HUNK_HDR:
+    case GGIT_DIFF_LINE_BINARY:
+    default:
+      break;
+    }
+
+  return 0;
 }
 
 static gboolean
 on_parse_timeout (GbSourceChangeMonitor *monitor)
 {
   GbSourceChangeMonitorPrivate *priv;
+  GtkTextIter begin;
+  GtkTextIter end;
   GgitOId *entry_oid = NULL;
   GgitOId *oid = NULL;
   GgitObject *blob = NULL;
@@ -83,6 +165,13 @@ on_parse_timeout (GbSourceChangeMonitor *monitor)
   GFile *workdir = NULL;
   GError *error = NULL;
   gchar *relpath = NULL;
+  gchar *text = NULL;
+
+  /*
+   * TODO: Move this to a worker thread!
+   *       We probably want to generate the ghashtable and then pass back that
+   *       new state to the main thread via an async worker func/cb.
+   */
 
   ENTRY;
 
@@ -145,6 +234,18 @@ on_parse_timeout (GbSourceChangeMonitor *monitor)
   if (!blob)
     GOTO (cleanup);
 
+  gtk_text_buffer_get_bounds (priv->buffer, &begin, &end);
+  text = gtk_text_buffer_get_text (priv->buffer, &begin, &end, TRUE);
+
+  ggit_diff_blob_to_buffer (GGIT_BLOB (blob), relpath, (const guint8 *)text,
+                            -1, relpath, NULL, NULL, NULL, diff_line_cb,
+                            (gpointer *)priv->state, &error);
+
+  if (error)
+    GOTO (cleanup);
+
+  g_signal_emit (monitor, gSignals [CHANGED], 0);
+
 cleanup:
   if (error)
     {
@@ -152,6 +253,7 @@ cleanup:
       g_clear_error (&error);
     }
 
+  g_clear_pointer (&text, g_free);
   g_clear_object (&blob);
   g_clear_pointer (&entry_oid, ggit_oid_free);
   g_clear_pointer (&entry, ggit_tree_entry_unref);
@@ -443,6 +545,17 @@ gb_source_change_monitor_class_init (GbSourceChangeMonitorClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FILE,
                                    gParamSpecs [PROP_FILE]);
+
+  gSignals [CHANGED] =
+    g_signal_new ("changed",
+                  GB_TYPE_SOURCE_CHANGE_MONITOR,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSourceChangeMonitorClass, changed),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 static void

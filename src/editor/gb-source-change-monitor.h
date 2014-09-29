@@ -38,9 +38,8 @@ typedef struct _GbSourceChangeMonitorPrivate GbSourceChangeMonitorPrivate;
 typedef enum
 {
   GB_SOURCE_CHANGE_NONE    = 0,
-  GB_SOURCE_CHANGE_DIRTY   = 1 << 0,
-  GB_SOURCE_CHANGE_ADDED   = 1 << 1,
-  GB_SOURCE_CHANGE_CHANGED = 1 << 2,
+  GB_SOURCE_CHANGE_ADDED   = 1 << 0,
+  GB_SOURCE_CHANGE_CHANGED = 1 << 1,
 } GbSourceChangeFlags;
 
 struct _GbSourceChangeMonitor
@@ -54,6 +53,8 @@ struct _GbSourceChangeMonitor
 struct _GbSourceChangeMonitorClass
 {
   GObjectClass parent_class;
+
+  void (*changed) (GbSourceChangeMonitor *monitor);
 };
 
 GType                  gb_source_change_monitor_get_type (void) G_GNUC_CONST;
