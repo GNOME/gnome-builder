@@ -76,15 +76,17 @@ build_indent (GbSourceAutoIndenterC *c,
   do {
     ch = gtk_text_iter_get_char (&iter);
 
-    switch (ch) {
-    case '\t':
-    case ' ':
-      g_string_append_unichar (str, ch);
-      break;
-    default:
-      g_string_append_c (str, ' ');
-      break;
-    }
+    switch (ch)
+      {
+      case '\t':
+      case ' ':
+        g_string_append_unichar (str, ch);
+        break;
+
+      default:
+        g_string_append_c (str, ' ');
+        break;
+      }
   } while (gtk_text_iter_forward_char (&iter) &&
            (gtk_text_iter_compare (&iter, matching_line) <= 0) &&
            (str->len < line_offset));
@@ -959,7 +961,34 @@ line_starts_with_fuzzy (const GtkTextIter *iter,
 static gboolean
 line_is_case (const GtkTextIter *line)
 {
-  return line_starts_with_fuzzy (line, "case ");
+  return (line_starts_with_fuzzy (line, "case ") ||
+          line_starts_with_fuzzy (line, "default:"));
+}
+
+static gboolean
+str_maybe_label (const gchar *str)
+{
+  const gchar *ptr = str;
+
+  if (g_strcmp0 (str, "default:") == 0)
+    return FALSE;
+
+  for (; *ptr; ptr = g_utf8_next_char (ptr))
+    {
+      gunichar ch = g_utf8_get_char (ptr);
+
+      switch (ch)
+        {
+        case ':':
+        case '_':
+          break;
+        default:
+          if (!g_unichar_isalnum (ch))
+            return FALSE;
+        }
+    }
+
+  return (*str != '\0');
 }
 
 static gboolean
@@ -989,7 +1018,19 @@ line_is_label (const GtkTextIter *line)
   for (i = 0; parts [i]; i++)
     {
       g_strstrip (parts [i]);
-      if (*parts [i] && (g_strcmp0 (parts [i], ":") != 0))
+      if (*parts [i])
+        count++;
+    }
+  
+  if (count > 1)
+    return FALSE;
+
+  count = 0;
+
+  for (i = 0; parts [i]; i++)
+    {
+      g_strstrip (parts [i]);
+      if (str_maybe_label (parts [i]))
         count++;
     }
 
