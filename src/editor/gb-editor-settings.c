@@ -351,6 +351,7 @@ gb_editor_settings_finalize (GObject *object)
   priv = GB_EDITOR_SETTINGS (object)->priv;
 
   g_clear_object (&priv->style_scheme);
+  g_clear_pointer (&priv->font_desc, pango_font_description_free);
 
   G_OBJECT_CLASS (gb_editor_settings_parent_class)->finalize (object);
 }
