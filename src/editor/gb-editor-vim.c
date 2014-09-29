@@ -464,6 +464,81 @@ gb_editor_vim_redo (GbEditorVim *vim)
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
+static void
+gb_editor_vim_insert_nl_before (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  guint line;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  line = gtk_text_iter_get_line (&iter);
+
+  /*
+   * Insert a newline before the current line.
+   */
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
+  gtk_text_buffer_insert (buffer, &iter, "\n", 1);
+
+  /*
+   * Move ourselves back to the line we were one.
+   */
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
+
+  /*
+   * Select this position as the cursor.
+   */
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  /*
+   * TODO: Query auto-indenter to see if we should indent the position.
+   */
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+
+  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+}
+
+static void
+gb_editor_vim_insert_nl_after (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  /*
+   * Move to the end of the current line and insert a newline.
+   */
+  while (!gtk_text_iter_ends_line (&iter))
+    if (!gtk_text_iter_forward_char (&iter))
+      break;
+  gtk_text_buffer_insert (buffer, &iter, "\n", 1);
+
+  /*
+   * Select this position as the cursor to update insert.
+   */
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  /*
+   * TODO: Query auto-indenter to see if we should indent the position.
+   */
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+
+  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+}
+
 static gboolean
 gb_editor_vim_handle_normal (GbEditorVim *vim,
                              GdkEventKey *event)
@@ -581,15 +656,19 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 
     case GDK_KEY_O:
       /*
-       * TODO: Insert a newline before the current line, and start editing.
+       * Insert a newline before the current line, and start editing.
        */
-      break;
+      gb_editor_vim_insert_nl_before (vim);
+      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+      return TRUE;
 
     case GDK_KEY_o:
       /*
-       * TODO: Insert a new line, and then begin insertion.
+       * Insert a new line, and then begin insertion.
        */
-      break;
+      gb_editor_vim_insert_nl_after (vim);
+      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+      return TRUE;
 
     case GDK_KEY_r:
       /*
