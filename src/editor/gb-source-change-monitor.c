@@ -34,6 +34,8 @@ struct _GbSourceChangeMonitorPrivate
   GtkTextBuffer  *buffer;
   GFile          *file;
   GgitRepository *repo;
+  GgitBlob       *blob;
+  gchar          *relative_path;
   GHashTable     *state;
   guint           changed_handler;
   guint           parse_timeout;
@@ -66,17 +68,12 @@ gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
 {
   g_return_val_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor), 0);
 
-  /*
-   * We store line numbers as 1 based to simply the diff code.
-   */
-  lineno++;
-
   if (monitor->priv->state)
     {
       gpointer value;
 
       value = g_hash_table_lookup (monitor->priv->state,
-                                   GINT_TO_POINTER (lineno));
+                                   GINT_TO_POINTER (lineno + 1));
       return (GPOINTER_TO_INT (value) & GB_SOURCE_CHANGE_MASK);
     }
 
@@ -155,16 +152,7 @@ on_parse_timeout (GbSourceChangeMonitor *monitor)
   GbSourceChangeMonitorPrivate *priv;
   GtkTextIter begin;
   GtkTextIter end;
-  GgitOId *entry_oid = NULL;
-  GgitOId *oid = NULL;
-  GgitObject *blob = NULL;
-  GgitObject *commit = NULL;
-  GgitRef *head = NULL;
-  GgitTree *tree = NULL;
-  GgitTreeEntry *entry = NULL;
-  GFile *workdir = NULL;
   GError *error = NULL;
-  gchar *relpath = NULL;
   gchar *text = NULL;
 
   /*
@@ -173,11 +161,12 @@ on_parse_timeout (GbSourceChangeMonitor *monitor)
    *       new state to the main thread via an async worker func/cb.
    */
 
-  ENTRY;
-
   g_assert (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
 
   priv = monitor->priv;
+
+  if (!priv->blob || !priv->relative_path || !priv->buffer || !priv->file)
+    return G_SOURCE_REMOVE;
 
   /*
    * First, disable this so any side-effects cause a new parse to occur.
@@ -190,13 +179,98 @@ on_parse_timeout (GbSourceChangeMonitor *monitor)
   g_hash_table_remove_all (priv->state);
 
   /*
-   * Double check we have everything we need.
+   * Load the contents of the buffer from the GtkTextBuffer.
    */
-  if (!priv->repo)
-    RETURN (G_SOURCE_REMOVE);
+  gtk_text_buffer_get_bounds (priv->buffer, &begin, &end);
+  text = gtk_text_buffer_get_text (priv->buffer, &begin, &end, TRUE);
 
   /*
-   * Work our way through ggit to get to the original blog we care about.
+   * Ask ggit to diff the buffer for us. We will get a callback for all of
+   * the changes that we can then turn into Add/Change line statuses.
+   */
+  ggit_diff_blob_to_buffer (priv->blob, priv->relative_path,
+                            (const guint8 *)text, -1, priv->relative_path,
+                            NULL, NULL, NULL, diff_line_cb,
+                            priv->state, &error);
+
+  if (error)
+    {
+      g_message ("Failed to generate diff: %s", error->message);
+      g_clear_error (&error);
+      GOTO (cleanup);
+    }
+
+  /*
+   * Notify any listeners (such as the gutter renderer) of potential changes.
+   */
+  g_signal_emit (monitor, gSignals [CHANGED], 0);
+
+cleanup:
+  g_free (text);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gb_source_change_monitor_queue_parse (GbSourceChangeMonitor *monitor)
+{
+  GbSourceChangeMonitorPrivate *priv;
+
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+
+  priv = monitor->priv;
+
+  if (!priv->repo || !priv->blob || !priv->file)
+    return;
+
+  if (priv->parse_timeout)
+    {
+      g_source_remove (priv->parse_timeout);
+      priv->parse_timeout = 0;
+    }
+
+  priv->parse_timeout = g_timeout_add (PARSE_TIMEOUT_MSEC,
+                                       (GSourceFunc)on_parse_timeout,
+                                       monitor);
+}
+
+static void
+on_change_cb (GbSourceChangeMonitor *monitor,
+              GtkTextBuffer         *buffer)
+{
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+
+  gb_source_change_monitor_queue_parse (monitor);
+}
+
+static void
+gb_source_change_monitor_load_blob (GbSourceChangeMonitor *monitor)
+{
+  GbSourceChangeMonitorPrivate *priv;
+  GgitOId *entry_oid = NULL;
+  GgitOId *oid = NULL;
+  GgitObject *blob = NULL;
+  GgitObject *commit = NULL;
+  GgitRef *head = NULL;
+  GgitTree *tree = NULL;
+  GgitTreeEntry *entry = NULL;
+  GFile *workdir = NULL;
+  GError *error = NULL;
+  gchar *relpath = NULL;
+
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+
+  priv = monitor->priv;
+
+  /*
+   * Double check we have everything we need.
+   */
+  if (!priv->repo || !priv->file)
+    return;
+
+  /*
+   * Work our way through ggit to get to the original blob we care about.
    */
   head = ggit_repository_get_head (priv->repo, &error);
   if (!head)
@@ -234,17 +308,8 @@ on_parse_timeout (GbSourceChangeMonitor *monitor)
   if (!blob)
     GOTO (cleanup);
 
-  gtk_text_buffer_get_bounds (priv->buffer, &begin, &end);
-  text = gtk_text_buffer_get_text (priv->buffer, &begin, &end, TRUE);
-
-  ggit_diff_blob_to_buffer (GGIT_BLOB (blob), relpath, (const guint8 *)text,
-                            -1, relpath, NULL, NULL, NULL, diff_line_cb,
-                            priv->state, &error);
-
-  if (error)
-    GOTO (cleanup);
-
-  g_signal_emit (monitor, gSignals [CHANGED], 0);
+  priv->blob = g_object_ref (blob);
+  priv->relative_path = g_strdup (relpath);
 
 cleanup:
   if (error)
@@ -253,7 +318,6 @@ cleanup:
       g_clear_error (&error);
     }
 
-  g_clear_pointer (&text, g_free);
   g_clear_object (&blob);
   g_clear_pointer (&entry_oid, ggit_oid_free);
   g_clear_pointer (&entry, ggit_tree_entry_unref);
@@ -263,42 +327,10 @@ cleanup:
   g_clear_object (&commit);
   g_clear_pointer (&oid, ggit_oid_free);
   g_clear_object (&head);
-
-  RETURN (G_SOURCE_REMOVE);
 }
 
 static void
-gb_source_change_monitor_queue_parse (GbSourceChangeMonitor *monitor)
-{
-  GbSourceChangeMonitorPrivate *priv;
-
-  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
-
-  priv = monitor->priv;
-
-  if (priv->parse_timeout)
-    {
-      g_source_remove (priv->parse_timeout);
-      priv->parse_timeout = 0;
-    }
-
-  priv->parse_timeout = g_timeout_add (PARSE_TIMEOUT_MSEC,
-                                       (GSourceFunc)on_parse_timeout,
-                                       monitor);
-}
-
-static void
-on_change_cb (GbSourceChangeMonitor *monitor,
-              GtkTextBuffer         *buffer)
-{
-  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
-  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
-
-  gb_source_change_monitor_queue_parse (monitor);
-}
-
-static void
-discover_repository (GbSourceChangeMonitor *monitor)
+gb_source_change_monitor_discover_repository (GbSourceChangeMonitor *monitor)
 {
   GbSourceChangeMonitorPrivate *priv;
 
@@ -326,30 +358,19 @@ discover_repository (GbSourceChangeMonitor *monitor)
 
       repo_file = ggit_repository_discover (priv->file, &error);
 
-      TRACE;
-
       if (!repo_file)
         {
-          g_message ("%s", error->message);
+          g_message ("Failed to locate a gir repository: %s", error->message);
           g_clear_error (&error);
           EXIT;
         }
 
       priv->repo = ggit_repository_open (repo_file, &error);
-      TRACE;
 
       if (!priv->repo)
         {
-          g_message ("%s", error->message);
+          g_message ("Failed to open git repository: %s", error->message);
           g_clear_error (&error);
-        }
-      else
-        {
-          gchar *uri;
-
-          uri = g_file_get_uri (repo_file);
-          g_message ("Discovered Git repository at \"%s\"", uri);
-          g_free (uri);
         }
 
       g_clear_object (&repo_file);
@@ -397,6 +418,8 @@ gb_source_change_monitor_set_buffer (GbSourceChangeMonitor *monitor,
                                  G_CONNECT_SWAPPED);
     }
 
+  gb_source_change_monitor_queue_parse (monitor);
+
   EXIT;
 }
 
@@ -425,9 +448,19 @@ gb_source_change_monitor_set_file (GbSourceChangeMonitor *monitor,
     EXIT;
 
   g_clear_object (&priv->file);
-  monitor->priv->file = file ? g_object_ref (file) : NULL;
-  discover_repository (monitor);
+  g_clear_object (&priv->blob);
+  g_clear_object (&priv->repo);
+
+  if (file)
+    {
+      priv->file = g_object_ref (file);
+      gb_source_change_monitor_discover_repository (monitor);
+      gb_source_change_monitor_load_blob (monitor);
+    }
+
   g_object_notify_by_pspec (G_OBJECT (monitor), gParamSpecs [PROP_FILE]);
+
+  gb_source_change_monitor_queue_parse (monitor);
 
   EXIT;
 }
@@ -443,6 +476,7 @@ gb_source_change_monitor_dispose (GObject *object)
   gb_source_change_monitor_set_file (monitor, NULL);
 
   g_clear_object (&monitor->priv->repo);
+  g_clear_object (&monitor->priv->blob);
 
   if (monitor->priv->parse_timeout)
     {
@@ -461,6 +495,7 @@ gb_source_change_monitor_finalize (GObject *object)
   GbSourceChangeMonitorPrivate *priv = GB_SOURCE_CHANGE_MONITOR (object)->priv;
 
   g_clear_pointer (&priv->state, g_hash_table_unref);
+  g_clear_pointer (&priv->relative_path, g_free);
 
   G_OBJECT_CLASS (gb_source_change_monitor_parent_class)->finalize (object);
 }
