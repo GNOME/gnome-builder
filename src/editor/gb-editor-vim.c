@@ -23,6 +23,7 @@
 
 #include "gb-editor-vim.h"
 #include "gb-log.h"
+#include "gb-source-view.h"
 
 struct _GbEditorVimPrivate
 {
@@ -677,6 +678,18 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       if ((event->state & GDK_CONTROL_MASK))
         {
           gb_editor_vim_redo (vim);
+          return TRUE;
+        }
+
+      break;
+
+    case GDK_KEY_slash:
+      /*
+       * Focus the search entry for the source view.
+       */
+      if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
+        {
+          gb_source_view_begin_search (GB_SOURCE_VIEW (vim->priv->text_view));
           return TRUE;
         }
 
