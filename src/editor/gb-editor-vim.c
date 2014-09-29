@@ -350,9 +350,26 @@ gb_editor_vim_delete_selection (GbEditorVim *vim)
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
 
+  /*
+   * If there is no selection to delete, try to remove the next character
+   * in the line. If there is no next character, delete the last character
+   * in the line.
+   */
   if (gtk_text_iter_equal (&begin, &end))
-    if (!gtk_text_iter_forward_char (&end))
-      return;
+    {
+      if (!gtk_text_iter_ends_line (&end))
+        {
+          if (!gtk_text_iter_forward_char (&end))
+            return;
+        }
+      else if (!gtk_text_iter_starts_line (&begin))
+        {
+          if (!gtk_text_iter_backward_char (&begin))
+            return;
+        }
+      else
+        return;
+    }
 
   gtk_text_buffer_begin_user_action (buffer);
   gtk_text_buffer_delete (buffer, &begin, &end);
