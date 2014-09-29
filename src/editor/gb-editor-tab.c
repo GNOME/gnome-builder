@@ -1081,6 +1081,11 @@ gb_editor_tab_constructed (GObject *object)
                     NULL);
   gtk_source_gutter_insert (gutter, priv->change_renderer, 0);
 
+  priv->vim = g_object_new (GB_TYPE_EDITOR_VIM,
+                            "enabled", TRUE,
+                            "text-view", priv->source_view,
+                            NULL);
+
   gb_editor_tab_cursor_moved (tab, priv->document);
 
   EXIT;

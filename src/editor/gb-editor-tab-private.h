@@ -26,6 +26,7 @@
 #include "gb-box-theatric.h"
 #include "gb-editor-document.h"
 #include "gb-editor-settings.h"
+#include "gb-editor-vim.h"
 #include "gb-markdown-preview.h"
 #include "gb-notebook.h"
 #include "gb-source-auto-indenter.h"
@@ -68,6 +69,11 @@ struct _GbEditorTabPrivate
    * Tab related settings.
    */
   GbEditorSettings *settings;
+
+  /*
+   * VIM mode helper.
+   */
+  GbEditorVim *vim;
 
   /*
    * Weak reference bindings for tracking settings.

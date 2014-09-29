@@ -58,15 +58,13 @@ struct _GbSourceViewClass
                         GbSourceSnippet        *snippet);
 };
 
-GType gb_source_view_get_type       (void) G_GNUC_CONST;
-void  gb_source_view_push_snippet   (GbSourceView      *view,
-                                     GbSourceSnippet   *snippet);
-void  gb_source_view_clear_snippets (GbSourceView      *view);
-
-gboolean gb_source_view_get_show_shadow (GbSourceView *view); /* XXX: Remove this */
-void     gb_source_view_set_show_shadow (GbSourceView *view, /* XXX: Remove this */
-                                         gboolean      show_shadow);
-
+GType                 gb_source_view_get_type          (void) G_GNUC_CONST;
+void                  gb_source_view_push_snippet      (GbSourceView         *view,
+                                                        GbSourceSnippet      *snippet);
+void                  gb_source_view_clear_snippets    (GbSourceView         *view);
+gboolean              gb_source_view_get_show_shadow   (GbSourceView         *view);
+void                  gb_source_view_set_show_shadow   (GbSourceView         *view,
+                                                        gboolean              show_shadow);
 GbSourceAutoIndenter *gb_source_view_get_auto_indenter (GbSourceView         *view);
 void                  gb_source_view_set_auto_indenter (GbSourceView         *view,
                                                         GbSourceAutoIndenter *auto_indenter);
