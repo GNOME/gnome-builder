@@ -548,6 +548,21 @@ gb_editor_vim_insert_nl_after (GbEditorVim *vim)
 }
 
 static gboolean
+gb_editor_vim_has_selection (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  return !gtk_text_iter_equal (&begin, &end);
+}
+
+static gboolean
 gb_editor_vim_handle_normal (GbEditorVim *vim,
                              GdkEventKey *event)
 {
@@ -683,11 +698,37 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 
       break;
 
+    case GDK_KEY_greater:
+      /*
+       * If we have a selection, try to indent it.
+       */
+      if (gb_editor_vim_has_selection (vim) &&
+          GB_IS_SOURCE_VIEW (vim->priv->text_view))
+        {
+          GbSourceView *view = GB_SOURCE_VIEW (vim->priv->text_view);
+          gb_source_view_indent_selection (view);
+          return TRUE;
+        }
+
+      break;
+
+    case GDK_KEY_less:
+      /*
+       * If we have a selection, try to unindent it.
+       */
+      if (gb_editor_vim_has_selection (vim) &&
+          GB_IS_SOURCE_VIEW (vim->priv->text_view))
+        {
+          GbSourceView *view = GB_SOURCE_VIEW (vim->priv->text_view);
+          gb_source_view_unindent_selection (view);
+          return TRUE;
+        }
+
+      break;
+
     /*
      * TODO:
      *
-     *   - Shift in with >
-     *   - Shift out with <
      *   - Selection with v
      *   - auto-indent on o and O
      */
