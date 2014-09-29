@@ -683,6 +683,15 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 
       break;
 
+    /*
+     * TODO:
+     *
+     *   - Shift in with >
+     *   - Shift out with <
+     *   - Selection with v
+     *   - auto-indent on o and O
+     */
+
     case GDK_KEY_slash:
       /*
        * Focus the search entry for the source view.
