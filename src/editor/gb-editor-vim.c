@@ -543,13 +543,6 @@ static gboolean
 gb_editor_vim_handle_normal (GbEditorVim *vim,
                              GdkEventKey *event)
 {
-  /*
-   * WORKAROUND:
-   *
-   * The masks above are due to how the X server sometimes reports back
-   * invalid modifier keys. Not ideal, but seems to get us moving.
-   */
-
   g_assert (GB_IS_EDITOR_VIM (vim));
   g_assert (event);
 
