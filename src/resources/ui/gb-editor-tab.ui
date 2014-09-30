@@ -131,6 +131,7 @@
     <property name="source-view">source_view</property>
   </object>
   <object class="GtkSourceSearchSettings" id="search_settings">
+    <property name="at-word-boundaries">True</property>
   </object>
   <object class="GtkSourceSearchContext" id="search_context">
     <property name="buffer">document</property>
