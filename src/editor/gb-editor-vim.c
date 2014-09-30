@@ -1154,6 +1154,25 @@ gb_editor_vim_select_current_word (GbEditorVim *vim,
 }
 
 static void
+gb_editor_vim_clear_selection (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+
+  gtk_text_view_move_mark_onscreen (vim->priv->text_view, insert);
+}
+
+static void
 gb_editor_vim_reverse_search (GbEditorVim *vim)
 {
   GbSourceView *source_view;
@@ -1185,6 +1204,57 @@ gb_editor_vim_reverse_search (GbEditorVim *vim)
        * feature.
        */
       gtk_widget_grab_focus (GTK_WIDGET (vim->priv->text_view));
+
+      /*
+       * And it also selects the word, and VIM does not (it just leaves us
+       * on the word). So let's clear the selection too.
+       */
+#if 0
+      gb_editor_vim_clear_selection (vim);
+#endif
+    }
+}
+
+static void
+gb_editor_vim_search (GbEditorVim *vim)
+{
+  GbSourceView *source_view;
+
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  if (!GB_IS_SOURCE_VIEW (vim->priv->text_view))
+    return;
+
+  source_view = GB_SOURCE_VIEW (vim->priv->text_view);
+
+  if (gb_editor_vim_select_current_word (vim, &begin, &end))
+    {
+      gchar *text;
+
+      /*
+       * Set the search text and begin jumping back to the previous match.
+       */
+      text = gtk_text_iter_get_slice (&begin, &end);
+      gb_source_view_begin_search (source_view, GTK_DIR_DOWN, text);
+      g_free (text);
+
+      /*
+       * But don't let the search entry focus. VIM let's us just keep hitting
+       * '#' over and over without any intervention, and that's a useful
+       * feature.
+       */
+      gtk_widget_grab_focus (GTK_WIDGET (vim->priv->text_view));
+
+      /*
+       * And it also selects the word, and VIM does not (it just leaves us
+       * on the word). So let's clear the selection too.
+       */
+#if 0
+      gb_editor_vim_clear_selection (vim);
+#endif
     }
 }
 
@@ -1197,25 +1267,6 @@ gb_editor_vim_get_has_selection (GbEditorVim *vim)
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   return gtk_text_buffer_get_has_selection (buffer);
-}
-
-static void
-gb_editor_vim_clear_selection (GbEditorVim *vim)
-{
-  GtkTextBuffer *buffer;
-  GtkTextMark *insert;
-  GtkTextIter iter;
-
-  g_assert (GB_IS_EDITOR_VIM (vim));
-
-  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-  gtk_text_buffer_select_range (buffer, &iter, &iter);
-
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
-
-  gtk_text_view_move_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static gboolean
@@ -1493,9 +1544,17 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       gb_editor_vim_move_line_start (vim);
       return TRUE;
 
+    case GDK_KEY_asterisk:
+      /*
+       * Start search in the forward direction for the word that is under
+       * the cursor. If we are over a space, we move ot the next word.
+       */
+      gb_editor_vim_search (vim);
+      return TRUE;
+
     case GDK_KEY_numbersign:
       /*
-       * Start searching in the reverse direction for the world that is
+       * Start searching in the reverse direction for the word that is
        * under the cursor. If we are over a space, we move to the next
        * word.
        */
