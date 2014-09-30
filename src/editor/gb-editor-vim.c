@@ -30,6 +30,7 @@ struct _GbEditorVimPrivate
   GtkTextView     *text_view;
   GbEditorVimMode  mode;
   guint            key_press_event_handler;
+  guint            mark_set_handler;
   guint            target_line_offset;
   guint            enabled : 1;
   guint            connected : 1;
@@ -58,14 +59,6 @@ gb_editor_vim_new (GtkTextView *text_view)
                        NULL);
 }
 
-GbEditorVimMode
-gb_editor_vim_get_mode (GbEditorVim *vim)
-{
-  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), 0);
-
-  return vim->priv->mode;
-}
-
 static guint
 gb_editor_vim_get_line_offset (GbEditorVim *vim)
 {
@@ -80,6 +73,14 @@ gb_editor_vim_get_line_offset (GbEditorVim *vim)
   return gtk_text_iter_get_line_offset (&iter);
 }
 
+GbEditorVimMode
+gb_editor_vim_get_mode (GbEditorVim *vim)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), 0);
+
+  return vim->priv->mode;
+}
+
 static void
 gb_editor_vim_set_mode (GbEditorVim     *vim,
                         GbEditorVimMode  mode)
@@ -88,6 +89,10 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
 
   vim->priv->mode = mode;
 
+  /*
+   * If we are going back to navigation mode, stash our current buffer
+   * position for use in commands like j and k.
+   */
   if (mode == GB_EDITOR_VIM_NORMAL)
     vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
@@ -97,6 +102,26 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
    */
   gtk_text_view_set_overwrite (vim->priv->text_view,
                                (mode != GB_EDITOR_VIM_INSERT));
+
+  /*
+   * If we are are going to normal mode and are at the end of the line,
+   * then move back a character so we are on the last character as opposed
+   * to after it. This matches closer to VIM.
+   */
+  if (mode == GB_EDITOR_VIM_NORMAL)
+    {
+      GtkTextBuffer *buffer;
+      GtkTextMark *insert;
+      GtkTextIter iter;
+
+      buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+      insert = gtk_text_buffer_get_insert (buffer);
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+      if (gtk_text_iter_ends_line (&iter) && !gtk_text_iter_starts_line (&iter))
+        if (gtk_text_iter_backward_char (&iter))
+          gtk_text_buffer_select_range (buffer, &iter, &iter);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_MODE]);
 }
@@ -759,16 +784,16 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       /*
        * Start insert mode at the end of the line.
        */
-      gb_editor_vim_move_line_end (vim);
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+      gb_editor_vim_move_line_end (vim);
       return TRUE;
 
     case GDK_KEY_a:
       /*
        * Start insert mode after the current character.
        */
-      gb_editor_vim_move_forward (vim);
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+      gb_editor_vim_move_forward (vim);
       return TRUE;
 
     case GDK_KEY_D:
@@ -1021,6 +1046,35 @@ gb_editor_vim_key_press_event_cb (GtkTextView *text_view,
 }
 
 static void
+gb_editor_vim_mark_set_cb (GtkTextBuffer *buffer,
+                           GtkTextIter   *iter,
+                           GtkTextMark   *mark,
+                           GbEditorVim   *vim)
+{
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (iter);
+  g_return_if_fail (GTK_IS_TEXT_MARK (mark));
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  if (vim->priv->mode == GB_EDITOR_VIM_INSERT)
+    return;
+
+  if (mark != gtk_text_buffer_get_insert (buffer))
+    return;
+
+  if (gtk_text_iter_ends_line (iter) &&
+      !gtk_text_iter_starts_line (iter) &&
+      !gtk_text_buffer_get_has_selection (buffer))
+    {
+      /*
+       * Probably want to add a canary here for dealing with reentrancy.
+       */
+      if (gtk_text_iter_backward_char (iter))
+        gtk_text_buffer_select_range (buffer, iter, iter);
+    }
+}
+
+static void
 gb_editor_vim_connect (GbEditorVim *vim)
 {
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
@@ -1030,6 +1084,12 @@ gb_editor_vim_connect (GbEditorVim *vim)
     g_signal_connect (vim->priv->text_view,
                       "key-press-event",
                       G_CALLBACK (gb_editor_vim_key_press_event_cb),
+                      vim);
+
+  vim->priv->mark_set_handler =
+    g_signal_connect (gtk_text_view_get_buffer (vim->priv->text_view),
+                      "mark-set",
+                      G_CALLBACK (gb_editor_vim_mark_set_cb),
                       vim);
 
   gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
@@ -1046,6 +1106,10 @@ gb_editor_vim_disconnect (GbEditorVim *vim)
   g_signal_handler_disconnect (vim->priv->text_view,
                                vim->priv->key_press_event_handler);
   vim->priv->key_press_event_handler = 0;
+
+  g_signal_handler_disconnect (vim->priv->text_view,
+                               vim->priv->mark_set_handler);
+  vim->priv->mark_set_handler = 0;
 
   vim->priv->connected = FALSE;
 }
@@ -1135,6 +1199,7 @@ gb_editor_vim_finalize (GObject *object)
 
   if (priv->text_view)
     {
+      gb_editor_vim_disconnect (GB_EDITOR_VIM (object));
       g_object_remove_weak_pointer (G_OBJECT (priv->text_view),
                                     (gpointer *)&priv->text_view);
       priv->text_view = NULL;
