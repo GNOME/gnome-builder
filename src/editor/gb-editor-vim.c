@@ -1017,12 +1017,20 @@ gb_editor_vim_move_to_end (GbEditorVim *vim)
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
+  GtkTextIter selection;
+  gboolean has_selection;
 
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+
   gtk_text_buffer_get_end_iter (buffer, &iter);
-  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  if (has_selection)
+    gb_editor_vim_select_range (vim, &iter, &selection);
+  else
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
