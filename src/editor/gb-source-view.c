@@ -75,12 +75,13 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
 void
-gb_source_view_begin_search (GbSourceView *view,
-                             const gchar  *search_text)
+gb_source_view_begin_search (GbSourceView     *view,
+                             GtkDirectionType  direction,
+                             const gchar      *search_text)
 {
   g_return_if_fail (GB_IS_SOURCE_VIEW (view));
 
-  g_signal_emit (view, gSignals [BEGIN_SEARCH], 0, search_text);
+  g_signal_emit (view, gSignals [BEGIN_SEARCH], 0, direction, search_text);
 }
 
 static void
@@ -1479,9 +1480,10 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                   G_STRUCT_OFFSET (GbSourceViewClass, begin_search),
                   NULL,
                   NULL,
-                  g_cclosure_marshal_VOID__STRING,
+                  NULL,
                   G_TYPE_NONE,
-                  1,
+                  2,
+                  GTK_TYPE_DIRECTION_TYPE,
                   G_TYPE_STRING);
 }
 

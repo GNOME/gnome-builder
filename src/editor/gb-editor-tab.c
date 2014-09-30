@@ -885,9 +885,10 @@ on_source_view_push_snippet (GbSourceView           *source_view,
 }
 
 static void
-on_source_view_begin_search (GbSourceView *source_view,
-                             const gchar  *search_text,
-                             GbEditorTab  *tab)
+on_source_view_begin_search (GbSourceView     *source_view,
+                             GtkDirectionType  direction,
+                             const gchar      *search_text,
+                             GbEditorTab      *tab)
 {
   GbEditorTabPrivate *priv;
 
@@ -902,6 +903,11 @@ on_source_view_begin_search (GbSourceView *source_view,
   gtk_revealer_set_reveal_child (priv->revealer, TRUE);
   gtk_source_search_context_set_highlight (priv->search_context, TRUE);
   gtk_widget_grab_focus (GTK_WIDGET (priv->search_entry));
+
+  if (direction == GTK_DIR_DOWN)
+    gb_editor_tab_move_next_match (tab);
+  else if (direction == GTK_DIR_UP)
+    gb_editor_tab_move_previous_match (tab);
 }
 
 void

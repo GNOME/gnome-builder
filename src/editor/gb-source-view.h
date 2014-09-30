@@ -57,6 +57,7 @@ struct _GbSourceViewClass
   void (*pop_snippet)  (GbSourceView           *view,
                         GbSourceSnippet        *snippet);
   void (*begin_search) (GbSourceView           *view,
+                        GtkDirectionType        direction,
                         const gchar            *search_text);
 };
 
@@ -71,6 +72,7 @@ GbSourceAutoIndenter *gb_source_view_get_auto_indenter  (GbSourceView         *v
 void                  gb_source_view_set_auto_indenter  (GbSourceView         *view,
                                                          GbSourceAutoIndenter *auto_indenter);
 void                  gb_source_view_begin_search       (GbSourceView         *view,
+                                                         GtkDirectionType      direction,
                                                          const gchar          *search_text);
 void                  gb_source_view_indent_selection   (GbSourceView         *view);
 void                  gb_source_view_unindent_selection (GbSourceView         *view);
