@@ -967,11 +967,23 @@ gb_editor_vim_paste (GbEditorVim *vim)
 {
   GtkClipboard *clipboard;
   GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  guint line;
+  guint offset;
   gchar *text;
 
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
+  /*
+   * Track the current insert location so we can jump back to it.
+   */
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  line = gtk_text_iter_get_line (&iter);
+  offset = gtk_text_iter_get_line_offset (&iter);
 
   gtk_text_buffer_begin_user_action (buffer);
 
@@ -1030,6 +1042,15 @@ gb_editor_vim_paste (GbEditorVim *vim)
     }
 
   gtk_text_buffer_end_user_action (buffer);
+
+  /*
+   * Restore the cursor position.
+   */
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, line + 1);
+  for (; offset; offset--)
+    if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
+      break;
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   g_free (text);
 }
