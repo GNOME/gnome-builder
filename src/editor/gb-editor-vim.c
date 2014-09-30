@@ -846,6 +846,35 @@ gb_editor_vim_move_to_end (GbEditorVim *vim)
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 }
 
+static void
+gb_editor_vim_move_end_of_word (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  /*
+   * Move forward to the end of the next word. If we successfully find it,
+   * move back one character so the cursor is "on-top" of the character just
+   * like in VIM.
+   */
+  if (!gtk_text_iter_forward_char (&iter) ||
+      !gtk_text_iter_forward_word_end (&iter))
+    gtk_text_buffer_get_end_iter (buffer, &iter);
+  else
+    gtk_text_iter_backward_char (&iter);
+
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+}
+
 static gboolean
 gb_editor_vim_get_has_selection (GbEditorVim *vim)
 {
@@ -866,6 +895,14 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 
   switch (event->keyval)
     {
+    case GDK_KEY_e:
+      /*
+       * Move to the end of the current word if there is one. Otherwise
+       * the end of the next word.
+       */
+      gb_editor_vim_move_end_of_word (vim);
+      return TRUE;
+
     case GDK_KEY_I:
       /*
        * Start insert mode at the beginning of the line.
