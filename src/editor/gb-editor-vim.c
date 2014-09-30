@@ -480,11 +480,10 @@ gb_editor_vim_delete_selection (GbEditorVim *vim)
    */
   if (gtk_text_iter_equal (&begin, &end))
     {
-      if (gtk_text_iter_starts_line (&begin) && gtk_text_iter_ends_line (&end))
-        {
-          if (!gtk_text_iter_forward_char (&end))
-            gtk_text_iter_backward_char (&begin);
-        }
+      if (gtk_text_iter_starts_line (&begin) &&
+          gtk_text_iter_ends_line (&end) &&
+          (0 == gtk_text_iter_get_line_offset (&end)))
+        return;
       else if (!gtk_text_iter_ends_line (&end))
         {
           if (!gtk_text_iter_forward_char (&end))
