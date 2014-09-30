@@ -32,6 +32,7 @@ struct _GbEditorVimPrivate
   guint            key_press_event_handler;
   guint            target_line_offset;
   guint            enabled : 1;
+  guint            connected : 1;
 };
 
 enum
@@ -813,22 +814,28 @@ static void
 gb_editor_vim_connect (GbEditorVim *vim)
 {
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (!vim->priv->connected);
 
   vim->priv->key_press_event_handler =
     g_signal_connect (vim->priv->text_view,
                       "key-press-event",
                       G_CALLBACK (gb_editor_vim_key_press_event_cb),
                       vim);
+
+  vim->priv->connected = TRUE;
 }
 
 static void
 gb_editor_vim_disconnect (GbEditorVim *vim)
 {
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (vim->priv->connected);
 
   g_signal_handler_disconnect (vim->priv->text_view,
                                vim->priv->key_press_event_handler);
   vim->priv->key_press_event_handler = 0;
+
+  vim->priv->connected = FALSE;
 }
 
 gboolean
