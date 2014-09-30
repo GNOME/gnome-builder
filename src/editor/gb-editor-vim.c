@@ -642,14 +642,49 @@ gb_editor_vim_delete_to_line_end (GbEditorVim *vim)
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
   gtk_text_iter_assign (&end, &begin);
-  
+
   /*
    * Move forward to the end of the line, excluding the \n.
    */
   while (!gtk_text_iter_ends_line (&end))
     if (!gtk_text_iter_forward_char (&end))
       break;
-  
+
+  gtk_text_buffer_begin_user_action (buffer);
+  gtk_text_buffer_delete (buffer, &begin, &end);
+  gtk_text_buffer_end_user_action (buffer);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+}
+
+static void
+gb_editor_vim_delete_to_line_start (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
+  gtk_text_iter_assign (&end, &begin);
+
+  /*
+   * Move backward to the start of the line. If we are at the start of a line
+   * already, we actually just want to remove the \n.
+   */
+  if (!gtk_text_iter_starts_line (&begin))
+    {
+      while (!gtk_text_iter_starts_line (&begin))
+        if (!gtk_text_iter_backward_char (&begin))
+          break;
+    }
+  else
+    gtk_text_iter_backward_char (&begin);
+
   gtk_text_buffer_begin_user_action (buffer);
   gtk_text_buffer_delete (buffer, &begin, &end);
   gtk_text_buffer_end_user_action (buffer);
@@ -877,10 +912,29 @@ static gboolean
 gb_editor_vim_handle_insert (GbEditorVim *vim,
                              GdkEventKey *event)
 {
-  if (event->keyval == GDK_KEY_Escape)
+  switch (event->keyval)
     {
+    case GDK_KEY_Escape:
+      /*
+       * Escape back into NORMAL mode.
+       */
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
       return TRUE;
+
+    case GDK_KEY_u:
+      /*
+       * Delete everything before the cursor upon <Control>U.
+       */
+      if ((event->state & GDK_CONTROL_MASK) != 0)
+        {
+          gb_editor_vim_delete_to_line_start (vim);
+          return TRUE;
+        }
+
+      break;
+
+    default:
+      break;
     }
 
   return FALSE;
