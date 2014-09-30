@@ -31,6 +31,7 @@ struct _GbEditorVimPrivate
   GbEditorVimMode  mode;
   guint            key_press_event_handler;
   guint            mark_set_handler;
+  guint            delete_range_handler;
   guint            target_line_offset;
   guint            enabled : 1;
   guint            connected : 1;
@@ -876,16 +877,16 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       /*
        * Insert a newline before the current line, and start editing.
        */
-      gb_editor_vim_insert_nl_before (vim);
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+      gb_editor_vim_insert_nl_before (vim);
       return TRUE;
 
     case GDK_KEY_o:
       /*
        * Insert a new line, and then begin insertion.
        */
-      gb_editor_vim_insert_nl_after (vim);
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+      gb_editor_vim_insert_nl_after (vim);
       return TRUE;
 
     case GDK_KEY_r:
@@ -1075,10 +1076,54 @@ gb_editor_vim_mark_set_cb (GtkTextBuffer *buffer,
 }
 
 static void
+gb_editor_vim_delete_range_cb (GtkTextBuffer *buffer,
+                               GtkTextIter   *begin,
+                               GtkTextIter   *end,
+                               GbEditorVim   *vim)
+{
+  GtkTextIter iter;
+  GtkTextMark *insert;
+  guint line;
+  guint end_line;
+  guint begin_line;
+
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (begin);
+  g_return_if_fail (end);
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  if (vim->priv->mode == GB_EDITOR_VIM_INSERT)
+    return;
+
+  /*
+   * Replace the cursor if we maybe deleted past the end of the line.
+   * This should force the cursor to be on the last character instead of
+   * after it.
+   */
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  line = gtk_text_iter_get_line (&iter);
+  begin_line = gtk_text_iter_get_line (begin);
+  end_line = gtk_text_iter_get_line (end);
+
+  if (line >= begin_line && line <= end_line)
+    {
+      if (gtk_text_iter_ends_line (end))
+        gb_editor_vim_move_line_end (vim);
+    }
+}
+
+static void
 gb_editor_vim_connect (GbEditorVim *vim)
 {
+  GtkTextBuffer *buffer;
+
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
   g_return_if_fail (!vim->priv->connected);
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
   vim->priv->key_press_event_handler =
     g_signal_connect (vim->priv->text_view,
@@ -1087,10 +1132,16 @@ gb_editor_vim_connect (GbEditorVim *vim)
                       vim);
 
   vim->priv->mark_set_handler =
-    g_signal_connect (gtk_text_view_get_buffer (vim->priv->text_view),
+    g_signal_connect (buffer,
                       "mark-set",
                       G_CALLBACK (gb_editor_vim_mark_set_cb),
                       vim);
+
+  vim->priv->delete_range_handler =
+    g_signal_connect_after (buffer,
+                            "delete-range",
+                            G_CALLBACK (gb_editor_vim_delete_range_cb),
+                            vim);
 
   gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
 
@@ -1107,9 +1158,13 @@ gb_editor_vim_disconnect (GbEditorVim *vim)
                                vim->priv->key_press_event_handler);
   vim->priv->key_press_event_handler = 0;
 
-  g_signal_handler_disconnect (vim->priv->text_view,
+  g_signal_handler_disconnect (gtk_text_view_get_buffer (vim->priv->text_view),
                                vim->priv->mark_set_handler);
   vim->priv->mark_set_handler = 0;
+
+  g_signal_handler_disconnect (gtk_text_view_get_buffer (vim->priv->text_view),
+                               vim->priv->delete_range_handler);
+  vim->priv->delete_range_handler = 0;
 
   vim->priv->connected = FALSE;
 }
