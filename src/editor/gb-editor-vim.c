@@ -95,6 +95,84 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
 }
 
 static void
+gb_editor_vim_maybe_auto_indent (GbEditorVim *vim)
+{
+  GbSourceAutoIndenter *auto_indenter;
+  GbEditorVimPrivate *priv;
+  GbSourceView *source_view;
+  GdkEvent fake_event = { 0 };
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  priv = vim->priv;
+
+  if (!GB_IS_SOURCE_VIEW (priv->text_view))
+    return;
+
+  source_view = GB_SOURCE_VIEW (priv->text_view);
+
+  auto_indenter = gb_source_view_get_auto_indenter (source_view);
+  if (!auto_indenter)
+    return;
+
+  fake_event.key.type = GDK_KEY_PRESS;
+  fake_event.key.window = gtk_text_view_get_window (priv->text_view,
+                                                    GTK_TEXT_WINDOW_TEXT);
+  fake_event.key.send_event = FALSE;
+  fake_event.key.time = GDK_CURRENT_TIME;
+  fake_event.key.state = 0;
+  fake_event.key.keyval = GDK_KEY_Return;
+  fake_event.key.length = 1;
+  fake_event.key.string = (char *)"";
+  fake_event.key.hardware_keycode = 0;
+  fake_event.key.group = 0;
+  fake_event.key.is_modifier = 0;
+
+  if (gb_source_auto_indenter_is_trigger (auto_indenter, &fake_event.key))
+    {
+      GtkTextBuffer *buffer;
+      GtkTextMark *insert;
+      GtkTextIter begin;
+      GtkTextIter end;
+      gint cursor_offset = 0;
+      gchar *indent;
+
+      buffer = gtk_text_view_get_buffer (priv->text_view);
+      insert = gtk_text_buffer_get_insert (buffer);
+      gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
+      gtk_text_iter_assign (&end, &begin);
+
+      indent = gb_source_auto_indenter_format (auto_indenter, priv->text_view,
+                                               buffer, &begin, &end,
+                                               &cursor_offset, &fake_event.key);
+
+      if (indent)
+        {
+          /*
+           * Insert the indention text.
+           */
+          gtk_text_buffer_begin_user_action (buffer);
+          if (!gtk_text_iter_equal (&begin, &end))
+            gtk_text_buffer_delete (buffer, &begin, &end);
+          gtk_text_buffer_insert (buffer, &begin, indent, -1);
+          gtk_text_buffer_end_user_action (buffer);
+
+          /*
+           * Place the cursor, as it could be somewhere within our indent text.
+           */
+          gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
+          if (cursor_offset > 0)
+            gtk_text_iter_forward_chars (&begin, cursor_offset);
+          else if (cursor_offset < 0)
+            gtk_text_iter_backward_chars (&begin, ABS (cursor_offset));
+          gtk_text_buffer_select_range (buffer, &begin, &begin);
+        }
+
+      g_free (indent);
+    }
+}
+
+static void
 gb_editor_vim_move_line_start (GbEditorVim *vim)
 {
   GbEditorVimPrivate *priv;
@@ -505,8 +583,9 @@ gb_editor_vim_insert_nl_before (GbEditorVim *vim)
   gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   /*
-   * TODO: Query auto-indenter to see if we should indent the position.
+   * We might need to auto-indent the cursor after the newline.
    */
+  gb_editor_vim_maybe_auto_indent (vim);
 
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
@@ -540,8 +619,9 @@ gb_editor_vim_insert_nl_after (GbEditorVim *vim)
   gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   /*
-   * TODO: Query auto-indenter to see if we should indent the position.
+   * We might need to auto-indent after the newline.
    */
+  gb_editor_vim_maybe_auto_indent (vim);
 
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
