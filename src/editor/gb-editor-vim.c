@@ -91,6 +91,13 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
   if (mode == GB_EDITOR_VIM_NORMAL)
     vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
+  /*
+   * Switch to the "block mode" cursor for non-insert mode. We are totally
+   * abusing "overwrite" here simply to look more like VIM.
+   */
+  gtk_text_view_set_overwrite (vim->priv->text_view,
+                               (mode != GB_EDITOR_VIM_INSERT));
+
   g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_MODE]);
 }
 
@@ -857,6 +864,14 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 
       break;
 
+    case GDK_KEY_R:
+      /*
+       * Go into insert mode with overwrite.
+       */
+      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+      gtk_text_view_set_overwrite (vim->priv->text_view, TRUE);
+      return TRUE;
+
     case GDK_KEY_greater:
       /*
        * If we have a selection, try to indent it.
@@ -1005,6 +1020,8 @@ gb_editor_vim_connect (GbEditorVim *vim)
                       "key-press-event",
                       G_CALLBACK (gb_editor_vim_key_press_event_cb),
                       vim);
+
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
 
   vim->priv->connected = TRUE;
 }
