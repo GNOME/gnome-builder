@@ -431,6 +431,8 @@ gb_editor_vim_delete_selection (GbEditorVim *vim)
   GtkTextMark *insert;
   GtkTextIter begin;
   GtkTextIter end;
+  GtkClipboard *clipboard;
+  gchar *text;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
 
@@ -463,6 +465,15 @@ gb_editor_vim_delete_selection (GbEditorVim *vim)
       else
         return;
     }
+
+  /*
+   * Yank the selection text and apply it to the clipboard.
+   */
+  text = gtk_text_iter_get_slice (&begin, &end);
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (vim->priv->text_view),
+                                        GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_set_text (clipboard, text, -1);
+  g_free (text);
 
   /*
    * If this selection is an entire line, delete the trailing newline as
