@@ -835,6 +835,25 @@ gb_editor_vim_paste (GbEditorVim *vim)
   g_free (text);
 }
 
+static void
+gb_editor_vim_move_to_end (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  gtk_text_buffer_get_end_iter (buffer, &iter);
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+}
+
 static gboolean
 gb_editor_vim_has_selection (GbEditorVim *vim)
 {
@@ -904,6 +923,13 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
        * same line.
        */
       gb_editor_vim_move_forward (vim);
+      return TRUE;
+
+    case GDK_KEY_G:
+      /*
+       * Move to the end of the buffer.
+       */
+      gb_editor_vim_move_to_end (vim);
       return TRUE;
 
     case GDK_KEY_h:
