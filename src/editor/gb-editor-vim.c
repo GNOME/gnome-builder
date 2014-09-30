@@ -561,6 +561,28 @@ gb_editor_vim_select_line (GbEditorVim *vim)
 }
 
 static void
+gb_editor_vim_select_char (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  if (gtk_text_iter_forward_char (&end))
+    gtk_text_buffer_select_range (buffer, &begin, &end);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+}
+
+static void
 gb_editor_vim_undo (GbEditorVim *vim)
 {
   GtkSourceUndoManager *undo;
@@ -1087,6 +1109,15 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       gb_editor_vim_select_line (vim);
       return TRUE;
 
+    case GDK_KEY_v:
+      /*
+       * Advance the selection to the next character. This needs to be able
+       * to be composted so things like 10v selectio the next 10 characters.
+       * However, `vvvvvvvvvv` does not select the next 10 characters.
+       */
+      gb_editor_vim_select_char (vim);
+      return TRUE;
+
     case GDK_KEY_w:
       /*
        * Move forward by one word.
@@ -1208,12 +1239,14 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 
     case GDK_KEY_slash:
       /*
-       * Focus the search entry for the source view.
+       * Focus the search entry for the source view and clear the current
+       * search. It would be nice to not clear the current search, but
+       * the focus/editable selection process is being a bit annoying.
        */
       if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
         {
           gb_source_view_begin_search (GB_SOURCE_VIEW (vim->priv->text_view),
-                                       GTK_DIR_DOWN, NULL);
+                                       GTK_DIR_DOWN, "");
           return TRUE;
         }
 
