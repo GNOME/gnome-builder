@@ -457,9 +457,16 @@ static gboolean
 is_single_line_selection (const GtkTextIter *begin,
                           const GtkTextIter *end)
 {
-  return ((gtk_text_iter_get_line_offset (begin) == 0) &&
-          (gtk_text_iter_get_line_offset (end) == 0) &&
-          (gtk_text_iter_get_line (begin) + 1 == gtk_text_iter_get_line (end)));
+  if (gtk_text_iter_compare (begin, end) < 0)
+    return ((gtk_text_iter_get_line_offset (begin) == 0) &&
+            (gtk_text_iter_get_line_offset (end) == 0) &&
+            ((gtk_text_iter_get_line (begin) + 1) ==
+             gtk_text_iter_get_line (end)));
+  else
+    return ((gtk_text_iter_get_line_offset (begin) == 0) &&
+            (gtk_text_iter_get_line_offset (end) == 0) &&
+            ((gtk_text_iter_get_line (end) + 1) ==
+             gtk_text_iter_get_line (begin)));
 }
 
 static void
@@ -502,7 +509,8 @@ gb_editor_vim_move_down (GbEditorVim *vim)
    */
   if (is_single_line_selection (&iter, &selection))
     {
-      text_iter_swap (&iter, &selection);
+      if (gtk_text_iter_compare (&iter, &selection) < 0)
+        text_iter_swap (&iter, &selection);
       gtk_text_iter_set_line (&iter, gtk_text_iter_get_line (&iter) + 1);
       gb_editor_vim_select_range (vim, &iter, &selection);
       GOTO (move_mark);
@@ -554,6 +562,15 @@ gb_editor_vim_move_up (GbEditorVim *vim)
   if (line == 0)
     return;
 
+  if (is_single_line_selection (&iter, &selection))
+    {
+      if (gtk_text_iter_compare (&iter, &selection) > 0)
+        text_iter_swap (&iter, &selection);
+      gtk_text_iter_set_line (&iter, gtk_text_iter_get_line (&iter) - 1);
+      gb_editor_vim_select_range (vim, &iter, &selection);
+      GOTO (move_mark);
+    }
+
   gtk_text_buffer_get_iter_at_line (buffer, &iter, line - 1);
   if ((line - 1) == gtk_text_iter_get_line (&iter))
     {
@@ -572,6 +589,7 @@ gb_editor_vim_move_up (GbEditorVim *vim)
         gtk_text_buffer_select_range (buffer, &iter, &iter);
     }
 
+move_mark:
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
