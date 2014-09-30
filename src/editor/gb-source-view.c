@@ -206,13 +206,10 @@ gb_source_view_indent_selection (GbSourceView *view)
   gtk_text_buffer_get_selection_bounds (priv->buffer, &begin, &end);
 
   /*
-   * Expand the iters to the beginning of the first line and the
-   * end of the last line.
+   * Expand the iters to the beginning of the first line.
    */
   while (!gtk_text_iter_starts_line (&begin))
     gtk_text_iter_backward_char (&begin);
-  while (!gtk_text_iter_ends_line (&end))
-    gtk_text_iter_forward_char (&end);
 
   /*
    * Set marks so we can track our end position after every edit.
@@ -296,13 +293,10 @@ gb_source_view_unindent_selection (GbSourceView *view)
   gtk_text_buffer_get_selection_bounds (priv->buffer, &begin, &end);
 
   /*
-   * Expand the iters to the beginning of the first line and the
-   * end of the last line.
+   * Adjust the starting iter to include the whole line.
    */
   while (!gtk_text_iter_starts_line (&begin))
     gtk_text_iter_backward_char (&begin);
-  while (!gtk_text_iter_ends_line (&end))
-    gtk_text_iter_forward_char (&end);
 
   /*
    * Set marks so we can track our end position after every edit.
