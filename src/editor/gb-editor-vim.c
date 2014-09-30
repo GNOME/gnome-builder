@@ -896,6 +896,13 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       gb_editor_vim_insert_nl_after (vim);
       return TRUE;
 
+    case GDK_KEY_p:
+      /*
+       * Paste the current clipboard selection.
+       */
+      g_signal_emit_by_name (vim->priv->text_view, "paste-clipboard");
+      return TRUE;
+
     case GDK_KEY_r:
       /*
        * Try to redo a previously undone operation if we can.
