@@ -1165,6 +1165,13 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       gb_editor_vim_move_line_end (vim);
       return TRUE;
 
+    case GDK_KEY_asciicircum:
+      /*
+       * Move to the beginning of the line.
+       */
+      gb_editor_vim_move_line_start (vim);
+      return TRUE;
+
     default:
       break;
     }
