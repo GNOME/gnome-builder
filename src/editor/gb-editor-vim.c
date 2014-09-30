@@ -963,6 +963,13 @@ gb_editor_vim_reverse_search (GbEditorVim *vim)
       text = gtk_text_iter_get_slice (&begin, &end);
       gb_source_view_begin_search (source_view, GTK_DIR_UP, text);
       g_free (text);
+
+      /*
+       * But don't let the search entry focus. VIM let's us just keep hitting
+       * '#' over and over without any intervention, and that's a useful
+       * feature.
+       */
+      gtk_widget_grab_focus (GTK_WIDGET (vim->priv->text_view));
     }
 }
 
