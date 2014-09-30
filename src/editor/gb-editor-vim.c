@@ -904,6 +904,13 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 
       break;
 
+    case GDK_KEY_dollar:
+      /*
+       * Move to the end of the line.
+       */
+      gb_editor_vim_move_line_end (vim);
+      return TRUE;
+
     default:
       break;
     }
