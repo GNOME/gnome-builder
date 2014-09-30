@@ -29,9 +29,9 @@ struct _GbEditorVimPrivate
 {
   GtkTextView     *text_view;
   GbEditorVimMode  mode;
-  guint            key_press_event_handler;
-  guint            mark_set_handler;
-  guint            delete_range_handler;
+  gulong           key_press_event_handler;
+  gulong           mark_set_handler;
+  gulong           delete_range_handler;
   guint            target_line_offset;
   guint            enabled : 1;
   guint            connected : 1;
