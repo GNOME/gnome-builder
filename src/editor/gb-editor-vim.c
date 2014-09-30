@@ -1067,12 +1067,13 @@ gb_editor_vim_move_end_of_word (GbEditorVim *vim)
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
+  GtkTextIter selection;
+  gboolean has_selection;
 
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
 
   /*
    * Move forward to the end of the next word. If we successfully find it,
@@ -1082,11 +1083,17 @@ gb_editor_vim_move_end_of_word (GbEditorVim *vim)
   if (!gtk_text_iter_forward_char (&iter) ||
       !gtk_text_iter_forward_word_end (&iter))
     gtk_text_buffer_get_end_iter (buffer, &iter);
-  else
+  else if (!has_selection)
     gtk_text_iter_backward_char (&iter);
 
-  gtk_text_buffer_select_range (buffer, &iter, &iter);
+  if (has_selection)
+    gb_editor_vim_select_range (vim, &iter, &selection);
+  else
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 }
 
