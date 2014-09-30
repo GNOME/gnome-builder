@@ -1084,6 +1084,25 @@ gb_editor_vim_get_has_selection (GbEditorVim *vim)
   return gtk_text_buffer_get_has_selection (buffer);
 }
 
+static void
+gb_editor_vim_clear_selection (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  
+  g_assert (GB_IS_EDITOR_VIM (vim));
+  
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+
+  gtk_text_view_move_mark_onscreen (vim->priv->text_view, insert);
+}
+
 static gboolean
 gb_editor_vim_handle_normal (GbEditorVim *vim,
                              GdkEventKey *event)
@@ -1093,6 +1112,13 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 
   switch (event->keyval)
     {
+    case GDK_KEY_Escape:
+      /*
+       * Escape any selections we currently have.
+       */
+      gb_editor_vim_clear_selection (vim);
+      break;
+
     case GDK_KEY_e:
       /*
        * Move to the end of the current word if there is one. Otherwise
