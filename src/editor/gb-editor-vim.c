@@ -913,6 +913,60 @@ gb_editor_vim_yank (GbEditorVim *vim)
 }
 
 static gboolean
+gb_editor_vim_select_current_word (GbEditorVim *vim,
+                                   GtkTextIter *begin,
+                                   GtkTextIter *end)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+
+  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), FALSE);
+  g_return_val_if_fail (begin, FALSE);
+  g_return_val_if_fail (end, FALSE);
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, begin, insert);
+
+  if (gtk_text_iter_forward_word_end (begin))
+    {
+      gtk_text_iter_assign (end, begin);
+      if (gtk_text_iter_backward_word_start (begin))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gb_editor_vim_reverse_search (GbEditorVim *vim)
+{
+  GbSourceView *source_view;
+
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  if (!GB_IS_SOURCE_VIEW (vim->priv->text_view))
+    return;
+
+  source_view = GB_SOURCE_VIEW (vim->priv->text_view);
+
+  if (gb_editor_vim_select_current_word (vim, &begin, &end))
+    {
+      gchar *text;
+
+      /*
+       * Set the search text and begin jumping back to the previous match.
+       */
+      text = gtk_text_iter_get_slice (&begin, &end);
+      gb_source_view_begin_search (source_view, GTK_DIR_UP, text);
+      g_free (text);
+    }
+}
+
+static gboolean
 gb_editor_vim_get_has_selection (GbEditorVim *vim)
 {
   GtkTextBuffer *buffer;
@@ -1170,6 +1224,15 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
        * Move to the beginning of the line.
        */
       gb_editor_vim_move_line_start (vim);
+      return TRUE;
+
+    case GDK_KEY_numbersign:
+      /*
+       * Start searching in the reverse direction for the world that is
+       * under the cursor. If we are over a space, we move to the next
+       * word.
+       */
+      gb_editor_vim_reverse_search (vim);
       return TRUE;
 
     default:
