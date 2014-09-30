@@ -1176,10 +1176,9 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       break;
     }
 
-  if (event->string && *event->string)
-    return TRUE;
+  gtk_bindings_activate_event (G_OBJECT (vim->priv->text_view), event);
 
-  return FALSE;
+  return TRUE;
 }
 
 static gboolean
