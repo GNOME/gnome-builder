@@ -91,6 +91,13 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
   vim->priv->mode = mode;
 
   /*
+   * Switch to the "block mode" cursor for non-insert mode. We are totally
+   * abusing "overwrite" here simply to look more like VIM.
+   */
+  gtk_text_view_set_overwrite (vim->priv->text_view,
+                               (mode != GB_EDITOR_VIM_INSERT));
+
+  /*
    * If we are going back to navigation mode, stash our current buffer
    * position for use in commands like j and k.
    */
@@ -98,11 +105,11 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
     vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
   /*
-   * Switch to the "block mode" cursor for non-insert mode. We are totally
-   * abusing "overwrite" here simply to look more like VIM.
+   * If there are any snippets active, escape out of them.
    */
-  gtk_text_view_set_overwrite (vim->priv->text_view,
-                               (mode != GB_EDITOR_VIM_INSERT));
+  if ((mode != GB_EDITOR_VIM_INSERT) &&
+      GB_IS_SOURCE_VIEW (vim->priv->text_view))
+    gb_source_view_clear_snippets (GB_SOURCE_VIEW (vim->priv->text_view));
 
   /*
    * If we are are going to normal mode and are at the end of the line,
