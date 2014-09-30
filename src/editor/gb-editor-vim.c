@@ -453,6 +453,26 @@ gb_editor_vim_move_forward_word (GbEditorVim *vim)
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
+static gboolean
+is_single_line_selection (const GtkTextIter *begin,
+                          const GtkTextIter *end)
+{
+  return ((gtk_text_iter_get_line_offset (begin) == 0) &&
+          (gtk_text_iter_get_line_offset (end) == 0) &&
+          (gtk_text_iter_get_line (begin) + 1 == gtk_text_iter_get_line (end)));
+}
+
+static void
+text_iter_swap (GtkTextIter *a,
+                GtkTextIter *b)
+{
+  GtkTextIter tmp;
+
+  gtk_text_iter_assign (&tmp, a);
+  gtk_text_iter_assign (a, b);
+  gtk_text_iter_assign (b, &tmp);
+}
+
 static void
 gb_editor_vim_move_down (GbEditorVim *vim)
 {
@@ -474,6 +494,20 @@ gb_editor_vim_move_down (GbEditorVim *vim)
   line = gtk_text_iter_get_line (&iter);
   offset = vim->priv->target_line_offset;
 
+  /*
+   * If we have a whole line selected (from say `V`), then we need to swap
+   * the cursor and selection. This feels to me like a slight bit of a hack.
+   * There may be cause to actually have a selection mode and know the type
+   * of selection (line vs individual characters).
+   */
+  if (is_single_line_selection (&iter, &selection))
+    {
+      text_iter_swap (&iter, &selection);
+      gtk_text_iter_set_line (&iter, gtk_text_iter_get_line (&iter) + 1);
+      gb_editor_vim_select_range (vim, &iter, &selection);
+      GOTO (move_mark);
+    }
+
   gtk_text_buffer_get_iter_at_line (buffer, &iter, line + 1);
   if ((line + 1) == gtk_text_iter_get_line (&iter))
     {
@@ -491,6 +525,7 @@ gb_editor_vim_move_down (GbEditorVim *vim)
         gtk_text_buffer_select_range (buffer, &iter, &iter);
     }
 
+move_mark:
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
@@ -642,6 +677,8 @@ gb_editor_vim_select_line (GbEditorVim *vim)
     gtk_text_iter_forward_char (&end);
 
   gtk_text_buffer_select_range (buffer, &begin, &end);
+
+  vim->priv->target_line_offset = 0;
 }
 
 static void
