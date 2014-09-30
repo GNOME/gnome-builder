@@ -291,6 +291,29 @@ gb_editor_vim_move_line_start (GbEditorVim *vim)
 }
 
 static void
+gb_editor_vim_move_line0 (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  gboolean has_selection;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (vim->priv->text_view));
+  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+
+  gtk_text_iter_set_line_offset (&iter, 0);
+
+  if (has_selection)
+    gb_editor_vim_select_range (vim, &iter, &selection);
+  else
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+}
+
+static void
 gb_editor_vim_move_line_end (GbEditorVim *vim)
 {
   GbEditorVimPrivate *priv;
@@ -1455,9 +1478,17 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       gb_editor_vim_move_line_end (vim);
       return TRUE;
 
+    case GDK_KEY_0:
+      /*
+       * Move to the first offset (even if it is whitespace) on the current
+       * line.
+       */
+      gb_editor_vim_move_line0 (vim);
+      return TRUE;
+
     case GDK_KEY_asciicircum:
       /*
-       * Move to the beginning of the line.
+       * Move to the first word in the line.
        */
       gb_editor_vim_move_line_start (vim);
       return TRUE;
