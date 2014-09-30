@@ -761,7 +761,24 @@ gb_editor_tab_move_previous_match (GbEditorTab *tab)
 
   if (gtk_source_search_context_backward (priv->search_context, &select_begin,
                                           &match_begin, &match_end))
-    select_and_animate (tab, &match_begin, &match_end);
+    GOTO (found_match);
+  else
+    {
+      /*
+       * We need to wrap around from the end to find the last search result.
+       */
+      gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (priv->document),
+                                    &select_begin);
+      if (gtk_source_search_context_backward (priv->search_context,
+                                              &select_begin, &match_begin,
+                                              &match_end))
+        GOTO (found_match);
+    }
+
+  EXIT;
+
+found_match:
+  select_and_animate (tab, &match_begin, &match_end);
 
   EXIT;
 }
