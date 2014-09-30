@@ -508,13 +508,6 @@ gb_editor_vim_delete_selection (GbEditorVim *vim)
   gtk_clipboard_set_text (clipboard, text, -1);
   g_free (text);
 
-  /*
-   * If this selection is an entire line, delete the trailing newline as
-   * VIM does in both `v` and `V` selection modes.
-   */
-  if (gtk_text_iter_starts_line (&begin) && gtk_text_iter_ends_line (&end))
-    gtk_text_iter_forward_char (&end);
-
   gtk_text_buffer_begin_user_action (buffer);
   gtk_text_buffer_delete (buffer, &begin, &end);
   gtk_text_buffer_end_user_action (buffer);
