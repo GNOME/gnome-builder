@@ -323,8 +323,9 @@ gb_editor_vim_move_forward (GbEditorVim *vim)
 {
   GbEditorVimPrivate *priv;
   GtkTextBuffer *buffer;
-  GtkTextMark *insert;
-  GtkTextIter iter;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gboolean has_selection;
   guint line;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
@@ -332,19 +333,18 @@ gb_editor_vim_move_forward (GbEditorVim *vim)
   priv = vim->priv;
 
   buffer = gtk_text_view_get_buffer (priv->text_view);
-  insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-  line = gtk_text_iter_get_line (&iter);
+  has_selection = gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  line = gtk_text_iter_get_line (&end);
 
-  /*
-   * TODO: handle there being a selection.
-   */
-
-  if (gtk_text_iter_forward_char (&iter) &&
-      (line == gtk_text_iter_get_line (&iter)))
-    gtk_text_buffer_select_range (buffer, &iter, &iter);
-
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  if (gtk_text_iter_forward_char (&end) &&
+      (line == gtk_text_iter_get_line (&end)))
+    {
+      if (has_selection)
+        gtk_text_buffer_select_range (buffer, &begin, &end);
+      else
+        gtk_text_buffer_select_range (buffer, &end, &end);
+      vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+    }
 }
 
 static void
