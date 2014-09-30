@@ -475,7 +475,7 @@ gb_editor_vim_delete_selection (GbEditorVim *vim)
   /*
    * If there is no selection to delete, try to remove the next character
    * in the line. If there is no next character, delete the last character
-   * in the line. It might look like there is no selection of the line
+   * in the line. It might look like there is no selection if the line
    * was empty.
    */
   if (gtk_text_iter_equal (&begin, &end))
