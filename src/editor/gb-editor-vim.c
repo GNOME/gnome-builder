@@ -875,6 +875,43 @@ gb_editor_vim_move_end_of_word (GbEditorVim *vim)
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 }
 
+static void
+gb_editor_vim_yank (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GtkClipboard *clipboard;
+  gchar *text;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  /*
+   * Get the current textview selection.
+   */
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  /*
+   * Copy the selected text and insert it into the clipboard.
+   */
+  text = gtk_text_iter_get_slice (&begin, &end);
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (vim->priv->text_view),
+                                        GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_set_text (clipboard, text, -1);
+  g_free (text);
+
+  /*
+   * Move the cursor to the first character that was selected.
+   */
+  gtk_text_buffer_select_range (buffer, &begin, &begin);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+}
+
 static gboolean
 gb_editor_vim_get_has_selection (GbEditorVim *vim)
 {
@@ -1059,6 +1096,19 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
       gtk_text_view_set_overwrite (vim->priv->text_view, TRUE);
       return TRUE;
+
+    case GDK_KEY_y:
+      /*
+       * Yank (copy) the current selection and then remove the selection
+       * leaving the cursor on the first character.
+       */
+      if (gb_editor_vim_get_has_selection (vim))
+        {
+          gb_editor_vim_yank (vim);
+          return TRUE;
+        }
+
+        break;
 
     case GDK_KEY_greater:
       /*
