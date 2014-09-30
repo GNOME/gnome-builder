@@ -364,14 +364,14 @@ gb_editor_vim_move_forward_word (GbEditorVim *vim)
    * TODO: handle there being a selection.
    */
 
-  if (!g_unichar_isspace (gtk_text_iter_get_char (&iter)) &&
-      !gtk_text_iter_ends_word (&iter))
-    if (!gtk_text_iter_forward_word_end (&iter))
-      return;
+  if (gtk_text_iter_inside_word (&iter))
+    {
+      if (!gtk_text_iter_forward_word_end (&iter))
+        gtk_text_buffer_get_end_iter (buffer, &iter);
+    }
 
-  if (!gtk_text_iter_forward_word_end (&iter) ||
-      !gtk_text_iter_backward_word_start (&iter))
-    gtk_text_buffer_get_end_iter (buffer, &iter);
+  if (gtk_text_iter_forward_word_end (&iter))
+    gtk_text_iter_backward_word_start (&iter);
 
   gtk_text_buffer_select_range (buffer, &iter, &iter);
 
