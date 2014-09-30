@@ -886,6 +886,7 @@ on_source_view_push_snippet (GbSourceView           *source_view,
 
 static void
 on_source_view_begin_search (GbSourceView *source_view,
+                             const gchar  *search_text,
                              GbEditorTab  *tab)
 {
   GbEditorTabPrivate *priv;
@@ -894,6 +895,9 @@ on_source_view_begin_search (GbSourceView *source_view,
   g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
 
   priv = tab->priv;
+
+  if (search_text)
+    gtk_entry_set_text (GTK_ENTRY (priv->search_entry), search_text);
 
   gtk_revealer_set_reveal_child (priv->revealer, TRUE);
   gtk_source_search_context_set_highlight (priv->search_context, TRUE);

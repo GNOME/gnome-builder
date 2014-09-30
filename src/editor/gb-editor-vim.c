@@ -1101,7 +1101,8 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
        */
       if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
         {
-          gb_source_view_begin_search (GB_SOURCE_VIEW (vim->priv->text_view));
+          gb_source_view_begin_search (GB_SOURCE_VIEW (vim->priv->text_view),
+                                       NULL);
           return TRUE;
         }
 

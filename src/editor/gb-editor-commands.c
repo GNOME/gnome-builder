@@ -218,7 +218,7 @@ gb_editor_commands_find (GbEditorWorkspace *workspace,
 {
   ENTRY;
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-  gb_source_view_begin_search (tab->priv->source_view);
+  gb_source_view_begin_search (tab->priv->source_view, NULL);
   EXIT;
 }
 
