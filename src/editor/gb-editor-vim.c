@@ -543,15 +543,27 @@ gb_editor_vim_select_line (GbEditorVim *vim)
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
 
+  /*
+   * Move to the start iter to the beginning of the line.
+   */
   gtk_text_iter_assign (&begin, &iter);
   while (!gtk_text_iter_starts_line (&begin))
     if (!gtk_text_iter_backward_char (&begin))
       break;
 
+  /*
+   * Move to the end cursor to the end of the line.
+   */
   gtk_text_iter_assign (&end, &iter);
   while (!gtk_text_iter_ends_line (&end))
     if (!gtk_text_iter_forward_char (&end))
       break;
+
+  /*
+   * We actually want to select the \n befire the line.
+   */
+  if (gtk_text_iter_ends_line (&end))
+    gtk_text_iter_forward_char (&end);
 
   gtk_text_buffer_select_range (buffer, &begin, &end);
 }
@@ -650,7 +662,8 @@ gb_editor_vim_insert_nl_before (GbEditorVim *vim)
 }
 
 static void
-gb_editor_vim_insert_nl_after (GbEditorVim *vim)
+gb_editor_vim_insert_nl_after (GbEditorVim *vim,
+                               gboolean     auto_indent)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
@@ -678,7 +691,8 @@ gb_editor_vim_insert_nl_after (GbEditorVim *vim)
   /*
    * We might need to auto-indent after the newline.
    */
-  gb_editor_vim_maybe_auto_indent (vim);
+  if (auto_indent)
+    gb_editor_vim_maybe_auto_indent (vim);
 
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
@@ -747,6 +761,78 @@ gb_editor_vim_delete_to_line_start (GbEditorVim *vim)
   gtk_text_buffer_end_user_action (buffer);
 
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+}
+
+static void
+gb_editor_vim_paste (GbEditorVim *vim)
+{
+  GtkClipboard *clipboard;
+  GtkTextBuffer *buffer;
+  gchar *text;
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
+  gtk_text_buffer_begin_user_action (buffer);
+
+  /*
+   * Fetch the clipboard contents so we can check to see if we are pasting a
+   * whole line (which needs to be treated differently).
+   */
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (vim->priv->text_view),
+                                        GDK_SELECTION_CLIPBOARD);
+  text = gtk_clipboard_wait_for_text (clipboard);
+
+  /*
+   * If we are pasting an entire line, we don't want to paste it at the current
+   * location. We want to insert a new line after the current line, and then
+   * paste it there (so move the insert mark first).
+   */
+  if (text && g_str_has_suffix (text, "\n"))
+    {
+      gchar *trimmed;
+
+      /*
+       * WORKAROUND:
+       *
+       * This is a hack so that we can continue to use the paste code from
+       * within GtkTextBuffer.
+       *
+       * We needed to keep the trailing \n in the text so that we know when
+       * we are selecting whole lines. We also need to insert a new line
+       * manually based on the context. Further more, we need to remove the
+       * trailing line since we already added one.
+       *
+       * Terriby annoying, but the result is something that feels very nice,
+       * just like VIM.
+       */
+
+      trimmed = g_strndup (text, strlen (text) - 1);
+      gb_editor_vim_insert_nl_after (vim, FALSE);
+      gtk_clipboard_set_text (clipboard, trimmed, -1);
+      g_signal_emit_by_name (vim->priv->text_view, "paste-clipboard");
+      gtk_clipboard_set_text (clipboard, text, -1);
+      g_free (trimmed);
+    }
+  else
+    {
+      /*
+       * By default, GtkTextBuffer will paste at our current position.
+       * While VIM will paste after the current position. Let's advance the
+       * buffer a single character on the current line if possible. We switch
+       * to insert mode so that we can move past the last character in the
+       * buffer. Possibly should consider an alternate design for this.
+       */
+      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+      gb_editor_vim_move_forward (vim);
+      g_signal_emit_by_name (vim->priv->text_view, "paste-clipboard");
+      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+    }
+
+  gtk_text_buffer_end_user_action (buffer);
+
+  g_free (text);
 }
 
 static gboolean
@@ -893,14 +979,14 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
        * Insert a new line, and then begin insertion.
        */
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-      gb_editor_vim_insert_nl_after (vim);
+      gb_editor_vim_insert_nl_after (vim, TRUE);
       return TRUE;
 
     case GDK_KEY_p:
       /*
        * Paste the current clipboard selection.
        */
-      g_signal_emit_by_name (vim->priv->text_view, "paste-clipboard");
+      gb_editor_vim_paste (vim);
       return TRUE;
 
     case GDK_KEY_r:
