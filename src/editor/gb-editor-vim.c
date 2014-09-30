@@ -855,18 +855,14 @@ gb_editor_vim_move_to_end (GbEditorVim *vim)
 }
 
 static gboolean
-gb_editor_vim_has_selection (GbEditorVim *vim)
+gb_editor_vim_get_has_selection (GbEditorVim *vim)
 {
   GtkTextBuffer *buffer;
-  GtkTextIter begin;
-  GtkTextIter end;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
-
-  return !gtk_text_iter_equal (&begin, &end);
+  return gtk_text_buffer_get_has_selection (buffer);
 }
 
 static gboolean
@@ -1039,7 +1035,7 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       /*
        * If we have a selection, try to indent it.
        */
-      if (gb_editor_vim_has_selection (vim) &&
+      if (gb_editor_vim_get_has_selection (vim) &&
           GB_IS_SOURCE_VIEW (vim->priv->text_view))
         {
           GbSourceView *view = GB_SOURCE_VIEW (vim->priv->text_view);
@@ -1053,7 +1049,7 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       /*
        * If we have a selection, try to unindent it.
        */
-      if (gb_editor_vim_has_selection (vim) &&
+      if (gb_editor_vim_get_has_selection (vim) &&
           GB_IS_SOURCE_VIEW (vim->priv->text_view))
         {
           GbSourceView *view = GB_SOURCE_VIEW (vim->priv->text_view);
