@@ -58,7 +58,10 @@ gb_notebook_raise_tab (GbNotebook *notebook,
                            NULL);
 
   if (page != -1)
-    gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page);
+    {
+      gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page);
+      gtk_widget_grab_focus (GTK_WIDGET (tab));
+    }
 }
 
 static void
