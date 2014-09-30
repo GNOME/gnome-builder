@@ -793,10 +793,10 @@ gb_editor_vim_paste (GbEditorVim *vim)
        *
        * We needed to keep the trailing \n in the text so that we know when
        * we are selecting whole lines. We also need to insert a new line
-       * manually based on the context. Further more, we need to remove the
+       * manually based on the context. Furthermore, we need to remove the
        * trailing line since we already added one.
        *
-       * Terriby annoying, but the result is something that feels very nice,
+       * Terribly annoying, but the result is something that feels very nice,
        * just like VIM.
        */
 
