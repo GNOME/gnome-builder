@@ -1788,7 +1788,7 @@ gb_editor_vim_focus_in_event_cb (GtkTextView *text_view,
   g_return_val_if_fail (event, FALSE);
   g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), FALSE);
 
-  if (vim->priv->mode != GB_EDITOR_VIM_NORMAL)
+  if (vim->priv->mode == GB_EDITOR_VIM_COMMAND)
     gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
 
   return FALSE;
