@@ -130,6 +130,16 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
     gtk_entry_set_text (GTK_ENTRY (vim->priv->command_entry), "");
 
   /*
+   * Make the command entry visible if necessary.
+   */
+  if (vim->priv->command_entry)
+    {
+      gtk_widget_set_visible (GTK_WIDGET (vim->priv->command_entry),
+                              (mode == GB_EDITOR_VIM_COMMAND));
+      gtk_widget_grab_focus (GTK_WIDGET (vim->priv->command_entry));
+    }
+
+  /*
    * If we are are going to normal mode and are at the end of the line,
    * then move back a character so we are on the last character as opposed
    * to after it. This matches closer to VIM.
