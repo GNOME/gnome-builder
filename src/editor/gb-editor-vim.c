@@ -1423,9 +1423,6 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
     case GDK_KEY_V:
       /*
        * Select the current line.
-       *
-       * TODO: Allow this selection to grow. Might want to just add another
-       *        mode for selections like VIM does.
        */
       gb_editor_vim_select_line (vim);
       return TRUE;
@@ -1550,13 +1547,6 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
         }
 
       break;
-
-    /*
-     * TODO:
-     *
-     *   - Selection with v
-     *   - auto-indent on o and O
-     */
 
     case GDK_KEY_slash:
       /*
@@ -1961,8 +1951,7 @@ gb_editor_vim_execute_command (GbEditorVim *vim,
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
   g_return_if_fail (command);
 
-  /* TODO: execute command */
-  g_print ("Execute command: '%s'\n", command);
+  g_debug (" TODO: Command Execution Support: %s", command);
 
   gb_editor_vim_clear_selection (vim);
   gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
