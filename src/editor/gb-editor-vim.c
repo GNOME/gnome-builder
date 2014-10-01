@@ -1214,8 +1214,8 @@ gb_editor_vim_clear_selection (GbEditorVim *vim)
 static void
 gb_editor_vim_reverse_search (GbEditorVim *vim)
 {
+  GtkTextBuffer *buffer;
   GbSourceView *source_view;
-
   GtkTextIter begin;
   GtkTextIter end;
 
@@ -1225,17 +1225,28 @@ gb_editor_vim_reverse_search (GbEditorVim *vim)
     return;
 
   source_view = GB_SOURCE_VIEW (vim->priv->text_view);
-
-  gb_editor_vim_clear_selection (vim);
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
   if (gb_editor_vim_select_current_word (vim, &begin, &end))
     {
       gchar *text;
 
       /*
-       * Set the search text and begin jumping back to the previous match.
+       * Fetch the search text.
        */
       text = gtk_text_iter_get_slice (&begin, &end);
+
+      /*
+       * Move to right before the current word and clear the selection.
+       */
+      if (gtk_text_iter_compare (&begin, &end) <= 0)
+        gtk_text_buffer_select_range (buffer, &begin, &begin);
+      else
+        gtk_text_buffer_select_range (buffer, &end, &end);
+
+      /*
+       * Start searching.
+       */
       gb_source_view_begin_search (source_view, GTK_DIR_UP, text);
       g_free (text);
 
@@ -1270,8 +1281,6 @@ gb_editor_vim_search (GbEditorVim *vim)
     return;
 
   source_view = GB_SOURCE_VIEW (vim->priv->text_view);
-
-  gb_editor_vim_clear_selection (vim);
 
   if (gb_editor_vim_select_current_word (vim, &begin, &end))
     {
