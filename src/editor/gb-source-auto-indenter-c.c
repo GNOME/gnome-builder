@@ -1036,7 +1036,7 @@ line_is_label (const GtkTextIter *line)
       if (*parts [i])
         count++;
     }
-  
+
   if (count > 1)
     return FALSE;
 
@@ -1175,18 +1175,18 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
         str = g_string_new (NULL);
 
         gtk_text_iter_assign (&iter, begin);
-        gtk_text_iter_backward_char (&iter);
-        gtk_text_iter_backward_char (&iter);
-        backward_to_line_first_char (&iter);
-        offset = gtk_text_iter_get_line_offset (&iter);
-        build_indent (c, offset, &iter, str);
-        g_string_prepend (str, "\n");
-        g_string_prepend (str, ret);
+        if (backward_find_matching_char (&iter, '}'))
+          {
+            offset = gtk_text_iter_get_line_offset (&iter);
+            build_indent (c, offset, &iter, str);
+            g_string_prepend (str, "\n");
+            g_string_prepend (str, ret);
 
-        *cursor_offset = -(str->len - strlen (ret));
+            *cursor_offset = -(str->len - strlen (ret));
 
-        ret = g_string_free (str, FALSE);
-        g_free (tmp);
+            ret = g_string_free (str, FALSE);
+            g_free (tmp);
+          }
       }
 
     break;
