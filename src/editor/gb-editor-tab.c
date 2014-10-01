@@ -1002,6 +1002,7 @@ on_vim_command_entry_activate (GtkEntry    *entry,
     {
       action = g_action_map_lookup_action (G_ACTION_MAP (actions), "save");
       g_action_activate (action, NULL);
+      gb_editor_vim_set_mode (tab->priv->vim, GB_EDITOR_VIM_NORMAL);
       return;
     }
 
