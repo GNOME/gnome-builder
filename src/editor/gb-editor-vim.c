@@ -1613,6 +1613,13 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       gb_editor_vim_reverse_search (vim);
       return TRUE;
 
+    case GDK_KEY_colon:
+      /*
+       * Switch to command mode.
+       */
+      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_COMMAND);
+      return TRUE;
+
     default:
       break;
     }
@@ -1658,7 +1665,48 @@ static gboolean
 gb_editor_vim_handle_command (GbEditorVim *vim,
                               GdkEventKey *event)
 {
-  return FALSE;
+  switch (event->keyval)
+    {
+    case GDK_KEY_Escape:
+      /*
+       * Escape back into NORMAL mode.
+       */
+      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+      return TRUE;
+
+    case GDK_KEY_KP_Enter:
+    case GDK_KEY_Return:
+      /*
+       * Execute the command line and then go back to normal mode.
+       */
+      g_printerr ("Execute Command Line: %s\n", vim->priv->command_line->str);
+      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+      return TRUE;
+
+    case GDK_KEY_u:
+      /*
+       * Delete everything before the cursor upon <Control>U.
+       */
+      if ((event->state & GDK_CONTROL_MASK) != 0)
+        {
+          g_string_truncate (vim->priv->command_line, 0);
+          return TRUE;
+        }
+
+      break;
+
+    default:
+      break;
+    }
+
+  /*
+   * TODO: This is not sufficient, since we can't handle control text.
+   *       We really need to display an entry that we own somewhere.
+   *       Possibly on our behalf by the editor container.
+   */
+  g_string_append (vim->priv->command_line, event->string);
+
+  return TRUE;
 }
 
 static gboolean
