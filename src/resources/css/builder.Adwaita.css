@@ -82,6 +82,15 @@ GbEditorTab .gb-search-slider {
     padding: 2px;
 }
 
+GbEditorTab .gb-vim-command-slider {
+    background-color: @theme_base_color;
+    padding: 6px;
+    border-color: shade (@theme_base_color, 0.60);
+    border-radius: 0 3px 0 0;
+    border-width: 1px 1px 0 0;
+    border-style: solid;
+}
+
 GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton {
     background-color: transparent;
     background-image: none;
