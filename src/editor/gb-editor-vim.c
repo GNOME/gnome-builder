@@ -292,35 +292,6 @@ gb_editor_vim_select_range (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_move_line_start (GbEditorVim *vim)
-{
-  GtkTextBuffer *buffer;
-  GtkTextIter iter;
-  GtkTextIter selection;
-  gboolean has_selection;
-
-  g_assert (GB_IS_EDITOR_VIM (vim));
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (vim->priv->text_view));
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
-
-  gtk_text_buffer_get_iter_at_line (buffer, &iter,
-                                    gtk_text_iter_get_line (&iter));
-
-  while (!gtk_text_iter_ends_line (&iter) &&
-         g_unichar_isspace (gtk_text_iter_get_char (&iter)))
-    if (!gtk_text_iter_forward_char (&iter))
-      break;
-
-  if (has_selection)
-    gb_editor_vim_select_range (vim, &iter, &selection);
-  else
-    gtk_text_buffer_select_range (buffer, &iter, &iter);
-
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
-}
-
-static void
 gb_editor_vim_move_line0 (GbEditorVim *vim)
 {
   GtkTextBuffer *buffer;
@@ -334,6 +305,49 @@ gb_editor_vim_move_line0 (GbEditorVim *vim)
   has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
 
   gtk_text_iter_set_line_offset (&iter, 0);
+
+  if (has_selection)
+    gb_editor_vim_select_range (vim, &iter, &selection);
+  else
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+}
+
+static void
+gb_editor_vim_move_line_start (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter original;
+  GtkTextIter selection;
+  gboolean has_selection;
+  guint line;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (vim->priv->text_view));
+  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  line = gtk_text_iter_get_line (&iter);
+  gtk_text_iter_assign (&original, &iter);
+
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
+
+  while (!gtk_text_iter_ends_line (&iter) &&
+         g_unichar_isspace (gtk_text_iter_get_char (&iter)))
+    if (!gtk_text_iter_forward_char (&iter))
+      break;
+
+  /*
+   * If we failed to find a non-whitespace character or ended up at the
+   * same place we already were, just use the 0 index position.
+   */
+  if (g_unichar_isspace (gtk_text_iter_get_char (&iter)) ||
+      gtk_text_iter_equal (&iter, &original))
+    {
+      gb_editor_vim_move_line0 (vim);
+      return;
+    }
 
   if (has_selection)
     gb_editor_vim_select_range (vim, &iter, &selection);
