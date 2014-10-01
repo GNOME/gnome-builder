@@ -921,10 +921,22 @@ on_source_view_begin_search (GbSourceView     *source_view,
   gtk_source_search_context_set_highlight (priv->search_context, TRUE);
   gtk_widget_grab_focus (GTK_WIDGET (priv->search_entry));
 
-  if (direction == GTK_DIR_DOWN)
-    gb_editor_tab_move_next_match (tab);
-  else if (direction == GTK_DIR_UP)
-    gb_editor_tab_move_previous_match (tab);
+  if (search_text)
+    {
+      if (direction == GTK_DIR_DOWN)
+        gb_editor_tab_move_next_match (tab);
+      else if (direction == GTK_DIR_UP)
+        gb_editor_tab_move_previous_match (tab);
+    }
+  else
+    {
+      const gchar *text;
+      guint len;
+
+      text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
+      len = g_utf8_strlen (text, -1);
+      gtk_editable_select_region (GTK_EDITABLE (priv->search_entry), 0, len);
+    }
 }
 
 void

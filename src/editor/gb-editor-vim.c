@@ -1569,13 +1569,12 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
     case GDK_KEY_slash:
       /*
        * Focus the search entry for the source view and clear the current
-       * search. It would be nice to not clear the current search, but
-       * the focus/editable selection process is being a bit annoying.
+       * search. NULL indicates that the search text should be refocused.
        */
       if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
         {
           gb_source_view_begin_search (GB_SOURCE_VIEW (vim->priv->text_view),
-                                       GTK_DIR_DOWN, "");
+                                       GTK_DIR_DOWN, NULL);
           return TRUE;
         }
 
