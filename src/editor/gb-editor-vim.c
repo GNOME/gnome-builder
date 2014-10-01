@@ -1686,8 +1686,10 @@ gb_editor_vim_handle_insert (GbEditorVim *vim,
     {
     case GDK_KEY_Escape:
       /*
-       * Escape back into NORMAL mode.
+       * First move back onto the last character we entered, and then
+       * return to NORMAL mode.
        */
+      gb_editor_vim_move_backward (vim);
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
       return TRUE;
 
