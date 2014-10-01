@@ -1226,6 +1226,8 @@ gb_editor_vim_reverse_search (GbEditorVim *vim)
 
   source_view = GB_SOURCE_VIEW (vim->priv->text_view);
 
+  gb_editor_vim_clear_selection (vim);
+
   if (gb_editor_vim_select_current_word (vim, &begin, &end))
     {
       gchar *text;
@@ -1268,6 +1270,8 @@ gb_editor_vim_search (GbEditorVim *vim)
     return;
 
   source_view = GB_SOURCE_VIEW (vim->priv->text_view);
+
+  gb_editor_vim_clear_selection (vim);
 
   if (gb_editor_vim_select_current_word (vim, &begin, &end))
     {
