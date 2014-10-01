@@ -28,6 +28,7 @@
 struct _GbEditorVimPrivate
 {
   GtkTextView     *text_view;
+  GString         *command_line;
   GbEditorVimMode  mode;
   gulong           key_press_event_handler;
   gulong           mark_set_handler;
@@ -110,6 +111,12 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
   if ((mode != GB_EDITOR_VIM_INSERT) &&
       GB_IS_SOURCE_VIEW (vim->priv->text_view))
     gb_source_view_clear_snippets (GB_SOURCE_VIEW (vim->priv->text_view));
+
+  /*
+   * Clear the command line text.
+   */
+  if (vim->priv->command_line->len)
+    g_string_truncate (vim->priv->command_line, 0);
 
   /*
    * If we are are going to normal mode and are at the end of the line,
@@ -1902,6 +1909,9 @@ gb_editor_vim_finalize (GObject *object)
       priv->text_view = NULL;
     }
 
+  g_string_free (priv->command_line, TRUE);
+  priv->command_line = NULL;
+
   G_OBJECT_CLASS (gb_editor_vim_parent_class)->finalize (object);
 }
 
@@ -2004,6 +2014,7 @@ gb_editor_vim_init (GbEditorVim *vim)
   vim->priv = gb_editor_vim_get_instance_private (vim);
   vim->priv->enabled = FALSE;
   vim->priv->mode = GB_EDITOR_VIM_NORMAL;
+  vim->priv->command_line = g_string_new (NULL);
 }
 
 GType
