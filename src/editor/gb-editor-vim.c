@@ -1331,6 +1331,18 @@ gb_editor_vim_search (GbEditorVim *vim)
     }
 }
 
+static void
+gb_editor_vim_page_up (GbEditorVim *vim)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  g_signal_emit_by_name (vim->priv->text_view,
+                         "move-cursor",
+                         GTK_MOVEMENT_PAGES,
+                         -1,
+                         FALSE);
+}
+
 static gboolean
 gb_editor_vim_get_has_selection (GbEditorVim *vim)
 {
@@ -1469,7 +1481,10 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       /*
        * Move backward by one word.
        */
-      gb_editor_vim_move_backward_word (vim);
+      if ((event->state & GDK_CONTROL_MASK) != 0)
+        gb_editor_vim_page_up (vim);
+      else
+        gb_editor_vim_move_backward_word (vim);
       return TRUE;
 
     case GDK_KEY_x:
