@@ -496,6 +496,21 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
     }
 
   /*
+   * Maybe we are in a conditional.
+   *
+   * TODO: This technically isn't right since it is perfectly reasonable to
+   * end a line on a ) but not be done with the entire conditional.
+   */
+  if ((ch != ')') && backward_find_matching_char (iter, ')'))
+    {
+      guint offset;
+
+      offset = gtk_text_iter_get_line_offset (iter);
+      build_indent (c, offset + 1, iter, str);
+      GOTO (cleanup);
+    }
+
+  /*
    * If we just ended a scope, we need to look for the matching scope
    * before it.
    */
