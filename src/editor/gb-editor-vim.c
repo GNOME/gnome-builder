@@ -1199,8 +1199,12 @@ gb_editor_vim_clear_selection (GbEditorVim *vim)
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  if (gtk_text_buffer_get_has_selection (buffer))
+    {
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+      gtk_text_buffer_select_range (buffer, &iter, &iter);
+    }
 
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
