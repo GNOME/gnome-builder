@@ -83,6 +83,29 @@ gb_editor_vim_get_line_offset (GbEditorVim *vim)
   return gtk_text_iter_get_line_offset (&iter);
 }
 
+static void
+gb_editor_vim_clear_selection (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+
+  if (gtk_text_buffer_get_has_selection (buffer))
+    {
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+      gtk_text_buffer_select_range (buffer, &iter, &iter);
+    }
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+
+  gtk_text_view_move_mark_onscreen (vim->priv->text_view, insert);
+}
+
 GbEditorVimMode
 gb_editor_vim_get_mode (GbEditorVim *vim)
 {
@@ -944,20 +967,39 @@ gb_editor_vim_delete_to_line_start (GbEditorVim *vim)
 
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
 
+  /*
+   * Clear any selection so we are left at the cursor position.
+   */
+  gb_editor_vim_clear_selection (vim);
+
+  /*
+   * Get everything we need to determine the deletion region.
+   */
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
   gtk_text_iter_assign (&end, &begin);
 
   /*
-   * Move backward to the start of the line. If we are at the start of a line
-   * already, we actually just want to remove the \n.
+   * Move backward to the start of the line. VIM actually moves back to the
+   * first non-whitespace character at the beginning of the line rather
+   * than just position 0.
+   *
+   * If we are at the start of a line already, we actually just want to
+   * remove the \n.
    */
   if (!gtk_text_iter_starts_line (&begin))
     {
-      while (!gtk_text_iter_starts_line (&begin))
-        if (!gtk_text_iter_backward_char (&begin))
-          break;
+      gb_editor_vim_move_line_start (vim);
+
+      gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
+
+      if (gtk_text_iter_compare (&begin, &end) > 0)
+        {
+          while (!gtk_text_iter_starts_line (&begin))
+            if (!gtk_text_iter_backward_char (&begin))
+              break;
+        }
     }
   else
     gtk_text_iter_backward_char (&begin);
@@ -1186,29 +1228,6 @@ gb_editor_vim_select_current_word (GbEditorVim *vim,
     }
 
   return FALSE;
-}
-
-static void
-gb_editor_vim_clear_selection (GbEditorVim *vim)
-{
-  GtkTextBuffer *buffer;
-  GtkTextMark *insert;
-  GtkTextIter iter;
-
-  g_assert (GB_IS_EDITOR_VIM (vim));
-
-  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  insert = gtk_text_buffer_get_insert (buffer);
-
-  if (gtk_text_buffer_get_has_selection (buffer))
-    {
-      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-      gtk_text_buffer_select_range (buffer, &iter, &iter);
-    }
-
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
-
-  gtk_text_view_move_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
