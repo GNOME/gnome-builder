@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
+#include <stdlib.h>
 
 #include "gb-editor-vim.h"
 #include "gb-log.h"
