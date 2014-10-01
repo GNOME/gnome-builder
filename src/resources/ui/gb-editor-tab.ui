@@ -117,7 +117,7 @@
             <property name="halign">start</property>
             <property name="valign">end</property>
             <property name="reveal_child">False</property>
-            <property name="transition_type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT</property>
+            <property name="transition_type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP</property>
             <child>
               <object class="GtkFrame" id="vim_command_frame">
                 <property name="visible">True</property>
