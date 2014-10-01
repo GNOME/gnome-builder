@@ -1408,6 +1408,10 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 
   switch (event->keyval)
     {
+    case GDK_KEY_bracketleft:
+      if ((event->state & GDK_CONTROL_MASK) == 0)
+        break;
+      /* Fall through */
     case GDK_KEY_Escape:
       /*
        * Escape any selections we currently have.
@@ -1717,6 +1721,10 @@ gb_editor_vim_handle_insert (GbEditorVim *vim,
 {
   switch (event->keyval)
     {
+    case GDK_KEY_bracketleft:
+      if ((event->state & GDK_CONTROL_MASK) == 0)
+        break;
+      /* Fall through */
     case GDK_KEY_Escape:
       /*
        * First move back onto the last character we entered, and then
@@ -1756,6 +1764,10 @@ gb_editor_vim_handle_command (GbEditorVim *vim,
 
   switch (event->keyval)
     {
+    case GDK_KEY_bracketleft:
+      if ((event->state & GDK_CONTROL_MASK) == 0)
+        break;
+      /* Fall through */
     case GDK_KEY_Escape:
       /*
        * Escape back into NORMAL mode.
