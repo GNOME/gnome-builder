@@ -136,7 +136,12 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
     {
       gtk_widget_set_visible (GTK_WIDGET (vim->priv->command_entry),
                               (mode == GB_EDITOR_VIM_COMMAND));
-      gtk_widget_grab_focus (GTK_WIDGET (vim->priv->command_entry));
+      gtk_editable_set_editable (GTK_EDITABLE (vim->priv->command_entry),
+                                 (mode == GB_EDITOR_VIM_COMMAND));
+      if (mode == GB_EDITOR_VIM_COMMAND)
+        gtk_widget_grab_focus (GTK_WIDGET (vim->priv->command_entry));
+      else
+        gtk_widget_grab_focus (GTK_WIDGET (vim->priv->text_view));
     }
 
   /*
@@ -1352,7 +1357,10 @@ gb_editor_vim_command_entry_activate_cb (GtkEntry    *entry,
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
 
   text = gtk_entry_get_text (entry);
+
   g_print ("Execute Command Line: \"%s\"\n", text);
+
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
 }
 
 static gboolean

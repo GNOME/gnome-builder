@@ -1129,6 +1129,7 @@ gb_editor_tab_constructed (GObject *object)
   gtk_source_gutter_insert (gutter, priv->change_renderer, 0);
 
   priv->vim = g_object_new (GB_TYPE_EDITOR_VIM,
+                            "command-entry", priv->vim_command_entry,
                             "enabled", TRUE,
                             "text-view", priv->source_view,
                             NULL);
@@ -1352,6 +1353,8 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
                                                 snippets_provider);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
                                                 source_view);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                vim_command_entry);
 
   g_type_ensure (GB_TYPE_EDITOR_DOCUMENT);
   g_type_ensure (GB_TYPE_SOURCE_CHANGE_MONITOR);

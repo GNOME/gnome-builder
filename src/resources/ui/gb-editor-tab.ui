@@ -32,7 +32,7 @@
             <property name="halign">fill</property>
             <property name="valign">start</property>
             <property name="fraction">0.0</property>
-	    <style>
+            <style>
               <class name="osd"/>
             </style>
           </object>
@@ -42,6 +42,14 @@
             <property name="visible">True</property>
             <property name="halign">end</property>
             <property name="valign">end</property>
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkEntry" id="vim_command_entry">
+            <property name="visible">True</property>
+            <property name="halign">start</property>
+            <property name="valign">end</property>
+            <property name="width_chars">20</property>
           </object>
         </child>
         <child type="overlay">
