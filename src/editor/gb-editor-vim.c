@@ -1258,8 +1258,10 @@ gb_editor_vim_reverse_search (GbEditorVim *vim)
       gtk_widget_grab_focus (GTK_WIDGET (vim->priv->text_view));
 
       /*
-       * And it also selects the word, and VIM does not (it just leaves us
-       * on the word). So let's clear the selection too.
+       * TODO: It would be nice to clear the selection to match closer to
+       *       VIM. However, we do a delayed selection of the match in the
+       *       editor tab (which eventually needs to search asynchronously
+       *       too). So we need a better way to do this.
        */
 #if 0
       gb_editor_vim_clear_selection (vim);
@@ -1318,8 +1320,10 @@ gb_editor_vim_search (GbEditorVim *vim)
       gtk_widget_grab_focus (GTK_WIDGET (vim->priv->text_view));
 
       /*
-       * And it also selects the word, and VIM does not (it just leaves us
-       * on the word). So let's clear the selection too.
+       * TODO: It would be nice to clear the selection to match closer to
+       *       VIM. However, we do a delayed selection of the match in the
+       *       editor tab (which eventually needs to search asynchronously
+       *       too). So we need a better way to do this.
        */
 #if 0
       gb_editor_vim_clear_selection (vim);
