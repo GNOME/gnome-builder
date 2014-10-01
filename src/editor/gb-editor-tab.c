@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "gb-editor-workspace.h"
 #include "gb-editor-tab.h"
 #include "gb-editor-tab-private.h"
 #include "gb-log.h"
@@ -403,7 +404,6 @@ gb_editor_tab_language_changed (GbEditorTab      *tab,
   gb_editor_tab_reload_snippets (tab, language);
 
 }
-
 
 static void
 gb_editor_tab_cursor_moved (GbEditorTab      *tab,
@@ -973,15 +973,38 @@ static void
 on_vim_command_entry_activate (GtkEntry    *entry,
                                GbEditorTab *tab)
 {
+  GtkWidget *toplevel;
+  GbWorkspace *workspace;
+  GActionGroup *actions;
+  GAction *action = NULL;
   const gchar *text;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
+  if (!(text = gtk_entry_get_text (entry)))
+    return;
+
+  while (*text == ':')
+    text++;
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tab));
+  workspace = gb_workbench_get_workspace (GB_WORKBENCH (toplevel),
+                                          GB_TYPE_EDITOR_WORKSPACE);
+  actions = gb_workspace_get_actions (workspace);
+
   /*
-   * Execute the command in the command entry.
+   * TODO: This is a very crappy way to commands. If you support Builder,
+   *       I'll have time to fix this ;-)
    */
-  text = gtk_entry_get_text (entry);
+
+  if (g_str_equal (text, "w"))
+    {
+      action = g_action_map_lookup_action (G_ACTION_MAP (actions), "save");
+      g_action_activate (action, NULL);
+      return;
+    }
+
   gb_editor_vim_execute_command (tab->priv->vim, text);
 }
 
