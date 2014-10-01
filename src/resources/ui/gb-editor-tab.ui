@@ -116,12 +116,12 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="valign">end</property>
-            <property name="reveal_child">True</property>
+            <property name="reveal_child">False</property>
+            <property name="transition_type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT</property>
             <child>
               <object class="GtkFrame" id="vim_command_frame">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_start">0</property>
                 <style>
                   <class name="gb-vim-command-slider"/>
                 </style>
@@ -129,8 +129,7 @@
                   <object class="GtkEntry" id="vim_command_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="width_request">260</property>
-                    <property name="placeholder_text">:</property>
+                    <property name="width_chars">20</property>
                   </object>
                 </child>
               </object>
@@ -158,7 +157,6 @@
     <property name="source-view">source_view</property>
   </object>
   <object class="GtkSourceSearchSettings" id="search_settings">
-    <property name="at-word-boundaries">True</property>
   </object>
   <object class="GtkSourceSearchContext" id="search_context">
     <property name="buffer">document</property>

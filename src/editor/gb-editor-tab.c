@@ -945,6 +945,68 @@ gb_editor_tab_scroll_to_line (GbEditorTab *tab,
                                 0.0, FALSE, 0.0, 0.5);
 }
 
+static void
+on_vim_command_visibility_toggled (GbEditorVim *vim,
+                                   gboolean     visible,
+                                   GbEditorTab *tab)
+{
+  ENTRY;
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  gtk_revealer_set_reveal_child (tab->priv->vim_command_entry_revealer,
+                                 visible);
+
+  if (visible)
+    {
+      gtk_entry_set_text (tab->priv->vim_command_entry, "");
+      gtk_widget_grab_focus (GTK_WIDGET (tab->priv->vim_command_entry));
+    }
+  else
+    gtk_widget_grab_focus (GTK_WIDGET (tab->priv->source_view));
+
+  EXIT;
+}
+
+static void
+on_vim_command_entry_activate (GtkEntry    *entry,
+                               GbEditorTab *tab)
+{
+  const gchar *text;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  /*
+   * Execute the command in the command entry.
+   */
+  text = gtk_entry_get_text (entry);
+  gb_editor_vim_execute_command (tab->priv->vim, text);
+}
+
+static gboolean
+on_vim_command_entry_key_press_event (GtkEntry    *entry,
+                                      GdkEventKey *event,
+                                      GbEditorTab *tab)
+{
+  ENTRY;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (event);
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  switch (event->keyval)
+    {
+    case GDK_KEY_Escape:
+      gb_editor_vim_set_mode (tab->priv->vim, GB_EDITOR_VIM_NORMAL);
+      RETURN (TRUE);
+
+    default:
+      RETURN (FALSE);
+    }
+}
+
 static gboolean
 transform_file_to_language (GBinding     *binding,
                             const GValue *src_value,
@@ -1129,10 +1191,23 @@ gb_editor_tab_constructed (GObject *object)
   gtk_source_gutter_insert (gutter, priv->change_renderer, 0);
 
   priv->vim = g_object_new (GB_TYPE_EDITOR_VIM,
-                            "command-entry", priv->vim_command_entry,
                             "enabled", TRUE,
                             "text-view", priv->source_view,
                             NULL);
+  g_signal_connect (priv->vim,
+                    "command-visibility-toggled",
+                    G_CALLBACK (on_vim_command_visibility_toggled),
+                    tab);
+
+  g_signal_connect (priv->vim_command_entry,
+                    "activate",
+                    G_CALLBACK (on_vim_command_entry_activate),
+                    tab);
+
+  g_signal_connect (priv->vim_command_entry,
+                    "key-press-event",
+                    G_CALLBACK (on_vim_command_entry_key_press_event),
+                    tab);
 
   gb_editor_tab_cursor_moved (tab, priv->document);
 
@@ -1355,6 +1430,8 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
                                                 source_view);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
                                                 vim_command_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                vim_command_entry_revealer);
 
   g_type_ensure (GB_TYPE_EDITOR_DOCUMENT);
   g_type_ensure (GB_TYPE_SOURCE_CHANGE_MONITOR);

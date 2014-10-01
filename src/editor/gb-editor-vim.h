@@ -56,14 +56,18 @@ struct _GbEditorVimClass
   GObjectClass parent_class;
 };
 
-GType            gb_editor_vim_get_type      (void) G_GNUC_CONST;
-GType            gb_editor_vim_mode_get_type (void) G_GNUC_CONST;
-GbEditorVim     *gb_editor_vim_new           (GtkTextView  *text_view);
-GbEditorVimMode  gb_editor_vim_get_mode      (GbEditorVim  *vim);
-gboolean         gb_editor_vim_get_enabled   (GbEditorVim  *vim);
-void             gb_editor_vim_set_enabled   (GbEditorVim  *vim,
-                                              gboolean      enabled);
-GtkWidget       *gb_editor_vim_get_text_view (GbEditorVim  *vim);
+GType            gb_editor_vim_get_type        (void) G_GNUC_CONST;
+GType            gb_editor_vim_mode_get_type   (void) G_GNUC_CONST;
+GbEditorVim     *gb_editor_vim_new             (GtkTextView     *text_view);
+GbEditorVimMode  gb_editor_vim_get_mode        (GbEditorVim     *vim);
+void             gb_editor_vim_set_mode        (GbEditorVim     *vim,
+                                                GbEditorVimMode  mode);
+gboolean         gb_editor_vim_get_enabled     (GbEditorVim     *vim);
+void             gb_editor_vim_set_enabled     (GbEditorVim     *vim,
+                                                gboolean         enabled);
+GtkWidget       *gb_editor_vim_get_text_view   (GbEditorVim     *vim);
+void             gb_editor_vim_execute_command (GbEditorVim     *vim,
+                                                const gchar     *command);
 
 G_END_DECLS
 

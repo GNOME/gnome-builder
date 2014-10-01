@@ -28,12 +28,11 @@
 struct _GbEditorVimPrivate
 {
   GtkTextView     *text_view;
-  GtkEntry        *command_entry;
   GbEditorVimMode  mode;
   gulong           key_press_event_handler;
+  gulong           focus_in_event_handler;
   gulong           mark_set_handler;
   gulong           delete_range_handler;
-  gulong           command_entry_activate_handler;
   guint            target_line_offset;
   guint            enabled : 1;
   guint            connected : 1;
@@ -42,16 +41,22 @@ struct _GbEditorVimPrivate
 enum
 {
   PROP_0,
-  PROP_COMMAND_ENTRY,
   PROP_ENABLED,
   PROP_MODE,
   PROP_TEXT_VIEW,
   LAST_PROP
 };
 
+enum
+{
+  COMMAND_VISIBILITY_TOGGLED,
+  LAST_SIGNAL
+};
+
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorVim, gb_editor_vim, G_TYPE_OBJECT)
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint       gSignals [LAST_SIGNAL];
 
 GbEditorVim *
 gb_editor_vim_new (GtkTextView *text_view)
@@ -85,20 +90,11 @@ gb_editor_vim_get_mode (GbEditorVim *vim)
   return vim->priv->mode;
 }
 
-static void
+void
 gb_editor_vim_set_mode (GbEditorVim     *vim,
                         GbEditorVimMode  mode)
 {
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
-
-  /*
-   * Don't allow changing to command mode if we don't have an editable widget.
-   */
-  if ((mode == GB_EDITOR_VIM_COMMAND) && !vim->priv->command_entry)
-    {
-      g_warning ("Cannot change to command mode, no command entry widget set.");
-      mode = GB_EDITOR_VIM_NORMAL;
-    }
 
   vim->priv->mode = mode;
 
@@ -124,44 +120,21 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
     gb_source_view_clear_snippets (GB_SOURCE_VIEW (vim->priv->text_view));
 
   /*
-   * Clear the command line text.
-   */
-  if (GTK_IS_ENTRY (vim->priv->command_entry))
-    gtk_entry_set_text (GTK_ENTRY (vim->priv->command_entry), "");
-
-  /*
    * Make the command entry visible if necessary.
    */
-  if (vim->priv->command_entry)
-    {
-      gtk_widget_set_visible (GTK_WIDGET (vim->priv->command_entry),
-                              (mode == GB_EDITOR_VIM_COMMAND));
-      gtk_editable_set_editable (GTK_EDITABLE (vim->priv->command_entry),
-                                 (mode == GB_EDITOR_VIM_COMMAND));
-      if (mode == GB_EDITOR_VIM_COMMAND)
-        gtk_widget_grab_focus (GTK_WIDGET (vim->priv->command_entry));
-      else
-        gtk_widget_grab_focus (GTK_WIDGET (vim->priv->text_view));
-    }
+  g_signal_emit (vim, gSignals [COMMAND_VISIBILITY_TOGGLED], 0,
+                 (mode == GB_EDITOR_VIM_COMMAND));
 
   /*
+   * TODO: This should actually happen always on insert->normal transition.
+   *
    * If we are are going to normal mode and are at the end of the line,
    * then move back a character so we are on the last character as opposed
    * to after it. This matches closer to VIM.
    */
   if (mode == GB_EDITOR_VIM_NORMAL)
     {
-      GtkTextBuffer *buffer;
-      GtkTextMark *insert;
-      GtkTextIter iter;
-
-      buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-      insert = gtk_text_buffer_get_insert (buffer);
-      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-
-      if (gtk_text_iter_ends_line (&iter) && !gtk_text_iter_starts_line (&iter))
-        if (gtk_text_iter_backward_char (&iter))
-          gtk_text_buffer_select_range (buffer, &iter, &iter);
+      /* TODO: Old code did not respect selections */
     }
 
   g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_MODE]);
@@ -1347,22 +1320,6 @@ gb_editor_vim_get_has_selection (GbEditorVim *vim)
   return gtk_text_buffer_get_has_selection (buffer);
 }
 
-static void
-gb_editor_vim_command_entry_activate_cb (GtkEntry    *entry,
-                                         GbEditorVim *vim)
-{
-  const gchar *text;
-
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
-
-  text = gtk_entry_get_text (entry);
-
-  g_print ("Execute Command Line: \"%s\"\n", text);
-
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
-}
-
 static gboolean
 gb_editor_vim_handle_normal (GbEditorVim *vim,
                              GdkEventKey *event)
@@ -1721,22 +1678,17 @@ gb_editor_vim_handle_command (GbEditorVim *vim,
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
       return TRUE;
 
-    /*
-     * Execute the command line if we can.
-     */
-    case GDK_KEY_KP_Enter:
-    case GDK_KEY_Return:
-      if (vim->priv->command_entry)
-        gb_editor_vim_command_entry_activate_cb (vim->priv->command_entry, vim);
-      else
-        gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
-      return TRUE;
-
     default:
       break;
     }
 
-  gtk_bindings_activate_event (G_OBJECT (vim->priv->text_view), event);
+  if (!gtk_bindings_activate_event (G_OBJECT (vim->priv->text_view), event))
+    {
+      /*
+       * TODO: Show visual error because we can't input right now. We shouldn't
+       *       even get here though.
+       */
+    }
 
   return TRUE;
 }
@@ -1773,6 +1725,21 @@ gb_editor_vim_key_press_event_cb (GtkTextView *text_view,
     }
 
   RETURN (FALSE);
+}
+
+static gboolean
+gb_editor_vim_focus_in_event_cb (GtkTextView *text_view,
+                                 GdkEvent    *event,
+                                 GbEditorVim *vim)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+  g_return_val_if_fail (event, FALSE);
+  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), FALSE);
+
+  if (vim->priv->mode != GB_EDITOR_VIM_NORMAL)
+    gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+
+  return FALSE;
 }
 
 static void
@@ -1860,6 +1827,12 @@ gb_editor_vim_connect (GbEditorVim *vim)
                       G_CALLBACK (gb_editor_vim_key_press_event_cb),
                       vim);
 
+  vim->priv->focus_in_event_handler =
+    g_signal_connect (vim->priv->text_view,
+                      "focus-in-event",
+                      G_CALLBACK (gb_editor_vim_focus_in_event_cb),
+                      vim);
+
   vim->priv->mark_set_handler =
     g_signal_connect (buffer,
                       "mark-set",
@@ -1886,6 +1859,10 @@ gb_editor_vim_disconnect (GbEditorVim *vim)
   g_signal_handler_disconnect (vim->priv->text_view,
                                vim->priv->key_press_event_handler);
   vim->priv->key_press_event_handler = 0;
+
+  g_signal_handler_disconnect (vim->priv->text_view,
+                               vim->priv->focus_in_event_handler);
+  vim->priv->focus_in_event_handler = 0;
 
   g_signal_handler_disconnect (gtk_text_view_get_buffer (vim->priv->text_view),
                                vim->priv->mark_set_handler);
@@ -1976,51 +1953,19 @@ gb_editor_vim_set_text_view (GbEditorVim *vim,
   g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_TEXT_VIEW]);
 }
 
-GtkEntry *
-gb_editor_vim_get_command_entry (GbEditorVim *vim)
-{
-  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), NULL);
-
-  return vim->priv->command_entry;
-}
 
 void
-gb_editor_vim_set_command_entry (GbEditorVim *vim,
-                                 GtkEntry    *command_entry)
+gb_editor_vim_execute_command (GbEditorVim *vim,
+                               const gchar *command)
 {
-  GbEditorVimPrivate *priv;
-
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
-  g_return_if_fail (!command_entry || GTK_IS_ENTRY (command_entry));
+  g_return_if_fail (command);
 
-  priv = vim->priv;
+  /* TODO: execute command */
+  g_print ("Execute command: '%s'\n", command);
 
-  if (priv->command_entry == command_entry)
-    return;
-
-  if (priv->command_entry)
-    {
-      g_signal_handler_disconnect (priv->command_entry,
-                                   priv->command_entry_activate_handler);
-      priv->command_entry_activate_handler = 0;
-      g_object_remove_weak_pointer (G_OBJECT (priv->command_entry),
-                                    (gpointer *)&priv->command_entry);
-      priv->command_entry = NULL;
-    }
-
-  if (command_entry)
-    {
-      priv->command_entry = command_entry;
-      g_object_add_weak_pointer (G_OBJECT (priv->command_entry),
-                                 (gpointer *)&priv->command_entry);
-      priv->command_entry_activate_handler =
-        g_signal_connect (priv->command_entry,
-                          "activate",
-                          G_CALLBACK (gb_editor_vim_command_entry_activate_cb),
-                          vim);
-    }
-
-  g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_COMMAND_ENTRY]);
+  gb_editor_vim_clear_selection (vim);
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
 }
 
 static void
@@ -2036,13 +1981,6 @@ gb_editor_vim_finalize (GObject *object)
       priv->text_view = NULL;
     }
 
-  if (priv->command_entry_activate_handler && priv->command_entry)
-    {
-      g_signal_handler_disconnect (priv->command_entry,
-                                   priv->command_entry_activate_handler);
-      priv->command_entry_activate_handler = 0;
-    }
-
   G_OBJECT_CLASS (gb_editor_vim_parent_class)->finalize (object);
 }
 
@@ -2056,10 +1994,6 @@ gb_editor_vim_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_COMMAND_ENTRY:
-      g_value_set_object (value, gb_editor_vim_get_command_entry (vim));
-      break;
-
     case PROP_ENABLED:
       g_value_set_boolean (value, gb_editor_vim_get_enabled (vim));
       break;
@@ -2087,10 +2021,6 @@ gb_editor_vim_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_COMMAND_ENTRY:
-      gb_editor_vim_set_command_entry (vim, g_value_get_object (value));
-      break;
-
     case PROP_ENABLED:
       gb_editor_vim_set_enabled (vim, g_value_get_boolean (value));
       break;
@@ -2113,17 +2043,6 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
   object_class->finalize = gb_editor_vim_finalize;
   object_class->get_property = gb_editor_vim_get_property;
   object_class->set_property = gb_editor_vim_set_property;
-
-  gParamSpecs [PROP_COMMAND_ENTRY] =
-    g_param_spec_object ("command-entry",
-                         _("Command Entry"),
-                         _("The command entry widget for command mode."),
-                         GTK_TYPE_ENTRY,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_COMMAND_ENTRY,
-                                   gParamSpecs [PROP_COMMAND_ENTRY]);
 
   gParamSpecs [PROP_ENABLED] =
     g_param_spec_boolean ("enabled",
@@ -2156,6 +2075,26 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_TEXT_VIEW,
                                    gParamSpecs [PROP_TEXT_VIEW]);
+
+  /**
+   * GbEditorVim::command-visibility-toggled:
+   * @visible: If the the command entry should be visible.
+   *
+   * The "command-visibility-toggled" signal is emitted when the command entry
+   * should be shown or hidden. The command entry is used to interact with the
+   * VIM style command line.
+   */
+  gSignals [COMMAND_VISIBILITY_TOGGLED] =
+    g_signal_new ("command-visibility-toggled",
+                  GB_TYPE_EDITOR_VIM,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__BOOLEAN,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_BOOLEAN);
 }
 
 static void

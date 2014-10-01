@@ -107,6 +107,7 @@ struct _GbEditorTabPrivate
   GdTaggedEntry       *search_entry;
   GdTaggedEntryTag    *search_entry_tag;
   GtkEntry            *vim_command_entry;
+  GtkRevealer         *vim_command_entry_revealer;
 
   /*
    * Information about our target file and encoding.
