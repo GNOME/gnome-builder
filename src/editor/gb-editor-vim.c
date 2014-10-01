@@ -1801,6 +1801,63 @@ gb_editor_vim_delete_range_cb (GtkTextBuffer *buffer,
     }
 }
 
+static int
+str_compare_qsort (const void *aptr,
+                   const void *bptr)
+{
+  const gchar * const *a = aptr;
+  const gchar * const *b = bptr;
+
+  return g_strcmp0 (*a, *b);
+}
+
+static void
+gb_editor_vim_sort (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GtkTextIter cursor;
+  guint cursor_offset;
+  gchar *text;
+  gchar **parts;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  if (gtk_text_iter_equal (&begin, &end))
+    return;
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &cursor, insert);
+  cursor_offset = gtk_text_iter_get_offset (&cursor);
+
+  if (gtk_text_iter_compare (&begin, &end) > 0)
+    text_iter_swap (&begin, &end);
+
+  if (gtk_text_iter_starts_line (&end))
+    gtk_text_iter_backward_char (&end);
+
+  text = gtk_text_iter_get_slice (&begin, &end);
+  parts = g_strsplit (text, "\n", 0);
+  g_free (text);
+
+  qsort (parts, g_strv_length (parts), sizeof (gchar *),
+         str_compare_qsort);
+
+  text = g_strjoinv ("\n", parts);
+  gtk_text_buffer_delete (buffer, &begin, &end);
+  gtk_text_buffer_insert (buffer, &begin, text, -1);
+  g_free (text);
+  g_strfreev (parts);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &begin, cursor_offset);
+  gtk_text_buffer_select_range (buffer, &begin, &begin);
+}
+
 static void
 gb_editor_vim_connect (GbEditorVim *vim)
 {
@@ -1948,13 +2005,21 @@ void
 gb_editor_vim_execute_command (GbEditorVim *vim,
                                const gchar *command)
 {
+  gchar *copy;
+
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
   g_return_if_fail (command);
 
-  g_debug (" TODO: Command Execution Support: %s", command);
+  copy = g_strstrip (g_strdup (command));
+
+  if (g_str_equal (copy, "sort"))
+    gb_editor_vim_sort (vim);
+  else
+    g_debug (" TODO: Command Execution Support: %s", command);
 
   gb_editor_vim_clear_selection (vim);
   gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+  g_free (copy);
 }
 
 static void
