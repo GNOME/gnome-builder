@@ -999,14 +999,16 @@ gb_editor_vim_select_char (GbEditorVim *vim)
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  insert = gtk_text_buffer_get_insert (buffer);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
+  gtk_text_iter_assign (&end, &begin);
 
   if (gtk_text_iter_forward_char (&end))
     gb_editor_vim_select_range (vim, &end, &begin);
 
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
-  insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
