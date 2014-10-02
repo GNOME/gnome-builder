@@ -74,6 +74,9 @@ void                        gb_editor_settings_set_tab_width                    
 gboolean                    gb_editor_settings_get_highlight_current_line        (GbEditorSettings           *settings);
 void                        gb_editor_settings_set_highlight_current_line        (GbEditorSettings           *settings,
                                                                                   gboolean                    highlight_current_line);
+gboolean                    gb_editor_settings_get_highlight_matching_brackets   (GbEditorSettings           *settings);
+void                        gb_editor_settings_set_highlight_matching_brackets   (GbEditorSettings           *settings,
+                                                                                  gboolean                    highlight_matching_brackets);
 gboolean                    gb_editor_settings_get_indent_on_tab                 (GbEditorSettings           *settings);
 void                        gb_editor_settings_set_indent_on_tab                 (GbEditorSettings           *settings,
                                                                                   gboolean                    indent_on_tab);

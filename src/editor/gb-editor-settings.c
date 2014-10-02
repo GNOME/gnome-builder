@@ -40,6 +40,7 @@ struct _GbEditorSettingsPrivate
 
   gboolean              auto_indent;
   gboolean              highlight_current_line;
+  gboolean              highlight_matching_brackets;
   gboolean              indent_on_tab;
   gboolean              insert_spaces_instead_of_tabs;
   gboolean              show_line_marks;
@@ -57,6 +58,7 @@ enum {
   PROP_AUTO_INDENT,
   PROP_FONT_DESC,
   PROP_HIGHLIGHT_CURRENT_LINE,
+  PROP_HIGHLIGHT_MATCHING_BRACKETS,
   PROP_INDENT_ON_TAB,
   PROP_INDENT_WIDTH,
   PROP_INSERT_SPACES_INSTEAD_OF_TABS,
@@ -200,6 +202,25 @@ gb_editor_settings_set_highlight_current_line (GbEditorSettings *settings,
   settings->priv->highlight_current_line = highlight_current_line;
   g_object_notify_by_pspec (G_OBJECT (settings),
                             gParamSpecs[PROP_HIGHLIGHT_CURRENT_LINE]);
+}
+
+gboolean
+gb_editor_settings_get_highlight_matching_brackets (GbEditorSettings *settings)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_SETTINGS (settings), FALSE);
+
+  return settings->priv->highlight_matching_brackets;
+}
+
+void
+gb_editor_settings_set_highlight_matching_brackets (GbEditorSettings *settings,
+                                                    gboolean          highlight_matching_brackets)
+{
+  g_return_if_fail (GB_IS_EDITOR_SETTINGS (settings));
+
+  settings->priv->highlight_matching_brackets = highlight_matching_brackets;
+  g_object_notify_by_pspec (G_OBJECT (settings),
+                            gParamSpecs [PROP_HIGHLIGHT_MATCHING_BRACKETS]);
 }
 
 gboolean
@@ -404,6 +425,10 @@ gb_editor_settings_get_property (GObject    *object,
       g_value_set_boolean (value, gb_editor_settings_get_highlight_current_line (settings));
       break;
 
+    case PROP_HIGHLIGHT_MATCHING_BRACKETS:
+      g_value_set_boolean (value, gb_editor_settings_get_highlight_matching_brackets (settings));
+      break;
+
     case PROP_INDENT_ON_TAB:
       g_value_set_boolean (value, gb_editor_settings_get_indent_on_tab (settings));
       break;
@@ -473,6 +498,10 @@ gb_editor_settings_set_property (GObject      *object,
 
     case PROP_HIGHLIGHT_CURRENT_LINE:
       gb_editor_settings_set_highlight_current_line (settings, g_value_get_boolean (value));
+      break;
+
+    case PROP_HIGHLIGHT_MATCHING_BRACKETS:
+      gb_editor_settings_set_highlight_matching_brackets (settings, g_value_get_boolean (value));
       break;
 
     case PROP_INDENT_ON_TAB:
@@ -555,6 +584,16 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_HIGHLIGHT_CURRENT_LINE,
                                    gParamSpecs[PROP_HIGHLIGHT_CURRENT_LINE]);
+
+  gParamSpecs [PROP_HIGHLIGHT_MATCHING_BRACKETS] =
+    g_param_spec_boolean ("highlight-matching-brackets",
+                         _("Highlight Matching Brackets"),
+                         _("Highlight Matching Brackets"),
+                         TRUE,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_HIGHLIGHT_MATCHING_BRACKETS,
+                                   gParamSpecs [PROP_HIGHLIGHT_MATCHING_BRACKETS]);
 
   gParamSpecs[PROP_INDENT_ON_TAB] =
     g_param_spec_boolean ("indent-on-tab",
@@ -689,6 +728,7 @@ gb_editor_settings_init (GbEditorSettings *settings)
   settings->priv->auto_indent = FALSE;
   settings->priv->show_right_margin = TRUE;
   settings->priv->highlight_current_line = TRUE;
+  settings->priv->highlight_matching_brackets = TRUE;
   settings->priv->show_line_numbers = TRUE;
   settings->priv->right_margin_position = 80;
   settings->priv->insert_spaces_instead_of_tabs = TRUE;

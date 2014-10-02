@@ -170,6 +170,9 @@ gb_editor_tab_connect_settings (GbEditorTab      *tab,
   ADD_BINDING ("highlight-current-line", priv->source_view,
                "highlight-current-line",
                priv->highlight_current_line_binding);
+  ADD_BINDING ("highlight-matching-brackets", priv->document,
+               "highlight-matching-brackets",
+               priv->highlight_matching_brackets_binding);
   ADD_BINDING ("indent-on-tab", priv->source_view, "indent-on-tab",
                priv->indent_on_tab_binding);
   ADD_BINDING ("insert-spaces-instead-of-tabs", priv->source_view,
@@ -218,6 +221,7 @@ gb_editor_tab_disconnect_settings (GbEditorTab *tab)
 
   REMOVE_BINDING (priv->auto_indent_binding);
   REMOVE_BINDING (priv->highlight_current_line_binding);
+  REMOVE_BINDING (priv->highlight_matching_brackets_binding);
   REMOVE_BINDING (priv->indent_on_tab_binding);
   REMOVE_BINDING (priv->insert_spaces_instead_of_tabs_binding);
   REMOVE_BINDING (priv->show_line_marks_binding);

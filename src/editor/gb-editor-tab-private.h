@@ -81,6 +81,7 @@ struct _GbEditorTabPrivate
   GBinding *auto_indent_binding;
   GBinding *font_desc_binding;
   GBinding *highlight_current_line_binding;
+  GBinding *highlight_matching_brackets_binding;
   GBinding *indent_on_tab_binding;
   GBinding *indent_width_binding;
   GBinding *insert_spaces_instead_of_tabs_binding;
