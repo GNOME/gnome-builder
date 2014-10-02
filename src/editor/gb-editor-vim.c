@@ -20,6 +20,7 @@
 
 #include <errno.h>
 #include <glib/gi18n.h>
+#include <gtksourceview/gtksource.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -1776,22 +1777,12 @@ gb_editor_vim_page_down (GbEditorVim *vim)
   gb_editor_vim_move_to_iter (vim, &iter, 0.0);
 }
 
-static gboolean
-gb_editor_vim_get_has_selection (GbEditorVim *vim)
-{
-  GtkTextBuffer *buffer;
-
-  g_assert (GB_IS_EDITOR_VIM (vim));
-
-  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  return gtk_text_buffer_get_has_selection (buffer);
-}
-
 static void
 gb_editor_vim_indent (GbEditorVim *vim)
 {
 #ifndef GB_EDITOR_VIM_EXTERNAL
   GbSourceView *view;
+  GtkTextBuffer *buffer;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
 
@@ -1799,8 +1790,9 @@ gb_editor_vim_indent (GbEditorVim *vim)
     return;
 
   view = GB_SOURCE_VIEW (vim->priv->text_view);
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
-  if (gb_editor_vim_get_has_selection (vim))
+  if (gtk_text_buffer_get_has_selection (buffer))
     gb_source_view_indent_selection (view);
 #endif
 }
@@ -1810,6 +1802,7 @@ gb_editor_vim_unindent (GbEditorVim *vim)
 {
 #ifndef GB_EDITOR_VIM_EXTERNAL
   GbSourceView *view;
+  GtkTextBuffer *buffer;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
 
@@ -1817,8 +1810,9 @@ gb_editor_vim_unindent (GbEditorVim *vim)
     return;
 
   view = GB_SOURCE_VIEW (vim->priv->text_view);
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
-  if (gb_editor_vim_get_has_selection (vim))
+  if (gtk_text_buffer_get_has_selection (buffer))
     gb_source_view_unindent_selection (view);
 #endif
 }
