@@ -920,8 +920,6 @@ gb_editor_vim_move_down (GbEditorVim *vim)
             break;
       if (has_selection)
         {
-          if (gtk_text_iter_equal (&iter, &selection))
-            gtk_text_iter_forward_char (&iter);
           gb_editor_vim_select_range (vim, &iter, &selection);
           gb_editor_vim_ensure_anchor_selected (vim);
         }
