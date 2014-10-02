@@ -2407,6 +2407,11 @@ gb_editor_vim_cmd_goto (GbEditorVim *vim,
 {
   g_assert (GB_IS_EDITOR_VIM (vim));
 
+  /*
+   * TODO: We have more plumbing todo so we can support commands that are
+   *       multiple characters (gU gu g~ and gg are all separate commands).
+   */
+
   switch (modifier)
     {
     case '~':
