@@ -863,6 +863,26 @@ is_single_line_selection (const GtkTextIter *begin,
              gtk_text_iter_get_line (begin)));
 }
 
+static gboolean
+is_single_char_selection (const GtkTextIter *begin,
+                          const GtkTextIter *end)
+{
+  GtkTextIter tmp;
+
+  g_assert (begin);
+  g_assert (end);
+
+  gtk_text_iter_assign (&tmp, begin);
+  if (gtk_text_iter_forward_char (&tmp) && gtk_text_iter_equal (&tmp, end))
+    return TRUE;
+
+  gtk_text_iter_assign (&tmp, end);
+  if (gtk_text_iter_forward_char (&tmp) && gtk_text_iter_equal (&tmp, begin))
+    return TRUE;
+
+  return FALSE;
+}
+
 static void
 text_iter_swap (GtkTextIter *a,
                 GtkTextIter *b)
@@ -909,6 +929,12 @@ gb_editor_vim_move_down (GbEditorVim *vim)
       gb_editor_vim_select_range (vim, &iter, &selection);
       gb_editor_vim_ensure_anchor_selected (vim);
       GOTO (move_mark);
+    }
+
+  if (is_single_char_selection (&iter, &selection))
+    {
+      if (gtk_text_iter_compare (&iter, &selection) < 0)
+        priv->target_line_offset = ++offset;
     }
 
   gtk_text_buffer_get_iter_at_line (buffer, &iter, line + 1);
@@ -964,6 +990,12 @@ gb_editor_vim_move_up (GbEditorVim *vim)
       gb_editor_vim_select_range (vim, &iter, &selection);
       gb_editor_vim_ensure_anchor_selected (vim);
       GOTO (move_mark);
+    }
+
+  if (is_single_char_selection (&iter, &selection))
+    {
+      if (gtk_text_iter_compare (&iter, &selection) > 0)
+        priv->target_line_offset = --offset;
     }
 
   gtk_text_buffer_get_iter_at_line (buffer, &iter, line - 1);
