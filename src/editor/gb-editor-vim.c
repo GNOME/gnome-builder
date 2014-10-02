@@ -426,7 +426,8 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
   /*
    * Clear the current selection too.
    */
-  gb_editor_vim_clear_selection (vim);
+  if (mode != GB_EDITOR_VIM_COMMAND)
+    gb_editor_vim_clear_selection (vim);
 
   /*
    * Make the command entry visible if necessary.
