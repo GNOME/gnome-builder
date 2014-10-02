@@ -2681,7 +2681,27 @@ gb_editor_vim_cmd_yank (GbEditorVim *vim,
   gb_editor_vim_clear_selection (vim);
 
   if (modifier == 'y')
-    gb_editor_vim_select_line (vim);
+    {
+      GtkTextBuffer *buffer;
+      GtkTextMark *insert;
+      GtkTextIter iter;
+      guint offset;
+
+      buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+      insert = gtk_text_buffer_get_insert (buffer);
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+      offset = gtk_text_iter_get_line_offset (&iter);
+
+      gb_editor_vim_select_line (vim);
+      gb_editor_vim_yank (vim);
+      gb_editor_vim_clear_selection (vim);
+
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+      gtk_text_iter_set_line_offset (&iter, offset);
+      gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+      vim->priv->target_line_offset = offset;
+    }
   else
     {
       GbEditorVimCommand *cmd;
@@ -2691,10 +2711,10 @@ gb_editor_vim_cmd_yank (GbEditorVim *vim,
         return;
 
       cmd->func (vim, 1, '\0');
-    }
 
-  gb_editor_vim_yank (vim);
-  gb_editor_vim_clear_selection (vim);
+      gb_editor_vim_yank (vim);
+      gb_editor_vim_clear_selection (vim);
+    }
 }
 
 static void
