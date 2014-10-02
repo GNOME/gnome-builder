@@ -2104,6 +2104,8 @@ gb_editor_vim_disconnect (GbEditorVim *vim)
                                vim->priv->delete_range_handler);
   vim->priv->delete_range_handler = 0;
 
+  vim->priv->mode = 0;
+
   vim->priv->connected = FALSE;
 }
 
@@ -3027,7 +3029,7 @@ gb_editor_vim_init (GbEditorVim *vim)
 {
   vim->priv = gb_editor_vim_get_instance_private (vim);
   vim->priv->enabled = FALSE;
-  vim->priv->mode = GB_EDITOR_VIM_NORMAL;
+  vim->priv->mode = 0;
   vim->priv->phrase = g_string_new (NULL);
 }
 

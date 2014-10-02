@@ -38,7 +38,7 @@ typedef struct _GbEditorVimPrivate GbEditorVimPrivate;
 
 typedef enum
 {
-  GB_EDITOR_VIM_NORMAL,
+  GB_EDITOR_VIM_NORMAL = 1,
   GB_EDITOR_VIM_INSERT,
   GB_EDITOR_VIM_COMMAND,
 } GbEditorVimMode;
