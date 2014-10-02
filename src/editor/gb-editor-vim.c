@@ -24,9 +24,11 @@
 #include <stdlib.h>
 
 #include "gb-editor-vim.h"
-#include "gb-log.h"
-#include "gb-source-view.h"
-#include "gb-string.h"
+
+#ifndef GB_EDITOR_VIM_EXTERNAL
+# include "gb-log.h"
+# include "gb-source-view.h"
+#endif
 
 /*
  *  I can't possibly know all of VIM features. So this doesn't implement
@@ -437,6 +439,7 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
 static void
 gb_editor_vim_maybe_auto_indent (GbEditorVim *vim)
 {
+#ifndef GB_EDITOR_VIM_EXTERNAL
   GbSourceAutoIndenter *auto_indenter;
   GbEditorVimPrivate *priv;
   GbSourceView *source_view;
@@ -510,6 +513,7 @@ gb_editor_vim_maybe_auto_indent (GbEditorVim *vim)
 
       g_free (indent);
     }
+#endif
 }
 
 static gboolean
@@ -927,7 +931,7 @@ gb_editor_vim_move_down (GbEditorVim *vim)
       gtk_text_iter_set_line (&iter, gtk_text_iter_get_line (&iter) + 1);
       gb_editor_vim_select_range (vim, &iter, &selection);
       gb_editor_vim_ensure_anchor_selected (vim);
-      GOTO (move_mark);
+      goto move_mark;
     }
 
   if (is_single_char_selection (&iter, &selection))
@@ -988,7 +992,7 @@ gb_editor_vim_move_up (GbEditorVim *vim)
       gtk_text_iter_set_line (&iter, gtk_text_iter_get_line (&iter) - 1);
       gb_editor_vim_select_range (vim, &iter, &selection);
       gb_editor_vim_ensure_anchor_selected (vim);
-      GOTO (move_mark);
+      goto move_mark;
     }
 
   if (is_single_char_selection (&iter, &selection))
@@ -1555,6 +1559,7 @@ gb_editor_vim_select_current_word (GbEditorVim *vim,
 static void
 gb_editor_vim_reverse_search (GbEditorVim *vim)
 {
+#ifndef GB_EDITOR_VIM_EXTERNAL
   GtkTextBuffer *buffer;
   GbSourceView *source_view;
   GtkTextIter begin;
@@ -1608,11 +1613,13 @@ gb_editor_vim_reverse_search (GbEditorVim *vim)
       gb_editor_vim_clear_selection (vim);
 #endif
     }
+#endif
 }
 
 static void
 gb_editor_vim_search (GbEditorVim *vim)
 {
+#ifndef GB_EDITOR_VIM_EXTERNAL
   GtkTextBuffer *buffer;
   GbSourceView *source_view;
   GtkTextIter begin;
@@ -1670,6 +1677,7 @@ gb_editor_vim_search (GbEditorVim *vim)
       gb_editor_vim_clear_selection (vim);
 #endif
     }
+#endif
 }
 
 static void
@@ -1782,6 +1790,7 @@ gb_editor_vim_get_has_selection (GbEditorVim *vim)
 static void
 gb_editor_vim_indent (GbEditorVim *vim)
 {
+#ifndef GB_EDITOR_VIM_EXTERNAL
   GbSourceView *view;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
@@ -1793,11 +1802,13 @@ gb_editor_vim_indent (GbEditorVim *vim)
 
   if (gb_editor_vim_get_has_selection (vim))
     gb_source_view_indent_selection (view);
+#endif
 }
 
 static void
 gb_editor_vim_unindent (GbEditorVim *vim)
 {
+#ifndef GB_EDITOR_VIM_EXTERNAL
   GbSourceView *view;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
@@ -1809,6 +1820,7 @@ gb_editor_vim_unindent (GbEditorVim *vim)
 
   if (gb_editor_vim_get_has_selection (vim))
     gb_source_view_unindent_selection (view);
+#endif
 }
 
 static void
@@ -2070,7 +2082,7 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
    *       that.
    */
 
-  if (!gb_str_empty0 (event->string))
+  if (event->string && *event->string)
     {
       g_string_append (vim->priv->phrase, event->string);
       g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_PHRASE]);
@@ -2604,11 +2616,13 @@ gb_editor_vim_cmd_begin_search (GbEditorVim *vim,
                                 guint        count,
                                 gchar        modifier)
 {
+#ifndef GB_EDITOR_VIM_EXTERNAL
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
     gb_source_view_begin_search (GB_SOURCE_VIEW (vim->priv->text_view),
                                  GTK_DIR_DOWN, NULL);
+#endif
 }
 
 static void
