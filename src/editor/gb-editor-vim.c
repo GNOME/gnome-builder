@@ -1143,6 +1143,11 @@ gb_editor_vim_paste (GbEditorVim *vim)
       g_signal_emit_by_name (vim->priv->text_view, "paste-clipboard");
       gtk_clipboard_set_text (clipboard, text, -1);
       g_free (trimmed);
+
+      /*
+       * VIM leaves us on position 0 when pasting a whole line.
+       */
+      offset = 0;
     }
   else
     {
