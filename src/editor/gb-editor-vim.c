@@ -1694,27 +1694,79 @@ gb_editor_vim_move_to_line_n (GbEditorVim *vim,
 }
 
 static void
+gb_editor_vim_move_to_iter (GbEditorVim *vim,
+                            GtkTextIter *iter,
+                            gdouble      yalign)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (iter);
+  g_assert (yalign >= 0.0);
+  g_assert (yalign <= 1.0);
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+
+  if (gtk_text_buffer_get_has_selection (buffer))
+    {
+      gtk_text_buffer_move_mark (buffer, insert, iter);
+      gb_editor_vim_ensure_anchor_selected (vim);
+    }
+  else
+    gtk_text_buffer_select_range (buffer, iter, iter);
+
+  gtk_text_view_scroll_to_iter (vim->priv->text_view, iter, 0.0,
+                                TRUE, 0.0, yalign);
+}
+
+static void
 gb_editor_vim_page_up (GbEditorVim *vim)
 {
+  GdkRectangle rect;
+  GtkTextIter iter;
+  guint offset;
+  gint line;
+
   g_assert (GB_IS_EDITOR_VIM (vim));
 
-  g_signal_emit_by_name (vim->priv->text_view,
-                         "move-cursor",
-                         GTK_MOVEMENT_PAGES,
-                         -1,
-                         FALSE);
+  gtk_text_view_get_visible_rect (vim->priv->text_view, &rect);
+  gtk_text_view_get_iter_at_location (vim->priv->text_view, &iter,
+                                      rect.x, rect.y);
+
+  line = MAX (0, gtk_text_iter_get_line (&iter) + 3);
+  gtk_text_iter_set_line (&iter, line);
+
+  for (offset = vim->priv->target_line_offset; offset; offset--)
+    if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
+      break;
+
+  gb_editor_vim_move_to_iter (vim, &iter, 1.0);
 }
 
 static void
 gb_editor_vim_page_down (GbEditorVim *vim)
 {
+  GdkRectangle rect;
+  GtkTextIter iter;
+  guint offset;
+  gint line;
+
   g_assert (GB_IS_EDITOR_VIM (vim));
 
-  g_signal_emit_by_name (vim->priv->text_view,
-                         "move-cursor",
-                         GTK_MOVEMENT_PAGES,
-                         1,
-                         FALSE);
+  gtk_text_view_get_visible_rect (vim->priv->text_view, &rect);
+  gtk_text_view_get_iter_at_location (vim->priv->text_view, &iter,
+                                      rect.x, rect.y + rect.height);
+
+  line = MAX (0, gtk_text_iter_get_line (&iter) - 3);
+  gtk_text_iter_set_line (&iter, line);
+
+  for (offset = vim->priv->target_line_offset; offset; offset--)
+    if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
+      break;
+
+  gb_editor_vim_move_to_iter (vim, &iter, 0.0);
 }
 
 static gboolean
