@@ -439,18 +439,6 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
   g_signal_emit (vim, gSignals [COMMAND_VISIBILITY_TOGGLED], 0,
                  (mode == GB_EDITOR_VIM_COMMAND));
 
-  /*
-   * TODO: This should actually happen always on insert->normal transition.
-   *
-   * If we are are going to normal mode and are at the end of the line,
-   * then move back a character so we are on the last character as opposed
-   * to after it. This matches closer to VIM.
-   */
-  if (mode == GB_EDITOR_VIM_NORMAL)
-    {
-      /* TODO: Old code did not respect selections */
-    }
-
   g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_MODE]);
 }
 
