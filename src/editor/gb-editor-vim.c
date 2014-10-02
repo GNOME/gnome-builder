@@ -20,7 +20,6 @@
 
 #include <errno.h>
 #include <glib/gi18n.h>
-#include <gtksourceview/gtksource.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -420,13 +419,6 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
    */
   if (mode == GB_EDITOR_VIM_NORMAL)
     vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
-
-  /*
-   * If there are any snippets active, escape out of them.
-   */
-  if ((mode != GB_EDITOR_VIM_INSERT) &&
-      GB_IS_SOURCE_VIEW (vim->priv->text_view))
-    gb_source_view_clear_snippets (GB_SOURCE_VIEW (vim->priv->text_view));
 
   /*
    * Clear the current selection too.

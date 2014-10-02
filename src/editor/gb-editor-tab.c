@@ -1041,6 +1041,22 @@ on_vim_notify_phrase (GbEditorVim *vim,
   gb_editor_tab_cursor_moved (tab, tab->priv->document);
 }
 
+static void
+on_vim_notify_mode (GbEditorVim *vim,
+                    GParamSpec  *pspec,
+                    GbEditorTab *tab)
+{
+  GbEditorVimMode mode;
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  mode = gb_editor_vim_get_mode (vim);
+
+  if (mode != GB_EDITOR_VIM_INSERT)
+    gb_source_view_clear_snippets (tab->priv->source_view);
+}
+
 static gboolean
 on_vim_command_entry_key_press_event (GtkEntry    *entry,
                                       GdkEventKey *event,
@@ -1257,6 +1273,10 @@ gb_editor_tab_constructed (GObject *object)
   g_signal_connect (priv->vim,
                     "notify::phrase",
                     G_CALLBACK (on_vim_notify_phrase),
+                    tab);
+  g_signal_connect (priv->vim,
+                    "notify::mode",
+                    G_CALLBACK (on_vim_notify_mode),
                     tab);
 
   g_signal_connect (priv->vim_command_entry,
