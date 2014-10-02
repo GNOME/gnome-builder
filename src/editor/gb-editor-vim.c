@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "vim"
 
+#include <errno.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 #include <stdio.h>
@@ -1830,6 +1831,50 @@ gb_editor_vim_unindent (GbEditorVim *vim)
     gb_source_view_unindent_selection (view);
 }
 
+static void
+gb_editor_vim_add (GbEditorVim *vim,
+                   gint         by_count)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  gchar *endptr = NULL;
+  gchar *replace = NULL;
+  gchar *slice;
+  gint64 value = 0;
+
+  g_assert (vim);
+
+  /*
+   * TODO: There are a lot of smarts we can put in here. Guessing the base
+   *       comes to mind (hex, octal, etc).
+   */
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &iter, &selection);
+
+  slice = gtk_text_iter_get_slice (&iter, &selection);
+  value = g_ascii_strtoll (slice, &endptr, 10);
+
+  if (((value == G_MAXINT64) || (value == G_MININT64)) && (errno == ERANGE))
+    goto cleanup;
+
+  if (!endptr || *endptr)
+    goto cleanup;
+
+  value += by_count;
+
+  replace = g_strdup_printf ("%"G_GINT64_FORMAT, value);
+
+  gtk_text_buffer_delete (buffer, &iter, &selection);
+  gtk_text_buffer_insert (buffer, &iter, replace, -1);
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+cleanup:
+  g_free (slice);
+  g_free (replace);
+}
+
 static GbEditorVimPhraseStatus
 gb_editor_vim_parse_phrase (GbEditorVim       *vim,
                             GbEditorVimPhrase *phrase)
@@ -1943,6 +1988,30 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       if (!vim->priv->phrase->len)
         {
           gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_COMMAND);
+          return TRUE;
+        }
+      break;
+
+    case GDK_KEY_a:
+    case GDK_KEY_x:
+      if ((event->state & GDK_CONTROL_MASK) != 0)
+        {
+          GtkTextBuffer *buffer;
+          GtkTextIter begin;
+          GtkTextIter end;
+
+          buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+          gb_editor_vim_clear_phrase (vim);
+          gb_editor_vim_clear_selection (vim);
+          if (gb_editor_vim_select_current_word (vim, &begin, &end))
+            {
+              if (gtk_text_iter_backward_char (&begin) &&
+                  ('-' != gtk_text_iter_get_char (&begin)))
+                gtk_text_iter_forward_char (&begin);
+              gtk_text_buffer_select_range (buffer, &begin, &end);
+              gb_editor_vim_add (vim, (event->keyval == GDK_KEY_a) ? 1 : -1);
+              gb_editor_vim_clear_selection (vim);
+            }
           return TRUE;
         }
       break;
