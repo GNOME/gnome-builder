@@ -20,12 +20,42 @@
 
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "gb-editor-vim.h"
 #include "gb-log.h"
 #include "gb-source-view.h"
 #include "gb-string.h"
+
+/*
+ *  I can't possibly know all of VIM features. So this doesn't implement
+ *  all of them. Just the main ones I know about. File bugs if you like.
+ *
+ * TODO:
+ *
+ *  - Registers
+ *  - Multi-character verb/noun/modifiers.
+ *  - Marks
+ *  - Jumps
+ *  - Mark which commands are "movements" so that we can use that when
+ *    looking up movement modifiers. Also should mark jumps, etc.
+ */
+
+/**
+ * GbEditorVimCommandFunc:
+ * @vim: The #GbEditorVim instance.
+ * @count: The number modifier for the command.
+ * @modifier: A potential trailing modifer character.
+ *
+ * This is a function prototype for commands to implement themselves. They
+ * can potentially use the count to perform the operation multiple times.
+ *
+ * However, not all commands support this or will use it.
+ */
+typedef void (*GbEditorVimCommandFunc) (GbEditorVim        *vim,
+                                        guint               count,
+                                        gchar               modifier);
 
 struct _GbEditorVimPrivate
 {
@@ -40,6 +70,35 @@ struct _GbEditorVimPrivate
   guint            enabled : 1;
   guint            connected : 1;
 };
+
+/**
+ * GbEditorVimCommand:
+ *
+ * This structure encapsulates what we need to know about a command before
+ * we can dispatch it. requires_modifier means there needs to be a
+ * supplimental character provided after the key. Such an example would be
+ * "dd", "dw", "yy", or "gg".
+ */
+typedef struct
+{
+  GbEditorVimCommandFunc  func;
+  gchar                   key;
+  guint                   requires_modifier : 1;
+} GbEditorVimCommand;
+
+typedef enum
+{
+  GB_EDITOR_VIM_PHRASE_FAILED,
+  GB_EDITOR_VIM_PHRASE_SUCCESS,
+  GB_EDITOR_VIM_PHRASE_NEED_MORE,
+} GbEditorVimPhraseStatus;
+
+typedef struct
+{
+  guint count;
+  gchar key;
+  gchar modifier;
+} GbEditorVimPhrase;
 
 enum
 {
@@ -58,6 +117,7 @@ enum
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorVim, gb_editor_vim, G_TYPE_OBJECT)
 
+static GHashTable *gCommands;
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
@@ -105,7 +165,7 @@ gb_editor_vim_clear_selection (GbEditorVim *vim)
 
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
-  gtk_text_view_move_mark_onscreen (vim->priv->text_view, insert);
+  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 GbEditorVimMode
@@ -393,7 +453,7 @@ gb_editor_vim_move_line_end (GbEditorVim *vim)
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_view_move_mark_onscreen (vim->priv->text_view, insert);
+  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
@@ -506,6 +566,10 @@ gb_editor_vim_move_forward_word (GbEditorVim *vim)
   gboolean has_selection;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
+
+  /*
+   * TODO: Make the word boundaries more like VIM.
+   */
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
@@ -642,6 +706,10 @@ gb_editor_vim_move_up (GbEditorVim *vim)
 
   if (line == 0)
     return;
+
+  /*
+   * TODO: Bug when `vk`: Missing original character.
+   */
 
   if (is_single_line_selection (&iter, &selection))
     {
@@ -947,35 +1015,6 @@ gb_editor_vim_insert_nl_after (GbEditorVim *vim,
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
-}
-
-static void
-gb_editor_vim_delete_to_line_end (GbEditorVim *vim)
-{
-  GtkTextBuffer *buffer;
-  GtkTextMark *insert;
-  GtkTextIter begin;
-  GtkTextIter end;
-
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
-
-  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
-  gtk_text_iter_assign (&end, &begin);
-
-  /*
-   * Move forward to the end of the line, excluding the \n.
-   */
-  while (!gtk_text_iter_ends_line (&end))
-    if (!gtk_text_iter_forward_char (&end))
-      break;
-
-  gtk_text_buffer_begin_user_action (buffer);
-  gtk_text_buffer_delete (buffer, &begin, &end);
-  gtk_text_buffer_end_user_action (buffer);
-
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 }
 
 static void
@@ -1388,7 +1427,7 @@ gb_editor_vim_move_to_line_n (GbEditorVim *vim,
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_view_move_mark_onscreen (vim->priv->text_view, insert);
+  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
@@ -1427,6 +1466,38 @@ gb_editor_vim_get_has_selection (GbEditorVim *vim)
 }
 
 static void
+gb_editor_vim_indent (GbEditorVim *vim)
+{
+  GbSourceView *view;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  if (!GB_IS_SOURCE_VIEW (vim->priv->text_view))
+    return;
+
+  view = GB_SOURCE_VIEW (vim->priv->text_view);
+
+  if (gb_editor_vim_get_has_selection (vim))
+    gb_source_view_indent_selection (view);
+}
+
+static void
+gb_editor_vim_unindent (GbEditorVim *vim)
+{
+  GbSourceView *view;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  if (!GB_IS_SOURCE_VIEW (vim->priv->text_view))
+    return;
+
+  view = GB_SOURCE_VIEW (vim->priv->text_view);
+
+  if (gb_editor_vim_get_has_selection (vim))
+    gb_source_view_unindent_selection (view);
+}
+
+static void
 gb_editor_vim_clear_phrase (GbEditorVim *vim)
 {
   g_assert (GB_IS_EDITOR_VIM (vim));
@@ -1438,200 +1509,89 @@ gb_editor_vim_clear_phrase (GbEditorVim *vim)
 #endif
 }
 
-static gboolean
-gb_editor_vim_execute_phrase (GbEditorVim *vim)
+static GbEditorVimPhraseStatus
+gb_editor_vim_parse_phrase (GbEditorVim       *vim,
+                            GbEditorVimPhrase *phrase)
 {
-  GtkTextBuffer *buffer;
-  gboolean ret = FALSE;
-  const gchar *phrase;
-  gint count = -1;
-  gchar ch = 0;
+  const gchar *str;
+  guint count = 0;
+  gchar key;
+  gchar modifier;
+  gint n_scanned;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (phrase);
 
-  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  gtk_text_buffer_begin_user_action (buffer);
+  phrase->key = 0;
+  phrase->count = 0;
+  phrase->modifier = 0;
 
-  /*
-   * TODO: This could use some improvement so things like 10dw can be
-   *       supported. This is clearly a first draft.
-   */
+  str = vim->priv->phrase->str;
 
-  phrase = vim->priv->phrase->str;
+  n_scanned = sscanf (str, "%u%c%c", &count, &key, &modifier);
 
-  /*
-   * Check for all the normal special cases that I know of. If you are
-   * finding this code because something is missing, add it and send me
-   * a patch. If you have access to git.gnome.org, just commit it yourself.
-   */
-  if (g_str_equal (phrase, "dw"))
+  if (n_scanned == 3)
     {
-      gb_editor_vim_clear_selection (vim);
-      gb_editor_vim_select_char (vim);
-      gb_editor_vim_move_forward_word (vim);
-      gb_editor_vim_delete_selection (vim);
-      gb_editor_vim_clear_selection (vim);
-      ret = TRUE;
-    }
-  else if (g_str_equal (phrase, "dd"))
-    {
-      gb_editor_vim_clear_selection (vim);
-      gb_editor_vim_select_line (vim);
-      gb_editor_vim_delete_selection (vim);
-      ret = TRUE;
-    }
-  else if (g_str_equal (phrase, "yy"))
-    {
-      gb_editor_vim_clear_selection (vim);
-      gb_editor_vim_select_line (vim);
-      gb_editor_vim_yank (vim);
-      gb_editor_vim_clear_selection (vim);
-      ret = TRUE;
-    }
-  else if (g_str_equal (phrase, "gg"))
-    {
-      gb_editor_vim_clear_selection (vim);
-      gb_editor_vim_move_to_line_n (vim, 0);
-      ret = TRUE;
+      phrase->count = count;
+      phrase->key = key;
+      phrase->modifier = modifier;
+
+      return GB_EDITOR_VIM_PHRASE_SUCCESS;
     }
 
-  if (!ret)
+  if (n_scanned == 2)
     {
-      gint n_scanned;
+      phrase->count = count;
+      phrase->key = key;
+      phrase->modifier = 0;
 
-      n_scanned = sscanf (phrase, "%d%c", &count, &ch);
-
-      if (n_scanned == 2)
-        {
-          /*
-           * TODO: Execute command ch with argument count.
-           */
-          if (ch == 'G')
-            gb_editor_vim_move_to_line_n (vim, MAX (0, (count - 1)));
-          else if (ch == 'w')
-            {
-              gint i;
-
-              for (i = 0; i < count; i++)
-                gb_editor_vim_move_forward_word (vim);
-            }
-          else if (ch == 'x')
-            {
-              gint i;
-
-              for (i = 0; i < count; i++)
-                {
-                  gb_editor_vim_select_char (vim);
-                  gb_editor_vim_delete_selection (vim);
-                }
-            }
-
-          ret = TRUE;
-        }
-      else if (n_scanned == 1)
-        {
-          /*
-           * We only have a number, can't do anything right now.
-           */
-          g_print ("Only have a number, which is : %d\n", count);
-          ret = FALSE;
-        }
-      else if ((n_scanned == 0) &&
-               (vim->priv->phrase->len == 1) &&
-               g_ascii_isalpha (*phrase))
-        {
-          /* Do nothing so we can wait for multi-char sequence */
-        }
-      else
-        {
-          /*
-           * We got something invalid, just discard the whole phrase.
-           */
-          ret = TRUE;
-        }
+      return GB_EDITOR_VIM_PHRASE_SUCCESS;
     }
 
-  gtk_text_buffer_end_user_action (buffer);
-
-  return ret;
-}
-
-static void
-gb_editor_vim_push_phrase (GbEditorVim *vim,
-                           GdkEventKey *event)
-{
-  gchar *str;
-
-  g_assert (GB_IS_EDITOR_VIM (vim));
-
-  /*
-   * XXX: I'm not totally sure that this is the best way to get the input
-   *      string. It makes things like compose characters very difficult
-   *      and that needs to be well tested. However, that probably needs a
-   *      bunch of work in general with the VIM mode.
-   */
-
-  if (!event->string)
-    return;
-
-  str = g_strstrip (g_strdup (event->string));
-  g_string_append (vim->priv->phrase, str);
-
-  g_printerr ("PHRASE IS NOW : %s\n", vim->priv->phrase->str);
-
-  /*
-   * Try to execute the phrase if it is complete.
-   */
-  if (gb_editor_vim_execute_phrase (vim))
-    gb_editor_vim_clear_phrase (vim);
-
-  g_free (str);
-}
-
-static gboolean
-gb_editor_vim_handle_phrase (GbEditorVim *vim,
-                             GdkEventKey *event)
-{
-  g_assert (GB_IS_EDITOR_VIM (vim));
-  g_assert (event);
-
-  switch (event->keyval)
+  /* Special case for "0" command. */
+  if ((n_scanned == 1) && (count == 0))
     {
-    case GDK_KEY_bracketleft:
-      if ((event->state & GDK_CONTROL_MASK) == 0)
-        break;
-      /* Fall through */
-    case GDK_KEY_Escape:
-      /*
-       * Escape any selections we currently have.
-       */
-      gb_editor_vim_clear_selection (vim);
-      gb_editor_vim_clear_phrase (vim);
-      break;
+      phrase->key = '0';
+      phrase->count = 0;
+      phrase->modifier = 0;
 
-    case GDK_KEY_Return:
-    case GDK_KEY_KP_Enter:
-      /*
-       * Execute the phrase if possible. If not, there was nothing we could
-       * do so just finish the phrase entry and go back to normal mode.
-       */
-      gb_editor_vim_execute_phrase (vim);
-      gb_editor_vim_clear_phrase (vim);
-      break;
-
-    default:
-      if (!gb_str_empty0 (event->string) && g_ascii_isalnum (*event->string))
-        gb_editor_vim_push_phrase (vim, event);
-      break;
+      return GB_EDITOR_VIM_PHRASE_SUCCESS;
     }
 
-  return TRUE;
+  if (n_scanned == 1)
+    return GB_EDITOR_VIM_PHRASE_NEED_MORE;
+
+  n_scanned = sscanf (str, "%c%c", &key, &modifier);
+
+  if (n_scanned == 2)
+    {
+      phrase->count = 0;
+      phrase->key = key;
+      phrase->modifier = modifier;
+
+      return GB_EDITOR_VIM_PHRASE_SUCCESS;
+    }
+
+  if (n_scanned == 1)
+    {
+      phrase->count = 0;
+      phrase->key = key;
+      phrase->modifier = 0;
+
+      return GB_EDITOR_VIM_PHRASE_SUCCESS;
+    }
+
+  return GB_EDITOR_VIM_PHRASE_FAILED;
 }
 
 static gboolean
 gb_editor_vim_handle_normal (GbEditorVim *vim,
                              GdkEventKey *event)
 {
+  GbEditorVimCommand *cmd;
+  GbEditorVimPhraseStatus status;
+  GbEditorVimPhrase phrase;
+
   g_assert (GB_IS_EDITOR_VIM (vim));
   g_assert (event);
 
@@ -1642,310 +1602,103 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
         break;
       /* Fall through */
     case GDK_KEY_Escape:
-      /*
-       * Escape any selections we currently have.
-       */
       gb_editor_vim_clear_selection (vim);
       gb_editor_vim_clear_phrase (vim);
-      break;
-
-    case GDK_KEY_e:
-      /*
-       * Move to the end of the current word if there is one. Otherwise
-       * the end of the next word.
-       */
-      gb_editor_vim_move_end_of_word (vim);
       return TRUE;
 
-    case GDK_KEY_I:
-      /*
-       * Start insert mode at the beginning of the line.
-       */
-      gb_editor_vim_move_line_start (vim);
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-      return TRUE;
-
-    case GDK_KEY_i:
-      /*
-       * Start insert mode at the current line position.
-       */
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-      return TRUE;
-
-    case GDK_KEY_A:
-      /*
-       * Start insert mode at the end of the line.
-       */
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-      gb_editor_vim_move_line_end (vim);
-      return TRUE;
-
-    case GDK_KEY_a:
-      /*
-       * Start insert mode after the current character.
-       */
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-      gb_editor_vim_move_forward (vim);
-      return TRUE;
-
-    case GDK_KEY_D:
-      /*
-       * Delete from the current position to the end of the line.
-       * Stay in NORMAL mode.
-       */
-      gb_editor_vim_delete_to_line_end (vim);
-      return TRUE;
-
-    case GDK_KEY_l:
-      /*
-       * Move forward in the buffer one character, but stay on the
-       * same line.
-       */
-      gb_editor_vim_move_forward (vim);
-      return TRUE;
-
-    case GDK_KEY_G:
-      /*
-       * Move to the end of the buffer.
-       */
-      gb_editor_vim_move_to_end (vim);
-      return TRUE;
-
-    case GDK_KEY_h:
-      /*
-       * Move backward in the buffer one character, but stay on the
-       * same line.
-       */
-      gb_editor_vim_move_backward (vim);
-      return TRUE;
-
-    case GDK_KEY_j:
-      /*
-       * Move down in the buffer one line, and try to stay on the same column.
-       */
+    case GDK_KEY_KP_Enter:
+    case GDK_KEY_Return:
+      gb_editor_vim_clear_phrase (vim);
       gb_editor_vim_move_down (vim);
       return TRUE;
 
-    case GDK_KEY_k:
-      /*
-       * Move down in the buffer one line, and try to stay on the same column.
-       */
-      gb_editor_vim_move_up (vim);
-      return TRUE;
-
-    case GDK_KEY_V:
-      /*
-       * Select the current line.
-       */
-      gb_editor_vim_select_line (vim);
-      return TRUE;
-
-    case GDK_KEY_v:
-      /*
-       * Advance the selection to the next character. This needs to be able
-       * to be composted so things like 10v selectio the next 10 characters.
-       * However, `vvvvvvvvvv` does not select the next 10 characters.
-       */
-      gb_editor_vim_select_char (vim);
-      return TRUE;
-
-    case GDK_KEY_w:
-      /*
-       * Move forward by one word.
-       */
-      gb_editor_vim_move_forward_word (vim);
-      return TRUE;
+    case GDK_KEY_colon:
+      if (!vim->priv->phrase->len)
+        {
+          gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_COMMAND);
+          return TRUE;
+        }
+      break;
 
     case GDK_KEY_b:
-      /*
-       * Move backward by one word, or by a page if <Control> is set.
-       */
-      if ((event->state & GDK_CONTROL_MASK) != 0)
-        gb_editor_vim_page_up (vim);
-      else
-        gb_editor_vim_move_backward_word (vim);
-      return TRUE;
-
-    case GDK_KEY_f:
-      /*
-       * Move forward by one page if <Control> is set.
-       */
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
+          gb_editor_vim_clear_phrase (vim);
+          gb_editor_vim_page_up (vim);
+          return TRUE;
+        }
+      break;
+
+    case GDK_KEY_f:
+      if ((event->state & GDK_CONTROL_MASK) != 0)
+        {
+          gb_editor_vim_clear_phrase (vim);
           gb_editor_vim_page_down (vim);
           return TRUE;
         }
-
       break;
 
-    case GDK_KEY_x:
-      /*
-       * Delete the current selection.
-       */
-      gb_editor_vim_delete_selection (vim);
-      return TRUE;
-
-    case GDK_KEY_u:
-      /*
-       * Undo the last operation if we can.
-       */
-      gb_editor_vim_undo (vim);
-      return TRUE;
-
-    case GDK_KEY_O:
-      /*
-       * Insert a newline before the current line, and start editing.
-       */
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-      gb_editor_vim_insert_nl_before (vim);
-      return TRUE;
-
-    case GDK_KEY_o:
-      /*
-       * Insert a new line, and then begin insertion.
-       */
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-      gb_editor_vim_insert_nl_after (vim, TRUE);
-      return TRUE;
-
-    case GDK_KEY_p:
-      /*
-       * Paste the current clipboard selection.
-       */
-      gb_editor_vim_paste (vim);
-      return TRUE;
-
     case GDK_KEY_r:
-      /*
-       * Try to redo a previously undone operation if we can.
-       */
-      if ((event->state & GDK_CONTROL_MASK))
+      if ((event->state & GDK_CONTROL_MASK) != 0)
         {
+          gb_editor_vim_clear_phrase (vim);
           gb_editor_vim_redo (vim);
           return TRUE;
         }
-
       break;
 
-    case GDK_KEY_R:
-      /*
-       * Go into insert mode with overwrite.
-       */
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-      gtk_text_view_set_overwrite (vim->priv->text_view, TRUE);
-      return TRUE;
-
-    case GDK_KEY_y:
-      /*
-       * Yank (copy) the current selection and then remove the selection
-       * leaving the cursor on the first character.
-       */
-      if (gb_editor_vim_get_has_selection (vim))
+    case GDK_KEY_u:
+      if ((event->state & GDK_CONTROL_MASK) != 0)
         {
-          gb_editor_vim_yank (vim);
+          gb_editor_vim_clear_phrase (vim);
+          gb_editor_vim_clear_selection (vim);
+          gb_editor_vim_select_char (vim);
+          gb_editor_vim_move_line_start (vim);
+          gb_editor_vim_delete_selection (vim);
           return TRUE;
         }
-
-        break;
-
-    case GDK_KEY_greater:
-      /*
-       * If we have a selection, try to indent it.
-       */
-      if (gb_editor_vim_get_has_selection (vim) &&
-          GB_IS_SOURCE_VIEW (vim->priv->text_view))
-        {
-          GbSourceView *view = GB_SOURCE_VIEW (vim->priv->text_view);
-          gb_source_view_indent_selection (view);
-          return TRUE;
-        }
-
       break;
-
-    case GDK_KEY_less:
-      /*
-       * If we have a selection, try to unindent it.
-       */
-      if (gb_editor_vim_get_has_selection (vim) &&
-          GB_IS_SOURCE_VIEW (vim->priv->text_view))
-        {
-          GbSourceView *view = GB_SOURCE_VIEW (vim->priv->text_view);
-          gb_source_view_unindent_selection (view);
-          return TRUE;
-        }
-
-      break;
-
-    case GDK_KEY_slash:
-      /*
-       * Focus the search entry for the source view and clear the current
-       * search. NULL indicates that the search text should be refocused.
-       */
-      if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
-        {
-          gb_source_view_begin_search (GB_SOURCE_VIEW (vim->priv->text_view),
-                                       GTK_DIR_DOWN, NULL);
-          return TRUE;
-        }
-
-      break;
-
-    case GDK_KEY_dollar:
-      /*
-       * Move to the end of the line.
-       */
-      gb_editor_vim_move_line_end (vim);
-      return TRUE;
-
-    case GDK_KEY_0:
-      /*
-       * Move to the first offset (even if it is whitespace) on the current
-       * line.
-       */
-      gb_editor_vim_move_line0 (vim);
-      return TRUE;
-
-    case GDK_KEY_asciicircum:
-      /*
-       * Move to the first word in the line.
-       */
-      gb_editor_vim_move_line_start (vim);
-      return TRUE;
-
-    case GDK_KEY_asterisk:
-      /*
-       * Start search in the forward direction for the word that is under
-       * the cursor. If we are over a space, we move ot the next word.
-       */
-      gb_editor_vim_search (vim);
-      return TRUE;
-
-    case GDK_KEY_numbersign:
-      /*
-       * Start searching in the reverse direction for the word that is
-       * under the cursor. If we are over a space, we move to the next
-       * word.
-       */
-      gb_editor_vim_reverse_search (vim);
-      return TRUE;
-
-    case GDK_KEY_colon:
-      /*
-       * Switch to command mode.
-       */
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_COMMAND);
-      return TRUE;
 
     default:
       break;
     }
 
-  if (!gtk_bindings_activate_event (G_OBJECT (vim->priv->text_view), event))
+  if (gtk_bindings_activate_event (G_OBJECT (vim->priv->text_view), event))
+    return TRUE;
+
+  /*
+   * TODO: The GdkEventKey.string field is deprecated, so we will need to
+   *       determine how to do this more precisely once we can no longer use
+   *       that.
+   */
+
+  if (!gb_str_empty0 (event->string))
+    g_string_append (vim->priv->phrase, event->string);
+
+  status = gb_editor_vim_parse_phrase (vim, &phrase);
+
+  switch (status)
     {
-      if (!gb_str_empty0 (event->string) && g_ascii_isalnum (*event->string))
-        gb_editor_vim_push_phrase (vim, event);
-      else
-        gb_editor_vim_clear_phrase (vim);
+    case GB_EDITOR_VIM_PHRASE_SUCCESS:
+      cmd = g_hash_table_lookup (gCommands, GINT_TO_POINTER (phrase.key));
+      if (!cmd)
+        {
+          gb_editor_vim_clear_phrase (vim);
+          break;
+        }
+      if (cmd->requires_modifier && !phrase.modifier)
+        break;
+      gb_editor_vim_clear_phrase (vim);
+      cmd->func (vim, phrase.count, phrase.modifier);
+      break;
+
+    case GB_EDITOR_VIM_PHRASE_NEED_MORE:
+      break;
+
+    default:
+    case GB_EDITOR_VIM_PHRASE_FAILED:
+      gb_editor_vim_clear_phrase (vim);
+      break;
     }
 
   return TRUE;
@@ -2033,8 +1786,6 @@ gb_editor_vim_key_press_event_cb (GtkTextView *text_view,
 {
   gboolean ret;
 
-  ENTRY;
-
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
   g_return_val_if_fail (event, FALSE);
   g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), FALSE);
@@ -2042,25 +1793,22 @@ gb_editor_vim_key_press_event_cb (GtkTextView *text_view,
   switch (vim->priv->mode)
     {
     case GB_EDITOR_VIM_NORMAL:
-      if (vim->priv->phrase->len)
-        ret = gb_editor_vim_handle_phrase (vim, event);
-      else
-        ret = gb_editor_vim_handle_normal (vim, event);
-      RETURN (ret);
+      ret = gb_editor_vim_handle_normal (vim, event);
+      break;
 
     case GB_EDITOR_VIM_INSERT:
       ret = gb_editor_vim_handle_insert (vim, event);
-      RETURN (ret);
+      break;
 
     case GB_EDITOR_VIM_COMMAND:
       ret = gb_editor_vim_handle_command (vim, event);
-      RETURN (ret);
+      break;
 
     default:
       g_assert_not_reached();
     }
 
-  RETURN (FALSE);
+  return ret;
 }
 
 static gboolean
@@ -2437,6 +2185,560 @@ gb_editor_vim_set_property (GObject      *object,
 }
 
 static void
+gb_editor_vim_cmd_repeat (GbEditorVim *vim,
+                          guint        count,
+                          gchar        modifier)
+{
+  /* TODO! */
+}
+
+static void
+gb_editor_vim_cmd_begin_search (GbEditorVim *vim,
+                                guint        count,
+                                gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
+    gb_source_view_begin_search (GB_SOURCE_VIEW (vim->priv->text_view),
+                                 GTK_DIR_DOWN, NULL);
+}
+
+static void
+gb_editor_vim_cmd_forward_line_end (GbEditorVim *vim,
+                                    guint        count,
+                                    gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_move_line_end (vim);
+}
+
+static void
+gb_editor_vim_cmd_backward_0 (GbEditorVim *vim,
+                              guint        count,
+                              gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_move_line0 (vim);
+}
+
+static void
+gb_editor_vim_cmd_backward_start (GbEditorVim *vim,
+                                  guint        count,
+                                  gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_move_line_start (vim);
+}
+
+static void
+gb_editor_vim_cmd_match_backward (GbEditorVim *vim,
+                                  guint        count,
+                                  gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_reverse_search (vim);
+}
+
+static void
+gb_editor_vim_cmd_match_forward (GbEditorVim *vim,
+                                 guint        count,
+                                 gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_search (vim);
+}
+
+static void
+gb_editor_vim_cmd_indent (GbEditorVim *vim,
+                          guint        count,
+                          gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_indent (vim);
+
+  gb_editor_vim_clear_selection (vim);
+}
+
+static void
+gb_editor_vim_cmd_unindent (GbEditorVim *vim,
+                            guint        count,
+                            gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_unindent (vim);
+
+  gb_editor_vim_clear_selection (vim);
+}
+
+static void
+gb_editor_vim_cmd_insert_end (GbEditorVim *vim,
+                              guint        count,
+                              gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+  gb_editor_vim_clear_selection (vim);
+  gb_editor_vim_move_line_end (vim);
+}
+
+static void
+gb_editor_vim_cmd_insert_after (GbEditorVim *vim,
+                                guint        count,
+                                gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+  gb_editor_vim_clear_selection (vim);
+  gb_editor_vim_move_forward (vim);
+}
+
+static void
+gb_editor_vim_cmd_backward_word (GbEditorVim *vim,
+                                 guint        count,
+                                 gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_move_backward_word (vim);
+}
+
+static void
+gb_editor_vim_cmd_delete (GbEditorVim *vim,
+                          guint        count,
+                          gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_clear_selection (vim);
+
+  if (modifier == 'd')
+    gb_editor_vim_select_line (vim);
+  else
+    {
+      GbEditorVimCommand *cmd;
+
+      /*
+       * TODO: Ensure that cmd is a motion command.
+       */
+
+      cmd = g_hash_table_lookup (gCommands, GINT_TO_POINTER (modifier));
+      if (!cmd)
+        return;
+
+      gb_editor_vim_select_char (vim);
+      cmd->func (vim, count, '\0');
+    }
+
+  gb_editor_vim_delete_selection (vim);
+}
+
+static void
+gb_editor_vim_cmd_delete_to_end (GbEditorVim *vim,
+                                 guint        count,
+                                 gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_clear_selection (vim);
+  gb_editor_vim_select_char (vim);
+  gb_editor_vim_move_line_end (vim);
+  gb_editor_vim_delete_selection (vim);
+}
+
+static void
+gb_editor_vim_cmd_forward_word_end (GbEditorVim *vim,
+                                    guint        count,
+                                    gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_move_end_of_word (vim);
+}
+
+static void
+gb_editor_vim_cmd_goto (GbEditorVim *vim,
+                        guint        count,
+                        gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  if (modifier == 'g')
+    {
+      gb_editor_vim_clear_selection (vim);
+      gb_editor_vim_move_to_line_n (vim, 0);
+    }
+}
+
+static void
+gb_editor_vim_cmd_goto_line (GbEditorVim *vim,
+                             guint        count,
+                             gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  if (count)
+    gb_editor_vim_move_to_line_n (vim, count - 1);
+  else
+    gb_editor_vim_move_to_end (vim);
+}
+
+static void
+gb_editor_vim_cmd_move_backward (GbEditorVim *vim,
+                                 guint        count,
+                                 gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_move_backward (vim);
+}
+
+static void
+gb_editor_vim_cmd_insert_start (GbEditorVim *vim,
+                                guint        count,
+                                gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+  gb_editor_vim_clear_selection (vim);
+  gb_editor_vim_move_line_start (vim);
+}
+
+static void
+gb_editor_vim_cmd_insert (GbEditorVim *vim,
+                          guint        count,
+                          gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+  gb_editor_vim_clear_selection (vim);
+}
+
+static void
+gb_editor_vim_cmd_move_down (GbEditorVim *vim,
+                             guint        count,
+                             gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_move_down (vim);
+}
+
+static void
+gb_editor_vim_cmd_move_up (GbEditorVim *vim,
+                           guint        count,
+                           gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_move_up (vim);
+}
+
+static void
+gb_editor_vim_cmd_move_forward (GbEditorVim *vim,
+                                guint        count,
+                                gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_move_forward (vim);
+}
+
+static void
+gb_editor_vim_cmd_insert_before_line (GbEditorVim *vim,
+                                      guint        count,
+                                      gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_insert_nl_before (vim);
+}
+
+static void
+gb_editor_vim_cmd_insert_after_line (GbEditorVim *vim,
+                                     guint        count,
+                                     gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_insert_nl_after (vim, TRUE);
+}
+
+static void
+gb_editor_vim_cmd_paste_after (GbEditorVim *vim,
+                               guint        count,
+                               gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_paste (vim);
+}
+
+static void
+gb_editor_vim_cmd_paste_before (GbEditorVim *vim,
+                                guint        count,
+                                gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  /* TODO: Paste Before intead of after. */
+  gb_editor_vim_cmd_paste_after (vim, count, modifier);
+}
+
+static void
+gb_editor_vim_cmd_overwrite (GbEditorVim *vim,
+                             guint        count,
+                             gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+  gtk_text_view_set_overwrite (vim->priv->text_view, TRUE);
+}
+
+static void
+gb_editor_vim_cmd_undo (GbEditorVim *vim,
+                        guint        count,
+                        gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_undo (vim);
+}
+
+static void
+gb_editor_vim_cmd_select_line (GbEditorVim *vim,
+                               guint        count,
+                               gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  gb_editor_vim_select_line (vim);
+  for (i = 1; i < count; i++)
+    gb_editor_vim_move_down (vim);
+}
+
+static void
+gb_editor_vim_cmd_select (GbEditorVim *vim,
+                          guint        count,
+                          gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+  gb_editor_vim_select_char (vim);
+  for (i = 1; i < count; i++)
+    gb_editor_vim_move_forward (vim);
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+}
+
+static void
+gb_editor_vim_cmd_forward_word (GbEditorVim *vim,
+                                guint        count,
+                                gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_move_forward_word (vim);
+}
+
+static void
+gb_editor_vim_cmd_delete_selection (GbEditorVim *vim,
+                                    guint        count,
+                                    gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_delete_selection (vim);
+}
+
+static void
+gb_editor_vim_cmd_yank (GbEditorVim *vim,
+                        guint        count,
+                        gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_clear_selection (vim);
+
+  if (modifier == 'y')
+    gb_editor_vim_select_line (vim);
+  else
+    {
+      GbEditorVimCommand *cmd;
+
+      /*
+       * TODO: Make sure that cmd is a movement command.
+       */
+
+      cmd = g_hash_table_lookup (gCommands, GINT_TO_POINTER (modifier));
+      if (!cmd)
+        return;
+
+      cmd->func (vim, 1, '\0');
+    }
+
+  gb_editor_vim_yank (vim);
+  gb_editor_vim_clear_selection (vim);
+}
+
+static void
+gb_editor_vim_cmd_center (GbEditorVim *vim,
+                          guint        count,
+                          gchar        modifier)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  switch (modifier)
+    {
+    case 'b':
+      gtk_text_view_scroll_to_iter (vim->priv->text_view, &iter, 0.0, TRUE,
+                                    0.0, 1.0);
+      break;
+
+    case 't':
+      gtk_text_view_scroll_to_iter (vim->priv->text_view, &iter, 0.0, TRUE,
+                                    0.0, 0.0);
+      break;
+
+    case 'z':
+      gtk_text_view_scroll_to_iter (vim->priv->text_view, &iter, 0.0, TRUE,
+                                    0.0, 0.5);
+      break;
+
+    default:
+      break;
+    }
+}
+
+static void
+gb_editor_vim_class_register_command (GbEditorVimClass       *klass,
+                                      gchar                   key,
+                                      gboolean                requires_modifier,
+                                      GbEditorVimCommandFunc  func)
+{
+  GbEditorVimCommand *cmd;
+  gpointer keyptr = GINT_TO_POINTER ((gint)key);
+
+  g_assert (GB_IS_EDITOR_VIM_CLASS (klass));
+
+  /*
+   * TODO: It would be neat to have gCommands be a field in the klass. We
+   *       could then just chain up to discover the proper command. This
+   *       allows for subclasses to override and add new commands.
+   *       To do so will probably take registering the GObjectClass
+   *       manually to set base_init().
+   */
+
+  if (!gCommands)
+    gCommands = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  cmd = g_new0 (GbEditorVimCommand, 1);
+  cmd->key = key;
+  cmd->func = func;
+  cmd->requires_modifier = requires_modifier;
+
+  g_hash_table_replace (gCommands, keyptr, cmd);
+}
+
+static void
 gb_editor_vim_class_init (GbEditorVimClass *klass)
 {
   GObjectClass *object_class;
@@ -2497,6 +2799,81 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                   G_TYPE_NONE,
                   1,
                   G_TYPE_BOOLEAN);
+
+  /*
+   * Register all of our internal VIM commands. These can be used directly
+   * or via phrases.
+   */
+  gb_editor_vim_class_register_command (klass, '.', FALSE,
+                                        gb_editor_vim_cmd_repeat);
+  gb_editor_vim_class_register_command (klass, '/', FALSE,
+                                        gb_editor_vim_cmd_begin_search);
+  gb_editor_vim_class_register_command (klass, '$', FALSE,
+                                        gb_editor_vim_cmd_forward_line_end);
+  gb_editor_vim_class_register_command (klass, '0', FALSE,
+                                        gb_editor_vim_cmd_backward_0);
+  gb_editor_vim_class_register_command (klass, '^', FALSE,
+                                        gb_editor_vim_cmd_backward_start);
+  gb_editor_vim_class_register_command (klass, '#', FALSE,
+                                        gb_editor_vim_cmd_match_backward);
+  gb_editor_vim_class_register_command (klass, '*', FALSE,
+                                        gb_editor_vim_cmd_match_forward);
+  gb_editor_vim_class_register_command (klass, '>', FALSE,
+                                        gb_editor_vim_cmd_indent);
+  gb_editor_vim_class_register_command (klass, '<', FALSE,
+                                        gb_editor_vim_cmd_unindent);
+  gb_editor_vim_class_register_command (klass, 'A', FALSE,
+                                        gb_editor_vim_cmd_insert_end);
+  gb_editor_vim_class_register_command (klass, 'a', FALSE,
+                                        gb_editor_vim_cmd_insert_after);
+  gb_editor_vim_class_register_command (klass, 'b', FALSE,
+                                        gb_editor_vim_cmd_backward_word);
+  gb_editor_vim_class_register_command (klass, 'd', TRUE,
+                                        gb_editor_vim_cmd_delete);
+  gb_editor_vim_class_register_command (klass, 'D', FALSE,
+                                        gb_editor_vim_cmd_delete_to_end);
+  gb_editor_vim_class_register_command (klass, 'e', FALSE,
+                                        gb_editor_vim_cmd_forward_word_end);
+  gb_editor_vim_class_register_command (klass, 'G', FALSE,
+                                        gb_editor_vim_cmd_goto_line);
+  gb_editor_vim_class_register_command (klass, 'g', TRUE,
+                                        gb_editor_vim_cmd_goto);
+  gb_editor_vim_class_register_command (klass, 'h', FALSE,
+                                        gb_editor_vim_cmd_move_backward);
+  gb_editor_vim_class_register_command (klass, 'I', FALSE,
+                                        gb_editor_vim_cmd_insert_start);
+  gb_editor_vim_class_register_command (klass, 'i', FALSE,
+                                        gb_editor_vim_cmd_insert);
+  gb_editor_vim_class_register_command (klass, 'j', FALSE,
+                                        gb_editor_vim_cmd_move_down);
+  gb_editor_vim_class_register_command (klass, 'k', FALSE,
+                                        gb_editor_vim_cmd_move_up);
+  gb_editor_vim_class_register_command (klass, 'l', FALSE,
+                                        gb_editor_vim_cmd_move_forward);
+  gb_editor_vim_class_register_command (klass, 'O', FALSE,
+                                        gb_editor_vim_cmd_insert_before_line);
+  gb_editor_vim_class_register_command (klass, 'o', FALSE,
+                                        gb_editor_vim_cmd_insert_after_line);
+  gb_editor_vim_class_register_command (klass, 'P', FALSE,
+                                        gb_editor_vim_cmd_paste_before);
+  gb_editor_vim_class_register_command (klass, 'p', FALSE,
+                                        gb_editor_vim_cmd_paste_after);
+  gb_editor_vim_class_register_command (klass, 'R', FALSE,
+                                        gb_editor_vim_cmd_overwrite);
+  gb_editor_vim_class_register_command (klass, 'u', FALSE,
+                                        gb_editor_vim_cmd_undo);
+  gb_editor_vim_class_register_command (klass, 'V', FALSE,
+                                        gb_editor_vim_cmd_select_line);
+  gb_editor_vim_class_register_command (klass, 'v', FALSE,
+                                        gb_editor_vim_cmd_select);
+  gb_editor_vim_class_register_command (klass, 'w', FALSE,
+                                        gb_editor_vim_cmd_forward_word);
+  gb_editor_vim_class_register_command (klass, 'x', FALSE,
+                                        gb_editor_vim_cmd_delete_selection);
+  gb_editor_vim_class_register_command (klass, 'y', TRUE,
+                                        gb_editor_vim_cmd_yank);
+  gb_editor_vim_class_register_command (klass, 'z', TRUE,
+                                        gb_editor_vim_cmd_center);
 }
 
 static void
