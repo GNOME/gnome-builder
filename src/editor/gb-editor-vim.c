@@ -25,10 +25,12 @@
 #include "gb-editor-vim.h"
 #include "gb-log.h"
 #include "gb-source-view.h"
+#include "gb-string.h"
 
 struct _GbEditorVimPrivate
 {
   GtkTextView     *text_view;
+  GString         *phrase;
   GbEditorVimMode  mode;
   gulong           key_press_event_handler;
   gulong           focus_in_event_handler;
@@ -128,6 +130,11 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
    */
   gtk_text_view_set_overwrite (vim->priv->text_view,
                                (mode != GB_EDITOR_VIM_INSERT));
+
+  /*
+   * Clear any in flight phrases.
+   */
+  g_string_truncate (vim->priv->phrase, 0);
 
   /*
    * If we are going back to navigation mode, stash our current buffer
@@ -1365,6 +1372,26 @@ gb_editor_vim_search (GbEditorVim *vim)
 }
 
 static void
+gb_editor_vim_move_to_line_n (GbEditorVim *vim,
+                              guint        line)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_view_move_mark_onscreen (vim->priv->text_view, insert);
+}
+
+static void
 gb_editor_vim_page_up (GbEditorVim *vim)
 {
   g_assert (GB_IS_EDITOR_VIM (vim));
@@ -1399,6 +1426,208 @@ gb_editor_vim_get_has_selection (GbEditorVim *vim)
   return gtk_text_buffer_get_has_selection (buffer);
 }
 
+static void
+gb_editor_vim_clear_phrase (GbEditorVim *vim)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  g_string_truncate (vim->priv->phrase, 0);
+
+#if 0
+  g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_PHRASE]);
+#endif
+}
+
+static gboolean
+gb_editor_vim_execute_phrase (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  gboolean ret = FALSE;
+  const gchar *phrase;
+  gint count = -1;
+  gchar ch = 0;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  gtk_text_buffer_begin_user_action (buffer);
+
+  /*
+   * TODO: This could use some improvement so things like 10dw can be
+   *       supported. This is clearly a first draft.
+   */
+
+  phrase = vim->priv->phrase->str;
+
+  /*
+   * Check for all the normal special cases that I know of. If you are
+   * finding this code because something is missing, add it and send me
+   * a patch. If you have access to git.gnome.org, just commit it yourself.
+   */
+  if (g_str_equal (phrase, "dw"))
+    {
+      gb_editor_vim_clear_selection (vim);
+      gb_editor_vim_select_char (vim);
+      gb_editor_vim_move_forward_word (vim);
+      gb_editor_vim_delete_selection (vim);
+      gb_editor_vim_clear_selection (vim);
+      ret = TRUE;
+    }
+  else if (g_str_equal (phrase, "dd"))
+    {
+      gb_editor_vim_clear_selection (vim);
+      gb_editor_vim_select_line (vim);
+      gb_editor_vim_delete_selection (vim);
+      ret = TRUE;
+    }
+  else if (g_str_equal (phrase, "yy"))
+    {
+      gb_editor_vim_clear_selection (vim);
+      gb_editor_vim_select_line (vim);
+      gb_editor_vim_yank (vim);
+      gb_editor_vim_clear_selection (vim);
+      ret = TRUE;
+    }
+  else if (g_str_equal (phrase, "gg"))
+    {
+      gb_editor_vim_clear_selection (vim);
+      gb_editor_vim_move_to_line_n (vim, 0);
+      ret = TRUE;
+    }
+
+  if (!ret)
+    {
+      gint n_scanned;
+
+      n_scanned = sscanf (phrase, "%d%c", &count, &ch);
+
+      if (n_scanned == 2)
+        {
+          /*
+           * TODO: Execute command ch with argument count.
+           */
+          if (ch == 'G')
+            gb_editor_vim_move_to_line_n (vim, MAX (0, (count - 1)));
+          else if (ch == 'w')
+            {
+              gint i;
+
+              for (i = 0; i < count; i++)
+                gb_editor_vim_move_forward_word (vim);
+            }
+          else if (ch == 'x')
+            {
+              gint i;
+
+              for (i = 0; i < count; i++)
+                {
+                  gb_editor_vim_select_char (vim);
+                  gb_editor_vim_delete_selection (vim);
+                }
+            }
+
+          ret = TRUE;
+        }
+      else if (n_scanned == 1)
+        {
+          /*
+           * We only have a number, can't do anything right now.
+           */
+          g_print ("Only have a number, which is : %d\n", count);
+          ret = FALSE;
+        }
+      else if ((n_scanned == 0) &&
+               (vim->priv->phrase->len == 1) &&
+               g_ascii_isalpha (*phrase))
+        {
+          /* Do nothing so we can wait for multi-char sequence */
+        }
+      else
+        {
+          /*
+           * We got something invalid, just discard the whole phrase.
+           */
+          ret = TRUE;
+        }
+    }
+
+  gtk_text_buffer_end_user_action (buffer);
+
+  return ret;
+}
+
+static void
+gb_editor_vim_push_phrase (GbEditorVim *vim,
+                           GdkEventKey *event)
+{
+  gchar *str;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  /*
+   * XXX: I'm not totally sure that this is the best way to get the input
+   *      string. It makes things like compose characters very difficult
+   *      and that needs to be well tested. However, that probably needs a
+   *      bunch of work in general with the VIM mode.
+   */
+
+  if (!event->string)
+    return;
+
+  str = g_strstrip (g_strdup (event->string));
+  g_string_append (vim->priv->phrase, str);
+
+  g_printerr ("PHRASE IS NOW : %s\n", vim->priv->phrase->str);
+
+  /*
+   * Try to execute the phrase if it is complete.
+   */
+  if (gb_editor_vim_execute_phrase (vim))
+    gb_editor_vim_clear_phrase (vim);
+
+  g_free (str);
+}
+
+static gboolean
+gb_editor_vim_handle_phrase (GbEditorVim *vim,
+                             GdkEventKey *event)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (event);
+
+  switch (event->keyval)
+    {
+    case GDK_KEY_bracketleft:
+      if ((event->state & GDK_CONTROL_MASK) == 0)
+        break;
+      /* Fall through */
+    case GDK_KEY_Escape:
+      /*
+       * Escape any selections we currently have.
+       */
+      gb_editor_vim_clear_selection (vim);
+      gb_editor_vim_clear_phrase (vim);
+      break;
+
+    case GDK_KEY_Return:
+    case GDK_KEY_KP_Enter:
+      /*
+       * Execute the phrase if possible. If not, there was nothing we could
+       * do so just finish the phrase entry and go back to normal mode.
+       */
+      gb_editor_vim_execute_phrase (vim);
+      gb_editor_vim_clear_phrase (vim);
+      break;
+
+    default:
+      if (!gb_str_empty0 (event->string) && g_ascii_isalnum (*event->string))
+        gb_editor_vim_push_phrase (vim, event);
+      break;
+    }
+
+  return TRUE;
+}
+
 static gboolean
 gb_editor_vim_handle_normal (GbEditorVim *vim,
                              GdkEventKey *event)
@@ -1417,6 +1646,7 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
        * Escape any selections we currently have.
        */
       gb_editor_vim_clear_selection (vim);
+      gb_editor_vim_clear_phrase (vim);
       break;
 
     case GDK_KEY_e:
@@ -1553,14 +1783,14 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
        * Delete the current selection.
        */
       gb_editor_vim_delete_selection (vim);
-      break;
+      return TRUE;
 
     case GDK_KEY_u:
       /*
        * Undo the last operation if we can.
        */
       gb_editor_vim_undo (vim);
-      break;
+      return TRUE;
 
     case GDK_KEY_O:
       /*
@@ -1710,7 +1940,13 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       break;
     }
 
-  gtk_bindings_activate_event (G_OBJECT (vim->priv->text_view), event);
+  if (!gtk_bindings_activate_event (G_OBJECT (vim->priv->text_view), event))
+    {
+      if (!gb_str_empty0 (event->string) && g_ascii_isalnum (*event->string))
+        gb_editor_vim_push_phrase (vim, event);
+      else
+        gb_editor_vim_clear_phrase (vim);
+    }
 
   return TRUE;
 }
@@ -1806,7 +2042,10 @@ gb_editor_vim_key_press_event_cb (GtkTextView *text_view,
   switch (vim->priv->mode)
     {
     case GB_EDITOR_VIM_NORMAL:
-      ret = gb_editor_vim_handle_normal (vim, event);
+      if (vim->priv->phrase->len)
+        ret = gb_editor_vim_handle_phrase (vim, event);
+      else
+        ret = gb_editor_vim_handle_normal (vim, event);
       RETURN (ret);
 
     case GB_EDITOR_VIM_INSERT:
@@ -2107,7 +2346,6 @@ gb_editor_vim_set_text_view (GbEditorVim *vim,
   g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_TEXT_VIEW]);
 }
 
-
 void
 gb_editor_vim_execute_command (GbEditorVim *vim,
                                const gchar *command)
@@ -2141,6 +2379,9 @@ gb_editor_vim_finalize (GObject *object)
                                     (gpointer *)&priv->text_view);
       priv->text_view = NULL;
     }
+
+  g_string_free (priv->phrase, TRUE);
+  priv->phrase = NULL;
 
   G_OBJECT_CLASS (gb_editor_vim_parent_class)->finalize (object);
 }
@@ -2264,6 +2505,7 @@ gb_editor_vim_init (GbEditorVim *vim)
   vim->priv = gb_editor_vim_get_instance_private (vim);
   vim->priv->enabled = FALSE;
   vim->priv->mode = GB_EDITOR_VIM_NORMAL;
+  vim->priv->phrase = g_string_new (NULL);
 }
 
 GType
