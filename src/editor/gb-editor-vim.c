@@ -2819,15 +2819,16 @@ gb_editor_vim_cmd_forward_word_end (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_cmd_goto (GbEditorVim *vim,
-                        guint        count,
-                        gchar        modifier)
+gb_editor_vim_cmd_g (GbEditorVim *vim,
+                     guint        count,
+                     gchar        modifier)
 {
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   /*
    * TODO: We have more plumbing todo so we can support commands that are
    *       multiple characters (gU gu g~ and gg are all separate commands).
+   *       We can support `gU' on a selection, but not `gUw'.
    */
 
   switch (modifier)
@@ -3311,7 +3312,7 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         gb_editor_vim_cmd_goto_line);
   gb_editor_vim_class_register_command (klass, 'g', TRUE,
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_goto);
+                                        gb_editor_vim_cmd_g);
   gb_editor_vim_class_register_command (klass, 'h', FALSE,
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_move_backward);
