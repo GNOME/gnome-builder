@@ -1149,8 +1149,10 @@ gb_editor_vim_select_char (GbEditorVim *vim)
   gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
   gtk_text_iter_assign (&end, &begin);
 
-  if (gtk_text_iter_forward_char (&end))
-    gb_editor_vim_select_range (vim, &end, &begin);
+  if (!gtk_text_iter_forward_char (&end))
+    gtk_text_buffer_get_end_iter (buffer, &end);
+
+  gb_editor_vim_select_range (vim, &end, &begin);
 
   gb_editor_vim_set_selection_anchor (vim, &begin, &end);
 
