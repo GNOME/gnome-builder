@@ -67,6 +67,8 @@ struct _GbEditorVimPrivate
   gulong           mark_set_handler;
   gulong           delete_range_handler;
   guint            target_line_offset;
+  guint            stash_line;
+  guint            stash_line_offset;
   guint            enabled : 1;
   guint            connected : 1;
 };
@@ -152,6 +154,43 @@ gb_editor_vim_get_line_offset (GbEditorVim *vim)
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
 
   return gtk_text_iter_get_line_offset (&iter);
+}
+
+static void
+gb_editor_vim_save_position (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &iter, &selection);
+
+  vim->priv->stash_line = gtk_text_iter_get_line (&iter);
+  vim->priv->stash_line_offset = gtk_text_iter_get_line_offset (&iter);
+}
+
+static void
+gb_editor_vim_restore_position (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  guint offset;
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, vim->priv->stash_line);
+
+  for (offset = vim->priv->stash_line_offset; offset; offset--)
+    if (!gtk_text_iter_forward_char (&iter))
+      break;
+
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 }
 
 static void
@@ -2687,25 +2726,11 @@ gb_editor_vim_cmd_yank (GbEditorVim *vim,
 
   if (modifier == 'y')
     {
-      GtkTextBuffer *buffer;
-      GtkTextMark *insert;
-      GtkTextIter iter;
-      guint offset;
-
-      buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-      insert = gtk_text_buffer_get_insert (buffer);
-      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-      offset = gtk_text_iter_get_line_offset (&iter);
-
+      gb_editor_vim_save_position (vim);
       gb_editor_vim_select_line (vim);
       gb_editor_vim_yank (vim);
       gb_editor_vim_clear_selection (vim);
-
-      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-      gtk_text_iter_set_line_offset (&iter, offset);
-      gtk_text_buffer_select_range (buffer, &iter, &iter);
-
-      vim->priv->target_line_offset = offset;
+      gb_editor_vim_restore_position (vim);
     }
   else
     {
