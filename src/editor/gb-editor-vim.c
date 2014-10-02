@@ -118,6 +118,7 @@ enum
   PROP_0,
   PROP_ENABLED,
   PROP_MODE,
+  PROP_PHRASE,
   PROP_TEXT_VIEW,
   LAST_PROP
 };
@@ -351,6 +352,15 @@ gb_editor_vim_get_mode (GbEditorVim *vim)
   return vim->priv->mode;
 }
 
+static void
+gb_editor_vim_clear_phrase (GbEditorVim *vim)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  g_string_truncate (vim->priv->phrase, 0);
+  g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_PHRASE]);
+}
+
 void
 gb_editor_vim_set_mode (GbEditorVim     *vim,
                         GbEditorVimMode  mode)
@@ -393,7 +403,7 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
   /*
    * Clear any in flight phrases.
    */
-  g_string_truncate (vim->priv->phrase, 0);
+  gb_editor_vim_clear_phrase (vim);
 
   /*
    * If we are going back to navigation mode, stash our current buffer
@@ -1812,18 +1822,6 @@ gb_editor_vim_unindent (GbEditorVim *vim)
     gb_source_view_unindent_selection (view);
 }
 
-static void
-gb_editor_vim_clear_phrase (GbEditorVim *vim)
-{
-  g_assert (GB_IS_EDITOR_VIM (vim));
-
-  g_string_truncate (vim->priv->phrase, 0);
-
-#if 0
-  g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_PHRASE]);
-#endif
-}
-
 static GbEditorVimPhraseStatus
 gb_editor_vim_parse_phrase (GbEditorVim       *vim,
                             GbEditorVimPhrase *phrase)
@@ -2010,7 +2008,10 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
    */
 
   if (!gb_str_empty0 (event->string))
-    g_string_append (vim->priv->phrase, event->string);
+    {
+      g_string_append (vim->priv->phrase, event->string);
+      g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_PHRASE]);
+    }
 
   status = gb_editor_vim_parse_phrase (vim, &phrase);
 
@@ -2489,6 +2490,10 @@ gb_editor_vim_get_property (GObject    *object,
 
     case PROP_MODE:
       g_value_set_enum (value, gb_editor_vim_get_mode (vim));
+      break;
+
+    case PROP_PHRASE:
+      g_value_set_string (value, vim->priv->phrase->str);
       break;
 
     case PROP_TEXT_VIEW:
@@ -3127,6 +3132,16 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                         G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_MODE,
                                    gParamSpecs [PROP_MODE]);
+
+  gParamSpecs [PROP_PHRASE] =
+    g_param_spec_string ("phrase",
+                         _("Phrase"),
+                         _("The current phrase input."),
+                         NULL,
+                         (G_PARAM_READABLE |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_PHRASE,
+                                   gParamSpecs [PROP_PHRASE]);
 
   gParamSpecs [PROP_TEXT_VIEW] =
     g_param_spec_object ("text-view",
