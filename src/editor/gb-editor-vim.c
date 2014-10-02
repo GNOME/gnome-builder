@@ -927,9 +927,17 @@ gb_editor_vim_move_down (GbEditorVim *vim)
    */
   if (is_single_line_selection (&iter, &selection))
     {
+      guint target_line;
+
       if (gtk_text_iter_compare (&iter, &selection) < 0)
         text_iter_swap (&iter, &selection);
-      gtk_text_iter_set_line (&iter, gtk_text_iter_get_line (&iter) + 1);
+
+      target_line = gtk_text_iter_get_line (&iter) + 1;
+      gtk_text_iter_set_line (&iter, target_line);
+
+      if (target_line != gtk_text_iter_get_line (&iter))
+        goto select_to_end;
+
       gb_editor_vim_select_range (vim, &iter, &selection);
       gb_editor_vim_ensure_anchor_selected (vim);
       goto move_mark;
@@ -948,6 +956,18 @@ gb_editor_vim_move_down (GbEditorVim *vim)
         if (!gtk_text_iter_ends_line (&iter))
           if (!gtk_text_iter_forward_char (&iter))
             break;
+      if (has_selection)
+        {
+          gb_editor_vim_select_range (vim, &iter, &selection);
+          gb_editor_vim_ensure_anchor_selected (vim);
+        }
+      else
+        gtk_text_buffer_select_range (buffer, &iter, &iter);
+    }
+  else
+    {
+select_to_end:
+      gtk_text_buffer_get_end_iter (buffer, &iter);
       if (has_selection)
         {
           gb_editor_vim_select_range (vim, &iter, &selection);
