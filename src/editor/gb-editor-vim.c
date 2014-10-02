@@ -71,6 +71,14 @@ struct _GbEditorVimPrivate
   guint            connected : 1;
 };
 
+typedef enum
+{
+  GB_EDITOR_VIM_COMMAND_NOOP,
+  GB_EDITOR_VIM_COMMAND_MOVEMENT,
+  GB_EDITOR_VIM_COMMAND_CHANGE,
+  GB_EDITOR_VIM_COMMAND_JUMP,
+} GbEditorVimCommandType;
+
 /**
  * GbEditorVimCommand:
  *
@@ -82,6 +90,7 @@ struct _GbEditorVimPrivate
 typedef struct
 {
   GbEditorVimCommandFunc  func;
+  GbEditorVimCommandType  type;
   gchar                   key;
   guint                   requires_modifier : 1;
 } GbEditorVimCommand;
@@ -2352,12 +2361,8 @@ gb_editor_vim_cmd_delete (GbEditorVim *vim,
     {
       GbEditorVimCommand *cmd;
 
-      /*
-       * TODO: Ensure that cmd is a motion command.
-       */
-
       cmd = g_hash_table_lookup (gCommands, GINT_TO_POINTER (modifier));
-      if (!cmd)
+      if (!cmd || (cmd->type != GB_EDITOR_VIM_COMMAND_MOVEMENT))
         return;
 
       gb_editor_vim_select_char (vim);
@@ -2402,10 +2407,28 @@ gb_editor_vim_cmd_goto (GbEditorVim *vim,
 {
   g_assert (GB_IS_EDITOR_VIM (vim));
 
-  if (modifier == 'g')
+  switch (modifier)
     {
+    case '~':
+      /* swap case */
+      break;
+
+    case 'u':
+      /* lowercase */
+      break;
+
+    case 'U':
+      /* uppercase */
+      break;
+
+    case 'g':
+      /* jump to beginning of buffer. */
       gb_editor_vim_clear_selection (vim);
       gb_editor_vim_move_to_line_n (vim, 0);
+      break;
+
+    default:
+      break;
     }
 }
 
@@ -2512,8 +2535,8 @@ gb_editor_vim_cmd_insert_before_line (GbEditorVim *vim,
 {
   g_assert (GB_IS_EDITOR_VIM (vim));
 
-  gb_editor_vim_insert_nl_before (vim);
   gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+  gb_editor_vim_insert_nl_before (vim);
 }
 
 static void
@@ -2523,8 +2546,8 @@ gb_editor_vim_cmd_insert_after_line (GbEditorVim *vim,
 {
   g_assert (GB_IS_EDITOR_VIM (vim));
 
-  gb_editor_vim_insert_nl_after (vim, TRUE);
   gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+  gb_editor_vim_insert_nl_after (vim, TRUE);
 }
 
 static void
@@ -2658,12 +2681,8 @@ gb_editor_vim_cmd_yank (GbEditorVim *vim,
     {
       GbEditorVimCommand *cmd;
 
-      /*
-       * TODO: Make sure that cmd is a movement command.
-       */
-
       cmd = g_hash_table_lookup (gCommands, GINT_TO_POINTER (modifier));
-      if (!cmd)
+      if (!cmd || (cmd->type != GB_EDITOR_VIM_COMMAND_MOVEMENT))
         return;
 
       cmd->func (vim, 1, '\0');
@@ -2714,6 +2733,7 @@ static void
 gb_editor_vim_class_register_command (GbEditorVimClass       *klass,
                                       gchar                   key,
                                       gboolean                requires_modifier,
+                                      GbEditorVimCommandType  type,
                                       GbEditorVimCommandFunc  func)
 {
   GbEditorVimCommand *cmd;
@@ -2733,6 +2753,7 @@ gb_editor_vim_class_register_command (GbEditorVimClass       *klass,
     gCommands = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   cmd = g_new0 (GbEditorVimCommand, 1);
+  cmd->type = type;
   cmd->key = key;
   cmd->func = func;
   cmd->requires_modifier = requires_modifier;
@@ -2807,74 +2828,109 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
    * or via phrases.
    */
   gb_editor_vim_class_register_command (klass, '.', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_repeat);
   gb_editor_vim_class_register_command (klass, '/', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_JUMP,
                                         gb_editor_vim_cmd_begin_search);
   gb_editor_vim_class_register_command (klass, '$', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_forward_line_end);
   gb_editor_vim_class_register_command (klass, '0', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_backward_0);
   gb_editor_vim_class_register_command (klass, '^', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_backward_start);
   gb_editor_vim_class_register_command (klass, '#', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_JUMP,
                                         gb_editor_vim_cmd_match_backward);
   gb_editor_vim_class_register_command (klass, '*', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_JUMP,
                                         gb_editor_vim_cmd_match_forward);
   gb_editor_vim_class_register_command (klass, '>', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_indent);
   gb_editor_vim_class_register_command (klass, '<', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_unindent);
   gb_editor_vim_class_register_command (klass, 'A', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_insert_end);
   gb_editor_vim_class_register_command (klass, 'a', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_insert_after);
   gb_editor_vim_class_register_command (klass, 'b', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_backward_word);
   gb_editor_vim_class_register_command (klass, 'd', TRUE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_delete);
   gb_editor_vim_class_register_command (klass, 'D', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_delete_to_end);
   gb_editor_vim_class_register_command (klass, 'e', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_forward_word_end);
   gb_editor_vim_class_register_command (klass, 'G', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_goto_line);
   gb_editor_vim_class_register_command (klass, 'g', TRUE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_goto);
   gb_editor_vim_class_register_command (klass, 'h', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_move_backward);
   gb_editor_vim_class_register_command (klass, 'I', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_insert_start);
   gb_editor_vim_class_register_command (klass, 'i', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_insert);
   gb_editor_vim_class_register_command (klass, 'j', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_move_down);
   gb_editor_vim_class_register_command (klass, 'k', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_move_up);
   gb_editor_vim_class_register_command (klass, 'l', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_move_forward);
   gb_editor_vim_class_register_command (klass, 'O', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_insert_before_line);
   gb_editor_vim_class_register_command (klass, 'o', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_insert_after_line);
   gb_editor_vim_class_register_command (klass, 'P', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_paste_before);
   gb_editor_vim_class_register_command (klass, 'p', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_paste_after);
   gb_editor_vim_class_register_command (klass, 'R', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_overwrite);
   gb_editor_vim_class_register_command (klass, 'u', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_undo);
   gb_editor_vim_class_register_command (klass, 'V', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_NOOP,
                                         gb_editor_vim_cmd_select_line);
   gb_editor_vim_class_register_command (klass, 'v', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_NOOP,
                                         gb_editor_vim_cmd_select);
   gb_editor_vim_class_register_command (klass, 'w', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_forward_word);
   gb_editor_vim_class_register_command (klass, 'x', FALSE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_delete_selection);
   gb_editor_vim_class_register_command (klass, 'y', TRUE,
+                                        GB_EDITOR_VIM_COMMAND_NOOP,
                                         gb_editor_vim_cmd_yank);
   gb_editor_vim_class_register_command (klass, 'z', TRUE,
+                                        GB_EDITOR_VIM_COMMAND_NOOP,
                                         gb_editor_vim_cmd_center);
 }
 
