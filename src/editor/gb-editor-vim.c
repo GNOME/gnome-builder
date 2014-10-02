@@ -259,6 +259,11 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
     gb_source_view_clear_snippets (GB_SOURCE_VIEW (vim->priv->text_view));
 
   /*
+   * Clear the current selection too.
+   */
+  gb_editor_vim_clear_selection (vim);
+
+  /*
    * Make the command entry visible if necessary.
    */
   g_signal_emit (vim, gSignals [COMMAND_VISIBILITY_TOGGLED], 0,
@@ -2723,15 +2728,10 @@ gb_editor_vim_cmd_yank (GbEditorVim *vim,
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   gb_editor_vim_clear_selection (vim);
+  gb_editor_vim_save_position (vim);
 
   if (modifier == 'y')
-    {
-      gb_editor_vim_save_position (vim);
       gb_editor_vim_select_line (vim);
-      gb_editor_vim_yank (vim);
-      gb_editor_vim_clear_selection (vim);
-      gb_editor_vim_restore_position (vim);
-    }
   else
     {
       GbEditorVimCommand *cmd;
@@ -2740,11 +2740,13 @@ gb_editor_vim_cmd_yank (GbEditorVim *vim,
       if (!cmd || (cmd->type != GB_EDITOR_VIM_COMMAND_MOVEMENT))
         return;
 
+      gb_editor_vim_select_char (vim);
       cmd->func (vim, 1, '\0');
-
-      gb_editor_vim_yank (vim);
-      gb_editor_vim_clear_selection (vim);
     }
+
+  gb_editor_vim_yank (vim);
+  gb_editor_vim_clear_selection (vim);
+  gb_editor_vim_restore_position (vim);
 }
 
 static void
