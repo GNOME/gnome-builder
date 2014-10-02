@@ -1513,9 +1513,38 @@ gb_editor_vim_yank (GbEditorVim *vim)
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
 
   /*
-   * Copy the selected text and insert it into the clipboard.
+   * Copy the selected text.
    */
   text = gtk_text_iter_get_slice (&begin, &end);
+
+  /*
+   * We might need to synthesize a trailing \n if this is at the end of the
+   * buffer and we are performing a full line selection.
+   */
+  if (GTK_SOURCE_IS_BUFFER (buffer))
+    {
+      GtkSourceBuffer *sb = GTK_SOURCE_BUFFER (buffer);
+      GtkTextIter line_start;
+      GtkTextIter eob;
+
+      gtk_text_buffer_get_end_iter (buffer, &eob);
+      gtk_text_buffer_get_iter_at_line (buffer, &line_start,
+                                        gtk_text_iter_get_line (&end));
+
+      if (gtk_source_buffer_get_implicit_trailing_newline (sb) &&
+          gtk_text_iter_equal (&eob, &end) &&
+          (gtk_text_iter_compare (&begin, &line_start) <= 0))
+        {
+          gchar *tmp = text;
+
+          text = g_strdup_printf ("%s\n", tmp);
+          g_free (tmp);
+        }
+    }
+
+  /*
+   * Update the selection clipboard.
+   */
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (vim->priv->text_view),
                                         GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_set_text (clipboard, text, -1);
