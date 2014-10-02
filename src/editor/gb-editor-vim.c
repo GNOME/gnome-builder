@@ -2042,10 +2042,10 @@ gb_editor_vim_connect (GbEditorVim *vim)
                       vim);
 
   vim->priv->mark_set_handler =
-    g_signal_connect (buffer,
-                      "mark-set",
-                      G_CALLBACK (gb_editor_vim_mark_set_cb),
-                      vim);
+    g_signal_connect_after (buffer,
+                            "mark-set",
+                            G_CALLBACK (gb_editor_vim_mark_set_cb),
+                            vim);
 
   vim->priv->delete_range_handler =
     g_signal_connect_after (buffer,
@@ -2692,11 +2692,9 @@ gb_editor_vim_cmd_select (GbEditorVim *vim,
 
   count = MAX (1, count);
 
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
   gb_editor_vim_select_char (vim);
   for (i = 1; i < count; i++)
     gb_editor_vim_move_forward (vim);
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
 }
 
 static void
