@@ -413,6 +413,7 @@ gb_editor_tab_cursor_moved (GbEditorTab      *tab,
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GtkTextMark *mark;
+  const gchar *phrase = NULL;
   gchar *text;
   guint ln;
   guint col;
@@ -429,7 +430,15 @@ gb_editor_tab_cursor_moved (GbEditorTab      *tab,
   ln = gtk_text_iter_get_line (&iter);
   col = gtk_source_view_get_visual_column (source_view, &iter);
 
-  text = g_strdup_printf (_ ("Line %u, Column %u"), ln + 1, col + 1);
+  if (tab->priv->vim)
+    phrase = gb_editor_vim_get_phrase (tab->priv->vim);
+
+  if (!gb_str_empty0 (phrase))
+    text = g_strdup_printf (_ ("%s\tLine %u, Column %u"),
+                            phrase, ln + 1, col + 1);
+  else
+    text = g_strdup_printf (_ ("Line %u, Column %u"), ln + 1, col + 1);
+
   nautilus_floating_bar_set_primary_label (tab->priv->floating_bar, text);
   g_free (text);
 
@@ -1021,6 +1030,17 @@ on_vim_command_entry_activate (GtkEntry    *entry,
   gb_editor_vim_execute_command (tab->priv->vim, text);
 }
 
+static void
+on_vim_notify_phrase (GbEditorVim *vim,
+                      GParamSpec  *pspec,
+                      GbEditorTab *tab)
+{
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  gb_editor_tab_cursor_moved (tab, tab->priv->document);
+}
+
 static gboolean
 on_vim_command_entry_key_press_event (GtkEntry    *entry,
                                       GdkEventKey *event,
@@ -1233,6 +1253,10 @@ gb_editor_tab_constructed (GObject *object)
   g_signal_connect (priv->vim,
                     "command-visibility-toggled",
                     G_CALLBACK (on_vim_command_visibility_toggled),
+                    tab);
+  g_signal_connect (priv->vim,
+                    "notify::phrase",
+                    G_CALLBACK (on_vim_notify_phrase),
                     tab);
 
   g_signal_connect (priv->vim_command_entry,

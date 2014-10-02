@@ -352,6 +352,14 @@ gb_editor_vim_get_mode (GbEditorVim *vim)
   return vim->priv->mode;
 }
 
+const gchar *
+gb_editor_vim_get_phrase (GbEditorVim *vim)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), NULL);
+
+  return vim->priv->phrase->str;
+}
+
 static void
 gb_editor_vim_clear_phrase (GbEditorVim *vim)
 {
