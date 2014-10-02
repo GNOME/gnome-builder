@@ -2513,6 +2513,7 @@ gb_editor_vim_cmd_insert_before_line (GbEditorVim *vim,
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   gb_editor_vim_insert_nl_before (vim);
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
 }
 
 static void
@@ -2523,6 +2524,7 @@ gb_editor_vim_cmd_insert_after_line (GbEditorVim *vim,
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   gb_editor_vim_insert_nl_after (vim, TRUE);
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
 }
 
 static void
