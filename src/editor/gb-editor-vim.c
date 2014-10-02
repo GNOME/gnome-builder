@@ -1974,6 +1974,28 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
         }
       break;
 
+    case GDK_KEY_y:
+      {
+        GtkTextBuffer *buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
+        /*
+         * WORKAROUND:
+         *
+         * Special case workaround for `y', which in some cases has a modifier
+         * and in other cases does not. We should probably mark whether or not
+         * a command can be executed directly if there is a selection.
+         */
+        if (gtk_text_buffer_get_has_selection (buffer))
+          {
+            gb_editor_vim_clear_phrase (vim);
+            gb_editor_vim_yank (vim);
+            gb_editor_vim_clear_selection (vim);
+            return TRUE;
+          }
+
+        break;
+      }
+
     default:
       break;
     }
