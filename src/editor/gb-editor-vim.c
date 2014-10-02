@@ -1933,6 +1933,12 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       gb_editor_vim_move_down (vim);
       return TRUE;
 
+    case GDK_KEY_BackSpace:
+      gb_editor_vim_clear_phrase (vim);
+      if (!vim->priv->phrase->len)
+        gb_editor_vim_move_backward (vim);
+      return TRUE;
+
     case GDK_KEY_colon:
       if (!vim->priv->phrase->len)
         {
