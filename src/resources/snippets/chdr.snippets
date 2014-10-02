@@ -18,7 +18,7 @@ snippet gobject
 	typedef struct _$1Class   $1Class;
 	typedef struct _$1Private $1Private;
 
-	struct _${1:MyObject}
+	struct _${1:$filename|stripsuffix|functify|camelize}
 	{
 		${2:GObject} parent;
 
