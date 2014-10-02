@@ -1192,9 +1192,13 @@ gb_editor_vim_paste (GbEditorVim *vim)
        * VIM leaves us on position 0 when pasting a whole line.
        */
       offset = 0;
+      line++;
     }
   else
     {
+      GtkTextIter tmp;
+      GtkTextIter tmp2;
+
       /*
        * By default, GtkTextBuffer will paste at our current position.
        * While VIM will paste after the current position. Let's advance the
@@ -1206,6 +1210,11 @@ gb_editor_vim_paste (GbEditorVim *vim)
       gb_editor_vim_move_forward (vim);
       g_signal_emit_by_name (vim->priv->text_view, "paste-clipboard");
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+
+      gtk_text_buffer_get_selection_bounds (buffer, &tmp, &tmp2);
+      offset = gtk_text_iter_get_line_offset (&tmp);
+      if (offset)
+        offset--;
     }
 
   gtk_text_buffer_end_user_action (buffer);
@@ -1213,7 +1222,7 @@ gb_editor_vim_paste (GbEditorVim *vim)
   /*
    * Restore the cursor position.
    */
-  gtk_text_buffer_get_iter_at_line (buffer, &iter, line + 1);
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
   for (; offset; offset--)
     if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
       break;
