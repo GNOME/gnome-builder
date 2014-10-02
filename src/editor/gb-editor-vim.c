@@ -228,7 +228,31 @@ void
 gb_editor_vim_set_mode (GbEditorVim     *vim,
                         GbEditorVimMode  mode)
 {
+  GtkTextBuffer *buffer;
+
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  /*
+   * Ignore if we are already in this mode.
+   */
+  if (mode == vim->priv->mode)
+    return;
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
+  /*
+   * If we are starting insert mode, let's try to coalesce all changes
+   * into one undo stack item like VIM.
+   */
+  if (mode == GB_EDITOR_VIM_INSERT)
+    gtk_text_buffer_begin_user_action (buffer);
+
+  /*
+   * If we are leaving insert mode, let's complete that user action.
+   */
+  if ((mode != GB_EDITOR_VIM_INSERT) &&
+      (vim->priv->mode == GB_EDITOR_VIM_INSERT))
+    gtk_text_buffer_end_user_action (buffer);
 
   vim->priv->mode = mode;
 
