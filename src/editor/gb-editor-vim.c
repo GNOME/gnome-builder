@@ -1997,9 +1997,12 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
   GbEditorVimCommand *cmd;
   GbEditorVimPhraseStatus status;
   GbEditorVimPhrase phrase;
+  GtkTextBuffer *buffer;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
   g_assert (event);
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
   switch (event->keyval)
     {
@@ -2036,11 +2039,9 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
     case GDK_KEY_x:
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
-          GtkTextBuffer *buffer;
           GtkTextIter begin;
           GtkTextIter end;
 
-          buffer = gtk_text_view_get_buffer (vim->priv->text_view);
           gb_editor_vim_clear_phrase (vim);
           gb_editor_vim_clear_selection (vim);
           if (gb_editor_vim_select_current_word (vim, &begin, &end))
@@ -2097,8 +2098,6 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 
     case GDK_KEY_y:
       {
-        GtkTextBuffer *buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-
         /*
          * WORKAROUND:
          *
@@ -2147,10 +2146,16 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
           gb_editor_vim_clear_phrase (vim);
           break;
         }
+
       if (cmd->requires_modifier && !phrase.modifier)
         break;
+
       gb_editor_vim_clear_phrase (vim);
+
+      gtk_text_buffer_begin_user_action (buffer);
       cmd->func (vim, phrase.count, phrase.modifier);
+      gtk_text_buffer_end_user_action (buffer);
+
       break;
 
     case GB_EDITOR_VIM_PHRASE_NEED_MORE:
