@@ -1079,7 +1079,7 @@ gb_editor_vim_delete_selection (GbEditorVim *vim)
       else if (!gtk_text_iter_ends_line (&end))
         {
           if (!gtk_text_iter_forward_char (&end))
-            return;
+            gtk_text_buffer_get_end_iter (buffer, &end);
         }
       else if (!gtk_text_iter_starts_line (&begin))
         {
