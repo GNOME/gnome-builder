@@ -752,8 +752,10 @@ gb_editor_vim_move_forward (GbEditorVim *vim)
   has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
   line = gtk_text_iter_get_line (&iter);
 
-  if (gtk_text_iter_forward_char (&iter) &&
-      (line == gtk_text_iter_get_line (&iter)))
+  if (!gtk_text_iter_forward_char (&iter))
+    gtk_text_buffer_get_end_iter (buffer, &iter);
+
+  if (line == gtk_text_iter_get_line (&iter))
     {
       if (has_selection)
         {
