@@ -754,6 +754,29 @@ maybe_unindent_hash (GbSourceAutoIndenterC *c,
   return ret;
 }
 
+static gboolean
+line_starts_with_fuzzy (const GtkTextIter *iter,
+                        const gchar       *prefix)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+  gboolean ret;
+  gchar *line;
+
+  ITER_INIT_LINE_START (&begin, iter);
+  ITER_INIT_LINE_START (&end, iter);
+
+  while (!gtk_text_iter_ends_line (&end))
+    if (!gtk_text_iter_forward_char (&end))
+      return FALSE;
+
+  line = g_strstrip (gtk_text_iter_get_slice (&begin, &end));
+  ret = g_str_has_prefix (line, prefix);
+  g_free (line);
+
+  return ret;
+}
+
 static gchar *
 maybe_space_before_paren (GbSourceAutoIndenterC *c,
                           GtkTextIter           *begin,
@@ -948,29 +971,6 @@ maybe_add_brace (GbSourceAutoIndenterC *c,
     }
 
   return NULL;
-}
-
-static gboolean
-line_starts_with_fuzzy (const GtkTextIter *iter,
-                        const gchar       *prefix)
-{
-  GtkTextIter begin;
-  GtkTextIter end;
-  gboolean ret;
-  gchar *line;
-
-  ITER_INIT_LINE_START (&begin, iter);
-  ITER_INIT_LINE_START (&end, iter);
-
-  while (!gtk_text_iter_ends_line (&end))
-    if (!gtk_text_iter_forward_char (&end))
-      return FALSE;
-
-  line = g_strstrip (gtk_text_iter_get_slice (&begin, &end));
-  ret = g_str_has_prefix (line, prefix);
-  g_free (line);
-
-  return ret;
 }
 
 static gboolean
