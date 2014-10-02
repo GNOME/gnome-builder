@@ -796,6 +796,10 @@ maybe_space_before_paren (GbSourceAutoIndenterC *c,
   if (in_c89_comment (begin, &match_begin))
     return NULL;
 
+  /* ignore preprocessor #define */
+  if (line_starts_with_fuzzy (begin, "#"))
+    return NULL;
+
   gtk_text_iter_assign (&copy, begin);
 
   /*
