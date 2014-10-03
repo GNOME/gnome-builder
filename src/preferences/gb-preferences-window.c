@@ -35,6 +35,8 @@ struct _GbPreferencesWindowPrivate
   GtkSearchBar    *search_bar;
   GtkStack        *stack;
 
+  GtkSwitch       *vim_switch;
+
   GtkEntry        *git_author_name_entry;
   GtkEntry        *git_author_email_entry;
 };
@@ -78,6 +80,21 @@ gb_preferences_window_section_changed (GtkStack            *stack,
 }
 
 static void
+load_editor (GbPreferencesWindow *window)
+{
+  GSettings *settings;
+
+  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
+
+  settings = g_settings_new ("org.gnome.builder.editor");
+
+  g_settings_bind (settings, "vim-mode", window->priv->vim_switch, "active",
+                   G_SETTINGS_BIND_DEFAULT);
+
+  g_object_unref (settings);
+}
+
+static void
 load_git (GbPreferencesWindow *window)
 {
   GgitConfig *config;
@@ -116,6 +133,7 @@ gb_preferences_window_constructed (GObject *object)
                     window);
   gb_preferences_window_section_changed (window->priv->stack, NULL, window);
   
+  load_editor (window);
   load_git (window);
 }
 
@@ -182,6 +200,9 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class,
                                                 GbPreferencesWindow,
                                                 stack);
+  gtk_widget_class_bind_template_child_private (widget_class,
+                                                GbPreferencesWindow,
+                                                vim_switch);
   gtk_widget_class_bind_template_child_private (widget_class,
                                                 GbPreferencesWindow,
                                                 git_author_name_entry);
