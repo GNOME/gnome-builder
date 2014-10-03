@@ -35,6 +35,7 @@ AC_CONFIG_FILES([
 	Makefile
 	data/icons/Makefile
 	data/org.gnome.Builder.service
+	data/org.gnome.builder.editor.gschema.xml
 ])
 
 # Last change to configure things and write configuration files.

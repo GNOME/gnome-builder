@@ -1,1 +1,4 @@
 org.gnome.Builder.service
+*.gschema.xml.in
+*.gschema.xml
+*.gschema.valid

@@ -7,6 +7,7 @@ ACLOCAL_AMFLAGS = -I build/autotools/m4 ${ACLOCAL_FLAGS}
 
 include src/gnome-builder.mk
 include data/data.mk
+include data/gsettings.mk
 include tests/tests.mk
 
 # XXX: Not happy about this, need to come up with a good way to do
