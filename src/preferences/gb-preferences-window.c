@@ -23,7 +23,9 @@
 
 struct _GbPreferencesWindowPrivate
 {
-  void *d;
+  GtkToggleButton *search_toggle;
+  GtkSearchEntry  *search_entry;
+  GtkSearchBar    *search_bar;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesWindow, gb_preferences_window,
@@ -40,6 +42,17 @@ GtkWidget *
 gb_preferences_window_new (void)
 {
   return g_object_new (GB_TYPE_PREFERENCES_WINDOW, NULL);
+}
+
+static void
+gb_preferences_window_constructed (GObject *object)
+{
+  GbPreferencesWindow *window = (GbPreferencesWindow *)object;
+
+  G_OBJECT_CLASS (gb_preferences_window_parent_class)->constructed (object);
+
+  gtk_search_bar_connect_entry (window->priv->search_bar,
+                                GTK_ENTRY (window->priv->search_entry));
 }
 
 static void
@@ -86,12 +99,22 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = gb_preferences_window_constructed;
   object_class->finalize = gb_preferences_window_finalize;
   object_class->get_property = gb_preferences_window_get_property;
   object_class->set_property = gb_preferences_window_set_property;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-preferences-window.ui");
+  gtk_widget_class_bind_template_child_private (widget_class,
+                                                GbPreferencesWindow,
+                                                search_toggle);
+  gtk_widget_class_bind_template_child_private (widget_class,
+                                                GbPreferencesWindow,
+                                                search_bar);
+  gtk_widget_class_bind_template_child_private (widget_class,
+                                                GbPreferencesWindow,
+                                                search_entry);
 
   g_type_ensure (GB_TYPE_SIDEBAR);
 }
