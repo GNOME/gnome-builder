@@ -7,6 +7,13 @@
     <property name="default-width">800</property>
     <property name="default-height">500</property>
     <property name="window-position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header_bar">
+        <property name="visible">True</property>
+        <property name="title" translatable="yes">Preferences</property>
+        <property name="show-close-button">True</property>
+      </object>
+    </child>
     <child>
       <object class="GtkBox" id="hbox1">
         <property name="expand">True</property>
