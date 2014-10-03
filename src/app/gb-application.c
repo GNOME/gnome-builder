@@ -29,6 +29,7 @@
 #include "gb-editor-workspace.h"
 #include "gb-log.h"
 #include "gb-keybindings.h"
+#include "gb-preferences-window.h"
 #include "gb-resources.h"
 #include "gb-workbench.h"
 
@@ -261,6 +262,31 @@ gb_application_activate_quit_action (GSimpleAction *action,
 }
 
 static void
+gb_application_activate_preferences_action (GSimpleAction *action,
+                                            GVariant      *parameter,
+                                            gpointer       user_data)
+{
+  GbApplication *application = user_data;
+  GbPreferencesWindow *window;
+  GbWorkbench *workbench = NULL;
+  GList *list;
+
+  g_return_if_fail (GB_IS_APPLICATION (application));
+
+  list = gtk_application_get_windows (GTK_APPLICATION (application));
+
+  for (; list; list = list->next)
+    if (GB_IS_WORKBENCH (list->data))
+      workbench = GB_WORKBENCH (list->data);
+
+  window = g_object_new (GB_TYPE_PREFERENCES_WINDOW,
+                         "transient-for", workbench,
+                         NULL);
+
+  gtk_window_present (GTK_WINDOW (window));
+}
+
+static void
 gb_application_activate_about_action (GSimpleAction *action,
                                       GVariant      *parameter,
                                       gpointer       user_data)
@@ -317,6 +343,7 @@ gb_application_register_actions (GbApplication *self)
 {
   static const GActionEntry action_entries[] = {
     { "about", gb_application_activate_about_action },
+    { "preferences", gb_application_activate_preferences_action },
     { "quit", gb_application_activate_quit_action },
   };
 

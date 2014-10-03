@@ -55,6 +55,10 @@ libgnome_builder_la_SOURCES = \
 	src/navigation/gb-navigation-list.c \
 	src/navigation/gb-navigation-item.h \
 	src/navigation/gb-navigation-item.c \
+	src/preferences/gb-preferences-window.c \
+	src/preferences/gb-preferences-window.h \
+	src/sidebar/gb-sidebar.c \
+	src/sidebar/gb-sidebar.h \
 	src/snippets/gb-source-snippet-chunk.c \
 	src/snippets/gb-source-snippet-chunk.h \
 	src/snippets/gb-source-snippet-completion-item.c \
@@ -141,8 +145,10 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/markdown \
 	-I$(top_srcdir)/src/nautilus \
 	-I$(top_srcdir)/src/navigation \
+	-I$(top_srcdir)/src/preferences \
 	-I$(top_srcdir)/src/resources \
 	-I$(top_builddir)/src/resources \
+	-I$(top_srcdir)/src/sidebar \
 	-I$(top_srcdir)/src/snippets \
 	-I$(top_srcdir)/src/tabs \
 	-I$(top_srcdir)/src/trie \

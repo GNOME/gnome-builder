@@ -1,5 +1,7 @@
+/*
+ * Nautilus floating bar used for cursor status in editor.
+ */
 @define-color floating_bar_inset_color alpha(white, 0.45);
-
 .floating-bar {
     background-image: linear-gradient(to bottom,
                                       @theme_base_color 20%,
@@ -16,46 +18,38 @@
     border-style: solid;
     box-shadow: inset 1px 1px @floating_bar_inset_color, -1px -1px @floating_bar_inset_color;
 }
-
 .floating-bar.top {
     border-top-width: 0;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
 }
-
 .floating-bar.right {
     border-right-width: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
-
 .floating-bar.bottom {
     border-bottom-width: 0;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
-
 .floating-bar.left {
     border-left-width: 0;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
-
 .floating-bar.bottom.right {
     box-shadow: inset 1px 1px @floating_bar_inset_color;
 }
-
 .floating-bar.bottom.left {
     box-shadow: inset -1px 1px @floating_bar_inset_color;
 }
-
 .floating-bar:backdrop {
     background-color: @theme_unfocused_base_color;
     border-color: shade(@theme_unfocused_base_color, 0.9);
     background-image: none;
     box-shadow: none;
 }
-
 .floating-bar .button {
     background-color: transparent;
     background-image: none;
@@ -67,6 +61,10 @@
     -GtkButton-inner-border: 0;
 }
 
+
+/*
+ * Search entry that slides down from top of editor.
+ */
 GbEditorTab .gb-search-slider {
     background-color: @theme_base_color;
     padding: 6px;
@@ -75,13 +73,16 @@ GbEditorTab .gb-search-slider {
     border-width: 0 1px 1px 1px;
     border-style: solid;
 }
-
 .gb-search-entry-occurrences-tag {
     color: shade (@theme_unfocused_fg_color, 0.8);
     margin: 2px;
     padding: 2px;
 }
 
+
+/*
+ * Vim command entry that slides up from the buttom.
+ */
 GbEditorTab .gb-vim-command-slider {
     background-color: shade (@theme_base_color, 0.8);
     padding: 6px;
@@ -91,6 +92,10 @@ GbEditorTab .gb-vim-command-slider {
     border-style: solid;
 }
 
+
+/*
+ * Workspace switcher, thin-panel on left side.
+ */
 GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton {
     background-color: transparent;
     background-image: none;
@@ -102,23 +107,19 @@ GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton {
     -GtkButton-inner-border: 0;
     padding: 4px 1px 4px 1px;
 }
-
 GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:checked {
     background-color: shade(@theme_base_color, 0.70);
     color: #ffffff;
 }
-
 GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:checked:hover {
     border-color: shade(@theme_base_color, 0.60);
 }
-
 GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:hover {
     border-style: solid;
     border-width: 1px 1px 1px 1px;
     border-color: shade(@theme_base_color, 0.80);
     transition-duration: 0ms;
 }
-
 GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:active {
     background-color: shade(@theme_base_color, 0.80);
     border-style: solid;
@@ -126,3 +127,15 @@ GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:active {
     border-color: shade(@theme_base_color, 0.60);
     transition-duration: 0ms;
 }
+
+
+/*
+ * Preferences sidebar style.
+ */
+.preferences.sidebar GtkListBox {
+    background-color: shade(@theme_bg_color, 0.98);
+}
+.preferences.sidebar GtkListBoxRow {
+    padding: 10px;
+}
+

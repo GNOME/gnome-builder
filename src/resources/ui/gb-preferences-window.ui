@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbPreferencesWindow" parent="GtkWindow">
+    <property name="title" translatable="yes">Preferences</property>
+    <property name="icon-name">builder</property>
+    <property name="default-width">800</property>
+    <property name="default-height">500</property>
+    <property name="window-position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+    <child>
+      <object class="GtkBox" id="hbox1">
+        <property name="expand">True</property>
+        <property name="visible">True</property>
+        <property name="orientation">horizontal</property>
+        <child>
+          <object class="GbSidebar" id="sidebar">
+            <property name="visible">True</property>
+            <property name="width-request">215</property>
+            <property name="stack">stack</property>
+            <style>
+              <class name="preferences" />
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator" id="separator1">
+            <property name="orientation">vertical</property>
+            <property name="visible">True</property>
+            <property name="expand">False</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="visible">True</property>
+            <property name="expand">True</property>
+            <child>
+              <object class="GtkGrid" id="editor_grid">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+              </object>
+              <packing>
+                <property name="name">editor</property>
+                <property name="title" translatable="yes">Editor</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
