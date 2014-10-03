@@ -179,7 +179,6 @@ gb_application_create_workbench (GApplication *application)
                          NULL);
 
   gtk_window_maximize (window);
-  gtk_window_present (window);
 
   gtk_application_add_window (GTK_APPLICATION (application), window);
 
@@ -189,7 +188,25 @@ gb_application_create_workbench (GApplication *application)
 static void
 gb_application_activate (GApplication *application)
 {
-  (void)gb_application_create_workbench (application);
+  GbWorkbench *workbench;
+  GList *list;
+
+  g_return_if_fail (GB_IS_APPLICATION (application));
+
+  list = gtk_application_get_windows (GTK_APPLICATION (application));
+
+  for (; list; list = list->next)
+    {
+      if (GB_IS_WORKBENCH (list->data))
+        {
+          gtk_window_present (GTK_WINDOW (list->data));
+          return;
+        }
+    }
+
+  workbench = gb_application_create_workbench (application);
+
+  gtk_window_present (GTK_WINDOW (workbench));
 }
 
 static void
@@ -218,6 +235,8 @@ gb_application_open (GApplication   *application,
 
   if (!workbench)
     workbench = GB_WORKBENCH (gb_application_create_workbench (application));
+
+  gtk_window_present (GTK_WINDOW (workbench));
 
   workspace = gb_workbench_get_workspace (workbench,
                                           GB_TYPE_EDITOR_WORKSPACE);
