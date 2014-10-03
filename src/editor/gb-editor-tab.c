@@ -1152,6 +1152,7 @@ gb_editor_tab_constructed (GObject *object)
   GbEditorTabPrivate *priv;
   GbEditorTab *tab = (GbEditorTab *) object;
   GtkSourceGutter *gutter;
+  GSettings *settings;
 
   ENTRY;
 
@@ -1267,7 +1268,7 @@ gb_editor_tab_constructed (GObject *object)
   gtk_source_gutter_insert (gutter, priv->change_renderer, 0);
 
   priv->vim = g_object_new (GB_TYPE_EDITOR_VIM,
-                            "enabled", TRUE,
+                            "enabled", FALSE,
                             "text-view", priv->source_view,
                             NULL);
   g_signal_connect (priv->vim,
@@ -1292,6 +1293,11 @@ gb_editor_tab_constructed (GObject *object)
                     "key-press-event",
                     G_CALLBACK (on_vim_command_entry_key_press_event),
                     tab);
+
+  settings = g_settings_new ("org.gnome.builder.editor");
+  g_settings_bind (settings, "vim-mode", priv->vim, "enabled",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_object_unref (settings);
 
   gb_editor_tab_cursor_moved (tab, priv->document);
 
