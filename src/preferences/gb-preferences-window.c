@@ -23,9 +23,10 @@
 
 struct _GbPreferencesWindowPrivate
 {
-  GtkToggleButton *search_toggle;
+  GtkHeaderBar    *right_header_bar;
   GtkSearchEntry  *search_entry;
   GtkSearchBar    *search_bar;
+  GtkStack        *stack;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesWindow, gb_preferences_window,
@@ -45,6 +46,28 @@ gb_preferences_window_new (void)
 }
 
 static void
+gb_preferences_window_section_changed (GtkStack            *stack,
+                                       GParamSpec          *pspec,
+                                       GbPreferencesWindow *window)
+{
+  GtkWidget *visible_child;
+  gchar *title = NULL;
+
+  g_return_if_fail (GTK_IS_STACK (stack));
+  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
+
+  visible_child = gtk_stack_get_visible_child (stack);
+  if (visible_child)
+    gtk_container_child_get (GTK_CONTAINER (stack), visible_child,
+                             "title", &title,
+                             NULL);
+
+  gtk_header_bar_set_title (window->priv->right_header_bar, title);
+
+  g_free (title);
+}
+
+static void
 gb_preferences_window_constructed (GObject *object)
 {
   GbPreferencesWindow *window = (GbPreferencesWindow *)object;
@@ -53,6 +76,12 @@ gb_preferences_window_constructed (GObject *object)
 
   gtk_search_bar_connect_entry (window->priv->search_bar,
                                 GTK_ENTRY (window->priv->search_entry));
+
+  g_signal_connect (window->priv->stack,
+                    "notify::visible-child",
+                    G_CALLBACK (gb_preferences_window_section_changed),
+                    window);
+  gb_preferences_window_section_changed (window->priv->stack, NULL, window);
 }
 
 static void
@@ -108,13 +137,16 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
                                                "/org/gnome/builder/ui/gb-preferences-window.ui");
   gtk_widget_class_bind_template_child_private (widget_class,
                                                 GbPreferencesWindow,
-                                                search_toggle);
+                                                right_header_bar);
   gtk_widget_class_bind_template_child_private (widget_class,
                                                 GbPreferencesWindow,
                                                 search_bar);
   gtk_widget_class_bind_template_child_private (widget_class,
                                                 GbPreferencesWindow,
                                                 search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class,
+                                                GbPreferencesWindow,
+                                                stack);
 
   g_type_ensure (GB_TYPE_SIDEBAR);
 }
