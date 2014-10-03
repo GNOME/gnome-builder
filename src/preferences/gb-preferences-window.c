@@ -44,13 +44,6 @@ struct _GbPreferencesWindowPrivate
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesWindow, gb_preferences_window,
                             GTK_TYPE_WINDOW)
 
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
-
 GtkWidget *
 gb_preferences_window_new (void)
 {
@@ -99,7 +92,7 @@ load_git (GbPreferencesWindow *window)
 {
   GgitConfig *config;
   const gchar *value;
-  
+
   g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
 
   config = ggit_config_new_default (NULL);
@@ -132,7 +125,7 @@ gb_preferences_window_constructed (GObject *object)
                     G_CALLBACK (gb_preferences_window_section_changed),
                     window);
   gb_preferences_window_section_changed (window->priv->stack, NULL, window);
-  
+
   load_editor (window);
   load_git (window);
 }
@@ -140,8 +133,6 @@ gb_preferences_window_constructed (GObject *object)
 static void
 gb_preferences_window_finalize (GObject *object)
 {
-  GbPreferencesWindowPrivate *priv = GB_PREFERENCES_WINDOW (object)->priv;
-
   G_OBJECT_CLASS (gb_preferences_window_parent_class)->finalize (object);
 }
 
@@ -151,8 +142,6 @@ gb_preferences_window_get_property (GObject    *object,
                                     GValue     *value,
                                     GParamSpec *pspec)
 {
-  GbPreferencesWindow *self = GB_PREFERENCES_WINDOW (object);
-
   switch (prop_id)
     {
     default:
@@ -166,8 +155,6 @@ gb_preferences_window_set_property (GObject      *object,
                                     const GValue *value,
                                     GParamSpec   *pspec)
 {
-  GbPreferencesWindow *self = GB_PREFERENCES_WINDOW (object);
-
   switch (prop_id)
     {
     default:
