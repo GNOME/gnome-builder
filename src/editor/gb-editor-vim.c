@@ -2463,6 +2463,9 @@ gb_editor_vim_disconnect (GbEditorVim *vim)
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
   g_return_if_fail (vim->priv->connected);
 
+  if (vim->priv->mode == GB_EDITOR_VIM_NORMAL)
+    gtk_text_view_set_overwrite (vim->priv->text_view, FALSE);
+
   g_signal_handler_disconnect (vim->priv->text_view,
                                vim->priv->key_press_event_handler);
   vim->priv->key_press_event_handler = 0;
