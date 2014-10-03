@@ -338,6 +338,7 @@ gb_application_startup (GApplication *app)
   self = GB_APPLICATION (app);
 
   g_resources_register (gb_get_resource ());
+  g_application_set_resource_base_path (app, "/org/gnome/builder");
 
   G_APPLICATION_CLASS (gb_application_parent_class)->startup (app);
 
@@ -355,9 +356,6 @@ gb_application_constructed (GObject *object)
 
   if (G_OBJECT_CLASS (gb_application_parent_class)->constructed)
     G_OBJECT_CLASS (gb_application_parent_class)->constructed (object);
-
-  g_application_set_resource_base_path (G_APPLICATION (object),
-                                        "/org/gnome/builder");
 
   EXIT;
 }
