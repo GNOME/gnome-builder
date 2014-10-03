@@ -2,8 +2,8 @@
   <schema id="org.gnome.builder.editor" path="/org/gnome/builder/editor/" gettext-domain="gnome-builder">
     <key name="vim-mode" type="b">
       <default>false</default>
-      <_summary>Enable VIM keybindings<_summary>
-      <_description>Whether or not VIM style keybindings should be used in the source code editor.</_description>
+      <summary>Enable VIM keybindings</summary>
+      <description>Whether or not VIM style keybindings should be used in the source code editor.</description>
     </key>
   </schema>
 </schemalist>
