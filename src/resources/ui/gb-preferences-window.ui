@@ -8,27 +8,51 @@
     <property name="default-height">500</property>
     <property name="window-position">GTK_WIN_POS_CENTER_ON_PARENT</property>
     <child type="titlebar">
-      <object class="GtkHeaderBar" id="header_bar">
+      <object class="GtkBox" id="titlebar_box">
         <property name="visible">True</property>
-        <property name="title" translatable="yes">Preferences</property>
-        <property name="show-close-button">True</property>
+        <property name="expand">True</property>
+        <property name="orientation">horizontal</property>
         <child>
-          <object class="GtkToggleButton" id="search_toggle">
+          <object class="GtkHeaderBar" id="left_header_bar">
             <property name="visible">True</property>
+            <property name="title" translatable="yes">Preferences</property>
+            <property name="show-close-button">True</property>
+            <property name="decoration_layout">menu</property>
             <child>
-              <object class="GtkImage" id="search_toggle_image">
+              <object class="GtkToggleButton" id="search_toggle">
                 <property name="visible">True</property>
-                <property name="icon-name">edit-find-symbolic</property>
                 <property name="valign">baseline</property>
+                <child>
+                  <object class="GtkImage" id="search_toggle_image">
+                    <property name="visible">True</property>
+                    <property name="icon-name">edit-find-symbolic</property>
+                    <property name="valign">baseline</property>
+                  </object>
+                </child>
               </object>
+              <style>
+                <class name="image-button" />
+              </style>
+              <packing>
+                <property name="pack_type">start</property>
+              </packing>
             </child>
           </object>
-          <style>
-            <class name="image-button" />
-          </style>
-          <packing>
-            <property name="pack_type">start</property>
-          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator" id="header_separator">
+            <property name="orientation">vertical</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkHeaderBar" id="right_header_bar">
+            <property name="visible">True</property>
+            <property name="expand">True</property>
+            <property name="title" translatable="yes"></property>
+            <property name="show-close-button">True</property>
+            <property name="decoration_layout">:close</property>
+          </object>
         </child>
       </object>
     </child>
@@ -39,7 +63,7 @@
         <property name="orientation">horizontal</property>
         <child>
           <object class="GtkBox" id="sidebar_vbox">
-            <property name="expand">False</property>
+            <property name="hexpand">false</property>
             <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <child>
@@ -59,7 +83,6 @@
               <object class="GbSidebar" id="sidebar">
                 <property name="visible">True</property>
                 <property name="vexpand">True</property>
-                <property name="width-request">215</property>
                 <property name="stack">stack</property>
                 <style>
                   <class name="preferences" />
@@ -77,9 +100,11 @@
         </child>
         <child>
           <object class="GtkStack" id="stack">
+            <property name="border_width">12</property>
             <property name="visible">True</property>
             <property name="expand">True</property>
             <property name="transition-type">GTK_STACK_TRANSITION_TYPE_CROSSFADE</property>
+            <property name="visible_child">editor_grid</property>
             <child>
               <object class="GtkGrid" id="editor_grid">
                 <property name="visible">True</property>
@@ -103,4 +128,11 @@
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
+    <widgets>
+      <widget name="left_header_bar"/>
+      <widget name="sidebar"/>
+    </widgets>
+  </object>
 </interface>
