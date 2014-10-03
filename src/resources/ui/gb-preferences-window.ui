@@ -79,6 +79,7 @@
           <object class="GtkStack" id="stack">
             <property name="visible">True</property>
             <property name="expand">True</property>
+            <property name="transition-type">GTK_STACK_TRANSITION_TYPE_CROSSFADE</property>
             <child>
               <object class="GtkGrid" id="editor_grid">
                 <property name="visible">True</property>
