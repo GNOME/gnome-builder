@@ -702,7 +702,7 @@ select_and_animate (GbEditorTab       *tab,
 
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->document), begin, end);
   gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view), &copy, 0.0,
-                                TRUE, 0.0, 0.5);
+                                TRUE, 0.5, 0.5);
 
   if (!gtk_text_iter_equal (begin, end))
     delayed_animation (tab);
