@@ -170,8 +170,6 @@ gnome_builder_built_sources = \
 	src/resources/gb-resources.c \
 	src/resources/gb-resources.h
 
-src/app/libgnome_builder_la-gb-application.$(OBJEXT): $(gnome_builder_built_sources)
-
 resource_files = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/src/resources --generate-dependencies $(top_srcdir)/src/resources/gnome-builder.gresource.xml)
 src/resources/gb-resources.c: src/resources/gnome-builder.gresource.xml $(resource_files)
 	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/src/resources --generate-source --c-name gb $(top_srcdir)/src/resources/gnome-builder.gresource.xml
@@ -181,6 +179,8 @@ src/resources/gb-resources.h: src/resources/gnome-builder.gresource.xml $(resour
 nodist_gnome_builder_SOURCES = \
 	$(gnome_builder_built_sources) \
 	$(NULL)
+
+BUILT_SOURCES += $(gnome_builder_built_sources)
 
 EXTRA_DIST += $(resource_files)
 EXTRA_DIST += src/resources/gnome-builder.gresource.xml
