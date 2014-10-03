@@ -58,6 +58,7 @@
             <child>
               <object class="GbSidebar" id="sidebar">
                 <property name="visible">True</property>
+                <property name="vexpand">True</property>
                 <property name="width-request">215</property>
                 <property name="stack">stack</property>
                 <style>
