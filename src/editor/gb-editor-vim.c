@@ -1822,8 +1822,10 @@ gb_editor_vim_page_down (GbEditorVim *vim)
   gtk_text_view_get_iter_at_location (vim->priv->text_view, &iter,
                                       rect.x, rect.y + rect.height);
 
-  // rect.y + rect.height is the next line affter the end of the buffer so
-  // now we have to decrease one more.
+  /*
+   * rect.y + rect.height is the next line affter the end of the buffer so
+   * now we have to decrease one more.
+   */
   line = MAX (0, gtk_text_iter_get_line (&iter) - SCROLL_OFF - 1);
   gtk_text_iter_set_line (&iter, line);
 
