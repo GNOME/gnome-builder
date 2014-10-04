@@ -139,6 +139,10 @@ static GHashTable *gCommands;
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
+static void gb_editor_vim_cmd_select_line (GbEditorVim *vim,
+                                           guint        count,
+                                           gchar        modifier);
+
 GbEditorVim *
 gb_editor_vim_new (GtkTextView *text_view)
 {
@@ -2844,7 +2848,7 @@ gb_editor_vim_cmd_delete (GbEditorVim *vim,
   gb_editor_vim_clear_selection (vim);
 
   if (modifier == 'd')
-    gb_editor_vim_select_line (vim);
+    gb_editor_vim_cmd_select_line (vim, count, '\0');
   else
     {
       GbEditorVimCommand *cmd;
@@ -3169,7 +3173,7 @@ gb_editor_vim_cmd_yank (GbEditorVim *vim,
   gb_editor_vim_save_position (vim);
 
   if (modifier == 'y')
-      gb_editor_vim_select_line (vim);
+      gb_editor_vim_cmd_select_line (vim, count, '\0');
   else
     {
       GbEditorVimCommand *cmd;
