@@ -93,6 +93,7 @@ typedef enum
   GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER = 1 << 0,
   GB_EDITOR_VIM_COMMAND_FLAG_VISUAL            = 1 << 1,
   GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE  = 1 << 2,
+  GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE   = 1 << 3,
 } GbEditorVimCommandFlags;
 
 /**
@@ -1218,7 +1219,11 @@ gb_editor_vim_apply_motion (GbEditorVim *vim,
   if (!cmd || (cmd->type != GB_EDITOR_VIM_COMMAND_MOVEMENT))
     return;
 
-  gb_editor_vim_select_char (vim);
+  if (cmd->flags & GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE)
+    gb_editor_vim_select_line (vim);
+  else
+    gb_editor_vim_select_char (vim);
+
   cmd->func (vim, count, '\0');
 
   if ((cmd->flags & GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE))
@@ -3478,7 +3483,7 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_forward_word_end);
   gb_editor_vim_class_register_command (klass, 'G',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
+                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE,
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_goto_line);
   gb_editor_vim_class_register_command (klass, 'g',
@@ -3498,11 +3503,11 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_insert);
   gb_editor_vim_class_register_command (klass, 'j',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
+                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE,
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_move_down);
   gb_editor_vim_class_register_command (klass, 'k',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
+                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE,
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_move_up);
   gb_editor_vim_class_register_command (klass, 'l',
