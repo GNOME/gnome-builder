@@ -149,6 +149,15 @@ static guint       gSignals [LAST_SIGNAL];
 static void gb_editor_vim_cmd_select_line (GbEditorVim *vim,
                                            guint        count,
                                            gchar        modifier);
+static void gb_editor_vim_cmd_delete (GbEditorVim *vim,
+                                      guint        count,
+                                      gchar        modifier);
+static void gb_editor_vim_cmd_delete_to_end (GbEditorVim *vim,
+                                             guint        count,
+                                             gchar        modifier);
+static void gb_editor_vim_cmd_insert_before_line (GbEditorVim *vim,
+                                                  guint        count,
+                                                  gchar        modifier);
 
 GbEditorVim *
 gb_editor_vim_new (GtkTextView *text_view)
@@ -2846,6 +2855,38 @@ gb_editor_vim_cmd_backward_word (GbEditorVim *vim,
 }
 
 static void
+gb_editor_vim_cmd_change (GbEditorVim *vim,
+                          guint        count,
+                          gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  if (modifier == 'c')
+    {
+      gb_editor_vim_cmd_delete (vim, count, 'd');
+      gb_editor_vim_cmd_insert_before_line (vim, 0, '\0');
+    }
+  else
+    {
+      gb_editor_vim_cmd_delete (vim, count, modifier);
+      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+    }
+}
+
+static void
+gb_editor_vim_cmd_change_to_end (GbEditorVim *vim,
+                                 guint        count,
+                                 gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_cmd_delete_to_end (vim, count, '\0');
+  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+  gb_editor_vim_move_forward (vim);
+}
+
+
+static void
 gb_editor_vim_cmd_delete (GbEditorVim *vim,
                           guint        count,
                           gchar        modifier)
@@ -3092,6 +3133,16 @@ gb_editor_vim_cmd_overwrite (GbEditorVim *vim,
 
   gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
   gtk_text_view_set_overwrite (vim->priv->text_view, TRUE);
+}
+
+static void
+gb_editor_vim_cmd_substitute (GbEditorVim *vim,
+                              guint        count,
+                              gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_cmd_change (vim, count, 'l');
 }
 
 static void
@@ -3390,6 +3441,15 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_backward_word);
+  gb_editor_vim_class_register_command (klass, 'c',
+                                        GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER |
+                                        GB_EDITOR_VIM_COMMAND_FLAG_VISUAL,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
+                                        gb_editor_vim_cmd_change);
+  gb_editor_vim_class_register_command (klass, 'C',
+                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
+                                        gb_editor_vim_cmd_change_to_end);
   gb_editor_vim_class_register_command (klass, 'd',
                                         GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER |
                                         GB_EDITOR_VIM_COMMAND_FLAG_VISUAL,
@@ -3455,6 +3515,10 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_overwrite);
+  gb_editor_vim_class_register_command (klass, 's',
+                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
+                                        gb_editor_vim_cmd_substitute);
   gb_editor_vim_class_register_command (klass, 'u',
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
