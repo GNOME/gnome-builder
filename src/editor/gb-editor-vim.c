@@ -1190,6 +1190,21 @@ gb_editor_vim_select_char (GbEditorVim *vim)
 }
 
 static void
+gb_editor_vim_apply_motion (GbEditorVim *vim,
+                            char         motion,
+                            guint        count)
+{
+  GbEditorVimCommand *cmd;
+
+  cmd = g_hash_table_lookup (gCommands, GINT_TO_POINTER (motion));
+  if (!cmd || (cmd->type != GB_EDITOR_VIM_COMMAND_MOVEMENT))
+    return;
+
+  gb_editor_vim_select_char (vim);
+  cmd->func (vim, count, '\0');
+}
+
+static void
 gb_editor_vim_undo (GbEditorVim *vim)
 {
   GtkSourceUndoManager *undo;
@@ -2850,16 +2865,7 @@ gb_editor_vim_cmd_delete (GbEditorVim *vim,
   if (modifier == 'd')
     gb_editor_vim_cmd_select_line (vim, count, '\0');
   else
-    {
-      GbEditorVimCommand *cmd;
-
-      cmd = g_hash_table_lookup (gCommands, GINT_TO_POINTER (modifier));
-      if (!cmd || (cmd->type != GB_EDITOR_VIM_COMMAND_MOVEMENT))
-        return;
-
-      gb_editor_vim_select_char (vim);
-      cmd->func (vim, count, '\0');
-    }
+    gb_editor_vim_apply_motion (vim, modifier, count);
 
   gb_editor_vim_delete_selection (vim);
 }
@@ -3181,16 +3187,7 @@ gb_editor_vim_cmd_yank (GbEditorVim *vim,
   if (modifier == 'y')
       gb_editor_vim_cmd_select_line (vim, count, '\0');
   else
-    {
-      GbEditorVimCommand *cmd;
-
-      cmd = g_hash_table_lookup (gCommands, GINT_TO_POINTER (modifier));
-      if (!cmd || (cmd->type != GB_EDITOR_VIM_COMMAND_MOVEMENT))
-        return;
-
-      gb_editor_vim_select_char (vim);
-      cmd->func (vim, 1, '\0');
-    }
+      gb_editor_vim_apply_motion (vim, modifier, count);
 
   gb_editor_vim_yank (vim);
   gb_editor_vim_clear_selection (vim);
