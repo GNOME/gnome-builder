@@ -488,7 +488,10 @@ get_drag_drop_target_area (GbMultiNotebook *mnb,
   priv = mnb->priv;
 
   gtk_widget_get_allocation (GTK_WIDGET (priv->drag_drop_target), &alloc);
-  gtk_widget_translate_coordinates (GTK_WIDGET (priv->drag_drop_target), GTK_WIDGET (mnb), alloc.x, alloc.y, &alloc.x, &alloc.y);
+  gtk_widget_translate_coordinates (GTK_WIDGET (priv->drag_drop_target),
+                                    GTK_WIDGET (mnb),
+                                    alloc.x, alloc.y,
+                                    &alloc.x, &alloc.y);
 
   if (priv->drag_drop_position == -1)
     {
@@ -944,10 +947,7 @@ on_set_focus_child (GbNotebook      *notebook,
   if (GB_IS_TAB (widget))
     tab = GB_TAB (widget);
   else if (GB_IS_TAB_LABEL (widget))
-    {
-      tab = g_object_get_data (G_OBJECT (widget), "GB_TAB");
-      g_assert (GB_IS_TAB (tab));
-    }
+    tab = gb_tab_label_get_tab (GB_TAB_LABEL (widget));
 
   if (tab)
     {

@@ -75,10 +75,9 @@ gb_notebook_tab_label_close_clicked (GbNotebook *notebook,
   g_return_if_fail (GB_IS_NOTEBOOK (notebook));
   g_return_if_fail (GB_IS_TAB_LABEL (tab_label));
 
-  tab = g_object_get_data (G_OBJECT (tab_label), "GB_TAB");
-  g_assert (GB_IS_TAB (tab));
-
-  gb_tab_close (tab);
+  tab = gb_tab_label_get_tab (tab_label);
+  if (tab)
+    gb_tab_close (tab);
 
   EXIT;
 }
@@ -96,7 +95,6 @@ gb_notebook_add_tab (GbNotebook *notebook,
                              "tab", tab,
                              "visible", TRUE,
                              NULL);
-   g_object_set_data (G_OBJECT (tab_label), "GB_TAB", tab);
    g_signal_connect_object (tab_label,
                             "close-clicked",
                             G_CALLBACK (gb_notebook_tab_label_close_clicked),
