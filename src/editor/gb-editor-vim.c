@@ -91,6 +91,7 @@ typedef enum
 {
   GB_EDITOR_VIM_COMMAND_FLAG_NONE,
   GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER = 1 << 0,
+  GB_EDITOR_VIM_COMMAND_FLAG_VISUAL            = 1 << 1,
 } GbEditorVimCommandFlags;
 
 /**
@@ -2141,26 +2142,6 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
         }
       break;
 
-    case GDK_KEY_y:
-      {
-        /*
-         * WORKAROUND:
-         *
-         * Special case workaround for `y', which in some cases has a modifier
-         * and in other cases does not. We should probably mark whether or not
-         * a command can be executed directly if there is a selection.
-         */
-        if (gtk_text_buffer_get_has_selection (buffer))
-          {
-            gb_editor_vim_clear_phrase (vim);
-            gb_editor_vim_yank (vim);
-            gb_editor_vim_clear_selection (vim);
-            return TRUE;
-          }
-
-        break;
-      }
-
     default:
       break;
     }
@@ -2193,6 +2174,8 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
         }
 
       if (cmd->flags & GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER &&
+          !((cmd->flags & GB_EDITOR_VIM_COMMAND_FLAG_VISUAL) &&
+            gtk_text_buffer_get_has_selection (buffer)) &&
           !phrase.modifier)
         break;
 
@@ -2200,6 +2183,8 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 
       gtk_text_buffer_begin_user_action (buffer);
       cmd->func (vim, phrase.count, phrase.modifier);
+      if (cmd->flags & GB_EDITOR_VIM_COMMAND_FLAG_VISUAL)
+        gb_editor_vim_clear_selection (vim);
       gtk_text_buffer_end_user_action (buffer);
 
       break;
@@ -2865,14 +2850,19 @@ gb_editor_vim_cmd_delete (GbEditorVim *vim,
                           guint        count,
                           gchar        modifier)
 {
+  GtkTextBuffer *buffer;
+
   g_assert (GB_IS_EDITOR_VIM (vim));
 
-  gb_editor_vim_clear_selection (vim);
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
-  if (modifier == 'd')
-    gb_editor_vim_cmd_select_line (vim, count, '\0');
-  else
-    gb_editor_vim_apply_motion (vim, modifier, count);
+  if (!gtk_text_buffer_get_has_selection (buffer))
+    {
+      if (modifier == 'd')
+        gb_editor_vim_cmd_select_line (vim, count, '\0');
+      else
+        gb_editor_vim_apply_motion (vim, modifier, count);
+    }
 
   gb_editor_vim_delete_selection (vim);
 }
@@ -3186,15 +3176,21 @@ gb_editor_vim_cmd_yank (GbEditorVim *vim,
                         guint        count,
                         gchar        modifier)
 {
+  GtkTextBuffer *buffer;
+
   g_assert (GB_IS_EDITOR_VIM (vim));
 
-  gb_editor_vim_clear_selection (vim);
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
   gb_editor_vim_save_position (vim);
 
-  if (modifier == 'y')
-      gb_editor_vim_cmd_select_line (vim, count, '\0');
-  else
-      gb_editor_vim_apply_motion (vim, modifier, count);
+  if (!gtk_text_buffer_get_has_selection (buffer))
+    {
+      if (modifier == 'y')
+          gb_editor_vim_cmd_select_line (vim, count, '\0');
+      else
+          gb_editor_vim_apply_motion (vim, modifier, count);
+    }
 
   gb_editor_vim_yank (vim);
   gb_editor_vim_clear_selection (vim);
@@ -3395,7 +3391,8 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_backward_word);
   gb_editor_vim_class_register_command (klass, 'd',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER,
+                                        GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER |
+                                        GB_EDITOR_VIM_COMMAND_FLAG_VISUAL,
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_delete);
   gb_editor_vim_class_register_command (klass, 'D',
@@ -3475,11 +3472,12 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_forward_word);
   gb_editor_vim_class_register_command (klass, 'x',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
+                                        GB_EDITOR_VIM_COMMAND_FLAG_VISUAL,
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_delete_selection);
   gb_editor_vim_class_register_command (klass, 'y',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER,
+                                        GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER |
+                                        GB_EDITOR_VIM_COMMAND_FLAG_VISUAL,
                                         GB_EDITOR_VIM_COMMAND_NOOP,
                                         gb_editor_vim_cmd_yank);
   gb_editor_vim_class_register_command (klass, 'z',
