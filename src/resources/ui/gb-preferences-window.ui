@@ -115,7 +115,7 @@
                     <property name="visible">True</property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="Yes">Enable VIM compatability mode</property>
+                    <property name="label" translatable="Yes">Enable VIM compatibility mode</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
