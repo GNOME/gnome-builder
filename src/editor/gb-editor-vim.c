@@ -1971,6 +1971,21 @@ gb_editor_vim_parse_phrase (GbEditorVim       *vim,
   if (n_scanned == 1)
     return GB_EDITOR_VIM_PHRASE_NEED_MORE;
 
+  n_scanned = sscanf (str, "%c%u%c", &key, &count, &modifier);
+
+  if (n_scanned == 3)
+    {
+      phrase->count = count;
+      phrase->key = key;
+      phrase->modifier = modifier;
+
+      return GB_EDITOR_VIM_PHRASE_SUCCESS;
+    }
+
+  /* there's a count following key - the modifier is non-optional then */
+  if (n_scanned == 2)
+    return GB_EDITOR_VIM_PHRASE_NEED_MORE;
+
   n_scanned = sscanf (str, "%c%c", &key, &modifier);
 
   if (n_scanned == 2)
