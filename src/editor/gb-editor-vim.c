@@ -1912,6 +1912,7 @@ gb_editor_vim_add (GbEditorVim *vim,
 
   gtk_text_buffer_delete (buffer, &iter, &selection);
   gtk_text_buffer_insert (buffer, &iter, replace, -1);
+  gtk_text_iter_backward_char (&iter);
   gtk_text_buffer_select_range (buffer, &iter, &iter);
 
 cleanup:
