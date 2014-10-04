@@ -827,6 +827,7 @@ gb_editor_vim_move_forward_word (GbEditorVim *vim)
     {
       if (gtk_text_iter_equal (&iter, &selection))
         gtk_text_iter_forward_word_end (&iter);
+      gtk_text_iter_forward_char (&iter);
       gb_editor_vim_select_range (vim, &iter, &selection);
       gb_editor_vim_ensure_anchor_selected (vim);
     }
