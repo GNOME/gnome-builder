@@ -1897,13 +1897,33 @@ gb_editor_vim_move_to_line_n (GbEditorVim *vim,
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
-  GtkTextIter iter;
+  GtkTextIter iter, selection;
+  gboolean has_selection;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
-  gtk_text_buffer_select_range (buffer, &iter, &iter);
+  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+
+  if (is_single_line_selection (&iter, &selection))
+    {
+      gtk_text_iter_set_line (&iter, line);
+
+      if (gtk_text_iter_compare (&iter, &selection) > 0)
+        gtk_text_iter_forward_line (&iter);
+    }
+  else
+    gtk_text_iter_set_line (&iter, line);
+
+  if (has_selection)
+    {
+      gb_editor_vim_select_range (vim, &iter, &selection);
+      gb_editor_vim_ensure_anchor_selected (vim);
+    }
+  else
+    {
+      gb_editor_vim_select_range (vim, &iter, &iter);
+    }
 
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
