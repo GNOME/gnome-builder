@@ -2869,11 +2869,17 @@ gb_editor_vim_cmd_delete_to_end (GbEditorVim *vim,
                                  guint        count,
                                  gchar        modifier)
 {
+  guint i;
+
   g_assert (GB_IS_EDITOR_VIM (vim));
+
+  count = MAX (1, count);
 
   gb_editor_vim_clear_selection (vim);
   gb_editor_vim_select_char (vim);
   gb_editor_vim_move_line_end (vim);
+  for (i = 1; i < count; i++)
+    gb_editor_vim_move_down (vim);
   gb_editor_vim_delete_selection (vim);
 }
 
