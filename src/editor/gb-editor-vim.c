@@ -2681,6 +2681,28 @@ gb_editor_vim_set_line_numbers (GbEditorVim *vim,
     }
 }
 
+static void
+gb_editor_vim_colorscheme (GbEditorVim *vim,
+                           const gchar *name)
+{
+  GtkSourceStyleSchemeManager *manager;
+  GtkSourceStyleScheme *scheme;
+  GtkTextBuffer *buffer;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (name);
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  manager = gtk_source_style_scheme_manager_get_default ();
+  scheme = gtk_source_style_scheme_manager_get_scheme (manager, name);
+
+  if (scheme)
+    gtk_source_buffer_set_style_scheme (GTK_SOURCE_BUFFER (buffer), scheme);
+}
+
 void
 gb_editor_vim_execute_command (GbEditorVim *vim,
                                const gchar *command)
@@ -2710,6 +2732,8 @@ gb_editor_vim_execute_command (GbEditorVim *vim,
     gb_editor_vim_set_line_numbers (vim, TRUE);
   else if (g_str_equal (copy, "set nonu"))
     gb_editor_vim_set_line_numbers (vim, FALSE);
+  else if (g_str_has_prefix (copy, "colorscheme "))
+    gb_editor_vim_colorscheme (vim, copy + strlen ("colorscheme "));
   else
     g_debug (" TODO: Command Execution Support: %s", command);
 
