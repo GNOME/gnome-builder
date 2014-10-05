@@ -140,6 +140,7 @@ enum
 
 enum
 {
+  BEGIN_SEARCH,
   COMMAND_VISIBILITY_TOGGLED,
   LAST_SIGNAL
 };
@@ -2736,13 +2737,24 @@ gb_editor_vim_cmd_begin_search (GbEditorVim *vim,
                                 guint        count,
                                 gchar        modifier)
 {
-#ifndef GB_EDITOR_VIM_EXTERNAL
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gchar *text = NULL;
+
   g_assert (GB_IS_EDITOR_VIM (vim));
 
-  if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
-    gb_source_view_begin_search (GB_SOURCE_VIEW (vim->priv->text_view),
-                                 GTK_DIR_DOWN, NULL);
-#endif
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
+  if (gtk_text_buffer_get_has_selection (buffer))
+    {
+      gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+      text = gtk_text_iter_get_slice (&begin, &end);
+    }
+
+  g_signal_emit (vim, gSignals [BEGIN_SEARCH], 0, text);
+
+  g_free (text);
 }
 
 static void
@@ -3394,6 +3406,26 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                    gParamSpecs [PROP_TEXT_VIEW]);
 
   /**
+   * GbEditorVim::begin-search:
+   * @search_text: (allow none): Optional search text to apply to the search.
+   *
+   * This signal is emitted when the `/` key is pressed. The consuming code
+   * should make their search entry widget visible and set the search text
+   * to @search_text if non-%NULL.
+   */
+  gSignals [BEGIN_SEARCH] =
+    g_signal_new ("begin-search",
+                  GB_TYPE_EDITOR_VIM,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbEditorVimClass, begin_search),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__STRING,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_STRING);
+
+  /**
    * GbEditorVim::command-visibility-toggled:
    * @visible: If the the command entry should be visible.
    *
@@ -3405,7 +3437,8 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
     g_signal_new ("command-visibility-toggled",
                   GB_TYPE_EDITOR_VIM,
                   G_SIGNAL_RUN_LAST,
-                  0,
+                  G_STRUCT_OFFSET (GbEditorVimClass,
+                                   command_visibility_toggled),
                   NULL,
                   NULL,
                   g_cclosure_marshal_VOID__BOOLEAN,

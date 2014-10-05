@@ -995,6 +995,17 @@ on_vim_command_visibility_toggled (GbEditorVim *vim,
 }
 
 static void
+on_vim_begin_search (GbEditorVim *vim,
+                     const gchar *search_text,
+                     GbEditorTab *tab)
+{
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  gb_source_view_begin_search (tab->priv->source_view, GTK_DIR_DOWN,
+                               search_text);
+}
+
+static void
 on_vim_command_entry_activate (GtkEntry    *entry,
                                GbEditorTab *tab)
 {
@@ -1274,6 +1285,10 @@ gb_editor_tab_constructed (GObject *object)
   g_signal_connect (priv->vim,
                     "command-visibility-toggled",
                     G_CALLBACK (on_vim_command_visibility_toggled),
+                    tab);
+  g_signal_connect (priv->vim,
+                    "begin-search",
+                    G_CALLBACK (on_vim_begin_search),
                     tab);
   g_signal_connect (priv->vim,
                     "notify::phrase",

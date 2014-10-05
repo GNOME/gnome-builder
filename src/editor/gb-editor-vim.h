@@ -54,6 +54,18 @@ struct _GbEditorVim
 struct _GbEditorVimClass
 {
   GObjectClass parent_class;
+
+  void (*begin_search)               (GbEditorVim *vim,
+                                      const gchar *search_text);
+  void (*command_visibility_toggled) (GbEditorVim *vim,
+                                      gboolean     visibility);
+
+  gpointer _padding1;
+  gpointer _padding2;
+  gpointer _padding3;
+  gpointer _padding4;
+  gpointer _padding5;
+  gpointer _padding6;
 };
 
 GType            gb_editor_vim_get_type        (void) G_GNUC_CONST;
