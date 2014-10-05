@@ -63,20 +63,22 @@ typedef void (*GbEditorVimCommandFunc) (GbEditorVim        *vim,
 
 struct _GbEditorVimPrivate
 {
-  GtkTextView     *text_view;
-  GString         *phrase;
-  GtkTextMark     *selection_anchor_begin;
-  GtkTextMark     *selection_anchor_end;
-  GbEditorVimMode  mode;
-  gulong           key_press_event_handler;
-  gulong           focus_in_event_handler;
-  gulong           mark_set_handler;
-  gulong           delete_range_handler;
-  guint            target_line_offset;
-  guint            stash_line;
-  guint            stash_line_offset;
-  guint            enabled : 1;
-  guint            connected : 1;
+  GtkTextView             *text_view;
+  GString                 *phrase;
+  GtkTextMark             *selection_anchor_begin;
+  GtkTextMark             *selection_anchor_end;
+  GtkSourceSearchContext  *search_context;
+  GtkSourceSearchSettings *search_settings;
+  GbEditorVimMode          mode;
+  gulong                   key_press_event_handler;
+  gulong                   focus_in_event_handler;
+  gulong                   mark_set_handler;
+  gulong                   delete_range_handler;
+  guint                    target_line_offset;
+  guint                    stash_line;
+  guint                    stash_line_offset;
+  guint                    enabled : 1;
+  guint                    connected : 1;
 };
 
 typedef enum
@@ -1667,127 +1669,113 @@ gb_editor_vim_select_current_word (GbEditorVim *vim,
 }
 
 static void
+gb_editor_vim_search_cb (GObject      *source,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  GtkSourceSearchContext *search_context = (GtkSourceSearchContext *)source;
+  GbEditorVim *vim = user_data;
+  GtkTextIter match_begin;
+  GtkTextIter match_end;
+
+  g_return_if_fail (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
+  g_return_if_fail (G_IS_ASYNC_RESULT (result));
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  if (gtk_source_search_context_backward_finish (search_context, result,
+                                                 &match_begin, &match_end,
+                                                 NULL))
+    {
+      if (vim->priv->text_view)
+        {
+          GtkTextBuffer *buffer;
+
+          buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+          gtk_text_buffer_select_range (buffer, &match_begin, &match_begin);
+          gtk_text_view_scroll_to_iter (vim->priv->text_view, &match_begin,
+                                        0.0, TRUE, 0.0, 0.5);
+        }
+    }
+
+  g_object_unref (vim);
+}
+
+static void
 gb_editor_vim_reverse_search (GbEditorVim *vim)
 {
-#ifndef GB_EDITOR_VIM_EXTERNAL
-  GtkTextBuffer *buffer;
-  GbSourceView *source_view;
   GtkTextIter begin;
   GtkTextIter end;
 
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
 
-  if (!GB_IS_SOURCE_VIEW (vim->priv->text_view))
+  if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view))
     return;
-
-  source_view = GB_SOURCE_VIEW (vim->priv->text_view);
-  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
   if (gb_editor_vim_select_current_word (vim, &begin, &end))
     {
+      GtkTextIter start_iter;
       gchar *text;
 
-      /*
-       * Fetch the search text.
-       */
       text = gtk_text_iter_get_slice (&begin, &end);
 
-      /*
-       * Move to right before the current word and clear the selection.
-       */
       if (gtk_text_iter_compare (&begin, &end) <= 0)
-        gtk_text_buffer_select_range (buffer, &begin, &begin);
+        gtk_text_iter_assign (&start_iter, &begin);
       else
-        gtk_text_buffer_select_range (buffer, &end, &end);
+        gtk_text_iter_assign (&start_iter, &end);
 
-      /*
-       * Start searching.
-       */
-      gb_source_view_begin_search (source_view, GTK_DIR_UP, text);
+      gtk_source_search_settings_set_search_text (vim->priv->search_settings,
+                                                  text);
+
+      gtk_source_search_context_set_highlight (vim->priv->search_context,
+                                               TRUE);
+
+      gtk_source_search_context_backward_async (vim->priv->search_context,
+                                                &start_iter,
+                                                NULL,
+                                                gb_editor_vim_search_cb,
+                                                g_object_ref (vim));
+
       g_free (text);
-
-      /*
-       * But don't let the search entry focus. VIM let's us just keep hitting
-       * '#' over and over without any intervention, and that's a useful
-       * feature.
-       */
-      gtk_widget_grab_focus (GTK_WIDGET (vim->priv->text_view));
-
-      /*
-       * TODO: It would be nice to clear the selection to match closer to
-       *       VIM. However, we do a delayed selection of the match in the
-       *       editor tab (which eventually needs to search asynchronously
-       *       too). So we need a better way to do this.
-       */
-#if 0
-      gb_editor_vim_clear_selection (vim);
-#endif
     }
-#endif
 }
 
 static void
 gb_editor_vim_search (GbEditorVim *vim)
 {
-#ifndef GB_EDITOR_VIM_EXTERNAL
-  GtkTextBuffer *buffer;
-  GbSourceView *source_view;
   GtkTextIter begin;
   GtkTextIter end;
 
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
 
-  if (!GB_IS_SOURCE_VIEW (vim->priv->text_view))
+  if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view))
     return;
-
-  source_view = GB_SOURCE_VIEW (vim->priv->text_view);
 
   if (gb_editor_vim_select_current_word (vim, &begin, &end))
     {
+      GtkTextIter start_iter;
       gchar *text;
 
-      /*
-       * Query the search text.
-       */
       text = gtk_text_iter_get_slice (&begin, &end);
 
-      /*
-       * Move past the current word so that we don't reselect it.
-       */
-      buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-      if (gtk_text_buffer_get_has_selection (buffer))
-        {
-          gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
-          if (gtk_text_iter_compare (&begin, &end) <= 0)
-            gtk_text_buffer_select_range (buffer, &end, &end);
-          else
-            gtk_text_buffer_select_range (buffer, &begin, &begin);
-        }
+      if (gtk_text_iter_compare (&begin, &end) > 0)
+        gtk_text_iter_assign (&start_iter, &begin);
+      else
+        gtk_text_iter_assign (&start_iter, &end);
 
-      /*
-       * Start searching.
-       */
-      gb_source_view_begin_search (source_view, GTK_DIR_DOWN, text);
+      gtk_source_search_settings_set_search_text (vim->priv->search_settings,
+                                                  text);
+
+      gtk_source_search_context_set_highlight (vim->priv->search_context,
+                                               TRUE);
+
+      gtk_source_search_context_forward_async (vim->priv->search_context,
+                                               &start_iter,
+                                               NULL,
+                                               gb_editor_vim_search_cb,
+                                               g_object_ref (vim));
+
       g_free (text);
-
-      /*
-       * But don't let the search entry focus. VIM let's us just keep hitting
-       * '#' over and over without any intervention, and that's a useful
-       * feature.
-       */
-      gtk_widget_grab_focus (GTK_WIDGET (vim->priv->text_view));
-
-      /*
-       * TODO: It would be nice to clear the selection to match closer to
-       *       VIM. However, we do a delayed selection of the match in the
-       *       editor tab (which eventually needs to search asynchronously
-       *       too). So we need a better way to do this.
-       */
-#if 0
-      gb_editor_vim_clear_selection (vim);
-#endif
     }
-#endif
 }
 
 static void
@@ -2511,6 +2499,11 @@ gb_editor_vim_connect (GbEditorVim *vim)
                             G_CALLBACK (gb_editor_vim_delete_range_cb),
                             vim);
 
+  if (GTK_SOURCE_IS_BUFFER (buffer))
+    vim->priv->search_context =
+      gtk_source_search_context_new (GTK_SOURCE_BUFFER (buffer),
+                                     vim->priv->search_settings);
+
   gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
 
   vim->priv->connected = TRUE;
@@ -2540,6 +2533,8 @@ gb_editor_vim_disconnect (GbEditorVim *vim)
   g_signal_handler_disconnect (gtk_text_view_get_buffer (vim->priv->text_view),
                                vim->priv->delete_range_handler);
   vim->priv->delete_range_handler = 0;
+
+  g_clear_object (&vim->priv->search_context);
 
   vim->priv->mode = 0;
 
@@ -2628,15 +2623,23 @@ void
 gb_editor_vim_execute_command (GbEditorVim *vim,
                                const gchar *command)
 {
+  GbEditorVimPrivate *priv;
   gchar *copy;
 
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
   g_return_if_fail (command);
 
+  priv = vim->priv;
+
   copy = g_strstrip (g_strdup (command));
 
   if (g_str_equal (copy, "sort"))
     gb_editor_vim_sort (vim);
+  else if (g_str_equal (copy, "nohl"))
+    {
+      if (vim->priv->search_context)
+        gtk_source_search_context_set_highlight (priv->search_context, FALSE);
+    }
   else
     g_debug (" TODO: Command Execution Support: %s", command);
 
@@ -2657,6 +2660,8 @@ gb_editor_vim_finalize (GObject *object)
                                     (gpointer *)&priv->text_view);
       priv->text_view = NULL;
     }
+
+  g_clear_object (&priv->search_settings);
 
   g_string_free (priv->phrase, TRUE);
   priv->phrase = NULL;
@@ -3576,6 +3581,7 @@ gb_editor_vim_init (GbEditorVim *vim)
   vim->priv->enabled = FALSE;
   vim->priv->mode = 0;
   vim->priv->phrase = g_string_new (NULL);
+  vim->priv->search_settings = gtk_source_search_settings_new ();
 }
 
 GType
