@@ -1219,7 +1219,7 @@ gb_editor_vim_apply_motion (GbEditorVim *vim,
   if (!cmd || (cmd->type != GB_EDITOR_VIM_COMMAND_MOVEMENT))
     return;
 
-  if (cmd->flags & GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE)
+  if ((cmd->flags & GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE))
     gb_editor_vim_select_line (vim);
   else
     gb_editor_vim_select_char (vim);
