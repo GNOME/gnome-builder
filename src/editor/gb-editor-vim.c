@@ -2641,6 +2641,31 @@ gb_editor_vim_set_filetype (GbEditorVim *vim,
   gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), language);
 }
 
+static void
+gb_editor_vim_set_syntax (GbEditorVim *vim,
+                          const gchar *name)
+{
+  GtkTextBuffer *buffer;
+  gboolean enabled;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (name);
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  if (g_strcmp0 (name, "on") == 0)
+    enabled = TRUE;
+  else if (g_strcmp0 (name, "off") == 0)
+    enabled = FALSE;
+  else
+    return;
+
+  gtk_source_buffer_set_highlight_syntax (GTK_SOURCE_BUFFER (buffer), enabled);
+}
+
 void
 gb_editor_vim_execute_command (GbEditorVim *vim,
                                const gchar *command)
@@ -2664,6 +2689,8 @@ gb_editor_vim_execute_command (GbEditorVim *vim,
     }
   else if (g_str_has_prefix (copy, "set filetype="))
     gb_editor_vim_set_filetype (vim, copy + strlen ("set filetype="));
+  else if (g_str_has_prefix (copy, "syntax "))
+    gb_editor_vim_set_syntax (vim, copy + strlen ("syntax "));
   else
     g_debug (" TODO: Command Execution Support: %s", command);
 
