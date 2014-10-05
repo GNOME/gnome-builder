@@ -1145,7 +1145,7 @@ gb_editor_vim_select_line (GbEditorVim *vim)
       break;
 
   /*
-   * We actually want to select the \n befire the line.
+   * We actually want to select the \n before the line.
    */
   if (gtk_text_iter_ends_line (&end))
     gtk_text_iter_forward_char (&end);
@@ -1823,7 +1823,7 @@ gb_editor_vim_page_down (GbEditorVim *vim)
                                       rect.x, rect.y + rect.height);
 
   /*
-   * rect.y + rect.height is the next line affter the end of the buffer so
+   * rect.y + rect.height is the next line after the end of the buffer so
    * now we have to decrease one more.
    */
   line = MAX (0, gtk_text_iter_get_line (&iter) - SCROLL_OFF - 1);
