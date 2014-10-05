@@ -929,6 +929,86 @@ text_iter_swap (GtkTextIter *a,
 }
 
 static void
+gb_editor_vim_move_forward_paragraph (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter, selection;
+  gboolean has_selection;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+
+  /* Move down to the first non-blank line */
+  while (gtk_text_iter_starts_line (&iter) &&
+         gtk_text_iter_ends_line (&iter))
+    if (!gtk_text_iter_forward_line (&iter))
+      break;
+
+  /* Find the next blank line */
+  while (gtk_text_iter_forward_line (&iter))
+    if (gtk_text_iter_starts_line (&iter) &&
+        gtk_text_iter_ends_line (&iter))
+      break;
+
+  if (has_selection)
+    {
+      gb_editor_vim_select_range (vim, &iter, &selection);
+      gb_editor_vim_ensure_anchor_selected (vim);
+    }
+  else
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+}
+
+static void
+gb_editor_vim_move_backward_paragraph (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter, selection;
+  gboolean has_selection;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+
+  /* Move up to the first non-blank line */
+  while (gtk_text_iter_starts_line (&iter) &&
+         gtk_text_iter_ends_line (&iter))
+    if (!gtk_text_iter_backward_line (&iter))
+      break;
+
+  /* Find the next blank line */
+  while (gtk_text_iter_backward_line (&iter))
+    if (gtk_text_iter_starts_line (&iter) &&
+        gtk_text_iter_ends_line (&iter))
+      break;
+
+  if (has_selection)
+    {
+      if (gtk_text_iter_equal (&iter, &selection))
+        gtk_text_iter_forward_char (&selection);
+      gb_editor_vim_select_range (vim, &iter, &selection);
+      gb_editor_vim_ensure_anchor_selected (vim);
+    }
+  else
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+}
+
+static void
 gb_editor_vim_move_down (GbEditorVim *vim)
 {
   GbEditorVimPrivate *priv;
@@ -3063,6 +3143,26 @@ gb_editor_vim_cmd_backward_start (GbEditorVim *vim,
 }
 
 static void
+gb_editor_vim_cmd_backward_paragraph (GbEditorVim *vim,
+                                      guint        count,
+                                      gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_move_backward_paragraph (vim);
+}
+
+static void
+gb_editor_vim_cmd_forward_paragraph (GbEditorVim *vim,
+                                      guint        count,
+                                      gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_move_forward_paragraph (vim);
+}
+
+static void
 gb_editor_vim_cmd_match_backward (GbEditorVim *vim,
                                   guint        count,
                                   gchar        modifier)
@@ -3745,6 +3845,14 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_backward_start);
+  gb_editor_vim_class_register_command (klass, '}',
+                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
+                                        gb_editor_vim_cmd_forward_paragraph);
+  gb_editor_vim_class_register_command (klass, '{',
+                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
+                                        gb_editor_vim_cmd_backward_paragraph);
   gb_editor_vim_class_register_command (klass, '#',
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_JUMP,
