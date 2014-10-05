@@ -2620,6 +2620,27 @@ gb_editor_vim_set_text_view (GbEditorVim *vim,
   g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_TEXT_VIEW]);
 }
 
+static void
+gb_editor_vim_set_filetype (GbEditorVim *vim,
+                            const gchar *name)
+{
+  GtkSourceLanguageManager *manager;
+  GtkSourceLanguage *language;
+  GtkTextBuffer *buffer;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (name);
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  manager = gtk_source_language_manager_get_default ();
+  language = gtk_source_language_manager_get_language (manager, name);
+  gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), language);
+}
+
 void
 gb_editor_vim_execute_command (GbEditorVim *vim,
                                const gchar *command)
@@ -2641,6 +2662,8 @@ gb_editor_vim_execute_command (GbEditorVim *vim,
       if (vim->priv->search_context)
         gtk_source_search_context_set_highlight (priv->search_context, FALSE);
     }
+  else if (g_str_has_prefix (copy, "set filetype="))
+    gb_editor_vim_set_filetype (vim, copy + strlen ("set filetype="));
   else
     g_debug (" TODO: Command Execution Support: %s", command);
 
