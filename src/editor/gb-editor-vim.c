@@ -2666,6 +2666,21 @@ gb_editor_vim_set_syntax (GbEditorVim *vim,
   gtk_source_buffer_set_highlight_syntax (GTK_SOURCE_BUFFER (buffer), enabled);
 }
 
+static void
+gb_editor_vim_set_line_numbers (GbEditorVim *vim,
+                                gboolean     enable)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  if (GTK_SOURCE_IS_VIEW (vim->priv->text_view))
+    {
+      GtkSourceView *source_view;
+
+      source_view = GTK_SOURCE_VIEW (vim->priv->text_view);
+      gtk_source_view_set_show_line_numbers (source_view, enable);
+    }
+}
+
 void
 gb_editor_vim_execute_command (GbEditorVim *vim,
                                const gchar *command)
@@ -2691,6 +2706,10 @@ gb_editor_vim_execute_command (GbEditorVim *vim,
     gb_editor_vim_set_filetype (vim, copy + strlen ("set filetype="));
   else if (g_str_has_prefix (copy, "syntax "))
     gb_editor_vim_set_syntax (vim, copy + strlen ("syntax "));
+  else if (g_str_equal (copy, "set nu"))
+    gb_editor_vim_set_line_numbers (vim, TRUE);
+  else if (g_str_equal (copy, "set nonu"))
+    gb_editor_vim_set_line_numbers (vim, FALSE);
   else
     g_debug (" TODO: Command Execution Support: %s", command);
 
