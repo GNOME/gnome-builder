@@ -1785,6 +1785,74 @@ gb_source_vim_delete_selection (GbSourceVim *vim)
   gb_source_vim_ensure_scroll (vim);
 }
 
+static gboolean
+gb_source_vim_find_char_forward (GbSourceVim *vim,
+                                 gchar        c)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter, selection;
+  gboolean has_selection;
+
+  g_assert (GB_IS_SOURCE_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
+
+  if (gtk_text_iter_compare (&iter, &selection) < 0)
+    text_iter_swap (&iter, &selection);
+
+  while (gtk_text_iter_forward_char (&iter))
+    if (gtk_text_iter_get_char (&iter) == (gunichar)c)
+      break; /* found */
+    else if (gtk_text_iter_ends_line (&iter))
+      return FALSE; /* not found */
+
+  if (has_selection)
+    {
+      if (gtk_text_iter_compare (&iter, &selection) > 0)
+        gtk_text_iter_forward_char (&iter);
+      gb_source_vim_select_range (vim, &iter, &selection);
+    }
+  else
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  return TRUE;
+}
+
+static gboolean
+gb_source_vim_find_char_backward (GbSourceVim *vim,
+                                  gchar        c)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter, selection;
+  gboolean has_selection;
+
+  g_assert (GB_IS_SOURCE_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
+
+  if (gtk_text_iter_compare (&iter, &selection) < 0)
+    text_iter_swap (&iter, &selection);
+
+  while (gtk_text_iter_backward_char (&iter))
+    if (gtk_text_iter_get_char (&iter) == (gunichar)c)
+      break; /* found */
+    else if (gtk_text_iter_starts_line (&iter))
+      return FALSE; /* not found */
+
+  if (has_selection)
+    {
+      if (gtk_text_iter_compare (&iter, &selection) > 0)
+        gtk_text_iter_forward_char (&iter);
+      gb_source_vim_select_range (vim, &iter, &selection);
+    }
+  else
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  return TRUE;
+}
+
 static void
 gb_source_vim_select_line (GbSourceVim *vim)
 {
@@ -4855,6 +4923,88 @@ gb_source_vim_cmd_forward_word_end (GbSourceVim *vim,
 }
 
 static void
+gb_source_vim_cmd_find_char_forward (GbSourceVim *vim,
+                                     guint        count,
+                                     gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_SOURCE_VIM (vim));
+
+  count = MAX (1, count);
+
+  gb_source_vim_save_position (vim);
+  for (i = 0; i < count; i++)
+    if (!gb_source_vim_find_char_forward (vim, modifier))
+      {
+        gb_source_vim_restore_position (vim);
+        return;
+      }
+}
+
+static void
+gb_source_vim_cmd_find_char_backward (GbSourceVim *vim,
+                                      guint        count,
+                                      gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_SOURCE_VIM (vim));
+
+  count = MAX (1, count);
+
+  gb_source_vim_save_position (vim);
+  for (i = 0; i < count; i++)
+    if (!gb_source_vim_find_char_backward (vim, modifier))
+      {
+        gb_source_vim_restore_position (vim);
+        return;
+      }
+}
+
+static void
+gb_source_vim_cmd_find_char_exclusive_forward (GbSourceVim *vim,
+                                               guint        count,
+                                               gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_SOURCE_VIM (vim));
+
+  count = MAX (1, count);
+
+  gb_source_vim_save_position (vim);
+  for (i = 0; i < count; i++)
+    if (!gb_source_vim_find_char_forward (vim, modifier))
+      {
+        gb_source_vim_restore_position (vim);
+        return;
+      }
+  gb_source_vim_move_backward (vim);
+}
+
+static void
+gb_source_vim_cmd_find_char_exclusive_backward (GbSourceVim *vim,
+                                                guint        count,
+                                                gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_SOURCE_VIM (vim));
+
+  count = MAX (1, count);
+
+  gb_source_vim_save_position (vim);
+  for (i = 0; i < count; i++)
+    if (!gb_source_vim_find_char_backward (vim, modifier))
+      {
+        gb_source_vim_restore_position (vim);
+        return;
+      }
+    gb_source_vim_move_forward (vim);
+}
+
+static void
 gb_source_vim_cmd_g (GbSourceVim *vim,
                      guint        count,
                      gchar        modifier)
@@ -5754,6 +5904,15 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
                                         GB_SOURCE_VIM_COMMAND_FLAG_NONE,
                                         GB_SOURCE_VIM_COMMAND_MOVEMENT,
                                         gb_source_vim_cmd_forward_word_end);
+  gb_source_vim_class_register_command (klass, 'F',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_REQUIRES_MODIFIER |
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_find_char_backward);
+  gb_source_vim_class_register_command (klass, 'f',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_REQUIRES_MODIFIER,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_find_char_forward);
   gb_source_vim_class_register_command (klass, 'G',
                                         GB_SOURCE_VIM_COMMAND_FLAG_MOTION_LINEWISE,
                                         GB_SOURCE_VIM_COMMAND_MOVEMENT,
@@ -5830,6 +5989,15 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
                                         GB_SOURCE_VIM_COMMAND_FLAG_NONE,
                                         GB_SOURCE_VIM_COMMAND_CHANGE,
                                         gb_source_vim_cmd_substitute);
+  gb_source_vim_class_register_command (klass, 'T',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_REQUIRES_MODIFIER |
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_find_char_exclusive_backward);
+  gb_source_vim_class_register_command (klass, 't',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_REQUIRES_MODIFIER,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_find_char_exclusive_forward);
   gb_source_vim_class_register_command (klass, 'u',
                                         GB_SOURCE_VIM_COMMAND_FLAG_NONE,
                                         GB_SOURCE_VIM_COMMAND_CHANGE,
