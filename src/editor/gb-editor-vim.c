@@ -1235,9 +1235,41 @@ gb_editor_vim_apply_motion (GbEditorVim *vim,
 
       gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
       if (gtk_text_iter_compare (&iter, &selection) < 0)
-        gtk_text_iter_backward_char (&selection);
+        text_iter_swap (&iter, &selection);
+
+      /* From the docs:
+       * "If the motion is exclusive and the end of the motion is in column 1,
+       *  the end of the motion is moved to the end of the previous line and
+       *  the motion becomes inclusive."
+       */
+      if (gtk_text_iter_get_line_offset (&iter) == 0)
+        {
+          GtkTextIter tmp;
+          guint line;
+
+          gtk_text_iter_backward_char (&iter);
+
+          /* More docs:
+           * "If [as above] and the start of the motion was at or before
+           *  the first non-blank in the line, the motion becomes linewise."
+           */
+           tmp = selection;
+           line = gtk_text_iter_get_line (&selection);
+
+           gtk_text_iter_backward_word_start (&tmp);
+           if (gtk_text_iter_is_start (&tmp) ||
+               gtk_text_iter_get_line (&tmp) < line)
+             {
+               while (!gtk_text_iter_starts_line (&selection))
+                 gtk_text_iter_backward_char (&selection);
+               while (!gtk_text_iter_starts_line (&iter))
+                 gtk_text_iter_forward_char (&iter);
+             }
+        }
       else
-        gtk_text_iter_backward_char (&iter);
+        {
+          gtk_text_iter_backward_char (&iter);
+        }
       gb_editor_vim_select_range (vim, &iter, &selection);
     }
 }
