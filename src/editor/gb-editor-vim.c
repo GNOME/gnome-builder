@@ -3426,6 +3426,9 @@ gb_editor_vim_cmd_begin_search (GbEditorVim *vim,
 
   g_assert (GB_IS_EDITOR_VIM (vim));
 
+  if (vim->priv->search_context)
+    gtk_source_search_context_set_highlight (vim->priv->search_context, FALSE);
+
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
   if (gtk_text_buffer_get_has_selection (buffer))
