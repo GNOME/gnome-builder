@@ -3704,9 +3704,14 @@ gb_editor_vim_cmd_backward_paragraph (GbEditorVim *vim,
                                       guint        count,
                                       gchar        modifier)
 {
+  guint i;
+
   g_assert (GB_IS_EDITOR_VIM (vim));
 
-  gb_editor_vim_move_backward_paragraph (vim);
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_move_backward_paragraph (vim);
 }
 
 static void
@@ -3714,9 +3719,14 @@ gb_editor_vim_cmd_forward_paragraph (GbEditorVim *vim,
                                       guint        count,
                                       gchar        modifier)
 {
+  guint i;
+
   g_assert (GB_IS_EDITOR_VIM (vim));
 
-  gb_editor_vim_move_forward_paragraph (vim);
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_move_forward_paragraph (vim);
 }
 
 static void
