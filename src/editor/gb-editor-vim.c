@@ -2069,10 +2069,11 @@ gb_editor_vim_select_current_word (GbEditorVim *vim,
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, begin, insert);
 
-  if (gtk_text_iter_forward_word_end (begin))
+  if (text_iter_forward_vim_word_end (begin))
     {
       gtk_text_iter_assign (end, begin);
-      if (gtk_text_iter_backward_word_start (begin))
+      gtk_text_iter_forward_char (end);
+      if (text_iter_backward_vim_word (begin))
         return TRUE;
     }
 
