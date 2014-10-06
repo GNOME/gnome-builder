@@ -2135,8 +2135,12 @@ gb_editor_vim_reverse_search (GbEditorVim *vim)
       else
         gtk_text_iter_assign (&start_iter, &end);
 
-      gtk_source_search_settings_set_search_text (vim->priv->search_settings,
-                                                  text);
+      g_object_set (vim->priv->search_settings,
+                    "at-word-boundaries", TRUE,
+                    "case-sensitive", TRUE,
+                    "search-text", text,
+                    "wrap-around", TRUE,
+                    NULL);
 
       gtk_source_search_context_set_highlight (vim->priv->search_context,
                                                TRUE);
@@ -2174,8 +2178,12 @@ gb_editor_vim_search (GbEditorVim *vim)
       else
         gtk_text_iter_assign (&start_iter, &end);
 
-      gtk_source_search_settings_set_search_text (vim->priv->search_settings,
-                                                  text);
+      g_object_set (vim->priv->search_settings,
+                    "at-word-boundaries", TRUE,
+                    "case-sensitive", TRUE,
+                    "search-text", text,
+                    "wrap-around", TRUE,
+                    NULL);
 
       gtk_source_search_context_set_highlight (vim->priv->search_context,
                                                TRUE);
