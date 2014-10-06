@@ -1369,26 +1369,26 @@ gb_editor_vim_select_char (GbEditorVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
-  GtkTextIter begin;
-  GtkTextIter end;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  GtkTextIter *target;
+  gboolean has_selection;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  insert = gtk_text_buffer_get_insert (buffer);
+  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  target = has_selection ? &iter : &selection;
 
-  gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
-  gtk_text_iter_assign (&end, &begin);
+  if (!gtk_text_iter_forward_char (target))
+    gtk_text_buffer_get_end_iter (buffer, target);
 
-  if (!gtk_text_iter_forward_char (&end))
-    gtk_text_buffer_get_end_iter (buffer, &end);
-
-  gb_editor_vim_select_range (vim, &begin, &end);
-
-  gb_editor_vim_set_selection_anchor (vim, &begin, &end);
+  gb_editor_vim_select_range (vim, &iter, &selection);
+  gb_editor_vim_set_selection_anchor (vim, &iter, &selection);
 
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
+  insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
