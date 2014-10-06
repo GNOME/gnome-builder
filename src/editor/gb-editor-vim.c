@@ -652,6 +652,8 @@ gb_editor_vim_move_line_start (GbEditorVim *vim)
 
   if (has_selection)
     {
+      if (gtk_text_iter_compare (&iter, &selection) > 0)
+        gtk_text_iter_forward_char (&iter);
       gb_editor_vim_select_range (vim, &iter, &selection);
       gb_editor_vim_ensure_anchor_selected (vim);
     }
