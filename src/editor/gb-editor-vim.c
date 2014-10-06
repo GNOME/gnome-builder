@@ -28,7 +28,6 @@
 #include "gb-editor-vim.h"
 
 #ifndef GB_EDITOR_VIM_EXTERNAL
-# include "gb-log.h"
 # include "gb-source-view.h"
 #endif
 
