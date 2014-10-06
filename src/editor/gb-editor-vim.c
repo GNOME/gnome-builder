@@ -1379,14 +1379,14 @@ gb_editor_vim_undo (GbEditorVim *vim)
 
   /*
    * GtkSourceView might preserve the selection. So let's go ahead and
-   * clear it manually to the insert mark position.
+   * clear it manually to the selection-bound mark position.
    */
-  insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-  gtk_text_buffer_select_range (buffer, &iter, &iter);
+  if (gb_editor_vim_get_selection_bounds (vim, NULL, &iter))
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
+  insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
