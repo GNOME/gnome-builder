@@ -157,6 +157,8 @@ static GHashTable *gCommands;
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
+static void text_iter_swap (GtkTextIter *a,
+                            GtkTextIter *b);
 static void gb_editor_vim_cmd_select_line (GbEditorVim *vim,
                                            guint        count,
                                            gchar        modifier);
@@ -582,6 +584,8 @@ gb_editor_vim_select_range (GbEditorVim *vim,
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextMark *selection;
+  gint insert_off;
+  gint selection_off;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
   g_assert (insert_iter);
@@ -590,6 +594,16 @@ gb_editor_vim_select_range (GbEditorVim *vim,
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   insert = gtk_text_buffer_get_insert (buffer);
   selection = gtk_text_buffer_get_selection_bound (buffer);
+
+  /*
+   * If the caller is requesting that we select a single character, we will
+   * keep the iter before that character. This more closely matches the visual
+   * mode in VIM.
+   */
+  insert_off = gtk_text_iter_get_offset (insert_iter);
+  selection_off = gtk_text_iter_get_offset (selection_iter);
+  if ((insert_off - selection_off) == 1)
+    text_iter_swap (insert_iter, selection_iter);
 
   gtk_text_buffer_move_mark (buffer, insert, insert_iter);
   gtk_text_buffer_move_mark (buffer, selection, selection_iter);
