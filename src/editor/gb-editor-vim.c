@@ -151,6 +151,14 @@ enum
   LAST_SIGNAL
 };
 
+enum
+{
+  CLASS_0,
+  CLASS_SPACE,
+  CLASS_SPECIAL,
+  CLASS_WORD,
+};
+
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorVim, gb_editor_vim, G_TYPE_OBJECT)
 
 static GHashTable *gCommands;
@@ -183,6 +191,33 @@ gb_editor_vim_new (GtkTextView *text_view)
   return g_object_new (GB_TYPE_EDITOR_VIM,
                        "text-view", text_view,
                        NULL);
+}
+
+static int
+gb_editor_vim_classify (gunichar ch)
+{
+  switch (ch)
+    {
+    case ' ':
+    case '\t':
+    case '\n':
+      return CLASS_SPACE;
+
+    case '"': case '\'':
+    case '(': case ')':
+    case '{': case '}':
+    case '[': case ']':
+    case '<': case '>':
+    case '-': case '+': case '*': case '/':
+    case '!': case '@': case '#': case '$': case '%':
+    case '^': case '&': case ':': case ';': case '?':
+    case '|': case '=': case '\\': case '.': case ',':
+      return CLASS_SPECIAL;
+
+    case '_':
+    default:
+      return CLASS_WORD;
+    }
 }
 
 static guint
@@ -823,41 +858,6 @@ gb_editor_vim_move_forward (GbEditorVim *vim)
         gtk_text_buffer_select_range (buffer, &iter, &iter);
 
       vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
-    }
-}
-
-enum
-{
-  CLASS_0,
-  CLASS_SPACE,
-  CLASS_SPECIAL,
-  CLASS_WORD,
-};
-
-static int
-gb_editor_vim_classify (gunichar ch)
-{
-  switch (ch)
-    {
-    case ' ':
-    case '\t':
-    case '\n':
-      return CLASS_SPACE;
-
-    case '"': case '\'':
-    case '(': case ')':
-    case '{': case '}':
-    case '[': case ']':
-    case '<': case '>':
-    case '-': case '+': case '*': case '/':
-    case '!': case '@': case '#': case '$': case '%':
-    case '^': case '&': case ':': case ';': case '?':
-    case '|': case '=': case '\\': case '.': case ',':
-      return CLASS_SPECIAL;
-
-    case '_':
-    default:
-      return CLASS_WORD;
     }
 }
 
