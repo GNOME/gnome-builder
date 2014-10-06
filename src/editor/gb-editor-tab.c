@@ -700,7 +700,13 @@ select_and_animate (GbEditorTab       *tab,
 
   gtk_text_iter_assign (&copy, begin);
 
+#if 0
+  /* select the entire word */
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->document), begin, end);
+#else
+  /* move the cursor to the first character of the word */
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->document), begin, begin);
+#endif
   gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view), &copy, 0.0,
                                 TRUE, 0.5, 0.5);
 
