@@ -826,33 +826,105 @@ gb_editor_vim_move_forward (GbEditorVim *vim)
     }
 }
 
+enum
+{
+  CLASS_0,
+  CLASS_SPACE,
+  CLASS_SPECIAL,
+  CLASS_WORD,
+};
+
+static int
+gb_editor_vim_classify (gunichar ch)
+{
+  switch (ch)
+    {
+    case ' ':
+    case '\t':
+    case '\n':
+      return CLASS_SPACE;
+
+    case '"': case '\'':
+    case '(': case ')':
+    case '{': case '}':
+    case '[': case ']':
+    case '<': case '>':
+    case '-': case '+': case '*': case '/':
+    case '!': case '@': case '#': case '$': case '%':
+    case '^': case '&': case ':': case ';': case '?':
+    case '|': case '=': case '\\': case '.': case ',':
+      return CLASS_SPECIAL;
+
+    case '_':
+    default:
+      return CLASS_WORD;
+    }
+}
+
 static void
 gb_editor_vim_move_forward_word (GbEditorVim *vim)
 {
   GtkTextBuffer *buffer;
+  GtkTextMark *insert;
   GtkTextIter iter;
   GtkTextIter selection;
-  GtkTextMark *insert;
+  gunichar ch;
   gboolean has_selection;
+  gboolean found = FALSE;
+  gint begin_class;
+  gint cur_class;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   /*
-   * TODO: Make the word boundaries more like VIM.
+   * TODO: VIM will jump to an empty line before going to the next word.
    */
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
 
-  if (gtk_text_iter_inside_word (&iter))
+  ch = gtk_text_iter_get_char (&iter);
+  begin_class = gb_editor_vim_classify (ch);
+
+  /* Move to the first non-whitespace character if necessary. */
+  if (begin_class == CLASS_SPACE)
     {
-      if (!gtk_text_iter_forward_word_end (&iter))
-        gtk_text_buffer_get_end_iter (buffer, &iter);
+      for (;;)
+        {
+          if (!gtk_text_iter_forward_char (&iter))
+            goto not_found;
+
+          ch = gtk_text_iter_get_char (&iter);
+          cur_class = gb_editor_vim_classify (ch);
+          if (cur_class != CLASS_SPACE)
+            goto finish;
+        }
     }
 
-  if (gtk_text_iter_forward_word_end (&iter))
-    gtk_text_iter_backward_word_start (&iter);
+  /* move to first character not at same class level. */
+  while (gtk_text_iter_forward_char (&iter))
+    {
+      ch = gtk_text_iter_get_char (&iter);
+      cur_class = gb_editor_vim_classify (ch);
 
+      if (cur_class == CLASS_SPACE)
+        {
+          begin_class = CLASS_0;
+          continue;
+        }
+
+      if (cur_class != begin_class)
+        {
+          found = TRUE;
+          break;
+        }
+    }
+
+not_found:
+  if (!found)
+    gtk_text_buffer_get_end_iter (buffer, &iter);
+
+finish:
   if (has_selection)
     {
       if (gtk_text_iter_equal (&iter, &selection))
