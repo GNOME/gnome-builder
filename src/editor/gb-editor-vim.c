@@ -128,6 +128,13 @@ typedef struct
   gchar modifier;
 } GbEditorVimPhrase;
 
+typedef struct
+{
+  gunichar jump_to;
+  gunichar jump_from;
+  guint    depth;
+} MatchingBracketState;
+
 enum
 {
   PROP_0,
@@ -881,6 +888,98 @@ gb_editor_vim_move_forward_word_end (GbEditorVim *vim)
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 
   vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+}
+
+static gboolean
+bracket_predicate (gunichar ch,
+                   gpointer user_data)
+{
+  MatchingBracketState *state = user_data;
+
+  if (ch == state->jump_from)
+    state->depth++;
+  else if (ch == state->jump_to)
+    state->depth--;
+
+  return (state->depth == 0);
+}
+
+static void
+gb_editor_vim_move_matching_bracket (GbEditorVim *vim)
+{
+  MatchingBracketState state;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  gboolean has_selection;
+  gboolean is_forward;
+  gboolean ret;
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+
+  state.depth = 1;
+  state.jump_from = gtk_text_iter_get_char (&iter);
+
+  switch (state.jump_from)
+    {
+    case '{':
+      state.jump_to = '}';
+      is_forward = TRUE;
+      break;
+
+    case '[':
+      state.jump_to = ']';
+      is_forward = TRUE;
+      break;
+
+    case '(':
+      state.jump_to = ')';
+      is_forward = TRUE;
+      break;
+
+    case '}':
+      state.jump_to = '{';
+      is_forward = FALSE;
+      break;
+
+    case ']':
+      state.jump_to = '[';
+      is_forward = FALSE;
+      break;
+
+    case ')':
+      state.jump_to = '(';
+      is_forward = FALSE;
+      break;
+
+    default:
+      return;
+    }
+
+  if (is_forward)
+    ret = gtk_text_iter_forward_find_char (&iter, bracket_predicate, &state,
+                                           NULL);
+  else
+    ret = gtk_text_iter_backward_find_char (&iter, bracket_predicate, &state,
+                                            NULL);
+
+  if (ret)
+    {
+      if (has_selection)
+        {
+          gtk_text_buffer_select_range (buffer, &iter, &selection);
+          gb_editor_vim_ensure_anchor_selected (vim);
+        }
+      else
+        gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+      insert = gtk_text_buffer_get_insert (buffer);
+      gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+    }
 }
 
 static gboolean
@@ -3318,7 +3417,6 @@ gb_editor_vim_cmd_change_to_end (GbEditorVim *vim,
   gb_editor_vim_move_forward (vim);
 }
 
-
 static void
 gb_editor_vim_cmd_delete (GbEditorVim *vim,
                           guint        count,
@@ -3719,6 +3817,34 @@ gb_editor_vim_cmd_center (GbEditorVim *vim,
 }
 
 static void
+gb_editor_vim_cmd_matching_bracket (GbEditorVim *vim,
+                                    guint        count,
+                                    gchar        modifier)
+{
+  GtkTextIter iter;
+  GtkTextIter selection;
+
+  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+
+  switch (gtk_text_iter_get_char (&iter))
+    {
+    case '{':
+    case '}':
+    case '[':
+    case ']':
+    case '(':
+    case ')':
+      gb_editor_vim_move_matching_bracket (vim);
+      break;
+
+    default:
+      break;
+    }
+}
+
+static void
 gb_editor_vim_class_register_command (GbEditorVimClass       *klass,
                                       gchar                   key,
                                       GbEditorVimCommandFlags flags,
@@ -3891,6 +4017,10 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_unindent);
+  gb_editor_vim_class_register_command (klass, '%',
+                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
+                                        GB_EDITOR_VIM_COMMAND_JUMP,
+                                        gb_editor_vim_cmd_matching_bracket);
   gb_editor_vim_class_register_command (klass, 'A',
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
