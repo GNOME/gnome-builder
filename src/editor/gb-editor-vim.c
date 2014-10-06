@@ -2703,6 +2703,154 @@ gb_editor_vim_colorscheme (GbEditorVim *vim,
     gtk_source_buffer_set_style_scheme (GTK_SOURCE_BUFFER (buffer), scheme);
 }
 
+static void
+gb_editor_vim_do_search_and_replace (GbEditorVim *vim,
+                                     GtkTextIter *begin,
+                                     GtkTextIter *end,
+                                     const gchar *search_text,
+                                     const gchar *replace_text,
+                                     gboolean     is_global)
+{
+  GError *error = NULL;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (search_text);
+  g_assert (replace_text);
+  g_assert ((!begin && !end) || (begin && end));
+
+  /*
+   * TODO: This is pretty incomplete. We don't actually respect is_global, or
+   *       if we should be limiting to the current selection buffer.
+   *       But having it in any state is better than none.
+   */
+
+  if (!vim->priv->search_context)
+    return;
+
+  gtk_source_search_settings_set_search_text (vim->priv->search_settings,
+                                              search_text);
+
+  if (begin)
+    {
+      /* todo: limit to selection range */
+      g_warning ("TODO: Selection based search/replace");
+    }
+  else
+    {
+      if (!gtk_source_search_context_replace_all (vim->priv->search_context,
+                                                  replace_text, -1, &error))
+        {
+          g_warning ("%s", error->message);
+          g_clear_error (&error);
+        }
+    }
+}
+
+static void
+gb_editor_vim_search_and_replace (GbEditorVim *vim,
+                                  const gchar *command)
+{
+  GtkTextBuffer *buffer;
+  const gchar *search_begin = NULL;
+  const gchar *search_end = NULL;
+  const gchar *replace_begin = NULL;
+  const gchar *replace_end = NULL;
+  gchar *search_text = NULL;
+  gchar *replace_text = NULL;
+  gunichar separator;
+  gboolean is_global = FALSE;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (command);
+
+  separator = g_utf8_get_char (command);
+  if (!separator)
+    return;
+
+  search_begin = command = g_utf8_next_char (command);
+
+  for (; *command; command = g_utf8_next_char (command))
+    {
+      if (*command == '\\')
+        {
+          command = g_utf8_next_char (command);
+          if (!*command)
+            return;
+          continue;
+        }
+
+      if (g_utf8_get_char (command) == separator)
+        {
+          search_end = command;
+          break;
+        }
+    }
+
+  if (!search_end)
+    return;
+
+  replace_begin = command = g_utf8_next_char (command);
+
+  for (; *command; command = g_utf8_next_char (command))
+    {
+      if (*command == '\\')
+        {
+          command = g_utf8_next_char (command);
+          if (!*command)
+            return;
+          continue;
+        }
+
+      if (g_utf8_get_char (command) == separator)
+        {
+          replace_end = command;
+          break;
+        }
+    }
+
+  if (!replace_end)
+    return;
+
+  command = g_utf8_next_char (command);
+
+  if (*command)
+    {
+      for (; *command; command++)
+        {
+          switch (*command)
+            {
+            case 'g':
+              is_global = TRUE;
+                break;
+            /* what other options are supported? */
+            default:
+              break;
+            }
+        }
+    }
+
+  search_text = g_strndup (search_begin, search_end - search_begin);
+  replace_text = g_strndup (replace_begin, replace_end - replace_begin);
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
+  if (gtk_text_buffer_get_has_selection (buffer))
+    {
+      GtkTextIter begin;
+      GtkTextIter end;
+
+      gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+      gb_editor_vim_do_search_and_replace (vim, &begin, &end, search_text,
+                                           replace_text, is_global);
+    }
+  else
+    gb_editor_vim_do_search_and_replace (vim, NULL, NULL, search_text,
+                                         replace_text, is_global);
+
+  g_free (search_text);
+  g_free (replace_text);
+}
+
 void
 gb_editor_vim_execute_command (GbEditorVim *vim,
                                const gchar *command)
@@ -2734,6 +2882,8 @@ gb_editor_vim_execute_command (GbEditorVim *vim,
     gb_editor_vim_set_line_numbers (vim, FALSE);
   else if (g_str_has_prefix (copy, "colorscheme "))
     gb_editor_vim_colorscheme (vim, copy + strlen ("colorscheme "));
+  else if (g_str_has_prefix (copy, "%s"))
+    gb_editor_vim_search_and_replace (vim, copy + strlen ("%s"));
   else
     g_debug (" TODO: Command Execution Support: %s", command);
 
