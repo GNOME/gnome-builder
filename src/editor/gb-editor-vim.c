@@ -791,6 +791,77 @@ gb_editor_vim_move_backward (GbEditorVim *vim)
     }
 }
 
+static gboolean
+text_iter_backward_vim_word (GtkTextIter *iter)
+{
+  gunichar ch;
+  gint begin_class;
+  gint cur_class;
+
+  g_assert (iter);
+
+  if (!gtk_text_iter_backward_char (iter))
+    return FALSE;
+
+  /*
+   * If we are on space, walk until we get to non-whitespace. Then work our way
+   * back to the beginning of the word.
+   */
+  ch = gtk_text_iter_get_char (iter);
+  if (gb_editor_vim_classify (ch) == CLASS_SPACE)
+    {
+      for (;;)
+        {
+          if (!gtk_text_iter_backward_char (iter))
+            return FALSE;
+
+          ch = gtk_text_iter_get_char (iter);
+          if (gb_editor_vim_classify (ch) != CLASS_SPACE)
+            break;
+        }
+
+      ch = gtk_text_iter_get_char (iter);
+      begin_class = gb_editor_vim_classify (ch);
+
+      for (;;)
+        {
+          if (!gtk_text_iter_backward_char (iter))
+            return FALSE;
+
+          ch = gtk_text_iter_get_char (iter);
+          cur_class = gb_editor_vim_classify (ch);
+
+          if (cur_class != begin_class)
+            {
+              gtk_text_iter_forward_char (iter);
+              return TRUE;
+            }
+        }
+
+      return FALSE;
+    }
+
+  ch = gtk_text_iter_get_char (iter);
+  begin_class = gb_editor_vim_classify (ch);
+
+  for (;;)
+    {
+      if (!gtk_text_iter_backward_char (iter))
+        return FALSE;
+
+      ch = gtk_text_iter_get_char (iter);
+      cur_class = gb_editor_vim_classify (ch);
+
+      if (cur_class != begin_class)
+        {
+          gtk_text_iter_forward_char (iter);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static void
 gb_editor_vim_move_backward_word (GbEditorVim *vim)
 {
@@ -805,7 +876,7 @@ gb_editor_vim_move_backward_word (GbEditorVim *vim)
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
 
-  if (!gtk_text_iter_backward_word_start (&iter))
+  if (!text_iter_backward_vim_word (&iter))
     gtk_text_buffer_get_start_iter (buffer, &iter);
 
   if (has_selection)
