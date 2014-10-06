@@ -987,7 +987,7 @@ gb_editor_vim_move_matching_bracket (GbEditorVim *vim)
     {
       if (has_selection)
         {
-          gtk_text_buffer_select_range (buffer, &iter, &selection);
+          gb_editor_vim_select_range (vim, &iter, &selection);
           gb_editor_vim_ensure_anchor_selected (vim);
         }
       else
