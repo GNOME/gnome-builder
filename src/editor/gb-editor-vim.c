@@ -3857,9 +3857,9 @@ gb_editor_vim_cmd_yank (GbEditorVim *vim,
   if (!gtk_text_buffer_get_has_selection (buffer))
     {
       if (modifier == 'y')
-          gb_editor_vim_cmd_select_line (vim, count, '\0');
+        gb_editor_vim_cmd_select_line (vim, count, '\0');
       else
-          gb_editor_vim_apply_motion (vim, modifier, count);
+        gb_editor_vim_apply_motion (vim, modifier, count);
     }
 
   gb_editor_vim_yank (vim);
