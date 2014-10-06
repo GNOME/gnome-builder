@@ -2263,7 +2263,7 @@ gb_editor_vim_move_to_iter (GbEditorVim *vim,
     gtk_text_buffer_select_range (buffer, iter, iter);
 
   gtk_text_view_scroll_to_iter (vim->priv->text_view, iter, 0.0,
-                                TRUE, 0.0, yalign);
+                                TRUE, 0.5, yalign);
 }
 
 static void
@@ -4007,17 +4007,17 @@ gb_editor_vim_cmd_center (GbEditorVim *vim,
     {
     case 'b':
       gtk_text_view_scroll_to_iter (vim->priv->text_view, &iter, 0.0, TRUE,
-                                    0.0, 1.0);
+                                    0.5, 1.0);
       break;
 
     case 't':
       gtk_text_view_scroll_to_iter (vim->priv->text_view, &iter, 0.0, TRUE,
-                                    0.0, 0.0);
+                                    0.5, 0.0);
       break;
 
     case 'z':
       gtk_text_view_scroll_to_iter (vim->priv->text_view, &iter, 0.0, TRUE,
-                                    0.0, 0.5);
+                                    0.5, 0.5);
       break;
 
     default:
