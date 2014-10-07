@@ -1893,6 +1893,7 @@ gb_editor_vim_paste (GbEditorVim *vim)
    */
   if (text && g_str_has_suffix (text, "\n"))
     {
+      const gchar *tmp;
       gchar *trimmed;
 
       /*
@@ -1918,9 +1919,22 @@ gb_editor_vim_paste (GbEditorVim *vim)
       g_free (trimmed);
 
       /*
-       * VIM leaves us on position 0 when pasting a whole line.
+       * VIM leaves us on the first non-whitespace character.
        */
       offset = 0;
+      for (tmp = text; *tmp; tmp = g_utf8_next_char (tmp))
+        {
+          gunichar ch;
+
+          ch = g_utf8_get_char (tmp);
+          if (g_unichar_isspace (ch))
+            {
+              offset++;
+              continue;
+            }
+          break;
+        }
+
       line++;
     }
   else
