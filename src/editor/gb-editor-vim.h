@@ -79,7 +79,7 @@ gboolean         gb_editor_vim_get_enabled     (GbEditorVim     *vim);
 void             gb_editor_vim_set_enabled     (GbEditorVim     *vim,
                                                 gboolean         enabled);
 GtkWidget       *gb_editor_vim_get_text_view   (GbEditorVim     *vim);
-void             gb_editor_vim_execute_command (GbEditorVim     *vim,
+gboolean         gb_editor_vim_execute_command (GbEditorVim     *vim,
                                                 const gchar     *command);
 
 G_END_DECLS

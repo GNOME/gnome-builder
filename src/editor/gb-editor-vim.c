@@ -3448,11 +3448,12 @@ gb_editor_vim_search_and_replace (GbEditorVim *vim,
   g_free (replace_text);
 }
 
-void
+gboolean
 gb_editor_vim_execute_command (GbEditorVim *vim,
                                const gchar *command)
 {
   GbEditorVimPrivate *priv;
+  gboolean ret = TRUE;
   gchar *copy;
 
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
@@ -3482,11 +3483,17 @@ gb_editor_vim_execute_command (GbEditorVim *vim,
   else if (g_str_has_prefix (copy, "%s"))
     gb_editor_vim_search_and_replace (vim, copy + strlen ("%s"));
   else
-    g_debug (" TODO: Command Execution Support: %s", command);
+    ret = FALSE;
 
-  gb_editor_vim_clear_selection (vim);
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+  if (ret)
+    {
+      gb_editor_vim_clear_selection (vim);
+      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+    }
+
   g_free (copy);
+
+  return ret;
 }
 
 static void
