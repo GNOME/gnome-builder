@@ -3326,6 +3326,8 @@ gb_editor_vim_do_search_and_replace (GbEditorVim *vim,
 
   gtk_source_search_settings_set_search_text (vim->priv->search_settings,
                                               search_text);
+  gtk_source_search_settings_set_case_sensitive (vim->priv->search_settings,
+                                                 TRUE);
 
   if (begin)
     {
