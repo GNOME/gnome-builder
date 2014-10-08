@@ -376,11 +376,11 @@ gb_application_register_actions (GbApplication *self)
 static void
 gb_application_startup (GApplication *app)
 {
-  GbApplication *self;
+  GbApplication *self = (GbApplication *)app;
 
   ENTRY;
 
-  self = GB_APPLICATION (app);
+  g_assert (GB_IS_APPLICATION (self));
 
   g_resources_register (gb_get_resource ());
   g_application_set_resource_base_path (app, "/org/gnome/builder");
@@ -391,6 +391,30 @@ gb_application_startup (GApplication *app)
   gb_application_register_keybindings (self);
   gb_application_register_theme_overrides (self);
   gb_application_load_file_marks (self);
+
+  EXIT;
+}
+
+static void
+gb_application_shutdown (GApplication *app)
+{
+  GbApplication *self = (GbApplication *)app;
+  GbEditorFileMarks *marks;
+  GError *error = NULL;
+
+  ENTRY;
+
+  g_assert (GB_IS_APPLICATION (self));
+
+  marks = gb_editor_file_marks_get_default ();
+
+  if (!gb_editor_file_marks_save (marks, NULL, &error))
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+
+  G_APPLICATION_CLASS (gb_application_parent_class)->shutdown (app);
 
   EXIT;
 }
@@ -418,6 +442,7 @@ gb_application_class_init (GbApplicationClass *klass)
 
   app_class->activate = gb_application_activate;
   app_class->startup = gb_application_startup;
+  app_class->shutdown = gb_application_shutdown;
   app_class->open = gb_application_open;
 
   EXIT;
