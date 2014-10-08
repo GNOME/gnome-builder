@@ -55,6 +55,9 @@ GbEditorFileMark  *gb_editor_file_marks_get_for_file (GbEditorFileMarks    *mark
                                                       GFile                *file);
 gboolean           gb_editor_file_marks_load         (GbEditorFileMarks    *marks,
                                                       GError              **error);
+gboolean           gb_editor_file_marks_save         (GbEditorFileMarks    *marks,
+                                                      GCancellable         *cancellable,
+                                                      GError              **error);
 void               gb_editor_file_marks_save_async   (GbEditorFileMarks    *marks,
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,

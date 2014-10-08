@@ -211,6 +211,36 @@ gb_editor_file_marks_save_finish (GbEditorFileMarks  *marks,
 }
 
 gboolean
+gb_editor_file_marks_save (GbEditorFileMarks  *marks,
+                           GCancellable       *cancellable,
+                           GError            **error)
+{
+  GBytes *bytes;
+  GFile *file;
+  gboolean ret;
+
+  g_return_val_if_fail (GB_IS_EDITOR_FILE_MARKS (marks), FALSE);
+
+  bytes = gb_editor_file_marks_serialize (marks);
+  file = gb_editor_file_marks_get_file (marks);
+
+  ret = g_file_replace_contents (file,
+                                 g_bytes_get_data (bytes, NULL),
+                                 g_bytes_get_size (bytes),
+                                 NULL,
+                                 FALSE,
+                                 G_FILE_CREATE_REPLACE_DESTINATION,
+                                 NULL,
+                                 cancellable,
+                                 error);
+
+  g_bytes_unref (bytes);
+  g_clear_object (&file);
+
+  return ret;
+}
+
+gboolean
 gb_editor_file_marks_load (GbEditorFileMarks  *marks,
                            GError            **error)
 {
