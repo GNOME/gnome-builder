@@ -20,9 +20,12 @@
 
 #include <glib/gi18n.h>
 
-#include "gb-editor-workspace.h"
+#include "gb-editor-file-mark.h"
+#include "gb-editor-file-marks.h"
 #include "gb-editor-tab.h"
 #include "gb-editor-tab-private.h"
+#include "gb-editor-workspace.h"
+#include "gb-gtk.h"
 #include "gb-log.h"
 #include "gb-rgba.h"
 #include "gb-source-change-gutter-renderer.h"
@@ -1330,6 +1333,34 @@ gb_editor_tab_constructed (GObject *object)
   gb_editor_tab_cursor_moved (tab, priv->document);
 
   EXIT;
+}
+
+void
+gb_editor_tab_load_file_mark (GbEditorTab *tab)
+{
+  GbEditorFileMarks *marks;
+  GbEditorFileMark *mark;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GFile *file;
+  guint line;
+  guint column;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  buffer = GTK_TEXT_BUFFER (tab->priv->document);
+
+  file = gtk_source_file_get_location (tab->priv->file);
+  marks = gb_editor_file_marks_get_default ();
+  mark = gb_editor_file_marks_get_for_file (marks, file);
+
+  line = gb_editor_file_mark_get_line (mark);
+  column = gb_editor_file_mark_get_column (mark);
+
+  gb_gtk_text_buffer_get_iter_at_line_and_offset (buffer, &iter, line, column);
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (tab->priv->source_view),
+                                   &iter, 0.0, TRUE, 0.5, 0.5);
 }
 
 static void
