@@ -813,6 +813,7 @@ on_search_entry_activate (GdTaggedEntry *search_entry,
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
   gb_editor_tab_move_next_match (tab);
+  gtk_widget_grab_focus (GTK_WIDGET (tab->priv->source_view));
 }
 
 static gboolean
