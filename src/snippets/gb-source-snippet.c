@@ -60,11 +60,11 @@ gb_source_snippet_new (const gchar *trigger)
 {
   GbSourceSnippet *ret;
 
-  ENTRY;
   ret = g_object_new (GB_TYPE_SOURCE_SNIPPET,
                       "trigger", trigger,
                       NULL);
-  RETURN (ret);
+
+  return ret;
 }
 
 GbSourceSnippet *
@@ -135,14 +135,10 @@ void
 gb_source_snippet_set_trigger (GbSourceSnippet *snippet,
                                const gchar     *trigger)
 {
-  ENTRY;
-
   g_return_if_fail (GB_IS_SOURCE_SNIPPET (snippet));
 
   g_free (snippet->priv->trigger);
   snippet->priv->trigger = g_strdup (trigger);
-
-  EXIT;
 }
 
 static gint
@@ -842,8 +838,6 @@ gb_source_snippet_dispose (GObject *object)
 {
   GbSourceSnippetPrivate *priv;
 
-  ENTRY;
-
   priv = GB_SOURCE_SNIPPET (object)->priv;
 
   if (priv->mark_begin)
@@ -867,16 +861,12 @@ gb_source_snippet_dispose (GObject *object)
 
   g_clear_object (&priv->buffer);
   g_clear_object (&priv->context);
-
-  EXIT;
 }
 
 static void
 gb_source_snippet_finalize (GObject *object)
 {
-  ENTRY;
   G_OBJECT_CLASS (gb_source_snippet_parent_class)->finalize (object);
-  EXIT;
 }
 
 static void
@@ -999,8 +989,6 @@ gb_source_snippet_class_init (GbSourceSnippetClass *klass)
 static void
 gb_source_snippet_init (GbSourceSnippet *snippet)
 {
-  ENTRY;
-
   snippet->priv = gb_source_snippet_get_instance_private (snippet);
 
   snippet->priv->tab_stop = 0;
@@ -1008,6 +996,4 @@ gb_source_snippet_init (GbSourceSnippet *snippet)
   snippet->priv->chunks = g_ptr_array_new_with_free_func (g_object_unref);
   snippet->priv->runs = g_array_new (FALSE, FALSE, sizeof (gint));
   snippet->priv->context = gb_source_snippet_context_new ();
-
-  EXIT;
 }
