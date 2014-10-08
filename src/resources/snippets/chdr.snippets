@@ -37,3 +37,16 @@ snippet gobject
 	G_END_DECLS
 
 	#endif /* ${$1|functify|upper}_H */
+snippet guard
+	#ifndef ${1:$filename|stripsuffix|functify|upper}_H
+	#define $1_H
+
+	#include <glib.h>
+
+	G_BEGIN_DECLS
+
+	$0
+
+	G_END_DECLS
+
+	#endif /* $1_H */
