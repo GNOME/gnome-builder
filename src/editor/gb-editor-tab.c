@@ -1333,6 +1333,30 @@ gb_editor_tab_constructed (GObject *object)
 }
 
 static void
+gb_editor_tab_save_file_mark (GbEditorTab *tab)
+{
+  GbEditorFileMarks *marks;
+  GbEditorFileMark *mark;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextMark *insert;
+  GFile *file;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  buffer = GTK_TEXT_BUFFER (tab->priv->document);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  file = gtk_source_file_get_location (tab->priv->file);
+
+  marks = gb_editor_file_marks_get_default ();
+  mark = gb_editor_file_marks_get_for_file (marks, file);
+  gb_editor_file_mark_set_line (mark, gtk_text_iter_get_line (&iter));
+  gb_editor_file_mark_set_column (mark, gtk_text_iter_get_line_offset (&iter));
+}
+
+static void
 gb_editor_tab_close (GbTab *tab)
 {
   GbEditorTabPrivate *priv;
@@ -1351,6 +1375,8 @@ gb_editor_tab_close (GbTab *tab)
     {
       g_message ("TODO: handle dirty editor state.");
     }
+
+  gb_editor_tab_save_file_mark (GB_EDITOR_TAB (tab));
 
   /*
    * WORKAROUND:
