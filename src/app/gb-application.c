@@ -26,6 +26,7 @@
 #include <glib/gi18n.h>
 
 #include "gb-application.h"
+#include "gb-editor-file-marks.h"
 #include "gb-editor-workspace.h"
 #include "gb-log.h"
 #include "gb-keybindings.h"
@@ -34,6 +35,23 @@
 #include "gb-workbench.h"
 
 G_DEFINE_TYPE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
+
+static void
+gb_application_load_file_marks (GbApplication *application)
+{
+  GbEditorFileMarks *marks;
+  GError *error = NULL;
+
+  g_return_if_fail (GB_IS_APPLICATION (application));
+
+  marks = gb_editor_file_marks_get_default ();
+
+  if (!gb_editor_file_marks_load (marks, &error))
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+}
 
 static void
 gb_application_on_theme_changed (GbApplication *self,
@@ -372,6 +390,7 @@ gb_application_startup (GApplication *app)
   gb_application_register_actions (self);
   gb_application_register_keybindings (self);
   gb_application_register_theme_overrides (self);
+  gb_application_load_file_marks (self);
 
   EXIT;
 }
