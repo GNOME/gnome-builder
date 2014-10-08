@@ -42,63 +42,6 @@ typedef struct
   gboolean         requires_tab;
 } GbEditorCommandsEntry;
 
-static gboolean
-delayed_scroll_to_iter_cb (gpointer user_data)
-{
-  GbEditorTab *tab = user_data;
-  GtkTextIter iter;
-  guint line;
-  guint line_offset;
-
-  g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), G_SOURCE_REMOVE);
-
-  line = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tab), "scroll-line"));
-  line_offset = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tab),
-                                                    "scroll-line-offset"));
-
-  gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (tab->priv->document),
-                                    &iter, line);
-
-  for (; line_offset; line_offset--)
-    {
-      if (gtk_text_iter_ends_line (&iter) ||
-          !gtk_text_iter_forward_char (&iter))
-        {
-          gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (tab->priv->document),
-                                        &iter);
-          break;
-        }
-    }
-
-  gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (tab->priv->source_view), &iter,
-                                0.0, TRUE, 0.5, 0.5);
-
-  g_object_set_data (G_OBJECT (tab), "scroll-line", NULL);
-  g_object_set_data (G_OBJECT (tab), "scroll-line-offset", NULL);
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-delayed_scroll_to_iter (GbEditorTab       *tab,
-                        const GtkTextIter *iter)
-{
-  guint line;
-  guint line_offset;
-
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-
-  line = gtk_text_iter_get_line (iter);
-  line_offset = gtk_text_iter_get_line_offset (iter);
-
-  g_object_set_data (G_OBJECT (tab), "scroll-line",
-                     GINT_TO_POINTER (line));
-  g_object_set_data (G_OBJECT (tab), "scroll-line-offset",
-                     GINT_TO_POINTER (line_offset));
-
-  g_timeout_add (250, delayed_scroll_to_iter_cb, g_object_ref (tab));
-}
-
 /**
  * gb_editor_commands_reformat:
  * @tab: A #GbEditorTab.
@@ -418,13 +361,7 @@ on_load_cb (GtkSourceFileLoader *loader,
             GAsyncResult        *result,
             GbEditorTab         *tab)
 {
-  GbEditorFileMarks *marks;
-  GbEditorFileMark *mark;
-  GtkSourceFile *source_file;
-  GtkTextBuffer *buffer;
-  GFile *file;
   GError *error = NULL;
-  GtkTextIter iter;
 
   g_return_if_fail (GTK_SOURCE_IS_FILE_LOADER (loader));
   g_return_if_fail (G_IS_ASYNC_RESULT (result));
@@ -444,36 +381,7 @@ on_load_cb (GtkSourceFileLoader *loader,
       g_clear_error (&error);
     }
 
-  buffer = GTK_TEXT_BUFFER (tab->priv->document);
-  source_file = gtk_source_file_loader_get_file (loader);
-  file = gtk_source_file_get_location (source_file);
-  marks = gb_editor_file_marks_get_default ();
-  mark = gb_editor_file_marks_get_for_file (marks, file);
-
-  if (mark)
-    {
-      guint line;
-      guint column;
-
-      line = gb_editor_file_mark_get_line (mark);
-      column = gb_editor_file_mark_get_column (mark);
-      gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
-
-      if (gtk_text_iter_get_line (&iter) == line)
-        {
-          for (; column; column--)
-            if (gtk_text_iter_ends_line (&iter) ||
-                !gtk_text_iter_forward_char (&iter))
-              break;
-        }
-    }
-  else
-    gtk_text_buffer_get_start_iter (buffer, &iter);
-
-  gtk_text_buffer_select_range (buffer, &iter, &iter);
-
-  if (gtk_widget_get_realized (GTK_WIDGET (tab->priv->source_view)))
-    delayed_scroll_to_iter (tab, &iter);
+  gb_editor_tab_load_file_mark (tab);
 
   gtk_source_gutter_renderer_set_visible (tab->priv->change_renderer, TRUE);
 
