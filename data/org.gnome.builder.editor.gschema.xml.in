@@ -5,5 +5,11 @@
       <summary>Enable VIM keybindings</summary>
       <description>Whether or not VIM style keybindings should be used in the source code editor.</description>
     </key>
+    <key name="restore-insert-mark" type="b">
+      <default>true</default>
+      <summary>Restore last position</summary>
+      <summary>Jump to the last position when reopening a file.</summary>
+      <description>Whether or not VIM style keybindings should be used in the source code editor.</description>
+    </key>
   </schema>
 </schemalist>

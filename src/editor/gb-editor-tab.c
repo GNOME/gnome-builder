@@ -1343,13 +1343,28 @@ gb_editor_tab_load_file_mark (GbEditorTab *tab)
   GbEditorFileMark *mark;
   GtkTextBuffer *buffer;
   GtkTextIter iter;
+  GSettings *settings;
+  gboolean load_mark;
   GFile *file;
   guint line;
   guint column;
 
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
+  settings = g_settings_new ("org.gnome.builder.editor");
+  load_mark = g_settings_get_boolean (settings, "restore-insert-mark");
+  g_clear_object (&settings);
+
   buffer = GTK_TEXT_BUFFER (tab->priv->document);
+
+  if (!load_mark)
+    {
+      gtk_text_buffer_get_start_iter (buffer, &iter);
+      gtk_text_buffer_select_range (buffer, &iter, &iter);
+      gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (tab->priv->source_view),
+                                       &iter, 0.0, TRUE, 0.5, 0.5);
+      return;
+    }
 
   file = gtk_source_file_get_location (tab->priv->file);
   marks = gb_editor_file_marks_get_default ();

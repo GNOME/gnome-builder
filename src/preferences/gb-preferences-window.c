@@ -36,6 +36,7 @@ struct _GbPreferencesWindowPrivate
   GtkStack        *stack;
 
   GtkSwitch       *vim_switch;
+  GtkSwitch       *restore_insert_mark_switch;
 
   GtkEntry        *git_author_name_entry;
   GtkEntry        *git_author_email_entry;
@@ -75,13 +76,20 @@ gb_preferences_window_section_changed (GtkStack            *stack,
 static void
 load_editor (GbPreferencesWindow *window)
 {
+  GbPreferencesWindowPrivate *priv;
   GSettings *settings;
 
   g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
 
+  priv = window->priv;
+
   settings = g_settings_new ("org.gnome.builder.editor");
 
-  g_settings_bind (settings, "vim-mode", window->priv->vim_switch, "active",
+  g_settings_bind (settings, "vim-mode",
+                   priv->vim_switch, "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (settings, "restore-insert-mark",
+                   priv->restore_insert_mark_switch, "active",
                    G_SETTINGS_BIND_DEFAULT);
 
   g_object_unref (settings);
@@ -175,27 +183,15 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-preferences-window.ui");
-  gtk_widget_class_bind_template_child_private (widget_class,
-                                                GbPreferencesWindow,
-                                                right_header_bar);
-  gtk_widget_class_bind_template_child_private (widget_class,
-                                                GbPreferencesWindow,
-                                                search_bar);
-  gtk_widget_class_bind_template_child_private (widget_class,
-                                                GbPreferencesWindow,
-                                                search_entry);
-  gtk_widget_class_bind_template_child_private (widget_class,
-                                                GbPreferencesWindow,
-                                                stack);
-  gtk_widget_class_bind_template_child_private (widget_class,
-                                                GbPreferencesWindow,
-                                                vim_switch);
-  gtk_widget_class_bind_template_child_private (widget_class,
-                                                GbPreferencesWindow,
-                                                git_author_name_entry);
-  gtk_widget_class_bind_template_child_private (widget_class,
-                                                GbPreferencesWindow,
-                                                git_author_email_entry);
+
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, git_author_email_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, git_author_name_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, restore_insert_mark_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, right_header_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, search_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, stack);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, vim_switch);
 
   g_type_ensure (GB_TYPE_SIDEBAR);
 }
