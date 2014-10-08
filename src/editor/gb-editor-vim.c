@@ -3240,7 +3240,9 @@ gb_editor_vim_op_filetype (GbEditorVim *vim,
   GtkTextBuffer *buffer;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
-  g_assert (name);
+  g_assert (g_str_has_prefix (name, "set filetype="));
+
+  name += strlen ("set filetype=");
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
