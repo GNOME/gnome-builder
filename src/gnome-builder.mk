@@ -21,6 +21,10 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-editor-commands.h \
 	src/editor/gb-editor-document.c \
 	src/editor/gb-editor-document.h \
+	src/editor/gb-editor-file-mark.c \
+	src/editor/gb-editor-file-mark.h \
+	src/editor/gb-editor-file-marks.c \
+	src/editor/gb-editor-file-marks.h \
 	src/editor/gb-editor-navigation-item.c \
 	src/editor/gb-editor-navigation-item.h \
 	src/editor/gb-editor-settings.c \
