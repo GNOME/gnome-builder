@@ -81,8 +81,7 @@ void             gb_editor_vim_set_enabled     (GbEditorVim     *vim,
 GtkWidget       *gb_editor_vim_get_text_view   (GbEditorVim     *vim);
 gboolean         gb_editor_vim_execute_command (GbEditorVim     *vim,
                                                 const gchar     *command);
-gboolean         gb_editor_vim_is_command      (GbEditorVim     *vim,
-                                                const gchar     *command_text);
+gboolean         gb_editor_vim_is_command      (const gchar     *command_text);
 
 G_END_DECLS
 

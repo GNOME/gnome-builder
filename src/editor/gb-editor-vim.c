@@ -3491,10 +3491,8 @@ gb_editor_vim_op_nohl (GbEditorVim *vim,
 }
 
 static GbEditorVimOperation
-gb_editor_vim_parse_operation (GbEditorVim *vim,
-                               const gchar *command_text)
+gb_editor_vim_parse_operation (const gchar *command_text)
 {
-  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), NULL);
   g_return_val_if_fail (command_text, NULL);
 
   if (g_str_equal (command_text, "sort"))
@@ -3518,15 +3516,13 @@ gb_editor_vim_parse_operation (GbEditorVim *vim,
 }
 
 gboolean
-gb_editor_vim_is_command (GbEditorVim *vim,
-                          const gchar *command_text)
+gb_editor_vim_is_command (const gchar *command_text)
 {
   GbEditorVimOperation func;
 
-  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), FALSE);
   g_return_val_if_fail (command_text, FALSE);
 
-  func = gb_editor_vim_parse_operation (vim, command_text);
+  func = gb_editor_vim_parse_operation (command_text);
   if (func)
     return TRUE;
 
@@ -3545,7 +3541,7 @@ gb_editor_vim_execute_command (GbEditorVim *vim,
   g_return_if_fail (command);
 
   copy = g_strstrip (g_strdup (command));
-  func = gb_editor_vim_parse_operation (vim, copy);
+  func = gb_editor_vim_parse_operation (copy);
 
   if (func)
     {
