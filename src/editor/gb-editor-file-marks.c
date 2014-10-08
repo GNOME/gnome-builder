@@ -63,6 +63,16 @@ gb_editor_file_marks_get_file (GbEditorFileMarks *marks)
   return file;
 }
 
+/**
+ * gb_editor_file_marks_get_for_file:
+ *
+ * Gets the #GbEditorFileMark used to represent @file. If one has not been
+ * loaded, it will be created. The resulting #GbEditorFileMark is owned by
+ * the #GbEditorFileMarks instance and will be saved when
+ * gb_editor_file_marks_save_async() is called.
+ *
+ * Returns: (transfer none): A #GbEditorFileMark representing @file.
+ */
 GbEditorFileMark *
 gb_editor_file_marks_get_for_file (GbEditorFileMarks *marks,
                                    GFile             *file)
@@ -76,6 +86,12 @@ gb_editor_file_marks_get_for_file (GbEditorFileMarks *marks,
   uri = g_file_get_uri (file);
   ret = g_hash_table_lookup (marks->priv->marks, uri);
   g_free (uri);
+
+  if (!ret)
+    {
+      ret = gb_editor_file_mark_new (file, 0, 0);
+      g_hash_table_replace (marks->priv->marks, g_file_get_uri (file), ret);
+    }
 
   return ret;
 }
