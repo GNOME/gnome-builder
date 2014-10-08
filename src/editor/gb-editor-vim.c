@@ -60,6 +60,19 @@ typedef void (*GbEditorVimCommandFunc) (GbEditorVim        *vim,
                                         guint               count,
                                         gchar               modifier);
 
+/**
+ * GbEditorVimOperation:
+ * @command_text: text command to execute.
+ * 
+ * This is a function declaration for functions that can process an operation.
+ * Operations are things that are entered into the command mode entry.
+ * 
+ * Unfortunately, we already have a command abstraction that should possibly
+ * be renamed. But such is life!
+ */
+typedef void (*GbEditorVimOperation) (GbEditorVim *vim,
+                                      const gchar *command_text);
+
 struct _GbEditorVimPrivate
 {
   GtkTextView             *text_view;
@@ -3017,7 +3030,8 @@ str_compare_qsort (const void *aptr,
 }
 
 static void
-gb_editor_vim_sort (GbEditorVim *vim)
+gb_editor_vim_op_sort (GbEditorVim *vim,
+                       const gchar *command_text)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
@@ -3218,8 +3232,8 @@ gb_editor_vim_set_text_view (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_set_filetype (GbEditorVim *vim,
-                            const gchar *name)
+gb_editor_vim_op_filetype (GbEditorVim *vim,
+                           const gchar *name)
 {
   GtkSourceLanguageManager *manager;
   GtkSourceLanguage *language;
@@ -3239,14 +3253,16 @@ gb_editor_vim_set_filetype (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_set_syntax (GbEditorVim *vim,
-                          const gchar *name)
+gb_editor_vim_op_syntax (GbEditorVim *vim,
+                         const gchar *name)
 {
   GtkTextBuffer *buffer;
   gboolean enabled;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
-  g_assert (name);
+  g_assert (g_str_has_prefix (name, "syntax "));
+
+  name += strlen ("syntax ");
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
@@ -3264,10 +3280,22 @@ gb_editor_vim_set_syntax (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_set_line_numbers (GbEditorVim *vim,
-                                gboolean     enable)
+gb_editor_vim_op_nu (GbEditorVim *vim,
+                     const gchar *command_text)
 {
+  gboolean enable;
+
   g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (g_str_has_prefix (command_text, "set "));
+
+  command_text += strlen ("set ");
+
+  if (g_strcmp0 (command_text, "nu") == 0)
+    enable = TRUE;
+  else if (g_strcmp0 (command_text, "nonu") == 0)
+    enable = FALSE;
+  else
+    return;
 
   if (GTK_SOURCE_IS_VIEW (vim->priv->text_view))
     {
@@ -3279,15 +3307,17 @@ gb_editor_vim_set_line_numbers (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_colorscheme (GbEditorVim *vim,
-                           const gchar *name)
+gb_editor_vim_op_colorscheme (GbEditorVim *vim,
+                              const gchar *name)
 {
   GtkSourceStyleSchemeManager *manager;
   GtkSourceStyleScheme *scheme;
   GtkTextBuffer *buffer;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
-  g_assert (name);
+  g_assert (g_str_has_prefix (name, "colorscheme "));
+
+  name += strlen ("colorscheme ");
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   if (!GTK_SOURCE_IS_BUFFER (buffer))
@@ -3346,8 +3376,8 @@ gb_editor_vim_do_search_and_replace (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_search_and_replace (GbEditorVim *vim,
-                                  const gchar *command)
+gb_editor_vim_op_search_and_replace (GbEditorVim *vim,
+                                     const gchar *command)
 {
   GtkTextBuffer *buffer;
   const gchar *search_begin = NULL;
@@ -3360,7 +3390,9 @@ gb_editor_vim_search_and_replace (GbEditorVim *vim,
   gboolean is_global = FALSE;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
-  g_assert (command);
+  g_assert (g_str_has_prefix (command, "%s"));
+
+  command += strlen ("%s");
 
   separator = g_utf8_get_char (command);
   if (!separator)
@@ -3450,47 +3482,77 @@ gb_editor_vim_search_and_replace (GbEditorVim *vim,
   g_free (replace_text);
 }
 
+static void
+gb_editor_vim_op_nohl (GbEditorVim *vim,
+                       const gchar *command_text)
+{
+  if (vim->priv->search_context)
+    gtk_source_search_context_set_highlight (vim->priv->search_context, FALSE);
+}
+
+static GbEditorVimOperation
+gb_editor_vim_parse_operation (GbEditorVim *vim,
+                               const gchar *command_text)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), NULL);
+  g_return_val_if_fail (command_text, NULL);
+
+  if (g_str_equal (command_text, "sort"))
+    return gb_editor_vim_op_sort;
+  else if (g_str_equal (command_text, "nohl"))
+    return gb_editor_vim_op_nohl;
+  else if (g_str_has_prefix (command_text, "set filetype="))
+    return gb_editor_vim_op_filetype;
+  else if (g_str_has_prefix (command_text, "syntax "))
+    return gb_editor_vim_op_syntax;
+  else if (g_str_equal (command_text, "set nu"))
+    return gb_editor_vim_op_nu;
+  else if (g_str_equal (command_text, "set nonu"))
+    return gb_editor_vim_op_nu;
+  else if (g_str_has_prefix (command_text, "colorscheme "))
+    return gb_editor_vim_op_colorscheme;
+  else if (g_str_has_prefix (command_text, "%s"))
+    return gb_editor_vim_op_search_and_replace;
+
+  return NULL;
+}
+
+gboolean
+gb_editor_vim_is_command (GbEditorVim *vim,
+                          const gchar *command_text)
+{
+  GbEditorVimOperation func;
+
+  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), FALSE);
+  g_return_val_if_fail (command_text, FALSE);
+
+  func = gb_editor_vim_parse_operation (vim, command_text);
+  if (func)
+    return TRUE;
+
+  return FALSE;
+}
+
 gboolean
 gb_editor_vim_execute_command (GbEditorVim *vim,
                                const gchar *command)
 {
-  GbEditorVimPrivate *priv;
-  gboolean ret = TRUE;
+  GbEditorVimOperation func;
+  gboolean ret = FALSE;
   gchar *copy;
 
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
   g_return_if_fail (command);
 
-  priv = vim->priv;
-
   copy = g_strstrip (g_strdup (command));
+  func = gb_editor_vim_parse_operation (vim, copy);
 
-  if (g_str_equal (copy, "sort"))
-    gb_editor_vim_sort (vim);
-  else if (g_str_equal (copy, "nohl"))
+  if (func)
     {
-      if (vim->priv->search_context)
-        gtk_source_search_context_set_highlight (priv->search_context, FALSE);
-    }
-  else if (g_str_has_prefix (copy, "set filetype="))
-    gb_editor_vim_set_filetype (vim, copy + strlen ("set filetype="));
-  else if (g_str_has_prefix (copy, "syntax "))
-    gb_editor_vim_set_syntax (vim, copy + strlen ("syntax "));
-  else if (g_str_equal (copy, "set nu"))
-    gb_editor_vim_set_line_numbers (vim, TRUE);
-  else if (g_str_equal (copy, "set nonu"))
-    gb_editor_vim_set_line_numbers (vim, FALSE);
-  else if (g_str_has_prefix (copy, "colorscheme "))
-    gb_editor_vim_colorscheme (vim, copy + strlen ("colorscheme "));
-  else if (g_str_has_prefix (copy, "%s"))
-    gb_editor_vim_search_and_replace (vim, copy + strlen ("%s"));
-  else
-    ret = FALSE;
-
-  if (ret)
-    {
+      func (vim, command);
       gb_editor_vim_clear_selection (vim);
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+      ret = TRUE;
     }
 
   g_free (copy);
