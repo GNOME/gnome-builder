@@ -48,20 +48,20 @@ struct _GbEditorFileMarksClass
   GObjectClass parent;
 };
 
-GType              gb_editor_file_marks_get_type          (void) G_GNUC_CONST;
-GbEditorFileMarks *gb_editor_file_marks_new               (void);
-GbEditorFileMarks *gb_editor_file_marks_get_default       (void);
-GbEditorFileMark  *gb_editor_file_marks_get_mark_for_file (GbEditorFileMarks    *marks,
-                                                           GFile                *file);
-gboolean           gb_editor_file_marks_load              (GbEditorFileMarks    *marks,
-                                                           GError              **error);
-void               gb_editor_file_marks_save_async        (GbEditorFileMarks    *marks,
-                                                           GCancellable         *cancellable,
-                                                           GAsyncReadyCallback   callback,
-                                                           gpointer              user_data);
-gboolean           gb_editor_file_marks_save_finish       (GbEditorFileMarks    *marks,
-                                                           GAsyncResult         *result,
-                                                           GError              **error);
+GType              gb_editor_file_marks_get_type     (void) G_GNUC_CONST;
+GbEditorFileMarks *gb_editor_file_marks_new          (void);
+GbEditorFileMarks *gb_editor_file_marks_get_default  (void);
+GbEditorFileMark  *gb_editor_file_marks_get_for_file (GbEditorFileMarks    *marks,
+                                                      GFile                *file);
+gboolean           gb_editor_file_marks_load         (GbEditorFileMarks    *marks,
+                                                      GError              **error);
+void               gb_editor_file_marks_save_async   (GbEditorFileMarks    *marks,
+                                                      GCancellable         *cancellable,
+                                                      GAsyncReadyCallback   callback,
+                                                      gpointer              user_data);
+gboolean           gb_editor_file_marks_save_finish  (GbEditorFileMarks    *marks,
+                                                      GAsyncResult         *result,
+                                                      GError              **error);
 
 G_END_DECLS
 
