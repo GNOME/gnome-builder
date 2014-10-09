@@ -152,6 +152,7 @@ libgnome_builder_la_CFLAGS = \
 	$(WEBKIT_CFLAGS) \
 	-I$(top_srcdir)/src/animation \
 	-I$(top_srcdir)/src/app \
+	-I$(top_srcdir)/src/commands \
 	-I$(top_srcdir)/src/devhelp \
 	-I$(top_srcdir)/src/editor \
 	-I$(top_srcdir)/src/gd \

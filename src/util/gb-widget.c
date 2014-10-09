@@ -21,6 +21,27 @@
 #include "gb-cairo.h"
 #include "gb-rgba.h"
 #include "gb-widget.h"
+#include "gb-workbench.h"
+
+/**
+ * gb_widget_get_workbench:
+ *
+ * Returns: (transfer none) (type GbWorkbench*): A #GbWorkbench or %NULL.
+ */
+gpointer
+gb_widget_get_workbench (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GB_IS_WORKBENCH (toplevel))
+    return GB_WORKBENCH (toplevel);
+
+  return NULL;
+}
 
 void
 gb_widget_add_style_class (gpointer     widget,
@@ -118,7 +139,6 @@ gb_widget_snapshot (GtkWidget *widget,
         cairo_stroke (cr);
 
         gb_cairo_rounded_rectangle (cr, &rect, 1, 1);
-
 
         gdk_rgba_parse (&rgba, "#729fcf");
         gb_rgba_shade (&rgba, &rgba, 1.2);

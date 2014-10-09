@@ -31,6 +31,7 @@ cairo_surface_t *gb_widget_snapshot        (GtkWidget    *widget,
                                             gint          height,
                                             gdouble       alpha,
                                             gboolean      draw_border);
+gpointer         gb_widget_get_workbench   (GtkWidget    *widget);
 
 G_END_DECLS
 

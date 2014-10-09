@@ -20,6 +20,9 @@
 
 #include <glib/gi18n.h>
 
+#include "gb-command-gaction-provider.h"
+#include "gb-command-manager.h"
+#include "gb-command-vim-provider.h"
 #include "gb-devhelp-workspace.h"
 #include "gb-editor-workspace.h"
 #include "gb-log.h"
@@ -33,6 +36,7 @@
 struct _GbWorkbenchPrivate
 {
   GbWorkbenchActions     *actions;
+  GbCommandManager       *command_manager;
   GbNavigationList       *navigation_list;
 
   GbWorkspace            *active_workspace;
@@ -51,6 +55,7 @@ struct _GbWorkbenchPrivate
 
 enum {
   PROP_0,
+  PROP_COMMAND_MANAGER,
   PROP_NAVIGATION_LIST,
   LAST_PROP
 };
@@ -66,6 +71,21 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbWorkbench,
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
+
+/**
+ * gb_workbench_get_command_manager:
+ *
+ * Retrieves the command manager for the workspace.
+ *
+ * Returns: (transfer none) (type GbCommandManager*): A #GbCommandManager.
+ */
+gpointer
+gb_workbench_get_command_manager (GbWorkbench *workbench)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
+
+  return workbench->priv->command_manager;
+}
 
 /**
  * gb_workbench_get_navigation_list:
@@ -337,6 +357,7 @@ gb_workbench_dispose (GObject *object)
   priv = GB_WORKBENCH (object)->priv;
 
   g_clear_object (&priv->actions);
+  g_clear_object (&priv->command_manager);
   g_clear_object (&priv->navigation_list);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->dispose (object);
@@ -350,8 +371,18 @@ gb_workbench_get_property (GObject    *object,
                            GValue     *value,
                            GParamSpec *pspec)
 {
+  GbWorkbench *self = (GbWorkbench *)object;
+
   switch (prop_id)
     {
+    case PROP_COMMAND_MANAGER:
+      g_value_set_object (value, gb_workbench_get_command_manager (self));
+      break;
+
+    case PROP_NAVIGATION_LIST:
+      g_value_set_object (value, gb_workbench_get_navigation_list (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -384,6 +415,16 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   widget_class->realize = gb_workbench_realize;
 
   klass->workspace_changed = gb_workbench_workspace_changed;
+
+  gParamSpecs [PROP_COMMAND_MANAGER] =
+    g_param_spec_object ("command-manager",
+                         _("Command Manager"),
+                         _("The command manager for the workspace."),
+                         GB_TYPE_COMMAND_MANAGER,
+                         (G_PARAM_READABLE |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_COMMAND_MANAGER,
+                                   gParamSpecs [PROP_COMMAND_MANAGER]);
 
   gParamSpecs [PROP_NAVIGATION_LIST] =
     g_param_spec_object ("navigation-list",
@@ -439,9 +480,25 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 static void
 gb_workbench_init (GbWorkbench *workbench)
 {
+  GbCommandProvider *provider;
+
   workbench->priv = gb_workbench_get_instance_private (workbench);
 
   gtk_widget_init_template (GTK_WIDGET (workbench));
+
+  workbench->priv->command_manager =
+    g_object_new (GB_TYPE_COMMAND_MANAGER,
+                  NULL);
+
+  provider = g_object_new (GB_TYPE_COMMAND_GACTION_PROVIDER,
+                           "workbench", workbench,
+                           NULL);
+  gb_command_manager_add_provider (workbench->priv->command_manager, provider);
+
+  provider = g_object_new (GB_TYPE_COMMAND_VIM_PROVIDER,
+                           "workbench", workbench,
+                           NULL);
+  gb_command_manager_add_provider (workbench->priv->command_manager, provider);
 
   workbench->priv->navigation_list = g_object_new (GB_TYPE_NAVIGATION_LIST,
                                                    "workbench", workbench,
