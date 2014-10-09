@@ -1792,6 +1792,79 @@ gb_editor_vim_redo (GbEditorVim *vim)
 }
 
 static void
+gb_editor_vim_join (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  gboolean has_selection;
+  GString *str;
+  gchar **parts;
+  gchar *slice;
+  guint i;
+  guint offset;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+
+  if (!has_selection)
+    {
+      guint line;
+
+      /*
+       * If there is no selection, we move the selection position to the end
+       * of the following line.
+       */
+      line = gtk_text_iter_get_line (&iter) + 1;
+      gtk_text_buffer_get_iter_at_line (buffer, &selection, line);
+      if (gtk_text_iter_get_line (&selection) != line)
+        return;
+
+      while (!gtk_text_iter_ends_line (&selection))
+        if (!gtk_text_iter_forward_char (&selection))
+          break;
+    }
+  else if (gtk_text_iter_compare (&iter, &selection) > 0)
+    text_iter_swap (&iter, &selection);
+
+  offset = gtk_text_iter_get_offset (&iter);
+
+  slice = gtk_text_iter_get_slice (&iter, &selection);
+  parts = g_strsplit (slice, "\n", -1);
+  str = g_string_new (NULL);
+
+  for (i = 0; parts [i]; i++)
+    {
+      g_strstrip (parts [i]);
+      if (*parts [i])
+        {
+          if (str->len)
+            g_string_append (str, " ");
+          g_string_append (str, parts [i]);
+        }
+    }
+
+  gtk_text_buffer_begin_user_action (buffer);
+  gtk_text_buffer_delete (buffer, &iter, &selection);
+  gtk_text_buffer_insert (buffer, &iter, str->str, str->len);
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+  gtk_text_buffer_end_user_action (buffer);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+
+  g_strfreev (parts);
+  g_free (slice);
+  g_string_free (str, TRUE);
+}
+
+static void
 gb_editor_vim_insert_nl_before (GbEditorVim *vim)
 {
   GtkTextBuffer *buffer;
@@ -4074,6 +4147,16 @@ gb_editor_vim_cmd_yank (GbEditorVim *vim,
 }
 
 static void
+gb_editor_vim_cmd_join (GbEditorVim *vim,
+                        guint        count,
+                        gchar        modifier)
+{
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  gb_editor_vim_join (vim);
+}
+
+static void
 gb_editor_vim_cmd_center (GbEditorVim *vim,
                           guint        count,
                           gchar        modifier)
@@ -4398,6 +4481,10 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE,
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
                                         gb_editor_vim_cmd_move_down);
+  gb_editor_vim_class_register_command (klass, 'J',
+                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
+                                        gb_editor_vim_cmd_join);
   gb_editor_vim_class_register_command (klass, 'k',
                                         GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE,
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
