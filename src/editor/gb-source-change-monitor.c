@@ -213,6 +213,7 @@ on_parse_timeout (GbSourceChangeMonitor *monitor)
 {
   GbSourceChangeMonitorPrivate *priv;
   GSimpleAsyncResult *async;
+  GtkSourceBuffer *gsb;
   GtkTextIter begin;
   GtkTextIter end;
   gchar *text = NULL;
@@ -244,6 +245,18 @@ on_parse_timeout (GbSourceChangeMonitor *monitor)
    */
   gtk_text_buffer_get_bounds (priv->buffer, &begin, &end);
   text = gtk_text_buffer_get_text (priv->buffer, &begin, &end, TRUE);
+
+  /*
+   * If the buffer has the trailing newline hidden, go ahead and add one back.
+   */
+  gsb = GTK_SOURCE_BUFFER (priv->buffer);
+  if (gtk_source_buffer_get_implicit_trailing_newline (gsb))
+    {
+      gchar *tmp = text;
+
+      text = g_strconcat (text, "\n", NULL);
+      g_free (tmp);
+    }
 
   /*
    * Set the required fields for our worker.
