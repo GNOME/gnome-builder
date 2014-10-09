@@ -9,6 +9,8 @@ libgnome_builder_la_SOURCES = \
 	src/animation/gb-frame-source.h \
 	src/app/gb-application.c \
 	src/app/gb-application.h \
+	src/commands/gb-command-provider.c \
+	src/commands/gb-command-provider.h \
 	src/devhelp/gb-devhelp-navigation-item.c \
 	src/devhelp/gb-devhelp-navigation-item.h \
 	src/devhelp/gb-devhelp-tab.c \
