@@ -1393,6 +1393,8 @@ gb_source_vim_move_matching_bracket (GbSourceVim *vim)
     {
       if (has_selection)
         {
+          if (is_forward)
+            gtk_text_iter_forward_char (&iter);
           gb_source_vim_select_range (vim, &iter, &selection);
           gb_source_vim_ensure_anchor_selected (vim);
         }
