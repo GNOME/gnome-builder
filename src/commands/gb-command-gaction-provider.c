@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <glib/gi18n.h>
+
 #include "gb-command-gaction-provider.h"
 
 struct _GbCommandGactionProviderPrivate
