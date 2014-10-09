@@ -939,7 +939,8 @@ maybe_align_parameters (GbSourceAutoIndenterC *c,
       gtk_text_iter_backward_char (end) &&
       (gtk_text_iter_compare (begin, end) < 0) &&
       (text = gtk_text_iter_get_slice (begin, end)) &&
-      (params = parse_parameters (text)))
+      (params = parse_parameters (text)) &&
+      (params->next != NULL))
     ret = format_parameters (begin, params);
 
   g_slist_foreach (params, (GFunc)parameter_free, NULL);
