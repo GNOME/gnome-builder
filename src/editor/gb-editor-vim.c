@@ -1455,6 +1455,77 @@ move_mark:
 }
 
 static void
+gb_editor_vim_toggle_case (GbEditorVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter cur;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gboolean has_selection;
+  gboolean place_at_end = FALSE;
+  GString *str;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  has_selection = gb_editor_vim_get_selection_bounds (vim, &begin, &end);
+
+  if (gtk_text_iter_compare (&begin, &end) > 0)
+    {
+      text_iter_swap (&begin, &end);
+      place_at_end = TRUE;
+    }
+
+  if (!has_selection)
+    {
+      if (!gtk_text_iter_forward_char (&end))
+        return;
+    }
+
+  str = g_string_new (NULL);
+
+  gtk_text_iter_assign (&cur, &begin);
+
+  while (gtk_text_iter_compare (&cur, &end) < 0)
+    {
+      gunichar ch;
+
+      ch = gtk_text_iter_get_char (&cur);
+
+      if (g_unichar_isupper (ch))
+        g_string_append_unichar (str, g_unichar_tolower (ch));
+      else
+        g_string_append_unichar (str, g_unichar_toupper (ch));
+
+      if (!gtk_text_iter_forward_char (&cur))
+        break;
+    }
+
+  if (!str->len)
+    goto cleanup;
+
+  gtk_text_buffer_begin_user_action (buffer);
+
+  gb_editor_vim_save_position (vim);
+  gtk_text_buffer_delete (buffer, &begin, &end);
+  gtk_text_buffer_insert (buffer, &begin, str->str, str->len);
+  gb_editor_vim_restore_position (vim);
+
+  if (!has_selection)
+    gb_editor_vim_select_range (vim, &begin, &begin);
+  else if (place_at_end)
+    {
+      if (gtk_text_iter_backward_char (&begin))
+        gb_editor_vim_select_range (vim, &begin, &begin);
+    }
+
+  gtk_text_buffer_end_user_action (buffer);
+
+cleanup:
+  g_string_free (str, TRUE);
+}
+
+static void
 gb_editor_vim_delete_selection (GbEditorVim *vim)
 {
   GtkTextBuffer *buffer;
@@ -4068,6 +4139,27 @@ gb_editor_vim_cmd_matching_bracket (GbEditorVim *vim,
 }
 
 static void
+gb_editor_vim_cmd_toggle_case (GbEditorVim *vim,
+                               guint        count,
+                               gchar        modifier)
+{
+  GtkTextBuffer *buffer;
+  guint i;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
+  if (gtk_text_buffer_get_has_selection (buffer))
+    count = 1;
+  else
+    count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_editor_vim_toggle_case (vim);
+}
+
+static void
 gb_editor_vim_class_register_command (GbEditorVimClass       *klass,
                                       gchar                   key,
                                       GbEditorVimCommandFlags flags,
@@ -4244,6 +4336,10 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_JUMP,
                                         gb_editor_vim_cmd_matching_bracket);
+  gb_editor_vim_class_register_command (klass, '~',
+                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
+                                        gb_editor_vim_cmd_toggle_case);
   gb_editor_vim_class_register_command (klass, 'A',
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
