@@ -141,6 +141,10 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
    * queried. During the lookup process, providers are queried in order of
    * priority to parse the command text and resolve a GAction and optional
    * parameters.
+   *
+   * Lower priorities will be queried first.
+   *
+   * A negative priority is allowed;
    */
   gParamSpecs [PROP_PRIORITY] =
     g_param_spec_int ("priority",
