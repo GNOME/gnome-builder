@@ -37,6 +37,40 @@
 G_DEFINE_TYPE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
 
 static void
+gb_application_make_skeleton_dirs (GbApplication *self)
+{
+  gchar *path;
+
+  g_return_if_fail (GB_IS_APPLICATION (self));
+
+  path = g_build_filename (g_get_user_data_dir (),
+                           "gnome-builder",
+                           NULL);
+  g_mkdir_with_parents (path, 0750);
+  g_free (path);
+
+  path = g_build_filename (g_get_user_config_dir (),
+                           "gnome-builder",
+                           NULL);
+  g_mkdir_with_parents (path, 0750);
+  g_free (path);
+
+  path = g_build_filename (g_get_user_config_dir (),
+                           "gnome-builder",
+                           "snippets",
+                           NULL);
+  g_mkdir_with_parents (path, 0750);
+  g_free (path);
+
+  path = g_build_filename (g_get_user_config_dir (),
+                           "gnome-builder",
+                           "uncrustify",
+                           NULL);
+  g_mkdir_with_parents (path, 0750);
+  g_free (path);
+}
+
+static void
 gb_application_load_file_marks (GbApplication *application)
 {
   GbEditorFileMarks *marks;
@@ -387,6 +421,7 @@ gb_application_startup (GApplication *app)
 
   G_APPLICATION_CLASS (gb_application_parent_class)->startup (app);
 
+  gb_application_make_skeleton_dirs (self);
   gb_application_register_actions (self);
   gb_application_register_keybindings (self);
   gb_application_register_theme_overrides (self);
