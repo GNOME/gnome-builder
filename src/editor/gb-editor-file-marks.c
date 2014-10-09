@@ -24,6 +24,7 @@
 struct _GbEditorFileMarksPrivate
 {
   GHashTable *marks;
+  guint       save_timeout;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorFileMarks, gb_editor_file_marks, G_TYPE_OBJECT)
@@ -45,12 +46,50 @@ gb_editor_file_marks_get_default (void)
   return instance;
 }
 
+static gboolean
+gb_editor_file_marks_save_timeout (gpointer data)
+{
+  GbEditorFileMarks *marks = data;
+
+  g_return_val_if_fail (GB_IS_EDITOR_FILE_MARKS (marks), G_SOURCE_REMOVE);
+
+  marks->priv->save_timeout = 0;
+
+  gb_editor_file_marks_save_async (marks, NULL, NULL, NULL);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gb_editor_file_marks_queue_save (GbEditorFileMarks *marks)
+{
+  g_return_if_fail (GB_IS_EDITOR_FILE_MARKS (marks));
+
+  if (!marks->priv->save_timeout)
+    {
+      marks->priv->save_timeout =
+        g_timeout_add_seconds (1, gb_editor_file_marks_save_timeout, marks);
+    }
+}
+
+static void
+on_mark_notify (GbEditorFileMark *mark,
+                GParamSpec       *pspec,
+                gpointer          user_data)
+{
+  GbEditorFileMarks *marks = user_data;
+
+  g_assert (GB_IS_EDITOR_FILE_MARKS (marks));
+
+  gb_editor_file_marks_queue_save (marks);
+}
+
 static GFile *
 gb_editor_file_marks_get_file (GbEditorFileMarks *marks)
 {
   gchar *path;
   GFile *file;
-  
+
   g_return_val_if_fail (GB_IS_EDITOR_FILE_MARKS (marks), NULL);
 
   path = g_build_filename (g_get_user_data_dir (),
@@ -91,6 +130,8 @@ gb_editor_file_marks_get_for_file (GbEditorFileMarks *marks,
     {
       ret = gb_editor_file_mark_new (file, 0, 0);
       g_hash_table_replace (marks->priv->marks, g_file_get_uri (file), ret);
+      g_signal_connect_object (ret, "notify", G_CALLBACK (on_mark_notify),
+                               marks, 0);
     }
 
   return ret;
@@ -151,6 +192,7 @@ gb_editor_file_marks_save_cb (GObject      *source,
   GError *error = NULL;
 
   g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (G_IS_ASYNC_RESULT (result));
   g_return_if_fail (G_IS_SIMPLE_ASYNC_RESULT (simple));
 
   if (!g_file_replace_contents_finish (file, result, NULL, &error))
@@ -187,7 +229,7 @@ gb_editor_file_marks_save_async (GbEditorFileMarks   *marks,
                                        G_FILE_CREATE_REPLACE_DESTINATION,
                                        cancellable,
                                        gb_editor_file_marks_save_cb,
-                                       simple);
+                                       g_object_ref (simple));
 
   g_clear_object (&file);
   g_clear_object (&simple);
@@ -300,6 +342,8 @@ gb_editor_file_marks_load (GbEditorFileMarks  *marks,
 
           mark = gb_editor_file_mark_new (mark_file, line, column);
           g_hash_table_replace (marks->priv->marks, g_strdup (str), mark);
+          g_signal_connect_object (mark, "notify", G_CALLBACK (on_mark_notify),
+                                   marks, 0);
           g_object_unref (mark_file);
         }
     }
@@ -317,6 +361,12 @@ gb_editor_file_marks_finalize (GObject *object)
   GbEditorFileMarksPrivate *priv = GB_EDITOR_FILE_MARKS (object)->priv;
 
   g_clear_pointer (&priv->marks, g_hash_table_unref);
+
+  if (priv->save_timeout)
+    {
+      g_source_remove (priv->save_timeout);
+      priv->save_timeout = 0;
+    }
 
   G_OBJECT_CLASS (gb_editor_file_marks_parent_class)->finalize (object);
 }
