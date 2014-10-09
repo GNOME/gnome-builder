@@ -18,28 +18,12 @@
 
 #define G_LOG_DOMAIN "gaction-commands"
 
-#include <glib/gi18n.h>
+#include <string.h>
 
 #include "gb-command-gaction-provider.h"
-#include "gb-tab.h"
 
-struct _GbCommandGactionProviderPrivate
-{
-  GbWorkbench *workbench;
-  GtkWidget   *focus;
-};
-
-G_DEFINE_TYPE_WITH_PRIVATE (GbCommandGactionProvider,
-                            gb_command_gaction_provider,
-                            GB_TYPE_COMMAND_PROVIDER)
-
-enum {
-  PROP_0,
-  PROP_WORKBENCH,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
+G_DEFINE_TYPE (GbCommandGactionProvider, gb_command_gaction_provider,
+               GB_TYPE_COMMAND_PROVIDER)
 
 GbCommandProvider *
 gb_command_gaction_provider_new (GbWorkbench *workbench)
@@ -48,127 +32,6 @@ gb_command_gaction_provider_new (GbWorkbench *workbench)
                        "workbench", workbench,
                        NULL);
 }
-
-GbWorkbench *
-gb_command_gaction_provider_get_workbench (GbCommandGactionProvider *provider)
-{
-  g_return_val_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (provider), NULL);
-
-  return provider->priv->workbench;
-}
-
-static void
-gb_command_gaction_provider_update_focus (GbCommandGactionProvider *provider,
-                                          GtkWidget                *focus)
-{
-  GbCommandGactionProviderPrivate *priv;
-
-  g_return_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (provider));
-  g_return_if_fail (!focus || GTK_IS_WIDGET (focus));
-
-  priv = provider->priv;
-
-  if (priv->focus)
-    {
-      g_object_remove_weak_pointer (G_OBJECT (priv->focus),
-                                    (gpointer *)&priv->focus);
-      priv->focus = NULL;
-    }
-
-  if (focus)
-    {
-      priv->focus = focus;
-      g_object_add_weak_pointer (G_OBJECT (priv->focus),
-                                 (gpointer *)&priv->focus);
-    }
-}
-
-static void
-on_workbench_set_focus (GbCommandGactionProvider *provider,
-                        GtkWidget                *widget,
-                        GbWorkbench              *workbench)
-{
-  GtkWidget *parent = widget;
-
-  g_return_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (provider));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  /*
-   * Try to locate the nearest GbTab in the widget hierarchy starting from
-   * the new focus widget. If this widget is not a decendent of a tab, we
-   * will just ignore things.
-   */
-  while (!GB_IS_TAB (parent))
-    {
-      parent = gtk_widget_get_parent (parent);
-      if (!parent)
-        break;
-    }
-
-  if (GB_IS_TAB (parent))
-    gb_command_gaction_provider_update_focus (provider, parent);
-}
-
-static void
-gb_command_gaction_provider_connect (GbCommandGactionProvider *provider,
-                                     GbWorkbench              *workbench)
-{
-  g_return_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (provider));
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-
-  g_signal_connect_object (workbench,
-                           "set-focus",
-                           G_CALLBACK (on_workbench_set_focus),
-                           provider,
-                           G_CONNECT_SWAPPED);
-}
-
-static void
-gb_command_gaction_provider_disconnect (GbCommandGactionProvider *provider,
-                                        GbWorkbench              *workbench)
-{
-  g_return_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (provider));
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-
-  g_signal_handlers_disconnect_by_func (workbench,
-                                        G_CALLBACK (on_workbench_set_focus),
-                                        provider);
-}
-
-void
-gb_command_gaction_provider_set_workbench (GbCommandGactionProvider *provider,
-                                           GbWorkbench              *workbench)
-{
-  GbCommandGactionProviderPrivate *priv;
-
-  g_return_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (provider));
-  g_return_if_fail (!workbench || GB_IS_WORKBENCH (workbench));
-
-  priv = provider->priv;
-
-  if (workbench != priv->workbench)
-    {
-      if (priv->workbench)
-        {
-          gb_command_gaction_provider_disconnect (provider, workbench);
-          g_object_remove_weak_pointer (G_OBJECT (priv->workbench),
-                                        (gpointer *)&priv->workbench);
-          priv->workbench = NULL;
-        }
-
-      if (workbench)
-        {
-          gb_command_gaction_provider_connect (provider, workbench);
-          priv->workbench = workbench;
-          g_object_add_weak_pointer (G_OBJECT (workbench),
-                                     (gpointer *)&priv->workbench);
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (provider),
-                                gParamSpecs [PROP_WORKBENCH]);
-    }
-}
-
 static GAction *
 gb_command_gaction_provider_lookup (GbCommandProvider  *provider,
                                     const gchar        *command_text,
@@ -182,11 +45,6 @@ gb_command_gaction_provider_lookup (GbCommandProvider  *provider,
   gchar *name = NULL;
 
   g_return_val_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (self), NULL);
-
-  if (!self->priv->focus)
-    return NULL;
-
-  widget = self->priv->focus;
 
   /* Determine the command name */
   tmp = g_strdelimit (g_strdup (command_text), "(", ' ');
@@ -222,6 +80,7 @@ gb_command_gaction_provider_lookup (GbCommandProvider  *provider,
    *       ApplicationWindow which is a GActionMap.
    */
 
+  widget = GTK_WIDGET (gb_command_provider_get_active_tab (provider));
   while (widget)
     {
       if (G_IS_ACTION_MAP (widget))
@@ -234,6 +93,18 @@ gb_command_gaction_provider_lookup (GbCommandProvider  *provider,
       widget = gtk_widget_get_parent (widget);
     }
 
+  /*
+   * Now try to lookup the action inside of the GApplication.
+   * This is useful for stuff like "quit", and "preferences".
+   */
+  if (!action)
+    {
+      GApplication *app;
+
+      app = g_application_get_default ();
+      action = g_action_map_lookup_action (G_ACTION_MAP (app), name);
+    }
+
   if (!action && *parameters)
     {
       g_variant_unref (*parameters);
@@ -243,85 +114,18 @@ gb_command_gaction_provider_lookup (GbCommandProvider  *provider,
 cleanup:
   g_free (name);
 
-  return action;
-}
-
-static void
-gb_command_gaction_provider_dispose (GObject *object)
-{
-  GbCommandGactionProvider *provider = (GbCommandGactionProvider *)object;
-
-  gb_command_gaction_provider_update_focus (provider, NULL);
-  gb_command_gaction_provider_set_workbench (provider, NULL);
-
-  G_OBJECT_CLASS (gb_command_gaction_provider_parent_class)->dispose (object);
-}
-
-static void
-gb_command_gaction_provider_get_property (GObject    *object,
-                                          guint       prop_id,
-                                          GValue     *value,
-                                          GParamSpec *pspec)
-{
-  GbCommandGactionProvider *self = GB_COMMAND_GACTION_PROVIDER (object);
-
-  switch (prop_id)
-    {
-    case PROP_WORKBENCH:
-      g_value_set_object (value,
-                          gb_command_gaction_provider_get_workbench (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-gb_command_gaction_provider_set_property (GObject      *object,
-                                          guint         prop_id,
-                                          const GValue *value,
-                                          GParamSpec   *pspec)
-{
-  GbCommandGactionProvider *self = GB_COMMAND_GACTION_PROVIDER (object);
-
-  switch (prop_id)
-    {
-    case PROP_WORKBENCH:
-      gb_command_gaction_provider_set_workbench (self,
-                                                 g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
+  return action ? g_object_ref (action) : NULL;
 }
 
 static void
 gb_command_gaction_provider_class_init (GbCommandGactionProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GbCommandProviderClass *provider_class = GB_COMMAND_PROVIDER_CLASS (klass);
 
-  object_class->dispose = gb_command_gaction_provider_dispose;
-  object_class->get_property = gb_command_gaction_provider_get_property;
-  object_class->set_property = gb_command_gaction_provider_set_property;
-
   provider_class->lookup = gb_command_gaction_provider_lookup;
-
-  gParamSpecs [PROP_WORKBENCH] =
-    g_param_spec_object ("workbench",
-                         _("Workbench"),
-                         _("The workbench containing the actions."),
-                         GB_TYPE_WORKBENCH,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_WORKBENCH,
-                                   gParamSpecs [PROP_WORKBENCH]);
 }
 
 static void
 gb_command_gaction_provider_init (GbCommandGactionProvider *self)
 {
-  self->priv = gb_command_gaction_provider_get_instance_private (self);
 }

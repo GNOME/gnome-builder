@@ -22,7 +22,9 @@
 
 struct _GbCommandProviderPrivate
 {
-  gint priority;
+  GbWorkbench *workbench;
+  GbTab       *active_tab;
+  gint         priority;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbCommandProvider, gb_command_provider,
@@ -30,7 +32,9 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbCommandProvider, gb_command_provider,
 
 enum {
   PROP_0,
+  PROP_ACTIVE_TAB,
   PROP_PRIORITY,
+  PROP_WORKBENCH,
   LAST_PROP
 };
 
@@ -43,9 +47,143 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
 
 GbCommandProvider *
-gb_command_provider_new (void)
+gb_command_provider_new (GbWorkbench *workbench)
 {
-  return g_object_new (GB_TYPE_COMMAND_PROVIDER, NULL);
+  return g_object_new (GB_TYPE_COMMAND_PROVIDER,
+                       "workbench", workbench,
+                       NULL);
+}
+
+/**
+ * gb_command_provider_get_active_tab:
+ *
+ * Returns the "active-tab" property. The active-tab is the last tab that
+ * was focused in the workbench.
+ *
+ * Returns: (transfer none): A #GbTab or %NULL.
+ */
+GbTab *
+gb_command_provider_get_active_tab (GbCommandProvider *provider)
+{
+  g_return_val_if_fail (GB_IS_COMMAND_PROVIDER (provider), NULL);
+
+  return provider->priv->active_tab;
+}
+
+static void
+gb_command_provider_set_active_tab (GbCommandProvider *provider,
+                                    GbTab             *tab)
+{
+  GbCommandProviderPrivate *priv;
+
+  g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
+  g_return_if_fail (!tab || GB_IS_TAB (tab));
+
+  priv = provider->priv;
+
+  if (priv->active_tab)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->active_tab),
+                                    (gpointer *)&priv->active_tab);
+      priv->active_tab = NULL;
+    }
+
+  if (tab)
+    {
+      priv->active_tab = tab;
+      g_object_add_weak_pointer (G_OBJECT (priv->active_tab),
+                                 (gpointer *)&priv->active_tab);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (provider),
+                            gParamSpecs [PROP_ACTIVE_TAB]);
+}
+
+static void
+on_workbench_set_focus (GbCommandProvider *provider,
+                        GtkWidget         *widget,
+                        GbWorkbench       *workbench)
+{
+  g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (!widget || GTK_IS_WIDGET (widget));
+
+  /* walk the hierarchy to find a tab */
+  if (widget)
+    while (!GB_IS_TAB (widget))
+      if (!(widget = gtk_widget_get_parent (widget)))
+        break;
+
+  if (GB_IS_TAB (widget))
+    gb_command_provider_set_active_tab (provider, GB_TAB (widget));
+}
+
+static void
+gb_command_provider_connect (GbCommandProvider *provider,
+                             GbWorkbench       *workbench)
+{
+  g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  g_signal_connect_object (workbench,
+                           "set-focus",
+                           G_CALLBACK (on_workbench_set_focus),
+                           provider,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
+gb_command_provider_disconnect (GbCommandProvider *provider,
+                                GbWorkbench       *workbench)
+{
+  g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  g_signal_handlers_disconnect_by_func (workbench,
+                                        G_CALLBACK (on_workbench_set_focus),
+                                        provider);
+}
+
+GbWorkbench *
+gb_command_provider_get_workbench (GbCommandProvider *provider)
+{
+  g_return_val_if_fail (GB_IS_COMMAND_PROVIDER (provider), NULL);
+
+  return provider->priv->workbench;
+}
+
+static void
+gb_command_provider_set_workbench (GbCommandProvider *provider,
+                                   GbWorkbench       *workbench)
+{
+  GbCommandProviderPrivate *priv;
+
+  g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
+  g_return_if_fail (!workbench || GB_IS_WORKBENCH (workbench));
+
+  priv = provider->priv;
+
+  if (priv->workbench != workbench)
+    {
+      if (priv->workbench)
+        {
+          gb_command_provider_disconnect (provider, workbench);
+          g_object_remove_weak_pointer (G_OBJECT (priv->workbench),
+                                        (gpointer *)&priv->workbench);
+          priv->workbench = NULL;
+        }
+    
+      if (workbench)
+        {
+          priv->workbench = workbench;
+          g_object_add_weak_pointer (G_OBJECT (priv->workbench),
+                                     (gpointer *)&priv->workbench);
+          gb_command_provider_connect (provider, workbench);
+        }
+    
+      g_object_notify_by_pspec (G_OBJECT (provider),
+                                gParamSpecs [PROP_WORKBENCH]);
+  }
 }
 
 gint
@@ -70,6 +208,19 @@ gb_command_provider_set_priority (GbCommandProvider *provider,
     }
 }
 
+/**
+ * gb_command_provider_lookup:
+ * @provider: (in): The #GbCommandProvider
+ * @command_text: (in): Command text to be parsed
+ * @parameter: (allow-none) (out): location for a resulting #GVariant parameter
+ *
+ * This function causes the provider to attept to parse @command_text and
+ * generate a GAction to execute the command. If the @command_text could not
+ * be parsed, then %NULL is returned.
+ *
+ * Returns: (transfer full): A #GAction that should be freed with
+ *   g_object_unref().
+ */
 GAction *
 gb_command_provider_lookup (GbCommandProvider  *provider,
                             const gchar        *command_text,
@@ -98,8 +249,16 @@ gb_command_provider_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ACTIVE_TAB:
+      g_value_set_object (value, gb_command_provider_get_active_tab (self));
+      break;
+
     case PROP_PRIORITY:
       g_value_set_int (value, gb_command_provider_get_priority (self));
+      break;
+
+    case PROP_WORKBENCH:
+      g_value_set_object (value, gb_command_provider_get_workbench (self));
       break;
 
     default:
@@ -121,6 +280,10 @@ gb_command_provider_set_property (GObject      *object,
       gb_command_provider_set_priority (self, g_value_get_int (value));
       break;
 
+    case PROP_WORKBENCH:
+      gb_command_provider_set_workbench (self, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -133,6 +296,16 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
 
   object_class->get_property = gb_command_provider_get_property;
   object_class->set_property = gb_command_provider_set_property;
+
+  gParamSpecs [PROP_ACTIVE_TAB] =
+    g_param_spec_object ("active-tab",
+                         _("Active Tab"),
+                         _("The last focused GbTab widget."),
+                         GB_TYPE_TAB,
+                         (G_PARAM_READABLE |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_ACTIVE_TAB,
+                                   gParamSpecs [PROP_ACTIVE_TAB]);
 
   /**
    * GbCommandProvider:priority:
@@ -156,6 +329,24 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_PRIORITY,
                                    gParamSpecs [PROP_PRIORITY]);
+
+  /**
+   * GbCommandProvider:workbench:
+   * 
+   * The "workbench" property is the top-level window containing our project
+   * and the workbench to work on it. It keeps track of the last focused tab
+   * for convenience by action providers.
+   */
+  gParamSpecs [PROP_WORKBENCH] =
+    g_param_spec_object ("workbench",
+                         _("Workbench"),
+                         _("The target workbench."),
+                         GB_TYPE_WORKBENCH,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_WORKBENCH,
+                                   gParamSpecs [PROP_WORKBENCH]);
 
   /**
    * GbCommandProvider::lookup:

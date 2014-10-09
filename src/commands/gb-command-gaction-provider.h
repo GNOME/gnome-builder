@@ -20,7 +20,6 @@
 #define GB_COMMAND_GACTION_PROVIDER_H
 
 #include "gb-command-provider.h"
-#include "gb-workbench.h"
 
 G_BEGIN_DECLS
 

@@ -21,6 +21,9 @@
 
 #include <gio/gio.h>
 
+#include "gb-tab.h"
+#include "gb-workbench.h"
+
 G_BEGIN_DECLS
 
 #define GB_TYPE_COMMAND_PROVIDER            (gb_command_provider_get_type())
@@ -58,14 +61,16 @@ struct _GbCommandProviderClass
   gpointer _padding5;
 };
 
-GType              gb_command_provider_get_type     (void) G_GNUC_CONST;
-GbCommandProvider *gb_command_provider_new          (void);
-gint               gb_command_provider_get_priority (GbCommandProvider  *provider);
-void               gb_command_provider_set_priority (GbCommandProvider  *provider,
-                                                     gint                priority);
-GAction           *gb_command_provider_lookup       (GbCommandProvider  *provider,
-                                                     const gchar        *command_text,
-                                                     GVariant          **parameters);
+GType              gb_command_provider_get_type       (void) G_GNUC_CONST;
+GbCommandProvider *gb_command_provider_new            (GbWorkbench        *workbench);
+GbWorkbench       *gb_command_provider_get_workbench  (GbCommandProvider  *provider);
+GbTab             *gb_command_provider_get_active_tab (GbCommandProvider  *provider);
+gint               gb_command_provider_get_priority   (GbCommandProvider  *provider);
+void               gb_command_provider_set_priority   (GbCommandProvider  *provider,
+                                                       gint                priority);
+GAction           *gb_command_provider_lookup         (GbCommandProvider  *provider,
+                                                       const gchar        *command_text,
+                                                       GVariant          **parameters);
 
 G_END_DECLS
 
