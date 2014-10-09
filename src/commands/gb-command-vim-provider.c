@@ -1,0 +1,95 @@
+/* gb-command-vim-provider.c
+ *
+ * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#define G_LOG_DOMAIN "vim-command-provider"
+
+#include "gb-command-vim.h"
+#include "gb-command-vim-provider.h"
+#include "gb-editor-tab.h"
+#include "gb-editor-vim.h"
+
+G_DEFINE_TYPE (GbCommandVimProvider, gb_command_vim_provider,
+               GB_TYPE_COMMAND_PROVIDER)
+
+GbCommandProvider *
+gb_command_vim_provider_new (GbWorkbench *workbench)
+{
+  return g_object_new (GB_TYPE_COMMAND_VIM_PROVIDER,
+                       "workbench", workbench,
+                       NULL);
+}
+
+static GAction *
+gb_command_vim_provider_lookup (GbCommandProvider  *provider,
+                                const gchar        *command_text,
+                                GVariant          **parameters)
+{
+  GbWorkbench *workbench;
+  GSettings *settings;
+  GbTab *active_tab;
+
+  g_return_val_if_fail (GB_IS_COMMAND_VIM_PROVIDER (provider), NULL);
+  g_return_val_if_fail (command_text, NULL);
+  g_return_val_if_fail (parameters, NULL);
+
+  /* Fetch our editor gsettings */
+  settings = g_object_get_data (G_OBJECT (provider), "editor-settings");
+  if (!G_IS_SETTINGS (settings))
+    return NULL;
+
+  /* Make sure vim-mode is enabled */
+  if (!g_settings_get_boolean (settings, "vim-mode"))
+    return NULL;
+  
+  /* Make sure we have a workbench */
+  workbench = gb_command_provider_get_workbench (provider);
+  if (!GB_IS_WORKBENCH (workbench))
+    return NULL;
+
+  /* Make sure we have an editor tab last focused */
+  active_tab = gb_command_provider_get_active_tab (provider);
+  if (!GB_IS_EDITOR_TAB (active_tab))
+    return NULL;
+
+  /* See if GbEditorVim recognizes this command */
+  if (gb_editor_vim_is_command (command_text))
+    {
+      *parameters = g_variant_new_string (command_text);
+      return gb_command_vim_new (GB_EDITOR_TAB (active_tab));
+    }
+
+  return NULL;
+}
+
+static void
+gb_command_vim_provider_class_init (GbCommandVimProviderClass *klass)
+{
+  GbCommandProviderClass *provider_class = GB_COMMAND_PROVIDER_CLASS (klass);
+
+  provider_class->lookup = gb_command_vim_provider_lookup;
+}
+
+static void
+gb_command_vim_provider_init (GbCommandVimProvider *self)
+{
+  GSettings *settings;
+
+  settings = g_settings_new ("org.gnome.builder.editor");
+  g_object_set_data_full (G_OBJECT (self), "editor-settings", settings,
+                          g_object_unref);
+}

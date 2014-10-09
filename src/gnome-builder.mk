@@ -15,6 +15,10 @@ libgnome_builder_la_SOURCES = \
 	src/commands/gb-command-manager.h \
 	src/commands/gb-command-provider.c \
 	src/commands/gb-command-provider.h \
+	src/commands/gb-command-vim-provider.c \
+	src/commands/gb-command-vim-provider.h \
+	src/commands/gb-command-vim.c \
+	src/commands/gb-command-vim.h \
 	src/devhelp/gb-devhelp-navigation-item.c \
 	src/devhelp/gb-devhelp-navigation-item.h \
 	src/devhelp/gb-devhelp-tab.c \
