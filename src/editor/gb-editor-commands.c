@@ -479,8 +479,11 @@ gb_editor_tab_do_save (GbEditorTab *tab)
     GbWorkspace *workspace;
     GbNavigationItem *item;
     GbNavigationList *list = NULL;
+    GbEditorFileMarks *marks;
+    GbEditorFileMark *mark;
     GtkTextMark *insert;
     GtkTextIter iter;
+    GFile *file;
     guint line;
     guint line_offset;
 
@@ -491,16 +494,23 @@ gb_editor_tab_do_save (GbEditorTab *tab)
     insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->document));
     gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->document),
                                       &iter, insert);
+    file = gtk_source_file_get_location (priv->file);
     line = gtk_text_iter_get_line (&iter);
     line_offset = gtk_text_iter_get_line_offset (&iter);
     item = g_object_new (GB_TYPE_EDITOR_NAVIGATION_ITEM,
-                         "file", gtk_source_file_get_location (priv->file),
+                         "file", file,
                          "line", line,
                          "line-offset", line_offset,
                          "tab", tab,
                          "workspace", workspace,
                          NULL);
     gb_navigation_list_append (list, item);
+
+    /* and save a file mark for it */
+    marks = gb_editor_file_marks_get_default ();
+    mark = gb_editor_file_marks_get_for_file (marks, file);
+    gb_editor_file_mark_set_line (mark, line);
+    gb_editor_file_mark_set_column (mark, line_offset);
   }
 
   /*
