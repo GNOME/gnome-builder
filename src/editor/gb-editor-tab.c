@@ -985,21 +985,27 @@ on_vim_command_visibility_toggled (GbEditorVim *vim,
                                    gboolean     visible,
                                    GbEditorTab *tab)
 {
+  GbWorkbench *workbench;
+  GAction *action;
+  GVariant *params;
+
   ENTRY;
 
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
-  gtk_revealer_set_reveal_child (tab->priv->vim_command_entry_revealer,
-                                 visible);
+  workbench = gb_widget_get_workbench (GTK_WIDGET (tab));
+  if (!workbench)
+    return;
 
-  if (visible)
-    {
-      gtk_entry_set_text (tab->priv->vim_command_entry, "");
-      gtk_widget_grab_focus (GTK_WIDGET (tab->priv->vim_command_entry));
-    }
-  else
-    gtk_widget_grab_focus (GTK_WIDGET (tab->priv->source_view));
+  action = g_action_map_lookup_action (G_ACTION_MAP (workbench),
+                                       "toggle-command-bar");
+  if (!action)
+    return;
+
+  params = g_variant_new_boolean (visible);
+  g_action_activate (action, params);
+  g_variant_unref (params);
 
   EXIT;
 }
@@ -1013,53 +1019,6 @@ on_vim_begin_search (GbEditorVim *vim,
 
   gb_source_view_begin_search (tab->priv->source_view, GTK_DIR_DOWN,
                                search_text);
-}
-
-static void
-on_vim_command_entry_activate (GtkEntry    *entry,
-                               GbEditorTab *tab)
-{
-  GtkWidget *toplevel;
-  GbWorkspace *workspace;
-  GActionGroup *actions;
-  GAction *action = NULL;
-  const gchar *text;
-
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-
-  if (!(text = gtk_entry_get_text (entry)))
-    return;
-
-  while (*text == ':')
-    text++;
-
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tab));
-  workspace = gb_workbench_get_workspace (GB_WORKBENCH (toplevel),
-                                          GB_TYPE_EDITOR_WORKSPACE);
-  actions = gb_workspace_get_actions (workspace);
-
-  /*
-   * TODO: This is a very crappy way to commands. If you support Builder,
-   *       I'll have time to fix this ;-)
-   */
-
-  if (g_str_equal (text, "w"))
-    {
-      gb_editor_vim_set_mode (tab->priv->vim, GB_EDITOR_VIM_NORMAL);
-      action = g_action_map_lookup_action (G_ACTION_MAP (actions), "save");
-      g_action_activate (action, NULL);
-      return;
-    }
-  else if (g_str_equal (text, "e"))
-    {
-      gb_editor_vim_set_mode (tab->priv->vim, GB_EDITOR_VIM_NORMAL);
-      action = g_action_map_lookup_action (G_ACTION_MAP (actions), "open");
-      g_action_activate (action, NULL);
-      return;
-    }
-
-  gb_editor_vim_execute_command (tab->priv->vim, text);
 }
 
 static void
@@ -1087,28 +1046,6 @@ on_vim_notify_mode (GbEditorVim *vim,
 
   if (mode != GB_EDITOR_VIM_INSERT)
     gb_source_view_clear_snippets (tab->priv->source_view);
-}
-
-static gboolean
-on_vim_command_entry_key_press_event (GtkEntry    *entry,
-                                      GdkEventKey *event,
-                                      GbEditorTab *tab)
-{
-  ENTRY;
-
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-  g_return_if_fail (event);
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-
-  switch (event->keyval)
-    {
-    case GDK_KEY_Escape:
-      gb_editor_vim_set_mode (tab->priv->vim, GB_EDITOR_VIM_NORMAL);
-      RETURN (TRUE);
-
-    default:
-      RETURN (FALSE);
-    }
 }
 
 static gboolean
@@ -1314,16 +1251,6 @@ gb_editor_tab_constructed (GObject *object)
   g_signal_connect (priv->vim,
                     "notify::mode",
                     G_CALLBACK (on_vim_notify_mode),
-                    tab);
-
-  g_signal_connect (priv->vim_command_entry,
-                    "activate",
-                    G_CALLBACK (on_vim_command_entry_activate),
-                    tab);
-
-  g_signal_connect (priv->vim_command_entry,
-                    "key-press-event",
-                    G_CALLBACK (on_vim_command_entry_key_press_event),
                     tab);
 
   settings = g_settings_new ("org.gnome.builder.editor");
@@ -1619,10 +1546,6 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
                                                 snippets_provider);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
                                                 source_view);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                vim_command_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                vim_command_entry_revealer);
 
   g_type_ensure (GB_TYPE_EDITOR_DOCUMENT);
   g_type_ensure (GB_TYPE_SOURCE_CHANGE_MONITOR);

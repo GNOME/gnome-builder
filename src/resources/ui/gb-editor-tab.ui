@@ -110,32 +110,6 @@
             </child>
           </object>
         </child>
-        <child type="overlay">
-          <object class="GtkRevealer" id="vim_command_entry_revealer">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">center</property>
-            <property name="valign">end</property>
-            <property name="reveal_child">False</property>
-            <property name="transition_type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP</property>
-            <child>
-              <object class="GtkFrame" id="vim_command_frame">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <style>
-                  <class name="gb-vim-command-slider"/>
-                </style>
-                <child>
-                  <object class="GtkEntry" id="vim_command_entry">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="width_chars">40</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
       </object>
     </child>
     <child>

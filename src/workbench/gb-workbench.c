@@ -297,15 +297,55 @@ on_show_command_bar_activate (GSimpleAction *action,
 {
   GbWorkbenchPrivate *priv;
   GbWorkbench *workbench = user_data;
+  gboolean show = TRUE;
 
   g_return_if_fail (GB_IS_WORKBENCH (workbench));
 
   priv = workbench->priv;
 
-  if (gtk_revealer_get_reveal_child (GTK_REVEALER (priv->command_bar)))
-    gb_command_bar_hide (priv->command_bar);
-  else
+  show = !gtk_revealer_get_reveal_child (GTK_REVEALER (priv->command_bar));
+
+  if (show)
     gb_command_bar_show (priv->command_bar);
+  else
+    gb_command_bar_hide (priv->command_bar);
+}
+
+static void
+on_toggle_command_bar_activate (GSimpleAction *action,
+                                GVariant      *parameters,
+                                gpointer       user_data)
+{
+  GbWorkbenchPrivate *priv;
+  GbWorkbench *workbench = user_data;
+  gboolean show = TRUE;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  priv = workbench->priv;
+
+  show = g_variant_get_boolean (parameters);
+
+  if (show)
+    gb_command_bar_show (priv->command_bar);
+  else
+    gb_command_bar_hide (priv->command_bar);
+}
+
+static void
+on_command_bar_notify_child_revealed (GbCommandBar *command_bar,
+                                      GParamSpec   *pspec,
+                                      GbWorkbench  *workbench)
+{
+  gboolean reveal_child;
+
+  g_return_if_fail (GB_IS_COMMAND_BAR (command_bar));
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  reveal_child = gtk_revealer_get_reveal_child (GTK_REVEALER (command_bar));
+
+  if (!reveal_child && workbench->priv->active_workspace)
+    gtk_widget_grab_focus (GTK_WIDGET (workbench->priv->active_workspace));
 }
 
 static void
@@ -317,6 +357,7 @@ gb_workbench_constructed (GObject *object)
     { "go-backward", on_go_backward_activate },
     { "go-forward", on_go_forward_activate },
     { "show-command-bar", on_show_command_bar_activate },
+    { "toggle-command-bar", on_toggle_command_bar_activate, "b" },
   };
   GbWorkbenchPrivate *priv;
   GbWorkbench *workbench = (GbWorkbench *)object;
@@ -362,6 +403,10 @@ gb_workbench_constructed (GObject *object)
   action = g_action_map_lookup_action (G_ACTION_MAP (workbench), "go-forward");
   g_object_bind_property (priv->navigation_list, "can-go-forward",
                           action, "enabled", G_BINDING_SYNC_CREATE);
+
+  g_signal_connect (priv->command_bar, "notify::child-revealed",
+                    G_CALLBACK (on_command_bar_notify_child_revealed),
+                    workbench);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->constructed (object);
 
