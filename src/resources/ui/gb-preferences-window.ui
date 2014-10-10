@@ -162,6 +162,32 @@
                     <property name="height">1</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkLabel" id="word_completion_label">
+                    <property name="visible">True</property>
+                    <property name="halign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="Yes">Enable auto-completion of words in the document.</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="width">1</property>
+                    <property name="top-attach">2</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="word_completion_switch">
+                    <property name="visible">True</property>
+                    <property name="active">False</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="width">1</property>
+                    <property name="top-attach">2</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="name">editor</property>

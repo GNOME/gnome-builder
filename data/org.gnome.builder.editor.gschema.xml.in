@@ -11,5 +11,10 @@
       <summary>Jump to the last position when reopening a file.</summary>
       <description>Whether or not VIM style keybindings should be used in the source code editor.</description>
     </key>
+    <key name="word-completion" type="b">
+      <default>true</default>
+      <summary>Enable auto-completion of words in document.</summary>
+      <description>If enabled, words within the current document will be available for auto-completion.</description>
+    </key>
   </schema>
 </schemalist>

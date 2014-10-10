@@ -35,8 +35,9 @@ struct _GbPreferencesWindowPrivate
   GtkSearchBar    *search_bar;
   GtkStack        *stack;
 
-  GtkSwitch       *vim_switch;
   GtkSwitch       *restore_insert_mark_switch;
+  GtkSwitch       *vim_switch;
+  GtkSwitch       *word_completion_switch;
 
   GtkEntry        *git_author_name_entry;
   GtkEntry        *git_author_email_entry;
@@ -91,6 +92,9 @@ load_editor (GbPreferencesWindow *window)
   g_settings_bind (settings, "restore-insert-mark",
                    priv->restore_insert_mark_switch, "active",
                    G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (settings, "word-completion",
+                   priv->word_completion_switch, "active",
+                   G_SETTINGS_BIND_DEFAULT);
 
   g_object_unref (settings);
 }
@@ -106,6 +110,11 @@ load_git (GbPreferencesWindow *window)
   config = ggit_config_new_default (NULL);
   if (!config)
     return;
+
+  /*
+   * TODO: These should be bound to a config wrapper object that will sync
+   *       the values back to the underlying config.
+   */
 
   value = ggit_config_get_string (config, "user.name", NULL);
   if (value)
@@ -192,6 +201,7 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, search_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, stack);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, vim_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, word_completion_switch);
 
   g_type_ensure (GB_TYPE_SIDEBAR);
 }
