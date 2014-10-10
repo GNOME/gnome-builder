@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include "gb-command-gaction-provider.h"
+#include "gb-log.h"
 
 G_DEFINE_TYPE (GbCommandGactionProvider, gb_command_gaction_provider,
                GB_TYPE_COMMAND_PROVIDER)
@@ -65,6 +66,8 @@ gb_command_gaction_provider_lookup (GbCommandProvider *provider,
   gchar *tmp;
   gchar *name = NULL;
 
+  ENTRY;
+
   g_return_val_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (self), NULL);
 
   /* Determine the command name */
@@ -90,7 +93,7 @@ gb_command_gaction_provider_lookup (GbCommandProvider *provider,
     {
       parameters = g_variant_parse (NULL, command_text, NULL, NULL, NULL);
       if (!parameters)
-        goto cleanup;
+        GOTO (cleanup);
     }
 
   /*
@@ -112,6 +115,44 @@ gb_command_gaction_provider_lookup (GbCommandProvider *provider,
         }
 
       widget = gtk_widget_get_parent (widget);
+    }
+
+  /*
+   * Now try to lookup the action from the workspace up, which is the case if
+   * we don't have an active tab.
+   */
+  if (!action)
+    {
+      GbWorkbench *workbench;
+      GbWorkspace *workspace;
+
+      workbench = gb_command_provider_get_workbench (provider);
+      workspace = gb_workbench_get_active_workspace (workbench);
+      widget = GTK_WIDGET (workspace);
+
+      while (widget)
+        {
+          if (G_IS_ACTION_MAP (widget))
+            {
+              action = g_action_map_lookup_action (G_ACTION_MAP (widget), name);
+              if (action)
+                break;
+            }
+          else if (GB_IS_WORKSPACE (widget))
+            {
+              GActionGroup *group;
+
+              group = gb_workspace_get_actions (GB_WORKSPACE (widget));
+              if (G_IS_ACTION_MAP (group))
+                {
+                  action = g_action_map_lookup_action (G_ACTION_MAP (group), name);
+                  if (action)
+                    break;
+                }
+            }
+
+          widget = gtk_widget_get_parent (widget);
+        }
     }
 
   /*
@@ -147,7 +188,7 @@ gb_command_gaction_provider_lookup (GbCommandProvider *provider,
 cleanup:
   g_free (name);
 
-  return command;
+  RETURN (command);
 }
 
 static void
