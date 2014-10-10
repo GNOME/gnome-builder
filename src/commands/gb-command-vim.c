@@ -59,5 +59,5 @@ gb_command_vim_new (GbEditorTab *tab)
   g_signal_connect (action, "activate", G_CALLBACK (gb_command_vim_activate),
                     NULL);
 
-  return action;
+  return G_ACTION (action);
 }
