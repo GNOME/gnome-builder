@@ -48,9 +48,10 @@ struct _GbEditorTabPrivate
   GbEditorDocument *document;
 
   /*
-   * Snippet related components.
+   * Variants completion providers.
    */
   GtkSourceCompletionProvider *snippets_provider;
+  GtkSourceCompletionProvider *words_provider;
 
   /*
    * Search releated components.

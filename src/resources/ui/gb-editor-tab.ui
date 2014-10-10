@@ -130,6 +130,8 @@
   <object class="GbSourceSnippetCompletionProvider" id="snippets_provider">
     <property name="source-view">source_view</property>
   </object>
+  <object class="GtkSourceCompletionWords" id="words_provider">
+  </object>
   <object class="GtkSourceSearchSettings" id="search_settings">
   </object>
   <object class="GtkSourceSearchContext" id="search_context">

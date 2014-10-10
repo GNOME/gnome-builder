@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "editor"
 
 #include <glib/gi18n.h>
+#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 
 #include "gb-editor-file-mark.h"
 #include "gb-editor-file-marks.h"
@@ -1173,8 +1174,13 @@ gb_editor_tab_constructed (GObject *object)
                             G_CALLBACK (on_search_occurrences_notify),
                             tab);
 
+  gtk_source_completion_words_register (
+      GTK_SOURCE_COMPLETION_WORDS (priv->words_provider),
+      GTK_TEXT_BUFFER (priv->document));
+
   comp = gtk_source_view_get_completion (GTK_SOURCE_VIEW (priv->source_view));
   gtk_source_completion_add_provider (comp, priv->snippets_provider, NULL);
+  gtk_source_completion_add_provider (comp, priv->words_provider, NULL);
 
   /*
    * WORKAROUND:
@@ -1546,6 +1552,8 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
                                                 snippets_provider);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
                                                 source_view);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
+                                                words_provider);
 
   g_type_ensure (GB_TYPE_EDITOR_DOCUMENT);
   g_type_ensure (GB_TYPE_SOURCE_CHANGE_MONITOR);
