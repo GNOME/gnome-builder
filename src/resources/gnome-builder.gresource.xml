@@ -17,6 +17,8 @@
     <file>snippets/c.snippets</file>
     <file>snippets/chdr.snippets</file>
 
+    <file>ui/gb-command-bar.ui</file>
+    <file>ui/gb-command-bar-item.ui</file>
     <file>ui/gb-devhelp-tab.ui</file>
     <file>ui/gb-editor-tab.ui</file>
     <file>ui/gb-preferences-window.ui</file>
