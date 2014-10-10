@@ -21,6 +21,7 @@
 
 #include <gio/gio.h>
 
+#include "gb-command.h"
 #include "gb-tab.h"
 #include "gb-workbench.h"
 
@@ -50,27 +51,19 @@ struct _GbCommandProviderClass
 {
   GObjectClass parent;
 
-  GAction *(*lookup) (GbCommandProvider  *provider,
-                      const gchar        *command_text,
-                      GVariant          **parameters);
-
-  gpointer _padding1;
-  gpointer _padding2;
-  gpointer _padding3;
-  gpointer _padding4;
-  gpointer _padding5;
+  GbCommand *(*lookup) (GbCommandProvider *provider,
+                        const gchar       *command_text);
 };
 
 GType              gb_command_provider_get_type       (void) G_GNUC_CONST;
-GbCommandProvider *gb_command_provider_new            (GbWorkbench        *workbench);
-GbWorkbench       *gb_command_provider_get_workbench  (GbCommandProvider  *provider);
-GbTab             *gb_command_provider_get_active_tab (GbCommandProvider  *provider);
-gint               gb_command_provider_get_priority   (GbCommandProvider  *provider);
-void               gb_command_provider_set_priority   (GbCommandProvider  *provider,
-                                                       gint                priority);
-GAction           *gb_command_provider_lookup         (GbCommandProvider  *provider,
-                                                       const gchar        *command_text,
-                                                       GVariant          **parameters);
+GbCommandProvider *gb_command_provider_new            (GbWorkbench       *workbench);
+GbWorkbench       *gb_command_provider_get_workbench  (GbCommandProvider *provider);
+GbTab             *gb_command_provider_get_active_tab (GbCommandProvider *provider);
+gint               gb_command_provider_get_priority   (GbCommandProvider *provider);
+void               gb_command_provider_set_priority   (GbCommandProvider *provider,
+                                                       gint               priority);
+GbCommand         *gb_command_provider_lookup         (GbCommandProvider *provider,
+                                                       const gchar       *command_text);
 
 G_END_DECLS
 

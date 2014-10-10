@@ -21,6 +21,7 @@
 
 #include <gio/gio.h>
 
+#include "gb-command.h"
 #include "gb-command-provider.h"
 
 G_BEGIN_DECLS
@@ -50,12 +51,11 @@ struct _GbCommandManagerClass
   GObjectClass parent;
 };
 
-GType     gb_command_manager_get_type     (void) G_GNUC_CONST;
-GAction  *gb_command_manager_lookup       (GbCommandManager   *manager,
-                                           const gchar        *command_text,
-                                           GVariant          **parameters);
-void      gb_command_manager_add_provider (GbCommandManager   *manager,
-                                           GbCommandProvider  *provider);
+GType      gb_command_manager_get_type     (void) G_GNUC_CONST;
+GbCommand *gb_command_manager_lookup       (GbCommandManager  *manager,
+                                            const gchar       *command_text);
+void       gb_command_manager_add_provider (GbCommandManager  *manager,
+                                            GbCommandProvider *provider);
 
 G_END_DECLS
 

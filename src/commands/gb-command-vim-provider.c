@@ -34,10 +34,9 @@ gb_command_vim_provider_new (GbWorkbench *workbench)
                        NULL);
 }
 
-static GAction *
-gb_command_vim_provider_lookup (GbCommandProvider  *provider,
-                                const gchar        *command_text,
-                                GVariant          **parameters)
+static GbCommand *
+gb_command_vim_provider_lookup (GbCommandProvider *provider,
+                                const gchar       *command_text)
 {
   GbWorkbench *workbench;
   GSettings *settings;
@@ -45,7 +44,6 @@ gb_command_vim_provider_lookup (GbCommandProvider  *provider,
 
   g_return_val_if_fail (GB_IS_COMMAND_VIM_PROVIDER (provider), NULL);
   g_return_val_if_fail (command_text, NULL);
-  g_return_val_if_fail (parameters, NULL);
 
   /* Fetch our editor gsettings */
   settings = g_object_get_data (G_OBJECT (provider), "editor-settings");
@@ -68,10 +66,10 @@ gb_command_vim_provider_lookup (GbCommandProvider  *provider,
 
   /* See if GbEditorVim recognizes this command */
   if (gb_editor_vim_is_command (command_text))
-    {
-      *parameters = g_variant_new_string (command_text);
-      return gb_command_vim_new (GB_EDITOR_TAB (active_tab));
-    }
+    return g_object_new (GB_TYPE_COMMAND_VIM,
+                         "command-text", command_text,
+                         "tab", active_tab,
+                         NULL);
 
   return NULL;
 }

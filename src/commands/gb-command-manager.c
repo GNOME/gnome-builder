@@ -83,32 +83,28 @@ gb_command_manager_add_provider (GbCommandManager  *manager,
   g_ptr_array_sort (manager->priv->providers, provider_compare_func);
 }
 
-GAction *
-gb_command_manager_lookup (GbCommandManager  *manager,
-                           const gchar       *command_text,
-                           GVariant         **parameters)
+GbCommand *
+gb_command_manager_lookup (GbCommandManager *manager,
+                           const gchar      *command_text)
 {
-  GVariant *dummy = NULL;
-  GAction *ret = NULL;
+  GbCommand *ret = NULL;
   guint i;
 
   g_return_val_if_fail (GB_IS_COMMAND_MANAGER (manager), NULL);
   g_return_val_if_fail (command_text, NULL);
 
-  if (!parameters)
-    parameters = &dummy;
-
-  for (i = 0; !ret && (i < manager->priv->providers->len); i++)
+  for (i = 0; i < manager->priv->providers->len; i++)
     {
       GbCommandProvider *provider;
 
       provider = g_ptr_array_index (manager->priv->providers, i);
-      ret = gb_command_provider_lookup (provider, command_text, parameters);
+      ret = gb_command_provider_lookup (provider, command_text);
+
+      if (ret)
+        return ret;
     }
 
-  g_clear_pointer (&dummy, g_variant_unref);
-
-  return ret;
+  return NULL;
 }
 
 static void

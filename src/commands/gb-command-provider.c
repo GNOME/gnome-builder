@@ -212,29 +212,20 @@ gb_command_provider_set_priority (GbCommandProvider *provider,
  * gb_command_provider_lookup:
  * @provider: (in): The #GbCommandProvider
  * @command_text: (in): Command text to be parsed
- * @parameter: (allow-none) (out): location for a resulting #GVariant parameter
  *
- * This function causes the provider to attept to parse @command_text and
- * generate a GAction to execute the command. If the @command_text could not
- * be parsed, then %NULL is returned.
  *
- * Returns: (transfer full): A #GAction that should be freed with
- *   g_object_unref().
+ * Returns: (transfer full): A #GbCommand if successful; otherwise %NULL.
  */
-GAction *
-gb_command_provider_lookup (GbCommandProvider  *provider,
-                            const gchar        *command_text,
-                            GVariant          **parameter)
+GbCommand *
+gb_command_provider_lookup (GbCommandProvider *provider,
+                            const gchar       *command_text)
 {
-  GAction *ret = NULL;
+  GbCommand *ret = NULL;
 
   g_return_val_if_fail (GB_IS_COMMAND_PROVIDER (provider), NULL);
   g_return_val_if_fail (command_text, NULL);
 
-  if (parameter)
-    *parameter = NULL;
-
-  g_signal_emit (provider, gSignals [LOOKUP], 0, command_text, provider, &ret);
+  g_signal_emit (provider, gSignals [LOOKUP], 0, command_text, &ret);
 
   return ret;
 }
@@ -368,10 +359,9 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
                   g_signal_accumulator_first_wins,
                   NULL,
                   NULL,
-                  G_TYPE_ACTION,
-                  2,
-                  G_TYPE_STRING,
-                  G_TYPE_POINTER);
+                  GB_TYPE_COMMAND,
+                  1,
+                  G_TYPE_STRING);
 }
 
 static void

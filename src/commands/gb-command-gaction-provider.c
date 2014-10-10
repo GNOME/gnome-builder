@@ -32,13 +32,34 @@ gb_command_gaction_provider_new (GbWorkbench *workbench)
                        "workbench", workbench,
                        NULL);
 }
-static GAction *
-gb_command_gaction_provider_lookup (GbCommandProvider  *provider,
-                                    const gchar        *command_text,
-                                    GVariant          **parameters)
+
+static GbCommandResult *
+execute_action (GbCommand *command,
+                gpointer   user_data)
+{
+  GAction *action;
+  GVariant *params;
+
+  g_return_if_fail (GB_IS_COMMAND (command));
+
+  action = g_object_get_data (G_OBJECT (command), "action");
+  g_return_if_fail (G_IS_ACTION (action));
+
+  params = g_object_get_data (G_OBJECT (command), "parameters");
+
+  g_action_activate (action, params);
+
+  return NULL;
+}
+
+static GbCommand *
+gb_command_gaction_provider_lookup (GbCommandProvider *provider,
+                                    const gchar       *command_text)
 {
   GbCommandGactionProvider *self = (GbCommandGactionProvider *)provider;
   GtkWidget *widget;
+  GbCommand *command = NULL;
+  GVariant *parameters = NULL;
   GAction *action = NULL;
   gchar **parts;
   gchar *tmp;
@@ -67,8 +88,8 @@ gb_command_gaction_provider_lookup (GbCommandProvider  *provider,
 
   if (*command_text)
     {
-      *parameters = g_variant_parse (NULL, command_text, NULL, NULL, NULL);
-      if (!*parameters)
+      parameters = g_variant_parse (NULL, command_text, NULL, NULL, NULL);
+      if (!parameters)
         goto cleanup;
     }
 
@@ -105,16 +126,28 @@ gb_command_gaction_provider_lookup (GbCommandProvider  *provider,
       action = g_action_map_lookup_action (G_ACTION_MAP (app), name);
     }
 
-  if (!action && *parameters)
+  if (!action && parameters)
     {
-      g_variant_unref (*parameters);
-      *parameters = NULL;
+      g_variant_unref (parameters);
+      parameters = NULL;
     }
+
+  if (action)
+    {
+      command = gb_command_new ();
+      if (parameters)
+        g_object_set_data_full (G_OBJECT (command), "parameters",
+                                parameters, (GDestroyNotify)g_variant_unref);
+      g_object_set_data_full (G_OBJECT (command), "action",
+                              g_object_ref (action), g_object_unref);
+      g_signal_connect (command, "execute", G_CALLBACK (execute_action), NULL);
+    }
+
 
 cleanup:
   g_free (name);
 
-  return action ? g_object_ref (action) : NULL;
+  return command;
 }
 
 static void
