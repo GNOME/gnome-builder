@@ -41,8 +41,6 @@
  *  - Multi-character verb/noun/modifiers.
  *  - Marks
  *  - Jumps
- *  - Mark which commands are "movements" so that we can use that when
- *    looking up movement modifiers. Also should mark jumps, etc.
  */
 
 /**
