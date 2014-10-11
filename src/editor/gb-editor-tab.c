@@ -74,7 +74,7 @@ gb_editor_tab_set_enable_word_completion (GbEditorTab *tab,
 {
   GtkSourceCompletion *completion;
 
-  g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), FALSE);
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
   completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (tab->priv->source_view));
 
