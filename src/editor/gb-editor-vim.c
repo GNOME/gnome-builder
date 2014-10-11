@@ -2329,44 +2329,48 @@ gb_editor_vim_reverse_search (GbEditorVim *vim)
 static void
 gb_editor_vim_search (GbEditorVim *vim)
 {
-  GtkTextIter begin;
-  GtkTextIter end;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  GtkTextIter start_iter;
+  gboolean has_selection;
+  gchar *text = NULL;
 
   g_return_if_fail (GB_IS_EDITOR_VIM (vim));
 
   if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view))
     return;
 
-  if (gb_editor_vim_select_current_word (vim, &begin, &end))
-    {
-      GtkTextIter start_iter;
-      gchar *text;
+  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
 
-      text = gtk_text_iter_get_slice (&begin, &end);
+  if (has_selection)
+    text = gtk_text_iter_get_slice (&iter, &selection);
+  else if (gb_editor_vim_select_current_word (vim, &iter, &selection))
+    text = gtk_text_iter_get_slice (&iter, &selection);
+  else
+    return;
 
-      if (gtk_text_iter_compare (&begin, &end) > 0)
-        gtk_text_iter_assign (&start_iter, &begin);
-      else
-        gtk_text_iter_assign (&start_iter, &end);
+  if (gtk_text_iter_compare (&iter, &selection) > 0)
+    gtk_text_iter_assign (&start_iter, &iter);
+  else
+    gtk_text_iter_assign (&start_iter, &selection);
 
-      g_object_set (vim->priv->search_settings,
-                    "at-word-boundaries", TRUE,
-                    "case-sensitive", TRUE,
-                    "search-text", text,
-                    "wrap-around", TRUE,
-                    NULL);
+  g_object_set (vim->priv->search_settings,
+                "at-word-boundaries", TRUE,
+                "case-sensitive", TRUE,
+                "search-text", text,
+                "wrap-around", TRUE,
+                NULL);
 
-      gtk_source_search_context_set_highlight (vim->priv->search_context,
-                                               TRUE);
+  gtk_source_search_context_set_highlight (vim->priv->search_context,
+                                           TRUE);
 
-      gtk_source_search_context_forward_async (vim->priv->search_context,
-                                               &start_iter,
-                                               NULL,
-                                               gb_editor_vim_search_cb,
-                                               g_object_ref (vim));
+  gtk_source_search_context_forward_async (vim->priv->search_context,
+                                           &start_iter,
+                                           NULL,
+                                           gb_editor_vim_search_cb,
+                                           g_object_ref (vim));
 
-      g_free (text);
-    }
+  g_free (text);
 }
 
 static void
