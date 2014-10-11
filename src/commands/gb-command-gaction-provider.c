@@ -41,10 +41,10 @@ execute_action (GbCommand *command,
   GAction *action;
   GVariant *params;
 
-  g_return_if_fail (GB_IS_COMMAND (command));
+  g_return_val_if_fail (GB_IS_COMMAND (command), NULL);
 
   action = g_object_get_data (G_OBJECT (command), "action");
-  g_return_if_fail (G_IS_ACTION (action));
+  g_return_val_if_fail (G_IS_ACTION (action), NULL);
 
   params = g_object_get_data (G_OBJECT (command), "parameters");
 

@@ -3539,8 +3539,8 @@ gb_editor_vim_execute_command (GbEditorVim *vim,
   gboolean ret = FALSE;
   gchar *copy;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
-  g_return_if_fail (command);
+  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), FALSE);
+  g_return_val_if_fail (command, FALSE);
 
   copy = g_strstrip (g_strdup (command));
   func = gb_editor_vim_parse_operation (copy);

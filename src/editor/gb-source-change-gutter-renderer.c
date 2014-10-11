@@ -53,7 +53,7 @@ on_changed (GbSourceChangeMonitor        *monitor,
 {
   GtkTextView *text_view;
 
-  g_return_val_if_fail (GB_IS_SOURCE_CHANGE_GUTTER_RENDERER (renderer), NULL);
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_GUTTER_RENDERER (renderer));
 
   text_view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (renderer));
   gtk_widget_queue_draw (GTK_WIDGET (text_view));

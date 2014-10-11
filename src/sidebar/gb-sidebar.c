@@ -514,7 +514,7 @@ gb_sidebar_get_stack (GbSidebar *sidebar)
 {
   GbSidebarPrivate *priv;
 
-  g_return_if_fail (GB_IS_SIDEBAR (sidebar));
+  g_return_val_if_fail (GB_IS_SIDEBAR (sidebar), NULL);
 
   priv = gb_sidebar_get_instance_private (sidebar);
 

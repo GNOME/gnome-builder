@@ -78,8 +78,8 @@ static void
 gb_command_bar_item_set_result (GbCommandBarItem *item,
                                 GbCommandResult  *result)
 {
-  g_return_val_if_fail (GB_IS_COMMAND_BAR_ITEM (item), NULL);
-  g_return_val_if_fail (GB_IS_COMMAND_RESULT (result), NULL);
+  g_return_if_fail (GB_IS_COMMAND_BAR_ITEM (item));
+  g_return_if_fail (GB_IS_COMMAND_RESULT (result));
 
   if (item->priv->result != result)
     {
