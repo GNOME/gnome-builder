@@ -1043,7 +1043,6 @@ on_vim_command_visibility_toggled (GbEditorVim *vim,
 
   params = g_variant_new_boolean (visible);
   g_action_activate (action, params);
-  g_variant_unref (params);
 
   EXIT;
 }

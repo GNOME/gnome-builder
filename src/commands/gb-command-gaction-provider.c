@@ -178,7 +178,8 @@ gb_command_gaction_provider_lookup (GbCommandProvider *provider,
       command = gb_command_new ();
       if (parameters)
         g_object_set_data_full (G_OBJECT (command), "parameters",
-                                parameters, (GDestroyNotify)g_variant_unref);
+                                g_variant_ref (parameters),
+                                (GDestroyNotify)g_variant_unref);
       g_object_set_data_full (G_OBJECT (command), "action",
                               g_object_ref (action), g_object_unref);
       g_signal_connect (command, "execute", G_CALLBACK (execute_action), NULL);
