@@ -43,6 +43,7 @@
 enum {
   PROP_0,
   PROP_DOCUMENT,
+  PROP_ENABLE_WORD_COMPLETION,
   PROP_FILE,
   PROP_FONT_DESC,
   PROP_SETTINGS,
@@ -57,6 +58,42 @@ GtkWidget *
 gb_editor_tab_new (void)
 {
   return g_object_new (GB_TYPE_EDITOR_TAB, NULL);
+}
+
+gboolean
+gb_editor_tab_get_enable_word_completion (GbEditorTab *tab)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), FALSE);
+
+  return tab->priv->enable_word_completion;
+}
+
+void
+gb_editor_tab_set_enable_word_completion (GbEditorTab *tab,
+                                          gboolean     enable_word_completion)
+{
+  GtkSourceCompletion *completion;
+
+  g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), FALSE);
+
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (tab->priv->source_view));
+
+  if (enable_word_completion != tab->priv->enable_word_completion)
+    {
+      if (!enable_word_completion)
+        gtk_source_completion_remove_provider (
+            completion,
+            GTK_SOURCE_COMPLETION_PROVIDER (tab->priv->words_provider),
+            NULL);
+      else
+        gtk_source_completion_add_provider (
+            completion,
+            GTK_SOURCE_COMPLETION_PROVIDER (tab->priv->words_provider),
+            NULL);
+      tab->priv->enable_word_completion = enable_word_completion;
+      g_object_notify_by_pspec (G_OBJECT (tab),
+                                gParamSpecs [PROP_ENABLE_WORD_COMPLETION]);
+    }
 }
 
 /**
@@ -1262,6 +1299,8 @@ gb_editor_tab_constructed (GObject *object)
   settings = g_settings_new ("org.gnome.builder.editor");
   g_settings_bind (settings, "vim-mode", priv->vim, "enabled",
                    G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (settings, "word-completion", tab, "enable-word-completion",
+                   G_SETTINGS_BIND_DEFAULT);
   g_object_unref (settings);
 
   gb_editor_tab_cursor_moved (tab, priv->document);
@@ -1422,6 +1461,11 @@ gb_editor_tab_get_property (GObject    *object,
       g_value_set_object (value, gb_editor_tab_get_document (tab));
       break;
 
+    case PROP_ENABLE_WORD_COMPLETION:
+      g_value_set_boolean (value,
+                           gb_editor_tab_get_enable_word_completion (tab));
+      break;
+
     case PROP_FILE:
       g_value_set_object (value, gb_editor_tab_get_file (tab));
       break;
@@ -1447,6 +1491,11 @@ gb_editor_tab_set_property (GObject      *object,
     {
     case PROP_FONT_DESC:
       gb_editor_tab_set_font_desc (tab, g_value_get_boxed (value));
+      break;
+
+    case PROP_ENABLE_WORD_COMPLETION:
+      gb_editor_tab_set_enable_word_completion (tab,
+                                                g_value_get_boolean (value));
       break;
 
     case PROP_SETTINGS:
@@ -1487,13 +1536,23 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
   g_object_class_install_property (object_class, PROP_DOCUMENT,
                                    gParamSpecs[PROP_DOCUMENT]);
 
+  gParamSpecs [PROP_ENABLE_WORD_COMPLETION] =
+    g_param_spec_boolean ("enable-word-completion",
+                          _("Enable Word Completion"),
+                          _("Enable Word Completion"),
+                          TRUE,
+                          (G_PARAM_READWRITE |
+                           G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_ENABLE_WORD_COMPLETION,
+                                   gParamSpecs [PROP_ENABLE_WORD_COMPLETION]);
+
   gParamSpecs [PROP_FILE] =
-      g_param_spec_object ("file",
-                           _("File"),
-                           _("The file for the tab."),
-                           GTK_SOURCE_TYPE_FILE,
-                           (G_PARAM_READABLE |
-                            G_PARAM_STATIC_STRINGS));
+    g_param_spec_object ("file",
+                         _("File"),
+                         _("The file for the tab."),
+                         GTK_SOURCE_TYPE_FILE,
+                         (G_PARAM_READABLE |
+                          G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FILE,
                                    gParamSpecs [PROP_FILE]);
 
@@ -1568,6 +1627,8 @@ static void
 gb_editor_tab_init (GbEditorTab *tab)
 {
   tab->priv = gb_editor_tab_get_instance_private (tab);
+
+  tab->priv->enable_word_completion = TRUE;
 
   gtk_widget_init_template (GTK_WIDGET (tab));
 }

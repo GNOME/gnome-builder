@@ -118,6 +118,11 @@ struct _GbEditorTabPrivate
    * Animation for save progress.
    */
   GbAnimation *save_animation;
+
+  /*
+   * If we want to use word completion in this editor.
+   */
+  guint enable_word_completion : 1;
 };
 
 G_END_DECLS
