@@ -1159,12 +1159,53 @@ gb_editor_tab_constructed (GObject *object)
   ENTRY;
 
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (tab->priv->document));
 
   priv = tab->priv;
 
+  if (!priv->document)
+    priv->document = gb_editor_document_new ();
+
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (priv->source_view),
+                            GTK_TEXT_BUFFER (priv->document));
+
+  priv->snippets_provider =
+    g_object_new (GB_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER,
+                  "source-view", priv->source_view,
+                  NULL);
+
   if (!priv->settings)
     gb_editor_tab_set_settings (tab, NULL);
+
+  if (!priv->file)
+    priv->file = gtk_source_file_new ();
+
+  if (!priv->change_monitor)
+    priv->change_monitor = gb_source_change_monitor_new (GTK_TEXT_BUFFER (priv->document));
+
+  priv->search_settings =
+    g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
+                  NULL);
+
+  priv->search_context =
+    g_object_new (GTK_SOURCE_TYPE_SEARCH_CONTEXT,
+                  "buffer", priv->document,
+                  "settings", priv->search_settings,
+                  "highlight", TRUE,
+                  NULL);
+
+  priv->search_highlighter =
+    g_object_new (GB_TYPE_SOURCE_SEARCH_HIGHLIGHTER,
+                  "search-context", priv->search_context,
+                  "search-settings", priv->search_settings,
+                  NULL);
+  g_object_set (priv->source_view,
+                "search-highlighter", priv->search_highlighter,
+                NULL);
+
+  priv->words_provider =
+    g_object_new (GTK_SOURCE_TYPE_COMPLETION_WORDS,
+                  NULL);
+
 
   g_signal_connect_swapped (priv->document,
                             "modified-changed",
@@ -1414,6 +1455,7 @@ gb_editor_tab_dispose (GObject *object)
 
   gb_editor_tab_disconnect_settings (tab);
 
+  g_clear_object (&tab->priv->change_monitor);
   g_clear_object (&tab->priv->document);
   g_clear_object (&tab->priv->search_entry_tag);
   g_clear_object (&tab->priv->file);
@@ -1422,6 +1464,7 @@ gb_editor_tab_dispose (GObject *object)
   g_clear_object (&tab->priv->search_settings);
   g_clear_object (&tab->priv->search_context);
   g_clear_object (&tab->priv->settings);
+  g_clear_object (&tab->priv->words_provider);
 
   G_OBJECT_CLASS (gb_editor_tab_parent_class)->dispose (object);
 
@@ -1568,42 +1611,16 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                GB_EDITOR_TAB_UI_RESOURCE);
 
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                floating_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                document);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                change_monitor);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                file);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                go_down_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                go_up_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                overlay);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                preview_container);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                progress_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                revealer);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                scroller);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                search_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                search_context);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                search_highlighter);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                search_settings);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                snippets_provider);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                source_view);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab,
-                                                words_provider);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, floating_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, go_down_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, go_up_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, overlay);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, preview_container);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, progress_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, revealer);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, scroller);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, source_view);
 
   g_type_ensure (GB_TYPE_EDITOR_DOCUMENT);
   g_type_ensure (GB_TYPE_SOURCE_CHANGE_MONITOR);

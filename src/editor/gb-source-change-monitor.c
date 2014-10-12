@@ -62,6 +62,14 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbSourceChangeMonitor,
 static GParamSpec  *gParamSpecs [LAST_PROP];
 static guint        gSignals [LAST_SIGNAL];
 
+GbSourceChangeMonitor *
+gb_source_change_monitor_new (GtkTextBuffer *buffer)
+{
+  return g_object_new (GB_TYPE_SOURCE_CHANGE_MONITOR,
+                       "buffer", buffer,
+                       NULL);
+}
+
 GbSourceChangeFlags
 gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
                                    guint                  lineno)
