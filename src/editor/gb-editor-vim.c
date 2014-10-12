@@ -3884,8 +3884,9 @@ gb_editor_vim_cmd_change (GbEditorVim *vim,
       gb_editor_vim_cmd_delete (vim, count, 'd');
       gb_editor_vim_cmd_insert_before_line (vim, 0, '\0');
     }
-  else
+  else if (modifier != 'd')
     {
+      /* cd should do nothing */
       gb_editor_vim_cmd_delete (vim, count, modifier);
       gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
     }
