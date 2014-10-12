@@ -1433,6 +1433,8 @@ gb_editor_tab_dispose (GObject *object)
   g_clear_object (&tab->priv->search_context);
   g_clear_object (&tab->priv->settings);
 
+  G_OBJECT_CLASS (gb_editor_tab_parent_class)->dispose (object);
+
   EXIT;
 }
 
