@@ -2471,7 +2471,7 @@ gb_editor_vim_move_page (GbEditorVim                 *vim,
     {
     case GB_EDITOR_VIM_PAGE_UP:
       yalign = 1.0;
-      line = MAX (0, gtk_text_iter_get_line (&iter_top) + SCROLL_OFF);
+      line = gtk_text_iter_get_line (&iter_top) + SCROLL_OFF;
       break;
     case GB_EDITOR_VIM_PAGE_DOWN:
       yalign = 0.0;
