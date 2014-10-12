@@ -3,7 +3,6 @@
   <gresource prefix="/org/gnome/builder">
     <file alias="AUTHORS">../../AUTHORS</file>
     <file alias="ARTISTS">../../ARTISTS</file>
-    <file alias="TRANSLATORS">../../TRANSLATORS</file>
 
     <file>css/builder.Adwaita.css</file>
     <file>css/markdown.css</file>

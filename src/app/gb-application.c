@@ -348,7 +348,6 @@ gb_application_activate_about_action (GSimpleAction *action,
   GBytes *bytes;
   gchar **authors;
   gchar **artists;
-  gchar *translators;
 
   g_return_if_fail (GB_IS_APPLICATION (user_data));
 
@@ -362,10 +361,6 @@ gb_application_activate_about_action (GSimpleAction *action,
   artists = g_strsplit (g_bytes_get_data (bytes, NULL), "\n", 0);
   g_bytes_unref (bytes);
 
-  bytes = g_resources_lookup_data ("/org/gnome/builder/TRANSLATORS", 0, NULL);
-  translators = g_strdup (g_bytes_get_data (bytes, NULL));
-  g_bytes_unref (bytes);
-
   window = g_object_new (GTK_TYPE_ABOUT_DIALOG,
                          "artists", artists,
                          "authors", authors,
@@ -376,7 +371,7 @@ gb_application_activate_about_action (GSimpleAction *action,
                          "modal", TRUE,
                          "program-name", _("GNOME Builder"),
                          "transient-for", list ? list->data : NULL,
-                         "translator-credits", translators,
+                         "translator-credits", _("translator-credits"),
                          "version", PACKAGE_VERSION,
                          "website", "https://live.gnome.org/Apps/Builder",
                          "website-label", _("Builder Website"),
@@ -387,7 +382,6 @@ gb_application_activate_about_action (GSimpleAction *action,
 
   g_strfreev (authors);
   g_strfreev (artists);
-  g_free (translators);
 }
 
 static void
