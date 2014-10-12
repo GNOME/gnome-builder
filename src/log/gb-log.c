@@ -65,7 +65,7 @@ static inline const gchar *
 gb_log_level_str (GLogLevelFlags log_level)
 {
 #define CASE_LEVEL_STR(_l) case G_LOG_LEVEL_ ## _l: return #_l
-  switch ((long) log_level)
+  switch (((gulong)log_level & G_LOG_LEVEL_MASK))
     {
     CASE_LEVEL_STR (ERROR);
     CASE_LEVEL_STR (CRITICAL);
