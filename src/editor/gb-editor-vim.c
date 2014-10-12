@@ -2458,6 +2458,7 @@ gb_editor_vim_move_page (GbEditorVim                 *vim,
   GtkTextBuffer *buffer;
   gfloat yalign;
 
+  yalign = 0.0;
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   gtk_text_view_get_visible_rect (vim->priv->text_view, &rect);
@@ -2476,16 +2477,10 @@ gb_editor_vim_move_page (GbEditorVim                 *vim,
   if (direction == GB_EDITOR_VIM_HALF_PAGE_UP ||
       direction == GB_EDITOR_VIM_HALF_PAGE_DOWN)
     {
-      if (line_bottom == line_top)
-        {
-        yalign = 0.0;
-        }
-      else
-        {
-        /* keep current yalign */
+      /* keep current yalign */
+      if (line_bottom != line_top)
         yalign = MAX (0.0, (float)(line_current - line_top) /
                            (float)(line_bottom - line_top));
-        }
     }
 
   switch (direction)
