@@ -3,23 +3,27 @@
   <!-- interface-requires gtk+ 3.8 -->
   <template class="GbTabLabel" parent="GtkBin">
     <property name="visible">True</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkBox" id="hbox">
         <property name="visible">True</property>
         <property name="spacing">3</property>
         <property name="orientation">horizontal</property>
+        <property name="can-focus">False</property>
         <child>
           <object class="GtkBox" id="label_container">
             <property name="visible">True</property>
             <property name="hexpand">True</property>
             <property name="halign">center</property>
             <property name="orientation">horizontal</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkLabel" id="modified_label">
                 <property name="use-markup">False</property>
                 <property name="use-underline">False</property>
                 <property name="valign">baseline</property>
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
               </object>
             </child>
             <child>
@@ -30,6 +34,7 @@
                 <property name="use-underline">False</property>
                 <property name="valign">baseline</property>
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
               </object>
             </child>
           </object>
@@ -39,6 +44,7 @@
             <property name="hexpand">False</property>
             <property name="vexpand">False</property>
             <property name="visible">True</property>
+            <property name="can-focus">False</property>
           </object>
         </child>
       </object>
