@@ -1338,6 +1338,9 @@ gb_editor_tab_load_file_mark (GbEditorTab *tab)
     }
 
   file = gtk_source_file_get_location (tab->priv->file);
+  if (!file)
+    return;
+
   marks = gb_editor_file_marks_get_default ();
   mark = gb_editor_file_marks_get_for_file (marks, file);
 
@@ -1367,6 +1370,8 @@ gb_editor_tab_save_file_mark (GbEditorTab *tab)
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
 
   file = gtk_source_file_get_location (tab->priv->file);
+  if (!file)
+    return;
 
   marks = gb_editor_file_marks_get_default ();
   mark = gb_editor_file_marks_get_for_file (marks, file);
