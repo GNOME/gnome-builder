@@ -1379,7 +1379,6 @@ gb_editor_tab_close (GbTab *tab)
 {
   GbEditorTabPrivate *priv;
   GtkTextBuffer *buffer;
-  GtkWidget *parent;
 
   ENTRY;
 
@@ -1390,25 +1389,11 @@ gb_editor_tab_close (GbTab *tab)
   buffer = GTK_TEXT_BUFFER (priv->document);
 
   if (gtk_text_buffer_get_modified (buffer))
-    {
-      g_message ("TODO: handle dirty editor state.");
-    }
+    g_message ("TODO: handle dirty editor state.");
 
   gb_editor_tab_save_file_mark (GB_EDITOR_TAB (tab));
 
-  /*
-   * WORKAROUND:
-   *
-   * The search entry seems to have some sort of idle task that is causing
-   * this to segfault while it is still around.
-   */
-  g_clear_pointer (&priv->search_entry, gtk_widget_destroy);
-
-  /*
-   * Remove the tab from the notebook.
-   */
-  parent = gtk_widget_get_parent (GTK_WIDGET (tab));
-  gtk_container_remove (GTK_CONTAINER (parent), GTK_WIDGET (tab));
+  gtk_widget_destroy (GTK_WIDGET (tab));
 
   EXIT;
 }
