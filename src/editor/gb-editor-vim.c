@@ -4149,6 +4149,43 @@ gb_editor_vim_cmd_overwrite (GbEditorVim *vim,
 }
 
 static void
+gb_editor_vim_cmd_replace (GbEditorVim *vim,
+                           guint        count,
+                           gchar        modifier)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter begin, end;
+  gboolean at_end;
+
+  g_assert (GB_IS_EDITOR_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
+  gtk_text_buffer_begin_user_action (buffer);
+  gb_editor_vim_delete_selection (vim);
+
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  gtk_text_iter_forward_char (&begin);
+  if (gtk_text_iter_ends_line (&begin))
+    {
+    at_end = TRUE;
+    }
+  else
+    {
+    gtk_text_iter_backward_char (&begin);
+    at_end = FALSE;
+    }
+
+  gtk_text_buffer_insert (buffer, &begin, &modifier, 1);
+  if (at_end)
+    gb_editor_vim_move_forward (vim);
+  else
+    gb_editor_vim_move_backward (vim);
+
+  gtk_text_buffer_end_user_action (buffer);
+}
+
+static void
 gb_editor_vim_cmd_substitute (GbEditorVim *vim,
                               guint        count,
                               gchar        modifier)
@@ -4628,6 +4665,10 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_overwrite);
+  gb_editor_vim_class_register_command (klass, 'r',
+                                        GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER,
+                                        GB_EDITOR_VIM_COMMAND_CHANGE,
+                                        gb_editor_vim_cmd_replace);
   gb_editor_vim_class_register_command (klass, 's',
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
