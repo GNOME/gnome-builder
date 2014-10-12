@@ -4583,6 +4583,10 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_insert_after);
+  gb_editor_vim_class_register_command (klass, 'B',
+                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
+                                        gb_editor_vim_cmd_backward_word);
   gb_editor_vim_class_register_command (klass, 'b',
                                         GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
@@ -4605,6 +4609,10 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_CHANGE,
                                         gb_editor_vim_cmd_delete_to_end);
+  gb_editor_vim_class_register_command (klass, 'E',
+                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
+                                        gb_editor_vim_cmd_forward_word_end);
   gb_editor_vim_class_register_command (klass, 'e',
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
@@ -4685,6 +4693,10 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                         GB_EDITOR_VIM_COMMAND_FLAG_NONE,
                                         GB_EDITOR_VIM_COMMAND_NOOP,
                                         gb_editor_vim_cmd_select);
+  gb_editor_vim_class_register_command (klass, 'W',
+                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
+                                        gb_editor_vim_cmd_forward_word);
   gb_editor_vim_class_register_command (klass, 'w',
                                         GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
                                         GB_EDITOR_VIM_COMMAND_MOVEMENT,
