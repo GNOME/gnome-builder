@@ -95,6 +95,8 @@ typedef enum
 {
   GB_EDITOR_VIM_PAGE_UP,
   GB_EDITOR_VIM_PAGE_DOWN,
+  GB_EDITOR_VIM_HALF_PAGE_UP,
+  GB_EDITOR_VIM_HALF_PAGE_DOWN,
 } GbEditorVimPageDirectionType;
 
 typedef enum
@@ -2452,7 +2454,7 @@ gb_editor_vim_move_page (GbEditorVim                 *vim,
   GdkRectangle rect;
   GtkTextIter iter_top, iter_bottom, iter_current;
   guint offset;
-  gint line;
+  gint line, line_top, line_bottom, line_current;
   GtkTextBuffer *buffer;
   gfloat yalign;
 
@@ -2467,8 +2469,33 @@ gb_editor_vim_move_page (GbEditorVim                 *vim,
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   gtk_text_buffer_get_selection_bounds (buffer, &iter_current, NULL);
 
+  line_top = gtk_text_iter_get_line (&iter_top);
+  line_bottom = gtk_text_iter_get_line (&iter_bottom);
+  line_current = gtk_text_iter_get_line (&iter_current);
+
+  if (direction == GB_EDITOR_VIM_HALF_PAGE_UP ||
+      direction == GB_EDITOR_VIM_HALF_PAGE_DOWN)
+    {
+      if (line_bottom == line_top)
+        {
+        yalign = 0.0;
+        }
+      else
+        {
+        /* keep current yalign */
+        yalign = MAX (0.0, (float)(line_current - line_top) /
+                           (float)(line_bottom - line_top));
+        }
+    }
+
   switch (direction)
     {
+    case GB_EDITOR_VIM_HALF_PAGE_UP:
+      line = line_current - (line_bottom - line_top) / 2;
+      break;
+    case GB_EDITOR_VIM_HALF_PAGE_DOWN:
+      line = line_current + (line_bottom - line_top) / 2;
+      break;
     case GB_EDITOR_VIM_PAGE_UP:
       yalign = 1.0;
       line = gtk_text_iter_get_line (&iter_top) + SCROLL_OFF;
@@ -2746,6 +2773,15 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
         }
       break;
 
+    case GDK_KEY_d:
+      if ((event->state & GDK_CONTROL_MASK) != 0)
+        {
+          gb_editor_vim_clear_phrase (vim);
+          gb_editor_vim_move_page (vim, GB_EDITOR_VIM_HALF_PAGE_DOWN);
+          return TRUE;
+        }
+      break;
+
     case GDK_KEY_f:
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
@@ -2768,10 +2804,7 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
           gb_editor_vim_clear_phrase (vim);
-          gb_editor_vim_clear_selection (vim);
-          gb_editor_vim_select_char (vim);
-          gb_editor_vim_move_line_start (vim);
-          gb_editor_vim_delete_selection (vim);
+          gb_editor_vim_move_page (vim, GB_EDITOR_VIM_HALF_PAGE_UP);
           return TRUE;
         }
       break;
