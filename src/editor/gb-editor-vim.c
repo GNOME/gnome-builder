@@ -93,6 +93,12 @@ struct _GbEditorVimPrivate
 
 typedef enum
 {
+  GB_EDITOR_VIM_PAGE_UP,
+  GB_EDITOR_VIM_PAGE_DOWN,
+} GbEditorVimPageDirectionType;
+
+typedef enum
+{
   GB_EDITOR_VIM_COMMAND_NOOP,
   GB_EDITOR_VIM_COMMAND_MOVEMENT,
   GB_EDITOR_VIM_COMMAND_CHANGE,
@@ -2440,54 +2446,53 @@ gb_editor_vim_move_to_iter (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_page_up (GbEditorVim *vim)
+gb_editor_vim_move_page (GbEditorVim                 *vim,
+                         GbEditorVimPageDirectionType direction)
 {
   GdkRectangle rect;
-  GtkTextIter iter;
+  GtkTextIter iter_top, iter_bottom, iter_current;
   guint offset;
   gint line;
+  GtkTextBuffer *buffer;
+  gfloat yalign;
 
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   gtk_text_view_get_visible_rect (vim->priv->text_view, &rect);
-  gtk_text_view_get_iter_at_location (vim->priv->text_view, &iter,
+  gtk_text_view_get_iter_at_location (vim->priv->text_view, &iter_top,
                                       rect.x, rect.y);
-
-  line = MAX (0, gtk_text_iter_get_line (&iter) + SCROLL_OFF);
-  gtk_text_iter_set_line (&iter, line);
-
-  for (offset = vim->priv->target_line_offset; offset; offset--)
-    if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
-      break;
-
-  gb_editor_vim_move_to_iter (vim, &iter, 1.0);
-}
-
-static void
-gb_editor_vim_page_down (GbEditorVim *vim)
-{
-  GdkRectangle rect;
-  GtkTextIter iter;
-  guint offset;
-  gint line;
-
-  g_assert (GB_IS_EDITOR_VIM (vim));
-
-  gtk_text_view_get_visible_rect (vim->priv->text_view, &rect);
-  gtk_text_view_get_iter_at_location (vim->priv->text_view, &iter,
+  gtk_text_view_get_iter_at_location (vim->priv->text_view, &iter_bottom,
                                       rect.x, rect.y + rect.height);
 
-  /*
-   * rect.y + rect.height is the next line after the end of the buffer so
-   * now we have to decrease one more.
-   */
-  line = MAX (0, gtk_text_iter_get_line (&iter) - SCROLL_OFF - 1);
-  gtk_text_iter_set_line (&iter, line);
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &iter_current, NULL);
+
+  switch (direction)
+    {
+    case GB_EDITOR_VIM_PAGE_UP:
+      yalign = 1.0;
+      line = MAX (0, gtk_text_iter_get_line (&iter_top) + SCROLL_OFF);
+      break;
+    case GB_EDITOR_VIM_PAGE_DOWN:
+      yalign = 0.0;
+      /*
+       * rect.y + rect.height is the next line after the end of the buffer so
+       * now we have to decrease one more.
+       */
+      line = MAX (0, gtk_text_iter_get_line (&iter_bottom) - SCROLL_OFF - 1);
+      break;
+    default:
+      g_assert_not_reached();
+    }
+
+  gtk_text_iter_set_line (&iter_current, line);
 
   for (offset = vim->priv->target_line_offset; offset; offset--)
-    if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
+    if (gtk_text_iter_ends_line (&iter_current) ||
+        !gtk_text_iter_forward_char (&iter_current))
       break;
-  gb_editor_vim_move_to_iter (vim, &iter, 0.0);
+
+  gb_editor_vim_move_to_iter (vim, &iter_current, yalign);
 }
 
 static void
@@ -2736,7 +2741,7 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
           gb_editor_vim_clear_phrase (vim);
-          gb_editor_vim_page_up (vim);
+          gb_editor_vim_move_page (vim, GB_EDITOR_VIM_PAGE_UP);
           return TRUE;
         }
       break;
@@ -2745,7 +2750,7 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
           gb_editor_vim_clear_phrase (vim);
-          gb_editor_vim_page_down (vim);
+          gb_editor_vim_move_page (vim, GB_EDITOR_VIM_PAGE_DOWN);
           return TRUE;
         }
       break;
