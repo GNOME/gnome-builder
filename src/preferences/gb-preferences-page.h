@@ -46,6 +46,12 @@ struct _GbPreferencesPage
 struct _GbPreferencesPageClass
 {
   GtkBinClass parent;
+
+  /*
+   * TODO: We will need some vfunc's here for setting the search text. This
+   *       will allow us to alter the visibility or sensitivity of various
+   *       controls when there is search text active.
+   */
 };
 
 GType gb_preferences_page_get_type (void) G_GNUC_CONST;
