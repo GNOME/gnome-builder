@@ -22,6 +22,7 @@
     <file>ui/gb-editor-tab.ui</file>
     <file>ui/gb-preferences-window.ui</file>
     <file>ui/gb-preferences-page-editor.ui</file>
+    <file>ui/gb-preferences-page-git.ui</file>
     <file>ui/gb-tab-label.ui</file>
     <file>ui/gb-workbench.ui</file>
   </gresource>
