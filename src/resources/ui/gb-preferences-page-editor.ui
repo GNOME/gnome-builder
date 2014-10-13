@@ -1,0 +1,92 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbPreferencesPageEditor" parent="GtkBin">
+    <child>
+      <object class="GtkGrid">
+        <property name="visible">True</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">12</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="halign">start</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="Yes">Enable VIM compatibility mode</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="width">1</property>
+            <property name="top-attach">0</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="vim_mode_switch">
+            <property name="visible">True</property>
+            <property name="active">False</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="width">1</property>
+            <property name="top-attach">0</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="halign">start</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="Yes">Jump to last position when reopening a file.</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="width">1</property>
+            <property name="top-attach">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="restore_insert_mark_switch">
+            <property name="visible">True</property>
+            <property name="active">False</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="width">1</property>
+            <property name="top-attach">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="halign">start</property>
+            <property name="hexpand">True</property>
+            <property name="label" translatable="Yes">Enable auto-completion of words in the document.</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="width">1</property>
+            <property name="top-attach">2</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="word_completion_switch">
+            <property name="visible">True</property>
+            <property name="active">False</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="width">1</property>
+            <property name="top-attach">2</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
