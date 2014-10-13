@@ -1246,10 +1246,11 @@ gb_editor_tab_constructed (GObject *object)
                             G_CALLBACK (gb_editor_tab_move_previous_match),
                             tab);
 
-  g_signal_connect_swapped (priv->search_context,
-                            "notify::occurrences-count",
-                            G_CALLBACK (on_search_occurrences_notify),
-                            tab);
+  g_signal_connect_object (priv->search_context,
+                           "notify::occurrences-count",
+                           G_CALLBACK (on_search_occurrences_notify),
+                           tab,
+                           G_CONNECT_SWAPPED);
 
   gtk_source_completion_words_register (
       GTK_SOURCE_COMPLETION_WORDS (priv->words_provider),
