@@ -3287,6 +3287,8 @@ gb_editor_vim_op_filetype (GbEditorVim *vim,
   manager = gtk_source_language_manager_get_default ();
   language = gtk_source_language_manager_get_language (manager, name);
   gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), language);
+
+  gtk_widget_queue_draw (GTK_WIDGET (vim->priv->text_view));
 }
 
 static void
