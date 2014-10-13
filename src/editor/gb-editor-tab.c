@@ -1203,6 +1203,7 @@ gb_editor_tab_constructed (GObject *object)
 
   priv->words_provider =
     g_object_new (GTK_SOURCE_TYPE_COMPLETION_WORDS,
+                  "minimum-word-size", 5,
                   NULL);
 
 
