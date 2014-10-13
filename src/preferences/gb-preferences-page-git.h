@@ -19,7 +19,7 @@
 #ifndef GB_PREFERENCES_PAGE_GIT_H
 #define GB_PREFERENCES_PAGE_GIT_H
 
-#include <gtk/gtk.h>
+#include "gb-preferences-page.h"
 
 G_BEGIN_DECLS
 
@@ -37,7 +37,7 @@ typedef struct _GbPreferencesPageGitPrivate GbPreferencesPageGitPrivate;
 
 struct _GbPreferencesPageGit
 {
-  GtkBin parent;
+  GbPreferencesPage parent;
 
   /*< private >*/
   GbPreferencesPageGitPrivate *priv;
@@ -45,7 +45,7 @@ struct _GbPreferencesPageGit
 
 struct _GbPreferencesPageGitClass
 {
-  GtkBinClass parent;
+  GbPreferencesPageClass parent;
 };
 
 GType gb_preferences_page_git_get_type (void) G_GNUC_CONST;

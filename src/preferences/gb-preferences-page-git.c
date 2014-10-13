@@ -29,7 +29,7 @@ struct _GbPreferencesPageGitPrivate
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPageGit, gb_preferences_page_git,
-                            GTK_TYPE_BIN)
+                            GB_TYPE_PREFERENCES_PAGE)
 
 static void
 on_author_name_changed (GtkEntry             *entry,

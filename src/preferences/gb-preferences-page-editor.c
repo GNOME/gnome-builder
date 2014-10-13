@@ -28,7 +28,7 @@ struct _GbPreferencesPageEditorPrivate
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPageEditor, gb_preferences_page_editor,
-                            GTK_TYPE_BIN)
+                            GB_TYPE_PREFERENCES_PAGE)
 
 static void
 gb_preferences_page_editor_constructed (GObject *object)
