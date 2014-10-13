@@ -49,7 +49,7 @@ gb_notebook_raise_tab (GbNotebook *notebook,
 
   if (gtk_widget_get_parent (GTK_WIDGET (tab)) != GTK_WIDGET (notebook))
     {
-      g_warning ("Cannot raise tab, does not belong to requested notebook.");
+      g_warning (_("Cannot raise tab, does not belong to requested notebook."));
       return;
     }
 

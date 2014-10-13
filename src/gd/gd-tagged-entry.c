@@ -22,6 +22,8 @@
 
 #include "gd-tagged-entry.h"
 
+#include <glib/gi18n.h>
+
 #include <math.h>
 
 #define BUTTON_INTERNAL_SPACING 6
@@ -932,8 +934,8 @@ gd_tagged_entry_class_init (GdTaggedEntryClass *klass)
                   1, GD_TYPE_TAGGED_ENTRY_TAG);
 
   properties[PROP_TAG_BUTTON_VISIBLE] =
-    g_param_spec_boolean ("tag-close-visible", "Tag close icon visibility",
-                          "Whether the close button should be shown in tags.", TRUE,
+    g_param_spec_boolean ("tag-close-visible", _("Tag close icon visibility"),
+                          _("Whether the close button should be shown in tags."), TRUE,
                           G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
   g_type_class_add_private (klass, sizeof (GdTaggedEntryPrivate));
@@ -1026,16 +1028,16 @@ gd_tagged_entry_tag_class_init (GdTaggedEntryTagClass *klass)
   oclass->get_property = gd_tagged_entry_tag_get_property;
 
   tag_properties[PROP_TAG_LABEL] =
-    g_param_spec_string ("label", "Label",
-                         "Text to show on the tag.", NULL,
+    g_param_spec_string ("label", _("Label"),
+                         _("Text to show on the tag."), NULL,
                          G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   tag_properties[PROP_TAG_HAS_CLOSE_BUTTON] =
-    g_param_spec_boolean ("has-close-button", "Tag has a close button",
-                          "Whether the tag has a close button.", TRUE,
+    g_param_spec_boolean ("has-close-button", _("Tag has a close button"),
+                          _("Whether the tag has a close button."), TRUE,
                           G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   tag_properties[PROP_TAG_STYLE] =
-    g_param_spec_string ("style", "Style",
-                         "Style of the tag.", "documents-entry-tag",
+    g_param_spec_string ("style", _("Style"),
+                         _("Style of the tag."), "documents-entry-tag",
                          G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_type_class_add_private (klass, sizeof (GdTaggedEntryTagPrivate));

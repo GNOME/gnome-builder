@@ -131,8 +131,8 @@ gb_source_snippet_completion_item_class_init (GbSourceSnippetCompletionItemClass
 
   gParamSpecs[PROP_SNIPPET] =
     g_param_spec_object ("snippet",
-                         _ ("Snippet"),
-                         _ ("The snippet to insert."),
+                         _("Snippet"),
+                         _("The snippet to insert."),
                          GB_TYPE_SOURCE_SNIPPET,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SNIPPET,

@@ -306,7 +306,7 @@ gb_source_snippet_get_chunk_range (GbSourceSnippet      *snippet,
         }
     }
 
-  g_warning ("chunk does not belong to snippet.");
+  g_warning (_("Chunk does not belong to snippet."));
 }
 
 static void
@@ -938,8 +938,8 @@ gb_source_snippet_class_init (GbSourceSnippetClass *klass)
 
   gParamSpecs[PROP_BUFFER] =
     g_param_spec_object ("buffer",
-                         _ ("Buffer"),
-                         _ ("The GtkTextBuffer for the snippet."),
+                         _("Buffer"),
+                         _("The GtkTextBuffer for the snippet."),
                          GTK_TYPE_TEXT_BUFFER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_BUFFER,
@@ -947,8 +947,8 @@ gb_source_snippet_class_init (GbSourceSnippetClass *klass)
 
   gParamSpecs[PROP_MARK_BEGIN] =
     g_param_spec_object ("mark-begin",
-                         _ ("Mark Begin"),
-                         _ ("The beginning text mark."),
+                         _("Mark Begin"),
+                         _("The beginning text mark."),
                          GTK_TYPE_TEXT_MARK,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_MARK_BEGIN,
@@ -956,8 +956,8 @@ gb_source_snippet_class_init (GbSourceSnippetClass *klass)
 
   gParamSpecs[PROP_MARK_END] =
     g_param_spec_object ("mark-end",
-                         _ ("Mark End"),
-                         _ ("The ending text mark."),
+                         _("Mark End"),
+                         _("The ending text mark."),
                          GTK_TYPE_TEXT_MARK,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_MARK_END,
@@ -965,8 +965,8 @@ gb_source_snippet_class_init (GbSourceSnippetClass *klass)
 
   gParamSpecs[PROP_TRIGGER] =
     g_param_spec_string ("trigger",
-                         _ ("Trigger"),
-                         _ ("The trigger for the snippet."),
+                         _("Trigger"),
+                         _("The trigger for the snippet."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_TRIGGER,
@@ -974,8 +974,8 @@ gb_source_snippet_class_init (GbSourceSnippetClass *klass)
 
   gParamSpecs[PROP_TAB_STOP] =
     g_param_spec_int ("tab-stop",
-                      _ ("Tab Stop"),
-                      _ ("The current tab stop."),
+                      _("Tab Stop"),
+                      _("The current tab stop."),
                       -1,
                       G_MAXINT,
                       -1,

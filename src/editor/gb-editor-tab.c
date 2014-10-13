@@ -405,7 +405,7 @@ update_search_position_label (GbEditorTab *tab)
   else
     gtk_style_context_remove_class (context, GTK_STYLE_CLASS_ERROR);
 
-  text = g_strdup_printf (_ ("%u of %u"), pos, count);
+  text = g_strdup_printf (_("%u of %u"), pos, count);
   set_search_position_label (tab, text);
   g_free (text);
 }
@@ -478,10 +478,10 @@ gb_editor_tab_cursor_moved (GbEditorTab      *tab,
     phrase = gb_editor_vim_get_phrase (tab->priv->vim);
 
   if (!gb_str_empty0 (phrase))
-    text = g_strdup_printf (_ ("%s\tLine %u, Column %u"),
+    text = g_strdup_printf (_("%s\tLine %u, Column %u"),
                             phrase, ln + 1, col + 1);
   else
-    text = g_strdup_printf (_ ("Line %u, Column %u"), ln + 1, col + 1);
+    text = g_strdup_printf (_("Line %u, Column %u"), ln + 1, col + 1);
 
   nautilus_floating_bar_set_primary_label (tab->priv->floating_bar, text);
   g_free (text);
@@ -1563,8 +1563,8 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
-                         _ ("Document"),
-                         _ ("The document to edit."),
+                         _("Document"),
+                         _("The document to edit."),
                          GB_TYPE_EDITOR_DOCUMENT,
                          (G_PARAM_READABLE |
                           G_PARAM_STATIC_STRINGS));
@@ -1593,8 +1593,8 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
 
   gParamSpecs [PROP_FONT_DESC] =
     g_param_spec_boxed ("font-desc",
-                        _ ("Font Description"),
-                        _ ("The Pango Font Description to use in the editor."),
+                        _("Font Description"),
+                        _("The Pango Font Description to use in the editor."),
                         PANGO_TYPE_FONT_DESCRIPTION,
                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FONT_DESC,
@@ -1602,8 +1602,8 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
 
   gParamSpecs [PROP_SETTINGS] =
     g_param_spec_object ("settings",
-                         _ ("Settings"),
-                         _ ("The editor settings."),
+                         _("Settings"),
+                         _("The editor settings."),
                          GB_TYPE_EDITOR_SETTINGS,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SETTINGS,

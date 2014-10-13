@@ -25,6 +25,8 @@
 
 #include <string.h>
 
+#include <glib/gi18n.h>
+
 #include "nautilus-floating-bar.h"
 
 struct _NautilusFloatingBarDetails {
@@ -309,20 +311,20 @@ nautilus_floating_bar_class_init (NautilusFloatingBarClass *klass)
 
 	properties[PROP_PRIMARY_LABEL] =
 		g_param_spec_string ("primary-label",
-				     "Bar's primary label",
-				     "Primary label displayed by the bar",
+				     _("Bar's primary label"),
+				     _("Primary label displayed by the bar"),
 				     NULL,
 				     G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 	properties[PROP_DETAILS_LABEL] =
 		g_param_spec_string ("details-label",
-				     "Bar's details label",
-				     "Details label displayed by the bar",
+				     _("Bar's details label"),
+				     _("Details label displayed by the bar"),
 				     NULL,
 				     G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 	properties[PROP_SHOW_SPINNER] =
 		g_param_spec_boolean ("show-spinner",
-				      "Show spinner",
-				      "Whether a spinner should be shown in the floating bar",
+				      _("Show spinner"),
+				      _("Whether a spinner should be shown in the floating bar"),
 				      FALSE,
 				      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 

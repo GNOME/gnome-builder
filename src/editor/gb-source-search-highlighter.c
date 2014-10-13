@@ -331,8 +331,8 @@ gb_source_search_highlighter_class_init (GbSourceSearchHighlighterClass *klass)
 
   gParamSpecs[PROP_SEARCH_CONTEXT] =
     g_param_spec_object ("search-context",
-                         _ ("Search Context"),
-                         _ ("Search Context"),
+                         _("Search Context"),
+                         _("Search Context"),
                          GTK_SOURCE_TYPE_SEARCH_CONTEXT,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SEARCH_CONTEXT,
@@ -340,8 +340,8 @@ gb_source_search_highlighter_class_init (GbSourceSearchHighlighterClass *klass)
 
   gParamSpecs[PROP_SEARCH_SETTINGS] =
     g_param_spec_object ("search-settings",
-                         _ ("Search Settings"),
-                         _ ("Search Settings"),
+                         _("Search Settings"),
+                         _("Search Settings"),
                          GTK_SOURCE_TYPE_SEARCH_SETTINGS,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SEARCH_SETTINGS,

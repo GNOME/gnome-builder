@@ -116,7 +116,7 @@ gb_markdown_preview_reload (GbMarkdownPreview *preview)
 
   if (!(html = gs_markdown_parse (markdown, text)))
     {
-      g_warning ("Failed to parse markdown.");
+      g_warning (_("Failed to parse markdown."));
       GOTO (cleanup);
     }
 

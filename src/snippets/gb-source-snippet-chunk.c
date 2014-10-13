@@ -292,8 +292,8 @@ gb_source_snippet_chunk_class_init (GbSourceSnippetChunkClass *klass)
 
   gParamSpecs[PROP_CONTEXT] =
     g_param_spec_object ("context",
-                         _ ("Context"),
-                         _ ("The snippet context."),
+                         _("Context"),
+                         _("The snippet context."),
                          GB_TYPE_SOURCE_SNIPPET_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_CONTEXT,
@@ -301,8 +301,8 @@ gb_source_snippet_chunk_class_init (GbSourceSnippetChunkClass *klass)
 
   gParamSpecs[PROP_SPEC] =
     g_param_spec_string ("spec",
-                         _ ("Spec"),
-                         _ ("The specification to expand using the contxt."),
+                         _("Spec"),
+                         _("The specification to expand using the contxt."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SPEC,
@@ -310,8 +310,8 @@ gb_source_snippet_chunk_class_init (GbSourceSnippetChunkClass *klass)
 
   gParamSpecs[PROP_TAB_STOP] =
     g_param_spec_int ("tab-stop",
-                      _ ("Tab Stop"),
-                      _ ("The tab stop for the chunk."),
+                      _("Tab Stop"),
+                      _("The tab stop for the chunk."),
                       -1,
                       G_MAXINT,
                       -1,
@@ -321,8 +321,8 @@ gb_source_snippet_chunk_class_init (GbSourceSnippetChunkClass *klass)
 
   gParamSpecs[PROP_TEXT] =
     g_param_spec_string ("text",
-                         _ ("Text"),
-                         _ ("The text for the chunk."),
+                         _("Text"),
+                         _("The text for the chunk."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_TEXT,
@@ -330,8 +330,8 @@ gb_source_snippet_chunk_class_init (GbSourceSnippetChunkClass *klass)
 
   gParamSpecs[PROP_TEXT_SET] =
     g_param_spec_boolean ("text-set",
-                          _ ("Text Set"),
-                          _ ("If the text property has been manually set."),
+                          _("Text Set"),
+                          _("If the text property has been manually set."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_TEXT_SET,

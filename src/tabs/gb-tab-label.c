@@ -214,8 +214,8 @@ gb_tab_label_class_init (GbTabLabelClass *klass)
 
   gParamSpecs [PROP_TAB] =
     g_param_spec_object ("tab",
-                         _ ("Tab"),
-                         _ ("The tab the label is observing."),
+                         _("Tab"),
+                         _("The tab the label is observing."),
                          GB_TYPE_TAB,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |

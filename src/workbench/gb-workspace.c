@@ -169,8 +169,8 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
 
   gParamSpecs[PROP_TITLE] =
     g_param_spec_string ("title",
-                         _ ("Title"),
-                         _ ("The title of the workspace."),
+                         _("Title"),
+                         _("The title of the workspace."),
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
@@ -179,8 +179,8 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
 
   gParamSpecs[PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
-                         _ ("Icon Name"),
-                         _ ("The name of the icon to use."),
+                         _("Icon Name"),
+                         _("The name of the icon to use."),
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));

@@ -1425,8 +1425,8 @@ gb_source_view_class_init (GbSourceViewClass *klass)
 
   gParamSpecs[PROP_SHOW_SHADOW] =
     g_param_spec_boolean ("show-shadow",
-                          _ ("Show Shadow"),
-                          _ ("Show the search shadow"),
+                          _("Show Shadow"),
+                          _("Show the search shadow"),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SHOW_SHADOW,
@@ -1434,8 +1434,8 @@ gb_source_view_class_init (GbSourceViewClass *klass)
 
   gParamSpecs[PROP_SEARCH_HIGHLIGHTER] =
     g_param_spec_object ("search-highlighter",
-                         _ ("Search Highlighter"),
-                         _ ("Search Highlighter"),
+                         _("Search Highlighter"),
+                         _("Search Highlighter"),
                          GB_TYPE_SOURCE_SEARCH_HIGHLIGHTER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SEARCH_HIGHLIGHTER,

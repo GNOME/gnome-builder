@@ -677,7 +677,7 @@ gb_animation_add_property (GbAnimation  *animation,
     {
       if (!GTK_IS_WIDGET (priv->target))
         {
-          g_critical ("Cannot locate property %s in class %s",
+          g_critical (_("Cannot locate property %s in class %s"),
                       pspec->name, g_type_name (type));
           return;
         }
@@ -813,8 +813,8 @@ gb_animation_class_init (GbAnimationClass *klass)
    */
   gParamSpecs[PROP_DURATION] =
     g_param_spec_uint ("duration",
-                       _ ("Duration"),
-                       _ ("The duration of the animation"),
+                       _("Duration"),
+                       _("The duration of the animation"),
                        0,
                        G_MAXUINT,
                        250,
@@ -826,8 +826,8 @@ gb_animation_class_init (GbAnimationClass *klass)
 
   gParamSpecs[PROP_FRAME_CLOCK] =
     g_param_spec_object ("frame-clock",
-                         _ ("Frame Clock"),
-                         _ ("An optional frame-clock to synchronize with."),
+                         _("Frame Clock"),
+                         _("An optional frame-clock to synchronize with."),
                          GDK_TYPE_FRAME_CLOCK,
                          (G_PARAM_WRITABLE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -844,8 +844,8 @@ gb_animation_class_init (GbAnimationClass *klass)
    */
   gParamSpecs[PROP_MODE] =
     g_param_spec_enum ("mode",
-                       _ ("Mode"),
-                       _ ("The animation mode"),
+                       _("Mode"),
+                       _("The animation mode"),
                        GB_TYPE_ANIMATION_MODE,
                        GB_ANIMATION_LINEAR,
                        (G_PARAM_WRITABLE |
@@ -862,8 +862,8 @@ gb_animation_class_init (GbAnimationClass *klass)
    */
   gParamSpecs[PROP_TARGET] =
     g_param_spec_object ("target",
-                         _ ("Target"),
-                         _ ("The target of the animation"),
+                         _("Target"),
+                         _("The target of the animation"),
                          G_TYPE_OBJECT,
                          (G_PARAM_WRITABLE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -1023,13 +1023,13 @@ gb_object_animatev (gpointer        object,
         {
           if (!g_type_is_a (type, GTK_TYPE_WIDGET))
             {
-              g_critical ("Failed to find property %s in %s",
+              g_critical (_("Failed to find property %s in %s"),
                           name, g_type_name (type));
               goto failure;
             }
           if (!(parent = gtk_widget_get_parent (object)))
             {
-              g_critical ("Failed to find property %s in %s",
+              g_critical (_("Failed to find property %s in %s"),
                           name, g_type_name (type));
               goto failure;
             }
@@ -1037,7 +1037,7 @@ gb_object_animatev (gpointer        object,
           ptype = G_TYPE_FROM_INSTANCE (parent);
           if (!(pspec = gtk_container_class_find_child_property (pklass, name)))
             {
-              g_critical ("Failed to find property %s in %s or parent %s",
+              g_critical (_("Failed to find property %s in %s or parent %s"),
                           name, g_type_name (type), g_type_name (ptype));
               goto failure;
             }
@@ -1047,7 +1047,7 @@ gb_object_animatev (gpointer        object,
       G_VALUE_COLLECT (&value, args, 0, &error);
       if (error != NULL)
         {
-          g_critical ("Failed to retrieve va_list value: %s", error);
+          g_critical (_("Failed to retrieve va_list value: %s"), error);
           g_free (error);
           goto failure;
         }

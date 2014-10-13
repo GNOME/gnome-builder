@@ -18,6 +18,8 @@
 
 #include <string.h>
 
+#include <glib/gi18n.h>
+
 #include "trie.h"
 
 #if defined(__LP64__) || __WORDSIZE == 64
@@ -785,7 +787,7 @@ trie_traverse (Trie             *trie,
          trie_traverse_node_post_order(trie, node, str, flags,
                                        max_depth, func, user_data);
       } else {
-         g_warning("Traversal order %u is not supported on Trie.", order);
+         g_warning(_("Traversal order %u is not supported on Trie."), order);
       }
    }
 

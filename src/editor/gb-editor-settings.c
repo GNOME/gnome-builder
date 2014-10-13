@@ -569,8 +569,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_AUTO_INDENT] =
     g_param_spec_boolean ("auto-indent",
-                          _ ("auto indent"),
-                          _ ("auto indent"),
+                          _("auto indent"),
+                          _("auto indent"),
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_AUTO_INDENT,
@@ -578,8 +578,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_HIGHLIGHT_CURRENT_LINE] =
     g_param_spec_boolean ("highlight-current-line",
-                          _ ("highlight current line"),
-                          _ ("highlight current line"),
+                          _("highlight current line"),
+                          _("highlight current line"),
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_HIGHLIGHT_CURRENT_LINE,
@@ -597,8 +597,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_INDENT_ON_TAB] =
     g_param_spec_boolean ("indent-on-tab",
-                          _ ("indent on tab"),
-                          _ ("indent on tab"),
+                          _("indent on tab"),
+                          _("indent on tab"),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_INDENT_ON_TAB,
@@ -606,8 +606,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_INSERT_SPACES_INSTEAD_OF_TABS] =
     g_param_spec_boolean ("insert-spaces-instead-of-tabs",
-                          _ ("insert spaces instead of tabs"),
-                          _ ("insert spaces instead of tabs"),
+                          _("insert spaces instead of tabs"),
+                          _("insert spaces instead of tabs"),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_INSERT_SPACES_INSTEAD_OF_TABS,
@@ -615,8 +615,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_SHOW_LINE_MARKS] =
     g_param_spec_boolean ("show-line-marks",
-                          _ ("show line marks"),
-                          _ ("show line marks"),
+                          _("show line marks"),
+                          _("show line marks"),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SHOW_LINE_MARKS,
@@ -624,8 +624,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_SHOW_LINE_NUMBERS] =
     g_param_spec_boolean ("show-line-numbers",
-                          _ ("show line numbers"),
-                          _ ("show line numbers"),
+                          _("show line numbers"),
+                          _("show line numbers"),
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SHOW_LINE_NUMBERS,
@@ -633,8 +633,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_SHOW_RIGHT_MARGIN] =
     g_param_spec_boolean ("show-right-margin",
-                          _ ("show right margin"),
-                          _ ("show right margin"),
+                          _("show right margin"),
+                          _("show right margin"),
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SHOW_RIGHT_MARGIN,
@@ -642,8 +642,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_SMART_HOME_END] =
     g_param_spec_boolean ("smart-home-end",
-                          _ ("smart home end"),
-                          _ ("smart home end"),
+                          _("smart home end"),
+                          _("smart home end"),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SMART_HOME_END,
@@ -651,8 +651,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_RIGHT_MARGIN_POSITION] =
     g_param_spec_uint ("right-margin-position",
-                       _ ("Right Margin Position"),
-                       _ ("The position of the right margin, if any."),
+                       _("Right Margin Position"),
+                       _("The position of the right margin, if any."),
                        1,
                        1000,
                        80,
@@ -662,8 +662,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_INDENT_WIDTH] =
     g_param_spec_uint ("indent-width",
-                       _ ("Indent Width"),
-                       _ ("The indent width."),
+                       _("Indent Width"),
+                       _("The indent width."),
                        1,
                        100,
                        2,
@@ -673,8 +673,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_TAB_WIDTH] =
     g_param_spec_uint ("tab-width",
-                       _ ("Tab Width"),
-                       _ ("The width of tabs."),
+                       _("Tab Width"),
+                       _("The width of tabs."),
                        1,
                        32,
                        2,
@@ -684,8 +684,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_FONT_DESC] =
     g_param_spec_boxed ("font-desc",
-                        _ ("Font Description"),
-                        _ ("A PangoFontDescription to be used."),
+                        _("Font Description"),
+                        _("A PangoFontDescription to be used."),
                         PANGO_TYPE_FONT_DESCRIPTION,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FONT_DESC,
@@ -693,8 +693,8 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
 
   gParamSpecs[PROP_STYLE_SCHEME] =
     g_param_spec_object ("style-scheme",
-                         _ ("Style Scheme"),
-                         _ ("The style scheme to use in the source view."),
+                         _("Style Scheme"),
+                         _("The style scheme to use in the source view."),
                          GTK_SOURCE_TYPE_STYLE_SCHEME,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_STYLE_SCHEME,

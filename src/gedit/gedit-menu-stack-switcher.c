@@ -420,8 +420,8 @@ gedit_menu_stack_switcher_class_init (GeditMenuStackSwitcherClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_STACK,
                                    g_param_spec_object ("stack",
-                                                        "Stack",
-                                                        "Stack",
+                                                        _("Stack"),
+                                                        _("Stack"),
                                                         GTK_TYPE_STACK,
                                                         G_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT));

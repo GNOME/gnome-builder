@@ -194,7 +194,7 @@ gb_workbench_load_workspace_actions (GbWorkbench *workbench,
 
   if (group)
     {
-      g_message ("Registering actions for \"%s\" prefix.", name);
+      g_message (_("Registering actions for \"%s\" prefix."), name);
       gtk_widget_insert_action_group (GTK_WIDGET (workbench), name, group);
     }
 }

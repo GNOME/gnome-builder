@@ -165,8 +165,8 @@ gb_source_snippet_completion_provider_class_init (GbSourceSnippetCompletionProvi
 
   gParamSpecs[PROP_SOURCE_VIEW] =
     g_param_spec_object ("source-view",
-                         _ ("Source View"),
-                         _ ("The source view to insert snippet into."),
+                         _("Source View"),
+                         _("The source view to insert snippet into."),
                          GB_TYPE_SOURCE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SOURCE_VIEW,
@@ -174,8 +174,8 @@ gb_source_snippet_completion_provider_class_init (GbSourceSnippetCompletionProvi
 
   gParamSpecs[PROP_SNIPPETS] =
     g_param_spec_object ("snippets",
-                         _ ("Snippets"),
-                         _ ("The snippets to complete with this provider."),
+                         _("Snippets"),
+                         _("The snippets to complete with this provider."),
                          GB_TYPE_SOURCE_SNIPPETS,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SNIPPETS,
@@ -259,7 +259,7 @@ provider_get_priority (GtkSourceCompletionProvider *provider)
 static gchar *
 provider_get_name (GtkSourceCompletionProvider *provider)
 {
-  return g_strdup (_ ("Snippets"));
+  return g_strdup (_("Snippets"));
 }
 
 static void

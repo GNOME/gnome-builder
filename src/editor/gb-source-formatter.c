@@ -115,7 +115,7 @@ gb_source_formatter_format (GbSourceFormatter *formatter,
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_FAILED,
-                   "Failed to locate uncrustify configuration.");
+                   _("Failed to locate uncrustify configuration."));
       return FALSE;
     }
 
@@ -141,7 +141,7 @@ gb_source_formatter_format (GbSourceFormatter *formatter,
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_FAILED,
-                   _ ("unrustify failure: %s"),
+                   _("uncrustify failure: %s"),
                    stderr_buf);
       goto finish;
     }
@@ -238,7 +238,7 @@ gb_source_formatter_extract_configs (void)
           if (!g_file_copy (file, target_file, G_FILE_COPY_NONE, NULL, NULL,
                             NULL, &error))
             {
-              g_warning ("Failure copying to \"%s\": %s", target_path,
+              g_warning (_("Failure copying to \"%s\": %s"), target_path,
                          error->message);
               g_clear_error (&error);
             }

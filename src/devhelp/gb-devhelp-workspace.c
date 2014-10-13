@@ -96,7 +96,7 @@ on_new_tab_activated (GSimpleAction *action,
   priv = workspace->priv;
 
   tab = g_object_new (GB_TYPE_DEVHELP_TAB,
-                      "title", _ ("Empty Page"),
+                      "title", _("Empty Page"),
                       "visible", TRUE,
                       NULL);
   notebook = gb_multi_notebook_get_active_notebook (priv->multi_notebook);
@@ -298,7 +298,7 @@ gb_devhelp_workspace_init (GbDevhelpWorkspace *workspace)
   gtk_paned_add2 (priv->paned, GTK_WIDGET (priv->multi_notebook));
 
   tab = g_object_new (GB_TYPE_DEVHELP_TAB,
-                      "title", _ ("Empty Page"),
+                      "title", _("Empty Page"),
                       "visible", TRUE,
                       NULL);
   notebook = gb_multi_notebook_get_active_notebook (priv->multi_notebook);

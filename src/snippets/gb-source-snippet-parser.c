@@ -387,7 +387,7 @@ gb_source_snippet_parser_feed_line (GbSourceSnippetParser *parser,
 
     /* Fall through */
     default:
-      g_warning ("Invalid snippet at line %d: %s", priv->lineno, line);
+      g_warning (_("Invalid snippet at line %d: %s"), priv->lineno, line);
       break;
     }
 }

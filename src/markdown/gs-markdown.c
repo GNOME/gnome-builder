@@ -24,6 +24,8 @@
 #include <string.h>
 #include <glib.h>
 
+#include <glib/gi18n.h>
+
 #include "gs-markdown.h"
 
 #if 0
@@ -967,7 +969,7 @@ gs_markdown_set_output_kind (GsMarkdown *self, GsMarkdownOutputKind output)
 		break;
 	case GS_MARKDOWN_OUTPUT_LAST:
 	default:
-		g_warning ("unknown output enum");
+		g_warning (_("Unknown output enum"));
 		break;
 	}
 }

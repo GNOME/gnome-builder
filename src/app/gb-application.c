@@ -175,7 +175,7 @@ gb_application_register_keybindings (GbApplication *self)
                                    G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   if (!gb_keybindings_load_bytes (keybindings, bytes, &error))
     {
-      g_warning ("Failed to load default keybindings: %s", error->message);
+      g_warning (_("Failed to load default keybindings: %s"), error->message);
       g_clear_error (&error);
     }
   g_bytes_unref (bytes);
@@ -190,7 +190,7 @@ gb_application_register_keybindings (GbApplication *self)
   if (g_file_test (path, G_FILE_TEST_EXISTS) &&
       !gb_keybindings_load_path (keybindings, path, &error))
     {
-      g_warning ("Failed to load local keybindings: %s", error->message);
+      g_warning (_("Failed to load local keybindings: %s"), error->message);
       g_clear_error (&error);
     }
   g_free (path);

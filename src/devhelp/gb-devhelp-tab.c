@@ -158,8 +158,8 @@ gb_devhelp_tab_class_init (GbDevhelpTabClass *klass)
 
   gParamSpecs[PROP_URI] =
     g_param_spec_string ("uri",
-                         _ ("Uri"),
-                         _ ("The uri for the web_view."),
+                         _("Uri"),
+                         _("The uri for the web_view."),
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_URI,
