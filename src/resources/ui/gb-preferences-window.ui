@@ -106,88 +106,8 @@
             <property name="transition-type">GTK_STACK_TRANSITION_TYPE_CROSSFADE</property>
             <property name="visible_child">editor_grid</property>
             <child>
-              <object class="GtkGrid" id="editor_grid">
+              <object class="GbPreferencesPageEditor" id="editor_page">
                 <property name="visible">True</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">12</property>
-                <child>
-                  <object class="GtkLabel" id="vim_label">
-                    <property name="visible">True</property>
-                    <property name="halign">start</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="Yes">Enable VIM compatibility mode</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="width">1</property>
-                    <property name="top-attach">0</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="vim_switch">
-                    <property name="visible">True</property>
-                    <property name="active">False</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="width">1</property>
-                    <property name="top-attach">0</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="restore_insert_mark_label">
-                    <property name="visible">True</property>
-                    <property name="halign">start</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="Yes">Jump to last position when reopening a file.</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="width">1</property>
-                    <property name="top-attach">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="restore_insert_mark_switch">
-                    <property name="visible">True</property>
-                    <property name="active">False</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="width">1</property>
-                    <property name="top-attach">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="word_completion_label">
-                    <property name="visible">True</property>
-                    <property name="halign">start</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="Yes">Enable auto-completion of words in the document.</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="width">1</property>
-                    <property name="top-attach">2</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="word_completion_switch">
-                    <property name="visible">True</property>
-                    <property name="active">False</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="width">1</property>
-                    <property name="top-attach">2</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
               </object>
               <packing>
                 <property name="name">editor</property>
@@ -260,23 +180,4 @@
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup">
-    <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
-    <widgets>
-      <widget name="left_header_bar"/>
-      <widget name="sidebar"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup">
-    <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
-    <widgets>
-      <widget name="vim_label"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup">
-    <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
-    <widgets>
-      <widget name="vim_switch"/>
-    </widgets>
-  </object>
 </interface>
