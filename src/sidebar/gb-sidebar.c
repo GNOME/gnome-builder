@@ -19,16 +19,12 @@
  *      Ikey Doherty <michael.i.doherty@intel.com>
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <glib/gi18n.h>
 
 #include "gb-sidebar.h"
 
 /**
- * SECTION:gb-sidebar
+ * SECTION:gtk-sidebar
  * @short_description: An automatic sidebar widget
  * @title: GbSidebar
  *
@@ -188,12 +184,7 @@ gb_sidebar_init (GbSidebar *sidebar)
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
 
-#if 1
   gtk_container_add (GTK_CONTAINER (sidebar), sw);
-#else
-  _gtk_bin_set_child (GTK_BIN (sidebar), sw);
-  gtk_widget_set_parent (sw, GTK_WIDGET (sidebar));
-#endif
 
   priv->list = GTK_LIST_BOX (gtk_list_box_new ());
   gtk_widget_show (GTK_WIDGET (priv->list));
@@ -328,8 +319,16 @@ static void
 populate_sidebar (GbSidebar *sidebar)
 {
   GbSidebarPrivate *priv = gb_sidebar_get_instance_private (sidebar);
+  GtkWidget *widget, *row;
 
   gtk_container_foreach (GTK_CONTAINER (priv->stack), (GtkCallback)add_child, sidebar);
+
+  widget = gtk_stack_get_visible_child (priv->stack);
+  if (widget)
+    {
+      row = g_hash_table_lookup (priv->rows, widget);
+      gtk_list_box_select_row (priv->list, GTK_LIST_BOX_ROW (row));
+    }
 }
 
 static void
@@ -433,11 +432,10 @@ gb_sidebar_class_init (GbSidebarClass *klass)
   object_class->get_property = gb_sidebar_get_property;
 
   obj_properties[PROP_STACK] =
-      g_param_spec_object ("stack",
-                           _("Stack"),
+      g_param_spec_object (_("stack"), _("Stack"),
                            _("Associated stack for this GbSidebar"),
                            GTK_TYPE_STACK,
-                           G_PARAM_READWRITE);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 }
