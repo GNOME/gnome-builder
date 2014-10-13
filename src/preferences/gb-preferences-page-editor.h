@@ -37,7 +37,7 @@ typedef struct _GbPreferencesPageEditorPrivate GbPreferencesPageEditorPrivate;
 
 struct _GbPreferencesPageEditor
 {
-  GbPreferencesPage parent;
+  GtkBin parent;
 
   /*< private >*/
   GbPreferencesPageEditorPrivate *priv;
@@ -45,11 +45,10 @@ struct _GbPreferencesPageEditor
 
 struct _GbPreferencesPageEditorClass
 {
-  GbPreferencesPageClass parent;
+  GtkBinClass parent;
 };
 
-GType                        gb_preferences_page_editor_get_type (void) G_GNUC_CONST;
-GbPreferencesPageEditor     *gb_preferences_page_editor_new      (void);
+GType gb_preferences_page_editor_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
