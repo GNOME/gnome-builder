@@ -23,9 +23,9 @@
  */
 
 #include <glib/gi18n.h>
-#include <libgit2-glib/ggit.h>
 
 #include "gb-preferences-page-editor.h"
+#include "gb-preferences-page-git.h"
 #include "gb-preferences-window.h"
 #include "gb-sidebar.h"
 
@@ -35,9 +35,6 @@ struct _GbPreferencesWindowPrivate
   GtkSearchEntry  *search_entry;
   GtkSearchBar    *search_bar;
   GtkStack        *stack;
-
-  GtkEntry        *git_author_name_entry;
-  GtkEntry        *git_author_email_entry;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesWindow, gb_preferences_window,
@@ -72,34 +69,6 @@ gb_preferences_window_section_changed (GtkStack            *stack,
 }
 
 static void
-load_git (GbPreferencesWindow *window)
-{
-  GgitConfig *config;
-  const gchar *value;
-
-  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
-
-  config = ggit_config_new_default (NULL);
-  if (!config)
-    return;
-
-  /*
-   * TODO: These should be bound to a config wrapper object that will sync
-   *       the values back to the underlying config.
-   */
-
-  value = ggit_config_get_string (config, "user.name", NULL);
-  if (value)
-    gtk_entry_set_text (window->priv->git_author_name_entry, value);
-
-  value = ggit_config_get_string (config, "user.email", NULL);
-  if (value)
-    gtk_entry_set_text (window->priv->git_author_email_entry, value);
-
-  g_object_unref (config);
-}
-
-static void
 gb_preferences_window_constructed (GObject *object)
 {
   GbPreferencesWindow *window = (GbPreferencesWindow *)object;
@@ -114,8 +83,6 @@ gb_preferences_window_constructed (GObject *object)
                     G_CALLBACK (gb_preferences_window_section_changed),
                     window);
   gb_preferences_window_section_changed (window->priv->stack, NULL, window);
-
-  load_git (window);
 }
 
 static void
@@ -164,13 +131,12 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-preferences-window.ui");
 
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, git_author_email_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, git_author_name_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, right_header_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, search_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, search_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, stack);
 
+  g_type_ensure (GB_TYPE_PREFERENCES_PAGE_GIT);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EDITOR);
   g_type_ensure (GB_TYPE_SIDEBAR);
 }
