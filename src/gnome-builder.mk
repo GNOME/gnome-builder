@@ -83,6 +83,8 @@ libgnome_builder_la_SOURCES = \
 	src/preferences/gb-preferences-page.h \
 	src/preferences/gb-preferences-page-editor.c \
 	src/preferences/gb-preferences-page-editor.h \
+	src/preferences/gb-preferences-page-git.c \
+	src/preferences/gb-preferences-page-git.h \
 	src/sidebar/gb-sidebar.c \
 	src/sidebar/gb-sidebar.h \
 	src/snippets/gb-source-snippet-chunk.c \

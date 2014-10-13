@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbPreferencesPageGit" parent="GtkBin">
+    <child>
+      <object class="GtkGrid">
+        <property name="visible">True</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">12</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="halign">start</property>
+            <property name="hexpand">False</property>
+            <property name="label" translatable="Yes">Author Name</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="width">1</property>
+            <property name="top-attach">0</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="git_author_name_entry">
+            <property name="visible">True</property>
+            <property name="hexpand">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="width">1</property>
+            <property name="top-attach">0</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="Yes">Author Email</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="width">1</property>
+            <property name="top-attach">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="git_author_email_entry">
+            <property name="visible">True</property>
+            <property name="hexpand">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="width">1</property>
+            <property name="top-attach">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="name">git</property>
+        <property name="title" translatable="yes">Git</property>
+      </packing>
+    </child>
+  </template>
+</interface>

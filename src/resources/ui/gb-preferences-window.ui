@@ -103,8 +103,8 @@
             <property name="border_width">12</property>
             <property name="visible">True</property>
             <property name="expand">True</property>
+            <property name="visible-child">editor_page</property>
             <property name="transition-type">GTK_STACK_TRANSITION_TYPE_CROSSFADE</property>
-            <property name="visible_child">editor_grid</property>
             <child>
               <object class="GbPreferencesPageEditor" id="editor_page">
                 <property name="visible">True</property>
@@ -115,60 +115,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkGrid" id="git_grid">
+              <object class="GbPreferencesPageGit" id="git_page">
                 <property name="visible">True</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">12</property>
-                <child>
-                  <object class="GtkLabel" id="git_author_name_label">
-                    <property name="visible">True</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="Yes">Author Name</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="width">1</property>
-                    <property name="top-attach">0</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="git_author_name_entry">
-                    <property name="visible">True</property>
-                    <property name="hexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="width">1</property>
-                    <property name="top-attach">0</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="git_author_email_label">
-                    <property name="visible">True</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="Yes">Author Email</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="width">1</property>
-                    <property name="top-attach">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="git_author_email_entry">
-                    <property name="visible">True</property>
-                    <property name="hexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="width">1</property>
-                    <property name="top-attach">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
               </object>
               <packing>
                 <property name="name">git</property>
@@ -180,4 +128,11 @@
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
+    <widgets>
+      <widget name="left_header_bar"/>
+      <widget name="sidebar"/>
+    </widgets>
+  </object>
 </interface>
