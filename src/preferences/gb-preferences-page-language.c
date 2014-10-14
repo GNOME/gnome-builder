@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <glib/gi18n.h>
+
 #include <gtksourceview/gtksource.h>
 #include <string.h>
 
@@ -53,8 +55,10 @@ make_language_row (GtkSourceLanguage *language)
   label = g_object_new (GTK_TYPE_LABEL,
                         "hexpand", TRUE,
                         "visible", TRUE,
-                        "ypad", 6,
-                        "xpad", 6,
+                        "margin-top", 6,
+                        "margin-bottom", 6,
+                        "margin-start", 6,
+                        "margin-end", 6,
                         "xalign", 0.0f,
                         "label", name,
                         NULL);
@@ -123,6 +127,57 @@ search_entry_changed (GtkEntry   *entry,
 }
 
 static void
+selected_rows_changed (GtkListBox                *list_box,
+                       GbPreferencesPageLanguage *page)
+{
+  GtkListBoxRow *row;
+  GtkSourceLanguage *lang;
+  GbEditorSettingsWidget *widget;
+  GbEditorSettings *settings;
+  GtkDialog *dialog;
+  GtkWidget *toplevel;
+  GtkWidget *content_area;
+
+  g_assert (GTK_IS_LIST_BOX (list_box));
+  g_assert (GB_IS_PREFERENCES_PAGE_LANGUAGE (page));
+
+  row = gtk_list_box_get_selected_row (list_box);
+  if (!row)
+    return;
+
+  lang = g_object_get_data (G_OBJECT (row), "GTK_SOURCE_LANGUAGE");
+  if (!lang)
+    return;
+
+  /* TODO: Get for the language */
+  settings = g_object_new (GB_TYPE_EDITOR_SETTINGS, NULL);
+  if (!settings)
+    return;
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (list_box));
+
+  dialog = g_object_new (GTK_TYPE_DIALOG,
+                         "transient-for", toplevel,
+                         "title", gtk_source_language_get_name (lang),
+                         "use-header-bar", TRUE,
+                         NULL);
+  gtk_dialog_add_button (dialog, _("Close"), GTK_RESPONSE_CLOSE);
+
+  content_area = gtk_dialog_get_content_area (dialog);
+  widget = g_object_new (GB_TYPE_EDITOR_SETTINGS_WIDGET,
+                         "border-width", 12,
+                         "settings", settings,
+                         "visible", TRUE,
+                         NULL);
+  gtk_container_add (GTK_CONTAINER (content_area), GTK_WIDGET (widget));
+
+  gtk_dialog_run (dialog);
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  g_object_unref (settings);
+}
+
+static void
 gb_preferences_page_language_constructed (GObject *object)
 {
   GtkSourceLanguageManager *manager;
@@ -140,6 +195,11 @@ gb_preferences_page_language_constructed (GObject *object)
                     "changed",
                     G_CALLBACK (search_entry_changed),
                     page->priv->language_list_box);
+
+  g_signal_connect (page->priv->language_list_box,
+                    "selected-rows-changed",
+                    G_CALLBACK (selected_rows_changed),
+                    page);
 
   manager = gtk_source_language_manager_get_default ();
   lang_ids = gtk_source_language_manager_get_language_ids (manager);
