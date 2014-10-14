@@ -1156,6 +1156,7 @@ gb_editor_tab_constructed (GObject *object)
   GbEditorTab *tab = (GbEditorTab *) object;
   GtkSourceGutter *gutter;
   GSettings *settings;
+  gboolean vim_enabled;
 
   ENTRY;
 
@@ -1163,11 +1164,28 @@ gb_editor_tab_constructed (GObject *object)
 
   priv = tab->priv;
 
+  settings = g_settings_new ("org.gnome.builder.editor");
+
   if (!priv->document)
     priv->document = gb_editor_document_new ();
 
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (priv->source_view),
                             GTK_TEXT_BUFFER (priv->document));
+
+  /*
+   * WORKAROUND:
+   * 
+   * We need to connect VIM in the proper mode as early as possible
+   * so that our key-press-event signal is connected before the
+   * GtkSourceCompletion connects to key-press-event of the GtkSourceView.
+   * Otherwise, Escape when in insert mode may only hide the completion
+   * window and not escape us back into VIM normal mode as VIM would.
+   */
+  vim_enabled = g_settings_get_boolean (settings, "vim-mode");
+  priv->vim = g_object_new (GB_TYPE_EDITOR_VIM,
+                            "enabled", vim_enabled,
+                            "text-view", priv->source_view,
+                            NULL);
 
   priv->snippets_provider =
     g_object_new (GB_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER,
@@ -1318,10 +1336,6 @@ gb_editor_tab_constructed (GObject *object)
                     NULL);
   gtk_source_gutter_insert (gutter, priv->change_renderer, 0);
 
-  priv->vim = g_object_new (GB_TYPE_EDITOR_VIM,
-                            "enabled", FALSE,
-                            "text-view", priv->source_view,
-                            NULL);
   g_signal_connect (priv->vim,
                     "command-visibility-toggled",
                     G_CALLBACK (on_vim_command_visibility_toggled),
@@ -1339,14 +1353,14 @@ gb_editor_tab_constructed (GObject *object)
                     G_CALLBACK (on_vim_notify_mode),
                     tab);
 
-  settings = g_settings_new ("org.gnome.builder.editor");
   g_settings_bind (settings, "vim-mode", priv->vim, "enabled",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (settings, "word-completion", tab, "enable-word-completion",
                    G_SETTINGS_BIND_DEFAULT);
-  g_object_unref (settings);
 
   gb_editor_tab_cursor_moved (tab, priv->document);
+
+  g_object_unref (settings);
 
   EXIT;
 }
