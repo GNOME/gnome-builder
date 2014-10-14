@@ -123,6 +123,15 @@
                 <property name="title" translatable="yes">Git</property>
               </packing>
             </child>
+            <child>
+              <object class="GbPreferencesPageLanguage" id="language_page">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="name">language</property>
+                <property name="title" translatable="yes">Language Settings</property>
+              </packing>
+            </child>
           </object>
         </child>
       </object>

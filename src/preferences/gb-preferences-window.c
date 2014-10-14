@@ -26,6 +26,7 @@
 
 #include "gb-preferences-page-editor.h"
 #include "gb-preferences-page-git.h"
+#include "gb-preferences-page-language.h"
 #include "gb-preferences-window.h"
 #include "gb-sidebar.h"
 
@@ -138,6 +139,7 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
 
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_GIT);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EDITOR);
+  g_type_ensure (GB_TYPE_PREFERENCES_PAGE_LANGUAGE);
   g_type_ensure (GB_TYPE_SIDEBAR);
 }
 

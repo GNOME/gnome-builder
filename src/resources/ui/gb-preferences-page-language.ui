@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbPreferencesPageLanguage" parent="GbPreferencesPage">
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+        <property name="visible">True</property>
+        <property name="border-width">6</property>
+        <property name="spacing">2</property>
+        <property name="can-focus">False</property>
+        <child>
+          <object class="GtkSearchEntry" id="search_entry">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="shadow-type">GTK_SHADOW_IN</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkListBox" id="language_list_box">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="can-focus">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
