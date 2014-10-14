@@ -19,6 +19,8 @@
 #include <gtksourceview/gtksource.h>
 #include <string.h>
 
+#include "gb-editor-settings.h"
+#include "gb-editor-settings-widget.h"
 #include "gb-preferences-page-language.h"
 #include "gb-string.h"
 
@@ -180,6 +182,8 @@ gb_preferences_page_language_class_init (GbPreferencesPageLanguageClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class,
                                                 GbPreferencesPageLanguage,
                                                 search_entry);
+
+  g_type_ensure (GB_TYPE_EDITOR_SETTINGS_WIDGET);
 }
 
 static void

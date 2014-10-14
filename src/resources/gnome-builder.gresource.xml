@@ -19,6 +19,7 @@
     <file>ui/gb-command-bar.ui</file>
     <file>ui/gb-command-bar-item.ui</file>
     <file>ui/gb-devhelp-tab.ui</file>
+    <file>ui/gb-editor-settings-widget.ui</file>
     <file>ui/gb-editor-tab.ui</file>
     <file>ui/gb-preferences-window.ui</file>
     <file>ui/gb-preferences-page-editor.ui</file>

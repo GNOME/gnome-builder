@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbEditorSettingsWidget" parent="GtkGrid">
+    <property name="visible">True</property>
+    <property name="column-spacing">6</property>
+    <property name="row-spacing">3</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkCheckButton" id="auto_indent">
+        <property name="visible">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Auto-Indent</property>
+      </object>
+      <packing>
+        <property name="top-attach">0</property>
+        <property name="left-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="highlight_current_line">
+        <property name="visible">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Highlight Current Line</property>
+      </object>
+      <packing>
+        <property name="top-attach">1</property>
+        <property name="left-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="highlight_matching_brackets">
+        <property name="visible">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Highlight Matching Brackets</property>
+      </object>
+      <packing>
+        <property name="top-attach">2</property>
+        <property name="left-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="indent_on_tab">
+        <property name="visible">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Indent on Tab</property>
+      </object>
+      <packing>
+        <property name="top-attach">3</property>
+        <property name="left-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="insert_spaces_instead_of_tabs">
+        <property name="visible">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Insert Spaces Instead of Tabs</property>
+      </object>
+      <packing>
+        <property name="top-attach">4</property>
+        <property name="left-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="show_line_marks">
+        <property name="visible">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Show Line Marks</property>
+      </object>
+      <packing>
+        <property name="top-attach">5</property>
+        <property name="left-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="show_line_numbers">
+        <property name="visible">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Show Line Numbers</property>
+      </object>
+      <packing>
+        <property name="top-attach">6</property>
+        <property name="left-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="show_right_margin">
+        <property name="visible">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Display right margin at position</property>
+      </object>
+      <packing>
+        <property name="top-attach">7</property>
+        <property name="left-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSpinButton" id="right_margin_position">
+        <property name="visible">True</property>
+        <property name="halign">start</property>
+      </object>
+      <packing>
+        <property name="top-attach">7</property>
+        <property name="left-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="smart_home_end">
+        <property name="visible">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Smart Home and End</property>
+      </object>
+      <packing>
+        <property name="top-attach">8</property>
+        <property name="left-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSpinButton" id="indent_width">
+        <property name="visible">True</property>
+        <property name="halign">start</property>
+      </object>
+      <packing>
+        <property name="top-attach">9</property>
+        <property name="left-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSpinButton" id="tab_width">
+        <property name="visible">True</property>
+        <property name="halign">start</property>
+      </object>
+      <packing>
+        <property name="top-attach">11</property>
+        <property name="left-attach">0</property>
+      </packing>
+    </child>
+  </template>
+</interface>
