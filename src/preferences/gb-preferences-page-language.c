@@ -134,6 +134,7 @@ row_selected (GtkListBox                *list_box,
   GtkSourceLanguage *lang;
   GbEditorSettingsWidget *widget;
   GbEditorSettings *settings;
+  const gchar *lang_id;
   GtkDialog *dialog;
   GtkWidget *toplevel;
   GtkWidget *content_area;
@@ -149,8 +150,8 @@ row_selected (GtkListBox                *list_box,
   if (!lang)
     return;
 
-  /* TODO: Get for the language */
-  settings = g_object_new (GB_TYPE_EDITOR_SETTINGS, NULL);
+  lang_id = gtk_source_language_get_id (lang);
+  settings = gb_editor_settings_new_for_language (lang_id);
   if (!settings)
     return;
 
