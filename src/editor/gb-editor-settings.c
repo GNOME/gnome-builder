@@ -16,19 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * TODO: These should be bound to settings from GSettings. Additionally,
- *       we want to have them per-language. So that schema will need to
- *       be relocatable.
- *
- *       Add something like:
- *
- *         gb_editor_settings_new_for_language ("c")
- */
+#define G_LOG_DOMAIN "editor-settings"
 
 #include <glib/gi18n.h>
 
 #include "gb-editor-settings.h"
+#include "gb-log.h"
 
 #define DEFAULT_FONT "Monospace 11"
 #define DEFAULT_SCHEME "tango"
@@ -395,12 +388,16 @@ gb_editor_settings_finalize (GObject *object)
 {
   GbEditorSettingsPrivate *priv;
 
+  ENTRY;
+
   priv = GB_EDITOR_SETTINGS (object)->priv;
 
   g_clear_object (&priv->style_scheme);
   g_clear_pointer (&priv->font_desc, pango_font_description_free);
 
   G_OBJECT_CLASS (gb_editor_settings_parent_class)->finalize (object);
+
+  EXIT;
 }
 
 static void
@@ -678,6 +675,8 @@ gb_editor_settings_init (GbEditorSettings *settings)
   GtkSourceStyleScheme *scheme;
   PangoFontDescription *font_desc;
 
+  ENTRY;
+
   settings->priv = gb_editor_settings_get_instance_private (settings);
 
   ssm = gtk_source_style_scheme_manager_get_default ();
@@ -695,4 +694,6 @@ gb_editor_settings_init (GbEditorSettings *settings)
   settings->priv->tab_width = 2;
   settings->priv->font_desc = font_desc;
   settings->priv->style_scheme = g_object_ref (scheme);
+
+  EXIT;
 }
