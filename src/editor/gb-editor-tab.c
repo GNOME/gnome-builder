@@ -216,8 +216,6 @@ gb_editor_tab_connect_settings (GbEditorTab      *tab,
   ADD_BINDING ("highlight-matching-brackets", priv->document,
                "highlight-matching-brackets",
                priv->highlight_matching_brackets_binding);
-  ADD_BINDING ("indent-on-tab", priv->source_view, "indent-on-tab",
-               priv->indent_on_tab_binding);
   ADD_BINDING ("insert-spaces-instead-of-tabs", priv->source_view,
                "insert-spaces-instead-of-tabs",
                priv->insert_spaces_instead_of_tabs_binding);
