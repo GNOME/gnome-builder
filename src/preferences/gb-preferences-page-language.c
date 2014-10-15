@@ -211,6 +211,9 @@ gb_preferences_page_language_constructed (GObject *object)
       GtkSourceLanguage *lang;
       GtkWidget *widget;
 
+      if (g_str_equal (lang_ids [i], "def"))
+        continue;
+
       lang = gtk_source_language_manager_get_language (manager, lang_ids [i]);
       widget = make_language_row (lang);
 
