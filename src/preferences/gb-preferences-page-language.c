@@ -127,10 +127,10 @@ search_entry_changed (GtkEntry   *entry,
 }
 
 static void
-selected_rows_changed (GtkListBox                *list_box,
-                       GbPreferencesPageLanguage *page)
+row_selected (GtkListBox                *list_box,
+              GtkListBoxRow             *row,
+              GbPreferencesPageLanguage *page)
 {
-  GtkListBoxRow *row;
   GtkSourceLanguage *lang;
   GbEditorSettingsWidget *widget;
   GbEditorSettings *settings;
@@ -139,9 +139,9 @@ selected_rows_changed (GtkListBox                *list_box,
   GtkWidget *content_area;
 
   g_assert (GTK_IS_LIST_BOX (list_box));
+  g_assert (!row || GTK_IS_LIST_BOX_ROW (row));
   g_assert (GB_IS_PREFERENCES_PAGE_LANGUAGE (page));
 
-  row = gtk_list_box_get_selected_row (list_box);
   if (!row)
     return;
 
@@ -174,6 +174,8 @@ selected_rows_changed (GtkListBox                *list_box,
   gtk_dialog_run (dialog);
   gtk_widget_destroy (GTK_WIDGET (dialog));
 
+  gtk_list_box_unselect_row (list_box, row);
+
   g_object_unref (settings);
 }
 
@@ -197,8 +199,8 @@ gb_preferences_page_language_constructed (GObject *object)
                     page->priv->language_list_box);
 
   g_signal_connect (page->priv->language_list_box,
-                    "selected-rows-changed",
-                    G_CALLBACK (selected_rows_changed),
+                    "row-selected",
+                    G_CALLBACK (row_selected),
                     page);
 
   manager = gtk_source_language_manager_get_default ();
