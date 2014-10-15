@@ -6,7 +6,7 @@
     <key name="highlight-current-line" type="b">
       <default>false</default>
     </key>
-    <key name="hihglight-matching-braces" type="b">
+    <key name="highlight-matching-brackets" type="b">
       <default>false</default>
     </key>
     <key name="insert-spaces-instead-of-tabs" type="b">
