@@ -34,7 +34,97 @@
 #include "gb-resources.h"
 #include "gb-workbench.h"
 
+#define LANGUAGE_SCHEMA "org.gnome.builder.editor.language"
+#define LANGUAGE_PATH "/org/gnome/builder/editor/language/"
+
 G_DEFINE_TYPE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
+
+static void
+gb_application_install_language_defaults (GbApplication *self)
+{
+  gchar *defaults_installed_path;
+  gboolean exists;
+
+  g_return_if_fail (GB_IS_APPLICATION (self));
+
+  defaults_installed_path = g_build_filename (g_get_user_data_dir (),
+                                              "gnome-builder",
+                                              ".defaults-installed",
+                                              NULL);
+  exists = g_file_test (defaults_installed_path, G_FILE_TEST_EXISTS);
+
+  if (!exists)
+    {
+      GKeyFile *key_file;
+      GBytes *bytes;
+
+      key_file = g_key_file_new ();
+
+      bytes =
+        g_resources_lookup_data ("/org/gnome/builder/language/defaults.ini",
+                                 0, NULL);
+
+      if (bytes)
+        {
+          if (g_key_file_load_from_data (key_file,
+                                         g_bytes_get_data (bytes, NULL),
+                                         g_bytes_get_size (bytes),
+                                         0, NULL))
+            {
+              gchar **groups;
+              guint i;
+
+              groups = g_key_file_get_groups (key_file, NULL);
+
+              for (i = 0; groups [i]; i++)
+                {
+                  GSettings *settings;
+                  gchar *settings_path;
+                  gchar **keys;
+                  guint j;
+
+                  settings_path = g_strdup_printf (
+                      "/org/gnome/builder/editor/language/%s/", groups [i]);
+                  settings = g_settings_new_with_path (
+                      "org.gnome.builder.editor.language",
+                      settings_path);
+                  g_free (settings_path);
+
+                  keys = g_key_file_get_keys (key_file, groups [i], NULL, NULL);
+
+                  for (j = 0; keys [j]; j++)
+                    {
+                      GVariant *param;
+                      gchar *value;
+
+                      value = g_key_file_get_value (key_file, groups [i],
+                                                    keys [j], NULL);
+                      param = g_variant_parse (NULL, value, NULL, NULL, NULL);
+
+                      if (param)
+                        {
+                          g_settings_set_value (settings, keys [j], param);
+                          g_variant_unref (param);
+                        }
+
+                      g_free (value);
+                    }
+
+                  g_object_unref (settings);
+                }
+
+              g_strfreev (groups);
+            }
+
+          g_bytes_unref (bytes);
+        }
+
+      g_key_file_free (key_file);
+      g_file_set_contents (defaults_installed_path, "", 0, NULL);
+    }
+
+  g_free (defaults_installed_path);
+}
 
 static void
 gb_application_make_skeleton_dirs (GbApplication *self)
@@ -416,6 +506,7 @@ gb_application_startup (GApplication *app)
   G_APPLICATION_CLASS (gb_application_parent_class)->startup (app);
 
   gb_application_make_skeleton_dirs (self);
+  gb_application_install_language_defaults (self);
   gb_application_register_actions (self);
   gb_application_register_keybindings (self);
   gb_application_register_theme_overrides (self);

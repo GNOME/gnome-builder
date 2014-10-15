@@ -13,6 +13,8 @@
 
     <file>keybindings/default.ini</file>
 
+    <file>language/defaults.ini</file>
+
     <file>snippets/c.snippets</file>
     <file>snippets/chdr.snippets</file>
 
