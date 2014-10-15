@@ -87,6 +87,7 @@ struct _GbEditorVimPrivate
   guint                    target_line_offset;
   guint                    stash_line;
   guint                    stash_line_offset;
+  guint                    anim_timeout;
   guint                    enabled : 1;
   guint                    connected : 1;
 };
@@ -2419,6 +2420,20 @@ gb_editor_vim_move_to_line_n (GbEditorVim *vim,
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
+static gboolean
+reshow_highlight (gpointer data)
+{
+  GbEditorVim *vim = data;
+  GtkSourceView *source_view;
+
+  vim->priv->anim_timeout = 0;
+
+  source_view = GTK_SOURCE_VIEW (vim->priv->text_view);
+  gtk_source_view_set_highlight_current_line (source_view, TRUE);
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 gb_editor_vim_move_to_iter (GbEditorVim *vim,
                             GtkTextIter *iter,
@@ -2431,6 +2446,21 @@ gb_editor_vim_move_to_iter (GbEditorVim *vim,
   g_assert (iter);
   g_assert (yalign >= 0.0);
   g_assert (yalign <= 1.0);
+
+  if (GTK_SOURCE_IS_VIEW (vim->priv->text_view))
+    {
+      GtkSourceView *source_view;
+
+      source_view = GTK_SOURCE_VIEW (vim->priv->text_view);
+      if (vim->priv->anim_timeout ||
+          gtk_source_view_get_highlight_current_line (source_view))
+        {
+          if (vim->priv->anim_timeout)
+            g_source_remove (vim->priv->anim_timeout);
+          gtk_source_view_set_highlight_current_line (source_view, FALSE);
+          vim->priv->anim_timeout = g_timeout_add (200, reshow_highlight, vim);
+        }
+    }
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   insert = gtk_text_buffer_get_insert (buffer);
@@ -2456,9 +2486,8 @@ gb_editor_vim_move_page (GbEditorVim                 *vim,
   guint offset;
   gint line, line_top, line_bottom, line_current;
   GtkTextBuffer *buffer;
-  gfloat yalign;
+  gfloat yalign = 0.0;
 
-  yalign = 0.0;
   g_assert (GB_IS_EDITOR_VIM (vim));
 
   gtk_text_view_get_visible_rect (vim->priv->text_view, &rect);
@@ -3599,6 +3628,12 @@ static void
 gb_editor_vim_finalize (GObject *object)
 {
   GbEditorVimPrivate *priv = GB_EDITOR_VIM (object)->priv;
+
+  if (priv->anim_timeout)
+    {
+      g_source_remove (priv->anim_timeout);
+      priv->anim_timeout = 0;
+    }
 
   if (priv->text_view)
     {
