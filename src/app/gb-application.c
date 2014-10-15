@@ -111,6 +111,7 @@ gb_application_install_language_defaults (GbApplication *self)
                     }
 
                   g_object_unref (settings);
+                  g_strfreev (keys);
                 }
 
               g_strfreev (groups);
