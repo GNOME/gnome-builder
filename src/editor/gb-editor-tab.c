@@ -253,8 +253,9 @@ gb_editor_tab_disconnect_settings (GbEditorTab *tab)
 
 #define REMOVE_BINDING(b) \
   if (b) { \
-      g_object_remove_weak_pointer (G_OBJECT (b), (gpointer *) &(b)); \
       g_binding_unbind (b); \
+      if (b) \
+        g_object_remove_weak_pointer (G_OBJECT (b), (gpointer *) &(b)); \
       (b) = NULL; \
     }
 
@@ -312,6 +313,9 @@ gb_editor_tab_set_settings (GbEditorTab      *tab,
   g_return_if_fail (!settings || GB_IS_EDITOR_SETTINGS (settings));
 
   priv = tab->priv;
+
+  if (settings == priv->settings)
+      return;
 
   if (priv->settings)
     {
@@ -1088,8 +1092,11 @@ transform_file_to_language (GBinding     *binding,
                             GValue       *dst_value,
                             gpointer      user_data)
 {
+  GbEditorTab *tab = user_data;
   GtkSourceLanguage *language = NULL;
   GFile *location;
+
+  g_assert (GB_IS_EDITOR_TAB (tab));
 
   location = g_value_get_object (src_value);
 
@@ -1108,6 +1115,20 @@ transform_file_to_language (GBinding     *binding,
       manager = gtk_source_language_manager_get_default ();
       language = gtk_source_language_manager_guess_language (manager, filename,
                                                              content_type);
+
+      /* TODO: This shouldn't be set here, this function shouldn't have
+       *       side effects. But easy to plumb it until we clean this up.
+       */
+      if (language)
+        {
+          GbEditorSettings *settings;
+          const gchar *lang_id;
+
+          lang_id = gtk_source_language_get_id (language);
+          settings = gb_editor_settings_new_for_language (lang_id);
+          gb_editor_tab_set_settings (tab, settings);
+          g_object_unref (settings);
+        }
 
       g_free (filename);
       g_free (content_type);
