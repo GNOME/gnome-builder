@@ -229,8 +229,6 @@ gb_editor_tab_connect_settings (GbEditorTab      *tab,
                priv->show_right_margin_binding);
   ADD_BINDING ("smart-home-end", priv->source_view, "smart-home-end",
                priv->smart_home_end_binding);
-  ADD_BINDING ("indent-width", priv->source_view, "indent-width",
-               priv->indent_width_binding);
   ADD_BINDING ("tab-width", priv->source_view, "tab-width",
                priv->tab_width_binding);
   ADD_BINDING ("right-margin-position", priv->source_view,

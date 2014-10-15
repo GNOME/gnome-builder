@@ -35,7 +35,6 @@ struct _GbEditorSettingsWidgetPrivate
   GtkCheckButton *show_right_margin;
   GtkCheckButton *smart_home_end;
 
-  GtkSpinButton  *indent_width;
   GtkSpinButton  *right_margin_position;
   GtkSpinButton  *tab_width;
 };
@@ -96,9 +95,6 @@ gb_editor_settings_widget_set_settings (GbEditorSettingsWidget *widget,
                           G_BINDING_SYNC_CREATE);
   g_object_bind_property (settings, "smart-home-end",
                           priv->smart_home_end, "active",
-                          G_BINDING_SYNC_CREATE);
-  g_object_bind_property (settings, "indent-width",
-                          priv->indent_width, "value",
                           G_BINDING_SYNC_CREATE);
   g_object_bind_property (settings, "right-margin-position",
                           priv->right_margin_position, "value",
@@ -173,7 +169,6 @@ gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, highlight_current_line);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, highlight_matching_brackets);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, indent_on_tab);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, indent_width);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, insert_spaces_instead_of_tabs);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, right_margin_position);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, show_line_marks);

@@ -1,139 +1,311 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.8 -->
+  <requires lib="gtk+" version="3.8"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">32</property>
+    <property name="upper">500</property>
+    <property name="value">80</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="lower">1</property>
+    <property name="upper">32</property>
+    <property name="value">8</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">4</property>
+  </object>
   <template class="GbEditorSettingsWidget" parent="GtkGrid">
     <property name="visible">True</property>
-    <property name="column-spacing">6</property>
-    <property name="row-spacing">3</property>
-    <property name="can-focus">False</property>
+    <property name="can_focus">False</property>
+    <property name="row_spacing">12</property>
     <child>
-      <object class="GtkCheckButton" id="auto_indent">
+      <object class="GtkBox" id="box2">
         <property name="visible">True</property>
-        <property name="halign">start</property>
-        <property name="label" translatable="yes">Auto-Indent</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">12</property>
+        <property name="margin_right">12</property>
+        <property name="orientation">vertical</property>
+        <property name="homogeneous">True</property>
+        <child>
+          <object class="GtkCheckButton" id="show_line_numbers">
+            <property name="label" translatable="yes">_Display line numbers</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="use_underline">True</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkCheckButton" id="show_right_margin">
+                <property name="label" translatable="yes">Display right _margin at column:</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="valign">baseline</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="right_margin_position">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="halign">start</property>
+                <property name="valign">baseline</property>
+                <property name="input_purpose">number</property>
+                <property name="adjustment">adjustment1</property>
+                <property name="value">80</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="show_line_marks">
+            <property name="label" translatable="yes">Display line mar_ks</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="use_underline">True</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="smart_home_end">
+            <property name="label" translatable="yes">Home moves to first non-space character</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
       </object>
       <packing>
-        <property name="top-attach">0</property>
-        <property name="left-attach">0</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
     <child>
-      <object class="GtkCheckButton" id="highlight_current_line">
+      <object class="GtkBox" id="box3">
         <property name="visible">True</property>
-        <property name="halign">start</property>
-        <property name="label" translatable="yes">Highlight Current Line</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">3</property>
+        <child>
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">&lt;b&gt;Highlighting&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="highlight_current_line">
+            <property name="label" translatable="yes">Highlight current _line</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="highlight_matching_brackets">
+            <property name="label" translatable="yes">Highlight matching _brackets</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
       </object>
       <packing>
-        <property name="top-attach">1</property>
-        <property name="left-attach">0</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
       </packing>
     </child>
     <child>
-      <object class="GtkCheckButton" id="highlight_matching_brackets">
+      <object class="GtkBox" id="box4">
         <property name="visible">True</property>
-        <property name="halign">start</property>
-        <property name="label" translatable="yes">Highlight Matching Brackets</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">3</property>
+        <child>
+          <object class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">&lt;b&gt;Indentation&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box5">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="label3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">baseline</property>
+                <property name="margin_left">12</property>
+                <property name="label" translatable="yes">_Tab width:</property>
+                <property name="use_underline">True</property>
+                <property name="ellipsize">end</property>
+                <accessibility>
+                  <relation type="label-for" target="tab_width"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="tab_width">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="valign">baseline</property>
+                <property name="adjustment">adjustment2</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="insert_spaces_instead_of_tabs">
+            <property name="label" translatable="yes">Insert _spaces instead of tabs</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="auto_indent">
+            <property name="label" translatable="yes">_Enable automatic indentation</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
       </object>
       <packing>
-        <property name="top-attach">2</property>
-        <property name="left-attach">0</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
       </packing>
     </child>
     <child>
-      <object class="GtkCheckButton" id="indent_on_tab">
-        <property name="visible">True</property>
-        <property name="halign">start</property>
-        <property name="label" translatable="yes">Indent on Tab</property>
-      </object>
-      <packing>
-        <property name="top-attach">3</property>
-        <property name="left-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkCheckButton" id="insert_spaces_instead_of_tabs">
-        <property name="visible">True</property>
-        <property name="halign">start</property>
-        <property name="label" translatable="yes">Insert Spaces Instead of Tabs</property>
-      </object>
-      <packing>
-        <property name="top-attach">4</property>
-        <property name="left-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkCheckButton" id="show_line_marks">
-        <property name="visible">True</property>
-        <property name="halign">start</property>
-        <property name="label" translatable="yes">Show Line Marks</property>
-      </object>
-      <packing>
-        <property name="top-attach">5</property>
-        <property name="left-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkCheckButton" id="show_line_numbers">
-        <property name="visible">True</property>
-        <property name="halign">start</property>
-        <property name="label" translatable="yes">Show Line Numbers</property>
-      </object>
-      <packing>
-        <property name="top-attach">6</property>
-        <property name="left-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkCheckButton" id="show_right_margin">
-        <property name="visible">True</property>
-        <property name="halign">start</property>
-        <property name="label" translatable="yes">Display right margin at position</property>
-      </object>
-      <packing>
-        <property name="top-attach">7</property>
-        <property name="left-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkSpinButton" id="right_margin_position">
-        <property name="visible">True</property>
-        <property name="halign">start</property>
-      </object>
-      <packing>
-        <property name="top-attach">7</property>
-        <property name="left-attach">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkCheckButton" id="smart_home_end">
-        <property name="visible">True</property>
-        <property name="halign">start</property>
-        <property name="label" translatable="yes">Smart Home and End</property>
-      </object>
-      <packing>
-        <property name="top-attach">8</property>
-        <property name="left-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkSpinButton" id="indent_width">
-        <property name="visible">True</property>
-        <property name="halign">start</property>
-      </object>
-      <packing>
-        <property name="top-attach">9</property>
-        <property name="left-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkSpinButton" id="tab_width">
-        <property name="visible">True</property>
-        <property name="halign">start</property>
-      </object>
-      <packing>
-        <property name="top-attach">11</property>
-        <property name="left-attach">0</property>
-      </packing>
+      <placeholder/>
     </child>
   </template>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="mode">vertical</property>
+    <widgets>
+      <widget name="show_line_numbers"/>
+      <widget name="box1"/>
+      <widget name="show_line_marks"/>
+      <widget name="smart_home_end"/>
+      <widget name="highlight_current_line"/>
+      <widget name="highlight_matching_brackets"/>
+      <widget name="box5"/>
+      <widget name="insert_spaces_instead_of_tabs"/>
+      <widget name="auto_indent"/>
+    </widgets>
+  </object>
 </interface>

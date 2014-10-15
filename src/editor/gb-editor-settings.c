@@ -41,14 +41,12 @@ struct _GbEditorSettingsPrivate
   gboolean              auto_indent;
   gboolean              highlight_current_line;
   gboolean              highlight_matching_brackets;
-  gboolean              indent_on_tab;
   gboolean              insert_spaces_instead_of_tabs;
   gboolean              show_line_marks;
   gboolean              show_line_numbers;
   gboolean              show_right_margin;
   gboolean              smart_home_end;
 
-  guint                 indent_width;
   guint                 right_margin_position;
   guint                 tab_width;
 };
@@ -60,7 +58,6 @@ enum {
   PROP_HIGHLIGHT_CURRENT_LINE,
   PROP_HIGHLIGHT_MATCHING_BRACKETS,
   PROP_INDENT_ON_TAB,
-  PROP_INDENT_WIDTH,
   PROP_INSERT_SPACES_INSTEAD_OF_TABS,
   PROP_RIGHT_MARGIN_POSITION,
   PROP_SHOW_LINE_MARKS,
@@ -224,25 +221,6 @@ gb_editor_settings_set_highlight_matching_brackets (GbEditorSettings *settings,
 }
 
 gboolean
-gb_editor_settings_get_indent_on_tab (GbEditorSettings *settings)
-{
-  g_return_val_if_fail (GB_IS_EDITOR_SETTINGS (settings), FALSE);
-
-  return settings->priv->indent_on_tab;
-}
-
-void
-gb_editor_settings_set_indent_on_tab (GbEditorSettings *settings,
-                                      gboolean          indent_on_tab)
-{
-  g_return_if_fail (GB_IS_EDITOR_SETTINGS (settings));
-
-  settings->priv->indent_on_tab = indent_on_tab;
-  g_object_notify_by_pspec (G_OBJECT (settings),
-                            gParamSpecs[PROP_INDENT_ON_TAB]);
-}
-
-gboolean
 gb_editor_settings_get_insert_spaces_instead_of_tabs (GbEditorSettings *settings)
 {
   g_return_val_if_fail (GB_IS_EDITOR_SETTINGS (settings), FALSE);
@@ -338,25 +316,6 @@ gb_editor_settings_set_smart_home_end (GbEditorSettings *settings,
 }
 
 guint
-gb_editor_settings_get_indent_width (GbEditorSettings *settings)
-{
-  g_return_val_if_fail (GB_IS_EDITOR_SETTINGS (settings), 0);
-
-  return settings->priv->indent_width;
-}
-
-void
-gb_editor_settings_set_indent_width (GbEditorSettings *settings,
-                                     guint             indent_width)
-{
-  g_return_if_fail (GB_IS_EDITOR_SETTINGS (settings));
-
-  settings->priv->indent_width = indent_width;
-  g_object_notify_by_pspec (G_OBJECT (settings),
-                            gParamSpecs[PROP_INDENT_WIDTH]);
-}
-
-guint
 gb_editor_settings_get_tab_width (GbEditorSettings *settings)
 {
   g_return_val_if_fail (GB_IS_EDITOR_SETTINGS (settings), 0);
@@ -429,10 +388,6 @@ gb_editor_settings_get_property (GObject    *object,
       g_value_set_boolean (value, gb_editor_settings_get_highlight_matching_brackets (settings));
       break;
 
-    case PROP_INDENT_ON_TAB:
-      g_value_set_boolean (value, gb_editor_settings_get_indent_on_tab (settings));
-      break;
-
     case PROP_INSERT_SPACES_INSTEAD_OF_TABS:
       g_value_set_boolean (value, gb_editor_settings_get_insert_spaces_instead_of_tabs (settings));
       break;
@@ -451,10 +406,6 @@ gb_editor_settings_get_property (GObject    *object,
 
     case PROP_SMART_HOME_END:
       g_value_set_boolean (value, gb_editor_settings_get_smart_home_end (settings));
-      break;
-
-    case PROP_INDENT_WIDTH:
-      g_value_set_uint (value, gb_editor_settings_get_indent_width (settings));
       break;
 
     case PROP_TAB_WIDTH:
@@ -504,10 +455,6 @@ gb_editor_settings_set_property (GObject      *object,
       gb_editor_settings_set_highlight_matching_brackets (settings, g_value_get_boolean (value));
       break;
 
-    case PROP_INDENT_ON_TAB:
-      gb_editor_settings_set_indent_on_tab (settings, g_value_get_boolean (value));
-      break;
-
     case PROP_INSERT_SPACES_INSTEAD_OF_TABS:
       gb_editor_settings_set_insert_spaces_instead_of_tabs (settings, g_value_get_boolean (value));
       break;
@@ -526,10 +473,6 @@ gb_editor_settings_set_property (GObject      *object,
 
     case PROP_SMART_HOME_END:
       gb_editor_settings_set_smart_home_end (settings, g_value_get_boolean (value));
-      break;
-
-    case PROP_INDENT_WIDTH:
-      gb_editor_settings_set_indent_width (settings, g_value_get_uint (value));
       break;
 
     case PROP_TAB_WIDTH:
@@ -595,15 +538,6 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
   g_object_class_install_property (object_class, PROP_HIGHLIGHT_MATCHING_BRACKETS,
                                    gParamSpecs [PROP_HIGHLIGHT_MATCHING_BRACKETS]);
 
-  gParamSpecs[PROP_INDENT_ON_TAB] =
-    g_param_spec_boolean ("indent-on-tab",
-                          _("indent on tab"),
-                          _("indent on tab"),
-                          FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_INDENT_ON_TAB,
-                                   gParamSpecs[PROP_INDENT_ON_TAB]);
-
   gParamSpecs[PROP_INSERT_SPACES_INSTEAD_OF_TABS] =
     g_param_spec_boolean ("insert-spaces-instead-of-tabs",
                           _("insert spaces instead of tabs"),
@@ -659,17 +593,6 @@ gb_editor_settings_class_init (GbEditorSettingsClass *klass)
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_RIGHT_MARGIN_POSITION,
                                    gParamSpecs[PROP_RIGHT_MARGIN_POSITION]);
-
-  gParamSpecs[PROP_INDENT_WIDTH] =
-    g_param_spec_uint ("indent-width",
-                       _("Indent Width"),
-                       _("The indent width."),
-                       1,
-                       100,
-                       2,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_INDENT_WIDTH,
-                                   gParamSpecs[PROP_INDENT_WIDTH]);
 
   gParamSpecs[PROP_TAB_WIDTH] =
     g_param_spec_uint ("tab-width",
@@ -733,7 +656,6 @@ gb_editor_settings_init (GbEditorSettings *settings)
   settings->priv->right_margin_position = 80;
   settings->priv->insert_spaces_instead_of_tabs = TRUE;
   settings->priv->tab_width = 2;
-  settings->priv->indent_width = 2;
   settings->priv->font_desc = font_desc;
   settings->priv->style_scheme = g_object_ref (scheme);
 }
