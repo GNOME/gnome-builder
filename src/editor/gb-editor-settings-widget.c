@@ -68,36 +68,42 @@ gb_editor_settings_widget_set_settings (GbEditorSettingsWidget *widget,
 
   priv = widget->priv;
 
+  if (settings == priv->settings)
+      return;
+
+  g_clear_object (&priv->settings);
+  priv->settings = g_object_ref (settings);
+
   g_object_bind_property (settings, "auto-indent",
                           priv->auto_indent, "active",
-                          G_BINDING_SYNC_CREATE);
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   g_object_bind_property (settings, "highlight-current-line",
                           priv->highlight_current_line, "active",
-                          G_BINDING_SYNC_CREATE);
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   g_object_bind_property (settings, "highlight-matching-brackets",
                           priv->highlight_matching_brackets, "active",
-                          G_BINDING_SYNC_CREATE);
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   g_object_bind_property (settings, "insert-spaces-instead-of-tabs",
                           priv->insert_spaces_instead_of_tabs, "active",
-                          G_BINDING_SYNC_CREATE);
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   g_object_bind_property (settings, "show-line-marks",
                           priv->show_line_marks, "active",
-                          G_BINDING_SYNC_CREATE);
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   g_object_bind_property (settings, "show-line-numbers",
                           priv->show_line_numbers, "active",
-                          G_BINDING_SYNC_CREATE);
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   g_object_bind_property (settings, "show-right-margin",
                           priv->show_right_margin, "active",
-                          G_BINDING_SYNC_CREATE);
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   g_object_bind_property (settings, "smart-home-end",
                           priv->smart_home_end, "active",
-                          G_BINDING_SYNC_CREATE);
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   g_object_bind_property (settings, "right-margin-position",
                           priv->right_margin_position, "value",
-                          G_BINDING_SYNC_CREATE);
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   g_object_bind_property (settings, "tab-width",
                           priv->tab_width, "value",
-                          G_BINDING_SYNC_CREATE);
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
 }
 
 static void
