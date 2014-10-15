@@ -61,10 +61,10 @@ typedef void (*GbEditorVimCommandFunc) (GbEditorVim        *vim,
 /**
  * GbEditorVimOperation:
  * @command_text: text command to execute.
- * 
+ *
  * This is a function declaration for functions that can process an operation.
  * Operations are things that are entered into the command mode entry.
- * 
+ *
  * Unfortunately, we already have a command abstraction that should possibly
  * be renamed. But such is life!
  */
@@ -2134,6 +2134,8 @@ gb_editor_vim_paste (GbEditorVim *vim)
     if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
       break;
   gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
 
   g_free (text);
 }
