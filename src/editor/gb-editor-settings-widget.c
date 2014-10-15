@@ -28,7 +28,6 @@ struct _GbEditorSettingsWidgetPrivate
   GtkCheckButton *auto_indent;
   GtkCheckButton *highlight_current_line;
   GtkCheckButton *highlight_matching_brackets;
-  GtkCheckButton *indent_on_tab;
   GtkCheckButton *insert_spaces_instead_of_tabs;
   GtkCheckButton *show_line_marks;
   GtkCheckButton *show_line_numbers;
@@ -77,9 +76,6 @@ gb_editor_settings_widget_set_settings (GbEditorSettingsWidget *widget,
                           G_BINDING_SYNC_CREATE);
   g_object_bind_property (settings, "highlight-matching-brackets",
                           priv->highlight_matching_brackets, "active",
-                          G_BINDING_SYNC_CREATE);
-  g_object_bind_property (settings, "indent-on-tab",
-                          priv->indent_on_tab, "active",
                           G_BINDING_SYNC_CREATE);
   g_object_bind_property (settings, "insert-spaces-instead-of-tabs",
                           priv->insert_spaces_instead_of_tabs, "active",
@@ -168,7 +164,6 @@ gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, auto_indent);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, highlight_current_line);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, highlight_matching_brackets);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, indent_on_tab);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, insert_spaces_instead_of_tabs);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, right_margin_position);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, show_line_marks);
