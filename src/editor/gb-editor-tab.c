@@ -314,9 +314,6 @@ gb_editor_tab_set_settings (GbEditorTab      *tab,
 
   priv = tab->priv;
 
-  if (settings == priv->settings)
-      return;
-
   if (priv->settings)
     {
       gb_editor_tab_disconnect_settings (tab);
