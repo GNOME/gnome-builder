@@ -49,6 +49,7 @@ struct _GbEditorSettingsClass
   GObjectClass parent_class;
 };
 
+GbEditorSettings           *gb_editor_settings_new_for_language                  (const gchar                *language_id);
 GType                       gb_editor_settings_get_type                          (void) G_GNUC_CONST;
 gboolean                    gb_editor_settings_get_auto_indent                   (GbEditorSettings           *settings);
 void                        gb_editor_settings_set_auto_indent                   (GbEditorSettings           *settings,

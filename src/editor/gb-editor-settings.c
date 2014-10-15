@@ -73,6 +73,44 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbEditorSettings, gb_editor_settings, G_TYPE_OBJECT)
 
 static GParamSpec * gParamSpecs[LAST_PROP];
 
+GbEditorSettings *
+gb_editor_settings_new_for_language (const gchar *language_id)
+{
+  GbEditorSettings *ret;
+  GSettings *settings;
+  gchar *path;
+
+  g_return_val_if_fail (language_id, NULL);
+
+  path = g_strdup_printf ("/org/gnome/builder/editor/language/%s/",
+                          language_id);
+  settings = g_settings_new_with_path ("org.gnome.builder.editor.language",
+                                       path);
+
+  ret = g_object_new (GB_TYPE_EDITOR_SETTINGS, NULL);
+
+#define BIND(name) \
+  g_settings_bind (settings, name, ret, name, G_SETTINGS_BIND_DEFAULT)
+
+  BIND ("auto-indent");
+  BIND ("highlight-current-line");
+  BIND ("highlight-matching-brackets");
+  BIND ("insert-spaces-instead-of-tabs");
+  BIND ("right-margin-position");
+  BIND ("show-line-marks");
+  BIND ("show-line-numbers");
+  BIND ("show-right-margin");
+  BIND ("smart-home-end");
+  BIND ("tab-width");
+
+#undef BIND
+
+  g_object_unref (settings);
+  g_free (path);
+
+  return ret;
+}
+
 GtkSourceStyleScheme *
 gb_editor_settings_get_style_scheme (GbEditorSettings *settings)
 {
