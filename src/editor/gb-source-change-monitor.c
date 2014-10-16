@@ -394,7 +394,7 @@ gb_source_change_monitor_load_blob (GbSourceChangeMonitor *monitor)
 cleanup:
   if (error)
     {
-      g_warning ("%s", error->message);
+      g_message ("%s", error->message);
       g_clear_error (&error);
     }
 
