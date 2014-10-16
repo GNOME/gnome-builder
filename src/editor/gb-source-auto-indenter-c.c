@@ -281,7 +281,7 @@ backward_to_line_first_char (GtkTextIter *iter)
        gtk_text_iter_compare (&tmp, iter) < 0;
        gtk_text_iter_forward_char (&tmp))
     {
-      if (!g_unichar_isspace (gtk_text_iter_get_char (iter)))
+      if (!g_unichar_isspace (gtk_text_iter_get_char (&tmp)))
         {
           gtk_text_iter_assign (iter, &tmp);
           return TRUE;
