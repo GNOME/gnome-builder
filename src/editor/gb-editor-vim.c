@@ -694,7 +694,8 @@ gb_editor_vim_move_line0 (GbEditorVim *vim)
 }
 
 static void
-gb_editor_vim_move_line_start (GbEditorVim *vim)
+gb_editor_vim_move_line_start (GbEditorVim *vim,
+                               gboolean     can_move_forward)
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;
@@ -721,11 +722,14 @@ gb_editor_vim_move_line_start (GbEditorVim *vim)
    * If we failed to find a non-whitespace character or ended up at the
    * same place we already were, just use the 0 index position.
    */
-  if (g_unichar_isspace (gtk_text_iter_get_char (&iter)) ||
-      gtk_text_iter_equal (&iter, &original))
+  if (!can_move_forward)
     {
-      gb_editor_vim_move_line0 (vim);
-      return;
+      if (g_unichar_isspace (gtk_text_iter_get_char (&iter)) ||
+          gtk_text_iter_equal (&iter, &original))
+        {
+          gb_editor_vim_move_line0 (vim);
+          return;
+        }
     }
 
   if (has_selection)
@@ -1996,7 +2000,7 @@ gb_editor_vim_delete_to_line_start (GbEditorVim *vim)
    */
   if (!gtk_text_iter_starts_line (&begin))
     {
-      gb_editor_vim_move_line_start (vim);
+      gb_editor_vim_move_line_start (vim, FALSE);
 
       gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
 
@@ -3770,7 +3774,7 @@ gb_editor_vim_cmd_backward_start (GbEditorVim *vim,
 {
   g_assert (GB_IS_EDITOR_VIM (vim));
 
-  gb_editor_vim_move_line_start (vim);
+  gb_editor_vim_move_line_start (vim, FALSE);
 }
 
 static void
@@ -4069,7 +4073,7 @@ gb_editor_vim_cmd_insert_start (GbEditorVim *vim,
 
   gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
   gb_editor_vim_clear_selection (vim);
-  gb_editor_vim_move_line_start (vim);
+  gb_editor_vim_move_line_start (vim, TRUE);
 }
 
 static void
