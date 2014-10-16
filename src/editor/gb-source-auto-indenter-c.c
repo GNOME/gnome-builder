@@ -1178,14 +1178,17 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
         GtkTextIter iter;
         GString *str;
         gchar *tmp = ret;
-        guint offset;
+        guint offset = 0;
 
         str = g_string_new (NULL);
 
         gtk_text_iter_assign (&iter, begin);
         if (backward_find_matching_char (&iter, '}'))
           {
-            offset = gtk_text_iter_get_line_offset (&iter);
+            if (line_is_whitespace_until (&iter))
+              offset = gtk_text_iter_get_line_offset (&iter);
+            else if (backward_to_line_first_char (&iter))
+              offset = gtk_text_iter_get_line_offset (&iter);
             build_indent (c, offset, &iter, str);
             g_string_prepend (str, "\n");
             g_string_prepend (str, ret);
