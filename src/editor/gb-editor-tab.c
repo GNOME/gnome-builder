@@ -208,8 +208,10 @@ gb_editor_tab_connect_settings (GbEditorTab      *tab,
     g_object_add_weak_pointer (G_OBJECT ((loc)), (gpointer *) &(loc)); \
   } G_STMT_END
 
+#if 0
   ADD_BINDING ("auto-indent", priv->source_view, "auto-indent",
                priv->auto_indent_binding);
+#endif
   ADD_BINDING ("highlight-current-line", priv->source_view,
                "highlight-current-line",
                priv->highlight_current_line_binding);
@@ -259,7 +261,9 @@ gb_editor_tab_disconnect_settings (GbEditorTab *tab)
       (b) = NULL; \
     }
 
+#if 0
   REMOVE_BINDING (priv->auto_indent_binding);
+#endif
   REMOVE_BINDING (priv->highlight_current_line_binding);
   REMOVE_BINDING (priv->highlight_matching_brackets_binding);
   REMOVE_BINDING (priv->indent_on_tab_binding);
@@ -1188,7 +1192,7 @@ gb_editor_tab_constructed (GObject *object)
 
   /*
    * WORKAROUND:
-   * 
+   *
    * We need to connect VIM in the proper mode as early as possible
    * so that our key-press-event signal is connected before the
    * GtkSourceCompletion connects to key-press-event of the GtkSourceView.
