@@ -16,5 +16,11 @@
       <summary>Enable auto-completion of words in document.</summary>
       <description>If enabled, words within the current document will be available for auto-completion.</description>
     </key>
+    <key name="font-name" type="s">
+      <default>"Monospace 11"</default>
+    </key>
+    <key name="style-scheme" type="s">
+      <default>"tango"</default>
+    </key>
   </schema>
 </schemalist>
