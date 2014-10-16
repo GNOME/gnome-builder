@@ -59,6 +59,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbSourceView, gb_source_view, GTK_SOURCE_TYPE_VIEW)
 enum {
   PROP_0,
   PROP_AUTO_INDENTER,
+  PROP_FONT_NAME,
   PROP_SEARCH_HIGHLIGHTER,
   PROP_SHOW_SHADOW,
   LAST_PROP
@@ -1285,6 +1286,20 @@ gb_source_view_grab_focus (GtkWidget *widget)
   GTK_WIDGET_CLASS (gb_source_view_parent_class)->grab_focus (widget);
 }
 
+void
+gb_source_view_set_font_name (GbSourceView *view,
+                              const gchar  *font_name)
+{
+  PangoFontDescription *font_desc;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  font_desc = pango_font_description_from_string (font_name);
+  gtk_widget_override_font (GTK_WIDGET (view), font_desc);
+  if (font_desc)
+    pango_font_description_free (font_desc);
+}
+
 static void
 gb_source_view_finalize (GObject *object)
 {
@@ -1378,6 +1393,10 @@ gb_source_view_set_property (GObject      *object,
       gb_source_view_set_auto_indenter (view, g_value_get_object (value));
       break;
 
+    case PROP_FONT_NAME:
+      gb_source_view_set_font_name (view, g_value_get_string (value));
+      break;
+
     case PROP_SEARCH_HIGHLIGHTER:
       gb_source_view_set_search_highlighter (view, g_value_get_object (value));
       break;
@@ -1422,6 +1441,15 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_AUTO_INDENTER,
                                    gParamSpecs [PROP_AUTO_INDENTER]);
+
+  gParamSpecs [PROP_FONT_NAME] =
+    g_param_spec_string ("font-name",
+                         _("Font Name"),
+                         _("The font name to apply to the widget."),
+                         NULL,
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_FONT_NAME,
+                                   gParamSpecs [PROP_FONT_NAME]);
 
   gParamSpecs[PROP_SHOW_SHADOW] =
     g_param_spec_boolean ("show-shadow",

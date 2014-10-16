@@ -76,6 +76,8 @@ void                  gb_source_view_begin_search       (GbSourceView         *v
                                                          const gchar          *search_text);
 void                  gb_source_view_indent_selection   (GbSourceView         *view);
 void                  gb_source_view_unindent_selection (GbSourceView         *view);
+void                  gb_source_view_set_font_name      (GbSourceView         *view,
+                                                         const gchar          *font_name);
 
 G_END_DECLS
 
