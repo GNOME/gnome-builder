@@ -71,6 +71,10 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-source-highlight-menu.h \
 	src/editor/gb-source-search-highlighter.h \
 	src/editor/gb-source-search-highlighter.c \
+	src/editor/gb-source-style-scheme-button.c \
+	src/editor/gb-source-style-scheme-button.h \
+	src/editor/gb-source-style-scheme-widget.c \
+	src/editor/gb-source-style-scheme-widget.h \
 	src/markdown/gs-markdown.c \
 	src/markdown/gs-markdown.h \
 	src/markdown/gb-markdown-preview.c \
