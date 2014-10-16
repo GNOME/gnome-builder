@@ -1183,7 +1183,7 @@ gb_editor_tab_constructed (GObject *object)
   g_settings_bind (settings, "font-name",
                    priv->source_view, "font-name",
                    G_SETTINGS_BIND_GET);
-  g_settings_bind (settings, "style-scheme",
+  g_settings_bind (settings, "style-scheme-name",
                    priv->document, "style-scheme-name",
                    G_SETTINGS_BIND_GET);
 
