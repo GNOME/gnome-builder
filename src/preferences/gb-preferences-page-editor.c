@@ -20,11 +20,12 @@
 
 struct _GbPreferencesPageEditorPrivate
 {
-  GSettings *settings;
+  GSettings     *settings;
 
-  GtkSwitch *restore_insert_mark_switch;
-  GtkSwitch *vim_mode_switch;
-  GtkSwitch *word_completion_switch;
+  GtkSwitch     *restore_insert_mark_switch;
+  GtkSwitch     *vim_mode_switch;
+  GtkSwitch     *word_completion_switch;
+  GtkFontButton *font_button;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPageEditor, gb_preferences_page_editor,
@@ -49,6 +50,9 @@ gb_preferences_page_editor_constructed (GObject *object)
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (priv->settings, "word-completion",
                    priv->word_completion_switch, "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (priv->settings, "font-name",
+                   priv->font_button, "font-name",
                    G_SETTINGS_BIND_DEFAULT);
 
   G_OBJECT_CLASS (gb_preferences_page_editor_parent_class)->constructed (object);
@@ -76,8 +80,9 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-preferences-page-editor.ui");
 
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, vim_mode_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, font_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, restore_insert_mark_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, vim_mode_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, word_completion_switch);
 }
 
