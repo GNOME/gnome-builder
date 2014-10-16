@@ -103,6 +103,26 @@ non_space_predicate (gunichar ch,
 }
 
 static gboolean
+line_is_whitespace_until (GtkTextIter *iter)
+{
+  GtkTextIter cur;
+
+  gtk_text_buffer_get_iter_at_line (gtk_text_iter_get_buffer (iter),
+                                    &cur,
+                                    gtk_text_iter_get_line (iter));
+
+  for (;
+       gtk_text_iter_compare (&cur, iter) < 0;
+       gtk_text_iter_forward_char (&cur))
+    {
+      if (!g_unichar_isspace (gtk_text_iter_get_char (&cur)))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
 backward_find_keyword (GtkTextIter *iter,
                        const gchar *keyword,
                        GtkTextIter *limit)
@@ -571,6 +591,9 @@ gb_source_auto_indenter_c_indent (GbSourceAutoIndenterC *c,
     {
       guint offset;
 
+      if (!line_is_whitespace_until (&match_begin))
+        backward_to_line_first_char (&match_begin);
+
       offset = gtk_text_iter_get_line_offset (&match_begin);
       build_indent (c, offset + priv->scope_indent, iter, str);
       GOTO (cleanup);
@@ -610,26 +633,6 @@ cleanup:
   ret = g_string_free (str, FALSE);
 
   RETURN (ret);
-}
-
-static gboolean
-line_is_whitespace_until (GtkTextIter *iter)
-{
-  GtkTextIter cur;
-
-  gtk_text_buffer_get_iter_at_line (gtk_text_iter_get_buffer (iter),
-                                    &cur,
-                                    gtk_text_iter_get_line (iter));
-
-  for (;
-       gtk_text_iter_compare (&cur, iter) < 0;
-       gtk_text_iter_forward_char (&cur))
-    {
-      if (!g_unichar_isspace (gtk_text_iter_get_char (&cur)))
-        return FALSE;
-    }
-
-  return TRUE;
 }
 
 static gchar *
