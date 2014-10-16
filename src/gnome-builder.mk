@@ -9,6 +9,10 @@ libgnome_builder_la_SOURCES = \
 	src/animation/gb-frame-source.h \
 	src/app/gb-application.c \
 	src/app/gb-application.h \
+	src/auto-indent/gb-source-auto-indenter.c \
+	src/auto-indent/gb-source-auto-indenter.h \
+	src/auto-indent/gb-source-auto-indenter-c.c \
+	src/auto-indent/gb-source-auto-indenter-c.h \
 	src/commands/gb-command.c \
 	src/commands/gb-command.h \
 	src/commands/gb-command-bar.c \
@@ -57,10 +61,6 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-editor-workspace.c \
 	src/editor/gb-editor-workspace.h \
 	src/editor/gb-editor-workspace-private.h \
-	src/editor/gb-source-auto-indenter.c \
-	src/editor/gb-source-auto-indenter.h \
-	src/editor/gb-source-auto-indenter-c.c \
-	src/editor/gb-source-auto-indenter-c.h \
 	src/editor/gb-source-change-monitor.c \
 	src/editor/gb-source-change-monitor.h \
 	src/editor/gb-source-formatter.c \
@@ -170,6 +170,7 @@ libgnome_builder_la_CFLAGS = \
 	$(WEBKIT_CFLAGS) \
 	-I$(top_srcdir)/src/animation \
 	-I$(top_srcdir)/src/app \
+	-I$(top_srcdir)/src/auto-indent \
 	-I$(top_srcdir)/src/commands \
 	-I$(top_srcdir)/src/devhelp \
 	-I$(top_srcdir)/src/editor \
