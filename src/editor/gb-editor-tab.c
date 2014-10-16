@@ -761,10 +761,12 @@ static void
 gb_editor_tab_move_next_match (GbEditorTab *tab)
 {
   GbEditorTabPrivate *priv;
+  GtkTextBuffer *buffer;
   GtkTextIter select_begin;
   GtkTextIter select_end;
   GtkTextIter match_begin;
   GtkTextIter match_end;
+  gboolean has_selection;
 
   ENTRY;
 
@@ -772,12 +774,16 @@ gb_editor_tab_move_next_match (GbEditorTab *tab)
 
   priv = tab->priv;
 
+  buffer = GTK_TEXT_BUFFER (priv->document);
+
   /*
    * Start by trying from our current location.
    */
-
-  gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (priv->document),
-                                        &select_begin, &select_end);
+  has_selection = gtk_text_buffer_get_selection_bounds (buffer, &select_begin,
+                                                        &select_end);
+  if (!has_selection)
+    if (!gtk_text_iter_forward_char (&select_end))
+      gtk_text_buffer_get_end_iter (buffer, &select_end);
 
   if (gtk_source_search_context_forward (priv->search_context, &select_end,
                                          &match_begin, &match_end))
