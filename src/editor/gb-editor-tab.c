@@ -45,7 +45,6 @@ enum {
   PROP_DOCUMENT,
   PROP_ENABLE_WORD_COMPLETION,
   PROP_FILE,
-  PROP_FONT_DESC,
   PROP_SETTINGS,
   LAST_PROP
 };
@@ -233,9 +232,6 @@ gb_editor_tab_connect_settings (GbEditorTab      *tab,
                priv->tab_width_binding);
   ADD_BINDING ("right-margin-position", priv->source_view,
                "right-margin-position", priv->right_margin_position_binding);
-  ADD_BINDING ("font-desc", tab, "font-desc", priv->font_desc_binding);
-  ADD_BINDING ("style-scheme", priv->document, "style-scheme",
-               priv->style_scheme_binding);
 
 #undef ADD_BINDING
 
@@ -266,16 +262,13 @@ gb_editor_tab_disconnect_settings (GbEditorTab *tab)
 #endif
   REMOVE_BINDING (priv->highlight_current_line_binding);
   REMOVE_BINDING (priv->highlight_matching_brackets_binding);
-  REMOVE_BINDING (priv->indent_on_tab_binding);
   REMOVE_BINDING (priv->insert_spaces_instead_of_tabs_binding);
   REMOVE_BINDING (priv->show_line_marks_binding);
   REMOVE_BINDING (priv->show_line_numbers_binding);
   REMOVE_BINDING (priv->show_right_margin_binding);
   REMOVE_BINDING (priv->smart_home_end_binding);
-  REMOVE_BINDING (priv->indent_width_binding);
   REMOVE_BINDING (priv->tab_width_binding);
   REMOVE_BINDING (priv->right_margin_position_binding);
-  REMOVE_BINDING (priv->font_desc_binding);
 
 #undef REMOVE_BINDING
 
@@ -503,15 +496,6 @@ gb_editor_tab_modified_changed (GbEditorTab   *tab,
 
   dirty = gtk_text_buffer_get_modified (buffer);
   gb_tab_set_dirty (GB_TAB (tab), dirty);
-}
-
-void
-gb_editor_tab_set_font_desc (GbEditorTab                *tab,
-                             const PangoFontDescription *font_desc)
-{
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-
-  gtk_widget_override_font (GTK_WIDGET (tab->priv->source_view), font_desc);
 }
 
 static void
@@ -1196,6 +1180,13 @@ gb_editor_tab_constructed (GObject *object)
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (priv->source_view),
                             GTK_TEXT_BUFFER (priv->document));
 
+  g_settings_bind (settings, "font-name",
+                   priv->source_view, "font-name",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (settings, "style-scheme",
+                   priv->document, "style-scheme-name",
+                   G_SETTINGS_BIND_GET);
+
   /*
    * WORKAROUND:
    *
@@ -1564,10 +1555,6 @@ gb_editor_tab_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_FONT_DESC:
-      gb_editor_tab_set_font_desc (tab, g_value_get_boxed (value));
-      break;
-
     case PROP_ENABLE_WORD_COMPLETION:
       gb_editor_tab_set_enable_word_completion (tab,
                                                 g_value_get_boolean (value));
@@ -1630,15 +1617,6 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FILE,
                                    gParamSpecs [PROP_FILE]);
-
-  gParamSpecs [PROP_FONT_DESC] =
-    g_param_spec_boxed ("font-desc",
-                        _("Font Description"),
-                        _("The Pango Font Description to use in the editor."),
-                        PANGO_TYPE_FONT_DESCRIPTION,
-                        (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FONT_DESC,
-                                   gParamSpecs[PROP_FONT_DESC]);
 
   gParamSpecs [PROP_SETTINGS] =
     g_param_spec_object ("settings",

@@ -80,18 +80,14 @@ struct _GbEditorTabPrivate
    * Weak reference bindings for tracking settings.
    */
   GBinding *auto_indent_binding;
-  GBinding *font_desc_binding;
   GBinding *highlight_current_line_binding;
   GBinding *highlight_matching_brackets_binding;
-  GBinding *indent_on_tab_binding;
-  GBinding *indent_width_binding;
   GBinding *insert_spaces_instead_of_tabs_binding;
   GBinding *right_margin_position_binding;
   GBinding *show_line_marks_binding;
   GBinding *show_line_numbers_binding;
   GBinding *show_right_margin_binding;
   GBinding *smart_home_end_binding;
-  GBinding *style_scheme_binding;
   GBinding *tab_width_binding;
 
   /*
