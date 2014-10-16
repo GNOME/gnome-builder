@@ -228,6 +228,24 @@ backward_find_matching_char (GtkTextIter *iter,
     {
       cur = gtk_text_iter_get_char (iter);
 
+      if ((cur == '\'') || (cur == '"'))
+        {
+          gunichar strcur = 0;
+
+          while (gtk_text_iter_backward_char (iter))
+            {
+              strcur = gtk_text_iter_get_char (iter);
+              if (strcur == cur)
+                {
+                  /* TODO: Check back for escape char */
+                  break;
+                }
+            }
+
+          if (strcur != cur)
+            break;
+        }
+
       if (cur == match)
         {
           if (--count == 0)
