@@ -277,15 +277,18 @@ backward_to_line_first_char (GtkTextIter *iter)
                                     &tmp,
                                     gtk_text_iter_get_line (iter));
 
-  for (;
-       gtk_text_iter_compare (&tmp, iter) < 0;
-       gtk_text_iter_forward_char (&tmp))
+  while (gtk_text_iter_compare (&tmp, iter) <= 0)
     {
-      if (!g_unichar_isspace (gtk_text_iter_get_char (&tmp)))
+      gunichar ch = gtk_text_iter_get_char (&tmp);
+
+      if (!g_unichar_isspace (ch))
         {
           gtk_text_iter_assign (iter, &tmp);
           return TRUE;
         }
+
+      if (!gtk_text_iter_forward_char (&tmp))
+        break;
     }
 
   return FALSE;
