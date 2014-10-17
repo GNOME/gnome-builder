@@ -13,6 +13,8 @@ libgnome_builder_la_SOURCES = \
 	src/auto-indent/gb-source-auto-indenter.h \
 	src/auto-indent/gb-source-auto-indenter-c.c \
 	src/auto-indent/gb-source-auto-indenter-c.h \
+	src/auto-indent/gb-source-auto-indenter-xml.c \
+	src/auto-indent/gb-source-auto-indenter-xml.h \
 	src/commands/gb-command.c \
 	src/commands/gb-command.h \
 	src/commands/gb-command-bar.c \

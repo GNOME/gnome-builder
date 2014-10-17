@@ -31,6 +31,7 @@
 #include "gb-rgba.h"
 #include "gb-source-auto-indenter.h"
 #include "gb-source-auto-indenter-c.h"
+#include "gb-source-auto-indenter-xml.h"
 #include "gb-source-change-gutter-renderer.h"
 #include "gb-source-highlight-menu.h"
 #include "gb-source-snippet.h"
@@ -438,6 +439,8 @@ gb_editor_tab_language_changed (GbEditorTab      *tab,
 
       if (g_str_equal (lang_id, "c") || g_str_equal (lang_id, "chdr"))
         indenter = gb_source_auto_indenter_c_new ();
+      if (g_str_equal (lang_id, "xml") || g_str_equal (lang_id, "html"))
+        indenter = gb_source_auto_indenter_xml_new ();
     }
 
   gb_source_view_set_auto_indenter (tab->priv->source_view, indenter);
