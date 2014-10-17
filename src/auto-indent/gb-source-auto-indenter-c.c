@@ -435,44 +435,83 @@ backward_to_line_first_char (GtkTextIter *iter)
   return FALSE;
 }
 
+/**
+ * text_iter_in_c89_comment:
+ * @location: (in): A #GtkTextIter containing the target location.
+ *
+ * The algorith for this is unfortunately trickier than one would expect.
+ * Because we could always still have context if we walk backwards that
+ * would let us know if we are in a string, we just start from the beginning
+ * of the buffer and try to skip forward until we get to our target
+ * position.
+ *
+ * Returns: %TRUE if we think we are in a c89 comment, otherwise %FALSE.
+ */
 static gboolean
-in_c89_comment (GtkTextIter *iter,
-                GtkTextIter *match_begin)
+in_c89_comment (const GtkTextIter *location,
+                GtkTextIter       *match_begin)
 {
-  GtkTextIter saved;
-  GtkTextIter after_cur;
-  GtkTextIter match_end;
-  gboolean ret;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
 
-  gtk_text_iter_assign (&saved, iter);
+  buffer = gtk_text_iter_get_buffer (location);
+  gtk_text_buffer_get_start_iter (buffer, &iter);
 
-  gtk_text_iter_assign (&after_cur, iter);
-  gtk_text_iter_forward_char (&after_cur);
+  do
+    {
+      gunichar ch;
 
-  /*
-   * This works by first looking for the end of a comment. Afterwards,
-   * we then walk forward looking for the beginning of a comment. If we
-   * find one, then we are still in a comment.
-   *
-   * Not perfect, since we could be in a string, but it's a good start.
-   */
+      if (gtk_text_iter_compare (&iter, location) > 0)
+        break;
 
-  if (gtk_text_iter_backward_search (&after_cur, "*/",
-                                     GTK_TEXT_SEARCH_TEXT_ONLY, match_begin,
-                                     &match_end, NULL))
-    gtk_text_iter_assign (iter, &match_end);
-  else
-    gtk_text_buffer_get_start_iter (gtk_text_iter_get_buffer (iter), iter);
+      ch = gtk_text_iter_get_char (&iter);
 
-  /*
-   * Walk forwards until we find begin of a comment.
-   */
-  ret = gtk_text_iter_forward_search (iter, "/*", GTK_TEXT_SEARCH_TEXT_ONLY,
-                                      match_begin, &match_end, &after_cur);
+      /* skip past the c89 comment */
+      if ((ch == '/') && (text_iter_peek_next_char (&iter) == '*'))
+        {
+          GtkTextIter saved = iter;
 
-  gtk_text_iter_assign (iter, &saved);
+          if (!gtk_text_iter_forward_chars (&iter, 2) ||
+              !gtk_text_iter_forward_search (&iter, "*/",
+                                             GTK_TEXT_SEARCH_TEXT_ONLY,
+                                             NULL, NULL, NULL) ||
+              (gtk_text_iter_compare (&iter, location) > 0))
+            {
+              *match_begin = saved;
+              return TRUE;
+            }
+        }
 
-  return ret;
+      /* skip past a string or character */
+      if ((ch == '\'') || (ch == '"'))
+        {
+          const gchar *match = (ch == '\'') ? "'" : "\"";
+
+        again:
+          if (!gtk_text_iter_forward_search (&iter, match,
+                                             GTK_TEXT_SEARCH_TEXT_ONLY,
+                                             NULL, NULL, NULL))
+            return FALSE;
+
+          /* this one is escaped, keep looking */
+          if (text_iter_peek_prev_char (&iter) == '\\')
+            {
+              if (!gtk_text_iter_forward_char (&iter))
+                return FALSE;
+              goto again;
+            }
+        }
+
+      /* skip past escaped character */
+      if (ch == '\\')
+        {
+          if (!gtk_text_iter_forward_char (&iter))
+            return FALSE;
+        }
+    }
+  while (gtk_text_iter_forward_char (&iter));
+
+  return FALSE;
 }
 
 static gchar *
