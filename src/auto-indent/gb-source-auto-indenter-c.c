@@ -237,7 +237,13 @@ backward_find_matching_char (GtkTextIter *iter,
               strcur = gtk_text_iter_get_char (iter);
               if (strcur == cur)
                 {
-                  /* TODO: Check back for escape char */
+                  GtkTextIter copy2 = *iter;
+
+                  /* check if the character before this is an escape char */
+                  if (gtk_text_iter_backward_char (&copy2) &&
+                      ('\\' == gtk_text_iter_get_char (&copy2)))
+                    continue;
+
                   break;
                 }
             }
