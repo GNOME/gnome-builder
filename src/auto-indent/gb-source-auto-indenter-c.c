@@ -1262,6 +1262,10 @@ gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
     {
     case GDK_KEY_KP_Enter:
     case GDK_KEY_Return:
+      if ((event->state & GDK_SHIFT_MASK) != 0)
+        return FALSE;
+      /* Fall through */
+
     case GDK_KEY_braceleft:
     case GDK_KEY_braceright:
     case GDK_KEY_colon:
