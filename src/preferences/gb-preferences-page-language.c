@@ -162,7 +162,6 @@ row_selected (GtkListBox                *list_box,
                          "title", gtk_source_language_get_name (lang),
                          "use-header-bar", TRUE,
                          NULL);
-  gtk_dialog_add_button (dialog, _("Close"), GTK_RESPONSE_CLOSE);
 
   content_area = gtk_dialog_get_content_area (dialog);
   widget = g_object_new (GB_TYPE_EDITOR_SETTINGS_WIDGET,
