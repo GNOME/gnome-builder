@@ -318,8 +318,13 @@ backward_find_matching_char (GtkTextIter *iter,
         }
       else if ((cur == '/') && iter_ends_c89_comment (iter))
         {
-          if (!backward_before_c89_comment (iter))
-            break;
+          GtkTextIter tmp = *iter;
+
+          if (backward_before_c89_comment (&tmp))
+            {
+              *iter = tmp;
+              cur = gtk_text_iter_get_char (iter);
+            }
         }
 
       if (cur == match)
