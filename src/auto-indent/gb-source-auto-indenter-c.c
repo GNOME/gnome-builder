@@ -73,6 +73,28 @@ gb_source_auto_indenter_c_new (void)
   return g_object_new (GB_TYPE_SOURCE_AUTO_INDENTER_C, NULL);
 }
 
+static gunichar
+text_iter_peek_next_char (const GtkTextIter *location)
+{
+  GtkTextIter iter = *location;
+
+  if (gtk_text_iter_forward_char (&iter))
+    return gtk_text_iter_get_char (&iter);
+
+  return 0;
+}
+
+static gunichar
+text_iter_peek_prev_char (const GtkTextIter *location)
+{
+  GtkTextIter iter = *location;
+
+  if (gtk_text_iter_backward_char (&iter))
+    return gtk_text_iter_get_char (&iter);
+
+  return 0;
+}
+
 static inline void
 build_indent (GbSourceAutoIndenterC *c,
               guint                  line_offset,
