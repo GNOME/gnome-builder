@@ -112,6 +112,23 @@ build_indent (GbSourceAutoIndenterC *c,
 }
 
 static gboolean
+iter_ends_c89_comment (const GtkTextIter *iter)
+{
+  if (gtk_text_iter_get_char (iter) == '/')
+    {
+      GtkTextIter tmp;
+
+      tmp = *iter;
+
+      if (gtk_text_iter_backward_char (&tmp) &&
+          ('*' == gtk_text_iter_get_char (&tmp)))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 non_space_predicate (gunichar ch,
                      gpointer user_data)
 {
@@ -211,6 +228,42 @@ backward_last_word (GtkTextIter *iter,
 }
 
 static gboolean
+backward_before_c89_comment (GtkTextIter *iter)
+{
+  GtkTextIter copy;
+  GtkTextIter match_start;
+  GtkTextIter match_end;
+  gunichar ch;
+
+  gtk_text_iter_assign (&copy, iter);
+
+  while (g_unichar_isspace (gtk_text_iter_get_char (iter)))
+    if (!gtk_text_iter_backward_char (iter))
+      GOTO (cleanup);
+
+  if (!(ch = gtk_text_iter_get_char (iter)) ||
+      (ch != '/') ||
+      !gtk_text_iter_backward_char (iter) ||
+      !(ch = gtk_text_iter_get_char (iter)) ||
+      (ch != '*') ||
+      !gtk_text_iter_backward_search (iter, "/*",
+                                      GTK_TEXT_SEARCH_TEXT_ONLY,
+                                      &match_start, &match_end, NULL) ||
+      !gtk_text_iter_backward_find_char (&match_start, non_space_predicate,
+                                         NULL, NULL))
+    GOTO (cleanup);
+
+  gtk_text_iter_assign (iter, &match_start);
+
+  return TRUE;
+
+cleanup:
+  gtk_text_iter_assign (iter, &copy);
+
+  return FALSE;
+}
+
+static gboolean
 backward_find_matching_char (GtkTextIter *iter,
                              gunichar     ch)
 {
@@ -233,10 +286,6 @@ backward_find_matching_char (GtkTextIter *iter,
     g_assert_not_reached ();
     break;
   }
-
-  /*
-   * TODO: Make this skip past comment blocks!
-   */
 
   gtk_text_iter_assign (&copy, iter);
 
@@ -265,6 +314,11 @@ backward_find_matching_char (GtkTextIter *iter,
             }
 
           if (strcur != cur)
+            break;
+        }
+      else if ((cur == '/') && iter_ends_c89_comment (iter))
+        {
+          if (!backward_before_c89_comment (iter))
             break;
         }
 
@@ -350,42 +404,6 @@ backward_to_line_first_char (GtkTextIter *iter)
       if (!gtk_text_iter_forward_char (&tmp))
         break;
     }
-
-  return FALSE;
-}
-
-static gboolean
-backward_before_c89_comment (GtkTextIter *iter)
-{
-  GtkTextIter copy;
-  GtkTextIter match_start;
-  GtkTextIter match_end;
-  gunichar ch;
-
-  gtk_text_iter_assign (&copy, iter);
-
-  while (g_unichar_isspace (gtk_text_iter_get_char (iter)))
-    if (!gtk_text_iter_backward_char (iter))
-      GOTO (cleanup);
-
-  if (!(ch = gtk_text_iter_get_char (iter)) ||
-      (ch != '/') ||
-      !gtk_text_iter_backward_char (iter) ||
-      !(ch = gtk_text_iter_get_char (iter)) ||
-      (ch != '*') ||
-      !gtk_text_iter_backward_search (iter, "/*",
-                                      GTK_TEXT_SEARCH_TEXT_ONLY,
-                                      &match_start, &match_end, NULL) ||
-      !gtk_text_iter_backward_find_char (&match_start, non_space_predicate,
-                                         NULL, NULL))
-    GOTO (cleanup);
-
-  gtk_text_iter_assign (iter, &match_start);
-
-  return TRUE;
-
-cleanup:
-  gtk_text_iter_assign (iter, &copy);
 
   return FALSE;
 }
