@@ -166,28 +166,6 @@ gb_editor_tab_get_file (GbEditorTab *tab)
 }
 
 static void
-gb_editor_tab_reload_snippets (GbEditorTab       *tab,
-                               GtkSourceLanguage *language)
-{
-  GbSourceSnippetsManager *manager;
-  GbEditorTabPrivate *priv;
-  GbSourceSnippets *snippets = NULL;
-
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-
-  priv = tab->priv;
-
-  if (language)
-    {
-      manager = gb_source_snippets_manager_get_default ();
-      snippets = gb_source_snippets_manager_get_for_language (manager,
-                                                              language);
-    }
-
-  g_object_set (priv->snippets_provider, "snippets", snippets, NULL);
-}
-
-static void
 gb_editor_tab_connect_settings (GbEditorTab      *tab,
                                 GbEditorSettings *settings)
 {
@@ -411,22 +389,6 @@ on_search_occurrences_notify (GbEditorTab            *tab,
   g_return_if_fail (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
 
   update_search_position_label (tab);
-}
-
-static void
-gb_editor_tab_language_changed (GbEditorTab      *tab,
-                                GParamSpec       *pspec,
-                                GbEditorDocument *document)
-{
-  GtkSourceLanguage *language;
-
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
-
-  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (document));
-
-  gb_editor_tab_reload_snippets (tab, language);
-
 }
 
 static void
@@ -1186,11 +1148,6 @@ gb_editor_tab_constructed (GObject *object)
                             "text-view", priv->source_view,
                             NULL);
 
-  priv->snippets_provider =
-    g_object_new (GB_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER,
-                  "source-view", priv->source_view,
-                  NULL);
-
   if (!priv->settings)
     gb_editor_tab_set_settings (tab, NULL);
 
@@ -1234,10 +1191,6 @@ gb_editor_tab_constructed (GObject *object)
                             "cursor-moved",
                             G_CALLBACK (gb_editor_tab_cursor_moved),
                             tab);
-  g_signal_connect_swapped (priv->document,
-                            "notify::language",
-                            G_CALLBACK (gb_editor_tab_language_changed),
-                            tab);
 
   g_signal_connect (priv->source_view,
                     "focus-in-event",
@@ -1276,7 +1229,6 @@ gb_editor_tab_constructed (GObject *object)
       GTK_TEXT_BUFFER (priv->document));
 
   comp = gtk_source_view_get_completion (GTK_SOURCE_VIEW (priv->source_view));
-  gtk_source_completion_add_provider (comp, priv->snippets_provider, NULL);
   gtk_source_completion_add_provider (comp, priv->words_provider, NULL);
 
   /*
@@ -1475,7 +1427,6 @@ gb_editor_tab_dispose (GObject *object)
   g_clear_object (&tab->priv->document);
   g_clear_object (&tab->priv->search_entry_tag);
   g_clear_object (&tab->priv->file);
-  g_clear_object (&tab->priv->snippets_provider);
   g_clear_object (&tab->priv->search_highlighter);
   g_clear_object (&tab->priv->search_settings);
   g_clear_object (&tab->priv->search_context);
@@ -1628,7 +1579,6 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
   g_type_ensure (GB_TYPE_EDITOR_DOCUMENT);
   g_type_ensure (GB_TYPE_SOURCE_CHANGE_MONITOR);
   g_type_ensure (GB_TYPE_SOURCE_VIEW);
-  g_type_ensure (GB_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER);
   g_type_ensure (GB_TYPE_SOURCE_SEARCH_HIGHLIGHTER);
   g_type_ensure (GD_TYPE_TAGGED_ENTRY);
   g_type_ensure (NAUTILUS_TYPE_FLOATING_BAR);

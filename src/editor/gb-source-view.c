@@ -31,6 +31,9 @@
 #include "gb-log.h"
 #include "gb-source-auto-indenter.h"
 #include "gb-source-search-highlighter.h"
+#include "gb-source-snippets.h"
+#include "gb-source-snippets-manager.h"
+#include "gb-source-snippet-completion-provider.h"
 #include "gb-source-snippet-context.h"
 #include "gb-source-snippet-private.h"
 #include "gb-source-view.h"
@@ -38,20 +41,21 @@
 
 struct _GbSourceViewPrivate
 {
-  GQueue                    *snippets;
-  GbSourceSearchHighlighter *search_highlighter;
-  GtkTextBuffer             *buffer;
-  GbSourceAutoIndenter      *auto_indenter;
+  GQueue                      *snippets;
+  GbSourceSearchHighlighter   *search_highlighter;
+  GtkTextBuffer               *buffer;
+  GbSourceAutoIndenter        *auto_indenter;
+  GtkSourceCompletionProvider *snippets_provider;
 
-  guint                      buffer_insert_text_handler;
-  guint                      buffer_insert_text_after_handler;
-  guint                      buffer_delete_range_handler;
-  guint                      buffer_delete_range_after_handler;
-  guint                      buffer_mark_set_handler;
-  guint                      buffer_notify_language_handler;
+  guint                        buffer_insert_text_handler;
+  guint                        buffer_insert_text_after_handler;
+  guint                        buffer_delete_range_handler;
+  guint                        buffer_delete_range_after_handler;
+  guint                        buffer_mark_set_handler;
+  guint                        buffer_notify_language_handler;
 
-  guint                      show_shadow : 1;
-  guint                      auto_indent : 1;
+  guint                        show_shadow : 1;
+  guint                        auto_indent : 1;
 };
 
 typedef void (*GbSourceViewMatchFunc) (GbSourceView      *view,
@@ -832,6 +836,27 @@ on_mark_set (GtkTextBuffer *buffer,
 }
 
 static void
+gb_source_view_reload_snippets (GbSourceView      *source_view,
+                                GtkSourceLanguage *language)
+{
+  GbSourceSnippetsManager *mgr;
+  GbSourceSnippets *snippets = NULL;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
+  g_return_if_fail (!language || GTK_SOURCE_IS_LANGUAGE (language));
+
+  if (language)
+    {
+      mgr = gb_source_snippets_manager_get_default ();
+      snippets = gb_source_snippets_manager_get_for_language (mgr, language);
+    }
+
+  g_object_set (source_view->priv->snippets_provider,
+                "snippets", snippets,
+                NULL);
+}
+
+static void
 on_language_set (GtkSourceBuffer *buffer,
                  GParamSpec      *pspec,
                  GbSourceView    *source_view)
@@ -859,6 +884,8 @@ on_language_set (GtkSourceBuffer *buffer,
     }
 
   source_view->priv->auto_indenter = auto_indenter;
+
+  gb_source_view_reload_snippets (source_view, language);
 }
 
 static void
@@ -1357,6 +1384,20 @@ gb_source_view_get_auto_indenter (GbSourceView *view)
 }
 
 static void
+gb_source_view_constructed (GObject *object)
+{
+  GtkSourceCompletion *completion;
+  GbSourceView *source_view = (GbSourceView *)object;
+
+  G_OBJECT_CLASS (gb_source_view_parent_class)->constructed (object);
+
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (object));
+  gtk_source_completion_add_provider (completion,
+                                      source_view->priv->snippets_provider,
+                                      NULL);
+}
+
+static void
 gb_source_view_finalize (GObject *object)
 {
   GbSourceViewPrivate *priv;
@@ -1373,6 +1414,7 @@ gb_source_view_finalize (GObject *object)
   g_clear_pointer (&priv->snippets, g_queue_free);
   g_clear_object (&priv->search_highlighter);
   g_clear_object (&priv->auto_indenter);
+  g_clear_object (&priv->snippets_provider);
 
   G_OBJECT_CLASS (gb_source_view_parent_class)->finalize (object);
 }
@@ -1442,6 +1484,7 @@ gb_source_view_class_init (GbSourceViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
 
+  object_class->constructed = gb_source_view_constructed;
   object_class->finalize = gb_source_view_finalize;
   object_class->get_property = gb_source_view_get_property;
   object_class->set_property = gb_source_view_set_property;
@@ -1533,4 +1576,9 @@ gb_source_view_init (GbSourceView *view)
                     "notify::buffer",
                     G_CALLBACK (gb_source_view_notify_buffer),
                     NULL);
+
+  view->priv->snippets_provider =
+    g_object_new (GB_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER,
+                  "source-view", view,
+                  NULL);
 }

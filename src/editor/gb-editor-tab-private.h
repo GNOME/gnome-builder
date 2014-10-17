@@ -31,7 +31,6 @@
 #include "gb-notebook.h"
 #include "gb-source-change-monitor.h"
 #include "gb-source-search-highlighter.h"
-#include "gb-source-snippet-completion-provider.h"
 #include "gb-source-view.h"
 #include "gd-tagged-entry.h"
 #include "nautilus-floating-bar.h"
@@ -48,7 +47,6 @@ struct _GbEditorTabPrivate
   /*
    * Variants completion providers.
    */
-  GtkSourceCompletionProvider *snippets_provider;
   GtkSourceCompletionProvider *words_provider;
 
   /*
