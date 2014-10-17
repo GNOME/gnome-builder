@@ -453,9 +453,13 @@ in_c89_comment (const GtkTextIter *location,
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;
+  GtkTextIter after_location;
 
   buffer = gtk_text_iter_get_buffer (location);
   gtk_text_buffer_get_start_iter (buffer, &iter);
+
+  after_location = *location;
+  gtk_text_iter_forward_char (&after_location);
 
   do
     {
@@ -474,11 +478,10 @@ in_c89_comment (const GtkTextIter *location,
           if (!gtk_text_iter_forward_chars (&iter, 2) ||
               !gtk_text_iter_forward_search (&iter, "*/",
                                              GTK_TEXT_SEARCH_TEXT_ONLY,
-                                             NULL, &iter, NULL) ||
-              (gtk_text_iter_compare (&iter, location) > 0))
+                                             NULL, &iter, &after_location))
             {
               *match_begin = saved;
-              return TRUE;
+              RETURN (TRUE);
             }
         }
 
