@@ -22,6 +22,9 @@
 #include <gtksourceview/gtksource.h>
 
 #include "gb-animation.h"
+#include "gb-source-auto-indenter.h"
+#include "gb-source-auto-indenter-c.h"
+#include "gb-source-auto-indenter-xml.h"
 #include "gb-box-theatric.h"
 #include "gb-cairo.h"
 #include "gb-editor-document.h"
@@ -45,8 +48,10 @@ struct _GbSourceViewPrivate
   guint                      buffer_delete_range_handler;
   guint                      buffer_delete_range_after_handler;
   guint                      buffer_mark_set_handler;
+  guint                      buffer_notify_language_handler;
 
   guint                      show_shadow : 1;
+  guint                      auto_indent : 1;
 };
 
 typedef void (*GbSourceViewMatchFunc) (GbSourceView      *view,
@@ -58,7 +63,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbSourceView, gb_source_view, GTK_SOURCE_TYPE_VIEW)
 
 enum {
   PROP_0,
-  PROP_AUTO_INDENTER,
+  PROP_AUTO_INDENT,
   PROP_FONT_NAME,
   PROP_SEARCH_HIGHLIGHTER,
   PROP_SHOW_SHADOW,
@@ -812,7 +817,7 @@ on_mark_set (GtkTextBuffer *buffer,
 
   if (mark == gtk_text_buffer_get_insert (buffer))
     {
-again:
+    again:
       if ((snippet = g_queue_peek_head (priv->snippets)))
         {
           if (!gb_source_snippet_insert_set (snippet, mark))
@@ -824,6 +829,36 @@ again:
     }
 
   gb_source_view_unblock_handlers (view);
+}
+
+static void
+on_language_set (GtkSourceBuffer *buffer,
+                 GParamSpec      *pspec,
+                 GbSourceView    *source_view)
+{
+  GtkSourceLanguage *language;
+  GbSourceAutoIndenter *auto_indenter = NULL;
+
+  g_return_if_fail (GTK_SOURCE_IS_BUFFER (buffer));
+  g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
+
+  g_clear_object (&source_view->priv->auto_indenter);
+
+  language = gtk_source_buffer_get_language (buffer);
+
+  if (language)
+    {
+      const gchar *lang_id;
+
+      lang_id = gtk_source_language_get_id (language);
+
+      if (g_str_equal (lang_id, "c") || g_str_equal (lang_id, "chdr"))
+        auto_indenter = gb_source_auto_indenter_c_new ();
+      else if (g_str_equal (lang_id, "xml"))
+        auto_indenter = gb_source_auto_indenter_xml_new ();
+    }
+
+  source_view->priv->auto_indenter = auto_indenter;
 }
 
 static void
@@ -852,11 +887,14 @@ gb_source_view_notify_buffer (GObject    *object,
                                    priv->buffer_delete_range_after_handler);
       g_signal_handler_disconnect (priv->buffer,
                                    priv->buffer_mark_set_handler);
+      g_signal_handler_disconnect (priv->buffer,
+                                   priv->buffer_notify_language_handler);
       priv->buffer_insert_text_handler = 0;
       priv->buffer_insert_text_after_handler = 0;
       priv->buffer_delete_range_handler = 0;
       priv->buffer_delete_range_after_handler = 0;
       priv->buffer_mark_set_handler = 0;
+      priv->buffer_notify_language_handler = 0;
       g_object_remove_weak_pointer (G_OBJECT (priv->buffer),
                                     (gpointer *) &priv->buffer);
       priv->buffer = NULL;
@@ -897,6 +935,12 @@ gb_source_view_notify_buffer (GObject    *object,
         g_signal_connect_object (buffer,
                                  "mark-set",
                                  G_CALLBACK (on_mark_set),
+                                 object,
+                                 0);
+      priv->buffer_notify_language_handler =
+        g_signal_connect_object (buffer,
+                                 "notify::language",
+                                 G_CALLBACK (on_language_set),
                                  object,
                                  0);
     }
@@ -985,7 +1029,8 @@ gb_source_view_key_press_event (GtkWidget   *widget,
    * chain up to the parent class to insert the character, and then let the
    * auto-indenter fix things up.
    */
-  if (priv->auto_indenter &&
+  if (priv->auto_indent &&
+      priv->auto_indenter &&
       gb_source_auto_indenter_is_trigger (priv->auto_indenter, event))
     {
       GtkTextMark *insert;
@@ -1300,6 +1345,17 @@ gb_source_view_set_font_name (GbSourceView *view,
     pango_font_description_free (font_desc);
 }
 
+GbSourceAutoIndenter *
+gb_source_view_get_auto_indenter (GbSourceView *view)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), NULL);
+
+  if (view->priv->auto_indent)
+    return view->priv->auto_indenter;
+
+  return NULL;
+}
+
 static void
 gb_source_view_finalize (GObject *object)
 {
@@ -1321,37 +1377,6 @@ gb_source_view_finalize (GObject *object)
   G_OBJECT_CLASS (gb_source_view_parent_class)->finalize (object);
 }
 
-GbSourceAutoIndenter *
-gb_source_view_get_auto_indenter (GbSourceView *view)
-{
-  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), NULL);
-
-  return view->priv->auto_indenter;
-}
-
-void
-gb_source_view_set_auto_indenter (GbSourceView         *view,
-                                  GbSourceAutoIndenter *auto_indenter)
-{
-  GbSourceViewPrivate *priv;
-
-  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
-  g_return_if_fail (!auto_indenter ||
-                    GB_IS_SOURCE_AUTO_INDENTER (auto_indenter));
-
-  priv = view->priv;
-
-  if (priv->auto_indenter != auto_indenter)
-    {
-      g_clear_object (&priv->auto_indenter);
-      priv->auto_indenter = auto_indenter
-                          ? g_object_ref (auto_indenter)
-                          : NULL;
-      g_object_notify_by_pspec (G_OBJECT (view),
-                                gParamSpecs [PROP_AUTO_INDENTER]);
-    }
-}
-
 static void
 gb_source_view_get_property (GObject    *object,
                              guint       prop_id,
@@ -1362,8 +1387,8 @@ gb_source_view_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_AUTO_INDENTER:
-      g_value_set_object (value, gb_source_view_get_auto_indenter (view));
+    case PROP_AUTO_INDENT:
+      g_value_set_boolean (value, view->priv->auto_indent);
       break;
 
     case PROP_SEARCH_HIGHLIGHTER:
@@ -1389,8 +1414,8 @@ gb_source_view_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_AUTO_INDENTER:
-      gb_source_view_set_auto_indenter (view, g_value_get_object (value));
+    case PROP_AUTO_INDENT:
+      view->priv->auto_indent = g_value_get_boolean (value);
       break;
 
     case PROP_FONT_NAME:
@@ -1426,22 +1451,6 @@ gb_source_view_class_init (GbSourceViewClass *klass)
 
   text_view_class->draw_layer = gb_source_view_draw_layer;
 
-  /**
-   * GbSourceView:auto-indenter:
-   *
-   * Sets the #GbSourceAutoIndenter to use while typing in the source view.
-   *
-   * %NULL to unset the auto-indenter.
-   */
-  gParamSpecs [PROP_AUTO_INDENTER] =
-    g_param_spec_object ("auto-indenter",
-                         _("Auto Indenter"),
-                         _("The indenter to use when auto_indent is set."),
-                         GB_TYPE_SOURCE_AUTO_INDENTER,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_AUTO_INDENTER,
-                                   gParamSpecs [PROP_AUTO_INDENTER]);
-
   gParamSpecs [PROP_FONT_NAME] =
     g_param_spec_string ("font-name",
                          _("Font Name"),
@@ -1468,6 +1477,10 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SEARCH_HIGHLIGHTER,
                                    gParamSpecs[PROP_SEARCH_HIGHLIGHTER]);
+
+  g_object_class_override_property (object_class,
+                                    PROP_AUTO_INDENT,
+                                    "auto-indent");
 
   gSignals [PUSH_SNIPPET] =
     g_signal_new ("push-snippet",
