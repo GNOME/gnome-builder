@@ -29,6 +29,8 @@
 #include "gb-gtk.h"
 #include "gb-log.h"
 #include "gb-rgba.h"
+#include "gb-source-auto-indenter.h"
+#include "gb-source-auto-indenter-c.h"
 #include "gb-source-change-gutter-renderer.h"
 #include "gb-source-highlight-menu.h"
 #include "gb-source-snippet.h"
