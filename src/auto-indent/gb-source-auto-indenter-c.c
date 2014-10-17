@@ -1258,20 +1258,22 @@ static gboolean
 gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
                                       GdkEventKey          *event)
 {
-  switch (event->keyval) {
-  case GDK_KEY_KP_Enter:
-  case GDK_KEY_Return:
-  case GDK_KEY_braceleft:
-  case GDK_KEY_braceright:
-  case GDK_KEY_colon:
-  case GDK_KEY_numbersign:
-  case GDK_KEY_parenright:
-  case GDK_KEY_parenleft:
-  case GDK_KEY_slash:
-    return TRUE;
-  default:
-    return FALSE;
-  }
+  switch (event->keyval)
+    {
+    case GDK_KEY_KP_Enter:
+    case GDK_KEY_Return:
+    case GDK_KEY_braceleft:
+    case GDK_KEY_braceright:
+    case GDK_KEY_colon:
+    case GDK_KEY_numbersign:
+    case GDK_KEY_parenright:
+    case GDK_KEY_parenleft:
+    case GDK_KEY_slash:
+      return TRUE;
+
+    default:
+      return FALSE;
+    }
 }
 
 static gchar *
