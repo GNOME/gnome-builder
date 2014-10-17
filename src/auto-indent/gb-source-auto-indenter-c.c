@@ -25,6 +25,22 @@
 
 #include "c-parse-helper.h"
 
+/*
+ * TODO:
+ *
+ * Don't let the fact that this auto-indenter "sort of works" fool you. It
+ * needs some serious rebuilding. In particular, we can't use something like
+ * clang because clang_tokenize() wont work on a TranslationUnit that fails
+ * to compile.
+ *
+ * But, it would be nice to have a bit of relaxed tokenizing. So that we can
+ * work our way backwards without having to keep checking things on a
+ * character by character basis. (Lots of code duplication here too).
+ *
+ * I imagine something that is more like source_iter_get_previous_token()
+ * which would return something like PARAM, FUNC, COMMENT, STRING, etc.
+ */
+
 struct _GbSourceAutoIndenterCPrivate
 {
   gint  scope_indent;
