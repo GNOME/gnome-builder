@@ -474,7 +474,7 @@ in_c89_comment (const GtkTextIter *location,
           if (!gtk_text_iter_forward_chars (&iter, 2) ||
               !gtk_text_iter_forward_search (&iter, "*/",
                                              GTK_TEXT_SEARCH_TEXT_ONLY,
-                                             NULL, NULL, NULL) ||
+                                             NULL, &iter, NULL) ||
               (gtk_text_iter_compare (&iter, location) > 0))
             {
               *match_begin = saved;
