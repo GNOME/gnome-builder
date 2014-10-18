@@ -21,7 +21,7 @@
 #include "gb-command-vim.h"
 #include "gb-command-vim-provider.h"
 #include "gb-editor-tab.h"
-#include "gb-editor-vim.h"
+#include "gb-source-vim.h"
 
 G_DEFINE_TYPE (GbCommandVimProvider, gb_command_vim_provider,
                GB_TYPE_COMMAND_PROVIDER)

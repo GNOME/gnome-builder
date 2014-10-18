@@ -397,9 +397,10 @@ gb_editor_tab_cursor_moved (GbEditorTab      *tab,
 {
   GtkSourceView *source_view;
   GtkTextBuffer *buffer;
+  GbEditorVim *vim;
   GtkTextIter iter;
   GtkTextMark *mark;
-  const gchar *phrase = NULL;
+  const gchar *phrase;
   gchar *text;
   guint ln;
   guint col;
@@ -416,8 +417,8 @@ gb_editor_tab_cursor_moved (GbEditorTab      *tab,
   ln = gtk_text_iter_get_line (&iter);
   col = gtk_source_view_get_visual_column (source_view, &iter);
 
-  if (tab->priv->vim)
-    phrase = gb_editor_vim_get_phrase (tab->priv->vim);
+  vim = gb_source_view_get_vim (tab->priv->source_view);
+  phrase = gb_editor_vim_get_phrase (vim);
 
   if (!gb_str_empty0 (phrase))
     text = g_strdup_printf (_("%s\tLine %u, Column %u"),
@@ -1108,9 +1109,9 @@ gb_editor_tab_constructed (GObject *object)
   GtkSourceCompletion *comp;
   GbEditorTabPrivate *priv;
   GbEditorTab *tab = (GbEditorTab *) object;
+  GbEditorVim *vim;
   GtkSourceGutter *gutter;
   GSettings *settings;
-  gboolean vim_enabled;
 
   ENTRY;
 
@@ -1132,21 +1133,6 @@ gb_editor_tab_constructed (GObject *object)
   g_settings_bind (settings, "style-scheme-name",
                    priv->document, "style-scheme-name",
                    G_SETTINGS_BIND_GET);
-
-  /*
-   * WORKAROUND:
-   *
-   * We need to connect VIM in the proper mode as early as possible
-   * so that our key-press-event signal is connected before the
-   * GtkSourceCompletion connects to key-press-event of the GtkSourceView.
-   * Otherwise, Escape when in insert mode may only hide the completion
-   * window and not escape us back into VIM normal mode as VIM would.
-   */
-  vim_enabled = g_settings_get_boolean (settings, "vim-mode");
-  priv->vim = g_object_new (GB_TYPE_EDITOR_VIM,
-                            "enabled", vim_enabled,
-                            "text-view", priv->source_view,
-                            NULL);
 
   if (!priv->settings)
     gb_editor_tab_set_settings (tab, NULL);
@@ -1287,24 +1273,25 @@ gb_editor_tab_constructed (GObject *object)
                     NULL);
   gtk_source_gutter_insert (gutter, priv->change_renderer, 0);
 
-  g_signal_connect (priv->vim,
+  vim = gb_source_view_get_vim (priv->source_view);
+  g_signal_connect (vim,
                     "command-visibility-toggled",
                     G_CALLBACK (on_vim_command_visibility_toggled),
                     tab);
-  g_signal_connect (priv->vim,
+  g_signal_connect (vim,
                     "begin-search",
                     G_CALLBACK (on_vim_begin_search),
                     tab);
-  g_signal_connect (priv->vim,
+  g_signal_connect (vim,
                     "notify::phrase",
                     G_CALLBACK (on_vim_notify_phrase),
                     tab);
-  g_signal_connect (priv->vim,
+  g_signal_connect (vim,
                     "notify::mode",
                     G_CALLBACK (on_vim_notify_mode),
                     tab);
 
-  g_settings_bind (settings, "vim-mode", priv->vim, "enabled",
+  g_settings_bind (settings, "vim-mode", vim, "enabled",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (settings, "word-completion", tab, "enable-word-completion",
                    G_SETTINGS_BIND_DEFAULT);

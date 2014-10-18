@@ -23,6 +23,7 @@
 
 #include "gb-source-auto-indenter.h"
 #include "gb-source-snippet.h"
+#include "gb-source-vim.h"
 
 G_BEGIN_DECLS
 
@@ -76,6 +77,7 @@ void                  gb_source_view_set_font_name      (GbSourceView         *v
 void                  gb_source_view_set_show_shadow    (GbSourceView         *view,
                                                          gboolean              show_shadow);
 void                  gb_source_view_unindent_selection (GbSourceView         *view);
+GbEditorVim          *gb_source_view_get_vim            (GbSourceView         *view);
 
 G_END_DECLS
 

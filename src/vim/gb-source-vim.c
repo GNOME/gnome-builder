@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "gb-editor-vim.h"
+#include "gb-source-vim.h"
 
 #ifndef GB_EDITOR_VIM_EXTERNAL
 # include "gb-source-view.h"

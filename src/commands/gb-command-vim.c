@@ -21,6 +21,7 @@
 #include "gb-command-vim.h"
 #include "gb-editor-tab.h"
 #include "gb-editor-tab-private.h"
+#include "gb-source-vim.h"
 
 struct _GbCommandVimPrivate
 {
@@ -101,14 +102,16 @@ gb_command_vim_set_command_text (GbCommandVim *vim,
 static GbCommandResult *
 gb_command_vim_execute (GbCommand *command)
 {
-  GbCommandVim *vim = (GbCommandVim *)command;
+  GbCommandVim *self = (GbCommandVim *)command;
 
-  g_return_val_if_fail (GB_IS_COMMAND_VIM (vim), NULL);
+  g_return_val_if_fail (GB_IS_COMMAND_VIM (self), NULL);
 
-  if (vim->priv->tab && vim->priv->command_text)
+  if (self->priv->tab && self->priv->command_text)
     {
-      gb_editor_vim_execute_command (vim->priv->tab->priv->vim,
-                                     vim->priv->command_text);
+      GbEditorVim *vim;
+
+      vim = gb_source_view_get_vim (self->priv->tab->priv->source_view);
+      gb_editor_vim_execute_command (vim, self->priv->command_text);
     }
 
   return NULL;

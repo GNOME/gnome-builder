@@ -37,6 +37,7 @@
 #include "gb-source-snippet-context.h"
 #include "gb-source-snippet-private.h"
 #include "gb-source-view.h"
+#include "gb-source-vim.h"
 #include "gb-widget.h"
 
 struct _GbSourceViewPrivate
@@ -46,6 +47,7 @@ struct _GbSourceViewPrivate
   GtkTextBuffer               *buffer;
   GbSourceAutoIndenter        *auto_indenter;
   GtkSourceCompletionProvider *snippets_provider;
+  GbEditorVim                 *vim;
 
   guint                        buffer_insert_text_handler;
   guint                        buffer_insert_text_after_handler;
@@ -83,6 +85,14 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
+
+GbEditorVim *
+gb_source_view_get_vim (GbSourceView *view)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), NULL);
+
+  return view->priv->vim;
+}
 
 void
 gb_source_view_begin_search (GbSourceView     *view,
@@ -1415,6 +1425,7 @@ gb_source_view_finalize (GObject *object)
   g_clear_object (&priv->search_highlighter);
   g_clear_object (&priv->auto_indenter);
   g_clear_object (&priv->snippets_provider);
+  g_clear_object (&priv->vim);
 
   G_OBJECT_CLASS (gb_source_view_parent_class)->finalize (object);
 }
@@ -1581,4 +1592,9 @@ gb_source_view_init (GbSourceView *view)
     g_object_new (GB_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER,
                   "source-view", view,
                   NULL);
+
+  view->priv->vim = g_object_new (GB_TYPE_EDITOR_VIM,
+                                  "enabled", FALSE,
+                                  "text-view", view,
+                                  NULL);
 }

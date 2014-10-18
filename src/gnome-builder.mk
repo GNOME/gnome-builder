@@ -58,8 +58,6 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-editor-tab.c \
 	src/editor/gb-editor-tab.h \
 	src/editor/gb-editor-tab-private.h \
-	src/editor/gb-editor-vim.c \
-	src/editor/gb-editor-vim.h \
 	src/editor/gb-editor-workspace.c \
 	src/editor/gb-editor-workspace.h \
 	src/editor/gb-editor-workspace-private.h \
@@ -150,6 +148,8 @@ libgnome_builder_la_SOURCES = \
 	src/util/gb-string.h \
 	src/util/gb-widget.c \
 	src/util/gb-widget.h \
+	src/vim/gb-source-vim.c \
+	src/vim/gb-source-vim.h \
 	src/workbench/gb-workbench.c \
 	src/workbench/gb-workbench.h \
 	src/workbench/gb-workbench-actions.c \
@@ -196,6 +196,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/trie \
 	-I$(top_srcdir)/src/theatrics \
 	-I$(top_srcdir)/src/util \
+	-I$(top_srcdir)/src/vim \
 	-I$(top_srcdir)/src/workbench
 
 if ENABLE_TRACING
