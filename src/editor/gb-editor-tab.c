@@ -397,7 +397,7 @@ gb_editor_tab_cursor_moved (GbEditorTab      *tab,
 {
   GtkSourceView *source_view;
   GtkTextBuffer *buffer;
-  GbEditorVim *vim;
+  GbSourceVim *vim;
   GtkTextIter iter;
   GtkTextMark *mark;
   const gchar *phrase;
@@ -418,7 +418,7 @@ gb_editor_tab_cursor_moved (GbEditorTab      *tab,
   col = gtk_source_view_get_visual_column (source_view, &iter);
 
   vim = gb_source_view_get_vim (tab->priv->source_view);
-  phrase = gb_editor_vim_get_phrase (vim);
+  phrase = gb_source_vim_get_phrase (vim);
 
   if (!gb_str_empty0 (phrase))
     text = g_strdup_printf (_("%s\tLine %u, Column %u"),
@@ -958,7 +958,7 @@ gb_editor_tab_scroll_to_line (GbEditorTab *tab,
 }
 
 static void
-on_vim_command_visibility_toggled (GbEditorVim *vim,
+on_vim_command_visibility_toggled (GbSourceVim *vim,
                                    gboolean     visible,
                                    GbEditorTab *tab)
 {
@@ -968,7 +968,7 @@ on_vim_command_visibility_toggled (GbEditorVim *vim,
 
   ENTRY;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
   workbench = gb_widget_get_workbench (GTK_WIDGET (tab));
@@ -987,7 +987,7 @@ on_vim_command_visibility_toggled (GbEditorVim *vim,
 }
 
 static void
-on_vim_begin_search (GbEditorVim *vim,
+on_vim_begin_search (GbSourceVim *vim,
                      const gchar *search_text,
                      GbEditorTab *tab)
 {
@@ -998,29 +998,29 @@ on_vim_begin_search (GbEditorVim *vim,
 }
 
 static void
-on_vim_notify_phrase (GbEditorVim *vim,
+on_vim_notify_phrase (GbSourceVim *vim,
                       GParamSpec  *pspec,
                       GbEditorTab *tab)
 {
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
   gb_editor_tab_cursor_moved (tab, tab->priv->document);
 }
 
 static void
-on_vim_notify_mode (GbEditorVim *vim,
+on_vim_notify_mode (GbSourceVim *vim,
                     GParamSpec  *pspec,
                     GbEditorTab *tab)
 {
-  GbEditorVimMode mode;
+  GbSourceVimMode mode;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
-  mode = gb_editor_vim_get_mode (vim);
+  mode = gb_source_vim_get_mode (vim);
 
-  if (mode != GB_EDITOR_VIM_INSERT)
+  if (mode != GB_SOURCE_VIM_INSERT)
     gb_source_view_clear_snippets (tab->priv->source_view);
 }
 
@@ -1109,7 +1109,7 @@ gb_editor_tab_constructed (GObject *object)
   GtkSourceCompletion *comp;
   GbEditorTabPrivate *priv;
   GbEditorTab *tab = (GbEditorTab *) object;
-  GbEditorVim *vim;
+  GbSourceVim *vim;
   GtkSourceGutter *gutter;
   GSettings *settings;
 

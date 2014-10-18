@@ -1,4 +1,4 @@
-/* gb-editor-vim.c
+/* gb-source-vim.c
  *
  * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
  *
@@ -27,7 +27,7 @@
 
 #include "gb-source-vim.h"
 
-#ifndef GB_EDITOR_VIM_EXTERNAL
+#ifndef GB_SOURCE_VIM_EXTERNAL
 # include "gb-source-view.h"
 #endif
 
@@ -44,8 +44,8 @@
  */
 
 /**
- * GbEditorVimCommandFunc:
- * @vim: The #GbEditorVim instance.
+ * GbSourceVimCommandFunc:
+ * @vim: The #GbSourceVim instance.
  * @count: The number modifier for the command.
  * @modifier: A potential trailing modifer character.
  *
@@ -54,12 +54,12 @@
  *
  * However, not all commands support this or will use it.
  */
-typedef void (*GbEditorVimCommandFunc) (GbEditorVim        *vim,
+typedef void (*GbSourceVimCommandFunc) (GbSourceVim        *vim,
                                         guint               count,
                                         gchar               modifier);
 
 /**
- * GbEditorVimOperation:
+ * GbSourceVimOperation:
  * @command_text: text command to execute.
  *
  * This is a function declaration for functions that can process an operation.
@@ -68,10 +68,10 @@ typedef void (*GbEditorVimCommandFunc) (GbEditorVim        *vim,
  * Unfortunately, we already have a command abstraction that should possibly
  * be renamed. But such is life!
  */
-typedef void (*GbEditorVimOperation) (GbEditorVim *vim,
+typedef void (*GbSourceVimOperation) (GbSourceVim *vim,
                                       const gchar *command_text);
 
-struct _GbEditorVimPrivate
+struct _GbSourceVimPrivate
 {
   GtkTextView             *text_view;
   GString                 *phrase;
@@ -79,7 +79,7 @@ struct _GbEditorVimPrivate
   GtkTextMark             *selection_anchor_end;
   GtkSourceSearchContext  *search_context;
   GtkSourceSearchSettings *search_settings;
-  GbEditorVimMode          mode;
+  GbSourceVimMode          mode;
   gulong                   key_press_event_handler;
   gulong                   focus_in_event_handler;
   gulong                   mark_set_handler;
@@ -94,31 +94,31 @@ struct _GbEditorVimPrivate
 
 typedef enum
 {
-  GB_EDITOR_VIM_PAGE_UP,
-  GB_EDITOR_VIM_PAGE_DOWN,
-  GB_EDITOR_VIM_HALF_PAGE_UP,
-  GB_EDITOR_VIM_HALF_PAGE_DOWN,
-} GbEditorVimPageDirectionType;
+  GB_SOURCE_VIM_PAGE_UP,
+  GB_SOURCE_VIM_PAGE_DOWN,
+  GB_SOURCE_VIM_HALF_PAGE_UP,
+  GB_SOURCE_VIM_HALF_PAGE_DOWN,
+} GbSourceVimPageDirectionType;
 
 typedef enum
 {
-  GB_EDITOR_VIM_COMMAND_NOOP,
-  GB_EDITOR_VIM_COMMAND_MOVEMENT,
-  GB_EDITOR_VIM_COMMAND_CHANGE,
-  GB_EDITOR_VIM_COMMAND_JUMP,
-} GbEditorVimCommandType;
+  GB_SOURCE_VIM_COMMAND_NOOP,
+  GB_SOURCE_VIM_COMMAND_MOVEMENT,
+  GB_SOURCE_VIM_COMMAND_CHANGE,
+  GB_SOURCE_VIM_COMMAND_JUMP,
+} GbSourceVimCommandType;
 
 typedef enum
 {
-  GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-  GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER = 1 << 0,
-  GB_EDITOR_VIM_COMMAND_FLAG_VISUAL            = 1 << 1,
-  GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE  = 1 << 2,
-  GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE   = 1 << 3,
-} GbEditorVimCommandFlags;
+  GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+  GB_SOURCE_VIM_COMMAND_FLAG_REQUIRES_MODIFIER = 1 << 0,
+  GB_SOURCE_VIM_COMMAND_FLAG_VISUAL            = 1 << 1,
+  GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE  = 1 << 2,
+  GB_SOURCE_VIM_COMMAND_FLAG_MOTION_LINEWISE   = 1 << 3,
+} GbSourceVimCommandFlags;
 
 /**
- * GbEditorVimCommand:
+ * GbSourceVimCommand:
  *
  * This structure encapsulates what we need to know about a command before
  * we can dispatch it. GB_EDiTOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER in flags
@@ -127,25 +127,25 @@ typedef enum
  */
 typedef struct
 {
-  GbEditorVimCommandFunc  func;
-  GbEditorVimCommandType  type;
+  GbSourceVimCommandFunc  func;
+  GbSourceVimCommandType  type;
   gchar                   key;
-  GbEditorVimCommandFlags flags;
-} GbEditorVimCommand;
+  GbSourceVimCommandFlags flags;
+} GbSourceVimCommand;
 
 typedef enum
 {
-  GB_EDITOR_VIM_PHRASE_FAILED,
-  GB_EDITOR_VIM_PHRASE_SUCCESS,
-  GB_EDITOR_VIM_PHRASE_NEED_MORE,
-} GbEditorVimPhraseStatus;
+  GB_SOURCE_VIM_PHRASE_FAILED,
+  GB_SOURCE_VIM_PHRASE_SUCCESS,
+  GB_SOURCE_VIM_PHRASE_NEED_MORE,
+} GbSourceVimPhraseStatus;
 
 typedef struct
 {
   guint count;
   gchar key;
   gchar modifier;
-} GbEditorVimPhrase;
+} GbSourceVimPhrase;
 
 typedef struct
 {
@@ -179,7 +179,7 @@ enum
   CLASS_WORD,
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbEditorVim, gb_editor_vim, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GbSourceVim, gb_source_vim, G_TYPE_OBJECT)
 
 static GHashTable *gCommands;
 static GParamSpec *gParamSpecs [LAST_PROP];
@@ -187,34 +187,34 @@ static guint       gSignals [LAST_SIGNAL];
 
 static void text_iter_swap (GtkTextIter *a,
                             GtkTextIter *b);
-static void gb_editor_vim_select_range (GbEditorVim *vim,
+static void gb_source_vim_select_range (GbSourceVim *vim,
                                         GtkTextIter *insert_iter,
                                         GtkTextIter *selection_iter);
-static void gb_editor_vim_cmd_select_line (GbEditorVim *vim,
+static void gb_source_vim_cmd_select_line (GbSourceVim *vim,
                                            guint        count,
                                            gchar        modifier);
-static void gb_editor_vim_cmd_delete (GbEditorVim *vim,
+static void gb_source_vim_cmd_delete (GbSourceVim *vim,
                                       guint        count,
                                       gchar        modifier);
-static void gb_editor_vim_cmd_delete_to_end (GbEditorVim *vim,
+static void gb_source_vim_cmd_delete_to_end (GbSourceVim *vim,
                                              guint        count,
                                              gchar        modifier);
-static void gb_editor_vim_cmd_insert_before_line (GbEditorVim *vim,
+static void gb_source_vim_cmd_insert_before_line (GbSourceVim *vim,
                                                   guint        count,
                                                   gchar        modifier);
 
-GbEditorVim *
-gb_editor_vim_new (GtkTextView *text_view)
+GbSourceVim *
+gb_source_vim_new (GtkTextView *text_view)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
 
-  return g_object_new (GB_TYPE_EDITOR_VIM,
+  return g_object_new (GB_TYPE_SOURCE_VIM,
                        "text-view", text_view,
                        NULL);
 }
 
 static int
-gb_editor_vim_classify (gunichar ch)
+gb_source_vim_classify (gunichar ch)
 {
   switch (ch)
     {
@@ -241,7 +241,7 @@ gb_editor_vim_classify (gunichar ch)
 }
 
 static guint
-gb_editor_vim_get_line_offset (GbEditorVim *vim)
+gb_source_vim_get_line_offset (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
@@ -255,13 +255,13 @@ gb_editor_vim_get_line_offset (GbEditorVim *vim)
 }
 
 static void
-gb_editor_vim_save_position (GbEditorVim *vim)
+gb_source_vim_save_position (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GtkTextIter selection;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   gtk_text_buffer_get_selection_bounds (buffer, &iter, &selection);
@@ -271,13 +271,13 @@ gb_editor_vim_save_position (GbEditorVim *vim)
 }
 
 static void
-gb_editor_vim_restore_position (GbEditorVim *vim)
+gb_source_vim_restore_position (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   guint offset;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   gtk_text_buffer_get_iter_at_line (buffer, &iter, vim->priv->stash_line);
@@ -288,20 +288,20 @@ gb_editor_vim_restore_position (GbEditorVim *vim)
 
   gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 }
 
 static void
-gb_editor_vim_set_selection_anchor (GbEditorVim       *vim,
+gb_source_vim_set_selection_anchor (GbSourceVim       *vim,
                                     const GtkTextIter *begin,
                                     const GtkTextIter *end)
 {
-  GbEditorVimPrivate *priv;
+  GbSourceVimPrivate *priv;
   GtkTextBuffer *buffer;
   GtkTextIter left_anchor;
   GtkTextIter right_anchor;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
   g_assert (begin);
   g_assert (end);
 
@@ -344,9 +344,9 @@ gb_editor_vim_set_selection_anchor (GbEditorVim       *vim,
 }
 
 static void
-gb_editor_vim_ensure_anchor_selected (GbEditorVim *vim)
+gb_source_vim_ensure_anchor_selected (GbSourceVim *vim)
 {
-  GbEditorVimPrivate *priv;
+  GbSourceVimPrivate *priv;
   GtkTextBuffer *buffer;
   GtkTextMark *selection_mark;
   GtkTextMark *insert_mark;
@@ -355,7 +355,7 @@ gb_editor_vim_ensure_anchor_selected (GbEditorVim *vim)
   GtkTextIter insert_iter;
   GtkTextIter selection_iter;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   priv = vim->priv;
 
@@ -379,29 +379,29 @@ gb_editor_vim_ensure_anchor_selected (GbEditorVim *vim)
       (gtk_text_iter_compare (&insert_iter, &anchor_end) < 0))
     {
       if (gtk_text_iter_compare (&insert_iter, &selection_iter) < 0)
-        gb_editor_vim_select_range (vim, &insert_iter, &anchor_end);
+        gb_source_vim_select_range (vim, &insert_iter, &anchor_end);
       else
-        gb_editor_vim_select_range (vim, &anchor_end, &selection_iter);
+        gb_source_vim_select_range (vim, &anchor_end, &selection_iter);
     }
   else if ((gtk_text_iter_compare (&selection_iter, &anchor_begin) > 0) &&
            (gtk_text_iter_compare (&insert_iter, &anchor_begin) > 0))
     {
       if (gtk_text_iter_compare (&insert_iter, &selection_iter) < 0)
-        gb_editor_vim_select_range (vim, &anchor_begin, &selection_iter);
+        gb_source_vim_select_range (vim, &anchor_begin, &selection_iter);
       else
-        gb_editor_vim_select_range (vim, &insert_iter, &anchor_begin);
+        gb_source_vim_select_range (vim, &insert_iter, &anchor_begin);
     }
 }
 
 static void
-gb_editor_vim_clear_selection (GbEditorVim *vim)
+gb_source_vim_clear_selection (GbSourceVim *vim)
 {
-  GbEditorVimPrivate *priv;
+  GbSourceVimPrivate *priv;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   priv = vim->priv;
 
@@ -434,43 +434,43 @@ gb_editor_vim_clear_selection (GbEditorVim *vim)
       gtk_text_buffer_delete_mark (buffer, mark);
     }
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
-GbEditorVimMode
-gb_editor_vim_get_mode (GbEditorVim *vim)
+GbSourceVimMode
+gb_source_vim_get_mode (GbSourceVim *vim)
 {
-  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), 0);
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), 0);
 
   return vim->priv->mode;
 }
 
 const gchar *
-gb_editor_vim_get_phrase (GbEditorVim *vim)
+gb_source_vim_get_phrase (GbSourceVim *vim)
 {
-  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), NULL);
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), NULL);
 
   return vim->priv->phrase->str;
 }
 
 static void
-gb_editor_vim_clear_phrase (GbEditorVim *vim)
+gb_source_vim_clear_phrase (GbSourceVim *vim)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   g_string_truncate (vim->priv->phrase, 0);
   g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_PHRASE]);
 }
 
 void
-gb_editor_vim_set_mode (GbEditorVim     *vim,
-                        GbEditorVimMode  mode)
+gb_source_vim_set_mode (GbSourceVim     *vim,
+                        GbSourceVimMode  mode)
 {
   GtkTextBuffer *buffer;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   /*
    * Ignore if we are already in this mode.
@@ -484,14 +484,14 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
    * If we are starting insert mode, let's try to coalesce all changes
    * into one undo stack item like VIM.
    */
-  if (mode == GB_EDITOR_VIM_INSERT)
+  if (mode == GB_SOURCE_VIM_INSERT)
     gtk_text_buffer_begin_user_action (buffer);
 
   /*
    * If we are leaving insert mode, let's complete that user action.
    */
-  if ((mode != GB_EDITOR_VIM_INSERT) &&
-      (vim->priv->mode == GB_EDITOR_VIM_INSERT))
+  if ((mode != GB_SOURCE_VIM_INSERT) &&
+      (vim->priv->mode == GB_SOURCE_VIM_INSERT))
     gtk_text_buffer_end_user_action (buffer);
 
   vim->priv->mode = mode;
@@ -501,45 +501,45 @@ gb_editor_vim_set_mode (GbEditorVim     *vim,
    * abusing "overwrite" here simply to look more like VIM.
    */
   gtk_text_view_set_overwrite (vim->priv->text_view,
-                               (mode != GB_EDITOR_VIM_INSERT));
+                               (mode != GB_SOURCE_VIM_INSERT));
 
   /*
    * Clear any in flight phrases.
    */
-  gb_editor_vim_clear_phrase (vim);
+  gb_source_vim_clear_phrase (vim);
 
   /*
    * If we are going back to navigation mode, stash our current buffer
    * position for use in commands like j and k.
    */
-  if (mode == GB_EDITOR_VIM_NORMAL)
-    vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  if (mode == GB_SOURCE_VIM_NORMAL)
+    vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   /*
    * Clear the current selection too.
    */
-  if (mode != GB_EDITOR_VIM_COMMAND)
-    gb_editor_vim_clear_selection (vim);
+  if (mode != GB_SOURCE_VIM_COMMAND)
+    gb_source_vim_clear_selection (vim);
 
   /*
    * Make the command entry visible if necessary.
    */
   g_signal_emit (vim, gSignals [COMMAND_VISIBILITY_TOGGLED], 0,
-                 (mode == GB_EDITOR_VIM_COMMAND));
+                 (mode == GB_SOURCE_VIM_COMMAND));
 
   g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_MODE]);
 }
 
 static void
-gb_editor_vim_maybe_auto_indent (GbEditorVim *vim)
+gb_source_vim_maybe_auto_indent (GbSourceVim *vim)
 {
-#ifndef GB_EDITOR_VIM_EXTERNAL
+#ifndef GB_SOURCE_VIM_EXTERNAL
   GbSourceAutoIndenter *auto_indenter;
-  GbEditorVimPrivate *priv;
+  GbSourceVimPrivate *priv;
   GbSourceView *source_view;
   GdkEvent fake_event = { 0 };
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   priv = vim->priv;
 
@@ -611,7 +611,7 @@ gb_editor_vim_maybe_auto_indent (GbEditorVim *vim)
 }
 
 static gboolean
-gb_editor_vim_get_selection_bounds (GbEditorVim *vim,
+gb_source_vim_get_selection_bounds (GbSourceVim *vim,
                                     GtkTextIter *insert_iter,
                                     GtkTextIter *selection_iter)
 {
@@ -619,7 +619,7 @@ gb_editor_vim_get_selection_bounds (GbEditorVim *vim,
   GtkTextMark *insert;
   GtkTextMark *selection;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   insert = gtk_text_buffer_get_insert (buffer);
@@ -635,7 +635,7 @@ gb_editor_vim_get_selection_bounds (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_select_range (GbEditorVim *vim,
+gb_source_vim_select_range (GbSourceVim *vim,
                             GtkTextIter *insert_iter,
                             GtkTextIter *selection_iter)
 {
@@ -645,7 +645,7 @@ gb_editor_vim_select_range (GbEditorVim *vim,
   gint insert_off;
   gint selection_off;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
   g_assert (insert_iter);
   g_assert (selection_iter);
 
@@ -668,33 +668,33 @@ gb_editor_vim_select_range (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_move_line0 (GbEditorVim *vim)
+gb_source_vim_move_line0 (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GtkTextIter selection;
   gboolean has_selection;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (vim->priv->text_view));
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   gtk_text_iter_set_line_offset (&iter, 0);
 
   if (has_selection)
     {
-      gb_editor_vim_select_range (vim, &iter, &selection);
-      gb_editor_vim_ensure_anchor_selected (vim);
+      gb_source_vim_select_range (vim, &iter, &selection);
+      gb_source_vim_ensure_anchor_selected (vim);
     }
   else
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 }
 
 static void
-gb_editor_vim_move_line_start (GbEditorVim *vim,
+gb_source_vim_move_line_start (GbSourceVim *vim,
                                gboolean     can_move_forward)
 {
   GtkTextBuffer *buffer;
@@ -704,10 +704,10 @@ gb_editor_vim_move_line_start (GbEditorVim *vim,
   gboolean has_selection;
   guint line;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (vim->priv->text_view));
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
   line = gtk_text_iter_get_line (&iter);
   gtk_text_iter_assign (&original, &iter);
 
@@ -727,7 +727,7 @@ gb_editor_vim_move_line_start (GbEditorVim *vim,
       if (g_unichar_isspace (gtk_text_iter_get_char (&iter)) ||
           gtk_text_iter_equal (&iter, &original))
         {
-          gb_editor_vim_move_line0 (vim);
+          gb_source_vim_move_line0 (vim);
           return;
         }
     }
@@ -736,31 +736,31 @@ gb_editor_vim_move_line_start (GbEditorVim *vim,
     {
       if (gtk_text_iter_compare (&iter, &selection) > 0)
         gtk_text_iter_forward_char (&iter);
-      gb_editor_vim_select_range (vim, &iter, &selection);
-      gb_editor_vim_ensure_anchor_selected (vim);
+      gb_source_vim_select_range (vim, &iter, &selection);
+      gb_source_vim_ensure_anchor_selected (vim);
     }
   else
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 }
 
 static void
-gb_editor_vim_move_line_end (GbEditorVim *vim)
+gb_source_vim_move_line_end (GbSourceVim *vim)
 {
-  GbEditorVimPrivate *priv;
+  GbSourceVimPrivate *priv;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
   GtkTextIter selection;
   gboolean has_selection;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   priv = vim->priv;
 
   buffer = gtk_text_view_get_buffer (priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   while (!gtk_text_iter_ends_line (&iter))
     if (!gtk_text_iter_forward_char (&iter))
@@ -768,20 +768,20 @@ gb_editor_vim_move_line_end (GbEditorVim *vim)
 
   if (has_selection)
     {
-      gb_editor_vim_select_range (vim, &iter, &selection);
-      gb_editor_vim_ensure_anchor_selected (vim);
+      gb_source_vim_select_range (vim, &iter, &selection);
+      gb_source_vim_ensure_anchor_selected (vim);
     }
   else
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
-gb_editor_vim_move_backward (GbEditorVim *vim)
+gb_source_vim_move_backward (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;
@@ -789,10 +789,10 @@ gb_editor_vim_move_backward (GbEditorVim *vim)
   gboolean has_selection;
   guint line;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
   line = gtk_text_iter_get_line (&iter);
 
   if (gtk_text_iter_backward_char (&iter) &&
@@ -805,13 +805,13 @@ gb_editor_vim_move_backward (GbEditorVim *vim)
               gtk_text_iter_backward_char (&iter);
               gtk_text_iter_forward_char (&selection);
             }
-          gb_editor_vim_select_range (vim, &iter, &selection);
-          gb_editor_vim_ensure_anchor_selected (vim);
+          gb_source_vim_select_range (vim, &iter, &selection);
+          gb_source_vim_ensure_anchor_selected (vim);
         }
       else
         gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-      vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+      vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
     }
 }
 
@@ -832,7 +832,7 @@ text_iter_backward_vim_word (GtkTextIter *iter)
    * back to the beginning of the word.
    */
   ch = gtk_text_iter_get_char (iter);
-  if (gb_editor_vim_classify (ch) == CLASS_SPACE)
+  if (gb_source_vim_classify (ch) == CLASS_SPACE)
     {
       for (;;)
         {
@@ -840,12 +840,12 @@ text_iter_backward_vim_word (GtkTextIter *iter)
             return FALSE;
 
           ch = gtk_text_iter_get_char (iter);
-          if (gb_editor_vim_classify (ch) != CLASS_SPACE)
+          if (gb_source_vim_classify (ch) != CLASS_SPACE)
             break;
         }
 
       ch = gtk_text_iter_get_char (iter);
-      begin_class = gb_editor_vim_classify (ch);
+      begin_class = gb_source_vim_classify (ch);
 
       for (;;)
         {
@@ -853,7 +853,7 @@ text_iter_backward_vim_word (GtkTextIter *iter)
             return FALSE;
 
           ch = gtk_text_iter_get_char (iter);
-          cur_class = gb_editor_vim_classify (ch);
+          cur_class = gb_source_vim_classify (ch);
 
           if (cur_class != begin_class)
             {
@@ -866,7 +866,7 @@ text_iter_backward_vim_word (GtkTextIter *iter)
     }
 
   ch = gtk_text_iter_get_char (iter);
-  begin_class = gb_editor_vim_classify (ch);
+  begin_class = gb_source_vim_classify (ch);
 
   for (;;)
     {
@@ -874,7 +874,7 @@ text_iter_backward_vim_word (GtkTextIter *iter)
         return FALSE;
 
       ch = gtk_text_iter_get_char (iter);
-      cur_class = gb_editor_vim_classify (ch);
+      cur_class = gb_source_vim_classify (ch);
 
       if (cur_class != begin_class)
         {
@@ -887,7 +887,7 @@ text_iter_backward_vim_word (GtkTextIter *iter)
 }
 
 static void
-gb_editor_vim_move_backward_word (GbEditorVim *vim)
+gb_source_vim_move_backward_word (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;
@@ -895,10 +895,10 @@ gb_editor_vim_move_backward_word (GbEditorVim *vim)
   GtkTextMark *insert;
   gboolean has_selection;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   if (!text_iter_backward_vim_word (&iter))
     gtk_text_buffer_get_start_iter (buffer, &iter);
@@ -907,20 +907,20 @@ gb_editor_vim_move_backward_word (GbEditorVim *vim)
     {
       if (gtk_text_iter_equal (&iter, &selection))
         gtk_text_iter_backward_word_start (&iter);
-      gb_editor_vim_select_range (vim, &iter, &selection);
-      gb_editor_vim_ensure_anchor_selected (vim);
+      gb_source_vim_select_range (vim, &iter, &selection);
+      gb_source_vim_ensure_anchor_selected (vim);
     }
   else
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
-gb_editor_vim_move_forward (GbEditorVim *vim)
+gb_source_vim_move_forward (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;
@@ -928,10 +928,10 @@ gb_editor_vim_move_forward (GbEditorVim *vim)
   gboolean has_selection;
   guint line;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
   line = gtk_text_iter_get_line (&iter);
 
   if (!gtk_text_iter_forward_char (&iter))
@@ -945,14 +945,14 @@ gb_editor_vim_move_forward (GbEditorVim *vim)
             {
               gtk_text_iter_forward_char (&iter);
               gtk_text_iter_backward_char (&selection);
-              gb_editor_vim_ensure_anchor_selected (vim);
+              gb_source_vim_ensure_anchor_selected (vim);
             }
-          gb_editor_vim_select_range (vim, &iter, &selection);
+          gb_source_vim_select_range (vim, &iter, &selection);
         }
       else
         gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-      vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+      vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
     }
 }
 
@@ -966,7 +966,7 @@ text_iter_forward_vim_word (GtkTextIter *iter)
   g_assert (iter);
 
   ch = gtk_text_iter_get_char (iter);
-  begin_class = gb_editor_vim_classify (ch);
+  begin_class = gb_source_vim_classify (ch);
 
   /* Move to the first non-whitespace character if necessary. */
   if (begin_class == CLASS_SPACE)
@@ -977,7 +977,7 @@ text_iter_forward_vim_word (GtkTextIter *iter)
             return FALSE;
 
           ch = gtk_text_iter_get_char (iter);
-          cur_class = gb_editor_vim_classify (ch);
+          cur_class = gb_source_vim_classify (ch);
           if (cur_class != CLASS_SPACE)
             return TRUE;
         }
@@ -987,7 +987,7 @@ text_iter_forward_vim_word (GtkTextIter *iter)
   while (gtk_text_iter_forward_char (iter))
     {
       ch = gtk_text_iter_get_char (iter);
-      cur_class = gb_editor_vim_classify (ch);
+      cur_class = gb_source_vim_classify (ch);
 
       if (cur_class == CLASS_SPACE)
         {
@@ -1016,12 +1016,12 @@ text_iter_forward_vim_word_end (GtkTextIter *iter)
 
   /* If we are on space, walk to the start of the next word. */
   ch = gtk_text_iter_get_char (iter);
-  if (gb_editor_vim_classify (ch) == CLASS_SPACE)
+  if (gb_source_vim_classify (ch) == CLASS_SPACE)
     if (!text_iter_forward_vim_word (iter))
       return FALSE;
 
   ch = gtk_text_iter_get_char (iter);
-  begin_class = gb_editor_vim_classify (ch);
+  begin_class = gb_source_vim_classify (ch);
 
   for (;;)
     {
@@ -1029,7 +1029,7 @@ text_iter_forward_vim_word_end (GtkTextIter *iter)
         return FALSE;
 
       ch = gtk_text_iter_get_char (iter);
-      cur_class = gb_editor_vim_classify (ch);
+      cur_class = gb_source_vim_classify (ch);
 
       if (cur_class != begin_class)
         {
@@ -1042,7 +1042,7 @@ text_iter_forward_vim_word_end (GtkTextIter *iter)
 }
 
 static void
-gb_editor_vim_move_forward_word (GbEditorVim *vim)
+gb_source_vim_move_forward_word (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
@@ -1050,14 +1050,14 @@ gb_editor_vim_move_forward_word (GbEditorVim *vim)
   GtkTextIter selection;
   gboolean has_selection;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   /*
    * TODO: VIM will jump to an empty line before going to the next word.
    */
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   if (!text_iter_forward_vim_word (&iter))
     gtk_text_buffer_get_end_iter (buffer, &iter);
@@ -1066,20 +1066,20 @@ gb_editor_vim_move_forward_word (GbEditorVim *vim)
     {
       if (!gtk_text_iter_forward_char (&iter))
         gtk_text_buffer_get_end_iter (buffer, &iter);
-      gb_editor_vim_select_range (vim, &iter, &selection);
-      gb_editor_vim_ensure_anchor_selected (vim);
+      gb_source_vim_select_range (vim, &iter, &selection);
+      gb_source_vim_ensure_anchor_selected (vim);
     }
   else
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
-gb_editor_vim_move_forward_word_end (GbEditorVim *vim)
+gb_source_vim_move_forward_word_end (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
@@ -1087,10 +1087,10 @@ gb_editor_vim_move_forward_word_end (GbEditorVim *vim)
   GtkTextIter selection;
   gboolean has_selection;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   if (!text_iter_forward_vim_word_end (&iter))
     gtk_text_buffer_get_end_iter (buffer, &iter);
@@ -1099,13 +1099,13 @@ gb_editor_vim_move_forward_word_end (GbEditorVim *vim)
     {
       if (!gtk_text_iter_forward_char (&iter))
         gtk_text_buffer_get_end_iter (buffer, &iter);
-      gb_editor_vim_select_range (vim, &iter, &selection);
-      gb_editor_vim_ensure_anchor_selected (vim);
+      gb_source_vim_select_range (vim, &iter, &selection);
+      gb_source_vim_ensure_anchor_selected (vim);
     }
   else
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
@@ -1126,7 +1126,7 @@ bracket_predicate (gunichar ch,
 }
 
 static void
-gb_editor_vim_move_matching_bracket (GbEditorVim *vim)
+gb_source_vim_move_matching_bracket (GbSourceVim *vim)
 {
   MatchingBracketState state;
   GtkTextBuffer *buffer;
@@ -1137,10 +1137,10 @@ gb_editor_vim_move_matching_bracket (GbEditorVim *vim)
   gboolean is_forward;
   gboolean ret;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   state.depth = 1;
   state.jump_from = gtk_text_iter_get_char (&iter);
@@ -1192,8 +1192,8 @@ gb_editor_vim_move_matching_bracket (GbEditorVim *vim)
     {
       if (has_selection)
         {
-          gb_editor_vim_select_range (vim, &iter, &selection);
-          gb_editor_vim_ensure_anchor_selected (vim);
+          gb_source_vim_select_range (vim, &iter, &selection);
+          gb_source_vim_ensure_anchor_selected (vim);
         }
       else
         gtk_text_buffer_select_range (buffer, &iter, &iter);
@@ -1251,17 +1251,17 @@ text_iter_swap (GtkTextIter *a,
 }
 
 static void
-gb_editor_vim_move_forward_paragraph (GbEditorVim *vim)
+gb_source_vim_move_forward_paragraph (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter, selection;
   gboolean has_selection;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   /* Move down to the first non-blank line */
   while (gtk_text_iter_starts_line (&iter) &&
@@ -1277,30 +1277,30 @@ gb_editor_vim_move_forward_paragraph (GbEditorVim *vim)
 
   if (has_selection)
     {
-      gb_editor_vim_select_range (vim, &iter, &selection);
-      gb_editor_vim_ensure_anchor_selected (vim);
+      gb_source_vim_select_range (vim, &iter, &selection);
+      gb_source_vim_ensure_anchor_selected (vim);
     }
   else
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
-gb_editor_vim_move_backward_paragraph (GbEditorVim *vim)
+gb_source_vim_move_backward_paragraph (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter, selection;
   gboolean has_selection;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   /* Move up to the first non-blank line */
   while (gtk_text_iter_starts_line (&iter) &&
@@ -1318,22 +1318,22 @@ gb_editor_vim_move_backward_paragraph (GbEditorVim *vim)
     {
       if (gtk_text_iter_equal (&iter, &selection))
         gtk_text_iter_forward_char (&selection);
-      gb_editor_vim_select_range (vim, &iter, &selection);
-      gb_editor_vim_ensure_anchor_selected (vim);
+      gb_source_vim_select_range (vim, &iter, &selection);
+      gb_source_vim_ensure_anchor_selected (vim);
     }
   else
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
-gb_editor_vim_move_down (GbEditorVim *vim)
+gb_source_vim_move_down (GbSourceVim *vim)
 {
-  GbEditorVimPrivate *priv;
+  GbSourceVimPrivate *priv;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
@@ -1342,12 +1342,12 @@ gb_editor_vim_move_down (GbEditorVim *vim)
   guint line;
   guint offset;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   priv = vim->priv;
 
   buffer = gtk_text_view_get_buffer (priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
   line = gtk_text_iter_get_line (&iter);
   offset = vim->priv->target_line_offset;
 
@@ -1370,8 +1370,8 @@ gb_editor_vim_move_down (GbEditorVim *vim)
       if (target_line != gtk_text_iter_get_line (&iter))
         goto select_to_end;
 
-      gb_editor_vim_select_range (vim, &iter, &selection);
-      gb_editor_vim_ensure_anchor_selected (vim);
+      gb_source_vim_select_range (vim, &iter, &selection);
+      gb_source_vim_ensure_anchor_selected (vim);
       goto move_mark;
     }
 
@@ -1390,8 +1390,8 @@ gb_editor_vim_move_down (GbEditorVim *vim)
             break;
       if (has_selection)
         {
-          gb_editor_vim_select_range (vim, &iter, &selection);
-          gb_editor_vim_ensure_anchor_selected (vim);
+          gb_source_vim_select_range (vim, &iter, &selection);
+          gb_source_vim_ensure_anchor_selected (vim);
         }
       else
         gtk_text_buffer_select_range (buffer, &iter, &iter);
@@ -1402,8 +1402,8 @@ select_to_end:
       gtk_text_buffer_get_end_iter (buffer, &iter);
       if (has_selection)
         {
-          gb_editor_vim_select_range (vim, &iter, &selection);
-          gb_editor_vim_ensure_anchor_selected (vim);
+          gb_source_vim_select_range (vim, &iter, &selection);
+          gb_source_vim_ensure_anchor_selected (vim);
         }
       else
         gtk_text_buffer_select_range (buffer, &iter, &iter);
@@ -1415,9 +1415,9 @@ move_mark:
 }
 
 static void
-gb_editor_vim_move_up (GbEditorVim *vim)
+gb_source_vim_move_up (GbSourceVim *vim)
 {
-  GbEditorVimPrivate *priv;
+  GbSourceVimPrivate *priv;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
@@ -1426,12 +1426,12 @@ gb_editor_vim_move_up (GbEditorVim *vim)
   guint line;
   guint offset;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   priv = vim->priv;
 
   buffer = gtk_text_view_get_buffer (priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
   line = gtk_text_iter_get_line (&iter);
   offset = vim->priv->target_line_offset;
 
@@ -1443,8 +1443,8 @@ gb_editor_vim_move_up (GbEditorVim *vim)
       if (gtk_text_iter_compare (&iter, &selection) > 0)
         text_iter_swap (&iter, &selection);
       gtk_text_iter_set_line (&iter, gtk_text_iter_get_line (&iter) - 1);
-      gb_editor_vim_select_range (vim, &iter, &selection);
-      gb_editor_vim_ensure_anchor_selected (vim);
+      gb_source_vim_select_range (vim, &iter, &selection);
+      gb_source_vim_ensure_anchor_selected (vim);
       goto move_mark;
     }
 
@@ -1466,8 +1466,8 @@ gb_editor_vim_move_up (GbEditorVim *vim)
         {
           if (gtk_text_iter_equal (&iter, &selection))
             gtk_text_iter_backward_char (&iter);
-          gb_editor_vim_select_range (vim, &iter, &selection);
-          gb_editor_vim_ensure_anchor_selected (vim);
+          gb_source_vim_select_range (vim, &iter, &selection);
+          gb_source_vim_ensure_anchor_selected (vim);
         }
       else
         gtk_text_buffer_select_range (buffer, &iter, &iter);
@@ -1479,7 +1479,7 @@ move_mark:
 }
 
 static void
-gb_editor_vim_toggle_case (GbEditorVim *vim)
+gb_source_vim_toggle_case (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextIter cur;
@@ -1489,10 +1489,10 @@ gb_editor_vim_toggle_case (GbEditorVim *vim)
   gboolean place_at_end = FALSE;
   GString *str;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &begin, &end);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &begin, &end);
 
   if (gtk_text_iter_compare (&begin, &end) > 0)
     {
@@ -1530,17 +1530,17 @@ gb_editor_vim_toggle_case (GbEditorVim *vim)
 
   gtk_text_buffer_begin_user_action (buffer);
 
-  gb_editor_vim_save_position (vim);
+  gb_source_vim_save_position (vim);
   gtk_text_buffer_delete (buffer, &begin, &end);
   gtk_text_buffer_insert (buffer, &begin, str->str, str->len);
-  gb_editor_vim_restore_position (vim);
+  gb_source_vim_restore_position (vim);
 
   if (!has_selection)
-    gb_editor_vim_select_range (vim, &begin, &begin);
+    gb_source_vim_select_range (vim, &begin, &begin);
   else if (place_at_end)
     {
       if (gtk_text_iter_backward_char (&begin))
-        gb_editor_vim_select_range (vim, &begin, &begin);
+        gb_source_vim_select_range (vim, &begin, &begin);
     }
 
   gtk_text_buffer_end_user_action (buffer);
@@ -1550,7 +1550,7 @@ cleanup:
 }
 
 static void
-gb_editor_vim_delete_selection (GbEditorVim *vim)
+gb_source_vim_delete_selection (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
@@ -1559,7 +1559,7 @@ gb_editor_vim_delete_selection (GbEditorVim *vim)
   GtkClipboard *clipboard;
   gchar *text;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
@@ -1603,23 +1603,23 @@ gb_editor_vim_delete_selection (GbEditorVim *vim)
   gtk_text_buffer_delete (buffer, &begin, &end);
   gtk_text_buffer_end_user_action (buffer);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
-gb_editor_vim_select_line (GbEditorVim *vim)
+gb_source_vim_select_line (GbSourceVim *vim)
 {
-  GbEditorVimPrivate *priv;
+  GbSourceVimPrivate *priv;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
   GtkTextIter begin;
   GtkTextIter end;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   priv = vim->priv;
 
@@ -1651,13 +1651,13 @@ gb_editor_vim_select_line (GbEditorVim *vim)
 
   gtk_text_buffer_select_range (buffer, &begin, &end);
 
-  gb_editor_vim_set_selection_anchor (vim, &begin, &end);
+  gb_source_vim_set_selection_anchor (vim, &begin, &end);
 
   vim->priv->target_line_offset = 0;
 }
 
 static void
-gb_editor_vim_select_char (GbEditorVim *vim)
+gb_source_vim_select_char (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
@@ -1666,47 +1666,47 @@ gb_editor_vim_select_char (GbEditorVim *vim)
   GtkTextIter *target;
   gboolean has_selection;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
   target = has_selection ? &iter : &selection;
 
   if (!gtk_text_iter_forward_char (target))
     gtk_text_buffer_get_end_iter (buffer, target);
 
-  gb_editor_vim_select_range (vim, &iter, &selection);
-  gb_editor_vim_set_selection_anchor (vim, &iter, &selection);
+  gb_source_vim_select_range (vim, &iter, &selection);
+  gb_source_vim_set_selection_anchor (vim, &iter, &selection);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
-gb_editor_vim_apply_motion (GbEditorVim *vim,
+gb_source_vim_apply_motion (GbSourceVim *vim,
                             char         motion,
                             guint        count)
 {
-  GbEditorVimCommand *cmd;
+  GbSourceVimCommand *cmd;
 
   cmd = g_hash_table_lookup (gCommands, GINT_TO_POINTER (motion));
-  if (!cmd || (cmd->type != GB_EDITOR_VIM_COMMAND_MOVEMENT))
+  if (!cmd || (cmd->type != GB_SOURCE_VIM_COMMAND_MOVEMENT))
     return;
 
-  if ((cmd->flags & GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE))
-    gb_editor_vim_select_line (vim);
+  if ((cmd->flags & GB_SOURCE_VIM_COMMAND_FLAG_MOTION_LINEWISE))
+    gb_source_vim_select_line (vim);
   else
-    gb_editor_vim_select_char (vim);
+    gb_source_vim_select_char (vim);
 
   cmd->func (vim, count, '\0');
 
-  if ((cmd->flags & GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE))
+  if ((cmd->flags & GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE))
     {
       GtkTextIter iter, selection;
 
-      gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+      gb_source_vim_get_selection_bounds (vim, &iter, &selection);
       if (gtk_text_iter_compare (&iter, &selection) < 0)
         text_iter_swap (&iter, &selection);
 
@@ -1743,19 +1743,19 @@ gb_editor_vim_apply_motion (GbEditorVim *vim,
         {
           gtk_text_iter_backward_char (&iter);
         }
-      gb_editor_vim_select_range (vim, &iter, &selection);
+      gb_source_vim_select_range (vim, &iter, &selection);
     }
 }
 
 static void
-gb_editor_vim_undo (GbEditorVim *vim)
+gb_source_vim_undo (GbSourceVim *vim)
 {
   GtkSourceUndoManager *undo;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   /*
    * We only support GtkSourceView for now.
@@ -1772,24 +1772,24 @@ gb_editor_vim_undo (GbEditorVim *vim)
    * GtkSourceView might preserve the selection. So let's go ahead and
    * clear it manually to the selection-bound mark position.
    */
-  if (gb_editor_vim_get_selection_bounds (vim, NULL, &iter))
+  if (gb_source_vim_get_selection_bounds (vim, NULL, &iter))
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
-gb_editor_vim_redo (GbEditorVim *vim)
+gb_source_vim_redo (GbSourceVim *vim)
 {
   GtkSourceUndoManager *undo;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   /*
    * We only support GtkSourceView for now.
@@ -1810,13 +1810,13 @@ gb_editor_vim_redo (GbEditorVim *vim)
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
   gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
-gb_editor_vim_join (GbEditorVim *vim)
+gb_source_vim_join (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
@@ -1829,10 +1829,10 @@ gb_editor_vim_join (GbEditorVim *vim)
   guint i;
   guint offset;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   if (!has_selection)
     {
@@ -1878,7 +1878,7 @@ gb_editor_vim_join (GbEditorVim *vim)
   gtk_text_buffer_select_range (buffer, &iter, &iter);
   gtk_text_buffer_end_user_action (buffer);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
@@ -1889,14 +1889,14 @@ gb_editor_vim_join (GbEditorVim *vim)
 }
 
 static void
-gb_editor_vim_insert_nl_before (GbEditorVim *vim)
+gb_source_vim_insert_nl_before (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
   guint line;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   insert = gtk_text_buffer_get_insert (buffer);
@@ -1922,22 +1922,22 @@ gb_editor_vim_insert_nl_before (GbEditorVim *vim)
   /*
    * We might need to auto-indent the cursor after the newline.
    */
-  gb_editor_vim_maybe_auto_indent (vim);
+  gb_source_vim_maybe_auto_indent (vim);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
-gb_editor_vim_insert_nl_after (GbEditorVim *vim,
+gb_source_vim_insert_nl_after (GbSourceVim *vim,
                                gboolean     auto_indent)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   insert = gtk_text_buffer_get_insert (buffer);
@@ -1960,27 +1960,27 @@ gb_editor_vim_insert_nl_after (GbEditorVim *vim,
    * We might need to auto-indent after the newline.
    */
   if (auto_indent)
-    gb_editor_vim_maybe_auto_indent (vim);
+    gb_source_vim_maybe_auto_indent (vim);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 }
 
 static void
-gb_editor_vim_delete_to_line_start (GbEditorVim *vim)
+gb_source_vim_delete_to_line_start (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter begin;
   GtkTextIter end;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   /*
    * Clear any selection so we are left at the cursor position.
    */
-  gb_editor_vim_clear_selection (vim);
+  gb_source_vim_clear_selection (vim);
 
   /*
    * Get everything we need to determine the deletion region.
@@ -2000,7 +2000,7 @@ gb_editor_vim_delete_to_line_start (GbEditorVim *vim)
    */
   if (!gtk_text_iter_starts_line (&begin))
     {
-      gb_editor_vim_move_line_start (vim, FALSE);
+      gb_source_vim_move_line_start (vim, FALSE);
 
       gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
 
@@ -2018,11 +2018,11 @@ gb_editor_vim_delete_to_line_start (GbEditorVim *vim)
   gtk_text_buffer_delete (buffer, &begin, &end);
   gtk_text_buffer_end_user_action (buffer);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 }
 
 static void
-gb_editor_vim_paste (GbEditorVim *vim)
+gb_source_vim_paste (GbSourceVim *vim)
 {
   GtkClipboard *clipboard;
   GtkTextBuffer *buffer;
@@ -2032,7 +2032,7 @@ gb_editor_vim_paste (GbEditorVim *vim)
   guint offset;
   gchar *text;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
@@ -2080,7 +2080,7 @@ gb_editor_vim_paste (GbEditorVim *vim)
        */
 
       trimmed = g_strndup (text, strlen (text) - 1);
-      gb_editor_vim_insert_nl_after (vim, FALSE);
+      gb_source_vim_insert_nl_after (vim, FALSE);
       gtk_clipboard_set_text (clipboard, trimmed, -1);
       g_signal_emit_by_name (vim->priv->text_view, "paste-clipboard");
       gtk_clipboard_set_text (clipboard, text, -1);
@@ -2117,10 +2117,10 @@ gb_editor_vim_paste (GbEditorVim *vim)
        * to insert mode so that we can move past the last character in the
        * buffer. Possibly should consider an alternate design for this.
        */
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-      gb_editor_vim_move_forward (vim);
+      gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+      gb_source_vim_move_forward (vim);
       g_signal_emit_by_name (vim->priv->text_view, "paste-clipboard");
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+      gb_source_vim_set_mode (vim, GB_SOURCE_VIM_NORMAL);
 
       gtk_text_buffer_get_selection_bounds (buffer, &tmp, &tmp2);
       offset = gtk_text_iter_get_line_offset (&tmp);
@@ -2139,13 +2139,13 @@ gb_editor_vim_paste (GbEditorVim *vim)
       break;
   gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   g_free (text);
 }
 
 static void
-gb_editor_vim_move_to_end (GbEditorVim *vim)
+gb_source_vim_move_to_end (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
@@ -2153,26 +2153,26 @@ gb_editor_vim_move_to_end (GbEditorVim *vim)
   GtkTextIter selection;
   gboolean has_selection;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   gtk_text_buffer_get_end_iter (buffer, &iter);
 
   if (has_selection)
-    gb_editor_vim_select_range (vim, &iter, &selection);
+    gb_source_vim_select_range (vim, &iter, &selection);
   else
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 }
 
 static void
-gb_editor_vim_yank (GbEditorVim *vim)
+gb_source_vim_yank (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
@@ -2181,7 +2181,7 @@ gb_editor_vim_yank (GbEditorVim *vim)
   GtkClipboard *clipboard;
   gchar *text;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   /*
    * Get the current textview selection.
@@ -2234,18 +2234,18 @@ gb_editor_vim_yank (GbEditorVim *vim)
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 }
 
 static gboolean
-gb_editor_vim_select_current_word (GbEditorVim *vim,
+gb_source_vim_select_current_word (GbSourceVim *vim,
                                    GtkTextIter *begin,
                                    GtkTextIter *end)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
 
-  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), FALSE);
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
   g_return_val_if_fail (begin, FALSE);
   g_return_val_if_fail (end, FALSE);
 
@@ -2265,18 +2265,18 @@ gb_editor_vim_select_current_word (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_search_cb (GObject      *source,
+gb_source_vim_search_cb (GObject      *source,
                          GAsyncResult *result,
                          gpointer      user_data)
 {
   GtkSourceSearchContext *search_context = (GtkSourceSearchContext *)source;
-  GbEditorVim *vim = user_data;
+  GbSourceVim *vim = user_data;
   GtkTextIter match_begin;
   GtkTextIter match_end;
 
   g_return_if_fail (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
   g_return_if_fail (G_IS_ASYNC_RESULT (result));
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   if (gtk_source_search_context_backward_finish (search_context, result,
                                                  &match_begin, &match_end,
@@ -2297,17 +2297,17 @@ gb_editor_vim_search_cb (GObject      *source,
 }
 
 static void
-gb_editor_vim_reverse_search (GbEditorVim *vim)
+gb_source_vim_reverse_search (GbSourceVim *vim)
 {
   GtkTextIter begin;
   GtkTextIter end;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view))
     return;
 
-  if (gb_editor_vim_select_current_word (vim, &begin, &end))
+  if (gb_source_vim_select_current_word (vim, &begin, &end))
     {
       GtkTextIter start_iter;
       gchar *text;
@@ -2332,7 +2332,7 @@ gb_editor_vim_reverse_search (GbEditorVim *vim)
       gtk_source_search_context_backward_async (vim->priv->search_context,
                                                 &start_iter,
                                                 NULL,
-                                                gb_editor_vim_search_cb,
+                                                gb_source_vim_search_cb,
                                                 g_object_ref (vim));
 
       g_free (text);
@@ -2340,7 +2340,7 @@ gb_editor_vim_reverse_search (GbEditorVim *vim)
 }
 
 static void
-gb_editor_vim_search (GbEditorVim *vim)
+gb_source_vim_search (GbSourceVim *vim)
 {
   GtkTextIter iter;
   GtkTextIter selection;
@@ -2348,16 +2348,16 @@ gb_editor_vim_search (GbEditorVim *vim)
   gboolean has_selection;
   gchar *text = NULL;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view))
     return;
 
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   if (has_selection)
     text = gtk_text_iter_get_slice (&iter, &selection);
-  else if (gb_editor_vim_select_current_word (vim, &iter, &selection))
+  else if (gb_source_vim_select_current_word (vim, &iter, &selection))
     text = gtk_text_iter_get_slice (&iter, &selection);
   else
     return;
@@ -2380,14 +2380,14 @@ gb_editor_vim_search (GbEditorVim *vim)
   gtk_source_search_context_forward_async (vim->priv->search_context,
                                            &start_iter,
                                            NULL,
-                                           gb_editor_vim_search_cb,
+                                           gb_source_vim_search_cb,
                                            g_object_ref (vim));
 
   g_free (text);
 }
 
 static void
-gb_editor_vim_move_to_line_n (GbEditorVim *vim,
+gb_source_vim_move_to_line_n (GbSourceVim *vim,
                               guint        line)
 {
   GtkTextBuffer *buffer;
@@ -2395,10 +2395,10 @@ gb_editor_vim_move_to_line_n (GbEditorVim *vim,
   GtkTextIter iter, selection;
   gboolean has_selection;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-  has_selection = gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   if (is_single_line_selection (&iter, &selection))
     {
@@ -2412,15 +2412,15 @@ gb_editor_vim_move_to_line_n (GbEditorVim *vim,
 
   if (has_selection)
     {
-      gb_editor_vim_select_range (vim, &iter, &selection);
-      gb_editor_vim_ensure_anchor_selected (vim);
+      gb_source_vim_select_range (vim, &iter, &selection);
+      gb_source_vim_ensure_anchor_selected (vim);
     }
   else
     {
-      gb_editor_vim_select_range (vim, &iter, &iter);
+      gb_source_vim_select_range (vim, &iter, &iter);
     }
 
-  vim->priv->target_line_offset = gb_editor_vim_get_line_offset (vim);
+  vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
@@ -2429,7 +2429,7 @@ gb_editor_vim_move_to_line_n (GbEditorVim *vim,
 static gboolean
 reshow_highlight (gpointer data)
 {
-  GbEditorVim *vim = data;
+  GbSourceVim *vim = data;
   GtkSourceView *source_view;
 
   vim->priv->anim_timeout = 0;
@@ -2441,14 +2441,14 @@ reshow_highlight (gpointer data)
 }
 
 static void
-gb_editor_vim_move_to_iter (GbEditorVim *vim,
+gb_source_vim_move_to_iter (GbSourceVim *vim,
                             GtkTextIter *iter,
                             gdouble      yalign)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
   g_assert (iter);
   g_assert (yalign >= 0.0);
   g_assert (yalign <= 1.0);
@@ -2474,7 +2474,7 @@ gb_editor_vim_move_to_iter (GbEditorVim *vim,
   if (gtk_text_buffer_get_has_selection (buffer))
     {
       gtk_text_buffer_move_mark (buffer, insert, iter);
-      gb_editor_vim_ensure_anchor_selected (vim);
+      gb_source_vim_ensure_anchor_selected (vim);
     }
   else
     gtk_text_buffer_select_range (buffer, iter, iter);
@@ -2484,8 +2484,8 @@ gb_editor_vim_move_to_iter (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_move_page (GbEditorVim                 *vim,
-                         GbEditorVimPageDirectionType direction)
+gb_source_vim_move_page (GbSourceVim                 *vim,
+                         GbSourceVimPageDirectionType direction)
 {
   GdkRectangle rect;
   GtkTextIter iter_top, iter_bottom, iter_current;
@@ -2494,7 +2494,7 @@ gb_editor_vim_move_page (GbEditorVim                 *vim,
   GtkTextBuffer *buffer;
   gfloat yalign = 0.0;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   gtk_text_view_get_visible_rect (vim->priv->text_view, &rect);
   gtk_text_view_get_iter_at_location (vim->priv->text_view, &iter_top,
@@ -2509,8 +2509,8 @@ gb_editor_vim_move_page (GbEditorVim                 *vim,
   line_bottom = gtk_text_iter_get_line (&iter_bottom);
   line_current = gtk_text_iter_get_line (&iter_current);
 
-  if (direction == GB_EDITOR_VIM_HALF_PAGE_UP ||
-      direction == GB_EDITOR_VIM_HALF_PAGE_DOWN)
+  if (direction == GB_SOURCE_VIM_HALF_PAGE_UP ||
+      direction == GB_SOURCE_VIM_HALF_PAGE_DOWN)
     {
       /* keep current yalign */
       if (line_bottom != line_top)
@@ -2520,17 +2520,17 @@ gb_editor_vim_move_page (GbEditorVim                 *vim,
 
   switch (direction)
     {
-    case GB_EDITOR_VIM_HALF_PAGE_UP:
+    case GB_SOURCE_VIM_HALF_PAGE_UP:
       line = line_current - (line_bottom - line_top) / 2;
       break;
-    case GB_EDITOR_VIM_HALF_PAGE_DOWN:
+    case GB_SOURCE_VIM_HALF_PAGE_DOWN:
       line = line_current + (line_bottom - line_top) / 2;
       break;
-    case GB_EDITOR_VIM_PAGE_UP:
+    case GB_SOURCE_VIM_PAGE_UP:
       yalign = 1.0;
       line = gtk_text_iter_get_line (&iter_top) + SCROLL_OFF;
       break;
-    case GB_EDITOR_VIM_PAGE_DOWN:
+    case GB_SOURCE_VIM_PAGE_DOWN:
       yalign = 0.0;
       /*
        * rect.y + rect.height is the next line after the end of the buffer so
@@ -2549,17 +2549,17 @@ gb_editor_vim_move_page (GbEditorVim                 *vim,
         !gtk_text_iter_forward_char (&iter_current))
       break;
 
-  gb_editor_vim_move_to_iter (vim, &iter_current, yalign);
+  gb_source_vim_move_to_iter (vim, &iter_current, yalign);
 }
 
 static void
-gb_editor_vim_indent (GbEditorVim *vim)
+gb_source_vim_indent (GbSourceVim *vim)
 {
-#ifndef GB_EDITOR_VIM_EXTERNAL
+#ifndef GB_SOURCE_VIM_EXTERNAL
   GbSourceView *view;
   GtkTextBuffer *buffer;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   if (!GB_IS_SOURCE_VIEW (vim->priv->text_view))
     return;
@@ -2573,13 +2573,13 @@ gb_editor_vim_indent (GbEditorVim *vim)
 }
 
 static void
-gb_editor_vim_unindent (GbEditorVim *vim)
+gb_source_vim_unindent (GbSourceVim *vim)
 {
-#ifndef GB_EDITOR_VIM_EXTERNAL
+#ifndef GB_SOURCE_VIM_EXTERNAL
   GbSourceView *view;
   GtkTextBuffer *buffer;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   if (!GB_IS_SOURCE_VIEW (vim->priv->text_view))
     return;
@@ -2593,7 +2593,7 @@ gb_editor_vim_unindent (GbEditorVim *vim)
 }
 
 static void
-gb_editor_vim_add (GbEditorVim *vim,
+gb_source_vim_add (GbSourceVim *vim,
                    gint         by_count)
 {
   GtkTextBuffer *buffer;
@@ -2637,9 +2637,9 @@ cleanup:
   g_free (replace);
 }
 
-static GbEditorVimPhraseStatus
-gb_editor_vim_parse_phrase (GbEditorVim       *vim,
-                            GbEditorVimPhrase *phrase)
+static GbSourceVimPhraseStatus
+gb_source_vim_parse_phrase (GbSourceVim       *vim,
+                            GbSourceVimPhrase *phrase)
 {
   const gchar *str;
   guint count = 0;
@@ -2647,7 +2647,7 @@ gb_editor_vim_parse_phrase (GbEditorVim       *vim,
   gchar modifier;
   gint n_scanned;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
   g_assert (phrase);
 
   phrase->key = 0;
@@ -2664,7 +2664,7 @@ gb_editor_vim_parse_phrase (GbEditorVim       *vim,
       phrase->key = key;
       phrase->modifier = modifier;
 
-      return GB_EDITOR_VIM_PHRASE_SUCCESS;
+      return GB_SOURCE_VIM_PHRASE_SUCCESS;
     }
 
   if (n_scanned == 2)
@@ -2673,7 +2673,7 @@ gb_editor_vim_parse_phrase (GbEditorVim       *vim,
       phrase->key = key;
       phrase->modifier = 0;
 
-      return GB_EDITOR_VIM_PHRASE_SUCCESS;
+      return GB_SOURCE_VIM_PHRASE_SUCCESS;
     }
 
   /* Special case for "0" command. */
@@ -2683,11 +2683,11 @@ gb_editor_vim_parse_phrase (GbEditorVim       *vim,
       phrase->count = 0;
       phrase->modifier = 0;
 
-      return GB_EDITOR_VIM_PHRASE_SUCCESS;
+      return GB_SOURCE_VIM_PHRASE_SUCCESS;
     }
 
   if (n_scanned == 1)
-    return GB_EDITOR_VIM_PHRASE_NEED_MORE;
+    return GB_SOURCE_VIM_PHRASE_NEED_MORE;
 
   n_scanned = sscanf (str, "%c%u%c", &key, &count, &modifier);
 
@@ -2697,12 +2697,12 @@ gb_editor_vim_parse_phrase (GbEditorVim       *vim,
       phrase->key = key;
       phrase->modifier = modifier;
 
-      return GB_EDITOR_VIM_PHRASE_SUCCESS;
+      return GB_SOURCE_VIM_PHRASE_SUCCESS;
     }
 
   /* there's a count following key - the modifier is non-optional then */
   if (n_scanned == 2)
-    return GB_EDITOR_VIM_PHRASE_NEED_MORE;
+    return GB_SOURCE_VIM_PHRASE_NEED_MORE;
 
   n_scanned = sscanf (str, "%c%c", &key, &modifier);
 
@@ -2712,7 +2712,7 @@ gb_editor_vim_parse_phrase (GbEditorVim       *vim,
       phrase->key = key;
       phrase->modifier = modifier;
 
-      return GB_EDITOR_VIM_PHRASE_SUCCESS;
+      return GB_SOURCE_VIM_PHRASE_SUCCESS;
     }
 
   if (n_scanned == 1)
@@ -2721,22 +2721,22 @@ gb_editor_vim_parse_phrase (GbEditorVim       *vim,
       phrase->key = key;
       phrase->modifier = 0;
 
-      return GB_EDITOR_VIM_PHRASE_SUCCESS;
+      return GB_SOURCE_VIM_PHRASE_SUCCESS;
     }
 
-  return GB_EDITOR_VIM_PHRASE_FAILED;
+  return GB_SOURCE_VIM_PHRASE_FAILED;
 }
 
 static gboolean
-gb_editor_vim_handle_normal (GbEditorVim *vim,
+gb_source_vim_handle_normal (GbSourceVim *vim,
                              GdkEventKey *event)
 {
-  GbEditorVimCommand *cmd;
-  GbEditorVimPhraseStatus status;
-  GbEditorVimPhrase phrase;
+  GbSourceVimCommand *cmd;
+  GbSourceVimPhraseStatus status;
+  GbSourceVimPhrase phrase;
   GtkTextBuffer *buffer;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
   g_assert (event);
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
@@ -2748,26 +2748,26 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
         break;
       /* Fall through */
     case GDK_KEY_Escape:
-      gb_editor_vim_clear_selection (vim);
-      gb_editor_vim_clear_phrase (vim);
+      gb_source_vim_clear_selection (vim);
+      gb_source_vim_clear_phrase (vim);
       return TRUE;
 
     case GDK_KEY_KP_Enter:
     case GDK_KEY_Return:
-      gb_editor_vim_clear_phrase (vim);
-      gb_editor_vim_move_down (vim);
+      gb_source_vim_clear_phrase (vim);
+      gb_source_vim_move_down (vim);
       return TRUE;
 
     case GDK_KEY_BackSpace:
-      gb_editor_vim_clear_phrase (vim);
+      gb_source_vim_clear_phrase (vim);
       if (!vim->priv->phrase->len)
-        gb_editor_vim_move_backward (vim);
+        gb_source_vim_move_backward (vim);
       return TRUE;
 
     case GDK_KEY_colon:
       if (!vim->priv->phrase->len)
         {
-          gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_COMMAND);
+          gb_source_vim_set_mode (vim, GB_SOURCE_VIM_COMMAND);
           return TRUE;
         }
       break;
@@ -2779,16 +2779,16 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
           GtkTextIter begin;
           GtkTextIter end;
 
-          gb_editor_vim_clear_phrase (vim);
-          gb_editor_vim_clear_selection (vim);
-          if (gb_editor_vim_select_current_word (vim, &begin, &end))
+          gb_source_vim_clear_phrase (vim);
+          gb_source_vim_clear_selection (vim);
+          if (gb_source_vim_select_current_word (vim, &begin, &end))
             {
               if (gtk_text_iter_backward_char (&begin) &&
                   ('-' != gtk_text_iter_get_char (&begin)))
                 gtk_text_iter_forward_char (&begin);
               gtk_text_buffer_select_range (buffer, &begin, &end);
-              gb_editor_vim_add (vim, (event->keyval == GDK_KEY_a) ? 1 : -1);
-              gb_editor_vim_clear_selection (vim);
+              gb_source_vim_add (vim, (event->keyval == GDK_KEY_a) ? 1 : -1);
+              gb_source_vim_clear_selection (vim);
             }
           return TRUE;
         }
@@ -2797,8 +2797,8 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
     case GDK_KEY_b:
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
-          gb_editor_vim_clear_phrase (vim);
-          gb_editor_vim_move_page (vim, GB_EDITOR_VIM_PAGE_UP);
+          gb_source_vim_clear_phrase (vim);
+          gb_source_vim_move_page (vim, GB_SOURCE_VIM_PAGE_UP);
           return TRUE;
         }
       break;
@@ -2806,8 +2806,8 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
     case GDK_KEY_d:
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
-          gb_editor_vim_clear_phrase (vim);
-          gb_editor_vim_move_page (vim, GB_EDITOR_VIM_HALF_PAGE_DOWN);
+          gb_source_vim_clear_phrase (vim);
+          gb_source_vim_move_page (vim, GB_SOURCE_VIM_HALF_PAGE_DOWN);
           return TRUE;
         }
       break;
@@ -2815,8 +2815,8 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
     case GDK_KEY_f:
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
-          gb_editor_vim_clear_phrase (vim);
-          gb_editor_vim_move_page (vim, GB_EDITOR_VIM_PAGE_DOWN);
+          gb_source_vim_clear_phrase (vim);
+          gb_source_vim_move_page (vim, GB_SOURCE_VIM_PAGE_DOWN);
           return TRUE;
         }
       break;
@@ -2824,8 +2824,8 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
     case GDK_KEY_r:
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
-          gb_editor_vim_clear_phrase (vim);
-          gb_editor_vim_redo (vim);
+          gb_source_vim_clear_phrase (vim);
+          gb_source_vim_redo (vim);
           return TRUE;
         }
       break;
@@ -2833,8 +2833,8 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
     case GDK_KEY_u:
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
-          gb_editor_vim_clear_phrase (vim);
-          gb_editor_vim_move_page (vim, GB_EDITOR_VIM_HALF_PAGE_UP);
+          gb_source_vim_clear_phrase (vim);
+          gb_source_vim_move_page (vim, GB_SOURCE_VIM_HALF_PAGE_UP);
           return TRUE;
         }
       break;
@@ -2858,40 +2858,40 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
       g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_PHRASE]);
     }
 
-  status = gb_editor_vim_parse_phrase (vim, &phrase);
+  status = gb_source_vim_parse_phrase (vim, &phrase);
 
   switch (status)
     {
-    case GB_EDITOR_VIM_PHRASE_SUCCESS:
+    case GB_SOURCE_VIM_PHRASE_SUCCESS:
       cmd = g_hash_table_lookup (gCommands, GINT_TO_POINTER (phrase.key));
       if (!cmd)
         {
-          gb_editor_vim_clear_phrase (vim);
+          gb_source_vim_clear_phrase (vim);
           break;
         }
 
-      if (cmd->flags & GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER &&
-          !((cmd->flags & GB_EDITOR_VIM_COMMAND_FLAG_VISUAL) &&
+      if (cmd->flags & GB_SOURCE_VIM_COMMAND_FLAG_REQUIRES_MODIFIER &&
+          !((cmd->flags & GB_SOURCE_VIM_COMMAND_FLAG_VISUAL) &&
             gtk_text_buffer_get_has_selection (buffer)) &&
           !phrase.modifier)
         break;
 
-      gb_editor_vim_clear_phrase (vim);
+      gb_source_vim_clear_phrase (vim);
 
       gtk_text_buffer_begin_user_action (buffer);
       cmd->func (vim, phrase.count, phrase.modifier);
-      if (cmd->flags & GB_EDITOR_VIM_COMMAND_FLAG_VISUAL)
-        gb_editor_vim_clear_selection (vim);
+      if (cmd->flags & GB_SOURCE_VIM_COMMAND_FLAG_VISUAL)
+        gb_source_vim_clear_selection (vim);
       gtk_text_buffer_end_user_action (buffer);
 
       break;
 
-    case GB_EDITOR_VIM_PHRASE_NEED_MORE:
+    case GB_SOURCE_VIM_PHRASE_NEED_MORE:
       break;
 
     default:
-    case GB_EDITOR_VIM_PHRASE_FAILED:
-      gb_editor_vim_clear_phrase (vim);
+    case GB_SOURCE_VIM_PHRASE_FAILED:
+      gb_source_vim_clear_phrase (vim);
       break;
     }
 
@@ -2899,7 +2899,7 @@ gb_editor_vim_handle_normal (GbEditorVim *vim,
 }
 
 static gboolean
-gb_editor_vim_handle_insert (GbEditorVim *vim,
+gb_source_vim_handle_insert (GbSourceVim *vim,
                              GdkEventKey *event)
 {
   switch (event->keyval)
@@ -2913,8 +2913,8 @@ gb_editor_vim_handle_insert (GbEditorVim *vim,
        * First move back onto the last character we entered, and then
        * return to NORMAL mode.
        */
-      gb_editor_vim_move_backward (vim);
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+      gb_source_vim_move_backward (vim);
+      gb_source_vim_set_mode (vim, GB_SOURCE_VIM_NORMAL);
       return TRUE;
 
     case GDK_KEY_u:
@@ -2923,7 +2923,7 @@ gb_editor_vim_handle_insert (GbEditorVim *vim,
        */
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
-          gb_editor_vim_delete_to_line_start (vim);
+          gb_source_vim_delete_to_line_start (vim);
           return TRUE;
         }
 
@@ -2937,7 +2937,7 @@ gb_editor_vim_handle_insert (GbEditorVim *vim,
 }
 
 static gboolean
-gb_editor_vim_handle_command (GbEditorVim *vim,
+gb_source_vim_handle_command (GbSourceVim *vim,
                               GdkEventKey *event)
 {
   /*
@@ -2955,7 +2955,7 @@ gb_editor_vim_handle_command (GbEditorVim *vim,
       /*
        * Escape back into NORMAL mode.
        */
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+      gb_source_vim_set_mode (vim, GB_SOURCE_VIM_NORMAL);
       return TRUE;
 
     default:
@@ -2974,28 +2974,28 @@ gb_editor_vim_handle_command (GbEditorVim *vim,
 }
 
 static gboolean
-gb_editor_vim_key_press_event_cb (GtkTextView *text_view,
+gb_source_vim_key_press_event_cb (GtkTextView *text_view,
                                   GdkEventKey *event,
-                                  GbEditorVim *vim)
+                                  GbSourceVim *vim)
 {
   gboolean ret;
 
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
   g_return_val_if_fail (event, FALSE);
-  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), FALSE);
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
 
   switch (vim->priv->mode)
     {
-    case GB_EDITOR_VIM_NORMAL:
-      ret = gb_editor_vim_handle_normal (vim, event);
+    case GB_SOURCE_VIM_NORMAL:
+      ret = gb_source_vim_handle_normal (vim, event);
       break;
 
-    case GB_EDITOR_VIM_INSERT:
-      ret = gb_editor_vim_handle_insert (vim, event);
+    case GB_SOURCE_VIM_INSERT:
+      ret = gb_source_vim_handle_insert (vim, event);
       break;
 
-    case GB_EDITOR_VIM_COMMAND:
-      ret = gb_editor_vim_handle_command (vim, event);
+    case GB_SOURCE_VIM_COMMAND:
+      ret = gb_source_vim_handle_command (vim, event);
       break;
 
     default:
@@ -3006,32 +3006,32 @@ gb_editor_vim_key_press_event_cb (GtkTextView *text_view,
 }
 
 static gboolean
-gb_editor_vim_focus_in_event_cb (GtkTextView *text_view,
+gb_source_vim_focus_in_event_cb (GtkTextView *text_view,
                                  GdkEvent    *event,
-                                 GbEditorVim *vim)
+                                 GbSourceVim *vim)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
   g_return_val_if_fail (event, FALSE);
-  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), FALSE);
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
 
-  if (vim->priv->mode == GB_EDITOR_VIM_COMMAND)
-    gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+  if (vim->priv->mode == GB_SOURCE_VIM_COMMAND)
+    gb_source_vim_set_mode (vim, GB_SOURCE_VIM_NORMAL);
 
   return FALSE;
 }
 
 static void
-gb_editor_vim_mark_set_cb (GtkTextBuffer *buffer,
+gb_source_vim_mark_set_cb (GtkTextBuffer *buffer,
                            GtkTextIter   *iter,
                            GtkTextMark   *mark,
-                           GbEditorVim   *vim)
+                           GbSourceVim   *vim)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (iter);
   g_return_if_fail (GTK_IS_TEXT_MARK (mark));
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
-  if (vim->priv->mode == GB_EDITOR_VIM_INSERT)
+  if (vim->priv->mode == GB_SOURCE_VIM_INSERT)
     return;
 
   if (mark != gtk_text_buffer_get_insert (buffer))
@@ -3050,10 +3050,10 @@ gb_editor_vim_mark_set_cb (GtkTextBuffer *buffer,
 }
 
 static void
-gb_editor_vim_delete_range_cb (GtkTextBuffer *buffer,
+gb_source_vim_delete_range_cb (GtkTextBuffer *buffer,
                                GtkTextIter   *begin,
                                GtkTextIter   *end,
-                               GbEditorVim   *vim)
+                               GbSourceVim   *vim)
 {
   GtkTextIter iter;
   GtkTextMark *insert;
@@ -3064,9 +3064,9 @@ gb_editor_vim_delete_range_cb (GtkTextBuffer *buffer,
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (begin);
   g_return_if_fail (end);
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
-  if (vim->priv->mode == GB_EDITOR_VIM_INSERT)
+  if (vim->priv->mode == GB_SOURCE_VIM_INSERT)
     return;
 
   /*
@@ -3085,7 +3085,7 @@ gb_editor_vim_delete_range_cb (GtkTextBuffer *buffer,
   if (line >= begin_line && line <= end_line)
     {
       if (gtk_text_iter_ends_line (end))
-        gb_editor_vim_move_line_end (vim);
+        gb_source_vim_move_line_end (vim);
     }
 }
 
@@ -3100,7 +3100,7 @@ str_compare_qsort (const void *aptr,
 }
 
 static void
-gb_editor_vim_op_sort (GbEditorVim *vim,
+gb_source_vim_op_sort (GbSourceVim *vim,
                        const gchar *command_text)
 {
   GtkTextBuffer *buffer;
@@ -3112,7 +3112,7 @@ gb_editor_vim_op_sort (GbEditorVim *vim,
   gchar *text;
   gchar **parts;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
@@ -3148,11 +3148,11 @@ gb_editor_vim_op_sort (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_connect (GbEditorVim *vim)
+gb_source_vim_connect (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
   g_return_if_fail (!vim->priv->connected);
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
@@ -3160,25 +3160,25 @@ gb_editor_vim_connect (GbEditorVim *vim)
   vim->priv->key_press_event_handler =
     g_signal_connect (vim->priv->text_view,
                       "key-press-event",
-                      G_CALLBACK (gb_editor_vim_key_press_event_cb),
+                      G_CALLBACK (gb_source_vim_key_press_event_cb),
                       vim);
 
   vim->priv->focus_in_event_handler =
     g_signal_connect (vim->priv->text_view,
                       "focus-in-event",
-                      G_CALLBACK (gb_editor_vim_focus_in_event_cb),
+                      G_CALLBACK (gb_source_vim_focus_in_event_cb),
                       vim);
 
   vim->priv->mark_set_handler =
     g_signal_connect_after (buffer,
                             "mark-set",
-                            G_CALLBACK (gb_editor_vim_mark_set_cb),
+                            G_CALLBACK (gb_source_vim_mark_set_cb),
                             vim);
 
   vim->priv->delete_range_handler =
     g_signal_connect_after (buffer,
                             "delete-range",
-                            G_CALLBACK (gb_editor_vim_delete_range_cb),
+                            G_CALLBACK (gb_source_vim_delete_range_cb),
                             vim);
 
   if (GTK_SOURCE_IS_BUFFER (buffer))
@@ -3186,18 +3186,18 @@ gb_editor_vim_connect (GbEditorVim *vim)
       gtk_source_search_context_new (GTK_SOURCE_BUFFER (buffer),
                                      vim->priv->search_settings);
 
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+  gb_source_vim_set_mode (vim, GB_SOURCE_VIM_NORMAL);
 
   vim->priv->connected = TRUE;
 }
 
 static void
-gb_editor_vim_disconnect (GbEditorVim *vim)
+gb_source_vim_disconnect (GbSourceVim *vim)
 {
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
   g_return_if_fail (vim->priv->connected);
 
-  if (vim->priv->mode == GB_EDITOR_VIM_NORMAL)
+  if (vim->priv->mode == GB_SOURCE_VIM_NORMAL)
     gtk_text_view_set_overwrite (vim->priv->text_view, FALSE);
 
   g_signal_handler_disconnect (vim->priv->text_view,
@@ -3224,20 +3224,20 @@ gb_editor_vim_disconnect (GbEditorVim *vim)
 }
 
 gboolean
-gb_editor_vim_get_enabled (GbEditorVim *vim)
+gb_source_vim_get_enabled (GbSourceVim *vim)
 {
-  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), FALSE);
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
 
   return vim->priv->enabled;
 }
 
 void
-gb_editor_vim_set_enabled (GbEditorVim *vim,
+gb_source_vim_set_enabled (GbSourceVim *vim,
                            gboolean     enabled)
 {
-  GbEditorVimPrivate *priv;
+  GbSourceVimPrivate *priv;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   priv = vim->priv;
 
@@ -3246,12 +3246,12 @@ gb_editor_vim_set_enabled (GbEditorVim *vim,
 
   if (enabled)
     {
-      gb_editor_vim_connect (vim);
+      gb_source_vim_connect (vim);
       priv->enabled = TRUE;
     }
   else
     {
-      gb_editor_vim_disconnect (vim);
+      gb_source_vim_disconnect (vim);
       priv->enabled = FALSE;
     }
 
@@ -3259,20 +3259,20 @@ gb_editor_vim_set_enabled (GbEditorVim *vim,
 }
 
 GtkWidget *
-gb_editor_vim_get_text_view (GbEditorVim *vim)
+gb_source_vim_get_text_view (GbSourceVim *vim)
 {
-  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), NULL);
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), NULL);
 
   return (GtkWidget *)vim->priv->text_view;
 }
 
 static void
-gb_editor_vim_set_text_view (GbEditorVim *vim,
+gb_source_vim_set_text_view (GbSourceVim *vim,
                              GtkTextView *text_view)
 {
-  GbEditorVimPrivate *priv;
+  GbSourceVimPrivate *priv;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
   priv = vim->priv;
@@ -3283,7 +3283,7 @@ gb_editor_vim_set_text_view (GbEditorVim *vim,
   if (priv->text_view)
     {
       if (priv->enabled)
-        gb_editor_vim_disconnect (vim);
+        gb_source_vim_disconnect (vim);
       g_object_remove_weak_pointer (G_OBJECT (priv->text_view),
                                     (gpointer *)&priv->text_view);
       priv->text_view = NULL;
@@ -3295,21 +3295,21 @@ gb_editor_vim_set_text_view (GbEditorVim *vim,
       g_object_add_weak_pointer (G_OBJECT (text_view),
                                  (gpointer *)&priv->text_view);
       if (priv->enabled)
-        gb_editor_vim_connect (vim);
+        gb_source_vim_connect (vim);
     }
 
   g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_TEXT_VIEW]);
 }
 
 static void
-gb_editor_vim_op_filetype (GbEditorVim *vim,
+gb_source_vim_op_filetype (GbSourceVim *vim,
                            const gchar *name)
 {
   GtkSourceLanguageManager *manager;
   GtkSourceLanguage *language;
   GtkTextBuffer *buffer;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
   g_assert (g_str_has_prefix (name, "set filetype="));
 
   name += strlen ("set filetype=");
@@ -3327,13 +3327,13 @@ gb_editor_vim_op_filetype (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_op_syntax (GbEditorVim *vim,
+gb_source_vim_op_syntax (GbSourceVim *vim,
                          const gchar *name)
 {
   GtkTextBuffer *buffer;
   gboolean enabled;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
   g_assert (g_str_has_prefix (name, "syntax "));
 
   name += strlen ("syntax ");
@@ -3354,12 +3354,12 @@ gb_editor_vim_op_syntax (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_op_nu (GbEditorVim *vim,
+gb_source_vim_op_nu (GbSourceVim *vim,
                      const gchar *command_text)
 {
   gboolean enable;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
   g_assert (g_str_has_prefix (command_text, "set "));
 
   command_text += strlen ("set ");
@@ -3381,14 +3381,14 @@ gb_editor_vim_op_nu (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_op_colorscheme (GbEditorVim *vim,
+gb_source_vim_op_colorscheme (GbSourceVim *vim,
                               const gchar *name)
 {
   GtkSourceStyleSchemeManager *manager;
   GtkSourceStyleScheme *scheme;
   GtkTextBuffer *buffer;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
   g_assert (g_str_has_prefix (name, "colorscheme "));
 
   name += strlen ("colorscheme ");
@@ -3405,7 +3405,7 @@ gb_editor_vim_op_colorscheme (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_do_search_and_replace (GbEditorVim *vim,
+gb_source_vim_do_search_and_replace (GbSourceVim *vim,
                                      GtkTextIter *begin,
                                      GtkTextIter *end,
                                      const gchar *search_text,
@@ -3414,7 +3414,7 @@ gb_editor_vim_do_search_and_replace (GbEditorVim *vim,
 {
   GError *error = NULL;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
   g_assert (search_text);
   g_assert (replace_text);
   g_assert ((!begin && !end) || (begin && end));
@@ -3450,7 +3450,7 @@ gb_editor_vim_do_search_and_replace (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_op_search_and_replace (GbEditorVim *vim,
+gb_source_vim_op_search_and_replace (GbSourceVim *vim,
                                      const gchar *command)
 {
   GtkTextBuffer *buffer;
@@ -3463,7 +3463,7 @@ gb_editor_vim_op_search_and_replace (GbEditorVim *vim,
   gunichar separator;
   gboolean is_global = FALSE;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
   g_assert (g_str_has_prefix (command, "%s"));
 
   command += strlen ("%s");
@@ -3545,11 +3545,11 @@ gb_editor_vim_op_search_and_replace (GbEditorVim *vim,
       GtkTextIter end;
 
       gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
-      gb_editor_vim_do_search_and_replace (vim, &begin, &end, search_text,
+      gb_source_vim_do_search_and_replace (vim, &begin, &end, search_text,
                                            replace_text, is_global);
     }
   else
-    gb_editor_vim_do_search_and_replace (vim, NULL, NULL, search_text,
+    gb_source_vim_do_search_and_replace (vim, NULL, NULL, search_text,
                                          replace_text, is_global);
 
   g_free (search_text);
@@ -3557,46 +3557,46 @@ gb_editor_vim_op_search_and_replace (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_op_nohl (GbEditorVim *vim,
+gb_source_vim_op_nohl (GbSourceVim *vim,
                        const gchar *command_text)
 {
   if (vim->priv->search_context)
     gtk_source_search_context_set_highlight (vim->priv->search_context, FALSE);
 }
 
-static GbEditorVimOperation
-gb_editor_vim_parse_operation (const gchar *command_text)
+static GbSourceVimOperation
+gb_source_vim_parse_operation (const gchar *command_text)
 {
   g_return_val_if_fail (command_text, NULL);
 
   if (g_str_equal (command_text, "sort"))
-    return gb_editor_vim_op_sort;
+    return gb_source_vim_op_sort;
   else if (g_str_equal (command_text, "nohl"))
-    return gb_editor_vim_op_nohl;
+    return gb_source_vim_op_nohl;
   else if (g_str_has_prefix (command_text, "set filetype="))
-    return gb_editor_vim_op_filetype;
+    return gb_source_vim_op_filetype;
   else if (g_str_has_prefix (command_text, "syntax "))
-    return gb_editor_vim_op_syntax;
+    return gb_source_vim_op_syntax;
   else if (g_str_equal (command_text, "set nu"))
-    return gb_editor_vim_op_nu;
+    return gb_source_vim_op_nu;
   else if (g_str_equal (command_text, "set nonu"))
-    return gb_editor_vim_op_nu;
+    return gb_source_vim_op_nu;
   else if (g_str_has_prefix (command_text, "colorscheme "))
-    return gb_editor_vim_op_colorscheme;
+    return gb_source_vim_op_colorscheme;
   else if (g_str_has_prefix (command_text, "%s"))
-    return gb_editor_vim_op_search_and_replace;
+    return gb_source_vim_op_search_and_replace;
 
   return NULL;
 }
 
 gboolean
-gb_editor_vim_is_command (const gchar *command_text)
+gb_source_vim_is_command (const gchar *command_text)
 {
-  GbEditorVimOperation func;
+  GbSourceVimOperation func;
 
   g_return_val_if_fail (command_text, FALSE);
 
-  func = gb_editor_vim_parse_operation (command_text);
+  func = gb_source_vim_parse_operation (command_text);
   if (func)
     return TRUE;
 
@@ -3604,24 +3604,24 @@ gb_editor_vim_is_command (const gchar *command_text)
 }
 
 gboolean
-gb_editor_vim_execute_command (GbEditorVim *vim,
+gb_source_vim_execute_command (GbSourceVim *vim,
                                const gchar *command)
 {
-  GbEditorVimOperation func;
+  GbSourceVimOperation func;
   gboolean ret = FALSE;
   gchar *copy;
 
-  g_return_val_if_fail (GB_IS_EDITOR_VIM (vim), FALSE);
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
   g_return_val_if_fail (command, FALSE);
 
   copy = g_strstrip (g_strdup (command));
-  func = gb_editor_vim_parse_operation (copy);
+  func = gb_source_vim_parse_operation (copy);
 
   if (func)
     {
       func (vim, command);
-      gb_editor_vim_clear_selection (vim);
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_NORMAL);
+      gb_source_vim_clear_selection (vim);
+      gb_source_vim_set_mode (vim, GB_SOURCE_VIM_NORMAL);
       ret = TRUE;
     }
 
@@ -3631,9 +3631,9 @@ gb_editor_vim_execute_command (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_finalize (GObject *object)
+gb_source_vim_finalize (GObject *object)
 {
-  GbEditorVimPrivate *priv = GB_EDITOR_VIM (object)->priv;
+  GbSourceVimPrivate *priv = GB_SOURCE_VIM (object)->priv;
 
   if (priv->anim_timeout)
     {
@@ -3643,7 +3643,7 @@ gb_editor_vim_finalize (GObject *object)
 
   if (priv->text_view)
     {
-      gb_editor_vim_disconnect (GB_EDITOR_VIM (object));
+      gb_source_vim_disconnect (GB_SOURCE_VIM (object));
       g_object_remove_weak_pointer (G_OBJECT (priv->text_view),
                                     (gpointer *)&priv->text_view);
       priv->text_view = NULL;
@@ -3654,25 +3654,25 @@ gb_editor_vim_finalize (GObject *object)
   g_string_free (priv->phrase, TRUE);
   priv->phrase = NULL;
 
-  G_OBJECT_CLASS (gb_editor_vim_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gb_source_vim_parent_class)->finalize (object);
 }
 
 static void
-gb_editor_vim_get_property (GObject    *object,
+gb_source_vim_get_property (GObject    *object,
                             guint       prop_id,
                             GValue     *value,
                             GParamSpec *pspec)
 {
-  GbEditorVim *vim = GB_EDITOR_VIM (object);
+  GbSourceVim *vim = GB_SOURCE_VIM (object);
 
   switch (prop_id)
     {
     case PROP_ENABLED:
-      g_value_set_boolean (value, gb_editor_vim_get_enabled (vim));
+      g_value_set_boolean (value, gb_source_vim_get_enabled (vim));
       break;
 
     case PROP_MODE:
-      g_value_set_enum (value, gb_editor_vim_get_mode (vim));
+      g_value_set_enum (value, gb_source_vim_get_mode (vim));
       break;
 
     case PROP_PHRASE:
@@ -3680,7 +3680,7 @@ gb_editor_vim_get_property (GObject    *object,
       break;
 
     case PROP_TEXT_VIEW:
-      g_value_set_object (value, gb_editor_vim_get_text_view (vim));
+      g_value_set_object (value, gb_source_vim_get_text_view (vim));
       break;
 
     default:
@@ -3689,21 +3689,21 @@ gb_editor_vim_get_property (GObject    *object,
 }
 
 static void
-gb_editor_vim_set_property (GObject      *object,
+gb_source_vim_set_property (GObject      *object,
                             guint         prop_id,
                             const GValue *value,
                             GParamSpec   *pspec)
 {
-  GbEditorVim *vim = GB_EDITOR_VIM (object);
+  GbSourceVim *vim = GB_SOURCE_VIM (object);
 
   switch (prop_id)
     {
     case PROP_ENABLED:
-      gb_editor_vim_set_enabled (vim, g_value_get_boolean (value));
+      gb_source_vim_set_enabled (vim, g_value_get_boolean (value));
       break;
 
     case PROP_TEXT_VIEW:
-      gb_editor_vim_set_text_view (vim, g_value_get_object (value));
+      gb_source_vim_set_text_view (vim, g_value_get_object (value));
       break;
 
     default:
@@ -3712,7 +3712,7 @@ gb_editor_vim_set_property (GObject      *object,
 }
 
 static void
-gb_editor_vim_cmd_repeat (GbEditorVim *vim,
+gb_source_vim_cmd_repeat (GbSourceVim *vim,
                           guint        count,
                           gchar        modifier)
 {
@@ -3720,7 +3720,7 @@ gb_editor_vim_cmd_repeat (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_cmd_begin_search (GbEditorVim *vim,
+gb_source_vim_cmd_begin_search (GbSourceVim *vim,
                                 guint        count,
                                 gchar        modifier)
 {
@@ -3729,7 +3729,7 @@ gb_editor_vim_cmd_begin_search (GbEditorVim *vim,
   GtkTextIter end;
   gchar *text = NULL;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   if (vim->priv->search_context)
     gtk_source_search_context_set_highlight (vim->priv->search_context, FALSE);
@@ -3748,262 +3748,262 @@ gb_editor_vim_cmd_begin_search (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_cmd_forward_line_end (GbEditorVim *vim,
+gb_source_vim_cmd_forward_line_end (GbSourceVim *vim,
                                     guint        count,
                                     gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_move_line_end (vim);
+  gb_source_vim_move_line_end (vim);
 }
 
 static void
-gb_editor_vim_cmd_backward_0 (GbEditorVim *vim,
+gb_source_vim_cmd_backward_0 (GbSourceVim *vim,
                               guint        count,
                               gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_move_line0 (vim);
+  gb_source_vim_move_line0 (vim);
 }
 
 static void
-gb_editor_vim_cmd_backward_start (GbEditorVim *vim,
+gb_source_vim_cmd_backward_start (GbSourceVim *vim,
                                   guint        count,
                                   gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_move_line_start (vim, FALSE);
+  gb_source_vim_move_line_start (vim, FALSE);
 }
 
 static void
-gb_editor_vim_cmd_backward_paragraph (GbEditorVim *vim,
+gb_source_vim_cmd_backward_paragraph (GbSourceVim *vim,
                                       guint        count,
                                       gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_move_backward_paragraph (vim);
+    gb_source_vim_move_backward_paragraph (vim);
 }
 
 static void
-gb_editor_vim_cmd_forward_paragraph (GbEditorVim *vim,
+gb_source_vim_cmd_forward_paragraph (GbSourceVim *vim,
                                       guint        count,
                                       gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_move_forward_paragraph (vim);
+    gb_source_vim_move_forward_paragraph (vim);
 }
 
 static void
-gb_editor_vim_cmd_match_backward (GbEditorVim *vim,
+gb_source_vim_cmd_match_backward (GbSourceVim *vim,
                                   guint        count,
                                   gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_reverse_search (vim);
+    gb_source_vim_reverse_search (vim);
 }
 
 static void
-gb_editor_vim_cmd_match_forward (GbEditorVim *vim,
+gb_source_vim_cmd_match_forward (GbSourceVim *vim,
                                  guint        count,
                                  gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_search (vim);
+    gb_source_vim_search (vim);
 }
 
 static void
-gb_editor_vim_cmd_indent (GbEditorVim *vim,
+gb_source_vim_cmd_indent (GbSourceVim *vim,
                           guint        count,
                           gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_indent (vim);
+    gb_source_vim_indent (vim);
 
-  gb_editor_vim_clear_selection (vim);
+  gb_source_vim_clear_selection (vim);
 }
 
 static void
-gb_editor_vim_cmd_unindent (GbEditorVim *vim,
+gb_source_vim_cmd_unindent (GbSourceVim *vim,
                             guint        count,
                             gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_unindent (vim);
+    gb_source_vim_unindent (vim);
 
-  gb_editor_vim_clear_selection (vim);
+  gb_source_vim_clear_selection (vim);
 }
 
 static void
-gb_editor_vim_cmd_insert_end (GbEditorVim *vim,
+gb_source_vim_cmd_insert_end (GbSourceVim *vim,
                               guint        count,
                               gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-  gb_editor_vim_clear_selection (vim);
-  gb_editor_vim_move_line_end (vim);
+  gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_clear_selection (vim);
+  gb_source_vim_move_line_end (vim);
 }
 
 static void
-gb_editor_vim_cmd_insert_after (GbEditorVim *vim,
+gb_source_vim_cmd_insert_after (GbSourceVim *vim,
                                 guint        count,
                                 gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-  gb_editor_vim_clear_selection (vim);
-  gb_editor_vim_move_forward (vim);
+  gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_clear_selection (vim);
+  gb_source_vim_move_forward (vim);
 }
 
 static void
-gb_editor_vim_cmd_backward_word (GbEditorVim *vim,
+gb_source_vim_cmd_backward_word (GbSourceVim *vim,
                                  guint        count,
                                  gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_move_backward_word (vim);
+    gb_source_vim_move_backward_word (vim);
 }
 
 static void
-gb_editor_vim_cmd_change (GbEditorVim *vim,
+gb_source_vim_cmd_change (GbSourceVim *vim,
                           guint        count,
                           gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   if (modifier == 'c')
     {
-      gb_editor_vim_cmd_delete (vim, count, 'd');
-      gb_editor_vim_cmd_insert_before_line (vim, 0, '\0');
+      gb_source_vim_cmd_delete (vim, count, 'd');
+      gb_source_vim_cmd_insert_before_line (vim, 0, '\0');
     }
   else if (modifier != 'd')
     {
       /* cd should do nothing */
-      gb_editor_vim_cmd_delete (vim, count, modifier);
-      gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+      gb_source_vim_cmd_delete (vim, count, modifier);
+      gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
     }
 }
 
 static void
-gb_editor_vim_cmd_change_to_end (GbEditorVim *vim,
+gb_source_vim_cmd_change_to_end (GbSourceVim *vim,
                                  guint        count,
                                  gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_cmd_delete_to_end (vim, count, '\0');
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-  gb_editor_vim_move_forward (vim);
+  gb_source_vim_cmd_delete_to_end (vim, count, '\0');
+  gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_move_forward (vim);
 }
 
 static void
-gb_editor_vim_cmd_delete (GbEditorVim *vim,
+gb_source_vim_cmd_delete (GbSourceVim *vim,
                           guint        count,
                           gchar        modifier)
 {
   GtkTextBuffer *buffer;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
   if (!gtk_text_buffer_get_has_selection (buffer))
     {
       if (modifier == 'd')
-        gb_editor_vim_cmd_select_line (vim, count, '\0');
+        gb_source_vim_cmd_select_line (vim, count, '\0');
       else
-        gb_editor_vim_apply_motion (vim, modifier, count);
+        gb_source_vim_apply_motion (vim, modifier, count);
     }
 
-  gb_editor_vim_delete_selection (vim);
+  gb_source_vim_delete_selection (vim);
 }
 
 static void
-gb_editor_vim_cmd_delete_to_end (GbEditorVim *vim,
+gb_source_vim_cmd_delete_to_end (GbSourceVim *vim,
                                  guint        count,
                                  gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
-  gb_editor_vim_clear_selection (vim);
-  gb_editor_vim_select_char (vim);
-  gb_editor_vim_move_line_end (vim);
+  gb_source_vim_clear_selection (vim);
+  gb_source_vim_select_char (vim);
+  gb_source_vim_move_line_end (vim);
   for (i = 1; i < count; i++)
-    gb_editor_vim_move_down (vim);
-  gb_editor_vim_delete_selection (vim);
+    gb_source_vim_move_down (vim);
+  gb_source_vim_delete_selection (vim);
 }
 
 static void
-gb_editor_vim_cmd_forward_word_end (GbEditorVim *vim,
+gb_source_vim_cmd_forward_word_end (GbSourceVim *vim,
                                     guint        count,
                                     gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_move_forward_word_end (vim);
+    gb_source_vim_move_forward_word_end (vim);
 }
 
 static void
-gb_editor_vim_cmd_g (GbEditorVim *vim,
+gb_source_vim_cmd_g (GbSourceVim *vim,
                      guint        count,
                      gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   /*
    * TODO: We have more plumbing todo so we can support commands that are
@@ -4027,8 +4027,8 @@ gb_editor_vim_cmd_g (GbEditorVim *vim,
 
     case 'g':
       /* jump to beginning of buffer. */
-      gb_editor_vim_clear_selection (vim);
-      gb_editor_vim_move_to_line_n (vim, 0);
+      gb_source_vim_clear_selection (vim);
+      gb_source_vim_move_to_line_n (vim, 0);
       break;
 
     default:
@@ -4037,162 +4037,162 @@ gb_editor_vim_cmd_g (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_cmd_goto_line (GbEditorVim *vim,
+gb_source_vim_cmd_goto_line (GbSourceVim *vim,
                              guint        count,
                              gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   if (count)
-    gb_editor_vim_move_to_line_n (vim, count - 1);
+    gb_source_vim_move_to_line_n (vim, count - 1);
   else
-    gb_editor_vim_move_to_end (vim);
+    gb_source_vim_move_to_end (vim);
 }
 
 static void
-gb_editor_vim_cmd_move_backward (GbEditorVim *vim,
+gb_source_vim_cmd_move_backward (GbSourceVim *vim,
                                  guint        count,
                                  gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_move_backward (vim);
+    gb_source_vim_move_backward (vim);
 }
 
 static void
-gb_editor_vim_cmd_insert_start (GbEditorVim *vim,
+gb_source_vim_cmd_insert_start (GbSourceVim *vim,
                                 guint        count,
                                 gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-  gb_editor_vim_clear_selection (vim);
-  gb_editor_vim_move_line_start (vim, TRUE);
+  gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_clear_selection (vim);
+  gb_source_vim_move_line_start (vim, TRUE);
 }
 
 static void
-gb_editor_vim_cmd_insert (GbEditorVim *vim,
+gb_source_vim_cmd_insert (GbSourceVim *vim,
                           guint        count,
                           gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-  gb_editor_vim_clear_selection (vim);
+  gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_clear_selection (vim);
 }
 
 static void
-gb_editor_vim_cmd_move_down (GbEditorVim *vim,
+gb_source_vim_cmd_move_down (GbSourceVim *vim,
                              guint        count,
                              gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_move_down (vim);
+    gb_source_vim_move_down (vim);
 }
 
 static void
-gb_editor_vim_cmd_move_up (GbEditorVim *vim,
+gb_source_vim_cmd_move_up (GbSourceVim *vim,
                            guint        count,
                            gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_move_up (vim);
+    gb_source_vim_move_up (vim);
 }
 
 static void
-gb_editor_vim_cmd_move_forward (GbEditorVim *vim,
+gb_source_vim_cmd_move_forward (GbSourceVim *vim,
                                 guint        count,
                                 gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_move_forward (vim);
+    gb_source_vim_move_forward (vim);
 }
 
 static void
-gb_editor_vim_cmd_insert_before_line (GbEditorVim *vim,
+gb_source_vim_cmd_insert_before_line (GbSourceVim *vim,
                                       guint        count,
                                       gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-  gb_editor_vim_insert_nl_before (vim);
+  gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_insert_nl_before (vim);
 }
 
 static void
-gb_editor_vim_cmd_insert_after_line (GbEditorVim *vim,
+gb_source_vim_cmd_insert_after_line (GbSourceVim *vim,
                                      guint        count,
                                      gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
-  gb_editor_vim_insert_nl_after (vim, TRUE);
+  gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_insert_nl_after (vim, TRUE);
 }
 
 static void
-gb_editor_vim_cmd_paste_after (GbEditorVim *vim,
+gb_source_vim_cmd_paste_after (GbSourceVim *vim,
                                guint        count,
                                gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_paste (vim);
+    gb_source_vim_paste (vim);
 }
 
 static void
-gb_editor_vim_cmd_paste_before (GbEditorVim *vim,
+gb_source_vim_cmd_paste_before (GbSourceVim *vim,
                                 guint        count,
                                 gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   /* TODO: Paste Before intead of after. */
-  gb_editor_vim_cmd_paste_after (vim, count, modifier);
+  gb_source_vim_cmd_paste_after (vim, count, modifier);
 }
 
 static void
-gb_editor_vim_cmd_overwrite (GbEditorVim *vim,
+gb_source_vim_cmd_overwrite (GbSourceVim *vim,
                              guint        count,
                              gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_set_mode (vim, GB_EDITOR_VIM_INSERT);
+  gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
   gtk_text_view_set_overwrite (vim->priv->text_view, TRUE);
 }
 
 static void
-gb_editor_vim_cmd_replace (GbEditorVim *vim,
+gb_source_vim_cmd_replace (GbSourceVim *vim,
                            guint        count,
                            gchar        modifier)
 {
@@ -4200,12 +4200,12 @@ gb_editor_vim_cmd_replace (GbEditorVim *vim,
   GtkTextIter begin, end;
   gboolean at_end;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
   gtk_text_buffer_begin_user_action (buffer);
-  gb_editor_vim_delete_selection (vim);
+  gb_source_vim_delete_selection (vim);
 
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
   gtk_text_iter_forward_char (&begin);
@@ -4221,138 +4221,138 @@ gb_editor_vim_cmd_replace (GbEditorVim *vim,
 
   gtk_text_buffer_insert (buffer, &begin, &modifier, 1);
   if (at_end)
-    gb_editor_vim_move_forward (vim);
+    gb_source_vim_move_forward (vim);
   else
-    gb_editor_vim_move_backward (vim);
+    gb_source_vim_move_backward (vim);
 
   gtk_text_buffer_end_user_action (buffer);
 }
 
 static void
-gb_editor_vim_cmd_substitute (GbEditorVim *vim,
+gb_source_vim_cmd_substitute (GbSourceVim *vim,
                               guint        count,
                               gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_cmd_change (vim, count, 'l');
+  gb_source_vim_cmd_change (vim, count, 'l');
 }
 
 static void
-gb_editor_vim_cmd_undo (GbEditorVim *vim,
+gb_source_vim_cmd_undo (GbSourceVim *vim,
                         guint        count,
                         gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_undo (vim);
+    gb_source_vim_undo (vim);
 }
 
 static void
-gb_editor_vim_cmd_select_line (GbEditorVim *vim,
+gb_source_vim_cmd_select_line (GbSourceVim *vim,
                                guint        count,
                                gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
-  gb_editor_vim_select_line (vim);
+  gb_source_vim_select_line (vim);
   for (i = 1; i < count; i++)
-    gb_editor_vim_move_down (vim);
+    gb_source_vim_move_down (vim);
 }
 
 static void
-gb_editor_vim_cmd_select (GbEditorVim *vim,
+gb_source_vim_cmd_select (GbSourceVim *vim,
                           guint        count,
                           gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
-  gb_editor_vim_select_char (vim);
+  gb_source_vim_select_char (vim);
   for (i = 1; i < count; i++)
-    gb_editor_vim_move_forward (vim);
+    gb_source_vim_move_forward (vim);
 }
 
 static void
-gb_editor_vim_cmd_forward_word (GbEditorVim *vim,
+gb_source_vim_cmd_forward_word (GbSourceVim *vim,
                                 guint        count,
                                 gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_move_forward_word (vim);
+    gb_source_vim_move_forward_word (vim);
 }
 
 static void
-gb_editor_vim_cmd_delete_selection (GbEditorVim *vim,
+gb_source_vim_cmd_delete_selection (GbSourceVim *vim,
                                     guint        count,
                                     gchar        modifier)
 {
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_delete_selection (vim);
+    gb_source_vim_delete_selection (vim);
 }
 
 static void
-gb_editor_vim_cmd_yank (GbEditorVim *vim,
+gb_source_vim_cmd_yank (GbSourceVim *vim,
                         guint        count,
                         gchar        modifier)
 {
   GtkTextBuffer *buffer;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
-  gb_editor_vim_save_position (vim);
+  gb_source_vim_save_position (vim);
 
   if (!gtk_text_buffer_get_has_selection (buffer))
     {
       if (modifier == 'y')
-        gb_editor_vim_cmd_select_line (vim, count, '\0');
+        gb_source_vim_cmd_select_line (vim, count, '\0');
       else
-        gb_editor_vim_apply_motion (vim, modifier, count);
+        gb_source_vim_apply_motion (vim, modifier, count);
     }
 
-  gb_editor_vim_yank (vim);
-  gb_editor_vim_clear_selection (vim);
-  gb_editor_vim_restore_position (vim);
+  gb_source_vim_yank (vim);
+  gb_source_vim_clear_selection (vim);
+  gb_source_vim_restore_position (vim);
 }
 
 static void
-gb_editor_vim_cmd_join (GbEditorVim *vim,
+gb_source_vim_cmd_join (GbSourceVim *vim,
                         guint        count,
                         gchar        modifier)
 {
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_join (vim);
+  gb_source_vim_join (vim);
 }
 
 static void
-gb_editor_vim_cmd_center (GbEditorVim *vim,
+gb_source_vim_cmd_center (GbSourceVim *vim,
                           guint        count,
                           gchar        modifier)
 {
@@ -4360,7 +4360,7 @@ gb_editor_vim_cmd_center (GbEditorVim *vim,
   GtkTextMark *insert;
   GtkTextIter iter;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   insert = gtk_text_buffer_get_insert (buffer);
@@ -4389,16 +4389,16 @@ gb_editor_vim_cmd_center (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_cmd_matching_bracket (GbEditorVim *vim,
+gb_source_vim_cmd_matching_bracket (GbSourceVim *vim,
                                     guint        count,
                                     gchar        modifier)
 {
   GtkTextIter iter;
   GtkTextIter selection;
 
-  g_return_if_fail (GB_IS_EDITOR_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
-  gb_editor_vim_get_selection_bounds (vim, &iter, &selection);
+  gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
   switch (gtk_text_iter_get_char (&iter))
     {
@@ -4408,7 +4408,7 @@ gb_editor_vim_cmd_matching_bracket (GbEditorVim *vim,
     case ']':
     case '(':
     case ')':
-      gb_editor_vim_move_matching_bracket (vim);
+      gb_source_vim_move_matching_bracket (vim);
       break;
 
     default:
@@ -4417,14 +4417,14 @@ gb_editor_vim_cmd_matching_bracket (GbEditorVim *vim,
 }
 
 static void
-gb_editor_vim_cmd_toggle_case (GbEditorVim *vim,
+gb_source_vim_cmd_toggle_case (GbSourceVim *vim,
                                guint        count,
                                gchar        modifier)
 {
   GtkTextBuffer *buffer;
   guint i;
 
-  g_assert (GB_IS_EDITOR_VIM (vim));
+  g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
@@ -4434,20 +4434,20 @@ gb_editor_vim_cmd_toggle_case (GbEditorVim *vim,
     count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_editor_vim_toggle_case (vim);
+    gb_source_vim_toggle_case (vim);
 }
 
 static void
-gb_editor_vim_class_register_command (GbEditorVimClass       *klass,
+gb_source_vim_class_register_command (GbSourceVimClass       *klass,
                                       gchar                   key,
-                                      GbEditorVimCommandFlags flags,
-                                      GbEditorVimCommandType  type,
-                                      GbEditorVimCommandFunc  func)
+                                      GbSourceVimCommandFlags flags,
+                                      GbSourceVimCommandType  type,
+                                      GbSourceVimCommandFunc  func)
 {
-  GbEditorVimCommand *cmd;
+  GbSourceVimCommand *cmd;
   gpointer keyptr = GINT_TO_POINTER ((gint)key);
 
-  g_assert (GB_IS_EDITOR_VIM_CLASS (klass));
+  g_assert (GB_IS_SOURCE_VIM_CLASS (klass));
 
   /*
    * TODO: It would be neat to have gCommands be a field in the klass. We
@@ -4460,7 +4460,7 @@ gb_editor_vim_class_register_command (GbEditorVimClass       *klass,
   if (!gCommands)
     gCommands = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  cmd = g_new0 (GbEditorVimCommand, 1);
+  cmd = g_new0 (GbSourceVimCommand, 1);
   cmd->type = type;
   cmd->key = key;
   cmd->func = func;
@@ -4470,14 +4470,14 @@ gb_editor_vim_class_register_command (GbEditorVimClass       *klass,
 }
 
 static void
-gb_editor_vim_class_init (GbEditorVimClass *klass)
+gb_source_vim_class_init (GbSourceVimClass *klass)
 {
   GObjectClass *object_class;
 
   object_class = G_OBJECT_CLASS (klass);
-  object_class->finalize = gb_editor_vim_finalize;
-  object_class->get_property = gb_editor_vim_get_property;
-  object_class->set_property = gb_editor_vim_set_property;
+  object_class->finalize = gb_source_vim_finalize;
+  object_class->get_property = gb_source_vim_get_property;
+  object_class->set_property = gb_source_vim_set_property;
 
   gParamSpecs [PROP_ENABLED] =
     g_param_spec_boolean ("enabled",
@@ -4493,8 +4493,8 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
     g_param_spec_enum ("mode",
                        _("Mode"),
                        _("The current mode of the widget."),
-                       GB_TYPE_EDITOR_VIM_MODE,
-                       GB_EDITOR_VIM_NORMAL,
+                       GB_TYPE_SOURCE_VIM_MODE,
+                       GB_SOURCE_VIM_NORMAL,
                        (G_PARAM_READABLE |
                         G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_MODE,
@@ -4522,7 +4522,7 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                                    gParamSpecs [PROP_TEXT_VIEW]);
 
   /**
-   * GbEditorVim::begin-search:
+   * GbSourceVim::begin-search:
    * @search_text: (allow none): Optional search text to apply to the search.
    *
    * This signal is emitted when the `/` key is pressed. The consuming code
@@ -4531,9 +4531,9 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
    */
   gSignals [BEGIN_SEARCH] =
     g_signal_new ("begin-search",
-                  GB_TYPE_EDITOR_VIM,
+                  GB_TYPE_SOURCE_VIM,
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GbEditorVimClass, begin_search),
+                  G_STRUCT_OFFSET (GbSourceVimClass, begin_search),
                   NULL,
                   NULL,
                   g_cclosure_marshal_VOID__STRING,
@@ -4542,7 +4542,7 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
                   G_TYPE_STRING);
 
   /**
-   * GbEditorVim::command-visibility-toggled:
+   * GbSourceVim::command-visibility-toggled:
    * @visible: If the the command entry should be visible.
    *
    * The "command-visibility-toggled" signal is emitted when the command entry
@@ -4551,9 +4551,9 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
    */
   gSignals [COMMAND_VISIBILITY_TOGGLED] =
     g_signal_new ("command-visibility-toggled",
-                  GB_TYPE_EDITOR_VIM,
+                  GB_TYPE_SOURCE_VIM,
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GbEditorVimClass,
+                  G_STRUCT_OFFSET (GbSourceVimClass,
                                    command_visibility_toggled),
                   NULL,
                   NULL,
@@ -4566,203 +4566,203 @@ gb_editor_vim_class_init (GbEditorVimClass *klass)
    * Register all of our internal VIM commands. These can be used directly
    * or via phrases.
    */
-  gb_editor_vim_class_register_command (klass, '.',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_repeat);
-  gb_editor_vim_class_register_command (klass, '/',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_JUMP,
-                                        gb_editor_vim_cmd_begin_search);
-  gb_editor_vim_class_register_command (klass, '$',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_forward_line_end);
-  gb_editor_vim_class_register_command (klass, '0',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_backward_0);
-  gb_editor_vim_class_register_command (klass, '^',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_backward_start);
-  gb_editor_vim_class_register_command (klass, '}',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_forward_paragraph);
-  gb_editor_vim_class_register_command (klass, '{',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_backward_paragraph);
-  gb_editor_vim_class_register_command (klass, '#',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_JUMP,
-                                        gb_editor_vim_cmd_match_backward);
-  gb_editor_vim_class_register_command (klass, '*',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_JUMP,
-                                        gb_editor_vim_cmd_match_forward);
-  gb_editor_vim_class_register_command (klass, '>',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_indent);
-  gb_editor_vim_class_register_command (klass, '<',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_unindent);
-  gb_editor_vim_class_register_command (klass, '%',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_JUMP,
-                                        gb_editor_vim_cmd_matching_bracket);
-  gb_editor_vim_class_register_command (klass, '~',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_toggle_case);
-  gb_editor_vim_class_register_command (klass, 'A',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_insert_end);
-  gb_editor_vim_class_register_command (klass, 'a',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_insert_after);
-  gb_editor_vim_class_register_command (klass, 'B',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_backward_word);
-  gb_editor_vim_class_register_command (klass, 'b',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_backward_word);
-  gb_editor_vim_class_register_command (klass, 'c',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER |
-                                        GB_EDITOR_VIM_COMMAND_FLAG_VISUAL,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_change);
-  gb_editor_vim_class_register_command (klass, 'C',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_change_to_end);
-  gb_editor_vim_class_register_command (klass, 'd',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER |
-                                        GB_EDITOR_VIM_COMMAND_FLAG_VISUAL,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_delete);
-  gb_editor_vim_class_register_command (klass, 'D',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_delete_to_end);
-  gb_editor_vim_class_register_command (klass, 'E',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_forward_word_end);
-  gb_editor_vim_class_register_command (klass, 'e',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_forward_word_end);
-  gb_editor_vim_class_register_command (klass, 'G',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_goto_line);
-  gb_editor_vim_class_register_command (klass, 'g',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_g);
-  gb_editor_vim_class_register_command (klass, 'h',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_move_backward);
-  gb_editor_vim_class_register_command (klass, 'I',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_insert_start);
-  gb_editor_vim_class_register_command (klass, 'i',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_insert);
-  gb_editor_vim_class_register_command (klass, 'j',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_move_down);
-  gb_editor_vim_class_register_command (klass, 'J',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_join);
-  gb_editor_vim_class_register_command (klass, 'k',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_LINEWISE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_move_up);
-  gb_editor_vim_class_register_command (klass, 'l',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_move_forward);
-  gb_editor_vim_class_register_command (klass, 'O',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_insert_before_line);
-  gb_editor_vim_class_register_command (klass, 'o',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_insert_after_line);
-  gb_editor_vim_class_register_command (klass, 'P',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_paste_before);
-  gb_editor_vim_class_register_command (klass, 'p',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_paste_after);
-  gb_editor_vim_class_register_command (klass, 'R',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_overwrite);
-  gb_editor_vim_class_register_command (klass, 'r',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_replace);
-  gb_editor_vim_class_register_command (klass, 's',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_substitute);
-  gb_editor_vim_class_register_command (klass, 'u',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_undo);
-  gb_editor_vim_class_register_command (klass, 'V',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_NOOP,
-                                        gb_editor_vim_cmd_select_line);
-  gb_editor_vim_class_register_command (klass, 'v',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_NONE,
-                                        GB_EDITOR_VIM_COMMAND_NOOP,
-                                        gb_editor_vim_cmd_select);
-  gb_editor_vim_class_register_command (klass, 'W',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_forward_word);
-  gb_editor_vim_class_register_command (klass, 'w',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
-                                        GB_EDITOR_VIM_COMMAND_MOVEMENT,
-                                        gb_editor_vim_cmd_forward_word);
-  gb_editor_vim_class_register_command (klass, 'x',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_VISUAL,
-                                        GB_EDITOR_VIM_COMMAND_CHANGE,
-                                        gb_editor_vim_cmd_delete_selection);
-  gb_editor_vim_class_register_command (klass, 'y',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER |
-                                        GB_EDITOR_VIM_COMMAND_FLAG_VISUAL,
-                                        GB_EDITOR_VIM_COMMAND_NOOP,
-                                        gb_editor_vim_cmd_yank);
-  gb_editor_vim_class_register_command (klass, 'z',
-                                        GB_EDITOR_VIM_COMMAND_FLAG_REQUIRES_MODIFIER,
-                                        GB_EDITOR_VIM_COMMAND_NOOP,
-                                        gb_editor_vim_cmd_center);
+  gb_source_vim_class_register_command (klass, '.',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_repeat);
+  gb_source_vim_class_register_command (klass, '/',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_JUMP,
+                                        gb_source_vim_cmd_begin_search);
+  gb_source_vim_class_register_command (klass, '$',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_forward_line_end);
+  gb_source_vim_class_register_command (klass, '0',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_backward_0);
+  gb_source_vim_class_register_command (klass, '^',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_backward_start);
+  gb_source_vim_class_register_command (klass, '}',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_forward_paragraph);
+  gb_source_vim_class_register_command (klass, '{',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_backward_paragraph);
+  gb_source_vim_class_register_command (klass, '#',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_JUMP,
+                                        gb_source_vim_cmd_match_backward);
+  gb_source_vim_class_register_command (klass, '*',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_JUMP,
+                                        gb_source_vim_cmd_match_forward);
+  gb_source_vim_class_register_command (klass, '>',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_indent);
+  gb_source_vim_class_register_command (klass, '<',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_unindent);
+  gb_source_vim_class_register_command (klass, '%',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_JUMP,
+                                        gb_source_vim_cmd_matching_bracket);
+  gb_source_vim_class_register_command (klass, '~',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_toggle_case);
+  gb_source_vim_class_register_command (klass, 'A',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_insert_end);
+  gb_source_vim_class_register_command (klass, 'a',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_insert_after);
+  gb_source_vim_class_register_command (klass, 'B',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_backward_word);
+  gb_source_vim_class_register_command (klass, 'b',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_backward_word);
+  gb_source_vim_class_register_command (klass, 'c',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_REQUIRES_MODIFIER |
+                                        GB_SOURCE_VIM_COMMAND_FLAG_VISUAL,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_change);
+  gb_source_vim_class_register_command (klass, 'C',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_change_to_end);
+  gb_source_vim_class_register_command (klass, 'd',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_REQUIRES_MODIFIER |
+                                        GB_SOURCE_VIM_COMMAND_FLAG_VISUAL,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_delete);
+  gb_source_vim_class_register_command (klass, 'D',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_delete_to_end);
+  gb_source_vim_class_register_command (klass, 'E',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_forward_word_end);
+  gb_source_vim_class_register_command (klass, 'e',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_forward_word_end);
+  gb_source_vim_class_register_command (klass, 'G',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_LINEWISE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_goto_line);
+  gb_source_vim_class_register_command (klass, 'g',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_REQUIRES_MODIFIER,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_g);
+  gb_source_vim_class_register_command (klass, 'h',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_move_backward);
+  gb_source_vim_class_register_command (klass, 'I',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_insert_start);
+  gb_source_vim_class_register_command (klass, 'i',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_insert);
+  gb_source_vim_class_register_command (klass, 'j',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_LINEWISE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_move_down);
+  gb_source_vim_class_register_command (klass, 'J',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_join);
+  gb_source_vim_class_register_command (klass, 'k',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_LINEWISE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_move_up);
+  gb_source_vim_class_register_command (klass, 'l',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_move_forward);
+  gb_source_vim_class_register_command (klass, 'O',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_insert_before_line);
+  gb_source_vim_class_register_command (klass, 'o',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_insert_after_line);
+  gb_source_vim_class_register_command (klass, 'P',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_paste_before);
+  gb_source_vim_class_register_command (klass, 'p',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_paste_after);
+  gb_source_vim_class_register_command (klass, 'R',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_overwrite);
+  gb_source_vim_class_register_command (klass, 'r',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_REQUIRES_MODIFIER,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_replace);
+  gb_source_vim_class_register_command (klass, 's',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_substitute);
+  gb_source_vim_class_register_command (klass, 'u',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_undo);
+  gb_source_vim_class_register_command (klass, 'V',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_NOOP,
+                                        gb_source_vim_cmd_select_line);
+  gb_source_vim_class_register_command (klass, 'v',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_NOOP,
+                                        gb_source_vim_cmd_select);
+  gb_source_vim_class_register_command (klass, 'W',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_forward_word);
+  gb_source_vim_class_register_command (klass, 'w',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
+                                        GB_SOURCE_VIM_COMMAND_MOVEMENT,
+                                        gb_source_vim_cmd_forward_word);
+  gb_source_vim_class_register_command (klass, 'x',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_VISUAL,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_delete_selection);
+  gb_source_vim_class_register_command (klass, 'y',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_REQUIRES_MODIFIER |
+                                        GB_SOURCE_VIM_COMMAND_FLAG_VISUAL,
+                                        GB_SOURCE_VIM_COMMAND_NOOP,
+                                        gb_source_vim_cmd_yank);
+  gb_source_vim_class_register_command (klass, 'z',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_REQUIRES_MODIFIER,
+                                        GB_SOURCE_VIM_COMMAND_NOOP,
+                                        gb_source_vim_cmd_center);
 }
 
 static void
-gb_editor_vim_init (GbEditorVim *vim)
+gb_source_vim_init (GbSourceVim *vim)
 {
-  vim->priv = gb_editor_vim_get_instance_private (vim);
+  vim->priv = gb_source_vim_get_instance_private (vim);
   vim->priv->enabled = FALSE;
   vim->priv->mode = 0;
   vim->priv->phrase = g_string_new (NULL);
@@ -4770,18 +4770,18 @@ gb_editor_vim_init (GbEditorVim *vim)
 }
 
 GType
-gb_editor_vim_mode_get_type (void)
+gb_source_vim_mode_get_type (void)
 {
   static GType type_id;
   static const GEnumValue values[] = {
-    { GB_EDITOR_VIM_NORMAL, "GB_EDITOR_VIM_NORMAL", "NORMAL" },
-    { GB_EDITOR_VIM_INSERT, "GB_EDITOR_VIM_INSERT", "INSERT" },
-    { GB_EDITOR_VIM_COMMAND, "GB_EDITOR_VIM_COMMAND", "COMMAND" },
+    { GB_SOURCE_VIM_NORMAL, "GB_SOURCE_VIM_NORMAL", "NORMAL" },
+    { GB_SOURCE_VIM_INSERT, "GB_SOURCE_VIM_INSERT", "INSERT" },
+    { GB_SOURCE_VIM_COMMAND, "GB_SOURCE_VIM_COMMAND", "COMMAND" },
     { 0 }
   };
 
   if (!type_id)
-    type_id = g_enum_register_static ("GbEditorVimMode", values);
+    type_id = g_enum_register_static ("GbSourceVimMode", values);
 
   return type_id;
 }

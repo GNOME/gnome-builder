@@ -65,7 +65,7 @@ gb_command_vim_provider_lookup (GbCommandProvider *provider,
     return NULL;
 
   /* See if GbEditorVim recognizes this command */
-  if (gb_editor_vim_is_command (command_text))
+  if (gb_source_vim_is_command (command_text))
     return g_object_new (GB_TYPE_COMMAND_VIM,
                          "command-text", command_text,
                          "tab", active_tab,

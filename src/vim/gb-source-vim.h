@@ -1,4 +1,4 @@
-/* gb-editor-vim.h
+/* gb-source-vim.h
  *
  * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
  *
@@ -16,48 +16,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_EDITOR_VIM_H
-#define GB_EDITOR_VIM_H
+#ifndef GB_SOURCE_VIM_H
+#define GB_SOURCE_VIM_H
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_EDITOR_VIM            (gb_editor_vim_get_type())
-#define GB_TYPE_EDITOR_VIM_MODE       (gb_editor_vim_mode_get_type())
-#define GB_EDITOR_VIM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_EDITOR_VIM, GbEditorVim))
-#define GB_EDITOR_VIM_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_EDITOR_VIM, GbEditorVim const))
-#define GB_EDITOR_VIM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_EDITOR_VIM, GbEditorVimClass))
-#define GB_IS_EDITOR_VIM(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_EDITOR_VIM))
-#define GB_IS_EDITOR_VIM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_EDITOR_VIM))
-#define GB_EDITOR_VIM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_EDITOR_VIM, GbEditorVimClass))
+#define GB_TYPE_SOURCE_VIM            (gb_source_vim_get_type())
+#define GB_TYPE_SOURCE_VIM_MODE       (gb_source_vim_mode_get_type())
+#define GB_SOURCE_VIM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SOURCE_VIM, GbSourceVim))
+#define GB_SOURCE_VIM_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SOURCE_VIM, GbSourceVim const))
+#define GB_SOURCE_VIM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_SOURCE_VIM, GbSourceVimClass))
+#define GB_IS_SOURCE_VIM(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_SOURCE_VIM))
+#define GB_IS_SOURCE_VIM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_SOURCE_VIM))
+#define GB_SOURCE_VIM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_SOURCE_VIM, GbSourceVimClass))
 
-typedef struct _GbEditorVim        GbEditorVim;
-typedef struct _GbEditorVimClass   GbEditorVimClass;
-typedef struct _GbEditorVimPrivate GbEditorVimPrivate;
+typedef struct _GbSourceVim        GbSourceVim;
+typedef struct _GbSourceVimClass   GbSourceVimClass;
+typedef struct _GbSourceVimPrivate GbSourceVimPrivate;
 
 typedef enum
 {
-  GB_EDITOR_VIM_NORMAL = 1,
-  GB_EDITOR_VIM_INSERT,
-  GB_EDITOR_VIM_COMMAND,
-} GbEditorVimMode;
+  GB_SOURCE_VIM_NORMAL = 1,
+  GB_SOURCE_VIM_INSERT,
+  GB_SOURCE_VIM_COMMAND,
+} GbSourceVimMode;
 
-struct _GbEditorVim
+struct _GbSourceVim
 {
   GObject parent;
 
   /*< private >*/
-  GbEditorVimPrivate *priv;
+  GbSourceVimPrivate *priv;
 };
 
-struct _GbEditorVimClass
+struct _GbSourceVimClass
 {
   GObjectClass parent_class;
 
-  void (*begin_search)               (GbEditorVim *vim,
+  void (*begin_search)               (GbSourceVim *vim,
                                       const gchar *search_text);
-  void (*command_visibility_toggled) (GbEditorVim *vim,
+  void (*command_visibility_toggled) (GbSourceVim *vim,
                                       gboolean     visibility);
 
   gpointer _padding1;
@@ -68,21 +68,21 @@ struct _GbEditorVimClass
   gpointer _padding6;
 };
 
-GType            gb_editor_vim_get_type        (void) G_GNUC_CONST;
-GType            gb_editor_vim_mode_get_type   (void) G_GNUC_CONST;
-GbEditorVim     *gb_editor_vim_new             (GtkTextView     *text_view);
-GbEditorVimMode  gb_editor_vim_get_mode        (GbEditorVim     *vim);
-void             gb_editor_vim_set_mode        (GbEditorVim     *vim,
-                                                GbEditorVimMode  mode);
-const gchar     *gb_editor_vim_get_phrase      (GbEditorVim     *vim);
-gboolean         gb_editor_vim_get_enabled     (GbEditorVim     *vim);
-void             gb_editor_vim_set_enabled     (GbEditorVim     *vim,
+GType            gb_source_vim_get_type        (void) G_GNUC_CONST;
+GType            gb_source_vim_mode_get_type   (void) G_GNUC_CONST;
+GbSourceVim     *gb_source_vim_new             (GtkTextView     *text_view);
+GbSourceVimMode  gb_source_vim_get_mode        (GbSourceVim     *vim);
+void             gb_source_vim_set_mode        (GbSourceVim     *vim,
+                                                GbSourceVimMode  mode);
+const gchar     *gb_source_vim_get_phrase      (GbSourceVim     *vim);
+gboolean         gb_source_vim_get_enabled     (GbSourceVim     *vim);
+void             gb_source_vim_set_enabled     (GbSourceVim     *vim,
                                                 gboolean         enabled);
-GtkWidget       *gb_editor_vim_get_text_view   (GbEditorVim     *vim);
-gboolean         gb_editor_vim_execute_command (GbEditorVim     *vim,
+GtkWidget       *gb_source_vim_get_text_view   (GbSourceVim     *vim);
+gboolean         gb_source_vim_execute_command (GbSourceVim     *vim,
                                                 const gchar     *command);
-gboolean         gb_editor_vim_is_command      (const gchar     *command_text);
+gboolean         gb_source_vim_is_command      (const gchar     *command_text);
 
 G_END_DECLS
 
-#endif /* GB_EDITOR_VIM_H */
+#endif /* GB_SOURCE_VIM_H */

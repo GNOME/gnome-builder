@@ -108,10 +108,10 @@ gb_command_vim_execute (GbCommand *command)
 
   if (self->priv->tab && self->priv->command_text)
     {
-      GbEditorVim *vim;
+      GbSourceVim *vim;
 
       vim = gb_source_view_get_vim (self->priv->tab->priv->source_view);
-      gb_editor_vim_execute_command (vim, self->priv->command_text);
+      gb_source_vim_execute_command (vim, self->priv->command_text);
     }
 
   return NULL;

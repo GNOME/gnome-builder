@@ -47,7 +47,7 @@ struct _GbSourceViewPrivate
   GtkTextBuffer               *buffer;
   GbSourceAutoIndenter        *auto_indenter;
   GtkSourceCompletionProvider *snippets_provider;
-  GbEditorVim                 *vim;
+  GbSourceVim                 *vim;
 
   guint                        buffer_insert_text_handler;
   guint                        buffer_insert_text_after_handler;
@@ -86,7 +86,7 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
-GbEditorVim *
+GbSourceVim *
 gb_source_view_get_vim (GbSourceView *view)
 {
   g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), NULL);
@@ -1593,7 +1593,7 @@ gb_source_view_init (GbSourceView *view)
                   "source-view", view,
                   NULL);
 
-  view->priv->vim = g_object_new (GB_TYPE_EDITOR_VIM,
+  view->priv->vim = g_object_new (GB_TYPE_SOURCE_VIM,
                                   "enabled", FALSE,
                                   "text-view", view,
                                   NULL);
