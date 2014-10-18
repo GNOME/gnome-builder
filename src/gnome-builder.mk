@@ -77,6 +77,8 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-source-style-scheme-button.h \
 	src/editor/gb-source-style-scheme-widget.c \
 	src/editor/gb-source-style-scheme-widget.h \
+	src/gca/gca-diagnostics.c \
+	src/gca/gca-diagnostics.h \
 	src/gca/gca-service.c \
 	src/gca/gca-service.h \
 	src/markdown/gs-markdown.c \

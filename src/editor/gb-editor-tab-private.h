@@ -105,7 +105,10 @@ struct _GbEditorTabPrivate
    * Code Assistance.
    */
   GcaService *gca_service;
+  gchar      *gca_tmpfile;
+  gint        gca_tmpfd;
   gulong      gca_buffer_changed_handler;
+  guint       gca_parse_timeout;
 
   /*
    * Animation for save progress.
