@@ -15,8 +15,6 @@ libgnome_builder_la_SOURCES = \
 	src/auto-indent/gb-source-auto-indenter-c.h \
 	src/auto-indent/gb-source-auto-indenter-xml.c \
 	src/auto-indent/gb-source-auto-indenter-xml.h \
-	src/code-assistant/gb-source-code-assistant.c \
-	src/code-assistant/gb-source-code-assistant.h \
 	src/commands/gb-command.c \
 	src/commands/gb-command.h \
 	src/commands/gb-command-bar.c \
@@ -43,6 +41,8 @@ libgnome_builder_la_SOURCES = \
 	src/devhelp/gb-devhelp-workspace.h \
 	src/editor/c-parse-helper.c \
 	src/editor/c-parse-helper.h \
+	src/editor/gb-editor-code-assistant.c \
+	src/editor/gb-editor-code-assistant.h \
 	src/editor/gb-editor-commands.c \
 	src/editor/gb-editor-commands.h \
 	src/editor/gb-editor-document.c \
@@ -181,7 +181,6 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/animation \
 	-I$(top_srcdir)/src/app \
 	-I$(top_srcdir)/src/auto-indent \
-	-I$(top_srcdir)/src/code-assistant \
 	-I$(top_srcdir)/src/commands \
 	-I$(top_srcdir)/src/devhelp \
 	-I$(top_srcdir)/src/editor \

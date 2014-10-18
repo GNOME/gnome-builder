@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 
+#include "gb-editor-code-assistant.h"
 #include "gb-editor-file-mark.h"
 #include "gb-editor-file-marks.h"
 #include "gb-editor-tab.h"
@@ -430,6 +431,23 @@ gb_editor_tab_cursor_moved (GbEditorTab      *tab,
   g_free (text);
 
   update_search_position_label (tab);
+}
+
+static void
+gb_editor_tab_language_changed (GbEditorTab     *tab,
+                                GParamSpec      *pspec,
+                                GtkSourceBuffer *buffer)
+{
+  GtkSourceLanguage *language;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+  g_return_if_fail (GTK_SOURCE_IS_BUFFER (buffer));
+
+  language = gtk_source_buffer_get_language (buffer);
+
+  gb_editor_code_assistant_destroy (tab);
+  if (language)
+    gb_editor_code_assistant_init (tab);
 }
 
 static void
@@ -1054,6 +1072,8 @@ transform_file_to_language (GBinding     *binding,
       language = gtk_source_language_manager_guess_language (manager, filename,
                                                              content_type);
 
+      gb_editor_code_assistant_destroy (tab);
+
       /* TODO: This shouldn't be set here, this function shouldn't have
        *       side effects. But easy to plumb it until we clean this up.
        */
@@ -1066,6 +1086,9 @@ transform_file_to_language (GBinding     *binding,
           settings = gb_editor_settings_new_for_language (lang_id);
           gb_editor_tab_set_settings (tab, settings);
           g_object_unref (settings);
+
+          
+          gb_editor_code_assistant_init (tab);
         }
 
       g_free (filename);
@@ -1169,6 +1192,10 @@ gb_editor_tab_constructed (GObject *object)
                   NULL);
 
 
+  g_signal_connect_swapped (priv->document,
+                            "notify::language",
+                            G_CALLBACK (gb_editor_tab_language_changed),
+                            tab);
   g_signal_connect_swapped (priv->document,
                             "modified-changed",
                             G_CALLBACK (gb_editor_tab_modified_changed),
@@ -1408,10 +1435,11 @@ gb_editor_tab_dispose (GObject *object)
 
   g_assert (GB_IS_EDITOR_TAB (tab));
 
+  gb_editor_code_assistant_destroy (tab);
+
   gb_editor_tab_disconnect_settings (tab);
 
   g_clear_object (&tab->priv->change_monitor);
-  g_clear_object (&tab->priv->document);
   g_clear_object (&tab->priv->search_entry_tag);
   g_clear_object (&tab->priv->file);
   g_clear_object (&tab->priv->search_highlighter);
@@ -1419,6 +1447,7 @@ gb_editor_tab_dispose (GObject *object)
   g_clear_object (&tab->priv->search_context);
   g_clear_object (&tab->priv->settings);
   g_clear_object (&tab->priv->words_provider);
+  g_clear_object (&tab->priv->document);
 
   G_OBJECT_CLASS (gb_editor_tab_parent_class)->dispose (object);
 

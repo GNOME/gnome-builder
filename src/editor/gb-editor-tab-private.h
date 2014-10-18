@@ -31,6 +31,7 @@
 #include "gb-source-change-monitor.h"
 #include "gb-source-search-highlighter.h"
 #include "gb-source-view.h"
+#include "gca-service.h"
 #include "gd-tagged-entry.h"
 #include "nautilus-floating-bar.h"
 
@@ -99,6 +100,12 @@ struct _GbEditorTabPrivate
    * Information about our target file and encoding.
    */
   GtkSourceFile *file;
+
+  /*
+   * Code Assistance.
+   */
+  GcaService *gca_service;
+  gulong      gca_buffer_changed_handler;
 
   /*
    * Animation for save progress.
