@@ -71,6 +71,9 @@
         <child>
           <object class="GtkMenuButton" id="gear_menu_button">
             <property name="visible">True</property>
+            <style>
+              <class name="image-button"/>
+            </style>
             <child>
               <object class="GtkImage" id="menu_image">
                 <property name="visible">True</property>
@@ -86,6 +89,9 @@
         <child>
           <object class="GtkMenuButton" id="add_button">
             <property name="visible">True</property>
+            <style>
+              <class name="image-button"/>
+            </style>
             <child>
               <object class="GtkImage" id="add_image">
                 <property name="visible">True</property>
