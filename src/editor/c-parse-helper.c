@@ -85,6 +85,7 @@ parameter_validate (Parameter *param)
       switch (ch) {
       case '*':
       case ' ':
+      case '_':
         continue;
 
       default:
