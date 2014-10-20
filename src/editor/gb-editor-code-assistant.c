@@ -257,8 +257,6 @@ gb_editor_code_assistant_parse (gpointer user_data)
                           G_GINT64_CONSTANT (0));
   options = g_variant_new ("a{sv}", 0);
 
-  g_print ("PATH: %s\n", path);
-
   gca_service_call_parse (priv->gca_service,
                           path,
                           priv->gca_tmpfile,
