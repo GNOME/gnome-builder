@@ -486,12 +486,7 @@ gb_source_vim_set_mode (GbSourceVim     *vim,
    */
   if (mode == GB_SOURCE_VIM_INSERT)
     gtk_text_buffer_begin_user_action (buffer);
-
-  /*
-   * If we are leaving insert mode, let's complete that user action.
-   */
-  if ((mode != GB_SOURCE_VIM_INSERT) &&
-      (vim->priv->mode == GB_SOURCE_VIM_INSERT))
+  else if (vim->priv->mode == GB_SOURCE_VIM_INSERT)
     gtk_text_buffer_end_user_action (buffer);
 
   vim->priv->mode = mode;
@@ -2878,11 +2873,9 @@ gb_source_vim_handle_normal (GbSourceVim *vim,
 
       gb_source_vim_clear_phrase (vim);
 
-      gtk_text_buffer_begin_user_action (buffer);
       cmd->func (vim, phrase.count, phrase.modifier);
       if (cmd->flags & GB_SOURCE_VIM_COMMAND_FLAG_VISUAL)
         gb_source_vim_clear_selection (vim);
-      gtk_text_buffer_end_user_action (buffer);
 
       break;
 
