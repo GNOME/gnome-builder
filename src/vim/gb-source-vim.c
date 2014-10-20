@@ -4210,13 +4210,11 @@ gb_source_vim_cmd_replace (GbSourceVim *vim,
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
   gtk_text_iter_forward_char (&begin);
   if (gtk_text_iter_ends_line (&begin))
-    {
     at_end = TRUE;
-    }
   else
     {
-    gtk_text_iter_backward_char (&begin);
-    at_end = FALSE;
+      gtk_text_iter_backward_char (&begin);
+      at_end = FALSE;
     }
 
   gtk_text_buffer_insert (buffer, &begin, &modifier, 1);
