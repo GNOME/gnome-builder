@@ -25,8 +25,86 @@
 #include "gb-log.h"
 #include "gca-diagnostics.h"
 #include "gca-service.h"
+#include "gca-structs.h"
 
 #define PARSE_TIMEOUT_MSEC 250
+
+static void
+add_diagnostic_range (GbEditorTab    *tab,
+                      GcaDiagnostic  *diag,
+                      GcaSourceRange *range)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+  guint column;
+
+  g_assert (GB_IS_EDITOR_TAB (tab));
+  g_assert (diag);
+  g_assert (range);
+
+  buffer = GTK_TEXT_BUFFER (tab->priv->document);
+
+  gtk_text_buffer_get_iter_at_line (buffer, &begin, range->begin.line);
+  for (column = range->begin.column; column; column--)
+    if (gtk_text_iter_ends_line (&begin) || !gtk_text_iter_forward_char (&begin))
+      break;
+
+  gtk_text_buffer_get_iter_at_line (buffer, &end, range->end.line);
+  for (column = range->end.column; column; column--)
+    if (gtk_text_iter_ends_line (&end) || !gtk_text_iter_forward_char (&end))
+      break;
+
+  if (gtk_text_iter_equal (&begin, &end))
+    gtk_text_iter_forward_to_line_end (&end);
+
+  gtk_text_buffer_apply_tag_by_name (buffer, "ErrorTag", &begin, &end);
+}
+
+static void
+add_diagnostic (GbEditorTab   *tab,
+                GcaDiagnostic *diag)
+{
+  guint i;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+  g_return_if_fail (diag);
+
+#if 0
+  g_print ("DIAG: %s\n", diag->message);
+#endif
+
+  for (i = 0; i < diag->locations->len; i++)
+    {
+      GcaSourceRange *range;
+
+      range = &g_array_index (diag->locations, GcaSourceRange, i);
+      add_diagnostic_range (tab, diag, range);
+    }
+}
+
+static const gchar *
+get_language (GbSourceView *view)
+{
+  GtkTextBuffer *buffer;
+  GtkSourceLanguage *lang;
+  const gchar *lang_id;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return NULL;
+
+  lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+  if (!lang)
+    return NULL;
+
+  /* TODO: probably should get the mapping from GCA service for this */
+  lang_id = gtk_source_language_get_id (lang);
+  if (g_str_equal (lang_id, "chdr") || g_str_equal (lang_id, "objc"))
+    return "c";
+
+  return lang_id;
+}
 
 static void
 gb_editor_code_assistant_diag_cb (GObject      *source_object,
@@ -34,26 +112,55 @@ gb_editor_code_assistant_diag_cb (GObject      *source_object,
                                   gpointer      user_data)
 {
   GbEditorTab *tab = user_data;
-  GcaDiagnostics *diag = (GcaDiagnostics *)source_object;
+  GtkTextBuffer *buffer;
+  GtkTextTagTable *tag_table;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GtkTextTag *tag;
+  GcaDiagnostics *proxy = (GcaDiagnostics *)source_object;
   GVariant *diags = NULL;
+  GArray *ar;
   GError *error = NULL;
+  guint i;
 
-  if (!gca_diagnostics_call_diagnostics_finish (diag, &diags, result, &error))
+  ENTRY;
+
+  if (!gca_diagnostics_call_diagnostics_finish (proxy, &diags, result, &error))
     {
       g_warning ("%s", error->message);
       g_clear_error (&error);
       GOTO (cleanup);
     }
 
-  {
-    gchar *str = g_variant_print (diags, TRUE);
-    g_print (">> %s\n", str);
-    g_free (str);
-  }
+  buffer = GTK_TEXT_BUFFER (tab->priv->document);
+  tag_table = gtk_text_buffer_get_tag_table (buffer);
+  tag = gtk_text_tag_table_lookup (tag_table, "ErrorTag");
+
+  if (!tag)
+    tag = gtk_text_buffer_create_tag (buffer, "ErrorTag",
+                                      "underline", PANGO_UNDERLINE_ERROR,
+                                      NULL);
+
+  gtk_text_buffer_get_bounds (buffer, &begin, &end);
+  gtk_text_buffer_remove_tag (buffer, tag, &begin, &end);
+
+  ar = gca_diagnostics_from_variant (diags);
+
+  for (i = 0; i < ar->len; i++)
+    {
+      GcaDiagnostic *diag;
+
+      diag = &g_array_index (ar, GcaDiagnostic, i);
+      add_diagnostic (tab, diag);
+    }
+
+  g_array_unref (ar);
 
 cleanup:
   g_clear_pointer (&diags, g_variant_unref);
   g_object_unref (tab);
+
+  EXIT;
 }
 
 static void
@@ -64,7 +171,6 @@ gb_editor_code_assistant_parse_cb (GObject      *source_object,
   GbEditorTab *tab = user_data;
   GcaService *service = (GcaService *)source_object;
   GcaDiagnostics *diag_proxy = NULL;
-  GtkSourceLanguage *language;
   const gchar *lang_id;
   GError *error = NULL;
   gchar *document_path = NULL;
@@ -82,12 +188,10 @@ gb_editor_code_assistant_parse_cb (GObject      *source_object,
       GOTO (cleanup);
     }
 
-  language =
-    gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (tab->priv->document));
-  if (!language)
+  lang_id = get_language (tab->priv->source_view);
+  if (!lang_id)
     GOTO (cleanup);
 
-  lang_id = gtk_source_language_get_id (language);
   name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", lang_id);
 
   diag_proxy =
@@ -129,6 +233,8 @@ gb_editor_code_assistant_parse (gpointer user_data)
   gchar *path;
   gchar *text;
 
+  ENTRY;
+
   g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), G_SOURCE_REMOVE);
 
   priv = tab->priv;
@@ -163,7 +269,7 @@ gb_editor_code_assistant_parse (gpointer user_data)
   g_free (path);
   g_free (text);
 
-  return G_SOURCE_REMOVE;
+  RETURN (G_SOURCE_REMOVE);
 }
 
 static void
@@ -198,7 +304,6 @@ void
 gb_editor_code_assistant_init (GbEditorTab *tab)
 {
   GbEditorTabPrivate *priv;
-  GtkSourceLanguage *language;
   const gchar *lang_id;
   gchar *name;
   gchar *path;
@@ -210,11 +315,10 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
 
   priv = tab->priv;
 
-  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (priv->document));
-  if (!language)
+  lang_id = get_language (tab->priv->source_view);
+  if (!lang_id)
     EXIT;
 
-  lang_id = gtk_source_language_get_id (language);
   name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", lang_id);
   path = g_strdup_printf ("/org/gnome/CodeAssist/v1/%s", lang_id);
 

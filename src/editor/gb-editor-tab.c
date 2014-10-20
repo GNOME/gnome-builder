@@ -1086,9 +1086,6 @@ transform_file_to_language (GBinding     *binding,
           settings = gb_editor_settings_new_for_language (lang_id);
           gb_editor_tab_set_settings (tab, settings);
           g_object_unref (settings);
-
-          
-          gb_editor_code_assistant_init (tab);
         }
 
       g_free (filename);

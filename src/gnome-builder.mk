@@ -81,6 +81,8 @@ libgnome_builder_la_SOURCES = \
 	src/gca/gca-diagnostics.h \
 	src/gca/gca-service.c \
 	src/gca/gca-service.h \
+	src/gca/gca-structs.c \
+	src/gca/gca-structs.h \
 	src/markdown/gs-markdown.c \
 	src/markdown/gs-markdown.h \
 	src/markdown/gb-markdown-preview.c \
