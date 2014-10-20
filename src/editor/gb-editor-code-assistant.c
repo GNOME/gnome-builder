@@ -154,7 +154,10 @@ gb_editor_code_assistant_diag_cb (GObject      *source_object,
       add_diagnostic (tab, diag);
     }
 
-  g_array_unref (ar);
+  if (tab->priv->gca_diagnostics)
+    g_array_unref (tab->priv->gca_diagnostics);
+
+  tab->priv->gca_diagnostics = ar;
 
 cleanup:
   g_clear_pointer (&diags, g_variant_unref);
@@ -291,6 +294,60 @@ gb_editor_code_assistant_buffer_changed (GbEditorDocument *document,
                                            tab);
 }
 
+static gboolean
+on_query_tooltip (GbSourceView *source_view,
+                  gint          x,
+                  gint          y,
+                  gboolean      keyboard_mode,
+                  GtkTooltip   *tooltip,
+                  GbEditorTab  *tab)
+{
+  GbEditorTabPrivate *priv;
+  GtkTextIter iter;
+  guint line;
+  guint i;
+
+  g_assert (GB_IS_SOURCE_VIEW (source_view));
+  g_assert (GB_IS_EDITOR_TAB (tab));
+
+  priv = tab->priv;
+
+  if (!priv->gca_diagnostics || !priv->gca_diagnostics->len)
+    return FALSE;
+
+  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (source_view),
+                                         GTK_TEXT_WINDOW_WIDGET,
+                                         x, y, &x, &y);
+
+  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (source_view),
+                                      &iter, x, y);
+
+  line = gtk_text_iter_get_line (&iter);
+
+  for (i = 0; i < priv->gca_diagnostics->len; i++)
+    {
+      GcaDiagnostic *diag;
+      guint j;
+
+      diag = &g_array_index (priv->gca_diagnostics, GcaDiagnostic, i);
+
+      for (j = 0; j < diag->locations->len; j++)
+        {
+          GcaSourceRange *loc;
+
+          loc = &g_array_index (diag->locations, GcaSourceRange, j);
+
+          if ((loc->begin.line <= line) && (loc->end.line >= line))
+            {
+              gtk_tooltip_set_text (tooltip, diag->message);
+              return TRUE;
+            }
+        }
+    }
+
+  return FALSE;
+}
+
 /**
  * gb_editor_code_assistant_init:
  *
@@ -344,6 +401,12 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
     g_signal_connect (priv->document, "changed",
                       G_CALLBACK (gb_editor_code_assistant_buffer_changed),
                       tab);
+
+  priv->gca_tooltip_handler =
+    g_signal_connect (priv->source_view,
+                      "query-tooltip",
+                      G_CALLBACK (on_query_tooltip),
+                      tab);
 }
 
 void
@@ -366,6 +429,13 @@ gb_editor_code_assistant_destroy (GbEditorTab *tab)
       priv->gca_buffer_changed_handler = 0;
     }
 
+  if (priv->gca_tooltip_handler)
+    {
+      g_signal_handler_disconnect (priv->document,
+                                   priv->gca_tooltip_handler);
+      priv->gca_tooltip_handler = 0;
+    }
+
   if (priv->gca_parse_timeout)
     {
       g_source_remove (priv->gca_parse_timeout);
@@ -384,6 +454,11 @@ gb_editor_code_assistant_destroy (GbEditorTab *tab)
       priv->gca_tmpfd = -1;
     }
 
+  if (priv->gca_diagnostics)
+    {
+      g_array_unref (priv->gca_diagnostics);
+      priv->gca_diagnostics = NULL;
+    }
 
   EXIT;
 }

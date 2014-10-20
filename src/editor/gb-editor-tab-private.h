@@ -109,6 +109,8 @@ struct _GbEditorTabPrivate
   gint        gca_tmpfd;
   gulong      gca_buffer_changed_handler;
   guint       gca_parse_timeout;
+  gulong      gca_tooltip_handler;
+  GArray     *gca_diagnostics;
 
   /*
    * Animation for save progress.
