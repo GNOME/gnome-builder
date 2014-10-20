@@ -1052,9 +1052,13 @@ gb_multi_notebook_insert_notebook (GbMultiNotebook *self,
   position = CLAMP (position, 0, priv->notebooks->len);
 
   notebook_container = g_object_new (GTK_TYPE_PANED,
+                                     "orientation", GTK_ORIENTATION_HORIZONTAL,
                                      "expand", TRUE,
                                      "visible", TRUE,
                                      NULL);
+#if GTK_CHECK_VERSION(3, 15, 0)
+  gtk_paned_set_wide_handle (GTK_PANED (notebook_container), TRUE);
+#endif
   gtk_paned_add1 (GTK_PANED (notebook_container), GTK_WIDGET (notebook));
   gtk_container_child_set (GTK_CONTAINER (notebook_container),
                            GTK_WIDGET (notebook),
@@ -1285,6 +1289,9 @@ gb_multi_notebook_init (GbMultiNotebook *self)
                                    "orientation", GTK_ORIENTATION_HORIZONTAL,
                                    "visible", TRUE,
                                    NULL);
+#if GTK_CHECK_VERSION(3, 15, 0)
+  gtk_paned_set_wide_handle (priv->root_paned, TRUE);
+#endif
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (priv->root_paned));
 
   notebook = g_object_new (GB_TYPE_NOTEBOOK,
