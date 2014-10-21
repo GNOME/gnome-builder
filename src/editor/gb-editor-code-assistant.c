@@ -613,6 +613,8 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
 
   g_free (name);
   g_free (path);
+
+  EXIT;
 }
 
 void
