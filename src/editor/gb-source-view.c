@@ -1333,6 +1333,9 @@ gb_source_view_draw_layer (GtkTextView     *text_view,
                            GtkTextViewLayer layer,
                            cairo_t         *cr)
 {
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+  g_assert (cr);
+
   g_signal_emit (text_view, gSignals [DRAW_LAYER], 0, layer, cr);
 }
 
