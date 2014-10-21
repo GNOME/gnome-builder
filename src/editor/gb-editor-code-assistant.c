@@ -27,7 +27,7 @@
 #include "gca-service.h"
 #include "gca-structs.h"
 
-#define PARSE_TIMEOUT_MSEC 250
+#define PARSE_TIMEOUT_MSEC 500
 
 static GDBusConnection *gSessionBus;
 
