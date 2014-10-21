@@ -40,6 +40,7 @@ add_diagnostic_range (GbEditorTab    *tab,
   GtkTextIter begin;
   GtkTextIter end;
   guint column;
+  guint i;
 
   g_assert (GB_IS_EDITOR_TAB (tab));
   g_assert (diag);
@@ -61,6 +62,17 @@ add_diagnostic_range (GbEditorTab    *tab,
     gtk_text_iter_forward_to_line_end (&end);
 
   gtk_text_buffer_apply_tag_by_name (buffer, "ErrorTag", &begin, &end);
+
+  for (i = range->begin.line; i <= range->end.line; i++)
+    {
+      gpointer v;
+
+      v = g_hash_table_lookup (tab->priv->gca_error_lines, GINT_TO_POINTER (i));
+      if (GPOINTER_TO_INT (v) < diag->severity)
+        v = GINT_TO_POINTER (diag->severity);
+
+      g_hash_table_insert (tab->priv->gca_error_lines, GINT_TO_POINTER (i), v);
+    }
 }
 
 static void
@@ -147,6 +159,8 @@ gb_editor_code_assistant_diag_cb (GObject      *source_object,
   gtk_text_buffer_remove_tag (buffer, tag, &begin, &end);
 
   ar = gca_diagnostics_from_variant (diags);
+
+  g_hash_table_remove_all (tab->priv->gca_error_lines);
 
   for (i = 0; i < ar->len; i++)
     {
@@ -443,6 +457,43 @@ on_draw_layer (GbSourceView     *source_view,
     }
 }
 
+static void
+on_query_data (GtkSourceGutterRenderer      *renderer,
+               GtkTextIter                  *begin,
+               GtkTextIter                  *end,
+               GtkSourceGutterRendererState  state,
+               GbEditorTab                  *tab)
+{
+  const gchar *icon_name;
+  gpointer v;
+  guint line;
+
+  line = gtk_text_iter_get_line (begin);
+  v = g_hash_table_lookup (tab->priv->gca_error_lines, GINT_TO_POINTER (line));
+
+  /* TODO: we want to get a real renderer for this */
+
+  switch (GPOINTER_TO_INT (v))
+    {
+    case GCA_SEVERITY_ERROR:
+      icon_name = "process-stop";
+      break;
+
+    case GCA_SEVERITY_WARNING:
+      icon_name = "dialog-warning";
+      break;
+
+    default:
+      icon_name = NULL;
+      break;
+    }
+
+  if (icon_name)
+    g_object_set (renderer, "icon-name", icon_name, NULL);
+  else
+    g_object_set (renderer, "pixbuf", NULL, NULL);
+}
+
 /**
  * gb_editor_code_assistant_init:
  *
@@ -456,6 +507,7 @@ void
 gb_editor_code_assistant_init (GbEditorTab *tab)
 {
   GbEditorTabPrivate *priv;
+  GtkSourceGutter *gutter;
   const gchar *lang_id;
   gchar *name;
   gchar *path;
@@ -515,6 +567,23 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
                       "draw-layer",
                       G_CALLBACK (on_draw_layer),
                       tab);
+
+  priv->gca_error_lines = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  priv->gca_gutter =
+    g_object_new (GTK_SOURCE_TYPE_GUTTER_RENDERER_PIXBUF,
+                  "icon-name", "process-stop", /* TODO: create icon */
+                  "size", 16,
+                  "visible", TRUE,
+                  NULL);
+  g_signal_connect (priv->gca_gutter,
+                    "query-data",
+                    G_CALLBACK (on_query_data),
+                    tab);
+
+  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (priv->source_view),
+                                       GTK_TEXT_WINDOW_LEFT);
+  gtk_source_gutter_insert (gutter, priv->gca_gutter, -100);
 }
 
 void
@@ -529,6 +598,7 @@ gb_editor_code_assistant_destroy (GbEditorTab *tab)
   priv = tab->priv;
 
   g_clear_object (&priv->gca_service);
+  g_clear_pointer (&priv->gca_error_lines, g_hash_table_unref);
 
   if (priv->gca_buffer_changed_handler)
     {
@@ -573,6 +643,16 @@ gb_editor_code_assistant_destroy (GbEditorTab *tab)
     {
       g_array_unref (priv->gca_diagnostics);
       priv->gca_diagnostics = NULL;
+    }
+
+  if (priv->gca_gutter)
+    {
+      GtkSourceGutter *gutter;
+
+      gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (priv->source_view),
+                                           GTK_TEXT_WINDOW_LEFT);
+      gtk_source_gutter_remove (gutter, priv->gca_gutter);
+      priv->gca_gutter = NULL;
     }
 
   EXIT;
