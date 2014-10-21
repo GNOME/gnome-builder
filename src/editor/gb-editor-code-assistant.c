@@ -317,22 +317,26 @@ gb_editor_code_assistant_parse (gpointer user_data)
 }
 
 static void
+gb_editor_code_assistant_queue_parse (GbEditorTab *tab)
+{
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  if (tab->priv->gca_parse_timeout)
+    g_source_remove (tab->priv->gca_parse_timeout);
+
+  tab->priv->gca_parse_timeout = g_timeout_add (PARSE_TIMEOUT_MSEC,
+                                                gb_editor_code_assistant_parse,
+                                                tab);
+}
+
+static void
 gb_editor_code_assistant_buffer_changed (GbEditorDocument *document,
                                          GbEditorTab      *tab)
 {
-  GbEditorTabPrivate *priv;
-
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
 
-  priv = tab->priv;
-
-  if (priv->gca_parse_timeout)
-    g_source_remove (priv->gca_parse_timeout);
-
-  priv->gca_parse_timeout = g_timeout_add (PARSE_TIMEOUT_MSEC,
-                                           gb_editor_code_assistant_parse,
-                                           tab);
+  gb_editor_code_assistant_queue_parse (tab);
 }
 
 static gboolean
@@ -570,6 +574,8 @@ service_proxy_new_cb (GObject      *source_object,
   gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (priv->source_view),
                                        GTK_TEXT_WINDOW_LEFT);
   gtk_source_gutter_insert (gutter, priv->gca_gutter, -100);
+
+  gb_editor_code_assistant_queue_parse (tab);
 
 cleanup:
   g_object_unref (tab);
