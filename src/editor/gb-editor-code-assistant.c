@@ -366,6 +366,83 @@ on_query_tooltip (GbSourceView *source_view,
   return FALSE;
 }
 
+static void
+highlight_line (GbSourceView *source_view,
+                cairo_t      *cr,
+                guint         line)
+{
+  GtkAllocation alloc;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GdkRectangle rect;
+
+  gtk_widget_get_allocation (GTK_WIDGET (source_view), &alloc);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
+  gtk_text_view_get_iter_location (GTK_TEXT_VIEW (source_view), &iter, &rect);
+  gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (source_view),
+                                         GTK_TEXT_WINDOW_TEXT,
+                                         rect.x, rect.y, &rect.x, &rect.y);
+
+  rect.width = 2000;
+
+  cairo_set_line_width (cr, 1.0);
+
+  cairo_rectangle (cr, rect.x, rect.y, rect.width, rect.height);
+  cairo_set_source_rgba (cr, 0.8, 0, 0, 0.125);
+  cairo_fill (cr);
+
+  cairo_move_to (cr, rect.x, rect.y);
+  cairo_line_to (cr, rect.x + rect.width, rect.y);
+  cairo_set_source_rgba (cr, 0.6, 0, 0, 0.1);
+  cairo_stroke (cr);
+
+  cairo_move_to (cr, rect.x, rect.y + rect.height);
+  cairo_line_to (cr, rect.x + rect.width, rect.y + rect.height);
+  cairo_set_source_rgba (cr, 0.6, 0, 0, 0.1);
+  cairo_stroke (cr);
+}
+
+static void
+on_draw_layer (GbSourceView     *source_view,
+               GtkTextViewLayer  layer,
+               cairo_t          *cr,
+               GbEditorTab      *tab)
+{
+  GbEditorTabPrivate *priv = tab->priv;
+  guint i;
+
+  if (!priv->gca_diagnostics)
+    return;
+
+  if (layer != GTK_TEXT_VIEW_LAYER_BELOW)
+    return;
+
+  for (i = 0; i < priv->gca_diagnostics->len; i++)
+    {
+      GcaDiagnostic *diag;
+      guint j;
+
+      diag = &g_array_index (priv->gca_diagnostics, GcaDiagnostic, i);
+
+      for (j = 0; j < diag->locations->len; j++)
+        {
+          GcaSourceRange *range;
+          guint line_begin;
+          guint line_end;
+          guint k;
+
+          range = &g_array_index (diag->locations, GcaSourceRange, j);
+
+          line_begin = range->begin.line;
+          line_end = range->end.line;
+
+          for (k = line_begin; k <= line_end; k++)
+            highlight_line (source_view, cr, k);
+        }
+    }
+}
+
 /**
  * gb_editor_code_assistant_init:
  *
@@ -432,6 +509,12 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
                       "query-tooltip",
                       G_CALLBACK (on_query_tooltip),
                       tab);
+
+  priv->gca_draw_layer =
+    g_signal_connect (priv->source_view,
+                      "draw-layer",
+                      G_CALLBACK (on_draw_layer),
+                      tab);
 }
 
 void
@@ -456,9 +539,16 @@ gb_editor_code_assistant_destroy (GbEditorTab *tab)
 
   if (priv->gca_tooltip_handler)
     {
-      g_signal_handler_disconnect (priv->document,
+      g_signal_handler_disconnect (priv->source_view,
                                    priv->gca_tooltip_handler);
       priv->gca_tooltip_handler = 0;
+    }
+
+  if (priv->gca_draw_layer)
+    {
+      g_signal_handler_disconnect (priv->source_view,
+                                   priv->gca_draw_layer);
+      priv->gca_draw_layer = 0;
     }
 
   if (priv->gca_parse_timeout)
