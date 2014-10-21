@@ -30,8 +30,6 @@
 
 #define PARSE_TIMEOUT_MSEC 500
 
-static GDBusConnection *gSessionBus;
-
 static void
 add_diagnostic_range (GbEditorTab    *tab,
                       GcaDiagnostic  *diag,
@@ -203,7 +201,7 @@ diagnostics_proxy_new_cb (GObject      *source_object,
   GbEditorTab *tab = user_data;
   GError *error = NULL;
 
-  proxy = gca_diagnostics_proxy_new_finish (result, &error);
+  proxy = gca_diagnostics_proxy_new_for_bus_finish (result, &error);
 
   if (!proxy)
     {
@@ -251,13 +249,13 @@ gb_editor_code_assistant_parse_cb (GObject      *source_object,
 
   name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", lang_id);
 
-  gca_diagnostics_proxy_new (gSessionBus,
-                             G_DBUS_PROXY_FLAGS_NONE,
-                             name,
-                             document_path,
-                             NULL,
-                             diagnostics_proxy_new_cb,
-                             g_object_ref (tab));
+  gca_diagnostics_proxy_new_for_bus (G_BUS_TYPE_SESSION,
+                                     G_DBUS_PROXY_FLAGS_NONE,
+                                     name,
+                                     document_path,
+                                     NULL,
+                                     diagnostics_proxy_new_cb,
+                                     g_object_ref (tab));
 
 cleanup:
   g_free (name);
@@ -506,58 +504,35 @@ on_query_data (GtkSourceGutterRenderer      *renderer,
     g_object_set (renderer, "pixbuf", NULL, NULL);
 }
 
-/**
- * gb_editor_code_assistant_init:
- *
- * Initializes the code assistant based on the open file, source language,
- * and document buffer.
- *
- * This will hook to the gnome-code-assistance service to provide warnings
- * if possible.
- */
-void
-gb_editor_code_assistant_init (GbEditorTab *tab)
+static void
+service_proxy_new_cb (GObject      *source_object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
 {
-  GbEditorTabPrivate *priv;
+  GcaService *service;
   GtkSourceGutter *gutter;
-  const gchar *lang_id;
-  gchar *name;
-  gchar *path;
+  GbEditorTab *tab = user_data;
+  GbEditorTabPrivate *priv;
+  GError *error = NULL;
 
   ENTRY;
 
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-  g_return_if_fail (!tab->priv->gca_service);
-
   priv = tab->priv;
 
-  if (!gSessionBus)
+  /*
+   * TODO: We can race here upon language changes.
+   */
+
+  service = gca_service_proxy_new_for_bus_finish (result, &error);
+
+  if (!service)
     {
-      gSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-      if (!gSessionBus)
-        EXIT;
+      g_message ("%s\n", error->message);
+      g_clear_error (&error);
+      GOTO (cleanup);
     }
 
-  lang_id = get_language (tab->priv->source_view);
-  if (!lang_id)
-    EXIT;
-
-  name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", lang_id);
-  path = g_strdup_printf ("/org/gnome/CodeAssist/v1/%s", lang_id);
-
-  priv->gca_service =
-    gca_service_proxy_new_sync (gSessionBus,
-                                G_DBUS_PROXY_FLAGS_NONE,
-                                name, path, NULL, NULL);
-
-  g_free (name);
-  g_free (path);
-
-  if (!priv->gca_service)
-    {
-      g_message ("No code assistance found for language \"%s\"", lang_id);
-      EXIT;
-    }
+  priv->gca_service = service;
 
   priv->gca_tmpfd =
     g_file_open_tmp ("builder-code-assist.XXXXXX",
@@ -584,7 +559,6 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
 
   priv->gca_gutter =
     g_object_new (GTK_SOURCE_TYPE_GUTTER_RENDERER_PIXBUF,
-                  "icon-name", "process-stop", /* TODO: create icon */
                   "size", 16,
                   "visible", TRUE,
                   NULL);
@@ -596,6 +570,49 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
   gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (priv->source_view),
                                        GTK_TEXT_WINDOW_LEFT);
   gtk_source_gutter_insert (gutter, priv->gca_gutter, -100);
+
+cleanup:
+  g_object_unref (tab);
+
+  EXIT;
+}
+
+/**
+ * gb_editor_code_assistant_init:
+ *
+ * Initializes the code assistant based on the open file, source language,
+ * and document buffer.
+ *
+ * This will hook to the gnome-code-assistance service to provide warnings
+ * if possible.
+ */
+void
+gb_editor_code_assistant_init (GbEditorTab *tab)
+{
+  const gchar *lang_id;
+  gchar *name;
+  gchar *path;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+  g_return_if_fail (!tab->priv->gca_service);
+
+  lang_id = get_language (tab->priv->source_view);
+  if (!lang_id)
+    EXIT;
+
+  name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", lang_id);
+  path = g_strdup_printf ("/org/gnome/CodeAssist/v1/%s", lang_id);
+
+  gca_service_proxy_new_for_bus (G_BUS_TYPE_SESSION,
+                                 G_DBUS_PROXY_FLAGS_NONE,
+                                 name, path, NULL,
+                                 service_proxy_new_cb,
+                                 g_object_ref (tab));
+
+  g_free (name);
+  g_free (path);
 }
 
 void
