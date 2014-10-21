@@ -142,7 +142,7 @@
             <property name="visible">True</property>
             <child>
               <object class="GtkStackSwitcher" id="switcher">
-                <property name="visible">True</property>
+                <property name="visible">False</property>
                 <property name="stack">stack</property>
                 <property name="orientation">vertical</property>
                 <property name="border_width">4</property>
@@ -154,7 +154,7 @@
             </child>
             <child>
               <object class="GtkSeparator" id="sidebar_separator">
-                <property name="visible">True</property>
+                <property name="visible">False</property>
                 <property name="orientation">vertical</property>
               </object>
             </child>
