@@ -29,6 +29,8 @@
 
 #define PARSE_TIMEOUT_MSEC 250
 
+static GDBusConnection *gSessionBus;
+
 static void
 add_diagnostic_range (GbEditorTab    *tab,
                       GcaDiagnostic  *diag,
@@ -197,11 +199,11 @@ gb_editor_code_assistant_parse_cb (GObject      *source_object,
 
   name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", lang_id);
 
-  diag_proxy =
-    gca_diagnostics_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                                            G_DBUS_PROXY_FLAGS_NONE,
-                                            name, document_path,
-                                            NULL, &error);
+  diag_proxy = gca_diagnostics_proxy_new_sync (gSessionBus,
+                                               G_DBUS_PROXY_FLAGS_NONE,
+                                               name, document_path,
+                                               NULL, &error);
+
   if (!diag_proxy)
     {
       g_warning ("%s", error->message);
@@ -370,6 +372,13 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
 
   priv = tab->priv;
 
+  if (!gSessionBus)
+    {
+      gSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+      if (!gSessionBus)
+        EXIT;
+    }
+
   lang_id = get_language (tab->priv->source_view);
   if (!lang_id)
     EXIT;
@@ -378,9 +387,9 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
   path = g_strdup_printf ("/org/gnome/CodeAssist/v1/%s", lang_id);
 
   priv->gca_service =
-    gca_service_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                                        G_DBUS_PROXY_FLAGS_NONE,
-                                        name, path, NULL, NULL);
+    gca_service_proxy_new_sync (gSessionBus,
+                                G_DBUS_PROXY_FLAGS_NONE,
+                                name, path, NULL, NULL);
 
   g_free (name);
   g_free (path);
