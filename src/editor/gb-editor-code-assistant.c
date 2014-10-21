@@ -169,13 +169,40 @@ cleanup:
 }
 
 static void
+diagnostics_proxy_new_cb (GObject      *source_object,
+                          GAsyncResult *result,
+                          gpointer      user_data)
+{
+  GcaDiagnostics *proxy = NULL;
+  GbEditorTab *tab = user_data;
+  GError *error = NULL;
+
+  proxy = gca_diagnostics_proxy_new_finish (result, &error);
+
+  if (!proxy)
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+      GOTO (cleanup);
+    }
+
+  gca_diagnostics_call_diagnostics (proxy, NULL,
+                                    gb_editor_code_assistant_diag_cb,
+                                    g_object_ref (tab));
+
+
+cleanup:
+  g_clear_object (&tab);
+  g_clear_object (&proxy);
+}
+
+static void
 gb_editor_code_assistant_parse_cb (GObject      *source_object,
                                    GAsyncResult *result,
                                    gpointer      user_data)
 {
   GbEditorTab *tab = user_data;
   GcaService *service = (GcaService *)source_object;
-  GcaDiagnostics *diag_proxy = NULL;
   const gchar *lang_id;
   GError *error = NULL;
   gchar *document_path = NULL;
@@ -199,24 +226,15 @@ gb_editor_code_assistant_parse_cb (GObject      *source_object,
 
   name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", lang_id);
 
-  diag_proxy = gca_diagnostics_proxy_new_sync (gSessionBus,
-                                               G_DBUS_PROXY_FLAGS_NONE,
-                                               name, document_path,
-                                               NULL, &error);
-
-  if (!diag_proxy)
-    {
-      g_warning ("%s", error->message);
-      g_clear_error (&error);
-      GOTO (cleanup);
-    }
-
-  gca_diagnostics_call_diagnostics (diag_proxy, NULL,
-                                    gb_editor_code_assistant_diag_cb,
-                                    g_object_ref (tab));
+  gca_diagnostics_proxy_new (gSessionBus,
+                             G_DBUS_PROXY_FLAGS_NONE,
+                             name,
+                             document_path,
+                             NULL,
+                             diagnostics_proxy_new_cb,
+                             g_object_ref (tab));
 
 cleanup:
-  g_clear_object (&diag_proxy);
   g_free (name);
   g_free (document_path);
   g_object_unref (tab);
