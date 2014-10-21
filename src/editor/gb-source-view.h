@@ -60,6 +60,9 @@ struct _GbSourceViewClass
   void (*begin_search) (GbSourceView           *view,
                         GtkDirectionType        direction,
                         const gchar            *search_text);
+  void (*draw_layer)   (GbSourceView           *view,
+                        GtkTextViewLayer        layer,
+                        cairo_t                *cr);
 };
 
 void                  gb_source_view_begin_search       (GbSourceView         *view,

@@ -77,9 +77,10 @@ enum {
 };
 
 enum {
-  PUSH_SNIPPET,
-  POP_SNIPPET,
   BEGIN_SEARCH,
+  DRAW_LAYER,
+  POP_SNIPPET,
+  PUSH_SNIPPET,
   LAST_SIGNAL
 };
 
@@ -1332,7 +1333,16 @@ gb_source_view_draw_layer (GtkTextView     *text_view,
                            GtkTextViewLayer layer,
                            cairo_t         *cr)
 {
-  GbSourceViewPrivate *priv = GB_SOURCE_VIEW (text_view)->priv;
+  g_signal_emit (text_view, gSignals [DRAW_LAYER], 0, layer, cr);
+}
+
+static void
+gb_source_view_real_draw_layer (GbSourceView     *view,
+                                GtkTextViewLayer  layer,
+                                cairo_t          *cr)
+{
+  GbSourceViewPrivate *priv = view->priv;
+  GtkTextView *text_view = GTK_TEXT_VIEW (view);
 
   GTK_TEXT_VIEW_CLASS (gb_source_view_parent_class)->draw_layer (text_view, layer, cr);
 
@@ -1505,6 +1515,8 @@ gb_source_view_class_init (GbSourceViewClass *klass)
 
   text_view_class->draw_layer = gb_source_view_draw_layer;
 
+  klass->draw_layer = gb_source_view_real_draw_layer;
+
   gParamSpecs [PROP_FONT_NAME] =
     g_param_spec_string ("font-name",
                          _("Font Name"),
@@ -1574,6 +1586,19 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                   2,
                   GTK_TYPE_DIRECTION_TYPE,
                   G_TYPE_STRING);
+
+  gSignals [DRAW_LAYER] =
+    g_signal_new ("draw-layer",
+                  GB_TYPE_SOURCE_VIEW,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSourceViewClass, draw_layer),
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  2,
+                  GTK_TYPE_TEXT_VIEW_LAYER,
+                  G_TYPE_POINTER);
 }
 
 static void
