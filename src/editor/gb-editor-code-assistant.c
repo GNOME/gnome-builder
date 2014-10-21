@@ -23,6 +23,7 @@
 #include "gb-editor-code-assistant.h"
 #include "gb-editor-tab-private.h"
 #include "gb-log.h"
+#include "gb-rgba.h"
 #include "gca-diagnostics.h"
 #include "gca-service.h"
 #include "gca-structs.h"
@@ -46,6 +47,9 @@ add_diagnostic_range (GbEditorTab    *tab,
   g_assert (diag);
   g_assert (range);
 
+  if (range->begin.line == -1 || range->end.line == -1)
+    return;
+
   buffer = GTK_TEXT_BUFFER (tab->priv->document);
 
   gtk_text_buffer_get_iter_at_line (buffer, &begin, range->begin.line);
@@ -62,6 +66,8 @@ add_diagnostic_range (GbEditorTab    *tab,
     gtk_text_iter_forward_to_line_end (&end);
 
   gtk_text_buffer_apply_tag_by_name (buffer, "ErrorTag", &begin, &end);
+
+  g_return_if_fail (tab->priv->gca_error_lines);
 
   for (i = range->begin.line; i <= range->end.line; i++)
     {
@@ -162,18 +168,24 @@ gb_editor_code_assistant_diag_cb (GObject      *source_object,
 
   g_hash_table_remove_all (tab->priv->gca_error_lines);
 
-  for (i = 0; i < ar->len; i++)
+  if (tab->priv->gca_diagnostics)
     {
-      GcaDiagnostic *diag;
-
-      diag = &g_array_index (ar, GcaDiagnostic, i);
-      add_diagnostic (tab, diag);
+      g_array_unref (tab->priv->gca_diagnostics);
+      tab->priv->gca_diagnostics = NULL;
     }
 
-  if (tab->priv->gca_diagnostics)
-    g_array_unref (tab->priv->gca_diagnostics);
+  if (ar)
+    {
+      for (i = 0; i < ar->len; i++)
+        {
+          GcaDiagnostic *diag;
 
-  tab->priv->gca_diagnostics = ar;
+          diag = &g_array_index (ar, GcaDiagnostic, i);
+          add_diagnostic (tab, diag);
+        }
+
+      tab->priv->gca_diagnostics = ar;
+    }
 
 cleanup:
   g_clear_pointer (&diags, g_variant_unref);
@@ -203,7 +215,6 @@ diagnostics_proxy_new_cb (GObject      *source_object,
   gca_diagnostics_call_diagnostics (proxy, NULL,
                                     gb_editor_code_assistant_diag_cb,
                                     g_object_ref (tab));
-
 
 cleanup:
   g_clear_object (&tab);
@@ -383,12 +394,28 @@ on_query_tooltip (GbSourceView *source_view,
 static void
 highlight_line (GbSourceView *source_view,
                 cairo_t      *cr,
-                guint         line)
+                guint         line,
+                GcaSeverity   severity)
 {
   GtkAllocation alloc;
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GdkRectangle rect;
+  GdkRGBA color;
+  GdkRGBA shaded;
+
+  if (severity == GCA_SEVERITY_WARNING)
+    {
+      gdk_rgba_parse (&color, "#fce94f");
+      color.alpha = 0.3;
+    }
+  else
+    {
+      gdk_rgba_parse (&color, "#cc0000");
+      color.alpha = 0.125;
+    }
+
+  gb_rgba_shade (&color, &shaded, 0.8);
 
   gtk_widget_get_allocation (GTK_WIDGET (source_view), &alloc);
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
@@ -398,22 +425,20 @@ highlight_line (GbSourceView *source_view,
                                          GTK_TEXT_WINDOW_TEXT,
                                          rect.x, rect.y, &rect.x, &rect.y);
 
+  /* TODO: get proper width */
   rect.width = 2000;
 
   cairo_set_line_width (cr, 1.0);
 
   cairo_rectangle (cr, rect.x, rect.y, rect.width, rect.height);
-  cairo_set_source_rgba (cr, 0.8, 0, 0, 0.125);
+  gdk_cairo_set_source_rgba (cr, &color);
   cairo_fill (cr);
 
   cairo_move_to (cr, rect.x, rect.y);
   cairo_line_to (cr, rect.x + rect.width, rect.y);
-  cairo_set_source_rgba (cr, 0.6, 0, 0, 0.1);
-  cairo_stroke (cr);
-
   cairo_move_to (cr, rect.x, rect.y + rect.height);
   cairo_line_to (cr, rect.x + rect.width, rect.y + rect.height);
-  cairo_set_source_rgba (cr, 0.6, 0, 0, 0.1);
+  gdk_cairo_set_source_rgba (cr, &shaded);
   cairo_stroke (cr);
 }
 
@@ -424,36 +449,23 @@ on_draw_layer (GbSourceView     *source_view,
                GbEditorTab      *tab)
 {
   GbEditorTabPrivate *priv = tab->priv;
-  guint i;
-
-  if (!priv->gca_diagnostics)
-    return;
+  GHashTableIter iter;
+  gpointer k, v;
 
   if (layer != GTK_TEXT_VIEW_LAYER_BELOW)
     return;
 
-  for (i = 0; i < priv->gca_diagnostics->len; i++)
+  if (!priv->gca_error_lines)
+    return;
+
+  g_hash_table_iter_init (&iter, priv->gca_error_lines);
+
+  while (g_hash_table_iter_next (&iter, &k, &v))
     {
-      GcaDiagnostic *diag;
-      guint j;
+      guint line = GPOINTER_TO_INT (k);
+      GcaSeverity severity = GPOINTER_TO_INT (v);
 
-      diag = &g_array_index (priv->gca_diagnostics, GcaDiagnostic, i);
-
-      for (j = 0; j < diag->locations->len; j++)
-        {
-          GcaSourceRange *range;
-          guint line_begin;
-          guint line_end;
-          guint k;
-
-          range = &g_array_index (diag->locations, GcaSourceRange, j);
-
-          line_begin = range->begin.line;
-          line_end = range->end.line;
-
-          for (k = line_begin; k <= line_end; k++)
-            highlight_line (source_view, cr, k);
-        }
+      highlight_line (source_view, cr, line, severity);
     }
 }
 

@@ -51,6 +51,8 @@ gca_diagnostics_from_variant (GVariant *variant)
   gchar *d;
   guint a;
 
+  g_return_val_if_fail (variant, NULL);
+
   ret = g_array_new (FALSE, FALSE, sizeof (GcaDiagnostic));
 
   g_array_set_clear_func (ret, gca_diagnostic_destroy);
