@@ -48,6 +48,31 @@ in_pydoc (const GtkTextIter *iter)
   return FALSE;
 }
 
+static gboolean
+line_starts_with (GtkTextIter *line,
+                  const gchar *prefix)
+{
+  GtkTextIter begin = *line;
+  GtkTextIter end = *line;
+  gboolean ret;
+  gchar *text;
+
+  while (!gtk_text_iter_starts_line (&begin))
+    if (!gtk_text_iter_backward_char (&begin))
+      break;
+
+  while (!gtk_text_iter_ends_line (&end))
+    if (!gtk_text_iter_forward_char (&end))
+      break;
+
+  text = gtk_text_iter_get_slice (&begin, &end);
+  g_strstrip (text);
+  ret = g_str_has_prefix (text, prefix);
+  g_free (text);
+
+  return ret;
+}
+
 static gchar *
 copy_indent (GbSourceAutoIndenterPython *python,
              GtkTextIter                *begin,
@@ -139,44 +164,6 @@ indent_colon (GbSourceAutoIndenterPython *python,
   return g_string_free (str, FALSE);
 }
 
-static gboolean
-is_return_line (const GtkTextIter *line)
-{
-  GtkTextIter iter = *line;
-  GtkTextIter end;
-  gchar *text;
-  gboolean ret;
-
-  gtk_text_iter_set_line_offset (&iter, 0);
-
-  while (!gtk_text_iter_ends_line (&iter))
-    {
-      gunichar ch;
-
-      ch = gtk_text_iter_get_char (&iter);
-      if (!g_unichar_isspace (ch))
-        {
-          if (ch != 'r')
-            return FALSE;
-          break;
-        }
-
-      if (!gtk_text_iter_forward_char (&iter))
-        return FALSE;
-    }
-
-  end = iter;
-
-  if (!gtk_text_iter_forward_chars (&end, 6))
-    return FALSE;
-
-  text = gtk_text_iter_get_slice (&iter, &end);
-  ret = (g_strcmp0 (text, "return") == 0);
-  g_free (text);
-
-  return ret;
-}
-
 static gchar *
 gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
                                        GtkTextView          *text_view,
@@ -207,7 +194,10 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
       if (in_pydoc (&iter))
         return copy_indent (python, begin, end, &iter);
 
-      if (is_return_line (&iter))
+      if (line_starts_with (&iter, "return") ||
+          line_starts_with (&iter, "break") ||
+          line_starts_with (&iter, "continue") ||
+          line_starts_with (&iter, "pass"))
         return copy_indent_minus_tab (python, text_view, begin, end, &iter);
 
       return copy_indent (python, begin, end, &iter);
