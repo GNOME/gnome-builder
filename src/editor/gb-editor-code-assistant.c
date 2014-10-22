@@ -30,6 +30,8 @@
 
 #define PARSE_TIMEOUT_MSEC 500
 
+static GdkPixbuf  *gErrorPixbuf;
+static GdkPixbuf  *gWarningPixbuf;
 static GHashTable *gGcaServices;
 
 static void
@@ -480,7 +482,7 @@ on_query_data (GtkSourceGutterRenderer      *renderer,
                GtkSourceGutterRendererState  state,
                GbEditorTab                  *tab)
 {
-  const gchar *icon_name;
+  GdkPixbuf *pixbuf = NULL;
   gpointer v;
   guint line;
 
@@ -492,22 +494,18 @@ on_query_data (GtkSourceGutterRenderer      *renderer,
   switch (GPOINTER_TO_INT (v))
     {
     case GCA_SEVERITY_ERROR:
-      icon_name = "process-stop";
+      pixbuf = gErrorPixbuf;
       break;
 
     case GCA_SEVERITY_WARNING:
-      icon_name = "dialog-warning";
+      pixbuf = gWarningPixbuf;
       break;
 
     default:
-      icon_name = NULL;
       break;
     }
 
-  if (icon_name)
-    g_object_set (renderer, "icon-name", icon_name, NULL);
-  else
-    g_object_set (renderer, "pixbuf", NULL, NULL);
+  g_object_set (renderer, "pixbuf", pixbuf, NULL);
 }
 
 static void
@@ -516,6 +514,7 @@ setup_service_proxy (GbEditorTab *tab,
 {
   GtkSourceGutter *gutter;
   GbEditorTabPrivate *priv = tab->priv;
+  gint width;
 
   ENTRY;
 
@@ -544,9 +543,12 @@ setup_service_proxy (GbEditorTab *tab,
 
   priv->gca_error_lines = g_hash_table_new (g_direct_hash, g_direct_equal);
 
+  width = MAX (gdk_pixbuf_get_width (gErrorPixbuf),
+               gdk_pixbuf_get_width (gWarningPixbuf));
+
   priv->gca_gutter =
     g_object_new (GTK_SOURCE_TYPE_GUTTER_RENDERER_PIXBUF,
-                  "size", 16,
+                  "size", width,
                   "visible", TRUE,
                   NULL);
   g_signal_connect (priv->gca_gutter,
@@ -602,6 +604,33 @@ cleanup:
   g_clear_object (&service);
 }
 
+static GdkPixbuf *
+get_pixbuf_sized_for (GtkWidget   *widget,
+                      const gchar *icon_name)
+{
+  PangoLayout *layout;
+  GdkPixbuf *pixbuf = NULL;
+  GError *error = NULL;
+  gint width;
+  gint height;
+
+  layout = gtk_widget_create_pango_layout (widget, "0123456789");
+  pango_layout_get_pixel_size (layout, &width, &height);
+  g_object_unref (layout);
+
+  if (!(pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+                                           icon_name,
+                                           height,
+                                           GTK_ICON_LOOKUP_FORCE_SIZE,
+                                           &error)))
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+
+  return pixbuf;
+}
+
 /**
  * gb_editor_code_assistant_init:
  *
@@ -623,6 +652,14 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
 
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
   g_return_if_fail (!tab->priv->gca_service);
+
+  if (!gErrorPixbuf)
+    gErrorPixbuf = get_pixbuf_sized_for (GTK_WIDGET (tab->priv->source_view),
+                                         "process-stop-symbolic");
+
+  if (!gWarningPixbuf)
+    gWarningPixbuf = get_pixbuf_sized_for (GTK_WIDGET (tab->priv->source_view),
+                                           "dialog-warning-symbolic");
 
   lang_id = get_language (tab->priv->source_view);
   if (!lang_id)
