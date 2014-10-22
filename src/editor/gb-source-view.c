@@ -24,6 +24,7 @@
 #include "gb-animation.h"
 #include "gb-source-auto-indenter.h"
 #include "gb-source-auto-indenter-c.h"
+#include "gb-source-auto-indenter-python.h"
 #include "gb-source-auto-indenter-xml.h"
 #include "gb-box-theatric.h"
 #include "gb-cairo.h"
@@ -890,6 +891,8 @@ on_language_set (GtkSourceBuffer *buffer,
 
       if (g_str_equal (lang_id, "c") || g_str_equal (lang_id, "chdr"))
         auto_indenter = gb_source_auto_indenter_c_new ();
+      else if (g_str_equal (lang_id, "python"))
+        auto_indenter = gb_source_auto_indenter_python_new ();
       else if (g_str_equal (lang_id, "xml"))
         auto_indenter = gb_source_auto_indenter_xml_new ();
     }
