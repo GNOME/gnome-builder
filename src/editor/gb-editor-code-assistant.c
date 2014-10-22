@@ -30,6 +30,8 @@
 
 #define PARSE_TIMEOUT_MSEC 500
 
+static GHashTable *gGcaServices;
+
 static void
 add_diagnostic_range (GbEditorTab    *tab,
                       GcaDiagnostic  *diag,
@@ -509,34 +511,15 @@ on_query_data (GtkSourceGutterRenderer      *renderer,
 }
 
 static void
-service_proxy_new_cb (GObject      *source_object,
-                      GAsyncResult *result,
-                      gpointer      user_data)
+setup_service_proxy (GbEditorTab *tab,
+                     GcaService  *service)
 {
-  GcaService *service;
   GtkSourceGutter *gutter;
-  GbEditorTab *tab = user_data;
-  GbEditorTabPrivate *priv;
-  GError *error = NULL;
+  GbEditorTabPrivate *priv = tab->priv;
 
   ENTRY;
 
-  priv = tab->priv;
-
-  /*
-   * TODO: We can race here upon language changes.
-   */
-
-  service = gca_service_proxy_new_for_bus_finish (result, &error);
-
-  if (!service)
-    {
-      g_message ("%s\n", error->message);
-      g_clear_error (&error);
-      GOTO (cleanup);
-    }
-
-  priv->gca_service = service;
+  priv->gca_service = g_object_ref (service);
 
   priv->gca_tmpfd =
     g_file_open_tmp ("builder-code-assist.XXXXXX",
@@ -577,10 +560,46 @@ service_proxy_new_cb (GObject      *source_object,
 
   gb_editor_code_assistant_queue_parse (tab);
 
+  EXIT;
+}
+
+static void
+service_proxy_new_cb (GObject      *source_object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
+{
+  GcaService *service;
+  GbEditorTab *tab = user_data;
+  GError *error = NULL;
+
+  ENTRY;
+
+  /*
+   * TODO: We can race here upon language changes.
+   */
+
+  service = gca_service_proxy_new_for_bus_finish (result, &error);
+
+  if (!service)
+    {
+      g_message ("%s\n", error->message);
+      g_clear_error (&error);
+      GOTO (cleanup);
+    }
+  else
+    {
+      const gchar *name;
+
+      name = g_dbus_proxy_get_name (G_DBUS_PROXY (service));
+      g_hash_table_insert (gGcaServices, g_strdup (name),
+                           g_object_ref (service));
+    }
+
+  setup_service_proxy (tab, service);
+
 cleanup:
   g_object_unref (tab);
-
-  EXIT;
+  g_clear_object (&service);
 }
 
 /**
@@ -596,6 +615,7 @@ void
 gb_editor_code_assistant_init (GbEditorTab *tab)
 {
   const gchar *lang_id;
+  GcaService *service;
   gchar *name;
   gchar *path;
 
@@ -611,11 +631,20 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
   name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", lang_id);
   path = g_strdup_printf ("/org/gnome/CodeAssist/v1/%s", lang_id);
 
-  gca_service_proxy_new_for_bus (G_BUS_TYPE_SESSION,
-                                 G_DBUS_PROXY_FLAGS_NONE,
-                                 name, path, NULL,
-                                 service_proxy_new_cb,
-                                 g_object_ref (tab));
+  if (!gGcaServices)
+    gGcaServices = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                          g_free, g_object_unref);
+
+  service = g_hash_table_lookup (gGcaServices, name);
+
+  if (!service)
+    gca_service_proxy_new_for_bus (G_BUS_TYPE_SESSION,
+                                   G_DBUS_PROXY_FLAGS_NONE,
+                                   name, path, NULL,
+                                   service_proxy_new_cb,
+                                   g_object_ref (tab));
+  else
+    setup_service_proxy (tab, service);
 
   g_free (name);
   g_free (path);
