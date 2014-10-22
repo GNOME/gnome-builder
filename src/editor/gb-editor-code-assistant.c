@@ -31,6 +31,7 @@
 #define PARSE_TIMEOUT_MSEC 500
 
 static GdkPixbuf  *gErrorPixbuf;
+static GdkPixbuf  *gInfoPixbuf;
 static GdkPixbuf  *gWarningPixbuf;
 static GHashTable *gGcaServices;
 
@@ -410,15 +411,26 @@ highlight_line (GbSourceView *source_view,
   GdkRGBA color;
   GdkRGBA shaded;
 
-  if (severity == GCA_SEVERITY_WARNING)
+  switch (severity)
     {
+    case GCA_SEVERITY_DEPRECATED:
+    case GCA_SEVERITY_WARNING:
       gdk_rgba_parse (&color, "#fce94f");
-      color.alpha = 0.3;
-    }
-  else
-    {
+      color.alpha = 0.125;
+      break;
+
+    case GCA_SEVERITY_FATAL:
+    case GCA_SEVERITY_ERROR:
       gdk_rgba_parse (&color, "#cc0000");
       color.alpha = 0.125;
+      break;
+
+    case GCA_SEVERITY_INFO:
+    case GCA_SEVERITY_NONE:
+    default:
+      gdk_rgba_parse (&color, "#ffffff");
+      color.alpha = 0.0;
+      break;
     }
 
   gb_rgba_shade (&color, &shaded, 0.8);
@@ -493,14 +505,21 @@ on_query_data (GtkSourceGutterRenderer      *renderer,
 
   switch (GPOINTER_TO_INT (v))
     {
+    case GCA_SEVERITY_FATAL:
     case GCA_SEVERITY_ERROR:
       pixbuf = gErrorPixbuf;
       break;
 
+    case GCA_SEVERITY_INFO:
+      pixbuf = gInfoPixbuf;
+      break;
+
+    case GCA_SEVERITY_DEPRECATED:
     case GCA_SEVERITY_WARNING:
       pixbuf = gWarningPixbuf;
       break;
 
+    case GCA_SEVERITY_NONE:
     default:
       break;
     }
@@ -656,6 +675,10 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
   if (!gErrorPixbuf)
     gErrorPixbuf = get_pixbuf_sized_for (GTK_WIDGET (tab->priv->source_view),
                                          "process-stop-symbolic");
+
+  if (!gInfoPixbuf)
+    gInfoPixbuf = get_pixbuf_sized_for (GTK_WIDGET (tab->priv->source_view),
+                                        "dialog-information-symbolic");
 
   if (!gWarningPixbuf)
     gWarningPixbuf = get_pixbuf_sized_for (GTK_WIDGET (tab->priv->source_view),
