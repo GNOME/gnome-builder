@@ -40,6 +40,18 @@
             <property name="visible">True</property>
             <property name="halign">end</property>
             <property name="valign">end</property>
+            <child>
+              <object class="GtkSpinner" id="parsing_spinner">
+                <property name="visible">False</property>
+                <property name="active">False</property>
+                <property name="margin-start">6</property>
+                <property name="tooltip-text" translatable="yes">Currently parsing document.</property>
+              </object>
+              <packing>
+                <property name="pack_type">GTK_PACK_START</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
           </object>
         </child>
         <child type="overlay">

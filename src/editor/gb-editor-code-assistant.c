@@ -241,6 +241,9 @@ gb_editor_code_assistant_parse_cb (GObject      *source_object,
   g_return_if_fail (GCA_IS_SERVICE (service));
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
+  gtk_spinner_stop (tab->priv->parsing_spinner);
+  gtk_widget_hide (GTK_WIDGET (tab->priv->parsing_spinner));
+
   if (!gca_service_call_parse_finish (service, &document_path, result, &error))
     {
       g_warning ("%s", error->message);
@@ -304,6 +307,9 @@ gb_editor_code_assistant_parse (gpointer user_data)
                           G_GINT64_CONSTANT (0),
                           G_GINT64_CONSTANT (0));
   options = g_variant_new ("a{sv}", 0);
+
+  gtk_widget_set_visible (GTK_WIDGET (tab->priv->parsing_spinner), TRUE);
+  gtk_spinner_start (tab->priv->parsing_spinner);
 
   gca_service_call_parse (priv->gca_service,
                           path,

@@ -88,6 +88,7 @@ struct _GbEditorTabPrivate
   GtkButton           *go_down_button;
   GtkButton           *go_up_button;
   GtkOverlay          *overlay;
+  GtkSpinner          *parsing_spinner;
   GtkBox              *preview_container;
   GtkProgressBar      *progress_bar;
   GtkRevealer         *revealer;

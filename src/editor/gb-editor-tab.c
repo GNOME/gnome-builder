@@ -1582,6 +1582,7 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, go_down_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, go_up_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, overlay);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, parsing_spinner);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, preview_container);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, progress_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorTab, revealer);
