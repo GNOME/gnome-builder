@@ -569,6 +569,7 @@ setup_service_proxy (GbEditorTab *tab,
     g_object_new (GTK_SOURCE_TYPE_GUTTER_RENDERER_PIXBUF,
                   "size", width,
                   "visible", TRUE,
+                  "xpad", 3,
                   NULL);
   g_signal_connect (priv->gca_gutter,
                     "query-data",
