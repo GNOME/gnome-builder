@@ -407,6 +407,7 @@ on_query_tooltip (GbSourceView *source_view,
 static void
 highlight_line (GbSourceView *source_view,
                 cairo_t      *cr,
+                gint          width,
                 guint         line,
                 GcaSeverity   severity)
 {
@@ -449,8 +450,16 @@ highlight_line (GbSourceView *source_view,
                                          GTK_TEXT_WINDOW_TEXT,
                                          rect.x, rect.y, &rect.x, &rect.y);
 
-  /* TODO: get proper width */
-  rect.width = 2000;
+  /*
+   * WORKAROUND:
+   *
+   * Try to render outside the current area so that pixel cache picks up
+   * the line rendering. Probably a better way to do this, as I'm not sure
+   * this actually covers all the corner cases. In particular, if you have
+   * lots of non-visible space (>200px).
+   */
+  rect.x = -200;
+  rect.width = width + 400;
 
   cairo_set_line_width (cr, 1.0);
 
@@ -473,14 +482,34 @@ on_draw_layer (GbSourceView     *source_view,
                GbEditorTab      *tab)
 {
   GbEditorTabPrivate *priv = tab->priv;
+  GtkRequisition req;
+  GtkAllocation alloc;
   GHashTableIter iter;
+  GdkWindow *window;
   gpointer k, v;
+  gint width;
 
   if (layer != GTK_TEXT_VIEW_LAYER_BELOW)
     return;
 
   if (!priv->gca_error_lines)
     return;
+
+  window = gtk_text_view_get_window (GTK_TEXT_VIEW (source_view),
+                                     GTK_TEXT_WINDOW_TEXT);
+  if (!window)
+    return;
+
+  /*
+   * WORKAROUND:
+   *
+   * I'm not sure if there is a better way to do this, but we are trying to
+   * determine the size of the textview inside of the scrolled window.
+   * We need this to draw the highlight line wide enough.
+   */
+  gtk_widget_get_allocation (GTK_WIDGET (source_view), &alloc);
+  gtk_widget_get_preferred_size (GTK_WIDGET (source_view), NULL, &req);
+  width = MAX (alloc.width, req.width);
 
   g_hash_table_iter_init (&iter, priv->gca_error_lines);
 
@@ -489,7 +518,7 @@ on_draw_layer (GbSourceView     *source_view,
       guint line = GPOINTER_TO_INT (k);
       GcaSeverity severity = GPOINTER_TO_INT (v);
 
-      highlight_line (source_view, cr, line, severity);
+      highlight_line (source_view, cr, width, line, severity);
     }
 }
 
