@@ -283,7 +283,6 @@ gb_editor_code_assistant_parse (gpointer user_data)
   GVariant *cursor;
   GVariant *options;
   GFile *location;
-  gchar *data_path = g_get_current_dir (); /* TODO: Get from Git */
   gchar *path;
   gchar *text;
 
@@ -320,7 +319,6 @@ gb_editor_code_assistant_parse (gpointer user_data)
                           gb_editor_code_assistant_parse_cb,
                           g_object_ref (tab));
 
-  g_free (data_path);
   g_free (path);
   g_free (text);
 
