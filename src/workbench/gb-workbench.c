@@ -25,6 +25,7 @@
 #include "gb-command-manager.h"
 #include "gb-command-vim-provider.h"
 #include "gb-devhelp-workspace.h"
+#include "gb-drawer.h"
 #include "gb-editor-workspace.h"
 #include "gb-log.h"
 #include "gb-widget.h"
@@ -542,6 +543,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 
   g_type_ensure (GB_TYPE_COMMAND_BAR);
   g_type_ensure (GB_TYPE_DEVHELP_WORKSPACE);
+  g_type_ensure (GB_TYPE_DRAWER);
   g_type_ensure (GB_TYPE_EDITOR_WORKSPACE);
   g_type_ensure (GEDIT_TYPE_MENU_STACK_SWITCHER);
 }

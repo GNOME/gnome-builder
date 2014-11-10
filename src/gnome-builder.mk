@@ -41,6 +41,8 @@ libgnome_builder_la_SOURCES = \
 	src/devhelp/gb-devhelp-tab.h \
 	src/devhelp/gb-devhelp-workspace.c \
 	src/devhelp/gb-devhelp-workspace.h \
+	src/drawer/gb-drawer.c \
+	src/drawer/gb-drawer.h \
 	src/editor/c-parse-helper.c \
 	src/editor/c-parse-helper.h \
 	src/editor/gb-editor-code-assistant.c \
@@ -189,6 +191,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/auto-indent \
 	-I$(top_srcdir)/src/commands \
 	-I$(top_srcdir)/src/devhelp \
+	-I$(top_srcdir)/src/drawer \
 	-I$(top_srcdir)/src/editor \
 	-I$(top_srcdir)/src/gca \
 	-I$(top_srcdir)/src/gd \
