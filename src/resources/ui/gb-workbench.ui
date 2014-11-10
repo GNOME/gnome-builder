@@ -159,30 +159,56 @@
               </object>
             </child>
             <child>
-              <object class="GtkStack" id="stack">
+              <object class="GtkPaned" id="main_paned">
                 <property name="visible">True</property>
-                <property name="transition_type">GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN</property>
+                <property name="orientation">horizontal</property>
+                <property name="position">250</property>
                 <child>
-                  <object class="GbEditorWorkspace" id="editor">
-                    <property name="name">editor</property>
-                    <property name="visible">True</property>
+                  <object class="GtkBox">
+                    <property name="visible">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkStackSwitcher" id="drawer_switcher">
+                        <property name="visible">True</property>
+                        <property name="vexpand">False</property>
+                        <property name="stack">drawer_stack</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkStack" id="drawer_stack">
+                        <property name="visible">True</property>
+                        <property name="vexpand">True</property>
+                      </object>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="icon_name">text-editor-symbolic</property>
-                    <property name="name">editor</property>
-                    <property name="title" translatable="yes">Editor</property>
-                  </packing>
                 </child>
                 <child>
-                  <object class="GbDevhelpWorkspace" id="devhelp">
-                    <property name="name">devhelp</property>
+                  <object class="GtkStack" id="stack">
                     <property name="visible">True</property>
+                    <property name="transition_type">GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN</property>
+                    <child>
+                      <object class="GbEditorWorkspace" id="editor">
+                        <property name="name">editor</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="icon_name">text-editor-symbolic</property>
+                        <property name="name">editor</property>
+                        <property name="title" translatable="yes">Editor</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GbDevhelpWorkspace" id="devhelp">
+                        <property name="name">devhelp</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="name">devhelp</property>
+                        <property name="icon_name">help-browser-symbolic</property>
+                        <property name="title" translatable="yes">Documentation</property>
+                      </packing>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="name">devhelp</property>
-                    <property name="icon_name">help-browser-symbolic</property>
-                    <property name="title" translatable="yes">Documentation</property>
-                  </packing>
                 </child>
               </object>
             </child>
