@@ -35,6 +35,7 @@
   <color name="pink1" value="#dd4a68"/>
   <color name="green1" value="#669900"/>
   <color name="text1" value="#4d4e53"/>
+  <color name="selection1" value="#b3d4fc"/>
   <color name="line1" value="#a2a3a3"/>
 
   <color name="butter1"                     value="#fce94f"/>
@@ -67,6 +68,7 @@
 
   <!-- Global Settings -->
   <style name="text"                        foreground="text1" background="bg1"/>
+  <style name="selection"                   background="selection1"/>
   <style name="cursor"                      foreground="aluminium4"/>
   <style name="current-line"                background="aluminium1"/>
   <style name="draw-spaces"                 foreground="aluminium3"/>
