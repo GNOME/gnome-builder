@@ -17,13 +17,13 @@
  */
 
 #define G_LOG_DOMAIN "app"
-#define ADWAITA_CSS  "resource:///org/gnome/builder/css/builder.Adwaita.css"
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
 #include <glib/gi18n.h>
+#include <gtksourceview/gtksource.h>
 
 #include "gb-application.h"
 #include "gb-editor-file-marks.h"
@@ -34,10 +34,22 @@
 #include "gb-resources.h"
 #include "gb-workbench.h"
 
+#define ADWAITA_CSS  "resource:///org/gnome/builder/css/builder.Adwaita.css"
 #define LANGUAGE_SCHEMA "org.gnome.builder.editor.language"
 #define LANGUAGE_PATH "/org/gnome/builder/editor/language/"
+#define GSV_PATH "resource:///org/gnome/builder/styles/"
 
 G_DEFINE_TYPE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
+
+static void
+gb_application_setup_search_paths (void)
+{
+  GtkSourceStyleSchemeManager *mgr;
+
+  mgr = gtk_source_style_scheme_manager_get_default ();
+  gtk_source_style_scheme_manager_append_search_path (
+      mgr, PACKAGE_DATADIR"/gtksourceview-3.0/styles/");
+}
 
 static void
 gb_application_install_language_defaults (GbApplication *self)
@@ -512,6 +524,7 @@ gb_application_startup (GApplication *app)
   gb_application_register_keybindings (self);
   gb_application_register_theme_overrides (self);
   gb_application_load_file_marks (self);
+  gb_application_setup_search_paths ();
 
   EXIT;
 }

@@ -10,3 +10,8 @@ service_in_files = data/org.gnome.Builder.service.in
 service_DATA = $(service_in_files:.service.in=.service)
 EXTRA_DIST += $(service_in_files)
 CLEANFILES += $(service_DATA)
+
+# GtkSourceView Style Scheme
+styledir = $(datadir)/gtksourceview-3.0/styles/
+style_DATA = data/styles/builder.xml
+EXTRA_DIST += $(style_DATA)

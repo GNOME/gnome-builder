@@ -177,6 +177,7 @@ libgnome_builder_la_LIBADD = \
 	-lm
 
 libgnome_builder_la_CFLAGS = \
+	-DPACKAGE_DATADIR="\"$(datadir)\"" \
 	$(DEVHELP_CFLAGS) \
 	$(GGIT_CFLAGS) \
 	$(GIO_CFLAGS) \
