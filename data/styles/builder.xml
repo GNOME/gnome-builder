@@ -21,7 +21,7 @@
 -->
 <style-scheme id="builder" _name="Builder" version="1.0">
   <author>Christian Hergert</author>
-  <_description>The default color scheme for Builder.</_description>
+  <_description>The default color scheme for Builder</_description>
 
   <!-- Tango Palette -->
   <color name="bg1" value="#f6f7f8"/>
