@@ -20,7 +20,7 @@
       <default>"Monospace 11"</default>
     </key>
     <key name="style-scheme-name" type="s">
-      <default>"tango"</default>
+      <default>"builder"</default>
     </key>
   </schema>
 </schemalist>
