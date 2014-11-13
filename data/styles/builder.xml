@@ -37,6 +37,7 @@
   <color name="text1" value="#4d4e53"/>
   <color name="selection1" value="#b3d4fc"/>
   <color name="line1" value="#a2a3a3"/>
+  <color name="white" value="#ffffff"/>
 
   <color name="butter1"                     value="#fce94f"/>
   <color name="butter2"                     value="#edd400"/>
@@ -82,7 +83,7 @@
   <style name="right-margin"                foreground="aluminium3" background="bg2"/>
 
   <!-- Search Matching -->
-  <style name="search-match"                background="butter1"/>
+  <style name="search-match"                foreground="white" background="pink1"/>
 
   <!-- Comments -->
   <style name="def:comment"                 foreground="blue1"/>
