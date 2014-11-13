@@ -97,7 +97,7 @@
   <style name="def:keyword"                 foreground="gr1" bold="true"/>
   <style name="def:note"                    background="orange1" bold="true"/>
   <style name="def:operator"                foreground="purple1"/>
-  <style name="def:preprocessor"            foreground="purple1"/>
+  <style name="def:preprocessor"            foreground="pink1"/>
   <style name="def:shebang"                 foreground="blue1" bold="true"/>
   <style name="def:special-char"            foreground="pink1"/>
   <style name="def:statement"               foreground="green1" bold="true"/>
@@ -105,7 +105,7 @@
   <style name="def:type"                    foreground="gr1" bold="true"/>
   <style name="def:underlined"              italic="true" underline="true"/>
   <style name="def:warning"                 background="plum1"/>
-  <style name="def:special-constant"        foreground="pink1"/>
+  <style name="def:special-constant"        foreground="purple1"/>
 
   <style name="diff:added-line"             foreground="gr1"/>
   <style name="diff:removed-line"           foreground="pink1"/>
