@@ -176,3 +176,17 @@ GbCommandBarItem .gb-command-bar-item-equal {
     padding-right: 12px;
     font-family: Monospace;
 }
+
+GtkBox.shift-bar {
+    border: none;
+    background-image: linear-gradient(to bottom, #2e3436, #555753 10%);
+    box-shadow: none;
+    color: #eeeeec;
+    font-family: Monospace;
+}
+
+GtkBox.shift-bar GtkEntry {
+    background-image: none;
+    padding: 6px 6px 6px 6px;
+}
+
