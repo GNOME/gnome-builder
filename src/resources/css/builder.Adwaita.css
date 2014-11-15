@@ -147,7 +147,6 @@ GbCommandBar GtkBox {
     border: none;
     background-image: linear-gradient(to bottom, #2e3436, #555753 10%);
     box-shadow: none;
-    font-family: Monospace;
 }
 
 GbCommandBar GtkLabel {
@@ -155,6 +154,7 @@ GbCommandBar GtkLabel {
 }
 
 GbCommandBar GtkEntry {
+    font-family: Monospace;
     background-image: none;
     padding: 6px 6px 6px 6px;
     color: #eeeeec;

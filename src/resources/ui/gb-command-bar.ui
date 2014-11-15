@@ -41,7 +41,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="label">&gt;&gt;</property>
+                <property name="label">»</property>
                 <property name="margin-start">6</property>
               </object>
             </child>
