@@ -25,7 +25,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="search_button">
+              <object class="GtkMenuButton" id="search_button">
                 <property name="visible">True</property>
                 <style>
                   <class name="image-button"/>
