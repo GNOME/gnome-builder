@@ -162,14 +162,6 @@
     <child>
       <object class="GtkOverlay" id="main_overlay">
         <property name="visible">True</property>
-        <child type="overlay">
-          <object class="GbCommandBar" id="command_bar">
-            <property name="transition-type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP</property>
-            <property name="halign">fill</property>
-            <property name="valign">end</property>
-            <property name="visible">True</property>
-          </object>
-        </child>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
@@ -247,29 +239,9 @@
               </object>
             </child>
             <child>
-              <object class="GtkBox">
-                <!-- WIP on new command bar. Set visible to True to test. -->
-                <property name="visible">False</property>
-                <property name="orientation">horizontal</property>
-                <property name="spacing">3</property>
-                <style>
-                  <class name="shift-bar"/>
-                </style>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="hexpand">False</property>
-                    <property name="label">&gt;&gt;</property>
-                    <property name="margin-start">6</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkEntry">
-                    <property name="visible">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="has-frame">False</property>
-                  </object>
-                </child>
+              <object class="GbCommandBar" id="command_bar">
+                <property name="transition-type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP</property>
+                <property name="visible">True</property>
               </object>
             </child>
           </object>
