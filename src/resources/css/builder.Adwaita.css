@@ -141,52 +141,22 @@ GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:active {
 
 
 /*
- * Command bar styling.
+ * Command Bar styling.
  */
-.gb-command-bar-frame {
-    background-color: shade (@theme_base_color, 0.8);
-    padding: 6px 6px 8px 6px;
-    border-color: shade (@theme_base_color, 0.6);
-    border-radius: 3px 3px 0 0;
-    border-width: 1px 1px 0 1px;
-    border-style: solid;
-}
-GtkEntry.gb-command-bar {
-    padding: 6px;
-    font-family: Monospace;
-}
-GtkLabel.gb-command-bar-placeholder {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: shade (@theme_base_color, 0.5);
-}
-GbCommandBarItem .gb-command-bar-item-command {
-    font-size: 1.1em;
-    font-family: Monospace;
-}
-GbCommandBarItem .gb-command-bar-item-result {
-    font-size: 1.1em;
-    font-family: Monospace;
-}
-GbCommandBarItem .gb-command-bar-item-equal {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: shade (@theme_base_color, 0.5);
-    padding-left: 12px;
-    padding-right: 12px;
-    font-family: Monospace;
-}
-
-GtkBox.shift-bar {
+GbCommandBar GtkBox {
     border: none;
     background-image: linear-gradient(to bottom, #2e3436, #555753 10%);
     box-shadow: none;
-    color: #eeeeec;
     font-family: Monospace;
 }
 
-GtkBox.shift-bar GtkEntry {
+GbCommandBar GtkLabel {
+    color: #eeeeec;
+}
+
+GbCommandBar GtkEntry {
     background-image: none;
     padding: 6px 6px 6px 6px;
+    color: #eeeeec;
 }
 

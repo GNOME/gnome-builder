@@ -29,7 +29,6 @@ struct _GbCommandBarPrivate
 {
   GtkSizeGroup      *result_size_group;
   GtkEntry          *entry;
-  GtkFrame          *frame;
   GtkListBox        *list_box;
   GtkScrolledWindow *scroller;
 };
@@ -45,7 +44,7 @@ gb_command_bar_new (void)
 /**
  * gb_command_bar_hide:
  * @bar: A #GbCommandBar
- * 
+ *
  * Hides the command bar in an animated fashion.
  */
 void
@@ -59,7 +58,7 @@ gb_command_bar_hide (GbCommandBar *bar)
 /**
  * gb_command_bar_show:
  * @bar: A #GbCommandBar
- * 
+ *
  * Shows the command bar in an animated fashion.
  */
 void
@@ -277,7 +276,6 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
                                                "/org/gnome/builder/ui/gb-command-bar.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, GbCommandBar, entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GbCommandBar, frame);
   gtk_widget_class_bind_template_child_private (widget_class, GbCommandBar, list_box);
   gtk_widget_class_bind_template_child_private (widget_class, GbCommandBar, scroller);
   gtk_widget_class_bind_template_child_private (widget_class, GbCommandBar, result_size_group);

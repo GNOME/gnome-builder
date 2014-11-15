@@ -164,9 +164,8 @@
         <property name="visible">True</property>
         <child type="overlay">
           <object class="GbCommandBar" id="command_bar">
-            <property name="width-request">500</property>
             <property name="transition-type">GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP</property>
-            <property name="halign">center</property>
+            <property name="halign">fill</property>
             <property name="valign">end</property>
             <property name="visible">True</property>
           </object>
