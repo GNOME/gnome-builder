@@ -141,6 +141,7 @@
         <child>
           <object class="GtkButton" id="run_button">
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <style>
               <class name="image-button"/>
             </style>
