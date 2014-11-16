@@ -146,7 +146,7 @@ GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:active {
 GbCommandBar GtkBox {
     border: none;
     background-image: linear-gradient(to bottom, #2e3436, #555753 10%);
-    box-shadow: none;
+    box-shadow: inset 0px 3px 6px #2e3436;
 }
 
 GbCommandBar GtkLabel {
