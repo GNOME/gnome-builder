@@ -51,6 +51,7 @@ struct _GbWorkbenchPrivate
   GtkButton              *next_button;
   GtkButton              *run_button;
   GtkHeaderBar           *header_bar;
+  GtkSearchEntry         *search_entry;
   GtkStack               *stack;
   GtkStackSwitcher       *switcher;
 };
@@ -349,11 +350,24 @@ on_command_bar_notify_child_revealed (GbCommandBar *command_bar,
 }
 
 static void
+on_global_search_activate (GSimpleAction *action,
+                           GVariant      *parameters,
+                           gpointer       user_data)
+{
+  GbWorkbench *workbench = user_data;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  gtk_widget_grab_focus (GTK_WIDGET (workbench->priv->search_entry));
+}
+
+static void
 gb_workbench_constructed (GObject *object)
 {
   static const GActionEntry actions[] = {
     { "workspace1", on_workspace1_activate },
     { "workspace2", on_workspace2_activate },
+    { "global-search", on_global_search_activate },
     { "go-backward", on_go_backward_activate },
     { "go-forward", on_go_forward_activate },
     { "show-command-bar", on_show_command_bar_activate },
@@ -535,6 +549,8 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
                                                 run_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
                                                 header_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
+                                                search_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
                                                 switcher);
   gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
