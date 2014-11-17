@@ -115,6 +115,8 @@ gb_source_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
 
   priv = GB_SOURCE_CHANGE_GUTTER_RENDERER (renderer)->priv;
 
+  GTK_SOURCE_GUTTER_RENDERER_CLASS (gb_source_change_gutter_renderer_parent_class)->draw (renderer, cr, bg_area, cell_area, begin, end, state);
+
   lineno = gtk_text_iter_get_line (begin);
   flags = gb_source_change_monitor_get_line (priv->change_monitor, lineno);
 
