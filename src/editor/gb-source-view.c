@@ -1347,10 +1347,61 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
                                 GtkTextViewLayer  layer,
                                 cairo_t          *cr)
 {
+  static GdkRGBA lines = { 0 };
   GbSourceViewPrivate *priv = view->priv;
+  GtkSourceStyleScheme *scheme;
   GtkTextView *text_view = GTK_TEXT_VIEW (view);
+  GtkTextBuffer *buffer;
 
   GTK_TEXT_VIEW_CLASS (gb_source_view_parent_class)->draw_layer (text_view, layer, cr);
+
+  if ((layer == GTK_TEXT_VIEW_LAYER_BELOW) &&
+      (buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view))) &&
+      GTK_SOURCE_IS_BUFFER (buffer) &&
+      (scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer))) &&
+      g_strcmp0 ("builder", gtk_source_style_scheme_get_id (scheme)) == 0)
+    {
+      GdkRectangle clip;
+      GdkRectangle vis;
+      gdouble x;
+      gdouble y;
+
+#define GRID_SIZE 16
+
+      if (lines.alpha == 0.0)
+        gdk_rgba_parse (&lines, "#eeefee");
+
+      cairo_save (cr);
+      cairo_set_line_width (cr, 1.0);
+      gdk_cairo_set_source_rgba (cr, &lines);
+      gdk_cairo_get_clip_rectangle (cr, &clip);
+      gtk_text_view_get_visible_rect (text_view, &vis);
+
+      /*
+       * The following constants come from gtktextview.c pixel cache
+       * settings. Sadly, I didn't expose those in public API so we have to
+       * just keep them in sync here. 64 for X, height/2 for Y.
+       */
+      x = (GRID_SIZE - (vis.x % GRID_SIZE)) - 64;
+      y = (GRID_SIZE - (vis.y % GRID_SIZE)) - (vis.height / 2 / GRID_SIZE * GRID_SIZE) - GRID_SIZE;
+
+      for (; x <= clip.x + clip.width; x += GRID_SIZE)
+        {
+          cairo_move_to (cr, x + .5, clip.y + .5);
+          cairo_line_to (cr, x + .5, clip.y + clip.height + .5);
+        }
+
+      for (; y <= clip.y + clip.height; y += GRID_SIZE)
+        {
+          cairo_move_to (cr, clip.x + .5, y + .5);
+          cairo_line_to (cr, clip.x + clip.width + .5, y + .5);
+        }
+
+      cairo_stroke (cr);
+      cairo_restore (cr);
+
+#undef GRID_SIZE
+    }
 
   if (layer == GTK_TEXT_VIEW_LAYER_BELOW)
     {
