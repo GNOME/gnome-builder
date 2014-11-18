@@ -39,6 +39,7 @@
   <color name="selection1" value="#b3d4fc"/>
   <color name="line1" value="#a2a3a3"/>
   <color name="white" value="#ffffff"/>
+  <color name="yellow1" value="#fff9e5"/>
 
   <color name="butter1"                     value="#fce94f"/>
   <color name="butter2"                     value="#edd400"/>
@@ -105,7 +106,7 @@
   <style name="def:string"                  foreground="blue2"/>
   <style name="def:type"                    foreground="gr1" bold="true"/>
   <style name="def:underlined"              italic="true" underline="true"/>
-  <style name="def:warning"                 background="plum1"/>
+  <style name="def:warning"                 background="yellow1"/>
   <style name="def:special-constant"        foreground="purple1"/>
 
   <style name="diff:added-line"             foreground="gr1"/>
