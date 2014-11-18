@@ -1374,7 +1374,7 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
 #define GRID_SIZE 16
 
       if (lines.alpha == 0.0)
-        gdk_rgba_parse (&lines, "rgba(.5,.5,.5,.05)");
+        gdk_rgba_parse (&lines, "rgba(.125,.125,.125,.025)");
 
       cairo_save (cr);
       cairo_set_line_width (cr, 1.0);
