@@ -1372,15 +1372,16 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
       gdouble y;
       PangoContext *context;
       PangoLayout *layout;
-      int grid_size = 16;
+      int grid_width = 16;
+      int grid_height = 16;
 
       context = gtk_widget_get_pango_context (GTK_WIDGET (view));
       layout = pango_layout_new (context);
       pango_layout_set_text (layout, "X", 1);
-      pango_layout_get_pixel_size (layout, NULL, &grid_size);
+      pango_layout_get_pixel_size (layout, &grid_width, &grid_height);
       g_object_unref (layout);
 
-#define GRID_SIZE grid_size
+      grid_width *= 2;
 
       if (lines.alpha == 0.0)
         gdk_rgba_parse (&lines, "rgba(.125,.125,.125,.025)");
@@ -1396,16 +1397,18 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
        * settings. Sadly, I didn't expose those in public API so we have to
        * just keep them in sync here. 64 for X, height/2 for Y.
        */
-      x = (GRID_SIZE - (vis.x % GRID_SIZE)) - 64;
-      y = (GRID_SIZE - (vis.y % GRID_SIZE)) - (vis.height / 2 / GRID_SIZE * GRID_SIZE) - GRID_SIZE;
+      x = (grid_width - (vis.x % grid_width)) - (64 / grid_width * grid_width) - grid_width + 1;
+      y = (grid_height - (vis.y % grid_height))
+          - (vis.height / 2 / grid_height * grid_height)
+          - grid_height;
 
-      for (; x <= clip.x + clip.width; x += GRID_SIZE)
+      for (; x <= clip.x + clip.width; x += grid_width)
         {
           cairo_move_to (cr, x + .5, clip.y - .5);
           cairo_line_to (cr, x + .5, clip.y + clip.height - .5);
         }
 
-      for (; y <= clip.y + clip.height; y += GRID_SIZE)
+      for (; y <= clip.y + clip.height; y += grid_height)
         {
           cairo_move_to (cr, clip.x + .5, y - .5);
           cairo_line_to (cr, clip.x + clip.width + .5, y - .5);
@@ -1413,8 +1416,6 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
 
       cairo_stroke (cr);
       cairo_restore (cr);
-
-#undef GRID_SIZE
     }
 
   GTK_TEXT_VIEW_CLASS (gb_source_view_parent_class)->draw_layer (text_view, layer, cr);
