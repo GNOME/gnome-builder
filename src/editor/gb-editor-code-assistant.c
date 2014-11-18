@@ -409,36 +409,60 @@ highlight_line (GbSourceView *source_view,
                 guint         line,
                 GcaSeverity   severity)
 {
+  GtkSourceStyleScheme *scheme;
+  GtkSourceStyle *style;
   GtkAllocation alloc;
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GdkRectangle rect;
   GdkRGBA color;
-  GdkRGBA shaded;
+  gchar *bg = NULL;
+
+  /*
+   * TODO: Move all this style parsing into outer function to save on
+   *       useless overhead.
+   */
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
+  if (!scheme)
+    return;
+
+  style = gtk_source_style_scheme_get_style (scheme, "def:error");
+  if (!style)
+    return;
+
 
   switch (severity)
     {
     case GCA_SEVERITY_DEPRECATED:
     case GCA_SEVERITY_WARNING:
-      gdk_rgba_parse (&color, "#fce94f");
-      color.alpha = 0.125;
+      style = gtk_source_style_scheme_get_style (scheme, "def:warning");
+      if (!style)
+        return;
+      g_object_get (style, "background", &bg, NULL);
+      gdk_rgba_parse (&color, bg);
       break;
 
     case GCA_SEVERITY_FATAL:
     case GCA_SEVERITY_ERROR:
-      gdk_rgba_parse (&color, "#cc0000");
-      color.alpha = 0.125;
+      style = gtk_source_style_scheme_get_style (scheme, "def:error");
+      if (!style)
+        return;
+      g_object_get (style, "background", &bg, NULL);
+      gdk_rgba_parse (&color, bg);
       break;
 
     case GCA_SEVERITY_INFO:
     case GCA_SEVERITY_NONE:
     default:
-      gdk_rgba_parse (&color, "#ffffff");
-      color.alpha = 0.0;
-      break;
+      return;
     }
 
-  gb_rgba_shade (&color, &shaded, 0.8);
+  g_free (bg);
 
   gtk_widget_get_allocation (GTK_WIDGET (source_view), &alloc);
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
@@ -464,13 +488,6 @@ highlight_line (GbSourceView *source_view,
   cairo_rectangle (cr, rect.x, rect.y, rect.width, rect.height);
   gdk_cairo_set_source_rgba (cr, &color);
   cairo_fill (cr);
-
-  cairo_move_to (cr, rect.x, rect.y);
-  cairo_line_to (cr, rect.x + rect.width, rect.y);
-  cairo_move_to (cr, rect.x, rect.y + rect.height);
-  cairo_line_to (cr, rect.x + rect.width, rect.y + rect.height);
-  gdk_cairo_set_source_rgba (cr, &shaded);
-  cairo_stroke (cr);
 }
 
 static void
