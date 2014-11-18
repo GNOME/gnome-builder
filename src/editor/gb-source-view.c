@@ -1370,8 +1370,17 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
       GdkRectangle vis;
       gdouble x;
       gdouble y;
+      PangoContext *context;
+      PangoLayout *layout;
+      int grid_size = 16;
 
-#define GRID_SIZE 16
+      context = gtk_widget_get_pango_context (GTK_WIDGET (view));
+      layout = pango_layout_new (context);
+      pango_layout_set_text (layout, "X", 1);
+      pango_layout_get_pixel_size (layout, NULL, &grid_size);
+      g_object_unref (layout);
+
+#define GRID_SIZE grid_size
 
       if (lines.alpha == 0.0)
         gdk_rgba_parse (&lines, "rgba(.125,.125,.125,.025)");
@@ -1392,14 +1401,14 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
 
       for (; x <= clip.x + clip.width; x += GRID_SIZE)
         {
-          cairo_move_to (cr, x + .5, clip.y + .5);
-          cairo_line_to (cr, x + .5, clip.y + clip.height + .5);
+          cairo_move_to (cr, x + .5, clip.y - .5);
+          cairo_line_to (cr, x + .5, clip.y + clip.height - .5);
         }
 
       for (; y <= clip.y + clip.height; y += GRID_SIZE)
         {
-          cairo_move_to (cr, clip.x + .5, y + .5);
-          cairo_line_to (cr, clip.x + clip.width + .5, y + .5);
+          cairo_move_to (cr, clip.x + .5, y - .5);
+          cairo_line_to (cr, clip.x + clip.width + .5, y - .5);
         }
 
       cairo_stroke (cr);
