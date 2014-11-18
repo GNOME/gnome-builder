@@ -1360,8 +1360,6 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
    * in here. Once we can do this with CSS background's, we should probably do
    * it there.
    */
-  GTK_TEXT_VIEW_CLASS (gb_source_view_parent_class)->draw_layer (text_view, layer, cr);
-
   if ((layer == GTK_TEXT_VIEW_LAYER_BELOW) &&
       (buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view))) &&
       GTK_SOURCE_IS_BUFFER (buffer) &&
@@ -1409,6 +1407,8 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
 
 #undef GRID_SIZE
     }
+
+  GTK_TEXT_VIEW_CLASS (gb_source_view_parent_class)->draw_layer (text_view, layer, cr);
 
   if (layer == GTK_TEXT_VIEW_LAYER_BELOW)
     {
