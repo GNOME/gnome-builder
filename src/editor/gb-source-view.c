@@ -1353,6 +1353,13 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
   GtkTextView *text_view = GTK_TEXT_VIEW (view);
   GtkTextBuffer *buffer;
 
+  /*
+   * WORKAROUND:
+   *
+   * We can't do our grid background from a GtkSourceStyleScheme, so we hack it
+   * in here. Once we can do this with CSS background's, we should probably do
+   * it there.
+   */
   GTK_TEXT_VIEW_CLASS (gb_source_view_parent_class)->draw_layer (text_view, layer, cr);
 
   if ((layer == GTK_TEXT_VIEW_LAYER_BELOW) &&
