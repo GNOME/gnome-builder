@@ -17,6 +17,8 @@
 
     <file>snippets/c.snippets</file>
     <file>snippets/chdr.snippets</file>
+    <file>snippets/python.snippets</file>
+    <file>snippets/vala.snippets</file>
 
     <file>ui/gb-command-bar.ui</file>
     <file>ui/gb-command-bar-item.ui</file>
