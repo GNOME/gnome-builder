@@ -94,6 +94,7 @@ struct _GbEditorTabPrivate
   /*
    * Code Assistance.
    */
+  GCancellable            *gca_cancellable;
   GcaService              *gca_service;
   gchar                   *gca_tmpfile;
   gint                     gca_tmpfd;

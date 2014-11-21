@@ -319,7 +319,7 @@ gb_editor_code_assistant_parse (gpointer user_data)
                           priv->gca_tmpfile,
                           cursor,
                           options,
-                          NULL,
+                          priv->gca_cancellable,
                           gb_editor_code_assistant_parse_cb,
                           g_object_ref (tab));
 
@@ -743,9 +743,15 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
     gWarningPixbuf = get_pixbuf_sized_for (GTK_WIDGET (tab->priv->source_view),
                                            "dialog-warning-symbolic");
 
+  /* destroy is safe to call on zeroed structures */
+  gb_editor_code_assistant_destroy (tab);
+
   lang_id = get_language (tab->priv->source_view);
   if (!lang_id)
     EXIT;
+
+  if (!tab->priv->gca_cancellable)
+    tab->priv->gca_cancellable = g_cancellable_new ();
 
   name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", lang_id);
   path = g_strdup_printf ("/org/gnome/CodeAssist/v1/%s", lang_id);
@@ -759,7 +765,7 @@ gb_editor_code_assistant_init (GbEditorTab *tab)
   if (!service)
     gca_service_proxy_new_for_bus (G_BUS_TYPE_SESSION,
                                    G_DBUS_PROXY_FLAGS_NONE,
-                                   name, path, NULL,
+                                   name, path, tab->priv->gca_cancellable,
                                    service_proxy_new_cb,
                                    g_object_ref (tab));
   else
@@ -781,6 +787,12 @@ gb_editor_code_assistant_destroy (GbEditorTab *tab)
   g_return_if_fail (GB_IS_EDITOR_TAB (tab));
 
   priv = tab->priv;
+
+  if (priv->gca_cancellable)
+    {
+      g_cancellable_cancel (priv->gca_cancellable);
+      g_clear_object (&priv->gca_cancellable);
+    }
 
   g_clear_object (&priv->gca_service);
   g_clear_pointer (&priv->gca_error_lines, g_hash_table_unref);
