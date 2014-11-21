@@ -184,4 +184,5 @@ gb_notebook_class_init (GbNotebookClass *klass)
 static void
 gb_notebook_init (GbNotebook *notebook)
 {
+  gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
 }
