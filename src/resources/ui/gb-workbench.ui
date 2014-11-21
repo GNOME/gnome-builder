@@ -166,6 +166,7 @@
           <object class="GbCreditsWidget" id="credits">
             <property name="visible">False</property>
             <property name="expand">True</property>
+            <property name="duration">40000</property>
           </object>
         </child>
         <child>
