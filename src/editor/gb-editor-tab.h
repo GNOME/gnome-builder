@@ -21,7 +21,6 @@
 
 #include "gb-tab.h"
 #include "gb-editor-document.h"
-#include "gb-editor-settings.h"
 
 G_BEGIN_DECLS
 
@@ -54,9 +53,6 @@ GType             gb_editor_tab_get_type       (void) G_GNUC_CONST;
 GtkWidget        *gb_editor_tab_new            (void);
 GbEditorDocument *gb_editor_tab_get_document   (GbEditorTab                *tab);
 GtkSourceFile    *gb_editor_tab_get_file       (GbEditorTab                *tab);
-GbEditorSettings *gb_editor_tab_get_settings   (GbEditorTab                *tab);
-void              gb_editor_tab_set_settings   (GbEditorTab                *tab,
-                                                GbEditorSettings           *settings);
 void              gb_editor_tab_set_font_desc  (GbEditorTab                *tab,
                                                 const PangoFontDescription *font_desc);
 gboolean          gb_editor_tab_get_is_default (GbEditorTab                *tab);

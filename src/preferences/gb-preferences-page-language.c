@@ -21,7 +21,6 @@
 #include <gtksourceview/gtksource.h>
 #include <string.h>
 
-#include "gb-editor-settings.h"
 #include "gb-editor-settings-widget.h"
 #include "gb-preferences-page-language.h"
 #include "gb-string.h"
@@ -133,7 +132,6 @@ row_selected (GtkListBox                *list_box,
 {
   GtkSourceLanguage *lang;
   GbEditorSettingsWidget *widget;
-  GbEditorSettings *settings;
   const gchar *lang_id;
   GtkDialog *dialog;
   GtkWidget *toplevel;
@@ -151,9 +149,6 @@ row_selected (GtkListBox                *list_box,
     return;
 
   lang_id = gtk_source_language_get_id (lang);
-  settings = gb_editor_settings_new_for_language (lang_id);
-  if (!settings)
-    return;
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (list_box));
 
@@ -166,7 +161,7 @@ row_selected (GtkListBox                *list_box,
   content_area = gtk_dialog_get_content_area (dialog);
   widget = g_object_new (GB_TYPE_EDITOR_SETTINGS_WIDGET,
                          "border-width", 12,
-                         "settings", settings,
+                         "language", lang_id,
                          "visible", TRUE,
                          NULL);
   gtk_container_add (GTK_CONTAINER (content_area), GTK_WIDGET (widget));
@@ -175,8 +170,6 @@ row_selected (GtkListBox                *list_box,
   gtk_widget_destroy (GTK_WIDGET (dialog));
 
   gtk_list_box_unselect_row (list_box, row);
-
-  g_object_unref (settings);
 }
 
 static void

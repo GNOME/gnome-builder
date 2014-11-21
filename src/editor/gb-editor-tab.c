@@ -1226,7 +1226,6 @@ gb_editor_tab_dispose (GObject *object)
   g_clear_object (&tab->priv->search_highlighter);
   g_clear_object (&tab->priv->search_settings);
   g_clear_object (&tab->priv->search_context);
-  g_clear_object (&tab->priv->settings);
   g_clear_object (&tab->priv->document);
 
   G_OBJECT_CLASS (gb_editor_tab_parent_class)->dispose (object);

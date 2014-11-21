@@ -25,7 +25,6 @@
 #include "gb-animation.h"
 #include "gb-box-theatric.h"
 #include "gb-editor-document.h"
-#include "gb-editor-settings.h"
 #include "gb-markdown-preview.h"
 #include "gb-notebook.h"
 #include "gb-source-change-monitor.h"
@@ -56,11 +55,6 @@ struct _GbEditorTabPrivate
    */
   GbSourceChangeMonitor *change_monitor;
   GtkSourceGutterRenderer *change_renderer;
-
-  /*
-   * Tab related settings.
-   */
-  GbEditorSettings *settings;
 
   /*
    * Weak reference bindings for tracking settings.

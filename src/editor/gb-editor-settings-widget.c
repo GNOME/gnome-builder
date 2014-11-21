@@ -18,12 +18,12 @@
 
 #include <glib/gi18n.h>
 
-#include "gb-editor-settings.h"
 #include "gb-editor-settings-widget.h"
 
 struct _GbEditorSettingsWidgetPrivate
 {
-  GbEditorSettings *settings;
+  GSettings      *settings;
+  gchar          *language;
 
   GtkCheckButton *auto_indent;
   GtkCheckButton *highlight_current_line;
@@ -33,7 +33,6 @@ struct _GbEditorSettingsWidgetPrivate
   GtkCheckButton *show_line_numbers;
   GtkCheckButton *show_right_margin;
   GtkCheckButton *smart_home_end;
-
   GtkSpinButton  *right_margin_position;
   GtkSpinButton  *tab_width;
 };
@@ -43,67 +42,78 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbEditorSettingsWidget, gb_editor_settings_widget,
 
 enum {
   PROP_0,
-  PROP_SETTINGS,
+  PROP_LANGUAGE,
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-GbEditorSettings *
-gb_editor_settings_widget_get_settings (GbEditorSettingsWidget *widget)
+const gchar *
+gb_editor_settings_widget_get_language (GbEditorSettingsWidget *widget)
 {
   g_return_val_if_fail (GB_IS_EDITOR_SETTINGS_WIDGET (widget), NULL);
 
-  return widget->priv->settings;
+  return widget->priv->language;
 }
 
-static void
-gb_editor_settings_widget_set_settings (GbEditorSettingsWidget *widget,
-                                        GbEditorSettings       *settings)
+void
+gb_editor_settings_widget_set_language (GbEditorSettingsWidget *widget,
+                                        const gchar            *language)
 {
   GbEditorSettingsWidgetPrivate *priv;
 
   g_return_if_fail (GB_IS_EDITOR_SETTINGS_WIDGET (widget));
-  g_return_if_fail (GB_IS_EDITOR_SETTINGS (settings));
 
   priv = widget->priv;
 
-  if (settings == priv->settings)
-      return;
+  if (language != priv->language)
+    {
+      gchar *path;
 
-  g_clear_object (&priv->settings);
-  priv->settings = g_object_ref (settings);
+      g_free (priv->language);
+      priv->language = g_strdup (language);
 
-  g_object_bind_property (settings, "auto-indent",
-                          priv->auto_indent, "active",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (settings, "highlight-current-line",
-                          priv->highlight_current_line, "active",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (settings, "highlight-matching-brackets",
-                          priv->highlight_matching_brackets, "active",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (settings, "insert-spaces-instead-of-tabs",
-                          priv->insert_spaces_instead_of_tabs, "active",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (settings, "show-line-marks",
-                          priv->show_line_marks, "active",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (settings, "show-line-numbers",
-                          priv->show_line_numbers, "active",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (settings, "show-right-margin",
-                          priv->show_right_margin, "active",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (settings, "smart-home-end",
-                          priv->smart_home_end, "active",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (settings, "right-margin-position",
-                          priv->right_margin_position, "value",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (settings, "tab-width",
-                          priv->tab_width, "value",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+      g_clear_object (&priv->settings);
+
+      path = g_strdup_printf ("/org/gnome/builder/editor/language/%s/",
+                              language);
+      priv->settings = g_settings_new_with_path (
+        "org.gnome.builder.editor.language", path);
+      g_free (path);
+
+      g_settings_bind (priv->settings, "auto-indent",
+                       priv->auto_indent, "active",
+                       G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (priv->settings, "highlight-current-line",
+                       priv->highlight_current_line, "active",
+                       G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (priv->settings, "highlight-matching-brackets",
+                       priv->highlight_matching_brackets, "active",
+                       G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (priv->settings, "insert-spaces-instead-of-tabs",
+                       priv->insert_spaces_instead_of_tabs, "active",
+                       G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (priv->settings, "show-line-marks",
+                       priv->show_line_marks, "active",
+                       G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (priv->settings, "show-line-numbers",
+                       priv->show_line_numbers, "active",
+                       G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (priv->settings, "show-right-margin",
+                       priv->show_right_margin, "active",
+                       G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (priv->settings, "smart-home-end",
+                       priv->smart_home_end, "active",
+                       G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (priv->settings, "right-margin-position",
+                       priv->right_margin_position, "value",
+                       G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (priv->settings, "tab-width",
+                       priv->tab_width, "value",
+                       G_SETTINGS_BIND_DEFAULT);
+
+      g_object_notify_by_pspec (G_OBJECT (widget), gParamSpecs [PROP_LANGUAGE]);
+    }
 }
 
 static void
@@ -111,6 +121,7 @@ gb_editor_settings_widget_finalize (GObject *object)
 {
   GbEditorSettingsWidgetPrivate *priv = GB_EDITOR_SETTINGS_WIDGET (object)->priv;
 
+  g_clear_pointer (&priv->language, g_free);
   g_clear_object (&priv->settings);
 
   G_OBJECT_CLASS (gb_editor_settings_widget_parent_class)->finalize (object);
@@ -126,8 +137,8 @@ gb_editor_settings_widget_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_SETTINGS:
-      g_value_set_object (value, gb_editor_settings_widget_get_settings (self));
+    case PROP_LANGUAGE:
+      g_value_set_string (value, gb_editor_settings_widget_get_language (self));
       break;
 
     default:
@@ -145,8 +156,8 @@ gb_editor_settings_widget_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_SETTINGS:
-      gb_editor_settings_widget_set_settings (self, g_value_get_object (value));
+    case PROP_LANGUAGE:
+      gb_editor_settings_widget_set_language (self, g_value_get_string (value));
       break;
 
     default:
@@ -178,16 +189,14 @@ gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, smart_home_end);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, tab_width);
 
-  gParamSpecs [PROP_SETTINGS] =
-    g_param_spec_object ("settings",
-                         _("Settings"),
-                         _("The settings to be configured."),
-                         GB_TYPE_EDITOR_SETTINGS,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SETTINGS,
-                                   gParamSpecs [PROP_SETTINGS]);
+  gParamSpecs [PROP_LANGUAGE] =
+    g_param_spec_string ("language",
+                         _("Language"),
+                         _("The language to change the settings for."),
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_LANGUAGE,
+                                   gParamSpecs [PROP_LANGUAGE]);
 }
 
 static void
