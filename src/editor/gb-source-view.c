@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
+#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 
 #include "gb-animation.h"
 #include "gb-source-auto-indenter.h"
@@ -48,7 +49,11 @@ struct _GbSourceViewPrivate
   GtkTextBuffer               *buffer;
   GbSourceAutoIndenter        *auto_indenter;
   GtkSourceCompletionProvider *snippets_provider;
+  GtkSourceCompletionProvider *words_provider;
   GbSourceVim                 *vim;
+
+  GSettings                   *language_settings;
+  GSettings                   *editor_settings;
 
   guint                        buffer_insert_text_handler;
   guint                        buffer_insert_text_after_handler;
@@ -57,8 +62,9 @@ struct _GbSourceViewPrivate
   guint                        buffer_mark_set_handler;
   guint                        buffer_notify_language_handler;
 
-  guint                        show_shadow : 1;
   guint                        auto_indent : 1;
+  guint                        enable_word_completion : 1;
+  guint                        show_shadow : 1;
 };
 
 typedef void (*GbSourceViewMatchFunc) (GbSourceView      *view,
@@ -71,9 +77,11 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbSourceView, gb_source_view, GTK_SOURCE_TYPE_VIEW)
 enum {
   PROP_0,
   PROP_AUTO_INDENT,
+  PROP_ENABLE_WORD_COMPLETION,
   PROP_FONT_NAME,
   PROP_SEARCH_HIGHLIGHTER,
   PROP_SHOW_SHADOW,
+  PROP_SMART_HOME_END_SIMPLE,
   LAST_PROP
 };
 
@@ -94,6 +102,177 @@ gb_source_view_get_vim (GbSourceView *view)
   g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), NULL);
 
   return view->priv->vim;
+}
+
+gboolean
+gb_source_view_get_enable_word_completion (GbSourceView *view)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), FALSE);
+
+  return view->priv->enable_word_completion;
+}
+
+void
+gb_source_view_set_enable_word_completion (GbSourceView *view,
+                                           gboolean      enable_word_completion)
+{
+  GbSourceViewPrivate *priv;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  priv = view->priv;
+
+  if (enable_word_completion != priv->enable_word_completion)
+    {
+      GtkSourceCompletion *completion;
+
+      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (view));
+
+      if (!enable_word_completion)
+        gtk_source_completion_remove_provider (
+            completion,
+            GTK_SOURCE_COMPLETION_PROVIDER (priv->words_provider),
+            NULL);
+      else
+        gtk_source_completion_add_provider (
+            completion,
+            GTK_SOURCE_COMPLETION_PROVIDER (priv->words_provider),
+            NULL);
+
+      priv->enable_word_completion = enable_word_completion;
+      g_object_notify_by_pspec (G_OBJECT (view),
+                                gParamSpecs [PROP_ENABLE_WORD_COMPLETION]);
+    }
+}
+
+static void
+gb_source_view_disconnect_settings (GbSourceView *view)
+{
+  GtkTextBuffer *buffer;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+
+  g_settings_unbind (buffer, "highlight-matching-brackets");
+  g_settings_unbind (buffer, "style-scheme-name");
+
+  g_settings_unbind (view, "auto-indent");
+  g_settings_unbind (view, "highlight-current-line");
+  g_settings_unbind (view, "insert-spaces-instead-of-tabs");
+  g_settings_unbind (view, "right-margin-position");
+  g_settings_unbind (view, "show-line-marks");
+  g_settings_unbind (view, "show-line-numbers");
+  g_settings_unbind (view, "show-right-margin");
+  g_settings_unbind (view, "tab-width");
+  g_settings_unbind (view, "font-name");
+  g_settings_unbind (view->priv->vim, "enabled");
+
+  g_clear_object (&view->priv->language_settings);
+  g_clear_object (&view->priv->editor_settings);
+}
+
+static void
+gb_source_view_connect_settings (GbSourceView *view)
+{
+  GtkTextBuffer *buffer;
+  GtkSourceLanguage *language;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+
+  if (language)
+    {
+      GSettings *settings;
+      gchar *path;
+
+      path = g_strdup_printf ("/org/gnome/builder/editor/language/%s/",
+                              gtk_source_language_get_id (language));
+      settings = g_settings_new_with_path ("org.gnome.builder.editor.language",
+                                           path);
+      g_free (path);
+
+      g_settings_bind (settings, "auto-indent", view, "auto-indent",
+                       G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "auto-indent", view, "auto-indent",
+                       G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "highlight-current-line",
+                       view, "highlight-current-line",
+                       G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "highlight-matching-brackets",
+                       buffer, "highlight-matching-brackets",
+                       G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "insert-spaces-instead-of-tabs",
+                       view, "insert-spaces-instead-of-tabs",
+                       G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "right-margin-position",
+                       view, "right-margin-position",
+                       G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "show-line-marks",
+                       view, "show-line-marks",
+                       G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "show-line-numbers",
+                       view,"show-line-numbers",
+                       G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "show-right-margin",
+                       view, "show-right-margin",
+                       G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "tab-width", view, "tab-width",
+                       G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "smart-home-end",
+                       view, "smart-home-end-simple",
+                       G_SETTINGS_BIND_GET);
+
+      view->priv->language_settings = settings;
+    }
+
+  view->priv->editor_settings = g_settings_new ("org.gnome.builder.editor");
+
+  g_settings_bind (view->priv->editor_settings, "font-name",
+                   view, "font-name", G_SETTINGS_BIND_GET);
+  g_settings_bind (view->priv->editor_settings, "style-scheme-name",
+                   buffer, "style-scheme-name", G_SETTINGS_BIND_GET);
+  g_settings_bind (view->priv->editor_settings, "vim-mode",
+                   view->priv->vim, "enabled", G_SETTINGS_BIND_GET);
+  g_settings_bind (view->priv->editor_settings, "word-completion",
+                   view, "enable-word-completion", G_SETTINGS_BIND_GET);
+}
+
+static void
+gb_source_view_reload_settings (GbSourceView *view)
+{
+  GtkSourceLanguage *language;
+  GtkTextBuffer *buffer;
+  GSettings *settings = NULL;
+  gchar *path;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  if (view->priv->language_settings)
+    {
+      gb_source_view_disconnect_settings (view);
+      g_clear_object (&view->priv->language_settings);
+    }
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+
+  if (language)
+    {
+      path = g_strdup_printf ("/org/gnome/builder/editor/language/%s/",
+                              gtk_source_language_get_id (language));
+      settings = g_settings_new_with_path ("org.gnome.builder.editor.language",
+                                           path);
+      g_free (path);
+    }
+
+  if (settings)
+    {
+      view->priv->language_settings = settings;
+      gb_source_view_connect_settings (view);
+    }
 }
 
 void
@@ -848,14 +1027,17 @@ on_mark_set (GtkTextBuffer *buffer,
 }
 
 static void
-gb_source_view_reload_snippets (GbSourceView      *source_view,
-                                GtkSourceLanguage *language)
+gb_source_view_reload_snippets (GbSourceView *source_view)
 {
   GbSourceSnippetsManager *mgr;
   GbSourceSnippets *snippets = NULL;
+  GtkSourceLanguage *language;
+  GtkTextBuffer *buffer;
 
   g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
-  g_return_if_fail (!language || GTK_SOURCE_IS_LANGUAGE (language));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
 
   if (language)
     {
@@ -869,19 +1051,16 @@ gb_source_view_reload_snippets (GbSourceView      *source_view,
 }
 
 static void
-on_language_set (GtkSourceBuffer *buffer,
-                 GParamSpec      *pspec,
-                 GbSourceView    *source_view)
+gb_source_view_reload_auto_indenter (GbSourceView *view)
 {
-  GtkSourceLanguage *language;
   GbSourceAutoIndenter *auto_indenter = NULL;
+  GtkTextBuffer *buffer;
+  GtkSourceLanguage *language;
 
-  g_return_if_fail (GTK_SOURCE_IS_BUFFER (buffer));
-  g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
 
-  g_clear_object (&source_view->priv->auto_indenter);
-
-  language = gtk_source_buffer_get_language (buffer);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
 
   if (language)
     {
@@ -897,9 +1076,22 @@ on_language_set (GtkSourceBuffer *buffer,
         auto_indenter = gb_source_auto_indenter_xml_new ();
     }
 
-  source_view->priv->auto_indenter = auto_indenter;
+  g_clear_object (&view->priv->auto_indenter);
 
-  gb_source_view_reload_snippets (source_view, language);
+  view->priv->auto_indenter = auto_indenter;
+}
+
+static void
+on_language_set (GtkSourceBuffer *buffer,
+                 GParamSpec      *pspec,
+                 GbSourceView    *source_view)
+{
+  g_return_if_fail (GTK_SOURCE_IS_BUFFER (buffer));
+  g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
+
+  gb_source_view_reload_auto_indenter (source_view);
+  gb_source_view_reload_settings (source_view);
+  gb_source_view_reload_snippets (source_view);
 }
 
 static void
@@ -936,6 +1128,9 @@ gb_source_view_notify_buffer (GObject    *object,
       priv->buffer_delete_range_after_handler = 0;
       priv->buffer_mark_set_handler = 0;
       priv->buffer_notify_language_handler = 0;
+      gtk_source_completion_words_unregister (
+          GTK_SOURCE_COMPLETION_WORDS (priv->words_provider),
+          GTK_TEXT_BUFFER (priv->buffer));
       g_object_remove_weak_pointer (G_OBJECT (priv->buffer),
                                     (gpointer *) &priv->buffer);
       priv->buffer = NULL;
@@ -984,6 +1179,10 @@ gb_source_view_notify_buffer (GObject    *object,
                                  G_CALLBACK (on_language_set),
                                  object,
                                  0);
+
+      gtk_source_completion_words_register (
+          GTK_SOURCE_COMPLETION_WORDS (priv->words_provider),
+          GTK_TEXT_BUFFER (buffer));
     }
 }
 
@@ -1507,10 +1706,12 @@ gb_source_view_finalize (GObject *object)
       priv->buffer = NULL;
     }
 
+  gb_source_view_disconnect_settings (GB_SOURCE_VIEW (object));
   g_clear_pointer (&priv->snippets, g_queue_free);
   g_clear_object (&priv->search_highlighter);
   g_clear_object (&priv->auto_indenter);
   g_clear_object (&priv->snippets_provider);
+  g_clear_object (&priv->words_provider);
   g_clear_object (&priv->vim);
 
   G_OBJECT_CLASS (gb_source_view_parent_class)->finalize (object);
@@ -1529,6 +1730,10 @@ gb_source_view_get_property (GObject    *object,
     case PROP_AUTO_INDENT:
       g_value_set_boolean (value, view->priv->auto_indent);
       break;
+      
+    case PROP_ENABLE_WORD_COMPLETION:
+      g_value_set_boolean (value,
+                           gb_source_view_get_enable_word_completion (view));
 
     case PROP_SEARCH_HIGHLIGHTER:
       g_value_set_object (value, gb_source_view_get_search_highlighter (view));
@@ -1557,6 +1762,11 @@ gb_source_view_set_property (GObject      *object,
       view->priv->auto_indent = g_value_get_boolean (value);
       break;
 
+    case PROP_ENABLE_WORD_COMPLETION:
+      gb_source_view_set_enable_word_completion (view,
+                                                 g_value_get_boolean (value));
+      break;
+
     case PROP_FONT_NAME:
       gb_source_view_set_font_name (view, g_value_get_string (value));
       break;
@@ -1567,6 +1777,15 @@ gb_source_view_set_property (GObject      *object,
 
     case PROP_SHOW_SHADOW:
       gb_source_view_set_show_shadow (view, g_value_get_boolean (value));
+      break;
+
+    case PROP_SMART_HOME_END_SIMPLE:
+      if (g_value_get_boolean (value))
+        gtk_source_view_set_smart_home_end (GTK_SOURCE_VIEW (view),
+                                            GTK_SOURCE_SMART_HOME_END_BEFORE);
+      else
+        gtk_source_view_set_smart_home_end (GTK_SOURCE_VIEW (view),
+                                            GTK_SOURCE_SMART_HOME_END_DISABLED);
       break;
 
     default:
@@ -1592,6 +1811,15 @@ gb_source_view_class_init (GbSourceViewClass *klass)
   text_view_class->draw_layer = gb_source_view_draw_layer;
 
   klass->draw_layer = gb_source_view_real_draw_layer;
+
+  gParamSpecs [PROP_ENABLE_WORD_COMPLETION] =
+    g_param_spec_boolean ("enable-word-completion",
+                          _("Enable Word Completion"),
+                          _("Enable Word Completion"),
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_ENABLE_WORD_COMPLETION,
+                                   gParamSpecs [PROP_ENABLE_WORD_COMPLETION]);
 
   gParamSpecs [PROP_FONT_NAME] =
     g_param_spec_string ("font-name",
@@ -1619,6 +1847,15 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SEARCH_HIGHLIGHTER,
                                    gParamSpecs[PROP_SEARCH_HIGHLIGHTER]);
+
+  gParamSpecs [PROP_SMART_HOME_END_SIMPLE] =
+    g_param_spec_boolean ("smart-home-end-simple",
+                          _("Smart Home End"),
+                          _("Enable smart home end in gtksourceview."),
+                          TRUE,
+                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SMART_HOME_END_SIMPLE,
+                                   gParamSpecs [PROP_SMART_HOME_END_SIMPLE]);
 
   g_object_class_override_property (object_class,
                                     PROP_AUTO_INDENT,
@@ -1692,6 +1929,11 @@ gb_source_view_init (GbSourceView *view)
   view->priv->snippets_provider =
     g_object_new (GB_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER,
                   "source-view", view,
+                  NULL);
+
+  view->priv->words_provider =
+    g_object_new (GTK_SOURCE_TYPE_COMPLETION_WORDS,
+                  "minimum-word-size", 4,
                   NULL);
 
   view->priv->vim = g_object_new (GB_TYPE_SOURCE_VIM,

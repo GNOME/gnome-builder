@@ -45,11 +45,6 @@ struct _GbEditorTabPrivate
   GbEditorDocument *document;
 
   /*
-   * Variants completion providers.
-   */
-  GtkSourceCompletionProvider *words_provider;
-
-  /*
    * Search releated components.
    */
   GbSourceSearchHighlighter *search_highlighter;

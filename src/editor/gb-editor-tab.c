@@ -19,7 +19,6 @@
 #define G_LOG_DOMAIN "editor"
 
 #include <glib/gi18n.h>
-#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 
 #include "gb-editor-code-assistant.h"
 #include "gb-editor-file-mark.h"
@@ -44,9 +43,7 @@
 enum {
   PROP_0,
   PROP_DOCUMENT,
-  PROP_ENABLE_WORD_COMPLETION,
   PROP_FILE,
-  PROP_SETTINGS,
   LAST_PROP
 };
 
@@ -58,44 +55,6 @@ GtkWidget *
 gb_editor_tab_new (void)
 {
   return g_object_new (GB_TYPE_EDITOR_TAB, NULL);
-}
-
-gboolean
-gb_editor_tab_get_enable_word_completion (GbEditorTab *tab)
-{
-  g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), FALSE);
-
-  return tab->priv->enable_word_completion;
-}
-
-void
-gb_editor_tab_set_enable_word_completion (GbEditorTab *tab,
-                                          gboolean     enable_word_completion)
-{
-  GtkSourceCompletion *completion;
-  GtkSourceView *source_view;
-
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-
-  source_view = GTK_SOURCE_VIEW (tab->priv->source_view);
-  completion = gtk_source_view_get_completion (source_view);
-
-  if (enable_word_completion != tab->priv->enable_word_completion)
-    {
-      if (!enable_word_completion)
-        gtk_source_completion_remove_provider (
-            completion,
-            GTK_SOURCE_COMPLETION_PROVIDER (tab->priv->words_provider),
-            NULL);
-      else
-        gtk_source_completion_add_provider (
-            completion,
-            GTK_SOURCE_COMPLETION_PROVIDER (tab->priv->words_provider),
-            NULL);
-      tab->priv->enable_word_completion = enable_word_completion;
-      g_object_notify_by_pspec (G_OBJECT (tab),
-                                gParamSpecs [PROP_ENABLE_WORD_COMPLETION]);
-    }
 }
 
 /**
@@ -164,142 +123,6 @@ gb_editor_tab_get_file (GbEditorTab *tab)
   g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), NULL);
 
   return tab->priv->file;
-}
-
-static void
-gb_editor_tab_connect_settings (GbEditorTab      *tab,
-                                GbEditorSettings *settings)
-{
-  GbEditorTabPrivate *priv;
-
-  ENTRY;
-
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-  g_return_if_fail (GB_IS_EDITOR_SETTINGS (settings));
-
-  priv = tab->priv;
-
-#define ADD_BINDING(name, dst, prop, loc) \
-  G_STMT_START { \
-    (loc) = g_object_bind_property (settings, name, (dst), \
-                                    prop, G_BINDING_SYNC_CREATE); \
-    g_object_add_weak_pointer (G_OBJECT ((loc)), (gpointer *) &(loc)); \
-  } G_STMT_END
-
-  ADD_BINDING ("auto-indent", priv->source_view, "auto-indent",
-               priv->auto_indent_binding);
-  ADD_BINDING ("highlight-current-line", priv->source_view,
-               "highlight-current-line",
-               priv->highlight_current_line_binding);
-  ADD_BINDING ("highlight-matching-brackets", priv->document,
-               "highlight-matching-brackets",
-               priv->highlight_matching_brackets_binding);
-  ADD_BINDING ("insert-spaces-instead-of-tabs", priv->source_view,
-               "insert-spaces-instead-of-tabs",
-               priv->insert_spaces_instead_of_tabs_binding);
-  ADD_BINDING ("show-line-marks", priv->source_view, "show-line-marks",
-               priv->show_line_marks_binding);
-  ADD_BINDING ("show-line-numbers", priv->source_view, "show-line-numbers",
-               priv->show_line_numbers_binding);
-  ADD_BINDING ("show-right-margin", priv->source_view, "show-right-margin",
-               priv->show_right_margin_binding);
-  ADD_BINDING ("smart-home-end", priv->source_view, "smart-home-end",
-               priv->smart_home_end_binding);
-  ADD_BINDING ("tab-width", priv->source_view, "tab-width",
-               priv->tab_width_binding);
-  ADD_BINDING ("right-margin-position", priv->source_view,
-               "right-margin-position", priv->right_margin_position_binding);
-
-#undef ADD_BINDING
-
-  EXIT;
-}
-
-static void
-gb_editor_tab_disconnect_settings (GbEditorTab *tab)
-{
-  GbEditorTabPrivate *priv;
-
-  ENTRY;
-
-  g_assert (GB_IS_EDITOR_TAB (tab));
-
-  priv = tab->priv;
-
-#define REMOVE_BINDING(b) \
-  if (b) { \
-      g_binding_unbind (b); \
-      if (b) \
-        g_object_remove_weak_pointer (G_OBJECT (b), (gpointer *) &(b)); \
-      (b) = NULL; \
-    }
-
-  REMOVE_BINDING (priv->auto_indent_binding);
-  REMOVE_BINDING (priv->highlight_current_line_binding);
-  REMOVE_BINDING (priv->highlight_matching_brackets_binding);
-  REMOVE_BINDING (priv->insert_spaces_instead_of_tabs_binding);
-  REMOVE_BINDING (priv->show_line_marks_binding);
-  REMOVE_BINDING (priv->show_line_numbers_binding);
-  REMOVE_BINDING (priv->show_right_margin_binding);
-  REMOVE_BINDING (priv->smart_home_end_binding);
-  REMOVE_BINDING (priv->tab_width_binding);
-  REMOVE_BINDING (priv->right_margin_position_binding);
-
-#undef REMOVE_BINDING
-
-  EXIT;
-}
-
-/**
- * gb_editor_tab_get_settings:
- * @tab: A #GbEditorTab.
- *
- * Fetches the settings used on the editor tab.
- *
- * Returns: (transfer none): A #GbEditorSettings.
- */
-GbEditorSettings *
-gb_editor_tab_get_settings (GbEditorTab *tab)
-{
-  g_return_val_if_fail (GB_IS_EDITOR_TAB (tab), NULL);
-
-  return tab->priv->settings;
-}
-
-/**
- * gb_editor_tab_set_settings:
- * @tab: A #GbEditorTab.
- *
- * Sets the settings to use for this tab, including tab spacing and
- * style schemes.
- */
-void
-gb_editor_tab_set_settings (GbEditorTab      *tab,
-                            GbEditorSettings *settings)
-{
-  GbEditorTabPrivate *priv;
-
-  ENTRY;
-
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-  g_return_if_fail (!settings || GB_IS_EDITOR_SETTINGS (settings));
-
-  priv = tab->priv;
-
-  if (priv->settings)
-    {
-      gb_editor_tab_disconnect_settings (tab);
-      g_clear_object (&priv->settings);
-    }
-
-  if (settings)
-    priv->settings = g_object_ref (settings);
-  else
-    priv->settings = g_object_new (GB_TYPE_EDITOR_SETTINGS, NULL);
-
-  gb_editor_tab_connect_settings (tab, priv->settings);
-
-  EXIT;
 }
 
 static void
@@ -1066,27 +889,16 @@ transform_file_to_language (GBinding     *binding,
 
       /*
        * TODO: Load content_type using g_file_query_info().
+       *       Also, don't do this here, do it async.
        */
 
       manager = gtk_source_language_manager_get_default ();
       language = gtk_source_language_manager_guess_language (manager, filename,
                                                              content_type);
+      gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (tab->priv->document),
+                                      language);
 
       gb_editor_code_assistant_destroy (tab);
-
-      /* TODO: This shouldn't be set here, this function shouldn't have
-       *       side effects. But easy to plumb it until we clean this up.
-       */
-      if (language)
-        {
-          GbEditorSettings *settings;
-          const gchar *lang_id;
-
-          lang_id = gtk_source_language_get_id (language);
-          settings = gb_editor_settings_new_for_language (lang_id);
-          gb_editor_tab_set_settings (tab, settings);
-          g_object_unref (settings);
-        }
 
       g_free (filename);
       g_free (content_type);
@@ -1131,7 +943,6 @@ gb_editor_tab_constructed (GObject *object)
   GbEditorTab *tab = (GbEditorTab *) object;
   GbSourceVim *vim;
   GtkSourceGutter *gutter;
-  GSettings *settings;
 
   ENTRY;
 
@@ -1139,23 +950,11 @@ gb_editor_tab_constructed (GObject *object)
 
   priv = tab->priv;
 
-  settings = g_settings_new ("org.gnome.builder.editor");
-
   if (!priv->document)
     priv->document = gb_editor_document_new ();
 
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (priv->source_view),
                             GTK_TEXT_BUFFER (priv->document));
-
-  g_settings_bind (settings, "font-name",
-                   priv->source_view, "font-name",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (settings, "style-scheme-name",
-                   priv->document, "style-scheme-name",
-                   G_SETTINGS_BIND_GET);
-
-  if (!priv->settings)
-    gb_editor_tab_set_settings (tab, NULL);
 
   if (!priv->file)
     priv->file = gtk_source_file_new ();
@@ -1182,12 +981,6 @@ gb_editor_tab_constructed (GObject *object)
   g_object_set (priv->source_view,
                 "search-highlighter", priv->search_highlighter,
                 NULL);
-
-  priv->words_provider =
-    g_object_new (GTK_SOURCE_TYPE_COMPLETION_WORDS,
-                  "minimum-word-size", 5,
-                  NULL);
-
 
   g_signal_connect_swapped (priv->document,
                             "notify::language",
@@ -1234,19 +1027,14 @@ gb_editor_tab_constructed (GObject *object)
                            tab,
                            G_CONNECT_SWAPPED);
 
-  gtk_source_completion_words_register (
-      GTK_SOURCE_COMPLETION_WORDS (priv->words_provider),
-      GTK_TEXT_BUFFER (priv->document));
-
-  comp = gtk_source_view_get_completion (GTK_SOURCE_VIEW (priv->source_view));
-  gtk_source_completion_add_provider (comp, priv->words_provider, NULL);
 
   /*
    * WORKAROUND:
-
+   *
    * Once GtkSourceView exports this as an internal child, we can do this from
    * the gb-editor-tab.ui file.
    */
+  comp = gtk_source_view_get_completion (GTK_SOURCE_VIEW (priv->source_view));
   g_object_set (comp,
                 "show-headers", FALSE,
                 "select-on-show", TRUE,
@@ -1315,14 +1103,12 @@ gb_editor_tab_constructed (GObject *object)
                     G_CALLBACK (on_vim_notify_mode),
                     tab);
 
-  g_settings_bind (settings, "vim-mode", vim, "enabled",
-                   G_SETTINGS_BIND_DEFAULT);
+#if 0
   g_settings_bind (settings, "word-completion", tab, "enable-word-completion",
                    G_SETTINGS_BIND_DEFAULT);
+#endif
 
   gb_editor_tab_cursor_moved (tab, priv->document);
-
-  g_object_unref (settings);
 
   EXIT;
 }
@@ -1434,8 +1220,6 @@ gb_editor_tab_dispose (GObject *object)
 
   gb_editor_code_assistant_destroy (tab);
 
-  gb_editor_tab_disconnect_settings (tab);
-
   g_clear_object (&tab->priv->change_monitor);
   g_clear_object (&tab->priv->search_entry_tag);
   g_clear_object (&tab->priv->file);
@@ -1443,7 +1227,6 @@ gb_editor_tab_dispose (GObject *object)
   g_clear_object (&tab->priv->search_settings);
   g_clear_object (&tab->priv->search_context);
   g_clear_object (&tab->priv->settings);
-  g_clear_object (&tab->priv->words_provider);
   g_clear_object (&tab->priv->document);
 
   G_OBJECT_CLASS (gb_editor_tab_parent_class)->dispose (object);
@@ -1475,17 +1258,8 @@ gb_editor_tab_get_property (GObject    *object,
       g_value_set_object (value, gb_editor_tab_get_document (tab));
       break;
 
-    case PROP_ENABLE_WORD_COMPLETION:
-      g_value_set_boolean (value,
-                           gb_editor_tab_get_enable_word_completion (tab));
-      break;
-
     case PROP_FILE:
       g_value_set_object (value, gb_editor_tab_get_file (tab));
-      break;
-
-    case PROP_SETTINGS:
-      g_value_set_object (value, gb_editor_tab_get_settings (tab));
       break;
 
     default:
@@ -1499,19 +1273,12 @@ gb_editor_tab_set_property (GObject      *object,
                             const GValue *value,
                             GParamSpec   *pspec)
 {
+#if 0
   GbEditorTab *tab = GB_EDITOR_TAB (object);
+#endif
 
   switch (prop_id)
     {
-    case PROP_ENABLE_WORD_COMPLETION:
-      gb_editor_tab_set_enable_word_completion (tab,
-                                                g_value_get_boolean (value));
-      break;
-
-    case PROP_SETTINGS:
-      gb_editor_tab_set_settings (tab, g_value_get_object (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1546,16 +1313,6 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
   g_object_class_install_property (object_class, PROP_DOCUMENT,
                                    gParamSpecs[PROP_DOCUMENT]);
 
-  gParamSpecs [PROP_ENABLE_WORD_COMPLETION] =
-    g_param_spec_boolean ("enable-word-completion",
-                          _("Enable Word Completion"),
-                          _("Enable Word Completion"),
-                          TRUE,
-                          (G_PARAM_READWRITE |
-                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ENABLE_WORD_COMPLETION,
-                                   gParamSpecs [PROP_ENABLE_WORD_COMPLETION]);
-
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
                          _("File"),
@@ -1565,15 +1322,6 @@ gb_editor_tab_class_init (GbEditorTabClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FILE,
                                    gParamSpecs [PROP_FILE]);
-
-  gParamSpecs [PROP_SETTINGS] =
-    g_param_spec_object ("settings",
-                         _("Settings"),
-                         _("The editor settings."),
-                         GB_TYPE_EDITOR_SETTINGS,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SETTINGS,
-                                   gParamSpecs[PROP_SETTINGS]);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                GB_EDITOR_TAB_UI_RESOURCE);
@@ -1602,8 +1350,6 @@ static void
 gb_editor_tab_init (GbEditorTab *tab)
 {
   tab->priv = gb_editor_tab_get_instance_private (tab);
-
-  tab->priv->enable_word_completion = TRUE;
 
   gtk_widget_init_template (GTK_WIDGET (tab));
 }
