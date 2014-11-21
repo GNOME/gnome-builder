@@ -32,6 +32,8 @@ cairo_surface_t *gb_widget_snapshot        (GtkWidget    *widget,
                                             gdouble       alpha,
                                             gboolean      draw_border);
 gpointer         gb_widget_get_workbench   (GtkWidget    *widget);
+void             gb_widget_fade_hide       (GtkWidget    *widget);
+void             gb_widget_fade_show       (GtkWidget    *widget);
 
 G_END_DECLS
 

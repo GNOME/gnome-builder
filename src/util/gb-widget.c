@@ -18,6 +18,7 @@
 
 #include <math.h>
 
+#include "gb-animation.h"
 #include "gb-cairo.h"
 #include "gb-rgba.h"
 #include "gb-widget.h"
@@ -170,4 +171,57 @@ gb_widget_shrink_font (gpointer widget)
                                     pango_font_description_get_size (f)));
   gtk_widget_override_font (widget, f);
   pango_font_description_free (f);
+}
+
+static void
+hide_callback (gpointer data)
+{
+  GtkWidget *widget = data;
+
+  gtk_widget_hide (widget);
+  gtk_widget_set_opacity (widget, 1.0);
+}
+
+void
+gb_widget_fade_hide (GtkWidget *widget)
+{
+  GdkFrameClock *frame_clock;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (gtk_widget_get_visible (widget))
+    {
+      frame_clock = gtk_widget_get_frame_clock (widget);
+      gb_object_animate_full (widget,
+                              GB_ANIMATION_LINEAR,
+                              1000,
+                              frame_clock,
+                              hide_callback,
+                              widget,
+                              "opacity", 0.0,
+                              NULL);
+    }
+}
+
+void
+gb_widget_fade_show (GtkWidget *widget)
+{
+  GdkFrameClock *frame_clock;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (!gtk_widget_get_visible (widget))
+    {
+      frame_clock = gtk_widget_get_frame_clock (widget);
+      gtk_widget_set_opacity (widget, 0.0);
+      gtk_widget_show (widget);
+      gb_object_animate_full (widget,
+                              GB_ANIMATION_LINEAR,
+                              500,
+                              frame_clock,
+                              NULL,
+                              NULL,
+                              "opacity", 1.0,
+                              NULL);
+    }
 }
