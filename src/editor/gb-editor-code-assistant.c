@@ -284,8 +284,8 @@ gb_editor_code_assistant_parse (gpointer user_data)
   GVariant *cursor;
   GVariant *options;
   GFile *location;
-  gchar *path;
-  gchar *text;
+  gchar *path = NULL;
+  gchar *text = NULL;
 
   ENTRY;
 
@@ -301,6 +301,9 @@ gb_editor_code_assistant_parse (gpointer user_data)
   g_file_set_contents (priv->gca_tmpfile, text, -1, NULL);
 
   location = gtk_source_file_get_location (priv->file);
+  if (!location)
+    goto cleanup;
+
   path = g_file_get_path (location);
 
   cursor = g_variant_new ("(xx)",
@@ -320,6 +323,7 @@ gb_editor_code_assistant_parse (gpointer user_data)
                           gb_editor_code_assistant_parse_cb,
                           g_object_ref (tab));
 
+cleanup:
   g_free (path);
   g_free (text);
 
