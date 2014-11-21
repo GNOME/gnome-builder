@@ -45,6 +45,7 @@
             <property name="vexpand">False</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="tooltip-text" translatable="yes">Close tab</property>
           </object>
         </child>
       </object>

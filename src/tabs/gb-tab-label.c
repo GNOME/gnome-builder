@@ -117,6 +117,8 @@ gb_tab_label_set_tab (GbTabLabel *label,
                                    NULL, NULL, NULL);
       g_object_bind_property (tab, "title", priv->label, "label",
                               G_BINDING_SYNC_CREATE);
+      g_object_bind_property (tab, "title", label, "tooltip-text",
+                              G_BINDING_SYNC_CREATE);
     }
 }
 
