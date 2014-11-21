@@ -228,6 +228,10 @@ gb_credits_widget_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_DURATION:
+      g_value_set_uint (value, gb_credits_widget_get_duration (self));
+      break;
+
     case PROP_PROGRESS:
       g_value_set_double (value, gb_credits_widget_get_progress (self));
       break;
@@ -247,6 +251,10 @@ gb_credits_widget_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_DURATION:
+      gb_credits_widget_set_duration (self, g_value_get_uint (value));
+      break;
+
     case PROP_PROGRESS:
       gb_credits_widget_set_progress (self, g_value_get_double (value));
       break;
@@ -269,6 +277,17 @@ gb_credits_widget_class_init (GbCreditsWidgetClass *klass)
   object_class->set_property = gb_credits_widget_set_property;
 
   overlay_class->get_child_position = gb_credits_widget_get_child_position;
+
+  gParamSpecs [PROP_DURATION] =
+    g_param_spec_uint ("duration",
+                       _("Duration"),
+                       _("The duration of the animation in millseconds."),
+                       0,
+                       G_MAXUINT,
+                       20000,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_DURATION,
+                                   gParamSpecs [PROP_DURATION]);
 
   gParamSpecs [PROP_PROGRESS] =
     g_param_spec_double ("progress",
