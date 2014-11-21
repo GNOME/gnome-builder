@@ -377,7 +377,7 @@ on_load_cb (GtkSourceFileLoader *loader,
       /*
        * TODO: Propagate error to tab.
        */
-      g_warning ("%s", error->message);
+      g_warning ("%s (): %s", G_STRFUNC, error->message);
       g_clear_error (&error);
     }
 

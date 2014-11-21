@@ -662,7 +662,7 @@ service_proxy_new_cb (GObject      *source_object,
 
   if (!service)
     {
-      g_message ("%s\n", error->message);
+      g_message ("%s", error->message);
       g_clear_error (&error);
       GOTO (cleanup);
     }
