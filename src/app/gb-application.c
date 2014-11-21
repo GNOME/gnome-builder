@@ -446,45 +446,21 @@ gb_application_activate_about_action (GSimpleAction *action,
                                       GVariant      *parameter,
                                       gpointer       user_data)
 {
-  GtkWindow *window;
   GList *list;
-  GBytes *bytes;
-  gchar **authors;
-  gchar **artists;
 
   g_return_if_fail (GB_IS_APPLICATION (user_data));
 
   list = gtk_application_get_windows (GTK_APPLICATION (user_data));
 
-  bytes = g_resources_lookup_data ("/org/gnome/builder/AUTHORS", 0, NULL);
-  authors = g_strsplit (g_bytes_get_data (bytes, NULL), "\n", 0);
-  g_bytes_unref (bytes);
-
-  bytes = g_resources_lookup_data ("/org/gnome/builder/ARTISTS", 0, NULL);
-  artists = g_strsplit (g_bytes_get_data (bytes, NULL), "\n", 0);
-  g_bytes_unref (bytes);
-
-  window = g_object_new (GTK_TYPE_ABOUT_DIALOG,
-                         "artists", artists,
-                         "authors", authors,
-                         "comments", _("Builder is an IDE for writing GNOME applications."),
-                         "copyright", "Copyright © 2014 Christian Hergert",
-                         "license-type", GTK_LICENSE_GPL_3_0,
-                         "logo-icon-name", "builder",
-                         "modal", TRUE,
-                         "program-name", _("GNOME Builder"),
-                         "transient-for", list ? list->data : NULL,
-                         "translator-credits", _("translator-credits"),
-                         "version", PACKAGE_VERSION,
-                         "website", "https://live.gnome.org/Apps/Builder",
-                         "website-label", _("Builder Website"),
-                         "window-position", GTK_WIN_POS_CENTER,
-                         NULL);
-
-  gtk_window_present (window);
-
-  g_strfreev (authors);
-  g_strfreev (artists);
+  for (; list; list = list->next)
+    {
+      if (GB_IS_WORKBENCH (list->data))
+        {
+          gb_workbench_roll_credits (list->data);
+          gtk_window_present (list->data);
+          break;
+        }
+    }
 }
 
 static void

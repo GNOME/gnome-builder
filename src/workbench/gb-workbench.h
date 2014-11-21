@@ -60,6 +60,7 @@ GbWorkspace      *gb_workbench_get_active_workspace (GbWorkbench *workbench);
 GbWorkspace      *gb_workbench_get_workspace        (GbWorkbench *workbench,
                                                      GType        type);
 gpointer          gb_workbench_get_command_manager  (GbWorkbench *workbench);
+void              gb_workbench_roll_credits         (GbWorkbench *workbench);
 
 GbWorkbench      *gb_navigation_list_get_workbench  (GbNavigationList *list);
 

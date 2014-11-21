@@ -35,6 +35,8 @@ libgnome_builder_la_SOURCES = \
 	src/commands/gb-command-vim-provider.h \
 	src/commands/gb-command-vim.c \
 	src/commands/gb-command-vim.h \
+	src/credits/gb-credits-widget.c \
+	src/credits/gb-credits-widget.h \
 	src/devhelp/gb-devhelp-navigation-item.c \
 	src/devhelp/gb-devhelp-navigation-item.h \
 	src/devhelp/gb-devhelp-tab.c \
@@ -189,6 +191,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/app \
 	-I$(top_srcdir)/src/auto-indent \
 	-I$(top_srcdir)/src/commands \
+	-I$(top_srcdir)/src/credits \
 	-I$(top_srcdir)/src/devhelp \
 	-I$(top_srcdir)/src/editor \
 	-I$(top_srcdir)/src/gca \

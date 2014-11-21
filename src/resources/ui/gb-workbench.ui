@@ -162,6 +162,12 @@
     <child>
       <object class="GtkOverlay" id="main_overlay">
         <property name="visible">True</property>
+        <child type="overlay">
+          <object class="GbCreditsWidget" id="credits">
+            <property name="visible">False</property>
+            <property name="expand">True</property>
+          </object>
+        </child>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>

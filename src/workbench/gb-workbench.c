@@ -24,6 +24,7 @@
 #include "gb-command-gaction-provider.h"
 #include "gb-command-manager.h"
 #include "gb-command-vim-provider.h"
+#include "gb-credits-widget.h"
 #include "gb-devhelp-workspace.h"
 #include "gb-editor-workspace.h"
 #include "gb-log.h"
@@ -42,6 +43,7 @@ struct _GbWorkbenchPrivate
 
   GbWorkspace            *active_workspace;
   GbCommandBar           *command_bar;
+  GbCreditsWidget        *credits;
   GbWorkspace            *devhelp;
   GbWorkspace            *editor;
   GtkMenuButton          *add_button;
@@ -131,6 +133,14 @@ gb_workbench_get_workspace (GbWorkbench *workbench,
     return GB_WORKSPACE (workbench->priv->devhelp);
 
   return NULL;
+}
+
+void
+gb_workbench_roll_credits (GbWorkbench *workbench)
+{
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  gb_credits_widget_start (workbench->priv->credits);
 }
 
 static void
@@ -362,6 +372,18 @@ on_global_search_activate (GSimpleAction *action,
 }
 
 static void
+on_roll_credits (GSimpleAction *action,
+                 GVariant      *parameters,
+                 gpointer       user_data)
+{
+  GbWorkbench *workbench = user_data;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  gb_workbench_roll_credits (workbench);
+}
+
+static void
 gb_workbench_constructed (GObject *object)
 {
   static const GActionEntry actions[] = {
@@ -372,6 +394,7 @@ gb_workbench_constructed (GObject *object)
     { "go-forward", on_go_forward_activate },
     { "show-command-bar", on_show_command_bar_activate },
     { "toggle-command-bar", on_toggle_command_bar_activate, "b" },
+    { "roll-credits", on_roll_credits },
   };
   GbWorkbenchPrivate *priv;
   GbWorkbench *workbench = (GbWorkbench *)object;
@@ -534,6 +557,8 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
                                                 command_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
+                                                credits);
+  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
                                                 editor);
   gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
                                                 add_button);
@@ -557,6 +582,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
                                                 stack);
 
   g_type_ensure (GB_TYPE_COMMAND_BAR);
+  g_type_ensure (GB_TYPE_CREDITS_WIDGET);
   g_type_ensure (GB_TYPE_DEVHELP_WORKSPACE);
   g_type_ensure (GB_TYPE_EDITOR_WORKSPACE);
   g_type_ensure (GEDIT_TYPE_MENU_STACK_SWITCHER);
