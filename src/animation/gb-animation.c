@@ -548,13 +548,14 @@ static gboolean
 gb_animation_widget_tick_cb (GdkFrameClock *frame_clock,
                              GbAnimation   *animation)
 {
-  gboolean ret;
+  gboolean ret = G_SOURCE_REMOVE;
 
   g_assert (GDK_IS_FRAME_CLOCK (frame_clock));
   g_assert (GB_IS_ANIMATION (animation));
 
-  if (!(ret = gb_animation_tick (animation)))
-    gb_animation_stop (animation);
+  if (animation->priv->tween_handler)
+    if (!(ret = gb_animation_tick (animation)))
+      gb_animation_stop (animation);
 
   return ret;
 }
