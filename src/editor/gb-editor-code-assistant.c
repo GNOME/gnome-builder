@@ -247,6 +247,7 @@ gb_editor_code_assistant_parse_cb (GObject      *source_object,
   if (!gca_service_call_parse_finish (service, &document_path, result, &error))
     {
       g_warning ("%s", error->message);
+      gb_editor_code_assistant_destroy (tab);
       g_clear_error (&error);
       GOTO (cleanup);
     }
@@ -584,6 +585,9 @@ setup_service_proxy (GbEditorTab *tab,
   GtkSourceGutter *gutter;
   GbEditorTabPrivate *priv = tab->priv;
   gint width;
+
+  g_assert (GB_IS_EDITOR_TAB (tab));
+  g_assert (GCA_IS_SERVICE (service));
 
   ENTRY;
 
