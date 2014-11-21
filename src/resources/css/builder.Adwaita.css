@@ -69,7 +69,7 @@ GbEditorTab .gb-search-slider {
     background-color: @theme_base_color;
     padding: 6px;
     border-color: shade (@theme_base_color, 0.60);
-    border-radius: 0 0 3px 3px;
+    border-radius: 0 0 0 5px;
     border-width: 0 1px 1px 1px;
     border-style: solid;
 }
