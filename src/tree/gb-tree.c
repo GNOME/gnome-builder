@@ -882,7 +882,6 @@ gb_tree_class_init (GbTreeClass *klass)
   object_class->finalize = gb_tree_finalize;
   object_class->get_property = gb_tree_get_property;
   object_class->set_property = gb_tree_set_property;
-  g_type_class_add_private (object_class, sizeof (GbTreePrivate));
 
   gParamSpecs[PROP_ROOT] =
     g_param_spec_object ("root",
