@@ -32,6 +32,7 @@ struct _GbEditorWorkspacePrivate
   GSimpleActionGroup *actions;
   GHashTable         *command_map;
   GbMultiNotebook    *multi_notebook;
+  GtkPaned           *paned;
 };
 
 G_END_DECLS

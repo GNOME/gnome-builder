@@ -21,6 +21,8 @@
 #include "gb-editor-commands.h"
 #include "gb-editor-workspace.h"
 #include "gb-editor-workspace-private.h"
+#include "gb-multi-notebook.h"
+#include "gb-tree.h"
 
 enum {
   PROP_0,
@@ -102,6 +104,14 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
   workspace_class->get_actions = gb_editor_workspace_get_actions;
 
   widget_class->grab_focus = gb_editor_workspace_grab_focus;
+
+  gtk_widget_class_set_template_from_resource (widget_class,
+                                               "/org/gnome/builder/ui/gb-editor-workspace.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorWorkspace, multi_notebook);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorWorkspace, paned);
+
+  g_type_ensure (GB_TYPE_MULTI_NOTEBOOK);
+  g_type_ensure (GB_TYPE_TREE);
 }
 
 static void
@@ -112,16 +122,6 @@ gb_editor_workspace_init (GbEditorWorkspace *workspace)
   workspace->priv->actions = g_simple_action_group_new ();
   workspace->priv->command_map = g_hash_table_new (g_str_hash, g_str_equal);
 
-  /*
-   * TODO: make this be done with GtkBuilder.
-   */
-  workspace->priv->multi_notebook =
-      g_object_new (GB_TYPE_MULTI_NOTEBOOK,
-                    "visible", TRUE,
-                    "group-name", "GB_EDITOR_WORKSPACE",
-                    NULL);
-  gtk_container_add (GTK_CONTAINER (workspace),
-                     GTK_WIDGET (workspace->priv->multi_notebook));
-
+  gtk_widget_init_template (GTK_WIDGET (workspace));
   gb_editor_commands_init (workspace);
 }

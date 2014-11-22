@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbEditorWorkspace" parent="GbWorkspace">
+    <child>
+      <object class="GtkPaned" id="paned">
+        <property name="visible">True</property>
+        <property name="orientation">horizontal</property>
+        <property name="position">250</property>
+        <child>
+          <object class="GtkScrolledWindow" id="scroller">
+            <property name="visible">False</property>
+            <child>
+              <object class="GbTree" id="tree">
+                <property name="headers-visible">False</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GbMultiNotebook" id="multi_notebook">
+            <property name="group-name">GB_EDITOR_WORKSPACE</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
