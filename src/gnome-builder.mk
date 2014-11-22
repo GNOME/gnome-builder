@@ -147,6 +147,12 @@ libgnome_builder_la_SOURCES = \
 	src/tabs/gb-tab.h \
 	src/theatrics/gb-box-theatric.c \
 	src/theatrics/gb-box-theatric.h \
+	src/tree/gb-tree.c \
+	src/tree/gb-tree.h \
+	src/tree/gb-tree-builder.c \
+	src/tree/gb-tree-builder.h \
+	src/tree/gb-tree-node.c \
+	src/tree/gb-tree-node.h \
 	src/trie/trie.c \
 	src/trie/trie.h \
 	src/util/gb-cairo.c \
@@ -206,6 +212,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/sidebar \
 	-I$(top_srcdir)/src/snippets \
 	-I$(top_srcdir)/src/tabs \
+	-I$(top_srcdir)/src/tree \
 	-I$(top_srcdir)/src/trie \
 	-I$(top_srcdir)/src/theatrics \
 	-I$(top_srcdir)/src/util \
