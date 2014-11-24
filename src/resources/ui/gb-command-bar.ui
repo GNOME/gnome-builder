@@ -30,7 +30,24 @@
         <child>
           <object class="GtkSeparator" id="hsep1">
             <property name="orientation">horizontal</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="completion_scroller">
+            <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
             <property name="visible">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">False</property>
+            <child>
+              <object class="GtkFlowBox" id="flow_box">
+                <property name="visible">True</property>
+                <property name="column-spacing">8</property>
+                <property name="halign">start</property>
+                <property name="hexpand">False</property>
+                <property name="selection_mode">GTK_SELECTION_NONE</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
