@@ -67,6 +67,7 @@ gb_command_bar_show (GbCommandBar *bar)
   g_return_if_fail (GB_IS_COMMAND_BAR (bar));
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (bar), TRUE);
+  gtk_entry_set_text (bar->priv->entry, "");
   gtk_widget_grab_focus (GTK_WIDGET (bar->priv->entry));
 }
 
