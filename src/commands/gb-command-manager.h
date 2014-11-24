@@ -54,6 +54,8 @@ struct _GbCommandManagerClass
 GType      gb_command_manager_get_type     (void) G_GNUC_CONST;
 GbCommand *gb_command_manager_lookup       (GbCommandManager  *manager,
                                             const gchar       *command_text);
+gchar **   gb_command_manager_complete     (GbCommandManager  *manager,
+                                            const gchar       *initial_command_text);
 void       gb_command_manager_add_provider (GbCommandManager  *manager,
                                             GbCommandProvider *provider);
 

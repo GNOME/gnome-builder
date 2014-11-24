@@ -40,6 +40,7 @@ enum {
 
 enum {
   LOOKUP,
+  COMPLETE,
   LAST_SIGNAL
 };
 
@@ -230,6 +231,26 @@ gb_command_provider_lookup (GbCommandProvider *provider,
   return ret;
 }
 
+/**
+ * gb_command_provider_complete:
+ * @provider: (in): The #GbCommandProvider
+ * @completions: (in): A #GPtrArray where completed strings can be added
+ * @command_text: (in): Initial command text to be completed
+ *
+ */
+void
+gb_command_provider_complete (GbCommandProvider *provider,
+                              GPtrArray         *completions,
+                              const gchar       *initial_command_text)
+{
+  g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
+  g_return_if_fail (completions);
+  g_return_if_fail (initial_command_text);
+
+  g_signal_emit (provider, gSignals [COMPLETE], 0, completions, initial_command_text);
+}
+
+
 static void
 gb_command_provider_get_property (GObject    *object,
                                   guint       prop_id,
@@ -361,6 +382,28 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
                   NULL,
                   GB_TYPE_COMMAND,
                   1,
+                  G_TYPE_STRING);
+
+  /**
+   * GbCommandProvider::complete:
+   * @completions: (in): A #GPtrArray where completed strings can be added
+   * @initial_command_text: (in): the command line text to be processed.
+   *
+   * This signal is emitted when a request to complete a command text is
+   * received. All providers should all all possible completions, matching
+   * the initial test.
+   */
+  gSignals [COMPLETE] =
+    g_signal_new ("complete",
+                  GB_TYPE_COMMAND_PROVIDER,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbCommandProviderClass, complete),
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_PTR_ARRAY,
                   G_TYPE_STRING);
 }
 

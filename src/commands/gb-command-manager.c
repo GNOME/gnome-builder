@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+
 #include "gb-command-manager.h"
 
 struct _GbCommandManagerPrivate
@@ -106,6 +108,41 @@ gb_command_manager_lookup (GbCommandManager *manager,
 
   return NULL;
 }
+
+static gint
+sort_strings (const gchar * const * a,
+              const gchar * const * b)
+{
+  return strcmp (*a, *b);
+}
+
+gchar **
+gb_command_manager_complete (GbCommandManager *manager,
+                             const gchar      *initial_command_text)
+{
+  GPtrArray *completions;
+  int i;
+
+  g_return_val_if_fail (GB_IS_COMMAND_MANAGER (manager), NULL);
+  g_return_val_if_fail (initial_command_text, NULL);
+
+  completions = g_ptr_array_new ();
+
+  for (i = 0; i < manager->priv->providers->len; i++)
+    {
+      GbCommandProvider *provider;
+
+      provider = g_ptr_array_index (manager->priv->providers, i);
+      gb_command_provider_complete (provider, completions, initial_command_text);
+    }
+
+  g_ptr_array_sort (completions, (GCompareFunc)sort_strings);
+
+  g_ptr_array_add (completions, NULL);
+
+  return (gchar **)g_ptr_array_free (completions, FALSE);
+}
+
 
 static void
 gb_command_manager_finalize (GObject *object)

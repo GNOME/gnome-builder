@@ -53,6 +53,9 @@ struct _GbCommandProviderClass
 
   GbCommand *(*lookup) (GbCommandProvider *provider,
                         const gchar       *command_text);
+  void       (*complete) (GbCommandProvider *provider,
+                          GPtrArray         *completions,
+                          const gchar       *command_text);
 };
 
 GType              gb_command_provider_get_type       (void) G_GNUC_CONST;
@@ -64,6 +67,9 @@ void               gb_command_provider_set_priority   (GbCommandProvider *provid
                                                        gint               priority);
 GbCommand         *gb_command_provider_lookup         (GbCommandProvider *provider,
                                                        const gchar       *command_text);
+void               gb_command_provider_complete      (GbCommandProvider  *provider,
+                                                      GPtrArray          *completions,
+                                                      const gchar        *initial_command_text);
 
 G_END_DECLS
 
