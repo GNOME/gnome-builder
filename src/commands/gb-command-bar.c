@@ -33,13 +33,23 @@ struct _GbCommandBarPrivate
   GtkScrolledWindow *scroller;
   GtkScrolledWindow *completion_scroller;
   GtkFlowBox        *flow_box;
+
   gchar             *last_completion;
+
+  GQueue            *history;
+  GList             *history_current;
+  gchar             *saved_text;
+  int                saved_position;
+  gboolean           saved_position_valid;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbCommandBar, gb_command_bar, GTK_TYPE_REVEALER)
 
+#define HISTORY_LENGTH 30
+
 enum {
   COMPLETE,
+  MOVE_HISTORY,
   LAST_SIGNAL
 };
 
@@ -77,6 +87,10 @@ gb_command_bar_show (GbCommandBar *bar)
   g_return_if_fail (GB_IS_COMMAND_BAR (bar));
 
   gtk_widget_hide (GTK_WIDGET (bar->priv->completion_scroller));
+
+  bar->priv->history_current = NULL;
+  g_clear_pointer (&bar->priv->saved_text, g_free);
+  bar->priv->saved_position_valid = FALSE;
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (bar), TRUE);
   gtk_entry_set_text (bar->priv->entry, "");
@@ -141,6 +155,9 @@ gb_command_bar_on_entry_activate (GbCommandBar *bar,
       GbCommandResult *result = NULL;
       GbCommand *command = NULL;
 
+      g_queue_push_head (bar->priv->history, g_strdup (text));
+      g_free (g_queue_pop_nth (bar->priv->history, HISTORY_LENGTH));
+
       manager = gb_workbench_get_command_manager (workbench);
       command = gb_command_manager_lookup (manager, text);
 
@@ -170,6 +187,7 @@ gb_command_bar_on_entry_activate (GbCommandBar *bar,
   else
     gb_command_bar_hide (bar);
 
+  bar->priv->history_current = NULL;
   gtk_entry_set_text (bar->priv->entry, "");
 }
 
@@ -336,6 +354,79 @@ gb_command_bar_complete (GbCommandBar *bar)
   g_free (current_prefix);
 }
 
+static void
+gb_command_bar_move_history (GbCommandBar *bar,
+                             GtkDirectionType dir)
+{
+  GList *l;
+
+  switch (dir)
+    {
+    case GTK_DIR_UP:
+      l = bar->priv->history_current;
+      if (l == NULL)
+        l = bar->priv->history->head;
+      else
+        l = l->next;
+
+      if (l == NULL)
+        {
+          gtk_widget_error_bell (GTK_WIDGET (bar));
+          return;
+        }
+
+      break;
+
+    case GTK_DIR_DOWN:
+
+      l = bar->priv->history_current;
+      if (l == NULL)
+        {
+          gtk_widget_error_bell (GTK_WIDGET (bar));
+          return;
+        }
+
+      l = l->prev;
+
+      break;
+
+    case GTK_DIR_TAB_FORWARD:
+    case GTK_DIR_TAB_BACKWARD:
+    case GTK_DIR_LEFT:
+    case GTK_DIR_RIGHT:
+    default:
+      return;
+    }
+
+  if (bar->priv->history_current == NULL)
+    {
+      g_clear_pointer (&bar->priv->saved_text, g_free);
+      bar->priv->saved_text = g_strdup (gtk_entry_get_text (bar->priv->entry));
+    }
+  bar->priv->history_current = l;
+
+  if (!bar->priv->saved_position_valid)
+    {
+      bar->priv->saved_position = gtk_editable_get_position (GTK_EDITABLE (bar->priv->entry));
+      if (bar->priv->saved_position == gtk_entry_get_text_length (bar->priv->entry))
+        bar->priv->saved_position = -1;
+    }
+
+  if (l == NULL)
+    gtk_entry_set_text (bar->priv->entry, bar->priv->saved_text ? bar->priv->saved_text : "");
+  else
+    gtk_entry_set_text (bar->priv->entry, l->data);
+
+  gtk_editable_set_position (GTK_EDITABLE (bar->priv->entry), bar->priv->saved_position);
+  bar->priv->saved_position_valid = TRUE;
+}
+
+static void
+gb_command_bar_on_entry_cursor_changed (GbCommandBar *bar)
+{
+  bar->priv->saved_position_valid = FALSE;
+}
+
 static gboolean
 gb_command_bar_on_entry_key_press_event (GbCommandBar *bar,
                                          GdkEventKey  *event,
@@ -405,6 +496,12 @@ gb_command_bar_constructed (GObject *object)
                            bar,
                            G_CONNECT_SWAPPED);
 
+  g_signal_connect_object (bar->priv->entry,
+                           "notify::cursor-position",
+                           G_CALLBACK (gb_command_bar_on_entry_cursor_changed),
+                           bar,
+                           G_CONNECT_SWAPPED);
+
   gtk_list_box_set_header_func (bar->priv->list_box, update_header_func,
                                 NULL, NULL);
 }
@@ -415,6 +512,8 @@ gb_command_bar_finalize (GObject *object)
   GbCommandBar *bar = (GbCommandBar *)object;
 
   g_clear_pointer (&bar->priv->last_completion, g_free);
+  g_clear_pointer (&bar->priv->saved_text, g_free);
+  g_queue_free_full (bar->priv->history, g_free);
 
   G_OBJECT_CLASS (gb_command_bar_parent_class)->finalize (object);
 }
@@ -432,6 +531,7 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
   widget_class->grab_focus = gb_command_bar_grab_focus;
 
   klass->complete = gb_command_bar_complete;
+  klass->move_history = gb_command_bar_move_history;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-command-bar.ui");
@@ -458,11 +558,36 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  /**
+   * GbCommandBar::move-history:
+   * @bar: the object which received the signal.
+   * @direction: direction to move
+   */
+  signals[MOVE_HISTORY] =
+    g_signal_new ("move-history",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GbCommandBarClass, move_history),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__ENUM,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_DIRECTION_TYPE);
+
   binding_set = gtk_binding_set_by_class (klass);
 
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KEY_Tab, 0,
                                 "complete", 0);
+
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_Up, 0,
+                                "move-history", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_UP);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_Down, 0,
+                                "move-history", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_DOWN);
 }
 
 static void
@@ -470,4 +595,5 @@ gb_command_bar_init (GbCommandBar *self)
 {
   self->priv = gb_command_bar_get_instance_private (self);
   gtk_widget_init_template (GTK_WIDGET (self));
+  self->priv->history = g_queue_new ();
 }

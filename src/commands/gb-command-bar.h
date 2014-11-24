@@ -48,6 +48,8 @@ struct _GbCommandBarClass
   GtkRevealerClass parent;
 
   void (*complete) (GbCommandBar *bar);
+  void (*move_history) (GbCommandBar *bar,
+                        GtkDirectionType dir);
 };
 
 GType      gb_command_bar_get_type (void) G_GNUC_CONST;
