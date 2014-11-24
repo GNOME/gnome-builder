@@ -22,6 +22,10 @@
 
 struct _GbTabPrivate
 {
+  GtkWidget *content;
+  GtkWidget *footer_box;
+  GtkWidget *header_box;
+
   gchar    *icon_name;
   gchar    *title;
   gboolean  dirty;
@@ -42,10 +46,39 @@ enum {
   LAST_SIGNAL
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbTab, gb_tab, GTK_TYPE_BOX)
+static void buildable_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_EXTENDED (GbTab, gb_tab, GTK_TYPE_BOX, 0,
+                        G_ADD_PRIVATE (GbTab)
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                               buildable_init))
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
+
+GtkWidget *
+gb_tab_get_header_area (GbTab *tab)
+{
+  g_return_val_if_fail (GB_IS_TAB (tab), NULL);
+
+  return tab->priv->header_box;
+}
+
+GtkWidget *
+gb_tab_get_footer_area (GbTab *tab)
+{
+  g_return_val_if_fail (GB_IS_TAB (tab), NULL);
+
+  return tab->priv->footer_box;
+}
+
+GtkWidget *
+gb_tab_get_content_area (GbTab *tab)
+{
+  g_return_val_if_fail (GB_IS_TAB (tab), NULL);
+
+  return tab->priv->content;
+}
 
 gboolean
 gb_tab_get_dirty (GbTab *tab)
@@ -130,12 +163,10 @@ gb_tab_thaw_drag (GbTab *tab)
 static void
 gb_tab_finalize (GObject *object)
 {
-  GbTabPrivate *priv;
+  GbTab *tab = (GbTab *)object;
 
-  priv = GB_TAB (object)->priv;
-
-  g_clear_pointer (&priv->icon_name, g_free);
-  g_clear_pointer (&priv->title, g_free);
+  g_clear_pointer (&tab->priv->icon_name, g_free);
+  g_clear_pointer (&tab->priv->title, g_free);
 
   G_OBJECT_CLASS (gb_tab_parent_class)->finalize (object);
 }
@@ -197,12 +228,18 @@ gb_tab_set_property (GObject      *object,
 static void
 gb_tab_class_init (GbTabClass *klass)
 {
-  GObjectClass *object_class;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = gb_tab_finalize;
   object_class->get_property = gb_tab_get_property;
   object_class->set_property = gb_tab_set_property;
+
+  gtk_widget_class_set_template_from_resource (widget_class,
+                                               "/org/gnome/builder/ui/gb-tab.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GbTab, header_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GbTab, content);
+  gtk_widget_class_bind_template_child_private (widget_class, GbTab, footer_box);
 
   gParamSpecs [PROP_DIRTY] =
     g_param_spec_boolean ("dirty",
@@ -215,21 +252,19 @@ gb_tab_class_init (GbTabClass *klass)
 
   gParamSpecs[PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
-                         _ ("Icon Name"),
-                         _ ("The name of the icon to display."),
+                         _("Icon Name"),
+                         _("The name of the icon to display."),
                          NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_ICON_NAME,
                                    gParamSpecs[PROP_ICON_NAME]);
 
   gParamSpecs[PROP_TITLE] =
     g_param_spec_string ("title",
-                         _ ("Title"),
-                         _ ("The title of the tab."),
+                         _("Title"),
+                         _("The title of the tab."),
                          NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_TITLE,
                                    gParamSpecs[PROP_TITLE]);
 
@@ -271,4 +306,31 @@ static void
 gb_tab_init (GbTab *tab)
 {
   tab->priv = gb_tab_get_instance_private (tab);
+
+  gtk_widget_init_template (GTK_WIDGET (tab));
+}
+
+static GObject *
+gb_tab_get_internal_child (GtkBuildable *buildable,
+                           GtkBuilder   *builder,
+                           const gchar  *childname)
+{
+  GbTab *tab = (GbTab *)buildable;
+
+  g_return_val_if_fail (GB_IS_TAB (tab), NULL);
+
+  if (g_strcmp0 (childname, "content") == 0)
+    return G_OBJECT (tab->priv->content);
+  else if (g_strcmp0 (childname, "header") == 0)
+    return G_OBJECT (tab->priv->header_box);
+  else if (g_strcmp0 (childname, "footer") == 0)
+    return G_OBJECT (tab->priv->footer_box);
+
+  return NULL;
+}
+
+static void
+buildable_init (GtkBuildableIface *iface)
+{
+  iface->get_internal_child = gb_tab_get_internal_child;
 }

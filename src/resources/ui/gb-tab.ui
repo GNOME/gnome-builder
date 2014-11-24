@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbTab" parent="GtkBox">
+    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+    <child>
+      <object class="GtkBox" id="header_box">
+        <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+        <property name="visible">True</property>
+        <property name="vexpand">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="content">
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+        <property name="visible">True</property>
+        <property name="expand">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="footer_box">
+        <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+        <property name="visible">True</property>
+        <property name="vexpand">False</property>
+      </object>
+    </child>
+  </template>
+</interface>

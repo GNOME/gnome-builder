@@ -52,19 +52,22 @@ struct _GbTabClass
   void (*close)       (GbTab *tab);
 };
 
-GType        gb_tab_get_type      (void) G_GNUC_CONST;
-const gchar *gb_tab_get_title     (GbTab       *tab);
-void         gb_tab_set_title     (GbTab       *tab,
-                                   const gchar *title);
-const gchar *gb_tab_get_icon_name (GbTab       *tab);
-void         gb_tab_set_icon_name (GbTab       *tab,
-                                   const gchar *icon_name);
-gboolean     gb_tab_get_dirty     (GbTab       *tab);
-void         gb_tab_set_dirty     (GbTab       *tab,
-                                   gboolean     dirty);
-void         gb_tab_freeze_drag   (GbTab       *tab);
-void         gb_tab_thaw_drag     (GbTab       *tab);
-void         gb_tab_close         (GbTab       *tab);
+GType        gb_tab_get_type         (void) G_GNUC_CONST;
+const gchar *gb_tab_get_title        (GbTab       *tab);
+void         gb_tab_set_title        (GbTab       *tab,
+                                      const gchar *title);
+const gchar *gb_tab_get_icon_name    (GbTab       *tab);
+void         gb_tab_set_icon_name    (GbTab       *tab,
+                                      const gchar *icon_name);
+gboolean     gb_tab_get_dirty        (GbTab       *tab);
+void         gb_tab_set_dirty        (GbTab       *tab,
+                                      gboolean     dirty);
+void         gb_tab_freeze_drag      (GbTab       *tab);
+void         gb_tab_thaw_drag        (GbTab       *tab);
+void         gb_tab_close            (GbTab       *tab);
+GtkWidget   *gb_tab_get_header_area  (GbTab       *tab);
+GtkWidget   *gb_tab_get_footer_area  (GbTab       *tab);
+GtkWidget   *gb_tab_get_content_area (GbTab       *tab);
 
 G_END_DECLS
 

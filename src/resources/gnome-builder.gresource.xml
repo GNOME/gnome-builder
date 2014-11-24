@@ -29,6 +29,7 @@
     <file>ui/gb-preferences-page-editor.ui</file>
     <file>ui/gb-preferences-page-git.ui</file>
     <file>ui/gb-preferences-page-language.ui</file>
+    <file>ui/gb-tab.ui</file>
     <file>ui/gb-tab-label.ui</file>
     <file>ui/gb-workbench.ui</file>
   </gresource>
