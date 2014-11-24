@@ -193,11 +193,96 @@ cleanup:
 }
 
 static void
+add_completions_from_group (GPtrArray         *completions,
+                            const gchar       *prefix,
+                            GActionGroup      *group)
+{
+  gchar **actions = g_action_group_list_actions (group);
+  int i;
+
+  for (i = 0; actions[i] != NULL; i++)
+    {
+      if (g_str_has_prefix (actions[i], prefix))
+        g_ptr_array_add (completions, g_strdup (actions[i]));
+    }
+
+  g_strfreev (actions);
+}
+
+static void
+gb_command_gaction_provider_complete (GbCommandProvider *provider,
+                                      GPtrArray         *completions,
+                                      const gchar       *initial_command_text)
+{
+  GbCommandGactionProvider *self = (GbCommandGactionProvider *)provider;
+  GtkWidget *widget;
+  const gchar *tmp;
+  gchar *prefix;
+  GApplication *app;
+  GbWorkbench *workbench;
+  GbWorkspace *workspace;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (self));
+
+  tmp = initial_command_text;
+
+  while (*tmp != 0 && *tmp != ' ' && *tmp != '(')
+    tmp++;
+
+  if (*tmp != 0)
+    return;
+
+  prefix = g_strndup (initial_command_text, tmp - initial_command_text);
+
+  widget = GTK_WIDGET (gb_command_provider_get_active_tab (provider));
+  while (widget)
+    {
+      if (G_IS_ACTION_GROUP (widget))
+        add_completions_from_group (completions, prefix, G_ACTION_GROUP (widget));
+
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  /*
+   * Now try to lookup the action from the workspace up, which is the case if
+   * we don't have an active tab.
+   */
+  workbench = gb_command_provider_get_workbench (provider);
+  workspace = gb_workbench_get_active_workspace (workbench);
+  widget = GTK_WIDGET (workspace);
+
+  while (widget)
+    {
+      if (G_IS_ACTION_GROUP (widget))
+        add_completions_from_group (completions, prefix, G_ACTION_GROUP (widget));
+      else if (GB_IS_WORKSPACE (widget))
+        add_completions_from_group (completions, prefix,
+                                   gb_workspace_get_actions (GB_WORKSPACE (widget)));
+
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  /*
+   * Now try to lookup the action inside of the GApplication.
+   * This is useful for stuff like "quit", and "preferences".
+   */
+  app = g_application_get_default ();
+  add_completions_from_group (completions, prefix, G_ACTION_GROUP (app));
+
+  g_free (prefix);
+
+  RETURN();
+}
+
+static void
 gb_command_gaction_provider_class_init (GbCommandGactionProviderClass *klass)
 {
   GbCommandProviderClass *provider_class = GB_COMMAND_PROVIDER_CLASS (klass);
 
   provider_class->lookup = gb_command_gaction_provider_lookup;
+  provider_class->complete = gb_command_gaction_provider_complete;
 }
 
 static void
