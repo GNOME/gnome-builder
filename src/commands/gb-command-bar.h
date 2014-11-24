@@ -46,6 +46,8 @@ struct _GbCommandBar
 struct _GbCommandBarClass
 {
   GtkRevealerClass parent;
+
+  void (*complete) (GbCommandBar *bar);
 };
 
 GType      gb_command_bar_get_type (void) G_GNUC_CONST;
