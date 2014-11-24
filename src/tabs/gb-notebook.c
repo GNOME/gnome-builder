@@ -185,4 +185,5 @@ static void
 gb_notebook_init (GbNotebook *notebook)
 {
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
+  gtk_notebook_set_show_border (GTK_NOTEBOOK (notebook), FALSE);
 }
