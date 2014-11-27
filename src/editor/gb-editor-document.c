@@ -23,8 +23,14 @@
 
 #include "gb-editor-document.h"
 
+struct _GbEditorDocumentPrivate
+{
+  GtkSourceFile *file;
+};
+
 enum {
   PROP_0,
+  PROP_FILE,
   PROP_STYLE_SCHEME_NAME,
   LAST_PROP
 };
@@ -34,7 +40,7 @@ enum {
   LAST_SIGNAL
 };
 
-G_DEFINE_TYPE (GbEditorDocument, gb_editor_document, GTK_SOURCE_TYPE_BUFFER)
+G_DEFINE_TYPE_WITH_PRIVATE (GbEditorDocument, gb_editor_document, GTK_SOURCE_TYPE_BUFFER)
 
 static  GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
@@ -43,6 +49,29 @@ GbEditorDocument *
 gb_editor_document_new (void)
 {
   return g_object_new (GB_TYPE_EDITOR_DOCUMENT, NULL);
+}
+
+GtkSourceFile *
+gb_editor_document_get_file (GbEditorDocument *document)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), NULL);
+
+  return document->priv->file;
+}
+
+void
+gb_editor_document_set_file (GbEditorDocument *document,
+                             GtkSourceFile    *file)
+{
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+  g_return_if_fail (!file || GTK_SOURCE_IS_FILE (file));
+
+  if (file != document->priv->file)
+    {
+      g_clear_object (&document->priv->file);
+      document->priv->file = file ? g_object_ref (file) : NULL;
+      g_object_notify_by_pspec (G_OBJECT (document), gParamSpecs [PROP_FILE]);
+    }
 }
 
 static void
@@ -69,7 +98,7 @@ gb_editor_document_mark_set (GtkTextBuffer     *buffer,
     GTK_TEXT_BUFFER_CLASS (gb_editor_document_parent_class)->mark_set (buffer, iter, mark);
 
   if (mark == gtk_text_buffer_get_insert (buffer))
-    g_signal_emit (buffer, gSignals[CURSOR_MOVED], 0);
+    g_signal_emit (buffer, gSignals [CURSOR_MOVED], 0);
 }
 
 static void
@@ -77,9 +106,38 @@ gb_editor_document_changed (GtkTextBuffer *buffer)
 {
   g_assert (GB_IS_EDITOR_DOCUMENT (buffer));
 
-  g_signal_emit (buffer, gSignals[CURSOR_MOVED], 0);
+  g_signal_emit (buffer, gSignals [CURSOR_MOVED], 0);
 
   GTK_TEXT_BUFFER_CLASS (gb_editor_document_parent_class)->changed (buffer);
+}
+
+static void
+gb_editor_document_finalize (GObject *object)
+{
+  GbEditorDocumentPrivate *priv = GB_EDITOR_DOCUMENT (object)->priv;
+
+  g_clear_object (&priv->file);
+
+  G_OBJECT_CLASS(gb_editor_document_parent_class)->finalize (object);
+}
+
+static void
+gb_editor_document_get_property (GObject    *object,
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
+{
+  GbEditorDocument *self = (GbEditorDocument *)object;
+
+  switch (prop_id)
+    {
+    case PROP_FILE:
+      g_value_set_object (value, gb_editor_document_get_file (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
 }
 
 static void
@@ -92,6 +150,10 @@ gb_editor_document_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_FILE:
+      gb_editor_document_set_file (self, g_value_get_object (value));
+      break;
+
     case PROP_STYLE_SCHEME_NAME:
       gb_editor_document_set_style_scheme_name (self,
                                                 g_value_get_string (value));
@@ -109,10 +171,21 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkTextBufferClass *text_buffer_class = GTK_TEXT_BUFFER_CLASS (klass);
 
+  object_class->finalize = gb_editor_document_finalize;
+  object_class->get_property = gb_editor_document_get_property;
   object_class->set_property = gb_editor_document_set_property;
 
   text_buffer_class->mark_set = gb_editor_document_mark_set;
   text_buffer_class->changed = gb_editor_document_changed;
+
+  gParamSpecs [PROP_FILE] =
+    g_param_spec_object ("file",
+                         _("File"),
+                         _("The backing file for the document."),
+                         GTK_SOURCE_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_FILE,
+                                   gParamSpecs [PROP_FILE]);
 
   gParamSpecs [PROP_STYLE_SCHEME_NAME] =
     g_param_spec_string ("style-scheme-name",
@@ -139,4 +212,6 @@ static void
 gb_editor_document_init (GbEditorDocument *document)
 {
   document->priv = gb_editor_document_get_instance_private (document);
+
+  document->priv->file = gtk_source_file_new ();
 }

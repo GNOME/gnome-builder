@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbEditorFrame" parent="GtkOverlay">
+    <child type="overlay">
+      <object class="NautilusFloatingBar" id="floating_bar">
+        <property name="halign">end</property>
+        <property name="valign">end</property>
+        <property name="visible">true</property>
+        <property name="primary_label" translatable="yes">Line 1, Column 1</property>
+        <child>
+          <object class="GtkSpinner" id="busy_spinner">
+            <property name="active">false</property>
+            <property name="margin_start">6</property>
+            <property name="tooltip_text" translatable="yes">Currently parsing document</property>
+            <property name="visible">false</property>
+          </object>
+          <packing>
+            <property name="pack_type">start</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child type="overlay">
+      <object class="GtkRevealer" id="search_revealer">
+        <property name="halign">end</property>
+        <property name="valign">start</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkFrame">
+            <property name="visible">true</property>
+            <property name="margin_end">12</property>
+            <style>
+              <class name="gb-search-slider"/>
+            </style>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="linked"/>
+                </style>
+                <child>
+                  <object class="GdTaggedEntry" id="search_entry">
+                    <property name="visible">True</property>
+                    <property name="tag_close_visible">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="width_request">260</property>
+                    <property name="primary_icon_activatable">True</property>
+                    <property name="primary_icon_sensitive">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="backward_search">
+                    <property name="visible">true</property>
+                    <property name="can_focus">false</property>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon_name">go-up-symbolic</property>
+                        <property name="icon_size">1</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="forward_search">
+                    <property name="visible">true</property>
+                    <property name="can_focus">false</property>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon_name">go-down-symbolic</property>
+                        <property name="icon_size">1</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="scrolled_window">
+        <property name="visible">true</property>
+        <child>
+          <object class="GbSourceView" id="source_view">
+            <property name="visible">true</property>
+            <property name="show-line-numbers">true</property>
+            <property name="show-right-margin">true</property>
+            <property name="right-margin-position">80</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
