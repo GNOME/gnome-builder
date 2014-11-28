@@ -22,7 +22,6 @@
 
 #include "gb-editor-frame.h"
 #include "gb-log.h"
-#include "gb-source-change-gutter-renderer.h"
 #include "gb-source-search-highlighter.h"
 #include "gb-source-view.h"
 #include "gd-tagged-entry.h"
@@ -31,25 +30,24 @@
 struct _GbEditorFramePrivate
 {
   /* Widgets owned by GtkBuilder */
-  GtkSpinner                   *busy_spinner;
-  GbSourceChangeGutterRenderer *diff_renderer;
-  NautilusFloatingBar          *floating_bar;
-  GtkButton                    *forward_search;
-  GtkButton                    *backward_search;
-  GtkScrolledWindow            *scrolled_window;
-  GtkRevealer                  *search_revealer;
-  GdTaggedEntry                *search_entry;
-  GdTaggedEntryTag             *search_entry_tag;
-  GbSourceView                 *source_view;
+  GtkSpinner                *busy_spinner;
+  NautilusFloatingBar       *floating_bar;
+  GtkButton                 *forward_search;
+  GtkButton                 *backward_search;
+  GtkScrolledWindow         *scrolled_window;
+  GtkRevealer               *search_revealer;
+  GdTaggedEntry             *search_entry;
+  GdTaggedEntryTag          *search_entry_tag;
+  GbSourceView              *source_view;
 
   /* Objects owned by GbEditorFrame */
-  GbEditorDocument             *document;
-  GtkSourceSearchContext       *search_context;
-  GtkSourceSearchSettings      *search_settings;
-  GbSourceSearchHighlighter    *search_highlighter;
+  GbEditorDocument          *document;
+  GtkSourceSearchContext    *search_context;
+  GtkSourceSearchSettings   *search_settings;
+  GbSourceSearchHighlighter *search_highlighter;
 
   /* Signal handler identifiers */
-  gulong                        cursor_moved_handler;
+  gulong                     cursor_moved_handler;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorFrame, gb_editor_frame, GTK_TYPE_OVERLAY)
@@ -241,7 +239,6 @@ gb_editor_frame_connect (GbEditorFrame    *frame,
                          GbEditorDocument *document)
 {
   GbEditorFramePrivate *priv;
-  GbSourceChangeMonitor *monitor;
 
   ENTRY;
 
@@ -255,11 +252,6 @@ gb_editor_frame_connect (GbEditorFrame    *frame,
 
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (priv->source_view),
                             GTK_TEXT_BUFFER (priv->document));
-
-  monitor = gb_editor_document_get_change_monitor (document);
-  g_object_set (priv->diff_renderer,
-                "change-monitor", monitor,
-                NULL);
 
   priv->search_settings = g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
                                         NULL);
@@ -482,27 +474,10 @@ gb_editor_frame_finalize (GObject *object)
 static void
 gb_editor_frame_constructed (GObject *object)
 {
-  GbSourceChangeMonitor *monitor = NULL;
   GbEditorFramePrivate *priv = GB_EDITOR_FRAME (object)->priv;
-  GtkSourceGutter *gutter;
   GbEditorFrame *frame = GB_EDITOR_FRAME (object);
 
   G_OBJECT_CLASS (gb_editor_frame_parent_class)->constructed (object);
-
-  if (priv->document)
-    monitor = gb_editor_document_get_change_monitor (priv->document);
-
-  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (priv->source_view),
-                                       GTK_TEXT_WINDOW_LEFT);
-  priv->diff_renderer = g_object_new (GB_TYPE_SOURCE_CHANGE_GUTTER_RENDERER,
-                                      "change-monitor", monitor,
-                                      "size", 2,
-                                      "visible", TRUE,
-                                      "xpad", 1,
-                                      NULL);
-  gtk_source_gutter_insert (gutter,
-                            GTK_SOURCE_GUTTER_RENDERER (priv->diff_renderer),
-                            0);
 
   g_signal_connect_object (priv->source_view,
                            "focus-in-event",

@@ -484,16 +484,12 @@ gb_source_change_monitor_set_buffer (GbSourceChangeMonitor *monitor,
     {
       g_signal_handler_disconnect (priv->buffer, priv->changed_handler);
       priv->changed_handler = 0;
-      g_object_remove_weak_pointer (G_OBJECT (priv->buffer),
-                                    (gpointer *)&priv->buffer);
+      g_clear_object (&priv->buffer);
     }
 
   if (buffer)
     {
-      priv->buffer = buffer;
-      g_object_add_weak_pointer (G_OBJECT (priv->buffer),
-                                 (gpointer *)&priv->buffer);
-
+      priv->buffer = g_object_ref (buffer);
       priv->changed_handler =
         g_signal_connect_object (priv->buffer,
                                  "changed",
