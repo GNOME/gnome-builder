@@ -1573,7 +1573,7 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
        * just keep them in sync here. 64 for X, height/2 for Y.
        */
       x = (grid_width - (vis.x % grid_width)) - (64 / grid_width * grid_width)
-        - grid_width + 1;
+        - grid_width + 2;
       y = (grid_height - (vis.y % grid_height))
           - (vis.height / 2 / grid_height * grid_height)
           - grid_height;
