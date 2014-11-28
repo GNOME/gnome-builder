@@ -90,6 +90,8 @@ gb_source_change_gutter_renderer_set_change_monitor (GbSourceChangeGutterRendere
                         G_CALLBACK (on_changed),
                         renderer);
     }
+
+  gtk_source_gutter_renderer_queue_draw (GTK_SOURCE_GUTTER_RENDERER (renderer));
 }
 
 static void
@@ -196,9 +198,7 @@ gb_source_change_gutter_renderer_class_init (GbSourceChangeGutterRendererClass *
                          _("Change Monitor"),
                          _("The change monitor for the gutter renderer."),
                          GB_TYPE_SOURCE_CHANGE_MONITOR,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_CHANGE_MONITOR,
                                    gParamSpecs [PROP_CHANGE_MONITOR]);
 }

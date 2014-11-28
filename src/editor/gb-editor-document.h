@@ -21,6 +21,8 @@
 
 #include <gtksourceview/gtksourcebuffer.h>
 
+#include "gb-source-change-monitor.h"
+
 G_BEGIN_DECLS
 
 #define GB_TYPE_EDITOR_DOCUMENT            (gb_editor_document_get_type())
@@ -50,11 +52,12 @@ struct _GbEditorDocumentClass
   void (*cursor_moved) (GbEditorDocument *document);
 };
 
-GbEditorDocument *gb_editor_document_new      (void);
-GType             gb_editor_document_get_type (void) G_GNUC_CONST;
-GtkSourceFile    *gb_editor_document_get_file (GbEditorDocument *document);
-void              gb_editor_document_set_file (GbEditorDocument *document,
-                                               GtkSourceFile    *file);
+GbEditorDocument      *gb_editor_document_new                (void);
+GType                  gb_editor_document_get_type           (void) G_GNUC_CONST;
+GtkSourceFile         *gb_editor_document_get_file           (GbEditorDocument *document);
+void                   gb_editor_document_set_file           (GbEditorDocument *document,
+                                                              GtkSourceFile    *file);
+GbSourceChangeMonitor *gb_editor_document_get_change_monitor (GbEditorDocument *document);
 
 G_END_DECLS
 

@@ -27,6 +27,8 @@
 
 #include "gb-application.h"
 #include "gb-editor-file-marks.h"
+#include "gb-editor-document.h"
+#include "gb-editor-frame.h"
 #include "gb-editor-workspace.h"
 #include "gb-log.h"
 #include "gb-keybindings.h"
@@ -346,6 +348,30 @@ gb_application_activate (GApplication *application)
 {
   GbWorkbench *workbench;
   GList *list;
+
+  {
+    GbEditorDocument *document;
+    GtkSourceFile *file;
+    GFile *gfile;
+    GtkWindow *window;
+    GtkWidget *frame;
+
+    file = gtk_source_file_new ();
+    gfile = g_file_new_for_path ("src/app/gb-application.c");
+    gtk_source_file_set_location (file, gfile);
+    g_object_unref (gfile);
+
+    document = g_object_new (GB_TYPE_EDITOR_DOCUMENT, "file", file, NULL);
+    g_object_unref (file);
+
+    window = g_object_new (GTK_TYPE_WINDOW, NULL);
+    frame = g_object_new (GB_TYPE_EDITOR_FRAME,
+                          "document", document,
+                          "visible", TRUE,
+                          NULL);
+    gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (frame));
+    gtk_window_present (window);
+  }
 
   g_return_if_fail (GB_IS_APPLICATION (application));
 

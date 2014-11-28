@@ -25,11 +25,14 @@
 
 struct _GbEditorDocumentPrivate
 {
-  GtkSourceFile *file;
+  GtkSourceFile         *file;
+  GbSourceChangeMonitor *change_monitor;
+  GBinding              *file_binding;
 };
 
 enum {
   PROP_0,
+  PROP_CHANGE_MONITOR,
   PROP_FILE,
   PROP_STYLE_SCHEME_NAME,
   LAST_PROP
@@ -51,6 +54,14 @@ gb_editor_document_new (void)
   return g_object_new (GB_TYPE_EDITOR_DOCUMENT, NULL);
 }
 
+GbSourceChangeMonitor *
+gb_editor_document_get_change_monitor (GbEditorDocument *document)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), NULL);
+
+  return document->priv->change_monitor;
+}
+
 GtkSourceFile *
 gb_editor_document_get_file (GbEditorDocument *document)
 {
@@ -63,13 +74,27 @@ void
 gb_editor_document_set_file (GbEditorDocument *document,
                              GtkSourceFile    *file)
 {
+  GbEditorDocumentPrivate *priv;
+
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
   g_return_if_fail (!file || GTK_SOURCE_IS_FILE (file));
 
-  if (file != document->priv->file)
+  priv = document->priv;
+
+  if (file != priv->file)
     {
-      g_clear_object (&document->priv->file);
-      document->priv->file = file ? g_object_ref (file) : NULL;
+      g_clear_object (&priv->file);
+      g_clear_object (&priv->file_binding);
+
+      if (file)
+        {
+          priv->file = g_object_ref (file);
+          priv->file_binding =
+            g_object_bind_property (priv->file, "location",
+                                    priv->change_monitor, "file",
+                                    G_BINDING_SYNC_CREATE);
+        }
+
       g_object_notify_by_pspec (G_OBJECT (document), gParamSpecs [PROP_FILE]);
     }
 }
@@ -117,6 +142,8 @@ gb_editor_document_finalize (GObject *object)
   GbEditorDocumentPrivate *priv = GB_EDITOR_DOCUMENT (object)->priv;
 
   g_clear_object (&priv->file);
+  g_clear_object (&priv->file_binding);
+  g_clear_object (&priv->change_monitor);
 
   G_OBJECT_CLASS(gb_editor_document_parent_class)->finalize (object);
 }
@@ -131,6 +158,10 @@ gb_editor_document_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CHANGE_MONITOR:
+      g_value_set_object (value, gb_editor_document_get_change_monitor (self));
+      break;
+
     case PROP_FILE:
       g_value_set_object (value, gb_editor_document_get_file (self));
       break;
@@ -178,6 +209,15 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
   text_buffer_class->mark_set = gb_editor_document_mark_set;
   text_buffer_class->changed = gb_editor_document_changed;
 
+  gParamSpecs [PROP_CHANGE_MONITOR] =
+    g_param_spec_object ("change-monitor",
+                         _("Change Monitor"),
+                         _("The change monitor for the backing file."),
+                         GB_TYPE_SOURCE_CHANGE_MONITOR,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_CHANGE_MONITOR,
+                                   gParamSpecs [PROP_CHANGE_MONITOR]);
+
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
                          _("File"),
@@ -212,6 +252,6 @@ static void
 gb_editor_document_init (GbEditorDocument *document)
 {
   document->priv = gb_editor_document_get_instance_private (document);
-
   document->priv->file = gtk_source_file_new ();
+  document->priv->change_monitor = gb_source_change_monitor_new (GTK_TEXT_BUFFER (document));
 }
