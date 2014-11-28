@@ -1635,8 +1635,17 @@ gb_source_vim_select_line (GbSourceVim *vim)
    */
   gtk_text_iter_assign (&end, &iter);
   while (!gtk_text_iter_ends_line (&end))
-    if (!gtk_text_iter_forward_char (&end))
-      break;
+    {
+      if (!gtk_text_iter_forward_char (&end))
+        {
+          /*
+           * This is the last line in the buffer, so we need to select the
+           * newline before the line instead of the newline after the line.
+           */
+          gtk_text_iter_backward_char (&begin);
+          break;
+        }
+    }
 
   /*
    * We actually want to select the \n before the line.
@@ -3949,7 +3958,30 @@ gb_source_vim_cmd_delete (GbSourceVim *vim,
   if (!gtk_text_buffer_get_has_selection (buffer))
     {
       if (modifier == 'd')
-        gb_source_vim_cmd_select_line (vim, count, '\0');
+        {
+          GtkTextMark *insert;
+          GtkTextIter end_iter;
+          GtkTextIter mark_iter;
+
+          /*
+           * WORKAROUND:
+           *
+           * We need to workaround that we can't "line select" the last line
+           * in the buffer with GtkTextBuffer. So instead, we'll just handle
+           * that case specially here.
+           */
+          insert = gtk_text_buffer_get_insert (buffer);
+          gtk_text_buffer_get_iter_at_mark (buffer, &mark_iter, insert);
+          gtk_text_buffer_get_end_iter (buffer, &end_iter);
+
+          if (gtk_text_iter_equal (&mark_iter, &end_iter))
+            {
+              gtk_text_iter_backward_char (&mark_iter);
+              gb_source_vim_select_range (vim, &mark_iter, &end_iter);
+            }
+          else
+            gb_source_vim_cmd_select_line (vim, count, '\0');
+        }
       else
         gb_source_vim_apply_motion (vim, modifier, count);
     }
