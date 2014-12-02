@@ -16,99 +16,67 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "devhelp-tab"
+
 #include <devhelp/devhelp.h>
 #include <glib/gi18n.h>
 #include <webkit2/webkit2.h>
 
 #include "gb-devhelp-tab.h"
-#include "gb-multi-notebook.h"
-#include "gd-tagged-entry.h"
+#include "gb-log.h"
 
 struct _GbDevhelpTabPrivate
 {
-  WebKitWebView *web_view;
-};
-
-enum {
-  PROP_0,
-  PROP_URI,
-  LAST_PROP
+  DhAssistantView *assistant_view;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbDevhelpTab, gb_devhelp_tab, GB_TYPE_TAB)
 
-static GParamSpec *gParamSpecs[LAST_PROP];
+enum {
+  PROP_0,
+  LAST_PROP
+};
 
-static void
-gb_devhelp_tab_close (GbTab *tab)
+static DhBookManager *gBookManager;
+
+#if 0
+static GParamSpec *gParamSpecs [LAST_PROP];
+#endif
+
+GbDevhelpTab *
+gb_devhelp_tab_new (void)
 {
-  GtkWidget *parent = (GtkWidget *)tab;
-  GList *list;
-
-  g_return_if_fail (GB_IS_DEVHELP_TAB (tab));
-
-  while (!GB_IS_MULTI_NOTEBOOK (parent))
-    parent = gtk_widget_get_parent (parent);
-
-  list = gb_multi_notebook_get_all_tabs (GB_MULTI_NOTEBOOK (parent));
-
-  if (list->next)
-    gtk_widget_destroy (GTK_WIDGET (tab));
-
-  g_list_free (list);
-}
-
-static void
-gb_devhelp_tab_freeze_drag (GbTab *tab)
-{
-  GbDevhelpTabPrivate *priv = GB_DEVHELP_TAB (tab)->priv;
-  GtkTargetList *target_list;
-
-  target_list = gtk_drag_dest_get_target_list (GTK_WIDGET (priv->web_view));
-  g_object_set_data_full (G_OBJECT (priv->web_view),
-                          "GB_TAB_DRAG_TARGET_LIST",
-                          gtk_target_list_ref (target_list),
-                          (GDestroyNotify) gtk_target_list_unref);
-  gtk_drag_dest_unset (GTK_WIDGET (priv->web_view));
-}
-
-static void
-gb_devhelp_tab_thaw_drag (GbTab *tab)
-{
-  GbDevhelpTabPrivate *priv = GB_DEVHELP_TAB (tab)->priv;
-  GtkTargetList *target_list;
-
-  target_list = g_object_get_data (G_OBJECT (priv->web_view),
-                                   "GB_TAB_DRAG_TARGET_LIST");
-  gtk_drag_dest_set (GTK_WIDGET (priv->web_view), 0, 0, 0,
-                     (GDK_ACTION_COPY |
-                      GDK_ACTION_MOVE |
-                      GDK_ACTION_LINK |
-                      GDK_ACTION_PRIVATE));
-  gtk_drag_dest_set_target_list (GTK_WIDGET (priv->web_view), target_list);
-}
-
-static void
-gb_devhelp_tab_on_title_changed (GbDevhelpTab  *tab,
-                                 GParamSpec    *pspec,
-                                 WebKitWebView *web_view)
-{
-  const gchar *title;
-
-  g_return_if_fail (GB_IS_DEVHELP_TAB (tab));
-  g_return_if_fail (WEBKIT_IS_WEB_VIEW (web_view));
-
-  title = webkit_web_view_get_title (web_view);
-  gb_tab_set_title (GB_TAB (tab), title);
+  return g_object_new (GB_TYPE_DEVHELP_TAB, NULL);
 }
 
 void
-gb_devhelp_tab_set_uri (GbDevhelpTab *tab,
-                        const gchar  *uri)
+gb_devhelp_tab_jump_to_keyword (GbDevhelpTab *tab,
+                                const gchar  *keyword)
 {
-  g_return_if_fail (GB_IS_DEVHELP_TAB (tab));
+  gchar *title;
 
-  webkit_web_view_load_uri (tab->priv->web_view, uri);
+  ENTRY;
+
+  g_return_if_fail (GB_IS_DEVHELP_TAB (tab));
+  g_return_if_fail (keyword);
+
+  dh_assistant_view_search (tab->priv->assistant_view, keyword);
+
+  title = g_strdup_printf (_("Documentation (%s)"), keyword);
+  gb_tab_set_title (GB_TAB (tab), title);
+  g_free (title);
+
+  EXIT;
+}
+
+static void
+gb_devhelp_tab_constructed (GObject *object)
+{
+  GbDevhelpTabPrivate *priv = GB_DEVHELP_TAB (object)->priv;
+
+  G_OBJECT_CLASS (gb_devhelp_tab_parent_class)->constructed (object);
+
+  dh_assistant_view_set_book_manager (priv->assistant_view, gBookManager);
 }
 
 static void
@@ -118,19 +86,34 @@ gb_devhelp_tab_finalize (GObject *object)
 }
 
 static void
+gb_devhelp_tab_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+#if 0
+  GbDevhelpTab *self = GB_DEVHELP_TAB (object);
+#endif
+
+  switch (prop_id)
+    {
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gb_devhelp_tab_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
                              GParamSpec   *pspec)
 {
-  GbDevhelpTab *tab = GB_DEVHELP_TAB (object);
+#if 0
+  GbDevhelpTab *self = GB_DEVHELP_TAB (object);
+#endif
 
   switch (prop_id)
     {
-    case PROP_URI:
-      gb_devhelp_tab_set_uri (tab, g_value_get_string (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -141,44 +124,30 @@ gb_devhelp_tab_class_init (GbDevhelpTabClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GbTabClass *tab_class = GB_TAB_CLASS (klass);
 
+  object_class->constructed = gb_devhelp_tab_constructed;
   object_class->finalize = gb_devhelp_tab_finalize;
+  object_class->get_property = gb_devhelp_tab_get_property;
   object_class->set_property = gb_devhelp_tab_set_property;
-
-  tab_class->close = gb_devhelp_tab_close;
-  tab_class->freeze_drag = gb_devhelp_tab_freeze_drag;
-  tab_class->thaw_drag = gb_devhelp_tab_thaw_drag;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-devhelp-tab.ui");
-  gtk_widget_class_bind_template_child_private (widget_class,
-                                                GbDevhelpTab,
-                                                web_view);
+  gtk_widget_class_bind_template_child_private (widget_class, GbDevhelpTab, assistant_view);
 
-  gParamSpecs[PROP_URI] =
-    g_param_spec_string ("uri",
-                         _("Uri"),
-                         _("The uri for the web_view."),
-                         NULL,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_URI,
-                                   gParamSpecs[PROP_URI]);
+  /* TODO:
+   *
+   * This type of stuff should be loaded during init just in case we ever
+   * reach the point of having to have a "splash screen".  Ugh, just the
+   * thought of it.
+   */
+  gBookManager = dh_book_manager_new ();
+  dh_book_manager_populate (gBookManager);
 }
 
 static void
-gb_devhelp_tab_init (GbDevhelpTab *tab)
+gb_devhelp_tab_init (GbDevhelpTab *self)
 {
-  tab->priv = gb_devhelp_tab_get_instance_private (tab);
+  self->priv = gb_devhelp_tab_get_instance_private (self);
 
-  g_type_ensure (GD_TYPE_TAGGED_ENTRY);
-  g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
-
-  gtk_widget_init_template (GTK_WIDGET (tab));
-
-  g_signal_connect_object (tab->priv->web_view,
-                           "notify::title",
-                           G_CALLBACK (gb_devhelp_tab_on_title_changed),
-                           tab,
-                           G_CONNECT_SWAPPED);
+  gtk_widget_init_template (GTK_WIDGET (self));
 }

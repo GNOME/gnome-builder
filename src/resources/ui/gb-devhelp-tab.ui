@@ -3,87 +3,13 @@
   <!-- interface-requires gtk+ 3.8 -->
   <template class="GbDevhelpTab" parent="GbTab">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
     <child internal-child="content">
       <object class="GtkBox">
         <child>
-          <object class="GtkOverlay" id="overlay">
-            <property name="visible">True</property>
-            <child>
-              <object class="GtkScrolledWindow" id="scroller">
-                <property name="visible">True</property>
-                <property name="vexpand">True</property>
-                <child>
-                  <object class="WebKitWebView" id="web_view">
-                    <property name="visible">True</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="overlay">
-              <object class="GtkRevealer" id="revealer">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="valign">start</property>
-                <child>
-                  <object class="GtkFrame" id="frame">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <style>
-                      <class name="gb-search-slider"/>
-                    </style>
-                    <child>
-                      <object class="GtkBox" id="hbox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">horizontal</property>
-                        <style>
-                          <class name="linked"/>
-                        </style>
-                        <child>
-                          <object class="GdTaggedEntry" id="search_entry">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="primary-icon-activatable">True</property>
-                            <property name="primary-icon-sensitive">True</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="go_up_button">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkImage" id="up_image">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="icon_size">1</property>
-                                <property name="icon_name">go-up-symbolic</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="go_down_button">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkImage" id="down_image">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="icon_size">1</property>
-                                <property name="icon_name">go-down-symbolic</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
+          <object class="DhAssistantView" id="assistant_view">
+            <property name="visible">true</property>
+            <property name="vexpand">true</property>
           </object>
         </child>
       </object>

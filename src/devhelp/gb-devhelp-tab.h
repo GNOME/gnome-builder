@@ -45,12 +45,13 @@ struct _GbDevhelpTab
 
 struct _GbDevhelpTabClass
 {
-  GbTabClass parent_class;
+  GbTabClass parent;
 };
 
-GType gb_devhelp_tab_get_type (void) G_GNUC_CONST;
-void  gb_devhelp_tab_set_uri  (GbDevhelpTab *tab,
-                               const gchar  *uri);
+GType         gb_devhelp_tab_get_type        (void);
+GbDevhelpTab *gb_devhelp_tab_new             (void);
+void          gb_devhelp_tab_jump_to_keyword (GbDevhelpTab *tab,
+                                              const gchar  *keyword);
 
 G_END_DECLS
 
