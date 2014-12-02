@@ -32,5 +32,8 @@
       <range min="1" max="120"/>
       <default>8</default>
     </key>
+    <key name="trim-trailing-whitespace" type="b">
+      <default>true</default>
+    </key>
   </schema>
 </schemalist>
