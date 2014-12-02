@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 
 #include "gb-command-vim.h"
+#include "gb-editor-frame-private.h"
 #include "gb-editor-tab.h"
 #include "gb-editor-tab-private.h"
 #include "gb-source-vim.h"
@@ -109,8 +110,10 @@ gb_command_vim_execute (GbCommand *command)
   if (self->priv->tab && self->priv->command_text)
     {
       GbSourceVim *vim;
+      GbEditorFrame *frame;
 
-      vim = gb_source_view_get_vim (self->priv->tab->priv->source_view);
+      frame = gb_editor_tab_get_last_frame (self->priv->tab);
+      vim = gb_source_view_get_vim (frame->priv->source_view);
       gb_source_vim_execute_command (vim, self->priv->command_text);
     }
 
