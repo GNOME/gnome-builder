@@ -2918,7 +2918,7 @@ gb_source_vim_handle_insert (GbSourceVim *vim,
        */
       gb_source_vim_move_backward (vim);
       gb_source_vim_set_mode (vim, GB_SOURCE_VIM_NORMAL);
-      return TRUE;
+      return FALSE;
 
     case GDK_KEY_u:
       /*
