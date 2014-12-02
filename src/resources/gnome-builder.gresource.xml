@@ -31,6 +31,7 @@
     <file>ui/gb-preferences-page-language.ui</file>
     <file>ui/gb-tab.ui</file>
     <file>ui/gb-tab-label.ui</file>
+    <file>ui/gb-tab-stack.ui</file>
     <file>ui/gb-workbench.ui</file>
   </gresource>
 </gresources>
