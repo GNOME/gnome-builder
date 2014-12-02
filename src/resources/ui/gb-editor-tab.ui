@@ -13,7 +13,7 @@
         </style>
         <child>
           <object class="GtkComboBox" id="symbol_browser">
-            <property name="visible">true</property>
+            <property name="visible">false</property>
             <property name="hexpand">true</property>
             <style>
               <class name="tab-control-first"/>
@@ -26,6 +26,7 @@
             <property name="tooltip_text">Split tab vertically</property>
             <style>
               <class name="image-button"/>
+              <class name="tab-control-first"/>
               <class name="tab-control-last"/>
             </style>
             <child>
