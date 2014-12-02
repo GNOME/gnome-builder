@@ -35,6 +35,7 @@ struct _GbEditorSettingsWidgetPrivate
   GtkCheckButton *smart_home_end;
   GtkSpinButton  *right_margin_position;
   GtkSpinButton  *tab_width;
+  GtkCheckButton *trim_trailing_whitespace;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorSettingsWidget, gb_editor_settings_widget,
@@ -110,6 +111,9 @@ gb_editor_settings_widget_set_language (GbEditorSettingsWidget *widget,
                        G_SETTINGS_BIND_DEFAULT);
       g_settings_bind (priv->settings, "tab-width",
                        priv->tab_width, "value",
+                       G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (priv->settings, "trim-trailing-whitespace",
+                       priv->trim_trailing_whitespace, "active",
                        G_SETTINGS_BIND_DEFAULT);
 
       g_object_notify_by_pspec (G_OBJECT (widget), gParamSpecs [PROP_LANGUAGE]);
@@ -188,6 +192,7 @@ gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, show_right_margin);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, smart_home_end);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, tab_width);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, trim_trailing_whitespace);
 
   gParamSpecs [PROP_LANGUAGE] =
     g_param_spec_string ("language",
