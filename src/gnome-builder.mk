@@ -17,6 +17,10 @@ libgnome_builder_la_SOURCES = \
 	src/auto-indent/gb-source-auto-indenter-python.h \
 	src/auto-indent/gb-source-auto-indenter-xml.c \
 	src/auto-indent/gb-source-auto-indenter-xml.h \
+	src/code-assistant/gb-source-code-assistant.h \
+	src/code-assistant/gb-source-code-assistant.c \
+	src/code-assistant/gb-source-code-assistant-renderer.c \
+	src/code-assistant/gb-source-code-assistant-renderer.h \
 	src/commands/gb-command.c \
 	src/commands/gb-command.h \
 	src/commands/gb-command-bar.c \
@@ -195,6 +199,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/app \
 	-I$(top_srcdir)/src/auto-indent \
 	-I$(top_srcdir)/src/commands \
+	-I$(top_srcdir)/src/code-assistant \
 	-I$(top_srcdir)/src/credits \
 	-I$(top_srcdir)/src/devhelp \
 	-I$(top_srcdir)/src/editor \
