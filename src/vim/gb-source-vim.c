@@ -3037,6 +3037,9 @@ gb_source_vim_mark_set_cb (GtkTextBuffer *buffer,
   if (vim->priv->mode == GB_SOURCE_VIM_INSERT)
     return;
 
+  if (!gtk_widget_has_focus (GTK_WIDGET (vim->priv->text_view)))
+    return;
+
   if (mark != gtk_text_buffer_get_insert (buffer))
     return;
 
