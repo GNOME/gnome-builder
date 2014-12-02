@@ -1695,15 +1695,13 @@ gb_source_view_focus_in_event (GtkWidget     *widget,
   GtkSourceCompletion *completion;
   gboolean ret;
 
-  g_return_if_fail (GB_IS_SOURCE_VIEW (widget));
-  g_return_if_fail (event);
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (widget), FALSE);
+  g_return_val_if_fail (event, FALSE);
 
   ret = GTK_WIDGET_CLASS (gb_source_view_parent_class)->focus_in_event (widget, event);
 
   completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (widget));
   gtk_source_completion_unblock_interactive (completion);
-
-  gb_source_view_scroll_to_insert (GB_SOURCE_VIEW (widget));
 
   return ret;
 }
@@ -1715,8 +1713,8 @@ gb_source_view_focus_out_event (GtkWidget     *widget,
   GtkSourceCompletion *completion;
   gboolean ret;
 
-  g_return_if_fail (GB_IS_SOURCE_VIEW (widget));
-  g_return_if_fail (event);
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (widget), FALSE);
+  g_return_val_if_fail (event, FALSE);
 
   ret = GTK_WIDGET_CLASS (gb_source_view_parent_class)->focus_out_event (widget, event);
 
