@@ -64,6 +64,7 @@ void                   gb_source_change_monitor_set_file (GbSourceChangeMonitor 
                                                           GFile                 *file);
 GbSourceChangeFlags    gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
                                                           guint                  lineno);
+void                   gb_source_change_monitor_reload   (GbSourceChangeMonitor *monitor);
 
 G_END_DECLS
 

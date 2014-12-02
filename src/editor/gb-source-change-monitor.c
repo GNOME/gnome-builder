@@ -85,6 +85,14 @@ gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
       return (GPOINTER_TO_INT (value) & GB_SOURCE_CHANGE_MASK);
     }
 
+  /*
+   * If we found a repository, but don't have state, then we are
+   * possibly just a new file in the repository. Mark the line as
+   * added.
+   */
+  if (monitor->priv->repo)
+    return GB_SOURCE_CHANGE_ADDED;
+
   return GB_SOURCE_CHANGE_NONE;
 }
 
@@ -440,7 +448,7 @@ gb_source_change_monitor_discover_repository (GbSourceChangeMonitor *monitor)
 
       if (!repo_file)
         {
-          g_message (_("Failed to locate a gir repository: %s"), error->message);
+          g_message (_("Failed to locate a git repository: %s"), error->message);
           g_clear_error (&error);
           EXIT;
         }
@@ -484,12 +492,16 @@ gb_source_change_monitor_set_buffer (GbSourceChangeMonitor *monitor,
     {
       g_signal_handler_disconnect (priv->buffer, priv->changed_handler);
       priv->changed_handler = 0;
-      g_clear_object (&priv->buffer);
+      g_object_remove_weak_pointer (G_OBJECT (priv->buffer),
+                                    (gpointer *)&priv->buffer);
     }
 
   if (buffer)
     {
-      priv->buffer = g_object_ref (buffer);
+      priv->buffer = buffer;
+      g_object_add_weak_pointer (G_OBJECT (priv->buffer),
+                                 (gpointer *)&priv->buffer);
+
       priv->changed_handler =
         g_signal_connect_object (priv->buffer,
                                  "changed",
@@ -509,6 +521,23 @@ gb_source_change_monitor_get_file (GbSourceChangeMonitor *monitor)
   g_return_val_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor), NULL);
 
   return monitor->priv->file;
+}
+
+void
+gb_source_change_monitor_reload (GbSourceChangeMonitor *monitor)
+{
+  ENTRY;
+
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+
+  if (monitor->priv->file)
+    {
+      gb_source_change_monitor_discover_repository (monitor);
+      gb_source_change_monitor_load_blob (monitor);
+      gb_source_change_monitor_queue_parse (monitor);
+    }
+
+  EXIT;
 }
 
 void
@@ -534,13 +563,10 @@ gb_source_change_monitor_set_file (GbSourceChangeMonitor *monitor,
   if (file)
     {
       priv->file = g_object_ref (file);
-      gb_source_change_monitor_discover_repository (monitor);
-      gb_source_change_monitor_load_blob (monitor);
+      gb_source_change_monitor_reload (monitor);
     }
 
   g_object_notify_by_pspec (G_OBJECT (monitor), gParamSpecs [PROP_FILE]);
-
-  gb_source_change_monitor_queue_parse (monitor);
 
   EXIT;
 }
@@ -678,6 +704,5 @@ gb_source_change_monitor_init (GbSourceChangeMonitor *monitor)
 {
   ENTRY;
   monitor->priv = gb_source_change_monitor_get_instance_private (monitor);
-  monitor->priv->state = g_hash_table_new (g_direct_hash, g_direct_equal);
   EXIT;
 }
