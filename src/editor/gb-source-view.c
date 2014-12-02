@@ -229,6 +229,8 @@ gb_source_view_connect_settings (GbSourceView *view)
                        G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "tab-width", view, "tab-width",
                        G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "trim-trailing-whitespace",
+                       buffer, "trim-trailing-whitespace",
                        G_SETTINGS_BIND_GET);
 
       view->priv->language_settings = settings;
