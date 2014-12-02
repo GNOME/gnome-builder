@@ -3164,28 +3164,32 @@ gb_source_vim_connect (GbSourceVim *vim)
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
   vim->priv->key_press_event_handler =
-    g_signal_connect (vim->priv->text_view,
-                      "key-press-event",
-                      G_CALLBACK (gb_source_vim_key_press_event_cb),
-                      vim);
+    g_signal_connect_object (vim->priv->text_view,
+                             "key-press-event",
+                             G_CALLBACK (gb_source_vim_key_press_event_cb),
+                             vim,
+                             0);
 
   vim->priv->focus_in_event_handler =
-    g_signal_connect (vim->priv->text_view,
-                      "focus-in-event",
-                      G_CALLBACK (gb_source_vim_focus_in_event_cb),
-                      vim);
+    g_signal_connect_object (vim->priv->text_view,
+                             "focus-in-event",
+                             G_CALLBACK (gb_source_vim_focus_in_event_cb),
+                             vim,
+                             0);
 
   vim->priv->mark_set_handler =
-    g_signal_connect_after (buffer,
+    g_signal_connect_object (buffer,
                             "mark-set",
                             G_CALLBACK (gb_source_vim_mark_set_cb),
-                            vim);
+                            vim,
+                            G_CONNECT_AFTER);
 
   vim->priv->delete_range_handler =
-    g_signal_connect_after (buffer,
+    g_signal_connect_object (buffer,
                             "delete-range",
                             G_CALLBACK (gb_source_vim_delete_range_cb),
-                            vim);
+                            vim,
+                            G_CONNECT_AFTER);
 
   if (GTK_SOURCE_IS_BUFFER (buffer))
     vim->priv->search_context =
