@@ -145,6 +145,8 @@ libgnome_builder_la_SOURCES = \
 	src/tabs/gb-tab-label-private.h \
 	src/tabs/gb-tab.c \
 	src/tabs/gb-tab.h \
+	src/tabs/gb-tab-grid.c \
+	src/tabs/gb-tab-grid.h \
 	src/tabs/gb-tab-stack.c \
 	src/tabs/gb-tab-stack.h \
 	src/theatrics/gb-box-theatric.c \
