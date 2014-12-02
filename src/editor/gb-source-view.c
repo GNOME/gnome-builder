@@ -1681,6 +1681,44 @@ gb_source_view_constructed (GObject *object)
                                       NULL);
 }
 
+static gboolean
+gb_source_view_focus_in_event (GtkWidget     *widget,
+                               GdkEventFocus *event)
+{
+  GtkSourceCompletion *completion;
+  gboolean ret;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (widget));
+  g_return_if_fail (event);
+
+  ret = GTK_WIDGET_CLASS (gb_source_view_parent_class)->focus_in_event (widget, event);
+
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (widget));
+  gtk_source_completion_unblock_interactive (completion);
+
+  gb_source_view_scroll_to_insert (GB_SOURCE_VIEW (widget));
+
+  return ret;
+}
+
+static gboolean
+gb_source_view_focus_out_event (GtkWidget     *widget,
+                                GdkEventFocus *event)
+{
+  GtkSourceCompletion *completion;
+  gboolean ret;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (widget));
+  g_return_if_fail (event);
+
+  ret = GTK_WIDGET_CLASS (gb_source_view_parent_class)->focus_out_event (widget, event);
+
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (widget));
+  gtk_source_completion_block_interactive (completion);
+
+  return ret;
+}
+
 static void
 gb_source_view_finalize (GObject *object)
 {
@@ -1794,6 +1832,8 @@ gb_source_view_class_init (GbSourceViewClass *klass)
   object_class->get_property = gb_source_view_get_property;
   object_class->set_property = gb_source_view_set_property;
 
+  widget_class->focus_in_event = gb_source_view_focus_in_event;
+  widget_class->focus_out_event = gb_source_view_focus_out_event;
   widget_class->grab_focus = gb_source_view_grab_focus;
   widget_class->key_press_event = gb_source_view_key_press_event;
 
@@ -1906,6 +1946,8 @@ gb_source_view_class_init (GbSourceViewClass *klass)
 static void
 gb_source_view_init (GbSourceView *view)
 {
+  GtkSourceCompletion *completion;
+
   view->priv = gb_source_view_get_instance_private (view);
 
   view->priv->snippets = g_queue_new ();
@@ -1935,4 +1977,6 @@ gb_source_view_init (GbSourceView *view)
                            view,
                            G_CONNECT_SWAPPED);
 
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (view));
+  gtk_source_completion_block_interactive (completion);
 }
