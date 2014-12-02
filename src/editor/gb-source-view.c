@@ -30,6 +30,7 @@
 #include "gb-box-theatric.h"
 #include "gb-cairo.h"
 #include "gb-editor-document.h"
+#include "gb-gtk.h"
 #include "gb-log.h"
 #include "gb-source-auto-indenter.h"
 #include "gb-source-search-highlighter.h"
@@ -634,12 +635,16 @@ gb_source_view_scroll_to_insert (GbSourceView *view)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *mark;
+  GtkTextIter iter;
 
   g_return_if_fail (GB_IS_SOURCE_VIEW (view));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
   mark = gtk_text_buffer_get_insert (buffer);
-  gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (view), mark, 0.0, FALSE, 0, 0);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+
+  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (view), &iter,
+                                   0.0, FALSE, 0.0, 0.0);
 }
 
 void
