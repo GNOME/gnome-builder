@@ -65,6 +65,7 @@ void         gb_tab_set_dirty        (GbTab       *tab,
 void         gb_tab_freeze_drag      (GbTab       *tab);
 void         gb_tab_thaw_drag        (GbTab       *tab);
 void         gb_tab_close            (GbTab       *tab);
+GtkWidget   *gb_tab_get_controls     (GbTab       *tab);
 GtkWidget   *gb_tab_get_header_area  (GbTab       *tab);
 GtkWidget   *gb_tab_get_footer_area  (GbTab       *tab);
 GtkWidget   *gb_tab_get_content_area (GbTab       *tab);

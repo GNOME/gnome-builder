@@ -16,13 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "tab"
+
 #include <glib/gi18n.h>
 
+#include "gb-log.h"
+#include "gb-notebook.h"
 #include "gb-tab.h"
 
 struct _GbTabPrivate
 {
   GtkWidget *content;
+  GtkBox    *controls;
   GtkWidget *footer_box;
   GtkWidget *header_box;
 
@@ -63,6 +68,14 @@ gb_tab_get_header_area (GbTab *tab)
   g_return_val_if_fail (GB_IS_TAB (tab), NULL);
 
   return tab->priv->header_box;
+}
+
+GtkWidget *
+gb_tab_get_controls (GbTab *tab)
+{
+  g_return_val_if_fail (GB_IS_TAB (tab), NULL);
+
+  return GTK_WIDGET (tab->priv->controls);
 }
 
 GtkWidget *
@@ -168,6 +181,7 @@ gb_tab_finalize (GObject *object)
 
   g_clear_pointer (&tab->priv->icon_name, g_free);
   g_clear_pointer (&tab->priv->title, g_free);
+  g_clear_object (&tab->priv->controls);
 
   G_OBJECT_CLASS (gb_tab_parent_class)->finalize (object);
 }
@@ -238,9 +252,9 @@ gb_tab_class_init (GbTabClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-tab.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GbTab, header_box);
   gtk_widget_class_bind_template_child_private (widget_class, GbTab, content);
   gtk_widget_class_bind_template_child_private (widget_class, GbTab, footer_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GbTab, header_box);
 
   gParamSpecs [PROP_DIRTY] =
     g_param_spec_boolean ("dirty",
@@ -308,6 +322,16 @@ gb_tab_init (GbTab *tab)
 {
   tab->priv = gb_tab_get_instance_private (tab);
 
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (tab),
+                                  GTK_ORIENTATION_VERTICAL);
+
+  tab->priv->controls =
+    g_object_new (GTK_TYPE_BOX,
+                  "orientation", GTK_ORIENTATION_HORIZONTAL,
+                  "visible", TRUE,
+                  NULL);
+  g_object_ref_sink (tab->priv->controls);
+
   gtk_widget_init_template (GTK_WIDGET (tab));
 }
 
@@ -326,6 +350,8 @@ gb_tab_get_internal_child (GtkBuildable *buildable,
     return G_OBJECT (tab->priv->header_box);
   else if (g_strcmp0 (childname, "footer") == 0)
     return G_OBJECT (tab->priv->footer_box);
+  else if (g_strcmp0 (childname, "controls") == 0)
+    return G_OBJECT (tab->priv->controls);
 
   return NULL;
 }
