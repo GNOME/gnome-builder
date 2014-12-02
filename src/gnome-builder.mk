@@ -37,18 +37,10 @@ libgnome_builder_la_SOURCES = \
 	src/commands/gb-command-vim.h \
 	src/credits/gb-credits-widget.c \
 	src/credits/gb-credits-widget.h \
-	src/devhelp/gb-devhelp-navigation-item.c \
-	src/devhelp/gb-devhelp-navigation-item.h \
 	src/devhelp/gb-devhelp-tab.c \
 	src/devhelp/gb-devhelp-tab.h \
-	src/devhelp/gb-devhelp-workspace.c \
-	src/devhelp/gb-devhelp-workspace.h \
 	src/editor/c-parse-helper.c \
 	src/editor/c-parse-helper.h \
-	src/editor/gb-editor-code-assistant.c \
-	src/editor/gb-editor-code-assistant.h \
-	src/editor/gb-editor-commands.c \
-	src/editor/gb-editor-commands.h \
 	src/editor/gb-editor-document.c \
 	src/editor/gb-editor-document.h \
 	src/editor/gb-editor-file-mark.c \
