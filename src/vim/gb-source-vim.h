@@ -59,13 +59,14 @@ struct _GbSourceVimClass
                                       const gchar *search_text);
   void (*command_visibility_toggled) (GbSourceVim *vim,
                                       gboolean     visibility);
+  void (*jump_to_doc)                (GbSourceVim *vim,
+                                      const gchar *search_text);
 
   gpointer _padding1;
   gpointer _padding2;
   gpointer _padding3;
   gpointer _padding4;
   gpointer _padding5;
-  gpointer _padding6;
 };
 
 GType            gb_source_vim_get_type        (void) G_GNUC_CONST;

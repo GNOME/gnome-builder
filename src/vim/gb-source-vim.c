@@ -168,6 +168,7 @@ enum
 {
   BEGIN_SEARCH,
   COMMAND_VISIBILITY_TOGGLED,
+  JUMP_TO_DOC,
   LAST_SIGNAL
 };
 
@@ -4158,6 +4159,25 @@ gb_source_vim_cmd_move_forward (GbSourceVim *vim,
 }
 
 static void
+gb_source_vim_cmd_jump_to_doc (GbSourceVim *vim,
+                               guint        count,
+                               gchar        modifier)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+  gchar *word;
+
+  g_assert (GB_IS_SOURCE_VIM (vim));
+
+  gb_source_vim_select_current_word (vim, &begin, &end);
+  word = gtk_text_iter_get_slice (&begin, &end);
+  g_signal_emit (vim, gSignals [JUMP_TO_DOC], 0, word);
+  g_free (word);
+
+  gb_source_vim_select_range (vim, &begin, &begin);
+}
+
+static void
 gb_source_vim_cmd_insert_before_line (GbSourceVim *vim,
                                       guint        count,
                                       gchar        modifier)
@@ -4585,6 +4605,25 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
                   1,
                   G_TYPE_BOOLEAN);
 
+  /**
+   * GbSourceVim::jump-to-doc:
+   * @search_text: keyword to search for.
+   *
+   * Requests that documentation for @search_text is shown. This is typically
+   * performed with SHIFT-K in VIM.
+   */
+  gSignals [JUMP_TO_DOC] =
+    g_signal_new ("jump-to-doc",
+                  GB_TYPE_SOURCE_VIM,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSourceVimClass, jump_to_doc),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__STRING,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_STRING);
+
   /*
    * Register all of our internal VIM commands. These can be used directly
    * or via phrases.
@@ -4715,6 +4754,10 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
                                         GB_SOURCE_VIM_COMMAND_FLAG_MOTION_LINEWISE,
                                         GB_SOURCE_VIM_COMMAND_MOVEMENT,
                                         gb_source_vim_cmd_move_up);
+  gb_source_vim_class_register_command (klass, 'K',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_NOOP,
+                                        gb_source_vim_cmd_jump_to_doc);
   gb_source_vim_class_register_command (klass, 'l',
                                         GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
                                         GB_SOURCE_VIM_COMMAND_MOVEMENT,
