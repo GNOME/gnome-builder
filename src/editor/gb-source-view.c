@@ -259,6 +259,17 @@ gb_source_view_begin_search (GbSourceView     *view,
 }
 
 static void
+gb_source_view_vim_begin_search (GbSourceView *view,
+                                 const gchar  *text,
+                                 GbSourceVim  *vim)
+{
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+
+  gb_source_view_begin_search (view, GTK_DIR_DOWN, text);
+}
+
+static void
 on_search_highlighter_changed (GbSourceSearchHighlighter *highlighter,
                                GbSourceView              *view)
 {
@@ -1918,4 +1929,10 @@ gb_source_view_init (GbSourceView *view)
                                   "enabled", FALSE,
                                   "text-view", view,
                                   NULL);
+  g_signal_connect_object (view->priv->vim,
+                           "begin-search",
+                           G_CALLBACK (gb_source_view_vim_begin_search),
+                           view,
+                           G_CONNECT_SWAPPED);
+
 }
