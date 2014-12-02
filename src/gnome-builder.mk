@@ -159,6 +159,8 @@ libgnome_builder_la_SOURCES = \
 	src/trie/trie.h \
 	src/util/gb-cairo.c \
 	src/util/gb-cairo.h \
+	src/util/gb-doc-seq.c \
+	src/util/gb-doc-seq.h \
 	src/util/gb-gtk.c \
 	src/util/gb-gtk.h \
 	src/util/gb-rgba.c \
