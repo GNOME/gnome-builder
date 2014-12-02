@@ -26,6 +26,7 @@
     <file>ui/gb-editor-frame.ui</file>
     <file>ui/gb-editor-tab.ui</file>
     <file>ui/gb-editor-workspace.ui</file>
+    <file>ui/gb-markdown-tab.ui</file>
     <file>ui/gb-preferences-window.ui</file>
     <file>ui/gb-preferences-page-editor.ui</file>
     <file>ui/gb-preferences-page-git.ui</file>
