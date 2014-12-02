@@ -107,6 +107,9 @@ gb_markdown_preview_reload (GbMarkdownPreview *preview)
 
   priv = preview->priv;
 
+  if (!priv->buffer)
+    EXIT;
+
   gtk_text_buffer_get_bounds (priv->buffer, &begin, &end);
   text = gtk_text_buffer_get_text (priv->buffer, &begin, &end, TRUE);
 
@@ -158,12 +161,17 @@ gb_markdown_preview_set_buffer (GbMarkdownPreview *preview,
     {
       g_signal_handler_disconnect (priv->buffer, priv->buffer_changed_handler);
       priv->buffer_changed_handler = 0;
-      g_clear_object (&priv->buffer);
+
+      g_object_remove_weak_pointer (G_OBJECT (priv->buffer),
+                                    (gpointer *)&priv->buffer);
+      priv->buffer = NULL;
     }
 
   if (buffer)
     {
-      priv->buffer = g_object_ref (buffer);
+      priv->buffer = buffer;
+      g_object_add_weak_pointer (G_OBJECT (priv->buffer),
+                                 (gpointer *)&priv->buffer);
       priv->buffer_changed_handler =
         g_signal_connect_object (priv->buffer,
                                  "changed",
@@ -183,7 +191,8 @@ gb_markdown_preview_dispose (GObject *object)
     {
       g_signal_handler_disconnect (priv->buffer, priv->buffer_changed_handler);
       priv->buffer_changed_handler = 0;
-      g_clear_object (&priv->buffer);
+      g_object_remove_weak_pointer (G_OBJECT (priv->buffer),
+                                    (gpointer *)&priv->buffer);
     }
 
   G_OBJECT_CLASS (gb_markdown_preview_parent_class)->dispose (object);
@@ -202,6 +211,7 @@ gb_markdown_preview_get_property (GObject    *object,
     case PROP_BUFFER:
       g_value_set_object (value, gb_markdown_preview_get_buffer (self));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -220,6 +230,7 @@ gb_markdown_preview_set_property (GObject      *object,
     case PROP_BUFFER:
       gb_markdown_preview_set_buffer (self, g_value_get_object (value));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }

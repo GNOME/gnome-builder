@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbMarkdownTab" parent="GbTab">
+    <property name="visible">true</property>
+    <child internal-child="content">
+      <object class="GtkBox">
+        <child>
+          <object class="GbMarkdownPreview" id="preview">
+            <property name="visible">true</property>
+            <property name="expand">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
