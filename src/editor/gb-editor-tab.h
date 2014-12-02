@@ -60,6 +60,7 @@ void         gb_editor_tab_open_file         (GbEditorTab *tab,
 void         gb_editor_tab_scroll_up         (GbEditorTab *tab);
 void         gb_editor_tab_scroll_down       (GbEditorTab *tab);
 void         gb_editor_tab_toggle_split      (GbEditorTab *tab);
+void         gb_editor_tab_switch_pane       (GbEditorTab *tab);
 void         gb_editor_tab_find              (GbEditorTab *tab);
 void         gb_editor_tab_reformat          (GbEditorTab *tab);
 void         gb_editor_tab_scroll_to_line    (GbEditorTab *tab,

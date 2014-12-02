@@ -572,6 +572,33 @@ gb_editor_tab_reformat (GbEditorTab *tab)
   gb_editor_frame_reformat (frame);
 }
 
+void
+gb_editor_tab_switch_pane (GbEditorTab *tab)
+{
+  GbEditorFrame *last_frame;
+  GtkWidget *frame1;
+  GtkWidget *frame2;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
+
+  frame1 = GTK_WIDGET (tab->priv->frame);
+  frame2 = gtk_paned_get_child2 (tab->priv->paned);
+
+  if (!frame2)
+    return;
+
+  last_frame = gb_editor_tab_get_last_frame (tab);
+
+  if (last_frame == (GbEditorFrame *)frame1)
+    gtk_widget_grab_focus (frame2);
+  else
+    gtk_widget_grab_focus (frame1);
+
+  EXIT;
+}
+
 static gboolean
 markdown_preview_title (GBinding     *binding,
                         const GValue *from_value,
