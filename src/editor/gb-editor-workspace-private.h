@@ -22,8 +22,8 @@
 #include <gtk/gtk.h>
 
 #include "gb-editor-tab.h"
-#include "gb-multi-notebook.h"
 #include "gb-notebook.h"
+#include "gb-tab-grid.h"
 
 G_BEGIN_DECLS
 
@@ -31,8 +31,8 @@ struct _GbEditorWorkspacePrivate
 {
   GSimpleActionGroup *actions;
   GHashTable         *command_map;
-  GbMultiNotebook    *multi_notebook;
   GtkPaned           *paned;
+  GbTabGrid          *tab_grid;
 };
 
 G_END_DECLS
