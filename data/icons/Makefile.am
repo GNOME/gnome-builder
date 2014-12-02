@@ -5,9 +5,22 @@ nobase_icon_DATA = \
 	hicolor/256x256/apps/builder.png \
 	hicolor/512x512/apps/builder.png \
 	hicolor/16x16/apps/builder.png \
+	hicolor/16x16/apps/builder-move-tab-left.png \
+	hicolor/16x16/apps/builder-move-tab-right.png \
+	hicolor/16x16/apps/builder-split-tab.png \
 	hicolor/32x32/apps/builder.png \
 	hicolor/48x48/apps/builder.png \
-	hicolor/24x24/apps/builder.png
+	hicolor/24x24/apps/builder.png \
+	hicolor/scalable/apps/builder-documentation-symbolic.svg \
+	hicolor/scalable/apps/builder-editor-symbolic.svg \
+	hicolor/scalable/autocomplete/lang-enum-value-symbolic.svg \
+	hicolor/scalable/autocomplete/struct-field-symbolic.svg \
+	hicolor/scalable/autocomplete/lang-class-symbolic.svg \
+	hicolor/scalable/autocomplete/lang-struct-symbolic.svg \
+	hicolor/scalable/autocomplete/lang-enum-symbolic.svg \
+	hicolor/scalable/autocomplete/lang-method-symbolic.svg \
+	hicolor/scalable/autocomplete/lang-function-symbolic.svg \
+	$(NULL)
 
 EXTRA_DIST = \
 	$(nobase_icon_DATA) \
