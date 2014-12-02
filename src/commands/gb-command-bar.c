@@ -24,6 +24,7 @@
 #include "gb-command-bar-item.h"
 #include "gb-command-manager.h"
 #include "gb-string.h"
+#include "gb-widget.h"
 
 struct _GbCommandBarPrivate
 {
@@ -70,9 +71,17 @@ gb_command_bar_new (void)
 void
 gb_command_bar_hide (GbCommandBar *bar)
 {
+  GbWorkbench *workbench;
+  GbWorkspace *workspace;
+
   g_return_if_fail (GB_IS_COMMAND_BAR (bar));
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (bar), FALSE);
+
+  workbench = gb_widget_get_workbench (GTK_WIDGET (bar));
+  workspace = gb_workbench_get_active_workspace (workbench);
+
+  gtk_widget_grab_focus (GTK_WIDGET (workspace));
 }
 
 /**
@@ -164,8 +173,15 @@ gb_command_bar_on_entry_activate (GbCommandBar *bar,
       if (command)
         {
           result = gb_command_execute (command);
+
+          /* if we got a result item, keep the bar open for observing it.
+           * (However, we currently have the result area hidden, until it is
+           * ported to Popover.) Otherwise, just hide the command bar.
+           */
           if (result)
             gb_command_bar_push_result (bar, result);
+          else
+            gb_command_bar_hide (bar);
         }
       else
         {
