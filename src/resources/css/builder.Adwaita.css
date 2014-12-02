@@ -17,6 +17,8 @@
     border-width: 1px;
     border-style: solid;
     box-shadow: inset 1px 1px @floating_bar_inset_color, -1px -1px @floating_bar_inset_color;
+
+    font-size: 0.9em;
 }
 .floating-bar.top {
     border-top-width: 0;
@@ -65,7 +67,7 @@
 /*
  * Search entry that slides down from top of editor.
  */
-GbEditorTab .gb-search-slider {
+GbEditorFrame .gb-search-slider {
     background-color: @theme_base_color;
     padding: 6px;
     border-color: shade (@theme_base_color, 0.60);
@@ -77,19 +79,6 @@ GbEditorTab .gb-search-slider {
     color: shade (@theme_unfocused_fg_color, 0.8);
     margin: 2px;
     padding: 2px;
-}
-
-
-/*
- * Vim command entry that slides up from the buttom.
- */
-GbEditorTab .gb-vim-command-slider {
-    background-color: shade (@theme_base_color, 0.8);
-    padding: 6px;
-    border-color: shade (@theme_base_color, 0.6);
-    border-radius: 3px 3px 0 0;
-    border-width: 1px 1px 0 1px;
-    border-style: solid;
 }
 
 
@@ -158,5 +147,53 @@ GbCommandBar GtkEntry {
     background-image: none;
     padding: 6px 6px 6px 6px;
     color: #eeeeec;
+}
+
+
+/*
+ * Styling of main window header bar.
+ */
+GbWorkbench GtkHeaderBar {
+    border-bottom: none;
+}
+
+
+/*
+ * Tab header styling.
+ */
+GtkComboBox.tab-header-first .button,
+GtkButton.tab-header-first {
+    border-left: none;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+GtkComboBox.tab-header-last .button,
+GtkButton.tab-header-last {
+    border-right: none;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+GtkComboBox.tab-control-first .button,
+GtkButton.tab-control-first {
+    border-left: none;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+GtkComboBox.tab-control-last .button,
+GtkButton.tab-control-last {
+    border-right: 1px solid @borders;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+
+
+#project-title {
+    border-left: none;
+    border-right: none;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
