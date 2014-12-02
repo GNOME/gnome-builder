@@ -28,7 +28,8 @@ struct _GbTabPrivate
 
   gchar    *icon_name;
   gchar    *title;
-  gboolean  dirty;
+
+  guint     dirty : 1;
 };
 
 enum {
