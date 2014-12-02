@@ -33,6 +33,9 @@
   <color name="blue2" value="#0077aa"/>
   <color name="purple1" value="#990055"/>
   <color name="pink1" value="#dd4a68"/>
+  <!-- Once gtksourceview supports rgba, we can uncomment this.
+  <color name="pink2" value="rgba(235,202,210,.5)"/>
+  -->
   <color name="pink2" value="#EBCAD2"/>
   <color name="green1" value="#669900"/>
   <color name="text1" value="#4d4e53"/>
@@ -90,7 +93,7 @@
   <style name="def:comment"                 foreground="blue1"/>
   <style name="def:constant"                foreground="blue2"/>
   <style name="def:doc-comment-element"     italic="true"/>
-  <style name="def:error"                   background="pink2" bold="true"/>
+  <style name="def:error"                   line-background="pink2" />
   <style name="def:floating-point"          foreground="blue2"/>
   <style name="def:decimal"                 foreground="blue2"/>
   <style name="def:base-n-integer"          foreground="blue2"/>
