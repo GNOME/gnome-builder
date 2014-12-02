@@ -516,7 +516,7 @@ gb_editor_tab_update_title (GbEditorTab *tab)
       if (!tab->priv->unsaved_id)
         {
           tab->priv->unsaved_id = gb_doc_seq_acquire ();
-          title = g_strdup_printf (_("unsaved %u"), tab->priv->unsaved_id);
+          title = g_strdup_printf (_("untitled document %u"), tab->priv->unsaved_id);
           gb_tab_set_title (GB_TAB (tab), title);
           g_free (title);
         }
