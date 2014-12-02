@@ -30,7 +30,7 @@ void gb_gtk_text_buffer_get_iter_at_line_and_offset (GtkTextBuffer *buffer,
 
 void gb_gtk_text_view_scroll_to_iter (GtkTextView *text_view,
                                       GtkTextIter *iter,
-                                      gboolean     within_margin,
+                                      gdouble      within_margin,
                                       gboolean     use_align,
                                       gdouble      xalign,
                                       gdouble      yalign);

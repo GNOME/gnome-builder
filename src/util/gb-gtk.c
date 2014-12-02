@@ -82,7 +82,7 @@ gb_gtk_text_view_scroll_to_iter_cb (gpointer data)
 
 /**
  * gb_gtk_text_view_scroll_to_iter:
- * 
+ *
  * This function is a wrapper function for gb_gtk_text_view_scroll_to_iter()
  * that will check to see if the text_view has calculated enough of it's
  * internal sizing to be able to scroll to the given iter.
@@ -93,7 +93,7 @@ gb_gtk_text_view_scroll_to_iter_cb (gpointer data)
 void
 gb_gtk_text_view_scroll_to_iter (GtkTextView *text_view,
                                  GtkTextIter *iter,
-                                 gboolean     within_margin,
+                                 gdouble      within_margin,
                                  gboolean     use_align,
                                  gdouble      xalign,
                                  gdouble      yalign)
