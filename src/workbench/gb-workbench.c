@@ -25,7 +25,6 @@
 #include "gb-command-manager.h"
 #include "gb-command-vim-provider.h"
 #include "gb-credits-widget.h"
-#include "gb-devhelp-workspace.h"
 #include "gb-editor-workspace.h"
 #include "gb-log.h"
 #include "gb-widget.h"
@@ -44,7 +43,6 @@ struct _GbWorkbenchPrivate
   GbWorkspace            *active_workspace;
   GbCommandBar           *command_bar;
   GbCreditsWidget        *credits;
-  GbWorkspace            *devhelp;
   GbWorkspace            *editor;
   GtkMenuButton          *add_button;
   GtkButton              *back_button;
@@ -129,8 +127,6 @@ gb_workbench_get_workspace (GbWorkbench *workbench,
 
   if (type == GB_TYPE_EDITOR_WORKSPACE)
     return GB_WORKSPACE (workbench->priv->editor);
-  else if (type == GB_TYPE_DEVHELP_WORKSPACE)
-    return GB_WORKSPACE (workbench->priv->devhelp);
 
   return NULL;
 }
@@ -233,17 +229,6 @@ on_workspace1_activate (GSimpleAction *action,
 }
 
 static void
-on_workspace2_activate (GSimpleAction *action,
-                        GVariant      *variant,
-                        gpointer       user_data)
-{
-  GbWorkbenchPrivate *priv = GB_WORKBENCH (user_data)->priv;
-  GtkWidget *child = gtk_stack_get_child_by_name (priv->stack, "devhelp");
-  gtk_stack_set_visible_child (priv->stack, child);
-  gtk_widget_grab_focus (child);
-}
-
-static void
 on_go_forward_activate (GSimpleAction *action,
                         GVariant      *variant,
                         gpointer       user_data)
@@ -296,8 +281,7 @@ gb_workbench_navigation_changed (GbWorkbench      *workbench,
       workspace = gb_navigation_item_get_workspace (item);
       if (workspace)
         gtk_stack_set_visible_child (priv->stack, GTK_WIDGET (workspace));
-
-      gb_navigation_item_emit_activate (item);
+      gb_navigation_item_activate (item);
     }
 }
 
@@ -388,7 +372,6 @@ gb_workbench_constructed (GObject *object)
 {
   static const GActionEntry actions[] = {
     { "workspace1", on_workspace1_activate },
-    { "workspace2", on_workspace2_activate },
     { "global-search", on_global_search_activate },
     { "go-backward", on_go_backward_activate },
     { "go-forward", on_go_forward_activate },
@@ -409,7 +392,6 @@ gb_workbench_constructed (GObject *object)
   priv = workbench->priv;
 
   gb_workbench_load_workspace_actions (workbench, GB_WORKSPACE (priv->editor));
-  gb_workbench_load_workspace_actions (workbench, GB_WORKSPACE (priv->devhelp));
 
   app = GTK_APPLICATION (g_application_get_default ());
   menu = gtk_application_get_menu_by_id (app, "gear-menu");
@@ -553,8 +535,6 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, UI_RESOURCE_PATH);
   gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                devhelp);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
                                                 command_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
                                                 credits);
@@ -583,7 +563,6 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 
   g_type_ensure (GB_TYPE_COMMAND_BAR);
   g_type_ensure (GB_TYPE_CREDITS_WIDGET);
-  g_type_ensure (GB_TYPE_DEVHELP_WORKSPACE);
   g_type_ensure (GB_TYPE_EDITOR_WORKSPACE);
   g_type_ensure (GEDIT_TYPE_MENU_STACK_SWITCHER);
 }

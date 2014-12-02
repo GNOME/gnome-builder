@@ -230,17 +230,6 @@
                         <property name="title" translatable="yes">Editor</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GbDevhelpWorkspace" id="devhelp">
-                        <property name="name">devhelp</property>
-                        <property name="visible">True</property>
-                      </object>
-                      <packing>
-                        <property name="name">devhelp</property>
-                        <property name="icon_name">help-browser-symbolic</property>
-                        <property name="title" translatable="yes">Documentation</property>
-                      </packing>
-                    </child>
                   </object>
                 </child>
               </object>
