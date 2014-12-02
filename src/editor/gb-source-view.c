@@ -215,6 +215,9 @@ gb_source_view_connect_settings (GbSourceView *view)
       g_settings_bind (settings, "right-margin-position",
                        view, "right-margin-position",
                        G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "smart-home-end",
+                       view, "smart-home-end-simple",
+                       G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "show-line-marks",
                        view, "show-line-marks",
                        G_SETTINGS_BIND_GET);
@@ -226,8 +229,6 @@ gb_source_view_connect_settings (GbSourceView *view)
                        G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "tab-width", view, "tab-width",
                        G_SETTINGS_BIND_GET);
-      g_settings_bind (settings, "smart-home-end",
-                       view, "smart-home-end-simple",
                        G_SETTINGS_BIND_GET);
 
       view->priv->language_settings = settings;
