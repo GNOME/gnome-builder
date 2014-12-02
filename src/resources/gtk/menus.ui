@@ -89,14 +89,6 @@
       </submenu>
       <submenu>
         <attribute name="label" translatable="yes">Tools</attribute>
-        <item>
-          <attribute name="label" translatable="yes">Autoformat Code</attribute>
-          <attribute name="action">editor.reformat</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">Trim Trailing Space</attribute>
-          <attribute name="action">editor.trim-trailing-space</attribute>
-        </item>
       </submenu>
     </section>
     <section>
@@ -105,6 +97,45 @@
         <attribute name="label" translatable="yes">_Close All</attribute>
         <attribute name="action">workbench.close-all</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">_Close</attribute>
+        <attribute name="action">workbench.close-tab</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="stack-menu">
+    <section>
+      <attribute name="id">juntion-section</attribute>
+      <attribute name="display-hint">horizontal-buttons</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Move Tab to _Left</attribute>
+        <attribute name="action">tabs.move-left</attribute>
+        <attribute name="verb-icon">builder-move-tab-left</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Fullscreen</attribute>
+        <attribute name="action">win.fullscreen</attribute>
+        <attribute name="verb-icon">view-fullscreen-symbolic</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Move Tab to _Right</attribute>
+        <attribute name="action">tabs.move-right</attribute>
+        <attribute name="verb-icon">builder-move-tab-right</attribute>
+      </item>
+    </section>
+    <section>
+      <attribute name="id">file-section-1</attribute>
+      <item>
+        <attribute name="label" translatable="yes">_Save</attribute>
+        <attribute name="action">workbench.save</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Save As…</attribute>
+        <attribute name="action">workbench.save-as</attribute>
+      </item>
+    </section>
+    <section>
+      <attribute name="id">close-section</attribute>
       <item>
         <attribute name="label" translatable="yes">_Close</attribute>
         <attribute name="action">workbench.close-tab</attribute>
