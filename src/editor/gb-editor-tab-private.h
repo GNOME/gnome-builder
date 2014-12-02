@@ -19,103 +19,34 @@
 #ifndef GB_EDITOR_TAB_PRIVATE_H
 #define GB_EDITOR_TAB_PRIVATE_H
 
-#include <gtk/gtk.h>
 #include <gtksourceview/gtksource.h>
 
 #include "gb-animation.h"
-#include "gb-box-theatric.h"
 #include "gb-editor-document.h"
-#include "gb-markdown-preview.h"
-#include "gb-notebook.h"
-#include "gb-source-change-monitor.h"
-#include "gb-source-search-highlighter.h"
-#include "gb-source-view.h"
-#include "gca-service.h"
-#include "gd-tagged-entry.h"
-#include "nautilus-floating-bar.h"
+#include "gb-editor-frame.h"
+#include "gb-editor-tab.h"
 
 G_BEGIN_DECLS
 
 struct _GbEditorTabPrivate
 {
-  /*
-   * Our underlying document, the GtkTextBuffer.
-   */
+  /* Widgets owned by GtkBuilder */
+  GbEditorFrame    *frame;
+  GtkPaned         *paned;
+  GtkProgressBar   *progress_bar;
+  GtkToggleButton  *split_button;
+
+  /* Weak references */
+  GbEditorFrame    *last_frame;
+  GbAnimation      *progress_animation;
+
+  /* Objects owned by GbEditorTab */
   GbEditorDocument *document;
 
-  /*
-   * Search releated components.
-   */
-  GbSourceSearchHighlighter *search_highlighter;
-  GtkSourceSearchSettings   *search_settings;
-  GtkSourceSearchContext    *search_context;
-
-  /*
-   * Change (add, change, etc) tracking of the editor.
-   */
-  GbSourceChangeMonitor *change_monitor;
-  GtkSourceGutterRenderer *change_renderer;
-
-  /*
-   * Weak reference bindings for tracking settings.
-   */
-  GBinding *auto_indent_binding;
-  GBinding *highlight_current_line_binding;
-  GBinding *highlight_matching_brackets_binding;
-  GBinding *insert_spaces_instead_of_tabs_binding;
-  GBinding *right_margin_position_binding;
-  GBinding *show_line_marks_binding;
-  GBinding *show_line_numbers_binding;
-  GBinding *show_right_margin_binding;
-  GBinding *smart_home_end_binding;
-  GBinding *tab_width_binding;
-
-  /*
-   * Tab related widgets, filled in with GtkBuilder templates.
-   */
-  NautilusFloatingBar *floating_bar;
-  GtkButton           *go_down_button;
-  GtkButton           *go_up_button;
-  GtkOverlay          *overlay;
-  GtkSpinner          *parsing_spinner;
-  GtkBox              *preview_container;
-  GtkProgressBar      *progress_bar;
-  GtkRevealer         *revealer;
-  GtkScrolledWindow   *scroller;
-  GbSourceView        *source_view;
-  GdTaggedEntry       *search_entry;
-  GdTaggedEntryTag    *search_entry_tag;
-
-  /*
-   * Information about our target file and encoding.
-   */
-  GtkSourceFile *file;
-
-  /*
-   * Code Assistance.
-   */
-  GCancellable            *gca_cancellable;
-  GcaService              *gca_service;
-  gchar                   *gca_tmpfile;
-  gint                     gca_tmpfd;
-  gulong                   gca_buffer_changed_handler;
-  guint                    gca_parse_timeout;
-  gulong                   gca_tooltip_handler;
-  GArray                  *gca_diagnostics;
-  gulong                   gca_draw_layer;
-  GtkSourceGutterRenderer *gca_gutter;
-  GHashTable              *gca_error_lines;
-
-  /*
-   * Animation for save progress.
-   */
-  GbAnimation *save_animation;
-
-  /*
-   * If we want to use word completion in this editor.
-   */
-  guint enable_word_completion : 1;
+  guint             unsaved_id;
 };
+
+GbEditorFrame *gb_editor_tab_get_last_frame (GbEditorTab *tab);
 
 G_END_DECLS
 

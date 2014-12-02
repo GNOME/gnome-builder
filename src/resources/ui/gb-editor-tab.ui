@@ -4,135 +4,75 @@
   <template class="GbEditorTab" parent="GbTab">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="orientation">horizontal</property>
     <property name="expand">True</property>
-    <child internal-child="content">
-      <object class="GtkBox" id="content">
+    <child internal-child="controls">
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <style>
+          <class name="linked"/>
+        </style>
         <child>
-          <object class="GtkOverlay" id="overlay">
+          <object class="GtkComboBox" id="symbol_browser">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <style>
+              <class name="tab-control-first"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="split_button">
             <property name="visible">True</property>
+            <property name="tooltip_text">Split tab vertically</property>
+            <style>
+              <class name="image-button"/>
+              <class name="tab-control-last"/>
+            </style>
             <child>
-              <object class="GtkScrolledWindow" id="scroller">
+              <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="expand">True</property>
-                <child>
-                  <object class="GbSourceView" id="source_view">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="show_line_numbers">True</property>
-                    <property name="show_right_margin">True</property>
-                    <property name="right_margin_position">80</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="overlay">
-              <object class="GtkProgressBar" id="progress_bar">
-                <property name="visible">False</property>
-                <property name="halign">fill</property>
-                <property name="valign">start</property>
-                <property name="fraction">0.0</property>
-                <style>
-                  <class name="osd"/>
-                </style>
-              </object>
-            </child>
-            <child type="overlay">
-              <object class="NautilusFloatingBar" id="floating_bar">
-                <property name="visible">True</property>
-                <property name="halign">end</property>
-                <property name="valign">end</property>
-                <child>
-                  <object class="GtkSpinner" id="parsing_spinner">
-                    <property name="visible">False</property>
-                    <property name="active">False</property>
-                    <property name="margin-start">6</property>
-                    <property name="tooltip-text" translatable="yes">Currently parsing document.</property>
-                  </object>
-                  <packing>
-                    <property name="pack_type">GTK_PACK_START</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="overlay">
-              <object class="GtkRevealer" id="revealer">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="valign">start</property>
-                <child>
-                  <object class="GtkFrame" id="frame">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_end">12</property>
-                    <style>
-                      <class name="gb-search-slider"/>
-                    </style>
-                    <child>
-                      <object class="GtkBox" id="hbox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">horizontal</property>
-                        <style>
-                          <class name="linked"/>
-                        </style>
-                        <child>
-                          <object class="GdTaggedEntry" id="search_entry">
-                            <property name="visible">True</property>
-                            <property name="tag-close-visible">False</property>
-                            <property name="can_focus">True</property>
-                            <property name="width-request">260</property>
-                            <property name="primary-icon-activatable">True</property>
-                            <property name="primary-icon-sensitive">True</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="go_up_button">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkImage" id="up_image">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="icon_size">1</property>
-                                <property name="icon_name">go-up-symbolic</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="go_down_button">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkImage" id="down_image">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="icon_size">1</property>
-                                <property name="icon_name">go-down-symbolic</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+                <property name="icon_size">1</property>
+                <property name="icon_name">builder-split-tab</property>
               </object>
             </child>
           </object>
         </child>
       </object>
     </child>
-    <child internal-child="footer">
-      <object class="GtkBox">
+    <child internal-child="content">
+      <object class="GtkBox" id="content">
         <child>
-          <object class="GtkBox" id="preview_container">
-            <property name="orientation">horizontal</property>
-            <property name="visible">False</property>
-            <property name="hexpand">True</property>
+          <object class="GtkOverlay">
+            <property name="visible">true</property>
+            <child type="overlay">
+              <object class="GtkProgressBar" id="progress_bar">
+                <property name="visible">false</property>
+                <property name="fraction">0.0</property>
+                <property name="valign">start</property>
+                <property name="halign">fill</property>
+                <property name="vexpand">false</property>
+                <style>
+                  <class name="osd"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkPaned" id="paned">
+                <property name="visible">true</property>
+                <property name="orientation">vertical</property>
+                <property name="vexpand">true</property>
+                <child>
+                  <object class="GbEditorFrame" id="frame">
+                    <property name="visible">true</property>
+                    <property name="vexpand">true</property>
+                  </object>
+                  <packing>
+                    <property name="resize">true</property>
+                    <property name="shrink">false</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>

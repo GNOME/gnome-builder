@@ -19,8 +19,10 @@
 #ifndef GB_EDITOR_TAB_H
 #define GB_EDITOR_TAB_H
 
+#include <gio/gio.h>
+#include <gtk/gtk.h>
+
 #include "gb-tab.h"
-#include "gb-editor-document.h"
 
 G_BEGIN_DECLS
 
@@ -49,17 +51,22 @@ struct _GbEditorTabClass
   GbTabClass parent_class;
 };
 
-GType             gb_editor_tab_get_type       (void) G_GNUC_CONST;
-GtkWidget        *gb_editor_tab_new            (void);
-GbEditorDocument *gb_editor_tab_get_document   (GbEditorTab                *tab);
-GtkSourceFile    *gb_editor_tab_get_file       (GbEditorTab                *tab);
-void              gb_editor_tab_set_font_desc  (GbEditorTab                *tab,
-                                                const PangoFontDescription *font_desc);
-gboolean          gb_editor_tab_get_is_default (GbEditorTab                *tab);
-void              gb_editor_tab_load_file_mark (GbEditorTab                *tab);
-void              gb_editor_tab_scroll_to_line (GbEditorTab                *tab,
-                                                guint                       line,
-                                                guint                       line_offset);
+GbEditorTab *gb_editor_tab_new               (void);
+GType        gb_editor_tab_get_type          (void) G_GNUC_CONST;
+void         gb_editor_tab_save              (GbEditorTab *tab);
+void         gb_editor_tab_save_as           (GbEditorTab *tab);
+void         gb_editor_tab_open_file         (GbEditorTab *tab,
+                                              GFile       *file);
+void         gb_editor_tab_scroll_up         (GbEditorTab *tab);
+void         gb_editor_tab_scroll_down       (GbEditorTab *tab);
+void         gb_editor_tab_toggle_split      (GbEditorTab *tab);
+void         gb_editor_tab_find              (GbEditorTab *tab);
+void         gb_editor_tab_reformat          (GbEditorTab *tab);
+void         gb_editor_tab_scroll_to_line    (GbEditorTab *tab,
+                                              guint        line,
+                                              guint        line_offset);
+void         gb_editor_tab_restore_file_mark (GbEditorTab *tab);
+GbTab       *gb_editor_tab_preview           (GbEditorTab *tab);
 
 G_END_DECLS
 

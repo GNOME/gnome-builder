@@ -8,20 +8,38 @@
         <property name="orientation">horizontal</property>
         <property name="position">250</property>
         <child>
-          <object class="GtkScrolledWindow" id="scroller">
-            <property name="visible">False</property>
+          <object class="GtkBox">
+            <property name="visible">false</property>
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GbTree" id="tree">
-                <property name="headers-visible">False</property>
+              <object class="GtkLabel" id="project_label">
+                <property name="name">project-title</property>
                 <property name="visible">True</property>
+                <property name="label"></property>
+                <property name="xalign">0.0</property>
+                <style>
+                  <class name="button"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scroller">
+                <property name="visible">True</property>
+                <property name="vexpand">True</property>
+                <child>
+                  <object class="GbTree" id="tree">
+                    <property name="headers-visible">False</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="GbMultiNotebook" id="multi_notebook">
-            <property name="group-name">GB_EDITOR_WORKSPACE</property>
+          <object class="GbTabGrid" id="tab_grid">
             <property name="visible">True</property>
+            <property name="hexpand">True</property>
           </object>
         </child>
       </object>
