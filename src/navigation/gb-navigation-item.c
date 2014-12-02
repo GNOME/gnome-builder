@@ -106,7 +106,7 @@ gb_navigation_item_set_workspace (GbNavigationItem *item,
 
 
 void
-gb_navigation_item_emit_activate (GbNavigationItem *item)
+gb_navigation_item_activate (GbNavigationItem *item)
 {
   g_return_if_fail (GB_IS_NAVIGATION_ITEM (item));
 

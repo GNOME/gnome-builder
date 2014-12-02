@@ -54,7 +54,7 @@ struct _GbNavigationItemClass
 
 GType             gb_navigation_item_get_type      (void) G_GNUC_CONST;
 GbNavigationItem *gb_navigation_item_new           (const gchar      *label);
-void              gb_navigation_item_emit_activate (GbNavigationItem *item);
+void              gb_navigation_item_activate      (GbNavigationItem *item);
 const gchar      *gb_navigation_item_get_label     (GbNavigationItem *item);
 void              gb_navigation_item_set_label     (GbNavigationItem *item,
                                                     const gchar      *label);
