@@ -362,6 +362,7 @@ gb_editor_tab_on_split_toggled (GbEditorTab     *tab,
   if (child2)
     {
       gtk_container_remove (GTK_CONTAINER (priv->paned), child2);
+      gtk_widget_grab_focus (GTK_WIDGET (tab->priv->frame));
     }
   else
     {
