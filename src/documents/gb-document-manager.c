@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <gtksourceview/gtksource.h>
+
 #include "gb-document-manager.h"
 
 G_DEFINE_TYPE (GbDocumentManager, gb_document_manager, GTK_TYPE_LIST_STORE)
@@ -31,7 +33,58 @@ gb_document_manager_new (void)
   return g_object_new (GB_TYPE_DOCUMENT_MANAGER, NULL);
 }
 
-gboolean
+/**
+ * gb_document_manager_find_by_file:
+ * @manager: A #GbDocumentManager.
+ * @file: A #GFile.
+ *
+ * This function will attempt to locate a previously stored buffer that matches
+ * the requsted file.
+ *
+ * If located, that buffer will be returned. Otherwise, %NULL is returned.
+ *
+ * Returns: (transfer none): A #GbEditorDocument or %NULL.
+ */
+GbEditorDocument *
+gb_document_manager_find_by_file (GbDocumentManager *manager,
+                                  GFile             *file)
+{
+  GtkTreeIter iter;
+
+  g_return_val_if_fail (GB_IS_DOCUMENT_MANAGER (manager), NULL);
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (manager), &iter))
+    {
+      do
+        {
+          GbEditorDocument *document;
+          GtkSourceFile *source_file;
+          GFile *location;
+          GValue value = { 0 };
+
+          gtk_tree_model_get_value (GTK_TREE_MODEL (manager), &iter,
+                                    COLUMN_DOCUMENT, &value);
+
+          document = g_value_get_object (&value);
+          source_file = gb_editor_document_get_file (document);
+          location = gtk_source_file_get_location (source_file);
+
+          if (g_file_equal (location, file))
+            {
+              g_value_unset (&value);
+              return document;
+            }
+
+          g_value_unset (&value);
+        }
+      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (manager), &iter));
+    }
+
+  return NULL;
+}
+
+static gboolean
 gb_document_manager_find_document (GbDocumentManager *manager,
                                    GbEditorDocument  *document,
                                    GtkTreeIter       *iter)
@@ -63,7 +116,7 @@ gb_document_manager_find_document (GbDocumentManager *manager,
   return FALSE;
 }
 
-void
+static void
 gb_document_manager_document_changed (GbDocumentManager *manager,
                                       GbEditorDocument  *document)
 {
