@@ -43,6 +43,8 @@ libgnome_builder_la_SOURCES = \
 	src/credits/gb-credits-widget.h \
 	src/devhelp/gb-devhelp-tab.c \
 	src/devhelp/gb-devhelp-tab.h \
+	src/documents/gb-document-manager.c \
+	src/documents/gb-document-manager.h \
 	src/editor/c-parse-helper.c \
 	src/editor/c-parse-helper.h \
 	src/editor/gb-editor-document.c \
@@ -205,6 +207,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/code-assistant \
 	-I$(top_srcdir)/src/credits \
 	-I$(top_srcdir)/src/devhelp \
+	-I$(top_srcdir)/src/documents \
 	-I$(top_srcdir)/src/editor \
 	-I$(top_srcdir)/src/gca \
 	-I$(top_srcdir)/src/gd \
