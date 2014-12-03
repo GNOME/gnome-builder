@@ -29,6 +29,7 @@
                 <property name="visible">True</property>
                 <style>
                   <class name="image-button"/>
+                  <class name="text-button"/>
                 </style>
                 <child>
                   <object class="GtkImage">
