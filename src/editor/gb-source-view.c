@@ -574,6 +574,10 @@ get_rect_for_iters (GtkTextView       *text_view,
       gtk_text_view_get_iter_location (text_view, &iter, &tmp);
       gdk_rectangle_union (&area, &tmp, &area);
 
+      /* ive seen a crash on the following line due to invalid textiter.
+       * none of these functions appear to me to be doing modifications,
+       * so im a bit perplexed. maybe stack corruption?
+       */
       gtk_text_iter_forward_to_line_end (&iter);
       gtk_text_view_get_iter_location (text_view, &iter, &tmp);
       gdk_rectangle_union (&area, &tmp, &area);
