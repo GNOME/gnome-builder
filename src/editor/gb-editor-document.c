@@ -21,6 +21,8 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
+#include "gb-document.h"
+#include "gb-doc-seq.h"
 #include "gb-editor-document.h"
 #include "gb-editor-file-marks.h"
 #include "gb-log.h"
@@ -31,15 +33,19 @@ struct _GbEditorDocumentPrivate
   GtkSourceFile         *file;
   GbSourceChangeMonitor *change_monitor;
   GbSourceCodeAssistant *code_assistant;
+  gchar                 *title;
 
-  guint trim_trailing_whitespace : 1;
+  guint                  doc_seq_id;
+  guint                  trim_trailing_whitespace : 1;
 };
 
 enum {
   PROP_0,
+  PROP_CAN_SAVE,
   PROP_CHANGE_MONITOR,
   PROP_FILE,
   PROP_STYLE_SCHEME_NAME,
+  PROP_TITLE,
   PROP_TRIM_TRAILING_WHITESPACE,
   LAST_PROP
 };
@@ -49,7 +55,16 @@ enum {
   LAST_SIGNAL
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbEditorDocument, gb_editor_document, GTK_SOURCE_TYPE_BUFFER)
+static void
+gb_editor_document_init_document (GbDocumentInterface *iface);
+
+G_DEFINE_TYPE_EXTENDED (GbEditorDocument,
+                        gb_editor_document,
+                        GTK_SOURCE_TYPE_BUFFER,
+                        0,
+                        G_ADD_PRIVATE (GbEditorDocument)
+                        G_IMPLEMENT_INTERFACE (GB_TYPE_DOCUMENT,
+                                               gb_editor_document_init_document))
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
@@ -437,6 +452,28 @@ gb_editor_document_guess_language (GbEditorDocument *document)
 }
 
 static void
+gb_editor_document_update_title (GbEditorDocument *document)
+{
+  GbEditorDocumentPrivate *priv;
+  GFile *location;
+
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  priv = document->priv;
+
+  g_clear_pointer (&priv->title, g_free);
+
+  location = gtk_source_file_get_location (priv->file);
+
+  if (location)
+    priv->title = g_file_get_basename (location);
+  else
+    priv->title = g_strdup_printf (_("untitled document %u"), priv->doc_seq_id);
+
+  g_object_notify (G_OBJECT (document), "title");
+}
+
+static void
 gb_editor_document_notify_file_location (GbEditorDocument *document,
                                          GParamSpec       *pspec,
                                          GtkSourceFile    *file)
@@ -450,6 +487,23 @@ gb_editor_document_notify_file_location (GbEditorDocument *document,
   priv = document->priv;
 
   location = gtk_source_file_get_location (file);
+
+  if (!location)
+    {
+      if (!priv->doc_seq_id)
+        priv->doc_seq_id = gb_doc_seq_acquire ();
+    }
+  else
+    {
+      if (priv->doc_seq_id)
+        {
+          gb_doc_seq_release (priv->doc_seq_id);
+          priv->doc_seq_id = 0;
+        }
+    }
+
+  gb_editor_document_update_title (document);
+
   gb_source_change_monitor_set_file (priv->change_monitor, location);
 
   gb_editor_document_guess_language (document);
@@ -663,6 +717,34 @@ gb_editor_document_load_finish (GbEditorDocument  *document,
 }
 
 static void
+gb_editor_document_modified_changed (GtkTextBuffer *buffer)
+{
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (buffer));
+
+  if (GTK_TEXT_BUFFER_CLASS (gb_editor_document_parent_class)->modified_changed)
+    GTK_TEXT_BUFFER_CLASS (gb_editor_document_parent_class)->
+      modified_changed (buffer);
+
+  g_object_notify (G_OBJECT (buffer), "can-save");
+}
+
+gboolean
+gb_editor_document_get_can_save (GbDocument *document)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), FALSE);
+
+  return gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (document));
+}
+
+const gchar *
+gb_editor_document_get_title (GbDocument *document)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), NULL);
+
+  return GB_EDITOR_DOCUMENT (document)->priv->title;
+}
+
+static void
 gb_editor_document_finalize (GObject *object)
 {
   GbEditorDocumentPrivate *priv = GB_EDITOR_DOCUMENT (object)->priv;
@@ -688,6 +770,11 @@ gb_editor_document_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CAN_SAVE:
+      g_value_set_boolean (value,
+                           gb_editor_document_get_can_save (GB_DOCUMENT (self)));
+      break;
+
     case PROP_CHANGE_MONITOR:
       g_value_set_object (value, gb_editor_document_get_change_monitor (self));
       break;
@@ -695,6 +782,10 @@ gb_editor_document_get_property (GObject    *object,
     case PROP_FILE:
       g_value_set_object (value, gb_editor_document_get_file (self));
       break;
+
+    case PROP_TITLE:
+      g_value_set_string (value,
+                          gb_editor_document_get_title (GB_DOCUMENT (self)));
 
     case PROP_TRIM_TRAILING_WHITESPACE:
       g_value_set_boolean (value,
@@ -744,6 +835,10 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
 
   text_buffer_class->mark_set = gb_editor_document_mark_set;
   text_buffer_class->changed = gb_editor_document_changed;
+  text_buffer_class->modified_changed = gb_editor_document_modified_changed;
+
+  g_object_class_override_property (object_class, PROP_CAN_SAVE, "can-save");
+  g_object_class_override_property (object_class, PROP_TITLE, "title");
 
   gParamSpecs [PROP_CHANGE_MONITOR] =
     g_param_spec_object ("change-monitor",
@@ -819,4 +914,11 @@ gb_editor_document_init (GbEditorDocument *document)
                     "notify::style-scheme",
                     G_CALLBACK (gb_editor_document_notify_style_scheme),
                     NULL);
+}
+
+static void
+gb_editor_document_init_document (GbDocumentInterface *iface)
+{
+  iface->get_can_save = gb_editor_document_get_can_save;
+  iface->get_title = gb_editor_document_get_title;
 }

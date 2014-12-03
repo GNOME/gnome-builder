@@ -43,6 +43,8 @@ libgnome_builder_la_SOURCES = \
 	src/credits/gb-credits-widget.h \
 	src/devhelp/gb-devhelp-tab.c \
 	src/devhelp/gb-devhelp-tab.h \
+	src/documents/gb-document.c \
+	src/documents/gb-document.h \
 	src/documents/gb-document-manager.c \
 	src/documents/gb-document-manager.h \
 	src/editor/c-parse-helper.c \
