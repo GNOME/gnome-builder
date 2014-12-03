@@ -71,7 +71,7 @@ snippet ginterface
 		GTypeInterface parent;
 	};
 
-	GType foo_bar_get_type (void) G_GNUC_CONST;
+	GType ${$1|functify}_get_type (void) G_GNUC_CONST;
 
 	G_END_DECLS
 
