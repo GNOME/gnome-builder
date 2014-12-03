@@ -129,6 +129,17 @@ GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:active {
 }
 
 
+/**
+ * Preference page language style.
+ */
+GbPreferencesPageLanguage GtkSearchEntry {
+    border-radius: 0;
+}
+GbPreferencesPageLanguage GtkScrolledWindow {
+    border-top-width: 0;
+}
+
+
 /*
  * Command Bar styling.
  */
