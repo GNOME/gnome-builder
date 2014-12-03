@@ -34,6 +34,24 @@ gb_document_manager_new (void)
 }
 
 /**
+ * gb_document_manager_get_default:
+ *
+ * Retrieves the singleton instance of #GbDocumentManager.
+ *
+ * Returns: (transfer none): A #GbDocumentManager.
+ */
+GbDocumentManager *
+gb_document_manager_get_default (void)
+{
+  static GbDocumentManager *instance;
+
+  if (!instance)
+    instance = gb_document_manager_new ();
+
+  return instance;
+}
+
+/**
  * gb_document_manager_find_by_file:
  * @manager: A #GbDocumentManager.
  * @file: A #GFile.
