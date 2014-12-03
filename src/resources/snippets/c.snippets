@@ -183,3 +183,12 @@ snippet unref
 	g_object_unref (${1});$0
 snippet clear
 	g_clear_object (&${1});$0
+snippet ginterface
+	#include "${1:$filename|stripsuffix}.h"
+
+	G_DEFINE_INTERFACE (${2:$1|camelize}, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
+
+	static void
+	$3_default_init ($2Interface *iface)
+	{
+	}
