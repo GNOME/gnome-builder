@@ -605,7 +605,6 @@ gb_tab_stack_class_init (GbTabStackClass *klass)
                          _("The model containing the buffers."),
                          GTK_TYPE_TREE_MODEL,
                          (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_MODEL,
                                    gParamSpecs [PROP_MODEL]);
