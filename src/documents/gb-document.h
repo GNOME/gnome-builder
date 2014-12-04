@@ -19,7 +19,7 @@
 #ifndef GB_DOCUMENT_H
 #define GB_DOCUMENT_H
 
-#include <glib-object.h>
+#include "gb-tab.h"
 
 G_BEGIN_DECLS
 
@@ -37,11 +37,13 @@ struct _GbDocumentInterface
 
   gboolean     (*get_can_save) (GbDocument *document);
   const gchar *(*get_title)    (GbDocument *document);
+  GbTab       *(*create_tab)   (GbDocument *document);
 };
 
 GType        gb_document_get_type     (void) G_GNUC_CONST;
 gboolean     gb_document_get_can_save (GbDocument *document);
 const gchar *gb_document_get_title    (GbDocument *document);
+GbTab       *gb_document_create_tab   (GbDocument *document);
 
 G_END_DECLS
 

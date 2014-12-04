@@ -47,6 +47,14 @@ gb_document_get_title (GbDocument *document)
   return GB_DOCUMENT_GET_INTERFACE (document)->get_title (document);
 }
 
+GbTab *
+gb_document_create_tab (GbDocument *document)
+{
+  g_return_val_if_fail (GB_IS_DOCUMENT (document), NULL);
+
+  return GB_DOCUMENT_GET_INTERFACE (document)->create_tab (document);
+}
+
 static void
 gb_document_default_init (GbDocumentInterface *iface)
 {
