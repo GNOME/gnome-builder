@@ -249,4 +249,9 @@ gb_document_manager_class_init (GbDocumentManagerClass *klass)
 static void
 gb_document_manager_init (GbDocumentManager *self)
 {
+  GType column_types[] = { GB_TYPE_DOCUMENT };
+
+  gtk_list_store_set_column_types (GTK_LIST_STORE (self),
+                                   G_N_ELEMENTS (column_types),
+                                   column_types);
 }
