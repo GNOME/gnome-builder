@@ -21,7 +21,7 @@
 
 #include <gtk/gtk.h>
 
-#include "gb-editor-document.h"
+#include "gb-document.h"
 
 G_BEGIN_DECLS
 
@@ -53,12 +53,12 @@ struct _GbDocumentManagerClass
 GType              gb_document_manager_get_type        (void);
 GbDocumentManager *gb_document_manager_new             (void);
 GbDocumentManager *gb_document_manager_get_default     (void);
-GbEditorDocument  *gb_document_manager_find_by_file    (GbDocumentManager *manager,
+GbDocument        *gb_document_manager_find_by_file    (GbDocumentManager *manager,
                                                         GFile             *file);
 void               gb_document_manager_add_document    (GbDocumentManager *manager,
-                                                        GbEditorDocument  *document);
+                                                        GbDocument        *document);
 gboolean           gb_document_manager_remove_document (GbDocumentManager *manager,
-                                                        GbEditorDocument  *document);
+                                                        GbDocument        *document);
 
 G_END_DECLS
 

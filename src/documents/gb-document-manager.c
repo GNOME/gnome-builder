@@ -19,6 +19,7 @@
 #include <gtksourceview/gtksource.h>
 
 #include "gb-document-manager.h"
+#include "gb-editor-document.h"
 
 G_DEFINE_TYPE (GbDocumentManager, gb_document_manager, GTK_TYPE_LIST_STORE)
 
@@ -61,9 +62,9 @@ gb_document_manager_get_default (void)
  *
  * If located, that buffer will be returned. Otherwise, %NULL is returned.
  *
- * Returns: (transfer none): A #GbEditorDocument or %NULL.
+ * Returns: (transfer none): A #GbDocument or %NULL.
  */
-GbEditorDocument *
+GbDocument *
 gb_document_manager_find_by_file (GbDocumentManager *manager,
                                   GFile             *file)
 {
@@ -84,14 +85,18 @@ gb_document_manager_find_by_file (GbDocumentManager *manager,
           gtk_tree_model_get_value (GTK_TREE_MODEL (manager), &iter,
                                     COLUMN_DOCUMENT, &value);
 
-          document = g_value_get_object (&value);
-          source_file = gb_editor_document_get_file (document);
-          location = gtk_source_file_get_location (source_file);
-
-          if (g_file_equal (location, file))
+          if (G_VALUE_HOLDS (&value, GB_TYPE_EDITOR_DOCUMENT))
             {
-              g_value_unset (&value);
-              return document;
+              document = g_value_get_object (&value);
+
+              source_file = gb_editor_document_get_file (document);
+              location = gtk_source_file_get_location (source_file);
+
+              if (g_file_equal (location, file))
+                {
+                  g_value_unset (&value);
+                  return GB_DOCUMENT (document);
+                }
             }
 
           g_value_unset (&value);
@@ -104,11 +109,11 @@ gb_document_manager_find_by_file (GbDocumentManager *manager,
 
 static gboolean
 gb_document_manager_find_document (GbDocumentManager *manager,
-                                   GbEditorDocument  *document,
+                                   GbDocument        *document,
                                    GtkTreeIter       *iter)
 {
   g_return_val_if_fail (GB_IS_DOCUMENT_MANAGER (manager), FALSE);
-  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), FALSE);
+  g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
 
   if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (manager), iter))
     {
@@ -136,12 +141,12 @@ gb_document_manager_find_document (GbDocumentManager *manager,
 
 static void
 gb_document_manager_document_changed (GbDocumentManager *manager,
-                                      GbEditorDocument  *document)
+                                      GbDocument        *document)
 {
   GtkTreeIter iter;
 
   g_return_if_fail (GB_IS_DOCUMENT_MANAGER (manager));
-  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+  g_return_if_fail (GB_IS_DOCUMENT (document));
 
   if (gb_document_manager_find_document (manager, document, &iter))
     {
@@ -154,37 +159,43 @@ gb_document_manager_document_changed (GbDocumentManager *manager,
 }
 
 static void
-gb_document_manager_on_notify_dirty (GbDocumentManager *manager,
-                                     GParamSpec        *pspec,
-                                     GbEditorDocument  *document)
+gb_document_manager_on_notify_can_save (GbDocumentManager *manager,
+                                        GParamSpec        *pspec,
+                                        GbDocument        *document)
 {
+  g_return_if_fail (GB_IS_DOCUMENT_MANAGER (manager));
+  g_return_if_fail (GB_IS_DOCUMENT (document));
+
   gb_document_manager_document_changed (manager, document);
 }
 
 static void
 gb_document_manager_on_notify_title (GbDocumentManager *manager,
                                      GParamSpec        *pspec,
-                                     GbEditorDocument  *document)
+                                     GbDocument        *document)
 {
+  g_return_if_fail (GB_IS_DOCUMENT_MANAGER (manager));
+  g_return_if_fail (GB_IS_DOCUMENT (document));
+
   gb_document_manager_document_changed (manager, document);
 }
 
 /**
  * gb_document_manager_add_document:
  * @manager: A #GbDocumentManager.
- * @document: A #GbEditorDocument.
+ * @document: A #GbDocument.
  *
- * Adds A #GbEditorDocument to the collection of buffers managed by the
+ * Adds A #GbDocument to the collection of buffers managed by the
  * #GbDocumentManager instance.
  */
 void
 gb_document_manager_add_document (GbDocumentManager *manager,
-                                  GbEditorDocument  *document)
+                                  GbDocument        *document)
 {
   GtkTreeIter iter;
 
   g_return_if_fail (GB_IS_DOCUMENT_MANAGER (manager));
-  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+  g_return_if_fail (GB_IS_DOCUMENT (document));
 
   g_signal_connect_object (document,
                            "notify::title",
@@ -193,8 +204,8 @@ gb_document_manager_add_document (GbDocumentManager *manager,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (document,
-                           "notify::dirty",
-                           G_CALLBACK (gb_document_manager_on_notify_dirty),
+                           "notify::can-save",
+                           G_CALLBACK (gb_document_manager_on_notify_can_save),
                            manager,
                            G_CONNECT_SWAPPED);
 
@@ -207,19 +218,19 @@ gb_document_manager_add_document (GbDocumentManager *manager,
 /**
  * gb_document_manager_remove_document:
  *
- * Removes the #GbEditorDocument instance @document from being managed by
+ * Removes the #GbDocument instance @document from being managed by
  * the #GbDocumentManager instance.
  *
  * Returns: %TRUE if the document was removed.
  */
 gboolean
 gb_document_manager_remove_document (GbDocumentManager *manager,
-                                     GbEditorDocument  *document)
+                                     GbDocument        *document)
 {
   GtkTreeIter iter;
 
   g_return_val_if_fail (GB_IS_DOCUMENT_MANAGER (manager), FALSE);
-  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), FALSE);
+  g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
 
   if (gb_document_manager_find_document (manager, document, &iter))
     {
