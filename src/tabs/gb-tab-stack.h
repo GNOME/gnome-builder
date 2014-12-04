@@ -52,20 +52,23 @@ struct _GbTabStackClass
    void (*changed) (GbTabStack *stack);
 };
 
-GType      gb_tab_stack_get_type       (void) G_GNUC_CONST;
-GbTab     *gb_tab_stack_get_active     (GbTabStack *stack);
-gboolean   gb_tab_stack_contains_tab   (GbTabStack *stack,
-                                        GbTab      *tab);
-void       gb_tab_stack_remove_tab     (GbTabStack *stack,
-                                        GbTab      *tab);
-guint      gb_tab_stack_get_n_tabs     (GbTabStack *stack);
-gboolean   gb_tab_stack_focus_first    (GbTabStack *stack);
-gboolean   gb_tab_stack_focus_last     (GbTabStack *stack);
-gboolean   gb_tab_stack_focus_next     (GbTabStack *stack);
-gboolean   gb_tab_stack_focus_previous (GbTabStack *stack);
-gboolean   gb_tab_stack_focus_tab      (GbTabStack *stack,
-                                        GbTab      *tab);
-GList     *gb_tab_stack_get_tabs       (GbTabStack *stack);
+GType         gb_tab_stack_get_type       (void) G_GNUC_CONST;
+GbTab        *gb_tab_stack_get_active     (GbTabStack *stack);
+gboolean      gb_tab_stack_contains_tab   (GbTabStack *stack,
+                                           GbTab      *tab);
+void          gb_tab_stack_remove_tab     (GbTabStack *stack,
+                                           GbTab      *tab);
+guint         gb_tab_stack_get_n_tabs     (GbTabStack *stack);
+gboolean      gb_tab_stack_focus_first    (GbTabStack *stack);
+gboolean      gb_tab_stack_focus_last     (GbTabStack *stack);
+gboolean      gb_tab_stack_focus_next     (GbTabStack *stack);
+gboolean      gb_tab_stack_focus_previous (GbTabStack *stack);
+gboolean      gb_tab_stack_focus_tab      (GbTabStack *stack,
+                                           GbTab      *tab);
+GList        *gb_tab_stack_get_tabs       (GbTabStack *stack);
+GtkTreeModel *gb_tab_stack_get_model      (GbTabStack *stack);
+void          gb_tab_stack_set_model      (GbTabStack   *stack,
+                                           GtkTreeModel *model);
 
 G_END_DECLS
 

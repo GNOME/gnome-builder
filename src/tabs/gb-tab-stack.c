@@ -38,6 +38,12 @@ struct _GbTabStackPrivate
 G_DEFINE_TYPE_WITH_PRIVATE (GbTabStack, gb_tab_stack, GTK_TYPE_BOX)
 
 enum {
+  PROP_0,
+  PROP_MODEL,
+  LAST_PROP
+};
+
+enum {
   CHANGED,
   LAST_SIGNAL
 };
@@ -45,7 +51,8 @@ enum {
 static void gb_tab_stack_tab_closed (GbTabStack *stack,
                                      GbTab      *tab);
 
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *gParamSpecs [LAST_PROP];
+static guint       gSignals [LAST_SIGNAL];
 
 GtkWidget *
 gb_tab_stack_new (void)
@@ -505,11 +512,78 @@ gb_tab_stack_do_close_tab (GbTabStack *stack,
     gb_tab_stack_remove_tab (stack, tab);
 }
 
+GtkTreeModel *
+gb_tab_stack_get_model (GbTabStack *stack)
+{
+  g_return_val_if_fail (GB_IS_TAB_STACK (stack), NULL);
+
+  return gtk_combo_box_get_model (stack->priv->combo);
+}
+
+void
+gb_tab_stack_set_model (GbTabStack   *stack,
+                        GtkTreeModel *model)
+{
+  g_return_if_fail (GB_IS_TAB_STACK (stack));
+
+  gtk_combo_box_set_model (stack->priv->combo, model);
+  g_object_notify_by_pspec (G_OBJECT (stack), gParamSpecs [PROP_MODEL]);
+}
+
+static void
+gb_tab_stack_finalize (GObject *object)
+{
+  G_OBJECT_CLASS (gb_tab_stack_parent_class)->finalize (object);
+}
+
+static void
+gb_tab_stack_get_property (GObject    *object,
+                           guint       prop_id,
+                           GValue     *value,
+                           GParamSpec *pspec)
+{
+  GbTabStack *stack = GB_TAB_STACK(object);
+
+  switch (prop_id)
+    {
+    case PROP_MODEL:
+      g_value_set_object (value, gb_tab_stack_get_model (stack));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
+static void
+gb_tab_stack_set_property (GObject      *object,
+                           guint         prop_id,
+                           const GValue *value,
+                           GParamSpec   *pspec)
+{
+  GbTabStack *stack = GB_TAB_STACK(object);
+
+  switch (prop_id)
+    {
+    case PROP_MODEL:
+      gb_tab_stack_set_model (stack, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
 static void
 gb_tab_stack_class_init (GbTabStackClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gb_tab_stack_finalize;
+  object_class->get_property = gb_tab_stack_get_property;
+  object_class->set_property = gb_tab_stack_set_property;
 
   container_class->add = gb_tab_stack_add;
 
@@ -524,6 +598,17 @@ gb_tab_stack_class_init (GbTabStackClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbTabStack, stack);
   gtk_widget_class_bind_template_child_private (widget_class, GbTabStack, stack_menu);
   gtk_widget_class_bind_template_child_private (widget_class, GbTabStack, store);
+
+  gParamSpecs [PROP_MODEL] =
+    g_param_spec_object ("model",
+                         _("Model"),
+                         _("The model containing the buffers."),
+                         GTK_TYPE_TREE_MODEL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_MODEL,
+                                   gParamSpecs [PROP_MODEL]);
 
   gSignals [CHANGED] = g_signal_new ("changed",
                                      GB_TYPE_TAB_STACK,
