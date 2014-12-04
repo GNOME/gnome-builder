@@ -50,21 +50,24 @@ struct _GbTabGridClass
    GtkBinClass parent_class;
 };
 
-GtkWidget *gb_tab_grid_new                (void);
-GType      gb_tab_grid_get_type           (void) G_GNUC_CONST;
-GbTab     *gb_tab_grid_get_active         (GbTabGrid *grid);
-void       gb_tab_grid_focus_tab          (GbTabGrid *grid,
-                                           GbTab     *tab);
-void       gb_tab_grid_move_tab_left      (GbTabGrid *grid,
-                                           GbTab     *tab);
-void       gb_tab_grid_move_tab_right     (GbTabGrid *grid,
-                                           GbTab     *tab);
-void       gb_tab_grid_focus_next_tab     (GbTabGrid *grid,
-                                           GbTab     *tab);
-void       gb_tab_grid_focus_previous_tab (GbTabGrid *grid,
-                                           GbTab     *tab);
-GbTab     *gb_tab_grid_find_tab_typed     (GbTabGrid *grid,
-                                           GType      type);
+GtkWidget    *gb_tab_grid_new                (void);
+GType         gb_tab_grid_get_type           (void) G_GNUC_CONST;
+GbTab        *gb_tab_grid_get_active         (GbTabGrid    *grid);
+void          gb_tab_grid_focus_tab          (GbTabGrid    *grid,
+                                              GbTab        *tab);
+void          gb_tab_grid_move_tab_left      (GbTabGrid    *grid,
+                                              GbTab        *tab);
+void          gb_tab_grid_move_tab_right     (GbTabGrid    *grid,
+                                              GbTab        *tab);
+void          gb_tab_grid_focus_next_tab     (GbTabGrid    *grid,
+                                              GbTab        *tab);
+void          gb_tab_grid_focus_previous_tab (GbTabGrid    *grid,
+                                              GbTab        *tab);
+GbTab        *gb_tab_grid_find_tab_typed     (GbTabGrid    *grid,
+                                              GType         type);
+GtkTreeModel *gb_tab_grid_get_model          (GbTabGrid    *grid);
+void          gb_tab_grid_set_model          (GbTabGrid    *grid,
+                                              GtkTreeModel *model);
 
 G_END_DECLS
 

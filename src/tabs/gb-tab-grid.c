@@ -28,15 +28,24 @@
 struct _GbTabGridPrivate
 {
   GSimpleActionGroup *actions;
+  GtkTreeModel       *model;
 
   GtkWidget          *top_hpaned;
   GbTabStack         *last_focused_stack;
 };
 
+enum {
+  PROP_0,
+  PROP_MODEL,
+  LAST_PROP
+};
+
 G_DEFINE_TYPE_WITH_PRIVATE (GbTabGrid, gb_tab_grid, GTK_TYPE_BIN)
 
-static GtkWidget *
-gb_tab_grid_get_first_stack (GbTabGrid*);
+static GParamSpec *gParamSpecs [LAST_PROP];
+
+static GtkWidget *gb_tab_grid_get_first_stack (GbTabGrid *);
+static GList     *gb_tab_grid_get_stacks      (GbTabGrid *);
 
 static void
 gb_tab_grid_set_last_focused (GbTabGrid  *grid,
@@ -68,6 +77,42 @@ GtkWidget *
 gb_tab_grid_new (void)
 {
   return g_object_new (GB_TYPE_TAB_GRID, NULL);
+}
+
+GtkTreeModel *
+gb_tab_grid_get_model (GbTabGrid *grid)
+{
+  g_return_val_if_fail (GB_IS_TAB_GRID (grid), NULL);
+
+  return grid->priv->model;
+}
+
+void
+gb_tab_grid_set_model (GbTabGrid    *grid,
+                       GtkTreeModel *model)
+{
+  g_return_if_fail (GB_IS_TAB_GRID (grid));
+  g_return_if_fail (!model || GTK_IS_TREE_MODEL (model));
+
+  if (model != grid->priv->model)
+    {
+      g_clear_object (&grid->priv->model);
+
+      if (model)
+        {
+          GList *list;
+          GList *iter;
+
+          grid->priv->model = g_object_ref (model);
+
+          list = gb_tab_grid_get_stacks (grid);
+
+          for (iter = list; iter; iter = iter->next)
+            gb_tab_stack_set_model (iter->data, model);
+
+          g_list_free (list);
+        }
+    }
 }
 
 static void
@@ -117,6 +162,15 @@ gb_tab_grid_remove_empty (GbTabGrid *self)
   EXIT;
 }
 
+static gpointer
+gb_tab_grid_create_stack (GbTabGrid *grid)
+{
+  return g_object_new (GB_TYPE_TAB_STACK,
+                       "model", grid->priv->model,
+                       "visible", TRUE,
+                       NULL);
+}
+
 static GtkWidget *
 gb_tab_grid_get_first_stack (GbTabGrid *self)
 {
@@ -141,9 +195,7 @@ gb_tab_grid_get_first_stack (GbTabGrid *self)
                                "resize", TRUE,
                                "shrink", FALSE,
                                NULL);
-      child = g_object_new (GB_TYPE_TAB_STACK,
-                            "visible", TRUE,
-                            NULL);
+      child = gb_tab_grid_create_stack (self);
       g_signal_connect_swapped (child, "changed",
                                 G_CALLBACK (gb_tab_grid_remove_empty),
                                 self);
@@ -292,9 +344,7 @@ gb_tab_grid_prepend_stack (GbTabGrid *self)
 
   priv = self->priv;
 
-  stack = g_object_new (GB_TYPE_TAB_STACK,
-                        "visible", TRUE,
-                        NULL);
+  stack = gb_tab_grid_create_stack (self);
   g_signal_connect_swapped (stack, "changed",
                             G_CALLBACK (gb_tab_grid_remove_empty),
                             self);
@@ -337,9 +387,7 @@ gb_tab_grid_add_stack (GbTabGrid *self)
 
   priv = self->priv;
 
-  stack = g_object_new (GB_TYPE_TAB_STACK,
-                        "visible", TRUE,
-                        NULL);
+  stack = gb_tab_grid_create_stack (self);
   g_signal_connect_swapped (stack, "changed",
                             G_CALLBACK (gb_tab_grid_remove_empty),
                             self);
@@ -825,6 +873,17 @@ gb_tab_grid_class_init (GbTabGridClass *klass)
   widget_class->grab_focus = gb_tab_grid_grab_focus;
 
   container_class->add = gb_tab_grid_add;
+
+  gParamSpecs [PROP_MODEL] =
+    g_param_spec_object ("model",
+                         _("Model"),
+                         _("A model containing the loaded documents."),
+                         GTK_TYPE_TREE_MODEL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_MODEL,
+                                   gParamSpecs [PROP_MODEL]);
 }
 
 /**
@@ -867,9 +926,7 @@ gb_tab_grid_init (GbTabGrid *self)
                         NULL);
   gtk_paned_add2 (GTK_PANED (self->priv->top_hpaned), paned);
 
-  stack = g_object_new (GB_TYPE_TAB_STACK,
-                        "visible", TRUE,
-                        NULL);
+  stack = gb_tab_grid_create_stack (self);
   g_signal_connect_swapped (stack, "changed",
                             G_CALLBACK (gb_tab_grid_remove_empty),
                             self);
