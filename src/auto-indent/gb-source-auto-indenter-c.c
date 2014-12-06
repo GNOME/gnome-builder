@@ -1104,6 +1104,32 @@ maybe_add_brace (GbSourceAutoIndenterC *c,
       (gtk_text_iter_get_char (&iter) == '{') &&
       (gtk_text_iter_get_char (begin) != '}'))
     {
+      GtkTextIter copy = iter;
+
+      gtk_text_iter_assign (&copy, &iter);
+
+      if (gtk_text_iter_backward_word_start (&copy))
+        {
+          GtkTextIter copy2 = copy;
+
+          if (gtk_text_iter_forward_word_end (&copy2))
+            {
+              gchar *word;
+
+              word = gtk_text_iter_get_slice (&copy, &copy2);
+
+              if ((g_strcmp0 (word, "enum") == 0) ||
+                  (g_strcmp0 (word, "struct") == 0))
+                {
+                  *cursor_offset = -2;
+                  g_free (word);
+                  return g_strdup ("};");
+                }
+
+              g_free (word);
+            }
+        }
+
       *cursor_offset = -1;
       return g_strdup ("}");
     }
