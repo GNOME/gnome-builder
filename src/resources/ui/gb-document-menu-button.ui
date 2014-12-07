@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.14 -->
+  <template class="GbDocumentMenuButton" parent="GtkMenuButton">
+    <property name="popover">popover</property>
+    <style>
+      <class name="text-button"/>
+    </style>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">true</property>
+        <property name="hexpand">true</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="visible">true</property>
+            <property name="xalign">0.0</property>
+            <property name="hexpand">false</property>
+            <property name="valign">baseline</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="modified_label">
+            <property name="visible">false</property>
+            <property name="xalign">0.0</property>
+            <property name="valign">baseline</property>
+            <property name="hexpand">false</property>
+            <property name="label">•</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkArrow">
+            <property name="visible">true</property>
+            <property name="arrow_type">GTK_ARROW_DOWN</property>
+            <property name="hexpand">false</property>
+            <property name="valign">baseline</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkPopover" id="popover">
+    <property name="border_width">9</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <property name="expand">true</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkSearchEntry" id="search_entry">
+            <property name="visible">true</property>
+            <property name="placeholder-text" translatable="yes">Search Documents</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolled_window">
+            <property name="visible">true</property>
+            <property name="expand">true</property>
+            <property name="hscrollbar_policy">never</property>
+            <property name="shadow_type">in</property>
+            <property name="height_request">200</property>
+            <property name="width_request">400</property>
+            <child>
+              <object class="GtkListBox" id="list_box">
+                <property name="selection-mode">GTK_SELECTION_SINGLE</property>
+                <property name="visible">true</property>
+                <child type="placeholder">
+                  <object class="GtkLabel">
+                    <property name="visible">true</property>
+                    <property name="label" translatable="yes">No document were found</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

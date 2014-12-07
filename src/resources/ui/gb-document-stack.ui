@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbDocumentStack" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkBox" id="header_box">
+        <property name="visible">true</property>
+        <property name="orientation">horizontal</property>
+        <style>
+          <class name="linked"/>
+        </style>
+        <child>
+          <object class="GbDocumentMenuButton" id="document_button">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="controls">
+            <property name="homogeneous">false</property>
+            <property name="hexpand">false</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="stack_menu">
+            <property name="visible">false</property>
+            <style>
+              <class name="image-button"/>
+              <class name="tab-header-first"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">true</property>
+                <property name="icon_name">open-menu-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="close">
+            <property name="visible">false</property>
+            <property name="tooltip_text">Close the current document</property>
+            <style>
+              <class name="image-button"/>
+              <class name="tab-header-last"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">true</property>
+                <property name="icon_name">window-close-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkStack" id="stack">
+        <property name="visible">true</property>
+        <property name="expand">true</property>
+        <property name="transition-type">GTK_STACK_TRANSITION_TYPE_CROSSFADE</property>
+      </object>
+    </child>
+  </template>
+</interface>

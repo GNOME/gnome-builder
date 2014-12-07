@@ -37,7 +37,7 @@
           </object>
         </child>
         <child>
-          <object class="GbTabGrid" id="tab_grid">
+          <object class="GbDocumentGrid" id="document_grid">
             <property name="visible">True</property>
             <property name="hexpand">True</property>
           </object>

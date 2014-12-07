@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.14 -->
+  <template class="GbEditorView" parent="GbDocumentView">
+    <child internal-child="controls">
+      <object class="GtkBox">
+        <property name="visible">true</property>
+        <style>
+          <class name="linked"/>
+        </style>
+        <child>
+          <object class="GtkToggleButton" id="split_button">
+            <property name="visible">true</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkPaned" id="paned">
+        <property name="orientation">vertical</property>
+        <property name="vexpand">true</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GbEditorFrame" id="frame">
+            <property name="expand">true</property>
+            <property name="visible">true</property>
+          </object>
+          <packing>
+            <property name="resize">true</property>
+            <property name="shrink">false</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
