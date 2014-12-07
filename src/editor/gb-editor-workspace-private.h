@@ -21,9 +21,9 @@
 
 #include <gtk/gtk.h>
 
+#include "gb-document-grid.h"
 #include "gb-editor-tab.h"
 #include "gb-notebook.h"
-#include "gb-tab-grid.h"
 
 G_BEGIN_DECLS
 
@@ -32,7 +32,7 @@ struct _GbEditorWorkspacePrivate
   GSimpleActionGroup *actions;
   GHashTable         *command_map;
   GtkPaned           *paned;
-  GbTabGrid          *tab_grid;
+  GbDocumentGrid     *document_grid;
 };
 
 G_END_DECLS
