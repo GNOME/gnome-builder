@@ -19,7 +19,7 @@
 #ifndef GB_DOCUMENT_MANAGER_H
 #define GB_DOCUMENT_MANAGER_H
 
-#include <gtk/gtk.h>
+#include <gio/gio.h>
 
 #include "gb-document.h"
 
@@ -39,7 +39,7 @@ typedef struct _GbDocumentManagerPrivate GbDocumentManagerPrivate;
 
 struct _GbDocumentManager
 {
-  GtkListStore parent;
+  GObject parent;
 
   /*< private >*/
   GbDocumentManagerPrivate *priv;
@@ -47,18 +47,27 @@ struct _GbDocumentManager
 
 struct _GbDocumentManagerClass
 {
-  GtkListStoreClass parent;
+  GObjectClass parent;
+
+  void (*document_added)           (GbDocumentManager *manager,
+                                     GbDocument        *document);
+  void (*document_removed)          (GbDocumentManager *manager,
+                                     GbDocument        *document);
+  void (*document_modified_changed) (GbDocumentManager *manager,
+                                     GbDocument        *document);
 };
 
-GType              gb_document_manager_get_type        (void);
-GbDocumentManager *gb_document_manager_new             (void);
-GbDocumentManager *gb_document_manager_get_default     (void);
-GbDocument        *gb_document_manager_find_by_file    (GbDocumentManager *manager,
-                                                        GFile             *file);
-void               gb_document_manager_add_document    (GbDocumentManager *manager,
-                                                        GbDocument        *document);
-gboolean           gb_document_manager_remove_document (GbDocumentManager *manager,
-                                                        GbDocument        *document);
+GType              gb_document_manager_get_type       (void);
+GbDocumentManager *gb_document_manager_new            (void);
+GbDocumentManager *gb_document_manager_get_default    (void);
+void               gb_document_manager_add            (GbDocumentManager *manager,
+                                                       GbDocument        *document);
+void               gb_document_manager_remove         (GbDocumentManager *manager,
+                                                       GbDocument        *document);
+GList             *gb_document_manager_get_documents  (GbDocumentManager *manager);
+guint              gb_document_manager_get_count      (GbDocumentManager *manager);
+GbDocument        *gb_document_manager_find_with_file (GbDocumentManager *manager,
+                                                       GFile             *file);
 
 G_END_DECLS
 

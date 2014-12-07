@@ -16,17 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "document-manager"
+
 #include <gtksourceview/gtksource.h>
 
 #include "gb-document-manager.h"
 #include "gb-editor-document.h"
 
-G_DEFINE_TYPE (GbDocumentManager, gb_document_manager, GTK_TYPE_LIST_STORE)
+struct _GbDocumentManagerPrivate
+{
+  GPtrArray *documents;
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE (GbDocumentManager, gb_document_manager,
+                            G_TYPE_OBJECT)
 
 enum {
-  COLUMN_DOCUMENT,
-  LAST_COLUMN
+  DOCUMENT_ADDED,
+  DOCUMENT_REMOVED,
+  DOCUMENT_MODIFIED_CHANGED,
+  LAST_SIGNAL
 };
+
+static guint gSignals [LAST_SIGNAL];
 
 GbDocumentManager *
 gb_document_manager_new (void)
@@ -34,13 +46,6 @@ gb_document_manager_new (void)
   return g_object_new (GB_TYPE_DOCUMENT_MANAGER, NULL);
 }
 
-/**
- * gb_document_manager_get_default:
- *
- * Retrieves the singleton instance of #GbDocumentManager.
- *
- * Returns: (transfer none): A #GbDocumentManager.
- */
 GbDocumentManager *
 gb_document_manager_get_default (void)
 {
@@ -52,206 +57,211 @@ gb_document_manager_get_default (void)
   return instance;
 }
 
-/**
- * gb_document_manager_find_by_file:
- * @manager: A #GbDocumentManager.
- * @file: A #GFile.
- *
- * This function will attempt to locate a previously stored buffer that matches
- * the requsted file.
- *
- * If located, that buffer will be returned. Otherwise, %NULL is returned.
- *
- * Returns: (transfer none): A #GbDocument or %NULL.
- */
-GbDocument *
-gb_document_manager_find_by_file (GbDocumentManager *manager,
-                                  GFile             *file)
+guint
+gb_document_manager_get_count (GbDocumentManager *manager)
 {
-  GtkTreeIter iter;
+  g_return_val_if_fail (GB_IS_DOCUMENT_MANAGER (manager), 0);
+
+  return manager->priv->documents->len;
+}
+
+GbDocument *
+gb_document_manager_find_with_file (GbDocumentManager *manager,
+                                    GFile             *file)
+{
+  guint i;
 
   g_return_val_if_fail (GB_IS_DOCUMENT_MANAGER (manager), NULL);
-  g_return_val_if_fail (G_IS_FILE (file), NULL);
 
-  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (manager), &iter))
+  for (i = 0; i < manager->priv->documents->len; i++)
     {
-      do
+      GbDocument *document;
+
+      document = g_ptr_array_index (manager->priv->documents, i);
+
+      if (GB_IS_EDITOR_DOCUMENT (document))
         {
-          GbEditorDocument *document;
-          GtkSourceFile *source_file;
+          GtkSourceFile *sfile;
           GFile *location;
-          GValue value = { 0 };
 
-          gtk_tree_model_get_value (GTK_TREE_MODEL (manager), &iter,
-                                    COLUMN_DOCUMENT, &value);
+          sfile = gb_editor_document_get_file (GB_EDITOR_DOCUMENT (document));
+          location = gtk_source_file_get_location (sfile);
 
-          if (G_VALUE_HOLDS (&value, GB_TYPE_EDITOR_DOCUMENT))
-            {
-              document = g_value_get_object (&value);
-
-              source_file = gb_editor_document_get_file (document);
-              location = gtk_source_file_get_location (source_file);
-
-              if (g_file_equal (location, file))
-                {
-                  g_value_unset (&value);
-                  return GB_DOCUMENT (document);
-                }
-            }
-
-          g_value_unset (&value);
+          if (g_file_equal (location, file))
+            return document;
         }
-      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (manager), &iter));
     }
 
   return NULL;
 }
 
-static gboolean
-gb_document_manager_find_document (GbDocumentManager *manager,
-                                   GbDocument        *document,
-                                   GtkTreeIter       *iter)
-{
-  g_return_val_if_fail (GB_IS_DOCUMENT_MANAGER (manager), FALSE);
-  g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
-
-  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (manager), iter))
-    {
-      do
-        {
-          GValue value = { 0 };
-
-          gtk_tree_model_get_value (GTK_TREE_MODEL (manager), iter,
-                                    COLUMN_DOCUMENT, &value);
-
-          if (G_VALUE_HOLDS_OBJECT (&value) &&
-              (g_value_get_object (&value) == (void *)document))
-            {
-              g_value_unset (&value);
-              return TRUE;
-            }
-
-          g_value_unset (&value);
-        }
-      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (manager), iter));
-    }
-
-  return FALSE;
-}
-
-static void
-gb_document_manager_document_changed (GbDocumentManager *manager,
-                                      GbDocument        *document)
-{
-  GtkTreeIter iter;
-
-  g_return_if_fail (GB_IS_DOCUMENT_MANAGER (manager));
-  g_return_if_fail (GB_IS_DOCUMENT (document));
-
-  if (gb_document_manager_find_document (manager, document, &iter))
-    {
-      GtkTreePath *tree_path;
-
-      tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL (manager), &iter);
-      gtk_tree_model_row_changed (GTK_TREE_MODEL (manager), tree_path, &iter);
-      gtk_tree_path_free (tree_path);
-    }
-}
-
-static void
-gb_document_manager_on_notify_can_save (GbDocumentManager *manager,
-                                        GParamSpec        *pspec,
-                                        GbDocument        *document)
-{
-  g_return_if_fail (GB_IS_DOCUMENT_MANAGER (manager));
-  g_return_if_fail (GB_IS_DOCUMENT (document));
-
-  gb_document_manager_document_changed (manager, document);
-}
-
-static void
-gb_document_manager_on_notify_title (GbDocumentManager *manager,
-                                     GParamSpec        *pspec,
-                                     GbDocument        *document)
-{
-  g_return_if_fail (GB_IS_DOCUMENT_MANAGER (manager));
-  g_return_if_fail (GB_IS_DOCUMENT (document));
-
-  gb_document_manager_document_changed (manager, document);
-}
-
 /**
- * gb_document_manager_add_document:
- * @manager: A #GbDocumentManager.
- * @document: A #GbDocument.
+ * gb_document_manager_get_documents:
  *
- * Adds A #GbDocument to the collection of buffers managed by the
- * #GbDocumentManager instance.
+ * Fetches a #GList of all the documents loaded by #GbDocumentManager.
+ *
+ * Returns: (transfer container) (element-type GbDocument*): #GList of
+ *   #GbDocument. Free list with g_list_free().
  */
+GList *
+gb_document_manager_get_documents (GbDocumentManager *manager)
+{
+  GList *list = NULL;
+  guint i;
+
+  g_return_val_if_fail (GB_IS_DOCUMENT_MANAGER (manager), NULL);
+
+  for (i = 0; i < manager->priv->documents->len; i++)
+    {
+      GbDocument *document;
+
+      document = g_ptr_array_index (manager->priv->documents, i);
+      list = g_list_prepend (list, document);
+    }
+
+  return list;
+}
+
+static void
+gb_document_manager_document_modified (GbDocumentManager *manager,
+                                       GParamSpec        *pspec,
+                                       GbDocument        *document)
+{
+  g_return_if_fail (GB_IS_DOCUMENT_MANAGER (manager));
+  g_return_if_fail (GB_IS_DOCUMENT (document));
+
+  g_signal_emit (manager, gSignals [DOCUMENT_MODIFIED_CHANGED], 0, document);
+}
+
 void
-gb_document_manager_add_document (GbDocumentManager *manager,
-                                  GbDocument        *document)
+gb_document_manager_add (GbDocumentManager *manager,
+                         GbDocument        *document)
 {
-  GtkTreeIter iter;
+  guint i;
 
   g_return_if_fail (GB_IS_DOCUMENT_MANAGER (manager));
   g_return_if_fail (GB_IS_DOCUMENT (document));
 
-  g_signal_connect_object (document,
-                           "notify::title",
-                           G_CALLBACK (gb_document_manager_on_notify_title),
-                           manager,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (document,
-                           "notify::can-save",
-                           G_CALLBACK (gb_document_manager_on_notify_can_save),
-                           manager,
-                           G_CONNECT_SWAPPED);
-
-  gtk_list_store_append (GTK_LIST_STORE (manager), &iter);
-  gtk_list_store_set (GTK_LIST_STORE (manager), &iter,
-                      COLUMN_DOCUMENT, document,
-                      -1);
-}
-
-/**
- * gb_document_manager_remove_document:
- *
- * Removes the #GbDocument instance @document from being managed by
- * the #GbDocumentManager instance.
- *
- * Returns: %TRUE if the document was removed.
- */
-gboolean
-gb_document_manager_remove_document (GbDocumentManager *manager,
-                                     GbDocument        *document)
-{
-  GtkTreeIter iter;
-
-  g_return_val_if_fail (GB_IS_DOCUMENT_MANAGER (manager), FALSE);
-  g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
-
-  if (gb_document_manager_find_document (manager, document, &iter))
+  for (i = 0; i < manager->priv->documents->len; i++)
     {
-      gtk_list_store_remove (GTK_LIST_STORE (manager), &iter);
-      return TRUE;
+      GbDocument *item;
+
+      item = g_ptr_array_index (manager->priv->documents, i);
+
+      if (item == document)
+        {
+          g_warning ("GbDocumentManager already contains document \"%s\"",
+                     gb_document_get_title (document));
+          return;
+        }
     }
 
-  return FALSE;
+  g_signal_connect_object (document,
+                           "notify::modified",
+                           G_CALLBACK (gb_document_manager_document_modified),
+                           manager,
+                           G_CONNECT_SWAPPED);
+
+  g_ptr_array_add (manager->priv->documents, g_object_ref (document));
+
+  g_signal_emit (manager, gSignals [DOCUMENT_ADDED], 0, document);
+}
+
+void
+gb_document_manager_remove (GbDocumentManager *manager,
+                            GbDocument        *document)
+{
+  guint i;
+
+  g_return_if_fail (GB_IS_DOCUMENT_MANAGER (manager));
+  g_return_if_fail (GB_IS_DOCUMENT (document));
+
+  for (i = 0; i < manager->priv->documents->len; i++)
+    {
+      GbDocument *item;
+
+      item = g_ptr_array_index (manager->priv->documents, i);
+
+      if (item == document)
+        {
+          g_signal_handlers_disconnect_by_func (item,
+                                                gb_document_manager_document_modified,
+                                                manager);
+          g_ptr_array_remove_index_fast (manager->priv->documents, i);
+          g_signal_emit (manager, gSignals [DOCUMENT_REMOVED], 0, item);
+          g_object_unref (item);
+          break;
+        }
+    }
+}
+
+static void
+gb_document_manager_finalize (GObject *object)
+{
+  GbDocumentManagerPrivate *priv = GB_DOCUMENT_MANAGER (object)->priv;
+  GbDocumentManager *manager = (GbDocumentManager *)object;
+
+  while (priv->documents->len)
+    {
+      GbDocument *document;
+
+      document = GB_DOCUMENT (g_ptr_array_index (priv->documents, 0));
+      gb_document_manager_remove (manager, document);
+    }
+
+  g_clear_pointer (&priv->documents, g_ptr_array_unref);
+
+  G_OBJECT_CLASS (gb_document_manager_parent_class)->finalize (object);
 }
 
 static void
 gb_document_manager_class_init (GbDocumentManagerClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gb_document_manager_finalize;
+
+  gSignals [DOCUMENT_ADDED] =
+    g_signal_new ("document-added",
+                  GB_TYPE_DOCUMENT_MANAGER,
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GbDocumentManagerClass, document_added),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  GB_TYPE_DOCUMENT);
+
+  gSignals [DOCUMENT_MODIFIED_CHANGED] =
+    g_signal_new ("document-modified-changed",
+                  GB_TYPE_DOCUMENT_MANAGER,
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GbDocumentManagerClass,
+                                   document_modified_changed),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  GB_TYPE_DOCUMENT);
+
+  gSignals [DOCUMENT_REMOVED] =
+    g_signal_new ("document-removed",
+                  GB_TYPE_DOCUMENT_MANAGER,
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GbDocumentManagerClass, document_removed),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  GB_TYPE_DOCUMENT);
 }
 
 static void
 gb_document_manager_init (GbDocumentManager *self)
 {
-  GType column_types[] = { GB_TYPE_DOCUMENT };
-
-  gtk_list_store_set_column_types (GTK_LIST_STORE (self),
-                                   G_N_ELEMENTS (column_types),
-                                   column_types);
+  self->priv = gb_document_manager_get_instance_private (self);
+  self->priv->documents = g_ptr_array_new ();
 }

@@ -19,7 +19,7 @@
 #ifndef GB_DOCUMENT_H
 #define GB_DOCUMENT_H
 
-#include "gb-tab.h"
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -28,22 +28,22 @@ G_BEGIN_DECLS
 #define GB_IS_DOCUMENT(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_DOCUMENT))
 #define GB_DOCUMENT_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GB_TYPE_DOCUMENT, GbDocumentInterface))
 
-typedef struct _GbDocument      GbDocument;
+typedef struct _GbDocument          GbDocument;
 typedef struct _GbDocumentInterface GbDocumentInterface;
 
 struct _GbDocumentInterface
 {
   GTypeInterface parent;
 
-  gboolean     (*get_can_save) (GbDocument *document);
+  gboolean     (*get_modified) (GbDocument *document);
   const gchar *(*get_title)    (GbDocument *document);
-  GbTab       *(*create_tab)   (GbDocument *document);
+  GtkWidget   *(*create_view)  (GbDocument *document);
 };
 
 GType        gb_document_get_type     (void) G_GNUC_CONST;
-gboolean     gb_document_get_can_save (GbDocument *document);
+gboolean     gb_document_get_modified (GbDocument *document);
 const gchar *gb_document_get_title    (GbDocument *document);
-GbTab       *gb_document_create_tab   (GbDocument *document);
+GtkWidget   *gb_document_create_view  (GbDocument *document);
 
 G_END_DECLS
 
