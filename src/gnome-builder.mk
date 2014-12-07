@@ -45,8 +45,18 @@ libgnome_builder_la_SOURCES = \
 	src/devhelp/gb-devhelp-tab.h \
 	src/documents/gb-document.c \
 	src/documents/gb-document.h \
+	src/documents/gb-document-grid.c \
+	src/documents/gb-document-grid.h \
 	src/documents/gb-document-manager.c \
 	src/documents/gb-document-manager.h \
+	src/documents/gb-document-menu-button.c \
+	src/documents/gb-document-menu-button.h \
+	src/documents/gb-document-split.c \
+	src/documents/gb-document-split.h \
+	src/documents/gb-document-stack.c \
+	src/documents/gb-document-stack.h \
+	src/documents/gb-document-view.c \
+	src/documents/gb-document-view.h \
 	src/editor/c-parse-helper.c \
 	src/editor/c-parse-helper.h \
 	src/editor/gb-editor-document.c \
@@ -65,6 +75,8 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-editor-tab.c \
 	src/editor/gb-editor-tab.h \
 	src/editor/gb-editor-tab-private.h \
+	src/editor/gb-editor-view.c \
+	src/editor/gb-editor-view.h \
 	src/editor/gb-editor-workspace.c \
 	src/editor/gb-editor-workspace.h \
 	src/editor/gb-editor-workspace-private.h \
@@ -168,6 +180,7 @@ libgnome_builder_la_SOURCES = \
 	src/util/gb-cairo.h \
 	src/util/gb-doc-seq.c \
 	src/util/gb-doc-seq.h \
+	src/util/gb-glib.h \
 	src/util/gb-gtk.c \
 	src/util/gb-gtk.h \
 	src/util/gb-rgba.c \

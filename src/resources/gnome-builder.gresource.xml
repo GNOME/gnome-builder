@@ -22,9 +22,12 @@
     <file>ui/gb-command-bar-item.ui</file>
     <file>ui/gb-credits-widget.ui</file>
     <file>ui/gb-devhelp-tab.ui</file>
+    <file>ui/gb-document-stack.ui</file>
+    <file>ui/gb-document-menu-button.ui</file>
     <file>ui/gb-editor-settings-widget.ui</file>
     <file>ui/gb-editor-frame.ui</file>
     <file>ui/gb-editor-tab.ui</file>
+    <file>ui/gb-editor-view.ui</file>
     <file>ui/gb-editor-workspace.ui</file>
     <file>ui/gb-markdown-tab.ui</file>
     <file>ui/gb-preferences-window.ui</file>
