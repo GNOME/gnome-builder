@@ -726,7 +726,7 @@ gb_editor_document_modified_changed (GtkTextBuffer *buffer)
     GTK_TEXT_BUFFER_CLASS (gb_editor_document_parent_class)->
       modified_changed (buffer);
 
-  g_object_notify (G_OBJECT (buffer), "can-save");
+  g_object_notify (G_OBJECT (buffer), "modified");
 }
 
 gboolean
