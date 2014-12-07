@@ -25,6 +25,7 @@
 #include "gb-doc-seq.h"
 #include "gb-editor-document.h"
 #include "gb-editor-file-marks.h"
+#include "gb-editor-view.h"
 #include "gb-log.h"
 #include "gca-structs.h"
 
@@ -41,9 +42,9 @@ struct _GbEditorDocumentPrivate
 
 enum {
   PROP_0,
-  PROP_CAN_SAVE,
   PROP_CHANGE_MONITOR,
   PROP_FILE,
+  PROP_MODIFIED,
   PROP_STYLE_SCHEME_NAME,
   PROP_TITLE,
   PROP_TRIM_TRAILING_WHITESPACE,
@@ -729,7 +730,7 @@ gb_editor_document_modified_changed (GtkTextBuffer *buffer)
 }
 
 gboolean
-gb_editor_document_get_can_save (GbDocument *document)
+gb_editor_document_get_modified (GbDocument *document)
 {
   g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), FALSE);
 
@@ -744,6 +745,21 @@ gb_editor_document_get_title (GbDocument *document)
   return GB_EDITOR_DOCUMENT (document)->priv->title;
 }
 
+static GtkWidget *
+gb_editor_document_create_view (GbDocument *document)
+{
+  GbEditorView *view;
+
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), NULL);
+
+  view = g_object_new (GB_TYPE_EDITOR_VIEW,
+                       "document", document,
+                       "visible", TRUE,
+                       NULL);
+
+  return GTK_WIDGET (view);
+}
+
 static void
 gb_editor_document_finalize (GObject *object)
 {
@@ -754,6 +770,7 @@ gb_editor_document_finalize (GObject *object)
   g_clear_object (&priv->file);
   g_clear_object (&priv->change_monitor);
   g_clear_object (&priv->code_assistant);
+  g_clear_pointer (&priv->title, g_free);
 
   G_OBJECT_CLASS(gb_editor_document_parent_class)->finalize (object);
 
@@ -770,9 +787,9 @@ gb_editor_document_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_CAN_SAVE:
+    case PROP_MODIFIED:
       g_value_set_boolean (value,
-                           gb_editor_document_get_can_save (GB_DOCUMENT (self)));
+                           gb_editor_document_get_modified (GB_DOCUMENT (self)));
       break;
 
     case PROP_CHANGE_MONITOR:
@@ -837,7 +854,7 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
   text_buffer_class->changed = gb_editor_document_changed;
   text_buffer_class->modified_changed = gb_editor_document_modified_changed;
 
-  g_object_class_override_property (object_class, PROP_CAN_SAVE, "can-save");
+  g_object_class_override_property (object_class, PROP_MODIFIED, "modified");
   g_object_class_override_property (object_class, PROP_TITLE, "title");
 
   gParamSpecs [PROP_CHANGE_MONITOR] =
@@ -919,6 +936,7 @@ gb_editor_document_init (GbEditorDocument *document)
 static void
 gb_editor_document_init_document (GbDocumentInterface *iface)
 {
-  iface->get_can_save = gb_editor_document_get_can_save;
+  iface->get_modified = gb_editor_document_get_modified;
   iface->get_title = gb_editor_document_get_title;
+  iface->create_view = gb_editor_document_create_view;
 }

@@ -19,24 +19,31 @@
 #include <glib/gi18n.h>
 
 #include "gb-document.h"
+#include "gb-document-view.h"
 
 G_DEFINE_INTERFACE (GbDocument, gb_document, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
-  PROP_CAN_SAVE,
+  PROP_MODIFIED,
   PROP_TITLE,
   LAST_PROP
 };
 
+enum {
+  CREATE_VIEW,
+  LAST_SIGNAL
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint       gSignals [LAST_SIGNAL];
 
 gboolean
-gb_document_get_can_save (GbDocument *document)
+gb_document_get_modified (GbDocument *document)
 {
   g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
 
-  return GB_DOCUMENT_GET_INTERFACE (document)->get_can_save (document);
+  return GB_DOCUMENT_GET_INTERFACE (document)->get_modified (document);
 }
 
 const gchar *
@@ -47,24 +54,32 @@ gb_document_get_title (GbDocument *document)
   return GB_DOCUMENT_GET_INTERFACE (document)->get_title (document);
 }
 
-GbTab *
-gb_document_create_tab (GbDocument *document)
+GtkWidget *
+gb_document_create_view (GbDocument *document)
 {
+  GtkWidget *ret = NULL;
+
   g_return_val_if_fail (GB_IS_DOCUMENT (document), NULL);
 
-  return GB_DOCUMENT_GET_INTERFACE (document)->create_tab (document);
+  g_signal_emit (document, gSignals [CREATE_VIEW], 0, &ret);
+
+  if (!ret)
+    g_warning ("%s failed to implement create_view() signal",
+               g_type_name (G_TYPE_FROM_INSTANCE (document)));
+
+  return ret;
 }
 
 static void
 gb_document_default_init (GbDocumentInterface *iface)
 {
-  gParamSpecs [PROP_CAN_SAVE] =
-    g_param_spec_boolean ("can-save",
-                          _("Can Save"),
-                          _("If the document can be saved."),
+  gParamSpecs [PROP_MODIFIED] =
+    g_param_spec_boolean ("modified",
+                          _("Modified"),
+                          _("If the document has been modified from disk."),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_interface_install_property (iface, gParamSpecs [PROP_CAN_SAVE]);
+  g_object_interface_install_property (iface, gParamSpecs [PROP_MODIFIED]);
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",
@@ -73,4 +88,15 @@ gb_document_default_init (GbDocumentInterface *iface)
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_interface_install_property (iface, gParamSpecs [PROP_TITLE]);
+
+  gSignals [CREATE_VIEW] =
+    g_signal_new ("create-view",
+                  GB_TYPE_DOCUMENT,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbDocumentInterface, create_view),
+                  g_signal_accumulator_first_wins,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  GB_TYPE_DOCUMENT_VIEW,
+                  0);
 }
