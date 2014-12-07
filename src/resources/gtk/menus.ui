@@ -103,42 +103,25 @@
       </item>
     </section>
   </menu>
-  <menu id="stack-menu">
+  <menu id="gb-document-stack-menu">
     <section>
-      <attribute name="id">juntion-section</attribute>
-      <attribute name="display-hint">horizontal-buttons</attribute>
       <item>
-        <attribute name="label" translatable="yes">Move Tab to _Left</attribute>
-        <attribute name="action">tabs.move-left</attribute>
-        <attribute name="verb-icon">builder-move-tab-left</attribute>
+        <attribute name="label" translatable="yes">Move Document _Left</attribute>
+        <attribute name="action">stack.move-document-left</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_Fullscreen</attribute>
-        <attribute name="action">win.fullscreen</attribute>
-        <attribute name="verb-icon">view-fullscreen-symbolic</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Move Tab to _Right</attribute>
-        <attribute name="action">tabs.move-right</attribute>
-        <attribute name="verb-icon">builder-move-tab-right</attribute>
+        <attribute name="label" translatable="yes">Move Document _Right</attribute>
+        <attribute name="action">stack.move-document-right</attribute>
       </item>
     </section>
     <section>
-      <attribute name="id">file-section-1</attribute>
       <item>
-        <attribute name="label" translatable="yes">_Save</attribute>
-        <attribute name="action">workbench.save</attribute>
+        <attribute name="label" translatable="yes">Split Document _Left</attribute>
+        <attribute name="action">stack.split-document-left</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_Save As…</attribute>
-        <attribute name="action">workbench.save-as</attribute>
-      </item>
-    </section>
-    <section>
-      <attribute name="id">close-section</attribute>
-      <item>
-        <attribute name="label" translatable="yes">_Close</attribute>
-        <attribute name="action">workbench.close-tab</attribute>
+        <attribute name="label" translatable="yes">Split Document _Right</attribute>
+        <attribute name="action">stack.split-document-right</attribute>
       </item>
     </section>
   </menu>
