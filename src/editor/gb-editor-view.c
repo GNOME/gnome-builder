@@ -112,14 +112,9 @@ gb_editor_view_set_document (GbEditorView     *view,
 static void
 gb_editor_view_finalize (GObject *object)
 {
-  GbEditorViewPrivate *priv = GB_EDITOR_VIEW (object)->priv;
   GbEditorView *view = (GbEditorView *)object;
 
-  if (priv->document)
-    {
-      gb_editor_view_disconnect (view, priv->document);
-      g_clear_object (&priv->document);
-    }
+  g_clear_object (&view->priv->document);
 
   G_OBJECT_CLASS (gb_editor_view_parent_class)->finalize (object);
 }

@@ -72,6 +72,7 @@ gb_document_manager_find_with_file (GbDocumentManager *manager,
   guint i;
 
   g_return_val_if_fail (GB_IS_DOCUMENT_MANAGER (manager), NULL);
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
 
   for (i = 0; i < manager->priv->documents->len; i++)
     {
@@ -87,7 +88,7 @@ gb_document_manager_find_with_file (GbDocumentManager *manager,
           sfile = gb_editor_document_get_file (GB_EDITOR_DOCUMENT (document));
           location = gtk_source_file_get_location (sfile);
 
-          if (g_file_equal (location, file))
+          if (location && g_file_equal (location, file))
             return document;
         }
     }

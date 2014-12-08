@@ -803,6 +803,7 @@ gb_editor_document_get_property (GObject    *object,
     case PROP_TITLE:
       g_value_set_string (value,
                           gb_editor_document_get_title (GB_DOCUMENT (self)));
+      break;
 
     case PROP_TRIM_TRAILING_WHITESPACE:
       g_value_set_boolean (value,
