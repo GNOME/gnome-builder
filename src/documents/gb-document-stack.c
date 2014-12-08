@@ -53,6 +53,7 @@ enum {
   CREATE_VIEW,
   EMPTY,
   FOCUS_NEIGHBOR,
+  VIEW_CLOSED,
   LAST_SIGNAL
 };
 
@@ -81,6 +82,8 @@ gb_document_stack_remove_view (GbDocumentStack *stack,
   if (view == stack->priv->active_view)
     gb_clear_weak_pointer (&stack->priv->active_view);
 
+  g_object_ref (view);
+
   /* Notify the document view it is being closed */
   gb_document_view_close (view);
 
@@ -89,6 +92,11 @@ gb_document_stack_remove_view (GbDocumentStack *stack,
   if (controls)
     gtk_container_remove (GTK_CONTAINER (stack->priv->controls), controls);
   gtk_container_remove (GTK_CONTAINER (stack->priv->stack), GTK_WIDGET (view));
+
+  /* Notify document grid of view closure */
+  g_signal_emit (stack, gSignals [VIEW_CLOSED], 0, view);
+
+  g_object_unref (view);
 
   /*
    * Set the visible child to the first document view. We probably want to
@@ -687,6 +695,17 @@ gb_document_stack_class_init (GbDocumentStackClass *klass)
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_TEXT_DIRECTION);
+
+  gSignals [VIEW_CLOSED] =
+    g_signal_new ("view-closed",
+                  GB_TYPE_DOCUMENT_STACK,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbDocumentStackClass, view_closed),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  GB_TYPE_DOCUMENT_VIEW);
 
   g_type_ensure (GB_TYPE_DOCUMENT_MENU_BUTTON);
 }
