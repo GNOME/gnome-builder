@@ -22,6 +22,8 @@
 
 #include "gb-document-menu-button.h"
 #include "gb-glib.h"
+#include "gb-log.h"
+#include "gb-string.h"
 
 struct _GbDocumentMenuButtonPrivate
 {
@@ -153,6 +155,8 @@ gb_document_menu_button_add_document (GbDocumentMenuButton *button,
 {
   GtkListBoxRow *row;
 
+  ENTRY;
+
   g_return_if_fail (GB_IS_DOCUMENT_MENU_BUTTON (button));
   g_return_if_fail (GB_IS_DOCUMENT (document));
   g_return_if_fail (GB_IS_DOCUMENT_MANAGER (document_manager));
@@ -162,6 +166,8 @@ gb_document_menu_button_add_document (GbDocumentMenuButton *button,
   gtk_list_box_insert (button->priv->list_box, GTK_WIDGET (row), -1);
 
   gb_document_menu_button_update_sensitive (button);
+
+  EXIT;
 }
 
 static void
@@ -212,6 +218,8 @@ gb_document_menu_button_connect (GbDocumentMenuButton *button,
   GList *documents;
   GList *iter;
 
+  ENTRY;
+
   g_return_if_fail (GB_IS_DOCUMENT_MENU_BUTTON (button));
   g_return_if_fail (GB_IS_DOCUMENT_MANAGER (document_manager));
 
@@ -238,6 +246,8 @@ gb_document_menu_button_connect (GbDocumentMenuButton *button,
     }
 
   g_list_free (documents);
+
+  EXIT;
 }
 
 static void
@@ -260,6 +270,8 @@ void
 gb_document_menu_button_set_document_manager (GbDocumentMenuButton *button,
                                               GbDocumentManager    *document_manager)
 {
+  ENTRY;
+
   g_return_if_fail (GB_IS_DOCUMENT_MENU_BUTTON (button));
   g_return_if_fail (!document_manager || GB_IS_DOCUMENT_MANAGER (document_manager));
 
@@ -280,6 +292,8 @@ gb_document_menu_button_set_document_manager (GbDocumentMenuButton *button,
       g_object_notify_by_pspec (G_OBJECT (button),
                                 gParamSpecs [PROP_DOCUMENT_MANAGER]);
     }
+
+  EXIT;
 }
 
 void
@@ -477,6 +491,8 @@ gb_document_menu_button_search_activate (GbDocumentMenuButton *button,
 {
   GtkListBoxRow *row;
 
+  ENTRY;
+
   g_return_if_fail (GB_IS_DOCUMENT_MENU_BUTTON (button));
 
   row = gtk_list_box_get_row_at_y (button->priv->list_box, 1);
@@ -488,6 +504,8 @@ gb_document_menu_button_search_activate (GbDocumentMenuButton *button,
       document = g_object_get_data (G_OBJECT (row), "GB_DOCUMENT");
       gb_document_menu_button_select_document (button, document);
     }
+
+  EXIT;
 }
 
 static void
