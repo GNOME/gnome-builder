@@ -218,6 +218,48 @@ gb_document_grid_focus_neighbor (GbDocumentGrid   *grid,
     gtk_widget_grab_focus (neighbor);
 }
 
+static void
+gb_document_grid_view_closed (GbDocumentGrid *grid,
+                              GbDocumentView *view)
+{
+  GbDocumentManager *document_manager;
+  GbDocument *document;
+  GList *stacks;
+  GList *iter;
+
+  /*
+   * This function will attempt to close the document with the underlying
+   * document manager if this was the last open view of the document and the
+   * document is not currently modified.
+   */
+
+  g_return_if_fail (GB_IS_DOCUMENT_GRID (grid));
+  g_return_if_fail (GB_IS_DOCUMENT_VIEW (view));
+
+  document = gb_document_view_get_document (view);
+  if (!document)
+    return;
+
+  if (gb_document_get_modified (document))
+    return;
+
+  stacks = gb_document_grid_get_stacks (grid);
+
+  for (iter = stacks; iter; iter = iter->next)
+    {
+      GbDocumentStack *stack = iter->data;
+
+      if (gb_document_stack_find_with_document (stack, document))
+        goto cleanup;
+    }
+
+  document_manager = gb_document_manager_get_default ();
+  gb_document_manager_remove (document_manager, document);
+
+cleanup:
+  g_list_free (stacks);
+}
+
 static GtkPaned *
 gb_document_grid_create_paned (GbDocumentGrid *grid)
 {
@@ -254,6 +296,12 @@ gb_document_grid_create_stack (GbDocumentGrid *grid)
                            G_CALLBACK (gb_document_grid_focus_neighbor),
                            grid,
                            G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (stack,
+                           "view-closed",
+                           G_CALLBACK (gb_document_grid_view_closed),
+                           grid,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   return stack;
 }
