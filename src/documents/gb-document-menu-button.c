@@ -311,13 +311,15 @@ gb_document_menu_button_select_document (GbDocumentMenuButton *button,
   if (priv->title_binding)
     {
       g_binding_unbind (priv->title_binding);
-      priv->title_binding = NULL;
+      if (priv->title_binding)
+        gb_clear_weak_pointer (&priv->title_binding);
     }
 
   if (priv->modified_binding)
     {
       g_binding_unbind (priv->modified_binding);
-      priv->modified_binding = NULL;
+      if (priv->modified_binding)
+        gb_clear_weak_pointer (&priv->modified_binding);
     }
 
   gb_clear_weak_pointer (&priv->selected_document);
@@ -328,11 +330,13 @@ gb_document_menu_button_select_document (GbDocumentMenuButton *button,
       priv->title_binding =
         g_object_bind_property (document, "title", priv->label, "label",
                                 G_BINDING_SYNC_CREATE);
+      gb_set_weak_pointer (priv->title_binding, &priv->title_binding);
 
       priv->modified_binding =
         g_object_bind_property (document, "modified",
                                 priv->modified_label, "visible",
                                 G_BINDING_SYNC_CREATE);
+      gb_set_weak_pointer (priv->title_binding, &priv->modified_binding);
 
       value = g_get_monotonic_time () / (G_USEC_PER_SEC / 10);
       g_hash_table_replace (priv->focus_time, document,
