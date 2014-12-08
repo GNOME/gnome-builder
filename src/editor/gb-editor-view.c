@@ -110,6 +110,14 @@ gb_editor_view_set_document (GbEditorView     *view,
 }
 
 static void
+gb_editor_view_grab_focus (GtkWidget *widget)
+{
+  GbEditorView *view = (GbEditorView *)widget;
+
+  gtk_widget_grab_focus (GTK_WIDGET (view->priv->frame));
+}
+
+static void
 gb_editor_view_finalize (GObject *object)
 {
   GbEditorView *view = (GbEditorView *)object;
@@ -167,6 +175,8 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   object_class->finalize = gb_editor_view_finalize;
   object_class->get_property = gb_editor_view_get_property;
   object_class->set_property = gb_editor_view_set_property;
+
+  widget_class->grab_focus = gb_editor_view_grab_focus;
 
   view_class->get_document = gb_editor_view_get_document;
 
