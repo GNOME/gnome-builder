@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "editor-frame"
 
 #include <glib/gi18n.h>
+#include <gio/gio.h>
 
 #include "gb-editor-frame.h"
 #include "gb-editor-frame-private.h"
@@ -929,6 +930,63 @@ gb_editor_frame_grab_focus (GtkWidget *widget)
 }
 
 static void
+gb_editor_frame_scroll (GbEditorFrame    *frame,
+                        GtkDirectionType  dir)
+{
+  GtkAdjustment *vadj;
+  GtkScrolledWindow *scroller;
+  GtkTextMark *insert;
+  GtkTextView *view;
+  GtkTextBuffer *buffer;
+  GdkRectangle rect;
+  GtkTextIter iter;
+  gdouble amount;
+  gdouble value;
+  gdouble upper;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+
+  scroller = frame->priv->scrolled_window;
+  view = GTK_TEXT_VIEW (frame->priv->source_view);
+  buffer = GTK_TEXT_BUFFER (frame->priv->document);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  gtk_text_view_get_iter_location (view, &iter, &rect);
+
+  amount = (dir == GTK_DIR_UP) ? -rect.height : rect.height;
+
+  vadj = gtk_scrolled_window_get_vadjustment (scroller);
+  value = gtk_adjustment_get_value (vadj);
+  upper = gtk_adjustment_get_upper (vadj);
+  gtk_adjustment_set_value (vadj, CLAMP (value + amount, 0, upper));
+}
+
+static void
+gb_editor_frame_scroll_down (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
+{
+  GbEditorFrame *frame = user_data;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+
+  gb_editor_frame_scroll (frame, GTK_DIR_DOWN);
+}
+
+static void
+gb_editor_frame_scroll_up (GSimpleAction *action,
+                           GVariant      *parameter,
+                           gpointer       user_data)
+{
+  GbEditorFrame *frame = user_data;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+
+  gb_editor_frame_scroll (frame, GTK_DIR_UP);
+}
+
+static void
 gb_editor_frame_finalize (GObject *object)
 {
   GbEditorFrame *frame = GB_EDITOR_FRAME (object);
@@ -1156,7 +1214,21 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
 static void
 gb_editor_frame_init (GbEditorFrame *self)
 {
+  const GActionEntry entries[] = {
+    { "scroll-up", gb_editor_frame_scroll_up },
+    { "scroll-down", gb_editor_frame_scroll_down },
+  };
+  GSimpleActionGroup *actions;
+
   self->priv = gb_editor_frame_get_instance_private (self);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "editor-frame",
+                                  G_ACTION_GROUP (actions));
+  g_object_unref (actions);
 }
