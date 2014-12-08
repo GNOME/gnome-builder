@@ -434,9 +434,12 @@ gb_document_menu_button_filter_func (GtkListBoxRow *row,
 
   g_return_val_if_fail (GB_IS_DOCUMENT_MENU_BUTTON (button), FALSE);
 
+  str = gtk_entry_get_text (GTK_ENTRY (button->priv->search_entry));
+  if (gb_str_empty0 (str))
+    return TRUE;
+
   document = g_object_get_data (G_OBJECT (row), "GB_DOCUMENT");
   title = gb_document_get_title (document);
-  str = gtk_entry_get_text (GTK_ENTRY (button->priv->search_entry));
 
   /*
    * TODO: Replace this with a proper fuzzy search with scoring and
