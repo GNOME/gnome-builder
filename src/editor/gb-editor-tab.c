@@ -39,42 +39,6 @@ gb_editor_tab_new (void)
 }
 
 static void
-gb_editor_tab_progress_cb (goffset  current_num_bytes,
-                           goffset  total_num_bytes,
-                           gpointer user_data)
-{
-  GbEditorTabPrivate *priv;
-  GbEditorTab *tab = user_data;
-  gdouble fraction;
-
-  g_return_if_fail (GB_IS_EDITOR_TAB (tab));
-
-  priv = tab->priv;
-
-  if (priv->progress_animation)
-    {
-      g_object_remove_weak_pointer (G_OBJECT (priv->progress_animation),
-                                    (gpointer *)&priv->progress_animation);
-      gb_animation_stop (priv->progress_animation);
-      priv->progress_animation = NULL;
-    }
-
-  fraction = total_num_bytes
-           ? ((gdouble)current_num_bytes / (gdouble)total_num_bytes)
-           : 1.0;
-
-  priv->progress_animation =
-    gb_object_animate (priv->progress_bar,
-                       GB_ANIMATION_LINEAR,
-                       250,
-                       NULL,
-                       "fraction", fraction,
-                       NULL);
-  g_object_add_weak_pointer (G_OBJECT (priv->progress_animation),
-                             (gpointer *)&priv->progress_animation);
-}
-
-static void
 gb_editor_tab_save_cb (GObject      *source_object,
                        GAsyncResult *result,
                        gpointer      user_data)
@@ -115,9 +79,6 @@ gb_editor_tab_do_save (GbEditorTab *tab)
 
   gb_editor_document_save_async (tab->priv->document,
                                  NULL, /* cancellable */
-                                 gb_editor_tab_progress_cb,
-                                 tab,
-                                 NULL,
                                  gb_editor_tab_save_cb,
                                  g_object_ref (tab));
 
@@ -249,9 +210,6 @@ gb_editor_tab_open_file (GbEditorTab *tab,
   gb_editor_document_load_async (tab->priv->document,
                                  file,
                                  NULL, /* cancellable */
-                                 gb_editor_tab_progress_cb,
-                                 tab,
-                                 NULL,
                                  gb_editor_tab_open_file_cb,
                                  g_object_ref (tab));
 

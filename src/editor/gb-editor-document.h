@@ -66,9 +66,6 @@ void                   gb_editor_document_set_trim_trailing_whitespace (GbEditor
 void                   gb_editor_document_load_async                   (GbEditorDocument       *document,
                                                                         GFile                  *file,
                                                                         GCancellable           *cancellable,
-                                                                        GFileProgressCallback   progress_callback,
-                                                                        gpointer                progress_data,
-                                                                        GDestroyNotify          progress_data_notify,
                                                                         GAsyncReadyCallback     callback,
                                                                         gpointer                user_data);
 gboolean               gb_editor_document_load_finish                  (GbEditorDocument       *document,
@@ -76,9 +73,6 @@ gboolean               gb_editor_document_load_finish                  (GbEditor
                                                                         GError                **error);
 void                   gb_editor_document_save_async                   (GbEditorDocument       *document,
                                                                         GCancellable           *cancellable,
-                                                                        GFileProgressCallback   progress_callback,
-                                                                        gpointer                progress_data,
-                                                                        GDestroyNotify          progress_data_notify,
                                                                         GAsyncReadyCallback     callback,
                                                                         gpointer                user_data);
 gboolean               gb_editor_document_save_finish                  (GbEditorDocument       *document,

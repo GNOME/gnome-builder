@@ -36,6 +36,7 @@ struct _GbEditorDocumentPrivate
   GbSourceCodeAssistant *code_assistant;
   gchar                 *title;
 
+  gdouble                progress;
   guint                  doc_seq_id;
   guint                  trim_trailing_whitespace : 1;
 };
@@ -45,6 +46,7 @@ enum {
   PROP_CHANGE_MONITOR,
   PROP_FILE,
   PROP_MODIFIED,
+  PROP_PROGRESS,
   PROP_STYLE_SCHEME_NAME,
   PROP_TITLE,
   PROP_TRIM_TRAILING_WHITESPACE,
@@ -74,6 +76,26 @@ GbEditorDocument *
 gb_editor_document_new (void)
 {
   return g_object_new (GB_TYPE_EDITOR_DOCUMENT, NULL);
+}
+
+gdouble
+gb_editor_document_get_progress (GbEditorDocument *document)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), 0.0);
+
+  return document->priv->progress;
+}
+
+static void
+gb_editor_document_set_progress (GbEditorDocument *document,
+                                 gdouble           progress)
+{
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+  g_return_if_fail (progress >= 0.0);
+  g_return_if_fail (progress <= 1.0);
+
+  document->priv->progress = progress;
+  g_object_notify_by_pspec (G_OBJECT (document), gParamSpecs [PROP_PROGRESS]);
 }
 
 gboolean
@@ -511,6 +533,23 @@ gb_editor_document_notify_file_location (GbEditorDocument *document,
 }
 
 static void
+gb_editor_document_progress_cb (goffset  current_num_bytes,
+                                goffset  total_num_bytes,
+                                gpointer user_data)
+{
+  GbEditorDocument *document = user_data;
+  gdouble fraction;
+
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  fraction = total_num_bytes
+           ? ((gdouble)current_num_bytes / (gdouble)total_num_bytes)
+           : 1.0;
+
+  gb_editor_document_set_progress (document, fraction);
+}
+
+static void
 gb_editor_document_save_cb (GObject      *object,
                             GAsyncResult *result,
                             gpointer      user_data)
@@ -557,9 +596,6 @@ cleanup:
 void
 gb_editor_document_save_async (GbEditorDocument      *document,
                                GCancellable          *cancellable,
-                               GFileProgressCallback  progress_callback,
-                               gpointer               progress_data,
-                               GDestroyNotify         progress_data_notify,
                                GAsyncReadyCallback    callback,
                                gpointer               user_data)
 {
@@ -607,9 +643,9 @@ gb_editor_document_save_async (GbEditorDocument      *document,
   gtk_source_file_saver_save_async (saver,
                                     G_PRIORITY_DEFAULT,
                                     cancellable,
-                                    progress_callback,
-                                    progress_data,
-                                    progress_data_notify,
+                                    gb_editor_document_progress_cb,
+                                    g_object_ref (document),
+                                    g_object_unref,
                                     gb_editor_document_save_cb,
                                     task);
 
@@ -668,9 +704,6 @@ void
 gb_editor_document_load_async (GbEditorDocument      *document,
                                GFile                 *file,
                                GCancellable          *cancellable,
-                               GFileProgressCallback  progress_callback,
-                               gpointer               progress_data,
-                               GDestroyNotify         progress_data_notify,
                                GAsyncReadyCallback    callback,
                                gpointer               user_data)
 {
@@ -693,9 +726,9 @@ gb_editor_document_load_async (GbEditorDocument      *document,
   gtk_source_file_loader_load_async (loader,
                                      G_PRIORITY_DEFAULT,
                                      cancellable,
-                                     progress_callback,
-                                     progress_data,
-                                     progress_data_notify,
+                                     gb_editor_document_progress_cb,
+                                     g_object_ref (document),
+                                     g_object_unref,
                                      gb_editor_document_load_cb,
                                      task);
 
@@ -800,6 +833,10 @@ gb_editor_document_get_property (GObject    *object,
       g_value_set_object (value, gb_editor_document_get_file (self));
       break;
 
+    case PROP_PROGRESS:
+      g_value_set_double (value, gb_editor_document_get_progress (self));
+      break;
+
     case PROP_TITLE:
       g_value_set_string (value,
                           gb_editor_document_get_title (GB_DOCUMENT (self)));
@@ -875,6 +912,17 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FILE,
                                    gParamSpecs [PROP_FILE]);
+
+  gParamSpecs [PROP_PROGRESS] =
+    g_param_spec_double ("progress",
+                         _("Progress"),
+                         _("Loading or saving progress."),
+                         0.0,
+                         1.0,
+                         0.0,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_PROGRESS,
+                                   gParamSpecs [PROP_PROGRESS]);
 
   gParamSpecs [PROP_STYLE_SCHEME_NAME] =
     g_param_spec_string ("style-scheme-name",
