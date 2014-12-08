@@ -88,36 +88,6 @@ save_as_tab (GSimpleAction *action,
 }
 
 static void
-scroll_up_tab (GSimpleAction *action,
-               GVariant      *parameter,
-               gpointer       user_data)
-{
-#if 0
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  tab = gb_tab_grid_get_active (workspace->priv->tab_grid);
-  if (GB_IS_EDITOR_TAB (tab))
-    gb_editor_tab_scroll_up (GB_EDITOR_TAB (tab));
-#endif
-}
-
-static void
-scroll_down_tab (GSimpleAction *action,
-                 GVariant      *parameter,
-                 gpointer       user_data)
-{
-#if 0
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  tab = gb_tab_grid_get_active (workspace->priv->tab_grid);
-  if (GB_IS_EDITOR_TAB (tab))
-    gb_editor_tab_scroll_down (GB_EDITOR_TAB (tab));
-#endif
-}
-
-static void
 toggle_split_tab (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
@@ -203,21 +173,6 @@ preview_tab (GSimpleAction *action,
             }
         }
     }
-#endif
-}
-
-static void
-close_tab (GSimpleAction *action,
-           GVariant      *parameter,
-           gpointer       user_data)
-{
-#if 0
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  tab = gb_tab_grid_get_active (workspace->priv->tab_grid);
-  if (GB_IS_TAB (tab))
-    gb_tab_close (GB_TAB (tab));
 #endif
 }
 
@@ -458,13 +413,10 @@ static void
 gb_editor_workspace_init (GbEditorWorkspace *workspace)
 {
     const GActionEntry entries[] = {
-      { "close-tab", close_tab },
       { "new-tab", new_tab },
       { "open", open_tab },
       { "save", save_tab },
       { "save-as", save_as_tab },
-      { "scroll-up", scroll_up_tab },
-      { "scroll-down", scroll_down_tab },
       { "toggle-split", toggle_split_tab },
       { "find", find_tab },
       { "reformat", reformat_tab },
