@@ -52,6 +52,7 @@ enum {
 enum {
   CREATE_VIEW,
   EMPTY,
+  FOCUS_NEIGHBOR,
   LAST_SIGNAL
 };
 
@@ -508,6 +509,40 @@ gb_document_stack_split_document_right (GSimpleAction *action,
 }
 
 static void
+gb_document_stack_focus_left (GSimpleAction *action,
+                              GVariant      *parameter,
+                              gpointer       user_data)
+{
+  GbDocumentStack *stack = user_data;
+  GbDocumentView *view;
+
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
+
+  view = gb_document_stack_get_active_view (stack);
+  if (!view)
+    return;
+
+  g_signal_emit (stack, gSignals [FOCUS_NEIGHBOR], 0, GTK_DIR_LEFT);
+}
+
+static void
+gb_document_stack_focus_right (GSimpleAction *action,
+                               GVariant      *parameter,
+                               gpointer       user_data)
+{
+  GbDocumentStack *stack = user_data;
+  GbDocumentView *view;
+
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
+
+  view = gb_document_stack_get_active_view (stack);
+  if (!view)
+    return;
+
+  g_signal_emit (stack, gSignals [FOCUS_NEIGHBOR], 0, GTK_DIR_RIGHT);
+}
+
+static void
 gb_document_stack_finalize (GObject *object)
 {
   GbDocumentStackPrivate *priv = GB_DOCUMENT_STACK (object)->priv;
@@ -630,6 +665,17 @@ gb_document_stack_class_init (GbDocumentStackClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  gSignals [FOCUS_NEIGHBOR] =
+    g_signal_new ("focus-neighbor",
+                  GB_TYPE_DOCUMENT_STACK,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_TEXT_DIRECTION);
+
   g_type_ensure (GB_TYPE_DOCUMENT_MENU_BUTTON);
 }
 
@@ -641,6 +687,8 @@ gb_document_stack_init (GbDocumentStack *self)
     { "move-document-right", gb_document_stack_move_document_right },
     { "split-document-left", gb_document_stack_split_document_left },
     { "split-document-right", gb_document_stack_split_document_right },
+    { "focus-left", gb_document_stack_focus_left },
+    { "focus-right", gb_document_stack_focus_right },
     { "close", gb_document_stack_close },
   };
   GSimpleActionGroup *actions;

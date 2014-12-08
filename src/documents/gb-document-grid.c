@@ -189,6 +189,35 @@ cleanup:
   g_list_free (stacks);
 }
 
+static void
+gb_document_grid_focus_neighbor (GbDocumentGrid   *grid,
+                                 GtkDirectionType  dir,
+                                 GbDocumentStack  *stack)
+{
+  GtkWidget *neighbor;
+
+  g_return_if_fail (GB_IS_DOCUMENT_GRID (grid));
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
+
+  switch ((int)dir)
+    {
+    case GTK_DIR_LEFT:
+      neighbor = gb_document_grid_get_stack_before (grid, stack);
+      break;
+
+    case GTK_DIR_RIGHT:
+      neighbor = gb_document_grid_get_stack_after (grid, stack);
+      break;
+
+    default:
+      neighbor = NULL;
+      break;
+    }
+
+  if (neighbor != NULL)
+    gtk_widget_grab_focus (neighbor);
+}
+
 static GtkPaned *
 gb_document_grid_create_paned (GbDocumentGrid *grid)
 {
@@ -217,6 +246,12 @@ gb_document_grid_create_stack (GbDocumentGrid *grid)
   g_signal_connect_object (stack,
                            "empty",
                            G_CALLBACK (gb_document_grid_stack_empty),
+                           grid,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (stack,
+                           "focus-neighbor",
+                           G_CALLBACK (gb_document_grid_focus_neighbor),
                            grid,
                            G_CONNECT_SWAPPED);
 
