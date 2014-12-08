@@ -37,6 +37,7 @@ struct _GbSourceCodeAssistantPrivate
   GcaDiagnostics *document_proxy;
   GArray         *diagnostics;
   gchar          *document_path;
+  GCancellable   *cancellable;
 
   gchar          *tmpfile_path;
   int             tmpfile_fd;
@@ -179,7 +180,7 @@ gb_source_code_assistant_load_service (GbSourceCodeAssistant *assistant)
                          G_DBUS_PROXY_FLAGS_NONE,
                          name,
                          object_path,
-                         NULL,
+                         assistant->priv->cancellable,
                          gb_source_code_assistant_proxy_cb,
                          g_object_ref (assistant));
 
@@ -279,7 +280,8 @@ gb_source_code_assistant_diag_proxy_cb (GObject      *source_object,
   priv->document_proxy = proxy;
 
   gb_source_code_assistant_inc_active (assistant, 1);
-  gca_diagnostics_call_diagnostics (proxy, NULL,
+  gca_diagnostics_call_diagnostics (proxy,
+                                    priv->cancellable,
                                     gb_source_code_assistant_diag_cb,
                                     g_object_ref (assistant));
 
@@ -340,14 +342,15 @@ gb_source_code_assistant_parse_cb (GObject      *source_object,
                                  G_DBUS_PROXY_FLAGS_NONE,
                                  name,
                                  document_path,
-                                 NULL,
+                                 priv->cancellable,
                                  gb_source_code_assistant_diag_proxy_cb,
                                  g_object_ref (assistant));
     }
   else
     {
       gb_source_code_assistant_inc_active (assistant, 1);
-      gca_diagnostics_call_diagnostics (priv->document_proxy, NULL,
+      gca_diagnostics_call_diagnostics (priv->document_proxy,
+                                        priv->cancellable,
                                         gb_source_code_assistant_diag_cb,
                                         g_object_ref (assistant));
     }
@@ -444,7 +447,7 @@ gb_source_code_assistant_do_parse (gpointer data)
                           priv->tmpfile_path,
                           cursor,
                           options,
-                          NULL,
+                          priv->cancellable,
                           gb_source_code_assistant_parse_cb,
                           g_object_ref (assistant));
 
@@ -545,6 +548,18 @@ gb_source_code_assistant_get_buffer (GbSourceCodeAssistant *assistant)
 }
 
 static void
+gb_source_code_assistant_buffer_disposed (gpointer  user_data,
+                                          GObject  *where_object_was)
+{
+  GbSourceCodeAssistant *assistant = user_data;
+
+  g_return_if_fail (GB_IS_SOURCE_CODE_ASSISTANT (assistant));
+
+  assistant->priv->buffer = NULL;
+  g_cancellable_cancel (assistant->priv->cancellable);
+}
+
+static void
 gb_source_code_assistant_set_buffer (GbSourceCodeAssistant *assistant,
                                      GtkTextBuffer         *buffer)
 {
@@ -559,16 +574,18 @@ gb_source_code_assistant_set_buffer (GbSourceCodeAssistant *assistant,
       if (priv->buffer)
         {
           gb_source_code_assistant_disconnect (assistant);
-          g_object_remove_weak_pointer (G_OBJECT (priv->buffer),
-                                        (gpointer *)&priv->buffer);
+          g_object_weak_unref (G_OBJECT (priv->buffer),
+                               gb_source_code_assistant_buffer_disposed,
+                               assistant);
           priv->buffer = NULL;
         }
 
       if (buffer)
         {
           priv->buffer = buffer;
-          g_object_add_weak_pointer (G_OBJECT (priv->buffer),
-                                     (gpointer *)&priv->buffer);
+          g_object_weak_ref (G_OBJECT (priv->buffer),
+                             gb_source_code_assistant_buffer_disposed,
+                             assistant);
           gb_source_code_assistant_connect (assistant);
         }
 
@@ -631,6 +648,7 @@ gb_source_code_assistant_finalize (GObject *object)
 
   g_clear_pointer (&priv->document_path, g_free);
   g_clear_object (&priv->document_proxy);
+  g_clear_object (&priv->cancellable);
 
   G_OBJECT_CLASS (gb_source_code_assistant_parent_class)->finalize (object);
 
@@ -751,4 +769,5 @@ gb_source_code_assistant_init (GbSourceCodeAssistant *assistant)
 {
   assistant->priv = gb_source_code_assistant_get_instance_private (assistant);
   assistant->priv->tmpfile_fd = -1;
+  assistant->priv->cancellable = g_cancellable_new ();
 }
