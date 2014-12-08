@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "editor-workspace"
 
 #include <glib/gi18n.h>
+#include <gtksourceview/gtksource.h>
 
 #include "gb-devhelp-tab.h"
 #include "gb-editor-document.h"
@@ -325,11 +326,15 @@ open_tab (GSimpleAction *action,
 
           if (!document)
             {
+              GtkSourceFile *sfile;
+
               document = GB_DOCUMENT (gb_editor_document_new ());
               gb_document_manager_add (manager, document);
               gb_document_grid_focus_document (workspace->priv->document_grid,
                                                document);
               /* TODO: open */
+              sfile = gb_editor_document_get_file (GB_EDITOR_DOCUMENT (document));
+              gtk_source_file_set_location (sfile, file);
               //g_object_unref (document);
             }
           else
