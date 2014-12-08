@@ -27,6 +27,7 @@
 #include "gb-editor-file-marks.h"
 #include "gb-editor-view.h"
 #include "gb-log.h"
+#include "gb-gtk.h"
 #include "gca-structs.h"
 
 struct _GbEditorDocumentPrivate
@@ -668,6 +669,48 @@ gb_editor_document_save_finish (GbEditorDocument  *document,
 }
 
 static void
+gb_editor_document_restore_insert (GbEditorDocument *document)
+{
+  GbEditorFileMarks *marks;
+  GbEditorFileMark *mark;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GSettings *settings;
+  gboolean load_mark;
+  GFile *file;
+  guint line;
+  guint column;
+
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  settings = g_settings_new ("org.gnome.builder.editor");
+  load_mark = g_settings_get_boolean (settings, "restore-insert-mark");
+  g_clear_object (&settings);
+
+  buffer = GTK_TEXT_BUFFER (document);
+
+  if (!load_mark)
+    {
+      gtk_text_buffer_get_start_iter (buffer, &iter);
+      gtk_text_buffer_select_range (buffer, &iter, &iter);
+      return;
+    }
+
+  file = gtk_source_file_get_location (document->priv->file);
+  if (!file)
+    return;
+
+  marks = gb_editor_file_marks_get_default ();
+  mark = gb_editor_file_marks_get_for_file (marks, file);
+
+  line = gb_editor_file_mark_get_line (mark);
+  column = gb_editor_file_mark_get_column (mark);
+
+  gb_gtk_text_buffer_get_iter_at_line_and_offset (buffer, &iter, line, column);
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+}
+
+static void
 gb_editor_document_load_cb (GObject      *object,
                             GAsyncResult *result,
                             gpointer      user_data)
@@ -690,6 +733,8 @@ gb_editor_document_load_cb (GObject      *object,
     }
 
   document = g_task_get_source_object (task);
+
+  gb_editor_document_restore_insert (document);
   gb_editor_document_guess_language (document);
 
   g_task_return_boolean (task, TRUE);
