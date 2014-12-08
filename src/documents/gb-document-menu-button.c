@@ -501,6 +501,8 @@ gb_document_menu_button_search_activate (GbDocumentMenuButton *button,
     {
       GbDocument *document;
 
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+
       document = g_object_get_data (G_OBJECT (row), "GB_DOCUMENT");
       gb_document_menu_button_select_document (button, document);
     }
