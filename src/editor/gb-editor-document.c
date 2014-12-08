@@ -56,6 +56,7 @@ enum {
 
 enum {
   CURSOR_MOVED,
+  FILE_MARK_SET,
   LAST_SIGNAL
 };
 
@@ -708,6 +709,8 @@ gb_editor_document_restore_insert (GbEditorDocument *document)
 
   gb_gtk_text_buffer_get_iter_at_line_and_offset (buffer, &iter, line, column);
   gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  g_signal_emit (document, gSignals [FILE_MARK_SET], 0, &iter);
 }
 
 static void
@@ -987,7 +990,7 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
   g_object_class_install_property (object_class, PROP_TRIM_TRAILING_WHITESPACE,
                                    gParamSpecs [PROP_TRIM_TRAILING_WHITESPACE]);
 
-  gSignals[CURSOR_MOVED] =
+  gSignals [CURSOR_MOVED] =
     g_signal_new ("cursor-moved",
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
@@ -997,6 +1000,17 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+
+  gSignals [FILE_MARK_SET] =
+    g_signal_new ("file-mark-set",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbEditorDocumentClass, file_mark_set),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_TEXT_ITER);
 }
 
 static void

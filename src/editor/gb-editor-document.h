@@ -50,7 +50,9 @@ struct _GbEditorDocumentClass
 {
   GtkSourceBufferClass parent_class;
 
-  void (*cursor_moved) (GbEditorDocument *document);
+  void (*cursor_moved)  (GbEditorDocument *document);
+  void (*file_mark_set) (GbEditorDocument *document,
+                         GtkTextIter      *location);
 };
 
 GbEditorDocument      *gb_editor_document_new                          (void);
