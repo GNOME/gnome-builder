@@ -271,6 +271,26 @@ jump_to_doc_tab (GSimpleAction *action,
 }
 
 static void
+gb_editor_workspace_load_cb (GObject      *object,
+                             GAsyncResult *result,
+                             gpointer      user_data)
+{
+  GbEditorDocument *document = (GbEditorDocument *)object;
+  GbEditorWorkspace *workspace = user_data;
+  GError *error = NULL;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  if (!gb_editor_document_load_finish (document, result, &error))
+    {
+      /* TODO: propagate error */
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+}
+
+static void
 open_tab (GSimpleAction *action,
           GVariant      *parameter,
           gpointer       user_data)
@@ -326,16 +346,21 @@ open_tab (GSimpleAction *action,
 
           if (!document)
             {
-              GtkSourceFile *sfile;
+              /*
+               * TODO: I'm not convinced this goes here.
+               *       It's also ugly.
+               */
 
               document = GB_DOCUMENT (gb_editor_document_new ());
               gb_document_manager_add (manager, document);
               gb_document_grid_focus_document (workspace->priv->document_grid,
                                                document);
-              /* TODO: open */
-              sfile = gb_editor_document_get_file (GB_EDITOR_DOCUMENT (document));
-              gtk_source_file_set_location (sfile, file);
-              //g_object_unref (document);
+              gb_editor_document_load_async (GB_EDITOR_DOCUMENT (document),
+                                             file,
+                                             NULL, /* cancellable */
+                                             gb_editor_workspace_load_cb,
+                                             workspace);
+              g_object_unref (document);
             }
           else
             gb_document_grid_focus_document (workspace->priv->document_grid,
