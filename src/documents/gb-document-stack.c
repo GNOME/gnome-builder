@@ -357,18 +357,16 @@ gb_document_stack_document_selected (GbDocumentStack      *stack,
 }
 
 static void
-gb_document_stack_close_clicked (GbDocumentStack *stack,
-                                 GtkButton       *button)
+gb_document_stack_close (GSimpleAction *action,
+                         GVariant      *parameter,
+                         gpointer       user_data)
 {
-  GbDocumentStackPrivate *priv;
+  GbDocumentStack *stack = user_data;
 
   g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
-  g_return_if_fail (GTK_IS_BUTTON (button));
 
-  priv = stack->priv;
-
-  if (priv->active_view)
-    gb_document_stack_remove_view (stack, priv->active_view);
+  if (stack->priv->active_view)
+    gb_document_stack_remove_view (stack, stack->priv->active_view);
 }
 
 static void
@@ -409,12 +407,6 @@ gb_document_stack_constructed (GObject *object)
   g_signal_connect_object (stack->priv->document_button,
                            "document-selected",
                            G_CALLBACK (gb_document_stack_document_selected),
-                           stack,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (stack->priv->close,
-                           "clicked",
-                           G_CALLBACK (gb_document_stack_close_clicked),
                            stack,
                            G_CONNECT_SWAPPED);
 }
@@ -649,6 +641,7 @@ gb_document_stack_init (GbDocumentStack *self)
     { "move-document-right", gb_document_stack_move_document_right },
     { "split-document-left", gb_document_stack_split_document_left },
     { "split-document-right", gb_document_stack_split_document_right },
+    { "close", gb_document_stack_close },
   };
   GSimpleActionGroup *actions;
 

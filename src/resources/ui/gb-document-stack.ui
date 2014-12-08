@@ -44,6 +44,7 @@
         <child>
           <object class="GtkButton" id="close">
             <property name="visible">false</property>
+            <property name="action-name">stack.close</property>
             <property name="tooltip_text">Close the current document</property>
             <style>
               <class name="image-button"/>

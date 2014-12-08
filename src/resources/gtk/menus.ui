@@ -124,5 +124,11 @@
         <attribute name="action">stack.split-document-right</attribute>
       </item>
     </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Close Document</attribute>
+        <attribute name="action">stack.close</attribute>
+      </item>
+    </section>
   </menu>
 </interface>
