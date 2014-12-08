@@ -23,6 +23,7 @@
 #include "gb-editor-frame.h"
 #include "gb-editor-frame-private.h"
 #include "gb-editor-workspace.h"
+#include "gb-gtk.h"
 #include "gb-log.h"
 #include "gb-source-formatter.h"
 #include "gb-string.h"
@@ -401,6 +402,21 @@ gb_editor_frame_on_cursor_moved (GbEditorFrame    *frame,
   gb_editor_frame_update_search_position_label (frame);
 }
 
+static void
+gb_editor_frame_on_file_mark_set (GbEditorFrame *frame,
+                                  GtkTextIter   *location,
+                                  GtkTextBuffer *buffer)
+{
+  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+
+  if (!gtk_widget_has_focus (GTK_WIDGET (frame->priv->source_view)))
+    return;
+
+  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (frame->priv->source_view),
+                                   location, 0.0, TRUE, 0.5, 0.5);
+}
+
 /**
  * gb_editor_frame_connect:
  *
@@ -414,6 +430,8 @@ gb_editor_frame_connect (GbEditorFrame    *frame,
   GbEditorFramePrivate *priv;
   GbSourceChangeMonitor *monitor;
   GbSourceCodeAssistant *code_assistant;
+  GtkTextIter iter;
+  GtkTextMark *insert;
 
   ENTRY;
 
@@ -470,6 +488,12 @@ gb_editor_frame_connect (GbEditorFrame    *frame,
                            frame,
                            G_CONNECT_SWAPPED);
 
+  g_signal_connect_object (priv->document,
+                           "file-mark-set",
+                           G_CALLBACK (gb_editor_frame_on_file_mark_set),
+                           frame,
+                           G_CONNECT_SWAPPED);
+
   /*
    * Connect to cursor-moved signal to update cursor position label.
    */
@@ -481,6 +505,11 @@ gb_editor_frame_connect (GbEditorFrame    *frame,
                                   G_CALLBACK (gb_editor_frame_on_cursor_moved),
                                   frame);
     }
+
+  insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (document));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (document), &iter, insert);
+  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (frame->priv->source_view),
+                                   &iter, 0.0, TRUE, 0.5, 0.0);
 
   EXIT;
 }
