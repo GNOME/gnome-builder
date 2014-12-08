@@ -343,9 +343,7 @@ gb_document_stack_document_selected (GbDocumentStack      *stack,
         }
 
       gtk_container_add (GTK_CONTAINER (stack->priv->stack), view);
-
       controls = gb_document_view_get_controls (GB_DOCUMENT_VIEW (view));
-
       if (controls)
         gtk_container_add (GTK_CONTAINER (stack->priv->controls), controls);
     }
