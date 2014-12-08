@@ -61,6 +61,7 @@ void               gb_document_menu_button_set_document_manager (GbDocumentMenuB
                                                                  GbDocumentManager    *document_manager);
 void               gb_document_menu_button_select_document      (GbDocumentMenuButton *button,
                                                                  GbDocument           *document);
+void               gb_document_menu_button_focus_search         (GbDocumentMenuButton *button);
 
 G_END_DECLS
 

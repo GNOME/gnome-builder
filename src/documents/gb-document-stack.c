@@ -543,6 +543,18 @@ gb_document_stack_focus_right (GSimpleAction *action,
 }
 
 static void
+gb_document_stack_focus_search (GSimpleAction *action,
+                                GVariant      *parameter,
+                                gpointer       user_data)
+{
+  GbDocumentStack *stack = user_data;
+
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
+
+  gb_document_menu_button_focus_search (stack->priv->document_button);
+}
+
+static void
 gb_document_stack_finalize (GObject *object)
 {
   GbDocumentStackPrivate *priv = GB_DOCUMENT_STACK (object)->priv;
@@ -689,6 +701,7 @@ gb_document_stack_init (GbDocumentStack *self)
     { "split-document-right", gb_document_stack_split_document_right },
     { "focus-left", gb_document_stack_focus_left },
     { "focus-right", gb_document_stack_focus_right },
+    { "focus-search", gb_document_stack_focus_search },
     { "close", gb_document_stack_close },
   };
   GSimpleActionGroup *actions;

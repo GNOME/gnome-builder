@@ -522,6 +522,15 @@ gb_document_menu_button_clicked (GtkButton *button)
   GTK_BUTTON_CLASS (gb_document_menu_button_parent_class)->clicked (button);
 }
 
+void
+gb_document_menu_button_focus_search (GbDocumentMenuButton *button)
+{
+  g_return_if_fail (GB_IS_DOCUMENT_MENU_BUTTON (button));
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  gtk_widget_grab_focus (GTK_WIDGET (button->priv->search_entry));
+}
+
 static void
 gb_document_menu_button_constructed (GObject *object)
 {
