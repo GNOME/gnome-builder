@@ -46,6 +46,8 @@ struct _GbPreferencesWindow
 struct _GbPreferencesWindowClass
 {
   GtkWindowClass parent;
+
+  void (*close) (GbPreferencesWindow *window);
 };
 
 GType      gb_preferences_window_get_type (void) G_GNUC_CONST;

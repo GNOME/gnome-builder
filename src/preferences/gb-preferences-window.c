@@ -41,6 +41,13 @@ struct _GbPreferencesWindowPrivate
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesWindow, gb_preferences_window,
                             GTK_TYPE_WINDOW)
 
+enum {
+  CLOSE,
+  LAST_SIGNAL
+};
+
+static guint gSignals [LAST_SIGNAL];
+
 GtkWidget *
 gb_preferences_window_new (void)
 {
@@ -67,6 +74,14 @@ gb_preferences_window_section_changed (GtkStack            *stack,
   gtk_header_bar_set_title (window->priv->right_header_bar, title);
 
   g_free (title);
+}
+
+static void
+gb_preferences_window_close (GbPreferencesWindow *window)
+{
+  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
+
+  gtk_window_close (GTK_WINDOW (window));
 }
 
 static void
@@ -123,11 +138,27 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkBindingSet *binding_set;
 
   object_class->constructed = gb_preferences_window_constructed;
   object_class->finalize = gb_preferences_window_finalize;
   object_class->get_property = gb_preferences_window_get_property;
   object_class->set_property = gb_preferences_window_set_property;
+
+  klass->close = gb_preferences_window_close;
+
+  gSignals [CLOSE] =
+    g_signal_new ("close",
+                  GB_TYPE_PREFERENCES_WINDOW,
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GbPreferencesWindowClass, close),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  binding_set = gtk_binding_set_by_class (klass);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-preferences-window.ui");
