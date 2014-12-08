@@ -85,6 +85,7 @@ static void
 gb_document_grid_remove_stack (GbDocumentGrid  *grid,
                                GbDocumentStack *stack)
 {
+  GtkWidget *new_focus;
   GList *stacks;
   GList *iter;
 
@@ -96,6 +97,10 @@ gb_document_grid_remove_stack (GbDocumentGrid  *grid,
   /* refuse to remove the stack if there is only one */
   if (g_list_length (stacks) == 1)
     return;
+
+  new_focus = gb_document_grid_get_stack_before (grid, stack);
+  if (!new_focus)
+    new_focus = gb_document_grid_get_stack_after (grid, stack);
 
   for (iter = stacks; iter; iter = iter->next)
     {
@@ -163,6 +168,9 @@ gb_document_grid_remove_stack (GbDocumentGrid  *grid,
           break;
         }
     }
+
+  if (new_focus)
+    gtk_widget_grab_focus (new_focus);
 
   g_list_free (stacks);
 }
