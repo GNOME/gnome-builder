@@ -14,6 +14,9 @@
           <object class="GbDocumentMenuButton" id="document_button">
             <property name="visible">true</property>
             <property name="hexpand">true</property>
+            <style>
+              <class name="tab-header-first"/>
+            </style>
           </object>
         </child>
         <child>

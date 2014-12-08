@@ -13,6 +13,8 @@
             <property name="visible">true</property>
             <style>
               <class name="image-button"/>
+              <class name="tab-control-first"/>
+              <class name="tab-control-last"/>
             </style>
           </object>
         </child>

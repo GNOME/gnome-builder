@@ -173,25 +173,25 @@ GbWorkbench GtkHeaderBar {
 /*
  * Tab header styling.
  */
-GtkComboBox.tab-header-first .button,
+GtkMenuButton.tab-header-first .button,
 GtkButton.tab-header-first {
     border-left: none;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
 }
-GtkComboBox.tab-header-last .button,
+GtkMenuButton.tab-header-last .button,
 GtkButton.tab-header-last {
     border-right: none;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
 }
-GtkComboBox.tab-control-first .button,
+GtkMenuButton.tab-control-first .button,
 GtkButton.tab-control-first {
     border-left: none;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
 }
-GtkComboBox.tab-control-last .button,
+GtkMenuButton.tab-control-last .button,
 GtkButton.tab-control-last {
     border-right: 1px solid @borders;
     border-top-right-radius: 0px;
