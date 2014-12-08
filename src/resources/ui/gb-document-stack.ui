@@ -11,6 +11,21 @@
           <class name="linked"/>
         </style>
         <child>
+          <object class="GtkMenuButton" id="stack_menu">
+            <property name="visible">false</property>
+            <style>
+              <class name="image-button"/>
+              <class name="tab-header-first"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">true</property>
+                <property name="icon_name">open-menu-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
           <object class="GbDocumentMenuButton" id="document_button">
             <property name="visible">true</property>
             <property name="hexpand">true</property>
@@ -24,21 +39,6 @@
             <property name="homogeneous">false</property>
             <property name="hexpand">false</property>
             <property name="visible">true</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkMenuButton" id="stack_menu">
-            <property name="visible">false</property>
-            <style>
-              <class name="image-button"/>
-              <class name="tab-header-first"/>
-            </style>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">true</property>
-                <property name="icon_name">open-menu-symbolic</property>
-              </object>
-            </child>
           </object>
         </child>
         <child>
