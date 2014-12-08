@@ -484,9 +484,21 @@ static void
 gb_document_menu_button_search_changed (GbDocumentMenuButton *button,
                                         GtkEditable          *editable)
 {
+  GtkListBoxRow *row;
+
   g_return_if_fail (GB_IS_DOCUMENT_MENU_BUTTON (button));
 
   gtk_list_box_invalidate_filter (button->priv->list_box);
+
+  /*
+   * WORKAROUND:
+   *
+   * Using a y of 1 since 0 returns NULL. This is a bug in GtkListBoxRow
+   * and has been filed upstream.
+   */
+  row = gtk_list_box_get_row_at_y (button->priv->list_box, 1);
+  if (row)
+    gtk_list_box_select_row (button->priv->list_box, row);
 }
 
 static void
