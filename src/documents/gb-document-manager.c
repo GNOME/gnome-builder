@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "document-manager"
 
+#include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
 #include "gb-document-manager.h"
@@ -32,13 +33,20 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbDocumentManager, gb_document_manager,
                             G_TYPE_OBJECT)
 
 enum {
+    PROP_0,
+    PROP_COUNT,
+    LAST_PROP
+};
+
+enum {
   DOCUMENT_ADDED,
   DOCUMENT_REMOVED,
   DOCUMENT_MODIFIED_CHANGED,
   LAST_SIGNAL
 };
 
-static guint gSignals [LAST_SIGNAL];
+static GParamSpec *gParamSpecs [LAST_PROP];
+static guint       gSignals [LAST_SIGNAL];
 
 GbDocumentManager *
 gb_document_manager_new (void)
@@ -166,6 +174,8 @@ gb_document_manager_add (GbDocumentManager *manager,
   g_ptr_array_add (manager->priv->documents, g_object_ref (document));
 
   g_signal_emit (manager, gSignals [DOCUMENT_ADDED], 0, document);
+
+  g_object_notify_by_pspec (G_OBJECT (manager), gParamSpecs [PROP_COUNT]);
 }
 
 void
@@ -194,6 +204,8 @@ gb_document_manager_remove (GbDocumentManager *manager,
           break;
         }
     }
+
+  g_object_notify_by_pspec (G_OBJECT (manager), gParamSpecs [PROP_COUNT]);
 }
 
 static void
@@ -216,11 +228,42 @@ gb_document_manager_finalize (GObject *object)
 }
 
 static void
+gb_document_manager_get_property (GObject    *object,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
+{
+  GbDocumentManager *self = GB_DOCUMENT_MANAGER (object);
+
+  switch (prop_id)
+    {
+    case PROP_COUNT:
+      g_value_set_uint (value, gb_document_manager_get_count (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gb_document_manager_class_init (GbDocumentManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gb_document_manager_finalize;
+  object_class->get_property = gb_document_manager_get_property;
+
+  gParamSpecs [PROP_COUNT] =
+    g_param_spec_uint ("count",
+                       _("Count"),
+                       _("The number of documents in the manager."),
+                       0,
+                       G_MAXUINT,
+                       0,
+                       (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_COUNT,
+                                   gParamSpecs [PROP_COUNT]);
 
   gSignals [DOCUMENT_ADDED] =
     g_signal_new ("document-added",
