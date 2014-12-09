@@ -118,6 +118,16 @@ gb_document_stack_remove_view (GbDocumentStack *stack,
     g_signal_emit (stack, gSignals [EMPTY], 0);
 }
 
+static gboolean
+transform_uint_to_boolean (GBinding     *binding,
+                           const GValue *from_value,
+                           GValue       *to_value,
+                           gpointer      user_data)
+{
+  g_value_set_boolean (to_value, !!g_value_get_uint (from_value));
+  return TRUE;
+}
+
 /**
  * gb_document_stack_get_document_manager:
  *
@@ -176,6 +186,11 @@ gb_document_stack_set_document_manager (GbDocumentStack   *stack,
           priv->document_manager = g_object_ref (document_manager);
           gb_document_menu_button_set_document_manager (priv->document_button,
                                                         document_manager);
+          g_object_bind_property_full (document_manager, "count",
+                                       priv->document_button, "visible",
+                                       G_BINDING_SYNC_CREATE,
+                                       transform_uint_to_boolean,
+                                       NULL, NULL, NULL);
         }
 
       g_object_notify_by_pspec (G_OBJECT (stack),
