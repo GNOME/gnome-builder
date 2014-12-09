@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.14 -->
+  <template class="GbHtmlView" parent="GbDocumentView">
+    <child internal-child="controls">
+      <object class="GtkBox">
+        <property name="visible">true</property>
+        <style>
+          <class name="linked"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="WebKitWebView" id="web_view">
+        <property name="expand">true</property>
+        <property name="visible">true</property>
+      </object>
+    </child>
+  </template>
+</interface>
