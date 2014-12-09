@@ -167,6 +167,7 @@ GbCommandBar GtkEntry {
  */
 GbWorkbench GtkHeaderBar {
     border-bottom: none;
+    box-shadow: none;
 }
 
 
