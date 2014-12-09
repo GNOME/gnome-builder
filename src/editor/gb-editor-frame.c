@@ -775,6 +775,18 @@ gb_editor_frame_find (GbEditorFrame *frame,
                                    frame->priv->source_view);
 }
 
+static void
+gb_editor_frame_find_activate (GSimpleAction *action,
+                               GVariant      *parameter,
+                               gpointer       user_data)
+{
+  GbEditorFrame *frame = user_data;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+
+  gb_editor_frame_find (frame, "");
+}
+
 static gboolean
 gb_editor_frame_on_query_tooltip (GbEditorFrame *frame,
                                   gint           x,
@@ -1215,6 +1227,7 @@ static void
 gb_editor_frame_init (GbEditorFrame *self)
 {
   const GActionEntry entries[] = {
+    { "find", gb_editor_frame_find_activate },
     { "scroll-up", gb_editor_frame_scroll_up },
     { "scroll-down", gb_editor_frame_scroll_down },
   };

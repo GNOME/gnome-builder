@@ -88,21 +88,6 @@ save_as_tab (GSimpleAction *action,
 }
 
 static void
-find_tab (GSimpleAction *action,
-          GVariant      *parameter,
-          gpointer       user_data)
-{
-#if 0
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  tab = gb_tab_grid_get_active (workspace->priv->tab_grid);
-  if (GB_IS_EDITOR_TAB (tab))
-    gb_editor_tab_find (GB_EDITOR_TAB (tab));
-#endif
-}
-
-static void
 reformat_tab (GSimpleAction *action,
               GVariant      *parameter,
               gpointer       user_data)
@@ -402,7 +387,6 @@ gb_editor_workspace_init (GbEditorWorkspace *workspace)
       { "open", open_tab },
       { "save", save_tab },
       { "save-as", save_as_tab },
-      { "find", find_tab },
       { "reformat", reformat_tab },
       { "preview", preview_tab },
       { "jump-to-doc", jump_to_doc_tab, "s" },
