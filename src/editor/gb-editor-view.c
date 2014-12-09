@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 
 #include "gb-editor-frame.h"
+#include "gb-editor-frame-private.h"
 #include "gb-editor-view.h"
 
 struct _GbEditorViewPrivate
@@ -153,7 +154,6 @@ gb_editor_view_split_button_toggled (GbEditorView    *view,
   gb_editor_view_toggle_split (view);
 }
 
-
 static void
 gb_editor_view_toggle_split_activate (GSimpleAction *action,
                                       GVariant      *parameter,
@@ -166,6 +166,27 @@ gb_editor_view_toggle_split_activate (GSimpleAction *action,
 
   active = gtk_toggle_button_get_active (view->priv->split_button);
   gtk_toggle_button_set_active (view->priv->split_button, !active);
+}
+
+static void
+gb_editor_view_switch_pane (GSimpleAction *action,
+                            GVariant      *parameter,
+                            gpointer       user_data)
+{
+  GbEditorView *view = user_data;
+
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+
+  if (!gtk_widget_has_focus (GTK_WIDGET (view->priv->frame->priv->source_view)))
+    gtk_widget_grab_focus (GTK_WIDGET (view->priv->frame));
+  else
+    {
+      GtkWidget *child2;
+
+      child2 = gtk_paned_get_child2 (view->priv->paned);
+      if (child2)
+        gtk_widget_grab_focus (child2);
+    }
 }
 
 static void
@@ -262,6 +283,7 @@ gb_editor_view_init (GbEditorView *self)
 {
   const GActionEntry entries[] = {
     { "toggle-split", gb_editor_view_toggle_split_activate },
+    { "switch-pane", gb_editor_view_switch_pane },
   };
   GSimpleActionGroup *actions;
 

@@ -300,21 +300,6 @@ open_tab (GSimpleAction *action,
   gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
-static void
-switch_pane_tab (GSimpleAction *action,
-                 GVariant      *parameter,
-                 gpointer       user_data)
-{
-#if 0
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  tab = gb_tab_grid_get_active (workspace->priv->tab_grid);
-  if (GB_IS_EDITOR_TAB (tab))
-    gb_editor_tab_switch_pane (GB_EDITOR_TAB (tab));
-#endif
-}
-
 static GActionGroup *
 gb_editor_workspace_get_actions (GbWorkspace *workspace)
 {
@@ -390,7 +375,6 @@ gb_editor_workspace_init (GbEditorWorkspace *workspace)
       { "reformat", reformat_tab },
       { "preview", preview_tab },
       { "jump-to-doc", jump_to_doc_tab, "s" },
-      { "switch-pane", switch_pane_tab },
     };
 
   workspace->priv = gb_editor_workspace_get_instance_private (workspace);
