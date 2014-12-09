@@ -177,7 +177,6 @@ gb_workbench_actions_constructed (GObject *object)
 {
    GbWorkbenchActions *actions = (GbWorkbenchActions *)object;
    static const GActionEntry action_entries[] = {
-      { "close-tab", proxy_action },
       { "find", proxy_action },
       { "new-tab", proxy_action },
       { "open", proxy_action },
