@@ -23,6 +23,7 @@
 #include "gb-editor-frame.h"
 #include "gb-editor-frame-private.h"
 #include "gb-editor-view.h"
+#include "gb-html-document.h"
 
 struct _GbEditorViewPrivate
 {
@@ -54,6 +55,66 @@ gb_editor_view_new (GbEditorDocument *document)
 }
 
 static void
+gb_editor_view_notify_language (GbEditorView     *view,
+                                GParamSpec       *pspec,
+                                GbEditorDocument *document)
+{
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  g_object_notify (G_OBJECT (view), "can-preview");
+}
+
+static gboolean
+gb_editor_view_get_can_preview (GbDocumentView *view)
+{
+  GbEditorViewPrivate *priv;
+  GtkSourceLanguage *language;
+  GtkSourceBuffer *buffer;
+  const gchar *lang_id;
+
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (view), NULL);
+
+  priv = GB_EDITOR_VIEW (view)->priv;
+
+  buffer = GTK_SOURCE_BUFFER (priv->document);
+  language = gtk_source_buffer_get_language (buffer);
+  if (!language)
+    return FALSE;
+
+  lang_id = gtk_source_language_get_id (language);
+  if (!lang_id)
+    return FALSE;
+
+  return (g_str_equal (lang_id, "html") ||
+          g_str_equal (lang_id, "markdown"));
+}
+
+/**
+ * gb_editor_view_create_preview:
+ * @view: A #GbEditorView.
+ *
+ * Creates a new document that can be previewed by calling
+ * gb_document_create_view() on the document.
+ *
+ * Returns: (transfer full): A #GbDocument.
+ */
+static GbDocument *
+gb_editor_view_create_preview (GbDocumentView *view)
+{
+  GbEditorView *self = (GbEditorView *)view;
+  GbDocument *document;
+
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (self), NULL);
+
+  document = g_object_new (GB_TYPE_HTML_DOCUMENT,
+                           "buffer", self->priv->document,
+                           NULL);
+
+  return document;
+}
+
+static void
 gb_editor_view_connect (GbEditorView     *view,
                         GbEditorDocument *document)
 {
@@ -67,16 +128,32 @@ gb_editor_view_connect (GbEditorView     *view,
   child2 = gtk_paned_get_child2 (view->priv->paned);
   if (GB_IS_EDITOR_FRAME (child2))
     gb_editor_frame_set_document (GB_EDITOR_FRAME (child2), document);
+
+  g_signal_connect_object (document,
+                           "notify::language",
+                           G_CALLBACK (gb_editor_view_notify_language),
+                           view,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
 gb_editor_view_disconnect (GbEditorView     *view,
                            GbEditorDocument *document)
 {
+  GtkWidget *child2;
+
   g_return_if_fail (GB_IS_EDITOR_VIEW (view));
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
 
   gb_editor_frame_set_document (view->priv->frame, NULL);
+
+  child2 = gtk_paned_get_child2 (view->priv->paned);
+  if (GB_IS_EDITOR_FRAME (child2))
+    gb_editor_frame_set_document (GB_EDITOR_FRAME (child2), document);
+
+  g_signal_handlers_disconnect_by_func (document,
+                                        G_CALLBACK (gb_editor_view_notify_language),
+                                        view);
 }
 
 static GbDocument *
@@ -259,6 +336,8 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   widget_class->grab_focus = gb_editor_view_grab_focus;
 
   view_class->get_document = gb_editor_view_get_document;
+  view_class->get_can_preview = gb_editor_view_get_can_preview;
+  view_class->create_preview = gb_editor_view_create_preview;
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
