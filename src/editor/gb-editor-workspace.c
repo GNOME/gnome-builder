@@ -21,7 +21,8 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
-#include "gb-devhelp-tab.h"
+#include "gb-devhelp-document.h"
+#include "gb-devhelp-view.h"
 #include "gb-editor-document.h"
 #include "gb-editor-workspace.h"
 #include "gb-editor-workspace-private.h"
@@ -92,31 +93,36 @@ jump_to_doc_tab (GSimpleAction *action,
                  GVariant      *parameter,
                  gpointer       user_data)
 {
-#if 0
   GbEditorWorkspace *workspace = user_data;
+  GbDocumentManager *manager;
   const gchar *search_text;
-  GbTab *tab;
+  GbDocument *document;
+  GbDocument *reffed = NULL;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
 
   search_text = g_variant_get_string (parameter, NULL);
   if (!search_text || !*search_text)
     return;
 
-  tab = gb_tab_grid_find_tab_typed (workspace->priv->tab_grid,
-                                    GB_TYPE_DEVHELP_TAB);
+  manager = gb_document_manager_get_default ();
+  document = gb_document_manager_find_with_type (manager,
+                                                 GB_TYPE_DEVHELP_DOCUMENT);
 
-  if (!tab)
+  if (!document)
     {
-      tab = g_object_new (GB_TYPE_DEVHELP_TAB,
-                          "visible", TRUE,
-                          NULL);
-      gtk_container_add (GTK_CONTAINER (workspace->priv->tab_grid),
-                         GTK_WIDGET (tab));
-      gb_tab_grid_move_tab_right (workspace->priv->tab_grid, tab);
+      document = GB_DOCUMENT (gb_devhelp_document_new ());
+      gb_document_manager_add (manager, document);
+      reffed = document;
     }
 
-  gb_devhelp_tab_jump_to_keyword (GB_DEVHELP_TAB (tab), search_text);
-  gb_tab_grid_focus_tab (workspace->priv->tab_grid, tab);
-#endif
+  gb_devhelp_document_set_search (GB_DEVHELP_DOCUMENT (document),
+                                  search_text);
+
+  gb_document_grid_focus_document (workspace->priv->document_grid,
+                                   document);
+
+  g_clear_object (&reffed);
 }
 
 static void
