@@ -145,15 +145,27 @@ gb_editor_view_toggle_split (GbEditorView *view)
 }
 
 static void
+gb_editor_view_split_button_toggled (GbEditorView    *view,
+                                     GtkToggleButton *button)
+{
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+
+  gb_editor_view_toggle_split (view);
+}
+
+
+static void
 gb_editor_view_toggle_split_activate (GSimpleAction *action,
                                       GVariant      *parameter,
                                       gpointer       user_data)
 {
   GbEditorView *view = user_data;
+  gboolean active;
 
   g_return_if_fail (GB_IS_EDITOR_VIEW (view));
 
-  gb_editor_view_toggle_split (view);
+  active = gtk_toggle_button_get_active (view->priv->split_button);
+  gtk_toggle_button_set_active (view->priv->split_button, !active);
 }
 
 static void
@@ -263,4 +275,10 @@ gb_editor_view_init (GbEditorView *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self), "editor-view",
                                   G_ACTION_GROUP (actions));
   g_object_unref (actions);
+
+  g_signal_connect_object (self->priv->split_button,
+                           "toggled",
+                           G_CALLBACK (gb_editor_view_split_button_toggled),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
