@@ -28,9 +28,11 @@ struct _GbDocumentStackPrivate
 {
   /* Objects ownen by GbDocumentStack */
   GbDocumentManager    *document_manager;
+  GActionGroup         *actions;
 
   /* Weak references */
   GbDocumentView       *active_view;
+  GBinding             *preview_binding;
 
   /* GtkWidgets owned by GtkWidgetClass template */
   GbDocumentMenuButton *document_button;
@@ -228,12 +230,28 @@ gb_document_stack_set_active_view (GbDocumentStack *stack,
 
   if (active_view != stack->priv->active_view)
     {
-      gb_clear_weak_pointer (&stack->priv->active_view);
-      gb_set_weak_pointer (active_view, &stack->priv->active_view);
+      if (stack->priv->active_view)
+        {
+          if (stack->priv->preview_binding)
+            {
+              g_binding_unbind (stack->priv->preview_binding);
+              gb_clear_weak_pointer (&stack->priv->preview_binding);
+            }
+          gb_clear_weak_pointer (&stack->priv->active_view);
+        }
 
       if (active_view)
         {
           GtkWidget *controls;
+
+          stack->priv->preview_binding =
+            g_object_bind_property (active_view, "can-preview",
+                                    g_action_map_lookup_action (G_ACTION_MAP (stack->priv->actions), "preview"), "enabled",
+                                    G_BINDING_SYNC_CREATE);
+          gb_set_weak_pointer (stack->priv->preview_binding,
+                               &stack->priv->preview_binding);
+
+          gb_set_weak_pointer (active_view, &stack->priv->active_view);
 
           gtk_stack_set_visible_child (stack->priv->stack,
                                        GTK_WIDGET (active_view));
@@ -391,6 +409,33 @@ gb_document_stack_close (GSimpleAction *action,
 
   if (stack->priv->active_view)
     gb_document_stack_remove_view (stack, stack->priv->active_view);
+}
+
+static void
+gb_document_stack_preview_activate (GSimpleAction *action,
+                                    GVariant      *parameter,
+                                    gpointer       user_data)
+{
+  GbDocumentStackPrivate *priv;
+  GbDocumentStack *stack = user_data;
+
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
+
+  priv = stack->priv;
+
+  if (priv->active_view)
+    {
+      if (gb_document_view_get_can_preview (priv->active_view))
+        {
+          GbDocument *document;
+
+          document = gb_document_view_create_preview (priv->active_view);
+          gb_document_manager_add (priv->document_manager, document);
+
+          g_signal_emit (stack, gSignals [CREATE_VIEW], 0, document,
+                         GB_DOCUMENT_SPLIT_RIGHT);
+        }
+    }
 }
 
 static void
@@ -584,6 +629,7 @@ gb_document_stack_finalize (GObject *object)
 
   gb_clear_weak_pointer (&priv->active_view);
   g_clear_object (&priv->document_manager);
+  g_clear_object (&priv->actions);
 
   G_OBJECT_CLASS (gb_document_stack_parent_class)->finalize (object);
 }
@@ -737,17 +783,16 @@ gb_document_stack_init (GbDocumentStack *self)
     { "focus-right", gb_document_stack_focus_right },
     { "focus-search", gb_document_stack_focus_search },
     { "close", gb_document_stack_close },
+    { "preview", gb_document_stack_preview_activate },
   };
-  GSimpleActionGroup *actions;
 
   self->priv = gb_document_stack_get_instance_private (self);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  actions = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries,
-                                   G_N_ELEMENTS (entries), self);
+  self->priv->actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (self->priv->actions),
+                                   entries, G_N_ELEMENTS (entries), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "stack",
-                                  G_ACTION_GROUP (actions));
-  g_clear_object (&actions);
+                                  G_ACTION_GROUP (self->priv->actions));
 }

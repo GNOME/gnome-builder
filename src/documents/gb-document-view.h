@@ -49,15 +49,19 @@ struct _GbDocumentViewClass
 {
   GtkBoxClass parent;
 
-  GbDocument *(*get_document) (GbDocumentView *view);
-  gboolean    (*close)        (GbDocumentView *view);
+  GbDocument  *(*get_document)    (GbDocumentView *view);
+  gboolean     (*get_can_preview) (GbDocumentView *view);
+  gboolean     (*close)           (GbDocumentView *view);
+  GbDocument  *(*create_preview)  (GbDocumentView *view);
 };
 
-GType               gb_document_view_get_type     (void);
-GbDocumentView     *gb_document_view_new          (void);
-void                gb_document_view_close        (GbDocumentView *view);
-GbDocument         *gb_document_view_get_document (GbDocumentView *view);
-GtkWidget          *gb_document_view_get_controls (GbDocumentView *view);
+GType           gb_document_view_get_type        (void);
+GbDocumentView *gb_document_view_new             (void);
+GbDocument     *gb_document_view_create_preview  (GbDocumentView *view);
+void            gb_document_view_close           (GbDocumentView *view);
+GbDocument     *gb_document_view_get_document    (GbDocumentView *view);
+GtkWidget      *gb_document_view_get_controls    (GbDocumentView *view);
+gboolean        gb_document_view_get_can_preview (GbDocumentView *view);
 
 G_END_DECLS
 

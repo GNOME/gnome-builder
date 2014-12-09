@@ -126,6 +126,12 @@
     </section>
     <section>
       <item>
+        <attribute name="label" translatable="yes">Preview</attribute>
+        <attribute name="action">stack.preview</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
         <attribute name="label" translatable="yes">Close Document</attribute>
         <attribute name="action">stack.close</attribute>
       </item>

@@ -38,6 +38,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GbDocumentView,
 
 enum {
   PROP_0,
+  PROP_CAN_PREVIEW,
   PROP_CONTROLS,
   PROP_DOCUMENT,
   LAST_PROP
@@ -97,6 +98,28 @@ gb_document_view_close (GbDocumentView *view)
   g_signal_emit (view, gSignals [CLOSE], 0);
 }
 
+gboolean
+gb_document_view_get_can_preview (GbDocumentView *view)
+{
+  g_return_val_if_fail (GB_IS_DOCUMENT_VIEW (view), FALSE);
+
+  if (GB_DOCUMENT_VIEW_GET_CLASS (view)->get_can_preview)
+    return GB_DOCUMENT_VIEW_GET_CLASS (view)->get_can_preview (view);
+
+  return FALSE;
+}
+
+GbDocument *
+gb_document_view_create_preview (GbDocumentView *view)
+{
+  g_return_val_if_fail (GB_IS_DOCUMENT_VIEW (view), NULL);
+
+  if (GB_DOCUMENT_VIEW_GET_CLASS (view)->create_preview)
+    return GB_DOCUMENT_VIEW_GET_CLASS (view)->create_preview (view);
+
+  return NULL;
+}
+
 static GObject *
 gb_document_view_get_internal_child (GtkBuildable *buildable,
                                      GtkBuilder   *builder,
@@ -130,6 +153,10 @@ gb_document_view_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CAN_PREVIEW:
+      g_value_set_boolean (value, gb_document_view_get_can_preview (self));
+      break;
+
     case PROP_CONTROLS:
       g_value_set_object (value, gb_document_view_get_controls (self));
       break;
@@ -152,6 +179,15 @@ gb_document_view_class_init (GbDocumentViewClass *klass)
   object_class->get_property = gb_document_view_get_property;
 
   widget_class->destroy = gb_document_view_destroy;
+
+  gParamSpecs [PROP_CAN_PREVIEW] =
+    g_param_spec_boolean ("can-preview",
+                         _("Can Preview"),
+                         _("If the view can preview."),
+                         FALSE,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_CAN_PREVIEW,
+                                   gParamSpecs [PROP_CAN_PREVIEW]);
 
   gParamSpecs [PROP_CONTROLS] =
     g_param_spec_object ("controls",
