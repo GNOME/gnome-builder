@@ -942,6 +942,18 @@ gb_editor_frame_grab_focus (GtkWidget *widget)
 }
 
 static void
+gb_editor_frame_reformat_activate (GSimpleAction *action,
+                                   GVariant      *parameter,
+                                   gpointer       user_data)
+{
+  GbEditorFrame *frame = user_data;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+
+  gb_editor_frame_reformat (frame);
+}
+
+static void
 gb_editor_frame_scroll (GbEditorFrame    *frame,
                         GtkDirectionType  dir)
 {
@@ -1228,6 +1240,7 @@ gb_editor_frame_init (GbEditorFrame *self)
 {
   const GActionEntry entries[] = {
     { "find", gb_editor_frame_find_activate },
+    { "reformat", gb_editor_frame_reformat_activate },
     { "scroll-up", gb_editor_frame_scroll_up },
     { "scroll-down", gb_editor_frame_scroll_down },
   };
