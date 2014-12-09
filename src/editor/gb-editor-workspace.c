@@ -88,23 +88,6 @@ save_as_tab (GSimpleAction *action,
 }
 
 static void
-new_tab (GSimpleAction *action,
-         GVariant      *parameter,
-         gpointer       user_data)
-{
-#if 0
-  GbEditorWorkspace *workspace = user_data;
-  GbEditorTab *tab;
-
-  tab = gb_editor_tab_new ();
-  gtk_container_add (GTK_CONTAINER (workspace->priv->tab_grid),
-                     GTK_WIDGET (tab));
-  gtk_widget_show (GTK_WIDGET (tab));
-  gtk_widget_grab_focus (GTK_WIDGET (tab));
-#endif
-}
-
-static void
 jump_to_doc_tab (GSimpleAction *action,
                  GVariant      *parameter,
                  gpointer       user_data)
@@ -309,11 +292,9 @@ static void
 gb_editor_workspace_init (GbEditorWorkspace *workspace)
 {
     const GActionEntry entries[] = {
-      { "new-tab", new_tab },
       { "open", open_tab },
       { "save", save_tab },
       { "save-as", save_as_tab },
-      { "preview", preview_tab },
       { "jump-to-doc", jump_to_doc_tab, "s" },
     };
 
