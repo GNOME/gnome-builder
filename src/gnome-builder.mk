@@ -41,6 +41,10 @@ libgnome_builder_la_SOURCES = \
 	src/commands/gb-command-vim.h \
 	src/credits/gb-credits-widget.c \
 	src/credits/gb-credits-widget.h \
+	src/devhelp/gb-devhelp-document.c \
+	src/devhelp/gb-devhelp-document.h \
+	src/devhelp/gb-devhelp-view.c \
+	src/devhelp/gb-devhelp-view.h \
 	src/devhelp/gb-devhelp-tab.c \
 	src/devhelp/gb-devhelp-tab.h \
 	src/documents/gb-document.c \
