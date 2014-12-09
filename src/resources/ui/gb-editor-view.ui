@@ -16,6 +16,12 @@
               <class name="tab-control-first"/>
               <class name="tab-control-last"/>
             </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">true</property>
+                <property name="icon_name">builder-split-tab</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
