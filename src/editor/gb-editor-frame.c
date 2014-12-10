@@ -896,6 +896,7 @@ gb_editor_frame_on_jump_to_doc (GbEditorFrame *frame,
 
   g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
   g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+  g_return_if_fail (search_text);
 
   workbench = gb_widget_get_workbench (GTK_WIDGET (frame));
   if (!workbench)
