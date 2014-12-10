@@ -16,24 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #define G_LOG_DOMAIN "editor-view"
 
 #include <glib/gi18n.h>
 
+#include "gb-animation.h"
 #include "gb-editor-frame.h"
 #include "gb-editor-frame-private.h"
 #include "gb-editor-view.h"
+#include "gb-glib.h"
 #include "gb-html-document.h"
+#include "gb-widget.h"
 
 struct _GbEditorViewPrivate
 {
   /* References owned by view */
   GbEditorDocument *document;
 
+  /* Weak references */
+  GbAnimation     *progress_anim;
+
   /* References owned by GtkWidget template */
   GtkPaned        *paned;
   GtkToggleButton *split_button;
   GbEditorFrame   *frame;
+  GtkProgressBar  *progress_bar;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorView, gb_editor_view, GB_TYPE_DOCUMENT_VIEW)
@@ -65,6 +73,45 @@ gb_editor_view_notify_language (GbEditorView     *view,
   g_object_notify (G_OBJECT (view), "can-preview");
 }
 
+static void
+gb_editor_view_notify_progress (GbEditorView     *view,
+                                GParamSpec       *pspec,
+                                GbEditorDocument *document)
+{
+  GbEditorViewPrivate *priv;
+  gdouble progress;
+
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  priv = view->priv;
+
+  progress = gb_editor_document_get_progress (document);
+
+  if (!gtk_widget_get_visible (GTK_WIDGET (priv->progress_bar)))
+    {
+      gtk_progress_bar_set_fraction (priv->progress_bar, 0.0);
+      gtk_widget_set_opacity (GTK_WIDGET (priv->progress_bar), 1.0);
+      gtk_widget_show (GTK_WIDGET (priv->progress_bar));
+    }
+
+  if (priv->progress_anim)
+    gb_animation_stop (priv->progress_anim);
+
+  gb_clear_weak_pointer (&priv->progress_anim);
+
+  priv->progress_anim = gb_object_animate (priv->progress_bar,
+                                           GB_ANIMATION_LINEAR,
+                                           250,
+                                           NULL,
+                                           "fraction", progress,
+                                           NULL);
+  gb_set_weak_pointer (priv->progress_anim, &priv->progress_anim);
+
+  if (progress == 1.0)
+    gb_widget_fade_hide (GTK_WIDGET (priv->progress_bar));
+}
+
 static gboolean
 gb_editor_view_get_can_preview (GbDocumentView *view)
 {
@@ -73,7 +120,7 @@ gb_editor_view_get_can_preview (GbDocumentView *view)
   GtkSourceBuffer *buffer;
   const gchar *lang_id;
 
-  g_return_val_if_fail (GB_IS_EDITOR_VIEW (view), NULL);
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (view), FALSE);
 
   priv = GB_EDITOR_VIEW (view)->priv;
 
@@ -156,6 +203,12 @@ gb_editor_view_connect (GbEditorView     *view,
                            G_CALLBACK (gb_editor_view_notify_language),
                            view,
                            G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (document,
+                           "notify::progress",
+                           G_CALLBACK (gb_editor_view_notify_progress),
+                           view,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -175,6 +228,9 @@ gb_editor_view_disconnect (GbEditorView     *view,
 
   g_signal_handlers_disconnect_by_func (document,
                                         G_CALLBACK (gb_editor_view_notify_language),
+                                        view);
+  g_signal_handlers_disconnect_by_func (document,
+                                        G_CALLBACK (gb_editor_view_notify_progress),
                                         view);
 }
 
@@ -374,6 +430,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
                                                "/org/gnome/builder/ui/gb-editor-view.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, frame);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, paned);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, progress_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, split_button);
 
   g_type_ensure (GB_TYPE_EDITOR_FRAME);

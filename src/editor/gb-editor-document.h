@@ -60,6 +60,7 @@ GType                  gb_editor_document_get_type                     (void) G_
 GtkSourceFile         *gb_editor_document_get_file                     (GbEditorDocument       *document);
 void                   gb_editor_document_set_file                     (GbEditorDocument       *document,
                                                                         GtkSourceFile          *file);
+gdouble                gb_editor_document_get_progress                 (GbEditorDocument       *document);
 GbSourceChangeMonitor *gb_editor_document_get_change_monitor           (GbEditorDocument       *document);
 GbSourceCodeAssistant *gb_editor_document_get_code_assistant           (GbEditorDocument       *document);
 gboolean               gb_editor_document_get_trim_trailing_whitespace (GbEditorDocument       *document);

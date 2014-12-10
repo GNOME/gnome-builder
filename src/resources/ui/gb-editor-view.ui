@@ -27,19 +27,37 @@
       </object>
     </child>
     <child>
-      <object class="GtkPaned" id="paned">
-        <property name="orientation">vertical</property>
-        <property name="vexpand">true</property>
+      <object class="GtkOverlay">
         <property name="visible">true</property>
+        <property name="expand">true</property>
+        <child type="overlay">
+          <object class="GtkProgressBar" id="progress_bar">
+            <property name="visible">false</property>
+            <property name="fraction">0.0</property>
+            <property name="valign">start</property>
+            <property name="halign">fill</property>
+            <property name="vexpand">false</property>
+            <style>
+              <class name="osd"/>
+            </style>
+          </object>
+        </child>
         <child>
-          <object class="GbEditorFrame" id="frame">
+          <object class="GtkPaned" id="paned">
+            <property name="orientation">vertical</property>
             <property name="expand">true</property>
             <property name="visible">true</property>
+            <child>
+              <object class="GbEditorFrame" id="frame">
+                <property name="expand">true</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="resize">true</property>
+                <property name="shrink">false</property>
+              </packing>
+            </child>
           </object>
-          <packing>
-            <property name="resize">true</property>
-            <property name="shrink">false</property>
-          </packing>
         </child>
       </object>
     </child>

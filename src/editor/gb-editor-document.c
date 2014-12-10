@@ -672,6 +672,16 @@ gb_editor_document_save_finish (GbEditorDocument  *document,
 }
 
 static void
+gb_editor_document_save (GbDocument *document)
+{
+  GbEditorDocument *self = (GbEditorDocument *)document;
+
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (self));
+
+  gb_editor_document_save_async (self, NULL, NULL, NULL);
+}
+
+static void
 gb_editor_document_restore_insert (GbEditorDocument *document)
 {
   GbEditorFileMarks *marks;
@@ -1051,4 +1061,5 @@ gb_editor_document_init_document (GbDocumentInterface *iface)
   iface->get_modified = gb_editor_document_get_modified;
   iface->get_title = gb_editor_document_get_title;
   iface->create_view = gb_editor_document_create_view;
+  iface->save = gb_editor_document_save;
 }
