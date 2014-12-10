@@ -21,7 +21,6 @@
 
 #include <gio/gio.h>
 
-#include "gb-editor-tab.h"
 #include "gb-navigation-item.h"
 
 G_BEGIN_DECLS
@@ -54,7 +53,6 @@ struct _GbEditorNavigationItemClass
 GFile                *gb_editor_navigation_item_get_file        (GbEditorNavigationItem *item);
 guint                 gb_editor_navigation_item_get_line        (GbEditorNavigationItem *item);
 guint                 gb_editor_navigation_item_get_line_offset (GbEditorNavigationItem *item);
-GbEditorTab          *gb_editor_navigation_item_get_tab         (GbEditorNavigationItem *item);
 GType                 gb_editor_navigation_item_get_type        (void) G_GNUC_CONST;
 GbNavigationItem     *gb_editor_navigation_item_new             (GFile                  *file,
                                                                  guint                   line,

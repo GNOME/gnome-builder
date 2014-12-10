@@ -22,8 +22,6 @@
 #include <gtk/gtk.h>
 
 #include "gb-document-grid.h"
-#include "gb-editor-tab.h"
-#include "gb-notebook.h"
 
 G_BEGIN_DECLS
 

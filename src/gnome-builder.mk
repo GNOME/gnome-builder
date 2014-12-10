@@ -45,8 +45,6 @@ libgnome_builder_la_SOURCES = \
 	src/devhelp/gb-devhelp-document.h \
 	src/devhelp/gb-devhelp-view.c \
 	src/devhelp/gb-devhelp-view.h \
-	src/devhelp/gb-devhelp-tab.c \
-	src/devhelp/gb-devhelp-tab.h \
 	src/documents/gb-document.c \
 	src/documents/gb-document.h \
 	src/documents/gb-document-grid.c \
@@ -76,9 +74,6 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-editor-navigation-item.h \
 	src/editor/gb-editor-settings-widget.c \
 	src/editor/gb-editor-settings-widget.h \
-	src/editor/gb-editor-tab.c \
-	src/editor/gb-editor-tab.h \
-	src/editor/gb-editor-tab-private.h \
 	src/editor/gb-editor-view.c \
 	src/editor/gb-editor-view.h \
 	src/editor/gb-editor-workspace.c \
@@ -112,8 +107,6 @@ libgnome_builder_la_SOURCES = \
 	src/markdown/gs-markdown.h \
 	src/markdown/gb-markdown-preview.c \
 	src/markdown/gb-markdown-preview.h \
-	src/markdown/gb-markdown-tab.c \
-	src/markdown/gb-markdown-tab.h \
 	src/navigation/gb-navigation-list.h \
 	src/navigation/gb-navigation-list.c \
 	src/navigation/gb-navigation-item.h \
@@ -159,19 +152,6 @@ libgnome_builder_la_SOURCES = \
 	src/log/gb-log.h \
 	src/nautilus/nautilus-floating-bar.c \
 	src/nautilus/nautilus-floating-bar.h \
-	src/tabs/gb-multi-notebook.c \
-	src/tabs/gb-multi-notebook.h \
-	src/tabs/gb-notebook.c \
-	src/tabs/gb-notebook.h \
-	src/tabs/gb-tab-label.c \
-	src/tabs/gb-tab-label.h \
-	src/tabs/gb-tab-label-private.h \
-	src/tabs/gb-tab.c \
-	src/tabs/gb-tab.h \
-	src/tabs/gb-tab-grid.c \
-	src/tabs/gb-tab-grid.h \
-	src/tabs/gb-tab-stack.c \
-	src/tabs/gb-tab-stack.h \
 	src/theatrics/gb-box-theatric.c \
 	src/theatrics/gb-box-theatric.h \
 	src/tree/gb-tree.c \
