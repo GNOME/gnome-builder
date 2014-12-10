@@ -51,18 +51,18 @@ struct _GbSourceViewClass
 {
   GtkSourceViewClass parent_class;
 
-  void (*push_snippet) (GbSourceView           *view,
-                        GbSourceSnippet        *snippet,
-                        GbSourceSnippetContext *context,
-                        GtkTextIter            *location);
-  void (*pop_snippet)  (GbSourceView           *view,
-                        GbSourceSnippet        *snippet);
-  void (*begin_search) (GbSourceView           *view,
-                        GtkDirectionType        direction,
-                        const gchar            *search_text);
-  void (*draw_layer)   (GbSourceView           *view,
-                        GtkTextViewLayer        layer,
-                        cairo_t                *cr);
+  void (*push_snippet)          (GbSourceView           *view,
+                                GbSourceSnippet        *snippet,
+                                GbSourceSnippetContext *context,
+                                GtkTextIter            *location);
+  void (*pop_snippet)           (GbSourceView           *view,
+                                GbSourceSnippet        *snippet);
+  void (*begin_search)          (GbSourceView           *view,
+                                GtkDirectionType        direction,
+                                const gchar            *search_text);
+  void (*draw_layer)            (GbSourceView           *view,
+                                 GtkTextViewLayer        layer,
+                                 cairo_t                *cr);
   void (*request_documentation) (GbSourceView           *view);
   void (*display_documentation) (GbSourceView           *view,
                                  const gchar            *search_text);
