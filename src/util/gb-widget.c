@@ -156,23 +156,6 @@ gb_widget_snapshot (GtkWidget *widget,
   return surface;
 }
 
-void
-gb_widget_shrink_font (gpointer widget)
-{
-  PangoFontDescription *f = NULL;
-  GtkStyleContext *style;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  style = gtk_widget_get_style_context (widget);
-  gtk_style_context_get (style, GTK_STATE_FLAG_NORMAL, "font", &f, NULL);
-  pango_font_description_set_size (f,
-                                   (PANGO_SCALE_SMALL *
-                                    pango_font_description_get_size (f)));
-  gtk_widget_override_font (widget, f);
-  pango_font_description_free (f);
-}
-
 static void
 hide_callback (gpointer data)
 {

@@ -25,7 +25,6 @@ G_BEGIN_DECLS
 
 void             gb_widget_add_style_class (gpointer      widget,
                                             const gchar  *class_name);
-void             gb_widget_shrink_font     (gpointer      widget);
 cairo_surface_t *gb_widget_snapshot        (GtkWidget    *widget,
                                             gint          width,
                                             gint          height,
