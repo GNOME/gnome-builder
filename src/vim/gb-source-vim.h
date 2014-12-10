@@ -69,20 +69,20 @@ struct _GbSourceVimClass
   gpointer _padding5;
 };
 
-GType            gb_source_vim_get_type        (void) G_GNUC_CONST;
-GType            gb_source_vim_mode_get_type   (void) G_GNUC_CONST;
-GbSourceVim     *gb_source_vim_new             (GtkTextView     *text_view);
-GbSourceVimMode  gb_source_vim_get_mode        (GbSourceVim     *vim);
-void             gb_source_vim_set_mode        (GbSourceVim     *vim,
-                                                GbSourceVimMode  mode);
-const gchar     *gb_source_vim_get_phrase      (GbSourceVim     *vim);
-gboolean         gb_source_vim_get_enabled     (GbSourceVim     *vim);
-void             gb_source_vim_set_enabled     (GbSourceVim     *vim,
-                                                gboolean         enabled);
-GtkWidget       *gb_source_vim_get_text_view   (GbSourceVim     *vim);
-gboolean         gb_source_vim_execute_command (GbSourceVim     *vim,
-                                                const gchar     *command);
-gboolean         gb_source_vim_is_command      (const gchar     *command_text);
+GType            gb_source_vim_get_type         (void);
+GType            gb_source_vim_mode_get_type    (void);
+GbSourceVim     *gb_source_vim_new              (GtkTextView     *text_view);
+GbSourceVimMode  gb_source_vim_get_mode         (GbSourceVim     *vim);
+void             gb_source_vim_set_mode         (GbSourceVim     *vim,
+                                                 GbSourceVimMode  mode);
+const gchar     *gb_source_vim_get_phrase       (GbSourceVim     *vim);
+gboolean         gb_source_vim_get_enabled      (GbSourceVim     *vim);
+void             gb_source_vim_set_enabled      (GbSourceVim     *vim,
+                                                 gboolean         enabled);
+GtkWidget       *gb_source_vim_get_text_view    (GbSourceVim     *vim);
+gboolean         gb_source_vim_execute_command  (GbSourceVim     *vim,
+                                                 const gchar     *command);
+gboolean         gb_source_vim_is_command       (const gchar     *command_text);
 gchar           *gb_source_vim_get_current_word (GbSourceVim     *vim,
                                                  GtkTextIter     *begin,
                                                  GtkTextIter     *end);
