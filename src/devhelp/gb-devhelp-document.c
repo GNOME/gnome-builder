@@ -111,7 +111,7 @@ gb_devhelp_document_set_search (GbDevhelpDocument *document,
 
   if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->model), &iter))
     {
-      DhLink *link = NULL;
+      DhLink *link_ = NULL;
       gchar *name = NULL;
 
       /*
@@ -123,14 +123,14 @@ gb_devhelp_document_set_search (GbDevhelpDocument *document,
        */
       gtk_tree_model_get (GTK_TREE_MODEL (priv->model), &iter,
                           DH_KEYWORD_MODEL_COL_NAME, &name,
-                          DH_KEYWORD_MODEL_COL_LINK, &link,
+                          DH_KEYWORD_MODEL_COL_LINK, &link_,
                           -1);
 
-      if (name && link)
+      if (name && link_)
         {
-          g_debug ("Name=\"%s\" Uri=\"%s\"", name, dh_link_get_uri (link));
+          g_debug ("Name=\"%s\" Uri=\"%s\"", name, dh_link_get_uri (link_));
           gb_devhelp_document_set_title (document, name);
-          gb_devhelp_document_set_uri (document, dh_link_get_uri (link));
+          gb_devhelp_document_set_uri (document, dh_link_get_uri (link_));
         }
 
       g_clear_pointer (&name, g_free);
