@@ -210,3 +210,11 @@ GtkButton.tab-control-last {
     border-bottom-right-radius: 0px;
 }
 
+
+GbCreditsWidget GtkEventBox {
+    background-color: #000000;
+}
+
+GbCreditsWidget GtkLabel {
+    color: #eeeeef;
+}

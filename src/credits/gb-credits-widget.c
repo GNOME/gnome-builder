@@ -165,22 +165,6 @@ gb_credits_widget_set_progress (GbCreditsWidget *widget,
     }
 }
 
-static void
-gb_credits_widget_constructed (GObject *object)
-{
-  GbCreditsWidget *widget = (GbCreditsWidget *)object;
-  GdkRGBA white = { 0 };
-  GdkRGBA black = { 0 };
-
-  gdk_rgba_parse (&white, "#fffefe");
-  gdk_rgba_parse (&black, "#000001");
-
-  gtk_widget_override_background_color (GTK_WIDGET (widget->priv->event_box),
-                                        GTK_STATE_FLAG_NORMAL, &black);
-  gtk_widget_override_color (GTK_WIDGET (widget->priv->grid),
-                             GTK_STATE_FLAG_NORMAL, &white);
-}
-
 static gboolean
 gb_credits_widget_get_child_position (GtkOverlay    *overlay,
                                       GtkWidget     *widget,
@@ -271,7 +255,6 @@ gb_credits_widget_class_init (GbCreditsWidgetClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkOverlayClass *overlay_class = GTK_OVERLAY_CLASS (klass);
 
-  object_class->constructed = gb_credits_widget_constructed;
   object_class->dispose = gb_credits_widget_dispose;
   object_class->get_property = gb_credits_widget_get_property;
   object_class->set_property = gb_credits_widget_set_property;
