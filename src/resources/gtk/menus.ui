@@ -116,23 +116,33 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Split Document _Left</attribute>
+        <attribute name="label" translatable="yes">Split Document Left</attribute>
         <attribute name="action">stack.split-document-left</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Split Document _Right</attribute>
+        <attribute name="label" translatable="yes">Split Document Right</attribute>
         <attribute name="action">stack.split-document-right</attribute>
       </item>
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Preview</attribute>
+        <attribute name="label" translatable="yes">Save</attribute>
+        <attribute name="action">stack.save</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Save _As</attribute>
+        <attribute name="action">stack.save-as</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Preview</attribute>
         <attribute name="action">stack.preview</attribute>
       </item>
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">Close Document</attribute>
+        <attribute name="label" translatable="yes">_Close Document</attribute>
         <attribute name="action">stack.close</attribute>
       </item>
     </section>

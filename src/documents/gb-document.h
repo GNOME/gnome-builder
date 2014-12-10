@@ -38,12 +38,16 @@ struct _GbDocumentInterface
   gboolean     (*get_modified) (GbDocument *document);
   const gchar *(*get_title)    (GbDocument *document);
   GtkWidget   *(*create_view)  (GbDocument *document);
+  void         (*save)         (GbDocument *document);
+  void         (*save_as)      (GbDocument *document);
 };
 
 GType        gb_document_get_type     (void) G_GNUC_CONST;
 gboolean     gb_document_get_modified (GbDocument *document);
 const gchar *gb_document_get_title    (GbDocument *document);
 GtkWidget   *gb_document_create_view  (GbDocument *document);
+void         gb_document_save         (GbDocument *document);
+void         gb_document_save_as      (GbDocument *document);
 
 G_END_DECLS
 

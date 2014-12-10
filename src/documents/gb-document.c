@@ -70,6 +70,24 @@ gb_document_create_view (GbDocument *document)
   return ret;
 }
 
+void
+gb_document_save (GbDocument *document)
+{
+  g_return_if_fail (GB_IS_DOCUMENT (document));
+
+  if (GB_DOCUMENT_GET_INTERFACE (document)->save)
+    GB_DOCUMENT_GET_INTERFACE (document)->save (document);
+}
+
+void
+gb_document_save_as (GbDocument *document)
+{
+  g_return_if_fail (GB_IS_DOCUMENT (document));
+
+  if (GB_DOCUMENT_GET_INTERFACE (document)->save_as)
+    GB_DOCUMENT_GET_INTERFACE (document)->save_as (document);
+}
+
 static void
 gb_document_default_init (GbDocumentInterface *iface)
 {

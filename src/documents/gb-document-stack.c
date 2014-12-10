@@ -439,6 +439,32 @@ gb_document_stack_preview_activate (GSimpleAction *action,
 }
 
 static void
+gb_document_stack_save_activate (GSimpleAction *action,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
+{
+  GbDocumentStackPrivate *priv;
+  GbDocumentStack *stack = user_data;
+
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
+
+  priv = stack->priv;
+
+  if (priv->active_view)
+    {
+      GbDocument *document;
+
+      document = gb_document_view_get_document (priv->active_view);
+
+      if (document)
+        {
+          if (gb_document_get_modified (document))
+            gb_document_save (document);
+        }
+    }
+}
+
+static void
 gb_document_stack_grab_focus (GtkWidget *widget)
 {
   GbDocumentStack *stack = (GbDocumentStack *)widget;
@@ -784,6 +810,7 @@ gb_document_stack_init (GbDocumentStack *self)
     { "focus-search", gb_document_stack_focus_search },
     { "close", gb_document_stack_close },
     { "preview", gb_document_stack_preview_activate },
+    { "save", gb_document_stack_save_activate },
   };
 
   self->priv = gb_document_stack_get_instance_private (self);
