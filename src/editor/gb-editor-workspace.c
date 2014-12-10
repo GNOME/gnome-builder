@@ -41,51 +41,31 @@ void
 gb_editor_workspace_open (GbEditorWorkspace *workspace,
                           GFile             *file)
 {
-#if 0
-  GbEditorTab *tab;
+  GbDocumentManager *manager;
+  GbDocument *document;
 
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-  g_return_if_fail (G_IS_FILE (file));
 
-  tab = g_object_new (GB_TYPE_EDITOR_TAB,
-                      "visible", TRUE,
-                      NULL);
-  gtk_container_add (GTK_CONTAINER (workspace->priv->tab_grid),
-                     GTK_WIDGET (tab));
-  gb_tab_grid_focus_tab (workspace->priv->tab_grid, GB_TAB (tab));
+  manager = gb_document_manager_get_default ();
+  document = gb_document_manager_find_with_file (manager, file);
 
-  gb_editor_tab_open_file (tab, file);
-#endif
-}
-
-static void
-save_tab (GSimpleAction *action,
-          GVariant      *parameter,
-          gpointer       user_data)
-{
-#if 0
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  tab = gb_tab_grid_get_active (workspace->priv->tab_grid);
-  if (GB_IS_EDITOR_TAB (tab))
-    gb_editor_tab_save (GB_EDITOR_TAB (tab));
-#endif
-}
-
-static void
-save_as_tab (GSimpleAction *action,
-             GVariant      *parameter,
-             gpointer       user_data)
-{
-#if 0
-  GbEditorWorkspace *workspace = user_data;
-  GbTab *tab;
-
-  tab = gb_tab_grid_get_active (workspace->priv->tab_grid);
-  if (GB_IS_EDITOR_TAB (tab))
-    gb_editor_tab_save_as (GB_EDITOR_TAB (tab));
-#endif
+  if (!document)
+    {
+      document = GB_DOCUMENT (gb_editor_document_new ());
+      gb_document_manager_add (manager, document);
+      gb_document_grid_focus_document (workspace->priv->document_grid,
+                                       document);
+      /* TODO: Should we add simplified gb_editor_document_open()? */
+      gb_editor_document_load_async (GB_EDITOR_DOCUMENT (document),
+                                     file,
+                                     NULL, /* cancellable */
+                                     NULL,
+                                     workspace);
+      g_object_unref (document);
+    }
+  else
+    gb_document_grid_focus_document (workspace->priv->document_grid,
+                                     document);
 }
 
 static void
@@ -123,26 +103,6 @@ jump_to_doc_tab (GSimpleAction *action,
                                    document);
 
   g_clear_object (&reffed);
-}
-
-static void
-gb_editor_workspace_load_cb (GObject      *object,
-                             GAsyncResult *result,
-                             gpointer      user_data)
-{
-  GbEditorDocument *document = (GbEditorDocument *)object;
-  GbEditorWorkspace *workspace = user_data;
-  GError *error = NULL;
-
-  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
-  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
-
-  if (!gb_editor_document_load_finish (document, result, &error))
-    {
-      /* TODO: propagate error */
-      g_warning ("%s", error->message);
-      g_clear_error (&error);
-    }
 }
 
 static void
@@ -192,36 +152,8 @@ open_tab (GSimpleAction *action,
 
       for (iter = files; iter; iter = iter->next)
         {
-          GbDocumentManager *manager;
-          GbDocument *document;
-          GFile *file = iter->data;
-
-          manager = gb_document_manager_get_default ();
-          document = gb_document_manager_find_with_file (manager, file);
-
-          if (!document)
-            {
-              /*
-               * TODO: I'm not convinced this goes here.
-               *       It's also ugly.
-               */
-
-              document = GB_DOCUMENT (gb_editor_document_new ());
-              gb_document_manager_add (manager, document);
-              gb_document_grid_focus_document (workspace->priv->document_grid,
-                                               document);
-              gb_editor_document_load_async (GB_EDITOR_DOCUMENT (document),
-                                             file,
-                                             NULL, /* cancellable */
-                                             gb_editor_workspace_load_cb,
-                                             workspace);
-              g_object_unref (document);
-            }
-          else
-            gb_document_grid_focus_document (workspace->priv->document_grid,
-                                             document);
-
-          g_clear_object (&file);
+          gb_editor_workspace_open (workspace, G_FILE (iter->data));
+          g_clear_object (&iter->data);
         }
 
       g_slist_free (files);
@@ -299,8 +231,6 @@ gb_editor_workspace_init (GbEditorWorkspace *workspace)
 {
     const GActionEntry entries[] = {
       { "open", open_tab },
-      { "save", save_tab },
-      { "save-as", save_as_tab },
       { "jump-to-doc", jump_to_doc_tab, "s" },
     };
 
