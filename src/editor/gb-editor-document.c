@@ -682,6 +682,62 @@ gb_editor_document_save (GbDocument *document)
 }
 
 static void
+gb_editor_document_save_as (GbDocument *document,
+                            GtkWidget  *toplevel)
+{
+  GbEditorDocument *self = (GbEditorDocument *)document;
+  const gchar *title;
+  GtkDialog *dialog;
+  GtkWidget *suggested;
+  GFile *chosen_file;
+  guint response;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (self));
+
+  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                         "action", GTK_FILE_CHOOSER_ACTION_SAVE,
+                         "do-overwrite-confirmation", TRUE,
+                         "local-only", FALSE,
+                         "select-multiple", FALSE,
+                         "show-hidden", FALSE,
+                         "transient-for", toplevel,
+                         "title", _("Save Document As"),
+                         NULL);
+
+  title = gb_document_get_title (document);
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), title);
+
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("Cancel"), GTK_RESPONSE_CANCEL,
+                          _("Save"), GTK_RESPONSE_OK,
+                          NULL);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog),
+                                                  GTK_RESPONSE_OK);
+  gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
+                               GTK_STYLE_CLASS_SUGGESTED_ACTION);
+
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_hide (GTK_WIDGET (dialog));
+
+  if (response == GTK_RESPONSE_OK)
+    {
+      chosen_file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      gtk_source_file_set_location (self->priv->file, chosen_file);
+      gb_editor_document_save_async (self, NULL, NULL, NULL);
+      g_clear_object (&chosen_file);
+    }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  EXIT;
+}
+
+static void
 gb_editor_document_restore_insert (GbEditorDocument *document)
 {
   GbEditorFileMarks *marks;
@@ -1062,4 +1118,5 @@ gb_editor_document_init_document (GbDocumentInterface *iface)
   iface->get_title = gb_editor_document_get_title;
   iface->create_view = gb_editor_document_create_view;
   iface->save = gb_editor_document_save;
+  iface->save_as = gb_editor_document_save_as;
 }
