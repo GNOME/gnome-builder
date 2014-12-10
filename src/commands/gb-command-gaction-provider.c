@@ -104,7 +104,7 @@ gb_command_gaction_provider_lookup (GbCommandProvider *provider,
    *       ApplicationWindow which is a GActionMap.
    */
 
-  widget = GTK_WIDGET (gb_command_provider_get_active_tab (provider));
+  widget = GTK_WIDGET (gb_command_provider_get_active_view (provider));
   while (widget)
     {
       if (G_IS_ACTION_MAP (widget))
@@ -119,7 +119,7 @@ gb_command_gaction_provider_lookup (GbCommandProvider *provider,
 
   /*
    * Now try to lookup the action from the workspace up, which is the case if
-   * we don't have an active tab.
+   * we don't have an active view.
    */
   if (!action)
     {
@@ -236,7 +236,7 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
 
   prefix = g_strndup (initial_command_text, tmp - initial_command_text);
 
-  widget = GTK_WIDGET (gb_command_provider_get_active_tab (provider));
+  widget = GTK_WIDGET (gb_command_provider_get_active_view (provider));
   while (widget)
     {
       if (G_IS_ACTION_GROUP (widget))
@@ -247,7 +247,7 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
 
   /*
    * Now try to lookup the action from the workspace up, which is the case if
-   * we don't have an active tab.
+   * we don't have an active view.
    */
   workbench = gb_command_provider_get_workbench (provider);
   workspace = gb_workbench_get_active_workspace (workbench);

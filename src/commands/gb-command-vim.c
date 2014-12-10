@@ -19,15 +19,12 @@
 #include <glib/gi18n.h>
 
 #include "gb-command-vim.h"
-#include "gb-editor-frame-private.h"
-#include "gb-editor-tab.h"
-#include "gb-editor-tab-private.h"
-#include "gb-source-vim.h"
+#include "gb-source-view.h"
 
 struct _GbCommandVimPrivate
 {
-  GbEditorTab *tab;
-  gchar       *command_text;
+  GbSourceView *source_view;
+  gchar        *command_text;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbCommandVim, gb_command_vim, GB_TYPE_COMMAND)
@@ -35,44 +32,44 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbCommandVim, gb_command_vim, GB_TYPE_COMMAND)
 enum {
   PROP_0,
   PROP_COMMAND_TEXT,
-  PROP_TAB,
+  PROP_SOURCE_VIEW,
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-GbEditorTab *
-gb_command_vim_get_tab (GbCommandVim *vim)
+GbSourceView *
+gb_command_vim_get_source_view (GbCommandVim *vim)
 {
   g_return_val_if_fail (GB_IS_COMMAND_VIM (vim), NULL);
 
-  return vim->priv->tab;
+  return vim->priv->source_view;
 }
 
 static void
-gb_command_vim_set_tab (GbCommandVim *vim,
-                        GbEditorTab  *tab)
+gb_command_vim_set_source_view (GbCommandVim *vim,
+                                GbSourceView *source_view)
 {
   g_return_if_fail (GB_IS_COMMAND_VIM (vim));
-  g_return_if_fail (!tab || GB_IS_EDITOR_TAB (tab));
+  g_return_if_fail (!source_view || GB_IS_SOURCE_VIEW (source_view));
 
-  if (tab != vim->priv->tab)
+  if (source_view != vim->priv->source_view)
     {
-      if (vim->priv->tab)
+      if (vim->priv->source_view)
         {
-          g_object_remove_weak_pointer (G_OBJECT (vim->priv->tab),
-                                        (gpointer *)&vim->priv->tab);
-          vim->priv->tab = NULL;
+          g_object_remove_weak_pointer (G_OBJECT (vim->priv->source_view),
+                                        (gpointer *)&vim->priv->source_view);
+          vim->priv->source_view = NULL;
         }
 
-      if (tab)
+      if (source_view)
         {
-          vim->priv->tab = tab;
-          g_object_add_weak_pointer (G_OBJECT (vim->priv->tab),
-                                     (gpointer *)&vim->priv->tab);
+          vim->priv->source_view = source_view;
+          g_object_add_weak_pointer (G_OBJECT (vim->priv->source_view),
+                                     (gpointer *)&vim->priv->source_view);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_TAB]);
+      g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_SOURCE_VIEW]);
     }
 }
 
@@ -107,13 +104,11 @@ gb_command_vim_execute (GbCommand *command)
 
   g_return_val_if_fail (GB_IS_COMMAND_VIM (self), NULL);
 
-  if (self->priv->tab && self->priv->command_text)
+  if (self->priv->source_view)
     {
       GbSourceVim *vim;
-      GbEditorFrame *frame;
 
-      frame = gb_editor_tab_get_last_frame (self->priv->tab);
-      vim = gb_source_view_get_vim (frame->priv->source_view);
+      vim = gb_source_view_get_vim (self->priv->source_view);
       gb_source_vim_execute_command (vim, self->priv->command_text);
     }
 
@@ -125,7 +120,7 @@ gb_command_vim_finalize (GObject *object)
 {
   GbCommandVimPrivate *priv = GB_COMMAND_VIM (object)->priv;
 
-  gb_command_vim_set_tab (GB_COMMAND_VIM (object), NULL);
+  gb_command_vim_set_source_view (GB_COMMAND_VIM (object), NULL);
   g_clear_pointer (&priv->command_text, g_free);
 
   G_OBJECT_CLASS (gb_command_vim_parent_class)->finalize (object);
@@ -145,8 +140,8 @@ gb_command_vim_get_property (GObject    *object,
       g_value_set_string (value, gb_command_vim_get_command_text (self));
       break;
 
-    case PROP_TAB:
-      g_value_set_object (value, gb_command_vim_get_tab (self));
+    case PROP_SOURCE_VIEW:
+      g_value_set_object (value, gb_command_vim_get_source_view (self));
       break;
 
     default:
@@ -168,8 +163,8 @@ gb_command_vim_set_property (GObject      *object,
       gb_command_vim_set_command_text (self, g_value_get_string (value));
       break;
 
-    case PROP_TAB:
-      gb_command_vim_set_tab (self, g_value_get_object (value));
+    case PROP_SOURCE_VIEW:
+      gb_command_vim_set_source_view (self, g_value_get_object (value));
       break;
 
     default:
@@ -199,15 +194,15 @@ gb_command_vim_class_init (GbCommandVimClass *klass)
   g_object_class_install_property (object_class, PROP_COMMAND_TEXT,
                                    gParamSpecs [PROP_COMMAND_TEXT]);
 
-  gParamSpecs [PROP_TAB] =
-    g_param_spec_object ("tab",
-                         _("Tab"),
-                         _("The editor tab to modify."),
-                         GB_TYPE_EDITOR_TAB,
+  gParamSpecs [PROP_SOURCE_VIEW] =
+    g_param_spec_object ("source-view",
+                         _("Source View"),
+                         _("The source view to modify."),
+                         GB_TYPE_SOURCE_VIEW,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TAB,
-                                   gParamSpecs [PROP_TAB]);
+  g_object_class_install_property (object_class, PROP_SOURCE_VIEW,
+                                   gParamSpecs [PROP_SOURCE_VIEW]);
 }
 
 static void

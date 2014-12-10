@@ -22,7 +22,7 @@
 #include <gio/gio.h>
 
 #include "gb-command.h"
-#include "gb-tab.h"
+#include "gb-document-view.h"
 #include "gb-workbench.h"
 
 G_BEGIN_DECLS
@@ -58,18 +58,18 @@ struct _GbCommandProviderClass
                           const gchar       *command_text);
 };
 
-GType              gb_command_provider_get_type       (void) G_GNUC_CONST;
-GbCommandProvider *gb_command_provider_new            (GbWorkbench       *workbench);
-GbWorkbench       *gb_command_provider_get_workbench  (GbCommandProvider *provider);
-GbTab             *gb_command_provider_get_active_tab (GbCommandProvider *provider);
-gint               gb_command_provider_get_priority   (GbCommandProvider *provider);
-void               gb_command_provider_set_priority   (GbCommandProvider *provider,
-                                                       gint               priority);
-GbCommand         *gb_command_provider_lookup         (GbCommandProvider *provider,
-                                                       const gchar       *command_text);
-void               gb_command_provider_complete      (GbCommandProvider  *provider,
-                                                      GPtrArray          *completions,
-                                                      const gchar        *initial_command_text);
+GType              gb_command_provider_get_type        (void);
+GbCommandProvider *gb_command_provider_new             (GbWorkbench       *workbench);
+GbWorkbench       *gb_command_provider_get_workbench   (GbCommandProvider *provider);
+GbDocumentView    *gb_command_provider_get_active_view (GbCommandProvider *provider);
+gint               gb_command_provider_get_priority    (GbCommandProvider *provider);
+void               gb_command_provider_set_priority    (GbCommandProvider *provider,
+                                                        gint               priority);
+GbCommand         *gb_command_provider_lookup          (GbCommandProvider *provider,
+                                                        const gchar       *command_text);
+void               gb_command_provider_complete        (GbCommandProvider *provider,
+                                                        GPtrArray         *completions,
+                                                        const gchar       *initial_command_text);
 
 G_END_DECLS
 

@@ -18,9 +18,11 @@
 
 #define G_LOG_DOMAIN "vim-command-provider"
 
+#include "gb-editor-view.h"
+#include "gb-editor-frame-private.h"
 #include "gb-command-vim.h"
 #include "gb-command-vim-provider.h"
-#include "gb-editor-tab.h"
+#include "gb-source-view.h"
 #include "gb-source-vim.h"
 
 G_DEFINE_TYPE (GbCommandVimProvider, gb_command_vim_provider,
@@ -40,7 +42,8 @@ gb_command_vim_provider_lookup (GbCommandProvider *provider,
 {
   GbWorkbench *workbench;
   GSettings *settings;
-  GbTab *active_tab;
+  GbDocumentView *active_view;
+  GbEditorFrame *frame;
 
   g_return_val_if_fail (GB_IS_COMMAND_VIM_PROVIDER (provider), NULL);
   g_return_val_if_fail (command_text, NULL);
@@ -53,22 +56,27 @@ gb_command_vim_provider_lookup (GbCommandProvider *provider,
   /* Make sure vim-mode is enabled */
   if (!g_settings_get_boolean (settings, "vim-mode"))
     return NULL;
-  
+
   /* Make sure we have a workbench */
   workbench = gb_command_provider_get_workbench (provider);
   if (!GB_IS_WORKBENCH (workbench))
     return NULL;
 
   /* Make sure we have an editor tab last focused */
-  active_tab = gb_command_provider_get_active_tab (provider);
-  if (!GB_IS_EDITOR_TAB (active_tab))
+  active_view = gb_command_provider_get_active_view (provider);
+  if (!GB_IS_EDITOR_VIEW (active_view))
+    return NULL;
+
+  /* TODO: Perhaps get the last focused frame? */
+  frame = gb_editor_view_get_frame1 (GB_EDITOR_VIEW (active_view));
+  if (!GB_IS_EDITOR_FRAME (frame))
     return NULL;
 
   /* See if GbEditorVim recognizes this command */
   if (gb_source_vim_is_command (command_text))
     return g_object_new (GB_TYPE_COMMAND_VIM,
                          "command-text", command_text,
-                         "tab", active_tab,
+                         "source-view", frame->priv->source_view,
                          NULL);
 
   return NULL;
