@@ -50,6 +50,13 @@ gb_devhelp_document_new (void)
   return g_object_new (GB_TYPE_DEVHELP_DOCUMENT, NULL);
 }
 
+void
+gb_devhelp_document_set_search (GbDevhelpDocument *document,
+                                const gchar       *search)
+{
+  g_return_if_fail (GB_IS_DEVHELP_DOCUMENT (document));
+}
+
 const gchar *
 gb_devhelp_document_get_title (GbDocument *document)
 {
