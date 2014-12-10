@@ -885,7 +885,7 @@ gb_editor_frame_on_command_toggled (GbEditorFrame *frame,
 static void
 gb_editor_frame_on_jump_to_doc (GbEditorFrame *frame,
                                 const gchar   *search_text,
-                                GbSourceVim   *vim)
+                                GbSourceView  *source_view)
 {
   GbWorkbench *workbench;
   GAction *action;
@@ -895,7 +895,7 @@ gb_editor_frame_on_jump_to_doc (GbEditorFrame *frame,
   ENTRY;
 
   g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
-  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+  g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
   g_return_if_fail (search_text);
 
   workbench = gb_widget_get_workbench (GTK_WIDGET (frame));
@@ -1088,8 +1088,9 @@ gb_editor_frame_constructed (GObject *object)
                            G_CALLBACK (gb_editor_frame_on_command_toggled),
                            frame,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (vim,
-                           "jump-to-doc",
+
+  g_signal_connect_object (priv->source_view,
+                           "display-documentation",
                            G_CALLBACK (gb_editor_frame_on_jump_to_doc),
                            frame,
                            G_CONNECT_SWAPPED);
