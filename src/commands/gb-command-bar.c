@@ -23,6 +23,7 @@
 #include "gb-command-bar.h"
 #include "gb-command-bar-item.h"
 #include "gb-command-manager.h"
+#include "gb-glib.h"
 #include "gb-string.h"
 #include "gb-widget.h"
 
@@ -36,6 +37,7 @@ struct _GbCommandBarPrivate
   GtkFlowBox        *flow_box;
 
   gchar             *last_completion;
+  GtkWidget         *last_focus;
 
   GQueue            *history;
   GList             *history_current;
@@ -81,7 +83,24 @@ gb_command_bar_hide (GbCommandBar *bar)
   workbench = gb_widget_get_workbench (GTK_WIDGET (bar));
   workspace = gb_workbench_get_active_workspace (workbench);
 
-  gtk_widget_grab_focus (GTK_WIDGET (workspace));
+  if (bar->priv->last_focus)
+    gtk_widget_grab_focus (bar->priv->last_focus);
+  else
+    gtk_widget_grab_focus (GTK_WIDGET (workspace));
+}
+
+static void
+gb_command_bar_set_last_focus (GbCommandBar *bar,
+                               GtkWidget    *widget)
+{
+  g_return_if_fail (GB_IS_COMMAND_BAR (bar));
+  g_return_if_fail (!widget || GTK_IS_WIDGET (widget));
+
+  if (bar->priv->last_focus != widget)
+    {
+      gb_clear_weak_pointer (&bar->priv->last_focus);
+      gb_set_weak_pointer (widget, &bar->priv->last_focus);
+    }
 }
 
 /**
@@ -93,7 +112,14 @@ gb_command_bar_hide (GbCommandBar *bar)
 void
 gb_command_bar_show (GbCommandBar *bar)
 {
+  GtkWidget *toplevel;
+  GtkWidget *focus;
+
   g_return_if_fail (GB_IS_COMMAND_BAR (bar));
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (bar));
+  focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+  gb_command_bar_set_last_focus (bar, focus);
 
   gtk_widget_hide (GTK_WIDGET (bar->priv->completion_scroller));
 
@@ -530,6 +556,7 @@ gb_command_bar_finalize (GObject *object)
   g_clear_pointer (&bar->priv->last_completion, g_free);
   g_clear_pointer (&bar->priv->saved_text, g_free);
   g_queue_free_full (bar->priv->history, g_free);
+  gb_clear_weak_pointer (&bar->priv->last_focus);
 
   G_OBJECT_CLASS (gb_command_bar_parent_class)->finalize (object);
 }
