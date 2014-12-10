@@ -60,10 +60,53 @@ gb_devhelp_view_get_document (GbDocumentView *view)
 }
 
 static void
+gb_devhelp_view_notify_uri (GbDevhelpView     *view,
+                            GParamSpec        *pspec,
+                            GbDevhelpDocument *document)
+{
+  const gchar *uri;
+
+  g_return_if_fail (GB_IS_DEVHELP_VIEW (view));
+  g_return_if_fail (GB_IS_DEVHELP_DOCUMENT (document));
+
+  uri = gb_devhelp_document_get_uri (document);
+  if (uri)
+    webkit_web_view_load_uri (view->priv->web_view, uri);
+}
+
+static void
 gb_devhelp_view_set_document (GbDevhelpView     *view,
                               GbDevhelpDocument *document)
 {
+  GbDevhelpViewPrivate *priv;
+
   g_return_if_fail (GB_IS_DEVHELP_VIEW (view));
+
+  priv = view->priv;
+
+  if (priv->document != document)
+    {
+      if (priv->document)
+        {
+          g_signal_handlers_disconnect_by_func (priv->document,
+                                                G_CALLBACK (gb_devhelp_view_notify_uri),
+                                                view);
+          g_clear_object (&priv->document);
+        }
+
+      if (document)
+        {
+          priv->document = g_object_ref (document);
+          g_signal_connect_object (priv->document,
+                                   "notify::uri",
+                                   G_CALLBACK (gb_devhelp_view_notify_uri),
+                                   view,
+                                   G_CONNECT_SWAPPED);
+        }
+
+      gb_devhelp_view_notify_uri (view, NULL, document);
+      g_object_notify (G_OBJECT (view), "document");
+    }
 }
 
 static void
