@@ -83,6 +83,9 @@ GtkWidget       *gb_source_vim_get_text_view   (GbSourceVim     *vim);
 gboolean         gb_source_vim_execute_command (GbSourceVim     *vim,
                                                 const gchar     *command);
 gboolean         gb_source_vim_is_command      (const gchar     *command_text);
+gchar           *gb_source_vim_get_current_word (GbSourceVim     *vim,
+                                                 GtkTextIter     *begin,
+                                                 GtkTextIter     *end);
 
 G_END_DECLS
 

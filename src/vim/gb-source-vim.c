@@ -2242,6 +2242,33 @@ gb_source_vim_yank (GbSourceVim *vim)
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 }
 
+gchar *
+gb_source_vim_get_current_word (GbSourceVim *vim,
+                                GtkTextIter *begin,
+                                GtkTextIter *end)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), NULL);
+  g_return_val_if_fail (begin, NULL);
+  g_return_val_if_fail (end, NULL);
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, begin, insert);
+
+  if (text_iter_forward_vim_word_end (begin))
+    {
+      gtk_text_iter_assign (end, begin);
+      gtk_text_iter_forward_char (end);
+      if (text_iter_backward_vim_word (begin))
+        return gtk_text_iter_get_slice (begin, end);
+    }
+
+  return NULL;
+}
+
 static gboolean
 gb_source_vim_select_current_word (GbSourceVim *vim,
                                    GtkTextIter *begin,
