@@ -88,9 +88,11 @@ enum {
 
 enum {
   BEGIN_SEARCH,
+  DISPLAY_DOCUMENTATION,
   DRAW_LAYER,
   POP_SNIPPET,
   PUSH_SNIPPET,
+  REQUEST_DOCUMENTATION,
   LAST_SIGNAL
 };
 
@@ -268,6 +270,18 @@ gb_source_view_vim_begin_search (GbSourceView *view,
   g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   gb_source_view_begin_search (view, GTK_DIR_DOWN, text);
+}
+
+static void
+gb_source_view_vim_jump_to_doc (GbSourceView *view,
+                                const gchar  *text,
+                                GbSourceVim  *vim)
+{
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+
+  if (text)
+    g_signal_emit (view, gSignals [DISPLAY_DOCUMENTATION], 0, text);
 }
 
 static void
@@ -1646,6 +1660,37 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
 }
 
 static void
+gb_source_view_display_documentation (GbSourceView *view,
+                                      const gchar  *search_text)
+{
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+  g_return_if_fail (search_text);
+
+}
+
+static void
+gb_source_view_request_documentation (GbSourceView *view)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+  gchar *word;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  word = gb_source_vim_get_current_word (view->priv->vim, &begin, &end);
+
+  if (word)
+    {
+      g_signal_emit (view, gSignals [DISPLAY_DOCUMENTATION], 0, word);
+      g_free (word);
+    }
+
+  EXIT;
+}
+
+static void
 gb_source_view_grab_focus (GtkWidget *widget)
 {
   invalidate_window (GB_SOURCE_VIEW (widget));
@@ -1835,6 +1880,7 @@ gb_source_view_class_init (GbSourceViewClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
+  GtkBindingSet *binding_set;
 
   object_class->constructed = gb_source_view_constructed;
   object_class->finalize = gb_source_view_finalize;
@@ -1849,6 +1895,8 @@ gb_source_view_class_init (GbSourceViewClass *klass)
   text_view_class->draw_layer = gb_source_view_draw_layer;
 
   klass->draw_layer = gb_source_view_real_draw_layer;
+  klass->display_documentation = gb_source_view_display_documentation;
+  klass->request_documentation = gb_source_view_request_documentation;
 
   gParamSpecs [PROP_ENABLE_WORD_COMPLETION] =
     g_param_spec_boolean ("enable-word-completion",
@@ -1930,12 +1978,23 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                   GB_TYPE_SOURCE_VIEW,
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GbSourceViewClass, begin_search),
-                  NULL,
-                  NULL,
-                  NULL,
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
                   G_TYPE_NONE,
                   2,
                   GTK_TYPE_DIRECTION_TYPE,
+                  G_TYPE_STRING);
+
+  gSignals [DISPLAY_DOCUMENTATION] =
+    g_signal_new ("display-documentation",
+                  GB_TYPE_SOURCE_VIEW,
+                  G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GbSourceViewClass,
+                                   display_documentation),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
                   G_TYPE_STRING);
 
   gSignals [DRAW_LAYER] =
@@ -1950,6 +2009,24 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                   2,
                   GTK_TYPE_TEXT_VIEW_LAYER,
                   G_TYPE_POINTER);
+
+  gSignals [REQUEST_DOCUMENTATION] =
+    g_signal_new ("request-documentation",
+                  GB_TYPE_SOURCE_VIEW,
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GbSourceViewClass,
+                                   request_documentation),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  0);
+
+  binding_set = gtk_binding_set_by_class (klass);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_k,
+                                GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                "request-documentation",
+                                0);
 }
 
 static void
@@ -1983,6 +2060,11 @@ gb_source_view_init (GbSourceView *view)
   g_signal_connect_object (view->priv->vim,
                            "begin-search",
                            G_CALLBACK (gb_source_view_vim_begin_search),
+                           view,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (view->priv->vim,
+                           "jump-to-doc",
+                           G_CALLBACK (gb_source_view_vim_jump_to_doc),
                            view,
                            G_CONNECT_SWAPPED);
 
