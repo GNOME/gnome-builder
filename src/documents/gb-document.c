@@ -80,12 +80,13 @@ gb_document_save (GbDocument *document)
 }
 
 void
-gb_document_save_as (GbDocument *document)
+gb_document_save_as (GbDocument *document,
+                     GtkWidget  *toplevel)
 {
   g_return_if_fail (GB_IS_DOCUMENT (document));
 
   if (GB_DOCUMENT_GET_INTERFACE (document)->save_as)
-    GB_DOCUMENT_GET_INTERFACE (document)->save_as (document);
+    GB_DOCUMENT_GET_INTERFACE (document)->save_as (document, toplevel);
 }
 
 static void
