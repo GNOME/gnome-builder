@@ -153,4 +153,5 @@ static void
 gb_document_init (GbDocumentInterface *iface)
 {
   iface->get_title = gb_devhelp_document_get_title;
+  iface->get_modified = gb_devhelp_document_get_modified;
 }
