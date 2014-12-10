@@ -642,6 +642,8 @@ gb_editor_document_save_async (GbEditorDocument      *document,
       gb_editor_file_mark_set_column (mark, column);
     }
 
+  gb_editor_document_set_progress (document, 0.0);
+
   gtk_source_file_saver_save_async (saver,
                                     G_PRIORITY_DEFAULT,
                                     cancellable,
@@ -770,6 +772,8 @@ gb_editor_document_load_async (GbEditorDocument      *document,
 
   loader = gtk_source_file_loader_new (GTK_SOURCE_BUFFER (document),
                                        document->priv->file);
+
+  gb_editor_document_set_progress (document, 0.0);
 
   gtk_source_file_loader_load_async (loader,
                                      G_PRIORITY_DEFAULT,
