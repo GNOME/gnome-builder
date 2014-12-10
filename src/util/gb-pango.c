@@ -20,19 +20,22 @@
 
 #include "gb-pango.h"
 
-static void
-_add_keyval (GString     *str,
-             const gchar *key,
-             const gchar *value)
-{
-  g_string_append_printf (str, "%s:%s;", key, value);
-}
+#define FONT_FAMILY  "font-family"
+#define FONT_VARIANT "font-variant"
+#define FONT_STRETCH "font-stretch"
+#define FONT_WEIGHT  "font-weight"
+#define FONT_SIZE    "font-size"
 
 gchar *
 gb_pango_font_description_to_css (const PangoFontDescription *font_desc)
 {
   PangoFontMask mask;
   GString *str;
+
+#define ADD_KEYVAL(key,fmt) \
+  g_string_append(str,key":"fmt";")
+#define ADD_KEYVAL_PRINTF(key,fmt,...) \
+  g_string_append_printf(str,key":"fmt";", __VA_ARGS__)
 
   g_return_val_if_fail (font_desc, NULL);
 
@@ -45,7 +48,7 @@ gb_pango_font_description_to_css (const PangoFontDescription *font_desc)
       const gchar *family;
 
       family = pango_font_description_get_family (font_desc);
-      _add_keyval (str, "font-family", family);
+      ADD_KEYVAL_PRINTF (FONT_FAMILY, "\"%s\"", family);
     }
 
   if ((mask & PANGO_FONT_MASK_STYLE) != 0)
@@ -57,11 +60,11 @@ gb_pango_font_description_to_css (const PangoFontDescription *font_desc)
       switch (variant)
         {
         case PANGO_VARIANT_NORMAL:
-          _add_keyval (str, "font-variant", "normal");
+          ADD_KEYVAL (FONT_VARIANT, "normal");
           break;
 
         case PANGO_VARIANT_SMALL_CAPS:
-          _add_keyval (str, "font-variant", "small-caps");
+          ADD_KEYVAL (FONT_VARIANT, "small-caps");
           break;
 
         default:
@@ -71,53 +74,50 @@ gb_pango_font_description_to_css (const PangoFontDescription *font_desc)
 
   if ((mask & PANGO_FONT_MASK_WEIGHT))
     {
-      gchar weight[12];
+      gint weight;
 
-      g_snprintf (weight, sizeof weight, "%d",
-                  (int)pango_font_description_get_weight (font_desc));
-      _add_keyval (str, "font-weight", weight);
+      weight = pango_font_description_get_weight (font_desc);
+      ADD_KEYVAL_PRINTF ("font-weight", "%d", weight);
     }
 
   if ((mask & PANGO_FONT_MASK_STRETCH))
     {
-      const gchar *key = "font-stretch";
-
       switch (pango_font_description_get_stretch (font_desc))
         {
         case PANGO_STRETCH_ULTRA_CONDENSED:
-          _add_keyval (str, key, "untra-condensed");
+          ADD_KEYVAL (FONT_STRETCH, "untra-condensed");
           break;
 
         case PANGO_STRETCH_EXTRA_CONDENSED:
-          _add_keyval (str, key, "extra-condensed");
+          ADD_KEYVAL (FONT_STRETCH, "extra-condensed");
           break;
 
         case PANGO_STRETCH_CONDENSED:
-          _add_keyval (str, key, "condensed");
+          ADD_KEYVAL (FONT_STRETCH, "condensed");
           break;
 
         case PANGO_STRETCH_SEMI_CONDENSED:
-          _add_keyval (str, key, "semi-condensed");
+          ADD_KEYVAL (FONT_STRETCH, "semi-condensed");
           break;
 
         case PANGO_STRETCH_NORMAL:
-          _add_keyval (str, key, "normal");
+          ADD_KEYVAL (FONT_STRETCH, "normal");
           break;
 
         case PANGO_STRETCH_SEMI_EXPANDED:
-          _add_keyval (str, key, "semi-expanded");
+          ADD_KEYVAL (FONT_STRETCH, "semi-expanded");
           break;
 
         case PANGO_STRETCH_EXPANDED:
-          _add_keyval (str, key, "expanded");
+          ADD_KEYVAL (FONT_STRETCH, "expanded");
           break;
 
         case PANGO_STRETCH_EXTRA_EXPANDED:
-          _add_keyval (str, key, "extra-expanded");
+          ADD_KEYVAL (FONT_STRETCH, "extra-expanded");
           break;
 
         case PANGO_STRETCH_ULTRA_EXPANDED:
-          _add_keyval (str, key, "untra-expanded");
+          ADD_KEYVAL (FONT_STRETCH, "untra-expanded");
           break;
 
         default:
@@ -128,12 +128,13 @@ gb_pango_font_description_to_css (const PangoFontDescription *font_desc)
   if ((mask & PANGO_FONT_MASK_SIZE))
     {
       gint font_size;
-      gchar value[12];
 
       font_size = pango_font_description_get_size (font_desc) / PANGO_SCALE;
-      g_snprintf (value, sizeof value, "%dpx", font_size);
-      _add_keyval (str, "font-size", value);
+      ADD_KEYVAL_PRINTF ("font-size", "%dpx", font_size);
     }
 
   return g_string_free (str, FALSE);
+
+#undef ADD_KEYVAL
+#undef ADD_KEYVAL_PRINTF
 }
