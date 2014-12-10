@@ -114,6 +114,13 @@ gb_devhelp_document_set_search (GbDevhelpDocument *document,
       DhLink *link = NULL;
       gchar *name = NULL;
 
+      /*
+       * NOTE:
+       *
+       * Note that the DH_KEYWORD_MODEL_COL_LINK is specified as a
+       * G_TYPE_POINTER so dh_link_unref() does not need to be called
+       * on the resulting structure.
+       */
       gtk_tree_model_get (GTK_TREE_MODEL (priv->model), &iter,
                           DH_KEYWORD_MODEL_COL_NAME, &name,
                           DH_KEYWORD_MODEL_COL_LINK, &link,
@@ -127,7 +134,6 @@ gb_devhelp_document_set_search (GbDevhelpDocument *document,
         }
 
       g_clear_pointer (&name, g_free);
-      g_clear_pointer (&link, dh_link_unref);
     }
 }
 
