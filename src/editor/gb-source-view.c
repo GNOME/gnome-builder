@@ -32,6 +32,7 @@
 #include "gb-editor-document.h"
 #include "gb-gtk.h"
 #include "gb-log.h"
+#include "gb-pango.h"
 #include "gb-source-auto-indenter.h"
 #include "gb-source-search-highlighter.h"
 #include "gb-source-snippets.h"
@@ -52,6 +53,7 @@ struct _GbSourceViewPrivate
   GtkSourceCompletionProvider *snippets_provider;
   GtkSourceCompletionProvider *words_provider;
   GbSourceVim                 *vim;
+  GtkCssProvider              *css_provider;
 
   GSettings                   *language_settings;
   GSettings                   *editor_settings;
@@ -1707,9 +1709,22 @@ gb_source_view_set_font_name (GbSourceView *view,
   g_return_if_fail (GB_IS_SOURCE_VIEW (view));
 
   font_desc = pango_font_description_from_string (font_name);
-  gtk_widget_override_font (GTK_WIDGET (view), font_desc);
+
   if (font_desc)
-    pango_font_description_free (font_desc);
+    {
+      gchar *str;
+      gchar *css;
+
+      str = gb_pango_font_description_to_css (font_desc);
+      css = g_strdup_printf ("GbSourceView { %s }", str);
+      gtk_css_provider_load_from_data (view->priv->css_provider, css, -1, NULL);
+      pango_font_description_free (font_desc);
+
+      g_free (css);
+      g_free (str);
+    }
+  else
+    gtk_css_provider_load_from_data (view->priv->css_provider, "", -1, NULL);
 }
 
 GbSourceAutoIndenter *
@@ -1726,10 +1741,19 @@ gb_source_view_get_auto_indenter (GbSourceView *view)
 static void
 gb_source_view_constructed (GObject *object)
 {
+  GbSourceViewPrivate *priv;
   GtkSourceCompletion *completion;
   GbSourceView *source_view = (GbSourceView *)object;
+  GtkStyleContext *context;
+
+  priv = source_view->priv;
 
   G_OBJECT_CLASS (gb_source_view_parent_class)->constructed (object);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (object));
+  gtk_style_context_add_provider (context,
+                                  GTK_STYLE_PROVIDER (priv->css_provider),
+                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (object));
   gtk_source_completion_add_provider (completion,
@@ -1794,6 +1818,7 @@ gb_source_view_finalize (GObject *object)
   g_clear_object (&priv->snippets_provider);
   g_clear_object (&priv->words_provider);
   g_clear_object (&priv->vim);
+  g_clear_object (&priv->css_provider);
 
   G_OBJECT_CLASS (gb_source_view_parent_class)->finalize (object);
 }
@@ -2035,6 +2060,8 @@ gb_source_view_init (GbSourceView *view)
   GtkSourceCompletion *completion;
 
   view->priv = gb_source_view_get_instance_private (view);
+
+  view->priv->css_provider = gtk_css_provider_new ();
 
   view->priv->snippets = g_queue_new ();
 
