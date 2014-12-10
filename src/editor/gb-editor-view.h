@@ -23,6 +23,7 @@
 
 #include "gb-document-view.h"
 #include "gb-editor-document.h"
+#include "gb-editor-frame.h"
 
 G_BEGIN_DECLS
 
@@ -51,8 +52,10 @@ struct _GbEditorViewClass
   GbDocumentViewClass parent;
 };
 
-GType      gb_editor_view_get_type (void);
-GtkWidget *gb_editor_view_new      (GbEditorDocument *document);
+GType          gb_editor_view_get_type   (void);
+GtkWidget     *gb_editor_view_new        (GbEditorDocument *document);
+GbEditorFrame *gb_editor_view_get_frame1 (GbEditorView     *view);
+GbEditorFrame *gb_editor_view_get_frame2 (GbEditorView     *view);
 
 G_END_DECLS
 

@@ -114,6 +114,28 @@ gb_editor_view_create_preview (GbDocumentView *view)
   return document;
 }
 
+GbEditorFrame *
+gb_editor_view_get_frame1 (GbEditorView *view)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (view), NULL);
+
+  return view->priv->frame;
+}
+
+GbEditorFrame *
+gb_editor_view_get_frame2 (GbEditorView *view)
+{
+  GtkWidget *child2;
+
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (view), NULL);
+
+  child2 = gtk_paned_get_child2 (view->priv->paned);
+  if (GB_IS_EDITOR_FRAME (child2))
+    return GB_EDITOR_FRAME (child2);
+
+  return NULL;
+}
+
 static void
 gb_editor_view_connect (GbEditorView     *view,
                         GbEditorDocument *document)
