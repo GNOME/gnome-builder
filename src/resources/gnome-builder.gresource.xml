@@ -22,6 +22,7 @@
     <file>ui/gb-command-bar-item.ui</file>
     <file>ui/gb-credits-widget.ui</file>
     <file>ui/gb-devhelp-tab.ui</file>
+    <file>ui/gb-devhelp-view.ui</file>
     <file>ui/gb-document-stack.ui</file>
     <file>ui/gb-document-menu-button.ui</file>
     <file>ui/gb-editor-settings-widget.ui</file>

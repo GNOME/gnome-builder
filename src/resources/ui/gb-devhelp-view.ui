@@ -13,6 +13,7 @@
     <child>
       <object class="WebKitWebView" id="web_view">
         <property name="visible">true</property>
+        <property name="expand">true</property>
       </object>
     </child>
   </template>

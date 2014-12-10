@@ -25,7 +25,11 @@
 
 struct _GbDevhelpViewPrivate
 {
+  /* References owned by view */
   GbDevhelpDocument *document;
+
+  /* References owned by Gtk template */
+  WebKitWebView *web_view;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbDevhelpView, gb_devhelp_view,
@@ -134,6 +138,9 @@ gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-devhelp-view.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GbDevhelpView, web_view);
+
+  g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }
 
 static void
