@@ -74,6 +74,28 @@ gb_document_manager_get_count (GbDocumentManager *manager)
 }
 
 GbDocument *
+gb_document_manager_find_with_type (GbDocumentManager *manager,
+                                    GType              type)
+{
+  guint i;
+
+  g_return_val_if_fail (GB_IS_DOCUMENT_MANAGER (manager), NULL);
+  g_return_val_if_fail (g_type_is_a (type, GB_TYPE_DOCUMENT), NULL);
+
+  for (i = 0; i < manager->priv->documents->len; i++)
+    {
+      GbDocument *document;
+
+      document = g_ptr_array_index (manager->priv->documents, i);
+
+      if (g_type_is_a (G_TYPE_FROM_INSTANCE (document), type))
+        return document;
+    }
+
+  return NULL;
+}
+
+GbDocument *
 gb_document_manager_find_with_file (GbDocumentManager *manager,
                                     GFile             *file)
 {

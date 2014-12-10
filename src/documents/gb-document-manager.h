@@ -68,6 +68,8 @@ GList             *gb_document_manager_get_documents  (GbDocumentManager *manage
 guint              gb_document_manager_get_count      (GbDocumentManager *manager);
 GbDocument        *gb_document_manager_find_with_file (GbDocumentManager *manager,
                                                        GFile             *file);
+GbDocument        *gb_document_manager_find_with_type (GbDocumentManager *manager,
+                                                       GType              type);
 
 G_END_DECLS
 
