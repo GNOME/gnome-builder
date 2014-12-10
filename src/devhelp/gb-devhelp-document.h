@@ -52,6 +52,7 @@ GType              gb_devhelp_document_get_type   (void);
 GbDevhelpDocument *gb_devhelp_document_new        (void);
 void               gb_devhelp_document_set_search (GbDevhelpDocument *document,
                                                    const gchar       *search);
+const gchar       *gb_devhelp_document_get_uri    (GbDevhelpDocument *document);
 
 G_END_DECLS
 
