@@ -326,8 +326,8 @@ gb_html_markdown_transform (GbHtmlDocument *document,
   GsMarkdown *md;
   gchar *str;
 
-  g_return_if_fail (GB_IS_HTML_DOCUMENT (document));
-  g_return_if_fail (content);
+  g_return_val_if_fail (GB_IS_HTML_DOCUMENT (document), NULL);
+  g_return_val_if_fail (content, NULL);
 
   md = gs_markdown_new (GS_MARKDOWN_OUTPUT_HTML);
   gs_markdown_set_autolinkify (md, TRUE);
