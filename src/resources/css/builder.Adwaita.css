@@ -218,3 +218,8 @@ GbCreditsWidget GtkEventBox {
 GbCreditsWidget GtkLabel {
     color: #eeeeef;
 }
+
+
+GbSourceStyleSchemeWidget GtkSourceView {
+    font-family: Monospace;
+}

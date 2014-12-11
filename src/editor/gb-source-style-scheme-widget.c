@@ -90,8 +90,7 @@ gb_source_style_scheme_widget_set_style_scheme_name (GbSourceStyleSchemeWidget *
 
 static GtkListBoxRow *
 make_row (GtkSourceStyleScheme *scheme,
-          GtkSourceLanguage    *language,
-          PangoFontDescription *font_desc)
+          GtkSourceLanguage    *language)
 {
   GtkListBoxRow *row;
   GtkSourceBuffer *buffer;
@@ -101,7 +100,6 @@ make_row (GtkSourceStyleScheme *scheme,
 
   g_return_val_if_fail (GTK_SOURCE_IS_STYLE_SCHEME (scheme), NULL);
   g_return_val_if_fail (GTK_SOURCE_IS_LANGUAGE (language), NULL);
-  g_return_val_if_fail (font_desc, NULL);
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "visible", TRUE,
@@ -131,7 +129,6 @@ make_row (GtkSourceStyleScheme *scheme,
                        "right-margin-position", 30,
                        "show-right-margin", TRUE,
                        NULL);
-  gtk_widget_override_font (GTK_WIDGET (view), font_desc);
   gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (view));
 
   return row;
@@ -143,7 +140,6 @@ gb_source_style_scheme_widget_populate (GbSourceStyleSchemeWidget *widget)
   GtkSourceLanguageManager *lm;
   GtkSourceLanguage *lang;
   GtkSourceStyleSchemeManager *manager;
-  PangoFontDescription *font_desc;
   const gchar * const *scheme_ids;
   guint i;
 
@@ -155,19 +151,15 @@ gb_source_style_scheme_widget_populate (GbSourceStyleSchemeWidget *widget)
   lm = gtk_source_language_manager_get_default ();
   lang = gtk_source_language_manager_get_language (lm, "c");
 
-  font_desc = pango_font_description_from_string ("Monospace");
-
   for (i = 0; scheme_ids [i]; i++)
     {
       GtkListBoxRow *row;
       GtkSourceStyleScheme *scheme;
 
       scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_ids [i]);
-      row = make_row (scheme, lang, font_desc);
+      row = make_row (scheme, lang);
       gtk_container_add (GTK_CONTAINER (widget->priv->list_box), GTK_WIDGET (row));
     }
-
-  pango_font_description_free (font_desc);
 }
 
 static void
