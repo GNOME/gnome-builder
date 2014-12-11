@@ -29,14 +29,12 @@
 #include "gb-log.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
-#include "gb-workbench-actions.h"
 #include "gedit-menu-stack-switcher.h"
 
 #define UI_RESOURCE_PATH "/org/gnome/builder/ui/gb-workbench.ui"
 
 struct _GbWorkbenchPrivate
 {
-  GbWorkbenchActions     *actions;
   GbCommandManager       *command_manager;
   GbNavigationList       *navigation_list;
 
@@ -441,7 +439,6 @@ gb_workbench_dispose (GObject *object)
 
   priv = GB_WORKBENCH (object)->priv;
 
-  g_clear_object (&priv->actions);
   g_clear_object (&priv->command_manager);
   g_clear_object (&priv->navigation_list);
 
@@ -593,8 +590,4 @@ gb_workbench_init (GbWorkbench *workbench)
   workbench->priv->navigation_list = g_object_new (GB_TYPE_NAVIGATION_LIST,
                                                    "workbench", workbench,
                                                    NULL);
-  workbench->priv->actions = gb_workbench_actions_new (workbench);
-  gtk_widget_insert_action_group (GTK_WIDGET (workbench),
-                                  "workbench",
-                                  G_ACTION_GROUP (workbench->priv->actions));
 }

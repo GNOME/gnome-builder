@@ -178,8 +178,6 @@ libgnome_builder_la_SOURCES = \
 	src/vim/gb-source-vim.h \
 	src/workbench/gb-workbench.c \
 	src/workbench/gb-workbench.h \
-	src/workbench/gb-workbench-actions.c \
-	src/workbench/gb-workbench-actions.h \
 	src/workbench/gb-workspace.c \
 	src/workbench/gb-workspace.h
 
