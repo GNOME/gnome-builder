@@ -27,6 +27,8 @@ libgnome_builder_la_SOURCES = \
 	src/commands/gb-command-bar.h \
 	src/commands/gb-command-bar-item.c \
 	src/commands/gb-command-bar-item.h \
+	src/commands/gb-command-gaction.c \
+	src/commands/gb-command-gaction.h \
 	src/commands/gb-command-gaction-provider.c \
 	src/commands/gb-command-gaction-provider.h \
 	src/commands/gb-command-manager.c \
