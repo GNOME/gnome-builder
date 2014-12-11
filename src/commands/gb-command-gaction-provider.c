@@ -56,7 +56,7 @@ discover_groups (GbCommandGactionProvider *provider)
        widget;
        widget = gtk_widget_get_parent (widget))
     {
-      gchar **prefixes;
+      const gchar **prefixes;
       guint i;
 
       prefixes = gtk_widget_list_action_prefixes (widget);
@@ -75,7 +75,7 @@ discover_groups (GbCommandGactionProvider *provider)
                 list = g_list_append (list, group);
             }
 
-          g_strfreev (prefixes);
+          g_free (prefixes);
         }
     }
 
