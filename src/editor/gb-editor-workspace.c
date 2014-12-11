@@ -106,6 +106,29 @@ jump_to_doc_tab (GSimpleAction *action,
 }
 
 static void
+new_document (GSimpleAction *action,
+              GVariant      *parameter,
+              gpointer       user_data)
+{
+  GbEditorWorkspace *workspace = user_data;
+  GbEditorDocument *document;
+  GbDocumentManager *manager;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+
+  /* TODO: We should fetch the document manager from the workbench so that we
+   * can have one per loaded project. */
+  manager = gb_document_manager_get_default ();
+  document = gb_editor_document_new ();
+
+  gb_document_manager_add (manager, GB_DOCUMENT (document));
+  gb_document_grid_focus_document (workspace->priv->document_grid,
+                                   GB_DOCUMENT (document));
+
+  g_clear_object (&document);
+}
+
+static void
 open_tab (GSimpleAction *action,
           GVariant      *parameter,
           gpointer       user_data)
@@ -230,6 +253,7 @@ gb_editor_workspace_init (GbEditorWorkspace *workspace)
 {
     const GActionEntry entries[] = {
       { "open", open_tab },
+      { "new-document", new_document },
       { "jump-to-doc", jump_to_doc_tab, "s" },
     };
 
