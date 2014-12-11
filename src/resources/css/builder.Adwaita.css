@@ -81,6 +81,10 @@ GbEditorFrame .gb-search-slider {
     padding: 2px;
 }
 
+GdTaggedEntry {
+    color: @theme_fg_color;
+}
+
 
 /*
  * Workspace switcher, thin-panel on left side.
