@@ -6,6 +6,7 @@
       <object class="GtkBox">
         <property name="visible">true</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
         <child>
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
