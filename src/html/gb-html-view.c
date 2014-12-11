@@ -58,9 +58,7 @@ gb_html_view_changed (GbHtmlView    *view,
                       GtkTextBuffer *buffer)
 {
   GbHtmlViewPrivate *priv;
-  GtkTextIter begin;
-  GtkTextIter end;
-  gchar *content = NULL;
+  gchar *content;
   gchar *base_uri = NULL;
 
   ENTRY;
@@ -87,9 +85,7 @@ gb_html_view_changed (GbHtmlView    *view,
         }
     }
 
-  gtk_text_buffer_get_bounds (buffer, &begin, &end);
-  content = gtk_text_buffer_get_text (buffer, &begin, &end, TRUE);
-
+  content = gb_html_document_get_content (view->priv->document);
   webkit_web_view_load_html (view->priv->web_view, content, base_uri);
 
   g_free (content);

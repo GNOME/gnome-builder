@@ -48,8 +48,16 @@ struct _GbHtmlDocumentClass
   GObjectClass parent;
 };
 
-GType          gb_html_document_get_type   (void);
-GtkTextBuffer *gb_html_document_get_buffer (GbHtmlDocument *document);
+typedef gchar *(*GbHtmlDocumentTransform) (GbHtmlDocument *document,
+                                           const gchar    *content);
+
+GType          gb_html_document_get_type           (void);
+GtkTextBuffer *gb_html_document_get_buffer         (GbHtmlDocument          *document);
+void           gb_html_document_set_transform_func (GbHtmlDocument          *document,
+                                                    GbHtmlDocumentTransform  transform);
+gchar         *gb_html_document_get_content        (GbHtmlDocument          *document);
+gchar         *gb_html_markdown_transform          (GbHtmlDocument          *document,
+                                                    const gchar             *content);
 
 G_END_DECLS
 

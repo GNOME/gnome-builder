@@ -151,12 +151,32 @@ gb_editor_view_create_preview (GbDocumentView *view)
 {
   GbEditorView *self = (GbEditorView *)view;
   GbDocument *document;
+  GbHtmlDocumentTransform transform = NULL;
+  GtkSourceBuffer *buffer;
+  GtkSourceLanguage *language;
 
   g_return_val_if_fail (GB_IS_EDITOR_VIEW (self), NULL);
 
+  buffer = GTK_SOURCE_BUFFER (self->priv->document);
+  language = gtk_source_buffer_get_language (buffer);
+
+  if (language)
+    {
+      const gchar *lang_id;
+
+      lang_id = gtk_source_language_get_id (language);
+
+      if (g_strcmp0 (lang_id, "markdown") == 0)
+        transform = gb_html_markdown_transform;
+    }
+
   document = g_object_new (GB_TYPE_HTML_DOCUMENT,
-                           "buffer", self->priv->document,
+                           "buffer", buffer,
                            NULL);
+
+  if (transform)
+    gb_html_document_set_transform_func (GB_HTML_DOCUMENT (document),
+                                         transform);
 
   return document;
 }

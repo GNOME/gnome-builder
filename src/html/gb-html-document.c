@@ -24,11 +24,13 @@
 #include "gb-editor-document.h"
 #include "gb-html-document.h"
 #include "gb-html-view.h"
+#include "gs-markdown.h"
 
 struct _GbHtmlDocumentPrivate
 {
-  GtkTextBuffer *buffer;
-  gchar         *title;
+  GtkTextBuffer           *buffer;
+  gchar                   *title;
+  GbHtmlDocumentTransform  transform;
 };
 
 static void gb_html_document_init_document (GbDocumentInterface *iface);
@@ -52,6 +54,41 @@ GbHtmlDocument *
 gb_html_document_new (void)
 {
   return g_object_new (GB_TYPE_HTML_DOCUMENT, NULL);
+}
+
+void
+gb_html_document_set_transform_func (GbHtmlDocument          *document,
+                                     GbHtmlDocumentTransform  transform)
+{
+  g_return_if_fail (GB_IS_HTML_DOCUMENT (document));
+
+  document->priv->transform = transform;
+}
+
+gchar *
+gb_html_document_get_content (GbHtmlDocument *document)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+  gchar *tmp;
+  gchar *str;
+
+  g_return_val_if_fail (GB_IS_HTML_DOCUMENT (document), NULL);
+
+  if (!document->priv->buffer)
+    return NULL;
+
+  gtk_text_buffer_get_bounds (document->priv->buffer, &begin, &end);
+  str = gtk_text_iter_get_slice (&begin, &end);
+
+  if (document->priv->transform)
+    {
+      tmp = document->priv->transform (document, str);
+      g_free (str);
+      str = tmp;
+    }
+
+  return str;
 }
 
 static const gchar *
@@ -280,4 +317,48 @@ gb_html_document_init_document (GbDocumentInterface *iface)
   iface->get_title = gb_html_document_get_title;
   iface->get_modified = gb_html_document_get_modified;
   iface->create_view = gb_html_document_create_view;
+}
+
+gchar *
+gb_html_markdown_transform (GbHtmlDocument *document,
+                            const gchar    *content)
+{
+  GsMarkdown *md;
+  gchar *str;
+
+  g_return_if_fail (GB_IS_HTML_DOCUMENT (document));
+  g_return_if_fail (content);
+
+  md = gs_markdown_new (GS_MARKDOWN_OUTPUT_HTML);
+  gs_markdown_set_autolinkify (md, TRUE);
+  gs_markdown_set_escape (md, TRUE);
+
+  str = gs_markdown_parse (md, content);
+
+  if (str)
+    {
+      GBytes *css;
+      const guint8 *css_data;
+      gchar *tmp;
+
+      css = g_resources_lookup_data ("/org/gnome/builder/css/markdown.css",
+                                     0, NULL);
+      css_data = g_bytes_get_data (css, NULL);
+      tmp = g_strdup_printf ("<html>\n"
+                             " <style>%s</style>\n"
+                             " <body>\n"
+                             "  <div class=\"markdown-body\">\n"
+                             "   %s\n"
+                             "  </div>\n"
+                             " </body>\n"
+                             "</html>",
+                             (gchar *)css_data, str);
+      g_free (str);
+
+      str = tmp;
+    }
+
+  g_clear_object (&md);
+
+  return str;
 }
