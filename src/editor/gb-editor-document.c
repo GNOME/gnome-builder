@@ -891,9 +891,11 @@ gb_editor_document_get_modified (GbDocument *document)
 const gchar *
 gb_editor_document_get_title (GbDocument *document)
 {
-  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), NULL);
+  GbEditorDocument *self = (GbEditorDocument *)document;
 
-  return GB_EDITOR_DOCUMENT (document)->priv->title;
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (self), NULL);
+
+  return self->priv->title;
 }
 
 static GtkWidget *
@@ -909,6 +911,16 @@ gb_editor_document_create_view (GbDocument *document)
                        NULL);
 
   return GTK_WIDGET (view);
+}
+
+static void
+gb_editor_document_constructed (GObject *object)
+{
+  GbEditorDocument *self = (GbEditorDocument *)object;
+
+  G_OBJECT_CLASS (gb_editor_document_parent_class)->constructed (object);
+
+  gb_editor_document_notify_file_location (self, NULL, self->priv->file);
 }
 
 static void
@@ -1002,6 +1014,7 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkTextBufferClass *text_buffer_class = GTK_TEXT_BUFFER_CLASS (klass);
 
+  object_class->constructed = gb_editor_document_constructed;
   object_class->finalize = gb_editor_document_finalize;
   object_class->get_property = gb_editor_document_get_property;
   object_class->set_property = gb_editor_document_set_property;
