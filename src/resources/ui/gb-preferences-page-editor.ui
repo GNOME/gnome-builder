@@ -3,113 +3,198 @@
   <!-- interface-requires gtk+ 3.8 -->
   <template class="GbPreferencesPageEditor" parent="GbPreferencesPage">
     <child>
-      <object class="GtkGrid">
-        <property name="visible">True</property>
-        <property name="row-spacing">6</property>
-        <property name="column-spacing">12</property>
+      <object class="GtkBox">
+        <property name="visible">true</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
-            <property name="halign">start</property>
+            <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="label" translatable="Yes">Enable VIM compatibility mode</property>
+            <property name="border_width">12</property>
+            <property name="row_spacing">12</property>
+            <property name="column_spacing">12</property>
+            <child>
+              <object class="GtkSwitch" id="vim_mode_switch">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="valign">center</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSwitch" id="restore_insert_mark_switch">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="valign">center</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSwitch" id="word_completion_switch">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="valign">center</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box8">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">&lt;b&gt;VIM Modal Editing&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label8">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Use VIM style modal editing in the source code editor.</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box9">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="label9">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Restore Cursor Position&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label10">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Restore the insertion cursor to the last position when reopening a file.</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box10">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="label11">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Word Completion&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label12">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Enable completion of words found within the current document.</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="width">1</property>
-            <property name="top-attach">0</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSwitch" id="vim_mode_switch">
-            <property name="visible">True</property>
-            <property name="active">False</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="width">1</property>
-            <property name="top-attach">0</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="halign">start</property>
-            <property name="hexpand">True</property>
-            <property name="label" translatable="Yes">Jump to last position when reopening a file.</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="width">1</property>
-            <property name="top-attach">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSwitch" id="restore_insert_mark_switch">
-            <property name="visible">True</property>
-            <property name="active">False</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="width">1</property>
-            <property name="top-attach">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="halign">start</property>
-            <property name="hexpand">True</property>
-            <property name="label" translatable="Yes">Enable auto-completion of words in the document.</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="width">1</property>
-            <property name="top-attach">2</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSwitch" id="word_completion_switch">
-            <property name="visible">True</property>
-            <property name="active">False</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="width">1</property>
-            <property name="top-attach">2</property>
-            <property name="height">1</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkFontButton" id="font_button">
             <property name="visible">True</property>
-            <property name="halign">end</property>
-            <property name="hexpand">True</property>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="width">2</property>
-            <property name="top-attach">3</property>
-            <property name="height">1</property>
-          </packing>
         </child>
         <child>
           <object class="GbSourceStyleSchemeButton" id="style_scheme_button">
             <property name="visible">True</property>
-            <property name="halign">end</property>
-            <property name="hexpand">True</property>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="width">2</property>
-            <property name="top-attach">4</property>
-            <property name="height">1</property>
-          </packing>
         </child>
       </object>
     </child>
