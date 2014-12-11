@@ -1034,8 +1034,11 @@ gb_editor_frame_constructed (GObject *object)
   GtkSourceGutter *gutter;
   GbEditorFrame *frame = GB_EDITOR_FRAME (object);
   GbSourceVim *vim;
+  GSettings *settings;
 
   G_OBJECT_CLASS (gb_editor_frame_parent_class)->constructed (object);
+
+  settings = g_settings_new ("org.gnome.builder.editor");
 
   if (priv->document)
     monitor = gb_editor_document_get_change_monitor (priv->document);
@@ -1053,6 +1056,9 @@ gb_editor_frame_constructed (GObject *object)
   gtk_source_gutter_insert (gutter,
                             GTK_SOURCE_GUTTER_RENDERER (priv->diff_renderer),
                             0);
+  g_settings_bind (settings, "show-diff",
+                   priv->diff_renderer, "visible",
+                   G_SETTINGS_BIND_GET);
 
   priv->code_assistant_renderer =
     g_object_new (GB_TYPE_SOURCE_CODE_ASSISTANT_RENDERER,
@@ -1148,6 +1154,8 @@ gb_editor_frame_constructed (GObject *object)
                            G_CALLBACK (gb_editor_frame_on_backward_search_clicked),
                            frame,
                            G_CONNECT_SWAPPED);
+
+  g_object_unref (settings);
 }
 
 static void

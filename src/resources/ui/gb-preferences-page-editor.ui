@@ -49,6 +49,17 @@
               </packing>
             </child>
             <child>
+              <object class="GtkSwitch" id="show_diff_switch">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="valign">center</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkBox" id="box8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -147,7 +158,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Word Completion&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Suggest Word Completion&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                     <property name="xalign">0</property>
                   </object>
@@ -162,7 +173,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Enable completion of words found within the current document.</property>
+                    <property name="label" translatable="yes">Suggest completion of words found within the current document.</property>
                     <property name="xalign">0</property>
                     <style>
                       <class name="dim-label"/>
@@ -178,6 +189,50 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Display Document Changes&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Display whether a line has been added or modified next to the line number.</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
               </packing>
             </child>
           </object>

@@ -24,6 +24,7 @@ struct _GbPreferencesPageEditorPrivate
   GSettings                 *settings;
 
   GtkSwitch                 *restore_insert_mark_switch;
+  GtkSwitch                 *show_diff_switch;
   GtkSwitch                 *vim_mode_switch;
   GtkSwitch                 *word_completion_switch;
   GtkFontButton             *font_button;
@@ -49,6 +50,9 @@ gb_preferences_page_editor_constructed (GObject *object)
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (priv->settings, "restore-insert-mark",
                    priv->restore_insert_mark_switch, "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (priv->settings, "show-diff",
+                   priv->show_diff_switch, "active",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (priv->settings, "word-completion",
                    priv->word_completion_switch, "active",
@@ -87,6 +91,7 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
 
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, font_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, restore_insert_mark_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, show_diff_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, style_scheme_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, vim_mode_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, word_completion_switch);
