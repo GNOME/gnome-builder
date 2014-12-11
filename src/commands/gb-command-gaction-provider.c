@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include "gb-command-gaction-provider.h"
+#include "gb-command-gaction.h"
 #include "gb-log.h"
 
 G_DEFINE_TYPE (GbCommandGactionProvider, gb_command_gaction_provider,
@@ -34,23 +35,116 @@ gb_command_gaction_provider_new (GbWorkbench *workbench)
                        NULL);
 }
 
-static GbCommandResult *
-execute_action (GbCommand *command,
-                gpointer   user_data)
+static GList *
+discover_groups (GbCommandGactionProvider *provider)
 {
-  GAction *action;
-  GVariant *params;
+  GbDocumentView *view;
+  GApplication *application;
+  GbWorkbench *workbench;
+  GtkWidget *widget;
+  GList *list = NULL;
 
-  g_return_val_if_fail (GB_IS_COMMAND (command), NULL);
+  g_return_val_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (provider), NULL);
 
-  action = g_object_get_data (G_OBJECT (command), "action");
-  g_return_val_if_fail (G_IS_ACTION (action), NULL);
+  view = gb_command_provider_get_active_view (GB_COMMAND_PROVIDER (provider));
 
-  params = g_object_get_data (G_OBJECT (command), "parameters");
+  g_print ("Active View: %p\n", view);
+  if (view)
+    g_print ("== %s\n", g_type_name (G_TYPE_FROM_INSTANCE (view)));
 
-  g_action_activate (action, params);
+  for (widget = GTK_WIDGET (view);
+       widget;
+       widget = gtk_widget_get_parent (widget))
+    {
+      gchar **prefixes;
+      guint i;
 
-  return NULL;
+      prefixes = gtk_widget_list_action_prefixes (widget);
+
+      if (prefixes)
+        {
+          GActionGroup *group;
+
+          for (i = 0; prefixes [i]; i++)
+            {
+              g_print (" Group = %s\n", prefixes [i]);
+
+              group = gtk_widget_get_action_group (widget, prefixes [i]);
+
+              if (G_IS_ACTION_GROUP (group))
+                list = g_list_append (list, group);
+            }
+
+          g_strfreev (prefixes);
+        }
+    }
+
+  workbench = gb_command_provider_get_workbench (GB_COMMAND_PROVIDER (provider));
+  list = g_list_append (list, G_ACTION_GROUP (workbench));
+
+  application = g_application_get_default ();
+  list = g_list_append (list, G_ACTION_GROUP (application));
+
+  return list;
+}
+
+static gboolean
+parse_command_text (const gchar  *command_text,
+                    gchar       **name,
+                    GVariant    **params)
+{
+  GVariant *ret_params = NULL;
+  const gchar *str;
+  gchar *tmp;
+  gchar **parts;
+  gchar *ret_name = NULL;
+
+  g_return_val_if_fail (command_text, FALSE);
+  g_return_val_if_fail (name, FALSE);
+  g_return_val_if_fail (params, FALSE);
+
+  *name = NULL;
+  *params = NULL;
+
+  /* Determine the command name */
+  tmp = g_strdelimit (g_strdup (command_text), "(", ' ');
+  parts = g_strsplit (tmp, " ", 2);
+  ret_name = g_strdup (parts [0]);
+  g_free (tmp);
+  g_strfreev (parts);
+
+  /* Advance to the (optional) parameters */
+  for (str = command_text + strlen (ret_name);
+       *str;
+       str = g_utf8_next_char (str))
+    {
+      gunichar ch;
+
+      ch = g_utf8_get_char (str);
+      if (g_unichar_isspace (ch))
+        continue;
+
+      break;
+    }
+
+  /* Parse any (optional) parameters */
+  if (*str != '\0')
+    {
+      ret_params = g_variant_parse (NULL, str, NULL, NULL, NULL);
+      if (!ret_params)
+        goto failure;
+    }
+
+  *name = ret_name;
+  *params = ret_params;
+
+  return TRUE;
+
+failure:
+  g_clear_pointer (&ret_name, g_free);
+  g_clear_pointer (&ret_params, g_variant_unref);
+
+  return FALSE;
 }
 
 static GbCommand *
@@ -58,155 +152,42 @@ gb_command_gaction_provider_lookup (GbCommandProvider *provider,
                                     const gchar       *command_text)
 {
   GbCommandGactionProvider *self = (GbCommandGactionProvider *)provider;
-  GtkWidget *widget;
   GbCommand *command = NULL;
-  GVariant *parameters = NULL;
-  GAction *action = NULL;
-  gchar **parts;
-  gchar *tmp;
-  gchar *name = NULL;
+  GVariant *params = NULL;
+  GList *groups;
+  GList *iter;
+  gchar *action_name = NULL;
 
   ENTRY;
 
   g_return_val_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (self), NULL);
+  g_return_val_if_fail (command_text, NULL);
 
-  /* Determine the command name */
-  tmp = g_strdelimit (g_strdup (command_text), "(", ' ');
-  parts = g_strsplit (tmp, " ", 2);
-  name = g_strdup (parts [0]);
-  g_free (tmp);
-  g_strfreev (parts);
+  if (!parse_command_text (command_text, &action_name, &params))
+    RETURN (NULL);
 
-  /* Parse the parameters if provided */
-  command_text += strlen (name);
-  for (; *command_text; command_text = g_utf8_next_char (command_text))
+  groups = discover_groups (self);
+
+  for (iter = groups; iter; iter = iter->next)
     {
-      gunichar ch;
+      GActionGroup *group = G_ACTION_GROUP (iter->data);
 
-      ch = g_utf8_get_char (command_text);
-      if (g_unichar_isspace (ch))
-        continue;
-      break;
-    }
-
-  if (*command_text)
-    {
-      parameters = g_variant_parse (NULL, command_text, NULL, NULL, NULL);
-      if (!parameters)
-        GOTO (cleanup);
-    }
-
-  /*
-   * TODO: We are missing some API in Gtk+ to be able to resolve an action
-   *       for a particular name. It exists, but is currently only private
-   *       API. So we'll hold off a bit on this until we can use that.
-   *       Alternatively, we can just walk up the chain to the
-   *       ApplicationWindow which is a GActionMap.
-   */
-
-  widget = GTK_WIDGET (gb_command_provider_get_active_view (provider));
-  while (widget)
-    {
-      if (G_IS_ACTION_MAP (widget))
+      if (g_action_group_has_action (group, action_name))
         {
-          action = g_action_map_lookup_action (G_ACTION_MAP (widget), name);
-          if (action)
-            break;
-        }
-
-      widget = gtk_widget_get_parent (widget);
-    }
-
-  /*
-   * Now try to lookup the action from the workspace up, which is the case if
-   * we don't have an active view.
-   */
-  if (!action)
-    {
-      GbWorkbench *workbench;
-      GbWorkspace *workspace;
-
-      workbench = gb_command_provider_get_workbench (provider);
-      workspace = gb_workbench_get_active_workspace (workbench);
-      widget = GTK_WIDGET (workspace);
-
-      while (widget)
-        {
-          if (G_IS_ACTION_MAP (widget))
-            {
-              action = g_action_map_lookup_action (G_ACTION_MAP (widget), name);
-              if (action)
-                break;
-            }
-          else if (GB_IS_WORKSPACE (widget))
-            {
-              GActionGroup *group;
-
-              group = gb_workspace_get_actions (GB_WORKSPACE (widget));
-              if (G_IS_ACTION_MAP (group))
-                {
-                  action = g_action_map_lookup_action (G_ACTION_MAP (group), name);
-                  if (action)
-                    break;
-                }
-            }
-
-          widget = gtk_widget_get_parent (widget);
+          command = g_object_new (GB_TYPE_COMMAND_GACTION,
+                                  "action-group", group,
+                                  "action-name", action_name,
+                                  "parameters", params,
+                                  NULL);
+          break;
         }
     }
 
-  /*
-   * Now try to lookup the action inside of the GApplication.
-   * This is useful for stuff like "quit", and "preferences".
-   */
-  if (!action)
-    {
-      GApplication *app;
-
-      app = g_application_get_default ();
-      action = g_action_map_lookup_action (G_ACTION_MAP (app), name);
-    }
-
-  if (!action && parameters)
-    {
-      g_variant_unref (parameters);
-      parameters = NULL;
-    }
-
-  if (action)
-    {
-      command = gb_command_new ();
-      if (parameters)
-        g_object_set_data_full (G_OBJECT (command), "parameters",
-                                g_variant_ref (parameters),
-                                (GDestroyNotify)g_variant_unref);
-      g_object_set_data_full (G_OBJECT (command), "action",
-                              g_object_ref (action), g_object_unref);
-      g_signal_connect (command, "execute", G_CALLBACK (execute_action), NULL);
-    }
-
-
-cleanup:
-  g_free (name);
+  g_clear_pointer (&params, g_variant_unref);
+  g_list_free (groups);
+  g_free (action_name);
 
   RETURN (command);
-}
-
-static void
-add_completions_from_group (GPtrArray         *completions,
-                            const gchar       *prefix,
-                            GActionGroup      *group)
-{
-  gchar **actions = g_action_group_list_actions (group);
-  int i;
-
-  for (i = 0; actions[i] != NULL; i++)
-    {
-      if (g_str_has_prefix (actions[i], prefix))
-        g_ptr_array_add (completions, g_strdup (actions[i]));
-    }
-
-  g_strfreev (actions);
 }
 
 static void
@@ -215,65 +196,43 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
                                       const gchar       *initial_command_text)
 {
   GbCommandGactionProvider *self = (GbCommandGactionProvider *)provider;
-  GtkWidget *widget;
-  const gchar *tmp;
-  gchar *prefix;
-  GApplication *app;
-  GbWorkbench *workbench;
-  GbWorkspace *workspace;
+  GList *groups;
+  GList *iter;
 
   ENTRY;
 
   g_return_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (self));
+  g_return_if_fail (initial_command_text);
 
-  tmp = initial_command_text;
+  g_print ("initial=\"%s\"\n", initial_command_text);
 
-  while (*tmp != 0 && *tmp != ' ' && *tmp != '(')
-    tmp++;
+  groups = discover_groups (self);
 
-  if (*tmp != 0)
-    return;
-
-  prefix = g_strndup (initial_command_text, tmp - initial_command_text);
-
-  widget = GTK_WIDGET (gb_command_provider_get_active_view (provider));
-  while (widget)
+  for (iter = groups; iter; iter = iter->next)
     {
-      if (G_IS_ACTION_GROUP (widget))
-        add_completions_from_group (completions, prefix, G_ACTION_GROUP (widget));
+      GActionGroup *group = iter->data;
+      gchar **names;
+      guint i;
 
-      widget = gtk_widget_get_parent (widget);
+      g_assert (G_IS_ACTION_GROUP (group));
+
+      g_print ("Group %p\n", group);
+
+      names = g_action_group_list_actions (group);
+
+      for (i = 0; names [i]; i++)
+        {
+          g_print ("> %s\n", names[i]);
+          if (g_str_has_prefix (names [i], initial_command_text))
+            g_ptr_array_add (completions, g_strdup (names [i]));
+        }
+
+      //g_free (names);
     }
 
-  /*
-   * Now try to lookup the action from the workspace up, which is the case if
-   * we don't have an active view.
-   */
-  workbench = gb_command_provider_get_workbench (provider);
-  workspace = gb_workbench_get_active_workspace (workbench);
-  widget = GTK_WIDGET (workspace);
+  g_list_free (groups);
 
-  while (widget)
-    {
-      if (G_IS_ACTION_GROUP (widget))
-        add_completions_from_group (completions, prefix, G_ACTION_GROUP (widget));
-      else if (GB_IS_WORKSPACE (widget))
-        add_completions_from_group (completions, prefix,
-                                   gb_workspace_get_actions (GB_WORKSPACE (widget)));
-
-      widget = gtk_widget_get_parent (widget);
-    }
-
-  /*
-   * Now try to lookup the action inside of the GApplication.
-   * This is useful for stuff like "quit", and "preferences".
-   */
-  app = g_application_get_default ();
-  add_completions_from_group (completions, prefix, G_ACTION_GROUP (app));
-
-  g_free (prefix);
-
-  RETURN();
+  EXIT;
 }
 
 static void
