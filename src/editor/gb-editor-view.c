@@ -275,6 +275,12 @@ gb_editor_view_notify_error (GbEditorView     *view,
 
   error = gb_editor_document_get_error (document);
 
+  /* Ignore file not found errors */
+  if (error &&
+      (error->domain == G_IO_ERROR) &&
+      (error->code == G_IO_ERROR_NOT_FOUND))
+    error = NULL;
+
   if (!error)
     {
       if (gtk_revealer_get_reveal_child (view->priv->error_revealer))
