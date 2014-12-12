@@ -42,6 +42,9 @@ struct _GbEditorViewPrivate
   GtkToggleButton *split_button;
   GbEditorFrame   *frame;
   GtkProgressBar  *progress_bar;
+  GtkLabel        *error_label;
+  GtkButton       *error_close_button;
+  GtkRevealer     *error_revealer;
   GtkLabel        *modified_label;
   GtkButton       *modified_reload_button;
   GtkButton       *modified_cancel_button;
@@ -260,6 +263,31 @@ gb_editor_view_reload_document (GbEditorView *view,
 }
 
 static void
+gb_editor_view_notify_error (GbEditorView     *view,
+                             GParamSpec       *pspec,
+                             GbEditorDocument *document)
+{
+  const GError *error;
+
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+  g_return_if_fail (pspec);
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  error = gb_editor_document_get_error (document);
+
+  if (!error)
+    {
+      if (gtk_revealer_get_reveal_child (view->priv->error_revealer))
+        gtk_revealer_set_reveal_child (view->priv->error_revealer, FALSE);
+    }
+  else
+    {
+      gtk_label_set_label (view->priv->error_label, error->message);
+      gtk_revealer_set_reveal_child (view->priv->error_revealer, TRUE);
+    }
+}
+
+static void
 gb_editor_view_connect (GbEditorView     *view,
                         GbEditorDocument *document)
 {
@@ -296,6 +324,18 @@ gb_editor_view_connect (GbEditorView     *view,
                            "clicked",
                            G_CALLBACK (gb_editor_view_reload_document),
                            view,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (document,
+                           "notify::error",
+                           G_CALLBACK (gb_editor_view_notify_error),
+                           view,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (view->priv->error_close_button,
+                           "clicked",
+                           G_CALLBACK (gb_editor_view_hide_revealer_child),
+                           view->priv->error_revealer,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (document,
@@ -530,6 +570,9 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, modified_label);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, modified_cancel_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, modified_reload_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, error_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, error_revealer);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, error_close_button);
 
   g_type_ensure (GB_TYPE_EDITOR_FRAME);
 }
