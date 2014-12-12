@@ -36,9 +36,15 @@ struct _GbEditorDocumentPrivate
   GbSourceChangeMonitor *change_monitor;
   GbSourceCodeAssistant *code_assistant;
   gchar                 *title;
+  GCancellable          *cancellable;
 
   gdouble                progress;
   guint                  doc_seq_id;
+  GTimeVal               mtime;
+
+  guint                  file_changed_on_volume : 1;
+  guint                  mtime_set : 1;
+  guint                  read_only : 1;
   guint                  trim_trailing_whitespace : 1;
 };
 
@@ -46,8 +52,10 @@ enum {
   PROP_0,
   PROP_CHANGE_MONITOR,
   PROP_FILE,
+  PROP_FILE_CHANGED_ON_VOLUME,
   PROP_MODIFIED,
   PROP_PROGRESS,
+  PROP_READ_ONLY,
   PROP_STYLE_SCHEME_NAME,
   PROP_TITLE,
   PROP_TRIM_TRAILING_WHITESPACE,
@@ -78,6 +86,116 @@ GbEditorDocument *
 gb_editor_document_new (void)
 {
   return g_object_new (GB_TYPE_EDITOR_DOCUMENT, NULL);
+}
+
+gboolean
+gb_editor_document_get_read_only (GbEditorDocument *document)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), FALSE);
+
+  return document->priv->read_only;
+}
+
+static void
+gb_editor_document_set_read_only (GbEditorDocument *document,
+                                  gboolean          read_only)
+{
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  if (document->priv->read_only != read_only)
+    {
+      document->priv->read_only = read_only;
+      g_object_notify_by_pspec (G_OBJECT (document),
+                                gParamSpecs [PROP_READ_ONLY]);
+    }
+}
+
+gboolean
+gb_editor_document_get_file_changed_on_volume (GbEditorDocument *document)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), FALSE);
+
+  return document->priv->file_changed_on_volume;
+}
+
+static void
+gb_editor_document_set_file_changed_on_volume (GbEditorDocument *document,
+                                               gboolean          file_changed_on_volume)
+{
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  if (file_changed_on_volume != document->priv->file_changed_on_volume)
+    {
+      document->priv->file_changed_on_volume = file_changed_on_volume;
+      g_object_notify_by_pspec (G_OBJECT (document),
+                                gParamSpecs [PROP_FILE_CHANGED_ON_VOLUME]);
+    }
+}
+
+static void
+gb_editor_document_check_modified_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  GbEditorDocument *document = user_data;
+  GFileInfo *info;
+  GError *error = NULL;
+  GFile *file = (GFile *)object;
+
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  info = g_file_query_info_finish (file, result, &error);
+
+  if (info)
+    {
+      if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE))
+        {
+          gboolean read_only;
+
+          read_only = g_file_info_get_attribute_boolean (info,
+                                                         G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
+          gb_editor_document_set_read_only (document, read_only);
+        }
+
+      if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_TIME_MODIFIED) &&
+          document->priv->mtime_set)
+        {
+          GTimeVal tv;
+
+          g_file_info_get_modification_time (info, &tv);
+
+          if (memcmp (&tv, &document->priv->mtime, sizeof tv) != 0)
+            gb_editor_document_set_file_changed_on_volume (document, TRUE);
+        }
+    }
+
+  g_clear_object (&document);
+  g_clear_object (&info);
+}
+
+void
+gb_editor_document_check_externally_modified (GbEditorDocument *document)
+{
+  GFile *location;
+
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  if (document->priv->file_changed_on_volume)
+    return;
+
+  location = gtk_source_file_get_location (document->priv->file);
+  if (!location)
+    return;
+
+  g_file_query_info_async (location,
+                           G_FILE_ATTRIBUTE_TIME_MODIFIED ","
+                           G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE,
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           document->priv->cancellable,
+                           gb_editor_document_check_modified_cb,
+                           g_object_ref (document));
 }
 
 gdouble
@@ -552,6 +670,47 @@ gb_editor_document_progress_cb (goffset  current_num_bytes,
 }
 
 static void
+gb_editor_document_load_info_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  GbEditorDocument *document = user_data;
+  GFileInfo *info;
+  GError *error = NULL;
+  GFile *file = (GFile *)object;
+
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  info = g_file_query_info_finish (file, result, &error);
+
+  if (info)
+    {
+      if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE))
+        {
+          gboolean read_only;
+
+          read_only = g_file_info_get_attribute_boolean (info,
+                                                         G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
+          gb_editor_document_set_read_only (document, read_only);
+        }
+
+      if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_TIME_MODIFIED))
+        {
+          GTimeVal tv;
+
+          g_file_info_get_modification_time (info, &tv);
+
+          document->priv->mtime = tv;
+          document->priv->mtime_set = TRUE;
+        }
+    }
+
+  g_clear_object (&document);
+  g_clear_object (&info);
+}
+
+static void
 gb_editor_document_save_cb (GObject      *object,
                             GAsyncResult *result,
                             gpointer      user_data)
@@ -561,6 +720,7 @@ gb_editor_document_save_cb (GObject      *object,
   GbEditorDocument *document;
   GError *error = NULL;
   GTask *task = user_data;
+  GFile *location;
 
   ENTRY;
 
@@ -574,6 +734,8 @@ gb_editor_document_save_cb (GObject      *object,
       GOTO (cleanup);
     }
 
+  document = g_task_get_source_object (task);
+
   /*
    * FIXME:
    *
@@ -581,8 +743,17 @@ gb_editor_document_save_cb (GObject      *object,
    *   for the buffer during the process or keep a sequence number to
    *   ensure it hasn't changed since we started the request to save.
    */
-  document = g_task_get_source_object (task);
   gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (document), FALSE);
+
+  location = gtk_source_file_saver_get_location (saver);
+  g_file_query_info_async (location,
+                           G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE","
+                           G_FILE_ATTRIBUTE_TIME_MODIFIED,
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           document->priv->cancellable,
+                           gb_editor_document_load_info_cb,
+                           g_object_ref (document));
 
   change_monitor = gb_editor_document_get_change_monitor (document);
   gb_source_change_monitor_reload (change_monitor);
@@ -643,6 +814,8 @@ gb_editor_document_save_async (GbEditorDocument      *document,
     }
 
   gb_editor_document_set_progress (document, 0.0);
+
+  document->priv->mtime_set = FALSE;
 
   gtk_source_file_saver_save_async (saver,
                                     G_PRIORITY_DEFAULT,
@@ -788,6 +961,7 @@ gb_editor_document_load_cb (GObject      *object,
 {
   GtkSourceFileLoader *loader = (GtkSourceFileLoader *)object;
   GbEditorDocument *document;
+  GFile *location;
   GError *error = NULL;
   GTask *task = user_data;
 
@@ -804,6 +978,19 @@ gb_editor_document_load_cb (GObject      *object,
     }
 
   document = g_task_get_source_object (task);
+
+  document->priv->mtime_set = FALSE;
+  document->priv->file_changed_on_volume = FALSE;
+
+  location = gtk_source_file_loader_get_location (loader);
+  g_file_query_info_async (location,
+                           G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE","
+                           G_FILE_ATTRIBUTE_TIME_MODIFIED,
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           document->priv->cancellable,
+                           gb_editor_document_load_info_cb,
+                           g_object_ref (document));
 
   gb_editor_document_restore_insert (document);
   gb_editor_document_guess_language (document);
@@ -924,6 +1111,17 @@ gb_editor_document_constructed (GObject *object)
 }
 
 static void
+gb_editor_document_dispose (GObject *object)
+{
+  GbEditorDocument *document = (GbEditorDocument *)object;
+
+  if (!g_cancellable_is_cancelled (document->priv->cancellable))
+    g_cancellable_cancel (document->priv->cancellable);
+
+  G_OBJECT_CLASS (gb_editor_document_parent_class)->dispose (object);
+}
+
+static void
 gb_editor_document_finalize (GObject *object)
 {
   GbEditorDocumentPrivate *priv = GB_EDITOR_DOCUMENT (object)->priv;
@@ -933,6 +1131,7 @@ gb_editor_document_finalize (GObject *object)
   g_clear_object (&priv->file);
   g_clear_object (&priv->change_monitor);
   g_clear_object (&priv->code_assistant);
+  g_clear_object (&priv->cancellable);
   g_clear_pointer (&priv->title, g_free);
 
   G_OBJECT_CLASS(gb_editor_document_parent_class)->finalize (object);
@@ -961,6 +1160,15 @@ gb_editor_document_get_property (GObject    *object,
 
     case PROP_FILE:
       g_value_set_object (value, gb_editor_document_get_file (self));
+      break;
+
+    case PROP_FILE_CHANGED_ON_VOLUME:
+      g_value_set_boolean (value,
+                           gb_editor_document_get_file_changed_on_volume (self));
+      break;
+
+    case PROP_READ_ONLY:
+      g_value_set_boolean (value, gb_editor_document_get_read_only (self));
       break;
 
     case PROP_PROGRESS:
@@ -1015,6 +1223,7 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
   GtkTextBufferClass *text_buffer_class = GTK_TEXT_BUFFER_CLASS (klass);
 
   object_class->constructed = gb_editor_document_constructed;
+  object_class->dispose = gb_editor_document_dispose;
   object_class->finalize = gb_editor_document_finalize;
   object_class->get_property = gb_editor_document_get_property;
   object_class->set_property = gb_editor_document_set_property;
@@ -1044,6 +1253,15 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
   g_object_class_install_property (object_class, PROP_FILE,
                                    gParamSpecs [PROP_FILE]);
 
+  gParamSpecs [PROP_FILE_CHANGED_ON_VOLUME] =
+    g_param_spec_boolean ("file-changed-on-volume",
+                          _("File Changed on Volume"),
+                          _("If the file has changed underneath the buffer."),
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_FILE_CHANGED_ON_VOLUME,
+                                   gParamSpecs [PROP_FILE_CHANGED_ON_VOLUME]);
+
   gParamSpecs [PROP_PROGRESS] =
     g_param_spec_double ("progress",
                          _("Progress"),
@@ -1054,6 +1272,15 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_PROGRESS,
                                    gParamSpecs [PROP_PROGRESS]);
+
+  gParamSpecs [PROP_READ_ONLY] =
+    g_param_spec_boolean ("read-only",
+                          _("Read Only"),
+                          _("If the buffer is read only."),
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_READ_ONLY,
+                                   gParamSpecs [PROP_READ_ONLY]);
 
   gParamSpecs [PROP_STYLE_SCHEME_NAME] =
     g_param_spec_string ("style-scheme-name",
@@ -1101,6 +1328,7 @@ gb_editor_document_init (GbEditorDocument *document)
 {
   document->priv = gb_editor_document_get_instance_private (document);
 
+  document->priv->cancellable = g_cancellable_new ();
   document->priv->trim_trailing_whitespace = TRUE;
   document->priv->file = gtk_source_file_new ();
   document->priv->change_monitor = gb_source_change_monitor_new (GTK_TEXT_BUFFER (document));
