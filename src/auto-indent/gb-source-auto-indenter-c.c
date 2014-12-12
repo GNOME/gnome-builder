@@ -1002,8 +1002,11 @@ format_parameters (GtkTextIter *begin,
   for (iter = params; iter; iter = iter->next)
     {
       Parameter *p = iter->data;
-      max_star = MAX (max_star, p->n_star);
-      max_type = MAX (max_type, strlen (p->type));
+
+      if (p->n_star)
+        max_star = MAX (max_star, p->n_star);
+      if (p->type)
+        max_type = MAX (max_type, strlen (p->type));
     }
 
   str = g_string_new (NULL);
