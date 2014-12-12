@@ -49,7 +49,7 @@ struct _GbPreferencesPageClass
 };
 
 GType gb_preferences_page_get_type                (void);
-void  gb_preferences_page_set_keywords            (GbPreferencesPage   *page,
+guint gb_preferences_page_set_keywords            (GbPreferencesPage   *page,
                                                    const gchar * const *keywords);
 void  gb_preferences_page_set_keywords_for_widget (GbPreferencesPage   *page,
                                                    const gchar         *keywords,

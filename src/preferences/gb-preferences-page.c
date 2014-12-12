@@ -48,7 +48,7 @@ gb_preferences_page_match (const gchar *needle,
   return !!strstr (haystack, needle);
 }
 
-void
+guint
 gb_preferences_page_set_keywords (GbPreferencesPage   *page,
                                   const gchar * const *keywords)
 {
@@ -57,6 +57,7 @@ gb_preferences_page_set_keywords (GbPreferencesPage   *page,
   gpointer value;
   gchar **needle;
   gsize size;
+  guint count = 0;
   guint i;
 
   g_return_if_fail (GB_IS_PREFERENCES_PAGE (page));
@@ -64,7 +65,7 @@ gb_preferences_page_set_keywords (GbPreferencesPage   *page,
   if (!keywords || (g_strv_length ((gchar **)keywords) == 0))
     {
       g_hash_table_foreach (page->priv->widgets, (GHFunc)gtk_widget_show, NULL);
-      return;
+      return G_MAXUINT;
     }
 
   size = g_strv_length ((gchar **)keywords) + 1;
@@ -88,6 +89,7 @@ gb_preferences_page_set_keywords (GbPreferencesPage   *page,
         {
           if (gb_preferences_page_match (needle [i], haystack))
             {
+              count++;
               visible = TRUE;
               break;
             }
@@ -97,6 +99,8 @@ gb_preferences_page_set_keywords (GbPreferencesPage   *page,
     }
 
   g_strfreev (needle);
+
+  return count;
 }
 
 void
