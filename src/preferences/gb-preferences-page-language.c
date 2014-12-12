@@ -203,12 +203,21 @@ gb_preferences_page_language_constructed (GObject *object)
     {
       GtkSourceLanguage *lang;
       GtkWidget *widget;
+      gchar *keywords;
 
       if (g_str_equal (lang_ids [i], "def"))
         continue;
 
       lang = gtk_source_language_manager_get_language (manager, lang_ids [i]);
       widget = make_language_row (lang);
+
+      keywords = g_strdup_printf ("%s %s %s",
+                                  gtk_source_language_get_id (lang),
+                                  gtk_source_language_get_name (lang),
+                                  gtk_source_language_get_section (lang));
+      gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (object),
+                                                   keywords, widget, NULL);
+      g_free (keywords);
 
       gtk_container_add (GTK_CONTAINER (page->priv->language_list_box), widget);
     }
