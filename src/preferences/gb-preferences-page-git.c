@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <glib/gi18n.h>
 #include <libgit2-glib/ggit.h>
 
 #include "gb-preferences-page-git.h"
@@ -26,6 +27,9 @@ struct _GbPreferencesPageGitPrivate
 
   GtkEntry *git_author_name_entry;
   GtkEntry *git_author_email_entry;
+
+  GtkWidget *name_label;
+  GtkWidget *email_label;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPageGit, gb_preferences_page_git,
@@ -109,6 +113,9 @@ gb_preferences_page_git_class_init (GbPreferencesPageGitClass *klass)
 
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageGit, git_author_name_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageGit, git_author_email_entry);
+
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageGit, name_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageGit, email_label);
 }
 
 static void
@@ -119,4 +126,15 @@ gb_preferences_page_git_init (GbPreferencesPageGit *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->priv->config = ggit_config_new_default (NULL);
+
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("git author name surname"),
+                                               self->priv->name_label,
+                                               self->priv->git_author_name_entry,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("git author email mail address"),
+                                               self->priv->email_label,
+                                               self->priv->git_author_email_entry,
+                                               NULL);
 }

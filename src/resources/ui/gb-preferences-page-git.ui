@@ -8,7 +8,7 @@
         <property name="row-spacing">6</property>
         <property name="column-spacing">12</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="name_label">
             <property name="visible">True</property>
             <property name="halign">start</property>
             <property name="hexpand">False</property>
@@ -34,7 +34,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="email_label">
             <property name="visible">True</property>
             <property name="halign">start</property>
             <property name="label" translatable="Yes">Author Email</property>
