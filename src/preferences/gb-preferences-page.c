@@ -16,14 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "prefs-page"
+
 #include <glib/gi18n.h>
 
 #include "gb-preferences-page.h"
+#include "gb-log.h"
 #include "gb-string.h"
 
 struct _GbPreferencesPagePrivate
 {
-  gchar *title;
+  GHashTable *widgets;
+  gchar      *title;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPage, gb_preferences_page,
@@ -36,6 +40,93 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+static gboolean
+gb_preferences_page_match (const gchar *needle,
+                           const gchar *haystack)
+{
+  return !!strstr (haystack, needle);
+}
+
+void
+gb_preferences_page_set_keywords (GbPreferencesPage   *page,
+                                  const gchar * const *keywords)
+{
+  GHashTableIter iter;
+  gpointer key;
+  gpointer value;
+  gchar **needle;
+  gsize size;
+  guint i;
+
+  g_return_if_fail (GB_IS_PREFERENCES_PAGE (page));
+
+  if (!keywords || (g_strv_length ((gchar **)keywords) == 0))
+    {
+      g_hash_table_foreach (page->priv->widgets, (GHFunc)gtk_widget_show, NULL);
+      return;
+    }
+
+  size = g_strv_length ((gchar **)keywords) + 1;
+  needle = g_new0 (gchar *, size);
+
+  for (i = 0; keywords [i]; i++)
+    needle [i] = g_utf8_strdown (keywords [i], -1);
+
+  g_hash_table_iter_init (&iter, page->priv->widgets);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      const gchar *haystack;
+      GtkWidget *widget = key;
+      gboolean visible = FALSE;
+      GQuark q = GPOINTER_TO_INT (value);
+
+      haystack = g_quark_to_string (q);
+
+      for (i = 0; keywords [i]; i++)
+        {
+          if (gb_preferences_page_match (needle [i], haystack))
+            {
+              visible = TRUE;
+              break;
+            }
+        }
+
+      gtk_widget_set_visible (widget, visible);
+    }
+
+  g_strfreev (needle);
+}
+
+void
+gb_preferences_page_set_keywords_for_widget (GbPreferencesPage *page,
+                                             const gchar       *keywords,
+                                             GtkWidget         *first_widget,
+                                             ...)
+{
+  GtkWidget *widget = first_widget;
+  va_list args;
+  GQuark q;
+  gchar *downcase;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_PREFERENCES_PAGE (page));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  downcase = g_utf8_strdown (keywords, -1);
+  q = g_quark_from_string (downcase);
+  g_free (downcase);
+
+  va_start (args, first_widget);
+  do
+    g_hash_table_insert (page->priv->widgets, widget, GINT_TO_POINTER (q));
+  while ((widget = va_arg (args, GtkWidget *)));
+  va_end (args);
+
+  EXIT;
+}
 
 const gchar *
 gb_preferences_page_get_title (GbPreferencesPage *page)
@@ -66,6 +157,7 @@ gb_preferences_page_finalize (GObject *object)
   GbPreferencesPagePrivate *priv = GB_PREFERENCES_PAGE (object)->priv;
 
   g_clear_pointer (&priv->title, g_free);
+  g_clear_pointer (&priv->widgets, g_hash_table_unref);
 
   G_OBJECT_CLASS (gb_preferences_page_parent_class)->finalize (object);
 }
@@ -132,4 +224,6 @@ static void
 gb_preferences_page_init (GbPreferencesPage *self)
 {
   self->priv = gb_preferences_page_get_instance_private (self);
+  self->priv->widgets = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+                                               NULL, NULL);
 }
