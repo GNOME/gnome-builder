@@ -472,6 +472,13 @@ gb_editor_frame_connect (GbEditorFrame    *frame,
                           G_BINDING_SYNC_CREATE);
 
   /*
+   * Don't allow editing if the buffer is read-only.
+   */
+  g_object_bind_property (priv->document, "read-only",
+                          priv->source_view, "editable",
+                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+
+  /*
    * Create search defaults for this frame.
    */
   priv->search_context = g_object_new (GTK_SOURCE_TYPE_SEARCH_CONTEXT,

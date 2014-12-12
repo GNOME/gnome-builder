@@ -100,6 +100,8 @@ static void
 gb_editor_document_set_read_only (GbEditorDocument *document,
                                   gboolean          read_only)
 {
+  ENTRY;
+
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
 
   if (document->priv->read_only != read_only)
@@ -108,6 +110,8 @@ gb_editor_document_set_read_only (GbEditorDocument *document,
       g_object_notify_by_pspec (G_OBJECT (document),
                                 gParamSpecs [PROP_READ_ONLY]);
     }
+
+  EXIT;
 }
 
 gboolean
@@ -153,8 +157,8 @@ gb_editor_document_check_modified_cb (GObject      *object,
         {
           gboolean read_only;
 
-          read_only = g_file_info_get_attribute_boolean (info,
-                                                         G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
+          read_only = !g_file_info_get_attribute_boolean (info,
+                                                          G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
           gb_editor_document_set_read_only (document, read_only);
         }
 
@@ -690,8 +694,8 @@ gb_editor_document_load_info_cb (GObject      *object,
         {
           gboolean read_only;
 
-          read_only = g_file_info_get_attribute_boolean (info,
-                                                         G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
+          read_only = !g_file_info_get_attribute_boolean (info,
+                                                          G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
           gb_editor_document_set_read_only (document, read_only);
         }
 
