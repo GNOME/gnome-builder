@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "prefs-page-editor"
+
+#include <glib/gi18n.h>
+
 #include "gb-preferences-page-editor.h"
 #include "gb-source-style-scheme-button.h"
 
@@ -23,12 +27,19 @@ struct _GbPreferencesPageEditorPrivate
 {
   GSettings                 *settings;
 
+  /* Widgets owned by Template */
   GtkSwitch                 *restore_insert_mark_switch;
   GtkSwitch                 *show_diff_switch;
   GtkSwitch                 *vim_mode_switch;
   GtkSwitch                 *word_completion_switch;
   GtkFontButton             *font_button;
   GbSourceStyleSchemeButton *style_scheme_button;
+
+  /* Template widgets used for filtering */
+  GtkWidget                 *vim_container;
+  GtkWidget                 *restore_insert_mark_container;
+  GtkWidget                 *word_completion_container;
+  GtkWidget                 *show_diff_container;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPageEditor, gb_preferences_page_editor,
@@ -96,6 +107,11 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, vim_mode_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, word_completion_switch);
 
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, vim_container);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, restore_insert_mark_container);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, word_completion_container);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, show_diff_container);
+
   g_type_ensure (GB_TYPE_SOURCE_STYLE_SCHEME_BUTTON);
 }
 
@@ -105,4 +121,33 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
   self->priv = gb_preferences_page_editor_get_instance_private (self);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("vim modal"),
+                                               self->priv->vim_container,
+                                               self->priv->vim_mode_switch,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("restore insert cursor mark"),
+                                               self->priv->restore_insert_mark_container,
+                                               self->priv->restore_insert_mark_switch,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("word words auto completion suggest found document"),
+                                               self->priv->word_completion_container,
+                                               self->priv->word_completion_switch,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("diff renderer gutter changes git vcs"),
+                                               self->priv->show_diff_container,
+                                               self->priv->show_diff_switch,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("font document editor monospace"),
+                                               GTK_WIDGET (self->priv->font_button),
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("source style scheme source tango solarized builder"),
+                                               GTK_WIDGET (self->priv->style_scheme_button),
+                                               NULL);
 }
