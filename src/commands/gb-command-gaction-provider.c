@@ -48,10 +48,6 @@ discover_groups (GbCommandGactionProvider *provider)
 
   view = gb_command_provider_get_active_view (GB_COMMAND_PROVIDER (provider));
 
-  g_print ("Active View: %p\n", view);
-  if (view)
-    g_print ("== %s\n", g_type_name (G_TYPE_FROM_INSTANCE (view)));
-
   for (widget = GTK_WIDGET (view);
        widget;
        widget = gtk_widget_get_parent (widget))
@@ -67,8 +63,6 @@ discover_groups (GbCommandGactionProvider *provider)
 
           for (i = 0; prefixes [i]; i++)
             {
-              g_print (" Group = %s\n", prefixes [i]);
-
               group = gtk_widget_get_action_group (widget, prefixes [i]);
 
               if (G_IS_ACTION_GROUP (group))
@@ -204,8 +198,6 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
   g_return_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (self));
   g_return_if_fail (initial_command_text);
 
-  g_print ("initial=\"%s\"\n", initial_command_text);
-
   groups = discover_groups (self);
 
   for (iter = groups; iter; iter = iter->next)
@@ -216,13 +208,10 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
 
       g_assert (G_IS_ACTION_GROUP (group));
 
-      g_print ("Group %p\n", group);
-
       names = g_action_group_list_actions (group);
 
       for (i = 0; names [i]; i++)
         {
-          g_print ("> %s\n", names[i]);
           if (g_str_has_prefix (names [i], initial_command_text))
             g_ptr_array_add (completions, g_strdup (names [i]));
         }
