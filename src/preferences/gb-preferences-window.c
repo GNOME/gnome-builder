@@ -84,6 +84,37 @@ gb_preferences_window_close (GbPreferencesWindow *window)
 }
 
 static void
+gb_preferences_window_search_changed (GbPreferencesWindow *window,
+                                      GtkSearchEntry      *entry)
+{
+  GList *pages;
+  GList *iter;
+  const gchar *text;
+  gchar **keywords;
+
+  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  text = gtk_entry_get_text (GTK_ENTRY (entry));
+  keywords = g_strsplit (text, " ", -1);
+
+  if (g_strv_length (keywords) == 0)
+    g_clear_pointer (&keywords, g_strfreev);
+
+  pages = gtk_container_get_children (GTK_CONTAINER (window->priv->stack));
+
+  for (iter = pages; iter; iter = iter->next)
+    {
+      GbPreferencesPage *page = GB_PREFERENCES_PAGE (iter->data);
+
+      gb_preferences_page_set_keywords (page, (const gchar * const *)keywords);
+    }
+
+  g_list_free (pages);
+  g_strfreev (keywords);
+}
+
+static void
 gb_preferences_window_constructed (GObject *object)
 {
   GbPreferencesWindow *window = (GbPreferencesWindow *)object;
@@ -98,6 +129,12 @@ gb_preferences_window_constructed (GObject *object)
                     G_CALLBACK (gb_preferences_window_section_changed),
                     window);
   gb_preferences_window_section_changed (window->priv->stack, NULL, window);
+
+  g_signal_connect_object (window->priv->search_entry,
+                           "changed",
+                           G_CALLBACK (gb_preferences_window_search_changed),
+                           window,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
