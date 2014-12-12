@@ -1060,6 +1060,24 @@ gb_editor_document_load_finish (GbEditorDocument  *document,
   return g_task_propagate_boolean (task, error);
 }
 
+void
+gb_editor_document_reload (GbEditorDocument *document)
+{
+  GFile *location;
+
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  location = gtk_source_file_get_location (document->priv->file);
+
+  if (!location)
+    {
+      g_warning ("Cannot reload document as it has not been saved to disk.");
+      return;
+    }
+
+  gb_editor_document_load_async (document, location, NULL, NULL, NULL);
+}
+
 static void
 gb_editor_document_modified_changed (GtkTextBuffer *buffer)
 {
