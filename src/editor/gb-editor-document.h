@@ -86,6 +86,7 @@ gboolean               gb_editor_document_save_finish                  (GbEditor
 void                   gb_editor_document_reformat                     (GbEditorDocument       *document);
 void                   gb_editor_document_check_externally_modified    (GbEditorDocument       *document);
 void                   gb_editor_document_reload                       (GbEditorDocument       *document);
+const GError          *gb_editor_document_get_error                    (GbEditorDocument       *document);
 
 G_END_DECLS
 

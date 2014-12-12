@@ -37,6 +37,7 @@ struct _GbEditorDocumentPrivate
   GbSourceCodeAssistant *code_assistant;
   gchar                 *title;
   GCancellable          *cancellable;
+  GError                *error;
 
   gdouble                progress;
   guint                  doc_seq_id;
@@ -51,6 +52,7 @@ struct _GbEditorDocumentPrivate
 enum {
   PROP_0,
   PROP_CHANGE_MONITOR,
+  PROP_ERROR,
   PROP_FILE,
   PROP_FILE_CHANGED_ON_VOLUME,
   PROP_MODIFIED,
@@ -86,6 +88,36 @@ GbEditorDocument *
 gb_editor_document_new (void)
 {
   return g_object_new (GB_TYPE_EDITOR_DOCUMENT, NULL);
+}
+
+/**
+ * gb_editor_document_get_error:
+ *
+ * Fetches the most recent error for the #GbEditorDocument instance. If no
+ * error has been registered, %NULL is returned.
+ *
+ * Returns: (transfer none): A #GError or %NULL.
+ */
+const GError *
+gb_editor_document_get_error (GbEditorDocument *document)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), NULL);
+
+  return document->priv->error;
+}
+
+static void
+gb_editor_document_set_error (GbEditorDocument *document,
+                              const GError     *error)
+{
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  if (error != document->priv->error)
+    {
+      g_clear_error (&document->priv->error);
+      document->priv->error = g_error_copy (error);
+      g_object_notify_by_pspec (G_OBJECT (document), gParamSpecs [PROP_ERROR]);
+    }
 }
 
 gboolean
@@ -732,13 +764,14 @@ gb_editor_document_save_cb (GObject      *object,
   g_return_if_fail (G_IS_ASYNC_RESULT (result));
   g_return_if_fail (G_IS_TASK (task));
 
+  document = g_task_get_source_object (task);
+
   if (!gtk_source_file_saver_save_finish (saver, result, &error))
     {
+      gb_editor_document_set_error (document, error);
       g_task_return_error (task, error);
       GOTO (cleanup);
     }
-
-  document = g_task_get_source_object (task);
 
   /*
    * FIXME:
@@ -975,13 +1008,14 @@ gb_editor_document_load_cb (GObject      *object,
   g_return_if_fail (G_IS_ASYNC_RESULT (result));
   g_return_if_fail (G_IS_TASK (task));
 
+  document = g_task_get_source_object (task);
+
   if (!gtk_source_file_loader_load_finish (loader, result, &error))
     {
+      gb_editor_document_set_error (document, error);
       g_task_return_error (task, error);
       GOTO (cleanup);
     }
-
-  document = g_task_get_source_object (task);
 
   document->priv->mtime_set = FALSE;
   document->priv->file_changed_on_volume = FALSE;
@@ -1181,6 +1215,10 @@ gb_editor_document_get_property (GObject    *object,
       g_value_set_object (value, gb_editor_document_get_change_monitor (self));
       break;
 
+    case PROP_ERROR:
+      g_value_set_boxed (value, gb_editor_document_get_error (self));
+      break;
+
     case PROP_FILE:
       g_value_set_object (value, gb_editor_document_get_file (self));
       break;
@@ -1266,6 +1304,15 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_CHANGE_MONITOR,
                                    gParamSpecs [PROP_CHANGE_MONITOR]);
+
+  gParamSpecs [PROP_ERROR] =
+    g_param_spec_boxed ("error",
+                        _("Error"),
+                        _("An error that may have been loaded."),
+                        G_TYPE_ERROR,
+                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_ERROR,
+                                   gParamSpecs [PROP_ERROR]);
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
