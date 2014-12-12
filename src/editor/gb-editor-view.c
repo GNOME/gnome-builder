@@ -42,6 +42,10 @@ struct _GbEditorViewPrivate
   GtkToggleButton *split_button;
   GbEditorFrame   *frame;
   GtkProgressBar  *progress_bar;
+  GtkLabel        *modified_label;
+  GtkButton       *modified_reload_button;
+  GtkButton       *modified_cancel_button;
+  GtkRevealer     *modified_revealer;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorView, gb_editor_view, GB_TYPE_DOCUMENT_VIEW)
@@ -204,6 +208,58 @@ gb_editor_view_get_frame2 (GbEditorView *view)
 }
 
 static void
+gb_editor_view_hide_revealer_child (GtkRevealer *revealer)
+{
+  g_return_if_fail (GTK_IS_REVEALER (revealer));
+
+  gtk_revealer_set_reveal_child (revealer, FALSE);
+}
+
+static void
+gb_editor_view_file_changed_on_volume (GbEditorView     *view,
+                                       GParamSpec       *pspec,
+                                       GbEditorDocument *document)
+{
+  GtkSourceFile *source_file;
+  GFile *location;
+  gchar *path;
+  gchar *str;
+
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  source_file = gb_editor_document_get_file (document);
+  location = gtk_source_file_get_location (source_file);
+
+  if (!location)
+    return;
+
+  if (g_file_is_native (location))
+    path = g_file_get_path (location);
+  else
+    path = g_file_get_uri (location);
+
+  str = g_strdup_printf (_("The file “%s” was modified outside of Builder."),
+                         path);
+
+  gtk_label_set_label (view->priv->modified_label, str);
+  gtk_revealer_set_reveal_child (view->priv->modified_revealer, TRUE);
+
+  g_free (path);
+  g_free (str);
+}
+
+static void
+gb_editor_view_reload_document (GbEditorView *view,
+                                GtkButton    *button)
+{
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+
+  gb_editor_document_reload (view->priv->document);
+  gtk_revealer_set_reveal_child (view->priv->modified_revealer, FALSE);
+}
+
+static void
 gb_editor_view_connect (GbEditorView     *view,
                         GbEditorDocument *document)
 {
@@ -227,6 +283,24 @@ gb_editor_view_connect (GbEditorView     *view,
   g_signal_connect_object (document,
                            "notify::progress",
                            G_CALLBACK (gb_editor_view_notify_progress),
+                           view,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (view->priv->modified_cancel_button,
+                           "clicked",
+                           G_CALLBACK (gb_editor_view_hide_revealer_child),
+                           view->priv->modified_revealer,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (view->priv->modified_reload_button,
+                           "clicked",
+                           G_CALLBACK (gb_editor_view_reload_document),
+                           view,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (document,
+                           "notify::file-changed-on-volume",
+                           G_CALLBACK (gb_editor_view_file_changed_on_volume),
                            view,
                            G_CONNECT_SWAPPED);
 }
@@ -452,6 +526,10 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, paned);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, progress_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, split_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, modified_revealer);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, modified_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, modified_cancel_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, modified_reload_button);
 
   g_type_ensure (GB_TYPE_EDITOR_FRAME);
 }
