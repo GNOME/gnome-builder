@@ -227,7 +227,7 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
             g_ptr_array_add (completions, g_strdup (names [i]));
         }
 
-      //g_free (names);
+      g_free (names);
     }
 
   g_list_free (groups);
