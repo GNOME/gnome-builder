@@ -1030,6 +1030,7 @@ gb_editor_document_load_async (GbEditorDocument      *document,
   loader = gtk_source_file_loader_new (GTK_SOURCE_BUFFER (document),
                                        document->priv->file);
 
+  gb_editor_document_set_file_changed_on_volume (document, FALSE);
   gb_editor_document_set_progress (document, 0.0);
 
   gtk_source_file_loader_load_async (loader,
