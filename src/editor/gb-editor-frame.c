@@ -612,8 +612,13 @@ gb_editor_frame_on_focus_in_event (GbEditorFrame *frame,
   g_return_val_if_fail (GB_IS_EDITOR_FRAME (frame), FALSE);
   g_return_val_if_fail (GB_IS_SOURCE_VIEW (source_view), FALSE);
 
-  gtk_revealer_set_reveal_child (frame->priv->search_revealer, FALSE);
-  gtk_source_search_context_set_highlight (frame->priv->search_context, FALSE);
+  if (gtk_revealer_get_reveal_child (frame->priv->search_revealer))
+    gtk_revealer_set_reveal_child (frame->priv->search_revealer, FALSE);
+
+  if (gtk_source_search_context_get_highlight (frame->priv->search_context))
+    gtk_source_search_context_set_highlight (frame->priv->search_context, FALSE);
+
+  gb_editor_document_check_externally_modified (frame->priv->document);
 
   g_signal_emit (frame, gSignals [FOCUSED], 0);
 
