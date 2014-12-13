@@ -26,6 +26,7 @@ G_DEFINE_INTERFACE (GbDocument, gb_document, G_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_MODIFIED,
+  PROP_READ_ONLY,
   PROP_TITLE,
   LAST_PROP
 };
@@ -39,11 +40,58 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
 gboolean
+gb_document_is_untitled (GbDocument *document)
+{
+  g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
+
+  if (GB_DOCUMENT_GET_INTERFACE (document)->is_untitled)
+    return GB_DOCUMENT_GET_INTERFACE (document)->is_untitled (document);
+  return FALSE;
+}
+
+gboolean
+gb_document_get_mtime (GbDocument *document,
+                       GTimeVal   *mtime)
+{
+  g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
+  g_return_val_if_fail (mtime, FALSE);
+
+  if (GB_DOCUMENT_GET_INTERFACE (document)->get_mtime)
+    return GB_DOCUMENT_GET_INTERFACE (document)->get_mtime (document, mtime);
+  return FALSE;
+}
+
+glong
+_gb_document_get_seconds_since_last_save_or_load (GbDocument *document)
+{
+  GTimeVal now;
+  GTimeVal tv;
+
+  if (!gb_document_get_mtime (document, &tv))
+    return 0;
+
+  g_get_current_time (&now);
+
+  /* not totally precise, but whatever */
+  return now.tv_sec - tv.tv_sec;
+}
+
+gboolean
 gb_document_get_modified (GbDocument *document)
 {
   g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
 
   return GB_DOCUMENT_GET_INTERFACE (document)->get_modified (document);
+}
+
+gboolean
+gb_document_get_read_only (GbDocument *document)
+{
+  g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
+
+  if (GB_DOCUMENT_GET_INTERFACE (document)->get_read_only)
+    return GB_DOCUMENT_GET_INTERFACE (document)->get_read_only (document);
+  return FALSE;
 }
 
 const gchar *
@@ -107,6 +155,14 @@ gb_document_default_init (GbDocumentInterface *iface)
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_interface_install_property (iface, gParamSpecs [PROP_TITLE]);
+
+  gParamSpecs [PROP_READ_ONLY] =
+    g_param_spec_boolean ("read-only",
+                         _("Read Only"),
+                         _("If the document is read only."),
+                         FALSE,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_interface_install_property (iface, gParamSpecs [PROP_READ_ONLY]);
 
   gSignals [CREATE_VIEW] =
     g_signal_new ("create-view",

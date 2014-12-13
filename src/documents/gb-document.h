@@ -35,21 +35,29 @@ struct _GbDocumentInterface
 {
   GTypeInterface parent;
 
-  gboolean     (*get_modified) (GbDocument *document);
-  const gchar *(*get_title)    (GbDocument *document);
-  GtkWidget   *(*create_view)  (GbDocument *document);
-  void         (*save)         (GbDocument *document);
-  void         (*save_as)      (GbDocument *document,
-                                GtkWidget  *toplevel);
+  GtkWidget   *(*create_view)   (GbDocument *document);
+  gboolean     (*get_modified)  (GbDocument *document);
+  gboolean     (*get_mtime)     (GbDocument *document,
+                                 GTimeVal   *mtime);
+  gboolean     (*get_read_only) (GbDocument *document);
+  const gchar *(*get_title)     (GbDocument *document);
+  gboolean     (*is_untitled)   (GbDocument *document);
+  void         (*save)          (GbDocument *document);
+  void         (*save_as)       (GbDocument *document,
+                                 GtkWidget  *toplevel);
 };
 
-GType        gb_document_get_type     (void) G_GNUC_CONST;
-gboolean     gb_document_get_modified (GbDocument *document);
-const gchar *gb_document_get_title    (GbDocument *document);
-GtkWidget   *gb_document_create_view  (GbDocument *document);
-void         gb_document_save         (GbDocument *document);
-void         gb_document_save_as      (GbDocument *document,
-                                       GtkWidget  *toplevel);
+GtkWidget   *gb_document_create_view   (GbDocument *document);
+gboolean     gb_document_get_modified  (GbDocument *document);
+gboolean     gb_document_get_mtime     (GbDocument *document,
+                                        GTimeVal   *mtime);
+gboolean     gb_document_get_read_only (GbDocument *document);
+const gchar *gb_document_get_title     (GbDocument *document);
+GType        gb_document_get_type      (void);
+gboolean     gb_document_is_untitled   (GbDocument *document);
+void         gb_document_save          (GbDocument *document);
+void         gb_document_save_as       (GbDocument *document,
+                                        GtkWidget  *toplevel);
 
 G_END_DECLS
 
