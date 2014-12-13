@@ -513,15 +513,17 @@ gb_workbench_begin_save_as (GbWorkbench *workbench,
 
 static void
 gb_workbench_wait_for_saved (GbWorkbench *workbench,
+                             GtkDialog   *dialog,
                              SavedState  *state)
 {
   g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (GTK_IS_DIALOG (dialog));
   g_return_if_fail (state);
 
+  gtk_widget_set_sensitive (GTK_WIDGET (dialog), FALSE);
   while (state->outstanding)
-    {
-      gtk_main_iteration_do (TRUE);
-    }
+    gtk_main_iteration_do (TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (dialog), TRUE);
 }
 
 static gboolean
@@ -563,7 +565,7 @@ gb_workbench_confirm_close (GbWorkbench *workbench)
                 gb_workbench_begin_save (workbench, document, &state);
             }
 
-          gb_workbench_wait_for_saved (workbench, &state);
+          gb_workbench_wait_for_saved (workbench, GTK_DIALOG (dialog), &state);
           g_clear_object (&state.cancellable);
           break;
 
