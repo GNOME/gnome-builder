@@ -2177,13 +2177,26 @@ gb_source_vim_move_to_end (GbSourceVim *vim)
 }
 
 static void
+gb_source_vim_set_clipboard_text (GbSourceVim *vim,
+                                  const gchar *text)
+{
+  GtkClipboard *clipboard;
+
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+  g_return_if_fail (text);
+
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (vim->priv->text_view),
+                                        GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_set_text (clipboard, text, -1);
+}
+
+static void
 gb_source_vim_yank (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter begin;
   GtkTextIter end;
-  GtkClipboard *clipboard;
   gchar *text;
 
   g_assert (GB_IS_SOURCE_VIM (vim));
@@ -2227,9 +2240,7 @@ gb_source_vim_yank (GbSourceVim *vim)
   /*
    * Update the selection clipboard.
    */
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (vim->priv->text_view),
-                                        GDK_SELECTION_CLIPBOARD);
-  gtk_clipboard_set_text (clipboard, text, -1);
+  gb_source_vim_set_clipboard_text (vim, text);
   g_free (text);
 
   /*
@@ -4408,12 +4419,46 @@ gb_source_vim_cmd_yank (GbSourceVim *vim,
   if (!gtk_text_buffer_get_has_selection (buffer))
     {
       if (modifier == 'y')
-        gb_source_vim_cmd_select_line (vim, count, '\0');
+        {
+          GtkTextIter iter;
+          GtkTextMark *insert;
+
+          insert = gtk_text_buffer_get_insert (buffer);
+          gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+          if (!gtk_text_iter_forward_to_line_end (&iter))
+            {
+              GtkTextIter begin = iter;
+              gchar *str;
+              gchar *line;
+
+              /*
+               * WORKAROUND:
+               *
+               * We are on the last line of the file, so we can't fetch the
+               * newline at the end of this line. We will need to synthesize
+               * the line with our own trailing\n, so that the yank does not
+               * include a prefixing newline.
+               */
+              gtk_text_iter_set_line_offset (&begin, 0);
+              str = gtk_text_iter_get_slice (&begin, &iter);
+              line = g_strdup_printf ("%s\n", str);
+              gb_source_vim_set_clipboard_text (vim, line);
+              g_free (str);
+              g_free (line);
+
+              goto finish;
+            }
+
+          gb_source_vim_cmd_select_line (vim, count, '\0');
+        }
       else
         gb_source_vim_apply_motion (vim, modifier, count);
     }
 
   gb_source_vim_yank (vim);
+
+finish:
   gb_source_vim_clear_selection (vim);
   gb_source_vim_restore_position (vim);
 }
