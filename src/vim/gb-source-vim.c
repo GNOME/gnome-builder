@@ -4033,6 +4033,12 @@ gb_source_vim_cmd_delete (GbSourceVim *vim,
     }
 
   gb_source_vim_delete_selection (vim);
+
+  if (modifier == 'd')
+    {
+      /* Move the cursor to the 0 position */
+      gb_source_vim_cmd_backward_0 (vim, 0, 0);
+    }
 }
 
 static void
