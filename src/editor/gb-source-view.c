@@ -1725,6 +1725,8 @@ gb_source_view_set_font_name (GbSourceView *view,
     }
   else
     gtk_css_provider_load_from_data (view->priv->css_provider, "", -1, NULL);
+
+  gtk_widget_queue_resize (GTK_WIDGET (view));
 }
 
 GbSourceAutoIndenter *
