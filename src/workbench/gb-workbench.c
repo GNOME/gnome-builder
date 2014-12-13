@@ -56,6 +56,12 @@ struct _GbWorkbenchPrivate
   GtkStackSwitcher       *switcher;
 };
 
+typedef struct
+{
+  GCancellable *cancellable;
+  gint          outstanding;
+} SavedState;
+
 enum {
   PROP_0,
   PROP_COMMAND_MANAGER,
@@ -442,11 +448,85 @@ gb_workbench_get_document_manager (GbWorkbench *workbench)
   return gb_document_manager_get_default ();
 }
 
-static gboolean
-gb_workbench_delete_event (GtkWidget   *widget,
-                           GdkEventAny *event)
+static void
+gb_workbench_save_cb (GObject      *object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
 {
-  GbWorkbench *workbench = (GbWorkbench *)widget;
+  SavedState *state = user_data;
+
+  GbDocument *document = (GbDocument *)object;
+
+  gb_document_save_finish (document, result, NULL);
+
+  state->outstanding--;
+}
+
+static void
+gb_workbench_save_as_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  SavedState *state = user_data;
+
+  GbDocument *document = (GbDocument *)object;
+
+  gb_document_save_as_finish (document, result, NULL);
+
+  state->outstanding--;
+}
+
+static void
+gb_workbench_begin_save (GbWorkbench *workbench,
+                         GbDocument  *document,
+                         SavedState  *state)
+{
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (GB_IS_DOCUMENT (document));
+  g_return_if_fail (state);
+
+  state->outstanding++;
+
+  gb_document_save_async (document,
+                          state->cancellable,
+                          gb_workbench_save_cb,
+                          state);
+}
+
+static void
+gb_workbench_begin_save_as (GbWorkbench *workbench,
+                            GbDocument  *document,
+                            SavedState  *state)
+{
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (GB_IS_DOCUMENT (document));
+  g_return_if_fail (state);
+
+  state->outstanding++;
+
+  gb_document_save_as_async (document,
+                             GTK_WIDGET (workbench),
+                             state->cancellable,
+                             gb_workbench_save_as_cb,
+                             state);
+}
+
+static void
+gb_workbench_wait_for_saved (GbWorkbench *workbench,
+                             SavedState  *state)
+{
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (state);
+
+  while (state->outstanding)
+    {
+      gtk_main_iteration_do (TRUE);
+    }
+}
+
+static gboolean
+gb_workbench_confirm_close (GbWorkbench *workbench)
+{
   GbDocumentManager *document_manager;
   gboolean ret = FALSE;
   GList *unsaved = NULL;
@@ -458,32 +538,33 @@ gb_workbench_delete_event (GtkWidget   *widget,
 
   if (unsaved)
     {
+      SavedState state = { 0 };
       GtkWidget *dialog;
+      GList *selected;
       GList *iter;
       gint response_id;
 
       dialog = gb_close_confirmation_dialog_new (GTK_WINDOW (workbench), unsaved);
       response_id = gtk_dialog_run (GTK_DIALOG (dialog));
-
-      gtk_widget_hide (dialog);
-      gtk_widget_destroy (dialog);
+      selected = gb_close_confirmation_dialog_get_selected_documents (GB_CLOSE_CONFIRMATION_DIALOG (dialog));
 
       switch (response_id)
         {
         case GTK_RESPONSE_YES:
-          for (iter = unsaved; iter; iter = iter->next)
+          state.cancellable = g_cancellable_new ();
+
+          for (iter = selected; iter; iter = iter->next)
             {
               GbDocument *document = GB_DOCUMENT (iter->data);
 
               if (gb_document_is_untitled (document))
-                {
-                  /* TODO: Save as */
-                }
+                gb_workbench_begin_save_as (workbench, document, &state);
               else
-                {
-                  /* TODO: Save */
-                }
+                gb_workbench_begin_save (workbench, document, &state);
             }
+
+          gb_workbench_wait_for_saved (workbench, &state);
+          g_clear_object (&state.cancellable);
           break;
 
         case GTK_RESPONSE_NO:
@@ -497,17 +578,33 @@ gb_workbench_delete_event (GtkWidget   *widget,
         default:
           g_assert_not_reached ();
         }
+
+      g_list_free (selected);
+      gtk_widget_hide (dialog);
+      gtk_widget_destroy (dialog);
     }
 
   g_list_free (unsaved);
 
-  if (!ret)
+  return ret;
+}
+
+static gboolean
+gb_workbench_delete_event (GtkWidget   *widget,
+                           GdkEventAny *event)
+{
+  GbWorkbench *workbench = (GbWorkbench *)widget;
+
+  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), FALSE);
+
+  if (!gb_workbench_confirm_close (workbench))
     {
       if (GTK_WIDGET_CLASS (gb_workbench_parent_class)->delete_event)
         return GTK_WIDGET_CLASS (gb_workbench_parent_class)->delete_event (widget, event);
+      return FALSE;
     }
 
-  return ret;
+  return TRUE;
 }
 
 static void
