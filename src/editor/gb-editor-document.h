@@ -75,13 +75,6 @@ void                   gb_editor_document_load_async                   (GbEditor
 gboolean               gb_editor_document_load_finish                  (GbEditorDocument       *document,
                                                                         GAsyncResult           *result,
                                                                         GError                **error);
-void                   gb_editor_document_save_async                   (GbEditorDocument       *document,
-                                                                        GCancellable           *cancellable,
-                                                                        GAsyncReadyCallback     callback,
-                                                                        gpointer                user_data);
-gboolean               gb_editor_document_save_finish                  (GbEditorDocument       *document,
-                                                                        GAsyncResult           *result,
-                                                                        GError                **error);
 void                   gb_editor_document_reformat                     (GbEditorDocument       *document);
 void                   gb_editor_document_check_externally_modified    (GbEditorDocument       *document);
 void                   gb_editor_document_reload                       (GbEditorDocument       *document);

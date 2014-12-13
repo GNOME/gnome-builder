@@ -119,22 +119,65 @@ gb_document_create_view (GbDocument *document)
 }
 
 void
-gb_document_save (GbDocument *document)
+gb_document_save_async (GbDocument          *document,
+                        GCancellable        *cancellable,
+                        GAsyncReadyCallback  callback,
+                        gpointer             user_data)
 {
   g_return_if_fail (GB_IS_DOCUMENT (document));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (GB_DOCUMENT_GET_INTERFACE (document)->save)
-    GB_DOCUMENT_GET_INTERFACE (document)->save (document);
+  if (GB_DOCUMENT_GET_INTERFACE (document)->save_async)
+    GB_DOCUMENT_GET_INTERFACE (document)->save_async (document,
+                                                      cancellable,
+                                                      callback,
+                                                      user_data);
+}
+
+gboolean
+gb_document_save_finish (GbDocument    *document,
+                         GAsyncResult  *result,
+                         GError       **error)
+{
+  g_return_if_fail (GB_IS_DOCUMENT (document));
+  g_return_if_fail (G_IS_ASYNC_RESULT (result));
+
+  if (GB_DOCUMENT_GET_INTERFACE (document)->save_finish)
+    return GB_DOCUMENT_GET_INTERFACE (document)->
+      save_finish (document, result, error);
+
+  return TRUE;
 }
 
 void
-gb_document_save_as (GbDocument *document,
-                     GtkWidget  *toplevel)
+gb_document_save_as_async (GbDocument          *document,
+                           GtkWidget           *toplevel,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
 {
   g_return_if_fail (GB_IS_DOCUMENT (document));
+  g_return_if_fail (GTK_IS_WIDGET (toplevel));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (GB_DOCUMENT_GET_INTERFACE (document)->save_as)
-    GB_DOCUMENT_GET_INTERFACE (document)->save_as (document, toplevel);
+  if (GB_DOCUMENT_GET_INTERFACE (document)->save_as_async)
+    GB_DOCUMENT_GET_INTERFACE (document)->
+      save_as_async (document, toplevel, cancellable, callback, user_data);
+}
+
+gboolean
+gb_document_save_as_finish (GbDocument    *document,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  g_return_if_fail (GB_IS_DOCUMENT (document));
+  g_return_if_fail (G_IS_ASYNC_RESULT (result));
+
+  if (GB_DOCUMENT_GET_INTERFACE (document)->save_as_finish)
+    return GB_DOCUMENT_GET_INTERFACE (document)->
+      save_as_finish (document, result, error);
+
+  return TRUE;
 }
 
 static void

@@ -814,13 +814,14 @@ cleanup:
   EXIT;
 }
 
-void
-gb_editor_document_save_async (GbEditorDocument      *document,
-                               GCancellable          *cancellable,
-                               GAsyncReadyCallback    callback,
-                               gpointer               user_data)
+static void
+gb_editor_document_save_async (GbDocument          *doc,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
 {
   GtkSourceFileSaver *saver;
+  GbEditorDocument *document = (GbEditorDocument *)doc;
   GbEditorFileMarks *marks;
   GbEditorFileMark *mark;
   GFile *location;
@@ -879,10 +880,10 @@ gb_editor_document_save_async (GbEditorDocument      *document,
   EXIT;
 }
 
-gboolean
-gb_editor_document_save_finish (GbEditorDocument  *document,
-                                GAsyncResult      *result,
-                                GError           **error)
+static gboolean
+gb_editor_document_save_finish (GbDocument    *document,
+                                GAsyncResult  *result,
+                                GError       **error)
 {
   GTask *task = (GTask *)result;
 
@@ -893,29 +894,47 @@ gb_editor_document_save_finish (GbEditorDocument  *document,
 }
 
 static void
-gb_editor_document_save (GbDocument *document)
+gb_editor_document_save_as_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
 {
-  GbEditorDocument *self = (GbEditorDocument *)document;
+  GbDocument *document;
+  GTask *task = user_data;
+  GError *error = NULL;
 
-  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (self));
+  g_return_if_fail (G_IS_ASYNC_RESULT (result));
+  g_return_if_fail (G_IS_TASK (task));
 
-  gb_editor_document_save_async (self, NULL, NULL, NULL);
+  document = g_task_get_source_object (task);
+
+  if (!gb_editor_document_save_finish (document, result, &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
+
+  g_object_unref (task);
 }
 
 static void
-gb_editor_document_save_as (GbDocument *document,
-                            GtkWidget  *toplevel)
+gb_editor_document_save_as_async (GbDocument          *document,
+                                  GtkWidget           *toplevel,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
 {
   GbEditorDocument *self = (GbEditorDocument *)document;
   const gchar *title;
   GtkDialog *dialog;
   GtkWidget *suggested;
+  GTask *task;
   GFile *chosen_file;
   guint response;
 
   ENTRY;
 
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (self));
+
+  task = g_task_new (document, cancellable, callback, user_data);
 
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
                          "action", GTK_FILE_CHOOSER_ACTION_SAVE,
@@ -949,13 +968,36 @@ gb_editor_document_save_as (GbDocument *document,
     {
       chosen_file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       gtk_source_file_set_location (self->priv->file, chosen_file);
-      gb_editor_document_save_async (self, NULL, NULL, NULL);
+      gb_editor_document_save_async (GB_DOCUMENT (self),
+                                     cancellable,
+                                     gb_editor_document_save_as_cb,
+                                     task);
       g_clear_object (&chosen_file);
+    }
+  else
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               _("No file was selected for saving."));
     }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
 
   EXIT;
+}
+
+static gboolean
+gb_editor_document_save_as_finish (GbDocument    *document,
+                                   GAsyncResult  *result,
+                                   GError       **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), FALSE);
+  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+
+  return g_task_propagate_boolean (task, error);
 }
 
 static void
@@ -1458,6 +1500,8 @@ gb_editor_document_init_document (GbDocumentInterface *iface)
   iface->get_title = gb_editor_document_get_title;
   iface->is_untitled = gb_editor_document_is_untitled;
   iface->create_view = gb_editor_document_create_view;
-  iface->save = gb_editor_document_save;
-  iface->save_as = gb_editor_document_save_as;
+  iface->save_async = gb_editor_document_save_async;
+  iface->save_finish = gb_editor_document_save_finish;
+  iface->save_as_async = gb_editor_document_save_as_async;
+  iface->save_as_finish = gb_editor_document_save_as_finish;
 }

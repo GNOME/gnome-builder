@@ -459,7 +459,7 @@ gb_document_stack_save_activate (GSimpleAction *action,
       if (document)
         {
           if (gb_document_get_modified (document))
-            gb_document_save (document);
+            gb_document_save_async (document, NULL, NULL, NULL);
         }
     }
 }
@@ -485,7 +485,7 @@ gb_document_stack_save_as_activate (GSimpleAction *action,
       document = gb_document_view_get_document (priv->active_view);
 
       if (document)
-        gb_document_save_as (document, toplevel);
+        gb_document_save_as_async (document, toplevel, NULL, NULL, NULL);
     }
 }
 
