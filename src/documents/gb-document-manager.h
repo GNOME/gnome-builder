@@ -57,19 +57,20 @@ struct _GbDocumentManagerClass
                                      GbDocument        *document);
 };
 
-GType              gb_document_manager_get_type       (void);
-GbDocumentManager *gb_document_manager_new            (void);
-GbDocumentManager *gb_document_manager_get_default    (void);
-void               gb_document_manager_add            (GbDocumentManager *manager,
-                                                       GbDocument        *document);
-void               gb_document_manager_remove         (GbDocumentManager *manager,
-                                                       GbDocument        *document);
-GList             *gb_document_manager_get_documents  (GbDocumentManager *manager);
-guint              gb_document_manager_get_count      (GbDocumentManager *manager);
-GbDocument        *gb_document_manager_find_with_file (GbDocumentManager *manager,
-                                                       GFile             *file);
-GbDocument        *gb_document_manager_find_with_type (GbDocumentManager *manager,
-                                                       GType              type);
+GType              gb_document_manager_get_type              (void);
+GbDocumentManager *gb_document_manager_new                   (void);
+GbDocumentManager *gb_document_manager_get_default           (void);
+void               gb_document_manager_add                   (GbDocumentManager *manager,
+                                                              GbDocument        *document);
+void               gb_document_manager_remove                (GbDocumentManager *manager,
+                                                              GbDocument        *document);
+GList             *gb_document_manager_get_documents         (GbDocumentManager *manager);
+GList             *gb_document_manager_get_unsaved_documents (GbDocumentManager *manager);
+guint              gb_document_manager_get_count             (GbDocumentManager *manager);
+GbDocument        *gb_document_manager_find_with_file        (GbDocumentManager *manager,
+                                                              GFile             *file);
+GbDocument        *gb_document_manager_find_with_type        (GbDocumentManager *manager,
+                                                              GType              type);
 
 G_END_DECLS
 

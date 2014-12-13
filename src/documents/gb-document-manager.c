@@ -153,6 +153,36 @@ gb_document_manager_get_documents (GbDocumentManager *manager)
   return list;
 }
 
+/**
+ * gb_document_manager_get_unsaved_documents:
+ *
+ * Fetches a #GList of all the documents loaded by #GbDocumentManager for
+ * which have not been saved.
+ *
+ * Returns: (transfer container) (element-type GbDocument*): #GList of
+ *   #GbDocument. Free list with g_list_free().
+ */
+GList *
+gb_document_manager_get_unsaved_documents (GbDocumentManager *manager)
+{
+  GList *list = NULL;
+  guint i;
+
+  g_return_val_if_fail (GB_IS_DOCUMENT_MANAGER (manager), NULL);
+
+  for (i = 0; i < manager->priv->documents->len; i++)
+    {
+      GbDocument *document;
+
+      document = g_ptr_array_index (manager->priv->documents, i);
+
+      if (gb_document_get_modified (document))
+        list = g_list_prepend (list, document);
+    }
+
+  return list;
+}
+
 static void
 gb_document_manager_document_modified (GbDocumentManager *manager,
                                        GParamSpec        *pspec,
