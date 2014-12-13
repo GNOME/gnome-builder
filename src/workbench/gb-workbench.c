@@ -24,7 +24,9 @@
 #include "gb-command-gaction-provider.h"
 #include "gb-command-manager.h"
 #include "gb-command-vim-provider.h"
+#include "gb-close-confirmation-dialog.h"
 #include "gb-credits-widget.h"
+#include "gb-document-manager.h"
 #include "gb-editor-workspace.h"
 #include "gb-log.h"
 #include "gb-widget.h"
@@ -430,6 +432,84 @@ gb_workbench_constructed (GObject *object)
   EXIT;
 }
 
+GbDocumentManager *
+gb_workbench_get_document_manager (GbWorkbench *workbench)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
+
+  /* TODO: Store document manager per project/workbench */
+
+  return gb_document_manager_get_default ();
+}
+
+static gboolean
+gb_workbench_delete_event (GtkWidget   *widget,
+                           GdkEventAny *event)
+{
+  GbWorkbench *workbench = (GbWorkbench *)widget;
+  GbDocumentManager *document_manager;
+  gboolean ret = FALSE;
+  GList *unsaved = NULL;
+
+  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), FALSE);
+
+  document_manager = gb_workbench_get_document_manager (workbench);
+  unsaved = gb_document_manager_get_unsaved_documents (document_manager);
+
+  if (unsaved)
+    {
+      GtkWidget *dialog;
+      GList *iter;
+      gint response_id;
+
+      dialog = gb_close_confirmation_dialog_new (GTK_WINDOW (workbench), unsaved);
+      response_id = gtk_dialog_run (GTK_DIALOG (dialog));
+
+      gtk_widget_hide (dialog);
+      gtk_widget_destroy (dialog);
+
+      switch (response_id)
+        {
+        case GTK_RESPONSE_YES:
+          for (iter = unsaved; iter; iter = iter->next)
+            {
+              GbDocument *document = GB_DOCUMENT (iter->data);
+
+              if (gb_document_is_untitled (document))
+                {
+                  /* TODO: Save as */
+                }
+              else
+                {
+                  /* TODO: Save */
+                }
+            }
+          break;
+
+        case GTK_RESPONSE_NO:
+          break;
+
+        case GTK_RESPONSE_DELETE_EVENT:
+        case GTK_RESPONSE_CANCEL:
+          ret = TRUE;
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+    }
+
+  g_list_free (unsaved);
+
+  if (!ret)
+    {
+      if (GTK_WIDGET_CLASS (gb_workbench_parent_class)->delete_event)
+        return GTK_WIDGET_CLASS (gb_workbench_parent_class)->delete_event (widget, event);
+    }
+
+  return ret;
+}
+
 static void
 gb_workbench_dispose (GObject *object)
 {
@@ -495,6 +575,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   object_class->set_property = gb_workbench_set_property;
 
   widget_class->realize = gb_workbench_realize;
+  widget_class->delete_event = gb_workbench_delete_event;
 
   klass->workspace_changed = gb_workbench_workspace_changed;
 
