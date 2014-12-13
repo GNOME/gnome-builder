@@ -3452,6 +3452,29 @@ gb_source_vim_op_colorscheme (GbSourceVim *vim,
     gtk_source_buffer_set_style_scheme (GTK_SOURCE_BUFFER (buffer), scheme);
 }
 
+static gboolean
+gb_source_vim_match_is_selected (GbSourceVim *vim,
+                                 GtkTextIter *match_begin,
+                                 GtkTextIter *match_end)
+{
+  GtkTextIter sel_begin;
+  GtkTextIter sel_end;
+
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
+  g_return_val_if_fail (match_begin, FALSE);
+  g_return_val_if_fail (match_end, FALSE);
+
+  gb_source_vim_get_selection_bounds (vim, &sel_begin, &sel_end);
+
+  if (gtk_text_iter_compare (&sel_begin, &sel_end) > 0)
+    text_iter_swap (&sel_begin, &sel_end);
+
+  return ((gtk_text_iter_compare (&sel_begin, match_begin) <= 0) &&
+          (gtk_text_iter_compare (&sel_begin, match_end) < 0) &&
+          (gtk_text_iter_compare (&sel_end, match_begin) > 0) &&
+          (gtk_text_iter_compare (&sel_end, match_end) >= 0));
+}
+
 static void
 gb_source_vim_do_search_and_replace (GbSourceVim *vim,
                                      GtkTextIter *begin,
@@ -3460,6 +3483,12 @@ gb_source_vim_do_search_and_replace (GbSourceVim *vim,
                                      const gchar *replace_text,
                                      gboolean     is_global)
 {
+  GtkTextBuffer *buffer;
+  GtkTextMark *mark;
+  GtkTextIter tmp1;
+  GtkTextIter tmp2;
+  GtkTextIter match_begin;
+  GtkTextIter match_end;
   GError *error = NULL;
 
   g_assert (GB_IS_SOURCE_VIM (vim));
@@ -3467,34 +3496,60 @@ gb_source_vim_do_search_and_replace (GbSourceVim *vim,
   g_assert (replace_text);
   g_assert ((!begin && !end) || (begin && end));
 
-  /*
-   * TODO: This is pretty incomplete. We don't actually respect is_global, or
-   *       if we should be limiting to the current selection buffer.
-   *       But having it in any state is better than none.
-   */
-
   if (!vim->priv->search_context)
     return;
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
+  if (!begin)
+    {
+      gtk_text_buffer_get_start_iter (buffer, &tmp1);
+      begin = &tmp1;
+    }
+
+  if (!end)
+    {
+      gtk_text_buffer_get_end_iter (buffer, &tmp2);
+      end = &tmp2;
+    }
+
+  mark = gtk_text_buffer_create_mark (buffer, NULL, end, FALSE);
 
   gtk_source_search_settings_set_search_text (vim->priv->search_settings,
                                               search_text);
   gtk_source_search_settings_set_case_sensitive (vim->priv->search_settings,
                                                  TRUE);
 
-  if (begin)
+  while (gtk_source_search_context_forward (vim->priv->search_context, begin,
+                                            &match_begin, &match_end))
     {
-      /* todo: limit to selection range */
-      g_warning ("TODO: Selection based search/replace");
-    }
-  else
-    {
-      if (!gtk_source_search_context_replace_all (vim->priv->search_context,
-                                                  replace_text, -1, &error))
+      if (is_global ||
+          gb_source_vim_match_is_selected (vim, &match_begin, &match_end))
         {
-          g_warning ("%s", error->message);
-          g_clear_error (&error);
+          GtkTextMark *mark2;
+
+          mark2 = gtk_text_buffer_create_mark (buffer, NULL, &match_end, FALSE);
+
+          if (!gtk_source_search_context_replace (vim->priv->search_context,
+                                                  &match_begin, &match_end,
+                                                  replace_text, -1, &error))
+            {
+              g_warning ("%s", error->message);
+              g_clear_error (&error);
+              gtk_text_buffer_delete_mark (buffer, mark2);
+              break;
+            }
+
+          gtk_text_buffer_get_iter_at_mark (buffer, &match_end, mark2);
+          gtk_text_buffer_delete_mark (buffer, mark2);
         }
+
+      *begin = match_end;
+
+      gtk_text_buffer_get_iter_at_mark (buffer, end, mark);
     }
+
+  gtk_text_buffer_delete_mark (buffer, mark);
 }
 
 static void
@@ -3509,12 +3564,14 @@ gb_source_vim_op_search_and_replace (GbSourceVim *vim,
   gchar *search_text = NULL;
   gchar *replace_text = NULL;
   gunichar separator;
-  gboolean is_global = FALSE;
 
   g_assert (GB_IS_SOURCE_VIM (vim));
-  g_assert (g_str_has_prefix (command, "%s"));
+  g_assert (g_str_has_prefix (command, "%s") ||
+            g_str_has_prefix (command, "s"));
 
-  command += strlen ("%s");
+  if (*command == '%')
+    command++;
+  command++;
 
   separator = g_utf8_get_char (command);
   if (!separator)
@@ -3573,8 +3630,8 @@ gb_source_vim_op_search_and_replace (GbSourceVim *vim,
           switch (*command)
             {
             case 'g':
-              is_global = TRUE;
-                break;
+              break;
+
             /* what other options are supported? */
             default:
               break;
@@ -3593,12 +3650,15 @@ gb_source_vim_op_search_and_replace (GbSourceVim *vim,
       GtkTextIter end;
 
       gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+      if (gtk_text_iter_compare (&begin, &end) > 0)
+        text_iter_swap (&begin, &end);
       gb_source_vim_do_search_and_replace (vim, &begin, &end, search_text,
-                                           replace_text, is_global);
+                                           replace_text, FALSE);
     }
   else
     gb_source_vim_do_search_and_replace (vim, NULL, NULL, search_text,
-                                         replace_text, is_global);
+                                         replace_text, TRUE);
 
   g_free (search_text);
   g_free (replace_text);
@@ -3633,6 +3693,8 @@ gb_source_vim_parse_operation (const gchar *command_text)
     return gb_source_vim_op_colorscheme;
   else if (g_str_has_prefix (command_text, "%s"))
     return gb_source_vim_op_search_and_replace;
+  else if (g_str_has_prefix (command_text, "s")) /* not ideal */
+    return gb_source_vim_op_search_and_replace;
 
   return NULL;
 }
@@ -3656,6 +3718,7 @@ gb_source_vim_execute_command (GbSourceVim *vim,
                                const gchar *command)
 {
   GbSourceVimOperation func;
+  GtkTextBuffer *buffer;
   gboolean ret = FALSE;
   gchar *copy;
 
@@ -3667,9 +3730,12 @@ gb_source_vim_execute_command (GbSourceVim *vim,
 
   if (func)
     {
+      buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+      gtk_text_buffer_begin_user_action (buffer);
       func (vim, command);
       gb_source_vim_clear_selection (vim);
       gb_source_vim_set_mode (vim, GB_SOURCE_VIM_NORMAL);
+      gtk_text_buffer_end_user_action (buffer);
       ret = TRUE;
     }
 
