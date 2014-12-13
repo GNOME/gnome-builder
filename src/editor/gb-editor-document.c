@@ -90,6 +90,14 @@ gb_editor_document_new (void)
   return g_object_new (GB_TYPE_EDITOR_DOCUMENT, NULL);
 }
 
+static gboolean
+gb_editor_document_is_untitled (GbDocument *document)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), NULL);
+
+  return (GB_EDITOR_DOCUMENT (document)->priv->doc_seq_id > 0);
+}
+
 /**
  * gb_editor_document_get_error:
  *
@@ -120,12 +128,12 @@ gb_editor_document_set_error (GbEditorDocument *document,
     }
 }
 
-gboolean
-gb_editor_document_get_read_only (GbEditorDocument *document)
+static gboolean
+gb_editor_document_get_read_only (GbDocument *document)
 {
   g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), FALSE);
 
-  return document->priv->read_only;
+  return GB_EDITOR_DOCUMENT (document)->priv->read_only;
 }
 
 static void
@@ -139,8 +147,7 @@ gb_editor_document_set_read_only (GbEditorDocument *document,
   if (document->priv->read_only != read_only)
     {
       document->priv->read_only = read_only;
-      g_object_notify_by_pspec (G_OBJECT (document),
-                                gParamSpecs [PROP_READ_ONLY]);
+      g_object_notify (G_OBJECT (document), "read-only");
     }
 
   EXIT;
@@ -1125,6 +1132,23 @@ gb_editor_document_modified_changed (GtkTextBuffer *buffer)
 }
 
 gboolean
+gb_editor_document_get_mtime (GbDocument *document,
+                              GTimeVal   *mtime)
+{
+  GbEditorDocument *self = (GbEditorDocument *)document;
+
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (self), FALSE);
+
+  if (self->priv->mtime_set)
+    {
+      memcpy (mtime, &self->priv->mtime, sizeof *mtime);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
 gb_editor_document_get_modified (GbDocument *document)
 {
   g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), FALSE);
@@ -1229,7 +1253,8 @@ gb_editor_document_get_property (GObject    *object,
       break;
 
     case PROP_READ_ONLY:
-      g_value_set_boolean (value, gb_editor_document_get_read_only (self));
+      g_value_set_boolean (value,
+                           gb_editor_document_get_read_only (GB_DOCUMENT (self)));
       break;
 
     case PROP_PROGRESS:
@@ -1294,6 +1319,7 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
   text_buffer_class->modified_changed = gb_editor_document_modified_changed;
 
   g_object_class_override_property (object_class, PROP_MODIFIED, "modified");
+  g_object_class_override_property (object_class, PROP_READ_ONLY, "read-only");
   g_object_class_override_property (object_class, PROP_TITLE, "title");
 
   gParamSpecs [PROP_CHANGE_MONITOR] =
@@ -1342,15 +1368,6 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_PROGRESS,
                                    gParamSpecs [PROP_PROGRESS]);
-
-  gParamSpecs [PROP_READ_ONLY] =
-    g_param_spec_boolean ("read-only",
-                          _("Read Only"),
-                          _("If the buffer is read only."),
-                          FALSE,
-                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_READ_ONLY,
-                                   gParamSpecs [PROP_READ_ONLY]);
 
   gParamSpecs [PROP_STYLE_SCHEME_NAME] =
     g_param_spec_string ("style-scheme-name",
@@ -1426,7 +1443,10 @@ static void
 gb_editor_document_init_document (GbDocumentInterface *iface)
 {
   iface->get_modified = gb_editor_document_get_modified;
+  iface->get_mtime = gb_editor_document_get_mtime;
+  iface->get_read_only = gb_editor_document_get_read_only;
   iface->get_title = gb_editor_document_get_title;
+  iface->is_untitled = gb_editor_document_is_untitled;
   iface->create_view = gb_editor_document_create_view;
   iface->save = gb_editor_document_save;
   iface->save_as = gb_editor_document_save_as;

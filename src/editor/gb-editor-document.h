@@ -63,7 +63,6 @@ void                   gb_editor_document_set_file                     (GbEditor
 gdouble                gb_editor_document_get_progress                 (GbEditorDocument       *document);
 GbSourceChangeMonitor *gb_editor_document_get_change_monitor           (GbEditorDocument       *document);
 GbSourceCodeAssistant *gb_editor_document_get_code_assistant           (GbEditorDocument       *document);
-gboolean               gb_editor_document_get_read_only                (GbEditorDocument       *document);
 gboolean               gb_editor_document_get_file_changed_on_volume   (GbEditorDocument       *document);
 gboolean               gb_editor_document_get_trim_trailing_whitespace (GbEditorDocument       *document);
 void                   gb_editor_document_set_trim_trailing_whitespace (GbEditorDocument       *document,
