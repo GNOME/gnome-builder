@@ -42,6 +42,7 @@ struct _GbEditorDocumentPrivate
   gdouble                progress;
   guint                  doc_seq_id;
   GTimeVal               mtime;
+  GTimeVal               unsaved_ctime;
 
   guint                  file_changed_on_volume : 1;
   guint                  mtime_set : 1;
@@ -677,7 +678,10 @@ gb_editor_document_notify_file_location (GbEditorDocument *document,
   if (!location)
     {
       if (!priv->doc_seq_id)
-        priv->doc_seq_id = gb_doc_seq_acquire ();
+        {
+          priv->doc_seq_id = gb_doc_seq_acquire ();
+          g_get_current_time (&priv->unsaved_ctime);
+        }
     }
   else
     {
@@ -1138,6 +1142,12 @@ gb_editor_document_get_mtime (GbDocument *document,
   GbEditorDocument *self = (GbEditorDocument *)document;
 
   g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (self), FALSE);
+
+  if (self->priv->doc_seq_id)
+    {
+      memcpy (mtime, &self->priv->unsaved_ctime, sizeof *mtime);
+      return TRUE;
+    }
 
   if (self->priv->mtime_set)
     {
