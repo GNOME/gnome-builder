@@ -51,7 +51,7 @@
     <section>
       <item>
         <attribute name="label" translatable="yes">_New Document</attribute>
-        <attribute name="action">win.new-document</attribute>
+        <attribute name="action">workspace.new-document</attribute>
       </item>
     </section>
     <section>
