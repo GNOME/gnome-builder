@@ -26,6 +26,7 @@
 #include "gb-document-grid.h"
 #include "gb-editor-document.h"
 #include "gb-editor-workspace.h"
+#include "gb-log.h"
 #include "gb-tree.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
@@ -191,11 +192,15 @@ gb_editor_workspace_action_open (GSimpleAction *action,
 static void
 gb_editor_workspace_grab_focus (GtkWidget *widget)
 {
-  GbEditorWorkspace *workspace = GB_EDITOR_WORKSPACE (widget);
+  GbEditorWorkspace *workspace = (GbEditorWorkspace *)widget;
+
+  ENTRY;
 
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
 
   gtk_widget_grab_focus (GTK_WIDGET (workspace->priv->document_grid));
+
+  EXIT;
 }
 
 static void

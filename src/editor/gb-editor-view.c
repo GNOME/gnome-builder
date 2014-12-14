@@ -26,6 +26,7 @@
 #include "gb-editor-view.h"
 #include "gb-glib.h"
 #include "gb-html-document.h"
+#include "gb-log.h"
 #include "gb-widget.h"
 
 struct _GbEditorViewPrivate
@@ -416,6 +417,8 @@ gb_editor_view_toggle_split (GbEditorView *view)
   GbEditorViewPrivate *priv;
   GtkWidget *child2;
 
+  ENTRY;
+
   g_return_if_fail (GB_IS_EDITOR_VIEW (view));
 
   priv = view->priv;
@@ -437,6 +440,8 @@ gb_editor_view_toggle_split (GbEditorView *view)
                                          NULL);
       gtk_widget_grab_focus (child2);
     }
+
+  EXIT;
 }
 
 static void
@@ -469,6 +474,8 @@ gb_editor_view_switch_pane (GSimpleAction *action,
 {
   GbEditorView *view = user_data;
 
+  ENTRY;
+
   g_return_if_fail (GB_IS_EDITOR_VIEW (view));
 
   if (!gtk_widget_has_focus (GTK_WIDGET (view->priv->frame->priv->source_view)))
@@ -481,6 +488,8 @@ gb_editor_view_switch_pane (GSimpleAction *action,
       if (child2)
         gtk_widget_grab_focus (child2);
     }
+
+  EXIT;
 }
 
 static void
@@ -488,7 +497,13 @@ gb_editor_view_grab_focus (GtkWidget *widget)
 {
   GbEditorView *view = (GbEditorView *)widget;
 
+  ENTRY;
+
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+
   gtk_widget_grab_focus (GTK_WIDGET (view->priv->frame));
+
+  EXIT;
 }
 
 static void

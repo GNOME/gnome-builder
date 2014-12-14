@@ -682,6 +682,8 @@ gb_editor_frame_on_search_entry_key_press (GbEditorFrame *frame,
                                            GdkEventKey   *event,
                                            GdTaggedEntry *entry)
 {
+  ENTRY;
+
   g_assert (GD_IS_TAGGED_ENTRY (entry));
   g_assert (GB_IS_EDITOR_FRAME (frame));
 
@@ -690,21 +692,25 @@ gb_editor_frame_on_search_entry_key_press (GbEditorFrame *frame,
       gtk_revealer_set_reveal_child (frame->priv->search_revealer, FALSE);
       gb_source_view_set_show_shadow (frame->priv->source_view, FALSE);
       gtk_widget_grab_focus (GTK_WIDGET (frame->priv->source_view));
-      return GDK_EVENT_STOP;
+      RETURN (GDK_EVENT_STOP);
     }
 
-  return GDK_EVENT_PROPAGATE;
+  RETURN (GDK_EVENT_PROPAGATE);
 }
 
 static void
 gb_editor_frame_on_search_entry_activate (GbEditorFrame *frame,
                                           GdTaggedEntry *entry)
 {
+  ENTRY;
+
   g_assert (GD_IS_TAGGED_ENTRY (entry));
   g_assert (GB_IS_EDITOR_FRAME (frame));
 
   gb_editor_frame_move_next_match (frame);
   gtk_widget_grab_focus (GTK_WIDGET (frame->priv->source_view));
+
+  EXIT;
 }
 
 static void
@@ -922,9 +928,13 @@ gb_editor_frame_grab_focus (GtkWidget *widget)
 {
   GbEditorFrame *frame = (GbEditorFrame *)widget;
 
+  ENTRY;
+
   g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
 
   gtk_widget_grab_focus (GTK_WIDGET (frame->priv->source_view));
+
+  EXIT;
 }
 
 static void
