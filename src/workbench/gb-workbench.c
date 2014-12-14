@@ -413,12 +413,13 @@ on_save_all (GSimpleAction *action,
              GVariant      *parameters,
              gpointer       user_data)
 {
-  GbDocumentManager *manager;
+  GbWorkbench *workbench = user_data;
   GList *list;
   GList *iter;
 
-  manager = gb_document_manager_get_default ();
-  list = gb_document_manager_get_documents (manager);
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  list = gb_document_manager_get_documents (workbench->priv->document_manager);
 
   for (iter = list; iter; iter = iter->next)
     {
