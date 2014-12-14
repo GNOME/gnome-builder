@@ -25,7 +25,6 @@
 #include "gb-document-manager.h"
 #include "gb-navigation-list.h"
 #include "gb-workbench-types.h"
-#include "gb-workspace.h"
 
 G_BEGIN_DECLS
 
