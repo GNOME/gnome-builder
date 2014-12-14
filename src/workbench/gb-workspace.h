@@ -48,6 +48,8 @@ struct _GbWorkspaceClass
   GtkBinClass parent_class;
 
   GActionGroup *(*get_actions) (GbWorkspace *workspace);
+
+  void (*new_document) (GbWorkspace *workspace);
 };
 
 GType         gb_workspace_get_type      (void) G_GNUC_CONST;
@@ -58,6 +60,7 @@ const gchar  *gb_workspace_get_title     (GbWorkspace *workspace);
 void          gb_workspace_set_title     (GbWorkspace *workspace,
                                           const gchar *title);
 GActionGroup *gb_workspace_get_actions   (GbWorkspace *workspace);
+void          gb_workspace_new_document  (GbWorkspace *workspace);
 
 G_END_DECLS
 

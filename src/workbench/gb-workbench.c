@@ -374,6 +374,18 @@ on_roll_credits (GSimpleAction *action,
 }
 
 static void
+on_new_document (GSimpleAction *action,
+                 GVariant      *parameters,
+                 gpointer       user_data)
+{
+  GbWorkbench *workbench = user_data;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  gb_workspace_new_document (workbench->priv->active_workspace);
+}
+
+static void
 gb_workbench_constructed (GObject *object)
 {
   static const GActionEntry actions[] = {
@@ -384,6 +396,7 @@ gb_workbench_constructed (GObject *object)
     { "show-command-bar", on_show_command_bar_activate },
     { "toggle-command-bar", on_toggle_command_bar_activate, "b" },
     { "roll-credits", on_roll_credits },
+    { "new-document", on_new_document },
   };
   GbWorkbenchPrivate *priv;
   GbWorkbench *workbench = (GbWorkbench *)object;

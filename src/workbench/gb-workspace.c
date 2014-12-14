@@ -33,9 +33,15 @@ enum {
   LAST_PROP
 };
 
+enum {
+  NEW_DOCUMENT,
+  LAST_SIGNAL
+};
+
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GbWorkspace, gb_workspace, GTK_TYPE_BIN)
 
 static GParamSpec *gParamSpecs[LAST_PROP];
+static guint       gSignals [LAST_SIGNAL];
 
 /**
  * gb_workspace_get_actions:
@@ -96,6 +102,14 @@ gb_workspace_set_title (GbWorkspace *workspace,
   workspace->priv->title = g_strdup (title);
   g_object_notify_by_pspec (G_OBJECT (workspace),
                             gParamSpecs[PROP_TITLE]);
+}
+
+void
+gb_workspace_new_document (GbWorkspace *workspace)
+{
+  g_return_if_fail (GB_IS_WORKSPACE (workspace));
+
+  g_signal_emit (workspace, gSignals [NEW_DOCUMENT], 0);
 }
 
 static void
@@ -186,6 +200,17 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_ICON_NAME,
                                    gParamSpecs[PROP_ICON_NAME]);
+
+  gSignals [NEW_DOCUMENT] =
+    g_signal_new ("new-document",
+                  GB_TYPE_WORKSPACE,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbWorkspaceClass, new_document),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 static void

@@ -192,6 +192,12 @@ gb_editor_workspace_get_actions (GbWorkspace *workspace)
 }
 
 static void
+gb_editor_workspace_new_document (GbWorkspace *workspace)
+{
+  new_document (NULL, NULL, workspace);
+}
+
+static void
 gb_editor_workspace_grab_focus (GtkWidget *widget)
 {
   GbEditorWorkspace *workspace = GB_EDITOR_WORKSPACE (widget);
@@ -236,6 +242,7 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
   object_class->finalize = gb_editor_workspace_finalize;
 
   workspace_class->get_actions = gb_editor_workspace_get_actions;
+  workspace_class->new_document = gb_editor_workspace_new_document;
 
   widget_class->grab_focus = gb_editor_workspace_grab_focus;
 
