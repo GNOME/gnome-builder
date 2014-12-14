@@ -761,33 +761,19 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
                   1,
                   GB_TYPE_WORKSPACE);
 
-  gtk_widget_class_set_template_from_resource (widget_class, UI_RESOURCE_PATH);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                command_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                credits);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                editor);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                add_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                back_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                gear_menu_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                new_tab);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                next_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                run_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                header_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                search_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                switcher);
-  gtk_widget_class_bind_template_child_private (widget_class, GbWorkbench,
-                                                stack);
+  GB_WIDGET_CLASS_TEMPLATE (klass, "gb-workbench.ui");
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, add_button);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, back_button);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, command_bar);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, editor);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, gear_menu_button);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, header_bar);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, new_tab);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, next_button);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, run_button);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_entry);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, stack);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, switcher);
 
   g_type_ensure (GB_TYPE_COMMAND_BAR);
   g_type_ensure (GB_TYPE_CREDITS_WIDGET);
