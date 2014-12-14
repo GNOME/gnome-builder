@@ -60,7 +60,7 @@ gb_preferences_page_set_keywords (GbPreferencesPage   *page,
   guint count = 0;
   guint i;
 
-  g_return_if_fail (GB_IS_PREFERENCES_PAGE (page));
+  g_return_val_if_fail (GB_IS_PREFERENCES_PAGE (page), 0);
 
   if (!keywords || (g_strv_length ((gchar **)keywords) == 0))
     {
