@@ -96,6 +96,8 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-source-style-scheme-button.h \
 	src/editor/gb-source-style-scheme-widget.c \
 	src/editor/gb-source-style-scheme-widget.h \
+	src/fuzzy/fuzzy.c \
+	src/fuzzy/fuzzy.h \
 	src/gca/gca-diagnostics.c \
 	src/gca/gca-diagnostics.h \
 	src/gca/gca-service.c \
@@ -224,6 +226,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/dialogs \
 	-I$(top_srcdir)/src/documents \
 	-I$(top_srcdir)/src/editor \
+	-I$(top_srcdir)/src/fuzzy \
 	-I$(top_srcdir)/src/gca \
 	-I$(top_srcdir)/src/gd \
 	-I$(top_srcdir)/src/gedit \
