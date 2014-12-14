@@ -47,9 +47,11 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 GbNavigationList *
-gb_navigation_list_new (void)
+gb_navigation_list_new (GbWorkbench *workbench)
 {
-  return g_object_new (GB_TYPE_NAVIGATION_LIST, NULL);
+  return g_object_new (GB_TYPE_NAVIGATION_LIST,
+                       "workbench", workbench,
+                       NULL);
 }
 
 GbWorkbench *

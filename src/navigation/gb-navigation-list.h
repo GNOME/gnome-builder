@@ -22,6 +22,7 @@
 #include <glib-object.h>
 
 #include "gb-navigation-item.h"
+#include "gb-workbench-types.h"
 
 G_BEGIN_DECLS
 
@@ -51,6 +52,7 @@ struct _GbNavigationListClass
 };
 
 GType             gb_navigation_list_get_type            (void);
+GbNavigationList *gb_navigation_list_new                 (GbWorkbench      *workbench);
 gboolean          gb_navigation_list_get_can_go_backward (GbNavigationList *list);
 gboolean          gb_navigation_list_get_can_go_forward  (GbNavigationList *list);
 GbNavigationItem *gb_navigation_list_get_current_item    (GbNavigationList *list);
