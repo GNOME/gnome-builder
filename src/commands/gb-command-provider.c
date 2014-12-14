@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 
 #include "gb-command-provider.h"
+#include "gb-workbench.h"
 
 struct _GbCommandProviderPrivate
 {

@@ -21,6 +21,8 @@
 
 #include <gtk/gtk.h>
 
+#include "gb-workbench-types.h"
+
 G_BEGIN_DECLS
 
 #define GB_TYPE_WORKSPACE            (gb_workspace_get_type())
@@ -30,10 +32,6 @@ G_BEGIN_DECLS
 #define GB_IS_WORKSPACE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_WORKSPACE))
 #define GB_IS_WORKSPACE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_WORKSPACE))
 #define GB_WORKSPACE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_WORKSPACE, GbWorkspaceClass))
-
-typedef struct _GbWorkspace        GbWorkspace;
-typedef struct _GbWorkspaceClass   GbWorkspaceClass;
-typedef struct _GbWorkspacePrivate GbWorkspacePrivate;
 
 struct _GbWorkspace
 {

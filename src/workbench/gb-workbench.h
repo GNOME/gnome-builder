@@ -21,7 +21,10 @@
 
 #include <gtk/gtk.h>
 
+#include "gb-command-manager.h"
+#include "gb-document-manager.h"
 #include "gb-navigation-list.h"
+#include "gb-workbench-types.h"
 #include "gb-workspace.h"
 
 G_BEGIN_DECLS
@@ -33,10 +36,6 @@ G_BEGIN_DECLS
 #define GB_IS_WORKBENCH(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_WORKBENCH))
 #define GB_IS_WORKBENCH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_WORKBENCH))
 #define GB_WORKBENCH_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_WORKBENCH, GbWorkbenchClass))
-
-typedef struct _GbWorkbench        GbWorkbench;
-typedef struct _GbWorkbenchClass   GbWorkbenchClass;
-typedef struct _GbWorkbenchPrivate GbWorkbenchPrivate;
 
 struct _GbWorkbench
 {
@@ -57,12 +56,11 @@ struct _GbWorkbenchClass
 GType              gb_workbench_get_type             (void);
 
 GbNavigationList  *gb_workbench_get_navigation_list  (GbWorkbench *workbench);
+GbDocumentManager *gb_workbench_get_document_manager (GbWorkbench *workbench);
 GbWorkspace       *gb_workbench_get_active_workspace (GbWorkbench *workbench);
 GbWorkspace       *gb_workbench_get_workspace        (GbWorkbench *workbench,
                                                       GType        type);
-gpointer           gb_workbench_get_command_manager  (GbWorkbench *workbench);
-
-GbWorkbench      *gb_navigation_list_get_workbench  (GbNavigationList *list);
+GbCommandManager  *gb_workbench_get_command_manager  (GbWorkbench *workbench);
 
 G_END_DECLS
 

@@ -50,15 +50,16 @@ struct _GbNavigationListClass
   GObjectClass parent;
 };
 
-GType                 gb_navigation_list_get_type            (void) G_GNUC_CONST;
-gboolean              gb_navigation_list_get_can_go_backward (GbNavigationList *list);
-gboolean              gb_navigation_list_get_can_go_forward  (GbNavigationList *list);
-GbNavigationItem     *gb_navigation_list_get_current_item    (GbNavigationList *list);
-void                  gb_navigation_list_append              (GbNavigationList *list,
-                                                              GbNavigationItem *item);
-void                  gb_navigation_list_go_backward         (GbNavigationList *list);
-void                  gb_navigation_list_go_forward          (GbNavigationList *list);
-guint                 gb_navigation_list_get_depth           (GbNavigationList *list);
+GType             gb_navigation_list_get_type            (void);
+gboolean          gb_navigation_list_get_can_go_backward (GbNavigationList *list);
+gboolean          gb_navigation_list_get_can_go_forward  (GbNavigationList *list);
+GbNavigationItem *gb_navigation_list_get_current_item    (GbNavigationList *list);
+void              gb_navigation_list_append              (GbNavigationList *list,
+                                                          GbNavigationItem *item);
+void              gb_navigation_list_go_backward         (GbNavigationList *list);
+void              gb_navigation_list_go_forward          (GbNavigationList *list);
+guint             gb_navigation_list_get_depth           (GbNavigationList *list);
+GbWorkbench      *gb_navigation_list_get_workbench       (GbNavigationList *list);
 
 G_END_DECLS
 

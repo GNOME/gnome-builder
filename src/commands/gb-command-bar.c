@@ -26,6 +26,7 @@
 #include "gb-glib.h"
 #include "gb-string.h"
 #include "gb-widget.h"
+#include "gb-workbench.h"
 
 struct _GbCommandBarPrivate
 {

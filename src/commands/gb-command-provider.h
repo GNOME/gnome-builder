@@ -23,7 +23,7 @@
 
 #include "gb-command.h"
 #include "gb-document-view.h"
-#include "gb-workbench.h"
+#include "gb-workbench-types.h"
 
 G_BEGIN_DECLS
 

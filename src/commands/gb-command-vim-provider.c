@@ -24,6 +24,7 @@
 #include "gb-command-vim-provider.h"
 #include "gb-source-view.h"
 #include "gb-source-vim.h"
+#include "gb-workbench.h"
 
 G_DEFINE_TYPE (GbCommandVimProvider, gb_command_vim_provider,
                GB_TYPE_COMMAND_PROVIDER)

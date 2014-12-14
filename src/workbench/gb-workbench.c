@@ -88,7 +88,7 @@ static guint       gSignals [LAST_SIGNAL];
  *
  * Returns: (transfer none) (type GbCommandManager*): A #GbCommandManager.
  */
-gpointer
+GbCommandManager *
 gb_workbench_get_command_manager (GbWorkbench *workbench)
 {
   g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);

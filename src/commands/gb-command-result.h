@@ -48,7 +48,7 @@ struct _GbCommandResultClass
   GObjectClass parent;
 };
 
-GType            gb_command_result_get_type         (void) G_GNUC_CONST;
+GType            gb_command_result_get_type         (void);
 GbCommandResult *gb_command_result_new              (void);
 gboolean         gb_command_result_get_is_running   (GbCommandResult *result);
 void             gb_command_result_set_is_running   (GbCommandResult *result,

@@ -52,7 +52,7 @@ struct _GbCommandClass
   GbCommandResult *(*execute) (GbCommand *command);
 };
 
-GType            gb_command_get_type (void) G_GNUC_CONST;
+GType            gb_command_get_type (void);
 GbCommand       *gb_command_new      (void);
 GbCommandResult *gb_command_execute  (GbCommand *command);
 

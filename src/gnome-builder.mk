@@ -181,6 +181,7 @@ libgnome_builder_la_SOURCES = \
 	src/vim/gb-source-vim.h \
 	src/workbench/gb-workbench.c \
 	src/workbench/gb-workbench.h \
+	src/workbench/gb-workbench-types.h \
 	src/workbench/gb-workspace.c \
 	src/workbench/gb-workspace.h
 
@@ -264,3 +265,4 @@ EXTRA_DIST += src/resources/gnome-builder.gresource.xml
 EXTRA_DIST += $(gnome_builder_built_sources)
 
 DISTCLEANFILES += $(gnome_builder_built_sources)
+
