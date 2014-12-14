@@ -230,7 +230,6 @@ static void
 gb_document_grid_view_closed (GbDocumentGrid *grid,
                               GbDocumentView *view)
 {
-  GbDocumentManager *document_manager;
   GbDocument *document;
   GList *stacks;
   GList *iter;
@@ -261,8 +260,7 @@ gb_document_grid_view_closed (GbDocumentGrid *grid,
         goto cleanup;
     }
 
-  document_manager = gb_document_manager_get_default ();
-  gb_document_manager_remove (document_manager, document);
+  gb_document_manager_remove (grid->priv->document_manager, document);
 
 cleanup:
   g_list_free (stacks);
