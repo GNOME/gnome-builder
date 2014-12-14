@@ -27,6 +27,8 @@
 #include "gb-editor-document.h"
 #include "gb-editor-workspace.h"
 #include "gb-tree.h"
+#include "gb-widget.h"
+#include "gb-workbench.h"
 
 struct _GbEditorWorkspacePrivate
 {
@@ -49,11 +51,13 @@ gb_editor_workspace_open (GbEditorWorkspace *workspace,
                           GFile             *file)
 {
   GbDocumentManager *manager;
+  GbWorkbench *workbench;
   GbDocument *document;
 
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
 
-  manager = gb_document_manager_get_default ();
+  workbench = gb_widget_get_workbench (GTK_WIDGET (workspace));
+  manager = gb_workbench_get_document_manager (workbench);
   document = gb_document_manager_find_with_file (manager, file);
 
   if (!document)
@@ -82,6 +86,7 @@ jump_to_doc_tab (GSimpleAction *action,
 {
   GbEditorWorkspace *workspace = user_data;
   GbDocumentManager *manager;
+  GbWorkbench *workbench;
   const gchar *search_text;
   GbDocument *document;
   GbDocument *reffed = NULL;
@@ -92,7 +97,8 @@ jump_to_doc_tab (GSimpleAction *action,
   if (!search_text || !*search_text)
     return;
 
-  manager = gb_document_manager_get_default ();
+  workbench = gb_widget_get_workbench (GTK_WIDGET (workspace));
+  manager = gb_workbench_get_document_manager (workbench);
   document = gb_document_manager_find_with_type (manager,
                                                  GB_TYPE_DEVHELP_DOCUMENT);
 
@@ -120,12 +126,12 @@ new_document (GSimpleAction *action,
   GbEditorWorkspace *workspace = user_data;
   GbEditorDocument *document;
   GbDocumentManager *manager;
+  GbWorkbench *workbench;
 
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
 
-  /* TODO: We should fetch the document manager from the workbench so that we
-   * can have one per loaded project. */
-  manager = gb_document_manager_get_default ();
+  workbench = gb_widget_get_workbench (GTK_WIDGET (workspace));
+  manager = gb_workbench_get_document_manager (workbench);
   document = gb_editor_document_new ();
 
   gb_document_manager_add (manager, GB_DOCUMENT (document));
@@ -215,15 +221,17 @@ gb_editor_workspace_activate_open (GbWorkspace *workspace)
 }
 
 static void
-gb_editor_workspace_constructed (GObject *object)
+gb_editor_workspace_map (GtkWidget *widget)
 {
-  GbEditorWorkspacePrivate *priv = GB_EDITOR_WORKSPACE (object)->priv;
+  GbEditorWorkspace *workspace = (GbEditorWorkspace *)widget;
   GbDocumentManager *document_manager;
+  GbWorkbench *workbench;
 
-  G_OBJECT_CLASS (gb_editor_workspace_parent_class)->constructed (object);
+  GTK_WIDGET_CLASS (gb_editor_workspace_parent_class)->map (widget);
 
-  document_manager = gb_document_manager_get_default ();
-  gb_document_grid_set_document_manager (priv->document_grid,
+  workbench = gb_widget_get_workbench (GTK_WIDGET (workspace));
+  document_manager = gb_workbench_get_document_manager (workbench);
+  gb_document_grid_set_document_manager (workspace->priv->document_grid,
                                          document_manager);
 }
 
@@ -244,13 +252,13 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
   GbWorkspaceClass *workspace_class = GB_WORKSPACE_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->constructed = gb_editor_workspace_constructed;
   object_class->finalize = gb_editor_workspace_finalize;
+
+  widget_class->grab_focus = gb_editor_workspace_grab_focus;
+  widget_class->map = gb_editor_workspace_map;
 
   workspace_class->new_document = gb_editor_workspace_new_document;
   workspace_class->open = gb_editor_workspace_activate_open;
-
-  widget_class->grab_focus = gb_editor_workspace_grab_focus;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-editor-workspace.ui");
