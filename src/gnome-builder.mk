@@ -104,6 +104,8 @@ libgnome_builder_la_SOURCES = \
 	src/gca/gca-service.h \
 	src/gca/gca-structs.c \
 	src/gca/gca-structs.h \
+	src/git/gb-git-search-provider.c \
+	src/git/gb-git-search-provider.h \
 	src/html/gb-html-document.c \
 	src/html/gb-html-document.h \
 	src/html/gb-html-view.c \
@@ -230,6 +232,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/gca \
 	-I$(top_srcdir)/src/gd \
 	-I$(top_srcdir)/src/gedit \
+	-I$(top_srcdir)/src/git \
 	-I$(top_srcdir)/src/html \
 	-I$(top_srcdir)/src/keybindings \
 	-I$(top_srcdir)/src/log \
