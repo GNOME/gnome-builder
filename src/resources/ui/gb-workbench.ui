@@ -25,8 +25,9 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuButton" id="search_button">
+              <object class="GtkMenuButton" id="search_menu_button">
                 <property name="visible">True</property>
+                <property name="popover">search_popover</property>
                 <style>
                   <class name="image-button"/>
                   <class name="text-button"/>
@@ -246,4 +247,14 @@
       </object>
     </child>
   </template>
+  <object class="GtkPopover" id="search_popover">
+    <property name="visible">True</property>
+    <property name="modal">False</property>
+    <property name="relative-to">search_entry</property>
+    <child>
+      <object class="GbSearchDisplay" id="search_display">
+        <property name="visible">True</property>
+      </object>
+    </child>
+  </object>
 </interface>

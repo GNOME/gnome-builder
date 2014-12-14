@@ -30,6 +30,7 @@
 #include "gb-editor-workspace.h"
 #include "gb-glib.h"
 #include "gb-log.h"
+#include "gb-search-display.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 #include "gedit-menu-stack-switcher.h"
@@ -45,9 +46,12 @@ struct _GbWorkbenchPrivate
   GbCreditsWidget        *credits;
   GbWorkspace            *editor;
   GeditMenuStackSwitcher *gear_menu_button;
-  GtkButton              *run_button;
   GtkHeaderBar           *header_bar;
+  GtkButton              *run_button;
+  GbSearchDisplay        *search_display;
   GtkSearchEntry         *search_entry;
+  GtkMenuButton          *search_menu_button;
+  GtkPopover             *search_popover;
   GtkStack               *stack;
 };
 
@@ -384,69 +388,6 @@ gb_workbench_navigation_changed (GbWorkbench      *workbench,
 }
 
 static void
-gb_workbench_constructed (GObject *object)
-{
-  static const GActionEntry actions[] = {
-    { "global-search",      gb_workbench_action_global_search },
-    { "go-backward",        gb_workbench_action_go_backward },
-    { "go-forward",         gb_workbench_action_go_forward },
-    { "show-command-bar",   gb_workbench_action_show_command_bar },
-    { "toggle-command-bar", gb_workbench_action_toggle_command_bar, "b" },
-    { "save-all",           gb_workbench_action_save_all },
-    { "about",              gb_workbench_action_roll_credits },
-  };
-  GbWorkbenchPrivate *priv;
-  GbWorkbench *workbench = (GbWorkbench *)object;
-  GtkApplication *app;
-  GAction *action;
-  GMenu *menu;
-
-  g_assert (GB_IS_WORKBENCH (workbench));
-
-  ENTRY;
-
-  priv = workbench->priv;
-
-  G_OBJECT_CLASS (gb_workbench_parent_class)->constructed (object);
-
-  app = GTK_APPLICATION (g_application_get_default ());
-  menu = gtk_application_get_menu_by_id (app, "gear-menu");
-  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (priv->gear_menu_button),
-                                  G_MENU_MODEL (menu));
-
-  g_signal_connect_object (priv->stack,
-                           "notify::visible-child",
-                           G_CALLBACK (gb_workbench_stack_child_changed),
-                           workbench,
-                           (G_CONNECT_SWAPPED | G_CONNECT_AFTER));
-
-  g_action_map_add_action_entries (G_ACTION_MAP (workbench), actions,
-                                   G_N_ELEMENTS (actions), workbench);
-
-  g_signal_connect_object (priv->navigation_list,
-                           "notify::current-item",
-                           G_CALLBACK (gb_workbench_navigation_changed),
-                           workbench,
-                           G_CONNECT_SWAPPED);
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (workbench), "go-backward");
-  g_object_bind_property (priv->navigation_list, "can-go-backward",
-                          action, "enabled", G_BINDING_SYNC_CREATE);
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (workbench), "go-forward");
-  g_object_bind_property (priv->navigation_list, "can-go-forward",
-                          action, "enabled", G_BINDING_SYNC_CREATE);
-
-  g_signal_connect (priv->command_bar, "notify::child-revealed",
-                    G_CALLBACK (on_command_bar_notify_child_revealed),
-                    workbench);
-
-  gb_workbench_stack_child_changed (workbench, NULL, priv->stack);
-
-  EXIT;
-}
-
-static void
 gb_workbench_save_cb (GObject      *object,
                       GAsyncResult *result,
                       gpointer      user_data)
@@ -624,6 +565,108 @@ gb_workbench_add_command_provider (GbWorkbench *workbench,
 }
 
 static void
+gb_workbench_popover_closed (GbWorkbench *workbench,
+                             GtkPopover  *popover)
+{
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  gtk_widget_hide (GTK_WIDGET (popover));
+}
+
+static void
+gb_workbench_set_focus (GtkWindow *window,
+                        GtkWidget *widget)
+{
+  GbWorkbenchPrivate *priv = GB_WORKBENCH (window)->priv;
+
+  if (gtk_widget_get_visible (GTK_WIDGET (priv->search_popover)))
+    {
+      if (gtk_widget_is_ancestor (widget, GTK_WIDGET (priv->search_entry)) ||
+          gtk_widget_is_ancestor (widget, GTK_WIDGET (priv->search_popover)) ||
+          gtk_widget_is_ancestor (widget, GTK_WIDGET (priv->search_menu_button)))
+        {
+        }
+      else
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->search_menu_button),
+                                      FALSE);
+    }
+
+  GTK_WINDOW_CLASS (gb_workbench_parent_class)->set_focus (window, widget);
+}
+
+static void
+gb_workbench_constructed (GObject *object)
+{
+  static const GActionEntry actions[] = {
+    { "global-search",      gb_workbench_action_global_search },
+    { "go-backward",        gb_workbench_action_go_backward },
+    { "go-forward",         gb_workbench_action_go_forward },
+    { "show-command-bar",   gb_workbench_action_show_command_bar },
+    { "toggle-command-bar", gb_workbench_action_toggle_command_bar, "b" },
+    { "save-all",           gb_workbench_action_save_all },
+    { "about",              gb_workbench_action_roll_credits },
+  };
+  GbWorkbenchPrivate *priv;
+  GbWorkbench *workbench = (GbWorkbench *)object;
+  GtkApplication *app;
+  GAction *action;
+  GMenu *menu;
+
+  g_assert (GB_IS_WORKBENCH (workbench));
+
+  ENTRY;
+
+  priv = workbench->priv;
+
+  G_OBJECT_CLASS (gb_workbench_parent_class)->constructed (object);
+
+  app = GTK_APPLICATION (g_application_get_default ());
+  menu = gtk_application_get_menu_by_id (app, "gear-menu");
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (priv->gear_menu_button),
+                                  G_MENU_MODEL (menu));
+
+  g_signal_connect_object (priv->stack,
+                           "notify::visible-child",
+                           G_CALLBACK (gb_workbench_stack_child_changed),
+                           workbench,
+                           (G_CONNECT_SWAPPED | G_CONNECT_AFTER));
+
+  g_action_map_add_action_entries (G_ACTION_MAP (workbench), actions,
+                                   G_N_ELEMENTS (actions), workbench);
+
+  g_signal_connect_object (priv->navigation_list,
+                           "notify::current-item",
+                           G_CALLBACK (gb_workbench_navigation_changed),
+                           workbench,
+                           G_CONNECT_SWAPPED);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (workbench), "go-backward");
+  g_object_bind_property (priv->navigation_list, "can-go-backward",
+                          action, "enabled", G_BINDING_SYNC_CREATE);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (workbench), "go-forward");
+  g_object_bind_property (priv->navigation_list, "can-go-forward",
+                          action, "enabled", G_BINDING_SYNC_CREATE);
+
+  g_signal_connect (priv->command_bar, "notify::child-revealed",
+                    G_CALLBACK (on_command_bar_notify_child_revealed),
+                    workbench);
+
+  gtk_popover_set_relative_to (priv->search_popover,
+                               GTK_WIDGET (priv->search_entry));
+  g_signal_connect_object (priv->search_popover,
+                           "closed",
+                           G_CALLBACK (gb_workbench_popover_closed),
+                           workbench,
+                           G_CONNECT_SWAPPED);
+
+  gb_workbench_stack_child_changed (workbench, NULL, priv->stack);
+
+  EXIT;
+}
+
+static void
 gb_workbench_dispose (GObject *object)
 {
   GbWorkbenchPrivate *priv = GB_WORKBENCH (object)->priv;
@@ -680,6 +723,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
 
   object_class->constructed = gb_workbench_constructed;
   object_class->dispose = gb_workbench_dispose;
@@ -688,6 +732,8 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 
   widget_class->realize = gb_workbench_realize;
   widget_class->delete_event = gb_workbench_delete_event;
+
+  window_class->set_focus = gb_workbench_set_focus;
 
   klass->workspace_changed = gb_workbench_workspace_changed;
 
@@ -729,12 +775,16 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, gear_menu_button);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, header_bar);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, run_button);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_display);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_entry);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_menu_button);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_popover);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, stack);
 
   g_type_ensure (GB_TYPE_COMMAND_BAR);
   g_type_ensure (GB_TYPE_CREDITS_WIDGET);
   g_type_ensure (GB_TYPE_EDITOR_WORKSPACE);
+  g_type_ensure (GB_TYPE_SEARCH_DISPLAY);
   g_type_ensure (GEDIT_TYPE_MENU_STACK_SWITCHER);
 }
 
