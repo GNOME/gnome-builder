@@ -48,7 +48,7 @@ struct _GbEditorWorkspaceClass
   GbWorkspaceClass parent_class;
 };
 
-GType gb_editor_workspace_get_type (void) G_GNUC_CONST;
+GType gb_editor_workspace_get_type (void);
 void  gb_editor_workspace_open     (GbEditorWorkspace *workspace,
                                     GFile             *file);
 

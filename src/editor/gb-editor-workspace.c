@@ -37,24 +37,21 @@ struct _GbEditorWorkspacePrivate
   GbDocumentGrid     *document_grid;
 };
 
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-G_DEFINE_TYPE_WITH_PRIVATE (GbEditorWorkspace,
-                            gb_editor_workspace,
+G_DEFINE_TYPE_WITH_PRIVATE (GbEditorWorkspace, gb_editor_workspace,
                             GB_TYPE_WORKSPACE)
 
 void
 gb_editor_workspace_open (GbEditorWorkspace *workspace,
                           GFile             *file)
 {
+  GbEditorWorkspacePrivate *priv;
   GbDocumentManager *manager;
   GbWorkbench *workbench;
   GbDocument *document;
 
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+
+  priv = workspace->priv;
 
   workbench = gb_widget_get_workbench (GTK_WIDGET (workspace));
   manager = gb_workbench_get_document_manager (workbench);
@@ -63,27 +60,22 @@ gb_editor_workspace_open (GbEditorWorkspace *workspace,
   if (!document)
     {
       document = GB_DOCUMENT (gb_editor_document_new ());
-      gb_document_manager_add (manager, document);
-      gb_document_grid_focus_document (workspace->priv->document_grid,
-                                       document);
-      /* TODO: Should we add simplified gb_editor_document_open()? */
       gb_editor_document_load_async (GB_EDITOR_DOCUMENT (document),
-                                     file,
-                                     NULL, /* cancellable */
-                                     NULL,
-                                     workspace);
+                                     file, NULL, NULL, NULL);
+      gb_document_manager_add (manager, document);
+      gb_document_grid_focus_document (priv->document_grid, document);
       g_object_unref (document);
     }
   else
-    gb_document_grid_focus_document (workspace->priv->document_grid,
-                                     document);
+    gb_document_grid_focus_document (priv->document_grid, document);
 }
 
 static void
-jump_to_doc_tab (GSimpleAction *action,
-                 GVariant      *parameter,
-                 gpointer       user_data)
+gb_editor_workspace_action_jump_to_doc (GSimpleAction *action,
+                                        GVariant      *parameter,
+                                        gpointer       user_data)
 {
+  GbEditorWorkspacePrivate *priv;
   GbEditorWorkspace *workspace = user_data;
   GbDocumentManager *manager;
   GbWorkbench *workbench;
@@ -92,6 +84,8 @@ jump_to_doc_tab (GSimpleAction *action,
   GbDocument *reffed = NULL;
 
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+
+  priv = workspace->priv;
 
   search_text = g_variant_get_string (parameter, NULL);
   if (!search_text || !*search_text)
@@ -109,42 +103,38 @@ jump_to_doc_tab (GSimpleAction *action,
       reffed = document;
     }
 
-  gb_devhelp_document_set_search (GB_DEVHELP_DOCUMENT (document),
-                                  search_text);
-
-  gb_document_grid_focus_document (workspace->priv->document_grid,
-                                   document);
+  gb_devhelp_document_set_search (GB_DEVHELP_DOCUMENT (document), search_text);
+  gb_document_grid_focus_document (priv->document_grid, document);
 
   g_clear_object (&reffed);
 }
 
 static void
-new_document (GSimpleAction *action,
-              GVariant      *parameter,
-              gpointer       user_data)
+gb_editor_workspace_action_new_document (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data)
 {
   GbEditorWorkspace *workspace = user_data;
-  GbEditorDocument *document;
   GbDocumentManager *manager;
   GbWorkbench *workbench;
+  GbDocument *document;
 
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
 
   workbench = gb_widget_get_workbench (GTK_WIDGET (workspace));
   manager = gb_workbench_get_document_manager (workbench);
-  document = gb_editor_document_new ();
+  document = GB_DOCUMENT (gb_editor_document_new ());
 
-  gb_document_manager_add (manager, GB_DOCUMENT (document));
-  gb_document_grid_focus_document (workspace->priv->document_grid,
-                                   GB_DOCUMENT (document));
+  gb_document_manager_add (manager, document);
+  gb_document_grid_focus_document (workspace->priv->document_grid, document);
 
   g_clear_object (&document);
 }
 
 static void
-open_tab (GSimpleAction *action,
-          GVariant      *parameter,
-          gpointer       user_data)
+gb_editor_workspace_action_open (GSimpleAction *action,
+                                 GVariant      *parameter,
+                                 gpointer       user_data)
 {
   GbEditorWorkspace *workspace = user_data;
   GtkFileChooserDialog *dialog;
@@ -211,16 +201,20 @@ gb_editor_workspace_grab_focus (GtkWidget *widget)
 static void
 gb_editor_workspace_map (GtkWidget *widget)
 {
+  GbEditorWorkspacePrivate *priv;
   GbEditorWorkspace *workspace = (GbEditorWorkspace *)widget;
   GbDocumentManager *document_manager;
   GbWorkbench *workbench;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+
+  priv = workspace->priv;
 
   GTK_WIDGET_CLASS (gb_editor_workspace_parent_class)->map (widget);
 
   workbench = gb_widget_get_workbench (GTK_WIDGET (workspace));
   document_manager = gb_workbench_get_document_manager (workbench);
-  gb_document_grid_set_document_manager (workspace->priv->document_grid,
-                                         document_manager);
+  gb_document_grid_set_document_manager (priv->document_grid, document_manager);
 }
 
 static void
@@ -237,7 +231,6 @@ static void
 gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GbWorkspaceClass *workspace_class = GB_WORKSPACE_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = gb_editor_workspace_finalize;
@@ -245,10 +238,9 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
   widget_class->grab_focus = gb_editor_workspace_grab_focus;
   widget_class->map = gb_editor_workspace_map;
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/gb-editor-workspace.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorWorkspace, paned);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorWorkspace, document_grid);
+  GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-workspace.ui");
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, paned);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, document_grid);
 
   g_type_ensure (GB_TYPE_DOCUMENT_GRID);
   g_type_ensure (GB_TYPE_TREE);
@@ -258,9 +250,9 @@ static void
 gb_editor_workspace_init (GbEditorWorkspace *workspace)
 {
   const GActionEntry entries[] = {
-    { "open", open_tab },
-    { "new-document", new_document },
-    { "jump-to-doc", jump_to_doc_tab, "s" },
+    { "open",         gb_editor_workspace_action_open },
+    { "new-document", gb_editor_workspace_action_new_document },
+    { "jump-to-doc",  gb_editor_workspace_action_jump_to_doc, "s" },
   };
   GSimpleActionGroup *actions;
 
