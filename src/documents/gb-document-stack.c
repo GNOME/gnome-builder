@@ -73,6 +73,7 @@ gb_document_stack_remove_view (GbDocumentStack *stack,
                                GbDocumentView  *view)
 {
   GbDocument *document = NULL;
+  GtkWidget *toplevel;
   GtkWidget *visible_child;
   GtkWidget *controls;
   gboolean visible;
@@ -85,6 +86,18 @@ gb_document_stack_remove_view (GbDocumentStack *stack,
     gb_clear_weak_pointer (&stack->priv->active_view);
 
   g_object_ref (view);
+
+  /*
+   * WORKAROUND:
+   *
+   * Clear the focus before we start removing stuff. Otherwise GtkStack
+   * can get pretty unhappy and segfault. Needs more investigation, but
+   * seems to help a bit. We refocus the new visible child afterwards
+   * anyway, so not too big of a deal.
+   */
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (stack));
+  if (GTK_IS_WINDOW (toplevel))
+    gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
 
   /* Notify the document view it is being closed */
   gb_document_view_close (view);
