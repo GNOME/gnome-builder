@@ -54,13 +54,13 @@ struct _GbWorkbenchClass
                              GbWorkspace *workspace);
 };
 
-GType             gb_workbench_get_type             (void) G_GNUC_CONST;
-GbNavigationList *gb_workbench_get_navigation_list  (GbWorkbench *workbench);
-GbWorkspace      *gb_workbench_get_active_workspace (GbWorkbench *workbench);
-GbWorkspace      *gb_workbench_get_workspace        (GbWorkbench *workbench,
-                                                     GType        type);
-gpointer          gb_workbench_get_command_manager  (GbWorkbench *workbench);
-void              gb_workbench_roll_credits         (GbWorkbench *workbench);
+GType              gb_workbench_get_type             (void);
+
+GbNavigationList  *gb_workbench_get_navigation_list  (GbWorkbench *workbench);
+GbWorkspace       *gb_workbench_get_active_workspace (GbWorkbench *workbench);
+GbWorkspace       *gb_workbench_get_workspace        (GbWorkbench *workbench,
+                                                      GType        type);
+gpointer           gb_workbench_get_command_manager  (GbWorkbench *workbench);
 
 GbWorkbench      *gb_navigation_list_get_workbench  (GbNavigationList *list);
 

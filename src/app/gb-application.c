@@ -442,32 +442,9 @@ gb_application_activate_preferences_action (GSimpleAction *action,
 }
 
 static void
-gb_application_activate_about_action (GSimpleAction *action,
-                                      GVariant      *parameter,
-                                      gpointer       user_data)
-{
-  GList *list;
-
-  g_return_if_fail (GB_IS_APPLICATION (user_data));
-
-  list = gtk_application_get_windows (GTK_APPLICATION (user_data));
-
-  for (; list; list = list->next)
-    {
-      if (GB_IS_WORKBENCH (list->data))
-        {
-          gb_workbench_roll_credits (list->data);
-          gtk_window_present (list->data);
-          break;
-        }
-    }
-}
-
-static void
 gb_application_register_actions (GbApplication *self)
 {
   static const GActionEntry action_entries[] = {
-    { "about", gb_application_activate_about_action },
     { "preferences", gb_application_activate_preferences_action },
     { "quit", gb_application_activate_quit_action },
   };

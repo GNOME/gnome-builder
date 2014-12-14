@@ -137,7 +137,7 @@ gb_workbench_get_workspace (GbWorkbench *workbench,
   return NULL;
 }
 
-void
+static void
 gb_workbench_roll_credits (GbWorkbench *workbench)
 {
   g_return_if_fail (GB_IS_WORKBENCH (workbench));
@@ -425,10 +425,10 @@ gb_workbench_constructed (GObject *object)
     { "go-forward", on_go_forward_activate },
     { "show-command-bar", on_show_command_bar_activate },
     { "toggle-command-bar", on_toggle_command_bar_activate, "b" },
-    { "roll-credits", on_roll_credits },
     { "new-document", on_new_document },
     { "open", on_open },
     { "save-all", on_save_all },
+    { "about", on_roll_credits },
   };
   GbWorkbenchPrivate *priv;
   GbWorkbench *workbench = (GbWorkbench *)object;
