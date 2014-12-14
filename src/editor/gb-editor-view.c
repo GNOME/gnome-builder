@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #define G_LOG_DOMAIN "editor-view"
 
 #include <glib/gi18n.h>
@@ -566,19 +565,18 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   g_object_class_install_property (object_class, PROP_DOCUMENT,
                                    gParamSpecs [PROP_DOCUMENT]);
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/gb-editor-view.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, frame);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, paned);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, progress_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, split_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, modified_revealer);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, modified_label);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, modified_cancel_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, modified_reload_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, error_label);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, error_revealer);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorView, error_close_button);
+  GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-view.ui");
+  GB_WIDGET_CLASS_BIND (klass, GbEditorView, frame);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, paned);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, progress_bar);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, split_button);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, modified_revealer);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, modified_label);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, modified_cancel_button);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, modified_reload_button);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, error_label);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, error_revealer);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, error_close_button);
 
   g_type_ensure (GB_TYPE_EDITOR_FRAME);
 }
@@ -588,7 +586,7 @@ gb_editor_view_init (GbEditorView *self)
 {
   const GActionEntry entries[] = {
     { "toggle-split", gb_editor_view_toggle_split_activate },
-    { "switch-pane", gb_editor_view_switch_pane },
+    { "switch-pane",  gb_editor_view_switch_pane },
   };
   GSimpleActionGroup *actions;
 
@@ -601,7 +599,7 @@ gb_editor_view_init (GbEditorView *self)
                                    G_N_ELEMENTS (entries), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "editor-view",
                                   G_ACTION_GROUP (actions));
-  g_object_unref (actions);
+  g_clear_object (&actions);
 
   g_signal_connect_object (self->priv->split_button,
                            "toggled",
