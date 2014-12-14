@@ -596,6 +596,19 @@ gb_workbench_set_focus (GtkWindow *window,
 }
 
 static void
+gb_workbench_search_entry_focus_in (GbWorkbench   *workbench,
+                                    GdkEventFocus *event,
+                                    GtkWidget     *search_entry)
+{
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (event);
+  g_return_if_fail (GTK_IS_SEARCH_ENTRY (search_entry));
+
+  gtk_toggle_button_set_active (
+    GTK_TOGGLE_BUTTON (workbench->priv->search_menu_button), TRUE);
+}
+
+static void
 gb_workbench_constructed (GObject *object)
 {
   static const GActionEntry actions[] = {
@@ -658,6 +671,12 @@ gb_workbench_constructed (GObject *object)
   g_signal_connect_object (priv->search_popover,
                            "closed",
                            G_CALLBACK (gb_workbench_popover_closed),
+                           workbench,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (priv->search_entry,
+                           "focus-in-event",
+                           G_CALLBACK (gb_workbench_search_entry_focus_in),
                            workbench,
                            G_CONNECT_SWAPPED);
 
