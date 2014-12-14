@@ -52,7 +52,7 @@
       <attribute name="id">file-section-1</attribute>
       <item>
         <attribute name="label" translatable="yes">_Open</attribute>
-        <attribute name="action">workbench.open</attribute>
+        <attribute name="action">win.open</attribute>
       </item>
     </section>
     <section>

@@ -197,9 +197,18 @@ gb_workbench_stack_child_changed (GbWorkbench *workbench,
       GAction *action;
       gboolean enabled;
 
+      /* FIXME: None of this is ideal. We should come up with a better
+       * way. Even if that is adding and removing actions from 'win.'.
+       */
+
       enabled = !!GB_WORKSPACE_GET_CLASS (child)->new_document;
       action = g_action_map_lookup_action (G_ACTION_MAP (workbench),
                                            "new-document");
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
+
+      enabled = !!GB_WORKSPACE_GET_CLASS (child)->open;
+      action = g_action_map_lookup_action (G_ACTION_MAP (workbench),
+                                           "open");
       g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
     }
 }
@@ -397,6 +406,18 @@ on_new_document (GSimpleAction *action,
 }
 
 static void
+on_open (GSimpleAction *action,
+         GVariant      *parameters,
+         gpointer       user_data)
+{
+  GbWorkbench *workbench = user_data;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  gb_workspace_open (workbench->priv->active_workspace);
+}
+
+static void
 gb_workbench_constructed (GObject *object)
 {
   static const GActionEntry actions[] = {
@@ -408,6 +429,7 @@ gb_workbench_constructed (GObject *object)
     { "toggle-command-bar", on_toggle_command_bar_activate, "b" },
     { "roll-credits", on_roll_credits },
     { "new-document", on_new_document },
+    { "open", on_open },
   };
   GbWorkbenchPrivate *priv;
   GbWorkbench *workbench = (GbWorkbench *)object;

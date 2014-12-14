@@ -208,6 +208,12 @@ gb_editor_workspace_grab_focus (GtkWidget *widget)
 }
 
 static void
+gb_editor_workspace_activate_open (GbWorkspace *workspace)
+{
+  open_tab (NULL, NULL, workspace);
+}
+
+static void
 gb_editor_workspace_constructed (GObject *object)
 {
   GbEditorWorkspacePrivate *priv = GB_EDITOR_WORKSPACE (object)->priv;
@@ -243,6 +249,7 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 
   workspace_class->get_actions = gb_editor_workspace_get_actions;
   workspace_class->new_document = gb_editor_workspace_new_document;
+  workspace_class->open = gb_editor_workspace_activate_open;
 
   widget_class->grab_focus = gb_editor_workspace_grab_focus;
 

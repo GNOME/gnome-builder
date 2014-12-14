@@ -50,6 +50,7 @@ struct _GbWorkspaceClass
   GActionGroup *(*get_actions) (GbWorkspace *workspace);
 
   void (*new_document) (GbWorkspace *workspace);
+  void (*open)         (GbWorkspace *workspace);
 };
 
 GType         gb_workspace_get_type      (void) G_GNUC_CONST;
@@ -61,6 +62,7 @@ void          gb_workspace_set_title     (GbWorkspace *workspace,
                                           const gchar *title);
 GActionGroup *gb_workspace_get_actions   (GbWorkspace *workspace);
 void          gb_workspace_new_document  (GbWorkspace *workspace);
+void          gb_workspace_open          (GbWorkspace *workspace);
 
 G_END_DECLS
 
