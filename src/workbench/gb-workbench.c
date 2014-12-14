@@ -803,11 +803,10 @@ gb_workbench_init (GbWorkbench *workbench)
   workbench->priv = gb_workbench_get_instance_private (workbench);
 
   workbench->priv->document_manager = gb_document_manager_new ();
-  gtk_widget_init_template (GTK_WIDGET (workbench));
+  workbench->priv->command_manager = gb_command_manager_new ();
+  workbench->priv->navigation_list = gb_navigation_list_new (workbench);
 
-  workbench->priv->command_manager =
-    g_object_new (GB_TYPE_COMMAND_MANAGER,
-                  NULL);
+  gtk_widget_init_template (GTK_WIDGET (workbench));
 
   provider = g_object_new (GB_TYPE_COMMAND_GACTION_PROVIDER,
                            "workbench", workbench,
@@ -818,8 +817,4 @@ gb_workbench_init (GbWorkbench *workbench)
                            "workbench", workbench,
                            NULL);
   gb_command_manager_add_provider (workbench->priv->command_manager, provider);
-
-  workbench->priv->navigation_list = g_object_new (GB_TYPE_NAVIGATION_LIST,
-                                                   "workbench", workbench,
-                                                   NULL);
 }
