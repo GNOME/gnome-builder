@@ -77,24 +77,6 @@ gb_workspace_set_title (GbWorkspace *workspace,
                             gParamSpecs[PROP_TITLE]);
 }
 
-void
-gb_workspace_new_document (GbWorkspace *workspace)
-{
-  g_return_if_fail (GB_IS_WORKSPACE (workspace));
-
-  if (GB_WORKSPACE_GET_CLASS (workspace)->new_document)
-    GB_WORKSPACE_GET_CLASS (workspace)->new_document (workspace);
-}
-
-void
-gb_workspace_open (GbWorkspace *workspace)
-{
-  g_return_if_fail (GB_IS_WORKSPACE (workspace));
-
-  if (GB_WORKSPACE_GET_CLASS (workspace)->open)
-    GB_WORKSPACE_GET_CLASS (workspace)->open (workspace);
-}
-
 static void
 gb_workspace_finalize (GObject *object)
 {

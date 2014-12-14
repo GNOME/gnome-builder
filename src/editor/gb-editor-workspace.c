@@ -199,12 +199,6 @@ open_tab (GSimpleAction *action,
 }
 
 static void
-gb_editor_workspace_new_document (GbWorkspace *workspace)
-{
-  new_document (NULL, NULL, workspace);
-}
-
-static void
 gb_editor_workspace_grab_focus (GtkWidget *widget)
 {
   GbEditorWorkspace *workspace = GB_EDITOR_WORKSPACE (widget);
@@ -212,12 +206,6 @@ gb_editor_workspace_grab_focus (GtkWidget *widget)
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
 
   gtk_widget_grab_focus (GTK_WIDGET (workspace->priv->document_grid));
-}
-
-static void
-gb_editor_workspace_activate_open (GbWorkspace *workspace)
-{
-  open_tab (NULL, NULL, workspace);
 }
 
 static void
@@ -256,9 +244,6 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 
   widget_class->grab_focus = gb_editor_workspace_grab_focus;
   widget_class->map = gb_editor_workspace_map;
-
-  workspace_class->new_document = gb_editor_workspace_new_document;
-  workspace_class->open = gb_editor_workspace_activate_open;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-editor-workspace.ui");
