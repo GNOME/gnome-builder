@@ -59,7 +59,6 @@ struct _GbDocumentManagerClass
 
 GType              gb_document_manager_get_type              (void);
 GbDocumentManager *gb_document_manager_new                   (void);
-GbDocumentManager *gb_document_manager_get_default           (void);
 void               gb_document_manager_add                   (GbDocumentManager *manager,
                                                               GbDocument        *document);
 void               gb_document_manager_remove                (GbDocumentManager *manager,

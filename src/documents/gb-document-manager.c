@@ -54,17 +54,6 @@ gb_document_manager_new (void)
   return g_object_new (GB_TYPE_DOCUMENT_MANAGER, NULL);
 }
 
-GbDocumentManager *
-gb_document_manager_get_default (void)
-{
-  static GbDocumentManager *instance;
-
-  if (!instance)
-    instance = gb_document_manager_new ();
-
-  return instance;
-}
-
 guint
 gb_document_manager_get_count (GbDocumentManager *manager)
 {
