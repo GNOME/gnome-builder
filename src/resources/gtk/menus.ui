@@ -59,7 +59,7 @@
       <attribute name="id">file-section-2</attribute>
       <item>
         <attribute name="label" translatable="yes">Save _All</attribute>
-        <attribute name="action">workbench.save-all</attribute>
+        <attribute name="action">win.save-all</attribute>
       </item>
     </section>
     <section>

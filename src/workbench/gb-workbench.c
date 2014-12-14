@@ -418,6 +418,30 @@ on_open (GSimpleAction *action,
 }
 
 static void
+on_save_all (GSimpleAction *action,
+             GVariant      *parameters,
+             gpointer       user_data)
+{
+  GbDocumentManager *manager;
+  GList *list;
+  GList *iter;
+
+  manager = gb_document_manager_get_default ();
+  list = gb_document_manager_get_documents (manager);
+
+  for (iter = list; iter; iter = iter->next)
+    {
+      GbDocument *document = GB_DOCUMENT (iter->data);
+
+      /* This will not save files which do not have location set */
+      if (gb_document_get_modified (document))
+        gb_document_save_async (document, NULL, NULL, NULL);
+    }
+
+  g_list_free (list);
+}
+
+static void
 gb_workbench_constructed (GObject *object)
 {
   static const GActionEntry actions[] = {
@@ -430,6 +454,7 @@ gb_workbench_constructed (GObject *object)
     { "roll-credits", on_roll_credits },
     { "new-document", on_new_document },
     { "open", on_open },
+    { "save-all", on_save_all },
   };
   GbWorkbenchPrivate *priv;
   GbWorkbench *workbench = (GbWorkbench *)object;
