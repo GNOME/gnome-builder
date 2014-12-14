@@ -822,4 +822,16 @@ gb_workbench_init (GbWorkbench *workbench)
                                      GB_TYPE_COMMAND_GACTION_PROVIDER);
   gb_workbench_add_command_provider (workbench,
                                      GB_TYPE_COMMAND_VIM_PROVIDER);
+
+  /*
+   * WORKAROUND:
+   *
+   * The GtkWidget template things that popover is a child of ours. When in
+   * reality it is a child of the GtkMenuButton (since it owns the "popover"
+   * property. Both our widget and the menu button try to call
+   * gtk_widget_destroy() on it.
+   *
+   * https://bugzilla.gnome.org/show_bug.cgi?id=741529
+   */
+  g_object_ref (workbench->priv->search_popover);
 }
