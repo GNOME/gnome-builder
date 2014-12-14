@@ -21,6 +21,8 @@
 
 #include <gtk/gtk.h>
 
+#include "gb-workbench-types.h"
+
 G_BEGIN_DECLS
 
 void             gb_widget_add_style_class (gpointer      widget,
@@ -30,7 +32,7 @@ cairo_surface_t *gb_widget_snapshot        (GtkWidget    *widget,
                                             gint          height,
                                             gdouble       alpha,
                                             gboolean      draw_border);
-gpointer         gb_widget_get_workbench   (GtkWidget    *widget);
+GbWorkbench     *gb_widget_get_workbench   (GtkWidget    *widget);
 void             gb_widget_fade_hide       (GtkWidget    *widget);
 void             gb_widget_fade_show       (GtkWidget    *widget);
 

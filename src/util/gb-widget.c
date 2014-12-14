@@ -29,7 +29,7 @@
  *
  * Returns: (transfer none) (type GbWorkbench*): A #GbWorkbench or %NULL.
  */
-gpointer
+GbWorkbench *
 gb_widget_get_workbench (GtkWidget *widget)
 {
   GtkWidget *toplevel;
