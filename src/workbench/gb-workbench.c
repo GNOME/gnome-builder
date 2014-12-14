@@ -191,6 +191,17 @@ gb_workbench_stack_child_changed (GbWorkbench *workbench,
 
   if (child)
     g_signal_emit (workbench, gSignals[WORKSPACE_CHANGED], 0, child);
+
+  if (GB_IS_WORKSPACE (child))
+    {
+      GAction *action;
+      gboolean enabled;
+
+      enabled = !!GB_WORKSPACE_GET_CLASS (child)->new_document;
+      action = g_action_map_lookup_action (G_ACTION_MAP (workbench),
+                                           "new-document");
+      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
+    }
 }
 
 static void
