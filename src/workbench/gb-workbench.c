@@ -38,6 +38,7 @@
 struct _GbWorkbenchPrivate
 {
   GbCommandManager       *command_manager;
+  GbDocumentManager      *document_manager;
   GbNavigationList       *navigation_list;
 
   GbWorkspace            *active_workspace;
@@ -94,6 +95,22 @@ gb_workbench_get_command_manager (GbWorkbench *workbench)
   g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
 
   return workbench->priv->command_manager;
+}
+
+/**
+ * gb_workbench_get_document_manager:
+ * @workbench: A #GbWorkbench
+ *
+ * Retrieves the document manager for the workbench.
+ *
+ * Returns: (transfer none): A #GbDocumentManager.
+ */
+GbDocumentManager *
+gb_workbench_get_document_manager (GbWorkbench *workbench)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
+
+  return workbench->priv->document_manager;
 }
 
 /**
@@ -481,16 +498,6 @@ gb_workbench_constructed (GObject *object)
   EXIT;
 }
 
-GbDocumentManager *
-gb_workbench_get_document_manager (GbWorkbench *workbench)
-{
-  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
-
-  /* TODO: Store document manager per project/workbench */
-
-  return gb_document_manager_get_default ();
-}
-
 static void
 gb_workbench_save_cb (GObject      *object,
                       GAsyncResult *result,
@@ -794,6 +801,7 @@ gb_workbench_init (GbWorkbench *workbench)
 
   workbench->priv = gb_workbench_get_instance_private (workbench);
 
+  workbench->priv->document_manager = gb_document_manager_new ();
   gtk_widget_init_template (GTK_WIDGET (workbench));
 
   workbench->priv->command_manager =
