@@ -189,47 +189,21 @@ gb_workbench_stack_child_changed (GbWorkbench *workbench,
   child = gtk_stack_get_visible_child (stack);
   g_assert (!child || GB_IS_WORKSPACE (child));
 
-  if (child)
-    g_signal_emit (workbench, gSignals[WORKSPACE_CHANGED], 0, child);
-
   if (GB_IS_WORKSPACE (child))
     {
-      GAction *action;
-      gboolean enabled;
+      GActionGroup *action_group;
 
-      /* FIXME: None of this is ideal. We should come up with a better
-       * way. Even if that is adding and removing actions from 'win.'.
+      /*
+       * Some actions need to be propagated from the workspace to the
+       * toplevel. This way the header bar can activate them.
        */
-
-      enabled = !!GB_WORKSPACE_GET_CLASS (child)->new_document;
-      action = g_action_map_lookup_action (G_ACTION_MAP (workbench),
-                                           "new-document");
-      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
-
-      enabled = !!GB_WORKSPACE_GET_CLASS (child)->open;
-      action = g_action_map_lookup_action (G_ACTION_MAP (workbench),
-                                           "open");
-      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
+      action_group = gtk_widget_get_action_group (child, "workspace");
+      gtk_widget_insert_action_group (GTK_WIDGET (workbench),
+                                      "workspace", action_group);
     }
-}
 
-static void
-gb_workbench_load_workspace_actions (GbWorkbench *workbench,
-                                     GbWorkspace *workspace)
-{
-  GActionGroup *group;
-  const gchar *name;
-
-  group = gb_workspace_get_actions (workspace);
-  name = gtk_widget_get_name (GTK_WIDGET (workspace));
-
-  g_assert (name);
-
-  if (group)
-    {
-      g_message (_("Registering actions for \"%s\" prefix."), name);
-      gtk_widget_insert_action_group (GTK_WIDGET (workbench), name, group);
-    }
+  if (child)
+    g_signal_emit (workbench, gSignals[WORKSPACE_CHANGED], 0, child);
 }
 
 static void
@@ -467,8 +441,6 @@ gb_workbench_constructed (GObject *object)
   ENTRY;
 
   priv = workbench->priv;
-
-  gb_workbench_load_workspace_actions (workbench, GB_WORKSPACE (priv->editor));
 
   app = GTK_APPLICATION (g_application_get_default ());
   menu = gtk_application_get_menu_by_id (app, "gear-menu");

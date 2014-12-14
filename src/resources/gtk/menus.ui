@@ -57,7 +57,7 @@
     <section>
       <item>
         <attribute name="label" translatable="yes">_Open</attribute>
-        <attribute name="action">win.open</attribute>
+        <attribute name="action">workspace.open</attribute>
       </item>
     </section>
     <section>

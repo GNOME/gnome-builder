@@ -37,27 +37,6 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GbWorkspace, gb_workspace, GTK_TYPE_BIN)
 
 static GParamSpec *gParamSpecs[LAST_PROP];
 
-/**
- * gb_workspace_get_actions:
- * @workspace: A #GbWorkspace.
- *
- * Fetch the actions for the workspace, to be added to the toplevel.
- * The actions will be added with the prefix for the workspace based on
- * the "name" property.
- *
- * Returns: (transfer none): A #GActionGroup or %NULL.
- */
-GActionGroup *
-gb_workspace_get_actions (GbWorkspace *workspace)
-{
-  g_return_val_if_fail (GB_IS_WORKSPACE (workspace), NULL);
-
-  if (GB_WORKSPACE_GET_CLASS (workspace)->get_actions)
-    return GB_WORKSPACE_GET_CLASS (workspace)->get_actions (workspace);
-
-  return NULL;
-}
-
 const gchar *
 gb_workspace_get_icon_name (GbWorkspace *workspace)
 {

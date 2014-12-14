@@ -89,7 +89,7 @@
         <child>
           <object class="GtkButton" id="new_tab">
             <property name="visible">True</property>
-            <property name="action_name">win.new-document</property>
+            <property name="action_name">workspace.new-document</property>
             <property name="tooltip-text" translatable="yes">Create new document</property>
             <style>
               <class name="image-button"/>

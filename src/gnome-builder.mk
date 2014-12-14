@@ -82,7 +82,6 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-editor-view.h \
 	src/editor/gb-editor-workspace.c \
 	src/editor/gb-editor-workspace.h \
-	src/editor/gb-editor-workspace-private.h \
 	src/editor/gb-source-change-monitor.c \
 	src/editor/gb-source-change-monitor.h \
 	src/editor/gb-source-formatter.c \

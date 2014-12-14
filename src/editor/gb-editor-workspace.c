@@ -23,10 +23,17 @@
 
 #include "gb-devhelp-document.h"
 #include "gb-devhelp-view.h"
+#include "gb-document-grid.h"
 #include "gb-editor-document.h"
 #include "gb-editor-workspace.h"
-#include "gb-editor-workspace-private.h"
 #include "gb-tree.h"
+
+struct _GbEditorWorkspacePrivate
+{
+  GHashTable         *command_map;
+  GtkPaned           *paned;
+  GbDocumentGrid     *document_grid;
+};
 
 enum {
   PROP_0,
@@ -185,12 +192,6 @@ open_tab (GSimpleAction *action,
   gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
-static GActionGroup *
-gb_editor_workspace_get_actions (GbWorkspace *workspace)
-{
-  return G_ACTION_GROUP (GB_EDITOR_WORKSPACE (workspace)->priv->actions);
-}
-
 static void
 gb_editor_workspace_new_document (GbWorkspace *workspace)
 {
@@ -231,7 +232,6 @@ gb_editor_workspace_finalize (GObject *object)
 {
   GbEditorWorkspacePrivate *priv = GB_EDITOR_WORKSPACE (object)->priv;
 
-  g_clear_object (&priv->actions);
   g_clear_pointer (&priv->command_map, g_hash_table_unref);
 
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->finalize (object);
@@ -247,7 +247,6 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
   object_class->constructed = gb_editor_workspace_constructed;
   object_class->finalize = gb_editor_workspace_finalize;
 
-  workspace_class->get_actions = gb_editor_workspace_get_actions;
   workspace_class->new_document = gb_editor_workspace_new_document;
   workspace_class->open = gb_editor_workspace_activate_open;
 
@@ -265,20 +264,24 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 static void
 gb_editor_workspace_init (GbEditorWorkspace *workspace)
 {
-    const GActionEntry entries[] = {
-      { "open", open_tab },
-      { "new-document", new_document },
-      { "jump-to-doc", jump_to_doc_tab, "s" },
-    };
+  const GActionEntry entries[] = {
+    { "open", open_tab },
+    { "new-document", new_document },
+    { "jump-to-doc", jump_to_doc_tab, "s" },
+  };
+  GSimpleActionGroup *actions;
 
   workspace->priv = gb_editor_workspace_get_instance_private (workspace);
-
-  workspace->priv->actions = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (workspace->priv->actions),
-                                   entries, G_N_ELEMENTS (entries),
-                                   workspace);
 
   workspace->priv->command_map = g_hash_table_new (g_str_hash, g_str_equal);
 
   gtk_widget_init_template (GTK_WIDGET (workspace));
+
+  actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   workspace);
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "workspace",
+                                  G_ACTION_GROUP (actions));
+  g_clear_object (&actions);
 }

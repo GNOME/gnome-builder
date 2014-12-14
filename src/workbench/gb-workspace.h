@@ -47,8 +47,6 @@ struct _GbWorkspaceClass
 {
   GtkBinClass parent_class;
 
-  GActionGroup *(*get_actions) (GbWorkspace *workspace);
-
   void (*new_document) (GbWorkspace *workspace);
   void (*open)         (GbWorkspace *workspace);
 };
@@ -60,7 +58,6 @@ void          gb_workspace_set_icon_name (GbWorkspace *workspace,
 const gchar  *gb_workspace_get_title     (GbWorkspace *workspace);
 void          gb_workspace_set_title     (GbWorkspace *workspace,
                                           const gchar *title);
-GActionGroup *gb_workspace_get_actions   (GbWorkspace *workspace);
 void          gb_workspace_new_document  (GbWorkspace *workspace);
 void          gb_workspace_open          (GbWorkspace *workspace);
 

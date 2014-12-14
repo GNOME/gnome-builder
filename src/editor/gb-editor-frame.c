@@ -899,10 +899,8 @@ gb_editor_frame_on_jump_to_doc (GbEditorFrame *frame,
                                 const gchar   *search_text,
                                 GbSourceView  *source_view)
 {
+  GActionGroup *action_group;
   GbWorkbench *workbench;
-  GAction *action;
-  GVariant *params;
-  GtkWidget *parent;
 
   ENTRY;
 
@@ -911,35 +909,10 @@ gb_editor_frame_on_jump_to_doc (GbEditorFrame *frame,
   g_return_if_fail (search_text);
 
   workbench = gb_widget_get_workbench (GTK_WIDGET (frame));
-  if (!workbench)
-    EXIT;
-
-  parent = GTK_WIDGET (frame);
-
-  /*
-   * TODO: I really want this to all just work by searching for muxed actions
-   *       in Gtk+ directly. Matthias has some patches and Ryan needs to
-   *       review them. This all becomes easier then.
-   */
-
-  while (parent && !GB_IS_EDITOR_WORKSPACE (parent))
-    parent = gtk_widget_get_parent (parent);
-
-  if (GB_IS_EDITOR_WORKSPACE (parent))
-    {
-      GActionGroup *group;
-
-      group = gb_workspace_get_actions (GB_WORKSPACE (parent));
-      action = g_action_map_lookup_action (G_ACTION_MAP (group),
-                                           "jump-to-doc");
-      if (!action)
-        EXIT;
-
-      params = g_variant_new_string (search_text);
-      g_action_activate (action, params);
-
-      EXIT;
-    }
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (workbench),
+                                              "workspace");
+  g_action_group_activate_action (action_group, "jump-to-doc",
+                                  g_variant_new_string (search_text));
 
   EXIT;
 }
