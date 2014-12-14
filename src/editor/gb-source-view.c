@@ -1196,6 +1196,7 @@ gb_source_view_notify_buffer (GObject    *object,
           GTK_SOURCE_COMPLETION_WORDS (priv->words_provider),
           GTK_TEXT_BUFFER (buffer));
 
+      gb_source_view_reload_auto_indenter (view);
       gb_source_view_reload_snippets (view);
 
       gb_source_view_connect_settings (view);
