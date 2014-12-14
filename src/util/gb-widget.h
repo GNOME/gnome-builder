@@ -25,6 +25,13 @@
 
 G_BEGIN_DECLS
 
+#define GB_WIDGET_CLASS_TEMPLATE(klass, name) \
+  gtk_widget_class_set_template_from_resource((GtkWidgetClass*)klass, \
+                                              "/org/gnome/builder/ui/"name)
+#define GB_WIDGET_CLASS_BIND(klass, TN, field) \
+  gtk_widget_class_bind_template_child_private ((GtkWidgetClass*)klass, \
+                                                TN, field)
+
 void             gb_widget_add_style_class (gpointer      widget,
                                             const gchar  *class_name);
 cairo_surface_t *gb_widget_snapshot        (GtkWidget    *widget,
