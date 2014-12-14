@@ -145,7 +145,10 @@ gb_close_confirmation_dialog_init (GbCloseConfirmationDialog *dlg)
 	atk_object_set_role (atk_obj, ATK_ROLE_ALERT);
 	atk_object_set_name (atk_obj, _("Question"));
 
+	G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 	action_area = gtk_dialog_get_action_area (GTK_DIALOG (dlg));
+	G_GNUC_END_IGNORE_DEPRECATIONS;
+
 	gtk_button_box_set_layout (GTK_BUTTON_BOX (action_area), GTK_BUTTONBOX_EXPAND);
 	gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (dlg)),
 	                                                           GTK_STYLE_CLASS_MESSAGE_DIALOG);
