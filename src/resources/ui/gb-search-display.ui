@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.14 -->
+  <template class="GbSearchDisplay" parent="GtkBin">
+    <property name="border_width">10</property>
+    <property name="width_request">800</property>
+    <property name="height_request">600</property>
+    <child>
+      <object class="GtkScrolledWindow" id="scroller">
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkListBox" id="list_box">
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

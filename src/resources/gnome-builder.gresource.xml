@@ -33,6 +33,7 @@
     <file>ui/gb-preferences-page-editor.ui</file>
     <file>ui/gb-preferences-page-git.ui</file>
     <file>ui/gb-preferences-page-language.ui</file>
+    <file>ui/gb-search-display.ui</file>
     <file>ui/gb-workbench.ui</file>
   </gresource>
 </gresources>

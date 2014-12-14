@@ -153,6 +153,17 @@ libgnome_builder_la_SOURCES = \
 	src/log/gb-log.h \
 	src/nautilus/nautilus-floating-bar.c \
 	src/nautilus/nautilus-floating-bar.h \
+	src/search/gb-search-context.c \
+	src/search/gb-search-context.h \
+	src/search/gb-search-display.c \
+	src/search/gb-search-display.h \
+	src/search/gb-search-manager.c \
+	src/search/gb-search-manager.h \
+	src/search/gb-search-provider.c \
+	src/search/gb-search-provider.h \
+	src/search/gb-search-result.c \
+	src/search/gb-search-result.h \
+	src/search/gb-search-types.h \
 	src/theatrics/gb-box-theatric.c \
 	src/theatrics/gb-box-theatric.h \
 	src/tree/gb-tree.c \
@@ -225,6 +236,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/preferences \
 	-I$(top_srcdir)/src/resources \
 	-I$(top_builddir)/src/resources \
+	-I$(top_srcdir)/src/search \
 	-I$(top_srcdir)/src/snippets \
 	-I$(top_srcdir)/src/tabs \
 	-I$(top_srcdir)/src/tree \
