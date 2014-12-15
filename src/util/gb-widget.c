@@ -163,6 +163,7 @@ hide_callback (gpointer data)
 
   gtk_widget_hide (widget);
   gtk_widget_set_opacity (widget, 1.0);
+  g_object_unref (widget);
 }
 
 void
@@ -180,7 +181,7 @@ gb_widget_fade_hide (GtkWidget *widget)
                               1000,
                               frame_clock,
                               hide_callback,
-                              widget,
+                              g_object_ref (widget),
                               "opacity", 0.0,
                               NULL);
     }
