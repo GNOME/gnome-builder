@@ -16,8 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "search-display"
+
 #include <glib/gi18n.h>
 
+#include "gb-log.h"
 #include "gb-search-display.h"
 #include "gb-search-provider.h"
 
@@ -54,13 +57,19 @@ gb_search_display_results_added (GbSearchDisplay  *display,
 {
   GList *iter;
 
+  ENTRY;
+
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
   g_return_if_fail (GB_IS_SEARCH_PROVIDER (provider));
 
   for (iter = results; iter; iter = iter->next)
-    gtk_list_box_insert (display->priv->list_box, iter->data, -1);
+    {
+      gtk_list_box_insert (display->priv->list_box, iter->data, -1);
+    }
 
   gtk_list_box_invalidate_sort (display->priv->list_box);
+
+  EXIT;
 }
 
 static void
@@ -70,6 +79,8 @@ gb_search_display_connect (GbSearchDisplay *display,
   GbSearchDisplayPrivate *priv;
   const GList *list;
   const GList *iter;
+
+  ENTRY;
 
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
   g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
@@ -83,11 +94,11 @@ gb_search_display_connect (GbSearchDisplay *display,
                            G_CONNECT_SWAPPED);
 
   list = gb_search_context_get_results (context);
-
   for (iter = list; iter; iter = iter->next)
     gtk_list_box_insert (priv->list_box, iter->data, -1);
-
   gtk_list_box_invalidate_sort (display->priv->list_box);
+
+  EXIT;
 }
 
 static void
@@ -97,6 +108,8 @@ gb_search_display_disconnect (GbSearchDisplay *display,
   GbSearchDisplayPrivate *priv;
   GList *children;
   GList *iter;
+
+  ENTRY;
 
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
   g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
@@ -111,12 +124,16 @@ gb_search_display_disconnect (GbSearchDisplay *display,
   for (iter = children; iter; iter = iter->next)
     gtk_container_remove (GTK_CONTAINER (priv->list_box), iter->data);
   g_list_free (children);
+
+  EXIT;
 }
 
 void
 gb_search_display_set_context (GbSearchDisplay *display,
                                GbSearchContext *context)
 {
+  ENTRY;
+
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
   g_return_if_fail (!context || GB_IS_SEARCH_CONTEXT (context));
 
@@ -137,6 +154,8 @@ gb_search_display_set_context (GbSearchDisplay *display,
       g_object_notify_by_pspec (G_OBJECT (display),
                                 gParamSpecs [PROP_CONTEXT]);
     }
+
+  EXIT;
 }
 
 static void

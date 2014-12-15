@@ -160,6 +160,8 @@ gb_search_context_add_results (GbSearchContext  *context,
                                GList            *results,
                                gboolean          finished)
 {
+  ENTRY;
+
   g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
   g_return_if_fail (GB_IS_SEARCH_PROVIDER (provider));
 
@@ -167,6 +169,8 @@ gb_search_context_add_results (GbSearchContext  *context,
 
   g_signal_emit (context, gSignals [RESULTS_ADDED], 0,
                  provider, results, finished);
+
+  EXIT;
 }
 
 const gchar *
