@@ -312,7 +312,7 @@ gb_search_context_class_init (GbSearchContextClass *klass)
     g_signal_new ("results-added",
                   GB_TYPE_SEARCH_CONTEXT,
                   G_SIGNAL_RUN_LAST,
-                  0,
+                  G_STRUCT_OFFSET (GbSearchContextClass, results_added),
                   NULL,
                   NULL,
                   g_cclosure_marshal_generic,
