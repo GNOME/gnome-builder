@@ -294,7 +294,7 @@ gb_search_context_class_init (GbSearchContextClass *klass)
     g_param_spec_pointer ("providers",
                           _("Providers"),
                           _("The providers for the search context."),
-                          (G_PARAM_READABLE |
+                          (G_PARAM_READWRITE |
                            G_PARAM_CONSTRUCT_ONLY |
                            G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_PROVIDERS,
