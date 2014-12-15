@@ -141,7 +141,7 @@ gb_search_display_set_context (GbSearchDisplay *display,
     {
       if (display->priv->context)
         {
-          gb_search_display_disconnect (display, context);
+          gb_search_display_disconnect (display, display->priv->context);
           g_clear_object (&display->priv->context);
         }
 
