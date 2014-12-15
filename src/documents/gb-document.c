@@ -139,8 +139,8 @@ gb_document_save_finish (GbDocument    *document,
                          GAsyncResult  *result,
                          GError       **error)
 {
-  g_return_if_fail (GB_IS_DOCUMENT (document));
-  g_return_if_fail (G_IS_ASYNC_RESULT (result));
+  g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   if (GB_DOCUMENT_GET_INTERFACE (document)->save_finish)
     return GB_DOCUMENT_GET_INTERFACE (document)->
@@ -170,8 +170,8 @@ gb_document_save_as_finish (GbDocument    *document,
                             GAsyncResult  *result,
                             GError       **error)
 {
-  g_return_if_fail (GB_IS_DOCUMENT (document));
-  g_return_if_fail (G_IS_ASYNC_RESULT (result));
+  g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   if (GB_DOCUMENT_GET_INTERFACE (document)->save_as_finish)
     return GB_DOCUMENT_GET_INTERFACE (document)->
