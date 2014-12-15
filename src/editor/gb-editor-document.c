@@ -94,7 +94,7 @@ gb_editor_document_new (void)
 static gboolean
 gb_editor_document_is_untitled (GbDocument *document)
 {
-  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), NULL);
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), FALSE);
 
   return (GB_EDITOR_DOCUMENT (document)->priv->doc_seq_id > 0);
 }
