@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.14 -->
+  <template class="GbSearchBox" parent="GtkBox">
+    <property name="orientation">horizontal</property>
+    <style>
+      <class name="linked"/>
+    </style>
+    <child>
+      <object class="GtkSearchEntry" id="entry">
+        <property name="visible">true</property>
+        <property name="hexpand">true</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="button">
+        <property name="visible">true</property>
+        <property name="popover">popover</property>
+        <style>
+          <class name="image-button"/>
+          <class name="text-button"/>
+        </style>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="icon_name">open-menu-symbolic</property>
+            <property name="valign">baseline</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkPopover" id="popover">
+    <property name="visible">true</property>
+    <property name="modal">false</property>
+    <property name="relative-to">entry</property>
+    <child>
+      <object class="GbSearchDisplay" id="display">
+        <property name="visible">true</property>
+      </object>
+    </child>
+  </object>
+</interface>

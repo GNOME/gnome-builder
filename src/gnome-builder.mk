@@ -159,6 +159,8 @@ libgnome_builder_la_SOURCES = \
 	src/log/gb-log.h \
 	src/nautilus/nautilus-floating-bar.c \
 	src/nautilus/nautilus-floating-bar.h \
+	src/search/gb-search-box.c \
+	src/search/gb-search-box.h \
 	src/search/gb-search-context.c \
 	src/search/gb-search-context.h \
 	src/search/gb-search-display.c \
