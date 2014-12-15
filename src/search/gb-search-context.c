@@ -141,21 +141,32 @@ gb_search_context_results_added (GbSearchContext  *context,
   g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
   g_return_if_fail (GB_IS_SEARCH_PROVIDER (provider));
 
+  /* TODO: how should we deal with priority? */
+
   context->priv->results = g_list_concat (context->priv->results, results);
 }
 
+/**
+ * gb_search_context_add_results:
+ * @results: (transfer full) (element-type GbSearchResult*): A #GList or %NULL
+ * @finished: if the provider is finished adding results.
+ *
+ * This function will add a list of results to the context. Ownership of
+ * @results and the contained elements will be transfered to @context.
+ */
 void
 gb_search_context_add_results (GbSearchContext  *context,
                                GbSearchProvider *provider,
-                               GList            *proposals,
+                               GList            *results,
                                gboolean          finished)
 {
   g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
   g_return_if_fail (GB_IS_SEARCH_PROVIDER (provider));
 
-  g_signal_emit (context, gSignals [RESULTS_ADDED], 0,
-                 provider, proposals, finished);
+  g_list_foreach (results, (GFunc)g_object_ref_sink, NULL);
 
+  g_signal_emit (context, gSignals [RESULTS_ADDED], 0,
+                 provider, results, finished);
 }
 
 const gchar *

@@ -23,6 +23,10 @@
 #include "fuzzy.h"
 #include "gb-git-search-provider.h"
 #include "gb-log.h"
+#include "gb-search-context.h"
+#include "gb-search-result.h"
+
+#define GB_GIT_SEARCH_PROVIDER_MAX_MATCHES 1000
 
 struct _GbGitSearchProviderPrivate
 {
@@ -30,8 +34,15 @@ struct _GbGitSearchProviderPrivate
   Fuzzy          *file_index;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbGitSearchProvider, gb_git_search_provider,
-                            G_TYPE_OBJECT)
+static void search_provider_init (GbSearchProviderInterface *iface);
+
+G_DEFINE_TYPE_EXTENDED (GbGitSearchProvider,
+                        gb_git_search_provider,
+                        G_TYPE_OBJECT,
+                        0,
+                        G_ADD_PRIVATE (GbGitSearchProvider)
+                        G_IMPLEMENT_INTERFACE (GB_TYPE_SEARCH_PROVIDER,
+                                               search_provider_init))
 
 enum {
   PROP_0,
@@ -120,6 +131,55 @@ cleanup:
   g_clear_object (&repository);
 
   EXIT;
+}
+
+static void
+gb_git_search_provider_populate (GbSearchProvider *provider,
+                                 GbSearchContext  *context,
+                                 GCancellable     *cancellable)
+{
+  GbGitSearchProvider *self = (GbGitSearchProvider *)provider;
+  GList *list = NULL;
+
+  g_return_if_fail (GB_IS_GIT_SEARCH_PROVIDER (self));
+  g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (self->priv->file_index)
+    {
+      const gchar *search_text;
+      GArray *matches;
+      guint i;
+
+      search_text = gb_search_context_get_search_text (context);
+      matches = fuzzy_match (self->priv->file_index, search_text,
+                             GB_GIT_SEARCH_PROVIDER_MAX_MATCHES);
+
+      for (i = 0; i < matches->len; i++)
+        {
+          FuzzyMatch *match;
+          GtkWidget *widget;
+          GtkWidget *child;
+
+          match = &g_array_index (matches, FuzzyMatch, i);
+
+          /* TODO: Make a git file search result */
+          widget = g_object_new (GB_TYPE_SEARCH_RESULT,
+                                 "visible", TRUE,
+                                 NULL);
+          child = g_object_new (GTK_TYPE_LABEL,
+                                "label", match->key,
+                                "xalign", 0.0f,
+                                "visible", TRUE,
+                                NULL);
+          gtk_container_add (GTK_CONTAINER (widget), child);
+          list = g_list_prepend (list, widget);
+        }
+
+      list = g_list_reverse (list);
+      gb_search_context_add_results (context, provider, list, TRUE);
+      g_array_unref (matches);
+    }
 }
 
 GgitRepository *
@@ -229,4 +289,10 @@ static void
 gb_git_search_provider_init (GbGitSearchProvider *self)
 {
   self->priv = gb_git_search_provider_get_instance_private (self);
+}
+
+static void
+search_provider_init (GbSearchProviderInterface *iface)
+{
+  iface->populate = gb_git_search_provider_populate;
 }
