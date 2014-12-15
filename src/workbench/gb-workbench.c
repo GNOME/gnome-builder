@@ -665,6 +665,9 @@ gb_workbench_begin_search (gpointer user_data)
 
   priv->search_timeout = 0;
 
+  context = gb_search_display_get_context (priv->search_display);
+  if (context)
+    gb_search_context_cancel (context);
   search_text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
   search_manager = gb_workbench_get_search_manager (workbench);
   context = gb_search_manager_search (search_manager, search_text);
