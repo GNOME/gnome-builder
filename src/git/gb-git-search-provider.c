@@ -22,6 +22,7 @@
 
 #include "fuzzy.h"
 #include "gb-git-search-provider.h"
+#include "gb-git-search-result.h"
 #include "gb-log.h"
 #include "gb-search-context.h"
 #include "gb-search-result.h"
@@ -196,20 +197,14 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
         {
           FuzzyMatch *match;
           GtkWidget *widget;
-          GtkWidget *child;
 
           match = &g_array_index (matches, FuzzyMatch, i);
 
           /* TODO: Make a git file search result */
-          widget = g_object_new (GB_TYPE_SEARCH_RESULT,
+          widget = g_object_new (GB_TYPE_GIT_SEARCH_RESULT,
                                  "visible", TRUE,
+                                 "path", match->key,
                                  NULL);
-          child = g_object_new (GTK_TYPE_LABEL,
-                                "label", match->key,
-                                "xalign", 0.0f,
-                                "visible", TRUE,
-                                NULL);
-          gtk_container_add (GTK_CONTAINER (widget), child);
           list = g_list_prepend (list, widget);
         }
 

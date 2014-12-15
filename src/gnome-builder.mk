@@ -106,6 +106,8 @@ libgnome_builder_la_SOURCES = \
 	src/gca/gca-structs.h \
 	src/git/gb-git-search-provider.c \
 	src/git/gb-git-search-provider.h \
+	src/git/gb-git-search-result.c \
+	src/git/gb-git-search-result.h \
 	src/html/gb-html-document.c \
 	src/html/gb-html-document.h \
 	src/html/gb-html-view.c \

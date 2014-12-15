@@ -28,6 +28,7 @@
     <file>ui/gb-editor-frame.ui</file>
     <file>ui/gb-editor-view.ui</file>
     <file>ui/gb-editor-workspace.ui</file>
+    <file>ui/gb-git-search-result.ui</file>
     <file>ui/gb-html-view.ui</file>
     <file>ui/gb-preferences-window.ui</file>
     <file>ui/gb-preferences-page-editor.ui</file>
