@@ -67,26 +67,50 @@ static void
 gb_search_display_connect (GbSearchDisplay *display,
                            GbSearchContext *context)
 {
+  GbSearchDisplayPrivate *priv;
+  const GList *list;
+  const GList *iter;
+
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
   g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
+
+  priv = display->priv;
 
   g_signal_connect_object (context,
                            "results-added",
                            G_CALLBACK (gb_search_display_results_added),
                            display,
                            G_CONNECT_SWAPPED);
+
+  list = gb_search_context_get_results (context);
+
+  for (iter = list; iter; iter = iter->next)
+    gtk_list_box_insert (priv->list_box, iter->data, -1);
+
+  gtk_list_box_invalidate_sort (display->priv->list_box);
 }
 
 static void
 gb_search_display_disconnect (GbSearchDisplay *display,
                               GbSearchContext *context)
 {
+  GbSearchDisplayPrivate *priv;
+  GList *children;
+  GList *iter;
+
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
   g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
+
+  priv = display->priv;
 
   g_signal_handlers_disconnect_by_func (context,
                                         G_CALLBACK (gb_search_display_results_added),
                                         display);
+
+  children = gtk_container_get_children (GTK_CONTAINER (priv->list_box));
+  for (iter = children; iter; iter = iter->next)
+    gtk_container_remove (GTK_CONTAINER (priv->list_box), iter->data);
+  g_list_free (children);
 }
 
 void
@@ -172,6 +196,16 @@ gb_search_display_class_init (GbSearchDisplayClass *klass)
   object_class->finalize = gb_search_display_finalize;
   object_class->get_property = gb_search_display_get_property;
   object_class->set_property = gb_search_display_set_property;
+
+  gParamSpecs [PROP_CONTEXT] =
+    g_param_spec_object ("context",
+                         _("Context"),
+                         _("The search context."),
+                         GB_TYPE_SEARCH_CONTEXT,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_CONTEXT,
+                                   gParamSpecs [PROP_CONTEXT]);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-search-display.ui");
