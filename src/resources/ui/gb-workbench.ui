@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.8 -->
+  <!-- interface-requires gtk+ 3.15 -->
   <template class="GbWorkbench" parent="GtkApplicationWindow">
     <property name="icon-name">builder</property>
     <child type="titlebar">
@@ -8,39 +8,11 @@
         <property name="visible">True</property>
         <property name="show_close_button">True</property>
         <child type="title">
-          <object class="GtkBox" id="search_container">
-            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+          <object class="GbSearchBox" id="search_box">
             <property name="visible">True</property>
             <property name="width_request">540</property>
             <property name="margin-start">6</property>
             <property name="margin-end">6</property>
-            <style>
-              <class name="linked"/>
-            </style>
-            <child>
-              <object class="GtkSearchEntry" id="search_entry">
-                <property name="visible">True</property>
-                <property name="hexpand">True</property>
-                <property name="primary_icon_name">edit-find-symbolic</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuButton" id="search_menu_button">
-                <property name="visible">True</property>
-                <property name="popover">search_popover</property>
-                <style>
-                  <class name="image-button"/>
-                  <class name="text-button"/>
-                </style>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="icon_name">open-menu-symbolic</property>
-                    <property name="valign">baseline</property>
-                  </object>
-                </child>
-              </object>
-            </child>
           </object>
         </child>
         <child>
@@ -247,14 +219,4 @@
       </object>
     </child>
   </template>
-  <object class="GtkPopover" id="search_popover">
-    <property name="visible">True</property>
-    <property name="modal">False</property>
-    <property name="relative-to">search_entry</property>
-    <child>
-      <object class="GbSearchDisplay" id="search_display">
-        <property name="visible">True</property>
-      </object>
-    </child>
-  </object>
 </interface>

@@ -32,13 +32,11 @@
 #include "gb-git-search-provider.h"
 #include "gb-glib.h"
 #include "gb-log.h"
-#include "gb-search-display.h"
+#include "gb-search-box.h"
 #include "gb-search-manager.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 #include "gedit-menu-stack-switcher.h"
-
-#define SEARCH_DELAY_MSEC 100
 
 struct _GbWorkbenchPrivate
 {
@@ -56,10 +54,7 @@ struct _GbWorkbenchPrivate
   GeditMenuStackSwitcher *gear_menu_button;
   GtkHeaderBar           *header_bar;
   GtkButton              *run_button;
-  GbSearchDisplay        *search_display;
-  GtkSearchEntry         *search_entry;
-  GtkMenuButton          *search_menu_button;
-  GtkPopover             *search_popover;
+  GbSearchBox            *search_box;
   GtkStack               *stack;
 };
 
@@ -346,7 +341,7 @@ gb_workbench_action_global_search (GSimpleAction *action,
 
   g_return_if_fail (GB_IS_WORKBENCH (workbench));
 
-  gtk_widget_grab_focus (GTK_WIDGET (workbench->priv->search_entry));
+  gtk_widget_grab_focus (GTK_WIDGET (workbench->priv->search_box));
 }
 
 static void
@@ -605,101 +600,35 @@ gb_workbench_add_command_provider (GbWorkbench *workbench,
 }
 
 static void
-gb_workbench_popover_closed (GbWorkbench *workbench,
-                             GtkPopover  *popover)
-{
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (GTK_IS_POPOVER (popover));
-
-  gtk_widget_hide (GTK_WIDGET (popover));
-}
-
-static void
 gb_workbench_set_focus (GtkWindow *window,
                         GtkWidget *widget)
 {
-  GbWorkbenchPrivate *priv = GB_WORKBENCH (window)->priv;
+  GbWorkbench *workbench = (GbWorkbench *)window;
 
-  if (gtk_widget_get_visible (GTK_WIDGET (priv->search_popover)))
-    {
-      if (gtk_widget_is_ancestor (widget, GTK_WIDGET (priv->search_entry)) ||
-          gtk_widget_is_ancestor (widget, GTK_WIDGET (priv->search_popover)) ||
-          gtk_widget_is_ancestor (widget, GTK_WIDGET (priv->search_menu_button)))
-        {
-        }
-      else
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->search_menu_button),
-                                      FALSE);
-    }
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  /*
+   * The goal here is to focus the current workspace if we are trying to
+   * clear the workbench focus (from something like the global search).
+   */
 
   GTK_WINDOW_CLASS (gb_workbench_parent_class)->set_focus (window, widget);
-}
 
-static void
-gb_workbench_search_entry_focus_in (GbWorkbench   *workbench,
-                                    GdkEventFocus *event,
-                                    GtkWidget     *search_entry)
-{
-  GtkToggleButton *toggle;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (event);
-  g_return_if_fail (GTK_IS_SEARCH_ENTRY (search_entry));
-
-  toggle = GTK_TOGGLE_BUTTON (workbench->priv->search_menu_button);
-  gtk_toggle_button_set_active (toggle, TRUE);
-}
-
-static gboolean
-gb_workbench_begin_search (gpointer user_data)
-{
-  GbWorkbenchPrivate *priv;
-  GbWorkbench *workbench = user_data;
-  GbSearchContext *context;
-  GbSearchManager *search_manager;
-  const gchar *search_text;
-
-  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), G_SOURCE_REMOVE);
-
-  priv = workbench->priv;
-
-  priv->search_timeout = 0;
-
-  context = gb_search_display_get_context (priv->search_display);
-  if (context)
-    gb_search_context_cancel (context);
-  search_text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
-  search_manager = gb_workbench_get_search_manager (workbench);
-  context = gb_search_manager_search (search_manager, search_text);
-  gb_search_display_set_context (priv->search_display, context);
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-gb_workbench_search_entry_changed (GbWorkbench    *workbench,
-                                   GtkSearchEntry *search_entry)
-{
-  GbWorkbenchPrivate *priv;
-  const gchar *search_text;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (GTK_IS_SEARCH_ENTRY (search_entry));
-
-  priv = workbench->priv;
-
-  if (priv->search_timeout)
+  if (!widget)
     {
-      g_source_remove (priv->search_timeout);
-      priv->search_timeout = 0;
+      GbWorkspace *workspace;
+
+      /*
+       * Sadly we can't just set @widget before calling the parent set_focus()
+       * implementation. It doesn't actually do anything. So instead we grab
+       * the focus of the active workspace directly. We might need to check
+       * for reentrancy later, but if that happens, we are probably doing
+       * something else wrong.
+       */
+      workspace = gb_workbench_get_active_workspace (workbench);
+      if (workspace)
+        gtk_widget_grab_focus (GTK_WIDGET (workspace));
     }
-
-  search_text = gtk_entry_get_text (GTK_ENTRY (search_entry));
-
-  if (search_text)
-    priv->search_timeout = g_timeout_add (SEARCH_DELAY_MSEC,
-                                          gb_workbench_begin_search,
-                                          workbench);
 }
 
 static void
@@ -716,6 +645,7 @@ gb_workbench_constructed (GObject *object)
   };
   GbWorkbenchPrivate *priv;
   GbWorkbench *workbench = (GbWorkbench *)object;
+  GbSearchManager *search_manager;
   GtkApplication *app;
   GAction *action;
   GMenu *menu;
@@ -760,24 +690,9 @@ gb_workbench_constructed (GObject *object)
                     G_CALLBACK (on_command_bar_notify_child_revealed),
                     workbench);
 
-  gtk_popover_set_relative_to (priv->search_popover,
-                               GTK_WIDGET (priv->search_entry));
-  g_signal_connect_object (priv->search_popover,
-                           "closed",
-                           G_CALLBACK (gb_workbench_popover_closed),
-                           workbench,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (priv->search_entry,
-                           "focus-in-event",
-                           G_CALLBACK (gb_workbench_search_entry_focus_in),
-                           workbench,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (priv->search_entry,
-                           "changed",
-                           G_CALLBACK (gb_workbench_search_entry_changed),
-                           workbench,
-                           G_CONNECT_SWAPPED);
+  search_manager = gb_workbench_get_search_manager (workbench);
+  gb_search_box_set_search_manager (workbench->priv->search_box,
+                                    search_manager);
 
   gb_workbench_stack_child_changed (workbench, NULL, priv->stack);
 
@@ -900,16 +815,13 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, gear_menu_button);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, header_bar);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, run_button);
-  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_display);
-  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_entry);
-  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_menu_button);
-  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_popover);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_box);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, stack);
 
   g_type_ensure (GB_TYPE_COMMAND_BAR);
   g_type_ensure (GB_TYPE_CREDITS_WIDGET);
   g_type_ensure (GB_TYPE_EDITOR_WORKSPACE);
-  g_type_ensure (GB_TYPE_SEARCH_DISPLAY);
+  g_type_ensure (GB_TYPE_SEARCH_BOX);
   g_type_ensure (GEDIT_TYPE_MENU_STACK_SWITCHER);
 }
 
@@ -928,16 +840,4 @@ gb_workbench_init (GbWorkbench *workbench)
                                      GB_TYPE_COMMAND_GACTION_PROVIDER);
   gb_workbench_add_command_provider (workbench,
                                      GB_TYPE_COMMAND_VIM_PROVIDER);
-
-  /*
-   * WORKAROUND:
-   *
-   * The GtkWidget template things that popover is a child of ours. When in
-   * reality it is a child of the GtkMenuButton (since it owns the "popover"
-   * property. Both our widget and the menu button try to call
-   * gtk_widget_destroy() on it.
-   *
-   * https://bugzilla.gnome.org/show_bug.cgi?id=741529
-   */
-  g_object_ref (workbench->priv->search_popover);
 }
