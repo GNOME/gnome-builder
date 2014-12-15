@@ -55,6 +55,7 @@ GType            gb_search_context_get_type        (void);
 GbSearchContext *gb_search_context_new             (const GList      *providers,
                                                     const gchar      *search_text);
 void             gb_search_context_cancel          (GbSearchContext  *context);
+const GList     *gb_search_context_get_results     (GbSearchContext  *context);
 void             gb_search_context_add_results     (GbSearchContext  *context,
                                                     GbSearchProvider *provider,
                                                     GList            *results,
