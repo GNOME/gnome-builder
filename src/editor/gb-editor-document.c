@@ -199,11 +199,11 @@ gb_editor_document_check_modified_cb (GObject      *object,
 
           read_only = !g_file_info_get_attribute_boolean (info,
                                                           G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
-          gb_editor_document_set_read_only (document, read_only);
+          if (gb_editor_document_get_read_only (GB_DOCUMENT (document)) != read_only)
+            gb_editor_document_set_read_only (document, read_only);
         }
 
-      if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_TIME_MODIFIED) &&
-          document->priv->mtime_set)
+      if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_TIME_MODIFIED) && document->priv->mtime_set)
         {
           GTimeVal tv;
 
