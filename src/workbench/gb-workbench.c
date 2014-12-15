@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "workbench"
 
 #include <glib/gi18n.h>
+#include <libgit2-glib/ggit.h>
 
 #include "gb-command-bar.h"
 #include "gb-command-gaction-provider.h"
@@ -28,6 +29,7 @@
 #include "gb-credits-widget.h"
 #include "gb-document-manager.h"
 #include "gb-editor-workspace.h"
+#include "gb-git-search-provider.h"
 #include "gb-glib.h"
 #include "gb-log.h"
 #include "gb-search-display.h"
@@ -43,6 +45,7 @@ struct _GbWorkbenchPrivate
   GbCommandManager       *command_manager;
   GbDocumentManager      *document_manager;
   GbNavigationList       *navigation_list;
+  GbSearchManager        *search_manager;
 
   guint                   search_timeout;
 
@@ -129,6 +132,38 @@ gb_workbench_get_navigation_list (GbWorkbench *workbench)
   g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
 
   return workbench->priv->navigation_list;
+}
+
+GbSearchManager *
+gb_workbench_get_search_manager (GbWorkbench *workbench)
+{
+  GbWorkbenchPrivate *priv;
+
+  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
+
+  priv = workbench->priv;
+
+  if (!priv->search_manager)
+    {
+      GbSearchProvider *provider;
+      GgitRepository *repository;
+      GFile *file;
+
+      priv->search_manager = gb_search_manager_new ();
+
+      /* TODO: Keep repository in sync with loaded project */
+      file = g_file_new_for_path (".");
+      repository = ggit_repository_open (file, NULL);
+      provider = g_object_new (GB_TYPE_GIT_SEARCH_PROVIDER,
+                               "repository", repository,
+                               NULL);
+      gb_search_manager_add_provider (priv->search_manager, provider);
+      g_clear_object (&file);
+      g_clear_object (&repository);
+      g_clear_object (&provider);
+    }
+
+  return priv->search_manager;
 }
 
 /**
@@ -631,7 +666,7 @@ gb_workbench_begin_search (gpointer user_data)
   priv->search_timeout = 0;
 
   search_text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
-  search_manager = gb_search_manager_get_default ();
+  search_manager = gb_workbench_get_search_manager (workbench);
   context = gb_search_manager_search (search_manager, search_text);
   gb_search_display_set_context (priv->search_display, context);
 
@@ -762,6 +797,7 @@ gb_workbench_dispose (GObject *object)
   g_clear_object (&priv->command_manager);
   g_clear_object (&priv->document_manager);
   g_clear_object (&priv->navigation_list);
+  g_clear_object (&priv->search_manager);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->dispose (object);
 
