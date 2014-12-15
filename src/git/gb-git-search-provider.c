@@ -60,7 +60,35 @@ gb_git_search_provider_new (GgitRepository *repository)
                        NULL);
 }
 
-G_GNUC_UNUSED static void
+static void
+load_cb (GObject      *object,
+         GAsyncResult *result,
+         gpointer      user_data)
+{
+  GbGitSearchProvider *provider = (GbGitSearchProvider *)object;
+  GTask *task = (GTask *)result;
+  Fuzzy *file_index;
+  GError *error = NULL;
+
+  g_return_if_fail (GB_IS_GIT_SEARCH_PROVIDER (provider));
+  g_return_if_fail (G_IS_TASK (task));
+
+  file_index = g_task_propagate_pointer (task, &error);
+
+  if (!file_index)
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+  else
+    {
+      g_clear_pointer (&provider->priv->file_index, fuzzy_unref);
+      provider->priv->file_index = fuzzy_ref (file_index);
+      g_message ("Git file index loaded.");
+    }
+}
+
+static void
 gb_git_search_provider_build_file_index (GTask        *task,
                                          gpointer      source_object,
                                          gpointer      task_data,
@@ -97,6 +125,15 @@ gb_git_search_provider_build_file_index (GTask        *task,
       GOTO (cleanup);
     }
 
+  index = ggit_repository_get_index (repository, &error);
+  if (!index)
+    {
+      g_task_return_error (task, error);
+      GOTO (cleanup);
+    }
+
+  entries = ggit_index_get_entries (index);
+
   fuzzy = fuzzy_new (FALSE);
   fuzzy_begin_bulk_insert (fuzzy);
 
@@ -126,7 +163,7 @@ gb_git_search_provider_build_file_index (GTask        *task,
   g_task_return_pointer (task, fuzzy, (GDestroyNotify)fuzzy_unref);
 
 cleanup:
-  g_clear_object (&entries);
+  g_clear_pointer (&entries, ggit_index_entries_unref);
   g_clear_object (&index);
   g_clear_object (&repository);
 
@@ -194,18 +231,28 @@ void
 gb_git_search_provider_set_repository (GbGitSearchProvider *provider,
                                        GgitRepository      *repository)
 {
+  GbGitSearchProviderPrivate *priv;
+
   g_return_if_fail (GB_IS_GIT_SEARCH_PROVIDER (provider));
 
-  if (provider->priv->repository != repository)
+  priv = provider->priv;
+
+  if (priv->repository != repository)
     {
-      if (provider->priv->repository)
-        {
-          g_clear_object (&provider->priv->repository);
-        }
+      if (priv->repository)
+        g_clear_object (&provider->priv->repository);
 
       if (repository)
         {
-          provider->priv->repository = g_object_ref (repository);
+          GTask *task;
+
+          priv->repository = g_object_ref (repository);
+          task = g_task_new (provider, NULL, load_cb, provider);
+          g_task_set_task_data (task,
+                                ggit_repository_get_location (repository),
+                                g_object_unref);
+          g_task_run_in_thread (task, gb_git_search_provider_build_file_index);
+          g_clear_object (&task);
         }
     }
 }
@@ -216,6 +263,7 @@ gb_git_search_provider_finalize (GObject *object)
   GbGitSearchProviderPrivate *priv = GB_GIT_SEARCH_PROVIDER (object)->priv;
 
   g_clear_object (&priv->repository);
+  g_clear_pointer (&priv->file_index, fuzzy_unref);
 
   G_OBJECT_CLASS (gb_git_search_provider_parent_class)->finalize (object);
 }
