@@ -611,6 +611,20 @@ cleanup:
 }
 
 static void
+gb_document_grid_grab_focus (GtkWidget *widget)
+{
+  GbDocumentGrid *grid = (GbDocumentGrid *)widget;
+  GList *stacks;
+
+  g_return_if_fail (GB_IS_DOCUMENT_GRID (grid));
+
+  stacks = gb_document_grid_get_stacks (grid);
+  if (stacks)
+    gtk_widget_grab_focus (stacks->data);
+  g_list_free (stacks);
+}
+
+static void
 gb_document_grid_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
@@ -662,10 +676,13 @@ static void
 gb_document_grid_class_init (GbDocumentGridClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = gb_document_grid_finalize;
   object_class->get_property = gb_document_grid_get_property;
   object_class->set_property = gb_document_grid_set_property;
+
+  widget_class->grab_focus = gb_document_grid_grab_focus;
 
   /**
    * GbDocumentGrid:document-manager:
