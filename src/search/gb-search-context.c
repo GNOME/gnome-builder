@@ -138,12 +138,16 @@ gb_search_context_results_added (GbSearchContext  *context,
                                  GList            *results,
                                  gboolean          finished)
 {
+  ENTRY;
+
   g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
   g_return_if_fail (GB_IS_SEARCH_PROVIDER (provider));
 
   /* TODO: how should we deal with priority? */
 
   context->priv->results = g_list_concat (context->priv->results, results);
+
+  EXIT;
 }
 
 /**
