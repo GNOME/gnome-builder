@@ -44,6 +44,17 @@ gb_search_manager_new (void)
   return g_object_new (GB_TYPE_SEARCH_MANAGER, NULL);
 }
 
+GbSearchManager *
+gb_search_manager_get_default (void)
+{
+  static GbSearchManager *instance;
+
+  if (!instance)
+    instance = gb_search_manager_new ();
+
+  return instance;
+}
+
 static gint
 sort_provider (gconstpointer a,
                gconstpointer b)
