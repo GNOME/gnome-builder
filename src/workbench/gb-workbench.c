@@ -38,7 +38,7 @@
 #include "gb-workbench.h"
 #include "gedit-menu-stack-switcher.h"
 
-#define SEARCH_DELAY_MSEC 250
+#define SEARCH_DELAY_MSEC 100
 
 struct _GbWorkbenchPrivate
 {
