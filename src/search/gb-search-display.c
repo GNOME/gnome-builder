@@ -67,7 +67,7 @@ gb_search_display_results_added (GbSearchDisplay  *display,
       gtk_list_box_insert (display->priv->list_box, iter->data, -1);
     }
 
-  gtk_list_box_invalidate_sort (display->priv->list_box);
+  //gtk_list_box_invalidate_sort (display->priv->list_box);
 
   EXIT;
 }
@@ -96,7 +96,7 @@ gb_search_display_connect (GbSearchDisplay *display,
   list = gb_search_context_get_results (context);
   for (iter = list; iter; iter = iter->next)
     gtk_list_box_insert (priv->list_box, iter->data, -1);
-  gtk_list_box_invalidate_sort (display->priv->list_box);
+  //gtk_list_box_invalidate_sort (display->priv->list_box);
 
   EXIT;
 }
