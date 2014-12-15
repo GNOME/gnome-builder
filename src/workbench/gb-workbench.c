@@ -31,15 +31,20 @@
 #include "gb-glib.h"
 #include "gb-log.h"
 #include "gb-search-display.h"
+#include "gb-search-manager.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 #include "gedit-menu-stack-switcher.h"
+
+#define SEARCH_DELAY_MSEC 250
 
 struct _GbWorkbenchPrivate
 {
   GbCommandManager       *command_manager;
   GbDocumentManager      *document_manager;
   GbNavigationList       *navigation_list;
+
+  guint                   search_timeout;
 
   GbWorkspace            *active_workspace;
   GbCommandBar           *command_bar;
@@ -600,12 +605,63 @@ gb_workbench_search_entry_focus_in (GbWorkbench   *workbench,
                                     GdkEventFocus *event,
                                     GtkWidget     *search_entry)
 {
+  GtkToggleButton *toggle;
+
   g_return_if_fail (GB_IS_WORKBENCH (workbench));
   g_return_if_fail (event);
   g_return_if_fail (GTK_IS_SEARCH_ENTRY (search_entry));
 
-  gtk_toggle_button_set_active (
-    GTK_TOGGLE_BUTTON (workbench->priv->search_menu_button), TRUE);
+  toggle = GTK_TOGGLE_BUTTON (workbench->priv->search_menu_button);
+  gtk_toggle_button_set_active (toggle, TRUE);
+}
+
+static gboolean
+gb_workbench_begin_search (gpointer user_data)
+{
+  GbWorkbenchPrivate *priv;
+  GbWorkbench *workbench = user_data;
+  GbSearchContext *context;
+  GbSearchManager *search_manager;
+  const gchar *search_text;
+
+  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), G_SOURCE_REMOVE);
+
+  priv = workbench->priv;
+
+  priv->search_timeout = 0;
+
+  search_text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
+  search_manager = gb_search_manager_get_default ();
+  context = gb_search_manager_search (search_manager, search_text);
+  gb_search_display_set_context (priv->search_display, context);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gb_workbench_search_entry_changed (GbWorkbench    *workbench,
+                                   GtkSearchEntry *search_entry)
+{
+  GbWorkbenchPrivate *priv;
+  const gchar *search_text;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (GTK_IS_SEARCH_ENTRY (search_entry));
+
+  priv = workbench->priv;
+
+  if (priv->search_timeout)
+    {
+      g_source_remove (priv->search_timeout);
+      priv->search_timeout = 0;
+    }
+
+  search_text = gtk_entry_get_text (GTK_ENTRY (search_entry));
+
+  if (search_text)
+    priv->search_timeout = g_timeout_add (SEARCH_DELAY_MSEC,
+                                          gb_workbench_begin_search,
+                                          workbench);
 }
 
 static void
@@ -679,6 +735,11 @@ gb_workbench_constructed (GObject *object)
                            G_CALLBACK (gb_workbench_search_entry_focus_in),
                            workbench,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->search_entry,
+                           "changed",
+                           G_CALLBACK (gb_workbench_search_entry_changed),
+                           workbench,
+                           G_CONNECT_SWAPPED);
 
   gb_workbench_stack_child_changed (workbench, NULL, priv->stack);
 
@@ -691,6 +752,12 @@ gb_workbench_dispose (GObject *object)
   GbWorkbenchPrivate *priv = GB_WORKBENCH (object)->priv;
 
   ENTRY;
+
+  if (priv->search_timeout)
+    {
+      g_source_remove (priv->search_timeout);
+      priv->search_timeout = 0;
+    }
 
   g_clear_object (&priv->command_manager);
   g_clear_object (&priv->document_manager);
