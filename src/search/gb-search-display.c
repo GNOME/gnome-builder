@@ -72,6 +72,14 @@ gb_search_display_results_added (GbSearchDisplay  *display,
   EXIT;
 }
 
+GbSearchContext *
+gb_search_display_get_context (GbSearchDisplay *display)
+{
+  g_return_val_if_fail (GB_IS_SEARCH_DISPLAY (display), NULL);
+
+  return display->priv->context;
+}
+
 static void
 gb_search_display_connect (GbSearchDisplay *display,
                            GbSearchContext *context)

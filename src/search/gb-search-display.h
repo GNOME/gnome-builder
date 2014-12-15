@@ -51,10 +51,11 @@ struct _GbSearchDisplayClass
   GtkBinClass parent;
 };
 
-GType      gb_search_display_get_type    (void);
-GtkWidget *gb_search_display_new         (void);
-void       gb_search_display_set_context (GbSearchDisplay *display,
-                                          GbSearchContext *context);
+GType            gb_search_display_get_type    (void);
+GtkWidget       *gb_search_display_new         (void);
+GbSearchContext *gb_search_display_get_context (GbSearchDisplay *display);
+void             gb_search_display_set_context (GbSearchDisplay *display,
+                                                GbSearchContext *context);
 
 G_END_DECLS
 
