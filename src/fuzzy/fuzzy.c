@@ -115,6 +115,18 @@ fuzzy_match_compare (gconstpointer a,
 }
 
 
+Fuzzy *
+fuzzy_ref (Fuzzy *fuzzy)
+{
+  g_return_val_if_fail (fuzzy, NULL);
+  g_return_val_if_fail (fuzzy->ref_count > 0, NULL);
+
+  g_atomic_int_inc (&fuzzy->ref_count);
+
+  return fuzzy;
+}
+
+
 /**
  * fuzzy_new:
  * @case_sensitive: %TRUE if case should be preserved.
