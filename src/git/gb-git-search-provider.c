@@ -171,6 +171,22 @@ cleanup:
   EXIT;
 }
 
+static gchar *
+remove_spaces (const gchar *text)
+{
+  GString *str = g_string_new (NULL);
+
+  for (; *text; text = g_utf8_next_char (text))
+    {
+      gunichar ch = g_utf8_get_char (text);
+
+      if (ch != ' ')
+        g_string_append_unichar (str, ch);
+    }
+
+  return g_string_free (str, FALSE);
+}
+
 static void
 gb_git_search_provider_populate (GbSearchProvider *provider,
                                  GbSearchContext  *context,
@@ -186,11 +202,13 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
   if (self->priv->file_index)
     {
       const gchar *search_text;
+      gchar *delimited;
       GArray *matches;
       guint i;
 
       search_text = gb_search_context_get_search_text (context);
-      matches = fuzzy_match (self->priv->file_index, search_text,
+      delimited = remove_spaces (search_text);
+      matches = fuzzy_match (self->priv->file_index, delimited,
                              GB_GIT_SEARCH_PROVIDER_MAX_MATCHES);
 
       for (i = 0; i < matches->len; i++)
@@ -210,7 +228,9 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
 
       list = g_list_reverse (list);
       gb_search_context_add_results (context, provider, list, TRUE);
+
       g_array_unref (matches);
+      g_free (delimited);
     }
 }
 
