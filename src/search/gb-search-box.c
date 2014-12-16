@@ -183,6 +183,19 @@ gb_search_box_entry_key_press_event (GbSearchBox    *box,
 }
 
 static void
+gb_search_box_display_result_activated (GbSearchBox     *box,
+                                        GbSearchResult  *result,
+                                        GbSearchDisplay *display)
+{
+  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (box->priv->button), FALSE);
+  gtk_entry_set_text (GTK_ENTRY (box->priv->entry), "");
+}
+
+static void
 gb_search_box_grab_focus (GtkWidget *widget)
 {
   GbSearchBox *box = (GbSearchBox *)widget;
@@ -224,6 +237,11 @@ gb_search_box_constructed (GObject *object)
   g_signal_connect_object (priv->entry,
                            "key-press-event",
                            G_CALLBACK (gb_search_box_entry_key_press_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->display,
+                           "result-activated",
+                           G_CALLBACK (gb_search_box_display_result_activated),
                            self,
                            G_CONNECT_SWAPPED);
 }
