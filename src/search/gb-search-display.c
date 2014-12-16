@@ -222,8 +222,11 @@ gb_search_display_grab_focus (GtkWidget *widget)
   if (row)
     {
       gtk_list_box_select_row (display->priv->list_box, row);
-      gtk_widget_grab_focus (GTK_WIDGET (row));
+      gtk_widget_child_focus (GTK_WIDGET (display->priv->list_box),
+                              GTK_DIR_TAB_FORWARD);
     }
+  else
+    GTK_WIDGET_CLASS (gb_search_display_parent_class)->grab_focus (widget);
 }
 
 static void
