@@ -221,6 +221,7 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
           /* TODO: Make a git file search result */
           widget = g_object_new (GB_TYPE_GIT_SEARCH_RESULT,
                                  "visible", TRUE,
+                                 "score", match->score,
                                  "path", match->key,
                                  NULL);
           list = g_list_prepend (list, widget);
