@@ -44,12 +44,15 @@ struct _GbSearchResult
 struct _GbSearchResultClass
 {
   GtkBinClass parent;
+
+  void (*activate) (GbSearchResult *result);
 };
 
-GType      gb_search_result_get_type     (void);
-GtkWidget *gb_search_result_new          (void);
+void       gb_search_result_activate     (GbSearchResult *result);
 gint       gb_search_result_compare_func (gconstpointer result1,
                                           gconstpointer result2);
+GType      gb_search_result_get_type     (void);
+GtkWidget *gb_search_result_new          (void);
 
 G_END_DECLS
 

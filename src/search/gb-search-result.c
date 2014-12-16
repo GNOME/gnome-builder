@@ -31,7 +31,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  ACTIVATE,
+  LAST_SIGNAL
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint       gSignals [LAST_SIGNAL];
 
 GtkWidget *
 gb_search_result_new (void)
@@ -58,6 +64,14 @@ gb_search_result_compare_func (gconstpointer result1,
     }
 
   return ret;
+}
+
+void
+gb_search_result_activate (GbSearchResult *result)
+{
+  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+
+  g_signal_emit (result, gSignals [ACTIVATE], 0);
 }
 
 static void
@@ -104,6 +118,17 @@ gb_search_result_class_init (GbSearchResultClass *klass)
   object_class->finalize = gb_search_result_finalize;
   object_class->get_property = gb_search_result_get_property;
   object_class->set_property = gb_search_result_set_property;
+
+  gSignals [ACTIVATE] =
+    g_signal_new ("activate",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSearchResultClass, activate),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 static void
