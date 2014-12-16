@@ -23,6 +23,7 @@
 
 #include "gb-search-types.h"
 #include "gb-search-context.h"
+#include "gb-search-result.h"
 
 G_BEGIN_DECLS
 
@@ -49,6 +50,9 @@ struct _GbSearchDisplay
 struct _GbSearchDisplayClass
 {
   GtkBinClass parent;
+
+  void (*result_activated) (GbSearchDisplay *display,
+                            GbSearchResult  *result);
 };
 
 GType            gb_search_display_get_type    (void);

@@ -23,6 +23,7 @@
 #include "gb-log.h"
 #include "gb-search-display.h"
 #include "gb-search-provider.h"
+#include "gb-search-result.h"
 
 struct _GbSearchDisplayPrivate
 {
@@ -41,7 +42,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  RESULT_ACTIVATED,
+  LAST_SIGNAL
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint       gSignals [LAST_SIGNAL];
 
 GtkWidget *
 gb_search_display_new (void)
@@ -167,6 +174,50 @@ gb_search_display_set_context (GbSearchDisplay *display,
 }
 
 static void
+gb_search_display_emit_result_activated (GbSearchDisplay *display,
+                                         GbSearchResult  *result)
+{
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+
+  gb_search_result_activate (result);
+  g_signal_emit (display, gSignals [RESULT_ACTIVATED], 0, result);
+}
+
+static void
+gb_search_display_row_activated (GbSearchDisplay *display,
+                                 GtkListBoxRow   *row,
+                                 GtkListBox      *list_box)
+{
+  GtkWidget *child;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+  g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
+  g_return_if_fail (GTK_IS_LIST_BOX (list_box));
+
+  child = gtk_bin_get_child (GTK_BIN (row));
+
+  if (GB_IS_SEARCH_RESULT (child))
+    gb_search_display_emit_result_activated (display, GB_SEARCH_RESULT (child));
+}
+
+static void
+gb_search_display_constructed (GObject *object)
+{
+  GbSearchDisplay *self = (GbSearchDisplay *)object;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (self));
+
+  G_OBJECT_CLASS (gb_search_display_parent_class)->constructed (object);
+
+  g_signal_connect_object (self->priv->list_box,
+                           "row-activated",
+                           G_CALLBACK (gb_search_display_row_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
 gb_search_display_finalize (GObject *object)
 {
   GbSearchDisplayPrivate *priv = GB_SEARCH_DISPLAY (object)->priv;
@@ -220,6 +271,7 @@ gb_search_display_class_init (GbSearchDisplayClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = gb_search_display_constructed;
   object_class->finalize = gb_search_display_finalize;
   object_class->get_property = gb_search_display_get_property;
   object_class->set_property = gb_search_display_set_property;
@@ -233,6 +285,18 @@ gb_search_display_class_init (GbSearchDisplayClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_CONTEXT,
                                    gParamSpecs [PROP_CONTEXT]);
+
+  gSignals [RESULT_ACTIVATED] =
+    g_signal_new ("result-activated",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSearchDisplayClass, result_activated),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  GB_TYPE_SEARCH_RESULT);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-search-display.ui");
