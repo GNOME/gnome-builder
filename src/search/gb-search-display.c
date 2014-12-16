@@ -245,6 +245,23 @@ gb_search_display_grab_focus (GtkWidget *widget)
 }
 
 static void
+gb_search_display_header_func (GtkListBoxRow *row,
+                               GtkListBoxRow *before,
+                               gpointer       user_data)
+{
+  if (before)
+    {
+      GtkWidget *header;
+
+      header = g_object_new (GTK_TYPE_SEPARATOR,
+                             "orientation", GTK_ORIENTATION_HORIZONTAL,
+                             "visible", TRUE,
+                             NULL);
+      gtk_list_box_row_set_header (row, header);
+    }
+}
+
+static void
 gb_search_display_constructed (GObject *object)
 {
   GbSearchDisplay *self = (GbSearchDisplay *)object;
@@ -252,6 +269,11 @@ gb_search_display_constructed (GObject *object)
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (self));
 
   G_OBJECT_CLASS (gb_search_display_parent_class)->constructed (object);
+
+  gtk_list_box_set_header_func (self->priv->list_box,
+                                gb_search_display_header_func,
+                                NULL, NULL);
+
 
   g_signal_connect_object (self->priv->list_box,
                            "row-activated",
