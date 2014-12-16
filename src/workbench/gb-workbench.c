@@ -46,6 +46,7 @@ struct _GbWorkbenchPrivate
   GbSearchManager        *search_manager;
 
   guint                   search_timeout;
+  guint                   disposing;
 
   GbWorkspace            *active_workspace;
   GbCommandBar           *command_bar;
@@ -614,7 +615,7 @@ gb_workbench_set_focus (GtkWindow *window,
 
   GTK_WINDOW_CLASS (gb_workbench_parent_class)->set_focus (window, widget);
 
-  if (!widget && !gtk_widget_in_destruction (GTK_WIDGET (window)))
+  if (!widget && !workbench->priv->disposing)
     {
       GbWorkspace *workspace;
 
@@ -706,6 +707,8 @@ gb_workbench_dispose (GObject *object)
 
   ENTRY;
 
+  priv->disposing++;
+
   if (priv->search_timeout)
     {
       g_source_remove (priv->search_timeout);
@@ -718,6 +721,8 @@ gb_workbench_dispose (GObject *object)
   g_clear_object (&priv->search_manager);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->dispose (object);
+
+  priv->disposing--;
 
   EXIT;
 }
