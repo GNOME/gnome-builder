@@ -166,17 +166,29 @@ gb_search_box_entry_key_press_event (GbSearchBox    *box,
   g_return_val_if_fail (key, GDK_EVENT_PROPAGATE);
   g_return_val_if_fail (GTK_IS_SEARCH_ENTRY (entry), GDK_EVENT_PROPAGATE);
 
-  if (key->keyval == GDK_KEY_Escape)
+  switch (key->keyval)
     {
-      GtkWidget *toplevel;
+    case GDK_KEY_Escape:
+      {
+        GtkWidget *toplevel;
 
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (box->priv->button),
-                                    FALSE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (box->priv->button),
+                                      FALSE);
 
-      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (entry));
-      gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
+        toplevel = gtk_widget_get_toplevel (GTK_WIDGET (entry));
+        gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
 
+        return GDK_EVENT_STOP;
+      }
+      break;
+
+    case GDK_KEY_Down:
+    case GDK_KEY_KP_Down:
+      gtk_widget_grab_focus (GTK_WIDGET (box->priv->display));
       return GDK_EVENT_STOP;
+
+    default:
+      break;
     }
 
   return GDK_EVENT_PROPAGATE;

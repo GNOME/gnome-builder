@@ -202,6 +202,31 @@ gb_search_display_row_activated (GbSearchDisplay *display,
 }
 
 static void
+gb_search_display_grab_focus (GtkWidget *widget)
+{
+  GbSearchDisplay *display = (GbSearchDisplay *)widget;
+  GtkListBoxRow *row;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+
+  /*
+   * WORKAROUND:
+   *
+   * Getting the row at y of 0 does not work (returns NULL). And getting the
+   * row at index 0 does not take into account sort.
+   *
+   * https://bugzilla.gnome.org/show_bug.cgi?id=741208
+   */
+  row = gtk_list_box_get_row_at_y (display->priv->list_box, 1);
+
+  if (row)
+    {
+      gtk_list_box_select_row (display->priv->list_box, row);
+      gtk_widget_grab_focus (GTK_WIDGET (row));
+    }
+}
+
+static void
 gb_search_display_constructed (GObject *object)
 {
   GbSearchDisplay *self = (GbSearchDisplay *)object;
@@ -275,6 +300,8 @@ gb_search_display_class_init (GbSearchDisplayClass *klass)
   object_class->finalize = gb_search_display_finalize;
   object_class->get_property = gb_search_display_get_property;
   object_class->set_property = gb_search_display_set_property;
+
+  widget_class->grab_focus = gb_search_display_grab_focus;
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
