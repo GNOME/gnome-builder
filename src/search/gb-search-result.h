@@ -49,10 +49,13 @@ struct _GbSearchResultClass
 };
 
 void       gb_search_result_activate     (GbSearchResult *result);
-gint       gb_search_result_compare_func (gconstpointer result1,
-                                          gconstpointer result2);
+gint       gb_search_result_compare_func (gconstpointer   result1,
+                                          gconstpointer   result2);
 GType      gb_search_result_get_type     (void);
 GtkWidget *gb_search_result_new          (void);
+gfloat     gb_search_result_get_score    (GbSearchResult *result);
+void       gb_search_result_set_score    (GbSearchResult *result,
+                                          gfloat          score);
 
 G_END_DECLS
 
