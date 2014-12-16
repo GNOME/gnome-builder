@@ -201,6 +201,21 @@ gb_search_display_row_activated (GbSearchDisplay *display,
     gb_search_display_emit_result_activated (display, GB_SEARCH_RESULT (child));
 }
 
+static gint
+gb_search_display_sort_cb (GtkListBoxRow *row1,
+                           GtkListBoxRow *row2,
+                           gpointer       user_data)
+{
+  GtkWidget *child1;
+  GtkWidget *child2;
+
+  child1 = gtk_bin_get_child (GTK_BIN (row1));
+  child2 = gtk_bin_get_child (GTK_BIN (row2));
+
+  return gb_search_result_compare_func (GB_SEARCH_RESULT (child1),
+                                        GB_SEARCH_RESULT (child2));
+}
+
 static void
 gb_search_display_grab_focus (GtkWidget *widget)
 {
@@ -243,6 +258,10 @@ gb_search_display_constructed (GObject *object)
                            G_CALLBACK (gb_search_display_row_activated),
                            self,
                            G_CONNECT_SWAPPED);
+
+  gtk_list_box_set_sort_func (self->priv->list_box,
+                              gb_search_display_sort_cb,
+                              NULL, NULL);
 }
 
 static void
