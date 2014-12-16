@@ -614,7 +614,7 @@ gb_workbench_set_focus (GtkWindow *window,
 
   GTK_WINDOW_CLASS (gb_workbench_parent_class)->set_focus (window, widget);
 
-  if (!widget)
+  if (!widget && !gtk_widget_in_destruction (GTK_WIDGET (window)))
     {
       GbWorkspace *workspace;
 
