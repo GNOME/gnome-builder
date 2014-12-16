@@ -3,13 +3,46 @@
   <!-- interface-requires gtk+ 3.14 -->
   <template class="GbGitSearchResult" parent="GbSearchResult">
     <child>
-      <object class="GtkLabel" id="label">
+      <object class="GtkBox">
         <property name="visible">true</property>
-        <property name="xalign">0.0</property>
-        <property name="margin-top">12</property>
-        <property name="margin-bottom">12</property>
-        <property name="margin-start">12</property>
-        <property name="margin-end">12</property>
+        <property name="expand">true</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkImage" id="image">
+            <property name="pixel_size">32</property>
+            <property name="visible">true</property>
+            <property name="icon_name">folder</property>
+            <property name="can_focus">false</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">true</property>
+            <property name="expand">true</property>
+            <property name="spacing">0</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel" id="label">
+                <property name="visible">true</property>
+                <property name="xalign">0.0</property>
+                <property name="valign">baseline</property>
+                <property name="label">foo</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="dirname_label">
+                <property name="visible">true</property>
+                <property name="xalign">0.0</property>
+                <property name="valign">baseline</property>
+                <property name="label">foo</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </template>
