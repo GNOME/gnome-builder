@@ -20,17 +20,25 @@
 
 #include <glib/gi18n.h>
 
+#include "gb-glib.h"
 #include "gb-search-box.h"
 #include "gb-search-display.h"
 #include "gb-search-manager.h"
 #include "gb-widget.h"
+#include "gb-workbench.h"
 
 #define DELAY_TIMEOUT_MSEC 250
 
 struct _GbSearchBoxPrivate
 {
+  /* References owned by instance */
   GbSearchManager *search_manager;
 
+  /* Weak references */
+  GbWorkbench     *workbench;
+  gulong           set_focus_handler;
+
+  /* References owned by template */
   GtkMenuButton   *button;
   GbSearchDisplay *display;
   GtkSearchEntry  *entry;
@@ -208,6 +216,20 @@ gb_search_box_display_result_activated (GbSearchBox     *box,
 }
 
 static void
+gb_search_box_button_toggled (GbSearchBox     *box,
+                              GtkToggleButton *button)
+{
+  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
+
+  if (gtk_toggle_button_get_active (button))
+    {
+      if (!gtk_widget_has_focus (GTK_WIDGET (box->priv->entry)))
+        gtk_widget_grab_focus (GTK_WIDGET (box->priv->entry));
+    }
+}
+
+static void
 gb_search_box_grab_focus (GtkWidget *widget)
 {
   GbSearchBox *box = (GbSearchBox *)widget;
@@ -215,6 +237,66 @@ gb_search_box_grab_focus (GtkWidget *widget)
   g_return_if_fail (GB_IS_SEARCH_BOX (box));
 
   gtk_widget_grab_focus (GTK_WIDGET (box->priv->entry));
+}
+
+static void
+gb_search_box_workbench_set_focus (GbSearchBox *box,
+                                   GtkWidget   *focus,
+                                   GbWorkbench *workbench)
+{
+  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+  g_return_if_fail (!focus || GTK_IS_WIDGET (focus));
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  if (!focus ||
+      (!gtk_widget_is_ancestor (focus, GTK_WIDGET (box)) &&
+       !gtk_widget_is_ancestor (focus, GTK_WIDGET (box->priv->popover))))
+    {
+      gtk_entry_set_text (GTK_ENTRY (box->priv->entry), "");
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (box->priv->button), FALSE);
+    }
+}
+
+static void
+gb_search_box_map (GtkWidget *widget)
+{
+  GbSearchBox *box = (GbSearchBox *)widget;
+  GtkWidget *toplevel;
+
+  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+
+  GTK_WIDGET_CLASS (gb_search_box_parent_class)->map (widget);
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GB_IS_WORKBENCH (toplevel))
+    {
+      gb_set_weak_pointer (toplevel, &box->priv->workbench);
+      box->priv->set_focus_handler =
+        g_signal_connect_object (toplevel,
+                                 "set-focus",
+                                 G_CALLBACK (gb_search_box_workbench_set_focus),
+                                 box,
+                                 G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+    }
+}
+
+static void
+gb_search_box_unmap (GtkWidget *widget)
+{
+  GbSearchBox *box = (GbSearchBox *)widget;
+
+  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+
+  if (box->priv->workbench)
+    {
+      g_signal_handler_disconnect (box->priv->workbench,
+                                   box->priv->set_focus_handler);
+      box->priv->set_focus_handler = 0;
+      gb_clear_weak_pointer (&box->priv->workbench);
+    }
+
+  GTK_WIDGET_CLASS (gb_search_box_parent_class)->unmap (widget);
 }
 
 static void
@@ -254,6 +336,11 @@ gb_search_box_constructed (GObject *object)
   g_signal_connect_object (priv->display,
                            "result-activated",
                            G_CALLBACK (gb_search_box_display_result_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->button,
+                           "toggled",
+                           G_CALLBACK (gb_search_box_button_toggled),
                            self,
                            G_CONNECT_SWAPPED);
 }
@@ -324,6 +411,8 @@ gb_search_box_class_init (GbSearchBoxClass *klass)
   object_class->set_property = gb_search_box_set_property;
 
   widget_class->grab_focus = gb_search_box_grab_focus;
+  widget_class->map = gb_search_box_map;
+  widget_class->unmap = gb_search_box_unmap;
 
   gParamSpecs [PROP_SEARCH_MANAGER] =
     g_param_spec_object ("search-manager",
