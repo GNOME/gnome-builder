@@ -1024,7 +1024,7 @@ gb_editor_view_init (GbEditorView *self)
     { "switch-pane",  gb_editor_view_switch_pane },
     { "tab-width", NULL, "i", "8", apply_state_tab_width },
     { "toggle-split", NULL, NULL, "false", apply_state_split_enabled },
-    { "use-spaces", NULL, NULL, "false", apply_state_use_spaces },
+    { "use-spaces", NULL, "b", "false", apply_state_use_spaces },
   };
   GSimpleActionGroup *actions;
   GtkWidget *controls;
