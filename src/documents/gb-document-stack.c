@@ -455,6 +455,7 @@ gb_document_stack_save_activate (GSimpleAction *action,
 {
   GbDocumentStackPrivate *priv;
   GbDocumentStack *stack = user_data;
+  GtkWidget *toplevel;
 
   g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
 
@@ -464,12 +465,13 @@ gb_document_stack_save_activate (GSimpleAction *action,
     {
       GbDocument *document;
 
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (stack));
       document = gb_document_view_get_document (priv->active_view);
 
       if (document)
         {
           if (gb_document_get_modified (document))
-            gb_document_save_async (document, NULL, NULL, NULL);
+            gb_document_save_async (document, toplevel, NULL, NULL, NULL);
         }
     }
 }

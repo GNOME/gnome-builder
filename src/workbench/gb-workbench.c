@@ -376,7 +376,8 @@ gb_workbench_action_save_all (GSimpleAction *action,
 
       /* This will not save files which do not have location set */
       if (gb_document_get_modified (document))
-        gb_document_save_async (document, NULL, NULL, NULL);
+        gb_document_save_async (document, GTK_WIDGET (workbench),
+                                NULL, NULL, NULL);
     }
 
   g_list_free (list);
@@ -463,6 +464,7 @@ gb_workbench_begin_save (GbWorkbench *workbench,
   state->outstanding++;
 
   gb_document_save_async (document,
+                          GTK_WIDGET (workbench),
                           state->cancellable,
                           gb_workbench_save_cb,
                           state);

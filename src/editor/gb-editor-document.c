@@ -868,6 +868,7 @@ cleanup:
 
 static void
 gb_editor_document_save_async (GbDocument          *doc,
+                               GtkWidget           *toplevel,
                                GCancellable        *cancellable,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
@@ -888,9 +889,7 @@ gb_editor_document_save_async (GbDocument          *doc,
     {
       GFile *chosen_file;
 
-      /* TODO: Plumb toplevel widget */
-
-      chosen_file = gb_editor_document_prompt_save (document, NULL);
+      chosen_file = gb_editor_document_prompt_save (document, toplevel);
 
       if (!chosen_file)
         {
@@ -1013,6 +1012,7 @@ gb_editor_document_save_as_async (GbDocument          *document,
   if (chosen_file)
     {
       gb_editor_document_save_async (GB_DOCUMENT (self),
+                                     toplevel,
                                      cancellable,
                                      gb_editor_document_save_as_cb,
                                      task);

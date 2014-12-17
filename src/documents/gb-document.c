@@ -120,18 +120,18 @@ gb_document_create_view (GbDocument *document)
 
 void
 gb_document_save_async (GbDocument          *document,
+                        GtkWidget           *toplevel,
                         GCancellable        *cancellable,
                         GAsyncReadyCallback  callback,
                         gpointer             user_data)
 {
   g_return_if_fail (GB_IS_DOCUMENT (document));
+  g_return_if_fail (!toplevel || GTK_IS_WIDGET (toplevel));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (GB_DOCUMENT_GET_INTERFACE (document)->save_async)
-    GB_DOCUMENT_GET_INTERFACE (document)->save_async (document,
-                                                      cancellable,
-                                                      callback,
-                                                      user_data);
+    GB_DOCUMENT_GET_INTERFACE (document)->
+      save_async (document, toplevel, cancellable, callback, user_data);
 }
 
 gboolean

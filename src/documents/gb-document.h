@@ -43,6 +43,7 @@ struct _GbDocumentInterface
   const gchar *(*get_title)             (GbDocument *document);
   gboolean     (*is_untitled)           (GbDocument *document);
   void         (*save_async)            (GbDocument           *document,
+                                         GtkWidget            *toplevel,
                                          GCancellable         *cancellable,
                                          GAsyncReadyCallback   callback,
                                          gpointer              user_data);
@@ -68,6 +69,7 @@ const gchar *gb_document_get_title      (GbDocument           *document);
 GType        gb_document_get_type       (void);
 gboolean     gb_document_is_untitled    (GbDocument           *document);
 void         gb_document_save_async     (GbDocument           *document,
+                                         GtkWidget            *toplevel,
                                          GCancellable         *cancellable,
                                          GAsyncReadyCallback   callback,
                                          gpointer              user_data);
