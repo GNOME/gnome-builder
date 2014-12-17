@@ -757,6 +757,58 @@ gb_editor_document_load_info_cb (GObject      *object,
   g_clear_object (&info);
 }
 
+static GFile *
+gb_editor_document_prompt_save (GbEditorDocument *document,
+                                GtkWidget        *toplevel)
+{
+  const gchar *title;
+  GtkDialog *dialog;
+  GtkWidget *suggested;
+  gint response;
+  GFile *chosen_file = NULL;
+
+  g_return_val_if_fail (GB_IS_EDITOR_DOCUMENT (document), NULL);
+  g_return_val_if_fail (!toplevel || GTK_IS_WIDGET (toplevel), NULL);
+
+  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                         "action", GTK_FILE_CHOOSER_ACTION_SAVE,
+                         "do-overwrite-confirmation", TRUE,
+                         "local-only", FALSE,
+                         "select-multiple", FALSE,
+                         "show-hidden", FALSE,
+                         "transient-for", toplevel,
+                         "title", _("Save Document As"),
+                         NULL);
+
+  title = gb_document_get_title (GB_DOCUMENT (document));
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), title);
+
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("Cancel"), GTK_RESPONSE_CANCEL,
+                          _("Save"), GTK_RESPONSE_OK,
+                          NULL);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog),
+                                                  GTK_RESPONSE_OK);
+  gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
+                               GTK_STYLE_CLASS_SUGGESTED_ACTION);
+
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_hide (GTK_WIDGET (dialog));
+
+  if (response == GTK_RESPONSE_OK)
+    {
+      chosen_file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      gtk_source_file_set_location (document->priv->file, chosen_file);
+    }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  return chosen_file;
+}
+
 static void
 gb_editor_document_save_cb (GObject      *object,
                             GAsyncResult *result,
@@ -832,10 +884,34 @@ gb_editor_document_save_async (GbDocument          *doc,
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (document->priv->trim_trailing_whitespace)
-    gb_editor_document_trim (document);
+  if (!(location = gtk_source_file_get_location (document->priv->file)))
+    {
+      GFile *chosen_file;
+
+      /* TODO: Plumb toplevel widget */
+
+      chosen_file = gb_editor_document_prompt_save (document, NULL);
+
+      if (!chosen_file)
+        {
+          g_task_report_new_error (document, callback, user_data,
+                                   gb_editor_document_save_async,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_NOT_FOUND,
+                                   _("No file was selected."));
+          EXIT;
+        }
+
+      location = gtk_source_file_get_location (document->priv->file);
+      g_assert (location == chosen_file);
+
+      g_clear_object (&chosen_file);
+    }
 
   task = g_task_new (document, cancellable, callback, user_data);
+
+  if (document->priv->trim_trailing_whitespace)
+    gb_editor_document_trim (document);
 
   saver = gtk_source_file_saver_new (GTK_SOURCE_BUFFER (document),
                                      document->priv->file);
@@ -923,51 +999,19 @@ gb_editor_document_save_as_async (GbDocument          *document,
                                   gpointer             user_data)
 {
   GbEditorDocument *self = (GbEditorDocument *)document;
-  const gchar *title;
-  GtkDialog *dialog;
-  GtkWidget *suggested;
   GTask *task;
   GFile *chosen_file;
-  guint response;
 
   ENTRY;
 
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (self));
 
-  task = g_task_new (document, cancellable, callback, user_data);
+  task = g_task_new (self, cancellable, callback, user_data);
 
-  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
-                         "action", GTK_FILE_CHOOSER_ACTION_SAVE,
-                         "do-overwrite-confirmation", TRUE,
-                         "local-only", FALSE,
-                         "select-multiple", FALSE,
-                         "show-hidden", FALSE,
-                         "transient-for", toplevel,
-                         "title", _("Save Document As"),
-                         NULL);
+  chosen_file = gb_editor_document_prompt_save (self, toplevel);
 
-  title = gb_document_get_title (document);
-  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), title);
-
-  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          _("Cancel"), GTK_RESPONSE_CANCEL,
-                          _("Save"), GTK_RESPONSE_OK,
-                          NULL);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-
-  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog),
-                                                  GTK_RESPONSE_OK);
-  gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
-                               GTK_STYLE_CLASS_SUGGESTED_ACTION);
-
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_hide (GTK_WIDGET (dialog));
-
-  if (response == GTK_RESPONSE_OK)
+  if (chosen_file)
     {
-      chosen_file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-      gtk_source_file_set_location (self->priv->file, chosen_file);
       gb_editor_document_save_async (GB_DOCUMENT (self),
                                      cancellable,
                                      gb_editor_document_save_as_cb,
@@ -981,8 +1025,6 @@ gb_editor_document_save_as_async (GbDocument          *document,
                                G_IO_ERROR_NOT_FOUND,
                                _("No file was selected for saving."));
     }
-
-  gtk_widget_destroy (GTK_WIDGET (dialog));
 
   EXIT;
 }
