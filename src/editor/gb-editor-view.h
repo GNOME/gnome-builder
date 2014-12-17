@@ -59,6 +59,9 @@ GbEditorFrame *gb_editor_view_get_frame2        (GbEditorView     *view);
 gboolean       gb_editor_view_get_split_enabled (GbEditorView     *view);
 void           gb_editor_view_set_split_enabled (GbEditorView     *view,
                                                  gboolean          split_enabled);
+gboolean       gb_editor_view_get_use_spaces    (GbEditorView     *view);
+void           gb_editor_view_set_use_spaces    (GbEditorView     *view,
+                                                 gboolean          use_spaces);
 
 G_END_DECLS
 
