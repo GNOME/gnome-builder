@@ -28,6 +28,7 @@
 #include "gb-glib.h"
 #include "gb-html-document.h"
 #include "gb-log.h"
+#include "gb-string.h"
 #include "gb-widget.h"
 
 struct _GbEditorViewPrivate
@@ -51,6 +52,7 @@ struct _GbEditorViewPrivate
   GtkButton       *modified_cancel_button;
   GtkRevealer     *modified_revealer;
   GtkMenuButton   *tweak_button;
+  GtkMenuButton   *tweak_widget;
 
   guint            auto_indent : 1;
   guint            highlight_current_line : 1;
@@ -98,6 +100,30 @@ gb_editor_view_action_set_state (GbEditorView *view,
   group = gtk_widget_get_action_group (GTK_WIDGET (view), "editor-view");
   action = g_action_map_lookup_action (G_ACTION_MAP (group), action_name);
   g_simple_action_set_state (G_SIMPLE_ACTION (action), state);
+}
+
+static void
+apply_state_language (GSimpleAction *action,
+                      GVariant      *param,
+                      gpointer       user_data)
+{
+  GbEditorView *view = user_data;
+  GtkSourceLanguage *l = NULL;
+  const gchar *lang_id;
+
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+
+  lang_id = g_variant_get_string (param, NULL);
+
+  if (!gb_str_empty0 (lang_id))
+    {
+      GtkSourceLanguageManager *m;
+
+      m = gtk_source_language_manager_get_default ();
+      l = gtk_source_language_manager_get_language (m, lang_id);
+    }
+
+  gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (view->priv->document), l);
 }
 
 gboolean
@@ -214,10 +240,20 @@ gb_editor_view_notify_language (GbEditorView     *view,
                                 GParamSpec       *pspec,
                                 GbEditorDocument *document)
 {
+  GtkSourceLanguage *language;
+  const gchar *lang_id = "";
+
   g_return_if_fail (GB_IS_EDITOR_VIEW (view));
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
 
   g_object_notify (G_OBJECT (view), "can-preview");
+
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (document));
+  if (language)
+    lang_id = gtk_source_language_get_id (language);
+
+  gb_editor_view_action_set_state (view, "language",
+                                   g_variant_new_string (lang_id));
 }
 
 static void
@@ -897,6 +933,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, progress_bar);
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, split_button);
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, tweak_button);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, tweak_widget);
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, modified_revealer);
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, modified_label);
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, modified_cancel_button);
@@ -916,6 +953,7 @@ gb_editor_view_init (GbEditorView *self)
     { "auto-indent", NULL, NULL, "false", apply_state_auto_indent },
     { "highlight-current-line", NULL, NULL, "false",
       apply_state_highlight_current_line },
+    { "language", NULL, "s", "''", apply_state_language },
     { "show-line-numbers", NULL, NULL, "false", apply_state_show_line_numbers },
     { "show-right-margin", NULL, NULL, "false", apply_state_show_right_margin },
     { "switch-pane",  gb_editor_view_switch_pane },
@@ -930,15 +968,20 @@ gb_editor_view_init (GbEditorView *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   actions = g_simple_action_group_new ();
+
+  /*
+   * Unfortunately, we need to manually attach the action group in
+   * a few places due to the complexity of how they are handled.
+   */
   g_action_map_add_action_entries (G_ACTION_MAP (actions), entries,
                                    G_N_ELEMENTS (entries), self);
-
   gtk_widget_insert_action_group (GTK_WIDGET (self), "editor-view",
                                   G_ACTION_GROUP (actions));
-
   controls = gb_document_view_get_controls (GB_DOCUMENT_VIEW (self));
   gtk_widget_insert_action_group (GTK_WIDGET (controls), "editor-view",
                                   G_ACTION_GROUP (actions));
+  gtk_widget_insert_action_group (GTK_WIDGET (self->priv->tweak_widget),
+                                  "editor-view", G_ACTION_GROUP (actions));
 
   g_clear_object (&actions);
 

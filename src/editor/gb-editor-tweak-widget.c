@@ -86,6 +86,51 @@ gb_editor_tweak_widget_entry_changed (GbEditorTweakWidget *widget,
                                   g_free);
 }
 
+static GActionGroup *
+find_action_group (GtkWidget   *widget,
+                   const gchar *name)
+{
+  GActionGroup *group = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (name, NULL);
+
+  while (!group && widget)
+    {
+      group = gtk_widget_get_action_group (widget, name);
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  return group;
+}
+
+static void
+gb_editor_tweak_widget_row_activated (GbEditorTweakWidget *widget,
+                                      GtkListBoxRow       *row,
+                                      GtkListBox          *list_box)
+{
+  GtkSourceLanguage *lang;
+  GActionGroup *group;
+  const gchar *lang_id;
+  GtkWidget *child;
+  GVariant *param;
+
+  g_return_if_fail (GB_IS_EDITOR_TWEAK_WIDGET (widget));
+  g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
+  g_return_if_fail (GTK_IS_LIST_BOX (list_box));
+
+  child = gtk_bin_get_child (GTK_BIN (row));
+  lang = g_object_get_qdata (G_OBJECT (child), gLangQuark);
+
+  if (lang)
+    {
+      group = find_action_group (GTK_WIDGET (widget), "editor-view");
+      lang_id = gtk_source_language_get_id (lang);
+      param = g_variant_new_string (lang_id);
+      g_action_group_activate_action (group, "language", param);
+    }
+}
+
 static void
 gb_editor_tweak_widget_constructed (GObject *object)
 {
@@ -123,6 +168,12 @@ gb_editor_tweak_widget_constructed (GObject *object)
   g_signal_connect_object (widget->priv->entry,
                            "changed",
                            G_CALLBACK (gb_editor_tweak_widget_entry_changed),
+                           widget,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (widget->priv->list_box,
+                           "row-activated",
+                           G_CALLBACK (gb_editor_tweak_widget_row_activated),
                            widget,
                            G_CONNECT_SWAPPED);
 }
