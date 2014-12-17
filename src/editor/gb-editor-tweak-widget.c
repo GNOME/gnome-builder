@@ -34,13 +34,7 @@ struct _GbEditorTweakWidgetPrivate
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorTweakWidget, gb_editor_tweak_widget,
                             GTK_TYPE_BIN)
 
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
-static GQuark      gLangQuark;
+static GQuark gLangQuark;
 
 GtkWidget *
 gb_editor_tweak_widget_new (void)
@@ -134,51 +128,12 @@ gb_editor_tweak_widget_constructed (GObject *object)
 }
 
 static void
-gb_editor_tweak_widget_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (gb_editor_tweak_widget_parent_class)->finalize (object);
-}
-
-static void
-gb_editor_tweak_widget_get_property (GObject    *object,
-                                     guint       prop_id,
-                                     GValue     *value,
-                                     GParamSpec *pspec)
-{
-  GbEditorTweakWidget *self = GB_EDITOR_TWEAK_WIDGET (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-gb_editor_tweak_widget_set_property (GObject      *object,
-                                     guint         prop_id,
-                                     const GValue *value,
-                                     GParamSpec   *pspec)
-{
-  GbEditorTweakWidget *self = GB_EDITOR_TWEAK_WIDGET (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 gb_editor_tweak_widget_class_init (GbEditorTweakWidgetClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gb_editor_tweak_widget_constructed;
-  object_class->finalize = gb_editor_tweak_widget_finalize;
-  object_class->get_property = gb_editor_tweak_widget_get_property;
-  object_class->set_property = gb_editor_tweak_widget_set_property;
 
   GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-editor-tweak-widget.ui");
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorTweakWidget, entry);
