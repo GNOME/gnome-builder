@@ -23,6 +23,7 @@
 #include "gb-animation.h"
 #include "gb-editor-frame.h"
 #include "gb-editor-frame-private.h"
+#include "gb-editor-tweak-widget.h"
 #include "gb-editor-view.h"
 #include "gb-glib.h"
 #include "gb-html-document.h"
@@ -594,6 +595,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, error_close_button);
 
   g_type_ensure (GB_TYPE_EDITOR_FRAME);
+  g_type_ensure (GB_TYPE_EDITOR_TWEAK_WIDGET);
 }
 
 static void

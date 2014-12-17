@@ -26,6 +26,7 @@
     <file>ui/gb-document-menu-button.ui</file>
     <file>ui/gb-editor-settings-widget.ui</file>
     <file>ui/gb-editor-frame.ui</file>
+    <file>ui/gb-editor-tweak-widget.ui</file>
     <file>ui/gb-editor-view.ui</file>
     <file>ui/gb-editor-workspace.ui</file>
     <file>ui/gb-git-search-result.ui</file>

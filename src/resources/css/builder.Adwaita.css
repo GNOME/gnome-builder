@@ -227,3 +227,8 @@ GbCreditsWidget GtkLabel {
 GbSourceStyleSchemeWidget GtkSourceView {
     font-family: Monospace;
 }
+
+
+GbEditorTweakWidget GtkScrolledWindow {
+    border-top: none;
+}

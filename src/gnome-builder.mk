@@ -78,6 +78,8 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-editor-navigation-item.h \
 	src/editor/gb-editor-settings-widget.c \
 	src/editor/gb-editor-settings-widget.h \
+	src/editor/gb-editor-tweak-widget.c \
+	src/editor/gb-editor-tweak-widget.h \
 	src/editor/gb-editor-view.c \
 	src/editor/gb-editor-view.h \
 	src/editor/gb-editor-workspace.c \

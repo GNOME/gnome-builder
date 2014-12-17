@@ -9,11 +9,20 @@
           <class name="linked"/>
         </style>
         <child>
+          <object class="GtkMenuButton" id="tweak_button">
+            <property name="visible">true</property>
+            <property name="popover">tweak_popover</property>
+            <style>
+              <class name="text-button"/>
+              <class name="tab-control-first"/>
+            </style>
+          </object>
+        </child>
+        <child>
           <object class="GtkToggleButton" id="split_button">
             <property name="visible">true</property>
             <style>
               <class name="image-button"/>
-              <class name="tab-control-first"/>
               <class name="tab-control-last"/>
             </style>
             <child>
@@ -212,4 +221,12 @@
       </object>
     </child>
   </template>
+  <object class="GtkPopoverMenu" id="tweak_popover">
+    <child>
+      <object class="GbEditorTweakWidget" id="tweak_widget">
+        <property name="visible">true</property>
+        <property name="margin">10</property>
+      </object>
+    </child>
+  </object>
 </interface>
