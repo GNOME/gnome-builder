@@ -37,7 +37,6 @@ struct _GbDocumentStackPrivate
   /* GtkWidgets owned by GtkWidgetClass template */
   GbDocumentMenuButton *document_button;
   GtkStack             *controls;
-  GtkButton            *close;
   GtkStack             *stack;
   GtkMenuButton        *stack_menu;
 };
@@ -126,7 +125,6 @@ gb_document_stack_remove_view (GbDocumentStack *stack,
 
   /* Only show close and stack menu if we have children */
   visible = (visible_child != NULL);
-  gtk_widget_set_visible (GTK_WIDGET (stack->priv->close), visible);
   gtk_widget_set_visible (GTK_WIDGET (stack->priv->stack_menu), visible);
 
   if (!visible_child)
@@ -403,7 +401,6 @@ gb_document_stack_document_selected (GbDocumentStack      *stack,
         gtk_container_add (GTK_CONTAINER (stack->priv->controls), controls);
     }
 
-  gtk_widget_set_visible (GTK_WIDGET (stack->priv->close), TRUE);
   gtk_widget_set_visible (GTK_WIDGET (stack->priv->stack_menu), TRUE);
   gb_document_stack_set_active_view (stack, GB_DOCUMENT_VIEW (view));
   gtk_widget_grab_focus (view);
@@ -758,7 +755,6 @@ gb_document_stack_class_init (GbDocumentStackClass *klass)
   widget_class->grab_focus = gb_document_stack_grab_focus;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-document-stack.ui");
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, close);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, stack);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, stack_menu);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, controls);
