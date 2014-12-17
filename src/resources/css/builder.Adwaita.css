@@ -198,7 +198,7 @@ GtkButton.tab-control-first {
 }
 GtkMenuButton.tab-control-last .button,
 GtkButton.tab-control-last {
-    border-right: 1px solid @borders;
+    border-right: none;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
 }
