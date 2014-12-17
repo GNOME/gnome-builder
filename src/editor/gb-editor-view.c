@@ -52,6 +52,7 @@ struct _GbEditorViewPrivate
   GtkRevealer     *modified_revealer;
   GtkMenuButton   *tweak_button;
 
+  guint            auto_indent : 1;
   guint            use_spaces : 1;
 };
 
@@ -59,6 +60,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbEditorView, gb_editor_view, GB_TYPE_DOCUMENT_VIEW)
 
 enum {
   PROP_0,
+  PROP_AUTO_INDENT,
   PROP_DOCUMENT,
   PROP_SPLIT_ENABLED,
   PROP_USE_SPACES,
@@ -90,6 +92,26 @@ gb_editor_view_action_set_state (GbEditorView *view,
   group = gtk_widget_get_action_group (GTK_WIDGET (view), "editor-view");
   action = g_action_map_lookup_action (G_ACTION_MAP (group), action_name);
   g_simple_action_set_state (G_SIMPLE_ACTION (action), state);
+}
+
+gboolean
+gb_editor_view_get_auto_indent (GbEditorView *view)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (view), FALSE);
+
+  return view->priv->auto_indent;
+}
+
+void
+gb_editor_view_set_auto_indent (GbEditorView *view,
+                               gboolean      auto_indent)
+{
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+
+  view->priv->auto_indent = auto_indent;
+  gb_editor_view_action_set_state (view, "auto-indent",
+                                   g_variant_new_boolean (auto_indent));
+  g_object_notify_by_pspec (G_OBJECT (view), gParamSpecs [PROP_AUTO_INDENT]);
 }
 
 gboolean
@@ -506,6 +528,10 @@ gb_editor_view_toggle_split (GbEditorView *view)
                               GB_EDITOR_FRAME (child2)->priv->source_view,
                               "insert-spaces-instead-of-tabs",
                               G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+      g_object_bind_property (view, "auto-indent",
+                              GB_EDITOR_FRAME (child2)->priv->source_view,
+                              "auto-indent",
+                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
       gtk_container_add_with_properties (GTK_CONTAINER (priv->paned), child2,
                                          "shrink", TRUE,
                                          "resize", TRUE,
@@ -581,41 +607,22 @@ gb_editor_view_grab_focus (GtkWidget *widget)
   EXIT;
 }
 
-static void
-apply_state_split (GSimpleAction *action,
-                   GVariant      *parameter,
-                   gpointer       user_data)
-{
-  GbEditorView *view = user_data;
-  gboolean split_enabled;
+#define STATE_HANDLER_BOOLEAN(name) \
+  static void \
+  apply_state_##name (GSimpleAction *action, \
+                      GVariant      *param, \
+                      gpointer       user_data) \
+  { \
+    GbEditorView *view = user_data; \
+    gboolean value; \
+    g_return_if_fail (GB_IS_EDITOR_VIEW (view)); \
+    value = g_variant_get_boolean (param); \
+    gb_editor_view_set_##name (view, value); \
+  }
 
-  ENTRY;
-
-  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
-
-  split_enabled = g_variant_get_boolean (parameter);
-  gb_editor_view_set_split_enabled (view, split_enabled);
-
-  EXIT;
-}
-
-static void
-apply_state_spaces (GSimpleAction *action,
-                    GVariant      *parameter,
-                    gpointer       user_data)
-{
-  GbEditorView *view = user_data;
-  gboolean use_spaces;
-
-  ENTRY;
-
-  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
-
-  use_spaces = g_variant_get_boolean (parameter);
-  gb_editor_view_set_use_spaces (view, use_spaces);
-
-  EXIT;
-}
+STATE_HANDLER_BOOLEAN (auto_indent)
+STATE_HANDLER_BOOLEAN (split_enabled)
+STATE_HANDLER_BOOLEAN (use_spaces)
 
 static void
 gb_editor_view_finalize (GObject *object)
@@ -637,6 +644,10 @@ gb_editor_view_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_AUTO_INDENT:
+      g_value_set_boolean (value, gb_editor_view_get_auto_indent (self));
+      break;
+
     case PROP_DOCUMENT:
       g_value_set_object (value, self->priv->document);
       break;
@@ -664,6 +675,10 @@ gb_editor_view_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_AUTO_INDENT:
+      gb_editor_view_set_auto_indent (self, g_value_get_boolean (value));
+      break;
+
     case PROP_DOCUMENT:
       gb_editor_view_set_document (self, g_value_get_object (value));
       break;
@@ -697,6 +712,15 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   view_class->get_document = gb_editor_view_get_document;
   view_class->get_can_preview = gb_editor_view_get_can_preview;
   view_class->create_preview = gb_editor_view_create_preview;
+
+  gParamSpecs [PROP_AUTO_INDENT] =
+    g_param_spec_boolean ("auto-indent",
+                         _("Auto Indent"),
+                         _("If we should use the auto-indentation engine."),
+                         FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_AUTO_INDENT,
+                                   gParamSpecs [PROP_AUTO_INDENT]);
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
@@ -747,9 +771,10 @@ static void
 gb_editor_view_init (GbEditorView *self)
 {
   const GActionEntry entries[] = {
-    { "toggle-split", NULL, NULL, "false", apply_state_split },
-    { "use-spaces", NULL, NULL, "false", apply_state_spaces },
+    { "auto-indent", NULL, NULL, "false", apply_state_auto_indent },
     { "switch-pane",  gb_editor_view_switch_pane },
+    { "toggle-split", NULL, NULL, "false", apply_state_split_enabled },
+    { "use-spaces", NULL, NULL, "false", apply_state_use_spaces },
   };
   GSimpleActionGroup *actions;
   GtkWidget *controls;
@@ -774,5 +799,9 @@ gb_editor_view_init (GbEditorView *self)
   g_object_bind_property (self->priv->frame->priv->source_view,
                           "insert-spaces-instead-of-tabs",
                           self, "use-spaces",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+
+  g_object_bind_property (self->priv->frame->priv->source_view, "auto-indent",
+                          self, "auto-indent",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
 }

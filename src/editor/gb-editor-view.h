@@ -62,6 +62,9 @@ void           gb_editor_view_set_split_enabled (GbEditorView     *view,
 gboolean       gb_editor_view_get_use_spaces    (GbEditorView     *view);
 void           gb_editor_view_set_use_spaces    (GbEditorView     *view,
                                                  gboolean          use_spaces);
+gboolean       gb_editor_view_get_auto_indent   (GbEditorView     *view);
+void           gb_editor_view_set_auto_indent   (GbEditorView     *view,
+                                                 gboolean          auto_indent);
 
 G_END_DECLS
 
