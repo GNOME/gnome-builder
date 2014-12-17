@@ -53,6 +53,7 @@ struct _GbEditorViewPrivate
   GtkMenuButton   *tweak_button;
 
   guint            auto_indent : 1;
+  guint            highlight_current_line : 1;
   guint            use_spaces : 1;
 };
 
@@ -62,6 +63,7 @@ enum {
   PROP_0,
   PROP_AUTO_INDENT,
   PROP_DOCUMENT,
+  PROP_HIGHLIGHT_CURRENT_LINE,
   PROP_SPLIT_ENABLED,
   PROP_USE_SPACES,
   LAST_PROP
@@ -112,6 +114,29 @@ gb_editor_view_set_auto_indent (GbEditorView *view,
   gb_editor_view_action_set_state (view, "auto-indent",
                                    g_variant_new_boolean (auto_indent));
   g_object_notify_by_pspec (G_OBJECT (view), gParamSpecs [PROP_AUTO_INDENT]);
+}
+
+gboolean
+gb_editor_view_get_highlight_current_line (GbEditorView *view)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (view), FALSE);
+
+  return view->priv->highlight_current_line;
+}
+
+void
+gb_editor_view_set_highlight_current_line (GbEditorView *view,
+                                           gboolean      highlight_current_line)
+{
+  GVariant *variant;
+
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+
+  view->priv->highlight_current_line = highlight_current_line;
+  variant = g_variant_new_boolean (highlight_current_line);
+  gb_editor_view_action_set_state (view, "highlight-current-line", variant);
+  g_object_notify_by_pspec (G_OBJECT (view),
+                            gParamSpecs [PROP_HIGHLIGHT_CURRENT_LINE]);
 }
 
 gboolean
@@ -532,6 +557,10 @@ gb_editor_view_toggle_split (GbEditorView *view)
                               GB_EDITOR_FRAME (child2)->priv->source_view,
                               "auto-indent",
                               G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+      g_object_bind_property (view, "highlight-current-line",
+                              GB_EDITOR_FRAME (child2)->priv->source_view,
+                              "highlight-current-line",
+                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
       gtk_container_add_with_properties (GTK_CONTAINER (priv->paned), child2,
                                          "shrink", TRUE,
                                          "resize", TRUE,
@@ -621,6 +650,7 @@ gb_editor_view_grab_focus (GtkWidget *widget)
   }
 
 STATE_HANDLER_BOOLEAN (auto_indent)
+STATE_HANDLER_BOOLEAN (highlight_current_line)
 STATE_HANDLER_BOOLEAN (split_enabled)
 STATE_HANDLER_BOOLEAN (use_spaces)
 
@@ -652,6 +682,11 @@ gb_editor_view_get_property (GObject    *object,
       g_value_set_object (value, self->priv->document);
       break;
 
+    case PROP_HIGHLIGHT_CURRENT_LINE:
+      g_value_set_boolean (value,
+                           gb_editor_view_get_highlight_current_line (self));
+      break;
+
     case PROP_SPLIT_ENABLED:
       g_value_set_boolean (value, gb_editor_view_get_split_enabled (self));
       break;
@@ -681,6 +716,10 @@ gb_editor_view_set_property (GObject      *object,
 
     case PROP_DOCUMENT:
       gb_editor_view_set_document (self, g_value_get_object (value));
+      break;
+
+    case PROP_HIGHLIGHT_CURRENT_LINE:
+      gb_editor_view_set_highlight_current_line (self, g_value_get_boolean (value));
       break;
 
     case PROP_SPLIT_ENABLED:
@@ -731,6 +770,15 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   g_object_class_install_property (object_class, PROP_DOCUMENT,
                                    gParamSpecs [PROP_DOCUMENT]);
 
+  gParamSpecs [PROP_HIGHLIGHT_CURRENT_LINE] =
+    g_param_spec_boolean ("highlight-current-line",
+                          _("Highlight Current Line"),
+                          _("If the current line should be highlighted."),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_HIGHLIGHT_CURRENT_LINE,
+                                   gParamSpecs [PROP_HIGHLIGHT_CURRENT_LINE]);
+
   gParamSpecs [PROP_SPLIT_ENABLED] =
     g_param_spec_boolean ("split-enabled",
                          _("Split Enabled"),
@@ -772,6 +820,8 @@ gb_editor_view_init (GbEditorView *self)
 {
   const GActionEntry entries[] = {
     { "auto-indent", NULL, NULL, "false", apply_state_auto_indent },
+    { "highlight-current-line", NULL, NULL, "false",
+      apply_state_highlight_current_line },
     { "switch-pane",  gb_editor_view_switch_pane },
     { "toggle-split", NULL, NULL, "false", apply_state_split_enabled },
     { "use-spaces", NULL, NULL, "false", apply_state_use_spaces },
@@ -803,5 +853,10 @@ gb_editor_view_init (GbEditorView *self)
 
   g_object_bind_property (self->priv->frame->priv->source_view, "auto-indent",
                           self, "auto-indent",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+
+  g_object_bind_property (self->priv->frame->priv->source_view,
+                          "highlight-current-line",
+                          self, "highlight-current-line",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
 }
