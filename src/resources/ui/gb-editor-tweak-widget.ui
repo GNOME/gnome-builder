@@ -2,7 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.8 -->
   <template class="GbEditorTweakWidget" parent="GtkBin">
-    <property name="width_request">250</property>
+    <property name="width_request">200</property>
     <property name="height_request">400</property>
     <child>
       <object class="GtkBox">
@@ -46,9 +46,18 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
+              <object class="GtkLabel">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Spacing</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+            <child>
               <object class="GtkModelButton">
                 <property name="visible">true</property>
-                <property name="label" translatable="yes">Auto Indent</property>
+                <property name="label" translatable="yes">Auto indent</property>
                 <property name="action_name">editor-view.auto-indent</property>
                 <property name="role">check</property>
                 <property name="halign">fill</property>
@@ -67,21 +76,33 @@
             </child>
             <child>
               <object class="GtkSeparator">
-                <property name="visible">true</property>
+                <property name="visible">false</property>
                 <property name="margin_top">3</property>
                 <property name="margin_bottom">3</property>
               </object>
             </child>
             <child>
+              <object class="GtkLabel">
+                <property name="visible">true</property>
+                <property name="margin_top">6</property>
+                <property name="label" translatable="yes">Tab width</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+<!-- TODO: implement auto detection.
+            <child>
               <object class="GtkModelButton">
                 <property name="visible">true</property>
                 <property name="action_name">editor-view.detect_indent</property>
-                <property name="label" translatable="yes">Detect tab width</property>
+                <property name="label" translatable="yes">Auto Detect</property>
                 <property name="role">check</property>
                 <property name="halign">fill</property>
                 <property name="xalign">0.0</property>
               </object>
             </child>
+-->
             <child>
               <object class="GtkModelButton">
                 <property name="visible">true</property>
