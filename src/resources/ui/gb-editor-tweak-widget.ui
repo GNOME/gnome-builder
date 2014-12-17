@@ -2,8 +2,8 @@
 <interface>
   <!-- interface-requires gtk+ 3.8 -->
   <template class="GbEditorTweakWidget" parent="GtkBin">
-    <property name="width_request">200</property>
-    <property name="height_request">400</property>
+    <property name="width_request">250</property>
+    <property name="height_request">450</property>
     <child>
       <object class="GtkBox">
         <property name="visible">true</property>
@@ -46,8 +46,36 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
+              <object class="GtkModelButton">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Display line numbers</property>
+                <property name="role">check</property>
+                <property name="halign">fill</property>
+                <property name="xalign">0.0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Display right margin</property>
+                <property name="role">check</property>
+                <property name="halign">fill</property>
+                <property name="xalign">0.0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Highlight current line</property>
+                <property name="role">check</property>
+                <property name="halign">fill</property>
+                <property name="xalign">0.0</property>
+              </object>
+            </child>
+            <child>
               <object class="GtkLabel">
                 <property name="visible">true</property>
+                <property name="margin_top">6</property>
                 <property name="label" translatable="yes">Spacing</property>
                 <style>
                   <class name="dim-label"/>
@@ -58,7 +86,6 @@
               <object class="GtkModelButton">
                 <property name="visible">true</property>
                 <property name="label" translatable="yes">Auto indent</property>
-                <property name="action_name">editor-view.auto-indent</property>
                 <property name="role">check</property>
                 <property name="halign">fill</property>
                 <property name="xalign">0.0</property>
@@ -68,7 +95,6 @@
               <object class="GtkModelButton">
                 <property name="visible">true</property>
                 <property name="label" translatable="yes">Use spaces</property>
-                <property name="action_name">editor-view.use_spaces</property>
                 <property name="role">check</property>
                 <property name="halign">fill</property>
                 <property name="xalign">0.0</property>
@@ -84,7 +110,6 @@
             <child>
               <object class="GtkLabel">
                 <property name="visible">true</property>
-                <property name="margin_top">6</property>
                 <property name="label" translatable="yes">Tab width</property>
                 <style>
                   <class name="dim-label"/>
@@ -95,7 +120,6 @@
             <child>
               <object class="GtkModelButton">
                 <property name="visible">true</property>
-                <property name="action_name">editor-view.detect_indent</property>
                 <property name="label" translatable="yes">Auto Detect</property>
                 <property name="role">check</property>
                 <property name="halign">fill</property>
@@ -106,7 +130,6 @@
             <child>
               <object class="GtkModelButton">
                 <property name="visible">true</property>
-                <property name="action_name">editor-view.tab_width</property>
                 <property name="action_target">2</property>
                 <property name="label" translatable="yes">2</property>
                 <property name="role">radio</property>
@@ -117,7 +140,6 @@
             <child>
               <object class="GtkModelButton">
                 <property name="visible">true</property>
-                <property name="action_name">editor-view.tab_width</property>
                 <property name="action_target">4</property>
                 <property name="label" translatable="yes">4</property>
                 <property name="role">radio</property>
@@ -128,7 +150,6 @@
             <child>
               <object class="GtkModelButton">
                 <property name="visible">true</property>
-                <property name="action_name">editor-view.tab_width</property>
                 <property name="action_target">8</property>
                 <property name="label" translatable="yes">8</property>
                 <property name="role">radio</property>
