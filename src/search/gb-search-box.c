@@ -146,23 +146,19 @@ static void
 gb_search_box_entry_changed (GbSearchBox    *box,
                              GtkSearchEntry *entry)
 {
-  const gchar *search_text;
-
   g_return_if_fail (GB_IS_SEARCH_BOX (box));
   g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
 
-  if (box->priv->delay_timeout)
+  if (!box->priv->delay_timeout)
     {
-      g_source_remove (box->priv->delay_timeout);
-      box->priv->delay_timeout = 0;
+      const gchar *search_text;
+
+      search_text = gtk_entry_get_text (GTK_ENTRY (entry));
+      if (search_text)
+        box->priv->delay_timeout = g_timeout_add (DELAY_TIMEOUT_MSEC,
+                                                  gb_search_box_delay_cb,
+                                                  box);
     }
-
-  search_text = gtk_entry_get_text (GTK_ENTRY (entry));
-
-  if (search_text)
-    box->priv->delay_timeout = g_timeout_add (DELAY_TIMEOUT_MSEC,
-                                              gb_search_box_delay_cb,
-                                              box);
 }
 
 static gboolean
