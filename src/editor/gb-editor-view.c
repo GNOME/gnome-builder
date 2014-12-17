@@ -50,6 +50,7 @@ struct _GbEditorViewPrivate
   GtkButton       *modified_reload_button;
   GtkButton       *modified_cancel_button;
   GtkRevealer     *modified_revealer;
+  GtkMenuButton   *tweak_button;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorView, gb_editor_view, GB_TYPE_DOCUMENT_VIEW)
@@ -294,6 +295,23 @@ gb_editor_view_notify_error (GbEditorView     *view,
     }
 }
 
+static gboolean
+transform_language_to_string (GBinding     *binding,
+                              const GValue *from_value,
+                              GValue       *to_value,
+                              gpointer      user_data)
+{
+  GtkSourceLanguage *language;
+  const gchar *str = _("Plain Text");
+
+  language = g_value_get_object (from_value);
+  if (language)
+    str = gtk_source_language_get_name (language);
+  g_value_set_string (to_value, str);
+
+  return TRUE;
+}
+
 static void
 gb_editor_view_connect (GbEditorView     *view,
                         GbEditorDocument *document)
@@ -350,6 +368,12 @@ gb_editor_view_connect (GbEditorView     *view,
                            G_CALLBACK (gb_editor_view_file_changed_on_volume),
                            view,
                            G_CONNECT_SWAPPED);
+
+  g_object_bind_property_full (document, "language",
+                               view->priv->tweak_button, "label",
+                               G_BINDING_SYNC_CREATE,
+                               transform_language_to_string,
+                               NULL, NULL, NULL);
 }
 
 static void
@@ -586,6 +610,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, paned);
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, progress_bar);
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, split_button);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, tweak_button);
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, modified_revealer);
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, modified_label);
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, modified_cancel_button);
