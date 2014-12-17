@@ -54,6 +54,7 @@ struct _GbEditorViewPrivate
 
   guint            auto_indent : 1;
   guint            highlight_current_line : 1;
+  guint            show_line_numbers : 1;
   guint            show_right_margin : 1;
   guint            use_spaces : 1;
 };
@@ -65,6 +66,7 @@ enum {
   PROP_AUTO_INDENT,
   PROP_DOCUMENT,
   PROP_HIGHLIGHT_CURRENT_LINE,
+  PROP_SHOW_LINE_NUMBERS,
   PROP_SHOW_RIGHT_MARGIN,
   PROP_SPLIT_ENABLED,
   PROP_USE_SPACES,
@@ -162,6 +164,29 @@ gb_editor_view_set_show_right_margin (GbEditorView *view,
   gb_editor_view_action_set_state (view, "show-right-margin", variant);
   g_object_notify_by_pspec (G_OBJECT (view),
                             gParamSpecs [PROP_SHOW_RIGHT_MARGIN]);
+}
+
+gboolean
+gb_editor_view_get_show_line_numbers (GbEditorView *view)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (view), FALSE);
+
+  return view->priv->show_line_numbers;
+}
+
+void
+gb_editor_view_set_show_line_numbers (GbEditorView *view,
+                                      gboolean      show_line_numbers)
+{
+  GVariant *variant;
+
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+
+  view->priv->show_line_numbers = show_line_numbers;
+  variant = g_variant_new_boolean (show_line_numbers);
+  gb_editor_view_action_set_state (view, "show-line-numbers", variant);
+  g_object_notify_by_pspec (G_OBJECT (view),
+                            gParamSpecs [PROP_SHOW_LINE_NUMBERS]);
 }
 
 gboolean
@@ -574,10 +599,6 @@ gb_editor_view_toggle_split (GbEditorView *view)
                              "document", view->priv->document,
                              "visible", TRUE,
                              NULL);
-      g_object_bind_property (view, "use-spaces",
-                              GB_EDITOR_FRAME (child2)->priv->source_view,
-                              "insert-spaces-instead-of-tabs",
-                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
       g_object_bind_property (view, "auto-indent",
                               GB_EDITOR_FRAME (child2)->priv->source_view,
                               "auto-indent",
@@ -585,6 +606,18 @@ gb_editor_view_toggle_split (GbEditorView *view)
       g_object_bind_property (view, "highlight-current-line",
                               GB_EDITOR_FRAME (child2)->priv->source_view,
                               "highlight-current-line",
+                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+      g_object_bind_property (view, "show-line-numbers",
+                              GB_EDITOR_FRAME (child2)->priv->source_view,
+                              "show-line-numbers",
+                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+      g_object_bind_property (view, "show-right-margin",
+                              GB_EDITOR_FRAME (child2)->priv->source_view,
+                              "show-right-margin",
+                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+      g_object_bind_property (view, "use-spaces",
+                              GB_EDITOR_FRAME (child2)->priv->source_view,
+                              "insert-spaces-instead-of-tabs",
                               G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
       gtk_container_add_with_properties (GTK_CONTAINER (priv->paned), child2,
                                          "shrink", TRUE,
@@ -676,6 +709,7 @@ gb_editor_view_grab_focus (GtkWidget *widget)
 
 STATE_HANDLER_BOOLEAN (auto_indent)
 STATE_HANDLER_BOOLEAN (highlight_current_line)
+STATE_HANDLER_BOOLEAN (show_line_numbers)
 STATE_HANDLER_BOOLEAN (show_right_margin)
 STATE_HANDLER_BOOLEAN (split_enabled)
 STATE_HANDLER_BOOLEAN (use_spaces)
@@ -711,6 +745,10 @@ gb_editor_view_get_property (GObject    *object,
     case PROP_HIGHLIGHT_CURRENT_LINE:
       g_value_set_boolean (value,
                            gb_editor_view_get_highlight_current_line (self));
+      break;
+
+    case PROP_SHOW_LINE_NUMBERS:
+      g_value_set_boolean (value, gb_editor_view_get_show_line_numbers (self));
       break;
 
     case PROP_SHOW_RIGHT_MARGIN:
@@ -750,6 +788,10 @@ gb_editor_view_set_property (GObject      *object,
 
     case PROP_HIGHLIGHT_CURRENT_LINE:
       gb_editor_view_set_highlight_current_line (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SHOW_LINE_NUMBERS:
+      gb_editor_view_set_show_line_numbers (self, g_value_get_boolean (value));
       break;
 
     case PROP_SHOW_RIGHT_MARGIN:
@@ -813,6 +855,15 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   g_object_class_install_property (object_class, PROP_HIGHLIGHT_CURRENT_LINE,
                                    gParamSpecs [PROP_HIGHLIGHT_CURRENT_LINE]);
 
+  gParamSpecs [PROP_SHOW_LINE_NUMBERS] =
+    g_param_spec_boolean ("show-line-numbers",
+                         _("Show Line Numbers"),
+                         _("If the line numbers should be shown."),
+                         FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SHOW_LINE_NUMBERS,
+                                   gParamSpecs [PROP_SHOW_LINE_NUMBERS]);
+
   gParamSpecs [PROP_SHOW_RIGHT_MARGIN] =
     g_param_spec_boolean ("show-right-margin",
                          _("Show Right Margin"),
@@ -865,8 +916,8 @@ gb_editor_view_init (GbEditorView *self)
     { "auto-indent", NULL, NULL, "false", apply_state_auto_indent },
     { "highlight-current-line", NULL, NULL, "false",
       apply_state_highlight_current_line },
-    { "show-right-margin", NULL, NULL, "false",
-      apply_state_show_right_margin },
+    { "show-line-numbers", NULL, NULL, "false", apply_state_show_line_numbers },
+    { "show-right-margin", NULL, NULL, "false", apply_state_show_right_margin },
     { "switch-pane",  gb_editor_view_switch_pane },
     { "toggle-split", NULL, NULL, "false", apply_state_split_enabled },
     { "use-spaces", NULL, NULL, "false", apply_state_use_spaces },
@@ -891,10 +942,6 @@ gb_editor_view_init (GbEditorView *self)
 
   g_clear_object (&actions);
 
-  g_object_bind_property (self->priv->frame->priv->source_view,
-                          "insert-spaces-instead-of-tabs",
-                          self, "use-spaces",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   g_object_bind_property (self->priv->frame->priv->source_view, "auto-indent",
                           self, "auto-indent",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
@@ -903,7 +950,15 @@ gb_editor_view_init (GbEditorView *self)
                           self, "highlight-current-line",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   g_object_bind_property (self->priv->frame->priv->source_view,
+                          "show-line-numbers",
+                          self, "show-line-numbers",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  g_object_bind_property (self->priv->frame->priv->source_view,
                           "show-right-margin",
                           self, "show-right-margin",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  g_object_bind_property (self->priv->frame->priv->source_view,
+                          "insert-spaces-instead-of-tabs",
+                          self, "use-spaces",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
 }
