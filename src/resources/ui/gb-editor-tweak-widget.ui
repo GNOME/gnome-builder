@@ -76,17 +76,6 @@
               </object>
             </child>
             <child>
-              <object class="GtkLabel">
-                <property name="visible">true</property>
-                <property name="margin_top">6</property>
-                <property name="margin_bottom">6</property>
-                <property name="label" translatable="yes">Spacing</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-            </child>
-            <child>
               <object class="GtkModelButton">
                 <property name="visible">true</property>
                 <property name="text" translatable="yes">Auto indent</property>
@@ -96,26 +85,9 @@
               </object>
             </child>
             <child>
-              <object class="GtkModelButton">
-                <property name="visible">true</property>
-                <property name="text" translatable="yes">Use spaces</property>
-                <property name="role">check</property>
-                <property name="halign">fill</property>
-                <property name="xalign">0.0</property>
-                <property name="action-name">editor-view.use-spaces</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSeparator">
-                <property name="visible">false</property>
-                <property name="margin_top">3</property>
-                <property name="margin_bottom">3</property>
-              </object>
-            </child>
-            <child>
               <object class="GtkLabel">
                 <property name="visible">true</property>
-                <property name="label" translatable="yes">Indentation size</property>
+                <property name="label" translatable="yes">Indentation</property>
                 <property name="margin_bottom">6</property>
                 <property name="margin_top">6</property>
                 <style>
@@ -123,63 +95,92 @@
                 </style>
               </object>
             </child>
-<!-- TODO: implement auto detection.
-            <child>
-              <object class="GtkModelButton">
-                <property name="visible">true</property>
-                <property name="text" translatable="yes">Auto Detect</property>
-                <property name="role">check</property>
-                <property name="halign">fill</property>
-                <property name="xalign">0.0</property>
-              </object>
-            </child>
--->
             <child>
               <object class="GtkBox">
                 <property name="visible">true</property>
                 <property name="orientation">horizontal</property>
                 <property name="halign">center</property>
-                <style>
-                  <class name="linked"/>
-                </style>
+                <property name="spacing">12</property>
                 <child>
-                  <object class="GtkModelButton">
-                    <property name="iconic">True</property>
+                  <object class="GtkBox">
                     <property name="visible">true</property>
-                    <property name="text" translatable="yes">2</property>
-                    <property name="halign">fill</property>
-                    <property name="action-name">editor-view.tab-width</property>
-                    <property name="action-target">2</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="halign">center</property>
+                    <style>
+                      <class name="linked"/>
+                    </style>
+                    <child>
+                      <object class="GtkModelButton">
+                        <property name="visible">true</property>
+                        <property name="text" translatable="yes">Spaces</property>
+                        <property name="halign">fill</property>
+                        <property name="xalign">0.0</property>
+                        <property name="action-name">editor-view.use-spaces</property>
+                        <property name="action-target">true</property>
+                        <property name="iconic">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkModelButton">
+                        <property name="visible">true</property>
+                        <property name="text" translatable="yes">Tabs</property>
+                        <property name="halign">fill</property>
+                        <property name="xalign">0.0</property>
+                        <property name="action-name">editor-view.use-spaces</property>
+                        <property name="action-target">false</property>
+                        <property name="iconic">true</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkModelButton">
-                    <property name="iconic">True</property>
+                  <object class="GtkBox">
                     <property name="visible">true</property>
-                    <property name="text" translatable="yes">3</property>
-                    <property name="halign">fill</property>
-                    <property name="action-name">editor-view.tab-width</property>
-                    <property name="action-target">3</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkModelButton">
-                    <property name="iconic">True</property>
-                    <property name="visible">true</property>
-                    <property name="text" translatable="yes">4</property>
-                    <property name="halign">fill</property>
-                    <property name="action-name">editor-view.tab-width</property>
-                    <property name="action-target">4</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkModelButton">
-                    <property name="iconic">True</property>
-                    <property name="visible">true</property>
-                    <property name="text" translatable="yes">8</property>
-                    <property name="halign">fill</property>
-                    <property name="action-name">editor-view.tab-width</property>
-                    <property name="action-target">8</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="halign">center</property>
+                    <style>
+                      <class name="linked"/>
+                    </style>
+                    <child>
+                      <object class="GtkModelButton">
+                        <property name="iconic">True</property>
+                        <property name="visible">true</property>
+                        <property name="text" translatable="yes">2</property>
+                        <property name="halign">fill</property>
+                        <property name="action-name">editor-view.tab-width</property>
+                        <property name="action-target">2</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkModelButton">
+                        <property name="iconic">True</property>
+                        <property name="visible">true</property>
+                        <property name="text" translatable="yes">3</property>
+                        <property name="halign">fill</property>
+                        <property name="action-name">editor-view.tab-width</property>
+                        <property name="action-target">3</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkModelButton">
+                        <property name="iconic">True</property>
+                        <property name="visible">true</property>
+                        <property name="text" translatable="yes">4</property>
+                        <property name="halign">fill</property>
+                        <property name="action-name">editor-view.tab-width</property>
+                        <property name="action-target">4</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkModelButton">
+                        <property name="iconic">True</property>
+                        <property name="visible">true</property>
+                        <property name="text" translatable="yes">8</property>
+                        <property name="halign">fill</property>
+                        <property name="action-name">editor-view.tab-width</property>
+                        <property name="action-target">8</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
