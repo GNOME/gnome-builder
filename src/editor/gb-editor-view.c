@@ -73,6 +73,23 @@ gb_editor_view_new (GbEditorDocument *document)
 }
 
 static void
+gb_editor_view_action_set_state (GbEditorView *view,
+                                 const gchar  *action_name,
+                                 GVariant     *state)
+{
+  GActionGroup *group;
+  GAction *action;
+
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+  g_return_if_fail (action_name);
+  g_return_if_fail (state);
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (view), "editor-view");
+  action = g_action_map_lookup_action (G_ACTION_MAP (group), action_name);
+  g_simple_action_set_state (G_SIMPLE_ACTION (action), state);
+}
+
+static void
 gb_editor_view_notify_language (GbEditorView     *view,
                                 GParamSpec       *pspec,
                                 GbEditorDocument *document)
@@ -442,6 +459,7 @@ gb_editor_view_toggle_split (GbEditorView *view)
 {
   GbEditorViewPrivate *priv;
   GtkWidget *child2;
+  gboolean active;
 
   ENTRY;
 
@@ -453,6 +471,7 @@ gb_editor_view_toggle_split (GbEditorView *view)
     {
       gtk_widget_destroy (child2);
       gtk_widget_grab_focus (GTK_WIDGET (priv->frame));
+      active = FALSE;
     }
   else
     {
@@ -465,7 +484,11 @@ gb_editor_view_toggle_split (GbEditorView *view)
                                          "resize", TRUE,
                                          NULL);
       gtk_widget_grab_focus (child2);
+      active = TRUE;
     }
+
+  gb_editor_view_action_set_state (view, "toggle-split",
+                                   g_variant_new_boolean (active));
 
   EXIT;
 }
@@ -527,6 +550,24 @@ gb_editor_view_grab_focus (GtkWidget *widget)
   g_return_if_fail (GB_IS_EDITOR_VIEW (view));
 
   gtk_widget_grab_focus (GTK_WIDGET (view->priv->frame));
+
+  EXIT;
+}
+
+static void
+apply_state_split (GSimpleAction *action,
+                   GVariant      *parameter,
+                   gpointer       user_data)
+{
+  GbEditorView *view = user_data;
+  gboolean split_enabled;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+
+  split_enabled = g_variant_get_boolean (parameter);
+  gb_editor_view_set_split_enabled (view, split_enabled);
 
   EXIT;
 }
@@ -644,10 +685,11 @@ static void
 gb_editor_view_init (GbEditorView *self)
 {
   const GActionEntry entries[] = {
-    { "toggle-split", gb_editor_view_toggle_split_activate },
+    { "toggle-split", NULL, NULL, "false", apply_state_split },
     { "switch-pane",  gb_editor_view_switch_pane },
   };
   GSimpleActionGroup *actions;
+  GtkWidget *controls;
 
   self->priv = gb_editor_view_get_instance_private (self);
 
@@ -656,13 +698,13 @@ gb_editor_view_init (GbEditorView *self)
   actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (actions), entries,
                                    G_N_ELEMENTS (entries), self);
+
   gtk_widget_insert_action_group (GTK_WIDGET (self), "editor-view",
                                   G_ACTION_GROUP (actions));
-  g_clear_object (&actions);
 
-  g_signal_connect_object (self->priv->split_button,
-                           "toggled",
-                           G_CALLBACK (gb_editor_view_split_button_toggled),
-                           self,
-                           G_CONNECT_SWAPPED);
+  controls = gb_document_view_get_controls (GB_DOCUMENT_VIEW (self));
+  gtk_widget_insert_action_group (GTK_WIDGET (controls), "editor-view",
+                                  G_ACTION_GROUP (actions));
+
+  g_clear_object (&actions);
 }

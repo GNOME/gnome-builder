@@ -21,6 +21,7 @@
         <child>
           <object class="GtkToggleButton" id="split_button">
             <property name="visible">true</property>
+            <property name="action-name">editor-view.toggle-split</property>
             <style>
               <class name="image-button"/>
               <class name="tab-control-last"/>
