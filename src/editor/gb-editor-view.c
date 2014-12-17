@@ -54,6 +54,7 @@ struct _GbEditorViewPrivate
   GtkMenuButton   *tweak_button;
   GtkMenuButton   *tweak_widget;
 
+  guint8           tab_width;
   guint            auto_indent : 1;
   guint            highlight_current_line : 1;
   guint            show_line_numbers : 1;
@@ -71,6 +72,7 @@ enum {
   PROP_SHOW_LINE_NUMBERS,
   PROP_SHOW_RIGHT_MARGIN,
   PROP_SPLIT_ENABLED,
+  PROP_TAB_WIDTH,
   PROP_USE_SPACES,
   LAST_PROP
 };
@@ -213,6 +215,32 @@ gb_editor_view_set_show_line_numbers (GbEditorView *view,
   gb_editor_view_action_set_state (view, "show-line-numbers", variant);
   g_object_notify_by_pspec (G_OBJECT (view),
                             gParamSpecs [PROP_SHOW_LINE_NUMBERS]);
+}
+
+guint
+gb_editor_view_get_tab_width (GbEditorView *view)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (view), 0);
+
+  return view->priv->tab_width;
+}
+
+void
+gb_editor_view_set_tab_width (GbEditorView *view,
+                              guint         tab_width)
+{
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+  g_return_if_fail (tab_width >= 1);
+  g_return_if_fail (tab_width <= 32);
+
+  if (tab_width != view->priv->tab_width)
+    {
+      view->priv->tab_width = tab_width;
+      gb_editor_view_action_set_state (view, "tab-width",
+                                       g_variant_new_int32 (tab_width));
+      g_object_notify_by_pspec (G_OBJECT (view),
+                                gParamSpecs [PROP_TAB_WIDTH]);
+    }
 }
 
 gboolean
@@ -651,6 +679,10 @@ gb_editor_view_toggle_split (GbEditorView *view)
                               GB_EDITOR_FRAME (child2)->priv->source_view,
                               "show-right-margin",
                               G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+      g_object_bind_property (view, "tab-width",
+                              GB_EDITOR_FRAME (child2)->priv->source_view,
+                              "tab-width",
+                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
       g_object_bind_property (view, "use-spaces",
                               GB_EDITOR_FRAME (child2)->priv->source_view,
                               "insert-spaces-instead-of-tabs",
@@ -743,11 +775,25 @@ gb_editor_view_grab_focus (GtkWidget *widget)
     gb_editor_view_set_##name (view, value); \
   }
 
+#define STATE_HANDLER_INT(name) \
+  static void \
+  apply_state_##name (GSimpleAction *action, \
+                      GVariant      *param, \
+                      gpointer       user_data) \
+  { \
+    GbEditorView *view = user_data; \
+    guint value; \
+    g_return_if_fail (GB_IS_EDITOR_VIEW (view)); \
+    value = g_variant_get_int32 (param); \
+    gb_editor_view_set_##name (view, value); \
+  }
+
 STATE_HANDLER_BOOLEAN (auto_indent)
 STATE_HANDLER_BOOLEAN (highlight_current_line)
 STATE_HANDLER_BOOLEAN (show_line_numbers)
 STATE_HANDLER_BOOLEAN (show_right_margin)
 STATE_HANDLER_BOOLEAN (split_enabled)
+STATE_HANDLER_INT     (tab_width)
 STATE_HANDLER_BOOLEAN (use_spaces)
 
 static void
@@ -795,6 +841,10 @@ gb_editor_view_get_property (GObject    *object,
       g_value_set_boolean (value, gb_editor_view_get_split_enabled (self));
       break;
 
+    case PROP_TAB_WIDTH:
+      g_value_set_uint (value, gb_editor_view_get_tab_width (self));
+      break;
+
     case PROP_USE_SPACES:
       g_value_set_boolean (value, gb_editor_view_get_use_spaces (self));
       break;
@@ -836,6 +886,10 @@ gb_editor_view_set_property (GObject      *object,
 
     case PROP_SPLIT_ENABLED:
       gb_editor_view_set_split_enabled (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_TAB_WIDTH:
+      gb_editor_view_set_tab_width (self, g_value_get_uint (value));
       break;
 
     case PROP_USE_SPACES:
@@ -918,6 +972,17 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   g_object_class_install_property (object_class, PROP_SPLIT_ENABLED,
                                    gParamSpecs [PROP_SPLIT_ENABLED]);
 
+  gParamSpecs [PROP_TAB_WIDTH] =
+    g_param_spec_uint ("tab-width",
+                         _("Tab Width"),
+                         _("The width a tab should be drawn as."),
+                         1,
+                         32,
+                         8,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_TAB_WIDTH,
+                                   gParamSpecs [PROP_TAB_WIDTH]);
+
   gParamSpecs [PROP_USE_SPACES] =
     g_param_spec_boolean ("use-spaces",
                          _("Use Spaces"),
@@ -957,6 +1022,7 @@ gb_editor_view_init (GbEditorView *self)
     { "show-line-numbers", NULL, NULL, "false", apply_state_show_line_numbers },
     { "show-right-margin", NULL, NULL, "false", apply_state_show_right_margin },
     { "switch-pane",  gb_editor_view_switch_pane },
+    { "tab-width", NULL, "i", "8", apply_state_tab_width },
     { "toggle-split", NULL, NULL, "false", apply_state_split_enabled },
     { "use-spaces", NULL, NULL, "false", apply_state_use_spaces },
   };
@@ -999,6 +1065,10 @@ gb_editor_view_init (GbEditorView *self)
   g_object_bind_property (self->priv->frame->priv->source_view,
                           "show-right-margin",
                           self, "show-right-margin",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  g_object_bind_property (self->priv->frame->priv->source_view,
+                          "tab-width",
+                          self, "tab-width",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   g_object_bind_property (self->priv->frame->priv->source_view,
                           "insert-spaces-instead-of-tabs",
