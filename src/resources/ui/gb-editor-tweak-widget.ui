@@ -8,77 +8,11 @@
       <object class="GtkBox">
         <property name="visible">true</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">3</property>
-        <child>
-          <object class="GtkModelButton">
-            <property name="visible">true</property>
-            <property name="action_name">editor-view.detect_indent</property>
-            <property name="label" translatable="yes">Auto detect tab width</property>
-            <property name="xalign">0.0</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator">
-            <property name="visible">true</property>
-            <property name="orientation">horizontal</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="visible">true</property>
-            <property name="action_name">editor-view.tab_width</property>
-            <property name="action_target">2</property>
-            <property name="label" translatable="yes">2</property>
-            <property name="xalign">0.0</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="visible">true</property>
-            <property name="action_name">editor-view.tab_width</property>
-            <property name="action_target">3</property>
-            <property name="label" translatable="yes">3</property>
-            <property name="xalign">0.0</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="visible">true</property>
-            <property name="action_name">editor-view.tab_width</property>
-            <property name="action_target">4</property>
-            <property name="label" translatable="yes">4</property>
-            <property name="xalign">0.0</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="visible">true</property>
-            <property name="action_name">editor-view.tab_width</property>
-            <property name="action_target">8</property>
-            <property name="label" translatable="yes">8</property>
-            <property name="xalign">0.0</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator">
-            <property name="visible">true</property>
-            <property name="margin_top">3</property>
-            <property name="margin_bottom">3</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="visible">true</property>
-            <property name="margin_bottom">12</property>
-            <property name="label" translatable="yes">Tabs instead of spaces</property>
-            <property name="action_name">editor-view.tabs_instead_of_spaces</property>
-            <property name="xalign">0.0</property>
-          </object>
-        </child>
         <child>
           <object class="GtkBox">
             <property name="visible">true</property>
             <property name="orientation">vertical</property>
+            <property name="margin_bottom">6</property>
             <style>
               <class name="linked"/>
             </style>
@@ -98,6 +32,87 @@
                     <property name="visible">true</property>
                   </object>
                 </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">true</property>
+            <property name="margin_start">3</property>
+            <property name="margin_end">3</property>
+            <property name="margin_top">10</property>
+            <property name="margin_bottom">6</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Auto Indent</property>
+                <property name="action_name">editor-view.auto-indent</property>
+                <property name="role">check</property>
+                <property name="halign">fill</property>
+                <property name="xalign">0.0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Use spaces</property>
+                <property name="action_name">editor-view.use_spaces</property>
+                <property name="role">check</property>
+                <property name="halign">fill</property>
+                <property name="xalign">0.0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="visible">true</property>
+                <property name="margin_top">3</property>
+                <property name="margin_bottom">3</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">true</property>
+                <property name="action_name">editor-view.detect_indent</property>
+                <property name="label" translatable="yes">Detect tab width</property>
+                <property name="role">check</property>
+                <property name="halign">fill</property>
+                <property name="xalign">0.0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">true</property>
+                <property name="action_name">editor-view.tab_width</property>
+                <property name="action_target">2</property>
+                <property name="label" translatable="yes">2</property>
+                <property name="role">radio</property>
+                <property name="halign">fill</property>
+                <property name="xalign">0.0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">true</property>
+                <property name="action_name">editor-view.tab_width</property>
+                <property name="action_target">4</property>
+                <property name="label" translatable="yes">4</property>
+                <property name="role">radio</property>
+                <property name="halign">fill</property>
+                <property name="xalign">0.0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">true</property>
+                <property name="action_name">editor-view.tab_width</property>
+                <property name="action_target">8</property>
+                <property name="label" translatable="yes">8</property>
+                <property name="role">radio</property>
+                <property name="halign">fill</property>
+                <property name="xalign">0.0</property>
               </object>
             </child>
           </object>
