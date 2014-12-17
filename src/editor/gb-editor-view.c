@@ -51,6 +51,8 @@ struct _GbEditorViewPrivate
   GtkButton       *modified_cancel_button;
   GtkRevealer     *modified_revealer;
   GtkMenuButton   *tweak_button;
+
+  guint            use_spaces : 1;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorView, gb_editor_view, GB_TYPE_DOCUMENT_VIEW)
@@ -59,6 +61,7 @@ enum {
   PROP_0,
   PROP_DOCUMENT,
   PROP_SPLIT_ENABLED,
+  PROP_USE_SPACES,
   LAST_PROP
 };
 
@@ -87,6 +90,26 @@ gb_editor_view_action_set_state (GbEditorView *view,
   group = gtk_widget_get_action_group (GTK_WIDGET (view), "editor-view");
   action = g_action_map_lookup_action (G_ACTION_MAP (group), action_name);
   g_simple_action_set_state (G_SIMPLE_ACTION (action), state);
+}
+
+gboolean
+gb_editor_view_get_use_spaces (GbEditorView *view)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (view), FALSE);
+
+  return view->priv->use_spaces;
+}
+
+void
+gb_editor_view_set_use_spaces (GbEditorView *view,
+                               gboolean      use_spaces)
+{
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+
+  view->priv->use_spaces = use_spaces;
+  gb_editor_view_action_set_state (view, "use-spaces",
+                                   g_variant_new_boolean (use_spaces));
+  g_object_notify_by_pspec (G_OBJECT (view), gParamSpecs [PROP_USE_SPACES]);
 }
 
 static void
@@ -479,6 +502,10 @@ gb_editor_view_toggle_split (GbEditorView *view)
                              "document", view->priv->document,
                              "visible", TRUE,
                              NULL);
+      g_object_bind_property (view, "use-spaces",
+                              GB_EDITOR_FRAME (child2)->priv->source_view,
+                              "insert-spaces-instead-of-tabs",
+                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
       gtk_container_add_with_properties (GTK_CONTAINER (priv->paned), child2,
                                          "shrink", TRUE,
                                          "resize", TRUE,
@@ -573,6 +600,24 @@ apply_state_split (GSimpleAction *action,
 }
 
 static void
+apply_state_spaces (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer       user_data)
+{
+  GbEditorView *view = user_data;
+  gboolean use_spaces;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+
+  use_spaces = g_variant_get_boolean (parameter);
+  gb_editor_view_set_use_spaces (view, use_spaces);
+
+  EXIT;
+}
+
+static void
 gb_editor_view_finalize (GObject *object)
 {
   GbEditorView *view = (GbEditorView *)object;
@@ -600,6 +645,10 @@ gb_editor_view_get_property (GObject    *object,
       g_value_set_boolean (value, gb_editor_view_get_split_enabled (self));
       break;
 
+    case PROP_USE_SPACES:
+      g_value_set_boolean (value, gb_editor_view_get_use_spaces (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -621,6 +670,10 @@ gb_editor_view_set_property (GObject      *object,
 
     case PROP_SPLIT_ENABLED:
       gb_editor_view_set_split_enabled (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_USE_SPACES:
+      gb_editor_view_set_use_spaces (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -663,6 +716,15 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   g_object_class_install_property (object_class, PROP_SPLIT_ENABLED,
                                    gParamSpecs [PROP_SPLIT_ENABLED]);
 
+  gParamSpecs [PROP_USE_SPACES] =
+    g_param_spec_boolean ("use-spaces",
+                         _("Use Spaces"),
+                         _("If spaces should be used instead of tabs."),
+                         FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_USE_SPACES,
+                                   gParamSpecs [PROP_USE_SPACES]);
+
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-view.ui");
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, frame);
   GB_WIDGET_CLASS_BIND (widget_class, GbEditorView, paned);
@@ -686,6 +748,7 @@ gb_editor_view_init (GbEditorView *self)
 {
   const GActionEntry entries[] = {
     { "toggle-split", NULL, NULL, "false", apply_state_split },
+    { "use-spaces", NULL, NULL, "false", apply_state_spaces },
     { "switch-pane",  gb_editor_view_switch_pane },
   };
   GSimpleActionGroup *actions;
@@ -707,4 +770,9 @@ gb_editor_view_init (GbEditorView *self)
                                   G_ACTION_GROUP (actions));
 
   g_clear_object (&actions);
+
+  g_object_bind_property (self->priv->frame->priv->source_view,
+                          "insert-spaces-instead-of-tabs",
+                          self, "use-spaces",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
 }
