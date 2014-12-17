@@ -52,10 +52,13 @@ struct _GbEditorViewClass
   GbDocumentViewClass parent;
 };
 
-GType          gb_editor_view_get_type   (void);
-GtkWidget     *gb_editor_view_new        (GbEditorDocument *document);
-GbEditorFrame *gb_editor_view_get_frame1 (GbEditorView     *view);
-GbEditorFrame *gb_editor_view_get_frame2 (GbEditorView     *view);
+GType          gb_editor_view_get_type          (void);
+GtkWidget     *gb_editor_view_new               (GbEditorDocument *document);
+GbEditorFrame *gb_editor_view_get_frame1        (GbEditorView     *view);
+GbEditorFrame *gb_editor_view_get_frame2        (GbEditorView     *view);
+gboolean       gb_editor_view_get_split_enabled (GbEditorView     *view);
+void           gb_editor_view_set_split_enabled (GbEditorView     *view,
+                                                 gboolean          split_enabled);
 
 G_END_DECLS
 

@@ -58,6 +58,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbEditorView, gb_editor_view, GB_TYPE_DOCUMENT_VIEW)
 enum {
   PROP_0,
   PROP_DOCUMENT,
+  PROP_SPLIT_ENABLED,
   LAST_PROP
 };
 
@@ -469,27 +470,26 @@ gb_editor_view_toggle_split (GbEditorView *view)
   EXIT;
 }
 
-static void
-gb_editor_view_split_button_toggled (GbEditorView    *view,
-                                     GtkToggleButton *button)
+gboolean
+gb_editor_view_get_split_enabled (GbEditorView *view)
 {
-  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (view), FALSE);
 
-  gb_editor_view_toggle_split (view);
+  return !!gb_editor_view_get_frame2 (view);
 }
 
-static void
-gb_editor_view_toggle_split_activate (GSimpleAction *action,
-                                      GVariant      *parameter,
-                                      gpointer       user_data)
+void
+gb_editor_view_set_split_enabled (GbEditorView *view,
+                                  gboolean      split_enabled)
 {
-  GbEditorView *view = user_data;
-  gboolean active;
-
   g_return_if_fail (GB_IS_EDITOR_VIEW (view));
 
-  active = gtk_toggle_button_get_active (view->priv->split_button);
-  gtk_toggle_button_set_active (view->priv->split_button, !active);
+  if (split_enabled == gb_editor_view_get_split_enabled (view))
+    return;
+
+  gb_editor_view_toggle_split (view);
+  g_object_notify_by_pspec (G_OBJECT (view),
+                            gParamSpecs [PROP_SPLIT_ENABLED]);
 }
 
 static void
@@ -555,6 +555,10 @@ gb_editor_view_get_property (GObject    *object,
       g_value_set_object (value, self->priv->document);
       break;
 
+    case PROP_SPLIT_ENABLED:
+      g_value_set_boolean (value, gb_editor_view_get_split_enabled (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -572,6 +576,10 @@ gb_editor_view_set_property (GObject      *object,
     {
     case PROP_DOCUMENT:
       gb_editor_view_set_document (self, g_value_get_object (value));
+      break;
+
+    case PROP_SPLIT_ENABLED:
+      gb_editor_view_set_split_enabled (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -604,6 +612,15 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_DOCUMENT,
                                    gParamSpecs [PROP_DOCUMENT]);
+
+  gParamSpecs [PROP_SPLIT_ENABLED] =
+    g_param_spec_boolean ("split-enabled",
+                         _("Split Enabled"),
+                         _("If the view split is enabled."),
+                         FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SPLIT_ENABLED,
+                                   gParamSpecs [PROP_SPLIT_ENABLED]);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-view.ui");
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, frame);
