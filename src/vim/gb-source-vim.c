@@ -3062,6 +3062,31 @@ gb_source_vim_focus_in_event_cb (GtkTextView *text_view,
 }
 
 static void
+gb_source_vim_maybe_adjust_insert (GbSourceVim *vim)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  if (gtk_text_iter_ends_line (&iter) &&
+      !gtk_text_iter_starts_line (&iter) &&
+      !gtk_text_buffer_get_has_selection (buffer))
+    {
+      /*
+       * Probably want to add a canary here for dealing with reentrancy.
+       */
+      if (gtk_text_iter_backward_char (&iter))
+        gtk_text_buffer_select_range (buffer, &iter, &iter);
+    }
+}
+
+static void
 gb_source_vim_mark_set_cb (GtkTextBuffer *buffer,
                            GtkTextIter   *iter,
                            GtkTextMark   *mark,
@@ -3081,16 +3106,7 @@ gb_source_vim_mark_set_cb (GtkTextBuffer *buffer,
   if (mark != gtk_text_buffer_get_insert (buffer))
     return;
 
-  if (gtk_text_iter_ends_line (iter) &&
-      !gtk_text_iter_starts_line (iter) &&
-      !gtk_text_buffer_get_has_selection (buffer))
-    {
-      /*
-       * Probably want to add a canary here for dealing with reentrancy.
-       */
-      if (gtk_text_iter_backward_char (iter))
-        gtk_text_buffer_select_range (buffer, iter, iter);
-    }
+  gb_source_vim_maybe_adjust_insert (vim);
 }
 
 static void
@@ -3294,8 +3310,10 @@ gb_source_vim_set_enabled (GbSourceVim *vim,
 
   if (enabled)
     {
+
       gb_source_vim_connect (vim);
       priv->enabled = TRUE;
+      gb_source_vim_maybe_adjust_insert (vim);
     }
   else
     {
