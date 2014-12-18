@@ -93,7 +93,7 @@
   <style name="def:comment"                 foreground="blue1"/>
   <style name="def:constant"                foreground="blue2"/>
   <style name="def:doc-comment-element"     italic="true"/>
-  <style name="def:error"                   line-background="pink2" />
+  <style name="def:error"                   line-background="#rgba(235,202,210,.4)" />
   <style name="def:floating-point"          foreground="blue2"/>
   <style name="def:decimal"                 foreground="blue2"/>
   <style name="def:base-n-integer"          foreground="blue2"/>
