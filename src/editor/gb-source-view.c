@@ -1574,10 +1574,12 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
                                 GtkTextViewLayer  layer,
                                 cairo_t          *cr)
 {
-  static GdkRGBA lines = { 0 };
+  static GdkRGBA lines_dark = { 0 };
+  static GdkRGBA lines_light = { 0 };
   GbSourceViewPrivate *priv = view->priv;
   GtkSourceStyleScheme *scheme;
   GtkTextView *text_view = GTK_TEXT_VIEW (view);
+  const gchar *scheme_id;
   GtkTextBuffer *buffer;
 
   /*
@@ -1591,10 +1593,12 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
       (buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view))) &&
       GTK_SOURCE_IS_BUFFER (buffer) &&
       (scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer))) &&
-      g_strcmp0 ("builder", gtk_source_style_scheme_get_id (scheme)) == 0)
+      (scheme_id = gtk_source_style_scheme_get_id (scheme)) &&
+      strncmp ("builder", scheme_id, 7) == 0)
     {
       GdkRectangle clip;
       GdkRectangle vis;
+      GdkRGBA *lines;
       gdouble x;
       gdouble y;
       PangoContext *context;
@@ -1611,12 +1615,16 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
       /* each character becomes 2 stacked boxes. */
       grid_height /= 2;
 
-      if (lines.alpha == 0.0)
-        gdk_rgba_parse (&lines, "rgba(.125,.125,.125,.025)");
+      if (lines_light.alpha == 0.0)
+        gdk_rgba_parse (&lines_light, "rgba(.125,.125,.125,.025)");
+      if (lines_dark.alpha == 0.0)
+        gdk_rgba_parse (&lines_dark, "#32383a");
+
+      lines = g_str_equal ("builder", scheme_id) ? &lines_light : &lines_dark;
 
       cairo_save (cr);
       cairo_set_line_width (cr, 1.0);
-      gdk_cairo_set_source_rgba (cr, &lines);
+      gdk_cairo_set_source_rgba (cr, lines);
       gdk_cairo_get_clip_rectangle (cr, &clip);
       gtk_text_view_get_visible_rect (text_view, &vis);
 
