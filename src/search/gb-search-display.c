@@ -21,17 +21,20 @@
 #include <glib/gi18n.h>
 
 #include "gb-log.h"
+#include "gb-scrolled-window.h"
 #include "gb-search-display.h"
 #include "gb-search-provider.h"
 #include "gb-search-result.h"
+#include "gb-widget.h"
 
 struct _GbSearchDisplayPrivate
 {
   /* References owned by widget */
-  GbSearchContext *context;
+  GbSearchContext  *context;
 
   /* References owned by Gtk template */
-  GtkListBox      *list_box;
+  GtkListBox       *list_box;
+  GbScrolledWindow *scroller;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbSearchDisplay, gb_search_display, GTK_TYPE_BIN)
@@ -369,9 +372,11 @@ gb_search_display_class_init (GbSearchDisplayClass *klass)
                   1,
                   GB_TYPE_SEARCH_RESULT);
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/gb-search-display.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GbSearchDisplay, list_box);
+  GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-search-display.ui");
+  GB_WIDGET_CLASS_BIND (widget_class, GbSearchDisplay, list_box);
+  GB_WIDGET_CLASS_BIND (widget_class, GbSearchDisplay, scroller);
+
+  g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
 }
 
 static void

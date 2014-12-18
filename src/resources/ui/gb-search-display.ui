@@ -3,11 +3,13 @@
   <!-- interface-requires gtk+ 3.14 -->
   <template class="GbSearchDisplay" parent="GtkBin">
     <property name="border_width">10</property>
-    <property name="width_request">800</property>
-    <property name="height_request">600</property>
     <child>
-      <object class="GtkScrolledWindow" id="scroller">
+      <object class="GbScrolledWindow" id="scroller">
         <property name="visible">true</property>
+        <property name="shadow_type">in</property>
+        <property name="min_content_width">800</property>
+        <property name="min_content_height">100</property>
+        <property name="max_content_height">600</property>
         <child>
           <object class="GtkListBox" id="list_box">
             <property name="visible">true</property>
