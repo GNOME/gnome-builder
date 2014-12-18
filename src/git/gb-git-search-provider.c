@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "git-search"
 
 #include <glib/gi18n.h>
+#include <string.h>
 
 #include "fuzzy.h"
 #include "gb-git-search-provider.h"
@@ -135,7 +136,7 @@ gb_git_search_provider_build_file_index (GTask        *task,
 
   entries = ggit_index_get_entries (index);
 
-  fuzzy = fuzzy_new (FALSE);
+  fuzzy = fuzzy_new_with_free_func (FALSE, g_free);
   fuzzy_begin_bulk_insert (fuzzy);
 
   count = ggit_index_entries_size (entries);
@@ -155,7 +156,14 @@ gb_git_search_provider_build_file_index (GTask        *task,
        *   the cost of gunichar most likely.
        */
       if (g_str_is_ascii (path))
-        fuzzy_insert (fuzzy, path, NULL);
+        {
+          const gchar *shortname = strrchr (path, '/');
+
+          if (shortname)
+            fuzzy_insert (fuzzy, shortname, g_strdup (path));
+          else
+            fuzzy_insert (fuzzy, path, g_strdup (path));
+        }
 
       ggit_index_entry_unref (entry);
     }
@@ -287,7 +295,7 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
 
           match = &g_array_index (matches, FuzzyMatch, i);
 
-          parts = split_path (match->key, &shortname);
+          parts = split_path (match->value, &shortname);
           for (j = 0; parts [j]; j++)
             g_string_append_printf (str, " / %s", parts [j]);
 
@@ -296,7 +304,7 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
                                  "visible", TRUE,
                                  "score", match->score,
                                  "repository-name", str->str,
-                                 "path", match->key,
+                                 "path", match->value,
                                  "display-name", shortname,
                                  NULL);
           list = g_list_prepend (list, widget);
