@@ -127,12 +127,21 @@ gb_scrolled_window_get_preferred_height (GtkWidget *widget,
       if (self->priv->max_content_height > -1)
         {
           GtkWidget *child;
+          GtkStyleContext *style;
+          GtkBorder border;
           gint child_min_height;
           gint child_nat_height;
+          gint additional;
 
           child = gtk_bin_get_child (GTK_BIN (widget));
           if (!child)
             return;
+
+          style = gtk_widget_get_style_context (widget);
+          gtk_style_context_get_border (style,
+                                        gtk_widget_get_state_flags (widget),
+                                        &border);
+          additional = border.top + border.bottom;
 
           gtk_widget_get_preferred_height (child, &child_min_height,
                                            &child_nat_height);
@@ -140,7 +149,7 @@ gb_scrolled_window_get_preferred_height (GtkWidget *widget,
           if ((child_nat_height > *natural_height) &&
               (self->priv->max_content_height > *natural_height))
             *natural_height = MIN (self->priv->max_content_height,
-                                   child_nat_height);
+                                   child_nat_height) + additional;
         }
     }
 }
@@ -162,12 +171,21 @@ gb_scrolled_window_get_preferred_width (GtkWidget *widget,
       if (self->priv->max_content_width > -1)
         {
           GtkWidget *child;
+          GtkStyleContext *style;
+          GtkBorder border;
           gint child_min_width;
           gint child_nat_width;
+          gint additional;
 
           child = gtk_bin_get_child (GTK_BIN (widget));
           if (!child)
             return;
+
+          style = gtk_widget_get_style_context (widget);
+          gtk_style_context_get_border (style,
+                                        gtk_widget_get_state_flags (widget),
+                                        &border);
+          additional = border.left = border.right;
 
           gtk_widget_get_preferred_width (child, &child_min_width,
                                            &child_nat_width);
@@ -175,7 +193,7 @@ gb_scrolled_window_get_preferred_width (GtkWidget *widget,
           if ((child_nat_width > *natural_width) &&
               (self->priv->max_content_width > *natural_width))
             *natural_width = MIN (self->priv->max_content_width,
-                                   child_nat_width);
+                                   child_nat_width) + additional;
         }
     }
 }
