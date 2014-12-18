@@ -1098,10 +1098,7 @@ gb_source_view_reload_auto_indenter (GbSourceView *view)
    * Fallback to built in auto indenter if necessary.
    */
   if (view->priv->auto_indent && !view->priv->auto_indenter)
-    {
-      g_print ("Falling back to basic auto indent.\n");
-      gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (view), TRUE);
-    }
+    gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (view), TRUE);
 }
 
 static void
