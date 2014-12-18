@@ -60,6 +60,7 @@ GtkWidget       *gb_search_display_new         (void);
 GbSearchContext *gb_search_display_get_context (GbSearchDisplay *display);
 void             gb_search_display_set_context (GbSearchDisplay *display,
                                                 GbSearchContext *context);
+void             gb_search_display_activate    (GbSearchDisplay *display);
 
 G_END_DECLS
 

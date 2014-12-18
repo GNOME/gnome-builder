@@ -143,6 +143,18 @@ gb_search_box_entry_focus_in (GbSearchBox   *box,
 }
 
 static void
+gb_search_box_entry_activate (GbSearchBox    *box,
+                              GtkSearchEntry *entry)
+{
+  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+  g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
+
+  g_print ("activate!\n");
+
+  gb_search_display_activate (box->priv->display);
+}
+
+static void
 gb_search_box_entry_changed (GbSearchBox    *box,
                              GtkSearchEntry *entry)
 {
@@ -317,6 +329,11 @@ gb_search_box_constructed (GObject *object)
   g_signal_connect_object (priv->entry,
                            "focus-in-event",
                            G_CALLBACK (gb_search_box_entry_focus_in),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->entry,
+                           "activate",
+                           G_CALLBACK (gb_search_box_entry_activate),
                            self,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (priv->entry,

@@ -202,6 +202,28 @@ gb_search_display_row_activated (GbSearchDisplay *display,
     gb_search_display_emit_result_activated (display, GB_SEARCH_RESULT (child));
 }
 
+void
+gb_search_display_activate (GbSearchDisplay *display)
+{
+  GtkListBoxRow *row;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+
+  row = gtk_list_box_get_selected_row (display->priv->list_box);
+
+  /*
+   * WORKAROUND:
+   *
+   * Workaround since get_index() does not take into account sorts and
+   * a y of 0 doesn't currently work.
+   */
+  if (!row)
+    row = gtk_list_box_get_row_at_y (display->priv->list_box, 5);
+
+  if (row)
+    gb_search_display_row_activated (display, row, display->priv->list_box);
+}
+
 static gint
 gb_search_display_sort_cb (GtkListBoxRow *row1,
                            GtkListBoxRow *row2,
