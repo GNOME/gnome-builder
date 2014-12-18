@@ -18,7 +18,7 @@
     border-style: solid;
     box-shadow: inset 1px 1px @floating_bar_inset_color, -1px -1px @floating_bar_inset_color;
 
-    font-size: 0.9em;
+    //font-size: 0.9em;
 }
 .floating-bar.top {
     border-top-width: 0;
