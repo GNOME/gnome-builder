@@ -187,6 +187,30 @@ remove_spaces (const gchar *text)
   return g_string_free (str, FALSE);
 }
 
+static gchar **
+split_path (const gchar  *path,
+            gchar       **shortname)
+{
+  gchar **parts;
+  gsize len;
+
+  g_return_val_if_fail (path, NULL);
+  g_return_val_if_fail (shortname, NULL);
+
+  *shortname = NULL;
+
+  parts = g_strsplit (path, "/", 0);
+  len = g_strv_length (parts);
+
+  if (len)
+    {
+      *shortname = parts [len-1];
+      parts [len-1] = 0;
+    }
+
+  return parts;
+}
+
 static void
 gb_git_search_provider_populate (GbSearchProvider *provider,
                                  GbSearchContext  *context,
@@ -201,30 +225,85 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
 
   if (self->priv->file_index)
     {
+      GString *str = g_string_new (NULL);
       const gchar *search_text;
       gchar *delimited;
       GArray *matches;
       guint i;
+      guint truncate_len;
 
       search_text = gb_search_context_get_search_text (context);
       delimited = remove_spaces (search_text);
       matches = fuzzy_match (self->priv->file_index, delimited,
                              GB_GIT_SEARCH_PROVIDER_MAX_MATCHES);
 
+      if (self->priv->repository)
+        {
+          GgitRef *ref;
+          GFile *repo_dir = NULL;
+
+          repo_dir = ggit_repository_get_location (self->priv->repository);
+          if (repo_dir)
+            {
+              gchar *repo_name;
+
+              repo_name = g_file_get_basename (repo_dir);
+
+              if (g_strcmp0 (repo_name, ".git") == 0)
+                {
+                  GFile *tmp;
+
+                  tmp = repo_dir;
+                  repo_dir = g_file_get_parent (repo_dir);
+                  g_clear_object (&tmp);
+
+                  repo_name = g_file_get_basename (repo_dir);
+                }
+
+              g_string_append (str, repo_name);
+
+              g_clear_object (&repo_dir);
+              g_free (repo_name);
+            }
+
+          ref = ggit_repository_get_head (self->priv->repository, NULL);
+          if (ref)
+            {
+              g_string_append_printf (str, "[%s]",
+                                      ggit_ref_get_shorthand (ref));
+              g_clear_object (&ref);
+            }
+        }
+
+      truncate_len = str->len;
+
       for (i = 0; i < matches->len; i++)
         {
           FuzzyMatch *match;
           GtkWidget *widget;
+          gchar *shortname = NULL;
+          gchar **parts;
+          guint j;
 
           match = &g_array_index (matches, FuzzyMatch, i);
+
+          parts = split_path (match->key, &shortname);
+          for (j = 0; parts [j]; j++)
+            g_string_append_printf (str, " / %s", parts [j]);
 
           /* TODO: Make a git file search result */
           widget = g_object_new (GB_TYPE_GIT_SEARCH_RESULT,
                                  "visible", TRUE,
                                  "score", match->score,
+                                 "repository-name", str->str,
                                  "path", match->key,
+                                 "display-name", shortname,
                                  NULL);
           list = g_list_prepend (list, widget);
+
+          g_free (shortname);
+          g_strfreev (parts);
+          g_string_truncate (str, truncate_len);
         }
 
       list = g_list_reverse (list);
@@ -232,6 +311,7 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
 
       g_array_unref (matches);
       g_free (delimited);
+      g_string_free (str, TRUE);
     }
 }
 

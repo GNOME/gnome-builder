@@ -48,8 +48,7 @@ struct _GbGitSearchResultClass
   GbSearchResultClass parent;
 };
 
-GType      gb_git_search_result_get_type (void);
-GtkWidget *gb_git_search_result_new      (const gchar *path);
+GType gb_git_search_result_get_type (void);
 
 G_END_DECLS
 

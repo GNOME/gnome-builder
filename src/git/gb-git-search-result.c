@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <libgit2-glib/ggit.h>
 
 #include "gb-document-manager.h"
 #include "gb-editor-document.h"
@@ -30,6 +31,7 @@ struct _GbGitSearchResultPrivate
   gchar *path;
 
   GtkLabel *label;
+  GtkLabel *repository;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbGitSearchResult, gb_git_search_result,
@@ -37,16 +39,36 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbGitSearchResult, gb_git_search_result,
 
 enum {
   PROP_0,
+  PROP_DISPLAY_NAME,
   PROP_PATH,
+  PROP_REPOSITORY_NAME,
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-GtkWidget *
-gb_git_search_result_new (const gchar *path)
+static void
+gb_git_search_result_set_repository_name (GbGitSearchResult *result,
+                                          const gchar       *repository_name)
 {
-  return g_object_new (GB_TYPE_GIT_SEARCH_RESULT, "path", path, NULL);
+  g_return_if_fail (GB_IS_GIT_SEARCH_RESULT (result));
+
+  if (!repository_name)
+    repository_name = "";
+
+  gtk_label_set_label (result->priv->repository, repository_name);
+}
+
+static void
+gb_git_search_result_set_display_name (GbGitSearchResult *result,
+                                       const gchar       *display_name)
+{
+  g_return_if_fail (GB_IS_GIT_SEARCH_RESULT (result));
+
+  if (!display_name)
+    display_name = "";
+
+  gtk_label_set_label (result->priv->label, display_name);
 }
 
 const gchar *
@@ -67,7 +89,6 @@ gb_git_search_result_set_path (GbGitSearchResult *result,
     {
       g_free (result->priv->path);
       result->priv->path = g_strdup (path);
-      g_object_notify_by_pspec (G_OBJECT (result), gParamSpecs [PROP_PATH]);
     }
 }
 
@@ -89,17 +110,6 @@ gb_git_search_result_activate (GbSearchResult *result)
   file = g_file_new_for_path (self->priv->path);
   gb_editor_workspace_open (GB_EDITOR_WORKSPACE (workspace), file);
   g_clear_object (&file);
-}
-
-static void
-gb_git_search_result_constructed (GObject *object)
-{
-  GbGitSearchResult *self = (GbGitSearchResult *)object;
-
-  G_OBJECT_CLASS (gb_git_search_result_parent_class)->constructed (object);
-
-  g_object_bind_property (self, "path", self->priv->label, "label",
-                          G_BINDING_SYNC_CREATE);
 }
 
 static void
@@ -141,8 +151,17 @@ gb_git_search_result_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_DISPLAY_NAME:
+      gb_git_search_result_set_display_name (self, g_value_get_string (value));
+      break;
+
     case PROP_PATH:
       gb_git_search_result_set_path (self, g_value_get_string (value));
+      break;
+
+    case PROP_REPOSITORY_NAME:
+      gb_git_search_result_set_repository_name (self,
+                                                g_value_get_string (value));
       break;
 
     default:
@@ -156,12 +175,20 @@ gb_git_search_result_class_init (GbGitSearchResultClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GbSearchResultClass *result_class = GB_SEARCH_RESULT_CLASS (klass);
 
-  object_class->constructed = gb_git_search_result_constructed;
   object_class->finalize = gb_git_search_result_finalize;
   object_class->get_property = gb_git_search_result_get_property;
   object_class->set_property = gb_git_search_result_set_property;
 
   result_class->activate = gb_git_search_result_activate;
+
+  gParamSpecs [PROP_DISPLAY_NAME] =
+    g_param_spec_string ("display-name",
+                         _("Display Name"),
+                         _("The display name for the file."),
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_DISPLAY_NAME,
+                                   gParamSpecs [PROP_DISPLAY_NAME]);
 
   gParamSpecs [PROP_PATH] =
     g_param_spec_string ("path",
@@ -172,13 +199,26 @@ gb_git_search_result_class_init (GbGitSearchResultClass *klass)
   g_object_class_install_property (object_class, PROP_PATH,
                                    gParamSpecs [PROP_PATH]);
 
+  gParamSpecs [PROP_REPOSITORY_NAME] =
+    g_param_spec_string ("repository-name",
+                         _("Repository Name"),
+                         _("The name of the repository, taken from basename."),
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_REPOSITORY_NAME,
+                                   gParamSpecs [PROP_REPOSITORY_NAME]);
+
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-git-search-result.ui");
   GB_WIDGET_CLASS_BIND (klass, GbGitSearchResult, label);
+  GB_WIDGET_CLASS_BIND (klass, GbGitSearchResult, repository);
 }
 
 static void
 gb_git_search_result_init (GbGitSearchResult *self)
 {
   self->priv = gb_git_search_result_get_instance_private (self);
+
   gtk_widget_init_template (GTK_WIDGET (self));
 }
