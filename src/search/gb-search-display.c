@@ -73,9 +73,7 @@ gb_search_display_results_added (GbSearchDisplay  *display,
   g_return_if_fail (GB_IS_SEARCH_PROVIDER (provider));
 
   for (iter = results; iter; iter = iter->next)
-    {
-      gtk_list_box_insert (display->priv->list_box, iter->data, -1);
-    }
+    gtk_list_box_insert (display->priv->list_box, iter->data, -1);
 
   gtk_list_box_invalidate_sort (display->priv->list_box);
 
