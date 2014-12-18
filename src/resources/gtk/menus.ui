@@ -93,10 +93,6 @@
         <attribute name="label" translatable="yes">_Close All</attribute>
         <attribute name="action">workbench.close-all</attribute>
       </item>
-      <item>
-        <attribute name="label" translatable="yes">_Close</attribute>
-        <attribute name="action">workbench.close-tab</attribute>
-      </item>
     </section>
   </menu>
   <menu id="gb-document-stack-menu">
