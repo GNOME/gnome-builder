@@ -15,3 +15,8 @@ CLEANFILES += $(service_DATA)
 styledir = $(datadir)/gtksourceview-3.0/styles/
 style_DATA = data/styles/builder.xml
 EXTRA_DIST += $(style_DATA)
+
+data/org.gnome.Builder.service: data/org.gnome.Builder.service.in
+	$(AM_V_GEN)	\
+		[ -d $(@D) ] || $(mkdir_p) $(@D) ; \
+		sed -e "s|\@bindir\@|$(bindir)|" $< > $@.tmp && mv $@.tmp $@
