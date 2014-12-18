@@ -13,6 +13,12 @@
         <child>
           <object class="GtkListBox" id="list_box">
             <property name="visible">true</property>
+            <child type="placeholder">
+              <object class="GtkLabel">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Use the entry above to search your project.</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
