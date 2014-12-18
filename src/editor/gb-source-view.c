@@ -1071,6 +1071,11 @@ gb_source_view_reload_auto_indenter (GbSourceView *view)
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
   language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
 
+  /*
+   * Disable default auto indenter.
+   */
+  gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (view), FALSE);
+
   if (language)
     {
       const gchar *lang_id;
@@ -1088,6 +1093,15 @@ gb_source_view_reload_auto_indenter (GbSourceView *view)
   g_clear_object (&view->priv->auto_indenter);
 
   view->priv->auto_indenter = auto_indenter;
+
+  /*
+   * Fallback to built in auto indenter if necessary.
+   */
+  if (view->priv->auto_indent && !view->priv->auto_indenter)
+    {
+      g_print ("Falling back to basic auto indent.\n");
+      gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (view), TRUE);
+    }
 }
 
 static void
@@ -1869,6 +1883,7 @@ gb_source_view_set_property (GObject      *object,
     {
     case PROP_AUTO_INDENT:
       view->priv->auto_indent = g_value_get_boolean (value);
+      gb_source_view_reload_auto_indenter (view);
       break;
 
     case PROP_ENABLE_WORD_COMPLETION:
