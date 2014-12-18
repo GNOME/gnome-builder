@@ -71,8 +71,8 @@ enum {
   LAST_SIGNAL
 };
 
-static void
-gb_editor_document_init_document (GbDocumentInterface *iface);
+static void gb_editor_document_init_document (GbDocumentInterface *iface);
+static void gb_editor_document_update_title  (GbEditorDocument *document);
 
 G_DEFINE_TYPE_EXTENDED (GbEditorDocument,
                         gb_editor_document,
@@ -149,6 +149,7 @@ gb_editor_document_set_read_only (GbEditorDocument *document,
     {
       document->priv->read_only = read_only;
       g_object_notify (G_OBJECT (document), "read-only");
+      gb_editor_document_update_title (document);
     }
 
   EXIT;
@@ -653,7 +654,16 @@ gb_editor_document_update_title (GbEditorDocument *document)
   location = gtk_source_file_get_location (priv->file);
 
   if (location)
-    priv->title = g_file_get_basename (location);
+    {
+      priv->title = g_file_get_basename (location);
+
+      if (document->priv->read_only)
+        {
+          gchar *tmp = priv->title;
+          priv->title = g_strdup_printf (_("%s (Read Only)"), tmp);
+          g_free (tmp);
+        }
+    }
   else
     priv->title = g_strdup_printf (_("untitled document %u"), priv->doc_seq_id);
 
