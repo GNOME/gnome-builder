@@ -818,6 +818,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-workbench.ui");
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, command_bar);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, credits);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, editor);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, gear_menu_button);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, header_bar);
