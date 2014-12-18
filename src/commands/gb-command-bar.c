@@ -79,6 +79,9 @@ gb_command_bar_hide (GbCommandBar *bar)
 
   g_return_if_fail (GB_IS_COMMAND_BAR (bar));
 
+  if (!gtk_revealer_get_reveal_child (GTK_REVEALER (bar)))
+    return;
+
   gtk_revealer_set_reveal_child (GTK_REVEALER (bar), FALSE);
 
   workbench = gb_widget_get_workbench (GTK_WIDGET (bar));
@@ -117,6 +120,9 @@ gb_command_bar_show (GbCommandBar *bar)
   GtkWidget *focus;
 
   g_return_if_fail (GB_IS_COMMAND_BAR (bar));
+
+  if (gtk_revealer_get_reveal_child (GTK_REVEALER (bar)))
+    return;
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (bar));
   focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
