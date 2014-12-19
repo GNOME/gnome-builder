@@ -22,6 +22,25 @@ language if it makes sense.
 
 ----
 
+Builder is developed in conjunction with GNOME releases. This means that we
+often contribute to, and depend on, features being developed in other GNOME
+modules.
+
+Since there has not yet been a stable release of Builder, the easiest way to
+get started is to use the development tool jhbuild to install from source.
+
+  git clone git://git.gnome.org/jhbuild.git
+  cd jhbuild
+  ./autogen.sh
+  make
+  make install
+  jhbuild build gnome-builder
+  jhbuild run gnome-builder
+
+We hope to have VM images that can be used for testing in the near future.
+
+----
+
 Builder is licensed under the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or (at
 your option) any later version.
