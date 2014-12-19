@@ -53,6 +53,7 @@ struct _GbEditorDocumentClass
   void (*cursor_moved)  (GbEditorDocument *document);
   void (*file_mark_set) (GbEditorDocument *document,
                          GtkTextIter      *location);
+  void (*saved)         (GbEditorDocument *document);
 };
 
 GbEditorDocument      *gb_editor_document_new                          (void);

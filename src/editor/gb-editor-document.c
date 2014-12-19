@@ -68,6 +68,7 @@ enum {
 enum {
   CURSOR_MOVED,
   FILE_MARK_SET,
+  SAVED,
   LAST_SIGNAL
 };
 
@@ -870,6 +871,8 @@ gb_editor_document_save_cb (GObject      *object,
 
   g_task_return_boolean (task, TRUE);
 
+  g_signal_emit (document, gSignals [SAVED], 0);
+
 cleanup:
   g_object_unref (task);
 
@@ -1512,6 +1515,16 @@ gb_editor_document_class_init (GbEditorDocumentClass *klass)
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_TEXT_ITER);
+
+  gSignals [SAVED] =
+    g_signal_new ("saved",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbEditorDocumentClass, saved),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  0);
 }
 
 static void

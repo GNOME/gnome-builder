@@ -418,6 +418,20 @@ gb_editor_frame_on_file_mark_set (GbEditorFrame *frame,
                                    location, 0.0, TRUE, 0.5, 0.5);
 }
 
+static void
+gb_editor_frame_document_saved (GbEditorFrame    *frame,
+                                GbEditorDocument *document)
+{
+  GdkWindow *window;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+
+  window = gtk_text_view_get_window (GTK_TEXT_VIEW (frame->priv->source_view),
+                                     GTK_TEXT_WINDOW_WIDGET);
+  gdk_window_invalidate_rect (window, NULL, TRUE);
+}
+
 /**
  * gb_editor_frame_connect:
  *
@@ -448,6 +462,17 @@ gb_editor_frame_connect (GbEditorFrame    *frame,
   priv->document = g_object_ref (document);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (priv->source_view),
                             GTK_TEXT_BUFFER (priv->document));
+
+  /*
+   * Look the saved signal so that we can invalidate the window afterwards.
+   * This could happen since gutter content could change (like if it is a
+   * new file in a git repo).
+   */
+  g_signal_connect_object (priv->document,
+                           "saved",
+                           G_CALLBACK (gb_editor_frame_document_saved),
+                           frame,
+                           G_CONNECT_SWAPPED);
 
   /*
    * Connect change monitor to gutter.
