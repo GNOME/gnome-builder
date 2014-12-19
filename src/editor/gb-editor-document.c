@@ -1316,6 +1316,12 @@ gb_editor_document_finalize (GObject *object)
 
   ENTRY;
 
+  if (priv->doc_seq_id)
+    {
+      gb_doc_seq_release (priv->doc_seq_id);
+      priv->doc_seq_id = 0;
+    }
+
   g_clear_object (&priv->file);
   g_clear_object (&priv->change_monitor);
   g_clear_object (&priv->code_assistant);
