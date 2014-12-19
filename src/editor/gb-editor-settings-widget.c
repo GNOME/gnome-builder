@@ -29,6 +29,7 @@ struct _GbEditorSettingsWidgetPrivate
   GtkCheckButton *highlight_current_line;
   GtkCheckButton *highlight_matching_brackets;
   GtkCheckButton *insert_spaces_instead_of_tabs;
+  GtkCheckButton *overwrite_braces;
   GtkCheckButton *show_line_marks;
   GtkCheckButton *show_line_numbers;
   GtkCheckButton *show_right_margin;
@@ -93,6 +94,9 @@ gb_editor_settings_widget_set_language (GbEditorSettingsWidget *widget,
                        G_SETTINGS_BIND_DEFAULT);
       g_settings_bind (priv->settings, "insert-spaces-instead-of-tabs",
                        priv->insert_spaces_instead_of_tabs, "active",
+                       G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (priv->settings, "overwrite-braces",
+                       priv->overwrite_braces, "active",
                        G_SETTINGS_BIND_DEFAULT);
       g_settings_bind (priv->settings, "show-line-marks",
                        priv->show_line_marks, "active",
@@ -187,6 +191,7 @@ gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, highlight_matching_brackets);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, insert_spaces_instead_of_tabs);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, right_margin_position);
+  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, overwrite_braces);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, show_line_marks);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, show_line_numbers);
   gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, show_right_margin);
