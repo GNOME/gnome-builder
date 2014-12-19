@@ -1268,63 +1268,70 @@ gb_source_view_notify_buffer (GObject    *object,
     }
 }
 
-static gboolean
+static void
 gb_source_view_maybe_overwrite (GbSourceView *view,
                                 GdkEventKey  *event)
 {
-  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), FALSE);
-  g_return_val_if_fail (event, FALSE);
+  GtkTextMark *mark;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  gunichar ch;
+  gboolean ignore = FALSE;
 
-  if (view->priv->overwrite_braces)
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+  g_return_if_fail (event);
+
+  /*
+   * Some auto-indenters will perform triggers on certain key-press that we
+   * would hijack by otherwise "doing nothing" during this key-press. So to
+   * avoid that, we actually delete the previous value and then allow this
+   * key-press event to continue.
+   */
+
+  if (!view->priv->overwrite_braces)
+    return;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  mark = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+
+  ch = gtk_text_iter_get_char (&iter);
+
+  switch (event->keyval)
     {
-      GtkTextMark *mark;
-      GtkTextBuffer *buffer;
-      GtkTextIter iter;
-      gunichar ch;
-      gboolean ignore = FALSE;
+    case GDK_KEY_parenright:
+      ignore = (ch == ')');
+      break;
 
-      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-      mark = gtk_text_buffer_get_insert (buffer);
-      gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+    case GDK_KEY_bracketright:
+      ignore = (ch == ']');
+      break;
 
-      ch = gtk_text_iter_get_char (&iter);
+    case GDK_KEY_braceright:
+      ignore = (ch == '}');
+      break;
 
-      switch (event->keyval)
-        {
-        case GDK_KEY_parenright:
-          ignore = (ch == ')');
-          break;
+    case GDK_KEY_quotedbl:
+      ignore = (ch == '"');
+      break;
 
-        case GDK_KEY_bracketright:
-          ignore = (ch == ']');
-          break;
+    case GDK_KEY_quoteright:
+      ignore = (ch == '\'');
+      break;
 
-        case GDK_KEY_braceright:
-          ignore = (ch == '}');
-          break;
-
-        case GDK_KEY_quotedbl:
-          ignore = (ch == '"');
-          break;
-
-        case GDK_KEY_quoteright:
-          ignore = (ch == '\'');
-          break;
-
-        default:
-          break;
-        }
-
-      if (ignore && !gtk_text_buffer_get_has_selection (buffer))
-        {
-          if (!gtk_text_iter_forward_char (&iter))
-            gtk_text_buffer_get_end_iter (buffer, &iter);
-          gtk_text_buffer_select_range (buffer, &iter, &iter);
-          return TRUE;
-        }
+    default:
+      break;
     }
 
-  return FALSE;
+  if (ignore && !gtk_text_buffer_get_has_selection (buffer))
+    {
+      GtkTextIter next = iter;
+
+      if (!gtk_text_iter_forward_char (&next))
+        gtk_text_buffer_get_end_iter (buffer, &next);
+
+      gtk_text_buffer_select_range (buffer, &iter, &next);
+    }
 }
 
 static gboolean
@@ -1557,11 +1564,11 @@ gb_source_view_key_press_event (GtkWidget   *widget,
       return TRUE;
 
   /*
-   * Possibly overwrite the next character if the keypress keycode matches
-   * the next bracket/brace/paren/quotation.
+   * If we are going to insert the same character as the next character in the
+   * buffer, we may want to remove it first. This allows us to still trigger
+   * the auto-indent engine (instead of just short-circuiting the key-press).
    */
-  if (gb_source_view_maybe_overwrite (view, event))
-    return TRUE;
+  gb_source_view_maybe_overwrite (view, event);
 
   /*
    * If we are backspacing, and the next character is the matching brace,
