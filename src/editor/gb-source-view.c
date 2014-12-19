@@ -1328,13 +1328,38 @@ gb_source_view_maybe_overwrite (GbSourceView *view,
 }
 
 static gboolean
+is_closing_char (gunichar ch)
+{
+  switch (ch)
+    {
+    case '}':
+    case ')':
+    case '"':
+    case '\'':
+    case ']':
+      return TRUE;
+
+    default:
+      return FALSE;
+    }
+}
+
+static gboolean
 gb_source_view_maybe_insert_match (GbSourceView *view,
                                    GdkEventKey  *event)
 {
   GtkTextIter iter;
+  GtkTextIter next_iter;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
+  gunichar next_ch = 0;
   gchar ch = 0;
+
+  /*
+   * TODO: I think we should put this into a base class for auto
+   *       indenters. It would make some things a lot more convenient, like
+   *       changing which characters we won't add matching characters for.
+   */
 
   g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), FALSE);
   g_return_val_if_fail (event, FALSE);
@@ -1360,19 +1385,40 @@ gb_source_view_maybe_insert_match (GbSourceView *view,
       ch = '"';
       break;
 
+#if 0
+    /*
+     * TODO: We should avoid this when we are in comments, etc. That will
+     *       require some communication with the syntax engine.
+     */
     case GDK_KEY_quoteleft:
     case GDK_KEY_quoteright:
       ch = '\'';
       break;
+#endif
 
     default:
-      break;
+      return FALSE;
     }
 
-  if (ch)
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  next_ch = gtk_text_iter_get_char (&iter);
+
+  /*
+   * Insert the match if one of the following is true:
+   *
+   *  - We are at EOF
+   *  - The next character is whitespace
+   *  - The next character is a closing brace.
+   */
+
+  next_iter = iter;
+  if (gtk_text_iter_forward_char (&next_iter))
+    next_ch = gtk_text_iter_get_char (&next_iter);
+
+  if (!next_ch || g_unichar_isspace (next_ch) || is_closing_char (next_ch))
     {
-      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-      insert = gtk_text_buffer_get_insert (buffer);
       gtk_text_buffer_insert_at_cursor (buffer, &ch, 1);
       gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
       gtk_text_iter_backward_char (&iter);
