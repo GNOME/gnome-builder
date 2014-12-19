@@ -11,6 +11,7 @@ nobase_icon_DATA = \
 	hicolor/32x32/apps/builder.png \
 	hicolor/48x48/apps/builder.png \
 	hicolor/24x24/apps/builder.png \
+	hicolor/scalable/actions/builder-split-tab-symbolic.svg \
 	hicolor/scalable/apps/builder-documentation-symbolic.svg \
 	hicolor/scalable/apps/builder-editor-symbolic.svg \
 	hicolor/scalable/autocomplete/lang-enum-value-symbolic.svg \
