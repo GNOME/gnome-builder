@@ -116,17 +116,17 @@ GbPreferencesPageLanguage GtkScrolledWindow {
 /*
  * Command Bar styling.
  */
-GbCommandBar GtkBox {
+GtkBox.gb-command-bar-box {
     border: none;
     background-image: linear-gradient(to bottom, #2e3436, #555753 10%);
     box-shadow: inset 0px 3px 6px #2e3436;
 }
 
-GbCommandBar GtkLabel {
+GtkBox.gb-command-bar-box GtkLabel {
     color: #eeeeec;
 }
 
-GbCommandBar GtkEntry {
+GtkEntry.gb-command-bar-entry {
     font-family: Monospace;
     background-image: none;
     padding: 6px 6px 6px 6px;
