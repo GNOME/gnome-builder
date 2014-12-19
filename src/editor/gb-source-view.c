@@ -67,6 +67,7 @@ struct _GbSourceViewPrivate
 
   guint                        auto_indent : 1;
   guint                        enable_word_completion : 1;
+  guint                        insert_matching_brace : 1;
   guint                        show_shadow : 1;
   guint                        overwrite_braces : 1;
 };
@@ -83,6 +84,7 @@ enum {
   PROP_AUTO_INDENT,
   PROP_ENABLE_WORD_COMPLETION,
   PROP_FONT_NAME,
+  PROP_INSERT_MATCHING_BRACE,
   PROP_OVERWRITE_BRACES,
   PROP_SEARCH_HIGHLIGHTER,
   PROP_SHOW_SHADOW,
@@ -109,6 +111,28 @@ gb_source_view_get_vim (GbSourceView *view)
   g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), NULL);
 
   return view->priv->vim;
+}
+
+gboolean
+gb_source_view_get_insert_matching_brace (GbSourceView *view)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), FALSE);
+
+  return view->priv->insert_matching_brace;
+}
+
+void
+gb_source_view_set_insert_matching_brace (GbSourceView *view,
+                                          gboolean      insert_matching_brace)
+{
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  if (view->priv->insert_matching_brace != insert_matching_brace)
+    {
+      view->priv->insert_matching_brace = insert_matching_brace;
+      g_object_notify_by_pspec (G_OBJECT (view),
+                                gParamSpecs [PROP_INSERT_MATCHING_BRACE]);
+    }
 }
 
 gboolean
@@ -237,6 +261,9 @@ gb_source_view_connect_settings (GbSourceView *view)
                        G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "highlight-matching-brackets",
                        buffer, "highlight-matching-brackets",
+                       G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "insert-matching-brace",
+                       view, "insert-matching-brace",
                        G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "insert-spaces-instead-of-tabs",
                        view, "insert-spaces-instead-of-tabs",
@@ -1301,6 +1328,63 @@ gb_source_view_maybe_overwrite (GbSourceView *view,
 }
 
 static gboolean
+gb_source_view_maybe_insert_match (GbSourceView *view,
+                                   GdkEventKey  *event)
+{
+  GtkTextIter iter;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  gchar ch = 0;
+
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), FALSE);
+  g_return_val_if_fail (event, FALSE);
+
+  if (!view->priv->insert_matching_brace)
+    return FALSE;
+
+  switch (event->keyval)
+    {
+    case GDK_KEY_braceleft:
+      ch = '}';
+      break;
+
+    case GDK_KEY_parenleft:
+      ch = ')';
+      break;
+
+    case GDK_KEY_bracketleft:
+      ch = ']';
+      break;
+
+    case GDK_KEY_quotedbl:
+      ch = '"';
+      break;
+
+    case GDK_KEY_quoteleft:
+    case GDK_KEY_quoteright:
+      ch = '\'';
+      break;
+
+    default:
+      break;
+    }
+
+  if (ch)
+    {
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+      insert = gtk_text_buffer_get_insert (buffer);
+      gtk_text_buffer_insert_at_cursor (buffer, &ch, 1);
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+      gtk_text_iter_backward_char (&iter);
+      gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gb_source_view_key_press_event (GtkWidget   *widget,
                                 GdkEventKey *event)
 {
@@ -1449,6 +1533,9 @@ gb_source_view_key_press_event (GtkWidget   *widget,
     }
 
   ret = GTK_WIDGET_CLASS (gb_source_view_parent_class)->key_press_event (widget, event);
+
+  if (ret)
+    gb_source_view_maybe_insert_match (view, event);
 
   return ret;
 }
@@ -1961,6 +2048,11 @@ gb_source_view_get_property (GObject    *object,
                            gb_source_view_get_enable_word_completion (view));
       break;
 
+    case PROP_INSERT_MATCHING_BRACE:
+      g_value_set_boolean (value,
+                           gb_source_view_get_insert_matching_brace (view));
+      break;
+
     case PROP_OVERWRITE_BRACES:
       g_value_set_boolean (value,
                            gb_source_view_get_overwrite_braces (view));
@@ -2001,6 +2093,11 @@ gb_source_view_set_property (GObject      *object,
 
     case PROP_FONT_NAME:
       gb_source_view_set_font_name (view, g_value_get_string (value));
+      break;
+
+    case PROP_INSERT_MATCHING_BRACE:
+      gb_source_view_set_insert_matching_brace (view,
+                                                g_value_get_boolean (value));
       break;
 
     case PROP_OVERWRITE_BRACES:
@@ -2070,6 +2167,15 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FONT_NAME,
                                    gParamSpecs [PROP_FONT_NAME]);
+
+  gParamSpecs [PROP_INSERT_MATCHING_BRACE] =
+    g_param_spec_boolean ("insert-matching-brace",
+                          _("Insert Matching Brace"),
+                          _("If we should insert matching braces."),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_INSERT_MATCHING_BRACE,
+                                   gParamSpecs [PROP_INSERT_MATCHING_BRACE]);
 
   gParamSpecs [PROP_OVERWRITE_BRACES] =
     g_param_spec_boolean ("overwrite-braces",

@@ -910,6 +910,7 @@ line_starts_with_fuzzy (const GtkTextIter *iter,
   return ret;
 }
 
+#if 0
 static gchar *
 maybe_space_before_paren (GbSourceAutoIndenterC *c,
                           GtkTextIter           *begin,
@@ -954,6 +955,7 @@ maybe_space_before_paren (GbSourceAutoIndenterC *c,
 
   return NULL;
 }
+#endif
 
 static gchar *
 format_parameter (const Parameter *param,
@@ -1093,6 +1095,7 @@ maybe_align_parameters (GbSourceAutoIndenterC *c,
   RETURN (ret);
 }
 
+#if 0
 static gchar *
 maybe_add_brace (GbSourceAutoIndenterC *c,
                  GtkTextIter           *begin,
@@ -1139,6 +1142,7 @@ maybe_add_brace (GbSourceAutoIndenterC *c,
 
   return NULL;
 }
+#endif
 
 static gboolean
 line_is_case (const GtkTextIter *line)
@@ -1298,12 +1302,10 @@ gb_source_auto_indenter_c_is_trigger (GbSourceAutoIndenter *indenter,
         return FALSE;
       /* Fall through */
 
-    case GDK_KEY_braceleft:
     case GDK_KEY_braceright:
     case GDK_KEY_colon:
     case GDK_KEY_numbersign:
     case GDK_KEY_parenright:
-    case GDK_KEY_parenleft:
     case GDK_KEY_slash:
       return TRUE;
 
@@ -1367,13 +1369,6 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
 
     break;
 
-  case GDK_KEY_braceleft:
-    /*
-     * If we are starting a new scope, maybe add a match closing brace.
-     */
-    ret = maybe_add_brace (c, begin, end, cursor_offset);
-    break;
-
   case GDK_KEY_braceright:
     /*
      * Probably need to unindent this line.
@@ -1394,13 +1389,6 @@ gb_source_auto_indenter_c_format (GbSourceAutoIndenter *indenter,
      * If this is a preprocessor directive, adjust indentation.
      */
     ret = maybe_unindent_hash (c, begin, end);
-    break;
-
-  case GDK_KEY_parenleft:
-    /*
-     * Possibly add a space before the ( if our config requests so.
-     */
-    ret = maybe_space_before_paren (c, begin, end);
     break;
 
   case GDK_KEY_parenright:
