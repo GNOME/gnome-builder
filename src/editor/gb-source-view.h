@@ -68,22 +68,25 @@ struct _GbSourceViewClass
                                  const gchar            *search_text);
 };
 
-void                  gb_source_view_begin_search       (GbSourceView         *view,
-                                                         GtkDirectionType      direction,
-                                                         const gchar          *search_text);
-void                  gb_source_view_clear_snippets     (GbSourceView         *view);
-GbSourceAutoIndenter *gb_source_view_get_auto_indenter  (GbSourceView         *view);
-gboolean              gb_source_view_get_show_shadow    (GbSourceView         *view);
-GType                 gb_source_view_get_type           (void) G_GNUC_CONST;
-void                  gb_source_view_indent_selection   (GbSourceView         *view);
-void                  gb_source_view_push_snippet       (GbSourceView         *view,
-                                                         GbSourceSnippet      *snippet);
-void                  gb_source_view_set_font_name      (GbSourceView         *view,
-                                                         const gchar          *font_name);
-void                  gb_source_view_set_show_shadow    (GbSourceView         *view,
-                                                         gboolean              show_shadow);
-void                  gb_source_view_unindent_selection (GbSourceView         *view);
-GbSourceVim          *gb_source_view_get_vim            (GbSourceView         *view);
+void                  gb_source_view_begin_search         (GbSourceView         *view,
+                                                           GtkDirectionType      direction,
+                                                           const gchar          *search_text);
+void                  gb_source_view_clear_snippets       (GbSourceView         *view);
+GbSourceAutoIndenter *gb_source_view_get_auto_indenter    (GbSourceView         *view);
+gboolean              gb_source_view_get_overwrite_braces (GbSourceView         *view);
+gboolean              gb_source_view_get_show_shadow      (GbSourceView         *view);
+GType                 gb_source_view_get_type             (void) G_GNUC_CONST;
+void                  gb_source_view_indent_selection     (GbSourceView         *view);
+void                  gb_source_view_push_snippet         (GbSourceView         *view,
+                                                           GbSourceSnippet      *snippet);
+void                  gb_source_view_set_font_name        (GbSourceView         *view,
+                                                           const gchar          *font_name);
+void                  gb_source_view_set_overwrite_braces (GbSourceView         *view,
+                                                           gboolean              overwrite_braces);
+void                  gb_source_view_set_show_shadow      (GbSourceView         *view,
+                                                           gboolean              show_shadow);
+void                  gb_source_view_unindent_selection   (GbSourceView         *view);
+GbSourceVim          *gb_source_view_get_vim              (GbSourceView         *view);
 
 G_END_DECLS
 

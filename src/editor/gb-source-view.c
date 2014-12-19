@@ -68,6 +68,7 @@ struct _GbSourceViewPrivate
   guint                        auto_indent : 1;
   guint                        enable_word_completion : 1;
   guint                        show_shadow : 1;
+  guint                        overwrite_braces : 1;
 };
 
 typedef void (*GbSourceViewMatchFunc) (GbSourceView      *view,
@@ -82,6 +83,7 @@ enum {
   PROP_AUTO_INDENT,
   PROP_ENABLE_WORD_COMPLETION,
   PROP_FONT_NAME,
+  PROP_OVERWRITE_BRACES,
   PROP_SEARCH_HIGHLIGHTER,
   PROP_SHOW_SHADOW,
   PROP_SMART_HOME_END_SIMPLE,
@@ -107,6 +109,28 @@ gb_source_view_get_vim (GbSourceView *view)
   g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), NULL);
 
   return view->priv->vim;
+}
+
+gboolean
+gb_source_view_get_overwrite_braces (GbSourceView *view)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), FALSE);
+
+  return view->priv->overwrite_braces;
+}
+
+void
+gb_source_view_set_overwrite_braces (GbSourceView *view,
+                                     gboolean      overwrite_braces)
+{
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  if (view->priv->overwrite_braces != overwrite_braces)
+    {
+      view->priv->overwrite_braces = overwrite_braces;
+      g_object_notify_by_pspec (G_OBJECT (view),
+                                gParamSpecs [PROP_OVERWRITE_BRACES]);
+    }
 }
 
 gboolean
@@ -216,6 +240,9 @@ gb_source_view_connect_settings (GbSourceView *view)
                        G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "insert-spaces-instead-of-tabs",
                        view, "insert-spaces-instead-of-tabs",
+                       G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "overwrite-braces",
+                       view, "overwrite-braces",
                        G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "right-margin-position",
                        view, "right-margin-position",
@@ -1215,6 +1242,65 @@ gb_source_view_notify_buffer (GObject    *object,
 }
 
 static gboolean
+gb_source_view_maybe_overwrite (GbSourceView *view,
+                                GdkEventKey  *event)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), FALSE);
+  g_return_val_if_fail (event, FALSE);
+
+  if (view->priv->overwrite_braces)
+    {
+      GtkTextMark *mark;
+      GtkTextBuffer *buffer;
+      GtkTextIter iter;
+      gunichar ch;
+      gboolean ignore = FALSE;
+
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+      mark = gtk_text_buffer_get_insert (buffer);
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+
+      ch = gtk_text_iter_get_char (&iter);
+
+      switch (event->keyval)
+        {
+        case GDK_KEY_parenright:
+          ignore = (ch == ')');
+          break;
+
+        case GDK_KEY_bracketright:
+          ignore = (ch == ']');
+          break;
+
+        case GDK_KEY_braceright:
+          ignore = (ch == '}');
+          break;
+
+        case GDK_KEY_quotedbl:
+          ignore = (ch == '"');
+          break;
+
+        case GDK_KEY_quoteright:
+          ignore = (ch == '\'');
+          break;
+
+        default:
+          break;
+        }
+
+      if (ignore && !gtk_text_buffer_get_has_selection (buffer))
+        {
+          if (!gtk_text_iter_forward_char (&iter))
+            gtk_text_buffer_get_end_iter (buffer, &iter);
+          gtk_text_buffer_select_range (buffer, &iter, &iter);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gb_source_view_key_press_event (GtkWidget   *widget,
                                 GdkEventKey *event)
 {
@@ -1291,6 +1377,13 @@ gb_source_view_key_press_event (GtkWidget   *widget,
   if ((event->keyval == GDK_KEY_Return) || (event->keyval == GDK_KEY_KP_Enter))
     if (gtk_text_view_im_context_filter_keypress (GTK_TEXT_VIEW (view), event))
       return TRUE;
+
+  /*
+   * Possibly overwrite the next character if the keypress keycode matches
+   * the next bracket/brace/paren/quotation.
+   */
+  if (gb_source_view_maybe_overwrite (view, event))
+    return TRUE;
 
   /*
    * If we have an auto-indenter and the event is for a trigger key, then we
@@ -1866,6 +1959,12 @@ gb_source_view_get_property (GObject    *object,
     case PROP_ENABLE_WORD_COMPLETION:
       g_value_set_boolean (value,
                            gb_source_view_get_enable_word_completion (view));
+      break;
+
+    case PROP_OVERWRITE_BRACES:
+      g_value_set_boolean (value,
+                           gb_source_view_get_overwrite_braces (view));
+      break;
 
     case PROP_SEARCH_HIGHLIGHTER:
       g_value_set_object (value, gb_source_view_get_search_highlighter (view));
@@ -1902,6 +2001,10 @@ gb_source_view_set_property (GObject      *object,
 
     case PROP_FONT_NAME:
       gb_source_view_set_font_name (view, g_value_get_string (value));
+      break;
+
+    case PROP_OVERWRITE_BRACES:
+      gb_source_view_set_overwrite_braces (view, g_value_get_boolean (value));
       break;
 
     case PROP_SEARCH_HIGHLIGHTER:
@@ -1967,6 +2070,16 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FONT_NAME,
                                    gParamSpecs [PROP_FONT_NAME]);
+
+  gParamSpecs [PROP_OVERWRITE_BRACES] =
+    g_param_spec_boolean ("overwrite-braces",
+                          _("Overwrite Braces"),
+                          _("If we should overwrite braces, brackets, "
+                            "parenthesis and quotes."),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_OVERWRITE_BRACES,
+                                   gParamSpecs [PROP_OVERWRITE_BRACES]);
 
   gParamSpecs[PROP_SHOW_SHADOW] =
     g_param_spec_boolean ("show-shadow",
