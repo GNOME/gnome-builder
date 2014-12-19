@@ -1431,6 +1431,54 @@ gb_source_view_maybe_insert_match (GbSourceView *view,
 }
 
 static gboolean
+gb_source_view_maybe_delete_match (GbSourceView *view,
+                                   GdkEventKey  *event)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  GtkTextIter prev;
+  gunichar ch;
+  gunichar match;
+
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), FALSE);
+  g_return_val_if_fail (event, FALSE);
+  g_return_val_if_fail (event->keyval == GDK_KEY_BackSpace, FALSE);
+
+  if (!view->priv->insert_matching_brace)
+    return FALSE;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  prev = iter;
+  if (!gtk_text_iter_backward_char (&prev))
+    return FALSE;
+
+  ch = gtk_text_iter_get_char (&prev);
+
+  switch (ch)
+    {
+    case '[':  match = ']';  break;
+    case '{':  match = '}';  break;
+    case '(':  match = ')';  break;
+    case '"':  match = '"';  break;
+    case '\'': match = '\''; break;
+    default:   match = 0;    break;
+    }
+
+  if (gtk_text_iter_get_char (&iter) == match)
+    {
+      gtk_text_iter_forward_char (&iter);
+      gtk_text_buffer_delete (buffer, &prev, &iter);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gb_source_view_key_press_event (GtkWidget   *widget,
                                 GdkEventKey *event)
 {
@@ -1514,6 +1562,14 @@ gb_source_view_key_press_event (GtkWidget   *widget,
    */
   if (gb_source_view_maybe_overwrite (view, event))
     return TRUE;
+
+  /*
+   * If we are backspacing, and the next character is the matching brace,
+   * then we might want to delete it too.
+   */
+  if (event->keyval == GDK_KEY_BackSpace)
+    if (gb_source_view_maybe_delete_match (view, event))
+      return TRUE;
 
   /*
    * If we have an auto-indenter and the event is for a trigger key, then we
