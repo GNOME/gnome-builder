@@ -1017,6 +1017,7 @@ gb_editor_frame_scroll_down (GSimpleAction *action,
   g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
 
   gb_editor_frame_scroll (frame, GTK_DIR_DOWN);
+  gtk_text_view_place_cursor_onscreen (GTK_TEXT_VIEW (frame->priv->source_view));
 }
 
 static void
@@ -1029,6 +1030,7 @@ gb_editor_frame_scroll_up (GSimpleAction *action,
   g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
 
   gb_editor_frame_scroll (frame, GTK_DIR_UP);
+  gtk_text_view_place_cursor_onscreen (GTK_TEXT_VIEW (frame->priv->source_view));
 }
 
 static void
