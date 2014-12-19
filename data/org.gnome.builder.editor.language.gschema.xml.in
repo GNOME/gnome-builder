@@ -12,6 +12,9 @@
     <key name="insert-spaces-instead-of-tabs" type="b">
       <default>false</default>
     </key>
+    <key name="overwrite-braces" type="b">
+      <default>false</default>
+    </key>
     <key name="show-line-marks" type="b">
       <default>false</default>
     </key>
