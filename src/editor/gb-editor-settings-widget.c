@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 
 #include "gb-editor-settings-widget.h"
+#include "gb-widget.h"
 
 struct _GbEditorSettingsWidgetPrivate
 {
@@ -187,22 +188,20 @@ gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
   object_class->get_property = gb_editor_settings_widget_get_property;
   object_class->set_property = gb_editor_settings_widget_set_property;
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/gb-editor-settings-widget.ui");
-
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, auto_indent);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, highlight_current_line);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, highlight_matching_brackets);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, insert_matching_brace);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, insert_spaces_instead_of_tabs);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, right_margin_position);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, overwrite_braces);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, show_line_marks);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, show_line_numbers);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, show_right_margin);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, smart_home_end);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, tab_width);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorSettingsWidget, trim_trailing_whitespace);
+  GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-editor-settings-widget.ui");
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, auto_indent);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, highlight_current_line);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, highlight_matching_brackets);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, insert_matching_brace);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, insert_spaces_instead_of_tabs);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, right_margin_position);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, overwrite_braces);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, show_line_marks);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, show_line_numbers);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, show_right_margin);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, smart_home_end);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, tab_width);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, trim_trailing_whitespace);
 
   gParamSpecs [PROP_LANGUAGE] =
     g_param_spec_string ("language",
