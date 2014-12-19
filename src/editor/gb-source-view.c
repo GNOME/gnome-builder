@@ -1725,6 +1725,7 @@ gb_source_view_set_font_name (GbSourceView *view,
                               const gchar  *font_name)
 {
   PangoFontDescription *font_desc;
+  GdkWindow *window;
 
   g_return_if_fail (GB_IS_SOURCE_VIEW (view));
 
@@ -1746,7 +1747,10 @@ gb_source_view_set_font_name (GbSourceView *view,
   else
     gtk_css_provider_load_from_data (view->priv->css_provider, "", -1, NULL);
 
-  gtk_widget_queue_resize (GTK_WIDGET (view));
+  window = gtk_text_view_get_window (GTK_TEXT_VIEW (view),
+                                     GTK_TEXT_WINDOW_WIDGET);
+  if (window)
+    gdk_window_invalidate_rect (window, NULL, TRUE);
 }
 
 GbSourceAutoIndenter *
