@@ -197,6 +197,6 @@ GbSourceStyleSchemeWidget GtkSourceView {
 }
 
 
-GbEditorTweakWidget GtkScrolledWindow {
+GtkScrolledWindow.gb-linked-scroller {
     border-top: none;
 }

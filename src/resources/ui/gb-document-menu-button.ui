@@ -53,7 +53,9 @@
         <property name="orientation">vertical</property>
         <property name="visible">true</property>
         <property name="expand">true</property>
-        <property name="spacing">6</property>
+        <style>
+          <class name="linked"/>
+        </style>
         <child>
           <object class="GtkSearchEntry" id="search_entry">
             <property name="visible">true</property>
@@ -68,6 +70,9 @@
             <property name="shadow_type">in</property>
             <property name="height_request">200</property>
             <property name="width_request">400</property>
+            <style>
+              <class name="gb-linked-scroller"/>
+            </style>
             <child>
               <object class="GtkListBox" id="list_box">
                 <property name="selection-mode">GTK_SELECTION_SINGLE</property>

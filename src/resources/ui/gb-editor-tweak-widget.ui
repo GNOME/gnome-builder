@@ -27,6 +27,9 @@
                 <property name="visible">true</property>
                 <property name="expand">true</property>
                 <property name="shadow_type">in</property>
+                <style>
+                  <class name="gb-linked-scroller"/>
+                </style>
                 <child>
                   <object class="GtkListBox" id="list_box">
                     <property name="visible">true</property>
