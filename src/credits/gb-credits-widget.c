@@ -20,6 +20,7 @@
 
 #include "gb-animation.h"
 #include "gb-credits-widget.h"
+#include "gb-version.h"
 #include "gb-widget.h"
 
 struct _GbCreditsWidgetPrivate
@@ -27,6 +28,7 @@ struct _GbCreditsWidgetPrivate
   GbAnimation *animation;
   GtkGrid     *grid;
   GtkEventBox *event_box;
+  GtkLabel    *title;
   gdouble      progress;
   guint        duration;
 };
@@ -283,18 +285,24 @@ gb_credits_widget_class_init (GbCreditsWidgetClass *klass)
   g_object_class_install_property (object_class, PROP_PROGRESS,
                                    gParamSpecs [PROP_PROGRESS]);
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/gb-credits-widget.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GbCreditsWidget, grid);
-  gtk_widget_class_bind_template_child_private (widget_class, GbCreditsWidget, event_box);
+  GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-credits-widget.ui");
+  GB_WIDGET_CLASS_BIND (widget_class, GbCreditsWidget, title);
+  GB_WIDGET_CLASS_BIND (widget_class, GbCreditsWidget, grid);
+  GB_WIDGET_CLASS_BIND (widget_class, GbCreditsWidget, event_box);
 }
 
 static void
 gb_credits_widget_init (GbCreditsWidget *self)
 {
+  gchar *label;
+
   self->priv = gb_credits_widget_get_instance_private (self);
 
   self->priv->duration = 1000 * 20;
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  label = g_strdup_printf (_("GNOME Builder - %s"), GB_VERSION_S);
+  gtk_label_set_label (self->priv->title, label);
+  g_free (label);
 }

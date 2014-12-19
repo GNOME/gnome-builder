@@ -233,7 +233,7 @@ and the Friends of GNOME</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label11">
+          <object class="GtkLabel" id="title">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">GNOME Builder</property>

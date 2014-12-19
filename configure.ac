@@ -1,6 +1,12 @@
 AC_PREREQ(2.60)
 
-m4_include([build/autotools/project_info.m4])
+m4_define([project_name],[gnome-builder])
+m4_define([project_major_version],[0])
+m4_define([project_minor_version],[1])
+m4_define([project_micro_version],[0])
+m4_define([project_interface_age],[0])
+m4_define([project_bugreport_url],
+	  [https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder])
 
 # Initialize autoconf and things that go with it.
 m4_include([build/autotools/autoconf.d/pre-ac.m4])
@@ -30,9 +36,18 @@ m4_ifdef([GTK_DOC_CHECK],[
 GTK_DOC_CHECK
 ])
 
+MAJOR_VERSION=project_major_version
+MINOR_VERSION=project_minor_version
+MICRO_VERSION=project_micro_version
+
+AC_SUBST(MAJOR_VERSION)
+AC_SUBST(MINOR_VERSION)
+AC_SUBST(MICRO_VERSION)
+
 # Define our known config files.
 AC_CONFIG_FILES([
 	Makefile
+	src/util/gb-version.h
 	data/icons/Makefile
 	data/org.gnome.builder.editor.gschema.xml
 	data/org.gnome.builder.editor.language.gschema.xml
