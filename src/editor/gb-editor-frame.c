@@ -1251,16 +1251,15 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/gb-editor-frame.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorFrame, busy_spinner);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorFrame, floating_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorFrame, forward_search);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorFrame, backward_search);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorFrame, scrolled_window);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorFrame, search_revealer);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorFrame, search_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GbEditorFrame, source_view);
+  GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-editor-frame.ui");
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, busy_spinner);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, floating_bar);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, forward_search);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, backward_search);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, scrolled_window);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, search_revealer);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, search_entry);
+  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, source_view);
 
   g_type_ensure (GB_TYPE_SOURCE_VIEW);
   g_type_ensure (GD_TYPE_TAGGED_ENTRY);
