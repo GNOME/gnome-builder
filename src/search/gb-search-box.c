@@ -27,7 +27,8 @@
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
-#define DELAY_TIMEOUT_MSEC 250
+#define SHORT_DELAY_TIMEOUT_MSEC 250
+#define LONG_DELAY_TIMEOUT_MSEC  500
 
 struct _GbSearchBoxPrivate
 {
@@ -156,6 +157,8 @@ static void
 gb_search_box_entry_changed (GbSearchBox    *box,
                              GtkSearchEntry *entry)
 {
+  guint delay_msec = SHORT_DELAY_TIMEOUT_MSEC;
+
   g_return_if_fail (GB_IS_SEARCH_BOX (box));
   g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
 
@@ -165,9 +168,13 @@ gb_search_box_entry_changed (GbSearchBox    *box,
 
       search_text = gtk_entry_get_text (GTK_ENTRY (entry));
       if (search_text)
-        box->priv->delay_timeout = g_timeout_add (DELAY_TIMEOUT_MSEC,
-                                                  gb_search_box_delay_cb,
-                                                  box);
+        {
+          if (strlen (search_text) < 3)
+            delay_msec = LONG_DELAY_TIMEOUT_MSEC;
+          box->priv->delay_timeout = g_timeout_add (delay_msec,
+                                                    gb_search_box_delay_cb,
+                                                    box);
+        }
     }
 }
 
