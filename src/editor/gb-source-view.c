@@ -1352,6 +1352,33 @@ is_closing_char (gunichar ch)
     }
 }
 
+static guint
+count_chars_on_line (GbSourceView      *view,
+                     gunichar           expected_char,
+                     const GtkTextIter *iter)
+{
+  GtkTextIter cur;
+  guint count = 0;
+
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), 0);
+  g_return_val_if_fail (iter, 0);
+
+  cur = *iter;
+
+  gtk_text_iter_set_line_offset (&cur, 0);
+
+  while (!gtk_text_iter_ends_line (&cur))
+    {
+      gunichar ch;
+
+      ch = gtk_text_iter_get_char (&cur);
+      count += (ch == expected_char);
+      gtk_text_iter_forward_char (&cur);
+    }
+
+  return count;
+}
+
 static gboolean
 gb_source_view_maybe_insert_match (GbSourceView *view,
                                    GdkEventKey  *event)
@@ -1419,6 +1446,8 @@ gb_source_view_maybe_insert_match (GbSourceView *view,
    *  - We are at EOF
    *  - The next character is whitespace
    *  - The next character is a closing brace.
+   *  - If the char is ", then there must be an even number already on
+   *    the current line.
    */
 
   next_iter = iter;
@@ -1427,6 +1456,22 @@ gb_source_view_maybe_insert_match (GbSourceView *view,
 
   if (!next_ch || g_unichar_isspace (next_ch) || is_closing_char (next_ch))
     {
+      /*
+       * Special case for working with double quotes.
+       *
+       * Ignore double quote if we just added enough to make there be an
+       * even number on this line. However, if it was the first quote on
+       * the line, we still need to include a second.
+       */
+      if (ch == '"')
+        {
+          guint count;
+
+          count = count_chars_on_line (view, '"', &iter);
+          if ((count > 1) && ((count % 2) == 0))
+            return FALSE;
+        }
+
       gtk_text_buffer_insert_at_cursor (buffer, &ch, 1);
       gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
       gtk_text_iter_backward_char (&iter);
