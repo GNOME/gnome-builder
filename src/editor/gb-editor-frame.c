@@ -125,8 +125,8 @@ gb_editor_frame_move_next_match (GbEditorFrame *frame)
 found_match:
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->document),
                                 &match_begin, &match_begin);
-  gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view),
-                                &match_begin, 0.0, TRUE, 0.5, 0.5);
+  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view),
+                                   &match_begin, 0.0, TRUE, 0.5, 0.5);
 
   EXIT;
 }
@@ -175,8 +175,8 @@ gb_editor_frame_move_previous_match (GbEditorFrame *frame)
 found_match:
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->document),
                                 &match_begin, &match_begin);
-  gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view),
-                                &match_begin, 0.0, TRUE, 0.5, 0.5);
+  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view),
+                                   &match_begin, 0.0, TRUE, 0.5, 0.5);
 
   EXIT;
 }
@@ -356,8 +356,8 @@ select_range:
   gtk_text_buffer_select_range (buffer, &iter, &iter);
   gtk_text_buffer_end_user_action (buffer);
 
-  gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view), &iter,
-                                0.25, TRUE, 0.5, 0.5);
+  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view), &iter,
+                                   0.25, TRUE, 0.5, 0.5);
 
 cleanup:
   g_free (input);
