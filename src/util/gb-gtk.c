@@ -29,6 +29,11 @@ struct ScrollState
   gdouble      yalign;
 };
 
+/*
+ * This function is like gtk_text_buffer_get_iter_at_line_offset() except that
+ * the line offset does not need to exist. It will work forward as far as
+ * possible on that line.
+ */
 void
 gb_gtk_text_buffer_get_iter_at_line_and_offset (GtkTextBuffer *buffer,
                                                 GtkTextIter   *iter,
