@@ -288,6 +288,8 @@ gb_source_view_connect_settings (GbSourceView *view)
                        G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "tab-width", view, "tab-width",
                        G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "tab-width", view, "indent-width",
+                       G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "trim-trailing-whitespace",
                        buffer, "trim-trailing-whitespace",
                        G_SETTINGS_BIND_GET);
@@ -443,7 +445,7 @@ gb_source_view_indent_selection (GbSourceView *view)
   GtkTextMark *mark_begin;
   GtkTextMark *mark_end;
   gboolean use_spaces = FALSE;
-  guint tab_width = 0;
+  guint shift_width = 0;
 
   ENTRY;
 
@@ -453,7 +455,7 @@ gb_source_view_indent_selection (GbSourceView *view)
 
   g_object_get (view,
                 "insert-spaces-instead-of-tabs", &use_spaces,
-                "tab-width", &tab_width,
+                "indent-width", &shift_width,
                 NULL);
 
   if (!gtk_text_buffer_get_has_selection (priv->buffer))
@@ -490,7 +492,7 @@ gb_source_view_indent_selection (GbSourceView *view)
         {
           guint i;
 
-          for (i = 0; i < tab_width; i++)
+          for (i = 0; i < shift_width; i++)
             gtk_text_buffer_insert (priv->buffer, &iter, " ", 1);
         }
       else
@@ -530,7 +532,7 @@ gb_source_view_unindent_selection (GbSourceView *view)
   GtkTextMark *mark_begin;
   GtkTextMark *mark_end;
   gboolean use_spaces = FALSE;
-  guint tab_width = 0;
+  guint shift_width = 0;
 
   ENTRY;
 
@@ -540,7 +542,7 @@ gb_source_view_unindent_selection (GbSourceView *view)
 
   g_object_get (view,
                 "insert-spaces-instead-of-tabs", &use_spaces,
-                "tab-width", &tab_width,
+                "indent-width", &shift_width,
                 NULL);
 
   if (!gtk_text_buffer_get_has_selection (priv->buffer))
@@ -567,7 +569,7 @@ gb_source_view_unindent_selection (GbSourceView *view)
   gtk_text_iter_assign (&iter, &begin);
 
   /*
-   * Walk through each selected line, removing up to `tab_width`
+   * Walk through each selected line, removing up to `shift_width`
    * spaces from the beginning of the line, or a single tab.
    */
   gtk_text_buffer_begin_user_action (priv->buffer);
@@ -578,7 +580,7 @@ gb_source_view_unindent_selection (GbSourceView *view)
       guint n_spaces = 0;
       gunichar ch;
 
-      while (!found_tab && (n_spaces < tab_width))
+      while (!found_tab && (n_spaces < shift_width))
         {
           ch = gtk_text_iter_get_char (&iter);
 
