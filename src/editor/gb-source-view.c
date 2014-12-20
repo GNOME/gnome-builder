@@ -1315,6 +1315,7 @@ gb_source_view_maybe_overwrite (GbSourceView *view,
       ignore = (ch == '"');
       break;
 
+    case GDK_KEY_quoteleft:
     case GDK_KEY_quoteright:
       ignore = (ch == '\'');
       break;
