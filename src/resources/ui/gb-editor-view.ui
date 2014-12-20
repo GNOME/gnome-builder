@@ -29,7 +29,7 @@
             <child>
               <object class="GtkImage">
                 <property name="visible">true</property>
-                <property name="icon_name">builder-split-tab</property>
+                <property name="icon_name">builder-split-tab-symbolic</property>
               </object>
             </child>
           </object>
