@@ -3368,31 +3368,6 @@ gb_source_vim_set_text_view (GbSourceVim *vim,
 }
 
 static void
-gb_source_vim_op_filetype (GbSourceVim *vim,
-                           const gchar *name)
-{
-  GtkSourceLanguageManager *manager;
-  GtkSourceLanguage *language;
-  GtkTextBuffer *buffer;
-
-  g_assert (GB_IS_SOURCE_VIM (vim));
-  g_assert (g_str_has_prefix (name, "set filetype="));
-
-  name += strlen ("set filetype=");
-
-  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
-
-  if (!GTK_SOURCE_IS_BUFFER (buffer))
-    return;
-
-  manager = gtk_source_language_manager_get_default ();
-  language = gtk_source_language_manager_get_language (manager, name);
-  gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), language);
-
-  gtk_widget_queue_draw (GTK_WIDGET (vim->priv->text_view));
-}
-
-static void
 gb_source_vim_op_syntax (GbSourceVim *vim,
                          const gchar *name)
 {
@@ -3417,33 +3392,6 @@ gb_source_vim_op_syntax (GbSourceVim *vim,
     return;
 
   gtk_source_buffer_set_highlight_syntax (GTK_SOURCE_BUFFER (buffer), enabled);
-}
-
-static void
-gb_source_vim_op_nu (GbSourceVim *vim,
-                     const gchar *command_text)
-{
-  gboolean enable;
-
-  g_assert (GB_IS_SOURCE_VIM (vim));
-  g_assert (g_str_has_prefix (command_text, "set "));
-
-  command_text += strlen ("set ");
-
-  if (g_strcmp0 (command_text, "nu") == 0)
-    enable = TRUE;
-  else if (g_strcmp0 (command_text, "nonu") == 0)
-    enable = FALSE;
-  else
-    return;
-
-  if (GTK_SOURCE_IS_VIEW (vim->priv->text_view))
-    {
-      GtkSourceView *source_view;
-
-      source_view = GTK_SOURCE_VIEW (vim->priv->text_view);
-      gtk_source_view_set_show_line_numbers (source_view, enable);
-    }
 }
 
 static void
@@ -3690,6 +3638,96 @@ gb_source_vim_op_nohl (GbSourceVim *vim,
     gtk_source_search_context_set_highlight (vim->priv->search_context, FALSE);
 }
 
+static void
+gb_source_vim_op_set_pair (GbSourceVim *vim,
+                           const gchar *key,
+                           const gchar *value)
+{
+  GtkSourceView *source_view;
+  GtkTextBuffer *buffer;
+
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+  g_return_if_fail (key);
+  g_return_if_fail (value);
+
+  g_print ("KEY %s   VALUE %s\n", key, value);
+
+  if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view))
+    return;
+
+  source_view = GTK_SOURCE_VIEW (vim->priv->text_view);
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  if (g_str_equal ("ts", key) || g_str_equal ("tabstop", key))
+    {
+      gint64 v64;
+
+      v64 = g_ascii_strtoll (value, NULL, 10);
+      if (((v64 == G_MAXINT64) || (v64 == G_MININT64)) && (errno == ERANGE))
+        return;
+
+      gtk_source_view_set_tab_width (source_view, v64);
+    }
+  else if (g_str_equal ("sw", key) || g_str_equal ("shiftwidth", key))
+    {
+      gint64 v64;
+
+      v64 = g_ascii_strtoll (value, NULL, 10);
+      if (((v64 == G_MAXINT64) || (v64 == G_MININT64)) && (errno == ERANGE))
+        return;
+
+      gtk_source_view_set_indent_width (source_view, v64);
+    }
+  else if (g_str_has_prefix (key, "nonu"))
+    {
+      gtk_source_view_set_show_line_numbers (source_view, FALSE);
+    }
+  else if (g_str_has_prefix (key, "nu"))
+    {
+      gtk_source_view_set_show_line_numbers (source_view, TRUE);
+    }
+  else if (g_str_equal (key, "ft") || g_str_equal (key, "filetype"))
+    {
+      GtkSourceLanguageManager *manager;
+      GtkSourceLanguage *language;
+
+      manager = gtk_source_language_manager_get_default ();
+      language = gtk_source_language_manager_get_language (manager, value);
+      gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), language);
+
+      gtk_widget_queue_draw (GTK_WIDGET (vim->priv->text_view));
+    }
+}
+
+static void
+gb_source_vim_op_set (GbSourceVim *vim,
+                      const gchar *command_text)
+{
+  gchar **parts;
+  guint i;
+
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+  g_return_if_fail (g_str_has_prefix (command_text, "set "));
+
+  command_text += strlen ("set ");
+
+  parts = g_strsplit (command_text, " ", 0);
+
+  for (i = 0; parts [i]; i++)
+    {
+      gchar **kv;
+
+      kv = g_strsplit (parts [i], "=", 2);
+      gb_source_vim_op_set_pair (vim, kv [0], kv [1] ? kv [1] : "");
+      g_strfreev (kv);
+    }
+
+  g_strfreev (parts);
+}
+
 static GbSourceVimOperation
 gb_source_vim_parse_operation (const gchar *command_text)
 {
@@ -3699,14 +3737,10 @@ gb_source_vim_parse_operation (const gchar *command_text)
     return gb_source_vim_op_sort;
   else if (g_str_equal (command_text, "nohl"))
     return gb_source_vim_op_nohl;
-  else if (g_str_has_prefix (command_text, "set filetype="))
-    return gb_source_vim_op_filetype;
+  else if (g_str_has_prefix (command_text, "set "))
+    return gb_source_vim_op_set;
   else if (g_str_has_prefix (command_text, "syntax "))
     return gb_source_vim_op_syntax;
-  else if (g_str_equal (command_text, "set nu"))
-    return gb_source_vim_op_nu;
-  else if (g_str_equal (command_text, "set nonu"))
-    return gb_source_vim_op_nu;
   else if (g_str_has_prefix (command_text, "colorscheme "))
     return gb_source_vim_op_colorscheme;
   else if (g_str_has_prefix (command_text, "%s"))
