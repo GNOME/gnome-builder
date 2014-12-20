@@ -149,8 +149,6 @@ gb_search_box_entry_activate (GbSearchBox    *box,
   g_return_if_fail (GB_IS_SEARCH_BOX (box));
   g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
 
-  g_print ("activate!\n");
-
   gb_search_display_activate (box->priv->display);
 }
 
