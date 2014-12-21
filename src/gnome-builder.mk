@@ -226,6 +226,7 @@ libgnome_builder_la_CFLAGS = \
 	$(GTK_CFLAGS) \
 	$(MAINTAINER_CFLAGS) \
 	$(WEBKIT_CFLAGS) \
+	-I$(top_builddir)/src/util \
 	-I$(top_srcdir)/src/animation \
 	-I$(top_srcdir)/src/app \
 	-I$(top_srcdir)/src/auto-indent \
