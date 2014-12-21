@@ -254,7 +254,6 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/scrolledwindow \
 	-I$(top_srcdir)/src/search \
 	-I$(top_srcdir)/src/snippets \
-	-I$(top_srcdir)/src/tabs \
 	-I$(top_srcdir)/src/tree \
 	-I$(top_srcdir)/src/trie \
 	-I$(top_srcdir)/src/theatrics \
