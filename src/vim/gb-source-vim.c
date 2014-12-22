@@ -1576,71 +1576,32 @@ static void
 gb_source_vim_toggle_case (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
-  GtkTextIter cur;
   GtkTextIter begin;
   GtkTextIter end;
   gboolean has_selection;
-  gboolean place_at_end = FALSE;
-  GString *str;
 
   g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   has_selection = gb_source_vim_get_selection_bounds (vim, &begin, &end);
 
-  if (gtk_text_iter_compare (&begin, &end) > 0)
-    {
-      text_iter_swap (&begin, &end);
-      place_at_end = TRUE;
-    }
-
-  if (!has_selection)
-    {
-      if (!gtk_text_iter_forward_char (&end))
-        return;
-    }
-
-  str = g_string_new (NULL);
-
-  gtk_text_iter_assign (&cur, &begin);
-
-  while (gtk_text_iter_compare (&cur, &end) < 0)
-    {
-      gunichar ch;
-
-      ch = gtk_text_iter_get_char (&cur);
-
-      if (g_unichar_isupper (ch))
-        g_string_append_unichar (str, g_unichar_tolower (ch));
-      else
-        g_string_append_unichar (str, g_unichar_toupper (ch));
-
-      if (!gtk_text_iter_forward_char (&cur))
-        break;
-    }
-
-  if (!str->len)
-    goto cleanup;
-
-  gtk_text_buffer_begin_user_action (buffer);
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
 
   gb_source_vim_save_position (vim);
-  gtk_text_buffer_delete (buffer, &begin, &end);
-  gtk_text_buffer_insert (buffer, &begin, str->str, str->len);
-  gb_source_vim_restore_position (vim);
 
   if (!has_selection)
-    gb_source_vim_select_range (vim, &begin, &begin);
-  else if (place_at_end)
     {
-      if (gtk_text_iter_backward_char (&begin))
-        gb_source_vim_select_range (vim, &begin, &begin);
+      gtk_text_iter_forward_char (&end);
+      gtk_text_buffer_select_range (buffer, &begin, &end);
     }
 
+  gtk_text_buffer_begin_user_action (buffer);
+  gtk_source_buffer_change_case (GTK_SOURCE_BUFFER (buffer),
+                                 GTK_SOURCE_CHANGE_CASE_TOGGLE,
+                                 &begin, &end);
+  gb_source_vim_restore_position (vim);
   gtk_text_buffer_end_user_action (buffer);
-
-cleanup:
-  g_string_free (str, TRUE);
 }
 
 static void
