@@ -4591,6 +4591,21 @@ gb_source_vim_cmd_undo_redo (GbSourceVim *vim,
   if (!GTK_SOURCE_IS_BUFFER (buffer))
     return;
 
+  /*
+   * TODO: I don't like that we are overloading a command based on there
+   *       being a selection or not. Real VIM probably handles this as
+   *       selections having a different mode (thereby a deferent command
+   *       hashtable lookup).
+   */
+
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
+
+  if (has_selection)
+    {
+      gb_source_vim_toggle_case (vim, GTK_SOURCE_CHANGE_CASE_UPPER);
+      return;
+    }
+
   if (gtk_source_buffer_can_redo (GTK_SOURCE_BUFFER (buffer)))
     gb_source_vim_redo (vim);
   else
