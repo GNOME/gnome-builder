@@ -1579,6 +1579,8 @@ gb_source_vim_toggle_case (GbSourceVim *vim)
   GtkTextIter begin;
   GtkTextIter end;
   gboolean has_selection;
+  guint begin_offset;
+  guint end_offset;
 
   g_assert (GB_IS_SOURCE_VIM (vim));
 
@@ -1588,20 +1590,31 @@ gb_source_vim_toggle_case (GbSourceVim *vim)
   if (!GTK_SOURCE_IS_BUFFER (buffer))
     return;
 
-  gb_source_vim_save_position (vim);
-
   if (!has_selection)
     {
       gtk_text_iter_forward_char (&end);
       gtk_text_buffer_select_range (buffer, &begin, &end);
     }
 
+  begin_offset = gtk_text_iter_get_offset (&begin);
+  end_offset = gtk_text_iter_get_offset (&end);
+
   gtk_text_buffer_begin_user_action (buffer);
   gtk_source_buffer_change_case (GTK_SOURCE_BUFFER (buffer),
                                  GTK_SOURCE_CHANGE_CASE_TOGGLE,
                                  &begin, &end);
-  gb_source_vim_restore_position (vim);
   gtk_text_buffer_end_user_action (buffer);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &begin, begin_offset);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, end_offset);
+
+  if (gtk_text_iter_compare (&begin, &end) > 0)
+    text_iter_swap (&begin, &end);
+
+  if (has_selection)
+    gtk_text_buffer_select_range (buffer, &begin, &begin);
+  else
+    gtk_text_buffer_select_range (buffer, &end, &end);
 }
 
 static void
