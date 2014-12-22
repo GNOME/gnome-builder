@@ -1573,7 +1573,8 @@ move_mark:
 }
 
 static void
-gb_source_vim_toggle_case (GbSourceVim *vim)
+gb_source_vim_toggle_case (GbSourceVim             *vim,
+                           GtkSourceChangeCaseType  change_type)
 {
   GtkTextBuffer *buffer;
   GtkTextIter begin;
@@ -1600,8 +1601,7 @@ gb_source_vim_toggle_case (GbSourceVim *vim)
   end_offset = gtk_text_iter_get_offset (&end);
 
   gtk_text_buffer_begin_user_action (buffer);
-  gtk_source_buffer_change_case (GTK_SOURCE_BUFFER (buffer),
-                                 GTK_SOURCE_CHANGE_CASE_TOGGLE,
+  gtk_source_buffer_change_case (GTK_SOURCE_BUFFER (buffer), change_type,
                                  &begin, &end);
   gtk_text_buffer_end_user_action (buffer);
 
@@ -4580,12 +4580,29 @@ gb_source_vim_cmd_undo (GbSourceVim *vim,
                         guint        count,
                         gchar        modifier)
 {
+  gboolean has_selection;
+  GtkTextIter iter;
+  GtkTextIter selection;
   guint i;
 
   g_assert (GB_IS_SOURCE_VIM (vim));
 
-  count = MAX (1, count);
+  /*
+   * TODO: I don't like that we are overloading a command based on there
+   *       being a selection or not. Real VIM probably handles this as
+   *       selections having a different mode (thereby a deferent command
+   *       hashtable lookup).
+   */
 
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
+
+  if (has_selection)
+    {
+      gb_source_vim_toggle_case (vim, GTK_SOURCE_CHANGE_CASE_LOWER);
+      return;
+    }
+
+  count = MAX (1, count);
   for (i = 0; i < count; i++)
     gb_source_vim_undo (vim);
 }
@@ -4805,7 +4822,7 @@ gb_source_vim_cmd_toggle_case (GbSourceVim *vim,
     count = MAX (1, count);
 
   for (i = 0; i < count; i++)
-    gb_source_vim_toggle_case (vim);
+    gb_source_vim_toggle_case (vim, GTK_SOURCE_CHANGE_CASE_TOGGLE);
 }
 
 static void
