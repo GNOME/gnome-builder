@@ -686,6 +686,102 @@ gb_document_stack_focus_search (GSimpleAction *action,
 }
 
 static void
+gb_document_stack_previous_document_activate (GSimpleAction *action,
+                                              GVariant      *parameter,
+                                              gpointer       user_data)
+{
+  GbDocumentStack *stack = user_data;
+  GtkWidget *child;
+  GList *children;
+  GList *iter;
+  gint position = -1;
+
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
+
+  child = gtk_stack_get_visible_child (stack->priv->stack);
+  if (!child)
+    return;
+
+  gtk_container_child_get (GTK_CONTAINER (stack->priv->stack), child,
+                           "position", &position,
+                           NULL);
+  if (position <= 0)
+    return;
+
+  position--;
+
+  children = gtk_container_get_children (GTK_CONTAINER (stack->priv->stack));
+
+  for (iter = children; iter; iter = iter->next)
+    {
+      gint child_pos = -1;
+
+      gtk_container_child_get (GTK_CONTAINER (stack->priv->stack), iter->data,
+                               "position", &child_pos,
+                               NULL);
+
+      if (child_pos == position)
+        {
+          GbDocument *document;
+
+          document = gb_document_view_get_document (iter->data);
+          gb_document_menu_button_select_document (stack->priv->document_button,
+                                                   document);
+          break;
+        }
+    }
+
+  g_list_free (children);
+}
+
+static void
+gb_document_stack_next_document_activate (GSimpleAction *action,
+                                          GVariant      *parameter,
+                                          gpointer       user_data)
+{
+  GbDocumentStack *stack = user_data;
+  GtkWidget *child;
+  GList *children;
+  GList *iter;
+  gint position = -1;
+
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
+
+  child = gtk_stack_get_visible_child (stack->priv->stack);
+  if (!child)
+    return;
+
+  gtk_container_child_get (GTK_CONTAINER (stack->priv->stack), child,
+                           "position", &position,
+                           NULL);
+
+  position++;
+
+  children = gtk_container_get_children (GTK_CONTAINER (stack->priv->stack));
+
+  for (iter = children; iter; iter = iter->next)
+    {
+      gint child_pos = -1;
+
+      gtk_container_child_get (GTK_CONTAINER (stack->priv->stack), iter->data,
+                               "position", &child_pos,
+                               NULL);
+
+      if (child_pos == position)
+        {
+          GbDocument *document;
+
+          document = gb_document_view_get_document (iter->data);
+          gb_document_menu_button_select_document (stack->priv->document_button,
+                                                   document);
+          break;
+        }
+    }
+
+  g_list_free (children);
+}
+
+static void
 gb_document_stack_finalize (GObject *object)
 {
   GbDocumentStackPrivate *priv = GB_DOCUMENT_STACK (object)->priv;
@@ -848,6 +944,8 @@ gb_document_stack_init (GbDocumentStack *self)
     { "preview", gb_document_stack_preview_activate },
     { "save", gb_document_stack_save_activate },
     { "save-as", gb_document_stack_save_as_activate },
+    { "previous-document", gb_document_stack_previous_document_activate },
+    { "next-document", gb_document_stack_next_document_activate },
   };
 
   self->priv = gb_document_stack_get_instance_private (self);
