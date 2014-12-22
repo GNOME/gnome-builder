@@ -4576,6 +4576,28 @@ gb_source_vim_cmd_substitute (GbSourceVim *vim,
 }
 
 static void
+gb_source_vim_cmd_undo_redo (GbSourceVim *vim,
+                             guint        count,
+                             gchar        modifier)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  gboolean has_selection;
+
+  g_assert (GB_IS_SOURCE_VIM (vim));
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  if (gtk_source_buffer_can_redo (GTK_SOURCE_BUFFER (buffer)))
+    gb_source_vim_redo (vim);
+  else
+    gb_source_vim_undo (vim);
+}
+
+static void
 gb_source_vim_cmd_undo (GbSourceVim *vim,
                         guint        count,
                         gchar        modifier)
@@ -5139,6 +5161,10 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
                                         GB_SOURCE_VIM_COMMAND_FLAG_NONE,
                                         GB_SOURCE_VIM_COMMAND_CHANGE,
                                         gb_source_vim_cmd_undo);
+  gb_source_vim_class_register_command (klass, 'U',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_CHANGE,
+                                        gb_source_vim_cmd_undo_redo);
   gb_source_vim_class_register_command (klass, 'V',
                                         GB_SOURCE_VIM_COMMAND_FLAG_NONE,
                                         GB_SOURCE_VIM_COMMAND_NOOP,
