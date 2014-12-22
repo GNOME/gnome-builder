@@ -79,8 +79,10 @@ struct _GbSourceVimPrivate
   GtkTextMark             *selection_anchor_end;
   GtkSourceSearchContext  *search_context;
   GtkSourceSearchSettings *search_settings;
+  GPtrArray               *captured_events;
   GbSourceVimMode          mode;
   gulong                   key_press_event_handler;
+  gulong                   key_release_event_handler;
   gulong                   focus_in_event_handler;
   gulong                   mark_set_handler;
   gulong                   delete_range_handler;
@@ -88,8 +90,12 @@ struct _GbSourceVimPrivate
   guint                    stash_line;
   guint                    stash_line_offset;
   guint                    anim_timeout;
+  gchar                    recording_trigger;
+  gchar                    recording_modifier;
   guint                    enabled : 1;
   guint                    connected : 1;
+  guint                    recording : 1;
+  guint                    in_replay : 1;
 };
 
 typedef enum
@@ -212,6 +218,92 @@ gb_source_vim_new (GtkTextView *text_view)
   return g_object_new (GB_TYPE_SOURCE_VIM,
                        "text-view", text_view,
                        NULL);
+}
+
+/**
+ * gb_source_vim_recording_begin:
+ * @trigger: the character used to trigger recording
+ *
+ * This begins capturing keys so that they may be replayed later using a
+ * command such as ".". @trigger is the key that was used to begin this
+ * recording such as (A, a, i, I, s, etc).
+ *
+ * gb_source_vim_recording_end() must be called to complete the capture.
+ */
+static void
+gb_source_vim_recording_begin (GbSourceVim *vim,
+                               gchar        trigger,
+                               gchar        modifier)
+{
+  g_return_if_fail (!vim->priv->recording || vim->priv->in_replay);
+  g_return_if_fail (trigger);
+
+  if (vim->priv->in_replay)
+    return;
+
+  if (vim->priv->captured_events->len)
+    g_ptr_array_remove_range (vim->priv->captured_events, 0,
+                              vim->priv->captured_events->len);
+
+  g_assert (vim->priv->captured_events->len == 0);
+
+  vim->priv->recording = TRUE;
+  vim->priv->recording_trigger = trigger;
+  vim->priv->recording_modifier = modifier;
+}
+
+static void
+gb_source_vim_recording_capture (GbSourceVim *vim,
+                                 GdkEvent    *event)
+{
+  GdkEvent *copy;
+
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+  g_return_if_fail (event);
+  g_return_if_fail ((event->type == GDK_KEY_PRESS) ||
+                    (event->type == GDK_KEY_RELEASE));
+
+  copy = gdk_event_copy (event);
+  g_ptr_array_add (vim->priv->captured_events, copy);
+}
+
+static void
+gb_source_vim_recording_replay (GbSourceVim *vim)
+{
+  GbSourceVimCommand *cmd;
+  guint i;
+
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+  g_return_if_fail (vim->priv->recording_trigger);
+  g_return_if_fail (!vim->priv->in_replay);
+
+  cmd = g_hash_table_lookup (gCommands,
+                             GINT_TO_POINTER (vim->priv->recording_trigger));
+  if (!cmd)
+    return;
+
+  vim->priv->in_replay = TRUE;
+
+  cmd->func (vim, 1, vim->priv->recording_modifier);
+
+  for (i = 0; i < vim->priv->captured_events->len; i++)
+    {
+      GdkEventKey *event;
+
+      event = g_ptr_array_index (vim->priv->captured_events, i);
+      event->time = GDK_CURRENT_TIME;
+      gtk_widget_event (GTK_WIDGET (vim->priv->text_view), (GdkEvent *)event);
+    }
+
+  vim->priv->in_replay = FALSE;
+}
+
+static void
+gb_source_vim_recording_end (GbSourceVim *vim)
+{
+  g_return_if_fail (vim->priv->recording);
+
+  vim->priv->recording = FALSE;
 }
 
 static int
@@ -478,6 +570,12 @@ gb_source_vim_set_mode (GbSourceVim     *vim,
    */
   if (mode == vim->priv->mode)
     return;
+
+  /*
+   * If we are leaving insert mode, stop recording.
+   */
+  if ((vim->priv->mode == GB_SOURCE_VIM_INSERT) && vim->priv->recording)
+    gb_source_vim_recording_end (vim);
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
@@ -2943,6 +3041,9 @@ static gboolean
 gb_source_vim_handle_insert (GbSourceVim *vim,
                              GdkEventKey *event)
 {
+  if (!vim->priv->in_replay)
+    gb_source_vim_recording_capture (vim, (GdkEvent *)event);
+
   switch (event->keyval)
     {
     case GDK_KEY_bracketleft:
@@ -3044,6 +3145,21 @@ gb_source_vim_key_press_event_cb (GtkTextView *text_view,
     }
 
   return ret;
+}
+
+static gboolean
+gb_source_vim_key_release_event_cb (GtkTextView *text_view,
+                                    GdkEventKey *event,
+                                    GbSourceVim *vim)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+  g_return_val_if_fail (event, FALSE);
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
+
+  if ((vim->priv->mode == GB_SOURCE_VIM_INSERT) && vim->priv->recording)
+    gb_source_vim_recording_capture (vim, (GdkEvent *)event);
+
+  return FALSE;
 }
 
 static gboolean
@@ -3224,6 +3340,13 @@ gb_source_vim_connect (GbSourceVim *vim)
                              vim,
                              0);
 
+  vim->priv->key_release_event_handler =
+    g_signal_connect_object (vim->priv->text_view,
+                             "key-release-event",
+                             G_CALLBACK (gb_source_vim_key_release_event_cb),
+                             vim,
+                             0);
+
   vim->priv->focus_in_event_handler =
     g_signal_connect_object (vim->priv->text_view,
                              "focus-in-event",
@@ -3267,6 +3390,10 @@ gb_source_vim_disconnect (GbSourceVim *vim)
   g_signal_handler_disconnect (vim->priv->text_view,
                                vim->priv->key_press_event_handler);
   vim->priv->key_press_event_handler = 0;
+
+  g_signal_handler_disconnect (vim->priv->text_view,
+                               vim->priv->key_release_event_handler);
+  vim->priv->key_release_event_handler = 0;
 
   g_signal_handler_disconnect (vim->priv->text_view,
                                vim->priv->focus_in_event_handler);
@@ -3650,8 +3777,6 @@ gb_source_vim_op_set_pair (GbSourceVim *vim,
   g_return_if_fail (key);
   g_return_if_fail (value);
 
-  g_print ("KEY %s   VALUE %s\n", key, value);
-
   if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view))
     return;
 
@@ -3820,6 +3945,8 @@ gb_source_vim_finalize (GObject *object)
   g_string_free (priv->phrase, TRUE);
   priv->phrase = NULL;
 
+  g_clear_pointer (&priv->captured_events, g_ptr_array_unref);
+
   G_OBJECT_CLASS (gb_source_vim_parent_class)->finalize (object);
 }
 
@@ -3882,7 +4009,22 @@ gb_source_vim_cmd_repeat (GbSourceVim *vim,
                           guint        count,
                           gchar        modifier)
 {
-  /* TODO! */
+  GtkSourceCompletion *completion;
+  GtkSourceView *source_view;
+
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+
+  if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view) ||
+      !vim->priv->recording_trigger ||
+      !vim->priv->captured_events->len)
+    return;
+
+  source_view = GTK_SOURCE_VIEW (vim->priv->text_view);
+  completion = gtk_source_view_get_completion (source_view);
+
+  gtk_source_completion_block_interactive (completion);
+  gb_source_vim_recording_replay (vim);
+  gtk_source_completion_unblock_interactive (completion);
 }
 
 static void
@@ -4045,6 +4187,7 @@ gb_source_vim_cmd_insert_end (GbSourceVim *vim,
   g_assert (GB_IS_SOURCE_VIM (vim));
 
   gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_recording_begin (vim, 'A', modifier);
   gb_source_vim_clear_selection (vim);
   gb_source_vim_move_line_end (vim);
 }
@@ -4057,6 +4200,7 @@ gb_source_vim_cmd_insert_after (GbSourceVim *vim,
   g_assert (GB_IS_SOURCE_VIM (vim));
 
   gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_recording_begin (vim, 'a', modifier);
   gb_source_vim_clear_selection (vim);
   gb_source_vim_move_forward (vim);
 }
@@ -4093,6 +4237,7 @@ gb_source_vim_cmd_change (GbSourceVim *vim,
       /* cd should do nothing */
       gb_source_vim_cmd_delete (vim, count, modifier);
       gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+      gb_source_vim_recording_begin (vim, 'c', modifier);
     }
 }
 
@@ -4105,6 +4250,7 @@ gb_source_vim_cmd_change_to_end (GbSourceVim *vim,
 
   gb_source_vim_cmd_delete_to_end (vim, count, '\0');
   gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_recording_begin (vim, 'C', modifier);
   gb_source_vim_move_forward (vim);
 }
 
@@ -4267,6 +4413,7 @@ gb_source_vim_cmd_insert_start (GbSourceVim *vim,
   g_assert (GB_IS_SOURCE_VIM (vim));
 
   gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_recording_begin (vim, 'I', modifier);
   gb_source_vim_clear_selection (vim);
   gb_source_vim_move_line_start (vim, TRUE);
 }
@@ -4279,6 +4426,7 @@ gb_source_vim_cmd_insert (GbSourceVim *vim,
   g_assert (GB_IS_SOURCE_VIM (vim));
 
   gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_recording_begin (vim, 'i', modifier);
   gb_source_vim_clear_selection (vim);
 }
 
@@ -4354,6 +4502,7 @@ gb_source_vim_cmd_insert_before_line (GbSourceVim *vim,
   g_assert (GB_IS_SOURCE_VIM (vim));
 
   gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_recording_begin (vim, 'O', modifier);
   gb_source_vim_insert_nl_before (vim);
 }
 
@@ -4365,6 +4514,7 @@ gb_source_vim_cmd_insert_after_line (GbSourceVim *vim,
   g_assert (GB_IS_SOURCE_VIM (vim));
 
   gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_recording_begin (vim, 'o', modifier);
   gb_source_vim_insert_nl_after (vim, TRUE);
 }
 
@@ -4402,6 +4552,7 @@ gb_source_vim_cmd_overwrite (GbSourceVim *vim,
   g_assert (GB_IS_SOURCE_VIM (vim));
 
   gb_source_vim_set_mode (vim, GB_SOURCE_VIM_INSERT);
+  gb_source_vim_recording_begin (vim, 'R', modifier);
   gtk_text_view_set_overwrite (vim->priv->text_view, TRUE);
 }
 
@@ -5036,6 +5187,8 @@ gb_source_vim_init (GbSourceVim *vim)
   vim->priv->mode = 0;
   vim->priv->phrase = g_string_new (NULL);
   vim->priv->search_settings = gtk_source_search_settings_new ();
+  vim->priv->captured_events =
+    g_ptr_array_new_with_free_func ((GDestroyNotify)gdk_event_free);
 }
 
 GType
