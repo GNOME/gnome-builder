@@ -9,6 +9,8 @@ libgnome_builder_la_SOURCES = \
 	src/animation/gb-frame-source.h \
 	src/app/gb-application.c \
 	src/app/gb-application.h \
+	src/auto-indent/c-parse-helper.c \
+	src/auto-indent/c-parse-helper.h \
 	src/auto-indent/gb-source-auto-indenter.c \
 	src/auto-indent/gb-source-auto-indenter.h \
 	src/auto-indent/gb-source-auto-indenter-c.c \
@@ -63,8 +65,6 @@ libgnome_builder_la_SOURCES = \
 	src/documents/gb-document-stack.h \
 	src/documents/gb-document-view.c \
 	src/documents/gb-document-view.h \
-	src/editor/c-parse-helper.c \
-	src/editor/c-parse-helper.h \
 	src/editor/gb-editor-document.c \
 	src/editor/gb-editor-document.h \
 	src/editor/gb-editor-file-mark.c \
