@@ -59,6 +59,7 @@ libgnome_builder_la_SOURCES = \
 	src/documents/gb-document-manager.h \
 	src/documents/gb-document-menu-button.c \
 	src/documents/gb-document-menu-button.h \
+	src/documents/gb-document-private.h \
 	src/documents/gb-document-split.c \
 	src/documents/gb-document-split.h \
 	src/documents/gb-document-stack.c \
