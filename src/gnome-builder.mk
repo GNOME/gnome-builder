@@ -209,23 +209,13 @@ libgnome_builder_la_SOURCES = \
 	src/workbench/gb-workspace.h
 
 libgnome_builder_la_LIBADD = \
-	$(DEVHELP_LIBS) \
-	$(GGIT_LIBS) \
-	$(GIO_LIBS) \
-	$(GTKSOURCEVIEW_LIBS) \
-	$(GTK_LIBS) \
-	$(WEBKIT_LIBS) \
+	$(BUILDER_LIBS) \
 	-lm
 
 libgnome_builder_la_CFLAGS = \
 	-DPACKAGE_DATADIR="\"$(datadir)\"" \
-	$(DEVHELP_CFLAGS) \
-	$(GGIT_CFLAGS) \
-	$(GIO_CFLAGS) \
-	$(GTKSOURCEVIEW_CFLAGS) \
-	$(GTK_CFLAGS) \
+	$(BUILDER_CFLAGS) \
 	$(MAINTAINER_CFLAGS) \
-	$(WEBKIT_CFLAGS) \
 	-I$(top_builddir)/src/util \
 	-I$(top_srcdir)/src/animation \
 	-I$(top_srcdir)/src/app \
