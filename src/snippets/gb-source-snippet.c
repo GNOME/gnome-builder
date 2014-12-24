@@ -410,6 +410,7 @@ static void
 gb_source_snippet_update_context (GbSourceSnippet *snippet)
 {
   GbSourceSnippetPrivate *priv;
+  GbSourceSnippetContext *context;
   GbSourceSnippetChunk *chunk;
   const gchar *text;
   gchar key[12];
@@ -422,7 +423,9 @@ gb_source_snippet_update_context (GbSourceSnippet *snippet)
 
   priv = snippet->priv;
 
-  gb_source_snippet_context_emit_changed (priv->context);
+  context = gb_source_snippet_get_context (snippet);
+
+  gb_source_snippet_context_emit_changed (context);
 
   for (i = 0; i < priv->chunks->len; i++)
     {
@@ -434,12 +437,12 @@ gb_source_snippet_update_context (GbSourceSnippet *snippet)
             {
               g_snprintf (key, sizeof key, "%d", tab_stop);
               key[sizeof key - 1] = '\0';
-              gb_source_snippet_context_add_variable (priv->context, key, text);
+              gb_source_snippet_context_add_variable (context, key, text);
             }
         }
     }
 
-  gb_source_snippet_context_emit_changed (priv->context);
+  gb_source_snippet_context_emit_changed (context);
 
   EXIT;
 }
@@ -450,6 +453,7 @@ gb_source_snippet_begin (GbSourceSnippet *snippet,
                          GtkTextIter     *iter)
 {
   GbSourceSnippetPrivate *priv;
+  GbSourceSnippetContext *context;
   GbSourceSnippetChunk *chunk;
   const gchar *text;
   gboolean ret;
@@ -469,8 +473,10 @@ gb_source_snippet_begin (GbSourceSnippet *snippet,
 
   priv->inserted = TRUE;
 
+  context = gb_source_snippet_get_context (snippet);
+
   gb_source_snippet_update_context (snippet);
-  gb_source_snippet_context_emit_changed (priv->context);
+  gb_source_snippet_context_emit_changed (context);
   gb_source_snippet_update_context (snippet);
 
   priv->buffer = g_object_ref (buffer);
@@ -830,6 +836,20 @@ gb_source_snippet_get_context (GbSourceSnippet *snippet)
 {
   g_return_val_if_fail (GB_IS_SOURCE_SNIPPET (snippet), NULL);
 
+  if (!snippet->priv->context)
+    {
+      GbSourceSnippetChunk *chunk;
+      guint i;
+
+      snippet->priv->context = gb_source_snippet_context_new ();
+
+      for (i = 0; i < snippet->priv->chunks->len; i++)
+        {
+          chunk = g_ptr_array_index (snippet->priv->chunks, i);
+          gb_source_snippet_chunk_set_context (chunk, snippet->priv->context);
+        }
+    }
+
   return snippet->priv->context;
 }
 
@@ -995,5 +1015,4 @@ gb_source_snippet_init (GbSourceSnippet *snippet)
   snippet->priv->max_tab_stop = -1;
   snippet->priv->chunks = g_ptr_array_new_with_free_func (g_object_unref);
   snippet->priv->runs = g_array_new (FALSE, FALSE, sizeof (gint));
-  snippet->priv->context = gb_source_snippet_context_new ();
 }

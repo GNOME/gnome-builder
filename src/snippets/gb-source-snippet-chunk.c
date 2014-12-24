@@ -100,31 +100,34 @@ gb_source_snippet_chunk_set_context (GbSourceSnippetChunk   *chunk,
   GbSourceSnippetChunkPrivate *priv;
 
   g_return_if_fail (GB_IS_SOURCE_SNIPPET_CHUNK (chunk));
-  g_return_if_fail (GB_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_return_if_fail (!context || GB_IS_SOURCE_SNIPPET_CONTEXT (context));
 
   priv = chunk->priv;
 
-  if (priv->context_changed_handler)
+  if (context != chunk->priv->context)
     {
-      g_signal_handler_disconnect (priv->context,
-                                   priv->context_changed_handler);
-      priv->context_changed_handler = 0;
+      if (priv->context_changed_handler)
+        {
+          g_signal_handler_disconnect (priv->context,
+                                       priv->context_changed_handler);
+          priv->context_changed_handler = 0;
+        }
+
+      g_clear_object (&chunk->priv->context);
+
+      if (context)
+        {
+          priv->context = context ? g_object_ref (context) : NULL;
+          priv->context_changed_handler =
+            g_signal_connect_object (priv->context,
+                                     "changed",
+                                     G_CALLBACK (on_context_changed),
+                                     chunk,
+                                     0);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_CONTEXT]);
     }
-
-  g_clear_object (&chunk->priv->context);
-
-  if (context)
-    {
-      priv->context = context ? g_object_ref (context) : NULL;
-      priv->context_changed_handler =
-        g_signal_connect_object (priv->context,
-                                 "changed",
-                                 G_CALLBACK (on_context_changed),
-                                 chunk,
-                                 0);
-    }
-
-  g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_CONTEXT]);
 }
 
 const gchar *
