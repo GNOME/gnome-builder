@@ -34,6 +34,8 @@ struct _GbGitSearchProviderPrivate
 {
   GgitRepository *repository;
   Fuzzy          *file_index;
+  GFile          *repository_dir;
+  gchar          *repository_shorthand;
 };
 
 static void search_provider_init (GbSearchProviderInterface *iface);
@@ -84,6 +86,10 @@ load_cb (GObject      *object,
     }
   else
     {
+      g_clear_pointer (&provider->priv->repository_shorthand, g_free);
+      provider->priv->repository_shorthand =
+        g_strdup (g_object_get_data (G_OBJECT (task), "shorthand"));
+
       g_clear_pointer (&provider->priv->file_index, fuzzy_unref);
       provider->priv->file_index = fuzzy_ref (file_index);
       g_message ("Git file index loaded.");
@@ -99,6 +105,7 @@ gb_git_search_provider_build_file_index (GTask        *task,
   GgitRepository *repository = NULL;
   GgitIndexEntries *entries = NULL;
   GgitIndex *index = NULL;
+  GgitRef *ref;
   GError *error = NULL;
   GFile *repository_dir = task_data;
   Fuzzy *fuzzy;
@@ -125,6 +132,20 @@ gb_git_search_provider_build_file_index (GTask        *task,
     {
       g_task_return_error (task, error);
       GOTO (cleanup);
+    }
+
+  ref = ggit_repository_get_head (repository, NULL);
+  if (ref)
+    {
+      const gchar *shorthand;
+
+      /* pass back the repo shorthand name via gobject data.
+       * not clean, but works for now */
+      shorthand = ggit_ref_get_shorthand (ref);
+      if (shorthand)
+        g_object_set_data_full (G_OBJECT (task), "shorthand",
+                                g_strdup (shorthand), g_free);
+      g_clear_object (&ref);
     }
 
   index = ggit_repository_get_index (repository, &error);
@@ -247,7 +268,6 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
 
       if (self->priv->repository)
         {
-          GgitRef *ref;
           GFile *repo_dir = NULL;
 
           repo_dir = ggit_repository_get_location (self->priv->repository);
@@ -274,13 +294,9 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
               g_free (repo_name);
             }
 
-          ref = ggit_repository_get_head (self->priv->repository, NULL);
-          if (ref)
-            {
-              g_string_append_printf (str, "[%s]",
-                                      ggit_ref_get_shorthand (ref));
-              g_clear_object (&ref);
-            }
+          if (self->priv->repository_shorthand)
+            g_string_append_printf (str, "[%s]",
+                                    self->priv->repository_shorthand);
         }
 
       truncate_len = str->len;
@@ -350,10 +366,13 @@ gb_git_search_provider_set_repository (GbGitSearchProvider *provider,
         {
           GTask *task;
 
+          g_clear_object (&priv->repository_dir);
+          priv->repository_dir = ggit_repository_get_location (repository);
+
           priv->repository = g_object_ref (repository);
           task = g_task_new (provider, NULL, load_cb, provider);
           g_task_set_task_data (task,
-                                ggit_repository_get_location (repository),
+                                g_object_ref (priv->repository_dir),
                                 g_object_unref);
           g_task_run_in_thread (task, gb_git_search_provider_build_file_index);
           g_clear_object (&task);
@@ -366,6 +385,8 @@ gb_git_search_provider_finalize (GObject *object)
 {
   GbGitSearchProviderPrivate *priv = GB_GIT_SEARCH_PROVIDER (object)->priv;
 
+  g_clear_pointer (&priv->repository_shorthand, g_free);
+  g_clear_object (&priv->repository_dir);
   g_clear_object (&priv->repository);
   g_clear_pointer (&priv->file_index, fuzzy_unref);
 
