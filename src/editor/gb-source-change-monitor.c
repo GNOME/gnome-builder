@@ -37,6 +37,8 @@ struct _GbSourceChangeMonitorPrivate
   GgitBlob       *blob;
   gchar          *relative_path;
   GHashTable     *state;
+  GCancellable   *cancellable;
+
   guint           changed_handler;
   guint           parse_timeout;
 };
@@ -333,9 +335,12 @@ on_change_cb (GbSourceChangeMonitor *monitor,
 }
 
 static void
-gb_source_change_monitor_load_blob (GbSourceChangeMonitor *monitor)
+gb_source_change_monitor_load_blob (GTask        *task,
+                                    gpointer      source_object,
+                                    gpointer      task_data,
+                                    GCancellable *cancellable)
 {
-  GbSourceChangeMonitorPrivate *priv;
+  GbSourceChangeMonitor *monitor = source_object;
   GgitOId *entry_oid = NULL;
   GgitOId *oid = NULL;
   GgitObject *blob = NULL;
@@ -343,24 +348,25 @@ gb_source_change_monitor_load_blob (GbSourceChangeMonitor *monitor)
   GgitRef *head = NULL;
   GgitTree *tree = NULL;
   GgitTreeEntry *entry = NULL;
+  GgitRepository *repo;
+  gboolean success = FALSE;
+  GFile *file;
   GFile *workdir = NULL;
   GError *error = NULL;
   gchar *relpath = NULL;
 
-  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+  g_assert (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
 
-  priv = monitor->priv;
+  repo = ((gpointer *)task_data)[0];
+  file = ((gpointer *)task_data)[1];
 
-  /*
-   * Double check we have everything we need.
-   */
-  if (!priv->repo || !priv->file)
-    return;
+  g_assert (GGIT_IS_REPOSITORY (repo));
+  g_assert (G_IS_FILE (file));
 
   /*
    * Work our way through ggit to get to the original blob we care about.
    */
-  head = ggit_repository_get_head (priv->repo, &error);
+  head = ggit_repository_get_head (repo, &error);
   if (!head)
     GOTO (cleanup);
 
@@ -368,7 +374,7 @@ gb_source_change_monitor_load_blob (GbSourceChangeMonitor *monitor)
   if (!oid)
     GOTO (cleanup);
 
-  commit = ggit_repository_lookup (priv->repo, oid, GGIT_TYPE_COMMIT, &error);
+  commit = ggit_repository_lookup (repo, oid, GGIT_TYPE_COMMIT, &error);
   if (!commit)
     GOTO (cleanup);
 
@@ -376,11 +382,11 @@ gb_source_change_monitor_load_blob (GbSourceChangeMonitor *monitor)
   if (!tree)
     GOTO (cleanup);
 
-  workdir = ggit_repository_get_workdir (priv->repo);
+  workdir = ggit_repository_get_workdir (repo);
   if (!workdir)
     GOTO (cleanup);
 
-  relpath = g_file_get_relative_path (workdir, priv->file);
+  relpath = g_file_get_relative_path (workdir, file);
   if (!relpath)
     GOTO (cleanup);
 
@@ -392,19 +398,21 @@ gb_source_change_monitor_load_blob (GbSourceChangeMonitor *monitor)
   if (!entry_oid)
     GOTO (cleanup);
 
-  blob = ggit_repository_lookup (priv->repo, entry_oid, GGIT_TYPE_BLOB, &error);
+  blob = ggit_repository_lookup (repo, entry_oid, GGIT_TYPE_BLOB, &error);
   if (!blob)
     GOTO (cleanup);
 
-  priv->blob = g_object_ref (blob);
-  priv->relative_path = g_strdup (relpath);
+  g_task_return_pointer (task, g_object_ref (blob), g_object_unref);
+  g_object_set_data_full (G_OBJECT (task), "relpath",
+                          g_strdup (relpath), g_free);
+  success = TRUE;
 
 cleanup:
   if (error)
-    {
-      g_message ("%s", error->message);
-      g_clear_error (&error);
-    }
+    g_task_return_error (task, error);
+  else if (!success)
+    g_task_return_new_error (task, G_FILE_ERROR, G_FILE_ERROR_NOENT,
+                             _("Failed to load git blob"));
 
   g_clear_object (&blob);
   g_clear_pointer (&entry_oid, ggit_oid_free);
@@ -417,54 +425,169 @@ cleanup:
   g_clear_object (&head);
 }
 
-static void
-gb_source_change_monitor_discover_repository (GbSourceChangeMonitor *monitor)
+static GgitBlob *
+gb_source_change_monitor_load_blob_finish (GbSourceChangeMonitor  *monitor,
+                                           GAsyncResult           *result,
+                                           gchar                 **relpath,
+                                           GError                **error)
 {
-  GbSourceChangeMonitorPrivate *priv;
+  GgitBlob *blob;
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor), NULL);
+  g_return_val_if_fail (G_IS_TASK (task), NULL);
+
+  blob = g_task_propagate_pointer (task, error);
+
+  if (blob && relpath)
+    *relpath = g_strdup (g_object_get_data (G_OBJECT (task), "relpath"));
+
+  return blob;
+}
+
+static void
+free_load_task_data (gpointer data)
+{
+  gpointer *task_data = (gpointer *)data;
+
+  g_object_unref (task_data[0]);
+  g_object_unref (task_data[1]);
+  g_free (task_data);
+}
+
+static void
+gb_source_change_monitor_load_blob_async (GbSourceChangeMonitor *monitor,
+                                          GCancellable          *cancellable,
+                                          GAsyncReadyCallback    callback,
+                                          gpointer               user_data)
+{
+  gpointer *task_data;
+  GTask *task;
+
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (!monitor->priv->repo || !monitor->priv->file)
+    {
+      g_task_report_new_error (monitor, callback, user_data,
+                               gb_source_change_monitor_load_blob_async,
+                               G_FILE_ERROR, G_FILE_ERROR_NOENT,
+                               _("No file, cannot load git blob"));
+      return;
+    }
+
+  task_data = g_new0 (gpointer, 2);
+  task_data[0] = g_object_ref (monitor->priv->repo);
+  task_data[1] = g_object_ref (monitor->priv->file);
+
+  task = g_task_new (monitor, cancellable, callback, user_data);
+  g_task_set_task_data (task, task_data, free_load_task_data);
+  g_task_run_in_thread (task, gb_source_change_monitor_load_blob);
+  g_object_unref (task);
+}
+
+static void
+gb_source_change_monitor_discover (GTask        *task,
+                                   gpointer      source_object,
+                                   gpointer      task_data,
+                                   GCancellable *cancellable)
+{
+  GbSourceChangeMonitor *monitor = source_object;
+  GgitRepository *repository = NULL;
+  GError *error = NULL;
+  GFile *file = task_data;
+  GFile *repo_dir = NULL;
 
   ENTRY;
 
   g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+  g_return_if_fail (G_IS_FILE (file));
 
   /*
-   * TODO: This makes a lot of assumptions.
-   *   - that we are local
-   *   - that checking disk is free
-   *   - that we don't need to cache anything.
-   *
-   *  and all of those are probably wrong.
+   * Cannot locate .git repository unless g_file_get_path() will return
+   * something.
    */
+  if (!g_file_is_native (file))
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                               _("Cannot load git repository from non-local filesystem."));
+      GOTO (failure);
+    }
+
+  /* Discover the .git repository for working directory containing @file. */
+  repo_dir = ggit_repository_discover (file, &error);
+
+  if (!repo_dir)
+    {
+      g_task_return_error (task, error);
+      GOTO (failure);
+    }
+
+  /* Check if we were cancelled since blocking call returned */
+  if (g_task_return_error_if_cancelled (task))
+    GOTO (failure);
+
+  /* Load the repository for the file */
+  repository = ggit_repository_open (repo_dir, &error);
+
+  if (!repository)
+    {
+      g_task_return_error (task, error);
+      GOTO (failure);
+    }
+
+  /* Check if we were cancelled since blocking call returned */
+  if (g_task_return_error_if_cancelled (task))
+    GOTO (failure);
+
+  /* Pass the repository back to the main thread to assign to private */
+  g_task_return_pointer (task, g_object_ref (repository), g_object_unref);
+
+failure:
+  g_clear_object (&repo_dir);
+  g_clear_object (&repository);
+
+  EXIT;
+}
+
+static void
+gb_source_change_monitor_discover_async (GbSourceChangeMonitor *monitor,
+                                         GCancellable          *cancellable,
+                                         GAsyncReadyCallback    callback,
+                                         gpointer               user_data)
+{
+  GbSourceChangeMonitorPrivate *priv;
+  GTask *task;
+
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   priv = monitor->priv;
 
-  g_clear_object (&priv->repo);
-
-  if (priv->file)
+  if (!priv->file)
     {
-      GFile *repo_file;
-      GError *error = NULL;
-
-      repo_file = ggit_repository_discover (priv->file, &error);
-
-      if (!repo_file)
-        {
-          g_message (_("Failed to locate a git repository: %s"), error->message);
-          g_clear_error (&error);
-          EXIT;
-        }
-
-      priv->repo = ggit_repository_open (repo_file, &error);
-
-      if (!priv->repo)
-        {
-          g_message (_("Failed to open git repository: %s"), error->message);
-          g_clear_error (&error);
-        }
-
-      g_clear_object (&repo_file);
+      g_task_report_new_error (monitor, callback, user_data,
+                               gb_source_change_monitor_discover_async,
+                               G_FILE_ERROR, G_FILE_ERROR_NOENT,
+                               _("No filename, cannot discover repository."));
+      return;
     }
 
-  EXIT;
+  task = g_task_new (monitor, cancellable, callback, user_data);
+  g_task_set_task_data (task, g_object_ref (priv->file), g_object_unref);
+  g_task_run_in_thread (task, gb_source_change_monitor_discover);
+  g_object_unref (task);
+}
+
+static GgitRepository *
+gb_source_change_monitor_discover_finish (GbSourceChangeMonitor  *monitor,
+                                          GAsyncResult           *result,
+                                          GError                **error)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 GtkTextBuffer *
@@ -523,6 +646,68 @@ gb_source_change_monitor_get_file (GbSourceChangeMonitor *monitor)
   return monitor->priv->file;
 }
 
+static void
+gb_source_change_monitor_load_blob_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  GbSourceChangeMonitor *monitor = (GbSourceChangeMonitor *)object;
+  GgitBlob *blob;
+  GError *error = NULL;
+  gchar *relpath = NULL;
+
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+
+  blob = gb_source_change_monitor_load_blob_finish (monitor, result, &relpath,
+                                                    &error);
+
+  if (blob)
+    {
+      g_clear_object (&monitor->priv->blob);
+      monitor->priv->blob = blob;
+      g_clear_pointer (&monitor->priv->relative_path, g_free);
+      monitor->priv->relative_path = relpath;
+
+      gb_source_change_monitor_queue_parse (monitor);
+    }
+  else
+    {
+      g_message ("%s", error->message);
+      g_clear_error (&error);
+    }
+}
+
+static void
+gb_source_change_monitor_discover_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  GbSourceChangeMonitor *monitor = (GbSourceChangeMonitor *)object;
+  GgitRepository *repo;
+  GError *error = NULL;
+
+  g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
+
+  repo = gb_source_change_monitor_discover_finish (monitor, result, &error);
+
+  if (repo)
+    {
+      g_clear_object (&monitor->priv->repo);
+      monitor->priv->repo = repo;
+
+      if (!g_cancellable_is_cancelled (monitor->priv->cancellable))
+        gb_source_change_monitor_load_blob_async (monitor,
+                                                  monitor->priv->cancellable,
+                                                  gb_source_change_monitor_load_blob_cb,
+                                                  NULL);
+    }
+  else
+    {
+      g_message ("%s", error->message);
+      g_clear_error (&error);
+    }
+}
+
 void
 gb_source_change_monitor_reload (GbSourceChangeMonitor *monitor)
 {
@@ -531,11 +716,10 @@ gb_source_change_monitor_reload (GbSourceChangeMonitor *monitor)
   g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
 
   if (monitor->priv->file)
-    {
-      gb_source_change_monitor_discover_repository (monitor);
-      gb_source_change_monitor_load_blob (monitor);
-      gb_source_change_monitor_queue_parse (monitor);
-    }
+    gb_source_change_monitor_discover_async (monitor,
+                                             monitor->priv->cancellable,
+                                             gb_source_change_monitor_discover_cb,
+                                             NULL);
 
   EXIT;
 }
@@ -581,8 +765,15 @@ gb_source_change_monitor_dispose (GObject *object)
   gb_source_change_monitor_set_buffer (monitor, NULL);
   gb_source_change_monitor_set_file (monitor, NULL);
 
+  if (monitor->priv->cancellable)
+    {
+      g_cancellable_cancel (monitor->priv->cancellable);
+      g_clear_object (&monitor->priv->cancellable);
+    }
+
   g_clear_object (&monitor->priv->repo);
   g_clear_object (&monitor->priv->blob);
+
 
   if (monitor->priv->parse_timeout)
     {
@@ -704,5 +895,6 @@ gb_source_change_monitor_init (GbSourceChangeMonitor *monitor)
 {
   ENTRY;
   monitor->priv = gb_source_change_monitor_get_instance_private (monitor);
+  monitor->priv->cancellable = g_cancellable_new ();
   EXIT;
 }
