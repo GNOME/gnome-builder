@@ -25,9 +25,15 @@
 #include "gb-source-view.h"
 #include "gb-source-vim.h"
 #include "gb-workbench.h"
+#include "trie.h"
 
-G_DEFINE_TYPE (GbCommandVimProvider, gb_command_vim_provider,
-               GB_TYPE_COMMAND_PROVIDER)
+struct _GbCommandVimProviderPrivate
+{
+  Trie *trie;
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE (GbCommandVimProvider, gb_command_vim_provider,
+                            GB_TYPE_COMMAND_PROVIDER)
 
 GbCommandProvider *
 gb_command_vim_provider_new (GbWorkbench *workbench)
@@ -83,18 +89,79 @@ gb_command_vim_provider_lookup (GbCommandProvider *provider,
   return NULL;
 }
 
+static gboolean
+traverse_func (Trie        *trie,
+               const gchar *key,
+               gpointer     value,
+               gpointer     user_data)
+{
+  GPtrArray *ar = user_data;
+  g_ptr_array_add (ar, g_strdup (key));
+  return FALSE;
+}
+
+static void
+gb_command_vim_provider_complete (GbCommandProvider *provider,
+                                  GPtrArray         *completions,
+                                  const gchar       *initial_command_text)
+{
+  GbCommandVimProvider *self = (GbCommandVimProvider *)provider;
+
+  g_return_if_fail (GB_IS_COMMAND_VIM_PROVIDER (provider));
+  g_return_if_fail (completions);
+  g_return_if_fail (initial_command_text);
+
+  trie_traverse (self->priv->trie,
+                 initial_command_text,
+                 G_PRE_ORDER,
+                 G_TRAVERSE_LEAVES,
+                 -1,
+                 traverse_func,
+                 completions);
+}
+
+static void
+gb_command_vim_provider_finalize (GObject *object)
+{
+  GbCommandVimProvider *provider = (GbCommandVimProvider *)object;
+
+  trie_destroy (provider->priv->trie);
+  provider->priv->trie = NULL;
+
+  G_OBJECT_CLASS (gb_command_vim_provider_parent_class)->finalize (object);
+}
+
 static void
 gb_command_vim_provider_class_init (GbCommandVimProviderClass *klass)
 {
   GbCommandProviderClass *provider_class = GB_COMMAND_PROVIDER_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gb_command_vim_provider_finalize;
 
   provider_class->lookup = gb_command_vim_provider_lookup;
+  provider_class->complete = gb_command_vim_provider_complete;
 }
 
 static void
 gb_command_vim_provider_init (GbCommandVimProvider *self)
 {
+  static const gchar *commands[] = {
+    "set ",
+    "colorscheme ",
+    "syntax ",
+    "sort",
+    "nohl",
+    NULL
+  };
   GSettings *settings;
+  guint i;
+
+  self->priv = gb_command_vim_provider_get_instance_private (self);
+
+  self->priv->trie = trie_new (NULL);
+  for (i = 0; commands [i]; i++)
+    trie_insert (self->priv->trie, commands [i], (gchar *)commands [i]);
 
   settings = g_settings_new ("org.gnome.builder.editor");
   g_object_set_data_full (G_OBJECT (self), "editor-settings", settings,
