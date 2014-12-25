@@ -28,12 +28,6 @@
           </object>
         </child>
         <child>
-          <object class="GtkSeparator" id="hsep1">
-            <property name="orientation">horizontal</property>
-            <property name="visible">True</property>
-          </object>
-        </child>
-        <child>
           <object class="GtkScrolledWindow" id="completion_scroller">
             <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
             <property name="visible">False</property>
