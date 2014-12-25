@@ -48,7 +48,7 @@ struct _GbCommandVimClass
   GbCommandClass parent;
 };
 
-GType gb_command_vim_get_type (void) G_GNUC_CONST;
+GType gb_command_vim_get_type (void);
 
 G_END_DECLS
 

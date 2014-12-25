@@ -51,7 +51,7 @@ struct _GbSourceSnippetCompletionProviderClass
   GObjectClass parent_class;
 };
 
-GType                        gb_source_snippet_completion_provider_get_type (void) G_GNUC_CONST;
+GType                        gb_source_snippet_completion_provider_get_type (void);
 GtkSourceCompletionProvider *gb_source_snippet_completion_provider_new      (GbSourceView     *source_view,
                                                                              GbSourceSnippets *snippets);
 

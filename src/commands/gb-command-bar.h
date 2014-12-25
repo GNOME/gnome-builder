@@ -52,7 +52,7 @@ struct _GbCommandBarClass
                         GtkDirectionType dir);
 };
 
-GType      gb_command_bar_get_type (void) G_GNUC_CONST;
+GType      gb_command_bar_get_type (void);
 GtkWidget *gb_command_bar_new      (void);
 void       gb_command_bar_show     (GbCommandBar *bar);
 void       gb_command_bar_hide     (GbCommandBar *bar);

@@ -46,7 +46,7 @@ struct _GbWorkspaceClass
   GtkBinClass parent_class;
 };
 
-GType         gb_workspace_get_type      (void) G_GNUC_CONST;
+GType         gb_workspace_get_type      (void);
 const gchar  *gb_workspace_get_icon_name (GbWorkspace *workspace);
 void          gb_workspace_set_icon_name (GbWorkspace *workspace,
                                           const gchar *icon_name);

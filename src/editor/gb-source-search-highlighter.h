@@ -50,7 +50,7 @@ struct _GbSourceSearchHighlighterClass
   GObjectClass parent_class;
 };
 
-GType                      gb_source_search_highlighter_get_type            (void) G_GNUC_CONST;
+GType                      gb_source_search_highlighter_get_type            (void);
 void                       gb_source_search_highlighter_set_search_context  (GbSourceSearchHighlighter *highlighter,
                                                                              GtkSourceSearchContext    *search_context);
 void                       gb_source_search_highlighter_set_search_settings (GbSourceSearchHighlighter *highlighter,

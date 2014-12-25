@@ -48,7 +48,7 @@ struct _GbPreferencesPageEditorClass
   GbPreferencesPageClass parent;
 };
 
-GType gb_preferences_page_editor_get_type (void) G_GNUC_CONST;
+GType gb_preferences_page_editor_get_type (void);
 
 G_END_DECLS
 

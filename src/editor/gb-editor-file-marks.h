@@ -48,7 +48,7 @@ struct _GbEditorFileMarksClass
   GObjectClass parent;
 };
 
-GType              gb_editor_file_marks_get_type     (void) G_GNUC_CONST;
+GType              gb_editor_file_marks_get_type     (void);
 GbEditorFileMarks *gb_editor_file_marks_new          (void);
 GbEditorFileMarks *gb_editor_file_marks_get_default  (void);
 GbEditorFileMark  *gb_editor_file_marks_get_for_file (GbEditorFileMarks    *marks,

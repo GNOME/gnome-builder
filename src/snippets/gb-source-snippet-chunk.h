@@ -52,7 +52,7 @@ struct _GbSourceSnippetChunkClass
 
 GbSourceSnippetChunk   *gb_source_snippet_chunk_new          (void);
 GbSourceSnippetChunk   *gb_source_snippet_chunk_copy         (GbSourceSnippetChunk   *chunk);
-GType                   gb_source_snippet_chunk_get_type     (void) G_GNUC_CONST;
+GType                   gb_source_snippet_chunk_get_type     (void);
 GbSourceSnippetContext *gb_source_snippet_chunk_get_context  (GbSourceSnippetChunk   *chunk);
 void                    gb_source_snippet_chunk_set_context  (GbSourceSnippetChunk   *chunk,
                                                               GbSourceSnippetContext *context);

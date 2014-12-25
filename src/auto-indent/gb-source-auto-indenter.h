@@ -62,7 +62,7 @@ struct _GbSourceAutoIndenterClass
   gpointer padding[6];
 };
 
-GType     gb_source_auto_indenter_get_type   (void) G_GNUC_CONST;
+GType     gb_source_auto_indenter_get_type   (void);
 gboolean  gb_source_auto_indenter_is_trigger (GbSourceAutoIndenter *indenter,
                                               GdkEventKey          *event);
 gchar    *gb_source_auto_indenter_format     (GbSourceAutoIndenter *indenter,

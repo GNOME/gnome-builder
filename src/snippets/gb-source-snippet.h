@@ -53,7 +53,7 @@ struct _GbSourceSnippetClass
 
 GbSourceSnippet        *gb_source_snippet_new             (const gchar          *trigger);
 GbSourceSnippet        *gb_source_snippet_copy            (GbSourceSnippet      *snippet);
-GType                   gb_source_snippet_get_type        (void) G_GNUC_CONST;
+GType                   gb_source_snippet_get_type        (void);
 const gchar            *gb_source_snippet_get_trigger     (GbSourceSnippet      *snippet);
 void                    gb_source_snippet_set_trigger     (GbSourceSnippet      *snippet,
                                                            const gchar          *trigger);

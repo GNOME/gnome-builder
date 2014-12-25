@@ -75,7 +75,7 @@ struct _GdTaggedEntryTagClass
   GObjectClass parent_class;
 };
 
-GType gd_tagged_entry_get_type (void) G_GNUC_CONST;
+GType gd_tagged_entry_get_type (void);
 
 GdTaggedEntry *gd_tagged_entry_new (void);
 
@@ -93,7 +93,7 @@ gboolean gd_tagged_entry_add_tag (GdTaggedEntry    *self,
 gboolean gd_tagged_entry_remove_tag (GdTaggedEntry *self,
                                      GdTaggedEntryTag *tag);
 
-GType gd_tagged_entry_tag_get_type (void) G_GNUC_CONST;
+GType gd_tagged_entry_tag_get_type (void);
 
 GdTaggedEntryTag *gd_tagged_entry_tag_new (const gchar *label);
 

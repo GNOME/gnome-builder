@@ -48,7 +48,7 @@ struct _GbCommandGactionProviderClass
   GbCommandProviderClass parent;
 };
 
-GType              gb_command_gaction_provider_get_type (void) G_GNUC_CONST;
+GType              gb_command_gaction_provider_get_type (void);
 GbCommandProvider *gb_command_gaction_provider_new      (GbWorkbench *workbench);
 
 G_END_DECLS

@@ -50,7 +50,7 @@ struct _GeditCloseButtonClass
 	GeditCloseButtonClassPrivate *priv;
 };
 
-GType		  gedit_close_button_get_type (void) G_GNUC_CONST;
+GType		  gedit_close_button_get_type (void);
 
 GtkWidget	 *gedit_close_button_new      (void);
 

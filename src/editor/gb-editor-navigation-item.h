@@ -53,7 +53,7 @@ struct _GbEditorNavigationItemClass
 GFile                *gb_editor_navigation_item_get_file        (GbEditorNavigationItem *item);
 guint                 gb_editor_navigation_item_get_line        (GbEditorNavigationItem *item);
 guint                 gb_editor_navigation_item_get_line_offset (GbEditorNavigationItem *item);
-GType                 gb_editor_navigation_item_get_type        (void) G_GNUC_CONST;
+GType                 gb_editor_navigation_item_get_type        (void);
 GbNavigationItem     *gb_editor_navigation_item_new             (GFile                  *file,
                                                                  guint                   line,
                                                                  guint                   line_offset);

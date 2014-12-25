@@ -48,7 +48,7 @@ struct _GbBoxTheatricClass
   GObjectClass parent_class;
 };
 
-GType gb_box_theatric_get_type (void) G_GNUC_CONST;
+GType gb_box_theatric_get_type (void);
 
 G_END_DECLS
 

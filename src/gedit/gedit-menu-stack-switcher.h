@@ -55,7 +55,7 @@ struct _GeditMenuStackSwitcherClass
   void (*_gedit_reserved4) (void);
 };
 
-GType        gedit_menu_stack_switcher_get_type   (void) G_GNUC_CONST;
+GType        gedit_menu_stack_switcher_get_type   (void);
 
 GtkWidget *  gedit_menu_stack_switcher_new 	      (void);
 

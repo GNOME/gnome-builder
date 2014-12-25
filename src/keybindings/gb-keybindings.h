@@ -48,7 +48,7 @@ struct _GbKeybindingsClass
   GObjectClass parent_class;
 };
 
-GType          gb_keybindings_get_type   (void) G_GNUC_CONST;
+GType          gb_keybindings_get_type   (void);
 GbKeybindings *gb_keybindings_new        (void);
 gboolean       gb_keybindings_load_bytes (GbKeybindings   *keybindings,
                                           GBytes          *bytes,

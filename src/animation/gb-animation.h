@@ -62,8 +62,8 @@ struct _GbAnimationClass
   GInitiallyUnownedClass parent_class;
 };
 
-GType        gb_animation_get_type      (void) G_GNUC_CONST;
-GType        gb_animation_mode_get_type (void) G_GNUC_CONST;
+GType        gb_animation_get_type      (void);
+GType        gb_animation_mode_get_type (void);
 void         gb_animation_start         (GbAnimation      *animation);
 void         gb_animation_stop          (GbAnimation      *animation);
 void         gb_animation_add_property  (GbAnimation      *animation,

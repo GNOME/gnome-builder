@@ -48,7 +48,7 @@ struct _GbSourceSnippetParserClass
   GObjectClass parent_class;
 };
 
-GType                  gb_source_snippet_parser_get_type       (void) G_GNUC_CONST;
+GType                  gb_source_snippet_parser_get_type       (void);
 GbSourceSnippetParser *gb_source_snippet_parser_new            (void);
 gboolean               gb_source_snippet_parser_load_from_file (GbSourceSnippetParser  *parser,
                                                                 GFile                  *file,

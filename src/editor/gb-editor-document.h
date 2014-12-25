@@ -57,7 +57,7 @@ struct _GbEditorDocumentClass
 };
 
 GbEditorDocument      *gb_editor_document_new                          (void);
-GType                  gb_editor_document_get_type                     (void) G_GNUC_CONST;
+GType                  gb_editor_document_get_type                     (void);
 GtkSourceFile         *gb_editor_document_get_file                     (GbEditorDocument       *document);
 void                   gb_editor_document_set_file                     (GbEditorDocument       *document,
                                                                         GtkSourceFile          *file);

@@ -50,7 +50,7 @@ struct _GbSourceSnippetCompletionItemClass
   GObjectClass parent_class;
 };
 
-GType                        gb_source_snippet_completion_item_get_type    (void) G_GNUC_CONST;
+GType                        gb_source_snippet_completion_item_get_type    (void);
 GtkSourceCompletionProposal *gb_source_snippet_completion_item_new         (GbSourceSnippet *snippet);
 GbSourceSnippet             *gb_source_snippet_completion_item_get_snippet (GbSourceSnippetCompletionItem *item);
 void                         gb_source_snippet_completion_item_set_snippet (GbSourceSnippetCompletionItem *item,

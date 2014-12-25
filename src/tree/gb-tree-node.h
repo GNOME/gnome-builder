@@ -58,7 +58,7 @@ const gchar   *gb_tree_node_get_icon_name (GbTreeNode  *node);
 GObject       *gb_tree_node_get_item      (GbTreeNode  *node);
 GbTreeNode    *gb_tree_node_get_parent    (GbTreeNode  *node);
 GtkTreePath   *gb_tree_node_get_path      (GbTreeNode  *node);
-GType          gb_tree_node_get_type      (void) G_GNUC_CONST;
+GType          gb_tree_node_get_type      (void);
 void           gb_tree_node_prepend       (GbTreeNode  *node,
                                            GbTreeNode  *child);
 void           gb_tree_node_remove        (GbTreeNode  *node,

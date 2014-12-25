@@ -48,7 +48,7 @@ struct _GbSourceSnippetContextClass
   GObjectClass parent_class;
 };
 
-GType                   gb_source_snippet_context_get_type        (void) G_GNUC_CONST;
+GType                   gb_source_snippet_context_get_type        (void);
 GbSourceSnippetContext *gb_source_snippet_context_new             (void);
 void                    gb_source_snippet_context_emit_changed    (GbSourceSnippetContext *context);
 void                    gb_source_snippet_context_clear_variables (GbSourceSnippetContext *context);

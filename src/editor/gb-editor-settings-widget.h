@@ -48,7 +48,7 @@ struct _GbEditorSettingsWidgetClass
   GtkGridClass parent;
 };
 
-GType gb_editor_settings_widget_get_type (void) G_GNUC_CONST;
+GType gb_editor_settings_widget_get_type (void);
 
 G_END_DECLS
 

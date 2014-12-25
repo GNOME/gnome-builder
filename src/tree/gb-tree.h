@@ -57,7 +57,7 @@ GtkUIManager *gb_tree_get_menu_ui    (GbTree        *tree);
 GtkTreePath  *gb_tree_get_path       (GbTree        *tree,
                                       GList         *list);
 GbTreeNode   *gb_tree_get_selected   (GbTree        *tree);
-GType         gb_tree_get_type       (void) G_GNUC_CONST;
+GType         gb_tree_get_type       (void);
 void          gb_tree_rebuild        (GbTree        *tree);
 void          gb_tree_remove_builder (GbTree        *tree,
                                       GbTreeBuilder *builder);

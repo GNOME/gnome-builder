@@ -34,7 +34,7 @@ struct _GcaDiagnosticsIface
 
 };
 
-GType gca_diagnostics_get_type (void) G_GNUC_CONST;
+GType gca_diagnostics_get_type (void);
 
 GDBusInterfaceInfo *gca_diagnostics_interface_info (void);
 guint gca_diagnostics_override_properties (GObjectClass *klass, guint property_id_begin);
@@ -94,7 +94,7 @@ struct _GcaDiagnosticsProxyClass
   GDBusProxyClass parent_class;
 };
 
-GType gca_diagnostics_proxy_get_type (void) G_GNUC_CONST;
+GType gca_diagnostics_proxy_get_type (void);
 
 void gca_diagnostics_proxy_new (
     GDBusConnection     *connection,
@@ -160,7 +160,7 @@ struct _GcaDiagnosticsSkeletonClass
   GDBusInterfaceSkeletonClass parent_class;
 };
 
-GType gca_diagnostics_skeleton_get_type (void) G_GNUC_CONST;
+GType gca_diagnostics_skeleton_get_type (void);
 
 GcaDiagnostics *gca_diagnostics_skeleton_new (void);
 

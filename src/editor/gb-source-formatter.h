@@ -49,7 +49,7 @@ struct _GbSourceFormatterClass
   GObjectClass parent_class;
 };
 
-GType              gb_source_formatter_get_type          (void) G_GNUC_CONST;
+GType              gb_source_formatter_get_type          (void);
 GbSourceFormatter *gb_source_formatter_new_from_language (GtkSourceLanguage  *language);
 gboolean           gb_source_formatter_format            (GbSourceFormatter  *formatter,
                                                           const gchar        *input,

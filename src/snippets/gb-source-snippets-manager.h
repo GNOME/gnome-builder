@@ -50,7 +50,7 @@ struct _GbSourceSnippetsManagerClass
   GObjectClass parent_class;
 };
 
-GType                    gb_source_snippets_manager_get_type         (void) G_GNUC_CONST;
+GType                    gb_source_snippets_manager_get_type         (void);
 GbSourceSnippetsManager *gb_source_snippets_manager_get_default      (void);
 GbSourceSnippets        *gb_source_snippets_manager_get_for_language (GbSourceSnippetsManager *manager,
                                                                       GtkSourceLanguage       *language);

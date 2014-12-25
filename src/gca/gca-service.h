@@ -43,7 +43,7 @@ struct _GcaServiceIface
 
 };
 
-GType gca_service_get_type (void) G_GNUC_CONST;
+GType gca_service_get_type (void);
 
 GDBusInterfaceInfo *gca_service_interface_info (void);
 guint gca_service_override_properties (GObjectClass *klass, guint property_id_begin);
@@ -133,7 +133,7 @@ struct _GcaServiceProxyClass
   GDBusProxyClass parent_class;
 };
 
-GType gca_service_proxy_get_type (void) G_GNUC_CONST;
+GType gca_service_proxy_get_type (void);
 
 void gca_service_proxy_new (
     GDBusConnection     *connection,
@@ -199,7 +199,7 @@ struct _GcaServiceSkeletonClass
   GDBusInterfaceSkeletonClass parent_class;
 };
 
-GType gca_service_skeleton_get_type (void) G_GNUC_CONST;
+GType gca_service_skeleton_get_type (void);
 
 GcaService *gca_service_skeleton_new (void);
 

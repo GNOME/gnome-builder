@@ -50,7 +50,7 @@ struct _GbPreferencesWindowClass
   void (*close) (GbPreferencesWindow *window);
 };
 
-GType      gb_preferences_window_get_type (void) G_GNUC_CONST;
+GType      gb_preferences_window_get_type (void);
 GtkWidget *gb_preferences_window_new      (void);
 
 G_END_DECLS

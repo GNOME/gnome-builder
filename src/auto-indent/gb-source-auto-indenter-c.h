@@ -49,7 +49,7 @@ struct _GbSourceAutoIndenterCClass
 };
 
 GbSourceAutoIndenter *gb_source_auto_indenter_c_new      (void);
-GType                 gb_source_auto_indenter_c_get_type (void) G_GNUC_CONST;
+GType                 gb_source_auto_indenter_c_get_type (void);
 
 G_END_DECLS
 

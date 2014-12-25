@@ -57,7 +57,7 @@ struct _GbSourceChangeMonitorClass
   void (*changed) (GbSourceChangeMonitor *monitor);
 };
 
-GType                  gb_source_change_monitor_get_type (void) G_GNUC_CONST;
+GType                  gb_source_change_monitor_get_type (void);
 GbSourceChangeMonitor *gb_source_change_monitor_new      (GtkTextBuffer         *buffer);
 GFile                 *gb_source_change_monitor_get_file (GbSourceChangeMonitor *monitor);
 void                   gb_source_change_monitor_set_file (GbSourceChangeMonitor *monitor,

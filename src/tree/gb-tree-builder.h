@@ -66,7 +66,7 @@ struct _GbTreeBuilderClass
 };
 
 GtkWidget *gb_tree_builder_get_tree        (GbTreeBuilder *builder);
-GType      gb_tree_builder_get_type        (void) G_GNUC_CONST;
+GType      gb_tree_builder_get_type        (void);
 void       gb_tree_builder_build_node      (GbTreeBuilder *builder,
                                             GbTreeNode    *node);
 gboolean   gb_tree_builder_node_activated  (GbTreeBuilder *builder,

@@ -48,7 +48,7 @@ struct _GbSourceChangeGutterRendererClass
   GtkSourceGutterRendererClass parent_class;
 };
 
-GType gb_source_change_gutter_renderer_get_type (void) G_GNUC_CONST;
+GType gb_source_change_gutter_renderer_get_type (void);
 
 G_END_DECLS
 

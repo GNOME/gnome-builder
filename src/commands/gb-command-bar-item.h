@@ -50,7 +50,7 @@ struct _GbCommandBarItemClass
   GtkBinClass parent;
 };
 
-GType      gb_command_bar_item_get_type   (void) G_GNUC_CONST;
+GType      gb_command_bar_item_get_type   (void);
 GtkWidget *gb_command_bar_item_new        (GbCommandResult  *result);
 GtkWidget *gb_command_bar_item_get_result (GbCommandBarItem *item);
 

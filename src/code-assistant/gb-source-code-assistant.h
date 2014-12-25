@@ -51,7 +51,7 @@ struct _GbSourceCodeAssistantClass
   void (*changed) (GbSourceCodeAssistant *assistant);
 };
 
-GType                  gb_source_code_assistant_get_type        (void) G_GNUC_CONST;
+GType                  gb_source_code_assistant_get_type        (void);
 GbSourceCodeAssistant *gb_source_code_assistant_new             (GtkTextBuffer         *buffer);
 GArray                *gb_source_code_assistant_get_diagnostics (GbSourceCodeAssistant *assistant);
 
