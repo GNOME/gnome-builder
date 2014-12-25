@@ -47,6 +47,8 @@ struct _GbSourceCodeAssistantPrivate
 
   guint           parse_timeout;
   guint           active;
+
+  guint           service_unknown : 1;
 };
 
 enum {
@@ -315,6 +317,8 @@ gb_source_code_assistant_parse_cb (GObject      *source_object,
 
   if (!gca_service_call_parse_finish (service, &document_path, result, &error))
     {
+      if (g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_SERVICE_UNKNOWN))
+        priv->service_unknown = 1;
       g_warning ("%s", error->message);
       GOTO (failure);
     }
@@ -482,6 +486,7 @@ gb_source_code_assistant_buffer_notify_language (GbSourceCodeAssistant *assistan
   g_return_if_fail (GB_IS_SOURCE_CODE_ASSISTANT (assistant));
   g_return_if_fail (GTK_SOURCE_IS_BUFFER (buffer));
 
+  assistant->priv->service_unknown = 0;
   gb_source_code_assistant_load_service (assistant);
 
   EXIT;
@@ -494,7 +499,8 @@ gb_source_code_assistant_buffer_changed (GbSourceCodeAssistant *assistant,
   g_return_if_fail (GB_IS_SOURCE_CODE_ASSISTANT (assistant));
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
-  gb_source_code_assistant_queue_parse (assistant);
+  if (!assistant->priv->service_unknown)
+    gb_source_code_assistant_queue_parse (assistant);
 }
 
 static void
