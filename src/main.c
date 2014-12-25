@@ -39,7 +39,7 @@ main (int   argc,
   gb_log_init (TRUE, NULL);
   ggit_init ();
 
-  g_message ("Initializing with Gtk+ version %d.%d.%d.\n",
+  g_message ("Initializing with Gtk+ version %d.%d.%d.",
              gtk_get_major_version (),
              gtk_get_minor_version (),
              gtk_get_micro_version ());
