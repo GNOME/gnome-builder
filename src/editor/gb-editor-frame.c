@@ -1052,13 +1052,15 @@ static void
 gb_editor_frame_constructed (GObject *object)
 {
   GbSourceChangeMonitor *monitor = NULL;
-  GbEditorFramePrivate *priv = GB_EDITOR_FRAME (object)->priv;
+  GbEditorFramePrivate *priv;
   GtkSourceGutter *gutter;
-  GbEditorFrame *frame = GB_EDITOR_FRAME (object);
+  GbEditorFrame *frame = (GbEditorFrame *)object;
   GbSourceVim *vim;
   GSettings *settings;
 
   G_OBJECT_CLASS (gb_editor_frame_parent_class)->constructed (object);
+
+  priv = frame->priv;
 
   settings = g_settings_new ("org.gnome.builder.editor");
 
