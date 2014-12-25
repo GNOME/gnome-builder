@@ -319,7 +319,9 @@ gb_source_code_assistant_parse_cb (GObject      *source_object,
     {
       if (g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_SERVICE_UNKNOWN))
         priv->service_unknown = 1;
-      g_warning ("%s", error->message);
+      else
+        g_warning ("%s", error->message);
+
       GOTO (failure);
     }
 
