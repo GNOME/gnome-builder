@@ -41,6 +41,8 @@ struct _GbSourceChangeMonitorPrivate
 
   guint           changed_handler;
   guint           parse_timeout;
+
+  gint            found_blob;
 };
 
 enum
@@ -92,7 +94,7 @@ gb_source_change_monitor_get_line (GbSourceChangeMonitor *monitor,
    * possibly just a new file in the repository. Mark the line as
    * added.
    */
-  if (monitor->priv->repo)
+  if (monitor->priv->repo && (monitor->priv->found_blob == 0))
     return GB_SOURCE_CHANGE_ADDED;
 
   return GB_SOURCE_CHANGE_NONE;
@@ -413,6 +415,9 @@ cleanup:
   else if (!success)
     g_task_return_new_error (task, G_FILE_ERROR, G_FILE_ERROR_NOENT,
                              _("Failed to load git blob"));
+
+  /* unsafe, but okay */
+  g_atomic_int_set (&monitor->priv->found_blob, success);
 
   g_clear_object (&blob);
   g_clear_pointer (&entry_oid, ggit_oid_free);
@@ -896,5 +901,6 @@ gb_source_change_monitor_init (GbSourceChangeMonitor *monitor)
   ENTRY;
   monitor->priv = gb_source_change_monitor_get_instance_private (monitor);
   monitor->priv->cancellable = g_cancellable_new ();
+  monitor->priv->found_blob = -1;
   EXIT;
 }
