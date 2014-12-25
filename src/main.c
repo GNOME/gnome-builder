@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "Builder"
+
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -36,6 +38,11 @@ main (int   argc,
 
   gb_log_init (TRUE, NULL);
   ggit_init ();
+
+  g_message ("Initializing with Gtk+ version %d.%d.%d.\n",
+             gtk_get_major_version (),
+             gtk_get_minor_version (),
+             gtk_get_micro_version ());
 
   app = g_object_new (GB_TYPE_APPLICATION,
                       "application-id", "org.gnome.Builder",
