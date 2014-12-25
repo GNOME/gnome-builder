@@ -3788,6 +3788,14 @@ gb_source_vim_op_set_pair (GbSourceVim *vim,
     {
       gtk_source_view_set_show_line_numbers (source_view, TRUE);
     }
+  else if (g_str_equal (key, "et"))
+    {
+      gtk_source_view_set_insert_spaces_instead_of_tabs (source_view, TRUE);
+    }
+  else if (g_str_equal (key, "noet"))
+    {
+      gtk_source_view_set_insert_spaces_instead_of_tabs (source_view, FALSE);
+    }
   else if (g_str_equal (key, "ft") || g_str_equal (key, "filetype"))
     {
       GtkSourceLanguageManager *manager;
