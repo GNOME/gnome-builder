@@ -45,7 +45,7 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [FOCUSED];
+static guint       gSignals [LAST_SIGNAL];
 
 GtkWidget *
 gb_editor_frame_new (void)
