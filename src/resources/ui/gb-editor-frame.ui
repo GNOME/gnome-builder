@@ -27,7 +27,7 @@
         <property name="halign">end</property>
         <property name="valign">start</property>
         <property name="visible">true</property>
-        <property name="reveal-child">false</property>
+        <property name="width_request">300</property>
         <child>
           <object class="GtkFrame">
             <property name="visible">true</property>
