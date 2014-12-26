@@ -79,7 +79,7 @@ gb_editor_frame_link (GbEditorFrame *src,
  * Move to the next search match after the cursor position.
  */
 static void
-gb_editor_frame_move_next_match (GbEditorFrame *frame)
+gb_editor_frame_move_next_match (GbEditorFrame *self)
 {
   GbEditorFramePrivate *priv;
   GtkTextBuffer *buffer;
@@ -91,9 +91,9 @@ gb_editor_frame_move_next_match (GbEditorFrame *frame)
 
   ENTRY;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  priv = frame->priv;
+  priv = self->priv;
 
   buffer = GTK_TEXT_BUFFER (priv->document);
 
@@ -137,7 +137,7 @@ found_match:
  * Move to the first match before the cursor position.
  */
 static void
-gb_editor_frame_move_previous_match (GbEditorFrame *frame)
+gb_editor_frame_move_previous_match (GbEditorFrame *self)
 {
   GbEditorFramePrivate *priv;
   GtkTextIter select_begin;
@@ -147,9 +147,9 @@ gb_editor_frame_move_previous_match (GbEditorFrame *frame)
 
   ENTRY;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  priv = frame->priv;
+  priv = self->priv;
 
   gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (priv->document),
                                         &select_begin, &select_end);
@@ -182,14 +182,14 @@ found_match:
 }
 
 static void
-gb_editor_frame_set_position_label (GbEditorFrame *frame,
+gb_editor_frame_set_position_label (GbEditorFrame *self,
                                     const gchar   *text)
 {
   GbEditorFramePrivate *priv;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  priv = frame->priv;
+  priv = self->priv;
 
   if (!text || !*text)
     {
@@ -215,7 +215,7 @@ gb_editor_frame_set_position_label (GbEditorFrame *frame,
 }
 
 static void
-gb_editor_frame_update_search_position_label (GbEditorFrame *frame)
+gb_editor_frame_update_search_position_label (GbEditorFrame *self)
 {
   GbEditorFramePrivate *priv;
   GtkStyleContext *context;
@@ -226,9 +226,9 @@ gb_editor_frame_update_search_position_label (GbEditorFrame *frame)
   gint count;
   gint pos;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  priv = frame->priv;
+  priv = self->priv;
 
   gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (priv->document),
                                         &begin, &end);
@@ -243,7 +243,7 @@ gb_editor_frame_update_search_position_label (GbEditorFrame *frame)
        * We are not yet done scanning the buffer.
        * We will be updated when we know more, so just hide it for now.
        */
-      gb_editor_frame_set_position_label (frame, NULL);
+      gb_editor_frame_set_position_label (self, NULL);
       return;
     }
 
@@ -256,23 +256,23 @@ gb_editor_frame_update_search_position_label (GbEditorFrame *frame)
     gtk_style_context_remove_class (context, GTK_STYLE_CLASS_ERROR);
 
   text = g_strdup_printf (_("%u of %u"), pos, count);
-  gb_editor_frame_set_position_label (frame, text);
+  gb_editor_frame_set_position_label (self, text);
   g_free (text);
 }
 
 static void
-gb_editor_frame_on_search_occurrences_notify (GbEditorFrame          *frame,
+gb_editor_frame_on_search_occurrences_notify (GbEditorFrame          *self,
                                               GParamSpec             *pspec,
                                               GtkSourceSearchContext *search_context)
 {
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
 
-  gb_editor_frame_update_search_position_label (frame);
+  gb_editor_frame_update_search_position_label (self);
 }
 
 void
-gb_editor_frame_reformat (GbEditorFrame *frame)
+gb_editor_frame_reformat (GbEditorFrame *self)
 {
   GbEditorFramePrivate *priv;
   GbSourceFormatter *formatter;
@@ -295,9 +295,9 @@ gb_editor_frame_reformat (GbEditorFrame *frame)
    * TODO: Do this asynchronously, add tab state, propagate errors.
    */
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  priv = frame->priv;
+  priv = self->priv;
 
   buffer = GTK_TEXT_BUFFER (priv->document);
 
@@ -373,7 +373,7 @@ cleanup:
  * Update cursor ruler in the floating bar upon changing of insert text mark.
  */
 static void
-gb_editor_frame_on_cursor_moved (GbEditorFrame    *frame,
+gb_editor_frame_on_cursor_moved (GbEditorFrame    *self,
                                  GbEditorDocument *document)
 {
   GtkSourceView *source_view;
@@ -384,10 +384,10 @@ gb_editor_frame_on_cursor_moved (GbEditorFrame    *frame,
   guint ln;
   guint col;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
 
-  source_view = GTK_SOURCE_VIEW (frame->priv->source_view);
+  source_view = GTK_SOURCE_VIEW (self->priv->source_view);
   buffer = GTK_TEXT_BUFFER (document);
 
   mark = gtk_text_buffer_get_insert (buffer);
@@ -397,37 +397,37 @@ gb_editor_frame_on_cursor_moved (GbEditorFrame    *frame,
   col = gtk_source_view_get_visual_column (source_view, &iter);
 
   text = g_strdup_printf (_("Line %u, Column %u"), ln + 1, col + 1);
-  nautilus_floating_bar_set_primary_label (frame->priv->floating_bar, text);
+  nautilus_floating_bar_set_primary_label (self->priv->floating_bar, text);
   g_free (text);
 
-  gb_editor_frame_update_search_position_label (frame);
+  gb_editor_frame_update_search_position_label (self);
 }
 
 static void
-gb_editor_frame_on_file_mark_set (GbEditorFrame *frame,
+gb_editor_frame_on_file_mark_set (GbEditorFrame *self,
                                   GtkTextIter   *location,
                                   GtkTextBuffer *buffer)
 {
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
-  if (!gtk_widget_has_focus (GTK_WIDGET (frame->priv->source_view)))
+  if (!gtk_widget_has_focus (GTK_WIDGET (self->priv->source_view)))
     return;
 
-  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (frame->priv->source_view),
+  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self->priv->source_view),
                                    location, 0.0, TRUE, 0.5, 0.5);
 }
 
 static void
-gb_editor_frame_document_saved (GbEditorFrame    *frame,
+gb_editor_frame_document_saved (GbEditorFrame    *self,
                                 GbEditorDocument *document)
 {
   GdkWindow *window;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
 
-  window = gtk_text_view_get_window (GTK_TEXT_VIEW (frame->priv->source_view),
+  window = gtk_text_view_get_window (GTK_TEXT_VIEW (self->priv->source_view),
                                      GTK_TEXT_WINDOW_WIDGET);
   gdk_window_invalidate_rect (window, NULL, TRUE);
 }
@@ -439,7 +439,7 @@ gb_editor_frame_document_saved (GbEditorFrame    *frame,
  * are dependent on the buffer.
  */
 static void
-gb_editor_frame_connect (GbEditorFrame    *frame,
+gb_editor_frame_connect (GbEditorFrame    *self,
                          GbEditorDocument *document)
 {
   GbEditorFramePrivate *priv;
@@ -450,11 +450,11 @@ gb_editor_frame_connect (GbEditorFrame    *frame,
 
   ENTRY;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
-  g_return_if_fail (!frame->priv->document);
+  g_return_if_fail (!self->priv->document);
 
-  priv = frame->priv;
+  priv = self->priv;
 
   /*
    * Save the document for later.
@@ -471,7 +471,7 @@ gb_editor_frame_connect (GbEditorFrame    *frame,
   g_signal_connect_object (priv->document,
                            "saved",
                            G_CALLBACK (gb_editor_frame_document_saved),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   /*
@@ -518,13 +518,13 @@ gb_editor_frame_connect (GbEditorFrame    *frame,
   g_signal_connect_object (priv->search_context,
                            "notify::occurrences-count",
                            G_CALLBACK (gb_editor_frame_on_search_occurrences_notify),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->document,
                            "file-mark-set",
                            G_CALLBACK (gb_editor_frame_on_file_mark_set),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   /*
@@ -536,12 +536,12 @@ gb_editor_frame_connect (GbEditorFrame    *frame,
         g_signal_connect_swapped (priv->document,
                                   "cursor-moved",
                                   G_CALLBACK (gb_editor_frame_on_cursor_moved),
-                                  frame);
+                                  self);
     }
 
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (document));
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (document), &iter, insert);
-  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (frame->priv->source_view),
+  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self->priv->source_view),
                                    &iter, 0.0, TRUE, 0.5, 0.0);
 
   EXIT;
@@ -553,15 +553,15 @@ gb_editor_frame_connect (GbEditorFrame    *frame,
  * Cleanup any signals or objects that are related to the #GtkTextBuffer.
  */
 static void
-gb_editor_frame_disconnect (GbEditorFrame *frame)
+gb_editor_frame_disconnect (GbEditorFrame *self)
 {
   GbEditorFramePrivate *priv;
 
   ENTRY;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  priv = frame->priv;
+  priv = self->priv;
 
   if (priv->document)
     {
@@ -595,11 +595,11 @@ gb_editor_frame_disconnect (GbEditorFrame *frame)
  * Returns: (transfer none): A #GbEditorDocument.
  */
 GbEditorDocument *
-gb_editor_frame_get_document (GbEditorFrame *frame)
+gb_editor_frame_get_document (GbEditorFrame *self)
 {
-  g_return_val_if_fail (GB_IS_EDITOR_FRAME (frame), NULL);
+  g_return_val_if_fail (GB_IS_EDITOR_FRAME (self), NULL);
 
-  return frame->priv->document;
+  return self->priv->document;
 }
 
 /**
@@ -608,18 +608,18 @@ gb_editor_frame_get_document (GbEditorFrame *frame)
  * Set the #GbEditorDocument to be displayed by the #GbEditorFrame.
  */
 void
-gb_editor_frame_set_document (GbEditorFrame    *frame,
+gb_editor_frame_set_document (GbEditorFrame    *self,
                               GbEditorDocument *document)
 {
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
 
-  if (document != frame->priv->document)
+  if (document != self->priv->document)
     {
-      gb_editor_frame_disconnect (frame);
+      gb_editor_frame_disconnect (self);
       if (document)
-        gb_editor_frame_connect (frame, document);
-      g_object_notify_by_pspec (G_OBJECT (frame), gParamSpecs [PROP_DOCUMENT]);
+        gb_editor_frame_connect (self, document);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOCUMENT]);
     }
 }
 
@@ -630,22 +630,22 @@ gb_editor_frame_set_document (GbEditorFrame    *frame,
  * is hidden and we are no longer highlighting search results.
  */
 static gboolean
-gb_editor_frame_on_focus_in_event (GbEditorFrame *frame,
+gb_editor_frame_on_focus_in_event (GbEditorFrame *self,
                                    GdkEvent      *event,
                                    GbSourceView  *source_view)
 {
-  g_return_val_if_fail (GB_IS_EDITOR_FRAME (frame), FALSE);
+  g_return_val_if_fail (GB_IS_EDITOR_FRAME (self), FALSE);
   g_return_val_if_fail (GB_IS_SOURCE_VIEW (source_view), FALSE);
 
-  if (gtk_revealer_get_reveal_child (frame->priv->search_revealer))
-    gtk_revealer_set_reveal_child (frame->priv->search_revealer, FALSE);
+  if (gtk_revealer_get_reveal_child (self->priv->search_revealer))
+    gtk_revealer_set_reveal_child (self->priv->search_revealer, FALSE);
 
-  if (gtk_source_search_context_get_highlight (frame->priv->search_context))
-    gtk_source_search_context_set_highlight (frame->priv->search_context, FALSE);
+  if (gtk_source_search_context_get_highlight (self->priv->search_context))
+    gtk_source_search_context_set_highlight (self->priv->search_context, FALSE);
 
-  gb_editor_document_check_externally_modified (frame->priv->document);
+  gb_editor_document_check_externally_modified (self->priv->document);
 
-  g_signal_emit (frame, gSignals [FOCUSED], 0);
+  g_signal_emit (self, gSignals [FOCUSED], 0);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -656,11 +656,11 @@ gb_editor_frame_on_focus_in_event (GbEditorFrame *frame,
  * Update the popup menu to include choices for language highlight.
  */
 static void
-gb_editor_frame_on_populate_popup (GbEditorFrame *frame,
+gb_editor_frame_on_populate_popup (GbEditorFrame *self,
                                    GtkWidget     *popup,
                                    GtkTextView   *text_view)
 {
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (GTK_IS_WIDGET (popup));
 
@@ -673,7 +673,7 @@ gb_editor_frame_on_populate_popup (GbEditorFrame *frame,
  * Update snippet context with the filename of the current document.
  */
 static void
-gb_editor_frame_on_push_snippet (GbEditorFrame          *frame,
+gb_editor_frame_on_push_snippet (GbEditorFrame          *self,
                                  GbSourceSnippet        *snippet,
                                  GbSourceSnippetContext *context,
                                  GtkTextIter            *iter,
@@ -686,9 +686,9 @@ gb_editor_frame_on_push_snippet (GbEditorFrame          *frame,
   g_return_if_fail (GB_IS_SOURCE_SNIPPET (snippet));
   g_return_if_fail (GB_IS_SOURCE_SNIPPET_CONTEXT (context));
   g_return_if_fail (iter);
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  source_file = gb_editor_document_get_file (frame->priv->document);
+  source_file = gb_editor_document_get_file (self->priv->document);
   file = gtk_source_file_get_location (source_file);
   g_assert (!file || G_IS_FILE (file));
 
@@ -703,20 +703,20 @@ gb_editor_frame_on_push_snippet (GbEditorFrame          *frame,
 }
 
 static gboolean
-gb_editor_frame_on_search_entry_key_press (GbEditorFrame *frame,
+gb_editor_frame_on_search_entry_key_press (GbEditorFrame *self,
                                            GdkEventKey   *event,
                                            GdTaggedEntry *entry)
 {
   ENTRY;
 
   g_assert (GD_IS_TAGGED_ENTRY (entry));
-  g_assert (GB_IS_EDITOR_FRAME (frame));
+  g_assert (GB_IS_EDITOR_FRAME (self));
 
   if (event->keyval == GDK_KEY_Escape)
     {
-      gtk_revealer_set_reveal_child (frame->priv->search_revealer, FALSE);
-      gb_source_view_set_show_shadow (frame->priv->source_view, FALSE);
-      gtk_widget_grab_focus (GTK_WIDGET (frame->priv->source_view));
+      gtk_revealer_set_reveal_child (self->priv->search_revealer, FALSE);
+      gb_source_view_set_show_shadow (self->priv->source_view, FALSE);
+      gtk_widget_grab_focus (GTK_WIDGET (self->priv->source_view));
       RETURN (GDK_EVENT_STOP);
     }
 
@@ -724,38 +724,38 @@ gb_editor_frame_on_search_entry_key_press (GbEditorFrame *frame,
 }
 
 static void
-gb_editor_frame_on_search_entry_activate (GbEditorFrame *frame,
+gb_editor_frame_on_search_entry_activate (GbEditorFrame *self,
                                           GdTaggedEntry *entry)
 {
   ENTRY;
 
   g_assert (GD_IS_TAGGED_ENTRY (entry));
-  g_assert (GB_IS_EDITOR_FRAME (frame));
+  g_assert (GB_IS_EDITOR_FRAME (self));
 
-  gb_editor_frame_move_next_match (frame);
-  gtk_widget_grab_focus (GTK_WIDGET (frame->priv->source_view));
+  gb_editor_frame_move_next_match (self);
+  gtk_widget_grab_focus (GTK_WIDGET (self->priv->source_view));
 
   EXIT;
 }
 
 static void
-gb_editor_frame_on_forward_search_clicked (GbEditorFrame *frame,
+gb_editor_frame_on_forward_search_clicked (GbEditorFrame *self,
                                            GtkButton     *button)
 {
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  gb_editor_frame_move_next_match (frame);
+  gb_editor_frame_move_next_match (self);
 }
 
 static void
-gb_editor_frame_on_backward_search_clicked (GbEditorFrame *frame,
+gb_editor_frame_on_backward_search_clicked (GbEditorFrame *self,
                                             GtkButton     *button)
 {
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  gb_editor_frame_move_previous_match (frame);
+  gb_editor_frame_move_previous_match (self);
 }
 
 /**
@@ -764,7 +764,7 @@ gb_editor_frame_on_backward_search_clicked (GbEditorFrame *frame,
  * Show the search machinery when a request to begin a search has occurred.
  */
 static void
-gb_editor_frame_on_begin_search (GbEditorFrame    *frame,
+gb_editor_frame_on_begin_search (GbEditorFrame    *self,
                                  GtkDirectionType  direction,
                                  const gchar      *search_text,
                                  GbSourceView     *source_view)
@@ -773,10 +773,10 @@ gb_editor_frame_on_begin_search (GbEditorFrame    *frame,
 
   ENTRY;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
 
-  priv = frame->priv;
+  priv = self->priv;
 
   if (search_text)
     gtk_entry_set_text (GTK_ENTRY (priv->search_entry), search_text);
@@ -788,9 +788,9 @@ gb_editor_frame_on_begin_search (GbEditorFrame    *frame,
   if (search_text)
     {
       if (direction == GTK_DIR_DOWN)
-        gb_editor_frame_move_next_match (frame);
+        gb_editor_frame_move_next_match (self);
       else if (direction == GTK_DIR_UP)
-        gb_editor_frame_move_previous_match (frame);
+        gb_editor_frame_move_previous_match (self);
     }
   else
     {
@@ -806,16 +806,16 @@ gb_editor_frame_on_begin_search (GbEditorFrame    *frame,
 }
 
 void
-gb_editor_frame_find (GbEditorFrame *frame,
+gb_editor_frame_find (GbEditorFrame *self,
                       const gchar   *search_text)
 {
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
   if (!search_text)
     search_text = "";
 
-  gb_editor_frame_on_begin_search (frame, GTK_DIR_DOWN, search_text,
-                                   frame->priv->source_view);
+  gb_editor_frame_on_begin_search (self, GTK_DIR_DOWN, search_text,
+                                   self->priv->source_view);
 }
 
 static void
@@ -823,15 +823,15 @@ gb_editor_frame_find_activate (GSimpleAction *action,
                                GVariant      *parameter,
                                gpointer       user_data)
 {
-  GbEditorFrame *frame = user_data;
+  GbEditorFrame *self = user_data;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  gb_editor_frame_find (frame, "");
+  gb_editor_frame_find (self, "");
 }
 
 static gboolean
-gb_editor_frame_on_query_tooltip (GbEditorFrame *frame,
+gb_editor_frame_on_query_tooltip (GbEditorFrame *self,
                                   gint           x,
                                   gint           y,
                                   gboolean       keyboard_mode,
@@ -847,9 +847,9 @@ gb_editor_frame_on_query_tooltip (GbEditorFrame *frame,
   guint i;
 
   g_assert (GB_IS_SOURCE_VIEW (source_view));
-  g_assert (GB_IS_EDITOR_FRAME (frame));
+  g_assert (GB_IS_EDITOR_FRAME (self));
 
-  priv = frame->priv;
+  priv = self->priv;
 
   code_assistant = gb_editor_document_get_code_assistant (priv->document);
   if (!code_assistant)
@@ -897,7 +897,7 @@ cleanup:
 }
 
 static void
-gb_editor_frame_on_command_toggled (GbEditorFrame *frame,
+gb_editor_frame_on_command_toggled (GbEditorFrame *self,
                                     gboolean       visible,
                                     GbSourceVim   *vim)
 {
@@ -907,10 +907,10 @@ gb_editor_frame_on_command_toggled (GbEditorFrame *frame,
 
   ENTRY;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
-  workbench = gb_widget_get_workbench (GTK_WIDGET (frame));
+  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
   if (!workbench)
     EXIT;
 
@@ -926,7 +926,7 @@ gb_editor_frame_on_command_toggled (GbEditorFrame *frame,
 }
 
 static void
-gb_editor_frame_on_jump_to_doc (GbEditorFrame *frame,
+gb_editor_frame_on_jump_to_doc (GbEditorFrame *self,
                                 const gchar   *search_text,
                                 GbSourceView  *source_view)
 {
@@ -935,11 +935,11 @@ gb_editor_frame_on_jump_to_doc (GbEditorFrame *frame,
 
   ENTRY;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
   g_return_if_fail (search_text);
 
-  workbench = gb_widget_get_workbench (GTK_WIDGET (frame));
+  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
   action_group = gtk_widget_get_action_group (GTK_WIDGET (workbench),
                                               "workspace");
   g_action_group_activate_action (action_group, "jump-to-doc",
@@ -951,13 +951,13 @@ gb_editor_frame_on_jump_to_doc (GbEditorFrame *frame,
 static void
 gb_editor_frame_grab_focus (GtkWidget *widget)
 {
-  GbEditorFrame *frame = (GbEditorFrame *)widget;
+  GbEditorFrame *self = (GbEditorFrame *)widget;
 
   ENTRY;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  gtk_widget_grab_focus (GTK_WIDGET (frame->priv->source_view));
+  gtk_widget_grab_focus (GTK_WIDGET (self->priv->source_view));
 
   EXIT;
 }
@@ -967,15 +967,15 @@ gb_editor_frame_reformat_activate (GSimpleAction *action,
                                    GVariant      *parameter,
                                    gpointer       user_data)
 {
-  GbEditorFrame *frame = user_data;
+  GbEditorFrame *self = user_data;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  gb_editor_frame_reformat (frame);
+  gb_editor_frame_reformat (self);
 }
 
 static void
-gb_editor_frame_scroll (GbEditorFrame    *frame,
+gb_editor_frame_scroll (GbEditorFrame    *self,
                         GtkDirectionType  dir)
 {
   GtkAdjustment *vadj;
@@ -989,11 +989,11 @@ gb_editor_frame_scroll (GbEditorFrame    *frame,
   gdouble value;
   gdouble upper;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  scroller = frame->priv->scrolled_window;
-  view = GTK_TEXT_VIEW (frame->priv->source_view);
-  buffer = GTK_TEXT_BUFFER (frame->priv->document);
+  scroller = self->priv->scrolled_window;
+  view = GTK_TEXT_VIEW (self->priv->source_view);
+  buffer = GTK_TEXT_BUFFER (self->priv->document);
 
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
@@ -1012,12 +1012,12 @@ gb_editor_frame_scroll_down (GSimpleAction *action,
                              GVariant      *parameter,
                              gpointer       user_data)
 {
-  GbEditorFrame *frame = user_data;
+  GbEditorFrame *self = user_data;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  gb_editor_frame_scroll (frame, GTK_DIR_DOWN);
-  gtk_text_view_place_cursor_onscreen (GTK_TEXT_VIEW (frame->priv->source_view));
+  gb_editor_frame_scroll (self, GTK_DIR_DOWN);
+  gtk_text_view_place_cursor_onscreen (GTK_TEXT_VIEW (self->priv->source_view));
 }
 
 static void
@@ -1025,25 +1025,25 @@ gb_editor_frame_scroll_up (GSimpleAction *action,
                            GVariant      *parameter,
                            gpointer       user_data)
 {
-  GbEditorFrame *frame = user_data;
+  GbEditorFrame *self = user_data;
 
-  g_return_if_fail (GB_IS_EDITOR_FRAME (frame));
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  gb_editor_frame_scroll (frame, GTK_DIR_UP);
-  gtk_text_view_place_cursor_onscreen (GTK_TEXT_VIEW (frame->priv->source_view));
+  gb_editor_frame_scroll (self, GTK_DIR_UP);
+  gtk_text_view_place_cursor_onscreen (GTK_TEXT_VIEW (self->priv->source_view));
 }
 
 static void
 gb_editor_frame_finalize (GObject *object)
 {
-  GbEditorFrame *frame = GB_EDITOR_FRAME (object);
+  GbEditorFrame *self = GB_EDITOR_FRAME (object);
 
-  gb_editor_frame_disconnect (frame);
+  gb_editor_frame_disconnect (self);
 
-  g_clear_object (&frame->priv->code_assistant_renderer);
-  g_clear_object (&frame->priv->diff_renderer);
-  g_clear_object (&frame->priv->search_settings);
-  g_clear_object (&frame->priv->search_highlighter);
+  g_clear_object (&self->priv->code_assistant_renderer);
+  g_clear_object (&self->priv->diff_renderer);
+  g_clear_object (&self->priv->search_settings);
+  g_clear_object (&self->priv->search_highlighter);
 
   G_OBJECT_CLASS (gb_editor_frame_parent_class)->finalize (object);
 }
@@ -1054,13 +1054,13 @@ gb_editor_frame_constructed (GObject *object)
   GbSourceChangeMonitor *monitor = NULL;
   GbEditorFramePrivate *priv;
   GtkSourceGutter *gutter;
-  GbEditorFrame *frame = (GbEditorFrame *)object;
+  GbEditorFrame *self = (GbEditorFrame *)object;
   GbSourceVim *vim;
   GSettings *settings;
 
   G_OBJECT_CLASS (gb_editor_frame_parent_class)->constructed (object);
 
-  priv = frame->priv;
+  priv = self->priv;
 
   settings = g_settings_new ("org.gnome.builder.editor");
 
@@ -1116,67 +1116,67 @@ gb_editor_frame_constructed (GObject *object)
   g_signal_connect_object (vim,
                            "command-visibility-toggled",
                            G_CALLBACK (gb_editor_frame_on_command_toggled),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->source_view,
                            "display-documentation",
                            G_CALLBACK (gb_editor_frame_on_jump_to_doc),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->source_view,
                            "focus-in-event",
                            G_CALLBACK (gb_editor_frame_on_focus_in_event),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->source_view,
                            "populate-popup",
                            G_CALLBACK (gb_editor_frame_on_populate_popup),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->source_view,
                            "push-snippet",
                            G_CALLBACK (gb_editor_frame_on_push_snippet),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->source_view,
                            "begin-search",
                            G_CALLBACK (gb_editor_frame_on_begin_search),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->source_view,
                            "query-tooltip",
                            G_CALLBACK (gb_editor_frame_on_query_tooltip),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->search_entry,
                            "key-press-event",
                            G_CALLBACK (gb_editor_frame_on_search_entry_key_press),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->search_entry,
                            "activate",
                            G_CALLBACK (gb_editor_frame_on_search_entry_activate),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->forward_search,
                            "clicked",
                            G_CALLBACK (gb_editor_frame_on_forward_search_clicked),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->backward_search,
                            "clicked",
                            G_CALLBACK (gb_editor_frame_on_backward_search_clicked),
-                           frame,
+                           self,
                            G_CONNECT_SWAPPED);
 
   g_object_unref (settings);

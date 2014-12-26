@@ -54,12 +54,12 @@ GType             gb_editor_frame_get_type     (void);
 GtkWidget        *gb_editor_frame_new          (void);
 void              gb_editor_frame_link         (GbEditorFrame    *src,
                                                 GbEditorFrame    *dst);
-GbEditorDocument *gb_editor_frame_get_document (GbEditorFrame    *frame);
-void              gb_editor_frame_set_document (GbEditorFrame    *frame,
+GbEditorDocument *gb_editor_frame_get_document (GbEditorFrame    *self);
+void              gb_editor_frame_set_document (GbEditorFrame    *self,
                                                 GbEditorDocument *document);
-void              gb_editor_frame_find         (GbEditorFrame    *frame,
+void              gb_editor_frame_find         (GbEditorFrame    *self,
                                                 const gchar      *search_text);
-void              gb_editor_frame_reformat     (GbEditorFrame    *frame);
+void              gb_editor_frame_reformat     (GbEditorFrame    *self);
 
 G_END_DECLS
 
