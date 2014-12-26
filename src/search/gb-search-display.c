@@ -392,9 +392,9 @@ gb_search_display_class_init (GbSearchDisplayClass *klass)
                   1,
                   GB_TYPE_SEARCH_RESULT);
 
-  GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-search-display.ui");
-  GB_WIDGET_CLASS_BIND (widget_class, GbSearchDisplay, list_box);
-  GB_WIDGET_CLASS_BIND (widget_class, GbSearchDisplay, scroller);
+  GB_WIDGET_CLASS_TEMPLATE (klass, "gb-search-display.ui");
+  GB_WIDGET_CLASS_BIND (klass, GbSearchDisplay, list_box);
+  GB_WIDGET_CLASS_BIND (klass, GbSearchDisplay, scroller);
 
   g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
 }

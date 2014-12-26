@@ -182,13 +182,12 @@ static void
 gb_editor_tweak_widget_class_init (GbEditorTweakWidgetClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gb_editor_tweak_widget_constructed;
 
-  GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-editor-tweak-widget.ui");
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorTweakWidget, entry);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorTweakWidget, list_box);
+  GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-tweak-widget.ui");
+  GB_WIDGET_CLASS_BIND (klass, GbEditorTweakWidget, entry);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorTweakWidget, list_box);
 
   gLangQuark = g_quark_from_static_string ("GtkSourceLanguage");
 }

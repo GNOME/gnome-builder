@@ -253,7 +253,6 @@ gb_credits_widget_set_property (GObject      *object,
 static void
 gb_credits_widget_class_init (GbCreditsWidgetClass *klass)
 {
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkOverlayClass *overlay_class = GTK_OVERLAY_CLASS (klass);
 
@@ -285,10 +284,10 @@ gb_credits_widget_class_init (GbCreditsWidgetClass *klass)
   g_object_class_install_property (object_class, PROP_PROGRESS,
                                    gParamSpecs [PROP_PROGRESS]);
 
-  GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-credits-widget.ui");
-  GB_WIDGET_CLASS_BIND (widget_class, GbCreditsWidget, title);
-  GB_WIDGET_CLASS_BIND (widget_class, GbCreditsWidget, grid);
-  GB_WIDGET_CLASS_BIND (widget_class, GbCreditsWidget, event_box);
+  GB_WIDGET_CLASS_TEMPLATE (klass, "gb-credits-widget.ui");
+  GB_WIDGET_CLASS_BIND (klass, GbCreditsWidget, title);
+  GB_WIDGET_CLASS_BIND (klass, GbCreditsWidget, grid);
+  GB_WIDGET_CLASS_BIND (klass, GbCreditsWidget, event_box);
 }
 
 static void

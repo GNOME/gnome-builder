@@ -182,26 +182,25 @@ static void
 gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = gb_editor_settings_widget_finalize;
   object_class->get_property = gb_editor_settings_widget_get_property;
   object_class->set_property = gb_editor_settings_widget_set_property;
 
-  GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-editor-settings-widget.ui");
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, auto_indent);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, highlight_current_line);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, highlight_matching_brackets);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, insert_matching_brace);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, insert_spaces_instead_of_tabs);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, right_margin_position);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, overwrite_braces);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, show_line_marks);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, show_line_numbers);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, show_right_margin);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, smart_home_end);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, tab_width);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorSettingsWidget, trim_trailing_whitespace);
+  GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-settings-widget.ui");
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, auto_indent);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, highlight_current_line);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, highlight_matching_brackets);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, insert_matching_brace);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, insert_spaces_instead_of_tabs);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, right_margin_position);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, overwrite_braces);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, show_line_marks);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, show_line_numbers);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, show_right_margin);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, smart_home_end);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, tab_width);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, trim_trailing_whitespace);
 
   gParamSpecs [PROP_LANGUAGE] =
     g_param_spec_string ("language",

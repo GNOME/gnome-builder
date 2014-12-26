@@ -26,10 +26,10 @@
 G_BEGIN_DECLS
 
 #define GB_WIDGET_CLASS_TEMPLATE(klass, name) \
-  gtk_widget_class_set_template_from_resource((GtkWidgetClass*)klass, \
+  gtk_widget_class_set_template_from_resource(GTK_WIDGET_CLASS (klass), \
                                               "/org/gnome/builder/ui/"name)
 #define GB_WIDGET_CLASS_BIND(klass, TN, field) \
-  gtk_widget_class_bind_template_child_private ((GtkWidgetClass*)klass, \
+  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (klass), \
                                                 TN, field)
 
 void             gb_widget_add_style_class (gpointer      widget,

@@ -1253,15 +1253,15 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-editor-frame.ui");
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, busy_spinner);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, floating_bar);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, forward_search);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, backward_search);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, scrolled_window);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, search_revealer);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, search_entry);
-  GB_WIDGET_CLASS_BIND (widget_class, GbEditorFrame, source_view);
+  GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-frame.ui");
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, busy_spinner);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, floating_bar);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, forward_search);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, backward_search);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, scrolled_window);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, search_revealer);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, search_entry);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, source_view);
 
   g_type_ensure (GB_TYPE_SOURCE_VIEW);
   g_type_ensure (GD_TYPE_TAGGED_ENTRY);
