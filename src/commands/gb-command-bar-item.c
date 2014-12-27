@@ -83,8 +83,7 @@ gb_command_bar_item_set_result (GbCommandBarItem *item,
 
   if (item->priv->result != result)
     {
-      if (item->priv->result)
-        g_clear_object (&item->priv->result);
+      g_clear_object (&item->priv->result);
 
       if (result)
         {
