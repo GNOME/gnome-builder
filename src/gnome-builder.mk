@@ -11,28 +11,26 @@ libgnome_builder_la_SOURCES = \
 	src/app/gb-application.h \
 	src/auto-indent/c-parse-helper.c \
 	src/auto-indent/c-parse-helper.h \
-	src/auto-indent/gb-source-auto-indenter.c \
-	src/auto-indent/gb-source-auto-indenter.h \
 	src/auto-indent/gb-source-auto-indenter-c.c \
 	src/auto-indent/gb-source-auto-indenter-c.h \
 	src/auto-indent/gb-source-auto-indenter-python.c \
 	src/auto-indent/gb-source-auto-indenter-python.h \
 	src/auto-indent/gb-source-auto-indenter-xml.c \
 	src/auto-indent/gb-source-auto-indenter-xml.h \
-	src/code-assistant/gb-source-code-assistant.h \
-	src/code-assistant/gb-source-code-assistant.c \
+	src/auto-indent/gb-source-auto-indenter.c \
+	src/auto-indent/gb-source-auto-indenter.h \
 	src/code-assistant/gb-source-code-assistant-renderer.c \
 	src/code-assistant/gb-source-code-assistant-renderer.h \
-	src/commands/gb-command.c \
-	src/commands/gb-command.h \
-	src/commands/gb-command-bar.c \
-	src/commands/gb-command-bar.h \
+	src/code-assistant/gb-source-code-assistant.c \
+	src/code-assistant/gb-source-code-assistant.h \
 	src/commands/gb-command-bar-item.c \
 	src/commands/gb-command-bar-item.h \
-	src/commands/gb-command-gaction.c \
-	src/commands/gb-command-gaction.h \
+	src/commands/gb-command-bar.c \
+	src/commands/gb-command-bar.h \
 	src/commands/gb-command-gaction-provider.c \
 	src/commands/gb-command-gaction-provider.h \
+	src/commands/gb-command-gaction.c \
+	src/commands/gb-command-gaction.h \
 	src/commands/gb-command-manager.c \
 	src/commands/gb-command-manager.h \
 	src/commands/gb-command-provider.c \
@@ -43,6 +41,8 @@ libgnome_builder_la_SOURCES = \
 	src/commands/gb-command-vim-provider.h \
 	src/commands/gb-command-vim.c \
 	src/commands/gb-command-vim.h \
+	src/commands/gb-command.c \
+	src/commands/gb-command.h \
 	src/credits/gb-credits-widget.c \
 	src/credits/gb-credits-widget.h \
 	src/devhelp/gb-devhelp-document.c \
@@ -51,8 +51,6 @@ libgnome_builder_la_SOURCES = \
 	src/devhelp/gb-devhelp-view.h \
 	src/dialogs/gb-close-confirmation-dialog.c \
 	src/dialogs/gb-close-confirmation-dialog.h \
-	src/documents/gb-document.c \
-	src/documents/gb-document.h \
 	src/documents/gb-document-grid.c \
 	src/documents/gb-document-grid.h \
 	src/documents/gb-document-manager.c \
@@ -66,15 +64,17 @@ libgnome_builder_la_SOURCES = \
 	src/documents/gb-document-stack.h \
 	src/documents/gb-document-view.c \
 	src/documents/gb-document-view.h \
+	src/documents/gb-document.c \
+	src/documents/gb-document.h \
 	src/editor/gb-editor-document.c \
 	src/editor/gb-editor-document.h \
 	src/editor/gb-editor-file-mark.c \
 	src/editor/gb-editor-file-mark.h \
 	src/editor/gb-editor-file-marks.c \
 	src/editor/gb-editor-file-marks.h \
+	src/editor/gb-editor-frame-private.h \
 	src/editor/gb-editor-frame.c \
 	src/editor/gb-editor-frame.h \
-	src/editor/gb-editor-frame-private.h \
 	src/editor/gb-editor-navigation-item.c \
 	src/editor/gb-editor-navigation-item.h \
 	src/editor/gb-editor-settings-widget.c \
@@ -85,20 +85,22 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-editor-view.h \
 	src/editor/gb-editor-workspace.c \
 	src/editor/gb-editor-workspace.h \
+	src/editor/gb-source-change-gutter-renderer.c \
+	src/editor/gb-source-change-gutter-renderer.h \
 	src/editor/gb-source-change-monitor.c \
 	src/editor/gb-source-change-monitor.h \
 	src/editor/gb-source-formatter.c \
 	src/editor/gb-source-formatter.h \
-	src/editor/gb-source-change-gutter-renderer.c \
-	src/editor/gb-source-change-gutter-renderer.h \
 	src/editor/gb-source-highlight-menu.c \
 	src/editor/gb-source-highlight-menu.h \
-	src/editor/gb-source-search-highlighter.h \
 	src/editor/gb-source-search-highlighter.c \
+	src/editor/gb-source-search-highlighter.h \
 	src/editor/gb-source-style-scheme-button.c \
 	src/editor/gb-source-style-scheme-button.h \
 	src/editor/gb-source-style-scheme-widget.c \
 	src/editor/gb-source-style-scheme-widget.h \
+	src/editor/gb-source-view.c \
+	src/editor/gb-source-view.h \
 	src/fuzzy/fuzzy.c \
 	src/fuzzy/fuzzy.h \
 	src/gca/gca-diagnostics.c \
@@ -107,6 +109,12 @@ libgnome_builder_la_SOURCES = \
 	src/gca/gca-service.h \
 	src/gca/gca-structs.c \
 	src/gca/gca-structs.h \
+	src/gd/gd-tagged-entry.c \
+	src/gd/gd-tagged-entry.h \
+	src/gedit/gedit-close-button.c \
+	src/gedit/gedit-close-button.h \
+	src/gedit/gedit-menu-stack-switcher.c \
+	src/gedit/gedit-menu-stack-switcher.h \
 	src/git/gb-git-search-provider.c \
 	src/git/gb-git-search-provider.h \
 	src/git/gb-git-search-result.c \
@@ -115,55 +123,30 @@ libgnome_builder_la_SOURCES = \
 	src/html/gb-html-document.h \
 	src/html/gb-html-view.c \
 	src/html/gb-html-view.h \
+	src/keybindings/gb-keybindings.c \
+	src/keybindings/gb-keybindings.h \
+	src/log/gb-log.c \
+	src/log/gb-log.h \
 	src/markdown/gs-markdown.c \
 	src/markdown/gs-markdown.h \
-	src/navigation/gb-navigation-list.h \
-	src/navigation/gb-navigation-list.c \
-	src/navigation/gb-navigation-item.h \
+	src/nautilus/nautilus-floating-bar.c \
+	src/nautilus/nautilus-floating-bar.h \
 	src/navigation/gb-navigation-item.c \
-	src/preferences/gb-preferences-window.c \
-	src/preferences/gb-preferences-window.h \
-	src/preferences/gb-preferences-page.c \
-	src/preferences/gb-preferences-page.h \
+	src/navigation/gb-navigation-item.h \
+	src/navigation/gb-navigation-list.c \
+	src/navigation/gb-navigation-list.h \
 	src/preferences/gb-preferences-page-editor.c \
 	src/preferences/gb-preferences-page-editor.h \
 	src/preferences/gb-preferences-page-git.c \
 	src/preferences/gb-preferences-page-git.h \
 	src/preferences/gb-preferences-page-language.c \
 	src/preferences/gb-preferences-page-language.h \
+	src/preferences/gb-preferences-page.c \
+	src/preferences/gb-preferences-page.h \
+	src/preferences/gb-preferences-window.c \
+	src/preferences/gb-preferences-window.h \
 	src/scrolledwindow/gb-scrolled-window.c \
 	src/scrolledwindow/gb-scrolled-window.h \
-	src/snippets/gb-source-snippet-chunk.c \
-	src/snippets/gb-source-snippet-chunk.h \
-	src/snippets/gb-source-snippet-completion-item.c \
-	src/snippets/gb-source-snippet-completion-item.h \
-	src/snippets/gb-source-snippet-completion-provider.c \
-	src/snippets/gb-source-snippet-completion-provider.h \
-	src/snippets/gb-source-snippet-context.c \
-	src/snippets/gb-source-snippet-context.h \
-	src/snippets/gb-source-snippet.c \
-	src/snippets/gb-source-snippet.h \
-	src/snippets/gb-source-snippet-parser.c \
-	src/snippets/gb-source-snippet-parser.h \
-	src/snippets/gb-source-snippet-private.h \
-	src/snippets/gb-source-snippets.c \
-	src/snippets/gb-source-snippets.h \
-	src/snippets/gb-source-snippets-manager.c \
-	src/snippets/gb-source-snippets-manager.h \
-	src/editor/gb-source-view.c \
-	src/editor/gb-source-view.h \
-	src/gd/gd-tagged-entry.c \
-	src/gd/gd-tagged-entry.h \
-	src/gedit/gedit-close-button.c \
-	src/gedit/gedit-close-button.h \
-	src/gedit/gedit-menu-stack-switcher.c \
-	src/gedit/gedit-menu-stack-switcher.h \
-	src/keybindings/gb-keybindings.c \
-	src/keybindings/gb-keybindings.h \
-	src/log/gb-log.c \
-	src/log/gb-log.h \
-	src/nautilus/nautilus-floating-bar.c \
-	src/nautilus/nautilus-floating-bar.h \
 	src/search/gb-search-box.c \
 	src/search/gb-search-box.h \
 	src/search/gb-search-context.c \
@@ -177,14 +160,31 @@ libgnome_builder_la_SOURCES = \
 	src/search/gb-search-result.c \
 	src/search/gb-search-result.h \
 	src/search/gb-search-types.h \
+	src/snippets/gb-source-snippet-chunk.c \
+	src/snippets/gb-source-snippet-chunk.h \
+	src/snippets/gb-source-snippet-completion-item.c \
+	src/snippets/gb-source-snippet-completion-item.h \
+	src/snippets/gb-source-snippet-completion-provider.c \
+	src/snippets/gb-source-snippet-completion-provider.h \
+	src/snippets/gb-source-snippet-context.c \
+	src/snippets/gb-source-snippet-context.h \
+	src/snippets/gb-source-snippet-parser.c \
+	src/snippets/gb-source-snippet-parser.h \
+	src/snippets/gb-source-snippet-private.h \
+	src/snippets/gb-source-snippet.c \
+	src/snippets/gb-source-snippet.h \
+	src/snippets/gb-source-snippets-manager.c \
+	src/snippets/gb-source-snippets-manager.h \
+	src/snippets/gb-source-snippets.c \
+	src/snippets/gb-source-snippets.h \
 	src/theatrics/gb-box-theatric.c \
 	src/theatrics/gb-box-theatric.h \
-	src/tree/gb-tree.c \
-	src/tree/gb-tree.h \
 	src/tree/gb-tree-builder.c \
 	src/tree/gb-tree-builder.h \
 	src/tree/gb-tree-node.c \
 	src/tree/gb-tree-node.h \
+	src/tree/gb-tree.c \
+	src/tree/gb-tree.h \
 	src/trie/trie.c \
 	src/trie/trie.h \
 	src/util/gb-cairo.c \
@@ -203,9 +203,9 @@ libgnome_builder_la_SOURCES = \
 	src/util/gb-widget.h \
 	src/vim/gb-source-vim.c \
 	src/vim/gb-source-vim.h \
+	src/workbench/gb-workbench-types.h \
 	src/workbench/gb-workbench.c \
 	src/workbench/gb-workbench.h \
-	src/workbench/gb-workbench-types.h \
 	src/workbench/gb-workspace.c \
 	src/workbench/gb-workspace.h
 
