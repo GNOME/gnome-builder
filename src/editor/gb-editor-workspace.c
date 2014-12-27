@@ -20,7 +20,6 @@
 
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
-#include <libgen.h>
 
 #include "gb-devhelp-document.h"
 #include "gb-devhelp-view.h"
