@@ -247,8 +247,7 @@ gb_editor_workspace_finalize (GObject *object)
   GbEditorWorkspacePrivate *priv = GB_EDITOR_WORKSPACE (object)->priv;
 
   g_clear_pointer (&priv->command_map, g_hash_table_unref);
-  g_free (priv->current_folder_uri);
-  priv->current_folder_uri = NULL;
+  g_clear_pointer (&priv->current_folder_uri, g_free);
 
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->finalize (object);
 }
