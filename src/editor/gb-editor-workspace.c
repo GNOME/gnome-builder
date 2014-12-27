@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
+#include <libgen.h>
 
 #include "gb-devhelp-document.h"
 #include "gb-devhelp-view.h"
@@ -36,6 +37,7 @@ struct _GbEditorWorkspacePrivate
   GHashTable         *command_map;
   GtkPaned           *paned;
   GbDocumentGrid     *document_grid;
+  gchar              *current_folder_uri;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorWorkspace, gb_editor_workspace,
@@ -138,6 +140,7 @@ gb_editor_workspace_action_open (GSimpleAction *action,
                                  gpointer       user_data)
 {
   GbEditorWorkspace *workspace = user_data;
+  GbEditorWorkspacePrivate *priv = workspace->priv;
   GtkFileChooserDialog *dialog;
   GtkWidget *toplevel;
   GtkWidget *suggested;
@@ -155,6 +158,9 @@ gb_editor_workspace_action_open (GSimpleAction *action,
                          "transient-for", toplevel,
                          "title", _("Open Document"),
                          NULL);
+
+  if (priv->current_folder_uri)
+    gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (dialog), priv->current_folder_uri);
 
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           _("Cancel"), GTK_RESPONSE_CANCEL,
@@ -174,6 +180,19 @@ gb_editor_workspace_action_open (GSimpleAction *action,
     {
       GSList *files;
       GSList *iter;
+      gchar *file_uri;
+      gchar *uri;
+
+      file_uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (dialog));
+      uri = g_strdup (dirname (file_uri));
+      if (g_strcmp0 (priv->current_folder_uri, uri) != 0)
+        {
+          g_free (priv->current_folder_uri);
+          priv->current_folder_uri = uri;
+          uri = NULL;
+        }
+      g_free (uri);
+      g_free (file_uri);
 
       files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (dialog));
 
@@ -228,6 +247,8 @@ gb_editor_workspace_finalize (GObject *object)
   GbEditorWorkspacePrivate *priv = GB_EDITOR_WORKSPACE (object)->priv;
 
   g_clear_pointer (&priv->command_map, g_hash_table_unref);
+  g_free (priv->current_folder_uri);
+  priv->current_folder_uri = NULL;
 
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->finalize (object);
 }
@@ -264,6 +285,7 @@ gb_editor_workspace_init (GbEditorWorkspace *workspace)
   workspace->priv = gb_editor_workspace_get_instance_private (workspace);
 
   workspace->priv->command_map = g_hash_table_new (g_str_hash, g_str_equal);
+  workspace->priv->current_folder_uri = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (workspace));
 
