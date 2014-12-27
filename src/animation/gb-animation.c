@@ -426,7 +426,7 @@ gb_animation_set_frame_clock (GbAnimation   *animation,
 {
   GbAnimationPrivate *priv = animation->priv;
 
-  if (frame_clock)
+  if (priv->frame_clock != frame_clock)
     {
       g_clear_object (&priv->frame_clock);
       priv->frame_clock = frame_clock ? g_object_ref (frame_clock) : NULL;
