@@ -160,7 +160,8 @@ gb_editor_workspace_action_open (GSimpleAction *action,
                          NULL);
 
   if (priv->current_folder_uri)
-    gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (dialog), priv->current_folder_uri);
+    gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (dialog),
+                                             priv->current_folder_uri);
 
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           _("Cancel"), GTK_RESPONSE_CANCEL,
@@ -183,7 +184,7 @@ gb_editor_workspace_action_open (GSimpleAction *action,
       gchar *file_uri;
       gchar *uri;
 
-      file_uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (dialog));
+      file_uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
       uri = g_strdup (dirname (file_uri));
       if (g_strcmp0 (priv->current_folder_uri, uri) != 0)
         {
