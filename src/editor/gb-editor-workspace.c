@@ -185,7 +185,7 @@ gb_editor_workspace_action_open (GSimpleAction *action,
       gchar *uri;
 
       file_uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
-      uri = g_strdup (dirname (file_uri));
+      uri = g_path_get_dirname (file_uri);
       if (g_strcmp0 (priv->current_folder_uri, uri) != 0)
         {
           g_free (priv->current_folder_uri);
