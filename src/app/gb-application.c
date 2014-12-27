@@ -31,6 +31,7 @@
 #include "gb-log.h"
 #include "gb-keybindings.h"
 #include "gb-preferences-window.h"
+#include "gb-support.h"
 #include "gb-resources.h"
 #include "gb-workbench.h"
 
@@ -442,10 +443,61 @@ gb_application_activate_preferences_action (GSimpleAction *action,
 }
 
 static void
+gb_application_activate_support_action (GSimpleAction *action,
+                                        GVariant      *parameter,
+                                        gpointer       user_data)
+{
+  GbApplication *application = user_data;
+  GtkWidget *dialog;
+  gchar *text = NULL;
+  GList *windows;
+  GError *error = NULL;
+  gchar *str = NULL;
+  gchar *log_path = NULL;
+  gchar *name = NULL;
+
+  name = g_strdup_printf ("gnome-builder-%u.log", (int)getpid ());
+  log_path = g_build_filename (g_get_home_dir (), name, NULL);
+  g_free (name);
+
+  windows = gtk_application_get_windows (GTK_APPLICATION (application));
+
+  str = gb_get_support_log ();
+
+  if (!g_file_set_contents (log_path, str, -1, &error))
+    {
+      g_printerr ("%s\n", error->message);
+      goto cleanup;
+    }
+
+  text = g_strdup_printf (_("The support log file has been written to '%s'. "
+                            "Please provide this file as an attachment on "
+                            "your bug report or support request."),
+                            log_path);
+
+  g_message ("%s", text);
+
+  dialog = gtk_message_dialog_new (windows ? windows->data : NULL,
+                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   GTK_MESSAGE_INFO,
+                                   GTK_BUTTONS_CLOSE,
+                                   "%s", text);
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+
+cleanup:
+  g_free (text);
+  g_clear_error (&error);
+  g_free (str);
+  g_free (log_path);
+}
+
+static void
 gb_application_register_actions (GbApplication *self)
 {
   static const GActionEntry action_entries[] = {
     { "preferences", gb_application_activate_preferences_action },
+    { "support", gb_application_activate_support_action },
     { "quit", gb_application_activate_quit_action },
   };
 

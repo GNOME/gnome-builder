@@ -177,6 +177,8 @@ libgnome_builder_la_SOURCES = \
 	src/snippets/gb-source-snippets-manager.h \
 	src/snippets/gb-source-snippets.c \
 	src/snippets/gb-source-snippets.h \
+	src/support/gb-support.c \
+	src/support/gb-support.h \
 	src/theatrics/gb-box-theatric.c \
 	src/theatrics/gb-box-theatric.h \
 	src/tree/gb-tree-builder.c \
@@ -245,6 +247,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/scrolledwindow \
 	-I$(top_srcdir)/src/search \
 	-I$(top_srcdir)/src/snippets \
+	-I$(top_srcdir)/src/support \
 	-I$(top_srcdir)/src/tree \
 	-I$(top_srcdir)/src/trie \
 	-I$(top_srcdir)/src/theatrics \
