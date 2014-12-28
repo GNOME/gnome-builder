@@ -811,9 +811,6 @@ gb_editor_frame_find (GbEditorFrame *self,
 {
   g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  if (!search_text)
-    search_text = "";
-
   gb_editor_frame_on_begin_search (self, GTK_DIR_DOWN, search_text,
                                    self->priv->source_view);
 }
@@ -827,7 +824,7 @@ gb_editor_frame_find_activate (GSimpleAction *action,
 
   g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  gb_editor_frame_find (self, "");
+  gb_editor_frame_find (self, NULL);
 }
 
 static gboolean
