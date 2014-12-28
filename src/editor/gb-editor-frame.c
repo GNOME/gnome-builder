@@ -124,7 +124,7 @@ gb_editor_frame_move_next_match (GbEditorFrame *self)
 
 found_match:
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->document),
-                                &match_begin, &match_begin);
+                                &match_begin, &match_end);
   gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view),
                                    &match_begin, 0.0, TRUE, 0.5, 0.5);
 
@@ -174,7 +174,7 @@ gb_editor_frame_move_previous_match (GbEditorFrame *self)
 
 found_match:
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->document),
-                                &match_begin, &match_begin);
+                                &match_begin, &match_end);
   gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view),
                                    &match_begin, 0.0, TRUE, 0.5, 0.5);
 
@@ -712,12 +712,24 @@ gb_editor_frame_on_search_entry_key_press (GbEditorFrame *self,
   g_assert (GD_IS_TAGGED_ENTRY (entry));
   g_assert (GB_IS_EDITOR_FRAME (self));
 
-  if (event->keyval == GDK_KEY_Escape)
+  switch (event->keyval)
     {
+    case GDK_KEY_Escape:
       gtk_revealer_set_reveal_child (self->priv->search_revealer, FALSE);
       gb_source_view_set_show_shadow (self->priv->source_view, FALSE);
       gtk_widget_grab_focus (GTK_WIDGET (self->priv->source_view));
       RETURN (GDK_EVENT_STOP);
+
+    case GDK_KEY_Down:
+      gb_editor_frame_move_next_match (self);
+      RETURN (GDK_EVENT_STOP);
+
+    case GDK_KEY_Up:
+      gb_editor_frame_move_previous_match (self);
+      RETURN (GDK_EVENT_STOP);
+
+    default:
+      break;
     }
 
   RETURN (GDK_EVENT_PROPAGATE);
