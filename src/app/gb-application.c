@@ -40,7 +40,13 @@
 #define LANGUAGE_PATH "/org/gnome/builder/editor/language/"
 #define GSV_PATH "resource:///org/gnome/builder/styles/"
 
-G_DEFINE_TYPE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
+struct _GbApplicationPrivate
+{
+  GbKeybindings *keybindings;
+  GSettings     *editor_settings;
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
 
 static void
 gb_application_setup_search_paths (void)
@@ -259,51 +265,92 @@ gb_application_register_theme_overrides (GbApplication *application)
 }
 
 static void
-gb_application_register_keybindings (GbApplication *self)
+gb_application_load_keybindings (GbApplication *application,
+                                 const gchar   *name)
 {
-  GbKeybindings *keybindings;
+  GbKeybindings *keybindings = NULL;
   GError *error = NULL;
-  GBytes *bytes;
+  GBytes *bytes = NULL;
   gchar *path;
 
-  ENTRY;
+  g_return_if_fail (GB_IS_APPLICATION (application));
 
-  g_assert (GB_IS_APPLICATION (self));
+  if (application->priv->keybindings)
+    {
+      gb_keybindings_unregister (application->priv->keybindings,
+                                 GTK_APPLICATION (application));
+      g_clear_object (&application->priv->keybindings);
+    }
+
+  path = g_strdup_printf ("/org/gnome/builder/keybindings/%s.ini", name);
+  bytes = g_resources_lookup_data (path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  g_free (path);
+
+  if (!bytes)
+    {
+      g_warning (_("Failed to load keybindings."));
+      return;
+    }
 
   keybindings = gb_keybindings_new ();
 
-  /*
-   * Load bundled keybindings.
-   */
-  bytes = g_resources_lookup_data ("/org/gnome/builder/keybindings/default.ini",
-                                   G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
   if (!gb_keybindings_load_bytes (keybindings, bytes, &error))
     {
-      g_warning (_("Failed to load default keybindings: %s"), error->message);
-      g_clear_error (&error);
+      g_warning (_("Failed to load keybindings: %s"), error->message);
+      goto cleanup;
     }
-  g_bytes_unref (bytes);
 
-  /*
-   * Load local overrides from ~/.config/gnome-builder/keybindings.ini
-   */
   path = g_build_filename (g_get_user_config_dir (),
                            "gnome-builder",
                            "keybindings.ini",
                            NULL);
+
   if (g_file_test (path, G_FILE_TEST_EXISTS) &&
       !gb_keybindings_load_path (keybindings, path, &error))
     {
       g_warning (_("Failed to load local keybindings: %s"), error->message);
-      g_clear_error (&error);
+      goto cleanup;
     }
+
   g_free (path);
 
-  gb_keybindings_register (keybindings, GTK_APPLICATION (self));
+  gb_keybindings_register (keybindings, GTK_APPLICATION (application));
 
-  g_object_unref (keybindings);
+  application->priv->keybindings = g_object_ref (keybindings);
 
-  EXIT;
+cleanup:
+  g_clear_object (&keybindings);
+  g_clear_error (&error);
+  g_clear_pointer (&bytes, g_bytes_unref);
+}
+
+static void
+gb_application_vim_mode_changed (GbApplication *self,
+                                 const gchar   *key,
+                                 GSettings     *settings)
+{
+  g_return_if_fail (GB_IS_APPLICATION (self));
+  g_return_if_fail (G_IS_SETTINGS (settings));
+
+  if (g_settings_get_boolean (settings, "vim-mode"))
+    gb_application_load_keybindings (self, "vim");
+  else
+    gb_application_load_keybindings (self, "default");
+}
+
+static void
+gb_application_register_keybindings (GbApplication *self)
+{
+  g_return_if_fail (GB_IS_APPLICATION (self));
+  g_return_if_fail (!self->priv->editor_settings);
+
+  self->priv->editor_settings = g_settings_new ("org.gnome.builder.editor");
+  g_signal_connect_object (self->priv->editor_settings,
+                           "changed::vim-mode",
+                           G_CALLBACK (gb_application_vim_mode_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gb_application_vim_mode_changed (self, NULL, self->priv->editor_settings);
 }
 
 static GbWorkbench *
@@ -570,6 +617,23 @@ gb_application_constructed (GObject *object)
 }
 
 static void
+gb_application_finalize (GObject *object)
+{
+  GbApplicationPrivate *priv;
+
+  ENTRY;
+
+  priv = GB_APPLICATION (object)->priv;
+
+  g_clear_object (&priv->editor_settings);
+  g_clear_object (&priv->keybindings);
+
+  G_OBJECT_CLASS (gb_application_parent_class)->finalize (object);
+
+  EXIT;
+}
+
+static void
 gb_application_class_init (GbApplicationClass *klass)
 {
   GApplicationClass *app_class = G_APPLICATION_CLASS (klass);
@@ -578,6 +642,7 @@ gb_application_class_init (GbApplicationClass *klass)
   ENTRY;
 
   object_class->constructed = gb_application_constructed;
+  object_class->finalize = gb_application_finalize;
 
   app_class->activate = gb_application_activate;
   app_class->startup = gb_application_startup;
@@ -591,5 +656,6 @@ static void
 gb_application_init (GbApplication *application)
 {
   ENTRY;
+  application->priv = gb_application_get_instance_private (application);
   EXIT;
 }

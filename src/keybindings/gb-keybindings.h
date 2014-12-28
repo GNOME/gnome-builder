@@ -58,6 +58,8 @@ gboolean       gb_keybindings_load_path  (GbKeybindings   *keybindings,
                                           GError         **error);
 void           gb_keybindings_register   (GbKeybindings   *keybindings,
                                           GtkApplication  *application);
+void           gb_keybindings_unregister (GbKeybindings   *keybindings,
+                                          GtkApplication  *application);
 
 G_END_DECLS
 

@@ -9,6 +9,7 @@
     <file>gtk/menus.ui</file>
 
     <file>keybindings/default.ini</file>
+    <file>keybindings/vim.ini</file>
 
     <file>language/defaults.ini</file>
 

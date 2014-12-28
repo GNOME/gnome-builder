@@ -162,6 +162,27 @@ gb_keybindings_register (GbKeybindings  *keybindings,
     }
 }
 
+void
+gb_keybindings_unregister (GbKeybindings  *keybindings,
+                           GtkApplication *application)
+{
+  GHashTableIter iter;
+  const gchar *action_name;
+  const gchar *accelerator;
+  gchar *accels[] = { NULL };
+
+  g_return_if_fail (GB_IS_KEYBINDINGS (keybindings));
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+
+  g_hash_table_iter_init (&iter, keybindings->priv->keybindings);
+
+  while (g_hash_table_iter_next (&iter,
+                                 (gpointer *)&action_name,
+                                 (gpointer *)&accelerator))
+    gtk_application_set_accels_for_action (application, action_name,
+                                           (const gchar * const *)accels);
+}
+
 static void
 gb_keybindings_finalize (GObject *object)
 {
