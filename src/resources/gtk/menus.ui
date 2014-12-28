@@ -10,24 +10,21 @@
       </item>
     </section>
     <section>
-      <attribute name="id">help-section</attribute>
-      <item>
-        <attribute name="label" translatable="yes">_Help</attribute>
-        <attribute name="action">app.help</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_About Builder</attribute>
-        <attribute name="action">win.about</attribute>
-      </item>
-    </section>
-    <section>
       <item>
         <attribute name="label" translatable="yes">Generate Support Log</attribute>
         <attribute name="action">app.support</attribute>
       </item>
     </section>
     <section>
-      <attribute name="id">quit-section</attribute>
+      <attribute name="id">help-section</attribute>
+      <item>
+        <attribute name="label" translatable="yes">_Help</attribute>
+        <attribute name="action">app.help</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About</attribute>
+        <attribute name="action">win.about</attribute>
+      </item>
       <item>
         <attribute name="label" translatable="yes">_Quit</attribute>
         <attribute name="action">app.quit</attribute>
