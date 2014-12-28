@@ -739,12 +739,28 @@ static void
 gb_editor_frame_on_search_entry_activate (GbEditorFrame *self,
                                           GdTaggedEntry *entry)
 {
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
   ENTRY;
 
   g_assert (GD_IS_TAGGED_ENTRY (entry));
   g_assert (GB_IS_EDITOR_FRAME (self));
 
   gb_editor_frame_move_next_match (self);
+
+  buffer = GTK_TEXT_BUFFER (self->priv->document);
+
+  if (gtk_text_buffer_get_has_selection (buffer))
+    {
+      gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+      if (gtk_text_iter_compare (&begin, &end) <= 0)
+        gtk_text_buffer_select_range (buffer, &begin, &begin);
+      else
+        gtk_text_buffer_select_range (buffer, &end, &end);
+    }
+
   gtk_widget_grab_focus (GTK_WIDGET (self->priv->source_view));
 
   EXIT;
