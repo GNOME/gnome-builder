@@ -20,7 +20,9 @@
 # include <sys/utsname.h>
 # include <sys/types.h>
 # include <sys/syscall.h>
-#endif /* __linux__ */
+#elif defined __FreeBSD__
+# include <sys/utsname.h>
+#endif /* !__linux__ && !__FreeBSD__ */
 
 #include <glib.h>
 #include <string.h>
@@ -169,7 +171,7 @@ gb_log_init (gboolean     stdout_,
           g_ptr_array_add (channels, channel);
         }
 
-#ifdef __linux__
+#if defined __linux__ || defined __FreeBSD__
       uname (&u);
       memcpy (hostname, u.nodename, sizeof (hostname));
 #else
