@@ -1545,7 +1545,11 @@ gb_source_vim_move_up (GbSourceVim *vim)
   if (is_single_char_selection (&iter, &selection))
     {
       if (gtk_text_iter_compare (&iter, &selection) > 0)
-        priv->target_line_offset = --offset;
+        {
+          if (offset)
+            --offset;
+          priv->target_line_offset = offset;
+        }
     }
 
   gtk_text_buffer_get_iter_at_line (buffer, &iter, line - 1);
