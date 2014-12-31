@@ -220,6 +220,22 @@ gb_source_vim_new (GtkTextView *text_view)
                        NULL);
 }
 
+static gboolean
+gb_source_vim_get_iter_visible (GbSourceVim *vim,
+                                GtkTextIter *iter)
+{
+  GdkRectangle visible_rect;
+  GdkRectangle iter_location;
+
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
+  g_return_val_if_fail (iter, FALSE);
+
+  gtk_text_view_get_iter_location (vim->priv->text_view, iter, &iter_location);
+  gtk_text_view_get_visible_rect (vim->priv->text_view, &visible_rect);
+
+  return gdk_rectangle_intersect (&visible_rect, &iter_location, NULL);
+}
+
 /**
  * gb_source_vim_recording_begin:
  * @trigger: the character used to trigger recording
@@ -905,6 +921,10 @@ gb_source_vim_move_backward (GbSourceVim *vim)
       else
         gtk_text_buffer_select_range (buffer, &iter, &iter);
 
+      if (!gb_source_vim_get_iter_visible (vim, &iter))
+        gtk_text_view_scroll_to_iter (vim->priv->text_view, &iter,
+                                      0.0, FALSE, 0.0, 0.0);
+
       vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
     }
 }
@@ -1045,6 +1065,10 @@ gb_source_vim_move_forward (GbSourceVim *vim)
         }
       else
         gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+      if (!gb_source_vim_get_iter_visible (vim, &iter))
+        gtk_text_view_scroll_to_iter (vim->priv->text_view, &iter,
+                                      0.0, FALSE, 0.0, 0.0);
 
       vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
     }
