@@ -1,3 +1,5 @@
+@APPSTREAM_XML_RULES@
+appstream_XML = data/appdata/org.gnome.Builder.appdata.xml
 
 # Desktop launcher and description file.
 data_desktopdir = $(datadir)/applications
