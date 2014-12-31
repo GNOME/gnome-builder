@@ -73,13 +73,48 @@ gb_editor_frame_link (GbEditorFrame *src,
                           G_BINDING_SYNC_CREATE);
 }
 
+static void
+gb_editor_frame_restore_position (GbEditorFrame *self)
+{
+  GtkTextIter iter;
+  GtkTextBuffer *buffer;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+
+  buffer = GTK_TEXT_BUFFER (self->priv->document);
+  gb_gtk_text_buffer_get_iter_at_line_and_offset (buffer, &iter,
+                                                  self->priv->saved_line,
+                                                  self->priv->saved_line_offset);
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self->priv->source_view),
+                                   &iter, 0.25, TRUE, 0.0, 0.5);
+}
+
+static void
+gb_editor_frame_save_position (GbEditorFrame *self)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+
+  buffer = GTK_TEXT_BUFFER (self->priv->document);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  self->priv->saved_line = gtk_text_iter_get_line (&iter);
+  self->priv->saved_line_offset = gtk_text_iter_get_line_offset (&iter);
+}
+
 /**
  * gb_editor_frame_move_next_match:
  *
  * Move to the next search match after the cursor position.
  */
 static void
-gb_editor_frame_move_next_match (GbEditorFrame *self)
+gb_editor_frame_move_next_match (GbEditorFrame *self,
+                                 gboolean       rubberbanding)
 {
   GbEditorFramePrivate *priv;
   GtkTextBuffer *buffer;
@@ -98,13 +133,27 @@ gb_editor_frame_move_next_match (GbEditorFrame *self)
   buffer = GTK_TEXT_BUFFER (priv->document);
 
   /*
-   * Start by trying from our current location.
+   * Start by trying from our current location unless we are rubberbanding, then
+   * start from our saved position.
    */
-  has_selection = gtk_text_buffer_get_selection_bounds (buffer, &select_begin,
-                                                        &select_end);
-  if (!has_selection)
-    if (!gtk_text_iter_forward_char (&select_end))
-      gtk_text_buffer_get_end_iter (buffer, &select_end);
+  if (rubberbanding)
+    {
+      gb_gtk_text_buffer_get_iter_at_line_and_offset (buffer, &select_begin,
+                                                      priv->saved_line,
+                                                      priv->saved_line_offset);
+      select_end = select_begin;
+    }
+  else
+    {
+      has_selection = gtk_text_buffer_get_selection_bounds (buffer,
+                                                            &select_begin,
+                                                            &select_end);
+
+      if (!has_selection)
+        if (!gtk_text_iter_forward_char (&select_end))
+          gtk_text_buffer_get_end_iter (buffer, &select_end);
+
+    }
 
   if (gtk_source_search_context_forward (priv->search_context, &select_end,
                                          &match_begin, &match_end))
@@ -119,6 +168,8 @@ gb_editor_frame_move_next_match (GbEditorFrame *self)
   if (gtk_source_search_context_forward (priv->search_context, &select_begin,
                                          &match_begin, &match_end))
     GOTO (found_match);
+
+  gb_editor_frame_restore_position (self);
 
   EXIT;
 
@@ -707,25 +758,44 @@ gb_editor_frame_on_search_entry_key_press (GbEditorFrame *self,
                                            GdkEventKey   *event,
                                            GdTaggedEntry *entry)
 {
+  gint begin;
+  gint end;
+
   ENTRY;
 
   g_assert (GD_IS_TAGGED_ENTRY (entry));
   g_assert (GB_IS_EDITOR_FRAME (self));
+
+  /*
+   * WORKAROUND:
+   *
+   * There is some weird stuff going on with key-press when we have a selection.
+   * We want to overwrite the text, but sometimes it doesn't. So we can just
+   * force it if the string field is set.
+   */
+  if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &begin, &end) &&
+      g_unichar_isprint (gdk_keyval_to_unicode (event->keyval)))
+    {
+      gtk_editable_delete_selection (GTK_EDITABLE (entry));
+    }
 
   switch (event->keyval)
     {
     case GDK_KEY_Escape:
       gtk_revealer_set_reveal_child (self->priv->search_revealer, FALSE);
       gb_source_view_set_show_shadow (self->priv->source_view, FALSE);
+      gb_editor_frame_restore_position (self);
       gtk_widget_grab_focus (GTK_WIDGET (self->priv->source_view));
       RETURN (GDK_EVENT_STOP);
 
     case GDK_KEY_Down:
-      gb_editor_frame_move_next_match (self);
+      gb_editor_frame_move_next_match (self, FALSE);
+      gb_editor_frame_save_position (self);
       RETURN (GDK_EVENT_STOP);
 
     case GDK_KEY_Up:
       gb_editor_frame_move_previous_match (self);
+      gb_editor_frame_save_position (self);
       RETURN (GDK_EVENT_STOP);
 
     default:
@@ -733,6 +803,21 @@ gb_editor_frame_on_search_entry_key_press (GbEditorFrame *self,
     }
 
   RETURN (GDK_EVENT_PROPAGATE);
+}
+
+static void
+gb_editor_frame_on_search_entry_changed (GbEditorFrame *self,
+                                         GtkEntry      *entry)
+{
+  const gchar *search_text;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+  g_return_if_fail (GD_IS_TAGGED_ENTRY (entry));
+
+  search_text = gtk_entry_get_text (entry);
+
+  if (!gb_str_empty0 (search_text))
+    gb_editor_frame_move_next_match (self, TRUE);
 }
 
 static void
@@ -747,7 +832,7 @@ gb_editor_frame_on_search_entry_activate (GbEditorFrame *self,
   g_assert (GD_IS_TAGGED_ENTRY (entry));
   g_assert (GB_IS_EDITOR_FRAME (self));
 
-  gb_editor_frame_move_next_match (self);
+  gb_editor_frame_move_next_match (self, TRUE);
 
   buffer = GTK_TEXT_BUFFER (self->priv->document);
 
@@ -773,7 +858,7 @@ gb_editor_frame_on_forward_search_clicked (GbEditorFrame *self,
   g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  gb_editor_frame_move_next_match (self);
+  gb_editor_frame_move_next_match (self, FALSE);
 }
 
 static void
@@ -806,6 +891,8 @@ gb_editor_frame_on_begin_search (GbEditorFrame    *self,
 
   priv = self->priv;
 
+  gb_editor_frame_save_position (self);
+
   if (search_text)
     gtk_entry_set_text (GTK_ENTRY (priv->search_entry), search_text);
 
@@ -816,7 +903,7 @@ gb_editor_frame_on_begin_search (GbEditorFrame    *self,
   if (search_text)
     {
       if (direction == GTK_DIR_DOWN)
-        gb_editor_frame_move_next_match (self);
+        gb_editor_frame_move_next_match (self, TRUE);
       else if (direction == GTK_DIR_UP)
         gb_editor_frame_move_previous_match (self);
     }
@@ -825,6 +912,12 @@ gb_editor_frame_on_begin_search (GbEditorFrame    *self,
       const gchar *text;
       guint len;
 
+      gb_editor_frame_move_next_match (self, TRUE);
+
+      /*
+       * We manually get the string length instead of passing -1 for length
+       * because -1 doesn't seem to work as documented.
+       */
       text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
       len = g_utf8_strlen (text, -1);
       gtk_editable_select_region (GTK_EDITABLE (priv->search_entry), 0, len);
@@ -1183,6 +1276,12 @@ gb_editor_frame_constructed (GObject *object)
   g_signal_connect_object (priv->search_entry,
                            "key-press-event",
                            G_CALLBACK (gb_editor_frame_on_search_entry_key_press),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (priv->search_entry,
+                           "changed",
+                           G_CALLBACK (gb_editor_frame_on_search_entry_changed),
                            self,
                            G_CONNECT_SWAPPED);
 

@@ -53,6 +53,10 @@ struct _GbEditorFramePrivate
 
   /* Signal handler identifiers */
   gulong                         cursor_moved_handler;
+
+  /* Tracking last cursor position when jumping */
+  guint                          saved_line;
+  guint                          saved_line_offset;
 };
 
 G_END_DECLS
