@@ -18,13 +18,13 @@
 
 #define G_LOG_DOMAIN "html-document"
 
+#include <glib.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksourcefile.h>
 
 #include "gb-editor-document.h"
 #include "gb-html-document.h"
 #include "gb-html-view.h"
-#include "gs-markdown.h"
 
 struct _GbHtmlDocumentPrivate
 {
@@ -336,42 +336,56 @@ gchar *
 gb_html_markdown_transform (GbHtmlDocument *document,
                             const gchar    *content)
 {
-  GsMarkdown *md;
   gchar *str;
 
-  g_return_val_if_fail (GB_IS_HTML_DOCUMENT (document), NULL);
-  g_return_val_if_fail (content, NULL);
-
-  md = gs_markdown_new (GS_MARKDOWN_OUTPUT_HTML);
-  gs_markdown_set_autolinkify (md, TRUE);
-  gs_markdown_set_escape (md, TRUE);
-
-  str = gs_markdown_parse (md, content);
+  str = g_strescape (content, NULL);
 
   if (str)
     {
       GBytes *css;
       const guint8 *css_data;
+      const guint8 *marked_data;
+      const guint8 *markdown_view_data;
+      GBytes *marked;
+      GBytes *markdown_view;
       gchar *tmp;
 
       css = g_resources_lookup_data ("/org/gnome/builder/css/markdown.css",
                                      0, NULL);
       css_data = g_bytes_get_data (css, NULL);
+
+      marked = g_resources_lookup_data ("/org/gnome/builder/js/marked.js",
+                                        0, NULL);
+      marked_data = g_bytes_get_data (marked, NULL);
+
+      markdown_view = g_resources_lookup_data (
+                      "/org/gnome/builder/js/markdown-view.js", 0, NULL);
+      markdown_view_data = g_bytes_get_data (markdown_view, NULL);
+
       tmp = g_strdup_printf ("<html>\n"
-                             " <style>%s</style>\n"
-                             " <body>\n"
-                             "  <div class=\"markdown-body\">\n"
-                             "   %s\n"
+                             " <head>\n"
+                             "  <style>%s</style>\n"
+                             "  <script>var str=\"%s\";</script>\n"
+                             "  <script>%s</script>\n"
+                             "  <script>%s</script>\n"
+                             " </head>\n"
+                             " <body onload=\"preview()\">\n"
+                             "  <div class=\"markdown-body\" id=\"preview\">\n"
                              "  </div>\n"
                              " </body>\n"
                              "</html>",
-                             (gchar *)css_data, str);
+                             (gchar *)css_data,
+                             str,
+                             (gchar *)marked_data,
+                             (gchar *)markdown_view_data);
+
+      g_bytes_unref (css);
+      g_bytes_unref (marked);
+      g_bytes_unref (markdown_view);
       g_free (str);
 
       str = tmp;
     }
-
-  g_clear_object (&md);
 
   return str;
 }

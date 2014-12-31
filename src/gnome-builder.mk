@@ -129,8 +129,6 @@ libgnome_builder_la_SOURCES = \
 	src/keybindings/gb-keybindings.h \
 	src/log/gb-log.c \
 	src/log/gb-log.h \
-	src/markdown/gs-markdown.c \
-	src/markdown/gs-markdown.h \
 	src/nautilus/nautilus-floating-bar.c \
 	src/nautilus/nautilus-floating-bar.h \
 	src/navigation/gb-navigation-item.c \
@@ -240,7 +238,6 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/html \
 	-I$(top_srcdir)/src/keybindings \
 	-I$(top_srcdir)/src/log \
-	-I$(top_srcdir)/src/markdown \
 	-I$(top_srcdir)/src/nautilus \
 	-I$(top_srcdir)/src/navigation \
 	-I$(top_srcdir)/src/preferences \

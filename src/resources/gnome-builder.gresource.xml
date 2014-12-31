@@ -7,6 +7,9 @@
     <file>editor/uncrustify/uncrustify.c.cfg</file>
 
     <file>gtk/menus.ui</file>
+    
+    <file>js/marked.js</file>
+    <file>js/markdown-view.js</file>
 
     <file>keybindings/default.ini</file>
     <file>keybindings/vim.ini</file>
