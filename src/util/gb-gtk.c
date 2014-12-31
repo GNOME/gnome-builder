@@ -34,14 +34,14 @@ struct ScrollState
  * the line offset does not need to exist. It will work forward as far as
  * possible on that line.
  */
-void
+gboolean
 gb_gtk_text_buffer_get_iter_at_line_and_offset (GtkTextBuffer *buffer,
                                                 GtkTextIter   *iter,
                                                 guint          line,
                                                 guint          line_offset)
 {
-  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
-  g_return_if_fail (iter);
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
+  g_return_val_if_fail (iter, FALSE);
 
   gtk_text_buffer_get_iter_at_line (buffer, iter, line);
 
@@ -57,7 +57,11 @@ gb_gtk_text_buffer_get_iter_at_line_and_offset (GtkTextBuffer *buffer,
               break;
             }
         }
+
+      return (line_offset == 0);
     }
+
+  return FALSE;
 }
 
 static gboolean
