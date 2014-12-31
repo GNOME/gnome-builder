@@ -76,18 +76,21 @@ gb_editor_frame_link (GbEditorFrame *src,
 static void
 gb_editor_frame_restore_position (GbEditorFrame *self)
 {
+  GtkTextView *text_view;
   GtkTextIter iter;
   GtkTextBuffer *buffer;
 
   g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  buffer = GTK_TEXT_BUFFER (self->priv->document);
+  text_view = GTK_TEXT_VIEW (self->priv->source_view);
+  buffer = gtk_text_view_get_buffer (text_view);
+
   gb_gtk_text_buffer_get_iter_at_line_and_offset (buffer, &iter,
                                                   self->priv->saved_line,
                                                   self->priv->saved_line_offset);
   gtk_text_buffer_select_range (buffer, &iter, &iter);
-  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self->priv->source_view),
-                                   &iter, 0.25, TRUE, 0.0, 0.5);
+  if (!gb_gtk_text_view_get_iter_visible (text_view, &iter))
+    gb_gtk_text_view_scroll_to_iter (text_view, &iter, 0.25, TRUE, 0.0, 0.5);
 }
 
 static void
@@ -176,8 +179,11 @@ gb_editor_frame_move_next_match (GbEditorFrame *self,
 found_match:
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->document),
                                 &match_begin, &match_end);
-  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view),
-                                   &match_begin, 0.0, TRUE, 0.5, 0.5);
+
+  if (!gb_gtk_text_view_get_iter_visible (GTK_TEXT_VIEW (priv->source_view),
+                                          &match_begin))
+    gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view),
+                                     &match_begin, 0.0, TRUE, 0.5, 0.5);
 
   EXIT;
 }
