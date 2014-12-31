@@ -35,6 +35,9 @@ void gb_gtk_text_view_scroll_to_iter (GtkTextView *text_view,
                                       gdouble      xalign,
                                       gdouble      yalign);
 
+gboolean gb_gtk_text_view_get_iter_visible (GtkTextView *text_view,
+                                            GtkTextIter *iter);
+
 G_END_DECLS
 
 #endif /* GB_GTK_H */

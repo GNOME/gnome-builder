@@ -138,3 +138,19 @@ gb_gtk_text_view_scroll_to_iter (GtkTextView *text_view,
 
   g_timeout_add (50, gb_gtk_text_view_scroll_to_iter_cb, state);
 }
+
+gboolean
+gb_gtk_text_view_get_iter_visible (GtkTextView *text_view,
+                                   GtkTextIter *iter)
+{
+  GdkRectangle visible_rect;
+  GdkRectangle iter_location;
+
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+  g_return_val_if_fail (iter, FALSE);
+
+  gtk_text_view_get_visible_rect (text_view, &visible_rect);
+  gtk_text_view_get_iter_location (text_view, iter, &iter_location);
+
+  return gdk_rectangle_intersect (&visible_rect, &iter_location, NULL);
+}
