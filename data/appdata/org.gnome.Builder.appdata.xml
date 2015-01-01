@@ -9,14 +9,19 @@
 
   <description>
     <p>
-      Builder is a new IDE for GNOME that is focused on bringing the power of
-      our platform to more developers than ever before.
+      Builder is an actively developed Integrated Development Environment for
+      GNOME. It combines integrated support for essential GNOME technologies
+      such as Gtk, Glib, and GNOME APIs with features that any developer will
+      appreciate, like syntax highlighting and snippets.
     </p>
     <p>Features:</p>
     <ul>
       <li>HTML/Markdown preview</li>
-      <li>Autocompletion</li>
-      <li>Integration with VCS</li>
+      <li>Autocompletion and indentation</li>
+      <li>Code syntax highlighting</li>
+      <li>Split views of a single document</li>
+      <li>Optional Vim-style editing</li>
+      <li>Integration with Git</li>
     </ul>
   </description>
 
