@@ -1,5 +1,6 @@
-@APPSTREAM_XML_RULES@
-appstream_XML = data/appdata/org.gnome.Builder.appdata.xml
+data_appdatadir = $(datadir)/appdata
+data_appdata_DATA = data/org.gnome.Builder.appdata.xml
+EXTRA_DIST += $(data_appdata_DATA)
 
 # Desktop launcher and description file.
 data_desktopdir = $(datadir)/applications
