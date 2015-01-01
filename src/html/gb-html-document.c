@@ -44,6 +44,7 @@ enum {
   PROP_0,
   PROP_BUFFER,
   PROP_MODIFIED,
+  PROP_READ_ONLY,
   PROP_TITLE,
   LAST_PROP
 };
@@ -222,6 +223,12 @@ gb_html_document_create_view (GbDocument *document)
                        NULL);
 }
 
+static gboolean
+gb_html_document_get_read_only (GbDocument *document)
+{
+  return TRUE;
+}
+
 static void
 gb_html_document_finalize (GObject *object)
 {
@@ -250,6 +257,10 @@ gb_html_document_get_property (GObject    *object,
     case PROP_MODIFIED:
       g_value_set_boolean (value,
                            gb_html_document_get_modified (GB_DOCUMENT (self)));
+      break;
+
+    case PROP_READ_ONLY:
+      g_value_set_boolean (value, TRUE);
       break;
 
     case PROP_TITLE:
@@ -291,6 +302,7 @@ gb_html_document_class_init (GbHtmlDocumentClass *klass)
   object_class->set_property = gb_html_document_set_property;
 
   g_object_class_override_property (object_class, PROP_MODIFIED, "modified");
+  g_object_class_override_property (object_class, PROP_READ_ONLY, "read-only");
   g_object_class_override_property (object_class, PROP_TITLE, "title");
 
   gParamSpecs [PROP_BUFFER] =
@@ -317,6 +329,7 @@ gb_html_document_init_document (GbDocumentInterface *iface)
   iface->get_title = gb_html_document_get_title;
   iface->get_modified = gb_html_document_get_modified;
   iface->create_view = gb_html_document_create_view;
+  iface->get_read_only = gb_html_document_get_read_only;
 }
 
 gchar *
