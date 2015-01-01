@@ -22,12 +22,6 @@ if test -z "${AUTORECONF}"; then
     exit 1
 fi
 
-# Check for libappstream-glib-devel so we don't get APPSTREAM_XML_RULES failures.
-if ! pkg-config appstream-glib; then
-    echo "*** libappstream-glib-devel not found, please install it."
-    exit 1
-fi
-
 # Generate m4 sub-configure scripts for inclusion by configure.ac.
 for group in ac am config lt output print; do
     for mode in pre post; do
