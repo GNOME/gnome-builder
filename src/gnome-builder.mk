@@ -119,6 +119,8 @@ libgnome_builder_la_SOURCES = \
 	src/git/gb-git-search-provider.h \
 	src/git/gb-git-search-result.c \
 	src/git/gb-git-search-result.h \
+	src/html/gb-html-completion-provider.c \
+	src/html/gb-html-completion-provider.h \
 	src/html/gb-html-document.c \
 	src/html/gb-html-document.h \
 	src/html/gb-html-view.c \

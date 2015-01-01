@@ -31,6 +31,7 @@
 #include "gb-cairo.h"
 #include "gb-editor-document.h"
 #include "gb-gtk.h"
+#include "gb-html-completion-provider.h"
 #include "gb-log.h"
 #include "gb-pango.h"
 #include "gb-source-auto-indenter.h"
@@ -50,6 +51,7 @@ struct _GbSourceViewPrivate
   GbSourceSearchHighlighter   *search_highlighter;
   GtkTextBuffer               *buffer;
   GbSourceAutoIndenter        *auto_indenter;
+  GtkSourceCompletionProvider *html_provider;
   GtkSourceCompletionProvider *snippets_provider;
   GtkSourceCompletionProvider *words_provider;
   GbSourceVim                 *vim;
@@ -1142,7 +1144,7 @@ gb_source_view_reload_auto_indenter (GbSourceView *view)
         auto_indenter = gb_source_auto_indenter_c_new ();
       else if (g_str_equal (lang_id, "python"))
         auto_indenter = gb_source_auto_indenter_python_new ();
-      else if (g_str_equal (lang_id, "xml"))
+      else if (g_str_equal (lang_id, "xml") || g_str_equal (lang_id, "html"))
         auto_indenter = gb_source_auto_indenter_xml_new ();
     }
 
@@ -1158,6 +1160,42 @@ gb_source_view_reload_auto_indenter (GbSourceView *view)
 }
 
 static void
+gb_source_view_reload_providers (GbSourceView *view)
+{
+  GtkSourceCompletion *completion;
+  GtkSourceLanguage *language;
+  GtkTextBuffer *buffer;
+  const gchar *lang_id = NULL;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (view));
+
+  if (language)
+    lang_id = gtk_source_language_get_id (language);
+
+  if (view->priv->html_provider)
+    {
+      gtk_source_completion_remove_provider (completion,
+                                             view->priv->html_provider,
+                                             NULL);
+      g_clear_object (&view->priv->html_provider);
+    }
+
+  if (g_strcmp0 (lang_id, "html") == 0)
+    {
+      view->priv->html_provider = gb_html_completion_provider_new ();
+      gtk_source_completion_add_provider (completion,
+                                          view->priv->html_provider,
+                                          NULL);
+    }
+
+  gb_source_view_reload_snippets (view);
+}
+
+static void
 on_language_set (GtkSourceBuffer *buffer,
                  GParamSpec      *pspec,
                  GbSourceView    *view)
@@ -1167,7 +1205,7 @@ on_language_set (GtkSourceBuffer *buffer,
 
   gb_source_view_disconnect_settings (view);
   gb_source_view_reload_auto_indenter (view);
-  gb_source_view_reload_snippets (view);
+  gb_source_view_reload_providers (view);
   gb_source_view_connect_settings (view);
 }
 
@@ -1264,7 +1302,7 @@ gb_source_view_notify_buffer (GObject    *object,
           GTK_TEXT_BUFFER (buffer));
 
       gb_source_view_reload_auto_indenter (view);
-      gb_source_view_reload_snippets (view);
+      gb_source_view_reload_providers (view);
 
       gb_source_view_connect_settings (view);
     }
@@ -2178,6 +2216,7 @@ gb_source_view_finalize (GObject *object)
   g_clear_pointer (&priv->snippets, g_queue_free);
   g_clear_object (&priv->search_highlighter);
   g_clear_object (&priv->auto_indenter);
+  g_clear_object (&priv->html_provider);
   g_clear_object (&priv->snippets_provider);
   g_clear_object (&priv->words_provider);
   g_clear_object (&priv->vim);
