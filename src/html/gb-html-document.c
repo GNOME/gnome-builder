@@ -290,7 +290,7 @@ gb_html_document_class_init (GbHtmlDocumentClass *klass)
   object_class->get_property = gb_html_document_get_property;
   object_class->set_property = gb_html_document_set_property;
 
-  g_object_class_override_property (object_class, PROP_TITLE, "modified");
+  g_object_class_override_property (object_class, PROP_MODIFIED, "modified");
   g_object_class_override_property (object_class, PROP_TITLE, "title");
 
   gParamSpecs [PROP_BUFFER] =
