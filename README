@@ -34,7 +34,7 @@ get started is to use the development tool jhbuild to install from source.
   ./autogen.sh
   make
   make install
-  jhbuild build gnome-builder
+  jhbuild build -m gnome-world gnome-builder
   jhbuild run gnome-builder
 
 We hope to have VM images that can be used for testing in the near future.
