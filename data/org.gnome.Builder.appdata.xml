@@ -27,7 +27,7 @@
 
   <screenshots>
     <screenshot type="default">
-      <image width="1440" height="900">https://raw.githubusercontent.com/chergert/gnome-builder-web/master/wiki-screenshot.png</image>
+      <image width="1200" height="675">https://git.gnome.org/browse/gnome-builder/plain/data/gnome-builder.png</image>
     </screenshot>
     <screenshot>
       <caption>HTML Preview</caption>
