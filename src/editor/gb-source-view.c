@@ -1316,6 +1316,7 @@ gb_source_view_maybe_overwrite (GbSourceView *view,
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   gunichar ch;
+  gunichar prev_ch;
   gboolean ignore = FALSE;
 
   g_return_if_fail (GB_IS_SOURCE_VIEW (view));
@@ -1336,6 +1337,7 @@ gb_source_view_maybe_overwrite (GbSourceView *view,
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
 
   ch = gtk_text_iter_get_char (&iter);
+  prev_ch = gb_gtk_text_iter_get_previous_char (&iter);
 
   switch (event->keyval)
     {
@@ -1352,7 +1354,7 @@ gb_source_view_maybe_overwrite (GbSourceView *view,
       break;
 
     case GDK_KEY_quotedbl:
-      ignore = (ch == '"');
+      ignore = (ch == '"') && (prev_ch != '\\');
       break;
 
     case GDK_KEY_quoteleft:
@@ -1425,9 +1427,11 @@ gb_source_view_maybe_insert_match (GbSourceView *view,
 {
   GtkTextIter iter;
   GtkTextIter next_iter;
+  GtkTextIter prev_iter;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   gunichar next_ch = 0;
+  gunichar prev_ch = 0;
   gchar ch = 0;
 
   /*
@@ -1479,6 +1483,17 @@ gb_source_view_maybe_insert_match (GbSourceView *view,
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
   next_ch = gtk_text_iter_get_char (&iter);
+
+  prev_iter = iter;
+  gtk_text_iter_backward_chars (&prev_iter, 2);
+  prev_ch = gtk_text_iter_get_char (&prev_iter);
+
+  /*
+   * If we are inserting right after \ (pretty much universal escape character,
+   * so probably not worth abstracting), then just do nothing.
+   */
+  if (prev_ch == '\\')
+    return FALSE;
 
   /*
    * Insert the match if one of the following is true:
