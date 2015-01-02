@@ -1414,6 +1414,13 @@ count_chars_on_line (GbSourceView      *view,
       gunichar ch;
 
       ch = gtk_text_iter_get_char (&cur);
+
+      if (ch == '\\')
+        {
+          gtk_text_iter_forward_chars (&cur, 2);
+          continue;
+        }
+
       count += (ch == expected_char);
       gtk_text_iter_forward_char (&cur);
     }
