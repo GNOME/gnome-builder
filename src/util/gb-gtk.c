@@ -154,3 +154,19 @@ gb_gtk_text_view_get_iter_visible (GtkTextView *text_view,
 
   return gdk_rectangle_intersect (&visible_rect, &iter_location, NULL);
 }
+
+gunichar
+gb_gtk_text_iter_get_previous_char (const GtkTextIter *iter)
+{
+  GtkTextIter copy;
+
+  g_return_val_if_fail (iter, 0);
+
+  copy = *iter;
+
+  gtk_text_iter_backward_char (&copy);
+  if (gtk_text_iter_equal (&copy, iter))
+    return '\0';
+
+  return gtk_text_iter_get_char (&copy);
+}

@@ -38,6 +38,8 @@ void gb_gtk_text_view_scroll_to_iter (GtkTextView *text_view,
 gboolean gb_gtk_text_view_get_iter_visible (GtkTextView *text_view,
                                             GtkTextIter *iter);
 
+gunichar gb_gtk_text_iter_get_previous_char (const GtkTextIter *iter);
+
 G_END_DECLS
 
 #endif /* GB_GTK_H */
