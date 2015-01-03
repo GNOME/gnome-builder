@@ -8,6 +8,23 @@
         <style>
           <class name="linked"/>
         </style>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">True</property>
+            <property name="action_name">html-view.refresh</property>
+            <style>
+              <class name="image-button"/>
+              <class name="tab-control-first"/>
+              <class name="tab-control-last"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon_name">view-refresh-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
     <child>

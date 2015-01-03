@@ -178,6 +178,26 @@ gb_html_view_set_document (GbHtmlView *view,
 }
 
 static void
+gb_html_view_refresh (GSimpleAction *action,
+                      GVariant      *parameters,
+                      gpointer       user_data)
+{
+  GtkTextBuffer *buffer;
+  GbHtmlView *view = user_data;
+
+  g_return_if_fail (GB_IS_HTML_VIEW (view));
+
+  if (!view->priv->document)
+    return;
+
+  buffer = gb_html_document_get_buffer (view->priv->document);
+  if (!buffer)
+    return;
+
+  gb_html_view_changed (view, buffer);
+}
+
+static void
 gb_html_view_finalize (GObject *object)
 {
   GbHtmlViewPrivate *priv = GB_HTML_VIEW (object)->priv;
@@ -258,7 +278,24 @@ gb_html_view_class_init (GbHtmlViewClass *klass)
 static void
 gb_html_view_init (GbHtmlView *self)
 {
+  static const GActionEntry entries[] = {
+    { "refresh", gb_html_view_refresh },
+  };
+  GSimpleActionGroup *actions;
+  GtkWidget *controls;
+
   self->priv = gb_html_view_get_instance_private (self);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  controls = gb_document_view_get_controls (GB_DOCUMENT_VIEW (self));
+
+  actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries,
+                                   G_N_ELEMENTS (entries), self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "html-view",
+                                  G_ACTION_GROUP (actions));
+  gtk_widget_insert_action_group (controls, "html-view",
+                                  G_ACTION_GROUP (actions));
+  g_object_unref (actions);
 }
