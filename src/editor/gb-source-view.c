@@ -1432,13 +1432,13 @@ static gboolean
 gb_source_view_maybe_insert_match (GbSourceView *view,
                                    GdkEventKey  *event)
 {
-  GtkTextIter iter;
-  GtkTextIter next_iter;
-  GtkTextIter prev_iter;
+  GtkSourceBuffer *sbuf;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
+  GtkTextIter iter;
+  GtkTextIter prev_iter;
+  GtkTextIter next_iter;
   gunichar next_ch = 0;
-  gunichar prev_ch = 0;
   gchar ch = 0;
 
   /*
@@ -1450,7 +1450,28 @@ gb_source_view_maybe_insert_match (GbSourceView *view,
   g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), FALSE);
   g_return_val_if_fail (event, FALSE);
 
+  /*
+   * If we are disabled, then do nothing.
+   */
   if (!view->priv->insert_matching_brace)
+    return FALSE;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  sbuf = GTK_SOURCE_BUFFER (buffer);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  next_ch = gtk_text_iter_get_char (&iter);
+
+  prev_iter = iter;
+  gtk_text_iter_backward_chars (&prev_iter, 2);
+
+  /*
+   * If the source language has marked this region as a string or comment,
+   * then do nothing.
+   */
+  if (gtk_source_buffer_iter_has_context_class (sbuf, &prev_iter, "string") ||
+      gtk_source_buffer_iter_has_context_class (sbuf, &prev_iter, "comment"))
     return FALSE;
 
   switch (event->keyval)
@@ -1485,22 +1506,6 @@ gb_source_view_maybe_insert_match (GbSourceView *view,
     default:
       return FALSE;
     }
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-  insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-  next_ch = gtk_text_iter_get_char (&iter);
-
-  prev_iter = iter;
-  gtk_text_iter_backward_chars (&prev_iter, 2);
-  prev_ch = gtk_text_iter_get_char (&prev_iter);
-
-  /*
-   * If we are inserting right after \ (pretty much universal escape character,
-   * so probably not worth abstracting), then just do nothing.
-   */
-  if (prev_ch == '\\')
-    return FALSE;
 
   /*
    * Insert the match if one of the following is true:
