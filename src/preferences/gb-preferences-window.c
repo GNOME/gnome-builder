@@ -118,6 +118,94 @@ gb_preferences_window_search_changed (GbPreferencesWindow *window,
   g_strfreev (keywords);
 }
 
+static gboolean
+is_escape_event (const GdkEventKey *event)
+{
+  return event->keyval == GDK_KEY_Escape;
+}
+
+static gboolean
+is_keynav_event (const GdkEventKey *event)
+{
+  switch (event->keyval)
+    {
+    case GDK_KEY_Escape:
+    case GDK_KEY_Up:
+    case GDK_KEY_KP_Up:
+    case GDK_KEY_Down:
+    case GDK_KEY_KP_Down:
+    case GDK_KEY_Left:
+    case GDK_KEY_KP_Left:
+    case GDK_KEY_Right:
+    case GDK_KEY_KP_Right:
+    case GDK_KEY_Home:
+    case GDK_KEY_KP_Home:
+    case GDK_KEY_End:
+    case GDK_KEY_KP_End:
+    case GDK_KEY_Page_Up:
+    case GDK_KEY_KP_Page_Up:
+    case GDK_KEY_Page_Down:
+    case GDK_KEY_KP_Page_Down:
+      return TRUE;
+    default:
+      break;
+    }
+
+  if ((event->state & GDK_MOD1_MASK) || (event->state & GDK_CONTROL_MASK))
+    return TRUE;
+
+  return FALSE;
+}
+
+static gboolean
+is_space_event (const GdkEventKey *event)
+{
+  return event->keyval == GDK_KEY_space;
+}
+
+static gboolean
+is_tab_event (const GdkEventKey *event)
+{
+  return (event->keyval == GDK_KEY_Tab) || (event->keyval == GDK_KEY_KP_Tab);
+}
+
+static gboolean
+gb_preferences_window_key_press_event (GtkWidget   *widget,
+                                       GdkEventKey *event)
+{
+  GbPreferencesWindow *self = (GbPreferencesWindow *)widget;
+  gboolean ret;
+  gboolean editable = FALSE;
+
+  g_return_val_if_fail (GB_IS_PREFERENCES_WINDOW (self), FALSE);
+
+  /*
+   * Try to propagate the event to any widget that wants to swallow it.
+   */
+  ret = GTK_WIDGET_CLASS (gb_preferences_window_parent_class)->key_press_event (widget, event);
+
+  /*
+   * Check of the focus widget is editable.
+   */
+  editable = GTK_IS_EDITABLE (gtk_window_get_focus (GTK_WINDOW (widget)));
+
+  if (!ret && !editable &&
+      !gtk_search_bar_get_search_mode (self->priv->search_bar))
+    {
+      if (!is_escape_event (event) &&
+          !is_keynav_event (event) &&
+          !is_space_event (event) &&
+          !is_tab_event (event))
+        {
+          gtk_search_bar_set_search_mode (self->priv->search_bar, TRUE);
+          gtk_widget_grab_focus (GTK_WIDGET (self->priv->search_entry));
+          ret = TRUE;
+        }
+    }
+
+  return ret;
+}
+
 static void
 gb_preferences_window_constructed (GObject *object)
 {
@@ -184,6 +272,8 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   object_class->finalize = gb_preferences_window_finalize;
   object_class->get_property = gb_preferences_window_get_property;
   object_class->set_property = gb_preferences_window_set_property;
+
+  widget_class->key_press_event = gb_preferences_window_key_press_event;
 
   klass->close = gb_preferences_window_close;
 
