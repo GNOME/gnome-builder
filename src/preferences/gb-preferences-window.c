@@ -28,6 +28,7 @@
 #include "gb-preferences-page-git.h"
 #include "gb-preferences-page-language.h"
 #include "gb-preferences-window.h"
+#include "gb-widget.h"
 
 struct _GbPreferencesWindowPrivate
 {
@@ -199,13 +200,12 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/gb-preferences-window.ui");
+  GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-preferences-window.ui");
 
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, right_header_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, search_bar);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, search_entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesWindow, stack);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, right_header_bar);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, search_bar);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, search_entry);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, stack);
 
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_GIT);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EDITOR);
