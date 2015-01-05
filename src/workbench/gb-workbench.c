@@ -130,6 +130,64 @@ gb_workbench_get_navigation_list (GbWorkbench *workbench)
   return workbench->priv->navigation_list;
 }
 
+static void
+load_repository_func (GTask        *task,
+                      gpointer      source_object,
+                      gpointer      task_data,
+                      GCancellable *cancellable)
+{
+  GbSearchProvider *provider;
+  GgitRepository *repository;
+  GError *error = NULL;
+  GFile *file = task_data;
+
+  g_return_if_fail (G_IS_TASK (task));
+  g_return_if_fail (GB_IS_WORKBENCH (source_object));
+  g_return_if_fail (G_IS_FILE (file));
+
+  repository = ggit_repository_open (file, &error);
+
+  if (!repository)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  provider = g_object_new (GB_TYPE_GIT_SEARCH_PROVIDER,
+                           "repository", repository,
+                           NULL);
+  g_task_return_pointer (task, provider, g_object_unref);
+  g_clear_object (&repository);
+}
+
+static void
+repository_loaded (GObject      *object,
+                   GAsyncResult *result,
+                   gpointer      unused)
+{
+  GbWorkbench *workbench = (GbWorkbench *)object;
+  GbSearchProvider *provider;
+  GError *error = NULL;
+  GTask *task = (GTask *)result;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (G_IS_TASK (task));
+
+  provider = g_task_propagate_pointer (task, &error);
+
+  if (!provider)
+    {
+      g_printerr ("%s\n", error->message);
+      g_clear_error (&error);
+    }
+  else
+    {
+      gb_search_manager_add_provider (workbench->priv->search_manager,
+                                      provider);
+      g_clear_object (&provider);
+    }
+}
+
 GbSearchManager *
 gb_workbench_get_search_manager (GbWorkbench *workbench)
 {
@@ -141,22 +199,18 @@ gb_workbench_get_search_manager (GbWorkbench *workbench)
 
   if (!priv->search_manager)
     {
-      GbSearchProvider *provider;
-      GgitRepository *repository;
       GFile *file;
+      GTask *task;
 
       priv->search_manager = gb_search_manager_new ();
 
       /* TODO: Keep repository in sync with loaded project */
       file = g_file_new_for_path (".");
-      repository = ggit_repository_open (file, NULL);
-      provider = g_object_new (GB_TYPE_GIT_SEARCH_PROVIDER,
-                               "repository", repository,
-                               NULL);
-      gb_search_manager_add_provider (priv->search_manager, provider);
+      task = g_task_new (workbench, NULL, repository_loaded, NULL);
+      g_task_set_task_data (task, g_object_ref (file), g_object_unref);
+      g_task_run_in_thread (task, load_repository_func);
+      g_clear_object (&task);
       g_clear_object (&file);
-      g_clear_object (&repository);
-      g_clear_object (&provider);
     }
 
   return priv->search_manager;
