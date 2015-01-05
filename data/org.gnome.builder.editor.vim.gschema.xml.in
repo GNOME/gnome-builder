@@ -1,0 +1,8 @@
+<schemalist>
+  <schema id="org.gnome.builder.editor.vim" path="/org/gnome/builder/editor/vim/" gettext-domain="gnome-builder">
+    <key name="scroll-off" type="i">
+      <range min="0" max="999"/>
+      <default>0</default>
+    </key>
+  </schema>
+</schemalist>

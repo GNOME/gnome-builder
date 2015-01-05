@@ -141,6 +141,8 @@ libgnome_builder_la_SOURCES = \
 	src/preferences/gb-preferences-page-git.h \
 	src/preferences/gb-preferences-page-language.c \
 	src/preferences/gb-preferences-page-language.h \
+	src/preferences/gb-preferences-page-vim.c \
+	src/preferences/gb-preferences-page-vim.h \
 	src/preferences/gb-preferences-page.c \
 	src/preferences/gb-preferences-page.h \
 	src/preferences/gb-preferences-window.c \

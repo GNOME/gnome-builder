@@ -28,6 +28,7 @@ struct _GbPreferencesPagePrivate
 {
   GHashTable *widgets;
   gchar      *title;
+  gboolean    active;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPage, gb_preferences_page,
@@ -155,6 +156,23 @@ gb_preferences_page_set_title (GbPreferencesPage *page,
     }
 }
 
+gboolean
+gb_preferences_page_get_active (GbPreferencesPage *page)
+{
+  g_return_val_if_fail (GB_IS_PREFERENCES_PAGE (page), FALSE);
+
+  return page->priv->active;
+}
+
+void
+gb_preferences_page_set_active (GbPreferencesPage *page,
+                                gboolean	   active)
+{
+  g_return_if_fail (GB_IS_PREFERENCES_PAGE (page));
+
+  page->priv->active = active;
+}
+
 static void
 gb_preferences_page_finalize (GObject *object)
 {
@@ -230,4 +248,8 @@ gb_preferences_page_init (GbPreferencesPage *self)
   self->priv = gb_preferences_page_get_instance_private (self);
   self->priv->widgets = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                                                NULL, NULL);
+  /* Make it active by default. If some page has to be disabled
+   * let the preferences window make it disabled.
+   */
+  self->priv->active = TRUE;
 }

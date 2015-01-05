@@ -51,6 +51,7 @@ AC_CONFIG_FILES([
 	data/icons/Makefile
 	data/org.gnome.builder.editor.gschema.xml
 	data/org.gnome.builder.editor.language.gschema.xml
+	data/org.gnome.builder.editor.vim.gschema.xml
 ])
 
 # Last change to configure things and write configuration files.

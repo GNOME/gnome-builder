@@ -132,6 +132,15 @@
                 <property name="title" translatable="yes">Git</property>
               </packing>
             </child>
+            <child>
+              <object class="GbPreferencesPageVim" id="vim_page">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="name">vim</property>
+                <property name="title" translatable="yes">Vim</property>
+              </packing>
+            </child>
           </object>
         </child>
       </object>
