@@ -466,6 +466,10 @@ gb_html_completion_provider_class_init (GbHtmlCompletionProviderClass *klass)
    *       and only provide those based upon the completion context.
    */
 
+  /*
+   * http://www.w3.org/TR/html-markup/elements.html
+   */
+
   ADD_ELEMENT ("a");
   ADD_ELEMENT ("abbr");
   ADD_ELEMENT ("acronym");
@@ -611,6 +615,261 @@ gb_html_completion_provider_class_init (GbHtmlCompletionProviderClass *klass)
   ADD_ATTRIBUTE ("a", "hreflang");
   ADD_ATTRIBUTE ("a", "media");
   ADD_ATTRIBUTE ("a", "type");
+
+  ADD_ATTRIBUTE ("area", "alt");
+  ADD_ATTRIBUTE ("area", "href");
+  ADD_ATTRIBUTE ("area", "target");
+  ADD_ATTRIBUTE ("area", "rel");
+  ADD_ATTRIBUTE ("area", "media");
+  ADD_ATTRIBUTE ("area", "hreflang");
+  ADD_ATTRIBUTE ("area", "type");
+  ADD_ATTRIBUTE ("area", "shape");
+  ADD_ATTRIBUTE ("area", "coords");
+
+  ADD_ATTRIBUTE ("audio", "autoplay");
+  ADD_ATTRIBUTE ("audio", "preload");
+  ADD_ATTRIBUTE ("audio", "controls");
+  ADD_ATTRIBUTE ("audio", "loop");
+  ADD_ATTRIBUTE ("audio", "mediagroup");
+  ADD_ATTRIBUTE ("audio", "muted");
+  ADD_ATTRIBUTE ("audio", "src");
+
+  ADD_ATTRIBUTE ("base", "href");
+  ADD_ATTRIBUTE ("base", "target");
+
+  ADD_ATTRIBUTE ("blockquote", "cite");
+
+  ADD_ATTRIBUTE ("button", "type");
+  ADD_ATTRIBUTE ("button", "name");
+  ADD_ATTRIBUTE ("button", "disabled");
+  ADD_ATTRIBUTE ("button", "form");
+  ADD_ATTRIBUTE ("button", "value");
+  ADD_ATTRIBUTE ("button", "formaction");
+  ADD_ATTRIBUTE ("button", "autofocus");
+  ADD_ATTRIBUTE ("button", "formmethod");
+  ADD_ATTRIBUTE ("button", "formtarget");
+  ADD_ATTRIBUTE ("button", "formnovalidate");
+
+  ADD_ATTRIBUTE ("canvas", "height");
+  ADD_ATTRIBUTE ("canvas", "width");
+
+  ADD_ATTRIBUTE ("col", "span");
+
+  ADD_ATTRIBUTE ("colgroup", "span");
+
+  ADD_ATTRIBUTE ("command", "type");
+  ADD_ATTRIBUTE ("command", "label");
+  ADD_ATTRIBUTE ("command", "icon");
+  ADD_ATTRIBUTE ("command", "radiogroup");
+  ADD_ATTRIBUTE ("command", "checked");
+  ADD_ATTRIBUTE ("command", "type");
+
+  ADD_ATTRIBUTE ("del", "cite");
+  ADD_ATTRIBUTE ("del", "datetime");
+
+  ADD_ATTRIBUTE ("details", "open");
+
+  ADD_ATTRIBUTE ("embed", "src");
+  ADD_ATTRIBUTE ("embed", "type");
+  ADD_ATTRIBUTE ("embed", "height");
+  ADD_ATTRIBUTE ("embed", "width");
+
+  ADD_ATTRIBUTE ("fieldset", "name");
+  ADD_ATTRIBUTE ("fieldset", "disabled");
+  ADD_ATTRIBUTE ("fieldset", "form");
+
+  ADD_ATTRIBUTE ("form", "action");
+  ADD_ATTRIBUTE ("form", "method");
+  ADD_ATTRIBUTE ("form", "enctype");
+  ADD_ATTRIBUTE ("form", "name");
+  ADD_ATTRIBUTE ("form", "accept-charset");
+  ADD_ATTRIBUTE ("form", "novalidate");
+  ADD_ATTRIBUTE ("form", "target");
+  ADD_ATTRIBUTE ("form", "autocomplete");
+
+  ADD_ATTRIBUTE ("html", "manifest");
+
+  ADD_ATTRIBUTE ("iframe", "src");
+  ADD_ATTRIBUTE ("iframe", "srcdoc");
+  ADD_ATTRIBUTE ("iframe", "name");
+  ADD_ATTRIBUTE ("iframe", "width");
+  ADD_ATTRIBUTE ("iframe", "height");
+  ADD_ATTRIBUTE ("iframe", "sandbox");
+  ADD_ATTRIBUTE ("iframe", "seamless");
+
+  ADD_ATTRIBUTE ("img", "src");
+  ADD_ATTRIBUTE ("img", "alt");
+  ADD_ATTRIBUTE ("img", "height");
+  ADD_ATTRIBUTE ("img", "width");
+  ADD_ATTRIBUTE ("img", "usemap");
+  ADD_ATTRIBUTE ("img", "ismap");
+
+  ADD_ATTRIBUTE ("input", "accept");
+  ADD_ATTRIBUTE ("input", "alt");
+  ADD_ATTRIBUTE ("input", "autocomplete");
+  ADD_ATTRIBUTE ("input", "autofocus");
+  ADD_ATTRIBUTE ("input", "dirname");
+  ADD_ATTRIBUTE ("input", "disabled");
+  ADD_ATTRIBUTE ("input", "form");
+  ADD_ATTRIBUTE ("input", "formaction");
+  ADD_ATTRIBUTE ("input", "formenctype");
+  ADD_ATTRIBUTE ("input", "formmethod");
+  ADD_ATTRIBUTE ("input", "formnovalidate");
+  ADD_ATTRIBUTE ("input", "formtarget");
+  ADD_ATTRIBUTE ("input", "height");
+  ADD_ATTRIBUTE ("input", "list");
+  ADD_ATTRIBUTE ("input", "list");
+  ADD_ATTRIBUTE ("input", "max");
+  ADD_ATTRIBUTE ("input", "maxlength");
+  ADD_ATTRIBUTE ("input", "min");
+  ADD_ATTRIBUTE ("input", "multiple");
+  ADD_ATTRIBUTE ("input", "name");
+  ADD_ATTRIBUTE ("input", "pattern");
+  ADD_ATTRIBUTE ("input", "placeholder");
+  ADD_ATTRIBUTE ("input", "readonly");
+  ADD_ATTRIBUTE ("input", "required");
+  ADD_ATTRIBUTE ("input", "size");
+  ADD_ATTRIBUTE ("input", "src");
+  ADD_ATTRIBUTE ("input", "step");
+  ADD_ATTRIBUTE ("input", "type");
+  ADD_ATTRIBUTE ("input", "value");
+  ADD_ATTRIBUTE ("input", "width");
+
+  ADD_ATTRIBUTE ("ins", "cite");
+  ADD_ATTRIBUTE ("ins", "datetime");
+
+  ADD_ATTRIBUTE ("keygen", "challenge");
+  ADD_ATTRIBUTE ("keygen", "keytype");
+  ADD_ATTRIBUTE ("keygen", "autofocus");
+  ADD_ATTRIBUTE ("keygen", "name");
+  ADD_ATTRIBUTE ("keygen", "disabled");
+  ADD_ATTRIBUTE ("keygen", "form");
+
+  ADD_ATTRIBUTE ("label", "for");
+  ADD_ATTRIBUTE ("label", "form");
+
+  ADD_ATTRIBUTE ("li", "value");
+
+  ADD_ATTRIBUTE ("link", "href");
+  ADD_ATTRIBUTE ("link", "rel");
+  ADD_ATTRIBUTE ("link", "hreflang");
+  ADD_ATTRIBUTE ("link", "media");
+  ADD_ATTRIBUTE ("link", "type");
+  ADD_ATTRIBUTE ("link", "sizes");
+
+  ADD_ATTRIBUTE ("map", "name");
+
+  ADD_ATTRIBUTE ("menu", "type");
+  ADD_ATTRIBUTE ("menu", "label");
+
+  ADD_ATTRIBUTE ("meta", "http-equiv");
+  ADD_ATTRIBUTE ("meta", "content");
+  ADD_ATTRIBUTE ("meta", "charset");
+
+  ADD_ATTRIBUTE ("meter", "high");
+  ADD_ATTRIBUTE ("meter", "low");
+  ADD_ATTRIBUTE ("meter", "max");
+  ADD_ATTRIBUTE ("meter", "min");
+  ADD_ATTRIBUTE ("meter", "optimum");
+  ADD_ATTRIBUTE ("meter", "value");
+
+  ADD_ATTRIBUTE ("object", "data");
+  ADD_ATTRIBUTE ("object", "type");
+  ADD_ATTRIBUTE ("object", "height");
+  ADD_ATTRIBUTE ("object", "width");
+  ADD_ATTRIBUTE ("object", "usemap");
+  ADD_ATTRIBUTE ("object", "name");
+  ADD_ATTRIBUTE ("object", "form");
+
+  ADD_ATTRIBUTE ("ol", "start");
+  ADD_ATTRIBUTE ("ol", "reversed");
+  ADD_ATTRIBUTE ("ol", "type");
+
+  ADD_ATTRIBUTE ("optgroup", "label");
+  ADD_ATTRIBUTE ("optgroup", "disabled");
+
+  ADD_ATTRIBUTE ("option", "disabled");
+  ADD_ATTRIBUTE ("option", "selected");
+  ADD_ATTRIBUTE ("option", "label");
+  ADD_ATTRIBUTE ("option", "value");
+
+  ADD_ATTRIBUTE ("output", "name");
+  ADD_ATTRIBUTE ("output", "form");
+  ADD_ATTRIBUTE ("output", "for");
+
+  ADD_ATTRIBUTE ("param", "name");
+  ADD_ATTRIBUTE ("param", "value");
+
+  ADD_ATTRIBUTE ("progress", "value");
+  ADD_ATTRIBUTE ("progress", "max");
+
+  ADD_ATTRIBUTE ("q", "cite");
+
+  ADD_ATTRIBUTE ("script", "type");
+  ADD_ATTRIBUTE ("script", "language");
+  ADD_ATTRIBUTE ("script", "src");
+  ADD_ATTRIBUTE ("script", "defer");
+  ADD_ATTRIBUTE ("script", "async");
+  ADD_ATTRIBUTE ("script", "charset");
+
+  ADD_ATTRIBUTE ("select", "name");
+  ADD_ATTRIBUTE ("select", "disabled");
+  ADD_ATTRIBUTE ("select", "form");
+  ADD_ATTRIBUTE ("select", "size");
+  ADD_ATTRIBUTE ("select", "multiple");
+  ADD_ATTRIBUTE ("select", "autofocus");
+  ADD_ATTRIBUTE ("select", "required");
+
+  ADD_ATTRIBUTE ("source", "src");
+  ADD_ATTRIBUTE ("source", "type");
+  ADD_ATTRIBUTE ("source", "media");
+
+  ADD_ATTRIBUTE ("style", "type");
+  ADD_ATTRIBUTE ("style", "media");
+  ADD_ATTRIBUTE ("style", "scoped");
+
+  ADD_ATTRIBUTE ("table", "border");
+
+  ADD_ATTRIBUTE ("td", "colspan");
+  ADD_ATTRIBUTE ("td", "rowspan");
+  ADD_ATTRIBUTE ("td", "headers");
+
+  ADD_ATTRIBUTE ("textarea", "name");
+  ADD_ATTRIBUTE ("textarea", "disabled");
+  ADD_ATTRIBUTE ("textarea", "form");
+  ADD_ATTRIBUTE ("textarea", "readonly");
+  ADD_ATTRIBUTE ("textarea", "maxlength");
+  ADD_ATTRIBUTE ("textarea", "autofocus");
+  ADD_ATTRIBUTE ("textarea", "required");
+  ADD_ATTRIBUTE ("textarea", "placeholder");
+  ADD_ATTRIBUTE ("textarea", "dirname");
+  ADD_ATTRIBUTE ("textarea", "rows");
+  ADD_ATTRIBUTE ("textarea", "wrap");
+  ADD_ATTRIBUTE ("textarea", "cols");
+
+  ADD_ATTRIBUTE ("th", "scope");
+  ADD_ATTRIBUTE ("th", "colspan");
+  ADD_ATTRIBUTE ("th", "rowspan");
+  ADD_ATTRIBUTE ("th", "headers");
+
+  ADD_ATTRIBUTE ("time", "datetime");
+
+  ADD_ATTRIBUTE ("track", "kind");
+  ADD_ATTRIBUTE ("track", "src");
+  ADD_ATTRIBUTE ("track", "srclang");
+  ADD_ATTRIBUTE ("track", "label");
+  ADD_ATTRIBUTE ("track", "default");
+
+  ADD_ATTRIBUTE ("video", "autoplay");
+  ADD_ATTRIBUTE ("video", "preload");
+  ADD_ATTRIBUTE ("video", "controls");
+  ADD_ATTRIBUTE ("video", "loop");
+  ADD_ATTRIBUTE ("video", "poster");
+  ADD_ATTRIBUTE ("video", "height");
+  ADD_ATTRIBUTE ("video", "width");
+  ADD_ATTRIBUTE ("video", "mediagroup");
+  ADD_ATTRIBUTE ("video", "muted");
+  ADD_ATTRIBUTE ("video", "src");
 
   ADD_STRING (css_styles, "border");
   ADD_STRING (css_styles, "background");
