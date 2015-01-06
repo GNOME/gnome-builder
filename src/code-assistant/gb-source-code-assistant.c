@@ -70,6 +70,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbSourceCodeAssistant,
 static GParamSpec      *gParamSpecs [LAST_PROP];
 static guint            gSignals [LAST_SIGNAL];
 static GDBusConnection *gDBus;
+static GHashTable      *gLangMappings;
 
 #define PARSE_TIMEOUT_MSEC 350
 
@@ -147,6 +148,7 @@ gb_source_code_assistant_load_service (GbSourceCodeAssistant *assistant)
   GbSourceCodeAssistantPrivate *priv;
   GtkSourceLanguage *language;
   GtkSourceBuffer *buffer;
+  const gchar *mapped_lang;
   const gchar *lang_id;
   gchar *name;
   gchar *object_path;
@@ -172,6 +174,9 @@ gb_source_code_assistant_load_service (GbSourceCodeAssistant *assistant)
     EXIT;
 
   lang_id = remap_language (gtk_source_language_get_id (language));
+  mapped_lang = g_hash_table_lookup (gLangMappings, lang_id);
+  if (mapped_lang)
+    lang_id = mapped_lang;
 
   name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", lang_id);
   object_path = g_strdup_printf ("/org/gnome/CodeAssist/v1/%s", lang_id);
@@ -760,6 +765,11 @@ gb_source_code_assistant_class_init (GbSourceCodeAssistantClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+
+  gLangMappings = g_hash_table_new (g_str_hash, g_str_equal);
+  g_hash_table_insert (gLangMappings, "python3", "python");
+  g_hash_table_insert (gLangMappings, "chdr", "c");
+  g_hash_table_insert (gLangMappings, "cpp", "c");
 
   address = g_dbus_address_get_for_bus_sync (G_BUS_TYPE_SESSION, NULL, &error);
   if (!address)
