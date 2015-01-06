@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "indent-xml"
 
+#include <string.h>
+
 #include "gb-log.h"
 #include "gb-source-auto-indenter-xml.h"
 
@@ -252,6 +254,64 @@ success:
 }
 
 static gboolean
+find_end (gunichar ch,
+          gpointer user_data)
+{
+  return (ch == '>' || g_unichar_isspace (ch));
+}
+
+static gchar *
+gb_source_auto_indenter_xml_maybe_add_closing (GbSourceAutoIndenterXml *xml,
+                                               GtkTextIter             *begin,
+                                               GtkTextIter             *end,
+                                               gint                    *cursor_offset)
+{
+  GtkTextIter match_begin;
+  GtkTextIter match_end;
+  GtkTextIter copy;
+
+  g_return_val_if_fail (GB_IS_SOURCE_AUTO_INDENTER_XML (xml), NULL);
+  g_return_val_if_fail (begin, NULL);
+  g_return_val_if_fail (end, NULL);
+
+  copy = *begin;
+
+  gtk_text_iter_backward_char (&copy);
+  gtk_text_iter_backward_char (&copy);
+
+  if (gtk_text_iter_get_char (&copy) == '/')
+    return NULL;
+
+  copy = *begin;
+
+  if (gtk_text_iter_backward_search (&copy, "<", GTK_TEXT_SEARCH_TEXT_ONLY,
+                                     &match_begin, &match_end, NULL))
+    {
+      gtk_text_iter_forward_char (&match_begin);
+      if (gtk_text_iter_get_char (&match_begin) == '/')
+        return NULL;
+
+      match_end = match_begin;
+
+      if (gtk_text_iter_forward_find_char (&match_end, find_end, NULL, begin))
+        {
+          gchar *slice;
+          gchar *ret;
+
+          slice = gtk_text_iter_get_slice (&match_begin, &match_end);
+          ret = g_strdup_printf ("</%s>", slice);
+          *cursor_offset = -strlen (ret);
+
+          g_free (slice);
+
+          return ret;
+        }
+    }
+
+  return NULL;
+}
+
+static gboolean
 gb_source_auto_indenter_xml_is_trigger (GbSourceAutoIndenter *indenter,
                                         GdkEventKey          *event)
 {
@@ -260,6 +320,7 @@ gb_source_auto_indenter_xml_is_trigger (GbSourceAutoIndenter *indenter,
     case GDK_KEY_Return:
     case GDK_KEY_KP_Enter:
     case GDK_KEY_slash:
+    case GDK_KEY_greater:
       return TRUE;
 
     default:
@@ -301,6 +362,10 @@ gb_source_auto_indenter_xml_format (GbSourceAutoIndenter *indenter,
 
     case GDK_KEY_slash:
       return gb_source_auto_indenter_xml_maybe_unindent (xml, begin, end);
+
+    case GDK_KEY_greater:
+      return gb_source_auto_indenter_xml_maybe_add_closing (xml, begin, end,
+                                                            cursor_offset);
 
     default:
       g_return_val_if_reached (NULL);
