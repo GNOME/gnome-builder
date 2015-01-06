@@ -21,7 +21,7 @@
 #include "gb-html-completion-provider.h"
 #include "trie.h"
 
-static Trie *attributes;
+static GHashTable *element_attrs;
 static Trie *css_styles;
 static Trie *elements;
 
@@ -37,6 +37,7 @@ enum {
 typedef struct
 {
   GList *results;
+  gint mode;
 } SearchState;
 
 static void completion_provider_init (GtkSourceCompletionProviderIface *);
@@ -266,18 +267,89 @@ traverse_cb (Trie        *trie,
 {
   SearchState *state = user_data;
   GtkSourceCompletionItem *item;
+  const gchar *text = key;
+  gchar *tmp = NULL;
 
   g_return_val_if_fail (trie, FALSE);
   g_return_val_if_fail (state, FALSE);
 
+  if (state->mode == MODE_ATTRIBUTE_NAME)
+    {
+      tmp = g_strdup_printf ("%s=", key);
+      text = tmp;
+    }
+
   item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
-                       "text", key,
+                       "text", text,
                        "label", key,
                        NULL);
 
   state->results = g_list_prepend (state->results, item);
 
+  g_free (tmp);
+
   return FALSE;
+}
+
+static gboolean
+find_space (gunichar ch,
+            gpointer user_data)
+{
+  return g_unichar_isspace (ch);
+}
+
+static gchar *
+get_element (GtkSourceCompletionContext *context)
+{
+  GtkTextIter iter;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GtkTextIter match_begin;
+  GtkTextIter match_end;
+
+  g_return_val_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context), NULL);
+
+  gtk_source_completion_context_get_iter (context, &iter);
+
+  if (gtk_text_iter_backward_search (&iter, "<", GTK_TEXT_SEARCH_TEXT_ONLY,
+                                     &match_begin, &match_end, NULL))
+    {
+      end = begin = match_end;
+
+      if (gtk_text_iter_forward_find_char (&end, find_space, NULL, &iter))
+        return gtk_text_iter_get_slice (&begin, &end);
+    }
+
+  return NULL;
+}
+
+static gint
+sort_completion_items (gconstpointer a,
+                       gconstpointer b)
+{
+  gchar *astr;
+  gchar *bstr;
+  gint ret;
+
+  /*
+   * XXX: This is very much not ideal. We are allocating a string for every
+   *      compare! But we don't have accessor funcs into the completion item.
+   *      We should probably make our completion item class.
+   */
+
+  g_object_get (GTK_SOURCE_COMPLETION_ITEM (a),
+                "label", &astr,
+                NULL);
+  g_object_get (GTK_SOURCE_COMPLETION_ITEM (b),
+                "label", &bstr,
+                NULL);
+
+  ret = g_strcmp0 (astr, bstr);
+
+  g_free (astr);
+  g_free (bstr);
+
+  return ret;
 }
 
 static void
@@ -306,8 +378,15 @@ gb_html_completion_provider_populate (GtkSourceCompletionProvider *provider,
       break;
 
     case MODE_ATTRIBUTE_NAME:
-      trie = attributes;
-      break;
+      {
+        gchar *element;
+
+        element = get_element (context);
+        trie = g_hash_table_lookup (element_attrs, element);
+        g_free (element);
+
+        break;
+      }
 
     case MODE_CSS:
       trie = css_styles;
@@ -320,12 +399,33 @@ gb_html_completion_provider_populate (GtkSourceCompletionProvider *provider,
       break;
     }
 
+  state.mode = mode;
+
+  /*
+   * Load the values for the context.
+   */
   if (trie && word)
     {
       trie_traverse (trie, word, G_PRE_ORDER, G_TRAVERSE_LEAVES, -1,
                      traverse_cb, &state);
-      state.results = g_list_reverse (state.results);
     }
+
+  /*
+   * If we are in an attribute, also load the global attributes values.
+   */
+  if (mode == MODE_ATTRIBUTE_NAME)
+    {
+      Trie *global;
+
+      global = g_hash_table_lookup (element_attrs, "*");
+      trie_traverse (global, word, G_PRE_ORDER, G_TRAVERSE_LEAVES, -1,
+                     traverse_cb, &state);
+    }
+
+  /*
+   * TODO: Not exactly an ideal sort mechanism.
+   */
+  state.results = g_list_sort (state.results, sort_completion_items);
 
   gtk_source_completion_context_add_proposals (context, provider,
                                                state.results, TRUE);
@@ -346,141 +446,171 @@ static void
 gb_html_completion_provider_class_init (GbHtmlCompletionProviderClass *klass)
 {
   elements = trie_new (NULL);
-  attributes = trie_new (NULL);
+  element_attrs = g_hash_table_new (g_str_hash, g_str_equal);
   css_styles = trie_new (NULL);
 
-#define ADD_STRING(dict, str) trie_insert(dict,str,str)
+#define ADD_ELEMENT(str)        trie_insert(elements,str,str)
+#define ADD_STRING(dict, str)   trie_insert(dict,str,str)
+#define ADD_ATTRIBUTE(ele,attr) \
+  G_STMT_START { \
+    Trie *t = g_hash_table_lookup (element_attrs, ele); \
+    if (!t) { \
+      t = trie_new (NULL); \
+      g_hash_table_insert (element_attrs, ele, t); \
+    } \
+    trie_insert (t,attr,attr); \
+  } G_STMT_END
 
   /*
    * TODO: We should determine what are valid attributes for given elements
    *       and only provide those based upon the completion context.
    */
 
-  ADD_STRING (elements, "a");
-  ADD_STRING (elements, "abbr");
-  ADD_STRING (elements, "acronym");
-  ADD_STRING (elements, "address");
-  ADD_STRING (elements, "applet");
-  ADD_STRING (elements, "area");
-  ADD_STRING (elements, "article");
-  ADD_STRING (elements, "aside");
-  ADD_STRING (elements, "audio");
-  ADD_STRING (elements, "b");
-  ADD_STRING (elements, "base");
-  ADD_STRING (elements, "basefont");
-  ADD_STRING (elements, "bdi");
-  ADD_STRING (elements, "bdo");
-  ADD_STRING (elements, "big");
-  ADD_STRING (elements, "blockquote");
-  ADD_STRING (elements, "body");
-  ADD_STRING (elements, "br");
-  ADD_STRING (elements, "button");
-  ADD_STRING (elements, "canvas");
-  ADD_STRING (elements, "caption");
-  ADD_STRING (elements, "center");
-  ADD_STRING (elements, "cite");
-  ADD_STRING (elements, "code");
-  ADD_STRING (elements, "col");
-  ADD_STRING (elements, "colgroup");
-  ADD_STRING (elements, "datalist");
-  ADD_STRING (elements, "dd");
-  ADD_STRING (elements, "del");
-  ADD_STRING (elements, "details");
-  ADD_STRING (elements, "dfn");
-  ADD_STRING (elements, "dialog");
-  ADD_STRING (elements, "dir");
-  ADD_STRING (elements, "div");
-  ADD_STRING (elements, "dl");
-  ADD_STRING (elements, "dt");
-  ADD_STRING (elements, "em");
-  ADD_STRING (elements, "embed");
-  ADD_STRING (elements, "fieldset");
-  ADD_STRING (elements, "figcaption");
-  ADD_STRING (elements, "figure");
-  ADD_STRING (elements, "font");
-  ADD_STRING (elements, "footer");
-  ADD_STRING (elements, "form");
-  ADD_STRING (elements, "frame");
-  ADD_STRING (elements, "frameset");
-  ADD_STRING (elements, "head");
-  ADD_STRING (elements, "header");
-  ADD_STRING (elements, "hgroup");
-  ADD_STRING (elements, "h1");
-  ADD_STRING (elements, "h2");
-  ADD_STRING (elements, "h3");
-  ADD_STRING (elements, "h4");
-  ADD_STRING (elements, "h5");
-  ADD_STRING (elements, "h6");
-  ADD_STRING (elements, "hr");
-  ADD_STRING (elements, "html");
-  ADD_STRING (elements, "i");
-  ADD_STRING (elements, "iframe");
-  ADD_STRING (elements, "img");
-  ADD_STRING (elements, "input");
-  ADD_STRING (elements, "ins");
-  ADD_STRING (elements, "kbd");
-  ADD_STRING (elements, "keygen");
-  ADD_STRING (elements, "label");
-  ADD_STRING (elements, "legend");
-  ADD_STRING (elements, "li");
-  ADD_STRING (elements, "link");
-  ADD_STRING (elements, "main");
-  ADD_STRING (elements, "map");
-  ADD_STRING (elements, "mark");
-  ADD_STRING (elements, "menu");
-  ADD_STRING (elements, "menuitem");
-  ADD_STRING (elements, "meta");
-  ADD_STRING (elements, "meter");
-  ADD_STRING (elements, "nav");
-  ADD_STRING (elements, "noframes");
-  ADD_STRING (elements, "noscript");
-  ADD_STRING (elements, "object");
-  ADD_STRING (elements, "ol");
-  ADD_STRING (elements, "optgroup");
-  ADD_STRING (elements, "option");
-  ADD_STRING (elements, "output");
-  ADD_STRING (elements, "p");
-  ADD_STRING (elements, "param");
-  ADD_STRING (elements, "pre");
-  ADD_STRING (elements, "progress");
-  ADD_STRING (elements, "q");
-  ADD_STRING (elements, "rp");
-  ADD_STRING (elements, "rt");
-  ADD_STRING (elements, "ruby");
-  ADD_STRING (elements, "s");
-  ADD_STRING (elements, "samp");
-  ADD_STRING (elements, "script");
-  ADD_STRING (elements, "section");
-  ADD_STRING (elements, "select");
-  ADD_STRING (elements, "small");
-  ADD_STRING (elements, "source");
-  ADD_STRING (elements, "span");
-  ADD_STRING (elements, "strike");
-  ADD_STRING (elements, "strong");
-  ADD_STRING (elements, "style");
-  ADD_STRING (elements, "sub");
-  ADD_STRING (elements, "summary");
-  ADD_STRING (elements, "sup");
-  ADD_STRING (elements, "table");
-  ADD_STRING (elements, "tbody");
-  ADD_STRING (elements, "td");
-  ADD_STRING (elements, "textarea");
-  ADD_STRING (elements, "tfoot");
-  ADD_STRING (elements, "th");
-  ADD_STRING (elements, "thead");
-  ADD_STRING (elements, "time");
-  ADD_STRING (elements, "title");
-  ADD_STRING (elements, "tr");
-  ADD_STRING (elements, "track");
-  ADD_STRING (elements, "tt");
-  ADD_STRING (elements, "u");
-  ADD_STRING (elements, "ul");
-  ADD_STRING (elements, "var");
-  ADD_STRING (elements, "video");
-  ADD_STRING (elements, "wbr");
+  ADD_ELEMENT ("a");
+  ADD_ELEMENT ("abbr");
+  ADD_ELEMENT ("acronym");
+  ADD_ELEMENT ("address");
+  ADD_ELEMENT ("applet");
+  ADD_ELEMENT ("area");
+  ADD_ELEMENT ("article");
+  ADD_ELEMENT ("aside");
+  ADD_ELEMENT ("audio");
+  ADD_ELEMENT ("b");
+  ADD_ELEMENT ("base");
+  ADD_ELEMENT ("basefont");
+  ADD_ELEMENT ("bdi");
+  ADD_ELEMENT ("bdo");
+  ADD_ELEMENT ("big");
+  ADD_ELEMENT ("blockquote");
+  ADD_ELEMENT ("body");
+  ADD_ELEMENT ("br");
+  ADD_ELEMENT ("button");
+  ADD_ELEMENT ("canvas");
+  ADD_ELEMENT ("caption");
+  ADD_ELEMENT ("center");
+  ADD_ELEMENT ("cite");
+  ADD_ELEMENT ("code");
+  ADD_ELEMENT ("col");
+  ADD_ELEMENT ("colgroup");
+  ADD_ELEMENT ("datalist");
+  ADD_ELEMENT ("dd");
+  ADD_ELEMENT ("del");
+  ADD_ELEMENT ("details");
+  ADD_ELEMENT ("dfn");
+  ADD_ELEMENT ("dialog");
+  ADD_ELEMENT ("dir");
+  ADD_ELEMENT ("div");
+  ADD_ELEMENT ("dl");
+  ADD_ELEMENT ("dt");
+  ADD_ELEMENT ("em");
+  ADD_ELEMENT ("embed");
+  ADD_ELEMENT ("fieldset");
+  ADD_ELEMENT ("figcaption");
+  ADD_ELEMENT ("figure");
+  ADD_ELEMENT ("font");
+  ADD_ELEMENT ("footer");
+  ADD_ELEMENT ("form");
+  ADD_ELEMENT ("frame");
+  ADD_ELEMENT ("frameset");
+  ADD_ELEMENT ("head");
+  ADD_ELEMENT ("header");
+  ADD_ELEMENT ("hgroup");
+  ADD_ELEMENT ("h1");
+  ADD_ELEMENT ("h2");
+  ADD_ELEMENT ("h3");
+  ADD_ELEMENT ("h4");
+  ADD_ELEMENT ("h5");
+  ADD_ELEMENT ("h6");
+  ADD_ELEMENT ("hr");
+  ADD_ELEMENT ("html");
+  ADD_ELEMENT ("i");
+  ADD_ELEMENT ("iframe");
+  ADD_ELEMENT ("img");
+  ADD_ELEMENT ("input");
+  ADD_ELEMENT ("ins");
+  ADD_ELEMENT ("kbd");
+  ADD_ELEMENT ("keygen");
+  ADD_ELEMENT ("label");
+  ADD_ELEMENT ("legend");
+  ADD_ELEMENT ("li");
+  ADD_ELEMENT ("link");
+  ADD_ELEMENT ("main");
+  ADD_ELEMENT ("map");
+  ADD_ELEMENT ("mark");
+  ADD_ELEMENT ("menu");
+  ADD_ELEMENT ("menuitem");
+  ADD_ELEMENT ("meta");
+  ADD_ELEMENT ("meter");
+  ADD_ELEMENT ("nav");
+  ADD_ELEMENT ("noframes");
+  ADD_ELEMENT ("noscript");
+  ADD_ELEMENT ("object");
+  ADD_ELEMENT ("ol");
+  ADD_ELEMENT ("optgroup");
+  ADD_ELEMENT ("option");
+  ADD_ELEMENT ("output");
+  ADD_ELEMENT ("p");
+  ADD_ELEMENT ("param");
+  ADD_ELEMENT ("pre");
+  ADD_ELEMENT ("progress");
+  ADD_ELEMENT ("q");
+  ADD_ELEMENT ("rp");
+  ADD_ELEMENT ("rt");
+  ADD_ELEMENT ("ruby");
+  ADD_ELEMENT ("s");
+  ADD_ELEMENT ("samp");
+  ADD_ELEMENT ("script");
+  ADD_ELEMENT ("section");
+  ADD_ELEMENT ("select");
+  ADD_ELEMENT ("small");
+  ADD_ELEMENT ("source");
+  ADD_ELEMENT ("span");
+  ADD_ELEMENT ("strike");
+  ADD_ELEMENT ("strong");
+  ADD_ELEMENT ("style");
+  ADD_ELEMENT ("sub");
+  ADD_ELEMENT ("summary");
+  ADD_ELEMENT ("sup");
+  ADD_ELEMENT ("table");
+  ADD_ELEMENT ("tbody");
+  ADD_ELEMENT ("td");
+  ADD_ELEMENT ("textarea");
+  ADD_ELEMENT ("tfoot");
+  ADD_ELEMENT ("th");
+  ADD_ELEMENT ("thead");
+  ADD_ELEMENT ("time");
+  ADD_ELEMENT ("title");
+  ADD_ELEMENT ("tr");
+  ADD_ELEMENT ("track");
+  ADD_ELEMENT ("tt");
+  ADD_ELEMENT ("u");
+  ADD_ELEMENT ("ul");
+  ADD_ELEMENT ("var");
+  ADD_ELEMENT ("video");
+  ADD_ELEMENT ("wbr");
 
-  ADD_STRING (attributes, "style");
-  ADD_STRING (attributes, "href");
+  ADD_ATTRIBUTE ("*", "accesskey");
+  ADD_ATTRIBUTE ("*", "class");
+  ADD_ATTRIBUTE ("*", "contenteditable");
+  ADD_ATTRIBUTE ("*", "contextmenu");
+  ADD_ATTRIBUTE ("*", "dir");
+  ADD_ATTRIBUTE ("*", "draggable");
+  ADD_ATTRIBUTE ("*", "dropzone");
+  ADD_ATTRIBUTE ("*", "hidden");
+  ADD_ATTRIBUTE ("*", "id");
+  ADD_ATTRIBUTE ("*", "lang");
+  ADD_ATTRIBUTE ("*", "spellcheck");
+  ADD_ATTRIBUTE ("*", "style");
+  ADD_ATTRIBUTE ("*", "tabindex");
+  ADD_ATTRIBUTE ("*", "title");
+  ADD_ATTRIBUTE ("*", "translate");
+
+  ADD_ATTRIBUTE ("a", "href");
+  ADD_ATTRIBUTE ("a", "target");
+  ADD_ATTRIBUTE ("a", "rel");
+  ADD_ATTRIBUTE ("a", "hreflang");
+  ADD_ATTRIBUTE ("a", "media");
+  ADD_ATTRIBUTE ("a", "type");
 
   ADD_STRING (css_styles, "border");
   ADD_STRING (css_styles, "background");
