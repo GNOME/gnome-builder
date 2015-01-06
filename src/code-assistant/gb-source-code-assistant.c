@@ -423,11 +423,25 @@ gb_source_code_assistant_do_parse (gpointer data)
 
   if (!priv->tmpfile_path)
     {
+      const gchar *suffix;
+      gchar *template;
       int fd;
 
-      fd = g_file_open_tmp ("builder-code-assistant.XXXXXX",
-                            &priv->tmpfile_path,
-                            &error);
+      /*
+       * Generate a template filename that has still has the same suffix as
+       * the original filename. Some code-assistance backends will use this
+       * to modify how they are parsed.
+       */
+      suffix = strrchr (path, '.');
+      if (!suffix)
+        suffix = "";
+      template = g_strdup_printf ("builder-code-assistant-XXXXXX%s",
+                                  suffix);
+
+      fd = g_file_open_tmp (template,  &priv->tmpfile_path, &error);
+
+      g_free (template);
+
       if (fd == -1)
         {
           g_warning ("%s", error->message);
