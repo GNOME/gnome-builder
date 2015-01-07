@@ -22,6 +22,7 @@
 
 #include "gb-log.h"
 #include "gb-source-auto-indenter-xml.h"
+#include "gb-gtk.h"
 
 /*
  * TODO:
@@ -191,6 +192,27 @@ gb_source_auto_indenter_xml_indent (GbSourceAutoIndenterXml *xml,
     {
       offset = gtk_text_iter_get_line_offset (&match_begin);
       build_indent (xml, offset + INDENT_WIDTH, &match_begin, str);
+
+      /*
+       * If immediately after our cursor is a closing tag, we will move it to
+       * a line after our indent line.
+       */
+      if ('<' == gtk_text_iter_get_char (end) &&
+          '/' == gb_gtk_text_iter_get_next_char (end))
+        {
+          GString *str2;
+
+          str2 = g_string_new (NULL);
+          build_indent (xml, offset, &match_begin, str2);
+
+          g_string_append (str, "\n");
+          g_string_append (str, str2->str);
+
+          *cursor_offset = -str2->len - 1;
+
+          g_string_free (str2, TRUE);
+        }
+
       GOTO (cleanup);
     }
 
