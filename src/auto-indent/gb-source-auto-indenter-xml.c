@@ -357,8 +357,10 @@ gb_source_auto_indenter_xml_format (GbSourceAutoIndenter *indenter,
     {
     case GDK_KEY_Return:
     case GDK_KEY_KP_Enter:
-      return gb_source_auto_indenter_xml_indent (xml, begin, end, cursor_offset,
-                                                 tab_width);
+      if ((trigger->state & GDK_SHIFT_MASK) == 0)
+        return gb_source_auto_indenter_xml_indent (xml, begin, end, cursor_offset,
+                                                   tab_width);
+      return NULL;
 
     case GDK_KEY_slash:
       return gb_source_auto_indenter_xml_maybe_unindent (xml, begin, end);
