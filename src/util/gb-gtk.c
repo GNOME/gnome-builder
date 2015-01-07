@@ -170,3 +170,19 @@ gb_gtk_text_iter_get_previous_char (const GtkTextIter *iter)
 
   return gtk_text_iter_get_char (&copy);
 }
+
+gunichar
+gb_gtk_text_iter_get_next_char (const GtkTextIter *iter)
+{
+  GtkTextIter copy;
+
+  g_return_val_if_fail (iter, 0);
+
+  copy = *iter;
+
+  gtk_text_iter_forward_char (&copy);
+  if (gtk_text_iter_equal (&copy, iter))
+    return '\0';
+
+  return gtk_text_iter_get_char (&copy);
+}

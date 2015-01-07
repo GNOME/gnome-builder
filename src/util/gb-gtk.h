@@ -39,6 +39,7 @@ gboolean gb_gtk_text_view_get_iter_visible (GtkTextView *text_view,
                                             GtkTextIter *iter);
 
 gunichar gb_gtk_text_iter_get_previous_char (const GtkTextIter *iter);
+gunichar gb_gtk_text_iter_get_next_char     (const GtkTextIter *iter);
 
 G_END_DECLS
 
