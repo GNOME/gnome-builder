@@ -2946,6 +2946,13 @@ gb_source_vim_handle_normal (GbSourceVim *vim,
         }
       break;
 
+    case GDK_KEY_D:
+      /* Special case for <Control><Shift>D, Gtk Inspector. */
+      if ((event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) ==
+          (GDK_CONTROL_MASK | GDK_SHIFT_MASK))
+          return FALSE;
+      break;
+
     case GDK_KEY_d:
       if ((event->state & GDK_CONTROL_MASK) != 0)
         {
