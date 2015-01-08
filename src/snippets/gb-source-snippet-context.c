@@ -706,6 +706,15 @@ gb_source_snippet_context_init (GbSourceSnippetContext *context)
   str = g_date_time_format (dt, "%Y");
   ADD_VARIABLE ("year", str);
   g_free (str);
+  str = g_date_time_format (dt, "%b");
+  ADD_VARIABLE ("shortmonth", str);
+  g_free (str);
+  str = g_date_time_format (dt, "%d");
+  ADD_VARIABLE ("day", str);
+  g_free (str);
+  str = g_date_time_format (dt, "%a");
+  ADD_VARIABLE ("shortweekday", str);
+  g_free (str);
   g_date_time_unref (dt);
 
   str = run_command ("git config user.email");
