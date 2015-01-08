@@ -305,10 +305,17 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
   GbSourceAutoIndenterPython *python = (GbSourceAutoIndenterPython *)indenter;
   GtkTextIter iter = *begin;
   gunichar ch;
+  gint line;
+
+  line = gtk_text_iter_get_line (&iter);
 
   /* move to the last character of the last line */
   if (!gtk_text_iter_backward_char (&iter) ||
       !gtk_text_iter_backward_char (&iter))
+    return NULL;
+
+  /* if the previous line was empty, don't do any indenting. */
+  if ((line - gtk_text_iter_get_line (&iter)) > 1)
     return NULL;
 
   /* get the last character */
@@ -327,7 +334,8 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
       return indent_parens (python, text_view, begin, end, &iter);
 
     default:
-      if (in_pydoc (&iter))
+      if (in_pydoc (&iter) ||
+          g_unichar_isspace (gtk_text_iter_get_char (&iter)))
         return copy_indent (python, begin, end, &iter);
 
       if (line_starts_with (&iter, "return") ||
