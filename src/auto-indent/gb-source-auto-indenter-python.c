@@ -278,6 +278,7 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
   switch (ch)
     {
     case ':':
+    case '(':
       return indent_colon (python, text_view, begin, end, &iter);
 
     case ',':
