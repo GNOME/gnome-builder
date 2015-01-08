@@ -32,6 +32,10 @@ struct _GbPreferencesPageEditorPrivate
   GtkSwitch                 *show_diff_switch;
   GtkSwitch                 *vim_mode_switch;
   GtkSwitch                 *word_completion_switch;
+  GtkSwitch                 *show_line_numbers_switch;
+  GtkSwitch                 *highlight_current_line_switch;
+  GtkSwitch                 *highlight_matching_brackets_switch;
+  GtkSwitch                 *smart_home_end_switch;
   GtkFontButton             *font_button;
   GbSourceStyleSchemeButton *style_scheme_button;
 
@@ -40,6 +44,10 @@ struct _GbPreferencesPageEditorPrivate
   GtkWidget                 *restore_insert_mark_container;
   GtkWidget                 *word_completion_container;
   GtkWidget                 *show_diff_container;
+  GtkWidget                 *show_line_numbers_container;
+  GtkWidget                 *highlight_current_line_container;
+  GtkWidget                 *highlight_matching_brackets_container;
+  GtkWidget                 *smart_home_end_container;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPageEditor, gb_preferences_page_editor,
@@ -57,7 +65,8 @@ gb_preferences_page_editor_constructed (GObject *object)
 
   priv->settings = g_settings_new ("org.gnome.builder.editor");
 
-  g_settings_bind (priv->settings, "vim-mode", priv->vim_mode_switch, "active",
+  g_settings_bind (priv->settings, "vim-mode",
+                   priv->vim_mode_switch, "active",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (priv->settings, "restore-insert-mark",
                    priv->restore_insert_mark_switch, "active",
@@ -67,6 +76,18 @@ gb_preferences_page_editor_constructed (GObject *object)
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (priv->settings, "word-completion",
                    priv->word_completion_switch, "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (priv->settings, "show-line-numbers",
+                   priv->show_line_numbers_switch, "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (priv->settings, "highlight-current-line",
+                   priv->highlight_current_line_switch, "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (priv->settings, "highlight-matching-brackets",
+                   priv->highlight_matching_brackets_switch, "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (priv->settings, "smart-home-end",
+                   priv->smart_home_end_switch, "active",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (priv->settings, "font-name",
                    priv->font_button, "font-name",
@@ -106,11 +127,19 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, style_scheme_button);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, vim_mode_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, word_completion_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, highlight_current_line_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, smart_home_end_switch);
 
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, vim_container);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, restore_insert_mark_container);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, word_completion_container);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, show_diff_container);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, show_line_numbers_container);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, highlight_current_line_container);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_container);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, smart_home_end_container);
 
   g_type_ensure (GB_TYPE_SOURCE_STYLE_SCHEME_BUTTON);
 }
@@ -141,6 +170,26 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
                                                _("diff renderer gutter changes git vcs"),
                                                self->priv->show_diff_container,
                                                self->priv->show_diff_switch,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("line numbers"),
+                                               self->priv->show_line_numbers_container,
+                                               self->priv->show_line_numbers_switch,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("line lines highlight current"),
+                                               self->priv->highlight_current_line_container,
+                                               self->priv->highlight_current_line_switch,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("bracket brackets highlight matching"),
+                                               self->priv->highlight_matching_brackets_container,
+                                               self->priv->highlight_matching_brackets_switch,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("smart home end"),
+                                               self->priv->smart_home_end_container,
+                                               self->priv->smart_home_end_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
                                                _("font document editor monospace"),

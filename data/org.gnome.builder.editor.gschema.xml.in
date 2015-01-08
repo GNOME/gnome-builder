@@ -21,6 +21,26 @@
       <summary>Show modified lines.</summary>
       <description>If enabled, the editor will show line additions and changes next to the source code.</description>
     </key>
+    <key name="highlight-current-line" type="b">
+      <default>false</default>
+      <summary>Highlight current line.</summary>
+      <description>If enabled, the editor will highlight the line containing the cursor.</description>
+    </key>
+    <key name="highlight-matching-brackets" type="b">
+      <default>false</default>
+      <summary>Highlight matching brackets.</summary>
+      <description>If enabled, the editor will highlight maching brackets.</description>
+    </key>
+    <key name="show-line-numbers" type="b">
+      <default>true</default>
+      <summary>Show line numbers.</summary>
+      <description>If enabled, the editor will show line numbers.</description>
+    </key>
+    <key name="smart-home-end" type="b">
+      <default>true</default>
+      <summary>Smart home end.</summary>
+      <description>Whether or not home moves to first non-space character.</description>
+    </key>
     <key name="font-name" type="s">
       <default>"Monospace 11"</default>
     </key>

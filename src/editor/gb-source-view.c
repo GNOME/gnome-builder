@@ -218,7 +218,6 @@ gb_source_view_disconnect_settings (GbSourceView *view)
   g_settings_unbind (view, "highlight-current-line");
   g_settings_unbind (view, "insert-spaces-instead-of-tabs");
   g_settings_unbind (view, "right-margin-position");
-  g_settings_unbind (view, "show-line-marks");
   g_settings_unbind (view, "show-line-numbers");
   g_settings_unbind (view, "show-right-margin");
   g_settings_unbind (view, "tab-width");
@@ -256,14 +255,6 @@ gb_source_view_connect_settings (GbSourceView *view)
 
       g_settings_bind (settings, "auto-indent", view, "auto-indent",
                        G_SETTINGS_BIND_GET);
-      g_settings_bind (settings, "auto-indent", view, "auto-indent",
-                       G_SETTINGS_BIND_GET);
-      g_settings_bind (settings, "highlight-current-line",
-                       view, "highlight-current-line",
-                       G_SETTINGS_BIND_GET);
-      g_settings_bind (settings, "highlight-matching-brackets",
-                       buffer, "highlight-matching-brackets",
-                       G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "insert-matching-brace",
                        view, "insert-matching-brace",
                        G_SETTINGS_BIND_GET);
@@ -275,15 +266,6 @@ gb_source_view_connect_settings (GbSourceView *view)
                        G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "right-margin-position",
                        view, "right-margin-position",
-                       G_SETTINGS_BIND_GET);
-      g_settings_bind (settings, "smart-home-end",
-                       view, "smart-home-end-simple",
-                       G_SETTINGS_BIND_GET);
-      g_settings_bind (settings, "show-line-marks",
-                       view, "show-line-marks",
-                       G_SETTINGS_BIND_GET);
-      g_settings_bind (settings, "show-line-numbers",
-                       view,"show-line-numbers",
                        G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "show-right-margin",
                        view, "show-right-margin",
@@ -309,6 +291,14 @@ gb_source_view_connect_settings (GbSourceView *view)
                    view->priv->vim, "enabled", G_SETTINGS_BIND_GET);
   g_settings_bind (view->priv->editor_settings, "word-completion",
                    view, "enable-word-completion", G_SETTINGS_BIND_GET);
+  g_settings_bind (view->priv->editor_settings, "show-line-numbers",
+                   view, "show-line-numbers",G_SETTINGS_BIND_GET);
+  g_settings_bind (view->priv->editor_settings, "highlight-current-line",
+                   view, "highlight-current-line",G_SETTINGS_BIND_GET);
+  g_settings_bind (view->priv->editor_settings, "highlight-matching-brackets",
+                   buffer, "highlight-matching-brackets",G_SETTINGS_BIND_GET);
+  g_settings_bind (view->priv->editor_settings, "smart-home-end",
+                   view, "smart-home-end-simple",G_SETTINGS_BIND_GET);
 }
 
 void

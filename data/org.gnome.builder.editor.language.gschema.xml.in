@@ -3,12 +3,6 @@
     <key name="auto-indent" type="b">
       <default>true</default>
     </key>
-    <key name="highlight-current-line" type="b">
-      <default>false</default>
-    </key>
-    <key name="highlight-matching-brackets" type="b">
-      <default>false</default>
-    </key>
     <key name="insert-spaces-instead-of-tabs" type="b">
       <default>false</default>
     </key>
@@ -18,16 +12,7 @@
     <key name="overwrite-braces" type="b">
       <default>false</default>
     </key>
-    <key name="show-line-marks" type="b">
-      <default>false</default>
-    </key>
-    <key name="show-line-numbers" type="b">
-      <default>true</default>
-    </key>
     <key name="show-right-margin" type="b">
-      <default>true</default>
-    </key>
-    <key name="smart-home-end" type="b">
       <default>true</default>
     </key>
     <key name="right-margin-position" type="i">
