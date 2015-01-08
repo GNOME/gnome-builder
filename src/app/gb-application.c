@@ -249,6 +249,9 @@ gb_application_register_theme_overrides (GbApplication *application)
 
   ENTRY;
 
+  gtk_icon_theme_add_resource_path (gtk_icon_theme_get_default (),
+                                    "/org/gnome/builder/icons/");
+
   /* Set up a handler to load our custom css for Adwaita.
    * See https://bugzilla.gnome.org/show_bug.cgi?id=732959
    * for a more automatic solution that is still under discussion.
