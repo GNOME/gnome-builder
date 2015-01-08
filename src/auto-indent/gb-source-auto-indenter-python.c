@@ -124,43 +124,7 @@ copy_indent_minus_tab (GbSourceAutoIndenterPython *python,
 
   if (tab_width <= str->len)
     g_string_truncate (str, str->len - tab_width);
-
-  return g_string_free (str, FALSE);
-}
-
-static gchar *
-indent_colon (GbSourceAutoIndenterPython *python,
-              GtkTextView                *view,
-              GtkTextIter                *begin,
-              GtkTextIter                *end,
-              GtkTextIter                *iter)
-{
-  GString *str;
-  gint indent_width = -1;
-  guint tab_width = 4;
-  guint i;
-  gchar *ret;
-
-  /* this is super naive. we don't even walk back to handle multi-line
-   * function parameter lists!
-   */
-
-  ret = copy_indent (python, begin, end, iter);
-  str = g_string_new (ret);
-  g_free (ret);
   
-  /* force spaces for now, cause anything else is evil in python */
-
-  if (GTK_SOURCE_IS_VIEW (view))
-    indent_width = gtk_source_view_get_indent_width (GTK_SOURCE_VIEW (view));
-
-  if (indent_width == -1)
-    if (GTK_SOURCE_IS_VIEW (view))
-      tab_width = gtk_source_view_get_tab_width (GTK_SOURCE_VIEW (view));
-
-  for (i = 0; i < tab_width; i++)
-    g_string_append (str, " ");
-
   return g_string_free (str, FALSE);
 }
 
@@ -185,6 +149,83 @@ find_paren (gunichar ch,
     }
 
   return (*count) == 0;
+}
+
+static gchar *
+indent_colon (GbSourceAutoIndenterPython *python,
+              GtkTextView                *view,
+              GtkTextIter                *begin,
+              GtkTextIter                *end,
+              GtkTextIter                *iter)
+{
+  GString *str;
+  guint tab_width = 4;
+  guint offset;
+  guint i;
+
+  /*
+   * TODO: Assign tab width from source view.
+   */
+
+  /*
+   * Work our way back to the first character of the first line. Jumping past
+   * strings and parens.
+   */
+  while (gtk_text_iter_backward_char (iter))
+    {
+      GtkTextIter match_begin;
+      GtkTextIter match_end;
+      gunichar ch;
+      gint count;
+
+      if (gtk_text_iter_get_line_offset (iter) == 0)
+        break;
+
+      ch = gtk_text_iter_get_char (iter);
+
+      switch (ch)
+        {
+        case ')':
+          count = 1;
+          if (!gtk_text_iter_backward_find_char (iter, find_paren, &count,
+                                                 NULL))
+            return NULL;
+          break;
+
+        case '\'':
+          if (!gtk_text_iter_backward_search (iter, "'",
+                                              GTK_TEXT_SEARCH_TEXT_ONLY,
+                                              &match_begin, &match_end, NULL))
+            return NULL;
+          *iter = match_begin;
+          break;
+
+        case '"':
+          if (!gtk_text_iter_backward_search (iter, "\"",
+                                              GTK_TEXT_SEARCH_TEXT_ONLY,
+                                              &match_begin, &match_end, NULL))
+            return NULL;
+          *iter = match_begin;
+          break;
+
+        default:
+          break;
+        }
+    }
+
+  /*
+   * Now work forward to the first non-whitespace char on this line.
+   */
+  while (!gtk_text_iter_ends_line (iter) &&
+         g_unichar_isspace (gtk_text_iter_get_char (iter)))
+    gtk_text_iter_forward_char (iter);
+
+  offset = gtk_text_iter_get_line_offset (iter);
+
+  str = g_string_new (NULL);
+  for (i = 0; i < (offset + tab_width); i++)
+    g_string_append (str, " ");
+  return g_string_free (str, FALSE);
 }
 
 static gchar *
