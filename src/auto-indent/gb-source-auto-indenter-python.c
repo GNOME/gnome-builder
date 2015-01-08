@@ -235,11 +235,18 @@ indent_parens (GbSourceAutoIndenterPython *python,
                GtkTextIter                *end,
                GtkTextIter                *iter)
 {
+  GtkTextIter copy;
+  GString *str;
   gint count = 1;
 
-  if (gtk_text_iter_backward_find_char (iter, find_paren, &count, NULL))
+  copy = *iter;
+
+  /* if we come across an opening paren on this line, we will move 1 space
+   * past it. otherwise, just copy the previous line's indentation.
+   */
+  if (gtk_text_iter_backward_find_char (iter, find_paren, &count, NULL) &&
+      (gtk_text_iter_get_line (iter) == gtk_text_iter_get_line (&copy)))
     {
-      GString *str;
       guint offset;
       gint i;
 
@@ -251,7 +258,18 @@ indent_parens (GbSourceAutoIndenterPython *python,
       return g_string_free (str, FALSE);
     }
 
-  return NULL;
+  str = g_string_new (NULL);
+
+  gtk_text_iter_set_line_offset (&copy, 0);
+
+  while (g_unichar_isspace (gtk_text_iter_get_char (&copy)))
+    {
+      g_string_append (str, " ");
+      if (!gtk_text_iter_forward_char (&copy))
+        break;
+    }
+
+  return g_string_free (str, FALSE);
 }
 
 static gchar *
