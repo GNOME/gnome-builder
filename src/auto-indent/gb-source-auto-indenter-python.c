@@ -255,6 +255,45 @@ indent_parens (GbSourceAutoIndenterPython *python,
 }
 
 static gchar *
+indent_previous_stmt (GbSourceAutoIndenterPython *python,
+                      GtkTextView                *text_view,
+                      GtkTextIter                *begin,
+                      GtkTextIter                *end,
+                      GtkTextIter                *iter)
+{
+  gint count = 1;
+
+  if (gtk_text_iter_backward_find_char (iter, find_paren, &count, NULL))
+    {
+      GString *str;
+      guint offset;
+      guint i;
+
+      gtk_text_iter_set_line_offset (iter, 0);
+
+      /*
+       * TODO:
+       *
+       * If the previous line ended in backslash (\), then we need to keep
+       * walking backwards. We also need to handle statements like:
+       */
+
+      while (g_unichar_isspace (gtk_text_iter_get_char (iter)))
+        if (!gtk_text_iter_forward_char (iter))
+          break;
+
+      offset = gtk_text_iter_get_line_offset (iter);
+
+      str = g_string_new (NULL);
+      for (i = 0; i < offset; i++)
+        g_string_append (str, " ");
+      return g_string_free (str, FALSE);
+    }
+
+  return NULL;
+}
+
+static gchar *
 gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
                                        GtkTextView          *text_view,
                                        GtkTextBuffer        *buffer,
@@ -280,6 +319,9 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
     case ':':
     case '(':
       return indent_colon (python, text_view, begin, end, &iter);
+
+    case ')':
+      return indent_previous_stmt (python, text_view, begin, end, &iter);
 
     case ',':
       return indent_parens (python, text_view, begin, end, &iter);
