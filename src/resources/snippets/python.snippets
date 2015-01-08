@@ -1,3 +1,6 @@
+snippet python
+	#!/usr/bin/env python
+	$0
 snippet gpl
 	# ${1:$filename}
 	#
@@ -34,3 +37,20 @@ snippet lgpl
 	# You should have received a copy of the GNU General Public License
 	# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	$0
+snippet import
+	import $0
+snippet from
+	from ${1} import $0
+snippet def
+	def ${1:function}(${2}):
+	    $0
+snippet class
+	class ${1:Foo}(${2:object}):
+	    def __init__(self{3}):
+	        $0
+snippet main
+	def main():
+	    $0
+	
+	if __name__ == "__main__":
+	    main()
