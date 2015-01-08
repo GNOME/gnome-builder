@@ -164,6 +164,55 @@ indent_colon (GbSourceAutoIndenterPython *python,
   return g_string_free (str, FALSE);
 }
 
+static gboolean
+find_paren (gunichar ch,
+            gpointer state)
+{
+  gint *count = state;
+
+  switch (ch)
+    {
+    case '(':
+      (*count)--;
+      break;
+
+    case ')':
+      (*count)++;
+      break;
+
+    default:
+      break;
+    }
+
+  return (*count) == 0;
+}
+
+static gchar *
+indent_parens (GbSourceAutoIndenterPython *python,
+               GtkTextView                *view,
+               GtkTextIter                *begin,
+               GtkTextIter                *end,
+               GtkTextIter                *iter)
+{
+  gint count = 1;
+
+  if (gtk_text_iter_backward_find_char (iter, find_paren, &count, NULL))
+    {
+      GString *str;
+      guint offset;
+      gint i;
+
+      offset = gtk_text_iter_get_line_offset (iter);
+
+      str = g_string_new (NULL);
+      for (i = 0; i <= offset; i++)
+        g_string_append (str, " ");
+      return g_string_free (str, FALSE);
+    }
+
+  return NULL;
+}
+
 static gchar *
 gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
                                        GtkTextView          *text_view,
@@ -189,6 +238,9 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
     {
     case ':':
       return indent_colon (python, text_view, begin, end, &iter);
+
+    case ',':
+      return indent_parens (python, text_view, begin, end, &iter);
 
     default:
       if (in_pydoc (&iter))
