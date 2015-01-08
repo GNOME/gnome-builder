@@ -1142,7 +1142,8 @@ gb_source_view_reload_auto_indenter (GbSourceView *view)
 
       if (g_str_equal (lang_id, "c") || g_str_equal (lang_id, "chdr"))
         auto_indenter = gb_source_auto_indenter_c_new ();
-      else if (g_str_equal (lang_id, "python"))
+      else if (g_str_equal (lang_id, "python") ||
+               g_str_equal (lang_id, "python3"))
         auto_indenter = gb_source_auto_indenter_python_new ();
       else if (g_str_equal (lang_id, "xml") || g_str_equal (lang_id, "html"))
         auto_indenter = gb_source_auto_indenter_xml_new ();
