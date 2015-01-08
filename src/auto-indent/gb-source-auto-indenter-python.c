@@ -159,6 +159,7 @@ indent_colon (GbSourceAutoIndenterPython *python,
               GtkTextIter                *iter)
 {
   GString *str;
+  gboolean is_colon;
   guint tab_width = 4;
   guint offset;
   guint i;
@@ -166,6 +167,8 @@ indent_colon (GbSourceAutoIndenterPython *python,
   /*
    * TODO: Assign tab width from source view.
    */
+
+  is_colon = gtk_text_iter_get_char (iter) == ':';
 
   /*
    * Work our way back to the first character of the first line. Jumping past
@@ -221,6 +224,25 @@ indent_colon (GbSourceAutoIndenterPython *python,
     gtk_text_iter_forward_char (iter);
 
   offset = gtk_text_iter_get_line_offset (iter);
+
+  /*
+   * If we are actually still in the parameter list, possibly indent more.
+   * I don't like that this code is here, it really belongs somewhere else.
+   */
+  if (!is_colon) {
+    GtkTextIter copy = *iter;
+
+    if (gtk_text_iter_forward_chars (&copy, 4))
+      {
+        gchar *slice;
+
+        slice = gtk_text_iter_get_slice (iter, &copy);
+        g_print ("SLICE: %s\n", slice);
+        if (g_strcmp0 (slice, "def ") == 0)
+          offset += tab_width;
+        g_free (slice);
+      }
+  }
 
   str = g_string_new (NULL);
   for (i = 0; i < (offset + tab_width); i++)
