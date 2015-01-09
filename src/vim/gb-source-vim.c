@@ -3251,6 +3251,12 @@ gb_source_vim_delete_range_cb (GtkTextBuffer *buffer,
   g_return_if_fail (end);
   g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
+  /*
+   * If we are not the focus widget, then it is not our problem.
+   */
+  if (!gtk_widget_has_focus (GTK_WIDGET (vim->priv->text_view)))
+    return;
+
   if (vim->priv->mode == GB_SOURCE_VIM_INSERT)
     return;
 
