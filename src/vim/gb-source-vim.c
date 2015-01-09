@@ -2895,6 +2895,18 @@ gb_source_vim_handle_normal (GbSourceVim *vim,
       gb_source_vim_clear_phrase (vim);
       return TRUE;
 
+    case GDK_KEY_Page_Up:
+    case GDK_KEY_KP_Page_Up:
+      gb_source_vim_clear_phrase (vim);
+      gb_source_vim_move_page (vim, GB_SOURCE_VIM_PAGE_UP);
+      return TRUE;
+
+    case GDK_KEY_Page_Down:
+    case GDK_KEY_KP_Page_Down:
+      gb_source_vim_clear_phrase (vim);
+      gb_source_vim_move_page (vim, GB_SOURCE_VIM_PAGE_DOWN);
+      return TRUE;
+
     case GDK_KEY_KP_Enter:
     case GDK_KEY_Return:
       gb_source_vim_clear_phrase (vim);
