@@ -2915,6 +2915,30 @@ gb_source_vim_handle_normal (GbSourceVim *vim,
         }
       break;
 
+    case GDK_KEY_KP_Down:
+    case GDK_KEY_Down:
+      gb_source_vim_clear_phrase (vim);
+      gb_source_vim_move_down (vim);
+      return TRUE;
+
+    case GDK_KEY_KP_Up:
+    case GDK_KEY_Up:
+      gb_source_vim_clear_phrase (vim);
+      gb_source_vim_move_up (vim);
+      return TRUE;
+
+    case GDK_KEY_KP_Left:
+    case GDK_KEY_Left:
+      gb_source_vim_clear_phrase (vim);
+      gb_source_vim_move_backward (vim);
+      return TRUE;
+
+    case GDK_KEY_KP_Right:
+    case GDK_KEY_Right:
+      gb_source_vim_clear_phrase (vim);
+      gb_source_vim_move_forward (vim);
+      return TRUE;
+
     case GDK_KEY_a:
     case GDK_KEY_x:
       if ((event->state & GDK_CONTROL_MASK) != 0)
