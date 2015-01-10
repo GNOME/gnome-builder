@@ -375,6 +375,30 @@ failure:
   EXIT;
 }
 
+static GVariant *
+gb_source_code_assistant_get_options (GbSourceCodeAssistant *assistant)
+{
+  GbSourceCodeAssistantPrivate *priv;
+  GtkSourceLanguage *language;
+  const gchar *lang_id;
+  GVariant *options = NULL;
+
+  g_return_val_if_fail (GB_IS_SOURCE_CODE_ASSISTANT (assistant), NULL);
+
+  priv = assistant->priv;
+
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (priv->buffer));
+  lang_id = language ? gtk_source_language_get_id (language) : NULL;
+
+  if ((g_strcmp0 (lang_id, "python") == 0) ||
+      (g_strcmp0 (lang_id, "python3") == 0))
+    options = g_variant_new_parsed ("{'pylint': <true>}");
+  else
+    options = g_variant_new ("a{sv}", 0);
+
+  return options;
+}
+
 static gboolean
 gb_source_code_assistant_do_parse (gpointer data)
 {
@@ -409,7 +433,7 @@ gb_source_code_assistant_do_parse (gpointer data)
   line = gtk_text_iter_get_line (&iter);
   line_offset = gtk_text_iter_get_line_offset (&iter);
   cursor = g_variant_new ("(xx)", line, line_offset);
-  options = g_variant_new ("a{sv}", 0);
+  options = gb_source_code_assistant_get_options (assistant);
 
   if (GB_IS_EDITOR_DOCUMENT (priv->buffer))
     {
