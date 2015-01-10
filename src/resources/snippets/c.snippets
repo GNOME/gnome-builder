@@ -1,167 +1,41 @@
-snippet main
-	#include <glib.h>
-
-	gint
-	main (gint   argc,
-	      gchar *argv[])
-	{
-		g_set_prgname ("${1:my-program}");
-		g_set_application_name ("${2:$1|capitalize}");
-
-		$0
-
-		return 0;
-	}
 snippet fail
+- scope c, chdr
 	g_return_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (`$filename|stripsuffix|instance`)});$0
 snippet vfail
+- scope c, chdr
 	g_return_val_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (`$filename|stripsuffix|instance`)}, ${2:NULL});$0
-snippet gpl
-	/* ${1:$filename}
-	 *
-	 * Copyright (C) $year ${2:$fullname} <${3:$email}>
-	 *
-	 * This program is free software: you can redistribute it and/or modify
-	 * it under the terms of the GNU General Public License as published by
-	 * the Free Software Foundation, either version 3 of the License, or
-	 * (at your option) any later version.
-	 *
-	 * This program is distributed in the hope that it will be useful,
-	 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	 * GNU General Public License for more details.
-	 *
-	 * You should have received a copy of the GNU General Public License
-	 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	 */
-	$0
-snippet lgpl
-	/* ${1:$filename}
-	 *
-	 * Copyright (C) $year ${2:$fullname} <${3:$email}>
-	 *
-	 * This file is free software; you can redistribute it and/or modify it
-	 * under the terms of the GNU Lesser General Public License as
-	 * published by the Free Software Foundation; either version 3 of the
-	 * License, or (at your option) any later version.
-	 *
-	 * This file is distributed in the hope that it will be useful, but
-	 * WITHOUT ANY WARRANTY; without even the implied warranty of
-	 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	 * Lesser General Public License for more details.
-	 *
-	 * You should have received a copy of the GNU General Public License
-	 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	 */
-	$0
 snippet W
+- scope c, chdr
 	GtkWidget *
 snippet c
+- scope c, chdr
 	*${$filename|stripsuffix|instance}
 snippet f
+- scope c, chdr
 	${$filename|stripsuffix|functify}_
 snippet gp
+- scope c, chdr
 	gpointer 
 snippet gb
+- scope c, chdr
 	gboolean 
 snippet for
+- scope c, chdr
 	for (${1:i = 0}; ${2:i < }; ${3:i++})
 	  {
 	    $0
 	  }
 snippet inc
+- scope c, chdr
 	#include "${1}"$0
 snippet Inc
+- scope c, chdr
 	#include <${1}>$0
-snippet gobject
-	#include "${1:$filename|stripsuffix}.h"
-
-	struct _${2:$1|camelize}Private
-	{
-		$0
-	};
-
-	G_DEFINE_TYPE_WITH_PRIVATE ($2, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
-
-	enum {
-		PROP_0,
-		LAST_PROP
-	};
-
-	static GParamSpec *gParamSpecs [LAST_PROP];
-
-	$2 *
-	$3_new (void)
-	{
-		return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
-	}
-
-	static void
-	$3_finalize (GObject *object)
-	{
-		$2Private *priv = ${$3|upper} (object)->priv;
-
-		G_OBJECT_CLASS ($3_parent_class)->finalize (object);
-	}
-
-	static void
-	$3_get_property (GObject    *object,
-	${$3|space}               guint       prop_id,
-	${$3|space}               GValue     *value,
-	${$3|space}               GParamSpec *pspec)
-	{
-		$2 *self = ${$3|upper} (object);
-
-		switch (prop_id)
-		  {
-		  default:
-		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		  }
-	}
-
-	static void
-	$3_set_property (GObject      *object,
-	${$3|space}               guint         prop_id,
-	${$3|space}               const GValue *value,
-	${$3|space}               GParamSpec   *pspec)
-	{
-		$2 *self = ${$3|upper} (object);
-
-		switch (prop_id)
-		  {
-		  default:
-		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		  }
-	}
-
-	static void
-	$3_class_init ($2Class *klass)
-	{
-		GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-		object_class->finalize = $3_finalize;
-		object_class->get_property = $3_get_property;
-		object_class->set_property = $3_set_property;
-	}
-
-	static void
-	$3_init ($2 *self)
-	{
-		self->priv = $3_get_instance_private (self);
-	}
 snippet pr
+- scope c, chdr
 	${$filename|stripsuffix|functify|camelize}Private *priv;$0
-snippet prop
-	gParamSpecs [PROP_${1:NAME}] =
-		g_param_spec_${2:object} ("${3:name}",
-		             ${$2|space}  _("${4:Name}"),
-		             ${$2|space}  _("${5:Name}"),
-		             ${$2|space}  ${6}
-		             ${$2|space}  (G_PARAM_${7:READWRITE} |
-		             ${$2|space}   G_PARAM_STATIC_STRINGS));
-	g_object_class_install_property (object_class, PROP_$1,
-	                                 gParamSpecs [PROP_$1]);
 snippet doc
+- scope c, chdr
 	/**
 	 * ${$filename|stripsuffix|functify}_${1:func}:
 	 *
@@ -170,25 +44,15 @@ snippet doc
 	 * Returns: ${2}
 	 */$0
 snippet C
+- scope c, chdr
 	${$filename|stripsuffix|functify|camelize} $0
 snippet CC
+- scope c, chdr
 	${$filename|stripsuffix|functify|upper} (${1})$0
 snippet comment
+- scope c, chdr
 	/*
 	 * $0
 	 */
-snippet ref
-	g_object_ref (${1});$0
-snippet unref
-	g_object_unref (${1});$0
-snippet clear
-	g_clear_object (&${1});$0
-snippet ginterface
-	#include "${1:$filename|stripsuffix}.h"
 
-	G_DEFINE_INTERFACE (${2:$1|camelize}, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
 
-	static void
-	$3_default_init ($2Interface *iface)
-	{
-	}

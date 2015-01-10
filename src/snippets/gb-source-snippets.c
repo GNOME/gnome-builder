@@ -86,33 +86,6 @@ gb_source_snippets_merge (GbSourceSnippets *snippets,
                  snippets->priv->snippets);
 }
 
-gboolean
-gb_source_snippets_load_from_file (GbSourceSnippets *snippets,
-                                   GFile            *file,
-                                   GError          **error)
-{
-  GbSourceSnippetParser *parser;
-  GList *iter;
-
-  g_return_val_if_fail (GB_IS_SOURCE_SNIPPETS (snippets), FALSE);
-  g_return_val_if_fail (G_IS_FILE (file), FALSE);
-
-  parser = gb_source_snippet_parser_new ();
-  if (!gb_source_snippet_parser_load_from_file (parser, file, error))
-    {
-      g_object_unref (parser);
-      return FALSE;
-    }
-
-  iter = gb_source_snippet_parser_get_snippets (parser);
-  for (; iter; iter = iter->next)
-    gb_source_snippets_add (snippets, iter->data);
-
-  g_object_unref (parser);
-
-  return TRUE;
-}
-
 void
 gb_source_snippets_add (GbSourceSnippets *snippets,
                         GbSourceSnippet  *snippet)

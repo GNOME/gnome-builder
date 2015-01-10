@@ -33,6 +33,7 @@ struct _GbSourceSnippetParserPrivate
 
   gint     lineno;
   GList   *chunks;
+  GList   *scope;
   gchar   *cur_name;
   GString *cur_text;
 };
@@ -59,28 +60,42 @@ gb_source_snippet_parser_flush_chunk (GbSourceSnippetParser *parser)
 }
 
 static void
-gb_source_snippet_parser_finish (GbSourceSnippetParser *parser)
+gb_source_snippet_parser_store (GbSourceSnippetParser *parser)
 {
   GbSourceSnippetParserPrivate *priv = parser->priv;
   GbSourceSnippet *snippet;
-  GList *iter;
+  GList *scope_iter;
+  GList *chunck_iter;
+
+  gb_source_snippet_parser_flush_chunk (parser);
+  for (scope_iter = priv->scope; scope_iter; scope_iter = scope_iter->next)
+    {
+      snippet = gb_source_snippet_new (priv->cur_name,
+                                       g_strdup(scope_iter->data));
+      for (chunck_iter = priv->chunks; chunck_iter; chunck_iter = chunck_iter->next)
+        {
+        #if 0
+          g_printerr ("%s:  Tab: %02d  Link: %02d  Text: %s\n",
+                      parser->priv->cur_name,
+                      gb_source_snippet_chunk_get_tab_stop (chunck_iter->data),
+                      gb_source_snippet_chunk_get_linked_chunk (chunck_iter->data),
+                      gb_source_snippet_chunk_get_text (chunck_iter->data));
+        #endif
+          gb_source_snippet_add_chunk (snippet, chunck_iter->data);
+        }
+
+      priv->snippets = g_list_append (priv->snippets, snippet);
+    }
+}
+
+static void
+gb_source_snippet_parser_finish (GbSourceSnippetParser *parser)
+{
+  GbSourceSnippetParserPrivate *priv = parser->priv;
 
   if (priv->cur_name)
     {
-      gb_source_snippet_parser_flush_chunk (parser);
-      snippet = gb_source_snippet_new (priv->cur_name);
-      for (iter = priv->chunks; iter; iter = iter->next)
-        {
-#if 0
-          g_printerr ("%s:  Tab: %02d  Link: %02d  Text: %s\n",
-                      parser->priv->cur_name,
-                      gb_source_snippet_chunk_get_tab_stop (iter->data),
-                      gb_source_snippet_chunk_get_linked_chunk (iter->data),
-                      gb_source_snippet_chunk_get_text (iter->data));
-#endif
-          gb_source_snippet_add_chunk (snippet, iter->data);
-        }
-      priv->snippets = g_list_append (priv->snippets, snippet);
+      gb_source_snippet_parser_store(parser);
     }
 
   g_clear_pointer (&priv->cur_name, g_free);
@@ -90,6 +105,9 @@ gb_source_snippet_parser_finish (GbSourceSnippetParser *parser)
   g_list_foreach (priv->chunks, (GFunc) g_object_unref, NULL);
   g_list_free (priv->chunks);
   priv->chunks = NULL;
+
+  g_list_free_full(priv->scope, g_free);
+  priv->scope = NULL;
 }
 
 static void
@@ -348,6 +366,24 @@ gb_source_snippet_parser_do_snippet (GbSourceSnippetParser *parser,
 }
 
 static void
+gb_source_snippet_parser_do_snippet_scope (GbSourceSnippetParser *parser,
+                                           const gchar           *line)
+{
+  gchar **scope_list;
+  gint i;
+
+  scope_list = g_strsplit (&line[8], ",", -1);
+
+  for (i = 0; scope_list[i]; i++)
+    {
+      parser->priv->scope = g_list_append(parser->priv->scope, 
+                                          g_strstrip (g_strdup (scope_list[i])));
+    }
+
+  g_strfreev(scope_list);
+}
+
+static void
 gb_source_snippet_parser_feed_line (GbSourceSnippetParser *parser,
                                     const gchar           *line)
 {
@@ -382,6 +418,29 @@ gb_source_snippet_parser_feed_line (GbSourceSnippetParser *parser,
         {
           gb_source_snippet_parser_finish (parser);
           gb_source_snippet_parser_do_snippet (parser, line);
+          break;
+        }
+
+    case '-':
+      if (priv->cur_text->len || priv->chunks)
+        {
+          gb_source_snippet_parser_store(parser);
+
+          g_string_truncate (priv->cur_text, 0);
+
+          g_list_foreach (priv->chunks, (GFunc) g_object_unref, NULL);
+          g_list_free (priv->chunks);
+          priv->chunks = NULL;
+        }
+
+      if (g_str_has_prefix(line, "- scope"))
+        {
+          if (priv->scope)
+            {
+              g_list_free_full(priv->scope, g_free);
+              priv->scope = NULL;
+            }
+          gb_source_snippet_parser_do_snippet_scope (parser, line);
           break;
         }
 
@@ -453,6 +512,9 @@ gb_source_snippet_parser_finalize (GObject *object)
   g_list_free (priv->chunks);
   priv->chunks = NULL;
 
+  g_list_free_full(priv->scope, g_free);
+  priv->scope = NULL;
+
   if (priv->cur_text)
     g_string_free (priv->cur_text, TRUE);
 
@@ -481,4 +543,5 @@ gb_source_snippet_parser_init (GbSourceSnippetParser *parser)
                                               GbSourceSnippetParserPrivate);
   parser->priv->lineno = -1;
   parser->priv->cur_text = g_string_new (NULL);
+  parser->priv->scope = NULL;
 }

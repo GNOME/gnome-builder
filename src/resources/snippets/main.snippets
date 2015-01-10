@@ -1,0 +1,21 @@
+snippet main
+- scope c, cpp
+	#include <glib.h>
+
+	gint
+	main (gint   argc,
+	      gchar *argv[])
+	{
+		g_set_prgname ("${1:my-program}");
+		g_set_application_name ("${2:$1|capitalize}");
+
+		$0
+
+		return 0;
+	}
+- scope python, python3
+	def main():
+		$0
+	
+	if __name__ == "__main__":
+		main()

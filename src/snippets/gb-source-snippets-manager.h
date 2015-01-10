@@ -22,6 +22,8 @@
 #include <gtksourceview/gtksourcelanguage.h>
 
 #include "gb-source-snippets.h"
+#include "gb-source-snippet.h"
+#include "gb-source-snippet-parser.h"
 
 G_BEGIN_DECLS
 

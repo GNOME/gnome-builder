@@ -57,9 +57,6 @@ void              gb_source_snippets_merge          (GbSourceSnippets *snippets,
                                                      GbSourceSnippets *other);
 GbSourceSnippets *gb_source_snippets_new            (void);
 GType             gb_source_snippets_get_type       (void);
-gboolean          gb_source_snippets_load_from_file (GbSourceSnippets  *snippets,
-                                                     GFile             *file,
-                                                     GError           **error);
 void              gb_source_snippets_foreach        (GbSourceSnippets *snippets,
                                                      const gchar      *prefix,
                                                      GFunc             foreach_func,

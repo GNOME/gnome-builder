@@ -1,0 +1,186 @@
+snippet gobject
+- scope c
+	#include "${1:$filename|stripsuffix}.h"
+
+	struct _${2:$1|camelize}Private
+	{
+		$0
+	};
+
+	G_DEFINE_TYPE_WITH_PRIVATE ($2, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
+
+	enum {
+		PROP_0,
+		LAST_PROP
+	};
+
+	static GParamSpec *gParamSpecs [LAST_PROP];
+
+	$2 *
+	$3_new (void)
+	{
+		return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
+	}
+
+	static void
+	$3_finalize (GObject *object)
+	{
+		$2Private *priv = ${$3|upper} (object)->priv;
+
+		G_OBJECT_CLASS ($3_parent_class)->finalize (object);
+	}
+
+	static void
+	$3_get_property (GObject    *object,
+	${$3|space}               guint       prop_id,
+	${$3|space}               GValue     *value,
+	${$3|space}               GParamSpec *pspec)
+	{
+		$2 *self = ${$3|upper} (object);
+
+		switch (prop_id)
+		  {
+		  default:
+		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		  }
+	}
+
+	static void
+	$3_set_property (GObject      *object,
+	${$3|space}               guint         prop_id,
+	${$3|space}               const GValue *value,
+	${$3|space}               GParamSpec   *pspec)
+	{
+		$2 *self = ${$3|upper} (object);
+
+		switch (prop_id)
+		  {
+		  default:
+		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		  }
+	}
+
+	static void
+	$3_class_init ($2Class *klass)
+	{
+		GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+		object_class->finalize = $3_finalize;
+		object_class->get_property = $3_get_property;
+		object_class->set_property = $3_set_property;
+	}
+
+	static void
+	$3_init ($2 *self)
+	{
+		self->priv = $3_get_instance_private (self);
+	}
+- scope chdr
+	#ifndef ${$1|functify|upper}_H
+	#define ${$1|functify|upper}_H
+
+	#include ${3:<glib-object.h>}
+
+	G_BEGIN_DECLS
+
+	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}            (${$1|functify}_get_type())
+	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1))
+	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1 const))
+	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1Class))
+	#define ${$1|functify|namespace|upper}_IS_${$1|class|functify|upper}(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}))
+	#define ${$1|functify|namespace|upper}_IS_${$1|class|functify|upper}_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}))
+	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1Class))
+
+	typedef struct _$1        $1;
+	typedef struct _$1Class   $1Class;
+	typedef struct _$1Private $1Private;
+
+	struct _${1:$filename|stripsuffix|functify|camelize}
+	{
+		${2:GObject} parent;
+
+		/*< private >*/
+		$1Private *priv;
+	};
+
+	struct _$1Class
+	{
+		$2Class parent;
+	};
+
+	GType ${$1|space}${$1|functify}_get_type (void);
+	$1     *${$1|functify}_new      (void);
+	$0
+	G_END_DECLS
+
+	#endif /* ${$1|functify|upper}_H */
+snippet gobj_guard
+- scope chdr
+	#ifndef ${1:$filename|stripsuffix|functify|upper}_H
+	#define $1_H
+
+	#include <glib.h>
+
+	G_BEGIN_DECLS
+
+	$0
+
+	G_END_DECLS
+
+	#endif /* $1_H */
+snippet gobj_interface
+- scope c
+	#include "${1:$filename|stripsuffix}.h"
+
+	G_DEFINE_INTERFACE (${2:$1|camelize}, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
+
+	static void
+	$3_default_init ($2Interface *iface)
+	{
+	}
+- scope chdr
+	#ifndef ${$1|functify|upper}_H
+	#define ${$1|functify|upper}_H
+
+	#include <glib-object.h>
+
+	G_BEGIN_DECLS
+
+	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}               (${$1|functify}_get_type ())
+	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1))
+	#define ${$1|functify|namespace|upper}_IS_${$1|class|functify|upper}(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}))
+	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1Interface))
+
+	typedef struct _$1      $1;
+	typedef struct _$1Interface $1Interface;
+
+	struct _${1:$filename|stripsuffix|functify|camelize}Interface
+	{
+		GTypeInterface parent;
+	};
+
+	GType ${$1|functify}_get_type (void);
+
+	G_END_DECLS
+
+	#endif /* ${$1|functify|upper}_H */
+snippet gobj_ref
+- scope c
+	g_object_ref (${1});$0
+snippet gobj_unref
+- scope c
+	g_object_unref (${1});$0
+snippet gobj_clear
+- scope c
+	g_clear_object (&${1});$0
+snippet gobj_prop
+- scope c
+	gParamSpecs [PROP_${1:NAME}] =
+		g_param_spec_${2:object} ("${3:name}",
+		             ${$2|space}  _("${4:Name}"),
+		             ${$2|space}  _("${5:Name}"),
+		             ${$2|space}  ${6}
+		             ${$2|space}  (G_PARAM_${7:READWRITE} |
+		             ${$2|space}   G_PARAM_STATIC_STRINGS));
+	g_object_class_install_property (object_class, PROP_$1,
+	                                 gParamSpecs [PROP_$1]);

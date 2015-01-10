@@ -22,6 +22,9 @@
     <file>snippets/c.snippets</file>
     <file>snippets/chdr.snippets</file>
     <file>snippets/c-sharp.snippets</file>
+    <file>snippets/gobject.snippets</file>
+    <file>snippets/licenses.snippets</file>
+    <file>snippets/main.snippets</file>
     <file>snippets/python.snippets</file>
     <file>snippets/rpmspec.snippets</file>
     <file>snippets/vala.snippets</file>

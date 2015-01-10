@@ -1,4 +1,5 @@
 snippet minimal
+- scope rpmspec
 	Name:          ${1:$filename|stripsuffix}
 	Version:       ${2:1.0}
 	Release:       ${3:1}%{?dist}
@@ -32,6 +33,7 @@ snippet minimal
 	* $shortweekday $shortmonth $day $year ${13:$fullname} <${14:$email}> - $2-$3
 	- Initial package$0
 snippet library
+- scope rpmspec
 	Name:          ${1:$filename|stripsuffix}
 	Version:       ${2:1.0}
 	Release:       ${3:1}%{?dist}
@@ -84,6 +86,7 @@ snippet library
 	* $shortweekday $shortmonth $day $year ${18:$fullname} <${19:$email}> - $2-$3
 	- Initial package$0
 snippet python-arch
+- scope rpmspec
 	%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 	%{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 	Name:          ${1:$filename|stripsuffix}
@@ -120,6 +123,7 @@ snippet python-arch
 	* $shortweekday $shortmonth $day $year ${16:$fullname} <${17:$email}> - $2-$3
 	- Initial package$0
 snippet python-noarch
+- scope rpmspec
 	Name:          ${1:$filename|stripsuffix}
 	Version:       ${2:1.0}
 	Release:       ${3:1}%{?dist}

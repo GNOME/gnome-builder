@@ -1,56 +1,20 @@
 snippet python
+- scope python, python3
 	#!/usr/bin/env python
 	$0
-snippet gpl
-	# ${1:$filename}
-	#
-	# Copyright (C) $year ${2:$fullname} <${3:$email}>
-	#
-	# This program is free software: you can redistribute it and/or modify
-	# it under the terms of the GNU General Public License as published by
-	# the Free Software Foundation, either version 3 of the License, or
-	# (at your option) any later version.
-	#
-	# This program is distributed in the hope that it will be useful,
-	# but WITHOUT ANY WARRANTY; without even the implied warranty of
-	# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	# GNU General Public License for more details.
-	#
-	# You should have received a copy of the GNU General Public License
-	# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	$0
-snippet lgpl
-	# ${1:$filename}
-	#
-	# Copyright (C) $year ${2:$fullname} <${3:$email}>
-	#
-	# This file is free software; you can redistribute it and/or modify it
-	# under the terms of the GNU Lesser General Public License as
-	# published by the Free Software Foundation; either version 3 of the
-	# License, or (at your option) any later version.
-	#
-	# This file is distributed in the hope that it will be useful, but
-	# WITHOUT ANY WARRANTY; without even the implied warranty of
-	# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	# Lesser General Public License for more details.
-	#
-	# You should have received a copy of the GNU General Public License
-	# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	$0
 snippet import
+- scope python, python3
 	import $0
 snippet from
+- scope python, python3
 	from ${1} import $0
 snippet def
+- scope python, python3
 	def ${1:function}(${2}):
 		$0
 snippet class
+- scope python, python3
 	class ${1:Foo}(${2:object}):
 		def __init__(self${3}):
 			$0
-snippet main
-	def main():
-		$0
-	
-	if __name__ == "__main__":
-		main()
+
