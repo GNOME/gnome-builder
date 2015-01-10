@@ -129,6 +129,29 @@ copy_indent_minus_tab (GbSourceAutoIndenterPython *python,
 }
 
 static gboolean
+find_bracket (gunichar ch,
+              gpointer state)
+{
+  gint *count = state;
+
+  switch (ch)
+    {
+    case '[':
+      (*count)--;
+      break;
+
+    case ']':
+      (*count)++;
+      break;
+
+    default:
+      break;
+    }
+
+  return (*count) == 0;
+}
+
+static gboolean
 find_paren (gunichar ch,
             gpointer state)
 {
@@ -188,6 +211,13 @@ indent_colon (GbSourceAutoIndenterPython *python,
 
       switch (ch)
         {
+        case ']':
+          count = 1;
+          if (!gtk_text_iter_backward_find_char (iter, find_bracket, &count,
+                                                 NULL))
+            return NULL;
+          break;
+
         case ')':
           count = 1;
           if (!gtk_text_iter_backward_find_char (iter, find_paren, &count,
@@ -364,7 +394,8 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
   switch (ch)
     {
     case ':':
-    case '(':
+    case '(': /* Not happy about this */
+    case '[': /* Or this */
       return indent_colon (python, text_view, begin, end, &iter);
 
     case ')':
