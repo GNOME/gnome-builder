@@ -369,15 +369,27 @@ static void
 gb_source_snippet_parser_do_snippet_scope (GbSourceSnippetParser *parser,
                                            const gchar           *line)
 {
+  GbSourceSnippetParserPrivate *priv = parser->priv;
   gchar **scope_list;
+  GList *iter;
   gint i;
+  gboolean add_scope;
 
   scope_list = g_strsplit (&line[8], ",", -1);
 
   for (i = 0; scope_list[i]; i++)
     {
-      parser->priv->scope = g_list_append(parser->priv->scope, 
-                                          g_strstrip (g_strdup (scope_list[i])));
+      add_scope = TRUE;
+      for (iter = priv->scope; iter; iter = iter->next)
+        {
+          if (g_strcmp0(iter->data, scope_list[i]) == 0)
+              add_scope = FALSE;
+              break;
+        }
+
+      if (add_scope)
+        priv->scope = g_list_append(priv->scope, 
+                                    g_strstrip (g_strdup (scope_list[i])));
     }
 
   g_strfreev(scope_list);
@@ -385,11 +397,13 @@ gb_source_snippet_parser_do_snippet_scope (GbSourceSnippetParser *parser,
 
 static void
 gb_source_snippet_parser_feed_line (GbSourceSnippetParser *parser,
+                                    gchar                 *basename,
                                     const gchar           *line)
 {
   GbSourceSnippetParserPrivate *priv = parser->priv;
 
   g_assert (parser);
+  g_assert (basename);
   g_assert (line);
 
   priv->lineno++;
@@ -407,6 +421,21 @@ gb_source_snippet_parser_feed_line (GbSourceSnippetParser *parser,
     case '\t':
       if (priv->cur_name)
         {
+          GList *iter;
+          gboolean add_default_scope = TRUE;
+          for (iter = priv->scope; iter; iter = iter->next)
+            {
+              if (g_strcmp0(iter->data, basename) == 0)
+                {
+                  add_default_scope = FALSE;
+                  break;
+                }
+            }
+
+          if (add_default_scope)
+            priv->scope = g_list_append(priv->scope, 
+                                        g_strstrip (g_strdup (basename)));
+
           if (priv->cur_text->len || priv->chunks)
             g_string_append_c (priv->cur_text, '\n');
           gb_source_snippet_parser_do_part (parser, line);
@@ -431,15 +460,13 @@ gb_source_snippet_parser_feed_line (GbSourceSnippetParser *parser,
           g_list_foreach (priv->chunks, (GFunc) g_object_unref, NULL);
           g_list_free (priv->chunks);
           priv->chunks = NULL;
+
+          g_list_free_full(priv->scope, g_free);
+          priv->scope = NULL;
         }
 
       if (g_str_has_prefix(line, "- scope"))
         {
-          if (priv->scope)
-            {
-              g_list_free_full(priv->scope, g_free);
-              priv->scope = NULL;
-            }
           gb_source_snippet_parser_do_snippet_scope (parser, line);
           break;
         }
@@ -460,9 +487,18 @@ gb_source_snippet_parser_load_from_file (GbSourceSnippetParser *parser,
   GDataInputStream *data_stream;
   GError *local_error = NULL;
   gchar *line;
+  gchar *basename = NULL;
 
   g_return_val_if_fail (GB_IS_SOURCE_SNIPPET_PARSER (parser), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
+
+  basename = g_file_get_basename (file);
+
+  if (basename) 
+    {
+      if (strstr (basename, "."))
+        *strstr (basename, ".") = '\0';
+    }
 
   file_stream = g_file_read (file, NULL, error);
   if (!file_stream)
@@ -480,12 +516,13 @@ again:
     }
   else if (line)
     {
-      gb_source_snippet_parser_feed_line (parser, line);
+      gb_source_snippet_parser_feed_line (parser, basename, line);
       g_free (line);
       goto again;
     }
 
   gb_source_snippet_parser_finish (parser);
+  g_free(basename);
 
   return TRUE;
 }
