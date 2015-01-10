@@ -197,9 +197,11 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
           !is_space_event (event) &&
           !is_tab_event (event))
         {
-          gtk_search_bar_set_search_mode (self->priv->search_bar, TRUE);
-          gtk_widget_grab_focus (GTK_WIDGET (self->priv->search_entry));
-          ret = TRUE;
+          if (gtk_search_bar_handle_event (GTK_SEARCH_BAR (self->priv->search_bar),
+                                           (GdkEvent*) event) == GDK_EVENT_STOP)
+            ret = TRUE;
+          else
+            ret = FALSE;
         }
     }
 
