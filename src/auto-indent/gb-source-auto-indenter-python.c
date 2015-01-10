@@ -44,7 +44,17 @@ gb_source_auto_indenter_python_new (void)
 static gboolean
 in_pydoc (const GtkTextIter *iter)
 {
-  /* TODO: implement this */
+  GtkTextIter copy = *iter;
+  GtkSourceBuffer *buffer;
+
+  gtk_text_iter_backward_char (&copy);
+
+  buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (iter));
+
+  if (gtk_source_buffer_iter_has_context_class (buffer, &copy, "comment") ||
+      gtk_source_buffer_iter_has_context_class (buffer, &copy, "string"))
+    return TRUE;
+
   return FALSE;
 }
 
@@ -391,6 +401,9 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
   /* get the last character */
   ch = gtk_text_iter_get_char (&iter);
 
+  if (in_pydoc (&iter))
+    return copy_indent (python, begin, end, &iter);
+
   switch (ch)
     {
     case ':':
@@ -405,8 +418,7 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
       return indent_parens (python, text_view, begin, end, &iter);
 
     default:
-      if (in_pydoc (&iter) ||
-          g_unichar_isspace (gtk_text_iter_get_char (&iter)))
+      if (g_unichar_isspace (gtk_text_iter_get_char (&iter)))
         return copy_indent (python, begin, end, &iter);
 
       if (line_starts_with (&iter, "return") ||
