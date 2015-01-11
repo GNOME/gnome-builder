@@ -114,6 +114,92 @@ copy_indent (GbSourceAutoIndenterPython *python,
   return g_string_free (str, FALSE);
 }
 
+static gboolean
+backtrack_to_open_pair (GtkTextIter *iter)
+{
+  GtkTextIter copy;
+  GtkSourceBuffer *buffer;
+
+  buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (iter));
+  copy = *iter;
+
+  do
+    {
+      GtkTextIter match_start;
+      GtkTextIter match_end;
+      gunichar ch;
+
+      if (gtk_source_buffer_iter_has_context_class (buffer, &copy, "comment") ||
+          gtk_source_buffer_iter_has_context_class (buffer, &copy, "string"))
+        continue;
+
+      ch = gtk_text_iter_get_char (&copy);
+
+      switch (ch)
+        {
+        case '=':
+          return FALSE;
+
+        case '{':
+        case '(':
+        case '[':
+          *iter = copy;
+          return TRUE;
+
+        case ')':
+          if (!gtk_text_iter_backward_search (&copy, "(",
+                                              GTK_TEXT_SEARCH_TEXT_ONLY,
+                                              &match_start, &match_end,
+                                              NULL))
+            return FALSE;
+          copy = match_start;
+          break;
+
+        case ']':
+          if (!gtk_text_iter_backward_search (&copy, "[",
+                                              GTK_TEXT_SEARCH_TEXT_ONLY,
+                                              &match_start, &match_end,
+                                              NULL))
+            return FALSE;
+          copy = match_start;
+          break;
+
+        case '}':
+          if (!gtk_text_iter_backward_search (&copy, "{",
+                                              GTK_TEXT_SEARCH_TEXT_ONLY,
+                                              &match_start, &match_end,
+                                              NULL))
+            return FALSE;
+          copy = match_start;
+          break;
+
+        case '\'':
+          if (!gtk_text_iter_backward_search (&copy, "'",
+                                              GTK_TEXT_SEARCH_TEXT_ONLY,
+                                              &match_start, &match_end,
+                                              NULL))
+            return FALSE;
+          copy = match_start;
+          break;
+
+        case '"':
+          if (!gtk_text_iter_backward_search (&copy, "\"",
+                                              GTK_TEXT_SEARCH_TEXT_ONLY,
+                                              &match_start, &match_end,
+                                              NULL))
+            return FALSE;
+          copy = match_start;
+          break;
+
+        default:
+          break;
+        }
+    }
+  while (gtk_text_iter_backward_char (&copy));
+
+  return FALSE;
+}
+
 static gchar *
 copy_indent_minus_tab (GbSourceAutoIndenterPython *python,
                        GtkTextView                *view,
@@ -334,6 +420,7 @@ indent_parens (GbSourceAutoIndenterPython *python,
   return g_string_free (str, FALSE);
 }
 
+#if 0
 static gchar *
 indent_previous_stmt (GbSourceAutoIndenterPython *python,
                       GtkTextView                *text_view,
@@ -372,6 +459,7 @@ indent_previous_stmt (GbSourceAutoIndenterPython *python,
 
   return NULL;
 }
+#endif
 
 static gchar *
 gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
@@ -411,8 +499,10 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
     case '[': /* Or this */
       return indent_colon (python, text_view, begin, end, &iter);
 
+#if 0
     case ')':
       return indent_previous_stmt (python, text_view, begin, end, &iter);
+#endif
 
     case ',':
       return indent_parens (python, text_view, begin, end, &iter);
@@ -426,6 +516,43 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
           line_starts_with (&iter, "continue") ||
           line_starts_with (&iter, "pass"))
         return copy_indent_minus_tab (python, text_view, begin, end, &iter);
+
+      if (backtrack_to_open_pair (&iter))
+        {
+          GString *str;
+          guint offset;
+          guint i;
+
+          offset = gtk_text_iter_get_line_offset (&iter);
+          str = g_string_new (NULL);
+
+          for (i = 0; i <= offset; i++)
+            g_string_append (str, " ");
+
+          return g_string_free (str, FALSE);
+        }
+
+      if (ch == ')' || ch == ']' || ch == '}')
+        {
+          GtkTextIter copy;
+
+          copy = iter;
+
+          gtk_text_iter_backward_char (&copy);
+
+          if (backtrack_to_open_pair (&copy))
+            {
+              gtk_text_iter_set_line_offset (&copy, 0);
+              while (g_unichar_isspace (gtk_text_iter_get_char (&copy)) &&
+                     !gtk_text_iter_ends_line (&copy) &&
+                     gtk_text_iter_forward_char (&copy))
+                {
+                  /* Do nothing */
+                }
+
+              return copy_indent (python, begin, end, &copy);
+            }
+        }
 
       return copy_indent (python, begin, end, &iter);
     }
