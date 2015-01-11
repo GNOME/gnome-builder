@@ -21,6 +21,8 @@
 #include <glib/gi18n.h>
 
 #include "gb-document-grid.h"
+#include "gb-widget.h"
+#include "gb-close-confirmation-dialog.h"
 
 struct _GbDocumentGridPrivate
 {
@@ -226,6 +228,59 @@ gb_document_grid_focus_neighbor (GbDocumentGrid   *grid,
     gtk_widget_grab_focus (neighbor);
 }
 
+static gboolean
+gb_document_grid_request_close (GbDocumentGrid *grid,
+                                GbDocumentView *view)
+{
+  gboolean ret = FALSE;
+  GbDocument *document;
+
+  g_return_val_if_fail (GB_IS_DOCUMENT_GRID (grid), FALSE);
+  g_return_val_if_fail (GB_IS_DOCUMENT_VIEW (view), FALSE);
+
+  document = gb_document_view_get_document (view);
+  if (!document)
+    return FALSE;
+
+  if (gb_document_get_modified (document))
+    {
+      GbWorkbench *workbench;
+      GtkWidget *dialog;
+      gint response_id;
+
+      workbench = gb_widget_get_workbench (GTK_WIDGET (view));
+      dialog = gb_close_confirmation_dialog_new_single (GTK_WINDOW (workbench),
+                                                 document);
+      response_id = gtk_dialog_run (GTK_DIALOG (dialog));
+
+      switch (response_id)
+        {
+        case GTK_RESPONSE_YES:
+          if (gb_document_is_untitled (document))
+            gb_document_save_as_async (document, GTK_WIDGET (workbench), NULL, NULL, NULL);
+          else
+            gb_document_save_async (document, GTK_WIDGET (workbench), NULL, NULL, NULL);
+          break;
+
+        case GTK_RESPONSE_NO:
+          break;
+
+        case GTK_RESPONSE_DELETE_EVENT:
+        case GTK_RESPONSE_CANCEL:
+          ret = TRUE;
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+
+      gtk_widget_hide (dialog);
+      gtk_widget_destroy (dialog);
+    }
+
+  return ret;
+}
+
 static void
 gb_document_grid_view_closed (GbDocumentGrid *grid,
                               GbDocumentView *view)
@@ -245,9 +300,6 @@ gb_document_grid_view_closed (GbDocumentGrid *grid,
 
   document = gb_document_view_get_document (view);
   if (!document)
-    return;
-
-  if (gb_document_get_modified (document))
     return;
 
   stacks = gb_document_grid_get_stacks (grid);
@@ -306,6 +358,12 @@ gb_document_grid_create_stack (GbDocumentGrid *grid)
   g_signal_connect_object (stack,
                            "view-closed",
                            G_CALLBACK (gb_document_grid_view_closed),
+                           grid,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+
+  g_signal_connect_object (stack,
+                           "request-close",
+                           G_CALLBACK (gb_document_grid_request_close),
                            grid,
                            G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 

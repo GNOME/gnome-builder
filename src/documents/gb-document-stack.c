@@ -55,6 +55,7 @@ enum {
   EMPTY,
   FOCUS_NEIGHBOR,
   VIEW_CLOSED,
+  REQUEST_CLOSE,
   LAST_SIGNAL
 };
 
@@ -76,15 +77,23 @@ gb_document_stack_remove_view (GbDocumentStack *stack,
   GtkWidget *visible_child;
   GtkWidget *controls;
   gboolean visible;
+  gboolean close_response;
 
   g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
   g_return_if_fail (GB_IS_DOCUMENT_VIEW (view));
 
+  g_object_ref (view);
+
+  g_signal_emit (stack, gSignals [REQUEST_CLOSE], 0, view, &close_response);
+  if (close_response)
+    {
+      g_object_unref (view);
+      return;
+    }
+
   /* Release our weak pointer */
   if (view == stack->priv->active_view)
     gb_clear_weak_pointer (&stack->priv->active_view);
-
-  g_object_ref (view);
 
   /*
    * WORKAROUND:
@@ -923,6 +932,17 @@ gb_document_stack_class_init (GbDocumentStackClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_generic,
                   G_TYPE_NONE,
+                  1,
+                  GB_TYPE_DOCUMENT_VIEW);
+
+  gSignals [REQUEST_CLOSE] =
+    g_signal_new ("request-close",
+                  GB_TYPE_DOCUMENT_STACK,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbDocumentStackClass, request_close),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_BOOLEAN,
                   1,
                   GB_TYPE_DOCUMENT_VIEW);
 

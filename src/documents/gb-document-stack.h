@@ -51,12 +51,14 @@ struct _GbDocumentStackClass
 {
   GtkBoxClass parent;
 
-  void (*create_view) (GbDocumentStack *stack,
-                       GbDocument      *document,
-                       GbDocumentSplit  split);
-  void (*empty)       (GbDocumentStack *stack);
-  void (*view_closed) (GbDocumentStack *stack,
-                       GbDocumentView  *view);
+  void (*create_view)   (GbDocumentStack *stack,
+                         GbDocument      *document,
+                         GbDocumentSplit  split);
+  void (*empty)         (GbDocumentStack *stack);
+  void (*view_closed)   (GbDocumentStack *stack,
+                         GbDocumentView  *view);
+  void (*request_close) (GbDocumentStack *stack,
+                         GbDocumentView  *view);
 };
 
 GType              gb_document_stack_get_type             (void);
