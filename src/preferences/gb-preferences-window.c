@@ -189,19 +189,32 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
    */
   editable = GTK_IS_EDITABLE (gtk_window_get_focus (GTK_WINDOW (widget)));
 
-  if (!ret && !editable &&
-      !gtk_search_bar_get_search_mode (self->priv->search_bar))
+  if (!ret && !editable)
     {
-      if (!is_escape_event (event) &&
-          !is_keynav_event (event) &&
-          !is_space_event (event) &&
-          !is_tab_event (event))
+      if (!gtk_search_bar_get_search_mode (self->priv->search_bar))
         {
-          if (gtk_search_bar_handle_event (GTK_SEARCH_BAR (self->priv->search_bar),
-                                           (GdkEvent*) event) == GDK_EVENT_STOP)
-            ret = TRUE;
-          else
-            ret = FALSE;
+          if (is_escape_event (event))
+            {
+              g_signal_emit_by_name (widget, "close");
+            }
+          else if (!is_keynav_event (event) &&
+                   !is_space_event (event) &&
+                   !is_tab_event (event))
+            {
+              if (gtk_search_bar_handle_event (GTK_SEARCH_BAR (self->priv->search_bar),
+                                               (GdkEvent*) event) == GDK_EVENT_STOP)
+                ret = TRUE;
+              else
+                ret = FALSE;
+            }
+        }
+      else
+        {
+          if (!gtk_widget_is_focus (GTK_WIDGET (self->priv->search_bar)) &&
+              is_escape_event (event))
+            gtk_search_bar_set_search_mode (self->priv->search_bar, FALSE);
+
+          ret = TRUE;
         }
     }
 
@@ -268,7 +281,6 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkBindingSet *binding_set;
 
   object_class->constructed = gb_preferences_window_constructed;
   object_class->finalize = gb_preferences_window_finalize;
@@ -288,9 +300,6 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
-
-  binding_set = gtk_binding_set_by_class (klass);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 
   GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-preferences-window.ui");
 
