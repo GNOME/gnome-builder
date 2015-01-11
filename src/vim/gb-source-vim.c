@@ -3997,6 +3997,16 @@ gb_source_vim_op_set_pair (GbSourceVim *vim,
 
       gtk_source_view_set_indent_width (source_view, v64);
     }
+  else if (g_str_equal ("so", key) || g_str_equal ("scrolloff", key))
+    {
+      gint64 v64;
+
+      v64 = g_ascii_strtoll (value, NULL, 10);
+      if (((v64 == G_MAXINT64) || (v64 == G_MININT64)) && (errno == ERANGE))
+        return;
+
+      vim->priv->scroll_off = (guint)v64;
+    }
   else if (g_str_has_prefix (key, "nonu"))
     {
       gtk_source_view_set_show_line_numbers (source_view, FALSE);
