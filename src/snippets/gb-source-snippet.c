@@ -36,6 +36,7 @@ struct _GbSourceSnippetPrivate
   GtkTextMark            *mark_end;
   gchar                  *trigger;
   gchar                  *language;
+  gchar                  *description;
   gint                    tab_stop;
   gint                    max_tab_stop;
   gint                    current_chunk;
@@ -50,6 +51,7 @@ enum {
   PROP_TAB_STOP,
   PROP_TRIGGER,
   PROP_LANGUAGE,
+  PROP_DESCRIPTION,
   LAST_PROP
 };
 
@@ -87,6 +89,7 @@ gb_source_snippet_copy (GbSourceSnippet *snippet)
   ret = g_object_new (GB_TYPE_SOURCE_SNIPPET,
                       "trigger", snippet->priv->trigger,
                       "language", snippet->priv->language,
+                      "description", snippet->priv->description,
                       NULL);
 
   for (i = 0; i < priv->chunks->len; i++)
@@ -161,6 +164,24 @@ gb_source_snippet_set_language (GbSourceSnippet *snippet,
 
   g_free (snippet->priv->language);
   snippet->priv->language = g_strdup (language);
+}
+
+const gchar *
+gb_source_snippet_get_description (GbSourceSnippet *snippet)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_SNIPPET (snippet), NULL);
+
+  return snippet->priv->description;
+}
+
+void
+gb_source_snippet_set_description (GbSourceSnippet *snippet,
+                                   const gchar     *description)
+{
+  g_return_if_fail (GB_IS_SOURCE_SNIPPET (snippet));
+
+  g_free (snippet->priv->description);
+  snippet->priv->description = g_strdup (description);
 }
 
 static gint
@@ -903,6 +924,9 @@ gb_source_snippet_dispose (GObject *object)
 
   g_clear_object (&priv->buffer);
   g_clear_object (&priv->context);
+
+  g_free(priv->language);
+  g_free(priv->description);
 }
 
 static void
@@ -941,6 +965,10 @@ gb_source_snippet_get_property (GObject    *object,
       g_value_set_string (value, snippet->priv->language);
       break;
 
+    case PROP_DESCRIPTION:
+      g_value_set_string (value, snippet->priv->description);
+      break;
+
     case PROP_TAB_STOP:
       g_value_set_uint (value, snippet->priv->tab_stop);
       break;
@@ -966,6 +994,10 @@ gb_source_snippet_set_property (GObject      *object,
 
     case PROP_LANGUAGE:
       gb_source_snippet_set_language (snippet, g_value_get_string (value));
+      break;
+
+    case PROP_DESCRIPTION:
+      gb_source_snippet_set_description (snippet, g_value_get_string (value));
       break;
 
     default:
@@ -1031,6 +1063,15 @@ gb_source_snippet_class_init (GbSourceSnippetClass *klass)
   g_object_class_install_property (object_class, PROP_LANGUAGE,
                                    gParamSpecs[PROP_LANGUAGE]);
 
+  gParamSpecs[PROP_DESCRIPTION] =
+    g_param_spec_string ("description",
+                         _("Description"),
+                         _("The description for the snippet."),
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_DESCRIPTION,
+                                   gParamSpecs[PROP_DESCRIPTION]);
+
   gParamSpecs[PROP_TAB_STOP] =
     g_param_spec_int ("tab-stop",
                       _("Tab Stop"),
@@ -1054,4 +1095,5 @@ gb_source_snippet_init (GbSourceSnippet *snippet)
   snippet->priv->max_tab_stop = -1;
   snippet->priv->chunks = g_ptr_array_new_with_free_func (g_object_unref);
   snippet->priv->runs = g_array_new (FALSE, FALSE, sizeof (gint));
+  snippet->priv->description = NULL;
 }

@@ -150,11 +150,18 @@ get_label (GtkSourceCompletionProposal *p)
 {
   GbSourceSnippetCompletionItem *item = GB_SOURCE_SNIPPET_COMPLETION_ITEM (p);
   const gchar *trigger = NULL;
+  const gchar *description = NULL;
 
   if (item->priv->snippet)
-    trigger = gb_source_snippet_get_trigger (item->priv->snippet);
+    {
+      trigger = gb_source_snippet_get_trigger (item->priv->snippet);
+      description = gb_source_snippet_get_description (item->priv->snippet);
+    }
 
-  return g_strdup (trigger);
+  if (description) 
+    return g_strdup_printf ("%s: %s", trigger, description);
+  else
+    return g_strdup(trigger);
 }
 
 static GdkPixbuf *

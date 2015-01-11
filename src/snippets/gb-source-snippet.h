@@ -61,6 +61,9 @@ void                    gb_source_snippet_set_trigger     (GbSourceSnippet      
 const gchar            *gb_source_snippet_get_language    (GbSourceSnippet      *snippet);
 void                    gb_source_snippet_set_language    (GbSourceSnippet      *snippet,
                                                            const gchar          *language);
+const gchar            *gb_source_snippet_get_description (GbSourceSnippet      *snippet);
+void                    gb_source_snippet_set_description (GbSourceSnippet      *snippet,
+                                                           const gchar          *description);
 void                    gb_source_snippet_add_chunk       (GbSourceSnippet      *snippet,
                                                            GbSourceSnippetChunk *chunk);
 guint                   gb_source_snippet_get_n_chunks    (GbSourceSnippet      *snippet);

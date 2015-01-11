@@ -35,6 +35,7 @@ struct _GbSourceSnippetParserPrivate
   GList   *chunks;
   GList   *scope;
   gchar   *cur_name;
+  gchar   *cur_desc;
   GString *cur_text;
 };
 
@@ -72,6 +73,8 @@ gb_source_snippet_parser_store (GbSourceSnippetParser *parser)
     {
       snippet = gb_source_snippet_new (priv->cur_name,
                                        g_strdup(scope_iter->data));
+      gb_source_snippet_set_description(snippet, priv->cur_desc);
+      
       for (chunck_iter = priv->chunks; chunck_iter; chunck_iter = chunck_iter->next)
         {
         #if 0
@@ -108,6 +111,9 @@ gb_source_snippet_parser_finish (GbSourceSnippetParser *parser)
 
   g_list_free_full(priv->scope, g_free);
   priv->scope = NULL;
+
+  g_free(priv->cur_desc);
+  priv->cur_desc = NULL;
 }
 
 static void
@@ -396,6 +402,21 @@ gb_source_snippet_parser_do_snippet_scope (GbSourceSnippetParser *parser,
 }
 
 static void
+gb_source_snippet_parser_do_snippet_description (GbSourceSnippetParser *parser,
+                                                 const gchar           *line)
+{
+  GbSourceSnippetParserPrivate *priv = parser->priv;
+
+  if (priv->cur_desc) 
+    {
+      g_free(priv->cur_desc);
+      priv->cur_desc = NULL;
+    }
+
+  priv->cur_desc = g_strstrip (g_strdup (&line[7]));
+}
+
+static void
 gb_source_snippet_parser_feed_line (GbSourceSnippetParser *parser,
                                     gchar                 *basename,
                                     const gchar           *line)
@@ -468,6 +489,12 @@ gb_source_snippet_parser_feed_line (GbSourceSnippetParser *parser,
       if (g_str_has_prefix(line, "- scope"))
         {
           gb_source_snippet_parser_do_snippet_scope (parser, line);
+          break;
+        }
+
+      if (g_str_has_prefix(line, "- desc"))
+        {
+          gb_source_snippet_parser_do_snippet_description (parser, line);
           break;
         }
 
@@ -558,6 +585,12 @@ gb_source_snippet_parser_finalize (GObject *object)
   g_free (priv->cur_name);
   priv->cur_name = NULL;
 
+  if (priv->cur_desc)
+    {
+      g_free (priv->cur_desc);
+      priv->cur_desc = NULL;
+    }
+
   G_OBJECT_CLASS (gb_source_snippet_parser_parent_class)->finalize (object);
 }
 
@@ -581,4 +614,5 @@ gb_source_snippet_parser_init (GbSourceSnippetParser *parser)
   parser->priv->lineno = -1;
   parser->priv->cur_text = g_string_new (NULL);
   parser->priv->scope = NULL;
+  parser->priv->cur_desc = NULL;
 }
