@@ -2792,7 +2792,7 @@ gb_source_vim_move_page (GbSourceVim                 *vim,
       adjusted_scroll = gb_source_vim_adjust_scroll (vim, line, GB_SOURCE_VIM_ALIGNMENT_KEEP);
       break;
     case GB_SOURCE_VIM_PAGE_UP:
-      line = gtk_text_iter_get_line (&iter_top);
+      line = MAX (vim->priv->scroll_off, gtk_text_iter_get_line (&iter_top));
       adjusted_scroll = gb_source_vim_adjust_scroll (vim, line, GB_SOURCE_VIM_ALIGNMENT_BOTTOM);
       break;
     case GB_SOURCE_VIM_PAGE_DOWN:
