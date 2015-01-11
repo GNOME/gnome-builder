@@ -554,9 +554,9 @@ maybe_unindent_else_or_elif (GbSourceAutoIndenterPython *python,
     {
       /*
        * TODO: This doesn't handle unindent properly for multi line
-       *       if or while statements.
+       *       if or for blocks.
        */
-      while (!(line_starts_with (&copy, "if ") || line_starts_with (&copy, "while ")) ||
+      while (!(line_starts_with (&copy, "if ") || line_starts_with (&copy, "for ")) ||
              !line_ends_with (&copy, ":"))
         {
           guint if_line;
@@ -573,7 +573,7 @@ maybe_unindent_else_or_elif (GbSourceAutoIndenterPython *python,
               break;
         }
 
-      if ((line_starts_with (&copy, "if ") || line_starts_with (&copy, "while ")) &&
+      if ((line_starts_with (&copy, "if ") || line_starts_with (&copy, "for ")) &&
           line_ends_with (&copy, ":"))
         {
           gtk_text_iter_set_line_offset (begin,
