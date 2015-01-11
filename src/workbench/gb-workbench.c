@@ -130,6 +130,35 @@ gb_workbench_get_navigation_list (GbWorkbench *workbench)
   return workbench->priv->navigation_list;
 }
 
+static gboolean
+gb_workbench_key_press_event (GtkWidget   *widget,
+                              GdkEventKey *event)
+{
+  GbWorkbench *self = (GbWorkbench *)widget;
+
+  g_return_val_if_fail (GB_IS_WORKBENCH (self), FALSE);
+  g_return_val_if_fail (event, FALSE);
+
+  switch (event->keyval)
+    {
+    case GDK_KEY_KP_Enter:
+    case GDK_KEY_Return:
+    case GDK_KEY_Escape:
+    case GDK_KEY_space:
+      if (gb_credits_widget_is_rolling (self->priv->credits))
+        {
+          gb_credits_widget_stop (self->priv->credits);
+          return GDK_EVENT_STOP;
+        }
+      break;
+
+    default:
+      break;
+    }
+
+  return GTK_WIDGET_CLASS (gb_workbench_parent_class)->key_press_event (widget, event);
+}
+
 static void
 load_repository_func (GTask        *task,
                       gpointer      source_object,
@@ -833,6 +862,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 
   widget_class->realize = gb_workbench_realize;
   widget_class->delete_event = gb_workbench_delete_event;
+  widget_class->key_press_event = gb_workbench_key_press_event;
 
   window_class->set_focus = gb_workbench_set_focus;
 
