@@ -51,6 +51,14 @@ gb_credits_widget_new (void)
   return g_object_new (GB_TYPE_CREDITS_WIDGET, NULL);
 }
 
+gboolean
+gb_credits_widget_is_rolling (GbCreditsWidget *widget)
+{
+  g_return_val_if_fail (GB_IS_CREDITS_WIDGET (widget), FALSE);
+
+  return !!widget->priv->animation;
+}
+
 static void
 stop_animation (GbCreditsWidget *widget)
 {

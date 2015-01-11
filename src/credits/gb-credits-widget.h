@@ -52,6 +52,7 @@ GType      gb_credits_widget_get_type     (void);
 GtkWidget *gb_credits_widget_new          (void);
 void       gb_credits_widget_start        (GbCreditsWidget *widget);
 void       gb_credits_widget_stop         (GbCreditsWidget *widget);
+gboolean   gb_credits_widget_is_rolling   (GbCreditsWidget *widget);
 guint      gb_credits_widget_get_duration (GbCreditsWidget *widget);
 void       gb_credits_widget_set_duration (GbCreditsWidget *widget,
                                            guint            duration);
