@@ -334,6 +334,7 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, search_bar);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, search_entry);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, stack);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, vim_page);
 
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_GIT);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EDITOR);
