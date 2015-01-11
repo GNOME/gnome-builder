@@ -18,7 +18,10 @@
 
 #define G_LOG_DOMAIN "python-indent"
 
+#include <string.h>
+
 #include "gb-log.h"
+#include "gb-gtk.h"
 #include "gb-source-auto-indenter-python.h"
 
 /*
@@ -462,6 +465,54 @@ indent_previous_stmt (GbSourceAutoIndenterPython *python,
 #endif
 
 static gchar *
+indent_for_pair (GbSourceAutoIndenterPython *python,
+                 GtkTextView                *text_view,
+                 GtkTextIter                *begin,
+                 GtkTextIter                *end,
+                 GtkTextIter                *iter,
+                 gint                       *cursor_offset)
+{
+  GtkTextIter copy = *iter;
+  gunichar ch;
+  gunichar prev_ch;
+  guint tab_width = 4; /* TODO */
+
+  prev_ch = gtk_text_iter_get_char (&copy);
+  gtk_text_iter_forward_char (&copy);
+  gtk_text_iter_forward_char (&copy);
+  ch = gtk_text_iter_get_char (&copy);
+
+  copy = *iter;
+
+  g_print ("Indent for pair\n");
+
+  g_print ("  '%c'  '%c'\n", prev_ch, ch);
+
+  if ((prev_ch == '{' && ch == '}') ||
+      (prev_ch == '[' && ch == ']') ||
+      (prev_ch == '(' && ch == ')'))
+    {
+      gchar *copied;
+      GString *str;
+      guint i;
+
+      copied = copy_indent (python, begin, end, &copy);
+      str = g_string_new (copied);
+
+      for (i = 0; i < tab_width; i++)
+        g_string_append (str, " ");
+      g_string_append (str, "\n");
+      g_string_append (str, copied);
+      *cursor_offset = -strlen (copied) - 1;
+      g_free (copied);
+
+      return g_string_free (str, FALSE);
+    }
+  else
+    return indent_colon (python, text_view, begin, end, iter);
+}
+
+static gchar *
 gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
                                        GtkTextView          *text_view,
                                        GtkTextBuffer        *buffer,
@@ -495,9 +546,13 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
   switch (ch)
     {
     case ':':
-    case '(': /* Not happy about this */
-    case '[': /* Or this */
       return indent_colon (python, text_view, begin, end, &iter);
+
+    case '(':
+    case '[':
+    case '{':
+      return indent_for_pair (python, text_view, begin, end, &iter,
+                              cursor_offset);
 
 #if 0
     case ')':
