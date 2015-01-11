@@ -23,6 +23,7 @@
 #include "gb-log.h"
 #include "gb-source-auto-indenter-xml.h"
 #include "gb-gtk.h"
+#include "gb-string.h"
 
 /*
  * TODO:
@@ -318,11 +319,15 @@ gb_source_auto_indenter_xml_maybe_add_closing (GbSourceAutoIndenterXml *xml,
       if (gtk_text_iter_forward_find_char (&match_end, find_end, NULL, begin))
         {
           gchar *slice;
-          gchar *ret;
+          gchar *ret = NULL;
 
           slice = gtk_text_iter_get_slice (&match_begin, &match_end);
-          ret = g_strdup_printf ("</%s>", slice);
-          *cursor_offset = -strlen (ret);
+
+          if (!gb_str_empty0 (slice) && (*slice != '!'))
+            {
+              ret = g_strdup_printf ("</%s>", slice);
+              *cursor_offset = -strlen (ret);
+            }
 
           g_free (slice);
 
