@@ -45,6 +45,7 @@ G_DEFINE_TYPE_EXTENDED (GbDevhelpDocument,
 enum {
   PROP_0,
   PROP_MODIFIED,
+  PROP_READ_ONLY,
   PROP_TITLE,
   PROP_URI,
   LAST_PROP
@@ -206,6 +207,10 @@ gb_devhelp_document_get_property (GObject    *object,
                            gb_devhelp_document_get_modified (GB_DOCUMENT (self)));
       break;
 
+    case PROP_READ_ONLY:
+      g_value_set_boolean (value, TRUE);
+      break;
+
     case PROP_TITLE:
       g_value_set_string (value,
                           gb_devhelp_document_get_title (GB_DOCUMENT (self)));
@@ -243,8 +248,9 @@ gb_devhelp_document_class_init (GbDevhelpDocumentClass *klass)
   object_class->get_property = gb_devhelp_document_get_property;
   object_class->set_property = gb_devhelp_document_set_property;
 
-  g_object_class_override_property (object_class, PROP_TITLE, "title");
   g_object_class_override_property (object_class, PROP_MODIFIED, "modified");
+  g_object_class_override_property (object_class, PROP_READ_ONLY, "read-only");
+  g_object_class_override_property (object_class, PROP_TITLE, "title");
 
   gParamSpecs [PROP_URI] =
     g_param_spec_string ("uri",
