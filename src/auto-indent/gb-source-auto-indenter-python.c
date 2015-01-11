@@ -86,6 +86,31 @@ line_starts_with (GtkTextIter *line,
   return ret;
 }
 
+static gboolean
+line_ends_with (const GtkTextIter *iter,
+                const gchar *suffix)
+{
+  GtkTextIter begin = *iter;
+  GtkTextIter end;
+  gboolean ret = FALSE;
+
+  while (!gtk_text_iter_ends_line (&begin))
+    gtk_text_iter_forward_char (&begin);
+
+  end = begin;
+
+  if (gtk_text_iter_backward_chars (&begin, strlen (suffix)))
+    {
+      gchar *slice;
+
+      slice = gtk_text_iter_get_slice (&begin, &end);
+      ret = g_str_equal (slice, suffix);
+      g_free (slice);
+    }
+
+  return ret;
+}
+
 static gchar *
 copy_indent (GbSourceAutoIndenterPython *python,
              GtkTextIter                *begin,
@@ -366,7 +391,6 @@ indent_colon (GbSourceAutoIndenterPython *python,
         gchar *slice;
 
         slice = gtk_text_iter_get_slice (iter, &copy);
-        g_print ("SLICE: %s\n", slice);
         if (g_strcmp0 (slice, "def ") == 0)
           offset += tab_width;
         g_free (slice);
@@ -484,10 +508,6 @@ indent_for_pair (GbSourceAutoIndenterPython *python,
 
   copy = *iter;
 
-  g_print ("Indent for pair\n");
-
-  g_print ("  '%c'  '%c'\n", prev_ch, ch);
-
   if ((prev_ch == '{' && ch == '}') ||
       (prev_ch == '[' && ch == ']') ||
       (prev_ch == '(' && ch == ')'))
@@ -513,6 +533,61 @@ indent_for_pair (GbSourceAutoIndenterPython *python,
 }
 
 static gchar *
+maybe_unindent_else_or_elif (GbSourceAutoIndenterPython *python,
+                             GtkTextIter                *begin,
+                             GtkTextIter                *end)
+{
+  GtkTextIter copy = *begin;
+  gboolean matches;
+  gchar *slice;
+
+  gtk_text_iter_backward_chars (&copy, 4);
+  slice = gtk_text_iter_get_slice (&copy, begin);
+  matches = g_str_equal (slice, "else") || g_str_equal (slice, "elif");
+
+  /* paranoia check to make sure this isn't part of a word. */
+  if (matches)
+    matches = (!gtk_text_iter_backward_char (&copy) ||
+               g_unichar_isspace (gtk_text_iter_get_char (&copy)));
+
+  if (matches)
+    {
+      /*
+       * TODO: This doesn't handle unindent properly for multi line
+       *       if or while statements.
+       */
+      while (!(line_starts_with (&copy, "if ") || line_starts_with (&copy, "while ")) ||
+             !line_ends_with (&copy, ":"))
+        {
+          guint if_line;
+
+          if (!(if_line = gtk_text_iter_get_line (&copy)))
+            break;
+
+          gtk_text_iter_set_line_offset (&copy, 0);
+          gtk_text_iter_set_line (&copy, if_line - 1);
+
+          while (g_unichar_isspace (gtk_text_iter_get_char (&copy)) &&
+                 !gtk_text_iter_ends_line (&copy))
+            if (!gtk_text_iter_forward_char (&copy))
+              break;
+        }
+
+      if ((line_starts_with (&copy, "if ") || line_starts_with (&copy, "while ")) &&
+          line_ends_with (&copy, ":"))
+        {
+          gtk_text_iter_set_line_offset (begin,
+                                         gtk_text_iter_get_line_offset (&copy));
+          return slice;
+        }
+    }
+
+  g_free (slice);
+
+  return NULL;
+}
+
+static gchar *
 gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
                                        GtkTextView          *text_view,
                                        GtkTextBuffer        *buffer,
@@ -526,6 +601,15 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
   gunichar ch;
   gint line;
 
+  /* possibly trying to adjust "else" or "elif". we always return in this
+   * block, since we don't want to process anything else.
+   */
+  gtk_text_iter_backward_char (&iter);
+  ch = gtk_text_iter_get_char (&iter);
+  if (ch == 'e' || ch == 'f')
+    return maybe_unindent_else_or_elif (python, begin, end);
+
+  iter = *begin;
   line = gtk_text_iter_get_line (&iter);
 
   /* move to the last character of the last line */
@@ -621,6 +705,8 @@ gb_source_auto_indenter_python_is_trigger (GbSourceAutoIndenter *indenter,
 {
   switch (event->keyval)
     {
+    case GDK_KEY_e:
+    case GDK_KEY_f:
     case GDK_KEY_KP_Enter:
     case GDK_KEY_Return:
       return TRUE;
