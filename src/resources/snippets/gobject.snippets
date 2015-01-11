@@ -1,5 +1,6 @@
 snippet gobject
 - scope c
+- desc Create GObject
 	#include "${1:$filename|stripsuffix}.h"
 
 	struct _${2:$1|camelize}Private
@@ -76,6 +77,7 @@ snippet gobject
 		self->priv = $3_get_instance_private (self);
 	}
 - scope chdr
+- desc Create GObject header
 	#ifndef ${$1|functify|upper}_H
 	#define ${$1|functify|upper}_H
 
@@ -130,6 +132,7 @@ snippet gobj_guard
 	#endif /* $1_H */
 snippet gobj_interface
 - scope c
+- desc Create GObject Interface
 	#include "${1:$filename|stripsuffix}.h"
 
 	G_DEFINE_INTERFACE (${2:$1|camelize}, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
@@ -139,6 +142,7 @@ snippet gobj_interface
 	{
 	}
 - scope chdr
+- desc Create GObject Interface header
 	#ifndef ${$1|functify|upper}_H
 	#define ${$1|functify|upper}_H
 
@@ -166,15 +170,19 @@ snippet gobj_interface
 	#endif /* ${$1|functify|upper}_H */
 snippet gobj_ref
 - scope c
+- desc GObject ref
 	g_object_ref (${1});$0
 snippet gobj_unref
 - scope c
+- desc GObject unref
 	g_object_unref (${1});$0
 snippet gobj_clear
 - scope c
+- desc GObject clear
 	g_clear_object (&${1});$0
 snippet gobj_prop
 - scope c
+- desc Add GObject property
 	gParamSpecs [PROP_${1:NAME}] =
 		g_param_spec_${2:object} ("${3:name}",
 		             ${$2|space}  _("${4:Name}"),
