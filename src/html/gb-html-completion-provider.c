@@ -381,9 +381,11 @@ gb_html_completion_provider_populate (GtkSourceCompletionProvider *provider,
       {
         gchar *element;
 
-        element = get_element (context);
-        trie = g_hash_table_lookup (element_attrs, element);
-        g_free (element);
+        if ((element = get_element (context)))
+          {
+            trie = g_hash_table_lookup (element_attrs, element);
+            g_free (element);
+          }
 
         break;
       }
