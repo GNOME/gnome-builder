@@ -27,6 +27,7 @@
     <file>snippets/main.snippets</file>
     <file>snippets/python.snippets</file>
     <file>snippets/rpmspec.snippets</file>
+    <file>snippets/shebang.snippets</file>
     <file>snippets/vala.snippets</file>
     <file>snippets/xml.snippets</file>
 
