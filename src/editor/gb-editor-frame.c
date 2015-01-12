@@ -1087,6 +1087,157 @@ gb_editor_frame_grab_focus (GtkWidget *widget)
 }
 
 static void
+gb_editor_frame_scroll_to_line (GbEditorFrame *self,
+                                guint          line,
+                                guint          offset)
+{
+  GtkTextBuffer *buffer;
+  GtkTextView *text_view;
+  GtkTextIter iter;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+
+  buffer = GTK_TEXT_BUFFER (self->priv->document);
+  text_view = GTK_TEXT_VIEW (self->priv->source_view);
+
+  gb_gtk_text_buffer_get_iter_at_line_and_offset (buffer, &iter, line, offset);
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+  gb_gtk_text_view_scroll_to_iter (text_view, &iter, 0.0, TRUE, 0.0, 0.5);
+}
+
+static void
+gb_editor_frame_next_diagnostic (GbEditorFrame *self)
+{
+  GbSourceCodeAssistant *assistant;
+  GtkTextMark *mark;
+  GtkTextIter iter;
+  guint current_line;
+  GArray *ar;
+  guint i;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+
+  assistant = gb_editor_document_get_code_assistant (self->priv->document);
+  ar = gb_source_code_assistant_get_diagnostics (assistant);
+  mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self->priv->document));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self->priv->document),
+                                    &iter, mark);
+  current_line = gtk_text_iter_get_line (&iter);
+
+  if (ar)
+    {
+      for (i = 0; i < ar->len; i++)
+        {
+          GcaDiagnostic *diag;
+          guint j;
+
+          diag = &g_array_index (ar, GcaDiagnostic, i);
+
+          for (j = 0; j < diag->locations->len; j++)
+            {
+              GcaSourceRange *range;
+
+              range = &g_array_index (diag->locations, GcaSourceRange, j);
+
+              if (range->begin.line > current_line)
+                {
+                  gb_editor_frame_scroll_to_line (self,
+                                                  range->begin.line,
+                                                  range->begin.column);
+                  goto cleanup;
+                }
+            }
+        }
+
+      /* wrap around to first diagnostic */
+      if (ar->len > 0)
+        {
+          GcaDiagnostic *diag;
+
+          diag = &g_array_index (ar, GcaDiagnostic, 0);
+
+          if (diag->locations->len > 0)
+            {
+              GcaSourceRange *range;
+
+              range = &g_array_index (diag->locations, GcaSourceRange, 0);
+              gb_editor_frame_scroll_to_line (self, range->begin.line,
+                                              range->begin.column);
+            }
+        }
+
+cleanup:
+      g_array_unref (ar);
+    }
+}
+
+static void
+gb_editor_frame_previous_diagnostic (GbEditorFrame *self)
+{
+  GbSourceCodeAssistant *assistant;
+  GtkTextMark *mark;
+  GtkTextIter iter;
+  guint current_line;
+  GArray *ar;
+  gint i;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+
+  assistant = gb_editor_document_get_code_assistant (self->priv->document);
+  ar = gb_source_code_assistant_get_diagnostics (assistant);
+  mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self->priv->document));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self->priv->document),
+                                    &iter, mark);
+  current_line = gtk_text_iter_get_line (&iter);
+
+  if (ar)
+    {
+      for (i = 0; i < ar->len; i++)
+        {
+          GcaDiagnostic *diag;
+          guint j;
+
+          diag = &g_array_index (ar, GcaDiagnostic, ar->len-i-1);
+
+          for (j = 0; j < diag->locations->len; j++)
+            {
+              GcaSourceRange *range;
+
+              range = &g_array_index (diag->locations, GcaSourceRange, j);
+
+              if (range->begin.line < current_line)
+                {
+                  gb_editor_frame_scroll_to_line (self,
+                                                  range->begin.line,
+                                                  range->begin.column);
+                  goto cleanup;
+                }
+            }
+        }
+
+      /* wrap around to last diagnostic */
+      if (ar->len > 0)
+        {
+          GcaDiagnostic *diag;
+
+          diag = &g_array_index (ar, GcaDiagnostic, ar->len-1);
+
+          if (diag->locations->len > 0)
+            {
+              GcaSourceRange *range;
+
+              range = &g_array_index (diag->locations, GcaSourceRange, 0);
+              gb_editor_frame_scroll_to_line (self, range->begin.line,
+                                              range->begin.column);
+            }
+        }
+    }
+
+cleanup:
+  g_clear_pointer (&ar, g_array_unref);
+}
+
+static void
 gb_editor_frame_reformat_activate (GSimpleAction *action,
                                    GVariant      *parameter,
                                    gpointer       user_data)
@@ -1096,6 +1247,26 @@ gb_editor_frame_reformat_activate (GSimpleAction *action,
   g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
   gb_editor_frame_reformat (self);
+}
+
+static void
+gb_editor_frame_next_diagnostic_activate (GSimpleAction *action,
+                                          GVariant      *parameter,
+                                          gpointer       user_data)
+{
+  GbEditorFrame *self = user_data;
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+  gb_editor_frame_next_diagnostic (self);
+}
+
+static void
+gb_editor_frame_previous_diagnostic_activate (GSimpleAction *action,
+                                              GVariant      *parameter,
+                                              gpointer       user_data)
+{
+  GbEditorFrame *self = user_data;
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+  gb_editor_frame_previous_diagnostic (self);
 }
 
 static void
@@ -1406,6 +1577,8 @@ gb_editor_frame_init (GbEditorFrame *self)
     { "reformat", gb_editor_frame_reformat_activate },
     { "scroll-up", gb_editor_frame_scroll_up },
     { "scroll-down", gb_editor_frame_scroll_down },
+    { "next-diagnostic", gb_editor_frame_next_diagnostic_activate },
+    { "previous-diagnostic", gb_editor_frame_previous_diagnostic_activate },
   };
   GSimpleActionGroup *actions;
 
