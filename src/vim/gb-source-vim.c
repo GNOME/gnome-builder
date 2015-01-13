@@ -854,6 +854,8 @@ gb_source_vim_move_line0 (GbSourceVim *vim)
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
+
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -906,6 +908,8 @@ gb_source_vim_move_line_start (GbSourceVim *vim,
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
+
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
