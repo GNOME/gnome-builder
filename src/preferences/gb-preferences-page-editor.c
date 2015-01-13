@@ -30,7 +30,6 @@ struct _GbPreferencesPageEditorPrivate
   /* Widgets owned by Template */
   GtkSwitch                 *restore_insert_mark_switch;
   GtkSwitch                 *show_diff_switch;
-  GtkSwitch                 *vim_mode_switch;
   GtkSwitch                 *word_completion_switch;
   GtkSwitch                 *show_line_numbers_switch;
   GtkSwitch                 *highlight_current_line_switch;
@@ -40,7 +39,6 @@ struct _GbPreferencesPageEditorPrivate
   GbSourceStyleSchemeButton *style_scheme_button;
 
   /* Template widgets used for filtering */
-  GtkWidget                 *vim_container;
   GtkWidget                 *restore_insert_mark_container;
   GtkWidget                 *word_completion_container;
   GtkWidget                 *show_diff_container;
@@ -65,9 +63,6 @@ gb_preferences_page_editor_constructed (GObject *object)
 
   priv->settings = g_settings_new ("org.gnome.builder.editor");
 
-  g_settings_bind (priv->settings, "vim-mode",
-                   priv->vim_mode_switch, "active",
-                   G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (priv->settings, "restore-insert-mark",
                    priv->restore_insert_mark_switch, "active",
                    G_SETTINGS_BIND_DEFAULT);
@@ -125,14 +120,12 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, restore_insert_mark_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, show_diff_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, style_scheme_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, vim_mode_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, word_completion_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, highlight_current_line_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, smart_home_end_switch);
 
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, vim_container);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, restore_insert_mark_container);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, word_completion_container);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, show_diff_container);
@@ -151,11 +144,6 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
-                                               _("vim modal"),
-                                               self->priv->vim_container,
-                                               self->priv->vim_mode_switch,
-                                               NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
                                                _("restore insert cursor mark"),
                                                self->priv->restore_insert_mark_container,

@@ -24,13 +24,16 @@
 
 struct _GbPreferencesPageVimPrivate
 {
-  GSettings             *settings;
+  GSettings             *editor_settings;
+  GSettings             *vim_settings;
 
   /* Widgets owned by Template */
   GtkSpinButton         *scroll_off_spin;
+  GtkSwitch             *vim_mode_switch;
 
   /* Template widgets used for filtering */
   GtkWidget             *scroll_off_container;
+  GtkWidget             *vim_container;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPageVim, gb_preferences_page_vim,
@@ -46,9 +49,14 @@ gb_preferences_page_vim_constructed (GObject *object)
 
   priv = vim->priv;
 
-  priv->settings = g_settings_new ("org.gnome.builder.editor.vim");
+  priv->editor_settings = g_settings_new ("org.gnome.builder.editor");
+  priv->vim_settings = g_settings_new ("org.gnome.builder.editor.vim");
 
-  g_settings_bind (priv->settings, "scroll-off", priv->scroll_off_spin, "value",
+  g_settings_bind (priv->vim_settings, "scroll-off",
+                   priv->scroll_off_spin, "value",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (priv->editor_settings, "vim-mode",
+                   priv->vim_mode_switch, "active",
                    G_SETTINGS_BIND_DEFAULT);
 }
 
@@ -57,7 +65,8 @@ gb_preferences_page_vim_finalize (GObject *object)
 {
   GbPreferencesPageVimPrivate *priv = GB_PREFERENCES_PAGE_VIM (object)->priv;
 
-  g_clear_object (&priv->settings);
+  g_clear_object (&priv->editor_settings);
+  g_clear_object (&priv->vim_settings);
 
   G_OBJECT_CLASS (gb_preferences_page_vim_parent_class)->finalize (object);
 }
@@ -75,8 +84,10 @@ gb_preferences_page_vim_class_init (GbPreferencesPageVimClass *klass)
                                                "/org/gnome/builder/ui/gb-preferences-page-vim.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageVim, scroll_off_spin);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageVim, vim_mode_switch);
 
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageVim, scroll_off_container);
+  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageVim, vim_container);
 }
 
 static void
@@ -90,5 +101,11 @@ gb_preferences_page_vim_init (GbPreferencesPageVim *self)
                                                _("lines margin scrolloff scroll off"),
                                                self->priv->scroll_off_container,
                                                self->priv->scroll_off_spin,
+                                               NULL);
+
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("vim modal"),
+                                               self->priv->vim_container,
+                                               self->priv->vim_mode_switch,
                                                NULL);
 }

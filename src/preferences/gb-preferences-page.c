@@ -115,8 +115,6 @@ gb_preferences_page_set_keywords_for_widget (GbPreferencesPage *page,
   GQuark q;
   gchar *downcase;
 
-  ENTRY;
-
   g_return_if_fail (GB_IS_PREFERENCES_PAGE (page));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -129,8 +127,6 @@ gb_preferences_page_set_keywords_for_widget (GbPreferencesPage *page,
     g_hash_table_insert (page->priv->widgets, widget, GINT_TO_POINTER (q));
   while ((widget = va_arg (args, GtkWidget *)));
   va_end (args);
-
-  EXIT;
 }
 
 const gchar *
