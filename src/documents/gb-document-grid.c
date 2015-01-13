@@ -178,28 +178,6 @@ gb_document_grid_remove_stack (GbDocumentGrid  *grid,
 }
 
 static void
-gb_document_grid_stack_empty (GbDocumentGrid  *grid,
-                              GbDocumentStack *stack)
-{
-  GList *stacks;
-
-  g_return_if_fail (GB_IS_DOCUMENT_GRID (grid));
-  g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
-
-  stacks = gb_document_grid_get_stacks (grid);
-
-  g_assert (stacks != NULL);
-
-  if (g_list_length (stacks) == 1)
-    goto cleanup;
-
-  gb_document_grid_remove_stack (grid, stack);
-
-cleanup:
-  g_list_free (stacks);
-}
-
-static void
 gb_document_grid_focus_neighbor (GbDocumentGrid   *grid,
                                  GtkDirectionType  dir,
                                  GbDocumentStack  *stack)
@@ -226,6 +204,29 @@ gb_document_grid_focus_neighbor (GbDocumentGrid   *grid,
 
   if (neighbor != NULL)
     gtk_widget_grab_focus (neighbor);
+}
+
+static void
+gb_document_grid_stack_empty (GbDocumentGrid  *grid,
+                              GbDocumentStack *stack)
+{
+  GList *stacks;
+
+  g_return_if_fail (GB_IS_DOCUMENT_GRID (grid));
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
+
+  stacks = gb_document_grid_get_stacks (grid);
+
+  g_assert (stacks != NULL);
+
+  if (g_list_length (stacks) == 1)
+    goto cleanup;
+
+  gb_document_grid_focus_neighbor (grid, GTK_DIR_LEFT, stack);
+  gb_document_grid_remove_stack (grid, stack);
+
+cleanup:
+  g_list_free (stacks);
 }
 
 static gboolean
