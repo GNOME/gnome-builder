@@ -196,6 +196,7 @@ enum
 {
   BEGIN_SEARCH,
   COMMAND_VISIBILITY_TOGGLED,
+  EXECUTE_COMMAND,
   JUMP_TO_DOC,
   LAST_SIGNAL
 };
@@ -4099,9 +4100,9 @@ gb_source_vim_is_command (const gchar *command_text)
   return FALSE;
 }
 
-gboolean
-gb_source_vim_execute_command (GbSourceVim *vim,
-                               const gchar *command)
+static gboolean
+gb_source_vim_real_execute_command (GbSourceVim *vim,
+                                    const gchar *command)
 {
   GbSourceVimOperation func;
   GtkTextBuffer *buffer;
@@ -4126,6 +4127,20 @@ gb_source_vim_execute_command (GbSourceVim *vim,
     }
 
   g_free (copy);
+
+  return ret;
+}
+
+gboolean
+gb_source_vim_execute_command (GbSourceVim *vim,
+                               const gchar *command)
+{
+  gboolean ret = FALSE;
+
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
+  g_return_val_if_fail (command, FALSE);
+
+  g_signal_emit (vim, gSignals [EXECUTE_COMMAND], 0, command, &ret);
 
   return ret;
 }
@@ -5140,6 +5155,8 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
   object_class->get_property = gb_source_vim_get_property;
   object_class->set_property = gb_source_vim_set_property;
 
+  klass->execute_command = gb_source_vim_real_execute_command;
+
   gParamSpecs [PROP_ENABLED] =
     g_param_spec_boolean ("enabled",
                           _("Enabled"),
@@ -5222,6 +5239,18 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
                   G_TYPE_NONE,
                   1,
                   G_TYPE_BOOLEAN);
+
+  gSignals [EXECUTE_COMMAND] =
+    g_signal_new ("execute-command",
+                  GB_TYPE_SOURCE_VIM,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSourceVimClass, execute_command),
+                  g_signal_accumulator_true_handled,
+                  NULL,
+                  g_cclosure_marshal_VOID__STRING,
+                  G_TYPE_BOOLEAN,
+                  1,
+                  G_TYPE_STRING);
 
   /**
    * GbSourceVim::jump-to-doc:

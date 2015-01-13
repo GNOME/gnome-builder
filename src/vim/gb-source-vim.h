@@ -55,12 +55,14 @@ struct _GbSourceVimClass
 {
   GObjectClass parent_class;
 
-  void (*begin_search)               (GbSourceVim *vim,
-                                      const gchar *search_text);
-  void (*command_visibility_toggled) (GbSourceVim *vim,
-                                      gboolean     visibility);
-  void (*jump_to_doc)                (GbSourceVim *vim,
-                                      const gchar *search_text);
+  void     (*begin_search)               (GbSourceVim *vim,
+                                          const gchar *search_text);
+  void     (*command_visibility_toggled) (GbSourceVim *vim,
+                                          gboolean     visibility);
+  gboolean (*execute_command)            (GbSourceVim *vim,
+                                          const gchar *command);
+  void     (*jump_to_doc)                (GbSourceVim *vim,
+                                          const gchar *search_text);
 
   gpointer _padding1;
   gpointer _padding2;
