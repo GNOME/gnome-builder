@@ -22,6 +22,7 @@
 #include <gtksourceview/gtksource.h>
 
 #include "gb-preferences-page-editor.h"
+#include "gb-widget.h"
 
 struct _GbPreferencesPageEditorPrivate
 {
@@ -63,8 +64,12 @@ gb_preferences_page_editor_style_scheme_changed (GtkSourceStyleSchemeChooser *ch
   g_return_if_fail (G_IS_SETTINGS (settings));
 
   scheme = gtk_source_style_scheme_chooser_get_style_scheme (chooser);
-  scheme_id = gtk_source_style_scheme_get_id (scheme);
-  g_settings_set_string (settings,"style-scheme-name", scheme_id);
+
+  if (scheme)
+    {
+      scheme_id = gtk_source_style_scheme_get_id (scheme);
+      g_settings_set_string (settings, "style-scheme-name", scheme_id);
+    }
 }
 
 static void
@@ -107,14 +112,18 @@ gb_preferences_page_editor_constructed (GObject *object)
                    priv->font_button, "font-name",
                    G_SETTINGS_BIND_DEFAULT);
 
-  scheme_id = g_settings_get_string(priv->settings, "style-scheme-name");
+  scheme_id = g_settings_get_string (priv->settings, "style-scheme-name");
   manager = gtk_source_style_scheme_manager_get_default ();
   scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_id);
   g_free (scheme_id);
-  gtk_source_style_scheme_chooser_set_style_scheme (GTK_SOURCE_STYLE_SCHEME_CHOOSER (priv->style_scheme_button),
-                                                    scheme);
-  g_signal_connect (priv->style_scheme_button, "notify::style-scheme",
-                    G_CALLBACK (gb_preferences_page_editor_style_scheme_changed), priv->settings);
+  gtk_source_style_scheme_chooser_set_style_scheme (
+      GTK_SOURCE_STYLE_SCHEME_CHOOSER (priv->style_scheme_button),
+      scheme);
+  g_signal_connect_object (priv->style_scheme_button,
+                           "notify::style-scheme",
+                           G_CALLBACK (gb_preferences_page_editor_style_scheme_changed),
+                           priv->settings,
+                           0);
 
   G_OBJECT_CLASS (gb_preferences_page_editor_parent_class)->constructed (object);
 }
@@ -138,26 +147,25 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
   object_class->constructed = gb_preferences_page_editor_constructed;
   object_class->finalize = gb_preferences_page_editor_finalize;
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/gb-preferences-page-editor.ui");
+  GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-preferences-page-editor.ui");
 
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, font_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, restore_insert_mark_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, show_diff_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, style_scheme_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, word_completion_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, highlight_current_line_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, smart_home_end_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, font_button);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, restore_insert_mark_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_diff_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, style_scheme_button);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, word_completion_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, highlight_current_line_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, smart_home_end_switch);
 
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, restore_insert_mark_container);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, word_completion_container);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, show_diff_container);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, show_line_numbers_container);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, highlight_current_line_container);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_container);
-  gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, smart_home_end_container);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, restore_insert_mark_container);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, word_completion_container);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_diff_container);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_line_numbers_container);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, highlight_current_line_container);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_container);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, smart_home_end_container);
 }
 
 static void
