@@ -4097,6 +4097,15 @@ gb_source_vim_is_command (const gchar *command_text)
   if (func)
     return TRUE;
 
+  /*
+   * Some other valid commands, that we don't know how to handle.
+   * (But they may be handled by EXECUTE_COMMAND signal.
+   */
+  if (g_strcmp0 (command_text, "w") == 0)
+    return TRUE;
+  else if (g_strcmp0 (command_text, "wq") == 0)
+    return TRUE;
+
   return FALSE;
 }
 

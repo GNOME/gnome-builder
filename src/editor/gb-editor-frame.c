@@ -53,6 +53,27 @@ gb_editor_frame_new (void)
   return g_object_new (GB_TYPE_EDITOR_FRAME, NULL);
 }
 
+static void
+gb_editor_frame_activate_action (GbEditorFrame *self,
+                                 const gchar   *prefix,
+                                 const gchar   *name)
+{
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (self);
+
+  do {
+    GActionGroup *group;
+
+    group = gtk_widget_get_action_group (widget, prefix);
+    if (group && g_action_group_has_action (group, name))
+      {
+        g_action_group_activate_action (group, name, NULL);
+        break;
+      }
+  } while ((widget = gtk_widget_get_parent (widget)));
+}
+
 /**
  * gb_editor_frame_link:
  * @src: (in): The source frame.
@@ -1020,6 +1041,27 @@ cleanup:
   return ret;
 }
 
+static gboolean
+gb_editor_frame_on_execute_command (GbEditorFrame *self,
+                                    const gchar   *command_text,
+                                    GbSourceVim   *vim)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_FRAME (self), FALSE);
+  g_return_val_if_fail (command_text, FALSE);
+
+  if ((g_strcmp0 (command_text, "w") == 0) ||
+      (g_strcmp0 (command_text, "wq") == 0))
+    {
+      /* TODO: If we wait until the document has saved, we can then
+       *       call gtk_window_close() on the toplevel.
+       */
+      gb_editor_frame_activate_action (self, "stack", "save");
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gb_editor_frame_on_command_toggled (GbEditorFrame *self,
                                     gboolean       visible,
@@ -1413,6 +1455,11 @@ gb_editor_frame_constructed (GObject *object)
                            G_CALLBACK (gb_editor_frame_on_command_toggled),
                            self,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (vim,
+                           "execute-command",
+                           G_CALLBACK (gb_editor_frame_on_execute_command),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_object (priv->source_view,
                            "display-documentation",
