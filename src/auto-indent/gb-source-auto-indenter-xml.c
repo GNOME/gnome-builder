@@ -310,6 +310,18 @@ gb_source_auto_indenter_xml_maybe_add_closing (GbSourceAutoIndenterXml *xml,
   if (gtk_text_iter_backward_search (&copy, "<", GTK_TEXT_SEARCH_TEXT_ONLY,
                                      &match_begin, &match_end, NULL))
     {
+      gchar *text;
+
+      /* avoid closing elements on spurious > */
+      gtk_text_iter_backward_char (&copy);
+      text = gtk_text_iter_get_slice (&match_begin, &copy);
+      if (strchr (text, '>'))
+        {
+          g_free (text);
+          return NULL;
+        }
+      g_free (text);
+
       gtk_text_iter_forward_char (&match_begin);
       if (gtk_text_iter_get_char (&match_begin) == '/')
         return NULL;
