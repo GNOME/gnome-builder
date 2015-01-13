@@ -1058,6 +1058,19 @@ gb_editor_frame_on_execute_command (GbEditorFrame *self,
       gb_editor_frame_activate_action (self, "stack", "save");
       return TRUE;
     }
+  else if (g_strcmp0 (command_text, "q") == 0)
+    {
+      GtkWidget *toplevel;
+
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+      gtk_window_close (GTK_WINDOW (toplevel));
+      return TRUE;
+    }
+  else if (g_strcmp0 (command_text, "q!") == 0)
+    {
+      g_application_quit (g_application_get_default ());
+      return TRUE;
+    }
 
   return FALSE;
 }
