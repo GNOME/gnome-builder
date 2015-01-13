@@ -28,6 +28,7 @@
 #include "gb-application.h"
 #include "gb-editor-file-marks.h"
 #include "gb-editor-workspace.h"
+#include "gb-glib.h"
 #include "gb-log.h"
 #include "gb-keybindings.h"
 #include "gb-preferences-window.h"
@@ -42,8 +43,9 @@
 
 struct _GbApplicationPrivate
 {
-  GbKeybindings *keybindings;
-  GSettings     *editor_settings;
+  GbKeybindings       *keybindings;
+  GSettings           *editor_settings;
+  GbPreferencesWindow *preferences_window;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
@@ -479,6 +481,12 @@ gb_application_activate_preferences_action (GSimpleAction *action,
 
   g_return_if_fail (GB_IS_APPLICATION (application));
 
+  if (application->priv->preferences_window)
+    {
+      gtk_window_present (GTK_WINDOW (application->priv->preferences_window));
+      return;
+    }
+
   list = gtk_application_get_windows (GTK_APPLICATION (application));
 
   for (; list; list = list->next)
@@ -488,6 +496,7 @@ gb_application_activate_preferences_action (GSimpleAction *action,
   window = g_object_new (GB_TYPE_PREFERENCES_WINDOW,
                          "transient-for", workbench,
                          NULL);
+  gb_set_weak_pointer (window, &application->priv->preferences_window);
 
   gtk_window_present (GTK_WINDOW (window));
 }
