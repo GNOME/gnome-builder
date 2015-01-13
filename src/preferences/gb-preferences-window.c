@@ -38,10 +38,6 @@ struct _GbPreferencesWindowPrivate
   GtkSearchEntry  *search_entry;
   GtkSearchBar    *search_bar;
   GtkStack        *stack;
-
-  GtkWidget       *vim_page;
-
-  GSettings       *editor_settings;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesWindow, gb_preferences_window,
@@ -252,16 +248,6 @@ gb_preferences_window_constructed (GObject *object)
 }
 
 static void
-gb_preferences_window_finalize (GObject *object)
-{
-  GbPreferencesWindowPrivate *priv = GB_PREFERENCES_WINDOW (object)->priv;
-
-  g_clear_object (&priv->editor_settings);
-
-  G_OBJECT_CLASS (gb_preferences_window_parent_class)->finalize (object);
-}
-
-static void
 gb_preferences_window_get_property (GObject    *object,
                                     guint       prop_id,
                                     GValue     *value,
@@ -288,29 +274,12 @@ gb_preferences_window_set_property (GObject      *object,
 }
 
 static void
-gb_prefereces_window_vim_mode_changed (GbPreferencesWindow *window,
-                                       const gchar         *key,
-                                       GSettings           *settings)
-{
-  gboolean active;
-
-  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
-  g_return_if_fail (G_IS_SETTINGS (settings));
-
-  active = g_settings_get_boolean (settings, "vim-mode");
-  gtk_widget_set_visible (window->priv->vim_page, active);
-  gb_preferences_page_set_active (GB_PREFERENCES_PAGE (window->priv->vim_page),
-                                  active);
-}
-
-static void
 gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gb_preferences_window_constructed;
-  object_class->finalize = gb_preferences_window_finalize;
   object_class->get_property = gb_preferences_window_get_property;
   object_class->set_property = gb_preferences_window_set_property;
 
@@ -334,7 +303,6 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, search_bar);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, search_entry);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, stack);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, vim_page);
 
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_GIT);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EDITOR);
@@ -348,12 +316,4 @@ gb_preferences_window_init (GbPreferencesWindow *self)
   self->priv = gb_preferences_window_get_instance_private (self);
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  self->priv->editor_settings = g_settings_new ("org.gnome.builder.editor");
-  g_signal_connect_object (self->priv->editor_settings,
-                           "changed::vim-mode",
-                           G_CALLBACK (gb_prefereces_window_vim_mode_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
-  gb_prefereces_window_vim_mode_changed (self, NULL, self->priv->editor_settings);
 }
