@@ -2746,7 +2746,7 @@ gb_source_vim_adjust_scroll (GbSourceVim          *vim,
 
     case GB_SOURCE_VIM_ALIGNMENT_BOTTOM:
       result->yalign = CLAMP (1.0, min_yalign, max_yalign);
-      result->line = line - (1.0 - result->yalign) * page_lines;
+      result->line = MAX(0, line - (1.0 - result->yalign) * page_lines);
       break;
 
     default:
@@ -2793,7 +2793,7 @@ gb_source_vim_move_page (GbSourceVim                 *vim,
       adjusted_scroll = gb_source_vim_adjust_scroll (vim, line, GB_SOURCE_VIM_ALIGNMENT_KEEP);
       break;
     case GB_SOURCE_VIM_PAGE_UP:
-      line = MAX (vim->priv->scroll_off, gtk_text_iter_get_line (&iter_top));
+      line = gtk_text_iter_get_line (&iter_top);
       adjusted_scroll = gb_source_vim_adjust_scroll (vim, line, GB_SOURCE_VIM_ALIGNMENT_BOTTOM);
       break;
     case GB_SOURCE_VIM_PAGE_DOWN:
