@@ -412,7 +412,7 @@
           </object>
         </child>
         <child>
-          <object class="GbSourceStyleSchemeButton" id="style_scheme_button">
+          <object class="GtkSourceStyleSchemeChooserButton" id="style_scheme_button">
             <property name="visible">True</property>
           </object>
         </child>

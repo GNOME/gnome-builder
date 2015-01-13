@@ -19,43 +19,62 @@
 #define G_LOG_DOMAIN "prefs-page-editor"
 
 #include <glib/gi18n.h>
+#include <gtksourceview/gtksource.h>
 
 #include "gb-preferences-page-editor.h"
-#include "gb-source-style-scheme-button.h"
 
 struct _GbPreferencesPageEditorPrivate
 {
-  GSettings                 *settings;
+  GSettings                         *settings;
 
   /* Widgets owned by Template */
-  GtkSwitch                 *restore_insert_mark_switch;
-  GtkSwitch                 *show_diff_switch;
-  GtkSwitch                 *word_completion_switch;
-  GtkSwitch                 *show_line_numbers_switch;
-  GtkSwitch                 *highlight_current_line_switch;
-  GtkSwitch                 *highlight_matching_brackets_switch;
-  GtkSwitch                 *smart_home_end_switch;
-  GtkFontButton             *font_button;
-  GbSourceStyleSchemeButton *style_scheme_button;
+  GtkSwitch                         *restore_insert_mark_switch;
+  GtkSwitch                         *show_diff_switch;
+  GtkSwitch                         *word_completion_switch;
+  GtkSwitch                         *show_line_numbers_switch;
+  GtkSwitch                         *highlight_current_line_switch;
+  GtkSwitch                         *highlight_matching_brackets_switch;
+  GtkSwitch                         *smart_home_end_switch;
+  GtkFontButton                     *font_button;
+  GtkSourceStyleSchemeChooserButton *style_scheme_button;
 
   /* Template widgets used for filtering */
-  GtkWidget                 *restore_insert_mark_container;
-  GtkWidget                 *word_completion_container;
-  GtkWidget                 *show_diff_container;
-  GtkWidget                 *show_line_numbers_container;
-  GtkWidget                 *highlight_current_line_container;
-  GtkWidget                 *highlight_matching_brackets_container;
-  GtkWidget                 *smart_home_end_container;
+  GtkWidget                         *restore_insert_mark_container;
+  GtkWidget                         *word_completion_container;
+  GtkWidget                         *show_diff_container;
+  GtkWidget                         *show_line_numbers_container;
+  GtkWidget                         *highlight_current_line_container;
+  GtkWidget                         *highlight_matching_brackets_container;
+  GtkWidget                         *smart_home_end_container;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPageEditor, gb_preferences_page_editor,
                             GB_TYPE_PREFERENCES_PAGE)
 
 static void
+gb_preferences_page_editor_style_scheme_changed (GtkSourceStyleSchemeChooser *chooser,
+                                                 GParamSpec                  *pspec,
+                                                 GSettings                   *settings)
+{
+  GtkSourceStyleScheme *scheme;
+  const gchar *scheme_id;
+
+  g_return_if_fail (GTK_SOURCE_IS_STYLE_SCHEME_CHOOSER (chooser));
+  g_return_if_fail (G_IS_SETTINGS (settings));
+
+  scheme = gtk_source_style_scheme_chooser_get_style_scheme (chooser);
+  scheme_id = gtk_source_style_scheme_get_id (scheme);
+  g_settings_set_string (settings,"style-scheme-name", scheme_id);
+}
+
+static void
 gb_preferences_page_editor_constructed (GObject *object)
 {
   GbPreferencesPageEditorPrivate *priv;
   GbPreferencesPageEditor *editor = (GbPreferencesPageEditor *)object;
+  GtkSourceStyleSchemeManager *manager;
+  GtkSourceStyleScheme *scheme;
+  gchar *scheme_id;
 
   g_return_if_fail (GB_IS_PREFERENCES_PAGE_EDITOR (editor));
 
@@ -87,9 +106,15 @@ gb_preferences_page_editor_constructed (GObject *object)
   g_settings_bind (priv->settings, "font-name",
                    priv->font_button, "font-name",
                    G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->settings, "style-scheme-name",
-                   priv->style_scheme_button, "style-scheme-name",
-                   G_SETTINGS_BIND_DEFAULT);
+
+  scheme_id = g_settings_get_string(priv->settings, "style-scheme-name");
+  manager = gtk_source_style_scheme_manager_get_default ();
+  scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_id);
+  g_free (scheme_id);
+  gtk_source_style_scheme_chooser_set_style_scheme (GTK_SOURCE_STYLE_SCHEME_CHOOSER (priv->style_scheme_button),
+                                                    scheme);
+  g_signal_connect (priv->style_scheme_button, "notify::style-scheme",
+                    G_CALLBACK (gb_preferences_page_editor_style_scheme_changed), priv->settings);
 
   G_OBJECT_CLASS (gb_preferences_page_editor_parent_class)->constructed (object);
 }
@@ -133,8 +158,6 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, highlight_current_line_container);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_container);
   gtk_widget_class_bind_template_child_private (widget_class, GbPreferencesPageEditor, smart_home_end_container);
-
-  g_type_ensure (GB_TYPE_SOURCE_STYLE_SCHEME_BUTTON);
 }
 
 static void
