@@ -336,7 +336,7 @@ gb_document_menu_button_select_document (GbDocumentMenuButton *button,
         g_object_bind_property (document, "modified",
                                 priv->modified_label, "visible",
                                 G_BINDING_SYNC_CREATE);
-      gb_set_weak_pointer (priv->title_binding, &priv->modified_binding);
+      gb_set_weak_pointer (priv->modified_binding, &priv->modified_binding);
 
       value = g_get_monotonic_time () / (G_USEC_PER_SEC / 10);
       g_hash_table_replace (priv->focus_time, document,
