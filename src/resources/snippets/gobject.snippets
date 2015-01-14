@@ -192,3 +192,16 @@ snippet gobj_prop
 		             ${$2|space}   G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class, PROP_$1,
 	                                 gParamSpecs [PROP_$1]);
+snippet gsignal
+- scope c
+- desc Add GObject signal
+	gSignals [${$1|functify|upper}] =
+		g_signal_new ("${1:name}",
+		              G_TYPE_FROM_CLASS (klass),
+		              ${2:G_SIGNAL_RUN_LAST},
+		              ${3:0},
+		              ${4:NULL},
+		              ${5:NULL},
+		              ${6:g_cclosure_marshal_generic},
+		              ${7:G_TYPE_NONE},
+		              ${8:0});
