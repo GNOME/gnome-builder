@@ -1323,6 +1323,16 @@ gb_source_view_maybe_overwrite (GbSourceView *view,
   if (!view->priv->overwrite_braces)
     return;
 
+  /*
+   * WORKAROUND:
+   *
+   * If we are inside of a snippet, then let's not do anything. It really
+   * messes with the position tracking. Once we can better integrate these
+   * things, go ahead and remove this.
+   */
+  if (view->priv->snippets->length)
+    return;
+
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
   mark = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
