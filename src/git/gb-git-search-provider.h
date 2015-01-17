@@ -40,7 +40,7 @@ typedef struct _GbGitSearchProviderPrivate GbGitSearchProviderPrivate;
 
 struct _GbGitSearchProvider
 {
-  GObject parent;
+  GbSearchProvider parent;
 
   /*< private >*/
   GbGitSearchProviderPrivate *priv;
@@ -48,7 +48,7 @@ struct _GbGitSearchProvider
 
 struct _GbGitSearchProviderClass
 {
-  GObjectClass parent;
+  GbSearchProviderClass parent;
 };
 
 GType             gb_git_search_provider_get_type       (void);

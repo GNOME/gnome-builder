@@ -23,9 +23,8 @@
 
 #include "fuzzy.h"
 #include "gb-git-search-provider.h"
-#include "gb-git-search-result.h"
-#include "gb-log.h"
 #include "gb-search-context.h"
+#include "gb-search-reducer.h"
 #include "gb-search-result.h"
 
 #define GB_GIT_SEARCH_PROVIDER_MAX_MATCHES 1000
@@ -38,15 +37,9 @@ struct _GbGitSearchProviderPrivate
   gchar          *repository_shorthand;
 };
 
-static void search_provider_init (GbSearchProviderInterface *iface);
-
-G_DEFINE_TYPE_EXTENDED (GbGitSearchProvider,
-                        gb_git_search_provider,
-                        G_TYPE_OBJECT,
-                        0,
-                        G_ADD_PRIVATE (GbGitSearchProvider)
-                        G_IMPLEMENT_INTERFACE (GB_TYPE_SEARCH_PROVIDER,
-                                               search_provider_init))
+G_DEFINE_TYPE_WITH_PRIVATE (GbGitSearchProvider,
+                            gb_git_search_provider,
+                            GB_TYPE_SEARCH_PROVIDER)
 
 enum {
   PROP_0,
@@ -112,8 +105,6 @@ gb_git_search_provider_build_file_index (GTask        *task,
   guint count;
   guint i;
 
-  ENTRY;
-
   g_return_if_fail (G_IS_FILE (repository_dir));
 
   /*
@@ -131,7 +122,7 @@ gb_git_search_provider_build_file_index (GTask        *task,
   if (!repository)
     {
       g_task_return_error (task, error);
-      GOTO (cleanup);
+      goto cleanup;
     }
 
   ref = ggit_repository_get_head (repository, NULL);
@@ -152,7 +143,7 @@ gb_git_search_provider_build_file_index (GTask        *task,
   if (!index)
     {
       g_task_return_error (task, error);
-      GOTO (cleanup);
+      goto cleanup;
     }
 
   entries = ggit_index_get_entries (index);
@@ -196,8 +187,6 @@ cleanup:
   g_clear_pointer (&entries, ggit_index_entries_unref);
   g_clear_object (&index);
   g_clear_object (&repository);
-
-  EXIT;
 }
 
 static gchar *
@@ -243,10 +232,11 @@ split_path (const gchar  *path,
 static void
 gb_git_search_provider_populate (GbSearchProvider *provider,
                                  GbSearchContext  *context,
+                                 const gchar      *search_terms,
+                                 gsize             max_results,
                                  GCancellable     *cancellable)
 {
   GbGitSearchProvider *self = (GbGitSearchProvider *)provider;
-  GList *list = NULL;
 
   g_return_if_fail (GB_IS_GIT_SEARCH_PROVIDER (self));
   g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
@@ -255,14 +245,13 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
   if (self->priv->file_index)
     {
       GString *str = g_string_new (NULL);
-      const gchar *search_text;
+      GbSearchReducer reducer = { 0 };
       gchar *delimited;
       GArray *matches;
       guint i;
       guint truncate_len;
 
-      search_text = gb_search_context_get_search_text (context);
-      delimited = remove_spaces (search_text);
+      delimited = remove_spaces (search_terms);
       matches = fuzzy_match (self->priv->file_index, delimited,
                              GB_GIT_SEARCH_PROVIDER_MAX_MATCHES);
 
@@ -301,38 +290,38 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
 
       truncate_len = str->len;
 
+      gb_search_reducer_init (&reducer, context, provider);
+
       for (i = 0; i < matches->len; i++)
         {
           FuzzyMatch *match;
-          GtkWidget *widget;
           gchar *shortname = NULL;
           gchar **parts;
           guint j;
 
           match = &g_array_index (matches, FuzzyMatch, i);
 
-          parts = split_path (match->value, &shortname);
-          for (j = 0; parts [j]; j++)
-            g_string_append_printf (str, " / %s", parts [j]);
+          if (gb_search_reducer_accepts (&reducer, match->score))
+            {
+              GbSearchResult *result;
 
-          /* TODO: Make a git file search result */
-          widget = g_object_new (GB_TYPE_GIT_SEARCH_RESULT,
-                                 "visible", TRUE,
-                                 "score", match->score,
-                                 "repository-name", str->str,
-                                 "path", match->value,
-                                 "display-name", shortname,
-                                 NULL);
-          list = g_list_prepend (list, widget);
+              parts = split_path (match->value, &shortname);
+              for (j = 0; parts [j]; j++)
+                g_string_append_printf (str, " / %s", parts [j]);
 
-          g_free (shortname);
-          g_strfreev (parts);
-          g_string_truncate (str, truncate_len);
+              result = gb_search_result_new (match->value, match->score);
+              gb_search_reducer_push (&reducer, result);
+              g_object_unref (result);
+
+              g_free (shortname);
+              g_strfreev (parts);
+              g_string_truncate (str, truncate_len);
+            }
         }
 
-      list = g_list_reverse (list);
-      gb_search_context_add_results (context, provider, list, TRUE);
+      gb_search_context_set_provider_count (context, provider, matches->len);
 
+      gb_search_reducer_destroy (&reducer);
       g_array_unref (matches);
       g_free (delimited);
       g_string_free (str, TRUE);
@@ -378,6 +367,14 @@ gb_git_search_provider_set_repository (GbGitSearchProvider *provider,
           g_clear_object (&task);
         }
     }
+}
+
+const gchar *
+gb_git_search_provider_get_verb (GbSearchProvider *provider)
+{
+  g_return_val_if_fail (GB_IS_GIT_SEARCH_PROVIDER (provider), NULL);
+
+  return _("Switch To");
 }
 
 static void
@@ -435,10 +432,14 @@ static void
 gb_git_search_provider_class_init (GbGitSearchProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GbSearchProviderClass *provider_class = GB_SEARCH_PROVIDER_CLASS (klass);
 
   object_class->finalize = gb_git_search_provider_finalize;
   object_class->get_property = gb_git_search_provider_get_property;
   object_class->set_property = gb_git_search_provider_set_property;
+
+  provider_class->populate = gb_git_search_provider_populate;
+  provider_class->get_verb = gb_git_search_provider_get_verb;
 
   /**
    * GbGitSearchProvider:repository:
@@ -462,10 +463,4 @@ static void
 gb_git_search_provider_init (GbGitSearchProvider *self)
 {
   self->priv = gb_git_search_provider_get_instance_private (self);
-}
-
-static void
-search_provider_init (GbSearchProviderInterface *iface)
-{
-  iface->populate = gb_git_search_provider_populate;
 }

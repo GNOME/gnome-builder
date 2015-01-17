@@ -113,8 +113,6 @@ libgnome_builder_la_SOURCES = \
 	src/gedit/gedit-menu-stack-switcher.h \
 	src/git/gb-git-search-provider.c \
 	src/git/gb-git-search-provider.h \
-	src/git/gb-git-search-result.c \
-	src/git/gb-git-search-result.h \
 	src/html/gb-html-completion-provider.c \
 	src/html/gb-html-completion-provider.h \
 	src/html/gb-html-document.c \
@@ -151,10 +149,14 @@ libgnome_builder_la_SOURCES = \
 	src/search/gb-search-context.h \
 	src/search/gb-search-display.c \
 	src/search/gb-search-display.h \
+	src/search/gb-search-display-group.c \
+	src/search/gb-search-display-group.h \
 	src/search/gb-search-manager.c \
 	src/search/gb-search-manager.h \
 	src/search/gb-search-provider.c \
 	src/search/gb-search-provider.h \
+	src/search/gb-search-reducer.c \
+	src/search/gb-search-reducer.h \
 	src/search/gb-search-result.c \
 	src/search/gb-search-result.h \
 	src/search/gb-search-types.h \

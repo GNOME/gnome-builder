@@ -1,6 +1,6 @@
 /* gb-search-result.h
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +19,12 @@
 #ifndef GB_SEARCH_RESULT_H
 #define GB_SEARCH_RESULT_H
 
-#include <gtk/gtk.h>
+#include <glib-object.h>
 
 #include "gb-search-types.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_SEARCH_RESULT            (gb_search_result_get_type())
 #define GB_SEARCH_RESULT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SEARCH_RESULT, GbSearchResult))
 #define GB_SEARCH_RESULT_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SEARCH_RESULT, GbSearchResult const))
 #define GB_SEARCH_RESULT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_SEARCH_RESULT, GbSearchResultClass))
@@ -35,7 +34,7 @@ G_BEGIN_DECLS
 
 struct _GbSearchResult
 {
-  GtkBin parent;
+  GObject parent;
 
   /*< private >*/
   GbSearchResultPrivate *priv;
@@ -43,19 +42,15 @@ struct _GbSearchResult
 
 struct _GbSearchResultClass
 {
-  GtkBinClass parent;
-
-  void (*activate) (GbSearchResult *result);
+  GObjectClass parent;
 };
 
-void       gb_search_result_activate     (GbSearchResult *result);
-gint       gb_search_result_compare_func (gconstpointer   result1,
-                                          gconstpointer   result2);
-GType      gb_search_result_get_type     (void);
-GtkWidget *gb_search_result_new          (void);
-gfloat     gb_search_result_get_score    (GbSearchResult *result);
-void       gb_search_result_set_score    (GbSearchResult *result,
-                                          gfloat          score);
+GbSearchResult *gb_search_result_new        (const gchar          *markup,
+                                             gfloat                score);
+gfloat          gb_search_result_get_score  (GbSearchResult       *result);
+const gchar    *gb_search_result_get_markup (GbSearchResult       *result);
+gint            gb_search_result_compare    (const GbSearchResult *a,
+                                             const GbSearchResult *b);
 
 G_END_DECLS
 

@@ -1,6 +1,6 @@
 /* gb-search-context.h
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +19,12 @@
 #ifndef GB_SEARCH_CONTEXT_H
 #define GB_SEARCH_CONTEXT_H
 
-#include <gio/gio.h>
+#include <glib-object.h>
 
 #include "gb-search-types.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_SEARCH_CONTEXT            (gb_search_context_get_type())
 #define GB_SEARCH_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SEARCH_CONTEXT, GbSearchContext))
 #define GB_SEARCH_CONTEXT_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SEARCH_CONTEXT, GbSearchContext const))
 #define GB_SEARCH_CONTEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_SEARCH_CONTEXT, GbSearchContextClass))
@@ -45,23 +44,31 @@ struct _GbSearchContextClass
 {
   GObjectClass parent;
 
-  void (*results_added) (GbSearchContext  *context,
-                         GbSearchProvider *provider,
-                         GList            *results,
-                         gboolean          finished);
+  void (*result_added)   (GbSearchContext  *context,
+                          GbSearchProvider *provider,
+                          GbSearchResult   *result);
+  void (*result_removed) (GbSearchContext  *context,
+                          GbSearchProvider *provider,
+                          GbSearchResult   *result);
 };
 
-GType            gb_search_context_get_type        (void);
-GbSearchContext *gb_search_context_new             (const GList      *providers,
-                                                    const gchar      *search_text);
-void             gb_search_context_cancel          (GbSearchContext  *context);
-const GList     *gb_search_context_get_results     (GbSearchContext  *context);
-void             gb_search_context_add_results     (GbSearchContext  *context,
-                                                    GbSearchProvider *provider,
-                                                    GList            *results,
-                                                    gboolean          finished);
-void             gb_search_context_execute         (GbSearchContext  *context);
-const gchar     *gb_search_context_get_search_text (GbSearchContext *context);
+GbSearchContext *gb_search_context_new                (void);
+const GList     *gb_search_context_get_providers      (GbSearchContext  *context);
+void             gb_search_context_add_provider       (GbSearchContext  *context,
+                                                       GbSearchProvider *provider,
+                                                       gsize             max_results);
+void             gb_search_context_add_result         (GbSearchContext  *context,
+                                                       GbSearchProvider *provider,
+                                                       GbSearchResult   *result);
+void             gb_search_context_remove_result      (GbSearchContext  *context,
+                                                       GbSearchProvider *provider,
+                                                       GbSearchResult   *result);
+void             gb_search_context_cancel             (GbSearchContext  *context);
+void             gb_search_context_execute            (GbSearchContext  *context,
+                                                       const gchar      *search_terms);
+void             gb_search_context_set_provider_count (GbSearchContext  *context,
+                                                       GbSearchProvider *provider,
+                                                       guint64           count);
 
 G_END_DECLS
 

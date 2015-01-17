@@ -1,6 +1,6 @@
 /* gb-search-types.h
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,16 +23,43 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GbSearchContext           GbSearchContext;
-typedef struct _GbSearchContextClass      GbSearchContextClass;
-typedef struct _GbSearchContextPrivate    GbSearchContextPrivate;
+#define GB_TYPE_SEARCH_CONTEXT       (gb_search_context_get_type())
+#define GB_TYPE_SEARCH_DISPLAY       (gb_search_display_get_type())
+#define GB_TYPE_SEARCH_DISPLAY_GROUP (gb_search_display_group_get_type())
+#define GB_TYPE_SEARCH_MANAGER       (gb_search_manager_get_type())
+#define GB_TYPE_SEARCH_PROVIDER      (gb_search_provider_get_type())
+#define GB_TYPE_SEARCH_RESULT        (gb_search_result_get_type())
 
-typedef struct _GbSearchProvider          GbSearchProvider;
-typedef struct _GbSearchProviderInterface GbSearchProviderInterface;
+typedef struct _GbSearchContext         GbSearchContext;
+typedef struct _GbSearchContextClass    GbSearchContextClass;
+typedef struct _GbSearchContextPrivate  GbSearchContextPrivate;
 
-typedef struct _GbSearchResult            GbSearchResult;
-typedef struct _GbSearchResultClass       GbSearchResultClass;
-typedef struct _GbSearchResultPrivate     GbSearchResultPrivate;
+typedef struct _GbSearchDisplay        GbSearchDisplay;
+typedef struct _GbSearchDisplayClass   GbSearchDisplayClass;
+typedef struct _GbSearchDisplayPrivate GbSearchDisplayPrivate;
+
+typedef struct _GbSearchDisplayGroup        GbSearchDisplayGroup;
+typedef struct _GbSearchDisplayGroupClass   GbSearchDisplayGroupClass;
+typedef struct _GbSearchDisplayGroupPrivate GbSearchDisplayGroupPrivate;
+
+typedef struct _GbSearchProvider        GbSearchProvider;
+typedef struct _GbSearchProviderClass   GbSearchProviderClass;
+typedef struct _GbSearchProviderPrivate GbSearchProviderPrivate;
+
+typedef struct _GbSearchManager         GbSearchManager;
+typedef struct _GbSearchManagerClass    GbSearchManagerClass;
+typedef struct _GbSearchManagerPrivate  GbSearchManagerPrivate;
+
+typedef struct _GbSearchResult          GbSearchResult;
+typedef struct _GbSearchResultClass     GbSearchResultClass;
+typedef struct _GbSearchResultPrivate   GbSearchResultPrivate;
+
+GType gb_search_context_get_type       (void);
+GType gb_search_display_get_type       (void);
+GType gb_search_display_group_get_type (void);
+GType gb_search_manager_get_type       (void);
+GType gb_search_provider_get_type      (void);
+GType gb_search_result_get_type        (void);
 
 G_END_DECLS
 

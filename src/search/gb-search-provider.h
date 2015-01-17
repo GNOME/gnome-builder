@@ -1,6 +1,6 @@
 /* gb-search-provider.h
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,30 +21,47 @@
 
 #include <gio/gio.h>
 
-#include "gb-search-types.h"
+#include "gb-search-context.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_SEARCH_PROVIDER               (gb_search_provider_get_type ())
-#define GB_SEARCH_PROVIDER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj),    GB_TYPE_SEARCH_PROVIDER, GbSearchProvider))
-#define GB_IS_SEARCH_PROVIDER(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj),    GB_TYPE_SEARCH_PROVIDER))
-#define GB_SEARCH_PROVIDER_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GB_TYPE_SEARCH_PROVIDER, GbSearchProviderInterface))
+#define GB_SEARCH_PROVIDER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SEARCH_PROVIDER, GbSearchProvider))
+#define GB_SEARCH_PROVIDER_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SEARCH_PROVIDER, GbSearchProvider const))
+#define GB_SEARCH_PROVIDER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_SEARCH_PROVIDER, GbSearchProviderClass))
+#define GB_IS_SEARCH_PROVIDER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_SEARCH_PROVIDER))
+#define GB_IS_SEARCH_PROVIDER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_SEARCH_PROVIDER))
+#define GB_SEARCH_PROVIDER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_SEARCH_PROVIDER, GbSearchProviderClass))
 
-struct _GbSearchProviderInterface
+struct _GbSearchProvider
 {
-  GTypeInterface parent;
+  GObject parent;
 
-  gint  (*get_priority) (GbSearchProvider *provider);
-  void  (*populate)     (GbSearchProvider *provider,
-                         GbSearchContext  *context,
-                         GCancellable     *cancellable);
+  /*< private >*/
+  GbSearchProviderPrivate *priv;
 };
 
-GType gb_search_provider_get_type     (void);
-gint  gb_search_provider_get_priority (GbSearchProvider *provider);
-void  gb_search_provider_populate     (GbSearchProvider *provider,
-                                       GbSearchContext  *context,
-                                       GCancellable     *cancellable);
+struct _GbSearchProviderClass
+{
+  GObjectClass parent;
+
+  gunichar     (*get_prefix)   (GbSearchProvider *provider);
+  gint         (*get_priority) (GbSearchProvider *provider);
+  const gchar *(*get_verb)     (GbSearchProvider *provider);
+  void         (*populate)     (GbSearchProvider *provider,
+                                GbSearchContext  *context,
+                                const gchar      *search_terms,
+                                gsize             max_results,
+                                GCancellable     *cancellable);
+};
+
+gunichar     gb_search_provider_get_prefix   (GbSearchProvider *provider);
+gint         gb_search_provider_get_priority (GbSearchProvider *provider);
+const gchar *gb_search_provider_get_verb     (GbSearchProvider *provider);
+void         gb_search_provider_populate     (GbSearchProvider *provider,
+                                              GbSearchContext  *context,
+                                              const gchar      *search_terms,
+                                              gsize             max_results,
+                                              GCancellable     *cancellable);
 
 G_END_DECLS
 

@@ -21,14 +21,17 @@
 #include <glib/gi18n.h>
 
 #include "gb-glib.h"
+#include "gb-scrolled-window.h"
 #include "gb-search-box.h"
+#include "gb-search-context.h"
 #include "gb-search-display.h"
 #include "gb-search-manager.h"
+#include "gb-search-result.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
-#define SHORT_DELAY_TIMEOUT_MSEC 250
-#define LONG_DELAY_TIMEOUT_MSEC  500
+#define SHORT_DELAY_TIMEOUT_MSEC 20
+#define LONG_DELAY_TIMEOUT_MSEC  250
 
 struct _GbSearchBoxPrivate
 {
@@ -113,8 +116,9 @@ gb_search_box_delay_cb (gpointer user_data)
   if (!search_text)
     return G_SOURCE_REMOVE;
 
-  context = gb_search_manager_search (box->priv->search_manager, search_text);
+  context = gb_search_manager_search (box->priv->search_manager, NULL, search_text); /* TODO: Remove search text */
   gb_search_display_set_context (box->priv->display, context);
+  gb_search_context_execute (context, search_text);
   g_object_unref (context);
 
   return G_SOURCE_REMOVE;
@@ -448,6 +452,7 @@ gb_search_box_class_init (GbSearchBoxClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbSearchBox, popover);
 
   g_type_ensure (GB_TYPE_SEARCH_DISPLAY);
+  g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
 }
 
 static void

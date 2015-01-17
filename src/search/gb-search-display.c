@@ -1,6 +1,6 @@
 /* gb-search-display.c
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "search-display"
-
 #include <glib/gi18n.h>
 
-#include "gb-log.h"
-#include "gb-scrolled-window.h"
 #include "gb-search-display.h"
+#include "gb-search-display-group.h"
 #include "gb-search-provider.h"
 #include "gb-search-result.h"
-#include "gb-widget.h"
 
 struct _GbSearchDisplayPrivate
 {
-  /* References owned by widget */
-  GbSearchContext  *context;
-
-  /* References owned by Gtk template */
-  GtkListBox       *list_box;
-  GbScrolledWindow *scroller;
+  GbSearchContext      *context;
+  GArray               *providers;
+  GtkSizeGroup         *size_group;
+  GbSearchDisplayGroup *last_group;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbSearchDisplay, gb_search_display, GTK_TYPE_BIN)
+typedef struct
+{
+  GbSearchProvider     *provider;
+  GbSearchDisplayGroup *group;
+} ProviderEntry;
+
+G_DEFINE_TYPE_WITH_PRIVATE (GbSearchDisplay, gb_search_display, GTK_TYPE_BOX)
 
 enum {
   PROP_0,
@@ -53,6 +53,29 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
+static void
+provider_entry_destroy (gpointer data)
+{
+  ProviderEntry *entry = data;
+
+  g_clear_object (&entry->provider);
+}
+
+static gint
+provider_entry_sort (gconstpointer ptra,
+                     gconstpointer ptrb)
+{
+  const ProviderEntry *entrya = ptra;
+  const ProviderEntry *entryb = ptrb;
+  gint a;
+  gint b;
+
+  a = gb_search_provider_get_priority ((GB_SEARCH_PROVIDER (entrya->provider)));
+  b = gb_search_provider_get_priority ((GB_SEARCH_PROVIDER (entryb->provider)));
+
+  return a - b;
+}
+
 GtkWidget *
 gb_search_display_new (void)
 {
@@ -60,24 +83,304 @@ gb_search_display_new (void)
 }
 
 static void
-gb_search_display_results_added (GbSearchDisplay  *display,
-                                 GbSearchProvider *provider,
-                                 GList            *results,
-                                 gboolean          finished)
+gb_search_display_result_selected (GbSearchDisplay      *display,
+                                   GbSearchResult       *result,
+                                   GbSearchDisplayGroup *group)
 {
-  GList *iter;
+  guint i;
 
-  ENTRY;
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+  g_return_if_fail (!result || GB_IS_SEARCH_RESULT (result));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
+
+  for (i = 0; i < display->priv->providers->len; i++)
+    {
+      ProviderEntry *ptr;
+
+      ptr = &g_array_index (display->priv->providers, ProviderEntry, i);
+      if (ptr->group != group)
+        gb_search_display_group_unselect (ptr->group);
+    }
+}
+
+static gboolean
+gb_search_display_keynav_failed (GbSearchDisplay      *display,
+                                 GtkDirectionType      dir,
+                                 GbSearchDisplayGroup *group)
+{
+  GList *list;
+  GList *iter;
+  gint position = -1;
+
+  g_return_val_if_fail (GB_IS_SEARCH_DISPLAY (display), FALSE);
+  g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group), FALSE);
+
+  gtk_container_child_get (GTK_CONTAINER (display), GTK_WIDGET (group),
+                           "position", &position,
+                           NULL);
+
+  if (dir == GTK_DIR_DOWN)
+    {
+      list = gtk_container_get_children (GTK_CONTAINER (display));
+      iter = g_list_nth (list, position + 1);
+      if (iter && (iter->data != display->priv->last_group))
+        {
+          gb_search_display_group_unselect (group);
+          gb_search_display_group_focus_first (iter->data);
+          return TRUE;
+        }
+    }
+  else if (dir == GTK_DIR_UP && position > 0)
+    {
+      list = gtk_container_get_children (GTK_CONTAINER (display));
+      iter = g_list_nth (list, position - 1);
+      if (iter)
+        {
+          gb_search_display_group_unselect (group);
+          gb_search_display_group_focus_last (iter->data);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+void
+gb_search_display_activate (GbSearchDisplay *display)
+{
+  g_warning ("TODO: implement display_activate()");
+}
+
+static void
+gb_search_display_add_provider (GbSearchDisplay  *display,
+                                GbSearchProvider *provider)
+{
+  ProviderEntry entry = { 0 };
+  guint i;
 
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
   g_return_if_fail (GB_IS_SEARCH_PROVIDER (provider));
 
-  for (iter = results; iter; iter = iter->next)
-    gtk_list_box_insert (display->priv->list_box, iter->data, -1);
+  /*
+   * Make sure we don't add an item twice. Probably can assert here, but
+   * warning will do for now.
+   */
+  for (i = 0; i < display->priv->providers->len; i++)
+    {
+      ProviderEntry *ptr;
 
-  gtk_list_box_invalidate_sort (display->priv->list_box);
+      ptr = &g_array_index (display->priv->providers, ProviderEntry, i);
 
-  EXIT;
+      if (ptr->provider == provider)
+        {
+          g_warning (_("Cannot add provider more than once."));
+          return;
+        }
+    }
+
+  /*
+   * Add the entry to our array and sort the array to determine our target
+   * widget packing position.
+   */
+  entry.provider = g_object_ref (provider);
+  entry.group = g_object_new (GB_TYPE_SEARCH_DISPLAY_GROUP,
+                              "size-group", display->priv->size_group,
+                              "provider", provider,
+                              "visible", FALSE,
+                              NULL);
+  g_signal_connect_object (entry.group,
+                           "result-selected",
+                           G_CALLBACK (gb_search_display_result_selected),
+                           display,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (entry.group,
+                           "keynav-failed",
+                           G_CALLBACK (gb_search_display_keynav_failed),
+                           display,
+                           G_CONNECT_SWAPPED);
+  g_array_append_val (display->priv->providers, entry);
+  g_array_sort (display->priv->providers, provider_entry_sort);
+
+  /*
+   * Find the location of the entry and use the index to pack the display
+   * group widget.
+   */
+  for (i = 0; i < display->priv->providers->len; i++)
+    {
+      ProviderEntry *ptr;
+
+      ptr = &g_array_index (display->priv->providers, ProviderEntry, i);
+
+      if (ptr->provider == provider)
+        {
+          gtk_container_add_with_properties (GTK_CONTAINER (display),
+                                             GTK_WIDGET (entry.group),
+                                             "position", i,
+                                             NULL);
+          break;
+        }
+    }
+}
+
+static void
+gb_search_display_remove_provider (GbSearchDisplay  *display,
+                                   GbSearchProvider *provider)
+{
+  guint i;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+  g_return_if_fail (GB_IS_SEARCH_PROVIDER (provider));
+
+  for (i = 0; i < display->priv->providers->len; i++)
+    {
+      ProviderEntry *ptr;
+
+      ptr = &g_array_index (display->priv->providers, ProviderEntry, i);
+
+      if (ptr->provider == provider)
+        {
+          gtk_container_remove (GTK_CONTAINER (display),
+                                GTK_WIDGET (ptr->group));
+          g_array_remove_index (display->priv->providers, i);
+          return;
+        }
+    }
+
+  g_warning (_("The provider could not be found."));
+}
+
+static void
+gb_search_display_result_added (GbSearchDisplay  *display,
+                                GbSearchProvider *provider,
+                                GbSearchResult   *result,
+                                GbSearchContext  *context)
+{
+  guint i;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+  g_return_if_fail (GB_IS_SEARCH_PROVIDER (provider));
+  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+  g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
+
+  for (i = 0; i < display->priv->providers->len; i++)
+    {
+      ProviderEntry *ptr;
+
+      ptr = &g_array_index (display->priv->providers, ProviderEntry, i);
+
+      if (ptr->provider == provider)
+        {
+          gb_search_display_group_add_result (ptr->group, result);
+          gtk_widget_show (GTK_WIDGET (ptr->group));
+          break;
+        }
+    }
+}
+
+static void
+gb_search_display_result_removed (GbSearchDisplay  *display,
+                                  GbSearchProvider *provider,
+                                  GbSearchResult   *result,
+                                  GbSearchContext  *context)
+{
+  guint i;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+  g_return_if_fail (GB_IS_SEARCH_PROVIDER (provider));
+  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+  g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
+
+  for (i = 0; i < display->priv->providers->len; i++)
+    {
+      ProviderEntry *ptr;
+
+      ptr = &g_array_index (display->priv->providers, ProviderEntry, i);
+
+      if (ptr->provider == provider)
+        {
+          gb_search_display_group_remove_result (ptr->group, result);
+          break;
+        }
+    }
+}
+
+static void
+gb_search_display_count_set (GbSearchDisplay  *display,
+                             GbSearchProvider *provider,
+                             guint64           count,
+                             GbSearchContext  *context)
+{
+  guint i;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+  g_return_if_fail (GB_IS_SEARCH_PROVIDER (provider));
+  g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
+
+  for (i = 0; i < display->priv->providers->len; i++)
+    {
+      ProviderEntry *ptr;
+
+      ptr = &g_array_index (display->priv->providers, ProviderEntry, i);
+
+      if (ptr->provider == provider)
+        {
+          gb_search_display_group_set_count (ptr->group, count);
+          break;
+        }
+    }
+}
+
+static void
+gb_search_display_connect_context (GbSearchDisplay *display,
+                                   GbSearchContext *context)
+{
+  const GList *providers;
+  const GList *iter;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+  g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
+
+  providers = gb_search_context_get_providers (context);
+
+  for (iter = providers; iter; iter = iter->next)
+    gb_search_display_add_provider (display, iter->data);
+
+  g_signal_connect_object (context,
+                           "result-added",
+                           G_CALLBACK (gb_search_display_result_added),
+                           display,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (context,
+                           "result-removed",
+                           G_CALLBACK (gb_search_display_result_removed),
+                           display,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (context,
+                           "count-set",
+                           G_CALLBACK (gb_search_display_count_set),
+                           display,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
+gb_search_display_disconnect_context (GbSearchDisplay *display,
+                                      GbSearchContext *context)
+{
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+  g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
+
+  while (display->priv->providers->len)
+    {
+      ProviderEntry *ptr;
+
+      ptr = &g_array_index (display->priv->providers, ProviderEntry,
+                            display->priv->providers->len - 1);
+      gb_search_display_remove_provider (display, ptr->provider);
+    }
+
+  g_signal_handlers_disconnect_by_func (context,
+                                        G_CALLBACK (gb_search_display_result_added),
+                                        display);
 }
 
 GbSearchContext *
@@ -88,235 +391,45 @@ gb_search_display_get_context (GbSearchDisplay *display)
   return display->priv->context;
 }
 
-static void
-gb_search_display_connect (GbSearchDisplay *display,
-                           GbSearchContext *context)
-{
-  GbSearchDisplayPrivate *priv;
-  const GList *list;
-  const GList *iter;
-
-  ENTRY;
-
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
-  g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
-
-  priv = display->priv;
-
-  g_signal_connect_object (context,
-                           "results-added",
-                           G_CALLBACK (gb_search_display_results_added),
-                           display,
-                           G_CONNECT_SWAPPED);
-
-  list = gb_search_context_get_results (context);
-  for (iter = list; iter; iter = iter->next)
-    gtk_list_box_insert (priv->list_box, iter->data, -1);
-  gtk_list_box_invalidate_sort (display->priv->list_box);
-
-  EXIT;
-}
-
-static void
-gb_search_display_disconnect (GbSearchDisplay *display,
-                              GbSearchContext *context)
-{
-  GbSearchDisplayPrivate *priv;
-  GList *children;
-  GList *iter;
-
-  ENTRY;
-
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
-  g_return_if_fail (GB_IS_SEARCH_CONTEXT (context));
-
-  priv = display->priv;
-
-  g_signal_handlers_disconnect_by_func (context,
-                                        G_CALLBACK (gb_search_display_results_added),
-                                        display);
-
-  children = gtk_container_get_children (GTK_CONTAINER (priv->list_box));
-  for (iter = children; iter; iter = iter->next)
-    gtk_container_remove (GTK_CONTAINER (priv->list_box), iter->data);
-  g_list_free (children);
-
-  EXIT;
-}
-
 void
 gb_search_display_set_context (GbSearchDisplay *display,
                                GbSearchContext *context)
 {
-  ENTRY;
+  GbSearchDisplayPrivate *priv;
 
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
   g_return_if_fail (!context || GB_IS_SEARCH_CONTEXT (context));
 
-  if (display->priv->context != context)
+  priv = display->priv;
+
+  if (priv->context != context)
     {
-      if (display->priv->context)
+      if (priv->context)
         {
-          gb_search_display_disconnect (display, display->priv->context);
+          gb_search_display_disconnect_context (display, priv->context);
           g_clear_object (&display->priv->context);
         }
 
       if (context)
         {
-          display->priv->context = g_object_ref (context);
-          gb_search_display_connect (display, context);
+          priv->context = g_object_ref (context);
+          gb_search_display_connect_context (display, priv->context);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (display),
-                                gParamSpecs [PROP_CONTEXT]);
-    }
-
-  EXIT;
-}
-
-static void
-gb_search_display_emit_result_activated (GbSearchDisplay *display,
-                                         GbSearchResult  *result)
-{
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
-  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
-
-  gb_search_result_activate (result);
-  g_signal_emit (display, gSignals [RESULT_ACTIVATED], 0, result);
-}
-
-static void
-gb_search_display_row_activated (GbSearchDisplay *display,
-                                 GtkListBoxRow   *row,
-                                 GtkListBox      *list_box)
-{
-  GtkWidget *child;
-
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
-  g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
-  g_return_if_fail (GTK_IS_LIST_BOX (list_box));
-
-  child = gtk_bin_get_child (GTK_BIN (row));
-
-  if (GB_IS_SEARCH_RESULT (child))
-    gb_search_display_emit_result_activated (display, GB_SEARCH_RESULT (child));
-}
-
-void
-gb_search_display_activate (GbSearchDisplay *display)
-{
-  GtkListBoxRow *row;
-
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
-
-  row = gtk_list_box_get_selected_row (display->priv->list_box);
-
-  /*
-   * WORKAROUND:
-   *
-   * Workaround since get_index() does not take into account sorts and
-   * a y of 0 doesn't currently work.
-   */
-  if (!row)
-    row = gtk_list_box_get_row_at_y (display->priv->list_box, 5);
-
-  if (row)
-    gb_search_display_row_activated (display, row, display->priv->list_box);
-}
-
-static gint
-gb_search_display_sort_cb (GtkListBoxRow *row1,
-                           GtkListBoxRow *row2,
-                           gpointer       user_data)
-{
-  GtkWidget *child1;
-  GtkWidget *child2;
-
-  child1 = gtk_bin_get_child (GTK_BIN (row1));
-  child2 = gtk_bin_get_child (GTK_BIN (row2));
-
-  return gb_search_result_compare_func (GB_SEARCH_RESULT (child1),
-                                        GB_SEARCH_RESULT (child2));
-}
-
-static void
-gb_search_display_grab_focus (GtkWidget *widget)
-{
-  GbSearchDisplay *display = (GbSearchDisplay *)widget;
-  GtkListBoxRow *row;
-
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
-
-  /*
-   * WORKAROUND:
-   *
-   * Getting the row at y of 0 does not work (returns NULL). And getting the
-   * row at index 0 does not take into account sort.
-   *
-   * https://bugzilla.gnome.org/show_bug.cgi?id=741208
-   */
-  row = gtk_list_box_get_row_at_y (display->priv->list_box, 1);
-
-  if (row)
-    {
-      gtk_list_box_select_row (display->priv->list_box, row);
-      gtk_widget_child_focus (GTK_WIDGET (display->priv->list_box),
-                              GTK_DIR_TAB_FORWARD);
-    }
-  else
-    GTK_WIDGET_CLASS (gb_search_display_parent_class)->grab_focus (widget);
-}
-
-static void
-gb_search_display_header_func (GtkListBoxRow *row,
-                               GtkListBoxRow *before,
-                               gpointer       user_data)
-{
-  if (before)
-    {
-      GtkWidget *header;
-
-      header = g_object_new (GTK_TYPE_SEPARATOR,
-                             "orientation", GTK_ORIENTATION_HORIZONTAL,
-                             "visible", TRUE,
-                             NULL);
-      gtk_list_box_row_set_header (row, header);
+      g_object_notify_by_pspec (G_OBJECT (display), gParamSpecs [PROP_CONTEXT]);
     }
 }
 
 static void
-gb_search_display_constructed (GObject *object)
-{
-  GbSearchDisplay *self = (GbSearchDisplay *)object;
-
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY (self));
-
-  G_OBJECT_CLASS (gb_search_display_parent_class)->constructed (object);
-
-  gtk_list_box_set_header_func (self->priv->list_box,
-                                gb_search_display_header_func,
-                                NULL, NULL);
-
-
-  g_signal_connect_object (self->priv->list_box,
-                           "row-activated",
-                           G_CALLBACK (gb_search_display_row_activated),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  gtk_list_box_set_sort_func (self->priv->list_box,
-                              gb_search_display_sort_cb,
-                              NULL, NULL);
-}
-
-static void
-gb_search_display_finalize (GObject *object)
+gb_search_display_dispose (GObject *object)
 {
   GbSearchDisplayPrivate *priv = GB_SEARCH_DISPLAY (object)->priv;
 
+  g_clear_pointer (&priv->providers, g_array_unref);
   g_clear_object (&priv->context);
+  g_clear_object (&priv->size_group);
 
-  G_OBJECT_CLASS (gb_search_display_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gb_search_display_parent_class)->dispose (object);
 }
 
 static void
@@ -330,7 +443,7 @@ gb_search_display_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_CONTEXT:
-      g_value_set_object (value, self->priv->context);
+      g_value_set_object (value, gb_search_display_get_context (self));
       break;
 
     default:
@@ -361,19 +474,15 @@ static void
 gb_search_display_class_init (GbSearchDisplayClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->constructed = gb_search_display_constructed;
-  object_class->finalize = gb_search_display_finalize;
+  object_class->dispose = gb_search_display_dispose;
   object_class->get_property = gb_search_display_get_property;
   object_class->set_property = gb_search_display_set_property;
-
-  widget_class->grab_focus = gb_search_display_grab_focus;
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
                          _("Context"),
-                         _("The search context."),
+                         _("The active search context."),
                          GB_TYPE_SEARCH_CONTEXT,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
@@ -391,12 +500,6 @@ gb_search_display_class_init (GbSearchDisplayClass *klass)
                   G_TYPE_NONE,
                   1,
                   GB_TYPE_SEARCH_RESULT);
-
-  GB_WIDGET_CLASS_TEMPLATE (klass, "gb-search-display.ui");
-  GB_WIDGET_CLASS_BIND (klass, GbSearchDisplay, list_box);
-  GB_WIDGET_CLASS_BIND (klass, GbSearchDisplay, scroller);
-
-  g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
 }
 
 static void
@@ -404,5 +507,20 @@ gb_search_display_init (GbSearchDisplay *self)
 {
   self->priv = gb_search_display_get_instance_private (self);
 
-  gtk_widget_init_template (GTK_WIDGET (self));
+  self->priv->providers = g_array_new (FALSE, FALSE, sizeof (ProviderEntry));
+  g_array_set_clear_func (self->priv->providers,
+                          (GDestroyNotify)provider_entry_destroy);
+
+  self->priv->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (self),
+                                  GTK_ORIENTATION_VERTICAL);
+
+  self->priv->last_group = g_object_new (GB_TYPE_SEARCH_DISPLAY_GROUP,
+                                         "size-group", self->priv->size_group,
+                                         "visible", TRUE,
+                                         "vexpand", TRUE,
+                                         NULL);
+  gtk_container_add (GTK_CONTAINER (self),
+                     GTK_WIDGET (self->priv->last_group));
 }

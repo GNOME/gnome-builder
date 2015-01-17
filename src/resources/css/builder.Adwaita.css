@@ -200,3 +200,12 @@ GbSourceStyleSchemeWidget GtkSourceView {
 GtkScrolledWindow.gb-linked-scroller {
     border-top: none;
 }
+
+
+/*
+ * Rows inside of global search. They have a really confusing transition
+ * by default.
+ */
+GbSearchDisplayGroup GtkListBox .list-row {
+    transition: none;
+}
