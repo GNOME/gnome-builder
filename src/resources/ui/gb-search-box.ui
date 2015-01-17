@@ -37,8 +37,8 @@
     <child>
       <object class="GbScrolledWindow" id="scroller">
         <property name="max-content-height">800</property>
-        <property name="min-content-height">300</property>
-        <property name="min-content-width">750</property>
+        <property name="min-content-height">150</property>
+        <property name="min-content-width">775</property>
         <property name="visible">True</property>
         <child>
           <object class="GbSearchDisplay" id="display">
