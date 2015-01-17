@@ -2777,19 +2777,21 @@ static void
 gb_source_vim_indent (GbSourceVim *vim)
 {
 #ifndef GB_SOURCE_VIM_EXTERNAL
-  GbSourceView *view;
+  GtkSourceView *view;
   GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
 
   g_assert (GB_IS_SOURCE_VIM (vim));
 
-  if (!GB_IS_SOURCE_VIEW (vim->priv->text_view))
+  if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view))
     return;
 
-  view = GB_SOURCE_VIEW (vim->priv->text_view);
+  view = GTK_SOURCE_VIEW (vim->priv->text_view);
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
-  if (gtk_text_buffer_get_has_selection (buffer))
-    gb_source_view_indent_selection (view);
+  if (gtk_text_buffer_get_selection_bounds (buffer, &iter, &selection))
+    gtk_source_view_indent_lines (view, &iter, &selection);
 #endif
 }
 
@@ -2797,19 +2799,21 @@ static void
 gb_source_vim_unindent (GbSourceVim *vim)
 {
 #ifndef GB_SOURCE_VIM_EXTERNAL
-  GbSourceView *view;
+  GtkSourceView *view;
   GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
 
   g_assert (GB_IS_SOURCE_VIM (vim));
 
-  if (!GB_IS_SOURCE_VIEW (vim->priv->text_view))
+  if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view))
     return;
 
-  view = GB_SOURCE_VIEW (vim->priv->text_view);
+  view = GTK_SOURCE_VIEW (vim->priv->text_view);
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
 
-  if (gtk_text_buffer_get_has_selection (buffer))
-    gb_source_view_unindent_selection (view);
+  if (gtk_text_buffer_get_selection_bounds (buffer, &iter, &selection))
+    gtk_source_view_unindent_lines (view, &iter, &selection);
 #endif
 }
 
