@@ -82,51 +82,8 @@ gb_search_provider_populate (GbSearchProvider *provider,
 }
 
 static void
-gb_search_provider_finalize (GObject *object)
-{
-  GbSearchProviderPrivate *priv = GB_SEARCH_PROVIDER (object)->priv;
-
-  G_OBJECT_CLASS (gb_search_provider_parent_class)->finalize (object);
-}
-
-static void
-gb_search_provider_get_property (GObject    *object,
-                                 guint       prop_id,
-                                 GValue     *value,
-                                 GParamSpec *pspec)
-{
-  GbSearchProvider *self = GB_SEARCH_PROVIDER (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-gb_search_provider_set_property (GObject      *object,
-                                 guint         prop_id,
-                                 const GValue *value,
-                                 GParamSpec   *pspec)
-{
-  GbSearchProvider *self = GB_SEARCH_PROVIDER (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 gb_search_provider_class_init (GbSearchProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = gb_search_provider_finalize;
-  object_class->get_property = gb_search_provider_get_property;
-  object_class->set_property = gb_search_provider_set_property;
 }
 
 static void

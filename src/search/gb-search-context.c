@@ -33,20 +33,13 @@ struct _GbSearchContextPrivate
 G_DEFINE_TYPE_WITH_PRIVATE (GbSearchContext, gb_search_context, G_TYPE_OBJECT)
 
 enum {
-  PROP_0,
-  PROP_PROVIDERS,
-  LAST_PROP
-};
-
-enum {
   COUNT_SET,
   RESULT_ADDED,
   RESULT_REMOVED,
   LAST_SIGNAL
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
+static guint gSignals [LAST_SIGNAL];
 
 GbSearchContext *
 gb_search_context_new (void)
@@ -154,38 +147,9 @@ gb_search_context_finalize (GObject *object)
 
   g_list_foreach (priv->providers, (GFunc)g_object_unref, NULL);
   g_list_free (priv->providers);
+  priv->providers = NULL;
 
   G_OBJECT_CLASS (gb_search_context_parent_class)->finalize (object);
-}
-
-static void
-gb_search_context_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
-{
-  GbSearchContext *self = GB_SEARCH_CONTEXT (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-gb_search_context_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
-{
-  GbSearchContext *self = GB_SEARCH_CONTEXT (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
 }
 
 static void
@@ -194,8 +158,6 @@ gb_search_context_class_init (GbSearchContextClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gb_search_context_finalize;
-  object_class->get_property = gb_search_context_get_property;
-  object_class->set_property = gb_search_context_set_property;
 
   gSignals [COUNT_SET] =
     g_signal_new ("count-set",
