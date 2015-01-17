@@ -30,8 +30,8 @@
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
-#define SHORT_DELAY_TIMEOUT_MSEC 20
-#define LONG_DELAY_TIMEOUT_MSEC  250
+#define SHORT_DELAY_TIMEOUT_MSEC 30
+#define LONG_DELAY_TIMEOUT_MSEC  30
 
 struct _GbSearchBoxPrivate
 {
