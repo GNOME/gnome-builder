@@ -1128,6 +1128,39 @@ gb_editor_frame_on_jump_to_doc (GbEditorFrame *self,
 }
 
 static void
+gb_editor_frame_on_drop_uris (GbEditorFrame *self,
+                              const gchar   **uri_list,
+                              GbSourceView  *source_view)
+{
+  GActionGroup *action_group;
+  GbWorkbench *workbench;
+  GVariantBuilder *builder;
+  GVariant *variant;
+  int i;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+  g_return_if_fail (GB_IS_SOURCE_VIEW (source_view));
+  g_return_if_fail (uri_list);
+
+  builder = g_variant_builder_new (G_VARIANT_TYPE_STRING_ARRAY);
+  for (i = 0; uri_list[i] != NULL; i++)
+    {
+      g_variant_builder_add (builder, "s", uri_list[i]);
+    }
+  variant = g_variant_builder_end (builder);
+  g_variant_builder_unref (builder);
+
+  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+  action_group = gtk_widget_get_action_group (GTK_WIDGET (workbench),
+                                              "workspace");
+  g_action_group_activate_action (action_group, "open-uri-list", variant);
+
+  EXIT;
+}
+
+static void
 gb_editor_frame_grab_focus (GtkWidget *widget)
 {
   GbEditorFrame *self = (GbEditorFrame *)widget;
@@ -1477,6 +1510,12 @@ gb_editor_frame_constructed (GObject *object)
   g_signal_connect_object (priv->source_view,
                            "display-documentation",
                            G_CALLBACK (gb_editor_frame_on_jump_to_doc),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (priv->source_view,
+                           "drop-uris",
+                           G_CALLBACK (gb_editor_frame_on_drop_uris),
                            self,
                            G_CONNECT_SWAPPED);
 

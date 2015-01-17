@@ -203,6 +203,8 @@ libgnome_builder_la_SOURCES = \
 	src/util/gb-string.h \
 	src/util/gb-widget.c \
 	src/util/gb-widget.h \
+	src/util/gb-dnd.c \
+	src/util/gb-dnd.h \
 	src/vim/gb-source-vim.c \
 	src/vim/gb-source-vim.h \
 	src/workbench/gb-workbench-types.h \

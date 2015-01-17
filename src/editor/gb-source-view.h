@@ -66,6 +66,8 @@ struct _GbSourceViewClass
   void (*request_documentation) (GbSourceView           *view);
   void (*display_documentation) (GbSourceView           *view,
                                  const gchar            *search_text);
+  void (*drop_uris)             (GbSourceViewClass      *view,
+                                 const gchar            **uri_list);
 };
 
 void                  gb_source_view_begin_search         (GbSourceView         *view,

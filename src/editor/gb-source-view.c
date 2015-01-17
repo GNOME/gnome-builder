@@ -29,6 +29,7 @@
 #include "gb-source-auto-indenter-xml.h"
 #include "gb-box-theatric.h"
 #include "gb-cairo.h"
+#include "gb-dnd.h"
 #include "gb-editor-document.h"
 #include "gb-gtk.h"
 #include "gb-html-completion-provider.h"
@@ -44,6 +45,11 @@
 #include "gb-source-view.h"
 #include "gb-source-vim.h"
 #include "gb-widget.h"
+
+enum
+{
+	TARGET_URI_LIST = 100
+};
 
 struct _GbSourceViewPrivate
 {
@@ -101,6 +107,7 @@ enum {
   POP_SNIPPET,
   PUSH_SNIPPET,
   REQUEST_DOCUMENTATION,
+  DROP_URIS,
   LAST_SIGNAL
 };
 
@@ -1982,6 +1989,42 @@ gb_source_view_constructed (GObject *object)
                                       NULL);
 }
 
+static void
+gb_source_view_drag_data_received (GtkWidget        *widget,
+                                   GdkDragContext   *context,
+                                   gint              x,
+                                   gint              y,
+                                   GtkSelectionData *selection_data,
+                                   guint             info,
+                                   guint             timestamp)
+{
+  gchar **uri_list;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (widget));
+
+  switch (info)
+    {
+    case TARGET_URI_LIST:
+      uri_list = gb_dnd_get_uri_list (selection_data);
+      if (uri_list != NULL)
+        {
+          g_signal_emit (widget, gSignals[DROP_URIS], 0, uri_list);
+          g_strfreev (uri_list);
+        }
+      gtk_drag_finish (context, TRUE, FALSE, timestamp);
+      break;
+
+    default:
+      GTK_WIDGET_CLASS (gb_source_view_parent_class)->drag_data_received (widget,
+                                                                          context,
+                                                                          x, y,
+                                                                          selection_data,
+                                                                          info,
+                                                                          timestamp);
+      break;
+    }
+}
+
 static gboolean
 gb_source_view_focus_in_event (GtkWidget     *widget,
                                GdkEventFocus *event)
@@ -2159,6 +2202,7 @@ gb_source_view_class_init (GbSourceViewClass *klass)
   widget_class->focus_out_event = gb_source_view_focus_out_event;
   widget_class->grab_focus = gb_source_view_grab_focus;
   widget_class->key_press_event = gb_source_view_key_press_event;
+  widget_class->drag_data_received = gb_source_view_drag_data_received;
 
   text_view_class->draw_layer = gb_source_view_draw_layer;
 
@@ -2308,6 +2352,17 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  gSignals [DROP_URIS] =
+    g_signal_new ("drop-uris",
+                  GB_TYPE_SOURCE_VIEW,
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GbSourceViewClass, drop_uris),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_STRV);
+
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KEY_k,
@@ -2320,6 +2375,7 @@ static void
 gb_source_view_init (GbSourceView *view)
 {
   GtkSourceCompletion *completion;
+  GtkTargetList *tl;
 
   view->priv = gb_source_view_get_instance_private (view);
 
@@ -2359,4 +2415,11 @@ gb_source_view_init (GbSourceView *view)
 
   completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (view));
   gtk_source_completion_block_interactive (completion);
+
+  /* Drag and drop support */
+  tl = gtk_drag_dest_get_target_list (GTK_WIDGET (view));
+  if (tl != NULL)
+    {
+      gtk_target_list_add_uri_targets (tl, TARGET_URI_LIST);
+    }
 }
