@@ -35,7 +35,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  ACTIVATE,
+  LAST_SIGNAL
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint       gSignals [LAST_SIGNAL];
 
 gint
 gb_search_result_compare (const GbSearchResult *a,
@@ -97,6 +103,14 @@ gb_search_result_set_score (GbSearchResult *result,
   g_return_if_fail (score <= 1.0);
 
   result->priv->score = score;
+}
+
+void
+gb_search_result_activate (GbSearchResult *result)
+{
+  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+
+  g_signal_emit (result, gSignals [ACTIVATE], 0);
 }
 
 static void
@@ -187,6 +201,17 @@ gb_search_result_class_init (GbSearchResultClass *klass)
                          G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SCORE,
                                    gParamSpecs [PROP_SCORE]);
+
+  gSignals [ACTIVATE] =
+    g_signal_new ("activate",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSearchResultClass, activate),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 static void

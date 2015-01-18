@@ -83,6 +83,28 @@ gb_search_display_new (void)
 }
 
 static void
+gb_search_display_real_result_activated (GbSearchDisplay *display,
+                                         GbSearchResult  *result)
+{
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+
+  gb_search_result_activate (result);
+}
+
+static void
+gb_search_display_result_activated (GbSearchDisplay      *display,
+                                    GbSearchResult       *result,
+                                    GbSearchDisplayGroup *group)
+{
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
+  g_return_if_fail (!result || GB_IS_SEARCH_RESULT (result));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
+
+  g_signal_emit (display, gSignals [RESULT_ACTIVATED], 0, result);
+}
+
+static void
 gb_search_display_result_selected (GbSearchDisplay      *display,
                                    GbSearchResult       *result,
                                    GbSearchDisplayGroup *group)
@@ -188,6 +210,11 @@ gb_search_display_add_provider (GbSearchDisplay  *display,
                               "provider", provider,
                               "visible", FALSE,
                               NULL);
+  g_signal_connect_object (entry.group,
+                           "result-activated",
+                           G_CALLBACK (gb_search_display_result_activated),
+                           display,
+                           G_CONNECT_SWAPPED);
   g_signal_connect_object (entry.group,
                            "result-selected",
                            G_CALLBACK (gb_search_display_result_selected),
@@ -478,6 +505,8 @@ gb_search_display_class_init (GbSearchDisplayClass *klass)
   object_class->dispose = gb_search_display_dispose;
   object_class->get_property = gb_search_display_get_property;
   object_class->set_property = gb_search_display_set_property;
+
+  klass->result_activated = gb_search_display_real_result_activated;
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",

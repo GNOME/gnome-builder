@@ -43,6 +43,8 @@ struct _GbSearchResult
 struct _GbSearchResultClass
 {
   GObjectClass parent;
+
+  void (*activate) (GbSearchResult *result);
 };
 
 GbSearchResult *gb_search_result_new        (const gchar          *markup,
@@ -51,6 +53,7 @@ gfloat          gb_search_result_get_score  (GbSearchResult       *result);
 const gchar    *gb_search_result_get_markup (GbSearchResult       *result);
 gint            gb_search_result_compare    (const GbSearchResult *a,
                                              const GbSearchResult *b);
+void            gb_search_result_activate   (GbSearchResult       *result);
 
 G_END_DECLS
 

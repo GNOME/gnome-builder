@@ -50,6 +50,7 @@ enum {
 };
 
 enum {
+  RESULT_ACTIVATED,
   RESULT_SELECTED,
   LAST_SIGNAL
 };
@@ -240,6 +241,21 @@ gb_search_display_group_unselect (GbSearchDisplayGroup *group)
 }
 
 static void
+gb_search_display_group_row_activated (GbSearchDisplayGroup *group,
+                                       GtkListBoxRow        *row,
+                                       GtkListBox           *list_box)
+{
+  GbSearchResult *result;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
+  g_return_if_fail (!row || GTK_IS_LIST_BOX_ROW (row));
+  g_return_if_fail (GTK_IS_LIST_BOX (list_box));
+
+  result = g_object_get_qdata (G_OBJECT (row), gQuarkResult);
+  g_signal_emit (group, gSignals [RESULT_ACTIVATED], 0, result);
+}
+
+static void
 gb_search_display_group_row_selected (GbSearchDisplayGroup *group,
                                       GtkListBoxRow        *row,
                                       GtkListBox           *list_box)
@@ -409,6 +425,18 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
   g_object_class_install_property (object_class, PROP_SIZE_GROUP,
                                    gParamSpecs [PROP_SIZE_GROUP]);
 
+  gSignals [RESULT_ACTIVATED] =
+    g_signal_new ("result-activated",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  GB_TYPE_SEARCH_RESULT);
+
   gSignals [RESULT_SELECTED] =
     g_signal_new ("result-selected",
                   G_TYPE_FROM_CLASS (klass),
@@ -444,6 +472,11 @@ gb_search_display_group_init (GbSearchDisplayGroup *self)
   g_signal_connect_object (self->priv->rows,
                            "keynav-failed",
                            G_CALLBACK (gb_search_display_group_keynav_failed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->priv->rows,
+                           "row-activated",
+                           G_CALLBACK (gb_search_display_group_row_activated),
                            self,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (self->priv->rows,
