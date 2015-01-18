@@ -2776,7 +2776,6 @@ gb_source_vim_move_page (GbSourceVim                 *vim,
 static void
 gb_source_vim_indent (GbSourceVim *vim)
 {
-#ifndef GB_SOURCE_VIM_EXTERNAL
   GtkSourceView *view;
   GtkTextBuffer *buffer;
   GtkTextIter iter;
@@ -2792,13 +2791,11 @@ gb_source_vim_indent (GbSourceVim *vim)
 
   if (gtk_text_buffer_get_selection_bounds (buffer, &iter, &selection))
     gtk_source_view_indent_lines (view, &iter, &selection);
-#endif
 }
 
 static void
 gb_source_vim_unindent (GbSourceVim *vim)
 {
-#ifndef GB_SOURCE_VIM_EXTERNAL
   GtkSourceView *view;
   GtkTextBuffer *buffer;
   GtkTextIter iter;
@@ -2814,7 +2811,6 @@ gb_source_vim_unindent (GbSourceVim *vim)
 
   if (gtk_text_buffer_get_selection_bounds (buffer, &iter, &selection))
     gtk_source_view_unindent_lines (view, &iter, &selection);
-#endif
 }
 
 static void
