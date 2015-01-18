@@ -183,6 +183,7 @@ load_repository_func (GTask        *task,
     }
 
   provider = g_object_new (GB_TYPE_GIT_SEARCH_PROVIDER,
+                           "workbench", source_object,
                            "repository", repository,
                            NULL);
   g_task_return_pointer (task, provider, g_object_unref);

@@ -23,9 +23,12 @@
 
 #include "fuzzy.h"
 #include "gb-git-search-provider.h"
+#include "gb-glib.h"
+#include "gb-editor-workspace.h"
 #include "gb-search-context.h"
 #include "gb-search-reducer.h"
 #include "gb-search-result.h"
+#include "gb-workbench.h"
 
 #define GB_GIT_SEARCH_PROVIDER_MAX_MATCHES 1000
 
@@ -35,6 +38,7 @@ struct _GbGitSearchProviderPrivate
   Fuzzy          *file_index;
   GFile          *repository_dir;
   gchar          *repository_shorthand;
+  GbWorkbench    *workbench;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbGitSearchProvider,
@@ -44,17 +48,29 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbGitSearchProvider,
 enum {
   PROP_0,
   PROP_REPOSITORY,
+  PROP_WORKBENCH,
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+static GQuark      gQuarkPath;
 
-GbSearchProvider *
-gb_git_search_provider_new (GgitRepository *repository)
+GbWorkbench *
+gb_git_search_provider_get_workbench (GbGitSearchProvider *provider)
 {
-  return g_object_new (GB_TYPE_GIT_SEARCH_PROVIDER,
-                       "repository", repository,
-                       NULL);
+  g_return_val_if_fail (GB_IS_GIT_SEARCH_PROVIDER (provider), NULL);
+
+  return provider->priv->workbench;
+}
+
+static void
+gb_git_search_provider_set_workbench (GbGitSearchProvider *provider,
+                                      GbWorkbench         *workbench)
+{
+  g_return_if_fail (GB_IS_GIT_SEARCH_PROVIDER (provider));
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  gb_set_weak_pointer (workbench, &provider->priv->workbench);
 }
 
 static void
@@ -230,6 +246,34 @@ split_path (const gchar  *path,
 }
 
 static void
+activate_cb (GbSearchResult *result,
+             gpointer        user_data)
+{
+  GbGitSearchProvider *provider = user_data;
+  GbWorkspace *workspace;
+  GFile *file;
+  GFile *base_location;
+  gchar *base_path;
+  gchar *path;
+
+  base_location = ggit_repository_get_workdir (provider->priv->repository);
+  base_path = g_file_get_path (base_location);
+  path = g_build_filename (base_path,
+                           g_object_get_qdata (G_OBJECT (result), gQuarkPath),
+                           NULL);
+  file = g_file_new_for_path (path);
+
+  workspace = gb_workbench_get_workspace (provider->priv->workbench,
+                                          GB_TYPE_EDITOR_WORKSPACE);
+  gb_editor_workspace_open (GB_EDITOR_WORKSPACE (workspace), file);
+
+  g_clear_object (&base_location);
+  g_clear_object (&file);
+  g_free (path);
+  g_free (base_path);
+}
+
+static void
 gb_git_search_provider_populate (GbSearchProvider *provider,
                                  GbSearchContext  *context,
                                  const gchar      *search_terms,
@@ -310,6 +354,12 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
                 g_string_append_printf (str, " / %s", parts [j]);
 
               result = gb_search_result_new (match->value, match->score);
+              g_object_set_qdata_full (G_OBJECT (result), gQuarkPath,
+                                       g_strdup (match->value), g_free);
+              g_signal_connect (result,
+                                "activate",
+                                G_CALLBACK (activate_cb),
+                                provider);
               gb_search_reducer_push (&reducer, result);
               g_object_unref (result);
 
@@ -404,6 +454,10 @@ gb_git_search_provider_get_property (GObject    *object,
       g_value_set_object (value, gb_git_search_provider_get_repository (self));
       break;
 
+    case PROP_WORKBENCH:
+      g_value_set_object (value, gb_git_search_provider_get_workbench (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -421,6 +475,10 @@ gb_git_search_provider_set_property (GObject      *object,
     {
     case PROP_REPOSITORY:
       gb_git_search_provider_set_repository (self, g_value_get_object (value));
+      break;
+
+    case PROP_WORKBENCH:
+      gb_git_search_provider_set_workbench (self, g_value_get_object (value));
       break;
 
     default:
@@ -457,6 +515,19 @@ gb_git_search_provider_class_init (GbGitSearchProviderClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_REPOSITORY,
                                    gParamSpecs [PROP_REPOSITORY]);
+
+  gParamSpecs [PROP_WORKBENCH] =
+    g_param_spec_object ("workbench",
+                         _("Workbench"),
+                         _("The workbench window."),
+                         GB_TYPE_WORKBENCH,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_WORKBENCH,
+                                   gParamSpecs [PROP_WORKBENCH]);
+
+  gQuarkPath = g_quark_from_static_string ("PATH");
 }
 
 static void

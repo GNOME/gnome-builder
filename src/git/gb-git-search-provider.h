@@ -52,7 +52,6 @@ struct _GbGitSearchProviderClass
 };
 
 GType             gb_git_search_provider_get_type       (void);
-GbSearchProvider *gb_git_search_provider_new            (GgitRepository      *repository);
 GgitRepository   *gb_git_search_provider_get_repository (GbGitSearchProvider *provider);
 void              gb_git_search_provider_set_repository (GbGitSearchProvider *provider,
                                                          GgitRepository      *repository);
