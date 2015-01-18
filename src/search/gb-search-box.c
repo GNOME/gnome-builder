@@ -207,6 +207,8 @@ gb_search_box_entry_key_press_event (GbSearchBox    *box,
       }
       break;
 
+    case GDK_KEY_Tab:
+    case GDK_KEY_KP_Tab:
     case GDK_KEY_Down:
     case GDK_KEY_KP_Down:
       gtk_widget_grab_focus (GTK_WIDGET (box->priv->display));
