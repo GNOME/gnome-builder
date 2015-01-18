@@ -1983,68 +1983,25 @@ gb_source_vim_join (GbSourceVim *vim)
   GtkTextIter iter;
   GtkTextIter selection;
   gboolean has_selection;
-  GString *str;
-  gchar **parts;
-  gchar *slice;
-  guint i;
-  guint offset;
 
   g_assert (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
   has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
+  /* Join with the following line. */
   if (!has_selection)
-    {
-      guint line;
+      gtk_text_iter_forward_line (&selection);
 
-      /*
-       * If there is no selection, we move the selection position to the end
-       * of the following line.
-       */
-      line = gtk_text_iter_get_line (&iter) + 1;
-      gtk_text_buffer_get_iter_at_line (buffer, &selection, line);
-      if (gtk_text_iter_get_line (&selection) != line)
-        return;
-
-      while (!gtk_text_iter_ends_line (&selection))
-        if (!gtk_text_iter_forward_char (&selection))
-          break;
-    }
-  else if (gtk_text_iter_compare (&iter, &selection) > 0)
-    text_iter_swap (&iter, &selection);
-
-  offset = gtk_text_iter_get_offset (&iter);
-
-  slice = gtk_text_iter_get_slice (&iter, &selection);
-  parts = g_strsplit (slice, "\n", -1);
-  str = g_string_new (NULL);
-
-  for (i = 0; parts [i]; i++)
-    {
-      g_strstrip (parts [i]);
-      if (*parts [i])
-        {
-          if (str->len)
-            g_string_append (str, " ");
-          g_string_append (str, parts [i]);
-        }
-    }
-
-  gtk_text_buffer_begin_user_action (buffer);
-  gtk_text_buffer_delete (buffer, &iter, &selection);
-  gtk_text_buffer_insert (buffer, &iter, str->str, str->len);
-  gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
+  gtk_source_buffer_join_lines (GTK_SOURCE_BUFFER (buffer), &iter, &selection);
   gtk_text_buffer_select_range (buffer, &iter, &iter);
-  gtk_text_buffer_end_user_action (buffer);
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
   gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
-
-  g_strfreev (parts);
-  g_free (slice);
-  g_string_free (str, TRUE);
 }
 
 static void
