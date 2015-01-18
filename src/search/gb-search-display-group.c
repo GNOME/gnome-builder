@@ -60,6 +60,20 @@ static GQuark      gQuarkRow;
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
+GbSearchResult *
+gb_search_display_group_get_first (GbSearchDisplayGroup *group)
+{
+  GtkListBoxRow *row;
+
+  g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group), NULL);
+
+  row = gtk_list_box_get_row_at_y (group->priv->rows, 1);
+  if (row)
+    return g_object_get_qdata (G_OBJECT (row), gQuarkResult);
+
+  return NULL;
+}
+
 GbSearchProvider *
 gb_search_display_group_get_provider (GbSearchDisplayGroup *group)
 {

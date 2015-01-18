@@ -168,9 +168,26 @@ gb_search_display_keynav_failed (GbSearchDisplay      *display,
 }
 
 void
-gb_search_display_activate (GbSearchDisplay *display)
+gb_search_display_activate (GbSearchDisplay *self)
 {
-  g_warning ("TODO: implement display_activate()");
+  GbSearchDisplayPrivate *priv;
+  GbSearchResult *result = NULL;
+  guint i;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (self));
+
+  priv = self->priv;
+
+  for (i = 0; !result && i < priv->providers->len; i++)
+    {
+      ProviderEntry *ptr;
+
+      ptr = &g_array_index (self->priv->providers, ProviderEntry, i);
+      result = gb_search_display_group_get_first (ptr->group);
+    }
+
+  if (result)
+    g_signal_emit (self, gSignals [RESULT_ACTIVATED], 0, result);
 }
 
 static void

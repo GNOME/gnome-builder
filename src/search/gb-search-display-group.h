@@ -56,6 +56,7 @@ void              gb_search_display_group_set_count     (GbSearchDisplayGroup *g
 void              gb_search_display_group_unselect      (GbSearchDisplayGroup *group);
 void              gb_search_display_group_focus_first   (GbSearchDisplayGroup *group);
 void              gb_search_display_group_focus_last    (GbSearchDisplayGroup *group);
+GbSearchResult   *gb_search_display_group_get_first     (GbSearchDisplayGroup *group);
 
 G_END_DECLS
 
