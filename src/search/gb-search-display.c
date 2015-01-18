@@ -448,6 +448,22 @@ gb_search_display_set_context (GbSearchDisplay *display,
 }
 
 static void
+gb_search_display_grab_focus (GtkWidget *widget)
+{
+  GbSearchDisplay *self = (GbSearchDisplay *)widget;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY (self));
+
+  if (self->priv->providers->len)
+    {
+      ProviderEntry *ptr;
+
+      ptr = &g_array_index (self->priv->providers, ProviderEntry, 0);
+      gtk_widget_child_focus (GTK_WIDGET (ptr->group), GTK_DIR_DOWN);
+    }
+}
+
+static void
 gb_search_display_dispose (GObject *object)
 {
   GbSearchDisplayPrivate *priv = GB_SEARCH_DISPLAY (object)->priv;
@@ -501,6 +517,9 @@ static void
 gb_search_display_class_init (GbSearchDisplayClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  widget_class->grab_focus = gb_search_display_grab_focus;
 
   object_class->dispose = gb_search_display_dispose;
   object_class->get_property = gb_search_display_get_property;
