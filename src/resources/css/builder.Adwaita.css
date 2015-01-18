@@ -151,24 +151,28 @@ GtkButton.tab-header-first {
     border-left: none;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
+    box-shadow: none;
 }
 GtkMenuButton.tab-header-last .button,
 GtkButton.tab-header-last {
     border-right: none;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
+    box-shadow: none;
 }
 GtkMenuButton.tab-control-first .button,
 GtkButton.tab-control-first {
     border-left: none;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
+    box-shadow: none;
 }
 GtkMenuButton.tab-control-last .button,
 GtkButton.tab-control-last {
     border-right: none;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
+    box-shadow: none;
 }
 
 
