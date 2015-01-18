@@ -2571,7 +2571,8 @@ gb_source_vim_move_to_line_n (GbSourceVim *vim,
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gtk_text_view_scroll_to_iter (vim->priv->text_view, &iter, 0.0, TRUE,
+                                0.0, 0.5);
 }
 
 static gboolean
