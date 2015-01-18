@@ -1994,7 +1994,7 @@ gb_source_vim_join (GbSourceVim *vim)
 
   /* Join with the following line. */
   if (!has_selection)
-      gtk_text_iter_forward_line (&selection);
+    gtk_text_iter_forward_line (&selection);
 
   gtk_source_buffer_join_lines (GTK_SOURCE_BUFFER (buffer), &iter, &selection);
   gtk_text_buffer_select_range (buffer, &iter, &iter);
