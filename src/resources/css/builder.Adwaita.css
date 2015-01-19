@@ -207,9 +207,12 @@ GtkScrolledWindow.gb-linked-scroller {
 
 
 /*
- * Rows inside of global search. They have a really confusing transition
- * by default.
+ * Disable various animatinos that are enabled by default and really annoying
+ * to the overall flow of Builder.
  */
 GbSearchDisplayGroup GtkListBox .list-row {
+    transition: none;
+}
+GbDocumentStack .button {
     transition: none;
 }
