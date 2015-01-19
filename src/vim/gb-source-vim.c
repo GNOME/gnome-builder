@@ -4039,10 +4039,13 @@ gb_source_vim_op_set (GbSourceVim *vim,
 static GbSourceVimOperation
 gb_source_vim_parse_operation (const gchar *command_text)
 {
-  GRegex *goto_line_regex = NULL;
+  static GRegex *goto_line_regex = NULL;
   GbSourceVimOperation ret = NULL;
 
   g_return_val_if_fail (command_text, NULL);
+
+  if (!goto_line_regex)
+    goto_line_regex = g_regex_new ("^([0-9]+|\\$)$", 0, 0, NULL);
 
   if (g_str_equal (command_text, "sort"))
     ret = gb_source_vim_op_sort;
@@ -4058,11 +4061,8 @@ gb_source_vim_parse_operation (const gchar *command_text)
     ret = gb_source_vim_op_search_and_replace;
   else if (g_str_has_prefix (command_text, "s")) /* not ideal */
     ret = gb_source_vim_op_search_and_replace;
-  else if ((goto_line_regex = g_regex_new ("^([0-9]+|\\$)$", 0, 0, NULL)) &&
-           g_regex_match (goto_line_regex, command_text, 0, NULL))
+  else if (g_regex_match (goto_line_regex, command_text, 0, NULL))
     ret = gb_source_vim_op_goto_line;
-
-  g_clear_pointer (&goto_line_regex, g_regex_unref);
 
   return ret;
 }
