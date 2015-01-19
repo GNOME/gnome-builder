@@ -1128,15 +1128,13 @@ gb_editor_frame_on_jump_to_doc (GbEditorFrame *self,
 }
 
 static void
-gb_editor_frame_on_drop_uris (GbEditorFrame *self,
+gb_editor_frame_on_drop_uris (GbEditorFrame  *self,
                               const gchar   **uri_list,
-                              GbSourceView  *source_view)
+                              GbSourceView   *source_view)
 {
-  GActionGroup *action_group;
-  GbWorkbench *workbench;
   GVariantBuilder *builder;
   GVariant *variant;
-  int i;
+  guint i;
 
   ENTRY;
 
@@ -1145,17 +1143,14 @@ gb_editor_frame_on_drop_uris (GbEditorFrame *self,
   g_return_if_fail (uri_list);
 
   builder = g_variant_builder_new (G_VARIANT_TYPE_STRING_ARRAY);
-  for (i = 0; uri_list[i] != NULL; i++)
-    {
-      g_variant_builder_add (builder, "s", uri_list[i]);
-    }
+  for (i = 0; uri_list [i]; i++)
+    g_variant_builder_add (builder, "s", uri_list[i]);
   variant = g_variant_builder_end (builder);
   g_variant_builder_unref (builder);
 
-  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
-  action_group = gtk_widget_get_action_group (GTK_WIDGET (workbench),
-                                              "workspace");
-  g_action_group_activate_action (action_group, "open-uri-list", variant);
+  gb_widget_activate_action (GTK_WIDGET (self),
+                             "workspace", "open-uri-list",
+                             variant);
 
   EXIT;
 }

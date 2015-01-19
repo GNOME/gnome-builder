@@ -46,9 +46,8 @@
 #include "gb-source-vim.h"
 #include "gb-widget.h"
 
-enum
-{
-	TARGET_URI_LIST = 100
+enum {
+  TARGET_URI_LIST = 100
 };
 
 struct _GbSourceViewPrivate
@@ -2006,11 +2005,13 @@ gb_source_view_drag_data_received (GtkWidget        *widget,
     {
     case TARGET_URI_LIST:
       uri_list = gb_dnd_get_uri_list (selection_data);
-      if (uri_list != NULL)
+
+      if (uri_list)
         {
-          g_signal_emit (widget, gSignals[DROP_URIS], 0, uri_list);
+          g_signal_emit (widget, gSignals [DROP_URIS], 0, uri_list);
           g_strfreev (uri_list);
         }
+
       gtk_drag_finish (context, TRUE, FALSE, timestamp);
       break;
 
@@ -2375,7 +2376,7 @@ static void
 gb_source_view_init (GbSourceView *view)
 {
   GtkSourceCompletion *completion;
-  GtkTargetList *tl;
+  GtkTargetList *target_list;
 
   view->priv = gb_source_view_get_instance_private (view);
 
@@ -2388,16 +2389,21 @@ gb_source_view_init (GbSourceView *view)
                     G_CALLBACK (gb_source_view_notify_buffer),
                     NULL);
 
+  /*
+   * Add various completion providers.
+   */
   view->priv->snippets_provider =
     g_object_new (GB_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER,
                   "source-view", view,
                   NULL);
-
   view->priv->words_provider =
     g_object_new (GTK_SOURCE_TYPE_COMPLETION_WORDS,
                   "minimum-word-size", 4,
                   NULL);
 
+  /*
+   * Setup VIM integration.
+   */
   view->priv->vim = g_object_new (GB_TYPE_SOURCE_VIM,
                                   "enabled", FALSE,
                                   "text-view", view,
@@ -2413,13 +2419,17 @@ gb_source_view_init (GbSourceView *view)
                            view,
                            G_CONNECT_SWAPPED);
 
+  /*
+   * We block completion when we are not focused so that two SourceViews
+   * viewing the same GtkTextBuffer do not both show completion windows.
+   */
   completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (view));
   gtk_source_completion_block_interactive (completion);
 
-  /* Drag and drop support */
-  tl = gtk_drag_dest_get_target_list (GTK_WIDGET (view));
-  if (tl != NULL)
-    {
-      gtk_target_list_add_uri_targets (tl, TARGET_URI_LIST);
-    }
+  /*
+   * Drag and drop support
+   */
+  target_list = gtk_drag_dest_get_target_list (GTK_WIDGET (view));
+  if (target_list)
+    gtk_target_list_add_uri_targets (target_list, TARGET_URI_LIST);
 }

@@ -1,6 +1,6 @@
 /* gb-dnd.c
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Dimitris Zenios <dimitris.zenios@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ gb_dnd_get_uri_list (GtkSelectionData *selection_data)
   g_return_val_if_fail (selection_data, NULL);
   g_return_val_if_fail (gtk_selection_data_get_length (selection_data) > 0, NULL);
 
-  data = (const gchar*) gtk_selection_data_get_data (selection_data);
+  data = (const gchar *)gtk_selection_data_get_data (selection_data);
+
   return g_uri_list_extract_uris (data);
 }

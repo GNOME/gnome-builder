@@ -34,11 +34,11 @@
 
 enum
 {
-	TARGET_URI_LIST = 100
+  TARGET_URI_LIST = 100
 };
 
 static const GtkTargetEntry drop_types [] = {
-	{ "text/uri-list", 0, TARGET_URI_LIST}
+  { "text/uri-list", 0, TARGET_URI_LIST}
 };
 
 struct _GbEditorWorkspacePrivate
@@ -83,20 +83,26 @@ gb_editor_workspace_open (GbEditorWorkspace *workspace,
 }
 
 static void
-gb_editor_workspace_open_uri_list (GbEditorWorkspace *workspace,
-                                   const gchar        **uri_list)
+gb_editor_workspace_open_uri_list (GbEditorWorkspace  *workspace,
+                                   const gchar       **uri_list)
 {
-  int i;
   GFile *file;
+  guint i;
 
   g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
   g_return_if_fail (uri_list);
 
-  for (i = 0; uri_list[i] != NULL; i++)
+  for (i = 0; uri_list [i]; i++)
     {
-      file = g_file_new_for_commandline_arg (uri_list[i]);
-      gb_editor_workspace_open (workspace, file);
-      g_clear_object (&file);
+      file = g_file_new_for_commandline_arg (uri_list [i]);
+
+      if (file)
+        {
+          gb_editor_workspace_open (workspace, file);
+          g_clear_object (&file);
+        }
+      else
+        g_warning ("Received invalid URI target");
     }
 }
 
@@ -120,11 +126,14 @@ gb_editor_workspace_drag_data_received (GtkWidget        *widget,
     {
     case TARGET_URI_LIST:
       uri_list = gb_dnd_get_uri_list (selection_data);
-      if (uri_list != NULL)
+
+      if (uri_list)
         {
-          gb_editor_workspace_open_uri_list (workspace, (const gchar **) uri_list);
+          gb_editor_workspace_open_uri_list (workspace,
+                                             (const gchar **)uri_list);
   				g_strfreev (uri_list);
         }
+
       handled = TRUE;
       break;
 
