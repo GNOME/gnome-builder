@@ -201,12 +201,9 @@ gb_editor_workspace_action_open_uri_list (GSimpleAction *action,
     }
 }
 
-static void
-gb_editor_workspace_action_new_document (GSimpleAction *action,
-                                         GVariant      *parameter,
-                                         gpointer       user_data)
+void
+gb_editor_workspace_new_document (GbEditorWorkspace *workspace)
 {
-  GbEditorWorkspace *workspace = user_data;
   GbDocumentManager *manager;
   GbWorkbench *workbench;
   GbDocument *document;
@@ -221,6 +218,16 @@ gb_editor_workspace_action_new_document (GSimpleAction *action,
   gb_document_grid_focus_document (workspace->priv->document_grid, document);
 
   g_clear_object (&document);
+}
+
+static void
+gb_editor_workspace_action_new_document (GSimpleAction *action,
+                                         GVariant      *parameter,
+                                         gpointer       user_data)
+{
+  GbEditorWorkspace *workspace = user_data;
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+  gb_editor_workspace_new_document (workspace);
 }
 
 static void

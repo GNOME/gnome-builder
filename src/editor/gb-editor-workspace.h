@@ -48,9 +48,10 @@ struct _GbEditorWorkspaceClass
   GbWorkspaceClass parent_class;
 };
 
-GType gb_editor_workspace_get_type (void);
-void  gb_editor_workspace_open     (GbEditorWorkspace *workspace,
-                                    GFile             *file);
+GType gb_editor_workspace_get_type     (void);
+void  gb_editor_workspace_new_document (GbEditorWorkspace *workspace);
+void  gb_editor_workspace_open         (GbEditorWorkspace *workspace,
+                                        GFile             *file);
 
 G_END_DECLS
 
