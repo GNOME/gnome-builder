@@ -33,7 +33,7 @@ gb_search_reducer_init (GbSearchReducer  *reducer,
   reducer->context = context;
   reducer->provider = provider;
   reducer->sequence = g_sequence_new (g_object_unref);
-  reducer->max_results = 15;
+  reducer->max_results = 10;
   reducer->count = 0;
 }
 
