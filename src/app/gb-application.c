@@ -398,6 +398,7 @@ static void
 gb_application_activate (GApplication *application)
 {
   GbWorkbench *workbench;
+  GbWorkspace *workspace;
   GList *list;
 
   g_return_if_fail (GB_IS_APPLICATION (application));
@@ -414,6 +415,8 @@ gb_application_activate (GApplication *application)
     }
 
   workbench = gb_application_create_workbench (application);
+  workspace = gb_workbench_get_workspace (workbench, GB_TYPE_EDITOR_WORKSPACE);
+  gb_editor_workspace_new_document (GB_EDITOR_WORKSPACE (workspace));
 
   gtk_window_present (GTK_WINDOW (workbench));
 }
@@ -428,6 +431,8 @@ gb_application_open (GApplication   *application,
   GbWorkspace *workspace;
   GList *list;
   guint i;
+
+  ENTRY;
 
   g_assert (GB_IS_APPLICATION (application));
 
@@ -457,6 +462,8 @@ gb_application_open (GApplication   *application,
       g_return_if_fail (G_IS_FILE (files [i]));
       gb_editor_workspace_open (GB_EDITOR_WORKSPACE (workspace), files [i]);
     }
+
+  EXIT;
 }
 
 static void
