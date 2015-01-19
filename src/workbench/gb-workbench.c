@@ -468,22 +468,6 @@ gb_workbench_action_save_all (GSimpleAction *action,
 }
 
 static void
-on_command_bar_notify_child_revealed (GbCommandBar *command_bar,
-                                      GParamSpec   *pspec,
-                                      GbWorkbench  *workbench)
-{
-  gboolean reveal_child;
-
-  g_return_if_fail (GB_IS_COMMAND_BAR (command_bar));
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-
-  reveal_child = gtk_revealer_get_reveal_child (GTK_REVEALER (command_bar));
-
-  if (!reveal_child && workbench->priv->active_workspace)
-    gtk_widget_grab_focus (GTK_WIDGET (workbench->priv->active_workspace));
-}
-
-static void
 gb_workbench_navigation_changed (GbWorkbench      *workbench,
                                  GParamSpec       *pspec,
                                  GbNavigationList *list)
@@ -772,10 +756,6 @@ gb_workbench_constructed (GObject *object)
   action = g_action_map_lookup_action (G_ACTION_MAP (workbench), "go-forward");
   g_object_bind_property (priv->navigation_list, "can-go-forward",
                           action, "enabled", G_BINDING_SYNC_CREATE);
-
-  g_signal_connect (priv->command_bar, "notify::child-revealed",
-                    G_CALLBACK (on_command_bar_notify_child_revealed),
-                    workbench);
 
   search_manager = gb_workbench_get_search_manager (workbench);
   gb_search_box_set_search_manager (workbench->priv->search_box,
