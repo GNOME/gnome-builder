@@ -3245,7 +3245,7 @@ gb_source_vim_event_after_cb (GtkTextView *text_view,
                               GbSourceVim *vim)
 {
   if (vim->priv->mode == GB_SOURCE_VIM_INSERT)
-      gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+    gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
 }
 
 static gboolean
@@ -3916,6 +3916,21 @@ gb_source_vim_op_nohl (GbSourceVim *vim,
 }
 
 static void
+gb_source_vim_op_goto_line (GbSourceVim *vim,
+                            const gchar *command_text)
+{
+  if (command_text[0] == '$')
+    gb_source_vim_move_to_end (vim);
+  else
+    {
+      int line = atoi (command_text);
+      line = line > 0 ? line - 1 : 0;
+
+      gb_source_vim_move_to_line_n (vim, line);
+    }
+}
+
+static void
 gb_source_vim_op_set_pair (GbSourceVim *vim,
                            const gchar *key,
                            const gchar *value)
@@ -4024,24 +4039,33 @@ gb_source_vim_op_set (GbSourceVim *vim,
 static GbSourceVimOperation
 gb_source_vim_parse_operation (const gchar *command_text)
 {
+  GRegex *goto_line_regex;
+  GbSourceVimOperation ret = NULL;
+
   g_return_val_if_fail (command_text, NULL);
 
-  if (g_str_equal (command_text, "sort"))
-    return gb_source_vim_op_sort;
-  else if (g_str_equal (command_text, "nohl"))
-    return gb_source_vim_op_nohl;
-  else if (g_str_has_prefix (command_text, "set "))
-    return gb_source_vim_op_set;
-  else if (g_str_has_prefix (command_text, "syntax "))
-    return gb_source_vim_op_syntax;
-  else if (g_str_has_prefix (command_text, "colorscheme "))
-    return gb_source_vim_op_colorscheme;
-  else if (g_str_has_prefix (command_text, "%s"))
-    return gb_source_vim_op_search_and_replace;
-  else if (g_str_has_prefix (command_text, "s")) /* not ideal */
-    return gb_source_vim_op_search_and_replace;
+  goto_line_regex = g_regex_new ("^([0-9]+|\\$)$", 0, 0, NULL);
 
-  return NULL;
+  if (g_str_equal (command_text, "sort"))
+    ret = gb_source_vim_op_sort;
+  else if (g_str_equal (command_text, "nohl"))
+    ret = gb_source_vim_op_nohl;
+  else if (g_str_has_prefix (command_text, "set "))
+    ret = gb_source_vim_op_set;
+  else if (g_str_has_prefix (command_text, "syntax "))
+    ret = gb_source_vim_op_syntax;
+  else if (g_str_has_prefix (command_text, "colorscheme "))
+    ret = gb_source_vim_op_colorscheme;
+  else if (g_str_has_prefix (command_text, "%s"))
+    ret = gb_source_vim_op_search_and_replace;
+  else if (g_str_has_prefix (command_text, "s")) /* not ideal */
+    ret = gb_source_vim_op_search_and_replace;
+  else if (g_regex_match (goto_line_regex, command_text, 0, NULL))
+    ret = gb_source_vim_op_goto_line;
+
+  g_regex_unref (goto_line_regex);
+
+  return ret;
 }
 
 gboolean
