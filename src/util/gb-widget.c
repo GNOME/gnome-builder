@@ -209,3 +209,50 @@ gb_widget_fade_show (GtkWidget *widget)
                               NULL);
     }
 }
+
+void
+gb_widget_activate_action (GtkWidget   *widget,
+                           const gchar *prefix,
+                           const gchar *action_name,
+                           GVariant    *parameter)
+{
+  GApplication *app;
+  GtkWidget *toplevel;
+  GActionGroup *group = NULL;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (prefix);
+  g_return_if_fail (action_name);
+
+  app = g_application_get_default ();
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  while ((group == NULL) && (widget != NULL))
+    {
+      group = gtk_widget_get_action_group (widget, prefix);
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  if (!group && g_str_equal (prefix, "win") && G_IS_ACTION_GROUP (toplevel))
+    group = G_ACTION_GROUP (toplevel);
+
+  if (!group && g_str_equal (prefix, "app") && G_IS_ACTION_GROUP (app))
+    group = G_ACTION_GROUP (app);
+
+  if (group)
+    {
+      if (g_action_group_has_action (group, action_name))
+        {
+          g_action_group_activate_action (group, action_name, parameter);
+          return;
+        }
+    }
+
+  if (g_variant_is_floating (parameter))
+    {
+      parameter = g_variant_ref_sink (parameter);
+      g_variant_unref (parameter);
+    }
+
+  g_warning ("Failed to resolve action %s.%s", prefix, action_name);
+}
