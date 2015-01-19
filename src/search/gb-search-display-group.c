@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 
 #include "gb-search-display-group.h"
+#include "gb-search-display-row.h"
 #include "gb-search-provider.h"
 #include "gb-search-result.h"
 #include "gb-widget.h"
@@ -55,7 +56,6 @@ enum {
   LAST_SIGNAL
 };
 
-static GQuark      gQuarkResult;
 static GQuark      gQuarkRow;
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
@@ -68,8 +68,15 @@ gb_search_display_group_get_first (GbSearchDisplayGroup *group)
   g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group), NULL);
 
   row = gtk_list_box_get_row_at_y (group->priv->rows, 1);
+
   if (row)
-    return g_object_get_qdata (G_OBJECT (row), gQuarkResult);
+    {
+      GtkWidget *child;
+
+      child = gtk_bin_get_child (GTK_BIN (row));
+      if (GB_IS_SEARCH_DISPLAY_ROW (child))
+        return gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child));
+    }
 
   return NULL;
 }
@@ -113,52 +120,21 @@ gb_search_display_group_set_size_group (GbSearchDisplayGroup *group,
 GtkWidget *
 gb_search_display_group_create_row (GbSearchResult *result)
 {
-  GtkProgressBar *progress;
   GtkListBoxRow *row;
-  const gchar *markup;
-  GtkLabel *label;
-  GtkBox *box;
-  gfloat score;
+  GbSearchDisplayRow *disp_row;
 
   g_return_val_if_fail (GB_IS_SEARCH_RESULT (result), NULL);
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "visible", TRUE,
                       NULL);
-  g_object_set_qdata_full (G_OBJECT (row), gQuarkResult,
-                           g_object_ref (result), g_object_unref);
-  g_object_set_qdata (G_OBJECT (result), gQuarkRow, row);
-  box = g_object_new (GTK_TYPE_BOX,
-                      "orientation", GTK_ORIENTATION_HORIZONTAL,
-                      "spacing", 6,
-                      "visible", TRUE,
-                      NULL);
-  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (box));
-  markup = gb_search_result_get_markup (result);
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "hexpand", TRUE,
-                        "label", markup,
-                        "use-markup", TRUE,
-                        "visible", TRUE,
-                        "xalign", 0.0f,
-                        "xpad", 6,
-                        "ypad", 3,
-                        NULL);
-  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
-  score = gb_search_result_get_score (result);
-  progress = g_object_new (GTK_TYPE_PROGRESS_BAR,
-                           "fraction", score,
-                           "hexpand", FALSE,
-                           "inverted", TRUE,
+  disp_row = g_object_new (GB_TYPE_SEARCH_DISPLAY_ROW,
                            "visible", TRUE,
-                           "width-request", 30,
-                           "valign", GTK_ALIGN_CENTER,
-                           "margin-start", 6,
-                           "margin-end", 6,
+                           "result", result,
                            NULL);
-  gtk_style_context_add_class (
-    gtk_widget_get_style_context (GTK_WIDGET (progress)), "osd");
-  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (progress));
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (disp_row));
+
+  g_object_set_qdata (G_OBJECT (result), gQuarkRow, row);
 
   return GTK_WIDGET (row);
 }
@@ -222,6 +198,8 @@ compare_cb (GtkListBoxRow *row1,
             gpointer       user_data)
 {
   GtkListBoxRow *more_row = user_data;
+  GtkWidget *child1;
+  GtkWidget *child2;
   GbSearchResult *result1;
   GbSearchResult *result2;
   gfloat score1;
@@ -232,8 +210,11 @@ compare_cb (GtkListBoxRow *row1,
   else if (row2 == more_row)
     return -1;
 
-  result1 = g_object_get_qdata (G_OBJECT (row1), gQuarkResult);
-  result2 = g_object_get_qdata (G_OBJECT (row2), gQuarkResult);
+  child1 = gtk_bin_get_child (GTK_BIN (row1));
+  child2 = gtk_bin_get_child (GTK_BIN (row2));
+
+  result1 = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child1));
+  result2 = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child2));
 
   score1 = gb_search_result_get_score (result1);
   score2 = gb_search_result_get_score (result2);
@@ -259,14 +240,22 @@ gb_search_display_group_row_activated (GbSearchDisplayGroup *group,
                                        GtkListBoxRow        *row,
                                        GtkListBox           *list_box)
 {
-  GbSearchResult *result;
+  GtkWidget *child;
 
   g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
   g_return_if_fail (!row || GTK_IS_LIST_BOX_ROW (row));
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
 
-  result = g_object_get_qdata (G_OBJECT (row), gQuarkResult);
-  g_signal_emit (group, gSignals [RESULT_ACTIVATED], 0, result);
+  child = gtk_bin_get_child (GTK_BIN (row));
+
+  if (GB_IS_SEARCH_DISPLAY_ROW (child))
+    {
+      GbSearchResult *result;
+
+      result = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child));
+      if (result)
+        g_signal_emit (group, gSignals [RESULT_ACTIVATED], 0, result);
+    }
 }
 
 static void
@@ -274,16 +263,21 @@ gb_search_display_group_row_selected (GbSearchDisplayGroup *group,
                                       GtkListBoxRow        *row,
                                       GtkListBox           *list_box)
 {
+  GtkWidget *child;
+
   g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
   g_return_if_fail (!row || GTK_IS_LIST_BOX_ROW (row));
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
 
-  if (row)
+  child = gtk_bin_get_child (GTK_BIN (row));
+
+  if (GB_IS_SEARCH_DISPLAY_ROW (child))
     {
       GbSearchResult *result;
 
-      result = g_object_get_qdata (G_OBJECT (row), gQuarkResult);
-      g_signal_emit (group, gSignals [RESULT_SELECTED], 0, result);
+      result = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child));
+      if (result)
+        g_signal_emit (group, gSignals [RESULT_SELECTED], 0, result);
     }
 }
 
@@ -469,7 +463,6 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
   GB_WIDGET_CLASS_BIND (widget_class, GbSearchDisplayGroup, label);
   GB_WIDGET_CLASS_BIND (widget_class, GbSearchDisplayGroup, rows);
 
-  gQuarkResult = g_quark_from_static_string ("GB_SEARCH_RESULT");
   gQuarkRow = g_quark_from_static_string ("GB_SEARCH_DISPLAY_ROW");
 }
 

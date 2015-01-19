@@ -19,13 +19,14 @@
 #ifndef GB_SEARCH_TYPES_H
 #define GB_SEARCH_TYPES_H
 
-#include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 #define GB_TYPE_SEARCH_CONTEXT       (gb_search_context_get_type())
 #define GB_TYPE_SEARCH_DISPLAY       (gb_search_display_get_type())
 #define GB_TYPE_SEARCH_DISPLAY_GROUP (gb_search_display_group_get_type())
+#define GB_TYPE_SEARCH_DISPLAY_ROW   (gb_search_display_row_get_type())
 #define GB_TYPE_SEARCH_MANAGER       (gb_search_manager_get_type())
 #define GB_TYPE_SEARCH_PROVIDER      (gb_search_provider_get_type())
 #define GB_TYPE_SEARCH_RESULT        (gb_search_result_get_type())
@@ -42,6 +43,10 @@ typedef struct _GbSearchDisplayGroup        GbSearchDisplayGroup;
 typedef struct _GbSearchDisplayGroupClass   GbSearchDisplayGroupClass;
 typedef struct _GbSearchDisplayGroupPrivate GbSearchDisplayGroupPrivate;
 
+typedef struct _GbSearchDisplayRow        GbSearchDisplayRow;
+typedef struct _GbSearchDisplayRowClass   GbSearchDisplayRowClass;
+typedef struct _GbSearchDisplayRowPrivate GbSearchDisplayRowPrivate;
+
 typedef struct _GbSearchProvider        GbSearchProvider;
 typedef struct _GbSearchProviderClass   GbSearchProviderClass;
 typedef struct _GbSearchProviderPrivate GbSearchProviderPrivate;
@@ -57,6 +62,7 @@ typedef struct _GbSearchResultPrivate   GbSearchResultPrivate;
 GType gb_search_context_get_type       (void);
 GType gb_search_display_get_type       (void);
 GType gb_search_display_group_get_type (void);
+GType gb_search_display_row_get_type   (void);
 GType gb_search_manager_get_type       (void);
 GType gb_search_provider_get_type      (void);
 GType gb_search_result_get_type        (void);

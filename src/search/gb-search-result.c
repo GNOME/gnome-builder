@@ -22,7 +22,8 @@
 
 struct _GbSearchResultPrivate
 {
-  gchar  *markup;
+  gchar  *subtitle;
+  gchar  *title;
   gfloat  score;
 };
 
@@ -30,8 +31,9 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbSearchResult, gb_search_result, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
-  PROP_MARKUP,
   PROP_SCORE,
+  PROP_SUBTITLE,
+  PROP_TITLE,
   LAST_PROP
 };
 
@@ -56,33 +58,56 @@ gb_search_result_compare (const GbSearchResult *a,
 }
 
 GbSearchResult *
-gb_search_result_new (const gchar *markup,
+gb_search_result_new (const gchar *title,
+                      const gchar *subtitle,
                       gfloat       score)
 {
   return g_object_new (GB_TYPE_SEARCH_RESULT,
-                       "markup", markup,
                        "score", score,
+                       "subtitle", subtitle,
+                       "title", title,
                        NULL);
 }
 
 const gchar *
-gb_search_result_get_markup (GbSearchResult *result)
+gb_search_result_get_subtitle (GbSearchResult *result)
 {
   g_return_val_if_fail (GB_IS_SEARCH_RESULT (result), NULL);
 
-  return result->priv->markup;
+  return result->priv->subtitle;
+}
+
+const gchar *
+gb_search_result_get_title (GbSearchResult *result)
+{
+  g_return_val_if_fail (GB_IS_SEARCH_RESULT (result), NULL);
+
+  return result->priv->title;
 }
 
 static void
-gb_search_result_set_markup (GbSearchResult *result,
-                             const gchar    *markup)
+gb_search_result_set_subtitle (GbSearchResult *result,
+                            const gchar    *subtitle)
 {
   g_return_if_fail (GB_IS_SEARCH_RESULT (result));
 
-  if (result->priv->markup != markup)
+  if (result->priv->subtitle != subtitle)
     {
-      g_free (result->priv->markup);
-      result->priv->markup = g_strdup (markup);
+      g_free (result->priv->subtitle);
+      result->priv->subtitle = g_strdup (subtitle);
+    }
+}
+
+static void
+gb_search_result_set_title (GbSearchResult *result,
+                            const gchar    *title)
+{
+  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+
+  if (result->priv->title != title)
+    {
+      g_free (result->priv->title);
+      result->priv->title = g_strdup (title);
     }
 }
 
@@ -118,7 +143,8 @@ gb_search_result_finalize (GObject *object)
 {
   GbSearchResultPrivate *priv = GB_SEARCH_RESULT (object)->priv;
 
-  g_clear_pointer (&priv->markup, g_free);
+  g_clear_pointer (&priv->subtitle, g_free);
+  g_clear_pointer (&priv->title, g_free);
 
   G_OBJECT_CLASS (gb_search_result_parent_class)->finalize (object);
 }
@@ -133,12 +159,16 @@ gb_search_result_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_MARKUP:
-      g_value_set_string (value, gb_search_result_get_markup (self));
-      break;
-
     case PROP_SCORE:
       g_value_set_float (value, gb_search_result_get_score (self));
+      break;
+
+    case PROP_SUBTITLE:
+      g_value_set_string (value, gb_search_result_get_subtitle (self));
+      break;
+
+    case PROP_TITLE:
+      g_value_set_string (value, gb_search_result_get_title (self));
       break;
 
     default:
@@ -156,12 +186,16 @@ gb_search_result_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_MARKUP:
-      gb_search_result_set_markup (self, g_value_get_string (value));
+    case PROP_SUBTITLE:
+      gb_search_result_set_subtitle (self, g_value_get_string (value));
       break;
 
     case PROP_SCORE:
       gb_search_result_set_score (self, g_value_get_float (value));
+      break;
+
+    case PROP_TITLE:
+      gb_search_result_set_title (self, g_value_get_string (value));
       break;
 
     default:
@@ -178,17 +212,6 @@ gb_search_result_class_init (GbSearchResultClass *klass)
   object_class->get_property = gb_search_result_get_property;
   object_class->set_property = gb_search_result_set_property;
 
-  gParamSpecs [PROP_MARKUP] =
-    g_param_spec_string ("markup",
-                         _("Markup"),
-                         _("The pango markup to be rendered."),
-                         NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MARKUP,
-                                   gParamSpecs [PROP_MARKUP]);
-
   gParamSpecs [PROP_SCORE] =
     g_param_spec_float ("score",
                         _("Score"),
@@ -201,6 +224,28 @@ gb_search_result_class_init (GbSearchResultClass *klass)
                          G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SCORE,
                                    gParamSpecs [PROP_SCORE]);
+
+  gParamSpecs [PROP_SUBTITLE] =
+    g_param_spec_string ("subtitle",
+                         _("Subtitle"),
+                         _("The pango markup to be rendered."),
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SUBTITLE,
+                                   gParamSpecs [PROP_SUBTITLE]);
+
+  gParamSpecs [PROP_TITLE] =
+    g_param_spec_string ("title",
+                         _("Title"),
+                         _("The pango markup to be rendered."),
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_TITLE,
+                                   gParamSpecs [PROP_TITLE]);
 
   gSignals [ACTIVATE] =
     g_signal_new ("activate",

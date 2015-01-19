@@ -151,6 +151,8 @@ libgnome_builder_la_SOURCES = \
 	src/search/gb-search-display.h \
 	src/search/gb-search-display-group.c \
 	src/search/gb-search-display-group.h \
+	src/search/gb-search-display-row.c \
+	src/search/gb-search-display-row.h \
 	src/search/gb-search-manager.c \
 	src/search/gb-search-manager.h \
 	src/search/gb-search-provider.c \

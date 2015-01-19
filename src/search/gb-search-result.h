@@ -47,13 +47,15 @@ struct _GbSearchResultClass
   void (*activate) (GbSearchResult *result);
 };
 
-GbSearchResult *gb_search_result_new        (const gchar          *markup,
-                                             gfloat                score);
-gfloat          gb_search_result_get_score  (GbSearchResult       *result);
-const gchar    *gb_search_result_get_markup (GbSearchResult       *result);
-gint            gb_search_result_compare    (const GbSearchResult *a,
-                                             const GbSearchResult *b);
-void            gb_search_result_activate   (GbSearchResult       *result);
+GbSearchResult *gb_search_result_new          (const gchar          *title,
+                                               const gchar          *subtitle,
+                                               gfloat                score);
+gfloat          gb_search_result_get_score    (GbSearchResult       *result);
+const gchar    *gb_search_result_get_title    (GbSearchResult       *result);
+const gchar    *gb_search_result_get_subtitle (GbSearchResult       *result);
+gint            gb_search_result_compare      (const GbSearchResult *a,
+                                               const GbSearchResult *b);
+void            gb_search_result_activate     (GbSearchResult       *result);
 
 G_END_DECLS
 

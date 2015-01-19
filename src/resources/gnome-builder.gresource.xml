@@ -50,6 +50,7 @@
     <file>ui/gb-preferences-page-vim.ui</file>
     <file>ui/gb-search-box.ui</file>
     <file>ui/gb-search-display-group.ui</file>
+    <file>ui/gb-search-display-row.ui</file>
     <file>ui/gb-workbench.ui</file>
   </gresource>
 </gresources>
