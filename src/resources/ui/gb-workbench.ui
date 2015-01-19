@@ -17,7 +17,7 @@
         </child>
         <child>
           <object class="GtkBox" id="navigation_box">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <property name="orientation">horizontal</property>
             <style>
               <class name="linked"/>
@@ -96,7 +96,7 @@
         </child>
         <child>
           <object class="GtkMenuButton" id="add_button">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <style>
               <class name="image-button"/>
             </style>
@@ -114,7 +114,7 @@
         </child>
         <child>
           <object class="GtkButton" id="run_button">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <property name="sensitive">False</property>
             <style>
               <class name="image-button"/>
