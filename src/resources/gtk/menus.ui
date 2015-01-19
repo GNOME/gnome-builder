@@ -86,14 +86,6 @@
       </item>
     </section>
     <section>
-      <submenu>
-        <attribute name="label" translatable="yes">View</attribute>
-      </submenu>
-      <submenu>
-        <attribute name="label" translatable="yes">Tools</attribute>
-      </submenu>
-    </section>
-    <section>
       <attribute name="id">close-section</attribute>
       <item>
         <attribute name="label" translatable="yes">_Close All</attribute>
