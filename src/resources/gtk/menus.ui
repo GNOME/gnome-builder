@@ -32,6 +32,7 @@
     </section>
   </menu>
   <menu id="gear-menu">
+<!--
     <section>
       <attribute name="id">juntion-section</attribute>
       <attribute name="display-hint">horizontal-buttons</attribute>
@@ -51,6 +52,7 @@
         <attribute name="verb-icon">view-fullscreen-symbolic</attribute>
       </item>
     </section>
+-->
     <section>
       <attribute name="id">file-section</attribute>
     </section>
@@ -78,6 +80,7 @@
     <section>
       <attribute name="id">edit-section-1</attribute>
     </section>
+<!--
     <section>
       <attribute name="id">close-section</attribute>
       <item>
@@ -85,6 +88,7 @@
         <attribute name="action">workbench.close-all</attribute>
       </item>
     </section>
+-->
   </menu>
   <menu id="gb-document-stack-menu">
     <section>
