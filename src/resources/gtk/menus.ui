@@ -79,13 +79,6 @@
       <attribute name="id">edit-section-1</attribute>
     </section>
     <section>
-      <attribute name="id">search-section</attribute>
-      <item>
-        <attribute name="label" translatable="yes">_Find…</attribute>
-        <attribute name="action">win.find</attribute>
-      </item>
-    </section>
-    <section>
       <attribute name="id">close-section</attribute>
       <item>
         <attribute name="label" translatable="yes">_Close All</attribute>
