@@ -198,6 +198,7 @@ enum
   COMMAND_VISIBILITY_TOGGLED,
   EXECUTE_COMMAND,
   JUMP_TO_DOC,
+  SWITCH_TO_FILE,
   LAST_SIGNAL
 };
 
@@ -4036,6 +4037,23 @@ gb_source_vim_op_set (GbSourceVim *vim,
   g_strfreev (parts);
 }
 
+static void
+gb_source_vim_op_edit (GbSourceVim *vim,
+                       const gchar *command_text)
+{
+  const gchar *path;
+  GFile *file;
+
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+  g_return_if_fail (g_str_has_prefix (command_text, "e ") ||
+                    g_str_has_prefix (command_text, "edit "));
+
+  path = strstr (command_text, " ") + 1;
+  file = g_file_new_for_path (path);
+  g_signal_emit (vim, gSignals [SWITCH_TO_FILE], 0, file);
+  g_clear_object (&file);
+}
+
 static GbSourceVimOperation
 gb_source_vim_parse_operation (const gchar *command_text)
 {
@@ -4049,6 +4067,9 @@ gb_source_vim_parse_operation (const gchar *command_text)
 
   if (g_str_equal (command_text, "sort"))
     ret = gb_source_vim_op_sort;
+  else if (g_str_has_prefix (command_text, "edit ") ||
+           g_str_has_prefix (command_text, "e "))
+    ret = gb_source_vim_op_edit;
   else if (g_str_equal (command_text, "nohl"))
     ret = gb_source_vim_op_nohl;
   else if (g_str_has_prefix (command_text, "set "))
@@ -5261,6 +5282,18 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
                   G_TYPE_NONE,
                   1,
                   G_TYPE_STRING);
+
+  gSignals [SWITCH_TO_FILE] =
+    g_signal_new ("switch-to-file",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSourceVimClass, switch_to_file),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_FILE);
 
   /*
    * Register all of our internal VIM commands. These can be used directly

@@ -63,12 +63,13 @@ struct _GbSourceVimClass
                                           const gchar *command);
   void     (*jump_to_doc)                (GbSourceVim *vim,
                                           const gchar *search_text);
+  void     (*switch_to_file)             (GbSourceVim *vim,
+                                          GFile       *file);
 
   gpointer _padding1;
   gpointer _padding2;
   gpointer _padding3;
   gpointer _padding4;
-  gpointer _padding5;
 };
 
 GType            gb_source_vim_get_type         (void);

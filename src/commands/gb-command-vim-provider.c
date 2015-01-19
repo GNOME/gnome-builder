@@ -147,11 +147,12 @@ static void
 gb_command_vim_provider_init (GbCommandVimProvider *self)
 {
   static const gchar *commands[] = {
-    "set ",
     "colorscheme ",
-    "syntax ",
-    "sort",
+    "edit",
     "nohl",
+    "set ",
+    "sort",
+    "syntax ",
     NULL
   };
   GSettings *settings;

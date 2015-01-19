@@ -1076,6 +1076,23 @@ gb_editor_frame_on_execute_command (GbEditorFrame *self,
 }
 
 static void
+gb_editor_frame_on_switch_to_file (GbEditorFrame *self,
+                                   GFile         *file,
+                                   GbSourceVim   *vim)
+{
+  GbWorkspace *workspace;
+  GbWorkbench *workbench;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+
+  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+  workspace = gb_workbench_get_workspace (workbench, GB_TYPE_EDITOR_WORKSPACE);
+  gb_editor_workspace_open (GB_EDITOR_WORKSPACE (workspace), file);
+}
+
+static void
 gb_editor_frame_on_command_toggled (GbEditorFrame *self,
                                     gboolean       visible,
                                     GbSourceVim   *vim)
@@ -1501,6 +1518,11 @@ gb_editor_frame_constructed (GObject *object)
                            G_CALLBACK (gb_editor_frame_on_execute_command),
                            self,
                            G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  g_signal_connect_object (vim,
+                           "switch-to-file",
+                           G_CALLBACK (gb_editor_frame_on_switch_to_file),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (priv->source_view,
                            "display-documentation",
