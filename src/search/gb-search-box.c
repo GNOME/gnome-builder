@@ -27,6 +27,7 @@
 #include "gb-search-display.h"
 #include "gb-search-manager.h"
 #include "gb-search-result.h"
+#include "gb-string.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
@@ -138,11 +139,16 @@ gb_search_box_entry_focus_in (GbSearchBox   *box,
                               GdkEventFocus *focus,
                               GtkWidget     *entry)
 {
+  const gchar *text;
+
   g_return_val_if_fail (GB_IS_SEARCH_BOX (box), FALSE);
   g_return_val_if_fail (focus, FALSE);
   g_return_val_if_fail (GTK_IS_SEARCH_ENTRY (entry), FALSE);
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (box->priv->button), TRUE);
+  text = gtk_entry_get_text (GTK_ENTRY (box->priv->entry));
+
+  if (!gb_str_empty0 (text))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (box->priv->button), TRUE);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -161,10 +167,20 @@ static void
 gb_search_box_entry_changed (GbSearchBox    *box,
                              GtkSearchEntry *entry)
 {
+  GtkToggleButton *button;
+  const gchar *text;
+  gboolean active;
   guint delay_msec = SHORT_DELAY_TIMEOUT_MSEC;
 
   g_return_if_fail (GB_IS_SEARCH_BOX (box));
   g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
+
+  button = GTK_TOGGLE_BUTTON (box->priv->button);
+  text = gtk_entry_get_text (GTK_ENTRY (entry));
+  active = !gb_str_empty0 (text);
+
+  if (gtk_toggle_button_get_active (button) != active)
+    gtk_toggle_button_set_active (button, active);
 
   if (!box->priv->delay_timeout)
     {
