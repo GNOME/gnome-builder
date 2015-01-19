@@ -202,6 +202,7 @@ libgnome_builder_la_SOURCES = \
 	src/util/gb-pango.h \
 	src/util/gb-rgba.c \
 	src/util/gb-rgba.h \
+	src/util/gb-string.c \
 	src/util/gb-string.h \
 	src/util/gb-widget.c \
 	src/util/gb-widget.h \
