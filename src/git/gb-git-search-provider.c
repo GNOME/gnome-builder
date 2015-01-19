@@ -28,6 +28,7 @@
 #include "gb-search-context.h"
 #include "gb-search-reducer.h"
 #include "gb-search-result.h"
+#include "gb-string.h"
 #include "gb-workbench.h"
 
 #define GB_GIT_SEARCH_PROVIDER_MAX_MATCHES 1000
@@ -348,12 +349,15 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
           if (gb_search_reducer_accepts (&reducer, match->score))
             {
               GbSearchResult *result;
+              gchar *markup;
 
               parts = split_path (match->value, &shortname);
               for (j = 0; parts [j]; j++)
                 g_string_append_printf (str, " / %s", parts [j]);
 
-              result = gb_search_result_new (shortname, str->str, match->score);
+              markup = gb_str_highlight (shortname, search_terms);
+
+              result = gb_search_result_new (markup, str->str, match->score);
               g_object_set_qdata_full (G_OBJECT (result), gQuarkPath,
                                        g_strdup (match->value), g_free);
               g_signal_connect (result,
@@ -363,6 +367,7 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
               gb_search_reducer_push (&reducer, result);
               g_object_unref (result);
 
+              g_free (markup);
               g_free (shortname);
               g_strfreev (parts);
               g_string_truncate (str, truncate_len);
