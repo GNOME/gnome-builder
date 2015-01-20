@@ -118,12 +118,6 @@ typedef enum
 
 typedef enum
 {
-  GB_SOURCE_VIM_ITER_BOUND_START,
-  GB_SOURCE_VIM_ITER_BOUND_END
-} GbSourceVimIterBound;
-
-typedef enum
-{
   GB_SOURCE_VIM_COMMAND_NOOP,
   GB_SOURCE_VIM_COMMAND_MOVEMENT,
   GB_SOURCE_VIM_COMMAND_CHANGE,
@@ -238,8 +232,7 @@ gb_source_vim_adjust_scroll (GbSourceVim          *vim,
                              gint                  line,
                              GbSourceVimAlignment  aligment);
 static void
-gb_source_vim_ensure_scroll_off (GbSourceVim          *vim,
-                                 GbSourceVimIterBound  iter_bound);
+gb_source_vim_ensure_scroll (GbSourceVim *vim);
 
 GbSourceVim *
 gb_source_vim_new (GtkTextView *text_view)
@@ -249,22 +242,6 @@ gb_source_vim_new (GtkTextView *text_view)
   return g_object_new (GB_TYPE_SOURCE_VIM,
                        "text-view", text_view,
                        NULL);
-}
-
-static gboolean
-gb_source_vim_get_iter_visible (GbSourceVim *vim,
-                                GtkTextIter *iter)
-{
-  GdkRectangle visible_rect;
-  GdkRectangle iter_location;
-
-  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
-  g_return_val_if_fail (iter, FALSE);
-
-  gtk_text_view_get_iter_location (vim->priv->text_view, iter, &iter_location);
-  gtk_text_view_get_visible_rect (vim->priv->text_view, &visible_rect);
-
-  return gdk_rectangle_intersect (&visible_rect, &iter_location, NULL);
 }
 
 /**
@@ -576,7 +553,7 @@ gb_source_vim_clear_selection (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 GbSourceVimMode
@@ -809,30 +786,47 @@ gb_source_vim_select_range (GbSourceVim *vim,
 }
 
 static void
-gb_source_vim_ensure_scroll_off (GbSourceVim          *vim,
-                                 GbSourceVimIterBound  iter_bound)
+gb_source_vim_ensure_scroll (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
+  gboolean cursor_selection_start;
+  GtkTextMark *insert;
   GtkTextIter iter_end;
   GtkTextIter iter_start;
   GtkTextIter iter;
   guint line;
   GbSourceVimAdjustedScroll *scroll;
+  GtkTextIter selection;
+  gboolean has_selection;
+
+  has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
+
+  cursor_selection_start = TRUE;
+  /* The cursor is at the end of the selection */
+  if (has_selection && gtk_text_iter_compare (&iter, &selection) > 0)
+    cursor_selection_start = FALSE;
 
   g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   gtk_text_buffer_get_selection_bounds (buffer, &iter_start, &iter_end);
-  iter = iter_bound == GB_SOURCE_VIM_ITER_BOUND_START ? iter_start : iter_end;
+  iter = cursor_selection_start ? iter_start : iter_end;
   line = gtk_text_iter_get_line (&iter);
   scroll = gb_source_vim_adjust_scroll (vim, line, GB_SOURCE_VIM_ALIGNMENT_NONE);
 
   /* Only adjust scroll if necesary. In this way we avoid
    * odd jumpings because of yalign imprecision.
+   * But if it's not necessary to scroll vertically, make
+   * sure the cursor is visible horizontally.
    */
-  if (scroll->yalign >= 0)
+  if (scroll->yalign >= 0) {
     gtk_text_view_scroll_to_iter (vim->priv->text_view, &iter, 0.0,
                                   TRUE, 1.0, scroll->yalign);
+  } else {
+    insert = gtk_text_buffer_get_insert (buffer);
+    gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+  }
+
   g_free (scroll);
 }
 
@@ -919,7 +913,6 @@ gb_source_vim_move_line_end (GbSourceVim *vim)
 {
   GbSourceVimPrivate *priv;
   GtkTextBuffer *buffer;
-  GtkTextMark *insert;
   GtkTextIter iter;
   GtkTextIter selection;
   gboolean has_selection;
@@ -945,8 +938,7 @@ gb_source_vim_move_line_end (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);;
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -980,12 +972,10 @@ gb_source_vim_move_backward (GbSourceVim *vim)
       else
         gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-      if (!gb_source_vim_get_iter_visible (vim, &iter))
-        gtk_text_view_scroll_to_iter (vim->priv->text_view, &iter,
-                                      0.0, FALSE, 0.0, 0.0);
-
       vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
     }
+
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static gboolean
@@ -1087,7 +1077,7 @@ gb_source_vim_move_backward_word (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -1123,12 +1113,10 @@ gb_source_vim_move_forward (GbSourceVim *vim)
       else
         gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-      if (!gb_source_vim_get_iter_visible (vim, &iter))
-        gtk_text_view_scroll_to_iter (vim->priv->text_view, &iter,
-                                      0.0, FALSE, 0.0, 0.0);
-
       vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
     }
+
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static gboolean
@@ -1248,7 +1236,7 @@ gb_source_vim_move_forward_word (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -1279,7 +1267,7 @@ gb_source_vim_move_forward_word_end (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static gboolean
@@ -1368,7 +1356,7 @@ gb_source_vim_move_matching_bracket (GbSourceVim *vim)
       else
         gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-      gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+      gb_source_vim_ensure_scroll (vim);
     }
 }
 
@@ -1453,7 +1441,7 @@ gb_source_vim_move_forward_paragraph (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -1492,7 +1480,7 @@ gb_source_vim_move_backward_paragraph (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -1503,7 +1491,6 @@ gb_source_vim_move_down (GbSourceVim *vim)
   GtkTextIter iter;
   GtkTextIter selection;
   gboolean has_selection;
-  GbSourceVimIterBound iter_bound;
   guint line;
   guint offset;
 
@@ -1515,11 +1502,6 @@ gb_source_vim_move_down (GbSourceVim *vim)
   has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
   line = gtk_text_iter_get_line (&iter);
   offset = vim->priv->target_line_offset;
-  iter_bound = GB_SOURCE_VIM_ITER_BOUND_END;
-
-  /* The cursor is at the start of the selection */
-  if (gtk_text_iter_compare (&iter, &selection) < 0)
-    iter_bound = GB_SOURCE_VIM_ITER_BOUND_START;
 
   /*
    * If we have a whole line selected (from say `V`), then we need to swap
@@ -1580,7 +1562,7 @@ select_to_end:
     }
 
 move_mark:
-  gb_source_vim_ensure_scroll_off (vim, iter_bound);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -1591,7 +1573,6 @@ gb_source_vim_move_up (GbSourceVim *vim)
   GtkTextIter iter;
   GtkTextIter selection;
   gboolean has_selection;
-  GbSourceVimIterBound iter_bound;
   guint line;
   guint offset;
 
@@ -1603,14 +1584,9 @@ gb_source_vim_move_up (GbSourceVim *vim)
   has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
   line = gtk_text_iter_get_line (&iter);
   offset = vim->priv->target_line_offset;
-  iter_bound = GB_SOURCE_VIM_ITER_BOUND_START;
 
   if (line == 0)
     return;
-
-  /* The cursor is at the end of the selection */
-  if (gtk_text_iter_compare (&iter, &selection) > 0)
-    iter_bound = GB_SOURCE_VIM_ITER_BOUND_END;
 
   /*
    * If we have a whole line selected (from say `V`), then we need to swap
@@ -1658,7 +1634,7 @@ gb_source_vim_move_up (GbSourceVim *vim)
     }
 
 move_mark:
-  gb_source_vim_ensure_scroll_off (vim, iter_bound);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -1761,7 +1737,7 @@ gb_source_vim_delete_selection (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -1824,7 +1800,6 @@ static void
 gb_source_vim_select_char (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
-  GtkTextMark *insert;
   GtkTextIter iter;
   GtkTextIter selection;
   GtkTextIter *target;
@@ -1844,8 +1819,7 @@ gb_source_vim_select_char (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -1940,7 +1914,7 @@ gb_source_vim_undo (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -1974,7 +1948,7 @@ gb_source_vim_redo (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -2002,7 +1976,7 @@ gb_source_vim_join (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -2043,7 +2017,7 @@ gb_source_vim_insert_nl_before (GbSourceVim *vim)
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -2081,7 +2055,7 @@ gb_source_vim_insert_nl_after (GbSourceVim *vim,
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -2265,7 +2239,6 @@ static void
 gb_source_vim_move_to_end (GbSourceVim *vim)
 {
   GtkTextBuffer *buffer;
-  GtkTextMark *insert;
   GtkTextIter iter;
   GtkTextIter selection;
   gboolean has_selection;
@@ -2282,10 +2255,9 @@ gb_source_vim_move_to_end (GbSourceVim *vim)
   else
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
-  insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_view_scroll_mark_onscreen (vim->priv->text_view, insert);
-
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
+
+  gb_source_vim_ensure_scroll (vim);
 }
 
 static void
@@ -2359,7 +2331,7 @@ gb_source_vim_yank (GbSourceVim *vim)
    */
   gtk_text_buffer_select_range (buffer, &begin, &begin);
 
-  gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+  gb_source_vim_ensure_scroll (vim);
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
 }
 
@@ -2686,7 +2658,7 @@ gb_source_vim_adjust_scroll (GbSourceVim          *vim,
        * is not necesary to adjust scroll
        */
       if (min_yalign > yalign || yalign > max_yalign)
-	result->yalign = CLAMP (yalign, min_yalign, max_yalign);
+        result->yalign = CLAMP (yalign, min_yalign, max_yalign);
       else
         result->yalign = -1;
       result->line = line;
@@ -2741,6 +2713,7 @@ gb_source_vim_move_page (GbSourceVim                 *vim,
   line_bottom = gtk_text_iter_get_line (&iter_bottom);
   line_current = gtk_text_iter_get_line (&iter_current);
 
+  /* We can't use gb_soure_vim_ensure_scroll because we want specific aligments */
   switch (direction)
     {
     case GB_SOURCE_VIM_HALF_PAGE_UP:
@@ -3245,8 +3218,10 @@ gb_source_vim_event_after_cb (GtkTextView *text_view,
                               GdkEventKey *event,
                               GbSourceVim *vim)
 {
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+
   if (vim->priv->mode == GB_SOURCE_VIM_INSERT)
-    gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+    gb_source_vim_ensure_scroll (vim);
 }
 
 static gboolean
@@ -5510,7 +5485,7 @@ gb_source_vim_scroll_off_changed (GbSourceVim *vim,
 
   vim->priv->scroll_off = g_settings_get_int (settings, "scroll-off");
   if (vim->priv->text_view != NULL)
-  	gb_source_vim_ensure_scroll_off (vim, GB_SOURCE_VIM_ITER_BOUND_START);
+    gb_source_vim_ensure_scroll (vim);
 }
 
 static void
