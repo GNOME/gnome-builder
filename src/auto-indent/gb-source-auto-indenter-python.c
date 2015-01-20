@@ -447,7 +447,6 @@ indent_parens (GbSourceAutoIndenterPython *python,
   return g_string_free (str, FALSE);
 }
 
-#if 0
 static gchar *
 indent_previous_stmt (GbSourceAutoIndenterPython *python,
                       GtkTextView                *text_view,
@@ -486,7 +485,6 @@ indent_previous_stmt (GbSourceAutoIndenterPython *python,
 
   return NULL;
 }
-#endif
 
 static gchar *
 indent_for_pair (GbSourceAutoIndenterPython *python,
@@ -638,10 +636,8 @@ gb_source_auto_indenter_python_format (GbSourceAutoIndenter *indenter,
       return indent_for_pair (python, text_view, begin, end, &iter,
                               cursor_offset);
 
-#if 0
     case ')':
       return indent_previous_stmt (python, text_view, begin, end, &iter);
-#endif
 
     case ',':
       return indent_parens (python, text_view, begin, end, &iter);
