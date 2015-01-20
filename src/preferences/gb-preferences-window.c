@@ -113,8 +113,7 @@ gb_preferences_window_search_changed (GbPreferencesWindow *window,
       if (0 == gb_preferences_page_set_keywords (page, (const gchar * const *)keywords))
         gtk_widget_set_visible (GTK_WIDGET (page), FALSE);
       else
-        gtk_widget_set_visible (GTK_WIDGET (page),
-                                gb_preferences_page_get_active (page));
+        gtk_widget_set_visible (GTK_WIDGET (page), TRUE);
     }
 
   g_list_free (pages);
