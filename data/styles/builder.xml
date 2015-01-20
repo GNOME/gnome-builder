@@ -95,6 +95,7 @@
   <style name="def:doc-comment-element"     italic="true"/>
   <style name="def:error"                   line-background="#rgba(235,202,210,.4)" />
   <style name="def:floating-point"          foreground="blue2"/>
+  <style name="def:function"                foreground="pink1"/>
   <style name="def:decimal"                 foreground="blue2"/>
   <style name="def:base-n-integer"          foreground="blue2"/>
   <style name="def:boolean"                 foreground="pink1"/>
@@ -118,6 +119,9 @@
   <style name="diff:diff-file"              use-style="def:type"/>
   <style name="diff:location"               use-style="def:statement"/>
   <style name="diff:special-case"           use-style="def:constant"/>
+
+  <style name="python:builtin-object"       foreground="og1"/>
+  <style name="python:keyword"              foreground="green1" bold="false"/>
 
   <style name="xml:tags"                    foreground="chameleon3"/>
   <style name="xml:namespace"               bold="true"/>
