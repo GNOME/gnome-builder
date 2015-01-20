@@ -548,8 +548,9 @@ gb_application_activate_support_action (GSimpleAction *action,
                                    GTK_MESSAGE_INFO,
                                    GTK_BUTTONS_CLOSE,
                                    "%s", text);
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+  gtk_window_present (GTK_WINDOW (dialog));
 
 cleanup:
   g_free (text);
