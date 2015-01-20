@@ -98,6 +98,7 @@ struct _GbSourceVimPrivate
   guint                    connected : 1;
   guint                    recording : 1;
   guint                    in_replay : 1;
+  guint                    in_ctrl_w : 1;
 };
 
 typedef enum
@@ -192,6 +193,7 @@ enum
   COMMAND_VISIBILITY_TOGGLED,
   EXECUTE_COMMAND,
   JUMP_TO_DOC,
+  SPLIT,
   SWITCH_TO_FILE,
   LAST_SIGNAL
 };
@@ -2950,6 +2952,7 @@ gb_source_vim_handle_normal (GbSourceVim *vim,
     case GDK_KEY_Escape:
       gb_source_vim_clear_selection (vim);
       gb_source_vim_clear_phrase (vim);
+      vim->priv->in_ctrl_w = FALSE;
       return TRUE;
 
     case GDK_KEY_Page_Up:
@@ -3078,6 +3081,15 @@ gb_source_vim_handle_normal (GbSourceVim *vim,
         {
           gb_source_vim_clear_phrase (vim);
           gb_source_vim_move_page (vim, GB_SOURCE_VIM_HALF_PAGE_UP);
+          return TRUE;
+        }
+      break;
+
+    case GDK_KEY_w:
+      if ((event->state & GDK_CONTROL_MASK) != 0)
+        {
+          gb_source_vim_clear_phrase (vim);
+          vim->priv->in_ctrl_w = TRUE;
           return TRUE;
         }
       break;
@@ -3217,6 +3229,55 @@ gb_source_vim_handle_command (GbSourceVim *vim,
   return TRUE;
 }
 
+static gboolean
+gb_source_vim_handle_ctrl_w (GbSourceVim *vim,
+                             GdkEventKey *event)
+{
+  GbSourceVimSplit split = 0;
+  gboolean handled = FALSE;
+
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
+  g_return_val_if_fail (event, FALSE);
+
+  vim->priv->in_ctrl_w = FALSE;
+
+  switch (event->keyval)
+    {
+    case GDK_KEY_S:
+    case GDK_KEY_s:
+      split = GB_SOURCE_VIM_SPLIT_HORIZONTAL;
+      break;
+
+    case GDK_KEY_v:
+    case GDK_KEY_V:
+      split = GB_SOURCE_VIM_SPLIT_VERTICAL;
+      break;
+
+    case GDK_KEY_c:
+      split = GB_SOURCE_VIM_SPLIT_CLOSE;
+      break;
+
+    default:
+      break;
+    }
+
+  if (split)
+    g_signal_emit (vim, gSignals [SPLIT], 0, split, &handled);
+
+  if (!handled)
+    {
+      /*
+       * TODO: emit message about unhandled split.
+       *
+       * Vim will emit a message here about the unhandled split. We should
+       * probably do the same, but that will require that we plumb messages
+       * too. Also a good idea.
+       */
+    }
+
+  return !!split;
+}
+
 static void
 gb_source_vim_event_after_cb (GtkTextView *text_view,
                               GdkEventKey *event,
@@ -3242,7 +3303,10 @@ gb_source_vim_key_press_event_cb (GtkTextView *text_view,
   switch (vim->priv->mode)
     {
     case GB_SOURCE_VIM_NORMAL:
-      ret = gb_source_vim_handle_normal (vim, event);
+      if (vim->priv->in_ctrl_w)
+        ret = gb_source_vim_handle_ctrl_w (vim, event);
+      else
+        ret = gb_source_vim_handle_normal (vim, event);
       break;
 
     case GB_SOURCE_VIM_INSERT:
@@ -4033,6 +4097,30 @@ gb_source_vim_op_edit (GbSourceVim *vim,
   g_clear_object (&file);
 }
 
+static void
+gb_source_vim_op_split_horizontal (GbSourceVim *vim,
+                                   const gchar *command_text)
+{
+  gboolean ret = FALSE;
+
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+
+  g_signal_emit (vim, gSignals [SPLIT], 0,
+                 GB_SOURCE_VIM_SPLIT_HORIZONTAL, &ret);
+}
+
+static void
+gb_source_vim_op_split_vertical (GbSourceVim *vim,
+                                 const gchar *command_text)
+{
+  gboolean ret = FALSE;
+
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+
+  g_signal_emit (vim, gSignals [SPLIT], 0,
+                 GB_SOURCE_VIM_SPLIT_VERTICAL, &ret);
+}
+
 static GbSourceVimOperation
 gb_source_vim_parse_operation (const gchar *command_text)
 {
@@ -4059,10 +4147,18 @@ gb_source_vim_parse_operation (const gchar *command_text)
     ret = gb_source_vim_op_colorscheme;
   else if (g_str_has_prefix (command_text, "%s"))
     ret = gb_source_vim_op_search_and_replace;
-  else if (g_str_has_prefix (command_text, "s")) /* not ideal */
-    ret = gb_source_vim_op_search_and_replace;
+  else if (g_str_equal (command_text, "split") ||
+           g_str_equal (command_text, "sp"))
+    ret = gb_source_vim_op_split_horizontal;
+  else if (g_str_equal (command_text, "vsplit") ||
+           g_str_equal (command_text, "vsp"))
+    ret = gb_source_vim_op_split_vertical;
   else if (g_regex_match (goto_line_regex, command_text, 0, NULL))
     ret = gb_source_vim_op_goto_line;
+  /* XXX: Keep this last */
+  else if (g_str_has_prefix (command_text, "s") &&
+           !g_ascii_isalnum (command_text[1]))
+    ret = gb_source_vim_op_search_and_replace;
 
   return ret;
 }
@@ -5262,6 +5358,24 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
                   1,
                   G_TYPE_STRING);
 
+  /**
+   * GbSourceVim::split:
+   * @type: A #GbSourceVimSplit containing the split type.
+   *
+   * Requests a split operation on the current buffer.
+   */
+  gSignals [SPLIT] =
+    g_signal_new ("split",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSourceVimClass, split),
+                  g_signal_accumulator_true_handled,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_BOOLEAN,
+                  1,
+                  GB_TYPE_SOURCE_VIM_SPLIT);
+
   gSignals [SWITCH_TO_FILE] =
     g_signal_new ("switch-to-file",
                   G_TYPE_FROM_CLASS (klass),
@@ -5525,6 +5639,23 @@ gb_source_vim_mode_get_type (void)
 
   if (!type_id)
     type_id = g_enum_register_static ("GbSourceVimMode", values);
+
+  return type_id;
+}
+
+GType
+gb_source_vim_split_get_type (void)
+{
+  static GType type_id;
+  static const GEnumValue values[] = {
+    { GB_SOURCE_VIM_SPLIT_HORIZONTAL, "GB_SOURCE_VIM_SPLIT_HORIZONTAL", "HORIZONTAL" },
+    { GB_SOURCE_VIM_SPLIT_VERTICAL, "GB_SOURCE_VIM_SPLIT_VERTICAL", "VERTICAL" },
+    { GB_SOURCE_VIM_SPLIT_CLOSE, "GB_SOURCE_VIM_SPLIT_CLOSE", "CLOSE" },
+    { 0 }
+  };
+
+  if (!type_id)
+    type_id = g_enum_register_static ("GbSourceVimSplit", values);
 
   return type_id;
 }

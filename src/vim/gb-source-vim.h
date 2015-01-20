@@ -25,6 +25,7 @@ G_BEGIN_DECLS
 
 #define GB_TYPE_SOURCE_VIM            (gb_source_vim_get_type())
 #define GB_TYPE_SOURCE_VIM_MODE       (gb_source_vim_mode_get_type())
+#define GB_TYPE_SOURCE_VIM_SPLIT      (gb_source_vim_split_get_type())
 #define GB_SOURCE_VIM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SOURCE_VIM, GbSourceVim))
 #define GB_SOURCE_VIM_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SOURCE_VIM, GbSourceVim const))
 #define GB_SOURCE_VIM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_SOURCE_VIM, GbSourceVimClass))
@@ -43,6 +44,13 @@ typedef enum
   GB_SOURCE_VIM_COMMAND,
 } GbSourceVimMode;
 
+typedef enum
+{
+  GB_SOURCE_VIM_SPLIT_HORIZONTAL = 1,
+  GB_SOURCE_VIM_SPLIT_VERTICAL,
+  GB_SOURCE_VIM_SPLIT_CLOSE,
+} GbSourceVimSplit;
+
 struct _GbSourceVim
 {
   GObject parent;
@@ -55,25 +63,27 @@ struct _GbSourceVimClass
 {
   GObjectClass parent_class;
 
-  void     (*begin_search)               (GbSourceVim *vim,
-                                          const gchar *search_text);
-  void     (*command_visibility_toggled) (GbSourceVim *vim,
-                                          gboolean     visibility);
-  gboolean (*execute_command)            (GbSourceVim *vim,
-                                          const gchar *command);
-  void     (*jump_to_doc)                (GbSourceVim *vim,
-                                          const gchar *search_text);
-  void     (*switch_to_file)             (GbSourceVim *vim,
-                                          GFile       *file);
+  void     (*begin_search)               (GbSourceVim      *vim,
+                                          const gchar      *search_text);
+  void     (*command_visibility_toggled) (GbSourceVim      *vim,
+                                          gboolean          visibility);
+  gboolean (*execute_command)            (GbSourceVim      *vim,
+                                          const gchar      *command);
+  void     (*jump_to_doc)                (GbSourceVim      *vim,
+                                          const gchar      *search_text);
+  void     (*switch_to_file)             (GbSourceVim      *vim,
+                                          GFile            *file);
+  void     (*split)                      (GbSourceVim      *vim,
+                                          GbSourceVimSplit  split);
 
   gpointer _padding1;
   gpointer _padding2;
   gpointer _padding3;
-  gpointer _padding4;
 };
 
 GType            gb_source_vim_get_type         (void);
 GType            gb_source_vim_mode_get_type    (void);
+GType            gb_source_vim_split_get_type   (void);
 GbSourceVim     *gb_source_vim_new              (GtkTextView     *text_view);
 GbSourceVimMode  gb_source_vim_get_mode         (GbSourceVim     *vim);
 void             gb_source_vim_set_mode         (GbSourceVim     *vim,
