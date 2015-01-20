@@ -222,6 +222,7 @@ gb_source_view_disconnect_settings (GbSourceView *view)
 
   g_settings_unbind (view, "auto-indent");
   g_settings_unbind (view, "highlight-current-line");
+  g_settings_unbind (view, "indent-width");
   g_settings_unbind (view, "insert-spaces-instead-of-tabs");
   g_settings_unbind (view, "right-margin-position");
   g_settings_unbind (view, "show-line-numbers");
@@ -261,6 +262,8 @@ gb_source_view_connect_settings (GbSourceView *view)
 
       g_settings_bind (settings, "auto-indent", view, "auto-indent",
                        G_SETTINGS_BIND_GET);
+      g_settings_bind (settings, "indent-width", view, "indent-width",
+                       G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "insert-matching-brace",
                        view, "insert-matching-brace",
                        G_SETTINGS_BIND_GET);
@@ -277,8 +280,6 @@ gb_source_view_connect_settings (GbSourceView *view)
                        view, "show-right-margin",
                        G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "tab-width", view, "tab-width",
-                       G_SETTINGS_BIND_GET);
-      g_settings_bind (settings, "tab-width", view, "indent-width",
                        G_SETTINGS_BIND_GET);
       g_settings_bind (settings, "trim-trailing-whitespace",
                        buffer, "trim-trailing-whitespace",

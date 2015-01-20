@@ -3,6 +3,10 @@
     <key name="auto-indent" type="b">
       <default>true</default>
     </key>
+    <key name="indent-width" type="i">
+      <range min="-1" max="32"/>
+      <default>-1</default>
+    </key>
     <key name="insert-spaces-instead-of-tabs" type="b">
       <default>false</default>
     </key>
