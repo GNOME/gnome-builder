@@ -79,6 +79,8 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+static void gb_editor_view_toggle_split (GbEditorView *view);
+
 GtkWidget *
 gb_editor_view_new (GbEditorDocument *document)
 {
@@ -638,6 +640,57 @@ gb_editor_view_set_document (GbEditorView     *view,
     }
 }
 
+static gboolean
+gb_editor_view_on_vim_split (GbEditorView     *self,
+                             GbSourceVimSplit  split,
+                             GbSourceVim      *vim)
+{
+  gboolean ret = FALSE;
+
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (self), FALSE);
+  g_return_val_if_fail (split, FALSE);
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
+
+  switch (split)
+    {
+    case GB_SOURCE_VIM_SPLIT_HORIZONTAL:
+      if (!gb_editor_view_get_split_enabled (self))
+        {
+          gb_editor_view_toggle_split (self);
+          ret = TRUE;
+        }
+      break;
+
+    case GB_SOURCE_VIM_SPLIT_VERTICAL:
+      gb_widget_activate_action (GTK_WIDGET (self),
+                                 "stack", "split-document-right",
+                                 NULL);
+      ret = TRUE;
+      break;
+
+    case GB_SOURCE_VIM_SPLIT_CLOSE:
+      if (gb_editor_view_get_split_enabled (self))
+        {
+          /*
+           * TODO: copy state from frame2 to frame1 if frame2 was focused.
+           */
+          gb_editor_view_toggle_split (self);
+          ret = TRUE;
+        }
+      else
+        {
+          gb_widget_activate_action (GTK_WIDGET (self), "stack", "close", NULL);
+          ret = TRUE;
+        }
+      break;
+
+    default:
+      break;
+    }
+
+  return ret;
+}
+
 static void
 gb_editor_view_toggle_split (GbEditorView *view)
 {
@@ -659,10 +712,18 @@ gb_editor_view_toggle_split (GbEditorView *view)
     }
   else
     {
+      GbSourceVim *vim;
+
       child2 = g_object_new (GB_TYPE_EDITOR_FRAME,
                              "document", view->priv->document,
                              "visible", TRUE,
                              NULL);
+      vim = gb_source_view_get_vim (GB_EDITOR_FRAME (child2)->priv->source_view);
+      g_signal_connect_object (vim,
+                               "split",
+                               G_CALLBACK (gb_editor_view_on_vim_split),
+                               view,
+                               G_CONNECT_SWAPPED);
       g_object_bind_property (view, "auto-indent",
                               GB_EDITOR_FRAME (child2)->priv->source_view,
                               "auto-indent",
@@ -1027,6 +1088,7 @@ gb_editor_view_init (GbEditorView *self)
     { "use-spaces", NULL, "b", "false", apply_state_use_spaces },
   };
   GSimpleActionGroup *actions;
+  GbSourceVim *vim;
   GtkWidget *controls;
 
   self->priv = gb_editor_view_get_instance_private (self);
@@ -1051,6 +1113,12 @@ gb_editor_view_init (GbEditorView *self)
 
   g_clear_object (&actions);
 
+  vim = gb_source_view_get_vim (self->priv->frame->priv->source_view);
+  g_signal_connect_object (vim,
+                           "split",
+                           G_CALLBACK (gb_editor_view_on_vim_split),
+                           self,
+                           G_CONNECT_SWAPPED);
   g_object_bind_property (self->priv->frame->priv->source_view, "auto-indent",
                           self, "auto-indent",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);

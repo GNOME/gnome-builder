@@ -152,7 +152,9 @@ gb_command_vim_provider_init (GbCommandVimProvider *self)
     "nohl",
     "set ",
     "sort",
+    "split",
     "syntax ",
+    "vsplit",
     NULL
   };
   GSettings *settings;
