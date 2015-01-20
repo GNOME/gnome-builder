@@ -3,7 +3,7 @@ Builder - Develop software for GNOME
 
 Bugs: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder
 Design: https://live.gnome.org/Design/Apps/Builder
-Download: We have not yet made a tarball release.
+Download: https://download.gnome.org/sources/gnome-builder/
 Git: http://git.gnome.org/browse/gnome-builder
 Website: https://wiki.gnome.org/Apps/Builder
 IRC: irc.gimp.net #gnome-builder
@@ -26,8 +26,19 @@ Builder is developed in conjunction with GNOME releases. This means that we
 often contribute to, and depend on, features being developed in other GNOME
 modules.
 
-Since there has not yet been a stable release of Builder, the easiest way to
-get started is to use the development tool jhbuild to install from source.
+----
+
+Builder can be built from tarball releases using the traditional autotools
+manner.
+
+  ./configure --prefix=/usr
+  make
+  sudo make install
+
+----
+
+Alternatively, you can build Builder from git using jhbuild. If you are
+unfamiliar with jhbuild, the following will help you get started.
 
   git clone git://git.gnome.org/jhbuild.git
   cd jhbuild
