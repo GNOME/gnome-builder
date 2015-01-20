@@ -109,7 +109,7 @@ gb_command_result_set_is_running (GbCommandResult *result,
 
   if (result->priv->is_running != is_running)
     {
-      result->priv->is_running = is_running;
+      result->priv->is_running = !!is_running;
       g_object_notify_by_pspec (G_OBJECT (result),
                                 gParamSpecs [PROP_IS_RUNNING]);
     }
@@ -131,7 +131,7 @@ gb_command_result_set_is_error (GbCommandResult *result,
 
   if (result->priv->is_error != is_error)
     {
-      result->priv->is_error = is_error;
+      result->priv->is_error = !!is_error;
       g_object_notify_by_pspec (G_OBJECT (result),
                                 gParamSpecs [PROP_IS_ERROR]);
     }

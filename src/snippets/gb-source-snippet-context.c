@@ -44,7 +44,7 @@ struct _GbSourceSnippetContextPrivate
   GHashTable *variables;
   gchar      *line_prefix;
   gint        tab_width;
-  gboolean    use_spaces;
+  guint       use_spaces : 1;
 };
 
 enum {
@@ -583,7 +583,7 @@ gb_source_snippet_context_set_use_spaces (GbSourceSnippetContext *context,
                                           gboolean                use_spaces)
 {
   g_return_if_fail (GB_IS_SOURCE_SNIPPET_CONTEXT (context));
-  context->priv->use_spaces = use_spaces;
+  context->priv->use_spaces = !!use_spaces;
 }
 
 void

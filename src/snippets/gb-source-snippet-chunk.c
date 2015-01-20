@@ -29,7 +29,7 @@ struct _GbSourceSnippetChunkPrivate
   gint                    tab_stop;
   gchar                  *spec;
   gchar                  *text;
-  gboolean                text_set;
+  guint                   text_set : 1;
 };
 
 enum {
@@ -194,7 +194,7 @@ gb_source_snippet_chunk_set_text_set (GbSourceSnippetChunk *chunk,
                                       gboolean              text_set)
 {
   g_return_if_fail (GB_IS_SOURCE_SNIPPET_CHUNK (chunk));
-  chunk->priv->text_set = text_set;
+  chunk->priv->text_set = !!text_set;
   g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_TEXT_SET]);
 }
 

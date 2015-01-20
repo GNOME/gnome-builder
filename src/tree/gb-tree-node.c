@@ -30,7 +30,7 @@ struct _GbTreeNodePrivate
   GbTreeNode    *parent;
   gchar         *text;
   GbTree        *tree;
-  gboolean       use_markup;
+  guint          use_markup : 1;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbTreeNode, gb_tree_node, G_TYPE_INITIALLY_UNOWNED)
@@ -321,7 +321,7 @@ gb_tree_node_set_use_markup (GbTreeNode *node,
 {
   g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  node->priv->use_markup = use_markup;
+  node->priv->use_markup = !!use_markup;
   g_object_notify_by_pspec (G_OBJECT (node), gParamSpecs [PROP_USE_MARKUP]);
 }
 

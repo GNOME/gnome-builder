@@ -142,7 +142,7 @@ gb_editor_view_set_auto_indent (GbEditorView *view,
 {
   g_return_if_fail (GB_IS_EDITOR_VIEW (view));
 
-  view->priv->auto_indent = auto_indent;
+  view->priv->auto_indent = !!auto_indent;
   gb_editor_view_action_set_state (view, "auto-indent",
                                    g_variant_new_boolean (auto_indent));
   g_object_notify_by_pspec (G_OBJECT (view), gParamSpecs [PROP_AUTO_INDENT]);
@@ -164,7 +164,7 @@ gb_editor_view_set_highlight_current_line (GbEditorView *view,
 
   g_return_if_fail (GB_IS_EDITOR_VIEW (view));
 
-  view->priv->highlight_current_line = highlight_current_line;
+  view->priv->highlight_current_line = !!highlight_current_line;
   variant = g_variant_new_boolean (highlight_current_line);
   gb_editor_view_action_set_state (view, "highlight-current-line", variant);
   g_object_notify_by_pspec (G_OBJECT (view),
@@ -187,7 +187,7 @@ gb_editor_view_set_show_right_margin (GbEditorView *view,
 
   g_return_if_fail (GB_IS_EDITOR_VIEW (view));
 
-  view->priv->show_right_margin = show_right_margin;
+  view->priv->show_right_margin = !!show_right_margin;
   variant = g_variant_new_boolean (show_right_margin);
   gb_editor_view_action_set_state (view, "show-right-margin", variant);
   g_object_notify_by_pspec (G_OBJECT (view),
@@ -210,7 +210,7 @@ gb_editor_view_set_show_line_numbers (GbEditorView *view,
 
   g_return_if_fail (GB_IS_EDITOR_VIEW (view));
 
-  view->priv->show_line_numbers = show_line_numbers;
+  view->priv->show_line_numbers = !!show_line_numbers;
   variant = g_variant_new_boolean (show_line_numbers);
   gb_editor_view_action_set_state (view, "show-line-numbers", variant);
   g_object_notify_by_pspec (G_OBJECT (view),
@@ -257,7 +257,7 @@ gb_editor_view_set_use_spaces (GbEditorView *view,
 {
   g_return_if_fail (GB_IS_EDITOR_VIEW (view));
 
-  view->priv->use_spaces = use_spaces;
+  view->priv->use_spaces = !!use_spaces;
   gb_editor_view_action_set_state (view, "use-spaces",
                                    g_variant_new_boolean (use_spaces));
   g_object_notify_by_pspec (G_OBJECT (view), gParamSpecs [PROP_USE_SPACES]);

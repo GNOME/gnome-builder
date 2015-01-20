@@ -137,7 +137,7 @@ gb_source_view_set_insert_matching_brace (GbSourceView *view,
 
   if (view->priv->insert_matching_brace != insert_matching_brace)
     {
-      view->priv->insert_matching_brace = insert_matching_brace;
+      view->priv->insert_matching_brace = !!insert_matching_brace;
       g_object_notify_by_pspec (G_OBJECT (view),
                                 gParamSpecs [PROP_INSERT_MATCHING_BRACE]);
     }
@@ -159,7 +159,7 @@ gb_source_view_set_overwrite_braces (GbSourceView *view,
 
   if (view->priv->overwrite_braces != overwrite_braces)
     {
-      view->priv->overwrite_braces = overwrite_braces;
+      view->priv->overwrite_braces = !!overwrite_braces;
       g_object_notify_by_pspec (G_OBJECT (view),
                                 gParamSpecs [PROP_OVERWRITE_BRACES]);
     }
@@ -200,7 +200,7 @@ gb_source_view_set_enable_word_completion (GbSourceView *view,
             GTK_SOURCE_COMPLETION_PROVIDER (priv->words_provider),
             NULL);
 
-      priv->enable_word_completion = enable_word_completion;
+      priv->enable_word_completion = !!enable_word_completion;
       g_object_notify_by_pspec (G_OBJECT (view),
                                 gParamSpecs [PROP_ENABLE_WORD_COMPLETION]);
     }
@@ -428,7 +428,7 @@ gb_source_view_set_show_shadow (GbSourceView *view,
 {
   g_return_if_fail (GB_IS_SOURCE_VIEW (view));
 
-  view->priv->show_shadow = show_shadow;
+  view->priv->show_shadow = !!show_shadow;
   g_object_notify_by_pspec (G_OBJECT (view), gParamSpecs[PROP_SHOW_SHADOW]);
   invalidate_window (view);
 }
@@ -2142,7 +2142,7 @@ gb_source_view_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_AUTO_INDENT:
-      view->priv->auto_indent = g_value_get_boolean (value);
+      view->priv->auto_indent = !!g_value_get_boolean (value);
       gb_source_view_reload_auto_indenter (view);
       break;
 

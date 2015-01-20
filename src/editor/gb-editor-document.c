@@ -148,7 +148,7 @@ gb_editor_document_set_read_only (GbEditorDocument *document,
 
   if (document->priv->read_only != read_only)
     {
-      document->priv->read_only = read_only;
+      document->priv->read_only = !!read_only;
       g_object_notify (G_OBJECT (document), "read-only");
       gb_editor_document_update_title (document);
     }
@@ -172,7 +172,7 @@ gb_editor_document_set_file_changed_on_volume (GbEditorDocument *document,
 
   if (file_changed_on_volume != document->priv->file_changed_on_volume)
     {
-      document->priv->file_changed_on_volume = file_changed_on_volume;
+      document->priv->file_changed_on_volume = !!file_changed_on_volume;
       g_object_notify_by_pspec (G_OBJECT (document),
                                 gParamSpecs [PROP_FILE_CHANGED_ON_VOLUME]);
     }
@@ -280,7 +280,7 @@ gb_editor_document_set_trim_trailing_whitespace (GbEditorDocument *document,
 
   if (trim_trailing_whitespace != document->priv->trim_trailing_whitespace)
     {
-      document->priv->trim_trailing_whitespace = trim_trailing_whitespace;
+      document->priv->trim_trailing_whitespace = !!trim_trailing_whitespace;
       g_object_notify_by_pspec (G_OBJECT (document),
                                 gParamSpecs [PROP_TRIM_TRAILING_WHITESPACE]);
     }

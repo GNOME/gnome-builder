@@ -40,7 +40,7 @@ struct _GbSourceSnippetPrivate
   gint                    tab_stop;
   gint                    max_tab_stop;
   gint                    current_chunk;
-  gboolean                inserted;
+  guint                   inserted : 1;
 };
 
 enum {
