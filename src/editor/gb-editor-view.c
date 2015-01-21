@@ -670,15 +670,20 @@ gb_editor_view_on_vim_split (GbEditorView     *self,
                              GbSourceVimSplit  split,
                              GbSourceVim      *vim)
 {
+  GtkWidget *toplevel;
+  GtkWidget *focus = NULL;
   gboolean ret = FALSE;
 
   g_return_val_if_fail (GB_IS_EDITOR_VIEW (self), FALSE);
   g_return_val_if_fail (split, FALSE);
   g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
 
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+
   switch (split)
     {
     case GB_SOURCE_VIM_SPLIT_HORIZONTAL:
+      focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
       if (!gb_editor_view_get_split_enabled (self))
         {
           gb_editor_view_toggle_split (self);
@@ -687,6 +692,7 @@ gb_editor_view_on_vim_split (GbEditorView     *self,
       break;
 
     case GB_SOURCE_VIM_SPLIT_VERTICAL:
+      focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
       gb_widget_activate_action (GTK_WIDGET (self),
                                  "stack", "split-document-right",
                                  NULL);
@@ -736,6 +742,9 @@ gb_editor_view_on_vim_split (GbEditorView     *self,
     default:
       break;
     }
+
+  if (focus)
+    gtk_widget_grab_focus (focus);
 
   return ret;
 }
