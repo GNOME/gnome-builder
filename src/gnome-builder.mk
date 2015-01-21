@@ -221,7 +221,8 @@ libgnome_builder_la_LIBADD = \
 	-lm
 
 libgnome_builder_la_CFLAGS = \
-	-DPACKAGE_DATADIR="\"$(datadir)\"" \
+	-DPACKAGE_DATADIR="\"${datadir}\"" \
+	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\" \
 	$(BUILDER_CFLAGS) \
 	$(MAINTAINER_CFLAGS) \
 	-I$(top_builddir)/src/util \

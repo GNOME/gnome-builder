@@ -18,10 +18,15 @@
 
 #define G_LOG_DOMAIN "Builder"
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <libgit2-glib/ggit.h>
+#include <locale.h>
 
 #include "gb-application.h"
 #include "gb-log.h"
@@ -33,7 +38,13 @@ main (int   argc,
   GApplication *app;
   int ret;
 
-  g_set_prgname ("gnome-builder");
+  setlocale (LC_ALL, "");
+
+  bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  textdomain (GETTEXT_PACKAGE);
+
+  g_set_prgname (PACKAGE_TARNAME);
   g_set_application_name (_("Builder"));
 
   gb_log_init (TRUE, NULL);

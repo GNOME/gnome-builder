@@ -31,6 +31,7 @@ for group in ac am config lt output print; do
 done
 
 # Run autoconf to build configure.
+intltoolize --automake
 autoreconf --force --install --verbose -I build/autotools ${ACLOCAL_FLAGS} || exit $?
 
 # Remove that pesky autom4te.cache

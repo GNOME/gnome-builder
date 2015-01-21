@@ -17,6 +17,14 @@ AC_SUBST(ACLOCAL_AMFLAGS, "-I build/autotools")
 AC_CONFIG_HEADERS([config.h])
 m4_include([build/autotools/autoconf.d/post-ac.m4])
 
+# Initialize gettext
+IT_PROG_INTLTOOL([0.50.1])
+GETTEXT_PACKAGE=AC_PACKAGE_TARNAME
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"],
+                   [GETTEXT package name])
+AM_GLIB_GNU_GETTEXT
+
 # Initlize libtool and things that go with it.
 m4_include([build/autotools/autoconf.d/pre-lt.m4])
 m4_include([build/autotools/autoconf.d/setup_libtool.m4])
@@ -52,6 +60,7 @@ AC_CONFIG_FILES([
 	data/org.gnome.builder.editor.gschema.xml
 	data/org.gnome.builder.editor.language.gschema.xml
 	data/org.gnome.builder.editor.vim.gschema.xml
+	po/Makefile.in
 ])
 
 # Last change to configure things and write configuration files.
