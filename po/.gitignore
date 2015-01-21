@@ -1,3 +1,4 @@
+*.gmo
 Makefile.in.in
 POTFILES
 gnome-builder.pot
