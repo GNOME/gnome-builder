@@ -99,6 +99,7 @@ enum {
   PROP_SEARCH_HIGHLIGHTER,
   PROP_SHOW_SHADOW,
   PROP_SMART_HOME_END_SIMPLE,
+  PROP_SHOW_GRID_LINES,
   LAST_PROP
 };
 
@@ -220,6 +221,7 @@ gb_source_view_disconnect_settings (GbSourceView *view)
   if (!GB_IS_EDITOR_DOCUMENT (buffer))
     return;
 
+  g_settings_unbind (buffer, "show-grid-lines");
   g_settings_unbind (buffer, "highlight-matching-brackets");
   g_settings_unbind (buffer, "style-scheme-name");
 
@@ -309,6 +311,8 @@ gb_source_view_connect_settings (GbSourceView *view)
                    buffer, "highlight-matching-brackets",G_SETTINGS_BIND_GET);
   g_settings_bind (view->priv->editor_settings, "smart-home-end",
                    view, "smart-home-end-simple",G_SETTINGS_BIND_GET);
+  g_settings_bind (view->priv->editor_settings, "show-grid-lines",
+                   view, "show-grid-lines",G_SETTINGS_BIND_GET);
 }
 
 void
@@ -2166,6 +2170,15 @@ gb_source_view_set_property (GObject      *object,
                                             GTK_SOURCE_SMART_HOME_END_DISABLED);
       break;
 
+    case PROP_SHOW_GRID_LINES:
+      if (g_value_get_boolean (value))
+        gtk_source_view_set_background_pattern (GTK_SOURCE_VIEW (view),
+                                                GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID);
+      else
+        gtk_source_view_set_background_pattern (GTK_SOURCE_VIEW (view),
+                                                GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -2259,6 +2272,15 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                           (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SMART_HOME_END_SIMPLE,
                                    gParamSpecs [PROP_SMART_HOME_END_SIMPLE]);
+
+  gParamSpecs [PROP_SHOW_GRID_LINES] =
+    g_param_spec_boolean ("show-grid-lines",
+                          _("Show Grid Lines"),
+                          _("Whether to show the grid lines."),
+                          TRUE,
+                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SHOW_GRID_LINES,
+                                   gParamSpecs [PROP_SHOW_GRID_LINES]);
 
   g_object_class_override_property (object_class,
                                     PROP_AUTO_INDENT,

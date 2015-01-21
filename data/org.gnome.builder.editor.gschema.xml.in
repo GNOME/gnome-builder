@@ -41,6 +41,11 @@
       <summary>Smart home end.</summary>
       <description>Whether or not home moves to first non-space character.</description>
     </key>
+    <key name="show-grid-lines" type="b">
+      <default>true</default>
+      <summary>Show grid lines.</summary>
+      <description>If enabled, the editor will show grid lines in the document.</description>
+    </key>
     <key name="font-name" type="s">
       <default>"Monospace 11"</default>
     </key>
