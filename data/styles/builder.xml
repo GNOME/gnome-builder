@@ -80,6 +80,7 @@
   <style name="current-line-number"         background="#rgba(238,238,236,.75)"/>
   <style name="draw-spaces"                 foreground="aluminium3"/>
   <style name="line-numbers"                foreground="line1" background="bg1"/>
+  <style name="background-pattern"          background="#rgba(.125,.125,.125,.025)"/>
 
   <!-- Bracket Matching -->
   <style name="bracket-match"               foreground="aluminium3" background="aluminium1" bold="true"/>

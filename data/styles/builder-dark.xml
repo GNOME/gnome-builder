@@ -65,6 +65,7 @@
   <style name="current-line-number"         background="#rgba(85,87,83,.5)"/>
   <style name="line-numbers"                foreground="aluminium4" background="aluminium6"/>
   <style name="draw-spaces"                 foreground="aluminium4"/>
+  <style name="background-pattern"          background="#32383a"/>
 
   <!-- Bracket Matching -->
   <style name="bracket-match"               foreground="chocolate2" bold="true"/>
