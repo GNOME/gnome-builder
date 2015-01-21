@@ -72,6 +72,9 @@ struct _GbSourceViewPrivate
   guint                        buffer_mark_set_handler;
   guint                        buffer_notify_language_handler;
 
+  gint                         saved_line;
+  gint                         saved_line_offset;
+
   guint                        auto_indent : 1;
   guint                        enable_word_completion : 1;
   guint                        insert_matching_brace : 1;
@@ -2027,6 +2030,49 @@ gb_source_view_drag_data_received (GtkWidget        *widget,
     }
 }
 
+static void
+gb_source_view_save_cursor (GbSourceView *view)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  view->priv->saved_line = gtk_text_iter_get_line (&iter);
+  view->priv->saved_line_offset = gtk_text_iter_get_line_offset (&iter);
+}
+
+static void
+gb_source_view_restore_cursor (GbSourceView *view)
+{
+  GbSourceViewPrivate *priv;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  priv = view->priv;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  if ((view->priv->saved_line == gtk_text_iter_get_line (&iter)) &&
+      (view->priv->saved_line_offset == gtk_text_iter_get_line_offset (&iter)))
+    return;
+
+  if (gb_gtk_text_buffer_get_iter_at_line_and_offset (buffer, &iter,
+                                                      priv->saved_line,
+                                                      priv->saved_line_offset))
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+}
+
 static gboolean
 gb_source_view_focus_in_event (GtkWidget     *widget,
                                GdkEventFocus *event)
@@ -2036,6 +2082,8 @@ gb_source_view_focus_in_event (GtkWidget     *widget,
 
   g_return_val_if_fail (GB_IS_SOURCE_VIEW (widget), FALSE);
   g_return_val_if_fail (event, FALSE);
+
+  gb_source_view_restore_cursor (GB_SOURCE_VIEW (widget));
 
   ret = GTK_WIDGET_CLASS (gb_source_view_parent_class)->focus_in_event (widget, event);
 
@@ -2054,6 +2102,8 @@ gb_source_view_focus_out_event (GtkWidget     *widget,
 
   g_return_val_if_fail (GB_IS_SOURCE_VIEW (widget), FALSE);
   g_return_val_if_fail (event, FALSE);
+
+  gb_source_view_save_cursor (GB_SOURCE_VIEW (widget));
 
   ret = GTK_WIDGET_CLASS (gb_source_view_parent_class)->focus_out_event (widget, event);
 
@@ -2384,6 +2434,9 @@ gb_source_view_init (GbSourceView *view)
   view->priv->css_provider = gtk_css_provider_new ();
 
   view->priv->snippets = g_queue_new ();
+
+  view->priv->saved_line = -1;
+  view->priv->saved_line_offset = -1;
 
   g_signal_connect (view,
                     "notify::buffer",
