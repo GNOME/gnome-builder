@@ -703,9 +703,18 @@ gb_editor_view_on_vim_split (GbEditorView     *self,
       break;
 
     case GB_SOURCE_VIM_SPLIT_CYCLE_PREVIOUS:
-      /* TODO: Take our split into account */
-      gb_widget_activate_action (GTK_WIDGET (self), "stack", "focus-left",
-                                 NULL);
+      {
+        GbEditorFrame *frame2;
+
+        frame2 = gb_editor_view_get_frame2 (self);
+
+        if (frame2 &&
+            gtk_widget_has_focus (GTK_WIDGET (frame2->priv->source_view)))
+          gb_editor_view_switch_pane (NULL, NULL, self);
+        else
+          gb_widget_activate_action (GTK_WIDGET (self), "stack", "focus-left",
+                                     NULL);
+      }
       break;
 
     case GB_SOURCE_VIM_SPLIT_CLOSE:
