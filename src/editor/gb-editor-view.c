@@ -640,6 +640,31 @@ gb_editor_view_set_document (GbEditorView     *view,
     }
 }
 
+static void
+gb_editor_view_switch_pane (GSimpleAction *action,
+                            GVariant      *parameter,
+                            gpointer       user_data)
+{
+  GbEditorView *view = user_data;
+
+  ENTRY;
+
+  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
+
+  if (!gtk_widget_has_focus (GTK_WIDGET (view->priv->frame->priv->source_view)))
+    gtk_widget_grab_focus (GTK_WIDGET (view->priv->frame));
+  else
+    {
+      GtkWidget *child2;
+
+      child2 = gtk_paned_get_child2 (view->priv->paned);
+      if (child2)
+        gtk_widget_grab_focus (child2);
+    }
+
+  EXIT;
+}
+
 static gboolean
 gb_editor_view_on_vim_split (GbEditorView     *self,
                              GbSourceVimSplit  split,
@@ -794,31 +819,6 @@ gb_editor_view_set_split_enabled (GbEditorView *view,
   gb_editor_view_toggle_split (view);
   g_object_notify_by_pspec (G_OBJECT (view),
                             gParamSpecs [PROP_SPLIT_ENABLED]);
-}
-
-static void
-gb_editor_view_switch_pane (GSimpleAction *action,
-                            GVariant      *parameter,
-                            gpointer       user_data)
-{
-  GbEditorView *view = user_data;
-
-  ENTRY;
-
-  g_return_if_fail (GB_IS_EDITOR_VIEW (view));
-
-  if (!gtk_widget_has_focus (GTK_WIDGET (view->priv->frame->priv->source_view)))
-    gtk_widget_grab_focus (GTK_WIDGET (view->priv->frame));
-  else
-    {
-      GtkWidget *child2;
-
-      child2 = gtk_paned_get_child2 (view->priv->paned);
-      if (child2)
-        gtk_widget_grab_focus (child2);
-    }
-
-  EXIT;
 }
 
 static void
