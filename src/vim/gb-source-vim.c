@@ -3265,8 +3265,7 @@ gb_source_vim_handle_ctrl_w (GbSourceVim *vim,
       break;
 
     case GDK_KEY_w:
-      if ((event->state & GDK_CONTROL_MASK))
-        split = GB_SOURCE_VIM_SPLIT_CYCLE_NEXT;
+      split = GB_SOURCE_VIM_SPLIT_CYCLE_NEXT;
       break;
 
     default:
