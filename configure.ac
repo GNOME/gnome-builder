@@ -10,7 +10,7 @@ m4_define([project_bugreport_url],
 
 # Initialize autoconf and things that go with it.
 m4_include([build/autotools/autoconf.d/pre-ac.m4])
-AC_INIT([project_name],[project_version],[project_bugreport_url])
+AC_INIT([project_name],[project_version.1],[project_bugreport_url])
 AC_CONFIG_MACRO_DIRS([build/autotools/m4])
 AC_CONFIG_AUX_DIR([build/autotools])
 AC_SUBST(ACLOCAL_AMFLAGS, "-I build/autotools")
