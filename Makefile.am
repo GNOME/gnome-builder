@@ -12,8 +12,20 @@ include tests/tests.mk
 
 # XXX: Not happy about this, need to come up with a good way to do
 # icon installation that doesn't require subdirs.
-SUBDIRS = . data/icons
+SUBDIRS = . data/icons po
 
 EXTRA_DIST += \
 	tap-driver.sh \
 	tap-test
+
+INTLTOOL_FILES = \
+	intltool-extract.in \
+	intltool-merge.in \
+	intltool-update.in \
+	$(NULL)
+
+EXTRA_DIST += \
+	$(INTLTOOL_FILES) \
+	AUTHORS \
+	$(NULL)
+

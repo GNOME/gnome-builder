@@ -19,6 +19,9 @@ config.log
 config.status
 configure
 gnome-builder
+intltool-extract.in
+intltool-merge.in
+intltool-update.in
 libgnome-builder.la
 libtool
 stamp-h1
