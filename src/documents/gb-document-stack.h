@@ -65,6 +65,8 @@ GType              gb_document_stack_get_type             (void);
 GtkWidget         *gb_document_stack_new                  (void);
 void               gb_document_stack_focus_document       (GbDocumentStack   *stack,
                                                            GbDocument        *document);
+void               gb_document_stack_remove_view          (GbDocumentStack   *stack,
+                                                           GbDocumentView    *view);
 GbDocumentManager *gb_document_stack_get_document_manager (GbDocumentStack   *stack);
 void               gb_document_stack_set_document_manager (GbDocumentStack   *stack,
                                                            GbDocumentManager *manager);

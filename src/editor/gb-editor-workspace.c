@@ -71,12 +71,36 @@ gb_editor_workspace_open (GbEditorWorkspace *workspace,
 
   if (!document)
     {
+      gboolean close_untitled = FALSE;
+      GList *list;
+
+      /*
+       * If we have a single document open, and it is an untitled document,
+       * we want to close it so that it appears that this new document opens
+       * in its place.
+       */
+      list = gb_document_manager_get_documents (manager);
+      if ((g_list_length (list) == 1) &&
+          gb_document_is_untitled (list->data) &&
+          !gb_document_get_modified (list->data))
+        close_untitled = TRUE;
+      g_list_free (list);
+
+      /*
+       * Now open the new document.
+       */
       document = GB_DOCUMENT (gb_editor_document_new ());
       gb_editor_document_load_async (GB_EDITOR_DOCUMENT (document),
                                      file, NULL, NULL, NULL);
       gb_document_manager_add (manager, document);
       gb_document_grid_focus_document (priv->document_grid, document);
       g_object_unref (document);
+
+      /*
+       * Now close the existing views if necessary.
+       */
+      if (close_untitled)
+        gb_document_grid_close_untitled (priv->document_grid);
     }
   else
     gb_document_grid_focus_document (priv->document_grid, document);

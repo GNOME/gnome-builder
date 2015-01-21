@@ -68,7 +68,7 @@ gb_document_stack_new (void)
   return g_object_new (GB_TYPE_DOCUMENT_STACK, NULL);
 }
 
-static void
+void
 gb_document_stack_remove_view (GbDocumentStack *stack,
                                GbDocumentView  *view)
 {

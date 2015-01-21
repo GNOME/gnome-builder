@@ -67,6 +67,7 @@ GtkWidget         *gb_document_grid_get_stack_before     (GbDocumentGrid    *gri
 GList             *gb_document_grid_get_stacks           (GbDocumentGrid    *grid);
 void               gb_document_grid_focus_document       (GbDocumentGrid    *grid,
                                                           GbDocument        *document);
+void               gb_document_grid_close_untitled       (GbDocumentGrid    *grid);
 
 G_END_DECLS
 

@@ -681,6 +681,47 @@ gb_document_grid_get_stack_after (GbDocumentGrid  *grid,
 }
 
 void
+gb_document_grid_close_untitled (GbDocumentGrid *grid)
+{
+  GList *documents;
+  GList *diter;
+  GList *stacks;
+  GList *siter;
+
+  g_return_if_fail (GB_IS_DOCUMENT_GRID (grid));
+
+  documents = gb_document_manager_get_documents (grid->priv->document_manager);
+  stacks = gb_document_grid_get_stacks (grid);
+
+  g_list_foreach (documents, (GFunc)g_object_ref, NULL);
+  g_list_foreach (stacks, (GFunc)g_object_ref, NULL);
+
+  for (diter = documents; diter; diter = diter->next)
+    {
+      if (gb_document_get_modified (diter->data) ||
+          !gb_document_is_untitled (diter->data))
+        continue;
+
+      for (siter = stacks; siter; siter = siter->next)
+        {
+          GtkWidget *view;
+
+          view = gb_document_stack_find_with_document (siter->data,
+                                                       diter->data);
+          if (view)
+            gb_document_stack_remove_view (siter->data,
+                                           GB_DOCUMENT_VIEW (view));
+        }
+    }
+
+  g_list_foreach (documents, (GFunc)g_object_unref, NULL);
+  g_list_foreach (stacks, (GFunc)g_object_unref, NULL);
+
+  g_list_free (documents);
+  g_list_free (stacks);
+}
+
+void
 gb_document_grid_focus_document (GbDocumentGrid *grid,
                                  GbDocument     *document)
 {
