@@ -666,6 +666,46 @@ gb_editor_view_switch_pane (GSimpleAction *action,
 }
 
 static gboolean
+gb_editor_view_on_execute_command (GbEditorView *self,
+                                   const gchar  *command_text,
+                                   GbSourceVim  *vim)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (self), FALSE);
+  g_return_val_if_fail (command_text, FALSE);
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
+
+  if (g_str_equal (command_text, "w"))
+    {
+      gb_widget_activate_action (GTK_WIDGET (self), "stack", "save", NULL);
+      return TRUE;
+    }
+  else if (g_str_equal (command_text, "wq"))
+    {
+      gb_widget_activate_action (GTK_WIDGET (self), "stack", "save", NULL);
+      gb_widget_activate_action (GTK_WIDGET (self), "stack", "close", NULL);
+      return TRUE;
+    }
+  else if (g_str_equal (command_text, "q"))
+    {
+      if (gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (self->priv->document)))
+        {
+          /* TODO: Plumb warning message */
+        }
+      else
+        gb_widget_activate_action (GTK_WIDGET (self), "stack", "close", NULL);
+      return TRUE;
+    }
+  else if (g_str_equal (command_text, "q!"))
+    {
+      /* TODO: don't prompt about saving */
+      gb_widget_activate_action (GTK_WIDGET (self), "stack", "close", NULL);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gb_editor_view_on_vim_split (GbEditorView     *self,
                              GbSourceVimSplit  split,
                              GbSourceVim      *vim)
@@ -777,6 +817,11 @@ gb_editor_view_toggle_split (GbEditorView *view)
                              "visible", TRUE,
                              NULL);
       vim = gb_source_view_get_vim (GB_EDITOR_FRAME (child2)->priv->source_view);
+      g_signal_connect_object (vim,
+                               "execute-command",
+                               G_CALLBACK (gb_editor_view_on_execute_command),
+                               view,
+                               G_CONNECT_SWAPPED);
       g_signal_connect_object (vim,
                                "split",
                                G_CALLBACK (gb_editor_view_on_vim_split),
@@ -1147,6 +1192,11 @@ gb_editor_view_init (GbEditorView *self)
   g_clear_object (&actions);
 
   vim = gb_source_view_get_vim (self->priv->frame->priv->source_view);
+  g_signal_connect_object (vim,
+                           "execute-command",
+                           G_CALLBACK (gb_editor_view_on_execute_command),
+                           self,
+                           G_CONNECT_SWAPPED);
   g_signal_connect_object (vim,
                            "split",
                            G_CALLBACK (gb_editor_view_on_vim_split),
