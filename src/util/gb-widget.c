@@ -248,7 +248,7 @@ gb_widget_activate_action (GtkWidget   *widget,
         }
     }
 
-  if (g_variant_is_floating (parameter))
+  if (parameter && g_variant_is_floating (parameter))
     {
       parameter = g_variant_ref_sink (parameter);
       g_variant_unref (parameter);
