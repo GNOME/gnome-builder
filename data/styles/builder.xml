@@ -122,6 +122,7 @@
 
   <style name="python:builtin-object"       foreground="og1"/>
   <style name="python:keyword"              foreground="green1" bold="false"/>
+  <style name="python:module-handler"       foreground="purple1" bold="false"/>
 
   <style name="xml:tags"                    foreground="chameleon3"/>
   <style name="xml:namespace"               bold="true"/>
