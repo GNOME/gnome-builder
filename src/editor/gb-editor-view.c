@@ -668,6 +668,18 @@ gb_editor_view_on_vim_split (GbEditorView     *self,
       ret = TRUE;
       break;
 
+    case GB_SOURCE_VIM_SPLIT_CYCLE_NEXT:
+      /* TODO: Take our split into account */
+      gb_widget_activate_action (GTK_WIDGET (self), "stack", "focus-right",
+                                 NULL);
+      break;
+
+    case GB_SOURCE_VIM_SPLIT_CYCLE_PREVIOUS:
+      /* TODO: Take our split into account */
+      gb_widget_activate_action (GTK_WIDGET (self), "stack", "focus-left",
+                                 NULL);
+      break;
+
     case GB_SOURCE_VIM_SPLIT_CLOSE:
       if (gb_editor_view_get_split_enabled (self))
         {

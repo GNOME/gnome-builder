@@ -3255,6 +3255,19 @@ gb_source_vim_handle_ctrl_w (GbSourceVim *vim,
       split = GB_SOURCE_VIM_SPLIT_CLOSE;
       break;
 
+    case GDK_KEY_n:
+      split = GB_SOURCE_VIM_SPLIT_CYCLE_NEXT;
+      break;
+
+    case GDK_KEY_p:
+      split = GB_SOURCE_VIM_SPLIT_CYCLE_PREVIOUS;
+      break;
+
+    case GDK_KEY_w:
+      if ((event->state & GDK_CONTROL_MASK))
+        split = GB_SOURCE_VIM_SPLIT_CYCLE_NEXT;
+      break;
+
     default:
       break;
     }
@@ -5649,6 +5662,8 @@ gb_source_vim_split_get_type (void)
     { GB_SOURCE_VIM_SPLIT_HORIZONTAL, "GB_SOURCE_VIM_SPLIT_HORIZONTAL", "HORIZONTAL" },
     { GB_SOURCE_VIM_SPLIT_VERTICAL, "GB_SOURCE_VIM_SPLIT_VERTICAL", "VERTICAL" },
     { GB_SOURCE_VIM_SPLIT_CLOSE, "GB_SOURCE_VIM_SPLIT_CLOSE", "CLOSE" },
+    { GB_SOURCE_VIM_SPLIT_CYCLE_NEXT, "GB_SOURCE_VIM_SPLIT_CYCLE_NEXT", "CYCLE_NEXT" },
+    { GB_SOURCE_VIM_SPLIT_CYCLE_PREVIOUS, "GB_SOURCE_VIM_SPLIT_CYCLE_PREVIOUS", "CYCLE_PREVIOUS" },
     { 0 }
   };
 

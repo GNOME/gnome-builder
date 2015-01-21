@@ -177,6 +177,47 @@ gb_document_grid_remove_stack (GbDocumentGrid  *grid,
   g_list_free (stacks);
 }
 
+static GtkWidget *
+gb_document_grid_get_first_stack (GbDocumentGrid *grid)
+{
+  GtkWidget *child;
+
+  g_return_val_if_fail (GB_IS_DOCUMENT_GRID (grid), NULL);
+
+  child = gtk_bin_get_child (GTK_BIN (grid));
+
+  if (GTK_IS_PANED (child))
+    {
+      child = gtk_paned_get_child1 (GTK_PANED (child));
+      if (GB_IS_DOCUMENT_STACK (child))
+        return child;
+    }
+
+  return NULL;
+}
+
+static GtkWidget *
+gb_document_grid_get_last_stack (GbDocumentGrid *grid)
+{
+  GtkWidget *child;
+  GtkWidget *child2;
+
+  g_return_val_if_fail (GB_IS_DOCUMENT_GRID (grid), NULL);
+
+  child = gtk_bin_get_child (GTK_BIN (grid));
+
+  while (GTK_IS_PANED (child) &&
+         (child2 = gtk_paned_get_child2 (GTK_PANED (child))))
+    child = child2;
+
+  child = gtk_paned_get_child1 (GTK_PANED (child));
+
+  if (GB_IS_DOCUMENT_STACK (child))
+    return child;
+
+  return NULL;
+}
+
 static void
 gb_document_grid_focus_neighbor (GbDocumentGrid   *grid,
                                  GtkDirectionType  dir,
@@ -191,10 +232,14 @@ gb_document_grid_focus_neighbor (GbDocumentGrid   *grid,
     {
     case GTK_DIR_LEFT:
       neighbor = gb_document_grid_get_stack_before (grid, stack);
+      if (!neighbor)
+        neighbor = gb_document_grid_get_last_stack (grid);
       break;
 
     case GTK_DIR_RIGHT:
       neighbor = gb_document_grid_get_stack_after (grid, stack);
+      if (!neighbor)
+        neighbor = gb_document_grid_get_first_stack (grid);
       break;
 
     default:
