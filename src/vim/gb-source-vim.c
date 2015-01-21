@@ -85,6 +85,7 @@ struct _GbSourceVimPrivate
   gulong                   event_after_handler;
   gulong                   key_release_event_handler;
   gulong                   focus_in_event_handler;
+  gulong                   focus_out_event_handler;
   gulong                   mark_set_handler;
   gulong                   delete_range_handler;
   guint                    target_line_offset;
@@ -3365,6 +3366,20 @@ gb_source_vim_focus_in_event_cb (GtkTextView *text_view,
   return FALSE;
 }
 
+static gboolean
+gb_source_vim_focus_out_event_cb (GtkTextView *text_view,
+                                  GdkEvent    *event,
+                                  GbSourceVim *vim)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+  g_return_val_if_fail (event, FALSE);
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
+
+  vim->priv->in_ctrl_w = FALSE;
+
+  return FALSE;
+}
+
 static void
 gb_source_vim_maybe_adjust_insert (GbSourceVim *vim)
 {
@@ -3555,6 +3570,13 @@ gb_source_vim_connect (GbSourceVim *vim)
                              vim,
                              0);
 
+  vim->priv->focus_out_event_handler =
+    g_signal_connect_object (vim->priv->text_view,
+                             "focus-out-event",
+                             G_CALLBACK (gb_source_vim_focus_out_event_cb),
+                             vim,
+                             0);
+
   vim->priv->mark_set_handler =
     g_signal_connect_object (buffer,
                             "mark-set",
@@ -3603,6 +3625,10 @@ gb_source_vim_disconnect (GbSourceVim *vim)
   g_signal_handler_disconnect (vim->priv->text_view,
                                vim->priv->focus_in_event_handler);
   vim->priv->focus_in_event_handler = 0;
+
+  g_signal_handler_disconnect (vim->priv->text_view,
+                               vim->priv->focus_out_event_handler);
+  vim->priv->focus_out_event_handler = 0;
 
   g_signal_handler_disconnect (gtk_text_view_get_buffer (vim->priv->text_view),
                                vim->priv->mark_set_handler);
