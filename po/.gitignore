@@ -1,3 +1,4 @@
 Makefile.in.in
 POTFILES
+gnome-builder.pot
 stamp-it
