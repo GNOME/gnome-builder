@@ -27,7 +27,7 @@
       <description>If enabled, the editor will highlight the line containing the cursor.</description>
     </key>
     <key name="highlight-matching-brackets" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>Highlight matching brackets.</summary>
       <description>If enabled, the editor will highlight maching brackets.</description>
     </key>
