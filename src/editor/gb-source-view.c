@@ -1779,86 +1779,8 @@ gb_source_view_real_draw_layer (GbSourceView     *view,
                                 GtkTextViewLayer  layer,
                                 cairo_t          *cr)
 {
-  static GdkRGBA lines_dark = { 0 };
-  static GdkRGBA lines_light = { 0 };
   GbSourceViewPrivate *priv = view->priv;
-  GtkSourceStyleScheme *scheme;
   GtkTextView *text_view = GTK_TEXT_VIEW (view);
-  const gchar *scheme_id;
-  GtkTextBuffer *buffer;
-
-  /*
-   * WORKAROUND:
-   *
-   * We can't do our grid background from a GtkSourceStyleScheme, so we hack it
-   * in here. Once we can do this with CSS background's, we should probably do
-   * it there.
-   */
-  if ((layer == GTK_TEXT_VIEW_LAYER_BELOW) &&
-      (buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view))) &&
-      GTK_SOURCE_IS_BUFFER (buffer) &&
-      (scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer))) &&
-      (scheme_id = gtk_source_style_scheme_get_id (scheme)) &&
-      strncmp ("builder", scheme_id, 7) == 0)
-    {
-      GdkRectangle clip;
-      GdkRectangle vis;
-      GdkRGBA *lines;
-      gdouble x;
-      gdouble y;
-      PangoContext *context;
-      PangoLayout *layout;
-      int grid_width = 16;
-      int grid_height = 16;
-
-      context = gtk_widget_get_pango_context (GTK_WIDGET (view));
-      layout = pango_layout_new (context);
-      pango_layout_set_text (layout, "X", 1);
-      pango_layout_get_pixel_size (layout, &grid_width, &grid_height);
-      g_object_unref (layout);
-
-      /* each character becomes 2 stacked boxes. */
-      grid_height /= 2;
-
-      if (lines_light.alpha == 0.0)
-        gdk_rgba_parse (&lines_light, "rgba(.125,.125,.125,.025)");
-      if (lines_dark.alpha == 0.0)
-        gdk_rgba_parse (&lines_dark, "#32383a");
-
-      lines = g_str_equal ("builder", scheme_id) ? &lines_light : &lines_dark;
-
-      cairo_save (cr);
-      cairo_set_line_width (cr, 1.0);
-      gdk_cairo_set_source_rgba (cr, lines);
-      gdk_cairo_get_clip_rectangle (cr, &clip);
-      gtk_text_view_get_visible_rect (text_view, &vis);
-
-      /*
-       * The following constants come from gtktextview.c pixel cache
-       * settings. Sadly, I didn't expose those in public API so we have to
-       * just keep them in sync here. 64 for X, height/2 for Y.
-       */
-      x = (grid_width - (vis.x % grid_width)) - (64 / grid_width * grid_width)
-        - grid_width + 2;
-      y = (grid_height - (vis.y % grid_height))
-          - (vis.height / 2 / grid_height * grid_height)
-          - grid_height;
-
-      for (; x <= clip.x + clip.width; x += grid_width)
-        {
-          cairo_move_to (cr, x + .5, clip.y - .5);
-          cairo_line_to (cr, x + .5, clip.y + clip.height - .5);
-        }
-
-      for (; y <= clip.y + clip.height; y += grid_height)
-        {
-          cairo_move_to (cr, clip.x + .5, y - .5);
-          cairo_line_to (cr, clip.x + clip.width + .5, y - .5);
-        }
-
-      cairo_stroke (cr);
-      cairo_restore (cr);
-    }
 
   GTK_TEXT_VIEW_CLASS (gb_source_view_parent_class)->draw_layer (text_view, layer, cr);
 
