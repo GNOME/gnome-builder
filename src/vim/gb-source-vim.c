@@ -554,8 +554,6 @@ gb_source_vim_clear_selection (GbSourceVim *vim)
     }
 
   vim->priv->target_line_offset = gb_source_vim_get_line_offset (vim);
-
-  gb_source_vim_ensure_scroll (vim);
 }
 
 GbSourceVimMode
