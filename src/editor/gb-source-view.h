@@ -74,6 +74,7 @@ void                  gb_source_view_begin_search         (GbSourceView         
                                                            GtkDirectionType      direction,
                                                            const gchar          *search_text);
 void                  gb_source_view_clear_snippets       (GbSourceView         *view);
+void                  gb_source_view_clear_saved_cursor   (GbSourceView         *view);
 GbSourceAutoIndenter *gb_source_view_get_auto_indenter    (GbSourceView         *view);
 gboolean              gb_source_view_get_overwrite_braces (GbSourceView         *view);
 gboolean              gb_source_view_get_show_shadow      (GbSourceView         *view);

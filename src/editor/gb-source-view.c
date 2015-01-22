@@ -2030,6 +2030,15 @@ gb_source_view_drag_data_received (GtkWidget        *widget,
     }
 }
 
+void
+gb_source_view_clear_saved_cursor (GbSourceView *view)
+{
+  g_return_if_fail (GB_IS_SOURCE_VIEW (view));
+
+  view->priv->saved_line = -1;
+  view->priv->saved_line_offset = -1;
+}
+
 static void
 gb_source_view_save_cursor (GbSourceView *view)
 {
@@ -2059,12 +2068,15 @@ gb_source_view_restore_cursor (GbSourceView *view)
 
   priv = view->priv;
 
+  if (priv->saved_line == -1 || priv->saved_line_offset == -1)
+    return;
+
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
 
-  if ((view->priv->saved_line == gtk_text_iter_get_line (&iter)) &&
-      (view->priv->saved_line_offset == gtk_text_iter_get_line_offset (&iter)))
+  if ((priv->saved_line == gtk_text_iter_get_line (&iter)) &&
+      (priv->saved_line_offset == gtk_text_iter_get_line_offset (&iter)))
     return;
 
   if (gb_gtk_text_buffer_get_iter_at_line_and_offset (buffer, &iter,
