@@ -177,6 +177,7 @@ gb_editor_frame_move_next_match (GbEditorFrame *self,
   EXIT;
 
 found_match:
+  gb_source_view_clear_saved_cursor (priv->source_view);
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->document),
                                 &match_begin, &match_end);
 
@@ -230,6 +231,7 @@ gb_editor_frame_move_previous_match (GbEditorFrame *self)
   EXIT;
 
 found_match:
+  gb_source_view_clear_saved_cursor (priv->source_view);
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->document),
                                 &match_begin, &match_end);
   gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view),
