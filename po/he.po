@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 15:22+0200\n"
-"PO-Revision-Date: 2015-01-21 15:52+0200\n"
+"POT-Creation-Date: 2015-01-22 12:09+0200\n"
+"PO-Revision-Date: 2015-01-22 12:46+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -96,21 +96,13 @@ msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
 "an attachment on your bug report or support request."
 msgstr ""
-"קובץ יומכן התמיכה נכתב אל '%s'. נא לספק קובץ זה כנספח בדיווח הבאג שלך או "
+"קובץ יומן התמיכה נכתב אל '%s'. נא לספק קובץ זה כנספח בדיווח הבאג שלך או "
 "בבקשת תמיכה."
 
 #: ../src/auto-indent/gb-source-auto-indenter-c.c:1467
 #: ../src/auto-indent/gb-source-auto-indenter-c.c:1468
 msgid "Name"
 msgstr "Name"
-
-#: ../src/code-assistant/gb-source-code-assistant-renderer.c:319
-msgid "Code Assistant"
-msgstr "Code Assistant"
-
-#: ../src/code-assistant/gb-source-code-assistant-renderer.c:320
-msgid "The code assistant to render."
-msgstr "The code assistant to render."
 
 #: ../src/code-assistant/gb-source-code-assistant.c:764
 msgid "Active"
@@ -137,15 +129,13 @@ msgid ""
 msgstr ""
 "Failed to load DBus connection. Code assistance will be disabled. \"%s\" (%s)"
 
-#: ../src/commands/gb-command-bar-item.c:175
-#: ../src/search/gb-search-display-row.c:159
-#: ../src/search/gb-search-display-row.c:160
-msgid "Result"
-msgstr "Result"
+#: ../src/code-assistant/gb-source-code-assistant-renderer.c:319
+msgid "Code Assistant"
+msgstr "Code Assistant"
 
-#: ../src/commands/gb-command-bar-item.c:176
-msgid "The result to be visualized in the item."
-msgstr "The result to be visualized in the item."
+#: ../src/code-assistant/gb-source-code-assistant-renderer.c:320
+msgid "The code assistant to render."
+msgstr "The code assistant to render."
 
 #: ../src/commands/gb-command-bar.c:223
 #, c-format
@@ -155,6 +145,16 @@ msgstr "פקודה לא נמצאה: %s"
 #: ../src/commands/gb-command-bar.c:524
 msgid "Use the entry below to execute a command"
 msgstr "יש להשתמש ברשימון שלהלן לביצוע פקודה"
+
+#: ../src/commands/gb-command-bar-item.c:175
+#: ../src/search/gb-search-display-row.c:159
+#: ../src/search/gb-search-display-row.c:160
+msgid "Result"
+msgstr "Result"
+
+#: ../src/commands/gb-command-bar-item.c:176
+msgid "The result to be visualized in the item."
+msgstr "The result to be visualized in the item."
 
 #: ../src/commands/gb-command-gaction.c:186
 msgid "Action Group"
@@ -304,6 +304,7 @@ msgid "Close _without Saving"
 msgstr "סגירה _ללא שמירה"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:317
+#: ../src/resources/ui/gb-editor-view.ui.h:2
 msgid "_Cancel"
 msgstr "_ביטול"
 
@@ -418,6 +419,32 @@ msgstr "נא ל_בחור את הקבצים שברצונך לשמור:"
 msgid "If you don't save, all your changes will be permanently lost."
 msgstr "אם לא תתבצע שמירה, כל השינויים יאבדו."
 
+#: ../src/documents/gb-document.c:188
+msgid "Modified"
+msgstr "Modified"
+
+#: ../src/documents/gb-document.c:189
+msgid "If the document has been modified from disk."
+msgstr "If the document has been modified from disk."
+
+#: ../src/documents/gb-document.c:196
+#: ../src/preferences/gb-preferences-page.c:214
+#: ../src/search/gb-search-result.c:241 ../src/workbench/gb-workspace.c:151
+msgid "Title"
+msgstr "Title"
+
+#: ../src/documents/gb-document.c:197
+msgid "The title of the document."
+msgstr "The title of the document."
+
+#: ../src/documents/gb-document.c:204
+msgid "Read Only"
+msgstr "Read Only"
+
+#: ../src/documents/gb-document.c:205
+msgid "If the document is read only."
+msgstr "If the document is read only."
+
 #: ../src/documents/gb-document-grid.c:840
 #: ../src/documents/gb-document-menu-button.c:667
 #: ../src/documents/gb-document-stack.c:881
@@ -472,32 +499,6 @@ msgstr "The widget containing the view controls."
 msgid "The document being viewed."
 msgstr "The document being viewed."
 
-#: ../src/documents/gb-document.c:188
-msgid "Modified"
-msgstr "Modified"
-
-#: ../src/documents/gb-document.c:189
-msgid "If the document has been modified from disk."
-msgstr "If the document has been modified from disk."
-
-#: ../src/documents/gb-document.c:196
-#: ../src/preferences/gb-preferences-page.c:214
-#: ../src/search/gb-search-result.c:241 ../src/workbench/gb-workspace.c:151
-msgid "Title"
-msgstr "Title"
-
-#: ../src/documents/gb-document.c:197
-msgid "The title of the document."
-msgstr "The title of the document."
-
-#: ../src/documents/gb-document.c:204
-msgid "Read Only"
-msgstr "Read Only"
-
-#: ../src/documents/gb-document.c:205
-msgid "If the document is read only."
-msgstr "If the document is read only."
-
 #: ../src/editor/gb-editor-document.c:664
 #, c-format
 msgid "%s (Read Only)"
@@ -517,7 +518,7 @@ msgstr "שמירת מסמך בשם"
 msgid "Cancel"
 msgstr "ביטול"
 
-#: ../src/editor/gb-editor-document.c:799
+#: ../src/editor/gb-editor-document.c:799 ../src/resources/gtk/menus.ui.h:17
 msgid "Save"
 msgstr "שמירה"
 
@@ -788,51 +789,51 @@ msgstr "Search Context"
 msgid "Search Settings"
 msgstr "Search Settings"
 
-#: ../src/editor/gb-source-view.c:2217 ../src/editor/gb-source-view.c:2218
+#: ../src/editor/gb-source-view.c:2267 ../src/editor/gb-source-view.c:2268
 msgid "Enable Word Completion"
 msgstr "Enable Word Completion"
 
-#: ../src/editor/gb-source-view.c:2226
+#: ../src/editor/gb-source-view.c:2276
 msgid "Font Name"
 msgstr "Font Name"
 
-#: ../src/editor/gb-source-view.c:2227
+#: ../src/editor/gb-source-view.c:2277
 msgid "The font name to apply to the widget."
 msgstr "The font name to apply to the widget."
 
-#: ../src/editor/gb-source-view.c:2235
+#: ../src/editor/gb-source-view.c:2285
 msgid "Insert Matching Brace"
 msgstr "Insert Matching Brace"
 
-#: ../src/editor/gb-source-view.c:2236
+#: ../src/editor/gb-source-view.c:2286
 msgid "If we should insert matching braces."
 msgstr "If we should insert matching braces."
 
-#: ../src/editor/gb-source-view.c:2244
+#: ../src/editor/gb-source-view.c:2294
 msgid "Overwrite Braces"
 msgstr "Overwrite Braces"
 
-#: ../src/editor/gb-source-view.c:2245
+#: ../src/editor/gb-source-view.c:2295
 msgid "If we should overwrite braces, brackets, parenthesis and quotes."
 msgstr "If we should overwrite braces, brackets, parenthesis and quotes."
 
-#: ../src/editor/gb-source-view.c:2254
+#: ../src/editor/gb-source-view.c:2304
 msgid "Show Shadow"
 msgstr "Show Shadow"
 
-#: ../src/editor/gb-source-view.c:2255
+#: ../src/editor/gb-source-view.c:2305
 msgid "Show the search shadow"
 msgstr "Show the search shadow"
 
-#: ../src/editor/gb-source-view.c:2263 ../src/editor/gb-source-view.c:2264
+#: ../src/editor/gb-source-view.c:2313 ../src/editor/gb-source-view.c:2314
 msgid "Search Highlighter"
 msgstr "Search Highlighter"
 
-#: ../src/editor/gb-source-view.c:2272
+#: ../src/editor/gb-source-view.c:2322
 msgid "Smart Home End"
 msgstr "Smart Home End"
 
-#: ../src/editor/gb-source-view.c:2273
+#: ../src/editor/gb-source-view.c:2323
 msgid "Enable smart home end in gtksourceview."
 msgstr "Enable smart home end in gtksourceview."
 
@@ -970,6 +971,10 @@ msgstr "The current item in the navigation list."
 msgid "The workbench the navigation list is for."
 msgstr "The workbench the navigation list is for."
 
+#: ../src/preferences/gb-preferences-page.c:215
+msgid "The title for the preferences page."
+msgstr "The title for the preferences page."
+
 #: ../src/preferences/gb-preferences-page-editor.c:179
 msgid "restore insert cursor mark"
 msgstr "שחזור הכנסה סמן ציון"
@@ -1022,9 +1027,440 @@ msgstr "שורות שוליים גבול גלילה סוף"
 msgid "vim modal"
 msgstr "vim שכיח מודאלי"
 
-#: ../src/preferences/gb-preferences-page.c:215
-msgid "The title for the preferences page."
-msgstr "The title for the preferences page."
+#: ../src/resources/gtk/menus.ui.h:1
+msgid "_Preferences"
+msgstr "ה_עדפות"
+
+#: ../src/resources/gtk/menus.ui.h:2
+msgid "Generate Support Log"
+msgstr "חילול יומן תמיכה"
+
+#: ../src/resources/gtk/menus.ui.h:3
+msgid "_Help"
+msgstr "_עזרה"
+
+#: ../src/resources/gtk/menus.ui.h:4
+msgid "_About"
+msgstr "על _אודות"
+
+#: ../src/resources/gtk/menus.ui.h:5
+msgid "_Quit"
+msgstr "_יציאה"
+
+#: ../src/resources/gtk/menus.ui.h:6 ../src/resources/ui/gb-editor-view.ui.h:1
+msgid "_Reload"
+msgstr "טעינה _מחדש"
+
+#: ../src/resources/gtk/menus.ui.h:7
+msgid "_Print…"
+msgstr "הד_פסה…"
+
+#: ../src/resources/gtk/menus.ui.h:8
+msgid "_Fullscreen"
+msgstr "מסך _מלך"
+
+#: ../src/resources/gtk/menus.ui.h:9
+msgid "_New Document"
+msgstr "פתיחת מסמךמסמך _חדש"
+
+#: ../src/resources/gtk/menus.ui.h:10
+msgid "_Open"
+msgstr "_פתיחה"
+
+#: ../src/resources/gtk/menus.ui.h:11
+msgid "Save _All"
+msgstr "בשמירת ה_כל"
+
+#: ../src/resources/gtk/menus.ui.h:12
+msgid "_Close All"
+msgstr "_סגירת הכל"
+
+#: ../src/resources/gtk/menus.ui.h:13
+msgid "Move Document _Left"
+msgstr "העברת מסמך ל_שמאל"
+
+#: ../src/resources/gtk/menus.ui.h:14
+msgid "Move Document _Right"
+msgstr "העברת מסמך ל_ימין"
+
+#: ../src/resources/gtk/menus.ui.h:15
+msgid "Split Document Left"
+msgstr "פיצול מסמך לשמאל"
+
+#: ../src/resources/gtk/menus.ui.h:16
+msgid "Split Document Right"
+msgstr "פיצול מסמך לימין"
+
+#: ../src/resources/gtk/menus.ui.h:18
+msgid "Save _As"
+msgstr "שמירה _בשם"
+
+#: ../src/resources/gtk/menus.ui.h:19
+msgid "_Preview"
+msgstr "תצוגה _מקדימה"
+
+#: ../src/resources/gtk/menus.ui.h:20
+msgid "_Close Document"
+msgstr "ס_גירת מסמך"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:1
+msgid "Created By:"
+msgstr "נוצר על ידי:"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:2
+msgid ""
+"Christian Hergert\n"
+"Alexander Larsson\n"
+"Alexandre Franke\n"
+"Carlos Soriano\n"
+"Cosimo Cecchi\n"
+"Dimitris Zenios\n"
+"Fabiano Fidêncio\n"
+"Florian Bäuerle\n"
+"Florian Müllner\n"
+"Hashem Nasarat\n"
+"Hylke Bons\n"
+"Igor Gnatenko\n"
+"Jakub Steiner\n"
+"Jasper St. Pierre\n"
+"Jonathon Jongsma\n"
+"Mathieu Bridon\n"
+"Megh Parikh\n"
+"Michael Catanzaro\n"
+"Pete Travis\n"
+"Ray Strode\n"
+"Roberto Majadas\n"
+"Ting-Wei Lan\n"
+"Trinh Anh Ngoc\n"
+"Yosef Or Boczko"
+msgstr ""
+"Christian Hergert\n"
+"Alexander Larsson\n"
+"Alexandre Franke\n"
+"Carlos Soriano\n"
+"Cosimo Cecchi\n"
+"Dimitris Zenios\n"
+"Fabiano Fidêncio\n"
+"Florian Bäuerle\n"
+"Florian Müllner\n"
+"Hashem Nasarat\n"
+"Hylke Bons\n"
+"Igor Gnatenko\n"
+"Jakub Steiner\n"
+"Jasper St. Pierre\n"
+"Jonathon Jongsma\n"
+"Mathieu Bridon\n"
+"Megh Parikh\n"
+"Michael Catanzaro\n"
+"Pete Travis\n"
+"Ray Strode\n"
+"Roberto Majadas\n"
+"Ting-Wei Lan\n"
+"Trinh Anh Ngoc\n"
+"Yosef Or Boczko"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:26
+msgid "Artwork By:"
+msgstr "אומנות על ידי:"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:27
+msgid ""
+"Allan Day\n"
+"Hylke Bons\n"
+"Jakub Steiner"
+msgstr ""
+"Allan Day\n"
+"Hylke Bons\n"
+"Jakub Steiner"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:30
+msgid "Translated By:"
+msgstr "תרגום על ידי:"
+
+#. Translate this string with the translator names for your language.
+#: ../src/resources/ui/gb-credits-widget.ui.h:32
+msgid "translator-credits"
+msgstr "יוסף אור בוצ׳קו <yoseforb@gnome.org>"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:33
+msgid "Funded By:"
+msgstr "מימון על ידי:"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:34
+msgid ""
+"Christian Hergert\n"
+"Gareth Foster"
+msgstr ""
+"Christian Hergert\n"
+"Gareth Foster"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:36
+msgid "Special Thanks To:"
+msgstr "תודות מיוחדות:"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:37
+msgid ""
+"Andy Hertzfeld and the Eazel Team\n"
+"Alberto Ruiz\n"
+"Bastien Nocera\n"
+"Cosimo Cecchi\n"
+"Emmanuele Bassi\n"
+"Federico Mena Quintero\n"
+"Jasper St Pierre\n"
+"Jon McCann\n"
+"Jonathan Blandford\n"
+"Matthias Clasen\n"
+"Miguel de Icaza\n"
+"Owen Taylor\n"
+"Rob Taylor\n"
+"Spencer Kimball\n"
+"Ximian Team\n"
+"\n"
+"Each and every contributor to GNOME\n"
+"and the Friends of GNOME"
+msgstr ""
+"Andy Hertzfeld and the Eazel Team\n"
+"Alberto Ruiz\n"
+"Bastien Nocera\n"
+"Cosimo Cecchi\n"
+"Emmanuele Bassi\n"
+"Federico Mena Quintero\n"
+"Jasper St Pierre\n"
+"Jon McCann\n"
+"Jonathan Blandford\n"
+"Matthias Clasen\n"
+"Miguel de Icaza\n"
+"Owen Taylor\n"
+"Rob Taylor\n"
+"Spencer Kimball\n"
+"Ximian Team\n"
+"\n"
+"כל תורם ותורם ל־GNOME\n"
+"וחברי GNOME"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:55
+msgid "GNOME Builder"
+msgstr "‏GNOME בונה"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:56
+msgid ""
+"Copyright 2014 Christian Hergert, et al.\n"
+"Licensed under the GNU GPL 3 or newer"
+msgstr ""
+"כל הזכויות שמורות 2014 Christian Hergert, ואחרים.\n"
+"תחת הרישיון הציבורי הכללי של גנו גרסה 3 או חדש יותר"
+
+#: ../src/resources/ui/gb-document-menu-button.ui.h:1
+msgid "Search Documents"
+msgstr "חיפוש מסמך"
+
+#: ../src/resources/ui/gb-document-menu-button.ui.h:2
+msgid "No document were found"
+msgstr "לא נמצא אף מסמך"
+
+#: ../src/resources/ui/gb-editor-frame.ui.h:1
+msgid "Line 1, Column 1"
+msgstr "שורה 1, עמודה 1"
+
+#: ../src/resources/ui/gb-editor-frame.ui.h:2
+msgid "Currently parsing document"
+msgstr "מנתח מסמך"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:1
+msgid "Display right _margin at column:"
+msgstr "הצגת _שולים ימניים בעומדה:"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:2
+msgid "Trim trailing whitespace when saving document"
+msgstr "להסיר רווחים לבנים בעת שמירת מסמך"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:3
+msgid "Insert matching brace, bracket, quotation, and parenthesis."
+msgstr "הכנסת סוגר מסולסל, סוגר מרובע, גרשיים וסוגר עגול מתאים. "
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:4
+msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
+msgstr "דריסת סוגר מסולסל, סוגר מרובע, גרשיים וסוגר עגול."
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:5
+msgid "<b>Indentation</b>"
+msgstr "<b>הזחה</b>"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:6
+msgid "_Tab width:"
+msgstr "רוחב _טאב:"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:7
+msgid "Insert _spaces instead of tabs"
+msgstr "הכנסת _רווחים במקום טאבים"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:8
+msgid "_Enable automatic indentation"
+msgstr "_לאפשר הזחה אוטומטית"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:1
+msgid "Search highlight mode…"
+msgstr "מצב הדגשת חיפוש…"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:2
+msgid "Display line numbers"
+msgstr "הצגת מספרי שורות"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:3
+msgid "Display right margin"
+msgstr "הצגת שולים ימניים"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr "הדגשת השורה הנוכחית"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:5
+msgid "Auto indent"
+msgstr "הזחה אוטומטית"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
+msgid "Indentation"
+msgstr "הזחה"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:7
+msgid "Spaces"
+msgstr "רווחים"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:8
+msgid "Tabs"
+msgstr "טאבים"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:9
+msgid "2"
+msgstr " "
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:10
+msgid "3"
+msgstr "3"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:11
+msgid "4"
+msgstr "4"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:12
+msgid "8"
+msgstr "8"
+
+#: ../src/resources/ui/gb-editor-view.ui.h:3
+msgid "_Close"
+msgstr "_סגירה"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:1
+msgid "<b>Restore Cursor Position</b>"
+msgstr "<b>שחזור מיקום סמן</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:2
+msgid ""
+"Restore the insertion cursor to the last position when reopening a file."
+msgstr "שחזור סמן ההכנסה למיקום האחרון בעת פתיחת קובץ."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:3
+msgid "<b>Suggest Word Completion</b>"
+msgstr "<b>הצעת השלמת מילים</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:4
+msgid "Suggest completion of words found within the current document."
+msgstr "הצעת השלמה של מילים הנמצאות במסמך הנוכחי."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:5
+msgid "<b>Display Document Changes</b>"
+msgstr "<b>הצגת שינויים במסמך</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:6
+msgid ""
+"Display whether a line has been added or modified next to the line number."
+msgstr "הצגה האם שורה נוסה או שונתה מיד לאחר מספר השורה."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:7
+msgid "<b>Show Line Numbers</b>"
+msgstr "<b>הצגת מספרי שורה</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:8
+msgid "Display line numbers in the document."
+msgstr "להציג מספרי שורות במסמך."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:9
+msgid "<b>Hightlight Current Line</b>"
+msgstr "<b>הדגשת השורה הנוכחית</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:10
+msgid "Highlight the line containing the cursor."
+msgstr "הדגשת השורה המכילה את הסמן."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:11
+msgid "<b>Hightlight Matching Brackets</b>"
+msgstr "<b>הדגשת סוגר תואם</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:12
+msgid "Whether or not matching brackets should be highlighted."
+msgstr "אם סוגר תואם צריך להיות מודגש או לא."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:13
+msgid "<b>Smart Home End</b>"
+msgstr "<b>מקשי בית וסוף חכמים</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:14
+msgid "Home moves to first non-space character."
+msgstr "בית (Home) מעביר לתו הראשון שאינו רווח."
+
+#: ../src/resources/ui/gb-preferences-page-git.ui.h:1
+#: ../src/resources/ui/gb-preferences-window.ui.h:5
+msgid "Git"
+msgstr "Git"
+
+#: ../src/resources/ui/gb-preferences-page-vim.ui.h:1
+msgid "<b>VIM Modal Editing</b>"
+msgstr "<b>דגם עריכת VIM</b>"
+
+#: ../src/resources/ui/gb-preferences-page-vim.ui.h:2
+msgid "Use VIM style modal editing in the source code editor."
+msgstr "שימוש בסגנון דגם עריכת VIM בעורך קוד המקור."
+
+#: ../src/resources/ui/gb-preferences-page-vim.ui.h:3
+msgid "<b>Scroll Offset</b>"
+msgstr "<b>קיזוז גלילה</b>"
+
+#: ../src/resources/ui/gb-preferences-page-vim.ui.h:4
+msgid "Minimal number of lines to keep above and below the cursor."
+msgstr "מספר מזערי של שורות להשאיר מעלה ומתחת לסמן."
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:1
+msgid "Preferences"
+msgstr "העדפות"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:2
+msgid "Search Preferences"
+msgstr "חיפוש העדפות"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:3
+#: ../src/resources/ui/gb-workbench.ui.h:4
+msgid "Editor"
+msgstr "עורך"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:4
+msgid "Language Settings"
+msgstr "הגדרות שפה"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:6
+msgid "Vim"
+msgstr "Vim"
+
+#: ../src/resources/ui/gb-workbench.ui.h:1
+msgid "Go back in history"
+msgstr "חזרה לאחור בהיסטוריה"
+
+#: ../src/resources/ui/gb-workbench.ui.h:2
+msgid "Go forward in history"
+msgstr "ללכת קדימה בהיסטוריה"
+
+#: ../src/resources/ui/gb-workbench.ui.h:3
+msgid "Create new document"
+msgstr "יצירת מסמך חדש"
 
 #: ../src/scrolledwindow/gb-scrolled-window.c:261
 msgid "Max Content Height"
@@ -1050,6 +1486,23 @@ msgstr "Search Manager"
 msgid "The search manager for the search box."
 msgstr "The search manager for the search box."
 
+#: ../src/search/gb-search-display.c:215
+msgid "Cannot add provider more than once."
+msgstr "Cannot add provider more than once."
+
+#: ../src/search/gb-search-display.c:293
+msgid "The provider could not be found."
+msgstr "The provider could not be found."
+
+#: ../src/search/gb-search-display.c:549
+#: ../src/snippets/gb-source-snippet-chunk.c:298
+msgid "Context"
+msgstr "Context"
+
+#: ../src/search/gb-search-display.c:550
+msgid "The active search context."
+msgstr "The active search context."
+
 #: ../src/search/gb-search-display-group.c:183
 msgid "%"
 msgstr "%"
@@ -1070,23 +1523,6 @@ msgstr "Size Group"
 msgid "The size group for the label."
 msgstr "The size group for the label."
 
-#: ../src/search/gb-search-display.c:215
-msgid "Cannot add provider more than once."
-msgstr "Cannot add provider more than once."
-
-#: ../src/search/gb-search-display.c:293
-msgid "The provider could not be found."
-msgstr "The provider could not be found."
-
-#: ../src/search/gb-search-display.c:549
-#: ../src/snippets/gb-source-snippet-chunk.c:298
-msgid "Context"
-msgstr "Context"
-
-#: ../src/search/gb-search-display.c:550
-msgid "The active search context."
-msgstr "The active search context."
-
 #: ../src/search/gb-search-result.c:217
 msgid "Score"
 msgstr "Score"
@@ -1103,6 +1539,59 @@ msgstr "Subtitle"
 msgid "The pango markup to be rendered."
 msgstr "The pango markup to be rendered."
 
+#: ../src/snippets/gb-source-snippet.c:352
+msgid "Chunk does not belong to snippet."
+msgstr "Chunk does not belong to snippet."
+
+#: ../src/snippets/gb-source-snippet.c:1024
+msgid "The GtkTextBuffer for the snippet."
+msgstr "The GtkTextBuffer for the snippet."
+
+#: ../src/snippets/gb-source-snippet.c:1032
+msgid "Mark Begin"
+msgstr "Mark Begin"
+
+#: ../src/snippets/gb-source-snippet.c:1033
+msgid "The beginning text mark."
+msgstr "The beginning text mark."
+
+#: ../src/snippets/gb-source-snippet.c:1041
+msgid "Mark End"
+msgstr "Mark End"
+
+#: ../src/snippets/gb-source-snippet.c:1042
+msgid "The ending text mark."
+msgstr "The ending text mark."
+
+#: ../src/snippets/gb-source-snippet.c:1050
+msgid "Trigger"
+msgstr "Trigger"
+
+#: ../src/snippets/gb-source-snippet.c:1051
+msgid "The trigger for the snippet."
+msgstr "The trigger for the snippet."
+
+#: ../src/snippets/gb-source-snippet.c:1060
+msgid "The language for the snippet."
+msgstr "The language for the snippet."
+
+#: ../src/snippets/gb-source-snippet.c:1068
+msgid "Description"
+msgstr "Description"
+
+#: ../src/snippets/gb-source-snippet.c:1069
+msgid "The description for the snippet."
+msgstr "The description for the snippet."
+
+#: ../src/snippets/gb-source-snippet.c:1077
+#: ../src/snippets/gb-source-snippet-chunk.c:316
+msgid "Tab Stop"
+msgstr "Tab Stop"
+
+#: ../src/snippets/gb-source-snippet.c:1078
+msgid "The current tab stop."
+msgstr "The current tab stop."
+
 #: ../src/snippets/gb-source-snippet-chunk.c:299
 msgid "The snippet context."
 msgstr "The snippet context."
@@ -1114,11 +1603,6 @@ msgstr "Spec"
 #: ../src/snippets/gb-source-snippet-chunk.c:308
 msgid "The specification to expand using the contxt."
 msgstr "The specification to expand using the contxt."
-
-#: ../src/snippets/gb-source-snippet-chunk.c:316
-#: ../src/snippets/gb-source-snippet.c:1077
-msgid "Tab Stop"
-msgstr "Tab Stop"
 
 #: ../src/snippets/gb-source-snippet-chunk.c:317
 msgid "The tab stop for the chunk."
@@ -1166,54 +1650,6 @@ msgstr "The snippets to complete with this provider."
 #, c-format
 msgid "Invalid snippet at line %d: %s"
 msgstr "Invalid snippet at line %d: %s"
-
-#: ../src/snippets/gb-source-snippet.c:352
-msgid "Chunk does not belong to snippet."
-msgstr "Chunk does not belong to snippet."
-
-#: ../src/snippets/gb-source-snippet.c:1024
-msgid "The GtkTextBuffer for the snippet."
-msgstr "The GtkTextBuffer for the snippet."
-
-#: ../src/snippets/gb-source-snippet.c:1032
-msgid "Mark Begin"
-msgstr "Mark Begin"
-
-#: ../src/snippets/gb-source-snippet.c:1033
-msgid "The beginning text mark."
-msgstr "The beginning text mark."
-
-#: ../src/snippets/gb-source-snippet.c:1041
-msgid "Mark End"
-msgstr "Mark End"
-
-#: ../src/snippets/gb-source-snippet.c:1042
-msgid "The ending text mark."
-msgstr "The ending text mark."
-
-#: ../src/snippets/gb-source-snippet.c:1050
-msgid "Trigger"
-msgstr "Trigger"
-
-#: ../src/snippets/gb-source-snippet.c:1051
-msgid "The trigger for the snippet."
-msgstr "The trigger for the snippet."
-
-#: ../src/snippets/gb-source-snippet.c:1060
-msgid "The language for the snippet."
-msgstr "The language for the snippet."
-
-#: ../src/snippets/gb-source-snippet.c:1068
-msgid "Description"
-msgstr "Description"
-
-#: ../src/snippets/gb-source-snippet.c:1069
-msgid "The description for the snippet."
-msgstr "The description for the snippet."
-
-#: ../src/snippets/gb-source-snippet.c:1078
-msgid "The current tab stop."
-msgstr "The current tab stop."
 
 #: ../src/snippets/gb-source-snippets-manager.c:92
 #, c-format
@@ -1263,6 +1699,22 @@ msgstr "Tree"
 msgid "The GbTree the builder belongs to."
 msgstr "The GbTree the builder belongs to."
 
+#: ../src/tree/gb-tree.c:888
+msgid "Root"
+msgstr "Root"
+
+#: ../src/tree/gb-tree.c:889
+msgid "The root object of the tree."
+msgstr "The root object of the tree."
+
+#: ../src/tree/gb-tree.c:897
+msgid "Selection"
+msgstr "Selection"
+
+#: ../src/tree/gb-tree.c:898
+msgid "The node selection."
+msgstr "The node selection."
+
 #: ../src/tree/gb-tree-node.c:483 ../src/workbench/gb-workspace.c:161
 msgid "Icon Name"
 msgstr "Icon Name"
@@ -1302,22 +1754,6 @@ msgstr "Use Markup"
 #: ../src/tree/gb-tree-node.c:554
 msgid "If text should be translated as markup."
 msgstr "If text should be translated as markup."
-
-#: ../src/tree/gb-tree.c:888
-msgid "Root"
-msgstr "Root"
-
-#: ../src/tree/gb-tree.c:889
-msgid "The root object of the tree."
-msgstr "The root object of the tree."
-
-#: ../src/tree/gb-tree.c:897
-msgid "Selection"
-msgstr "Selection"
-
-#: ../src/tree/gb-tree.c:898
-msgid "The node selection."
-msgstr "The node selection."
 
 #: ../src/trie/trie.c:790
 #, c-format
