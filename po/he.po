@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-22 12:54+0200\n"
-"PO-Revision-Date: 2015-01-22 12:56+0200\n"
+"PO-Revision-Date: 2015-01-22 13:07+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -310,7 +310,7 @@ msgstr "_ביטול"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:335
 msgid "_Save As…"
-msgstr "בשמירה _בשם…"
+msgstr "שמירה _בשם…"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:335
 msgid "_Save"
@@ -1033,7 +1033,7 @@ msgstr "ה_עדפות"
 
 #: ../src/resources/gtk/menus.ui.h:2
 msgid "Generate Support Log"
-msgstr "חילול יומן תמיכה"
+msgstr "יצירת יומן תמיכה"
 
 #: ../src/resources/gtk/menus.ui.h:3
 msgid "_Help"
@@ -1069,7 +1069,7 @@ msgstr "_פתיחה"
 
 #: ../src/resources/gtk/menus.ui.h:11
 msgid "Save _All"
-msgstr "בשמירת ה_כל"
+msgstr "שמירת ה_כל"
 
 #: ../src/resources/gtk/menus.ui.h:12
 msgid "_Close All"
@@ -1268,7 +1268,7 @@ msgstr "מנתח מסמך"
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:1
 msgid "Display right _margin at column:"
-msgstr "הצגת _שולים ימניים בעומדה:"
+msgstr "הצגת _שולים ימניים בעמודה:"
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:2
 msgid "Trim trailing whitespace when saving document"
@@ -1276,7 +1276,7 @@ msgstr "להסיר רווחים לבנים בעת שמירת מסמך"
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:3
 msgid "Insert matching brace, bracket, quotation, and parenthesis."
-msgstr "הכנסת סוגר מסולסל, סוגר מרובע, גרשיים וסוגר עגול מתאים. "
+msgstr "הכנסת סוגר מסולסל, סוגר מרובע, גרשיים וסוגר עגול מתאים."
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:4
 msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
@@ -1300,7 +1300,7 @@ msgstr "_לאפשר הזחה אוטומטית"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
-msgstr "מצב הדגשת חיפוש…"
+msgstr "חיפוש מצב הדגשה…"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:2
 msgid "Display line numbers"
@@ -1332,7 +1332,7 @@ msgstr "טאבים"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:9
 msgid "2"
-msgstr " "
+msgstr "2"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:10
 msgid "3"
@@ -1352,7 +1352,7 @@ msgstr "_סגירה"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:1
 msgid "<b>Restore Cursor Position</b>"
-msgstr "<b>שחזור מיקום סמן</b>"
+msgstr "<b>שחזור מיקום הסמן</b>"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:2
 msgid ""
@@ -1374,15 +1374,15 @@ msgstr "<b>הצגת שינויים במסמך</b>"
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:6
 msgid ""
 "Display whether a line has been added or modified next to the line number."
-msgstr "הצגה האם שורה נוסה או שונתה מיד לאחר מספר השורה."
+msgstr "הצגת סימן לצד מספר השורה המורה אם שורה נוספה או שונתה."
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:7
 msgid "<b>Show Line Numbers</b>"
-msgstr "<b>הצגת מספרי שורה</b>"
+msgstr "<b>הצגת מספרי שורות</b>"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:8
 msgid "Display line numbers in the document."
-msgstr "להציג מספרי שורות במסמך."
+msgstr "הצגת מספור שורות במסמך."
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:9
 msgid "<b>Hightlight Current Line</b>"
@@ -1398,7 +1398,7 @@ msgstr "<b>הדגשת סוגר תואם</b>"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:12
 msgid "Whether or not matching brackets should be highlighted."
-msgstr "אם סוגר תואם צריך להיות מודגש או לא."
+msgstr "אם להדגיש סוגר תואם."
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:13
 msgid "<b>Smart Home End</b>"
@@ -1410,11 +1410,11 @@ msgstr "בית (Home) מעביר לתו הראשון שאינו רווח."
 
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:1
 msgid "Author Name"
-msgstr "שם מחבר"
+msgstr "שם המחבר"
 
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:2
 msgid "Author Email"
-msgstr "דוא״ל מחבר"
+msgstr "דוא״ל המחבר"
 
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:3
 #: ../src/resources/ui/gb-preferences-window.ui.h:5
@@ -1435,7 +1435,7 @@ msgstr "<b>קיזוז גלילה</b>"
 
 #: ../src/resources/ui/gb-preferences-page-vim.ui.h:4
 msgid "Minimal number of lines to keep above and below the cursor."
-msgstr "מספר מזערי של שורות להשאיר מעלה ומתחת לסמן."
+msgstr "מספר מזערי של שורות להשאיר מעל ומתחת לסמן."
 
 #: ../src/resources/ui/gb-preferences-window.ui.h:1
 msgid "Preferences"
