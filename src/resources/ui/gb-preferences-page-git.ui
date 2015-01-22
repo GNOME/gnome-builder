@@ -12,7 +12,7 @@
             <property name="visible">True</property>
             <property name="halign">start</property>
             <property name="hexpand">False</property>
-            <property name="label" translatable="Yes">Author Name</property>
+            <property name="label" translatable="yes">Author Name</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -37,7 +37,7 @@
           <object class="GtkLabel" id="email_label">
             <property name="visible">True</property>
             <property name="halign">start</property>
-            <property name="label" translatable="Yes">Author Email</property>
+            <property name="label" translatable="yes">Author Email</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
