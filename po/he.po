@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-22 12:09+0200\n"
-"PO-Revision-Date: 2015-01-22 12:46+0200\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
+"POT-Creation-Date: 2015-01-22 12:54+0200\n"
+"PO-Revision-Date: 2015-01-22 12:55+0200\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -1409,6 +1409,14 @@ msgid "Home moves to first non-space character."
 msgstr "בית (Home) מעביר לתו הראשון שאינו רווח."
 
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:1
+msgid "Author Name"
+msgstr "שם מחבר"
+
+#: ../src/resources/ui/gb-preferences-page-git.ui.h:2
+msgid "Author Email"
+msgstr "דוא״ל מחבר"
+
+#: ../src/resources/ui/gb-preferences-page-git.ui.h:3
 #: ../src/resources/ui/gb-preferences-window.ui.h:5
 msgid "Git"
 msgstr "Git"
