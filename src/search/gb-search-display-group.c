@@ -269,15 +269,18 @@ gb_search_display_group_row_selected (GbSearchDisplayGroup *group,
   g_return_if_fail (!row || GTK_IS_LIST_BOX_ROW (row));
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
 
-  child = gtk_bin_get_child (GTK_BIN (row));
-
-  if (GB_IS_SEARCH_DISPLAY_ROW (child))
+  if (row)
     {
-      GbSearchResult *result;
+      child = gtk_bin_get_child (GTK_BIN (row));
 
-      result = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child));
-      if (result)
-        g_signal_emit (group, gSignals [RESULT_SELECTED], 0, result);
+      if (GB_IS_SEARCH_DISPLAY_ROW (child))
+        {
+          GbSearchResult *result;
+
+          result = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child));
+          if (result)
+            g_signal_emit (group, gSignals [RESULT_SELECTED], 0, result);
+        }
     }
 }
 
