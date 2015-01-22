@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-22 12:54+0200\n"
-"PO-Revision-Date: 2015-01-22 12:55+0200\n"
+"PO-Revision-Date: 2015-01-22 12:56+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -1061,7 +1061,7 @@ msgstr "מסך _מלך"
 
 #: ../src/resources/gtk/menus.ui.h:9
 msgid "_New Document"
-msgstr "פתיחת מסמךמסמך _חדש"
+msgstr "פתיחת מסמך _חדש"
 
 #: ../src/resources/gtk/menus.ui.h:10
 msgid "_Open"
