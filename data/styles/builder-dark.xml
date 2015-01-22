@@ -62,6 +62,7 @@
   <style name="selection"                   foreground="aluminium1" background="aluminium4"/>
   <style name="cursor"                      foreground="aluminium2"/>
   <style name="current-line"                background="#rgba(85,87,83,.5)"/>
+  <style name="current-line-number"         background="#rgba(85,87,83,.5)"/>
   <style name="line-numbers"                foreground="aluminium4" background="aluminium6"/>
   <style name="draw-spaces"                 foreground="aluminium4"/>
 
