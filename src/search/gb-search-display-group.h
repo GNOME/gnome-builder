@@ -52,7 +52,7 @@ void              gb_search_display_group_add_result    (GbSearchDisplayGroup *g
 void              gb_search_display_group_remove_result (GbSearchDisplayGroup *group,
                                                          GbSearchResult       *result);
 void              gb_search_display_group_set_count     (GbSearchDisplayGroup *group,
-                                                         gsize                 count);
+                                                         guint64               count);
 void              gb_search_display_group_unselect      (GbSearchDisplayGroup *group);
 void              gb_search_display_group_focus_first   (GbSearchDisplayGroup *group);
 void              gb_search_display_group_focus_last    (GbSearchDisplayGroup *group);
