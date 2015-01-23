@@ -93,6 +93,9 @@ GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:active {
 /*
  * Preferences sidebar style.
  */
+.preferences.sidebar GtkViewport {
+     border: 0px;
+}
 .preferences.sidebar GtkListBox {
     background-color: shade(@theme_bg_color, 0.99);
 }
