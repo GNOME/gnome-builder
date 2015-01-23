@@ -357,9 +357,9 @@ msgid_plural ""
 "If you don't save, changes from the last %ld minutes will be permanently "
 "lost."
 msgstr[0] ""
-"Si no guarda, los cambios del último minuto se perderán para siempre."
+"Si no guarda, los cambios del último %ld minuto se perderán para siempre."
 msgstr[1] ""
-"Si no guarda, los cambios de los últimos %ls minutos se perderán para "
+"Si no guarda, los cambios de los últimos %ld minutos se perderán para "
 "siempre."
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:394
