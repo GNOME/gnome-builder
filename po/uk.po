@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-24 12:32+0200\n"
-"PO-Revision-Date: 2015-01-24 13:35+0300\n"
+"PO-Revision-Date: 2015-01-25 15:55+0300\n"
 "Last-Translator: Daniel Korostil <ted.korostiled@gmail.com>\n"
 "Language-Team: linux.org.ua\n"
 "Language: uk\n"
@@ -332,8 +332,7 @@ msgstr[2] ""
 #: ../src/dialogs/gb-close-confirmation-dialog.c:363
 msgid ""
 "If you don't save, changes from the last minute will be permanently lost."
-msgstr ""
-"Якщо ви не збережете, зміни за останню хвилину будуть остаточно втрачено."
+msgstr "Якщо ви не збережете, зміни за останню хвилину буде остаточно втрачено."
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:369
 #, c-format
@@ -344,8 +343,14 @@ msgid_plural ""
 "If you don't save, changes from the last minute and %ld seconds will be "
 "permanently lost."
 msgstr[0] ""
+"Якщо ви не збережете, зміни за останню хвилину й %ld секунду буде остаточно "
+"втрачено."
 msgstr[1] ""
+"Якщо ви не збережете, зміни за останню хвилину й %ld секунди буде остаточно "
+"втрачено."
 msgstr[2] ""
+"Якщо ви не збережете, зміни за останню хвилину та %ld секунд буде остаточно "
+"втрачено."
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:379
 #, c-format
@@ -355,11 +360,15 @@ msgid_plural ""
 "If you don't save, changes from the last %ld minutes will be permanently "
 "lost."
 msgstr[0] ""
+"Якщо ви не збережете, зміни за останню %ld хвилину буде остаточно втрачено."
 msgstr[1] ""
+"Якщо ви не збережете, зміни за останню %ld хвилини буде остаточно втрачено."
+msgstr[2] ""
+"Якщо ви не збережете, зміни за останню %ld хвилин буде остаточно втрачено."
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:394
 msgid "If you don't save, changes from the last hour will be permanently lost."
-msgstr ""
+msgstr "Якщо ви не збережете, зміни за останню годину буде остаточно втрачено."
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:400
 #, c-format
@@ -370,7 +379,14 @@ msgid_plural ""
 "If you don't save, changes from the last hour and %d minutes will be "
 "permanently lost."
 msgstr[0] ""
+"Якщо ви не збережете, зміни за останню годину та %d хвилину буде остаточно "
+"втрачено."
 msgstr[1] ""
+"Якщо ви не збережете, зміни за останню годину та %d хвилини буде остаточно "
+"втрачено."
+msgstr[2] ""
+"Якщо ви не збережете, зміни за останню годину та %d хвилин буде остаточно "
+"втрачено."
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:415
 #, c-format
@@ -379,97 +395,104 @@ msgid ""
 msgid_plural ""
 "If you don't save, changes from the last %d hours will be permanently lost."
 msgstr[0] ""
+"Якщо ви не збережете, зміни за останню %d годину буде остаточно втрачено."
 msgstr[1] ""
+"Якщо ви не збережете, зміни за останню %d години буде остаточно втрачено."
+msgstr[2] ""
+"Якщо ви не збережете, зміни за останню %d годин буде остаточно втрачено."
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:459
 #, c-format
 msgid "Changes to document “%s” will be permanently lost."
-msgstr ""
+msgstr "Зміни в документі «%s» буде остаточно втрачено."
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:464
 #, c-format
 msgid "Save changes to document “%s” before closing?"
-msgstr ""
+msgstr "Зберегти зміни в документі «%s» перед закриванням?"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:477
 #: ../src/dialogs/gb-close-confirmation-dialog.c:637
 msgid "Saving has been disabled by the system administrator."
-msgstr ""
+msgstr "Збереження вимкнено системним адміністратором."
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:585
 #, c-format
 msgid "Changes to %d document will be permanently lost."
 msgid_plural "Changes to %d documents will be permanently lost."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Зміни, внесені в %d документ, буде остаточно втрачено."
+msgstr[1] "Зміни, внесені в %d документи, буде остаточно втрачено."
+msgstr[2] "Зміни, внесені в %d документів, буде остаточно втрачено."
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:593
 #, c-format
 msgid "There is %d document with unsaved changes. Save changes before closing?"
 msgid_plural ""
 "There are %d documents with unsaved changes. Save changes before closing?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d документ має незбережені зміни. Зберегти зміни перед закриванням?"
+msgstr[1] "%d документи мають незбережені зміни. Зберегти зміни перед закриванням?"
+msgstr[2] ""
+"%d документів мають незбережені зміни. Зберегти зміни перед закриванням?"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:613
 msgid "Docum_ents with unsaved changes:"
-msgstr ""
+msgstr "До_кументи з незбереженими змінами:"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:617
 msgid "S_elect the documents you want to save:"
-msgstr ""
+msgstr "_Виберіть документи, які бажаєте зберегти:"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:641
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
+msgstr "Якщо ви не збережете, всі зміни буде остаточно втрачено."
 
 #: ../src/documents/gb-document.c:188
 msgid "Modified"
-msgstr ""
+msgstr "Змінено"
 
 #: ../src/documents/gb-document.c:189
 msgid "If the document has been modified from disk."
-msgstr ""
+msgstr "Чи документ змінено на диску."
 
 #: ../src/documents/gb-document.c:196
 #: ../src/preferences/gb-preferences-page.c:214
 #: ../src/search/gb-search-result.c:241 ../src/workbench/gb-workspace.c:151
 msgid "Title"
-msgstr ""
+msgstr "Заголовок"
 
 #: ../src/documents/gb-document.c:197
 msgid "The title of the document."
-msgstr ""
+msgstr "Заголовок документа."
 
 #: ../src/documents/gb-document.c:204
 msgid "Read Only"
-msgstr ""
+msgstr "Лише для читання"
 
 #: ../src/documents/gb-document.c:205
 msgid "If the document is read only."
-msgstr ""
+msgstr "Чи документ можна й редагувати."
 
 #: ../src/documents/gb-document-grid.c:840
 #: ../src/documents/gb-document-menu-button.c:667
 #: ../src/documents/gb-document-stack.c:881
 msgid "Document Manager"
-msgstr ""
+msgstr "Менеджер документів"
 
 #: ../src/documents/gb-document-grid.c:841
 msgid "The document manager for the document grid."
-msgstr ""
+msgstr "Менеджер документів для ґраток."
 
 #: ../src/documents/gb-document-manager.c:300
 msgid "Count"
-msgstr ""
+msgstr "Кількість"
 
 #: ../src/documents/gb-document-manager.c:301
 msgid "The number of documents in the manager."
-msgstr ""
+msgstr "Кількість документів в менеджері."
 
 #: ../src/documents/gb-document-menu-button.c:668
 msgid "The document manager for the button."
-msgstr ""
+msgstr "Менеджер документів для кнопок."
 
 #: ../src/documents/gb-document-stack.c:872
 msgid "Active View"
@@ -1328,31 +1351,31 @@ msgstr ""
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:7
 msgid "Spaces"
-msgstr ""
+msgstr "Пробіли"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:8
 msgid "Tabs"
-msgstr ""
+msgstr "Вкладки"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:9
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:10
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:11
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:12
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: ../src/resources/ui/gb-editor-view.ui.h:3
 msgid "_Close"
-msgstr ""
+msgstr "_Закрити"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:1
 msgid "<b>Restore Cursor Position</b>"
@@ -1414,24 +1437,24 @@ msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:1
 msgid "Author Name"
-msgstr ""
+msgstr "Ім'я автора"
 
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:2
 msgid "Author Email"
-msgstr ""
+msgstr "Поштова скринька автора"
 
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:3
 #: ../src/resources/ui/gb-preferences-window.ui.h:5
 msgid "Git"
-msgstr ""
+msgstr "Git"
 
 #: ../src/resources/ui/gb-preferences-page-vim.ui.h:1
 msgid "<b>VIM Modal Editing</b>"
-msgstr ""
+msgstr "<b>Модальне редагування VIM</b>"
 
 #: ../src/resources/ui/gb-preferences-page-vim.ui.h:2
 msgid "Use VIM style modal editing in the source code editor."
-msgstr ""
+msgstr "Використовувати стиль VIM для модального редагування в редакторі коду."
 
 #: ../src/resources/ui/gb-preferences-page-vim.ui.h:3
 msgid "<b>Scroll Offset</b>"
@@ -1443,24 +1466,24 @@ msgstr ""
 
 #: ../src/resources/ui/gb-preferences-window.ui.h:1
 msgid "Preferences"
-msgstr ""
+msgstr "Параметри"
 
 #: ../src/resources/ui/gb-preferences-window.ui.h:2
 msgid "Search Preferences"
-msgstr ""
+msgstr "Параметри пошуку"
 
 #: ../src/resources/ui/gb-preferences-window.ui.h:3
 #: ../src/resources/ui/gb-workbench.ui.h:4
 msgid "Editor"
-msgstr ""
+msgstr "Редактор"
 
 #: ../src/resources/ui/gb-preferences-window.ui.h:4
 msgid "Language Settings"
-msgstr ""
+msgstr "Параметри мови"
 
 #: ../src/resources/ui/gb-preferences-window.ui.h:6
 msgid "Vim"
-msgstr ""
+msgstr "Vim"
 
 #: ../src/resources/ui/gb-workbench.ui.h:1
 msgid "Go back in history"
