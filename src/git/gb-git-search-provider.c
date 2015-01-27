@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "git-search"
 
+#include <ctype.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
@@ -206,22 +207,6 @@ cleanup:
   g_clear_object (&repository);
 }
 
-static gchar *
-remove_spaces (const gchar *text)
-{
-  GString *str = g_string_new (NULL);
-
-  for (; *text; text = g_utf8_next_char (text))
-    {
-      gunichar ch = g_utf8_get_char (text);
-
-      if (ch != ' ')
-        g_string_append_unichar (str, ch);
-    }
-
-  return g_string_free (str, FALSE);
-}
-
 static gchar **
 split_path (const gchar  *path,
             gchar       **shortname)
@@ -290,13 +275,25 @@ gb_git_search_provider_populate (GbSearchProvider *provider,
   if (self->priv->file_index)
     {
       GString *str = g_string_new (NULL);
+      GString *stripped = g_string_new (NULL);
       GbSearchReducer reducer = { 0 };
+      const gchar *ptr;
       gchar *delimited;
       GArray *matches;
       guint i;
       guint truncate_len;
 
-      delimited = remove_spaces (search_terms);
+      for (ptr = search_terms; *ptr; ptr = g_utf8_next_char (ptr))
+        {
+          gunichar ch;
+
+          ch = g_utf8_get_char (ptr);
+
+          if ((isascii (ch) != 0) && !g_unichar_isspace (ch))
+            g_string_append_unichar (stripped, ch);
+        }
+
+      delimited = g_string_free (stripped, FALSE);
       matches = fuzzy_match (self->priv->file_index, delimited,
                              GB_GIT_SEARCH_PROVIDER_MAX_MATCHES);
 
