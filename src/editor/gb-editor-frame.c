@@ -36,6 +36,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbEditorFrame, gb_editor_frame, GTK_TYPE_OVERLAY)
 enum {
   PROP_0,
   PROP_DOCUMENT,
+  PROP_SEARCH_DIRECTION,
   LAST_PROP
 };
 
@@ -47,6 +48,8 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
+static void gb_editor_frame_set_search_direction (GbEditorFrame    *self,
+                                                  GtkDirectionType  search_direction);
 GtkWidget *
 gb_editor_frame_new (void)
 {
@@ -133,6 +136,8 @@ gb_editor_frame_move_next_match (GbEditorFrame *self,
 
   priv = self->priv;
 
+  gb_editor_frame_set_search_direction (self, GTK_DIR_DOWN);
+
   buffer = GTK_TEXT_BUFFER (priv->document);
 
   /*
@@ -209,6 +214,7 @@ gb_editor_frame_move_previous_match (GbEditorFrame *self)
 
   priv = self->priv;
 
+  gb_editor_frame_set_search_direction (self, GTK_DIR_UP);
   gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (priv->document),
                                         &select_begin, &select_end);
 
@@ -680,6 +686,35 @@ gb_editor_frame_set_document (GbEditorFrame    *self,
         gb_editor_frame_connect (self, document);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOCUMENT]);
     }
+}
+
+/**
+ * gb_editor_frame_get_search_direction:
+ * @self: a #GbEditorFrame
+ *
+ * Gets the #GtkDirectionType associated with the last search.
+ * Will only be %GTK_DIR_DOWN or %GTK_DIR_UP
+ *
+ * Returns: A #GtkDirectionType.
+ */
+GtkDirectionType
+gb_editor_frame_get_search_direction (GbEditorFrame *self)
+{
+  g_return_val_if_fail (GB_IS_EDITOR_FRAME (self), GTK_DIR_DOWN);
+
+  return self->priv->search_direction;
+}
+
+static void
+gb_editor_frame_set_search_direction (GbEditorFrame    *self,
+                                      GtkDirectionType  search_direction)
+{
+  if (self->priv->search_direction == search_direction)
+    return;
+
+  self->priv->search_direction = search_direction;
+
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SEARCH_DIRECTION]);
 }
 
 /**
@@ -1555,6 +1590,10 @@ gb_editor_frame_get_property (GObject    *object,
       g_value_set_object (value, gb_editor_frame_get_document (self));
       break;
 
+    case PROP_SEARCH_DIRECTION:
+      g_value_set_enum (value, gb_editor_frame_get_search_direction (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1600,6 +1639,18 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_DOCUMENT,
                                    gParamSpecs [PROP_DOCUMENT]);
+
+  gParamSpecs [PROP_SEARCH_DIRECTION] =
+    g_param_spec_enum ("search-direction",
+                       _("Search Direction"),
+                       _("The direction of the last text searched for."),
+                       GTK_TYPE_DIRECTION_TYPE,
+                       GTK_DIR_DOWN,
+                       (G_PARAM_READABLE |
+                        G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SEARCH_DIRECTION,
+                                   gParamSpecs [PROP_SEARCH_DIRECTION]);
+
 
   gSignals [FOCUSED] =
     g_signal_new ("focused",
@@ -1651,4 +1702,6 @@ gb_editor_frame_init (GbEditorFrame *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self), "editor-frame",
                                   G_ACTION_GROUP (actions));
   g_object_unref (actions);
+
+  self->priv->search_direction = GTK_DIR_DOWN;
 }

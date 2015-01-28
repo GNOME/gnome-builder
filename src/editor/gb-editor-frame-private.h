@@ -50,6 +50,7 @@ struct _GbEditorFramePrivate
   GtkSourceSearchContext        *search_context;
   GtkSourceSearchSettings       *search_settings;
   GbSourceSearchHighlighter     *search_highlighter;
+  GtkDirectionType               search_direction;
 
   /* Signal handler identifiers */
   gulong                         cursor_moved_handler;

@@ -61,6 +61,8 @@ void              gb_editor_frame_find         (GbEditorFrame    *self,
                                                 const gchar      *search_text);
 void              gb_editor_frame_reformat     (GbEditorFrame    *self);
 
+GtkDirectionType  gb_editor_frame_get_search_direction (GbEditorFrame *self);
+
 G_END_DECLS
 
 #endif /* GB_EDITOR_FRAME_H */
