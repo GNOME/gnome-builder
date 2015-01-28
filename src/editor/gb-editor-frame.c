@@ -857,7 +857,14 @@ gb_editor_frame_on_search_entry_changed (GbEditorFrame *self,
   search_text = gtk_entry_get_text (entry);
 
   if (!gb_str_empty0 (search_text))
-    gb_editor_frame_move_next_match (self, TRUE);
+    {
+      if (self->priv->search_direction == GTK_DIR_DOWN)
+        gb_editor_frame_move_next_match (self, TRUE);
+      else if (self->priv->search_direction == GTK_DIR_UP)
+        gb_editor_frame_move_previous_match (self, TRUE);
+      else
+        g_assert_not_reached ();
+    }
 }
 
 static void
@@ -872,7 +879,12 @@ gb_editor_frame_on_search_entry_activate (GbEditorFrame *self,
   g_assert (GD_IS_TAGGED_ENTRY (entry));
   g_assert (GB_IS_EDITOR_FRAME (self));
 
-  gb_editor_frame_move_next_match (self, TRUE);
+  if (self->priv->search_direction == GTK_DIR_DOWN)
+    gb_editor_frame_move_next_match (self, TRUE);
+  else if (self->priv->search_direction == GTK_DIR_UP)
+    gb_editor_frame_move_previous_match (self, TRUE);
+  else
+    g_assert_not_reached ();
 
   buffer = GTK_TEXT_BUFFER (self->priv->document);
 
@@ -952,7 +964,12 @@ gb_editor_frame_on_begin_search (GbEditorFrame    *self,
       const gchar *text;
       guint len;
 
-      gb_editor_frame_move_next_match (self, TRUE);
+      if (direction == GTK_DIR_DOWN)
+        gb_editor_frame_move_next_match (self, TRUE);
+      else if (direction == GTK_DIR_UP)
+        gb_editor_frame_move_previous_match (self, TRUE);
+      else
+        g_assert_not_reached ();
 
       /*
        * We manually get the string length instead of passing -1 for length
