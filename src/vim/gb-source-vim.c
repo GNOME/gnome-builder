@@ -4376,9 +4376,8 @@ gb_source_vim_cmd_repeat (GbSourceVim *vim,
 }
 
 static void
-gb_source_vim_cmd_begin_search (GbSourceVim *vim,
-                                guint        count,
-                                gchar        modifier)
+gb_source_vim_begin_search (GbSourceVim      *vim,
+                            GtkDirectionType  direction)
 {
   GtkTextBuffer *buffer;
   GtkTextIter begin;
@@ -4398,9 +4397,25 @@ gb_source_vim_cmd_begin_search (GbSourceVim *vim,
       text = gtk_text_iter_get_slice (&begin, &end);
     }
 
-  g_signal_emit (vim, gSignals [BEGIN_SEARCH], 0, GTK_DIR_DOWN, text);
+  g_signal_emit (vim, gSignals [BEGIN_SEARCH], 0, direction, text);
 
   g_free (text);
+}
+
+static void
+gb_source_vim_cmd_begin_search (GbSourceVim *vim,
+                                guint        count,
+                                gchar        modifier)
+{
+  gb_source_vim_begin_search (vim, GTK_DIR_DOWN);
+}
+
+static void
+gb_source_vim_cmd_begin_search_backward (GbSourceVim *vim,
+                                         guint        count,
+                                         gchar        modifier)
+{
+  gb_source_vim_begin_search (vim, GTK_DIR_UP);
 }
 
 static void
@@ -5438,6 +5453,10 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
                                         GB_SOURCE_VIM_COMMAND_FLAG_NONE,
                                         GB_SOURCE_VIM_COMMAND_JUMP,
                                         gb_source_vim_cmd_begin_search);
+  gb_source_vim_class_register_command (klass, '?',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_JUMP,
+                                        gb_source_vim_cmd_begin_search_backward);
   gb_source_vim_class_register_command (klass, '$',
                                         GB_SOURCE_VIM_COMMAND_FLAG_NONE,
                                         GB_SOURCE_VIM_COMMAND_MOVEMENT,
