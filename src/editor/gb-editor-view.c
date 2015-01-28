@@ -827,6 +827,15 @@ gb_editor_view_toggle_split (GbEditorView *view)
                                G_CALLBACK (gb_editor_view_on_vim_split),
                                view,
                                G_CONNECT_SWAPPED);
+
+      g_object_bind_property (GB_EDITOR_FRAME (child2),
+                              "search-direction",
+                              vim, "search-direction",
+                              G_BINDING_SYNC_CREATE);
+      g_object_bind_property (GB_EDITOR_FRAME (child2)->priv->search_settings,
+                              "search-text",
+                              vim, "search-text",
+                              G_BINDING_SYNC_CREATE);
       g_object_bind_property (view, "auto-indent",
                               GB_EDITOR_FRAME (child2)->priv->source_view,
                               "auto-indent",
@@ -1225,4 +1234,13 @@ gb_editor_view_init (GbEditorView *self)
                           "insert-spaces-instead-of-tabs",
                           self, "use-spaces",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+
+  g_object_bind_property (self->priv->frame,
+                          "search-direction",
+                          vim, "search-direction",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (self->priv->frame->priv->search_settings,
+                          "search-text",
+                          vim, "search-text",
+                          G_BINDING_SYNC_CREATE);
 }
