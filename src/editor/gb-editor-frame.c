@@ -167,16 +167,6 @@ gb_editor_frame_move_next_match (GbEditorFrame *self,
                                          &match_begin, &match_end))
     GOTO (found_match);
 
-  /*
-   * Didn't find anything, let's try from the beginning of the buffer.
-   */
-  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (priv->document),
-                              &select_begin, &select_end);
-
-  if (gtk_source_search_context_forward (priv->search_context, &select_begin,
-                                         &match_begin, &match_end))
-    GOTO (found_match);
-
   gb_editor_frame_restore_position (self);
 
   EXIT;
@@ -1473,6 +1463,7 @@ gb_editor_frame_constructed (GObject *object)
                             -50);
 
   priv->search_settings = g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
+                                        "wrap-around", TRUE,
                                         NULL);
   g_object_bind_property (priv->search_entry, "text",
                           priv->search_settings, "search-text",
