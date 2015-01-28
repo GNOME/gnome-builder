@@ -95,6 +95,9 @@ const gchar     *gb_source_vim_get_phrase       (GbSourceVim     *vim);
 gboolean         gb_source_vim_get_enabled      (GbSourceVim     *vim);
 void             gb_source_vim_set_enabled      (GbSourceVim     *vim,
                                                  gboolean         enabled);
+const gchar     *gb_source_vim_get_search_text  (GbSourceVim     *vim);
+void             gb_source_vim_set_search_text  (GbSourceVim     *vim,
+                                                 const gchar     *text);
 GtkWidget       *gb_source_vim_get_text_view    (GbSourceVim     *vim);
 gboolean         gb_source_vim_execute_command  (GbSourceVim     *vim,
                                                  const gchar     *command);

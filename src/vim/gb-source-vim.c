@@ -184,6 +184,7 @@ enum
   PROP_ENABLED,
   PROP_MODE,
   PROP_PHRASE,
+  PROP_SEARCH_TEXT,
   PROP_TEXT_VIEW,
   LAST_PROP
 };
@@ -2449,10 +2450,11 @@ gb_source_vim_reverse_search (GbSourceVim *vim)
       else
         gtk_text_iter_assign (&start_iter, &end);
 
+      gb_source_vim_set_search_text (vim, text);
+
       g_object_set (vim->priv->search_settings,
                     "at-word-boundaries", TRUE,
                     "case-sensitive", TRUE,
-                    "search-text", text,
                     "wrap-around", TRUE,
                     NULL);
 
@@ -2497,10 +2499,11 @@ gb_source_vim_search (GbSourceVim *vim)
   else
     gtk_text_iter_assign (&start_iter, &selection);
 
+  gb_source_vim_set_search_text (vim, text);
+
   g_object_set (vim->priv->search_settings,
                 "at-word-boundaries", TRUE,
                 "case-sensitive", TRUE,
-                "search-text", text,
                 "wrap-around", TRUE,
                 NULL);
 
@@ -3681,6 +3684,35 @@ gb_source_vim_set_enabled (GbSourceVim *vim,
   g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_ENABLED]);
 }
 
+const gchar *
+gb_source_vim_get_search_text (GbSourceVim *vim)
+{
+  const gchar *search_text;
+
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), NULL);
+
+  search_text = gtk_source_search_settings_get_search_text (vim->priv->search_settings);
+
+  return search_text;
+}
+
+void
+gb_source_vim_set_search_text (GbSourceVim     *vim,
+                               const char      *search_text)
+{
+  const gchar *old_search_text;
+
+  old_search_text = gtk_source_search_settings_get_search_text (vim->priv->search_settings);
+
+  if (g_strcmp0 (old_search_text, search_text) == 0)
+    return;
+
+  gtk_source_search_settings_set_search_text (vim->priv->search_settings,
+                                              search_text);
+
+  g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_SEARCH_TEXT]);
+}
+
 GtkWidget *
 gb_source_vim_get_text_view (GbSourceVim *vim)
 {
@@ -3838,8 +3870,7 @@ gb_source_vim_do_search_and_replace (GbSourceVim *vim,
 
   mark = gtk_text_buffer_create_mark (buffer, NULL, end, FALSE);
 
-  gtk_source_search_settings_set_search_text (vim->priv->search_settings,
-                                              search_text);
+  gb_source_vim_set_search_text (vim, search_text);
   gtk_source_search_settings_set_case_sensitive (vim->priv->search_settings,
                                                  TRUE);
 
@@ -4320,6 +4351,10 @@ gb_source_vim_get_property (GObject    *object,
       g_value_set_string (value, vim->priv->phrase->str);
       break;
 
+    case PROP_SEARCH_TEXT:
+      g_value_set_string (value, gb_source_vim_get_search_text (vim));
+      break;
+
     case PROP_TEXT_VIEW:
       g_value_set_object (value, gb_source_vim_get_text_view (vim));
       break;
@@ -4341,6 +4376,10 @@ gb_source_vim_set_property (GObject      *object,
     {
     case PROP_ENABLED:
       gb_source_vim_set_enabled (vim, g_value_get_boolean (value));
+      break;
+
+    case PROP_SEARCH_TEXT:
+      gb_source_vim_set_search_text (vim, g_value_get_string (value));
       break;
 
     case PROP_TEXT_VIEW:
@@ -5325,6 +5364,16 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_PHRASE,
                                    gParamSpecs [PROP_PHRASE]);
+
+  gParamSpecs [PROP_SEARCH_TEXT] =
+    g_param_spec_string ("search-text",
+                         _("Search Text"),
+                         _("The last text searched for."),
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SEARCH_TEXT,
+                                   gParamSpecs [PROP_SEARCH_TEXT]);
 
   gParamSpecs [PROP_TEXT_VIEW] =
     g_param_spec_object ("text-view",
