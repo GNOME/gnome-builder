@@ -78,6 +78,7 @@ struct _GbSourceVimPrivate
   GtkTextMark             *selection_anchor_end;
   GtkSourceSearchContext  *search_context;
   GtkSourceSearchSettings *search_settings;
+  GtkDirectionType         search_direction;
   GPtrArray               *captured_events;
   GbSourceVimMode          mode;
   GSettings               *vim_settings;
@@ -185,6 +186,7 @@ enum
   PROP_MODE,
   PROP_PHRASE,
   PROP_SEARCH_TEXT,
+  PROP_SEARCH_DIRECTION,
   PROP_TEXT_VIEW,
   LAST_PROP
 };
@@ -2438,6 +2440,8 @@ gb_source_vim_reverse_search (GbSourceVim *vim)
   if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view))
     return;
 
+  gb_source_vim_set_search_direction (vim, GTK_DIR_UP);
+
   if (gb_source_vim_select_current_word (vim, &begin, &end))
     {
       GtkTextIter start_iter;
@@ -2484,6 +2488,8 @@ gb_source_vim_search (GbSourceVim *vim)
 
   if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view))
     return;
+
+  gb_source_vim_set_search_direction (vim, GTK_DIR_DOWN);
 
   has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
 
@@ -3713,6 +3719,26 @@ gb_source_vim_set_search_text (GbSourceVim     *vim,
   g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_SEARCH_TEXT]);
 }
 
+GtkDirectionType
+gb_source_vim_get_search_direction (GbSourceVim *vim)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), GTK_DIR_DOWN);
+
+  return vim->priv->search_direction;
+}
+
+void
+gb_source_vim_set_search_direction (GbSourceVim      *vim,
+                                    GtkDirectionType  search_direction)
+{
+  if (vim->priv->search_direction == search_direction)
+    return;
+
+  vim->priv->search_direction = search_direction;
+
+  g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_SEARCH_DIRECTION]);
+}
+
 GtkWidget *
 gb_source_vim_get_text_view (GbSourceVim *vim)
 {
@@ -4355,6 +4381,10 @@ gb_source_vim_get_property (GObject    *object,
       g_value_set_string (value, gb_source_vim_get_search_text (vim));
       break;
 
+    case PROP_SEARCH_DIRECTION:
+      g_value_set_enum (value, gb_source_vim_get_search_direction (vim));
+      break;
+
     case PROP_TEXT_VIEW:
       g_value_set_object (value, gb_source_vim_get_text_view (vim));
       break;
@@ -4380,6 +4410,10 @@ gb_source_vim_set_property (GObject      *object,
 
     case PROP_SEARCH_TEXT:
       gb_source_vim_set_search_text (vim, g_value_get_string (value));
+      break;
+
+    case PROP_SEARCH_DIRECTION:
+      gb_source_vim_set_search_direction (vim, g_value_get_enum (value));
       break;
 
     case PROP_TEXT_VIEW:
@@ -5375,6 +5409,17 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
   g_object_class_install_property (object_class, PROP_SEARCH_TEXT,
                                    gParamSpecs [PROP_SEARCH_TEXT]);
 
+  gParamSpecs [PROP_SEARCH_DIRECTION] =
+    g_param_spec_enum ("search-direction",
+                       _("Search Direction"),
+                       _("The direction of the last text searched for."),
+                       GTK_TYPE_DIRECTION_TYPE,
+                       GTK_DIR_DOWN,
+                       (G_PARAM_READWRITE |
+                        G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SEARCH_DIRECTION,
+                                   gParamSpecs [PROP_SEARCH_DIRECTION]);
+
   gParamSpecs [PROP_TEXT_VIEW] =
     g_param_spec_object ("text-view",
                          _("Text View"),
@@ -5720,6 +5765,7 @@ gb_source_vim_init (GbSourceVim *vim)
   vim->priv->mode = 0;
   vim->priv->phrase = g_string_new (NULL);
   vim->priv->search_settings = gtk_source_search_settings_new ();
+  vim->priv->search_direction = GTK_DIR_DOWN;
   vim->priv->captured_events =
     g_ptr_array_new_with_free_func ((GDestroyNotify)gdk_event_free);
 
