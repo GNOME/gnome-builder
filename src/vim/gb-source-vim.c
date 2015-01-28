@@ -25,6 +25,7 @@
 #include <stdlib.h>
 
 #include "gb-source-vim.h"
+#include "gb-string.h"
 
 #ifndef GB_SOURCE_VIM_EXTERNAL
 # include "gb-source-view.h"
@@ -730,6 +731,40 @@ gb_source_vim_maybe_auto_indent (GbSourceVim *vim)
       g_free (indent);
     }
 #endif
+}
+
+static void
+gb_source_vim_get_next_char_iter (GbSourceVim      *vim,
+                                  GtkDirectionType  direction,
+                                  gboolean          wrap_around,
+                                  GtkTextIter      *iter)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+
+  g_assert (GB_IS_SOURCE_VIM (vim));
+  g_assert (direction == GTK_DIR_UP || direction == GTK_DIR_DOWN);
+  g_assert (iter != NULL);
+
+  buffer = gtk_text_view_get_buffer (vim->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, iter, insert);
+
+  if (direction == GTK_DIR_UP)
+    {
+      if (!gtk_text_iter_backward_char (iter) && wrap_around)
+        gtk_text_buffer_get_end_iter (buffer, iter);
+    }
+  else if (direction == GTK_DIR_DOWN)
+    {
+      if (!gtk_text_iter_forward_char (iter) && wrap_around)
+        gtk_text_buffer_get_start_iter (buffer, iter);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
 }
 
 static gboolean
@@ -2523,6 +2558,47 @@ gb_source_vim_search (GbSourceVim *vim)
                                            g_object_ref (vim));
 
   g_free (text);
+}
+
+static void
+gb_source_vim_repeat_search (GbSourceVim      *vim,
+                             GtkDirectionType  search_direction)
+{
+  GtkTextIter iter;
+  const gchar *search_text = NULL;
+
+  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+
+  if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view))
+    return;
+
+  search_text = gb_source_vim_get_search_text (vim);
+
+  if (gb_str_empty0 (search_text))
+    return;
+
+  gb_source_vim_get_next_char_iter (vim, search_direction, TRUE, &iter);
+
+  g_object_set (vim->priv->search_settings,
+                "at-word-boundaries", FALSE,
+                "case-sensitive", TRUE,
+                "wrap-around", TRUE,
+                NULL);
+
+  gtk_source_search_context_set_highlight (vim->priv->search_context, TRUE);
+
+  if (search_direction == GTK_DIR_DOWN)
+    gtk_source_search_context_forward_async (vim->priv->search_context,
+                                             &iter,
+                                             NULL,
+                                             gb_source_vim_search_cb,
+                                             g_object_ref (vim));
+  else
+    gtk_source_search_context_backward_async (vim->priv->search_context,
+                                              &iter,
+                                              NULL,
+                                              gb_source_vim_search_cb,
+                                              g_object_ref (vim));
 }
 
 static void
@@ -4912,6 +4988,44 @@ gb_source_vim_cmd_move_forward (GbSourceVim *vim,
 }
 
 static void
+gb_source_vim_cmd_repeat_search_reverse (GbSourceVim *vim,
+                                         guint        count,
+                                         gchar        modifier)
+{
+  GtkDirectionType search_direction;
+  guint i;
+
+  g_assert (GB_IS_SOURCE_VIM (vim));
+
+  count = MAX (1, count);
+
+  if (vim->priv->search_direction == GTK_DIR_DOWN)
+    search_direction = GTK_DIR_UP;
+  else if (vim->priv->search_direction == GTK_DIR_UP)
+    search_direction = GTK_DIR_DOWN;
+  else
+    g_assert_not_reached ();
+
+  for (i = 0; i < count; i++)
+    gb_source_vim_repeat_search (vim, search_direction);
+}
+
+static void
+gb_source_vim_cmd_repeat_search (GbSourceVim *vim,
+                                 guint        count,
+                                 gchar        modifier)
+{
+  guint i;
+
+  g_assert (GB_IS_SOURCE_VIM (vim));
+
+  count = MAX (1, count);
+
+  for (i = 0; i < count; i++)
+    gb_source_vim_repeat_search (vim, vim->priv->search_direction);
+}
+
+static void
 gb_source_vim_cmd_jump_to_doc (GbSourceVim *vim,
                                guint        count,
                                gchar        modifier)
@@ -5677,6 +5791,14 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
                                         GB_SOURCE_VIM_COMMAND_FLAG_MOTION_EXCLUSIVE,
                                         GB_SOURCE_VIM_COMMAND_MOVEMENT,
                                         gb_source_vim_cmd_move_forward);
+  gb_source_vim_class_register_command (klass, 'N',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_JUMP,
+                                        gb_source_vim_cmd_repeat_search_reverse);
+  gb_source_vim_class_register_command (klass, 'n',
+                                        GB_SOURCE_VIM_COMMAND_FLAG_NONE,
+                                        GB_SOURCE_VIM_COMMAND_JUMP,
+                                        gb_source_vim_cmd_repeat_search);
   gb_source_vim_class_register_command (klass, 'O',
                                         GB_SOURCE_VIM_COMMAND_FLAG_NONE,
                                         GB_SOURCE_VIM_COMMAND_CHANGE,
