@@ -114,13 +114,21 @@ gb_editor_frame_save_position (GbEditorFrame *self)
 }
 
 /**
- * gb_editor_frame_move_next_match:
+ * gb_editor_frame_match:
+ * @self: the #GbEditorFrame
+ * @direction: the direction to search through the document
+ * @rubberbanding: if %TRUE then use the match closest to the
+ * position of cursor at the time gb_editor_frame_save_position()
+ * was last called, if %FALSE then use the match closest to
+ * the current cursor position.
  *
- * Move to the next search match after the cursor position.
+ * Move to a search match in the direction of @direction and/or
+ * select the match.
  */
 static void
-gb_editor_frame_move_next_match (GbEditorFrame *self,
-                                 gboolean       rubberbanding)
+gb_editor_frame_match (GbEditorFrame    *self,
+                       GtkDirectionType  direction,
+                       gboolean          rubberbanding)
 {
   GbEditorFramePrivate *priv;
   GtkTextBuffer *buffer;
@@ -129,14 +137,23 @@ gb_editor_frame_move_next_match (GbEditorFrame *self,
   GtkTextIter match_begin;
   GtkTextIter match_end;
   gboolean has_selection;
+  gboolean search_backward;
 
   ENTRY;
 
   g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+  g_return_if_fail (direction == GTK_DIR_UP || direction == GTK_DIR_DOWN);
 
   priv = self->priv;
 
-  gb_editor_frame_set_search_direction (self, GTK_DIR_DOWN);
+  if (direction == GTK_DIR_UP)
+    search_backward = TRUE;
+  else if (direction == GTK_DIR_DOWN)
+    search_backward = FALSE;
+  else
+    g_assert_not_reached ();
+
+  gb_editor_frame_set_search_direction (self, direction);
 
   buffer = GTK_TEXT_BUFFER (priv->document);
 
@@ -158,14 +175,32 @@ gb_editor_frame_move_next_match (GbEditorFrame *self,
                                                             &select_end);
 
       if (!has_selection)
-        if (!gtk_text_iter_forward_char (&select_end))
-          gtk_text_buffer_get_end_iter (buffer, &select_end);
-
+        {
+          if (!search_backward)
+            {
+              if (!gtk_text_iter_forward_char (&select_end))
+                gtk_text_buffer_get_end_iter (buffer, &select_end);
+            }
+          else
+            {
+              if (!gtk_text_iter_backward_char (&select_begin))
+                gtk_text_buffer_get_start_iter (buffer, &select_begin);
+            }
+        }
     }
 
-  if (gtk_source_search_context_forward (priv->search_context, &select_end,
-                                         &match_begin, &match_end))
-    GOTO (found_match);
+  if (!search_backward)
+    {
+      if (gtk_source_search_context_forward (priv->search_context, &select_end,
+                                             &match_begin, &match_end))
+        GOTO (found_match);
+    }
+  else
+    {
+      if (gtk_source_search_context_backward (priv->search_context, &select_begin,
+                                              &match_begin, &match_end))
+        GOTO (found_match);
+    }
 
   gb_editor_frame_restore_position (self);
 
@@ -185,55 +220,27 @@ found_match:
 }
 
 /**
+ * gb_editor_frame_move_next_match:
+ *
+ * Move to the next search match after the cursor position.
+ */
+static void
+gb_editor_frame_move_next_match (GbEditorFrame *self,
+                                 gboolean       rubberbanding)
+{
+  gb_editor_frame_match (self, GTK_DIR_DOWN, rubberbanding);
+}
+
+/**
  * gb_editor_frame_move_previous_match:
  *
  * Move to the first match before the cursor position.
  */
 static void
-gb_editor_frame_move_previous_match (GbEditorFrame *self)
+gb_editor_frame_move_previous_match (GbEditorFrame *self,
+                                     gboolean       rubberbanding)
 {
-  GbEditorFramePrivate *priv;
-  GtkTextIter select_begin;
-  GtkTextIter select_end;
-  GtkTextIter match_begin;
-  GtkTextIter match_end;
-
-  ENTRY;
-
-  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
-
-  priv = self->priv;
-
-  gb_editor_frame_set_search_direction (self, GTK_DIR_UP);
-  gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (priv->document),
-                                        &select_begin, &select_end);
-
-  if (gtk_source_search_context_backward (priv->search_context, &select_begin,
-                                          &match_begin, &match_end))
-    GOTO (found_match);
-  else
-    {
-      /*
-       * We need to wrap around from the end to find the last search result.
-       */
-      gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (priv->document),
-                                    &select_begin);
-      if (gtk_source_search_context_backward (priv->search_context,
-                                              &select_begin, &match_begin,
-                                              &match_end))
-        GOTO (found_match);
-    }
-
-  EXIT;
-
-found_match:
-  gb_source_view_clear_saved_cursor (priv->source_view);
-  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->document),
-                                &match_begin, &match_end);
-  gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view),
-                                   &match_begin, 0.0, TRUE, 0.5, 0.5);
-
-  EXIT;
+  gb_editor_frame_match (self, GTK_DIR_UP, rubberbanding);
 }
 
 static void
@@ -827,7 +834,7 @@ gb_editor_frame_on_search_entry_key_press (GbEditorFrame *self,
       RETURN (GDK_EVENT_STOP);
 
     case GDK_KEY_Up:
-      gb_editor_frame_move_previous_match (self);
+      gb_editor_frame_move_previous_match (self, FALSE);
       gb_editor_frame_save_position (self);
       RETURN (GDK_EVENT_STOP);
 
@@ -901,7 +908,7 @@ gb_editor_frame_on_backward_search_clicked (GbEditorFrame *self,
   g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  gb_editor_frame_move_previous_match (self);
+  gb_editor_frame_move_previous_match (self, FALSE);
 }
 
 /**
@@ -938,7 +945,7 @@ gb_editor_frame_on_begin_search (GbEditorFrame    *self,
       if (direction == GTK_DIR_DOWN)
         gb_editor_frame_move_next_match (self, TRUE);
       else if (direction == GTK_DIR_UP)
-        gb_editor_frame_move_previous_match (self);
+        gb_editor_frame_move_previous_match (self, TRUE);
     }
   else
     {
