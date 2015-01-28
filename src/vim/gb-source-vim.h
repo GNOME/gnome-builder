@@ -66,6 +66,7 @@ struct _GbSourceVimClass
   GObjectClass parent_class;
 
   void     (*begin_search)               (GbSourceVim      *vim,
+                                          GtkDirectionType  search_direction,
                                           const gchar      *search_text);
   void     (*command_visibility_toggled) (GbSourceVim      *vim,
                                           gboolean          visibility);

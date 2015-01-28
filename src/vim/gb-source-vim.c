@@ -4398,7 +4398,7 @@ gb_source_vim_cmd_begin_search (GbSourceVim *vim,
       text = gtk_text_iter_get_slice (&begin, &end);
     }
 
-  g_signal_emit (vim, gSignals [BEGIN_SEARCH], 0, text);
+  g_signal_emit (vim, gSignals [BEGIN_SEARCH], 0, GTK_DIR_DOWN, text);
 
   g_free (text);
 }
@@ -5324,6 +5324,7 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
 
   /**
    * GbSourceVim::begin-search:
+   * @search_direction: Direction to search
    * @search_text: (allow none): Optional search text to apply to the search.
    *
    * This signal is emitted when the `/` key is pressed. The consuming code
@@ -5337,9 +5338,10 @@ gb_source_vim_class_init (GbSourceVimClass *klass)
                   G_STRUCT_OFFSET (GbSourceVimClass, begin_search),
                   NULL,
                   NULL,
-                  g_cclosure_marshal_VOID__STRING,
+                  g_cclosure_marshal_generic,
                   G_TYPE_NONE,
-                  1,
+                  2,
+                  GTK_TYPE_DIRECTION_TYPE,
                   G_TYPE_STRING);
 
   /**

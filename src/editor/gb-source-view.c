@@ -326,14 +326,15 @@ gb_source_view_begin_search (GbSourceView     *view,
 }
 
 static void
-gb_source_view_vim_begin_search (GbSourceView *view,
-                                 const gchar  *text,
-                                 GbSourceVim  *vim)
+gb_source_view_vim_begin_search (GbSourceView     *view,
+                                 GtkDirectionType  direction,
+                                 const gchar      *text,
+                                 GbSourceVim      *vim)
 {
   g_return_if_fail (GB_IS_SOURCE_VIEW (view));
   g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
-  gb_source_view_begin_search (view, GTK_DIR_DOWN, text);
+  gb_source_view_begin_search (view, direction, text);
 }
 
 static void
