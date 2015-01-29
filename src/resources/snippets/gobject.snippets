@@ -3,10 +3,10 @@ snippet gobject
 - desc Create GObject
 	#include "${1:$filename|stripsuffix}.h"
 
-	struct _${2:$1|camelize}Private
+	typedef struct
 	{
 		$0
-	};
+	} ${2:$1|camelize}Private;
 
 	G_DEFINE_TYPE_WITH_PRIVATE ($2, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
 
@@ -26,7 +26,8 @@ snippet gobject
 	static void
 	$3_finalize (GObject *object)
 	{
-		$2Private *priv = ${$3|upper} (object)->priv;
+		$2 *self = ($2 *)object;
+		$2Private *priv = $3_get_instance_private (self);
 
 		G_OBJECT_CLASS ($3_parent_class)->finalize (object);
 	}
@@ -74,7 +75,6 @@ snippet gobject
 	static void
 	$3_init ($2 *self)
 	{
-		self->priv = $3_get_instance_private (self);
 	}
 - scope chdr
 - desc Create GObject header
@@ -85,33 +85,16 @@ snippet gobject
 
 	G_BEGIN_DECLS
 
-	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}            (${$1|functify}_get_type())
-	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1))
-	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1 const))
-	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1Class))
-	#define ${$1|functify|namespace|upper}_IS_${$1|class|functify|upper}(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}))
-	#define ${$1|functify|namespace|upper}_IS_${$1|class|functify|upper}_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}))
-	#define ${$1|functify|namespace|upper}_${$1|class|functify|upper}_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper}, $1Class))
+	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${$1|functify}_get_type())
 
-	typedef struct _$1        $1;
-	typedef struct _$1Class   $1Class;
-	typedef struct _$1Private $1Private;
-
-	struct _${1:$filename|stripsuffix|functify|camelize}
-	{
-		${2:GObject} parent;
-
-		/*< private >*/
-		$1Private *priv;
-	};
+	G_DECLARE_DERIVABLE_TYPE (${1:$filename|stripsuffix|camelize}, ${$1|functify}, ${$1|functify|namespace|upper}, ${$1|class|functify|upper}, ${2:GObject})
 
 	struct _$1Class
 	{
 		$2Class parent;
 	};
 
-	GType ${$1|space}${$1|functify}_get_type (void);
-	$1     *${$1|functify}_new      (void);
+	$1 *${$1|functify}_new (void);
 	$0
 	G_END_DECLS
 
