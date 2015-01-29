@@ -3381,7 +3381,8 @@ gb_source_vim_event_after_cb (GtkTextView *text_view,
 {
   g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
-  if (vim->priv->mode == GB_SOURCE_VIM_INSERT)
+  if (vim->priv->mode == GB_SOURCE_VIM_INSERT &&
+      event->type == GDK_KEY_PRESS)
     gb_source_vim_ensure_scroll (vim);
 }
 
