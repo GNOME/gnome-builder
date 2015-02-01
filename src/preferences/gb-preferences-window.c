@@ -34,6 +34,7 @@
 
 struct _GbPreferencesWindowPrivate
 {
+  GtkWidget       *return_to_page;
   GtkHeaderBar    *right_header_bar;
   GtkSearchEntry  *search_entry;
   GtkSearchBar    *search_bar;
@@ -54,6 +55,22 @@ GtkWidget *
 gb_preferences_window_new (void)
 {
   return g_object_new (GB_TYPE_PREFERENCES_WINDOW, NULL);
+}
+
+static void
+gb_preferences_window_notify_search_mode (GbPreferencesWindow *window,
+                                          GParamSpec          *pspec,
+                                          GtkSearchBar        *search_bar)
+{
+  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
+
+  if (!gtk_search_bar_get_search_mode (search_bar) &&
+      window->priv->return_to_page)
+    {
+      gtk_stack_set_visible_child (window->priv->stack,
+                                   window->priv->return_to_page);
+      window->priv->return_to_page = NULL;
+    }
 }
 
 static void
@@ -187,7 +204,7 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
   ret = GTK_WIDGET_CLASS (gb_preferences_window_parent_class)->key_press_event (widget, event);
 
   /*
-   * Check of the focus widget is editable.
+   * Check if the focus widget is a GtkEditable.
    */
   editable = GTK_IS_EDITABLE (gtk_window_get_focus (GTK_WINDOW (widget)));
 
@@ -203,9 +220,16 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
                    !is_space_event (event) &&
                    !is_tab_event (event))
             {
+              GtkWidget *current_page;
+
+              current_page = gtk_stack_get_visible_child (self->priv->stack);
+
               if (gtk_search_bar_handle_event (GTK_SEARCH_BAR (self->priv->search_bar),
                                                (GdkEvent*) event) == GDK_EVENT_STOP)
-                ret = TRUE;
+                {
+                  self->priv->return_to_page = current_page;
+                  ret = TRUE;
+                }
               else
                 ret = FALSE;
             }
@@ -238,6 +262,12 @@ gb_preferences_window_constructed (GObject *object)
                     G_CALLBACK (gb_preferences_window_section_changed),
                     window);
   gb_preferences_window_section_changed (window->priv->stack, NULL, window);
+
+  g_signal_connect_object (window->priv->search_bar,
+                           "notify::search-mode-enabled",
+                           G_CALLBACK (gb_preferences_window_notify_search_mode),
+                           window,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_object (window->priv->search_entry,
                            "changed",
