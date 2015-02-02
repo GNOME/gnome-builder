@@ -2526,8 +2526,8 @@ gb_source_vim_search_cb (GObject      *source,
 
           buffer = gtk_text_view_get_buffer (vim->priv->text_view);
           gtk_text_buffer_select_range (buffer, &match_begin, &match_begin);
-          gtk_text_view_scroll_to_iter (vim->priv->text_view, &match_begin,
-                                        0.0, TRUE, 0.0, 0.5);
+          gtk_text_view_scroll_to_iter (vim->priv->text_view, &match_end,
+                                        0.0, TRUE, 1.0, 0.5);
         }
     }
 

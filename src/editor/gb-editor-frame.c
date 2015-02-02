@@ -212,9 +212,9 @@ found_match:
                                 &match_begin, &match_end);
 
   if (!gb_gtk_text_view_get_iter_visible (GTK_TEXT_VIEW (priv->source_view),
-                                          &match_begin))
-    gb_gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view),
-                                     &match_begin, 0.0, TRUE, 0.5, 0.5);
+                                          &match_end))
+    gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (priv->source_view),
+                                  &match_end, 0.0, TRUE, 1.0, 0.5);
 
   EXIT;
 }
