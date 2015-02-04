@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-01-26 19:02+0000\n"
+"POT-Creation-Date: 2015-02-04 17:16+0000\n"
 "PO-Revision-Date: 2015-02-04 18:04+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
@@ -198,7 +198,7 @@ msgid "The priority of the command provider."
 msgstr "Priorita poskytovatele příkazu."
 
 #: ../src/commands/gb-command-provider.c:356
-#: ../src/git/gb-git-search-provider.c:526
+#: ../src/git/gb-git-search-provider.c:523
 #: ../src/navigation/gb-navigation-list.c:299
 msgid "Workbench"
 msgstr "Pracovní místo"
@@ -287,7 +287,7 @@ msgstr "Adresa URI, která se má načíst."
 
 #: ../src/devhelp/gb-devhelp-view.c:175
 #: ../src/documents/gb-document-view.c:203
-#: ../src/editor/gb-editor-frame.c:1597 ../src/editor/gb-editor-view.c:1071
+#: ../src/editor/gb-editor-frame.c:1651 ../src/editor/gb-editor-view.c:1080
 #: ../src/html/gb-html-view.c:264
 msgid "Document"
 msgstr "Dokument"
@@ -641,19 +641,27 @@ msgstr "Řádek"
 msgid "The line within the file."
 msgstr "Řádek v rámci souboru."
 
-#: ../src/editor/gb-editor-frame.c:317
+#: ../src/editor/gb-editor-frame.c:320
 #, c-format
 msgid "%u of %u"
 msgstr "%u z %u"
 
-#: ../src/editor/gb-editor-frame.c:458
+#: ../src/editor/gb-editor-frame.c:461
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "řádek %u, sloupec %u"
 
-#: ../src/editor/gb-editor-frame.c:1598
+#: ../src/editor/gb-editor-frame.c:1652
 msgid "The document for the editor."
 msgstr "Dokument pro editor."
+
+#: ../src/editor/gb-editor-frame.c:1660
+msgid "Search Direction"
+msgstr "Směr hledání"
+
+#: ../src/editor/gb-editor-frame.c:1661
+msgid "The direction of the last text searched for."
+msgstr "Směr, ve kterém bylo prováděno poslední hledání."
 
 #: ../src/editor/gb-editor-navigation-item.c:218
 msgid "The file that is being edited."
@@ -690,63 +698,63 @@ msgstr "Soubor „%s“ byl změněn mimo Builder."
 msgid "Plain Text"
 msgstr "Prostý text"
 
-#: ../src/editor/gb-editor-view.c:1062
+#: ../src/editor/gb-editor-view.c:1071
 msgid "Auto Indent"
 msgstr "Automatické odsazování"
 
-#: ../src/editor/gb-editor-view.c:1063
+#: ../src/editor/gb-editor-view.c:1072
 msgid "If we should use the auto-indentation engine."
 msgstr "Zda by se mělo provádět automatické odsazení."
 
-#: ../src/editor/gb-editor-view.c:1072
+#: ../src/editor/gb-editor-view.c:1081
 msgid "The document edited by the view."
 msgstr "Dokument upravovaný v zobrazení."
 
-#: ../src/editor/gb-editor-view.c:1080
+#: ../src/editor/gb-editor-view.c:1089
 msgid "Highlight Current Line"
 msgstr "Zvýrazňovat aktuální řádek"
 
-#: ../src/editor/gb-editor-view.c:1081
+#: ../src/editor/gb-editor-view.c:1090
 msgid "If the current line should be highlighted."
 msgstr "Zda by se měl zvýrazňovat aktuální řádek."
 
-#: ../src/editor/gb-editor-view.c:1089
+#: ../src/editor/gb-editor-view.c:1098
 msgid "Show Line Numbers"
 msgstr "Zobrazovat čísla řádků"
 
-#: ../src/editor/gb-editor-view.c:1090
+#: ../src/editor/gb-editor-view.c:1099
 msgid "If the line numbers should be shown."
 msgstr "Zda by se měly zobrazovat čísla řádků."
 
-#: ../src/editor/gb-editor-view.c:1098
+#: ../src/editor/gb-editor-view.c:1107
 msgid "Show Right Margin"
 msgstr "Zobrazovat pravý okraj"
 
-#: ../src/editor/gb-editor-view.c:1099
+#: ../src/editor/gb-editor-view.c:1108
 msgid "If we should show the right margin."
 msgstr "Zda by se měl zobrazovat pravý okraj."
 
-#: ../src/editor/gb-editor-view.c:1107
+#: ../src/editor/gb-editor-view.c:1116
 msgid "Split Enabled"
 msgstr "Povoleno rozdělení"
 
-#: ../src/editor/gb-editor-view.c:1108
+#: ../src/editor/gb-editor-view.c:1117
 msgid "If the view split is enabled."
 msgstr "Zda je povoleno rozdělení zobrazení."
 
-#: ../src/editor/gb-editor-view.c:1116
+#: ../src/editor/gb-editor-view.c:1125
 msgid "Tab Width"
 msgstr "Šířka tabulátoru"
 
-#: ../src/editor/gb-editor-view.c:1117
+#: ../src/editor/gb-editor-view.c:1126
 msgid "The width a tab should be drawn as."
 msgstr "Jak široký by měl být vykreslován tabulátor."
 
-#: ../src/editor/gb-editor-view.c:1127
+#: ../src/editor/gb-editor-view.c:1136
 msgid "Use Spaces"
 msgstr "Používat mezery"
 
-#: ../src/editor/gb-editor-view.c:1128
+#: ../src/editor/gb-editor-view.c:1137
 msgid "If spaces should be used instead of tabs."
 msgstr "Zda se mají místo mezer používat tabulátory."
 
@@ -823,61 +831,61 @@ msgstr "Kontext hledání"
 msgid "Search Settings"
 msgstr "Nastavení hledání"
 
-#: ../src/editor/gb-source-view.c:2214 ../src/editor/gb-source-view.c:2215
+#: ../src/editor/gb-source-view.c:2215 ../src/editor/gb-source-view.c:2216
 msgid "Enable Word Completion"
 msgstr "Zapnout dokončování slov"
 
-#: ../src/editor/gb-source-view.c:2223
+#: ../src/editor/gb-source-view.c:2224
 msgid "Font Name"
 msgstr "Název písma"
 
-#: ../src/editor/gb-source-view.c:2224
+#: ../src/editor/gb-source-view.c:2225
 msgid "The font name to apply to the widget."
 msgstr "Název písma, které se má použít u widgetu."
 
-#: ../src/editor/gb-source-view.c:2232
+#: ../src/editor/gb-source-view.c:2233
 msgid "Insert Matching Brace"
 msgstr "Vkládat odpovídající závorky"
 
-#: ../src/editor/gb-source-view.c:2233
+#: ../src/editor/gb-source-view.c:2234
 msgid "If we should insert matching braces."
 msgstr "Zda by se měly vkládat odpovídající závorky."
 
-#: ../src/editor/gb-source-view.c:2241
+#: ../src/editor/gb-source-view.c:2242
 msgid "Overwrite Braces"
 msgstr "Přepisovat závorky"
 
-#: ../src/editor/gb-source-view.c:2242
+#: ../src/editor/gb-source-view.c:2243
 msgid "If we should overwrite braces, brackets, parenthesis and quotes."
 msgstr ""
 "Zda by se měly přepisovat složené závorky, hranaté závorky, kulaté závorky a "
 "uvozovky."
 
-#: ../src/editor/gb-source-view.c:2251
+#: ../src/editor/gb-source-view.c:2252
 msgid "Show Shadow"
 msgstr "Zobrazovat stín"
 
-#: ../src/editor/gb-source-view.c:2252
+#: ../src/editor/gb-source-view.c:2253
 msgid "Show the search shadow"
 msgstr "Zobrazovat stín u hledání."
 
-#: ../src/editor/gb-source-view.c:2260 ../src/editor/gb-source-view.c:2261
+#: ../src/editor/gb-source-view.c:2261 ../src/editor/gb-source-view.c:2262
 msgid "Search Highlighter"
 msgstr "Zvýrazňování při hledání"
 
-#: ../src/editor/gb-source-view.c:2269
+#: ../src/editor/gb-source-view.c:2270
 msgid "Smart Home End"
 msgstr "Chytrý Home a End"
 
-#: ../src/editor/gb-source-view.c:2270
+#: ../src/editor/gb-source-view.c:2271
 msgid "Enable smart home end in gtksourceview."
 msgstr "Zapnout chytrý Home a End v GtkSourceView."
 
-#: ../src/editor/gb-source-view.c:2278
+#: ../src/editor/gb-source-view.c:2279
 msgid "Show Grid Lines"
 msgstr "Zobrazovat čáry mřížky"
 
-#: ../src/editor/gb-source-view.c:2279
+#: ../src/editor/gb-source-view.c:2280
 msgid "Whether to show the grid lines."
 msgstr "Zda se mají zobrazovat čáry mřížky."
 
@@ -918,19 +926,19 @@ msgstr "Styl značky."
 msgid "Stack"
 msgstr "Zásobník"
 
-#: ../src/git/gb-git-search-provider.c:432
+#: ../src/git/gb-git-search-provider.c:429
 msgid "Switch To"
 msgstr "Přepnout na"
 
-#: ../src/git/gb-git-search-provider.c:515
+#: ../src/git/gb-git-search-provider.c:512
 msgid "Repository"
 msgstr "Repozitář"
 
-#: ../src/git/gb-git-search-provider.c:516
+#: ../src/git/gb-git-search-provider.c:513
 msgid "The repository to use for search data."
 msgstr "Repozitář, který se má použít pro hledání dat."
 
-#: ../src/git/gb-git-search-provider.c:527
+#: ../src/git/gb-git-search-provider.c:524
 msgid "The workbench window."
 msgstr "Okno s pracovním místem."
 
@@ -1438,7 +1446,7 @@ msgid "Display line numbers in the document."
 msgstr "Zobrazovat v dokumentu čísla řádků."
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:9
-msgid "<b>Hightlight Current Line</b>"
+msgid "<b>Highlight Current Line</b>"
 msgstr "<b>Zvýrazňovat aktuální řádek</b>"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:10
@@ -1446,7 +1454,7 @@ msgid "Highlight the line containing the cursor."
 msgstr "Zvýrazňovat řádek obsahující kurzor."
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:11
-msgid "<b>Hightlight Matching Brackets</b>"
+msgid "<b>Highlight Matching Brackets</b>"
 msgstr "<b>Zvýrazňovat párové závorky</b>"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:12
