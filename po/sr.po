@@ -1,0 +1,1859 @@
+# Serbian translation for gnome-builder.
+# Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-builder package.
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-builder master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"builder&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2015-01-28 07:01+0000\n"
+"PO-Revision-Date: 2015-02-04 18:28+0200\n"
+"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
+"Language-Team: Serbian <gnom@prevod.org>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Project-Style: gnome\n"
+
+#: ../src/animation/gb-animation.c:681
+#, c-format
+msgid "Cannot locate property %s in class %s"
+msgstr "Не могу да нађем својство „%s“ у разреду „%s“"
+
+#: ../src/animation/gb-animation.c:817 ../src/credits/gb-credits-widget.c:275
+msgid "Duration"
+msgstr "Трајање"
+
+#: ../src/animation/gb-animation.c:818
+msgid "The duration of the animation"
+msgstr "Трајање анимације"
+
+#: ../src/animation/gb-animation.c:830
+msgid "Frame Clock"
+msgstr "Часовник кадра"
+
+#: ../src/animation/gb-animation.c:831
+msgid "An optional frame-clock to synchronize with."
+msgstr "Изборни часовник кадра за усклађивање."
+
+#: ../src/animation/gb-animation.c:848
+msgid "Mode"
+msgstr "Режим"
+
+#: ../src/animation/gb-animation.c:849
+msgid "The animation mode"
+msgstr "Режим анимације"
+
+# мета?
+#: ../src/animation/gb-animation.c:866 ../src/theatrics/gb-box-theatric.c:289
+#: ../src/theatrics/gb-box-theatric.c:290
+msgid "Target"
+msgstr "Одредиште"
+
+#: ../src/animation/gb-animation.c:867
+msgid "The target of the animation"
+msgstr "Одредиште анимације"
+
+#: ../src/animation/gb-animation.c:1027 ../src/animation/gb-animation.c:1033
+#, c-format
+msgid "Failed to find property %s in %s"
+msgstr "Нисам успео да нађем својство „%s“ у „%s“"
+
+#: ../src/animation/gb-animation.c:1041
+#, c-format
+msgid "Failed to find property %s in %s or parent %s"
+msgstr "Нисам успео да нађем својство „%s“ у „%s“ или у надређеном „%s“"
+
+#: ../src/animation/gb-animation.c:1051
+#, c-format
+msgid "Failed to retrieve va_list value: %s"
+msgstr "Не могу да добијем списак дељења са сервера: %s"
+
+#: ../src/app/gb-application.c:296
+msgid "Failed to load keybindings."
+msgstr "Нисам успео да учитам свезе тастера."
+
+#: ../src/app/gb-application.c:304
+#, c-format
+msgid "Failed to load keybindings: %s"
+msgstr "Нисам успео да учитам свезе тастера: %s"
+
+#: ../src/app/gb-application.c:316
+#, c-format
+msgid "Failed to load local keybindings: %s"
+msgstr "Нисам успео да учитам месне свезе тастера: %s"
+
+#: ../src/app/gb-application.c:384 ../src/main.c:48
+msgid "Builder"
+msgstr "Градитељ"
+
+#: ../src/app/gb-application.c:539
+#, c-format
+msgid ""
+"The support log file has been written to '%s'. Please provide this file as "
+"an attachment on your bug report or support request."
+msgstr ""
+"Датотека дневника подршке је записана у „%s“. Доставите ову датотеку као "
+"прилог вашем извештају о грешци или захтеву за подршком."
+
+#: ../src/auto-indent/gb-source-auto-indenter-c.c:1467
+#: ../src/auto-indent/gb-source-auto-indenter-c.c:1468
+msgid "Name"
+msgstr "Назив"
+
+#: ../src/code-assistant/gb-source-code-assistant.c:764
+msgid "Active"
+msgstr "Упослен"
+
+#: ../src/code-assistant/gb-source-code-assistant.c:765
+msgid "If code assistance is currently processing."
+msgstr "Да ли кодна испомоћ тренутно обрађује."
+
+#: ../src/code-assistant/gb-source-code-assistant.c:773
+#: ../src/editor/gb-source-change-monitor.c:867
+#: ../src/html/gb-html-document.c:310 ../src/snippets/gb-source-snippet.c:1023
+msgid "Buffer"
+msgstr "Међумеморија"
+
+#: ../src/code-assistant/gb-source-code-assistant.c:774
+msgid "The buffer "
+msgstr "Међумеморија "
+
+#: ../src/code-assistant/gb-source-code-assistant.c:813
+#, c-format
+msgid ""
+"Failed to load DBus connection. Code assistance will be disabled. \"%s\" (%s)"
+msgstr ""
+"Нисам успео да учитам везу Д-сабирнице. Кодна испомоћ биће искључена. „%s“ "
+"(%s)"
+
+#: ../src/code-assistant/gb-source-code-assistant-renderer.c:319
+msgid "Code Assistant"
+msgstr "Кодни помоћник"
+
+#: ../src/code-assistant/gb-source-code-assistant-renderer.c:320
+msgid "The code assistant to render."
+msgstr "Кодни помоћник за исцртавање."
+
+#: ../src/commands/gb-command-bar.c:223
+#, c-format
+msgid "Command not found: %s"
+msgstr "Нисам нашао наредбу: %s"
+
+#: ../src/commands/gb-command-bar.c:524
+msgid "Use the entry below to execute a command"
+msgstr "Користите унос испод за извршавање наредбе"
+
+#: ../src/commands/gb-command-bar-item.c:175
+#: ../src/search/gb-search-display-row.c:159
+#: ../src/search/gb-search-display-row.c:160
+msgid "Result"
+msgstr "Резултат"
+
+#: ../src/commands/gb-command-bar-item.c:176
+msgid "The result to be visualized in the item."
+msgstr "Резултат који ће бити приказан у ставци."
+
+#: ../src/commands/gb-command-gaction.c:186
+msgid "Action Group"
+msgstr "Група радње"
+
+#: ../src/commands/gb-command-gaction.c:187
+msgid "The GActionGroup containing the action."
+msgstr "Група радње која садржи радњу."
+
+#: ../src/commands/gb-command-gaction.c:195
+msgid "Action Name"
+msgstr "Назив радње"
+
+#: ../src/commands/gb-command-gaction.c:196
+msgid "The name of the action to execute."
+msgstr "Назив радње за извршавање."
+
+#: ../src/commands/gb-command-gaction.c:204
+msgid "Parameters"
+msgstr "Параметри"
+
+#: ../src/commands/gb-command-gaction.c:205
+msgid "The parameters for the action."
+msgstr "Параметри за радњу."
+
+#: ../src/commands/gb-command-provider.c:316
+msgid "Active DocumentView"
+msgstr "Радни преглед документа"
+
+#: ../src/commands/gb-command-provider.c:317
+msgid "The last focused GbDocumentView widget."
+msgstr "Последњи елемент прегледа Гб документа у првом плану."
+
+#: ../src/commands/gb-command-provider.c:338
+msgid "Priority"
+msgstr "Хитност"
+
+#: ../src/commands/gb-command-provider.c:339
+msgid "The priority of the command provider."
+msgstr "Хитност достављача наредбе."
+
+#: ../src/commands/gb-command-provider.c:356
+#: ../src/git/gb-git-search-provider.c:523
+#: ../src/navigation/gb-navigation-list.c:299
+msgid "Workbench"
+msgstr "Радионица"
+
+#: ../src/commands/gb-command-provider.c:357
+msgid "The target workbench."
+msgstr "Циљна радионица."
+
+#: ../src/commands/gb-command-result.c:224
+#: ../src/commands/gb-command-vim.c:189
+msgid "Command Text"
+msgstr "Текст наредбе"
+
+#: ../src/commands/gb-command-result.c:225
+msgid "The command text if any."
+msgstr "Текст наредбе ако постоји."
+
+#: ../src/commands/gb-command-result.c:234
+msgid "Is Error"
+msgstr "Јесте грешка"
+
+#: ../src/commands/gb-command-result.c:235
+msgid "If the result is an error."
+msgstr "Да ли је резултат грешка."
+
+#: ../src/commands/gb-command-result.c:244
+msgid "Is Running"
+msgstr "Ради"
+
+#: ../src/commands/gb-command-result.c:245
+msgid "If the command is still running."
+msgstr "Да ли се наредба још увек извршава."
+
+#: ../src/commands/gb-command-result.c:254
+msgid "Result Text"
+msgstr "Текст резултата"
+
+#: ../src/commands/gb-command-result.c:255
+msgid "The result text if any."
+msgstr "Текст резултата ако постоји."
+
+#: ../src/commands/gb-command-vim.c:190
+msgid "The command text to execute"
+msgstr "Текст наредбе за извршавање"
+
+#: ../src/commands/gb-command-vim.c:199
+#: ../src/snippets/gb-source-snippet-completion-provider.c:168
+msgid "Source View"
+msgstr "Преглед извора"
+
+#: ../src/commands/gb-command-vim.c:200
+msgid "The source view to modify."
+msgstr "Преглед извора за мењање."
+
+#: ../src/credits/gb-credits-widget.c:276
+msgid "The duration of the animation in millseconds."
+msgstr "Трајање анимирања у милисекундама."
+
+#: ../src/credits/gb-credits-widget.c:286
+#: ../src/credits/gb-credits-widget.c:287
+#: ../src/editor/gb-editor-document.c:1476
+msgid "Progress"
+msgstr "Напредовање"
+
+#: ../src/credits/gb-credits-widget.c:312
+#, c-format
+msgid "GNOME Builder - %s"
+msgstr "Гномов Градитељ – %s"
+
+#: ../src/devhelp/gb-devhelp-document.c:71
+#, c-format
+msgid "Documentation (%s)"
+msgstr "Документација (%s)"
+
+#: ../src/devhelp/gb-devhelp-document.c:151
+msgid "Documentation"
+msgstr "Документација"
+
+#: ../src/devhelp/gb-devhelp-document.c:257
+msgid "URI"
+msgstr "Путања"
+
+#: ../src/devhelp/gb-devhelp-document.c:258
+msgid "The uri to load."
+msgstr "Путања за учитавање."
+
+#: ../src/devhelp/gb-devhelp-view.c:175
+#: ../src/documents/gb-document-view.c:203
+#: ../src/editor/gb-editor-frame.c:1597 ../src/editor/gb-editor-view.c:1071
+#: ../src/html/gb-html-view.c:264
+msgid "Document"
+msgstr "Документ"
+
+#: ../src/devhelp/gb-devhelp-view.c:176
+msgid "The document for the devhelp view."
+msgstr "Документ за преглед развојне помоћи."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:148
+msgid "Question"
+msgstr "Питање"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:318
+msgid "Close _without Saving"
+msgstr "Затвори _без чувања"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:319
+#: ../src/resources/ui/gb-editor-view.ui.h:2
+msgid "_Cancel"
+msgstr "_Откажи"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:337
+msgid "_Save As…"
+msgstr "Сачувај _као…"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:337
+msgid "_Save"
+msgstr "_Сачувај"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:354
+#, c-format
+msgid ""
+"If you don't save, changes from the last %ld second will be permanently lost."
+msgid_plural ""
+"If you don't save, changes from the last %ld seconds will be permanently "
+"lost."
+msgstr[0] ""
+"Измене у последњој %ld секунди ће бити трајно одбачене уколико не сачувате."
+msgstr[1] ""
+"Измене у последње %ld секунде ће бити трајно одбачене уколико не сачувате."
+msgstr[2] ""
+"Измене у последњих %ld секунди ће бити трајно одбачене уколико не сачувате."
+msgstr[3] "Измене у последњој секунди ће бити трајно одбачене уколико не сачувате."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:363
+msgid ""
+"If you don't save, changes from the last minute will be permanently lost."
+msgstr "Ако не сачувате, измене у последњем минуту биће трајно изгубљене."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:369
+#, c-format
+msgid ""
+"If you don't save, changes from the last minute and %ld second will be "
+"permanently lost."
+msgid_plural ""
+"If you don't save, changes from the last minute and %ld seconds will be "
+"permanently lost."
+msgstr[0] ""
+"Измене у последњем минуту и %ld секунди ће бити трајно одбачене уколико не "
+"сачувате."
+msgstr[1] ""
+"Измене у последњем минуту и %ld секунде ће бити трајно одбачене уколико не "
+"сачувате."
+msgstr[2] ""
+"Измене у последњем минуту и %ld секунди ће бити трајно одбачене уколико не "
+"сачувате."
+msgstr[3] "Измене у последњем минуту ће бити трајно одбачене уколико не сачувате."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:379
+#, c-format
+msgid ""
+"If you don't save, changes from the last %ld minute will be permanently lost."
+msgid_plural ""
+"If you don't save, changes from the last %ld minutes will be permanently "
+"lost."
+msgstr[0] ""
+"Измене у последњем %ld минуту ће бити трајно одбачене уколико не сачувате."
+msgstr[1] ""
+"Измене у последња %ld минута ће бити трајно одбачене уколико не сачувате."
+msgstr[2] ""
+"Измене у последњих %ld минута ће бити трајно одбачене уколико не сачувате."
+msgstr[3] "Измене у последњем минуту ће бити трајно одбачене уколико не сачувате."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:394
+msgid "If you don't save, changes from the last hour will be permanently lost."
+msgstr ""
+"Измене током последњег часа ће бити трајно одбачене уколико не сачувате."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:400
+#, c-format
+msgid ""
+"If you don't save, changes from the last hour and %d minute will be "
+"permanently lost."
+msgid_plural ""
+"If you don't save, changes from the last hour and %d minutes will be "
+"permanently lost."
+msgstr[0] ""
+"Измене у последњем часу и %d минуту ће бити трајно одбачене уколико не "
+"сачувате."
+msgstr[1] ""
+"Измене у последњем часу и %d минута ће бити трајно одбачене уколико не "
+"сачувате."
+msgstr[2] ""
+"Измене у последњем часу и %d минута ће бити трајно одбачене уколико не "
+"сачувате."
+msgstr[3] "Измене у последњем часу ће бити трајно одбачене уколико не сачувате."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:415
+#, c-format
+msgid ""
+"If you don't save, changes from the last %d hour will be permanently lost."
+msgid_plural ""
+"If you don't save, changes from the last %d hours will be permanently lost."
+msgstr[0] "Измене у последњем %d часу ће бити трајно одбачене уколико не сачувате."
+msgstr[1] "Измене у последња %d часа ће бити трајно одбачене уколико не сачувате."
+msgstr[2] ""
+"Измене у последњих %d часова ће бити трајно одбачене уколико не сачувате."
+msgstr[3] "Измене у последњем часу ће бити трајно одбачене уколико не сачувате."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:459
+#, c-format
+msgid "Changes to document “%s” will be permanently lost."
+msgstr "Измене у документу „%s“ биће трајно одбачене."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:464
+#, c-format
+msgid "Save changes to document “%s” before closing?"
+msgstr "Да сачувам измене у документу „%s“ пре затварања?"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:477
+#: ../src/dialogs/gb-close-confirmation-dialog.c:637
+msgid "Saving has been disabled by the system administrator."
+msgstr "Администратор система је онемогућио чување."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:585
+#, c-format
+msgid "Changes to %d document will be permanently lost."
+msgid_plural "Changes to %d documents will be permanently lost."
+msgstr[0] "Измене у %d документу ће бити трајно одбачене."
+msgstr[1] "Измене у %d документа ће бити трајно одбачене."
+msgstr[2] "Измене у %d докумената ће бити трајно одбачене."
+msgstr[3] "Измене учињене у документу ће бити трајно одбачене."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:593
+#, c-format
+msgid "There is %d document with unsaved changes. Save changes before closing?"
+msgid_plural ""
+"There are %d documents with unsaved changes. Save changes before closing?"
+msgstr[0] "%d документ има несачуване измене. Да их сачувам пре затварања?"
+msgstr[1] "%d документа имају несачуване измене. Да их сачувам пре затварања?"
+msgstr[2] "%d докумената имају несачуване измене. Да их сачувам пре затварања?"
+msgstr[3] ""
+"#-#-#-#-#  gtranslator.po (gtranslator)  #-#-#-#-#\n"
+"Документ има несачуване измене. Да ли да их сачувам пре затварања?\n"
+"#-#-#-#-#  gedit.po (gedit)  #-#-#-#-#\n"
+"Документ има несачуване измене. Да сачувам измене пре затварања?\n"
+"#-#-#-#-#  gedit.master.sr.po (gedit)  #-#-#-#-#\n"
+"Документ има несачуване измене. Да сачувам измене пре затварања?"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:613
+msgid "Docum_ents with unsaved changes:"
+msgstr "Докум_енти са несачуваним изменама:"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:617
+msgid "S_elect the documents you want to save:"
+msgstr "Изаберите _документе које желите да сачувате:"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:641
+msgid "If you don't save, all your changes will be permanently lost."
+msgstr "Ако не сачувате, све измене ће бити трајно изгубљене."
+
+#: ../src/documents/gb-document.c:188
+msgid "Modified"
+msgstr "Измењен"
+
+#: ../src/documents/gb-document.c:189
+msgid "If the document has been modified from disk."
+msgstr "Да ли је документ измењен са диска."
+
+#: ../src/documents/gb-document.c:196
+#: ../src/preferences/gb-preferences-page.c:214
+#: ../src/search/gb-search-result.c:241 ../src/workbench/gb-workspace.c:151
+msgid "Title"
+msgstr "Наслов"
+
+#: ../src/documents/gb-document.c:197
+msgid "The title of the document."
+msgstr "Наслов документа."
+
+#: ../src/documents/gb-document.c:204
+msgid "Read Only"
+msgstr "Само за читање"
+
+#: ../src/documents/gb-document.c:205
+msgid "If the document is read only."
+msgstr "Да ли је документ само за читање."
+
+#: ../src/documents/gb-document-grid.c:840
+#: ../src/documents/gb-document-menu-button.c:667
+#: ../src/documents/gb-document-stack.c:881
+msgid "Document Manager"
+msgstr "Управник документа"
+
+#: ../src/documents/gb-document-grid.c:841
+msgid "The document manager for the document grid."
+msgstr "Управник документа за мрежу документа."
+
+#: ../src/documents/gb-document-manager.c:300
+msgid "Count"
+msgstr "Укупно"
+
+#: ../src/documents/gb-document-manager.c:301
+msgid "The number of documents in the manager."
+msgstr "Број докумената у управнику."
+
+#: ../src/documents/gb-document-menu-button.c:668
+msgid "The document manager for the button."
+msgstr "Управник документа за дугме."
+
+#: ../src/documents/gb-document-stack.c:872
+msgid "Active View"
+msgstr "Радни преглед"
+
+#: ../src/documents/gb-document-stack.c:873
+msgid "The active view within the stack."
+msgstr "Радни преглед у спремнику."
+
+#: ../src/documents/gb-document-stack.c:882
+msgid "The document manager for the stack."
+msgstr "Управник документа за спремник."
+
+#: ../src/documents/gb-document-view.c:185
+msgid "Can Preview"
+msgstr "Може да претпрегледа"
+
+#: ../src/documents/gb-document-view.c:186
+msgid "If the view can preview."
+msgstr "Да ли преглед може да претпрегледа."
+
+#: ../src/documents/gb-document-view.c:194
+msgid "Controls"
+msgstr "Контроле"
+
+#: ../src/documents/gb-document-view.c:195
+msgid "The widget containing the view controls."
+msgstr "Елемент који садржи контроле прегледа."
+
+#: ../src/documents/gb-document-view.c:204
+msgid "The document being viewed."
+msgstr "Документ који је прегледан."
+
+#: ../src/editor/gb-editor-document.c:664
+#, c-format
+msgid "%s (Read Only)"
+msgstr "%s (само за читање)"
+
+#: ../src/editor/gb-editor-document.c:669
+#, c-format
+msgid "untitled document %u"
+msgstr "неименовани документ „%u“"
+
+#: ../src/editor/gb-editor-document.c:791
+msgid "Save Document As"
+msgstr "Сачувајте документ као"
+
+#: ../src/editor/gb-editor-document.c:798
+#: ../src/editor/gb-editor-workspace.c:287
+msgid "Cancel"
+msgstr "Откажи"
+
+#: ../src/editor/gb-editor-document.c:799 ../src/resources/gtk/menus.ui.h:17
+msgid "Save"
+msgstr "Сачувај"
+
+#: ../src/editor/gb-editor-document.c:913
+msgid "No file was selected."
+msgstr "Није изабрана ниједна датотека."
+
+#: ../src/editor/gb-editor-document.c:1039
+msgid "No file was selected for saving."
+msgstr "Није изабрана датотеке за чување."
+
+#: ../src/editor/gb-editor-document.c:1440
+#: ../src/editor/gb-source-change-gutter-renderer.c:198
+msgid "Change Monitor"
+msgstr "Надзорник измена"
+
+#: ../src/editor/gb-editor-document.c:1441
+msgid "The change monitor for the backing file."
+msgstr "Надзорник измена за стварање резерве датотеке."
+
+#: ../src/editor/gb-editor-document.c:1449
+msgid "Error"
+msgstr "Грешка"
+
+#: ../src/editor/gb-editor-document.c:1450
+msgid "An error that may have been loaded."
+msgstr "Грешка која је можда учитана."
+
+#: ../src/editor/gb-editor-document.c:1458
+#: ../src/editor/gb-editor-file-mark.c:214
+#: ../src/editor/gb-editor-navigation-item.c:217
+#: ../src/editor/gb-source-change-monitor.c:878
+msgid "File"
+msgstr "Датотека"
+
+#: ../src/editor/gb-editor-document.c:1459
+msgid "The backing file for the document."
+msgstr "Датотека резерве за документ."
+
+#: ../src/editor/gb-editor-document.c:1467
+msgid "File Changed on Volume"
+msgstr "Измењена датотека на диску"
+
+#: ../src/editor/gb-editor-document.c:1468
+msgid "If the file has changed underneath the buffer."
+msgstr "Да ли је датотека измењена под међумеморијом."
+
+#: ../src/editor/gb-editor-document.c:1477
+msgid "Loading or saving progress."
+msgstr "Напредовање учитавања или чувања."
+
+#: ../src/editor/gb-editor-document.c:1487
+msgid "Style Scheme Name"
+msgstr "Назив шеме стила"
+
+#: ../src/editor/gb-editor-document.c:1488
+msgid "The style scheme name."
+msgstr "Назив шеме стила."
+
+#: ../src/editor/gb-editor-document.c:1496
+msgid "Trim Trailing Whitespace"
+msgstr "Краћење пратеће празнине"
+
+#: ../src/editor/gb-editor-document.c:1497
+msgid "If whitespace should be trimmed before saving."
+msgstr "Да ли празнина треба бити скраћена пре чувања."
+
+#: ../src/editor/gb-editor-file-mark.c:202
+msgid "Column"
+msgstr "Колона"
+
+#: ../src/editor/gb-editor-file-mark.c:203
+msgid "The column within the line."
+msgstr "Колона у реду."
+
+#: ../src/editor/gb-editor-file-mark.c:215
+msgid "The file for which to store the mark."
+msgstr "Датотека за коју сместити ознаку."
+
+#: ../src/editor/gb-editor-file-mark.c:224
+#: ../src/editor/gb-editor-navigation-item.c:228
+msgid "Line"
+msgstr "Ред"
+
+#: ../src/editor/gb-editor-file-mark.c:225
+msgid "The line within the file."
+msgstr "Ред у датотеци."
+
+#: ../src/editor/gb-editor-frame.c:317
+#, c-format
+msgid "%u of %u"
+msgstr "%u од %u"
+
+#: ../src/editor/gb-editor-frame.c:458
+#, c-format
+msgid "Line %u, Column %u"
+msgstr "%u. ред, %u. колона"
+
+#: ../src/editor/gb-editor-frame.c:1598
+msgid "The document for the editor."
+msgstr "Документ за уређивача."
+
+#: ../src/editor/gb-editor-navigation-item.c:218
+msgid "The file that is being edited."
+msgstr "Датотека која је уређивана."
+
+#: ../src/editor/gb-editor-navigation-item.c:229
+msgid "The line number within the file."
+msgstr "Број реда у датотеци."
+
+#: ../src/editor/gb-editor-navigation-item.c:241
+msgid "Line Offset"
+msgstr "Померај реда"
+
+#: ../src/editor/gb-editor-navigation-item.c:242
+msgid "The offset within the line."
+msgstr "Померај у реду."
+
+#: ../src/editor/gb-editor-settings-widget.c:182
+#: ../src/editor/gb-source-formatter.c:337
+#: ../src/snippets/gb-source-snippet.c:1059
+msgid "Language"
+msgstr "Језик"
+
+#: ../src/editor/gb-editor-settings-widget.c:183
+msgid "The language to change the settings for."
+msgstr "Језик за који изменити подешавања."
+
+#: ../src/editor/gb-editor-view.c:451
+#, c-format
+msgid "The file “%s” was modified outside of Builder."
+msgstr "Датотека „%s“ је измењена ван Градитеља."
+
+#: ../src/editor/gb-editor-view.c:509
+msgid "Plain Text"
+msgstr "Обичан текст"
+
+#: ../src/editor/gb-editor-view.c:1062
+msgid "Auto Indent"
+msgstr "Самоувлачење"
+
+#: ../src/editor/gb-editor-view.c:1063
+msgid "If we should use the auto-indentation engine."
+msgstr "Да ли треба да користимо погон самоувлачења."
+
+#: ../src/editor/gb-editor-view.c:1072
+msgid "The document edited by the view."
+msgstr "Документ је уређен прегледом."
+
+#: ../src/editor/gb-editor-view.c:1080
+msgid "Highlight Current Line"
+msgstr "Истицање текућег реда"
+
+#: ../src/editor/gb-editor-view.c:1081
+msgid "If the current line should be highlighted."
+msgstr "Да ли текући ред треба бити истакнут."
+
+#: ../src/editor/gb-editor-view.c:1089
+msgid "Show Line Numbers"
+msgstr "Приказ бројева редова"
+
+#: ../src/editor/gb-editor-view.c:1090
+msgid "If the line numbers should be shown."
+msgstr "Да ли бројеви редова треба да се приказују."
+
+#: ../src/editor/gb-editor-view.c:1098
+msgid "Show Right Margin"
+msgstr "Приказ десне маргине"
+
+#: ../src/editor/gb-editor-view.c:1099
+msgid "If we should show the right margin."
+msgstr "Да ли треба да прикажемо десну маргину."
+
+#: ../src/editor/gb-editor-view.c:1107
+msgid "Split Enabled"
+msgstr "Укључена подела"
+
+#: ../src/editor/gb-editor-view.c:1108
+msgid "If the view split is enabled."
+msgstr "Да ли је подела прегледа укључена."
+
+#: ../src/editor/gb-editor-view.c:1116
+msgid "Tab Width"
+msgstr "Ширина табулатора"
+
+#: ../src/editor/gb-editor-view.c:1117
+msgid "The width a tab should be drawn as."
+msgstr "Ширина за цртање табулатора."
+
+#: ../src/editor/gb-editor-view.c:1127
+msgid "Use Spaces"
+msgstr "Користи размаке"
+
+#: ../src/editor/gb-editor-view.c:1128
+msgid "If spaces should be used instead of tabs."
+msgstr "Да ли да користи размаке уместо табулатора."
+
+#: ../src/editor/gb-editor-workspace.c:279
+msgid "Open Document"
+msgstr "Отвори документ"
+
+#: ../src/editor/gb-editor-workspace.c:288
+msgid "Open"
+msgstr "Отвори"
+
+#: ../src/editor/gb-source-change-gutter-renderer.c:199
+msgid "The change monitor for the gutter renderer."
+msgstr "Пратилац измене за исцртавача сливника."
+
+#: ../src/editor/gb-source-change-monitor.c:417
+msgid "Failed to load git blob"
+msgstr "Нисам успео да учитам блоб гита"
+
+#: ../src/editor/gb-source-change-monitor.c:480
+msgid "No file, cannot load git blob"
+msgstr "Нема датотеке, не могу да учитам блоб гита"
+
+#: ../src/editor/gb-source-change-monitor.c:518
+msgid "Cannot load git repository from non-local filesystem."
+msgstr "Не могу да учитам ризницу гита са не-месног система датотека."
+
+#: ../src/editor/gb-source-change-monitor.c:577
+msgid "No filename, cannot discover repository."
+msgstr "Нема назива датотеке, не могу да пронађем ризницу."
+
+#: ../src/editor/gb-source-change-monitor.c:868
+msgid "The text buffer to monitor."
+msgstr "Међумеморија текста за надгледање."
+
+#: ../src/editor/gb-source-change-monitor.c:879
+msgid "The file for the buffer."
+msgstr "Датотека за међумеморију."
+
+#: ../src/editor/gb-source-formatter.c:118
+#, c-format
+msgid "Failed to locate uncrustify configuration."
+msgstr "Нисам успео да пронађем подешавања скидања облоге."
+
+#: ../src/editor/gb-source-formatter.c:144
+#, c-format
+msgid "uncrustify failure: %s"
+msgstr "неуспех скидања облоге: %s"
+
+#: ../src/editor/gb-source-formatter.c:241
+#, c-format
+msgid "Failure copying to \"%s\": %s"
+msgstr "Неуспех умножавања у „%s“: %s"
+
+#: ../src/editor/gb-source-formatter.c:328
+msgid "Can Format"
+msgstr "Може обликовати"
+
+#: ../src/editor/gb-source-formatter.c:329
+msgid "If the source language can be formatted."
+msgstr "Да ли језик извора може бити обликован."
+
+#: ../src/editor/gb-source-formatter.c:338
+msgid "The language to format."
+msgstr "Језик за обликовање."
+
+#: ../src/editor/gb-source-search-highlighter.c:338
+#: ../src/editor/gb-source-search-highlighter.c:339
+msgid "Search Context"
+msgstr "Контекст претраге"
+
+#: ../src/editor/gb-source-search-highlighter.c:347
+#: ../src/editor/gb-source-search-highlighter.c:348
+msgid "Search Settings"
+msgstr "Подешавања претраге"
+
+#: ../src/editor/gb-source-view.c:2214 ../src/editor/gb-source-view.c:2215
+msgid "Enable Word Completion"
+msgstr "Укључује довршавање речи"
+
+#: ../src/editor/gb-source-view.c:2223
+msgid "Font Name"
+msgstr "Назив слова"
+
+#: ../src/editor/gb-source-view.c:2224
+msgid "The font name to apply to the widget."
+msgstr "Назив слова за примену на елементу."
+
+#: ../src/editor/gb-source-view.c:2232
+msgid "Insert Matching Brace"
+msgstr "Умеће одговарајућу заграду"
+
+#: ../src/editor/gb-source-view.c:2233
+msgid "If we should insert matching braces."
+msgstr "Да ли треба да уметне одговарајуће заграде."
+
+#: ../src/editor/gb-source-view.c:2241
+msgid "Overwrite Braces"
+msgstr "Преписује заграде"
+
+#: ../src/editor/gb-source-view.c:2242
+msgid "If we should overwrite braces, brackets, parenthesis and quotes."
+msgstr "Да ли треба преписати велике, средње, мале заграде и наводнике."
+
+#: ../src/editor/gb-source-view.c:2251
+msgid "Show Shadow"
+msgstr "Показује сенку"
+
+#: ../src/editor/gb-source-view.c:2252
+msgid "Show the search shadow"
+msgstr "Приказује сенку претраге"
+
+#: ../src/editor/gb-source-view.c:2260 ../src/editor/gb-source-view.c:2261
+msgid "Search Highlighter"
+msgstr "Истицање претраге"
+
+#: ../src/editor/gb-source-view.c:2269
+msgid "Smart Home End"
+msgstr "Паметне типке „Почетак/Крај“"
+
+#: ../src/editor/gb-source-view.c:2270
+msgid "Enable smart home end in gtksourceview."
+msgstr "Укључује паметни тастер „Почетак/Крај“ у прегледу гтк извора."
+
+#: ../src/editor/gb-source-view.c:2278
+msgid "Show Grid Lines"
+msgstr "Приказује линије мреже"
+
+#: ../src/editor/gb-source-view.c:2279
+msgid "Whether to show the grid lines."
+msgstr "Да ли ће бити приказане линије мреже."
+
+#: ../src/gd/gd-tagged-entry.c:937
+msgid "Tag close icon visibility"
+msgstr "Видљивост иконице затварања ознаке"
+
+#: ../src/gd/gd-tagged-entry.c:938
+msgid "Whether the close button should be shown in tags."
+msgstr "Да ли се дугме затварања приказује у ознакама."
+
+#: ../src/gd/gd-tagged-entry.c:1031 ../src/navigation/gb-navigation-item.c:195
+msgid "Label"
+msgstr "Натпис"
+
+#: ../src/gd/gd-tagged-entry.c:1032
+msgid "Text to show on the tag."
+msgstr "Текст за приказ на ознаци."
+
+#: ../src/gd/gd-tagged-entry.c:1035
+msgid "Tag has a close button"
+msgstr "Ознака има дугме затварања"
+
+#: ../src/gd/gd-tagged-entry.c:1036
+msgid "Whether the tag has a close button."
+msgstr "Да ли ознака има дугме за затварање."
+
+#: ../src/gd/gd-tagged-entry.c:1039
+msgid "Style"
+msgstr "Стил"
+
+#: ../src/gd/gd-tagged-entry.c:1040
+msgid "Style of the tag."
+msgstr "Стил ознаке."
+
+#: ../src/gedit/gedit-menu-stack-switcher.c:423
+#: ../src/gedit/gedit-menu-stack-switcher.c:424
+msgid "Stack"
+msgstr "Спремник"
+
+#: ../src/git/gb-git-search-provider.c:429
+msgid "Switch To"
+msgstr "Пребаци на"
+
+#: ../src/git/gb-git-search-provider.c:512
+msgid "Repository"
+msgstr "Складиште"
+
+#: ../src/git/gb-git-search-provider.c:513
+msgid "The repository to use for search data."
+msgstr "Складиште које ће се користити за податке претраге."
+
+#: ../src/git/gb-git-search-provider.c:524
+msgid "The workbench window."
+msgstr "Прозор радионице."
+
+#: ../src/html/gb-html-document.c:105
+msgid "HTML Preview"
+msgstr "ХТМЛ претпреглед"
+
+#: ../src/html/gb-html-document.c:127
+#, c-format
+msgid "%s (Preview)"
+msgstr "%s (Претпреглед)"
+
+#: ../src/html/gb-html-document.c:311
+msgid "The buffer to monitor for changes."
+msgstr "Међумеморија у којој ће се пратити измене."
+
+#: ../src/html/gb-html-view.c:265
+msgid "The document to view as HTML."
+msgstr "Документ који ће бити прегледан као ХТМЛ."
+
+#: ../src/nautilus/nautilus-floating-bar.c:314
+msgid "Bar's primary label"
+msgstr "Главни натпис траке"
+
+#: ../src/nautilus/nautilus-floating-bar.c:315
+msgid "Primary label displayed by the bar"
+msgstr "Главни натпис који приказује трака"
+
+#: ../src/nautilus/nautilus-floating-bar.c:320
+msgid "Bar's details label"
+msgstr "Опширни натпис траке"
+
+#: ../src/nautilus/nautilus-floating-bar.c:321
+msgid "Details label displayed by the bar"
+msgstr "Опширни натпис који приказује трака"
+
+#: ../src/nautilus/nautilus-floating-bar.c:326
+msgid "Show spinner"
+msgstr "Приказује вртешку"
+
+#: ../src/nautilus/nautilus-floating-bar.c:327
+msgid "Whether a spinner should be shown in the floating bar"
+msgstr "Да ли вртешка треба бити приказана у лебдећој траци"
+
+#: ../src/navigation/gb-navigation-item.c:196
+msgid "The label for the navigation item."
+msgstr "Натпис за ставку навигације."
+
+#: ../src/navigation/gb-navigation-item.c:204
+msgid "Workspace"
+msgstr "Радни простор"
+
+#: ../src/navigation/gb-navigation-item.c:205
+msgid "The workspace to ensure is focused."
+msgstr "Радни простор који је у првом плану."
+
+#: ../src/navigation/gb-navigation-list.c:269
+msgid "Can Go Backward"
+msgstr "Може назад"
+
+#: ../src/navigation/gb-navigation-list.c:270
+msgid "If we can go backwards in the navigation list."
+msgstr "Да ли можемо да идемо назад у списку навигације."
+
+#: ../src/navigation/gb-navigation-list.c:279
+msgid "Can Go Forward"
+msgstr "Може напред"
+
+#: ../src/navigation/gb-navigation-list.c:280
+msgid "If we can go forward in the navigation list."
+msgstr "Да ли можемо да идемо напред у списку навигације."
+
+#: ../src/navigation/gb-navigation-list.c:289
+msgid "Current Item"
+msgstr "Тренутна ставка"
+
+#: ../src/navigation/gb-navigation-list.c:290
+msgid "The current item in the navigation list."
+msgstr "Тренутна ставка у списку навигације."
+
+#: ../src/navigation/gb-navigation-list.c:300
+msgid "The workbench the navigation list is for."
+msgstr "Радионица за коју је списак навигације."
+
+#: ../src/preferences/gb-preferences-page.c:215
+msgid "The title for the preferences page."
+msgstr "Наслов за страницу поставки."
+
+#: ../src/preferences/gb-preferences-page-editor.c:186
+msgid "restore insert cursor mark"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:191
+msgid "word words auto completion suggest found document"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:196
+msgid "diff renderer gutter changes git vcs"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:201
+msgid "line numbers"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:206
+msgid "line lines highlight current"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:211
+msgid "bracket brackets highlight matching"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:216
+msgid "smart home end"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:221
+msgid "show grid lines"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:226
+msgid "font document editor monospace"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:230
+msgid "source style scheme source tango solarized builder"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-git.c:131
+msgid "git author name surname"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-git.c:136
+msgid "git author email mail address"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-vim.c:101
+msgid "lines margin scrolloff scroll off"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-vim.c:107
+msgid "vim modal"
+msgstr ""
+
+#: ../src/resources/gtk/menus.ui.h:1
+msgid "_Preferences"
+msgstr "_Поставке"
+
+#: ../src/resources/gtk/menus.ui.h:2
+msgid "Generate Support Log"
+msgstr "Створите дневник подршке"
+
+#: ../src/resources/gtk/menus.ui.h:3
+msgid "_Help"
+msgstr "По_моћ"
+
+#: ../src/resources/gtk/menus.ui.h:4
+msgid "_About"
+msgstr "_О програму"
+
+#: ../src/resources/gtk/menus.ui.h:5
+msgid "_Quit"
+msgstr "_Изађи"
+
+#: ../src/resources/gtk/menus.ui.h:6 ../src/resources/ui/gb-editor-view.ui.h:1
+msgid "_Reload"
+msgstr "_Освежи"
+
+#: ../src/resources/gtk/menus.ui.h:7
+msgid "_Print…"
+msgstr "_Штампај…"
+
+#: ../src/resources/gtk/menus.ui.h:8
+msgid "_Fullscreen"
+msgstr "_Преко целог екрана"
+
+#: ../src/resources/gtk/menus.ui.h:9
+msgid "_New Document"
+msgstr "_Нови документ"
+
+#: ../src/resources/gtk/menus.ui.h:10
+msgid "_Open"
+msgstr "_Отвори"
+
+#: ../src/resources/gtk/menus.ui.h:11
+msgid "Save _All"
+msgstr "Сачувај _све"
+
+#: ../src/resources/gtk/menus.ui.h:12
+msgid "_Close All"
+msgstr "_Затвори све"
+
+#: ../src/resources/gtk/menus.ui.h:13
+msgid "Move Document _Left"
+msgstr "Премести документ _лево"
+
+#: ../src/resources/gtk/menus.ui.h:14
+msgid "Move Document _Right"
+msgstr "Премести документ _десно"
+
+#: ../src/resources/gtk/menus.ui.h:15
+msgid "Split Document Left"
+msgstr "Подели документ лево"
+
+#: ../src/resources/gtk/menus.ui.h:16
+msgid "Split Document Right"
+msgstr "Подели документ десно"
+
+#: ../src/resources/gtk/menus.ui.h:18
+msgid "Save _As"
+msgstr "Сачувај _као"
+
+#: ../src/resources/gtk/menus.ui.h:19
+msgid "_Preview"
+msgstr "_Претпреглед"
+
+#: ../src/resources/gtk/menus.ui.h:20
+msgid "_Close Document"
+msgstr "_Затвори документ"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:1
+msgid "Created By:"
+msgstr "Аутори:"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:2
+msgid ""
+"Christian Hergert\n"
+"Alexander Larsson\n"
+"Alexandre Franke\n"
+"Carlos Soriano\n"
+"Cosimo Cecchi\n"
+"Dimitris Zenios\n"
+"Fabiano Fidêncio\n"
+"Florian Bäuerle\n"
+"Florian Müllner\n"
+"Hashem Nasarat\n"
+"Hylke Bons\n"
+"Igor Gnatenko\n"
+"Jakub Steiner\n"
+"Jasper St. Pierre\n"
+"Jonathon Jongsma\n"
+"Mathieu Bridon\n"
+"Megh Parikh\n"
+"Michael Catanzaro\n"
+"Pete Travis\n"
+"Ray Strode\n"
+"Roberto Majadas\n"
+"Ting-Wei Lan\n"
+"Trinh Anh Ngoc\n"
+"Yosef Or Boczko"
+msgstr ""
+"Christian Hergert\n"
+"Alexander Larsson\n"
+"Alexandre Franke\n"
+"Carlos Soriano\n"
+"Cosimo Cecchi\n"
+"Dimitris Zenios\n"
+"Fabiano Fidêncio\n"
+"Florian Bäuerle\n"
+"Florian Müllner\n"
+"Hashem Nasarat\n"
+"Hylke Bons\n"
+"Igor Gnatenko\n"
+"Jakub Steiner\n"
+"Jasper St. Pierre\n"
+"Jonathon Jongsma\n"
+"Mathieu Bridon\n"
+"Megh Parikh\n"
+"Michael Catanzaro\n"
+"Pete Travis\n"
+"Ray Strode\n"
+"Roberto Majadas\n"
+"Ting-Wei Lan\n"
+"Trinh Anh Ngoc\n"
+"Yosef Or Boczko"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:26
+msgid "Artwork By:"
+msgstr "Слике су припремили:"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:27
+msgid ""
+"Allan Day\n"
+"Hylke Bons\n"
+"Jakub Steiner"
+msgstr ""
+"Allan Day\n"
+"Hylke Bons\n"
+"Jakub Steiner"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:30
+msgid "Translated By:"
+msgstr "Преводиоци:"
+
+#. Translate this string with the translator names for your language.
+#: ../src/resources/ui/gb-credits-widget.ui.h:32
+msgid "translator-credits"
+msgstr ""
+"Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
+"\n"
+"http://prevod.org — превод на српски језик"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:33
+msgid "Funded By:"
+msgstr "Оснивачи:"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:34
+msgid ""
+"Christian Hergert\n"
+"Gareth Foster"
+msgstr ""
+"Christian Hergert\n"
+"Gareth Foster"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:36
+msgid "Special Thanks To:"
+msgstr "Посебно се захваљујемо:"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:37
+msgid ""
+"Andy Hertzfeld and the Eazel Team\n"
+"Alberto Ruiz\n"
+"Bastien Nocera\n"
+"Cosimo Cecchi\n"
+"Emmanuele Bassi\n"
+"Federico Mena Quintero\n"
+"Jasper St Pierre\n"
+"Jon McCann\n"
+"Jonathan Blandford\n"
+"Matthias Clasen\n"
+"Miguel de Icaza\n"
+"Owen Taylor\n"
+"Rob Taylor\n"
+"Spencer Kimball\n"
+"Ximian Team\n"
+"\n"
+"Each and every contributor to GNOME\n"
+"and the Friends of GNOME"
+msgstr ""
+"Andy Hertzfeld and the Eazel Team\n"
+"Alberto Ruiz\n"
+"Bastien Nocera\n"
+"Cosimo Cecchi\n"
+"Emmanuele Bassi\n"
+"Federico Mena Quintero\n"
+"Jasper St Pierre\n"
+"Jon McCann\n"
+"Jonathan Blandford\n"
+"Matthias Clasen\n"
+"Miguel de Icaza\n"
+"Owen Taylor\n"
+"Rob Taylor\n"
+"Spencer Kimball\n"
+"Ximian Team\n"
+"\n"
+"Свим доприносиоцима Гнома\n"
+"и пријатељима Гнома"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:55
+msgid "GNOME Builder"
+msgstr "Гномов Градитељ"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:56
+msgid ""
+"Copyright 2014 Christian Hergert, et al.\n"
+"Licensed under the GNU GPL 3 or newer"
+msgstr ""
+"Ауторска права 2014 Кристијан Хергерт, и остали.\n"
+"Издато под Гнуовом ОЈЛ 3 или новијом"
+
+#: ../src/resources/ui/gb-document-menu-button.ui.h:1
+msgid "Search Documents"
+msgstr "Тражите документа"
+
+#: ../src/resources/ui/gb-document-menu-button.ui.h:2
+msgid "No document were found"
+msgstr "Нисам пронашао ниједан документ"
+
+#: ../src/resources/ui/gb-editor-frame.ui.h:1
+msgid "Line 1, Column 1"
+msgstr "1. ред, 1. колона"
+
+#: ../src/resources/ui/gb-editor-frame.ui.h:2
+msgid "Currently parsing document"
+msgstr "Тренутно обрађујем документ"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:1
+msgid "Display right _margin at column:"
+msgstr "Прикажи десну _ивицу на колони:"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:2
+msgid "Trim trailing whitespace when saving document"
+msgstr "Скрати пратећу празнину приликом чувања документа"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:3
+msgid "Insert matching brace, bracket, quotation, and parenthesis."
+msgstr "Умеће одговарајућу велику, средњу, наводник, и малу заграду."
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:4
+msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
+msgstr "Преписује затварајућу велику, средњу, наводник, и малу заграду."
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:5
+msgid "<b>Indentation</b>"
+msgstr "<b>Увлачење</b>"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:6
+msgid "_Tab width:"
+msgstr "Ширина _табулатора:"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:7
+msgid "Insert _spaces instead of tabs"
+msgstr "Уметни размаке уме_сто табулатора"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:8
+msgid "_Enable automatic indentation"
+msgstr "Укључи _самоувлачење"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:1
+msgid "Search highlight mode…"
+msgstr "Режим истицања претраге…"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:2
+msgid "Display line numbers"
+msgstr "Прикажи бројеве редова"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:3
+msgid "Display right margin"
+msgstr "Прикажи десну ивицу"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr "Истакни текући ред"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:5
+msgid "Auto indent"
+msgstr "Самоувлачење"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
+msgid "Indentation"
+msgstr "Увлачење"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:7
+msgid "Spaces"
+msgstr "Размаци"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:8
+msgid "Tabs"
+msgstr "Језичци"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:9
+msgid "2"
+msgstr "2"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:10
+msgid "3"
+msgstr "3"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:11
+msgid "4"
+msgstr "4"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:12
+msgid "8"
+msgstr "8"
+
+#: ../src/resources/ui/gb-editor-view.ui.h:3
+msgid "_Close"
+msgstr "_Затвори"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:1
+msgid "<b>Restore Cursor Position</b>"
+msgstr "<b>Враћање положаја курсора</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:2
+msgid ""
+"Restore the insertion cursor to the last position when reopening a file."
+msgstr ""
+"Враћа курсор уметања на последњи положај приликом поновног отварања датотеке."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:3
+msgid "<b>Suggest Word Completion</b>"
+msgstr "<b>Предложи довршавање речи</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:4
+msgid "Suggest completion of words found within the current document."
+msgstr "Предлаже довршавање речи нађених у текућем документу."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:5
+msgid "<b>Display Document Changes</b>"
+msgstr "<b>Прикажи измене документа</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:6
+msgid ""
+"Display whether a line has been added or modified next to the line number."
+msgstr "Приказује да ли је ред додат или измењен поред броја реда."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:7
+msgid "<b>Show Line Numbers</b>"
+msgstr "<b>Прикажи бројеве редова</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:8
+msgid "Display line numbers in the document."
+msgstr "Приказује бројеве редова у документу."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:9
+msgid "<b>Highlight Current Line</b>"
+msgstr "<b>Истакни текући ред</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:10
+msgid "Highlight the line containing the cursor."
+msgstr "Истиче ред у коме је курсор."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:11
+msgid "<b>Highlight Matching Brackets</b>"
+msgstr "<b>Истакни упарене заграде</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:12
+msgid "Whether or not matching brackets should be highlighted."
+msgstr "Да ли ће истаћи упарене заграде."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:13
+msgid "<b>Smart Home End</b>"
+msgstr "<b>Паметне типке „Почетак/Крај“</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:14
+msgid "Home moves to first non-space character."
+msgstr "„Почетак“ се премешта на први знак који није размак."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:15
+msgid "<b>Show Grid Lines</b>"
+msgstr "<b>Прикажи линије мреже</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:16
+msgid "Display a grid patten in the document."
+msgstr "Приказује шаблон мреже у документу."
+
+#: ../src/resources/ui/gb-preferences-page-git.ui.h:1
+msgid "Author Name"
+msgstr "Име аутора"
+
+#: ../src/resources/ui/gb-preferences-page-git.ui.h:2
+msgid "Author Email"
+msgstr "Ел. пошта аутора"
+
+#: ../src/resources/ui/gb-preferences-page-git.ui.h:3
+#: ../src/resources/ui/gb-preferences-window.ui.h:5
+msgid "Git"
+msgstr "Гит"
+
+#: ../src/resources/ui/gb-preferences-page-vim.ui.h:1
+msgid "<b>VIM Modal Editing</b>"
+msgstr "<b>Вимово модално уређивање</b>"
+
+#: ../src/resources/ui/gb-preferences-page-vim.ui.h:2
+msgid "Use VIM style modal editing in the source code editor."
+msgstr "Користи модално уређивање у ВИМ стилу у уређивачу изворног кода."
+
+#: ../src/resources/ui/gb-preferences-page-vim.ui.h:3
+msgid "<b>Scroll Offset</b>"
+msgstr "<b>Померај клизања</b>"
+
+#: ../src/resources/ui/gb-preferences-page-vim.ui.h:4
+msgid "Minimal number of lines to keep above and below the cursor."
+msgstr "Најмањи број редова за изнад и испод курсора."
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:1
+msgid "Preferences"
+msgstr "Поставке"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:2
+msgid "Search Preferences"
+msgstr "Поставке претраге"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:3
+#: ../src/resources/ui/gb-workbench.ui.h:4
+msgid "Editor"
+msgstr "Уређивач"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:4
+msgid "Language Settings"
+msgstr "Подешавање језика"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:6
+msgid "Vim"
+msgstr "Вим"
+
+#: ../src/resources/ui/gb-workbench.ui.h:1
+msgid "Go back in history"
+msgstr "Идите уназад у историјату"
+
+#: ../src/resources/ui/gb-workbench.ui.h:2
+msgid "Go forward in history"
+msgstr "Идите напред у историјату"
+
+#: ../src/resources/ui/gb-workbench.ui.h:3
+msgid "Create new document"
+msgstr "Направите нови документ"
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:261
+msgid "Max Content Height"
+msgstr "Највећа висина садржаја"
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:262
+msgid "The maximum height request that can be made."
+msgstr "Највећи захтев висине који може бити одрађен."
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:272
+msgid "Max Content Width"
+msgstr "Највећа ширина садржаја"
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:273
+msgid "The maximum width request that can be made."
+msgstr "Највећи захтев ширине који може бити одрађен."
+
+#: ../src/search/gb-search-box.c:459
+msgid "Search Manager"
+msgstr "Управник претраге"
+
+#: ../src/search/gb-search-box.c:460
+msgid "The search manager for the search box."
+msgstr "Управник претраге за поље претраге."
+
+#: ../src/search/gb-search-display.c:215
+msgid "Cannot add provider more than once."
+msgstr "Не могу да додам достављача више од једног пута."
+
+#: ../src/search/gb-search-display.c:293
+msgid "The provider could not be found."
+msgstr "Не могу да нађем достављача."
+
+#: ../src/search/gb-search-display.c:549
+#: ../src/snippets/gb-source-snippet-chunk.c:298
+msgid "Context"
+msgstr "Контекст"
+
+#: ../src/search/gb-search-display.c:550
+msgid "The active search context."
+msgstr "Контекст радне претраге."
+
+#: ../src/search/gb-search-display-group.c:183
+msgid "%"
+msgstr "%"
+
+#: ../src/search/gb-search-display-group.c:419
+msgid "Provider"
+msgstr "Достављач"
+
+#: ../src/search/gb-search-display-group.c:420
+msgid "The search provider"
+msgstr "Достављач претраге"
+
+#: ../src/search/gb-search-display-group.c:430
+msgid "Size Group"
+msgstr "Група величине"
+
+#: ../src/search/gb-search-display-group.c:431
+msgid "The size group for the label."
+msgstr "Група величине за натпис."
+
+#: ../src/search/gb-search-result.c:217
+msgid "Score"
+msgstr "Резултат"
+
+#: ../src/search/gb-search-result.c:218
+msgid "The result match score."
+msgstr "Резултат одговара згодитку."
+
+#: ../src/search/gb-search-result.c:230
+msgid "Subtitle"
+msgstr "Поднаслов"
+
+#: ../src/search/gb-search-result.c:231 ../src/search/gb-search-result.c:242
+msgid "The pango markup to be rendered."
+msgstr "Панго ознака за исцртавање."
+
+#: ../src/snippets/gb-source-snippet.c:352
+msgid "Chunk does not belong to snippet."
+msgstr "Део не припада исечку."
+
+#: ../src/snippets/gb-source-snippet.c:1024
+msgid "The GtkTextBuffer for the snippet."
+msgstr "Међумеморија Гтк текста за исечак."
+
+#: ../src/snippets/gb-source-snippet.c:1032
+msgid "Mark Begin"
+msgstr "Означи почетак"
+
+#: ../src/snippets/gb-source-snippet.c:1033
+msgid "The beginning text mark."
+msgstr "Ознака почетног текста."
+
+#: ../src/snippets/gb-source-snippet.c:1041
+msgid "Mark End"
+msgstr "Означи крај"
+
+#: ../src/snippets/gb-source-snippet.c:1042
+msgid "The ending text mark."
+msgstr "Ознака крајњег текста."
+
+#: ../src/snippets/gb-source-snippet.c:1050
+msgid "Trigger"
+msgstr "Окидач"
+
+#: ../src/snippets/gb-source-snippet.c:1051
+msgid "The trigger for the snippet."
+msgstr "Окидач за исечак."
+
+#: ../src/snippets/gb-source-snippet.c:1060
+msgid "The language for the snippet."
+msgstr "Језик за исечак."
+
+#: ../src/snippets/gb-source-snippet.c:1068
+msgid "Description"
+msgstr "Опис"
+
+#: ../src/snippets/gb-source-snippet.c:1069
+msgid "The description for the snippet."
+msgstr "Опис за исечак."
+
+# bug(slobo):nesigurno: da li su ovo jezicci ili tabulatori?
+#: ../src/snippets/gb-source-snippet.c:1077
+#: ../src/snippets/gb-source-snippet-chunk.c:316
+msgid "Tab Stop"
+msgstr "Заустав језичка"
+
+#: ../src/snippets/gb-source-snippet.c:1078
+msgid "The current tab stop."
+msgstr "Заустављање текућег језичка."
+
+#: ../src/snippets/gb-source-snippet-chunk.c:299
+msgid "The snippet context."
+msgstr "Садржај исечка."
+
+#: ../src/snippets/gb-source-snippet-chunk.c:307
+msgid "Spec"
+msgstr "Одредба"
+
+#: ../src/snippets/gb-source-snippet-chunk.c:308
+msgid "The specification to expand using the contxt."
+msgstr "Одредба за ширење коришћењем контекста."
+
+#: ../src/snippets/gb-source-snippet-chunk.c:317
+msgid "The tab stop for the chunk."
+msgstr "Заустављање језичка за део."
+
+#: ../src/snippets/gb-source-snippet-chunk.c:327
+#: ../src/tree/gb-tree-node.c:539
+msgid "Text"
+msgstr "Текст"
+
+#: ../src/snippets/gb-source-snippet-chunk.c:328
+msgid "The text for the chunk."
+msgstr "Текст за део."
+
+#: ../src/snippets/gb-source-snippet-chunk.c:336
+msgid "Text Set"
+msgstr "Поставка текста"
+
+#: ../src/snippets/gb-source-snippet-chunk.c:337
+msgid "If the text property has been manually set."
+msgstr "Да ли је својство текста постављено ручно."
+
+#: ../src/snippets/gb-source-snippet-completion-item.c:134
+msgid "Snippet"
+msgstr "Исечак"
+
+#: ../src/snippets/gb-source-snippet-completion-item.c:135
+msgid "The snippet to insert."
+msgstr "Исечак за уметање."
+
+#: ../src/snippets/gb-source-snippet-completion-provider.c:169
+msgid "The source view to insert snippet into."
+msgstr "Преглед извора у који уметнути исечак."
+
+#: ../src/snippets/gb-source-snippet-completion-provider.c:177
+#: ../src/snippets/gb-source-snippet-completion-provider.c:262
+msgid "Snippets"
+msgstr "Исечци"
+
+#: ../src/snippets/gb-source-snippet-completion-provider.c:178
+msgid "The snippets to complete with this provider."
+msgstr "Исечци за довршавање са овим достављачем."
+
+#: ../src/snippets/gb-source-snippet-parser.c:503
+#, c-format
+msgid "Invalid snippet at line %d: %s"
+msgstr "Неисправан исечак у %d. реду: %s"
+
+#: ../src/snippets/gb-source-snippets-manager.c:92
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr "Нисам успео да отворим директоријум: %s"
+
+#: ../src/snippets/gb-source-snippets-manager.c:107
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "Нисам успео да учитам датотеку: %s: %s"
+
+#: ../src/theatrics/gb-box-theatric.c:258
+#: ../src/theatrics/gb-box-theatric.c:259
+msgid "Alpha"
+msgstr "Провидност"
+
+#: ../src/theatrics/gb-box-theatric.c:269
+#: ../src/theatrics/gb-box-theatric.c:270
+msgid "background"
+msgstr "позадина"
+
+#: ../src/theatrics/gb-box-theatric.c:278
+#: ../src/theatrics/gb-box-theatric.c:279
+msgid "height"
+msgstr "висина"
+
+#: ../src/theatrics/gb-box-theatric.c:300
+#: ../src/theatrics/gb-box-theatric.c:301
+msgid "width"
+msgstr "ширина"
+
+#: ../src/theatrics/gb-box-theatric.c:311
+#: ../src/theatrics/gb-box-theatric.c:312
+msgid "x"
+msgstr "x"
+
+#: ../src/theatrics/gb-box-theatric.c:322
+#: ../src/theatrics/gb-box-theatric.c:323
+msgid "y"
+msgstr "y"
+
+#: ../src/tree/gb-tree-builder.c:288 ../src/tree/gb-tree-node.c:525
+msgid "Tree"
+msgstr "Стабло"
+
+#: ../src/tree/gb-tree-builder.c:289
+msgid "The GbTree the builder belongs to."
+msgstr "Гб стабло коме припада градитељ."
+
+#: ../src/tree/gb-tree.c:888
+msgid "Root"
+msgstr "Корен"
+
+#: ../src/tree/gb-tree.c:889
+msgid "The root object of the tree."
+msgstr "Корени објекат стабла."
+
+#: ../src/tree/gb-tree.c:897
+msgid "Selection"
+msgstr "Избор"
+
+#: ../src/tree/gb-tree.c:898
+msgid "The node selection."
+msgstr "Избор чвора."
+
+#: ../src/tree/gb-tree-node.c:483 ../src/workbench/gb-workspace.c:161
+msgid "Icon Name"
+msgstr "Назив иконице"
+
+#: ../src/tree/gb-tree-node.c:484
+msgid "The icon name to display."
+msgstr "Назив иконице за приказ."
+
+#: ../src/tree/gb-tree-node.c:497
+msgid "Item"
+msgstr "Ставка"
+
+#: ../src/tree/gb-tree-node.c:498
+msgid "Optional object to associate with node."
+msgstr "Изборни објекат за придруживање чвору."
+
+#: ../src/tree/gb-tree-node.c:511
+msgid "Parent"
+msgstr "Родитељ"
+
+#: ../src/tree/gb-tree-node.c:512
+msgid "The parent node."
+msgstr "Родитељски чвор."
+
+#: ../src/tree/gb-tree-node.c:526
+msgid "The GbTree the node belongs to."
+msgstr "Гб стабло коме припада чвор."
+
+#: ../src/tree/gb-tree-node.c:540
+msgid "The text of the node."
+msgstr "Текст чвора."
+
+#: ../src/tree/gb-tree-node.c:553
+msgid "Use Markup"
+msgstr "Користи ознаке"
+
+#: ../src/tree/gb-tree-node.c:554
+msgid "If text should be translated as markup."
+msgstr "Да ли текст треба да буде преведен као означавање."
+
+#: ../src/trie/trie.c:790
+#, c-format
+msgid "Traversal order %u is not supported on Trie."
+msgstr "Попречни редослед %u није подржан у Триу."
+
+#: ../src/workbench/gb-workbench.c:854
+msgid "Command Manager"
+msgstr "Управник наредбе"
+
+#: ../src/workbench/gb-workbench.c:855
+msgid "The command manager for the workspace."
+msgstr "Управник наредбе за радни простор."
+
+#: ../src/workbench/gb-workbench.c:864
+msgid "Navigation List"
+msgstr "Списак навигације"
+
+#: ../src/workbench/gb-workbench.c:865
+msgid "The navigation list for the workbench."
+msgstr "Списак навигације за радионицу."
+
+#: ../src/workbench/gb-workspace.c:152
+msgid "The title of the workspace."
+msgstr "Наслов радног простора."
+
+#: ../src/workbench/gb-workspace.c:162
+msgid "The name of the icon to use."
+msgstr "Назив иконице за коришћење."
