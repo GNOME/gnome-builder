@@ -27,6 +27,7 @@
 struct _GbDocumentGridPrivate
 {
   GbDocumentManager *document_manager;
+  GbDocumentStack   *last_focus;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbDocumentGrid, gb_document_grid, GTK_TYPE_BIN)
@@ -763,10 +764,79 @@ gb_document_grid_grab_focus (GtkWidget *widget)
 
   g_return_if_fail (GB_IS_DOCUMENT_GRID (grid));
 
+  if (grid->priv->last_focus)
+    {
+      gtk_widget_grab_focus (GTK_WIDGET (grid->priv->last_focus));
+      return;
+    }
+
   stacks = gb_document_grid_get_stacks (grid);
   if (stacks)
     gtk_widget_grab_focus (stacks->data);
   g_list_free (stacks);
+}
+
+static void
+gb_document_grid_toplevel_set_focus (GtkWidget      *toplevel,
+                                     GtkWidget      *focus,
+                                     GbDocumentGrid *self)
+{
+  GbDocumentGridPrivate *priv;
+
+  g_return_if_fail (GB_IS_DOCUMENT_GRID (self));
+
+  priv = self->priv;
+
+  if (focus && gtk_widget_is_ancestor (focus, GTK_WIDGET (self)))
+    {
+      GtkWidget *parent = focus;
+
+      while (parent && !GB_IS_DOCUMENT_STACK (parent))
+        parent = gtk_widget_get_parent (parent);
+
+      if (GB_IS_DOCUMENT_STACK (parent))
+        {
+          if (priv->last_focus)
+            {
+              g_object_remove_weak_pointer (G_OBJECT (priv->last_focus),
+                                            (gpointer *)&priv->last_focus);
+              priv->last_focus = NULL;
+            }
+
+          priv->last_focus = GB_DOCUMENT_STACK (focus);
+          g_object_add_weak_pointer (G_OBJECT (priv->last_focus),
+                                     (gpointer *)&priv->last_focus);
+        }
+    }
+}
+
+static void
+gb_document_grid_parent_set (GtkWidget      *widget,
+                             GtkWidget      *previous_parent)
+{
+  GbDocumentGrid *self = (GbDocumentGrid *)widget;
+  GtkWidget *toplevel;
+
+  g_return_if_fail (GB_IS_DOCUMENT_GRID (self));
+
+  if (previous_parent)
+    {
+      toplevel = gtk_widget_get_toplevel (previous_parent);
+      if (toplevel)
+        g_signal_handlers_disconnect_by_func (previous_parent,
+                                              G_CALLBACK (gb_document_grid_toplevel_set_focus),
+                                              toplevel);
+    }
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      g_signal_connect (toplevel,
+                        "set-focus",
+                        G_CALLBACK (gb_document_grid_toplevel_set_focus),
+                        widget);
+    }
 }
 
 static void
@@ -812,6 +882,13 @@ gb_document_grid_finalize (GObject *object)
 {
   GbDocumentGridPrivate *priv = GB_DOCUMENT_GRID (object)->priv;
 
+  if (priv->last_focus)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->last_focus),
+                                    (gpointer *)&priv->last_focus);
+      priv->last_focus = NULL;
+    }
+
   g_clear_object (&priv->document_manager);
 
   G_OBJECT_CLASS (gb_document_grid_parent_class)->finalize (object);
@@ -828,6 +905,7 @@ gb_document_grid_class_init (GbDocumentGridClass *klass)
   object_class->set_property = gb_document_grid_set_property;
 
   widget_class->grab_focus = gb_document_grid_grab_focus;
+  widget_class->parent_set = gb_document_grid_parent_set;
 
   /**
    * GbDocumentGrid:document-manager:
