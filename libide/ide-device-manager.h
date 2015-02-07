@@ -26,8 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEVICE_MANAGER (ide_device_manager_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDeviceManager, ide_device_manager,
-                      IDE, DEVICE_MANAGER, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeDeviceManager, ide_device_manager, IDE, DEVICE_MANAGER, IdeObject)
 
 struct _IdeDeviceManager
 {

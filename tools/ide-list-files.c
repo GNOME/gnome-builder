@@ -120,6 +120,7 @@ main (gint   argc,
   const gchar *project_path = ".";
 
   ide_set_program_name ("gnome-builder");
+  g_set_prgname ("ide-list-files");
 
   context = g_option_context_new (_("- List files found in project."));
 
