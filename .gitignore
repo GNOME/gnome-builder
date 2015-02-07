@@ -21,6 +21,7 @@ config.log
 config.status
 configure
 gnome-builder
+ide-build
 ide-list-files
 intltool-extract.in
 intltool-merge.in

@@ -30,8 +30,7 @@ typedef struct
   GPtrArray *providers;
 } IdeDeviceManagerPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeDeviceManager, ide_device_manager,
-                            IDE_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeDeviceManager, ide_device_manager, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -54,7 +53,7 @@ ide_device_manager_get_settled (IdeDeviceManager *self)
   IdeDeviceManagerPrivate *priv;
   gsize i;
 
-  g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), NULL);
+  g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), FALSE);
 
   priv = ide_device_manager_get_instance_private (self);
 
@@ -285,6 +284,32 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SETTLED,
                                    gParamSpecs [PROP_SETTLED]);
+
+  gSignals [DEVICE_ADDED] =
+    g_signal_new ("device-added",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  2,
+                  IDE_TYPE_DEVICE_PROVIDER,
+                  IDE_TYPE_DEVICE);
+
+  gSignals [DEVICE_REMOVED] =
+    g_signal_new ("device-removed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  2,
+                  IDE_TYPE_DEVICE_PROVIDER,
+                  IDE_TYPE_DEVICE);
 }
 
 static void
