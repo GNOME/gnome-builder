@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define _GNU_SOURCE
+
 #ifdef __linux__
 # include <sys/utsname.h>
 # include <sys/types.h>
@@ -26,6 +28,7 @@
 
 #include <glib.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 
 #include "gb-log.h"
