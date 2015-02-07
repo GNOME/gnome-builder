@@ -111,7 +111,8 @@ ide_git_vcs_init (IdeGitVcs *self)
 static void
 ide_git_vcs_reload_index_add_path (IdeGitVcs   *self,
                                    GHashTable  *cache,
-                                   const gchar *path)
+                                   const gchar *path,
+                                   gboolean     is_directory)
 {
   IdeProjectItem *parent;
   IdeProjectItem *item;
@@ -133,7 +134,7 @@ ide_git_vcs_reload_index_add_path (IdeGitVcs   *self,
 
   if (!parent)
     {
-      ide_git_vcs_reload_index_add_path (self, cache, dir);
+      ide_git_vcs_reload_index_add_path (self, cache, dir, TRUE);
       parent = g_hash_table_lookup (cache, dir);
     }
 
@@ -142,6 +143,15 @@ ide_git_vcs_reload_index_add_path (IdeGitVcs   *self,
   file_info = g_file_info_new ();
   g_file_info_set_name (file_info, name);
   g_file_info_set_display_name (file_info, name);
+
+  /*
+   * TODO: We can probably extract some additional information from the
+   *       index such as symbolic link, etc.
+   */
+  if (is_directory)
+    {
+      g_file_info_set_file_type (file_info, G_FILE_TYPE_DIRECTORY);
+    }
 
   item = g_object_new (IDE_TYPE_PROJECT_FILE,
                        "context", context,
@@ -207,7 +217,7 @@ ide_git_vcs_reload_index (IdeGitVcs  *self,
       entry = ggit_index_entries_get_by_index (entries, i);
       path = ggit_index_entry_get_path (entry);
 
-      ide_git_vcs_reload_index_add_path (self, cache, path);
+      ide_git_vcs_reload_index_add_path (self, cache, path, FALSE);
 
       ggit_index_entry_unref (entry);
     }
