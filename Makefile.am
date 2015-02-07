@@ -5,6 +5,7 @@ include build/autotools/automake/AutomakeDocs.mk
 
 ACLOCAL_AMFLAGS = -I build/autotools/m4 ${ACLOCAL_FLAGS}
 
+include libide/Makefile.am
 include src/gnome-builder.mk
 include data/data.mk
 include data/gsettings.mk
