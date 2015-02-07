@@ -1,11 +1,43 @@
+[type: gettext/glade]src/resources/gtk/menus.ui
+[type: gettext/glade]src/resources/ui/gb-credits-widget.ui
+[type: gettext/glade]src/resources/ui/gb-document-menu-button.ui
+[type: gettext/glade]src/resources/ui/gb-editor-frame.ui
+[type: gettext/glade]src/resources/ui/gb-editor-settings-widget.ui
+[type: gettext/glade]src/resources/ui/gb-editor-tweak-widget.ui
+[type: gettext/glade]src/resources/ui/gb-editor-view.ui
+[type: gettext/glade]src/resources/ui/gb-preferences-page-editor.ui
+[type: gettext/glade]src/resources/ui/gb-preferences-page-emacs.ui
+[type: gettext/glade]src/resources/ui/gb-preferences-page-git.ui
+[type: gettext/glade]src/resources/ui/gb-preferences-page-vim.ui
+[type: gettext/glade]src/resources/ui/gb-preferences-window.ui
+[type: gettext/glade]src/resources/ui/gb-workbench.ui
 data/org.gnome.builder.editor.gschema.xml.in
+libide/autotools/ide-autotools-build-system.c
+libide/autotools/ide-autotools-build-task.c
+libide/autotools/ide-autotools-builder.c
+libide/git/ide-git-vcs.c
+libide/ide-build-result.c
+libide/ide-build-system.c
+libide/ide-builder.c
+libide/ide-context.c
+libide/ide-device-manager.c
+libide/ide-device-provider.c
+libide/ide-device.c
+libide/ide-file.c
+libide/ide-object.c
+libide/ide-project-file.c
+libide/ide-project-item.c
+libide/ide-project.c
+libide/ide-service.c
+libide/ide.c
+libide/tasks/ide-load-directory-task.c
 src/animation/gb-animation.c
 src/app/gb-application.c
 src/auto-indent/gb-source-auto-indenter-c.c
-src/code-assistant/gb-source-code-assistant.c
 src/code-assistant/gb-source-code-assistant-renderer.c
-src/commands/gb-command-bar.c
+src/code-assistant/gb-source-code-assistant.c
 src/commands/gb-command-bar-item.c
+src/commands/gb-command-bar.c
 src/commands/gb-command-gaction.c
 src/commands/gb-command-provider.c
 src/commands/gb-command-result.c
@@ -14,12 +46,12 @@ src/credits/gb-credits-widget.c
 src/devhelp/gb-devhelp-document.c
 src/devhelp/gb-devhelp-view.c
 src/dialogs/gb-close-confirmation-dialog.c
-src/documents/gb-document.c
 src/documents/gb-document-grid.c
 src/documents/gb-document-manager.c
 src/documents/gb-document-menu-button.c
 src/documents/gb-document-stack.c
 src/documents/gb-document-view.c
+src/documents/gb-document.c
 src/editor/gb-editor-document.c
 src/editor/gb-editor-file-mark.c
 src/editor/gb-editor-frame.c
@@ -41,40 +73,27 @@ src/main.c
 src/nautilus/nautilus-floating-bar.c
 src/navigation/gb-navigation-item.c
 src/navigation/gb-navigation-list.c
-src/preferences/gb-preferences-page.c
 src/preferences/gb-preferences-page-editor.c
 src/preferences/gb-preferences-page-emacs.c
 src/preferences/gb-preferences-page-git.c
 src/preferences/gb-preferences-page-vim.c
-[type: gettext/glade]src/resources/gtk/menus.ui
-[type: gettext/glade]src/resources/ui/gb-credits-widget.ui
-[type: gettext/glade]src/resources/ui/gb-document-menu-button.ui
-[type: gettext/glade]src/resources/ui/gb-editor-frame.ui
-[type: gettext/glade]src/resources/ui/gb-editor-settings-widget.ui
-[type: gettext/glade]src/resources/ui/gb-editor-tweak-widget.ui
-[type: gettext/glade]src/resources/ui/gb-editor-view.ui
-[type: gettext/glade]src/resources/ui/gb-preferences-page-editor.ui
-[type: gettext/glade]src/resources/ui/gb-preferences-page-emacs.ui
-[type: gettext/glade]src/resources/ui/gb-preferences-page-git.ui
-[type: gettext/glade]src/resources/ui/gb-preferences-page-vim.ui
-[type: gettext/glade]src/resources/ui/gb-preferences-window.ui
-[type: gettext/glade]src/resources/ui/gb-workbench.ui
+src/preferences/gb-preferences-page.c
 src/scrolledwindow/gb-scrolled-window.c
 src/search/gb-search-box.c
-src/search/gb-search-display.c
 src/search/gb-search-display-group.c
 src/search/gb-search-display-row.c
+src/search/gb-search-display.c
 src/search/gb-search-result.c
-src/snippets/gb-source-snippet.c
 src/snippets/gb-source-snippet-chunk.c
 src/snippets/gb-source-snippet-completion-item.c
 src/snippets/gb-source-snippet-completion-provider.c
 src/snippets/gb-source-snippet-parser.c
+src/snippets/gb-source-snippet.c
 src/snippets/gb-source-snippets-manager.c
 src/theatrics/gb-box-theatric.c
 src/tree/gb-tree-builder.c
-src/tree/gb-tree.c
 src/tree/gb-tree-node.c
+src/tree/gb-tree.c
 src/trie/trie.c
 src/workbench/gb-workbench.c
 src/workbench/gb-workspace.c
