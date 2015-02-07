@@ -511,7 +511,9 @@ ide_context_init (IdeContext *self)
   IdeContextPrivate *priv = ide_context_get_instance_private (self);
 
   priv->root_build_dir = g_build_filename (g_get_user_cache_dir (),
-                                           "libide", "builds", NULL);
+                                           ide_get_program_name (),
+                                           "builds",
+                                           NULL);
 
   priv->device_manager = g_object_new (IDE_TYPE_DEVICE_MANAGER,
                                        "context", self,
