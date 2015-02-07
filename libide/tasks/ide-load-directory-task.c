@@ -64,7 +64,7 @@ task_state_unref (TaskState *state)
 static TaskState *
 task_state_ref (TaskState *state)
 {
-  g_return_if_fail (state->ref_count > 0);
+  g_return_val_if_fail (state->ref_count > 0, NULL);
 
   ++state->ref_count;
 
