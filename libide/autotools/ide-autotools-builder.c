@@ -204,7 +204,7 @@ ide_autotools_builder_finalize (GObject *object)
   IdeAutotoolsBuilder *self = (IdeAutotoolsBuilder *)object;
   IdeAutotoolsBuilderPrivate *priv = ide_autotools_builder_get_instance_private (self);
 
-  g_clear_object (&priv->config);
+  g_clear_pointer (&priv->config, g_key_file_unref);
   g_clear_object (&priv->device);
 
   G_OBJECT_CLASS (ide_autotools_builder_parent_class)->finalize (object);
