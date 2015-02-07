@@ -2,8 +2,10 @@
 *.gz
 *.libs
 *.lo
+*.log
 *.o
 *.swp
+*.trs
 *.xz
 *~
 .dirstamp
@@ -27,10 +29,5 @@ libide.la
 libtool
 stamp-h1
 test-c-parse-helper
-test-c-parse-helper
-test-c-parse-helper.log
-test-c-parse-helper.trs
+test-ide-context
 test-navigation-list
-test-navigation-list.log
-test-navigation-list.trs
-test-suite.log
