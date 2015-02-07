@@ -23,6 +23,7 @@ intltool-extract.in
 intltool-merge.in
 intltool-update.in
 libgnome-builder.la
+libide.la
 libtool
 stamp-h1
 test-c-parse-helper
