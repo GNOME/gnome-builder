@@ -15,6 +15,7 @@
     <file>js/markdown-view.js</file>
 
     <file>keybindings/default.ini</file>
+    <file>keybindings/emacs.ini</file>
     <file>keybindings/vim.ini</file>
 
     <file>language/defaults.ini</file>
@@ -45,6 +46,7 @@
     <file>ui/gb-html-view.ui</file>
     <file>ui/gb-preferences-window.ui</file>
     <file>ui/gb-preferences-page-editor.ui</file>
+    <file>ui/gb-preferences-page-emacs.ui</file>
     <file>ui/gb-preferences-page-git.ui</file>
     <file>ui/gb-preferences-page-language.ui</file>
     <file>ui/gb-preferences-page-vim.ui</file>

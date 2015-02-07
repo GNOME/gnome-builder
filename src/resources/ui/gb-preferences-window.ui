@@ -141,6 +141,15 @@
                 <property name="title" translatable="yes">Vim</property>
               </packing>
             </child>
+            <child>
+              <object class="GbPreferencesPageEmacs" id="emacs_page">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="name">emacs</property>
+                <property name="title" translatable="yes">Emacs</property>
+              </packing>
+            </child>
           </object>
         </child>
       </object>

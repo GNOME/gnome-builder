@@ -5,6 +5,11 @@
       <summary>Enable VIM keybindings</summary>
       <description>Whether or not VIM style keybindings should be used in the source code editor.</description>
     </key>
+    <key name="emacs-mode" type="b">
+      <default>false</default>
+      <summary>Enable EMACS keybindings</summary>
+      <description>Whether or not EMACS style keybindings should be used in the source code editor.</description>
+    </key>
     <key name="restore-insert-mark" type="b">
       <default>true</default>
       <summary>Restore last position</summary>

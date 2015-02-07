@@ -44,6 +44,7 @@
 #include "gb-source-snippet-private.h"
 #include "gb-source-view.h"
 #include "gb-source-vim.h"
+#include "gb-source-emacs.h" 
 #include "gb-widget.h"
 
 enum {
@@ -60,6 +61,7 @@ struct _GbSourceViewPrivate
   GtkSourceCompletionProvider *snippets_provider;
   GtkSourceCompletionProvider *words_provider;
   GbSourceVim                 *vim;
+  GbSourceEmacs               *emacs;
   GtkCssProvider              *css_provider;
 
   GSettings                   *language_settings;
@@ -123,6 +125,14 @@ gb_source_view_get_vim (GbSourceView *view)
   g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), NULL);
 
   return view->priv->vim;
+}
+
+GbSourceEmacs *
+gb_source_view_get_emacs (GbSourceView *view)
+{
+  g_return_val_if_fail (GB_IS_SOURCE_VIEW (view), NULL);
+
+  return view->priv->emacs;
 }
 
 gboolean
@@ -235,6 +245,7 @@ gb_source_view_disconnect_settings (GbSourceView *view)
   g_settings_unbind (view, "tab-width");
   g_settings_unbind (view, "font-name");
   g_settings_unbind (view->priv->vim, "enabled");
+  g_settings_unbind (view->priv->emacs, "enabled");
 
   g_clear_object (&view->priv->language_settings);
   g_clear_object (&view->priv->editor_settings);
@@ -301,6 +312,8 @@ gb_source_view_connect_settings (GbSourceView *view)
                    buffer, "style-scheme-name", G_SETTINGS_BIND_GET);
   g_settings_bind (view->priv->editor_settings, "vim-mode",
                    view->priv->vim, "enabled", G_SETTINGS_BIND_GET);
+  g_settings_bind (view->priv->editor_settings, "emacs-mode",
+                   view->priv->emacs, "enabled", G_SETTINGS_BIND_GET);
   g_settings_bind (view->priv->editor_settings, "word-completion",
                    view, "enable-word-completion", G_SETTINGS_BIND_GET);
   g_settings_bind (view->priv->editor_settings, "show-line-numbers",
@@ -2074,6 +2087,7 @@ gb_source_view_finalize (GObject *object)
   g_clear_object (&priv->snippets_provider);
   g_clear_object (&priv->words_provider);
   g_clear_object (&priv->vim);
+  g_clear_object (&priv->emacs);
   g_clear_object (&priv->css_provider);
 
   G_OBJECT_CLASS (gb_source_view_parent_class)->finalize (object);
@@ -2429,6 +2443,14 @@ gb_source_view_init (GbSourceView *view)
                            G_CALLBACK (gb_source_view_vim_jump_to_doc),
                            view,
                            G_CONNECT_SWAPPED);
+
+  /*
+   * Setup Emacs integration.
+   */
+    view->priv->emacs = g_object_new (GB_TYPE_SOURCE_EMACS,
+                                      "enabled", FALSE,
+                                      "text-view", view,
+                                      NULL);
 
   /*
    * We block completion when we are not focused so that two SourceViews

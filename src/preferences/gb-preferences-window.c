@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 
 #include "gb-preferences-page-editor.h"
+#include "gb-preferences-page-emacs.h"
 #include "gb-preferences-page-git.h"
 #include "gb-preferences-page-language.h"
 #include "gb-preferences-page-vim.h"
@@ -337,6 +338,7 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EDITOR);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_LANGUAGE);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_VIM);
+  g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EMACS);
 }
 
 static void

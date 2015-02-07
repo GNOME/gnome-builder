@@ -97,6 +97,8 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-source-search-highlighter.h \
 	src/editor/gb-source-view.c \
 	src/editor/gb-source-view.h \
+	src/emacs/gb-source-emacs.c \
+	src/emacs/gb-source-emacs.h \
 	src/fuzzy/fuzzy.c \
 	src/fuzzy/fuzzy.h \
 	src/gca/gca-diagnostics.c \
@@ -131,6 +133,8 @@ libgnome_builder_la_SOURCES = \
 	src/navigation/gb-navigation-list.h \
 	src/preferences/gb-preferences-page-editor.c \
 	src/preferences/gb-preferences-page-editor.h \
+	src/preferences/gb-preferences-page-emacs.c \
+	src/preferences/gb-preferences-page-emacs.h \
 	src/preferences/gb-preferences-page-git.c \
 	src/preferences/gb-preferences-page-git.h \
 	src/preferences/gb-preferences-page-language.c \
@@ -236,6 +240,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/dialogs \
 	-I$(top_srcdir)/src/documents \
 	-I$(top_srcdir)/src/editor \
+	-I$(top_srcdir)/src/emacs  \
 	-I$(top_srcdir)/src/fuzzy \
 	-I$(top_srcdir)/src/gca \
 	-I$(top_srcdir)/src/gd \

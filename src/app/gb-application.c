@@ -338,7 +338,27 @@ gb_application_vim_mode_changed (GbApplication *self,
   g_return_if_fail (G_IS_SETTINGS (settings));
 
   if (g_settings_get_boolean (settings, "vim-mode"))
-    gb_application_load_keybindings (self, "vim");
+    {
+      g_settings_set_boolean (settings, "emacs-mode", FALSE);
+      gb_application_load_keybindings (self, "vim");
+    }
+  else
+    gb_application_load_keybindings (self, "default");
+}
+
+static void
+gb_application_emacs_mode_changed (GbApplication *self,
+                                 const gchar   *key,
+                                 GSettings     *settings)
+{
+  g_return_if_fail (GB_IS_APPLICATION (self));
+  g_return_if_fail (G_IS_SETTINGS (settings));
+
+  if (g_settings_get_boolean (settings, "emacs-mode"))
+    {
+      g_settings_set_boolean (settings, "vim-mode", FALSE);
+      gb_application_load_keybindings (self, "emacs");
+    }
   else
     gb_application_load_keybindings (self, "default");
 }
@@ -355,7 +375,18 @@ gb_application_register_keybindings (GbApplication *self)
                            G_CALLBACK (gb_application_vim_mode_changed),
                            self,
                            G_CONNECT_SWAPPED);
-  gb_application_vim_mode_changed (self, NULL, self->priv->editor_settings);
+  g_signal_connect_object (self->priv->editor_settings,
+                           "changed::emacs-mode",
+                           G_CALLBACK (gb_application_emacs_mode_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  if (g_settings_get_boolean(self->priv->editor_settings, "vim-mode") == TRUE)
+    gb_application_vim_mode_changed (self, NULL, self->priv->editor_settings);
+  else if (g_settings_get_boolean(self->priv->editor_settings, "emacs-mode") == TRUE)
+    gb_application_emacs_mode_changed (self, NULL, self->priv->editor_settings);
+  else
+    gb_application_vim_mode_changed (self, NULL, self->priv->editor_settings);
+
 }
 
 static GbWorkbench *
