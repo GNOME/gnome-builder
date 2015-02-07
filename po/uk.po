@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-24 12:32+0200\n"
-"PO-Revision-Date: 2015-01-25 15:55+0300\n"
+"POT-Creation-Date: 2015-02-07 14:11+0200\n"
+"PO-Revision-Date: 2015-02-07 15:11+0300\n"
 "Last-Translator: Daniel Korostil <ted.korostiled@gmail.com>\n"
 "Language-Team: linux.org.ua\n"
 "Language: uk\n"
@@ -196,7 +196,7 @@ msgid "The priority of the command provider."
 msgstr "Пріоритет постачальника команд."
 
 #: ../src/commands/gb-command-provider.c:356
-#: ../src/git/gb-git-search-provider.c:526
+#: ../src/git/gb-git-search-provider.c:523
 #: ../src/navigation/gb-navigation-list.c:299
 msgid "Workbench"
 msgstr "Верстат"
@@ -285,7 +285,7 @@ msgstr "Посилання, яке завантажується."
 
 #: ../src/devhelp/gb-devhelp-view.c:175
 #: ../src/documents/gb-document-view.c:203
-#: ../src/editor/gb-editor-frame.c:1597 ../src/editor/gb-editor-view.c:1071
+#: ../src/editor/gb-editor-frame.c:1651 ../src/editor/gb-editor-view.c:1080
 #: ../src/html/gb-html-view.c:264
 msgid "Document"
 msgstr "Документ"
@@ -332,7 +332,8 @@ msgstr[2] ""
 #: ../src/dialogs/gb-close-confirmation-dialog.c:363
 msgid ""
 "If you don't save, changes from the last minute will be permanently lost."
-msgstr "Якщо ви не збережете, зміни за останню хвилину буде остаточно втрачено."
+msgstr ""
+"Якщо ви не збережете, зміни за останню хвилину буде остаточно втрачено."
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:369
 #, c-format
@@ -429,8 +430,10 @@ msgstr[2] "Зміни, внесені в %d документів, буде ос�
 msgid "There is %d document with unsaved changes. Save changes before closing?"
 msgid_plural ""
 "There are %d documents with unsaved changes. Save changes before closing?"
-msgstr[0] "%d документ має незбережені зміни. Зберегти зміни перед закриванням?"
-msgstr[1] "%d документи мають незбережені зміни. Зберегти зміни перед закриванням?"
+msgstr[0] ""
+"%d документ має незбережені зміни. Зберегти зміни перед закриванням?"
+msgstr[1] ""
+"%d документи мають незбережені зміни. Зберегти зміни перед закриванням?"
 msgstr[2] ""
 "%d документів мають незбережені зміни. Зберегти зміни перед закриванням?"
 
@@ -472,13 +475,13 @@ msgstr "Лише для читання"
 msgid "If the document is read only."
 msgstr "Чи документ можна й редагувати."
 
-#: ../src/documents/gb-document-grid.c:840
+#: ../src/documents/gb-document-grid.c:918
 #: ../src/documents/gb-document-menu-button.c:667
 #: ../src/documents/gb-document-stack.c:881
 msgid "Document Manager"
 msgstr "Менеджер документів"
 
-#: ../src/documents/gb-document-grid.c:841
+#: ../src/documents/gb-document-grid.c:919
 msgid "The document manager for the document grid."
 msgstr "Менеджер документів для ґраток."
 
@@ -496,90 +499,92 @@ msgstr "Менеджер документів для кнопок."
 
 #: ../src/documents/gb-document-stack.c:872
 msgid "Active View"
-msgstr ""
+msgstr "Чинний огляд"
 
 #: ../src/documents/gb-document-stack.c:873
 msgid "The active view within the stack."
-msgstr ""
+msgstr "Чинний огляд у стосі."
 
 #: ../src/documents/gb-document-stack.c:882
 msgid "The document manager for the stack."
-msgstr ""
+msgstr "Менеджер документів для стосу."
 
 #: ../src/documents/gb-document-view.c:185
 msgid "Can Preview"
-msgstr ""
+msgstr "Попередній перегляд"
 
 #: ../src/documents/gb-document-view.c:186
 msgid "If the view can preview."
-msgstr ""
+msgstr "Чи можна робити попередній перегляд."
 
 #: ../src/documents/gb-document-view.c:194
 msgid "Controls"
-msgstr ""
+msgstr "Контролі"
 
 #: ../src/documents/gb-document-view.c:195
 msgid "The widget containing the view controls."
-msgstr ""
+msgstr "Віджет, який містить контролі перегляду."
 
 #: ../src/documents/gb-document-view.c:204
 msgid "The document being viewed."
-msgstr ""
+msgstr "Документ переглянуто."
 
 #: ../src/editor/gb-editor-document.c:664
 #, c-format
 msgid "%s (Read Only)"
-msgstr ""
+msgstr "%s (тільки для читання)"
 
 #: ../src/editor/gb-editor-document.c:669
 #, c-format
 msgid "untitled document %u"
-msgstr ""
+msgstr "неназваний документ %u"
 
 #: ../src/editor/gb-editor-document.c:791
 msgid "Save Document As"
-msgstr ""
+msgstr "Зберегти документ як"
 
 #: ../src/editor/gb-editor-document.c:798
 #: ../src/editor/gb-editor-workspace.c:287
 msgid "Cancel"
-msgstr ""
+msgstr "Скасувати"
 
 #: ../src/editor/gb-editor-document.c:799 ../src/resources/gtk/menus.ui.h:17
 msgid "Save"
-msgstr ""
+msgstr "Зберегти"
 
 #: ../src/editor/gb-editor-document.c:913
 msgid "No file was selected."
-msgstr ""
+msgstr "Не вибрано жодного файла."
 
 #: ../src/editor/gb-editor-document.c:1039
 msgid "No file was selected for saving."
-msgstr ""
+msgstr "Не вибрано жодного файла для збереження."
 
 #: ../src/editor/gb-editor-document.c:1440
 #: ../src/editor/gb-source-change-gutter-renderer.c:198
+#, fuzzy
 msgid "Change Monitor"
-msgstr ""
+msgstr "Поміняти монітор"
 
 #: ../src/editor/gb-editor-document.c:1441
+#, fuzzy
 msgid "The change monitor for the backing file."
-msgstr ""
+msgstr "Поміняти монітор для "
 
 #: ../src/editor/gb-editor-document.c:1449
 msgid "Error"
-msgstr ""
+msgstr "Помилка"
 
 #: ../src/editor/gb-editor-document.c:1450
 msgid "An error that may have been loaded."
-msgstr ""
+msgstr "Помилка, яку можна завантажити."
 
 #: ../src/editor/gb-editor-document.c:1458
 #: ../src/editor/gb-editor-file-mark.c:214
 #: ../src/editor/gb-editor-navigation-item.c:217
 #: ../src/editor/gb-source-change-monitor.c:878
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 #: ../src/editor/gb-editor-document.c:1459
 msgid "The backing file for the document."
@@ -587,23 +592,23 @@ msgstr ""
 
 #: ../src/editor/gb-editor-document.c:1467
 msgid "File Changed on Volume"
-msgstr ""
+msgstr "Файл змінено на томі"
 
 #: ../src/editor/gb-editor-document.c:1468
 msgid "If the file has changed underneath the buffer."
-msgstr ""
+msgstr "Чи змінювати файл під буфером."
 
 #: ../src/editor/gb-editor-document.c:1477
 msgid "Loading or saving progress."
-msgstr ""
+msgstr "Поступ завантаження та збереження."
 
 #: ../src/editor/gb-editor-document.c:1487
 msgid "Style Scheme Name"
-msgstr ""
+msgstr "Назва схеми стилю"
 
 #: ../src/editor/gb-editor-document.c:1488
 msgid "The style scheme name."
-msgstr ""
+msgstr "Назва схеми стилю."
 
 #: ../src/editor/gb-editor-document.c:1496
 msgid "Trim Trailing Whitespace"
@@ -615,46 +620,54 @@ msgstr ""
 
 #: ../src/editor/gb-editor-file-mark.c:202
 msgid "Column"
-msgstr ""
+msgstr "Стовпчик"
 
 #: ../src/editor/gb-editor-file-mark.c:203
 msgid "The column within the line."
-msgstr ""
+msgstr "Колонка в рядку."
 
 #: ../src/editor/gb-editor-file-mark.c:215
 msgid "The file for which to store the mark."
-msgstr ""
+msgstr "Файл, для якого зберігається мітка."
 
 #: ../src/editor/gb-editor-file-mark.c:224
 #: ../src/editor/gb-editor-navigation-item.c:228
 msgid "Line"
-msgstr ""
+msgstr "Рядок"
 
 #: ../src/editor/gb-editor-file-mark.c:225
 msgid "The line within the file."
-msgstr ""
+msgstr "Рядок у файлі."
 
-#: ../src/editor/gb-editor-frame.c:317
+#: ../src/editor/gb-editor-frame.c:320
 #, c-format
 msgid "%u of %u"
-msgstr ""
+msgstr "%u з %u"
 
-#: ../src/editor/gb-editor-frame.c:458
+#: ../src/editor/gb-editor-frame.c:461
 #, c-format
 msgid "Line %u, Column %u"
-msgstr ""
+msgstr "Рядок %u, Стовпець %u"
 
-#: ../src/editor/gb-editor-frame.c:1598
+#: ../src/editor/gb-editor-frame.c:1652
 msgid "The document for the editor."
-msgstr ""
+msgstr "Документ для редактора."
+
+#: ../src/editor/gb-editor-frame.c:1660
+msgid "Search Direction"
+msgstr "Напрям пошуку"
+
+#: ../src/editor/gb-editor-frame.c:1661
+msgid "The direction of the last text searched for."
+msgstr "Напрям останнього шуканого тексту."
 
 #: ../src/editor/gb-editor-navigation-item.c:218
 msgid "The file that is being edited."
-msgstr ""
+msgstr "Файл, який відредаговано."
 
 #: ../src/editor/gb-editor-navigation-item.c:229
 msgid "The line number within the file."
-msgstr ""
+msgstr "Кількість рядків у файлі."
 
 #: ../src/editor/gb-editor-navigation-item.c:241
 msgid "Line Offset"
@@ -668,7 +681,7 @@ msgstr ""
 #: ../src/editor/gb-source-formatter.c:337
 #: ../src/snippets/gb-source-snippet.c:1059
 msgid "Language"
-msgstr ""
+msgstr "Мова"
 
 #: ../src/editor/gb-editor-settings-widget.c:183
 msgid "The language to change the settings for."
@@ -681,75 +694,75 @@ msgstr ""
 
 #: ../src/editor/gb-editor-view.c:509
 msgid "Plain Text"
-msgstr ""
+msgstr "Звичайний текст"
 
-#: ../src/editor/gb-editor-view.c:1062
+#: ../src/editor/gb-editor-view.c:1071
 msgid "Auto Indent"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1063
+#: ../src/editor/gb-editor-view.c:1072
 msgid "If we should use the auto-indentation engine."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1072
+#: ../src/editor/gb-editor-view.c:1081
 msgid "The document edited by the view."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1080
+#: ../src/editor/gb-editor-view.c:1089
 msgid "Highlight Current Line"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1081
+#: ../src/editor/gb-editor-view.c:1090
 msgid "If the current line should be highlighted."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1089
+#: ../src/editor/gb-editor-view.c:1098
 msgid "Show Line Numbers"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1090
+#: ../src/editor/gb-editor-view.c:1099
 msgid "If the line numbers should be shown."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1098
+#: ../src/editor/gb-editor-view.c:1107
 msgid "Show Right Margin"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1099
+#: ../src/editor/gb-editor-view.c:1108
 msgid "If we should show the right margin."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1107
+#: ../src/editor/gb-editor-view.c:1116
 msgid "Split Enabled"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1108
+#: ../src/editor/gb-editor-view.c:1117
 msgid "If the view split is enabled."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1116
+#: ../src/editor/gb-editor-view.c:1125
 msgid "Tab Width"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1117
+#: ../src/editor/gb-editor-view.c:1126
 msgid "The width a tab should be drawn as."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1127
+#: ../src/editor/gb-editor-view.c:1136
 msgid "Use Spaces"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1128
+#: ../src/editor/gb-editor-view.c:1137
 msgid "If spaces should be used instead of tabs."
 msgstr ""
 
 #: ../src/editor/gb-editor-workspace.c:279
 msgid "Open Document"
-msgstr ""
+msgstr "Відкрити документ"
 
 #: ../src/editor/gb-editor-workspace.c:288
 msgid "Open"
-msgstr ""
+msgstr "Відкрити"
 
 #: ../src/editor/gb-source-change-gutter-renderer.c:199
 msgid "The change monitor for the gutter renderer."
@@ -816,52 +829,60 @@ msgstr ""
 msgid "Search Settings"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2279 ../src/editor/gb-source-view.c:2280
+#: ../src/editor/gb-source-view.c:2215 ../src/editor/gb-source-view.c:2216
 msgid "Enable Word Completion"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2288
+#: ../src/editor/gb-source-view.c:2224
 msgid "Font Name"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2289
+#: ../src/editor/gb-source-view.c:2225
 msgid "The font name to apply to the widget."
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2297
+#: ../src/editor/gb-source-view.c:2233
 msgid "Insert Matching Brace"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2298
+#: ../src/editor/gb-source-view.c:2234
 msgid "If we should insert matching braces."
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2306
+#: ../src/editor/gb-source-view.c:2242
 msgid "Overwrite Braces"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2307
+#: ../src/editor/gb-source-view.c:2243
 msgid "If we should overwrite braces, brackets, parenthesis and quotes."
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2316
+#: ../src/editor/gb-source-view.c:2252
 msgid "Show Shadow"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2317
+#: ../src/editor/gb-source-view.c:2253
 msgid "Show the search shadow"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2325 ../src/editor/gb-source-view.c:2326
+#: ../src/editor/gb-source-view.c:2261 ../src/editor/gb-source-view.c:2262
 msgid "Search Highlighter"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2334
+#: ../src/editor/gb-source-view.c:2270
 msgid "Smart Home End"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2335
+#: ../src/editor/gb-source-view.c:2271
 msgid "Enable smart home end in gtksourceview."
+msgstr ""
+
+#: ../src/editor/gb-source-view.c:2279
+msgid "Show Grid Lines"
+msgstr ""
+
+#: ../src/editor/gb-source-view.c:2280
+msgid "Whether to show the grid lines."
 msgstr ""
 
 #: ../src/gd/gd-tagged-entry.c:937
@@ -890,49 +911,49 @@ msgstr ""
 
 #: ../src/gd/gd-tagged-entry.c:1039
 msgid "Style"
-msgstr ""
+msgstr "Стиль"
 
 #: ../src/gd/gd-tagged-entry.c:1040
 msgid "Style of the tag."
-msgstr ""
+msgstr "Стиль міток."
 
 #: ../src/gedit/gedit-menu-stack-switcher.c:423
 #: ../src/gedit/gedit-menu-stack-switcher.c:424
 msgid "Stack"
-msgstr ""
+msgstr "Стос"
 
-#: ../src/git/gb-git-search-provider.c:432
+#: ../src/git/gb-git-search-provider.c:429
 msgid "Switch To"
-msgstr ""
+msgstr "Перемкнутись на"
 
-#: ../src/git/gb-git-search-provider.c:515
+#: ../src/git/gb-git-search-provider.c:512
 msgid "Repository"
-msgstr ""
+msgstr "Сховище"
 
-#: ../src/git/gb-git-search-provider.c:516
+#: ../src/git/gb-git-search-provider.c:513
 msgid "The repository to use for search data."
-msgstr ""
+msgstr "Сховище для пошуку даних."
 
-#: ../src/git/gb-git-search-provider.c:527
+#: ../src/git/gb-git-search-provider.c:524
 msgid "The workbench window."
-msgstr ""
+msgstr "Вікно верстата."
 
 #: ../src/html/gb-html-document.c:105
 msgid "HTML Preview"
-msgstr ""
+msgstr "Перегляд HTML"
 
 #: ../src/html/gb-html-document.c:127
 #, c-format
 msgid "%s (Preview)"
-msgstr ""
+msgstr "%s (Перегляд)"
 
 #: ../src/html/gb-html-document.c:311
 msgid "The buffer to monitor for changes."
-msgstr ""
+msgstr "Буфер для аналізування змін."
 
 #: ../src/html/gb-html-view.c:265
 msgid "The document to view as HTML."
-msgstr ""
+msgstr "Документ для перегляду як HTML."
 
 #: ../src/nautilus/nautilus-floating-bar.c:314
 msgid "Bar's primary label"
@@ -964,7 +985,7 @@ msgstr ""
 
 #: ../src/navigation/gb-navigation-item.c:204
 msgid "Workspace"
-msgstr ""
+msgstr "Робочий простір"
 
 #: ../src/navigation/gb-navigation-item.c:205
 msgid "The workspace to ensure is focused."
@@ -1002,39 +1023,43 @@ msgstr ""
 msgid "The title for the preferences page."
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:179
+#: ../src/preferences/gb-preferences-page-editor.c:186
 msgid "restore insert cursor mark"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:184
+#: ../src/preferences/gb-preferences-page-editor.c:191
 msgid "word words auto completion suggest found document"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:189
+#: ../src/preferences/gb-preferences-page-editor.c:196
 msgid "diff renderer gutter changes git vcs"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:194
+#: ../src/preferences/gb-preferences-page-editor.c:201
 msgid "line numbers"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:199
+#: ../src/preferences/gb-preferences-page-editor.c:206
 msgid "line lines highlight current"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:204
+#: ../src/preferences/gb-preferences-page-editor.c:211
 msgid "bracket brackets highlight matching"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:209
+#: ../src/preferences/gb-preferences-page-editor.c:216
 msgid "smart home end"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:214
+#: ../src/preferences/gb-preferences-page-editor.c:221
+msgid "show grid lines"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:226
 msgid "font document editor monospace"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:218
+#: ../src/preferences/gb-preferences-page-editor.c:230
 msgid "source style scheme source tango solarized builder"
 msgstr ""
 
@@ -1287,15 +1312,15 @@ msgstr "Не знайдено жодного документа"
 
 #: ../src/resources/ui/gb-editor-frame.ui.h:1
 msgid "Line 1, Column 1"
-msgstr "Line 1, Column 1"
+msgstr "Рядок 1, Стовпець 1"
 
 #: ../src/resources/ui/gb-editor-frame.ui.h:2
 msgid "Currently parsing document"
-msgstr ""
+msgstr "Поточний розібраний документ"
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:1
 msgid "Display right _margin at column:"
-msgstr ""
+msgstr "_Показувати праву межу у стовпчику:"
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:2
 msgid "Trim trailing whitespace when saving document"
@@ -1310,43 +1335,40 @@ msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
 msgstr ""
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:5
-msgid "<b>Indentation</b>"
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
+msgid "Indentation"
 msgstr ""
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:6
 msgid "_Tab width:"
-msgstr ""
+msgstr "_Ширина табуляції:"
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:7
 msgid "Insert _spaces instead of tabs"
-msgstr ""
+msgstr "Вставляти _пробіли замість табуляції"
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:8
 msgid "_Enable automatic indentation"
-msgstr ""
+msgstr "_Увімкнути автоматичний відступ"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
-msgstr ""
+msgstr "Пошук підкреслення синтаксису…"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:2
 msgid "Display line numbers"
-msgstr ""
+msgstr "Показувати номери рядків"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:3
 msgid "Display right margin"
-msgstr ""
+msgstr "Показувати праве поле"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:4
 msgid "Highlight current line"
-msgstr ""
+msgstr "Підсвічувати поточний рядок"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:5
 msgid "Auto indent"
-msgstr ""
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
-msgid "Indentation"
 msgstr ""
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:7
@@ -1412,7 +1434,7 @@ msgid "Display line numbers in the document."
 msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:9
-msgid "<b>Hightlight Current Line</b>"
+msgid "<b>Highlight Current Line</b>"
 msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:10
@@ -1420,7 +1442,7 @@ msgid "Highlight the line containing the cursor."
 msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:11
-msgid "<b>Hightlight Matching Brackets</b>"
+msgid "<b>Highlight Matching Brackets</b>"
 msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:12
@@ -1433,6 +1455,14 @@ msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:14
 msgid "Home moves to first non-space character."
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:15
+msgid "<b>Show Grid Lines</b>"
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:16
+msgid "Display a grid patten in the document."
 msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:1
