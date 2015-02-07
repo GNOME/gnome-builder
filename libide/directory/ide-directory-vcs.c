@@ -154,8 +154,8 @@ ide_directory_vcs_init_finish (GAsyncInitable  *initable,
   GTask *task = (GTask *)result;
 
   g_return_val_if_fail (IDE_IS_DIRECTORY_VCS (initable), FALSE);
-  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+  g_return_val_if_fail (G_IS_TASK (task), FALSE);
 
   return g_task_propagate_boolean (task, error);
 }

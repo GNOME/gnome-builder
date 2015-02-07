@@ -174,7 +174,7 @@ ide_git_vcs_reload_index (IdeGitVcs  *self,
   guint count;
   guint i;
 
-  g_return_if_fail (IDE_IS_GIT_VCS (self));
+  g_return_val_if_fail (IDE_IS_GIT_VCS (self), FALSE);
 
   index = ggit_repository_get_index (priv->repository, error);
   if (!index)
