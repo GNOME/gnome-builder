@@ -532,7 +532,7 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
 {
   GTask *task = (GTask *)result;
 
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
   g_return_val_if_fail (G_IS_TASK (task), FALSE);
 
