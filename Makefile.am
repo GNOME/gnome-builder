@@ -7,6 +7,7 @@ ACLOCAL_AMFLAGS = -I build/autotools/m4 ${ACLOCAL_FLAGS}
 
 include libide/Makefile.am
 include src/gnome-builder.mk
+include tools/Makefile.am
 include data/data.mk
 include data/gsettings.mk
 include tests/tests.mk
