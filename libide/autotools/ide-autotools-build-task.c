@@ -30,7 +30,6 @@ typedef struct
   GKeyFile  *config;
   IdeDevice *device;
   GFile     *directory;
-  gchar     *make_target;
   guint      require_autogen : 1;
   guint      require_configure : 1;
   guint      executed : 1;
@@ -41,8 +40,8 @@ typedef struct
   gchar  *directory_path;
   gchar  *project_path;
   gchar  *system_type;
-  gchar  *make_target;
   gchar **configure_argv;
+  gchar **make_targets;
   guint   require_autogen : 1;
   guint   require_configure : 1;
 } WorkerState;
@@ -60,7 +59,6 @@ enum {
   PROP_CONFIG,
   PROP_DEVICE,
   PROP_DIRECTORY,
-  PROP_MAKE_TARGET,
   PROP_REQUIRE_AUTOGEN,
   PROP_REQUIRE_CONFIGURE,
   LAST_PROP
@@ -96,35 +94,6 @@ static WorkStep gWorkSteps [] = {
   step_make_all,
   NULL
 };
-
-const gchar *
-ide_autotools_build_task_get_make_target (IdeAutotoolsBuildTask *task)
-{
-  IdeAutotoolsBuildTaskPrivate *priv;
-
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (task), NULL);
-
-  priv = ide_autotools_build_task_get_instance_private (task);
-
-  return priv->make_target;
-}
-
-static void
-ide_autotools_build_task_set_make_target (IdeAutotoolsBuildTask *task,
-                                          const gchar           *make_target)
-{
-  IdeAutotoolsBuildTaskPrivate *priv;
-
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (task));
-
-  priv = ide_autotools_build_task_get_instance_private (task);
-
-  if (priv->make_target != make_target)
-    {
-      g_free (priv->make_target);
-      priv->make_target = g_strdup (make_target);
-    }
-}
 
 gboolean
 ide_autotools_build_task_get_require_autogen (IdeAutotoolsBuildTask *task)
@@ -343,11 +312,6 @@ ide_autotools_build_task_get_property (GObject    *object,
                           ide_autotools_build_task_get_directory (self));
       break;
 
-    case PROP_MAKE_TARGET:
-      g_value_set_string (value,
-                          ide_autotools_build_task_get_make_target (self));
-      break;
-
     case PROP_REQUIRE_AUTOGEN:
       g_value_set_boolean (value,
                            ide_autotools_build_task_get_require_autogen (self));
@@ -386,11 +350,6 @@ ide_autotools_build_task_set_property (GObject      *object,
     case PROP_DIRECTORY:
       ide_autotools_build_task_set_directory (self,
                                               g_value_get_object (value));
-      break;
-
-    case PROP_MAKE_TARGET:
-      ide_autotools_build_task_set_make_target (self,
-                                                g_value_get_string (value));
       break;
 
     case PROP_REQUIRE_AUTOGEN:
@@ -449,17 +408,6 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_DIRECTORY,
                                    gParamSpecs [PROP_DIRECTORY]);
-
-  gParamSpecs [PROP_MAKE_TARGET] =
-    g_param_spec_string ("make-target",
-                         _("Make Target"),
-                         _("The make target to execute."),
-                         "all",
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MAKE_TARGET,
-                                   gParamSpecs [PROP_MAKE_TARGET]);
 
   gParamSpecs [PROP_REQUIRE_AUTOGEN] =
     g_param_spec_boolean ("require-autogen",
@@ -578,6 +526,7 @@ worker_state_new (IdeAutotoolsBuildTask *self)
   IdeAutotoolsBuildTaskPrivate *priv;
   g_autoptr(gchar) name = NULL;
   IdeContext *context;
+  GPtrArray *make_targets;
   GFile *project_dir;
   GFile *project_file;
   WorkerState *state;
@@ -596,15 +545,22 @@ worker_state_new (IdeAutotoolsBuildTask *self)
   else
     project_dir = g_object_ref (project_file);
 
+  make_targets = g_ptr_array_new ();
+  if (priv->config &&
+      g_key_file_get_boolean (priv->config, "autotools", "rebuild", NULL))
+    g_ptr_array_add (make_targets, g_strdup ("clean"));
+  g_ptr_array_add (make_targets, g_strdup ("all"));
+  g_ptr_array_add (make_targets, NULL);
+
   state = g_slice_new0 (WorkerState);
 
   state->directory_path = g_file_get_path (priv->directory);
   state->project_path = g_file_get_path (project_dir);
   state->system_type = g_strdup (ide_device_get_system_type (priv->device));
   state->configure_argv = gen_configure_argv (self, state);
-  state->make_target = g_strdup (priv->make_target);
   state->require_autogen = priv->require_autogen;
   state->require_configure = priv->require_configure;
+  state->make_targets = (gchar **)g_ptr_array_free (make_targets, FALSE);
 
   return state;
 }
@@ -617,7 +573,6 @@ worker_state_free (void *data)
   g_free (state->directory_path);
   g_free (state->project_path);
   g_free (state->system_type);
-  g_free (state->make_target);
   g_slice_free (WorkerState, state);
 }
 
@@ -915,8 +870,10 @@ step_make_all  (GTask                 *task,
 {
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   g_autoptr(GSubprocess) process = NULL;
-  const gchar *target;
+  const gchar * const *targets;
+  gchar *default_targets[] = { "all", NULL };
   GError *error = NULL;
+  guint i;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
@@ -927,22 +884,30 @@ step_make_all  (GTask                 *task,
                                          G_SUBPROCESS_FLAGS_STDOUT_PIPE));
   g_subprocess_launcher_set_cwd (launcher, state->directory_path);
 
-  target = state->make_target ?: "all";
+  if (!g_strv_length (state->make_targets))
+    targets = (const gchar * const *)default_targets;
+  else
+    targets = (const gchar * const *)state->make_targets;
 
-  process = log_and_spawn (self, launcher, &error, "make", target, NULL);
-
-  if (!process)
+  for (i = 0; targets [i]; i++)
     {
-      g_task_return_error (task, error);
-      return FALSE;
-    }
+      const gchar *target = targets [i];
 
-  ide_build_result_log_subprocess (IDE_BUILD_RESULT (self), process);
+      process = log_and_spawn (self, launcher, &error, "make", target, NULL);
 
-  if (!g_subprocess_wait_check (process, cancellable, &error))
-    {
-      g_task_return_error (task, error);
-      return FALSE;
+      if (!process)
+        {
+          g_task_return_error (task, error);
+          return FALSE;
+        }
+
+      ide_build_result_log_subprocess (IDE_BUILD_RESULT (self), process);
+
+      if (!g_subprocess_wait_check (process, cancellable, &error))
+        {
+          g_task_return_error (task, error);
+          return FALSE;
+        }
     }
 
   return TRUE;

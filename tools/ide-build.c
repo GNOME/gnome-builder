@@ -32,6 +32,7 @@ static IdeContext *gContext;
 static guint gTimeout;
 static gulong gAddedHandler;
 static guint64 gBuildStart;
+static gboolean gRebuild;
 
 static void read_line_cb (GObject      *object,
                           GAsyncResult *result,
@@ -207,8 +208,12 @@ build_for_device (IdeContext *context,
 
   print_build_info (context, device);
 
-  build_system = ide_context_get_build_system (context);
   config = g_key_file_new ();
+
+  if (gRebuild)
+    g_key_file_set_boolean (config, "autotools", "rebuild", TRUE);
+
+  build_system = ide_context_get_build_system (context);
   builder = ide_build_system_get_builder (build_system, config, device, &error);
   g_key_file_unref (config);
 
@@ -337,6 +342,8 @@ main (gint   argc,
       N_("The target device we are building for."),
       N_("DEVICE_ID")
     },
+    { "rebuild", 'r', 0, G_OPTION_ARG_NONE, &gRebuild,
+      N_("Clean and rebuild the project.") },
     { NULL }
   };
   g_autoptr(GOptionContext) context = NULL;
