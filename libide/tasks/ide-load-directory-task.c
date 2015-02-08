@@ -153,14 +153,15 @@ next_files_cb (GObject      *object,
       if (state->file_count >= state->max_files)
         goto cleanup;
 
+      file = g_file_enumerator_get_child (enumerator, file_info);
+
       item = g_object_new (IDE_TYPE_PROJECT_FILE,
                            "context", context,
+                           "file", file,
                            "file-info", file_info,
                            "parent", parent,
                            NULL);
       ide_project_item_append (parent, item);
-
-      file = g_file_enumerator_get_child (enumerator, file_info);
 
       if (file_type == G_FILE_TYPE_DIRECTORY)
         {
