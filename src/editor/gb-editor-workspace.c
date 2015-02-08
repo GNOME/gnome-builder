@@ -27,6 +27,7 @@
 #include "gb-editor-document.h"
 #include "gb-editor-workspace.h"
 #include "gb-log.h"
+#include "gb-project-tree-builder.h"
 #include "gb-tree.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
@@ -47,8 +48,11 @@ struct _GbEditorWorkspacePrivate
   GtkPaned           *paned;
   gchar              *current_folder_uri;
 
-  GbDocumentGrid     *document_grid;
-  GtkSizeGroup       *title_size_group;
+  /* References not owned by this instance */
+  GbDocumentGrid       *document_grid;
+  GbProjectTreeBuilder *project_tree_builder;
+  GbTree               *tree;
+  GtkSizeGroup         *title_size_group;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorWorkspace, gb_editor_workspace,
@@ -346,6 +350,28 @@ gb_editor_workspace_grab_focus (GtkWidget *widget)
 }
 
 static void
+gb_editor_workspace_context_set (GbEditorWorkspace *workspace,
+                                 GParamSpec        *pspec,
+                                 GbWorkbench       *workbench)
+{
+  GbEditorWorkspacePrivate *priv;
+  GbTreeNode *root;
+  IdeContext *context;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  priv = workspace->priv;
+
+  context = gb_workbench_get_context (workbench);
+
+  root = gb_tree_get_root (priv->tree);
+  gb_tree_node_set_item (root, G_OBJECT (context));
+
+  gb_project_tree_builder_set_context (priv->project_tree_builder, context);
+}
+
+static void
 gb_editor_workspace_map (GtkWidget *widget)
 {
   GbEditorWorkspacePrivate *priv;
@@ -362,6 +388,26 @@ gb_editor_workspace_map (GtkWidget *widget)
   workbench = gb_widget_get_workbench (GTK_WIDGET (workspace));
   document_manager = gb_workbench_get_document_manager (workbench);
   gb_document_grid_set_document_manager (priv->document_grid, document_manager);
+
+  g_signal_connect_object (workbench,
+                           "notify::context",
+                           G_CALLBACK (gb_editor_workspace_context_set),
+                           widget,
+                           G_CONNECT_SWAPPED);
+
+  gb_editor_workspace_context_set (workspace, NULL, workbench);
+}
+
+static void
+gb_editor_workspace_constructed (GObject *object)
+{
+  GbEditorWorkspacePrivate *priv = GB_EDITOR_WORKSPACE (object)->priv;
+
+  G_OBJECT_CLASS (gb_editor_workspace_parent_class)->constructed (object);
+
+  priv->project_tree_builder = gb_project_tree_builder_new (NULL);
+  gb_tree_add_builder (priv->tree, GB_TREE_BUILDER (priv->project_tree_builder));
+  gb_tree_set_root (priv->tree, gb_tree_node_new ());
 }
 
 static void
@@ -381,14 +427,17 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = gb_editor_workspace_constructed;
   object_class->finalize = gb_editor_workspace_finalize;
 
   widget_class->grab_focus = gb_editor_workspace_grab_focus;
   widget_class->map = gb_editor_workspace_map;
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-workspace.ui");
-  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, paned);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, document_grid);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, paned);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, title_size_group);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, tree);
 
   g_type_ensure (GB_TYPE_DOCUMENT_GRID);
   g_type_ensure (GB_TYPE_TREE);
