@@ -51,6 +51,7 @@ struct _GbEditorWorkspacePrivate
   /* References not owned by this instance */
   GbDocumentGrid       *document_grid;
   GbProjectTreeBuilder *project_tree_builder;
+  GtkBox               *sidebar;
   GbTree               *tree;
   GtkSizeGroup         *title_size_group;
 };
@@ -261,6 +262,20 @@ gb_editor_workspace_action_new_document (GSimpleAction *action,
 }
 
 static void
+gb_editor_workspace_action_toggle_sidebar (GSimpleAction *action,
+                                           GVariant      *parameter,
+                                           gpointer       user_data)
+{
+  GbEditorWorkspace *workspace = user_data;
+  GtkWidget *sidebar;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (workspace));
+
+  sidebar = GTK_WIDGET (workspace->priv->sidebar);
+  gtk_widget_set_visible (sidebar, !gtk_widget_get_visible (sidebar));
+}
+
+static void
 gb_editor_workspace_action_open (GSimpleAction *action,
                                  GVariant      *parameter,
                                  gpointer       user_data)
@@ -436,6 +451,7 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-workspace.ui");
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, document_grid);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, paned);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, sidebar);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, title_size_group);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, tree);
 
@@ -447,10 +463,11 @@ static void
 gb_editor_workspace_init (GbEditorWorkspace *workspace)
 {
   const GActionEntry entries[] = {
-    { "open",          gb_editor_workspace_action_open },
-    { "new-document",  gb_editor_workspace_action_new_document },
-    { "jump-to-doc",   gb_editor_workspace_action_jump_to_doc,   "s" },
-    { "open-uri-list", gb_editor_workspace_action_open_uri_list, "as" }
+    { "toggle-sidebar", gb_editor_workspace_action_toggle_sidebar },
+    { "open",           gb_editor_workspace_action_open },
+    { "new-document",   gb_editor_workspace_action_new_document },
+    { "jump-to-doc",    gb_editor_workspace_action_jump_to_doc,   "s" },
+    { "open-uri-list",  gb_editor_workspace_action_open_uri_list, "as" }
   };
   GSimpleActionGroup *actions;
 
