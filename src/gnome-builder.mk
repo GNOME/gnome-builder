@@ -191,6 +191,8 @@ libgnome_builder_la_SOURCES = \
 	src/tree/gb-tree-builder.h \
 	src/tree/gb-tree-node.c \
 	src/tree/gb-tree-node.h \
+	src/tree/gb-project-tree-builder.c \
+	src/tree/gb-project-tree-builder.h \
 	src/tree/gb-tree.c \
 	src/tree/gb-tree.h \
 	src/trie/trie.c \
@@ -222,6 +224,7 @@ libgnome_builder_la_SOURCES = \
 
 libgnome_builder_la_LIBADD = \
 	$(BUILDER_LIBS) \
+	libide.la \
 	-lm
 
 libgnome_builder_la_CFLAGS = \
@@ -229,7 +232,9 @@ libgnome_builder_la_CFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\" \
 	$(BUILDER_CFLAGS) \
 	$(MAINTAINER_CFLAGS) \
+	-I$(top_builddir)/src/resources \
 	-I$(top_builddir)/src/util \
+	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/src/animation \
 	-I$(top_srcdir)/src/app \
 	-I$(top_srcdir)/src/auto-indent \
@@ -253,7 +258,6 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/navigation \
 	-I$(top_srcdir)/src/preferences \
 	-I$(top_srcdir)/src/resources \
-	-I$(top_builddir)/src/resources \
 	-I$(top_srcdir)/src/scrolledwindow \
 	-I$(top_srcdir)/src/search \
 	-I$(top_srcdir)/src/snippets \
@@ -271,7 +275,10 @@ endif
 
 gnome_builder_SOURCES = src/main.c
 gnome_builder_CFLAGS = $(libgnome_builder_la_CFLAGS)
-gnome_builder_LDADD = libgnome-builder.la
+gnome_builder_LDADD = \
+	libide.la \
+	libgnome-builder.la \
+	$(NULL)
 
 # XXX: Workaround for now, need to find a more automated way to do this
 # in how we build projects inside of Builder.
