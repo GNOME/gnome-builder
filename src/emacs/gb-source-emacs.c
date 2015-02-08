@@ -99,6 +99,51 @@ gb_source_emacs_cmd_open_file  (GbSourceEmacs           *emacs,
   return;
 }
 
+static void
+gb_source_emacs_cmd_undo (GbSourceEmacs           *emacs,
+                          GRegex                  *matcher,
+                          GbSourceEmacsCommandFlags flags)
+{
+  GtkSourceUndoManager *undo;
+  GtkTextBuffer *buffer;
+
+  g_assert (GB_IS_SOURCE_EMACS (emacs));
+
+  /*
+   * We only support GtkSourceView for now.
+   */
+  buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  undo = gtk_source_buffer_get_undo_manager (GTK_SOURCE_BUFFER (buffer));
+  if (gtk_source_undo_manager_can_undo (undo))
+    gtk_source_undo_manager_undo (undo);
+}
+
+static void
+gb_source_emacs_cmd_redo (GbSourceEmacs           *emacs,
+                          GRegex                  *matcher,
+                          GbSourceEmacsCommandFlags flags)
+{
+  GtkSourceUndoManager *undo;
+  GtkTextBuffer *buffer;
+
+  g_assert (GB_IS_SOURCE_EMACS (emacs));
+
+  /*
+   * We only support GtkSourceView for now.
+   */
+  buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  undo = gtk_source_buffer_get_undo_manager (GTK_SOURCE_BUFFER (buffer));
+  if (gtk_source_undo_manager_can_redo (undo))
+    gtk_source_undo_manager_redo (undo);
+}
+
+
 static gboolean
 gb_source_emacs_eval_cmd (GbSourceEmacs *emacs)
 {
@@ -147,13 +192,28 @@ gb_source_emacs_key_press_event_cb (GtkTextView *text_view,
   g_return_val_if_fail (event, FALSE);
   g_return_val_if_fail (GB_IS_SOURCE_EMACS (emacs), FALSE);
 
-  if ((event->keyval >= 0x041 && event->keyval <= 0x05a) || (event->keyval >= 0x061 && event->keyval <= 0x07a))
+  if ((event->keyval >= GDK_KEY_A && event->keyval <= GDK_KEY_Z) ||
+      (event->keyval >= GDK_KEY_a && event->keyval <= GDK_KEY_z) ||
+      (event->keyval == GDK_KEY_underscore)
+     )
     {
       if (event->state == (GDK_CONTROL_MASK | GDK_MOD1_MASK))
         {
           if (priv->cmd->len != 0 )
             g_string_append_printf(priv->cmd, " ");
           g_string_append_printf(priv->cmd, "C-M-%s", gdk_keyval_name(event->keyval));
+          eval_cmd = TRUE;
+        }
+      else if (event->state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))
+        {
+          if (priv->cmd->len != 0 )
+            g_string_append_printf(priv->cmd, " ");
+
+          if (g_strcmp0(gdk_keyval_name(event->keyval), "underscore") == 0)
+            g_string_append_printf(priv->cmd, "C-_");
+          else
+            g_string_append_printf(priv->cmd, "C-%s", gdk_keyval_name(event->keyval));
+
           eval_cmd = TRUE;
         }
       else if ((event->state & GDK_CONTROL_MASK) != 0)
@@ -169,6 +229,16 @@ gb_source_emacs_key_press_event_cb (GtkTextView *text_view,
             g_string_append_printf(priv->cmd, " ");
           g_string_append_printf(priv->cmd, "M-%s", gdk_keyval_name(event->keyval));
           eval_cmd = TRUE;
+        }
+      else 
+        {
+          if (g_str_has_prefix(priv->cmd->str, "C-x") == TRUE) 
+            {
+              if (priv->cmd->len != 0 )
+                g_string_append_printf(priv->cmd, " ");
+              g_string_append_printf(priv->cmd, "%s", gdk_keyval_name(event->keyval));
+              eval_cmd = TRUE;
+            }
         }
     }
 
@@ -263,7 +333,6 @@ gb_source_emacs_set_enabled (GbSourceEmacs *emacs,
 
   if (enabled)
     {
-
       gb_source_emacs_connect (emacs);
       priv->enabled = TRUE;
     }
@@ -441,6 +510,14 @@ gb_source_emacs_class_init (GbSourceEmacsClass *klass)
                                           g_regex_new("^C-x C-s$", 0, 0, NULL),
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
                                           gb_source_emacs_cmd_open_file);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^C-_$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_undo);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^C-x u$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_redo);
 }
 
 static void
