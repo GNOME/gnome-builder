@@ -25,7 +25,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <libgit2-glib/ggit.h>
+#include <ide.h>
 #include <locale.h>
 
 #include "gb-application.h"
@@ -47,8 +47,9 @@ main (int   argc,
   g_set_prgname (PACKAGE_TARNAME);
   g_set_application_name (_("Builder"));
 
+  ide_set_program_name ("gnome-builder");
+
   gb_log_init (TRUE, NULL);
-  ggit_init ();
 
   g_message ("Initializing with Gtk+ version %d.%d.%d.",
              gtk_get_major_version (),
