@@ -30,6 +30,9 @@ typedef struct
   GKeyFile  *config;
   IdeDevice *device;
   GFile     *directory;
+  gchar     *make_target;
+  guint      require_autogen : 1;
+  guint      require_configure : 1;
   guint      executed : 1;
 } IdeAutotoolsBuildTaskPrivate;
 
@@ -38,7 +41,10 @@ typedef struct
   gchar  *directory_path;
   gchar  *project_path;
   gchar  *system_type;
+  gchar  *make_target;
   gchar **configure_argv;
+  guint   require_autogen : 1;
+  guint   require_configure : 1;
 } WorkerState;
 
 typedef gboolean (*WorkStep) (GTask                 *task,
@@ -54,6 +60,9 @@ enum {
   PROP_CONFIG,
   PROP_DEVICE,
   PROP_DIRECTORY,
+  PROP_MAKE_TARGET,
+  PROP_REQUIRE_AUTOGEN,
+  PROP_REQUIRE_CONFIGURE,
   LAST_PROP
 };
 
@@ -87,6 +96,85 @@ static WorkStep gWorkSteps [] = {
   step_make_all,
   NULL
 };
+
+const gchar *
+ide_autotools_build_task_get_make_target (IdeAutotoolsBuildTask *task)
+{
+  IdeAutotoolsBuildTaskPrivate *priv;
+
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (task), NULL);
+
+  priv = ide_autotools_build_task_get_instance_private (task);
+
+  return priv->make_target;
+}
+
+static void
+ide_autotools_build_task_set_make_target (IdeAutotoolsBuildTask *task,
+                                          const gchar           *make_target)
+{
+  IdeAutotoolsBuildTaskPrivate *priv;
+
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (task));
+
+  priv = ide_autotools_build_task_get_instance_private (task);
+
+  if (priv->make_target != make_target)
+    {
+      g_free (priv->make_target);
+      priv->make_target = g_strdup (make_target);
+    }
+}
+
+gboolean
+ide_autotools_build_task_get_require_autogen (IdeAutotoolsBuildTask *task)
+{
+  IdeAutotoolsBuildTaskPrivate *priv;
+
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (task), FALSE);
+
+  priv = ide_autotools_build_task_get_instance_private (task);
+
+  return priv->require_autogen;
+}
+
+static void
+ide_autotools_build_task_set_require_autogen (IdeAutotoolsBuildTask *task,
+                                              gboolean               require_autogen)
+{
+  IdeAutotoolsBuildTaskPrivate *priv;
+
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (task));
+
+  priv = ide_autotools_build_task_get_instance_private (task);
+
+  priv->require_autogen = !!require_autogen;
+}
+
+gboolean
+ide_autotools_build_task_get_require_configure (IdeAutotoolsBuildTask *task)
+{
+  IdeAutotoolsBuildTaskPrivate *priv;
+
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (task), FALSE);
+
+  priv = ide_autotools_build_task_get_instance_private (task);
+
+  return priv->require_configure;
+}
+
+static void
+ide_autotools_build_task_set_require_configure (IdeAutotoolsBuildTask *task,
+                                                gboolean               require_configure)
+{
+  IdeAutotoolsBuildTaskPrivate *priv;
+
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (task));
+
+  priv = ide_autotools_build_task_get_instance_private (task);
+
+  priv->require_autogen = !!require_configure;
+}
 
 /**
  * ide_autotools_build_task_get_config:
@@ -255,6 +343,21 @@ ide_autotools_build_task_get_property (GObject    *object,
                           ide_autotools_build_task_get_directory (self));
       break;
 
+    case PROP_MAKE_TARGET:
+      g_value_set_string (value,
+                          ide_autotools_build_task_get_make_target (self));
+      break;
+
+    case PROP_REQUIRE_AUTOGEN:
+      g_value_set_boolean (value,
+                           ide_autotools_build_task_get_require_autogen (self));
+      break;
+
+    case PROP_REQUIRE_CONFIGURE:
+      g_value_set_boolean (value,
+                           ide_autotools_build_task_get_require_configure (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -283,6 +386,21 @@ ide_autotools_build_task_set_property (GObject      *object,
     case PROP_DIRECTORY:
       ide_autotools_build_task_set_directory (self,
                                               g_value_get_object (value));
+      break;
+
+    case PROP_MAKE_TARGET:
+      ide_autotools_build_task_set_make_target (self,
+                                                g_value_get_string (value));
+      break;
+
+    case PROP_REQUIRE_AUTOGEN:
+      ide_autotools_build_task_set_require_autogen (self,
+                                                    g_value_get_boolean (value));
+      break;
+
+    case PROP_REQUIRE_CONFIGURE:
+      ide_autotools_build_task_set_require_configure (self,
+                                                      g_value_get_boolean (value));
       break;
 
     default:
@@ -331,6 +449,39 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_DIRECTORY,
                                    gParamSpecs [PROP_DIRECTORY]);
+
+  gParamSpecs [PROP_MAKE_TARGET] =
+    g_param_spec_string ("make-target",
+                         _("Make Target"),
+                         _("The make target to execute."),
+                         "all",
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_MAKE_TARGET,
+                                   gParamSpecs [PROP_MAKE_TARGET]);
+
+  gParamSpecs [PROP_REQUIRE_AUTOGEN] =
+    g_param_spec_boolean ("require-autogen",
+                          _("Require Autogen"),
+                          _("If autogen.sh should be forced to execute."),
+                          FALSE,
+                          (G_PARAM_READWRITE |
+                           G_PARAM_CONSTRUCT_ONLY |
+                           G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_REQUIRE_AUTOGEN,
+                                   gParamSpecs [PROP_REQUIRE_AUTOGEN]);
+
+  gParamSpecs [PROP_REQUIRE_CONFIGURE] =
+    g_param_spec_boolean ("require-configure",
+                          _("Require Configure"),
+                          _("If configure should be forced to execute."),
+                          FALSE,
+                          (G_PARAM_READWRITE |
+                           G_PARAM_CONSTRUCT_ONLY |
+                           G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_REQUIRE_CONFIGURE,
+                                   gParamSpecs [PROP_REQUIRE_CONFIGURE]);
 }
 
 static void
@@ -451,6 +602,9 @@ worker_state_new (IdeAutotoolsBuildTask *self)
   state->project_path = g_file_get_path (project_dir);
   state->system_type = g_strdup (ide_device_get_system_type (priv->device));
   state->configure_argv = gen_configure_argv (self, state);
+  state->make_target = g_strdup (priv->make_target);
+  state->require_autogen = priv->require_autogen;
+  state->require_configure = priv->require_configure;
 
   return state;
 }
@@ -463,6 +617,7 @@ worker_state_free (void *data)
   g_free (state->directory_path);
   g_free (state->project_path);
   g_free (state->system_type);
+  g_free (state->make_target);
   g_slice_free (WorkerState, state);
 }
 
@@ -568,7 +723,7 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
 
   g_ptr_array_add (argv, NULL);
 
-  ide_build_result_log_stdout (IDE_BUILD_RESULT (self), log->str);
+  ide_build_result_log_stdout (IDE_BUILD_RESULT (self), "%s", log->str);
   ret = g_subprocess_launcher_spawnv (launcher,
                                       (const gchar * const *)argv->pdata,
                                       error);
@@ -631,12 +786,15 @@ step_autogen (GTask                 *task,
   g_assert (state);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  configure_path = g_build_filename (state->project_path,
-                                     "configure",
-                                     NULL);
+  if (!state->require_autogen)
+    {
+      configure_path = g_build_filename (state->project_path,
+                                         "configure",
+                                         NULL);
 
-  if (g_file_test (configure_path, G_FILE_TEST_IS_REGULAR))
-    return TRUE;
+      if (g_file_test (configure_path, G_FILE_TEST_IS_REGULAR))
+        return TRUE;
+    }
 
   autogen_sh_path = g_build_filename (state->project_path,
                                       "autogen.sh",
@@ -710,23 +868,22 @@ step_configure (GTask                 *task,
   g_assert (state);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /*
-   * If we have a Makefile already, we can skip the call to configure.
-   *
-   * TODO: Plumb support for "Full Rebuilds", which include autogen, configure,
-   *       and make.
-   */
-
-  makefile_path = g_build_filename (state->directory_path, "Makefile", NULL);
-  if (g_file_test (makefile_path, G_FILE_TEST_EXISTS))
-    return TRUE;
+  if (!state->require_configure)
+    {
+      /*
+       * Skip configure if we already have a makefile.
+       */
+      makefile_path = g_build_filename (state->directory_path, "Makefile", NULL);
+      if (g_file_test (makefile_path, G_FILE_TEST_EXISTS))
+        return TRUE;
+    }
 
   launcher = g_subprocess_launcher_new ((G_SUBPROCESS_FLAGS_STDERR_PIPE |
                                          G_SUBPROCESS_FLAGS_STDOUT_PIPE));
   g_subprocess_launcher_set_cwd (launcher, state->directory_path);
 
   config_log = g_strjoinv (" ", state->configure_argv);
-  ide_build_result_log_stdout (IDE_BUILD_RESULT (self), config_log);
+  ide_build_result_log_stdout (IDE_BUILD_RESULT (self), "%s", config_log);
 
   process = g_subprocess_launcher_spawnv (
       launcher,
@@ -758,6 +915,7 @@ step_make_all  (GTask                 *task,
 {
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   g_autoptr(GSubprocess) process = NULL;
+  const gchar *target;
   GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
@@ -769,7 +927,9 @@ step_make_all  (GTask                 *task,
                                          G_SUBPROCESS_FLAGS_STDOUT_PIPE));
   g_subprocess_launcher_set_cwd (launcher, state->directory_path);
 
-  process = log_and_spawn (self, launcher, &error, "make", "all", NULL);
+  target = state->make_target ?: "all";
+
+  process = log_and_spawn (self, launcher, &error, "make", target, NULL);
 
   if (!process)
     {
