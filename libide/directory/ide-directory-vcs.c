@@ -24,80 +24,23 @@
 #include "ide-project-files.h"
 #include "tasks/ide-load-directory-task.h"
 
-typedef struct
-{
-  gpointer dummy;
-} IdeDirectoryVcsPrivate;
+/*
+ * TODO: This all needs to be written synchronously on a thread so that we
+ *       cant hit the case of too many open files. Right now, child directories
+ *       are done async, and that can fail.
+ */
 
-enum
-{
-  PROP_0,
-  LAST_PROP
-};
+#define LOAD_MAX_FILES 2000
 
 static void async_initable_iface_init (GAsyncInitableIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeDirectoryVcs, ide_directory_vcs, IDE_TYPE_VCS, 0,
-                        G_ADD_PRIVATE (IdeDirectoryVcs)
                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
                                                async_initable_iface_init))
-
-#if 0
-static GParamSpec *gParamSpecs [LAST_PROP];
-#endif
-
-static void
-ide_directory_vcs_finalize (GObject *object)
-{
-#if 0
-  IdeDirectoryVcs *self = (IdeDirectoryVcs *)object;
-  IdeDirectoryVcsPrivate *priv = ide_directory_vcs_get_instance_private (self);
-#endif
-
-  G_OBJECT_CLASS (ide_directory_vcs_parent_class)->finalize (object);
-}
-
-static void
-ide_directory_vcs_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
-{
-#if 0
-  IdeDirectoryVcs *vcs = IDE_DIRECTORY_VCS (object);
-#endif
-
-  switch (prop_id) {
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-  }
-}
-
-static void
-ide_directory_vcs_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
-{
-#if 0
-  IdeDirectoryVcs *vcs = IDE_DIRECTORY_VCS (object);
-#endif
-
-  switch (prop_id) {
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-  }
-}
 
 static void
 ide_directory_vcs_class_init (IdeDirectoryVcsClass *klass)
 {
-  GObjectClass *object_class;
-
-  object_class = G_OBJECT_CLASS (klass);
-  object_class->finalize = ide_directory_vcs_finalize;
-  object_class->get_property = ide_directory_vcs_get_property;
-  object_class->set_property = ide_directory_vcs_set_property;
 }
 
 static void
@@ -134,12 +77,8 @@ ide_directory_vcs_init_async (GAsyncInitable      *initable,
                         NULL);
   ide_project_item_append (root, files);
 
-  task = ide_load_directory_task_new (self,
-                                      directory,
-                                      files,
-                                      io_priority,
-                                      cancellable,
-                                      callback,
+  task = ide_load_directory_task_new (self, directory, files, LOAD_MAX_FILES,
+                                      io_priority, cancellable, callback,
                                       user_data);
 
   g_object_unref (files);
