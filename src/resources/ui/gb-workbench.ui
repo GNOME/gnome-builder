@@ -148,24 +148,6 @@
             <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <child>
-              <object class="GtkStackSwitcher" id="switcher">
-                <property name="visible">False</property>
-                <property name="stack">stack</property>
-                <property name="orientation">vertical</property>
-                <property name="border_width">4</property>
-                <property name="spacing">4</property>
-                <style>
-                  <class name="gb-workspace-switcher"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSeparator" id="sidebar_separator">
-                <property name="visible">False</property>
-                <property name="orientation">vertical</property>
-              </object>
-            </child>
-            <child>
               <object class="GtkPaned" id="main_paned">
                 <property name="visible">True</property>
                 <property name="orientation">horizontal</property>
