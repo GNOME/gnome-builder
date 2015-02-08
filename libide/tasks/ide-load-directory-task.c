@@ -22,7 +22,7 @@
 #include "ide-project-item.h"
 #include "ide-project-file.h"
 
-#define NUM_FILES_DEFAULT 1000
+#define NUM_FILES_DEFAULT 100
 
 typedef struct
 {
@@ -30,6 +30,8 @@ typedef struct
   guint       failed : 1;
   GTask      *task;
   GHashTable *project_items;
+  gsize       file_count;
+  gsize       max_files;
 } TaskState;
 
 static void enumerate_children_cb (GObject      *object,
@@ -49,6 +51,7 @@ task_state_unref (TaskState *state)
 
   if (--state->ref_count == 0)
     {
+      g_print ("Failed: %d\n", state->failed);
       if (state->failed)
         g_task_return_new_error (state->task,
                                  G_IO_ERROR,
@@ -74,7 +77,8 @@ task_state_ref (TaskState *state)
 static gboolean
 should_ignore_file (const gchar *name)
 {
-  g_return_val_if_fail (name, FALSE);
+  if (!name || !*name || (*name == '.'))
+    return TRUE;
 
   if (g_str_equal (name, ".git"))
     return TRUE;
@@ -102,7 +106,7 @@ next_files_cb (GObject      *object,
   TaskState *state = user_data;
   GError *error = NULL;
   GFile *directory;
-  GList *list;
+  GList *list = NULL;
   GList *iter;
 
   g_return_if_fail (G_IS_FILE_ENUMERATOR (enumerator));
@@ -116,6 +120,7 @@ next_files_cb (GObject      *object,
 
   if (error)
     {
+      g_warning ("%s\n", error->message);
       state->failed = TRUE;
       goto cleanup;
     }
@@ -136,10 +141,17 @@ next_files_cb (GObject      *object,
           (file_type != G_FILE_TYPE_REGULAR))
         continue;
 
-      name = g_file_info_get_display_name (file_info);
+      state->file_count++;
 
+      name = g_file_info_get_name (file_info);
+      g_print ("name: %s\n", name);
       if (should_ignore_file (name))
         continue;
+
+      name = g_file_info_get_display_name (file_info);
+
+      if (state->file_count >= state->max_files)
+        goto cleanup;
 
       item = g_object_new (IDE_TYPE_PROJECT_FILE,
                            "context", context,
@@ -157,6 +169,7 @@ next_files_cb (GObject      *object,
                                g_object_ref (item));
           g_file_enumerate_children_async (file,
                                            (G_FILE_ATTRIBUTE_STANDARD_TYPE","
+                                            G_FILE_ATTRIBUTE_STANDARD_NAME","
                                             G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME),
                                            G_FILE_QUERY_INFO_NONE,
                                            G_PRIORITY_DEFAULT,
@@ -192,6 +205,7 @@ enumerate_children_cb (GObject      *object,
 
   if (!enumerator)
     {
+      g_warning ("%s\n", error->message);
       state->failed = TRUE;
       goto cleanup;
     }
@@ -226,6 +240,7 @@ query_info_cb (GObject      *object,
 
   if (!file_info)
     {
+      g_warning ("%s\n", error->message);
       state->failed = TRUE;
       goto cleanup;
     }
@@ -234,6 +249,7 @@ query_info_cb (GObject      *object,
 
   if (file_type != G_FILE_TYPE_DIRECTORY)
     {
+      g_warning (_("Not a directory"));
       state->failed = TRUE;
       goto cleanup;
     }
@@ -256,6 +272,7 @@ GTask *
 ide_load_directory_task_new (gpointer             source_object,
                              GFile               *directory,
                              IdeProjectItem      *parent,
+                             gsize                max_files,
                              int                  io_priority,
                              GCancellable        *cancellable,
                              GAsyncReadyCallback  callback,
@@ -270,6 +287,8 @@ ide_load_directory_task_new (gpointer             source_object,
 
   state = g_slice_new0 (TaskState);
   state->ref_count = 1;
+  state->max_files = max_files;
+  state->file_count = 0;
   state->task = g_task_new (source_object, cancellable, callback, user_data);
   state->project_items = g_hash_table_new_full (g_direct_hash,
                                                 g_direct_equal,

@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 GTask *ide_load_directory_task_new (gpointer             source_object,
                                     GFile               *directory,
                                     IdeProjectItem      *parent,
+                                    gsize                max_files,
                                     int                  io_priority,
                                     GCancellable        *cancellable,
                                     GAsyncReadyCallback  callback,
