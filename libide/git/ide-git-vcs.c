@@ -118,6 +118,7 @@ ide_git_vcs_reload_index_add_path (IdeGitVcs   *self,
   IdeProjectItem *item;
   IdeContext *context;
   GFileInfo *file_info = NULL;
+  GFile *file = NULL;
   gchar *dir;
   gchar *name;
 
@@ -149,19 +150,24 @@ ide_git_vcs_reload_index_add_path (IdeGitVcs   *self,
    *       index such as symbolic link, etc.
    */
   if (is_directory)
-    {
-      g_file_info_set_file_type (file_info, G_FILE_TYPE_DIRECTORY);
-    }
+    g_file_info_set_file_type (file_info, G_FILE_TYPE_DIRECTORY);
+
+  /*
+   * TODO: Take into account ggitrepository directory.
+   */
+  file = g_file_new_for_path (path);
 
   item = g_object_new (IDE_TYPE_PROJECT_FILE,
                        "context", context,
-                       "parent", parent,
+                       "file", file,
                        "file-info", file_info,
+                       "parent", parent,
                        NULL);
   ide_project_item_append (parent, item);
 
   g_hash_table_insert (cache, g_strdup (path), g_object_ref (item));
 
+  g_clear_object (&file);
   g_clear_object (&file_info);
   g_clear_object (&item);
   g_clear_pointer (&dir, g_free);
