@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-01-25 19:03+0000\n"
-"PO-Revision-Date: 2015-01-25 23:34+0200\n"
+"POT-Creation-Date: 2015-02-05 21:29+0000\n"
+"PO-Revision-Date: 2015-02-08 21:04+0200\n"
 "Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.7.3\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: ../src/animation/gb-animation.c:681
 #, c-format
 msgid "Cannot locate property %s in class %s"
-msgstr ""
+msgstr "%s özelliği, %s sınıfında bulunamıyor"
 
 #: ../src/animation/gb-animation.c:817 ../src/credits/gb-credits-widget.c:275
 msgid "Duration"
@@ -60,35 +60,35 @@ msgstr "Animasyon hedefi"
 #: ../src/animation/gb-animation.c:1027 ../src/animation/gb-animation.c:1033
 #, c-format
 msgid "Failed to find property %s in %s"
-msgstr ""
+msgstr "%s özelliği, %s içinde bulunamadı"
 
 #: ../src/animation/gb-animation.c:1041
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
-msgstr ""
+msgstr "%s özelliği, %s içinde ya da %s ebeveyninde bulunamadı"
 
 #: ../src/animation/gb-animation.c:1051
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
-msgstr ""
+msgstr "va_list değeri alınamadı: %s"
 
 #: ../src/app/gb-application.c:296
 msgid "Failed to load keybindings."
-msgstr ""
+msgstr "Tuş kısayolları yüklenemedi."
 
 #: ../src/app/gb-application.c:304
 #, c-format
 msgid "Failed to load keybindings: %s"
-msgstr ""
+msgstr "Tuş kısayolları yüklenemedi: %s"
 
 #: ../src/app/gb-application.c:316
 #, c-format
 msgid "Failed to load local keybindings: %s"
-msgstr ""
+msgstr "Yerel tuş kısayolları yüklenemedi: %s"
 
 #: ../src/app/gb-application.c:384 ../src/main.c:48
 msgid "Builder"
-msgstr ""
+msgstr "Builder"
 
 #: ../src/app/gb-application.c:539
 #, c-format
@@ -96,19 +96,21 @@ msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
 "an attachment on your bug report or support request."
 msgstr ""
+"Destek günlük kaydı dosyası '%s'e yazıldı. Lütfen hata kaydınıza ya da "
+"destek talebinize bu dosyayı ekleyin."
 
 #: ../src/auto-indent/gb-source-auto-indenter-c.c:1467
 #: ../src/auto-indent/gb-source-auto-indenter-c.c:1468
 msgid "Name"
-msgstr ""
+msgstr "İsim"
 
 #: ../src/code-assistant/gb-source-code-assistant.c:764
 msgid "Active"
-msgstr ""
+msgstr "Aktif"
 
 #: ../src/code-assistant/gb-source-code-assistant.c:765
 msgid "If code assistance is currently processing."
-msgstr ""
+msgstr "Kod yardımı şu anda işlem yapıyor mu."
 
 #: ../src/code-assistant/gb-source-code-assistant.c:773
 #: ../src/editor/gb-source-change-monitor.c:867
@@ -118,7 +120,7 @@ msgstr "Tampon"
 
 #: ../src/code-assistant/gb-source-code-assistant.c:774
 msgid "The buffer "
-msgstr ""
+msgstr "Tampon"
 
 #: ../src/code-assistant/gb-source-code-assistant.c:813
 #, c-format
@@ -194,7 +196,7 @@ msgid "The priority of the command provider."
 msgstr ""
 
 #: ../src/commands/gb-command-provider.c:356
-#: ../src/git/gb-git-search-provider.c:526
+#: ../src/git/gb-git-search-provider.c:523
 #: ../src/navigation/gb-navigation-list.c:299
 msgid "Workbench"
 msgstr ""
@@ -275,15 +277,15 @@ msgstr "Belgelendirme"
 
 #: ../src/devhelp/gb-devhelp-document.c:257
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: ../src/devhelp/gb-devhelp-document.c:258
 msgid "The uri to load."
-msgstr ""
+msgstr "Yüklenecek kaynak tanımlayıcı (URI)."
 
 #: ../src/devhelp/gb-devhelp-view.c:175
 #: ../src/documents/gb-document-view.c:203
-#: ../src/editor/gb-editor-frame.c:1597 ../src/editor/gb-editor-view.c:1071
+#: ../src/editor/gb-editor-frame.c:1651 ../src/editor/gb-editor-view.c:1080
 #: ../src/html/gb-html-view.c:264
 msgid "Document"
 msgstr "Belge"
@@ -298,20 +300,20 @@ msgstr "Soru"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:318
 msgid "Close _without Saving"
-msgstr ""
+msgstr "Ka_ydetmeden Kapat"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:319
 #: ../src/resources/ui/gb-editor-view.ui.h:2
 msgid "_Cancel"
-msgstr ""
+msgstr "_Vazgeç"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:337
 msgid "_Save As…"
-msgstr ""
+msgstr "Farklı _Kaydet…"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:337
 msgid "_Save"
-msgstr ""
+msgstr "_Kaydet"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:354
 #, c-format
@@ -417,7 +419,7 @@ msgstr ""
 
 #: ../src/documents/gb-document.c:188
 msgid "Modified"
-msgstr ""
+msgstr "Değiştirildi"
 
 #: ../src/documents/gb-document.c:189
 msgid "If the document has been modified from disk."
@@ -427,25 +429,25 @@ msgstr ""
 #: ../src/preferences/gb-preferences-page.c:214
 #: ../src/search/gb-search-result.c:241 ../src/workbench/gb-workspace.c:151
 msgid "Title"
-msgstr ""
+msgstr "Başlık"
 
 #: ../src/documents/gb-document.c:197
 msgid "The title of the document."
-msgstr ""
+msgstr "Belge başlığı."
 
 #: ../src/documents/gb-document.c:204
 msgid "Read Only"
-msgstr ""
+msgstr "Salt Okunur"
 
 #: ../src/documents/gb-document.c:205
 msgid "If the document is read only."
-msgstr ""
+msgstr "Belge salt okunur mu."
 
 #: ../src/documents/gb-document-grid.c:840
 #: ../src/documents/gb-document-menu-button.c:667
 #: ../src/documents/gb-document-stack.c:881
 msgid "Document Manager"
-msgstr ""
+msgstr "Belge Yöneticisi"
 
 #: ../src/documents/gb-document-grid.c:841
 msgid "The document manager for the document grid."
@@ -453,11 +455,11 @@ msgstr ""
 
 #: ../src/documents/gb-document-manager.c:300
 msgid "Count"
-msgstr ""
+msgstr "Sayı"
 
 #: ../src/documents/gb-document-manager.c:301
 msgid "The number of documents in the manager."
-msgstr ""
+msgstr "Yöneticideki belge sayısı."
 
 #: ../src/documents/gb-document-menu-button.c:668
 msgid "The document manager for the button."
@@ -507,24 +509,24 @@ msgstr ""
 
 #: ../src/editor/gb-editor-document.c:791
 msgid "Save Document As"
-msgstr ""
+msgstr "Belgeyi Farklı Kaydet"
 
 #: ../src/editor/gb-editor-document.c:798
 #: ../src/editor/gb-editor-workspace.c:287
 msgid "Cancel"
-msgstr ""
+msgstr "Vazgeç"
 
 #: ../src/editor/gb-editor-document.c:799 ../src/resources/gtk/menus.ui.h:17
 msgid "Save"
-msgstr ""
+msgstr "Kaydet"
 
 #: ../src/editor/gb-editor-document.c:913
 msgid "No file was selected."
-msgstr ""
+msgstr "Hiçbir dosya seçilmedi."
 
 #: ../src/editor/gb-editor-document.c:1039
 msgid "No file was selected for saving."
-msgstr ""
+msgstr "Kaydetmek için hiçbir dosya seçilmedi."
 
 #: ../src/editor/gb-editor-document.c:1440
 #: ../src/editor/gb-source-change-gutter-renderer.c:198
@@ -584,7 +586,7 @@ msgstr ""
 
 #: ../src/editor/gb-editor-file-mark.c:202
 msgid "Column"
-msgstr ""
+msgstr "Sütun"
 
 #: ../src/editor/gb-editor-file-mark.c:203
 msgid "The column within the line."
@@ -597,24 +599,32 @@ msgstr ""
 #: ../src/editor/gb-editor-file-mark.c:224
 #: ../src/editor/gb-editor-navigation-item.c:228
 msgid "Line"
-msgstr ""
+msgstr "Satır"
 
 #: ../src/editor/gb-editor-file-mark.c:225
 msgid "The line within the file."
 msgstr ""
 
-#: ../src/editor/gb-editor-frame.c:317
+#: ../src/editor/gb-editor-frame.c:320
 #, c-format
 msgid "%u of %u"
 msgstr ""
 
-#: ../src/editor/gb-editor-frame.c:458
+#: ../src/editor/gb-editor-frame.c:461
 #, c-format
 msgid "Line %u, Column %u"
 msgstr ""
 
-#: ../src/editor/gb-editor-frame.c:1598
+#: ../src/editor/gb-editor-frame.c:1652
 msgid "The document for the editor."
+msgstr ""
+
+#: ../src/editor/gb-editor-frame.c:1660
+msgid "Search Direction"
+msgstr ""
+
+#: ../src/editor/gb-editor-frame.c:1661
+msgid "The direction of the last text searched for."
 msgstr ""
 
 #: ../src/editor/gb-editor-navigation-item.c:218
@@ -637,7 +647,7 @@ msgstr ""
 #: ../src/editor/gb-source-formatter.c:337
 #: ../src/snippets/gb-source-snippet.c:1059
 msgid "Language"
-msgstr ""
+msgstr "Dil"
 
 #: ../src/editor/gb-editor-settings-widget.c:183
 msgid "The language to change the settings for."
@@ -650,75 +660,75 @@ msgstr ""
 
 #: ../src/editor/gb-editor-view.c:509
 msgid "Plain Text"
-msgstr ""
+msgstr "Düz Metin"
 
-#: ../src/editor/gb-editor-view.c:1062
+#: ../src/editor/gb-editor-view.c:1071
 msgid "Auto Indent"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1063
+#: ../src/editor/gb-editor-view.c:1072
 msgid "If we should use the auto-indentation engine."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1072
+#: ../src/editor/gb-editor-view.c:1081
 msgid "The document edited by the view."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1080
+#: ../src/editor/gb-editor-view.c:1089
 msgid "Highlight Current Line"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1081
+#: ../src/editor/gb-editor-view.c:1090
 msgid "If the current line should be highlighted."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1089
+#: ../src/editor/gb-editor-view.c:1098
 msgid "Show Line Numbers"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1090
+#: ../src/editor/gb-editor-view.c:1099
 msgid "If the line numbers should be shown."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1098
+#: ../src/editor/gb-editor-view.c:1107
 msgid "Show Right Margin"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1099
+#: ../src/editor/gb-editor-view.c:1108
 msgid "If we should show the right margin."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1107
+#: ../src/editor/gb-editor-view.c:1116
 msgid "Split Enabled"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1108
+#: ../src/editor/gb-editor-view.c:1117
 msgid "If the view split is enabled."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1116
+#: ../src/editor/gb-editor-view.c:1125
 msgid "Tab Width"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1117
+#: ../src/editor/gb-editor-view.c:1126
 msgid "The width a tab should be drawn as."
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1127
+#: ../src/editor/gb-editor-view.c:1136
 msgid "Use Spaces"
 msgstr ""
 
-#: ../src/editor/gb-editor-view.c:1128
+#: ../src/editor/gb-editor-view.c:1137
 msgid "If spaces should be used instead of tabs."
 msgstr ""
 
 #: ../src/editor/gb-editor-workspace.c:279
 msgid "Open Document"
-msgstr ""
+msgstr "Belge Aç"
 
 #: ../src/editor/gb-editor-workspace.c:288
 msgid "Open"
-msgstr ""
+msgstr "Aç"
 
 #: ../src/editor/gb-source-change-gutter-renderer.c:199
 msgid "The change monitor for the gutter renderer."
@@ -778,59 +788,67 @@ msgstr ""
 #: ../src/editor/gb-source-search-highlighter.c:338
 #: ../src/editor/gb-source-search-highlighter.c:339
 msgid "Search Context"
-msgstr ""
+msgstr "Arama Bağlamı"
 
 #: ../src/editor/gb-source-search-highlighter.c:347
 #: ../src/editor/gb-source-search-highlighter.c:348
 msgid "Search Settings"
-msgstr ""
+msgstr "Arama Ayarları"
 
-#: ../src/editor/gb-source-view.c:2279 ../src/editor/gb-source-view.c:2280
+#: ../src/editor/gb-source-view.c:2215 ../src/editor/gb-source-view.c:2216
 msgid "Enable Word Completion"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2288
+#: ../src/editor/gb-source-view.c:2224
 msgid "Font Name"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2289
+#: ../src/editor/gb-source-view.c:2225
 msgid "The font name to apply to the widget."
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2297
+#: ../src/editor/gb-source-view.c:2233
 msgid "Insert Matching Brace"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2298
+#: ../src/editor/gb-source-view.c:2234
 msgid "If we should insert matching braces."
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2306
+#: ../src/editor/gb-source-view.c:2242
 msgid "Overwrite Braces"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2307
+#: ../src/editor/gb-source-view.c:2243
 msgid "If we should overwrite braces, brackets, parenthesis and quotes."
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2316
+#: ../src/editor/gb-source-view.c:2252
 msgid "Show Shadow"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2317
+#: ../src/editor/gb-source-view.c:2253
 msgid "Show the search shadow"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2325 ../src/editor/gb-source-view.c:2326
+#: ../src/editor/gb-source-view.c:2261 ../src/editor/gb-source-view.c:2262
 msgid "Search Highlighter"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2334
+#: ../src/editor/gb-source-view.c:2270
 msgid "Smart Home End"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2335
+#: ../src/editor/gb-source-view.c:2271
 msgid "Enable smart home end in gtksourceview."
+msgstr ""
+
+#: ../src/editor/gb-source-view.c:2279
+msgid "Show Grid Lines"
+msgstr ""
+
+#: ../src/editor/gb-source-view.c:2280
+msgid "Whether to show the grid lines."
 msgstr ""
 
 #: ../src/gd/gd-tagged-entry.c:937
@@ -843,7 +861,7 @@ msgstr ""
 
 #: ../src/gd/gd-tagged-entry.c:1031 ../src/navigation/gb-navigation-item.c:195
 msgid "Label"
-msgstr ""
+msgstr "Etiket"
 
 #: ../src/gd/gd-tagged-entry.c:1032
 msgid "Text to show on the tag."
@@ -859,7 +877,7 @@ msgstr ""
 
 #: ../src/gd/gd-tagged-entry.c:1039
 msgid "Style"
-msgstr ""
+msgstr "Biçem"
 
 #: ../src/gd/gd-tagged-entry.c:1040
 msgid "Style of the tag."
@@ -870,19 +888,19 @@ msgstr ""
 msgid "Stack"
 msgstr ""
 
-#: ../src/git/gb-git-search-provider.c:432
+#: ../src/git/gb-git-search-provider.c:429
 msgid "Switch To"
 msgstr ""
 
-#: ../src/git/gb-git-search-provider.c:515
+#: ../src/git/gb-git-search-provider.c:512
 msgid "Repository"
 msgstr ""
 
-#: ../src/git/gb-git-search-provider.c:516
+#: ../src/git/gb-git-search-provider.c:513
 msgid "The repository to use for search data."
 msgstr ""
 
-#: ../src/git/gb-git-search-provider.c:527
+#: ../src/git/gb-git-search-provider.c:524
 msgid "The workbench window."
 msgstr ""
 
@@ -933,7 +951,7 @@ msgstr ""
 
 #: ../src/navigation/gb-navigation-item.c:204
 msgid "Workspace"
-msgstr ""
+msgstr "Çalışma Alanı"
 
 #: ../src/navigation/gb-navigation-item.c:205
 msgid "The workspace to ensure is focused."
@@ -971,39 +989,43 @@ msgstr ""
 msgid "The title for the preferences page."
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:179
+#: ../src/preferences/gb-preferences-page-editor.c:186
 msgid "restore insert cursor mark"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:184
+#: ../src/preferences/gb-preferences-page-editor.c:191
 msgid "word words auto completion suggest found document"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:189
+#: ../src/preferences/gb-preferences-page-editor.c:196
 msgid "diff renderer gutter changes git vcs"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:194
+#: ../src/preferences/gb-preferences-page-editor.c:201
 msgid "line numbers"
-msgstr ""
+msgstr "satır numaraları"
 
-#: ../src/preferences/gb-preferences-page-editor.c:199
+#: ../src/preferences/gb-preferences-page-editor.c:206
 msgid "line lines highlight current"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:204
+#: ../src/preferences/gb-preferences-page-editor.c:211
 msgid "bracket brackets highlight matching"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:209
+#: ../src/preferences/gb-preferences-page-editor.c:216
 msgid "smart home end"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:214
+#: ../src/preferences/gb-preferences-page-editor.c:221
+msgid "show grid lines"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:226
 msgid "font document editor monospace"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:218
+#: ../src/preferences/gb-preferences-page-editor.c:230
 msgid "source style scheme source tango solarized builder"
 msgstr ""
 
@@ -1025,83 +1047,83 @@ msgstr ""
 
 #: ../src/resources/gtk/menus.ui.h:1
 msgid "_Preferences"
-msgstr ""
+msgstr "_Tercihler"
 
 #: ../src/resources/gtk/menus.ui.h:2
 msgid "Generate Support Log"
-msgstr ""
+msgstr "Destek Kaydı Üret"
 
 #: ../src/resources/gtk/menus.ui.h:3
 msgid "_Help"
-msgstr ""
+msgstr "_Yardım"
 
 #: ../src/resources/gtk/menus.ui.h:4
 msgid "_About"
-msgstr ""
+msgstr "_Hakkında"
 
 #: ../src/resources/gtk/menus.ui.h:5
 msgid "_Quit"
-msgstr ""
+msgstr "_Çıkış"
 
 #: ../src/resources/gtk/menus.ui.h:6 ../src/resources/ui/gb-editor-view.ui.h:1
 msgid "_Reload"
-msgstr ""
+msgstr "Yeniden Y_ükle"
 
 #: ../src/resources/gtk/menus.ui.h:7
 msgid "_Print…"
-msgstr ""
+msgstr "_Yazdır…"
 
 #: ../src/resources/gtk/menus.ui.h:8
 msgid "_Fullscreen"
-msgstr ""
+msgstr "_Tam Ekran"
 
 #: ../src/resources/gtk/menus.ui.h:9
 msgid "_New Document"
-msgstr ""
+msgstr "_Yeni Belge"
 
 #: ../src/resources/gtk/menus.ui.h:10
 msgid "_Open"
-msgstr ""
+msgstr "_Aç"
 
 #: ../src/resources/gtk/menus.ui.h:11
 msgid "Save _All"
-msgstr ""
+msgstr "_Tümünü Kaydet"
 
 #: ../src/resources/gtk/menus.ui.h:12
 msgid "_Close All"
-msgstr ""
+msgstr "Tümünü _Kapat"
 
 #: ../src/resources/gtk/menus.ui.h:13
 msgid "Move Document _Left"
-msgstr ""
+msgstr "Belgeyi So_la Taşı"
 
 #: ../src/resources/gtk/menus.ui.h:14
 msgid "Move Document _Right"
-msgstr ""
+msgstr "Belgeyi _Sağa Taşı"
 
 #: ../src/resources/gtk/menus.ui.h:15
 msgid "Split Document Left"
-msgstr ""
+msgstr "Belgeyi Sola Böl"
 
 #: ../src/resources/gtk/menus.ui.h:16
 msgid "Split Document Right"
-msgstr ""
+msgstr "Belgeyi Sağa Böl"
 
 #: ../src/resources/gtk/menus.ui.h:18
 msgid "Save _As"
-msgstr ""
+msgstr "F_arklı Kaydet"
 
 #: ../src/resources/gtk/menus.ui.h:19
 msgid "_Preview"
-msgstr ""
+msgstr "_Önizleme"
 
 #: ../src/resources/gtk/menus.ui.h:20
 msgid "_Close Document"
-msgstr ""
+msgstr "Belgeyi _Kapat"
 
 #: ../src/resources/ui/gb-credits-widget.ui.h:1
 msgid "Created By:"
-msgstr ""
+msgstr "Oluşturanlar:"
 
 #: ../src/resources/ui/gb-credits-widget.ui.h:2
 msgid ""
@@ -1130,10 +1152,34 @@ msgid ""
 "Trinh Anh Ngoc\n"
 "Yosef Or Boczko"
 msgstr ""
+"Christian Hergert\n"
+"Alexander Larsson\n"
+"Alexandre Franke\n"
+"Carlos Soriano\n"
+"Cosimo Cecchi\n"
+"Dimitris Zenios\n"
+"Fabiano Fidêncio\n"
+"Florian Bäuerle\n"
+"Florian Müllner\n"
+"Hashem Nasarat\n"
+"Hylke Bons\n"
+"Igor Gnatenko\n"
+"Jakub Steiner\n"
+"Jasper St. Pierre\n"
+"Jonathon Jongsma\n"
+"Mathieu Bridon\n"
+"Megh Parikh\n"
+"Michael Catanzaro\n"
+"Pete Travis\n"
+"Ray Strode\n"
+"Roberto Majadas\n"
+"Ting-Wei Lan\n"
+"Trinh Anh Ngoc\n"
+"Yosef Or Boczko"
 
 #: ../src/resources/ui/gb-credits-widget.ui.h:26
 msgid "Artwork By:"
-msgstr ""
+msgstr "Sanatsal Ögeler:"
 
 #: ../src/resources/ui/gb-credits-widget.ui.h:27
 msgid ""
@@ -1141,15 +1187,18 @@ msgid ""
 "Hylke Bons\n"
 "Jakub Steiner"
 msgstr ""
+"Allan Day\n"
+"Hylke Bons\n"
+"Jakub Steiner"
 
 #: ../src/resources/ui/gb-credits-widget.ui.h:30
 msgid "Translated By:"
-msgstr ""
+msgstr "Çeviren:"
 
 #. Translate this string with the translator names for your language.
 #: ../src/resources/ui/gb-credits-widget.ui.h:32
 msgid "translator-credits"
-msgstr ""
+msgstr "Muhammet Kara <muhammetk@gmail.com>"
 
 #: ../src/resources/ui/gb-credits-widget.ui.h:33
 msgid "Funded By:"
@@ -1163,7 +1212,7 @@ msgstr ""
 
 #: ../src/resources/ui/gb-credits-widget.ui.h:36
 msgid "Special Thanks To:"
-msgstr ""
+msgstr "Özel Teşekkürler:"
 
 #: ../src/resources/ui/gb-credits-widget.ui.h:37
 msgid ""
@@ -1186,24 +1235,44 @@ msgid ""
 "Each and every contributor to GNOME\n"
 "and the Friends of GNOME"
 msgstr ""
+"Andy Hertzfeld ve Eazel Ekibi\n"
+"Alberto Ruiz\n"
+"Bastien Nocera\n"
+"Cosimo Cecchi\n"
+"Emmanuele Bassi\n"
+"Federico Mena Quintero\n"
+"Jasper St Pierre\n"
+"Jon McCann\n"
+"Jonathan Blandford\n"
+"Matthias Clasen\n"
+"Miguel de Icaza\n"
+"Owen Taylor\n"
+"Rob Taylor\n"
+"Spencer Kimball\n"
+"Ximian Team\n"
+"\n"
+"GNOME'a katkıda bulunan herkes\n"
+"ve GNOME Dostları"
 
 #: ../src/resources/ui/gb-credits-widget.ui.h:55
 msgid "GNOME Builder"
-msgstr ""
+msgstr "GNOME Builder"
 
 #: ../src/resources/ui/gb-credits-widget.ui.h:56
 msgid ""
 "Copyright 2014 Christian Hergert, et al.\n"
 "Licensed under the GNU GPL 3 or newer"
 msgstr ""
+"Telif Hakkı 2014 Christian Hergert, vd.\n"
+"GNU GPL 3 veya daha yeni sürümleri ile lisanlanmıştır"
 
 #: ../src/resources/ui/gb-document-menu-button.ui.h:1
 msgid "Search Documents"
-msgstr ""
+msgstr "Belgelerde Ara"
 
 #: ../src/resources/ui/gb-document-menu-button.ui.h:2
 msgid "No document were found"
-msgstr ""
+msgstr "Hiçbir belge bulunamadı"
 
 #: ../src/resources/ui/gb-editor-frame.ui.h:1
 msgid "Line 1, Column 1"
@@ -1230,12 +1299,13 @@ msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
 msgstr ""
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:5
-msgid "<b>Indentation</b>"
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
+msgid "Indentation"
 msgstr ""
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:6
 msgid "_Tab width:"
-msgstr ""
+msgstr "Sekme _genişliği:"
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:7
 msgid "Insert _spaces instead of tabs"
@@ -1251,22 +1321,18 @@ msgstr ""
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:2
 msgid "Display line numbers"
-msgstr ""
+msgstr "Satır numaralarını göster"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:3
 msgid "Display right margin"
-msgstr ""
+msgstr "Sağ kenar boşluğunu göster"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:4
 msgid "Highlight current line"
-msgstr ""
+msgstr "Geçerli satırı vurgula"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:5
 msgid "Auto indent"
-msgstr ""
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
-msgid "Indentation"
 msgstr ""
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:7
@@ -1332,7 +1398,7 @@ msgid "Display line numbers in the document."
 msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:9
-msgid "<b>Hightlight Current Line</b>"
+msgid "<b>Highlight Current Line</b>"
 msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:10
@@ -1340,7 +1406,7 @@ msgid "Highlight the line containing the cursor."
 msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:11
-msgid "<b>Hightlight Matching Brackets</b>"
+msgid "<b>Highlight Matching Brackets</b>"
 msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:12
@@ -1353,6 +1419,14 @@ msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:14
 msgid "Home moves to first non-space character."
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:15
+msgid "<b>Show Grid Lines</b>"
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:16
+msgid "Display a grid patten in the document."
 msgstr ""
 
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:1
@@ -1390,16 +1464,16 @@ msgstr "Tercihler"
 
 #: ../src/resources/ui/gb-preferences-window.ui.h:2
 msgid "Search Preferences"
-msgstr ""
+msgstr "Arama Tercihleri"
 
 #: ../src/resources/ui/gb-preferences-window.ui.h:3
 #: ../src/resources/ui/gb-workbench.ui.h:4
 msgid "Editor"
-msgstr ""
+msgstr "Düzenleyici"
 
 #: ../src/resources/ui/gb-preferences-window.ui.h:4
 msgid "Language Settings"
-msgstr ""
+msgstr "Dil Ayarları"
 
 #: ../src/resources/ui/gb-preferences-window.ui.h:6
 msgid "Vim"
@@ -1435,7 +1509,7 @@ msgstr ""
 
 #: ../src/search/gb-search-box.c:459
 msgid "Search Manager"
-msgstr ""
+msgstr "Arama Yöneticisi"
 
 #: ../src/search/gb-search-box.c:460
 msgid "The search manager for the search box."
@@ -1452,7 +1526,7 @@ msgstr ""
 #: ../src/search/gb-search-display.c:549
 #: ../src/snippets/gb-source-snippet-chunk.c:298
 msgid "Context"
-msgstr ""
+msgstr "Bağlam"
 
 #: ../src/search/gb-search-display.c:550
 msgid "The active search context."
@@ -1460,15 +1534,15 @@ msgstr ""
 
 #: ../src/search/gb-search-display-group.c:183
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: ../src/search/gb-search-display-group.c:419
 msgid "Provider"
-msgstr ""
+msgstr "Sağlayıcı"
 
 #: ../src/search/gb-search-display-group.c:420
 msgid "The search provider"
-msgstr ""
+msgstr "Arama sağlayıcısı"
 
 #: ../src/search/gb-search-display-group.c:430
 msgid "Size Group"
@@ -1639,12 +1713,12 @@ msgstr "genişlik"
 #: ../src/theatrics/gb-box-theatric.c:311
 #: ../src/theatrics/gb-box-theatric.c:312
 msgid "x"
-msgstr ""
+msgstr "x"
 
 #: ../src/theatrics/gb-box-theatric.c:322
 #: ../src/theatrics/gb-box-theatric.c:323
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: ../src/tree/gb-tree-builder.c:288 ../src/tree/gb-tree-node.c:525
 msgid "Tree"
@@ -1656,7 +1730,7 @@ msgstr ""
 
 #: ../src/tree/gb-tree.c:888
 msgid "Root"
-msgstr ""
+msgstr "Kök"
 
 #: ../src/tree/gb-tree.c:889
 msgid "The root object of the tree."
@@ -1664,7 +1738,7 @@ msgstr ""
 
 #: ../src/tree/gb-tree.c:897
 msgid "Selection"
-msgstr ""
+msgstr "Seçim"
 
 #: ../src/tree/gb-tree.c:898
 msgid "The node selection."
@@ -1680,7 +1754,7 @@ msgstr ""
 
 #: ../src/tree/gb-tree-node.c:497
 msgid "Item"
-msgstr ""
+msgstr "Öge"
 
 #: ../src/tree/gb-tree-node.c:498
 msgid "Optional object to associate with node."
@@ -1688,11 +1762,11 @@ msgstr ""
 
 #: ../src/tree/gb-tree-node.c:511
 msgid "Parent"
-msgstr ""
+msgstr "Ebeveyn"
 
 #: ../src/tree/gb-tree-node.c:512
 msgid "The parent node."
-msgstr ""
+msgstr "Ebeveyn düğüm."
 
 #: ../src/tree/gb-tree-node.c:526
 msgid "The GbTree the node belongs to."
@@ -1717,7 +1791,7 @@ msgstr ""
 
 #: ../src/workbench/gb-workbench.c:854
 msgid "Command Manager"
-msgstr ""
+msgstr "Komut Yöneticisi"
 
 #: ../src/workbench/gb-workbench.c:855
 msgid "The command manager for the workspace."
@@ -1725,7 +1799,7 @@ msgstr ""
 
 #: ../src/workbench/gb-workbench.c:864
 msgid "Navigation List"
-msgstr ""
+msgstr "Gezinme Listesi"
 
 #: ../src/workbench/gb-workbench.c:865
 msgid "The navigation list for the workbench."
