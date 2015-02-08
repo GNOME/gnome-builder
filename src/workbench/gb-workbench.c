@@ -44,6 +44,7 @@ struct _GbWorkbenchPrivate
   GbDocumentManager      *document_manager;
   GbNavigationList       *navigation_list;
   GbSearchManager        *search_manager;
+  IdeContext             *context;
 
   guint                   search_timeout;
   guint                   disposing;
@@ -68,6 +69,7 @@ typedef struct
 enum {
   PROP_0,
   PROP_COMMAND_MANAGER,
+  PROP_CONTEXT,
   PROP_NAVIGATION_LIST,
   LAST_PROP
 };
@@ -82,6 +84,29 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbWorkbench, gb_workbench,
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
+
+IdeContext *
+gb_workbench_get_context (GbWorkbench *workbench)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
+
+  return workbench->priv->context;
+}
+
+void
+gb_workbench_set_context (GbWorkbench *workbench,
+                          IdeContext  *context)
+{
+  GbWorkbenchPrivate *priv;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (!context || IDE_IS_CONTEXT (context));
+
+  priv = workbench->priv;
+
+  if (g_set_object (&priv->context, context))
+    g_object_notify_by_pspec (G_OBJECT (workbench), gParamSpecs [PROP_CONTEXT]);
+}
 
 /**
  * gb_workbench_get_command_manager:
@@ -703,6 +728,23 @@ gb_workbench_set_focus (GtkWindow *window,
 }
 
 static void
+on_context_new_cb (GObject      *object,
+                   GAsyncResult *result,
+                   gpointer      user_data)
+{
+  g_autoptr(GbWorkbench) self = user_data;
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GError) error = NULL;
+
+  context = ide_context_new_finish (result, &error);
+
+  if (!context)
+    g_warning ("%s\n", error->message);
+  else
+    gb_workbench_set_context (self, context);
+}
+
+static void
 gb_workbench_constructed (GObject *object)
 {
   static const GActionEntry actions[] = {
@@ -763,6 +805,18 @@ gb_workbench_constructed (GObject *object)
 
   gb_workbench_stack_child_changed (workbench, NULL, priv->stack);
 
+  /*
+   * TODO: Dummy code until we have real project loading.
+   */
+  {
+    g_autoptr(GFile) project_dir = g_file_new_for_path (".");
+
+    ide_context_new_async (project_dir,
+                           NULL,
+                           on_context_new_cb,
+                           g_object_ref (workbench));
+  }
+
   EXIT;
 }
 
@@ -807,6 +861,10 @@ gb_workbench_get_property (GObject    *object,
       g_value_set_object (value, gb_workbench_get_command_manager (self));
       break;
 
+    case PROP_CONTEXT:
+      g_value_set_object (value, gb_workbench_get_context (self));
+      break;
+
     case PROP_NAVIGATION_LIST:
       g_value_set_object (value, gb_workbench_get_navigation_list (self));
       break;
@@ -822,8 +880,14 @@ gb_workbench_set_property (GObject      *object,
                            const GValue *value,
                            GParamSpec   *pspec)
 {
+  GbWorkbench *self = (GbWorkbench *)object;
+
   switch (prop_id)
     {
+    case PROP_CONTEXT:
+      gb_workbench_set_context (self, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -858,6 +922,15 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_COMMAND_MANAGER,
                                    gParamSpecs [PROP_COMMAND_MANAGER]);
+
+  gParamSpecs [PROP_CONTEXT] =
+    g_param_spec_object ("context",
+                         _("Context"),
+                         _("The IDE context for the workbench."),
+                         IDE_TYPE_CONTEXT,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_CONTEXT,
+                                   gParamSpecs [PROP_CONTEXT]);
 
   gParamSpecs [PROP_NAVIGATION_LIST] =
     g_param_spec_object ("navigation-list",
