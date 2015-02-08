@@ -48,6 +48,7 @@ struct _GbWorkbenchPrivate
 
   guint                   search_timeout;
   guint                   disposing;
+  guint                   building : 1;
 
   GbWorkspace            *active_workspace;
   GbCommandBar           *command_bar;
@@ -443,6 +444,121 @@ gb_workbench_action_show_command_bar (GSimpleAction *action,
 }
 
 static void
+build_cb (GObject      *object,
+          GAsyncResult *result,
+          gpointer      user_data)
+{
+  IdeBuilder *builder = (IdeBuilder *)object;
+  g_autoptr(GbWorkbench) workbench = user_data;
+  g_autoptr(IdeBuildResult) build_result = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_return_if_fail (IDE_IS_BUILDER (builder));
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  workbench->priv->building = FALSE;
+
+  g_print ("Build finished.\n");
+
+  build_result = ide_builder_build_finish (builder, result, &error);
+
+  if (!build_result)
+    {
+      /*
+       * TODO: Focus build output pane?
+       */
+    }
+}
+
+static void
+gb_workbench_action_build (GSimpleAction *action,
+                           GVariant      *parameters,
+                           gpointer       user_data)
+{
+  GbWorkbenchPrivate *priv;
+  GbWorkbench *workbench = user_data;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+
+  priv = workbench->priv;
+
+  if (priv->building)
+    {
+      /*
+       * TODO: Can we have multiple parallel builds? Seems okay as long as they
+       *       are for different devices.
+       */
+      g_message (_("Already building.\n"));
+      return;
+    }
+
+  if (priv->context)
+    {
+      IdeDeviceManager *device_manager;
+      IdeBuildSystem *build_system;
+      g_autoptr(IdeDevice) device = NULL;
+      GPtrArray *devices;
+      guint i;
+
+      /*
+       * TODO: Add combo to select the target device we are working with.
+       */
+
+      device_manager = ide_context_get_device_manager (priv->context);
+      build_system = ide_context_get_build_system (priv->context);
+
+      devices = ide_device_manager_get_devices (device_manager);
+      for (i = 0; i < devices->len; i++)
+        {
+          IdeDevice *item = g_ptr_array_index (devices, i);
+
+          if (IDE_IS_LOCAL_DEVICE (item))
+            {
+              device = g_object_ref (item);
+              break;
+            }
+        }
+      g_ptr_array_unref (devices);
+
+      if (device)
+        {
+          g_autoptr(IdeBuilder) builder = NULL;
+          g_autoptr(GError) error = NULL;
+          g_autoptr(GKeyFile) config = NULL;
+
+          /*
+           * TODO: This should come from the current workspace configuration
+           *       for the build. We probably need to persist this between
+           *       runs as well.
+           */
+          config = g_key_file_new ();
+
+          builder = ide_build_system_get_builder (build_system,
+                                                  config,
+                                                  device,
+                                                  &error);
+
+          if (!builder)
+            {
+              g_warning ("%s\n", error->message);
+              return;
+            }
+
+          /*
+           * TODO: We should attach to the results progress signal so that we
+           *       can proxy that to the build status in the workbench.
+           */
+          priv->building = TRUE;
+          ide_builder_build_async (builder,
+                                   NULL,
+                                   NULL,
+                                   build_cb,
+                                   g_object_ref (workbench));
+        }
+    }
+}
+
+static void
 gb_workbench_action_global_search (GSimpleAction *action,
                                    GVariant      *parameters,
                                    gpointer       user_data)
@@ -748,6 +864,7 @@ static void
 gb_workbench_constructed (GObject *object)
 {
   static const GActionEntry actions[] = {
+    { "build",              gb_workbench_action_build },
     { "global-search",      gb_workbench_action_global_search },
     { "go-backward",        gb_workbench_action_go_backward },
     { "go-forward",         gb_workbench_action_go_forward },
