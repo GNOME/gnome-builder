@@ -26,10 +26,10 @@
 struct _GbTreeNodePrivate
 {
   GObject       *item;
-  GQuark         icon_name;
   GbTreeNode    *parent;
   gchar         *text;
   GbTree        *tree;
+  GQuark         icon_name;
   guint          use_markup : 1;
 };
 
