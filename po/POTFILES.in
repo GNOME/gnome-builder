@@ -97,3 +97,5 @@ src/tree/gb-tree.c
 src/trie/trie.c
 src/workbench/gb-workbench.c
 src/workbench/gb-workspace.c
+tools/ide-build.c
+tools/ide-list-files.c
