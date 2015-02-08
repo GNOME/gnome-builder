@@ -40,9 +40,16 @@
           <object class="GbDocumentGrid" id="document_grid">
             <property name="visible">True</property>
             <property name="hexpand">True</property>
+            <property name="title_size_group">title_size_group</property>
           </object>
         </child>
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup" id="title_size_group">
+    <property name="mode">vertical</property>
+    <widgets>
+      <widget name="project_label"/>
+    </widgets>
+  </object>
 </interface>

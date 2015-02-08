@@ -45,8 +45,10 @@ struct _GbEditorWorkspacePrivate
 {
   GHashTable         *command_map;
   GtkPaned           *paned;
-  GbDocumentGrid     *document_grid;
   gchar              *current_folder_uri;
+
+  GbDocumentGrid     *document_grid;
+  GtkSizeGroup       *title_size_group;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbEditorWorkspace, gb_editor_workspace,
