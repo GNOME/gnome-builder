@@ -52,6 +52,7 @@ struct _GbTreeNodeClass
 	GInitiallyUnownedClass parent_class;
 };
 
+GbTreeNode    *gb_tree_node_new           (void);
 void           gb_tree_node_append        (GbTreeNode  *node,
                                            GbTreeNode  *child);
 const gchar   *gb_tree_node_get_icon_name (GbTreeNode  *node);
