@@ -47,6 +47,14 @@ enum
   LAST_PROP
 };
 
+enum
+{
+  CLASS_0,
+  CLASS_SPACE,
+  CLASS_SPECIAL,
+  CLASS_WORD,
+};
+
 typedef enum
 {
   GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
@@ -278,6 +286,201 @@ gb_source_emacs_cmd_delete_forward_char (GbSourceEmacs           *emacs,
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   gb_source_emacs_delete_selection (emacs);
+}
+
+static int
+gb_source_emacs_classify (gunichar ch)
+{
+  switch (ch)
+    {
+    case ' ':
+    case '\t':
+    case '\n':
+      return CLASS_SPACE;
+
+    case '"': case '\'':
+    case '(': case ')':
+    case '{': case '}':
+    case '[': case ']':
+    case '<': case '>':
+    case '-': case '+': case '*': case '/':
+    case '!': case '@': case '#': case '$': case '%':
+    case '^': case '&': case ':': case ';': case '?':
+    case '|': case '=': case '\\': case '.': case ',':
+    case '_':
+      return CLASS_SPECIAL;
+
+    default:
+      return CLASS_WORD;
+    }
+}
+
+static gboolean
+text_iter_forward_emacs_word (GtkTextIter *iter)
+{
+  gint begin_class;
+  gint cur_class;
+  gunichar ch;
+
+  g_assert (iter);
+
+  ch = gtk_text_iter_get_char (iter);
+  begin_class = gb_source_emacs_classify (ch);
+
+  /* Move to the first non-whitespace character if necessary. */
+  if (begin_class == CLASS_SPACE)
+    {
+      for (;;)
+        {
+          if (!gtk_text_iter_forward_char (iter))
+            return FALSE;
+
+          ch = gtk_text_iter_get_char (iter);
+          cur_class = gb_source_emacs_classify (ch);
+          if (cur_class != CLASS_SPACE)
+            return TRUE;
+        }
+    }
+
+  /* move to first character not at same class level. */
+  while (gtk_text_iter_forward_char (iter))
+    {
+      ch = gtk_text_iter_get_char (iter);
+      cur_class = gb_source_emacs_classify (ch);
+
+      if (cur_class == CLASS_SPACE)
+        {
+          begin_class = CLASS_0;
+          continue;
+        }
+
+      if (cur_class != begin_class)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+text_iter_backward_emacs_word (GtkTextIter *iter)
+{
+  gunichar ch;
+  gint begin_class;
+  gint cur_class;
+
+  g_assert (iter);
+
+  if (!gtk_text_iter_backward_char (iter))
+    return FALSE;
+
+  /*
+   * If we are on space, walk until we get to non-whitespace. Then work our way
+   * back to the beginning of the word.
+   */
+  ch = gtk_text_iter_get_char (iter);
+  if (gb_source_emacs_classify (ch) == CLASS_SPACE)
+    {
+      for (;;)
+        {
+          if (!gtk_text_iter_backward_char (iter))
+            return FALSE;
+
+          ch = gtk_text_iter_get_char (iter);
+          if (gb_source_emacs_classify (ch) != CLASS_SPACE)
+            break;
+        }
+
+      ch = gtk_text_iter_get_char (iter);
+      begin_class = gb_source_emacs_classify (ch);
+
+      for (;;)
+        {
+          if (!gtk_text_iter_backward_char (iter))
+            return FALSE;
+
+          ch = gtk_text_iter_get_char (iter);
+          cur_class = gb_source_emacs_classify (ch);
+
+          if (cur_class != begin_class)
+            {
+              gtk_text_iter_forward_char (iter);
+              return TRUE;
+            }
+        }
+
+      return FALSE;
+    }
+
+  ch = gtk_text_iter_get_char (iter);
+  begin_class = gb_source_emacs_classify (ch);
+
+  for (;;)
+    {
+      if (!gtk_text_iter_backward_char (iter))
+        return FALSE;
+
+      ch = gtk_text_iter_get_char (iter);
+      cur_class = gb_source_emacs_classify (ch);
+
+      if (cur_class != begin_class)
+        {
+          gtk_text_iter_forward_char (iter);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+gb_source_emacs_cmd_move_forward_word (GbSourceEmacs           *emacs,
+                                       GRegex                  *matcher,
+                                       GbSourceEmacsCommandFlags flags)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  gboolean has_selection;
+
+  g_assert (GB_IS_SOURCE_EMACS (emacs));
+
+  buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
+  has_selection = gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
+
+  if (!text_iter_forward_emacs_word (&iter))
+    gtk_text_buffer_get_end_iter (buffer, &iter);
+
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+}
+
+static void
+gb_source_emacs_cmd_move_backward_word  (GbSourceEmacs           *emacs,
+                                         GRegex                  *matcher,
+                                         GbSourceEmacsCommandFlags flags)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  gboolean has_selection;
+
+  g_assert (GB_IS_SOURCE_EMACS (emacs));
+
+  buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
+  has_selection = gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
+
+  if (!text_iter_backward_emacs_word (&iter))
+    gtk_text_buffer_get_start_iter (buffer, &iter);
+
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
 }
 
 static gboolean
@@ -666,6 +869,14 @@ gb_source_emacs_class_init (GbSourceEmacsClass *klass)
                                           g_regex_new("^C-d$", 0, 0, NULL),
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
                                           gb_source_emacs_cmd_delete_forward_char);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^M-f$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_move_forward_word);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^M-b$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_move_backward_word);
 
 }
 
