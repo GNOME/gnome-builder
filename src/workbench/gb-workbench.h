@@ -20,6 +20,7 @@
 #define GB_WORKBENCH_H
 
 #include <gtk/gtk.h>
+#include <ide.h>
 
 #include "gb-command-manager.h"
 #include "gb-document-manager.h"
@@ -35,6 +36,8 @@ G_BEGIN_DECLS
 #define GB_IS_WORKBENCH(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_WORKBENCH))
 #define GB_IS_WORKBENCH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_WORKBENCH))
 #define GB_WORKBENCH_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_WORKBENCH, GbWorkbenchClass))
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbWorkbench, g_object_unref)
 
 struct _GbWorkbench
 {
@@ -53,7 +56,7 @@ struct _GbWorkbenchClass
 };
 
 GType              gb_workbench_get_type             (void);
-
+IdeContext        *gb_workbench_get_context          (GbWorkbench *workbench);
 GbNavigationList  *gb_workbench_get_navigation_list  (GbWorkbench *workbench);
 GbDocumentManager *gb_workbench_get_document_manager (GbWorkbench *workbench);
 GbWorkspace       *gb_workbench_get_active_workspace (GbWorkbench *workbench);
