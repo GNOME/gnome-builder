@@ -252,7 +252,7 @@ ide_autotools_build_system_class_init (IdeAutotoolsBuildSystemClass *klass)
   object_class->get_property = ide_autotools_build_system_get_property;
   object_class->set_property = ide_autotools_build_system_set_property;
 
-  build_system_class->get_builder =   ide_autotools_build_system_get_builder;
+  build_system_class->get_builder = ide_autotools_build_system_get_builder;
 
   gParamSpecs [PROP_TARBALL_NAME] =
     g_param_spec_string ("tarball-name",
