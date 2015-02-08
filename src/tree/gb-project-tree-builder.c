@@ -18,8 +18,11 @@
 
 #include <glib/gi18n.h>
 
+#include "gb-editor-workspace.h"
 #include "gb-project-tree-builder.h"
 #include "gb-tree.h"
+#include "gb-widget.h"
+#include "gb-workbench.h"
 
 typedef struct
 {
@@ -223,6 +226,52 @@ gb_project_tree_builder_build_node (GbTreeBuilder *builder,
     build_files (self, node);
 }
 
+static gboolean
+gb_project_tree_builder_node_activated (GbTreeBuilder *builder,
+                                        GbTreeNode    *node)
+{
+  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
+  GObject *item;
+
+  g_return_val_if_fail (GB_IS_PROJECT_TREE_BUILDER (self), FALSE);
+
+  item = gb_tree_node_get_item (node);
+
+  if (IDE_IS_PROJECT_FILE (item))
+    {
+      GbWorkbench *workbench;
+      GbWorkspace *workspace;
+      GFileInfo *file_info;
+      GbTree *tree;
+      GFile *file;
+
+      file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item));
+      if (!file_info)
+        goto failure;
+
+      if (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY)
+        goto failure;
+
+      file = ide_project_file_get_file (IDE_PROJECT_FILE (item));
+      if (!file)
+        goto failure;
+
+      tree = gb_tree_node_get_tree (node);
+      if (!tree)
+        goto failure;
+
+      workbench = gb_widget_get_workbench (GTK_WIDGET (tree));
+      workspace = gb_workbench_get_workspace (workbench,
+                                              GB_TYPE_EDITOR_WORKSPACE);
+      gb_editor_workspace_open (GB_EDITOR_WORKSPACE (workspace), file);
+
+      return TRUE;
+    }
+
+failure:
+  return FALSE;
+}
+
 static void
 gb_project_tree_builder_finalize (GObject *object)
 {
@@ -283,6 +332,7 @@ gb_project_tree_builder_class_init (GbProjectTreeBuilderClass *klass)
   object_class->set_property = gb_project_tree_builder_set_property;
 
   tree_builder_class->build_node = gb_project_tree_builder_build_node;
+  tree_builder_class->node_activated = gb_project_tree_builder_node_activated;
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
