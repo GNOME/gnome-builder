@@ -226,6 +226,18 @@ gb_source_emacs_cmd_save_file_as  (GbSourceEmacs           *emacs,
 }
 
 static void
+gb_source_emacs_cmd_save_all  (GbSourceEmacs           *emacs,
+                               GRegex                  *matcher,
+                               GbSourceEmacsCommandFlags flags)
+{
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+
+  gb_widget_activate_action (GTK_WIDGET (priv->text_view), "win", "save-all", NULL);
+
+  return;
+}
+
+static void
 gb_source_emacs_cmd_undo (GbSourceEmacs           *emacs,
                           GRegex                  *matcher,
                           GbSourceEmacsCommandFlags flags)
@@ -893,6 +905,10 @@ gb_source_emacs_class_init (GbSourceEmacsClass *klass)
                                           g_regex_new("^C-x C-s$", 0, 0, NULL),
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
                                           gb_source_emacs_cmd_save_file);
+    gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^C-x s$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_save_all);
   gb_source_emacs_class_register_command (klass,
                                           g_regex_new("^C-x C-w$", 0, 0, NULL),
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
