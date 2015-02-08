@@ -560,6 +560,7 @@ gb_source_emacs_eval_cmd (GbSourceEmacs *emacs)
       if (g_match_info_matches(match_info))
         {
           cmd->func (emacs, cmd->matcher, cmd->flags);
+          g_message("evaluate command: %s", priv->cmd->str);
           g_match_info_free (match_info);
           if (priv->cmd != NULL)
             g_string_free(priv->cmd, TRUE);
@@ -568,8 +569,6 @@ gb_source_emacs_eval_cmd (GbSourceEmacs *emacs)
         }
       g_match_info_free (match_info);
     }
-
-  g_print(">>> %s\n", priv->cmd->str);
   return TRUE;
 }
 
@@ -644,7 +643,10 @@ gb_source_emacs_key_press_event_cb (GtkTextView *text_view,
     }
 
   if (eval_cmd)
-    return gb_source_emacs_eval_cmd(emacs);
+    {
+      g_message ("cmd line: %s", priv->cmd->str);
+      return gb_source_emacs_eval_cmd(emacs);
+    }
 
   return FALSE;
 }
