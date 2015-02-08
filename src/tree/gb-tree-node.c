@@ -49,6 +49,20 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 /**
+ * gb_tree_node_new:
+ *
+ * Creates a new #GbTreeNode instance. This is handy for situations where you
+ * do not want to subclass #GbTreeNode.
+ *
+ * Returns: (transfer full): A #GbTreeNode
+ */
+GbTreeNode *
+gb_tree_node_new (void)
+{
+  return g_object_new (GB_TYPE_TREE_NODE, NULL);
+}
+
+/**
  * gb_tree_node_get_tree:
  * @node: (in): A #GbTreeNode.
  *
