@@ -297,7 +297,6 @@ gb_source_emacs_cmd_move_forward_char (GbSourceEmacs           *emacs,
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GtkTextIter selection;
-  gboolean has_selection;
 
   g_assert (GB_IS_SOURCE_EMACS (emacs));
 
@@ -305,7 +304,7 @@ gb_source_emacs_cmd_move_forward_char (GbSourceEmacs           *emacs,
   if (!GTK_SOURCE_IS_BUFFER (buffer))
     return;
 
-  has_selection = gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
+  gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
   if(gtk_text_iter_forward_char(&iter))
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 }
@@ -318,7 +317,6 @@ gb_source_emacs_cmd_move_backward_char (GbSourceEmacs           *emacs,
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GtkTextIter selection;
-  gboolean has_selection;
 
   g_assert (GB_IS_SOURCE_EMACS (emacs));
 
@@ -326,7 +324,7 @@ gb_source_emacs_cmd_move_backward_char (GbSourceEmacs           *emacs,
   if (!GTK_SOURCE_IS_BUFFER (buffer))
     return;
 
-  has_selection = gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
+  gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
   if(gtk_text_iter_backward_char(&iter))
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 }
@@ -506,7 +504,6 @@ gb_source_emacs_cmd_move_forward_word (GbSourceEmacs           *emacs,
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GtkTextIter selection;
-  gboolean has_selection;
 
   g_assert (GB_IS_SOURCE_EMACS (emacs));
 
@@ -515,7 +512,7 @@ gb_source_emacs_cmd_move_forward_word (GbSourceEmacs           *emacs,
     return;
 
   buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
-  has_selection = gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
+  gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
 
   if (!text_iter_forward_emacs_word (&iter))
     gtk_text_buffer_get_end_iter (buffer, &iter);
@@ -532,7 +529,6 @@ gb_source_emacs_cmd_move_backward_word  (GbSourceEmacs           *emacs,
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GtkTextIter selection;
-  gboolean has_selection;
 
   g_assert (GB_IS_SOURCE_EMACS (emacs));
 
@@ -541,7 +537,7 @@ gb_source_emacs_cmd_move_backward_word  (GbSourceEmacs           *emacs,
     return;
 
   buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
-  has_selection = gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
+  gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
 
   if (!text_iter_backward_emacs_word (&iter))
     gtk_text_buffer_get_start_iter (buffer, &iter);
@@ -932,7 +928,7 @@ gb_source_emacs_class_init (GbSourceEmacsClass *klass)
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
                                           gb_source_emacs_cmd_save_all);
   gb_source_emacs_class_register_command (klass,
-                                          g_regex_new("^C-s$", 0, 0, NULL),
+                                          g_regex_new("^C-s$", 0, 0, NULL ),
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
                                           gb_source_emacs_cmd_find);
   gb_source_emacs_class_register_command (klass,
