@@ -79,6 +79,84 @@ gb_source_emacs_new (GtkTextView *text_view)
                        NULL);
 }
 
+static gboolean
+gb_source_emacs_get_selection_bounds (GbSourceEmacs *emacs,
+                                      GtkTextIter *insert_iter,
+                                      GtkTextIter *selection_iter)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextMark *selection;
+
+  g_assert (GB_IS_SOURCE_EMACS (emacs));
+
+  buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  selection = gtk_text_buffer_get_selection_bound (buffer);
+
+  if (insert_iter)
+    gtk_text_buffer_get_iter_at_mark (buffer, insert_iter, insert);
+
+  if (selection_iter)
+    gtk_text_buffer_get_iter_at_mark (buffer, selection_iter, selection);
+
+  return gtk_text_buffer_get_has_selection (buffer);
+}
+
+static void
+gb_source_emacs_delete_selection (GbSourceEmacs *emacs)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GtkClipboard *clipboard;
+  gchar *text;
+
+  g_assert (GB_IS_SOURCE_EMACS (emacs));
+
+  buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  /*
+   * If there is no selection to delete, try to remove the next character
+   * in the line. If there is no next character, delete the last character
+   * in the line. It might look like there is no selection if the line
+   * was empty.
+   */
+  if (gtk_text_iter_equal (&begin, &end))
+    {
+      if (gtk_text_iter_starts_line (&begin) &&
+          gtk_text_iter_ends_line (&end) &&
+          (0 == gtk_text_iter_get_line_offset (&end)))
+        return;
+      else if (!gtk_text_iter_ends_line (&end))
+        {
+          if (!gtk_text_iter_forward_char (&end))
+            gtk_text_buffer_get_end_iter (buffer, &end);
+        }
+      else if (!gtk_text_iter_starts_line (&begin))
+        {
+          if (!gtk_text_iter_backward_char (&begin))
+            return;
+        }
+      else
+        return;
+    }
+
+  /*
+   * Yank the selection text and apply it to the clipboard.
+   */
+  text = gtk_text_iter_get_slice (&begin, &end);
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (emacs->priv->text_view),
+                                        GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_set_text (clipboard, text, -1);
+  g_free (text);
+
+  gtk_text_buffer_begin_user_action (buffer);
+  gtk_text_buffer_delete (buffer, &begin, &end);
+  gtk_text_buffer_end_user_action (buffer);
+}
+
 static void
 gb_source_emacs_cmd_exit_from_command_line  (GbSourceEmacs           *emacs,
                                              GRegex                  *matcher,
@@ -109,9 +187,6 @@ gb_source_emacs_cmd_undo (GbSourceEmacs           *emacs,
 
   g_assert (GB_IS_SOURCE_EMACS (emacs));
 
-  /*
-   * We only support GtkSourceView for now.
-   */
   buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
   if (!GTK_SOURCE_IS_BUFFER (buffer))
     return;
@@ -131,9 +206,6 @@ gb_source_emacs_cmd_redo (GbSourceEmacs           *emacs,
 
   g_assert (GB_IS_SOURCE_EMACS (emacs));
 
-  /*
-   * We only support GtkSourceView for now.
-   */
   buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
   if (!GTK_SOURCE_IS_BUFFER (buffer))
     return;
@@ -143,6 +215,70 @@ gb_source_emacs_cmd_redo (GbSourceEmacs           *emacs,
     gtk_source_undo_manager_redo (undo);
 }
 
+static void
+gb_source_emacs_cmd_move_forward_char (GbSourceEmacs           *emacs,
+                                       GRegex                  *matcher,
+                                       GbSourceEmacsCommandFlags flags)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  gboolean has_selection;
+
+  g_assert (GB_IS_SOURCE_EMACS (emacs));
+
+  buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  has_selection = gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
+  if(gtk_text_iter_forward_char(&iter))
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+}
+
+static void
+gb_source_emacs_cmd_move_backward_char (GbSourceEmacs           *emacs,
+                                        GRegex                  *matcher,
+                                        GbSourceEmacsCommandFlags flags)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  gboolean has_selection;
+
+  g_assert (GB_IS_SOURCE_EMACS (emacs));
+
+  buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  has_selection = gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
+  if(gtk_text_iter_backward_char(&iter))
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+}
+
+static void
+gb_source_emacs_cmd_delete_forward_char (GbSourceEmacs           *emacs,
+                                         GRegex                  *matcher,
+                                         GbSourceEmacsCommandFlags flags)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  gboolean has_selection;
+
+  g_assert (GB_IS_SOURCE_EMACS (emacs));
+
+  buffer = gtk_text_view_get_buffer (emacs->priv->text_view);
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  has_selection = gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
+  if (has_selection) 
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  gb_source_emacs_delete_selection (emacs);
+}
 
 static gboolean
 gb_source_emacs_eval_cmd (GbSourceEmacs *emacs)
@@ -230,9 +366,9 @@ gb_source_emacs_key_press_event_cb (GtkTextView *text_view,
           g_string_append_printf(priv->cmd, "M-%s", gdk_keyval_name(event->keyval));
           eval_cmd = TRUE;
         }
-      else 
+      else
         {
-          if (g_str_has_prefix(priv->cmd->str, "C-x") == TRUE) 
+          if (g_str_has_prefix(priv->cmd->str, "C-x") == TRUE)
             {
               if (priv->cmd->len != 0 )
                 g_string_append_printf(priv->cmd, " ");
@@ -518,6 +654,19 @@ gb_source_emacs_class_init (GbSourceEmacsClass *klass)
                                           g_regex_new("^C-x u$", 0, 0, NULL),
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
                                           gb_source_emacs_cmd_redo);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^C-f$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_move_forward_char);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^C-b$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_move_backward_char);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^C-d$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_delete_forward_char);
+
 }
 
 static void
