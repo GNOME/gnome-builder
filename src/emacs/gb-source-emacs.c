@@ -182,6 +182,16 @@ gb_source_emacs_cmd_exit_from_command_line  (GbSourceEmacs           *emacs,
 }
 
 static void
+gb_source_emacs_cmd_exit  (GbSourceEmacs           *emacs,
+                           GRegex                  *matcher,
+                           GbSourceEmacsCommandFlags flags)
+{
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+
+  gb_widget_activate_action (GTK_WIDGET (priv->text_view), "app", "quit", NULL);
+}
+
+static void
 gb_source_emacs_cmd_open_file  (GbSourceEmacs           *emacs,
                                 GRegex                  *matcher,
                                 GbSourceEmacsCommandFlags flags)
@@ -881,6 +891,10 @@ gb_source_emacs_class_init (GbSourceEmacsClass *klass)
                                           g_regex_new("C-g$", 0, 0, NULL),
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
                                           gb_source_emacs_cmd_exit_from_command_line);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^C-x C-c$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_exit);
   gb_source_emacs_class_register_command (klass,
                                           g_regex_new("^C-x C-f$", 0, 0, NULL),
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
