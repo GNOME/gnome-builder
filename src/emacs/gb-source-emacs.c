@@ -594,10 +594,17 @@ gb_source_emacs_key_press_event_cb (GtkTextView *text_view,
 
   if ((event->keyval >= GDK_KEY_A && event->keyval <= GDK_KEY_Z) ||
       (event->keyval >= GDK_KEY_a && event->keyval <= GDK_KEY_z) ||
-      (event->keyval == GDK_KEY_underscore)
+      (event->keyval == GDK_KEY_underscore) || (event->keyval == GDK_KEY_Escape )
      )
     {
-      if (event->state == (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+      if (event->keyval == GDK_KEY_Escape)
+        {
+          if (priv->cmd->len != 0 )
+            g_string_append_printf(priv->cmd, " ");
+          g_string_append_printf(priv->cmd, "ESC");
+          eval_cmd = TRUE;
+        }
+      else if (event->state == (GDK_CONTROL_MASK | GDK_MOD1_MASK))
         {
           if (priv->cmd->len != 0 )
             g_string_append_printf(priv->cmd, " ");
@@ -907,6 +914,10 @@ gb_source_emacs_class_init (GbSourceEmacsClass *klass)
   /* Register emacs commands */
   gb_source_emacs_class_register_command (klass,
                                           g_regex_new("C-g$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_exit_from_command_line);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("ESC ESC ESC$", 0, 0, NULL),
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
                                           gb_source_emacs_cmd_exit_from_command_line);
   gb_source_emacs_class_register_command (klass,
