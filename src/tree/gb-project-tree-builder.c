@@ -24,6 +24,10 @@
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
+#if 0
+# define ENABLE_ICONS
+#endif
+
 typedef struct
 {
   IdeContext *context;
@@ -84,6 +88,7 @@ gb_project_tree_builder_set_context (GbProjectTreeBuilder *self,
 static const gchar *
 get_icon_name (GFileInfo *file_info)
 {
+#ifdef ENABLE_ICONS
   GFileType file_type;
 
   g_return_val_if_fail (G_IS_FILE_INFO (file_info), NULL);
@@ -94,6 +99,9 @@ get_icon_name (GFileInfo *file_info)
     return "folder-symbolic";
 
   return "text-x-generic";
+#else
+  return NULL;
+#endif
 }
 
 static void
@@ -150,7 +158,9 @@ build_project (GbProjectTreeBuilder *self,
               GbTreeNode *child;
 
               child = g_object_new (GB_TYPE_TREE_NODE,
+#ifdef ENABLE_ICONS
                                     "icon-name", "folder-symbolic",
+#endif
                                     "item", item,
                                     "text", _("Files"),
                                     NULL);
