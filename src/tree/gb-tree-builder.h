@@ -37,6 +37,8 @@ typedef struct _GbTreeBuilder        GbTreeBuilder;
 typedef struct _GbTreeBuilderClass   GbTreeBuilderClass;
 typedef struct _GbTreeBuilderPrivate GbTreeBuilderPrivate;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbTreeBuilder, g_object_unref)
+
 struct _GbTreeBuilder
 {
 	GInitiallyUnowned parent;
@@ -47,22 +49,22 @@ struct _GbTreeBuilder
 
 struct _GbTreeBuilderClass
 {
-	GInitiallyUnownedClass parent_class;
+  GInitiallyUnownedClass parent_class;
 
-   void     (*added)           (GbTreeBuilder *builder,
-                                GtkWidget     *tree);
-   void     (*removed)         (GbTreeBuilder *builder,
-                                GtkWidget     *tree);
-	void     (*build_node)      (GbTreeBuilder *builder,
-	                             GbTreeNode    *node);
-	gboolean (*node_activated)  (GbTreeBuilder *builder,
-	                             GbTreeNode    *node);
-	void     (*node_selected)   (GbTreeBuilder *builder,
-	                             GbTreeNode    *node);
-	void     (*node_unselected) (GbTreeBuilder *builder,
-	                             GbTreeNode    *node);
-   void     (*node_popup)      (GbTreeBuilder *builder,
-                                GbTreeNode    *node);
+  void     (*added)           (GbTreeBuilder *builder,
+                               GtkWidget     *tree);
+  void     (*removed)         (GbTreeBuilder *builder,
+                               GtkWidget     *tree);
+  void     (*build_node)      (GbTreeBuilder *builder,
+                               GbTreeNode    *node);
+  gboolean (*node_activated)  (GbTreeBuilder *builder,
+                               GbTreeNode    *node);
+  void     (*node_selected)   (GbTreeBuilder *builder,
+                               GbTreeNode    *node);
+  void     (*node_unselected) (GbTreeBuilder *builder,
+                               GbTreeNode    *node);
+  void     (*node_popup)      (GbTreeBuilder *builder,
+                               GbTreeNode    *node);
 };
 
 GtkWidget *gb_tree_builder_get_tree        (GbTreeBuilder *builder);
