@@ -490,6 +490,22 @@ gb_tree_remove_builder (GbTree        *tree,
 }
 
 /**
+ * gb_tree_get_root:
+ *
+ * Retrieves the root node of the tree. The root node is not a visible node
+ * in the tree, but a placeholder for all other builders to build upon.
+ *
+ * Returns: (transfer none) (nullable): A #GbTreeNode or %NULL.
+ */
+GbTreeNode *
+gb_tree_get_root (GbTree *tree)
+{
+  g_return_val_if_fail (GB_IS_TREE (tree), NULL);
+
+  return tree->priv->root;
+}
+
+/**
  * gb_tree_set_root:
  * @tree: (in): A #GbTree.
  * @node: (in): A #GbTreeNode.
@@ -498,7 +514,7 @@ gb_tree_remove_builder (GbTree        *tree,
  * the items within the treeview. The item itself will not be added
  * to the tree, but the direct children will be.
  */
-static void
+void
 gb_tree_set_root (GbTree     *tree,
                   GbTreeNode *root)
 {
@@ -888,7 +904,7 @@ gb_tree_class_init (GbTreeClass *klass)
                          _ ("Root"),
                          _ ("The root object of the tree."),
                          GB_TYPE_TREE_NODE,
-                         G_PARAM_READWRITE);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_ROOT,
                                    gParamSpecs[PROP_ROOT]);
 
@@ -897,7 +913,7 @@ gb_tree_class_init (GbTreeClass *klass)
                          _ ("Selection"),
                          _ ("The node selection."),
                          GB_TYPE_TREE_NODE,
-                         G_PARAM_READWRITE);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_SELECTION,
                                    gParamSpecs[PROP_SELECTION]);
 }
