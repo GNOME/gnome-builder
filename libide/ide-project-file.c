@@ -22,6 +22,7 @@
 
 typedef struct
 {
+  GFile     *file;
   GFileInfo *file_info;
 } IdeProjectFilePrivate;
 
@@ -30,20 +31,34 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeProjectFile, ide_project_file,
 
 enum {
   PROP_0,
+  PROP_FILE,
   PROP_FILE_INFO,
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-IdeProjectFile *
-ide_project_file_new (IdeProjectItem *parent,
-                      GFileInfo      *file_info)
+GFile *
+ide_project_file_get_file (IdeProjectFile *file)
 {
-  return g_object_new (IDE_TYPE_PROJECT_FILE,
-                       "parent", parent,
-                       "file-info", file_info,
-                       NULL);
+  IdeProjectFilePrivate *priv = ide_project_file_get_instance_private (file);
+
+  g_return_val_if_fail (IDE_IS_PROJECT_FILE (file), NULL);
+
+  return priv->file;
+}
+
+void
+ide_project_file_set_file (IdeProjectFile *self,
+                           GFile          *file)
+{
+  IdeProjectFilePrivate *priv = ide_project_file_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PROJECT_FILE (self));
+  g_return_if_fail (!file || G_IS_FILE (file));
+
+  if (g_set_object (&priv->file, file))
+    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
 }
 
 GFileInfo *
@@ -90,6 +105,10 @@ ide_project_file_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_FILE:
+      g_value_set_object (value, ide_project_file_get_file (self));
+      break;
+
     case PROP_FILE_INFO:
       g_value_set_object (value, ide_project_file_get_file_info (self));
       break;
@@ -109,6 +128,10 @@ ide_project_file_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_FILE:
+      ide_project_file_set_file (self, g_value_get_object (value));
+      break;
+
     case PROP_FILE_INFO:
       ide_project_file_set_file_info (self, g_value_get_object (value));
       break;
@@ -126,6 +149,15 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
   object_class->finalize = ide_project_file_finalize;
   object_class->get_property = ide_project_file_get_property;
   object_class->set_property = ide_project_file_set_property;
+
+  gParamSpecs [PROP_FILE] =
+    g_param_spec_object ("file",
+                         _("File"),
+                         _("A GFile to the underlying file."),
+                         G_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_FILE,
+                                   gParamSpecs [PROP_FILE]);
 
   gParamSpecs [PROP_FILE_INFO] =
     g_param_spec_object ("file-info",

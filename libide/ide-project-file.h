@@ -28,15 +28,14 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_FILE (ide_project_file_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeProjectFile, ide_project_file, IDE, PROJECT_FILE,
-                          IdeProjectItem)
+G_DECLARE_DERIVABLE_TYPE (IdeProjectFile, ide_project_file, IDE, PROJECT_FILE, IdeProjectItem)
 
 struct _IdeProjectFileClass
 {
   GObjectClass parent;
 };
 
-IdeFile   *ide_project_file_get_file      (IdeProjectFile *file);
+GFile     *ide_project_file_get_file      (IdeProjectFile *file);
 GFileInfo *ide_project_file_get_file_info (IdeProjectFile *file);
 
 G_END_DECLS
