@@ -9,7 +9,7 @@
         <property name="position">250</property>
         <child>
           <object class="GtkBox">
-            <property name="visible">false</property>
+            <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="project_label">
