@@ -186,19 +186,9 @@ gb_source_emacs_cmd_open_file  (GbSourceEmacs           *emacs,
                                 GRegex                  *matcher,
                                 GbSourceEmacsCommandFlags flags)
 {
-  GActionGroup *action_group;
-
-  GbWorkbench *workbench;
-  GbWorkspace *workspace;
   GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
 
-  workbench = gb_widget_get_workbench (GTK_WIDGET(priv->text_view));
-  workspace = gb_workbench_get_workspace (workbench, GB_TYPE_EDITOR_WORKSPACE);
-  
-  action_group = gtk_widget_get_action_group (GTK_WIDGET(workspace), "workspace");
-  g_action_group_activate_action(action_group, "open", NULL);
-
-  return;
+  gb_widget_activate_action (GTK_WIDGET (priv->text_view), "workspace", "open", NULL);
 }
 
 static void
@@ -209,8 +199,6 @@ gb_source_emacs_cmd_save_file  (GbSourceEmacs           *emacs,
   GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
 
   gb_widget_activate_action (GTK_WIDGET (priv->text_view), "stack", "save", NULL);
-
-  return;
 }
 
 static void
@@ -221,8 +209,6 @@ gb_source_emacs_cmd_save_file_as  (GbSourceEmacs           *emacs,
   GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
 
   gb_widget_activate_action (GTK_WIDGET (priv->text_view), "stack", "save-as", NULL);
-
-  return;
 }
 
 static void
@@ -233,8 +219,6 @@ gb_source_emacs_cmd_save_all  (GbSourceEmacs           *emacs,
   GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
 
   gb_widget_activate_action (GTK_WIDGET (priv->text_view), "win", "save-all", NULL);
-
-  return;
 }
 
 static void
