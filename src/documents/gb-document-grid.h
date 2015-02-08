@@ -68,6 +68,9 @@ GList             *gb_document_grid_get_stacks           (GbDocumentGrid    *gri
 void               gb_document_grid_focus_document       (GbDocumentGrid    *grid,
                                                           GbDocument        *document);
 void               gb_document_grid_close_untitled       (GbDocumentGrid    *grid);
+GtkSizeGroup      *gb_document_grid_get_title_size_group (GbDocumentGrid    *grid);
+void               gb_document_grid_set_title_size_group (GbDocumentGrid    *grid,
+                                                          GtkSizeGroup      *size_group);
 
 G_END_DECLS
 

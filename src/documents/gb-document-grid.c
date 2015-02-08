@@ -28,6 +28,7 @@ struct _GbDocumentGridPrivate
 {
   GbDocumentManager *document_manager;
   GbDocumentStack   *last_focus;
+  GtkSizeGroup      *title_size_group;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbDocumentGrid, gb_document_grid, GTK_TYPE_BIN)
@@ -35,6 +36,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbDocumentGrid, gb_document_grid, GTK_TYPE_BIN)
 enum {
   PROP_0,
   PROP_DOCUMENT_MANAGER,
+  PROP_TITLE_SIZE_GROUP,
   LAST_PROP
 };
 
@@ -839,6 +841,39 @@ gb_document_grid_parent_set (GtkWidget      *widget,
     }
 }
 
+GtkSizeGroup *
+gb_document_grid_get_title_size_group (GbDocumentGrid *grid)
+{
+  g_return_val_if_fail (GB_IS_DOCUMENT_GRID (grid), NULL);
+
+  return grid->priv->title_size_group;
+}
+
+void
+gb_document_grid_set_title_size_group (GbDocumentGrid *grid,
+                                       GtkSizeGroup   *title_size_group)
+{
+  GbDocumentGridPrivate *priv;
+
+  g_return_if_fail (GB_IS_DOCUMENT_GRID (grid));
+
+  priv = grid->priv;
+
+  if (g_set_object (&priv->title_size_group, title_size_group))
+    {
+      GList *stacks;
+      GList *iter;
+
+      stacks = gb_document_grid_get_stacks (grid);
+      for (iter = stacks; iter; iter = iter->next)
+        g_object_set (iter->data, "title-size-group", title_size_group, NULL);
+      g_list_free (stacks);
+
+      g_object_notify_by_pspec (G_OBJECT (grid),
+                                gParamSpecs [PROP_TITLE_SIZE_GROUP]);
+    }
+}
+
 static void
 gb_document_grid_get_property (GObject    *object,
                                guint       prop_id,
@@ -851,6 +886,10 @@ gb_document_grid_get_property (GObject    *object,
     {
     case PROP_DOCUMENT_MANAGER:
       g_value_set_object (value, gb_document_grid_get_document_manager (self));
+      break;
+
+    case PROP_TITLE_SIZE_GROUP:
+      g_value_set_object (value, gb_document_grid_get_title_size_group (self));
       break;
 
     default:
@@ -870,6 +909,10 @@ gb_document_grid_set_property (GObject      *object,
     {
     case PROP_DOCUMENT_MANAGER:
       gb_document_grid_set_document_manager (self, g_value_get_object (value));
+      break;
+
+    case PROP_TITLE_SIZE_GROUP:
+      gb_document_grid_set_title_size_group (self, g_value_get_object (value));
       break;
 
     default:
@@ -921,6 +964,21 @@ gb_document_grid_class_init (GbDocumentGridClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_DOCUMENT_MANAGER,
                                    gParamSpecs [PROP_DOCUMENT_MANAGER]);
+
+  /**
+   * GbDocumentGrid:title-size-group:
+   *
+   * A #GtkSizeGroup to be applied to document stacks. This can be used to
+   * enforce the height across a row of stacks.
+   */
+  gParamSpecs [PROP_TITLE_SIZE_GROUP] =
+    g_param_spec_object ("title-size-group",
+                         _("Title Size Group"),
+                         _("A size group to apply to stack titles."),
+                         GTK_TYPE_SIZE_GROUP,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_TITLE_SIZE_GROUP,
+                                   gParamSpecs [PROP_TITLE_SIZE_GROUP]);
 }
 
 static void

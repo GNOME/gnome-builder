@@ -39,6 +39,7 @@ struct _GbDocumentStackPrivate
   GtkStack             *controls;
   GtkStack             *stack;
   GtkMenuButton        *stack_menu;
+  GtkBox               *header_box;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbDocumentStack, gb_document_stack, GTK_TYPE_BOX)
@@ -47,6 +48,7 @@ enum {
   PROP_0,
   PROP_ACTIVE_VIEW,
   PROP_DOCUMENT_MANAGER,
+  PROP_TITLE_SIZE_GROUP,
   LAST_PROP
 };
 
@@ -791,6 +793,16 @@ gb_document_stack_next_document_activate (GSimpleAction *action,
 }
 
 static void
+gb_document_stack_set_title_size_group (GbDocumentStack *self,
+                                        GtkSizeGroup    *size_group)
+{
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (self));
+
+  if (size_group)
+    gtk_size_group_add_widget (size_group, GTK_WIDGET (self->priv->header_box));
+}
+
+static void
 gb_document_stack_finalize (GObject *object)
 {
   GbDocumentStackPrivate *priv = GB_DOCUMENT_STACK (object)->priv;
@@ -843,6 +855,10 @@ gb_document_stack_set_property (GObject      *object,
       gb_document_stack_set_document_manager (self, g_value_get_object (value));
       break;
 
+    case PROP_TITLE_SIZE_GROUP:
+      gb_document_stack_set_title_size_group (self, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -866,6 +882,7 @@ gb_document_stack_class_init (GbDocumentStackClass *klass)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, stack_menu);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, controls);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, document_button);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, header_box);
 
   gParamSpecs [PROP_ACTIVE_VIEW] =
     g_param_spec_object ("active-view",
@@ -884,6 +901,16 @@ gb_document_stack_class_init (GbDocumentStackClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_DOCUMENT_MANAGER,
                                    gParamSpecs [PROP_DOCUMENT_MANAGER]);
+
+  gParamSpecs [PROP_TITLE_SIZE_GROUP] =
+    g_param_spec_object ("title-size-group",
+                         _("Title Size Group"),
+                         _("The size group for the titlebar."),
+                         GTK_TYPE_SIZE_GROUP,
+                         (G_PARAM_WRITABLE |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_TITLE_SIZE_GROUP,
+                                   gParamSpecs [PROP_TITLE_SIZE_GROUP]);
 
   gSignals [CREATE_VIEW] =
     g_signal_new ("create-view",
