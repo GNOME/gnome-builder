@@ -27,6 +27,10 @@
 
 #include "gb-source-emacs.h"
 #include "gb-string.h"
+#include "gb-widget.h"
+#include "gb-editor-workspace.h"
+#include "gb-workbench.h"
+
 
 struct _GbSourceEmacsPrivate
 {
@@ -182,6 +186,18 @@ gb_source_emacs_cmd_open_file  (GbSourceEmacs           *emacs,
                                 GRegex                  *matcher,
                                 GbSourceEmacsCommandFlags flags)
 {
+  GActionGroup *action_group;
+
+  GbWorkbench *workbench;
+  GbWorkspace *workspace;
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+
+  workbench = gb_widget_get_workbench (GTK_WIDGET(priv->text_view));
+  workspace = gb_workbench_get_workspace (workbench, GB_TYPE_EDITOR_WORKSPACE);
+  
+  action_group = gtk_widget_get_action_group (GTK_WIDGET(workspace), "workspace");
+  g_action_group_activate_action(action_group, "open", NULL);
+
   return;
 }
 
@@ -282,7 +298,7 @@ gb_source_emacs_cmd_delete_forward_char (GbSourceEmacs           *emacs,
     return;
 
   has_selection = gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
-  if (has_selection) 
+  if (has_selection)
     gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   gb_source_emacs_delete_selection (emacs);
@@ -846,7 +862,7 @@ gb_source_emacs_class_init (GbSourceEmacsClass *klass)
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
                                           gb_source_emacs_cmd_exit_from_command_line);
   gb_source_emacs_class_register_command (klass,
-                                          g_regex_new("^C-x C-s$", 0, 0, NULL),
+                                          g_regex_new("^C-x C-f$", 0, 0, NULL),
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
                                           gb_source_emacs_cmd_open_file);
   gb_source_emacs_class_register_command (klass,
