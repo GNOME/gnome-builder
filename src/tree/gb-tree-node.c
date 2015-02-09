@@ -93,7 +93,8 @@ _gb_tree_node_set_tree (GbTreeNode *node,
 {
   g_return_if_fail (GB_IS_TREE_NODE (node));
   g_return_if_fail (GB_IS_TREE (tree));
-  g_return_if_fail (node->priv->tree == NULL);
+  g_return_if_fail ((node->priv->tree == NULL) ||
+                    (node->priv->tree == tree));
 
   node->priv->tree = tree;
 }
