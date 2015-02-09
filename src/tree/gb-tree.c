@@ -334,8 +334,6 @@ gb_tree_get_iter_for_node (GbTree      *tree,
   GbTreeNode *that = NULL;
   gboolean ret;
 
-  ENTRY;
-
   g_return_val_if_fail (GB_IS_TREE (tree), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (GB_IS_TREE_NODE (node), FALSE);
@@ -356,14 +354,14 @@ gb_tree_get_iter_for_node (GbTree      *tree,
           if (that == node)
             {
               g_clear_object (&that);
-              RETURN (TRUE);
+              return TRUE;
             }
           g_clear_object (&that);
         }
       while (gtk_tree_model_iter_next (model, iter));
     }
 
-  RETURN (FALSE);
+  return FALSE;
 }
 
 /**
