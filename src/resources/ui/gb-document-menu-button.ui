@@ -80,7 +80,7 @@
                 <child type="placeholder">
                   <object class="GtkLabel">
                     <property name="visible">true</property>
-                    <property name="label" translatable="yes">No document were found</property>
+                    <property name="label" translatable="yes">No documents were found</property>
                   </object>
                 </child>
               </object>
