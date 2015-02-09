@@ -12,6 +12,9 @@ library, we make things easier to unit test.  Or at least, that is the hope.
    - Per-file modelines
  - How do we manage assets such as icons, settings, desktop and service files.
  - Does it make sense to add/remove/modify translations?
+ - How do we want to plumb templates?
+   Project templates, widget templates, etc.
+   How does the vcs fit in with this.
 
 ## Objects
 
