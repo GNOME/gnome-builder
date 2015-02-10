@@ -29,6 +29,10 @@ G_BEGIN_DECLS
 #define ide_set_weak_pointer(ptr,obj) \
   ((obj!=*(ptr)) ? (ide_clear_weak_pointer(ptr),*(ptr)=obj,g_object_add_weak_pointer((GObject*)obj, (gpointer*)ptr),1) : 0)
 
+typedef struct _IdeBackForwardItem             IdeBackForwardItem;
+
+typedef struct _IdeBackForwardList             IdeBackForwardList;
+
 typedef struct _IdeBuffer                      IdeBuffer;
 typedef struct _IdeBufferInterface             IdeBufferInterface;
 
@@ -104,6 +108,10 @@ typedef struct _IdeSearchResultClass           IdeSearchResultClass;
 typedef struct _IdeSearchResultPrivate         IdeSearchResultPrivate;
 
 typedef struct _IdeService                     IdeService;
+
+typedef struct _IdeSourceLocation              IdeSourceLocation;
+
+typedef struct _IdeSourceRange                 IdeSourceRange;
 
 typedef struct _IdeSymbol                      IdeSymbol;
 
