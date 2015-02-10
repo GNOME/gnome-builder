@@ -25,6 +25,8 @@ G_BEGIN_DECLS
 
 #define IDE_INSIDE
 
+#include "ide-back-forward-item.h"
+#include "ide-back-forward-list.h"
 #include "ide-buffer.h"
 #include "ide-buffer-iter.h"
 #include "ide-build-result.h"
@@ -56,6 +58,7 @@ G_BEGIN_DECLS
 #include "ide-search-provider.h"
 #include "ide-search-result.h"
 #include "ide-service.h"
+#include "ide-source-location.h"
 #include "ide-symbol-resolver.h"
 #include "ide-symbol.h"
 #include "ide-target.h"
