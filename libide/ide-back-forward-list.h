@@ -36,6 +36,7 @@ void                ide_back_forward_list_go_backward         (IdeBackForwardLis
 void                ide_back_forward_list_go_forward          (IdeBackForwardList *self);
 gboolean            ide_back_forward_list_get_can_go_backward (IdeBackForwardList *self);
 gboolean            ide_back_forward_list_get_can_go_forward  (IdeBackForwardList *self);
+IdeBackForwardItem *ide_back_forward_list_get_current_item    (IdeBackForwardList *self);
 void                ide_back_forward_list_push                (IdeBackForwardList *self,
                                                                IdeBackForwardItem *item);
 IdeBackForwardList *ide_back_forward_list_branch              (IdeBackForwardList *self);
