@@ -4586,8 +4586,7 @@ gb_source_vim_cmd_repeat (GbSourceVim *vim,
   g_return_if_fail (GB_IS_SOURCE_VIM (vim));
 
   if (!GTK_SOURCE_IS_VIEW (vim->priv->text_view) ||
-      !vim->priv->recording_trigger ||
-      !vim->priv->captured_events->len)
+      !vim->priv->recording_trigger)
     return;
 
   source_view = GTK_SOURCE_VIEW (vim->priv->text_view);
