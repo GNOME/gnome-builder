@@ -217,10 +217,106 @@ ide_back_forward_list_branch (IdeBackForwardList *self)
   return ret;
 }
 
+static GPtrArray *
+ide_back_forward_list_to_array (IdeBackForwardList *self)
+{
+  IdeBackForwardListPrivate *priv;
+  GPtrArray *ret;
+  GList *iter;
+
+  g_return_val_if_fail (IDE_IS_BACK_FORWARD_LIST (self), NULL);
+
+  priv = ide_back_forward_list_get_instance_private (self);
+
+  ret = g_ptr_array_new ();
+
+  for (iter = priv->backward->tail; iter; iter = iter->prev)
+    g_ptr_array_add (ret, iter->data);
+
+  if (priv->current_item)
+    g_ptr_array_add (ret, priv->current_item);
+
+  for (iter = priv->forward->head; iter; iter = iter->next)
+    g_ptr_array_add (ret, iter->data);
+
+  return ret;
+}
+
 void
-ide_back_forward_list_merge (IdeBackForwardList *list,
+ide_back_forward_list_merge (IdeBackForwardList *self,
                              IdeBackForwardList *branch)
 {
+  IdeBackForwardListPrivate *priv;
+  IdeBackForwardListPrivate *branch_priv;;
+  IdeBackForwardList *first;
+  gboolean found = FALSE;
+  GPtrArray *ar1;
+  GPtrArray *ar2;
+  gsize i = 0;
+  gsize j;
+
+  g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (self));
+  g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (branch));
+
+  /*
+   * The merge process works by:
+   *
+   * 1) Convert both BackForwardLists to an array containing all elements.
+   * 2) Find the common ancestor between the two lists.
+   * 3) If there is no common ancestor, copy all elements to @self.
+   * 4) If there was a common ancestor, work our way until the paths diverge.
+   * 5) Add all remaining elements to @self.
+   */
+
+  ar1 = ide_back_forward_list_to_array (self);
+  ar2 = ide_back_forward_list_to_array (branch);
+
+  first = g_ptr_array_index (ar2, 0);
+
+  for (i = 0; i < ar1->len; i++)
+    {
+      IdeBackForwardList *current = g_ptr_array_index (ar1, i);
+
+      if (current == first)
+        {
+          found = TRUE;
+          break;
+        }
+    }
+
+  if (!found)
+    {
+      for (i = 0; i < ar2->len; i++)
+        {
+          IdeBackForwardItem *current = g_ptr_array_index (ar2, i);
+          ide_back_forward_list_push (self, current);
+        }
+
+      goto cleanup;
+    }
+
+  for (j = 0; (i < ar1->len) && (j < ar2->len); i++, j++)
+    {
+      IdeBackForwardList *item1 = g_ptr_array_index (ar1, i);
+      IdeBackForwardList *item2 = g_ptr_array_index (ar2, j);
+
+      if (item1 != item2)
+        {
+          gsize k;
+
+          for (k = j; k < ar2->len; k++)
+            {
+              IdeBackForwardItem *current = g_ptr_array_index (ar2, k);
+              ide_back_forward_list_push (self, current);
+            }
+
+          goto cleanup;
+        }
+    }
+
+cleanup:
+  g_ptr_array_unref (ar1);
+  g_ptr_array_unref (ar2);
 }
 
 static void
