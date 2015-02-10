@@ -380,7 +380,7 @@ ide_back_forward_list_class_init (IdeBackForwardListClass *klass)
     g_param_spec_boolean ("can-go-backward",
                           _("Can Go Backward"),
                           _("If there are more backward navigation items."),
-                          IDE_TYPE_BACK_FORWARD_ITEM,
+                          FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_CAN_GO_BACKWARD,
                                    gParamSpecs [PROP_CAN_GO_BACKWARD]);
@@ -389,7 +389,7 @@ ide_back_forward_list_class_init (IdeBackForwardListClass *klass)
     g_param_spec_boolean ("can-go-forward",
                           _("Can Go Forward"),
                           _("If there are more forward navigation items."),
-                          IDE_TYPE_BACK_FORWARD_ITEM,
+                          FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_CAN_GO_FORWARD,
                                    gParamSpecs [PROP_CAN_GO_FORWARD]);
