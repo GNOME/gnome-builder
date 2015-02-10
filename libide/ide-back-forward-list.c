@@ -36,6 +36,7 @@ enum {
   PROP_0,
   PROP_CAN_GO_BACKWARD,
   PROP_CAN_GO_FORWARD,
+  PROP_CURRENT_ITEM,
   LAST_PROP
 };
 
@@ -46,6 +47,26 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
+
+/**
+ * ide_back_forward_list_get_current_item:
+ *
+ * Retrieves the current #IdeBackForwardItem or %NULL if no items have been
+ * added to the #IdeBackForwardList.
+ *
+ * Returns: (transfer none) (nullable): An #IdeBackForwardItem or %NULL.
+ */
+IdeBackForwardItem *
+ide_back_forward_list_get_current_item (IdeBackForwardList *self)
+{
+  IdeBackForwardListPrivate *priv;
+
+  g_return_val_if_fail (IDE_IS_BACK_FORWARD_LIST (self), NULL);
+
+  priv = ide_back_forward_list_get_instance_private (self);
+
+  return priv->current_item;
+}
 
 static void
 ide_back_forward_list_navigate_to (IdeBackForwardList *self,
@@ -363,6 +384,10 @@ ide_back_forward_list_get_property (GObject    *object,
                            ide_back_forward_list_get_can_go_forward (self));
       break;
 
+    case PROP_CURRENT_ITEM:
+      g_value_set_object (value, ide_back_forward_list_get_current_item (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -393,6 +418,15 @@ ide_back_forward_list_class_init (IdeBackForwardListClass *klass)
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_CAN_GO_FORWARD,
                                    gParamSpecs [PROP_CAN_GO_FORWARD]);
+
+  gParamSpecs [PROP_CURRENT_ITEM] =
+    g_param_spec_object ("current-item",
+                         _("Current Item"),
+                         _("The current navigation item."),
+                         IDE_TYPE_BACK_FORWARD_ITEM,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_CURRENT_ITEM,
+                                   gParamSpecs [PROP_CURRENT_ITEM]);
 
   gSignals [NAVIGATE_TO] =
     g_signal_new ("navigate-to",
