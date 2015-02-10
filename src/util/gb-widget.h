@@ -20,6 +20,7 @@
 #define GB_WIDGET_H
 
 #include <gtk/gtk.h>
+#include <ide.h>
 
 #include "gb-workbench-types.h"
 
@@ -32,6 +33,7 @@ G_BEGIN_DECLS
   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (klass), \
                                                 TN, field)
 
+IdeContext      *gb_widget_get_context     (GtkWidget    *widget);
 void             gb_widget_add_style_class (gpointer      widget,
                                             const gchar  *class_name);
 cairo_surface_t *gb_widget_snapshot        (GtkWidget    *widget,
