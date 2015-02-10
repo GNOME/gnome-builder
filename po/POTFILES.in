@@ -16,6 +16,8 @@ libide/autotools/ide-autotools-build-system.c
 libide/autotools/ide-autotools-build-task.c
 libide/autotools/ide-autotools-builder.c
 libide/git/ide-git-vcs.c
+libide/ide-back-forward-item.c
+libide/ide-back-forward-list.c
 libide/ide-build-result.c
 libide/ide-build-system.c
 libide/ide-builder.c
@@ -91,6 +93,7 @@ src/snippets/gb-source-snippet-parser.c
 src/snippets/gb-source-snippet.c
 src/snippets/gb-source-snippets-manager.c
 src/theatrics/gb-box-theatric.c
+src/tree/gb-project-tree-builder.c
 src/tree/gb-tree-builder.c
 src/tree/gb-tree-node.c
 src/tree/gb-tree.c
@@ -98,4 +101,5 @@ src/trie/trie.c
 src/workbench/gb-workbench.c
 src/workbench/gb-workspace.c
 tools/ide-build.c
+tools/ide-list-devices.c
 tools/ide-list-files.c
