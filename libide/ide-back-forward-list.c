@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-back-forward-list"
+
 #include <glib/gi18n.h>
 
 #include "ide-back-forward-item.h"
@@ -23,8 +25,9 @@
 
 typedef struct
 {
-  GQueue *backward;
-  GQueue *forward;
+  GQueue             *backward;
+  IdeBackForwardItem *current_item;
+  GQueue             *forward;
 } IdeBackForwardListPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeBackForwardList, ide_back_forward_list, IDE_TYPE_OBJECT)
@@ -57,15 +60,59 @@ ide_back_forward_list_navigate_to (IdeBackForwardList *self,
 void
 ide_back_forward_list_go_backward (IdeBackForwardList *self)
 {
+  IdeBackForwardListPrivate *priv;
+  IdeBackForwardItem *current_item;
+
   g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (self));
 
+  priv = ide_back_forward_list_get_instance_private (self);
+
+  current_item = g_queue_pop_head (priv->backward);
+
+  if (current_item)
+    {
+      if (priv->current_item)
+        g_queue_push_head (priv->forward, priv->current_item);
+
+      priv->current_item = current_item;
+
+      ide_back_forward_list_navigate_to (self, current_item);
+
+      g_object_notify_by_pspec (G_OBJECT (self),
+                                gParamSpecs [PROP_CAN_GO_BACKWARD]);
+      g_object_notify_by_pspec (G_OBJECT (self),
+                                gParamSpecs [PROP_CAN_GO_FORWARD]);
+    }
+  else
+    g_warning (_("Cannot go backward, no more items in queue."));
 }
 
 void
 ide_back_forward_list_go_forward (IdeBackForwardList *self)
 {
+  IdeBackForwardListPrivate *priv;
+  IdeBackForwardItem *current_item;
+
   g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (self));
 
+  current_item = g_queue_pop_head (priv->forward);
+
+  if (current_item)
+    {
+      if (priv->current_item)
+        g_queue_push_head (priv->forward, priv->current_item);
+
+      priv->current_item = current_item;
+
+      ide_back_forward_list_navigate_to (self, current_item);
+
+      g_object_notify_by_pspec (G_OBJECT (self),
+                                gParamSpecs [PROP_CAN_GO_BACKWARD]);
+      g_object_notify_by_pspec (G_OBJECT (self),
+                                gParamSpecs [PROP_CAN_GO_FORWARD]);
+    }
+  else
+    g_warning (_("Cannot go forward, no more items in queue."));
 }
 
 gboolean
@@ -97,22 +144,36 @@ ide_back_forward_list_push (IdeBackForwardList *self,
                             IdeBackForwardItem *item)
 {
   IdeBackForwardListPrivate *priv;
-  IdeBackForwardItem *tmp;
+  IdeBackForwardList *current_item = NULL;
 
   g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (self));
   g_return_if_fail (IDE_IS_BACK_FORWARD_ITEM (item));
 
   priv = ide_back_forward_list_get_instance_private (self);
 
-  if (priv->forward->length > 0)
+  /*
+   * The following algorithm tries to loosely copy the design of jump lists
+   * in Vim. If we are not all the way forward, we push all items back onto
+   * the backward stack. We then push a duplicated "current_item" onto the
+   * backward stack. After that, we place @item as the new current_item.
+   * This allows us to jump back to our previous place easily, but not lose
+   * the history from previously forward progress.
+   */
+
+  if (priv->current_item)
     {
-      while ((tmp = g_queue_pop_head (priv->forward)))
-        g_queue_push_head (priv->backward, tmp);
+      current_item = g_object_ref (priv->current_item);
+      g_queue_push_head (priv->backward, priv->current_item);
+      priv->current_item = NULL;
     }
 
-  if (!(tmp = g_queue_peek_head (priv->backward)) ||
-      !ide_back_forward_item_chain (tmp, item))
-    g_queue_push_head (priv->backward, g_object_ref (item));
+  while (priv->forward->length)
+    g_queue_push_head (priv->backward, g_queue_pop_head (priv->forward));
+
+  if (current_item)
+    g_queue_push_head (priv->backward, current_item);
+
+  priv->current_item = g_object_ref (item);
 
   g_object_notify_by_pspec (G_OBJECT (self),
                             gParamSpecs [PROP_CAN_GO_BACKWARD]);
@@ -137,9 +198,21 @@ ide_back_forward_list_dispose (GObject *object)
 {
   IdeBackForwardList *self = (IdeBackForwardList *)object;
   IdeBackForwardListPrivate *priv = ide_back_forward_list_get_instance_private (self);
+  IdeBackForwardItem *item;
 
-  g_clear_pointer (&priv->backward, g_queue_free);
-  g_clear_pointer (&priv->forward, g_queue_free);
+  if (priv->backward)
+    {
+      while ((item = g_queue_pop_head (priv->backward)))
+        g_object_unref (item);
+      g_clear_pointer (&priv->backward, g_queue_free);
+    }
+
+  if (priv->forward)
+    {
+      while ((item = g_queue_pop_head (priv->forward)))
+        g_object_unref (item);
+      g_clear_pointer (&priv->forward, g_queue_free);
+    }
 
   G_OBJECT_CLASS (ide_back_forward_list_parent_class)->dispose (object);
 }
