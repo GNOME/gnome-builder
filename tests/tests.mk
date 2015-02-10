@@ -21,6 +21,15 @@ test_ide_context_CFLAGS = \
 test_ide_context_LDADD = libide.la
 
 
+noinst_PROGRAMS += test-ide-back-forward-list
+TESTS += test-ide-back-forward-list
+test_ide_back_forward_list_SOURCES = tests/test-ide-back-forward-list.c
+test_ide_back_forward_list_CFLAGS = \
+	$(libide_la_CFLAGS) \
+	-DTEST_DATA_DIR="\"$(top_srcdir)/tests/data\""
+test_ide_back_forward_list_LDADD = libide.la
+
+
 EXTRA_DIST += \
 	tests/data/project1/configure.ac \
 	$(NULL)
