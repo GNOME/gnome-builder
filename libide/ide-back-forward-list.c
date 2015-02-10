@@ -73,7 +73,7 @@ ide_back_forward_list_navigate_to (IdeBackForwardList *self,
                                    IdeBackForwardItem *item)
 {
   g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (self));
-  g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (item));
+  g_return_if_fail (IDE_IS_BACK_FORWARD_ITEM (item));
 
   g_signal_emit (self, gSignals [NAVIGATE_TO], 0, item);
 }
@@ -96,8 +96,7 @@ ide_back_forward_list_go_backward (IdeBackForwardList *self)
         g_queue_push_head (priv->forward, priv->current_item);
 
       priv->current_item = current_item;
-
-      ide_back_forward_list_navigate_to (self, current_item);
+      ide_back_forward_list_navigate_to (self, priv->current_item);
 
       g_object_notify_by_pspec (G_OBJECT (self),
                                 gParamSpecs [PROP_CAN_GO_BACKWARD]);
@@ -105,7 +104,7 @@ ide_back_forward_list_go_backward (IdeBackForwardList *self)
                                 gParamSpecs [PROP_CAN_GO_FORWARD]);
     }
   else
-    g_warning (_("Cannot go backward, no more items in queue."));
+    g_warning ("Cannot go backward, no more items in queue.");
 }
 
 void
@@ -116,16 +115,17 @@ ide_back_forward_list_go_forward (IdeBackForwardList *self)
 
   g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (self));
 
+  priv = ide_back_forward_list_get_instance_private (self);
+
   current_item = g_queue_pop_head (priv->forward);
 
   if (current_item)
     {
       if (priv->current_item)
-        g_queue_push_head (priv->forward, priv->current_item);
+        g_queue_push_head (priv->backward, priv->current_item);
 
       priv->current_item = current_item;
-
-      ide_back_forward_list_navigate_to (self, current_item);
+      ide_back_forward_list_navigate_to (self, priv->current_item);
 
       g_object_notify_by_pspec (G_OBJECT (self),
                                 gParamSpecs [PROP_CAN_GO_BACKWARD]);
@@ -133,7 +133,7 @@ ide_back_forward_list_go_forward (IdeBackForwardList *self)
                                 gParamSpecs [PROP_CAN_GO_FORWARD]);
     }
   else
-    g_warning (_("Cannot go forward, no more items in queue."));
+    g_warning ("Cannot go forward, no more items in queue.");
 }
 
 gboolean
@@ -181,18 +181,24 @@ ide_back_forward_list_push (IdeBackForwardList *self,
    * the history from previously forward progress.
    */
 
-  if (priv->current_item)
+  if (!priv->current_item)
     {
-      current_item = g_object_ref (priv->current_item);
-      g_queue_push_head (priv->backward, priv->current_item);
-      priv->current_item = NULL;
+      priv->current_item = g_object_ref (item);
+
+      g_return_if_fail (priv->backward->length == 0);
+      g_return_if_fail (priv->forward->length == 0);
+
+      return;
     }
 
-  while (priv->forward->length)
-    g_queue_push_head (priv->backward, g_queue_pop_head (priv->forward));
+  g_queue_push_head (priv->backward, priv->current_item);
 
-  if (current_item)
-    g_queue_push_head (priv->backward, current_item);
+  if (priv->forward->length)
+    {
+      while (priv->forward->length)
+        g_queue_push_head (priv->backward, g_queue_pop_head (priv->forward));
+      g_queue_push_head (priv->backward, g_object_ref (priv->current_item));
+    }
 
   priv->current_item = g_object_ref (item);
 
@@ -200,6 +206,9 @@ ide_back_forward_list_push (IdeBackForwardList *self,
                             gParamSpecs [PROP_CAN_GO_BACKWARD]);
   g_object_notify_by_pspec (G_OBJECT (self),
                             gParamSpecs [PROP_CAN_GO_FORWARD]);
+
+  g_return_if_fail (priv->forward->length == 0);
+  g_return_if_fail (priv->backward->length > 0);
 }
 
 IdeBackForwardList *
