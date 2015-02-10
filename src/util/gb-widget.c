@@ -256,3 +256,19 @@ gb_widget_activate_action (GtkWidget   *widget,
 
   g_warning ("Failed to resolve action %s.%s", prefix, action_name);
 }
+
+IdeContext *
+gb_widget_get_context (GtkWidget *widget)
+{
+  GbWorkbench *workbench;
+  IdeContext *context = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  if ((workbench = gb_widget_get_workbench (widget)))
+    context = gb_workbench_get_context (workbench);
+
+  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
+
+  return context;
+}
