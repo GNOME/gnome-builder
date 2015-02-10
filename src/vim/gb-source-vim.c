@@ -4743,8 +4743,6 @@ gb_source_vim_cmd_indent (GbSourceVim *vim,
 
   for (i = 0; i < count; i++)
     gb_source_vim_indent (vim);
-
-  gb_source_vim_clear_selection (vim);
 }
 
 static void
@@ -4760,8 +4758,6 @@ gb_source_vim_cmd_unindent (GbSourceVim *vim,
 
   for (i = 0; i < count; i++)
     gb_source_vim_unindent (vim);
-
-  gb_source_vim_clear_selection (vim);
 }
 
 static void
