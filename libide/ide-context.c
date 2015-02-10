@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 
 #include "ide-async-helper.h"
+#include "ide-back-forward-list.h"
 #include "ide-build-system.h"
 #include "ide-context.h"
 #include "ide-device-manager.h"
@@ -32,6 +33,7 @@
 
 typedef struct
 {
+  IdeBackForwardList *back_forward_list;
   IdeBuildSystem     *build_system;
   IdeDeviceManager   *device_manager;
   IdeProject         *project;
@@ -51,6 +53,7 @@ G_DEFINE_TYPE_EXTENDED (IdeContext, ide_context, G_TYPE_OBJECT, 0,
 
 enum {
   PROP_0,
+  PROP_BACK_FORWARD_LIST,
   PROP_BUILD_SYSTEM,
   PROP_DEVICE_MANAGER,
   PROP_PROJECT_FILE,
@@ -61,6 +64,31 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+/**
+ * ide_context_get_back_forward_list:
+ *
+ * Retrieves the global back forward list for the #IdeContext.
+ *
+ * Consumers of this should branch the #IdeBackForwardList and merge them
+ * when there document stack is closed.
+ *
+ * See ide_back_forward_list_branch() and ide_back_forward_list_merge() for
+ * more information.
+ *
+ * Returns: (transfer none): An #IdeBackForwardList.
+ */
+IdeBackForwardList *
+ide_context_get_back_forward_list (IdeContext *context)
+{
+  IdeContextPrivate *priv;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  priv = ide_context_get_instance_private (context);
+
+  return priv->back_forward_list;
+}
 
 /**
  * ide_context_get_build_system:
@@ -387,6 +415,10 @@ ide_context_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_BACK_FORWARD_LIST:
+      g_value_set_object (value, ide_context_get_back_forward_list (self));
+      break;
+
     case PROP_BUILD_SYSTEM:
       g_value_set_object (value, ide_context_get_build_system (self));
       break;
@@ -448,6 +480,15 @@ ide_context_class_init (IdeContextClass *klass)
   object_class->finalize = ide_context_finalize;
   object_class->get_property = ide_context_get_property;
   object_class->set_property = ide_context_set_property;
+
+  gParamSpecs [PROP_BACK_FORWARD_LIST] =
+    g_param_spec_object ("back-forward-list",
+                         _("Back Forward List"),
+                         _("Back/forward navigation history for the context."),
+                         IDE_TYPE_BACK_FORWARD_LIST,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_BACK_FORWARD_LIST,
+                                   gParamSpecs [PROP_BACK_FORWARD_LIST]);
 
   gParamSpecs [PROP_BUILD_SYSTEM] =
     g_param_spec_object ("build-system",
@@ -515,6 +556,10 @@ ide_context_init (IdeContext *self)
                                            ide_get_program_name (),
                                            "builds",
                                            NULL);
+
+  priv->back_forward_list = g_object_new (IDE_TYPE_BACK_FORWARD_LIST,
+                                          "context", self,
+                                          NULL);
 
   priv->device_manager = g_object_new (IDE_TYPE_DEVICE_MANAGER,
                                        "context", self,
@@ -727,11 +772,27 @@ ide_context_init_unsaved_files (gpointer             source_object,
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
-  task = g_task_new (source_object, cancellable, callback, user_data);
+  task = g_task_new (self, cancellable, callback, user_data);
   ide_unsaved_files_restore_async (priv->unsaved_files,
                                    cancellable,
                                    ide_context_init_unsaved_files_cb,
                                    g_object_ref (task));
+}
+
+static void
+ide_context_init_back_forward_list (gpointer             source_object,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  IdeContextPrivate *priv = ide_context_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_return_boolean (task, TRUE); /* TODO: implement loading */
 }
 
 static void
@@ -754,6 +815,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_build_system,
                         ide_context_init_vcs,
                         ide_context_init_project_name,
+                        ide_context_init_back_forward_list,
                         ide_context_init_unsaved_files,
                         NULL);
 }

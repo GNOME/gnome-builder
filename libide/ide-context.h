@@ -34,6 +34,7 @@ struct _IdeContext
   GObject parent_instance;
 };
 
+IdeBackForwardList *ide_context_get_back_forward_list (IdeContext           *context);
 GFile              *ide_context_get_project_file      (IdeContext           *context);
 IdeBuildSystem     *ide_context_get_build_system      (IdeContext           *context);
 IdeDeviceManager   *ide_context_get_device_manager    (IdeContext           *context);
