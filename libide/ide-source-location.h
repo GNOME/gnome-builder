@@ -29,9 +29,9 @@ GType              ide_source_location_get_type        (void);
 IdeSourceLocation *ide_source_location_ref             (IdeSourceLocation *self);
 void               ide_source_location_unref           (IdeSourceLocation *self);
 IdeSourceLocation *ide_source_location_new             (IdeFile           *file,
-                                                        guint             line,
-                                                        guint             line_offset,
-                                                        guint             offset);
+                                                        guint              line,
+                                                        guint              line_offset,
+                                                        guint              offset);
 guint              ide_source_location_get_line        (IdeSourceLocation *self);
 guint              ide_source_location_get_line_offset (IdeSourceLocation *self);
 guint              ide_source_location_get_offset      (IdeSourceLocation *self);
