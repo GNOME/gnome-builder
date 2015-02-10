@@ -4741,8 +4741,10 @@ gb_source_vim_cmd_indent (GbSourceVim *vim,
 
   count = MAX (1, count);
 
+  gb_source_vim_recording_begin (vim, '>', modifier);
   for (i = 0; i < count; i++)
     gb_source_vim_indent (vim);
+  gb_source_vim_recording_end (vim);
 }
 
 static void
@@ -4756,8 +4758,10 @@ gb_source_vim_cmd_unindent (GbSourceVim *vim,
 
   count = MAX (1, count);
 
+  gb_source_vim_recording_begin (vim, '<', modifier);
   for (i = 0; i < count; i++)
     gb_source_vim_unindent (vim);
+  gb_source_vim_recording_end (vim);
 }
 
 static void
