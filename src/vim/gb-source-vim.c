@@ -332,7 +332,10 @@ gb_source_vim_recording_replay (GbSourceVim *vim)
 static void
 gb_source_vim_recording_end (GbSourceVim *vim)
 {
-  g_return_if_fail (vim->priv->recording);
+  g_return_if_fail (vim->priv->recording || vim->priv->in_replay);
+
+  if (vim->priv->in_replay)
+    return;
 
   vim->priv->recording = FALSE;
 }
