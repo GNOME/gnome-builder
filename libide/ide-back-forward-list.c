@@ -182,9 +182,39 @@ ide_back_forward_list_push (IdeBackForwardList *self,
 }
 
 IdeBackForwardList *
-ide_back_forward_list_branch (IdeBackForwardList *list)
+ide_back_forward_list_branch (IdeBackForwardList *self)
 {
-  return NULL;
+  IdeBackForwardListPrivate *priv;
+  IdeBackForwardList *ret;
+  IdeContext *context;
+  GList *iter;
+
+  g_return_val_if_fail (IDE_IS_BACK_FORWARD_LIST (self), NULL);
+
+  priv = ide_back_forward_list_get_instance_private (self);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  ret = g_object_new (IDE_TYPE_BACK_FORWARD_LIST,
+                      "context", context,
+                      NULL);
+
+  for (iter = priv->backward->head; iter; iter = iter->next)
+    {
+      IdeBackForwardItem *item = iter->data;
+      ide_back_forward_list_push (ret, item);
+    }
+
+  if (priv->current_item)
+    ide_back_forward_list_push (ret, priv->current_item);
+
+  for (iter = priv->forward->head; iter; iter = iter->next)
+    {
+      IdeBackForwardItem *item = iter->data;
+      ide_back_forward_list_push (ret, item);
+    }
+
+  return ret;
 }
 
 void
