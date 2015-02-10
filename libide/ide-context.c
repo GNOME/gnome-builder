@@ -32,14 +32,14 @@
 
 typedef struct
 {
-  IdeBuildSystem   *build_system;
-  IdeDeviceManager *device_manager;
-  IdeProject       *project;
-  GFile            *project_file;
-  gchar            *root_build_dir;
-  GHashTable       *services;
-  IdeUnsavedFiles  *unsaved_files;
-  IdeVcs           *vcs;
+  IdeBuildSystem     *build_system;
+  IdeDeviceManager   *device_manager;
+  IdeProject         *project;
+  GFile              *project_file;
+  gchar              *root_build_dir;
+  GHashTable         *services;
+  IdeUnsavedFiles    *unsaved_files;
+  IdeVcs             *vcs;
 } IdeContextPrivate;
 
 static void async_initable_init (GAsyncInitableIface *);

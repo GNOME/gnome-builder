@@ -34,24 +34,23 @@ struct _IdeContext
   GObject parent_instance;
 };
 
-void            ide_context_new_async        (GFile                *project_file,
-                                              GCancellable         *cancellable,
-                                              GAsyncReadyCallback   callback,
-                                              gpointer              user_data);
-IdeContext     *ide_context_new_finish       (GAsyncResult         *result,
-                                              GError              **error);
-
-IdeBuildSystem   *ide_context_get_build_system   (IdeContext  *context);
-IdeDeviceManager *ide_context_get_device_manager (IdeContext  *context);
-IdeProject       *ide_context_get_project        (IdeContext  *context);
-GFile            *ide_context_get_project_file   (IdeContext  *context);
-gpointer          ide_context_get_service_typed  (IdeContext  *context,
-                                                  GType        service_type);
-IdeUnsavedFiles  *ide_context_get_unsaved_files  (IdeContext  *context);
-IdeVcs           *ide_context_get_vcs            (IdeContext  *context);
-const gchar      *ide_context_get_root_build_dir (IdeContext  *context);
-void              ide_context_set_root_build_dir (IdeContext  *context,
-                                                  const gchar *root_build_dir);
+GFile              *ide_context_get_project_file      (IdeContext           *context);
+IdeBuildSystem     *ide_context_get_build_system      (IdeContext           *context);
+IdeDeviceManager   *ide_context_get_device_manager    (IdeContext           *context);
+IdeProject         *ide_context_get_project           (IdeContext           *context);
+IdeUnsavedFiles    *ide_context_get_unsaved_files     (IdeContext           *context);
+IdeVcs             *ide_context_get_vcs               (IdeContext           *context);
+const gchar        *ide_context_get_root_build_dir    (IdeContext           *context);
+gpointer            ide_context_get_service_typed     (IdeContext           *context,
+                                                       GType                 service_type);
+void                ide_context_new_async             (GFile                *project_file,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+IdeContext         *ide_context_new_finish            (GAsyncResult         *result,
+                                                       GError              **error);
+void                ide_context_set_root_build_dir    (IdeContext           *context,
+                                                       const gchar          *root_build_dir);
 
 G_END_DECLS
 
