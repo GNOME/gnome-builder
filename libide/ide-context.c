@@ -24,6 +24,7 @@
 #include "ide-build-system.h"
 #include "ide-context.h"
 #include "ide-device-manager.h"
+#include "ide-global.h"
 #include "ide-project.h"
 #include "ide-service.h"
 #include "ide-unsaved-files.h"

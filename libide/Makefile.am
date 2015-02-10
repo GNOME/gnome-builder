@@ -16,6 +16,10 @@ libide_la_SOURCES = \
 	libide/git/ide-git-vcs.h \
 	libide/ide-async-helper.c \
 	libide/ide-async-helper.h \
+	libide/ide-back-forward-item.c \
+	libide/ide-back-forward-item.h \
+	libide/ide-back-forward-list.c \
+	libide/ide-back-forward-list.h \
 	libide/ide-buffer-iter.h \
 	libide/ide-buffer.h \
 	libide/ide-build-result.c \
@@ -57,6 +61,8 @@ libide_la_SOURCES = \
 	libide/ide-refactory.h \
 	libide/ide-script.c \
 	libide/ide-script.h \
+	libide/ide-source-location.c \
+	libide/ide-source-location.h \
 	libide/ide-search-engine.h \
 	libide/ide-search-provider.h \
 	libide/ide-search-result.h \
