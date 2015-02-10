@@ -146,6 +146,7 @@ ide_source_location_new (IdeFile *file,
   g_return_val_if_fail (IDE_IS_FILE (file), NULL);
 
   ret = g_slice_new0 (IdeSourceLocation);
+  ret->ref_count = 1;
   ret->file = g_object_ref (file);
   ret->line = line;
   ret->line_offset = line_offset;
