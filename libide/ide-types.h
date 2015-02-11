@@ -24,7 +24,7 @@
 G_BEGIN_DECLS
 
 #define ide_clear_weak_pointer(ptr) \
-  (*(ptr) ? (g_object_remove_weak_pointer((GObject*)*(ptr), (gpointer*)ptr),1) : 0)
+  (*(ptr) ? (g_object_remove_weak_pointer((GObject*)*(ptr), (gpointer*)ptr),*(ptr)=NULL,1) : 0)
 
 #define ide_set_weak_pointer(ptr,obj) \
   ((obj!=*(ptr)) ? (ide_clear_weak_pointer(ptr),*(ptr)=obj,g_object_add_weak_pointer((GObject*)obj, (gpointer*)ptr),1) : 0)
@@ -32,12 +32,6 @@ G_BEGIN_DECLS
 typedef struct _IdeBackForwardItem             IdeBackForwardItem;
 
 typedef struct _IdeBackForwardList             IdeBackForwardList;
-
-typedef struct _IdeBuffer                      IdeBuffer;
-typedef struct _IdeBufferInterface             IdeBufferInterface;
-
-typedef struct _IdeBufferIter                  IdeBufferIter;
-typedef struct _IdeBufferIterInterface         IdeBufferIterInterface;
 
 typedef struct _IdeBuilder                     IdeBuilder;
 
@@ -60,10 +54,10 @@ typedef struct _IdeDeviceProvider              IdeDeviceProvider;
 typedef struct _IdeDeviceProviderInterface     IdeDeviceProviderInterface;
 
 typedef struct _IdeDiagnostic                  IdeDiagnostic;
-typedef struct _IdeDiagnosticInterface         IdeDiagnosticInterface;
+
+typedef struct _IdeDiagnostician               IdeDiagnostician;
 
 typedef struct _IdeDiagnosticProvider          IdeDiagnosticProvider;
-typedef struct _IdeDiagnosticProviderInterface IdeDiagnosticProviderInterface;
 
 typedef struct _IdeExecuter                    IdeExecuter;
 typedef struct _IdeExecuterInterface           IdeExecuterInterface;
@@ -73,11 +67,11 @@ typedef struct _IdeExecutableInterface         IdeExecutableInterface;
 
 typedef struct _IdeFile                        IdeFile;
 
+typedef struct _IdeHighlighter                 IdeHighlighter;
+
 typedef struct _IdeIndenter                    IdeIndenter;
-typedef struct _IdeIndenterInterface           IdeIndenterInterface;
 
 typedef struct _IdeLanguage                    IdeLanguage;
-typedef struct _IdeLanguageInterface           IdeLanguageInterface;
 
 typedef struct _IdeObject                      IdeObject;
 
@@ -96,16 +90,12 @@ typedef struct _IdeRefactory                   IdeRefactory;
 typedef struct _IdeRefactoryInterface          IdeRefactoryInterface;
 
 typedef struct _IdeScript                      IdeScript;
-typedef struct _IdeScriptClass                 IdeScriptClass;
-typedef struct _IdeScriptPrivate               IdeScriptPrivate;
 
 typedef struct _IdeSearchEngine                IdeSearchEngine;
 
 typedef struct _IdeSearchProvider              IdeSearchProvider;
 
 typedef struct _IdeSearchResult                IdeSearchResult;
-typedef struct _IdeSearchResultClass           IdeSearchResultClass;
-typedef struct _IdeSearchResultPrivate         IdeSearchResultPrivate;
 
 typedef struct _IdeService                     IdeService;
 

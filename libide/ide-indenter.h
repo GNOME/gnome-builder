@@ -19,21 +19,18 @@
 #ifndef IDE_INDENTER_H
 #define IDE_INDENTER_H
 
-#include <glib-object.h>
+#include "ide-object.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_INDENTER               (ide_indenter_get_type ())
-#define IDE_INDENTER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_INDENTER, IdeIndenter))
-#define IDE_IS_INDENTER(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_INDENTER))
-#define IDE_INDENTER_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), IDE_TYPE_INDENTER, IdeIndenterInterface))
+#define IDE_TYPE_INDENTER (ide_indenter_get_type())
 
-struct _IdeIndenterInterface
+G_DECLARE_DERIVABLE_TYPE (IdeIndenter, ide_indenter, IDE, INDENTER, IdeObject)
+
+struct _IdeIndenterClass
 {
-  GTypeInterface parent;
+  IdeObjectClass parent;
 };
-
-GType ide_indenter_get_type (void);
 
 G_END_DECLS
 

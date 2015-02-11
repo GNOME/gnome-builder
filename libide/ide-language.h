@@ -19,21 +19,34 @@
 #ifndef IDE_LANGUAGE_H
 #define IDE_LANGUAGE_H
 
-#include <glib-object.h>
+#include "ide-object.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LANGUAGE               (ide_language_get_type ())
-#define IDE_LANGUAGE(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_LANGUAGE, IdeLanguage))
-#define IDE_IS_LANGUAGE(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_LANGUAGE))
-#define IDE_LANGUAGE_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), IDE_TYPE_LANGUAGE, IdeLanguageInterface))
+#define IDE_TYPE_LANGUAGE            (ide_language_get_type())
+#define IDE_LANGUAGE_EXTENSION_POINT "org.gnome.libide.extensions.language"
 
-struct _IdeLanguageInterface
+G_DECLARE_DERIVABLE_TYPE (IdeLanguage, ide_language, IDE, LANGUAGE, IdeObject)
+
+struct _IdeLanguageClass
 {
-  GTypeInterface parent;
+  IdeObjectClass parent;
+
+  IdeDiagnostician  *(*get_diagnostician)   (IdeLanguage *self);
+  IdeHighlighter    *(*get_highlighter)     (IdeLanguage *self);
+  IdeIndenter       *(*get_indenter)        (IdeLanguage *self);
+  const gchar       *(*get_name)            (IdeLanguage *self);
+  IdeRefactory      *(*get_refactory)       (IdeLanguage *self);
+  IdeSymbolResolver *(*get_symbol_resolver) (IdeLanguage *self);
 };
 
-GType ide_language_get_type (void);
+IdeDiagnostician  *ide_language_get_diagnostician   (IdeLanguage *self);
+IdeHighlighter    *ide_language_get_highlighter     (IdeLanguage *self);
+const gchar       *ide_language_get_id              (IdeLanguage *self);
+IdeIndenter       *ide_language_get_indenter        (IdeLanguage *self);
+const gchar       *ide_language_get_name            (IdeLanguage *self);
+IdeRefactory      *ide_language_get_refactory       (IdeLanguage *self);
+IdeSymbolResolver *ide_language_get_symbol_resolver (IdeLanguage *self);
 
 G_END_DECLS
 

@@ -1,4 +1,4 @@
-/* ide-file.h
+/* ide-diagnostician.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,26 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_FILE_H
-#define IDE_FILE_H
+#ifndef IDE_DIAGNOSTICIAN_H
+#define IDE_DIAGNOSTICIAN_H
 
 #include "ide-object.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_FILE (ide_file_get_type())
+#define IDE_TYPE_DIAGNOSTICIAN (ide_diagnostician_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeFile, ide_file, IDE, FILE, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeDiagnostician, ide_diagnostician, IDE, DIAGNOSTICIAN, IdeObject)
 
-struct _IdeFile
+struct _IdeDiagnosticianClass
 {
-  IdeObject parent_instance;
+  GObjectClass parent;
 };
-
-IdeLanguage *ide_file_get_language     (IdeFile *self);
-GFile       *ide_file_get_file         (IdeFile *self);
-const gchar *ide_file_get_project_path (IdeFile *self);
 
 G_END_DECLS
 
-#endif /* IDE_FILE_H */
+#endif /* IDE_DIAGNOSTICIAN_H */
