@@ -206,16 +206,6 @@
                 <property name="orientation">vertical</property>
                 <property name="expand">true</property>
                 <property name="visible">true</property>
-                <child>
-                  <object class="GbEditorFrame" id="frame">
-                    <property name="expand">true</property>
-                    <property name="visible">true</property>
-                  </object>
-                  <packing>
-                    <property name="resize">true</property>
-                    <property name="shrink">false</property>
-                  </packing>
-                </child>
               </object>
             </child>
           </object>

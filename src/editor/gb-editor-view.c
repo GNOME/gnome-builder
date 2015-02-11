@@ -789,6 +789,63 @@ gb_editor_view_on_vim_split (GbEditorView     *self,
   return ret;
 }
 
+static GbEditorFrame *
+gb_editor_view_create_frame (GbEditorView *view)
+{
+  GbSourceVim *vim;
+  GtkWidget *frame;
+
+  g_return_val_if_fail (GB_IS_EDITOR_VIEW (view), NULL);
+
+  frame = g_object_new (GB_TYPE_EDITOR_FRAME,
+                         "document", view->priv->document,
+                         "visible", TRUE,
+                         NULL);
+  vim = gb_source_view_get_vim (GB_EDITOR_FRAME (frame)->priv->source_view);
+  g_signal_connect_object (vim,
+                           "execute-command",
+                           G_CALLBACK (gb_editor_view_on_execute_command),
+                           view,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (vim,
+                           "split",
+                           G_CALLBACK (gb_editor_view_on_vim_split),
+                           view,
+                           G_CONNECT_SWAPPED);
+
+  g_object_bind_property (GB_EDITOR_FRAME (frame), "search-direction",
+                          vim, "search-direction", G_BINDING_SYNC_CREATE);
+  g_object_bind_property (GB_EDITOR_FRAME (frame)->priv->search_settings,
+                          "search-text", vim, "search-text",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (view, "auto-indent",
+                          GB_EDITOR_FRAME (frame)->priv->source_view,
+                          "auto-indent",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  g_object_bind_property (view, "highlight-current-line",
+                          GB_EDITOR_FRAME (frame)->priv->source_view,
+                          "highlight-current-line",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  g_object_bind_property (view, "show-line-numbers",
+                          GB_EDITOR_FRAME (frame)->priv->source_view,
+                          "show-line-numbers",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  g_object_bind_property (view, "show-right-margin",
+                          GB_EDITOR_FRAME (frame)->priv->source_view,
+                          "show-right-margin",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  g_object_bind_property (view, "tab-width",
+                          GB_EDITOR_FRAME (frame)->priv->source_view,
+                          "tab-width",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  g_object_bind_property (view, "use-spaces",
+                          GB_EDITOR_FRAME (frame)->priv->source_view,
+                          "insert-spaces-instead-of-tabs",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+
+  return GB_EDITOR_FRAME (frame);
+}
+
 static void
 gb_editor_view_toggle_split (GbEditorView *view)
 {
@@ -810,61 +867,15 @@ gb_editor_view_toggle_split (GbEditorView *view)
     }
   else
     {
-      GbSourceVim *vim;
+      GbEditorFrame *frame;
 
-      child2 = g_object_new (GB_TYPE_EDITOR_FRAME,
-                             "document", view->priv->document,
-                             "visible", TRUE,
-                             NULL);
-      vim = gb_source_view_get_vim (GB_EDITOR_FRAME (child2)->priv->source_view);
-      g_signal_connect_object (vim,
-                               "execute-command",
-                               G_CALLBACK (gb_editor_view_on_execute_command),
-                               view,
-                               G_CONNECT_SWAPPED);
-      g_signal_connect_object (vim,
-                               "split",
-                               G_CALLBACK (gb_editor_view_on_vim_split),
-                               view,
-                               G_CONNECT_SWAPPED);
-
-      g_object_bind_property (GB_EDITOR_FRAME (child2),
-                              "search-direction",
-                              vim, "search-direction",
-                              G_BINDING_SYNC_CREATE);
-      g_object_bind_property (GB_EDITOR_FRAME (child2)->priv->search_settings,
-                              "search-text",
-                              vim, "search-text",
-                              G_BINDING_SYNC_CREATE);
-      g_object_bind_property (view, "auto-indent",
-                              GB_EDITOR_FRAME (child2)->priv->source_view,
-                              "auto-indent",
-                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-      g_object_bind_property (view, "highlight-current-line",
-                              GB_EDITOR_FRAME (child2)->priv->source_view,
-                              "highlight-current-line",
-                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-      g_object_bind_property (view, "show-line-numbers",
-                              GB_EDITOR_FRAME (child2)->priv->source_view,
-                              "show-line-numbers",
-                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-      g_object_bind_property (view, "show-right-margin",
-                              GB_EDITOR_FRAME (child2)->priv->source_view,
-                              "show-right-margin",
-                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-      g_object_bind_property (view, "tab-width",
-                              GB_EDITOR_FRAME (child2)->priv->source_view,
-                              "tab-width",
-                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-      g_object_bind_property (view, "use-spaces",
-                              GB_EDITOR_FRAME (child2)->priv->source_view,
-                              "insert-spaces-instead-of-tabs",
-                              G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-      gtk_container_add_with_properties (GTK_CONTAINER (priv->paned), child2,
+      frame = gb_editor_view_create_frame (view);
+      gtk_container_add_with_properties (GTK_CONTAINER (view->priv->paned),
+                                         GTK_WIDGET (frame),
                                          "shrink", TRUE,
                                          "resize", TRUE,
                                          NULL);
-      gtk_widget_grab_focus (child2);
+      gtk_widget_grab_focus (GTK_WIDGET (frame));
       active = TRUE;
     }
 
@@ -1175,7 +1186,6 @@ gb_editor_view_init (GbEditorView *self)
     { "use-spaces", NULL, "b", "false", apply_state_use_spaces },
   };
   GSimpleActionGroup *actions;
-  GbSourceVim *vim;
   GtkWidget *controls;
 
   self->priv = gb_editor_view_get_instance_private (self);
@@ -1200,47 +1210,10 @@ gb_editor_view_init (GbEditorView *self)
 
   g_clear_object (&actions);
 
-  vim = gb_source_view_get_vim (self->priv->frame->priv->source_view);
-  g_signal_connect_object (vim,
-                           "execute-command",
-                           G_CALLBACK (gb_editor_view_on_execute_command),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (vim,
-                           "split",
-                           G_CALLBACK (gb_editor_view_on_vim_split),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_object_bind_property (self->priv->frame->priv->source_view, "auto-indent",
-                          self, "auto-indent",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (self->priv->frame->priv->source_view,
-                          "highlight-current-line",
-                          self, "highlight-current-line",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (self->priv->frame->priv->source_view,
-                          "show-line-numbers",
-                          self, "show-line-numbers",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (self->priv->frame->priv->source_view,
-                          "show-right-margin",
-                          self, "show-right-margin",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (self->priv->frame->priv->source_view,
-                          "tab-width",
-                          self, "tab-width",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  g_object_bind_property (self->priv->frame->priv->source_view,
-                          "insert-spaces-instead-of-tabs",
-                          self, "use-spaces",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-
-  g_object_bind_property (self->priv->frame,
-                          "search-direction",
-                          vim, "search-direction",
-                          G_BINDING_SYNC_CREATE);
-  g_object_bind_property (self->priv->frame->priv->search_settings,
-                          "search-text",
-                          vim, "search-text",
-                          G_BINDING_SYNC_CREATE);
+  self->priv->frame = gb_editor_view_create_frame (self);
+  gtk_container_add_with_properties (GTK_CONTAINER (self->priv->paned),
+                                     GTK_WIDGET (self->priv->frame),
+                                     "shrink", TRUE,
+                                     "resize", TRUE,
+                                     NULL);
 }
