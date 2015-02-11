@@ -207,6 +207,7 @@ gb_editor_frame_match (GbEditorFrame    *self,
   EXIT;
 
 found_match:
+  gb_source_view_jump_notify (priv->source_view);
   gb_source_view_clear_saved_cursor (priv->source_view);
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->document),
                                 &match_begin, &match_end);
