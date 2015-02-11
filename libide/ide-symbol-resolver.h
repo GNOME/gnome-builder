@@ -35,6 +35,15 @@ struct _IdeSymbolResolverInterface
 
 GType ide_symbol_resolver_get_type (void);
 
+void       ide_symbol_resolver_lookup_symbol_async  (IdeSymbolResolver    *self,
+                                                     IdeSourceLocation    *location,
+                                                     GCancellable         *cancellable,
+                                                     GAsyncReadyCallback   callback,
+                                                     gpointer              user_data);
+IdeSymbol *ide_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver    *self,
+                                                     GAsyncResult         *result,
+                                                     GError              **error);
+
 G_END_DECLS
 
 #endif /* IDE_SYMBOL_RESOLVER_H */
