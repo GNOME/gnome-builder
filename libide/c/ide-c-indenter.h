@@ -1,4 +1,4 @@
-/* ide-service.h
+/* ide-c-indenter.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,32 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SERVICE_H
-#define IDE_SERVICE_H
+#ifndef IDE_C_INDENTER_H
+#define IDE_C_INDENTER_H
 
-#include "ide-object.h"
+#include "ide-indenter.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SERVICE            (ide_service_get_type())
-#define IDE_SERVICE_EXTENSION_POINT "org.gnome.libide.extensions.service"
+#define IDE_TYPE_C_INDENTER (ide_c_indenter_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeService, ide_service, IDE, SERVICE, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeCIndenter, ide_c_indenter, IDE, C_INDENTER, IdeIndenter)
 
-struct _IdeServiceClass
+struct _IdeCIndenterClass
 {
-  IdeObjectClass parent;
-
-  const gchar *(*get_name) (IdeService *service);
-  void         (*start)    (IdeService *service);
-  void         (*stop)     (IdeService *service);
+  IdeIndenterClass parent;
 };
-
-const gchar *ide_service_get_name    (IdeService *self);
-gboolean     ide_service_get_running (IdeService *self);
-void         ide_service_start       (IdeService *self);
-void         ide_service_stop        (IdeService *self);
 
 G_END_DECLS
 
-#endif /* IDE_SERVICE_H */
+#endif /* IDE_C_INDENTER_H */

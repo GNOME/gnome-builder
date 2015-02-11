@@ -32,9 +32,10 @@ struct _IdeFile
   IdeObject parent_instance;
 };
 
-IdeLanguage *ide_file_get_language     (IdeFile *self);
-GFile       *ide_file_get_file         (IdeFile *self);
-const gchar *ide_file_get_project_path (IdeFile *self);
+IdeLanguage     *ide_file_get_language      (IdeFile *self);
+GFile           *ide_file_get_file          (IdeFile *self);
+const gchar     *ide_file_get_project_path  (IdeFile *self);
+//IdeFileSettings *ide_file_get_file_settings (IdeFile *self);
 
 G_END_DECLS
 

@@ -23,17 +23,14 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SYMBOL_RESOLVER               (ide_symbol_resolver_get_type ())
-#define IDE_SYMBOL_RESOLVER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SYMBOL_RESOLVER, IdeSymbolResolver))
-#define IDE_IS_SYMBOL_RESOLVER(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_SYMBOL_RESOLVER))
-#define IDE_SYMBOL_RESOLVER_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), IDE_TYPE_SYMBOL_RESOLVER, IdeSymbolResolverInterface))
+#define IDE_TYPE_SYMBOL_RESOLVER (ide_symbol_resolver_get_type())
 
-struct _IdeSymbolResolverInterface
+G_DECLARE_DERIVABLE_TYPE (IdeSymbolResolver, ide_symbol_resolver, IDE, SYMBOL_RESOLVER, IdeObject)
+
+struct _IdeSymbolResolverClass
 {
-  GTypeInterface parent;
+  IdeObjectClass parent;
 };
-
-GType ide_symbol_resolver_get_type (void);
 
 void       ide_symbol_resolver_lookup_symbol_async  (IdeSymbolResolver    *self,
                                                      IdeSourceLocation    *location,

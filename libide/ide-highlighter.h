@@ -29,7 +29,7 @@ G_DECLARE_DERIVABLE_TYPE (IdeHighlighter, ide_highlighter, IDE, HIGHLIGHTER, Ide
 
 struct _IdeHighlighterClass
 {
-  GObjectClass parent;
+  IdeObjectClass parent;
 };
 
 G_END_DECLS
