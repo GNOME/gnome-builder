@@ -21,10 +21,12 @@
 
 #include "gconstructor.h"
 #include "ide.h"
-#include "autotools/ide-autotools-build-system.h"
-#include "directory/ide-directory-build-system.h"
-#include "directory/ide-directory-vcs.h"
-#include "git/ide-git-vcs.h"
+
+#include "ide-autotools-build-system.h"
+#include "ide-clang-service.h"
+#include "ide-directory-build-system.h"
+#include "ide-directory-vcs.h"
+#include "ide-git-vcs.h"
 
 static gboolean     gProgramNameRead;
 static const gchar *gProgramName = "libide";
@@ -68,6 +70,11 @@ ide_init_ctor (void)
                                   IDE_TYPE_DIRECTORY_BUILD_SYSTEM,
                                   IDE_BUILD_SYSTEM_EXTENSION_POINT".directory",
                                   -200);
+
+  g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
+                                  IDE_TYPE_CLANG_SERVICE,
+                                  IDE_SERVICE_EXTENSION_POINT".clang",
+                                  0);
 
   g_io_extension_point_implement (IDE_VCS_EXTENSION_POINT,
                                   IDE_TYPE_GIT_VCS,
