@@ -25,6 +25,8 @@
 struct _GbDocumentViewPrivate
 {
   GtkBox *controls;
+
+  IdeBackForwardList *back_forward_list;
 };
 
 static void buildable_init (GtkBuildableIface *iface);
@@ -38,6 +40,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GbDocumentView,
 
 enum {
   PROP_0,
+  PROP_BACK_FORWARD_LIST,
   PROP_CAN_PREVIEW,
   PROP_CONTROLS,
   PROP_DOCUMENT,
@@ -51,6 +54,34 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
+
+/**
+ * gb_document_view_get_back_forward_list:
+ *
+ * Retrieves the #IdeBackForwardList to be used by this view.
+ *
+ * Returns: (transfer none) (nullable): An #IdeBackForwardList or %NULL.
+ */
+IdeBackForwardList *
+gb_document_view_get_back_forward_list (GbDocumentView *view)
+{
+  g_return_val_if_fail (GB_IS_DOCUMENT_VIEW (view), NULL);
+
+  return view->priv->back_forward_list;
+}
+
+void
+gb_document_view_set_back_forward_list (GbDocumentView     *view,
+                                        IdeBackForwardList *back_forward_list)
+{
+  g_return_if_fail (GB_IS_DOCUMENT_VIEW (view));
+  g_return_if_fail (!back_forward_list ||
+                    IDE_IS_BACK_FORWARD_LIST (back_forward_list));
+
+  if (g_set_object (&view->priv->back_forward_list, back_forward_list))
+    g_object_notify_by_pspec (G_OBJECT (view),
+                              gParamSpecs [PROP_BACK_FORWARD_LIST]);
+}
 
 /**
  * gb_document_view_get_controls:
