@@ -6,3 +6,10 @@ PKG_CHECK_MODULES(LIBIDE, [gio-2.0 >= 2.43.4
                            gio-unix-2.0 >= 2.43.4
                            libgit2-glib-1.0 >= 0.0.24])
 
+
+AC_PATH_PROG([LLVM_CONFIG], [llvm-config])
+AS_IF([test "x$LLVM_CONFIG" = "x"],[
+    AC_MSG_ERROR([Failed to locate the llvm-config program.])
+])
+CLANG_LDFLAGS=`$LLVM_CONFIG --ldflags`
+AC_SUBST([CLANG_LDFLAGS])
