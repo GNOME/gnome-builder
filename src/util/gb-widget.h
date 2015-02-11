@@ -33,6 +33,7 @@ G_BEGIN_DECLS
   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (klass), \
                                                 TN, field)
 
+void             gb_widget_bind_context    (GtkWidget    *widget);
 IdeContext      *gb_widget_get_context     (GtkWidget    *widget);
 void             gb_widget_add_style_class (gpointer      widget,
                                             const gchar  *class_name);
