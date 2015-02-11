@@ -25,12 +25,17 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DIAGNOSTICIAN (ide_diagnostician_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeDiagnostician, ide_diagnostician, IDE, DIAGNOSTICIAN, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeDiagnostician, ide_diagnostician, IDE, DIAGNOSTICIAN, IdeObject)
 
-struct _IdeDiagnosticianClass
+struct _IdeDiagnostician
 {
-  GObjectClass parent;
+  IdeObject parent_instance;
 };
+
+void ide_diagnostician_add_provider    (IdeDiagnostician      *self,
+                                        IdeDiagnosticProvider *provider);
+void ide_diagnostician_remove_provider (IdeDiagnostician      *self,
+                                        IdeDiagnosticProvider *provider);
 
 G_END_DECLS
 

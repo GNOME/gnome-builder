@@ -7,6 +7,16 @@ libide_la_SOURCES = \
 	libide/autotools/ide-autotools-build-task.h \
 	libide/autotools/ide-autotools-builder.c \
 	libide/autotools/ide-autotools-builder.h \
+	libide/c/ide-c-language.c \
+	libide/c/ide-c-language.h \
+	libide/c/ide-c-indenter.c \
+	libide/c/ide-c-indenter.h \
+	libide/clang/ide-clang-service.c \
+	libide/clang/ide-clang-service.h \
+	libide/clang/ide-clang-diagnostic-provider.c \
+	libide/clang/ide-clang-diagnostic-provider.h \
+	libide/clang/ide-clang-symbol-resolver.c \
+	libide/clang/ide-clang-symbol-resolver.h \
 	libide/directory/ide-directory-build-system.c \
 	libide/directory/ide-directory-build-system.h \
 	libide/directory/ide-directory-vcs.c \
@@ -90,6 +100,8 @@ libide_la_SOURCES = \
 libide_la_CFLAGS = \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/libide/autotools \
+	-I$(top_srcdir)/libide/c \
+	-I$(top_srcdir)/libide/clang \
 	-I$(top_srcdir)/libide/directory \
 	-I$(top_srcdir)/libide/git \
 	-I$(top_srcdir)/libide/local \

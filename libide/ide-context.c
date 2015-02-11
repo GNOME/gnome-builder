@@ -42,6 +42,8 @@ typedef struct
   GHashTable         *services;
   IdeUnsavedFiles    *unsaved_files;
   IdeVcs             *vcs;
+
+  guint              services_started : 1;
 } IdeContextPrivate;
 
 static void async_initable_init (GAsyncInitableIface *);
@@ -305,11 +307,12 @@ ide_context_create_service (IdeContext *context,
                           "context", context,
                           NULL);
 
-  ide_service_start (service);
-
   g_hash_table_insert (priv->services,
                        GINT_TO_POINTER (service_type),
                        service);
+
+  if (priv->services_started)
+    ide_service_start (service);
 
   return service;
 }
@@ -796,6 +799,69 @@ ide_context_init_back_forward_list (gpointer             source_object,
 }
 
 static void
+ide_context_init_services (gpointer             source_object,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  GIOExtensionPoint *point;
+  IdeContext *self = source_object;
+  IdeContextPrivate *priv = ide_context_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+  const GList *extensions;
+  const GList *iter;
+  GHashTableIter hiter;
+  gpointer v;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  point = g_io_extension_point_lookup (IDE_SERVICE_EXTENSION_POINT);
+  extensions = g_io_extension_point_get_extensions (point);
+
+  for (iter = extensions; iter; iter = iter->next)
+    {
+      GIOExtension *extension = iter->data;
+      IdeService *service;
+      GType type_id;
+
+      type_id = g_io_extension_get_type (extension);
+
+      if (!g_type_is_a (type_id, IDE_TYPE_SERVICE))
+        {
+          g_warning (_("\"%s\" is not a service, ignoring extension point."),
+                     g_type_name (type_id));
+          continue;
+        }
+
+      service = ide_context_get_service_typed (self, type_id);
+
+      if (!service)
+        {
+          g_warning (_("Failed to create service of type \"%s\"."),
+                     g_type_name (type_id));
+          continue;
+        }
+
+      g_debug (_("Service of type \"%s\" registered."), g_type_name (type_id));
+    }
+
+  priv->services_started = TRUE;
+
+  g_hash_table_iter_init (&hiter, priv->services);
+
+  while (g_hash_table_iter_next (&hiter, NULL, &v))
+    {
+      IdeService *service = v;
+
+      if (!ide_service_get_running (service))
+        ide_service_start (service);
+    }
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_context_init_async (GAsyncInitable      *initable,
                         int                  io_priority,
                         GCancellable        *cancellable,
@@ -812,6 +878,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         cancellable,
                         callback,
                         user_data,
+                        ide_context_init_services,
                         ide_context_init_build_system,
                         ide_context_init_vcs,
                         ide_context_init_project_name,

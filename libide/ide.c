@@ -57,6 +57,7 @@ ide_init_ctor (void)
   g_type_ensure (IDE_TYPE_VCS);
 
   g_io_extension_point_register (IDE_BUILD_SYSTEM_EXTENSION_POINT);
+  g_io_extension_point_register (IDE_SERVICE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_VCS_EXTENSION_POINT);
 
   g_io_extension_point_implement (IDE_BUILD_SYSTEM_EXTENSION_POINT,

@@ -19,21 +19,20 @@
 #ifndef IDE_DIAGNOSTIC_PROVIDER_H
 #define IDE_DIAGNOSTIC_PROVIDER_H
 
-#include <glib-object.h>
+#include "ide-object.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DIAGNOSTIC_PROVIDER               (ide_diagnostic_provider_get_type ())
-#define IDE_DIAGNOSTIC_PROVIDER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_DIAGNOSTIC_PROVIDER, IdeDiagnosticProvider))
-#define IDE_IS_DIAGNOSTIC_PROVIDER(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_DIAGNOSTIC_PROVIDER))
-#define IDE_DIAGNOSTIC_PROVIDER_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), IDE_TYPE_DIAGNOSTIC_PROVIDER, IdeDiagnosticProviderInterface))
+#define IDE_TYPE_DIAGNOSTIC_PROVIDER (ide_diagnostic_provider_get_type())
 
-struct _IdeDiagnosticProviderInterface
+G_DECLARE_DERIVABLE_TYPE (IdeDiagnosticProvider, ide_diagnostic_provider,
+                          IDE, DIAGNOSTIC_PROVIDER,
+                          IdeObject)
+
+struct _IdeDiagnosticProviderClass
 {
-  GTypeInterface parent;
+  IdeObjectClass parent;
 };
-
-GType ide_diagnostic_provider_get_type (void);
 
 G_END_DECLS
 

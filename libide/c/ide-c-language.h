@@ -1,4 +1,4 @@
-/* ide-service.h
+/* ide-c-language.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,32 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SERVICE_H
-#define IDE_SERVICE_H
+#ifndef IDE_C_LANGUAGE_H
+#define IDE_C_LANGUAGE_H
 
-#include "ide-object.h"
+#include "ide-language.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SERVICE            (ide_service_get_type())
-#define IDE_SERVICE_EXTENSION_POINT "org.gnome.libide.extensions.service"
+#define IDE_TYPE_C_LANGUAGE (ide_c_language_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeService, ide_service, IDE, SERVICE, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeCLanguage, ide_c_language, IDE, C_LANGUAGE, IdeLanguage)
 
-struct _IdeServiceClass
+struct _IdeCLanguageClass
 {
   IdeObjectClass parent;
-
-  const gchar *(*get_name) (IdeService *service);
-  void         (*start)    (IdeService *service);
-  void         (*stop)     (IdeService *service);
 };
-
-const gchar *ide_service_get_name    (IdeService *self);
-gboolean     ide_service_get_running (IdeService *self);
-void         ide_service_start       (IdeService *self);
-void         ide_service_stop        (IdeService *self);
 
 G_END_DECLS
 
-#endif /* IDE_SERVICE_H */
+#endif /* IDE_C_LANGUAGE_H */
