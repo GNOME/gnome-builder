@@ -11,6 +11,36 @@
           <class name="linked"/>
         </style>
         <child>
+          <object class="GtkButton" id="back_button">
+            <property name="visible">true</property>
+            <style>
+              <class name="image-button"/>
+              <class name="tab-header-first"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">true</property>
+                <property name="icon_name">go-previous-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="forward_button">
+            <property name="visible">true</property>
+            <style>
+              <class name="image-button"/>
+              <class name="tab-header-first"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">true</property>
+                <property name="icon_name">go-next-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
           <object class="GtkMenuButton" id="stack_menu">
             <property name="visible">false</property>
             <style>
