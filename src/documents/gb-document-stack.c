@@ -19,20 +19,26 @@
 #define G_LOG_DOMAIN "document-stack"
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "gb-document-menu-button.h"
 #include "gb-document-stack.h"
 #include "gb-glib.h"
+#include "gb-widget.h"
 
 struct _GbDocumentStackPrivate
 {
   /* Objects ownen by GbDocumentStack */
   GbDocumentManager    *document_manager;
   GActionGroup         *actions;
+  IdeBackForwardList   *back_forward_list;
+  IdeContext           *context;
 
   /* Weak references */
   GbDocumentView       *active_view;
   GBinding             *preview_binding;
+  GBinding             *back_binding;
+  GBinding             *forward_binding;
 
   /* GtkWidgets owned by GtkWidgetClass template */
   GbDocumentMenuButton *document_button;
@@ -40,6 +46,8 @@ struct _GbDocumentStackPrivate
   GtkStack             *stack;
   GtkMenuButton        *stack_menu;
   GtkBox               *header_box;
+  GtkButton            *back_button;
+  GtkButton            *forward_button;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbDocumentStack, gb_document_stack, GTK_TYPE_BOX)
@@ -47,6 +55,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbDocumentStack, gb_document_stack, GTK_TYPE_BOX)
 enum {
   PROP_0,
   PROP_ACTIVE_VIEW,
+  PROP_CONTEXT,
   PROP_DOCUMENT_MANAGER,
   PROP_TITLE_SIZE_GROUP,
   LAST_PROP
@@ -68,6 +77,78 @@ GtkWidget *
 gb_document_stack_new (void)
 {
   return g_object_new (GB_TYPE_DOCUMENT_STACK, NULL);
+}
+
+static void
+gb_document_stack_connect_context (GbDocumentStack *self,
+                                   IdeContext      *context)
+{
+  GbDocumentStackPrivate *priv;
+  IdeBackForwardList *list;
+
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (self));
+  g_return_if_fail (IDE_IS_CONTEXT (context));
+
+  priv = gb_document_stack_get_instance_private (self);
+
+  list = ide_context_get_back_forward_list (context);
+  priv->back_forward_list = ide_back_forward_list_branch (list);
+
+  priv->back_binding =
+    g_object_bind_property (priv->back_forward_list, "can-go-backward",
+                            priv->back_button, "sensitive",
+                            G_BINDING_SYNC_CREATE);
+
+  priv->forward_binding =
+    g_object_bind_property (priv->back_forward_list, "can-go-forward",
+                            priv->forward_button, "sensitive",
+                            G_BINDING_SYNC_CREATE);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self), TRUE);
+}
+
+static void
+gb_document_stack_disconnect_context (GbDocumentStack *self,
+                                      IdeContext      *context)
+{
+  GbDocumentStackPrivate *priv;
+
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (self));
+  g_return_if_fail (IDE_IS_CONTEXT (context));
+
+  priv = gb_document_stack_get_instance_private (self);
+
+  g_binding_unbind (priv->back_binding);
+  g_binding_unbind (priv->forward_binding);
+  g_clear_object (&priv->back_forward_list);
+  gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
+}
+
+static void
+gb_document_stack_set_context (GbDocumentStack *self,
+                               IdeContext      *context)
+{
+  GbDocumentStackPrivate *priv;
+
+  g_return_if_fail (GB_IS_DOCUMENT_STACK (self));
+  g_return_if_fail (!context || IDE_IS_CONTEXT (context));
+
+  priv = gb_document_stack_get_instance_private (self);
+
+  if (context != priv->context)
+    {
+      if (priv->context)
+        {
+          gb_document_stack_disconnect_context (self, priv->context);
+          g_clear_object (&priv->context);
+        }
+
+      if (context)
+        {
+          priv->context = g_object_ref (context);
+          gb_document_stack_connect_context (self, priv->context);
+        }
+    }
 }
 
 void
@@ -851,6 +932,10 @@ gb_document_stack_set_property (GObject      *object,
       gb_document_stack_set_active_view (self, g_value_get_object (value));
       break;
 
+    case PROP_CONTEXT:
+      gb_document_stack_set_context (self, g_value_get_object (value));
+      break;
+
     case PROP_DOCUMENT_MANAGER:
       gb_document_stack_set_document_manager (self, g_value_get_object (value));
       break;
@@ -883,6 +968,8 @@ gb_document_stack_class_init (GbDocumentStackClass *klass)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, controls);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, document_button);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, header_box);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, back_button);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GbDocumentStack, forward_button);
 
   gParamSpecs [PROP_ACTIVE_VIEW] =
     g_param_spec_object ("active-view",
@@ -892,6 +979,15 @@ gb_document_stack_class_init (GbDocumentStackClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_ACTIVE_VIEW,
                                    gParamSpecs [PROP_ACTIVE_VIEW]);
+
+  gParamSpecs [PROP_CONTEXT] =
+    g_param_spec_object ("context",
+                         _("Context"),
+                         _("The context for the document stack."),
+                         IDE_TYPE_CONTEXT,
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_CONTEXT,
+                                   gParamSpecs [PROP_CONTEXT]);
 
   gParamSpecs [PROP_DOCUMENT_MANAGER] =
     g_param_spec_object ("document-manager",
@@ -994,6 +1090,8 @@ gb_document_stack_init (GbDocumentStack *self)
     { "previous-document", gb_document_stack_previous_document_activate },
     { "next-document", gb_document_stack_next_document_activate },
   };
+
+  gb_widget_bind_context (GTK_WIDGET (self));
 
   self->priv = gb_document_stack_get_instance_private (self);
 
