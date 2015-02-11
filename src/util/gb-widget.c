@@ -272,3 +272,76 @@ gb_widget_get_context (GtkWidget *widget)
 
   return context;
 }
+
+static void
+gb_widget_bind_context_notify (GtkWidget  *widget,
+                               GParamSpec *pspec,
+                               gpointer    user_data)
+{
+  GbWorkbench *workbench = (GbWorkbench *)widget;
+  GtkWidget *child = user_data;
+  IdeContext *context;
+
+  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+
+  context = gb_workbench_get_context (workbench);
+  g_object_set (child, "context", context, NULL);
+}
+
+static void
+gb_widget_bind_context_hierarchy_changed (GtkWidget *widget,
+                                          GtkWidget *previous_toplevel,
+                                          gpointer   user_data)
+{
+  GbWorkbench *workbench;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (GB_IS_WORKBENCH (previous_toplevel))
+    g_signal_handlers_disconnect_by_func (previous_toplevel,
+                                          G_CALLBACK (gb_widget_bind_context_notify),
+                                          widget);
+
+  workbench = gb_widget_get_workbench (widget);
+
+  if (workbench)
+    {
+      IdeContext *context;
+
+      g_signal_connect_object (workbench,
+                               "notify::context",
+                               G_CALLBACK (gb_widget_bind_context_notify),
+                               widget,
+                               0);
+      context = gb_workbench_get_context (workbench);
+      g_object_set (widget, "context", context, NULL);
+    }
+}
+
+void
+gb_widget_bind_context (GtkWidget *widget)
+{
+  GParamSpec *pspec;
+  IdeContext *context;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (widget), "context");
+
+  if (!pspec || (pspec->value_type != IDE_TYPE_CONTEXT))
+    {
+      g_warning ("%s() requires a widget with a context property named "
+                 "\"context\".", G_STRFUNC);
+      return;
+    }
+
+  g_signal_connect (widget,
+                    "hierarchy-changed",
+                    G_CALLBACK (gb_widget_bind_context_hierarchy_changed),
+                    NULL);
+
+  context = gb_widget_get_context (widget);
+  if (context)
+    g_object_set (widget, "context", context, NULL);
+}
