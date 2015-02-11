@@ -184,6 +184,10 @@ gb_document_view_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_BACK_FORWARD_LIST:
+      g_value_set_object (value, gb_document_view_get_back_forward_list (self));
+      break;
+
     case PROP_CAN_PREVIEW:
       g_value_set_boolean (value, gb_document_view_get_can_preview (self));
       break;
@@ -202,14 +206,44 @@ gb_document_view_get_property (GObject    *object,
 }
 
 static void
+gb_document_view_set_property (GObject      *object,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  GbDocumentView *self = GB_DOCUMENT_VIEW (object);
+
+  switch (prop_id)
+    {
+    case PROP_BACK_FORWARD_LIST:
+      gb_document_view_set_back_forward_list (self, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+
+static void
 gb_document_view_class_init (GbDocumentViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->get_property = gb_document_view_get_property;
+  object_class->set_property = gb_document_view_set_property;
 
   widget_class->destroy = gb_document_view_destroy;
+
+  gParamSpecs [PROP_BACK_FORWARD_LIST] =
+    g_param_spec_object ("back-forward-list",
+                         _("Back Forward List"),
+                         _("The back/forward history for the stack."),
+                         IDE_TYPE_BACK_FORWARD_LIST,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_BACK_FORWARD_LIST,
+                                   gParamSpecs [PROP_BACK_FORWARD_LIST]);
 
   gParamSpecs [PROP_CAN_PREVIEW] =
     g_param_spec_boolean ("can-preview",
