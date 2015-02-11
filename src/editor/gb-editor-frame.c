@@ -675,7 +675,7 @@ gb_editor_frame_set_document (GbEditorFrame    *self,
                               GbEditorDocument *document)
 {
   g_return_if_fail (GB_IS_EDITOR_FRAME (self));
-  g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
+  g_return_if_fail (!document || GB_IS_EDITOR_DOCUMENT (document));
 
   if (document != self->priv->document)
     {
