@@ -1152,7 +1152,6 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
                                    gParamSpecs [PROP_USE_SPACES]);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-view.ui");
-  GB_WIDGET_CLASS_BIND (klass, GbEditorView, frame);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, paned);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, progress_bar);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, split_button);
