@@ -109,6 +109,7 @@ enum {
   BEGIN_SEARCH,
   DISPLAY_DOCUMENTATION,
   DRAW_LAYER,
+  JUMP_NOTIFY,
   POP_SNIPPET,
   PUSH_SNIPPET,
   REQUEST_DOCUMENTATION,
@@ -118,6 +119,22 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
+
+void
+gb_source_view_jump_notify (GbSourceView *self)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *mark;
+  GtkTextIter iter;
+
+  g_return_if_fail (GB_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  mark = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+
+  g_signal_emit (self, gSignals [JUMP_NOTIFY], 0, &iter);
+}
 
 GbSourceVim *
 gb_source_view_get_vim (GbSourceView *view)
@@ -2385,6 +2402,17 @@ gb_source_view_class_init (GbSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   G_TYPE_STRV);
+
+  gSignals [JUMP_NOTIFY] =
+    g_signal_new ("jump-notify",
+                  GB_TYPE_SOURCE_VIEW,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbSourceViewClass, jump_notify),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_TEXT_ITER);
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set,

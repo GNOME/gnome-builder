@@ -617,6 +617,15 @@ gb_source_vim_set_mode (GbSourceVim     *vim,
   else if (vim->priv->mode == GB_SOURCE_VIM_INSERT)
     gtk_text_buffer_end_user_action (buffer);
 
+#ifndef GB_SOURCE_VIM_EXTERNAL
+  /*
+   * If we are entering insert mode, let's mark this spot as a jump so we can
+   * come back to it later.
+   */
+  if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
+    gb_source_view_jump_notify (GB_SOURCE_VIEW (vim->priv->text_view));
+#endif
+
   vim->priv->mode = mode;
 
   /*
@@ -1327,7 +1336,7 @@ bracket_predicate (gunichar ch,
   return (state->depth == 0);
 }
 
-static void
+static gboolean
 gb_source_vim_move_matching_bracket (GbSourceVim *vim)
 {
   MatchingBracketState state;
@@ -1338,7 +1347,7 @@ gb_source_vim_move_matching_bracket (GbSourceVim *vim)
   gboolean is_forward;
   gboolean ret;
 
-  g_return_if_fail (GB_IS_SOURCE_VIM (vim));
+  g_return_val_if_fail (GB_IS_SOURCE_VIM (vim), FALSE);
 
   buffer = gtk_text_view_get_buffer (vim->priv->text_view);
   has_selection = gb_source_vim_get_selection_bounds (vim, &iter, &selection);
@@ -1379,7 +1388,7 @@ gb_source_vim_move_matching_bracket (GbSourceVim *vim)
       break;
 
     default:
-      return;
+      return FALSE;
     }
 
   if (is_forward)
@@ -1402,7 +1411,11 @@ gb_source_vim_move_matching_bracket (GbSourceVim *vim)
         gtk_text_buffer_select_range (buffer, &iter, &iter);
 
       gb_source_vim_ensure_scroll (vim);
+
+      return TRUE;
     }
+
+  return FALSE;
 }
 
 static gboolean
@@ -4211,6 +4224,11 @@ gb_source_vim_op_goto_line (GbSourceVim *vim,
       line = line > 0 ? line - 1 : 0;
 
       gb_source_vim_move_to_line_n (vim, line);
+
+#ifndef GB_SOURCE_VIM_EXTERNAL
+      if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
+        gb_source_view_jump_notify (GB_SOURCE_VIEW (vim->priv->text_view));
+#endif
     }
 }
 
@@ -4711,6 +4729,11 @@ gb_source_vim_cmd_match_backward (GbSourceVim *vim,
 
   for (i = 0; i < count; i++)
     gb_source_vim_reverse_search (vim);
+
+#ifndef GB_SOURCE_VIM_EXTERNAL
+  if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
+    gb_source_view_jump_notify (GB_SOURCE_VIEW (vim->priv->text_view));
+#endif
 }
 
 static void
@@ -4726,6 +4749,11 @@ gb_source_vim_cmd_match_forward (GbSourceVim *vim,
 
   for (i = 0; i < count; i++)
     gb_source_vim_search (vim);
+
+#ifndef GB_SOURCE_VIM_EXTERNAL
+  if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
+    gb_source_view_jump_notify (GB_SOURCE_VIEW (vim->priv->text_view));
+#endif
 }
 
 static void
@@ -5161,6 +5189,11 @@ gb_source_vim_cmd_repeat_search_reverse (GbSourceVim *vim,
 
   for (i = 0; i < count; i++)
     gb_source_vim_repeat_search (vim, search_direction);
+
+#ifndef GB_SOURCE_VIM_EXTERNAL
+  if (GB_IS_SOURCE_VIM (vim->priv->text_view))
+    gb_source_view_jump_notify (GB_SOURCE_VIEW (vim->priv->text_view));
+#endif
 }
 
 static void
@@ -5176,6 +5209,11 @@ gb_source_vim_cmd_repeat_search (GbSourceVim *vim,
 
   for (i = 0; i < count; i++)
     gb_source_vim_repeat_search (vim, vim->priv->search_direction);
+
+#ifndef GB_SOURCE_VIM_EXTERNAL
+  if (GB_IS_SOURCE_VIM (vim->priv->text_view))
+    gb_source_view_jump_notify (GB_SOURCE_VIEW (vim->priv->text_view));
+#endif
 }
 
 static void
@@ -5562,7 +5600,13 @@ gb_source_vim_cmd_matching_bracket (GbSourceVim *vim,
     case ']':
     case '(':
     case ')':
-      gb_source_vim_move_matching_bracket (vim);
+      if (gb_source_vim_move_matching_bracket (vim))
+        {
+#ifndef GB_SOURCE_VIM_EXTERNAL
+          if (GB_IS_SOURCE_VIEW (vim->priv->text_view))
+            gb_source_view_jump_notify (GB_SOURCE_VIEW (vim->priv->text_view));
+#endif
+        }
       break;
 
     default:

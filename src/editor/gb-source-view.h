@@ -52,23 +52,25 @@ struct _GbSourceViewClass
 {
   GtkSourceViewClass parent_class;
 
-  void (*push_snippet)          (GbSourceView           *view,
-                                GbSourceSnippet        *snippet,
-                                GbSourceSnippetContext *context,
-                                GtkTextIter            *location);
-  void (*pop_snippet)           (GbSourceView           *view,
-                                GbSourceSnippet        *snippet);
-  void (*begin_search)          (GbSourceView           *view,
-                                GtkDirectionType        direction,
-                                const gchar            *search_text);
-  void (*draw_layer)            (GbSourceView           *view,
-                                 GtkTextViewLayer        layer,
-                                 cairo_t                *cr);
-  void (*request_documentation) (GbSourceView           *view);
-  void (*display_documentation) (GbSourceView           *view,
-                                 const gchar            *search_text);
-  void (*drop_uris)             (GbSourceViewClass      *view,
+  void (*push_snippet)          (GbSourceView            *view,
+                                 GbSourceSnippet         *snippet,
+                                 GbSourceSnippetContext  *context,
+                                 GtkTextIter             *location);
+  void (*pop_snippet)           (GbSourceView            *view,
+                                 GbSourceSnippet         *snippet);
+  void (*begin_search)          (GbSourceView            *view,
+                                 GtkDirectionType         direction,
+                                 const gchar             *search_text);
+  void (*draw_layer)            (GbSourceView            *view,
+                                 GtkTextViewLayer         layer,
+                                 cairo_t                 *cr);
+  void (*request_documentation) (GbSourceView            *view);
+  void (*display_documentation) (GbSourceView            *view,
+                                 const gchar             *search_text);
+  void (*drop_uris)             (GbSourceView            *view,
                                  const gchar            **uri_list);
+  void (*jump_notify)           (GbSourceView            *view,
+                                 GtkTextIter             *location);
 };
 
 void                  gb_source_view_begin_search         (GbSourceView         *view,
@@ -90,6 +92,7 @@ void                  gb_source_view_set_show_shadow      (GbSourceView         
                                                            gboolean              show_shadow);
 GbSourceVim          *gb_source_view_get_vim              (GbSourceView         *view);
 GbSourceEmacs        *gb_source_view_get_emacs            (GbSourceView         *view);
+void                  gb_source_view_jump_notify          (GbSourceView         *view);
 
 G_END_DECLS
 
