@@ -478,11 +478,14 @@ gb_document_stack_document_selected (GbDocumentStack      *stack,
                                      GbDocument           *document,
                                      GbDocumentMenuButton *button)
 {
+  GbDocumentStackPrivate *priv;
   GtkWidget *view;
 
   g_return_if_fail (GB_IS_DOCUMENT_STACK (stack));
   g_return_if_fail (GB_IS_DOCUMENT (document));
   g_return_if_fail (GB_IS_DOCUMENT_MENU_BUTTON (button));
+
+  priv = stack->priv;
 
   view = gb_document_stack_find_with_document (stack, document);
 
@@ -497,6 +500,9 @@ gb_document_stack_document_selected (GbDocumentStack      *stack,
           g_warning ("Failed to create view");
           return;
         }
+
+      gb_document_view_set_back_forward_list (GB_DOCUMENT_VIEW (view),
+                                              priv->back_forward_list);
 
       gtk_container_add (GTK_CONTAINER (stack->priv->stack), view);
       controls = gb_document_view_get_controls (GB_DOCUMENT_VIEW (view));
