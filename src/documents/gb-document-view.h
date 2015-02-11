@@ -20,6 +20,7 @@
 #define GB_DOCUMENT_VIEW_H
 
 #include <gtk/gtk.h>
+#include <ide.h>
 
 #include "gb-document.h"
 
@@ -55,13 +56,16 @@ struct _GbDocumentViewClass
   GbDocument  *(*create_preview)  (GbDocumentView *view);
 };
 
-GType           gb_document_view_get_type        (void);
-GbDocumentView *gb_document_view_new             (void);
-GbDocument     *gb_document_view_create_preview  (GbDocumentView *view);
-void            gb_document_view_close           (GbDocumentView *view);
-GbDocument     *gb_document_view_get_document    (GbDocumentView *view);
-GtkWidget      *gb_document_view_get_controls    (GbDocumentView *view);
-gboolean        gb_document_view_get_can_preview (GbDocumentView *view);
+GType               gb_document_view_get_type              (void);
+void                gb_document_view_set_back_forward_list (GbDocumentView     *view,
+                                                            IdeBackForwardList *list);
+IdeBackForwardList *gb_document_view_get_back_forward_list (GbDocumentView     *view);
+GbDocumentView     *gb_document_view_new                   (void);
+GbDocument         *gb_document_view_create_preview        (GbDocumentView     *view);
+void                gb_document_view_close                 (GbDocumentView     *view);
+GbDocument         *gb_document_view_get_document          (GbDocumentView     *view);
+GtkWidget          *gb_document_view_get_controls          (GbDocumentView     *view);
+gboolean            gb_document_view_get_can_preview       (GbDocumentView     *view);
 
 G_END_DECLS
 

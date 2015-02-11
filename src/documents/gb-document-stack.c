@@ -85,6 +85,8 @@ gb_document_stack_connect_context (GbDocumentStack *self,
 {
   GbDocumentStackPrivate *priv;
   IdeBackForwardList *list;
+  GList *children;
+  GList *iter;
 
   g_return_if_fail (GB_IS_DOCUMENT_STACK (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
@@ -105,6 +107,15 @@ gb_document_stack_connect_context (GbDocumentStack *self,
                             G_BINDING_SYNC_CREATE);
 
   gtk_widget_set_sensitive (GTK_WIDGET (self), TRUE);
+
+  children = gtk_container_get_children (GTK_CONTAINER (self));
+  for (iter = children; iter; iter = iter->next)
+    {
+      if (GB_IS_DOCUMENT_VIEW (iter->data))
+        gb_document_view_set_back_forward_list (iter->data,
+                                                priv->back_forward_list);
+    }
+  g_list_free (children);
 }
 
 static void
@@ -888,9 +899,14 @@ gb_document_stack_finalize (GObject *object)
 {
   GbDocumentStackPrivate *priv = GB_DOCUMENT_STACK (object)->priv;
 
+  /*
+   * TODO: Merge back-forward list?
+   */
+
   gb_clear_weak_pointer (&priv->active_view);
   g_clear_object (&priv->document_manager);
   g_clear_object (&priv->actions);
+  g_clear_object (&priv->back_forward_list);
 
   G_OBJECT_CLASS (gb_document_stack_parent_class)->finalize (object);
 }
