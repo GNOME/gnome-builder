@@ -32,6 +32,14 @@ struct _IdeDiagnostician
   IdeObject parent_instance;
 };
 
+void            ide_diagnostician_diagnose_async  (IdeDiagnostician     *diagnostician,
+                                                   IdeFile              *file,
+                                                   GCancellable         *cancellable,
+                                                   GAsyncReadyCallback   callback,
+                                                   gpointer              user_data);
+IdeDiagnostics *ide_diagnostician_diagnose_finish (IdeDiagnostician     *diagnostician,
+                                                   GAsyncResult         *result,
+                                                   GError              **error);
 
 G_END_DECLS
 

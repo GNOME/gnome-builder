@@ -55,6 +55,8 @@ typedef struct _IdeDeviceProviderInterface     IdeDeviceProviderInterface;
 
 typedef struct _IdeDiagnostic                  IdeDiagnostic;
 
+typedef struct _IdeDiagnostics                 IdeDiagnostics;
+
 typedef struct _IdeDiagnostician               IdeDiagnostician;
 
 typedef struct _IdeDiagnosticProvider          IdeDiagnosticProvider;
