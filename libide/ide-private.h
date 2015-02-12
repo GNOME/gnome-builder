@@ -34,6 +34,12 @@ IdeClangTranslationUnit *_ide_clang_translation_unit_new (IdeContext        *con
                                                           CXTranslationUnit  tu,
                                                           gint64             sequence);
 
+void _ide_diagnostician_add_provider    (IdeDiagnostician      *self,
+                                         IdeDiagnosticProvider *provider);
+void _ide_diagnostician_remove_provider (IdeDiagnostician      *self,
+                                         IdeDiagnosticProvider *provider);
+
+
 G_END_DECLS
 
 #endif /* IDE_PRIVATE_H */
