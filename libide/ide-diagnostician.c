@@ -32,6 +32,7 @@ typedef struct
 typedef struct
 {
   IdeDiagnostics *diagnostics;
+  guint           total;
   guint           active;
 } DiagnoseState;
 
@@ -111,12 +112,12 @@ diagnose_cb (GObject      *object,
   ide_diagnostics_unref (ret);
 
 maybe_complete:
-  if (!state->active)
-    {
-      g_task_return_pointer (task,
-                             ide_diagnostics_ref (state->diagnostics),
-                             (GDestroyNotify)ide_diagnostics_unref);
-    }
+  if (state->total == 1 && error)
+    g_task_return_error (task, error);
+  else if (!state->active)
+    g_task_return_pointer (task,
+                           ide_diagnostics_ref (state->diagnostics),
+                           (GDestroyNotify)ide_diagnostics_unref);
 }
 
 void
@@ -147,6 +148,7 @@ ide_diagnostician_diagnose_async (IdeDiagnostician    *self,
 
   state = g_slice_new0 (DiagnoseState);
   state->active = priv->providers->len;
+  state->total = priv->providers->len;
   state->diagnostics = _ide_diagnostics_new (NULL);
 
   g_task_set_task_data (task, state, diagnose_state_free);
