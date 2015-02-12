@@ -60,6 +60,7 @@ G_BEGIN_DECLS
 #include "ide-search-result.h"
 #include "ide-service.h"
 #include "ide-source-location.h"
+#include "ide-source-range.h"
 #include "ide-symbol-resolver.h"
 #include "ide-symbol.h"
 #include "ide-target.h"
