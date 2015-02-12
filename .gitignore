@@ -20,6 +20,8 @@ config.h.in~
 config.log
 config.status
 configure
+Ide.gir
+Ide.typelib
 gnome-builder
 ide-build
 ide-list-devices

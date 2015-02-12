@@ -29,5 +29,8 @@ INTLTOOL_FILES = \
 EXTRA_DIST += \
 	$(INTLTOOL_FILES) \
 	AUTHORS \
+	build/autotools/m4/introspection.m4 \
 	$(NULL)
+
+DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
 
