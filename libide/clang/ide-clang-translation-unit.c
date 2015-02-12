@@ -66,6 +66,47 @@ _ide_clang_translation_unit_new (IdeContext        *context,
   return ret;
 }
 
+static IdeDiagnosticSeverity
+translate_severity (enum CXDiagnosticSeverity severity)
+{
+  switch (severity)
+    {
+    case CXDiagnostic_Ignored:
+      return IDE_DIAGNOSTIC_IGNORED;
+
+    case CXDiagnostic_Note:
+      return IDE_DIAGNOSTIC_NOTE;
+
+    case CXDiagnostic_Warning:
+      return IDE_DIAGNOSTIC_WARNING;
+
+    case CXDiagnostic_Error:
+      return IDE_DIAGNOSTIC_ERROR;
+
+    case CXDiagnostic_Fatal:
+      return IDE_DIAGNOSTIC_FATAL;
+
+    default:
+      return 0;
+    }
+}
+
+static IdeDiagnostic *
+create_diagnostic (IdeClangTranslationUnit *self,
+                   CXDiagnostic            *cxdiag)
+{
+  enum CXDiagnosticSeverity cxseverity;
+  IdeDiagnosticSeverity severity;
+
+  g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
+  g_return_val_if_fail (cxdiag, NULL);
+
+  cxseverity = clang_getDiagnosticSeverity (cxdiag);
+  severity = translate_severity (cxseverity);
+
+  return _ide_diagnostic_new (severity);
+}
+
 /**
  * ide_clang_translation_unit_get_diagnostics:
  *
@@ -94,12 +135,12 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
       for (i = 0; i < count; i++)
         {
           CXDiagnostic cxdiag;
+          IdeDiagnostic *diag;
           CXString cxstr;
 
           cxdiag = clang_getDiagnostic (priv->tu, i);
-          cxstr = clang_getDiagnosticSpelling (cxdiag);
-          g_print ("> %s\n", clang_getCString (cxstr));
-          clang_disposeString (cxstr);
+          diag = create_diagnostic (self, cxdiag);
+          g_ptr_array_add (ar, diag);
           clang_disposeDiagnostic (cxdiag);
         }
 
