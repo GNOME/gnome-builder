@@ -95,7 +95,7 @@ context_cb (GObject      *object,
 
   if (!diagnostician)
     {
-      g_printerr (_("No diagnostician for language \"%s\""),
+      g_printerr (_("No diagnostician for language \"%s\"\n"),
                   ide_language_get_name (language));
       quit (EXIT_FAILURE);
       return;
