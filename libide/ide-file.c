@@ -39,6 +39,22 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeFile, ide_file, IDE_TYPE_OBJECT)
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+static const gchar *
+ide_file_remap_language (const gchar *lang_id)
+{
+  if (!lang_id)
+    return NULL;
+
+  if (g_str_equal (lang_id, "chdr") ||
+      g_str_equal (lang_id, "cpp"))
+    return "c";
+
+  if (g_str_equal (lang_id, "python3"))
+    return "python";
+
+  return lang_id;
+}
+
 guint
 ide_file_hash (IdeFile *self)
 {
@@ -97,9 +113,11 @@ ide_file_create_language (IdeFile *self)
           g_autoptr(gchar) ext_name = NULL;
           GIOExtension *extension;
           GIOExtensionPoint *point;
+          const gchar *lookup_id;
 
           lang_id = gtk_source_language_get_id (srclang);
-          ext_name = g_strdup_printf (IDE_LANGUAGE_EXTENSION_POINT".%s", lang_id);
+          lookup_id = ide_file_remap_language (lang_id);
+          ext_name = g_strdup_printf (IDE_LANGUAGE_EXTENSION_POINT".%s", lookup_id);
           point = g_io_extension_point_lookup (IDE_LANGUAGE_EXTENSION_POINT);
           extension = g_io_extension_point_get_extension_by_name (point, ext_name);
 
