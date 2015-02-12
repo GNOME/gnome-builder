@@ -39,6 +39,7 @@ G_BEGIN_DECLS
 #include "ide-device-provider.h"
 #include "ide-device-manager.h"
 #include "ide-diagnostic.h"
+#include "ide-diagnostics.h"
 #include "ide-diagnostician.h"
 #include "ide-diagnostic-provider.h"
 #include "ide-executable.h"
