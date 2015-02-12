@@ -43,7 +43,9 @@ diagnose_cb (GObject      *object,
 {
   IdeDiagnostician *diagnostician = (IdeDiagnostician *)object;
   g_autoptr(GError) error = NULL;
-  void *ret;
+  g_autoptr(IdeDiagnostics) ret = NULL;
+  gsize count;
+  gsize i;
 
   ret = ide_diagnostician_diagnose_finish (diagnostician, result, &error);
 
@@ -54,8 +56,20 @@ diagnose_cb (GObject      *object,
       return;
     }
 
+  count = ide_diagnostics_get_size (ret);
+
+  for (i = 0; i < count; i++)
+    {
+      IdeDiagnostic *diag;
+      const gchar *text;
+
+      diag = ide_diagnostics_index (ret, i);
+      text = ide_diagnostic_get_text (diag);
+
+      g_print ("%s\n", text);
+    }
+
   quit (EXIT_SUCCESS);
-  return;
 }
 
 static void
