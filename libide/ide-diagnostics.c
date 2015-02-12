@@ -16,7 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "ide-diagnostic.h"
 #include "ide-diagnostics.h"
+
+G_DEFINE_BOXED_TYPE (IdeDiagnostics, ide_diagnostics,
+                     ide_diagnostics_ref, ide_diagnostics_unref)
 
 struct _IdeDiagnostics
 {
@@ -24,24 +28,25 @@ struct _IdeDiagnostics
   GPtrArray     *diagnostics;
 };
 
-GType
-ide_diagnostics_get_type (void)
+/**
+ * _ide_diagnostics_new:
+ * @ar: (transfer full) (nullable): an array of #IdeDiagnostic.
+ *
+ * Creates a new #IdeDiagnostics container structure for @ar.
+ * Ownership of @ar is transfered to the resulting structure.
+ *
+ * Returns: (transfer full): A newly allocated #IdeDiagnostics.
+ */
+IdeDiagnostics *
+_ide_diagnostics_new (GPtrArray *ar)
 {
-  static gsize type_id;
+  IdeDiagnostics *ret;
 
-  if (g_once_init_enter (&type_id))
-    {
-      gsize _type_id;
+  ret = g_slice_new0 (IdeDiagnostics);
+  ret->ref_count = 1;
+  ret->diagnostics = ar ? ar : g_ptr_array_new_with_free_func (g_object_unref);
 
-      _type_id = g_boxed_type_register_static (
-          "IdeDiagnostics",
-          (GBoxedCopyFunc)ide_diagnostics_ref,
-          (GBoxedFreeFunc)ide_diagnostics_unref);
-
-      g_once_init_leave (&type_id, _type_id);
-    }
-
-  return type_id;
+  return ret;
 }
 
 IdeDiagnostics *
