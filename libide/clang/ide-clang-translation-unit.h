@@ -32,7 +32,8 @@ struct _IdeClangTranslationUnit
   GObject parent_instance;
 };
 
-gint64 ide_clang_translation_unit_get_sequence (IdeClangTranslationUnit *self);
+gint64          ide_clang_translation_unit_get_sequence    (IdeClangTranslationUnit *self);
+IdeDiagnostics *ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self);
 
 G_END_DECLS
 
