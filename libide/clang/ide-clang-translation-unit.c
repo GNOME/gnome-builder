@@ -24,8 +24,9 @@
 
 typedef struct
 {
-  CXTranslationUnit tu;
-  gint64            sequence;
+  CXTranslationUnit  tu;
+  gint64             sequence;
+  IdeDiagnostics    *diagnostics;
 } IdeClangTranslationUnitPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeClangTranslationUnit,
@@ -61,6 +62,29 @@ _ide_clang_translation_unit_new (IdeContext        *context,
   priv->sequence = sequence;
 
   return ret;
+}
+
+/**
+ * ide_clang_translation_unit_get_diagnostics:
+ *
+ * Retrieves the diagnostics for the translation unit.
+ *
+ * Returns: (transfer none) (nullable): An #IdeDiagnostics or %NULL.
+ */
+IdeDiagnostics *
+ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
+{
+  IdeClangTranslationUnitPrivate *priv;
+
+  g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
+
+  priv = ide_clang_translation_unit_get_instance_private (self);
+
+  if (!priv->diagnostics)
+    {
+    }
+
+  return priv->diagnostics;
 }
 
 gint64

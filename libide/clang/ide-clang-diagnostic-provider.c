@@ -20,76 +20,88 @@
 
 #include "ide-clang-diagnostic-provider.h"
 #include "ide-clang-service.h"
+#include "ide-clang-translation-unit.h"
+#include "ide-context.h"
+#include "ide-diagnostics.h"
 
-typedef struct
-{
-  void *foo;
-} IdeClangDiagnosticProviderPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE (IdeClangDiagnosticProvider,
-                            ide_clang_diagnostic_provider,
-                            IDE_TYPE_DIAGNOSTIC_PROVIDER)
-
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
-
-IdeClangDiagnosticProvider *
-ide_clang_diagnostic_provider_new (void)
-{
-  return g_object_new (IDE_TYPE_CLANG_DIAGNOSTIC_PROVIDER, NULL);
-}
+G_DEFINE_TYPE (IdeClangDiagnosticProvider, ide_clang_diagnostic_provider,
+               IDE_TYPE_DIAGNOSTIC_PROVIDER)
 
 static void
-ide_clang_diagnostic_provider_finalize (GObject *object)
+get_translation_unit_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
 {
-  IdeClangDiagnosticProvider *self = (IdeClangDiagnosticProvider *)object;
-  IdeClangDiagnosticProviderPrivate *priv = ide_clang_diagnostic_provider_get_instance_private (self);
+  IdeClangService *service = (IdeClangService *)object;
+  g_autoptr(IdeClangTranslationUnit) tu = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  IdeDiagnostics *diagnostics;
 
-  G_OBJECT_CLASS (ide_clang_diagnostic_provider_parent_class)->finalize (object);
-}
+  tu = ide_clang_service_get_translation_unit_finish (service, result, &error);
 
-static void
-ide_clang_diagnostic_provider_get_property (GObject    *object,
-                                            guint       prop_id,
-                                            GValue     *value,
-                                            GParamSpec *pspec)
-{
-  IdeClangDiagnosticProvider *self = IDE_CLANG_DIAGNOSTIC_PROVIDER (object);
-
-  switch (prop_id)
+  if (!tu)
     {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      g_task_return_error (task, error);
+      return;
     }
+
+  diagnostics = ide_clang_translation_unit_get_diagnostics (tu);
+
+  g_task_return_pointer (task,
+                         ide_diagnostics_ref (diagnostics),
+                         (GDestroyNotify)ide_diagnostics_unref);
 }
 
 static void
-ide_clang_diagnostic_provider_set_property (GObject      *object,
-                                            guint         prop_id,
-                                            const GValue *value,
-                                            GParamSpec   *pspec)
+ide_clang_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
+                                              IdeFile               *file,
+                                              GCancellable          *cancellable,
+                                              GAsyncReadyCallback    callback,
+                                              gpointer               user_data)
 {
-  IdeClangDiagnosticProvider *self = IDE_CLANG_DIAGNOSTIC_PROVIDER (object);
+  IdeClangDiagnosticProvider *self = (IdeClangDiagnosticProvider *)provider;
+  g_autoptr(GTask) task = NULL;
+  IdeClangService *service;
+  IdeContext *context;
 
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
+  g_return_if_fail (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (self));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  context = ide_object_get_context (IDE_OBJECT (provider));
+  service = ide_context_get_service_typed (context, IDE_TYPE_CLANG_SERVICE);
+
+  ide_clang_service_get_translation_unit_async (service,
+                                                file,
+                                                0,
+                                                cancellable,
+                                                get_translation_unit_cb,
+                                                g_object_ref (task));
+}
+
+static IdeDiagnostics *
+ide_clang_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *provider,
+                                               GAsyncResult           *result,
+                                               GError                **error)
+{
+  IdeClangDiagnosticProvider *self = (IdeClangDiagnosticProvider *)provider;
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (task), NULL);
+
+  return g_task_propagate_pointer (task, error);
 }
 
 static void
 ide_clang_diagnostic_provider_class_init (IdeClangDiagnosticProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeDiagnosticProviderClass *provider_class;
 
-  object_class->finalize = ide_clang_diagnostic_provider_finalize;
-  object_class->get_property = ide_clang_diagnostic_provider_get_property;
-  object_class->set_property = ide_clang_diagnostic_provider_set_property;
+  provider_class = IDE_DIAGNOSTIC_PROVIDER_CLASS (klass);
+  provider_class->diagnose_async = ide_clang_diagnostic_provider_diagnose_async;
+  provider_class->diagnose_finish = ide_clang_diagnostic_provider_diagnose_finish;
 }
 
 static void
