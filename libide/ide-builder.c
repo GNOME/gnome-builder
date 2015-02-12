@@ -67,6 +67,13 @@ ide_builder_build_async (IdeBuilder           *builder,
                            _("No implementation of build_async()"));
 }
 
+/**
+ * ide_builder_build_finish:
+ *
+ * Completes an asynchronous request to build the project.
+ *
+ * Returns: (transfer full): An #IdeBuildResult or %NULL upon failure.
+ */
 IdeBuildResult *
 ide_builder_build_finish (IdeBuilder    *builder,
                           GAsyncResult  *result,

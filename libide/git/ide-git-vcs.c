@@ -45,6 +45,13 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+/**
+ * ide_git_vcs_get_repository:
+ *
+ * Retrieves the underlying #GgitRepository used by @vcs.
+ *
+ * Returns: (transfer none): A #GgitRepository.
+ */
 GgitRepository *
 ide_git_vcs_get_repository (IdeGitVcs *vcs)
 {

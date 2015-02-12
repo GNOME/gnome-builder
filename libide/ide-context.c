@@ -190,6 +190,14 @@ ide_context_get_unsaved_files (IdeContext *context)
   return priv->unsaved_files;
 }
 
+/**
+ * ide_context_get_vcs:
+ *
+ * Retrieves the #IdeVcs used to load the project. If no version control system
+ * could be found, this will return an #IdeDirectoryVcs.
+ *
+ * Returns: (transfer none): An #IdeVcs.
+ */
 IdeVcs *
 ide_context_get_vcs (IdeContext *context)
 {
@@ -255,6 +263,13 @@ ide_context_new_finish (GAsyncResult  *result,
   return g_task_propagate_pointer (task, error);
 }
 
+/**
+ * ide_context_get_project:
+ *
+ * Retrieves the #IdeProject for the context.
+ *
+ * Returns: (transfer none): An #IdeContext.
+ */
 IdeProject *
 ide_context_get_project (IdeContext *context)
 {
@@ -265,6 +280,14 @@ ide_context_get_project (IdeContext *context)
   return priv->project;
 }
 
+/**
+ * ide_context_get_project_file:
+ *
+ * Retrieves a #GFile containing the project file that was used to load
+ * the context.
+ *
+ * Returns: (transfer none): A #GFile.
+ */
 GFile *
 ide_context_get_project_file (IdeContext *context)
 {

@@ -88,6 +88,14 @@ ide_project_files_find_child (IdeProjectItem *item,
   return NULL;
 }
 
+/**
+ * ide_project_files_get_file_for_path:
+ *
+ * Retrieves an #IdeFile for the path. If no such path exists within the
+ * project, %NULL is returned.
+ *
+ * Returns: (transfer full) (nullable): An #IdeFile or %NULL.
+ */
 IdeFile *
 ide_project_files_get_file_for_path (IdeProjectFiles *self,
                                      const gchar     *path)
