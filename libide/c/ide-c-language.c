@@ -24,6 +24,7 @@
 #include "ide-clang-highlighter.h"
 #include "ide-clang-symbol-resolver.h"
 #include "ide-diagnostician.h"
+#include "ide-private.h"
 
 typedef struct
 {
@@ -161,7 +162,7 @@ ide_c_language_initiable_init (GInitable     *initable,
       provider = g_object_new (IDE_TYPE_CLANG_DIAGNOSTIC_PROVIDER,
                                "context", context,
                                NULL);
-      ide_diagnostician_add_provider (priv->diagnostician, provider);
+      _ide_diagnostician_add_provider (priv->diagnostician, provider);
       g_clear_object (&provider);
 
       /*

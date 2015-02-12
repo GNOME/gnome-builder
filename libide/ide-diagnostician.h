@@ -32,10 +32,6 @@ struct _IdeDiagnostician
   IdeObject parent_instance;
 };
 
-void ide_diagnostician_add_provider    (IdeDiagnostician      *self,
-                                        IdeDiagnosticProvider *provider);
-void ide_diagnostician_remove_provider (IdeDiagnostician      *self,
-                                        IdeDiagnosticProvider *provider);
 
 G_END_DECLS
 
