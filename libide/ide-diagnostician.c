@@ -22,7 +22,7 @@
 #include "ide-diagnostician.h"
 #include "ide-diagnostics.h"
 #include "ide-file.h"
-#include "ide-private.h"
+#include "ide-internal.h"
 
 typedef struct
 {

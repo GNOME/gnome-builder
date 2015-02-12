@@ -24,7 +24,7 @@
 #include "ide-clang-highlighter.h"
 #include "ide-clang-symbol-resolver.h"
 #include "ide-diagnostician.h"
-#include "ide-private.h"
+#include "ide-internal.h"
 
 typedef struct
 {
