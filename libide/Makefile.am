@@ -53,6 +53,7 @@ libide_la_SOURCES = \
 	libide/ide-device.h \
 	libide/ide-diagnostic-provider.c \
 	libide/ide-diagnostic-provider.h \
+	libide/ide-diagnostic.c \
 	libide/ide-diagnostic.h \
 	libide/ide-diagnostician.c \
 	libide/ide-diagnostician.h \

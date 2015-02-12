@@ -1,4 +1,4 @@
-/* ide-diagnostic.h
+/* ide-diagnostic.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,19 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DIAGNOSTIC_H
-#define IDE_DIAGNOSTIC_H
+#include "ide-diagnostic.h"
 
-#include "ide-types.h"
+G_DEFINE_BOXED_TYPE (IdeDiagnostic, ide_diagnostic,
+                     ide_diagnostic_ref, ide_diagnostic_unref)
 
-G_BEGIN_DECLS
+struct _IdeDiagnostic
+{
+  volatile gint ref_count;
+};
 
-#define IDE_TYPE_DIAGNOSTIC (ide_diagnostic_get_type())
+IdeDiagnostic *
+ide_diagnostic_ref (IdeDiagnostic *self)
+{
+  g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
-GType          ide_diagnostic_get_type (void);
-IdeDiagnostic *ide_diagnostic_ref      (IdeDiagnostic *self);
-void           ide_diagnostic_unref    (IdeDiagnostic *self);
+  g_atomic_int_inc (&self->ref_count);
 
-G_END_DECLS
+  return self;
+}
 
-#endif /* IDE_DIAGNOSTIC_H */
+void
+ide_diagnostic_unref (IdeDiagnostic *self)
+{
+  g_return_if_fail (self);
+  g_return_if_fail (self->ref_count > 0);
+
+  if (g_atomic_int_dec_and_test (&self->ref_count))
+    {
+      g_slice_free (IdeDiagnostic, self);
+    }
+}
+
