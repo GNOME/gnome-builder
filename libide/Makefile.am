@@ -13,6 +13,8 @@ libide_la_SOURCES = \
 	libide/c/ide-c-language.h \
 	libide/clang/ide-clang-diagnostic-provider.c \
 	libide/clang/ide-clang-diagnostic-provider.h \
+	libide/clang/ide-clang-highlighter.c \
+	libide/clang/ide-clang-highlighter.h \
 	libide/clang/ide-clang-private.h \
 	libide/clang/ide-clang-service.c \
 	libide/clang/ide-clang-service.h \

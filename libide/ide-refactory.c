@@ -18,73 +18,24 @@
 
 #include "ide-refactory.h"
 
-typedef struct
-{
-  
-} IdeRefactoryPrivate;
+G_DEFINE_ABSTRACT_TYPE (IdeRefactory, ide_refactory, G_TYPE_OBJECT)
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeRefactory, ide_refactory, G_TYPE_OBJECT)
-
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
-
-IdeRefactory *
-ide_refactory_new (void)
-{
-  return g_object_new (IDE_TYPE_REFACTORY, NULL);
-}
-
-static void
-ide_refactory_finalize (GObject *object)
-{
-  IdeRefactory *self = (IdeRefactory *)object;
-  IdeRefactoryPrivate *priv = ide_refactory_get_instance_private (self);
-
-  G_OBJECT_CLASS (ide_refactory_parent_class)->finalize (object);
-}
-
-static void
-ide_refactory_get_property (GObject    *object,
-                            guint       prop_id,
-                            GValue     *value,
-                            GParamSpec *pspec)
-{
-  IdeRefactory *self = IDE_REFACTORY (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_refactory_set_property (GObject      *object,
-                            guint         prop_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
-{
-  IdeRefactory *self = IDE_REFACTORY (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
+/*
+ * TODO:
+ *
+ * If you'd like to work on the refactory engine, ping me.
+ *
+ * Examples would include:
+ *
+ *   - Rename method, local, etc
+ *   - Extract into method
+ *   - Rename GObject
+ *   - Whatever else you like.
+ */
 
 static void
 ide_refactory_class_init (IdeRefactoryClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = ide_refactory_finalize;
-  object_class->get_property = ide_refactory_get_property;
-  object_class->set_property = ide_refactory_set_property;
 }
 
 static void
