@@ -110,10 +110,10 @@ ide_file_create_language (IdeFile *self)
               type_id = g_io_extension_get_type (extension);
 
               if (g_type_is_a (type_id, IDE_TYPE_LANGUAGE))
-                language = g_object_new (type_id,
-                                         "context", context,
-                                         "id", lang_id,
-                                         NULL);
+                language = g_initable_new (type_id, NULL, NULL,
+                                           "context", context,
+                                           "id", lang_id,
+                                           NULL);
               else
                 g_warning (_("Type \"%s\" is not an IdeLanguage."),
                            g_type_name (type_id));
