@@ -36,6 +36,31 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeFile, ide_file, IDE_TYPE_OBJECT)
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+guint
+ide_file_hash (IdeFile *self)
+{
+  IdeFilePrivate *priv;
+
+  g_return_val_if_fail (IDE_IS_FILE (self), 0);
+
+  priv = ide_file_get_instance_private (self);
+
+  return g_file_hash (priv->file);
+}
+
+gboolean
+ide_file_equal (IdeFile *self,
+                IdeFile *other)
+{
+  IdeFilePrivate *priv1 = ide_file_get_instance_private (self);
+  IdeFilePrivate *priv2 = ide_file_get_instance_private (other);
+
+  g_return_val_if_fail (IDE_IS_FILE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_FILE (other), FALSE);
+
+  return g_file_equal (priv1->file, priv2->file);
+}
+
 GFile *
 ide_file_get_file (IdeFile *self)
 {

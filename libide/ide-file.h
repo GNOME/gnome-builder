@@ -35,6 +35,9 @@ struct _IdeFile
 IdeLanguage     *ide_file_get_language      (IdeFile *self);
 GFile           *ide_file_get_file          (IdeFile *self);
 const gchar     *ide_file_get_project_path  (IdeFile *self);
+guint            ide_file_hash              (IdeFile *self);
+gboolean         ide_file_equal             (IdeFile *self,
+                                             IdeFile *other);
 //IdeFileSettings *ide_file_get_file_settings (IdeFile *self);
 
 G_END_DECLS
