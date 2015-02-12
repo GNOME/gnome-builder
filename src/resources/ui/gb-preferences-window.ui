@@ -80,7 +80,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkSidebar" id="sidebar">
+              <object class="GtkStackSidebar" id="sidebar">
                 <property name="visible">True</property>
                 <property name="vexpand">True</property>
                 <property name="stack">stack</property>
