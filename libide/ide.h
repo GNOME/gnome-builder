@@ -27,8 +27,6 @@ G_BEGIN_DECLS
 
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
-#include "ide-buffer.h"
-#include "ide-buffer-iter.h"
 #include "ide-build-result.h"
 #include "ide-build-system.h"
 #include "ide-builder.h"
