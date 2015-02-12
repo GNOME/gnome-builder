@@ -29,7 +29,7 @@ G_DECLARE_DERIVABLE_TYPE (IdeCLanguage, ide_c_language, IDE, C_LANGUAGE, IdeLang
 
 struct _IdeCLanguageClass
 {
-  IdeObjectClass parent;
+  IdeLanguageClass parent;
 };
 
 G_END_DECLS
