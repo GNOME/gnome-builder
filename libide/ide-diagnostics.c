@@ -44,7 +44,7 @@ _ide_diagnostics_new (GPtrArray *ar)
 
   ret = g_slice_new0 (IdeDiagnostics);
   ret->ref_count = 1;
-  ret->diagnostics = ar ? ar : g_ptr_array_new_with_free_func (g_object_unref);
+  ret->diagnostics = ar;
 
   return ret;
 }
@@ -68,7 +68,7 @@ ide_diagnostics_unref (IdeDiagnostics *self)
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     {
-      g_ptr_array_unref (self->diagnostics);
+      g_clear_pointer (&self->diagnostics, g_ptr_array_unref);
       g_slice_free (IdeDiagnostics, self);
     }
 }
@@ -90,12 +90,21 @@ ide_diagnostics_merge (IdeDiagnostics *self,
   g_return_if_fail (self);
   g_return_if_fail (other);
 
-  for (i = 0; i < other->diagnostics->len; i++)
+  if (!self->diagnostics)
     {
-      IdeDiagnostic *diag;
+      self->diagnostics = g_ptr_array_new_with_free_func (
+        (GDestroyNotify)ide_diagnostic_unref);
+    }
 
-      diag = g_ptr_array_index (other->diagnostics, i);
-      g_ptr_array_add (self->diagnostics, ide_diagnostic_ref (diag));
+  if (other->diagnostics)
+    {
+      for (i = 0; i < other->diagnostics->len; i++)
+        {
+          IdeDiagnostic *diag;
+
+          diag = g_ptr_array_index (other->diagnostics, i);
+          g_ptr_array_add (self->diagnostics, ide_diagnostic_ref (diag));
+        }
     }
 }
 
@@ -111,9 +120,8 @@ gsize
 ide_diagnostics_get_size (IdeDiagnostics *self)
 {
   g_return_val_if_fail (self, 0);
-  g_return_val_if_fail (self->diagnostics, 0);
 
-  return self->diagnostics->len;
+  return self->diagnostics ? self->diagnostics->len : 0;
 }
 
 /**
