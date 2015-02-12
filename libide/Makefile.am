@@ -7,14 +7,15 @@ libide_la_SOURCES = \
 	libide/autotools/ide-autotools-build-task.h \
 	libide/autotools/ide-autotools-builder.c \
 	libide/autotools/ide-autotools-builder.h \
-	libide/c/ide-c-language.c \
-	libide/c/ide-c-language.h \
 	libide/c/ide-c-indenter.c \
 	libide/c/ide-c-indenter.h \
-	libide/clang/ide-clang-service.c \
-	libide/clang/ide-clang-service.h \
+	libide/c/ide-c-language.c \
+	libide/c/ide-c-language.h \
 	libide/clang/ide-clang-diagnostic-provider.c \
 	libide/clang/ide-clang-diagnostic-provider.h \
+	libide/clang/ide-clang-private.h \
+	libide/clang/ide-clang-service.c \
+	libide/clang/ide-clang-service.h \
 	libide/clang/ide-clang-symbol-resolver.c \
 	libide/clang/ide-clang-symbol-resolver.h \
 	libide/directory/ide-directory-build-system.c \
@@ -73,13 +74,13 @@ libide_la_SOURCES = \
 	libide/ide-refactory.h \
 	libide/ide-script.c \
 	libide/ide-script.h \
-	libide/ide-source-location.c \
-	libide/ide-source-location.h \
 	libide/ide-search-engine.h \
 	libide/ide-search-provider.h \
 	libide/ide-search-result.h \
 	libide/ide-service.c \
 	libide/ide-service.h \
+	libide/ide-source-location.c \
+	libide/ide-source-location.h \
 	libide/ide-symbol-resolver.h \
 	libide/ide-symbol.h \
 	libide/ide-target.h \
