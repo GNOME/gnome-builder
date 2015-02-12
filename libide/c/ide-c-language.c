@@ -153,7 +153,9 @@ ide_c_language_initiable_init (GInitable     *initable,
 
   id = ide_language_get_id (IDE_LANGUAGE (self));
 
-  if ((g_strcmp0 (id, "c") == 0) || (g_strcmp0 (id, "chdr") == 0))
+  if ((g_strcmp0 (id, "c") == 0) ||
+      (g_strcmp0 (id, "chdr") == 0) ||
+      (g_strcmp0 (id, "cpp") == 0))
     {
       IdeContext *context;
       IdeDiagnosticProvider *provider;
@@ -182,6 +184,7 @@ ide_c_language_initiable_init (GInitable     *initable,
       /*
        * Create our indenter to provide as-you-type indentation.
        */
+      /* TODO: Obviously change for C++ */
       priv->indenter = g_object_new (IDE_TYPE_C_INDENTER,
                                      "context", context,
                                      NULL);

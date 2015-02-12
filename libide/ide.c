@@ -76,7 +76,7 @@ ide_init_ctor (void)
   g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
                                   IDE_TYPE_C_LANGUAGE,
                                   IDE_LANGUAGE_EXTENSION_POINT".c",
-                                  0);
+                                  -100);
 
   g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
                                   IDE_TYPE_CLANG_SERVICE,
