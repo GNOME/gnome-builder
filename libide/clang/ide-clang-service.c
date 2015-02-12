@@ -74,7 +74,7 @@ ide_clang_service_parse_worker (GTask        *task,
                                 GCancellable *cancellable)
 {
   IdeClangServicePrivate *priv;
-  IdeClangTranslationUnit *ret;
+  g_autoptr(IdeClangTranslationUnit) ret = NULL;
   CXTranslationUnit tu = NULL;
   ParseRequest *request = task_data;
   IdeContext *context;
@@ -165,6 +165,8 @@ ide_clang_service_parse_worker (GTask        *task,
                         g_object_ref (request->file),
                         g_object_ref (ret));
   g_rw_lock_writer_unlock (&priv->cached_rwlock);
+
+  g_task_return_pointer (task, g_object_ref (ret), g_object_unref);
 
 cleanup:
   g_array_unref (ar);
