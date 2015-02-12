@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 
 #include "ide-project.h"
+#include "ide-project-files.h"
 #include "ide-project-item.h"
 
 typedef struct
@@ -103,7 +104,36 @@ IdeFile *
 ide_project_get_file_for_path (IdeProject  *self,
                                const gchar *path)
 {
-  g_warning ("todo: get file for path");
+  IdeProjectItem *root;
+  GSequenceIter *iter;
+  GSequence *children;
+
+  g_return_val_if_fail (IDE_IS_PROJECT (self), NULL);
+  g_return_val_if_fail (path, NULL);
+
+  root = ide_project_get_root (self);
+  if (!root)
+    return NULL;
+
+  children = ide_project_item_get_children (root);
+  if (!children)
+    return NULL;
+
+  for (iter = g_sequence_get_begin_iter (children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      IdeProjectItem *item = g_sequence_get (iter);
+
+      if (IDE_IS_PROJECT_FILES (item))
+        {
+          IdeProjectFiles *files;
+
+          files = IDE_PROJECT_FILES (item);
+          return ide_project_files_get_file_for_path (files, path);
+        }
+    }
+
   return NULL;
 }
 
