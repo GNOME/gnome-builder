@@ -18,6 +18,9 @@
 
 #include "ide-unsaved-file.h"
 
+G_DEFINE_BOXED_TYPE (IdeUnsavedFile, ide_unsaved_file,
+                     ide_unsaved_file_ref, ide_unsaved_file_unref)
+
 struct _IdeUnsavedFile
 {
   volatile gint  ref_count;
@@ -43,25 +46,6 @@ _ide_unsaved_file_new (GFile  *file,
   ret->sequence = sequence;
 
   return ret;
-}
-
-GType
-ide_unsaved_file_get_type (void)
-{
-  static gsize type_id;
-
-  if (g_once_init_enter (&type_id))
-    {
-      gsize _type_id;
-
-      type_id = g_boxed_type_register_static (
-          "IdeUnsavedFile",
-          (GBoxedCopyFunc)ide_unsaved_file_ref,
-          (GBoxedFreeFunc)ide_unsaved_file_unref);
-      g_once_init_leave (&type_id, _type_id);
-    }
-
-  return type_id;
 }
 
 gint64
