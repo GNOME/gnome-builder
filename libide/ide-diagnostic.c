@@ -17,6 +17,9 @@
  */
 
 #include "ide-diagnostic.h"
+#include "ide-private.h"
+#include "ide-source-location.h"
+#include "ide-source-range.h"
 
 G_DEFINE_BOXED_TYPE (IdeDiagnostic, ide_diagnostic,
                      ide_diagnostic_ref, ide_diagnostic_unref)
@@ -26,6 +29,7 @@ struct _IdeDiagnostic
   volatile gint          ref_count;
   IdeDiagnosticSeverity  severity;
   gchar                 *text;
+  GPtrArray             *ranges;
 };
 
 IdeDiagnostic *
@@ -80,6 +84,29 @@ _ide_diagnostic_new (IdeDiagnosticSeverity  severity,
   ret->text = g_strdup (text);
 
   return ret;
+}
+
+void
+_ide_diagnostic_add_range (IdeDiagnostic     *self,
+                           IdeSourceLocation *begin,
+                           IdeSourceLocation *end)
+{
+  IdeSourceRange *range;
+
+  g_return_if_fail (self);
+  g_return_if_fail (begin);
+  g_return_if_fail (end);
+
+  if (!self->ranges)
+    {
+      self->ranges = g_ptr_array_new ();
+      g_ptr_array_set_free_func (self->ranges,
+                                 (GDestroyNotify)ide_source_range_unref);
+    }
+
+  range = _ide_source_range_new (begin, end);
+  if (range)
+    g_ptr_array_add (self->ranges, range);
 }
 
 GType
