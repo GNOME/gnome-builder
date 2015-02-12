@@ -75,12 +75,14 @@ ide_clang_service_parse_worker (GTask        *task,
 {
   IdeClangServicePrivate *priv;
   IdeClangTranslationUnit *ret;
-  CXTranslationUnit tu;
+  CXTranslationUnit tu = NULL;
   ParseRequest *request = task_data;
   IdeContext *context;
   struct CXUnsavedFile *unsaved_files;
   const gchar * const *argv;
   gsize argc = 0;
+  const gchar *detail_error = NULL;
+  enum CXErrorCode code;
   GArray *ar;
   gsize i;
 
@@ -112,19 +114,46 @@ ide_clang_service_parse_worker (GTask        *task,
   argv = (const gchar * const *)request->command_line_args;
   argc = argv ? g_strv_length (request->command_line_args) : 0;
 
-  tu = clang_parseTranslationUnit (request->index,
-                                   request->source_filename,
-                                   argv, argc,
-                                   (struct CXUnsavedFile *)ar->data,
-                                   ar->len,
-                                   request->options);
+  code = clang_parseTranslationUnit2 (request->index,
+                                      request->source_filename,
+                                      argv, argc,
+                                      (struct CXUnsavedFile *)ar->data,
+                                      ar->len,
+                                      request->options,
+                                      &tu);
+
+  switch (code)
+    {
+    case CXError_Success:
+      break;
+
+    case CXError_Failure:
+      detail_error = _("Unknown failure");
+      break;
+
+    case CXError_Crashed:
+      detail_error = _("Clang crashed");
+      break;
+
+    case CXError_InvalidArguments:
+      detail_error = _("Invalid arguments");
+      break;
+
+    case CXError_ASTReadError:
+      detail_error = _("AST read error");
+      break;
+
+    default:
+      break;
+    }
 
   if (!tu)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_FAILED,
-                               _("Failed to create translation unit."));
+                               _("Failed to create translation unit: %s"),
+                               detail_error ? detail_error : "");
       goto cleanup;
     }
 
