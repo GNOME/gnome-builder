@@ -31,6 +31,8 @@ void            ide_diagnostics_unref    (IdeDiagnostics *self);
 gsize           ide_diagnostics_get_size (IdeDiagnostics *self);
 IdeDiagnostic  *ide_diagnostics_index    (IdeDiagnostics *self,
                                           gsize           index);
+void            ide_diagnostics_merge    (IdeDiagnostics *self,
+                                          IdeDiagnostics *other);
 
 G_END_DECLS
 

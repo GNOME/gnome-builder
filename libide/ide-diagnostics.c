@@ -69,6 +69,32 @@ ide_diagnostics_unref (IdeDiagnostics *self)
 }
 
 /**
+ * ide_diagnostics_merge:
+ *
+ * Copies the contents of @other into @self.
+ *
+ * This is performed by taking a reference to the immutable #IdeDiagnostic
+ * instances.
+ */
+void
+ide_diagnostics_merge (IdeDiagnostics *self,
+                       IdeDiagnostics *other)
+{
+  gsize i;
+
+  g_return_if_fail (self);
+  g_return_if_fail (other);
+
+  for (i = 0; i < other->diagnostics->len; i++)
+    {
+      IdeDiagnostic *diag;
+
+      diag = g_ptr_array_index (other->diagnostics, i);
+      g_ptr_array_add (self->diagnostics, ide_diagnostic_ref (diag));
+    }
+}
+
+/**
  * ide_diagnostics_get_size:
  *
  * Retrieves the number of diagnostics that can be accessed via
