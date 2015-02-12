@@ -24,8 +24,8 @@
 G_BEGIN_DECLS
 
 #define IDE_TYPE_TEST_SUITE               (ide_test_suite_get_type ())
-#define IDE_TEST_SUITE(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_TEST_SUITE, IdeTestSuite))
-#define IDE_IS_TEST_SUITE(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_TEST_SUITE))
+#define IDE_TEST_SUITE(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj),    IDE_TYPE_TEST_SUITE, IdeTestSuite))
+#define IDE_IS_TEST_SUITE(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj),    IDE_TYPE_TEST_SUITE))
 #define IDE_TEST_SUITE_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), IDE_TYPE_TEST_SUITE, IdeTestSuiteInterface))
 
 struct _IdeTestSuiteInterface

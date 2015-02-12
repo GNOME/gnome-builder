@@ -19,13 +19,13 @@
 #ifndef IDE_TARGET_H
 #define IDE_TARGET_H
 
-#include <glib-object.h>
+#include "ide-object.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_TARGET               (ide_target_get_type ())
-#define IDE_TARGET(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_TARGET, IdeTarget))
-#define IDE_IS_TARGET(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_TARGET))
+#define IDE_TARGET(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj),    IDE_TYPE_TARGET, IdeTarget))
+#define IDE_IS_TARGET(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj),    IDE_TYPE_TARGET))
 #define IDE_TARGET_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), IDE_TYPE_TARGET, IdeTargetInterface))
 
 struct _IdeTargetInterface

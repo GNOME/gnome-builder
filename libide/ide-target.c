@@ -1,4 +1,4 @@
-/* ide-executer.h
+/* ide-target.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,25 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EXECUTER_H
-#define IDE_EXECUTER_H
+#include "ide-target.h"
 
-#include "ide-object.h"
+G_DEFINE_INTERFACE (IdeTarget, ide_target, IDE_TYPE_OBJECT)
 
-G_BEGIN_DECLS
-
-#define IDE_TYPE_EXECUTER               (ide_executer_get_type ())
-#define IDE_EXECUTER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_EXECUTER, IdeExecuter))
-#define IDE_IS_EXECUTER(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_EXECUTER))
-#define IDE_EXECUTER_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), IDE_TYPE_EXECUTER, IdeExecuterInterface))
-
-struct _IdeExecuterInterface
+static void
+ide_target_default_init (IdeTargetInterface *iface)
 {
-  GTypeInterface parent;
-};
-
-GType ide_executer_get_type (void);
-
-G_END_DECLS
-
-#endif /* IDE_EXECUTER_H */
+}

@@ -19,18 +19,18 @@
 #ifndef IDE_SYMBOL_H
 #define IDE_SYMBOL_H
 
-#include "ide-object.h"
+#include "ide-types.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SYMBOL (ide_symbol_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeSymbol, ide_symbol, IDE, SYMBOL, IdeObject)
+GType        ide_symbol_get_type (void);
+IdeSymbol   *ide_symbol_ref      (IdeSymbol *self);
+void         ide_symbol_unref    (IdeSymbol *self);
+const gchar *ide_symbol_get_name (IdeSymbol *self);
 
-struct _IdeSymbolClass
-{
-  IdeObjectClass parent;
-};
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSymbol, ide_symbol_unref)
 
 G_END_DECLS
 

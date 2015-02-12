@@ -19,7 +19,7 @@
 #ifndef IDE_EXECUTABLE_H
 #define IDE_EXECUTABLE_H
 
-#include <glib-object.h>
+#include "ide-object.h"
 
 G_BEGIN_DECLS
 

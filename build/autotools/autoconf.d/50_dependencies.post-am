@@ -24,3 +24,5 @@ AC_SUBST([CLANG_LDFLAGS])
 AC_CHECK_HEADER([clang-c/Index.h], [], [
     AC_MSG_ERROR([Failed to locage clang-c/Index.h. Please install clang-devel.])
 ])
+
+GOBJECT_INTROSPECTION_CHECK([1.30.0])

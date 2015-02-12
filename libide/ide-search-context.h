@@ -1,4 +1,4 @@
-/* ide-executer.h
+/* ide-search-context.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,25 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_EXECUTER_H
-#define IDE_EXECUTER_H
+#ifndef IDE_SEARCH_CONTEXT_H
+#define IDE_SEARCH_CONTEXT_H
 
 #include "ide-object.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_EXECUTER               (ide_executer_get_type ())
-#define IDE_EXECUTER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_EXECUTER, IdeExecuter))
-#define IDE_IS_EXECUTER(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_EXECUTER))
-#define IDE_EXECUTER_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), IDE_TYPE_EXECUTER, IdeExecuterInterface))
+#define IDE_TYPE_SEARCH_CONTEXT (ide_search_context_get_type())
 
-struct _IdeExecuterInterface
+G_DECLARE_FINAL_TYPE (IdeSearchContext, ide_search_context, IDE, SEARCH_CONTEXT, IdeObject)
+
+struct _IdeSearchContext
 {
-  GTypeInterface parent;
+  IdeObject parent_instance;
 };
-
-GType ide_executer_get_type (void);
 
 G_END_DECLS
 
-#endif /* IDE_EXECUTER_H */
+#endif /* IDE_SEARCH_CONTEXT_H */

@@ -89,6 +89,13 @@ ide_unsaved_file_get_content (IdeUnsavedFile *self)
   return self->content;
 }
 
+/**
+ * ide_unsaved_file_get_file:
+ *
+ * Retrieves the underlying file represented by @self.
+ *
+ * Returns: (transfer none): A #GFile.
+ */
 GFile *
 ide_unsaved_file_get_file (IdeUnsavedFile *self)
 {
