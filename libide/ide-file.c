@@ -61,6 +61,13 @@ ide_file_equal (IdeFile *self,
   return g_file_equal (priv1->file, priv2->file);
 }
 
+IdeLanguage *
+ide_file_get_language (IdeFile *self)
+{
+  g_warning ("TODO: get language from file");
+  return NULL;
+}
+
 GFile *
 ide_file_get_file (IdeFile *self)
 {
