@@ -33,10 +33,21 @@ enum {
   PROP_0,
   PROP_FILE,
   PROP_FILE_INFO,
+  PROP_NAME,
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+const gchar *
+ide_project_file_get_name (IdeProjectFile *self)
+{
+  IdeProjectFilePrivate *priv = ide_project_file_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_PROJECT_FILE (self), NULL);
+
+  return g_file_info_get_name (priv->file_info);
+}
 
 GFile *
 ide_project_file_get_file (IdeProjectFile *file)
@@ -113,6 +124,10 @@ ide_project_file_get_property (GObject    *object,
       g_value_set_object (value, ide_project_file_get_file_info (self));
       break;
 
+    case PROP_NAME:
+      g_value_set_string (value, ide_project_file_get_name (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -169,6 +184,15 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FILE_INFO,
                                    gParamSpecs [PROP_FILE_INFO]);
+
+  gParamSpecs [PROP_NAME] =
+    g_param_spec_string ("name",
+                         _("Name"),
+                         _("The shortname of the file."),
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_NAME,
+                                   gParamSpecs [PROP_NAME]);
 }
 
 static void
