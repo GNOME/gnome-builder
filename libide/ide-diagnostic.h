@@ -25,9 +25,19 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DIAGNOSTIC (ide_diagnostic_get_type())
 
-GType          ide_diagnostic_get_type (void);
-IdeDiagnostic *ide_diagnostic_ref      (IdeDiagnostic *self);
-void           ide_diagnostic_unref    (IdeDiagnostic *self);
+typedef enum
+{
+  IDE_DIAGNOSTIC_IGNORED = 0,
+  IDE_DIAGNOSTIC_NOTE,
+  IDE_DIAGNOSTIC_WARNING,
+  IDE_DIAGNOSTIC_ERROR,
+  IDE_DIAGNOSTIC_FATAL,
+} IdeDiagnosticSeverity;
+
+GType                  ide_diagnostic_get_type     (void);
+IdeDiagnostic         *ide_diagnostic_ref          (IdeDiagnostic *self);
+void                   ide_diagnostic_unref        (IdeDiagnostic *self);
+IdeDiagnosticSeverity  ide_diagnostic_get_severity (IdeDiagnostic *self);
 
 G_END_DECLS
 

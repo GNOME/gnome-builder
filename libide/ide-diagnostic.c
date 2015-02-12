@@ -23,7 +23,8 @@ G_DEFINE_BOXED_TYPE (IdeDiagnostic, ide_diagnostic,
 
 struct _IdeDiagnostic
 {
-  volatile gint ref_count;
+  volatile gint         ref_count;
+  IdeDiagnosticSeverity severity;
 };
 
 IdeDiagnostic *
@@ -49,3 +50,22 @@ ide_diagnostic_unref (IdeDiagnostic *self)
     }
 }
 
+IdeDiagnosticSeverity
+ide_diagnostic_get_severity (IdeDiagnostic *self)
+{
+  g_return_val_if_fail (self, IDE_DIAGNOSTIC_IGNORED);
+
+  return self->severity;
+}
+
+IdeDiagnostic *
+_ide_diagnostic_new (IdeDiagnosticSeverity severity)
+{
+  IdeDiagnostic *ret;
+
+  ret = g_slice_new0 (IdeDiagnostic);
+  ret->ref_count = 1;
+  ret->severity = severity;
+
+  return ret;
+}
