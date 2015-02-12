@@ -81,3 +81,27 @@ _ide_diagnostic_new (IdeDiagnosticSeverity  severity,
 
   return ret;
 }
+
+GType
+ide_diagnostic_severity_get_type (void)
+{
+  static gsize type_id;
+
+  if (g_once_init_enter (&type_id))
+    {
+      gsize _type_id;
+      static const GEnumValue values[] = {
+        { IDE_DIAGNOSTIC_IGNORED, "IDE_DIAGNOSTIC_IGNORED", "IGNORED" },
+        { IDE_DIAGNOSTIC_NOTE, "IDE_DIAGNOSTIC_NOTE", "NOTE" },
+        { IDE_DIAGNOSTIC_WARNING, "IDE_DIAGNOSTIC_WARNING", "WARNING" },
+        { IDE_DIAGNOSTIC_ERROR, "IDE_DIAGNOSTIC_ERROR", "ERROR" },
+        { IDE_DIAGNOSTIC_FATAL, "IDE_DIAGNOSTIC_FATAL", "FATAL" },
+        { 0 }
+      };
+
+      _type_id = g_enum_register_static ("IdeDiagnosticSeverity", values);
+      g_once_init_leave (&type_id, _type_id);
+    }
+
+  return type_id;
+}
