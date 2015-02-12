@@ -38,6 +38,7 @@ GType                  ide_diagnostic_get_type     (void);
 IdeDiagnostic         *ide_diagnostic_ref          (IdeDiagnostic *self);
 void                   ide_diagnostic_unref        (IdeDiagnostic *self);
 IdeDiagnosticSeverity  ide_diagnostic_get_severity (IdeDiagnostic *self);
+const gchar           *ide_diagnostic_get_text     (IdeDiagnostic *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeDiagnostic, ide_diagnostic_unref)
 
