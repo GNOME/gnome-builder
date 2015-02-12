@@ -16,7 +16,11 @@ PKG_CHECK_MODULES(LIBIDE, [gio-2.0 >= glib_required_version
 
 AC_PATH_PROG([LLVM_CONFIG], [llvm-config])
 AS_IF([test "x$LLVM_CONFIG" = "x"],[
-    AC_MSG_ERROR([Failed to locate the llvm-config program.])
+    AC_MSG_ERROR([Failed to locate the llvm-config program. Please install llvm-devel.])
 ])
 CLANG_LDFLAGS=`$LLVM_CONFIG --ldflags`
 AC_SUBST([CLANG_LDFLAGS])
+
+AC_CHECK_HEADER([clang-c/Index.h], [], [
+    AC_MSG_ERROR([Failed to locage clang-c/Index.h. Please install clang-devel.])
+])
