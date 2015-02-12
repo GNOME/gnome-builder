@@ -39,6 +39,8 @@ void _ide_diagnostician_add_provider    (IdeDiagnostician      *self,
 void _ide_diagnostician_remove_provider (IdeDiagnostician      *self,
                                          IdeDiagnosticProvider *provider);
 
+IdeDiagnostics *_ide_diagnostics_new (GPtrArray *ar);
+
 
 G_END_DECLS
 
