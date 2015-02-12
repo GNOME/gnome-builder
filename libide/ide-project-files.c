@@ -19,16 +19,40 @@
 #include "ide-project-file.h"
 #include "ide-project-files.h"
 
-G_DEFINE_TYPE (IdeProjectFiles, ide_project_files, IDE_TYPE_PROJECT_ITEM)
+typedef struct
+{
+  GHashTable *files_by_path;
+} IdeProjectFilesPrivate;
+
+G_DEFINE_TYPE_WITH_PRIVATE (IdeProjectFiles, ide_project_files,
+                            IDE_TYPE_PROJECT_ITEM)
+
+static void
+ide_project_files_dispose (GObject *object)
+{
+  IdeProjectFiles *self = (IdeProjectFiles *)object;
+  IdeProjectFilesPrivate *priv = ide_project_files_get_instance_private (self);
+
+  g_clear_pointer (&priv->files_by_path, g_hash_table_unref);
+
+  G_OBJECT_CLASS (ide_project_files_parent_class)->dispose (object);
+}
 
 static void
 ide_project_files_class_init (IdeProjectFilesClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = ide_project_files_dispose;
 }
 
 static void
 ide_project_files_init (IdeProjectFiles *self)
 {
+  IdeProjectFilesPrivate *priv = ide_project_files_get_instance_private (self);
+
+  priv->files_by_path = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                               g_free, g_object_unref);
 }
 
 static IdeProjectItem *
@@ -68,11 +92,16 @@ IdeFile *
 ide_project_files_get_file_for_path (IdeProjectFiles *self,
                                      const gchar     *path)
 {
+  IdeProjectFilesPrivate *priv = ide_project_files_get_instance_private (self);
   IdeProjectItem *item = (IdeProjectItem *)self;
+  IdeFile *file;
   gchar **parts;
   gsize i;
 
   g_return_val_if_fail (IDE_IS_PROJECT_FILES (self), NULL);
+
+  if ((file = g_hash_table_lookup (priv->files_by_path, path)))
+    return file;
 
   parts = g_strsplit (path, G_DIR_SEPARATOR_S, 0);
 
@@ -81,12 +110,18 @@ ide_project_files_get_file_for_path (IdeProjectFiles *self,
 
   if (item)
     {
-      IdeFile *file = NULL;
+      IdeContext *context;
+      GFile *gfile;
 
-      g_warning ("TODO: Get/find/create idefile for %s\n", ide_project_file_get_name (IDE_PROJECT_FILE (item)));
-
-      return file;
+      context = ide_object_get_context (IDE_OBJECT (self));
+      gfile = ide_project_file_get_file (IDE_PROJECT_FILE (item));
+      file = g_object_new (IDE_TYPE_FILE,
+                           "context", context,
+                           "file", gfile,
+                           NULL);
+      if (file)
+        g_hash_table_insert (priv->files_by_path, g_strdup (path), file);
     }
 
-  return NULL;
+  return file;
 }
