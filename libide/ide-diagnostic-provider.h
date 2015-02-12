@@ -32,7 +32,25 @@ G_DECLARE_DERIVABLE_TYPE (IdeDiagnosticProvider, ide_diagnostic_provider,
 struct _IdeDiagnosticProviderClass
 {
   IdeObjectClass parent;
+
+  void            (*diagnose_async)  (IdeDiagnosticProvider  *self,
+                                      IdeFile                *file,
+                                      GCancellable           *cancellable,
+                                      GAsyncReadyCallback     callback,
+                                      gpointer                user_data);
+  IdeDiagnostics *(*diagnose_finish) (IdeDiagnosticProvider  *self,
+                                      GAsyncResult           *result,
+                                      GError                **error);
 };
+
+void            ide_diagnostic_provider_diagnose_async  (IdeDiagnosticProvider  *self,
+                                                         IdeFile                *file,
+                                                         GCancellable           *cancellable,
+                                                         GAsyncReadyCallback     callback,
+                                                         gpointer                user_data);
+IdeDiagnostics *ide_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *self,
+                                                         GAsyncResult           *result,
+                                                         GError                **error);
 
 G_END_DECLS
 
