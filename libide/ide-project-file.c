@@ -49,6 +49,13 @@ ide_project_file_get_name (IdeProjectFile *self)
   return g_file_info_get_name (priv->file_info);
 }
 
+/**
+ * ide_project_file_get_file:
+ *
+ * Retrieves the underlying #GFile represented by @file.
+ *
+ * Returns: (transfer none): Retrieves the #GFile represented by @file.
+ */
 GFile *
 ide_project_file_get_file (IdeProjectFile *file)
 {
@@ -72,6 +79,14 @@ ide_project_file_set_file (IdeProjectFile *self,
     g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
 }
 
+/**
+ * ide_project_file_get_file_info:
+ *
+ * Retrieves a #GFileInfo containing the basic information about @file. This
+ * includes the name, display name, and file type.
+ *
+ * Returns: (transfer none): A #GFileInfo
+ */
 GFileInfo *
 ide_project_file_get_file_info (IdeProjectFile *file)
 {

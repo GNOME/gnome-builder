@@ -148,6 +148,14 @@ ide_file_create_language (IdeFile *self)
     }
 }
 
+/**
+ * ide_file_get_language:
+ *
+ * Retrieves the #IdeLanguage that was discovered for the file. In some cases,
+ * this will be a subclass of #IdeLanguage, such as #IdeCLanguage.
+ *
+ * Returns: (transfer none): An #IdeLanguage
+ */
 IdeLanguage *
 ide_file_get_language (IdeFile *self)
 {
@@ -161,6 +169,13 @@ ide_file_get_language (IdeFile *self)
   return priv->language;
 }
 
+/**
+ * ide_file_get_file:
+ *
+ * Retrieves the underlying #GFile represented by @self.
+ *
+ * Returns: (transfer none): A #GFile.
+ */
 GFile *
 ide_file_get_file (IdeFile *self)
 {

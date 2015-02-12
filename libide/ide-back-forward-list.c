@@ -211,6 +211,17 @@ ide_back_forward_list_push (IdeBackForwardList *self,
   g_return_if_fail (priv->backward->length > 0);
 }
 
+/**
+ * ide_back_forward_list_branch:
+ *
+ * Branches @self into a newly created #IdeBackForwardList.
+ *
+ * This can be used independently and then merged back into a global
+ * #IdeBackForwardList. This can be useful in situations where you have
+ * multiple sets of editors.
+ *
+ * Returns: (transfer full): An #IdeBackForwardList
+ */
 IdeBackForwardList *
 ide_back_forward_list_branch (IdeBackForwardList *self)
 {

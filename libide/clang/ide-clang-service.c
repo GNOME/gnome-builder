@@ -250,6 +250,14 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
   g_task_run_in_thread (task, ide_clang_service_parse_worker);
 }
 
+/**
+ * ide_clang_service_get_translation_unit_finish:
+ *
+ * Completes an asychronous request to get a translation unit for a given file.
+ * See ide_clang_service_get_translation_unit_async() for more information.
+ *
+ * Returns: (transfer full): An #IdeClangTranslationUnit or %NULL up on failure.
+ */
 IdeClangTranslationUnit *
 ide_clang_service_get_translation_unit_finish (IdeClangService  *self,
                                                GAsyncResult     *result,

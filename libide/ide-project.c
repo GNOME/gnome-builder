@@ -65,6 +65,13 @@ ide_project_set_name (IdeProject  *project,
     }
 }
 
+/**
+ * ide_project_get_root:
+ *
+ * Retrieves the root item of the project tree.
+ *
+ * Returns: (transfer none): An #IdeProjectItem
+ */
 IdeProjectItem *
 ide_project_get_root (IdeProject *project)
 {
@@ -100,6 +107,15 @@ ide_project_set_root (IdeProject     *project,
     g_object_notify_by_pspec (G_OBJECT (project), gParamSpecs [PROP_ROOT]);
 }
 
+/**
+ * ide_project_get_file_for_path:
+ *
+ * Retrieves an #IdeFile for the path specified. #IdeFile provides access to
+ * language specific features via ide_file_get_language().
+ *
+ * Returns: (transfer full) (nullable): An #IdeFile or %NULL if no matching
+ *   file could be found.
+ */
 IdeFile *
 ide_project_get_file_for_path (IdeProject  *self,
                                const gchar *path)

@@ -76,6 +76,15 @@ ide_project_item_get_children (IdeProjectItem *item)
   return priv->children;
 }
 
+/**
+ * ide_project_item_get_parent:
+ *
+ * Retrieves the parent #IdeProjectItem of @item, or %NULL if @item is the root
+ * of the project tree.
+ *
+ * Returns: (transfer none) (nullable): An #IdeProjectItem or %NULL if the item
+ *   is the root of the tree.
+ */
 IdeProjectItem *
 ide_project_item_get_parent (IdeProjectItem *item)
 {
