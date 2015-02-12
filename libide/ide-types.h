@@ -51,7 +51,6 @@ typedef struct _IdeDevice                      IdeDevice;
 typedef struct _IdeDeviceManager               IdeDeviceManager;
 
 typedef struct _IdeDeviceProvider              IdeDeviceProvider;
-typedef struct _IdeDeviceProviderInterface     IdeDeviceProviderInterface;
 
 typedef struct _IdeDiagnostic                  IdeDiagnostic;
 
