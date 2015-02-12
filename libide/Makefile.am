@@ -96,6 +96,8 @@ libide_la_SOURCES = \
 	libide/ide-service.h \
 	libide/ide-source-location.c \
 	libide/ide-source-location.h \
+	libide/ide-source-range.c \
+	libide/ide-source-range.h \
 	libide/ide-symbol-resolver.c \
 	libide/ide-symbol-resolver.h \
 	libide/ide-symbol.h \
