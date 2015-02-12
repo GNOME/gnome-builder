@@ -18,7 +18,7 @@
 
 #include "ide-indenter.h"
 
-G_DEFINE_ABSTRACT_TYPE (IdeIndenter, ide_indenter, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (IdeIndenter, ide_indenter, IDE_TYPE_OBJECT)
 
 static void
 ide_indenter_class_init (IdeIndenterClass *klass)
