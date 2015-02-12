@@ -19,6 +19,9 @@
 #include "ide-file.h"
 #include "ide-source-location.h"
 
+G_DEFINE_BOXED_TYPE (IdeSourceLocation, ide_source_location,
+                     ide_source_location_ref, ide_source_location_unref)
+
 struct _IdeSourceLocation
 {
   volatile gint  ref_count;
@@ -153,22 +156,4 @@ ide_source_location_new (IdeFile *file,
   ret->offset = offset;
 
   return ret;
-}
-
-GType
-ide_source_location_get_type (void)
-{
-  static gsize type_id;
-
-  if (g_once_init_enter (&type_id))
-    {
-      gsize _type_id;
-
-      _type_id = g_boxed_type_register_static ("IdeSourceLocation",
-          (GBoxedCopyFunc)ide_source_location_ref,
-          (GBoxedFreeFunc)ide_source_location_unref);
-      g_once_init_leave (&type_id, _type_id);
-    }
-
-  return type_id;
 }
