@@ -79,6 +79,8 @@ ide_clang_service_parse_worker (GTask        *task,
   ParseRequest *request = task_data;
   IdeContext *context;
   struct CXUnsavedFile *unsaved_files;
+  const gchar * const *argv;
+  gsize argc = 0;
   GArray *ar;
   gsize i;
 
@@ -107,10 +109,12 @@ ide_clang_service_parse_worker (GTask        *task,
       g_array_append_val (ar, uf);
     }
 
+  argv = (const gchar * const *)request->command_line_args;
+  argc = argv ? g_strv_length (request->command_line_args) : 0;
+
   tu = clang_parseTranslationUnit (request->index,
                                    request->source_filename,
-                                   (const gchar * const *)request->command_line_args,
-                                   g_strv_length (request->command_line_args),
+                                   argv, argc,
                                    (struct CXUnsavedFile *)ar->data,
                                    ar->len,
                                    request->options);
