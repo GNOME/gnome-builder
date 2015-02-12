@@ -118,6 +118,9 @@ typedef struct _IdeTestSuite                   IdeTestSuite;
 typedef struct _IdeTestSuiteInterface          IdeTestSuiteInterface;
 
 typedef struct _IdeUnsavedFiles                IdeUnsavedFiles;
+
+typedef struct _IdeUnsavedFile                 IdeUnsavedFile;
+
 typedef struct _IdeVcs                         IdeVcs;
 
 G_END_DECLS

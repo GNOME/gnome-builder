@@ -67,6 +67,7 @@ G_BEGIN_DECLS
 #include "ide-test-case.h"
 #include "ide-test-suite.h"
 #include "ide-types.h"
+#include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 

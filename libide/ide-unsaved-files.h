@@ -32,25 +32,27 @@ struct _IdeUnsavedFiles
   IdeObject parent_instance;
 };
 
-void     ide_unsaved_files_update         (IdeUnsavedFiles      *self,
-                                           GFile                *file,
-                                           GBytes               *content);
-void     ide_unsaved_files_remove         (IdeUnsavedFiles      *self,
-                                           GFile                *file);
-void     ide_unsaved_files_save_async     (IdeUnsavedFiles      *files,
-                                           GCancellable         *cancellable,
-                                           GAsyncReadyCallback   callback,
-                                           gpointer              user_data);
-gboolean ide_unsaved_files_save_finish    (IdeUnsavedFiles      *files,
-                                           GAsyncResult         *result,
-                                           GError              **error);
-void     ide_unsaved_files_restore_async  (IdeUnsavedFiles      *files,
-                                           GCancellable         *cancellable,
-                                           GAsyncReadyCallback   callback,
-                                           gpointer              user_data);
-gboolean ide_unsaved_files_restore_finish (IdeUnsavedFiles      *files,
-                                           GAsyncResult         *result,
-                                           GError              **error);
+void       ide_unsaved_files_update            (IdeUnsavedFiles      *self,
+                                                GFile                *file,
+                                                GBytes               *content);
+void       ide_unsaved_files_remove            (IdeUnsavedFiles      *self,
+                                                GFile                *file);
+void       ide_unsaved_files_save_async        (IdeUnsavedFiles      *files,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data);
+gboolean   ide_unsaved_files_save_finish       (IdeUnsavedFiles      *files,
+                                                GAsyncResult         *result,
+                                                GError              **error);
+void       ide_unsaved_files_restore_async     (IdeUnsavedFiles      *files,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data);
+gboolean   ide_unsaved_files_restore_finish    (IdeUnsavedFiles      *files,
+                                                GAsyncResult         *result,
+                                                GError              **error);
+GPtrArray *ide_unsaved_files_get_unsaved_files (IdeUnsavedFiles      *files);
+gint64     ide_unsaved_files_get_sequence      (IdeUnsavedFiles      *files);
 
 G_END_DECLS
 

@@ -20,11 +20,14 @@
 
 #include "ide-context.h"
 #include "ide-global.h"
+#include "ide-private.h"
 #include "ide-project.h"
+#include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
 
 typedef struct
 {
+  gint64  sequence;
   GFile  *file;
   GBytes *content;
 } UnsavedFile;
@@ -32,6 +35,7 @@ typedef struct
 typedef struct
 {
   GPtrArray *unsaved_files;
+  gint64     sequence;
 } IdeUnsavedFilesPrivate;
 
 typedef struct
@@ -408,6 +412,8 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
   g_return_if_fail (G_IS_FILE (file));
 
+  priv->sequence++;
+
   if (!content)
     {
       ide_unsaved_files_remove (self, file);
@@ -424,6 +430,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
             {
               g_clear_pointer (&unsaved->content, g_bytes_unref);
               unsaved->content = g_bytes_ref (content);
+              unsaved->sequence = priv->sequence;
             }
 
           /*
@@ -442,8 +449,62 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
   unsaved = g_slice_new0 (UnsavedFile);
   unsaved->file = g_object_ref (file);
   unsaved->content = g_bytes_ref (content);
+  unsaved->sequence = priv->sequence;
 
   g_ptr_array_insert (priv->unsaved_files, 0, unsaved);
+}
+
+/**
+ * ide_unsaved_files_get_unsaved_files:
+ *
+ * This retrieves all of the unsaved file buffers known to the context.
+ * These are handy if you need to pass modified state to parsers such as
+ * clang.
+ *
+ * Call g_ptr_array_unref() on the resulting #GPtrArray when no longer in use.
+ *
+ * If you would like to hold onto an unsaved file instance, call
+ * ide_unsaved_file_ref() to increment it's reference count.
+ *
+ * Returns: (transfer container) (element-type IdeUnsavedFile*): A #GPtrArray
+ *   containing #IdeUnsavedFile elements.
+ */
+GPtrArray *
+ide_unsaved_files_get_unsaved_files (IdeUnsavedFiles *self)
+{
+  IdeUnsavedFilesPrivate *priv;
+  GPtrArray *ar;
+  gsize i;
+
+  g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), NULL);
+
+  priv = ide_unsaved_files_get_instance_private (self);
+
+  ar = g_ptr_array_new ();
+  g_ptr_array_set_free_func (ar, (GDestroyNotify)ide_unsaved_file_unref);
+
+  for (i = 0; i < priv->unsaved_files->len; i++)
+    {
+      IdeUnsavedFile *item;
+      UnsavedFile *uf;
+
+      uf = g_ptr_array_index (priv->unsaved_files, i);
+      item = _ide_unsaved_file_new (uf->file, uf->content, uf->sequence);
+
+      g_ptr_array_add (ar, item);
+    }
+
+  return ar;
+}
+
+gint64
+ide_unsaved_files_get_sequence (IdeUnsavedFiles *self)
+{
+  IdeUnsavedFilesPrivate *priv = ide_unsaved_files_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), -1);
+
+  return priv->sequence;
 }
 
 static void
