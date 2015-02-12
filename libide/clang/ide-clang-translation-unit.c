@@ -21,6 +21,8 @@
 
 #include "ide-context.h"
 #include "ide-clang-translation-unit.h"
+#include "ide-diagnostic.h"
+#include "ide-private.h"
 
 typedef struct
 {
@@ -82,6 +84,26 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
 
   if (!priv->diagnostics)
     {
+      GPtrArray *ar;
+      guint count;
+      guint i;
+
+      ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
+      count = clang_getNumDiagnostics (priv->tu);
+
+      for (i = 0; i < count; i++)
+        {
+          CXDiagnostic cxdiag;
+          CXString cxstr;
+
+          cxdiag = clang_getDiagnostic (priv->tu, i);
+          cxstr = clang_getDiagnosticSpelling (cxdiag);
+          g_print ("> %s\n", clang_getCString (cxstr));
+          clang_disposeString (cxstr);
+          clang_disposeDiagnostic (cxdiag);
+        }
+
+      priv->diagnostics = _ide_diagnostics_new (ar);
     }
 
   return priv->diagnostics;
