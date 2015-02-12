@@ -22,6 +22,7 @@
 #include <clang-c/Index.h>
 
 #include "ide-clang-translation-unit.h"
+#include "ide-diagnostic.h"
 #include "ide-types.h"
 
 G_BEGIN_DECLS
@@ -40,6 +41,8 @@ void _ide_diagnostician_remove_provider (IdeDiagnostician      *self,
                                          IdeDiagnosticProvider *provider);
 
 IdeDiagnostics *_ide_diagnostics_new (GPtrArray *ar);
+
+IdeDiagnostic *_ide_diagnostic_new (IdeDiagnosticSeverity severity);
 
 
 G_END_DECLS
