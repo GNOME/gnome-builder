@@ -23,8 +23,9 @@ G_DEFINE_BOXED_TYPE (IdeDiagnostic, ide_diagnostic,
 
 struct _IdeDiagnostic
 {
-  volatile gint         ref_count;
-  IdeDiagnosticSeverity severity;
+  volatile gint          ref_count;
+  IdeDiagnosticSeverity  severity;
+  gchar                 *text;
 };
 
 IdeDiagnostic *
@@ -46,6 +47,7 @@ ide_diagnostic_unref (IdeDiagnostic *self)
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     {
+      g_free (self->text);
       g_slice_free (IdeDiagnostic, self);
     }
 }
@@ -58,14 +60,24 @@ ide_diagnostic_get_severity (IdeDiagnostic *self)
   return self->severity;
 }
 
+const gchar *
+ide_diagnostic_get_text (IdeDiagnostic *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->text;
+}
+
 IdeDiagnostic *
-_ide_diagnostic_new (IdeDiagnosticSeverity severity)
+_ide_diagnostic_new (IdeDiagnosticSeverity  severity,
+                     const gchar           *text)
 {
   IdeDiagnostic *ret;
 
   ret = g_slice_new0 (IdeDiagnostic);
   ret->ref_count = 1;
   ret->severity = severity;
+  ret->text = g_strdup (text);
 
   return ret;
 }
