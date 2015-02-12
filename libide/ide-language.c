@@ -46,6 +46,119 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+/**
+ * ide_language_get_diagnostician:
+ *
+ * Returns the #IdeDiagnostician for the #IdeLanguage.
+ *
+ * The diagnostician is responsible for querying the proper language tools to
+ * diagnose issues with a particular #IdeFile.
+ *
+ * See ide_diagnostician_diagnose_async() for more information.
+ *
+ * If the #IdeLanguage does not have an #IdeDiagnostician, then %NULL is
+ * returned.
+ *
+ * Returns: (transfer none) (nullable): An #IdeDiagnostician or %NULL.
+ */
+IdeDiagnostician *
+ide_language_get_diagnostician (IdeLanguage *self)
+{
+  g_return_val_if_fail (IDE_IS_LANGUAGE (self), NULL);
+
+  if (IDE_LANGUAGE_GET_CLASS (self)->get_diagnostician)
+   return IDE_LANGUAGE_GET_CLASS (self)->get_diagnostician (self);
+
+  return NULL;
+}
+
+/**
+ * ide_language_get_highlighter:
+ *
+ * Fetches the #IdeHighlighter for the #IdeLanguage.
+ *
+ * If @language does not provide a semantic highlighter, %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): An #IdeHighlighter or %NULL.
+ */
+IdeHighlighter *
+ide_language_get_highlighter (IdeLanguage *self)
+{
+  g_return_val_if_fail (IDE_IS_LANGUAGE (self), NULL);
+
+  if (IDE_LANGUAGE_GET_CLASS (self)->get_highlighter)
+   return IDE_LANGUAGE_GET_CLASS (self)->get_highlighter (self);
+
+  return NULL;
+}
+
+/**
+ * ide_language_get_indenter:
+ *
+ * Fetches the #IdeIndenter for @language.
+ *
+ * If @language does not provide an #IdeIndenter, then %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): An #IdeIndenter or %NULL.
+ */
+IdeIndenter *
+ide_language_get_indenter (IdeLanguage *self)
+{
+  g_return_val_if_fail (IDE_IS_LANGUAGE (self), NULL);
+
+  if (IDE_LANGUAGE_GET_CLASS (self)->get_indenter)
+   return IDE_LANGUAGE_GET_CLASS (self)->get_indenter (self);
+
+  return NULL;
+}
+
+/**
+ * ide_language_get_refactory:
+ *
+ * Fetches the refactory for @language.
+ *
+ * If @language does not provide an #IdeRefactory, then %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): An #IdeRefactory or %NULL.
+ */
+IdeRefactory *
+ide_language_get_refactory (IdeLanguage *self)
+{
+  g_return_val_if_fail (IDE_IS_LANGUAGE (self), NULL);
+
+  if (IDE_LANGUAGE_GET_CLASS (self)->get_refactory)
+   return IDE_LANGUAGE_GET_CLASS (self)->get_refactory (self);
+
+  return NULL;
+}
+
+/**
+ * ide_language_get_symbol_resolver:
+ *
+ * Fetches the #IdeSymbolResolver for @language.
+ *
+ * If @language does not provide an #IdeSymbolResolver, then %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): An #IdeSymbolResolver or %NULL.
+ */
+IdeSymbolResolver *
+ide_language_get_symbol_resolver (IdeLanguage *self)
+{
+  g_return_val_if_fail (IDE_IS_LANGUAGE (self), NULL);
+
+  if (IDE_LANGUAGE_GET_CLASS (self)->get_symbol_resolver)
+   return IDE_LANGUAGE_GET_CLASS (self)->get_symbol_resolver (self);
+
+  return NULL;
+}
+
+/**
+ * ide_language_get_id:
+ *
+ * Fetches the unique identifier for the language.
+ *
+ * Returns: A string such as "c" or "python".
+ */
 const gchar *
 ide_language_get_id (IdeLanguage *self)
 {
@@ -56,7 +169,7 @@ ide_language_get_id (IdeLanguage *self)
   return priv->id;
 }
 
-void
+static void
 ide_language_set_id (IdeLanguage *self,
                      const gchar *id)
 {
@@ -66,6 +179,24 @@ ide_language_set_id (IdeLanguage *self,
   g_return_if_fail (!priv->id);
 
   priv->id = g_intern_string (id);
+}
+
+/**
+ * ide_language_get_name:
+ *
+ * Fetches the display name for the language.
+ *
+ * Returns: A string containing the display name.
+ */
+const gchar *
+ide_language_get_name (IdeLanguage *self)
+{
+  g_return_val_if_fail (IDE_IS_LANGUAGE (self), NULL);
+
+  if (IDE_LANGUAGE_GET_CLASS (self)->get_name)
+    return IDE_LANGUAGE_GET_CLASS (self)->get_name (self);
+
+  return ide_language_get_id (self);
 }
 
 static void
