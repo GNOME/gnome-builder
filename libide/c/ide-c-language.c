@@ -97,6 +97,12 @@ ide_c_language_get_symbol_resolver (IdeLanguage *language)
   return priv->symbol_resolver;
 }
 
+static const gchar *
+ide_c_language_get_name (IdeLanguage *self)
+{
+  return _("C");
+}
+
 static void
 ide_c_language_dispose (GObject *object)
 {
@@ -123,6 +129,7 @@ ide_c_language_class_init (IdeCLanguageClass *klass)
   language_class->get_indenter = ide_c_language_get_indenter;
   language_class->get_refactory = ide_c_language_get_refactory;
   language_class->get_symbol_resolver = ide_c_language_get_symbol_resolver;
+  language_class->get_name = ide_c_language_get_name;
 
   object_class->dispose = ide_c_language_dispose;
 }
