@@ -17,12 +17,15 @@
  */
 
 #include <glib/gi18n.h>
+#include <gtksourceview/gtksource.h>
 
 #include "ide-file.h"
+#include "ide-language.h"
 
 typedef struct
 {
-  GFile *file;
+  GFile       *file;
+  IdeLanguage *language;
 } IdeFilePrivate;
 
 enum
@@ -61,11 +64,83 @@ ide_file_equal (IdeFile *self,
   return g_file_equal (priv1->file, priv2->file);
 }
 
+static void
+ide_file_create_language (IdeFile *self)
+{
+  IdeFilePrivate *priv = ide_file_get_instance_private (self);
+
+  g_assert (IDE_IS_FILE (self));
+
+  if (g_once_init_enter (&priv->language))
+    {
+      GtkSourceLanguageManager *manager;
+      GtkSourceLanguage *srclang;
+      IdeLanguage *language = NULL;
+      const gchar *lang_id = NULL;
+      g_autoptr(gchar) content_type = NULL;
+      g_autoptr(gchar) filename = NULL;
+      IdeContext *context;
+      gboolean uncertain = TRUE;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      filename = g_file_get_basename (priv->file);
+      content_type = g_content_type_guess (filename, NULL, 0, &uncertain);
+
+      if (uncertain)
+        g_clear_pointer (&content_type, g_free);
+
+      manager = gtk_source_language_manager_get_default ();
+      srclang = gtk_source_language_manager_guess_language (manager, filename, content_type);
+
+      if (srclang)
+        {
+          g_autoptr(gchar) ext_name = NULL;
+          GIOExtension *extension;
+          GIOExtensionPoint *point;
+
+          lang_id = gtk_source_language_get_id (srclang);
+          ext_name = g_strdup_printf (IDE_LANGUAGE_EXTENSION_POINT".%s", lang_id);
+          point = g_io_extension_point_lookup (IDE_LANGUAGE_EXTENSION_POINT);
+          extension = g_io_extension_point_get_extension_by_name (point, ext_name);
+
+          if (extension)
+            {
+              GType type_id;
+
+              type_id = g_io_extension_get_type (extension);
+
+              if (g_type_is_a (type_id, IDE_TYPE_LANGUAGE))
+                language = g_object_new (type_id,
+                                         "context", context,
+                                         "id", lang_id,
+                                         NULL);
+              else
+                g_warning (_("Type \"%s\" is not an IdeLanguage."),
+                           g_type_name (type_id));
+            }
+        }
+
+      if (!language)
+        language = g_object_new (IDE_TYPE_LANGUAGE,
+                                 "context", context,
+                                 "id", lang_id,
+                                 NULL);
+
+      g_once_init_leave (&priv->language, language);
+    }
+}
+
 IdeLanguage *
 ide_file_get_language (IdeFile *self)
 {
-  g_warning ("TODO: get language from file");
-  return NULL;
+  IdeFilePrivate *priv = ide_file_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_FILE (self), NULL);
+
+  if (!priv->language)
+    ide_file_create_language (self);
+
+  return priv->language;
 }
 
 GFile *

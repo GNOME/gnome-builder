@@ -23,6 +23,7 @@
 #include "ide.h"
 
 #include "ide-autotools-build-system.h"
+#include "ide-c-language.h"
 #include "ide-clang-service.h"
 #include "ide-directory-build-system.h"
 #include "ide-directory-vcs.h"
@@ -59,6 +60,7 @@ ide_init_ctor (void)
   g_type_ensure (IDE_TYPE_VCS);
 
   g_io_extension_point_register (IDE_BUILD_SYSTEM_EXTENSION_POINT);
+  g_io_extension_point_register (IDE_LANGUAGE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SERVICE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_VCS_EXTENSION_POINT);
 
@@ -70,6 +72,11 @@ ide_init_ctor (void)
                                   IDE_TYPE_DIRECTORY_BUILD_SYSTEM,
                                   IDE_BUILD_SYSTEM_EXTENSION_POINT".directory",
                                   -200);
+
+  g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
+                                  IDE_TYPE_C_LANGUAGE,
+                                  IDE_LANGUAGE_EXTENSION_POINT".c",
+                                  0);
 
   g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
                                   IDE_TYPE_CLANG_SERVICE,
