@@ -27,18 +27,22 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-  IDE_DIAGNOSTIC_IGNORED = 0,
-  IDE_DIAGNOSTIC_NOTE,
-  IDE_DIAGNOSTIC_WARNING,
-  IDE_DIAGNOSTIC_ERROR,
-  IDE_DIAGNOSTIC_FATAL,
+  IDE_DIAGNOSTIC_IGNORED  = 0,
+  IDE_DIAGNOSTIC_NOTE     = 1,
+  IDE_DIAGNOSTIC_WARNING  = 2,
+  IDE_DIAGNOSTIC_ERROR    = 3,
+  IDE_DIAGNOSTIC_FATAL    = 4,
 } IdeDiagnosticSeverity;
 
-GType                  ide_diagnostic_get_type     (void);
-IdeDiagnostic         *ide_diagnostic_ref          (IdeDiagnostic *self);
-void                   ide_diagnostic_unref        (IdeDiagnostic *self);
-IdeDiagnosticSeverity  ide_diagnostic_get_severity (IdeDiagnostic *self);
-const gchar           *ide_diagnostic_get_text     (IdeDiagnostic *self);
+GType                  ide_diagnostic_get_type          (void);
+GType                  ide_diagnostic_severity_get_type (void);
+IdeDiagnostic         *ide_diagnostic_ref               (IdeDiagnostic *self);
+IdeSourceRange        *ide_diagnostic_get_range         (IdeDiagnostic *self,
+                                                         guint          index);
+IdeDiagnosticSeverity  ide_diagnostic_get_severity      (IdeDiagnostic *self);
+const gchar           *ide_diagnostic_get_text          (IdeDiagnostic *self);
+guint                  ide_diagnostic_get_num_ranges    (IdeDiagnostic *self);
+void                   ide_diagnostic_unref             (IdeDiagnostic *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeDiagnostic, ide_diagnostic_unref)
 
