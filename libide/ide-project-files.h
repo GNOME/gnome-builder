@@ -33,6 +33,9 @@ struct _IdeProjectFiles
   IdeProjectItem parent_instance;
 };
 
+IdeFile *ide_project_files_get_file_for_path (IdeProjectFiles *self,
+                                              const gchar     *path);
+
 G_END_DECLS
 
 #endif /* IDE_PROJECT_FILES_H */
