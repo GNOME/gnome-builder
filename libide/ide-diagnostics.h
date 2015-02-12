@@ -34,6 +34,8 @@ IdeDiagnostic  *ide_diagnostics_index    (IdeDiagnostics *self,
 void            ide_diagnostics_merge    (IdeDiagnostics *self,
                                           IdeDiagnostics *other);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeDiagnostics, ide_diagnostics_unref)
+
 G_END_DECLS
 
 #endif /* IDE_DIAGNOSTICS_H */

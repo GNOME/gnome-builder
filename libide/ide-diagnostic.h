@@ -39,6 +39,8 @@ IdeDiagnostic         *ide_diagnostic_ref          (IdeDiagnostic *self);
 void                   ide_diagnostic_unref        (IdeDiagnostic *self);
 IdeDiagnosticSeverity  ide_diagnostic_get_severity (IdeDiagnostic *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeDiagnostic, ide_diagnostic_unref)
+
 G_END_DECLS
 
 #endif /* IDE_DIAGNOSTIC_H */
