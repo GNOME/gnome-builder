@@ -15,6 +15,9 @@ data/org.gnome.builder.editor.gschema.xml.in
 libide/autotools/ide-autotools-build-system.c
 libide/autotools/ide-autotools-build-task.c
 libide/autotools/ide-autotools-builder.c
+libide/c/ide-c-language.c
+libide/clang/ide-clang-service.c
+libide/clang/ide-clang-translation-unit.c
 libide/git/ide-git-vcs.c
 libide/ide-back-forward-item.c
 libide/ide-back-forward-list.c
@@ -26,6 +29,7 @@ libide/ide-device-manager.c
 libide/ide-device-provider.c
 libide/ide-device.c
 libide/ide-file.c
+libide/ide-language.c
 libide/ide-object.c
 libide/ide-project-file.c
 libide/ide-project-item.c
