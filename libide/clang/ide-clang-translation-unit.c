@@ -97,6 +97,8 @@ create_diagnostic (IdeClangTranslationUnit *self,
 {
   enum CXDiagnosticSeverity cxseverity;
   IdeDiagnosticSeverity severity;
+  g_autoptr(gchar) spelling = NULL;
+  CXString cxstr;
 
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
   g_return_val_if_fail (cxdiag, NULL);
@@ -104,7 +106,11 @@ create_diagnostic (IdeClangTranslationUnit *self,
   cxseverity = clang_getDiagnosticSeverity (cxdiag);
   severity = translate_severity (cxseverity);
 
-  return _ide_diagnostic_new (severity);
+  cxstr = clang_getDiagnosticSpelling (cxdiag);
+  spelling = g_strdup (clang_getCString (cxstr));
+  clang_disposeString (cxstr);
+
+  return _ide_diagnostic_new (severity, spelling);
 }
 
 /**
