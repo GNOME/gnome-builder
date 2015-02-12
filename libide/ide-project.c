@@ -99,6 +99,14 @@ ide_project_set_root (IdeProject     *project,
     g_object_notify_by_pspec (G_OBJECT (project), gParamSpecs [PROP_ROOT]);
 }
 
+IdeFile *
+ide_project_get_file_for_path (IdeProject  *self,
+                               const gchar *path)
+{
+  g_warning ("todo: get file for path");
+  return NULL;
+}
+
 static void
 ide_project_finalize (GObject *object)
 {
