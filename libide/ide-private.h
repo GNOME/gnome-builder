@@ -42,7 +42,8 @@ void _ide_diagnostician_remove_provider (IdeDiagnostician      *self,
 
 IdeDiagnostics *_ide_diagnostics_new (GPtrArray *ar);
 
-IdeDiagnostic *_ide_diagnostic_new (IdeDiagnosticSeverity severity);
+IdeDiagnostic *_ide_diagnostic_new (IdeDiagnosticSeverity  severity,
+                                    const gchar           *text);
 
 
 G_END_DECLS
