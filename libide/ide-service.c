@@ -34,7 +34,14 @@ enum {
   LAST_PROP
 };
 
+enum {
+  START,
+  STOP,
+  LAST_SIGNAL
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint gSignals [LAST_SIGNAL];
 
 gboolean
 ide_service_get_running (IdeService *service)
@@ -60,33 +67,37 @@ ide_service_get_name (IdeService *service)
 void
 ide_service_start (IdeService *service)
 {
-  IdeServicePrivate *priv = ide_service_get_instance_private (service);
-
   g_return_if_fail (IDE_IS_SERVICE (service));
 
-  if (!priv->running)
-    {
-      if (IDE_SERVICE_GET_CLASS (service)->start)
-        IDE_SERVICE_GET_CLASS (service)->start (service);
-
-      priv->running = TRUE;
-    }
+  g_signal_emit (service, gSignals [START], 0);
 }
 
 void
 ide_service_stop (IdeService *service)
 {
+  g_return_if_fail (IDE_IS_SERVICE (service));
+
+  g_signal_emit (service, gSignals [STOP], 0);
+}
+
+static void
+ide_service_real_start (IdeService *service)
+{
   IdeServicePrivate *priv = ide_service_get_instance_private (service);
 
   g_return_if_fail (IDE_IS_SERVICE (service));
 
-  if (priv->running)
-    {
-      if (IDE_SERVICE_GET_CLASS (service)->stop)
-        IDE_SERVICE_GET_CLASS (service)->stop (service);
+  priv->running = TRUE;
+}
 
-      priv->running = FALSE;
-    }
+static void
+ide_service_real_stop (IdeService *service)
+{
+  IdeServicePrivate *priv = ide_service_get_instance_private (service);
+
+  g_return_if_fail (IDE_IS_SERVICE (service));
+
+  priv->running = FALSE;
 }
 
 static void
@@ -119,6 +130,9 @@ ide_service_class_init (IdeServiceClass *klass)
 
   object_class->get_property = ide_service_get_property;
 
+  klass->start = ide_service_real_start;
+  klass->start = ide_service_real_stop;
+
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
                          _("Name"),
@@ -136,6 +150,26 @@ ide_service_class_init (IdeServiceClass *klass)
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_RUNNING,
                                    gParamSpecs [PROP_RUNNING]);
+
+  gSignals [START] =
+    g_signal_new ("start",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeServiceClass, start),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  gSignals [STOP] =
+    g_signal_new ("stop",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeServiceClass, stop),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 static void
