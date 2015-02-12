@@ -60,6 +60,7 @@ libide_la_SOURCES = \
 	libide/ide-language.h \
 	libide/ide-object.c \
 	libide/ide-object.h \
+	libide/ide-private.h \
 	libide/ide-process.h \
 	libide/ide-project-file.c \
 	libide/ide-project-file.h \
@@ -85,6 +86,8 @@ libide_la_SOURCES = \
 	libide/ide-test-case.h \
 	libide/ide-test-suite.h \
 	libide/ide-types.h \
+	libide/ide-unsaved-file.c \
+	libide/ide-unsaved-file.h \
 	libide/ide-unsaved-files.c \
 	libide/ide-unsaved-files.h \
 	libide/ide-vcs.c \
