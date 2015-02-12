@@ -18,6 +18,8 @@ libide_la_SOURCES = \
 	libide/clang/ide-clang-service.h \
 	libide/clang/ide-clang-symbol-resolver.c \
 	libide/clang/ide-clang-symbol-resolver.h \
+	libide/clang/ide-clang-translation-unit.c \
+	libide/clang/ide-clang-translation-unit.h \
 	libide/directory/ide-directory-build-system.c \
 	libide/directory/ide-directory-build-system.h \
 	libide/directory/ide-directory-vcs.c \
@@ -113,4 +115,7 @@ libide_la_CFLAGS = \
 	$(LIBIDE_CFLAGS)
 
 libide_la_LIBADD = \
-	$(LIBIDE_LIBS)
+	$(CLANG_LDFLAGS) \
+	$(LIBIDE_LIBS) \
+	-lclang \
+	$(NULL)
