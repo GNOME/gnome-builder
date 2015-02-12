@@ -339,10 +339,14 @@ static void
 ide_clang_service_class_init (IdeClangServiceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeServiceClass *service_class = IDE_SERVICE_CLASS (klass);
 
   object_class->dispose = ide_clang_service_dispose;
   object_class->get_property = ide_clang_service_get_property;
   object_class->set_property = ide_clang_service_set_property;
+
+  service_class->start = ide_clang_service_start;
+  service_class->stop = ide_clang_service_stop;
 }
 
 static void
