@@ -21,6 +21,8 @@
 
 #include "ide-service.h"
 
+#include "ide-clang-translation-unit.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_CLANG_SERVICE (ide_clang_service_get_type())
@@ -31,6 +33,16 @@ struct _IdeClangServiceClass
 {
   IdeServiceClass parent;
 };
+
+void                     ide_clang_service_get_translation_unit_async  (IdeClangService      *self,
+                                                                        IdeFile              *file,
+                                                                        gint64                min_sequence,
+                                                                        GCancellable         *cancellable,
+                                                                        GAsyncReadyCallback   callback,
+                                                                        gpointer              user_data);
+IdeClangTranslationUnit *ide_clang_service_get_translation_unit_finish (IdeClangService      *self,
+                                                                        GAsyncResult         *result,
+                                                                        GError              **error);
 
 G_END_DECLS
 
