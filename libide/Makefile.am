@@ -51,13 +51,22 @@ libide_la_SOURCES = \
 	libide/ide-device-provider.h \
 	libide/ide-device.c \
 	libide/ide-device.h \
+	libide/ide-diagnostic-provider.c \
 	libide/ide-diagnostic-provider.h \
 	libide/ide-diagnostic.h \
+	libide/ide-diagnostician.c \
+	libide/ide-diagnostician.h \
+	libide/ide-diagnostics.c \
+	libide/ide-diagnostics.h \
 	libide/ide-executable.h \
 	libide/ide-executer.h \
 	libide/ide-file.c \
 	libide/ide-file.h \
 	libide/ide-global.h \
+	libide/ide-highlighter.c \
+	libide/ide-highlighter.h \
+	libide/ide-indenter.c \
+	libide/ide-indenter.h \
 	libide/ide-indenter.h \
 	libide/ide-language.c \
 	libide/ide-language.h \
@@ -73,6 +82,7 @@ libide_la_SOURCES = \
 	libide/ide-project-item.h \
 	libide/ide-project.c \
 	libide/ide-project.h \
+	libide/ide-refactory.c \
 	libide/ide-refactory.h \
 	libide/ide-script.c \
 	libide/ide-script.h \
@@ -83,6 +93,7 @@ libide_la_SOURCES = \
 	libide/ide-service.h \
 	libide/ide-source-location.c \
 	libide/ide-source-location.h \
+	libide/ide-symbol-resolver.c \
 	libide/ide-symbol-resolver.h \
 	libide/ide-symbol.h \
 	libide/ide-target.h \

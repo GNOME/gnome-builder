@@ -1,4 +1,4 @@
-/* ide-refactory.h
+/* ide-symbol-resolver.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,22 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_REFACTORY_H
-#define IDE_REFACTORY_H
+#include "ide-symbol-resolver.h"
 
-#include "ide-object.h"
+G_DEFINE_ABSTRACT_TYPE (IdeSymbolResolver, ide_symbol_resolver, IDE_TYPE_OBJECT)
 
-G_BEGIN_DECLS
-
-#define IDE_TYPE_REFACTORY (ide_refactory_get_type())
-
-G_DECLARE_DERIVABLE_TYPE (IdeRefactory, ide_refactory, IDE, REFACTORY, IdeObject)
-
-struct _IdeRefactoryClass
+static void
+ide_symbol_resolver_class_init (IdeSymbolResolverClass *klass)
 {
-  IdeObjectClass parent;
-};
+}
 
-G_END_DECLS
-
-#endif /* IDE_REFACTORY_H */
+static void
+ide_symbol_resolver_init (IdeSymbolResolver *self)
+{
+}
