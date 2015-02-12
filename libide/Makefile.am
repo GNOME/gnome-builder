@@ -71,11 +71,11 @@ libide_la_SOURCES = \
 	libide/ide-indenter.c \
 	libide/ide-indenter.h \
 	libide/ide-indenter.h \
+	libide/ide-internal.h \
 	libide/ide-language.c \
 	libide/ide-language.h \
 	libide/ide-object.c \
 	libide/ide-object.h \
-	libide/ide-private.h \
 	libide/ide-process.h \
 	libide/ide-project-file.c \
 	libide/ide-project-file.h \

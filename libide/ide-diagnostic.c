@@ -17,7 +17,7 @@
  */
 
 #include "ide-diagnostic.h"
-#include "ide-private.h"
+#include "ide-internal.h"
 #include "ide-source-location.h"
 #include "ide-source-range.h"
 

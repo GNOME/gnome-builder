@@ -22,7 +22,7 @@
 #include "ide-context.h"
 #include "ide-clang-translation-unit.h"
 #include "ide-diagnostic.h"
-#include "ide-private.h"
+#include "ide-internal.h"
 
 typedef struct
 {

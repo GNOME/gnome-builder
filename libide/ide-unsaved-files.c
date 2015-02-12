@@ -20,7 +20,7 @@
 
 #include "ide-context.h"
 #include "ide-global.h"
-#include "ide-private.h"
+#include "ide-internal.h"
 #include "ide-project.h"
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"

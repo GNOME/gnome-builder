@@ -1,4 +1,4 @@
-/* ide-private.h
+/* ide-internal.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
