@@ -69,7 +69,6 @@ libide_la_public_sources = \
 	libide/ide-highlighter.h \
 	libide/ide-indenter.c \
 	libide/ide-indenter.h \
-	libide/ide-indenter.h \
 	libide/ide-language.c \
 	libide/ide-language.h \
 	libide/ide-object.c \
