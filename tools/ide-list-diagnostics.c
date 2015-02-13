@@ -95,7 +95,10 @@ context_cb (GObject      *object,
     }
 
   project = ide_context_get_project (context);
+
+  ide_project_reader_lock (project);
   file = ide_project_get_file_for_path (project, gPath);
+  ide_project_reader_unlock (project);
 
   if (!file)
     {

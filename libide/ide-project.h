@@ -36,6 +36,10 @@ IdeProjectItem *ide_project_get_root          (IdeProject  *project);
 const gchar    *ide_project_get_name          (IdeProject  *project);
 IdeFile        *ide_project_get_file_for_path (IdeProject  *project,
                                                const gchar *path);
+void            ide_project_reader_lock       (IdeProject  *project);
+void            ide_project_reader_unlock     (IdeProject  *project);
+void            ide_project_writer_lock       (IdeProject  *project);
+void            ide_project_writer_unlock     (IdeProject  *project);
 
 G_END_DECLS
 

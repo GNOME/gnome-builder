@@ -131,12 +131,26 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
 
   if (!priv->diagnostics)
     {
+      IdeContext *context;
+      IdeProject *project;
       GPtrArray *ar;
       guint count;
       guint i;
 
       ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
       count = clang_getNumDiagnostics (priv->tu);
+
+      /*
+       * Acquire the reader lock for the project since we will need to do
+       * a bunch of project tree lookups when creating diagnostics. By doing
+       * this outside of the loops, we avoid creating lots of contention on
+       * the reader lock, but potentially hold on to the entire lock for a bit
+       * longer at a time.
+       */
+      context = ide_object_get_context (IDE_OBJECT (self));
+      project = ide_context_get_project (context);
+
+      ide_project_reader_lock (project);
 
       for (i = 0; i < count; i++)
         {
@@ -149,6 +163,8 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
           g_ptr_array_add (ar, diag);
           clang_disposeDiagnostic (cxdiag);
         }
+
+      ide_project_reader_unlock (project);
 
       priv->diagnostics = _ide_diagnostics_new (ar);
     }
