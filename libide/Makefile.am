@@ -64,11 +64,15 @@ libide_la_public_sources = \
 	libide/ide-executer.h \
 	libide/ide-file.c \
 	libide/ide-file.h \
+	libide/ide-file-settings.c \
+	libide/ide-file-settings.h \
 	libide/ide-global.h \
 	libide/ide-highlighter.c \
 	libide/ide-highlighter.h \
 	libide/ide-indenter.c \
 	libide/ide-indenter.h \
+	libide/ide-indent-style.c \
+	libide/ide-indent-style.h \
 	libide/ide-language.c \
 	libide/ide-language.h \
 	libide/ide-object.c \
