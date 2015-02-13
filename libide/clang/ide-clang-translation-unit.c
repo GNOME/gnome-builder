@@ -23,6 +23,8 @@
 #include "ide-clang-translation-unit.h"
 #include "ide-diagnostic.h"
 #include "ide-internal.h"
+#include "ide-project.h"
+#include "ide-source-location.h"
 
 typedef struct
 {
@@ -91,14 +93,68 @@ translate_severity (enum CXDiagnosticSeverity severity)
     }
 }
 
+static IdeSourceLocation *
+create_location (IdeClangTranslationUnit *self,
+                 IdeProject              *project,
+                 CXSourceLocation         cxloc)
+{
+  IdeSourceLocation *ret = NULL;
+  IdeFile *file = NULL;
+  CXFile cxfile = NULL;
+  CXString str;
+  unsigned line;
+  unsigned column;
+  unsigned offset;
+
+  g_return_val_if_fail (self, NULL);
+
+  clang_getFileLocation (cxloc, &cxfile, &line, &column, &offset);
+
+  str = clang_getFileName (cxfile);
+  file = ide_project_get_file_for_path (project, clang_getCString (str));
+  clang_disposeString (str);
+
+  ret = ide_source_location_new (file, line, column, offset);
+
+  return ret;
+}
+
+static IdeSourceRange *
+create_range (IdeClangTranslationUnit *self,
+              IdeProject              *project,
+              CXSourceRange            cxrange)
+{
+  IdeSourceRange *range;
+  CXSourceLocation cxbegin;
+  CXSourceLocation cxend;
+  g_autoptr(IdeSourceLocation) begin = NULL;
+  g_autoptr(IdeSourceLocation) end = NULL;
+
+  g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
+
+  cxbegin = clang_getRangeStart (cxrange);
+  cxend = clang_getRangeEnd (cxrange);
+
+  begin = create_location (self, project, cxbegin);
+  end = create_location (self, project, cxend);
+
+  range = _ide_source_range_new (begin, end);
+
+  return range;
+}
+
 static IdeDiagnostic *
 create_diagnostic (IdeClangTranslationUnit *self,
+                   IdeProject              *project,
                    CXDiagnostic            *cxdiag)
 {
   enum CXDiagnosticSeverity cxseverity;
   IdeDiagnosticSeverity severity;
+  IdeDiagnostic *diag;
   g_autoptr(gchar) spelling = NULL;
   CXString cxstr;
+  guint num_ranges;
+  guint i;
 
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
   g_return_val_if_fail (cxdiag, NULL);
@@ -110,7 +166,19 @@ create_diagnostic (IdeClangTranslationUnit *self,
   spelling = g_strdup (clang_getCString (cxstr));
   clang_disposeString (cxstr);
 
-  return _ide_diagnostic_new (severity, spelling);
+  diag = _ide_diagnostic_new (severity, spelling);
+
+  for (i = 0; i < num_ranges; i++)
+    {
+      CXSourceRange cxrange;
+      IdeSourceRange *range;
+
+      cxrange = clang_getDiagnosticRange (cxdiag, i);
+      range = create_range (self, project, cxrange);
+      _ide_diagnostic_take_range (diag, range);
+    }
+
+  return diag;
 }
 
 /**
@@ -159,7 +227,7 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
           CXString cxstr;
 
           cxdiag = clang_getDiagnostic (priv->tu, i);
-          diag = create_diagnostic (self, cxdiag);
+          diag = create_diagnostic (self, project, cxdiag);
           g_ptr_array_add (ar, diag);
           clang_disposeDiagnostic (cxdiag);
         }
