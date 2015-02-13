@@ -135,6 +135,7 @@ static void
 ide_git_vcs_reload_index_add_path (IdeGitVcs   *self,
                                    GHashTable  *cache,
                                    const gchar *path,
+                                   const gchar *workdir,
                                    gboolean     is_directory)
 {
   IdeProjectItem *parent;
@@ -142,6 +143,7 @@ ide_git_vcs_reload_index_add_path (IdeGitVcs   *self,
   IdeContext *context;
   GFileInfo *file_info = NULL;
   GFile *file = NULL;
+  g_autoptr(gchar) fullpath = NULL;
   gchar *dir;
   gchar *name;
 
@@ -158,7 +160,7 @@ ide_git_vcs_reload_index_add_path (IdeGitVcs   *self,
 
   if (!parent)
     {
-      ide_git_vcs_reload_index_add_path (self, cache, dir, TRUE);
+      ide_git_vcs_reload_index_add_path (self, cache, dir, workdir, TRUE);
       parent = g_hash_table_lookup (cache, dir);
     }
 
@@ -175,16 +177,15 @@ ide_git_vcs_reload_index_add_path (IdeGitVcs   *self,
   if (is_directory)
     g_file_info_set_file_type (file_info, G_FILE_TYPE_DIRECTORY);
 
-  /*
-   * TODO: Take into account ggitrepository directory.
-   */
-  file = g_file_new_for_path (path);
+  fullpath = g_build_filename (workdir, path, NULL);
+  file = g_file_new_for_path (fullpath);
 
   item = g_object_new (IDE_TYPE_PROJECT_FILE,
                        "context", context,
                        "file", file,
                        "file-info", file_info,
                        "parent", parent,
+                       "path", path,
                        NULL);
   ide_project_item_append (parent, item);
 
@@ -209,6 +210,7 @@ ide_git_vcs_reload_index (IdeGitVcs  *self,
   IdeProject *project;
   GgitIndex *index = NULL;
   GHashTable *cache = NULL;
+  g_autoptr(gchar) workdir = NULL;
   gboolean ret = FALSE;
   guint count;
   guint i;
@@ -240,6 +242,8 @@ ide_git_vcs_reload_index (IdeGitVcs  *self,
 
   g_hash_table_insert (cache, g_strdup ("."), g_object_ref (files));
 
+  workdir = g_file_get_path (priv->working_directory);
+
   for (i = 0; i < count; i++)
     {
       GgitIndexEntry *entry;
@@ -247,7 +251,7 @@ ide_git_vcs_reload_index (IdeGitVcs  *self,
 
       entry = ggit_index_entries_get_by_index (entries, i);
       path = ggit_index_entry_get_path (entry);
-      ide_git_vcs_reload_index_add_path (self, cache, path, FALSE);
+      ide_git_vcs_reload_index_add_path (self, cache, path, workdir, FALSE);
       ggit_index_entry_unref (entry);
     }
 
