@@ -26,12 +26,15 @@ typedef struct
 {
   GFile       *file;
   IdeLanguage *language;
+  gchar       *path;
 } IdeFilePrivate;
 
 enum
 {
   PROP_0,
   PROP_FILE,
+  PROP_LANGUAGE,
+  PROP_PATH,
   LAST_PROP
 };
 
@@ -202,6 +205,28 @@ ide_file_set_file (IdeFile *self,
     }
 }
 
+const gchar *
+ide_file_get_path (IdeFile *self)
+{
+  IdeFilePrivate *priv = ide_file_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_FILE (self), NULL);
+
+  return priv->path;
+}
+
+static void
+ide_file_set_path (IdeFile     *self,
+                   const gchar *path)
+{
+  IdeFilePrivate *priv = ide_file_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_FILE (self));
+  g_return_if_fail (!priv->path);
+
+  priv->path = g_strdup (path);
+}
+
 static void
 ide_file_finalize (GObject *object)
 {
@@ -209,6 +234,8 @@ ide_file_finalize (GObject *object)
   IdeFilePrivate *priv = ide_file_get_instance_private (self);
 
   g_clear_object (&priv->file);
+  g_clear_object (&priv->language);
+  g_clear_pointer (&priv->path, g_free);
 
   G_OBJECT_CLASS (ide_file_parent_class)->finalize (object);
 }
@@ -225,6 +252,14 @@ ide_file_get_property (GObject    *object,
     {
     case PROP_FILE:
       g_value_set_object (value, ide_file_get_file (self));
+      break;
+
+    case PROP_LANGUAGE:
+      g_value_set_object (value, ide_file_get_language (self));
+      break;
+
+    case PROP_PATH:
+      g_value_set_string (value, ide_file_get_path (self));
       break;
 
     default:
@@ -244,6 +279,10 @@ ide_file_set_property (GObject      *object,
     {
     case PROP_FILE:
       ide_file_set_file (self, g_value_get_object (value));
+      break;
+
+    case PROP_PATH:
+      ide_file_set_path (self, g_value_get_string (value));
       break;
 
     default:
@@ -270,6 +309,26 @@ ide_file_class_init (IdeFileClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FILE,
                                    gParamSpecs [PROP_FILE]);
+
+  gParamSpecs [PROP_LANGUAGE] =
+    g_param_spec_object ("language",
+                         _("Language"),
+                         _("The file language."),
+                         IDE_TYPE_LANGUAGE,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_LANGUAGE,
+                                   gParamSpecs [PROP_LANGUAGE]);
+
+  gParamSpecs [PROP_PATH] =
+    g_param_spec_string ("path",
+                         _("Path"),
+                         _("The path within the project."),
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_PATH,
+                                   gParamSpecs [PROP_PATH]);
 }
 
 static void

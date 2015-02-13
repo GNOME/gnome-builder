@@ -38,6 +38,7 @@ const gchar     *ide_file_get_project_path  (IdeFile *self);
 guint            ide_file_hash              (IdeFile *self);
 gboolean         ide_file_equal             (IdeFile *self,
                                              IdeFile *other);
+const gchar     *ide_file_get_path          (IdeFile *self);
 //IdeFileSettings *ide_file_get_file_settings (IdeFile *self);
 
 G_END_DECLS
