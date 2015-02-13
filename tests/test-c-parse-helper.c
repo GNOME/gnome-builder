@@ -36,11 +36,12 @@ test_parse_parameters1 (void)
     { "Item", 1, "a", 0 },
     { "Item", 2, "b", 0 },
     { "gpointer", 0, "u", 0 },
-    { "GError", 2, "error", 0 }
+    { "GError", 2, "error", 0 },
+    { NULL, 0, NULL, 1}
   };
 
-  ret = parse_parameters ("Item *a , Item **b, gpointer u, GError ** error");
-  g_assert_cmpint (4, ==, g_slist_length (ret));
+  ret = parse_parameters ("Item *a , Item **b, gpointer u, GError ** error, ...");
+  g_assert_cmpint (5, ==, g_slist_length (ret));
 
   for (i = 0, iter = ret; i < G_N_ELEMENTS (result); i++, iter = iter->next)
     {
