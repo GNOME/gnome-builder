@@ -24,8 +24,9 @@
 
 typedef struct
 {
+  GRWLock         rw_lock;
   IdeProjectItem *root;
-  gchar *name;
+  gchar          *name;
 } IdeProjectPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeProject, ide_project, IDE_TYPE_OBJECT)
@@ -39,6 +40,46 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+void
+ide_project_reader_lock (IdeProject *self)
+{
+  IdeProjectPrivate *priv = ide_project_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PROJECT (self));
+
+  g_rw_lock_reader_lock (&priv->rw_lock);
+}
+
+void
+ide_project_reader_unlock (IdeProject *self)
+{
+  IdeProjectPrivate *priv = ide_project_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PROJECT (self));
+
+  g_rw_lock_reader_unlock (&priv->rw_lock);
+}
+
+void
+ide_project_writer_lock (IdeProject *self)
+{
+  IdeProjectPrivate *priv = ide_project_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PROJECT (self));
+
+  g_rw_lock_writer_lock (&priv->rw_lock);
+}
+
+void
+ide_project_writer_unlock (IdeProject *self)
+{
+  IdeProjectPrivate *priv = ide_project_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PROJECT (self));
+
+  g_rw_lock_writer_unlock (&priv->rw_lock);
+}
+
 const gchar *
 ide_project_get_name (IdeProject *project)
 {
@@ -50,8 +91,8 @@ ide_project_get_name (IdeProject *project)
 }
 
 void
-ide_project_set_name (IdeProject  *project,
-                      const gchar *name)
+_ide_project_set_name (IdeProject  *project,
+                       const gchar *name)
 {
   IdeProjectPrivate *priv = ide_project_get_instance_private (project);
 
@@ -70,7 +111,16 @@ ide_project_set_name (IdeProject  *project,
  *
  * Retrieves the root item of the project tree.
  *
- * Returns: (transfer none): An #IdeProjectItem
+ * You must be holding the reader lock while calling and using the result of
+ * this function. Other thread may be accessing or modifying the tree without
+ * your knowledge. See ide_project_reader_lock() and ide_project_reader_unlock()
+ * for more information.
+ *
+ * If you need to modify the tree, you must hold a writer lock that has been
+ * acquired with ide_project_writer_lock() and released with
+ * ide_project_writer_unlock() when you are no longer modifiying the tree.
+ *
+ * Returns: (transfer none): An #IdeProjectItem.
  */
 IdeProjectItem *
 ide_project_get_root (IdeProject *project)
@@ -112,6 +162,10 @@ ide_project_set_root (IdeProject     *project,
  *
  * Retrieves an #IdeFile for the path specified. #IdeFile provides access to
  * language specific features via ide_file_get_language().
+ *
+ * You must hold the reader lock while calling this function. See
+ * ide_project_reader_lock() and ide_project_reader_unlock() for more
+ * information.
  *
  * Returns: (transfer full) (nullable): An #IdeFile or %NULL if no matching
  *   file could be found.
@@ -161,6 +215,7 @@ ide_project_finalize (GObject *object)
 
   g_clear_object (&priv->root);
   g_clear_pointer (&priv->name, g_free);
+  g_rw_lock_clear (&priv->rw_lock);
 
   G_OBJECT_CLASS (ide_project_parent_class)->finalize (object);
 }
@@ -198,10 +253,6 @@ ide_project_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_NAME:
-      ide_project_set_name (self, g_value_get_string (value));
-      break;
-
     case PROP_ROOT:
       ide_project_set_root (self, g_value_get_object (value));
       break;
@@ -225,7 +276,7 @@ ide_project_class_init (IdeProjectClass *klass)
                          _("Name"),
                          _("The name of the project."),
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_NAME,
                                    gParamSpecs [PROP_NAME]);
 
@@ -244,4 +295,7 @@ ide_project_class_init (IdeProjectClass *klass)
 static void
 ide_project_init (IdeProject *self)
 {
+  IdeProjectPrivate *priv = ide_project_get_instance_private (self);
+
+  g_rw_lock_init (&priv->rw_lock);
 }

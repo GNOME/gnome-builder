@@ -105,7 +105,9 @@ context_cb (GObject      *object,
   project = ide_context_get_project (context);
   root = ide_project_get_root (project);
 
+  ide_project_reader_lock (project);
   walk_tree (root, 0);
+  ide_project_reader_unlock (project);
 
   quit (EXIT_SUCCESS);
 }

@@ -140,6 +140,8 @@ build_project (GbProjectTreeBuilder *self,
 
   project = IDE_PROJECT (gb_tree_node_get_item (node));
 
+  ide_project_reader_lock (project);
+
   root = ide_project_get_root (project);
   children = ide_project_item_get_children (root);
 
@@ -169,6 +171,8 @@ build_project (GbProjectTreeBuilder *self,
             }
         }
     }
+
+  ide_project_reader_unlock (project);
 }
 
 static void

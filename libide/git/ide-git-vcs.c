@@ -213,12 +213,14 @@ ide_git_vcs_reload_index (IdeGitVcs  *self,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   project = ide_context_get_project (context);
+
+  ide_project_reader_lock (project);
   root = ide_project_get_root (project);
   files = g_object_new (IDE_TYPE_PROJECT_FILES,
                         "context", context,
                         "parent", root,
                         NULL);
-  ide_project_item_append (root, files);
+  ide_project_reader_unlock (project);
 
   g_hash_table_insert (cache, g_strdup ("."), g_object_ref (files));
 
@@ -229,11 +231,13 @@ ide_git_vcs_reload_index (IdeGitVcs  *self,
 
       entry = ggit_index_entries_get_by_index (entries, i);
       path = ggit_index_entry_get_path (entry);
-
       ide_git_vcs_reload_index_add_path (self, cache, path, FALSE);
-
       ggit_index_entry_unref (entry);
     }
+
+  ide_project_writer_lock (project);
+  ide_project_item_append (root, files);
+  ide_project_writer_unlock (project);
 
   ret = TRUE;
 
