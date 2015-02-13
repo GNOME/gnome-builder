@@ -43,11 +43,30 @@ severity_to_string (IdeDiagnosticSeverity severity)
     {
     case IDE_DIAGNOSTIC_IGNORED: return "ignored:";
     case IDE_DIAGNOSTIC_NOTE: return "note:";
-    case IDE_DIAGNOSTIC_WARNING: return "warning:";
-    case IDE_DIAGNOSTIC_ERROR: return "error:";
+    case IDE_DIAGNOSTIC_WARNING: return "\033[1;35mwarning:\033[0m";
+    case IDE_DIAGNOSTIC_ERROR: return "\033[1;31merror:\033[0m";
     case IDE_DIAGNOSTIC_FATAL: return "\033[1;31mfatal error:\033[0m";
     default: return "";
     }
+}
+
+static gchar *
+get_line (GFile *file,
+          guint  line)
+{
+  g_autoptr(gchar) contents = NULL;
+  gchar **lines;
+  gchar *ret = NULL;
+  gsize len;
+
+  g_file_load_contents (file, NULL, &contents, &len, NULL, NULL);
+
+  lines = g_strsplit (contents, "\n", line+2);
+
+  if (g_strv_length (lines) > line)
+    ret = g_strdup (lines [line]);
+
+  return ret;
 }
 
 static void
@@ -63,6 +82,7 @@ print_diagnostic (IdeDiagnostic *diag)
   gsize num_ranges;
   guint line;
   guint column;
+  g_autoptr(gchar) linestr = NULL;
 
   text = ide_diagnostic_get_text (diag);
   num_ranges = ide_diagnostic_get_num_ranges (diag);
@@ -79,6 +99,19 @@ print_diagnostic (IdeDiagnostic *diag)
            path, line+1, column+1,
            severity_to_string (severity),
            text);
+
+  linestr = get_line (gfile, line);
+
+  if (linestr)
+    {
+      gsize i;
+
+      g_print ("%s\n", linestr);
+
+      for (i = 0; i < column; i++)
+        g_print (" ");
+      g_print ("\033[1;32m^\033[0m\n");
+    }
 
 #if 0
   for (i = 0; i < num_ranges; i++)
@@ -117,6 +150,7 @@ diagnose_cb (GObject      *object,
   IdeDiagnostician *diagnostician = (IdeDiagnostician *)object;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeDiagnostics) ret = NULL;
+  guint error_count = 0;
   gsize count;
   gsize i;
 
@@ -134,9 +168,20 @@ diagnose_cb (GObject      *object,
   for (i = 0; i < count; i++)
     {
       IdeDiagnostic *diag;
+      IdeDiagnosticSeverity severity;
+
       diag = ide_diagnostics_index (ret, i);
+      severity = ide_diagnostic_get_severity (diag);
+
+      if ((severity == IDE_DIAGNOSTIC_ERROR) ||
+          (severity == IDE_DIAGNOSTIC_FATAL))
+        error_count++;
+
       print_diagnostic (diag);
     }
+
+  if (error_count)
+    g_print ("%u error generated.\n", error_count);
 
   quit (EXIT_SUCCESS);
 }
