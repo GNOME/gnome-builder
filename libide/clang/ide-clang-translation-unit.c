@@ -22,9 +22,11 @@
 #include "ide-context.h"
 #include "ide-clang-translation-unit.h"
 #include "ide-diagnostic.h"
+#include "ide-file.h"
 #include "ide-internal.h"
 #include "ide-project.h"
 #include "ide-source-location.h"
+#include "ide-vcs.h"
 
 typedef struct
 {
@@ -93,14 +95,32 @@ translate_severity (enum CXDiagnosticSeverity severity)
     }
 }
 
+static gchar *
+get_path (const gchar *workpath,
+          const gchar *path)
+{
+  if (g_str_has_prefix (path, workpath))
+    {
+      path = path + strlen (workpath);
+      while (*path == G_DIR_SEPARATOR)
+        path++;
+
+      return g_strdup (path);
+    }
+
+  return g_strdup (path);
+}
+
 static IdeSourceLocation *
 create_location (IdeClangTranslationUnit *self,
                  IdeProject              *project,
+                 const gchar             *workpath,
                  CXSourceLocation         cxloc)
 {
   IdeSourceLocation *ret = NULL;
   IdeFile *file = NULL;
   CXFile cxfile = NULL;
+  g_autoptr(gchar) path = NULL;
   CXString str;
   unsigned line;
   unsigned column;
@@ -111,8 +131,25 @@ create_location (IdeClangTranslationUnit *self,
   clang_getFileLocation (cxloc, &cxfile, &line, &column, &offset);
 
   str = clang_getFileName (cxfile);
-  file = ide_project_get_file_for_path (project, clang_getCString (str));
+  path = get_path (workpath, clang_getCString (str));
   clang_disposeString (str);
+
+  file = ide_project_get_file_for_path (project, path);
+
+  if (!file)
+    {
+      IdeContext *context;
+      GFile *gfile;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      gfile = g_file_new_for_path (path);
+
+      file = g_object_new (IDE_TYPE_FILE,
+                           "context", context,
+                           "file", gfile,
+                           "path", path,
+                           NULL);
+    }
 
   ret = ide_source_location_new (file, line, column, offset);
 
@@ -122,6 +159,7 @@ create_location (IdeClangTranslationUnit *self,
 static IdeSourceRange *
 create_range (IdeClangTranslationUnit *self,
               IdeProject              *project,
+              const gchar             *workpath,
               CXSourceRange            cxrange)
 {
   IdeSourceRange *range;
@@ -135,8 +173,8 @@ create_range (IdeClangTranslationUnit *self,
   cxbegin = clang_getRangeStart (cxrange);
   cxend = clang_getRangeEnd (cxrange);
 
-  begin = create_location (self, project, cxbegin);
-  end = create_location (self, project, cxend);
+  begin = create_location (self, project, workpath, cxbegin);
+  end = create_location (self, project, workpath, cxend);
 
   range = _ide_source_range_new (begin, end);
 
@@ -146,6 +184,7 @@ create_range (IdeClangTranslationUnit *self,
 static IdeDiagnostic *
 create_diagnostic (IdeClangTranslationUnit *self,
                    IdeProject              *project,
+                   const gchar             *workpath,
                    CXDiagnostic            *cxdiag)
 {
   enum CXDiagnosticSeverity cxseverity;
@@ -169,7 +208,7 @@ create_diagnostic (IdeClangTranslationUnit *self,
   clang_disposeString (cxstr);
 
   cxloc = clang_getDiagnosticLocation (cxdiag);
-  loc = create_location (self, project, cxloc);
+  loc = create_location (self, project, workpath, cxloc);
 
   diag = _ide_diagnostic_new (severity, spelling, loc);
 
@@ -179,7 +218,7 @@ create_diagnostic (IdeClangTranslationUnit *self,
       IdeSourceRange *range;
 
       cxrange = clang_getDiagnosticRange (cxdiag, i);
-      range = create_range (self, project, cxrange);
+      range = create_range (self, project, workpath, cxrange);
       _ide_diagnostic_take_range (diag, range);
     }
 
@@ -206,6 +245,9 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
     {
       IdeContext *context;
       IdeProject *project;
+      IdeVcs *vcs;
+      g_autoptr(gchar) workpath = NULL;
+      GFile *workdir;
       GPtrArray *ar;
       guint count;
       guint i;
@@ -222,6 +264,9 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
        */
       context = ide_object_get_context (IDE_OBJECT (self));
       project = ide_context_get_project (context);
+      vcs = ide_context_get_vcs (context);
+      workdir = ide_vcs_get_working_directory (vcs);
+      workpath = g_file_get_path (workdir);
 
       ide_project_reader_lock (project);
 
@@ -232,7 +277,7 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
           CXString cxstr;
 
           cxdiag = clang_getDiagnostic (priv->tu, i);
-          diag = create_diagnostic (self, project, cxdiag);
+          diag = create_diagnostic (self, project, workpath, cxdiag);
           g_ptr_array_add (ar, diag);
           clang_disposeDiagnostic (cxdiag);
         }
