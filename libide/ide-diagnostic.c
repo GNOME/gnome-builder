@@ -29,6 +29,7 @@ struct _IdeDiagnostic
   volatile gint          ref_count;
   IdeDiagnosticSeverity  severity;
   gchar                 *text;
+  IdeSourceLocation     *location;
   GPtrArray             *ranges;
 };
 
@@ -51,7 +52,9 @@ ide_diagnostic_unref (IdeDiagnostic *self)
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     {
-      g_free (self->text);
+      g_clear_pointer (&self->location, ide_source_location_unref);
+      g_clear_pointer (&self->text, g_free);
+      g_clear_pointer (&self->ranges, g_ptr_array_unref);
       g_slice_free (IdeDiagnostic, self);
     }
 }
@@ -103,9 +106,18 @@ ide_diagnostic_get_range (IdeDiagnostic *self,
   return NULL;
 }
 
+IdeSourceLocation *
+ide_diagnostic_get_location (IdeDiagnostic *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->location;
+}
+
 IdeDiagnostic *
 _ide_diagnostic_new (IdeDiagnosticSeverity  severity,
-                     const gchar           *text)
+                     const gchar           *text,
+                     IdeSourceLocation     *location)
 {
   IdeDiagnostic *ret;
 
@@ -113,6 +125,7 @@ _ide_diagnostic_new (IdeDiagnosticSeverity  severity,
   ret->ref_count = 1;
   ret->severity = severity;
   ret->text = g_strdup (text);
+  ret->location = location ? ide_source_location_ref (location) : NULL;
 
   return ret;
 }

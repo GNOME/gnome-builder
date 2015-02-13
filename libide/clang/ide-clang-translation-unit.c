@@ -151,8 +151,10 @@ create_diagnostic (IdeClangTranslationUnit *self,
   enum CXDiagnosticSeverity cxseverity;
   IdeDiagnosticSeverity severity;
   IdeDiagnostic *diag;
+  IdeSourceLocation *loc;
   g_autoptr(gchar) spelling = NULL;
   CXString cxstr;
+  CXSourceLocation cxloc;
   guint num_ranges;
   guint i;
 
@@ -166,7 +168,10 @@ create_diagnostic (IdeClangTranslationUnit *self,
   spelling = g_strdup (clang_getCString (cxstr));
   clang_disposeString (cxstr);
 
-  diag = _ide_diagnostic_new (severity, spelling);
+  cxloc = clang_getDiagnosticLocation (cxdiag);
+  loc = create_location (self, project, cxloc);
+
+  diag = _ide_diagnostic_new (severity, spelling, loc);
 
   for (i = 0; i < num_ranges; i++)
     {
