@@ -27,6 +27,9 @@
 
 G_BEGIN_DECLS
 
+void _ide_project_set_name (IdeProject  *project,
+                            const gchar *name);
+
 IdeUnsavedFile *_ide_unsaved_file_new (GFile  *file,
                                        GBytes *content,
                                        gint64  sequence);

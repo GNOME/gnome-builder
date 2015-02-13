@@ -34,8 +34,6 @@ struct _IdeProjectClass
 
 IdeProjectItem *ide_project_get_root          (IdeProject  *project);
 const gchar    *ide_project_get_name          (IdeProject  *project);
-void            ide_project_set_name          (IdeProject  *project,
-                                               const gchar *name);
 IdeFile        *ide_project_get_file_for_path (IdeProject  *project,
                                                const gchar *path);
 

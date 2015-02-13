@@ -631,7 +631,7 @@ ide_context_init_project_name_cb (GObject      *object,
       g_autoptr(gchar) name;
 
       name = g_file_get_basename (file);
-      ide_project_set_name (priv->project, name);
+      _ide_project_set_name (priv->project, name);
     }
   else
     {
@@ -641,7 +641,7 @@ ide_context_init_project_name_cb (GObject      *object,
       parent = g_file_get_parent (file);
       name = g_file_get_basename (parent);
 
-      ide_project_set_name (priv->project, name);
+      _ide_project_set_name (priv->project, name);
     }
 
   g_task_return_boolean (task, TRUE);
