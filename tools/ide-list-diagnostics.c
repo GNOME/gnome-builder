@@ -27,7 +27,7 @@
 
 static GMainLoop *gMainLoop;
 static gint gExitCode = EXIT_SUCCESS;
-static gchar *gPath;
+static GFile *gFile;
 
 static void
 quit (gint exit_code)
@@ -150,6 +150,9 @@ context_cb (GObject      *object,
   IdeLanguage *language;
   IdeProject *project;
   IdeFile *file;
+  IdeVcs *vcs;
+  GFile *workdir;
+  g_autoptr(gchar) relpath = NULL;
 
   context = ide_context_new_finish (result, &error);
 
@@ -161,14 +164,17 @@ context_cb (GObject      *object,
     }
 
   project = ide_context_get_project (context);
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+  relpath = g_file_get_relative_path (workdir, gFile);
 
   ide_project_reader_lock (project);
-  file = ide_project_get_file_for_path (project, gPath);
+  file = ide_project_get_file_for_path (project, relpath);
   ide_project_reader_unlock (project);
 
   if (!file)
     {
-      g_printerr (_("No such file in project: %s\n"), gPath);
+      g_printerr (_("No such file in project: %s\n"), relpath);
       quit (EXIT_FAILURE);
       return;
     }
@@ -199,6 +205,7 @@ main (gint   argc,
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) project_file = NULL;
   const gchar *project_path = ".";
+  const gchar *path;
 
   ide_set_program_name ("gnome-builder");
   g_set_prgname ("ide-list-diagnostics");
@@ -215,12 +222,12 @@ main (gint   argc,
 
   if (argc == 2)
     {
-      gPath = argv [1];
+      path = argv [1];
     }
   else if (argc == 3)
     {
       project_path = argv [1];
-      gPath = argv [2];
+      path = argv [2];
     }
   else
     {
@@ -228,12 +235,15 @@ main (gint   argc,
       return EXIT_FAILURE;
     }
 
+  gFile = g_file_new_for_path (path);
+
   project_file = g_file_new_for_path (project_path);
   ide_context_new_async (project_file, NULL, context_cb, NULL);
 
   g_main_loop_run (gMainLoop);
 
   g_clear_object (&project_file);
+  g_clear_object (&gFile);
   g_clear_pointer (&gMainLoop, g_main_loop_unref);
 
   return gExitCode;
