@@ -41,11 +41,11 @@ severity_to_string (IdeDiagnosticSeverity severity)
 {
   switch (severity)
     {
-    case IDE_DIAGNOSTIC_IGNORED: return "IGNORED";
-    case IDE_DIAGNOSTIC_NOTE: return "NOTE";
-    case IDE_DIAGNOSTIC_WARNING: return "WARNING";
-    case IDE_DIAGNOSTIC_ERROR: return "ERROR";
-    case IDE_DIAGNOSTIC_FATAL: return "FATAL";
+    case IDE_DIAGNOSTIC_IGNORED: return "ignored:";
+    case IDE_DIAGNOSTIC_NOTE: return "note:";
+    case IDE_DIAGNOSTIC_WARNING: return "warning:";
+    case IDE_DIAGNOSTIC_ERROR: return "error:";
+    case IDE_DIAGNOSTIC_FATAL: return "\033[1;31mfatal error:\033[0m";
     default: return "";
     }
 }
@@ -56,8 +56,9 @@ print_diagnostic (IdeDiagnostic *diag)
   IdeSourceLocation *location;
   IdeFile *file;
   const gchar *text;
-  const gchar *path;
+  g_autoptr(gchar) path = NULL;
   IdeDiagnosticSeverity severity;
+  GFile *gfile;
   gsize i;
   gsize num_ranges;
   guint line;
@@ -69,13 +70,15 @@ print_diagnostic (IdeDiagnostic *diag)
 
   location = ide_diagnostic_get_location (diag);
   file = ide_source_location_get_file (location);
-  path = ide_file_get_path (file);
+  gfile = ide_file_get_file (file);
+  path = g_file_get_path (gfile);
   line = ide_source_location_get_line (location);
   column = ide_source_location_get_line_offset (location);
 
-  g_print ("%s %s:%u:%u: %s\n",
+  g_print ("\033[1m%s:%u:%u:\033[0m %s \033[1m%s\033[0m\n",
+           path, line+1, column+1,
            severity_to_string (severity),
-           path, line+1, column+1, text);
+           text);
 
 #if 0
   for (i = 0; i < num_ranges; i++)
