@@ -87,15 +87,11 @@ _ide_diagnostic_new (IdeDiagnosticSeverity  severity,
 }
 
 void
-_ide_diagnostic_add_range (IdeDiagnostic     *self,
-                           IdeSourceLocation *begin,
-                           IdeSourceLocation *end)
+_ide_diagnostic_take_range (IdeDiagnostic  *self,
+                            IdeSourceRange *range)
 {
-  IdeSourceRange *range;
-
   g_return_if_fail (self);
-  g_return_if_fail (begin);
-  g_return_if_fail (end);
+  g_return_if_fail (range);
 
   if (!self->ranges)
     {
@@ -104,9 +100,17 @@ _ide_diagnostic_add_range (IdeDiagnostic     *self,
                                  (GDestroyNotify)ide_source_range_unref);
     }
 
-  range = _ide_source_range_new (begin, end);
-  if (range)
-    g_ptr_array_add (self->ranges, range);
+  g_ptr_array_add (self->ranges, range);
+}
+
+void
+_ide_diagnostic_add_range (IdeDiagnostic  *self,
+                           IdeSourceRange *range)
+{
+  g_return_if_fail (self);
+  g_return_if_fail (range);
+
+  _ide_diagnostic_take_range (self, ide_source_range_ref (range));
 }
 
 GType
