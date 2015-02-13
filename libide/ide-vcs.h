@@ -33,15 +33,18 @@ G_DECLARE_DERIVABLE_TYPE (IdeVcs, ide_vcs, IDE, VCS, IdeObject)
 struct _IdeVcsClass
 {
   IdeObjectClass parent;
+
+  GFile *(*get_working_directory) (IdeVcs *vcs);
 };
 
-void    ide_vcs_new_async  (IdeContext           *context,
-                            int                   io_priority,
-                            GCancellable         *cancellable,
-                            GAsyncReadyCallback   callback,
-                            gpointer              user_data);
-IdeVcs *ide_vcs_new_finish (GAsyncResult         *result,
-                            GError              **error);
+GFile  *ide_vcs_get_working_directory (IdeVcs *vcs);
+void    ide_vcs_new_async             (IdeContext           *context,
+                                       int                   io_priority,
+                                       GCancellable         *cancellable,
+                                       GAsyncReadyCallback   callback,
+                                       gpointer              user_data);
+IdeVcs *ide_vcs_new_finish            (GAsyncResult         *result,
+                                       GError              **error);
 
 G_END_DECLS
 
