@@ -43,6 +43,7 @@ src/navigation/gb-navigation-item.c
 src/navigation/gb-navigation-list.c
 src/preferences/gb-preferences-page.c
 src/preferences/gb-preferences-page-editor.c
+src/preferences/gb-preferences-page-emacs.c
 src/preferences/gb-preferences-page-git.c
 src/preferences/gb-preferences-page-vim.c
 [type: gettext/glade]src/resources/gtk/menus.ui
@@ -53,6 +54,7 @@ src/preferences/gb-preferences-page-vim.c
 [type: gettext/glade]src/resources/ui/gb-editor-tweak-widget.ui
 [type: gettext/glade]src/resources/ui/gb-editor-view.ui
 [type: gettext/glade]src/resources/ui/gb-preferences-page-editor.ui
+[type: gettext/glade]src/resources/ui/gb-preferences-page-emacs.ui
 [type: gettext/glade]src/resources/ui/gb-preferences-page-git.ui
 [type: gettext/glade]src/resources/ui/gb-preferences-page-vim.ui
 [type: gettext/glade]src/resources/ui/gb-preferences-window.ui
