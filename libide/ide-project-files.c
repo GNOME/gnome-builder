@@ -119,13 +119,16 @@ ide_project_files_get_file_for_path (IdeProjectFiles *self,
   if (item)
     {
       IdeContext *context;
+      const gchar *path;
       GFile *gfile;
 
       context = ide_object_get_context (IDE_OBJECT (self));
       gfile = ide_project_file_get_file (IDE_PROJECT_FILE (item));
+      path = ide_project_file_get_path (IDE_PROJECT_FILE (item));
       file = g_object_new (IDE_TYPE_FILE,
                            "context", context,
                            "file", gfile,
+                           "path", path,
                            NULL);
       if (file)
         g_hash_table_insert (priv->files_by_path, g_strdup (path), file);

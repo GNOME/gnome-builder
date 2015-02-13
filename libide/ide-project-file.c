@@ -24,6 +24,7 @@ typedef struct
 {
   GFile     *file;
   GFileInfo *file_info;
+  gchar     *path;
 } IdeProjectFilePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeProjectFile, ide_project_file,
@@ -34,10 +35,33 @@ enum {
   PROP_FILE,
   PROP_FILE_INFO,
   PROP_NAME,
+  PROP_PATH,
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+const gchar *
+ide_project_file_get_path (IdeProjectFile *self)
+{
+  IdeProjectFilePrivate *priv = ide_project_file_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_PROJECT_FILE (self), NULL);
+
+  return priv->path;
+}
+
+static void
+ide_project_file_set_path (IdeProjectFile *self,
+                           const gchar    *path)
+{
+  IdeProjectFilePrivate *priv = ide_project_file_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PROJECT_FILE (self));
+  g_return_if_fail (!priv->path);
+
+  priv->path = g_strdup (path);
+}
 
 const gchar *
 ide_project_file_get_name (IdeProjectFile *self)
@@ -116,6 +140,8 @@ ide_project_file_finalize (GObject *object)
   IdeProjectFile *self = (IdeProjectFile *)object;
   IdeProjectFilePrivate *priv = ide_project_file_get_instance_private (self);
 
+  g_clear_pointer (&priv->path, g_free);
+  g_clear_object (&priv->file);
   g_clear_object (&priv->file_info);
 
   G_OBJECT_CLASS (ide_project_file_parent_class)->finalize (object);
@@ -143,6 +169,10 @@ ide_project_file_get_property (GObject    *object,
       g_value_set_string (value, ide_project_file_get_name (self));
       break;
 
+    case PROP_PATH:
+      g_value_set_string (value, ide_project_file_get_path (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -164,6 +194,10 @@ ide_project_file_set_property (GObject      *object,
 
     case PROP_FILE_INFO:
       ide_project_file_set_file_info (self, g_value_get_object (value));
+      break;
+
+    case PROP_PATH:
+      ide_project_file_set_path (self, g_value_get_string (value));
       break;
 
     default:
@@ -208,6 +242,17 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_NAME,
                                    gParamSpecs [PROP_NAME]);
+
+  gParamSpecs [PROP_PATH] =
+    g_param_spec_string ("path",
+                         _("Path"),
+                         _("The path for the file within the project tree."),
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_PATH,
+                                   gParamSpecs [PROP_PATH]);
 }
 
 static void
