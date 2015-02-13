@@ -72,6 +72,37 @@ ide_diagnostic_get_text (IdeDiagnostic *self)
   return self->text;
 }
 
+guint
+ide_diagnostic_get_num_ranges (IdeDiagnostic *self)
+{
+  g_return_val_if_fail (self, 0);
+
+  return self->ranges ? self->ranges->len : 0;
+}
+
+/**
+ * ide_diagnostic_get_range:
+ *
+ * Retrieves the range found at @index. It is a programming error to call this
+ * function with a value greater or equal to ide_diagnostic_get_num_ranges().
+ *
+ * Returns: (transfer none) (nullable): An #IdeSourceRange
+ */
+IdeSourceRange *
+ide_diagnostic_get_range (IdeDiagnostic *self,
+                          guint          index)
+{
+  g_return_val_if_fail (self, NULL);
+
+  if (self->ranges)
+    {
+      if (index < self->ranges->len)
+        return g_ptr_array_index (self->ranges, index);
+    }
+
+  return NULL;
+}
+
 IdeDiagnostic *
 _ide_diagnostic_new (IdeDiagnosticSeverity  severity,
                      const gchar           *text)
