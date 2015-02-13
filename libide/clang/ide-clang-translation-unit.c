@@ -130,6 +130,9 @@ create_location (IdeClangTranslationUnit *self,
 
   clang_getFileLocation (cxloc, &cxfile, &line, &column, &offset);
 
+  if (line > 0) line--;
+  if (column > 0) column--;
+
   str = clang_getFileName (cxfile);
   path = get_path (workpath, clang_getCString (str));
   clang_disposeString (str);
