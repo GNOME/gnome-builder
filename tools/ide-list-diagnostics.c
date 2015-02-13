@@ -36,6 +36,76 @@ quit (gint exit_code)
   g_main_loop_quit (gMainLoop);
 }
 
+static const gchar *
+severity_to_string (IdeDiagnosticSeverity severity)
+{
+  switch (severity)
+    {
+    case IDE_DIAGNOSTIC_IGNORED: return "IGNORED";
+    case IDE_DIAGNOSTIC_NOTE: return "NOTE";
+    case IDE_DIAGNOSTIC_WARNING: return "WARNING";
+    case IDE_DIAGNOSTIC_ERROR: return "ERROR";
+    case IDE_DIAGNOSTIC_FATAL: return "FATAL";
+    default: return "";
+    }
+}
+
+static void
+print_diagnostic (IdeDiagnostic *diag)
+{
+  IdeSourceLocation *location;
+  IdeFile *file;
+  const gchar *text;
+  const gchar *path;
+  IdeDiagnosticSeverity severity;
+  gsize i;
+  gsize num_ranges;
+  guint line;
+  guint column;
+
+  text = ide_diagnostic_get_text (diag);
+  num_ranges = ide_diagnostic_get_num_ranges (diag);
+  severity = ide_diagnostic_get_severity (diag);
+
+  location = ide_diagnostic_get_location (diag);
+  file = ide_source_location_get_file (location);
+  path = ide_file_get_path (file);
+  line = ide_source_location_get_line (location);
+  column = ide_source_location_get_line_offset (location);
+
+  g_print ("%s %s:%u:%u: %s\n",
+           severity_to_string (severity),
+           path, line+1, column+1, text);
+
+#if 0
+  for (i = 0; i < num_ranges; i++)
+    {
+      IdeSourceRange *range;
+      IdeSourceLocation *begin;
+      IdeSourceLocation *end;
+      const gchar *path;
+      IdeFile *file;
+      guint line;
+      guint column;
+
+      range = ide_diagnostic_get_range (diag, i);
+      begin = ide_source_range_get_begin (range);
+      end = ide_source_range_get_end (range);
+
+      file = ide_source_location_get_file (begin);
+      line = ide_source_location_get_line (begin);
+      column = ide_source_location_get_line_offset (begin);
+
+      path = ide_file_get_path (file);
+
+      g_print ("%s:%u:%u\n", path, line+1, column+1);
+    }
+
+  if (!num_ranges)
+    g_print (">> %s\n", text);
+#endif
+}
+
 static void
 diagnose_cb (GObject      *object,
              GAsyncResult *result,
@@ -61,12 +131,8 @@ diagnose_cb (GObject      *object,
   for (i = 0; i < count; i++)
     {
       IdeDiagnostic *diag;
-      const gchar *text;
-
       diag = ide_diagnostics_index (ret, i);
-      text = ide_diagnostic_get_text (diag);
-
-      g_print ("%s\n", text);
+      print_diagnostic (diag);
     }
 
   quit (EXIT_SUCCESS);
