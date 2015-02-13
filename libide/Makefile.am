@@ -70,7 +70,6 @@ libide_la_public_sources = \
 	libide/ide-indenter.c \
 	libide/ide-indenter.h \
 	libide/ide-indenter.h \
-	libide/ide-internal.h \
 	libide/ide-language.c \
 	libide/ide-language.h \
 	libide/ide-object.c \
@@ -131,6 +130,7 @@ libide_la_SOURCES = \
 	libide/gconstructor.h \
 	libide/ide-async-helper.c \
 	libide/ide-async-helper.h \
+	libide/ide-internal.h \
 	libide/tasks/ide-load-directory-task.c \
 	libide/tasks/ide-load-directory-task.h \
 	$(NULL)
