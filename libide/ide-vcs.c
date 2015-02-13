@@ -30,6 +30,26 @@ ide_vcs_init (IdeVcs *self)
 {
 }
 
+/**
+ * ide_vcs_get_working_directory:
+ * @vcs: An #IdeVcs.
+ *
+ * Retrieves the working directory for the context. This is the root of where
+ * the project files exist.
+ *
+ * Returns: (transfer none): A #GFile.
+ */
+GFile *
+ide_vcs_get_working_directory (IdeVcs *vcs)
+{
+  g_return_val_if_fail (IDE_IS_VCS (vcs), NULL);
+
+  if (IDE_VCS_GET_CLASS (vcs)->get_working_directory)
+   return IDE_VCS_GET_CLASS (vcs)->get_working_directory (vcs);
+
+  return NULL;
+}
+
 void
 ide_vcs_new_async (IdeContext           *context,
                    int                   io_priority,

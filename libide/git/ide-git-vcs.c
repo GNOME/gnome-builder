@@ -28,6 +28,7 @@
 typedef struct
 {
   GgitRepository *repository;
+  GFile          *working_directory;
 } IdeGitVcsPrivate;
 
 static void g_async_initable_init_interface (GAsyncInitableIface *iface);
@@ -62,6 +63,17 @@ ide_git_vcs_get_repository (IdeGitVcs *vcs)
   return priv->repository;
 }
 
+static GFile *
+ide_git_vcs_get_working_directory (IdeVcs *vcs)
+{
+  IdeGitVcs *self = (IdeGitVcs *)vcs;
+  IdeGitVcsPrivate *priv = ide_git_vcs_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_GIT_VCS (self), NULL);
+
+  return priv->working_directory;
+}
+
 static void
 ide_git_vcs_finalize (GObject *object)
 {
@@ -69,6 +81,7 @@ ide_git_vcs_finalize (GObject *object)
   IdeGitVcsPrivate *priv = ide_git_vcs_get_instance_private (self);
 
   g_clear_object (&priv->repository);
+  g_clear_object (&priv->working_directory);
 
   G_OBJECT_CLASS (ide_git_vcs_parent_class)->finalize (object);
 }
@@ -96,9 +109,12 @@ static void
 ide_git_vcs_class_init (IdeGitVcsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeVcsClass *vcs_class = IDE_VCS_CLASS (klass);
 
   object_class->finalize = ide_git_vcs_finalize;
   object_class->get_property = ide_git_vcs_get_property;
+
+  vcs_class->get_working_directory = ide_git_vcs_get_working_directory;
 
   gParamSpecs [PROP_REPOSITORY] =
     g_param_spec_object ("repository",
@@ -286,6 +302,7 @@ ide_git_vcs_init_worker (GTask        *task,
     }
 
   priv->repository = g_object_ref (repository);
+  priv->working_directory = ggit_repository_get_workdir (priv->repository);
 
   if (!ide_git_vcs_reload_index (self, &error))
     {
