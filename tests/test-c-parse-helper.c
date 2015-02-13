@@ -21,42 +21,37 @@
 static void
 test_parse_parameters1 (void)
 {
-  Parameter *p;
+  gsize i;
   GSList *ret;
   GSList *iter;
+
+  static const struct
+  {
+    const gchar *type;
+    guint n_star;
+    const gchar *name;
+    guint ellipsis;
+  } result[]=
+  {
+    { "Item", 1, "a", 0 },
+    { "Item", 2, "b", 0 },
+    { "gpointer", 0, "u", 0 },
+    { "GError", 2, "error", 0 }
+  };
 
   ret = parse_parameters ("Item *a , Item **b, gpointer u, GError ** error");
   g_assert_cmpint (4, ==, g_slist_length (ret));
 
-  iter = ret;
+  for (i = 0, iter = ret; i < G_N_ELEMENTS (result); i++, iter = iter->next)
+    {
+      Parameter *p;
 
-  p = iter->data;
-  g_assert_cmpstr (p->type, ==, "Item");
-  g_assert_cmpint (p->n_star, ==, 1);
-  g_assert_cmpstr (p->name, ==, "a");
-  g_assert_cmpint (p->ellipsis, ==, 0);
-  iter = iter->next;
-
-  p = iter->data;
-  g_assert_cmpstr (p->type, ==, "Item");
-  g_assert_cmpint (p->n_star, ==, 2);
-  g_assert_cmpstr (p->name, ==, "b");
-  g_assert_cmpint (p->ellipsis, ==, 0);
-  iter = iter->next;
-
-  p = iter->data;
-  g_assert_cmpstr (p->type, ==, "gpointer");
-  g_assert_cmpint (p->n_star, ==, 0);
-  g_assert_cmpstr (p->name, ==, "u");
-  g_assert_cmpint (p->ellipsis, ==, 0);
-  iter = iter->next;
-
-  p = iter->data;
-  g_assert_cmpstr (p->type, ==, "GError");
-  g_assert_cmpint (p->n_star, ==, 2);
-  g_assert_cmpstr (p->name, ==, "error");
-  g_assert_cmpint (p->ellipsis, ==, 0);
-  iter = iter->next;
+      p = iter->data;
+      g_assert_cmpstr (p->type, ==, result[i].type);
+      g_assert_cmpint (p->n_star, ==, result[i].n_star);
+      g_assert_cmpstr (p->name, ==, result[i].name);
+      g_assert_cmpint (p->ellipsis, ==, result[i].ellipsis);
+    }
 
   g_assert (!iter);
 
