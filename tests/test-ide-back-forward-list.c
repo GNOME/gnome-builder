@@ -27,6 +27,11 @@ typedef struct
   GError       *error;
 } test_state_t;
 
+typedef struct
+{
+  guint counter;
+} counter_state_t;
+
 static IdeBackForwardItem *
 parse_item (test_state_t *state,
             const gchar  *str)
@@ -74,6 +79,16 @@ parse_item (test_state_t *state,
 }
 
 static void
+test_navigate_to_cb (IdeBackForwardList *list,
+                     IdeBackForwardItem *item,
+                     gpointer            user_data)
+{
+  counter_state_t *counter_state = user_data;
+
+  counter_state->counter++;
+}
+
+static void
 exercise1 (test_state_t       *state,
            IdeBackForwardList *list)
 {
@@ -85,6 +100,11 @@ exercise1 (test_state_t       *state,
     "test.h 1 2 3",
   };
   gsize i;
+
+  counter_state_t counter_state = { 0 };
+
+  g_signal_connect (list, "navigate-to", G_CALLBACK (test_navigate_to_cb),
+                    &counter_state);
 
   for (i = 0; i < G_N_ELEMENTS (items); i++)
     {
@@ -103,23 +123,27 @@ exercise1 (test_state_t       *state,
     {
       g_assert (ide_back_forward_list_get_can_go_backward (list));
       ide_back_forward_list_go_backward (list);
+      g_assert_cmpint (i + 1, ==, counter_state.counter);
     }
 
   g_assert (!ide_back_forward_list_get_can_go_backward (list));
   g_test_expect_message ("ide-back-forward-list", G_LOG_LEVEL_WARNING,
                          "Cannot go backward, no more items in queue.");
   ide_back_forward_list_go_backward (list);
+  g_assert_cmpint (4, ==, counter_state.counter);
 
   for (i = 0; i < G_N_ELEMENTS (items) - 1; i++)
     {
       g_assert (ide_back_forward_list_get_can_go_forward (list));
       ide_back_forward_list_go_forward (list);
+      g_assert_cmpint (i + 5, ==, counter_state.counter);
     }
 
   g_assert (!ide_back_forward_list_get_can_go_forward (list));
   g_test_expect_message ("ide-back-forward-list", G_LOG_LEVEL_WARNING,
                          "Cannot go forward, no more items in queue.");
   ide_back_forward_list_go_forward (list);
+  g_assert_cmpint (8, ==, counter_state.counter);
 }
 
 static void
