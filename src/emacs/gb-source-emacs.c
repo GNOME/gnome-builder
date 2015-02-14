@@ -36,8 +36,12 @@ struct _GbSourceEmacsPrivate
 {
   GtkTextView             *text_view;
   GString                 *cmd;
+  GtkTextMark             *selection_begin;
+  GtkTextMark             *selection_end;
+  gint                     selection_line_offset;
   guint                    enabled : 1;
   guint                    connected : 1;
+  guint                    select_region :1;
   gulong                   key_press_event_handler;
   gulong                   event_after_handler;
   gulong                   key_release_event_handler;
@@ -116,6 +120,38 @@ gb_source_emacs_get_selection_bounds (GbSourceEmacs *emacs,
 }
 
 static void
+gb_source_emacs_clear_selection_data (GbSourceEmacs *emacs)
+{
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+  GtkTextBuffer *buffer;
+  GtkTextIter end_iter;
+
+  buffer = gtk_text_view_get_buffer (priv->text_view);
+
+  if (priv->select_region == TRUE && priv->selection_begin != NULL && priv->selection_end != NULL)
+   {
+    gtk_text_buffer_get_iter_at_mark (buffer, &end_iter,
+                                      priv->selection_end);
+
+    gtk_text_buffer_select_range (buffer, &end_iter, &end_iter);
+   }
+
+  priv->select_region = FALSE;
+  priv->selection_line_offset = 0;
+  if (priv->selection_begin != NULL)
+    {
+      gtk_text_buffer_delete_mark(buffer, priv->selection_begin);
+      priv->selection_begin = NULL;
+    }
+
+  if (priv->selection_end != NULL)
+    {
+      gtk_text_buffer_delete_mark(buffer, priv->selection_end);
+      priv->selection_end = NULL;
+    }
+}
+
+static void
 gb_source_emacs_delete_selection (GbSourceEmacs *emacs)
 {
   GtkTextBuffer *buffer;
@@ -179,6 +215,260 @@ gb_source_emacs_cmd_exit_from_command_line  (GbSourceEmacs           *emacs,
   if (priv->cmd != NULL)
     g_string_free(priv->cmd, TRUE);
   priv->cmd = g_string_new(NULL);
+
+  gb_source_emacs_clear_selection_data(emacs);
+}
+
+static void
+gb_source_emacs_cmd_select_region  (GbSourceEmacs           *emacs,
+                                    GRegex                  *matcher,
+                                    GbSourceEmacsCommandFlags flags)
+{
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
+  gboolean has_selection;
+
+  g_assert (GB_IS_SOURCE_EMACS (emacs));
+
+  priv->select_region = TRUE;
+
+  buffer = gtk_text_view_get_buffer (priv->text_view);
+
+  has_selection = gb_source_emacs_get_selection_bounds (emacs, &iter, &selection);
+  if (has_selection) {
+    gtk_text_buffer_select_range (buffer, &iter, &iter);
+  }
+
+  if (priv->selection_begin != NULL)
+    {
+      gtk_text_buffer_delete_mark(buffer, priv->selection_begin);
+      priv->selection_begin = NULL;
+    }
+
+  if (priv->selection_end != NULL)
+    {
+      gtk_text_buffer_delete_mark(buffer, priv->selection_end);
+      priv->selection_end = NULL;
+    }
+
+  priv->selection_begin = gtk_text_buffer_create_mark (buffer,
+                                                      "selection-begin",
+                                                      &iter,
+                                                      TRUE);
+  priv->selection_end = gtk_text_buffer_create_mark (buffer,
+                                                     "selection-end",
+                                                     &iter,
+                                                     TRUE);
+  priv->selection_line_offset = gtk_text_iter_get_visible_line_offset (&iter);
+}
+
+static void
+gb_source_emacs_cmd_cut (GbSourceEmacs           *emacs,
+                         GRegex                  *matcher,
+                         GbSourceEmacsCommandFlags flags)
+{
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gboolean has_selection;
+  GtkClipboard *clipboard;
+  gchar *text;
+
+  buffer = gtk_text_view_get_buffer (priv->text_view);
+  has_selection = gb_source_emacs_get_selection_bounds (emacs, &begin, &end);
+  if (has_selection) {
+    text = gtk_text_iter_get_slice (&begin, &end);
+    clipboard = gtk_widget_get_clipboard (GTK_WIDGET (priv->text_view),
+                                          GDK_SELECTION_CLIPBOARD);
+    gtk_clipboard_set_text (clipboard, text, -1);
+    g_free (text);
+
+    gtk_text_buffer_begin_user_action (buffer);
+    gtk_text_buffer_delete (buffer, &begin, &end);
+    gb_source_emacs_clear_selection_data(emacs);
+    gtk_text_buffer_end_user_action (buffer);
+  }
+}
+
+static void
+gb_source_emacs_cmd_copy (GbSourceEmacs           *emacs,
+                          GRegex                  *matcher,
+                          GbSourceEmacsCommandFlags flags)
+{
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gboolean has_selection;
+  GtkClipboard *clipboard;
+  gchar *text;
+
+  buffer = gtk_text_view_get_buffer (priv->text_view);
+  has_selection = gb_source_emacs_get_selection_bounds (emacs, &begin, &end);
+  if (has_selection)
+  {
+    text = gtk_text_iter_get_slice (&begin, &end);
+    clipboard = gtk_widget_get_clipboard (GTK_WIDGET (priv->text_view),
+                                        GDK_SELECTION_CLIPBOARD);
+    gtk_clipboard_set_text (clipboard, text, -1);
+    g_free (text);
+
+    if (priv->select_region == TRUE && priv->selection_end != NULL)
+      gtk_text_buffer_get_iter_at_mark (buffer, &end,
+                                        priv->selection_end);
+
+    gtk_text_buffer_select_range (buffer, &end, &end);
+    gb_source_emacs_clear_selection_data(emacs);
+  }
+}
+
+static void
+gb_source_emacs_cmd_yank (GbSourceEmacs           *emacs,
+                          GRegex                  *matcher,
+                          GbSourceEmacsCommandFlags flags)
+{
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+  g_signal_emit_by_name (priv->text_view, "paste-clipboard");
+}
+
+static void
+gb_source_emacs_cmd_select_region_go_up  (GbSourceEmacs           *emacs,
+                                          GRegex                  *matcher,
+                                          GbSourceEmacsCommandFlags flags)
+{
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin_iter;
+  GtkTextIter end_iter;
+  gint current_line;
+
+  if (priv->select_region == FALSE || priv->selection_begin == NULL || priv->selection_end == NULL)
+    return;
+
+  buffer = gtk_text_view_get_buffer (priv->text_view);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &begin_iter,
+                                    priv->selection_begin);
+  gtk_text_buffer_get_iter_at_mark (buffer, &end_iter,
+                                    priv->selection_end);
+
+  current_line = gtk_text_iter_get_line (&end_iter);
+
+  if (current_line == 0)
+    return;
+
+  gtk_text_iter_backward_line (&end_iter);
+  gtk_text_iter_forward_to_line_end (&end_iter);
+
+  if (current_line == gtk_text_iter_get_line (&end_iter))
+    // Empty line fix position
+    gtk_text_iter_backward_line (&end_iter);
+  else
+    while (priv->selection_line_offset < gtk_text_iter_get_visible_line_offset (&end_iter))
+      gtk_text_iter_backward_char (&end_iter);
+
+  gtk_text_buffer_move_mark (buffer, priv->selection_end, &end_iter);
+  gtk_text_buffer_select_range (buffer, &begin_iter, &end_iter);
+}
+
+static void
+gb_source_emacs_cmd_select_region_go_down  (GbSourceEmacs           *emacs,
+                                            GRegex                  *matcher,
+                                            GbSourceEmacsCommandFlags flags)
+{
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin_iter;
+  GtkTextIter end_iter;
+  gint current_line;
+  gint lines_number;
+
+  if (priv->select_region == FALSE || priv->selection_begin == NULL || priv->selection_end == NULL)
+    return;
+
+  buffer = gtk_text_view_get_buffer (priv->text_view);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &begin_iter,
+                                    priv->selection_begin);
+  gtk_text_buffer_get_iter_at_mark (buffer, &end_iter,
+                                    priv->selection_end);
+
+
+  lines_number = gtk_text_buffer_get_line_count (buffer);
+  current_line = gtk_text_iter_get_line (&end_iter);
+
+  if (lines_number == current_line + 1)
+    return;
+
+  gtk_text_iter_forward_line (&end_iter);
+  gtk_text_iter_forward_to_line_end (&end_iter);
+
+  if (current_line + 2 == gtk_text_iter_get_line (&end_iter))
+    // Empty line fix position
+    gtk_text_iter_backward_line (&end_iter);
+  else
+    while (priv->selection_line_offset < gtk_text_iter_get_visible_line_offset (&end_iter))
+      gtk_text_iter_backward_char (&end_iter);
+
+  gtk_text_buffer_move_mark (buffer, priv->selection_end, &end_iter);
+  gtk_text_buffer_select_range (buffer, &begin_iter, &end_iter);
+}
+
+static void
+gb_source_emacs_cmd_select_region_go_left  (GbSourceEmacs           *emacs,
+                                            GRegex                  *matcher,
+                                            GbSourceEmacsCommandFlags flags)
+{
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin_iter;
+  GtkTextIter end_iter;
+
+  if (priv->select_region == FALSE || priv->selection_begin == NULL || priv->selection_end == NULL)
+    return;
+
+  buffer = gtk_text_view_get_buffer (priv->text_view);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &begin_iter,
+                                    priv->selection_begin);
+  gtk_text_buffer_get_iter_at_mark (buffer, &end_iter,
+                                    priv->selection_end);
+
+  gtk_text_iter_backward_char(&end_iter);
+  gtk_text_buffer_move_mark (buffer, priv->selection_end, &end_iter);
+  gtk_text_buffer_select_range (buffer, &begin_iter, &end_iter);
+
+  priv->selection_line_offset = gtk_text_iter_get_visible_line_offset (&end_iter);
+}
+
+static void
+gb_source_emacs_cmd_select_region_go_right  (GbSourceEmacs           *emacs,
+                                             GRegex                  *matcher,
+                                             GbSourceEmacsCommandFlags flags)
+{
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin_iter;
+  GtkTextIter end_iter;
+
+  if (priv->select_region == FALSE || priv->selection_begin == NULL || priv->selection_end == NULL)
+    return;
+
+  buffer = gtk_text_view_get_buffer (priv->text_view);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &begin_iter,
+                                    priv->selection_begin);
+  gtk_text_buffer_get_iter_at_mark (buffer, &end_iter,
+                                    priv->selection_end);
+
+  gtk_text_iter_forward_char(&end_iter);
+  gtk_text_buffer_move_mark (buffer, priv->selection_end, &end_iter);
+  gtk_text_buffer_select_range (buffer, &begin_iter, &end_iter);
+
+  priv->selection_line_offset = gtk_text_iter_get_visible_line_offset (&end_iter);
 }
 
 static void
@@ -560,7 +850,6 @@ gb_source_emacs_eval_cmd (GbSourceEmacs *emacs)
       if (g_match_info_matches(match_info))
         {
           cmd->func (emacs, cmd->matcher, cmd->flags);
-          g_message("evaluate command: %s", priv->cmd->str);
           g_match_info_free (match_info);
           if (priv->cmd != NULL)
             g_string_free(priv->cmd, TRUE);
@@ -570,6 +859,34 @@ gb_source_emacs_eval_cmd (GbSourceEmacs *emacs)
       g_match_info_free (match_info);
     }
   return TRUE;
+}
+
+static void
+gb_source_emacs_check_select_region (GbSourceEmacs *emacs) {
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (emacs)->priv;
+  GtkTextBuffer *buffer;
+  GtkTextIter selected_begin_iter;
+  GtkTextIter selected_end_iter;
+  GtkTextIter real_begin_iter;
+  GtkTextIter real_end_iter;
+
+  if (priv->select_region == FALSE || priv->selection_begin == NULL || priv->selection_end == NULL)
+    return;
+
+  buffer = gtk_text_view_get_buffer (priv->text_view);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &selected_begin_iter,
+                                    priv->selection_begin);
+  gtk_text_buffer_get_iter_at_mark (buffer, &selected_end_iter,
+                                    priv->selection_end);
+
+  gb_source_emacs_get_selection_bounds (emacs, &real_begin_iter, &real_end_iter);
+
+  if (gtk_text_iter_compare(&selected_begin_iter, &real_begin_iter) != 0 &&
+      gtk_text_iter_compare(&selected_end_iter, &real_end_iter) != 0)
+    {
+       gb_source_emacs_clear_selection_data(emacs);
+    }
 }
 
 static void
@@ -592,9 +909,18 @@ gb_source_emacs_key_press_event_cb (GtkTextView *text_view,
   g_return_val_if_fail (event, FALSE);
   g_return_val_if_fail (GB_IS_SOURCE_EMACS (emacs), FALSE);
 
+  gb_source_emacs_check_select_region(emacs);
+
+  if (priv->select_region == TRUE && event->keyval >= GDK_KEY_Left && event->keyval <= GDK_KEY_Down)
+    {
+      g_string_append_printf(priv->cmd, "%s", gdk_keyval_name(event->keyval));
+      eval_cmd = TRUE;
+    }
+
   if ((event->keyval >= GDK_KEY_A && event->keyval <= GDK_KEY_Z) ||
       (event->keyval >= GDK_KEY_a && event->keyval <= GDK_KEY_z) ||
-      (event->keyval == GDK_KEY_underscore) || (event->keyval == GDK_KEY_Escape )
+      (event->keyval == GDK_KEY_underscore) || (event->keyval == GDK_KEY_Escape ) ||
+      (event->keyval == GDK_KEY_space)
      )
     {
       if (event->keyval == GDK_KEY_Escape)
@@ -650,10 +976,7 @@ gb_source_emacs_key_press_event_cb (GtkTextView *text_view,
     }
 
   if (eval_cmd)
-    {
-      g_message ("cmd line: %s", priv->cmd->str);
-      return gb_source_emacs_eval_cmd(emacs);
-    }
+    return gb_source_emacs_eval_cmd(emacs);
 
   return FALSE;
 }
@@ -847,9 +1170,25 @@ gb_source_emacs_set_property (GObject      *object,
 static void
 gb_source_emacs_finalize (GObject *object)
 {
-	GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (object)->priv;
+  GbSourceEmacsPrivate *priv = GB_SOURCE_EMACS (object)->priv;
+  GtkTextBuffer *buffer;
+
 	if (priv->text_view)
     {
+      buffer = gtk_text_view_get_buffer (priv->text_view);
+
+      if (priv->selection_begin != NULL)
+        {
+          gtk_text_buffer_delete_mark(buffer, priv->selection_begin);
+          priv->selection_begin = NULL;
+        }
+
+      if (priv->selection_end != NULL)
+        {
+          gtk_text_buffer_delete_mark(buffer, priv->selection_end);
+          priv->selection_end = NULL;
+        }
+
       gb_source_emacs_disconnect (GB_SOURCE_EMACS (object));
       g_object_remove_weak_pointer (G_OBJECT (priv->text_view),
                                     (gpointer *)&priv->text_view);
@@ -921,6 +1260,38 @@ gb_source_emacs_class_init (GbSourceEmacsClass *klass)
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
                                           gb_source_emacs_cmd_exit_from_command_line);
   gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^C-space$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_select_region);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^C-w$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_cut);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^M-w$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_copy);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^C-y$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_yank);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^Up$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_select_region_go_up);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^Down$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_select_region_go_down);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^Left$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_select_region_go_left);
+  gb_source_emacs_class_register_command (klass,
+                                          g_regex_new("^Right$", 0, 0, NULL),
+                                          GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
+                                          gb_source_emacs_cmd_select_region_go_right);
+  gb_source_emacs_class_register_command (klass,
                                           g_regex_new("^C-x C-c$", 0, 0, NULL),
                                           GB_SOURCE_EMACS_COMMAND_FLAG_NONE,
                                           gb_source_emacs_cmd_exit);
@@ -984,6 +1355,10 @@ gb_source_emacs_init (GbSourceEmacs *emacs)
 {
   emacs->priv = gb_source_emacs_get_instance_private (emacs);
   emacs->priv->enabled = FALSE;
+  emacs->priv->select_region = FALSE;
+  emacs->priv->selection_begin = NULL;
+  emacs->priv->selection_end = NULL;
+  emacs->priv->selection_line_offset = 0;
   emacs->priv->cmd = g_string_new(NULL);
 }
 
