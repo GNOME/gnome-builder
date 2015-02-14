@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-22 12:54+0200\n"
-"PO-Revision-Date: 2015-01-22 13:08+0200\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"POT-Creation-Date: 2015-02-14 19:02+0200\n"
+"PO-Revision-Date: 2015-02-14 19:07+0200\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -86,11 +86,11 @@ msgstr "Failed to load keybindings: %s"
 msgid "Failed to load local keybindings: %s"
 msgstr "Failed to load local keybindings: %s"
 
-#: ../src/app/gb-application.c:384 ../src/main.c:48
+#: ../src/app/gb-application.c:415 ../src/main.c:48
 msgid "Builder"
 msgstr "בונה"
 
-#: ../src/app/gb-application.c:539
+#: ../src/app/gb-application.c:570
 #, c-format
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
@@ -197,7 +197,7 @@ msgid "The priority of the command provider."
 msgstr "The priority of the command provider."
 
 #: ../src/commands/gb-command-provider.c:356
-#: ../src/git/gb-git-search-provider.c:526
+#: ../src/git/gb-git-search-provider.c:523
 #: ../src/navigation/gb-navigation-list.c:299
 msgid "Workbench"
 msgstr "Workbench"
@@ -286,7 +286,7 @@ msgstr "The uri to load."
 
 #: ../src/devhelp/gb-devhelp-view.c:175
 #: ../src/documents/gb-document-view.c:203
-#: ../src/editor/gb-editor-frame.c:1595 ../src/editor/gb-editor-view.c:1071
+#: ../src/editor/gb-editor-frame.c:1651 ../src/editor/gb-editor-view.c:1080
 #: ../src/html/gb-html-view.c:264
 msgid "Document"
 msgstr "Document"
@@ -295,28 +295,28 @@ msgstr "Document"
 msgid "The document for the devhelp view."
 msgstr "The document for the devhelp view."
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:146
+#: ../src/dialogs/gb-close-confirmation-dialog.c:148
 msgid "Question"
 msgstr "שאלה"
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:316
+#: ../src/dialogs/gb-close-confirmation-dialog.c:318
 msgid "Close _without Saving"
 msgstr "סגירה _ללא שמירה"
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:317
+#: ../src/dialogs/gb-close-confirmation-dialog.c:319
 #: ../src/resources/ui/gb-editor-view.ui.h:2
 msgid "_Cancel"
 msgstr "_ביטול"
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:335
+#: ../src/dialogs/gb-close-confirmation-dialog.c:337
 msgid "_Save As…"
 msgstr "שמירה _בשם…"
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:335
+#: ../src/dialogs/gb-close-confirmation-dialog.c:337
 msgid "_Save"
 msgstr "_שמירה"
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:352
+#: ../src/dialogs/gb-close-confirmation-dialog.c:354
 #, c-format
 msgid ""
 "If you don't save, changes from the last %ld second will be permanently lost."
@@ -326,12 +326,12 @@ msgid_plural ""
 msgstr[0] "אם לא תתבצע שמירה, כל השינויים מהשנייה האחרונה יאבדו."
 msgstr[1] "אם לא תתבצע שמירה, כל השינויים מ־%ld השניות האחרונות יאבדו."
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:361
+#: ../src/dialogs/gb-close-confirmation-dialog.c:363
 msgid ""
 "If you don't save, changes from the last minute will be permanently lost."
 msgstr "אם לא תתבצע שמירה, שינויים מהדקה האחרונה יאבדו."
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:367
+#: ../src/dialogs/gb-close-confirmation-dialog.c:369
 #, c-format
 msgid ""
 "If you don't save, changes from the last minute and %ld second will be "
@@ -342,7 +342,7 @@ msgid_plural ""
 msgstr[0] "אם לא תתבצע שמירה, כל השינויים מהדקה והשנייה האחרונות יאבדו."
 msgstr[1] "אם לא תתבצע שמירה, כל השינויים מהדקה ו־%ld השניות האחרונות יאבדו."
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:377
+#: ../src/dialogs/gb-close-confirmation-dialog.c:379
 #, c-format
 msgid ""
 "If you don't save, changes from the last %ld minute will be permanently lost."
@@ -352,11 +352,11 @@ msgid_plural ""
 msgstr[0] "אם לא תתבצע שמירה, השינויים מהדקה האחרונה יאבדו."
 msgstr[1] "אם לא תתבצע שמירה, השינויים מ־%ld הדקות האחרונות יאבדו."
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:392
+#: ../src/dialogs/gb-close-confirmation-dialog.c:394
 msgid "If you don't save, changes from the last hour will be permanently lost."
 msgstr "אם לא תתבצע שמירה, השינויים מהשעה האחרונה יאבדו."
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:398
+#: ../src/dialogs/gb-close-confirmation-dialog.c:400
 #, c-format
 msgid ""
 "If you don't save, changes from the last hour and %d minute will be "
@@ -367,7 +367,7 @@ msgid_plural ""
 msgstr[0] "אם לא תתבצע שמירה, שינויים מהשעה והדקה האחרונות יאבדו."
 msgstr[1] "אם לא תתבצע שמירה, השינויים מהשעה ו־%d הדקות האחרונות יאבדו."
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:413
+#: ../src/dialogs/gb-close-confirmation-dialog.c:415
 #, c-format
 msgid ""
 "If you don't save, changes from the last %d hour will be permanently lost."
@@ -376,29 +376,29 @@ msgid_plural ""
 msgstr[0] "אם לא תתבצע שמירה, השינויים מהשעה האחרונה יאבדו."
 msgstr[1] "אם לא תתבצע שמירה, השינויים מ־%d השעות האחרונות יאבדו."
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:457
+#: ../src/dialogs/gb-close-confirmation-dialog.c:459
 #, c-format
 msgid "Changes to document “%s” will be permanently lost."
 msgstr "השינויים שנערכו במסמך „%s“ ילכו לאיבוד."
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:462
+#: ../src/dialogs/gb-close-confirmation-dialog.c:464
 #, c-format
 msgid "Save changes to document “%s” before closing?"
 msgstr "האם לשמור את השינויים למסמך „%s“ לפני הסגירה?"
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:475
-#: ../src/dialogs/gb-close-confirmation-dialog.c:635
+#: ../src/dialogs/gb-close-confirmation-dialog.c:477
+#: ../src/dialogs/gb-close-confirmation-dialog.c:637
 msgid "Saving has been disabled by the system administrator."
 msgstr "אפשרות השמירה בוטלה על ידי מנהל מערכת."
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:583
+#: ../src/dialogs/gb-close-confirmation-dialog.c:585
 #, c-format
 msgid "Changes to %d document will be permanently lost."
 msgid_plural "Changes to %d documents will be permanently lost."
 msgstr[0] "השינויים למסמך אחד יאבדו."
 msgstr[1] "השינויים ל־%d מסמכים יאבדו."
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:591
+#: ../src/dialogs/gb-close-confirmation-dialog.c:593
 #, c-format
 msgid "There is %d document with unsaved changes. Save changes before closing?"
 msgid_plural ""
@@ -407,15 +407,15 @@ msgstr[0] "יש מסמך עם שינויים לא שמורים. האם לשמו�
 msgstr[1] ""
 "יש %d מסמכים עם שינויים לא שמורים. האם לשמור את השינויים לפני הסגירה?"
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:611
+#: ../src/dialogs/gb-close-confirmation-dialog.c:613
 msgid "Docum_ents with unsaved changes:"
 msgstr "מסמכים עם _שינויים לא שמורים:"
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:615
+#: ../src/dialogs/gb-close-confirmation-dialog.c:617
 msgid "S_elect the documents you want to save:"
 msgstr "נא ל_בחור את הקבצים שברצונך לשמור:"
 
-#: ../src/dialogs/gb-close-confirmation-dialog.c:639
+#: ../src/dialogs/gb-close-confirmation-dialog.c:641
 msgid "If you don't save, all your changes will be permanently lost."
 msgstr "אם לא תתבצע שמירה, כל השינויים יאבדו."
 
@@ -445,13 +445,13 @@ msgstr "Read Only"
 msgid "If the document is read only."
 msgstr "If the document is read only."
 
-#: ../src/documents/gb-document-grid.c:840
+#: ../src/documents/gb-document-grid.c:918
 #: ../src/documents/gb-document-menu-button.c:667
 #: ../src/documents/gb-document-stack.c:881
 msgid "Document Manager"
 msgstr "Document Manager"
 
-#: ../src/documents/gb-document-grid.c:841
+#: ../src/documents/gb-document-grid.c:919
 msgid "The document manager for the document grid."
 msgstr "The document manager for the document grid."
 
@@ -607,19 +607,27 @@ msgstr "Line"
 msgid "The line within the file."
 msgstr "The line within the file."
 
-#: ../src/editor/gb-editor-frame.c:315
+#: ../src/editor/gb-editor-frame.c:320
 #, c-format
 msgid "%u of %u"
 msgstr "%u מתוך %u"
 
-#: ../src/editor/gb-editor-frame.c:456
+#: ../src/editor/gb-editor-frame.c:461
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "שורה %u, עמודה %u"
 
-#: ../src/editor/gb-editor-frame.c:1596
+#: ../src/editor/gb-editor-frame.c:1652
 msgid "The document for the editor."
 msgstr "The document for the editor."
+
+#: ../src/editor/gb-editor-frame.c:1660
+msgid "Search Direction"
+msgstr "Search Direction"
+
+#: ../src/editor/gb-editor-frame.c:1661
+msgid "The direction of the last text searched for."
+msgstr "The direction of the last text searched for."
 
 #: ../src/editor/gb-editor-navigation-item.c:218
 msgid "The file that is being edited."
@@ -656,63 +664,63 @@ msgstr "הקובץ „%s” שונה מחוץ לבונה."
 msgid "Plain Text"
 msgstr "טקסט פשוט"
 
-#: ../src/editor/gb-editor-view.c:1062
+#: ../src/editor/gb-editor-view.c:1071
 msgid "Auto Indent"
 msgstr "Auto Indent"
 
-#: ../src/editor/gb-editor-view.c:1063
+#: ../src/editor/gb-editor-view.c:1072
 msgid "If we should use the auto-indentation engine."
 msgstr "If we should use the auto-indentation engine."
 
-#: ../src/editor/gb-editor-view.c:1072
+#: ../src/editor/gb-editor-view.c:1081
 msgid "The document edited by the view."
 msgstr "The document edited by the view."
 
-#: ../src/editor/gb-editor-view.c:1080
+#: ../src/editor/gb-editor-view.c:1089
 msgid "Highlight Current Line"
 msgstr "Highlight Current Line"
 
-#: ../src/editor/gb-editor-view.c:1081
+#: ../src/editor/gb-editor-view.c:1090
 msgid "If the current line should be highlighted."
 msgstr "If the current line should be highlighted."
 
-#: ../src/editor/gb-editor-view.c:1089
+#: ../src/editor/gb-editor-view.c:1098
 msgid "Show Line Numbers"
 msgstr "Show Line Numbers"
 
-#: ../src/editor/gb-editor-view.c:1090
+#: ../src/editor/gb-editor-view.c:1099
 msgid "If the line numbers should be shown."
 msgstr "If the line numbers should be shown."
 
-#: ../src/editor/gb-editor-view.c:1098
+#: ../src/editor/gb-editor-view.c:1107
 msgid "Show Right Margin"
 msgstr "Show Right Margin"
 
-#: ../src/editor/gb-editor-view.c:1099
+#: ../src/editor/gb-editor-view.c:1108
 msgid "If we should show the right margin."
 msgstr "If we should show the right margin."
 
-#: ../src/editor/gb-editor-view.c:1107
+#: ../src/editor/gb-editor-view.c:1116
 msgid "Split Enabled"
 msgstr "Split Enabled"
 
-#: ../src/editor/gb-editor-view.c:1108
+#: ../src/editor/gb-editor-view.c:1117
 msgid "If the view split is enabled."
 msgstr "If the view split is enabled."
 
-#: ../src/editor/gb-editor-view.c:1116
+#: ../src/editor/gb-editor-view.c:1125
 msgid "Tab Width"
 msgstr "Tab Width"
 
-#: ../src/editor/gb-editor-view.c:1117
+#: ../src/editor/gb-editor-view.c:1126
 msgid "The width a tab should be drawn as."
 msgstr "The width a tab should be drawn as."
 
-#: ../src/editor/gb-editor-view.c:1127
+#: ../src/editor/gb-editor-view.c:1136
 msgid "Use Spaces"
 msgstr "Use Spaces"
 
-#: ../src/editor/gb-editor-view.c:1128
+#: ../src/editor/gb-editor-view.c:1137
 msgid "If spaces should be used instead of tabs."
 msgstr "If spaces should be used instead of tabs."
 
@@ -789,53 +797,61 @@ msgstr "Search Context"
 msgid "Search Settings"
 msgstr "Search Settings"
 
-#: ../src/editor/gb-source-view.c:2267 ../src/editor/gb-source-view.c:2268
+#: ../src/editor/gb-source-view.c:2229 ../src/editor/gb-source-view.c:2230
 msgid "Enable Word Completion"
 msgstr "Enable Word Completion"
 
-#: ../src/editor/gb-source-view.c:2276
+#: ../src/editor/gb-source-view.c:2238
 msgid "Font Name"
 msgstr "Font Name"
 
-#: ../src/editor/gb-source-view.c:2277
+#: ../src/editor/gb-source-view.c:2239
 msgid "The font name to apply to the widget."
 msgstr "The font name to apply to the widget."
 
-#: ../src/editor/gb-source-view.c:2285
+#: ../src/editor/gb-source-view.c:2247
 msgid "Insert Matching Brace"
 msgstr "Insert Matching Brace"
 
-#: ../src/editor/gb-source-view.c:2286
+#: ../src/editor/gb-source-view.c:2248
 msgid "If we should insert matching braces."
 msgstr "If we should insert matching braces."
 
-#: ../src/editor/gb-source-view.c:2294
+#: ../src/editor/gb-source-view.c:2256
 msgid "Overwrite Braces"
 msgstr "Overwrite Braces"
 
-#: ../src/editor/gb-source-view.c:2295
+#: ../src/editor/gb-source-view.c:2257
 msgid "If we should overwrite braces, brackets, parenthesis and quotes."
 msgstr "If we should overwrite braces, brackets, parenthesis and quotes."
 
-#: ../src/editor/gb-source-view.c:2304
+#: ../src/editor/gb-source-view.c:2266
 msgid "Show Shadow"
 msgstr "Show Shadow"
 
-#: ../src/editor/gb-source-view.c:2305
+#: ../src/editor/gb-source-view.c:2267
 msgid "Show the search shadow"
 msgstr "Show the search shadow"
 
-#: ../src/editor/gb-source-view.c:2313 ../src/editor/gb-source-view.c:2314
+#: ../src/editor/gb-source-view.c:2275 ../src/editor/gb-source-view.c:2276
 msgid "Search Highlighter"
 msgstr "Search Highlighter"
 
-#: ../src/editor/gb-source-view.c:2322
+#: ../src/editor/gb-source-view.c:2284
 msgid "Smart Home End"
 msgstr "Smart Home End"
 
-#: ../src/editor/gb-source-view.c:2323
+#: ../src/editor/gb-source-view.c:2285
 msgid "Enable smart home end in gtksourceview."
 msgstr "Enable smart home end in gtksourceview."
+
+#: ../src/editor/gb-source-view.c:2293
+msgid "Show Grid Lines"
+msgstr "Show Grid Lines"
+
+#: ../src/editor/gb-source-view.c:2294
+msgid "Whether to show the grid lines."
+msgstr "Whether to show the grid lines."
 
 #: ../src/gd/gd-tagged-entry.c:937
 msgid "Tag close icon visibility"
@@ -874,19 +890,19 @@ msgstr "Style of the tag."
 msgid "Stack"
 msgstr "Stack"
 
-#: ../src/git/gb-git-search-provider.c:432
+#: ../src/git/gb-git-search-provider.c:429
 msgid "Switch To"
 msgstr "להחליף ל"
 
-#: ../src/git/gb-git-search-provider.c:515
+#: ../src/git/gb-git-search-provider.c:512
 msgid "Repository"
 msgstr "Repository"
 
-#: ../src/git/gb-git-search-provider.c:516
+#: ../src/git/gb-git-search-provider.c:513
 msgid "The repository to use for search data."
 msgstr "The repository to use for search data."
 
-#: ../src/git/gb-git-search-provider.c:527
+#: ../src/git/gb-git-search-provider.c:524
 msgid "The workbench window."
 msgstr "The workbench window."
 
@@ -975,41 +991,49 @@ msgstr "The workbench the navigation list is for."
 msgid "The title for the preferences page."
 msgstr "The title for the preferences page."
 
-#: ../src/preferences/gb-preferences-page-editor.c:179
+#: ../src/preferences/gb-preferences-page-editor.c:186
 msgid "restore insert cursor mark"
 msgstr "שחזור הכנסה סמן ציון"
 
-#: ../src/preferences/gb-preferences-page-editor.c:184
+#: ../src/preferences/gb-preferences-page-editor.c:192
 msgid "word words auto completion suggest found document"
 msgstr "מילה מילים אוטומטי אוטומטית השלמה ניחוש למצוא מסמך"
 
-#: ../src/preferences/gb-preferences-page-editor.c:189
+#: ../src/preferences/gb-preferences-page-editor.c:198
 msgid "diff renderer gutter changes git vcs"
 msgstr "שינויים עיבוד ביב שינויים git vcs"
 
-#: ../src/preferences/gb-preferences-page-editor.c:194
+#: ../src/preferences/gb-preferences-page-editor.c:204
 msgid "line numbers"
 msgstr "מספר שורות"
 
-#: ../src/preferences/gb-preferences-page-editor.c:199
+#: ../src/preferences/gb-preferences-page-editor.c:210
 msgid "line lines highlight current"
 msgstr "שורה שורות הדגשה נוכחי"
 
-#: ../src/preferences/gb-preferences-page-editor.c:204
+#: ../src/preferences/gb-preferences-page-editor.c:216
 msgid "bracket brackets highlight matching"
 msgstr "סוגר סוגרים הדגשה התאמה"
 
-#: ../src/preferences/gb-preferences-page-editor.c:209
+#: ../src/preferences/gb-preferences-page-editor.c:222
 msgid "smart home end"
 msgstr "חכם בית סוף"
 
-#: ../src/preferences/gb-preferences-page-editor.c:214
+#: ../src/preferences/gb-preferences-page-editor.c:228
+msgid "show grid lines"
+msgstr "הצגה הצגת רשת שורות"
+
+#: ../src/preferences/gb-preferences-page-editor.c:234
 msgid "font document editor monospace"
 msgstr "גופן מסמך עורך רוחב קבוע"
 
-#: ../src/preferences/gb-preferences-page-editor.c:218
+#: ../src/preferences/gb-preferences-page-editor.c:239
 msgid "source style scheme source tango solarized builder"
 msgstr "נקטר סגנון ערכה מקור טנגו Solarized בונה"
+
+#: ../src/preferences/gb-preferences-page-emacs.c:90
+msgid "emacs modal"
+msgstr "emacs מודאלי"
 
 #: ../src/preferences/gb-preferences-page-git.c:131
 msgid "git author name surname"
@@ -1255,8 +1279,8 @@ msgid "Search Documents"
 msgstr "חיפוש מסמך"
 
 #: ../src/resources/ui/gb-document-menu-button.ui.h:2
-msgid "No document were found"
-msgstr "לא נמצא אף מסמך"
+msgid "No documents were found"
+msgstr "לא נמצאו מסמכים"
 
 #: ../src/resources/ui/gb-editor-frame.ui.h:1
 msgid "Line 1, Column 1"
@@ -1283,8 +1307,9 @@ msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
 msgstr "דריסת סוגר מסולסל, סוגר מרובע, גרשיים וסוגר עגול."
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:5
-msgid "<b>Indentation</b>"
-msgstr "<b>הזחה</b>"
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
+msgid "Indentation"
+msgstr "הזחה"
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:6
 msgid "_Tab width:"
@@ -1317,10 +1342,6 @@ msgstr "הדגשת השורה הנוכחית"
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:5
 msgid "Auto indent"
 msgstr "הזחה אוטומטית"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
-msgid "Indentation"
-msgstr "הזחה"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:7
 msgid "Spaces"
@@ -1385,7 +1406,7 @@ msgid "Display line numbers in the document."
 msgstr "הצגת מספור שורות במסמך."
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:9
-msgid "<b>Hightlight Current Line</b>"
+msgid "<b>Highlight Current Line</b>"
 msgstr "<b>הדגשת השורה הנוכחית</b>"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:10
@@ -1393,8 +1414,8 @@ msgid "Highlight the line containing the cursor."
 msgstr "הדגשת השורה המכילה את הסמן."
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:11
-msgid "<b>Hightlight Matching Brackets</b>"
-msgstr "<b>הדגשת סוגר תואם</b>"
+msgid "<b>Highlight Matching Brackets</b>"
+msgstr "<b>הדגשת הסוגר התואם</b>"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:12
 msgid "Whether or not matching brackets should be highlighted."
@@ -1407,6 +1428,22 @@ msgstr "<b>מקשי בית וסוף חכמים</b>"
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:14
 msgid "Home moves to first non-space character."
 msgstr "בית (Home) מעביר לתו הראשון שאינו רווח."
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:15
+msgid "<b>Show Grid Lines</b>"
+msgstr "<b>הצגת רשת שורות</b>"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:16
+msgid "Display a grid patten in the document."
+msgstr "הצגת רשת במסמך"
+
+#: ../src/resources/ui/gb-preferences-page-emacs.ui.h:1
+msgid "<b>EMACS Modal Editing</b>"
+msgstr "<b>דגם עריכת EMACS</b>"
+
+#: ../src/resources/ui/gb-preferences-page-emacs.ui.h:2
+msgid "Use EMACS style modal editing in the source code editor."
+msgstr "שימוש בסגנון דגם עריכת EMACS בעורך קוד המקור."
 
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:1
 msgid "Author Name"
@@ -1457,6 +1494,10 @@ msgstr "הגדרות שפה"
 #: ../src/resources/ui/gb-preferences-window.ui.h:6
 msgid "Vim"
 msgstr "Vim"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:7
+msgid "Emacs"
+msgstr "Emacs"
 
 #: ../src/resources/ui/gb-workbench.ui.h:1
 msgid "Go back in history"
@@ -1515,19 +1556,19 @@ msgstr "The active search context."
 msgid "%"
 msgstr "%"
 
-#: ../src/search/gb-search-display-group.c:416
+#: ../src/search/gb-search-display-group.c:419
 msgid "Provider"
 msgstr "Provider"
 
-#: ../src/search/gb-search-display-group.c:417
+#: ../src/search/gb-search-display-group.c:420
 msgid "The search provider"
 msgstr "The search provider"
 
-#: ../src/search/gb-search-display-group.c:427
+#: ../src/search/gb-search-display-group.c:430
 msgid "Size Group"
 msgstr "Size Group"
 
-#: ../src/search/gb-search-display-group.c:428
+#: ../src/search/gb-search-display-group.c:431
 msgid "The size group for the label."
 msgstr "The size group for the label."
 
@@ -1791,3 +1832,6 @@ msgstr "The title of the workspace."
 #: ../src/workbench/gb-workspace.c:162
 msgid "The name of the icon to use."
 msgstr "The name of the icon to use."
+
+#~ msgid "<b>Indentation</b>"
+#~ msgstr "<b>הזחה</b>"
