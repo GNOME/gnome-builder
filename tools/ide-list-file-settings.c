@@ -95,6 +95,7 @@ load_settings_cb (GObject      *object,
   g_print ("trim_trailing_whitespace = %s\n", ide_file_settings_get_trim_trailing_whitespace (settings) ? "true" : "false");
   g_print ("newline_type = %s\n", newline_string (ide_file_settings_get_newline_type (settings)));
   g_print ("indent_sytle = %s\n", indent_style_string (ide_file_settings_get_indent_style (settings)));
+  g_print ("right_margin_position = %u\n", ide_file_settings_get_right_margin_position (settings));
 
   g_clear_object (&settings);
 
