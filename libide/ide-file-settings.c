@@ -309,6 +309,10 @@ ide_file_settings_get_property (GObject    *object,
       g_value_set_string (value, ide_file_settings_get_encoding (self));
       break;
 
+    case PROP_FILE:
+      g_value_set_object (value, ide_file_settings_get_file (self));
+      break;
+
     case PROP_INDENT_STYLE:
       g_value_set_enum (value, ide_file_settings_get_indent_style (self));
       break;
@@ -350,6 +354,10 @@ ide_file_settings_set_property (GObject      *object,
     {
     case PROP_ENCODING:
       ide_file_settings_set_encoding (self, g_value_get_string (value));
+      break;
+
+    case PROP_FILE:
+      ide_file_settings_set_file (self, g_value_get_object (value));
       break;
 
     case PROP_INDENT_STYLE:
