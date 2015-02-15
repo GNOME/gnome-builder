@@ -138,14 +138,17 @@ libide_la_SOURCES = \
 	$(libide_la_public_sources) \
 	libide/editorconfig/editorconfig-glib.c \
 	libide/editorconfig/editorconfig-glib.h \
-	libide/gca/ide-gca-service.c \
-	libide/gca/ide-gca-service.h \
 	libide/gca/gca-diagnostics.c \
 	libide/gca/gca-diagnostics.h \
 	libide/gca/gca-service.c \
 	libide/gca/gca-service.h \
 	libide/gca/gca-structs.c \
 	libide/gca/gca-structs.h \
+	libide/gca/ide-gca-diagnostic-provider.c \
+	libide/gca/ide-gca-diagnostic-provider.h \
+	libide/gca/ide-gca-service.c \
+	libide/gca/ide-gca-service.h \
+	libide/gca/ide-gca-service.h \
 	libide/gconstructor.h \
 	libide/ide-async-helper.c \
 	libide/ide-async-helper.h \
