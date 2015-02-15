@@ -89,7 +89,7 @@ load_settings_cb (GObject      *object,
 
   g_print ("# %s\n", ide_file_get_path (file));
   g_print ("encoding = %s\n", ide_file_settings_get_encoding (settings) ?: "default");
-  g_print ("indent_width = %u\n", ide_file_settings_get_indent_width (settings));
+  g_print ("indent_width = %d\n", ide_file_settings_get_indent_width (settings));
   g_print ("tab_width = %u\n", ide_file_settings_get_tab_width (settings));
   g_print ("insert_trailing_newline = %s\n", ide_file_settings_get_insert_trailing_newline (settings) ? "true" : "false");
   g_print ("trim_trailing_whitespace = %s\n", ide_file_settings_get_trim_trailing_whitespace (settings) ? "true" : "false");

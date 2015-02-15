@@ -80,7 +80,7 @@ parse_key (GKeyFile     *key_file,
       ret = TRUE;
       goto cleanup;
     }
-  else if (g_str_equal (key, "indent_size") || g_str_equal (key, "tab_width"))
+  else if (g_str_equal (key, "tab_width"))
     {
       GError *local_error = NULL;
       gint v;
@@ -94,7 +94,23 @@ parse_key (GKeyFile     *key_file,
         }
 
       g_value_init (value, G_TYPE_UINT);
-      g_value_set_uint (value, MAX (0, v));
+      g_value_set_uint (value, MAX (1, v));
+    }
+  else if (g_str_equal (key, "indent_size"))
+    {
+      GError *local_error = NULL;
+      gint v;
+
+      v = g_key_file_get_integer (key_file, group, key, &local_error);
+
+      if (local_error)
+        {
+          g_propagate_error (error, local_error);
+          goto cleanup;
+        }
+
+      g_value_init (value, G_TYPE_INT);
+      g_value_set_int (value, MAX (-1, v));
     }
   else if (g_str_equal (key, "trim_trailing_whitespace") || g_str_equal (key, "insert_final_newline"))
     {
@@ -301,7 +317,7 @@ editorconfig_read (GFile         *file,
 
   queue = g_queue_new ();
   iter = g_object_ref (file);
- 
+
   do
     {
       GFile *parent;
