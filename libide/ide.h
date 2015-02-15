@@ -43,6 +43,7 @@ G_BEGIN_DECLS
 #include "ide-executable.h"
 #include "ide-executer.h"
 #include "ide-file.h"
+#include "ide-file-settings.h"
 #include "ide-global.h"
 #include "ide-highlighter.h"
 #include "ide-indenter.h"
