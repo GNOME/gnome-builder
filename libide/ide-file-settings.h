@@ -43,6 +43,7 @@ IdeIndentStyle        ide_file_settings_get_indent_style             (IdeFileSet
 guint                 ide_file_settings_get_indent_width             (IdeFileSettings      *self);
 gboolean              ide_file_settings_get_insert_trailing_newline  (IdeFileSettings      *self);
 GtkSourceNewlineType  ide_file_settings_get_newline_type             (IdeFileSettings      *self);
+guint                 ide_file_settings_get_right_margin_position    (IdeFileSettings      *self);
 guint                 ide_file_settings_get_tab_width                (IdeFileSettings      *self);
 gboolean              ide_file_settings_get_trim_trailing_whitespace (IdeFileSettings      *self);
 void                  ide_file_settings_set_encoding                 (IdeFileSettings      *self,
@@ -55,6 +56,8 @@ void                  ide_file_settings_set_insert_trailing_newline  (IdeFileSet
                                                                       gboolean              insert_trailing_newline);
 void                  ide_file_settings_set_newline_type             (IdeFileSettings      *self,
                                                                       GtkSourceNewlineType  newline_type);
+void                   ide_file_settings_set_right_margin_position   (IdeFileSettings      *self,
+                                                                      guint                 right_margin_position);
 void                  ide_file_settings_set_tab_width                (IdeFileSettings      *self,
                                                                       guint                 tab_width);
 void                  ide_file_settings_set_trim_trailing_whitespace (IdeFileSettings      *self,

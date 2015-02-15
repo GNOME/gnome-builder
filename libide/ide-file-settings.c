@@ -31,6 +31,7 @@ typedef struct
   guint                 insert_trailing_newline : 1;
   guint                 tab_width : 6;
   guint                 trim_trailing_whitespace : 1;
+  guint                 right_margin_position : 10;
   GtkSourceNewlineType  newline_type : 2;
 } IdeFileSettingsPrivate;
 
@@ -44,6 +45,7 @@ enum {
   PROP_INDENT_WIDTH,
   PROP_INSERT_TRAILING_NEWLINE,
   PROP_NEWLINE_TYPE,
+  PROP_RIGHT_MARGIN_POSITION,
   PROP_TAB_WIDTH,
   PROP_TRIM_TRAILING_WHITESPACE,
   LAST_PROP
@@ -229,6 +231,34 @@ ide_file_settings_set_newline_type (IdeFileSettings      *self,
 }
 
 guint
+ide_file_settings_get_right_margin_position (IdeFileSettings *self)
+{
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), 80);
+
+  return priv->right_margin_position;
+}
+
+void
+ide_file_settings_set_right_margin_position (IdeFileSettings *self,
+                                             guint            right_margin_position)
+{
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
+  g_return_if_fail (right_margin_position > 0);
+  g_return_if_fail (right_margin_position <= 1000);
+
+  if (priv->right_margin_position != right_margin_position)
+    {
+      priv->right_margin_position = right_margin_position;
+      g_object_notify_by_pspec (G_OBJECT (self),
+                                gParamSpecs [PROP_RIGHT_MARGIN_POSITION]);
+    }
+}
+
+guint
 ide_file_settings_get_tab_width (IdeFileSettings *self)
 {
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
@@ -329,6 +359,10 @@ ide_file_settings_get_property (GObject    *object,
       g_value_set_enum (value, ide_file_settings_get_newline_type (self));
       break;
 
+    case PROP_RIGHT_MARGIN_POSITION:
+      g_value_set_uint (value, ide_file_settings_get_right_margin_position (self));
+      break;
+
     case PROP_TAB_WIDTH:
       g_value_set_uint (value, ide_file_settings_get_tab_width (self));
       break;
@@ -374,6 +408,10 @@ ide_file_settings_set_property (GObject      *object,
 
     case PROP_NEWLINE_TYPE:
       ide_file_settings_set_newline_type (self, g_value_get_enum (value));
+      break;
+
+    case PROP_RIGHT_MARGIN_POSITION:
+      ide_file_settings_set_right_margin_position (self, g_value_get_uint (value));
       break;
 
     case PROP_TAB_WIDTH:
@@ -457,6 +495,17 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
   g_object_class_install_property (object_class, PROP_NEWLINE_TYPE,
                                    gParamSpecs [PROP_NEWLINE_TYPE]);
 
+  gParamSpecs [PROP_RIGHT_MARGIN_POSITION] =
+    g_param_spec_uint ("right-margin-position",
+                       _("Right Margin Position"),
+                       _("The position of the right margin guide."),
+                       1,
+                       1000,
+                       80,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_RIGHT_MARGIN_POSITION,
+                                   gParamSpecs [PROP_RIGHT_MARGIN_POSITION]);
+
   gParamSpecs [PROP_TAB_WIDTH] =
     g_param_spec_uint ("tab-width",
                        _("Tab Width"),
@@ -485,6 +534,7 @@ ide_file_settings_init (IdeFileSettings *self)
   priv->indent_width = 8;
   priv->insert_trailing_newline = TRUE;
   priv->newline_type = GTK_SOURCE_NEWLINE_TYPE_LF;
+  priv->right_margin_position = 80;
   priv->tab_width = 8;
   priv->trim_trailing_whitespace = TRUE;
 }
