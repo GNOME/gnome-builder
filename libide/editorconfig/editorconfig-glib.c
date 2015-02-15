@@ -75,9 +75,18 @@ editorconfig_glib_read (GFile         *file,
       goto cleanup;
     }
 
-  ret = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, _g_value_free);
-
   count = editorconfig_handle_get_name_value_count (handle);
+
+  if (!count)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "no config options were found.");
+      goto cleanup;
+    }
+
+  ret = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, _g_value_free);
 
   for (i = 0; i < count; i++)
     {
