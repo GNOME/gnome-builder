@@ -256,18 +256,20 @@ ide_file_load_settings_async (IdeFile              *self,
                               GAsyncReadyCallback   callback,
                               gpointer              user_data)
 {
+  IdeContext *context;
   g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_FILE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
-
+  context = ide_object_get_context (IDE_OBJECT (self));
   ide_object_new_async (IDE_FILE_SETTINGS_EXTENSION_POINT,
                         G_PRIORITY_DEFAULT,
                         cancellable,
                         ide_file_load_settings_cb,
                         g_object_ref (task),
+                        "context", context,
                         "file", self,
                         NULL);
 }
