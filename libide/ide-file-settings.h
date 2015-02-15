@@ -21,12 +21,13 @@
 
 #include <gtksourceview/gtksource.h>
 
-#include "ide-object.h"
 #include "ide-indent-style.h"
+#include "ide-object.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_FILE_SETTINGS (ide_file_settings_get_type())
+#define IDE_TYPE_FILE_SETTINGS            (ide_file_settings_get_type())
+#define IDE_FILE_SETTINGS_EXTENSION_POINT "org.gnome.libide.extensions.file-settings"
 
 G_DECLARE_DERIVABLE_TYPE (IdeFileSettings, ide_file_settings,
                           IDE, FILE_SETTINGS, IdeObject)
@@ -37,6 +38,7 @@ struct _IdeFileSettingsClass
 };
 
 const gchar          *ide_file_settings_get_encoding                 (IdeFileSettings      *self);
+IdeFile              *ide_file_settings_get_file                     (IdeFileSettings      *self);
 IdeIndentStyle        ide_file_settings_get_indent_style             (IdeFileSettings      *self);
 guint                 ide_file_settings_get_indent_width             (IdeFileSettings      *self);
 gboolean              ide_file_settings_get_insert_trailing_newline  (IdeFileSettings      *self);
