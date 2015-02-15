@@ -19,11 +19,13 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
+#include "ide-file.h"
 #include "ide-file-settings.h"
 
 typedef struct
 {
   gchar                *encoding;
+  IdeFile              *file;
   IdeIndentStyle        indent_style : 2;
   guint                 indent_width : 6;
   guint                 insert_trailing_newline : 1;
@@ -37,6 +39,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeFileSettings, ide_file_settings, IDE_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_ENCODING,
+  PROP_FILE,
   PROP_INDENT_STYLE,
   PROP_INDENT_WIDTH,
   PROP_INSERT_TRAILING_NEWLINE,
@@ -71,6 +74,45 @@ ide_file_settings_set_encoding (IdeFileSettings *self,
       g_free (priv->encoding);
       priv->encoding = g_strdup (encoding);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ENCODING]);
+    }
+}
+
+/**
+ * ide_file_settings_get_file:
+ * @self: An #IdeFileSettings.
+ *
+ * Retrieves the underlying file that @self refers to.
+ *
+ * This may be used by #IdeFileSettings implementations to discover additional
+ * information about the settings. For example, a modeline parser might load
+ * some portion of the file looking for modelines. An editorconfig
+ * implementation might look for ".editorconfig" files.
+ *
+ * Returns: (transfer none): An #IdeFile.
+ */
+IdeFile *
+ide_file_settings_get_file (IdeFileSettings *self)
+{
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), NULL);
+
+  return priv->file;
+}
+
+static void
+ide_file_settings_set_file (IdeFileSettings *self,
+                            IdeFile         *file)
+{
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
+  g_return_if_fail (IDE_IS_FILE (file));
+
+  if (priv->file != file)
+    {
+      if (ide_set_weak_pointer (&priv->file, file))
+        g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
     }
 }
 
@@ -248,6 +290,7 @@ ide_file_settings_finalize (GObject *object)
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
 
   g_clear_pointer (&priv->encoding, g_free);
+  ide_clear_weak_pointer (&priv->file);
 
   G_OBJECT_CLASS (ide_file_settings_parent_class)->finalize (object);
 }
@@ -355,6 +398,17 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_ENCODING,
                                    gParamSpecs [PROP_ENCODING]);
+
+  gParamSpecs [PROP_FILE] =
+    g_param_spec_object ("file",
+                         _("File"),
+                         _("The IdeFile the settings represent."),
+                         IDE_TYPE_FILE,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_FILE,
+                                   gParamSpecs [PROP_FILE]);
 
   gParamSpecs [PROP_INDENT_STYLE] =
     g_param_spec_enum ("indent-style",
