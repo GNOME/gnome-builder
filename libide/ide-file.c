@@ -20,6 +20,7 @@
 #include <gtksourceview/gtksource.h>
 
 #include "ide-file.h"
+#include "ide-file-settings.h"
 #include "ide-language.h"
 
 typedef struct
@@ -225,6 +226,70 @@ ide_file_set_path (IdeFile     *self,
   g_return_if_fail (!priv->path);
 
   priv->path = g_strdup (path);
+}
+
+static void
+ide_file_load_settings_cb (GObject      *object,
+                           GAsyncResult *result,
+                           gpointer      user_data)
+{
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeObject) ret = NULL;
+  GError *error = NULL;
+
+  g_return_if_fail (G_IS_TASK (task));
+
+  ret = ide_object_new_finish (result, &error);
+
+  if (!ret)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_task_return_pointer (task, g_object_ref (ret), g_object_unref);
+}
+
+void
+ide_file_load_settings_async (IdeFile              *self,
+                              GCancellable         *cancellable,
+                              GAsyncReadyCallback   callback,
+                              gpointer              user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_FILE (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  ide_object_new_async (IDE_FILE_SETTINGS_EXTENSION_POINT,
+                        G_PRIORITY_DEFAULT,
+                        cancellable,
+                        ide_file_load_settings_cb,
+                        g_object_ref (task),
+                        "file", self,
+                        NULL);
+}
+
+/**
+ * ide_file_load_settings_finish:
+ *
+ *
+ *
+ * Returns: (transfer full): An #IdeFileSettings or %NULL upon failure and
+ *   @error is set.
+ */
+IdeFileSettings *
+ide_file_load_settings_finish (IdeFile              *self,
+                               GAsyncResult         *result,
+                               GError              **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (G_IS_TASK (task), NULL);
+
+  return g_task_propagate_pointer (task, error);
 }
 
 static void

@@ -27,6 +27,7 @@
 #include "ide-clang-service.h"
 #include "ide-directory-build-system.h"
 #include "ide-directory-vcs.h"
+#include "ide-file-settings.h"
 #include "ide-git-vcs.h"
 
 static gboolean     gProgramNameRead;
@@ -60,6 +61,7 @@ ide_init_ctor (void)
   g_type_ensure (IDE_TYPE_VCS);
 
   g_io_extension_point_register (IDE_BUILD_SYSTEM_EXTENSION_POINT);
+  g_io_extension_point_register (IDE_FILE_SETTINGS_EXTENSION_POINT);
   g_io_extension_point_register (IDE_LANGUAGE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SERVICE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_VCS_EXTENSION_POINT);
