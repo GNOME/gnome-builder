@@ -322,6 +322,15 @@ editorconfig_read (GFile         *file,
 
   g_clear_object (&iter);
 
+  if (!queue->length)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_FOUND,
+                   _("No .editorconfig files could be found."));
+      goto cleanup;
+    }
+
   hashtable = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, vfree);
 
   while ((iter = g_queue_pop_head (queue)))

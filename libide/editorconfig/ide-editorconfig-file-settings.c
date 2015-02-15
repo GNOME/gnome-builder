@@ -114,13 +114,7 @@ ide_editorconfig_file_settings_init_worker (GTask        *task,
         }
     }
 
-  if (g_hash_table_size (ht) == 0)
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_FOUND,
-                             _("No editorconfig options were found."));
-  else
-    g_task_return_boolean (task, TRUE);
+  g_task_return_boolean (task, TRUE);
 
   g_hash_table_unref (ht);
 }
