@@ -27,10 +27,8 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-  IDE_INDENT_STYLE_NONE            = 0,
-  IDE_INDENT_STYLE_TABS            = 1,
-  IDE_INDENT_STYLE_SPACES          = 2,
-  IDE_INDENT_STYLE_TABS_AND_SPACES = 3,
+  IDE_INDENT_STYLE_SPACES = 1,
+  IDE_INDENT_STYLE_TABS   = 2,
 } IdeIndentStyle;
 
 GType ide_indent_style_get_type (void);
