@@ -88,7 +88,9 @@ load_settings_cb (GObject      *object,
       goto cleanup;
     }
 
-  g_print ("# %s\n", ide_file_get_path (file));
+  g_print ("# %s (%s)\n",
+           ide_file_get_path (file),
+           g_type_name (G_TYPE_FROM_INSTANCE (settings)));
   g_print ("encoding = %s\n", ide_file_settings_get_encoding (settings) ?: "default");
   g_print ("indent_width = %d\n", ide_file_settings_get_indent_width (settings));
   g_print ("tab_width = %u\n", ide_file_settings_get_tab_width (settings));
