@@ -113,7 +113,6 @@
                         <property name="visible">true</property>
                         <property name="text" translatable="yes">Spaces</property>
                         <property name="halign">fill</property>
-                        <property name="xalign">0.0</property>
                         <property name="action-name">editor-view.use-spaces</property>
                         <property name="action-target">true</property>
                         <property name="iconic">true</property>
@@ -124,7 +123,6 @@
                         <property name="visible">true</property>
                         <property name="text" translatable="yes">Tabs</property>
                         <property name="halign">fill</property>
-                        <property name="xalign">0.0</property>
                         <property name="action-name">editor-view.use-spaces</property>
                         <property name="action-target">false</property>
                         <property name="iconic">true</property>
