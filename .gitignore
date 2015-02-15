@@ -26,6 +26,7 @@ gnome-builder
 ide-build
 ide-list-devices
 ide-list-diagnostics
+ide-list-file-settings
 ide-list-files
 intltool-extract.in
 intltool-merge.in

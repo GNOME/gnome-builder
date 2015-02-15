@@ -4,6 +4,11 @@ ide_build_SOURCES = tools/ide-build.c
 ide_build_CFLAGS = $(libide_la_CFLAGS)
 ide_build_LDADD = libide.la
 
+noinst_PROGRAMS += ide-list-file-settings
+ide_list_file_settings_SOURCES = tools/ide-list-file-settings.c
+ide_list_file_settings_CFLAGS = $(libide_la_CFLAGS)
+ide_list_file_settings_LDADD = libide.la
+
 noinst_PROGRAMS += ide-list-devices
 ide_list_devices_SOURCES = tools/ide-list-devices.c
 ide_list_devices_CFLAGS = $(libide_la_CFLAGS)
