@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <glib/gstdio.h>
 #include <string.h>
 
 #include "ide-context.h"
@@ -30,6 +31,8 @@ typedef struct
   gint64  sequence;
   GFile  *file;
   GBytes *content;
+  gchar  *temp_path;
+  gint    temp_fd;
 } UnsavedFile;
 
 typedef struct
@@ -68,6 +71,9 @@ unsaved_file_free (gpointer data)
     {
       g_object_unref (uf->file);
       g_bytes_unref (uf->content);
+      g_unlink (uf->temp_path);
+      g_free (uf->temp_path);
+      g_close (uf->temp_fd, NULL);
       g_slice_free (UnsavedFile, uf);
     }
 }
@@ -90,6 +96,10 @@ unsaved_file_save (UnsavedFile  *uf,
                    GError      **error)
 {
   gboolean ret;
+
+  g_assert (uf);
+  g_assert (uf->content);
+  g_assert (path);
 
   ret = g_file_set_contents (path,
                              g_bytes_get_data (uf->content, NULL),
@@ -400,6 +410,28 @@ ide_unsaved_files_remove (IdeUnsavedFiles *self,
     }
 }
 
+static void
+setup_tempfile (GFile  *file,
+                gint   *temp_fd,
+                gchar **temp_path)
+{
+  g_autoptr(gchar) name = NULL;
+  const gchar *suffix;
+  gchar *template;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (temp_fd);
+  g_assert (temp_path);
+
+  *temp_fd = -1;
+  *temp_path = NULL;
+
+  name = g_file_get_basename (file);
+  suffix = strrchr (name, '.') ?: "";
+  template = g_strdup_printf ("builder_codeassistant_XXXXXX%s", suffix);
+  *temp_fd = g_file_open_tmp (template, temp_path, NULL);
+}
+
 void
 ide_unsaved_files_update (IdeUnsavedFiles *self,
                           GFile           *file,
@@ -431,6 +463,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
               g_clear_pointer (&unsaved->content, g_bytes_unref);
               unsaved->content = g_bytes_ref (content);
               unsaved->sequence = priv->sequence;
+              setup_tempfile (file, &unsaved->temp_fd, &unsaved->temp_path);
             }
 
           /*
@@ -489,12 +522,51 @@ ide_unsaved_files_get_unsaved_files (IdeUnsavedFiles *self)
       UnsavedFile *uf;
 
       uf = g_ptr_array_index (priv->unsaved_files, i);
-      item = _ide_unsaved_file_new (uf->file, uf->content, uf->sequence);
+      item = _ide_unsaved_file_new (uf->file, uf->content, uf->temp_path,
+                                    uf->sequence);
 
       g_ptr_array_add (ar, item);
     }
 
   return ar;
+}
+
+/**
+ * ide_unsaved_files_get_unsaved_file:
+ *
+ * Retrieves the unsaved file content for a particular file. If no unsaved
+ * file content is registered, %NULL is returned.
+ *
+ * Returns: (nullable) (transfer full): An #IdeUnsavedFile or %NULL.
+ */
+IdeUnsavedFile *
+ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
+                                    GFile           *file)
+{
+  IdeUnsavedFilesPrivate *priv;
+  IdeUnsavedFile *ret = NULL;
+  gsize i;
+
+  g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), NULL);
+
+  priv = ide_unsaved_files_get_instance_private (self);
+
+  for (i = 0; i < priv->unsaved_files->len; i++)
+    {
+      IdeUnsavedFile *item;
+      UnsavedFile *uf;
+
+      uf = g_ptr_array_index (priv->unsaved_files, i);
+
+      if (g_file_equal (uf->file, file))
+        {
+          ret = _ide_unsaved_file_new (uf->file, uf->content, uf->temp_path,
+                                       uf->sequence);
+          break;
+        }
+    }
+
+  return ret;
 }
 
 gint64
