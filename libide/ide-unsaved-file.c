@@ -26,13 +26,15 @@ struct _IdeUnsavedFile
   volatile gint  ref_count;
   GBytes        *content;
   GFile         *file;
+  gchar         *temp_path;
   gint64         sequence;
 };
 
 IdeUnsavedFile *
-_ide_unsaved_file_new (GFile  *file,
-                       GBytes *content,
-                       gint64  sequence)
+_ide_unsaved_file_new (GFile       *file,
+                       GBytes      *content,
+                       const gchar *temp_path,
+                       gint64       sequence)
 {
   IdeUnsavedFile *ret;
 
@@ -44,8 +46,35 @@ _ide_unsaved_file_new (GFile  *file,
   ret->file = g_object_ref (file);
   ret->content = g_bytes_ref (content);
   ret->sequence = sequence;
+  ret->temp_path = g_strdup (temp_path);
 
   return ret;
+}
+
+const gchar *
+ide_unsaved_file_get_temp_path (IdeUnsavedFile *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->temp_path;
+}
+
+gboolean
+ide_unsaved_file_persist (IdeUnsavedFile  *self,
+                          GCancellable    *cancellable,
+                          GError         **error)
+{
+  g_return_val_if_fail (self, FALSE);
+  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
+
+  /*
+   * TODO: Support cancellable.
+   */
+
+  return g_file_set_contents (self->temp_path,
+                              g_bytes_get_data (self->content, NULL),
+                              g_bytes_get_size (self->content),
+                              error);
 }
 
 gint64
@@ -75,6 +104,7 @@ ide_unsaved_file_unref (IdeUnsavedFile *self)
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     {
+      g_clear_pointer (&self->temp_path, g_free);
       g_clear_pointer (&self->content, g_bytes_unref);
       g_clear_object (&self->file);
       g_slice_free (IdeUnsavedFile, self);

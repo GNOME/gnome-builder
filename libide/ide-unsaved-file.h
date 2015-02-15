@@ -25,12 +25,16 @@
 
 G_BEGIN_DECLS
 
-GType           ide_unsaved_file_get_type     (void);
-IdeUnsavedFile *ide_unsaved_file_ref          (IdeUnsavedFile *self);
-void            ide_unsaved_file_unref        (IdeUnsavedFile *self);
-GBytes         *ide_unsaved_file_get_content  (IdeUnsavedFile *self);
-GFile          *ide_unsaved_file_get_file     (IdeUnsavedFile *self);
-gint64          ide_unsaved_file_get_sequence (IdeUnsavedFile *file);
+GType           ide_unsaved_file_get_type      (void);
+IdeUnsavedFile *ide_unsaved_file_ref           (IdeUnsavedFile  *self);
+void            ide_unsaved_file_unref         (IdeUnsavedFile  *self);
+GBytes         *ide_unsaved_file_get_content   (IdeUnsavedFile  *self);
+GFile          *ide_unsaved_file_get_file      (IdeUnsavedFile  *self);
+gint64          ide_unsaved_file_get_sequence  (IdeUnsavedFile  *self);
+const gchar    *ide_unsaved_file_get_temp_path (IdeUnsavedFile  *self);
+gboolean        ide_unsaved_file_persist       (IdeUnsavedFile  *self,
+                                                GCancellable    *cancellable,
+                                                GError         **error);
 
 G_END_DECLS
 

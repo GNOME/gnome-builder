@@ -30,9 +30,10 @@ G_BEGIN_DECLS
 void _ide_project_set_name (IdeProject  *project,
                             const gchar *name);
 
-IdeUnsavedFile *_ide_unsaved_file_new (GFile  *file,
-                                       GBytes *content,
-                                       gint64  sequence);
+IdeUnsavedFile *_ide_unsaved_file_new (GFile       *file,
+                                       GBytes      *content,
+                                       const gchar *temp_path,
+                                       gint64       sequence);
 
 IdeClangTranslationUnit *_ide_clang_translation_unit_new (IdeContext        *contxt,
                                                           CXTranslationUnit  tu,
