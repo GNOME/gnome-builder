@@ -27,12 +27,8 @@ ide_indent_style_get_type (void)
     {
       gsize _type_id;
       static const GEnumValue values[] = {
-        { IDE_INDENT_STYLE_NONE, "IDE_INDENT_STYLE_NONE", "NONE" },
-        { IDE_INDENT_STYLE_TABS, "IDE_INDENT_STYLE_TABS", "TABS" },
         { IDE_INDENT_STYLE_SPACES, "IDE_INDENT_STYLE_SPACES", "SPACES" },
-        { IDE_INDENT_STYLE_TABS_AND_SPACES,
-          "IDE_INDENT_STYLE_TABS_AND_SPACES",
-          "TABS_AND_SPACES" },
+        { IDE_INDENT_STYLE_TABS, "IDE_INDENT_STYLE_TABS", "TABS" },
         { 0 }
       };
 

@@ -24,7 +24,7 @@
 typedef struct
 {
   gchar                *encoding;
-  IdeIndentStyle        indent_style : 3;
+  IdeIndentStyle        indent_style : 2;
   guint                 indent_width : 6;
   guint                 insert_trailing_newline : 1;
   guint                 tab_width : 6;
@@ -91,8 +91,8 @@ ide_file_settings_set_indent_style (IdeFileSettings *self,
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
-  g_return_if_fail (indent_style >= IDE_INDENT_STYLE_NONE);
-  g_return_if_fail (indent_style <= IDE_INDENT_STYLE_TABS_AND_SPACES);
+  g_return_if_fail (indent_style >= IDE_INDENT_STYLE_SPACES);
+  g_return_if_fail (indent_style <= IDE_INDENT_STYLE_TABS);
 
   if (priv->indent_style != indent_style)
     {
@@ -361,7 +361,7 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                        _("Indent Style"),
                        _("The indent style to use."),
                        IDE_TYPE_INDENT_STYLE,
-                       IDE_INDENT_STYLE_NONE,
+                       IDE_INDENT_STYLE_SPACES,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_INDENT_STYLE,
                                    gParamSpecs [PROP_INDENT_STYLE]);
@@ -419,7 +419,7 @@ ide_file_settings_init (IdeFileSettings *self)
 {
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
 
-  priv->indent_style = IDE_INDENT_STYLE_NONE;
+  priv->indent_style = IDE_INDENT_STYLE_SPACES;
   priv->indent_width = 8;
   priv->insert_trailing_newline = TRUE;
   priv->newline_type = GTK_SOURCE_NEWLINE_TYPE_LF;
