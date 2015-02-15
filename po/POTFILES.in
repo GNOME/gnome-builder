@@ -18,7 +18,11 @@ libide/autotools/ide-autotools-builder.c
 libide/c/ide-c-language.c
 libide/clang/ide-clang-service.c
 libide/clang/ide-clang-translation-unit.c
+libide/editorconfig/ide-editorconfig-file-settings.c
+libide/gca/ide-gca-diagnostic-provider.c
+libide/gca/ide-gca-service.c
 libide/git/ide-git-vcs.c
+libide/gsettings/ide-gsettings-file-settings.c
 libide/ide-back-forward-item.c
 libide/ide-back-forward-list.c
 libide/ide-build-result.c
@@ -28,6 +32,7 @@ libide/ide-context.c
 libide/ide-device-manager.c
 libide/ide-device-provider.c
 libide/ide-device.c
+libide/ide-file-settings.c
 libide/ide-file.c
 libide/ide-language.c
 libide/ide-object.c
@@ -106,4 +111,6 @@ src/workbench/gb-workbench.c
 src/workbench/gb-workspace.c
 tools/ide-build.c
 tools/ide-list-devices.c
+tools/ide-list-diagnostics.c
+tools/ide-list-file-settings.c
 tools/ide-list-files.c
