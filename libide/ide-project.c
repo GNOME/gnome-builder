@@ -180,11 +180,7 @@ ide_project_get_file_for_path (IdeProject  *self,
   IdeProjectItem *root;
   GSequenceIter *iter;
   GSequence *children;
-  IdeContext *context;
-  IdeVcs *vcs;
-  GFile *workdir;
   IdeFile *file;
-  g_autoptr(GFile) gfile = NULL;
 
   g_return_val_if_fail (IDE_IS_PROJECT (self), NULL);
   g_return_val_if_fail (path, NULL);
@@ -215,12 +211,18 @@ ide_project_get_file_for_path (IdeProject  *self,
 
   if (!file)
     {
+      IdeContext *context;
+      IdeVcs *vcs;
+      GFile *workdir;
+      g_autoptr(GFile) gfile = NULL;
+
       /*
        * Okay, we couldn't find an existing item that matches this path, so let's
        * synthesize one (but not add it to the tree). This could be hit in common
        * cases like new files that are not yet added to the project.
        */
       context = ide_object_get_context (IDE_OBJECT (self));
+      g_assert (IDE_IS_CONTEXT (context));
       vcs = ide_context_get_vcs (context);
       workdir = ide_vcs_get_working_directory (vcs);
       gfile = g_file_get_child (workdir, path);
