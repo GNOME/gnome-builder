@@ -18,9 +18,12 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-context.h"
+#include "ide-file.h"
 #include "ide-project.h"
 #include "ide-project-files.h"
 #include "ide-project-item.h"
+#include "ide-vcs.h"
 
 typedef struct
 {
@@ -177,6 +180,11 @@ ide_project_get_file_for_path (IdeProject  *self,
   IdeProjectItem *root;
   GSequenceIter *iter;
   GSequence *children;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
+  IdeFile *file;
+  g_autoptr(GFile) gfile = NULL;
 
   g_return_val_if_fail (IDE_IS_PROJECT (self), NULL);
   g_return_val_if_fail (path, NULL);
@@ -200,11 +208,30 @@ ide_project_get_file_for_path (IdeProject  *self,
           IdeProjectFiles *files;
 
           files = IDE_PROJECT_FILES (item);
-          return ide_project_files_get_file_for_path (files, path);
+          file = ide_project_files_get_file_for_path (files, path);
+          break;
         }
     }
 
-  return NULL;
+  if (!file)
+    {
+      /*
+       * Okay, we couldn't find an existing item that matches this path, so let's
+       * synthesize one (but not add it to the tree). This could be hit in common
+       * cases like new files that are not yet added to the project.
+       */
+      context = ide_object_get_context (IDE_OBJECT (self));
+      vcs = ide_context_get_vcs (context);
+      workdir = ide_vcs_get_working_directory (vcs);
+      gfile = g_file_get_child (workdir, path);
+      file = g_object_new (IDE_TYPE_FILE,
+                           "context", context,
+                           "path", path,
+                           "file", gfile,
+                           NULL);
+    }
+
+  return file;
 }
 
 static void
