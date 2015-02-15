@@ -29,6 +29,7 @@
 #include "ide-directory-vcs.h"
 #include "ide-editorconfig-file-settings.h"
 #include "ide-file-settings.h"
+#include "ide-gca-service.h"
 #include "ide-git-vcs.h"
 #include "ide-gsettings-file-settings.h"
 
@@ -94,6 +95,10 @@ ide_init_ctor (void)
   g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
                                   IDE_TYPE_CLANG_SERVICE,
                                   IDE_SERVICE_EXTENSION_POINT".clang",
+                                  0);
+  g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
+                                  IDE_TYPE_GCA_SERVICE,
+                                  IDE_SERVICE_EXTENSION_POINT".gca",
                                   0);
 
   g_io_extension_point_implement (IDE_VCS_EXTENSION_POINT,
