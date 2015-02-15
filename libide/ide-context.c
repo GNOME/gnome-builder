@@ -374,16 +374,13 @@ ide_context_get_service_typed (IdeContext *context,
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      service = value;
+      IdeService *item = value;
 
-      if (g_type_is_a (G_TYPE_FROM_INSTANCE (service), service_type))
-        return service;
+      if (g_type_is_a (G_TYPE_FROM_INSTANCE (item), service_type))
+        return item;
     }
 
-  if (!service)
-    service = ide_context_create_service (context, service_type);
-
-  return service;
+  return ide_context_create_service (context, service_type);
 }
 
 static void
