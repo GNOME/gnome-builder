@@ -658,7 +658,7 @@ gb_source_change_monitor_load_blob_cb (GObject      *object,
 {
   GbSourceChangeMonitor *monitor = (GbSourceChangeMonitor *)object;
   GgitBlob *blob;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   gchar *relpath = NULL;
 
   g_return_if_fail (GB_IS_SOURCE_CHANGE_MONITOR (monitor));
@@ -675,10 +675,9 @@ gb_source_change_monitor_load_blob_cb (GObject      *object,
 
       gb_source_change_monitor_queue_parse (monitor);
     }
-  else
+  else if (!g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
     {
       g_message ("%s", error->message);
-      g_clear_error (&error);
     }
 }
 
