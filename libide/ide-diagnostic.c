@@ -111,7 +111,18 @@ ide_diagnostic_get_location (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self, NULL);
 
-  return self->location;
+  if (self->location)
+    return self->location;
+
+  if (self->ranges && self->ranges->len > 0)
+    {
+      IdeSourceRange *range;
+
+      range = ide_diagnostic_get_range (self, 0);
+      return ide_source_range_get_begin (range);
+    }
+
+  return NULL;
 }
 
 IdeDiagnostic *
