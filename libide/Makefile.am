@@ -1,3 +1,5 @@
+include libide/editorconfig/libeditorconfig/Makefile.am
+
 noinst_LTLIBRARIES += libide.la
 
 libide_la_public_sources = \
@@ -134,8 +136,8 @@ libide_la_public_sources = \
 
 libide_la_SOURCES = \
 	$(libide_la_public_sources) \
-	libide/editorconfig/editorconfig.c \
-	libide/editorconfig/editorconfig.h \
+	libide/editorconfig/editorconfig-glib.c \
+	libide/editorconfig/editorconfig-glib.h \
 	libide/gconstructor.h \
 	libide/ide-async-helper.c \
 	libide/ide-async-helper.h \
@@ -151,6 +153,7 @@ libide_la_CFLAGS = \
 	-I$(top_srcdir)/libide/clang \
 	-I$(top_srcdir)/libide/directory \
 	-I$(top_srcdir)/libide/editorconfig \
+	-I$(top_srcdir)/libide/editorconfig/libeditorconfig \
 	-I$(top_srcdir)/libide/git \
 	-I$(top_srcdir)/libide/gsettings \
 	-I$(top_srcdir)/libide/local \
@@ -161,6 +164,7 @@ libide_la_LIBADD = \
 	$(CLANG_LDFLAGS) \
 	$(LIBIDE_LIBS) \
 	-lclang \
+	libeditorconfig.la \
 	$(NULL)
 
 
