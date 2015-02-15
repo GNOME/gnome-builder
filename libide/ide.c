@@ -30,6 +30,7 @@
 #include "ide-editorconfig-file-settings.h"
 #include "ide-file-settings.h"
 #include "ide-git-vcs.h"
+#include "ide-gsettings-file-settings.h"
 
 static gboolean     gProgramNameRead;
 static const gchar *gProgramName = "libide";
@@ -79,7 +80,11 @@ ide_init_ctor (void)
   g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
                                   IDE_TYPE_EDITORCONFIG_FILE_SETTINGS,
                                   IDE_FILE_SETTINGS_EXTENSION_POINT".editorconfig",
-                                  0);
+                                  -100);
+  g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
+                                  IDE_TYPE_GSETTINGS_FILE_SETTINGS,
+                                  IDE_FILE_SETTINGS_EXTENSION_POINT".gsettings",
+                                  -200);
 
   g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
                                   IDE_TYPE_C_LANGUAGE,

@@ -30,6 +30,8 @@ libide_la_public_sources = \
 	libide/editorconfig/ide-editorconfig-file-settings.h \
 	libide/git/ide-git-vcs.c \
 	libide/git/ide-git-vcs.h \
+	libide/gsettings/ide-gsettings-file-settings.c \
+	libide/gsettings/ide-gsettings-file-settings.h \
 	libide/ide-back-forward-item.c \
 	libide/ide-back-forward-item.h \
 	libide/ide-back-forward-list.c \
@@ -150,6 +152,7 @@ libide_la_CFLAGS = \
 	-I$(top_srcdir)/libide/directory \
 	-I$(top_srcdir)/libide/editorconfig \
 	-I$(top_srcdir)/libide/git \
+	-I$(top_srcdir)/libide/gsettings \
 	-I$(top_srcdir)/libide/local \
 	-I$(top_srcdir)/libide/tasks \
 	$(LIBIDE_CFLAGS)
