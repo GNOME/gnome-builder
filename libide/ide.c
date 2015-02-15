@@ -27,6 +27,7 @@
 #include "ide-clang-service.h"
 #include "ide-directory-build-system.h"
 #include "ide-directory-vcs.h"
+#include "ide-editorconfig-file-settings.h"
 #include "ide-file-settings.h"
 #include "ide-git-vcs.h"
 
@@ -74,6 +75,11 @@ ide_init_ctor (void)
                                   IDE_TYPE_DIRECTORY_BUILD_SYSTEM,
                                   IDE_BUILD_SYSTEM_EXTENSION_POINT".directory",
                                   -200);
+
+  g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
+                                  IDE_TYPE_EDITORCONFIG_FILE_SETTINGS,
+                                  IDE_FILE_SETTINGS_EXTENSION_POINT".editorconfig",
+                                  0);
 
   g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
                                   IDE_TYPE_C_LANGUAGE,
