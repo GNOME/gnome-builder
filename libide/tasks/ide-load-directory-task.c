@@ -51,7 +51,6 @@ task_state_unref (TaskState *state)
 
   if (--state->ref_count == 0)
     {
-      g_print ("Failed: %d\n", state->failed);
       if (state->failed)
         g_task_return_new_error (state->task,
                                  G_IO_ERROR,
