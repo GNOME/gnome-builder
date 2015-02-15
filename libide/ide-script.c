@@ -20,7 +20,7 @@
 
 #include "ide-script.h"
 
-G_DEFINE_TYPE (IdeScript, ide_script, IDE_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (IdeScript, ide_script, IDE_TYPE_OBJECT)
 
 enum {
   LOAD,

@@ -32,6 +32,8 @@ libide_la_public_sources = \
 	libide/editorconfig/ide-editorconfig-file-settings.h \
 	libide/git/ide-git-vcs.c \
 	libide/git/ide-git-vcs.h \
+	libide/gjs/ide-gjs-script.cpp \
+	libide/gjs/ide-gjs-script.h \
 	libide/gsettings/ide-gsettings-file-settings.c \
 	libide/gsettings/ide-gsettings-file-settings.h \
 	libide/ide-back-forward-item.c \
@@ -167,16 +169,22 @@ libide_la_CFLAGS = \
 	-I$(top_srcdir)/libide/editorconfig \
 	-I$(top_srcdir)/libide/editorconfig/libeditorconfig \
 	-I$(top_srcdir)/libide/git \
+	-I$(top_srcdir)/libide/gjs \
 	-I$(top_srcdir)/libide/gsettings \
 	-I$(top_srcdir)/libide/local \
 	-I$(top_srcdir)/libide/tasks \
 	$(LIBIDE_CFLAGS)
+
+libide_la_CXXFLAGS = \
+	$(libide_la_CFLAGS) \
+	$(NULL)
 
 libide_la_LIBADD = \
 	$(CLANG_LDFLAGS) \
 	$(LIBIDE_LIBS) \
 	-lclang \
 	libeditorconfig.la \
+	-lstdc++ \
 	$(NULL)
 
 

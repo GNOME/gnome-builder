@@ -25,6 +25,8 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"],
                    [GETTEXT package name])
 AM_GLIB_GNU_GETTEXT
 
+AC_PROG_CXX
+
 # Initlize libtool and things that go with it.
 m4_include([build/autotools/autoconf.d/pre-lt.m4])
 m4_include([build/autotools/autoconf.d/setup_libtool.m4])
