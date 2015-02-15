@@ -26,8 +26,8 @@ typedef struct
 {
   gchar                *encoding;
   IdeFile              *file;
+  gint                  indent_width : 7;
   IdeIndentStyle        indent_style : 2;
-  guint                 indent_width : 6;
   guint                 insert_trailing_newline : 1;
   guint                 tab_width : 6;
   guint                 trim_trailing_whitespace : 1;
@@ -146,24 +146,24 @@ ide_file_settings_set_indent_style (IdeFileSettings *self,
     }
 }
 
-guint
+gint
 ide_file_settings_get_indent_width (IdeFileSettings *self)
 {
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
 
-  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), 0);
+  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), -1);
 
   return priv->indent_width;
 }
 
 void
 ide_file_settings_set_indent_width (IdeFileSettings *self,
-                                    guint            indent_width)
+                                    gint             indent_width)
 {
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
-  g_return_if_fail (indent_width > 0);
+  g_return_if_fail (indent_width >= -1);
   g_return_if_fail (indent_width < 32);
 
   if (priv->indent_width != indent_width)
@@ -399,7 +399,7 @@ ide_file_settings_set_property (GObject      *object,
       break;
 
     case PROP_INDENT_WIDTH:
-      ide_file_settings_set_indent_width (self, g_value_get_uint (value));
+      ide_file_settings_set_indent_width (self, g_value_get_int (value));
       break;
 
     case PROP_INSERT_TRAILING_NEWLINE:
@@ -467,11 +467,11 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                                    gParamSpecs [PROP_INDENT_STYLE]);
 
   gParamSpecs [PROP_INDENT_WIDTH] =
-    g_param_spec_uint ("indent-width",
-                       _("Indent Width"),
-                       _("The width to use when indenting."),
-                       1, 32, 8,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+    g_param_spec_int ("indent-width",
+                      _("Indent Width"),
+                      _("The width to use when indenting."),
+                      -1, 32, -1,
+                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_INDENT_WIDTH,
                                    gParamSpecs [PROP_INDENT_WIDTH]);
 
@@ -531,7 +531,7 @@ ide_file_settings_init (IdeFileSettings *self)
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
 
   priv->indent_style = IDE_INDENT_STYLE_SPACES;
-  priv->indent_width = 8;
+  priv->indent_width = -1;
   priv->insert_trailing_newline = TRUE;
   priv->newline_type = GTK_SOURCE_NEWLINE_TYPE_LF;
   priv->right_margin_position = 80;

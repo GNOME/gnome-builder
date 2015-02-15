@@ -40,7 +40,7 @@ struct _IdeFileSettingsClass
 const gchar          *ide_file_settings_get_encoding                 (IdeFileSettings      *self);
 IdeFile              *ide_file_settings_get_file                     (IdeFileSettings      *self);
 IdeIndentStyle        ide_file_settings_get_indent_style             (IdeFileSettings      *self);
-guint                 ide_file_settings_get_indent_width             (IdeFileSettings      *self);
+gint                  ide_file_settings_get_indent_width             (IdeFileSettings      *self);
 gboolean              ide_file_settings_get_insert_trailing_newline  (IdeFileSettings      *self);
 GtkSourceNewlineType  ide_file_settings_get_newline_type             (IdeFileSettings      *self);
 guint                 ide_file_settings_get_right_margin_position    (IdeFileSettings      *self);
@@ -51,7 +51,7 @@ void                  ide_file_settings_set_encoding                 (IdeFileSet
 void                  ide_file_settings_set_indent_style             (IdeFileSettings      *self,
                                                                       IdeIndentStyle        indent_style);
 void                  ide_file_settings_set_indent_width             (IdeFileSettings      *self,
-                                                                      guint                 indent_width);
+                                                                      gint                  indent_width);
 void                  ide_file_settings_set_insert_trailing_newline  (IdeFileSettings      *self,
                                                                       gboolean              insert_trailing_newline);
 void                  ide_file_settings_set_newline_type             (IdeFileSettings      *self,
