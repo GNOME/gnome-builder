@@ -77,7 +77,45 @@ gb_pango_font_description_to_css (const PangoFontDescription *font_desc)
       gint weight;
 
       weight = pango_font_description_get_weight (font_desc);
-      ADD_KEYVAL_PRINTF ("font-weight", "%d", weight);
+
+      /*
+       * WORKAROUND:
+       *
+       * font-weight with numbers does not appear to be working as expected
+       * right now. So for the common (bold/normal), let's just use the string
+       * and let gtk warn for the other values, which shouldn't really be
+       * used for this.
+       */
+
+      switch (weight)
+        {
+        case PANGO_WEIGHT_SEMILIGHT:
+          /*
+           * 350 is not actually a valid css font-weight, so we will just round
+           * up to 400.
+           */
+        case PANGO_WEIGHT_NORMAL:
+          ADD_KEYVAL (FONT_WEIGHT, "normal");
+          break;
+
+        case PANGO_WEIGHT_BOLD:
+          ADD_KEYVAL (FONT_WEIGHT, "bold");
+          break;
+
+        case PANGO_WEIGHT_THIN:
+        case PANGO_WEIGHT_ULTRALIGHT:
+        case PANGO_WEIGHT_LIGHT:
+        case PANGO_WEIGHT_BOOK:
+        case PANGO_WEIGHT_MEDIUM:
+        case PANGO_WEIGHT_SEMIBOLD:
+        case PANGO_WEIGHT_ULTRABOLD:
+        case PANGO_WEIGHT_HEAVY:
+        case PANGO_WEIGHT_ULTRAHEAVY:
+        default:
+          g_print ("%d\n", weight);
+          ADD_KEYVAL_PRINTF ("font-weight", "%d", weight);
+          break;
+        }
     }
 
   if ((mask & PANGO_FONT_MASK_STRETCH))
