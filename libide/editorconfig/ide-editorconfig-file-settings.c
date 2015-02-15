@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <editorconfig.h>
+#include <editorconfig-glib.h>
 #include <glib/gi18n.h>
 
 #include "ide-editorconfig-file-settings.h"
@@ -63,7 +63,7 @@ ide_editorconfig_file_settings_init_worker (GTask        *task,
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ht = editorconfig_read (file, cancellable, &error);
+  ht = editorconfig_glib_read (file, cancellable, &error);
 
   if (!ht)
     {
@@ -82,9 +82,10 @@ ide_editorconfig_file_settings_init_worker (GTask        *task,
       if (g_str_equal (key, "indent_size"))
         g_object_set_property (source_object, "indent_width", value);
       else if (g_str_equal (key, "tab_width") ||
-               g_str_equal (key, "trim_trailing_whitespace") ||
-               g_str_equal (key, "insert_final_newline"))
+               g_str_equal (key, "trim_trailing_whitespace"))
         g_object_set_property (source_object, key, value);
+      else if (g_str_equal (key, "insert_final_newline"))
+        g_object_set_property (source_object, "insert_trailing_newline", value);
       else if (g_str_equal (key, "charset"))
         g_object_set_property (source_object, "encoding", value);
       else if (g_str_equal (key, "end_of_line"))

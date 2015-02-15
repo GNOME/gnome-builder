@@ -1,5 +1,7 @@
 *.deps
+*.gch
 *.gz
+*.la
 *.libs
 *.lo
 *.log

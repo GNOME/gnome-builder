@@ -56,7 +56,7 @@ void                  ide_file_settings_set_insert_trailing_newline  (IdeFileSet
                                                                       gboolean              insert_trailing_newline);
 void                  ide_file_settings_set_newline_type             (IdeFileSettings      *self,
                                                                       GtkSourceNewlineType  newline_type);
-void                   ide_file_settings_set_right_margin_position   (IdeFileSettings      *self,
+void                  ide_file_settings_set_right_margin_position    (IdeFileSettings      *self,
                                                                       guint                 right_margin_position);
 void                  ide_file_settings_set_tab_width                (IdeFileSettings      *self,
                                                                       guint                 tab_width);
