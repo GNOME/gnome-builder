@@ -23,7 +23,9 @@
 
 struct _IdeGcaService
 {
-  IdeService parent_instance;
+  IdeService  parent_instance;
+
+  GHashTable *proxy_cache;
 };
 
 static GDBusConnection *gDBus;
@@ -48,12 +50,16 @@ proxy_new_cb (GObject      *object,
               GAsyncResult *result,
               gpointer      user_data)
 {
+  IdeGcaService *self;
   g_autoptr(GTask) task = user_data;
+  const gchar *language_id;
   GcaService *proxy;
   GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
   g_assert (G_IS_ASYNC_RESULT (result));
+
+  self = g_task_get_source_object (task);
 
   proxy = gca_service_proxy_new_finish (result, &error);
 
@@ -62,6 +68,10 @@ proxy_new_cb (GObject      *object,
       g_task_return_error (task, error);
       return;
     }
+
+  language_id = g_task_get_task_data (task);
+  g_hash_table_replace (self->proxy_cache, g_strdup (language_id),
+                        g_object_ref (proxy));
 
   g_task_return_pointer (task, g_object_ref (proxy), g_object_unref);
 
@@ -78,10 +88,13 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
   g_autoptr(GTask) task = NULL;
   g_autoptr(gchar) name = NULL;
   g_autoptr(gchar) object_path = NULL;
+  GcaService *proxy;
 
   g_return_if_fail (IDE_IS_GCA_SERVICE (self));
   g_return_if_fail (language_id);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  language_id = remap_language (language_id);
 
   task = g_task_new (self, cancellable, callback, user_data);
 
@@ -94,7 +107,13 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
       return;
     }
 
-  language_id = remap_language (language_id);
+  if ((proxy = g_hash_table_lookup (self->proxy_cache, language_id)))
+    {
+      g_task_return_pointer (task, g_object_ref (proxy), g_object_unref);
+      return;
+    }
+
+  g_task_set_task_data (task, g_strdup (language_id), g_free);
 
   name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", language_id);
   object_path = g_strdup_printf ("/org/gnome/CodeAssist/v1/%s", language_id);
@@ -108,6 +127,13 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
                          g_object_ref (task));
 }
 
+/**
+ * ide_gca_service_get_proxy_finish:
+ *
+ * Completes an asynchronous request to load a Gca proxy.
+ *
+ * Returns: (transfer full): A #GcaService or %NULL upon failure.
+ */
 GcaService *
 ide_gca_service_get_proxy_finish (IdeGcaService  *self,
                                   GAsyncResult   *result,
@@ -125,6 +151,8 @@ static void
 ide_gca_service_finalize (GObject *object)
 {
   IdeGcaService *self = (IdeGcaService *)object;
+
+  g_clear_pointer (&self->proxy_cache, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_gca_service_parent_class)->finalize (object);
 }
@@ -152,4 +180,6 @@ ide_gca_service_class_init (IdeGcaServiceClass *klass)
 static void
 ide_gca_service_init (IdeGcaService *self)
 {
+  self->proxy_cache = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                             g_free, g_object_unref);
 }
