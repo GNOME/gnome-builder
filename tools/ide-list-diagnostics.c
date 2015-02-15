@@ -39,14 +39,29 @@ quit (gint exit_code)
 static const gchar *
 severity_to_string (IdeDiagnosticSeverity severity)
 {
-  switch (severity)
+  if (isatty (STDOUT_FILENO))
     {
-    case IDE_DIAGNOSTIC_IGNORED: return "ignored:";
-    case IDE_DIAGNOSTIC_NOTE: return "note:";
-    case IDE_DIAGNOSTIC_WARNING: return "\033[1;35mwarning:\033[0m";
-    case IDE_DIAGNOSTIC_ERROR: return "\033[1;31merror:\033[0m";
-    case IDE_DIAGNOSTIC_FATAL: return "\033[1;31mfatal error:\033[0m";
-    default: return "";
+      switch (severity)
+        {
+        case IDE_DIAGNOSTIC_IGNORED: return "ignored:";
+        case IDE_DIAGNOSTIC_NOTE:    return "note:";
+        case IDE_DIAGNOSTIC_WARNING: return "\033[1;35mwarning:\033[0m";
+        case IDE_DIAGNOSTIC_ERROR:   return "\033[1;31merror:\033[0m";
+        case IDE_DIAGNOSTIC_FATAL:   return "\033[1;31mfatal error:\033[0m";
+        default: return "";
+        }
+    }
+  else
+    {
+      switch (severity)
+        {
+        case IDE_DIAGNOSTIC_IGNORED: return "ignored:";
+        case IDE_DIAGNOSTIC_NOTE:    return "note:";
+        case IDE_DIAGNOSTIC_WARNING: return "warning:";
+        case IDE_DIAGNOSTIC_ERROR:   return "error:";
+        case IDE_DIAGNOSTIC_FATAL:   return "fatal error:";
+        default: return "";
+        }
     }
 }
 
@@ -95,10 +110,16 @@ print_diagnostic (IdeDiagnostic *diag)
   line = ide_source_location_get_line (location);
   column = ide_source_location_get_line_offset (location);
 
-  g_print ("\033[1m%s:%u:%u:\033[0m %s \033[1m%s\033[0m\n",
-           path, line+1, column+1,
-           severity_to_string (severity),
-           text);
+  if (isatty (STDOUT_FILENO))
+    g_print ("\033[1m%s:%u:%u:\033[0m %s \033[1m%s\033[0m\n",
+             path, line+1, column+1,
+             severity_to_string (severity),
+             text);
+  else
+    g_print ("%s:%u:%u: %s %s\n",
+             path, line+1, column+1,
+             severity_to_string (severity),
+             text);
 
   linestr = get_line (gfile, line);
 
@@ -110,7 +131,11 @@ print_diagnostic (IdeDiagnostic *diag)
 
       for (i = 0; i < column; i++)
         g_print (" ");
-      g_print ("\033[1;32m^\033[0m\n");
+
+      if (isatty (STDOUT_FILENO))
+        g_print ("\033[1;32m^\033[0m\n");
+      else
+        g_print ("^\n");
     }
 
 #if 0
