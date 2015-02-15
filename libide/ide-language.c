@@ -19,8 +19,10 @@
 #include <glib/gi18n.h>
 
 #include "ide-diagnostician.h"
+#include "ide-gca-diagnostic-provider.h"
 #include "ide-highlighter.h"
 #include "ide-indenter.h"
+#include "ide-internal.h"
 #include "ide-language.h"
 #include "ide-refactory.h"
 #include "ide-symbol-resolver.h"
@@ -45,6 +47,7 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+static IdeDiagnostician *gDiagnostician;
 
 /**
  * ide_language_get_diagnostician:
@@ -70,6 +73,27 @@ ide_language_get_diagnostician (IdeLanguage *self)
    return IDE_LANGUAGE_GET_CLASS (self)->get_diagnostician (self);
 
   return NULL;
+}
+
+static IdeDiagnostician *
+ide_language_real_get_diagnostician (IdeLanguage *self)
+{
+  if (!gDiagnostician)
+    {
+      IdeDiagnosticProvider *provider;
+      IdeContext *context;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      gDiagnostician = g_object_new (IDE_TYPE_DIAGNOSTICIAN,
+                                     "context", context,
+                                     NULL);
+      provider = g_object_new (IDE_TYPE_GCA_DIAGNOSTIC_PROVIDER,
+                               "context", context,
+                               NULL);
+      _ide_diagnostician_add_provider (gDiagnostician, provider);
+    }
+
+  return gDiagnostician;
 }
 
 /**
@@ -268,6 +292,8 @@ ide_language_class_init (IdeLanguageClass *klass)
 
   object_class->get_property = ide_language_get_property;
   object_class->set_property = ide_language_set_property;
+
+  klass->get_diagnostician = ide_language_real_get_diagnostician;
 
   gParamSpecs [PROP_DIAGNOSTICIAN] =
     g_param_spec_object ("diagnostician",
