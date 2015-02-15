@@ -26,6 +26,8 @@ libide_la_public_sources = \
 	libide/directory/ide-directory-build-system.h \
 	libide/directory/ide-directory-vcs.c \
 	libide/directory/ide-directory-vcs.h \
+	libide/editorconfig/ide-editorconfig-file-settings.c \
+	libide/editorconfig/ide-editorconfig-file-settings.h \
 	libide/git/ide-git-vcs.c \
 	libide/git/ide-git-vcs.h \
 	libide/ide-back-forward-item.c \
@@ -130,6 +132,8 @@ libide_la_public_sources = \
 
 libide_la_SOURCES = \
 	$(libide_la_public_sources) \
+	libide/editorconfig/editorconfig.c \
+	libide/editorconfig/editorconfig.h \
 	libide/gconstructor.h \
 	libide/ide-async-helper.c \
 	libide/ide-async-helper.h \
@@ -144,6 +148,7 @@ libide_la_CFLAGS = \
 	-I$(top_srcdir)/libide/c \
 	-I$(top_srcdir)/libide/clang \
 	-I$(top_srcdir)/libide/directory \
+	-I$(top_srcdir)/libide/editorconfig \
 	-I$(top_srcdir)/libide/git \
 	-I$(top_srcdir)/libide/local \
 	-I$(top_srcdir)/libide/tasks \
