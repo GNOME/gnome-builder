@@ -68,6 +68,8 @@ typedef struct _IdeExecutableInterface         IdeExecutableInterface;
 
 typedef struct _IdeFile                        IdeFile;
 
+typedef struct _IdeFileSettings                IdeFileSettings;
+
 typedef struct _IdeHighlighter                 IdeHighlighter;
 
 typedef struct _IdeIndenter                    IdeIndenter;
