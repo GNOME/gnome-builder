@@ -29,6 +29,7 @@ static GMainLoop *gMainLoop;
 static gint gExitCode = EXIT_SUCCESS;
 static gchar **gPaths;
 static int gActive;
+static IdeContext *gContext;
 
 static void
 quit (gint exit_code)
@@ -144,6 +145,8 @@ context_cb (GObject      *object,
       g_printerr (_("No files provided to load settings for.\n"));
       quit (EXIT_FAILURE);
     }
+
+  gContext = g_object_ref (context);
 }
 
 gint
@@ -186,6 +189,7 @@ main (gint   argc,
   g_main_loop_run (gMainLoop);
   g_clear_pointer (&gMainLoop, g_main_loop_unref);
   g_strfreev (gPaths);
+  g_clear_object (&gContext);
 
   return gExitCode;
 }
