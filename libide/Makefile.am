@@ -217,7 +217,7 @@ INTROSPECTION_COMPILER_ARGS = --includedir=$(top_srcdir)/libide
 if HAVE_INTROSPECTION
 introspection_sources = $(libide_1_0_la_public_sources)
 
-Ide-1.0.gir: libide.la
+Ide-1.0.gir: libide-1.0.la
 Ide_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Ggit-1.0
 Ide_1_0_gir_CFLAGS = $(libide_1_0_la_CFLAGS)
 Ide_1_0_gir_LIBS = libide-1.0.la
