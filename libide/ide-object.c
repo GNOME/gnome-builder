@@ -72,22 +72,7 @@ ide_object_set_context (IdeObject  *object,
   g_return_if_fail (IDE_IS_OBJECT (object));
   g_return_if_fail (IDE_IS_CONTEXT (context));
 
-  if (context != priv->context)
-    {
-      if (priv->context)
-        {
-          g_object_remove_weak_pointer (G_OBJECT (priv->context),
-                                        (gpointer *)&priv->context);
-          priv->context = NULL;
-        }
-
-      if (context)
-        {
-          priv->context = context;
-          g_object_add_weak_pointer (G_OBJECT (priv->context),
-                                     (gpointer *)&priv->context);
-        }
-    }
+  ide_set_weak_pointer (&priv->context, context);
 }
 
 static void
