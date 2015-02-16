@@ -43,25 +43,24 @@ on_result_added_cb (IdeSearchContext  *search_context,
                     IdeSearchResult   *result,
                     gpointer           user_data)
 {
+  const gchar *title;
+  const gchar *subtitle;
+
   gCount++;
 
-  g_print ("Result: %s\n", g_type_name (G_TYPE_FROM_INSTANCE (result)));
+  title = ide_search_result_get_title (result);
+  subtitle = ide_search_result_get_subtitle (result);
+
+  g_print ("%s\n", title);
+  g_print ("%s\n", subtitle);
+  g_print ("------------------------------------------------------------\n");
+
 }
 
 static void
 on_completed_cb (IdeSearchContext *search_context)
 {
-  gchar *line;
-  guint len;
-  guint i;
-
-  line = g_strdup_printf (_("%"G_GSIZE_FORMAT" results"), gCount);
-  len = strlen (line);
-  for (i = 0; i < len; i++)
-    g_printerr ("=");
-  g_printerr ("\n");
-  g_printerr ("%s\n", line);
-
+  g_print (_("%"G_GSIZE_FORMAT" results\n"), gCount);
   g_object_unref (search_context);
   quit (gExitCode);
 }
