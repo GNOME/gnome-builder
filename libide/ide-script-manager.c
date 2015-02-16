@@ -140,6 +140,17 @@ ide_script_manager_init (IdeScriptManager *self)
 {
 }
 
+static gboolean
+allow_file (const gchar *name)
+{
+  /* NOTE:
+   *
+   * Add your allowed suffix here if you are adding a new scripting language
+   * (ie: python, etc)
+   */
+  return g_str_has_suffix (name, ".js");
+}
+
 static void
 ide_script_manager_get_files_worker (GTask        *task,
                                      gpointer      source_object,
@@ -170,6 +181,9 @@ ide_script_manager_get_files_worker (GTask        *task,
     {
       g_autoptr(gchar) path = NULL;
       g_autoptr(GFile) file = NULL;
+
+      if (!allow_file (name))
+        continue;
 
       path = g_build_filename (directory, name, NULL);
       file = g_file_new_for_path (path);
