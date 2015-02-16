@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "ide-file.h"
 #include "ide-source-location.h"
 #include "ide-source-range.h"
 
