@@ -23,3 +23,8 @@ noinst_PROGRAMS += ide-list-files
 ide_list_files_SOURCES = tools/ide-list-files.c
 ide_list_files_CFLAGS = $(libide_1_0_la_CFLAGS)
 ide_list_files_LDADD = libide-1.0.la
+
+noinst_PROGRAMS += ide-search
+ide_search_SOURCES = tools/ide-search.c
+ide_search_CFLAGS = $(libide_1_0_la_CFLAGS)
+ide_search_LDADD = libide-1.0.la
