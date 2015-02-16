@@ -18,6 +18,9 @@ include tests/tests.mk
 # icon installation that doesn't require subdirs.
 SUBDIRS = . data/icons po
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = $(top_builddir)/data/libide-1.0.pc
+
 EXTRA_DIST += \
 	tap-driver.sh \
 	tap-test

@@ -1,3 +1,4 @@
 org.gnome.Builder.service
 *.gschema.xml
 *.valid
+libide-1.0.pc
