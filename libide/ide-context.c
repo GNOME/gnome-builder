@@ -28,6 +28,7 @@
 #include "ide-global.h"
 #include "ide-internal.h"
 #include "ide-project.h"
+#include "ide-script-manager.h"
 #include "ide-service.h"
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
@@ -37,6 +38,7 @@ typedef struct
   IdeBackForwardList *back_forward_list;
   IdeBuildSystem     *build_system;
   IdeDeviceManager   *device_manager;
+  IdeScriptManager   *script_manager;
   IdeProject         *project;
   GFile              *project_file;
   gchar              *root_build_dir;
@@ -253,6 +255,12 @@ ide_context_new_async (GFile               *project_file,
   g_object_unref (task);
 }
 
+/**
+ * ide_context_new_finish:
+ *
+ * Returns: (transfer full): An #IdeContext or %NULL upon failure and
+ *   @error is set.
+ */
 IdeContext *
 ide_context_new_finish (GAsyncResult  *result,
                         GError       **error)
@@ -575,6 +583,7 @@ static void
 ide_context_init (IdeContext *self)
 {
   IdeContextPrivate *priv = ide_context_get_instance_private (self);
+  g_autoptr(gchar) scriptsdir = NULL;
 
   priv->root_build_dir = g_build_filename (g_get_user_cache_dir (),
                                            ide_get_program_name (),
@@ -601,6 +610,15 @@ ide_context_init (IdeContext *self)
   priv->unsaved_files = g_object_new (IDE_TYPE_UNSAVED_FILES,
                                       "context", self,
                                       NULL);
+
+  scriptsdir = g_build_filename (g_get_user_config_dir (),
+                                 ide_get_program_name (),
+                                 "scripts",
+                                 NULL);
+  priv->script_manager = g_object_new (IDE_TYPE_SCRIPT_MANAGER,
+                                       "context", self,
+                                       "scripts-directory", scriptsdir,
+                                       NULL);
 }
 
 static void
@@ -804,6 +822,47 @@ ide_context_init_unsaved_files (gpointer             source_object,
 }
 
 static void
+ide_context_init_scripts_cb (GObject      *object,
+                             GAsyncResult *result,
+                             gpointer      user_data)
+{
+  IdeScriptManager *manager = (IdeScriptManager *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_SCRIPT_MANAGER (manager));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_script_manager_load_finish (manager, result, &error))
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_context_init_scripts (gpointer             source_object,
+                          GCancellable        *cancellable,
+                          GAsyncReadyCallback  callback,
+                          gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  IdeContextPrivate *priv = ide_context_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  ide_script_manager_load_async (priv->script_manager,
+                                 cancellable,
+                                 ide_context_init_scripts_cb,
+                                 g_object_ref (task));
+}
+
+static void
 ide_context_init_back_forward_list (gpointer             source_object,
                                     GCancellable        *cancellable,
                                     GAsyncReadyCallback  callback,
@@ -905,6 +964,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_project_name,
                         ide_context_init_back_forward_list,
                         ide_context_init_unsaved_files,
+                        ide_context_init_scripts,
                         NULL);
 }
 

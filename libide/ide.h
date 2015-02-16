@@ -56,6 +56,7 @@ G_BEGIN_DECLS
 #include "ide-project-item.h"
 #include "ide-refactory.h"
 #include "ide-script.h"
+#include "ide-script-manager.h"
 #include "ide-search-context.h"
 #include "ide-search-engine.h"
 #include "ide-search-provider.h"

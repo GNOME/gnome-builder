@@ -66,6 +66,7 @@ ide_init_ctor (void)
   g_io_extension_point_register (IDE_BUILD_SYSTEM_EXTENSION_POINT);
   g_io_extension_point_register (IDE_FILE_SETTINGS_EXTENSION_POINT);
   g_io_extension_point_register (IDE_LANGUAGE_EXTENSION_POINT);
+  g_io_extension_point_register (IDE_SCRIPT_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SERVICE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_VCS_EXTENSION_POINT);
 

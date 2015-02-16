@@ -23,7 +23,8 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SCRIPT (ide_script_get_type())
+#define IDE_TYPE_SCRIPT            (ide_script_get_type())
+#define IDE_SCRIPT_EXTENSION_POINT "org.gnome.libide.extensions.script"
 
 G_DECLARE_DERIVABLE_TYPE (IdeScript, ide_script, IDE, SCRIPT, IdeObject)
 
@@ -31,12 +32,13 @@ struct _IdeScriptClass
 {
   IdeObjectClass parent;
 
-  void (*load)   (IdeScript *script);
-  void (*unload) (IdeScript *script);
+  void (*load)   (IdeScript *self);
+  void (*unload) (IdeScript *self);
 };
 
-void ide_script_load   (IdeScript *script);
-void ide_script_unload (IdeScript *script);
+void   ide_script_load     (IdeScript *self);
+void   ide_script_unload   (IdeScript *self);
+GFile *ide_script_get_file (IdeScript *self);
 
 G_END_DECLS
 

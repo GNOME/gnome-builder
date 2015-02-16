@@ -94,6 +94,8 @@ typedef struct _IdeRefactoryInterface          IdeRefactoryInterface;
 
 typedef struct _IdeScript                      IdeScript;
 
+typedef struct _IdeScriptManager               IdeScriptManager;
+
 typedef struct _IdeSearchContext               IdeSearchContext;
 
 typedef struct _IdeSearchEngine                IdeSearchEngine;

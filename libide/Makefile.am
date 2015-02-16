@@ -99,6 +99,8 @@ libide_1_0_la_public_sources = \
 	libide/ide-refactory.h \
 	libide/ide-script.c \
 	libide/ide-script.h \
+	libide/ide-script-manager.c \
+	libide/ide-script-manager.h \
 	libide/ide-search-context.c \
 	libide/ide-search-context.h \
 	libide/ide-search-engine.c \
