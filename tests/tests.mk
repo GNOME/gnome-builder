@@ -16,18 +16,18 @@ noinst_PROGRAMS += test-ide-context
 TESTS += test-ide-context
 test_ide_context_SOURCES = tests/test-ide-context.c
 test_ide_context_CFLAGS = \
-	$(libide_la_CFLAGS) \
+	$(libide_1_0_la_CFLAGS) \
 	-DTEST_DATA_DIR="\"$(top_srcdir)/tests/data\""
-test_ide_context_LDADD = libide.la
+test_ide_context_LDADD = libide-1.0.la
 
 
 noinst_PROGRAMS += test-ide-back-forward-list
 TESTS += test-ide-back-forward-list
 test_ide_back_forward_list_SOURCES = tests/test-ide-back-forward-list.c
 test_ide_back_forward_list_CFLAGS = \
-	$(libide_la_CFLAGS) \
+	$(libide_1_0_la_CFLAGS) \
 	-DTEST_DATA_DIR="\"$(top_srcdir)/tests/data\""
-test_ide_back_forward_list_LDADD = libide.la
+test_ide_back_forward_list_LDADD = libide-1.0.la
 
 
 EXTRA_DIST += \

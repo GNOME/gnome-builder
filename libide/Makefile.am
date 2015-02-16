@@ -1,8 +1,8 @@
 include libide/editorconfig/libeditorconfig/Makefile.am
 
-noinst_LTLIBRARIES += libide.la
+lib_LTLIBRARIES += libide-1.0.la
 
-libide_la_public_sources = \
+libide_1_0_la_public_sources = \
 	libide/autotools/ide-autotools-build-system.c \
 	libide/autotools/ide-autotools-build-system.h \
 	libide/autotools/ide-autotools-build-task.c \
@@ -136,8 +136,8 @@ libide_la_public_sources = \
 	libide/local/ide-local-device.h \
 	$(NULL)
 
-libide_la_SOURCES = \
-	$(libide_la_public_sources) \
+libide_1_0_la_SOURCES = \
+	$(libide_1_0_la_public_sources) \
 	libide/editorconfig/editorconfig-glib.c \
 	libide/editorconfig/editorconfig-glib.h \
 	libide/gca/gca-diagnostics.c \
@@ -159,7 +159,7 @@ libide_la_SOURCES = \
 	libide/tasks/ide-load-directory-task.h \
 	$(NULL)
 
-libide_la_CFLAGS = \
+libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/libide/autotools \
 	-I$(top_srcdir)/libide/c \
@@ -173,18 +173,36 @@ libide_la_CFLAGS = \
 	-I$(top_srcdir)/libide/gsettings \
 	-I$(top_srcdir)/libide/local \
 	-I$(top_srcdir)/libide/tasks \
-	$(LIBIDE_CFLAGS)
-
-libide_la_CXXFLAGS = \
-	$(libide_la_CFLAGS) \
 	$(NULL)
 
-libide_la_LIBADD = \
+libide_1_0_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(libide_1_0_la_includes) \
+	$(NULL)
+
+libide_1_0_la_CFLAGS = \
+	$(AM_CFLAGS) \
+	$(LIBIDE_CFLAGS) \
+	$(libide_1_0_la_includes) \
+	$(NULL)
+
+libide_1_0_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	$(LIBIDE_CFLAGS) \
+	$(libide_1_0_la_includes) \
+	$(NULL)
+
+libide_1_0_la_LDFLAGS = \
+	-avoid-version \
+	-no-undefined \
+	-export-symbols-regex '^ide_.*' \
+	$(NULL)
+
+libide_1_0_la_LIBADD = \
 	$(CLANG_LDFLAGS) \
 	$(LIBIDE_LIBS) \
 	-lclang \
 	libeditorconfig.la \
-	-lstdc++ \
 	$(NULL)
 
 
@@ -195,18 +213,18 @@ INTROSPECTION_SCANNER_ARGS = --add-include-path=$(top_srcdir)/libide --warn-all
 INTROSPECTION_COMPILER_ARGS = --includedir=$(top_srcdir)/libide
 
 if HAVE_INTROSPECTION
-introspection_sources = $(libide_la_public_sources)
+introspection_sources = $(libide_1_0_la_public_sources)
 
-Ide.gir: libide.la
-Ide_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Ggit-1.0
-Ide_gir_CFLAGS = $(libide_la_CFLAGS)
-Ide_gir_LIBS = libide.la
-Ide_gir_FILES = $(introspection_sources)
-Ide_gir_SCANNERFLAGS = \
+Ide-1.0.gir: libide.la
+Ide_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Ggit-1.0
+Ide_1_0_gir_CFLAGS = $(libide_1_0_la_CFLAGS)
+Ide_1_0_gir_LIBS = libide-1.0.la
+Ide_1_0_gir_FILES = $(introspection_sources)
+Ide_1_0_gir_SCANNERFLAGS = \
 	--c-include="ide.h" \
 	-n Ide \
 	$(NULL)
-INTROSPECTION_GIRS += Ide.gir
+INTROSPECTION_GIRS += Ide-1.0.gir
 
 girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)

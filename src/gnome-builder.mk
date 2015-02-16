@@ -224,7 +224,7 @@ libgnome_builder_la_SOURCES = \
 
 libgnome_builder_la_LIBADD = \
 	$(BUILDER_LIBS) \
-	libide.la \
+	libide-1.0.la \
 	-lm
 
 libgnome_builder_la_CFLAGS = \
@@ -276,7 +276,7 @@ endif
 gnome_builder_SOURCES = src/main.c
 gnome_builder_CFLAGS = $(libgnome_builder_la_CFLAGS)
 gnome_builder_LDADD = \
-	libide.la \
+	libide-1.0.la \
 	libgnome-builder.la \
 	$(NULL)
 
