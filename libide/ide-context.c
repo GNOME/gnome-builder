@@ -29,6 +29,8 @@
 #include "ide-internal.h"
 #include "ide-project.h"
 #include "ide-script-manager.h"
+#include "ide-search-engine.h"
+#include "ide-search-provider.h"
 #include "ide-service.h"
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
@@ -41,6 +43,7 @@ struct _IdeContext
   IdeBuildSystem     *build_system;
   IdeDeviceManager   *device_manager;
   IdeScriptManager   *script_manager;
+  IdeSearchEngine    *search_engine;
   IdeProject         *project;
   GFile              *project_file;
   gchar              *root_build_dir;
@@ -300,6 +303,36 @@ ide_context_set_project_file (IdeContext *self,
         g_object_notify_by_pspec (G_OBJECT (self),
                                   gParamSpecs [PROP_PROJECT_FILE]);
     }
+}
+
+/**
+ * ide_context_get_script_manager:
+ *
+ * Retrieves the script manager for the context.
+ *
+ * Returns: (transfer none): An #IdeScriptManager.
+ */
+IdeScriptManager *
+ide_context_get_script_manager (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->script_manager;
+}
+
+/**
+ * ide_context_get_search_engine:
+ *
+ * Retrieves the search engine for the context.
+ *
+ * Returns: (transfer none): An #IdeSearchEngine.
+ */
+IdeSearchEngine *
+ide_context_get_search_engine (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->search_engine;
 }
 
 static gpointer
@@ -580,6 +613,10 @@ ide_context_init (IdeContext *self)
                                           g_object_unref);
 
   self->unsaved_files = g_object_new (IDE_TYPE_UNSAVED_FILES,
+                                      "context", self,
+                                      NULL);
+
+  self->search_engine = g_object_new (IDE_TYPE_SEARCH_ENGINE,
                                       "context", self,
                                       NULL);
 
@@ -902,6 +939,63 @@ ide_context_init_services (gpointer             source_object,
 }
 
 static void
+ide_context_init_search_engine (gpointer             source_object,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  IdeContext *self = source_object;
+  GIOExtensionPoint *point;
+  const GList *iter;
+  const GList *list;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  point = g_io_extension_point_lookup (IDE_SEARCH_PROVIDER_EXTENSION_POINT);
+
+  if (!point)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               _("Missing extension point for %s"),
+                               IDE_SEARCH_PROVIDER_EXTENSION_POINT);
+      return;
+    }
+
+  list = g_io_extension_point_get_extensions (point);
+
+  for (iter = list; iter; iter = iter->next)
+    {
+      GIOExtension *extension = iter->data;
+      IdeSearchProvider *provider;
+      GType gtype;
+
+      gtype = g_io_extension_get_type (extension);
+
+      if (!g_type_is_a (gtype, IDE_TYPE_SEARCH_PROVIDER))
+        {
+          g_task_return_new_error (task,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_INVALID_DATA,
+                                   _("%s is not an IdeSearchProvider."),
+                                   g_type_name (gtype));
+          return;
+        }
+
+      provider = g_object_new (gtype, "context", self, NULL);
+      ide_search_engine_add_provider (self->search_engine, provider);
+      g_object_unref (provider);
+    }
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_context_init_async (GAsyncInitable      *initable,
                         int                  io_priority,
                         GCancellable        *cancellable,
@@ -924,6 +1018,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_project_name,
                         ide_context_init_back_forward_list,
                         ide_context_init_unsaved_files,
+                        ide_context_init_search_engine,
                         ide_context_init_scripts,
                         NULL);
 }

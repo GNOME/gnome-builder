@@ -31,8 +31,9 @@
 #include "ide-file-settings.h"
 #include "ide-gca-service.h"
 #include "ide-git-vcs.h"
-#include "ide-gsettings-file-settings.h"
 #include "ide-gjs-script.h"
+#include "ide-gsettings-file-settings.h"
+#include "ide-search-provider.h"
 
 static gboolean     gProgramNameRead;
 static const gchar *gProgramName = "libide";
@@ -68,6 +69,7 @@ ide_init_ctor (void)
   g_io_extension_point_register (IDE_FILE_SETTINGS_EXTENSION_POINT);
   g_io_extension_point_register (IDE_LANGUAGE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SCRIPT_EXTENSION_POINT);
+  g_io_extension_point_register (IDE_SEARCH_PROVIDER_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SERVICE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_VCS_EXTENSION_POINT);
 

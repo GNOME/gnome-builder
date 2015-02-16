@@ -25,6 +25,9 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_PROVIDER (ide_search_provider_get_type())
 
+#define IDE_SEARCH_PROVIDER_EXTENSION_POINT \
+  "org.gnome.libide.extensions.search-provider"
+
 G_DECLARE_DERIVABLE_TYPE (IdeSearchProvider, ide_search_provider,
                           IDE, SEARCH_PROVIDER, IdeObject)
 
