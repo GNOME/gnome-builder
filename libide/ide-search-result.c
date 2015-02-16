@@ -32,12 +32,6 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-IdeSearchResult *
-ide_search_result_new (void)
-{
-  return g_object_new (IDE_TYPE_SEARCH_RESULT, NULL);
-}
-
 static void
 ide_search_result_finalize (GObject *object)
 {

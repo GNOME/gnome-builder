@@ -57,7 +57,8 @@ ide_search_engine_search (IdeSearchEngine *self,
                           const GList     *providers,
                           const gchar     *search_terms)
 {
-  IdeSearchContext *context;
+  IdeSearchContext *search_context;
+  IdeContext *context;
   const GList *iter;
 
   g_return_val_if_fail (IDE_IS_SEARCH_ENGINE (self), NULL);
@@ -66,17 +67,15 @@ ide_search_engine_search (IdeSearchEngine *self,
   if (!providers)
     providers = self->providers;
 
-  if (!providers)
-    return NULL;
-
-  context = g_object_new (IDE_TYPE_SEARCH_CONTEXT,
-                          "context", context,
-                          NULL);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  search_context = g_object_new (IDE_TYPE_SEARCH_CONTEXT,
+                                 "context", context,
+                                 NULL);
 
   for (iter = providers; iter; iter = iter->next)
-    _ide_search_context_add_provider (context, iter->data, 0);
+    _ide_search_context_add_provider (search_context, iter->data, 0);
 
-  return context;
+  return search_context;
 }
 
 /**

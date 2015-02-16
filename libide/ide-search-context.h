@@ -28,6 +28,8 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeSearchContext, ide_search_context, IDE, SEARCH_CONTEXT, IdeObject)
 
 const GList *ide_search_context_get_providers      (IdeSearchContext  *self);
+void         ide_search_context_provider_completed (IdeSearchContext  *self,
+                                                    IdeSearchProvider *provider);
 void         ide_search_context_add_result         (IdeSearchContext  *self,
                                                     IdeSearchProvider *provider,
                                                     IdeSearchResult   *result);

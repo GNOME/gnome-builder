@@ -26,12 +26,14 @@ struct _IdeSearchContext
 
   GCancellable *cancellable;
   GList        *providers;
+  guint         in_progress;
   guint         executed : 1;
 };
 
 G_DEFINE_TYPE (IdeSearchContext, ide_search_context, IDE_TYPE_OBJECT)
 
 enum {
+  COMPLETED,
   COUNT_SET,
   RESULT_ADDED,
   RESULT_REMOVED,
@@ -39,6 +41,26 @@ enum {
 };
 
 static guint gSignals [LAST_SIGNAL];
+
+gboolean
+ide_search_context_get_completed (IdeSearchContext *self)
+{
+  g_return_val_if_fail (IDE_IS_SEARCH_CONTEXT (self), 0);
+
+  return (self->in_progress == 0);
+}
+
+void
+ide_search_context_provider_completed (IdeSearchContext  *self,
+                                       IdeSearchProvider *provider)
+{
+  g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
+  g_return_if_fail (IDE_IS_SEARCH_CONTEXT (provider));
+  g_return_if_fail (g_list_find (self->providers, provider));
+
+  if (--self->in_progress == 0)
+    g_signal_emit (self, gSignals [COMPLETED], 0);
+}
 
 /**
  * ide_search_context_get_providers:
@@ -102,6 +124,13 @@ ide_search_context_execute (IdeSearchContext *self,
   g_return_if_fail (search_terms);
 
   self->executed = TRUE;
+  self->in_progress = g_list_length (self->providers);
+
+  if (!self->in_progress)
+    {
+      g_signal_emit (self, gSignals [COMPLETED], 0);
+      return;
+    }
 
   for (iter = self->providers; iter; iter = iter->next)
     {
@@ -159,6 +188,16 @@ ide_search_context_class_init (IdeSearchContextClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_search_context_finalize;
+
+  gSignals [COMPLETED] =
+    g_signal_new ("completed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   gSignals [COUNT_SET] =
     g_signal_new ("count-set",
