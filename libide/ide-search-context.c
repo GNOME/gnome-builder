@@ -55,7 +55,7 @@ ide_search_context_provider_completed (IdeSearchContext  *self,
                                        IdeSearchProvider *provider)
 {
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
-  g_return_if_fail (IDE_IS_SEARCH_CONTEXT (provider));
+  g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
   g_return_if_fail (g_list_find (self->providers, provider));
 
   if (--self->in_progress == 0)

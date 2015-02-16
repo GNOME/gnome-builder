@@ -45,7 +45,7 @@ ide_search_provider_get_verb (IdeSearchProvider *provider)
 gint
 ide_search_provider_get_priority (IdeSearchProvider *provider)
 {
-  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (provider), NULL);
+  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (provider), -1);
 
   if (IDE_SEARCH_PROVIDER_GET_CLASS (provider)->get_priority)
     return IDE_SEARCH_PROVIDER_GET_CLASS (provider)->get_priority (provider);
@@ -56,7 +56,7 @@ ide_search_provider_get_priority (IdeSearchProvider *provider)
 gunichar
 ide_search_provider_get_prefix (IdeSearchProvider *provider)
 {
-  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (provider), NULL);
+  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (provider), -1);
 
   if (IDE_SEARCH_PROVIDER_GET_CLASS (provider)->get_prefix)
     return IDE_SEARCH_PROVIDER_GET_CLASS (provider)->get_prefix (provider);
