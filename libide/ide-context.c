@@ -33,8 +33,10 @@
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 
-typedef struct
+struct _IdeContext
 {
+  GObject             parent_instance;
+
   IdeBackForwardList *back_forward_list;
   IdeBuildSystem     *build_system;
   IdeDeviceManager   *device_manager;
@@ -47,12 +49,11 @@ typedef struct
   IdeVcs             *vcs;
 
   guint              services_started : 1;
-} IdeContextPrivate;
+};
 
 static void async_initable_init (GAsyncInitableIface *);
 
 G_DEFINE_TYPE_EXTENDED (IdeContext, ide_context, G_TYPE_OBJECT, 0,
-                        G_ADD_PRIVATE (IdeContext)
                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
                                                async_initable_init))
 
@@ -84,15 +85,11 @@ static GParamSpec *gParamSpecs [LAST_PROP];
  * Returns: (transfer none): An #IdeBackForwardList.
  */
 IdeBackForwardList *
-ide_context_get_back_forward_list (IdeContext *context)
+ide_context_get_back_forward_list (IdeContext *self)
 {
-  IdeContextPrivate *priv;
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-
-  priv = ide_context_get_instance_private (context);
-
-  return priv->back_forward_list;
+  return self->back_forward_list;
 }
 
 /**
@@ -103,13 +100,11 @@ ide_context_get_back_forward_list (IdeContext *context)
  * Returns: (transfer none): An #IdeBuildSystem.
  */
 IdeBuildSystem *
-ide_context_get_build_system (IdeContext *context)
+ide_context_get_build_system (IdeContext *self)
 {
-  IdeContextPrivate *priv = ide_context_get_instance_private (context);
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-
-  return priv->build_system;
+  return self->build_system;
 }
 
 /**
@@ -122,13 +117,11 @@ ide_context_get_build_system (IdeContext *context)
  * Returns: (transfer none): An #IdeDeviceManager.
  */
 IdeDeviceManager *
-ide_context_get_device_manager (IdeContext *context)
+ide_context_get_device_manager (IdeContext *self)
 {
-  IdeContextPrivate *priv = ide_context_get_instance_private (context);
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-
-  return priv->device_manager;
+  return self->device_manager;
 }
 
 /**
@@ -140,13 +133,11 @@ ide_context_get_device_manager (IdeContext *context)
  * Returns: A string containing the "root-build-dir" property.
  */
 const gchar *
-ide_context_get_root_build_dir (IdeContext *context)
+ide_context_get_root_build_dir (IdeContext *self)
 {
-  IdeContextPrivate *priv = ide_context_get_instance_private (context);
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-
-  return priv->root_build_dir;
+  return self->root_build_dir;
 }
 
 /**
@@ -158,19 +149,17 @@ ide_context_get_root_build_dir (IdeContext *context)
  * tree.
  */
 void
-ide_context_set_root_build_dir (IdeContext  *context,
+ide_context_set_root_build_dir (IdeContext  *self,
                                 const gchar *root_build_dir)
 {
-  IdeContextPrivate *priv = ide_context_get_instance_private (context);
-
-  g_return_if_fail (IDE_IS_CONTEXT (context));
+  g_return_if_fail (IDE_IS_CONTEXT (self));
   g_return_if_fail (root_build_dir);
 
-  if (priv->root_build_dir != root_build_dir)
+  if (self->root_build_dir != root_build_dir)
     {
-      g_free (priv->root_build_dir);
-      priv->root_build_dir = g_strdup (root_build_dir);
-      g_object_notify_by_pspec (G_OBJECT (context),
+      g_free (self->root_build_dir);
+      self->root_build_dir = g_strdup (root_build_dir);
+      g_object_notify_by_pspec (G_OBJECT (self),
                                 gParamSpecs [PROP_ROOT_BUILD_DIR]);
     }
 }
@@ -184,13 +173,11 @@ ide_context_set_root_build_dir (IdeContext  *context,
  * Returns: (transfer none): An #IdeUnsavedFiles.
  */
 IdeUnsavedFiles *
-ide_context_get_unsaved_files (IdeContext *context)
+ide_context_get_unsaved_files (IdeContext *self)
 {
-  IdeContextPrivate *priv = ide_context_get_instance_private (context);
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-
-  return priv->unsaved_files;
+  return self->unsaved_files;
 }
 
 /**
@@ -202,13 +189,11 @@ ide_context_get_unsaved_files (IdeContext *context)
  * Returns: (transfer none): An #IdeVcs.
  */
 IdeVcs *
-ide_context_get_vcs (IdeContext *context)
+ide_context_get_vcs (IdeContext *self)
 {
-  IdeContextPrivate *priv = ide_context_get_instance_private (context);
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-
-  return priv->vcs;
+  return self->vcs;
 }
 
 static void
@@ -280,13 +265,11 @@ ide_context_new_finish (GAsyncResult  *result,
  * Returns: (transfer none): An #IdeContext.
  */
 IdeProject *
-ide_context_get_project (IdeContext *context)
+ide_context_get_project (IdeContext *self)
 {
-  IdeContextPrivate *priv = ide_context_get_instance_private (context);
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-
-  return priv->project;
+  return self->project;
 }
 
 /**
@@ -298,52 +281,45 @@ ide_context_get_project (IdeContext *context)
  * Returns: (transfer none): A #GFile.
  */
 GFile *
-ide_context_get_project_file (IdeContext *context)
+ide_context_get_project_file (IdeContext *self)
 {
-  IdeContextPrivate *priv = ide_context_get_instance_private (context);
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-
-  return priv->project_file;
+  return self->project_file;
 }
 
 static void
-ide_context_set_project_file (IdeContext *context,
+ide_context_set_project_file (IdeContext *self,
                               GFile      *project_file)
 {
-  IdeContextPrivate *priv = ide_context_get_instance_private (context);
+  g_return_if_fail (IDE_IS_CONTEXT (self));
 
-  g_return_if_fail (IDE_IS_CONTEXT (context));
-
-  if (project_file != priv->project_file)
+  if (project_file != self->project_file)
     {
-      g_clear_object (&priv->project_file);
-      if (project_file)
-        priv->project_file = g_object_ref (project_file);
-      g_object_notify_by_pspec (G_OBJECT (context),
-                                gParamSpecs [PROP_PROJECT_FILE]);
+      if (g_set_object (&self->project_file, project_file))
+        g_object_notify_by_pspec (G_OBJECT (self),
+                                  gParamSpecs [PROP_PROJECT_FILE]);
     }
 }
 
 static gpointer
-ide_context_create_service (IdeContext *context,
+ide_context_create_service (IdeContext *self,
                             GType       service_type)
 {
-  IdeContextPrivate *priv = ide_context_get_instance_private (context);
   IdeService *service;
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
   g_return_val_if_fail (g_type_is_a (service_type, IDE_TYPE_SERVICE), NULL);
 
   service = g_object_new (service_type,
-                          "context", context,
+                          "context", self,
                           NULL);
 
-  g_hash_table_insert (priv->services,
+  g_hash_table_insert (self->services,
                        GINT_TO_POINTER (service_type),
                        service);
 
-  if (priv->services_started)
+  if (self->services_started)
     ide_service_start (service);
 
   return service;
@@ -361,25 +337,24 @@ ide_context_create_service (IdeContext *context,
  * Returns: (transfer none) (nullable): An #IdeService or %NULL.
  */
 gpointer
-ide_context_get_service_typed (IdeContext *context,
+ide_context_get_service_typed (IdeContext *self,
                                GType       service_type)
 {
-  IdeContextPrivate *priv = ide_context_get_instance_private (context);
   IdeService *service;
   GHashTableIter iter;
   gpointer key;
   gpointer value;
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
   g_return_val_if_fail (g_type_is_a (service_type, IDE_TYPE_SERVICE), NULL);
 
-  service = g_hash_table_lookup (priv->services,
+  service = g_hash_table_lookup (self->services,
                                  GINT_TO_POINTER (service_type));
 
   if (service)
     return service;
 
-  g_hash_table_iter_init (&iter, priv->services);
+  g_hash_table_iter_init (&iter, self->services);
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
@@ -389,21 +364,20 @@ ide_context_get_service_typed (IdeContext *context,
         return item;
     }
 
-  return ide_context_create_service (context, service_type);
+  return ide_context_create_service (self, service_type);
 }
 
 static void
 ide_context_dispose (GObject *object)
 {
   IdeContext *self = (IdeContext *)object;
-  IdeContextPrivate *priv = ide_context_get_instance_private (self);
   GHashTableIter iter;
   gpointer key;
   gpointer value;
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
-  g_hash_table_iter_init (&iter, priv->services);
+  g_hash_table_iter_init (&iter, self->services);
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
@@ -422,17 +396,16 @@ static void
 ide_context_finalize (GObject *object)
 {
   IdeContext *self = (IdeContext *)object;
-  IdeContextPrivate *priv = ide_context_get_instance_private (self);
 
-  g_clear_pointer (&priv->services, g_hash_table_unref);
-  g_clear_pointer (&priv->root_build_dir, g_free);
+  g_clear_pointer (&self->services, g_hash_table_unref);
+  g_clear_pointer (&self->root_build_dir, g_free);
 
-  g_clear_object (&priv->build_system);
-  g_clear_object (&priv->device_manager);
-  g_clear_object (&priv->project);
-  g_clear_object (&priv->project_file);
-  g_clear_object (&priv->unsaved_files);
-  g_clear_object (&priv->vcs);
+  g_clear_object (&self->build_system);
+  g_clear_object (&self->device_manager);
+  g_clear_object (&self->project);
+  g_clear_object (&self->project_file);
+  g_clear_object (&self->unsaved_files);
+  g_clear_object (&self->vcs);
 
   G_OBJECT_CLASS (ide_context_parent_class)->finalize (object);
 }
@@ -582,32 +555,31 @@ ide_context_class_init (IdeContextClass *klass)
 static void
 ide_context_init (IdeContext *self)
 {
-  IdeContextPrivate *priv = ide_context_get_instance_private (self);
   g_autoptr(gchar) scriptsdir = NULL;
 
-  priv->root_build_dir = g_build_filename (g_get_user_cache_dir (),
+  self->root_build_dir = g_build_filename (g_get_user_cache_dir (),
                                            ide_get_program_name (),
                                            "builds",
                                            NULL);
 
-  priv->back_forward_list = g_object_new (IDE_TYPE_BACK_FORWARD_LIST,
+  self->back_forward_list = g_object_new (IDE_TYPE_BACK_FORWARD_LIST,
                                           "context", self,
                                           NULL);
 
-  priv->device_manager = g_object_new (IDE_TYPE_DEVICE_MANAGER,
+  self->device_manager = g_object_new (IDE_TYPE_DEVICE_MANAGER,
                                        "context", self,
                                        NULL);
 
-  priv->project = g_object_new (IDE_TYPE_PROJECT,
+  self->project = g_object_new (IDE_TYPE_PROJECT,
                                 "context", self,
                                 NULL);
 
-  priv->services = g_hash_table_new_full (g_direct_hash,
+  self->services = g_hash_table_new_full (g_direct_hash,
                                           g_direct_equal,
                                           NULL,
                                           g_object_unref);
 
-  priv->unsaved_files = g_object_new (IDE_TYPE_UNSAVED_FILES,
+  self->unsaved_files = g_object_new (IDE_TYPE_UNSAVED_FILES,
                                       "context", self,
                                       NULL);
 
@@ -615,7 +587,7 @@ ide_context_init (IdeContext *self)
                                  ide_get_program_name (),
                                  "scripts",
                                  NULL);
-  priv->script_manager = g_object_new (IDE_TYPE_SCRIPT_MANAGER,
+  self->script_manager = g_object_new (IDE_TYPE_SCRIPT_MANAGER,
                                        "context", self,
                                        "scripts-directory", scriptsdir,
                                        NULL);
@@ -626,8 +598,7 @@ ide_context_init_project_name_cb (GObject      *object,
                                   GAsyncResult *result,
                                   gpointer      user_data)
 {
-  IdeContextPrivate *priv;
-  IdeContext *context;
+  IdeContext *self;
   g_autoptr(gchar) name = NULL;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GFileInfo) file_info = NULL;
@@ -636,8 +607,7 @@ ide_context_init_project_name_cb (GObject      *object,
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (G_IS_TASK (task));
 
-  context = g_task_get_source_object (task);
-  priv = ide_context_get_instance_private (context);
+  self = g_task_get_source_object (task);
 
   file_info = g_file_query_info_finish (file, result, NULL);
 
@@ -647,7 +617,7 @@ ide_context_init_project_name_cb (GObject      *object,
       g_autoptr(gchar) name;
 
       name = g_file_get_basename (file);
-      _ide_project_set_name (priv->project, name);
+      _ide_project_set_name (self->project, name);
     }
   else
     {
@@ -657,7 +627,7 @@ ide_context_init_project_name_cb (GObject      *object,
       parent = g_file_get_parent (file);
       name = g_file_get_basename (parent);
 
-      _ide_project_set_name (priv->project, name);
+      _ide_project_set_name (self->project, name);
     }
 
   g_task_return_boolean (task, TRUE);
@@ -669,16 +639,15 @@ ide_context_init_project_name (gpointer             source_object,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
 {
-  IdeContext *context = source_object;
-  IdeContextPrivate *priv = ide_context_get_instance_private (context);
+  IdeContext *self = source_object;
   g_autoptr(GTask) task = NULL;
 
-  g_return_if_fail (IDE_IS_CONTEXT (context));
+  g_return_if_fail (IDE_IS_CONTEXT (self));
 
   task = g_task_new (source_object, cancellable, callback, user_data);
 
-  if (!ide_project_get_name (priv->project))
-    g_file_query_info_async (priv->project_file,
+  if (!ide_project_get_name (self->project))
+    g_file_query_info_async (self->project_file,
                              G_FILE_ATTRIBUTE_STANDARD_TYPE,
                              G_FILE_QUERY_INFO_NONE,
                              G_PRIORITY_DEFAULT,
@@ -694,7 +663,6 @@ ide_context_init_vcs_cb (GObject      *object,
                          GAsyncResult *result,
                          gpointer      user_data)
 {
-  IdeContextPrivate *priv;
   IdeContext *self;
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeVcs) vcs = NULL;
@@ -704,7 +672,6 @@ ide_context_init_vcs_cb (GObject      *object,
   g_return_if_fail (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
-  priv = ide_context_get_instance_private (self);
 
   if (!(vcs = ide_vcs_new_finish (result, &error)))
     {
@@ -712,7 +679,7 @@ ide_context_init_vcs_cb (GObject      *object,
       return;
     }
 
-  priv->vcs = g_object_ref (vcs);
+  self->vcs = g_object_ref (vcs);
 
   g_task_return_boolean (task, TRUE);
 }
@@ -744,12 +711,10 @@ ide_context_init_build_system_cb (GObject      *object,
 {
   g_autoptr(IdeBuildSystem) build_system = NULL;
   g_autoptr(GTask) task = user_data;
-  IdeContextPrivate *priv;
   IdeContext *self;
   GError *error = NULL;
 
   self = g_task_get_source_object (task);
-  priv = ide_context_get_instance_private (self);
 
   if (!(build_system = ide_build_system_new_finish (result, &error)))
     {
@@ -757,7 +722,7 @@ ide_context_init_build_system_cb (GObject      *object,
       return;
     }
 
-  priv->build_system = g_object_ref (build_system);
+  self->build_system = g_object_ref (build_system);
 
   g_task_return_boolean (task, TRUE);
 }
@@ -769,14 +734,13 @@ ide_context_init_build_system (gpointer             source_object,
                                gpointer             user_data)
 {
   IdeContext *self = source_object;
-  IdeContextPrivate *priv = ide_context_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
   task = g_task_new (self, cancellable, callback, user_data);
   ide_build_system_new_async (self,
-                              priv->project_file,
+                              self->project_file,
                               cancellable,
                               ide_context_init_build_system_cb,
                               g_object_ref (task));
@@ -809,13 +773,12 @@ ide_context_init_unsaved_files (gpointer             source_object,
                                 gpointer             user_data)
 {
   IdeContext *self = source_object;
-  IdeContextPrivate *priv = ide_context_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  ide_unsaved_files_restore_async (priv->unsaved_files,
+  ide_unsaved_files_restore_async (self->unsaved_files,
                                    cancellable,
                                    ide_context_init_unsaved_files_cb,
                                    g_object_ref (task));
@@ -849,14 +812,13 @@ ide_context_init_scripts (gpointer             source_object,
                           gpointer             user_data)
 {
   IdeContext *self = source_object;
-  IdeContextPrivate *priv = ide_context_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  ide_script_manager_load_async (priv->script_manager,
+  ide_script_manager_load_async (self->script_manager,
                                  cancellable,
                                  ide_context_init_scripts_cb,
                                  g_object_ref (task));
@@ -869,7 +831,6 @@ ide_context_init_back_forward_list (gpointer             source_object,
                                     gpointer             user_data)
 {
   IdeContext *self = source_object;
-  IdeContextPrivate *priv = ide_context_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
@@ -886,7 +847,6 @@ ide_context_init_services (gpointer             source_object,
 {
   GIOExtensionPoint *point;
   IdeContext *self = source_object;
-  IdeContextPrivate *priv = ide_context_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
   const GList *extensions;
   const GList *iter;
@@ -926,9 +886,9 @@ ide_context_init_services (gpointer             source_object,
       g_debug (_("Service of type \"%s\" registered."), g_type_name (type_id));
     }
 
-  priv->services_started = TRUE;
+  self->services_started = TRUE;
 
-  g_hash_table_iter_init (&hiter, priv->services);
+  g_hash_table_iter_init (&hiter, self->services);
 
   while (g_hash_table_iter_next (&hiter, NULL, &v))
     {
