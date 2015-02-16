@@ -54,6 +54,10 @@ void           _ide_diagnostic_take_range (IdeDiagnostic         *self,
 void           _ide_diagnostic_add_range  (IdeDiagnostic         *self,
                                            IdeSourceRange        *range);
 
+void _ide_search_context_add_provider (IdeSearchContext  *context,
+                                       IdeSearchProvider *provider,
+                                       gsize              max_results);
+
 IdeSourceRange *_ide_source_range_new (IdeSourceLocation *begin,
                                        IdeSourceLocation *end);
 

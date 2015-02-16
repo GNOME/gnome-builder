@@ -18,67 +18,106 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-internal.h"
+#include "ide-search-context.h"
 #include "ide-search-engine.h"
 #include "ide-search-provider.h"
 #include "ide-search-result.h"
 
-typedef struct
+struct _IdeSearchEngine
 {
-  GPtrArray *providers;
-} IdeSearchEnginePrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE (IdeSearchEngine, ide_search_engine, IDE_TYPE_OBJECT)
-
-enum {
-  PROP_0,
-  LAST_PROP
+  IdeObject  parent_instance;
+  GList     *providers;
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+G_DEFINE_TYPE (IdeSearchEngine, ide_search_engine, IDE_TYPE_OBJECT)
 
-IdeSearchEngine *
-ide_search_engine_new (void)
+enum {
+  PROVIDER_ADDED,
+  LAST_SIGNAL
+};
+
+static guint gSignals [LAST_SIGNAL];
+
+/**
+ * ide_search_engine_search:
+ * @providers: (allow-none) (element-type IdeSearchProvider*): Optional list
+ *   of specific providers to use when searching.
+ * @search_terms: The search terms.
+ *
+ * Begins a query against the requested search providers.
+ *
+ * If @providers is %NULL, all registered providers will be used.
+ *
+ * Returns: (transfer full) (nullable): An #IdeSearchContext or %NULL if no
+ *   providers could be loaded.
+ */
+IdeSearchContext *
+ide_search_engine_search (IdeSearchEngine *self,
+                          const GList     *providers,
+                          const gchar     *search_terms)
 {
-  return g_object_new (IDE_TYPE_SEARCH_ENGINE, NULL);
+  IdeSearchContext *context;
+  const GList *iter;
+
+  g_return_val_if_fail (IDE_IS_SEARCH_ENGINE (self), NULL);
+  g_return_val_if_fail (search_terms, NULL);
+
+  if (!providers)
+    providers = self->providers;
+
+  if (!providers)
+    return NULL;
+
+  context = g_object_new (IDE_TYPE_SEARCH_CONTEXT,
+                          "context", context,
+                          NULL);
+
+  for (iter = providers; iter; iter = iter->next)
+    _ide_search_context_add_provider (context, iter->data, 0);
+
+  return context;
+}
+
+/**
+ * ide_search_engine_get_providers:
+ *
+ * Returns the list of registered search providers.
+ *
+ * Returns: (transfer none) (element-type IdeSearchProvider*): A #GList of
+ *   #IdeSearchProvider.
+ */
+GList *
+ide_search_engine_get_providers (IdeSearchEngine *self)
+{
+  g_return_val_if_fail (IDE_IS_SEARCH_ENGINE (self), NULL);
+
+  return self->providers;
+}
+
+void
+ide_search_engine_add_provider (IdeSearchEngine   *self,
+                                IdeSearchProvider *provider)
+{
+  g_return_if_fail (IDE_IS_SEARCH_ENGINE (self));
+  g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
+
+  self->providers = g_list_append (self->providers, g_object_ref (provider));
+  g_signal_emit (self, gSignals [PROVIDER_ADDED], 0, provider);
 }
 
 static void
-ide_search_engine_finalize (GObject *object)
+ide_search_engine_dispose (GObject *object)
 {
   IdeSearchEngine *self = (IdeSearchEngine *)object;
-  IdeSearchEnginePrivate *priv = ide_search_engine_get_instance_private (self);
+  GList *copy;
 
-  G_OBJECT_CLASS (ide_search_engine_parent_class)->finalize (object);
-}
+  copy = self->providers;
+  self->providers = NULL;
+  g_list_foreach (copy, (GFunc)g_object_unref, NULL);
+  g_list_free (copy);
 
-static void
-ide_search_engine_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
-{
-  IdeSearchEngine *self = IDE_SEARCH_ENGINE (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_search_engine_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
-{
-  IdeSearchEngine *self = IDE_SEARCH_ENGINE (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
+  G_OBJECT_CLASS (ide_search_engine_parent_class)->dispose (object);
 }
 
 static void
@@ -86,9 +125,19 @@ ide_search_engine_class_init (IdeSearchEngineClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_search_engine_finalize;
-  object_class->get_property = ide_search_engine_get_property;
-  object_class->set_property = ide_search_engine_set_property;
+  object_class->dispose = ide_search_engine_dispose;
+
+  gSignals [PROVIDER_ADDED] =
+    g_signal_new ("provider-added",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_SEARCH_PROVIDER);
 }
 
 static void

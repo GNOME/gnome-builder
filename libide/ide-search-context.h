@@ -27,10 +27,19 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeSearchContext, ide_search_context, IDE, SEARCH_CONTEXT, IdeObject)
 
-struct _IdeSearchContext
-{
-  IdeObject parent_instance;
-};
+const GList *ide_search_context_get_providers      (IdeSearchContext  *self);
+void         ide_search_context_add_result         (IdeSearchContext  *self,
+                                                    IdeSearchProvider *provider,
+                                                    IdeSearchResult   *result);
+void         ide_search_context_remove_result      (IdeSearchContext  *self,
+                                                    IdeSearchProvider *provider,
+                                                    IdeSearchResult   *result);
+void         ide_search_context_cancel             (IdeSearchContext  *self);
+void         ide_search_context_execute            (IdeSearchContext  *self,
+                                                    const gchar       *search_terms);
+void         ide_search_context_set_provider_count (IdeSearchContext  *self,
+                                                    IdeSearchProvider *provider,
+                                                    guint64            count);
 
 G_END_DECLS
 

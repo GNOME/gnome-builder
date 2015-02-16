@@ -25,12 +25,31 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_PROVIDER (ide_search_provider_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeSearchProvider, ide_search_provider, IDE, SEARCH_PROVIDER, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeSearchProvider, ide_search_provider,
+                          IDE, SEARCH_PROVIDER, IdeObject)
 
 struct _IdeSearchProviderClass
 {
   IdeObjectClass parent_class;
+
+  gunichar     (*get_prefix)   (IdeSearchProvider *provider);
+  gint         (*get_priority) (IdeSearchProvider *provider);
+  const gchar *(*get_verb)     (IdeSearchProvider *provider);
+  void         (*populate)     (IdeSearchProvider *provider,
+                                IdeSearchContext  *context,
+                                const gchar       *search_terms,
+                                gsize              max_results,
+                                GCancellable      *cancellable);
 };
+
+gunichar     ide_search_provider_get_prefix   (IdeSearchProvider *provider);
+gint         ide_search_provider_get_priority (IdeSearchProvider *provider);
+const gchar *ide_search_provider_get_verb     (IdeSearchProvider *provider);
+void         ide_search_provider_populate     (IdeSearchProvider *provider,
+                                               IdeSearchContext  *context,
+                                               const gchar       *search_terms,
+                                               gsize              max_results,
+                                               GCancellable      *cancellable);
 
 G_END_DECLS
 

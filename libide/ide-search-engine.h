@@ -27,10 +27,12 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeSearchEngine, ide_search_engine, IDE, SEARCH_ENGINE, IdeObject)
 
-struct _IdeSearchEngine
-{
-  IdeObject parent_instance;
-};
+GList            *ide_search_engine_get_providers (IdeSearchEngine   *self);
+void              ide_search_engine_add_provider  (IdeSearchEngine   *self,
+                                                   IdeSearchProvider *provider);
+IdeSearchContext *ide_search_engine_search        (IdeSearchEngine   *self,
+                                                   const GList       *providers,
+                                                   const gchar       *search_terms);
 
 G_END_DECLS
 
