@@ -25,8 +25,6 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"],
                    [GETTEXT package name])
 AM_GLIB_GNU_GETTEXT
 
-AC_PROG_CXX
-
 # Initlize libtool and things that go with it.
 m4_include([build/autotools/autoconf.d/pre-lt.m4])
 m4_include([build/autotools/autoconf.d/setup_libtool.m4])
@@ -39,6 +37,19 @@ m4_include([build/autotools/autoconf.d/pre-am.m4])
 AM_INIT_AUTOMAKE([foreign subdir-objects tar-ustar no-dist-gzip dist-xz])
 AM_MAINTAINER_MODE([enable])
 m4_include([build/autotools/autoconf.d/post-am.m4])
+
+AC_PROG_CC
+AM_PROG_CC_C_O
+AC_PROG_CXX
+AC_ISC_POSIX
+AC_HEADER_STDC
+
+AM_PROG_LIBTOOL
+
+AC_C_CONST
+
+GNOME_CXX_WARNINGS([maximum])
+GNOME_MAINTAINER_MODE_DEFINES
 
 # If we are using gtk-doc, enable it.
 # We would put this in a file but gtkdocize requires it.

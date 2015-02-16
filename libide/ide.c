@@ -32,6 +32,7 @@
 #include "ide-gca-service.h"
 #include "ide-git-vcs.h"
 #include "ide-gsettings-file-settings.h"
+#include "ide-gjs-script.h"
 
 static gboolean     gProgramNameRead;
 static const gchar *gProgramName = "libide";
@@ -91,6 +92,11 @@ ide_init_ctor (void)
   g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
                                   IDE_TYPE_C_LANGUAGE,
                                   IDE_LANGUAGE_EXTENSION_POINT".c",
+                                  -100);
+
+  g_io_extension_point_implement (IDE_SCRIPT_EXTENSION_POINT,
+                                  IDE_TYPE_GJS_SCRIPT,
+                                  IDE_SCRIPT_EXTENSION_POINT".gjs",
                                   -100);
 
   g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
