@@ -1,7 +1,6 @@
 # Czech translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-#
 # Marek Černocký <marek@manet.cz>, 2015.
 #
 msgid ""
@@ -9,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-04 17:16+0000\n"
-"PO-Revision-Date: 2015-02-04 18:04+0100\n"
+"POT-Creation-Date: 2015-02-13 23:45+0000\n"
+"PO-Revision-Date: 2015-02-16 22:47+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -87,11 +86,11 @@ msgstr "Selhalo načtení klávesových zkratek: %s"
 msgid "Failed to load local keybindings: %s"
 msgstr "Selhalo načtení místních klávesových zkratek: %s"
 
-#: ../src/app/gb-application.c:384 ../src/main.c:48
+#: ../src/app/gb-application.c:415 ../src/main.c:48
 msgid "Builder"
 msgstr "Builder"
 
-#: ../src/app/gb-application.c:539
+#: ../src/app/gb-application.c:570
 #, c-format
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
@@ -479,13 +478,13 @@ msgstr "Jen ke čtení"
 msgid "If the document is read only."
 msgstr "Zda je dokument jen ke čtení."
 
-#: ../src/documents/gb-document-grid.c:840
+#: ../src/documents/gb-document-grid.c:918
 #: ../src/documents/gb-document-menu-button.c:667
 #: ../src/documents/gb-document-stack.c:881
 msgid "Document Manager"
 msgstr "Správce dokumentů"
 
-#: ../src/documents/gb-document-grid.c:841
+#: ../src/documents/gb-document-grid.c:919
 msgid "The document manager for the document grid."
 msgstr "Správce dokumentů pro mřížku dokumentů."
 
@@ -831,61 +830,61 @@ msgstr "Kontext hledání"
 msgid "Search Settings"
 msgstr "Nastavení hledání"
 
-#: ../src/editor/gb-source-view.c:2215 ../src/editor/gb-source-view.c:2216
+#: ../src/editor/gb-source-view.c:2229 ../src/editor/gb-source-view.c:2230
 msgid "Enable Word Completion"
 msgstr "Zapnout dokončování slov"
 
-#: ../src/editor/gb-source-view.c:2224
+#: ../src/editor/gb-source-view.c:2238
 msgid "Font Name"
 msgstr "Název písma"
 
-#: ../src/editor/gb-source-view.c:2225
+#: ../src/editor/gb-source-view.c:2239
 msgid "The font name to apply to the widget."
 msgstr "Název písma, které se má použít u widgetu."
 
-#: ../src/editor/gb-source-view.c:2233
+#: ../src/editor/gb-source-view.c:2247
 msgid "Insert Matching Brace"
 msgstr "Vkládat odpovídající závorky"
 
-#: ../src/editor/gb-source-view.c:2234
+#: ../src/editor/gb-source-view.c:2248
 msgid "If we should insert matching braces."
 msgstr "Zda by se měly vkládat odpovídající závorky."
 
-#: ../src/editor/gb-source-view.c:2242
+#: ../src/editor/gb-source-view.c:2256
 msgid "Overwrite Braces"
 msgstr "Přepisovat závorky"
 
-#: ../src/editor/gb-source-view.c:2243
+#: ../src/editor/gb-source-view.c:2257
 msgid "If we should overwrite braces, brackets, parenthesis and quotes."
 msgstr ""
 "Zda by se měly přepisovat složené závorky, hranaté závorky, kulaté závorky a "
 "uvozovky."
 
-#: ../src/editor/gb-source-view.c:2252
+#: ../src/editor/gb-source-view.c:2266
 msgid "Show Shadow"
 msgstr "Zobrazovat stín"
 
-#: ../src/editor/gb-source-view.c:2253
+#: ../src/editor/gb-source-view.c:2267
 msgid "Show the search shadow"
 msgstr "Zobrazovat stín u hledání."
 
-#: ../src/editor/gb-source-view.c:2261 ../src/editor/gb-source-view.c:2262
+#: ../src/editor/gb-source-view.c:2275 ../src/editor/gb-source-view.c:2276
 msgid "Search Highlighter"
 msgstr "Zvýrazňování při hledání"
 
-#: ../src/editor/gb-source-view.c:2270
+#: ../src/editor/gb-source-view.c:2284
 msgid "Smart Home End"
 msgstr "Chytrý Home a End"
 
-#: ../src/editor/gb-source-view.c:2271
+#: ../src/editor/gb-source-view.c:2285
 msgid "Enable smart home end in gtksourceview."
 msgstr "Zapnout chytrý Home a End v GtkSourceView."
 
-#: ../src/editor/gb-source-view.c:2279
+#: ../src/editor/gb-source-view.c:2293
 msgid "Show Grid Lines"
 msgstr "Zobrazovat čáry mřížky"
 
-#: ../src/editor/gb-source-view.c:2280
+#: ../src/editor/gb-source-view.c:2294
 msgid "Whether to show the grid lines."
 msgstr "Zda se mají zobrazovat čáry mřížky."
 
@@ -1031,41 +1030,45 @@ msgstr "Název stránky v předvolbách."
 msgid "restore insert cursor mark"
 msgstr "obnovit vložit umístit kurzor značka"
 
-#: ../src/preferences/gb-preferences-page-editor.c:191
+#: ../src/preferences/gb-preferences-page-editor.c:192
 msgid "word words auto completion suggest found document"
 msgstr "slovo slova automatické dokončování návrh nalezené dokument"
 
-#: ../src/preferences/gb-preferences-page-editor.c:196
+#: ../src/preferences/gb-preferences-page-editor.c:198
 msgid "diff renderer gutter changes git vcs"
 msgstr "rozdíl diff vykreslení pruh změny git vcs"
 
-#: ../src/preferences/gb-preferences-page-editor.c:201
+#: ../src/preferences/gb-preferences-page-editor.c:204
 msgid "line numbers"
 msgstr "čísla číslování řádků řádek řádky"
 
-#: ../src/preferences/gb-preferences-page-editor.c:206
+#: ../src/preferences/gb-preferences-page-editor.c:210
 msgid "line lines highlight current"
 msgstr "řádek řádky řádků zvýrazňování aktuální současný"
 
-#: ../src/preferences/gb-preferences-page-editor.c:211
+#: ../src/preferences/gb-preferences-page-editor.c:216
 msgid "bracket brackets highlight matching"
 msgstr "závorka závorky zvýrazňování odpovídající párová"
 
-#: ../src/preferences/gb-preferences-page-editor.c:216
+#: ../src/preferences/gb-preferences-page-editor.c:222
 msgid "smart home end"
 msgstr "chytrý klávesa home end"
 
-#: ../src/preferences/gb-preferences-page-editor.c:221
+#: ../src/preferences/gb-preferences-page-editor.c:228
 msgid "show grid lines"
 msgstr "zobrazovat čáry mřížky mřížka"
 
-#: ../src/preferences/gb-preferences-page-editor.c:226
+#: ../src/preferences/gb-preferences-page-editor.c:234
 msgid "font document editor monospace"
 msgstr "písmo font dokument editor monospace pevná šířka"
 
-#: ../src/preferences/gb-preferences-page-editor.c:230
+#: ../src/preferences/gb-preferences-page-editor.c:239
 msgid "source style scheme source tango solarized builder"
 msgstr "zdrojový kód styl schéma tango solarized osluněná builder"
+
+#: ../src/preferences/gb-preferences-page-emacs.c:90
+msgid "emacs modal"
+msgstr "modální emacs"
 
 #: ../src/preferences/gb-preferences-page-git.c:131
 msgid "git author name surname"
@@ -1311,8 +1314,8 @@ msgid "Search Documents"
 msgstr "hledat dokumenty…"
 
 #: ../src/resources/ui/gb-document-menu-button.ui.h:2
-msgid "No document were found"
-msgstr "Nebyl nalezen žádný dokument"
+msgid "No documents were found"
+msgstr "Nebyly nalezeny žádné dokumenty"
 
 #: ../src/resources/ui/gb-editor-frame.ui.h:1
 msgid "Line 1, Column 1"
@@ -1342,8 +1345,9 @@ msgstr ""
 "uvozovky"
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:5
-msgid "<b>Indentation</b>"
-msgstr "<b>Odsazení</b>"
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
+msgid "Indentation"
+msgstr "Odsazení"
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:6
 msgid "_Tab width:"
@@ -1376,10 +1380,6 @@ msgstr "Zvýrazňovat aktuální řádek"
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:5
 msgid "Auto indent"
 msgstr "Automatické odsazování"
-
-#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
-msgid "Indentation"
-msgstr "Odsazení"
 
 #: ../src/resources/ui/gb-editor-tweak-widget.ui.h:7
 msgid "Spaces"
@@ -1477,6 +1477,15 @@ msgstr "<b>Zobrazovat čáry mřížky</b>"
 msgid "Display a grid patten in the document."
 msgstr "Zobrazovat vzor mřížky v dokumentu."
 
+#: ../src/resources/ui/gb-preferences-page-emacs.ui.h:1
+msgid "<b>EMACS Modal Editing</b>"
+msgstr "<b>Modální úpravy EMACS</b>"
+
+#: ../src/resources/ui/gb-preferences-page-emacs.ui.h:2
+msgid "Use EMACS style modal editing in the source code editor."
+msgstr ""
+"V editoru zdrojového kódu používat úpravy v modálním stylu podle EMACS."
+
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:1
 msgid "Author Name"
 msgstr "Jméno autora"
@@ -1526,6 +1535,10 @@ msgstr "Nastavení jazyka"
 #: ../src/resources/ui/gb-preferences-window.ui.h:6
 msgid "Vim"
 msgstr "Vim"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:7
+msgid "Emacs"
+msgstr "Emacs"
 
 #: ../src/resources/ui/gb-workbench.ui.h:1
 msgid "Go back in history"
