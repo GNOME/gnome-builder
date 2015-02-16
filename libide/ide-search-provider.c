@@ -66,10 +66,10 @@ ide_search_provider_get_prefix (IdeSearchProvider *provider)
 
 void
 ide_search_provider_populate (IdeSearchProvider *provider,
-                             IdeSearchContext  *context,
-                             const gchar      *search_terms,
-                             gsize             max_results,
-                             GCancellable     *cancellable)
+                              IdeSearchContext  *context,
+                              const gchar       *search_terms,
+                              gsize              max_results,
+                              GCancellable      *cancellable)
 {
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (context));
@@ -79,10 +79,10 @@ ide_search_provider_populate (IdeSearchProvider *provider,
   if (IDE_SEARCH_PROVIDER_GET_CLASS (provider)->populate)
     {
       IDE_SEARCH_PROVIDER_GET_CLASS (provider)->populate (provider,
-                                                         context,
-                                                         search_terms,
-                                                         max_results,
-                                                         cancellable);
+                                                          context,
+                                                          search_terms,
+                                                          max_results,
+                                                          cancellable);
       return;
     }
 
