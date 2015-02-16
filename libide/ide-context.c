@@ -67,6 +67,8 @@ enum {
   PROP_DEVICE_MANAGER,
   PROP_PROJECT_FILE,
   PROP_ROOT_BUILD_DIR,
+  PROP_SCRIPT_MANAGER,
+  PROP_SEARCH_ENGINE,
   PROP_VCS,
   PROP_UNSAVED_FILES,
   LAST_PROP
@@ -473,6 +475,14 @@ ide_context_get_property (GObject    *object,
       g_value_set_string (value, ide_context_get_root_build_dir (self));
       break;
 
+    case PROP_SCRIPT_MANAGER:
+      g_value_set_object (value, ide_context_get_script_manager (self));
+      break;
+
+    case PROP_SEARCH_ENGINE:
+      g_value_set_object (value, ide_context_get_search_engine (self));
+      break;
+
     case PROP_UNSAVED_FILES:
       g_value_set_object (value, ide_context_get_unsaved_files (self));
       break;
@@ -565,6 +575,24 @@ ide_context_class_init (IdeContextClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_ROOT_BUILD_DIR,
                                    gParamSpecs [PROP_ROOT_BUILD_DIR]);
+
+  gParamSpecs [PROP_SCRIPT_MANAGER] =
+    g_param_spec_object ("script-manager",
+                         _("Script Manager"),
+                         _("The script manager for the context."),
+                         IDE_TYPE_SCRIPT_MANAGER,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SCRIPT_MANAGER,
+                                   gParamSpecs [PROP_SCRIPT_MANAGER]);
+
+  gParamSpecs [PROP_SEARCH_ENGINE] =
+    g_param_spec_object ("search-engine",
+                         _("Search Engine"),
+                         _("The search engine for the context."),
+                         IDE_TYPE_SEARCH_ENGINE,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SEARCH_ENGINE,
+                                   gParamSpecs [PROP_SEARCH_ENGINE]);
 
   gParamSpecs [PROP_UNSAVED_FILES] =
     g_param_spec_object ("unsaved-files",
