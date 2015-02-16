@@ -205,6 +205,15 @@ ide_gjs_script_init_async (GAsyncInitable      *initable,
       return;
     }
 
+  if (!g_str_has_suffix (path, ".js"))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               _("The script is not a javascript file."));
+      return;
+    }
+
   ide_script_load (IDE_SCRIPT (self));
 
   g_task_return_boolean (task, TRUE);
