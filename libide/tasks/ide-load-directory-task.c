@@ -143,7 +143,6 @@ next_files_cb (GObject      *object,
       state->file_count++;
 
       name = g_file_info_get_name (file_info);
-      g_print ("name: %s\n", name);
       if (should_ignore_file (name))
         continue;
 

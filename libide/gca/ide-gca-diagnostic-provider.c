@@ -105,7 +105,6 @@ variant_to_diagnostics (DiagnoseState *state,
           /*
            * TODO: Add fixits back after we plumb them into IdeDiagnostic.
            */
-        g_print ("!!! %s\n", e);
 #if 0
           GcaFixit fixit = {{ 0 }};
 

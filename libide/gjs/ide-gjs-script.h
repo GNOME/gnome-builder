@@ -27,8 +27,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeGjsScript, ide_gjs_script, IDE, GJS_SCRIPT, IdeScript)
 
-GFile *ide_gjs_script_get_file (IdeGjsScript *self);
-
 G_END_DECLS
 
 #endif /* IDE_GJS_SCRIPT_H */

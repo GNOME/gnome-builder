@@ -130,9 +130,6 @@ ide_gsettings_file_settings_init_async (GAsyncInitable      *initable,
   g_settings_bind_with_mapping (self->settings, "insert-spaces-instead-of-tabs",
                                 self, "indent-style", G_SETTINGS_BIND_GET,
                                 indent_style_get, NULL, NULL, NULL);
-  g_settings_bind_with_mapping (self->settings, "insert-spaces-instead-of-tabs",
-                                self, "indent-style", G_SETTINGS_BIND_GET,
-                                indent_style_get, NULL, NULL, NULL);
   g_settings_bind (self->settings, "right-margin-position",
                    self, "right-margin-position",
                    G_SETTINGS_BIND_GET);
