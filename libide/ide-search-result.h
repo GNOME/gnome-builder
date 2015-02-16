@@ -30,7 +30,20 @@ G_DECLARE_DERIVABLE_TYPE (IdeSearchResult, ide_search_result, IDE, SEARCH_RESULT
 struct _IdeSearchResultClass
 {
   IdeObjectClass parent;
+
+  void (*activate) (IdeSearchResult *result);
 };
+
+IdeSearchResult *ide_search_result_new          (IdeContext            *context,
+                                                 const gchar           *title,
+                                                 const gchar           *subtitle,
+                                                 gfloat                 score);
+gfloat           ide_search_result_get_score    (IdeSearchResult       *result);
+const gchar     *ide_search_result_get_title    (IdeSearchResult       *result);
+const gchar     *ide_search_result_get_subtitle (IdeSearchResult       *result);
+gint             ide_search_result_compare      (const IdeSearchResult *a,
+                                                 const IdeSearchResult *b);
+void             ide_search_result_activate     (IdeSearchResult       *result);
 
 G_END_DECLS
 
