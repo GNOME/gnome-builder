@@ -175,6 +175,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide/gsettings \
 	-I$(top_srcdir)/libide/local \
 	-I$(top_srcdir)/libide/tasks \
+	$(CLANG_CFLAGS) \
 	$(NULL)
 
 libide_1_0_la_CPPFLAGS = \
