@@ -30,6 +30,7 @@
 #include "ide-editorconfig-file-settings.h"
 #include "ide-file-settings.h"
 #include "ide-gca-service.h"
+#include "ide-git-search-provider.h"
 #include "ide-git-vcs.h"
 #include "ide-gjs-script.h"
 #include "ide-gsettings-file-settings.h"
@@ -99,6 +100,11 @@ ide_init_ctor (void)
   g_io_extension_point_implement (IDE_SCRIPT_EXTENSION_POINT,
                                   IDE_TYPE_GJS_SCRIPT,
                                   IDE_SCRIPT_EXTENSION_POINT".gjs",
+                                  -100);
+
+  g_io_extension_point_implement (IDE_SEARCH_PROVIDER_EXTENSION_POINT,
+                                  IDE_TYPE_GIT_SEARCH_PROVIDER,
+                                  IDE_SEARCH_PROVIDER_EXTENSION_POINT".git",
                                   -100);
 
   g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,

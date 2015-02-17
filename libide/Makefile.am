@@ -30,6 +30,8 @@ libide_1_0_la_public_sources = \
 	libide/directory/ide-directory-vcs.h \
 	libide/editorconfig/ide-editorconfig-file-settings.c \
 	libide/editorconfig/ide-editorconfig-file-settings.h \
+	libide/git/ide-git-search-provider.c \
+	libide/git/ide-git-search-provider.h \
 	libide/git/ide-git-vcs.c \
 	libide/git/ide-git-vcs.h \
 	libide/gjs/ide-gjs-script.cpp \
@@ -156,6 +158,8 @@ libide_1_0_la_SOURCES = \
 	libide/gca/ide-gca-service.h \
 	libide/gca/ide-gca-service.h \
 	libide/gconstructor.h \
+	libide/git/ide-git-search-index.c \
+	libide/git/ide-git-search-index.h \
 	libide/ide-async-helper.c \
 	libide/ide-async-helper.h \
 	libide/ide-search-reducer.c \
