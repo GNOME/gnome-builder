@@ -1,9 +1,35 @@
 # Define the minimum version of Clang compiler.
+# This does not affect using clang for compiler support in Builder,
+# only if CC=clang.
 m4_define(clang_major_required_version, 3)
-m4_define(clang_minor_required_version, 3)
-
+m4_define(clang_minor_required_version, 5)
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
 #if !(defined(__clang__) && ((__clang_major__ > clang_major_required_version) || ((__clang_major__ == clang_major_required_version) && (__clang_minor__ >= clang_minor_required_version))))
 #error Not a supported Clang compiler
 #endif
 ])], [c_compiler="clang"], [])
+
+
+# Check clang deps for building clang support in LibIDE.
+AC_PATH_PROG([LLVM_CONFIG_3_5], [llvm-config-3.5])
+AS_IF([test "x$LLVM_CONFIG_3_5" = "x"],[
+  AC_PATH_PROG([LLVM_CONFIG], [llvm-config])
+],[LLVM_CONFIG=$LLVM_CONFIG_3_5])
+AS_IF([test "x$LLVM_CONFIG" = "x"],[
+    AC_MSG_ERROR([Failed to locate the llvm-config program. Please install llvm-devel.])
+])
+CLANG_INCLUDEDIR=`$LLVM_CONFIG --includedir`
+CLANG_CFLAGS="-I$CLANG_INCLUDEDIR"
+CLANG_LDFLAGS=`$LLVM_CONFIG --ldflags`
+AC_SUBST([CLANG_INCLUDEDIR])
+AC_SUBST([CLANG_CFLAGS])
+AC_SUBST([CLANG_LDFLAGS])
+
+
+# Now check for clang-c/Index.h
+CPPFLAGS_SAVE=${CPPFLAGS}
+CPPFLAGS=-I${CLANG_INCLUDEDIR}
+AC_CHECK_HEADER([clang-c/Index.h], [], [
+    AC_MSG_ERROR([Failed to locage clang-c/Index.h. Please install clang-devel.])
+])
+CPPFLAGS=${CPPFLAGS_SAVE}
