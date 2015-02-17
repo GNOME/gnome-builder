@@ -142,6 +142,8 @@ libide_1_0_la_SOURCES = \
 	$(libide_1_0_la_public_sources) \
 	libide/editorconfig/editorconfig-glib.c \
 	libide/editorconfig/editorconfig-glib.h \
+	libide/fuzzy/fuzzy.c \
+	libide/fuzzy/fuzzy.h \
 	libide/gca/gca-diagnostics.c \
 	libide/gca/gca-diagnostics.h \
 	libide/gca/gca-service.c \
@@ -156,6 +158,8 @@ libide_1_0_la_SOURCES = \
 	libide/gconstructor.h \
 	libide/ide-async-helper.c \
 	libide/ide-async-helper.h \
+	libide/ide-search-reducer.c \
+	libide/ide-search-reducer.h \
 	libide/ide-internal.h \
 	libide/tasks/ide-load-directory-task.c \
 	libide/tasks/ide-load-directory-task.h \
@@ -167,6 +171,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide/c \
 	-I$(top_srcdir)/libide/clang \
 	-I$(top_srcdir)/libide/directory \
+	-I$(top_srcdir)/libide/fuzzy \
 	-I$(top_srcdir)/libide/gca \
 	-I$(top_srcdir)/libide/editorconfig \
 	-I$(top_srcdir)/libide/editorconfig/libeditorconfig \
