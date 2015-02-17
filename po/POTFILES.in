@@ -21,7 +21,10 @@ libide/clang/ide-clang-translation-unit.c
 libide/editorconfig/ide-editorconfig-file-settings.c
 libide/gca/ide-gca-diagnostic-provider.c
 libide/gca/ide-gca-service.c
+libide/git/ide-git-search-index.c
+libide/git/ide-git-search-provider.c
 libide/git/ide-git-vcs.c
+libide/gjs/ide-gjs-script.cpp
 libide/gsettings/ide-gsettings-file-settings.c
 libide/ide-back-forward-item.c
 libide/ide-back-forward-list.c
@@ -39,6 +42,9 @@ libide/ide-object.c
 libide/ide-project-file.c
 libide/ide-project-item.c
 libide/ide-project.c
+libide/ide-script-manager.c
+libide/ide-script.c
+libide/ide-search-result.c
 libide/ide-service.c
 libide/ide.c
 libide/tasks/ide-load-directory-task.c
@@ -114,3 +120,4 @@ tools/ide-list-devices.c
 tools/ide-list-diagnostics.c
 tools/ide-list-file-settings.c
 tools/ide-list-files.c
+tools/ide-search.c
