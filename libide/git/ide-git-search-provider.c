@@ -142,18 +142,20 @@ populate_get_index_cb (GObject      *object,
   g_autoptr(IdeGitSearchIndex) index = NULL;
   GError *error = NULL;
 
+  g_assert (state);
+  g_assert (IDE_IS_SEARCH_CONTEXT (state->context));
+  g_assert (IDE_IS_SEARCH_PROVIDER (self));
+  g_assert (state->search_terms);
+
   index = ide_git_search_provider_get_index_finish (self, result, &error);
 
   if (index)
-    {
-      ide_git_search_index_populate (index,
-                                     IDE_SEARCH_PROVIDER (self),
-                                     state->context,
-                                     state->max_results,
-                                     state->search_terms);
-    }
+    ide_git_search_index_populate (index,
+                                   IDE_SEARCH_PROVIDER (self),
+                                   state->context,
+                                   state->max_results,
+                                   state->search_terms);
 
-cleanup:
   ide_search_context_provider_completed (state->context,
                                          IDE_SEARCH_PROVIDER (self));
 
