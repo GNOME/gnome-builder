@@ -5,6 +5,7 @@ m4_define([ggit_required_version], [0.0.24])
 m4_define([gjs_required_version], [1.42.0])
 
 PKG_CHECK_MODULES(BUILDER, [gtk+-3.0 >= gtk_required_version
+                            gio-2.0 >= glib_required_version
                             gtksourceview-3.0 >= gtksourceview_required_version
                             libdevhelp-3.0 >= 3.14.0
                             libgit2-glib-1.0 >= ggit_required_version])
