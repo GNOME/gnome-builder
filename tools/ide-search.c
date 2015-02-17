@@ -58,10 +58,11 @@ on_result_added_cb (IdeSearchContext  *search_context,
 }
 
 static void
-on_completed_cb (IdeSearchContext *search_context)
+on_completed_cb (IdeSearchContext *search_context,
+                 IdeContext       *context)
 {
   g_print (_("%"G_GSIZE_FORMAT" results\n"), gCount);
-  g_object_unref (search_context);
+  g_object_unref (context);
   quit (gExitCode);
 }
 
@@ -91,7 +92,8 @@ context_cb (GObject      *object,
   g_signal_connect (search_context, "result-added",
                     G_CALLBACK (on_result_added_cb), NULL);
   g_signal_connect (search_context, "completed",
-                    G_CALLBACK (on_completed_cb), NULL);
+                    G_CALLBACK (on_completed_cb),
+                    g_object_ref (context));
 
   ide_search_context_execute (search_context, gSearchTerms);
 }
