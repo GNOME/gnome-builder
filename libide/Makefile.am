@@ -138,6 +138,8 @@ libide_1_0_la_public_sources = \
 	libide/ide.h \
 	libide/local/ide-local-device.c \
 	libide/local/ide-local-device.h \
+	libide/xml/ide-xml-indenter.c \
+	libide/xml/ide-xml-indenter.h \
 	$(NULL)
 
 libide_1_0_la_SOURCES = \
