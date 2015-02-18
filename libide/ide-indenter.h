@@ -19,6 +19,8 @@
 #ifndef IDE_INDENTER_H
 #define IDE_INDENTER_H
 
+#include <gtk/gtk.h>
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -30,7 +32,25 @@ G_DECLARE_DERIVABLE_TYPE (IdeIndenter, ide_indenter, IDE, INDENTER, IdeObject)
 struct _IdeIndenterClass
 {
   IdeObjectClass parent;
+
+  gchar    *(*format)     (IdeIndenter   *self,
+                           GtkTextView   *text_view,
+                           GtkTextIter   *begin,
+                           GtkTextIter   *end,
+                           gint          *cursor_offset,
+                           GdkEventKey   *event);
+  gboolean  (*is_trigger) (IdeIndenter   *self,
+                           GdkEventKey   *event);
 };
+
+gboolean  ide_indenter_is_trigger (IdeIndenter *self,
+                                   GdkEventKey *event);
+gchar    *ide_indenter_format     (IdeIndenter *self,
+                                   GtkTextView *text_view,
+                                   GtkTextIter *begin,
+                                   GtkTextIter *end,
+                                   gint        *cursor_offset,
+                                   GdkEventKey *event);
 
 G_END_DECLS
 
