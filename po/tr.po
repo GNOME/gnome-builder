@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-05 21:29+0000\n"
-"PO-Revision-Date: 2015-02-08 21:04+0200\n"
+"POT-Creation-Date: 2015-02-13 23:45+0000\n"
+"PO-Revision-Date: 2015-02-18 20:07+0200\n"
 "Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -86,11 +86,11 @@ msgstr "Tuş kısayolları yüklenemedi: %s"
 msgid "Failed to load local keybindings: %s"
 msgstr "Yerel tuş kısayolları yüklenemedi: %s"
 
-#: ../src/app/gb-application.c:384 ../src/main.c:48
+#: ../src/app/gb-application.c:415 ../src/main.c:48
 msgid "Builder"
 msgstr "Builder"
 
-#: ../src/app/gb-application.c:539
+#: ../src/app/gb-application.c:570
 #, c-format
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
@@ -208,11 +208,11 @@ msgstr ""
 #: ../src/commands/gb-command-result.c:224
 #: ../src/commands/gb-command-vim.c:189
 msgid "Command Text"
-msgstr ""
+msgstr "Komut Metni"
 
 #: ../src/commands/gb-command-result.c:225
 msgid "The command text if any."
-msgstr ""
+msgstr "Eğer varsa, komut metni."
 
 #: ../src/commands/gb-command-result.c:234
 msgid "Is Error"
@@ -232,15 +232,15 @@ msgstr ""
 
 #: ../src/commands/gb-command-result.c:254
 msgid "Result Text"
-msgstr ""
+msgstr "Sonuç Metni"
 
 #: ../src/commands/gb-command-result.c:255
 msgid "The result text if any."
-msgstr ""
+msgstr "Eğer varsa, sonuç metni."
 
 #: ../src/commands/gb-command-vim.c:190
 msgid "The command text to execute"
-msgstr ""
+msgstr "Yürütülecek komut metni"
 
 #: ../src/commands/gb-command-vim.c:199
 #: ../src/snippets/gb-source-snippet-completion-provider.c:168
@@ -249,11 +249,11 @@ msgstr "Kaynak Görünümü"
 
 #: ../src/commands/gb-command-vim.c:200
 msgid "The source view to modify."
-msgstr ""
+msgstr "Değişiklik yapılacak kaynak görünümü."
 
 #: ../src/credits/gb-credits-widget.c:276
 msgid "The duration of the animation in millseconds."
-msgstr ""
+msgstr "Saniye cinsinden canlandırma süresi."
 
 #: ../src/credits/gb-credits-widget.c:286
 #: ../src/credits/gb-credits-widget.c:287
@@ -264,12 +264,12 @@ msgstr "İlerleme"
 #: ../src/credits/gb-credits-widget.c:312
 #, c-format
 msgid "GNOME Builder - %s"
-msgstr ""
+msgstr "GNOME Builder - %s"
 
 #: ../src/devhelp/gb-devhelp-document.c:71
 #, c-format
 msgid "Documentation (%s)"
-msgstr ""
+msgstr "Belgelendirme (%s)"
 
 #: ../src/devhelp/gb-devhelp-document.c:151
 msgid "Documentation"
@@ -443,13 +443,13 @@ msgstr "Salt Okunur"
 msgid "If the document is read only."
 msgstr "Belge salt okunur mu."
 
-#: ../src/documents/gb-document-grid.c:840
+#: ../src/documents/gb-document-grid.c:918
 #: ../src/documents/gb-document-menu-button.c:667
 #: ../src/documents/gb-document-stack.c:881
 msgid "Document Manager"
 msgstr "Belge Yöneticisi"
 
-#: ../src/documents/gb-document-grid.c:841
+#: ../src/documents/gb-document-grid.c:919
 msgid "The document manager for the document grid."
 msgstr ""
 
@@ -795,59 +795,59 @@ msgstr "Arama Bağlamı"
 msgid "Search Settings"
 msgstr "Arama Ayarları"
 
-#: ../src/editor/gb-source-view.c:2215 ../src/editor/gb-source-view.c:2216
+#: ../src/editor/gb-source-view.c:2229 ../src/editor/gb-source-view.c:2230
 msgid "Enable Word Completion"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2224
+#: ../src/editor/gb-source-view.c:2238
 msgid "Font Name"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2225
+#: ../src/editor/gb-source-view.c:2239
 msgid "The font name to apply to the widget."
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2233
+#: ../src/editor/gb-source-view.c:2247
 msgid "Insert Matching Brace"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2234
+#: ../src/editor/gb-source-view.c:2248
 msgid "If we should insert matching braces."
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2242
+#: ../src/editor/gb-source-view.c:2256
 msgid "Overwrite Braces"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2243
+#: ../src/editor/gb-source-view.c:2257
 msgid "If we should overwrite braces, brackets, parenthesis and quotes."
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2252
+#: ../src/editor/gb-source-view.c:2266
 msgid "Show Shadow"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2253
+#: ../src/editor/gb-source-view.c:2267
 msgid "Show the search shadow"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2261 ../src/editor/gb-source-view.c:2262
+#: ../src/editor/gb-source-view.c:2275 ../src/editor/gb-source-view.c:2276
 msgid "Search Highlighter"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2270
+#: ../src/editor/gb-source-view.c:2284
 msgid "Smart Home End"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2271
+#: ../src/editor/gb-source-view.c:2285
 msgid "Enable smart home end in gtksourceview."
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2279
+#: ../src/editor/gb-source-view.c:2293
 msgid "Show Grid Lines"
 msgstr ""
 
-#: ../src/editor/gb-source-view.c:2280
+#: ../src/editor/gb-source-view.c:2294
 msgid "Whether to show the grid lines."
 msgstr ""
 
@@ -975,11 +975,11 @@ msgstr ""
 
 #: ../src/navigation/gb-navigation-list.c:289
 msgid "Current Item"
-msgstr ""
+msgstr "Geçerli Öge"
 
 #: ../src/navigation/gb-navigation-list.c:290
 msgid "The current item in the navigation list."
-msgstr ""
+msgstr "Gezinme listesindeki geçerli öge."
 
 #: ../src/navigation/gb-navigation-list.c:300
 msgid "The workbench the navigation list is for."
@@ -993,40 +993,44 @@ msgstr ""
 msgid "restore insert cursor mark"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:191
+#: ../src/preferences/gb-preferences-page-editor.c:192
 msgid "word words auto completion suggest found document"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:196
+#: ../src/preferences/gb-preferences-page-editor.c:198
 msgid "diff renderer gutter changes git vcs"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:201
+#: ../src/preferences/gb-preferences-page-editor.c:204
 msgid "line numbers"
 msgstr "satır numaraları"
 
-#: ../src/preferences/gb-preferences-page-editor.c:206
+#: ../src/preferences/gb-preferences-page-editor.c:210
 msgid "line lines highlight current"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:211
+#: ../src/preferences/gb-preferences-page-editor.c:216
 msgid "bracket brackets highlight matching"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:216
+#: ../src/preferences/gb-preferences-page-editor.c:222
 msgid "smart home end"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:221
+#: ../src/preferences/gb-preferences-page-editor.c:228
 msgid "show grid lines"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:226
+#: ../src/preferences/gb-preferences-page-editor.c:234
 msgid "font document editor monospace"
 msgstr ""
 
-#: ../src/preferences/gb-preferences-page-editor.c:230
+#: ../src/preferences/gb-preferences-page-editor.c:239
 msgid "source style scheme source tango solarized builder"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-emacs.c:90
+msgid "emacs modal"
 msgstr ""
 
 #: ../src/preferences/gb-preferences-page-git.c:131
@@ -1209,6 +1213,8 @@ msgid ""
 "Christian Hergert\n"
 "Gareth Foster"
 msgstr ""
+"Christian Hergert\n"
+"Gareth Foster"
 
 #: ../src/resources/ui/gb-credits-widget.ui.h:36
 msgid "Special Thanks To:"
@@ -1271,7 +1277,8 @@ msgid "Search Documents"
 msgstr "Belgelerde Ara"
 
 #: ../src/resources/ui/gb-document-menu-button.ui.h:2
-msgid "No document were found"
+#| msgid "No document were found"
+msgid "No documents were found"
 msgstr "Hiçbir belge bulunamadı"
 
 #: ../src/resources/ui/gb-editor-frame.ui.h:1
@@ -1429,6 +1436,14 @@ msgstr ""
 msgid "Display a grid patten in the document."
 msgstr ""
 
+#: ../src/resources/ui/gb-preferences-page-emacs.ui.h:1
+msgid "<b>EMACS Modal Editing</b>"
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-emacs.ui.h:2
+msgid "Use EMACS style modal editing in the source code editor."
+msgstr ""
+
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:1
 msgid "Author Name"
 msgstr "Yazarın Adı"
@@ -1478,6 +1493,10 @@ msgstr "Dil Ayarları"
 #: ../src/resources/ui/gb-preferences-window.ui.h:6
 msgid "Vim"
 msgstr "Vim"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:7
+msgid "Emacs"
+msgstr ""
 
 #: ../src/resources/ui/gb-workbench.ui.h:1
 msgid "Go back in history"
@@ -1546,15 +1565,15 @@ msgstr "Arama sağlayıcısı"
 
 #: ../src/search/gb-search-display-group.c:430
 msgid "Size Group"
-msgstr ""
+msgstr "Boyut Grubu"
 
 #: ../src/search/gb-search-display-group.c:431
 msgid "The size group for the label."
-msgstr ""
+msgstr "Etiket için boyut grubu."
 
 #: ../src/search/gb-search-result.c:217
 msgid "Score"
-msgstr ""
+msgstr "Puan"
 
 #: ../src/search/gb-search-result.c:218
 msgid "The result match score."
@@ -1562,7 +1581,7 @@ msgstr ""
 
 #: ../src/search/gb-search-result.c:230
 msgid "Subtitle"
-msgstr ""
+msgstr "Altyazı"
 
 #: ../src/search/gb-search-result.c:231 ../src/search/gb-search-result.c:242
 msgid "The pango markup to be rendered."
@@ -1683,17 +1702,17 @@ msgstr ""
 #: ../src/snippets/gb-source-snippets-manager.c:92
 #, c-format
 msgid "Failed to open directory: %s"
-msgstr ""
+msgstr "Dizin açma başarısız oldu: %s"
 
 #: ../src/snippets/gb-source-snippets-manager.c:107
 #, c-format
 msgid "Failed to load file: %s: %s"
-msgstr ""
+msgstr "Dosya yükleme başarısız oldu: %s: %s"
 
 #: ../src/theatrics/gb-box-theatric.c:258
 #: ../src/theatrics/gb-box-theatric.c:259
 msgid "Alpha"
-msgstr ""
+msgstr "Alfa"
 
 #: ../src/theatrics/gb-box-theatric.c:269
 #: ../src/theatrics/gb-box-theatric.c:270
@@ -1734,7 +1753,7 @@ msgstr "Kök"
 
 #: ../src/tree/gb-tree.c:889
 msgid "The root object of the tree."
-msgstr ""
+msgstr "Ağacın kök nesnesi."
 
 #: ../src/tree/gb-tree.c:897
 msgid "Selection"
@@ -1742,7 +1761,7 @@ msgstr "Seçim"
 
 #: ../src/tree/gb-tree.c:898
 msgid "The node selection."
-msgstr ""
+msgstr "Düğüm seçimi."
 
 #: ../src/tree/gb-tree-node.c:483 ../src/workbench/gb-workspace.c:161
 msgid "Icon Name"
@@ -1750,7 +1769,7 @@ msgstr "Simge Adı"
 
 #: ../src/tree/gb-tree-node.c:484
 msgid "The icon name to display."
-msgstr ""
+msgstr "Görüntülenecek simge adı."
 
 #: ../src/tree/gb-tree-node.c:497
 msgid "Item"
@@ -1758,7 +1777,7 @@ msgstr "Öge"
 
 #: ../src/tree/gb-tree-node.c:498
 msgid "Optional object to associate with node."
-msgstr ""
+msgstr "Düğümle ilişkilendirilecek, isteğe bağlı nesne."
 
 #: ../src/tree/gb-tree-node.c:511
 msgid "Parent"
@@ -1770,11 +1789,11 @@ msgstr "Ebeveyn düğüm."
 
 #: ../src/tree/gb-tree-node.c:526
 msgid "The GbTree the node belongs to."
-msgstr ""
+msgstr "Düğümün ait olduğu GbTree."
 
 #: ../src/tree/gb-tree-node.c:540
 msgid "The text of the node."
-msgstr ""
+msgstr "Düğüm metni."
 
 #: ../src/tree/gb-tree-node.c:553
 msgid "Use Markup"
@@ -1807,7 +1826,7 @@ msgstr ""
 
 #: ../src/workbench/gb-workspace.c:152
 msgid "The title of the workspace."
-msgstr ""
+msgstr "Çalışma alanının başlığı."
 
 #: ../src/workbench/gb-workspace.c:162
 msgid "The name of the icon to use."
