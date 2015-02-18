@@ -25,12 +25,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_C_INDENTER (ide_c_indenter_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeCIndenter, ide_c_indenter, IDE, C_INDENTER, IdeIndenter)
-
-struct _IdeCIndenterClass
-{
-  IdeIndenterClass parent;
-};
+G_DECLARE_FINAL_TYPE (IdeCIndenter, ide_c_indenter, IDE, C_INDENTER, IdeIndenter)
 
 G_END_DECLS
 

@@ -142,6 +142,8 @@ libide_1_0_la_public_sources = \
 
 libide_1_0_la_SOURCES = \
 	$(libide_1_0_la_public_sources) \
+	libide/c/c-parse-helper.c \
+	libide/c/c-parse-helper.h \
 	libide/editorconfig/editorconfig-glib.c \
 	libide/editorconfig/editorconfig-glib.h \
 	libide/fuzzy/fuzzy.c \
