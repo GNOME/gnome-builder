@@ -209,7 +209,7 @@ ide_git_search_index_populate (IdeGitSearchIndex *self,
 
   /* initialize our reducer, which helps us prevent creating unnecessary
    * objects that will simply be discarded */
-  ide_search_reducer_init (&reducer, search_context, provider);
+  ide_search_reducer_init (&reducer, search_context, provider, max_results);
 
   for (i = 0; i < matches->len; i++)
     {

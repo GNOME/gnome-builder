@@ -24,7 +24,8 @@
 void
 ide_search_reducer_init (IdeSearchReducer  *reducer,
                          IdeSearchContext  *context,
-                         IdeSearchProvider *provider)
+                         IdeSearchProvider *provider,
+                         gsize              max_results)
 {
   g_return_if_fail (reducer);
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (context));
@@ -33,7 +34,7 @@ ide_search_reducer_init (IdeSearchReducer  *reducer,
   reducer->context = context;
   reducer->provider = provider;
   reducer->sequence = g_sequence_new (g_object_unref);
-  reducer->max_results = 10;
+  reducer->max_results = max_results ?: G_MAXSIZE;
   reducer->count = 0;
 }
 

@@ -34,7 +34,8 @@ typedef struct
 
 void     ide_search_reducer_init    (IdeSearchReducer  *reducer,
                                      IdeSearchContext  *context,
-                                     IdeSearchProvider *provider);
+                                     IdeSearchProvider *provider,
+                                     gsize              max_results);
 gboolean ide_search_reducer_accepts (IdeSearchReducer  *reducer,
                                      gfloat             score);
 void     ide_search_reducer_push    (IdeSearchReducer  *reducer,
