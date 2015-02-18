@@ -144,6 +144,8 @@ libide_1_0_la_public_sources = \
 	libide/python/ide-python-language.h \
 	libide/xml/ide-xml-indenter.c \
 	libide/xml/ide-xml-indenter.h \
+	libide/xml/ide-xml-language.c \
+	libide/xml/ide-xml-language.h \
 	$(NULL)
 
 libide_1_0_la_SOURCES = \
@@ -193,6 +195,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide/local \
 	-I$(top_srcdir)/libide/python \
 	-I$(top_srcdir)/libide/tasks \
+	-I$(top_srcdir)/libide/xml \
 	$(CLANG_CFLAGS) \
 	$(NULL)
 

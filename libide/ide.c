@@ -36,6 +36,7 @@
 #include "ide-gsettings-file-settings.h"
 #include "ide-python-language.h"
 #include "ide-search-provider.h"
+#include "ide-xml-language.h"
 
 static gboolean     gProgramNameRead;
 static const gchar *gProgramName = "libide";
@@ -100,6 +101,10 @@ ide_init_ctor (void)
   g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
                                   IDE_TYPE_PYTHON_LANGUAGE,
                                   IDE_LANGUAGE_EXTENSION_POINT".python",
+                                  0);
+  g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
+                                  IDE_TYPE_XML_LANGUAGE,
+                                  IDE_LANGUAGE_EXTENSION_POINT".xml",
                                   0);
 
   g_io_extension_point_implement (IDE_SCRIPT_EXTENSION_POINT,
