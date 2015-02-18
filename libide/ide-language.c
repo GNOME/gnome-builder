@@ -70,7 +70,7 @@ ide_language_get_diagnostician (IdeLanguage *self)
   g_return_val_if_fail (IDE_IS_LANGUAGE (self), NULL);
 
   if (IDE_LANGUAGE_GET_CLASS (self)->get_diagnostician)
-   return IDE_LANGUAGE_GET_CLASS (self)->get_diagnostician (self);
+    return IDE_LANGUAGE_GET_CLASS (self)->get_diagnostician (self);
 
   return NULL;
 }
@@ -111,7 +111,7 @@ ide_language_get_highlighter (IdeLanguage *self)
   g_return_val_if_fail (IDE_IS_LANGUAGE (self), NULL);
 
   if (IDE_LANGUAGE_GET_CLASS (self)->get_highlighter)
-   return IDE_LANGUAGE_GET_CLASS (self)->get_highlighter (self);
+    return IDE_LANGUAGE_GET_CLASS (self)->get_highlighter (self);
 
   return NULL;
 }
@@ -131,7 +131,7 @@ ide_language_get_indenter (IdeLanguage *self)
   g_return_val_if_fail (IDE_IS_LANGUAGE (self), NULL);
 
   if (IDE_LANGUAGE_GET_CLASS (self)->get_indenter)
-   return IDE_LANGUAGE_GET_CLASS (self)->get_indenter (self);
+    return IDE_LANGUAGE_GET_CLASS (self)->get_indenter (self);
 
   return NULL;
 }
@@ -151,7 +151,7 @@ ide_language_get_refactory (IdeLanguage *self)
   g_return_val_if_fail (IDE_IS_LANGUAGE (self), NULL);
 
   if (IDE_LANGUAGE_GET_CLASS (self)->get_refactory)
-   return IDE_LANGUAGE_GET_CLASS (self)->get_refactory (self);
+    return IDE_LANGUAGE_GET_CLASS (self)->get_refactory (self);
 
   return NULL;
 }
@@ -171,7 +171,7 @@ ide_language_get_symbol_resolver (IdeLanguage *self)
   g_return_val_if_fail (IDE_IS_LANGUAGE (self), NULL);
 
   if (IDE_LANGUAGE_GET_CLASS (self)->get_symbol_resolver)
-   return IDE_LANGUAGE_GET_CLASS (self)->get_symbol_resolver (self);
+    return IDE_LANGUAGE_GET_CLASS (self)->get_symbol_resolver (self);
 
   return NULL;
 }
