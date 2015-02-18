@@ -34,6 +34,7 @@
 #include "ide-git-vcs.h"
 #include "ide-gjs-script.h"
 #include "ide-gsettings-file-settings.h"
+#include "ide-python-language.h"
 #include "ide-search-provider.h"
 
 static gboolean     gProgramNameRead;
@@ -95,7 +96,11 @@ ide_init_ctor (void)
   g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
                                   IDE_TYPE_C_LANGUAGE,
                                   IDE_LANGUAGE_EXTENSION_POINT".c",
-                                  -100);
+                                  0);
+  g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
+                                  IDE_TYPE_PYTHON_LANGUAGE,
+                                  IDE_LANGUAGE_EXTENSION_POINT".python",
+                                  0);
 
   g_io_extension_point_implement (IDE_SCRIPT_EXTENSION_POINT,
                                   IDE_TYPE_GJS_SCRIPT,
