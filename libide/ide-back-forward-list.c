@@ -165,7 +165,6 @@ ide_back_forward_list_push (IdeBackForwardList *self,
                             IdeBackForwardItem *item)
 {
   IdeBackForwardListPrivate *priv;
-  IdeBackForwardList *current_item = NULL;
 
   g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (self));
   g_return_if_fail (IDE_IS_BACK_FORWARD_ITEM (item));
@@ -287,8 +286,6 @@ void
 ide_back_forward_list_merge (IdeBackForwardList *self,
                              IdeBackForwardList *branch)
 {
-  IdeBackForwardListPrivate *priv;
-  IdeBackForwardListPrivate *branch_priv;
   IdeBackForwardList *first;
   gboolean found = FALSE;
   GPtrArray *ar1;
