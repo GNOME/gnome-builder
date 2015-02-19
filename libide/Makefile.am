@@ -138,6 +138,8 @@ libide_1_0_la_public_sources = \
 	libide/ide.h \
 	libide/local/ide-local-device.c \
 	libide/local/ide-local-device.h \
+	libide/pygobject/ide-pygobject-script.c \
+	libide/pygobject/ide-pygobject-script.h \
 	libide/python/ide-python-indenter.c \
 	libide/python/ide-python-indenter.h \
 	libide/python/ide-python-language.c \
@@ -193,6 +195,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide/gjs \
 	-I$(top_srcdir)/libide/gsettings \
 	-I$(top_srcdir)/libide/local \
+	-I$(top_srcdir)/libide/pygobject \
 	-I$(top_srcdir)/libide/python \
 	-I$(top_srcdir)/libide/tasks \
 	-I$(top_srcdir)/libide/xml \

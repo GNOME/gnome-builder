@@ -146,9 +146,10 @@ allow_file (const gchar *name)
   /* NOTE:
    *
    * Add your allowed suffix here if you are adding a new scripting language
-   * (ie: python, etc)
+   * (ie: Lua, etc)
    */
-  return g_str_has_suffix (name, ".js");
+  return g_str_has_suffix (name, ".js") ||
+         g_str_has_suffix (name, ".py");
 }
 
 static void
