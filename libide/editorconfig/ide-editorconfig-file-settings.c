@@ -75,7 +75,6 @@ ide_editorconfig_file_settings_init_worker (GTask        *task,
 
   while (g_hash_table_iter_next (&iter, &k, &v))
     {
-      const gchar *prop_name;
       const gchar *key = k;
       const GValue *value = v;
 

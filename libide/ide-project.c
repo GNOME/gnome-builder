@@ -180,7 +180,7 @@ ide_project_get_file_for_path (IdeProject  *self,
   IdeProjectItem *root;
   GSequenceIter *iter;
   GSequence *children;
-  IdeFile *file;
+  IdeFile *file = NULL;
 
   g_return_val_if_fail (IDE_IS_PROJECT (self), NULL);
   g_return_val_if_fail (path, NULL);

@@ -26,13 +26,15 @@
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
 
-typedef struct
+struct _IdeClangService
 {
+  IdeService    parent_instance;
+
   GHashTable   *cached_units;
   GRWLock       cached_rwlock;
   CXIndex       index;
   GCancellable *cancellable;
-} IdeClangServicePrivate;
+};
 
 typedef struct
 {
@@ -45,15 +47,7 @@ typedef struct
   guint       options;
 } ParseRequest;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeClangService, ide_clang_service,
-                            IDE_TYPE_SERVICE)
-
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
+G_DEFINE_TYPE (IdeClangService, ide_clang_service, IDE_TYPE_SERVICE)
 
 static void
 parse_request_free (gpointer data)
@@ -73,12 +67,11 @@ ide_clang_service_parse_worker (GTask        *task,
                                 gpointer      task_data,
                                 GCancellable *cancellable)
 {
-  IdeClangServicePrivate *priv;
   g_autoptr(IdeClangTranslationUnit) ret = NULL;
+  IdeClangService *self = source_object;
   CXTranslationUnit tu = NULL;
   ParseRequest *request = task_data;
   IdeContext *context;
-  struct CXUnsavedFile *unsaved_files;
   const gchar * const *argv;
   gsize argc = 0;
   const gchar *detail_error = NULL;
@@ -89,8 +82,6 @@ ide_clang_service_parse_worker (GTask        *task,
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_CLANG_SERVICE (source_object));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  priv = ide_clang_service_get_instance_private (source_object);
 
   ar = g_array_new (FALSE, FALSE, sizeof (struct CXUnsavedFile));
 
@@ -104,7 +95,7 @@ ide_clang_service_parse_worker (GTask        *task,
       file = ide_unsaved_file_get_file (iuf);
       content = ide_unsaved_file_get_content (iuf);
 
-      uf.Filename = g_file_get_path (ide_unsaved_file_get_file (iuf));
+      uf.Filename = g_file_get_path (file);
       uf.Contents = g_bytes_get_data (content, NULL);
       uf.Length = g_bytes_get_size (content);
 
@@ -160,11 +151,11 @@ ide_clang_service_parse_worker (GTask        *task,
   context = ide_object_get_context (source_object);
   ret = _ide_clang_translation_unit_new (context, tu, request->sequence);
 
-  g_rw_lock_writer_lock (&priv->cached_rwlock);
-  g_hash_table_replace (priv->cached_units,
+  g_rw_lock_writer_lock (&self->cached_rwlock);
+  g_hash_table_replace (self->cached_units,
                         g_object_ref (request->file),
                         g_object_ref (ret));
-  g_rw_lock_writer_unlock (&priv->cached_rwlock);
+  g_rw_lock_writer_unlock (&self->cached_rwlock);
 
   g_task_return_pointer (task, g_object_ref (ret), g_object_unref);
 
@@ -193,7 +184,6 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
                                               GAsyncReadyCallback  callback,
                                               gpointer             user_data)
 {
-  IdeClangServicePrivate *priv = ide_clang_service_get_instance_private (self);
   g_autoptr(IdeClangTranslationUnit) cached = NULL;
   IdeUnsavedFiles *unsaved_files;
   IdeContext *context;
@@ -208,11 +198,11 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   unsaved_files = ide_context_get_unsaved_files (context);
 
-  g_rw_lock_reader_lock (&priv->cached_rwlock);
-  cached = g_hash_table_lookup (priv->cached_units, file);
+  g_rw_lock_reader_lock (&self->cached_rwlock);
+  cached = g_hash_table_lookup (self->cached_units, file);
   if (cached)
     g_object_ref (cached);
-  g_rw_lock_reader_unlock (&priv->cached_rwlock);
+  g_rw_lock_reader_unlock (&self->cached_rwlock);
 
   if (min_sequence <= 0)
     min_sequence = ide_unsaved_files_get_sequence (unsaved_files);
@@ -239,7 +229,7 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
 
   request = g_slice_new0 (ParseRequest);
   request->file = g_object_ref (file);
-  request->index = priv->index;
+  request->index = self->index;
   request->source_filename = g_strdup (path);
   request->command_line_args = NULL; /* TODO: Get from build system */
   request->unsaved_files = ide_unsaved_files_get_unsaved_files (unsaved_files);
@@ -274,16 +264,15 @@ static void
 ide_clang_service_start (IdeService *service)
 {
   IdeClangService *self = (IdeClangService *)service;
-  IdeClangServicePrivate *priv = ide_clang_service_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_CLANG_SERVICE (self));
-  g_return_if_fail (!priv->index);
+  g_return_if_fail (!self->index);
 
-  g_clear_object (&priv->cancellable);
-  priv->cancellable = g_cancellable_new ();
+  g_clear_object (&self->cancellable);
+  self->cancellable = g_cancellable_new ();
 
-  priv->index = clang_createIndex (0, 0);
-  clang_CXIndex_setGlobalOptions (priv->index,
+  self->index = clang_createIndex (0, 0);
+  clang_CXIndex_setGlobalOptions (self->index,
                                   CXGlobalOpt_ThreadBackgroundPriorityForAll);
 
   IDE_SERVICE_CLASS (ide_clang_service_parent_class)->start (service);
@@ -293,12 +282,11 @@ static void
 ide_clang_service_stop (IdeService *service)
 {
   IdeClangService *self = (IdeClangService *)service;
-  IdeClangServicePrivate *priv = ide_clang_service_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_CLANG_SERVICE (self));
-  g_return_if_fail (!priv->index);
+  g_return_if_fail (!self->index);
 
-  g_cancellable_cancel (priv->cancellable);
+  g_cancellable_cancel (self->cancellable);
 
   IDE_SERVICE_CLASS (ide_clang_service_parent_class)->start (service);
 }
@@ -307,42 +295,11 @@ static void
 ide_clang_service_dispose (GObject *object)
 {
   IdeClangService *self = (IdeClangService *)object;
-  IdeClangServicePrivate *priv = ide_clang_service_get_instance_private (self);
 
-  g_clear_pointer (&priv->index, clang_disposeIndex);
-  g_clear_object (&priv->cancellable);
+  g_clear_pointer (&self->index, clang_disposeIndex);
+  g_clear_object (&self->cancellable);
 
   G_OBJECT_CLASS (ide_clang_service_parent_class)->dispose (object);
-}
-
-static void
-ide_clang_service_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
-{
-  IdeClangService *self = IDE_CLANG_SERVICE (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_clang_service_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
-{
-  IdeClangService *self = IDE_CLANG_SERVICE (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
 }
 
 static void
@@ -352,8 +309,6 @@ ide_clang_service_class_init (IdeClangServiceClass *klass)
   IdeServiceClass *service_class = IDE_SERVICE_CLASS (klass);
 
   object_class->dispose = ide_clang_service_dispose;
-  object_class->get_property = ide_clang_service_get_property;
-  object_class->set_property = ide_clang_service_set_property;
 
   service_class->start = ide_clang_service_start;
   service_class->stop = ide_clang_service_stop;
@@ -362,11 +317,9 @@ ide_clang_service_class_init (IdeClangServiceClass *klass)
 static void
 ide_clang_service_init (IdeClangService *self)
 {
-  IdeClangServicePrivate *priv = ide_clang_service_get_instance_private (self);
+  g_rw_lock_init (&self->cached_rwlock);
 
-  g_rw_lock_init (&priv->cached_rwlock);
-
-  priv->cached_units = g_hash_table_new_full ((GHashFunc)ide_file_hash,
+  self->cached_units = g_hash_table_new_full ((GHashFunc)ide_file_hash,
                                               (GEqualFunc)ide_file_equal,
                                               g_object_unref,
                                               g_object_unref);

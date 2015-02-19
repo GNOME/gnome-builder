@@ -212,7 +212,7 @@ ide_unsaved_files_save_async (IdeUnsavedFiles     *files,
                               gpointer             user_data)
 {
   IdeUnsavedFilesPrivate *priv;
-  g_autoptr(GTask) task;
+  g_autoptr(GTask) task = NULL;
   AsyncState *state;
   gsize i;
 
@@ -326,7 +326,7 @@ ide_unsaved_files_restore_async (IdeUnsavedFiles     *files,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
-  g_autoptr(GTask) task;
+  g_autoptr(GTask) task = NULL;
   AsyncState *state;
 
   g_return_if_fail (IDE_IS_UNSAVED_FILES (files));
@@ -553,15 +553,13 @@ ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
 
   for (i = 0; i < priv->unsaved_files->len; i++)
     {
-      IdeUnsavedFile *item;
       UnsavedFile *uf;
 
       uf = g_ptr_array_index (priv->unsaved_files, i);
 
       if (g_file_equal (uf->file, file))
         {
-          ret = _ide_unsaved_file_new (uf->file, uf->content, uf->temp_path,
-                                       uf->sequence);
+          ret = _ide_unsaved_file_new (uf->file, uf->content, uf->temp_path, uf->sequence);
           break;
         }
     }

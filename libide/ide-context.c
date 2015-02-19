@@ -679,15 +679,15 @@ ide_context_init_project_name_cb (GObject      *object,
   if (file_info &&
       (G_FILE_TYPE_DIRECTORY == g_file_info_get_file_type (file_info)))
     {
-      g_autoptr(gchar) name;
+      g_autoptr(gchar) name = NULL;
 
       name = g_file_get_basename (file);
       _ide_project_set_name (self->project, name);
     }
   else
     {
-      g_autoptr(GFile) parent;
-      g_autoptr(gchar) name;
+      g_autoptr(GFile) parent = NULL;
+      g_autoptr(gchar) name = NULL;
 
       parent = g_file_get_parent (file);
       name = g_file_get_basename (parent);

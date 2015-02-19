@@ -59,7 +59,7 @@ _ide_build_result_open_log (IdeBuildResult  *self,
 
   if (fd != -1)
     {
-      g_autoptr(GFile) file;
+      g_autoptr(GFile) file = NULL;
 
       file = g_file_new_for_path (name_used);
       *read_stream = G_INPUT_STREAM (g_file_read (file, NULL, NULL));
@@ -76,7 +76,7 @@ static void
 _ide_build_result_log (GOutputStream  *stream,
                        const gchar    *message)
 {
-  g_autoptr(gchar) buffer;
+  g_autoptr(gchar) buffer = NULL;
 
   g_return_if_fail (G_IS_OUTPUT_STREAM (stream));
   g_return_if_fail (message);

@@ -57,15 +57,6 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-static void
-activate_cb (IdeSearchResult *result,
-             gpointer         user_data)
-{
-  g_assert (IDE_IS_SEARCH_RESULT (result));
-
-  /* TODO: Hook up document manager in LibIDE */
-}
-
 /**
  * ide_git_search_index_get_location:
  *
@@ -252,7 +243,6 @@ ide_git_search_index_populate (IdeGitSearchIndex *self,
         }
     }
 
-cleanup:
   g_clear_pointer (&matches, g_array_unref);
   g_string_free (str, TRUE);
 }
@@ -347,7 +337,6 @@ ide_git_search_index_init_worker (GTask        *task,
   GgitIndex *index = NULL;
   GgitRef *ref;
   GError *error = NULL;
-  GFile *repository_dir = task_data;
   guint count;
   guint i;
 

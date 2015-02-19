@@ -20,74 +20,16 @@
 
 #include "ide-clang-highlighter.h"
 
-typedef struct
+struct _IdeClangHighlighter
 {
-  void *foo;
-} IdeClangHighlighterPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE (IdeClangHighlighter, ide_clang_highlighter,
-                            IDE_TYPE_HIGHLIGHTER)
-
-enum {
-  PROP_0,
-  LAST_PROP
+  IdeHighlighter parent_instance;
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
-
-IdeClangHighlighter *
-ide_clang_highlighter_new (void)
-{
-  return g_object_new (IDE_TYPE_CLANG_HIGHLIGHTER, NULL);
-}
-
-static void
-ide_clang_highlighter_finalize (GObject *object)
-{
-  IdeClangHighlighter *self = (IdeClangHighlighter *)object;
-  IdeClangHighlighterPrivate *priv = ide_clang_highlighter_get_instance_private (self);
-
-  G_OBJECT_CLASS (ide_clang_highlighter_parent_class)->finalize (object);
-}
-
-static void
-ide_clang_highlighter_get_property (GObject    *object,
-                                    guint       prop_id,
-                                    GValue     *value,
-                                    GParamSpec *pspec)
-{
-  IdeClangHighlighter *self = IDE_CLANG_HIGHLIGHTER (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_clang_highlighter_set_property (GObject      *object,
-                                    guint         prop_id,
-                                    const GValue *value,
-                                    GParamSpec   *pspec)
-{
-  IdeClangHighlighter *self = IDE_CLANG_HIGHLIGHTER (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
+G_DEFINE_TYPE (IdeClangHighlighter, ide_clang_highlighter, IDE_TYPE_HIGHLIGHTER)
 
 static void
 ide_clang_highlighter_class_init (IdeClangHighlighterClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = ide_clang_highlighter_finalize;
-  object_class->get_property = ide_clang_highlighter_get_property;
-  object_class->set_property = ide_clang_highlighter_set_property;
 }
 
 static void

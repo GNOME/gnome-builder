@@ -190,7 +190,6 @@ get_diag_proxy_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   IdeGcaDiagnosticProvider *self;
   GcaDiagnostics *proxy;
-  DiagnoseState *state;
   GError *error = NULL;
   const gchar *path;
 
@@ -198,7 +197,6 @@ get_diag_proxy_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
 
   self = g_task_get_source_object (task);
-  state = g_task_get_task_data (task);
 
   proxy = gca_diagnostics_proxy_new_finish (result, &error);
 

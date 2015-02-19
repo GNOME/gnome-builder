@@ -50,8 +50,8 @@ ide_gjs_script_load (IdeScript *script)
   GjsContext *old_current;
   g_autoptr(GError) error = NULL;
   g_autoptr(gchar) contents = NULL;
-  g_autoptr(gchar) path;
-  g_autoptr(GFile) parent;
+  g_autoptr(gchar) path = NULL;
+  g_autoptr(GFile) parent = NULL;
   gchar **search_path;
   GFile *file;
   gsize len;

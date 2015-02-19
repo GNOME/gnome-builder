@@ -76,7 +76,6 @@ load_settings_cb (GObject      *object,
   IdeFileSettings *settings;
   IdeFile *file = (IdeFile *)object;
   GError *error = NULL;
-  gint exit_code = EXIT_SUCCESS;
 
   settings = ide_file_load_settings_finish (file, result, &error);
 

@@ -36,10 +36,6 @@ parse_item (test_state_t *state,
   IdeFile *file;
   gchar **parts;
   GFile *gfile;
-  gsize i;
-  guint offset;
-  guint line;
-  guint line_offset;
 
   parts = g_strsplit (str, " ", 0);
 

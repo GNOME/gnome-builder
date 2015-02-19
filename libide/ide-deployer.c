@@ -18,73 +18,19 @@
 
 #include "ide-deployer.h"
 
-typedef struct
-{
-  void *foo;
-} IdeDeployerPrivate;
-
 G_DEFINE_ABSTRACT_TYPE (IdeDeployer, ide_deployer, IDE_TYPE_OBJECT)
 
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
-
-IdeDeployer *
-ide_deployer_new (void)
-{
-  return g_object_new (IDE_TYPE_DEPLOYER, NULL);
-}
-
-static void
-ide_deployer_finalize (GObject *object)
-{
-  IdeDeployer *self = (IdeDeployer *)object;
-  IdeDeployerPrivate *priv = ide_deployer_get_instance_private (self);
-
-  G_OBJECT_CLASS (ide_deployer_parent_class)->finalize (object);
-}
-
-static void
-ide_deployer_get_property (GObject    *object,
-                           guint       prop_id,
-                           GValue     *value,
-                           GParamSpec *pspec)
-{
-  IdeDeployer *self = IDE_DEPLOYER (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_deployer_set_property (GObject      *object,
-                           guint         prop_id,
-                           const GValue *value,
-                           GParamSpec   *pspec)
-{
-  IdeDeployer *self = IDE_DEPLOYER (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
+/*
+ * TODO:
+ *
+ * This class is the base class for the code that will deploy a project to the
+ * device where it can run. Locally, this might be a make install. On a remote
+ * device it might be a combination of things.
+ */
 
 static void
 ide_deployer_class_init (IdeDeployerClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = ide_deployer_finalize;
-  object_class->get_property = ide_deployer_get_property;
-  object_class->set_property = ide_deployer_set_property;
 }
 
 static void

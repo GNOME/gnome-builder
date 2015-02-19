@@ -1391,7 +1391,6 @@ ide_c_indenter_format (IdeIndenter    *indenter,
 static void
 ide_c_indenter_class_init (IdeCIndenterClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeIndenterClass *indenter_class = IDE_INDENTER_CLASS (klass);
 
   indenter_class->is_trigger = ide_c_indenter_is_trigger;

@@ -25,12 +25,8 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CLANG_HIGHLIGHTER (ide_clang_highlighter_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeClangHighlighter, ide_clang_highlighter, IDE, CLANG_HIGHLIGHTER, IdeHighlighter)
-
-struct _IdeClangHighlighter
-{
-  IdeHighlighter parent_instance;
-};
+G_DECLARE_FINAL_TYPE (IdeClangHighlighter, ide_clang_highlighter,
+                      IDE, CLANG_HIGHLIGHTER, IdeHighlighter)
 
 G_END_DECLS
 

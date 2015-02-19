@@ -27,11 +27,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeDiagnostician, ide_diagnostician, IDE, DIAGNOSTICIAN, IdeObject)
 
-struct _IdeDiagnostician
-{
-  IdeObject parent_instance;
-};
-
 void            ide_diagnostician_diagnose_async  (IdeDiagnostician     *diagnostician,
                                                    IdeFile              *file,
                                                    GCancellable         *cancellable,

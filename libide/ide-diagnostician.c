@@ -24,10 +24,12 @@
 #include "ide-file.h"
 #include "ide-internal.h"
 
-typedef struct
+struct _IdeDiagnostician
 {
+  IdeObject  parent_instance;
+
   GPtrArray *providers;
-} IdeDiagnosticianPrivate;
+};
 
 typedef struct
 {
@@ -36,15 +38,7 @@ typedef struct
   guint           active;
 } DiagnoseState;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeDiagnostician, ide_diagnostician,
-                            IDE_TYPE_OBJECT)
-
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
+G_DEFINE_TYPE (IdeDiagnostician, ide_diagnostician, IDE_TYPE_OBJECT)
 
 static void
 diagnose_state_free (gpointer data)
@@ -62,24 +56,20 @@ void
 _ide_diagnostician_add_provider (IdeDiagnostician      *self,
                                  IdeDiagnosticProvider *provider)
 {
-  IdeDiagnosticianPrivate *priv = ide_diagnostician_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_DIAGNOSTICIAN (self));
   g_return_if_fail (IDE_IS_DIAGNOSTIC_PROVIDER (provider));
 
-  g_ptr_array_add (priv->providers, g_object_ref (provider));
+  g_ptr_array_add (self->providers, g_object_ref (provider));
 }
 
 void
 _ide_diagnostician_remove_provider (IdeDiagnostician      *self,
                                     IdeDiagnosticProvider *provider)
 {
-  IdeDiagnosticianPrivate *priv = ide_diagnostician_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_DIAGNOSTICIAN (self));
   g_return_if_fail (IDE_IS_DIAGNOSTIC_PROVIDER (provider));
 
-  g_ptr_array_remove (priv->providers, provider);
+  g_ptr_array_remove (self->providers, provider);
 }
 
 static void
@@ -127,7 +117,6 @@ ide_diagnostician_diagnose_async (IdeDiagnostician    *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  IdeDiagnosticianPrivate *priv = ide_diagnostician_get_instance_private (self);
   DiagnoseState *state;
   g_autoptr(GTask) task = NULL;
   gsize i;
@@ -138,7 +127,7 @@ ide_diagnostician_diagnose_async (IdeDiagnostician    *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  if (!priv->providers->len)
+  if (!self->providers->len)
     {
       g_task_return_pointer (task,
                              _ide_diagnostics_new (NULL),
@@ -147,16 +136,17 @@ ide_diagnostician_diagnose_async (IdeDiagnostician    *self,
     }
 
   state = g_slice_new0 (DiagnoseState);
-  state->active = priv->providers->len;
-  state->total = priv->providers->len;
+  state->active = self->providers->len;
+  state->total = self->providers->len;
   state->diagnostics = _ide_diagnostics_new (NULL);
 
   g_task_set_task_data (task, state, diagnose_state_free);
 
-  for (i = 0; i < priv->providers->len; i++)
+  for (i = 0; i < self->providers->len; i++)
     {
-      IdeDiagnosticProvider *provider = g_ptr_array_index (priv->providers, i);
+      IdeDiagnosticProvider *provider;
 
+      provider = g_ptr_array_index (self->providers, i);
       ide_diagnostic_provider_diagnose_async (provider,
                                               file,
                                               cancellable,
@@ -181,9 +171,8 @@ static void
 ide_diagnostician_dispose (GObject *object)
 {
   IdeDiagnostician *self = (IdeDiagnostician *)object;
-  IdeDiagnosticianPrivate *priv = ide_diagnostician_get_instance_private (self);
 
-  g_clear_pointer (&priv->providers, g_ptr_array_unref);
+  g_clear_pointer (&self->providers, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_diagnostician_parent_class)->dispose (object);
 }
@@ -199,7 +188,5 @@ ide_diagnostician_class_init (IdeDiagnosticianClass *klass)
 static void
 ide_diagnostician_init (IdeDiagnostician *self)
 {
-  IdeDiagnosticianPrivate *priv = ide_diagnostician_get_instance_private (self);
-
-  priv->providers = g_ptr_array_new_with_free_func (g_object_unref);
+  self->providers = g_ptr_array_new_with_free_func (g_object_unref);
 }

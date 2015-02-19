@@ -93,11 +93,11 @@ print_diagnostic (IdeDiagnostic *diag)
   g_autoptr(gchar) path = NULL;
   IdeDiagnosticSeverity severity;
   GFile *gfile;
-  gsize i;
   gsize num_ranges;
   guint line;
   guint column;
   g_autoptr(gchar) linestr = NULL;
+  gsize i;
 
   text = ide_diagnostic_get_text (diag);
   num_ranges = ide_diagnostic_get_num_ranges (diag);
@@ -138,9 +138,9 @@ print_diagnostic (IdeDiagnostic *diag)
         g_print ("^\n");
     }
 
-#if 0
   for (i = 0; i < num_ranges; i++)
     {
+#if 0
       IdeSourceRange *range;
       IdeSourceLocation *begin;
       IdeSourceLocation *end;
@@ -160,11 +160,8 @@ print_diagnostic (IdeDiagnostic *diag)
       path = ide_file_get_path (file);
 
       g_print ("%s:%u:%u\n", path, line+1, column+1);
-    }
-
-  if (!num_ranges)
-    g_print (">> %s\n", text);
 #endif
+    }
 }
 
 static void
@@ -219,7 +216,6 @@ context_cb (GObject      *object,
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GError) error = NULL;
   IdeDiagnostician *diagnostician;
-  IdeProjectItem *root;
   IdeLanguage *language;
   IdeProject *project;
   IdeFile *file;

@@ -69,8 +69,6 @@ context_cb (GObject      *object,
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GError) error = NULL;
   IdeDeviceManager *device_manager;
-  IdeProjectItem *root;
-  IdeProject *project;
 
   context = ide_context_new_finish (result, &error);
 

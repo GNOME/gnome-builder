@@ -27,12 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CLANG_SERVICE (ide_clang_service_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeClangService, ide_clang_service, IDE, CLANG_SERVICE, IdeService)
-
-struct _IdeClangServiceClass
-{
-  IdeServiceClass parent;
-};
+G_DECLARE_FINAL_TYPE (IdeClangService, ide_clang_service, IDE, CLANG_SERVICE, IdeService)
 
 void                     ide_clang_service_get_translation_unit_async  (IdeClangService      *self,
                                                                         IdeFile              *file,

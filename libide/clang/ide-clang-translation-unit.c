@@ -215,6 +215,8 @@ create_diagnostic (IdeClangTranslationUnit *self,
 
   diag = _ide_diagnostic_new (severity, spelling, loc);
 
+  num_ranges = clang_getDiagnosticNumRanges (cxdiag);
+
   for (i = 0; i < num_ranges; i++)
     {
       CXSourceRange cxrange;
@@ -277,7 +279,6 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
         {
           CXDiagnostic cxdiag;
           IdeDiagnostic *diag;
-          CXString cxstr;
 
           cxdiag = clang_getDiagnostic (priv->tu, i);
           diag = create_diagnostic (self, project, workpath, cxdiag);

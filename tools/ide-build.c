@@ -169,7 +169,7 @@ print_build_info (IdeContext *context,
   const gchar *build_system_name;
   const gchar *device_id;
   const gchar *system_type;
-  g_autoptr(gchar) build_date;
+  g_autoptr(gchar) build_date = NULL;
   GTimeVal tv;
 
   project = ide_context_get_project (context);

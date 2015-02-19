@@ -586,7 +586,6 @@ ide_python_indenter_format (IdeIndenter *indenter,
                             GdkEventKey          *event)
 {
   IdePythonIndenter *python = (IdePythonIndenter *)indenter;
-  GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
   GtkTextIter iter = *begin;
   gunichar ch;
   gint line;

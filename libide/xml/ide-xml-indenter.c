@@ -378,13 +378,10 @@ ide_xml_indenter_format (IdeIndenter *indenter,
                          GdkEventKey *trigger)
 {
   IdeXmlIndenter *xml = (IdeXmlIndenter *)indenter;
-  GtkTextBuffer *buffer;
   guint tab_width = 2;
   gint indent_width = -1;
 
   g_return_val_if_fail (IDE_IS_XML_INDENTER (xml), NULL);
-
-  buffer = gtk_text_view_get_buffer (view);
 
   *cursor_offset = 0;
 
