@@ -288,7 +288,7 @@ ide_back_forward_list_merge (IdeBackForwardList *self,
                              IdeBackForwardList *branch)
 {
   IdeBackForwardListPrivate *priv;
-  IdeBackForwardListPrivate *branch_priv;;
+  IdeBackForwardListPrivate *branch_priv;
   IdeBackForwardList *first;
   gboolean found = FALSE;
   GPtrArray *ar1;
