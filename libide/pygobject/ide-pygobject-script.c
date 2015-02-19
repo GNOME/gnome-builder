@@ -120,7 +120,7 @@ ide_pygobject_script_load (IdeScript *script)
   PyObject *module_dir = NULL;
   PyObject *retval;
   PyObject *pycontext = NULL;
-  PyObject *code;
+  PyObject *code = NULL;
   PyGILState_STATE state;
 
   g_return_if_fail (IDE_IS_PYGOBJECT_SCRIPT (self));
