@@ -72,17 +72,17 @@ libide_1_0_la_public_sources = \
 	libide/ide-executable.h \
 	libide/ide-executer.c \
 	libide/ide-executer.h \
-	libide/ide-file.c \
-	libide/ide-file.h \
 	libide/ide-file-settings.c \
 	libide/ide-file-settings.h \
+	libide/ide-file.c \
+	libide/ide-file.h \
 	libide/ide-global.h \
 	libide/ide-highlighter.c \
 	libide/ide-highlighter.h \
-	libide/ide-indenter.c \
-	libide/ide-indenter.h \
 	libide/ide-indent-style.c \
 	libide/ide-indent-style.h \
+	libide/ide-indenter.c \
+	libide/ide-indenter.h \
 	libide/ide-language.c \
 	libide/ide-language.h \
 	libide/ide-object.c \
@@ -99,10 +99,10 @@ libide_1_0_la_public_sources = \
 	libide/ide-project.h \
 	libide/ide-refactory.c \
 	libide/ide-refactory.h \
-	libide/ide-script.c \
-	libide/ide-script.h \
 	libide/ide-script-manager.c \
 	libide/ide-script-manager.h \
+	libide/ide-script.c \
+	libide/ide-script.h \
 	libide/ide-search-context.c \
 	libide/ide-search-context.h \
 	libide/ide-search-engine.c \
