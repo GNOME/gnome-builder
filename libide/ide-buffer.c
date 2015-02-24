@@ -110,7 +110,7 @@ ide_buffer_finalize (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
 
-  g_clear_object (&self->context);
+  ide_clear_weak_pointer (&self->context);
   g_clear_object (&self->file);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->finalize (object);

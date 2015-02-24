@@ -982,7 +982,7 @@ unregister_auto_save (IdeBufferManager *self,
       g_hash_table_remove (self->timeouts, buffer);
       if (state->source_id > 0)
         g_source_remove (state->source_id);
-      g_object_unref (state->buffer);
+      ide_clear_weak_pointer (&state->buffer);
       ide_clear_weak_pointer (&state->self);
       g_slice_free (AutoSave, state);
     }
