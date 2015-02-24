@@ -39,6 +39,7 @@ libide/ide-file-settings.c
 libide/ide-file.c
 libide/ide-language.c
 libide/ide-object.c
+libide/ide-progress.c
 libide/ide-project-file.c
 libide/ide-project-item.c
 libide/ide-project.c
@@ -47,6 +48,7 @@ libide/ide-script.c
 libide/ide-search-result.c
 libide/ide-service.c
 libide/ide.c
+libide/pygobject/ide-pygobject-script.c
 libide/tasks/ide-load-directory-task.c
 src/animation/gb-animation.c
 src/app/gb-application.c
