@@ -27,11 +27,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeFile, ide_file, IDE, FILE, IdeObject)
 
-struct _IdeFile
-{
-  IdeObject parent_instance;
-};
-
 IdeLanguage     *ide_file_get_language         (IdeFile              *self);
 GFile           *ide_file_get_file             (IdeFile              *self);
 const gchar     *ide_file_get_project_path     (IdeFile              *self);

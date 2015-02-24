@@ -23,12 +23,14 @@
 #include "ide-file-settings.h"
 #include "ide-language.h"
 
-typedef struct
+struct _IdeFile
 {
-  GFile       *file;
-  IdeLanguage *language;
-  gchar       *path;
-} IdeFilePrivate;
+  IdeObject      parent_instance;
+
+  GFile         *file;
+  IdeLanguage   *language;
+  gchar         *path;
+};
 
 enum
 {
@@ -39,7 +41,7 @@ enum
   LAST_PROP
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeFile, ide_file, IDE_TYPE_OBJECT)
+G_DEFINE_TYPE (IdeFile, ide_file, IDE_TYPE_OBJECT)
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
@@ -62,36 +64,27 @@ ide_file_remap_language (const gchar *lang_id)
 guint
 ide_file_hash (IdeFile *self)
 {
-  IdeFilePrivate *priv;
-
   g_return_val_if_fail (IDE_IS_FILE (self), 0);
 
-  priv = ide_file_get_instance_private (self);
-
-  return g_file_hash (priv->file);
+  return g_file_hash (self->file);
 }
 
 gboolean
 ide_file_equal (IdeFile *self,
                 IdeFile *other)
 {
-  IdeFilePrivate *priv1 = ide_file_get_instance_private (self);
-  IdeFilePrivate *priv2 = ide_file_get_instance_private (other);
-
   g_return_val_if_fail (IDE_IS_FILE (self), FALSE);
   g_return_val_if_fail (IDE_IS_FILE (other), FALSE);
 
-  return g_file_equal (priv1->file, priv2->file);
+  return g_file_equal (self->file, other->file);
 }
 
 static void
 ide_file_create_language (IdeFile *self)
 {
-  IdeFilePrivate *priv = ide_file_get_instance_private (self);
-
   g_assert (IDE_IS_FILE (self));
 
-  if (g_once_init_enter (&priv->language))
+  if (g_once_init_enter (&self->language))
     {
       GtkSourceLanguageManager *manager;
       GtkSourceLanguage *srclang;
@@ -103,7 +96,7 @@ ide_file_create_language (IdeFile *self)
       gboolean uncertain = TRUE;
 
       context = ide_object_get_context (IDE_OBJECT (self));
-      filename = g_file_get_basename (priv->file);
+      filename = g_file_get_basename (self->file);
       content_type = g_content_type_guess (filename, NULL, 0, &uncertain);
 
       if (uncertain)
@@ -163,14 +156,12 @@ ide_file_create_language (IdeFile *self)
 IdeLanguage *
 ide_file_get_language (IdeFile *self)
 {
-  IdeFilePrivate *priv = ide_file_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_FILE (self), NULL);
 
-  if (!priv->language)
+  if (!self->language)
     ide_file_create_language (self);
 
-  return priv->language;
+  return self->language;
 }
 
 /**
@@ -183,25 +174,21 @@ ide_file_get_language (IdeFile *self)
 GFile *
 ide_file_get_file (IdeFile *self)
 {
-  IdeFilePrivate *priv = ide_file_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_FILE (self), NULL);
 
-  return priv->file;
+  return self->file;
 }
 
 static void
 ide_file_set_file (IdeFile *self,
                    GFile   *file)
 {
-  IdeFilePrivate *priv = ide_file_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_FILE (self));
   g_return_if_fail (G_IS_FILE (file));
 
-  if (file != priv->file)
+  if (file != self->file)
     {
-      if (g_set_object (&priv->file, file))
+      if (g_set_object (&self->file, file))
         g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
     }
 }
@@ -209,23 +196,19 @@ ide_file_set_file (IdeFile *self,
 const gchar *
 ide_file_get_path (IdeFile *self)
 {
-  IdeFilePrivate *priv = ide_file_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_FILE (self), NULL);
 
-  return priv->path;
+  return self->path;
 }
 
 static void
 ide_file_set_path (IdeFile     *self,
                    const gchar *path)
 {
-  IdeFilePrivate *priv = ide_file_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_FILE (self));
-  g_return_if_fail (!priv->path);
+  g_return_if_fail (!self->path);
 
-  priv->path = g_strdup (path);
+  self->path = g_strdup (path);
 }
 
 static void
@@ -298,11 +281,10 @@ static void
 ide_file_finalize (GObject *object)
 {
   IdeFile *self = (IdeFile *)object;
-  IdeFilePrivate *priv = ide_file_get_instance_private (self);
 
-  g_clear_object (&priv->file);
-  g_clear_object (&priv->language);
-  g_clear_pointer (&priv->path, g_free);
+  g_clear_object (&self->file);
+  g_clear_object (&self->language);
+  g_clear_pointer (&self->path, g_free);
 
   G_OBJECT_CLASS (ide_file_parent_class)->finalize (object);
 }
