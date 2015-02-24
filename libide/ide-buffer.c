@@ -71,7 +71,7 @@ ide_buffer_set_context (IdeBuffer  *self,
   g_return_if_fail (IDE_IS_CONTEXT (context));
   g_return_if_fail (self->context == NULL);
 
-  self->context = g_object_ref (context);
+  ide_set_weak_pointer (&self->context, context);
 }
 
 /**
