@@ -183,6 +183,8 @@ libide_1_0_la_SOURCES = \
 	libide/ide-async-helper.c \
 	libide/ide-async-helper.h \
 	libide/ide-internal.h \
+	libide/ide-line-change-gutter-renderer.c \
+	libide/ide-line-change-gutter-renderer.h \
 	libide/ide-search-reducer.c \
 	libide/ide-search-reducer.h \
 	libide/tasks/ide-load-directory-task.c \
