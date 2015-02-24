@@ -81,6 +81,8 @@ typedef struct _IdeObject                      IdeObject;
 typedef struct _IdeProcess                     IdeProcess;
 typedef struct _IdeProcessInterface            IdeProcessInterface;
 
+typedef struct _IdeProgress                    IdeProgress;
+
 typedef struct _IdeProject                     IdeProject;
 
 typedef struct _IdeProjectItem                 IdeProjectItem;

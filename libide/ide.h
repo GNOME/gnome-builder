@@ -50,6 +50,7 @@ G_BEGIN_DECLS
 #include "ide-language.h"
 #include "ide-object.h"
 #include "ide-process.h"
+#include "ide-progress.h"
 #include "ide-project.h"
 #include "ide-project-file.h"
 #include "ide-project-files.h"

@@ -89,6 +89,8 @@ libide_1_0_la_public_sources = \
 	libide/ide-object.h \
 	libide/ide-process.c \
 	libide/ide-process.h \
+	libide/ide-progress.c \
+	libide/ide-progress.h \
 	libide/ide-project-file.c \
 	libide/ide-project-file.h \
 	libide/ide-project-files.c \
