@@ -31,6 +31,7 @@ G_DECLARE_FINAL_TYPE (IdeContext, ide_context, IDE, CONTEXT, GObject)
 
 IdeBackForwardList *ide_context_get_back_forward_list (IdeContext           *self);
 GFile              *ide_context_get_project_file      (IdeContext           *self);
+IdeBufferManager   *ide_context_get_buffer_manager    (IdeContext           *self);
 IdeBuildSystem     *ide_context_get_build_system      (IdeContext           *self);
 IdeDeviceManager   *ide_context_get_device_manager    (IdeContext           *self);
 IdeProject         *ide_context_get_project           (IdeContext           *self);

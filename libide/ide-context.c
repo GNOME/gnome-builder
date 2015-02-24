@@ -22,6 +22,7 @@
 
 #include "ide-async-helper.h"
 #include "ide-back-forward-list.h"
+#include "ide-buffer-manager.h"
 #include "ide-build-system.h"
 #include "ide-context.h"
 #include "ide-device-manager.h"
@@ -40,6 +41,7 @@ struct _IdeContext
   GObject             parent_instance;
 
   IdeBackForwardList *back_forward_list;
+  IdeBufferManager   *buffer_manager;
   IdeBuildSystem     *build_system;
   IdeDeviceManager   *device_manager;
   IdeScriptManager   *script_manager;
@@ -63,6 +65,7 @@ G_DEFINE_TYPE_EXTENDED (IdeContext, ide_context, G_TYPE_OBJECT, 0,
 enum {
   PROP_0,
   PROP_BACK_FORWARD_LIST,
+  PROP_BUFFER_MANAGER,
   PROP_BUILD_SYSTEM,
   PROP_DEVICE_MANAGER,
   PROP_PROJECT_FILE,
@@ -95,6 +98,23 @@ ide_context_get_back_forward_list (IdeContext *self)
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
   return self->back_forward_list;
+}
+
+/**
+ * ide_context_get_buffer_manager:
+ *
+ * Gets the #IdeContext:buffer-manager property. The buffer manager is responsible for loading
+ * and saving buffers (files) within the #IdeContext. It provides a convenient place for scripts
+ * to hook into the load and save process.
+ *
+ * Returns: (transfer none): An #IdeBufferManager.
+ */
+IdeBufferManager *
+ide_context_get_buffer_manager (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->buffer_manager;
 }
 
 /**
@@ -459,6 +479,10 @@ ide_context_get_property (GObject    *object,
       g_value_set_object (value, ide_context_get_back_forward_list (self));
       break;
 
+    case PROP_BUFFER_MANAGER:
+      g_value_set_object (value, ide_context_get_buffer_manager (self));
+      break;
+
     case PROP_BUILD_SYSTEM:
       g_value_set_object (value, ide_context_get_build_system (self));
       break;
@@ -537,6 +561,15 @@ ide_context_class_init (IdeContextClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_BACK_FORWARD_LIST,
                                    gParamSpecs [PROP_BACK_FORWARD_LIST]);
+
+  gParamSpecs [PROP_BUFFER_MANAGER] =
+    g_param_spec_object ("buffer-manager",
+                         _("Buffer Manager"),
+                         _("The buffer manager for the context."),
+                         IDE_TYPE_BUFFER_MANAGER,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_BUFFER_MANAGER,
+                                   gParamSpecs [PROP_BUFFER_MANAGER]);
 
   gParamSpecs [PROP_BUILD_SYSTEM] =
     g_param_spec_object ("build-system",
@@ -626,6 +659,10 @@ ide_context_init (IdeContext *self)
   self->back_forward_list = g_object_new (IDE_TYPE_BACK_FORWARD_LIST,
                                           "context", self,
                                           NULL);
+
+  self->buffer_manager = g_object_new (IDE_TYPE_BUFFER_MANAGER,
+                                       "context", self,
+                                       NULL);
 
   self->device_manager = g_object_new (IDE_TYPE_DEVICE_MANAGER,
                                        "context", self,
@@ -1049,6 +1086,8 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_search_engine,
                         ide_context_init_scripts,
                         NULL);
+
+  /* TODO: Restore buffer state? */
 }
 
 static gboolean
