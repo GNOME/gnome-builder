@@ -168,7 +168,7 @@ ide_git_search_index_populate (IdeGitSearchIndex *self,
                                const gchar       *search_terms)
 {
   g_auto(IdeSearchReducer) reducer = { 0 };
-  g_autoptr(gchar) delimited = NULL;
+  g_autofree gchar *delimited = NULL;
   IdeContext *context;
   IdeProject *project;
   const gchar *project_name;
@@ -208,8 +208,8 @@ ide_git_search_index_populate (IdeGitSearchIndex *self,
 
       if (ide_search_reducer_accepts (&reducer, match->score))
         {
-          g_autoptr(gchar) shortname = NULL;
-          g_autoptr(gchar) markup = NULL;
+          g_autofree gchar *shortname = NULL;
+          g_autofree gchar *markup = NULL;
           g_autoptr(IdeSearchResult) result = NULL;
           gchar **parts;
           gsize j;

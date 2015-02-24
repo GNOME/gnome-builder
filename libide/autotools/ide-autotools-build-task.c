@@ -255,7 +255,7 @@ ide_autotools_build_task_set_directory (IdeAutotoolsBuildTask *self,
    */
   if (directory)
     {
-      g_autoptr(gchar) path;
+      g_autofree gchar *path;
 
       path = g_file_get_path (directory);
 
@@ -524,7 +524,7 @@ static WorkerState *
 worker_state_new (IdeAutotoolsBuildTask *self)
 {
   IdeAutotoolsBuildTaskPrivate *priv;
-  g_autoptr(gchar) name = NULL;
+  g_autofree gchar *name = NULL;
   IdeContext *context;
   GPtrArray *make_targets;
   GFile *project_dir;
@@ -730,8 +730,8 @@ step_autogen (GTask                 *task,
               WorkerState           *state,
               GCancellable          *cancellable)
 {
-  g_autoptr(gchar) autogen_sh_path = NULL;
-  g_autoptr(gchar) configure_path = NULL;
+  g_autofree gchar *autogen_sh_path = NULL;
+  g_autofree gchar *configure_path = NULL;
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   g_autoptr(GSubprocess) process = NULL;
   GError *error = NULL;
@@ -814,8 +814,8 @@ step_configure (GTask                 *task,
 {
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   g_autoptr(GSubprocess) process = NULL;
-  g_autoptr(gchar) makefile_path = NULL;
-  g_autoptr(gchar) config_log = NULL;
+  g_autofree gchar *makefile_path = NULL;
+  g_autofree gchar *config_log = NULL;
   GError *error = NULL;
 
   g_assert (G_IS_TASK (task));

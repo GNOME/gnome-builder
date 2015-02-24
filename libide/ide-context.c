@@ -649,7 +649,7 @@ ide_context_class_init (IdeContextClass *klass)
 static void
 ide_context_init (IdeContext *self)
 {
-  g_autoptr(gchar) scriptsdir = NULL;
+  g_autofree gchar *scriptsdir = NULL;
 
   self->root_build_dir = g_build_filename (g_get_user_cache_dir (),
                                            ide_get_program_name (),
@@ -701,7 +701,7 @@ ide_context_init_project_name_cb (GObject      *object,
                                   gpointer      user_data)
 {
   IdeContext *self;
-  g_autoptr(gchar) name = NULL;
+  g_autofree gchar *name = NULL;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GFileInfo) file_info = NULL;
   GFile *file = (GFile *)object;
@@ -716,7 +716,7 @@ ide_context_init_project_name_cb (GObject      *object,
   if (file_info &&
       (G_FILE_TYPE_DIRECTORY == g_file_info_get_file_type (file_info)))
     {
-      g_autoptr(gchar) name = NULL;
+      g_autofree gchar *name = NULL;
 
       name = g_file_get_basename (file);
       _ide_project_set_name (self->project, name);
@@ -724,7 +724,7 @@ ide_context_init_project_name_cb (GObject      *object,
   else
     {
       g_autoptr(GFile) parent = NULL;
-      g_autoptr(gchar) name = NULL;
+      g_autofree gchar *name = NULL;
 
       parent = g_file_get_parent (file);
       name = g_file_get_basename (parent);

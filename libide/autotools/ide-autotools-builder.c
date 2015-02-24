@@ -135,7 +135,7 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
   IdeAutotoolsBuilder *self = (IdeAutotoolsBuilder *)builder;
   g_autoptr(IdeAutotoolsBuildTask) build_result = NULL;
   g_autoptr(GTask) task = NULL;
-  g_autoptr(gchar) build_dir = NULL;
+  g_autofree gchar *build_dir = NULL;
   g_autoptr(GFile) directory = NULL;
   const gchar *device_id;
   const gchar *project_name;

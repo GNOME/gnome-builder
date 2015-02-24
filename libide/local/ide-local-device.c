@@ -31,7 +31,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeLocalDevice, ide_local_device, IDE_TYPE_DEVICE)
 static gchar *
 get_system_type (void)
 {
-  g_autoptr(gchar) os_lower = NULL;
+  g_autofree gchar *os_lower = NULL;
   struct utsname u;
 
   if (uname (&u) < 0)

@@ -69,7 +69,7 @@ static gchar *
 get_line (GFile *file,
           guint  line)
 {
-  g_autoptr(gchar) contents = NULL;
+  g_autofree gchar *contents = NULL;
   gchar **lines;
   gchar *ret = NULL;
   gsize len;
@@ -90,13 +90,13 @@ print_diagnostic (IdeDiagnostic *diag)
   IdeSourceLocation *location;
   IdeFile *file;
   const gchar *text;
-  g_autoptr(gchar) path = NULL;
+  g_autofree gchar *path = NULL;
   IdeDiagnosticSeverity severity;
   GFile *gfile;
   gsize num_ranges;
   guint line;
   guint column;
-  g_autoptr(gchar) linestr = NULL;
+  g_autofree gchar *linestr = NULL;
   gsize i;
 
   text = ide_diagnostic_get_text (diag);
@@ -221,7 +221,7 @@ context_cb (GObject      *object,
   IdeFile *file;
   IdeVcs *vcs;
   GFile *workdir;
-  g_autoptr(gchar) relpath = NULL;
+  g_autofree gchar *relpath = NULL;
 
   context = ide_context_new_finish (result, &error);
 

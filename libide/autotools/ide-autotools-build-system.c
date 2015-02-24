@@ -147,7 +147,7 @@ ide_autotools_build_system_discover_file_async (IdeAutotoolsBuildSystem *system,
                                                 GAsyncReadyCallback      callback,
                                                 gpointer                 user_data)
 {
-  g_autoptr(gchar) name = NULL;
+  g_autofree gchar *name = NULL;
   g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system));

@@ -130,7 +130,7 @@ ide_unsaved_files_save_worker (GTask        *task,
 {
   GString *manifest;
   AsyncState *state = task_data;
-  g_autoptr(gchar) manifest_path = NULL;
+  g_autofree gchar *manifest_path = NULL;
   GError *error = NULL;
   gsize i;
 
@@ -145,9 +145,9 @@ ide_unsaved_files_save_worker (GTask        *task,
 
   for (i = 0; i < state->unsaved_files->len; i++)
     {
-      g_autoptr(gchar) path = NULL;
-      g_autoptr(gchar) uri = NULL;
-      g_autoptr(gchar) hash = NULL;
+      g_autofree gchar *path = NULL;
+      g_autofree gchar *uri = NULL;
+      g_autofree gchar *hash = NULL;
       UnsavedFile *uf;
 
       uf = g_ptr_array_index (state->unsaved_files, i);
@@ -256,8 +256,8 @@ ide_unsaved_files_restore_worker (GTask        *task,
                                   GCancellable *cancellable)
 {
   AsyncState *state = task_data;
-  g_autoptr(gchar) contents = NULL;
-  g_autoptr(gchar) manifest_path = NULL;
+  g_autofree gchar *contents = NULL;
+  g_autofree gchar *manifest_path = NULL;
   gchar **lines;
   GError *error = NULL;
   gsize len;
@@ -288,9 +288,9 @@ ide_unsaved_files_restore_worker (GTask        *task,
   for (i = 0; lines [i]; i++)
     {
       g_autoptr(GFile) file = NULL;
-      g_autoptr(gchar) contents = NULL;
-      g_autoptr(gchar) hash = NULL;
-      g_autoptr(gchar) path = NULL;
+      g_autofree gchar *contents = NULL;
+      g_autofree gchar *hash = NULL;
+      g_autofree gchar *path = NULL;
       UnsavedFile *unsaved;
       gsize len;
 
@@ -415,7 +415,7 @@ setup_tempfile (GFile  *file,
                 gint   *temp_fd,
                 gchar **temp_path)
 {
-  g_autoptr(gchar) name = NULL;
+  g_autofree gchar *name = NULL;
   const gchar *suffix;
   gchar *template;
 

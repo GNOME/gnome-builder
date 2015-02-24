@@ -48,7 +48,7 @@ _ide_build_result_open_log (IdeBuildResult  *self,
                             GOutputStream  **write_stream,
                             const gchar     *template)
 {
-  g_autoptr(gchar) name_used = NULL;
+  g_autofree gchar *name_used = NULL;
   gint fd;
 
   g_return_val_if_fail (IDE_IS_BUILD_RESULT (self), FALSE);
@@ -76,7 +76,7 @@ static void
 _ide_build_result_log (GOutputStream  *stream,
                        const gchar    *message)
 {
-  g_autoptr(gchar) buffer = NULL;
+  g_autofree gchar *buffer = NULL;
 
   g_return_if_fail (G_IS_OUTPUT_STREAM (stream));
   g_return_if_fail (message);
@@ -100,7 +100,7 @@ ide_build_result_log_stdout (IdeBuildResult *self,
                              ...)
 {
   IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
-  g_autoptr(gchar) msg = NULL;
+  g_autofree gchar *msg = NULL;
   va_list args;
 
   /* lazy create stream if necessary */
@@ -122,7 +122,7 @@ ide_build_result_log_stderr (IdeBuildResult *self,
                              ...)
 {
   IdeBuildResultPrivate *priv = ide_build_result_get_instance_private (self);
-  g_autoptr(gchar) msg = NULL;
+  g_autofree gchar *msg = NULL;
   va_list args;
 
   /* lazy create stream if necessary */
@@ -205,7 +205,7 @@ ide_build_result_tail_cb (GObject      *object,
 {
   GDataInputStream *reader = (GDataInputStream *)object;
   g_autoptr(GOutputStream) writer = user_data;
-  g_autoptr(gchar) line = NULL;
+  g_autofree gchar *line = NULL;
   g_autoptr(GError) error = NULL;
   gsize n_read;
 

@@ -102,7 +102,7 @@ read_line_cb (GObject      *object,
               gpointer      user_data)
 {
   GDataInputStream *data_stream = (GDataInputStream *)object;
-  g_autoptr(gchar) line = NULL;
+  g_autofree gchar *line = NULL;
   g_autoptr(GError) error = NULL;
   gsize length = 0;
 
@@ -169,7 +169,7 @@ print_build_info (IdeContext *context,
   const gchar *build_system_name;
   const gchar *device_id;
   const gchar *system_type;
-  g_autoptr(gchar) build_date = NULL;
+  g_autofree gchar *build_date = NULL;
   GTimeVal tv;
 
   project = ide_context_get_project (context);

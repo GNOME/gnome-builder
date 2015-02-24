@@ -227,7 +227,7 @@ parse_cb (GObject      *object,
   GcaDiagnostics *doc_proxy;
   gboolean ret;
   GError *error = NULL;
-  g_autoptr(gchar) document_path = NULL;
+  g_autofree gchar *document_path = NULL;
 
   g_assert (GCA_IS_SERVICE (proxy));
   g_assert (G_IS_TASK (task));
@@ -247,7 +247,7 @@ parse_cb (GObject      *object,
 
   if (!doc_proxy)
     {
-      g_autoptr(gchar) well_known_name = NULL;
+      g_autofree gchar *well_known_name = NULL;
       GDBusConnection *conn;
 
       well_known_name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s",
@@ -282,7 +282,7 @@ get_proxy_cb (GObject      *object,
   const gchar *temp_path;
   GError *error = NULL;
   GFile *gfile;
-  g_autoptr(gchar) path = NULL;
+  g_autofree gchar *path = NULL;
   GVariant *cursor = NULL;
   GVariant *options = NULL;
 

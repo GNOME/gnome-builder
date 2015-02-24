@@ -85,7 +85,7 @@ ide_gsettings_file_settings_init_async (GAsyncInitable      *initable,
   IdeGsettingsFileSettings *self = (IdeGsettingsFileSettings *)initable;
   g_autoptr(GSettings) settings = NULL;
   g_autoptr(GTask) task = NULL;
-  g_autoptr(gchar) path = NULL;
+  g_autofree gchar *path = NULL;
   IdeLanguage *language;
   IdeFile *file;
   const gchar *lang_id;

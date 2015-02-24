@@ -120,7 +120,7 @@ create_location (IdeClangTranslationUnit *self,
   IdeSourceLocation *ret = NULL;
   IdeFile *file = NULL;
   CXFile cxfile = NULL;
-  g_autoptr(gchar) path = NULL;
+  g_autofree gchar *path = NULL;
   CXString str;
   unsigned line;
   unsigned column;
@@ -194,7 +194,7 @@ create_diagnostic (IdeClangTranslationUnit *self,
   IdeDiagnosticSeverity severity;
   IdeDiagnostic *diag;
   IdeSourceLocation *loc;
-  g_autoptr(gchar) spelling = NULL;
+  g_autofree gchar *spelling = NULL;
   CXString cxstr;
   CXSourceLocation cxloc;
   guint num_ranges;
@@ -251,7 +251,7 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
       IdeContext *context;
       IdeProject *project;
       IdeVcs *vcs;
-      g_autoptr(gchar) workpath = NULL;
+      g_autofree gchar *workpath = NULL;
       GFile *workdir;
       GPtrArray *ar;
       guint count;

@@ -86,8 +86,8 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
                                  gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
-  g_autoptr(gchar) name = NULL;
-  g_autoptr(gchar) object_path = NULL;
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *object_path = NULL;
   GcaService *proxy;
 
   g_return_if_fail (IDE_IS_GCA_SERVICE (self));

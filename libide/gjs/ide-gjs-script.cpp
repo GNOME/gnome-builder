@@ -49,8 +49,8 @@ ide_gjs_script_load (IdeScript *script)
   IdeContext *context;
   GjsContext *old_current;
   g_autoptr(GError) error = NULL;
-  g_autoptr(gchar) contents = NULL;
-  g_autoptr(gchar) path = NULL;
+  g_autofree gchar *contents = NULL;
+  g_autofree gchar *path = NULL;
   g_autoptr(GFile) parent = NULL;
   gchar **search_path;
   GFile *file;
@@ -175,7 +175,7 @@ ide_gjs_script_init_async (GAsyncInitable      *initable,
 {
   IdeGjsScript *self = (IdeGjsScript *)initable;
   g_autoptr(GTask) task = NULL;
-  g_autoptr(gchar) path = NULL;
+  g_autofree gchar *path = NULL;
   GFile *file;
 
   g_return_if_fail (IDE_IS_GJS_SCRIPT (self));

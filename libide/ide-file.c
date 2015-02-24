@@ -91,8 +91,8 @@ ide_file_create_language (IdeFile *self)
       GtkSourceLanguage *srclang;
       IdeLanguage *language = NULL;
       const gchar *lang_id = NULL;
-      g_autoptr(gchar) content_type = NULL;
-      g_autoptr(gchar) filename = NULL;
+      g_autofree gchar *content_type = NULL;
+      g_autofree gchar *filename = NULL;
       IdeContext *context;
       gboolean uncertain = TRUE;
 
@@ -108,7 +108,7 @@ ide_file_create_language (IdeFile *self)
 
       if (srclang)
         {
-          g_autoptr(gchar) ext_name = NULL;
+          g_autofree gchar *ext_name = NULL;
           GIOExtension *extension;
           GIOExtensionPoint *point;
           const gchar *lookup_id;

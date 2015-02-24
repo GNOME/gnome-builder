@@ -110,10 +110,10 @@ ide_pygobject_script_load (IdeScript *script)
   IdePyGObjectScript *self = (IdePyGObjectScript *)script;
   IdeContext *context;
   g_autoptr(GError) error = NULL;
-  g_autoptr(gchar) contents = NULL;
-  g_autoptr(gchar) path = NULL;
+  g_autofree gchar *contents = NULL;
+  g_autofree gchar *path = NULL;
   g_autoptr(GFile) parent = NULL;
-  g_autoptr(gchar) parent_path = NULL;
+  g_autofree gchar *parent_path = NULL;
   GFile *file;
   PyObject *globals = NULL;
   PyObject *builtins_module;
@@ -233,7 +233,7 @@ ide_pygobject_script_init_async (GAsyncInitable      *initable,
 {
   IdePyGObjectScript *self = (IdePyGObjectScript *)initable;
   g_autoptr(GTask) task = NULL;
-  g_autoptr(gchar) path = NULL;
+  g_autofree gchar *path = NULL;
   GFile *file;
 
   g_return_if_fail (IDE_IS_PYGOBJECT_SCRIPT (self));

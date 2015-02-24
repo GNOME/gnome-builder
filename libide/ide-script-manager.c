@@ -180,7 +180,7 @@ ide_script_manager_get_files_worker (GTask        *task,
 
   while ((name = g_dir_read_name (dir)))
     {
-      g_autoptr(gchar) path = NULL;
+      g_autofree gchar *path = NULL;
       g_autoptr(GFile) file = NULL;
 
       if (!allow_file (name))

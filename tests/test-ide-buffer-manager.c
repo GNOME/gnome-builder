@@ -76,7 +76,7 @@ test_buffer_manager_basic_cb2 (GObject      *object,
   GtkTextIter begin, end;
   IdeFile *file;
   test_buffer_manager_basic_state *state = user_data;
-  g_autoptr(gchar) text = NULL;
+  g_autofree gchar *text = NULL;
   int fd;
 
   buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &state->error);

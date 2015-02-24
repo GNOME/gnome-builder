@@ -143,7 +143,7 @@ ide_git_vcs_reload_index_add_path (IdeGitVcs   *self,
   IdeContext *context;
   GFileInfo *file_info = NULL;
   GFile *file = NULL;
-  g_autoptr(gchar) fullpath = NULL;
+  g_autofree gchar *fullpath = NULL;
   gchar *dir;
   gchar *name;
 
@@ -210,7 +210,7 @@ ide_git_vcs_reload_index (IdeGitVcs  *self,
   IdeProject *project;
   GgitIndex *index = NULL;
   GHashTable *cache = NULL;
-  g_autoptr(gchar) workdir = NULL;
+  g_autofree gchar *workdir = NULL;
   gboolean ret = FALSE;
   guint count;
   guint i;
