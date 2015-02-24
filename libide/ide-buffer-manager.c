@@ -370,6 +370,7 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
   IdeBufferManager *self;
   LoadState *state;
   GError *error = NULL;
+  gsize i;
 
   g_assert (G_IS_TASK (task));
   g_assert (GTK_SOURCE_IS_FILE_LOADER (loader));
@@ -388,6 +389,19 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
       return;
     }
 
+  for (i = 0; i < self->buffers->len; i++)
+    {
+      IdeBuffer *cur_buffer;
+
+      cur_buffer = g_ptr_array_index (self->buffers, i);
+
+      if (cur_buffer == state->buffer)
+        goto emit_signal;
+    }
+
+  ide_buffer_manager_add_buffer (self, state->buffer);
+
+emit_signal:
   g_signal_emit (self, gSignals [BUFFER_LOADED], 0, state->buffer);
 
   g_task_return_pointer (task, g_object_ref (state->buffer), g_object_unref);
