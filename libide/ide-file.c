@@ -30,6 +30,7 @@ struct _IdeFile
   GFile         *file;
   IdeLanguage   *language;
   gchar         *path;
+  GtkSourceFile *source_file;
 };
 
 enum
@@ -141,7 +142,7 @@ ide_file_create_language (IdeFile *self)
                                  "id", lang_id,
                                  NULL);
 
-      g_once_init_leave (&priv->language, language);
+      g_once_init_leave (&self->language, language);
     }
 }
 
@@ -191,6 +192,24 @@ ide_file_set_file (IdeFile *self,
       if (g_set_object (&self->file, file))
         g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
     }
+}
+
+GtkSourceFile *
+_ide_file_get_source_file (IdeFile *self)
+{
+  g_return_val_if_fail (IDE_IS_FILE (self), NULL);
+
+  if (g_once_init_enter (&self->source_file))
+    {
+      GtkSourceFile *source_file;
+
+      source_file = gtk_source_file_new ();
+      gtk_source_file_set_location (source_file, self->file);
+
+      g_once_init_leave (&self->source_file, source_file);
+    }
+
+  return self->source_file;
 }
 
 const gchar *
@@ -283,6 +302,7 @@ ide_file_finalize (GObject *object)
   IdeFile *self = (IdeFile *)object;
 
   g_clear_object (&self->file);
+  g_clear_object (&self->source_file);
   g_clear_object (&self->language);
   g_clear_pointer (&self->path, g_free);
 

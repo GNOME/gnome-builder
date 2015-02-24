@@ -20,6 +20,7 @@
 #define IDE_PRIVATE_H
 
 #include <clang-c/Index.h>
+#include <gtksourceview/gtksource.h>
 
 #include "ide-clang-translation-unit.h"
 #include "ide-diagnostic.h"
@@ -53,6 +54,8 @@ void           _ide_diagnostic_take_range (IdeDiagnostic         *self,
                                            IdeSourceRange        *range);
 void           _ide_diagnostic_add_range  (IdeDiagnostic         *self,
                                            IdeSourceRange        *range);
+
+GtkSourceFile *_ide_file_get_source_file (IdeFile *file);
 
 void _ide_search_context_add_provider (IdeSearchContext  *context,
                                        IdeSearchProvider *provider,
