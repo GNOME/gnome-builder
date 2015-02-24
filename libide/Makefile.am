@@ -46,6 +46,8 @@ libide_1_0_la_public_sources = \
 	libide/ide-buffer-manager.h \
 	libide/ide-buffer.c \
 	libide/ide-buffer.h \
+	libide/ide-source-view.c \
+	libide/ide-source-view.h \
 	libide/ide-build-result.c \
 	libide/ide-build-result.h \
 	libide/ide-build-system.c \
@@ -185,6 +187,8 @@ libide_1_0_la_SOURCES = \
 	libide/ide-internal.h \
 	libide/tasks/ide-load-directory-task.c \
 	libide/tasks/ide-load-directory-task.h \
+	libide/util/ide-pango.c \
+	libide/util/ide-pango.h \
 	$(NULL)
 
 libide_1_0_la_includes = \
@@ -204,6 +208,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide/pygobject \
 	-I$(top_srcdir)/libide/python \
 	-I$(top_srcdir)/libide/tasks \
+	-I$(top_srcdir)/libide/util \
 	-I$(top_srcdir)/libide/xml \
 	$(CLANG_CFLAGS) \
 	$(NULL)
@@ -235,6 +240,7 @@ libide_1_0_la_LIBADD = \
 	$(CLANG_LDFLAGS) \
 	$(LIBIDE_LIBS) \
 	-lclang \
+	-lm \
 	libeditorconfig.la \
 	$(NULL)
 

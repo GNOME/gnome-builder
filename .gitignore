@@ -42,4 +42,5 @@ test-c-parse-helper
 test-ide-back-forward-list
 test-ide-buffer-manager
 test-ide-context
+test-ide-source-view
 test-navigation-list
