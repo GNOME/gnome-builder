@@ -29,8 +29,13 @@ load_cb (GObject      *object,
   g_autoptr(IdeBuffer) buffer = NULL;
   g_autoptr(GError) error = NULL;
   IdeSourceView *source_view = user_data;
+  GtkSourceStyleScheme *style;
+  GtkSourceStyleSchemeManager *styles;
 
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  styles = gtk_source_style_scheme_manager_get_default ();
+  style = gtk_source_style_scheme_manager_get_scheme (styles, "builder");
 
   buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error);
 
@@ -41,6 +46,7 @@ load_cb (GObject      *object,
       return;
     }
 
+  gtk_source_buffer_set_style_scheme (GTK_SOURCE_BUFFER (buffer), style);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (source_view), GTK_TEXT_BUFFER (buffer));
   gtk_widget_set_sensitive (GTK_WIDGET (source_view), TRUE);
   gtk_widget_grab_focus (GTK_WIDGET (source_view));
@@ -88,11 +94,11 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
-  GFile             *project_file;
+  GFile *project_file;
   GtkScrolledWindow *scroller;
-  IdeSourceView     *source_view;
-  GtkWindow         *window;
-  GCancellable      *cancellable;
+  IdeSourceView *source_view;
+  GtkWindow *window;
+  GCancellable *cancellable;
 
   ide_set_program_name ("gnome-builder");
 
