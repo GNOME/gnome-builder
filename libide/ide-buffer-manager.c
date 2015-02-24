@@ -385,8 +385,16 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
 
   if (!gtk_source_file_loader_load_finish (loader, result, &error))
     {
-      g_task_return_error (task, error);
-      return;
+      /*
+       * It's okay if we fail because the file does not exist yet.
+       */
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        {
+          g_task_return_error (task, error);
+          return;
+        }
+
+      g_clear_error (&error);
     }
 
   for (i = 0; i < self->buffers->len; i++)
