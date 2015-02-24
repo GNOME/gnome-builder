@@ -26,6 +26,7 @@
 #include "ide-highlighter.h"
 #include "ide-indenter.h"
 #include "ide-language.h"
+#include "ide-line-change-gutter-renderer.h"
 #include "ide-pango.h"
 #include "ide-source-view.h"
 
@@ -33,11 +34,12 @@
 
 typedef struct
 {
-  IdeBuffer            *buffer;
-  GtkCssProvider       *css_provider;
-  PangoFontDescription *font_desc;
+  IdeBuffer               *buffer;
+  GtkCssProvider          *css_provider;
+  PangoFontDescription    *font_desc;
+  GtkSourceGutterRenderer *line_change_renderer;
 
-  guint                 show_line_changes : 1;
+  guint                    show_line_changes : 1;
 } IdeSourceViewPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
@@ -183,6 +185,24 @@ ide_source_view_notify_buffer (IdeSourceView *self,
 }
 
 static void
+ide_source_view_constructed (GObject *object)
+{
+  IdeSourceView *self = (IdeSourceView *)object;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceGutter *gutter;
+
+  G_OBJECT_CLASS (ide_source_view_parent_class)->constructed (object);
+
+  priv->line_change_renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
+                                             "visible", priv->show_line_changes,
+                                             "xpad", 1,
+                                             "size", 2,
+                                             NULL);
+  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
+  gtk_source_gutter_insert (gutter, priv->line_change_renderer, 0);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -254,6 +274,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ide_source_view_constructed;
   object_class->dispose = ide_source_view_dispose;
   object_class->get_property = ide_source_view_get_property;
   object_class->set_property = ide_source_view_set_property;
@@ -275,12 +296,24 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FONT_NAME,
                                    gParamSpecs [PROP_FONT_NAME]);
+
+  gParamSpecs [PROP_SHOW_LINE_CHANGES] =
+    g_param_spec_boolean ("show-line-changes",
+                          _("Show Line Changes"),
+                          _("If line changes should be shown in the left gutter."),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SHOW_LINE_CHANGES,
+                                   gParamSpecs [PROP_SHOW_LINE_CHANGES]);
 }
 
 static void
 ide_source_view_init (IdeSourceView *self)
 {
-  g_signal_connect (self, "notify::buffer", G_CALLBACK (ide_source_view_notify_buffer), NULL);
+  g_signal_connect (self,
+                    "notify::buffer",
+                    G_CALLBACK (ide_source_view_notify_buffer),
+                    NULL);
 }
 
 const PangoFontDescription *
@@ -352,6 +385,8 @@ ide_source_view_set_show_line_changes (IdeSourceView *self,
   if (show_line_changes != priv->show_line_changes)
     {
       priv->show_line_changes = show_line_changes;
+      if (priv->line_change_renderer)
+        gtk_source_gutter_renderer_set_visible (priv->line_change_renderer, show_line_changes);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_LINE_CHANGES]);
     }
 }
