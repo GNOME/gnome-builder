@@ -115,9 +115,9 @@
   <style name="def:warning"                 background="yellow1"/>
   <style name="def:special-constant"        foreground="purple1"/>
 
-  <style name="diff:added-line"             foreground="gr1"/>
+  <style name="diff:added-line"             foreground="chameleon1"/>
   <style name="diff:removed-line"           foreground="pink1"/>
-  <style name="diff:changed-line"           foreground="og1"/>
+  <style name="diff:changed-line"           foreground="orange1"/>
   <style name="diff:diff-file"              use-style="def:type"/>
   <style name="diff:location"               use-style="def:statement"/>
   <style name="diff:special-case"           use-style="def:constant"/>
