@@ -266,26 +266,21 @@ ide_buffer_manager_set_focus_buffer (IdeBufferManager *self,
     }
 }
 
-static void
-ide_buffer_manager_save_async (IdeBufferManager    *self,
-                               IdeBuffer           *buffer,
-                               GCancellable        *cancellable,
-                               GAsyncReadyCallback  callback,
-                               gpointer             user_data)
-{
-}
-
 static gboolean
 ide_buffer_manager_auto_save_cb (gpointer data)
 {
   AutoSave *state = data;
+  IdeFile *file;
 
   g_return_val_if_fail (state, G_SOURCE_REMOVE);
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (state->self), G_SOURCE_REMOVE);
   g_return_val_if_fail (IDE_IS_BUFFER (state->buffer), G_SOURCE_REMOVE);
   g_return_val_if_fail (state->source_id > 0, G_SOURCE_REMOVE);
 
-  ide_buffer_manager_save_async (state->self, state->buffer, NULL, NULL, NULL);
+  file = ide_buffer_get_file (state->buffer);
+  if (file)
+    ide_buffer_manager_save_file_async (state->self, state->buffer, file, NULL, NULL, NULL, NULL);
+
   unregister_auto_save (state->self, state->buffer);
 
   return G_SOURCE_REMOVE;
