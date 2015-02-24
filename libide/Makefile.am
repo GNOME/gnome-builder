@@ -182,9 +182,9 @@ libide_1_0_la_SOURCES = \
 	libide/git/ide-git-search-index.h \
 	libide/ide-async-helper.c \
 	libide/ide-async-helper.h \
+	libide/ide-internal.h \
 	libide/ide-search-reducer.c \
 	libide/ide-search-reducer.h \
-	libide/ide-internal.h \
 	libide/tasks/ide-load-directory-task.c \
 	libide/tasks/ide-load-directory-task.h \
 	libide/util/ide-pango.c \
