@@ -35,13 +35,25 @@ G_BEGIN_DECLS
 
 typedef struct _IdeBufferClass  IdeBufferClass;
 
+typedef enum
+{
+  IDE_BUFFER_LINE_FLAGS_NONE     = 0,
+  IDE_BUFFER_LINE_FLAGS_ADDED    = 1 << 0,
+  IDE_BUFFER_LINE_FLAGS_CHANGED  = 1 << 1,
+  IDE_BUFFER_LINE_FLAGS_ERROR    = 1 << 2,
+  IDE_BUFFER_LINE_FLAGS_WARNING  = 1 << 3,
+} IdeBufferLineFlags;
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeBuffer, g_object_unref)
 
-GType       ide_buffer_get_type    (void);
-IdeContext *ide_buffer_get_context (IdeBuffer *self);
-IdeFile    *ide_buffer_get_file    (IdeBuffer *self);
-void        ide_buffer_set_file    (IdeBuffer *self,
-                                    IdeFile   *file);
+GType               ide_buffer_line_flags_get_type (void);
+GType               ide_buffer_get_type            (void);
+IdeContext         *ide_buffer_get_context         (IdeBuffer *self);
+IdeFile            *ide_buffer_get_file            (IdeBuffer *self);
+void                ide_buffer_set_file            (IdeBuffer *self,
+                                                    IdeFile   *file);
+IdeBufferLineFlags  ide_buffer_get_line_flags      (IdeBuffer *buffer,
+                                                    guint      line);
 
 G_END_DECLS
 

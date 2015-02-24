@@ -48,21 +48,6 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-/**
- * ide_buffer_get_context:
- *
- * Gets the #IdeBuffer:context property. This is the #IdeContext that owns the buffer.
- *
- * Returns: (transfer none): An #IdeContext.
- */
-IdeContext *
-ide_buffer_get_context (IdeBuffer *self)
-{
-  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
-
-  return self->context;
-}
-
 static void
 ide_buffer_set_context (IdeBuffer  *self,
                         IdeContext *context)
@@ -72,37 +57,6 @@ ide_buffer_set_context (IdeBuffer  *self,
   g_return_if_fail (self->context == NULL);
 
   ide_set_weak_pointer (&self->context, context);
-}
-
-/**
- * ide_buffer_get_file:
- *
- * Gets the underlying file behind the buffer.
- *
- * Returns: (transfer none): An #IdeFile.
- */
-IdeFile *
-ide_buffer_get_file (IdeBuffer *self)
-{
-  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
-
-  return self->file;
-}
-
-/**
- * ide_buffer_set_file:
- *
- * Sets the underlying file to use when saving and loading @self to and and from storage.
- */
-void
-ide_buffer_set_file (IdeBuffer *self,
-                     IdeFile   *file)
-{
-  g_return_if_fail (IDE_IS_BUFFER (self));
-  g_return_if_fail (IDE_IS_FILE (file));
-
-  if (g_set_object (&self->file, file))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
 }
 
 static void
@@ -194,4 +148,82 @@ ide_buffer_class_init (IdeBufferClass *klass)
 static void
 ide_buffer_init (IdeBuffer *self)
 {
+}
+
+GType
+ide_buffer_line_flags_get_type (void)
+{
+  static gsize type_id;
+
+  if (g_once_init_enter (&type_id))
+    {
+      GType _type_id;
+      const static GFlagsValue values[] = {
+        { IDE_BUFFER_LINE_FLAGS_NONE, "IDE_BUFFER_LINE_FLAGS_NONE", "NONE" },
+        { IDE_BUFFER_LINE_FLAGS_ADDED, "IDE_BUFFER_LINE_FLAGS_ADDED", "ADDED" },
+        { IDE_BUFFER_LINE_FLAGS_CHANGED, "IDE_BUFFER_LINE_FLAGS_CHANGED", "CHANGED" },
+        { IDE_BUFFER_LINE_FLAGS_ERROR, "IDE_BUFFER_LINE_FLAGS_ERROR", "ERROR" },
+        { IDE_BUFFER_LINE_FLAGS_WARNING, "IDE_BUFFER_LINE_FLAGS_WARNING", "WARNING" },
+        { 0 }
+      };
+
+      _type_id = g_flags_register_static ("IdeBufferLineFlags", values);
+      g_once_init_leave (&type_id, _type_id);
+    }
+
+  return type_id;
+}
+
+/**
+ * ide_buffer_get_file:
+ *
+ * Gets the underlying file behind the buffer.
+ *
+ * Returns: (transfer none): An #IdeFile.
+ */
+IdeFile *
+ide_buffer_get_file (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  return self->file;
+}
+
+/**
+ * ide_buffer_set_file:
+ *
+ * Sets the underlying file to use when saving and loading @self to and and from storage.
+ */
+void
+ide_buffer_set_file (IdeBuffer *self,
+                     IdeFile   *file)
+{
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (IDE_IS_FILE (file));
+
+  if (g_set_object (&self->file, file))
+    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+}
+
+/**
+ * ide_buffer_get_context:
+ *
+ * Gets the #IdeBuffer:context property. This is the #IdeContext that owns the buffer.
+ *
+ * Returns: (transfer none): An #IdeContext.
+ */
+IdeContext *
+ide_buffer_get_context (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  return self->context;
+}
+
+IdeBufferLineFlags
+ide_buffer_get_line_flags (IdeBuffer *self,
+                           guint      line)
+{
+  /* TODO: Coordinate with Vcs */
+  return IDE_BUFFER_LINE_FLAGS_ADDED;
 }
