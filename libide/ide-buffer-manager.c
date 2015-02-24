@@ -272,10 +272,10 @@ ide_buffer_manager_auto_save_cb (gpointer data)
   AutoSave *state = data;
   IdeFile *file;
 
-  g_return_val_if_fail (state, G_SOURCE_REMOVE);
-  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (state->self), G_SOURCE_REMOVE);
-  g_return_val_if_fail (IDE_IS_BUFFER (state->buffer), G_SOURCE_REMOVE);
-  g_return_val_if_fail (state->source_id > 0, G_SOURCE_REMOVE);
+  g_assert (state);
+  g_assert (IDE_IS_BUFFER_MANAGER (state->self));
+  g_assert (IDE_IS_BUFFER (state->buffer));
+  g_assert (state->source_id > 0);
 
   file = ide_buffer_get_file (state->buffer);
   if (file)
