@@ -25,6 +25,18 @@
 struct _IdeLineChangeGutterRenderer
 {
   GtkSourceGutterRenderer parent_instance;
+
+  GtkTextView   *text_view;
+  guint          text_view_notify_buffer;
+
+  GtkTextBuffer *buffer;
+  guint          buffer_notify_style_scheme;
+
+  GdkRGBA rgba_added;
+  GdkRGBA rgba_changed;
+
+  guint rgba_added_set : 1;
+  guint rgba_changed_set : 1;
 };
 
 struct _IdeLineChangeGutterRendererClass
@@ -40,6 +52,153 @@ static GdkRGBA gRgbaAdded;
 static GdkRGBA gRgbaChanged;
 
 static void
+disconnect_style_scheme (IdeLineChangeGutterRenderer *self)
+{
+  self->rgba_added_set = 0;
+  self->rgba_changed_set = 0;
+}
+
+static void
+disconnect_buffer (IdeLineChangeGutterRenderer *self)
+{
+  disconnect_style_scheme (self);
+
+  if (self->buffer && self->buffer_notify_style_scheme)
+    {
+      g_signal_handler_disconnect (self->buffer, self->buffer_notify_style_scheme);
+      self->buffer_notify_style_scheme = 0;
+      ide_clear_weak_pointer (&self->buffer);
+    }
+}
+
+static void
+disconnect_view (IdeLineChangeGutterRenderer *self)
+{
+  disconnect_buffer (self);
+
+  if (self->text_view && self->text_view_notify_buffer)
+    {
+      g_signal_handler_disconnect (self->text_view, self->text_view_notify_buffer);
+      self->text_view_notify_buffer = 0;
+      ide_clear_weak_pointer (&self->text_view);
+    }
+}
+
+static void
+connect_style_scheme (IdeLineChangeGutterRenderer *self)
+{
+  GtkTextView *text_view;
+  GtkTextBuffer *buffer;
+  GtkSourceStyleScheme *style_scheme;
+
+  text_view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
+    return;
+
+  style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
+
+  if (style_scheme)
+    {
+      GtkSourceStyle *style;
+
+      style = gtk_source_style_scheme_get_style (style_scheme, "diff:added-line");
+
+      if (style)
+        {
+          g_autofree gchar *foreground = NULL;
+          gboolean foreground_set = 0;
+
+          g_object_get (style,
+                        "foreground-set", &foreground_set,
+                        "foreground", &foreground,
+                        NULL);
+
+          if (foreground_set)
+            self->rgba_added_set = gdk_rgba_parse (&self->rgba_added, foreground);
+        }
+
+      style = gtk_source_style_scheme_get_style (style_scheme, "diff:changed-line");
+
+      if (style)
+        {
+          g_autofree gchar *foreground = NULL;
+          gboolean foreground_set = 0;
+
+          g_object_get (style,
+                        "foreground-set", &foreground_set,
+                        "foreground", &foreground,
+                        NULL);
+
+          if (foreground_set)
+            self->rgba_changed_set = gdk_rgba_parse (&self->rgba_changed, foreground);
+        }
+    }
+}
+
+static void
+notify_style_scheme_cb (GtkTextBuffer               *buffer,
+                        GParamSpec                  *pspec,
+                        IdeLineChangeGutterRenderer *self)
+{
+  disconnect_style_scheme (self);
+  connect_style_scheme (self);
+}
+
+static void
+connect_buffer (IdeLineChangeGutterRenderer *self)
+{
+  GtkTextBuffer *buffer;
+
+  buffer = gtk_text_view_get_buffer (self->text_view);
+
+  if (buffer)
+    {
+      ide_set_weak_pointer (&self->buffer, buffer);
+      self->buffer_notify_style_scheme = g_signal_connect (buffer,
+                                                           "notify::style-scheme",
+                                                           G_CALLBACK (notify_style_scheme_cb),
+                                                           self);
+      connect_style_scheme (self);
+    }
+}
+
+static void
+notify_buffer_cb (GtkTextView                 *text_view,
+                  GParamSpec                  *pspec,
+                  IdeLineChangeGutterRenderer *self)
+{
+  disconnect_buffer (self);
+  connect_buffer (self);
+}
+
+static void
+connect_view (IdeLineChangeGutterRenderer *self)
+{
+  GtkTextView *view;
+
+  view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
+
+  if (view)
+    {
+      ide_set_weak_pointer (&self->text_view, view);
+      self->text_view_notify_buffer = g_signal_connect (self->text_view,
+                                                        "notify::buffer",
+                                                        G_CALLBACK (notify_buffer_cb),
+                                                        self);
+      connect_buffer (self);
+    }
+}
+
+static void
+ide_line_change_gutter_renderer_notify_view (IdeLineChangeGutterRenderer *self)
+{
+  disconnect_view (self);
+  connect_view (self);
+}
+
+static void
 ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
                                       cairo_t                      *cr,
                                       GdkRectangle                 *bg_area,
@@ -48,12 +207,13 @@ ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
                                       GtkTextIter                  *end,
                                       GtkSourceGutterRendererState  state)
 {
+  IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)renderer;
   GtkTextBuffer *buffer;
   GdkRGBA *rgba = NULL;
   IdeBufferLineFlags flags;
   guint lineno;
 
-  g_return_if_fail (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (renderer));
+  g_return_if_fail (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
   g_return_if_fail (cr);
   g_return_if_fail (bg_area);
   g_return_if_fail (cell_area);
@@ -72,10 +232,10 @@ ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
   flags = ide_buffer_get_line_flags (IDE_BUFFER (buffer), lineno);
 
   if ((flags & IDE_BUFFER_LINE_FLAGS_ADDED) != 0)
-    rgba = &gRgbaAdded;
+    rgba = self->rgba_added_set ? &self->rgba_added : &gRgbaAdded;
 
   if ((flags & IDE_BUFFER_LINE_FLAGS_CHANGED) != 0)
-    rgba = &gRgbaChanged;
+    rgba = self->rgba_changed_set ? &self->rgba_changed : &gRgbaChanged;
 
   if (rgba)
     {
@@ -86,9 +246,20 @@ ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
 }
 
 static void
+ide_line_change_gutter_renderer_dispose (GObject *object)
+{
+  disconnect_view (IDE_LINE_CHANGE_GUTTER_RENDERER (object));
+
+  G_OBJECT_CLASS (ide_line_change_gutter_renderer_parent_class)->dispose (object);
+}
+
+static void
 ide_line_change_gutter_renderer_class_init (IdeLineChangeGutterRendererClass *klass)
 {
   GtkSourceGutterRendererClass *renderer_class = GTK_SOURCE_GUTTER_RENDERER_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = ide_line_change_gutter_renderer_dispose;
 
   renderer_class->draw = ide_line_change_gutter_renderer_draw;
 
@@ -99,4 +270,8 @@ ide_line_change_gutter_renderer_class_init (IdeLineChangeGutterRendererClass *kl
 static void
 ide_line_change_gutter_renderer_init (IdeLineChangeGutterRenderer *self)
 {
+  g_signal_connect (self,
+                    "notify::view",
+                    G_CALLBACK (ide_line_change_gutter_renderer_notify_view),
+                    NULL);
 }
