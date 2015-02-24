@@ -33,6 +33,10 @@ typedef struct _IdeBackForwardItem             IdeBackForwardItem;
 
 typedef struct _IdeBackForwardList             IdeBackForwardList;
 
+typedef struct _IdeBuffer                      IdeBuffer;
+
+typedef struct _IdeBufferManager               IdeBufferManager;
+
 typedef struct _IdeBuilder                     IdeBuilder;
 
 typedef struct _IdeBuildResult                 IdeBuildResult;

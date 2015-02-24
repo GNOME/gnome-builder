@@ -30,6 +30,8 @@ G_BEGIN_DECLS
 #include "ide-build-result.h"
 #include "ide-build-system.h"
 #include "ide-builder.h"
+#include "ide-buffer.h"
+#include "ide-buffer-manager.h"
 #include "ide-context.h"
 #include "ide-debugger.h"
 #include "ide-deployer.h"

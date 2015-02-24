@@ -28,6 +28,8 @@ libide/gjs/ide-gjs-script.cpp
 libide/gsettings/ide-gsettings-file-settings.c
 libide/ide-back-forward-item.c
 libide/ide-back-forward-list.c
+libide/ide-buffer-manager.c
+libide/ide-buffer.c
 libide/ide-build-result.c
 libide/ide-build-system.c
 libide/ide-builder.c

@@ -42,6 +42,10 @@ libide_1_0_la_public_sources = \
 	libide/ide-back-forward-item.h \
 	libide/ide-back-forward-list.c \
 	libide/ide-back-forward-list.h \
+	libide/ide-buffer-manager.c \
+	libide/ide-buffer-manager.h \
+	libide/ide-buffer.c \
+	libide/ide-buffer.h \
 	libide/ide-build-result.c \
 	libide/ide-build-result.h \
 	libide/ide-build-system.c \
