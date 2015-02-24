@@ -36,6 +36,8 @@ typedef struct
   IdeBuffer            *buffer;
   GtkCssProvider       *css_provider;
   PangoFontDescription *font_desc;
+
+  guint                 show_line_changes : 1;
 } IdeSourceViewPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
@@ -44,6 +46,7 @@ enum {
   PROP_0,
   PROP_FONT_NAME,
   PROP_FONT_DESC,
+  PROP_SHOW_LINE_CHANGES,
   LAST_PROP
 };
 
@@ -210,6 +213,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boxed (value, ide_source_view_get_font_desc (self));
       break;
 
+    case PROP_SHOW_LINE_CHANGES:
+      g_value_set_boolean (value, ide_source_view_get_show_line_changes (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -231,6 +238,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_FONT_DESC:
       ide_source_view_set_font_desc (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_SHOW_LINE_CHANGES:
+      ide_source_view_set_show_line_changes (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -316,4 +327,31 @@ ide_source_view_set_font_name (IdeSourceView *self,
   ide_source_view_set_font_desc (self, font_desc);
   if (font_desc)
     pango_font_description_free (font_desc);
+}
+
+gboolean
+ide_source_view_get_show_line_changes (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->show_line_changes;
+}
+
+void
+ide_source_view_set_show_line_changes (IdeSourceView *self,
+                                       gboolean       show_line_changes)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  show_line_changes = !!show_line_changes;
+
+  if (show_line_changes != priv->show_line_changes)
+    {
+      priv->show_line_changes = show_line_changes;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_LINE_CHANGES]);
+    }
 }

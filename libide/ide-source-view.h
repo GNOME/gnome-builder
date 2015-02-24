@@ -46,11 +46,14 @@ struct _IdeSourceViewClass
 
 GType ide_source_view_get_type (void);
 
-void                        ide_source_view_set_font_name (IdeSourceView              *self,
-                                                           const gchar                *font_name);
-const PangoFontDescription *ide_source_view_get_font_desc (IdeSourceView              *self);
-void                        ide_source_view_set_font_desc (IdeSourceView              *self,
-                                                           const PangoFontDescription *font_desc);
+const PangoFontDescription *ide_source_view_get_font_desc         (IdeSourceView              *self);
+gboolean                    ide_source_view_get_show_line_changes (IdeSourceView *self);
+void                        ide_source_view_set_font_desc         (IdeSourceView              *self,
+                                                                   const PangoFontDescription *font_desc);
+void                        ide_source_view_set_font_name         (IdeSourceView              *self,
+                                                                   const gchar                *font_name);
+void                        ide_source_view_set_show_line_changes (IdeSourceView              *self,
+                                                                   gboolean                    show_line_changes);
 
 G_END_DECLS
 
