@@ -701,7 +701,6 @@ ide_context_init_project_name_cb (GObject      *object,
                                   gpointer      user_data)
 {
   IdeContext *self;
-  g_autofree gchar *name = NULL;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GFileInfo) file_info = NULL;
   GFile *file = (GFile *)object;
@@ -938,7 +937,10 @@ ide_context_init_back_forward_list (gpointer             source_object,
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_return_boolean (task, TRUE); /* TODO: implement loading */
+
+  /* TODO: implement loading */
+
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -1068,7 +1070,6 @@ ide_context_init_async (GAsyncInitable      *initable,
                         gpointer             user_data)
 {
   IdeContext *context = (IdeContext *)initable;
-  g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (G_IS_ASYNC_INITABLE (context));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
