@@ -191,6 +191,8 @@ libide_1_0_la_SOURCES = \
 	libide/tasks/ide-load-directory-task.h \
 	libide/trie/trie.c \
 	libide/trie/trie.h \
+	libide/util/ide-cairo.c \
+	libide/util/ide-cairo.h \
 	libide/util/ide-pango.c \
 	libide/util/ide-pango.h \
 	$(NULL)
