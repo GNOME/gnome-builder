@@ -131,7 +131,6 @@ ide_source_snippets_manager_load_worker (GTask        *task,
 
   /* Load internal snippets */
   path = g_build_filename (g_get_user_config_dir (), ide_get_program_name (), "snippets", NULL);
-  g_print ("Loading %s\n", path);
   g_mkdir_with_parents (path, 0700);
   ide_source_snippets_manager_load_directory (source_object, path);
 
