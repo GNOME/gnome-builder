@@ -29,27 +29,27 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeContext, ide_context, IDE, CONTEXT, GObject)
 
-IdeBackForwardList *ide_context_get_back_forward_list (IdeContext           *self);
-GFile              *ide_context_get_project_file      (IdeContext           *self);
-IdeBufferManager   *ide_context_get_buffer_manager    (IdeContext           *self);
-IdeBuildSystem     *ide_context_get_build_system      (IdeContext           *self);
-IdeDeviceManager   *ide_context_get_device_manager    (IdeContext           *self);
-IdeProject         *ide_context_get_project           (IdeContext           *self);
-IdeScriptManager   *ide_context_get_script_manager    (IdeContext           *self);
-IdeSearchEngine    *ide_context_get_search_engine     (IdeContext           *self);
-IdeUnsavedFiles    *ide_context_get_unsaved_files     (IdeContext           *self);
-IdeVcs             *ide_context_get_vcs               (IdeContext           *self);
-const gchar        *ide_context_get_root_build_dir    (IdeContext           *self);
-gpointer            ide_context_get_service_typed     (IdeContext           *self,
-                                                       GType                 service_type);
-void                ide_context_new_async             (GFile                *project_file,
-                                                       GCancellable         *cancellable,
-                                                       GAsyncReadyCallback   callback,
-                                                       gpointer              user_data);
-IdeContext         *ide_context_new_finish            (GAsyncResult         *result,
-                                                       GError              **error);
-void                ide_context_set_root_build_dir    (IdeContext           *self,
-                                                       const gchar          *root_build_dir);
+IdeBackForwardList       *ide_context_get_back_forward_list (IdeContext           *self);
+GFile                    *ide_context_get_project_file      (IdeContext           *self);
+IdeBufferManager         *ide_context_get_buffer_manager    (IdeContext           *self);
+IdeBuildSystem           *ide_context_get_build_system      (IdeContext           *self);
+IdeDeviceManager         *ide_context_get_device_manager    (IdeContext           *self);
+IdeProject               *ide_context_get_project           (IdeContext           *self);
+IdeScriptManager         *ide_context_get_script_manager    (IdeContext           *self);
+IdeSearchEngine          *ide_context_get_search_engine     (IdeContext           *self);
+IdeUnsavedFiles          *ide_context_get_unsaved_files     (IdeContext           *self);
+IdeVcs                   *ide_context_get_vcs               (IdeContext           *self);
+const gchar              *ide_context_get_root_build_dir    (IdeContext           *self);
+gpointer                  ide_context_get_service_typed     (IdeContext           *self,
+                                                             GType                 service_type);
+void                      ide_context_new_async             (GFile                *project_file,
+                                                             GCancellable         *cancellable,
+                                                             GAsyncReadyCallback   callback,
+                                                             gpointer              user_data);
+IdeContext               *ide_context_new_finish            (GAsyncResult         *result,
+                                                             GError              **error);
+void                      ide_context_set_root_build_dir    (IdeContext           *self,
+                                                             const gchar          *root_build_dir);
 
 G_END_DECLS
 

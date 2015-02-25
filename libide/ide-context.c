@@ -38,22 +38,22 @@
 
 struct _IdeContext
 {
-  GObject             parent_instance;
+  GObject                   parent_instance;
 
-  IdeBackForwardList *back_forward_list;
-  IdeBufferManager   *buffer_manager;
-  IdeBuildSystem     *build_system;
-  IdeDeviceManager   *device_manager;
-  IdeScriptManager   *script_manager;
-  IdeSearchEngine    *search_engine;
-  IdeProject         *project;
-  GFile              *project_file;
-  gchar              *root_build_dir;
-  GHashTable         *services;
-  IdeUnsavedFiles    *unsaved_files;
-  IdeVcs             *vcs;
+  IdeBackForwardList       *back_forward_list;
+  IdeBufferManager         *buffer_manager;
+  IdeBuildSystem           *build_system;
+  IdeDeviceManager         *device_manager;
+  IdeScriptManager         *script_manager;
+  IdeSearchEngine          *search_engine;
+  IdeProject               *project;
+  GFile                    *project_file;
+  gchar                    *root_build_dir;
+  GHashTable               *services;
+  IdeUnsavedFiles          *unsaved_files;
+  IdeVcs                   *vcs;
 
-  guint              services_started : 1;
+  guint                     services_started : 1;
 };
 
 static void async_initable_init (GAsyncInitableIface *);
