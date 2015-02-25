@@ -37,12 +37,14 @@ typedef struct
   IdeBuffer               *buffer;
   GtkCssProvider          *css_provider;
   PangoFontDescription    *font_desc;
+  IdeIndenter             *indenter;
   GtkSourceGutterRenderer *line_change_renderer;
 
   gulong                   buffer_changed_handler;
   gulong                   buffer_notify_file_handler;
   gulong                   buffer_notify_language_handler;
 
+  guint                    auto_indent : 1;
   guint                    show_grid_lines : 1;
   guint                    show_line_changes : 1;
 } IdeSourceViewPrivate;
@@ -51,6 +53,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW
 
 enum {
   PROP_0,
+  PROP_AUTO_INDENT,
   PROP_FONT_NAME,
   PROP_FONT_DESC,
   PROP_SHOW_GRID_LINES,
@@ -59,6 +62,32 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+static void
+ide_source_view_reload_indenter (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->auto_indent && !priv->indenter)
+    gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (self), TRUE);
+  else
+    gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (self), FALSE);
+}
+
+static void
+ide_source_view_set_indenter (IdeSourceView *self,
+                              IdeIndenter   *indenter)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (!indenter || IDE_IS_INDENTER (indenter));
+
+  if (g_set_object (&priv->indenter, indenter))
+    ide_source_view_reload_indenter (self);
+}
 
 static void
 ide_source_view__file_load_settings_cb (GObject      *object,
@@ -122,6 +151,7 @@ ide_source_view_reload_language (IdeSourceView *self)
   IdeFile *file = NULL;
   IdeLanguage *language = NULL;
   GtkSourceLanguage *source_language = NULL;
+  IdeIndenter *indenter;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
@@ -135,6 +165,9 @@ ide_source_view_reload_language (IdeSourceView *self)
 
   source_language = ide_language_get_source_language (language);
   gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), source_language);
+
+  indenter = ide_language_get_indenter (language);
+  ide_source_view_set_indenter (self, indenter);
 }
 
 static void
@@ -242,6 +275,8 @@ ide_source_view_disconnect_buffer (IdeSourceView *self,
   ide_clear_signal_handler (buffer, &priv->buffer_changed_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_notify_file_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_notify_language_handler);
+
+  ide_source_view_set_indenter (self, NULL);
 }
 
 static void
@@ -276,6 +311,141 @@ ide_source_view_notify_buffer (IdeSourceView *self,
     }
 }
 
+static gboolean
+ide_source_view_key_press_event (GtkWidget   *widget,
+                                 GdkEventKey *event)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  gboolean ret = FALSE;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  /*
+   * Handle movement through the tab stops of the current snippet if needed.
+   */
+#if 0
+  if ((snippet = g_queue_peek_head (priv->snippets)))
+    {
+      switch ((gint) event->keyval)
+        {
+        case GDK_KEY_Escape:
+          gb_source_view_block_handlers (view);
+          gb_source_view_pop_snippet (view);
+          gb_source_view_scroll_to_insert (view);
+          gb_source_view_unblock_handlers (view);
+          return TRUE;
+
+        case GDK_KEY_KP_Tab:
+        case GDK_KEY_Tab:
+          gb_source_view_block_handlers (view);
+          if (!gb_source_snippet_move_next (snippet))
+            gb_source_view_pop_snippet (view);
+          gb_source_view_scroll_to_insert (view);
+          gb_source_view_unblock_handlers (view);
+          return TRUE;
+
+        case GDK_KEY_ISO_Left_Tab:
+          gb_source_view_block_handlers (view);
+          gb_source_snippet_move_previous (snippet);
+          gb_source_view_scroll_to_insert (view);
+          gb_source_view_unblock_handlers (view);
+          return TRUE;
+
+        default:
+          break;
+        }
+    }
+#endif
+
+  /*
+   * Allow the Input Method Context to potentially filter this keystroke.
+   */
+  if ((event->keyval == GDK_KEY_Return) || (event->keyval == GDK_KEY_KP_Enter))
+    if (gtk_text_view_im_context_filter_keypress (GTK_TEXT_VIEW (self), event))
+      return TRUE;
+
+  /*
+   * If we are going to insert the same character as the next character in the
+   * buffer, we may want to remove it first. This allows us to still trigger
+   * the auto-indent engine (instead of just short-circuiting the key-press).
+   */
+#if 0
+  gb_source_view_maybe_overwrite (view, event);
+#endif
+
+  /*
+   * If we have an auto-indenter and the event is for a trigger key, then we
+   * chain up to the parent class to insert the character, and then let the
+   * auto-indenter fix things up.
+   */
+  if ((priv->buffer != NULL) &&
+      (priv->auto_indent != FALSE) &&
+      (priv->indenter != NULL) &&
+      ide_indenter_is_trigger (priv->indenter, event))
+    {
+      GtkTextMark *insert;
+      GtkTextIter begin;
+      GtkTextIter end;
+      gchar *indent;
+      gint cursor_offset = 0;
+
+      /*
+       * Insert into the buffer so the auto-indenter can see it. If
+       * GtkSourceView:auto-indent is set, then we will end up with very
+       * unpredictable results.
+       */
+      GTK_WIDGET_CLASS (ide_source_view_parent_class)->key_press_event (widget, event);
+
+      /*
+       * Set begin and end to the position of the new insertion point.
+       */
+      insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->buffer));
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &begin, insert);
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &end, insert);
+
+      /*
+       * Let the formatter potentially set the replacement text.
+       */
+      indent = ide_indenter_format (priv->indenter, GTK_TEXT_VIEW (self), &begin, &end,
+                                    &cursor_offset, event);
+
+      if (indent)
+        {
+          /*
+           * Insert the indention text.
+           */
+          gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (priv->buffer));
+          if (!gtk_text_iter_equal (&begin, &end))
+            gtk_text_buffer_delete (GTK_TEXT_BUFFER (priv->buffer), &begin, &end);
+          gtk_text_buffer_insert (GTK_TEXT_BUFFER (priv->buffer), &begin, indent, -1);
+          g_free (indent);
+          gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (priv->buffer));
+
+          /*
+           * Place the cursor, as it could be somewhere within our indent text.
+           */
+          gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &begin, insert);
+          if (cursor_offset > 0)
+            gtk_text_iter_forward_chars (&begin, cursor_offset);
+          else if (cursor_offset < 0)
+            gtk_text_iter_backward_chars (&begin, ABS (cursor_offset));
+          gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->buffer), &begin, &begin);
+        }
+
+      return TRUE;
+    }
+
+  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->key_press_event (widget, event);
+
+#if 0
+  if (ret)
+    gb_source_view_maybe_insert_match (view, event);
+#endif
+
+  return ret;
+}
+
 static void
 ide_source_view_constructed (GObject *object)
 {
@@ -301,8 +471,9 @@ ide_source_view_dispose (GObject *object)
   IdeSourceView *self = (IdeSourceView *)object;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
-  g_clear_object (&priv->css_provider);
+  g_clear_object (&priv->indenter);
   g_clear_object (&priv->line_change_renderer);
+  g_clear_object (&priv->css_provider);
 
   if (priv->buffer)
     {
@@ -322,9 +493,14 @@ ide_source_view_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
   IdeSourceView *self = IDE_SOURCE_VIEW (object);
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   switch (prop_id)
     {
+    case PROP_AUTO_INDENT:
+      g_value_set_boolean (value, priv->auto_indent);
+      break;
+
     case PROP_FONT_DESC:
       g_value_set_boxed (value, ide_source_view_get_font_desc (self));
       break;
@@ -349,9 +525,15 @@ ide_source_view_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   IdeSourceView *self = IDE_SOURCE_VIEW (object);
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   switch (prop_id)
     {
+    case PROP_AUTO_INDENT:
+      priv->auto_indent = !!g_value_get_boolean (value);
+      ide_source_view_reload_indenter (self);
+      break;
+
     case PROP_FONT_NAME:
       ide_source_view_set_font_name (self, g_value_get_string (value));
       break;
@@ -377,11 +559,16 @@ static void
 ide_source_view_class_init (IdeSourceViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ide_source_view_constructed;
   object_class->dispose = ide_source_view_dispose;
   object_class->get_property = ide_source_view_get_property;
   object_class->set_property = ide_source_view_set_property;
+
+  widget_class->key_press_event = ide_source_view_key_press_event;
+
+  g_object_class_override_property (object_class, PROP_AUTO_INDENT, "auto-indent");
 
   gParamSpecs [PROP_FONT_DESC] =
     g_param_spec_boxed ("font-desc",

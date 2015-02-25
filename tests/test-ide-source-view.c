@@ -116,6 +116,7 @@ main (gint   argc,
                            NULL);
   gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (scroller));
   source_view = g_object_new (IDE_TYPE_SOURCE_VIEW,
+                              "auto-indent", TRUE,
                               "sensitive", FALSE,
                               "show-grid-lines", TRUE,
                               "show-line-changes", TRUE,
