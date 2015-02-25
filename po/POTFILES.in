@@ -55,9 +55,13 @@ libide/ide-source-snippet-completion-provider.c
 libide/ide-source-snippet-parser.c
 libide/ide-source-snippet.c
 libide/ide-source-snippets-manager.c
+libide/ide-source-view.c
 libide/ide.c
 libide/pygobject/ide-pygobject-script.c
 libide/tasks/ide-load-directory-task.c
+libide/theatrics/ide-animation.c
+libide/theatrics/ide-box-theatric.c
+libide/trie/trie.c
 src/animation/gb-animation.c
 src/app/gb-application.c
 src/auto-indent/gb-source-auto-indenter-c.c
