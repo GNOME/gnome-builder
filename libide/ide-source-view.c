@@ -45,6 +45,8 @@ typedef struct
   gulong                   buffer_notify_language_handler;
 
   guint                    auto_indent : 1;
+  guint                    insert_matching_brace : 1;
+  guint                    overwrite_braces : 1;
   guint                    show_grid_lines : 1;
   guint                    show_line_changes : 1;
 } IdeSourceViewPrivate;
@@ -56,6 +58,8 @@ enum {
   PROP_AUTO_INDENT,
   PROP_FONT_NAME,
   PROP_FONT_DESC,
+  PROP_INSERT_MATCHING_BRACE,
+  PROP_OVERWRITE_BRACES,
   PROP_SHOW_GRID_LINES,
   PROP_SHOW_LINE_CHANGES,
   LAST_PROP
@@ -311,6 +315,326 @@ ide_source_view_notify_buffer (IdeSourceView *self,
     }
 }
 
+static gunichar
+peek_previous_char (const GtkTextIter *iter)
+{
+  GtkTextIter copy = *iter;
+  gunichar ch = 0;
+
+  if (!gtk_text_iter_is_start (&copy))
+    {
+      gtk_text_iter_backward_char (&copy);
+      ch = gtk_text_iter_get_char (&copy);
+    }
+
+  return ch;
+}
+
+static void
+ide_source_view_maybe_overwrite (IdeSourceView *self,
+                                 GdkEventKey   *event)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextMark *mark;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  gunichar ch;
+  gunichar prev_ch;
+  gboolean ignore = FALSE;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (event);
+
+  /*
+   * Some auto-indenters will perform triggers on certain key-press that we
+   * would hijack by otherwise "doing nothing" during this key-press. So to
+   * avoid that, we actually delete the previous value and then allow this
+   * key-press event to continue.
+   */
+
+  if (!priv->overwrite_braces)
+    return;
+
+  /*
+   * WORKAROUND:
+   *
+   * If we are inside of a snippet, then let's not do anything. It really
+   * messes with the position tracking. Once we can better integrate these
+   * things, go ahead and remove this.
+   */
+#ifdef TODO_AFTER_SNIPPETS
+  if (priv->snippets->length)
+    return;
+#endif
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  mark = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+
+  ch = gtk_text_iter_get_char (&iter);
+  prev_ch = peek_previous_char (&iter);
+
+  switch (event->keyval)
+    {
+    case GDK_KEY_parenright:
+      ignore = (ch == ')');
+      break;
+
+    case GDK_KEY_bracketright:
+      ignore = (ch == ']');
+      break;
+
+    case GDK_KEY_braceright:
+      ignore = (ch == '}');
+      break;
+
+    case GDK_KEY_quotedbl:
+      ignore = (ch == '"') && (prev_ch != '\\');
+      break;
+
+    case GDK_KEY_quoteleft:
+    case GDK_KEY_quoteright:
+      ignore = (ch == '\'');
+      break;
+
+    default:
+      break;
+    }
+
+  if (ignore && !gtk_text_buffer_get_has_selection (buffer))
+    {
+      GtkTextIter next = iter;
+
+      if (!gtk_text_iter_forward_char (&next))
+        gtk_text_buffer_get_end_iter (buffer, &next);
+
+      gtk_text_buffer_select_range (buffer, &iter, &next);
+    }
+}
+
+static gboolean
+is_closing_char (gunichar ch)
+{
+  switch (ch)
+    {
+    case '}':
+    case ')':
+    case '"':
+    case '\'':
+    case ']':
+      return TRUE;
+
+    default:
+      return FALSE;
+    }
+}
+
+static guint
+count_chars_on_line (IdeSourceView      *view,
+                     gunichar           expected_char,
+                     const GtkTextIter *iter)
+{
+  GtkTextIter cur;
+  guint count = 0;
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (view), 0);
+  g_return_val_if_fail (iter, 0);
+
+  cur = *iter;
+
+  gtk_text_iter_set_line_offset (&cur, 0);
+
+  while (!gtk_text_iter_ends_line (&cur))
+    {
+      gunichar ch;
+
+      ch = gtk_text_iter_get_char (&cur);
+
+      if (ch == '\\')
+        {
+          gtk_text_iter_forward_chars (&cur, 2);
+          continue;
+        }
+
+      count += (ch == expected_char);
+      gtk_text_iter_forward_char (&cur);
+    }
+
+  return count;
+}
+
+static gboolean
+ide_source_view_maybe_insert_match (IdeSourceView *self,
+                                    GdkEventKey   *event)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceBuffer *sbuf;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  GtkTextIter prev_iter;
+  GtkTextIter next_iter;
+  gunichar next_ch = 0;
+  gchar ch = 0;
+
+  /*
+   * TODO: I think we should put this into a base class for auto
+   *       indenters. It would make some things a lot more convenient, like
+   *       changing which characters we won't add matching characters for.
+   */
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (event);
+
+  /*
+   * If we are disabled, then do nothing.
+   */
+  if (!priv->insert_matching_brace)
+    return FALSE;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  sbuf = GTK_SOURCE_BUFFER (buffer);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  next_ch = gtk_text_iter_get_char (&iter);
+
+  prev_iter = iter;
+  gtk_text_iter_backward_chars (&prev_iter, 2);
+
+  /*
+   * If the source language has marked this region as a string or comment,
+   * then do nothing.
+   */
+  if (gtk_source_buffer_iter_has_context_class (sbuf, &prev_iter, "string") ||
+      gtk_source_buffer_iter_has_context_class (sbuf, &prev_iter, "comment"))
+    return FALSE;
+
+  switch (event->keyval)
+    {
+    case GDK_KEY_braceleft:
+      ch = '}';
+      break;
+
+    case GDK_KEY_parenleft:
+      ch = ')';
+      break;
+
+    case GDK_KEY_bracketleft:
+      ch = ']';
+      break;
+
+    case GDK_KEY_quotedbl:
+      ch = '"';
+      break;
+
+#if 0
+    /*
+     * TODO: We should avoid this when we are in comments, etc. That will
+     *       require some communication with the syntax engine.
+     */
+    case GDK_KEY_quoteleft:
+    case GDK_KEY_quoteright:
+      ch = '\'';
+      break;
+#endif
+
+    default:
+      return FALSE;
+    }
+
+  /*
+   * Insert the match if one of the following is true:
+   *
+   *  - We are at EOF
+   *  - The next character is whitespace
+   *  - The next character is a closing brace.
+   *  - If the char is ", then there must be an even number already on
+   *    the current line.
+   */
+
+  next_iter = iter;
+  if (gtk_text_iter_forward_char (&next_iter))
+    next_ch = gtk_text_iter_get_char (&next_iter);
+
+  if (!next_ch || g_unichar_isspace (next_ch) || is_closing_char (next_ch))
+    {
+      /*
+       * Special case for working with double quotes.
+       *
+       * Ignore double quote if we just added enough to make there be an
+       * even number on this line. However, if it was the first quote on
+       * the line, we still need to include a second.
+       */
+      if (ch == '"')
+        {
+          guint count;
+
+          count = count_chars_on_line (self, '"', &iter);
+          if ((count > 1) && ((count % 2) == 0))
+            return FALSE;
+        }
+
+      gtk_text_buffer_insert_at_cursor (buffer, &ch, 1);
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+      gtk_text_iter_backward_char (&iter);
+      gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+ide_source_view_maybe_delete_match (IdeSourceView *self,
+                                    GdkEventKey   *event)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  GtkTextIter prev;
+  gunichar ch;
+  gunichar match;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (event);
+  g_assert_cmpint (event->keyval, ==, GDK_KEY_BackSpace);
+
+  if (!priv->insert_matching_brace)
+    return FALSE;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  prev = iter;
+  if (!gtk_text_iter_backward_char (&prev))
+    return FALSE;
+
+  ch = gtk_text_iter_get_char (&prev);
+
+  switch (ch)
+    {
+    case '[':  match = ']';  break;
+    case '{':  match = '}';  break;
+    case '(':  match = ')';  break;
+    case '"':  match = '"';  break;
+    case '\'': match = '\''; break;
+    default:   match = 0;    break;
+    }
+
+  if (gtk_text_iter_get_char (&iter) == match)
+    {
+      gtk_text_iter_forward_char (&iter);
+      gtk_text_buffer_delete (buffer, &prev, &iter);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static gboolean
 ide_source_view_key_press_event (GtkWidget   *widget,
                                  GdkEventKey *event)
@@ -324,32 +648,32 @@ ide_source_view_key_press_event (GtkWidget   *widget,
   /*
    * Handle movement through the tab stops of the current snippet if needed.
    */
-#if 0
+#ifdef TODO_AFTER_SNIPPETS
   if ((snippet = g_queue_peek_head (priv->snippets)))
     {
       switch ((gint) event->keyval)
         {
         case GDK_KEY_Escape:
-          gb_source_view_block_handlers (view);
-          gb_source_view_pop_snippet (view);
-          gb_source_view_scroll_to_insert (view);
-          gb_source_view_unblock_handlers (view);
+          ide_source_view_block_handlers (view);
+          ide_source_view_pop_snippet (view);
+          ide_source_view_scroll_to_insert (view);
+          ide_source_view_unblock_handlers (view);
           return TRUE;
 
         case GDK_KEY_KP_Tab:
         case GDK_KEY_Tab:
-          gb_source_view_block_handlers (view);
+          ide_source_view_block_handlers (view);
           if (!gb_source_snippet_move_next (snippet))
-            gb_source_view_pop_snippet (view);
-          gb_source_view_scroll_to_insert (view);
-          gb_source_view_unblock_handlers (view);
+            ide_source_view_pop_snippet (view);
+          ide_source_view_scroll_to_insert (view);
+          ide_source_view_unblock_handlers (view);
           return TRUE;
 
         case GDK_KEY_ISO_Left_Tab:
-          gb_source_view_block_handlers (view);
+          ide_source_view_block_handlers (view);
           gb_source_snippet_move_previous (snippet);
-          gb_source_view_scroll_to_insert (view);
-          gb_source_view_unblock_handlers (view);
+          ide_source_view_scroll_to_insert (view);
+          ide_source_view_unblock_handlers (view);
           return TRUE;
 
         default:
@@ -370,9 +694,15 @@ ide_source_view_key_press_event (GtkWidget   *widget,
    * buffer, we may want to remove it first. This allows us to still trigger
    * the auto-indent engine (instead of just short-circuiting the key-press).
    */
-#if 0
-  gb_source_view_maybe_overwrite (view, event);
-#endif
+  ide_source_view_maybe_overwrite (self, event);
+
+  /*
+   * If we are backspacing, and the next character is the matching brace,
+   * then we might want to delete it too.
+   */
+  if (event->keyval == GDK_KEY_BackSpace)
+    if (ide_source_view_maybe_delete_match (self, event))
+      return TRUE;
 
   /*
    * If we have an auto-indenter and the event is for a trigger key, then we
@@ -438,10 +768,8 @@ ide_source_view_key_press_event (GtkWidget   *widget,
 
   ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->key_press_event (widget, event);
 
-#if 0
   if (ret)
-    gb_source_view_maybe_insert_match (view, event);
-#endif
+    ide_source_view_maybe_insert_match (self, event);
 
   return ret;
 }
@@ -505,6 +833,14 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boxed (value, ide_source_view_get_font_desc (self));
       break;
 
+    case PROP_INSERT_MATCHING_BRACE:
+      g_value_set_boolean (value, ide_source_view_get_insert_matching_brace (self));
+      break;
+
+    case PROP_OVERWRITE_BRACES:
+      g_value_set_boolean (value, ide_source_view_get_overwrite_braces (self));
+      break;
+
     case PROP_SHOW_GRID_LINES:
       g_value_set_boolean (value, ide_source_view_get_show_grid_lines (self));
       break;
@@ -540,6 +876,14 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_FONT_DESC:
       ide_source_view_set_font_desc (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_INSERT_MATCHING_BRACE:
+      ide_source_view_set_insert_matching_brace (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_OVERWRITE_BRACES:
+      ide_source_view_set_overwrite_braces (self, g_value_get_boolean (value));
       break;
 
     case PROP_SHOW_GRID_LINES:
@@ -587,6 +931,24 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FONT_NAME,
                                    gParamSpecs [PROP_FONT_NAME]);
+
+  gParamSpecs [PROP_INSERT_MATCHING_BRACE] =
+    g_param_spec_boolean ("insert-matching-brace",
+                          _("Insert Matching Brace"),
+                          _("Insert a matching brace/bracket/quotation/paren."),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_INSERT_MATCHING_BRACE,
+                                   gParamSpecs [PROP_INSERT_MATCHING_BRACE]);
+
+  gParamSpecs [PROP_OVERWRITE_BRACES] =
+    g_param_spec_boolean ("overwrite-braces",
+                          _("Overwrite Braces"),
+                          _("Overwrite a matching brace/bracket/quotation/paren."),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_OVERWRITE_BRACES,
+                                   gParamSpecs [PROP_OVERWRITE_BRACES]);
 
   gParamSpecs [PROP_SHOW_GRID_LINES] =
     g_param_spec_boolean ("show-grid-lines",
@@ -721,5 +1083,59 @@ ide_source_view_set_show_grid_lines (IdeSourceView *self,
         gtk_source_view_set_background_pattern (GTK_SOURCE_VIEW (self),
                                                 GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_GRID_LINES]);
+    }
+}
+
+gboolean
+ide_source_view_get_insert_matching_brace (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->insert_matching_brace;
+}
+
+gboolean
+ide_source_view_get_overwrite_braces (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->overwrite_braces;
+}
+
+void
+ide_source_view_set_insert_matching_brace (IdeSourceView *self,
+                                           gboolean       insert_matching_brace)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  insert_matching_brace = !!insert_matching_brace;
+
+  if (insert_matching_brace != priv->insert_matching_brace)
+    {
+      priv->insert_matching_brace = insert_matching_brace;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_INSERT_MATCHING_BRACE]);
+    }
+}
+
+void
+ide_source_view_set_overwrite_braces (IdeSourceView *self,
+                                      gboolean       overwrite_braces)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  overwrite_braces = !!overwrite_braces;
+
+  if (overwrite_braces != priv->overwrite_braces)
+    {
+      priv->overwrite_braces = overwrite_braces;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_OVERWRITE_BRACES]);
     }
 }

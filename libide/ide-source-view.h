@@ -46,19 +46,24 @@ struct _IdeSourceViewClass
   GtkSourceViewClass parent_class;
 };
 
-GType ide_source_view_get_type (void);
-
-const PangoFontDescription *ide_source_view_get_font_desc         (IdeSourceView              *self);
-gboolean                    ide_source_view_get_show_grid_lines   (IdeSourceView              *self);
-gboolean                    ide_source_view_get_show_line_changes (IdeSourceView              *self);
-void                        ide_source_view_set_font_desc         (IdeSourceView              *self,
-                                                                   const PangoFontDescription *font_desc);
-void                        ide_source_view_set_font_name         (IdeSourceView              *self,
-                                                                   const gchar                *font_name);
-void                        ide_source_view_set_show_grid_lines   (IdeSourceView              *self,
-                                                                   gboolean                    show_grid_lines);
-void                        ide_source_view_set_show_line_changes (IdeSourceView              *self,
-                                                                   gboolean                    show_line_changes);
+const PangoFontDescription *ide_source_view_get_font_desc             (IdeSourceView              *self);
+gboolean                    ide_source_view_get_insert_matching_brace (IdeSourceView              *self);
+gboolean                    ide_source_view_get_overwrite_braces      (IdeSourceView              *self);
+gboolean                    ide_source_view_get_show_grid_lines       (IdeSourceView              *self);
+gboolean                    ide_source_view_get_show_line_changes     (IdeSourceView              *self);
+GType                       ide_source_view_get_type                  (void);
+void                        ide_source_view_set_font_desc             (IdeSourceView              *self,
+                                                                       const PangoFontDescription *font_desc);
+void                        ide_source_view_set_font_name             (IdeSourceView              *self,
+                                                                       const gchar                *font_name);
+void                        ide_source_view_set_insert_matching_brace (IdeSourceView              *self,
+                                                                       gboolean                    insert_matching_brace);
+void                        ide_source_view_set_overwrite_braces      (IdeSourceView              *self,
+                                                                       gboolean                    overwrite_braces);
+void                        ide_source_view_set_show_grid_lines       (IdeSourceView              *self,
+                                                                       gboolean                    show_grid_lines);
+void                        ide_source_view_set_show_line_changes     (IdeSourceView              *self,
+                                                                       gboolean                    show_line_changes);
 
 G_END_DECLS
 
