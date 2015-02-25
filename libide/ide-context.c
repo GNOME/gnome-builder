@@ -33,6 +33,7 @@
 #include "ide-search-engine.h"
 #include "ide-search-provider.h"
 #include "ide-service.h"
+#include "ide-source-snippets-manager.h"
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 
@@ -46,6 +47,7 @@ struct _IdeContext
   IdeDeviceManager         *device_manager;
   IdeScriptManager         *script_manager;
   IdeSearchEngine          *search_engine;
+  IdeSourceSnippetsManager *snippets_manager;
   IdeProject               *project;
   GFile                    *project_file;
   gchar                    *root_build_dir;
@@ -72,6 +74,7 @@ enum {
   PROP_ROOT_BUILD_DIR,
   PROP_SCRIPT_MANAGER,
   PROP_SEARCH_ENGINE,
+  PROP_SNIPPETS_MANAGER,
   PROP_VCS,
   PROP_UNSAVED_FILES,
   LAST_PROP
@@ -187,6 +190,21 @@ ide_context_set_root_build_dir (IdeContext  *self,
       g_object_notify_by_pspec (G_OBJECT (self),
                                 gParamSpecs [PROP_ROOT_BUILD_DIR]);
     }
+}
+
+/**
+ * ide_context_get_snippets_manager:
+ *
+ * Gets the #IdeContext:snippets-manager property.
+ *
+ * Returns: (transfer none): An #IdeSourceSnippetsManager.
+ */
+IdeSourceSnippetsManager *
+ide_context_get_snippets_manager (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->snippets_manager;
 }
 
 /**
@@ -507,6 +525,10 @@ ide_context_get_property (GObject    *object,
       g_value_set_object (value, ide_context_get_search_engine (self));
       break;
 
+    case PROP_SNIPPETS_MANAGER:
+      g_value_set_object (value, ide_context_get_snippets_manager (self));
+      break;
+
     case PROP_UNSAVED_FILES:
       g_value_set_object (value, ide_context_get_unsaved_files (self));
       break;
@@ -627,6 +649,15 @@ ide_context_class_init (IdeContextClass *klass)
   g_object_class_install_property (object_class, PROP_SEARCH_ENGINE,
                                    gParamSpecs [PROP_SEARCH_ENGINE]);
 
+  gParamSpecs [PROP_SNIPPETS_MANAGER] =
+    g_param_spec_object ("snippets-manager",
+                         _("Snippets Manager"),
+                         _("The snippets manager for the context."),
+                         IDE_TYPE_SOURCE_SNIPPETS_MANAGER,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SNIPPETS_MANAGER,
+                                   gParamSpecs [PROP_SNIPPETS_MANAGER]);
+
   gParamSpecs [PROP_UNSAVED_FILES] =
     g_param_spec_object ("unsaved-files",
                          _("Unsaved Files"),
@@ -684,6 +715,10 @@ ide_context_init (IdeContext *self)
   self->search_engine = g_object_new (IDE_TYPE_SEARCH_ENGINE,
                                       "context", self,
                                       NULL);
+
+  self->snippets_manager = g_object_new (IDE_TYPE_SOURCE_SNIPPETS_MANAGER,
+                                         "context", self,
+                                         NULL);
 
   scriptsdir = g_build_filename (g_get_user_config_dir (),
                                  ide_get_program_name (),
@@ -926,6 +961,45 @@ ide_context_init_scripts (gpointer             source_object,
 }
 
 static void
+ide_context_init_snippets_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  IdeSourceSnippetsManager *manager = (IdeSourceSnippetsManager *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  g_return_if_fail (IDE_IS_SOURCE_SNIPPETS_MANAGER (manager));
+
+  if (!ide_source_snippets_manager_load_finish (manager, result, &error))
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_context_init_snippets (gpointer             source_object,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  ide_source_snippets_manager_load_async (self->snippets_manager,
+                                          cancellable,
+                                          ide_context_init_snippets_cb,
+                                          g_object_ref (task));
+}
+
+static void
 ide_context_init_back_forward_list (gpointer             source_object,
                                     GCancellable        *cancellable,
                                     GAsyncReadyCallback  callback,
@@ -1085,6 +1159,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_back_forward_list,
                         ide_context_init_unsaved_files,
                         ide_context_init_search_engine,
+                        ide_context_init_snippets,
                         ide_context_init_scripts,
                         NULL);
 

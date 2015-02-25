@@ -37,6 +37,7 @@ IdeDeviceManager         *ide_context_get_device_manager    (IdeContext         
 IdeProject               *ide_context_get_project           (IdeContext           *self);
 IdeScriptManager         *ide_context_get_script_manager    (IdeContext           *self);
 IdeSearchEngine          *ide_context_get_search_engine     (IdeContext           *self);
+IdeSourceSnippetsManager *ide_context_get_snippets_manager  (IdeContext           *self);
 IdeUnsavedFiles          *ide_context_get_unsaved_files     (IdeContext           *self);
 IdeVcs                   *ide_context_get_vcs               (IdeContext           *self);
 const gchar              *ide_context_get_root_build_dir    (IdeContext           *self);
