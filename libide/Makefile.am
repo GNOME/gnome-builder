@@ -189,6 +189,12 @@ libide_1_0_la_SOURCES = \
 	libide/ide-search-reducer.h \
 	libide/tasks/ide-load-directory-task.c \
 	libide/tasks/ide-load-directory-task.h \
+	libide/theatrics/ide-animation.c \
+	libide/theatrics/ide-animation.h \
+	libide/theatrics/ide-box-theatric.c \
+	libide/theatrics/ide-box-theatric.h \
+	libide/theatrics/ide-frame-source.c \
+	libide/theatrics/ide-frame-source.h \
 	libide/trie/trie.c \
 	libide/trie/trie.h \
 	libide/util/ide-cairo.c \
@@ -214,6 +220,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide/pygobject \
 	-I$(top_srcdir)/libide/python \
 	-I$(top_srcdir)/libide/tasks \
+	-I$(top_srcdir)/libide/theatrics \
 	-I$(top_srcdir)/libide/util \
 	-I$(top_srcdir)/libide/xml \
 	$(CLANG_CFLAGS) \
