@@ -61,23 +61,36 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void
+ide_source_view_reload_language (IdeSourceView *self)
+{
+  GtkTextBuffer *buffer;
+  IdeFile *file = NULL;
+  IdeLanguage *language = NULL;
+  GtkSourceLanguage *source_language = NULL;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  file = ide_buffer_get_file (IDE_BUFFER (buffer));
+  language = ide_file_get_language (file);
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_FILE (file));
+  g_assert (IDE_IS_LANGUAGE (language));
+
+  source_language = ide_language_get_source_language (language);
+  gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), source_language);
+}
+
+static void
 ide_source_view__buffer_notify_file_cb (IdeSourceView *self,
                                         GParamSpec    *pspec,
                                         IdeBuffer     *buffer)
 {
-  IdeFile *file;
-  IdeLanguage *language;
-  GtkSourceLanguage *source_language;
-
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  if ((file = ide_buffer_get_file (buffer)) &&
-      (language = ide_file_get_language (file)) &&
-      (source_language = ide_language_get_source_language (language)))
-    gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), source_language);
-  else
-    gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), NULL);
+  ide_source_view_reload_language (self);
 }
 
 static void
