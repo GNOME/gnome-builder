@@ -27,4 +27,4 @@ gchar *ide_pango_font_description_to_css (const PangoFontDescription *font_desc)
 
 G_END_DECLS
 
-#endif /* GB_PANGO_H */
+#endif /* IDE_PANGO_H */
