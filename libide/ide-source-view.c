@@ -61,6 +61,58 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void
+ide_source_view__file_load_settings_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  g_autoptr(IdeSourceView) self = user_data;
+  g_autoptr(IdeFileSettings) file_settings = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeFile *file = (IdeFile *)object;
+  IdeIndentStyle indent_style;
+  guint tab_width;
+  gint indent_width;
+
+  g_assert (IDE_IS_FILE (file));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  file_settings = ide_file_load_settings_finish (file, result, &error);
+
+  if (!file_settings)
+    {
+      g_message ("%s", error->message);
+      return;
+    }
+
+  indent_width = ide_file_settings_get_indent_width (file_settings);
+  indent_style = ide_file_settings_get_indent_style (file_settings);
+  tab_width = ide_file_settings_get_tab_width (file_settings);
+
+  gtk_source_view_set_indent_width (GTK_SOURCE_VIEW (self), indent_width);
+  gtk_source_view_set_tab_width (GTK_SOURCE_VIEW (self), tab_width);
+  gtk_source_view_set_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (self),
+                                                     (indent_style == IDE_INDENT_STYLE_SPACES));
+}
+
+static void
+ide_source_view_reload_file_settings (IdeSourceView *self)
+{
+  IdeBuffer *buffer;
+  IdeFile *file;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (self))));
+
+  buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (self)));
+  file = ide_buffer_get_file (buffer);
+
+  ide_file_load_settings_async (file,
+                                NULL,
+                                ide_source_view__file_load_settings_cb,
+                                g_object_ref (self));
+}
+
+static void
 ide_source_view_reload_language (IdeSourceView *self)
 {
   GtkTextBuffer *buffer;
@@ -91,6 +143,7 @@ ide_source_view__buffer_notify_file_cb (IdeSourceView *self,
   g_assert (IDE_IS_BUFFER (buffer));
 
   ide_source_view_reload_language (self);
+  ide_source_view_reload_file_settings (self);
 }
 
 static void
