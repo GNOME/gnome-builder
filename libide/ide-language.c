@@ -50,6 +50,29 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 static IdeDiagnostician *gDiagnostician;
 
 /**
+ * ide_language_get_source_language:
+ *
+ * Retrieves the source language to use for the file.
+ *
+ * Returns: (transfer none) (nullable): A #GtkSourceLanguage or %NULL.
+ */
+GtkSourceLanguage *
+ide_language_get_source_language (IdeLanguage *self)
+{
+  IdeLanguagePrivate *priv = ide_language_get_instance_private (self);
+  GtkSourceLanguageManager *languages;
+  GtkSourceLanguage *language;
+
+  if (IDE_LANGUAGE_GET_CLASS (self)->get_source_language)
+    return IDE_LANGUAGE_GET_CLASS (self)->get_source_language (self);
+
+  languages = gtk_source_language_manager_get_default ();
+  language = gtk_source_language_manager_get_language (languages, priv->id);
+
+  return language;
+}
+
+/**
  * ide_language_get_diagnostician:
  *
  * Returns the #IdeDiagnostician for the #IdeLanguage.
