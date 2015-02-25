@@ -117,6 +117,7 @@ main (gint   argc,
   gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (scroller));
   source_view = g_object_new (IDE_TYPE_SOURCE_VIEW,
                               "sensitive", FALSE,
+                              "show-grid-lines", TRUE,
                               "show-line-changes", TRUE,
                               "show-line-numbers", TRUE,
                               "visible", TRUE,

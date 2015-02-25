@@ -39,6 +39,7 @@ typedef struct
   PangoFontDescription    *font_desc;
   GtkSourceGutterRenderer *line_change_renderer;
 
+  guint                    show_grid_lines : 1;
   guint                    show_line_changes : 1;
 } IdeSourceViewPrivate;
 
@@ -48,6 +49,7 @@ enum {
   PROP_0,
   PROP_FONT_NAME,
   PROP_FONT_DESC,
+  PROP_SHOW_GRID_LINES,
   PROP_SHOW_LINE_CHANGES,
   LAST_PROP
 };
@@ -233,6 +235,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boxed (value, ide_source_view_get_font_desc (self));
       break;
 
+    case PROP_SHOW_GRID_LINES:
+      g_value_set_boolean (value, ide_source_view_get_show_grid_lines (self));
+      break;
+
     case PROP_SHOW_LINE_CHANGES:
       g_value_set_boolean (value, ide_source_view_get_show_line_changes (self));
       break;
@@ -258,6 +264,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_FONT_DESC:
       ide_source_view_set_font_desc (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_SHOW_GRID_LINES:
+      ide_source_view_set_show_grid_lines (self, g_value_get_boolean (value));
       break;
 
     case PROP_SHOW_LINE_CHANGES:
@@ -296,6 +306,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FONT_NAME,
                                    gParamSpecs [PROP_FONT_NAME]);
+
+  gParamSpecs [PROP_SHOW_GRID_LINES] =
+    g_param_spec_boolean ("show-grid-lines",
+                          _("Show Grid Lines"),
+                          _("If the background grid should be shown."),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SHOW_GRID_LINES,
+                                   gParamSpecs [PROP_SHOW_GRID_LINES]);
 
   gParamSpecs [PROP_SHOW_LINE_CHANGES] =
     g_param_spec_boolean ("show-line-changes",
@@ -388,5 +407,38 @@ ide_source_view_set_show_line_changes (IdeSourceView *self,
       if (priv->line_change_renderer)
         gtk_source_gutter_renderer_set_visible (priv->line_change_renderer, show_line_changes);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_LINE_CHANGES]);
+    }
+}
+
+gboolean
+ide_source_view_get_show_grid_lines (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->show_grid_lines;
+}
+
+void
+ide_source_view_set_show_grid_lines (IdeSourceView *self,
+                                     gboolean       show_grid_lines)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  show_grid_lines = !!show_grid_lines;
+
+  if (show_grid_lines != priv->show_grid_lines)
+    {
+      priv->show_grid_lines = show_grid_lines;
+      if (show_grid_lines)
+        gtk_source_view_set_background_pattern (GTK_SOURCE_VIEW (self),
+                                                GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID);
+      else
+        gtk_source_view_set_background_pattern (GTK_SOURCE_VIEW (self),
+                                                GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_GRID_LINES]);
     }
 }
