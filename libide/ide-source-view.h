@@ -21,6 +21,8 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-types.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_VIEW            (ide_source_view_get_type())
@@ -44,14 +46,26 @@ struct _IdeSourceView
 struct _IdeSourceViewClass
 {
   GtkSourceViewClass parent_class;
+
+  void (*pop_snippet)  (IdeSourceView           *self,
+                        IdeSourceSnippet        *snippet);
+  void (*push_snippet) (IdeSourceView           *self,
+                        IdeSourceSnippet        *snippet,
+                        IdeSourceSnippetContext *context,
+                        const GtkTextIter       *location);
 };
 
+void                        ide_source_view_clear_snippets            (IdeSourceView              *self);
 const PangoFontDescription *ide_source_view_get_font_desc             (IdeSourceView              *self);
 gboolean                    ide_source_view_get_insert_matching_brace (IdeSourceView              *self);
 gboolean                    ide_source_view_get_overwrite_braces      (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_grid_lines       (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_line_changes     (IdeSourceView              *self);
+gboolean                    ide_source_view_get_snippet_completion    (IdeSourceView              *self);
 GType                       ide_source_view_get_type                  (void);
+void                        ide_source_view_pop_snippet               (IdeSourceView              *self);
+void                        ide_source_view_push_snippet              (IdeSourceView              *self,
+                                                                       IdeSourceSnippet           *snippet);
 void                        ide_source_view_set_font_desc             (IdeSourceView              *self,
                                                                        const PangoFontDescription *font_desc);
 void                        ide_source_view_set_font_name             (IdeSourceView              *self,
@@ -64,6 +78,8 @@ void                        ide_source_view_set_show_grid_lines       (IdeSource
                                                                        gboolean                    show_grid_lines);
 void                        ide_source_view_set_show_line_changes     (IdeSourceView              *self,
                                                                        gboolean                    show_line_changes);
+void                        ide_source_view_set_snippet_completion    (IdeSourceView              *self,
+                                                                       gboolean                    snippet_completion);
 
 G_END_DECLS
 
