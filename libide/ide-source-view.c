@@ -70,6 +70,7 @@ ide_source_view__file_load_settings_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   IdeFile *file = (IdeFile *)object;
   IdeIndentStyle indent_style;
+  guint right_margin_position;
   guint tab_width;
   gint indent_width;
 
@@ -86,10 +87,12 @@ ide_source_view__file_load_settings_cb (GObject      *object,
 
   indent_width = ide_file_settings_get_indent_width (file_settings);
   indent_style = ide_file_settings_get_indent_style (file_settings);
+  right_margin_position = ide_file_settings_get_right_margin_position (file_settings);
   tab_width = ide_file_settings_get_tab_width (file_settings);
 
   gtk_source_view_set_indent_width (GTK_SOURCE_VIEW (self), indent_width);
   gtk_source_view_set_tab_width (GTK_SOURCE_VIEW (self), tab_width);
+  gtk_source_view_set_right_margin_position (GTK_SOURCE_VIEW (self), right_margin_position);
   gtk_source_view_set_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (self),
                                                      (indent_style == IDE_INDENT_STYLE_SPACES));
 }

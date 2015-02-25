@@ -120,6 +120,7 @@ main (gint   argc,
                               "show-grid-lines", TRUE,
                               "show-line-changes", TRUE,
                               "show-line-numbers", TRUE,
+                              "show-right-margin", TRUE,
                               "visible", TRUE,
                               NULL);
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (source_view));
