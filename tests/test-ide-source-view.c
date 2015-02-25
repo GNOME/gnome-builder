@@ -124,6 +124,7 @@ main (gint   argc,
                               "show-line-changes", TRUE,
                               "show-line-numbers", TRUE,
                               "show-right-margin", TRUE,
+                              "snippet-completion", TRUE,
                               "visible", TRUE,
                               NULL);
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (source_view));
