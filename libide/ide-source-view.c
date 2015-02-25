@@ -703,7 +703,7 @@ ide_source_view_key_press_event (GtkWidget   *widget,
    * If we are backspacing, and the next character is the matching brace,
    * then we might want to delete it too.
    */
-  if (event->keyval == GDK_KEY_BackSpace)
+  if ((event->keyval == GDK_KEY_BackSpace) && !gtk_text_buffer_get_has_selection (buffer))
     if (ide_source_view_maybe_delete_match (self, event))
       return TRUE;
 
