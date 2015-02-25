@@ -290,6 +290,7 @@ ide_source_view_constructed (GObject *object)
                                              "xpad", 1,
                                              "size", 2,
                                              NULL);
+  g_object_ref (priv->line_change_renderer);
   gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
   gtk_source_gutter_insert (gutter, priv->line_change_renderer, 0);
 }
@@ -299,6 +300,9 @@ ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_clear_object (&priv->css_provider);
+  g_clear_object (&priv->line_change_renderer);
 
   if (priv->buffer)
     {
