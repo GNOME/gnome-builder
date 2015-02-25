@@ -34,6 +34,8 @@ G_BEGIN_DECLS
 typedef struct _IdeSourceView      IdeSourceView;
 typedef struct _IdeSourceViewClass IdeSourceViewClass;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceView, g_object_unref)
+
 struct _IdeSourceView
 {
   GtkSourceView parent;
