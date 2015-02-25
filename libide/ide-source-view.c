@@ -39,6 +39,10 @@ typedef struct
   PangoFontDescription    *font_desc;
   GtkSourceGutterRenderer *line_change_renderer;
 
+  gulong                   buffer_changed_handler;
+  gulong                   buffer_notify_file_handler;
+  gulong                   buffer_notify_language_handler;
+
   guint                    show_grid_lines : 1;
   guint                    show_line_changes : 1;
 } IdeSourceViewPrivate;
@@ -116,42 +120,48 @@ static void
 ide_source_view_connect_buffer (IdeSourceView *self,
                                 IdeBuffer     *buffer)
 {
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  g_signal_connect_object (buffer,
-                           "changed",
-                           G_CALLBACK (ide_source_view__buffer_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
+  priv->buffer_changed_handler =
+      g_signal_connect_object (buffer,
+                               "changed",
+                               G_CALLBACK (ide_source_view__buffer_changed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (buffer,
-                           "notify::file",
-                           G_CALLBACK (ide_source_view__buffer_notify_file_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
+  priv->buffer_notify_file_handler =
+      g_signal_connect_object (buffer,
+                               "notify::file",
+                               G_CALLBACK (ide_source_view__buffer_notify_file_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (buffer,
-                           "notify::language",
-                           G_CALLBACK (ide_source_view__buffer_notify_language_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
+  priv->buffer_notify_language_handler =
+      g_signal_connect_object (buffer,
+                               "notify::language",
+                               G_CALLBACK (ide_source_view__buffer_notify_language_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+  ide_source_view__buffer_notify_language_cb (self, NULL, buffer);
+  ide_source_view__buffer_notify_file_cb (self, NULL, buffer);
 }
 
 static void
 ide_source_view_disconnect_buffer (IdeSourceView *self,
                                    IdeBuffer     *buffer)
 {
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  g_signal_handlers_disconnect_by_func (buffer,
-                                        G_CALLBACK (ide_source_view__buffer_notify_file_cb),
-                                        self);
-
-  g_signal_handlers_disconnect_by_func (buffer,
-                                        G_CALLBACK (ide_source_view__buffer_notify_language_cb),
-                                        self);
+  ide_clear_signal_handler (buffer, &priv->buffer_changed_handler);
+  ide_clear_signal_handler (buffer, &priv->buffer_notify_file_handler);
+  ide_clear_signal_handler (buffer, &priv->buffer_notify_language_handler);
 }
 
 static void
