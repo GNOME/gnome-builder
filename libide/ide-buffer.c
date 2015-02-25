@@ -23,6 +23,7 @@
 #include "ide-buffer.h"
 #include "ide-context.h"
 #include "ide-file.h"
+#include "ide-file-settings.h"
 
 struct _IdeBufferClass
 {
@@ -57,6 +58,30 @@ ide_buffer_set_context (IdeBuffer  *self,
   g_return_if_fail (self->context == NULL);
 
   ide_set_weak_pointer (&self->context, context);
+}
+
+static void
+ide_buffer__file_load_settings_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  g_autoptr(IdeBuffer) self = user_data;
+  IdeFile *file = (IdeFile *)object;
+  g_autoptr(IdeFileSettings) file_settings = NULL;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_FILE (file));
+
+  file_settings = ide_file_load_settings_finish (file, result, NULL);
+
+  if (file_settings)
+    {
+      gboolean insert_trailing_newline;
+
+      insert_trailing_newline = ide_file_settings_get_insert_trailing_newline (file_settings);
+      gtk_source_buffer_set_implicit_trailing_newline (GTK_SOURCE_BUFFER (self),
+                                                       insert_trailing_newline);
+    }
 }
 
 static void
@@ -202,7 +227,14 @@ ide_buffer_set_file (IdeBuffer *self,
   g_return_if_fail (IDE_IS_FILE (file));
 
   if (g_set_object (&self->file, file))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+    {
+      ide_file_load_settings_async (self->file,
+                                    NULL,
+                                    ide_buffer__file_load_settings_cb,
+                                    g_object_ref (self));
+
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+    }
 }
 
 /**
