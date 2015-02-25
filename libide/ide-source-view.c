@@ -641,9 +641,12 @@ ide_source_view_key_press_event (GtkWidget   *widget,
 {
   IdeSourceView *self = (IdeSourceView *)widget;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextBuffer *buffer;
   gboolean ret = FALSE;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
   /*
    * Handle movement through the tab stops of the current snippet if needed.
@@ -745,22 +748,22 @@ ide_source_view_key_press_event (GtkWidget   *widget,
           /*
            * Insert the indention text.
            */
-          gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (priv->buffer));
+          gtk_text_buffer_begin_user_action (buffer);
           if (!gtk_text_iter_equal (&begin, &end))
-            gtk_text_buffer_delete (GTK_TEXT_BUFFER (priv->buffer), &begin, &end);
-          gtk_text_buffer_insert (GTK_TEXT_BUFFER (priv->buffer), &begin, indent, -1);
+            gtk_text_buffer_delete (buffer, &begin, &end);
+          gtk_text_buffer_insert (buffer, &begin, indent, -1);
           g_free (indent);
-          gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (priv->buffer));
+          gtk_text_buffer_end_user_action (buffer);
 
           /*
            * Place the cursor, as it could be somewhere within our indent text.
            */
-          gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &begin, insert);
+          gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
           if (cursor_offset > 0)
             gtk_text_iter_forward_chars (&begin, cursor_offset);
           else if (cursor_offset < 0)
             gtk_text_iter_backward_chars (&begin, ABS (cursor_offset));
-          gtk_text_buffer_select_range (GTK_TEXT_BUFFER (priv->buffer), &begin, &begin);
+          gtk_text_buffer_select_range (buffer, &begin, &begin);
         }
 
       return TRUE;
