@@ -189,6 +189,8 @@ libide_1_0_la_SOURCES = \
 	libide/ide-search-reducer.h \
 	libide/tasks/ide-load-directory-task.c \
 	libide/tasks/ide-load-directory-task.h \
+	libide/trie/trie.c \
+	libide/trie/trie.h \
 	libide/util/ide-pango.c \
 	libide/util/ide-pango.h \
 	$(NULL)
