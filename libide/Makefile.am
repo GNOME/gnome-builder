@@ -221,6 +221,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide/python \
 	-I$(top_srcdir)/libide/tasks \
 	-I$(top_srcdir)/libide/theatrics \
+	-I$(top_srcdir)/libide/trie \
 	-I$(top_srcdir)/libide/util \
 	-I$(top_srcdir)/libide/xml \
 	$(CLANG_CFLAGS) \
