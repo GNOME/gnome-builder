@@ -49,6 +49,12 @@ libide/ide-script-manager.c
 libide/ide-script.c
 libide/ide-search-result.c
 libide/ide-service.c
+libide/ide-source-snippet-chunk.c
+libide/ide-source-snippet-completion-item.c
+libide/ide-source-snippet-completion-provider.c
+libide/ide-source-snippet-parser.c
+libide/ide-source-snippet.c
+libide/ide-source-snippets-manager.c
 libide/ide.c
 libide/pygobject/ide-pygobject-script.c
 libide/tasks/ide-load-directory-task.c

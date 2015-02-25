@@ -123,6 +123,16 @@ libide_1_0_la_public_sources = \
 	libide/ide-source-location.h \
 	libide/ide-source-range.c \
 	libide/ide-source-range.h \
+	libide/ide-source-snippet-chunk.c \
+	libide/ide-source-snippet-chunk.h \
+	libide/ide-source-snippet-context.c \
+	libide/ide-source-snippet-context.h \
+	libide/ide-source-snippet.c \
+	libide/ide-source-snippet.h \
+	libide/ide-source-snippets-manager.c \
+	libide/ide-source-snippets-manager.h \
+	libide/ide-source-snippets.c \
+	libide/ide-source-snippets.h \
 	libide/ide-source-view.c \
 	libide/ide-source-view.h \
 	libide/ide-symbol-resolver.c \
@@ -187,6 +197,13 @@ libide_1_0_la_SOURCES = \
 	libide/ide-line-change-gutter-renderer.h \
 	libide/ide-search-reducer.c \
 	libide/ide-search-reducer.h \
+	libide/ide-source-snippet-completion-item.c \
+	libide/ide-source-snippet-completion-item.h \
+	libide/ide-source-snippet-completion-provider.c \
+	libide/ide-source-snippet-completion-provider.h \
+	libide/ide-source-snippet-parser.c \
+	libide/ide-source-snippet-parser.h \
+	libide/ide-source-snippet-private.h \
 	libide/tasks/ide-load-directory-task.c \
 	libide/tasks/ide-load-directory-task.h \
 	libide/theatrics/ide-animation.c \

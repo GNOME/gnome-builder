@@ -124,6 +124,16 @@ typedef struct _IdeSourceLocation              IdeSourceLocation;
 
 typedef struct _IdeSourceRange                 IdeSourceRange;
 
+typedef struct _IdeSourceSnippet               IdeSourceSnippet;
+
+typedef struct _IdeSourceSnippetChunk          IdeSourceSnippetChunk;
+
+typedef struct _IdeSourceSnippetContext        IdeSourceSnippetContext;
+
+typedef struct _IdeSourceSnippets              IdeSourceSnippets;
+
+typedef struct _IdeSourceSnippetsManager       IdeSourceSnippetsManager;
+
 typedef struct _IdeSymbol                      IdeSymbol;
 
 typedef struct _IdeSymbolResolver              IdeSymbolResolver;
