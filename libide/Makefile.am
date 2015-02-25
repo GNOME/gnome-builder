@@ -46,8 +46,6 @@ libide_1_0_la_public_sources = \
 	libide/ide-buffer-manager.h \
 	libide/ide-buffer.c \
 	libide/ide-buffer.h \
-	libide/ide-source-view.c \
-	libide/ide-source-view.h \
 	libide/ide-build-result.c \
 	libide/ide-build-result.h \
 	libide/ide-build-system.c \
@@ -125,6 +123,8 @@ libide_1_0_la_public_sources = \
 	libide/ide-source-location.h \
 	libide/ide-source-range.c \
 	libide/ide-source-range.h \
+	libide/ide-source-view.c \
+	libide/ide-source-view.h \
 	libide/ide-symbol-resolver.c \
 	libide/ide-symbol-resolver.h \
 	libide/ide-symbol.c \
