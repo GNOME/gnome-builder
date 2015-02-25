@@ -27,10 +27,10 @@ struct _IdeLineChangeGutterRenderer
   GtkSourceGutterRenderer parent_instance;
 
   GtkTextView   *text_view;
-  guint          text_view_notify_buffer;
+  gulong         text_view_notify_buffer;
 
   GtkTextBuffer *buffer;
-  guint          buffer_notify_style_scheme;
+  gulong         buffer_notify_style_scheme;
 
   GdkRGBA rgba_added;
   GdkRGBA rgba_changed;
