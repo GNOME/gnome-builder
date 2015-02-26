@@ -186,6 +186,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
+  gtk_init (&argc, &argv);
   g_test_init (&argc, &argv, NULL);
   g_test_add_func ("/Ide/BufferManager/basic", test_buffer_manager_basic);
   return g_test_run ();
