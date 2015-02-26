@@ -74,6 +74,37 @@ ide_diagnostic_get_text (IdeDiagnostic *self)
   return self->text;
 }
 
+/**
+ * ide_diagnostic_get_text_for_display:
+ *
+ * This creates a new string that is formatted using the diagnostics line number, column, severity,
+ * and message text in the format "line:column: severity: message".
+ *
+ * This can be convenient when wanting to quickly display a diagnostic such as in a tooltip.
+ *
+ * Returns: (transfer full): A string containing the text formatted for display.
+ */
+gchar *
+ide_diagnostic_get_text_for_display (IdeDiagnostic *self)
+{
+  IdeSourceLocation *location;
+  const gchar *severity;
+  guint line = 0;
+  guint column = 0;
+
+  g_return_val_if_fail (self, NULL);
+
+  severity = ide_diagnostic_severity_to_string (self->severity);
+  location = ide_diagnostic_get_location (self);
+  if (location)
+    {
+      line = ide_source_location_get_line (location) + 1;
+      column = ide_source_location_get_line_offset (location) + 1;
+    }
+
+  return g_strdup_printf ("%u:%u: %s: %s", line, column, severity, self->text);
+}
+
 guint
 ide_diagnostic_get_num_ranges (IdeDiagnostic *self)
 {
