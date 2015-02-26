@@ -49,6 +49,7 @@ struct _IdeBuffer
 
   IdeContext      *context;
   IdeDiagnostics  *diagnostics;
+  GHashTable      *diagnostics_line_cache;
   IdeFile         *file;
 
   guint            diagnose_timeout;
@@ -146,6 +147,9 @@ ide_buffer_clear_diagnostics (IdeBuffer *self)
 
   g_assert (IDE_IS_BUFFER (self));
 
+  if (self->diagnostics_line_cache)
+    g_hash_table_remove_all (self->diagnostics_line_cache);
+
   gtk_text_buffer_get_bounds (buffer, &begin, &end);
 
   gtk_text_buffer_remove_tag_by_name (buffer, TAG_NOTE, &begin, &end);
@@ -154,8 +158,43 @@ ide_buffer_clear_diagnostics (IdeBuffer *self)
 }
 
 static void
-ide_buffer_highlight_diagnostic (IdeBuffer     *self,
-                                 IdeDiagnostic *diagnostic)
+ide_buffer_cache_diagnostic_line (IdeBuffer             *self,
+                                  IdeSourceLocation     *begin,
+                                  IdeSourceLocation     *end,
+                                  IdeDiagnosticSeverity  severity)
+{
+  gpointer new_value = GINT_TO_POINTER (severity);
+  gsize line_begin;
+  gsize line_end;
+  gsize i;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (begin);
+  g_assert (end);
+
+  if (!self->diagnostics_line_cache)
+    return;
+
+  line_begin = MIN (ide_source_location_get_line (begin),
+                    ide_source_location_get_line (end));
+  line_end = MAX (ide_source_location_get_line (begin),
+                  ide_source_location_get_line (end));
+
+  for (i = line_begin; i <= line_end; i++)
+    {
+      gpointer old_value;
+      gpointer key = GINT_TO_POINTER (i);
+
+      old_value = g_hash_table_lookup (self->diagnostics_line_cache, key);
+
+      if (new_value > old_value)
+        g_hash_table_replace (self->diagnostics_line_cache, key, new_value);
+    }
+}
+
+static void
+ide_buffer_update_diagnostic (IdeBuffer     *self,
+                              IdeDiagnostic *diagnostic)
 {
   IdeDiagnosticSeverity severity;
   const gchar *tag_name = NULL;
@@ -201,6 +240,8 @@ ide_buffer_highlight_diagnostic (IdeBuffer     *self,
           /* Ignore? */
         }
 
+      ide_buffer_cache_diagnostic_line (self, location, location, severity);
+
       ide_buffer_get_iter_at_location (self, &iter1, location);
       gtk_text_iter_assign (&iter2, &iter1);
       if (!gtk_text_iter_ends_line (&iter2))
@@ -236,6 +277,8 @@ ide_buffer_highlight_diagnostic (IdeBuffer     *self,
       ide_buffer_get_iter_at_location (self, &iter1, begin);
       ide_buffer_get_iter_at_location (self, &iter2, end);
 
+      ide_buffer_cache_diagnostic_line (self, begin, end, severity);
+
       if (gtk_text_iter_equal (&iter1, &iter2))
         {
           if (!gtk_text_iter_ends_line (&iter2))
@@ -249,8 +292,8 @@ ide_buffer_highlight_diagnostic (IdeBuffer     *self,
 }
 
 static void
-ide_buffer_highlight_diagnostics (IdeBuffer      *self,
-                                  IdeDiagnostics *diagnostics)
+ide_buffer_update_diagnostics (IdeBuffer      *self,
+                               IdeDiagnostics *diagnostics)
 {
   gsize size;
   gsize i;
@@ -265,7 +308,7 @@ ide_buffer_highlight_diagnostics (IdeBuffer      *self,
       IdeDiagnostic *diagnostic;
 
       diagnostic = ide_diagnostics_index (diagnostics, i);
-      ide_buffer_highlight_diagnostic (self, diagnostic);
+      ide_buffer_update_diagnostic (self, diagnostic);
     }
 }
 
@@ -279,9 +322,11 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
     {
       g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
       self->diagnostics = diagnostics ? ide_diagnostics_ref (diagnostics) : NULL;
+
       ide_buffer_clear_diagnostics (self);
+
       if (diagnostics)
-        ide_buffer_highlight_diagnostics (self, diagnostics);
+        ide_buffer_update_diagnostics (self, diagnostics);
     }
 }
 
@@ -432,6 +477,7 @@ ide_buffer_dispose (GObject *object)
       self->diagnose_timeout = 0;
     }
 
+  g_clear_pointer (&self->diagnostics_line_cache, g_hash_table_unref);
   g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
   g_clear_object (&self->file);
 
@@ -548,6 +594,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
 static void
 ide_buffer_init (IdeBuffer *self)
 {
+  self->diagnostics_line_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 GType
@@ -564,6 +611,7 @@ ide_buffer_line_flags_get_type (void)
         { IDE_BUFFER_LINE_FLAGS_CHANGED, "IDE_BUFFER_LINE_FLAGS_CHANGED", "CHANGED" },
         { IDE_BUFFER_LINE_FLAGS_ERROR, "IDE_BUFFER_LINE_FLAGS_ERROR", "ERROR" },
         { IDE_BUFFER_LINE_FLAGS_WARNING, "IDE_BUFFER_LINE_FLAGS_WARNING", "WARNING" },
+        { IDE_BUFFER_LINE_FLAGS_NOTE, "IDE_BUFFER_LINE_FLAGS_NOTE", "NOTE" },
         { 0 }
       };
 
@@ -631,8 +679,38 @@ IdeBufferLineFlags
 ide_buffer_get_line_flags (IdeBuffer *self,
                            guint      line)
 {
+  IdeBufferLineFlags flags = 0;
+
+  if (self->diagnostics_line_cache)
+    {
+      gpointer key = GINT_TO_POINTER (line);
+      gpointer value;
+
+      value = g_hash_table_lookup (self->diagnostics_line_cache, key);
+
+      switch (GPOINTER_TO_INT (value))
+        {
+        case IDE_DIAGNOSTIC_ERROR:
+          flags |= IDE_BUFFER_LINE_FLAGS_ERROR;
+          break;
+
+        case IDE_DIAGNOSTIC_WARNING:
+          flags |= IDE_BUFFER_LINE_FLAGS_WARNING;
+          break;
+
+        case IDE_DIAGNOSTIC_NOTE:
+          flags |= IDE_BUFFER_LINE_FLAGS_NOTE;
+          break;
+
+        default:
+          break;
+        }
+    }
+
   /* TODO: Coordinate with Vcs */
-  return IDE_BUFFER_LINE_FLAGS_ADDED;
+  flags |= IDE_BUFFER_LINE_FLAGS_ADDED;
+
+  return flags;
 }
 
 gboolean

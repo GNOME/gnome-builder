@@ -40,6 +40,7 @@ typedef enum
   IDE_BUFFER_LINE_FLAGS_CHANGED  = 1 << 1,
   IDE_BUFFER_LINE_FLAGS_ERROR    = 1 << 2,
   IDE_BUFFER_LINE_FLAGS_WARNING  = 1 << 3,
+  IDE_BUFFER_LINE_FLAGS_NOTE     = 1 << 4,
 } IdeBufferLineFlags;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeBuffer, g_object_unref)
