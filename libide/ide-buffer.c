@@ -657,3 +657,62 @@ ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS]);
     }
 }
+
+/**
+ * ide_buffer_get_diagnostic_at_iter:
+ *
+ * Gets the first diagnostic that overlaps the position
+ *
+ * Returns: (transfer none) (nullable): An #IdeDiagnostic or %NULL.
+ */
+IdeDiagnostic *
+ide_buffer_get_diagnostic_at_iter (IdeBuffer         *self,
+                                   const GtkTextIter *iter)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+  g_return_val_if_fail (iter, NULL);
+
+  if (self->diagnostics)
+    {
+      IdeDiagnostic *diagnostic = NULL;
+      guint distance = G_MAXUINT;
+      gsize size;
+      gsize i;
+      guint line;
+
+      line = gtk_text_iter_get_line (iter);
+
+      size = ide_diagnostics_get_size (self->diagnostics);
+
+      for (i = 0; i < size; i++)
+        {
+          IdeDiagnostic *diag;
+          IdeSourceLocation *location;
+          GtkTextIter pos;
+
+          diag = ide_diagnostics_index (self->diagnostics, i);
+          location = ide_diagnostic_get_location (diag);
+          if (!location)
+            continue;
+
+          ide_buffer_get_iter_at_location (self, &pos, location);
+
+          if (line == gtk_text_iter_get_line (&pos))
+            {
+              guint offset;
+
+              offset = ABS (gtk_text_iter_get_offset (iter) - gtk_text_iter_get_offset (&pos));
+
+              if (offset < distance)
+                {
+                  distance = offset;
+                  diagnostic = diag;
+                }
+            }
+        }
+
+      return diagnostic;
+    }
+
+  return NULL;
+}
