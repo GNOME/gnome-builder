@@ -21,8 +21,7 @@
 #include "ide-source-location.h"
 #include "ide-source-range.h"
 
-G_DEFINE_BOXED_TYPE (IdeDiagnostic, ide_diagnostic,
-                     ide_diagnostic_ref, ide_diagnostic_unref)
+G_DEFINE_BOXED_TYPE (IdeDiagnostic, ide_diagnostic, ide_diagnostic_ref, ide_diagnostic_unref)
 
 struct _IdeDiagnostic
 {
