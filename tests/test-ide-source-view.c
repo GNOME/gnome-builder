@@ -46,6 +46,7 @@ load_cb (GObject      *object,
       return;
     }
 
+  ide_buffer_set_highlight_diagnostics (buffer, TRUE);
   gtk_source_buffer_set_style_scheme (GTK_SOURCE_BUFFER (buffer), style);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (source_view), GTK_TEXT_BUFFER (buffer));
   gtk_widget_set_sensitive (GTK_WIDGET (source_view), TRUE);
