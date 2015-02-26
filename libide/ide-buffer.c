@@ -733,6 +733,10 @@ ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
   if (highlight_diagnostics != self->highlight_diagnostics)
     {
       self->highlight_diagnostics = highlight_diagnostics;
+      if (!highlight_diagnostics)
+        ide_buffer_clear_diagnostics (self);
+      else
+        ide_buffer_queue_diagnose (self);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS]);
     }
 }
