@@ -33,8 +33,6 @@ G_BEGIN_DECLS
 #define IDE_IS_BUFFER_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_BUFFER))
 #define IDE_BUFFER_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_BUFFER, IdeBufferClass))
 
-typedef struct _IdeBufferClass  IdeBufferClass;
-
 typedef enum
 {
   IDE_BUFFER_LINE_FLAGS_NONE     = 0,
@@ -46,14 +44,17 @@ typedef enum
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeBuffer, g_object_unref)
 
-GType               ide_buffer_line_flags_get_type (void);
-GType               ide_buffer_get_type            (void);
-IdeContext         *ide_buffer_get_context         (IdeBuffer *self);
-IdeFile            *ide_buffer_get_file            (IdeBuffer *self);
-void                ide_buffer_set_file            (IdeBuffer *self,
-                                                    IdeFile   *file);
-IdeBufferLineFlags  ide_buffer_get_line_flags      (IdeBuffer *buffer,
-                                                    guint      line);
+GType               ide_buffer_line_flags_get_type       (void);
+GType               ide_buffer_get_type                  (void);
+IdeContext         *ide_buffer_get_context               (IdeBuffer *self);
+IdeFile            *ide_buffer_get_file                  (IdeBuffer *self);
+void                ide_buffer_set_file                  (IdeBuffer *self,
+                                                          IdeFile   *file);
+gboolean            ide_buffer_get_highlight_diagnostics (IdeBuffer *self);
+void                ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
+                                                          gboolean   highlight_diagnostics);
+IdeBufferLineFlags  ide_buffer_get_line_flags            (IdeBuffer *buffer,
+                                                          guint      line);
 
 G_END_DECLS
 

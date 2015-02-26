@@ -25,10 +25,10 @@
 #include "ide-file.h"
 #include "ide-file-settings.h"
 
-struct _IdeBufferClass
+typedef struct _IdeBufferClass
 {
-  GtkSourceBufferClass parent_class;
-};
+  GtkSourceBufferClass parent;
+} IdeBufferClass;
 
 struct _IdeBuffer
 {
@@ -36,6 +36,8 @@ struct _IdeBuffer
 
   IdeContext      *context;
   IdeFile         *file;
+
+  guint            highlight_diagnostics : 1;
 };
 
 G_DEFINE_TYPE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
@@ -44,6 +46,7 @@ enum {
   PROP_0,
   PROP_CONTEXT,
   PROP_FILE,
+  PROP_HIGHLIGHT_DIAGNOSTICS,
   LAST_PROP
 };
 
@@ -113,6 +116,10 @@ ide_buffer_get_property (GObject    *object,
       g_value_set_object (value, ide_buffer_get_file (self));
       break;
 
+    case PROP_HIGHLIGHT_DIAGNOSTICS:
+      g_value_set_boolean (value, ide_buffer_get_highlight_diagnostics (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -134,6 +141,10 @@ ide_buffer_set_property (GObject      *object,
 
     case PROP_FILE:
       ide_buffer_set_file (self, g_value_get_object (value));
+      break;
+
+    case PROP_HIGHLIGHT_DIAGNOSTICS:
+      ide_buffer_set_highlight_diagnostics (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -168,6 +179,15 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          IDE_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FILE, gParamSpecs [PROP_FILE]);
+
+  gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS] =
+    g_param_spec_boolean ("highlight-diagnostics",
+                          _("Highlight Diagnostics"),
+                          _("If diagnostic warnings and errors should be highlighted."),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_HIGHLIGHT_DIAGNOSTICS,
+                                   gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS]);
 }
 
 static void
@@ -258,4 +278,27 @@ ide_buffer_get_line_flags (IdeBuffer *self,
 {
   /* TODO: Coordinate with Vcs */
   return IDE_BUFFER_LINE_FLAGS_ADDED;
+}
+
+gboolean
+ide_buffer_get_highlight_diagnostics (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
+
+  return self->highlight_diagnostics;
+}
+
+void
+ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
+                                      gboolean   highlight_diagnostics)
+{
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  highlight_diagnostics = !!highlight_diagnostics;
+
+  if (highlight_diagnostics != self->highlight_diagnostics)
+    {
+      self->highlight_diagnostics = highlight_diagnostics;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS]);
+    }
 }
