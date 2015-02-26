@@ -753,12 +753,17 @@ ide_buffer_get_diagnostic_at_iter (IdeBuffer         *self,
   if (self->diagnostics)
     {
       IdeDiagnostic *diagnostic = NULL;
+      IdeBufferLineFlags flags;
       guint distance = G_MAXUINT;
       gsize size;
       gsize i;
       guint line;
 
       line = gtk_text_iter_get_line (iter);
+      flags = ide_buffer_get_line_flags (self, line);
+
+      if ((flags & IDE_BUFFER_LINE_FLAGS_DIAGNOSTICS_MASK) == 0)
+        return NULL;
 
       size = ide_diagnostics_get_size (self->diagnostics);
 
