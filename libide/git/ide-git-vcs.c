@@ -54,11 +54,11 @@ static GParamSpec *gParamSpecs [LAST_PROP];
  * Returns: (transfer none): A #GgitRepository.
  */
 GgitRepository *
-ide_git_vcs_get_repository (IdeGitVcs *vcs)
+ide_git_vcs_get_repository (IdeGitVcs *self)
 {
-  IdeGitVcsPrivate *priv = ide_git_vcs_get_instance_private (vcs);
+  IdeGitVcsPrivate *priv = ide_git_vcs_get_instance_private (self);
 
-  g_return_val_if_fail (IDE_IS_GIT_VCS (vcs), NULL);
+  g_return_val_if_fail (IDE_IS_GIT_VCS (self), NULL);
 
   return priv->repository;
 }

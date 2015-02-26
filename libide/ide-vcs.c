@@ -40,12 +40,12 @@ ide_vcs_init (IdeVcs *self)
  * Returns: (transfer none): A #GFile.
  */
 GFile *
-ide_vcs_get_working_directory (IdeVcs *vcs)
+ide_vcs_get_working_directory (IdeVcs *self)
 {
-  g_return_val_if_fail (IDE_IS_VCS (vcs), NULL);
+  g_return_val_if_fail (IDE_IS_VCS (self), NULL);
 
-  if (IDE_VCS_GET_CLASS (vcs)->get_working_directory)
-   return IDE_VCS_GET_CLASS (vcs)->get_working_directory (vcs);
+  if (IDE_VCS_GET_CLASS (self)->get_working_directory)
+    return IDE_VCS_GET_CLASS (self)->get_working_directory (self);
 
   return NULL;
 }

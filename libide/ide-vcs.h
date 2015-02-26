@@ -37,7 +37,7 @@ struct _IdeVcsClass
   GFile *(*get_working_directory) (IdeVcs *vcs);
 };
 
-GFile  *ide_vcs_get_working_directory (IdeVcs *vcs);
+GFile  *ide_vcs_get_working_directory (IdeVcs               *self);
 void    ide_vcs_new_async             (IdeContext           *context,
                                        int                   io_priority,
                                        GCancellable         *cancellable,
