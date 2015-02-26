@@ -191,3 +191,27 @@ ide_diagnostic_severity_get_type (void)
 
   return type_id;
 }
+
+const gchar *
+ide_diagnostic_severity_to_string (IdeDiagnosticSeverity severity)
+{
+  switch (severity)
+    {
+    case IDE_DIAGNOSTIC_IGNORED:
+      return "ignored";
+
+    case IDE_DIAGNOSTIC_NOTE:
+
+    case IDE_DIAGNOSTIC_WARNING:
+      return "warning";
+
+    case IDE_DIAGNOSTIC_ERROR:
+      return "error";
+
+    case IDE_DIAGNOSTIC_FATAL:
+      return "fatal";
+
+    default:
+      return "unknown";
+    }
+}
