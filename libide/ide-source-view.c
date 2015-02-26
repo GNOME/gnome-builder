@@ -63,6 +63,7 @@ typedef struct
   gulong                       buffer_insert_text_handler;
   gulong                       buffer_mark_set_handler;
   gulong                       buffer_notify_file_handler;
+  gulong                       buffer_notify_highlight_diagnostics_handler;
   gulong                       buffer_notify_language_handler;
 
   guint                        auto_indent : 1;
@@ -615,6 +616,27 @@ ide_source_view__buffer_mark_set_cb (GtkTextBuffer *buffer,
 }
 
 static void
+ide_source_view__buffer_notify_highlight_diagnostics_cb (IdeSourceView *self,
+                                                         GParamSpec    *pspec,
+                                                         IdeBuffer     *buffer)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (priv->line_diagnostics_renderer)
+    {
+      gboolean visible;
+
+      visible = ide_buffer_get_highlight_diagnostics (buffer);
+      g_object_set (priv->line_diagnostics_renderer,
+                    "visible", visible,
+                    NULL);
+    }
+}
+
+static void
 ide_source_view_connect_buffer (IdeSourceView *self,
                                 IdeBuffer     *buffer)
 {
@@ -627,6 +649,13 @@ ide_source_view_connect_buffer (IdeSourceView *self,
       g_signal_connect_object (buffer,
                                "changed",
                                G_CALLBACK (ide_source_view__buffer_changed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+  priv->buffer_notify_highlight_diagnostics_handler =
+      g_signal_connect_object (buffer,
+                               "notify::highlight-diagnostics",
+                               G_CALLBACK (ide_source_view__buffer_notify_highlight_diagnostics_cb),
                                self,
                                G_CONNECT_SWAPPED);
 
@@ -681,6 +710,7 @@ ide_source_view_connect_buffer (IdeSourceView *self,
 
   ide_source_view__buffer_notify_language_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_file_cb (self, NULL, buffer);
+  ide_source_view__buffer_notify_highlight_diagnostics_cb (self, NULL, buffer);
 }
 
 static void
@@ -697,6 +727,7 @@ ide_source_view_disconnect_buffer (IdeSourceView *self,
   ide_clear_signal_handler (buffer, &priv->buffer_insert_text_after_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_insert_text_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_mark_set_handler);
+  ide_clear_signal_handler (buffer, &priv->buffer_notify_highlight_diagnostics_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_notify_language_handler);
 
   ide_source_view_set_indenter (self, NULL);
@@ -1237,22 +1268,24 @@ ide_source_view_constructed (GObject *object)
   IdeSourceView *self = (IdeSourceView *)object;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceGutter *gutter;
+  gboolean visible;
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->constructed (object);
 
   gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
 
   priv->line_change_renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
+                                             "size", 2,
                                              "visible", priv->show_line_changes,
                                              "xpad", 1,
-                                             "size", 2,
                                              NULL);
   g_object_ref (priv->line_change_renderer);
   gtk_source_gutter_insert (gutter, priv->line_change_renderer, 0);
 
+  visible = priv->buffer && ide_buffer_get_highlight_diagnostics (priv->buffer);
   priv->line_diagnostics_renderer = g_object_new (IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER,
                                                   "size", 16,
-                                                  "visible", TRUE,
+                                                  "visible", visible,
                                                   NULL);
   g_object_ref (priv->line_diagnostics_renderer);
   gtk_source_gutter_insert (gutter, priv->line_diagnostics_renderer, -100);
