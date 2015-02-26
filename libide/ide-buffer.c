@@ -22,8 +22,21 @@
 
 #include "ide-buffer.h"
 #include "ide-context.h"
+#include "ide-diagnostic.h"
+#include "ide-diagnostician.h"
+#include "ide-diagnostics.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
+#include "ide-language.h"
+#include "ide-source-location.h"
+#include "ide-source-range.h"
+#include "ide-unsaved-files.h"
+
+#define DEFAULT_DIAGNOSE_TIMEOUT_MSEC 333
+
+#define TAG_ERROR   "diagnostician::error"
+#define TAG_WARNING "diagnostician::warning"
+#define TAG_NOTE    "diagnostician::note"
 
 typedef struct _IdeBufferClass
 {
@@ -35,8 +48,13 @@ struct _IdeBuffer
   GtkSourceBuffer  parent_instance;
 
   IdeContext      *context;
+  IdeDiagnostics  *diagnostics;
   IdeFile         *file;
 
+  guint            diagnose_timeout;
+
+  guint            diagnostics_dirty : 1;
+  guint            in_diagnose : 1;
   guint            highlight_diagnostics : 1;
 };
 
@@ -50,7 +68,33 @@ enum {
   LAST_PROP
 };
 
+static void ide_buffer_queue_diagnose (IdeBuffer *self);
+
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+static void
+ide_buffer_get_iter_at_location (IdeBuffer         *self,
+                                 GtkTextIter       *iter,
+                                 IdeSourceLocation *location)
+{
+  guint line;
+  guint line_offset;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (iter);
+  g_assert (location);
+
+  line = ide_source_location_get_line (location);
+  line_offset = ide_source_location_get_line_offset (location);
+
+  gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self), iter, line);
+
+  while (line_offset && !gtk_text_iter_ends_line (iter))
+    {
+      gtk_text_iter_forward_char (iter);
+      line_offset--;
+    }
+}
 
 static void
 ide_buffer_set_context (IdeBuffer  *self,
@@ -61,6 +105,184 @@ ide_buffer_set_context (IdeBuffer  *self,
   g_return_if_fail (self->context == NULL);
 
   ide_set_weak_pointer (&self->context, context);
+}
+
+static void
+ide_buffer_sync_to_unsaved_files (IdeBuffer *self)
+{
+  IdeUnsavedFiles *unsaved_files;
+  GtkTextBuffer *buffer = (GtkTextBuffer *)self;
+  gchar *text;
+  GFile *gfile;
+  GBytes *content;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  if (!self->context || !self->file)
+    return;
+
+  gfile = ide_file_get_file (self->file);
+  if (!gfile)
+    return;
+
+  gtk_text_buffer_get_bounds (buffer, &begin, &end);
+  text = gtk_text_buffer_get_text (buffer, &begin, &end, TRUE);
+  content = g_bytes_new_take (text, strlen (text));
+
+  unsaved_files = ide_context_get_unsaved_files (self->context);
+  ide_unsaved_files_update (unsaved_files, gfile, content);
+
+  g_bytes_unref (content);
+}
+
+static void
+ide_buffer_clear_diagnostics (IdeBuffer *self)
+{
+  GtkTextBuffer *buffer = (GtkTextBuffer *)self;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  gtk_text_buffer_get_bounds (buffer, &begin, &end);
+
+  gtk_text_buffer_remove_tag_by_name (buffer, TAG_NOTE, &begin, &end);
+  gtk_text_buffer_remove_tag_by_name (buffer, TAG_WARNING, &begin, &end);
+  gtk_text_buffer_remove_tag_by_name (buffer, TAG_ERROR, &begin, &end);
+}
+
+static void
+ide_buffer_highlight_diagnostic (IdeBuffer     *self,
+                                 IdeDiagnostic *diagnostic)
+{
+  IdeDiagnosticSeverity severity;
+  const gchar *tag_name = NULL;
+  IdeSourceLocation *location;
+  gsize num_ranges;
+  gsize i;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (diagnostic);
+
+  severity = ide_diagnostic_get_severity (diagnostic);
+
+  switch (severity)
+    {
+    case IDE_DIAGNOSTIC_NOTE:
+      tag_name = TAG_NOTE;
+      break;
+
+    case IDE_DIAGNOSTIC_WARNING:
+      tag_name = TAG_WARNING;
+      break;
+
+    case IDE_DIAGNOSTIC_ERROR:
+    case IDE_DIAGNOSTIC_FATAL:
+      tag_name = TAG_ERROR;
+      break;
+
+    case IDE_DIAGNOSTIC_IGNORED:
+    default:
+      return;
+    }
+
+  if ((location = ide_diagnostic_get_location (diagnostic)))
+    {
+      IdeFile *file;
+      GtkTextIter iter1;
+      GtkTextIter iter2;
+
+      file = ide_source_location_get_file (location);
+
+      if (file && self->file && !ide_file_equal (file, self->file))
+        {
+          /* Ignore? */
+        }
+
+      ide_buffer_get_iter_at_location (self, &iter1, location);
+      gtk_text_iter_assign (&iter2, &iter1);
+      if (!gtk_text_iter_ends_line (&iter2))
+        gtk_text_iter_forward_to_line_end (&iter2);
+      else
+        gtk_text_iter_backward_char (&iter1);
+
+      gtk_text_buffer_apply_tag_by_name (GTK_TEXT_BUFFER (self), tag_name, &iter1, &iter2);
+    }
+
+  num_ranges = ide_diagnostic_get_num_ranges (diagnostic);
+
+  for (i = 0; i < num_ranges; i++)
+    {
+      IdeSourceRange *range;
+      IdeSourceLocation *begin;
+      IdeSourceLocation *end;
+      IdeFile *file;
+      GtkTextIter iter1;
+      GtkTextIter iter2;
+
+      range = ide_diagnostic_get_range (diagnostic, i);
+      begin = ide_source_range_get_begin (range);
+      end = ide_source_range_get_end (range);
+
+      file = ide_source_location_get_file (begin);
+
+      if (file && self->file && !ide_file_equal (file, self->file))
+        {
+          /* Ignore */
+        }
+
+      ide_buffer_get_iter_at_location (self, &iter1, begin);
+      ide_buffer_get_iter_at_location (self, &iter2, end);
+
+      if (gtk_text_iter_equal (&iter1, &iter2))
+        {
+          if (!gtk_text_iter_ends_line (&iter2))
+            gtk_text_iter_forward_char (&iter2);
+          else
+            gtk_text_iter_backward_char (&iter1);
+        }
+
+      gtk_text_buffer_apply_tag_by_name (GTK_TEXT_BUFFER (self), tag_name, &iter1, &iter2);
+    }
+}
+
+static void
+ide_buffer_highlight_diagnostics (IdeBuffer      *self,
+                                  IdeDiagnostics *diagnostics)
+{
+  gsize size;
+  gsize i;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (diagnostics);
+
+  size = ide_diagnostics_get_size (diagnostics);
+
+  for (i = 0; i < size; i++)
+    {
+      IdeDiagnostic *diagnostic;
+
+      diagnostic = ide_diagnostics_index (diagnostics, i);
+      ide_buffer_highlight_diagnostic (self, diagnostic);
+    }
+}
+
+static void
+ide_buffer_set_diagnostics (IdeBuffer      *self,
+                            IdeDiagnostics *diagnostics)
+{
+  g_assert (IDE_IS_BUFFER (self));
+
+  if (diagnostics != self->diagnostics)
+    {
+      g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
+      self->diagnostics = diagnostics ? ide_diagnostics_ref (diagnostics) : NULL;
+      ide_buffer_clear_diagnostics (self);
+      if (diagnostics)
+        ide_buffer_highlight_diagnostics (self, diagnostics);
+    }
 }
 
 static void
@@ -88,12 +310,140 @@ ide_buffer__file_load_settings_cb (GObject      *object,
 }
 
 static void
+ide_buffer__diagnostician_diagnose_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  IdeDiagnostician *diagnostician = (IdeDiagnostician *)object;
+  g_autoptr(IdeBuffer) self = user_data;
+  g_autoptr(IdeDiagnostics) diagnostics = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_DIAGNOSTICIAN (diagnostician));
+  g_assert (IDE_IS_BUFFER (self));
+
+  self->in_diagnose = FALSE;
+
+  diagnostics = ide_diagnostician_diagnose_finish (diagnostician, result, &error);
+
+  if (error)
+    g_message ("%s", error->message);
+
+  ide_buffer_set_diagnostics (self, diagnostics);
+
+  if (self->diagnostics_dirty)
+    ide_buffer_queue_diagnose (self);
+}
+
+static gboolean
+ide_buffer__diagnose_timeout_cb (gpointer user_data)
+{
+  IdeBuffer *self = user_data;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  self->diagnose_timeout = 0;
+
+  if (self->file)
+    {
+      IdeLanguage *language;
+
+      language = ide_file_get_language (self->file);
+
+      if (language)
+        {
+          IdeDiagnostician *diagnostician;
+
+          diagnostician = ide_language_get_diagnostician (language);
+
+          if (diagnostician)
+            {
+              self->diagnostics_dirty = FALSE;
+              self->in_diagnose = TRUE;
+
+              ide_buffer_sync_to_unsaved_files (self);
+              ide_diagnostician_diagnose_async (diagnostician, self->file, NULL,
+                                                ide_buffer__diagnostician_diagnose_cb,
+                                                g_object_ref (self));
+            }
+        }
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_buffer_queue_diagnose (IdeBuffer *self)
+{
+  g_assert (IDE_IS_BUFFER (self));
+
+  self->diagnostics_dirty = TRUE;
+
+  if (self->diagnose_timeout != 0)
+    {
+      g_source_remove (self->diagnose_timeout);
+      self->diagnose_timeout = 0;
+    }
+
+  self->diagnose_timeout = g_timeout_add (DEFAULT_DIAGNOSE_TIMEOUT_MSEC,
+                                          ide_buffer__diagnose_timeout_cb,
+                                          self);
+}
+
+static void
+ide_buffer_changed (GtkTextBuffer *buffer)
+{
+  IdeBuffer *self = (IdeBuffer *)buffer;
+
+  GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->changed (buffer);
+
+  self->diagnostics_dirty = TRUE;
+
+  if (self->highlight_diagnostics && !self->in_diagnose)
+    ide_buffer_queue_diagnose (self);
+}
+
+static void
+ide_buffer_constructed (GObject *object)
+{
+  IdeBuffer *self = (IdeBuffer *)object;
+
+  G_OBJECT_CLASS (ide_buffer_parent_class)->constructed (object);
+
+  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_ERROR,
+                              "underline", PANGO_UNDERLINE_ERROR,
+                              NULL);
+  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_WARNING,
+                              "underline", PANGO_UNDERLINE_ERROR,
+                              NULL);
+  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_NOTE,
+                              "underline", PANGO_UNDERLINE_SINGLE,
+                              NULL);
+}
+
+static void
+ide_buffer_dispose (GObject *object)
+{
+  IdeBuffer *self = (IdeBuffer *)object;
+
+  if (self->diagnose_timeout)
+    {
+      g_source_remove (self->diagnose_timeout);
+      self->diagnose_timeout = 0;
+    }
+
+  g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
+  g_clear_object (&self->file);
+
+  G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
+}
+
+static void
 ide_buffer_finalize (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
 
   ide_clear_weak_pointer (&self->context);
-  g_clear_object (&self->file);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->finalize (object);
 }
@@ -156,10 +506,15 @@ static void
 ide_buffer_class_init (IdeBufferClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkTextBufferClass *text_buffer_class = GTK_TEXT_BUFFER_CLASS (klass);
 
+  object_class->constructed = ide_buffer_constructed;
+  object_class->dispose = ide_buffer_dispose;
   object_class->finalize = ide_buffer_finalize;
   object_class->get_property = ide_buffer_get_property;
   object_class->set_property = ide_buffer_set_property;
+
+  text_buffer_class->changed = ide_buffer_changed;
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
