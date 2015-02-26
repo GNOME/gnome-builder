@@ -690,6 +690,7 @@ ide_buffer_get_line_flags (IdeBuffer *self,
 
       switch (GPOINTER_TO_INT (value))
         {
+        case IDE_DIAGNOSTIC_FATAL:
         case IDE_DIAGNOSTIC_ERROR:
           flags |= IDE_BUFFER_LINE_FLAGS_ERROR;
           break;
