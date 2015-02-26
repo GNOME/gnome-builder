@@ -46,15 +46,15 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeBuffer, g_object_unref)
 
 GType               ide_buffer_line_flags_get_type       (void);
 GType               ide_buffer_get_type                  (void);
-IdeContext         *ide_buffer_get_context               (IdeBuffer *self);
-IdeFile            *ide_buffer_get_file                  (IdeBuffer *self);
-void                ide_buffer_set_file                  (IdeBuffer *self,
-                                                          IdeFile   *file);
-gboolean            ide_buffer_get_highlight_diagnostics (IdeBuffer *self);
-void                ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
-                                                          gboolean   highlight_diagnostics);
-IdeBufferLineFlags  ide_buffer_get_line_flags            (IdeBuffer *buffer,
-                                                          guint      line);
+IdeContext         *ide_buffer_get_context               (IdeBuffer         *self);
+IdeFile            *ide_buffer_get_file                  (IdeBuffer         *self);
+void                ide_buffer_set_file                  (IdeBuffer         *self,
+                                                          IdeFile           *file);
+gboolean            ide_buffer_get_highlight_diagnostics (IdeBuffer         *self);
+void                ide_buffer_set_highlight_diagnostics (IdeBuffer         *self,
+                                                          gboolean           highlight_diagnostics);
+IdeBufferLineFlags  ide_buffer_get_line_flags            (IdeBuffer         *buffer,
+                                                          guint              line);
 
 G_END_DECLS
 
