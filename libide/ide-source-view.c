@@ -31,6 +31,7 @@
 #include "ide-indenter.h"
 #include "ide-language.h"
 #include "ide-line-change-gutter-renderer.h"
+#include "ide-line-diagnostics-gutter-renderer.h"
 #include "ide-pango.h"
 #include "ide-source-snippet.h"
 #include "ide-source-snippet-chunk.h"
@@ -51,6 +52,7 @@ typedef struct
   PangoFontDescription        *font_desc;
   IdeIndenter                 *indenter;
   GtkSourceGutterRenderer     *line_change_renderer;
+  GtkSourceGutterRenderer     *line_diagnostics_renderer;
   GQueue                      *snippets;
   GtkSourceCompletionProvider *snippets_provider;
 
@@ -1238,14 +1240,22 @@ ide_source_view_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->constructed (object);
 
+  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
+
   priv->line_change_renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
                                              "visible", priv->show_line_changes,
                                              "xpad", 1,
                                              "size", 2,
                                              NULL);
   g_object_ref (priv->line_change_renderer);
-  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
   gtk_source_gutter_insert (gutter, priv->line_change_renderer, 0);
+
+  priv->line_diagnostics_renderer = g_object_new (IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER,
+                                                  "size", 16,
+                                                  "visible", TRUE,
+                                                  NULL);
+  g_object_ref (priv->line_diagnostics_renderer);
+  gtk_source_gutter_insert (gutter, priv->line_diagnostics_renderer, -100);
 }
 
 static void
@@ -1258,6 +1268,7 @@ ide_source_view_dispose (GObject *object)
 
   g_clear_object (&priv->indenter);
   g_clear_object (&priv->line_change_renderer);
+  g_clear_object (&priv->line_diagnostics_renderer);
   g_clear_object (&priv->snippets_provider);
   g_clear_object (&priv->css_provider);
 
