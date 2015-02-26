@@ -24,6 +24,7 @@
 #include "ide-box-theatric.h"
 #include "ide-buffer.h"
 #include "ide-context.h"
+#include "ide-diagnostic.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
 #include "ide-highlighter.h"
@@ -1190,6 +1191,44 @@ ide_source_view_key_press_event (GtkWidget   *widget,
   return ret;
 }
 
+static gboolean
+ide_source_view_query_tooltip (GtkWidget  *widget,
+                               gint        x,
+                               gint        y,
+                               gboolean    keyboard_mode,
+                               GtkTooltip *tooltip)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextView *text_view = (GtkTextView *)widget;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+  g_assert (GTK_IS_TOOLTIP (tooltip));
+
+  if (priv->buffer != NULL)
+    {
+      IdeDiagnostic *diagnostic;
+      GtkTextIter iter;
+
+      gtk_text_view_window_to_buffer_coords (text_view, GTK_TEXT_WINDOW_WIDGET, x, y, &x, &y);
+      gtk_text_view_get_iter_at_location (text_view, &iter, x, y);
+      diagnostic = ide_buffer_get_diagnostic_at_iter (priv->buffer, &iter);
+
+      if (diagnostic)
+        {
+          g_autofree gchar *str = NULL;
+
+          str = ide_diagnostic_get_text_for_display (diagnostic);
+          gtk_tooltip_set_text (tooltip, str);
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static void
 ide_source_view_constructed (GObject *object)
 {
@@ -1349,6 +1388,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   object_class->set_property = ide_source_view_set_property;
 
   widget_class->key_press_event = ide_source_view_key_press_event;
+  widget_class->query_tooltip = ide_source_view_query_tooltip;
 
   g_object_class_override_property (object_class, PROP_AUTO_INDENT, "auto-indent");
 
