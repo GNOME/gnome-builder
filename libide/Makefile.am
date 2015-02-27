@@ -238,6 +238,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide/autotools \
 	-I$(top_srcdir)/libide/c \
 	-I$(top_srcdir)/libide/clang \
+	-I$(top_srcdir)/libide/devhelp \
 	-I$(top_srcdir)/libide/directory \
 	-I$(top_srcdir)/libide/fuzzy \
 	-I$(top_srcdir)/libide/gca \

@@ -25,6 +25,7 @@
 #include "ide-autotools-build-system.h"
 #include "ide-c-language.h"
 #include "ide-clang-service.h"
+#include "ide-devhelp-search-provider.h"
 #include "ide-directory-build-system.h"
 #include "ide-directory-vcs.h"
 #include "ide-editorconfig-file-settings.h"
@@ -125,6 +126,11 @@ ide_init_ctor (void)
   g_io_extension_point_implement (IDE_SCRIPT_EXTENSION_POINT,
                                   IDE_TYPE_PYGOBJECT_SCRIPT,
                                   IDE_SCRIPT_EXTENSION_POINT".py",
+                                  -100);
+
+  g_io_extension_point_implement (IDE_SEARCH_PROVIDER_EXTENSION_POINT,
+                                  IDE_TYPE_DEVHELP_SEARCH_PROVIDER,
+                                  IDE_SEARCH_PROVIDER_EXTENSION_POINT".devhelp",
                                   -100);
 
   g_io_extension_point_implement (IDE_SEARCH_PROVIDER_EXTENSION_POINT,
