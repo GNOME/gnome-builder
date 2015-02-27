@@ -125,31 +125,12 @@ ide_buffer_set_context (IdeBuffer  *self,
 static void
 ide_buffer_sync_to_unsaved_files (IdeBuffer *self)
 {
-  IdeUnsavedFiles *unsaved_files;
-  GtkTextBuffer *buffer = (GtkTextBuffer *)self;
-  gchar *text;
-  GFile *gfile;
   GBytes *content;
-  GtkTextIter begin;
-  GtkTextIter end;
 
   g_assert (IDE_IS_BUFFER (self));
 
-  if (!self->context || !self->file)
-    return;
-
-  gfile = ide_file_get_file (self->file);
-  if (!gfile)
-    return;
-
-  gtk_text_buffer_get_bounds (buffer, &begin, &end);
-  text = gtk_text_buffer_get_text (buffer, &begin, &end, TRUE);
-  content = g_bytes_new_take (text, strlen (text));
-
-  unsaved_files = ide_context_get_unsaved_files (self->context);
-  ide_unsaved_files_update (unsaved_files, gfile, content);
-
-  g_bytes_unref (content);
+  if ((content = ide_buffer_get_content (self)))
+    g_bytes_unref (content);
 }
 
 static void
