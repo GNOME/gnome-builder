@@ -29,7 +29,7 @@ G_DECLARE_DERIVABLE_TYPE (IdeDevice, ide_device, IDE, DEVICE, IdeObject)
 
 struct _IdeDeviceClass
 {
-  GObjectClass parent;
+  IdeObjectClass parent;
 
   GKeyFile    *(*get_config)      (IdeDevice *device);
   const gchar *(*get_system_type) (IdeDevice *device);
