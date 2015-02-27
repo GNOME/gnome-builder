@@ -34,17 +34,21 @@ struct _IdeVcsClass
 {
   IdeObjectClass parent;
 
-  GFile *(*get_working_directory) (IdeVcs *vcs);
+  GFile                  *(*get_working_directory)     (IdeVcs    *self);
+  IdeBufferChangeMonitor *(*get_buffer_change_monitor) (IdeVcs    *self,
+                                                        IdeBuffer *buffer);
 };
 
-GFile  *ide_vcs_get_working_directory (IdeVcs               *self);
-void    ide_vcs_new_async             (IdeContext           *context,
-                                       int                   io_priority,
-                                       GCancellable         *cancellable,
-                                       GAsyncReadyCallback   callback,
-                                       gpointer              user_data);
-IdeVcs *ide_vcs_new_finish            (GAsyncResult         *result,
-                                       GError              **error);
+IdeBufferChangeMonitor *ide_vcs_get_buffer_change_monitor (IdeVcs               *self,
+                                                           IdeBuffer            *buffer);
+GFile                  *ide_vcs_get_working_directory     (IdeVcs               *self);
+void                    ide_vcs_new_async                 (IdeContext           *context,
+                                                           int                   io_priority,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
+IdeVcs                 *ide_vcs_new_finish                (GAsyncResult         *result,
+                                                           GError              **error);
 
 G_END_DECLS
 

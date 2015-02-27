@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "ide-buffer.h"
+#include "ide-buffer-change-monitor.h"
 #include "ide-vcs.h"
 
 G_DEFINE_ABSTRACT_TYPE (IdeVcs, ide_vcs, IDE_TYPE_OBJECT)
@@ -32,7 +34,7 @@ ide_vcs_init (IdeVcs *self)
 
 /**
  * ide_vcs_get_working_directory:
- * @vcs: An #IdeVcs.
+ * @self: An #IdeVcs.
  *
  * Retrieves the working directory for the context. This is the root of where
  * the project files exist.
@@ -48,6 +50,31 @@ ide_vcs_get_working_directory (IdeVcs *self)
     return IDE_VCS_GET_CLASS (self)->get_working_directory (self);
 
   return NULL;
+}
+
+/**
+ * ide_vcs_get_buffer_change_monitor:
+ *
+ * Gets an #IdeBufferChangeMonitor for the buffer provided. If the #IdeVcs implementation does not
+ * support change monitoring, or cannot for the current file, then %NULL is returned.
+ *
+ * Returns: (transfer full) (nullable): An #IdeBufferChangeMonitor or %NULL.
+ */
+IdeBufferChangeMonitor *
+ide_vcs_get_buffer_change_monitor (IdeVcs    *self,
+                                   IdeBuffer *buffer)
+{
+  IdeBufferChangeMonitor *ret = NULL;
+
+  g_return_val_if_fail (IDE_IS_VCS (self), NULL);
+  g_return_val_if_fail (IDE_IS_BUFFER (buffer), NULL);
+
+  if (IDE_VCS_GET_CLASS (self)->get_buffer_change_monitor)
+    ret = IDE_VCS_GET_CLASS (self)->get_buffer_change_monitor (self, buffer);
+
+  g_return_val_if_fail (!ret || IDE_IS_BUFFER_CHANGE_MONITOR (ret), NULL);
+
+  return ret;
 }
 
 void
