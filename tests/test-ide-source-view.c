@@ -19,6 +19,7 @@
 #include <ide.h>
 
 static IdeContext *gContext;
+static const gchar *gFileName = "test.c";
 
 static void
 load_cb (GObject      *object,
@@ -75,7 +76,7 @@ context_cb (GObject      *object,
     }
 
   project = ide_context_get_project (context);
-  file = ide_project_get_file_for_path (project, "test.c");
+  file = ide_project_get_file_for_path (project, gFileName);
 
   buffer_manager = ide_context_get_buffer_manager (context);
   ide_buffer_manager_load_file_async (buffer_manager, file, FALSE,
@@ -104,6 +105,9 @@ main (gint   argc,
   ide_set_program_name ("gnome-builder");
 
   gtk_init (&argc, &argv);
+
+  if (argc > 1)
+    gFileName = argv [1];
 
   cancellable = g_cancellable_new ();
 
