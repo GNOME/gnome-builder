@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 
 #include "ide-buffer.h"
+#include "ide-buffer-change-monitor.h"
 #include "ide-context.h"
 #include "ide-diagnostic.h"
 #include "ide-diagnostician.h"
@@ -31,6 +32,7 @@
 #include "ide-source-location.h"
 #include "ide-source-range.h"
 #include "ide-unsaved-files.h"
+#include "ide-vcs.h"
 
 #define DEFAULT_DIAGNOSE_TIMEOUT_MSEC 333
 
@@ -52,6 +54,7 @@ struct _IdeBuffer
   GHashTable             *diagnostics_line_cache;
   IdeFile                *file;
   GBytes                 *content;
+  IdeBufferChangeMonitor *change_monitor;
 
   guint            diagnose_timeout;
 
@@ -484,6 +487,7 @@ ide_buffer_dispose (GObject *object)
   g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
   g_clear_pointer (&self->content, g_bytes_unref);
   g_clear_object (&self->file);
+  g_clear_object (&self->change_monitor);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
 }
@@ -660,6 +664,16 @@ ide_buffer_set_file (IdeBuffer *self,
                                     ide_buffer__file_load_settings_cb,
                                     g_object_ref (self));
 
+      g_clear_object (&self->change_monitor);
+
+      if (self->context && self->file)
+        {
+          IdeVcs *vcs;
+
+          vcs = ide_context_get_vcs (self->context);
+          self->change_monitor = ide_vcs_get_buffer_change_monitor (vcs, self);
+        }
+
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
     }
 }
@@ -684,6 +698,7 @@ ide_buffer_get_line_flags (IdeBuffer *self,
                            guint      line)
 {
   IdeBufferLineFlags flags = 0;
+  IdeBufferLineChange change = 0;
 
   if (self->diagnostics_line_cache)
     {
@@ -712,8 +727,28 @@ ide_buffer_get_line_flags (IdeBuffer *self,
         }
     }
 
-  /* TODO: Coordinate with Vcs */
-  flags |= IDE_BUFFER_LINE_FLAGS_ADDED;
+  if (self->change_monitor)
+    {
+      GtkTextIter iter;
+
+      gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self), &iter, line);
+      change = ide_buffer_change_monitor_get_change (self->change_monitor, &iter);
+
+      switch (change)
+        {
+        case IDE_BUFFER_LINE_CHANGE_ADDED:
+          flags |= IDE_BUFFER_LINE_FLAGS_ADDED;
+          break;
+
+        case IDE_BUFFER_LINE_CHANGE_CHANGED:
+          flags |= IDE_BUFFER_LINE_FLAGS_CHANGED;
+          break;
+
+        case IDE_BUFFER_LINE_CHANGE_NONE:
+        default:
+          break;
+        }
+    }
 
   return flags;
 }
