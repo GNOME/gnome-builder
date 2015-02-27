@@ -27,12 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_GIT_VCS (ide_git_vcs_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeGitVcs, ide_git_vcs, IDE, GIT_VCS, IdeVcs)
-
-struct _IdeGitVcsClass
-{
-  IdeVcsClass parent;
-};
+G_DECLARE_FINAL_TYPE (IdeGitVcs, ide_git_vcs, IDE, GIT_VCS, IdeVcs)
 
 GgitRepository *ide_git_vcs_get_repository (IdeGitVcs *vcs);
 

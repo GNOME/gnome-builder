@@ -26,17 +26,18 @@
 #include "ide-project-file.h"
 #include "ide-project-files.h"
 
-typedef struct
+struct _IdeGitVcs
 {
+  IdeVcs parent_instance;
+
   GgitRepository *repository;
   GgitRepository *change_monitor_repository;
   GFile          *working_directory;
-} IdeGitVcsPrivate;
+};
 
 static void g_async_initable_init_interface (GAsyncInitableIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeGitVcs, ide_git_vcs, IDE_TYPE_VCS, 0,
-                        G_ADD_PRIVATE (IdeGitVcs)
                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
                                                g_async_initable_init_interface))
 
@@ -58,22 +59,19 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 GgitRepository *
 ide_git_vcs_get_repository (IdeGitVcs *self)
 {
-  IdeGitVcsPrivate *priv = ide_git_vcs_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_GIT_VCS (self), NULL);
 
-  return priv->repository;
+  return self->repository;
 }
 
 static GFile *
 ide_git_vcs_get_working_directory (IdeVcs *vcs)
 {
   IdeGitVcs *self = (IdeGitVcs *)vcs;
-  IdeGitVcsPrivate *priv = ide_git_vcs_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_GIT_VCS (self), NULL);
 
-  return priv->working_directory;
+  return self->working_directory;
 }
 
 static IdeBufferChangeMonitor *
@@ -81,7 +79,6 @@ ide_git_vcs_get_buffer_change_monitor (IdeVcs    *vcs,
                                        IdeBuffer *buffer)
 {
   IdeGitVcs *self = (IdeGitVcs *)vcs;
-  IdeGitVcsPrivate *priv = ide_git_vcs_get_instance_private (self);
   IdeContext *context;
 
   g_return_val_if_fail (IDE_IS_GIT_VCS (vcs), NULL);
@@ -91,7 +88,7 @@ ide_git_vcs_get_buffer_change_monitor (IdeVcs    *vcs,
   return g_object_new (IDE_TYPE_GIT_BUFFER_CHANGE_MONITOR,
                        "buffer", buffer,
                        "context", context,
-                       "repository", priv->change_monitor_repository,
+                       "repository", self->change_monitor_repository,
                        NULL);
 }
 
@@ -99,11 +96,10 @@ static void
 ide_git_vcs_finalize (GObject *object)
 {
   IdeGitVcs *self = (IdeGitVcs *)object;
-  IdeGitVcsPrivate *priv = ide_git_vcs_get_instance_private (self);
 
-  g_clear_object (&priv->change_monitor_repository);
-  g_clear_object (&priv->repository);
-  g_clear_object (&priv->working_directory);
+  g_clear_object (&self->change_monitor_repository);
+  g_clear_object (&self->repository);
+  g_clear_object (&self->working_directory);
 
   G_OBJECT_CLASS (ide_git_vcs_parent_class)->finalize (object);
 }
@@ -225,7 +221,6 @@ static gboolean
 ide_git_vcs_reload_index (IdeGitVcs  *self,
                           GError    **error)
 {
-  IdeGitVcsPrivate *priv = ide_git_vcs_get_instance_private (self);
   GgitIndexEntries *entries = NULL;
   IdeProjectItem *root;
   IdeProjectItem *files = NULL;
@@ -240,7 +235,7 @@ ide_git_vcs_reload_index (IdeGitVcs  *self,
 
   g_return_val_if_fail (IDE_IS_GIT_VCS (self), FALSE);
 
-  index = ggit_repository_get_index (priv->repository, error);
+  index = ggit_repository_get_index (self->repository, error);
   if (!index)
     goto cleanup;
 
@@ -265,7 +260,7 @@ ide_git_vcs_reload_index (IdeGitVcs  *self,
 
   g_hash_table_insert (cache, g_strdup ("."), g_object_ref (files));
 
-  workdir = g_file_get_path (priv->working_directory);
+  workdir = g_file_get_path (self->working_directory);
 
   for (i = 0; i < count; i++)
     {
@@ -299,7 +294,6 @@ ide_git_vcs_init_worker (GTask        *task,
                          gpointer      task_data,
                          GCancellable *cancellable)
 {
-  IdeGitVcsPrivate *priv;
   GgitRepository *repository = NULL;
   GgitRepository *diff_repository = NULL;
   IdeGitVcs *self = source_object;
@@ -310,8 +304,6 @@ ide_git_vcs_init_worker (GTask        *task,
   g_return_if_fail (G_IS_TASK (task));
   g_return_if_fail (IDE_IS_GIT_VCS (self));
   g_return_if_fail (G_IS_FILE (directory));
-
-  priv = ide_git_vcs_get_instance_private (self);
 
   location = ggit_repository_discover (directory, &error);
 
@@ -343,9 +335,9 @@ ide_git_vcs_init_worker (GTask        *task,
       goto cleanup;
     }
 
-  priv->repository = g_object_ref (repository);
-  priv->change_monitor_repository = g_object_ref (diff_repository);
-  priv->working_directory = ggit_repository_get_workdir (priv->repository);
+  self->repository = g_object_ref (repository);
+  self->change_monitor_repository = g_object_ref (diff_repository);
+  self->working_directory = ggit_repository_get_workdir (self->repository);
 
   if (!ide_git_vcs_reload_index (self, &error))
     {
