@@ -61,6 +61,7 @@ typedef struct
   gulong                       buffer_delete_range_handler;
   gulong                       buffer_insert_text_after_handler;
   gulong                       buffer_insert_text_handler;
+  gulong                       buffer_line_flags_changed_handler;
   gulong                       buffer_mark_set_handler;
   gulong                       buffer_notify_file_handler;
   gulong                       buffer_notify_highlight_diagnostics_handler;
@@ -637,6 +638,19 @@ ide_source_view__buffer_notify_highlight_diagnostics_cb (IdeSourceView *self,
 }
 
 static void
+ide_source_view__buffer_line_flags_changed_cb (IdeSourceView *self,
+                                               IdeBuffer     *buffer)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  gtk_source_gutter_renderer_queue_draw (priv->line_change_renderer);
+  gtk_source_gutter_renderer_queue_draw (priv->line_diagnostics_renderer);
+}
+
+static void
 ide_source_view_connect_buffer (IdeSourceView *self,
                                 IdeBuffer     *buffer)
 {
@@ -649,6 +663,13 @@ ide_source_view_connect_buffer (IdeSourceView *self,
       g_signal_connect_object (buffer,
                                "changed",
                                G_CALLBACK (ide_source_view__buffer_changed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+  priv->buffer_line_flags_changed_handler =
+      g_signal_connect_object (buffer,
+                               "line-flags-changed",
+                               G_CALLBACK (ide_source_view__buffer_line_flags_changed_cb),
                                self,
                                G_CONNECT_SWAPPED);
 
@@ -726,6 +747,7 @@ ide_source_view_disconnect_buffer (IdeSourceView *self,
   ide_clear_signal_handler (buffer, &priv->buffer_delete_range_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_insert_text_after_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_insert_text_handler);
+  ide_clear_signal_handler (buffer, &priv->buffer_line_flags_changed_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_mark_set_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_notify_highlight_diagnostics_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_notify_language_handler);
