@@ -38,6 +38,14 @@ test_ide_buffer_manager_CFLAGS = \
 	-DTEST_DATA_DIR="\"$(top_srcdir)/tests/data\""
 test_ide_buffer_manager_LDADD = libide-1.0.la $(LIBIDE_LIBS)
 
+noinst_PROGRAMS += test-ide-buffer
+TESTS += test-ide-buffer
+test_ide_buffer_SOURCES = tests/test-ide-buffer.c
+test_ide_buffer_CFLAGS = \
+	$(libide_1_0_la_CFLAGS) \
+	-DTEST_DATA_DIR="\"$(top_srcdir)/tests/data\""
+test_ide_buffer_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+
 
 noinst_PROGRAMS += test-ide-source-view
 test_ide_source_view_SOURCES = tests/test-ide-source-view.c
