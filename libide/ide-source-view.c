@@ -1094,7 +1094,7 @@ ide_source_view_maybe_delete_match (IdeSourceView *self,
     default:   match = 0;    break;
     }
 
-  if (gtk_text_iter_get_char (&iter) == match)
+  if (match && (gtk_text_iter_get_char (&iter) == match))
     {
       gtk_text_iter_forward_char (&iter);
       gtk_text_buffer_delete (buffer, &prev, &iter);
