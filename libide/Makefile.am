@@ -242,6 +242,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide/local \
 	-I$(top_srcdir)/libide/pygobject \
 	-I$(top_srcdir)/libide/python \
+	-I$(top_srcdir)/libide/resources \
 	-I$(top_srcdir)/libide/tasks \
 	-I$(top_srcdir)/libide/theatrics \
 	-I$(top_srcdir)/libide/trie \
@@ -279,6 +280,31 @@ libide_1_0_la_LIBADD = \
 	-lclang \
 	-lm \
 	libeditorconfig.la \
+	$(NULL)
+
+libide_1_0_la_built_sources = \
+	libide/resources/ide-resources.c \
+	libide/resources/ide-resources.h \
+	$(NULL)
+
+libide_resource_files = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/libide/resources --generate-dependencies $(top_srcdir)/libide/resources/libide.gresource.xml)
+libide/resources/ide-resources.c: libide/resources/libide.gresource.xml $(libide_resource_files)
+	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/libide/resources --generate-source --c-name ide $(top_srcdir)/libide/resources/libide.gresource.xml
+libide/resources/ide-resources.h: libide/resources/libide.gresource.xml $(libide_resource_files)
+	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/libide/resources --generate-header --c-name ide $(top_srcdir)/libide/resources/libide.gresource.xml
+
+nodist_libide_1_0_la_SOURCES = \
+	$(libide_1_0_la_built_sources) \
+	$(NULL)
+
+BUILT_SOURCES += $(libide_1_0_la_built_sources)
+
+DISTCLEANFILES += $(libide_1_0_la_built_sources)
+
+EXTRA_DIST += \
+	$(libide_resource_files) \
+	libide/resources/libide.gresource.xml \
+	$(libide_1_0_la_built_sources) \
 	$(NULL)
 
 

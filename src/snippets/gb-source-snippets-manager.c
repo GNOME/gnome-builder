@@ -31,7 +31,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbSourceSnippetsManager,
                             gb_source_snippets_manager,
                             G_TYPE_OBJECT)
 
-#define SNIPPETS_DIRECTORY "/org/gnome/builder/snippets/"
+#define SNIPPETS_DIRECTORY "/org/gnome/libide/snippets/"
 
 static gboolean
 gb_source_snippets_manager_load_file (GbSourceSnippetsManager *manager,

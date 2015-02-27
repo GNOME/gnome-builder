@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/libide">
+    <file alias="snippets/c-sharp.snippets">../../data/snippets/c-sharp.snippets</file>
+    <file alias="snippets/c.snippets">../../data/snippets/c.snippets</file>
+    <file alias="snippets/chdr.snippets">../../data/snippets/chdr.snippets</file>
+    <file alias="snippets/gobject.snippets">../../data/snippets/gobject.snippets</file>
+    <file alias="snippets/licenses.snippets">../../data/snippets/licenses.snippets</file>
+    <file alias="snippets/main.snippets">../../data/snippets/main.snippets</file>
+    <file alias="snippets/python.snippets">../../data/snippets/python.snippets</file>
+    <file alias="snippets/rpmspec.snippets">../../data/snippets/rpmspec.snippets</file>
+    <file alias="snippets/shebang.snippets">../../data/snippets/shebang.snippets</file>
+    <file alias="snippets/vala.snippets">../../data/snippets/vala.snippets</file>
+    <file alias="snippets/xml.snippets">../../data/snippets/xml.snippets</file>
+  </gresource>
+</gresources>
