@@ -21,6 +21,7 @@ libide/clang/ide-clang-translation-unit.c
 libide/editorconfig/ide-editorconfig-file-settings.c
 libide/gca/ide-gca-diagnostic-provider.c
 libide/gca/ide-gca-service.c
+libide/git/ide-git-buffer-change-monitor.c
 libide/git/ide-git-search-index.c
 libide/git/ide-git-search-provider.c
 libide/git/ide-git-vcs.c
@@ -28,6 +29,7 @@ libide/gjs/ide-gjs-script.cpp
 libide/gsettings/ide-gsettings-file-settings.c
 libide/ide-back-forward-item.c
 libide/ide-back-forward-list.c
+libide/ide-buffer-change-monitor.c
 libide/ide-buffer-manager.c
 libide/ide-buffer.c
 libide/ide-build-result.c
