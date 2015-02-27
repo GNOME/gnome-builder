@@ -207,7 +207,8 @@ ide_git_buffer_change_monitor__calculate_cb (GObject      *object,
 
   if (!ret)
     {
-      g_message ("%s", error->message);
+      if (!g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
+        g_message ("%s", error->message);
     }
   else
     {
