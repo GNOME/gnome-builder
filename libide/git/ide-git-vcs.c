@@ -20,6 +20,7 @@
 #include <libgit2-glib/ggit.h>
 
 #include "ide-context.h"
+#include "ide-git-buffer-change-monitor.h"
 #include "ide-git-vcs.h"
 #include "ide-project.h"
 #include "ide-project-file.h"
@@ -28,6 +29,7 @@
 typedef struct
 {
   GgitRepository *repository;
+  GgitRepository *change_monitor_repository;
   GFile          *working_directory;
 } IdeGitVcsPrivate;
 
@@ -74,12 +76,32 @@ ide_git_vcs_get_working_directory (IdeVcs *vcs)
   return priv->working_directory;
 }
 
+static IdeBufferChangeMonitor *
+ide_git_vcs_get_buffer_change_monitor (IdeVcs    *vcs,
+                                       IdeBuffer *buffer)
+{
+  IdeGitVcs *self = (IdeGitVcs *)vcs;
+  IdeGitVcsPrivate *priv = ide_git_vcs_get_instance_private (self);
+  IdeContext *context;
+
+  g_return_val_if_fail (IDE_IS_GIT_VCS (vcs), NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (vcs));
+
+  return g_object_new (IDE_TYPE_GIT_BUFFER_CHANGE_MONITOR,
+                       "buffer", buffer,
+                       "context", context,
+                       "repository", priv->change_monitor_repository,
+                       NULL);
+}
+
 static void
 ide_git_vcs_finalize (GObject *object)
 {
   IdeGitVcs *self = (IdeGitVcs *)object;
   IdeGitVcsPrivate *priv = ide_git_vcs_get_instance_private (self);
 
+  g_clear_object (&priv->change_monitor_repository);
   g_clear_object (&priv->repository);
   g_clear_object (&priv->working_directory);
 
@@ -115,6 +137,7 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
   object_class->get_property = ide_git_vcs_get_property;
 
   vcs_class->get_working_directory = ide_git_vcs_get_working_directory;
+  vcs_class->get_buffer_change_monitor = ide_git_vcs_get_buffer_change_monitor;
 
   gParamSpecs [PROP_REPOSITORY] =
     g_param_spec_object ("repository",
@@ -278,6 +301,7 @@ ide_git_vcs_init_worker (GTask        *task,
 {
   IdeGitVcsPrivate *priv;
   GgitRepository *repository = NULL;
+  GgitRepository *diff_repository = NULL;
   IdeGitVcs *self = source_object;
   GError *error = NULL;
   GFile *directory = task_data;
@@ -297,6 +321,9 @@ ide_git_vcs_init_worker (GTask        *task,
       goto cleanup;
     }
 
+  /*
+   * Open the repository we control for general, primary thread use.
+   */
   repository = ggit_repository_open (location, &error);
 
   if (!repository)
@@ -305,7 +332,19 @@ ide_git_vcs_init_worker (GTask        *task,
       goto cleanup;
     }
 
+  /*
+   * Open the repository we control for use in threaded diff calculations.
+   */
+  diff_repository = ggit_repository_open (location, &error);
+
+  if (!diff_repository)
+    {
+      g_task_return_error (task, error);
+      goto cleanup;
+    }
+
   priv->repository = g_object_ref (repository);
+  priv->change_monitor_repository = g_object_ref (diff_repository);
   priv->working_directory = ggit_repository_get_workdir (priv->repository);
 
   if (!ide_git_vcs_reload_index (self, &error))
@@ -319,6 +358,7 @@ ide_git_vcs_init_worker (GTask        *task,
 cleanup:
   g_clear_object (&location);
   g_clear_object (&repository);
+  g_clear_object (&diff_repository);
 }
 
 static void

@@ -190,6 +190,8 @@ libide_1_0_la_SOURCES = \
 	libide/gca/ide-gca-service.h \
 	libide/gca/ide-gca-service.h \
 	libide/gconstructor.h \
+	libide/git/ide-git-buffer-change-monitor.c \
+	libide/git/ide-git-buffer-change-monitor.h \
 	libide/git/ide-git-search-index.c \
 	libide/git/ide-git-search-index.h \
 	libide/ide-async-helper.c \
