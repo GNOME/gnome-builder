@@ -45,12 +45,13 @@ typedef struct _IdeBufferClass
 
 struct _IdeBuffer
 {
-  GtkSourceBuffer  parent_instance;
+  GtkSourceBuffer         parent_instance;
 
-  IdeContext      *context;
-  IdeDiagnostics  *diagnostics;
-  GHashTable      *diagnostics_line_cache;
-  IdeFile         *file;
+  IdeContext             *context;
+  IdeDiagnostics         *diagnostics;
+  GHashTable             *diagnostics_line_cache;
+  IdeFile                *file;
+  GBytes                 *content;
 
   guint            diagnose_timeout;
 
@@ -444,6 +445,8 @@ ide_buffer_changed (GtkTextBuffer *buffer)
 
   self->diagnostics_dirty = TRUE;
 
+  g_clear_pointer (&self->content, g_bytes_unref);
+
   if (self->highlight_diagnostics && !self->in_diagnose)
     ide_buffer_queue_diagnose (self);
 }
@@ -479,6 +482,7 @@ ide_buffer_dispose (GObject *object)
 
   g_clear_pointer (&self->diagnostics_line_cache, g_hash_table_unref);
   g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
+  g_clear_pointer (&self->content, g_bytes_unref);
   g_clear_object (&self->file);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
@@ -803,4 +807,58 @@ ide_buffer_get_diagnostic_at_iter (IdeBuffer         *self,
     }
 
   return NULL;
+}
+
+/**
+ * ide_buffer_get_content:
+ *
+ * Gets the contents of the buffer as GBytes.
+ *
+ * By using this function to get the bytes, you allow #IdeBuffer to avoid calculating the buffer
+ * text unnecessarily, potentially saving on allocations.
+ *
+ * Additionally, this allows the buffer to update the state in #IdeUnsavedFiles if the content
+ * is out of sync.
+ *
+ * Returns: (transfer full): A #GBytes containing the buffer content.
+ */
+GBytes *
+ide_buffer_get_content (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  if (!self->content)
+    {
+      IdeUnsavedFiles *unsaved_files;
+      gchar *text;
+      GtkTextIter begin;
+      GtkTextIter end;
+      GFile *gfile = NULL;
+      gsize len;
+
+      gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self), &begin, &end);
+      text = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (self), &begin, &end, TRUE);
+
+      /*
+       * If implicit newline is set, add a \n in place of the \0 and avoid duplicating the buffer.
+       * Make sure to track length beforehand, since we would overwrite afterwards. Since
+       * conversion to \r\n is dealth with during save operations, this should be fine for both.
+       * The unsaved files will restore to a buffer, for which \n is acceptable.
+       */
+      len = strlen (text);
+      if (gtk_source_buffer_get_implicit_trailing_newline (GTK_SOURCE_BUFFER (self)))
+        text [len++] = '\n';
+
+      self->content = g_bytes_new_take (text, len);
+
+      if ((self->context != NULL) &&
+          (self->file != NULL) &&
+          (gfile = ide_file_get_file (self->file)))
+        {
+          unsaved_files = ide_context_get_unsaved_files (self->context);
+          ide_unsaved_files_update (unsaved_files, gfile, self->content);
+        }
+    }
+
+  return g_bytes_ref (self->content);
 }

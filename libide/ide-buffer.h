@@ -60,6 +60,7 @@ void                ide_buffer_set_highlight_diagnostics (IdeBuffer         *sel
                                                           gboolean           highlight_diagnostics);
 IdeBufferLineFlags  ide_buffer_get_line_flags            (IdeBuffer         *buffer,
                                                           guint              line);
+GBytes             *ide_buffer_get_content               (IdeBuffer         *self);
 IdeDiagnostic      *ide_buffer_get_diagnostic_at_iter    (IdeBuffer         *self,
                                                           const GtkTextIter *iter);
 
