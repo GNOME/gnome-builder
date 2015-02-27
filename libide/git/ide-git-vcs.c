@@ -41,6 +41,7 @@ struct _IdeGitVcs
   guint           changed_timeout;
 
   guint           reloading : 1;
+  guint           loaded_files : 1;
 };
 
 static void     g_async_initable_init_interface (GAsyncInitableIface  *iface);
@@ -486,9 +487,6 @@ ide_git_vcs_reload__build_tree_cb (GObject      *object,
   IdeGitVcs *self = (IdeGitVcs *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeProjectFiles) files = NULL;
-  IdeContext *context;
-  IdeProject *project;
-  IdeProjectItem *root;
   GError *error = NULL;
 
   g_assert (IDE_IS_GIT_VCS (self));
@@ -502,14 +500,29 @@ ide_git_vcs_reload__build_tree_cb (GObject      *object,
       return;
     }
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  project = ide_context_get_project (context);
+  /*
+   * XXX:
+   *
+   * This is a hack to only load the project files the first time. We need to do this for real
+   * in the project tree to make appropriate events for tree changes.
+   */
+  if (!self->loaded_files)
+    {
+      IdeContext *context;
+      IdeProject *project;
+      IdeProjectItem *root;
 
-  ide_project_writer_lock (project);
-  root = ide_project_get_root (project);
-  /* TODO: Replace existing item!!! */
-  ide_project_item_append (root, IDE_PROJECT_ITEM (files));
-  ide_project_writer_unlock (project);
+      context = ide_object_get_context (IDE_OBJECT (self));
+      project = ide_context_get_project (context);
+
+      ide_project_writer_lock (project);
+      root = ide_project_get_root (project);
+      /* TODO: Replace existing item!!! */
+      ide_project_item_append (root, IDE_PROJECT_ITEM (files));
+      ide_project_writer_unlock (project);
+
+      self->loaded_files = TRUE;
+    }
 
   /*
    * Load the repository a third time for use by the threaded change monitors generating diffs.
