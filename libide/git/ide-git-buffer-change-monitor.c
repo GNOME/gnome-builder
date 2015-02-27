@@ -20,8 +20,10 @@
 #include <libgit2-glib/ggit.h>
 
 #include "ide-buffer.h"
+#include "ide-context.h"
 #include "ide-file.h"
 #include "ide-git-buffer-change-monitor.h"
+#include "ide-git-vcs.h"
 
 /**
  * SECTION:ide-git-buffer-change-monitor
@@ -385,16 +387,32 @@ ide_git_buffer_change_monitor__buffer_changed_after_cb (IdeGitBufferChangeMonito
 }
 
 static void
+ide_git_buffer_change_monitor__vcs_reloaded_cb (IdeGitBufferChangeMonitor *self,
+                                                IdeGitVcs                 *vcs)
+{
+  g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
+  g_assert (IDE_IS_GIT_VCS (vcs));
+
+  /* force reload of the git object on next calculation */
+  g_clear_object (&self->cached_blob);
+}
+
+static void
 ide_git_buffer_change_monitor_set_buffer (IdeBufferChangeMonitor *monitor,
                                           IdeBuffer              *buffer)
 {
   IdeGitBufferChangeMonitor *self = (IdeGitBufferChangeMonitor *)monitor;
+  IdeContext *context;
+  IdeVcs *vcs;
 
   g_return_if_fail (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
   g_return_if_fail (!self->buffer);
 
   self->buffer = g_object_ref (buffer);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
 
   g_signal_connect_object (self->buffer,
                            "insert-text",
@@ -419,6 +437,12 @@ ide_git_buffer_change_monitor_set_buffer (IdeBufferChangeMonitor *monitor,
                            G_CALLBACK (ide_git_buffer_change_monitor__buffer_changed_after_cb),
                            self,
                            G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+
+  g_signal_connect_object (vcs,
+                           "reloaded",
+                           G_CALLBACK (ide_git_buffer_change_monitor__vcs_reloaded_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static gint
