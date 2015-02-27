@@ -54,6 +54,7 @@ struct _IdeGitBufferChangeMonitor
   guint           state_dirty : 1;
   guint           in_calculation : 1;
   guint           delete_range_requires_recalculation : 1;
+  guint           is_child_of_workdir : 1;
 };
 
 typedef struct
@@ -63,6 +64,7 @@ typedef struct
   GFile          *file;
   GBytes         *content;
   GgitBlob       *blob;
+  guint           is_child_of_workdir : 1;
 } DiffTask;
 
 G_DEFINE_TYPE (IdeGitBufferChangeMonitor,
@@ -110,6 +112,9 @@ ide_git_buffer_change_monitor_calculate_finish (IdeGitBufferChangeMonitor  *self
   /* Keep the blob around for future use */
   if (diff->blob != self->cached_blob)
     g_set_object (&self->cached_blob, diff->blob);
+
+  /* If the file is a child of the working directory, we need to know */
+  self->is_child_of_workdir = diff->is_child_of_workdir;
 
   return g_task_propagate_pointer (task, error);
 }
@@ -172,7 +177,14 @@ ide_git_buffer_change_monitor_get_change (IdeBufferChangeMonitor *monitor,
   g_return_val_if_fail (iter, IDE_BUFFER_LINE_CHANGE_NONE);
 
   if (!self->state)
-    return IDE_BUFFER_LINE_CHANGE_NONE;
+    {
+      /*
+       * If the file is within the working directory, synthesize line addition.
+       */
+      if (self->is_child_of_workdir)
+        return IDE_BUFFER_LINE_CHANGE_ADDED;
+      return IDE_BUFFER_LINE_CHANGE_NONE;
+    }
 
   key = GINT_TO_POINTER (gtk_text_iter_get_line (iter) + 1);
   value = g_hash_table_lookup (self->state, key);
@@ -515,6 +527,8 @@ ide_git_buffer_change_monitor_calculate_threaded (IdeGitBufferChangeMonitor  *se
                    _("File is not under control of git working directory."));
       return FALSE;
     }
+
+  diff->is_child_of_workdir = TRUE;
 
   /*
    * Find the blob if necessary. This will be cached by the main thread for us on the way out
