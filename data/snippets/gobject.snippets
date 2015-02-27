@@ -188,3 +188,34 @@ snippet gsignal
 		              ${6:g_cclosure_marshal_generic},
 		              ${7:G_TYPE_NONE},
 		              ${8:0});
+snippet async
+- scope c
+	void
+	${$2|functify}_${1:do_something}_async (${2:$filename|stripsuffix|camelize} *self,
+	${$2|space} ${$1|space}          GCancellable *cancellable,
+	${$2|space} ${$1|space}          GAsyncReadyCallback callback,
+	${$2|space} ${$1|space}          gpointer user_data)
+	{
+		g_autoptr(GTask) task = NULL;
+
+		g_return_if_fail (${$filename|stripsuffix|functify|namespace|upper}_IS_${$filename|stripsuffix|class|functify|upper} (self));
+		g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+		task = g_task_new (self, cancellable, callback, user_data);
+
+		$0
+	}
+snippet finish
+- scope c
+	gboolean
+	${$2|functify}_${1:do_something}_finish (${2:$filename|stripsuffix|camelize} *self,
+	${$2|space} ${$1|space}           GAsyncResult *result,
+	${$2|space} ${$1|space}           GError **error)
+	{
+		GTask *task = (GTask *)result;
+
+		g_return_val_if_fail (${$filename|stripsuffix|functify|namespace|upper}_IS_${$filename|stripsuffix|class|functify|upper} (self), ${3:FALSE});
+		g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+		return g_task_propagate_${4:boolean} (task, error);
+	}
