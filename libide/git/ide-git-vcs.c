@@ -63,7 +63,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  RELOADED,
+  LAST_SIGNAL
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint gSignals [LAST_SIGNAL];
 
 /**
  * ide_git_vcs_get_repository:
@@ -640,6 +646,8 @@ ide_git_vcs_reload_finish (IdeGitVcs     *self,
 
   self->reloading = FALSE;
 
+  g_signal_emit (self, gSignals [RELOADED], 0);
+
   return g_task_propagate_boolean (task, error);
 }
 
@@ -699,14 +707,39 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
   vcs_class->get_working_directory = ide_git_vcs_get_working_directory;
   vcs_class->get_buffer_change_monitor = ide_git_vcs_get_buffer_change_monitor;
 
+  /**
+   * IdeGitVcs:repository:
+   *
+   * This property contains the underlying #GgitRepository that can be used to lookup git
+   * information. Consumers should be careful about using this directly. It is not thread-safe
+   * to use this object, nor is it safe to perform many blocking calls from the main thread.
+   *
+   * You might want to get the #GgitRepository:location property and create your own instance
+   * of the repository for threaded operations.
+   */
   gParamSpecs [PROP_REPOSITORY] =
     g_param_spec_object ("repository",
                          _("Repository"),
                          _("The git repository for the project."),
                          GGIT_TYPE_REPOSITORY,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_REPOSITORY,
-                                   gParamSpecs [PROP_REPOSITORY]);
+  g_object_class_install_property (object_class, PROP_REPOSITORY, gParamSpecs [PROP_REPOSITORY]);
+
+  /**
+   * IdeGitVcs::reloaded:
+   *
+   * This signal is emitted when the git index has been reloaded. Various consumers may want to
+   * reload their git objects upon this notification. Such an example would be the line diffs
+   * that are rendered in the source view gutter.
+   */
+  gSignals [RELOADED] = g_signal_new ("reloaded",
+                                      G_TYPE_FROM_CLASS (klass),
+                                      G_SIGNAL_RUN_LAST,
+                                      0,
+                                      NULL, NULL,
+                                      g_cclosure_marshal_VOID__VOID,
+                                      G_TYPE_NONE,
+                                      0);
 }
 
 static void
