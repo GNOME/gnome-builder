@@ -43,6 +43,8 @@ typedef struct _IdeBackForwardList             IdeBackForwardList;
 
 typedef struct _IdeBuffer                      IdeBuffer;
 
+typedef struct _IdeBufferChangeMonitor         IdeBufferChangeMonitor;
+
 typedef struct _IdeBufferManager               IdeBufferManager;
 
 typedef struct _IdeBuilder                     IdeBuilder;
