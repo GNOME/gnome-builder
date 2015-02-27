@@ -215,7 +215,6 @@ snippet finish
 		GTask *task = (GTask *)result;
 
 		g_return_val_if_fail (${$filename|stripsuffix|functify|namespace|upper}_IS_${$filename|stripsuffix|class|functify|upper} (self), ${3:FALSE});
-		g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
 		return g_task_propagate_${4:boolean} (task, error);
 	}
