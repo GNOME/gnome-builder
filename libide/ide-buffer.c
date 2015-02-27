@@ -56,11 +56,13 @@ struct _IdeBuffer
   GBytes                 *content;
   IdeBufferChangeMonitor *change_monitor;
 
-  guint            diagnose_timeout;
+  gulong                  change_monitor_changed_handler;
 
-  guint            diagnostics_dirty : 1;
-  guint            in_diagnose : 1;
-  guint            highlight_diagnostics : 1;
+  guint                   diagnose_timeout;
+
+  guint                   diagnostics_dirty : 1;
+  guint                   in_diagnose : 1;
+  guint                   highlight_diagnostics : 1;
 };
 
 G_DEFINE_TYPE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
@@ -73,9 +75,15 @@ enum {
   LAST_PROP
 };
 
+enum {
+  LINE_FLAGS_CHANGED,
+  LAST_SIGNAL
+};
+
 static void ide_buffer_queue_diagnose (IdeBuffer *self);
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint gSignals [LINE_FLAGS_CHANGED];
 
 static void
 ide_buffer_get_iter_at_location (IdeBuffer         *self,
@@ -331,6 +339,8 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
 
       if (diagnostics)
         ide_buffer_update_diagnostics (self, diagnostics);
+
+      g_signal_emit (self, gSignals [LINE_FLAGS_CHANGED], 0);
     }
 }
 
@@ -440,6 +450,43 @@ ide_buffer_queue_diagnose (IdeBuffer *self)
 }
 
 static void
+ide_buffer__change_monitor_changed_cb (IdeBuffer              *self,
+                                       IdeBufferChangeMonitor *monitor)
+{
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_BUFFER_CHANGE_MONITOR (monitor));
+
+  g_signal_emit (self, gSignals [LINE_FLAGS_CHANGED], 0);
+}
+
+static void
+ide_buffer_reload_change_monitor (IdeBuffer *self)
+{
+  g_assert (IDE_IS_BUFFER (self));
+
+  if (self->change_monitor)
+    {
+      ide_clear_signal_handler (self->change_monitor, &self->change_monitor_changed_handler);
+      g_clear_object (&self->change_monitor);
+    }
+
+  if (self->context && self->file)
+    {
+      IdeVcs *vcs;
+
+      vcs = ide_context_get_vcs (self->context);
+      self->change_monitor = ide_vcs_get_buffer_change_monitor (vcs, self);
+      self->change_monitor_changed_handler =
+        g_signal_connect_object (self->change_monitor,
+                                 "changed",
+                                 G_CALLBACK (ide_buffer__change_monitor_changed_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED);
+    }
+
+}
+
+static void
 ide_buffer_changed (GtkTextBuffer *buffer)
 {
   IdeBuffer *self = (IdeBuffer *)buffer;
@@ -483,11 +530,16 @@ ide_buffer_dispose (GObject *object)
       self->diagnose_timeout = 0;
     }
 
+  if (self->change_monitor)
+    {
+      ide_clear_signal_handler (self->change_monitor, &self->change_monitor_changed_handler);
+      g_clear_object (&self->change_monitor);
+    }
+
   g_clear_pointer (&self->diagnostics_line_cache, g_hash_table_unref);
   g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
   g_clear_pointer (&self->content, g_bytes_unref);
   g_clear_object (&self->file);
-  g_clear_object (&self->change_monitor);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
 }
@@ -597,6 +649,21 @@ ide_buffer_class_init (IdeBufferClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_HIGHLIGHT_DIAGNOSTICS,
                                    gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS]);
+
+  /**
+   * IdeBuffer::line-flags-changed:
+   *
+   * This signal is emitted when the calculated line flags have changed. This occurs when
+   * diagnostics and line changes have been recalculated.
+   */
+  gSignals [LINE_FLAGS_CHANGED] = g_signal_new ("line-flags-changed",
+                                                G_TYPE_FROM_CLASS (klass),
+                                                G_SIGNAL_RUN_LAST,
+                                                0,
+                                                NULL, NULL,
+                                                g_cclosure_marshal_VOID__VOID,
+                                                G_TYPE_NONE,
+                                                0);
 }
 
 static void
@@ -663,17 +730,7 @@ ide_buffer_set_file (IdeBuffer *self,
                                     NULL,
                                     ide_buffer__file_load_settings_cb,
                                     g_object_ref (self));
-
-      g_clear_object (&self->change_monitor);
-
-      if (self->context && self->file)
-        {
-          IdeVcs *vcs;
-
-          vcs = ide_context_get_vcs (self->context);
-          self->change_monitor = ide_vcs_get_buffer_change_monitor (vcs, self);
-        }
-
+      ide_buffer_reload_change_monitor (self);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
     }
 }
