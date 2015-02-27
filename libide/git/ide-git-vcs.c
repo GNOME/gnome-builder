@@ -629,7 +629,7 @@ ide_git_vcs_reload_async (IdeGitVcs           *self,
                                      g_object_ref (task));
 }
 
-gboolean
+static gboolean
 ide_git_vcs_reload_finish (IdeGitVcs     *self,
                            GAsyncResult  *result,
                            GError       **error)
