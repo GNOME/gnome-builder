@@ -628,6 +628,14 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
         }
     }
 
+  /*
+   * If file-settings dictate that we should trim trailing whitespace, trim it from the modified
+   * lines in the IdeBuffer. This is performed automatically based on line state within
+   * ide_buffer_trim_trailing_whitespace().
+   */
+  if (ide_file_settings_get_trim_trailing_whitespace (file_settings))
+    ide_buffer_trim_trailing_whitespace (state->buffer);
+
   gtk_source_file_saver_set_encoding (saver, encoding);
   gtk_source_file_saver_set_newline_type (saver, newline_type);
 

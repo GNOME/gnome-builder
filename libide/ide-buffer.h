@@ -63,6 +63,7 @@ IdeBufferLineFlags  ide_buffer_get_line_flags            (IdeBuffer         *buf
 GBytes             *ide_buffer_get_content               (IdeBuffer         *self);
 IdeDiagnostic      *ide_buffer_get_diagnostic_at_iter    (IdeBuffer         *self,
                                                           const GtkTextIter *iter);
+void                ide_buffer_trim_trailing_whitespace  (IdeBuffer         *self);
 
 G_END_DECLS
 

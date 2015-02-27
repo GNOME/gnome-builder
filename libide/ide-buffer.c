@@ -40,6 +40,8 @@
 #define TAG_WARNING "diagnostician::warning"
 #define TAG_NOTE    "diagnostician::note"
 
+#define TEXT_ITER_IS_SPACE(ptr) g_unichar_isspace(gtk_text_iter_get_char(ptr))
+
 typedef struct _IdeBufferClass
 {
   GtkSourceBufferClass parent;
@@ -953,4 +955,56 @@ ide_buffer_get_content (IdeBuffer *self)
     }
 
   return g_bytes_ref (self->content);
+}
+
+void
+ide_buffer_trim_trailing_whitespace  (IdeBuffer *self)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  gint line;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  buffer = GTK_TEXT_BUFFER (self);
+
+  gtk_text_buffer_get_end_iter (buffer, &iter);
+
+  for (line = gtk_text_iter_get_line (&iter); line >= 0; line--)
+    {
+      IdeBufferLineChange change = IDE_BUFFER_LINE_CHANGE_CHANGED;
+
+      if (self->change_monitor)
+        {
+          GtkTextIter tmp;
+
+          gtk_text_buffer_get_iter_at_line (buffer, &tmp, line);
+          change = ide_buffer_change_monitor_get_change (self->change_monitor, &tmp);
+        }
+
+      if (change != IDE_BUFFER_LINE_CHANGE_NONE)
+        {
+          gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
+
+          if (gtk_text_iter_forward_to_line_end (&iter) && TEXT_ITER_IS_SPACE (&iter))
+            {
+              GtkTextIter begin = iter;
+
+              while (TEXT_ITER_IS_SPACE (&begin))
+                {
+                  if (gtk_text_iter_starts_line (&begin))
+                    break;
+
+                  if (!gtk_text_iter_backward_char (&begin))
+                    break;
+                }
+
+              if (!TEXT_ITER_IS_SPACE (&begin) && !gtk_text_iter_ends_line (&begin))
+                gtk_text_iter_forward_char (&begin);
+
+              if (!gtk_text_iter_equal (&begin, &iter))
+                gtk_text_buffer_delete (buffer, &begin, &iter);
+            }
+        }
+    }
 }
