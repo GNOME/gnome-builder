@@ -398,8 +398,6 @@ ide_git_vcs__monitor_changed_cb (IdeGitVcs         *self,
 
   if (event_type == G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT)
     {
-      g_print ("Repository index changed.\n");
-
       if (self->changed_timeout)
         g_source_remove (self->changed_timeout);
 
@@ -615,7 +613,6 @@ ide_git_vcs_reload_async (IdeGitVcs           *self,
 
   if (self->reloading)
     {
-      g_print ("ignoring reload request, still running.\n");
       /*
        * Ignore if we are already reloading. We should probably set a bit here and attept to
        * reload again after the current process completes.
@@ -625,8 +622,6 @@ ide_git_vcs_reload_async (IdeGitVcs           *self,
     }
 
   self->reloading = TRUE;
-
-  g_print ("... now reloading...\n");
 
   ide_git_vcs_load_repository_async (self,
                                      NULL,
