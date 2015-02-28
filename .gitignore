@@ -26,6 +26,7 @@ config.status
 configure
 gnome-builder
 ide-build
+ide-list-build-flags
 ide-list-devices
 ide-list-diagnostics
 ide-list-file-settings

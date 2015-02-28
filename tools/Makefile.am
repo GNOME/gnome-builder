@@ -4,6 +4,11 @@ ide_build_SOURCES = tools/ide-build.c
 ide_build_CFLAGS = $(libide_1_0_la_CFLAGS)
 ide_build_LDADD = libide-1.0.la $(LIBIDE_LIBS)
 
+noinst_PROGRAMS += ide-list-build-flags
+ide_list_build_flags_SOURCES = tools/ide-list-build-flags.c
+ide_list_build_flags_CFLAGS = $(libide_1_0_la_CFLAGS)
+ide_list_build_flags_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+
 noinst_PROGRAMS += ide-list-file-settings
 ide_list_file_settings_SOURCES = tools/ide-list-file-settings.c
 ide_list_file_settings_CFLAGS = $(libide_1_0_la_CFLAGS)
