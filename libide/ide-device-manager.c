@@ -320,3 +320,35 @@ ide_device_manager_init (IdeDeviceManager *self)
   priv->devices = g_ptr_array_new_with_free_func (g_object_unref);
   priv->providers = g_ptr_array_new_with_free_func (g_object_unref);
 }
+
+/**
+ * ide_device_manager_get_device:
+ * @device_id: The device identifier string.
+ *
+ * Fetches the first device that matches the device identifier @device_id.
+ *
+ * Returns: (transfer none): An #IdeDevice or %NULL.
+ */
+IdeDevice *
+ide_device_manager_get_device (IdeDeviceManager *self,
+                               const gchar      *device_id)
+{
+  IdeDeviceManagerPrivate *priv = ide_device_manager_get_instance_private (self);
+  gsize i;
+
+  g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), NULL);
+
+  for (i = 0; i < priv->devices->len; i++)
+    {
+      IdeDevice *device;
+      const gchar *id;
+
+      device = g_ptr_array_index (priv->devices, i);
+      id = ide_device_get_id (device);
+
+      if (0 == g_strcmp0 (id, device_id))
+        return device;
+    }
+
+  return NULL;
+}

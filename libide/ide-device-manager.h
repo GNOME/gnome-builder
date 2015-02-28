@@ -39,6 +39,8 @@ GPtrArray *ide_device_manager_get_devices     (IdeDeviceManager  *self);
 gboolean   ide_device_manager_get_settled     (IdeDeviceManager  *self);
 void       ide_device_manager_remove_provider (IdeDeviceManager  *self,
                                                IdeDeviceProvider *provider);
+IdeDevice *ide_device_manager_get_device      (IdeDeviceManager  *self,
+                                               const gchar       *device_id);
 
 G_END_DECLS
 
