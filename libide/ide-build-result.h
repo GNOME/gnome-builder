@@ -27,8 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_RESULT (ide_build_result_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeBuildResult, ide_build_result, IDE, BUILD_RESULT,
-                          IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeBuildResult, ide_build_result, IDE, BUILD_RESULT, IdeObject)
 
 struct _IdeBuildResultClass
 {
