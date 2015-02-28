@@ -25,13 +25,9 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_AUTOTOOLS_BUILDER (ide_autotools_builder_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeAutotoolsBuilder, ide_autotools_builder,
-                          IDE, AUTOTOOLS_BUILDER, IdeBuilder)
+G_DECLARE_FINAL_TYPE (IdeAutotoolsBuilder, ide_autotools_builder, IDE, AUTOTOOLS_BUILDER, IdeBuilder)
 
-struct _IdeAutotoolsBuilderClass
-{
-  IdeBuilderClass parent;
-};
+GFile *ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self);
 
 G_END_DECLS
 

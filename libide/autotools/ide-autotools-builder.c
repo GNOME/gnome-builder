@@ -24,6 +24,7 @@
 #include "ide-context.h"
 #include "ide-device.h"
 #include "ide-project.h"
+#include "ide-vcs.h"
 
 typedef struct
 {
@@ -31,8 +32,14 @@ typedef struct
   IdeDevice *device;
 } IdeAutotoolsBuilderPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeAutotoolsBuilder, ide_autotools_builder,
-                            IDE_TYPE_BUILDER)
+struct _IdeAutotoolsBuilder
+{
+  IdeObject parent_instance;
+
+  /* TODO: Move private to instance fields */
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE (IdeAutotoolsBuilder, ide_autotools_builder, IDE_TYPE_BUILDER)
 
 enum {
   PROP_0,
@@ -124,6 +131,67 @@ ide_autotools_builder_build_cb (GObject      *object,
   g_task_return_pointer (task, g_object_ref (build_result), g_object_unref);
 }
 
+/**
+ * ide_autotools_builder_get_build_directory:
+ *
+ * Gets the directory that will contain the generated makefiles and build root.
+ *
+ * Returns: (transfer full): A #GFile containing the build directory.
+ */
+GFile *
+ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self)
+{
+  IdeAutotoolsBuilderPrivate *priv = ide_autotools_builder_get_instance_private (self);
+  g_autofree gchar *path = NULL;
+  IdeContext *context;
+  IdeProject *project;
+  const gchar *root_build_dir;
+  const gchar *project_name;
+  const gchar *device_id;
+  const gchar *system_type;
+
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self), NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  device_id = ide_device_get_id (priv->device);
+
+  /*
+   * If this is the local device, we have a special workaround for building within the project
+   * tree. Generally we want to be doing out of tree builds, but a lot of people are going to
+   * fire up their project from jhbuild or similar, and build in tree.
+   *
+   * This workaround will let us continue building their project in that location, with the
+   * caveat that we will need to `make distclean` later if they want to build for another device.
+   */
+  if (0 == g_strcmp0 (device_id, "local"))
+    {
+      IdeVcs *vcs;
+      GFile *working_directory;
+      g_autoptr(GFile) configure_file = NULL;
+      g_autofree gchar *configure_path = NULL;
+
+      vcs = ide_context_get_vcs (context);
+      working_directory = ide_vcs_get_working_directory (vcs);
+      configure_file = g_file_get_child (working_directory, "configure");
+      configure_path = g_file_get_path (configure_file);
+
+      if (g_file_test (configure_path, G_FILE_TEST_IS_EXECUTABLE))
+        return g_object_ref (working_directory);
+    }
+
+  project = ide_context_get_project (context);
+  root_build_dir = ide_context_get_root_build_dir (context);
+  system_type = ide_device_get_system_type (priv->device);
+  project_name = ide_project_get_name (project);
+  path = g_build_filename (root_build_dir,
+                           project_name,
+                           device_id,
+                           system_type,
+                           NULL);
+
+  return g_file_new_for_path (path);
+}
+
 static void
 ide_autotools_builder_build_async (IdeBuilder           *builder,
                                    IdeBuildResult      **result,
@@ -135,15 +203,9 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
   IdeAutotoolsBuilder *self = (IdeAutotoolsBuilder *)builder;
   g_autoptr(IdeAutotoolsBuildTask) build_result = NULL;
   g_autoptr(GTask) task = NULL;
-  g_autofree gchar *build_dir = NULL;
   g_autoptr(GFile) directory = NULL;
-  const gchar *device_id;
-  const gchar *project_name;
-  const gchar *root_build_dir;
-  const gchar *system_type;
   IdeContext *context;
   IdeDevice *device;
-  IdeProject *project;
 
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (builder));
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
@@ -152,22 +214,9 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  device = ide_autotools_builder_get_device (self);
-  device_id = ide_device_get_id (device);
-  system_type = ide_device_get_system_type (device);
-
   context = ide_object_get_context (IDE_OBJECT (builder));
-  root_build_dir = ide_context_get_root_build_dir (context);
-
-  project = ide_context_get_project (context);
-  project_name = ide_project_get_name (project);
-
-  build_dir = g_build_filename (root_build_dir,
-                                project_name,
-                                device_id,
-                                system_type,
-                                NULL);
-  directory = g_file_new_for_path (build_dir);
+  device = ide_autotools_builder_get_device (self);
+  directory = ide_autotools_builder_get_build_directory (self);
 
   build_result = g_object_new (IDE_TYPE_AUTOTOOLS_BUILD_TASK,
                                "context", context,
