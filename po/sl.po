@@ -1,0 +1,2088 @@
+# Slovenian translation for gnome-builder.
+# Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-builder package.
+#
+# Matej Urbančič <mateju@svn.gnome.org>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-builder master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"builder&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2015-02-28 19:04+0000\n"
+"PO-Revision-Date: 2015-02-28 21:55+0100\n"
+"Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
+"Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
+"Language: sl_SI\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#: ../src/animation/gb-animation.c:681
+#, fuzzy, c-format
+msgid "Cannot locate property %s in class %s"
+msgstr ""
+"[%s] Lastnost '%s' od predmeta razreda '%s' je bila vključena %s %d.%d\n"
+
+#: ../src/animation/gb-animation.c:817 ../src/credits/gb-credits-widget.c:275
+msgid "Duration"
+msgstr "Trajanje"
+
+#: ../src/animation/gb-animation.c:818
+msgid "The duration of the animation"
+msgstr "Trajanje animacije"
+
+#: ../src/animation/gb-animation.c:830
+#, fuzzy
+msgid "Frame Clock"
+msgstr "Vrtenje ure"
+
+#: ../src/animation/gb-animation.c:831
+msgid "An optional frame-clock to synchronize with."
+msgstr ""
+
+#: ../src/animation/gb-animation.c:848
+msgid "Mode"
+msgstr "Način"
+
+#: ../src/animation/gb-animation.c:849
+#, fuzzy
+msgid "The animation mode"
+msgstr "Način animacije"
+
+#: ../src/animation/gb-animation.c:866 ../src/theatrics/gb-box-theatric.c:289
+#: ../src/theatrics/gb-box-theatric.c:290
+msgid "Target"
+msgstr "Cilj"
+
+#: ../src/animation/gb-animation.c:867
+#, fuzzy
+msgid "The target of the animation"
+msgstr "Animacija in risanke"
+
+#: ../src/animation/gb-animation.c:1027 ../src/animation/gb-animation.c:1033
+#, fuzzy, c-format
+msgid "Failed to find property %s in %s"
+msgstr "Način za iskanje zadetkov"
+
+#: ../src/animation/gb-animation.c:1041
+#, c-format
+msgid "Failed to find property %s in %s or parent %s"
+msgstr ""
+
+#: ../src/animation/gb-animation.c:1051
+#, c-format
+msgid "Failed to retrieve va_list value: %s"
+msgstr ""
+
+#: ../src/app/gb-application.c:296
+#, fuzzy
+msgid "Failed to load keybindings."
+msgstr "Naložiti koledarja '%s' je spodletelo (%s)"
+
+#: ../src/app/gb-application.c:304
+#, fuzzy, c-format
+msgid "Failed to load keybindings: %s"
+msgstr "Naložiti koledarja '%s' je spodletelo (%s)"
+
+#: ../src/app/gb-application.c:316
+#, fuzzy, c-format
+msgid "Failed to load local keybindings: %s"
+msgstr "Prevzem krajevne veje <%s> je spodletel"
+
+#: ../src/app/gb-application.c:415 ../src/main.c:48
+msgid "Builder"
+msgstr "Izgrajevalnik"
+
+#: ../src/app/gb-application.c:570
+#, c-format
+msgid ""
+"The support log file has been written to '%s'. Please provide this file as "
+"an attachment on your bug report or support request."
+msgstr ""
+
+#: ../src/auto-indent/gb-source-auto-indenter-c.c:1467
+#: ../src/auto-indent/gb-source-auto-indenter-c.c:1468
+msgid "Name"
+msgstr "Ime"
+
+#: ../src/code-assistant/gb-source-code-assistant.c:764
+msgid "Active"
+msgstr "Dejavno"
+
+#: ../src/code-assistant/gb-source-code-assistant.c:765
+msgid "If code assistance is currently processing."
+msgstr ""
+
+#: ../src/code-assistant/gb-source-code-assistant.c:773
+#: ../src/editor/gb-source-change-monitor.c:867
+#: ../src/html/gb-html-document.c:310 ../src/snippets/gb-source-snippet.c:1023
+msgid "Buffer"
+msgstr "Medpomnilnik"
+
+#: ../src/code-assistant/gb-source-code-assistant.c:774
+msgid "The buffer "
+msgstr "Medpomnilnik"
+
+#: ../src/code-assistant/gb-source-code-assistant.c:813
+#, c-format
+msgid ""
+"Failed to load DBus connection. Code assistance will be disabled. \"%s\" (%s)"
+msgstr ""
+
+#: ../src/code-assistant/gb-source-code-assistant-renderer.c:319
+#, fuzzy
+msgid "Code Assistant"
+msgstr "Pomočnik datotek"
+
+#: ../src/code-assistant/gb-source-code-assistant-renderer.c:320
+#, fuzzy
+msgid "The code assistant to render."
+msgstr "Koda SQL ia izvedbo:"
+
+#: ../src/commands/gb-command-bar.c:223
+#, fuzzy, c-format
+msgid "Command not found: %s"
+msgstr "Ukaza ni mogoče najti."
+
+#: ../src/commands/gb-command-bar.c:524
+msgid "Use the entry below to execute a command"
+msgstr ""
+
+#: ../src/commands/gb-command-bar-item.c:175
+#: ../src/search/gb-search-display-row.c:159
+#: ../src/search/gb-search-display-row.c:160
+#, fuzzy
+msgid "Result"
+msgstr "Rezultat"
+
+#: ../src/commands/gb-command-bar-item.c:176
+msgid "The result to be visualized in the item."
+msgstr ""
+
+#: ../src/commands/gb-command-gaction.c:186
+#, fuzzy
+msgid "Action Group"
+msgstr "Skupina dejanj"
+
+#: ../src/commands/gb-command-gaction.c:187
+#, fuzzy
+msgid "The GActionGroup containing the action."
+msgstr "Razveljavi zadnje dejanje"
+
+#: ../src/commands/gb-command-gaction.c:195
+#, fuzzy
+msgid "Action Name"
+msgstr "Ime dejanja"
+
+#: ../src/commands/gb-command-gaction.c:196
+#, fuzzy
+msgid "The name of the action to execute."
+msgstr "Napaka med izvajanjem autogen: %s"
+
+#: ../src/commands/gb-command-gaction.c:204
+#, fuzzy
+msgid "Parameters"
+msgstr "Parametri"
+
+#: ../src/commands/gb-command-gaction.c:205
+#, fuzzy
+msgid "The parameters for the action."
+msgstr "Zahtevaj dejanje"
+
+#: ../src/commands/gb-command-provider.c:316
+#, fuzzy
+msgid "Active DocumentView"
+msgstr "Dejavna opravila:"
+
+#: ../src/commands/gb-command-provider.c:317
+#, fuzzy
+msgid "The last focused GbDocumentView widget."
+msgstr "Preverjanje zadnje izbrane enote dostopnosti"
+
+#: ../src/commands/gb-command-provider.c:338
+#, fuzzy
+msgid "Priority"
+msgstr "Prednost"
+
+#: ../src/commands/gb-command-provider.c:339
+#, fuzzy
+msgid "The priority of the command provider."
+msgstr "Zapisovanje ponudnika podatkov"
+
+#: ../src/commands/gb-command-provider.c:356
+#: ../src/git/gb-git-search-provider.c:523
+#: ../src/navigation/gb-navigation-list.c:299
+msgid "Workbench"
+msgstr ""
+
+#: ../src/commands/gb-command-provider.c:357
+#, fuzzy
+msgid "The target workbench."
+msgstr "Lastnosti cilja"
+
+#: ../src/commands/gb-command-result.c:224
+#: ../src/commands/gb-command-vim.c:189
+#, fuzzy
+msgid "Command Text"
+msgstr "Barva besdila ukazov"
+
+#: ../src/commands/gb-command-result.c:225
+#, fuzzy
+msgid "The command text if any."
+msgstr "Če je zadoščeno kateremukoli pogoju"
+
+#: ../src/commands/gb-command-result.c:234
+#, fuzzy
+msgid "Is Error"
+msgstr "Podrobno sporočilo o napaki:"
+
+#: ../src/commands/gb-command-result.c:235
+#, fuzzy
+msgid "If the result is an error."
+msgstr "ISNA:funkcija vrne PRAV, v kolikor je @{vrednost} napaka #N/A"
+
+#: ../src/commands/gb-command-result.c:244
+#, fuzzy
+msgid "Is Running"
+msgstr "F-Spot je zagnan"
+
+#: ../src/commands/gb-command-result.c:245
+#, fuzzy
+msgid "If the command is still running."
+msgstr "Se pojavi, če _binarna datoteke teče:"
+
+#: ../src/commands/gb-command-result.c:254
+#, fuzzy
+msgid "Result Text"
+msgstr "Besedilne datoteke"
+
+#: ../src/commands/gb-command-result.c:255
+#, fuzzy
+msgid "The result text if any."
+msgstr "Če je zadoščeno kateremukoli pogoju"
+
+#: ../src/commands/gb-command-vim.c:190
+#, fuzzy
+msgid "The command text to execute"
+msgstr "Ni mogoče izvesti ukaza."
+
+#: ../src/commands/gb-command-vim.c:199
+#: ../src/snippets/gb-source-snippet-completion-provider.c:168
+#, fuzzy
+msgid "Source View"
+msgstr "Poglej vir"
+
+#: ../src/commands/gb-command-vim.c:200
+#, fuzzy
+msgid "The source view to modify."
+msgstr "Spreminjanje podatkov je spodletelo: %s"
+
+#: ../src/credits/gb-credits-widget.c:276
+#, fuzzy
+msgid "The duration of the animation in millseconds."
+msgstr "Trajanje animacije v milisekundah"
+
+#: ../src/credits/gb-credits-widget.c:286
+#: ../src/credits/gb-credits-widget.c:287
+#: ../src/editor/gb-editor-document.c:1476
+#, fuzzy
+msgid "Progress"
+msgstr "Napredek"
+
+#: ../src/credits/gb-credits-widget.c:312
+#, fuzzy, c-format
+msgid "GNOME Builder - %s"
+msgstr "Izgrajevalnik peptidov"
+
+#: ../src/devhelp/gb-devhelp-document.c:71
+#, fuzzy, c-format
+msgid "Documentation (%s)"
+msgstr "Dokumentacija"
+
+#: ../src/devhelp/gb-devhelp-document.c:151
+#, fuzzy
+msgid "Documentation"
+msgstr "Dokumentacija"
+
+#: ../src/devhelp/gb-devhelp-document.c:257
+#, fuzzy
+msgid "URI"
+msgstr "URI"
+
+#: ../src/devhelp/gb-devhelp-document.c:258
+#, fuzzy
+msgid "The uri to load."
+msgstr "Ni mogoče naložiti %s: %s\n"
+
+#: ../src/devhelp/gb-devhelp-view.c:175
+#: ../src/documents/gb-document-view.c:203
+#: ../src/editor/gb-editor-frame.c:1651 ../src/editor/gb-editor-view.c:1080
+#: ../src/html/gb-html-view.c:264
+#, fuzzy
+msgid "Document"
+msgstr "Dokument"
+
+#: ../src/devhelp/gb-devhelp-view.c:176
+#, fuzzy
+msgid "The document for the devhelp view."
+msgstr "Pogled tiskalnikov za tiskanje dokumentov"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:148
+#, fuzzy
+msgid "Question"
+msgstr "Vprašanje"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:318
+#, fuzzy
+msgid "Close _without Saving"
+msgstr "Zapri _brez shranjevanja"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:319
+#: ../src/resources/ui/gb-editor-view.ui.h:2
+msgid "_Cancel"
+msgstr "_Prekliči"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:337
+msgid "_Save As…"
+msgstr "Shrani _kot ..."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:337
+msgid "_Save"
+msgstr "_Shrani"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:354
+#, fuzzy, c-format
+msgid ""
+"If you don't save, changes from the last %ld second will be permanently lost."
+msgid_plural ""
+"If you don't save, changes from the last %ld seconds will be permanently "
+"lost."
+msgstr[0] ""
+"V kolikor ne shranite, bodo spremembe zadnjih %ld sekund dela trajno "
+"izgubljene."
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:363
+#, fuzzy
+msgid ""
+"If you don't save, changes from the last minute will be permanently lost."
+msgstr "V kolikor ne shranite, bodo spremembe zadnje minute izgubljene."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:369
+#, fuzzy, c-format
+msgid ""
+"If you don't save, changes from the last minute and %ld second will be "
+"permanently lost."
+msgid_plural ""
+"If you don't save, changes from the last minute and %ld seconds will be "
+"permanently lost."
+msgstr[0] ""
+"V kolikor ne shranite, bodo spremembe zadnje minute in %ld sekund trajno "
+"izgubljene."
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:379
+#, fuzzy, c-format
+msgid ""
+"If you don't save, changes from the last %ld minute will be permanently lost."
+msgid_plural ""
+"If you don't save, changes from the last %ld minutes will be permanently "
+"lost."
+msgstr[0] ""
+"V kolikor ne shranite, bodo spremembe zadnjih %ld minut trajno izgubljene."
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:394
+#, fuzzy
+msgid "If you don't save, changes from the last hour will be permanently lost."
+msgstr "V kolikor ne shranite, bodo spremembe zadnje ure izgubljene."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:400
+#, fuzzy, c-format
+msgid ""
+"If you don't save, changes from the last hour and %d minute will be "
+"permanently lost."
+msgid_plural ""
+"If you don't save, changes from the last hour and %d minutes will be "
+"permanently lost."
+msgstr[0] ""
+"V kolikor ne shranite, bodo spremembe zadnje ure in %d minut trajno "
+"izgubljene."
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:415
+#, fuzzy, c-format
+msgid ""
+"If you don't save, changes from the last %d hour will be permanently lost."
+msgid_plural ""
+"If you don't save, changes from the last %d hours will be permanently lost."
+msgstr[0] ""
+"V kolikor ne shranite, bodo spremembe zadnjih %d ur trajno izgubljene."
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:459
+#, c-format
+msgid "Changes to document “%s” will be permanently lost."
+msgstr ""
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:464
+#, fuzzy, c-format
+msgid "Save changes to document “%s” before closing?"
+msgstr ""
+"%d dokumentov nima shranjenih spremembe. Ali želite shraniti pred zapiranjem?"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:477
+#: ../src/dialogs/gb-close-confirmation-dialog.c:637
+#, fuzzy
+msgid "Saving has been disabled by the system administrator."
+msgstr "Skrbnik sistema je onemogočil shranjevanje."
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:585
+#, fuzzy, c-format
+msgid "Changes to %d document will be permanently lost."
+msgid_plural "Changes to %d documents will be permanently lost."
+msgstr[0] "Spremembe %d dokumentov bodo trajno izgubljene."
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:593
+#, fuzzy, c-format
+msgid "There is %d document with unsaved changes. Save changes before closing?"
+msgid_plural ""
+"There are %d documents with unsaved changes. Save changes before closing?"
+msgstr[0] ""
+"%d dokumentov nima shranjenih spremembe. Ali želite shraniti pred zapiranjem?"
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:613
+#, fuzzy
+msgid "Docum_ents with unsaved changes:"
+msgstr "Spremenjeni doku_menti, ki niso shranjeni:"
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:617
+#, fuzzy
+msgid "S_elect the documents you want to save:"
+msgstr "_Izberite dokumente, ki jih želite shraniti: "
+
+#: ../src/dialogs/gb-close-confirmation-dialog.c:641
+#, fuzzy
+msgid "If you don't save, all your changes will be permanently lost."
+msgstr "V kolikor sprememb ne shranite, bodo trajno izgubljene."
+
+#: ../src/documents/gb-document.c:188
+msgid "Modified"
+msgstr "Spremenjeno"
+
+#: ../src/documents/gb-document.c:189
+msgid "If the document has been modified from disk."
+msgstr ""
+
+#: ../src/documents/gb-document.c:196
+#: ../src/preferences/gb-preferences-page.c:214
+#: ../src/search/gb-search-result.c:241 ../src/workbench/gb-workspace.c:151
+msgid "Title"
+msgstr "Naslov"
+
+#: ../src/documents/gb-document.c:197
+#, fuzzy
+msgid "The title of the document."
+msgstr "Naslov dokumenta"
+
+#: ../src/documents/gb-document.c:204
+#, fuzzy
+msgid "Read Only"
+msgstr "Le za branje"
+
+#: ../src/documents/gb-document.c:205
+#, fuzzy
+msgid "If the document is read only."
+msgstr "Ali je projekt le za branje"
+
+#: ../src/documents/gb-document-grid.c:918
+#: ../src/documents/gb-document-menu-button.c:667
+#: ../src/documents/gb-document-stack.c:881
+#, fuzzy
+msgid "Document Manager"
+msgstr "Upravljalnik dokumentov"
+
+#: ../src/documents/gb-document-grid.c:919
+#, fuzzy
+msgid "The document manager for the document grid."
+msgstr "Upravljalnik fotografij za GNOME namizje"
+
+#: ../src/documents/gb-document-manager.c:300
+msgid "Count"
+msgstr "Število"
+
+#: ../src/documents/gb-document-manager.c:301
+#, fuzzy
+msgid "The number of documents in the manager."
+msgstr "<big><b>Upravljalnik vstavkov</b></big>"
+
+#: ../src/documents/gb-document-menu-button.c:668
+#, fuzzy
+msgid "The document manager for the button."
+msgstr "Ikona uporabljena za gumb"
+
+#: ../src/documents/gb-document-stack.c:872
+#, fuzzy
+msgid "Active View"
+msgstr "Dejavni pogled"
+
+#: ../src/documents/gb-document-stack.c:873
+#, fuzzy
+msgid "The active view within the stack."
+msgstr "Ne teče znotraj dejavne seje"
+
+#: ../src/documents/gb-document-stack.c:882
+#, fuzzy
+msgid "The document manager for the stack."
+msgstr "Upravljalnik fotografij za GNOME namizje"
+
+#: ../src/documents/gb-document-view.c:185
+#, fuzzy
+msgid "Can Preview"
+msgstr "_Predogled tiskanja"
+
+#: ../src/documents/gb-document-view.c:186
+#, fuzzy
+msgid "If the view can preview."
+msgstr "PiTiVi ne more ustvariti predogleda te datoteke."
+
+#: ../src/documents/gb-document-view.c:194
+msgid "Controls"
+msgstr "Tipke"
+
+#: ../src/documents/gb-document-view.c:195
+#, fuzzy
+msgid "The widget containing the view controls."
+msgstr "Pregledovanje dokumentacije za izbran gradnik"
+
+#: ../src/documents/gb-document-view.c:204
+#, fuzzy
+msgid "The document being viewed."
+msgstr "Naslov prikazane strani"
+
+#: ../src/editor/gb-editor-document.c:664
+#, fuzzy, c-format
+msgid "%s (Read Only)"
+msgstr "[samo za branje]"
+
+#: ../src/editor/gb-editor-document.c:669
+#, fuzzy, c-format
+msgid "untitled document %u"
+msgstr "Neimenovan dokument"
+
+#: ../src/editor/gb-editor-document.c:791
+#, fuzzy
+msgid "Save Document As"
+msgstr "Shrani trenutni dokument kot ..."
+
+#: ../src/editor/gb-editor-document.c:798
+#: ../src/editor/gb-editor-workspace.c:287
+msgid "Cancel"
+msgstr "Prekliči"
+
+#: ../src/editor/gb-editor-document.c:799 ../src/resources/gtk/menus.ui.h:17
+msgid "Save"
+msgstr "Shrani"
+
+#: ../src/editor/gb-editor-document.c:913
+#, fuzzy
+msgid "No file was selected."
+msgstr "Slika ni izbrana."
+
+#: ../src/editor/gb-editor-document.c:1039
+msgid "No file was selected for saving."
+msgstr ""
+
+#: ../src/editor/gb-editor-document.c:1440
+#: ../src/editor/gb-source-change-gutter-renderer.c:198
+#, fuzzy
+msgid "Change Monitor"
+msgstr "<b>Nadzornik dogajanja</b>"
+
+#: ../src/editor/gb-editor-document.c:1441
+#, fuzzy
+msgid "The change monitor for the backing file."
+msgstr ".desktop datoteka za nadzornika sistema"
+
+#: ../src/editor/gb-editor-document.c:1449
+msgid "Error"
+msgstr "Napaka"
+
+#: ../src/editor/gb-editor-document.c:1450
+msgid "An error that may have been loaded."
+msgstr ""
+
+#: ../src/editor/gb-editor-document.c:1458
+#: ../src/editor/gb-editor-file-mark.c:214
+#: ../src/editor/gb-editor-navigation-item.c:217
+#: ../src/editor/gb-source-change-monitor.c:878
+msgid "File"
+msgstr "Datoteka"
+
+#: ../src/editor/gb-editor-document.c:1459
+#, fuzzy
+msgid "The backing file for the document."
+msgstr "dokument za ta diagram"
+
+#: ../src/editor/gb-editor-document.c:1467
+#, fuzzy
+msgid "File Changed on Volume"
+msgstr "Datoteka %s se je spremenila na disku."
+
+#: ../src/editor/gb-editor-document.c:1468
+msgid "If the file has changed underneath the buffer."
+msgstr ""
+
+#: ../src/editor/gb-editor-document.c:1477
+#, fuzzy
+msgid "Loading or saving progress."
+msgstr "Ne prikaži podrobnosti ali napredka"
+
+#: ../src/editor/gb-editor-document.c:1487
+#, fuzzy
+msgid "Style Scheme Name"
+msgstr "Ime sloga sheme"
+
+#: ../src/editor/gb-editor-document.c:1488
+#, fuzzy
+msgid "The style scheme name."
+msgstr "Ime sloga sheme"
+
+#: ../src/editor/gb-editor-document.c:1496
+#, fuzzy
+msgid "Trim Trailing Whitespace"
+msgstr "Nedeljivi presledek"
+
+#: ../src/editor/gb-editor-document.c:1497
+msgid "If whitespace should be trimmed before saving."
+msgstr ""
+
+#: ../src/editor/gb-editor-file-mark.c:202
+msgid "Column"
+msgstr "Stolpec"
+
+#: ../src/editor/gb-editor-file-mark.c:203
+#, fuzzy
+msgid "The column within the line."
+msgstr "[DATOTEKA ...] [+VRSTICA[:STOLPEC]]"
+
+#: ../src/editor/gb-editor-file-mark.c:215
+msgid "The file for which to store the mark."
+msgstr ""
+
+#: ../src/editor/gb-editor-file-mark.c:224
+#: ../src/editor/gb-editor-navigation-item.c:228
+msgid "Line"
+msgstr "Črta"
+
+#: ../src/editor/gb-editor-file-mark.c:225
+#, fuzzy
+msgid "The line within the file."
+msgstr "[DATOTEKA ...] [+VRSTICA[:STOLPEC]]"
+
+#: ../src/editor/gb-editor-frame.c:320
+#, c-format
+msgid "%u of %u"
+msgstr "%u od %u"
+
+#: ../src/editor/gb-editor-frame.c:461
+#, fuzzy, c-format
+msgid "Line %u, Column %u"
+msgstr "Vrstica: %i, stolpec: %i"
+
+#: ../src/editor/gb-editor-frame.c:1652
+#, fuzzy
+msgid "The document for the editor."
+msgstr "Geslo za dokument %s"
+
+#: ../src/editor/gb-editor-frame.c:1660
+#, fuzzy
+msgid "Search Direction"
+msgstr "<b>Smer iskanja:</b>"
+
+#: ../src/editor/gb-editor-frame.c:1661
+#, fuzzy
+msgid "The direction of the last text searched for."
+msgstr "Določitev smeri besedila za vir '%s'"
+
+#: ../src/editor/gb-editor-navigation-item.c:218
+#, fuzzy
+msgid "The file that is being edited."
+msgstr "Predmet, ki je povlečen"
+
+#: ../src/editor/gb-editor-navigation-item.c:229
+#, fuzzy
+msgid "The line number within the file."
+msgstr "Poudarjanje določene številke vrstice"
+
+#: ../src/editor/gb-editor-navigation-item.c:241
+#, fuzzy
+msgid "Line Offset"
+msgstr "Odmik gumba"
+
+#: ../src/editor/gb-editor-navigation-item.c:242
+#, fuzzy
+msgid "The offset within the line."
+msgstr "Povezava preko serijskih vrat"
+
+#: ../src/editor/gb-editor-settings-widget.c:182
+#: ../src/editor/gb-source-formatter.c:337
+#: ../src/snippets/gb-source-snippet.c:1059
+msgid "Language"
+msgstr "Jezik"
+
+#: ../src/editor/gb-editor-settings-widget.c:183
+#, fuzzy
+msgid "The language to change the settings for."
+msgstr "Jezikovna koda za iskanje"
+
+#: ../src/editor/gb-editor-view.c:451
+#, c-format
+msgid "The file “%s” was modified outside of Builder."
+msgstr ""
+
+#: ../src/editor/gb-editor-view.c:509
+#, fuzzy
+msgid "Plain Text"
+msgstr "Običajno besedilo"
+
+#: ../src/editor/gb-editor-view.c:1071
+#, fuzzy
+msgid "Auto Indent"
+msgstr "Samodejno zamikanje"
+
+#: ../src/editor/gb-editor-view.c:1072
+msgid "If we should use the auto-indentation engine."
+msgstr ""
+
+#: ../src/editor/gb-editor-view.c:1081
+#, fuzzy
+msgid "The document edited by the view."
+msgstr "Odstrani trenutni pogled dokumenta"
+
+#: ../src/editor/gb-editor-view.c:1089
+#, fuzzy
+msgid "Highlight Current Line"
+msgstr "Poudari trenutno vrstico"
+
+#: ../src/editor/gb-editor-view.c:1090
+msgid "If the current line should be highlighted."
+msgstr ""
+
+#: ../src/editor/gb-editor-view.c:1098
+#, fuzzy
+msgid "Show Line Numbers"
+msgstr "Pokaži številke vrstic"
+
+#: ../src/editor/gb-editor-view.c:1099
+#, fuzzy
+msgid "If the line numbers should be shown."
+msgstr "Ali naj bo puščica prikazana, če orodna vrstica ni ustreznih mer"
+
+#: ../src/editor/gb-editor-view.c:1107
+#, fuzzy
+msgid "Show Right Margin"
+msgstr "Pokaži desni rob"
+
+#: ../src/editor/gb-editor-view.c:1108
+msgid "If we should show the right margin."
+msgstr ""
+
+#: ../src/editor/gb-editor-view.c:1116
+#, fuzzy
+msgid "Split Enabled"
+msgstr "Onemogočene razširitve"
+
+#: ../src/editor/gb-editor-view.c:1117
+#, fuzzy
+msgid "If the view split is enabled."
+msgstr "Ali je omogočeno tiskanje pogleda Ganttovega diagrama."
+
+#: ../src/editor/gb-editor-view.c:1125
+msgid "Tab Width"
+msgstr "Širina tabulatorja"
+
+#: ../src/editor/gb-editor-view.c:1126
+msgid "The width a tab should be drawn as."
+msgstr ""
+
+#: ../src/editor/gb-editor-view.c:1136
+msgid "Use Spaces"
+msgstr "Uporabi presledke"
+
+#: ../src/editor/gb-editor-view.c:1137
+msgid "If spaces should be used instead of tabs."
+msgstr ""
+
+#: ../src/editor/gb-editor-workspace.c:279
+msgid "Open Document"
+msgstr "Odpri dokument"
+
+#: ../src/editor/gb-editor-workspace.c:288
+msgid "Open"
+msgstr "Odpri"
+
+#: ../src/editor/gb-source-change-gutter-renderer.c:199
+msgid "The change monitor for the gutter renderer."
+msgstr ""
+
+#: ../src/editor/gb-source-change-monitor.c:417
+#, fuzzy
+msgid "Failed to load git blob"
+msgstr "Nalaganje podatkov slike je spodletelo"
+
+#: ../src/editor/gb-source-change-monitor.c:480
+msgid "No file, cannot load git blob"
+msgstr ""
+
+#: ../src/editor/gb-source-change-monitor.c:518
+msgid "Cannot load git repository from non-local filesystem."
+msgstr ""
+
+#: ../src/editor/gb-source-change-monitor.c:577
+msgid "No filename, cannot discover repository."
+msgstr ""
+
+#: ../src/editor/gb-source-change-monitor.c:868
+#, fuzzy
+msgid "The text buffer to monitor."
+msgstr "Nadzor ciljnega imena"
+
+#: ../src/editor/gb-source-change-monitor.c:879
+#, fuzzy
+msgid "The file for the buffer."
+msgstr "Medpomnilnik besedila"
+
+#: ../src/editor/gb-source-formatter.c:118
+#, fuzzy, c-format
+msgid "Failed to locate uncrustify configuration."
+msgstr "Ni mogoče zagnati namestitvenega strežnika: %s\n"
+
+#: ../src/editor/gb-source-formatter.c:144
+#, fuzzy, c-format
+msgid "uncrustify failure: %s"
+msgstr "Začasna napaka overitve"
+
+#: ../src/editor/gb-source-formatter.c:241
+#, fuzzy, c-format
+msgid "Failure copying to \"%s\": %s"
+msgstr "Kopiranje iz %s v %s"
+
+#: ../src/editor/gb-source-formatter.c:328
+#, fuzzy
+msgid "Can Format"
+msgstr "_Oblika = Povezana"
+
+#: ../src/editor/gb-source-formatter.c:329
+msgid "If the source language can be formatted."
+msgstr ""
+
+#: ../src/editor/gb-source-formatter.c:338
+#, fuzzy
+msgid "The language to format."
+msgstr "Naprava za formatiranje"
+
+#: ../src/editor/gb-source-search-highlighter.c:338
+#: ../src/editor/gb-source-search-highlighter.c:339
+#, fuzzy
+msgid "Search Context"
+msgstr "Vsebinska _pomoč"
+
+#: ../src/editor/gb-source-search-highlighter.c:347
+#: ../src/editor/gb-source-search-highlighter.c:348
+#, fuzzy
+msgid "Search Settings"
+msgstr "Iskalni niz LDAP"
+
+#: ../src/editor/gb-source-view.c:2229 ../src/editor/gb-source-view.c:2230
+#, fuzzy
+msgid "Enable Word Completion"
+msgstr "Omogoči _dopolnjevanje besed"
+
+#: ../src/editor/gb-source-view.c:2238
+#, fuzzy
+msgid "Font Name"
+msgstr "Ime pisave"
+
+#: ../src/editor/gb-source-view.c:2239
+#, fuzzy
+msgid "The font name to apply to the widget."
+msgstr "Ime privzete pisave"
+
+#: ../src/editor/gb-source-view.c:2247
+#, fuzzy
+msgid "Insert Matching Brace"
+msgstr "Poudari pripadajoče oklepaje"
+
+#: ../src/editor/gb-source-view.c:2248
+msgid "If we should insert matching braces."
+msgstr ""
+
+#: ../src/editor/gb-source-view.c:2256
+#, fuzzy
+msgid "Overwrite Braces"
+msgstr "Prepiši &vse"
+
+#: ../src/editor/gb-source-view.c:2257
+msgid "If we should overwrite braces, brackets, parenthesis and quotes."
+msgstr ""
+
+#: ../src/editor/gb-source-view.c:2266
+#, fuzzy
+msgid "Show Shadow"
+msgstr "Stanje sence"
+
+#: ../src/editor/gb-source-view.c:2267
+#, fuzzy
+msgid "Show the search shadow"
+msgstr "Pokaži iskalni vnos"
+
+#: ../src/editor/gb-source-view.c:2275 ../src/editor/gb-source-view.c:2276
+#, fuzzy
+msgid "Search Highlighter"
+msgstr "Iskanje vnosa"
+
+#: ../src/editor/gb-source-view.c:2284
+#, fuzzy
+msgid "Smart Home End"
+msgstr "Pametni tipki HOME in END"
+
+#: ../src/editor/gb-source-view.c:2285
+msgid "Enable smart home end in gtksourceview."
+msgstr ""
+
+#: ../src/editor/gb-source-view.c:2293
+#, fuzzy
+msgid "Show Grid Lines"
+msgstr "Omogoči drevesne črte"
+
+#: ../src/editor/gb-source-view.c:2294
+#, fuzzy
+msgid "Whether to show the grid lines."
+msgstr "Ali naj bo prikazan pladenj predogleda."
+
+#: ../src/gd/gd-tagged-entry.c:937
+#, fuzzy
+msgid "Tag close icon visibility"
+msgstr "Urejanje ikone za oznako {0}"
+
+#: ../src/gd/gd-tagged-entry.c:938
+msgid "Whether the close button should be shown in tags."
+msgstr ""
+
+#: ../src/gd/gd-tagged-entry.c:1031 ../src/navigation/gb-navigation-item.c:195
+#, fuzzy
+msgid "Label"
+msgstr "Oznaka"
+
+#: ../src/gd/gd-tagged-entry.c:1032
+#, fuzzy
+msgid "Text to show on the tag."
+msgstr "Prikazano besedilo v predmetu"
+
+#: ../src/gd/gd-tagged-entry.c:1035
+#, fuzzy
+msgid "Tag has a close button"
+msgstr "Pokaži gumb za zapiranje zavihka"
+
+#: ../src/gd/gd-tagged-entry.c:1036
+#, fuzzy
+msgid "Whether the tag has a close button."
+msgstr "Ali naj ima okvir okna gumb za zapiranje"
+
+#: ../src/gd/gd-tagged-entry.c:1039
+#, fuzzy
+msgid "Style"
+msgstr "Slog"
+
+#: ../src/gd/gd-tagged-entry.c:1040
+#, fuzzy
+msgid "Style of the tag."
+msgstr "Oznaka objave:"
+
+#: ../src/gedit/gedit-menu-stack-switcher.c:423
+#: ../src/gedit/gedit-menu-stack-switcher.c:424
+#, fuzzy
+msgid "Stack"
+msgstr "Sklad"
+
+#: ../src/git/gb-git-search-provider.c:429
+#, fuzzy
+msgid "Switch To"
+msgstr "Preklopi na %s"
+
+#: ../src/git/gb-git-search-provider.c:512
+#, fuzzy
+msgid "Repository"
+msgstr "Odlagališče"
+
+#: ../src/git/gb-git-search-provider.c:513
+#, fuzzy
+msgid "The repository to use for search data."
+msgstr "Vnos iskanega niza v šestnajstiški ali ASCII obliki"
+
+#: ../src/git/gb-git-search-provider.c:524
+#, fuzzy
+msgid "The workbench window."
+msgstr "Višina okna"
+
+#: ../src/html/gb-html-document.c:105
+#, fuzzy
+msgid "HTML Preview"
+msgstr "_Predogled tiskanja"
+
+#: ../src/html/gb-html-document.c:127
+#, fuzzy, c-format
+msgid "%s (Preview)"
+msgstr "Predogled"
+
+#: ../src/html/gb-html-document.c:311
+msgid "The buffer to monitor for changes."
+msgstr ""
+
+#: ../src/html/gb-html-view.c:265
+msgid "The document to view as HTML."
+msgstr ""
+
+#: ../src/nautilus/nautilus-floating-bar.c:314
+#, fuzzy
+msgid "Bar's primary label"
+msgstr "oznaka_opombe_dtd"
+
+#: ../src/nautilus/nautilus-floating-bar.c:315
+#, fuzzy
+msgid "Primary label displayed by the bar"
+msgstr "Način pokazatelja vrednosti, prikazanega v vrstici"
+
+#: ../src/nautilus/nautilus-floating-bar.c:320
+#, fuzzy
+msgid "Bar's details label"
+msgstr "oznaka_opombe_dtd"
+
+#: ../src/nautilus/nautilus-floating-bar.c:321
+#, fuzzy
+msgid "Details label displayed by the bar"
+msgstr "Način pokazatelja vrednosti, prikazanega v vrstici"
+
+#: ../src/nautilus/nautilus-floating-bar.c:326
+#, fuzzy
+msgid "Show spinner"
+msgstr "Izrisovalnik vrtavke"
+
+#: ../src/nautilus/nautilus-floating-bar.c:327
+msgid "Whether a spinner should be shown in the floating bar"
+msgstr ""
+
+#: ../src/navigation/gb-navigation-item.c:196
+#, fuzzy
+msgid "The label for the navigation item."
+msgstr "Širina posameznega predmeta"
+
+#: ../src/navigation/gb-navigation-item.c:204
+#, fuzzy
+msgid "Workspace"
+msgstr "Delovna površina"
+
+#: ../src/navigation/gb-navigation-item.c:205
+msgid "The workspace to ensure is focused."
+msgstr ""
+
+#: ../src/navigation/gb-navigation-list.c:269
+#, fuzzy
+msgid "Can Go Backward"
+msgstr "Pojdi nazaj v zgodovini"
+
+#: ../src/navigation/gb-navigation-list.c:270
+msgid "If we can go backwards in the navigation list."
+msgstr ""
+
+#: ../src/navigation/gb-navigation-list.c:279
+#, fuzzy
+msgid "Can Go Forward"
+msgstr "Pojdi naprej v zgodovini"
+
+#: ../src/navigation/gb-navigation-list.c:280
+msgid "If we can go forward in the navigation list."
+msgstr ""
+
+#: ../src/navigation/gb-navigation-list.c:289
+#, fuzzy
+msgid "Current Item"
+msgstr "Predvajaj trenutni posnetek"
+
+#: ../src/navigation/gb-navigation-list.c:290
+#, fuzzy
+msgid "The current item in the navigation list."
+msgstr "Predmet v seznamu vhodnih datotek:"
+
+#: ../src/navigation/gb-navigation-list.c:300
+#, fuzzy
+msgid "The workbench the navigation list is for."
+msgstr "Možnost --list je zahtevana za --show-files"
+
+#: ../src/preferences/gb-preferences-page.c:215
+#, fuzzy
+msgid "The title for the preferences page."
+msgstr "Možnosti za pregledovalnik slik"
+
+#: ../src/preferences/gb-preferences-page-editor.c:186
+#, fuzzy
+msgid "restore insert cursor mark"
+msgstr "Vstavi na položaj kazalke"
+
+#: ../src/preferences/gb-preferences-page-editor.c:192
+msgid "word words auto completion suggest found document"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:198
+msgid "diff renderer gutter changes git vcs"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-editor.c:204
+#, fuzzy
+msgid "line numbers"
+msgstr "Številke vrstic"
+
+#: ../src/preferences/gb-preferences-page-editor.c:210
+#, fuzzy
+msgid "line lines highlight current"
+msgstr "Ali naj bo trenutna vrstica poudarjena"
+
+#: ../src/preferences/gb-preferences-page-editor.c:216
+#, fuzzy
+msgid "bracket brackets highlight matching"
+msgstr "Ali naj se poudarijo pari oklepaja (uklepaj - zaklepaj)"
+
+#: ../src/preferences/gb-preferences-page-editor.c:222
+#, fuzzy
+msgid "smart home end"
+msgstr "Pametni tipki HOME in END"
+
+#: ../src/preferences/gb-preferences-page-editor.c:228
+#, fuzzy
+msgid "show grid lines"
+msgstr "Omogoči drevesne črte"
+
+#: ../src/preferences/gb-preferences-page-editor.c:234
+#, fuzzy
+msgid "font document editor monospace"
+msgstr "Uporabi sistemsko pisavo monospace"
+
+#: ../src/preferences/gb-preferences-page-editor.c:239
+msgid "source style scheme source tango solarized builder"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-emacs.c:90
+#, fuzzy
+msgid "emacs modal"
+msgstr "_Modalno okno"
+
+#: ../src/preferences/gb-preferences-page-git.c:131
+#, fuzzy
+msgid "git author name surname"
+msgstr "Vnesite ime avtorja uveljavitve."
+
+#: ../src/preferences/gb-preferences-page-git.c:136
+#, fuzzy
+msgid "git author email mail address"
+msgstr "Vnesite elektronski naslov avtorja uveljavitve."
+
+#: ../src/preferences/gb-preferences-page-vim.c:101
+msgid "lines margin scrolloff scroll off"
+msgstr ""
+
+#: ../src/preferences/gb-preferences-page-vim.c:107
+#, fuzzy
+msgid "vim modal"
+msgstr "_Modalno okno"
+
+#: ../src/resources/gtk/menus.ui.h:1
+#, fuzzy
+msgid "_Preferences"
+msgstr "_Možnosti"
+
+#: ../src/resources/gtk/menus.ui.h:2
+#, fuzzy
+msgid "Generate Support Log"
+msgstr "Počisti dnevnik dogodkov"
+
+#: ../src/resources/gtk/menus.ui.h:3
+#, fuzzy
+msgid "_Help"
+msgstr "Pomo_č"
+
+#: ../src/resources/gtk/menus.ui.h:4
+#, fuzzy
+msgid "_About"
+msgstr "_O programu"
+
+#: ../src/resources/gtk/menus.ui.h:5
+#, fuzzy
+msgid "_Quit"
+msgstr "_Končaj"
+
+#: ../src/resources/gtk/menus.ui.h:6 ../src/resources/ui/gb-editor-view.ui.h:1
+#, fuzzy
+msgid "_Reload"
+msgstr "_Ponovno naloži"
+
+#: ../src/resources/gtk/menus.ui.h:7
+#, fuzzy
+msgid "_Print…"
+msgstr "_Natisni ..."
+
+#: ../src/resources/gtk/menus.ui.h:8
+#, fuzzy
+msgid "_Fullscreen"
+msgstr "_Celozaslonski način"
+
+#: ../src/resources/gtk/menus.ui.h:9
+#, fuzzy
+msgid "_New Document"
+msgstr "Nov dokument"
+
+#: ../src/resources/gtk/menus.ui.h:10
+#, fuzzy
+msgid "_Open"
+msgstr "_Odpri"
+
+#: ../src/resources/gtk/menus.ui.h:11
+#, fuzzy
+msgid "Save _All"
+msgstr "Shrani _vse"
+
+#: ../src/resources/gtk/menus.ui.h:12
+#, fuzzy
+msgid "_Close All"
+msgstr "_Zapri vse"
+
+#: ../src/resources/gtk/menus.ui.h:13
+#, fuzzy
+msgid "Move Document _Left"
+msgstr "Premakni zavihek _levo"
+
+#: ../src/resources/gtk/menus.ui.h:14
+#, fuzzy
+msgid "Move Document _Right"
+msgstr "Premakni zavihek _desno"
+
+#: ../src/resources/gtk/menus.ui.h:15
+#, fuzzy
+msgid "Split Document Left"
+msgstr "Poglej razdelek na levi"
+
+#: ../src/resources/gtk/menus.ui.h:16
+#, fuzzy
+msgid "Split Document Right"
+msgstr "Poglej razdelek na desni"
+
+#: ../src/resources/gtk/menus.ui.h:18
+#, fuzzy
+msgid "Save _As"
+msgstr "Shrani _kot"
+
+#: ../src/resources/gtk/menus.ui.h:19
+#, fuzzy
+msgid "_Preview"
+msgstr "_Predogled"
+
+#: ../src/resources/gtk/menus.ui.h:20
+#, fuzzy
+msgid "_Close Document"
+msgstr "_Zapri dokument"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:1
+#, fuzzy
+msgid "Created By:"
+msgstr "Ustvarili:"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:2
+msgid ""
+"Christian Hergert\n"
+"Alexander Larsson\n"
+"Alexandre Franke\n"
+"Carlos Soriano\n"
+"Cosimo Cecchi\n"
+"Dimitris Zenios\n"
+"Fabiano Fidêncio\n"
+"Florian Bäuerle\n"
+"Florian Müllner\n"
+"Hashem Nasarat\n"
+"Hylke Bons\n"
+"Igor Gnatenko\n"
+"Jakub Steiner\n"
+"Jasper St. Pierre\n"
+"Jonathon Jongsma\n"
+"Mathieu Bridon\n"
+"Megh Parikh\n"
+"Michael Catanzaro\n"
+"Pete Travis\n"
+"Ray Strode\n"
+"Roberto Majadas\n"
+"Ting-Wei Lan\n"
+"Trinh Anh Ngoc\n"
+"Yosef Or Boczko"
+msgstr ""
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:26
+#, fuzzy
+msgid "Artwork By:"
+msgstr "Grafična podoba:"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:27
+msgid ""
+"Allan Day\n"
+"Hylke Bons\n"
+"Jakub Steiner"
+msgstr ""
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:30
+#, fuzzy
+msgid "Translated By:"
+msgstr "Prevajalci"
+
+#. Translate this string with the translator names for your language.
+#: ../src/resources/ui/gb-credits-widget.ui.h:32
+#, fuzzy
+msgid "translator-credits"
+msgstr "Matej Urbančič"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:33
+#, fuzzy
+msgid "Funded By:"
+msgstr "Po _prihodu"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:34
+msgid ""
+"Christian Hergert\n"
+"Gareth Foster"
+msgstr ""
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:36
+#, fuzzy
+msgid "Special Thanks To:"
+msgstr "Poseben pozdrav za:\n"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:37
+msgid ""
+"Andy Hertzfeld and the Eazel Team\n"
+"Alberto Ruiz\n"
+"Bastien Nocera\n"
+"Cosimo Cecchi\n"
+"Emmanuele Bassi\n"
+"Federico Mena Quintero\n"
+"Jasper St Pierre\n"
+"Jon McCann\n"
+"Jonathan Blandford\n"
+"Matthias Clasen\n"
+"Miguel de Icaza\n"
+"Owen Taylor\n"
+"Rob Taylor\n"
+"Spencer Kimball\n"
+"Ximian Team\n"
+"\n"
+"Each and every contributor to GNOME\n"
+"and the Friends of GNOME"
+msgstr ""
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:55
+#, fuzzy
+msgid "GNOME Builder"
+msgstr "Izgrajevalnik peptidov"
+
+#: ../src/resources/ui/gb-credits-widget.ui.h:56
+msgid ""
+"Copyright 2014 Christian Hergert, et al.\n"
+"Licensed under the GNU GPL 3 or newer"
+msgstr ""
+
+#: ../src/resources/ui/gb-document-menu-button.ui.h:1
+#, fuzzy
+msgid "Search Documents"
+msgstr "Nedavni dokumenti"
+
+#: ../src/resources/ui/gb-document-menu-button.ui.h:2
+#, fuzzy
+msgid "No documents were found"
+msgstr "Ni zadetkov iskanja."
+
+#: ../src/resources/ui/gb-editor-frame.ui.h:1
+#, fuzzy
+msgid "Line 1, Column 1"
+msgstr "Vrstica: %i, stolpec: %i"
+
+#: ../src/resources/ui/gb-editor-frame.ui.h:2
+#, fuzzy
+msgid "Currently parsing document"
+msgstr "Dokument je že odprt"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:1
+#, fuzzy
+msgid "Display right _margin at column:"
+msgstr "Prikaži desni _rob na stolpcu:"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:2
+msgid "Trim trailing whitespace when saving document"
+msgstr ""
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:3
+msgid "Insert matching brace, bracket, quotation, and parenthesis."
+msgstr ""
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:4
+msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
+msgstr ""
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:5
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:6
+#, fuzzy
+msgid "Indentation"
+msgstr "Zamikanje"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:6
+#, fuzzy
+msgid "_Tab width:"
+msgstr "Širina _tabulatorja:"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:7
+#, fuzzy
+msgid "Insert _spaces instead of tabs"
+msgstr "Vstavi _presledke namesto tabulatorjev"
+
+#: ../src/resources/ui/gb-editor-settings-widget.ui.h:8
+#, fuzzy
+msgid "_Enable automatic indentation"
+msgstr "Vključi s_amodejno zamikanje"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:1
+#, fuzzy
+msgid "Search highlight mode…"
+msgstr "Barva okvira poudarjanja"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:2
+#, fuzzy
+msgid "Display line numbers"
+msgstr "Prikaži številke vrstic"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:3
+#, fuzzy
+msgid "Display right margin"
+msgstr "Pokaži desni rob"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:4
+#, fuzzy
+msgid "Highlight current line"
+msgstr "Poudari trenutno vrstico"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:5
+#, fuzzy
+msgid "Auto indent"
+msgstr "Samodejno zamikanje"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:7
+#, fuzzy
+msgid "Spaces"
+msgstr ""
+"Za omogočitev in uporabo <gui>stranskega pladnja</gui> izberite "
+"<guiseq><gui>Pogled</gui><gui>Stranski pladenj</gui></guiseq> (ali pa "
+"pritisnite <key>F9</key>) in nato kliknite na ikono <gui>brskalnik-datotek</"
+"gui> na dnu pladnja."
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:8
+#, fuzzy
+msgid "Tabs"
+msgstr "Zavihki"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:9
+#, fuzzy
+msgid "2"
+msgstr "2"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:10
+#, fuzzy
+msgid "3"
+msgstr "3"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:11
+#, fuzzy
+msgid "4"
+msgstr "4"
+
+#: ../src/resources/ui/gb-editor-tweak-widget.ui.h:12
+#, fuzzy
+msgid "8"
+msgstr "8"
+
+#: ../src/resources/ui/gb-editor-view.ui.h:3
+#, fuzzy
+msgid "_Close"
+msgstr "_Zapri"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:1
+#, fuzzy
+msgid "<b>Restore Cursor Position</b>"
+msgstr "Povrni prejšnji položaj kazalke"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:2
+msgid ""
+"Restore the insertion cursor to the last position when reopening a file."
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:3
+#, fuzzy
+msgid "<b>Suggest Word Completion</b>"
+msgstr "Omogoči _dopolnjevanje besed"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:4
+msgid "Suggest completion of words found within the current document."
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:5
+#, fuzzy
+msgid "<b>Display Document Changes</b>"
+msgstr "Pokaži sheme dokumentov"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:6
+msgid ""
+"Display whether a line has been added or modified next to the line number."
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:7
+#, fuzzy
+msgid "<b>Show Line Numbers</b>"
+msgstr "Pokaži številke vrstic"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:8
+#, fuzzy
+msgid "Display line numbers in the document."
+msgstr "Oblika zapis prikazanih številk"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:9
+#, fuzzy
+msgid "<b>Highlight Current Line</b>"
+msgstr "Poudari trenutno vrstico"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:10
+#, fuzzy
+msgid "Highlight the line containing the cursor."
+msgstr "Razmerje vrstice kazalke"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:11
+#, fuzzy
+msgid "<b>Highlight Matching Brackets</b>"
+msgstr "Poudari pripadajoče oklepaje"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:12
+msgid "Whether or not matching brackets should be highlighted."
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:13
+#, fuzzy
+msgid "<b>Smart Home End</b>"
+msgstr "Pametni tipki HOME in END"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:14
+msgid "Home moves to first non-space character."
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:15
+#, fuzzy
+msgid "<b>Show Grid Lines</b>"
+msgstr "Omogoči drevesne črte"
+
+#: ../src/resources/ui/gb-preferences-page-editor.ui.h:16
+msgid "Display a grid patten in the document."
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-emacs.ui.h:1
+#, fuzzy
+msgid "<b>EMACS Modal Editing</b>"
+msgstr "Območje urejanje vnosa"
+
+#: ../src/resources/ui/gb-preferences-page-emacs.ui.h:2
+msgid "Use EMACS style modal editing in the source code editor."
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-git.ui.h:1
+#, fuzzy
+msgid "Author Name"
+msgstr "Ime avtorja:"
+
+#: ../src/resources/ui/gb-preferences-page-git.ui.h:2
+#, fuzzy
+msgid "Author Email"
+msgstr "Elektronski naslov avtorja:"
+
+#: ../src/resources/ui/gb-preferences-page-git.ui.h:3
+#: ../src/resources/ui/gb-preferences-window.ui.h:5
+#, fuzzy
+msgid "Git"
+msgstr "Git"
+
+#: ../src/resources/ui/gb-preferences-page-vim.ui.h:1
+#, fuzzy
+msgid "<b>VIM Modal Editing</b>"
+msgstr "Območje urejanje vnosa"
+
+#: ../src/resources/ui/gb-preferences-page-vim.ui.h:2
+msgid "Use VIM style modal editing in the source code editor."
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-page-vim.ui.h:3
+#, fuzzy
+msgid "<b>Scroll Offset</b>"
+msgstr "Drsni odmik"
+
+#: ../src/resources/ui/gb-preferences-page-vim.ui.h:4
+msgid "Minimal number of lines to keep above and below the cursor."
+msgstr ""
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:1
+#, fuzzy
+msgid "Preferences"
+msgstr "Možnosti"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:2
+#, fuzzy
+msgid "Search Preferences"
+msgstr "Možnosti iskanja"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:3
+#: ../src/resources/ui/gb-workbench.ui.h:4
+#, fuzzy
+msgid "Editor"
+msgstr "Urejevalnik"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:4
+#, fuzzy
+msgid "Language Settings"
+msgstr "Jezikovne nastavitve"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:6
+#, fuzzy
+msgid "Vim"
+msgstr "Vim"
+
+#: ../src/resources/ui/gb-preferences-window.ui.h:7
+msgid "Emacs"
+msgstr "Emacs"
+
+#: ../src/resources/ui/gb-workbench.ui.h:1
+#, fuzzy
+msgid "Go back in history"
+msgstr "Vrni se po zgodovini razveljavitev"
+
+#: ../src/resources/ui/gb-workbench.ui.h:2
+#, fuzzy
+msgid "Go forward in history"
+msgstr "Pojdi naprej v zgodovini"
+
+#: ../src/resources/ui/gb-workbench.ui.h:3
+#, fuzzy
+msgid "Create new document"
+msgstr "Ustvari nov dokument"
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:261
+#, fuzzy
+msgid "Max Content Height"
+msgstr "Najmanjša višina vsebine"
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:262
+msgid "The maximum height request that can be made."
+msgstr ""
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:272
+#, fuzzy
+msgid "Max Content Width"
+msgstr "Najmanjša širina vsebine"
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:273
+msgid "The maximum width request that can be made."
+msgstr ""
+
+#: ../src/search/gb-search-box.c:459
+#, fuzzy
+msgid "Search Manager"
+msgstr "Upravljalnik vstavkov"
+
+#: ../src/search/gb-search-box.c:460
+#, fuzzy
+msgid "The search manager for the search box."
+msgstr "Model spustnega polja"
+
+#: ../src/search/gb-search-display.c:215
+msgid "Cannot add provider more than once."
+msgstr ""
+
+#: ../src/search/gb-search-display.c:293
+#, fuzzy
+msgid "The provider could not be found."
+msgstr "Mape ni mogoče najti."
+
+#: ../src/search/gb-search-display.c:549
+#: ../src/snippets/gb-source-snippet-chunk.c:298
+#, fuzzy
+msgid "Context"
+msgstr "Vsebina"
+
+#: ../src/search/gb-search-display.c:550
+#, fuzzy
+msgid "The active search context."
+msgstr "Skrij vsebinski pladenj"
+
+#: ../src/search/gb-search-display-group.c:183
+#, fuzzy
+msgid "%"
+msgstr "%"
+
+#: ../src/search/gb-search-display-group.c:419
+#, fuzzy
+msgid "Provider"
+msgstr "Ponudnik"
+
+#: ../src/search/gb-search-display-group.c:420
+#, fuzzy
+msgid "The search provider"
+msgstr "Ime ponudnika"
+
+#: ../src/search/gb-search-display-group.c:430
+#, fuzzy
+msgid "Size Group"
+msgstr "Skupina velikosti"
+
+#: ../src/search/gb-search-display-group.c:431
+#, fuzzy
+msgid "The size group for the label."
+msgstr "Določevanje oznake naprave"
+
+#: ../src/search/gb-search-result.c:217
+#, fuzzy
+msgid "Score"
+msgstr "Rezultat"
+
+#: ../src/search/gb-search-result.c:218
+#, fuzzy
+msgid "The result match score."
+msgstr "Odigrane igre: {0} (Rezultat: {1})"
+
+#: ../src/search/gb-search-result.c:230
+#, fuzzy
+msgid "Subtitle"
+msgstr "Podnapis"
+
+#: ../src/search/gb-search-result.c:231 ../src/search/gb-search-result.c:242
+msgid "The pango markup to be rendered."
+msgstr ""
+
+#: ../src/snippets/gb-source-snippet.c:352
+msgid "Chunk does not belong to snippet."
+msgstr ""
+
+#: ../src/snippets/gb-source-snippet.c:1024
+#, fuzzy
+msgid "The GtkTextBuffer for the snippet."
+msgstr "Dodaj nov izrezek ..."
+
+#: ../src/snippets/gb-source-snippet.c:1032
+#, fuzzy
+msgid "Mark Begin"
+msgstr "Začetni kot"
+
+#: ../src/snippets/gb-source-snippet.c:1033
+#, fuzzy
+msgid "The beginning text mark."
+msgstr "Označi navedeno besedilo"
+
+#: ../src/snippets/gb-source-snippet.c:1041
+#, fuzzy
+msgid "Mark End"
+msgstr "Končni datum:"
+
+#: ../src/snippets/gb-source-snippet.c:1042
+#, fuzzy
+msgid "The ending text mark."
+msgstr "Označi navedeno besedilo"
+
+#: ../src/snippets/gb-source-snippet.c:1050
+#, fuzzy
+msgid "Trigger"
+msgstr "Sprožilec"
+
+#: ../src/snippets/gb-source-snippet.c:1051
+#, fuzzy
+msgid "The trigger for the snippet."
+msgstr "Sprožilnik '%s' za '%s.%s' razpredelnico:"
+
+#: ../src/snippets/gb-source-snippet.c:1060
+#, fuzzy
+msgid "The language for the snippet."
+msgstr "Napaka Enchant za jezik: %s"
+
+#: ../src/snippets/gb-source-snippet.c:1068
+#, fuzzy
+msgid "Description"
+msgstr "Opis"
+
+#: ../src/snippets/gb-source-snippet.c:1069
+#, fuzzy
+msgid "The description for the snippet."
+msgstr "Opis za vrsto: %s\n"
+
+#: ../src/snippets/gb-source-snippet.c:1077
+#: ../src/snippets/gb-source-snippet-chunk.c:316
+#, fuzzy
+msgid "Tab Stop"
+msgstr "Zaustavi razhroščevalnik"
+
+#: ../src/snippets/gb-source-snippet.c:1078
+#, fuzzy
+msgid "The current tab stop."
+msgstr "Zaustavi trenutno opravilo"
+
+#: ../src/snippets/gb-source-snippet-chunk.c:299
+#, fuzzy
+msgid "The snippet context."
+msgstr "Vsebinska _pomoč"
+
+#: ../src/snippets/gb-source-snippet-chunk.c:307
+#, fuzzy
+msgid "Spec"
+msgstr "RPM določila"
+
+#: ../src/snippets/gb-source-snippet-chunk.c:308
+msgid "The specification to expand using the contxt."
+msgstr ""
+
+#: ../src/snippets/gb-source-snippet-chunk.c:317
+#, fuzzy
+msgid "The tab stop for the chunk."
+msgstr "Nov zavihek za povezavo"
+
+#: ../src/snippets/gb-source-snippet-chunk.c:327
+#: ../src/tree/gb-tree-node.c:539
+#, fuzzy
+msgid "Text"
+msgstr "Besedilo"
+
+#: ../src/snippets/gb-source-snippet-chunk.c:328
+#, fuzzy
+msgid "The text for the chunk."
+msgstr "Smer besedila"
+
+#: ../src/snippets/gb-source-snippet-chunk.c:336
+#, fuzzy
+msgid "Text Set"
+msgstr "Določitev besedila"
+
+#: ../src/snippets/gb-source-snippet-chunk.c:337
+msgid "If the text property has been manually set."
+msgstr ""
+
+#: ../src/snippets/gb-source-snippet-completion-item.c:134
+#, fuzzy
+msgid "Snippet"
+msgstr "Dodaj izrezek ..."
+
+#: ../src/snippets/gb-source-snippet-completion-item.c:135
+#, fuzzy
+msgid "The snippet to insert."
+msgstr "Vstavi vsebnik za %s"
+
+#: ../src/snippets/gb-source-snippet-completion-provider.c:169
+msgid "The source view to insert snippet into."
+msgstr ""
+
+#: ../src/snippets/gb-source-snippet-completion-provider.c:177
+#: ../src/snippets/gb-source-snippet-completion-provider.c:262
+#, fuzzy
+msgid "Snippets"
+msgstr "Izrezki"
+
+#: ../src/snippets/gb-source-snippet-completion-provider.c:178
+msgid "The snippets to complete with this provider."
+msgstr ""
+
+#: ../src/snippets/gb-source-snippet-parser.c:503
+#, fuzzy, c-format
+msgid "Invalid snippet at line %d: %s"
+msgstr "Neveljaven imenski prostor '%s' v vrstici %d, stolpec %d"
+
+#: ../src/snippets/gb-source-snippets-manager.c:92
+#, fuzzy, c-format
+msgid "Failed to open directory: %s"
+msgstr "Ustvarjanje mape %s je spodletelo: %s"
+
+#: ../src/snippets/gb-source-snippets-manager.c:107
+#, fuzzy, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "Ni mogoče naložiti datoteke \"%s\": %s"
+
+#: ../src/theatrics/gb-box-theatric.c:258
+#: ../src/theatrics/gb-box-theatric.c:259
+#, fuzzy
+msgid "Alpha"
+msgstr "Alfa"
+
+#: ../src/theatrics/gb-box-theatric.c:269
+#: ../src/theatrics/gb-box-theatric.c:270
+#, fuzzy
+msgid "background"
+msgstr "Ozadje"
+
+#: ../src/theatrics/gb-box-theatric.c:278
+#: ../src/theatrics/gb-box-theatric.c:279
+#, fuzzy
+msgid "height"
+msgstr "višina"
+
+#: ../src/theatrics/gb-box-theatric.c:300
+#: ../src/theatrics/gb-box-theatric.c:301
+#, fuzzy
+msgid "width"
+msgstr "širina"
+
+#: ../src/theatrics/gb-box-theatric.c:311
+#: ../src/theatrics/gb-box-theatric.c:312
+#, fuzzy
+msgid "x"
+msgstr "x"
+
+#: ../src/theatrics/gb-box-theatric.c:322
+#: ../src/theatrics/gb-box-theatric.c:323
+#, fuzzy
+msgid "y"
+msgstr "y"
+
+#: ../src/tree/gb-tree-builder.c:288 ../src/tree/gb-tree-node.c:525
+#, fuzzy
+msgid "Tree"
+msgstr "Drevo"
+
+#: ../src/tree/gb-tree-builder.c:289
+#, fuzzy
+msgid "The GbTree the builder belongs to."
+msgstr "Ime albuma, ki mu pripada spodnja slika."
+
+#: ../src/tree/gb-tree.c:888
+#, fuzzy
+msgid "Root"
+msgstr "Koren"
+
+#: ../src/tree/gb-tree.c:889
+#, fuzzy
+msgid "The root object of the tree."
+msgstr "Pokaži razvrstitev _opravil"
+
+#: ../src/tree/gb-tree.c:897
+#, fuzzy
+msgid "Selection"
+msgstr "Izbor"
+
+#: ../src/tree/gb-tree.c:898
+#, fuzzy
+msgid "The node selection."
+msgstr "_Počisti izbor"
+
+#: ../src/tree/gb-tree-node.c:483 ../src/workbench/gb-workspace.c:161
+#, fuzzy
+msgid "Icon Name"
+msgstr "Ime ikone"
+
+#: ../src/tree/gb-tree-node.c:484
+#, fuzzy
+msgid "The icon name to display."
+msgstr "Nabor ikon, ki naj se prikaže"
+
+#: ../src/tree/gb-tree-node.c:497
+#, fuzzy
+msgid "Item"
+msgstr "Predmet"
+
+#: ../src/tree/gb-tree-node.c:498
+msgid "Optional object to associate with node."
+msgstr ""
+
+#: ../src/tree/gb-tree-node.c:511
+#, fuzzy
+msgid "Parent"
+msgstr "Nadrejeni predmet"
+
+#: ../src/tree/gb-tree-node.c:512
+#, fuzzy
+msgid "The parent node."
+msgstr "Osveži _vozlišče"
+
+#: ../src/tree/gb-tree-node.c:526
+#, fuzzy
+msgid "The GbTree the node belongs to."
+msgstr "Ime albuma, ki mu pripada spodnja slika."
+
+#: ../src/tree/gb-tree-node.c:540
+#, fuzzy
+msgid "The text of the node."
+msgstr "Osveži _vozlišče"
+
+#: ../src/tree/gb-tree-node.c:553
+#, fuzzy
+msgid "Use Markup"
+msgstr "Uporabi označevanje"
+
+#: ../src/tree/gb-tree-node.c:554
+msgid "If text should be translated as markup."
+msgstr ""
+
+#: ../src/trie/trie.c:790
+#, c-format
+msgid "Traversal order %u is not supported on Trie."
+msgstr ""
+
+#: ../src/workbench/gb-workbench.c:854
+#, fuzzy
+msgid "Command Manager"
+msgstr "Ukaz za upravljalnik datotek"
+
+#: ../src/workbench/gb-workbench.c:855
+#, fuzzy
+msgid "The command manager for the workspace."
+msgstr "Upravljalnik fotografij za GNOME namizje"
+
+#: ../src/workbench/gb-workbench.c:864
+#, fuzzy
+msgid "Navigation List"
+msgstr "Seznam rezultatov"
+
+#: ../src/workbench/gb-workbench.c:865
+#, fuzzy
+msgid "The navigation list for the workbench."
+msgstr "Pridobivanje seznama map za %s"
+
+#: ../src/workbench/gb-workspace.c:152
+#, fuzzy
+msgid "The title of the workspace."
+msgstr "Delovna površina programa"
+
+#: ../src/workbench/gb-workspace.c:162
+#, fuzzy
+msgid "The name of the icon to use."
+msgstr "Ime uporabljene teme ikon"
