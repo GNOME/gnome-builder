@@ -298,28 +298,23 @@ ide_autotools_build_task_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_CONFIG:
-      g_value_set_object (value,
-                          ide_autotools_build_task_get_config (self));
+      g_value_set_object (value, ide_autotools_build_task_get_config (self));
       break;
 
     case PROP_DEVICE:
-      g_value_set_object (value,
-                          ide_autotools_build_task_get_device (self));
+      g_value_set_object (value, ide_autotools_build_task_get_device (self));
       break;
 
     case PROP_DIRECTORY:
-      g_value_set_object (value,
-                          ide_autotools_build_task_get_directory (self));
+      g_value_set_object (value, ide_autotools_build_task_get_directory (self));
       break;
 
     case PROP_REQUIRE_AUTOGEN:
-      g_value_set_boolean (value,
-                           ide_autotools_build_task_get_require_autogen (self));
+      g_value_set_boolean (value, ide_autotools_build_task_get_require_autogen (self));
       break;
 
     case PROP_REQUIRE_CONFIGURE:
-      g_value_set_boolean (value,
-                           ide_autotools_build_task_get_require_configure (self));
+      g_value_set_boolean (value, ide_autotools_build_task_get_require_configure (self));
       break;
 
     default:
@@ -338,28 +333,23 @@ ide_autotools_build_task_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_CONFIG:
-      ide_autotools_build_task_set_config (self,
-                                           g_value_get_boxed (value));
+      ide_autotools_build_task_set_config (self, g_value_get_boxed (value));
       break;
 
     case PROP_DEVICE:
-      ide_autotools_build_task_set_device (self,
-                                           g_value_get_object (value));
+      ide_autotools_build_task_set_device (self, g_value_get_object (value));
       break;
 
     case PROP_DIRECTORY:
-      ide_autotools_build_task_set_directory (self,
-                                              g_value_get_object (value));
+      ide_autotools_build_task_set_directory (self, g_value_get_object (value));
       break;
 
     case PROP_REQUIRE_AUTOGEN:
-      ide_autotools_build_task_set_require_autogen (self,
-                                                    g_value_get_boolean (value));
+      ide_autotools_build_task_set_require_autogen (self, g_value_get_boolean (value));
       break;
 
     case PROP_REQUIRE_CONFIGURE:
-      ide_autotools_build_task_set_require_configure (self,
-                                                      g_value_get_boolean (value));
+      ide_autotools_build_task_set_require_configure (self, g_value_get_boolean (value));
       break;
 
     default:
