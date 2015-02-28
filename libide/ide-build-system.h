@@ -28,30 +28,45 @@ G_BEGIN_DECLS
 #define IDE_TYPE_BUILD_SYSTEM            (ide_build_system_get_type())
 #define IDE_BUILD_SYSTEM_EXTENSION_POINT "org.gnome.libide.extensions.build-system"
 
-G_DECLARE_DERIVABLE_TYPE (IdeBuildSystem, ide_build_system,
-                          IDE, BUILD_SYSTEM, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeBuildSystem, ide_build_system, IDE, BUILD_SYSTEM, IdeObject)
 
 struct _IdeBuildSystemClass
 {
   IdeObjectClass parent;
 
-  IdeBuilder *(*get_builder) (IdeBuildSystem  *system,
-                              GKeyFile        *config,
-                              IdeDevice       *device,
-                              GError         **error);
+  IdeBuilder *(*get_builder)            (IdeBuildSystem       *system,
+                                         GKeyFile             *config,
+                                         IdeDevice            *device,
+                                         GError              **error);
+  void        (*get_build_flags_async)  (IdeBuildSystem       *self,
+                                         IdeFile              *file,
+                                         GCancellable         *cancellable,
+                                         GAsyncReadyCallback   callback,
+                                         gpointer              user_data);
+  gchar     **(*get_build_flags_finish) (IdeBuildSystem       *self,
+                                         GAsyncResult         *result,
+                                         GError              **error);
 };
 
-void            ide_build_system_new_async   (IdeContext           *context,
-                                              GFile                *project_file,
-                                              GCancellable         *cancellable,
-                                              GAsyncReadyCallback   callback,
-                                              gpointer              user_data);
-IdeBuildSystem *ide_build_system_new_finish  (GAsyncResult         *result,
-                                              GError              **error);
-IdeBuilder     *ide_build_system_get_builder (IdeBuildSystem       *system,
-                                              GKeyFile             *config,
-                                              IdeDevice            *device,
-                                              GError              **error);
+void            ide_build_system_get_build_flags_async  (IdeBuildSystem       *self,
+                                                         IdeFile              *file,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+gchar         **ide_build_system_get_build_flags_finish (IdeBuildSystem       *self,
+                                                         GAsyncResult         *result,
+                                                         GError              **error);
+void            ide_build_system_new_async              (IdeContext           *context,
+                                                         GFile                *project_file,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+IdeBuildSystem *ide_build_system_new_finish             (GAsyncResult         *result,
+                                                         GError              **error);
+IdeBuilder     *ide_build_system_get_builder            (IdeBuildSystem       *system,
+                                                         GKeyFile             *config,
+                                                         IdeDevice            *device,
+                                                         GError              **error);
 
 G_END_DECLS
 

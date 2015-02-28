@@ -21,6 +21,7 @@
 #include "ide-build-system.h"
 #include "ide-context.h"
 #include "ide-device.h"
+#include "ide-file.h"
 
 typedef struct
 {
@@ -36,6 +37,55 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+/**
+ * ide_build_system_get_build_flags_async:
+ *
+ * Asynchronously requests the build flags for a file. For autotools and C based projects, this
+ * would be similar to the $CFLAGS variable and is suitable for generating warnings and errors
+ * with clang.
+ */
+void
+ide_build_system_get_build_flags_async (IdeBuildSystem      *self,
+                                        IdeFile             *file,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_BUILD_SYSTEM (self));
+  g_return_if_fail (IDE_IS_FILE (file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (IDE_BUILD_SYSTEM_GET_CLASS (self)->get_build_flags_async)
+    return IDE_BUILD_SYSTEM_GET_CLASS (self)->get_build_flags_async (self, file, cancellable,
+                                                                     callback, user_data);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_return_pointer (task, NULL, NULL);
+}
+
+/**
+ * ide_build_system_get_build_flags_finish:
+ *
+ * Completes an asynchronous request to get the build flags for a file.
+ *
+ * Returns: (transfer none): An array of strings containing the build flags, or %NULL upon failure
+ *   and @error is set.
+ */
+gchar **
+ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
+                                         GAsyncResult    *result,
+                                         GError         **error)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
+
+  if (IDE_BUILD_SYSTEM_GET_CLASS (self)->get_build_flags_finish)
+    return IDE_BUILD_SYSTEM_GET_CLASS (self)->get_build_flags_finish (self, result, error);
+
+  return g_new0 (gchar*, 1);
+}
 
 GFile *
 ide_build_system_get_project_file (IdeBuildSystem *system)
