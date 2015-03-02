@@ -19,6 +19,7 @@
 #include <clang-c/Index.h>
 #include <glib/gi18n.h>
 
+#include "ide-build-system.h"
 #include "ide-clang-private.h"
 #include "ide-clang-service.h"
 #include "ide-context.h"
@@ -163,6 +164,36 @@ cleanup:
   g_array_unref (ar);
 }
 
+static void
+ide_clang_service__get_build_flags_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  IdeBuildSystem *build_system = (IdeBuildSystem *)object;
+  g_autoptr(GTask) task = user_data;
+  ParseRequest *request;
+  gchar **argv;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_TASK (task));
+
+  request = g_task_get_task_data (task);
+
+  argv = ide_build_system_get_build_flags_finish (build_system, result, &error);
+
+  if (!argv)
+    {
+      g_message ("%s", error->message);
+      g_clear_error (&error);
+      argv = g_new0 (gchar*, 1);
+    }
+
+  request->command_line_args = argv;
+
+  g_task_run_in_thread (task, ide_clang_service_parse_worker);
+}
+
 /**
  * ide_clang_service_get_translation_unit_async:
  * @min_sequence: The minimum change sequence number to reuse a cached unit.
@@ -186,6 +217,7 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
 {
   g_autoptr(IdeClangTranslationUnit) cached = NULL;
   IdeUnsavedFiles *unsaved_files;
+  IdeBuildSystem *build_system;
   IdeContext *context;
   g_autoptr(GTask) task = NULL;
   ParseRequest *request;
@@ -197,6 +229,7 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
   task = g_task_new (self, cancellable, callback, user_data);
   context = ide_object_get_context (IDE_OBJECT (self));
   unsaved_files = ide_context_get_unsaved_files (context);
+  build_system = ide_context_get_build_system (context);
 
   g_rw_lock_reader_lock (&self->cached_rwlock);
   cached = g_hash_table_lookup (self->cached_units, file);
@@ -231,13 +264,22 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
   request->file = g_object_ref (file);
   request->index = self->index;
   request->source_filename = g_strdup (path);
-  request->command_line_args = NULL; /* TODO: Get from build system */
+  request->command_line_args = NULL;
   request->unsaved_files = ide_unsaved_files_get_unsaved_files (unsaved_files);
   request->sequence = ide_unsaved_files_get_sequence (unsaved_files);
   request->options = 0;
 
   g_task_set_task_data (task, request, parse_request_free);
-  g_task_run_in_thread (task, ide_clang_service_parse_worker);
+
+  /*
+   * Request the build flags necessary to build this module from the build system.
+   */
+
+  ide_build_system_get_build_flags_async (build_system,
+                                          file,
+                                          cancellable,
+                                          ide_clang_service__get_build_flags_cb,
+                                          g_object_ref (task));
 }
 
 /**
