@@ -303,6 +303,9 @@ ide_autotools_build_system__makecache_new_cb (GObject      *object,
 
   g_assert (G_IS_TASK (task));
 
+  self = g_task_get_source_object (task);
+  priv = ide_autotools_build_system_get_instance_private (self);
+
   makecache = ide_makecache_new_for_makefile_finish (result, &error);
 
   if (!makecache)
@@ -311,12 +314,11 @@ ide_autotools_build_system__makecache_new_cb (GObject      *object,
       return;
     }
 
+  priv->makecache = g_object_ref (makecache);
+
   /*
    * Complete all of the pending tasks in flight.
    */
-
-  self = g_task_get_source_object (task);
-  priv = ide_autotools_build_system_get_instance_private (self);
 
   tasks = priv->makecache_tasks;
   priv->makecache_tasks = g_ptr_array_new ();
