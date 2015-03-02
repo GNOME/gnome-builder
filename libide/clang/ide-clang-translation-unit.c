@@ -33,6 +33,7 @@ typedef struct
   CXTranslationUnit  tu;
   gint64             sequence;
   IdeDiagnostics    *diagnostics;
+  GFile             *file;
 } IdeClangTranslationUnitPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeClangTranslationUnit,
@@ -41,15 +42,40 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeClangTranslationUnit,
 
 enum {
   PROP_0,
+  PROP_FILE,
   PROP_SEQUENCE,
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+GFile *
+ide_clang_translation_unit_get_file (IdeClangTranslationUnit *self)
+{
+  IdeClangTranslationUnitPrivate *priv = ide_clang_translation_unit_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
+
+  return priv->file;
+}
+
+static void
+ide_clang_translation_unit_set_file (IdeClangTranslationUnit *self,
+                                     GFile                   *file)
+{
+  IdeClangTranslationUnitPrivate *priv = ide_clang_translation_unit_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self));
+  g_return_if_fail (G_IS_FILE (file));
+
+  if (g_set_object (&priv->file, file))
+    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+}
+
 IdeClangTranslationUnit *
 _ide_clang_translation_unit_new (IdeContext        *context,
                                  CXTranslationUnit  tu,
+                                 GFile             *file,
                                  gint64             sequence)
 {
   IdeClangTranslationUnitPrivate *priv;
@@ -57,8 +83,10 @@ _ide_clang_translation_unit_new (IdeContext        *context,
 
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
   g_return_val_if_fail (tu, NULL);
+  g_return_val_if_fail (!file || G_IS_FILE (file), NULL);
 
   ret = g_object_new (IDE_TYPE_CLANG_TRANSLATION_UNIT,
+                      "file", file,
                       "context", context,
                       NULL);
 
@@ -184,12 +212,32 @@ create_range (IdeClangTranslationUnit *self,
   return range;
 }
 
+static gboolean
+cxfile_equal (CXFile  cxfile,
+              GFile  *file)
+{
+  CXString cxstr;
+  gchar *path;
+  gboolean ret;
+
+  cxstr = clang_getFileName (cxfile);
+  path = g_file_get_path (file);
+
+  ret = (0 == g_strcmp0 (clang_getCString (cxstr), path));
+
+  clang_disposeString (cxstr);
+  g_free (path);
+
+  return ret;
+}
+
 static IdeDiagnostic *
 create_diagnostic (IdeClangTranslationUnit *self,
                    IdeProject              *project,
                    const gchar             *workpath,
                    CXDiagnostic            *cxdiag)
 {
+  IdeClangTranslationUnitPrivate *priv = ide_clang_translation_unit_get_instance_private (self);
   enum CXDiagnosticSeverity cxseverity;
   IdeDiagnosticSeverity severity;
   IdeDiagnostic *diag;
@@ -197,11 +245,18 @@ create_diagnostic (IdeClangTranslationUnit *self,
   g_autofree gchar *spelling = NULL;
   CXString cxstr;
   CXSourceLocation cxloc;
+  CXFile cxfile = NULL;
   guint num_ranges;
   guint i;
 
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
   g_return_val_if_fail (cxdiag, NULL);
+
+  cxloc = clang_getDiagnosticLocation (cxdiag);
+  clang_getExpansionLocation (cxloc, &cxfile, NULL, NULL, NULL);
+
+  if (cxfile && !cxfile_equal (cxfile, priv->file))
+    return NULL;
 
   cxseverity = clang_getDiagnosticSeverity (cxdiag);
   severity = translate_severity (cxseverity);
@@ -210,7 +265,6 @@ create_diagnostic (IdeClangTranslationUnit *self,
   spelling = g_strdup (clang_getCString (cxstr));
   clang_disposeString (cxstr);
 
-  cxloc = clang_getDiagnosticLocation (cxdiag);
   loc = create_location (self, project, workpath, cxloc);
 
   diag = _ide_diagnostic_new (severity, spelling, loc);
@@ -282,7 +336,8 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
 
           cxdiag = clang_getDiagnostic (priv->tu, i);
           diag = create_diagnostic (self, project, workpath, cxdiag);
-          g_ptr_array_add (ar, diag);
+          if (diag)
+            g_ptr_array_add (ar, diag);
           clang_disposeDiagnostic (cxdiag);
         }
 
@@ -327,8 +382,31 @@ ide_clang_translation_unit_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_FILE:
+      g_value_set_object (value, ide_clang_translation_unit_get_file (self));
+      break;
+
     case PROP_SEQUENCE:
       g_value_set_int64 (value, ide_clang_translation_unit_get_sequence (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_clang_translation_unit_set_property (GObject      *object,
+                                         guint         prop_id,
+                                         const GValue *value,
+                                         GParamSpec   *pspec)
+{
+  IdeClangTranslationUnit *self = IDE_CLANG_TRANSLATION_UNIT (object);
+
+  switch (prop_id)
+    {
+    case PROP_FILE:
+      ide_clang_translation_unit_set_file (self, g_value_get_object (value));
       break;
 
     default:
@@ -343,6 +421,16 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
 
   object_class->finalize = ide_clang_translation_unit_finalize;
   object_class->get_property = ide_clang_translation_unit_get_property;
+  object_class->set_property = ide_clang_translation_unit_set_property;
+
+  gParamSpecs [PROP_FILE] =
+    g_param_spec_object ("file",
+                         _("File"),
+                         _("The file used to build the translation unit."),
+                         G_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_FILE,
+                                   gParamSpecs [PROP_FILE]);
 
   gParamSpecs [PROP_SEQUENCE] =
     g_param_spec_int64 ("sequence",
@@ -352,8 +440,7 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
                         G_MAXINT64,
                         0,
                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SEQUENCE,
-                                   gParamSpecs [PROP_SEQUENCE]);
+  g_object_class_install_property (object_class, PROP_SEQUENCE, gParamSpecs [PROP_SEQUENCE]);
 }
 
 static void
