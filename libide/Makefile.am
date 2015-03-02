@@ -172,6 +172,8 @@ libide_1_0_la_public_sources = \
 
 libide_1_0_la_SOURCES = \
 	$(libide_1_0_la_public_sources) \
+	libide/autotools/ide-makecache.c \
+	libide/autotools/ide-makecache.h \
 	libide/c/c-parse-helper.c \
 	libide/c/c-parse-helper.h \
 	libide/editorconfig/editorconfig-glib.c \
