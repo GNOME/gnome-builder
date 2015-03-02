@@ -147,12 +147,14 @@ create_location (IdeClangTranslationUnit *self,
   IdeFile *file = NULL;
   CXFile cxfile = NULL;
   g_autofree gchar *path = NULL;
+  const gchar *cstr;
   CXString str;
   unsigned line;
   unsigned column;
   unsigned offset;
 
   g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (workpath, NULL);
 
   clang_getFileLocation (cxloc, &cxfile, &line, &column, &offset);
 
@@ -160,7 +162,11 @@ create_location (IdeClangTranslationUnit *self,
   if (column > 0) column--;
 
   str = clang_getFileName (cxfile);
-  path = get_path (workpath, clang_getCString (str));
+  cstr = clang_getCString (str);
+  if (!cstr)
+    return NULL;
+
+  path = get_path (workpath, cstr);
   clang_disposeString (str);
 
   file = ide_project_get_file_for_path (project, path);
