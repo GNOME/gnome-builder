@@ -91,6 +91,8 @@ libide_1_0_la_public_sources = \
 	libide/ide-indenter.h \
 	libide/ide-language.c \
 	libide/ide-language.h \
+	libide/ide-log.c \
+	libide/ide-log.h \
 	libide/ide-object.c \
 	libide/ide-object.h \
 	libide/ide-process.c \
@@ -176,6 +178,7 @@ libide_1_0_la_SOURCES = \
 	libide/autotools/ide-makecache.h \
 	libide/c/c-parse-helper.c \
 	libide/c/c-parse-helper.h \
+	libide/ide-debug.h \
 	libide/editorconfig/editorconfig-glib.c \
 	libide/editorconfig/editorconfig-glib.h \
 	libide/fuzzy/fuzzy.c \

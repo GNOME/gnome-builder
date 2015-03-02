@@ -50,6 +50,7 @@ G_BEGIN_DECLS
 #include "ide-highlighter.h"
 #include "ide-indenter.h"
 #include "ide-language.h"
+#include "ide-log.h"
 #include "ide-object.h"
 #include "ide-process.h"
 #include "ide-progress.h"
