@@ -190,11 +190,7 @@ ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self)
   root_build_dir = ide_context_get_root_build_dir (context);
   system_type = ide_device_get_system_type (priv->device);
   project_name = ide_project_get_name (project);
-  path = g_build_filename (root_build_dir,
-                           project_name,
-                           device_id,
-                           system_type,
-                           NULL);
+  path = g_build_filename (root_build_dir, project_name, device_id, system_type, NULL);
 
   return g_file_new_for_path (path);
 }
@@ -351,4 +347,62 @@ ide_autotools_builder_class_init (IdeAutotoolsBuilderClass *klass)
 static void
 ide_autotools_builder_init (IdeAutotoolsBuilder *self)
 {
+}
+
+gboolean
+ide_autotools_builder_get_needs_bootstrap (IdeAutotoolsBuilder *self)
+{
+  g_autoptr(GFile) configure = NULL;
+  GFile *working_directory = NULL;
+  IdeContext *context;
+  IdeVcs *vcs;
+
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self), FALSE);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+  working_directory = ide_vcs_get_working_directory (vcs);
+  configure = g_file_get_child (working_directory, "configure");
+
+  if (!g_file_query_exists (configure, NULL))
+    return TRUE;
+
+  /*
+   * TODO:
+   *
+   * We might also want to check for dependent files being out of date. For example, if autogen.sh
+   * is newer than configure, we should bootstrap. Of course, once we go this far, I'd prefer
+   * to make this function asynchronous.
+   */
+
+  return FALSE;
+}
+
+void
+ide_autotools_builder_bootstrap_async (IdeAutotoolsBuilder *self,
+                                       GCancellable        *cancellable,
+                                       GAsyncReadyCallback  callback,
+                                       gpointer             user_data)
+{
+  IdeAutotoolsBuilderPrivate *priv = ide_autotools_builder_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  g_key_file_set_boolean (priv->config, "autotools", "boostrap", TRUE);
+}
+
+gboolean
+ide_autotools_builder_bootstrap_finish (IdeAutotoolsBuilder  *self,
+                                        GAsyncResult         *result,
+                                        GError              **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self), FALSE);
+
+  return g_task_propagate_boolean (task, error);
 }
