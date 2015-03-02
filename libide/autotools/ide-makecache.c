@@ -45,6 +45,7 @@ struct _IdeMakecache
   GFile       *parent;
   GMappedFile *mapped;
   GHashTable  *file_targets_cache;
+  GHashTable  *file_targets_neg_cache;
   GHashTable  *file_flags_cache;
 };
 
@@ -642,6 +643,7 @@ ide_makecache_finalize (GObject *object)
   g_clear_object (&self->makefile);
   g_clear_pointer (&self->mapped, g_mapped_file_unref);
   g_clear_pointer (&self->file_targets_cache, g_hash_table_unref);
+  g_clear_pointer (&self->file_targets_neg_cache, g_hash_table_unref);
   g_clear_pointer (&self->file_flags_cache, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_makecache_parent_class)->finalize (object);
@@ -709,6 +711,8 @@ ide_makecache_init (IdeMakecache *self)
 {
   self->file_targets_cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
                                                     (GDestroyNotify)g_strfreev);
+  self->file_targets_neg_cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+                                                        (GDestroyNotify)g_strfreev);
   self->file_flags_cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
                                                   (GDestroyNotify)g_strfreev);
 }
@@ -755,25 +759,151 @@ ide_makecache_new_for_makefile_finish (GAsyncResult  *result,
   return g_task_propagate_pointer (task, error);
 }
 
-const gchar * const *
-ide_makecache_get_file_targets (IdeMakecache *self,
-                                GFile        *file)
+static void
+ide_makecache_get_file_targets_worker (GTask        *task,
+                                       gpointer      source_object,
+                                       gpointer      task_data,
+                                       GCancellable *cancellable)
 {
-  g_autofree gchar *path = NULL;
+  IdeMakecache *self = source_object;
+  const gchar *path = task_data;
   const gchar * const *ret;
 
-  g_return_val_if_fail (IDE_IS_MAKECACHE (self), NULL);
-  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  g_assert (IDE_IS_MAKECACHE (self));
+  g_assert (G_IS_TASK (task));
+  g_assert (path);
+
+  ret = ide_makecache_get_file_targets_searched (self, path);
+
+  if (!ret)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "target was not found in project");
+      return;
+    }
+
+  g_task_return_pointer (task, g_strdupv ((gchar **)ret), (GDestroyNotify)g_strfreev);
+}
+
+void
+ide_makecache_get_file_targets_async (IdeMakecache        *self,
+                                      GFile               *file,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  const gchar * const *ret;
+  gchar *path = NULL;
+
+  g_return_if_fail (IDE_IS_MAKECACHE (self));
+  g_return_if_fail (G_IS_FILE (file));
+
+  task = g_task_new (self, cancellable, callback, user_data);
 
   path = g_file_get_relative_path (self->parent, file);
+  g_task_set_task_data (task, path, g_free);
+
   if (!path)
-    return NULL;
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               "File must be in the project path.");
+      return;
+    }
+
+  if (g_hash_table_contains (self->file_targets_neg_cache, path))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "target could not be found");
+      return;
+    }
 
   ret = ide_makecache_get_file_targets_cached (self, path);
+
+  if (ret)
+    {
+      g_task_return_pointer (task, g_strdupv ((gchar **)ret), (GDestroyNotify)g_strfreev);
+      return;
+    }
+
+  g_task_run_in_thread (task, ide_makecache_get_file_targets_worker);
+}
+
+gchar **
+ide_makecache_get_file_targets_finish (IdeMakecache  *self,
+                                       GAsyncResult  *result,
+                                       GError       **error)
+{
+  GTask *task = (GTask *)result;
+  gchar **ret;
+
+  g_return_val_if_fail (IDE_IS_MAKECACHE (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (task), NULL);
+
+  ret = g_task_propagate_pointer (task, error);
+
   if (!ret)
-    ret = ide_makecache_get_file_targets_searched (self, path);
+    {
+      const gchar *path;
+
+      path = g_task_get_task_data (task);
+      g_hash_table_insert (self->file_targets_neg_cache, g_strdup (path), NULL);
+    }
 
   return ret;
+}
+
+static void
+ide_makecache__get_targets_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  IdeMakecache *self = (IdeMakecache *)object;
+  g_autoptr(GTask) task = user_data;
+  gchar **targets;
+  GError *error = NULL;
+  GFile *file;
+  FileFlagsLookup *lookup;
+  g_autofree gchar *path = NULL;
+  g_autofree gchar *relative_path = NULL;
+  gchar **argv;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_MAKECACHE (self));
+
+  targets = ide_makecache_get_file_targets_finish (self, result, &error);
+
+  if (!targets)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  file = g_task_get_task_data (task);
+  path = g_file_get_path (file);
+  relative_path = g_file_get_relative_path (self->parent, file);
+
+  argv = g_hash_table_lookup (self->file_flags_cache, relative_path);
+
+  if (argv)
+    {
+      g_strfreev (targets);
+      g_task_return_pointer (task, argv, (GDestroyNotify)g_strfreev);
+      return;
+    }
+
+  lookup = g_new0 (FileFlagsLookup, 1);
+  lookup->targets = targets;
+  lookup->relative_path = g_strdup (relative_path);
+
+  g_task_set_task_data (task, lookup, file_flags_lookup_free);
+  g_task_run_in_thread (task, ide_makecache_get_file_flags_worker);
 }
 
 void
@@ -784,46 +914,19 @@ ide_makecache_get_file_flags_async (IdeMakecache        *self,
                                     gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
-  FileFlagsLookup *lookup;
-  g_autofree gchar *path = NULL;
-  g_autofree gchar *relative_path = NULL;
-  const gchar * const *targets;
-  gchar **argv;
 
   g_return_if_fail (IDE_IS_MAKECACHE (self));
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
-  path = g_file_get_path (file);
-  relative_path = g_file_get_relative_path (self->parent, file);
-  targets = ide_makecache_get_file_targets (self, file);
-
-  if (!targets)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               "No targets contain the file \"%s\"",
-                               path);
-      return;
-    }
-
-  argv = g_hash_table_lookup (self->file_flags_cache, relative_path);
-
-  if (argv)
-    {
-      g_task_return_pointer (task, argv, (GDestroyNotify)g_strfreev);
-      return;
-    }
-
-  lookup = g_new0 (FileFlagsLookup, 1);
-  lookup->targets = g_strdupv ((gchar **)targets);
-  lookup->relative_path = g_strdup (relative_path);
-
-  g_task_set_task_data (task, lookup, file_flags_lookup_free);
-  g_task_run_in_thread (task, ide_makecache_get_file_flags_worker);
+  ide_makecache_get_file_targets_async (self,
+                                        file,
+                                        g_task_get_cancellable (task),
+                                        ide_makecache__get_targets_cb,
+                                        g_object_ref (task));
 }
 
 gchar **
