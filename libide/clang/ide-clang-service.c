@@ -270,7 +270,7 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
   request->command_line_args = NULL;
   request->unsaved_files = ide_unsaved_files_get_unsaved_files (unsaved_files);
   request->sequence = ide_unsaved_files_get_sequence (unsaved_files);
-  request->options = 0;
+  request->options = clang_defaultEditingTranslationUnitOptions ();
 
   g_task_set_task_data (task, request, parse_request_free);
 
