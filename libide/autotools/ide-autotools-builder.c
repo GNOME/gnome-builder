@@ -167,15 +167,22 @@ ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self)
     {
       IdeVcs *vcs;
       GFile *working_directory;
-      g_autoptr(GFile) configure_file = NULL;
-      g_autofree gchar *configure_path = NULL;
+      g_autoptr(GFile) makefile_file = NULL;
+      g_autofree gchar *makefile_path = NULL;
 
       vcs = ide_context_get_vcs (context);
       working_directory = ide_vcs_get_working_directory (vcs);
-      configure_file = g_file_get_child (working_directory, "configure");
-      configure_path = g_file_get_path (configure_file);
+      makefile_file = g_file_get_child (working_directory, "Makefile");
+      makefile_path = g_file_get_path (makefile_file);
 
-      if (g_file_test (configure_path, G_FILE_TEST_IS_EXECUTABLE))
+      /*
+       * NOTE:
+       *
+       * It would be nice if this was done asynchronously, but if this isn't fast, we will have
+       * stalled in so many other places that the app will probably be generally unusable. So
+       * I'm going to cheat for now and make this function synchronous.
+       */
+      if (g_file_test (makefile_path, G_FILE_TEST_EXISTS))
         return g_object_ref (working_directory);
     }
 
