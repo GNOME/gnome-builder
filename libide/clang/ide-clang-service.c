@@ -186,7 +186,8 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
 
   if (!argv)
     {
-      g_message ("%s", error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        g_message ("%s", error->message);
       g_clear_error (&error);
       argv = g_new0 (gchar*, 1);
     }
