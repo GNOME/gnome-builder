@@ -46,6 +46,8 @@ struct _IdeMakecache
   GMappedFile *mapped;
   GHashTable  *file_targets_cache;
   GHashTable  *file_targets_neg_cache;
+
+  GMutex       mutex;
   GHashTable  *file_flags_cache;
 };
 
@@ -605,13 +607,20 @@ ide_makecache_get_file_flags_worker (GTask        *task,
 
   g_strfreev (lines);
 
-  if (ret)
-    g_task_return_pointer (task, ret, (GDestroyNotify)g_strfreev);
-  else
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_FAILED,
-                             "Failed to extract flags from make output");
+  if (!ret)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to extract flags from make output");
+      return;
+    }
+
+  g_mutex_lock (&self->mutex);
+  g_hash_table_replace (self->file_flags_cache, g_strdup (lookup->relative_path), g_strdupv (ret));
+  g_mutex_unlock (&self->mutex);
+
+  g_task_return_pointer (task, ret, (GDestroyNotify)g_strfreev);
 }
 
 static void
@@ -640,6 +649,7 @@ ide_makecache_finalize (GObject *object)
 {
   IdeMakecache *self = (IdeMakecache *)object;
 
+  g_mutex_clear (&self->mutex);
   g_clear_object (&self->makefile);
   g_clear_pointer (&self->mapped, g_mapped_file_unref);
   g_clear_pointer (&self->file_targets_cache, g_hash_table_unref);
@@ -709,6 +719,7 @@ ide_makecache_class_init (IdeMakecacheClass *klass)
 static void
 ide_makecache_init (IdeMakecache *self)
 {
+  g_mutex_init (&self->mutex);
   self->file_targets_cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
                                                     (GDestroyNotify)g_strfreev);
   self->file_targets_neg_cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
@@ -889,7 +900,9 @@ ide_makecache__get_targets_cb (GObject      *object,
   path = g_file_get_path (file);
   relative_path = g_file_get_relative_path (self->parent, file);
 
-  argv = g_hash_table_lookup (self->file_flags_cache, relative_path);
+  g_mutex_lock (&self->mutex);
+  argv = g_strdupv (g_hash_table_lookup (self->file_flags_cache, relative_path));
+  g_mutex_unlock (&self->mutex);
 
   if (argv)
     {
@@ -935,26 +948,9 @@ ide_makecache_get_file_flags_finish (IdeMakecache  *self,
                                      GError       **error)
 {
   GTask *task = (GTask *)result;
-  gchar **ret;
 
   g_return_val_if_fail (IDE_IS_MAKECACHE (self), NULL);
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
-  ret = g_task_propagate_pointer (task, error);
-
-  if (ret)
-    {
-      FileFlagsLookup *lookup;
-
-      lookup = g_task_get_task_data (task);
-
-      if (!g_hash_table_contains (self->file_flags_cache, lookup->relative_path))
-        {
-          g_hash_table_replace (self->file_flags_cache,
-                                g_strdup (lookup->relative_path),
-                                g_strdupv (ret));
-        }
-    }
-
-  return ret;
+  return g_task_propagate_pointer (task, error);
 }
