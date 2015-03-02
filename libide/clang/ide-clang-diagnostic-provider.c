@@ -85,10 +85,9 @@ ide_clang_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *provider,
                                                GAsyncResult           *result,
                                                GError                **error)
 {
-  IdeClangDiagnosticProvider *self = (IdeClangDiagnosticProvider *)provider;
   GTask *task = (GTask *)result;
 
-  g_return_val_if_fail (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (self), NULL);
+  g_return_val_if_fail (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (provider), NULL);
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
   return g_task_propagate_pointer (task, error);

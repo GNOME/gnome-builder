@@ -693,10 +693,9 @@ ide_autotools_build_system_init_finish (GAsyncInitable  *initable,
                                         GAsyncResult    *result,
                                         GError         **error)
 {
-  IdeAutotoolsBuildSystem *system = (IdeAutotoolsBuildSystem *)initable;
   GTask *task = (GTask *)result;
 
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system), FALSE);
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (initable), FALSE);
   g_return_val_if_fail (G_IS_TASK (task), FALSE);
 
   return g_task_propagate_boolean (task, error);

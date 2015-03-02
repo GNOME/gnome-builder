@@ -158,14 +158,13 @@ ide_script_manager_get_files_worker (GTask        *task,
                                      gpointer      task_data,
                                      GCancellable *cancellable)
 {
-  IdeScriptManager *self = source_object;
   gchar *directory = task_data;
   const gchar *name;
   GPtrArray *ar;
   GError *error = NULL;
   GDir *dir;
 
-  g_assert (IDE_IS_SCRIPT_MANAGER (self));
+  g_assert (IDE_IS_SCRIPT_MANAGER (source_object));
   g_assert (directory);
 
   dir = g_dir_open (directory, 0, &error);
