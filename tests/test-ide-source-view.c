@@ -92,19 +92,45 @@ cancel_ops (GCancellable *cancellable)
   return FALSE;
 }
 
+static gboolean
+verbose_cb (const gchar  *option_name,
+            const gchar  *option_value,
+            gpointer      data,
+            GError      **error)
+{
+  ide_log_increase_verbosity ();
+  return TRUE;
+}
+
 gint
 main (gint   argc,
       gchar *argv[])
 {
+  GOptionEntry entries[] = {
+    { "verbose", 'v', G_OPTION_FLAG_NO_ARG|G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_CALLBACK, verbose_cb, "Increase log verbosity" },
+    { NULL }
+  };
+  GOptionContext *context;
   GFile *project_file;
   GtkScrolledWindow *scroller;
   IdeSourceView *source_view;
   GtkWindow *window;
   GCancellable *cancellable;
+  GError *error = NULL;
 
   ide_set_program_name ("gnome-builder");
 
-  gtk_init (&argc, &argv);
+  context = g_option_context_new ("- test program for IdeSourceView");
+  g_option_context_add_main_entries (context, entries, NULL);
+  g_option_context_add_group (context, gtk_get_option_group (TRUE));
+
+  if (!g_option_context_parse (context, &argc, &argv, &error))
+    {
+      g_printerr ("%s\n", error->message);
+      return EXIT_FAILURE;
+    }
+
+  ide_log_init (TRUE, NULL);
 
   if (argc > 1)
     gFileName = argv [1];
