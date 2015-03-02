@@ -59,7 +59,7 @@ get_flags_cb (GObject      *object,
     {
       g_print ("%s", flags [0]);
       for (i = 1; flags [i]; i++)
-        g_print ("  %s", flags [i]);
+        g_print (" %s", flags [i]);
       g_print ("\n");
     }
 
