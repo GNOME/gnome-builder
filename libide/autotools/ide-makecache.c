@@ -30,6 +30,7 @@
 #include <unistd.h>
 
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-global.h"
 #include "ide-makecache.h"
 #include "ide-project.h"
@@ -93,9 +94,14 @@ ide_makecache_discover_llvm_flags_worker (GTask        *task,
 {
   g_autoptr(GSubprocess) subprocess = NULL;
   g_autofree gchar *stdoutstr = NULL;
+  gchar *include_path = NULL;
   GError *error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
+
+  IDE_TRACE_MSG ("Spawning 'clang -print-file-name=include'");
 
   subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE,
                                  &error,
@@ -106,24 +112,29 @@ ide_makecache_discover_llvm_flags_worker (GTask        *task,
   if (!subprocess)
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   if (!g_subprocess_communicate_utf8 (subprocess, NULL, cancellable, &stdoutstr, NULL, &error))
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   g_strstrip (stdoutstr);
 
+  IDE_TRACE_MSG ("Clang Result: %s", stdoutstr);
+
   if (g_str_equal (stdoutstr, "include"))
     {
       g_task_return_pointer (task, NULL, NULL);
-      return;
+      IDE_EXIT;
     }
 
-  g_task_return_pointer (task, g_strdup (stdoutstr), g_free);
+  include_path = g_strdup_printf ("-I%s", stdoutstr);
+  g_task_return_pointer (task, include_path, g_free);
+
+  IDE_EXIT;
 }
 
 static void
@@ -134,11 +145,15 @@ ide_makecache_discover_llvm_flags_async (IdeMakecache        *self,
 {
   g_autoptr(GTask) task = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_MAKECACHE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_run_in_thread (task, ide_makecache_discover_llvm_flags_worker);
+
+  IDE_EXIT;
 }
 
 static gchar *
@@ -147,11 +162,16 @@ ide_makecache_discover_llvm_flags_finish (IdeMakecache  *self,
                                           GError       **error)
 {
   GTask *task = (GTask *)result;
+  gchar *ret;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAKECACHE (self));
   g_assert (G_IS_TASK (task));
 
-  return g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (task, error);
+
+  IDE_RETURN (ret);
 }
 
 static gboolean
@@ -167,10 +187,18 @@ static const gchar * const *
 ide_makecache_get_file_targets_cached (IdeMakecache *self,
                                        const gchar  *path)
 {
+  const gchar * const *ret;
+
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAKECACHE (self));
   g_assert (path);
 
-  return g_hash_table_lookup (self->file_targets_cache, path);
+  ret = g_hash_table_lookup (self->file_targets_cache, path);
+
+  IDE_DEBUG ("File targets cache %s for %s.", ret ? "hit" : "miss", path);
+
+  IDE_RETURN (ret);
 }
 
 static const gchar * const *
@@ -186,6 +214,8 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
   g_autoptr(GPtrArray) targets = NULL;
   gsize len;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAKECACHE (self));
   g_assert (path);
 
@@ -194,13 +224,23 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
 
   regex = g_regex_new (regexstr, G_REGEX_MULTILINE, 0, NULL);
   if (!regex)
-    return NULL;
+    IDE_RETURN (NULL);
 
   content = g_mapped_file_get_contents (self->mapped);
   len = g_mapped_file_get_length (self->mapped);
 
   targets = g_ptr_array_new_with_free_func (g_free);
   found = g_hash_table_new (g_str_hash, g_str_equal);
+
+#ifndef IDE_DISABLE_TRACE
+  {
+    gchar *fmtsize;
+
+    fmtsize = g_format_size (len);
+    IDE_TRACE_MSG ("Beginning regex lookup across %s of UTF-8 text", fmtsize);
+    g_free (fmtsize);
+  }
+#endif
 
   if (g_regex_match_full (regex, content, len, 0, 0, &match_info, NULL))
     {
@@ -221,18 +261,31 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
         }
     }
 
+  IDE_TRACE_MSG ("Regex scan complete");
+
   if (targets->len)
     {
       gchar **ret;
 
       g_ptr_array_add (targets, NULL);
       ret = (gchar **)g_ptr_array_free (targets, FALSE);
+
+#ifndef IDE_DISABLE_TRACE
+      {
+        gchar *targetsstr;
+
+        targetsstr = g_strjoinv (" ", ret);
+        IDE_TRACE_MSG ("File \"%s\" found in targets: %s", path, targetsstr);
+        g_free (targetsstr);
+      }
+#endif
+
       g_hash_table_insert (self->file_targets_cache, g_strdup (path), ret);
 
-      return (const gchar * const *)ret;
+      IDE_RETURN ((const gchar * const *)ret);
     }
 
-  return NULL;
+  IDE_RETURN (NULL);
 }
 
 static gboolean
@@ -242,11 +295,13 @@ ide_makecache_validate_mapped_file (GMappedFile  *mapped,
   const gchar *contents;
   gsize len;
 
+  IDE_ENTRY;
+
   g_assert (mapped);
   g_assert (error);
   g_assert (!*error);
 
-  g_debug ("Validating makecache");
+  IDE_DEBUG ("Validating makecache");
 
   contents = g_mapped_file_get_contents (mapped);
 
@@ -256,7 +311,7 @@ ide_makecache_validate_mapped_file (GMappedFile  *mapped,
                    G_IO_ERROR,
                    G_IO_ERROR_INVALID_DATA,
                    "GMappedFile returned NULL contents");
-      return FALSE;
+      IDE_RETURN (FALSE);
     }
 
   len = g_mapped_file_get_length (mapped);
@@ -267,7 +322,7 @@ ide_makecache_validate_mapped_file (GMappedFile  *mapped,
                    G_IO_ERROR,
                    G_IO_ERROR_INVALID_DATA,
                    "GMappedFile returned zero length");
-      return FALSE;
+      IDE_RETURN (FALSE);
     }
 
   if (!g_utf8_validate (contents, len, NULL))
@@ -276,10 +331,10 @@ ide_makecache_validate_mapped_file (GMappedFile  *mapped,
                    G_IO_ERROR,
                    G_IO_ERROR_INVALID_DATA,
                    "mapped file contains invalid UTF-8");
-      return FALSE;
+      IDE_RETURN (FALSE);
     }
 
-  return TRUE;
+  IDE_RETURN (TRUE);
 }
 
 static int
@@ -296,6 +351,8 @@ ide_makecache_open_temp (IdeMakecache  *self,
   time_t now;
   int fd;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAKECACHE (self));
   g_assert (name_used);
   g_assert (error);
@@ -310,18 +367,22 @@ ide_makecache_open_temp (IdeMakecache  *self,
                                 "makecache",
                                 NULL);
 
+  IDE_DEBUG ("Using \"%s\" for makecache directory", directory);
+
   if (g_mkdir_with_parents (directory, 0700) != 0)
     {
       g_set_error (error,
                    G_IO_ERROR,
                    g_io_error_from_errno (errno),
                    "Failed to create makecache directory");
-      return -1;
+      IDE_RETURN (-1);
     }
 
   now = time (NULL);
   name = g_strdup_printf ("%s.makecache.tmp-%u", project_name, (guint)now);
   path = g_build_filename (directory, name, NULL);
+
+  IDE_DEBUG ("Creating temporary makecache at \"%s\"", path);
 
   fd = g_open (path, O_CREAT|O_RDWR, 0600);
 
@@ -333,12 +394,12 @@ ide_makecache_open_temp (IdeMakecache  *self,
                    g_io_error_from_errno (errno),
                    "Failed to open temporary file: %s",
                    g_strerror (errno));
-      return -1;
+      IDE_RETURN (-1);
     }
 
   *name_used = g_strdup (path);
 
-  return fd;
+  IDE_RETURN (fd);
 }
 
 static void
@@ -363,6 +424,8 @@ ide_makecache_new_worker (GTask        *task,
   int fdcopy;
   int fd;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_MAKECACHE (self));
 
@@ -372,7 +435,7 @@ ide_makecache_new_worker (GTask        *task,
                                G_IO_ERROR,
                                G_IO_ERROR_INVALID_FILENAME,
                                "No makefile was specified.");
-      return;
+      IDE_EXIT;
     }
 
   workdir = g_file_get_path (parent);
@@ -383,7 +446,7 @@ ide_makecache_new_worker (GTask        *task,
                                G_IO_ERROR,
                                G_IO_ERROR_INVALID_FILENAME,
                                "Makefile must be accessable on local filesystem.");
-      return;
+      IDE_EXIT;
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
@@ -425,7 +488,7 @@ ide_makecache_new_worker (GTask        *task,
   if (fd == -1)
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   /*
@@ -441,7 +504,7 @@ ide_makecache_new_worker (GTask        *task,
                                "Failed to open temporary file: %s",
                                g_strerror (errno));
       close (fd);
-      return;
+      IDE_EXIT;
     }
 
   /*
@@ -458,7 +521,7 @@ ide_makecache_new_worker (GTask        *task,
     {
       g_task_return_error (task, error);
       close (fd);
-      return;
+      IDE_EXIT;
     }
 
   /*
@@ -468,7 +531,7 @@ ide_makecache_new_worker (GTask        *task,
     {
       g_task_return_error (task, error);
       close (fd);
-      return;
+      IDE_EXIT;
     }
 
   /*
@@ -487,7 +550,7 @@ ide_makecache_new_worker (GTask        *task,
                                "Failed to move makecache into target directory: %s",
                                g_strerror (errno));
       close (fd);
-      return;
+      IDE_EXIT;
     }
 
   /*
@@ -499,7 +562,7 @@ ide_makecache_new_worker (GTask        *task,
     {
       g_task_return_error (task, error);
       close (fd);
-      return;
+      IDE_EXIT;
     }
 
   /*
@@ -514,7 +577,7 @@ ide_makecache_new_worker (GTask        *task,
   if (!ide_makecache_validate_mapped_file (mapped, &error))
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   /*
@@ -523,6 +586,8 @@ ide_makecache_new_worker (GTask        *task,
   self->mapped = g_mapped_file_ref (mapped);
 
   g_task_return_pointer (task, g_object_ref (self), g_object_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -594,27 +659,32 @@ ide_makecache_parse_line (IdeMakecache *self,
   GPtrArray *ret = NULL;
   const gchar *pos;
 
+  IDE_ENTRY;
+
   g_assert (line);
 
   ret = g_ptr_array_new ();
 
   if ((pos = strstr (line, FAKE_CXX)))
     {
+      gchar **strv;
+
       ide_makecache_parse_c_cxx (self, pos + strlen(FAKE_CXX), ret);
       g_ptr_array_add (ret, "-xc++");
-      return (gchar **)g_ptr_array_free (ret, FALSE);
+      strv = (gchar **)g_ptr_array_free (ret, FALSE);
+      IDE_RETURN (strv);
     }
   else if ((pos = strstr (line, FAKE_CC)))
     {
-      ide_makecache_parse_c_cxx (self, pos + strlen(FAKE_CC), ret);
-      return (gchar **)g_ptr_array_free (ret, FALSE);
-    }
-  else
-    {
-      g_ptr_array_unref (ret);
+      gchar **strv;
 
-      return NULL;
+      ide_makecache_parse_c_cxx (self, pos + strlen(FAKE_CC), ret);
+      strv = (gchar **)g_ptr_array_free (ret, FALSE);
+      IDE_RETURN (strv);
     }
+
+  g_ptr_array_unref (ret);
+  IDE_RETURN (NULL);
 }
 
 static void
@@ -634,6 +704,8 @@ ide_makecache_get_file_flags_worker (GTask        *task,
   gchar **lines;
   gchar **ret = NULL;
   gsize i;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAKECACHE (self));
   g_assert (G_IS_TASK (task));
@@ -656,6 +728,16 @@ ide_makecache_get_file_flags_worker (GTask        *task,
   g_ptr_array_add (argv, "CC="FAKE_CC);
   g_ptr_array_add (argv, "CXX="FAKE_CXX);
   g_ptr_array_add (argv, NULL);
+
+#ifndef IDE_DISABLE_TRACE
+  {
+    gchar *cmdline;
+
+    cmdline = g_strjoinv (" ", (gchar **)argv->pdata);
+    IDE_TRACE_MSG ("%s", cmdline);
+    g_free (cmdline);
+  }
+#endif
 
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
   g_subprocess_launcher_set_cwd (launcher, cwd);
@@ -886,6 +968,8 @@ ide_makecache_get_file_targets_worker (GTask        *task,
   const gchar *path = task_data;
   const gchar * const *ret;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAKECACHE (self));
   g_assert (G_IS_TASK (task));
   g_assert (path);
@@ -902,10 +986,12 @@ ide_makecache_get_file_targets_worker (GTask        *task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_FOUND,
                                "target was not found in project");
-      return;
+      IDE_EXIT;
     }
 
   g_task_return_pointer (task, g_strdupv ((gchar **)ret), (GDestroyNotify)g_strfreev);
+
+  IDE_EXIT;
 }
 
 void
@@ -919,6 +1005,8 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
   const gchar * const *ret;
   gchar *path = NULL;
   gboolean neg_hit;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_MAKECACHE (self));
   g_return_if_fail (G_IS_FILE (file));
@@ -934,7 +1022,7 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
                                G_IO_ERROR,
                                G_IO_ERROR_INVALID_FILENAME,
                                "File must be in the project path.");
-      return;
+      IDE_EXIT;
     }
 
   g_mutex_lock (&self->mutex);
@@ -947,7 +1035,7 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_FOUND,
                                "target could not be found");
-      return;
+      IDE_EXIT;
     }
 
   ret = ide_makecache_get_file_targets_cached (self, path);
@@ -955,10 +1043,12 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
   if (ret)
     {
       g_task_return_pointer (task, g_strdupv ((gchar **)ret), (GDestroyNotify)g_strfreev);
-      return;
+      IDE_EXIT;
     }
 
   g_task_run_in_thread (task, ide_makecache_get_file_targets_worker);
+
+  IDE_EXIT;
 }
 
 gchar **
@@ -967,11 +1057,16 @@ ide_makecache_get_file_targets_finish (IdeMakecache  *self,
                                        GError       **error)
 {
   GTask *task = (GTask *)result;
+  gchar **ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_MAKECACHE (self), NULL);
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (task, error);
+
+  IDE_RETURN (ret);
 }
 
 static void
@@ -989,6 +1084,8 @@ ide_makecache__get_targets_cb (GObject      *object,
   g_autofree gchar *relative_path = NULL;
   gchar **argv;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_MAKECACHE (self));
 
@@ -1002,11 +1099,11 @@ ide_makecache__get_targets_cb (GObject      *object,
           argv [0] = g_strdup (self->llvm_flags);
 
           g_task_return_pointer (task, argv, (GDestroyNotify)g_strfreev);
-          return;
+          IDE_EXIT;
         }
 
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   file = g_task_get_task_data (task);
@@ -1021,7 +1118,7 @@ ide_makecache__get_targets_cb (GObject      *object,
     {
       g_strfreev (targets);
       g_task_return_pointer (task, argv, (GDestroyNotify)g_strfreev);
-      return;
+      IDE_EXIT;
     }
 
   lookup = g_new0 (FileFlagsLookup, 1);
@@ -1030,6 +1127,8 @@ ide_makecache__get_targets_cb (GObject      *object,
 
   g_task_set_task_data (task, lookup, file_flags_lookup_free);
   g_task_run_in_thread (task, ide_makecache_get_file_flags_worker);
+
+  IDE_EXIT;
 }
 
 void
@@ -1040,6 +1139,8 @@ ide_makecache_get_file_flags_async (IdeMakecache        *self,
                                     gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_MAKECACHE (self));
   g_return_if_fail (G_IS_FILE (file));
@@ -1053,6 +1154,8 @@ ide_makecache_get_file_flags_async (IdeMakecache        *self,
                                         g_task_get_cancellable (task),
                                         ide_makecache__get_targets_cb,
                                         g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 gchar **
@@ -1061,9 +1164,14 @@ ide_makecache_get_file_flags_finish (IdeMakecache  *self,
                                      GError       **error)
 {
   GTask *task = (GTask *)result;
+  gchar **ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_MAKECACHE (self), NULL);
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (task, error);
+
+  IDE_RETURN (ret);
 }
