@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 
 IdeClangTranslationUnit *_ide_clang_translation_unit_new (IdeContext        *context,
                                                           CXTranslationUnit  tu,
+                                                          GFile             *file,
                                                           gint64             sequence);
 
 G_END_DECLS

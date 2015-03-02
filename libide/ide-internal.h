@@ -36,10 +36,6 @@ IdeUnsavedFile *_ide_unsaved_file_new (GFile       *file,
                                        const gchar *temp_path,
                                        gint64       sequence);
 
-IdeClangTranslationUnit *_ide_clang_translation_unit_new (IdeContext        *contxt,
-                                                          CXTranslationUnit  tu,
-                                                          gint64             sequence);
-
 void _ide_diagnostician_add_provider    (IdeDiagnostician      *self,
                                          IdeDiagnosticProvider *provider);
 void _ide_diagnostician_remove_provider (IdeDiagnostician      *self,

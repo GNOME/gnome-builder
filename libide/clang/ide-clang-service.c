@@ -74,6 +74,7 @@ ide_clang_service_parse_worker (GTask        *task,
   ParseRequest *request = task_data;
   IdeContext *context;
   const gchar * const *argv;
+  GFile *gfile;
   gsize argc = 0;
   const gchar *detail_error = NULL;
   enum CXErrorCode code;
@@ -150,7 +151,8 @@ ide_clang_service_parse_worker (GTask        *task,
     }
 
   context = ide_object_get_context (source_object);
-  ret = _ide_clang_translation_unit_new (context, tu, request->sequence);
+  gfile = ide_file_get_file (request->file);
+  ret = _ide_clang_translation_unit_new (context, tu, gfile, request->sequence);
 
   g_rw_lock_writer_lock (&self->cached_rwlock);
   g_hash_table_replace (self->cached_units,
