@@ -261,7 +261,7 @@ backward_find_matching_char (GtkTextIter *iter,
                              gunichar     ch)
 {
   GtkTextIter copy;
-  gunichar match;
+  gunichar match = 0;
   gunichar cur;
   guint count = 1;
 
