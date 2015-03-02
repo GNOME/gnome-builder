@@ -1,0 +1,7 @@
+#ifdef G_DISABLE_ASSERT
+# undef G_DISABLE_ASSERT
+#endif
+
+#ifdef G_DISABLE_CAST_CHECKS
+# undef G_DISABLE_CAST_CHECKS
+#endif
