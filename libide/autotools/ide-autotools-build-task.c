@@ -44,6 +44,7 @@ typedef struct
   gchar **make_targets;
   guint   require_autogen : 1;
   guint   require_configure : 1;
+  guint   bootstrap_only : 1;
 } WorkerState;
 
 typedef gboolean (*WorkStep) (GTask                 *task,
@@ -552,6 +553,14 @@ worker_state_new (IdeAutotoolsBuildTask *self)
   state->require_configure = priv->require_configure;
   state->make_targets = (gchar **)g_ptr_array_free (make_targets, FALSE);
 
+  if (g_key_file_get_boolean (priv->config, "autotools", "bootstrap-only", NULL))
+    {
+      state->require_autogen = TRUE;
+      state->require_configure = TRUE;
+      state->bootstrap_only = TRUE;
+      g_clear_pointer (&state->make_targets, (GDestroyNotify)g_strfreev);
+    }
+
   return state;
 }
 
@@ -846,6 +855,12 @@ step_configure (GTask                 *task,
   if (!g_subprocess_wait_check (process, cancellable, &error))
     {
       g_task_return_error (task, error);
+      return FALSE;
+    }
+
+  if (state->bootstrap_only)
+    {
+      g_task_return_boolean (task, TRUE);
       return FALSE;
     }
 
