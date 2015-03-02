@@ -27,14 +27,14 @@ G_BEGIN_DECLS
 # define G_LOG_LEVEL_TRACE (1 << G_LOG_LEVEL_USER_SHIFT)
 #endif
 
-#ifdef IDE_ENABLE_DEBUG
+#ifndef IDE_DISABLE_DEBUG
 # define IDE_DEBUG(...)                                                \
-   g_log(G_LOG_DOMAIN, G_LOG_LEVEL_TRACE, ##__VA_ARGS__)
+   g_log(G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, ##__VA_ARGS__)
 #else
 # define IDE_DEBUG(...)
 #endif
 
-#ifdef IDE_ENABLE_TRACE
+#ifndef IDE_DISABLE_TRACE
 # define IDE_TRACE_MSG(fmt, ...)                                       \
    g_log(G_LOG_DOMAIN, G_LOG_LEVEL_TRACE, "TRACE: %s():%d: "fmt,       \
          G_STRFUNC, __LINE__, ##__VA_ARGS__)

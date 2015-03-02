@@ -1,1 +1,5 @@
-echo "  Tracing .......................... : ${enable_tracing}"
+echo "Developer Build Options"
+echo ""
+echo "  Debug Build .......................... : ${enable_debug}"
+echo "  Trace Build .......................... : ${enable_tracing}"
+echo "  Maintainer Flags ..................... : ${enable_maintainer_flags}"

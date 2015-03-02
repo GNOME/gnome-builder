@@ -287,6 +287,16 @@ libide_1_0_la_LIBADD = \
 	libeditorconfig.la \
 	$(NULL)
 
+if ENABLE_TRACING
+else
+AM_CPPFLAGS += -DIDE_DISABLE_TRACING
+endif
+
+if ENABLE_DEBUG
+else
+AM_CPPFLAGS += -DIDE_DISABLE_DEBUG
+endif
+
 libide_1_0_la_built_sources = \
 	libide/resources/ide-resources.c \
 	libide/resources/ide-resources.h \

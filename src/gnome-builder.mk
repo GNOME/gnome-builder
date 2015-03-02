@@ -271,6 +271,8 @@ libgnome_builder_la_CFLAGS = \
 
 if ENABLE_TRACING
 libgnome_builder_la_CFLAGS += -DGB_ENABLE_TRACE
+else
+libgnome_builder_la_CFLAGS += -DIDE_DISABLE_TRACE
 endif
 
 gnome_builder_SOURCES = src/main.c
