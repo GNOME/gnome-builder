@@ -36,9 +36,7 @@ typedef struct
   GFile             *file;
 } IdeClangTranslationUnitPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeClangTranslationUnit,
-                            ide_clang_translation_unit,
-                            IDE_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeClangTranslationUnit, ide_clang_translation_unit, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
