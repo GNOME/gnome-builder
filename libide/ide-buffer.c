@@ -57,6 +57,7 @@ struct _IdeBuffer
   IdeFile                *file;
   GBytes                 *content;
   IdeBufferChangeMonitor *change_monitor;
+  gchar                  *title;
 
   gulong                  change_monitor_changed_handler;
 
@@ -74,6 +75,7 @@ enum {
   PROP_CONTEXT,
   PROP_FILE,
   PROP_HIGHLIGHT_DIAGNOSTICS,
+  PROP_TITLE,
   LAST_PROP
 };
 
@@ -522,6 +524,7 @@ ide_buffer_dispose (GObject *object)
   g_clear_pointer (&self->diagnostics_line_cache, g_hash_table_unref);
   g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
   g_clear_pointer (&self->content, g_bytes_unref);
+  g_clear_pointer (&self->title, g_free);
   g_clear_object (&self->file);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
@@ -557,6 +560,10 @@ ide_buffer_get_property (GObject    *object,
 
     case PROP_HIGHLIGHT_DIAGNOSTICS:
       g_value_set_boolean (value, ide_buffer_get_highlight_diagnostics (self));
+      break;
+
+    case PROP_TITLE:
+      g_value_set_string (value, ide_buffer_get_title (self));
       break;
 
     default:
@@ -633,6 +640,14 @@ ide_buffer_class_init (IdeBufferClass *klass)
   g_object_class_install_property (object_class, PROP_HIGHLIGHT_DIAGNOSTICS,
                                    gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS]);
 
+  gParamSpecs [PROP_TITLE] =
+    g_param_spec_string ("title",
+                         _("Title"),
+                         _("The title of the buffer."),
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_TITLE, gParamSpecs [PROP_TITLE]);
+
   /**
    * IdeBuffer::line-flags-changed:
    *
@@ -680,6 +695,33 @@ ide_buffer_line_flags_get_type (void)
   return type_id;
 }
 
+static void
+ide_buffer_update_title (IdeBuffer *self)
+{
+  g_autofree gchar *title = NULL;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  if (self->file)
+    {
+      GFile *workdir;
+      GFile *gfile;
+      IdeVcs *vcs;
+
+      vcs = ide_context_get_vcs (self->context);
+      workdir = ide_vcs_get_working_directory (vcs);
+      gfile = ide_file_get_file (self->file);
+
+      title = g_file_get_relative_path (workdir, gfile);
+      if (!title)
+        title = g_file_get_path (gfile);
+    }
+
+  g_clear_pointer (&self->title, g_free);
+  self->title = g_strdup (title);
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TITLE]);
+}
+
 /**
  * ide_buffer_get_file:
  *
@@ -714,6 +756,7 @@ ide_buffer_set_file (IdeBuffer *self,
                                     ide_buffer__file_load_settings_cb,
                                     g_object_ref (self));
       ide_buffer_reload_change_monitor (self);
+      ide_buffer_update_title (self);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
     }
 }
@@ -988,4 +1031,20 @@ ide_buffer_trim_trailing_whitespace  (IdeBuffer *self)
             }
         }
     }
+}
+
+/**
+ * ide_buffer_get_title:
+ *
+ * Gets the #IdeBuffer:title property. This property contains a title for the buffer suitable
+ * for display.
+ *
+ * Returns: A string containing the buffer title.
+ */
+const gchar *
+ide_buffer_get_title (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  return self->title;
 }
