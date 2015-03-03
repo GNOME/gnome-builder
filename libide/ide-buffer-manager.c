@@ -55,6 +55,7 @@ typedef struct
   IdeBuffer   *buffer;
   IdeFile     *file;
   IdeProgress *progress;
+  guint        is_new;
 } LoadState;
 
 typedef struct
@@ -407,7 +408,8 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
         goto emit_signal;
     }
 
-  ide_buffer_manager_add_buffer (self, state->buffer);
+  if (state->is_new)
+    ide_buffer_manager_add_buffer (self, state->buffer);
 
 emit_signal:
   g_signal_emit (self, gSignals [BUFFER_LOADED], 0, state->buffer);
@@ -467,6 +469,7 @@ ide_buffer_manager_load_file_async  (IdeBufferManager     *self,
     }
 
   state = g_slice_new0 (LoadState);
+  state->is_new = (buffer == NULL);
   state->file = g_object_ref (file);
   state->progress = g_object_new (IDE_TYPE_PROGRESS,
                                   "context", context,
