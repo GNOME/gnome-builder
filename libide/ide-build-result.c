@@ -35,13 +35,6 @@ typedef struct
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeBuildResult, ide_build_result, IDE_TYPE_OBJECT)
 
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-//static GParamSpec *gParamSpecs [LAST_PROP];
-
 static gboolean
 _ide_build_result_open_log (IdeBuildResult  *self,
                             GInputStream   **read_stream,
@@ -288,43 +281,11 @@ ide_build_result_finalize (GObject *object)
 }
 
 static void
-ide_build_result_get_property (GObject    *object,
-                               guint       prop_id,
-                               GValue     *value,
-                               GParamSpec *pspec)
-{
-  //IdeBuildResult *self = IDE_BUILD_RESULT (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_build_result_set_property (GObject      *object,
-                               guint         prop_id,
-                               const GValue *value,
-                               GParamSpec   *pspec)
-{
-  //IdeBuildResult *self = IDE_BUILD_RESULT (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 ide_build_result_class_init (IdeBuildResultClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_build_result_finalize;
-  object_class->get_property = ide_build_result_get_property;
-  object_class->set_property = ide_build_result_set_property;
 }
 
 static void
