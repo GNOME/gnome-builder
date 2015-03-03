@@ -363,10 +363,20 @@ ide_gca_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  context = ide_object_get_context (IDE_OBJECT (provider));
-  service = ide_context_get_service_typed (context, IDE_TYPE_GCA_SERVICE);
   language = ide_file_get_language (file);
   language_id = ide_language_get_id (language);
+
+  if (!language_id)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "No language specified, code assistance not supported.");
+      return;
+    }
+
+  context = ide_object_get_context (IDE_OBJECT (provider));
+  service = ide_context_get_service_typed (context, IDE_TYPE_GCA_SERVICE);
   files = ide_context_get_unsaved_files (context);
   gfile = ide_file_get_file (file);
 
