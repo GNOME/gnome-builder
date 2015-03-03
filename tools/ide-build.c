@@ -33,10 +33,8 @@ static guint gTimeout;
 static gulong gAddedHandler;
 static guint64 gBuildStart;
 static gboolean gRebuild;
-
-static void read_line_cb (GObject      *object,
-                          GAsyncResult *result,
-                          gpointer      user_data);
+static GList *gLogThreads;
+static gboolean gBuildDone;
 
 static void
 quit (gint exit_code)
@@ -44,6 +42,15 @@ quit (gint exit_code)
   gExitCode = exit_code;
   g_clear_object (&gContext);
   g_main_loop_quit (gMainLoop);
+}
+
+static void
+flush_logs (void)
+{
+  GList *iter;
+
+  for (iter = gLogThreads; iter; iter = iter->next)
+    g_thread_join (iter->data);
 }
 
 static void
@@ -61,6 +68,10 @@ build_cb (GObject      *object,
   build_result = ide_builder_build_finish (builder, result, &error);
 
   total_usec = completed_at - gBuildStart;
+
+  g_atomic_int_set (&gBuildDone, TRUE);
+
+  flush_logs ();
 
   if (!build_result)
     {
@@ -82,79 +93,75 @@ build_cb (GObject      *object,
   quit (EXIT_SUCCESS);
 }
 
-static gboolean
-delayed_read (gpointer data)
+static gpointer
+log_thread (gpointer data)
 {
-  g_autoptr(GDataInputStream) data_stream = data;
-
-  g_data_input_stream_read_line_async (data_stream,
-                                       G_PRIORITY_DEFAULT,
-                                       NULL,
-                                       read_line_cb,
-                                       NULL);
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-read_line_cb (GObject      *object,
-              GAsyncResult *result,
-              gpointer      user_data)
-{
-  GDataInputStream *data_stream = (GDataInputStream *)object;
-  g_autofree gchar *line = NULL;
-  g_autoptr(GError) error = NULL;
-  gsize length = 0;
+  GDataInputStream *data_stream = data;
+  gboolean istty;
+  gboolean iserror;
+  gboolean closing = FALSE;
+  gchar *line;
+  gsize len;
 
   g_assert (G_IS_DATA_INPUT_STREAM (data_stream));
 
-  line = g_data_input_stream_read_line_finish_utf8 (data_stream,
-                                                    result,
-                                                    &length,
-                                                    &error);
+  iserror = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (data_stream), "IS_STDERR"));
+  istty = isatty (iserror ? STDERR_FILENO : STDOUT_FILENO);
 
-  if (line)
+again:
+
+  while ((line = g_data_input_stream_read_line_utf8 (data_stream, &len, NULL, NULL)))
     {
-      g_print ("%s\n", line);
-      g_data_input_stream_read_line_async (data_stream,
-                                           G_PRIORITY_DEFAULT,
-                                           NULL,
-                                           read_line_cb,
-                                           NULL);
-    }
-  else if (error && g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CLOSED))
-    {
-      g_print ("Stream closed.\n");
-    }
-  else if (!error)
-    {
-      /* delay next read a bit. */
-      /* TODO: is there a better way to do this? should we alter the
-       *       O_NONBLOCK on the pipe?
+      /*
+       * TODO: I'd like to have time information here too.
        */
-      g_timeout_add (50, delayed_read, g_object_ref (data_stream));
+
+      if (iserror)
+        {
+          if (istty)
+            {
+              /* TODO: color red */
+              g_printerr ("%s\n", line);
+            }
+          else
+            {
+              g_printerr ("%s\n", line);
+            }
+        }
+      else
+        {
+          g_print ("%s\n", line);
+        }
+      g_free (line);
     }
-  else
+
+  if (!closing)
     {
-      g_print ("Stream failure: %s.\n", error->message);
-      g_input_stream_close (G_INPUT_STREAM (data_stream), NULL, NULL);
+      if (g_atomic_int_get (&gBuildDone))
+        closing = TRUE;
+
+      /* one final attempt to flush the logs */
+      g_usleep (G_USEC_PER_SEC / 20);
+      goto again;
     }
+
+  return NULL;
 }
 
 static void
-log_dumper (GInputStream *stream)
+log_dumper (GInputStream *stream,
+            gboolean      is_stderr)
 {
   g_autoptr(GDataInputStream) data_stream = NULL;
+  GThread *thread;
 
   g_assert (G_IS_INPUT_STREAM (stream));
 
   data_stream = g_data_input_stream_new (stream);
+  g_object_set_data (G_OBJECT (data_stream), "IS_STDERR", GINT_TO_POINTER (!!is_stderr));
 
-  g_data_input_stream_read_line_async (data_stream,
-                                       G_PRIORITY_DEFAULT,
-                                       NULL,
-                                       read_line_cb,
-                                       NULL);
+  thread = g_thread_new ("LogThread", log_thread, g_object_ref (data_stream));
+  gLogThreads = g_list_prepend (gLogThreads, thread);
 }
 
 static void
@@ -236,8 +243,8 @@ build_for_device (IdeContext *context,
       stderr_stream = ide_build_result_get_stderr_stream (build_result);
       stdout_stream = ide_build_result_get_stdout_stream (build_result);
 
-      log_dumper (stderr_stream);
-      log_dumper (stdout_stream);
+      log_dumper (stderr_stream, TRUE);
+      log_dumper (stdout_stream, FALSE);
 
       g_object_unref (stderr_stream);
       g_object_unref (stdout_stream);
