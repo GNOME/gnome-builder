@@ -24,6 +24,7 @@
 
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
+#include <ide.h>
 
 #include "gb-application.h"
 #include "gb-editor-file-marks.h"
@@ -656,6 +657,35 @@ gb_application_shutdown (GApplication *app)
   EXIT;
 }
 
+static gboolean
+verbose_cb (void)
+{
+  ide_log_increase_verbosity ();
+  return TRUE;
+}
+
+static gboolean
+gb_application_local_command_line (GApplication   *app,
+                                   gchar        ***argv,
+                                   int            *exit_status)
+{
+  g_autoptr(GOptionContext) context = NULL;
+  GOptionEntry entries[] = {
+    { "verbose", 'v', G_OPTION_FLAG_NO_ARG|G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_CALLBACK,
+      verbose_cb, N_("Increase verbosity. May be specified multiple times.") },
+    { NULL }
+  };
+
+  /* we dont really care about the result, just increasing verbosity */
+  context = g_option_context_new ("");
+  g_option_context_set_help_enabled (context, FALSE);
+  g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
+  g_option_context_parse_strv (context, argv, NULL);
+
+  return G_APPLICATION_CLASS (gb_application_parent_class)->
+    local_command_line (app, argv, exit_status);
+}
+
 static void
 gb_application_constructed (GObject *object)
 {
@@ -699,6 +729,7 @@ gb_application_class_init (GbApplicationClass *klass)
   app_class->startup = gb_application_startup;
   app_class->shutdown = gb_application_shutdown;
   app_class->open = gb_application_open;
+  app_class->local_command_line = gb_application_local_command_line;
 
   EXIT;
 }
