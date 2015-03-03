@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-unsaved-file"
+
+#include "ide-debug.h"
 #include "ide-unsaved-file.h"
 
 G_DEFINE_BOXED_TYPE (IdeUnsavedFile, ide_unsaved_file,
@@ -64,17 +67,25 @@ ide_unsaved_file_persist (IdeUnsavedFile  *self,
                           GCancellable    *cancellable,
                           GError         **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (self, FALSE);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
+
+  IDE_TRACE_MSG ("Saving draft to \"%s\"", self->temp_path);
 
   /*
    * TODO: Support cancellable.
    */
 
-  return g_file_set_contents (self->temp_path,
-                              g_bytes_get_data (self->content, NULL),
-                              g_bytes_get_size (self->content),
-                              error);
+  ret = g_file_set_contents (self->temp_path,
+                             g_bytes_get_data (self->content, NULL),
+                             g_bytes_get_size (self->content),
+                             error);
+
+  IDE_RETURN (ret);
 }
 
 gint64
