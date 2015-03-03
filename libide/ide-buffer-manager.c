@@ -1006,3 +1006,34 @@ unregister_auto_save (IdeBufferManager *self,
       g_slice_free (AutoSave, state);
     }
 }
+
+/**
+ * ide_buffer_manager_get_buffers:
+ *
+ * Returns a newly allocated #GPtrArray of all the buffers managed by the #IdeBufferManager
+ * instance.
+ *
+ * Buffers are generally not added to the buffer list until they have been loaded.
+ *
+ * Returns: (transfer container) (element-type IdeBuffer*): A #GPtrArray of buffers.
+ */
+GPtrArray *
+ide_buffer_manager_get_buffers (IdeBufferManager *self)
+{
+  GPtrArray *ret;
+  gsize i;
+
+  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
+
+  ret = g_ptr_array_new_with_free_func (g_object_unref);
+
+  for (i = 0; i < self->buffers->len; i++)
+    {
+      IdeBuffer *buffer;
+
+      buffer = g_ptr_array_index (self->buffers, i);
+      g_ptr_array_add (ret, g_object_ref (buffer));
+    }
+
+  return ret;
+}

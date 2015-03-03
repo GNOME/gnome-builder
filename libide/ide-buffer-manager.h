@@ -52,6 +52,7 @@ gboolean   ide_buffer_manager_save_file_finish (IdeBufferManager     *self,
 IdeBuffer *ide_buffer_manager_get_focus_buffer (IdeBufferManager     *self);
 void       ide_buffer_manager_set_focus_buffer (IdeBufferManager     *self,
                                                 IdeBuffer            *buffer);
+GPtrArray *ide_buffer_manager_get_buffers      (IdeBufferManager     *self);
 
 G_END_DECLS
 
