@@ -21,7 +21,6 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-source-view.h"
 #include "ide-types.h"
 
 G_BEGIN_DECLS
@@ -46,23 +45,6 @@ struct _IdeSourceViewModeClass
 {
   GtkWidgetClass parent_class;
 };
-
-/**
- * IdeSourceViewModeType:
- * @IDE_SOURCE_VIEW_MODE_TRANSIENT: Transient
- * @IDE_SOURCE_VIEW_MODE_PERMANENT: Permanent
- * @IDE_SOURCE_VIEW_MODE_MODAL: Modal
- *
- * The type of keyboard mode.
- */
-typedef enum
-{
-  IDE_SOURCE_VIEW_MODE_TYPE_TRANSIENT,
-  IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT,
-  IDE_SOURCE_VIEW_MODE_TYPE_MODAL
-} IdeSourceViewModeType;
-
-GType ide_source_view_mode_get_type (void);
 
 G_END_DECLS
 

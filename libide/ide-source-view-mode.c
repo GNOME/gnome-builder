@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-source-view.h"
 #include "ide-source-view-mode.h"
 
 typedef struct

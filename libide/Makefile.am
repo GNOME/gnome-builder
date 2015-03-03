@@ -302,9 +302,15 @@ else
 AM_CPPFLAGS += -DIDE_DISABLE_DEBUG
 endif
 
+libide_1_0_la_type_headers = \
+	libide/ide-source-view.h \
+	$(NULL)
+
 libide_1_0_la_built_sources = \
 	libide/resources/ide-resources.c \
 	libide/resources/ide-resources.h \
+	libide/ide-enums.c \
+	libide/ide-enums.h \
 	$(NULL)
 
 libide_resource_files = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/libide/resources --generate-dependencies $(top_srcdir)/libide/resources/libide.gresource.xml)
@@ -312,6 +318,13 @@ libide/resources/ide-resources.c: libide/resources/libide.gresource.xml $(libide
 	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/libide/resources --generate-source --c-name ide $(top_srcdir)/libide/resources/libide.gresource.xml
 libide/resources/ide-resources.h: libide/resources/libide.gresource.xml $(libide_resource_files)
 	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/libide/resources --generate-header --c-name ide $(top_srcdir)/libide/resources/libide.gresource.xml
+
+libide/ide-enums.h: $(libide_1_0_la_type_headers) libide/ide-enums.h.template
+	$(AM_V_GEN) ( cd $(srcdir) && glib-mkenums --template libide/ide-enums.h.template $(libide_1_0_la_type_headers) ) > libide/ide-enums.h.tmp
+	@ mv libide/ide-enums.h.tmp libide/ide-enums.h
+libide/ide-enums.c: $(libide_1_0_la_type_headers) libide/ide-enums.c.template
+	$(AM_V_GEN) ( cd $(srcdir) && glib-mkenums --template libide/ide-enums.c.template $(libide_1_0_la_type_headers) ) > libide/ide-enums.c.tmp
+	@ mv libide/ide-enums.c.tmp libide/ide-enums.c
 
 nodist_libide_1_0_la_SOURCES = \
 	$(libide_1_0_la_built_sources) \
@@ -324,6 +337,8 @@ DISTCLEANFILES += $(libide_1_0_la_built_sources)
 EXTRA_DIST += \
 	$(libide_resource_files) \
 	libide/resources/libide.gresource.xml \
+	libide/ide-enums.c.template \
+	libide/ide-enums.h.template \
 	$(libide_1_0_la_built_sources) \
 	$(NULL)
 
@@ -335,7 +350,11 @@ INTROSPECTION_SCANNER_ARGS = --add-include-path=$(top_srcdir)/libide --warn-all
 INTROSPECTION_COMPILER_ARGS = --includedir=$(top_srcdir)/libide
 
 if HAVE_INTROSPECTION
-introspection_sources = $(libide_1_0_la_public_sources)
+introspection_sources = \
+	$(libide_1_0_la_public_sources) \
+	libide/ide-enums.c \
+	libide/ide-enums.h \
+	$(NULL)
 
 Ide-1.0.gir: libide-1.0.la
 Ide_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Ggit-1.0

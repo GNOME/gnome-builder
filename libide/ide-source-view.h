@@ -36,6 +36,21 @@ G_BEGIN_DECLS
 typedef struct _IdeSourceView      IdeSourceView;
 typedef struct _IdeSourceViewClass IdeSourceViewClass;
 
+/**
+ * IdeSourceViewModeType:
+ * @IDE_SOURCE_VIEW_MODE_TRANSIENT: Transient
+ * @IDE_SOURCE_VIEW_MODE_PERMANENT: Permanent
+ * @IDE_SOURCE_VIEW_MODE_MODAL: Modal
+ *
+ * The type of keyboard mode.
+ */
+typedef enum
+{
+  IDE_SOURCE_VIEW_MODE_TYPE_TRANSIENT,
+  IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT,
+  IDE_SOURCE_VIEW_MODE_TYPE_MODAL
+} IdeSourceViewModeType;
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceView, g_object_unref)
 
 struct _IdeSourceView
@@ -55,6 +70,9 @@ struct _IdeSourceViewClass
                         IdeSourceSnippet        *snippet,
                         IdeSourceSnippetContext *context,
                         const GtkTextIter       *location);
+  void (*set_mode)     (IdeSourceView           *self,
+                        const gchar             *mode,
+                        IdeSourceViewModeType    type);
 };
 
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);

@@ -42,6 +42,7 @@ G_BEGIN_DECLS
 #include "ide-diagnostics.h"
 #include "ide-diagnostician.h"
 #include "ide-diagnostic-provider.h"
+#include "ide-enums.h"
 #include "ide-executable.h"
 #include "ide-executer.h"
 #include "ide-file.h"

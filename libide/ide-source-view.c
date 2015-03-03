@@ -26,10 +26,13 @@
 #include "ide-box-theatric.h"
 #include "ide-buffer.h"
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-diagnostic.h"
+#include "ide-enums.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
 #include "ide-highlighter.h"
+#include "ide-internal.h"
 #include "ide-indenter.h"
 #include "ide-language.h"
 #include "ide-line-change-gutter-renderer.h"
@@ -43,6 +46,7 @@
 #include "ide-source-snippets-manager.h"
 #include "ide-source-location.h"
 #include "ide-source-view.h"
+#include "ide-source-view-mode.h"
 
 #define DEFAULT_FONT_DESC "Monospace 11"
 #define ANIMATION_X_GROW  50
@@ -57,6 +61,7 @@ typedef struct
   IdeIndenter                 *indenter;
   GtkSourceGutterRenderer     *line_change_renderer;
   GtkSourceGutterRenderer     *line_diagnostics_renderer;
+  IdeSourceViewMode           *mode;
   GQueue                      *snippets;
   GtkSourceCompletionProvider *snippets_provider;
 
@@ -99,6 +104,7 @@ enum {
   JUMP,
   PUSH_SNIPPET,
   POP_SNIPPET,
+  SET_MODE,
   LAST_SIGNAL
 };
 
@@ -1124,6 +1130,24 @@ ide_source_view_key_press_event (GtkWidget   *widget,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
+  /*
+   * If we are in a non-default mode, dispatch the event to the mode. This allows custom
+   * keybindings like Emacs and Vim to be implemented using gtk-bindings CSS.
+   */
+  if (priv->mode)
+    {
+      gboolean handled;
+      gboolean remove = FALSE;
+
+      handled = _ide_source_view_mode_do_event (priv->mode, event, &remove);
+
+      if (remove)
+        g_clear_object (&priv->mode);
+
+      if (handled)
+        return TRUE;
+    }
+
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
   /*
@@ -1332,6 +1356,25 @@ ide_source_view_real_jump (IdeSourceView     *self,
 }
 
 static void
+ide_source_view_real_set_mode (IdeSourceView         *self,
+                               const gchar           *mode,
+                               IdeSourceViewModeType  type)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  g_clear_object (&priv->mode);
+
+  if (mode != NULL)
+    priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), mode, type);
+
+  IDE_EXIT;
+}
+
+static void
 ide_source_view_constructed (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -1373,6 +1416,7 @@ ide_source_view_dispose (GObject *object)
   g_clear_object (&priv->line_diagnostics_renderer);
   g_clear_object (&priv->snippets_provider);
   g_clear_object (&priv->css_provider);
+  g_clear_object (&priv->mode);
 
   if (priv->buffer)
     {
@@ -1504,6 +1548,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->query_tooltip = ide_source_view_query_tooltip;
 
   klass->jump = ide_source_view_real_jump;
+  klass->set_mode = ide_source_view_real_set_mode;
 
   g_object_class_override_property (object_class, PROP_AUTO_INDENT, "auto-indent");
 
@@ -1579,6 +1624,17 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                   G_TYPE_NONE,
                                   1,
                                   GTK_TYPE_TEXT_ITER);
+
+  gSignals [SET_MODE] = g_signal_new ("set-mode",
+                                      G_TYPE_FROM_CLASS (klass),
+                                      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                      G_STRUCT_OFFSET (IdeSourceViewClass, set_mode),
+                                      NULL, NULL,
+                                      g_cclosure_marshal_generic,
+                                      G_TYPE_NONE,
+                                      2,
+                                      G_TYPE_STRING,
+                                      IDE_TYPE_SOURCE_VIEW_MODE_TYPE);
 
   gSignals [POP_SNIPPET] = g_signal_new ("pop-snippet",
                                          G_TYPE_FROM_CLASS (klass),
