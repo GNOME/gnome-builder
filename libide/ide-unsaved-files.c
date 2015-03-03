@@ -463,7 +463,6 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
               g_clear_pointer (&unsaved->content, g_bytes_unref);
               unsaved->content = g_bytes_ref (content);
               unsaved->sequence = priv->sequence;
-              setup_tempfile (file, &unsaved->temp_fd, &unsaved->temp_path);
             }
 
           /*
@@ -483,6 +482,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
   unsaved->file = g_object_ref (file);
   unsaved->content = g_bytes_ref (content);
   unsaved->sequence = priv->sequence;
+  setup_tempfile (file, &unsaved->temp_fd, &unsaved->temp_path);
 
   g_ptr_array_insert (priv->unsaved_files, 0, unsaved);
 }
