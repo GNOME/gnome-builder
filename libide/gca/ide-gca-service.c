@@ -35,7 +35,8 @@ G_DEFINE_TYPE (IdeGcaService, ide_gca_service, IDE_TYPE_SERVICE)
 static const gchar *
 remap_language (const gchar *lang_id)
 {
-  g_return_val_if_fail (lang_id, NULL);
+  if (!lang_id)
+    return NULL;
 
   if (g_str_equal (lang_id, "chdr") ||
       g_str_equal (lang_id, "objc") ||
@@ -94,9 +95,18 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
   g_return_if_fail (language_id);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  task = g_task_new (self, cancellable, callback, user_data);
+
   language_id = remap_language (language_id);
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  if (!language_id)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               _("No language specified"));
+      return;
+    }
 
   if (!gDBus)
     {

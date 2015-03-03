@@ -303,7 +303,8 @@ ide_source_view_reload_snippets (IdeSourceView *self)
 
       manager = ide_context_get_snippets_manager (context);
       source_language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (priv->buffer));
-      snippets = ide_source_snippets_manager_get_for_language (manager, source_language);
+      if (source_language != NULL)
+        snippets = ide_source_snippets_manager_get_for_language (manager, source_language);
     }
 
   g_object_set (priv->snippets_provider, "snippets", snippets, NULL);

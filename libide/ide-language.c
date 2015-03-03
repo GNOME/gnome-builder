@@ -61,13 +61,16 @@ ide_language_get_source_language (IdeLanguage *self)
 {
   IdeLanguagePrivate *priv = ide_language_get_instance_private (self);
   GtkSourceLanguageManager *languages;
-  GtkSourceLanguage *language;
+  GtkSourceLanguage *language = NULL;
 
   if (IDE_LANGUAGE_GET_CLASS (self)->get_source_language)
     return IDE_LANGUAGE_GET_CLASS (self)->get_source_language (self);
 
-  languages = gtk_source_language_manager_get_default ();
-  language = gtk_source_language_manager_get_language (languages, priv->id);
+  if (priv->id)
+    {
+      languages = gtk_source_language_manager_get_default ();
+      language = gtk_source_language_manager_get_language (languages, priv->id);
+    }
 
   return language;
 }
