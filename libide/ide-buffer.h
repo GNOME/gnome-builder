@@ -57,6 +57,7 @@ IdeFile            *ide_buffer_get_file                  (IdeBuffer         *sel
 IdeBufferLineFlags  ide_buffer_get_line_flags            (IdeBuffer         *buffer,
                                                           guint              line);
 gboolean            ide_buffer_get_highlight_diagnostics (IdeBuffer         *self);
+const gchar        *ide_buffer_get_style_scheme_name     (IdeBuffer         *self);
 const gchar        *ide_buffer_get_title                 (IdeBuffer         *self);
 GType               ide_buffer_get_type                  (void);
 GType               ide_buffer_line_flags_get_type       (void);
@@ -64,6 +65,8 @@ void                ide_buffer_set_file                  (IdeBuffer         *sel
                                                           IdeFile           *file);
 void                ide_buffer_set_highlight_diagnostics (IdeBuffer         *self,
                                                           gboolean           highlight_diagnostics);
+void                ide_buffer_set_style_scheme_name     (IdeBuffer         *self,
+                                                          const gchar       *style_scheme_name);
 void                ide_buffer_trim_trailing_whitespace  (IdeBuffer         *self);
 
 G_END_DECLS

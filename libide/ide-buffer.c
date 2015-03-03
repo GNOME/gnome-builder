@@ -75,6 +75,7 @@ enum {
   PROP_CONTEXT,
   PROP_FILE,
   PROP_HIGHLIGHT_DIAGNOSTICS,
+  PROP_STYLE_SCHEME_NAME,
   PROP_TITLE,
   LAST_PROP
 };
@@ -566,6 +567,10 @@ ide_buffer_get_property (GObject    *object,
       g_value_set_string (value, ide_buffer_get_title (self));
       break;
 
+    case PROP_STYLE_SCHEME_NAME:
+      g_value_set_string (value, ide_buffer_get_style_scheme_name (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -591,6 +596,10 @@ ide_buffer_set_property (GObject      *object,
 
     case PROP_HIGHLIGHT_DIAGNOSTICS:
       ide_buffer_set_highlight_diagnostics (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_STYLE_SCHEME_NAME:
+      ide_buffer_set_style_scheme_name (self, g_value_get_string (value));
       break;
 
     default:
@@ -639,6 +648,15 @@ ide_buffer_class_init (IdeBufferClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_HIGHLIGHT_DIAGNOSTICS,
                                    gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS]);
+
+  gParamSpecs [PROP_STYLE_SCHEME_NAME] =
+    g_param_spec_string ("style-scheme-name",
+                         _("Style Scheme Name"),
+                         _("Style Scheme Name"),
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_STYLE_SCHEME_NAME,
+                                   gParamSpecs [PROP_STYLE_SCHEME_NAME]);
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",
@@ -1047,4 +1065,34 @@ ide_buffer_get_title (IdeBuffer *self)
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   return self->title;
+}
+
+const gchar *
+ide_buffer_get_style_scheme_name (IdeBuffer *self)
+{
+  GtkSourceStyleScheme *scheme;
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (self));
+  if (scheme)
+    return gtk_source_style_scheme_get_id (scheme);
+
+  return NULL;
+}
+
+void
+ide_buffer_set_style_scheme_name (IdeBuffer   *self,
+                                  const gchar *style_scheme_name)
+{
+  GtkSourceStyleSchemeManager *mgr;
+  GtkSourceStyleScheme *scheme;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  mgr = gtk_source_style_scheme_manager_get_default ();
+
+  scheme = gtk_source_style_scheme_manager_get_scheme (mgr, style_scheme_name);
+  if (scheme)
+    gtk_source_buffer_set_style_scheme (GTK_SOURCE_BUFFER (self), scheme);
 }
