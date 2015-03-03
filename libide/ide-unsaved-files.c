@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-unsaved-files"
+
 #include <glib/gstdio.h>
 #include <string.h>
 
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-global.h"
 #include "ide-internal.h"
 #include "ide-project.h"
@@ -522,8 +525,7 @@ ide_unsaved_files_get_unsaved_files (IdeUnsavedFiles *self)
       UnsavedFile *uf;
 
       uf = g_ptr_array_index (priv->unsaved_files, i);
-      item = _ide_unsaved_file_new (uf->file, uf->content, uf->temp_path,
-                                    uf->sequence);
+      item = _ide_unsaved_file_new (uf->file, uf->content, uf->temp_path, uf->sequence);
 
       g_ptr_array_add (ar, item);
     }
@@ -543,13 +545,23 @@ IdeUnsavedFile *
 ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
                                     GFile           *file)
 {
-  IdeUnsavedFilesPrivate *priv;
+  IdeUnsavedFilesPrivate *priv = ide_unsaved_files_get_instance_private (self);
   IdeUnsavedFile *ret = NULL;
   gsize i;
 
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), NULL);
 
-  priv = ide_unsaved_files_get_instance_private (self);
+#ifndef IDE_DISABLE_TRACE
+  {
+    gchar *path;
+
+    path = g_file_get_path (file);
+    IDE_TRACE_MSG ("%s", path);
+    g_free (path);
+  }
+#endif
 
   for (i = 0; i < priv->unsaved_files->len; i++)
     {
@@ -559,12 +571,16 @@ ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
 
       if (g_file_equal (uf->file, file))
         {
+          IDE_TRACE_MSG ("Hit");
           ret = _ide_unsaved_file_new (uf->file, uf->content, uf->temp_path, uf->sequence);
-          break;
+          goto complete;
         }
     }
 
-  return ret;
+  IDE_TRACE_MSG ("Miss");
+
+complete:
+  IDE_RETURN (ret);
 }
 
 gint64
