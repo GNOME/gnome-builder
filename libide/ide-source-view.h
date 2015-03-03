@@ -47,6 +47,8 @@ struct _IdeSourceViewClass
 {
   GtkSourceViewClass parent_class;
 
+  void (*jump)         (IdeSourceView           *self,
+                        const GtkTextIter       *location);
   void (*pop_snippet)  (IdeSourceView           *self,
                         IdeSourceSnippet        *snippet);
   void (*push_snippet) (IdeSourceView           *self,
@@ -56,6 +58,7 @@ struct _IdeSourceViewClass
 };
 
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);
+IdeBackForwardList         *ide_source_view_get_back_forward_list     (IdeSourceView              *self);
 const PangoFontDescription *ide_source_view_get_font_desc             (IdeSourceView              *self);
 gboolean                    ide_source_view_get_insert_matching_brace (IdeSourceView              *self);
 gboolean                    ide_source_view_get_overwrite_braces      (IdeSourceView              *self);
@@ -80,6 +83,8 @@ void                        ide_source_view_set_show_line_changes     (IdeSource
                                                                        gboolean                    show_line_changes);
 void                        ide_source_view_set_snippet_completion    (IdeSourceView              *self,
                                                                        gboolean                    snippet_completion);
+void                        ide_source_view_set_back_forward_list     (IdeSourceView              *self,
+                                                                       IdeBackForwardList         *back_forward_list);
 
 G_END_DECLS
 

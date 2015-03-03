@@ -21,6 +21,8 @@
 #include <glib/gi18n.h>
 
 #include "ide-animation.h"
+#include "ide-back-forward-item.h"
+#include "ide-back-forward-list.h"
 #include "ide-box-theatric.h"
 #include "ide-buffer.h"
 #include "ide-context.h"
@@ -39,6 +41,7 @@
 #include "ide-source-snippet-context.h"
 #include "ide-source-snippet-private.h"
 #include "ide-source-snippets-manager.h"
+#include "ide-source-location.h"
 #include "ide-source-view.h"
 
 #define DEFAULT_FONT_DESC "Monospace 11"
@@ -47,6 +50,7 @@
 
 typedef struct
 {
+  IdeBackForwardList          *back_forward_list;
   IdeBuffer                   *buffer;
   GtkCssProvider              *css_provider;
   PangoFontDescription        *font_desc;
@@ -80,6 +84,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW
 enum {
   PROP_0,
   PROP_AUTO_INDENT,
+  PROP_BACK_FORWARD_LIST,
   PROP_FONT_NAME,
   PROP_FONT_DESC,
   PROP_INSERT_MATCHING_BRACE,
@@ -91,6 +96,7 @@ enum {
 };
 
 enum {
+  JUMP,
   PUSH_SNIPPET,
   POP_SNIPPET,
   LAST_SIGNAL
@@ -1285,6 +1291,46 @@ ide_source_view_query_tooltip (GtkWidget  *widget,
 }
 
 static void
+ide_source_view_real_jump (IdeSourceView     *self,
+                           const GtkTextIter *location)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autoptr(IdeSourceLocation) srcloc = NULL;
+  g_autoptr(IdeBackForwardItem) item = NULL;
+  IdeContext *context;
+  IdeFile *file;
+  guint line;
+  guint line_offset;
+  guint offset;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (location);
+
+  if (!priv->back_forward_list)
+    return;
+
+  if (!priv->buffer)
+    return;
+
+  context = ide_buffer_get_context (priv->buffer);
+  if (!context)
+    return;
+
+  file = ide_buffer_get_file (priv->buffer);
+  if (!file)
+    return;
+
+  line = gtk_text_iter_get_line (location);
+  line_offset = gtk_text_iter_get_line_offset (location);
+  offset = gtk_text_iter_get_offset (location);
+
+  srcloc = ide_source_location_new (file, line, line_offset, offset);
+  item = ide_back_forward_item_new (context, srcloc);
+
+  ide_back_forward_list_push (priv->back_forward_list, item);
+}
+
+static void
 ide_source_view_constructed (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -1456,6 +1502,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
 
+  klass->jump = ide_source_view_real_jump;
+
   g_object_class_override_property (object_class, PROP_AUTO_INDENT, "auto-indent");
 
   gParamSpecs [PROP_FONT_DESC] =
@@ -1521,11 +1569,22 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   g_object_class_install_property (object_class, PROP_SNIPPET_COMPLETION,
                                    gParamSpecs [PROP_SNIPPET_COMPLETION]);
 
+  gSignals [JUMP] = g_signal_new ("jump",
+                                  G_TYPE_FROM_CLASS (klass),
+                                  G_SIGNAL_RUN_LAST,
+                                  G_STRUCT_OFFSET (IdeSourceViewClass, jump),
+                                  NULL, NULL,
+                                  g_cclosure_marshal_VOID__BOXED,
+                                  G_TYPE_NONE,
+                                  1,
+                                  GTK_TYPE_TEXT_ITER);
+
   gSignals [POP_SNIPPET] = g_signal_new ("pop-snippet",
                                          G_TYPE_FROM_CLASS (klass),
                                          G_SIGNAL_RUN_LAST,
                                          G_STRUCT_OFFSET (IdeSourceViewClass, pop_snippet),
-                                         NULL, NULL, NULL,
+                                         NULL, NULL,
+                                         g_cclosure_marshal_VOID__OBJECT,
                                          G_TYPE_NONE,
                                          1,
                                          IDE_TYPE_SOURCE_SNIPPET);
@@ -1889,4 +1948,45 @@ ide_source_view_set_snippet_completion (IdeSourceView *self,
 
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SNIPPET_COMPLETION]);
     }
+}
+
+/**
+ * ide_source_view_get_back_forward_list:
+ *
+ * Gets the #IdeSourceView:back-forward-list property. This is the list that is used to manage
+ * navigation history between multiple #IdeSourceView.
+ *
+ * Returns: (transfer none) (nullable): An #IdeBackForwardList or %NULL.
+ */
+IdeBackForwardList *
+ide_source_view_get_back_forward_list (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
+
+  return priv->back_forward_list;
+}
+
+void
+ide_source_view_set_back_forward_list (IdeSourceView      *self,
+                                       IdeBackForwardList *back_forward_list)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (!back_forward_list || IDE_IS_BACK_FORWARD_LIST (back_forward_list));
+
+  if (g_set_object (&priv->back_forward_list, back_forward_list))
+    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BACK_FORWARD_LIST]);
+}
+
+void
+ide_source_view_jump (IdeSourceView     *self,
+                      const GtkTextIter *location)
+{
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (location);
+
+  g_signal_emit (self, gSignals [JUMP], 0, location);
 }
