@@ -42,6 +42,15 @@
 static gboolean     gProgramNameRead;
 static const gchar *gProgramName = "libide";
 
+#if defined (G_HAS_CONSTRUCTORS)
+# ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
+#  pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(ide_init_ctor)
+# endif
+G_DEFINE_CONSTRUCTOR(ide_init_ctor)
+#else
+# error Your platform/compiler is missing constructor support
+#endif
+
 const gchar *
 ide_get_program_name (void)
 {
@@ -143,12 +152,3 @@ ide_init_ctor (void)
 
   ggit_init ();
 }
-
-#if defined (G_HAS_CONSTRUCTORS)
-# ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
-#  pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(ide_init_ctor)
-# endif
-G_DEFINE_CONSTRUCTOR(ide_init_ctor)
-#else
-# error Your platform/compiler is missing constructor support
-#endif
