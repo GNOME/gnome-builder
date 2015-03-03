@@ -141,6 +141,8 @@ libide_1_0_la_public_sources = \
 	libide/ide-source-snippets.h \
 	libide/ide-source-view.c \
 	libide/ide-source-view.h \
+	libide/ide-source-view-mode.c \
+	libide/ide-source-view-mode.h \
 	libide/ide-symbol-resolver.c \
 	libide/ide-symbol-resolver.h \
 	libide/ide-symbol.c \

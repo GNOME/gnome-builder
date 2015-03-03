@@ -25,6 +25,8 @@
 #include "ide-clang-translation-unit.h"
 #include "ide-diagnostic.h"
 #include "ide-types.h"
+#include "ide-source-view.h"
+#include "ide-source-view-mode.h"
 
 G_BEGIN_DECLS
 
@@ -59,6 +61,13 @@ void _ide_search_context_add_provider (IdeSearchContext  *context,
 
 IdeSourceRange *_ide_source_range_new (IdeSourceLocation *begin,
                                        IdeSourceLocation *end);
+
+gboolean           _ide_source_view_mode_do_event (IdeSourceViewMode     *mode,
+                                                   GdkEventKey           *event,
+                                                   gboolean              *remove);
+IdeSourceViewMode *_ide_source_view_mode_new      (GtkWidget             *view,
+                                                   const char            *mode,
+                                                   IdeSourceViewModeType  type);
 
 
 G_END_DECLS
