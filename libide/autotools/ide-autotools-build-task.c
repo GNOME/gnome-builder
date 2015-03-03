@@ -536,21 +536,24 @@ worker_state_new (IdeAutotoolsBuildTask *self)
   else
     project_dir = g_object_ref (project_file);
 
-  make_targets = g_ptr_array_new ();
-  if (priv->config &&
-      g_key_file_get_boolean (priv->config, "autotools", "rebuild", NULL))
-    g_ptr_array_add (make_targets, g_strdup ("clean"));
-  g_ptr_array_add (make_targets, g_strdup ("all"));
-  g_ptr_array_add (make_targets, NULL);
-
   state = g_slice_new0 (WorkerState);
-
+  state->require_autogen = priv->require_autogen;
+  state->require_configure = priv->require_configure;
   state->directory_path = g_file_get_path (priv->directory);
   state->project_path = g_file_get_path (project_dir);
   state->system_type = g_strdup (ide_device_get_system_type (priv->device));
-  state->configure_argv = gen_configure_argv (self, state);
-  state->require_autogen = priv->require_autogen;
-  state->require_configure = priv->require_configure;
+
+  make_targets = g_ptr_array_new ();
+
+  if (priv->config && g_key_file_get_boolean (priv->config, "autotools", "rebuild", NULL))
+    {
+      state->require_autogen = TRUE;
+      state->require_configure = TRUE;
+      g_ptr_array_add (make_targets, g_strdup ("clean"));
+    }
+
+  g_ptr_array_add (make_targets, g_strdup ("all"));
+  g_ptr_array_add (make_targets, NULL);
   state->make_targets = (gchar **)g_ptr_array_free (make_targets, FALSE);
 
   if (g_key_file_get_boolean (priv->config, "autotools", "bootstrap-only", NULL))
@@ -560,6 +563,8 @@ worker_state_new (IdeAutotoolsBuildTask *self)
       state->bootstrap_only = TRUE;
       g_clear_pointer (&state->make_targets, (GDestroyNotify)g_strfreev);
     }
+
+  state->configure_argv = gen_configure_argv (self, state);
 
   return state;
 }
@@ -740,20 +745,15 @@ step_autogen (GTask                 *task,
   g_assert (state);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  configure_path = g_build_filename (state->project_path, "configure", NULL);
+
   if (!state->require_autogen)
     {
-      configure_path = g_build_filename (state->project_path,
-                                         "configure",
-                                         NULL);
-
       if (g_file_test (configure_path, G_FILE_TEST_IS_REGULAR))
         return TRUE;
     }
 
-  autogen_sh_path = g_build_filename (state->project_path,
-                                      "autogen.sh",
-                                      NULL);
-
+  autogen_sh_path = g_build_filename (state->project_path, "autogen.sh", NULL);
   if (!g_file_test (autogen_sh_path, G_FILE_TEST_EXISTS))
     {
       g_task_return_new_error (task,
@@ -793,12 +793,13 @@ step_autogen (GTask                 *task,
       return FALSE;
     }
 
-  if (!g_file_test (configure_path, G_FILE_TEST_IS_REGULAR))
+  if (!g_file_test (configure_path, G_FILE_TEST_IS_EXECUTABLE))
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_FAILED,
-                               _("autogen.sh failed to create configure."));
+                               _("autogen.sh failed to create configure (%s)"),
+                               configure_path);
       return FALSE;
     }
 
