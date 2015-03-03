@@ -25,6 +25,7 @@
 #include "ide-buffer-manager.h"
 #include "ide-build-system.h"
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-device-manager.h"
 #include "ide-global.h"
 #include "ide-internal.h"
@@ -1183,4 +1184,79 @@ async_initable_init (GAsyncInitableIface *iface)
 {
   iface->init_async = ide_context_init_async;
   iface->init_finish = ide_context_init_finish;
+}
+
+static void
+ide_context_unload__unsaved_files_save_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
+{
+  IdeUnsavedFiles *unsaved_files = (IdeUnsavedFiles *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  if (!ide_unsaved_files_save_finish (unsaved_files, result, &error))
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_task_return_boolean (task, TRUE);
+}
+
+/**
+ * ide_context_unload_async:
+ *
+ * This function attempts to unload various components in the #IdeContext. This should be called
+ * before you dispose the context. Unsaved buffers will be persisted to the drafts directory.
+ * More operations may be added in the future.
+ */
+void
+ide_context_unload_async (IdeContext          *self,
+                          GCancellable        *cancellable,
+                          GAsyncReadyCallback  callback,
+                          gpointer             user_data)
+{
+  IdeUnsavedFiles *unsaved_files;
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  unsaved_files = ide_context_get_unsaved_files (self);
+
+  ide_unsaved_files_save_async (unsaved_files,
+                                cancellable,
+                                ide_context_unload__unsaved_files_save_cb,
+                                g_object_ref (task));
+
+  /*
+   * TODO:
+   *
+   * Detach devices?
+   * Anything else?
+   */
+
+  IDE_EXIT;
+}
+
+gboolean
+ide_context_unload_finish (IdeContext    *self,
+                           GAsyncResult  *result,
+                           GError       **error)
+{
+  GTask *task = (GTask *)result;
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), FALSE);
+
+  ret = g_task_propagate_boolean (task, error);
+
+  IDE_RETURN (ret);
 }

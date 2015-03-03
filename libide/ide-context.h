@@ -43,6 +43,13 @@ IdeVcs                   *ide_context_get_vcs               (IdeContext         
 const gchar              *ide_context_get_root_build_dir    (IdeContext           *self);
 gpointer                  ide_context_get_service_typed     (IdeContext           *self,
                                                              GType                 service_type);
+void                      ide_context_unload_async          (IdeContext           *self,
+                                                             GCancellable         *cancellable,
+                                                             GAsyncReadyCallback   callback,
+                                                             gpointer              user_data);
+gboolean                  ide_context_unload_finish         (IdeContext           *self,
+                                                             GAsyncResult         *result,
+                                                             GError              **error);
 void                      ide_context_new_async             (GFile                *project_file,
                                                              GCancellable         *cancellable,
                                                              GAsyncReadyCallback   callback,
