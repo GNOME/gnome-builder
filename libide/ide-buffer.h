@@ -49,20 +49,20 @@ typedef enum
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeBuffer, g_object_unref)
 
-GType               ide_buffer_line_flags_get_type       (void);
-GType               ide_buffer_get_type                  (void);
-IdeContext         *ide_buffer_get_context               (IdeBuffer         *self);
-IdeFile            *ide_buffer_get_file                  (IdeBuffer         *self);
-void                ide_buffer_set_file                  (IdeBuffer         *self,
-                                                          IdeFile           *file);
-gboolean            ide_buffer_get_highlight_diagnostics (IdeBuffer         *self);
-void                ide_buffer_set_highlight_diagnostics (IdeBuffer         *self,
-                                                          gboolean           highlight_diagnostics);
-IdeBufferLineFlags  ide_buffer_get_line_flags            (IdeBuffer         *buffer,
-                                                          guint              line);
 GBytes             *ide_buffer_get_content               (IdeBuffer         *self);
+IdeContext         *ide_buffer_get_context               (IdeBuffer         *self);
 IdeDiagnostic      *ide_buffer_get_diagnostic_at_iter    (IdeBuffer         *self,
                                                           const GtkTextIter *iter);
+IdeFile            *ide_buffer_get_file                  (IdeBuffer         *self);
+IdeBufferLineFlags  ide_buffer_get_line_flags            (IdeBuffer         *buffer,
+                                                          guint              line);
+gboolean            ide_buffer_get_highlight_diagnostics (IdeBuffer         *self);
+GType               ide_buffer_get_type                  (void);
+GType               ide_buffer_line_flags_get_type       (void);
+void                ide_buffer_set_file                  (IdeBuffer         *self,
+                                                          IdeFile           *file);
+void                ide_buffer_set_highlight_diagnostics (IdeBuffer         *self,
+                                                          gboolean           highlight_diagnostics);
 void                ide_buffer_trim_trailing_whitespace  (IdeBuffer         *self);
 
 G_END_DECLS
