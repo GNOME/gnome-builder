@@ -22,6 +22,7 @@
 
 static IdeContext *gContext;
 static const gchar *gFileName = "test.c";
+static GtkWindow *window;
 
 static void
 load_cb (GObject      *object,
@@ -48,6 +49,8 @@ load_cb (GObject      *object,
       gtk_main_quit ();
       return;
     }
+
+  g_object_bind_property (buffer, "title", window, "title", G_BINDING_SYNC_CREATE);
 
   ide_buffer_set_highlight_diagnostics (buffer, TRUE);
   gtk_source_buffer_set_style_scheme (GTK_SOURCE_BUFFER (buffer), style);
@@ -116,7 +119,6 @@ main (gint   argc,
   GFile *project_file;
   GtkScrolledWindow *scroller;
   IdeSourceView *source_view;
-  GtkWindow *window;
   GCancellable *cancellable;
   GError *error = NULL;
 
