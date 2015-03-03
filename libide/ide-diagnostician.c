@@ -103,7 +103,7 @@ diagnose_cb (GObject      *object,
 
 maybe_complete:
   if (state->total == 1 && error)
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_error_copy (error));
   else if (!state->active)
     g_task_return_pointer (task,
                            ide_diagnostics_ref (state->diagnostics),
