@@ -152,6 +152,7 @@ idedit__bufmgr_load_file_cb (GObject      *object,
     {
       GtkSourceStyleScheme *scheme;
       GtkSourceStyleSchemeManager *schememgr;
+      GtkTextIter begin;
 
       schememgr = gtk_source_style_scheme_manager_get_default ();
       scheme = gtk_source_style_scheme_manager_get_scheme (schememgr, "builder");
@@ -160,6 +161,8 @@ idedit__bufmgr_load_file_cb (GObject      *object,
       ide_buffer_set_highlight_diagnostics (buf, TRUE);
 
       gtk_widget_set_sensitive (view, TRUE);
+      gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buf), &begin);
+      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buf), &begin, &begin);
       gtk_widget_grab_focus (view);
     }
 }
@@ -385,7 +388,14 @@ parsing_error_cb (GtkCssProvider *provider,
                   GError         *error,
                   gpointer        user_data)
 {
-  g_printerr ("CSS Parsing Error: %s\n", error->message);
+  guint begin;
+  guint end;
+
+  begin = gtk_css_section_get_start_line (section);
+  end = gtk_css_section_get_end_line (section);
+
+  g_printerr ("CSS parsing error between lines %u and %u: %s\n",
+              begin, end, error->message);
 }
 
 static void
@@ -410,11 +420,13 @@ main (int argc,
   g_autoptr(GFile) project_dir = NULL;
   GError *error = NULL;
   gboolean emacs = FALSE;
+  gboolean vim = FALSE;
   gsize i;
   const GOptionEntry entries[] = {
     { "verbose", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
       increase_verbosity, N_("Increase logging verbosity.") },
     { "emacs", 'e', 0, G_OPTION_ARG_NONE, &emacs, N_("Use emacs keybindings") },
+    { "vim", 'm', 0, G_OPTION_ARG_NONE, &vim, N_("Use Vim keybindings") },
     { NULL }
   };
 
@@ -447,8 +459,17 @@ main (int argc,
                          idedit__context_new_cb,
                          NULL);
 
+  if (emacs && vim)
+    {
+      g_printerr ("You're crazy, you can't have both emacs and vim!\n");
+      return EXIT_FAILURE;
+    }
+
   if (emacs)
     load_css_resource ("/org/gnome/libide/keybindings/emacs.css");
+
+  if (vim)
+    load_css_resource ("/org/gnome/libide/keybindings/vim.css");
 
   gtk_main ();
 
