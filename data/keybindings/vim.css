@@ -98,6 +98,10 @@
   bind "u" { "undo" () };
   bind "<ctrl>R" { "redo" () };
 
+  /* overwrite */
+  bind "<shift>r" { "set-mode" ("vim-insert", permanent)
+                    "set-overwrite" (1) };
+
   /* delete */
   bind "x" { "movement" (next-char, 1)
              "copy-clipboard" ()
