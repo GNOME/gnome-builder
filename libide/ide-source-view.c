@@ -1741,58 +1741,63 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                     G_TYPE_STRING,
                                     G_TYPE_STRING);
 
-  gSignals [JUMP] = g_signal_new ("jump",
-                                  G_TYPE_FROM_CLASS (klass),
-                                  G_SIGNAL_RUN_LAST,
-                                  G_STRUCT_OFFSET (IdeSourceViewClass, jump),
-                                  NULL, NULL,
-                                  g_cclosure_marshal_VOID__BOXED,
-                                  G_TYPE_NONE,
-                                  1,
-                                  GTK_TYPE_TEXT_ITER);
+  gSignals [JUMP] =
+    g_signal_new ("jump",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, jump),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__BOXED,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_TEXT_ITER);
 
-  gSignals [MOVEMENT] = g_signal_new ("movement",
-                                      G_TYPE_FROM_CLASS (klass),
-                                      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                                      G_STRUCT_OFFSET (IdeSourceViewClass, movement),
-                                      NULL, NULL,
-                                      g_cclosure_marshal_generic,
-                                      G_TYPE_NONE,
-                                      2,
-                                      IDE_TYPE_SOURCE_VIEW_MOVEMENT,
-                                      G_TYPE_BOOLEAN);
+  gSignals [MOVEMENT] =
+    g_signal_new ("movement",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, movement),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  2,
+                  IDE_TYPE_SOURCE_VIEW_MOVEMENT,
+                  G_TYPE_BOOLEAN);
 
-  gSignals [SET_MODE] = g_signal_new ("set-mode",
-                                      G_TYPE_FROM_CLASS (klass),
-                                      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                                      G_STRUCT_OFFSET (IdeSourceViewClass, set_mode),
-                                      NULL, NULL,
-                                      g_cclosure_marshal_generic,
-                                      G_TYPE_NONE,
-                                      2,
-                                      G_TYPE_STRING,
-                                      IDE_TYPE_SOURCE_VIEW_MODE_TYPE);
+  gSignals [SET_MODE] =
+    g_signal_new ("set-mode",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, set_mode),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_STRING,
+                  IDE_TYPE_SOURCE_VIEW_MODE_TYPE);
 
-  gSignals [POP_SNIPPET] = g_signal_new ("pop-snippet",
-                                         G_TYPE_FROM_CLASS (klass),
-                                         G_SIGNAL_RUN_LAST,
-                                         G_STRUCT_OFFSET (IdeSourceViewClass, pop_snippet),
-                                         NULL, NULL,
-                                         g_cclosure_marshal_VOID__OBJECT,
-                                         G_TYPE_NONE,
-                                         1,
-                                         IDE_TYPE_SOURCE_SNIPPET);
+  gSignals [POP_SNIPPET] =
+    g_signal_new ("pop-snippet",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, pop_snippet),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_SOURCE_SNIPPET);
 
-  gSignals [PUSH_SNIPPET] = g_signal_new ("push-snippet",
-                                          G_TYPE_FROM_CLASS (klass),
-                                          G_SIGNAL_RUN_LAST,
-                                          G_STRUCT_OFFSET (IdeSourceViewClass, push_snippet),
-                                          NULL, NULL, NULL,
-                                          G_TYPE_NONE,
-                                          3,
-                                          IDE_TYPE_SOURCE_SNIPPET,
-                                          IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
-                                          GTK_TYPE_TEXT_ITER);
+  gSignals [PUSH_SNIPPET] =
+    g_signal_new ("push-snippet",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, push_snippet),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  3,
+                  IDE_TYPE_SOURCE_SNIPPET,
+                  IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
+                  GTK_TYPE_TEXT_ITER);
 }
 
 static void
