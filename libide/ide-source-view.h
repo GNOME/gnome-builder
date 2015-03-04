@@ -162,6 +162,7 @@ struct _IdeSourceViewClass
                                        const gchar             *prefix,
                                        const gchar             *action_name,
                                        const gchar             *param);
+  void (*clear_selection)             (IdeSourceView           *self);
   void (*insert_at_cursor_and_indent) (IdeSourceView           *self,
                                        const gchar             *str);
   void (*movement)                    (IdeSourceView           *self,

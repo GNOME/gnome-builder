@@ -103,6 +103,7 @@ enum {
 
 enum {
   ACTION,
+  CLEAR_SELECTION,
   INSERT_AT_CURSOR_AND_INDENT,
   JUMP,
   MOVEMENT,
@@ -1452,6 +1453,23 @@ ide_source_view_real_action (IdeSourceView *self,
 }
 
 static void
+ide_source_view_real_clear_selection (IdeSourceView *self)
+{
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+
+  buffer = gtk_text_view_get_buffer (text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+  gtk_text_view_scroll_mark_onscreen (text_view, insert);
+}
+
+static void
 ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
                                                   const gchar   *str)
 {
@@ -1792,6 +1810,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->query_tooltip = ide_source_view_query_tooltip;
 
   klass->action = ide_source_view_real_action;
+  klass->clear_selection = ide_source_view_real_clear_selection;
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
   klass->jump = ide_source_view_real_jump;
   klass->movement = ide_source_view_real_movement;
@@ -1874,6 +1893,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                     G_TYPE_STRING,
                                     G_TYPE_STRING,
                                     G_TYPE_STRING);
+
+  gSignals [CLEAR_SELECTION] =
+    g_signal_new ("clear-selection",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, clear_selection),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   gSignals [INSERT_AT_CURSOR_AND_INDENT] =
     g_signal_new ("insert-at-cursor-and-indent",
