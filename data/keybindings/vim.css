@@ -24,12 +24,12 @@
   /* insert line after current, insert mode */
   bind "o" { "set-mode" ("vim-insert", permanent)
              "movement" (last-char, 0)
-             "insert-at-cursor" ("\n") };
+             "insert-at-cursor-and-indent" ("\n") };
 
   /* insert line before current */
   bind "<shift>o" { "set-mode" ("vim-insert", permanent)
                     "movement" (first-char, 0)
-                    "insert-at-cursor" ("\n")
+                    "insert-at-cursor-and-indent" ("\n")
                     "move-cursor" (display-lines, -1, 0) };
 
   /* swallow the current character and go to insert */
