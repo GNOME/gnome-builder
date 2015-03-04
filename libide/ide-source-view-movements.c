@@ -491,6 +491,37 @@ ide_source_view_movements_match_special (IdeSourceView         *self,
     ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
 
+static void
+ide_source_view_movements_scroll_center (IdeSourceView         *self,
+                                         IdeSourceViewMovement  movement,
+                                         gboolean               extend_selection,
+                                         gint                   param)
+{
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  switch ((int)movement)
+    {
+    case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM:
+      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 0.5, 1.0);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP:
+      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 0.5, 0.0);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER:
+      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 0.5, 0.5);
+      break;
+
+    default:
+      break;
+    }
+}
+
 void
 _ide_source_view_apply_movement (IdeSourceView         *self,
                                  IdeSourceViewMovement  movement,
@@ -619,6 +650,12 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
     case IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL:
       ide_source_view_movements_match_special (self, movement, extend_selection, param);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP:
+    case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER:
+    case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM:
+      ide_source_view_movements_scroll_center (self, movement, extend_selection, param);
       break;
 
     default:

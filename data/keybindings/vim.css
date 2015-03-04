@@ -60,6 +60,7 @@
   /* screen movements, keeping cursor locked to visible region */
   bind "<ctrl>e" { "movement" (screen-up, 0) };
   bind "<ctrl>y" { "movement" (screen-down, 0) };
+  bind "z" { "set-mode" ("vim-normal-z", transient) };
 
   /* move by paragraph */
   bind "bracketleft" { "movement" (previous-paragraph, 0) };
@@ -111,6 +112,13 @@
              "set-mode" ("vim-visual") };
   bind "<shift>v" { "set-mode" ("vim-visual-line") };
   bind "<ctrl>v" { "set-mode" ("vim-visual-block") };
+}
+
+@binding-set builder-vim-source-view-normal-z
+{
+  bind "z" { "movement" (scroll-screen-center, 0) };
+  bind "t" { "movement" (scroll-screen-top, 0) };
+  bind "b" { "movement" (scroll-screen-bottom, 0) };
 }
 
 @binding-set builder-vim-source-view-normal-y
@@ -166,6 +174,11 @@ IdeSourceViewMode.vim-normal-g {
 IdeSourceViewMode.vim-normal-y {
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal-y;
+}
+
+IdeSourceViewMode.vim-normal-z {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-z;
 }
 
 IdeSourceViewMode.vim-insert {

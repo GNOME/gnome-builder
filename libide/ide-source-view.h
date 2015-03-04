@@ -89,6 +89,9 @@ typedef enum
  * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_MIDDLE: move to the middle of the screen.
  * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM: move to the bottom of the screen.
  * @IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL: move to match of brace, bracket, comment.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP: scroll until insert cursor is at screen top.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER: scroll until insert cursor is at screen center.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM: scroll until insert cursor is at screen bottom.
  *
  * The type of movement.
  *
@@ -138,6 +141,10 @@ typedef enum
   IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM,
 
   IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL,
+
+  IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP,
+  IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER,
+  IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM,
 } IdeSourceViewMovement;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceView, g_object_unref)
