@@ -351,10 +351,7 @@ ide_source_view_movements_next_line (IdeSourceView         *self,
     return;
 
   if (is_single_line_selection (&insert, &selection))
-    {
-      IDE_TRACE_MSG ("single line, swap\n");
     gtk_text_iter_order (&selection, &insert);
-    }
 
   gtk_text_iter_forward_line (&insert);
   if (!gtk_text_iter_ends_line (&insert))
