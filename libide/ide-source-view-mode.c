@@ -187,13 +187,12 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (mode));
 
+  g_object_ref (context);
   gtk_style_context_save (context);
-
   gtk_style_context_add_class (context, priv->name);
-
   handled = gtk_bindings_activate_event (G_OBJECT (mode), event);
-
   gtk_style_context_restore (context);
+  g_object_unref (context);
 
   *remove = FALSE;
   switch (priv->type)
