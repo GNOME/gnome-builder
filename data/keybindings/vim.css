@@ -1,7 +1,9 @@
 @binding-set builder-vim-source-view
 {
-  bind "Escape" { "set-mode" ("vim-normal", permanent) };
-  bind "<ctrl>bracketleft" { "set-mode" ("vim-normal", permanent) };
+  bind "Escape" { "set-overwrite" (0)
+                  "set-mode" ("vim-normal", permanent) };
+  bind "<ctrl>bracketleft" { "set-overwrite" (0)
+                             "set-mode" ("vim-normal", permanent) };
 }
 
 @binding-set builder-vim-source-view-normal
