@@ -105,9 +105,17 @@
  /* jump to sub-mode */
   bind "d" { "set-mode" ("vim-normal-d", transient) };
 
+  /* delete to end of line */
+  bind "<shift>d" { "movement" (last-char, 1)
+	            "copy-clipboard" ()
+		    "delete-from-cursor" (chars, 1) };
+
+  /* delete current char */
   bind "x" { "movement" (next-char, 1)
              "copy-clipboard" ()
              "delete-from-cursor" (chars, 1) };
+
+  /* delete previous char */
   bind "<shift>x" { "movement" (previous-char, 1)
                     "copy-clipboard" ()
                     "delete-from-cursor" (chars, 1) };
