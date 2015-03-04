@@ -1,8 +1,10 @@
 @binding-set builder-vim-source-view
 {
   bind "Escape" { "set-overwrite" (0)
+	          "clear-selection" ()
                   "set-mode" ("vim-normal", permanent) };
   bind "<ctrl>bracketleft" { "set-overwrite" (0)
+	                     "clear-selection" ()
                              "set-mode" ("vim-normal", permanent) };
 }
 
@@ -94,8 +96,11 @@
   /* move to nth line, defaults to last */
   bind "<shift>g" { "movement" (nth-line, 0) };
 
-  /* Undo & Redo */
-  bind "u" { "undo" () };
+  /* undo - todo: how do we land cursor on right spot? */
+  bind "u" { "undo" ()
+             "clear-selection" () };
+
+  /* redo */
   bind "<ctrl>r" { "redo" () };
 
   /* overwrite */
