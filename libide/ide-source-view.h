@@ -178,6 +178,8 @@ struct _IdeSourceViewClass
   void (*set_mode)                    (IdeSourceView           *self,
                                        const gchar             *mode,
                                        IdeSourceViewModeType    type);
+  void (*set_overwrite)               (IdeSourceView           *self,
+                                       gboolean                 overwrite);
 };
 
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);

@@ -109,6 +109,7 @@ enum {
   PUSH_SNIPPET,
   POP_SNIPPET,
   SET_MODE,
+  SET_OVERWRITE,
   LAST_SIGNAL
 };
 
@@ -1594,6 +1595,17 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
 }
 
 static void
+ide_source_view_real_set_overwrite (IdeSourceView *self,
+                                    gboolean       overwrite)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  IDE_TRACE_MSG ("Setting overwrite to %s", overwrite ? "TRUE" : "FALSE");
+
+  gtk_text_view_set_overwrite (GTK_TEXT_VIEW (self), overwrite);
+}
+
+static void
 ide_source_view_real_movement (IdeSourceView         *self,
                                IdeSourceViewMovement  movement,
                                gboolean               extend_selection)
@@ -1784,6 +1796,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->jump = ide_source_view_real_jump;
   klass->movement = ide_source_view_real_movement;
   klass->set_mode = ide_source_view_real_set_mode;
+  klass->set_overwrite = ide_source_view_real_set_overwrite;
 
   g_object_class_override_property (object_class, PROP_AUTO_INDENT, "auto-indent");
 
@@ -1930,6 +1943,17 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   2,
                   G_TYPE_STRING,
                   IDE_TYPE_SOURCE_VIEW_MODE_TYPE);
+
+  gSignals [SET_OVERWRITE] =
+    g_signal_new ("set-overwrite",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, set_overwrite),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_BOOLEAN);
 }
 
 static void
