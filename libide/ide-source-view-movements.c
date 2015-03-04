@@ -375,16 +375,14 @@ ide_source_view_movements_screen_bottom (IdeSourceView         *self,
 }
 
 static void
-ide_source_view_movements_scroll (IdeSourceView         *self,
-                                  IdeSourceViewMovement  movement,
-                                  gboolean               extend_selection,
-                                  gint                   param,
-                                  GtkDirectionType       dir)
+ide_source_view_movements_scroll_by_lines (IdeSourceView *self,
+                                           gint           lines)
 {
   GtkTextView *text_view = (GtkTextView *)self;
-  GtkTextMark *mark;
   GtkTextIter insert;
   GtkTextIter selection;
+  GtkTextIter begin;
+  GtkTextIter end;
   GtkAdjustment *vadj;
   GtkTextBuffer *buffer;
   GdkRectangle rect;
@@ -392,27 +390,131 @@ ide_source_view_movements_scroll (IdeSourceView         *self,
   gdouble value;
   gdouble upper;
 
-  param = MAX (1, param);
+  if (lines == 0)
+    return;
 
   vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self));
   buffer = gtk_text_view_get_buffer (text_view);
 
+  gtk_text_buffer_get_bounds (buffer, &begin, &end);
+
   ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  if (lines > 0)
+    {
+      if (gtk_text_iter_get_line (&end) == gtk_text_iter_get_line (&insert))
+        return;
+    }
+  else if (lines < 0)
+    {
+      if (gtk_text_iter_get_line (&begin) == gtk_text_iter_get_line (&insert))
+        return;
+    }
+  else
+    g_assert_not_reached ();
 
   gtk_text_view_get_iter_location (text_view, &insert, &rect);
 
-  amount = param * ((dir == GTK_DIR_UP) ? rect.height : -rect.height);
+  amount = lines * rect.height;
 
   value = gtk_adjustment_get_value (vadj);
   upper = gtk_adjustment_get_upper (vadj);
   gtk_adjustment_set_value (vadj, CLAMP (value + amount, 0, upper));
+}
 
+static void
+ide_source_view_movements_scroll (IdeSourceView         *self,
+                                  IdeSourceViewMovement  movement,
+                                  gboolean               extend_selection,
+                                  gint                   param,
+                                  GtkDirectionType       dir)
+{
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextBuffer *buffer;
+  GtkTextMark *mark;
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  param = MAX (1, param);
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  ide_source_view_movements_scroll_by_lines (self, (dir == GTK_DIR_UP) ? param : -param);
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   mark = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_move_mark_onscreen (text_view, mark);
 
   gtk_text_buffer_get_iter_at_mark (buffer, &insert, mark);
 
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+}
+
+static void
+ide_source_view_movements_move_page (IdeSourceView         *self,
+                                     IdeSourceViewMovement  movement,
+                                     gboolean               extend_selection,
+                                     gint                   param)
+{
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextBuffer *buffer;
+  GdkRectangle rect;
+  GtkTextIter iter_top;
+  GtkTextIter iter_bottom;
+  GtkTextIter iter_current;
+  GtkTextIter insert;
+  GtkTextIter selection;
+  gint half_page;
+  gint line_top;
+  gint line_bottom;
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  gtk_text_view_get_visible_rect (text_view, &rect);
+  gtk_text_view_get_iter_at_location (text_view, &iter_top, rect.x, rect.y);
+  gtk_text_view_get_iter_at_location (text_view, &iter_bottom, rect.x, rect.y + rect.height);
+
+  buffer = gtk_text_view_get_buffer (text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &iter_current, NULL);
+
+  line_top = gtk_text_iter_get_line (&iter_top);
+  line_bottom = gtk_text_iter_get_line (&iter_bottom);
+
+  half_page = (line_bottom - line_top) / 2;
+
+  /*
+   * TODO: Reintroduce scroll offset.
+   */
+
+  switch ((int)movement)
+    {
+    case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP:
+      ide_source_view_movements_scroll_by_lines (self, -half_page);
+      gtk_text_iter_backward_lines (&insert, half_page);
+      ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN:
+      ide_source_view_movements_scroll_by_lines (self, half_page);
+      gtk_text_iter_forward_lines (&insert, half_page);
+      ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP:
+      gtk_text_buffer_get_iter_at_line (buffer, &insert, MAX (0, line_top - 1));
+      ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+      gtk_text_view_scroll_to_iter (text_view, &insert, .0, TRUE, .0, 1.0);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN:
+      gtk_text_buffer_get_iter_at_line (buffer, &insert, line_bottom + 1);
+      ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+      gtk_text_view_scroll_to_iter (text_view, &insert, .0, TRUE, .0, .0);
+      break;
+
+    default:
+      g_assert_not_reached();
+    }
 }
 
 static gboolean
@@ -506,15 +608,15 @@ ide_source_view_movements_scroll_center (IdeSourceView         *self,
   switch ((int)movement)
     {
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM:
-      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 0.5, 1.0);
+      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 0.0, 1.0);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP:
-      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 0.5, 0.0);
+      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 0.0, 0.0);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER:
-      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 0.5, 0.5);
+      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 0.0, 0.5);
       break;
 
     default:
@@ -617,15 +719,10 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP:
-      break;
-
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN:
-      break;
-
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP:
-      break;
-
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN:
+      ide_source_view_movements_move_page (self, movement, extend_selection, param);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP:

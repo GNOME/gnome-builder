@@ -56,6 +56,8 @@
   /* page movements */
   bind "<ctrl>b" { "movement" (page-up, 0) };
   bind "<ctrl>f" { "movement" (page-down, 0) };
+  bind "<ctrl>u" { "movement" (half-page-up, 0) };
+  bind "<ctrl>d" { "movement" (half-page-down, 0) };
 
   /* screen movements, keeping cursor locked to visible region */
   bind "<ctrl>e" { "movement" (screen-up, 0) };
