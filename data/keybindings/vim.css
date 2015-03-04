@@ -136,8 +136,10 @@
   /* visual mode transition */
   bind "v" { "movement" (next-char, 1)
              "set-mode" ("vim-visual") };
-  bind "<shift>v" { "set-mode" ("vim-visual-line") };
-  bind "<ctrl>v" { "set-mode" ("vim-visual-block") };
+  bind "<shift>v" { "movement" (first-char, 0)
+                    "movement" (last-char, 1)
+                    "set-mode" ("vim-visual-line", permanent) };
+  bind "<ctrl>v" { "set-mode" ("vim-visual-block", permanent) };
 }
 
 @binding-set builder-vim-source-view-normal-d
@@ -184,6 +186,8 @@
 
 @binding-set builder-vim-source-view-visual-line
 {
+  bind "j" { "movement" (next-line, 1) };
+  bind "k" { "movement" (previous-line, 1) };
 }
 
 @binding-set builder-vim-source-view-visual-block
