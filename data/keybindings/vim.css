@@ -1,10 +1,10 @@
 @binding-set builder-vim-source-view
 {
   bind "Escape" { "set-overwrite" (0)
-	          "clear-selection" ()
+                  "clear-selection" ()
                   "set-mode" ("vim-normal", permanent) };
   bind "<ctrl>bracketleft" { "set-overwrite" (0)
-	                     "clear-selection" ()
+                             "clear-selection" ()
                              "set-mode" ("vim-normal", permanent) };
 }
 
@@ -143,7 +143,7 @@
 @binding-set builder-vim-source-view-normal-d
 {
   bind "d" { "movement" (first-char, 0)
-	     "movement" (last-char, 1)
+             "movement" (last-char, 1)
              "move-cursor" (visual-positions, 1, 1)
              "copy-clipboard" ()
              "delete-from-cursor" (chars, 1) };
