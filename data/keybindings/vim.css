@@ -188,6 +188,22 @@
 {
   bind "j" { "movement" (next-line, 1) };
   bind "k" { "movement" (previous-line, 1) };
+
+  bind "x"        { "copy-clipboard" ()
+                    "delete-from-cursor" (chars, 1)
+                    "delete-from-cursor" (chars, 1)
+                    "set-mode" ("vim-normal", permanent) };
+  bind "<shift>x" { "copy-clipboard" ()
+                    "delete-from-cursor" (chars, 1)
+                    "delete-from-cursor" (chars, 1)
+                    "set-mode" ("vim-normal", permanent) };
+
+  bind "y"        { "copy-clipboard" ()
+                    "clear-selection" ()
+                    "set-mode" ("vim-normal", permanent) };
+  bind "<shift>y" { "copy-clipboard" ()
+                    "clear-selection" ()
+                    "set-mode" ("vim-normal", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-block
