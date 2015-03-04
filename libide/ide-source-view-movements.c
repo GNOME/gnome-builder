@@ -608,15 +608,15 @@ ide_source_view_movements_scroll_center (IdeSourceView         *self,
   switch ((int)movement)
     {
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM:
-      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 0.0, 1.0);
+      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 1.0, 1.0);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP:
-      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 0.0, 0.0);
+      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 1.0, 0.0);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER:
-      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 0.0, 0.5);
+      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 1.0, 0.5);
       break;
 
     default:
