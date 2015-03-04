@@ -16,6 +16,8 @@
   /* insert after cursor */
   bind "a" { "set-mode" ("vim-insert", permanent)
              "movement" (next-char, 0) };
+  bind "<shift>a" { "set-mode" ("vim-insert", permanent)
+                    "movement" (last-char, 0) };
 
   /* insert at first non-whitespace character */
   bind "<shift>i" { "set-mode" ("vim-insert", permanent)
@@ -142,10 +144,6 @@
              "set-mode" ("vim-normal", permanent) };
 }
 
-@binding-set builder-vim-source-view-normal-number
-{
-}
-
 @binding-set builder-vim-source-view-insert
 {
 }
@@ -162,16 +160,15 @@
 {
 }
 
-IdeSourceView {
-  gtk-key-bindings: builder-vim-source-view;
-}
-
+IdeSourceViewMode.default,
 IdeSourceViewMode.vim-normal {
-  gtk-key-bindings: builder-vim-source-view, builder-vim-source-view-normal;
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal;
 }
 
 IdeSourceViewMode.vim-normal-g {
-  gtk-key-bindings: builder-vim-source-view, builder-vim-source-view-normal-g;
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-g;
 }
 
 IdeSourceViewMode.vim-normal-y {
@@ -185,9 +182,20 @@ IdeSourceViewMode.vim-normal-z {
 }
 
 IdeSourceViewMode.vim-insert {
-  gtk-key-bindings: builder-vim-source-view, builder-vim-source-view-insert;
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-insert;
 }
 
 IdeSourceViewMode.vim-visual {
-  gtk-key-bindings: builder-vim-source-view, builder-vim-source-view-visual;
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-visual;
+}
+
+IdeSourceViewMode.vim-visual-line {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-visual-line;
+}
+
+IdeSourceViewMode.vim-visual-block {
+  gtk-key-bindings: builder-vim-source-view, builder-vim-source-view-visual-block;
 }
