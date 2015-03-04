@@ -158,24 +158,24 @@ struct _IdeSourceViewClass
 {
   GtkSourceViewClass parent_class;
 
-  void (*action)         (IdeSourceView           *self,
-                          const gchar             *prefix,
-                          const gchar             *action_name,
-                          const gchar             *param);
-  void (*movement)       (IdeSourceView           *self,
-                          IdeSourceViewMovement    movement,
-                          gboolean                 extend_selection);
-  void (*jump)           (IdeSourceView           *self,
-                          const GtkTextIter       *location);
-  void (*pop_snippet)    (IdeSourceView           *self,
-                          IdeSourceSnippet        *snippet);
-  void (*push_snippet)   (IdeSourceView           *self,
-                          IdeSourceSnippet        *snippet,
-                          IdeSourceSnippetContext *context,
-                          const GtkTextIter       *location);
-  void (*set_mode)       (IdeSourceView           *self,
-                          const gchar             *mode,
-                          IdeSourceViewModeType    type);
+  void (*action)                      (IdeSourceView           *self,
+                                       const gchar             *prefix,
+                                       const gchar             *action_name,
+                                       const gchar             *param);
+  void (*movement)                    (IdeSourceView           *self,
+                                       IdeSourceViewMovement    movement,
+                                       gboolean                 extend_selection);
+  void (*jump)                        (IdeSourceView           *self,
+                                       const GtkTextIter       *location);
+  void (*pop_snippet)                 (IdeSourceView           *self,
+                                       IdeSourceSnippet        *snippet);
+  void (*push_snippet)                (IdeSourceView           *self,
+                                       IdeSourceSnippet        *snippet,
+                                       IdeSourceSnippetContext *context,
+                                       const GtkTextIter       *location);
+  void (*set_mode)                    (IdeSourceView           *self,
+                                       const gchar             *mode,
+                                       IdeSourceViewModeType    type);
 };
 
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);
