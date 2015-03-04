@@ -213,9 +213,11 @@ ide_source_view_movements_last_char (IdeSourceView         *self,
 
   ide_source_view_movements_get_selection (self, &insert, &selection);
 
-  gtk_text_iter_forward_to_line_end (&insert);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  if (!gtk_text_iter_ends_line (&insert))
+    {
+      gtk_text_iter_forward_to_line_end (&insert);
+      ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+    }
 }
 
 static void
