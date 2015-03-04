@@ -22,6 +22,13 @@
 #include "ide-enums.h"
 #include "ide-source-view-movements.h"
 
+typedef struct
+{
+  gunichar jump_to;
+  gunichar jump_from;
+  guint    depth;
+} MatchingBracketState;
+
 static void
 ide_source_view_movements_get_selection (IdeSourceView *self,
                                          GtkTextIter   *insert,
@@ -408,6 +415,82 @@ ide_source_view_movements_scroll (IdeSourceView         *self,
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
 
+static gboolean
+bracket_predicate (gunichar ch,
+                   gpointer user_data)
+{
+  MatchingBracketState *state = user_data;
+
+  if (ch == state->jump_from)
+    state->depth++;
+  else if (ch == state->jump_to)
+    state->depth--;
+
+  return (state->depth == 0);
+}
+
+static void
+ide_source_view_movements_match_special (IdeSourceView         *self,
+                                         IdeSourceViewMovement  movement,
+                                         gboolean               extend_selection,
+                                         gint                   param)
+{
+  MatchingBracketState state;
+  GtkTextIter insert;
+  GtkTextIter selection;
+  gboolean is_forward = FALSE;
+  gboolean ret;
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  state.depth = 1;
+  state.jump_from = gtk_text_iter_get_char (&insert);
+
+  switch (state.jump_from)
+    {
+    case '{':
+      state.jump_to = '}';
+      is_forward = TRUE;
+      break;
+
+    case '[':
+      state.jump_to = ']';
+      is_forward = TRUE;
+      break;
+
+    case '(':
+      state.jump_to = ')';
+      is_forward = TRUE;
+      break;
+
+    case '}':
+      state.jump_to = '{';
+      is_forward = FALSE;
+      break;
+
+    case ']':
+      state.jump_to = '[';
+      is_forward = FALSE;
+      break;
+
+    case ')':
+      state.jump_to = '(';
+      is_forward = FALSE;
+      break;
+
+    default:
+      return;
+    }
+
+  if (is_forward)
+    ret = gtk_text_iter_forward_find_char (&insert, bracket_predicate, &state, NULL);
+  else
+    ret = gtk_text_iter_backward_find_char (&insert, bracket_predicate, &state, NULL);
+
+  if (ret)
+    ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+}
+
 void
 _ide_source_view_apply_movement (IdeSourceView         *self,
                                  IdeSourceViewMovement  movement,
@@ -535,6 +618,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL:
+      ide_source_view_movements_match_special (self, movement, extend_selection, param);
       break;
 
     default:
