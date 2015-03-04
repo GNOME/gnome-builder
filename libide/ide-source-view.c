@@ -103,6 +103,7 @@ enum {
 
 enum {
   ACTION,
+  INSERT_AT_CURSOR_AND_INDENT,
   JUMP,
   MOVEMENT,
   PUSH_SNIPPET,
@@ -1431,6 +1432,84 @@ ide_source_view_real_action (IdeSourceView *self,
 }
 
 static void
+ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
+                                                  const gchar   *str)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextBuffer *buffer;
+  GdkEvent fake_event = { 0 };
+  GString *gstr;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (str);
+
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  /*
+   * Ignore if there is nothing to do.
+   */
+  if (g_utf8_strlen (str, -1) == 0)
+    IDE_EXIT;
+
+  /*
+   * If we do not have an indenter registered, just go ahead and insert text.
+   */
+  if (!priv->auto_indent || !priv->indenter)
+    {
+      g_signal_emit_by_name (self, "insert-at-cursor", str);
+      IDE_EXIT;
+    }
+
+  gtk_text_buffer_begin_user_action (buffer);
+
+  /*
+   * insert all but last character at once.
+   */
+  gstr = g_string_new (NULL);
+  for (; *str && *g_utf8_next_char (str); str = g_utf8_next_char (str))
+    g_string_append_unichar (gstr, g_utf8_get_char (str));
+  if (gstr->len)
+    g_signal_emit_by_name (self, "insert-at-cursor", gstr->str);
+  g_string_free (gstr, TRUE);
+
+  /*
+   * Sanity check.
+   */
+  g_assert (str != NULL);
+  g_assert (*str != '\0');
+
+  /*
+   * Now insert the last character (presumably something like \n) with a
+   * synthesized event that the indenter can deal with.
+   */
+  fake_event.key.type = GDK_KEY_PRESS;
+  fake_event.key.window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
+  fake_event.key.send_event = FALSE;
+  fake_event.key.time = GDK_CURRENT_TIME;
+  fake_event.key.state = 0;
+  fake_event.key.length = 1;
+  fake_event.key.string = (gchar *)str;
+  fake_event.key.hardware_keycode = 0;
+  fake_event.key.group = 0;
+  fake_event.key.is_modifier = 0;
+
+  /* Be nice during the common case */
+  if (*str == '\n')
+    fake_event.key.keyval = GDK_KEY_KP_Enter;
+  else
+    fake_event.key.keyval = gdk_unicode_to_keyval (g_utf8_get_char (str));
+
+  ide_source_view_do_indent (self, &fake_event.key);
+
+  gtk_text_buffer_end_user_action (buffer);
+
+  IDE_EXIT;
+}
+
+static void
 ide_source_view_real_jump (IdeSourceView     *self,
                            const GtkTextIter *location)
 {
@@ -1674,6 +1753,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->query_tooltip = ide_source_view_query_tooltip;
 
   klass->action = ide_source_view_real_action;
+  klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
   klass->jump = ide_source_view_real_jump;
   klass->movement = ide_source_view_real_movement;
   klass->set_mode = ide_source_view_real_set_mode;
@@ -1754,6 +1834,17 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                     G_TYPE_STRING,
                                     G_TYPE_STRING,
                                     G_TYPE_STRING);
+
+  gSignals [INSERT_AT_CURSOR_AND_INDENT] =
+    g_signal_new ("insert-at-cursor-and-indent",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, insert_at_cursor_and_indent),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__STRING,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_STRING);
 
   gSignals [JUMP] =
     g_signal_new ("jump",
