@@ -96,7 +96,7 @@
 
   /* Undo & Redo */
   bind "u" { "undo" () };
-  bind "<ctrl>R" { "redo" () };
+  bind "<ctrl>r" { "redo" () };
 
   /* overwrite */
   bind "<shift>r" { "set-mode" ("vim-insert", permanent)
