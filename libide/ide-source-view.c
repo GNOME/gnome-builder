@@ -1194,11 +1194,14 @@ ide_source_view_key_press_event (GtkWidget   *widget,
 
 #ifndef IDE_DISABLE_TRACE
       {
+        gunichar ch = 0;
         gchar *name = NULL;
 
         g_object_get (priv->mode, "name", &name, NULL);
+        if (event->string)
+          ch = g_utf8_get_char (event->string);
         IDE_TRACE_MSG ("dispatching to mode \"%s\": (%s)",
-                       name, event->string ?: "");
+                       name, g_unichar_isprint (ch) ? event->string : "");
         g_free (name);
       }
 #endif
