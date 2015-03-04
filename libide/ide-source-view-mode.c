@@ -32,6 +32,14 @@ typedef struct
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceViewMode, ide_source_view_mode, GTK_TYPE_WIDGET)
 
+enum {
+  PROP_0,
+  PROP_NAME,
+  LAST_PROP
+};
+
+static GParamSpec *gParamSpecs [LAST_PROP];
+
 static void
 ide_source_view_mode_finalize (GObject *object)
 {
@@ -99,6 +107,35 @@ proxy_all_action_signals (GType type)
     }
 }
 
+const gchar *
+ide_source_view_mode_get_name (IdeSourceViewMode *mode)
+{
+  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (mode);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW_MODE (mode), NULL);
+
+  return priv->name;
+}
+
+static void
+ide_source_view_mode_get_property (GObject    *object,
+                                   guint       prop_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
+{
+  IdeSourceViewMode *mode = IDE_SOURCE_VIEW_MODE(object);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      g_value_set_string (value, ide_source_view_mode_get_name (mode));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
 static void
 ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
 {
@@ -107,6 +144,15 @@ ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
   GType type;
 
   object_class->finalize = ide_source_view_mode_finalize;
+  object_class->get_property = ide_source_view_mode_get_property;
+
+  gParamSpecs [PROP_NAME] =
+    g_param_spec_string ("name",
+                          _("Name"),
+                          _("The name of the mode."),
+                          NULL,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_NAME, gParamSpecs [PROP_NAME]);
 
   /* Proxy all action signals from source view */
   type = IDE_TYPE_SOURCE_VIEW;
