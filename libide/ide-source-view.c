@@ -101,6 +101,7 @@ enum {
 };
 
 enum {
+  ACTION,
   JUMP,
   PUSH_SNIPPET,
   POP_SNIPPET,
@@ -110,6 +111,53 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
+
+static void
+activate_action (GtkWidget   *widget,
+                 const gchar *prefix,
+                 const gchar *action_name,
+                 GVariant    *parameter)
+{
+  GApplication *app;
+  GtkWidget *toplevel;
+  GActionGroup *group = NULL;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (prefix);
+  g_return_if_fail (action_name);
+
+  app = g_application_get_default ();
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  while ((group == NULL) && (widget != NULL))
+    {
+      group = gtk_widget_get_action_group (widget, prefix);
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  if (!group && g_str_equal (prefix, "win") && G_IS_ACTION_GROUP (toplevel))
+    group = G_ACTION_GROUP (toplevel);
+
+  if (!group && g_str_equal (prefix, "app") && G_IS_ACTION_GROUP (app))
+    group = G_ACTION_GROUP (app);
+
+  if (group)
+    {
+      if (g_action_group_has_action (group, action_name))
+        {
+          g_action_group_activate_action (group, action_name, parameter);
+          return;
+        }
+    }
+
+  if (parameter && g_variant_is_floating (parameter))
+    {
+      parameter = g_variant_ref_sink (parameter);
+      g_variant_unref (parameter);
+    }
+
+  g_warning ("Failed to resolve action %s.%s", prefix, action_name);
+}
 
 static void
 ide_source_view_block_handlers (IdeSourceView *self)
@@ -1316,6 +1364,33 @@ ide_source_view_query_tooltip (GtkWidget  *widget,
 }
 
 static void
+ide_source_view_real_action (IdeSourceView *self,
+                             const gchar   *prefix,
+                             const gchar   *action_name,
+                             const gchar   *param)
+{
+  GVariant *variant = NULL;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  if (*param != 0)
+    {
+      g_autoptr(GError) error = NULL;
+
+      variant = g_variant_parse (NULL, param, NULL, NULL, &error);
+
+      if (variant == NULL)
+        {
+          g_warning ("can't parse keybinding parameters \"%s\": %s",
+                     param, error->message);
+          return;
+        }
+    }
+
+  activate_action (GTK_WIDGET (self), prefix, action_name, variant);
+}
+
+static void
 ide_source_view_real_jump (IdeSourceView     *self,
                            const GtkTextIter *location)
 {
@@ -1547,6 +1622,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
 
+  klass->action = ide_source_view_real_action;
   klass->jump = ide_source_view_real_jump;
   klass->set_mode = ide_source_view_real_set_mode;
 
@@ -1614,6 +1690,18 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SNIPPET_COMPLETION,
                                    gParamSpecs [PROP_SNIPPET_COMPLETION]);
+
+  gSignals [ACTION] = g_signal_new ("action",
+                                    G_TYPE_FROM_CLASS (klass),
+                                    G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                    G_STRUCT_OFFSET (IdeSourceViewClass, action),
+                                    NULL, NULL,
+                                    g_cclosure_marshal_generic,
+                                    G_TYPE_NONE,
+                                    3,
+                                    G_TYPE_STRING,
+                                    G_TYPE_STRING,
+                                    G_TYPE_STRING);
 
   gSignals [JUMP] = g_signal_new ("jump",
                                   G_TYPE_FROM_CLASS (klass),

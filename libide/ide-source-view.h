@@ -62,6 +62,10 @@ struct _IdeSourceViewClass
 {
   GtkSourceViewClass parent_class;
 
+  void (*action)       (IdeSourceView           *self,
+                        const gchar             *prefix,
+                        const gchar             *action_name,
+                        const gchar             *param);
   void (*jump)         (IdeSourceView           *self,
                         const GtkTextIter       *location);
   void (*pop_snippet)  (IdeSourceView           *self,
