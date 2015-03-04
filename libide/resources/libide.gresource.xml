@@ -14,5 +14,6 @@
     <file alias="snippets/xml.snippets">../../data/snippets/xml.snippets</file>
 
     <file alias="keybindings/emacs.css">../../data/keybindings/emacs.css</file>
+    <file alias="keybindings/vim.css">../../data/keybindings/vim.css</file>
   </gresource>
 </gresources>

@@ -1,0 +1,158 @@
+@binding-set builder-vim-source-view
+{
+  bind "Escape" { "set-mode" ("vim-normal", permanent) };
+}
+
+@binding-set builder-vim-source-view-normal
+{
+  /*
+   * Sequences to get into insert mode from normal mode.
+   */
+
+  /* insert at cursor */
+  bind "i" { "set-mode" ("vim-insert", permanent) };
+
+  /* insert after cursor */
+  bind "a" { "set-mode" ("vim-insert", permanent)
+             "movement" (next-char, 0) };
+
+  /* insert at first non-whitespace character */
+  bind "I" { "set-mode" ("vim-insert", permanent)
+             "movement" (first-nonspace-char, 0) };
+
+  /* insert line after current, insert mode */
+  bind "o" { "set-mode" ("vim-insert", permanent)
+             "movement" (first-char, 0)
+             "insert-at-cursor" ("\n") };
+
+  /* insert line before current */
+  bind "O" { "set-mode" ("vim-insert", permanent)
+             "movement" (first-char, 0)
+             "insert-at-cursor" ("\n")
+             "move-cursor" (display-lines, -1, 0) };
+
+  /* swallow the current character and go to insert */
+  bind "s" { "set-mode" ("vim-insert", permanent)
+             "delete-from-cursor" (chars, 1) };
+
+  /* move by character, captive to current line */
+  bind "h" { "movement" (previous-char, 0) };
+  bind "l" { "movement" (next-char, 0) };
+
+  /* move by line, keep current line offset */
+  bind "k" { "movement" (previous-line, 0) };
+  bind "j" { "movement" (next-line, 0) };
+
+  /* move by word starts */
+  bind "b" { "movement" (previous-word-start, 0) };
+  bind "w" { "movement" (next-word-start, 0) };
+
+  /* move to special sub-mode 'g' */
+  bind "g" { "set-mode" ("vim-normal-g", modal) };
+
+  /* move by word ends */
+  bind "e" { "movement" (next-word-end, 0) };
+
+  /* page movements */
+  bind "<ctrl>b" { "movement" (page-up, 0) };
+  bind "<ctrl>f" { "movement" (page-down, 0) };
+
+  /* screen movements, keeping cursor locked to visible region */
+  bind "<ctrl>e" { "movement" (screen-up, 0) };
+  bind "<ctrl>y" { "movement" (screen-down, 0) };
+
+  /* move by paragraph */
+  bind "bracketleft" { "movement" (previous-paragraph, 0) };
+  bind "bracketright" { "movement" (next-paragraph, 0) };
+
+  /* move by sentance */
+  bind "parenleft" { "movement" (previous-sentance, 0) };
+  bind "parenright" { "movement" (next-sentance, 0) };
+
+  /* move to line offset of zero, and first non-whitespace char, end of line */
+  bind "0" { "movement" (first-char) };
+  bind "caret" { "movement" (first-nonspace-char) };
+  bind "dollar" { "movement" (last-char) };
+  bind "bar" { "movement" (nth-char) };
+
+  /* jump to match of brace/bracket/comment/etc */
+  bind "percent" { "movement" (match-special, 0) };
+
+  /* move based on visible screen area */
+  bind "H" { "movement" (screen-top, 0) };
+  bind "M" { "movement" (screen-middle, 0) };
+  bind "L" { "movement" (screen-bottom, 0) };
+
+  /* move to nth line, defaults to last */
+  bind "G" { "movement" (nth-line, 0) };
+
+  /* Undo & Redo */
+  bind "u" { "undo" () };
+  bind "<ctrl>R" { "redo" () };
+
+  /* delete */
+  bind "x" { "movement" (next-char, 1)
+             "copy" ()
+             "delete-from-cursor" (chars, 1) };
+  bind "X" { "movement" (previous-char, 1)
+             "copy" ()
+             "delete-from-cursor" (chars, 1) };
+
+  /* copy */
+  bind "y" { "set-mode" ("vim-normal-y") };
+  bind "Y" { "save-cursor" ()
+             "set-mode" ("vim-visual-line")
+             "copy" ()
+             "set-mode" ("vim-normal")
+             "restore-cursor" () };
+
+  /* visual mode transition */
+  bind "v" { "movement" (next-char, 1)
+             "set-mode" ("vim-visual") };
+  bind "V" { "set-mode" ("vim-visual-line") };
+  bind "<ctrl>v" { "set-mode" ("vim-visual-block") };
+}
+
+@binding-set builder-vim-source-view-normal-y
+{
+}
+
+@binding-set builder-vim-source-view-normal-g
+{
+}
+
+@binding-set builder-vim-source-view-normal-number
+{
+}
+
+@binding-set builder-vim-source-view-insert
+{
+}
+
+@binding-set builder-vim-source-view-visual
+{
+}
+
+@binding-set builder-vim-source-view-visual-line
+{
+}
+
+@binding-set builder-vim-source-view-visual-block
+{
+}
+
+IdeSourceView {
+  gtk-key-bindings: builder-vim-source-view;
+}
+
+IdeSourceViewMode.vim-normal {
+  gtk-key-bindings: builder-vim-source-view, builder-vim-source-view-normal;
+}
+
+IdeSourceViewMode.vim-insert {
+  gtk-key-bindings: builder-vim-source-view, builder-vim-source-view-insert;
+}
+
+IdeSourceViewMode.vim-visual {
+  gtk-key-bindings: builder-vim-source-view, builder-vim-source-view-visual;
+}
