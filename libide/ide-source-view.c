@@ -47,6 +47,7 @@
 #include "ide-source-location.h"
 #include "ide-source-view.h"
 #include "ide-source-view-mode.h"
+#include "ide-source-view-movements.h"
 
 #define DEFAULT_FONT_DESC "Monospace 11"
 #define ANIMATION_X_GROW  50
@@ -103,6 +104,7 @@ enum {
 enum {
   ACTION,
   JUMP,
+  MOVEMENT,
   PUSH_SNIPPET,
   POP_SNIPPET,
   SET_MODE,
@@ -1450,6 +1452,16 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
 }
 
 static void
+ide_source_view_real_movement (IdeSourceView         *self,
+                               IdeSourceViewMovement  movement,
+                               gboolean               extend_selection)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  _ide_source_view_apply_movement (self, movement, extend_selection, 0 /* TODO */);
+}
+
+static void
 ide_source_view_constructed (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -1624,6 +1636,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   klass->action = ide_source_view_real_action;
   klass->jump = ide_source_view_real_jump;
+  klass->movement = ide_source_view_real_movement;
   klass->set_mode = ide_source_view_real_set_mode;
 
   g_object_class_override_property (object_class, PROP_AUTO_INDENT, "auto-indent");
@@ -1712,6 +1725,17 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                   G_TYPE_NONE,
                                   1,
                                   GTK_TYPE_TEXT_ITER);
+
+  gSignals [MOVEMENT] = g_signal_new ("movement",
+                                      G_TYPE_FROM_CLASS (klass),
+                                      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                      G_STRUCT_OFFSET (IdeSourceViewClass, movement),
+                                      NULL, NULL,
+                                      g_cclosure_marshal_generic,
+                                      G_TYPE_NONE,
+                                      2,
+                                      IDE_TYPE_SOURCE_VIEW_MOVEMENT,
+                                      G_TYPE_BOOLEAN);
 
   gSignals [SET_MODE] = g_signal_new ("set-mode",
                                       G_TYPE_FROM_CLASS (klass),

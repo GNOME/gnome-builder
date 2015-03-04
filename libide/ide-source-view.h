@@ -51,6 +51,95 @@ typedef enum
   IDE_SOURCE_VIEW_MODE_TYPE_MODAL
 } IdeSourceViewModeType;
 
+/**
+ * IdeSourceViewMovement:
+ * @IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR: move to nth character in line. Use a repeat to
+ *   specify the target character within the line.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR: move to previous character in line.
+ * @IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR: move to next character in line.
+ * @IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR: move to line offset of zero.
+ * @IDE_SOURCE_VIEW_MOVEMENT_FIRST_NONSPACE_CHAR: move to first non-whitespace character in line.
+ * @IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR: move to the middle character in the line.
+ * @IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR: move to the last character in the line.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START: move to beginning of previous word.
+ * @IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START: move to beginning of next word.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END: move to end of previous word.
+ * @IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_END: move to end of next word.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SENTANCE_START: move to beginning of sentance.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SENTANCE_END: move to end of sentance.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_START: move to start of paragraph.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_END: move to end of paragraph.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE: move to previous line, keeping line offset if possible.
+ * @IDE_SOURCE_VIEW_MOVEMENT_NEXT_LINE: move to next line, keeping line offset if possible.
+ * @IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE: move to first line in file, line offset of zero.
+ * @IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE: move to nth line, line offset of zero. use repeat to
+ *   select the given line number.
+ * @IDE_SOURCE_VIEW_MOVEMENT_LAST_LINE: move to last line in file, with line offset of zero.
+ * @IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE: move to line based on percentage. Use repeat to
+ *   specify the percentage, 0 to 100.
+ * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP: move half a page up.
+ * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN: move half a page down.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP: move a full page up.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN: move a full page down.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP: move to viewport up by visible line, adjusting cursor
+ *   to stay on screen if necessary.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN: move to viewport down by visible line, adjusting cursor
+ *   to stay on screen if necessary.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP: move to the top of the screen.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_MIDDLE: move to the middle of the screen.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM: move to the bottom of the screen.
+ * @IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL: move to match of brace, bracket, comment.
+ *
+ * The type of movement.
+ *
+ * Some of these movements may be modified by using the modify-repeat action.
+ * First adjust the repeat and then perform the "movement" action.
+ */
+typedef enum
+{
+  IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR,
+  IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR,
+  IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR,
+  IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR,
+  IDE_SOURCE_VIEW_MOVEMENT_FIRST_NONSPACE_CHAR,
+  IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR,
+  IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR,
+
+  IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START,
+  IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START,
+
+  IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END,
+  IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_END,
+
+  IDE_SOURCE_VIEW_MOVEMENT_SENTANCE_START,
+  IDE_SOURCE_VIEW_MOVEMENT_SENTANCE_END,
+
+  IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_START,
+  IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_END,
+
+  IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE,
+  IDE_SOURCE_VIEW_MOVEMENT_NEXT_LINE,
+
+  IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE,
+  IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE,
+  IDE_SOURCE_VIEW_MOVEMENT_LAST_LINE,
+  IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE,
+
+  IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP,
+  IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN,
+
+  IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP,
+  IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN,
+
+  IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP,
+  IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN,
+  IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP,
+  IDE_SOURCE_VIEW_MOVEMENT_SCREEN_MIDDLE,
+  IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM,
+
+  IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL,
+} IdeSourceViewMovement;
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceView, g_object_unref)
 
 struct _IdeSourceView
@@ -62,21 +151,24 @@ struct _IdeSourceViewClass
 {
   GtkSourceViewClass parent_class;
 
-  void (*action)       (IdeSourceView           *self,
-                        const gchar             *prefix,
-                        const gchar             *action_name,
-                        const gchar             *param);
-  void (*jump)         (IdeSourceView           *self,
-                        const GtkTextIter       *location);
-  void (*pop_snippet)  (IdeSourceView           *self,
-                        IdeSourceSnippet        *snippet);
-  void (*push_snippet) (IdeSourceView           *self,
-                        IdeSourceSnippet        *snippet,
-                        IdeSourceSnippetContext *context,
-                        const GtkTextIter       *location);
-  void (*set_mode)     (IdeSourceView           *self,
-                        const gchar             *mode,
-                        IdeSourceViewModeType    type);
+  void (*action)         (IdeSourceView           *self,
+                          const gchar             *prefix,
+                          const gchar             *action_name,
+                          const gchar             *param);
+  void (*movement)       (IdeSourceView           *self,
+                          IdeSourceViewMovement    movement,
+                          gboolean                 extend_selection);
+  void (*jump)           (IdeSourceView           *self,
+                          const GtkTextIter       *location);
+  void (*pop_snippet)    (IdeSourceView           *self,
+                          IdeSourceSnippet        *snippet);
+  void (*push_snippet)   (IdeSourceView           *self,
+                          IdeSourceSnippet        *snippet,
+                          IdeSourceSnippetContext *context,
+                          const GtkTextIter       *location);
+  void (*set_mode)       (IdeSourceView           *self,
+                          const gchar             *mode,
+                          IdeSourceViewModeType    type);
 };
 
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);

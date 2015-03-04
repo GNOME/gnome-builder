@@ -219,6 +219,8 @@ libide_1_0_la_SOURCES = \
 	libide/ide-source-snippet-parser.c \
 	libide/ide-source-snippet-parser.h \
 	libide/ide-source-snippet-private.h \
+	libide/ide-source-view-movements.c \
+	libide/ide-source-view-movements.h \
 	libide/tasks/ide-load-directory-task.c \
 	libide/tasks/ide-load-directory-task.h \
 	libide/theatrics/ide-animation.c \
