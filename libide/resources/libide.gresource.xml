@@ -12,5 +12,7 @@
     <file alias="snippets/shebang.snippets">../../data/snippets/shebang.snippets</file>
     <file alias="snippets/vala.snippets">../../data/snippets/vala.snippets</file>
     <file alias="snippets/xml.snippets">../../data/snippets/xml.snippets</file>
+
+    <file alias="keybindings/emacs.css">../../data/keybindings/emacs.css</file>
   </gresource>
 </gresources>
