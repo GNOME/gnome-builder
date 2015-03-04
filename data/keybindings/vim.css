@@ -102,7 +102,9 @@
   bind "<shift>r" { "set-mode" ("vim-insert", permanent)
                     "set-overwrite" (1) };
 
-  /* delete */
+ /* jump to sub-mode */
+  bind "d" { "set-mode" ("vim-normal-d", transient) };
+
   bind "x" { "movement" (next-char, 1)
              "copy-clipboard" ()
              "delete-from-cursor" (chars, 1) };
@@ -123,6 +125,15 @@
              "set-mode" ("vim-visual") };
   bind "<shift>v" { "set-mode" ("vim-visual-line") };
   bind "<ctrl>v" { "set-mode" ("vim-visual-block") };
+}
+
+@binding-set builder-vim-source-view-normal-d
+{
+  bind "d" { "movement" (first-char, 0)
+	     "movement" (last-char, 1)
+             "move-cursor" (visual-positions, 1, 1)
+             "copy-clipboard" ()
+             "delete-from-cursor" (chars, 1) };
 }
 
 @binding-set builder-vim-source-view-normal-z
@@ -170,6 +181,11 @@ IdeSourceViewMode.default,
 IdeSourceViewMode.vim-normal {
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal;
+}
+
+IdeSourceViewMode.vim-normal-d {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-d;
 }
 
 IdeSourceViewMode.vim-normal-g {
