@@ -29,6 +29,33 @@ typedef struct
   guint    depth;
 } MatchingBracketState;
 
+static gboolean
+is_single_line_selection (const GtkTextIter *insert,
+                          const GtkTextIter *selection)
+{
+  return (gtk_text_iter_get_line (insert) == gtk_text_iter_get_line (selection)) &&
+         (gtk_text_iter_starts_line (insert) || gtk_text_iter_starts_line (selection)) &&
+         (gtk_text_iter_ends_line (insert) || gtk_text_iter_ends_line (selection));
+}
+
+static gboolean
+is_line_selection (const GtkTextIter *insert,
+                   const GtkTextIter *selection)
+{
+  gboolean ret = FALSE;
+
+  if (is_single_line_selection (insert, selection))
+    ret = TRUE;
+  else if (gtk_text_iter_starts_line (selection) &&
+      gtk_text_iter_ends_line (insert) &&
+      !gtk_text_iter_equal (selection, insert))
+    ret = TRUE;
+
+  IDE_TRACE_MSG ("is_line_selection=%s", ret ? "TRUE" : "FALSE");
+
+  return ret;
+}
+
 static void
 ide_source_view_movements_get_selection (IdeSourceView *self,
                                          GtkTextIter   *insert,
@@ -294,12 +321,46 @@ ide_source_view_movements_next_line (IdeSourceView         *self,
                                      gboolean               extend_selection,
                                      gint                   param)
 {
-  param = MAX (1, param);
-  g_signal_emit_by_name (self,
-                         "move-cursor",
-                         GTK_MOVEMENT_DISPLAY_LINES,
-                         param,
-                         extend_selection);
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  /*
+   * Try to use the normal move-cursor helpers if this is a simple movement.
+   */
+  if (!extend_selection || !is_line_selection (&insert, &selection))
+    {
+      IDE_TRACE_MSG ("next-line simple");
+
+      param = MAX (1, param);
+      g_signal_emit_by_name (self,
+                             "move-cursor",
+                             GTK_MOVEMENT_DISPLAY_LINES,
+                             param,
+                             extend_selection);
+      return;
+    }
+
+  IDE_TRACE_MSG ("next-line with line-selection");
+
+  g_assert (extend_selection);
+  g_assert (is_line_selection (&insert, &selection));
+
+  if (gtk_text_iter_is_end (&insert) || gtk_text_iter_is_end (&selection))
+    return;
+
+  if (is_single_line_selection (&insert, &selection))
+    {
+      IDE_TRACE_MSG ("single line, swap\n");
+    gtk_text_iter_order (&selection, &insert);
+    }
+
+  gtk_text_iter_forward_line (&insert);
+  if (!gtk_text_iter_ends_line (&insert))
+    gtk_text_iter_forward_to_line_end (&insert);
+
+  ide_source_view_movements_select_range (self, &insert, &selection, TRUE);
 }
 
 static void
@@ -308,12 +369,52 @@ ide_source_view_movements_previous_line (IdeSourceView         *self,
                                          gboolean               extend_selection,
                                          gint                   param)
 {
-  param = MAX (1, param);
-  g_signal_emit_by_name (self,
-                         "move-cursor",
-                         GTK_MOVEMENT_DISPLAY_LINES,
-                         -param,
-                         extend_selection);
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  /*
+   * Try to use the normal move-cursor helpers if this is a simple movement.
+   */
+  if (!extend_selection || !is_line_selection (&insert, &selection))
+    {
+      IDE_TRACE_MSG ("previous-line simple");
+
+      param = MAX (1, param);
+      g_signal_emit_by_name (self,
+                             "move-cursor",
+                             GTK_MOVEMENT_DISPLAY_LINES,
+                             -param,
+                             extend_selection);
+      return;
+    }
+
+  IDE_TRACE_MSG ("previous-line with line-selection");
+
+  g_assert (extend_selection);
+  g_assert (is_line_selection (&insert, &selection));
+
+  if (gtk_text_iter_is_start (&insert) || gtk_text_iter_is_start (&selection))
+    return;
+
+  /*
+   * if the current line is selected
+   */
+  if (is_single_line_selection (&insert, &selection))
+    {
+      gtk_text_iter_order (&insert, &selection);
+      gtk_text_iter_backward_line (&insert);
+      gtk_text_iter_set_line_offset (&insert, 0);
+    }
+  else
+    {
+      gtk_text_iter_backward_line (&insert);
+      if (!gtk_text_iter_ends_line (&insert))
+        gtk_text_iter_forward_to_line_end (&insert);
+    }
+
+  ide_source_view_movements_select_range (self, &insert, &selection, TRUE);
 }
 
 static void
