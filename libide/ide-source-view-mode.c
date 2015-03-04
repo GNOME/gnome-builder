@@ -39,7 +39,8 @@ ide_source_view_mode_finalize (GObject *object)
   IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (self);
 
   g_clear_object (&priv->view);
-  g_free (priv->name);
+  g_clear_pointer (&priv->name, g_free);
+  priv->type = 0;
 
   G_OBJECT_CLASS (ide_source_view_mode_parent_class)->finalize (object);
 }
@@ -197,7 +198,6 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
   *remove = FALSE;
   switch (priv->type)
     {
-    default:
     case IDE_SOURCE_VIEW_MODE_TYPE_TRANSIENT:
       if (handled)
         {
@@ -220,6 +220,9 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
     case IDE_SOURCE_VIEW_MODE_TYPE_MODAL:
       handled = TRUE;
       break;
+
+    default:
+      g_assert_not_reached ();
     }
 
   return handled;
