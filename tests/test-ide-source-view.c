@@ -34,7 +34,6 @@ static GtkStack    *gDocStack;
 static GHashTable  *gBufferToView;
 static GList       *gFilesToOpen;
 static gint         gExitCode = EXIT_SUCCESS;
-static const gchar *gAppCss = "";
 
 static void
 quit (int exit_code)
@@ -380,18 +379,42 @@ increase_verbosity (void)
   return TRUE;
 }
 
+static void
+parsing_error_cb (GtkCssProvider *provider,
+                  GtkCssSection  *section,
+                  GError         *error,
+                  gpointer        user_data)
+{
+  g_printerr ("CSS Parsing Error: %s\n", error->message);
+}
+
+static void
+load_css_resource (const gchar *path)
+{
+  GtkCssProvider *provider;
+
+  provider = gtk_css_provider_new ();
+  g_signal_connect (provider, "parsing-error", G_CALLBACK (parsing_error_cb), NULL);
+  gtk_css_provider_load_from_resource (provider, path);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default(),
+                                             GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  g_object_unref (provider);
+}
+
 int
 main (int argc,
       char *argv[])
 {
   g_autoptr(GOptionContext) context = NULL;
   g_autoptr(GFile) project_dir = NULL;
-  GtkCssProvider *provider;
   GError *error = NULL;
+  gboolean emacs = FALSE;
   gsize i;
   const GOptionEntry entries[] = {
     { "verbose", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
       increase_verbosity, N_("Increase logging verbosity.") },
+    { "emacs", 'e', 0, G_OPTION_ARG_NONE, &emacs, N_("Use emacs keybindings") },
     { NULL }
   };
 
@@ -424,15 +447,8 @@ main (int argc,
                          idedit__context_new_cb,
                          NULL);
 
-  provider = gtk_css_provider_new ();
-  if (!gtk_css_provider_load_from_data (provider, gAppCss, -1, &error))
-    {
-      g_printerr ("%s\n", error->message);
-      g_clear_error (&error);
-    }
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default(),
-                                             GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  if (emacs)
+    load_css_resource ("/org/gnome/libide/keybindings/emacs.css");
 
   gtk_main ();
 
