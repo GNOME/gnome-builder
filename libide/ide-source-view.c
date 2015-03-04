@@ -1232,23 +1232,14 @@ ide_source_view_do_indent (IdeSourceView *self,
 }
 
 static gboolean
-ide_source_view_key_press_event (GtkWidget   *widget,
-                                 GdkEventKey *event)
+ide_source_view_do_mode (IdeSourceView *self,
+                         GdkEventKey   *event)
 {
-  IdeSourceView *self = (IdeSourceView *)widget;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkTextBuffer *buffer;
-  IdeSourceSnippet *snippet;
   gboolean ret = FALSE;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-
-  /*
-   * If we are in a non-default mode, dispatch the event to the mode. This allows custom
-   * keybindings like Emacs and Vim to be implemented using gtk-bindings CSS.
-   */
   if (priv->mode)
     {
       IdeSourceViewMode *mode;
@@ -1284,8 +1275,36 @@ ide_source_view_key_press_event (GtkWidget   *widget,
       g_object_unref (mode);
 
       if (handled)
-        return TRUE;
+        ret = TRUE;
     }
+
+  if (!priv->mode)
+    priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), "default",
+                                            IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+
+  return ret;
+}
+
+static gboolean
+ide_source_view_key_press_event (GtkWidget   *widget,
+                                 GdkEventKey *event)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextBuffer *buffer;
+  IdeSourceSnippet *snippet;
+  gboolean ret = FALSE;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
+  /*
+   * If we are in a non-default mode, dispatch the event to the mode. This allows custom
+   * keybindings like Emacs and Vim to be implemented using gtk-bindings CSS.
+   */
+  if (ide_source_view_do_mode (self, event))
+    return TRUE;
 
   /*
    * Handle movement through the tab stops of the current snippet if needed.
@@ -1563,8 +1582,13 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
 
   g_clear_object (&priv->mode);
 
-  if (mode != NULL)
-    priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), mode, type);
+  if (mode == NULL)
+    {
+      mode = "default";
+      type = IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT;
+    }
+
+  priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), mode, type);
 
   IDE_EXIT;
 }
@@ -1588,6 +1612,9 @@ ide_source_view_constructed (GObject *object)
   gboolean visible;
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->constructed (object);
+
+  if (!priv->mode)
+    ide_source_view_real_set_mode (self, "default", IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
 
   gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
 
