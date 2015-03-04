@@ -1180,25 +1180,35 @@ ide_source_view_key_press_event (GtkWidget   *widget,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
   /*
    * If we are in a non-default mode, dispatch the event to the mode. This allows custom
    * keybindings like Emacs and Vim to be implemented using gtk-bindings CSS.
    */
   if (priv->mode)
     {
+      IdeSourceViewMode *mode;
       gboolean handled;
       gboolean remove = FALSE;
+
+      /* hold a reference incase binding changes mode */
+      mode = g_object_ref (priv->mode);
 
       handled = _ide_source_view_mode_do_event (priv->mode, event, &remove);
 
       if (remove)
-        g_clear_object (&priv->mode);
+        {
+          /* only remove mode if it is still active */
+          if (priv->mode == mode)
+            g_clear_object (&priv->mode);
+        }
+
+      g_object_unref (mode);
 
       if (handled)
         return TRUE;
     }
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
   /*
    * Handle movement through the tab stops of the current snippet if needed.
