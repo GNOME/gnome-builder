@@ -23,7 +23,7 @@
 
   /* insert line after current, insert mode */
   bind "o" { "set-mode" ("vim-insert", permanent)
-             "movement" (first-char, 0)
+             "movement" (last-char, 0)
              "insert-at-cursor" ("\n") };
 
   /* insert line before current */
