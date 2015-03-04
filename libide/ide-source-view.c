@@ -1168,6 +1168,68 @@ ide_source_view_maybe_delete_match (IdeSourceView *self,
   return FALSE;
 }
 
+static void
+ide_source_view_do_indent (IdeSourceView *self,
+                           GdkEventKey   *event)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkWidget *widget = (GtkWidget *)self;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gchar *indent;
+  gint cursor_offset = 0;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (event);
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
+  /*
+   * Insert into the buffer so the auto-indenter can see it. If
+   * GtkSourceView:auto-indent is set, then we will end up with very
+   * unpredictable results.
+   */
+  GTK_WIDGET_CLASS (ide_source_view_parent_class)->key_press_event (widget, event);
+
+  /*
+   * Set begin and end to the position of the new insertion point.
+   */
+  insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->buffer));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &begin, insert);
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &end, insert);
+
+  /*
+   * Let the formatter potentially set the replacement text.
+   */
+  indent = ide_indenter_format (priv->indenter, GTK_TEXT_VIEW (self), &begin, &end,
+                                &cursor_offset, event);
+
+  if (indent)
+    {
+      /*
+       * Insert the indention text.
+       */
+      gtk_text_buffer_begin_user_action (buffer);
+      if (!gtk_text_iter_equal (&begin, &end))
+        gtk_text_buffer_delete (buffer, &begin, &end);
+      gtk_text_buffer_insert (buffer, &begin, indent, -1);
+      g_free (indent);
+      gtk_text_buffer_end_user_action (buffer);
+
+      /*
+       * Place the cursor, as it could be somewhere within our indent text.
+       */
+      gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
+      if (cursor_offset > 0)
+        gtk_text_iter_forward_chars (&begin, cursor_offset);
+      else if (cursor_offset < 0)
+        gtk_text_iter_backward_chars (&begin, ABS (cursor_offset));
+      gtk_text_buffer_select_range (buffer, &begin, &begin);
+    }
+}
+
 static gboolean
 ide_source_view_key_press_event (GtkWidget   *widget,
                                  GdkEventKey *event)
@@ -1291,55 +1353,7 @@ ide_source_view_key_press_event (GtkWidget   *widget,
       (priv->indenter != NULL) &&
       ide_indenter_is_trigger (priv->indenter, event))
     {
-      GtkTextMark *insert;
-      GtkTextIter begin;
-      GtkTextIter end;
-      gchar *indent;
-      gint cursor_offset = 0;
-
-      /*
-       * Insert into the buffer so the auto-indenter can see it. If
-       * GtkSourceView:auto-indent is set, then we will end up with very
-       * unpredictable results.
-       */
-      GTK_WIDGET_CLASS (ide_source_view_parent_class)->key_press_event (widget, event);
-
-      /*
-       * Set begin and end to the position of the new insertion point.
-       */
-      insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->buffer));
-      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &begin, insert);
-      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &end, insert);
-
-      /*
-       * Let the formatter potentially set the replacement text.
-       */
-      indent = ide_indenter_format (priv->indenter, GTK_TEXT_VIEW (self), &begin, &end,
-                                    &cursor_offset, event);
-
-      if (indent)
-        {
-          /*
-           * Insert the indention text.
-           */
-          gtk_text_buffer_begin_user_action (buffer);
-          if (!gtk_text_iter_equal (&begin, &end))
-            gtk_text_buffer_delete (buffer, &begin, &end);
-          gtk_text_buffer_insert (buffer, &begin, indent, -1);
-          g_free (indent);
-          gtk_text_buffer_end_user_action (buffer);
-
-          /*
-           * Place the cursor, as it could be somewhere within our indent text.
-           */
-          gtk_text_buffer_get_iter_at_mark (buffer, &begin, insert);
-          if (cursor_offset > 0)
-            gtk_text_iter_forward_chars (&begin, cursor_offset);
-          else if (cursor_offset < 0)
-            gtk_text_iter_backward_chars (&begin, ABS (cursor_offset));
-          gtk_text_buffer_select_range (buffer, &begin, &begin);
-        }
-
+      ide_source_view_do_indent (self, event);
       return TRUE;
     }
 
