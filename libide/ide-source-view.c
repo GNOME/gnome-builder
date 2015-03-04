@@ -1192,6 +1192,17 @@ ide_source_view_key_press_event (GtkWidget   *widget,
       gboolean handled;
       gboolean remove = FALSE;
 
+#ifndef IDE_DISABLE_TRACE
+      {
+        gchar *name = NULL;
+
+        g_object_get (priv->mode, "name", &name, NULL);
+        IDE_TRACE_MSG ("dispatching to mode \"%s\": (%s)",
+                       name, event->string ?: "");
+        g_free (name);
+      }
+#endif
+
       /* hold a reference incase binding changes mode */
       mode = g_object_ref (priv->mode);
 
@@ -1450,6 +1461,7 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   IDE_ENTRY;
+  IDE_TRACE_MSG ("mode (%s)", mode ?: "<default>");
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
