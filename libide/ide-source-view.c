@@ -1896,18 +1896,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   IDE_TYPE_SOURCE_VIEW_MOVEMENT,
                   G_TYPE_BOOLEAN);
 
-  gSignals [SET_MODE] =
-    g_signal_new ("set-mode",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (IdeSourceViewClass, set_mode),
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
-                  G_TYPE_NONE,
-                  2,
-                  G_TYPE_STRING,
-                  IDE_TYPE_SOURCE_VIEW_MODE_TYPE);
-
   gSignals [POP_SNIPPET] =
     g_signal_new ("pop-snippet",
                   G_TYPE_FROM_CLASS (klass),
@@ -1930,6 +1918,18 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   IDE_TYPE_SOURCE_SNIPPET,
                   IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
                   GTK_TYPE_TEXT_ITER);
+
+  gSignals [SET_MODE] =
+    g_signal_new ("set-mode",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, set_mode),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_STRING,
+                  IDE_TYPE_SOURCE_VIEW_MODE_TYPE);
 }
 
 static void
