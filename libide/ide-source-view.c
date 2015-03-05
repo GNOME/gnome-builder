@@ -115,6 +115,7 @@ enum {
   JOIN_LINES,
   JUMP,
   MOVEMENT,
+  PASTE_CLIPBOARD_EXTENDED,
   PUSH_SNIPPET,
   POP_SNIPPET,
   RESTORE_INSERT_MARK,
@@ -1747,12 +1748,20 @@ ide_source_view_real_jump (IdeSourceView     *self,
 }
 
 static void
-ide_source_view_real_paste_clipboard (GtkTextView *text_view)
+ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
+                                               gboolean       smart_lines,
+                                               gboolean       after_cursor,
+                                               gboolean       place_cursor_at_original)
+
 {
-  IdeSourceView *self = (IdeSourceView *)text_view;
+  GtkTextView *text_view = (GtkTextView *)self;
   g_autofree gchar *text = NULL;
   GtkClipboard *clipboard;
   GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  guint target_line;
+  guint target_line_offset;
 
   /*
    * NOTE:
@@ -1766,12 +1775,18 @@ ide_source_view_real_paste_clipboard (GtkTextView *text_view)
    * is handled within vim.css (for example, what character to leave the insert mark on).
    */
 
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   buffer = gtk_text_view_get_buffer (text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self), GDK_SELECTION_CLIPBOARD);
   text = gtk_clipboard_wait_for_text (clipboard);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  target_line = gtk_text_iter_get_line (&iter);
+  target_line_offset = gtk_text_iter_get_line_offset (&iter);
 
   gtk_text_buffer_begin_user_action (buffer);
 
@@ -1780,7 +1795,7 @@ ide_source_view_real_paste_clipboard (GtkTextView *text_view)
    * to insert a new line after the current line, and then paste it there (so move the insert mark
    * first).
    */
-  if (text && g_str_has_suffix (text, "\n"))
+  if (smart_lines && text && g_str_has_suffix (text, "\n"))
     {
       g_autofree gchar *trimmed = NULL;
 
@@ -1796,29 +1811,50 @@ ide_source_view_real_paste_clipboard (GtkTextView *text_view)
        * Terribly annoying, but the result is something that feels very nice, similar to Vim.
        */
       trimmed = g_strndup (text, strlen (text) - 1);
-      _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR, FALSE, 0);
-      g_signal_emit_by_name (self, "insert-at-cursor", "\n");
+
+      if (after_cursor)
+        {
+          _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR, FALSE, 0);
+          g_signal_emit_by_name (self, "insert-at-cursor", "\n");
+        }
+      else
+        {
+          _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR, FALSE, 0);
+          g_signal_emit_by_name (self, "insert-at-cursor", "\n");
+          _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE, FALSE, 0);
+        }
+
+      if (!place_cursor_at_original)
+        {
+          gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+          target_line = gtk_text_iter_get_line (&iter);
+          target_line_offset = gtk_text_iter_get_line_offset (&iter);
+        }
+
       gtk_clipboard_set_text (clipboard, trimmed, -1);
       GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->paste_clipboard (text_view);
       gtk_clipboard_set_text (clipboard, text, -1);
     }
   else
     {
-#if 0
-      /*
-       * TODO:
-       *
-       * This is more important once we get block mode rendering for characters in place.
-       *
-       * By default, GtkTextBuffer will paste at our current position.  While VIM will paste after
-       * the current position. Let's advance the buffer a single character on the current line if
-       * possible. We switch to insert mode so that we can move past the last character in the
-       * buffer. Possibly should consider an alternate design for this.
-       */
-      _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR, FALSE, 0);
-#endif
+      if (after_cursor)
+        _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR, FALSE, 0);
+
       GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->paste_clipboard (text_view);
+
+      if (!place_cursor_at_original)
+        {
+          gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+          target_line = gtk_text_iter_get_line (&iter);
+          target_line_offset = gtk_text_iter_get_line_offset (&iter);
+        }
     }
+
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, target_line);
+  for (; target_line_offset; target_line_offset--)
+    if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
+      break;
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   gtk_text_buffer_end_user_action (buffer);
 }
@@ -2188,7 +2224,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
 
   object_class->constructed = ide_source_view_constructed;
   object_class->dispose = ide_source_view_dispose;
@@ -2199,8 +2234,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
 
-  text_view_class->paste_clipboard = ide_source_view_real_paste_clipboard;
-
   klass->action = ide_source_view_real_action;
   klass->change_case = ide_source_view_real_change_case;
   klass->clear_selection = ide_source_view_real_clear_selection;
@@ -2210,6 +2243,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->join_lines = ide_source_view_real_join_lines;
   klass->jump = ide_source_view_real_jump;
   klass->movement = ide_source_view_real_movement;
+  klass->paste_clipboard_extended = ide_source_view_real_paste_clipboard_extended;
   klass->push_snippet = ide_source_view_real_push_snippet;
   klass->restore_insert_mark = ide_source_view_real_restore_insert_mark;
   klass->save_insert_mark = ide_source_view_real_save_insert_mark;
@@ -2379,6 +2413,19 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   2,
                   IDE_TYPE_SOURCE_VIEW_MOVEMENT,
+                  G_TYPE_BOOLEAN);
+
+  gSignals [PASTE_CLIPBOARD_EXTENDED] =
+    g_signal_new ("paste-clipboard-extended",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, paste_clipboard_extended),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  3,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
 
   gSignals [POP_SNIPPET] =

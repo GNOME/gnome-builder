@@ -194,6 +194,10 @@ struct _IdeSourceViewClass
   void (*join_lines)                  (IdeSourceView           *self);
   void (*jump)                        (IdeSourceView           *self,
                                        const GtkTextIter       *location);
+  void (*paste_clipboard_extended)    (IdeSourceView           *self,
+                                       gboolean                 smart_lines,
+                                       gboolean                 after_cursor,
+                                       gboolean                 place_cursor_at_original);
   void (*pop_snippet)                 (IdeSourceView           *self,
                                        IdeSourceSnippet        *snippet);
   void (*push_snippet)                (IdeSourceView           *self,
