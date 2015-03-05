@@ -163,9 +163,60 @@ _ide_vim_iter_backward_sentence_end (GtkTextIter *iter)
 gboolean
 _ide_vim_iter_forward_sentence_end (GtkTextIter *iter)
 {
+  GtkTextIter end_bounds;
+  gboolean found_para;
+
   g_return_val_if_fail (iter, FALSE);
 
-  return FALSE;
+  end_bounds = *iter;
+  found_para = _ide_vim_iter_forward_paragraph_end (&end_bounds);
+
+  if (!found_para)
+    gtk_text_buffer_get_end_iter (gtk_text_iter_get_buffer (iter), &end_bounds);
+
+  while ((gtk_text_iter_compare (iter, &end_bounds) < 0) && gtk_text_iter_forward_char (iter))
+    {
+      if (gtk_text_iter_forward_find_char (iter, sentence_end_chars, NULL, &end_bounds))
+        {
+          GtkTextIter copy = *iter;
+
+          while (gtk_text_iter_forward_char (&copy) && (gtk_text_iter_compare (&copy, &end_bounds) < 0))
+            {
+              gunichar ch;
+              gboolean invalid = FALSE;
+
+              ch = gtk_text_iter_get_char (&copy);
+
+              switch (ch)
+                {
+                case ']':
+                case ')':
+                case '"':
+                case '\'':
+                  continue;
+
+                case ' ':
+                case '\n':
+                  *iter = copy;
+                  return SENTENCE_OK;
+
+                default:
+                  invalid = TRUE;
+                  break;
+                }
+
+              if (invalid)
+                break;
+            }
+        }
+    }
+
+  *iter = end_bounds;
+
+  if (found_para)
+    return SENTENCE_PARA;
+
+  return SENTENCE_FAILED;
 }
 
 gboolean
