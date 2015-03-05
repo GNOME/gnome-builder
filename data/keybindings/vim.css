@@ -178,6 +178,7 @@
              "movement" (last-char, 1)
              "move-cursor" (visual-positions, 1, 1)
              "copy-clipboard" ()
+             "selection-theatric" ()
              "clear-selection" ()
              "restore-insert-mark" () };
 }

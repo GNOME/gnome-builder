@@ -118,6 +118,7 @@ enum {
   POP_SNIPPET,
   RESTORE_INSERT_MARK,
   SAVE_INSERT_MARK,
+  SELECTION_THEATRIC,
   SET_MODE,
   SET_OVERWRITE,
   LAST_SIGNAL
@@ -1667,6 +1668,28 @@ ide_source_view_real_jump (IdeSourceView     *self,
 }
 
 static void
+ide_source_view_real_selection_theatric (IdeSourceView *self)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  gtk_text_iter_order (&begin, &end);
+
+  if (gtk_text_iter_equal (&begin, &end))
+    return;
+
+  if (gtk_text_iter_starts_line (&end))
+    gtk_text_iter_backward_char (&end);
+
+  animate_in (self, &begin, &end);
+}
+
+static void
 ide_source_view_real_set_mode (IdeSourceView         *self,
                                const gchar           *mode,
                                IdeSourceViewModeType  type)
@@ -1978,6 +2001,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->movement = ide_source_view_real_movement;
   klass->restore_insert_mark = ide_source_view_real_restore_insert_mark;
   klass->save_insert_mark = ide_source_view_real_save_insert_mark;
+  klass->selection_theatric = ide_source_view_real_selection_theatric;
   klass->set_mode = ide_source_view_real_set_mode;
   klass->set_overwrite = ide_source_view_real_set_overwrite;
 
@@ -2173,6 +2197,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, save_insert_mark),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  gSignals [SELECTION_THEATRIC] =
+    g_signal_new ("selection-theatric",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, selection_theatric),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
