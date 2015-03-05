@@ -173,12 +173,13 @@
 
 @binding-set builder-vim-source-view-normal-y
 {
-  bind "y" { "save-cursor" ()
+  bind "y" { "save-insert-mark" ()
              "movement" (first-char, 0)
              "movement" (last-char, 1)
              "move-cursor" (visual-positions, 1, 1)
              "copy-clipboard" ()
-             "restore-cursor" () };
+             "clear-selection" ()
+             "restore-insert-mark" () };
 }
 
 @binding-set builder-vim-source-view-normal-g
