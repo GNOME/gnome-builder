@@ -139,6 +139,10 @@
   bind "<ctrl>a" { "change-number" (1) };
   bind "<ctrl>x" { "change-number" (-1) };
 
+  /* toggle character case */
+  bind "asciitilde" { "change-case" (toggle)
+                      "movement" (next-char, 0) };
+
   /* copy */
   bind "y" { "set-mode" ("vim-normal-y", transient) };
   bind "<shift>y" { "save-cursor" ()
@@ -230,6 +234,17 @@
                     "clear-selection" ()
                     "movement" (last-char, 0)
                     "set-mode" ("vim-normal", permanent) };
+
+  bind "asciitilde" { "change-case" (toggle)
+                      "clear-selection" ()
+                      "set-mode" ("vim-normal", permanent) };
+
+  bind "<shift>u" { "change-case" (upper)
+                    "clear-selection" ()
+                    "set-mode" ("vim-normal", permanent) };
+  bind "u" { "change-case" (lower)
+             "clear-selection" ()
+             "set-mode" ("vim-normal", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-block
