@@ -1747,6 +1747,83 @@ ide_source_view_real_jump (IdeSourceView     *self,
 }
 
 static void
+ide_source_view_real_paste_clipboard (GtkTextView *text_view)
+{
+  IdeSourceView *self = (IdeSourceView *)text_view;
+  g_autofree gchar *text = NULL;
+  GtkClipboard *clipboard;
+  GtkTextBuffer *buffer;
+
+  /*
+   * NOTE:
+   *
+   * In this function, we try to improve how pasteing works in GtkTextView. There are some
+   * semenatics that make things easier by tracking the paste of an entire line verses small
+   * snippets of text.
+   *
+   * Basically, we are implementing something close to Vim. However that is not a strict
+   * requirement, just what we are starting with. In fact, the rest of the handling to be like vim
+   * is handled within vim.css (for example, what character to leave the insert mark on).
+   */
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self), GDK_SELECTION_CLIPBOARD);
+  text = gtk_clipboard_wait_for_text (clipboard);
+
+  gtk_text_buffer_begin_user_action (buffer);
+
+  /*
+   * If we are pasting an entire line, we don't want to paste it at the current location. We want
+   * to insert a new line after the current line, and then paste it there (so move the insert mark
+   * first).
+   */
+  if (text && g_str_has_suffix (text, "\n"))
+    {
+      g_autofree gchar *trimmed = NULL;
+
+      /*
+       * WORKAROUND:
+       *
+       * This is a hack so that we can continue to use the paste code from within GtkTextBuffer.
+       *
+       * We needed to keep the trailing \n in the text so that we know when we are selecting whole
+       * lines. We also need to insert a new line manually based on the context. Furthermore, we
+       * need to remove the trailing line since we already added one.
+       *
+       * Terribly annoying, but the result is something that feels very nice, similar to Vim.
+       */
+      trimmed = g_strndup (text, strlen (text) - 1);
+      _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR, FALSE, 0);
+      g_signal_emit_by_name (self, "insert-at-cursor", "\n");
+      gtk_clipboard_set_text (clipboard, trimmed, -1);
+      GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->paste_clipboard (text_view);
+      gtk_clipboard_set_text (clipboard, text, -1);
+    }
+  else
+    {
+#if 0
+      /*
+       * TODO:
+       *
+       * This is more important once we get block mode rendering for characters in place.
+       *
+       * By default, GtkTextBuffer will paste at our current position.  While VIM will paste after
+       * the current position. Let's advance the buffer a single character on the current line if
+       * possible. We switch to insert mode so that we can move past the last character in the
+       * buffer. Possibly should consider an alternate design for this.
+       */
+      _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR, FALSE, 0);
+#endif
+      GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->paste_clipboard (text_view);
+    }
+
+  gtk_text_buffer_end_user_action (buffer);
+}
+
+static void
 ide_source_view_real_selection_theatric (IdeSourceView         *self,
                                          IdeSourceViewTheatric  theatric)
 {
@@ -2111,6 +2188,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
 
   object_class->constructed = ide_source_view_constructed;
   object_class->dispose = ide_source_view_dispose;
@@ -2120,6 +2198,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
+
+  text_view_class->paste_clipboard = ide_source_view_real_paste_clipboard;
 
   klass->action = ide_source_view_real_action;
   klass->change_case = ide_source_view_real_change_case;
