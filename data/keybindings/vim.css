@@ -340,6 +340,9 @@
   bind "<ctrl>u" { "movement" (half-page-up, 1) };
   bind "<ctrl>d" { "movement" (half-page-down, 1) };
 
+  bind "greater" { "indent-selection" (1) };
+  bind "less" { "indent-selection" (-1) };
+
   bind "0" { "movement" (first-char, 1) };
   bind "<shift>asciicircum" { "movement" (first-nonspace-char, 1) };
   bind "dollar" { "movement" (last-char, 1) };
@@ -425,6 +428,9 @@
                      "movement" (last-char, 1) };
   bind "parenright" { "movement" (sentence-end, 1)
                       "movement" (last-char, 1) };
+
+  bind "greater" { "indent-selection" (1) };
+  bind "less" { "indent-selection" (-1) };
 
   bind "<ctrl>e" { "movement" (screen-up, 1) };
   bind "<ctrl>y" { "movement" (screen-down, 1) };
