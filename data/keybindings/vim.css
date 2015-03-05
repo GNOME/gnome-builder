@@ -266,10 +266,26 @@
 {
   bind "percent" { "move-to-matching-bracket" (1) };
 
+  bind "x" { "delete-selection" () };
+  bind "<shift>x" { "delete-selection" () };
+
   bind "h" { "movement" (previous-char, 1) };
   bind "l" { "movement" (next-char, 1) };
   bind "k" { "movement" (previous-line, 1) };
   bind "j" { "movement" (next-line, 1) };
+
+  bind "e" { "movement" (next-word-end, 1) };
+  bind "<shift>e" { "movement" (next-full-word-end, 1) };
+
+  bind "w" { "movement" (next-word-start, 1) };
+  bind "<shift>w" { "movement" (next-full-word-start, 1) };
+  bind "b" { "movement" (previous-word-start, 1) };
+  bind "<shift>b" { "movement" (previous-full-word-start, 1) };
+
+  bind "<ctrl>b" { "movement" (page-up, 1) };
+  bind "<ctrl>f" { "movement" (page-down, 1) };
+  bind "<ctrl>u" { "movement" (half-page-up, 1) };
+  bind "<ctrl>d" { "movement" (half-page-down, 1) };
 
   bind "0" { "movement" (first-char, 1) };
   bind "<shift>asciicircum" { "movement" (first-nonspace-char, 1) };
@@ -288,6 +304,8 @@
 
   bind "<ctrl>e" { "movement" (screen-up, 1) };
   bind "<ctrl>y" { "movement" (screen-down, 1) };
+
+  bind "g" { "set-mode" ("vim-visual-g", transient) };
   bind "z" { "set-mode" ("vim-visual-z", transient) };
 }
 
