@@ -138,6 +138,8 @@
   bind "asciitilde" { "change-case" (toggle)
                       "movement" (next-char, 0) };
 
+  bind "BackSpace" { "movement" (previous-char, 0) };
+
   /* copy */
   bind "y" { "set-mode" ("vim-normal-y", transient) };
   bind "<shift>y" { "save-cursor" ()
