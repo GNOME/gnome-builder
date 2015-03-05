@@ -172,6 +172,12 @@
              "delete-from-cursor" (chars, 1) };
   bind "<shift>w" { "movement" (next-full-word-start, 1)
                     "delete-from-cursor" (chars, 1) };
+  bind "0" { "movement" (first-char, 1)
+             "delete-from-cursor" (chars, 1) };
+  bind "<shift>asciicircum" { "movement" (first-nonspace-char, 1)
+                              "delete-from-cursor" (chars, 1) };
+  bind "dollar" { "movement" (last-char, 1)
+                  "delete-from-cursor" (chars, 1) };
 }
 
 @binding-set builder-vim-source-view-normal-z
