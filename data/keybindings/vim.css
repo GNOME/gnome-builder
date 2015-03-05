@@ -129,6 +129,12 @@
                     "copy-clipboard" ()
                     "delete-from-cursor" (chars, 1) };
 
+  /* join selected lines */
+  bind "<shift>j" { "movement" (first-char, 0)
+                    "movement" (next-line, 1)
+                    "join-lines" ()
+                    "movement" (last-char, 0) };
+
   /* change number */
   bind "<ctrl>a" { "change-number" (1) };
   bind "<ctrl>x" { "change-number" (-1) };
@@ -218,6 +224,11 @@
                     "set-mode" ("vim-normal", permanent) };
   bind "<shift>y" { "copy-clipboard" ()
                     "clear-selection" ()
+                    "set-mode" ("vim-normal", permanent) };
+
+  bind "<shift>j" { "join-lines" ()
+                    "clear-selection" ()
+                    "movement" (last-char, 0)
                     "set-mode" ("vim-normal", permanent) };
 }
 
