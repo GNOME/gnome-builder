@@ -1974,17 +1974,18 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   g_object_class_install_property (object_class, PROP_SNIPPET_COMPLETION,
                                    gParamSpecs [PROP_SNIPPET_COMPLETION]);
 
-  gSignals [ACTION] = g_signal_new ("action",
-                                    G_TYPE_FROM_CLASS (klass),
-                                    G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                                    G_STRUCT_OFFSET (IdeSourceViewClass, action),
-                                    NULL, NULL,
-                                    g_cclosure_marshal_generic,
-                                    G_TYPE_NONE,
-                                    3,
-                                    G_TYPE_STRING,
-                                    G_TYPE_STRING,
-                                    G_TYPE_STRING);
+  gSignals [ACTION] =
+    g_signal_new ("action",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, action),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  3,
+                  G_TYPE_STRING,
+                  G_TYPE_STRING,
+                  G_TYPE_STRING);
 
   gSignals [CLEAR_SELECTION] =
     g_signal_new ("clear-selection",
