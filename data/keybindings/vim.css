@@ -139,7 +139,12 @@
   bind "asciitilde" { "change-case" (toggle)
                       "movement" (next-char, 0) };
 
-  bind "BackSpace" { "movement" (previous-char, 0) };
+  bind "BackSpace" { "move-cursor" (logical-positions, -1, 0) };
+
+  bind "KP_Enter" { "movement" (next-line, 0) };
+  bind "<shift>KP_Enter" { "movement" (next-line, 0) };
+  bind "Return" { "movement" (next-line, 0) };
+  bind "<shift>Return" { "movement" (next-line, 0) };
 
   /* copy */
   bind "y" { "set-mode" ("vim-normal-y", transient) };
