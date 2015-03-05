@@ -78,6 +78,7 @@ typedef struct
   gulong                       buffer_notify_language_handler;
 
   guint                        auto_indent : 1;
+  guint                        completion_visible : 1;
   guint                        insert_matching_brace : 1;
   guint                        overwrite_braces : 1;
   guint                        show_grid_lines : 1;
@@ -104,6 +105,7 @@ enum {
 enum {
   ACTION,
   CLEAR_SELECTION,
+  CYCLE_COMPLETION,
   INSERT_AT_CURSOR_AND_INDENT,
   JUMP,
   MOVEMENT,
@@ -1470,6 +1472,43 @@ ide_source_view_real_clear_selection (IdeSourceView *self)
 }
 
 static void
+ide_source_view_real_cycle_completion (IdeSourceView    *self,
+                                       GtkDirectionType  direction)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceView *source_view = (GtkSourceView *)self;
+  GtkSourceCompletion *completion;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  completion = gtk_source_view_get_completion (source_view);
+
+  if (!priv->completion_visible)
+    {
+      g_signal_emit_by_name (self, "show-completion");
+      return;
+    }
+
+  switch (direction)
+    {
+    case GTK_DIR_TAB_FORWARD:
+    case GTK_DIR_DOWN:
+      g_signal_emit_by_name (completion, "move-cursor", GTK_SCROLL_STEPS, 1);
+      break;
+
+    case GTK_DIR_TAB_BACKWARD:
+    case GTK_DIR_UP:
+      g_signal_emit_by_name (completion, "move-cursor", GTK_SCROLL_STEPS, -1);
+      break;
+
+    case GTK_DIR_LEFT:
+    case GTK_DIR_RIGHT:
+    default:
+      break;
+    }
+}
+
+static void
 ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
                                                   const gchar   *str)
 {
@@ -1634,17 +1673,51 @@ ide_source_view_real_movement (IdeSourceView         *self,
 }
 
 static void
+ide_source_view__completion_hide_cb (IdeSourceView       *self,
+                                     GtkSourceCompletion *completion)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  priv->completion_visible = FALSE;
+}
+
+static void
+ide_source_view__completion_show_cb (IdeSourceView       *self,
+                                     GtkSourceCompletion *completion)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  priv->completion_visible = TRUE;
+}
+
+static void
 ide_source_view_constructed (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceGutter *gutter;
+  GtkSourceCompletion *completion;
   gboolean visible;
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->constructed (object);
 
   if (!priv->mode)
     ide_source_view_real_set_mode (self, "default", IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+
+  /*
+   * Completion does not have a way to retrieve visibility, so we need to track that ourselves
+   * by connecting to hide/show. We use this to know if we need to move to the next item in the
+   * result set during IdeSourceView:cycle-completion.
+   */
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+  g_signal_connect_object (completion,
+                           "show",
+                           G_CALLBACK (ide_source_view__completion_show_cb),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  g_signal_connect_object (completion,
+                           "hide",
+                           G_CALLBACK (ide_source_view__completion_hide_cb),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
 
@@ -1811,6 +1884,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   klass->action = ide_source_view_real_action;
   klass->clear_selection = ide_source_view_real_clear_selection;
+  klass->cycle_completion = ide_source_view_real_cycle_completion;
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
   klass->jump = ide_source_view_real_jump;
   klass->movement = ide_source_view_real_movement;
@@ -1903,6 +1977,17 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+
+  gSignals [CYCLE_COMPLETION] =
+    g_signal_new ("cycle-completion",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, cycle_completion),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__ENUM,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_DIRECTION_TYPE);
 
   gSignals [INSERT_AT_CURSOR_AND_INDENT] =
     g_signal_new ("insert-at-cursor-and-indent",
