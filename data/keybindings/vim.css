@@ -170,6 +170,7 @@
 
 @binding-set builder-vim-source-view-normal-g
 {
+  bind "e" { "movement" (previous-word-end, 0) };
   bind "g" { "movement" (first-line, 0) };
   bind "m" { "movement" (middle-char, 0) };
 }
