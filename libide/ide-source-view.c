@@ -104,6 +104,7 @@ enum {
 
 enum {
   ACTION,
+  CHANGE_CASE,
   CLEAR_SELECTION,
   CYCLE_COMPLETION,
   INSERT_AT_CURSOR_AND_INDENT,
@@ -1456,6 +1457,23 @@ ide_source_view_real_action (IdeSourceView *self,
 }
 
 static void
+ide_source_view_real_change_case (IdeSourceView           *self,
+                                  GtkSourceChangeCaseType  type)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  if (GTK_SOURCE_IS_BUFFER (buffer))
+    gtk_source_buffer_change_case (GTK_SOURCE_BUFFER (buffer), type, &begin, &end);
+}
+
+static void
 ide_source_view_real_clear_selection (IdeSourceView *self)
 {
   GtkTextView *text_view = (GtkTextView *)self;
@@ -1900,6 +1918,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->query_tooltip = ide_source_view_query_tooltip;
 
   klass->action = ide_source_view_real_action;
+  klass->change_case = ide_source_view_real_change_case;
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
@@ -1986,6 +2005,17 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_STRING,
                   G_TYPE_STRING,
                   G_TYPE_STRING);
+
+  gSignals [CHANGE_CASE] =
+    g_signal_new ("change-case",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, change_case),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__ENUM,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_SOURCE_TYPE_CHANGE_CASE_TYPE);
 
   gSignals [CLEAR_SELECTION] =
     g_signal_new ("clear-selection",

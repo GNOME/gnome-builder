@@ -162,6 +162,8 @@ struct _IdeSourceViewClass
                                        const gchar             *prefix,
                                        const gchar             *action_name,
                                        const gchar             *param);
+  void (*change_case)                 (IdeSourceView           *self,
+                                       GtkSourceChangeCaseType  type);
   void (*clear_selection)             (IdeSourceView           *self);
   void (*cycle_completion)            (IdeSourceView           *self,
                                        GtkDirectionType         direction);
