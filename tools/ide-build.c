@@ -35,6 +35,7 @@ static guint64 gBuildStart;
 static gboolean gRebuild;
 static GList *gLogThreads;
 static gboolean gBuildDone;
+static gint gParallel;
 
 static void
 quit (gint exit_code)
@@ -220,6 +221,9 @@ build_for_device (IdeContext *context,
   if (gRebuild)
     g_key_file_set_boolean (config, "autotools", "rebuild", TRUE);
 
+  if (gParallel)
+    g_key_file_set_integer (config, "parallel", "workers", gParallel);
+
   build_system = ide_context_get_build_system (context);
   builder = ide_build_system_get_builder (build_system, config, device, &error);
   g_key_file_unref (config);
@@ -351,6 +355,9 @@ main (gint   argc,
     },
     { "rebuild", 'r', 0, G_OPTION_ARG_NONE, &gRebuild,
       N_("Clean and rebuild the project.") },
+    { "parallel", 'j', 0, G_OPTION_ARG_INT, &gParallel,
+      N_("Increase parallelism in the build."),
+      N_("N") },
     { NULL }
   };
   g_autoptr(GOptionContext) context = NULL;

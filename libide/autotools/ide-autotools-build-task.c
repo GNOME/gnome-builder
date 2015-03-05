@@ -39,6 +39,7 @@ typedef struct
 {
   gchar  *directory_path;
   gchar  *project_path;
+  gchar  *parallel;
   gchar  *system_type;
   gchar **configure_argv;
   gchar **make_targets;
@@ -521,6 +522,7 @@ worker_state_new (IdeAutotoolsBuildTask *self)
   GFile *project_dir;
   GFile *project_file;
   WorkerState *state;
+  gint val32;
 
   g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), NULL);
 
@@ -542,6 +544,11 @@ worker_state_new (IdeAutotoolsBuildTask *self)
   state->directory_path = g_file_get_path (priv->directory);
   state->project_path = g_file_get_path (project_dir);
   state->system_type = g_strdup (ide_device_get_system_type (priv->device));
+
+  if ((val32 = g_key_file_get_integer (priv->config, "parallel", "workers", NULL)))
+    state->parallel = g_strdup_printf ("-j%u", val32);
+  else
+    state->parallel = g_strdup ("-j1");
 
   make_targets = g_ptr_array_new ();
 
@@ -577,6 +584,9 @@ worker_state_free (void *data)
   g_free (state->directory_path);
   g_free (state->project_path);
   g_free (state->system_type);
+  g_free (state->parallel);
+  g_strfreev (state->configure_argv);
+  g_strfreev (state->make_targets);
   g_slice_free (WorkerState, state);
 }
 
@@ -899,7 +909,7 @@ step_make_all  (GTask                 *task,
     {
       const gchar *target = targets [i];
 
-      process = log_and_spawn (self, launcher, &error, "make", target, NULL);
+      process = log_and_spawn (self, launcher, &error, "make", target, state->parallel, NULL);
 
       if (!process)
         {
