@@ -192,6 +192,7 @@
   bind "e" { "movement" (previous-word-end, 0) };
   bind "<shift>e" { "movement" (previous-full-word-end, 0) };
   bind "g" { "movement" (first-line, 0) };
+  bind "j" { "movement" (next-line, 0) };
   bind "m" { "movement" (middle-char, 0) };
 }
 
