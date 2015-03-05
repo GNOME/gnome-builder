@@ -195,6 +195,26 @@
   bind "b" { "movement" (scroll-screen-bottom, 0) };
 }
 
+@binding-set builder-vim-source-view-visual-z
+{
+  bind "z" { "movement" (scroll-screen-center, 1)
+             "set-mode" ("vim-visual", permanent) };
+  bind "t" { "movement" (scroll-screen-top, 1)
+             "set-mode" ("vim-visual", permanent) };
+  bind "b" { "movement" (scroll-screen-bottom, 1)
+             "set-mode" ("vim-visual", permanent) };
+}
+
+@binding-set builder-vim-source-view-visual-line-z
+{
+  bind "z" { "movement" (scroll-screen-center, 1)
+             "set-mode" ("vim-visual-line", permanent) };
+  bind "t" { "movement" (scroll-screen-top, 1)
+             "set-mode" ("vim-visual-line", permanent) };
+  bind "b" { "movement" (scroll-screen-bottom, 1)
+             "set-mode" ("vim-visual-line", permanent) };
+}
+
 @binding-set builder-vim-source-view-normal-y
 {
   bind "y" { "save-insert-mark" ()
@@ -420,6 +440,11 @@ IdeSourceViewMode.vim-visual-g {
                     builder-vim-source-view-visual-g;
 }
 
+IdeSourceViewMode.vim-visual-z {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-visual-z;
+}
+
 IdeSourceViewMode.vim-visual-line {
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-visual-line;
@@ -428,6 +453,11 @@ IdeSourceViewMode.vim-visual-line {
 IdeSourceViewMode.vim-visual-line-g {
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-visual-line-g;
+}
+
+IdeSourceViewMode.vim-visual-line-z {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-visual-line-z;
 }
 
 IdeSourceViewMode.vim-visual-block {
