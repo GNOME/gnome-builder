@@ -323,7 +323,7 @@ ide_animation_get_offset (IdeAnimation *animation)
  * @animation: (in): A #IdeAnimation.
  * @target: (in): A #GObject.
  * @tween: (in): a #Tween containing the property.
- * @value: (in) The new value for the property.
+ * @value: (in): The new value for the property.
  *
  * Updates the value of a property on an object using @value.
  *

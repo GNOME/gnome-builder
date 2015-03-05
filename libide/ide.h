@@ -90,6 +90,7 @@ G_BEGIN_DECLS
 #include "directory/ide-directory-vcs.h"
 #include "git/ide-git-vcs.h"
 #include "local/ide-local-device.h"
+#include "theatrics/ide-animation.h"
 
 #undef IDE_INSIDE
 

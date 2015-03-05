@@ -139,10 +139,10 @@ libide_1_0_la_public_sources = \
 	libide/ide-source-snippets-manager.h \
 	libide/ide-source-snippets.c \
 	libide/ide-source-snippets.h \
-	libide/ide-source-view.c \
-	libide/ide-source-view.h \
 	libide/ide-source-view-mode.c \
 	libide/ide-source-view-mode.h \
+	libide/ide-source-view.c \
+	libide/ide-source-view.h \
 	libide/ide-symbol-resolver.c \
 	libide/ide-symbol-resolver.h \
 	libide/ide-symbol.c \
@@ -170,6 +170,8 @@ libide_1_0_la_public_sources = \
 	libide/python/ide-python-indenter.h \
 	libide/python/ide-python-language.c \
 	libide/python/ide-python-language.h \
+	libide/theatrics/ide-animation.c \
+	libide/theatrics/ide-animation.h \
 	libide/xml/ide-xml-indenter.c \
 	libide/xml/ide-xml-indenter.h \
 	libide/xml/ide-xml-language.c \
@@ -227,8 +229,6 @@ libide_1_0_la_SOURCES = \
 	libide/ide-vim-iter.h \
 	libide/tasks/ide-load-directory-task.c \
 	libide/tasks/ide-load-directory-task.h \
-	libide/theatrics/ide-animation.c \
-	libide/theatrics/ide-animation.h \
 	libide/theatrics/ide-box-theatric.c \
 	libide/theatrics/ide-box-theatric.h \
 	libide/theatrics/ide-frame-source.c \
