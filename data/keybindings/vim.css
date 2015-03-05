@@ -103,6 +103,12 @@
   /* redo */
   bind "<ctrl>r" { "redo" () };
 
+  bind "p" { "save-insert-mark" ()
+             "paste-clipboard" ()
+             "restore-insert-mark" ()
+             "movement" (next-line, 0)
+             "movement" (first-nonspace-char, 0) };
+
   /* overwrite */
   bind "<shift>r" { "set-mode" ("vim-insert", permanent)
                     "set-overwrite" (1) };
