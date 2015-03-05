@@ -20,6 +20,7 @@
 
 #include "ide-debug.h"
 #include "ide-enums.h"
+#include "ide-source-iter.h"
 #include "ide-source-view-movements.h"
 
 typedef struct
@@ -724,6 +725,37 @@ ide_source_view_movements_scroll_center (IdeSourceView         *self,
     }
 }
 
+static void
+ide_source_view_movements_next_word_end (IdeSourceView         *self,
+                                         IdeSourceViewMovement  movement,
+                                         gboolean               extend_selection,
+                                         gint                   param)
+{
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+  _ide_source_iter_forward_visible_word_end (&insert);
+  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+}
+
+static void
+ide_source_view_movements_previous_word_end (IdeSourceView         *self,
+                                             IdeSourceViewMovement  movement,
+                                             gboolean               extend_selection,
+                                             gint                   param)
+{
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  _ide_source_iter_backward_visible_word_starts (&insert, 2);
+  _ide_source_iter_forward_visible_word_end (&insert);
+
+  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+}
+
 void
 _ide_source_view_apply_movement (IdeSourceView         *self,
                                  IdeSourceViewMovement  movement,
@@ -778,9 +810,11 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END:
+      ide_source_view_movements_previous_word_end (self, movement, extend_selection, param);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_END:
+      ide_source_view_movements_next_word_end (self, movement, extend_selection, param);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SENTANCE_START:
