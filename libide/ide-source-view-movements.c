@@ -1076,11 +1076,11 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       ide_source_view_movements_next_word_end (self, movement, extend_selection, param);
       break;
 
-    case IDE_SOURCE_VIEW_MOVEMENT_SENTANCE_START:
+    case IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_START:
       ide_source_view_movements_sentence_start (self, movement, extend_selection, param);
       break;
 
-    case IDE_SOURCE_VIEW_MOVEMENT_SENTANCE_END:
+    case IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_END:
       ide_source_view_movements_sentence_end (self, movement, extend_selection, param);
       break;
 

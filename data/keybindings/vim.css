@@ -74,9 +74,9 @@
   bind "braceleft" { "movement" (paragraph-start, 0) };
   bind "braceright" { "movement" (paragraph-end, 0) };
 
-  /* move by sentance */
-  bind "parenleft" { "movement" (sentance-start, 0) };
-  bind "parenright" { "movement" (sentance-end, 0) };
+  /* move by sentence */
+  bind "parenleft" { "movement" (sentence-start, 0) };
+  bind "parenright" { "movement" (sentence-end, 0) };
 
   /* move to line offset of zero, and first non-whitespace char, end of line */
   bind "0" { "movement" (first-char, 0) };
