@@ -90,7 +90,7 @@
   bind "bar" { "movement" (nth-char, 0) };
 
   /* jump to match of brace/bracket/comment/etc */
-  bind "percent" { "movement" (match-special, 0) };
+  bind "percent" { "move-to-matching-bracket" (0) };
 
   /* move based on visible screen area */
   bind "<shift>h" { "movement" (screen-top, 0) };
@@ -196,6 +196,7 @@
 
 @binding-set builder-vim-source-view-visual
 {
+  bind "percent" { "move-to-matching-bracket" (1) };
 }
 
 @binding-set builder-vim-source-view-visual-line
