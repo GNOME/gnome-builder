@@ -775,7 +775,7 @@ ide_source_view_movements_next_word_start (IdeSourceView         *self,
 
   copy = insert;
 
-  if (_ide_source_iter_starts_word (&insert))
+  if (!_ide_source_iter_ends_word (&insert))
     _ide_source_iter_forward_visible_word_end (&insert);
 
   if (_ide_source_iter_forward_visible_word_end (&insert))
