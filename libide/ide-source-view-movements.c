@@ -22,6 +22,7 @@
 #include "ide-enums.h"
 #include "ide-source-iter.h"
 #include "ide-source-view-movements.h"
+#include "ide-vim-iter.h"
 
 typedef struct
 {
@@ -803,17 +804,7 @@ ide_source_view_movements_paragraph_start (IdeSourceView         *self,
 
   ide_source_view_movements_get_selection (self, &insert, &selection);
 
-  /* Move up to the first non-blank line */
-  while (gtk_text_iter_starts_line (&insert) &&
-         gtk_text_iter_ends_line (&insert))
-    if (!gtk_text_iter_backward_line (&insert))
-      break;
-
-  /* Find the next blank line */
-  while (gtk_text_iter_backward_line (&insert))
-    if (gtk_text_iter_starts_line (&insert) &&
-        gtk_text_iter_ends_line (&insert))
-      break;
+  _ide_vim_iter_backward_paragraph_start (&insert);
 
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
@@ -831,15 +822,43 @@ ide_source_view_movements_paragraph_end (IdeSourceView         *self,
 
   ide_source_view_movements_get_selection (self, &insert, &selection);
 
-  /* Move down to the first non-blank line */
-  while (gtk_text_iter_starts_line (&insert) && gtk_text_iter_ends_line (&insert))
-    if (!gtk_text_iter_forward_line (&insert))
-      break;
+  _ide_vim_iter_forward_paragraph_end (&insert);
 
-  /* Find the next blank line */
-  while (gtk_text_iter_forward_line (&insert))
-    if (gtk_text_iter_starts_line (&insert) && gtk_text_iter_ends_line (&insert))
-      break;
+  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+}
+
+static void
+ide_source_view_movements_sentence_start (IdeSourceView         *self,
+                                          IdeSourceViewMovement  movement,
+                                          gboolean               extend_selection,
+                                          gint                   param)
+{
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  _ide_vim_iter_backward_sentence_start (&insert);
+
+  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+}
+
+static void
+ide_source_view_movements_sentence_end (IdeSourceView         *self,
+                                        IdeSourceViewMovement  movement,
+                                        gboolean               extend_selection,
+                                        gint                   param)
+{
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  _ide_vim_iter_forward_sentence_end (&insert);
 
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
@@ -908,9 +927,11 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SENTANCE_START:
+      ide_source_view_movements_sentence_start (self, movement, extend_selection, param);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SENTANCE_END:
+      ide_source_view_movements_sentence_end (self, movement, extend_selection, param);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_START:
