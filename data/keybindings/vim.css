@@ -103,11 +103,8 @@
   /* redo */
   bind "<ctrl>r" { "redo" () };
 
-  bind "p" { "save-insert-mark" ()
-             "paste-clipboard" ()
-             "restore-insert-mark" ()
-             "movement" (next-line, 0)
-             "movement" (first-nonspace-char, 0) };
+  bind "p" { "paste-clipboard-extended" (1, 1, 0) };
+  bind "<shift>p" { "paste-clipboard-extended" (1, 0, 0) };
 
   /* overwrite */
   bind "<shift>r" { "set-mode" ("vim-insert", permanent)
