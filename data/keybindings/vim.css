@@ -55,7 +55,7 @@
   bind "w" { "movement" (next-word-start, 0) };
 
   /* move to special sub-mode 'g' */
-  bind "g" { "set-mode" ("vim-normal-g", permanent) };
+  bind "g" { "set-mode" ("vim-normal-g", transient ) };
 
   /* move by word ends */
   bind "e" { "movement" (next-word-end, 0) };
@@ -170,10 +170,8 @@
 
 @binding-set builder-vim-source-view-normal-g
 {
-  bind "g" { "movement" (first-line, 0)
-             "set-mode" ("vim-normal", permanent) };
-  bind "m" { "movement" (middle-char, 0)
-             "set-mode" ("vim-normal", permanent) };
+  bind "g" { "movement" (first-line, 0) };
+  bind "m" { "movement" (middle-char, 0) };
 }
 
 @binding-set builder-vim-source-view-insert
