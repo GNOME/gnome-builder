@@ -181,6 +181,9 @@
 
 @binding-set builder-vim-source-view-insert
 {
+  bind "<ctrl>w" { "movement" (previous-word-start, 1)
+                   "copy-clipboard" ()
+                   "delete-from-cursor" (chars, 1) };
 }
 
 @binding-set builder-vim-source-view-visual
