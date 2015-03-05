@@ -197,6 +197,8 @@
 
 @binding-set builder-vim-source-view-insert
 {
+  bind "<ctrl>u" { "movement" (first-nonspace-char, 1)
+                   "delete-from-cursor" (chars, 1) };
   bind "<ctrl>w" { "movement" (previous-word-start, 1)
                    "copy-clipboard" ()
                    "delete-from-cursor" (chars, 1) };
