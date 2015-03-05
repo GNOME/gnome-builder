@@ -748,6 +748,20 @@ ide_source_view_movements_next_word_end (IdeSourceView         *self,
 }
 
 static void
+ide_source_view_movements_next_full_word_end (IdeSourceView         *self,
+                                              IdeSourceViewMovement  movement,
+                                              gboolean               extend_selection,
+                                              gint                   param)
+{
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+  _ide_source_iter_forward_full_word_end (&insert);
+  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+}
+
+static void
 ide_source_view_movements_next_word_start (IdeSourceView         *self,
                                            IdeSourceViewMovement  movement,
                                            gboolean               extend_selection,
@@ -758,11 +772,31 @@ ide_source_view_movements_next_word_start (IdeSourceView         *self,
 
   ide_source_view_movements_get_selection (self, &insert, &selection);
 
-  if (!_ide_source_iter_ends_full_word (&insert))
+  if (!_ide_source_iter_ends_word (&insert))
     _ide_source_iter_forward_visible_word_end (&insert);
 
   _ide_source_iter_forward_visible_word_end (&insert);
   _ide_source_iter_backward_visible_word_start (&insert);
+
+  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+}
+
+static void
+ide_source_view_movements_next_full_word_start (IdeSourceView         *self,
+                                                IdeSourceViewMovement  movement,
+                                                gboolean               extend_selection,
+                                                gint                   param)
+{
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  if (!_ide_source_iter_ends_full_word (&insert))
+    _ide_source_iter_forward_full_word_end (&insert);
+
+  _ide_source_iter_forward_full_word_end (&insert);
+  _ide_source_iter_backward_full_word_start (&insert);
 
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
@@ -782,6 +816,20 @@ ide_source_view_movements_previous_word_start (IdeSourceView         *self,
 }
 
 static void
+ide_source_view_movements_previous_full_word_start (IdeSourceView         *self,
+                                                    IdeSourceViewMovement  movement,
+                                                    gboolean               extend_selection,
+                                                    gint                   param)
+{
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+  _ide_source_iter_backward_full_word_start (&insert);
+  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+}
+
+static void
 ide_source_view_movements_previous_word_end (IdeSourceView         *self,
                                              IdeSourceViewMovement  movement,
                                              gboolean               extend_selection,
@@ -794,6 +842,25 @@ ide_source_view_movements_previous_word_end (IdeSourceView         *self,
 
   _ide_source_iter_backward_visible_word_starts (&insert, 2);
   _ide_source_iter_forward_visible_word_end (&insert);
+
+  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+}
+
+static void
+ide_source_view_movements_previous_full_word_end (IdeSourceView         *self,
+                                                  IdeSourceViewMovement  movement,
+                                                  gboolean               extend_selection,
+                                                  gint                   param)
+{
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  if (!_ide_source_iter_starts_full_word (&insert))
+    _ide_source_iter_backward_full_word_start (&insert);
+  _ide_source_iter_backward_full_word_start (&insert);
+  _ide_source_iter_forward_full_word_end (&insert);
 
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
@@ -915,6 +982,22 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
     case IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR:
       ide_source_view_movements_last_char (self, movement, extend_selection, param);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_START:
+      ide_source_view_movements_previous_full_word_start (self, movement, extend_selection, param);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_START:
+      ide_source_view_movements_next_full_word_start (self, movement, extend_selection, param);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_END:
+      ide_source_view_movements_previous_full_word_end (self, movement, extend_selection, param);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_END:
+      ide_source_view_movements_next_full_word_end (self, movement, extend_selection, param);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START:
