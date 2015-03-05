@@ -129,6 +129,10 @@
                     "copy-clipboard" ()
                     "delete-from-cursor" (chars, 1) };
 
+  /* change number */
+  bind "<ctrl>a" { "change-number" (1) };
+  bind "<ctrl>x" { "change-number" (-1) };
+
   /* copy */
   bind "y" { "set-mode" ("vim-normal-y", transient) };
   bind "<shift>y" { "save-cursor" ()
