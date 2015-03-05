@@ -767,16 +767,26 @@ ide_source_view_movements_next_word_start (IdeSourceView         *self,
                                            gboolean               extend_selection,
                                            gint                   param)
 {
+  GtkTextIter copy;
   GtkTextIter insert;
   GtkTextIter selection;
 
   ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  copy = insert;
 
   if (_ide_source_iter_starts_word (&insert))
     _ide_source_iter_forward_visible_word_end (&insert);
 
   if (_ide_source_iter_forward_visible_word_end (&insert))
     _ide_source_iter_backward_visible_word_start (&insert);
+
+  /*
+   * Vim treats an empty line as a word.
+   */
+  if (gtk_text_iter_forward_char (&copy))
+    if (gtk_text_iter_get_char (&copy) == '\n')
+      insert = copy;
 
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
@@ -787,16 +797,26 @@ ide_source_view_movements_next_full_word_start (IdeSourceView         *self,
                                                 gboolean               extend_selection,
                                                 gint                   param)
 {
+  GtkTextIter copy;
   GtkTextIter insert;
   GtkTextIter selection;
 
   ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  copy = insert;
 
   if (!_ide_source_iter_ends_full_word (&insert))
     _ide_source_iter_forward_full_word_end (&insert);
 
   _ide_source_iter_forward_full_word_end (&insert);
   _ide_source_iter_backward_full_word_start (&insert);
+
+  /*
+   * Vim treats an empty line as a word.
+   */
+  if (gtk_text_iter_forward_char (&copy))
+    if (gtk_text_iter_get_char (&copy) == '\n')
+      insert = copy;
 
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
@@ -807,11 +827,23 @@ ide_source_view_movements_previous_word_start (IdeSourceView         *self,
                                                gboolean               extend_selection,
                                                gint                   param)
 {
+  GtkTextIter copy;
   GtkTextIter insert;
   GtkTextIter selection;
 
   ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  copy = insert;
+
   _ide_source_iter_backward_visible_word_start (&insert);
+
+  /*
+   * Vim treats an empty line as a word.
+   */
+  if (gtk_text_iter_backward_char (&copy))
+    if (gtk_text_iter_get_char (&copy) == '\n')
+      insert = copy;
+
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
 
@@ -821,11 +853,23 @@ ide_source_view_movements_previous_full_word_start (IdeSourceView         *self,
                                                     gboolean               extend_selection,
                                                     gint                   param)
 {
+  GtkTextIter copy;
   GtkTextIter insert;
   GtkTextIter selection;
 
   ide_source_view_movements_get_selection (self, &insert, &selection);
+
+  copy = insert;
+
   _ide_source_iter_backward_full_word_start (&insert);
+
+  /*
+   * Vim treats an empty line as a word.
+   */
+  if (gtk_text_iter_backward_char (&copy))
+    if (gtk_text_iter_get_char (&copy) == '\n')
+      insert = copy;
+
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
 
@@ -835,13 +879,29 @@ ide_source_view_movements_previous_word_end (IdeSourceView         *self,
                                              gboolean               extend_selection,
                                              gint                   param)
 {
+  GtkTextIter copy;
   GtkTextIter insert;
   GtkTextIter selection;
 
   ide_source_view_movements_get_selection (self, &insert, &selection);
 
+  copy = insert;
+
   _ide_source_iter_backward_visible_word_starts (&insert, 2);
   _ide_source_iter_forward_visible_word_end (&insert);
+
+  /*
+   * Vim treats an empty line as a word.
+   */
+  if (gtk_text_iter_backward_char (&copy))
+    if (gtk_text_iter_get_char (&copy) == '\n')
+      insert = copy;
+
+  /*
+   * Ensure we are strictly before our previous position.
+   */
+  if (gtk_text_iter_compare (&insert, &copy) > 0)
+    gtk_text_buffer_get_start_iter (gtk_text_iter_get_buffer (&insert), &insert);
 
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
