@@ -202,7 +202,7 @@
              "movement" (last-char, 1)
              "move-cursor" (visual-positions, 1, 1)
              "copy-clipboard" ()
-             "selection-theatric" ()
+             "selection-theatric" (expand)
              "clear-selection" ()
              "restore-insert-mark" () };
 }
@@ -251,25 +251,32 @@
                     "set-mode" ("vim-normal", permanent) };
 
   bind "y"        { "copy-clipboard" ()
+                    "selection-theatric" (expand)
                     "clear-selection" ()
                     "set-mode" ("vim-normal", permanent) };
+
   bind "<shift>y" { "copy-clipboard" ()
+                    "selection-theatric" (expand)
                     "clear-selection" ()
                     "set-mode" ("vim-normal", permanent) };
 
   bind "<shift>j" { "join-lines" ()
+                    "selection-theatric" (expand)
                     "clear-selection" ()
                     "movement" (last-char, 0)
                     "set-mode" ("vim-normal", permanent) };
 
-  bind "asciitilde" { "change-case" (toggle)
+  bind "asciitilde" { "selection-theatric" (expand)
+                      "change-case" (toggle)
                       "clear-selection" ()
                       "set-mode" ("vim-normal", permanent) };
 
-  bind "<shift>u" { "change-case" (upper)
+  bind "<shift>u" { "selection-theatric" (expand)
+                    "change-case" (upper)
                     "clear-selection" ()
                     "set-mode" ("vim-normal", permanent) };
-  bind "u" { "change-case" (lower)
+  bind "u" { "selection-theatric" (expand)
+             "change-case" (lower)
              "clear-selection" ()
              "set-mode" ("vim-normal", permanent) };
 }
