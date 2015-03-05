@@ -218,6 +218,36 @@
   bind "m" { "movement" (middle-char, 0) };
 }
 
+@binding-set builder-vim-source-view-visual-g
+{
+  bind "e" { "movement" (previous-word-end, 1)
+             "set-mode" ("vim-visual", permanent) };
+  bind "<shift>e" { "movement" (previous-full-word-end, 1)
+                    "set-mode" ("vim-visual", permanent) };
+  bind "g" { "movement" (first-line, 1)
+             "set-mode" ("vim-visual", permanent) };
+  bind "j" { "movement" (next-line, 1)
+             "set-mode" ("vim-visual", permanent) };
+  bind "m" { "movement" (middle-char, 1)
+             "set-mode" ("vim-visual", permanent) };
+}
+
+@binding-set builder-vim-source-view-visual-line-g
+{
+  bind "e" { "movement" (previous-word-end, 1)
+             "movement" (last-char, 1)
+             "set-mode" ("vim-visual-line", permanent) };
+  bind "<shift>e" { "movement" (previous-full-word-end, 1)
+                    "movement" (last-char, 1)
+                    "set-mode" ("vim-visual-line", permanent) };
+  bind "g" { "movement" (first-line, 1)
+             "movement" (last-char, 1)
+             "set-mode" ("vim-visual-line", permanent) };
+  bind "j" { "movement" (next-line, 1)
+             "movement" (last-char, 1)
+             "set-mode" ("vim-visual-line", permanent) };
+}
+
 @binding-set builder-vim-source-view-insert
 {
   bind "<ctrl>u" { "movement" (first-nonspace-char, 1)
@@ -258,6 +288,7 @@
 
   bind "<ctrl>e" { "movement" (screen-up, 1) };
   bind "<ctrl>y" { "movement" (screen-down, 1) };
+  bind "z" { "set-mode" ("vim-visual-z", transient) };
 }
 
 @binding-set builder-vim-source-view-visual-line
@@ -366,9 +397,19 @@ IdeSourceViewMode.vim-visual {
                     builder-vim-source-view-visual;
 }
 
+IdeSourceViewMode.vim-visual-g {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-visual-g;
+}
+
 IdeSourceViewMode.vim-visual-line {
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-visual-line;
+}
+
+IdeSourceViewMode.vim-visual-line-g {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-visual-line-g;
 }
 
 IdeSourceViewMode.vim-visual-block {
