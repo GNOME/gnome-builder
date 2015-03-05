@@ -374,6 +374,8 @@
 
   bind "k" { "movement" (previous-line, 1) };
 
+  bind "z" { "set-mode" ("vim-visual-line-z", transient) };
+
   bind "x"        { "copy-clipboard" ()
                     "delete-selection" ()
                     "delete-from-cursor" (chars, 1)
