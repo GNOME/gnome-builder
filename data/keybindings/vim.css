@@ -117,12 +117,12 @@
   /* delete current char */
   bind "x" { "movement" (next-char, 1)
              "copy-clipboard" ()
-             "delete-from-cursor" (chars, 1) };
+             "delete-selection" () };
 
   /* delete previous char */
   bind "<shift>x" { "movement" (previous-char, 1)
                     "copy-clipboard" ()
-                    "delete-from-cursor" (chars, 1) };
+                    "delete-selection" () };
 
   /* join selected lines */
   bind "<shift>j" { "movement" (first-char, 0)
