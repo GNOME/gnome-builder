@@ -165,6 +165,17 @@
 
 @binding-set builder-vim-source-view-normal-d
 {
+  bind "h" { "movement" (previous-char, 1)
+             "delete-selection" () };
+  bind "l" { "movement" (next-char, 1)
+             "delete-selection" () };
+  bind "k" { "movement" (previous-line, 1)
+             "delete-selection" () };
+  bind "j" { "movement" (next-line, 1)
+             "delete-selection" () };
+
+  bind "g" { "set-mode" ("vim-normal-d-g", transient) };
+
   bind "d" { "movement" (first-char, 0)
              "movement" (last-char, 1)
              "move-cursor" (visual-positions, 1, 1)
@@ -241,6 +252,20 @@
   bind "g" { "movement" (first-line, 0) };
   bind "j" { "movement" (next-line, 0) };
   bind "m" { "movement" (middle-char, 0) };
+}
+
+@binding-set builder-vim-source-view-normal-d-g
+{
+  bind "e" { "movement" (previous-word-end, 1)
+             "delete-selection" () };
+  bind "<shift>e" { "movement" (previous-full-word-end, 1)
+                    "delete-selection" () };
+  bind "g" { "movement" (first-line, 0)
+             "delete-selection" () };
+  bind "j" { "movement" (next-line, 0)
+             "delete-selection" () };
+  bind "m" { "movement" (middle-char, 0)
+             "delete-selection" () };
 }
 
 @binding-set builder-vim-source-view-visual-g
@@ -419,6 +444,11 @@ IdeSourceViewMode.vim-normal {
 IdeSourceViewMode.vim-normal-d {
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal-d;
+}
+
+IdeSourceViewMode.vim-normal-d-g {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-d-g;
 }
 
 IdeSourceViewMode.vim-normal-g {
