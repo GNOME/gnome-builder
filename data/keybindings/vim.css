@@ -10,10 +10,6 @@
 
 @binding-set builder-vim-source-view-normal
 {
-  /*
-   * Sequences to get into insert mode from normal mode.
-   */
-
   /* insert at cursor */
   bind "i" { "set-mode" ("vim-insert", permanent) };
 
