@@ -110,6 +110,7 @@ enum {
   CHANGE_CASE,
   CLEAR_SELECTION,
   CYCLE_COMPLETION,
+  DELETE_SELECTION,
   INSERT_AT_CURSOR_AND_INDENT,
   JOIN_LINES,
   JUMP,
@@ -1534,6 +1535,21 @@ ide_source_view_real_cycle_completion (IdeSourceView    *self,
 }
 
 static void
+ide_source_view_real_delete_selection (IdeSourceView *self)
+{
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextBuffer *buffer;
+  gboolean editable;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+
+  editable = gtk_text_view_get_editable (text_view);
+  buffer = gtk_text_view_get_buffer (text_view);
+  gtk_text_buffer_delete_selection (buffer, TRUE, editable);
+}
+
+static void
 ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
                                                   const gchar   *str)
 {
@@ -2031,6 +2047,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->change_case = ide_source_view_real_change_case;
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
+  klass->delete_selection = ide_source_view_real_delete_selection;
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
   klass->join_lines = ide_source_view_real_join_lines;
   klass->jump = ide_source_view_real_jump;
@@ -2151,6 +2168,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_DIRECTION_TYPE);
+
+  gSignals [DELETE_SELECTION] =
+    g_signal_new ("delete-selection",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, delete_selection),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   gSignals [INSERT_AT_CURSOR_AND_INDENT] =
     g_signal_new ("insert-at-cursor-and-indent",
