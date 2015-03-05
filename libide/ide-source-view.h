@@ -185,6 +185,8 @@ struct _IdeSourceViewClass
                                        IdeSourceSnippet        *snippet,
                                        IdeSourceSnippetContext *context,
                                        const GtkTextIter       *location);
+  void (*restore_insert_mark)         (IdeSourceView           *self);
+  void (*save_insert_mark)            (IdeSourceView           *self);
   void (*set_mode)                    (IdeSourceView           *self,
                                        const gchar             *mode,
                                        IdeSourceViewModeType    type);

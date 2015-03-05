@@ -77,6 +77,9 @@ typedef struct
   gulong                       buffer_notify_highlight_diagnostics_handler;
   gulong                       buffer_notify_language_handler;
 
+  guint                        saved_line;
+  guint                        saved_line_offset;
+
   guint                        auto_indent : 1;
   guint                        completion_visible : 1;
   guint                        insert_matching_brace : 1;
@@ -113,6 +116,8 @@ enum {
   MOVEMENT,
   PUSH_SNIPPET,
   POP_SNIPPET,
+  RESTORE_INSERT_MARK,
+  SAVE_INSERT_MARK,
   SET_MODE,
   SET_OVERWRITE,
   LAST_SIGNAL
@@ -1708,6 +1713,52 @@ ide_source_view_real_movement (IdeSourceView         *self,
 }
 
 static void
+ide_source_view_real_restore_insert_mark (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  guint line_offset;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, priv->saved_line);
+
+  line_offset = priv->saved_line_offset;
+
+  for (; line_offset; line_offset--)
+    {
+      if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
+        break;
+    }
+
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (self), insert);
+}
+
+static void
+ide_source_view_real_save_insert_mark (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  priv->saved_line = gtk_text_iter_get_line (&iter);
+  priv->saved_line_offset = gtk_text_iter_get_line_offset (&iter);
+}
+
+static void
 ide_source_view__completion_hide_cb (IdeSourceView       *self,
                                      GtkSourceCompletion *completion)
 {
@@ -1925,6 +1976,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->join_lines = ide_source_view_real_join_lines;
   klass->jump = ide_source_view_real_jump;
   klass->movement = ide_source_view_real_movement;
+  klass->restore_insert_mark = ide_source_view_real_restore_insert_mark;
+  klass->save_insert_mark = ide_source_view_real_save_insert_mark;
   klass->set_mode = ide_source_view_real_set_mode;
   klass->set_overwrite = ide_source_view_real_set_overwrite;
 
@@ -2104,6 +2157,26 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   IDE_TYPE_SOURCE_SNIPPET,
                   IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
                   GTK_TYPE_TEXT_ITER);
+
+  gSignals [RESTORE_INSERT_MARK] =
+    g_signal_new ("restore-insert-mark",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, restore_insert_mark),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  gSignals [SAVE_INSERT_MARK] =
+    g_signal_new ("save-insert-mark",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, save_insert_mark),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   gSignals [SET_MODE] =
     g_signal_new ("set-mode",
