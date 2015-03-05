@@ -212,6 +212,8 @@ libide_1_0_la_SOURCES = \
 	libide/ide-line-diagnostics-gutter-renderer.h \
 	libide/ide-search-reducer.c \
 	libide/ide-search-reducer.h \
+	libide/ide-source-iter.c \
+	libide/ide-source-iter.h \
 	libide/ide-source-snippet-completion-item.c \
 	libide/ide-source-snippet-completion-item.h \
 	libide/ide-source-snippet-completion-provider.c \
