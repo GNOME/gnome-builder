@@ -232,6 +232,26 @@
 @binding-set builder-vim-source-view-visual
 {
   bind "percent" { "move-to-matching-bracket" (1) };
+
+  bind "h" { "movement" (previous-char, 1) };
+  bind "l" { "movement" (next-char, 1) };
+  bind "k" { "movement" (previous-line, 1) };
+  bind "j" { "movement" (next-line, 1) };
+
+  bind "0" { "movement" (first-char, 1) };
+  bind "<shift>asciicircum" { "movement" (first-nonspace-char, 1) };
+  bind "dollar" { "movement" (last-char, 1) };
+  bind "bar" { "movement" (nth-char, 1) };
+
+  bind "<shift>h" { "movement" (screen-top, 1) };
+  bind "<shift>m" { "movement" (screen-middle, 1) };
+  bind "<shift>l" { "movement" (screen-bottom, 1) };
+
+  bind "braceleft" { "movement" (paragraph-start, 1) };
+  bind "braceright" { "movement" (paragraph-end, 1) };
+
+  bind "parenleft" { "movement" (sentence-start, 1) };
+  bind "parenright" { "movement" (sentence-end, 1) };
 }
 
 @binding-set builder-vim-source-view-visual-line
