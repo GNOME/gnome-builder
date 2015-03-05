@@ -60,6 +60,10 @@
   /* move by word ends */
   bind "e" { "movement" (next-word-end, 0) };
 
+  /* move to by word start */
+  bind "w" { "movement" (next-word-start, 0) };
+  bind "b" { "movement" (previous-word-start, 0) };
+
   /* page movements */
   bind "<ctrl>b" { "movement" (page-up, 0) };
   bind "<ctrl>f" { "movement" (page-down, 0) };
