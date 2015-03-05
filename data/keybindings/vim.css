@@ -227,6 +227,9 @@
                    "delete-selection" () };
   bind "<ctrl>n" { "cycle-completion" (down) };
   bind "<ctrl>p" { "cycle-completion" (up) };
+
+  bind "<ctrl>e" { "movement" (screen-up, 0) };
+  bind "<ctrl>y" { "movement" (screen-down, 0) };
 }
 
 @binding-set builder-vim-source-view-visual
@@ -252,6 +255,9 @@
 
   bind "parenleft" { "movement" (sentence-start, 1) };
   bind "parenright" { "movement" (sentence-end, 1) };
+
+  bind "<ctrl>e" { "movement" (screen-up, 1) };
+  bind "<ctrl>y" { "movement" (screen-down, 1) };
 }
 
 @binding-set builder-vim-source-view-visual-line
@@ -299,6 +305,9 @@
              "change-case" (lower)
              "clear-selection" ()
              "set-mode" ("vim-normal", permanent) };
+
+  bind "<ctrl>e" { "movement" (screen-up, 1) };
+  bind "<ctrl>y" { "movement" (screen-down, 1) };
 }
 
 @binding-set builder-vim-source-view-visual-block
