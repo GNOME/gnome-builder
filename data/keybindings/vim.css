@@ -76,8 +76,8 @@
   bind "z" { "set-mode" ("vim-normal-z", transient) };
 
   /* move by paragraph */
-  bind "bracketleft" { "movement" (previous-paragraph, 0) };
-  bind "bracketright" { "movement" (next-paragraph, 0) };
+  bind "braceleft" { "movement" (paragraph-start, 0) };
+  bind "braceright" { "movement" (paragraph-end, 0) };
 
   /* move by sentance */
   bind "parenleft" { "movement" (previous-sentance, 0) };
