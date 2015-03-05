@@ -218,6 +218,12 @@
 {
 }
 
+@binding-set builder-vim-tree-view
+{
+  bind "<ctrl>n" { "move-cursor" (logical-positions, 1) };
+  bind "<ctrl>p" { "move-cursor" (logical-positions, -1) };
+}
+
 IdeSourceViewMode.default,
 IdeSourceViewMode.vim-normal {
   gtk-key-bindings: builder-vim-source-view,
@@ -261,4 +267,8 @@ IdeSourceViewMode.vim-visual-line {
 
 IdeSourceViewMode.vim-visual-block {
   gtk-key-bindings: builder-vim-source-view, builder-vim-source-view-visual-block;
+}
+
+GtkTreeView {
+  gtk-key-bindings: builder-vim-tree-view;
 }
