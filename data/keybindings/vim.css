@@ -116,8 +116,8 @@
 
   /* delete to end of line */
   bind "<shift>d" { "movement" (last-char, 1)
-	            "copy-clipboard" ()
-		    "delete-from-cursor" (chars, 1) };
+                    "copy-clipboard" ()
+                    "delete-from-cursor" (chars, 1) };
 
   /* delete current char */
   bind "x" { "movement" (next-char, 1)
