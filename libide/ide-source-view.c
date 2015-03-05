@@ -111,6 +111,7 @@ enum {
   CLEAR_SELECTION,
   CYCLE_COMPLETION,
   DELETE_SELECTION,
+  INDENT_SELECTION,
   INSERT_AT_CURSOR_AND_INDENT,
   JOIN_LINES,
   JUMP,
@@ -1614,6 +1615,45 @@ ide_source_view_real_delete_selection (IdeSourceView *self)
 }
 
 static void
+ide_source_view_real_indent_selection (IdeSourceView *self,
+                                       gint           level)
+{
+  GtkSourceView *source_view = (GtkSourceView *)self;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter selection;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+#if 0
+  /*
+   * Use count to increase direction.
+   */
+  if (priv->count)
+    level = priv->count * ((level > 0) ? 1 : -1);
+#endif
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
+  if (level < 0)
+    {
+      for (; level < 0; level++)
+        {
+          if (gtk_text_buffer_get_selection_bounds (buffer, &iter, &selection))
+            gtk_source_view_unindent_lines (source_view, &iter, &selection);
+        }
+    }
+  else
+    {
+      for (; level > 0; level--)
+        {
+          if (gtk_text_buffer_get_selection_bounds (buffer, &iter, &selection))
+            gtk_source_view_indent_lines (source_view, &iter, &selection);
+        }
+    }
+}
+
+static void
 ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
                                                   const gchar   *str)
 {
@@ -2239,6 +2279,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
   klass->delete_selection = ide_source_view_real_delete_selection;
+  klass->indent_selection = ide_source_view_real_indent_selection;
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
   klass->join_lines = ide_source_view_real_join_lines;
   klass->jump = ide_source_view_real_jump;
@@ -2370,6 +2411,17 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+
+  gSignals [INDENT_SELECTION] =
+    g_signal_new ("indent-selection",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, indent_selection),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__INT,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_INT);
 
   gSignals [INSERT_AT_CURSOR_AND_INDENT] =
     g_signal_new ("insert-at-cursor-and-indent",

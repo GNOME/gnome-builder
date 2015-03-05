@@ -186,6 +186,8 @@ struct _IdeSourceViewClass
   void (*cycle_completion)            (IdeSourceView           *self,
                                        GtkDirectionType         direction);
   void (*delete_selection)            (IdeSourceView           *self);
+  void (*indent_selection)            (IdeSourceView           *self,
+                                       gint                     level);
   void (*insert_at_cursor_and_indent) (IdeSourceView           *self,
                                        const gchar             *str);
   void (*movement)                    (IdeSourceView           *self,
