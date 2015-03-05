@@ -151,7 +151,7 @@
 
   /* visual mode transition */
   bind "v" { "movement" (next-char, 1)
-             "set-mode" ("vim-visual") };
+             "set-mode" ("vim-visual", permanent) };
   bind "<shift>v" { "movement" (first-char, 0)
                     "movement" (last-char, 1)
                     "set-mode" ("vim-visual-line", permanent) };
