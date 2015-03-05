@@ -170,6 +170,7 @@ struct _IdeSourceViewClass
   void (*movement)                    (IdeSourceView           *self,
                                        IdeSourceViewMovement    movement,
                                        gboolean                 extend_selection);
+  void (*join_lines)                  (IdeSourceView           *self);
   void (*jump)                        (IdeSourceView           *self,
                                        const GtkTextIter       *location);
   void (*pop_snippet)                 (IdeSourceView           *self,

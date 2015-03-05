@@ -107,6 +107,7 @@ enum {
   CLEAR_SELECTION,
   CYCLE_COMPLETION,
   INSERT_AT_CURSOR_AND_INDENT,
+  JOIN_LINES,
   JUMP,
   MOVEMENT,
   PUSH_SNIPPET,
@@ -1587,6 +1588,22 @@ ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
 }
 
 static void
+ide_source_view_real_join_lines (IdeSourceView *self)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  if (GTK_SOURCE_IS_BUFFER (buffer))
+    gtk_source_buffer_join_lines (GTK_SOURCE_BUFFER (buffer), &begin, &end);
+}
+
+static void
 ide_source_view_real_jump (IdeSourceView     *self,
                            const GtkTextIter *location)
 {
@@ -1886,6 +1903,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
+  klass->join_lines = ide_source_view_real_join_lines;
   klass->jump = ide_source_view_real_jump;
   klass->movement = ide_source_view_real_movement;
   klass->set_mode = ide_source_view_real_set_mode;
@@ -1999,6 +2017,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   G_TYPE_STRING);
+
+  gSignals [JOIN_LINES] =
+    g_signal_new ("join-lines",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, join_lines),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   gSignals [JUMP] =
     g_signal_new ("jump",
