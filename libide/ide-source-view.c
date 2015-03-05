@@ -1798,6 +1798,42 @@ ide_source_view__completion_show_cb (IdeSourceView       *self,
 }
 
 static void
+ide_source_view_real_push_snippet (IdeSourceView           *self,
+                                   IdeSourceSnippet        *snippet,
+                                   IdeSourceSnippetContext *context,
+                                   const GtkTextIter       *location)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_SOURCE_SNIPPET (snippet));
+  g_assert (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+
+  if (priv->buffer != NULL)
+    {
+      IdeFile *file;
+
+      file = ide_buffer_get_file (priv->buffer);
+
+      if (file != NULL)
+        {
+          GFile *gfile;
+
+          gfile = ide_file_get_file (file);
+
+          if (gfile != NULL)
+            {
+              gchar *name = NULL;
+
+              name = g_file_get_basename (gfile);
+              ide_source_snippet_context_add_variable (context, "filename", name);
+              g_free (name);
+            }
+        }
+    }
+}
+
+static void
 ide_source_view_constructed (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -1999,6 +2035,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->join_lines = ide_source_view_real_join_lines;
   klass->jump = ide_source_view_real_jump;
   klass->movement = ide_source_view_real_movement;
+  klass->push_snippet = ide_source_view_real_push_snippet;
   klass->restore_insert_mark = ide_source_view_real_restore_insert_mark;
   klass->save_insert_mark = ide_source_view_real_save_insert_mark;
   klass->selection_theatric = ide_source_view_real_selection_theatric;
