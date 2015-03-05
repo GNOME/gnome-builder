@@ -28,12 +28,21 @@
 #define ADD_CLASS(widget,name) \
   gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(widget)), name)
 
-static IdeContext  *gContext;
-static GtkWindow   *gWindow;
-static GtkStack    *gDocStack;
-static GHashTable  *gBufferToView;
-static GList       *gFilesToOpen;
-static gint         gExitCode = EXIT_SUCCESS;
+static IdeContext     *gContext;
+static GtkWindow      *gWindow;
+static GtkStack       *gDocStack;
+static GtkProgressBar *gProgress;
+static GHashTable     *gBufferToView;
+static GList          *gFilesToOpen;
+static gint            gExitCode = EXIT_SUCCESS;
+static gchar          *gCss = "\
+@binding-set file-keybindings { \
+    bind \"<ctrl>s\" { \"action\" (\"file\", \"save\", \"\") }; \
+} \
+IdeSourceView { \
+    gtk-key-bindings: file-keybindings; \
+} \
+";
 
 static void
 quit (int exit_code)
@@ -41,6 +50,22 @@ quit (int exit_code)
   gExitCode = exit_code;
   gtk_main_quit ();
   return;
+}
+
+static void
+parsing_error_cb (GtkCssProvider *provider,
+                  GtkCssSection  *section,
+                  GError         *error,
+                  gpointer        user_data)
+{
+  guint begin;
+  guint end;
+
+  begin = gtk_css_section_get_start_line (section);
+  end = gtk_css_section_get_end_line (section);
+
+  g_printerr ("CSS parsing error between lines %u and %u: %s\n",
+              begin, end, error->message);
 }
 
 static void
@@ -187,6 +212,75 @@ notify_visible_child_cb (GtkStack   *stack,
 }
 
 static void
+hide_callback (gpointer data)
+{
+  GtkWidget *widget = data;
+
+  gtk_widget_hide (widget);
+  gtk_widget_set_opacity (widget, 1.0);
+  g_object_unref (widget);
+}
+
+void
+widget_fade_hide (GtkWidget *widget)
+{
+  GdkFrameClock *frame_clock;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (gtk_widget_get_visible (widget))
+    {
+      frame_clock = gtk_widget_get_frame_clock (widget);
+      ide_object_animate_full (widget,
+                               IDE_ANIMATION_LINEAR,
+                               1000,
+                               frame_clock,
+                               hide_callback,
+                               g_object_ref (widget),
+                               "opacity", 0.0,
+                               NULL);
+    }
+}
+
+static void
+progress_completed (IdeProgress *progress,
+                    GParamSpec  *pspec,
+                    GtkWidget   *widget)
+{
+  widget_fade_hide (widget);
+}
+
+static void
+save_activate (GSimpleAction *action,
+               GVariant      *param,
+               gpointer       user_data)
+{
+  GtkWidget *current;
+
+  current = gtk_stack_get_visible_child (gDocStack);
+  if (current != NULL)
+    {
+      current = gtk_bin_get_child (GTK_BIN (current));
+      if (IDE_IS_SOURCE_VIEW (current))
+        {
+          IdeBufferManager *bufmgr;
+          IdeBuffer *buffer;
+          IdeFile *file;
+          IdeProgress *progress = NULL;
+
+          buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (current)));
+          bufmgr = ide_context_get_buffer_manager (gContext);
+          file = ide_buffer_get_file (buffer);
+          ide_buffer_manager_save_file_async (bufmgr, buffer, file, &progress, NULL, NULL, NULL);
+
+          g_object_bind_property (progress, "fraction", gProgress, "fraction", G_BINDING_SYNC_CREATE);
+          g_signal_connect (progress, "notify::completed", G_CALLBACK (progress_completed), gProgress);
+          gtk_widget_show (GTK_WIDGET (gProgress));
+        }
+    }
+}
+
+static void
 create_window (void)
 {
   GtkHeaderBar *header;
@@ -199,6 +293,20 @@ create_window (void)
   GtkButton *forward;
   GtkSeparator *sep;
   GtkButton *closebtn;
+  GtkOverlay *overlay;
+  GSimpleActionGroup *group;
+  GtkCssProvider *css;
+  static const GActionEntry entries[] = {
+    { "save", save_activate },
+  };
+
+  css = gtk_css_provider_new ();
+  g_signal_connect (css, "parsing-error", G_CALLBACK (parsing_error_cb), NULL);
+  gtk_css_provider_load_from_data (css, gCss, -1, NULL);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (css),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  g_clear_object (&css);
 
   gWindow = g_object_new (GTK_TYPE_WINDOW,
                           "default-width", 800,
@@ -206,6 +314,10 @@ create_window (void)
                           "title", _("idedit"),
                           NULL);
   g_signal_connect (gWindow, "delete-event", G_CALLBACK (delete_event_cb), NULL);
+
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), NULL);
+  gtk_widget_insert_action_group (GTK_WIDGET (gWindow), "file", G_ACTION_GROUP (group));
 
   header = g_object_new (GTK_TYPE_HEADER_BAR,
                          "show-close-button", TRUE,
@@ -318,12 +430,26 @@ create_window (void)
                       NULL);
   gtk_box_pack_end (hbox2, GTK_WIDGET (sep), FALSE, FALSE, 0);
 
+  overlay = g_object_new (GTK_TYPE_OVERLAY,
+                          "expand", TRUE,
+                          "visible", TRUE,
+                          NULL);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (overlay));
+
+  gProgress = g_object_new (GTK_TYPE_PROGRESS_BAR,
+                            "valign", GTK_ALIGN_START,
+                            "orientation", GTK_ORIENTATION_HORIZONTAL,
+                            "visible", FALSE,
+                            NULL);
+  ADD_CLASS (gProgress, "osd");
+  gtk_overlay_add_overlay (overlay, GTK_WIDGET (gProgress));
+
   gDocStack = g_object_new (GTK_TYPE_STACK,
                             "expand", TRUE,
                             "visible", TRUE,
                             NULL);
   g_signal_connect (gDocStack, "notify::visible-child", G_CALLBACK (notify_visible_child_cb), NULL);
-  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gDocStack));
+  gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (gDocStack));
 }
 
 static void
@@ -380,22 +506,6 @@ increase_verbosity (void)
 {
   ide_log_increase_verbosity ();
   return TRUE;
-}
-
-static void
-parsing_error_cb (GtkCssProvider *provider,
-                  GtkCssSection  *section,
-                  GError         *error,
-                  gpointer        user_data)
-{
-  guint begin;
-  guint end;
-
-  begin = gtk_css_section_get_start_line (section);
-  end = gtk_css_section_get_end_line (section);
-
-  g_printerr ("CSS parsing error between lines %u and %u: %s\n",
-              begin, end, error->message);
 }
 
 static void
