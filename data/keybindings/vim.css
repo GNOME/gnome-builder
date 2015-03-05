@@ -148,11 +148,11 @@
 
   /* copy */
   bind "y" { "set-mode" ("vim-normal-y", transient) };
-  bind "<shift>y" { "save-cursor" ()
+  bind "<shift>y" { "save-insert-mark" ()
                     "set-mode" ("vim-visual-line")
                     "copy-clipboard" ()
                     "set-mode" ("vim-normal")
-                    "restore-cursor" () };
+                    "restore-insert-mark" () };
 
   /* visual mode transition */
   bind "v" { "movement" (next-char, 1)
