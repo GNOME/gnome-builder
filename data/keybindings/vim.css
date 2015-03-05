@@ -184,6 +184,8 @@
   bind "<ctrl>w" { "movement" (previous-word-start, 1)
                    "copy-clipboard" ()
                    "delete-from-cursor" (chars, 1) };
+  bind "<ctrl>n" { "cycle-completion" (down) };
+  bind "<ctrl>p" { "cycle-completion" (up) };
 }
 
 @binding-set builder-vim-source-view-visual
