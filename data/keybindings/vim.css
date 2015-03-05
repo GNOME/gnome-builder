@@ -36,7 +36,8 @@
 
   /* swallow the current character and go to insert */
   bind "s" { "set-mode" ("vim-insert", permanent)
-             "delete-from-cursor" (chars, 1) };
+             "movement" (next-char, 1)
+             "delete-selection" () };
 
   /* move by character, captive to current line */
   bind "h" { "movement" (previous-char, 0) };
@@ -112,7 +113,7 @@
   /* delete to end of line */
   bind "<shift>d" { "movement" (last-char, 1)
                     "copy-clipboard" ()
-                    "delete-from-cursor" (chars, 1) };
+                    "delete-selection" () };
 
   /* delete current char */
   bind "x" { "movement" (next-char, 1)
@@ -163,21 +164,28 @@
              "movement" (last-char, 1)
              "move-cursor" (visual-positions, 1, 1)
              "copy-clipboard" ()
-             "delete-from-cursor" (chars, 1) };
+             "delete-selection" () };
   bind "e" { "movement" (next-word-end, 1)
-             "delete-from-cursor" (chars, 1) };
+             "copy-clipboard" ()
+             "delete-selection" () };
   bind "<shift>e" { "movement" (next-full-word-end, 1)
-                    "delete-from-cursor" (chars, 1) };
+                    "copy-clipboard" ()
+                    "delete-selection" () };
   bind "w" { "movement" (next-word-start, 1)
-             "delete-from-cursor" (chars, 1) };
+             "copy-clipboard" ()
+             "delete-selection" () };
   bind "<shift>w" { "movement" (next-full-word-start, 1)
-                    "delete-from-cursor" (chars, 1) };
+                    "copy-clipboard" ()
+                    "delete-selection" () };
   bind "0" { "movement" (first-char, 1)
-             "delete-from-cursor" (chars, 1) };
+             "copy-clipboard" ()
+             "delete-selection" () };
   bind "<shift>asciicircum" { "movement" (first-nonspace-char, 1)
-                              "delete-from-cursor" (chars, 1) };
+                              "copy-clipboard" ()
+                              "delete-selection" () };
   bind "dollar" { "movement" (last-char, 1)
-                  "delete-from-cursor" (chars, 1) };
+                  "copy-clipboard" ()
+                  "delete-selection" () };
 }
 
 @binding-set builder-vim-source-view-normal-z
@@ -213,10 +221,10 @@
 @binding-set builder-vim-source-view-insert
 {
   bind "<ctrl>u" { "movement" (first-nonspace-char, 1)
-                   "delete-from-cursor" (chars, 1) };
+                   "delete-selection" () };
   bind "<ctrl>w" { "movement" (previous-word-start, 1)
                    "copy-clipboard" ()
-                   "delete-from-cursor" (chars, 1) };
+                   "delete-selection" () };
   bind "<ctrl>n" { "cycle-completion" (down) };
   bind "<ctrl>p" { "cycle-completion" (up) };
 }
@@ -229,14 +237,16 @@
 @binding-set builder-vim-source-view-visual-line
 {
   bind "j" { "movement" (next-line, 1) };
+
   bind "k" { "movement" (previous-line, 1) };
 
   bind "x"        { "copy-clipboard" ()
-                    "delete-from-cursor" (chars, 1)
+                    "delete-selection" ()
                     "delete-from-cursor" (chars, 1)
                     "set-mode" ("vim-normal", permanent) };
+
   bind "<shift>x" { "copy-clipboard" ()
-                    "delete-from-cursor" (chars, 1)
+                    "delete-selection" ()
                     "delete-from-cursor" (chars, 1)
                     "set-mode" ("vim-normal", permanent) };
 
