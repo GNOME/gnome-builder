@@ -775,8 +775,8 @@ ide_source_view_movements_next_word_start (IdeSourceView         *self,
   if (!_ide_source_iter_ends_word (&insert))
     _ide_source_iter_forward_visible_word_end (&insert);
 
-  _ide_source_iter_forward_visible_word_end (&insert);
-  _ide_source_iter_backward_visible_word_start (&insert);
+  if (_ide_source_iter_forward_visible_word_end (&insert))
+    _ide_source_iter_backward_visible_word_start (&insert);
 
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
