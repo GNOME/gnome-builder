@@ -209,6 +209,13 @@ ide_source_view_movements_first_nonspace_char (IdeSourceView         *self,
          g_unichar_isspace (ch))
     gtk_text_iter_forward_char (&insert);
 
+  /*
+   * if we are at the line end, there was only whitespace.
+   * instead let's jump to the beginning of the line.
+   */
+  if (gtk_text_iter_ends_line (&insert))
+    gtk_text_iter_set_line_offset (&insert, 0);
+
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
 
