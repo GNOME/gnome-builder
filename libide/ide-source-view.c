@@ -249,9 +249,9 @@ get_rect_for_iters (GtkTextView       *text_view,
 }
 
 static void
-animate_in (IdeSourceView     *self,
-            const GtkTextIter *begin,
-            const GtkTextIter *end)
+animate_expand (IdeSourceView     *self,
+                const GtkTextIter *begin,
+                const GtkTextIter *end)
 {
   IdeBoxTheatric *theatric;
   GtkAllocation alloc;
@@ -287,6 +287,69 @@ animate_in (IdeSourceView     *self,
                            "height", rect.height + (ANIMATION_Y_GROW * 2),
                            "alpha", 0.0,
                            NULL);
+}
+
+static void
+animate_shrink (IdeSourceView     *self,
+                const GtkTextIter *begin,
+                const GtkTextIter *end)
+{
+  IdeBoxTheatric *theatric;
+  GtkAllocation alloc;
+  GdkRectangle rect = { 0 };
+  GtkTextIter copy_begin;
+  GtkTextIter copy_end;
+  gboolean is_whole_line;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (begin);
+  g_assert (end);
+
+  get_rect_for_iters (GTK_TEXT_VIEW (self), begin, end, &rect, GTK_TEXT_WINDOW_WIDGET);
+  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+  rect.height = MIN (rect.height, alloc.height - rect.y);
+
+  copy_begin = *begin;
+  copy_end = *end;
+  gtk_text_iter_order (&copy_begin, &copy_end);
+  is_whole_line = gtk_text_iter_starts_line (&copy_begin) && gtk_text_iter_ends_line (&copy_end);
+
+  theatric = g_object_new (IDE_TYPE_BOX_THEATRIC,
+                           "alpha", 0.3,
+                           "background", "#729fcf",
+                           "height", rect.height,
+                           "target", self,
+                           "width", rect.width,
+                           "x", rect.x,
+                           "y", rect.y,
+                           NULL);
+
+  if (is_whole_line)
+    ide_object_animate_full (theatric,
+                             IDE_ANIMATION_EASE_OUT_QUAD,
+                             150,
+                             gtk_widget_get_frame_clock (GTK_WIDGET (self)),
+                             g_object_unref,
+                             theatric,
+                             "x", rect.x,
+                             "width", rect.width,
+                             "y", rect.y,
+                             "height", 0,
+                             "alpha", 0.0,
+                             NULL);
+  else
+    ide_object_animate_full (theatric,
+                             IDE_ANIMATION_EASE_OUT_QUAD,
+                             150,
+                             gtk_widget_get_frame_clock (GTK_WIDGET (self)),
+                             g_object_unref,
+                             theatric,
+                             "x", rect.x,
+                             "width", 0,
+                             "y", rect.y,
+                             "height", rect.height,
+                             "alpha", 0.0,
+                             NULL);
 }
 
 static void
@@ -1684,13 +1747,16 @@ ide_source_view_real_jump (IdeSourceView     *self,
 }
 
 static void
-ide_source_view_real_selection_theatric (IdeSourceView *self)
+ide_source_view_real_selection_theatric (IdeSourceView         *self,
+                                         IdeSourceViewTheatric  theatric)
 {
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert ((theatric == IDE_SOURCE_VIEW_THEATRIC_EXPAND) ||
+            (theatric == IDE_SOURCE_VIEW_THEATRIC_SHRINK));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
@@ -1702,7 +1768,19 @@ ide_source_view_real_selection_theatric (IdeSourceView *self)
   if (gtk_text_iter_starts_line (&end))
     gtk_text_iter_backward_char (&end);
 
-  animate_in (self, &begin, &end);
+  switch (theatric)
+    {
+    case IDE_SOURCE_VIEW_THEATRIC_EXPAND:
+      animate_expand (self, &begin, &end);
+      break;
+
+    case IDE_SOURCE_VIEW_THEATRIC_SHRINK:
+      animate_shrink (self, &begin, &end);
+      break;
+
+    default:
+      break;
+    }
 }
 
 static void
@@ -2272,9 +2350,10 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, selection_theatric),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  g_cclosure_marshal_VOID__ENUM,
                   G_TYPE_NONE,
-                  0);
+                  1,
+                  IDE_TYPE_SOURCE_VIEW_THEATRIC);
 
   gSignals [SET_MODE] =
     g_signal_new ("set-mode",
@@ -2575,7 +2654,7 @@ ide_source_view_push_snippet (IdeSourceView    *self,
     while (gtk_events_pending ())
       gtk_main_iteration ();
 
-    animate_in (self, &begin, &end);
+    animate_expand (self, &begin, &end);
   }
 
   if (!has_more_tab_stops)

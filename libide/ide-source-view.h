@@ -52,6 +52,20 @@ typedef enum
 } IdeSourceViewModeType;
 
 /**
+ * IdeSourceViewTheatric:
+ * @IDE_SOURCE_VIEW_THEATRIC_EXPAND: expand from selection location.
+ * @IDE_SOURCE_VIEW_THEATRIC_SHRINK: shrink from selection location.
+ *
+ * The style of theatric.
+ */
+
+typedef enum
+{
+  IDE_SOURCE_VIEW_THEATRIC_EXPAND,
+  IDE_SOURCE_VIEW_THEATRIC_SHRINK,
+} IdeSourceViewTheatric;
+
+/**
  * IdeSourceViewMovement:
  * @IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR: move to nth character in line. Use a repeat to
  *   specify the target character within the line.
@@ -188,7 +202,8 @@ struct _IdeSourceViewClass
                                        const GtkTextIter       *location);
   void (*restore_insert_mark)         (IdeSourceView           *self);
   void (*save_insert_mark)            (IdeSourceView           *self);
-  void (*selection_theatric)          (IdeSourceView           *self);
+  void (*selection_theatric)          (IdeSourceView           *self,
+                                       IdeSourceViewTheatric    theatric);
   void (*set_mode)                    (IdeSourceView           *self,
                                        const gchar             *mode,
                                        IdeSourceViewModeType    type);
