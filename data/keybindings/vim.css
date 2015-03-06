@@ -209,6 +209,9 @@
                     "copy-clipboard" ()
                     "delete-selection" () };
 
+  bind "greater" { "set-mode" ("vim-normal-indent", transient) };
+  bind "less" { "set-mode" ("vim-normal-indent", transient) };
+
   /* join selected lines */
   bind "<shift>j" { "movement" (first-char, 0, 0, 0)
                     "movement" (next-line, 1, 0, 0)
@@ -322,6 +325,20 @@
   bind "dollar" { "movement" (line-end, 1, 1, 0)
                   "copy-clipboard" ()
                   "delete-selection" () };
+}
+
+@binding-set builder-vim-source-view-normal-indent
+{
+  bind "greater" { "movement" (first-char, 0, 1, 0)
+                   "movement" (line-end, 1, 1, 0)
+                   "indent-selection" (1)
+                   "clear-selection" ()
+                   "movement" (first-nonspace-char, 0, 1, 0) };
+  bind "less"    { "movement" (first-char, 0, 1, 0)
+                   "movement" (line-end, 1, 1, 0)
+                   "indent-selection" (-1)
+                   "clear-selection" ()
+                   "movement" (first-nonspace-char, 0, 1, 0) };
 }
 
 @binding-set builder-vim-source-view-normal-z
@@ -652,6 +669,11 @@ IdeSourceViewMode.vim-normal-g {
 IdeSourceViewMode.vim-normal-g-u {
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal-g-u;
+}
+
+IdeSourceViewMode.vim-normal-indent {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-indent;
 }
 
 IdeSourceViewMode.vim-normal-y {
