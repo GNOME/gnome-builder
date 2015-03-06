@@ -181,61 +181,61 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
   self->priv = gb_preferences_page_editor_get_instance_private (self);
 
   gtk_widget_init_template (GTK_WIDGET (self));
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("restore insert cursor mark"),
                                                self->priv->restore_insert_mark_container,
                                                self->priv->restore_insert_mark_switch,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("word words auto completion suggest found document"),
                                                self->priv->word_completion_container,
                                                self->priv->word_completion_switch,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("diff renderer gutter changes git vcs"),
                                                self->priv->show_diff_container,
                                                self->priv->show_diff_switch,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("line numbers"),
                                                self->priv->show_line_numbers_container,
                                                self->priv->show_line_numbers_switch,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("line lines highlight current"),
                                                self->priv->highlight_current_line_container,
                                                self->priv->highlight_current_line_switch,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("bracket brackets highlight matching"),
                                                self->priv->highlight_matching_brackets_container,
                                                self->priv->highlight_matching_brackets_switch,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("smart home end"),
                                                self->priv->smart_home_end_container,
                                                self->priv->smart_home_end_switch,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("show grid lines"),
                                                self->priv->show_grid_lines_container,
                                                self->priv->show_grid_lines_switch,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("font document editor monospace"),
                                                GTK_WIDGET (self->priv->font_button),
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("source style scheme source tango solarized builder"),
                                                GTK_WIDGET (self->priv->style_scheme_button),
                                                NULL);
