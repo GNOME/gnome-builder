@@ -329,7 +329,7 @@
 
 @binding-set builder-vim-source-view-insert
 {
-  bind "<ctrl>u" { "movement" (first-nonspace-char, 1)
+  bind "<ctrl>u" { "movement" (line-chars, 1)
                    "delete-selection" () };
   bind "<ctrl>w" { "movement" (previous-word-start, 1)
                    "copy-clipboard" ()
