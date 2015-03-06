@@ -106,8 +106,9 @@
 
   /* insert line before current */
   bind "<shift>o" { "movement" (first-char, 0, 0, 0)
-                    "insert-at-cursor-and-indent" ("\n")
+                    "insert-at-cursor" ("\n")
                     "move-cursor" (display-lines, -1, 0)
+                    "auto-indent" ()
                     "set-mode" ("vim-insert", permanent) };
 
   /* swallow the current character and go to insert */
