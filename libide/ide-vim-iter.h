@@ -25,7 +25,8 @@ G_BEGIN_DECLS
 
 gboolean _ide_vim_iter_forward_word_start       (GtkTextIter *iter);
 gboolean _ide_vim_iter_forward_WORD_start       (GtkTextIter *iter);
-
+gboolean _ide_vim_iter_forward_word_end         (GtkTextIter *iter);
+gboolean _ide_vim_iter_forward_WORD_end         (GtkTextIter *iter);
 gboolean _ide_vim_iter_backward_paragraph_start (GtkTextIter *iter);
 gboolean _ide_vim_iter_forward_paragraph_end    (GtkTextIter *iter);
 gboolean _ide_vim_iter_backward_sentence_start  (GtkTextIter *iter);

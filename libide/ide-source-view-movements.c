@@ -789,11 +789,21 @@ ide_source_view_movements_next_word_end (IdeSourceView         *self,
                                          gboolean               extend_selection,
                                          gint                   param)
 {
+  GtkTextIter copy;
   GtkTextIter insert;
   GtkTextIter selection;
 
   ide_source_view_movements_get_selection (self, &insert, &selection);
-  _ide_source_iter_forward_visible_word_end (&insert);
+
+  copy = insert;
+
+  _ide_vim_iter_forward_word_end (&insert);
+
+  /* prefer an empty line before word */
+  text_iter_forward_to_empty_line (&copy, &insert);
+  if (gtk_text_iter_compare (&copy, &insert) < 0)
+    insert = copy;
+
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
 
@@ -803,11 +813,21 @@ ide_source_view_movements_next_full_word_end (IdeSourceView         *self,
                                               gboolean               extend_selection,
                                               gint                   param)
 {
+  GtkTextIter copy;
   GtkTextIter insert;
   GtkTextIter selection;
 
   ide_source_view_movements_get_selection (self, &insert, &selection);
-  _ide_source_iter_forward_full_word_end (&insert);
+
+  copy = insert;
+
+  _ide_vim_iter_forward_WORD_end (&insert);
+
+  /* prefer an empty line before word */
+  text_iter_forward_to_empty_line (&copy, &insert);
+  if (gtk_text_iter_compare (&copy, &insert) < 0)
+    insert = copy;
+
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
 
