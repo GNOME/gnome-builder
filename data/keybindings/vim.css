@@ -105,13 +105,15 @@
              "movement" (next-char, 1)
              "delete-selection" () };
 
-  /* move by character, captive to current line */
-  bind "h" { "movement" (previous-char, 0) };
-  bind "l" { "movement" (next-char, 0) };
+  bind "Left"  { "movement" (previous-char, 0) };
+  bind "Right" { "movement" (next-char, 0) };
+  bind "Up"    { "movement" (previous-line, 0) };
+  bind "Down"  { "movement" (next-line, 0) };
 
-  /* move by line, keep current line offset */
-  bind "k" { "movement" (previous-line, 0) };
-  bind "j" { "movement" (next-line, 0) };
+  bind "h"     { "movement" (previous-char, 0) };
+  bind "l"     { "movement" (next-char, 0) };
+  bind "k"     { "movement" (previous-line, 0) };
+  bind "j"     { "movement" (next-line, 0) };
 
   /* move to special sub-mode 'g' */
   bind "g" { "set-mode" ("vim-normal-g", transient ) };
@@ -260,14 +262,22 @@
 
 @binding-set builder-vim-source-view-normal-d
 {
-  bind "h" { "movement" (previous-char, 1)
-             "delete-selection" () };
-  bind "l" { "movement" (next-char, 1)
-             "delete-selection" () };
-  bind "k" { "movement" (previous-line, 1)
-             "delete-selection" () };
-  bind "j" { "movement" (next-line, 1)
-             "delete-selection" () };
+  bind "h"     { "movement" (previous-char, 1)
+                 "delete-selection" () };
+  bind "l"     { "movement" (next-char, 1)
+                 "delete-selection" () };
+  bind "k"     { "movement" (previous-line, 1)
+                 "delete-selection" () };
+  bind "j"     { "movement" (next-line, 1)
+                 "delete-selection" () };
+  bind "Left"  { "movement" (previous-char, 1)
+                 "delete-selection" () };
+  bind "Right" { "movement" (next-char, 1)
+                 "delete-selection" () };
+  bind "Up"    { "movement" (previous-line, 1)
+                 "delete-selection" () };
+  bind "Down"  { "movement" (next-line, 1)
+                "delete-selection" () };
 
   bind "g" { "set-mode" ("vim-normal-d-g", transient) };
 
@@ -440,6 +450,11 @@
   bind "k" { "movement" (previous-line, 1) };
   bind "j" { "movement" (next-line, 1) };
 
+  bind "Left" { "movement" (previous-char, 1) };
+  bind "Right" { "movement" (next-char, 1) };
+  bind "Up" { "movement" (previous-line, 1) };
+  bind "Down" { "movement" (next-line, 1) };
+
   bind "e" { "movement" (next-word-end, 1) };
   bind "<shift>e" { "movement" (next-full-word-end, 1) };
 
@@ -486,9 +501,11 @@
 
 @binding-set builder-vim-source-view-visual-line
 {
+  bind "k" { "movement" (previous-line, 1) };
   bind "j" { "movement" (next-line, 1) };
 
-  bind "k" { "movement" (previous-line, 1) };
+  bind "Up" { "movement" (previous-line, 1) };
+  bind "Down" { "movement" (next-line, 1) };
 
   bind "z" { "set-mode" ("vim-visual-line-z", transient) };
 
