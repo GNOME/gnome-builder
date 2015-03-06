@@ -547,8 +547,12 @@
   bind "<ctrl>u" { "movement" (half-page-up, 1, 0, 1) };
   bind "<ctrl>d" { "movement" (half-page-down, 1, 0, 1) };
 
-  bind "greater" { "indent-selection" (1) };
-  bind "less" { "indent-selection" (-1) };
+  bind "greater" { "indent-selection" (1)
+                   "movement" (first-nonspace-char, 0, 1, 0)
+                   "set-mode" ("vim-normal", permanent) };
+  bind "less" { "indent-selection" (-1)
+                "movement" (first-nonspace-char, 0, 1, 0)
+                "set-mode" ("vim-normal", permanent) };
 
   bind "0" { "movement" (first-char, 1, 1, 0) };
   bind "<shift>asciicircum" { "movement" (first-nonspace-char, 1, 0, 0) };
@@ -640,10 +644,12 @@
 
   bind "greater" { "indent-selection" (1)
                    "clear-selection" ()
-                   "movement" (first-nonspace-char, 0, 1, 0) };
+                   "movement" (first-nonspace-char, 0, 1, 0)
+                   "set-mode" ("vim-normal", permanent) };
   bind "less" { "indent-selection" (-1)
                 "clear-selection" ()
-                   "movement" (first-nonspace-char, 0, 1, 0) };
+                "movement" (first-nonspace-char, 0, 1, 0)
+                "set-mode" ("vim-normal", permanent) };
 
   bind "<ctrl>e" { "movement" (screen-up, 1, 0, 1) };
   bind "<ctrl>y" { "movement" (screen-down, 1, 0, 1) };
