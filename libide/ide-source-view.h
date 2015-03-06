@@ -91,6 +91,9 @@ typedef enum
  * @IDE_SOURCE_VIEW_MOVEMENT_LAST_LINE: move to last line in file, with line offset of zero.
  * @IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE: move to line based on percentage. Use repeat to
  *   specify the percentage, 0 to 100.
+ * @IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS: special selection to select all line characters up to the
+ *   cursor position. special care will be taken if the line is blank to select only the blank
+ *   space if any. otherwise, the line break will be selected.
  * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP: move half a page up.
  * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN: move half a page down.
  * @IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP: move a full page up.
@@ -145,6 +148,8 @@ typedef enum
   IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE,
   IDE_SOURCE_VIEW_MOVEMENT_LAST_LINE,
   IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE,
+
+  IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS,
 
   IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP,
   IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN,

@@ -209,12 +209,44 @@ ide_source_view_movements_first_nonspace_char (IdeSourceView         *self,
          g_unichar_isspace (ch))
     gtk_text_iter_forward_char (&insert);
 
+  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+}
+
+static void
+ide_source_view_movements_line_chars (IdeSourceView         *self,
+                                      IdeSourceViewMovement  movement,
+                                      gboolean               extend_selection,
+                                      gint                   param)
+{
+  GtkTextIter insert;
+  GtkTextIter selection;
+
+  ide_source_view_movements_get_selection (self, &insert, &selection);
+
   /*
-   * if we are at the line end, there was only whitespace.
-   * instead let's jump to the beginning of the line.
+   * Selects the current position up to the first nonspace character.
+   * If the cursor is at the line start, we will select the newline.
+   * If only whitespace exists, we will select line offset of 0.
    */
-  if (gtk_text_iter_ends_line (&insert))
-    gtk_text_iter_set_line_offset (&insert, 0);
+
+  if (gtk_text_iter_starts_line (&insert))
+    {
+      gtk_text_iter_backward_char (&insert);
+    }
+  else
+    {
+      gunichar ch;
+
+      gtk_text_iter_set_line_offset (&insert, 0);
+
+      while (!gtk_text_iter_ends_line (&insert) &&
+             (ch = gtk_text_iter_get_char (&insert)) &&
+             g_unichar_isspace (ch))
+        gtk_text_iter_forward_char (&insert);
+
+      if (gtk_text_iter_ends_line (&insert))
+        gtk_text_iter_set_line_offset (&insert, 0);
+    }
 
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
@@ -1113,6 +1145,10 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE:
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS:
+      ide_source_view_movements_line_chars (self, movement, extend_selection, param);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP:
