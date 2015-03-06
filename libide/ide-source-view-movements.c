@@ -223,6 +223,16 @@ ide_source_view_movements_line_chars (Movement *mv)
 }
 
 static void
+ide_source_view_movements_line_end (Movement *mv)
+{
+  if (!gtk_text_iter_ends_line (&mv->insert))
+    gtk_text_iter_forward_to_line_end (&mv->insert);
+
+  if (!mv->exclusive)
+    gtk_text_iter_forward_char (&mv->insert);
+}
+
+static void
 ide_source_view_movements_middle_char (Movement *mv)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (mv->self);
@@ -935,7 +945,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_END:
-      //ide_source_view_movements_line_end (&mv);
+      ide_source_view_movements_line_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP:

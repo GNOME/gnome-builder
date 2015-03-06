@@ -97,7 +97,7 @@ typedef enum
  *   space if any. otherwise, the line break will be selected.
  * @IDE_SOURCE_VIEW_MOVEMENT_LINE_END: This will move you to the location of the newline at the
  *   end of the current line. It does not support exclusive will not select the newline, while
- *   invlusive will select the newline.
+ *   inclusive will select the newline.
  * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP: move half a page up.
  * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN: move half a page down.
  * @IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP: move a full page up.
