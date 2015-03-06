@@ -346,6 +346,28 @@
              "selection-theatric" (expand)
              "clear-selection" ()
              "restore-insert-mark" () };
+
+  bind "j" { "save-insert-mark" ()
+             "movement" (first-char, 0)
+             "movement" (next-line, 1)
+             "movement" (last-char, 1)
+             "move-cursor" (visual-positions, 1, 1)
+             "copy-clipboard" ()
+             "selection-theatric" (expand)
+             "clear-selection" ()
+             "restore-insert-mark" () };
+
+  bind "k" { "save-insert-mark" ()
+             "movement" (last-char, 0)
+             "move-cursor" (visual-positions, 1, 1)
+             "swap-selection-bounds" ()
+             "movement" (previous-line, 1)
+             "movement" (previous-line, 1)
+             "movement" (first-char, 1)
+             "copy-clipboard" ()
+             "selection-theatric" (expand)
+             "clear-selection" ()
+             "restore-insert-mark" () };
 }
 
 @binding-set builder-vim-source-view-normal-g
