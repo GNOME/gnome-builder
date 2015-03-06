@@ -26,6 +26,18 @@
 
 typedef struct
 {
+  IdeSourceView         *self;
+  IdeSourceViewMovement  type;                 /* Type of movement */
+  GtkTextIter            insert;               /* Current insert cursor location */
+  GtkTextIter            selection;            /* Current selection cursor location */
+  gint                   count;                /* Repeat count for movement */
+  guint                  extend_selection : 1; /* If selection should be extended */
+  guint                  exclusive : 1;        /* See ":help exclusive" in vim */
+  guint                  ignore_select : 1;    /* Don't update selection after movement */
+} Movement;
+
+typedef struct
+{
   gunichar jump_to;
   gunichar jump_from;
   guint    depth;
@@ -77,473 +89,345 @@ is_line_selection (const GtkTextIter *insert,
 }
 
 static void
-ide_source_view_movements_get_selection (IdeSourceView *self,
-                                         GtkTextIter   *insert,
-                                         GtkTextIter   *selection)
+ide_source_view_movements_get_selection (Movement *mv)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *mark;
 
-  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (mv);
+  g_assert (IDE_IS_SOURCE_VIEW (mv->self));
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-
-  if (insert)
-    {
-      mark = gtk_text_buffer_get_insert (buffer);
-      gtk_text_buffer_get_iter_at_mark (buffer, insert, mark);
-    }
-
-  if (selection)
-    {
-      mark = gtk_text_buffer_get_selection_bound (buffer);
-      gtk_text_buffer_get_iter_at_mark (buffer, selection, mark);
-    }
-}
-
-static void
-ide_source_view_movements_select_range (IdeSourceView     *self,
-                                        const GtkTextIter *insert,
-                                        const GtkTextIter *selection,
-                                        gboolean           extend_selection)
-{
-  GtkTextBuffer *buffer;
-  GtkTextMark *mark;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-
-  if (extend_selection)
-    gtk_text_buffer_select_range (buffer, insert, selection);
-  else
-    gtk_text_buffer_select_range (buffer, insert, insert);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
 
   mark = gtk_text_buffer_get_insert (buffer);
-  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (self), mark);
+  gtk_text_buffer_get_iter_at_mark (buffer, &mv->insert, mark);
+
+  mark = gtk_text_buffer_get_selection_bound (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &mv->selection, mark);
 }
 
 static void
-ide_source_view_movements_nth_char (IdeSourceView         *self,
-                                    IdeSourceViewMovement  movement,
-                                    gboolean               extend_selection,
-                                    gint                   param)
+ide_source_view_movements_select_range (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
+  GtkTextBuffer *buffer;
+  GtkTextMark *mark;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  g_assert (mv);
+  g_assert (IDE_IS_SOURCE_VIEW (mv->self));
 
-  gtk_text_iter_set_line_offset (&insert, 0);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
 
-  for (; param > 0; param--)
+  if (mv->extend_selection)
+    gtk_text_buffer_select_range (buffer, &mv->insert, &mv->selection);
+  else
+    gtk_text_buffer_select_range (buffer, &mv->insert, &mv->insert);
+
+  mark = gtk_text_buffer_get_insert (buffer);
+  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (mv->self), mark);
+}
+
+static void
+ide_source_view_movements_nth_char (Movement *mv)
+{
+  gtk_text_iter_set_line_offset (&mv->insert, 0);
+
+  for (; mv->count > 0; mv->count--)
     {
-      if (gtk_text_iter_ends_line (&insert))
+      if (gtk_text_iter_ends_line (&mv->insert))
         break;
-      gtk_text_iter_forward_char (&insert);
+      gtk_text_iter_forward_char (&mv->insert);
     }
 
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  if (!mv->exclusive)
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
-ide_source_view_movements_previous_char (IdeSourceView         *self,
-                                         IdeSourceViewMovement  movement,
-                                         gboolean               extend_selection,
-                                         gint                   param)
+ide_source_view_movements_previous_char (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
+  mv->count = MAX (1, mv->count);
 
-  param = MAX (1, param);
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
-  for (; param; param--)
+  for (; mv->count; mv->count--)
     {
-      if (gtk_text_iter_starts_line (&insert))
+      if (gtk_text_iter_starts_line (&mv->insert))
         break;
-      gtk_text_iter_backward_char (&insert);
+      gtk_text_iter_backward_char (&mv->insert);
     }
 
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  if (!mv->exclusive)
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
-ide_source_view_movements_next_char (IdeSourceView         *self,
-                                     IdeSourceViewMovement  movement,
-                                     gboolean               extend_selection,
-                                     gint                   param)
+ide_source_view_movements_next_char (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
+  mv->count = MAX (1, mv->count);
 
-  param = MAX (1, param);
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
-  for (; param; param--)
+  for (; mv->count; mv->count--)
     {
-      if (gtk_text_iter_ends_line (&insert))
+      if (gtk_text_iter_ends_line (&mv->insert))
         break;
-      gtk_text_iter_forward_char (&insert);
+      gtk_text_iter_forward_char (&mv->insert);
     }
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
 
 static void
-ide_source_view_movements_first_char (IdeSourceView         *self,
-                                      IdeSourceViewMovement  movement,
-                                      gboolean               extend_selection,
-                                      gint                   param)
+ide_source_view_movements_first_char (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
-  gtk_text_iter_set_line_offset (&insert, 0);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  gtk_text_iter_set_line_offset (&mv->insert, 0);
 }
 
 static void
-ide_source_view_movements_first_nonspace_char (IdeSourceView         *self,
-                                               IdeSourceViewMovement  movement,
-                                               gboolean               extend_selection,
-                                               gint                   param)
+ide_source_view_movements_first_nonspace_char (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
   gunichar ch;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  gtk_text_iter_set_line_offset (&mv->insert, 0);
 
-  gtk_text_iter_set_line_offset (&insert, 0);
-
-  while (!gtk_text_iter_ends_line (&insert) &&
-         (ch = gtk_text_iter_get_char (&insert)) &&
+  while (!gtk_text_iter_ends_line (&mv->insert) &&
+         (ch = gtk_text_iter_get_char (&mv->insert)) &&
          g_unichar_isspace (ch))
-    gtk_text_iter_forward_char (&insert);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
-ide_source_view_movements_line_chars (IdeSourceView         *self,
-                                      IdeSourceViewMovement  movement,
-                                      gboolean               extend_selection,
-                                      gint                   param)
+ide_source_view_movements_line_chars (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
   /*
    * Selects the current position up to the first nonspace character.
    * If the cursor is at the line start, we will select the newline.
    * If only whitespace exists, we will select line offset of 0.
    */
 
-  if (gtk_text_iter_starts_line (&insert))
+  if (gtk_text_iter_starts_line (&mv->insert))
     {
-      gtk_text_iter_backward_char (&insert);
+      gtk_text_iter_backward_char (&mv->insert);
     }
   else
     {
       gunichar ch;
 
-      gtk_text_iter_set_line_offset (&insert, 0);
+      gtk_text_iter_set_line_offset (&mv->insert, 0);
 
-      while (!gtk_text_iter_ends_line (&insert) &&
-             (ch = gtk_text_iter_get_char (&insert)) &&
+      while (!gtk_text_iter_ends_line (&mv->insert) &&
+             (ch = gtk_text_iter_get_char (&mv->insert)) &&
              g_unichar_isspace (ch))
-        gtk_text_iter_forward_char (&insert);
+        gtk_text_iter_forward_char (&mv->insert);
 
-      if (gtk_text_iter_ends_line (&insert))
-        gtk_text_iter_set_line_offset (&insert, 0);
+      if (gtk_text_iter_ends_line (&mv->insert))
+        gtk_text_iter_set_line_offset (&mv->insert, 0);
     }
 
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  if (!mv->exclusive)
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
-ide_source_view_movements_middle_char (IdeSourceView         *self,
-                                       IdeSourceViewMovement  movement,
-                                       gboolean               extend_selection,
-                                       gint                   param)
+ide_source_view_movements_middle_char (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
+  GtkTextView *text_view = GTK_TEXT_VIEW (mv->self);
+  GdkWindow *window;
+  GdkRectangle rect;
   guint line_offset;
+  int width;
+  int chars_in_line;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  gtk_text_view_get_iter_location (text_view, &mv->insert, &rect);
+  window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
 
-  gtk_text_iter_forward_to_line_end (&insert);
-  line_offset = gtk_text_iter_get_line_offset (&insert);
-  gtk_text_iter_set_line_offset (&insert, line_offset >> 1);
+  width = gdk_window_get_width (window);
+  if (rect.width <= 0)
+    return;
 
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  chars_in_line = width / rect.width;
+  if (chars_in_line == 0)
+    return;
+
+  gtk_text_iter_set_line_offset (&mv->insert, 0);
+
+  for (line_offset = chars_in_line / 2; line_offset; line_offset--)
+    if (!gtk_text_iter_forward_char (&mv->insert))
+      break;
+
+  if (!mv->exclusive)
+    if (!gtk_text_iter_ends_line (&mv->insert))
+      gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
-ide_source_view_movements_last_char (IdeSourceView         *self,
-                                     IdeSourceViewMovement  movement,
-                                     gboolean               extend_selection,
-                                     gint                   param)
+ide_source_view_movements_last_char (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
-  if (!gtk_text_iter_ends_line (&insert))
+  if (!gtk_text_iter_ends_line (&mv->insert))
     {
-      gtk_text_iter_forward_to_line_end (&insert);
-      ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+      gtk_text_iter_forward_to_line_end (&mv->insert);
+      if (mv->exclusive && !gtk_text_iter_starts_line (&mv->insert))
+        gtk_text_iter_backward_char (&mv->insert);
     }
 }
 
 static void
-ide_source_view_movements_first_line (IdeSourceView         *self,
-                                      IdeSourceViewMovement  movement,
-                                      gboolean               extend_selection,
-                                      gint                   param)
+ide_source_view_movements_first_line (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
-  gtk_text_iter_set_line (&insert, param);
-  gtk_text_iter_set_line_offset (&insert, 0);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  gtk_text_iter_set_line (&mv->insert, mv->count);
+  gtk_text_iter_set_line_offset (&mv->insert, 0);
 }
 
 static void
-ide_source_view_movements_nth_line (IdeSourceView         *self,
-                                    IdeSourceViewMovement  movement,
-                                    gboolean               extend_selection,
-                                    gint                   param)
+ide_source_view_movements_nth_line (Movement *mv)
 {
   GtkTextBuffer *buffer;
-  GtkTextIter insert;
-  GtkTextIter selection;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-
-  if (param < 1)
-    gtk_text_buffer_get_end_iter (buffer, &insert);
+  if (mv->count < 1)
+    gtk_text_buffer_get_end_iter (buffer, &mv->insert);
   else
-    gtk_text_iter_set_line (&insert, param - 1);
+    gtk_text_iter_set_line (&mv->insert, mv->count - 1);
 
-  gtk_text_iter_set_line_offset (&insert, 0);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  gtk_text_iter_set_line_offset (&mv->insert, 0);
 }
 
 static void
-ide_source_view_movements_last_line (IdeSourceView         *self,
-                                     IdeSourceViewMovement  movement,
-                                     gboolean               extend_selection,
-                                     gint                   param)
+ide_source_view_movements_last_line (Movement *mv)
 {
   GtkTextBuffer *buffer;
-  GtkTextIter insert;
-  GtkTextIter selection;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
+  gtk_text_buffer_get_end_iter (buffer, &mv->insert);
+  gtk_text_iter_set_line_offset (&mv->insert, 0);
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-  gtk_text_buffer_get_end_iter (buffer, &insert);
-  gtk_text_iter_set_line_offset (&insert, 0);
-
-  if (param)
+  if (mv->count)
     {
       gint line;
 
-      line = gtk_text_iter_get_line (&insert) - param;
-      gtk_text_iter_set_line (&insert, MAX (0, line));
+      line = gtk_text_iter_get_line (&mv->insert) - mv->count;
+      gtk_text_iter_set_line (&mv->insert, MAX (0, line));
     }
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
 
 static void
-ide_source_view_movements_next_line (IdeSourceView         *self,
-                                     IdeSourceViewMovement  movement,
-                                     gboolean               extend_selection,
-                                     gint                   param)
+ide_source_view_movements_next_line (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
   /*
    * Try to use the normal move-cursor helpers if this is a simple movement.
    */
-  if (!extend_selection || !is_line_selection (&insert, &selection))
+  if (!mv->extend_selection || !is_line_selection (&mv->insert, &mv->selection))
     {
       IDE_TRACE_MSG ("next-line simple");
 
-      param = MAX (1, param);
-      g_signal_emit_by_name (self,
+      mv->count = MAX (1, mv->count);
+      mv->ignore_select = TRUE;
+      g_signal_emit_by_name (mv->self,
                              "move-cursor",
                              GTK_MOVEMENT_DISPLAY_LINES,
-                             param,
-                             extend_selection);
+                             mv->count,
+                             mv->extend_selection);
       return;
     }
 
   IDE_TRACE_MSG ("next-line with line-selection");
 
-  g_assert (extend_selection);
-  g_assert (is_line_selection (&insert, &selection));
+  g_assert (mv->extend_selection);
+  g_assert (is_line_selection (&mv->insert, &mv->selection));
 
-  if (gtk_text_iter_is_end (&insert) || gtk_text_iter_is_end (&selection))
+  if (gtk_text_iter_is_end (&mv->insert) || gtk_text_iter_is_end (&mv->selection))
     return;
 
-  if (is_single_line_selection (&insert, &selection))
-    gtk_text_iter_order (&selection, &insert);
+  if (is_single_line_selection (&mv->insert, &mv->selection))
+    gtk_text_iter_order (&mv->selection, &mv->insert);
 
-  gtk_text_iter_forward_line (&insert);
-  if (!gtk_text_iter_ends_line (&insert))
-    gtk_text_iter_forward_to_line_end (&insert);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, TRUE);
+  gtk_text_iter_forward_line (&mv->insert);
+  if (!gtk_text_iter_ends_line (&mv->insert))
+    gtk_text_iter_forward_to_line_end (&mv->insert);
 }
 
 static void
-ide_source_view_movements_previous_line (IdeSourceView         *self,
-                                         IdeSourceViewMovement  movement,
-                                         gboolean               extend_selection,
-                                         gint                   param)
+ide_source_view_movements_previous_line (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
   /*
    * Try to use the normal move-cursor helpers if this is a simple movement.
    */
-  if (!extend_selection || !is_line_selection (&insert, &selection))
+  if (!mv->extend_selection || !is_line_selection (&mv->insert, &mv->selection))
     {
       IDE_TRACE_MSG ("previous-line simple");
 
-      param = MAX (1, param);
-      g_signal_emit_by_name (self,
+      mv->count = MAX (1, mv->count);
+      mv->ignore_select = TRUE;
+      g_signal_emit_by_name (mv->self,
                              "move-cursor",
                              GTK_MOVEMENT_DISPLAY_LINES,
-                             -param,
-                             extend_selection);
+                             -mv->count,
+                             mv->extend_selection);
       return;
     }
 
   IDE_TRACE_MSG ("previous-line with line-selection");
 
-  g_assert (extend_selection);
-  g_assert (is_line_selection (&insert, &selection));
+  g_assert (mv->extend_selection);
+  g_assert (is_line_selection (&mv->insert, &mv->selection));
 
-  if (gtk_text_iter_is_start (&insert) || gtk_text_iter_is_start (&selection))
+  if (gtk_text_iter_is_start (&mv->insert) || gtk_text_iter_is_start (&mv->selection))
     return;
 
   /*
    * if the current line is selected
    */
-  if (is_single_line_selection (&insert, &selection))
+  if (is_single_line_selection (&mv->insert, &mv->selection))
     {
-      gtk_text_iter_order (&insert, &selection);
-      gtk_text_iter_backward_line (&insert);
-      gtk_text_iter_set_line_offset (&insert, 0);
+      gtk_text_iter_order (&mv->insert, &mv->selection);
+      gtk_text_iter_backward_line (&mv->insert);
+      gtk_text_iter_set_line_offset (&mv->insert, 0);
     }
   else
     {
-      gtk_text_iter_backward_line (&insert);
-      if (!gtk_text_iter_ends_line (&insert))
-        gtk_text_iter_forward_to_line_end (&insert);
+      gtk_text_iter_backward_line (&mv->insert);
+      if (!gtk_text_iter_ends_line (&mv->insert))
+        gtk_text_iter_forward_to_line_end (&mv->insert);
     }
-
-  ide_source_view_movements_select_range (self, &insert, &selection, TRUE);
 }
 
 static void
-ide_source_view_movements_screen_top (IdeSourceView         *self,
-                                      IdeSourceViewMovement  movement,
-                                      gboolean               extend_selection,
-                                      gint                   param)
+ide_source_view_movements_screen_top (Movement *mv)
 {
-  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextView *text_view = (GtkTextView *)mv->self;
   GdkRectangle rect;
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
 
   gtk_text_view_get_visible_rect (text_view, &rect);
-  gtk_text_view_get_iter_at_location (text_view, &insert, rect.x, rect.y);
-  gtk_text_iter_set_line_offset (&insert, 0);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  gtk_text_view_get_iter_at_location (text_view, &mv->insert, rect.x, rect.y);
+  gtk_text_iter_set_line_offset (&mv->insert, 0);
 }
 
 static void
-ide_source_view_movements_screen_middle (IdeSourceView         *self,
-                                         IdeSourceViewMovement  movement,
-                                         gboolean               extend_selection,
-                                         gint                   param)
+ide_source_view_movements_screen_middle (Movement *mv)
 {
-  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextView *text_view = (GtkTextView *)mv->self;
   GdkRectangle rect;
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
 
   gtk_text_view_get_visible_rect (text_view, &rect);
-  gtk_text_view_get_iter_at_location (text_view, &insert, rect.x, rect.y + (rect.height/2));
-  gtk_text_iter_set_line_offset (&insert, 0);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  gtk_text_view_get_iter_at_location (text_view, &mv->insert, rect.x, rect.y + (rect.height/2));
+  gtk_text_iter_set_line_offset (&mv->insert, 0);
 }
 
 static void
-ide_source_view_movements_screen_bottom (IdeSourceView         *self,
-                                         IdeSourceViewMovement  movement,
-                                         gboolean               extend_selection,
-                                         gint                   param)
+ide_source_view_movements_screen_bottom (Movement *mv)
 {
-  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextView *text_view = (GtkTextView *)mv->self;
   GdkRectangle rect;
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
 
   gtk_text_view_get_visible_rect (text_view, &rect);
-  gtk_text_view_get_iter_at_location (text_view, &insert, rect.x, rect.y + rect.height);
-  gtk_text_iter_set_line_offset (&insert, 0);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  gtk_text_view_get_iter_at_location (text_view, &mv->insert, rect.x, rect.y + rect.height);
+  gtk_text_iter_set_line_offset (&mv->insert, 0);
 }
 
 static void
-ide_source_view_movements_scroll_by_lines (IdeSourceView *self,
-                                           gint           lines)
+ide_source_view_movements_scroll_by_lines (Movement *mv,
+                                           gint      lines)
 {
-  GtkTextView *text_view = (GtkTextView *)self;
-  GtkTextIter insert;
-  GtkTextIter selection;
-  GtkTextIter begin;
-  GtkTextIter end;
+  GtkTextView *text_view = (GtkTextView *)mv->self;
   GtkAdjustment *vadj;
   GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
   GdkRectangle rect;
   gdouble amount;
   gdouble value;
@@ -552,27 +436,25 @@ ide_source_view_movements_scroll_by_lines (IdeSourceView *self,
   if (lines == 0)
     return;
 
-  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self));
+  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (mv->self));
   buffer = gtk_text_view_get_buffer (text_view);
 
   gtk_text_buffer_get_bounds (buffer, &begin, &end);
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
   if (lines > 0)
     {
-      if (gtk_text_iter_get_line (&end) == gtk_text_iter_get_line (&insert))
+      if (gtk_text_iter_get_line (&end) == gtk_text_iter_get_line (&mv->insert))
         return;
     }
   else if (lines < 0)
     {
-      if (gtk_text_iter_get_line (&begin) == gtk_text_iter_get_line (&insert))
+      if (gtk_text_iter_get_line (&begin) == gtk_text_iter_get_line (&mv->insert))
         return;
     }
   else
     g_assert_not_reached ();
 
-  gtk_text_view_get_iter_location (text_view, &insert, &rect);
+  gtk_text_view_get_iter_location (text_view, &mv->insert, &rect);
 
   amount = lines * rect.height;
 
@@ -582,52 +464,36 @@ ide_source_view_movements_scroll_by_lines (IdeSourceView *self,
 }
 
 static void
-ide_source_view_movements_scroll (IdeSourceView         *self,
-                                  IdeSourceViewMovement  movement,
-                                  gboolean               extend_selection,
-                                  gint                   param,
-                                  GtkDirectionType       dir)
+ide_source_view_movements_scroll (Movement *mv)
 {
-  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextView *text_view = (GtkTextView *)mv->self;
   GtkTextBuffer *buffer;
   GtkTextMark *mark;
-  GtkTextIter insert;
-  GtkTextIter selection;
+  gint count = MAX (1, mv->count);
 
-  param = MAX (1, param);
+  if (mv->type == IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN)
+    count = -count;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  ide_source_view_movements_scroll_by_lines (mv, count);
 
-  ide_source_view_movements_scroll_by_lines (self, (dir == GTK_DIR_UP) ? param : -param);
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
   mark = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_move_mark_onscreen (text_view, mark);
-
-  gtk_text_buffer_get_iter_at_mark (buffer, &insert, mark);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  gtk_text_buffer_get_iter_at_mark (buffer, &mv->insert, mark);
 }
 
 static void
-ide_source_view_movements_move_page (IdeSourceView         *self,
-                                     IdeSourceViewMovement  movement,
-                                     gboolean               extend_selection,
-                                     gint                   param)
+ide_source_view_movements_move_page (Movement *mv)
 {
-  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextView *text_view = (GtkTextView *)mv->self;
   GtkTextBuffer *buffer;
   GdkRectangle rect;
   GtkTextIter iter_top;
   GtkTextIter iter_bottom;
   GtkTextIter iter_current;
-  GtkTextIter insert;
-  GtkTextIter selection;
   gint half_page;
   gint line_top;
   gint line_bottom;
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
 
   gtk_text_view_get_visible_rect (text_view, &rect);
   gtk_text_view_get_iter_at_location (text_view, &iter_top, rect.x, rect.y);
@@ -645,30 +511,30 @@ ide_source_view_movements_move_page (IdeSourceView         *self,
    * TODO: Reintroduce scroll offset.
    */
 
-  switch ((int)movement)
+  switch ((int)mv->type)
     {
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP:
-      ide_source_view_movements_scroll_by_lines (self, -half_page);
-      gtk_text_iter_backward_lines (&insert, half_page);
-      ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+      ide_source_view_movements_scroll_by_lines (mv, -half_page);
+      gtk_text_iter_backward_lines (&mv->insert, half_page);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN:
-      ide_source_view_movements_scroll_by_lines (self, half_page);
-      gtk_text_iter_forward_lines (&insert, half_page);
-      ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+      ide_source_view_movements_scroll_by_lines (mv, half_page);
+      gtk_text_iter_forward_lines (&mv->insert, half_page);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP:
-      gtk_text_buffer_get_iter_at_line (buffer, &insert, MAX (0, line_top - 1));
-      ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
-      gtk_text_view_scroll_to_iter (text_view, &insert, .0, TRUE, .0, 1.0);
+      gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, MAX (0, line_top - 1));
+      ide_source_view_movements_select_range (mv);
+      gtk_text_view_scroll_to_iter (text_view, &mv->insert, .0, TRUE, .0, 1.0);
+      mv->ignore_select = TRUE;
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN:
-      gtk_text_buffer_get_iter_at_line (buffer, &insert, line_bottom + 1);
-      ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
-      gtk_text_view_scroll_to_iter (text_view, &insert, .0, TRUE, .0, .0);
+      gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, line_bottom + 1);
+      ide_source_view_movements_select_range (mv);
+      gtk_text_view_scroll_to_iter (text_view, &mv->insert, .0, TRUE, .0, .0);
+      mv->ignore_select = TRUE;
       break;
 
     default:
@@ -691,21 +557,17 @@ bracket_predicate (gunichar ch,
 }
 
 static void
-ide_source_view_movements_match_special (IdeSourceView         *self,
-                                         IdeSourceViewMovement  movement,
-                                         gboolean               extend_selection,
-                                         gint                   param)
+ide_source_view_movements_match_special (Movement *mv)
 {
   MatchingBracketState state;
-  GtkTextIter insert;
-  GtkTextIter selection;
+  GtkTextIter copy;
   gboolean is_forward = FALSE;
   gboolean ret;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  copy = mv->insert;
 
   state.depth = 1;
-  state.jump_from = gtk_text_iter_get_char (&insert);
+  state.jump_from = gtk_text_iter_get_char (&mv->insert);
 
   switch (state.jump_from)
     {
@@ -744,38 +606,33 @@ ide_source_view_movements_match_special (IdeSourceView         *self,
     }
 
   if (is_forward)
-    ret = gtk_text_iter_forward_find_char (&insert, bracket_predicate, &state, NULL);
+    ret = gtk_text_iter_forward_find_char (&mv->insert, bracket_predicate, &state, NULL);
   else
-    ret = gtk_text_iter_backward_find_char (&insert, bracket_predicate, &state, NULL);
+    ret = gtk_text_iter_backward_find_char (&mv->insert, bracket_predicate, &state, NULL);
 
-  if (ret)
-    ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  if (!ret)
+    mv->insert = copy;
+  else if (!mv->exclusive)
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
-ide_source_view_movements_scroll_center (IdeSourceView         *self,
-                                         IdeSourceViewMovement  movement,
-                                         gboolean               extend_selection,
-                                         gint                   param)
+ide_source_view_movements_scroll_center (Movement *mv)
 {
-  GtkTextView *text_view = (GtkTextView *)self;
-  GtkTextIter insert;
-  GtkTextIter selection;
+  GtkTextView *text_view = (GtkTextView *)mv->self;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
-  switch ((int)movement)
+  switch ((int)mv->type)
     {
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM:
-      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 1.0, 1.0);
+      gtk_text_view_scroll_to_iter (text_view, &mv->insert, 0.0, TRUE, 1.0, 1.0);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP:
-      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 1.0, 0.0);
+      gtk_text_view_scroll_to_iter (text_view, &mv->insert, 0.0, TRUE, 1.0, 0.0);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER:
-      gtk_text_view_scroll_to_iter (text_view, &insert, 0.0, TRUE, 1.0, 0.5);
+      gtk_text_view_scroll_to_iter (text_view, &mv->insert, 0.0, TRUE, 1.0, 0.5);
       break;
 
     default:
@@ -784,275 +641,157 @@ ide_source_view_movements_scroll_center (IdeSourceView         *self,
 }
 
 static void
-ide_source_view_movements_next_word_end (IdeSourceView         *self,
-                                         IdeSourceViewMovement  movement,
-                                         gboolean               extend_selection,
-                                         gint                   param)
+ide_source_view_movements_next_word_end (Movement *mv)
 {
   GtkTextIter copy;
-  GtkTextIter insert;
-  GtkTextIter selection;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  copy = mv->insert;
 
-  copy = insert;
-
-  _ide_vim_iter_forward_word_end (&insert);
+  _ide_vim_iter_forward_word_end (&mv->insert);
 
   /* prefer an empty line before word */
-  text_iter_forward_to_empty_line (&copy, &insert);
-  if (gtk_text_iter_compare (&copy, &insert) < 0)
-    insert = copy;
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  text_iter_forward_to_empty_line (&copy, &mv->insert);
+  if (gtk_text_iter_compare (&copy, &mv->insert) < 0)
+    mv->insert = copy;
+  else if (!mv->exclusive && !gtk_text_iter_ends_line (&mv->insert))
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
-ide_source_view_movements_next_full_word_end (IdeSourceView         *self,
-                                              IdeSourceViewMovement  movement,
-                                              gboolean               extend_selection,
-                                              gint                   param)
+ide_source_view_movements_next_full_word_end (Movement *mv)
 {
   GtkTextIter copy;
-  GtkTextIter insert;
-  GtkTextIter selection;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  copy = mv->insert;
 
-  copy = insert;
-
-  _ide_vim_iter_forward_WORD_end (&insert);
+  _ide_vim_iter_forward_WORD_end (&mv->insert);
 
   /* prefer an empty line before word */
-  text_iter_forward_to_empty_line (&copy, &insert);
-  if (gtk_text_iter_compare (&copy, &insert) < 0)
-    insert = copy;
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  text_iter_forward_to_empty_line (&copy, &mv->insert);
+  if (gtk_text_iter_compare (&copy, &mv->insert) < 0)
+    mv->insert = copy;
 }
 
 static void
-ide_source_view_movements_next_word_start (IdeSourceView         *self,
-                                           IdeSourceViewMovement  movement,
-                                           gboolean               extend_selection,
-                                           gint                   param)
+ide_source_view_movements_next_word_start (Movement *mv)
 {
   GtkTextIter copy;
-  GtkTextIter insert;
-  GtkTextIter selection;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  copy = mv->insert;
 
-  copy = insert;
-
-  _ide_vim_iter_forward_word_start (&insert);
+  _ide_vim_iter_forward_word_start (&mv->insert);
 
   /* prefer an empty line before word */
-  text_iter_forward_to_empty_line (&copy, &insert);
-  if (gtk_text_iter_compare (&copy, &insert) < 0)
-    insert = copy;
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  text_iter_forward_to_empty_line (&copy, &mv->insert);
+  if (gtk_text_iter_compare (&copy, &mv->insert) < 0)
+    mv->insert = copy;
 }
 
 static void
-ide_source_view_movements_next_full_word_start (IdeSourceView         *self,
-                                                IdeSourceViewMovement  movement,
-                                                gboolean               extend_selection,
-                                                gint                   param)
+ide_source_view_movements_next_full_word_start (Movement *mv)
 {
   GtkTextIter copy;
-  GtkTextIter insert;
-  GtkTextIter selection;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  copy = mv->insert;
 
-  copy = insert;
-
-  _ide_vim_iter_forward_WORD_start (&insert);
+  _ide_vim_iter_forward_WORD_start (&mv->insert);
 
   /* prefer an empty line before word */
-  text_iter_forward_to_empty_line (&copy, &insert);
-  if (gtk_text_iter_compare (&copy, &insert) < 0)
-    insert = copy;
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  text_iter_forward_to_empty_line (&copy, &mv->insert);
+  if (gtk_text_iter_compare (&copy, &mv->insert) < 0)
+    mv->insert = copy;
 }
 
 static void
-ide_source_view_movements_previous_word_start (IdeSourceView         *self,
-                                               IdeSourceViewMovement  movement,
-                                               gboolean               extend_selection,
-                                               gint                   param)
+ide_source_view_movements_previous_word_start (Movement *mv)
 {
   GtkTextIter copy;
-  GtkTextIter insert;
-  GtkTextIter selection;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  copy = mv->insert;
 
-  copy = insert;
-
-  _ide_source_iter_backward_visible_word_start (&insert);
+  _ide_source_iter_backward_visible_word_start (&mv->insert);
 
   /*
    * Vim treats an empty line as a word.
    */
   if (gtk_text_iter_backward_char (&copy))
     if (gtk_text_iter_get_char (&copy) == '\n')
-      insert = copy;
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+      mv->insert = copy;
 }
 
 static void
-ide_source_view_movements_previous_full_word_start (IdeSourceView         *self,
-                                                    IdeSourceViewMovement  movement,
-                                                    gboolean               extend_selection,
-                                                    gint                   param)
+ide_source_view_movements_previous_full_word_start (Movement *mv)
 {
   GtkTextIter copy;
-  GtkTextIter insert;
-  GtkTextIter selection;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  copy = mv->insert;
 
-  copy = insert;
-
-  _ide_source_iter_backward_full_word_start (&insert);
+  _ide_source_iter_backward_full_word_start (&mv->insert);
 
   /*
    * Vim treats an empty line as a word.
    */
   if (gtk_text_iter_backward_char (&copy))
     if (gtk_text_iter_get_char (&copy) == '\n')
-      insert = copy;
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+      mv->insert = copy;
 }
 
 static void
-ide_source_view_movements_previous_word_end (IdeSourceView         *self,
-                                             IdeSourceViewMovement  movement,
-                                             gboolean               extend_selection,
-                                             gint                   param)
+ide_source_view_movements_previous_word_end (Movement *mv)
 {
   GtkTextIter copy;
-  GtkTextIter insert;
-  GtkTextIter selection;
 
-  ide_source_view_movements_get_selection (self, &insert, &selection);
+  copy = mv->insert;
 
-  copy = insert;
-
-  _ide_source_iter_backward_visible_word_starts (&insert, 2);
-  _ide_source_iter_forward_visible_word_end (&insert);
+  _ide_source_iter_backward_visible_word_starts (&mv->insert, 2);
+  _ide_source_iter_forward_visible_word_end (&mv->insert);
 
   /*
    * Vim treats an empty line as a word.
    */
   if (gtk_text_iter_backward_char (&copy))
     if (gtk_text_iter_get_char (&copy) == '\n')
-      insert = copy;
+      mv->insert = copy;
 
   /*
    * Ensure we are strictly before our previous position.
    */
-  if (gtk_text_iter_compare (&insert, &copy) > 0)
-    gtk_text_buffer_get_start_iter (gtk_text_iter_get_buffer (&insert), &insert);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  if (gtk_text_iter_compare (&mv->insert, &copy) > 0)
+    gtk_text_buffer_get_start_iter (gtk_text_iter_get_buffer (&mv->insert), &mv->insert);
 }
 
 static void
-ide_source_view_movements_previous_full_word_end (IdeSourceView         *self,
-                                                  IdeSourceViewMovement  movement,
-                                                  gboolean               extend_selection,
-                                                  gint                   param)
+ide_source_view_movements_previous_full_word_end (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
-  if (!_ide_source_iter_starts_full_word (&insert))
-    _ide_source_iter_backward_full_word_start (&insert);
-  _ide_source_iter_backward_full_word_start (&insert);
-  _ide_source_iter_forward_full_word_end (&insert);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  if (!_ide_source_iter_starts_full_word (&mv->insert))
+    _ide_source_iter_backward_full_word_start (&mv->insert);
+  _ide_source_iter_backward_full_word_start (&mv->insert);
+  _ide_source_iter_forward_full_word_end (&mv->insert);
 }
 
 static void
-ide_source_view_movements_paragraph_start (IdeSourceView         *self,
-                                          IdeSourceViewMovement  movement,
-                                          gboolean               extend_selection,
-                                          gint                   param)
+ide_source_view_movements_paragraph_start (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
-  _ide_vim_iter_backward_paragraph_start (&insert);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  _ide_vim_iter_backward_paragraph_start (&mv->insert);
 }
 
 static void
-ide_source_view_movements_paragraph_end (IdeSourceView         *self,
-                                        IdeSourceViewMovement  movement,
-                                        gboolean               extend_selection,
-                                        gint                   param)
+ide_source_view_movements_paragraph_end (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
 
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
-  _ide_vim_iter_forward_paragraph_end (&insert);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  _ide_vim_iter_forward_paragraph_end (&mv->insert);
 }
 
 static void
-ide_source_view_movements_sentence_start (IdeSourceView         *self,
-                                          IdeSourceViewMovement  movement,
-                                          gboolean               extend_selection,
-                                          gint                   param)
+ide_source_view_movements_sentence_start (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
-  _ide_vim_iter_backward_sentence_start (&insert);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  _ide_vim_iter_backward_sentence_start (&mv->insert);
 }
 
 static void
-ide_source_view_movements_sentence_end (IdeSourceView         *self,
-                                        IdeSourceViewMovement  movement,
-                                        gboolean               extend_selection,
-                                        gint                   param)
+ide_source_view_movements_sentence_end (Movement *mv)
 {
-  GtkTextIter insert;
-  GtkTextIter selection;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  ide_source_view_movements_get_selection (self, &insert, &selection);
-
-  _ide_vim_iter_forward_sentence_end (&insert);
-
-  ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
+  _ide_vim_iter_forward_sentence_end (&mv->insert);
 }
 
 void
@@ -1062,6 +801,10 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
                                  gboolean               exclusive,
                                  guint                  count)
 {
+  Movement mv = { 0 };
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
 #ifndef IDE_DISABLE_TRACE
   {
     GEnumValue *enum_value;
@@ -1077,153 +820,162 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   }
 #endif
 
+  mv.self = self;
+  mv.type = movement;
+  mv.extend_selection = extend_selection;
+  mv.exclusive = exclusive;
+  mv.count = count;
+  mv.ignore_select = FALSE;
+
+  ide_source_view_movements_get_selection (&mv);
+
   switch (movement)
     {
     case IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR:
-      ide_source_view_movements_nth_char (self, movement, extend_selection, count);
+      ide_source_view_movements_nth_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR:
-      ide_source_view_movements_previous_char (self, movement, extend_selection, count);
+      ide_source_view_movements_previous_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR:
-      ide_source_view_movements_next_char (self, movement, extend_selection, count);
+      ide_source_view_movements_next_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR:
-      ide_source_view_movements_first_char (self, movement, extend_selection, count);
+      ide_source_view_movements_first_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_NONSPACE_CHAR:
-      ide_source_view_movements_first_nonspace_char (self, movement, extend_selection, count);
+      ide_source_view_movements_first_nonspace_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR:
-      ide_source_view_movements_middle_char (self, movement, extend_selection, count);
+      ide_source_view_movements_middle_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR:
-      ide_source_view_movements_last_char (self, movement, extend_selection, count);
+      ide_source_view_movements_last_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_START:
-      ide_source_view_movements_previous_full_word_start (self, movement, extend_selection, count);
+      ide_source_view_movements_previous_full_word_start (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_START:
-      ide_source_view_movements_next_full_word_start (self, movement, extend_selection, count);
+      ide_source_view_movements_next_full_word_start (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_END:
-      ide_source_view_movements_previous_full_word_end (self, movement, extend_selection, count);
+      ide_source_view_movements_previous_full_word_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_END:
-      ide_source_view_movements_next_full_word_end (self, movement, extend_selection, count);
+      ide_source_view_movements_next_full_word_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START:
-      ide_source_view_movements_previous_word_start (self, movement, extend_selection, count);
+      ide_source_view_movements_previous_word_start (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START:
-      ide_source_view_movements_next_word_start (self, movement, extend_selection, count);
+      ide_source_view_movements_next_word_start (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END:
-      ide_source_view_movements_previous_word_end (self, movement, extend_selection, count);
+      ide_source_view_movements_previous_word_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_END:
-      ide_source_view_movements_next_word_end (self, movement, extend_selection, count);
+      ide_source_view_movements_next_word_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_START:
-      ide_source_view_movements_sentence_start (self, movement, extend_selection, count);
+      ide_source_view_movements_sentence_start (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_END:
-      ide_source_view_movements_sentence_end (self, movement, extend_selection, count);
+      ide_source_view_movements_sentence_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_START:
-      ide_source_view_movements_paragraph_start (self, movement, extend_selection, count);
+      ide_source_view_movements_paragraph_start (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_END:
-      ide_source_view_movements_paragraph_end (self, movement, extend_selection, count);
+      ide_source_view_movements_paragraph_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE:
-      ide_source_view_movements_previous_line (self, movement, extend_selection, count);
+      ide_source_view_movements_previous_line (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_LINE:
-      ide_source_view_movements_next_line (self, movement, extend_selection, count);
+      ide_source_view_movements_next_line (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE:
-      ide_source_view_movements_first_line (self, movement, extend_selection, count);
+      ide_source_view_movements_first_line (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE:
-      ide_source_view_movements_nth_line (self, movement, extend_selection, count);
+      ide_source_view_movements_nth_line (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LAST_LINE:
-      ide_source_view_movements_last_line (self, movement, extend_selection, count);
+      ide_source_view_movements_last_line (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE:
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS:
-      ide_source_view_movements_line_chars (self, movement, extend_selection, count);
+      ide_source_view_movements_line_chars (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_END:
-      //ide_source_view_movements_line_end (self, movement, extend_selection, exclusive, count);
+      //ide_source_view_movements_line_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP:
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN:
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP:
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN:
-      ide_source_view_movements_move_page (self, movement, extend_selection, count);
-      break;
-
-    case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP:
-      ide_source_view_movements_scroll (self, movement, extend_selection, count, GTK_DIR_UP);
+      ide_source_view_movements_move_page (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN:
-      ide_source_view_movements_scroll (self, movement, extend_selection, count, GTK_DIR_DOWN);
+    case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP:
+      ide_source_view_movements_scroll (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP:
-      ide_source_view_movements_screen_top (self, movement, extend_selection, count);
+      ide_source_view_movements_screen_top (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_MIDDLE:
-      ide_source_view_movements_screen_middle (self, movement, extend_selection, count);
+      ide_source_view_movements_screen_middle (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM:
-      ide_source_view_movements_screen_bottom (self, movement, extend_selection, count);
+      ide_source_view_movements_screen_bottom (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL:
-      ide_source_view_movements_match_special (self, movement, extend_selection, count);
+      ide_source_view_movements_match_special (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP:
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER:
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM:
-      ide_source_view_movements_scroll_center (self, movement, extend_selection, count);
+      ide_source_view_movements_scroll_center (&mv);
       break;
 
     default:
       g_return_if_reached ();
     }
+
+  if (!mv.ignore_select)
+    ide_source_view_movements_select_range (&mv);
 }
