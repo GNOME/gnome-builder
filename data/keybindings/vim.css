@@ -221,9 +221,12 @@
   /* copy */
   bind "y" { "set-mode" ("vim-normal-y", transient) };
   bind "<shift>y" { "save-insert-mark" ()
-                    "set-mode" ("vim-visual-line")
+                    "movement" (first-char, 0)
+                    "movement" (last-char, 1)
+                    "move-cursor" (visual-positions, 1, 1)
                     "copy-clipboard" ()
-                    "set-mode" ("vim-normal")
+                    "selection-theatric" (expand)
+                    "clear-selection" ()
                     "restore-insert-mark" () };
 
   /* visual mode transition */
