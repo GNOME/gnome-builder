@@ -1722,6 +1722,7 @@ static void
 ide_source_view_real_indent_selection (IdeSourceView *self,
                                        gint           level)
 {
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceView *source_view = (GtkSourceView *)self;
   GtkTextBuffer *buffer;
   GtkTextIter iter;
@@ -1729,13 +1730,11 @@ ide_source_view_real_indent_selection (IdeSourceView *self,
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
-#if 0
   /*
    * Use count to increase direction.
    */
   if (priv->count)
     level = priv->count * ((level > 0) ? 1 : -1);
-#endif
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
