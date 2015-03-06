@@ -74,7 +74,8 @@ typedef enum
  * @IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR: move to line offset of zero.
  * @IDE_SOURCE_VIEW_MOVEMENT_FIRST_NONSPACE_CHAR: move to first non-whitespace character in line.
  * @IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR: move to the middle character in the line.
- * @IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR: move to the last character in the line.
+ * @IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR: move to the last character in the line. this can be
+ *   inclusve or exclusive. inclusive is equivalent to %IDE_SOURCE_VIEW_MOVEMENT_LINE_END.
  * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START: move to beginning of previous word.
  * @IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START: move to beginning of next word.
  * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END: move to end of previous word.
@@ -94,6 +95,9 @@ typedef enum
  * @IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS: special selection to select all line characters up to the
  *   cursor position. special care will be taken if the line is blank to select only the blank
  *   space if any. otherwise, the line break will be selected.
+ * @IDE_SOURCE_VIEW_MOVEMENT_LINE_END: This will move you to the location of the newline at the
+ *   end of the current line. It does not support exclusive will not select the newline, while
+ *   invlusive will select the newline.
  * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP: move half a page up.
  * @IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN: move half a page down.
  * @IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP: move a full page up.
@@ -150,6 +154,7 @@ typedef enum
   IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE,
 
   IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS,
+  IDE_SOURCE_VIEW_MOVEMENT_LINE_END,
 
   IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP,
   IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN,
@@ -197,7 +202,9 @@ struct _IdeSourceViewClass
                                        const gchar             *str);
   void (*movement)                    (IdeSourceView           *self,
                                        IdeSourceViewMovement    movement,
-                                       gboolean                 extend_selection);
+                                       gboolean                 extend_selection,
+                                       gboolean                 exclusive,
+                                       gboolean                 apply_count);
   void (*join_lines)                  (IdeSourceView           *self);
   void (*jump)                        (IdeSourceView           *self,
                                        const GtkTextIter       *location);

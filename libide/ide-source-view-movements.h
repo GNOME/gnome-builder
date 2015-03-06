@@ -26,7 +26,8 @@ G_BEGIN_DECLS
 void _ide_source_view_apply_movement (IdeSourceView         *source_view,
                                       IdeSourceViewMovement  movement,
                                       gboolean               extend_selection,
-                                      gint                   param);
+                                      gboolean               exclusive,
+                                      guint                  count);
 
 G_END_DECLS
 

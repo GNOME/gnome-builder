@@ -1059,7 +1059,8 @@ void
 _ide_source_view_apply_movement (IdeSourceView         *self,
                                  IdeSourceViewMovement  movement,
                                  gboolean               extend_selection,
-                                 gint                   param)
+                                 gboolean               exclusive,
+                                 guint                  count)
 {
 #ifndef IDE_DISABLE_TRACE
   {
@@ -1068,150 +1069,158 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
     enum_class = g_type_class_peek (IDE_TYPE_SOURCE_VIEW_MOVEMENT);
     enum_value = g_enum_get_value (enum_class, movement);
-    IDE_TRACE_MSG ("apply movement: %s", enum_value->value_nick);
+    IDE_TRACE_MSG ("movement(%s, extend_selection=%s, exclusive=%s, count=%u)",
+                   enum_value->value_nick,
+                   extend_selection ? "YES" : "NO",
+                   exclusive ? "YES" : "NO",
+                   count);
   }
 #endif
 
   switch (movement)
     {
     case IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR:
-      ide_source_view_movements_nth_char (self, movement, extend_selection, param);
+      ide_source_view_movements_nth_char (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR:
-      ide_source_view_movements_previous_char (self, movement, extend_selection, param);
+      ide_source_view_movements_previous_char (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR:
-      ide_source_view_movements_next_char (self, movement, extend_selection, param);
+      ide_source_view_movements_next_char (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR:
-      ide_source_view_movements_first_char (self, movement, extend_selection, param);
+      ide_source_view_movements_first_char (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_NONSPACE_CHAR:
-      ide_source_view_movements_first_nonspace_char (self, movement, extend_selection, param);
+      ide_source_view_movements_first_nonspace_char (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR:
-      ide_source_view_movements_middle_char (self, movement, extend_selection, param);
+      ide_source_view_movements_middle_char (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR:
-      ide_source_view_movements_last_char (self, movement, extend_selection, param);
+      ide_source_view_movements_last_char (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_START:
-      ide_source_view_movements_previous_full_word_start (self, movement, extend_selection, param);
+      ide_source_view_movements_previous_full_word_start (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_START:
-      ide_source_view_movements_next_full_word_start (self, movement, extend_selection, param);
+      ide_source_view_movements_next_full_word_start (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_END:
-      ide_source_view_movements_previous_full_word_end (self, movement, extend_selection, param);
+      ide_source_view_movements_previous_full_word_end (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_END:
-      ide_source_view_movements_next_full_word_end (self, movement, extend_selection, param);
+      ide_source_view_movements_next_full_word_end (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START:
-      ide_source_view_movements_previous_word_start (self, movement, extend_selection, param);
+      ide_source_view_movements_previous_word_start (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START:
-      ide_source_view_movements_next_word_start (self, movement, extend_selection, param);
+      ide_source_view_movements_next_word_start (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END:
-      ide_source_view_movements_previous_word_end (self, movement, extend_selection, param);
+      ide_source_view_movements_previous_word_end (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_END:
-      ide_source_view_movements_next_word_end (self, movement, extend_selection, param);
+      ide_source_view_movements_next_word_end (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_START:
-      ide_source_view_movements_sentence_start (self, movement, extend_selection, param);
+      ide_source_view_movements_sentence_start (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_END:
-      ide_source_view_movements_sentence_end (self, movement, extend_selection, param);
+      ide_source_view_movements_sentence_end (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_START:
-      ide_source_view_movements_paragraph_start (self, movement, extend_selection, param);
+      ide_source_view_movements_paragraph_start (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_END:
-      ide_source_view_movements_paragraph_end (self, movement, extend_selection, param);
+      ide_source_view_movements_paragraph_end (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE:
-      ide_source_view_movements_previous_line (self, movement, extend_selection, param);
+      ide_source_view_movements_previous_line (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_LINE:
-      ide_source_view_movements_next_line (self, movement, extend_selection, param);
+      ide_source_view_movements_next_line (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE:
-      ide_source_view_movements_first_line (self, movement, extend_selection, param);
+      ide_source_view_movements_first_line (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE:
-      ide_source_view_movements_nth_line (self, movement, extend_selection, param);
+      ide_source_view_movements_nth_line (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LAST_LINE:
-      ide_source_view_movements_last_line (self, movement, extend_selection, param);
+      ide_source_view_movements_last_line (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE:
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS:
-      ide_source_view_movements_line_chars (self, movement, extend_selection, param);
+      ide_source_view_movements_line_chars (self, movement, extend_selection, count);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_LINE_END:
+      //ide_source_view_movements_line_end (self, movement, extend_selection, exclusive, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_UP:
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN:
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP:
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN:
-      ide_source_view_movements_move_page (self, movement, extend_selection, param);
+      ide_source_view_movements_move_page (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP:
-      ide_source_view_movements_scroll (self, movement, extend_selection, param, GTK_DIR_UP);
+      ide_source_view_movements_scroll (self, movement, extend_selection, count, GTK_DIR_UP);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN:
-      ide_source_view_movements_scroll (self, movement, extend_selection, param, GTK_DIR_DOWN);
+      ide_source_view_movements_scroll (self, movement, extend_selection, count, GTK_DIR_DOWN);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP:
-      ide_source_view_movements_screen_top (self, movement, extend_selection, param);
+      ide_source_view_movements_screen_top (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_MIDDLE:
-      ide_source_view_movements_screen_middle (self, movement, extend_selection, param);
+      ide_source_view_movements_screen_middle (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_BOTTOM:
-      ide_source_view_movements_screen_bottom (self, movement, extend_selection, param);
+      ide_source_view_movements_screen_bottom (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_MATCH_SPECIAL:
-      ide_source_view_movements_match_special (self, movement, extend_selection, param);
+      ide_source_view_movements_match_special (self, movement, extend_selection, count);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP:
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER:
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM:
-      ide_source_view_movements_scroll_center (self, movement, extend_selection, param);
+      ide_source_view_movements_scroll_center (self, movement, extend_selection, count);
       break;
 
     default:

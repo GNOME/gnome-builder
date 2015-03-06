@@ -77,6 +77,7 @@ typedef struct
   gulong                       buffer_notify_highlight_diagnostics_handler;
   gulong                       buffer_notify_language_handler;
 
+  guint                        count;
   guint                        scroll_offset;
 
   guint                        saved_line;
@@ -1858,14 +1859,14 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
 
       if (after_cursor)
         {
-          _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR, FALSE, 0);
+          _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR, FALSE, FALSE, 0);
           g_signal_emit_by_name (self, "insert-at-cursor", "\n");
         }
       else
         {
-          _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR, FALSE, 0);
+          _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR, FALSE, FALSE, 0);
           g_signal_emit_by_name (self, "insert-at-cursor", "\n");
-          _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE, FALSE, 0);
+          _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE, FALSE, FALSE, 0);
         }
 
       if (!place_cursor_at_original)
@@ -1882,7 +1883,7 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
   else
     {
       if (after_cursor)
-        _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR, FALSE, 0);
+        _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR, FALSE, FALSE, 0);
 
       GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->paste_clipboard (text_view);
 
@@ -1993,11 +1994,27 @@ ide_source_view_real_swap_selection_bounds (IdeSourceView *self)
 static void
 ide_source_view_real_movement (IdeSourceView         *self,
                                IdeSourceViewMovement  movement,
-                               gboolean               extend_selection)
+                               gboolean               extend_selection,
+                               gboolean               exclusive,
+                               gboolean               apply_count)
 {
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  guint count = 0;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  _ide_source_view_apply_movement (self, movement, extend_selection, 0 /* TODO */);
+  if (apply_count)
+    {
+      count = priv->count;
+#if 0
+      /*
+       * TODO: I think we want this in a clear-count action.
+       */
+      priv->count = 0;
+#endif
+    }
+
+  _ide_source_view_apply_movement (self, movement, extend_selection, exclusive, count);
 }
 
 static void
@@ -2501,8 +2518,10 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_generic,
                   G_TYPE_NONE,
-                  2,
+                  4,
                   IDE_TYPE_SOURCE_VIEW_MOVEMENT,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
 
   gSignals [PASTE_CLIPBOARD_EXTENDED] =
