@@ -281,6 +281,27 @@
   bind "g" { "movement" (first-line, 0) };
   bind "j" { "movement" (next-line, 0) };
   bind "m" { "movement" (middle-char, 0) };
+
+  bind "u"        { "set-mode" ("vim-normal-g-u", transient) };
+  bind "<shift>u" { "set-mode" ("vim-normal-g-u", transient) };
+}
+
+@binding-set builder-vim-source-view-normal-g-u
+{
+  bind "u" { "save-insert-mark" ()
+             "movement" (first-char, 0)
+             "movement" (last-char, 1)
+             "selection-theatric" ()
+             "change-case" (lower)
+             "clear-selection" ()
+             "restore-insert-mark" () };
+  bind "<shift>u" { "save-insert-mark" ()
+                    "movement" (first-char, 0)
+                    "movement" (last-char, 1)
+                    "selection-theatric" ()
+                    "change-case" (upper)
+                    "clear-selection" ()
+                    "restore-insert-mark" () };
 }
 
 @binding-set builder-vim-source-view-normal-d-g
@@ -501,6 +522,11 @@ IdeSourceViewMode.vim-normal-d-g {
 IdeSourceViewMode.vim-normal-g {
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal-g;
+}
+
+IdeSourceViewMode.vim-normal-g-u {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-g-u;
 }
 
 IdeSourceViewMode.vim-normal-y {
