@@ -115,6 +115,7 @@ enum {
   APPEND_TO_COUNT,
   AUTO_INDENT,
   CHANGE_CASE,
+  CLEAR_COUNT,
   CLEAR_SELECTION,
   CYCLE_COMPLETION,
   DELETE_SELECTION,
@@ -1650,6 +1651,16 @@ ide_source_view_real_change_case (IdeSourceView           *self,
 }
 
 static void
+ide_source_view_real_clear_count (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  priv->count = 0;
+}
+
+static void
 ide_source_view_real_clear_selection (IdeSourceView *self)
 {
   GtkTextView *text_view = (GtkTextView *)self;
@@ -2495,6 +2506,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->append_to_count = ide_source_view_real_append_to_count;
   klass->auto_indent = ide_source_view_real_auto_indent;
   klass->change_case = ide_source_view_real_change_case;
+  klass->clear_count = ide_source_view_real_clear_count;
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
   klass->delete_selection = ide_source_view_real_delete_selection;
@@ -2643,6 +2655,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   GTK_SOURCE_TYPE_CHANGE_CASE_TYPE);
+
+  gSignals [CLEAR_COUNT] =
+    g_signal_new ("clear-count",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, clear_count),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   gSignals [CLEAR_SELECTION] =
     g_signal_new ("clear-selection",

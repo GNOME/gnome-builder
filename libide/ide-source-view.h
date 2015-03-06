@@ -195,6 +195,7 @@ struct _IdeSourceViewClass
   void (*auto_indent)                 (IdeSourceView           *self);
   void (*change_case)                 (IdeSourceView           *self,
                                        GtkSourceChangeCaseType  type);
+  void (*clear_count)                 (IdeSourceView           *self);
   void (*clear_selection)             (IdeSourceView           *self);
   void (*cycle_completion)            (IdeSourceView           *self,
                                        GtkDirectionType         direction);
