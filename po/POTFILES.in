@@ -15,6 +15,7 @@ data/org.gnome.builder.editor.gschema.xml.in
 libide/autotools/ide-autotools-build-system.c
 libide/autotools/ide-autotools-build-task.c
 libide/autotools/ide-autotools-builder.c
+libide/autotools/ide-makecache.c
 libide/c/ide-c-language.c
 libide/clang/ide-clang-service.c
 libide/clang/ide-clang-translation-unit.c
@@ -57,6 +58,7 @@ libide/ide-source-snippet-completion-provider.c
 libide/ide-source-snippet-parser.c
 libide/ide-source-snippet.c
 libide/ide-source-snippets-manager.c
+libide/ide-source-view-mode.c
 libide/ide-source-view.c
 libide/ide.c
 libide/pygobject/ide-pygobject-script.c
@@ -132,6 +134,7 @@ src/trie/trie.c
 src/workbench/gb-workbench.c
 src/workbench/gb-workspace.c
 tools/ide-build.c
+tools/ide-list-build-flags.c
 tools/ide-list-devices.c
 tools/ide-list-diagnostics.c
 tools/ide-list-file-settings.c
