@@ -1,3 +1,69 @@
+/* vim.css
+ *
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ *
+ * This file is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This file is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Contributing:
+ *
+ * There are a lot of corner cases that vim handles. As you can see from the
+ * text below, we do not handle all of them. If you would like to contribute
+ * something that is missing, please do!
+ *
+ * In general, we use the selectors at the bottom to determine which binding
+ * sets are active in a mode.
+ *
+ * "set-mode" is used to move our way through the state machine. Take a look
+ * at the current uses to get an idea. "permanent" means that the mode will
+ * stay active until it has been released (by Escape or something). transient
+ * means that the the mode will disappear after a followup key press. However,
+ * transient mode may simply trigger another transient mode. (cip would be
+ * an example of this.
+ *
+ * If you need more advanced operations than you can perform, you might have
+ * to dig into IdeSourceView to add a new GSignal (with G_SIGNAL_ACTION flag).
+ * Any signal with G_SIGNAL_ACTION set in the following widget hierarchy
+ * should be callable from these bindings.
+ *
+ *   - GtkWidget
+ *     - GtkTextView
+ *       - GtkSourceView
+ *         - IdeSourceView
+ *
+ * For example, you could make the ficticious three-finger-salute keybinding
+ * to delete the entire buffer like so:
+ *
+ *   bind "<ctrl><alt>delete" { "movement" (first-line, 0)
+ *                              "movement" (last-line, 1)
+ *                              "movement" (last-char, 1)
+ *                              "copy-clipboard" ()
+ *                              "delete-selection" () };
+ *
+ * The first line will move the cursor to line and column 0:0. The second
+ * movement will extend the selection to the last line of the file (1
+ * indicates TRUE to the second action parameter "extend_selection").
+ * The third movement will move to the end of the current line (now the last
+ * line due to second movement). We then copy to the clipboard just to be
+ * nice, and then delete the whole thing from the buffer.
+ *
+ * That's pretty much it, happy Vim'ing!
+ *
+ *   -- Christian
+ */
+
 @binding-set builder-vim-source-view
 {
   bind "Escape" { "set-overwrite" (0)
@@ -492,6 +558,15 @@
   bind "<ctrl>n" { "move-cursor" (logical-positions, 1) };
   bind "<ctrl>p" { "move-cursor" (logical-positions, -1) };
 }
+
+/*
+ * Sadly, this will draw from the middle, so it does not result in our
+ * cursor being over the actual character, but between two characters.
+ *
+ *   IdeSourceView {
+ *     -GtkWidget-cursor-aspect-ratio: 0.5;
+ *   }
+ */
 
 IdeSourceViewMode.default,
 IdeSourceViewMode.vim-normal {
