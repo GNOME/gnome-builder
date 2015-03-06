@@ -312,6 +312,7 @@ animate_shrink (IdeSourceView     *self,
   GtkTextIter copy_begin;
   GtkTextIter copy_end;
   gboolean is_whole_line;
+  gboolean is_single_line;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (begin);
@@ -323,8 +324,14 @@ animate_shrink (IdeSourceView     *self,
 
   copy_begin = *begin;
   copy_end = *end;
+
   gtk_text_iter_order (&copy_begin, &copy_end);
-  is_whole_line = gtk_text_iter_starts_line (&copy_begin) && gtk_text_iter_ends_line (&copy_end);
+
+  is_single_line = (gtk_text_iter_get_line (&copy_begin) == gtk_text_iter_get_line (&copy_end));
+  is_whole_line = ((gtk_text_iter_get_line (&copy_begin) + 1 ==
+                    gtk_text_iter_get_line (&copy_end)) &&
+                   (gtk_text_iter_starts_line (&copy_begin) &&
+                    gtk_text_iter_starts_line (&copy_end)));
 
   theatric = g_object_new (IDE_TYPE_BOX_THEATRIC,
                            "alpha", 0.3,
@@ -347,9 +354,9 @@ animate_shrink (IdeSourceView     *self,
                              "width", rect.width,
                              "y", rect.y,
                              "height", 0,
-                             "alpha", 0.0,
+                             "alpha", 0.3,
                              NULL);
-  else
+  else if (is_single_line)
     ide_object_animate_full (theatric,
                              IDE_ANIMATION_EASE_OUT_QUAD,
                              150,
@@ -360,7 +367,20 @@ animate_shrink (IdeSourceView     *self,
                              "width", 0,
                              "y", rect.y,
                              "height", rect.height,
-                             "alpha", 0.0,
+                             "alpha", 0.3,
+                             NULL);
+  else
+    ide_object_animate_full (theatric,
+                             IDE_ANIMATION_EASE_OUT_QUAD,
+                             250,
+                             gtk_widget_get_frame_clock (GTK_WIDGET (self)),
+                             g_object_unref,
+                             theatric,
+                             "x", rect.x + (rect.width / 2),
+                             "width", 0,
+                             "y", rect.y + (rect.height / 2),
+                             "height", 0,
+                             "alpha", 0.3,
                              NULL);
 }
 
