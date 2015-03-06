@@ -86,18 +86,33 @@
                              "set-mode" ("vim-normal", permanent) };
 }
 
+@binding-set builder-vim-source-view-normal-with-count
+{
+  bind "0" { "append-to-count" (0)
+             "set-mode" ("vim-normal-with-count", transient) };
+}
+
 @binding-set builder-vim-source-view-normal
 {
   /* todo: need a submode that will allow 0 to be used. */
-  bind "1" { "append-to-count" (1) };
-  bind "2" { "append-to-count" (2) };
-  bind "3" { "append-to-count" (3) };
-  bind "4" { "append-to-count" (4) };
-  bind "5" { "append-to-count" (5) };
-  bind "6" { "append-to-count" (6) };
-  bind "7" { "append-to-count" (7) };
-  bind "8" { "append-to-count" (8) };
-  bind "9" { "append-to-count" (9) };
+  bind "1" { "append-to-count" (1)
+             "set-mode" ("vim-normal-with-count", transient) };
+  bind "2" { "append-to-count" (2)
+             "set-mode" ("vim-normal-with-count", transient) };
+  bind "3" { "append-to-count" (3)
+             "set-mode" ("vim-normal-with-count", transient) };
+  bind "4" { "append-to-count" (4)
+             "set-mode" ("vim-normal-with-count", transient) };
+  bind "5" { "append-to-count" (5)
+             "set-mode" ("vim-normal-with-count", transient) };
+  bind "6" { "append-to-count" (6)
+             "set-mode" ("vim-normal-with-count", transient) };
+  bind "7" { "append-to-count" (7)
+             "set-mode" ("vim-normal-with-count", transient) };
+  bind "8" { "append-to-count" (8)
+             "set-mode" ("vim-normal-with-count", transient) };
+  bind "9" { "append-to-count" (9)
+             "set-mode" ("vim-normal-with-count", transient) };
 
   /* insert at cursor */
   bind "i" { "set-mode" ("vim-insert", permanent) };
@@ -736,6 +751,12 @@
 IdeSourceViewMode.default,
 IdeSourceViewMode.vim-normal {
   gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal;
+}
+
+IdeSourceViewMode.vim-normal-with-count {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-with-count,
                     builder-vim-source-view-normal;
 }
 
