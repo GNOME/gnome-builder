@@ -112,6 +112,7 @@ enum {
 enum {
   ACTION,
   APPEND_TO_COUNT,
+  AUTO_INDENT,
   CHANGE_CASE,
   CLEAR_SELECTION,
   CYCLE_COMPLETION,
@@ -1549,6 +1550,64 @@ ide_source_view_real_append_to_count (IdeSourceView *self,
 }
 
 static void
+ide_source_view_real_auto_indent (IdeSourceView *self)
+{
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  if (!gtk_text_iter_is_start (&iter))
+    {
+      GdkEvent fake_event = { 0 };
+      GtkTextIter copy;
+      gchar str[8] = { 0 };
+      gunichar ch;
+
+      copy = iter;
+
+      gtk_text_iter_backward_char (&copy);
+      ch = gtk_text_iter_get_char (&copy);
+      g_unichar_to_utf8 (ch, str);
+
+      /*
+       * Now delete the character since the indenter will take care of
+       * reinserting it based on the GdkEventKey.
+       */
+      gtk_text_buffer_delete (buffer, &copy, &iter);
+
+      /*
+       * Now insert the last character (presumably something like \n) with a
+       * synthesized event that the indenter can deal with.
+       */
+      fake_event.key.type = GDK_KEY_PRESS;
+      fake_event.key.window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
+      fake_event.key.send_event = FALSE;
+      fake_event.key.time = GDK_CURRENT_TIME;
+      fake_event.key.state = 0;
+      fake_event.key.length = 1;
+      fake_event.key.string = str;
+      fake_event.key.hardware_keycode = 0;
+      fake_event.key.group = 0;
+      fake_event.key.is_modifier = 0;
+
+      /* Be nice during the common case */
+      if (*str == '\n')
+        fake_event.key.keyval = GDK_KEY_KP_Enter;
+      else
+        fake_event.key.keyval = gdk_unicode_to_keyval (ch);
+
+      ide_source_view_do_indent (self, &fake_event.key);
+    }
+}
+
+static void
 ide_source_view_real_change_case (IdeSourceView           *self,
                                   GtkSourceChangeCaseType  type)
 {
@@ -2334,6 +2393,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   klass->action = ide_source_view_real_action;
   klass->append_to_count = ide_source_view_real_append_to_count;
+  klass->auto_indent = ide_source_view_real_auto_indent;
   klass->change_case = ide_source_view_real_change_case;
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
@@ -2451,6 +2511,25 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   G_TYPE_INT);
+
+  /**
+   * IdeSourceView::auto-indent:
+   *
+   * Requests that the auto-indenter perform an indent request using the last
+   * inserted character. For example, if on the first character of a line, the
+   * last inserted character would be a newline and therefore "\n".
+   *
+   * If on the first character of the buffer, this signal will do nothing.
+   */
+  gSignals [AUTO_INDENT] =
+    g_signal_new ("auto-indent",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, auto_indent),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   gSignals [CHANGE_CASE] =
     g_signal_new ("change-case",

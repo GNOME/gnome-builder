@@ -192,6 +192,7 @@ struct _IdeSourceViewClass
                                        const gchar             *param);
   void (*append_to_count)             (IdeSourceView           *self,
                                        gint                     digit);
+  void (*auto_indent)                 (IdeSourceView           *self);
   void (*change_case)                 (IdeSourceView           *self,
                                        GtkSourceChangeCaseType  type);
   void (*clear_selection)             (IdeSourceView           *self);
