@@ -471,8 +471,8 @@
              "clear-selection" ()
              "restore-insert-mark" () };
 
-  bind "k" { "movement" (line-end, 0, 1, 0)
-             "movement" (first-char, 1, 1, 0)
+  bind "k" { "movement" (line-end, 0, 0, 0)
+             "movement" (previous-line, 1, 1, 0)
              "movement" (previous-line, 1, 1, 1)
              "copy-clipboard" ()
              "selection-theatric" (expand)
