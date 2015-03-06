@@ -90,17 +90,17 @@
   bind "i" { "set-mode" ("vim-insert", permanent) };
 
   /* insert after cursor */
-  bind "a" { "set-mode" ("vim-insert", permanent)
-             "movement" (next-char, 0, 0, 0) };
-  bind "<shift>a" { "set-mode" ("vim-insert", permanent)
-                    "movement" (last-char, 0, 0, 0) };
+  bind "a" { "movement" (next-char, 0, 0, 0)
+             "set-mode" ("vim-insert", permanent) };
+  bind "<shift>a" { "movement" (last-char, 0, 0, 0)
+                    "set-mode" ("vim-insert", permanent) };
 
   /* insert at first non-whitespace character */
-  bind "<shift>i" { "movement" (first-nonspace-char, 0, 0, 0)
+  bind "<shift>i" { "movement" (first-nonspace-char, 0, 1, 0)
                     "set-mode" ("vim-insert", permanent) };
 
   /* insert line after current, insert mode */
-  bind "o" { "movement" (last-char, 0, 0, 0)
+  bind "o" { "movement" (line-end, 0, 1, 0)
              "insert-at-cursor-and-indent" ("\n")
              "set-mode" ("vim-insert", permanent) };
 
@@ -111,10 +111,10 @@
                     "set-mode" ("vim-insert", permanent) };
 
   /* swallow the current character and go to insert */
-  bind "s" { "set-mode" ("vim-insert", permanent)
-             "movement" (next-char, 1, 0, 1)
+  bind "s" { "movement" (next-char, 1, 1, 1)
              "copy-selection" ()
-             "delete-selection" () };
+             "delete-selection" ()
+             "set-mode" ("vim-insert", permanent) };
 
   bind "Left"  { "movement" (previous-char, 0, 1, 1) };
   bind "Right" { "movement" (next-char, 0, 1, 1) };
@@ -161,7 +161,7 @@
   /* move to line offset of zero, and first non-whitespace char, end of line */
   bind "0" { "movement" (first-char, 0, 1, 0) };
   bind "<shift>asciicircum" { "movement" (first-nonspace-char, 0, 1, 0) };
-  bind "dollar" { "movement" (last-char, 0, 0, 0) };
+  bind "dollar" { "movement" (last-char, 0, 1, 0) };
   bind "bar" { "movement" (nth-char, 0, 1, 1) };
 
   /* jump to match of brace/bracket/comment/etc */
