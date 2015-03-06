@@ -141,6 +141,10 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
+static void ide_source_view_real_set_mode (IdeSourceView         *self,
+                                           const gchar           *name,
+                                           IdeSourceViewModeType  type);
+
 static void
 activate_action (GtkWidget   *widget,
                  const gchar *prefix,
@@ -1390,8 +1394,7 @@ ide_source_view_do_mode (IdeSourceView *self,
     }
 
   if (!priv->mode)
-    priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), "default",
-                                            IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+    ide_source_view_real_set_mode (self, NULL,  IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
 
   return ret;
 }
@@ -2069,6 +2072,10 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
       mode = "default";
       type = IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT;
     }
+
+  /* reset the count when switching to permanent mode */
+  if (type == IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT)
+    priv->count = 0;
 
   priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), mode, type);
 
