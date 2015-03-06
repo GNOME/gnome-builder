@@ -794,13 +794,36 @@ static void
 ide_source_view_movements_paragraph_start (Movement *mv)
 {
   _ide_vim_iter_backward_paragraph_start (&mv->insert);
+
+  if (mv->exclusive)
+    {
+      while (g_unichar_isspace (gtk_text_iter_get_char (&mv->insert)))
+        {
+          if (!gtk_text_iter_forward_char (&mv->insert))
+            break;
+        }
+    }
 }
 
 static void
 ide_source_view_movements_paragraph_end (Movement *mv)
 {
-
   _ide_vim_iter_forward_paragraph_end (&mv->insert);
+
+  if (mv->exclusive)
+    {
+      gboolean adjust = FALSE;
+
+      while (g_unichar_isspace (gtk_text_iter_get_char (&mv->insert)))
+        {
+          adjust = TRUE;
+          if (!gtk_text_iter_backward_char (&mv->insert))
+            break;
+        }
+
+      if (adjust)
+        gtk_text_iter_forward_char (&mv->insert);
+    }
 }
 
 static void
