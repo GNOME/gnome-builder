@@ -309,6 +309,7 @@ animate_shrink (IdeSourceView     *self,
   IdeBoxTheatric *theatric;
   GtkAllocation alloc;
   GdkRectangle rect = { 0 };
+  GdkRectangle char_rect = { 0 };
   GtkTextIter copy_begin;
   GtkTextIter copy_end;
   gboolean is_whole_line;
@@ -318,6 +319,7 @@ animate_shrink (IdeSourceView     *self,
   g_assert (begin);
   g_assert (end);
 
+  get_rect_for_iters (GTK_TEXT_VIEW (self), begin, begin, &char_rect, GTK_TEXT_WINDOW_WIDGET);
   get_rect_for_iters (GTK_TEXT_VIEW (self), begin, end, &rect, GTK_TEXT_WINDOW_WIDGET);
   gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
   rect.height = MIN (rect.height, alloc.height - rect.y);
@@ -372,14 +374,14 @@ animate_shrink (IdeSourceView     *self,
   else
     ide_object_animate_full (theatric,
                              IDE_ANIMATION_EASE_OUT_QUAD,
-                             250,
+                             150,
                              gtk_widget_get_frame_clock (GTK_WIDGET (self)),
                              g_object_unref,
                              theatric,
-                             "x", rect.x + (rect.width / 2),
+                             "x", rect.x,
                              "width", 0,
-                             "y", rect.y + (rect.height / 2),
-                             "height", 0,
+                             "y", rect.y,
+                             "height", char_rect.height,
                              "alpha", 0.3,
                              NULL);
 }
