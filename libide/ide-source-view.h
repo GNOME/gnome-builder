@@ -215,6 +215,7 @@ struct _IdeSourceViewClass
                                        IdeSourceViewModeType    type);
   void (*set_overwrite)               (IdeSourceView           *self,
                                        gboolean                 overwrite);
+  void (*swap_selection_bounds)       (IdeSourceView           *self);
 };
 
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);

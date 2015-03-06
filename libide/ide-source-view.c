@@ -124,6 +124,7 @@ enum {
   SELECTION_THEATRIC,
   SET_MODE,
   SET_OVERWRITE,
+  SWAP_SELECTION_BOUNDS,
   LAST_SIGNAL
 };
 
@@ -1973,6 +1974,20 @@ ide_source_view_real_set_overwrite (IdeSourceView *self,
 }
 
 static void
+ide_source_view_real_swap_selection_bounds (IdeSourceView *self)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter insert;
+  GtkTextIter selection_bound;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  gtk_text_buffer_get_selection_bounds (buffer, &insert, &selection_bound);
+  gtk_text_buffer_select_range (buffer, &selection_bound, &insert);
+}
+
+static void
 ide_source_view_real_movement (IdeSourceView         *self,
                                IdeSourceViewMovement  movement,
                                gboolean               extend_selection)
@@ -2291,6 +2306,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->selection_theatric = ide_source_view_real_selection_theatric;
   klass->set_mode = ide_source_view_real_set_mode;
   klass->set_overwrite = ide_source_view_real_set_overwrite;
+  klass->swap_selection_bounds = ide_source_view_real_swap_selection_bounds;
 
   g_object_class_override_property (object_class, PROP_AUTO_INDENT, "auto-indent");
 
@@ -2552,10 +2568,20 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, set_overwrite),
                   NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  g_cclosure_marshal_VOID__BOOLEAN,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_BOOLEAN);
+
+  gSignals [SWAP_SELECTION_BOUNDS] =
+    g_signal_new ("swap-selection-bounds",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, swap_selection_bounds),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 static void
