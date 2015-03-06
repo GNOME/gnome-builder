@@ -111,6 +111,7 @@ enum {
 
 enum {
   ACTION,
+  APPEND_TO_COUNT,
   CHANGE_CASE,
   CLEAR_SELECTION,
   CYCLE_COMPLETION,
@@ -1534,6 +1535,20 @@ ide_source_view_real_action (IdeSourceView *self,
 }
 
 static void
+ide_source_view_real_append_to_count (IdeSourceView *self,
+                                      gint           digit)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  g_return_if_fail (digit >= 0);
+  g_return_if_fail (digit <= 9);
+
+  priv->count = (priv->count * 10) + digit;
+}
+
+static void
 ide_source_view_real_change_case (IdeSourceView           *self,
                                   GtkSourceChangeCaseType  type)
 {
@@ -2318,6 +2333,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->query_tooltip = ide_source_view_query_tooltip;
 
   klass->action = ide_source_view_real_action;
+  klass->append_to_count = ide_source_view_real_append_to_count;
   klass->change_case = ide_source_view_real_change_case;
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
@@ -2424,6 +2440,17 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_STRING,
                   G_TYPE_STRING,
                   G_TYPE_STRING);
+
+  gSignals [APPEND_TO_COUNT] =
+    g_signal_new ("append-to-count",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, append_to_count),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__INT,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_INT);
 
   gSignals [CHANGE_CASE] =
     g_signal_new ("change-case",

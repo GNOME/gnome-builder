@@ -190,6 +190,8 @@ struct _IdeSourceViewClass
                                        const gchar             *prefix,
                                        const gchar             *action_name,
                                        const gchar             *param);
+  void (*append_to_count)             (IdeSourceView           *self,
+                                       gint                     digit);
   void (*change_case)                 (IdeSourceView           *self,
                                        GtkSourceChangeCaseType  type);
   void (*clear_selection)             (IdeSourceView           *self);
