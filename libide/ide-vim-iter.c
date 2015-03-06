@@ -28,6 +28,49 @@ typedef enum
   SENTENCE_FAILED,
 } SentenceStatus;
 
+enum
+{
+  CLASS_0,
+  CLASS_SPACE,
+  CLASS_SPECIAL,
+  CLASS_WORD,
+};
+
+static int
+_ide_vim_word_classify (gunichar ch)
+{
+  switch (ch)
+    {
+    case ' ':
+    case '\t':
+    case '\n':
+      return CLASS_SPACE;
+
+    case '"': case '\'':
+    case '(': case ')':
+    case '{': case '}':
+    case '[': case ']':
+    case '<': case '>':
+    case '-': case '+': case '*': case '/':
+    case '!': case '@': case '#': case '$': case '%':
+    case '^': case '&': case ':': case ';': case '?':
+    case '|': case '=': case '\\': case '.': case ',':
+      return CLASS_SPECIAL;
+
+    case '_':
+    default:
+      return CLASS_WORD;
+    }
+}
+
+static int
+_ide_vim_WORD_classify (gunichar ch)
+{
+  if (g_unichar_isspace (ch))
+    return CLASS_SPACE;
+  return CLASS_WORD;
+}
+
 static gboolean
 _ide_vim_iter_line_is_empty (GtkTextIter *iter)
 {
@@ -256,4 +299,63 @@ _ide_vim_iter_backward_sentence_start (GtkTextIter *iter)
       gtk_text_buffer_get_start_iter (gtk_text_iter_get_buffer (iter), iter);
       return FALSE;
     }
+}
+
+static gboolean
+_ide_vim_iter_forward_classified_start (GtkTextIter *iter,
+                                        gint (*classify) (gunichar ch))
+{
+  gint begin_class;
+  gint cur_class;
+  gunichar ch;
+
+  g_assert (iter);
+
+  ch = gtk_text_iter_get_char (iter);
+  begin_class = classify (ch);
+
+  /* Move to the first non-whitespace character if necessary. */
+  if (begin_class == CLASS_SPACE)
+    {
+      for (;;)
+        {
+          if (!gtk_text_iter_forward_char (iter))
+            return FALSE;
+
+          ch = gtk_text_iter_get_char (iter);
+          cur_class = classify (ch);
+          if (cur_class != CLASS_SPACE)
+            return TRUE;
+        }
+    }
+
+  /* move to first character not at same class level. */
+  while (gtk_text_iter_forward_char (iter))
+    {
+      ch = gtk_text_iter_get_char (iter);
+      cur_class = classify (ch);
+
+      if (cur_class == CLASS_SPACE)
+        {
+          begin_class = CLASS_0;
+          continue;
+        }
+
+      if (cur_class != begin_class)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+_ide_vim_iter_forward_word_start (GtkTextIter *iter)
+{
+  return _ide_vim_iter_forward_classified_start (iter, _ide_vim_word_classify);
+}
+
+gboolean
+_ide_vim_iter_forward_WORD_start (GtkTextIter *iter)
+{
+  return _ide_vim_iter_forward_classified_start (iter, _ide_vim_WORD_classify);
 }

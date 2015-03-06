@@ -32,6 +32,24 @@ typedef struct
 } MatchingBracketState;
 
 static gboolean
+text_iter_forward_to_empty_line (GtkTextIter *iter,
+                                 GtkTextIter *bounds)
+{
+  if (!gtk_text_iter_forward_char (iter))
+    return FALSE;
+
+  while (gtk_text_iter_compare (iter, bounds) < 0)
+    {
+      if (gtk_text_iter_starts_line (iter) && gtk_text_iter_ends_line (iter))
+        return TRUE;
+      if (!gtk_text_iter_forward_char (iter))
+        return FALSE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 is_single_line_selection (const GtkTextIter *insert,
                           const GtkTextIter *selection)
 {
@@ -807,18 +825,12 @@ ide_source_view_movements_next_word_start (IdeSourceView         *self,
 
   copy = insert;
 
-  if (!_ide_source_iter_ends_word (&insert))
-    _ide_source_iter_forward_visible_word_end (&insert);
+  _ide_vim_iter_forward_word_start (&insert);
 
-  if (_ide_source_iter_forward_visible_word_end (&insert))
-    _ide_source_iter_backward_visible_word_start (&insert);
-
-  /*
-   * Vim treats an empty line as a word.
-   */
-  if (gtk_text_iter_forward_char (&copy))
-    if (gtk_text_iter_get_char (&copy) == '\n')
-      insert = copy;
+  /* prefer an empty line before word */
+  text_iter_forward_to_empty_line (&copy, &insert);
+  if (gtk_text_iter_compare (&copy, &insert) < 0)
+    insert = copy;
 
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
@@ -837,18 +849,12 @@ ide_source_view_movements_next_full_word_start (IdeSourceView         *self,
 
   copy = insert;
 
-  if (!_ide_source_iter_ends_full_word (&insert))
-    _ide_source_iter_forward_full_word_end (&insert);
+  _ide_vim_iter_forward_WORD_start (&insert);
 
-  _ide_source_iter_forward_full_word_end (&insert);
-  _ide_source_iter_backward_full_word_start (&insert);
-
-  /*
-   * Vim treats an empty line as a word.
-   */
-  if (gtk_text_iter_forward_char (&copy))
-    if (gtk_text_iter_get_char (&copy) == '\n')
-      insert = copy;
+  /* prefer an empty line before word */
+  text_iter_forward_to_empty_line (&copy, &insert);
+  if (gtk_text_iter_compare (&copy, &insert) < 0)
+    insert = copy;
 
   ide_source_view_movements_select_range (self, &insert, &selection, extend_selection);
 }
