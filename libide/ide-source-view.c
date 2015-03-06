@@ -77,6 +77,8 @@ typedef struct
   gulong                       buffer_notify_highlight_diagnostics_handler;
   gulong                       buffer_notify_language_handler;
 
+  guint                        scroll_offset;
+
   guint                        saved_line;
   guint                        saved_line_offset;
 
@@ -99,6 +101,7 @@ enum {
   PROP_FONT_DESC,
   PROP_INSERT_MATCHING_BRACE,
   PROP_OVERWRITE_BRACES,
+  PROP_SCROLL_OFFSET,
   PROP_SHOW_GRID_LINES,
   PROP_SHOW_LINE_CHANGES,
   PROP_SNIPPET_COMPLETION,
@@ -2208,6 +2211,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_overwrite_braces (self));
       break;
 
+    case PROP_SCROLL_OFFSET:
+      g_value_set_uint (value, ide_source_view_get_scroll_offset (self));
+      break;
+
     case PROP_SHOW_GRID_LINES:
       g_value_set_boolean (value, ide_source_view_get_show_grid_lines (self));
       break;
@@ -2255,6 +2262,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_OVERWRITE_BRACES:
       ide_source_view_set_overwrite_braces (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SCROLL_OFFSET:
+      ide_source_view_set_scroll_offset (self, g_value_get_uint (value));
       break;
 
     case PROP_SHOW_GRID_LINES:
@@ -2345,6 +2356,17 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_OVERWRITE_BRACES,
                                    gParamSpecs [PROP_OVERWRITE_BRACES]);
+
+  gParamSpecs [PROP_SCROLL_OFFSET] =
+    g_param_spec_uint ("scroll-offset",
+                       _("Scroll Offset"),
+                       _("The number of lines between the insertion cursor and screen boundary."),
+                       0,
+                       G_MAXUINT,
+                       0,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SCROLL_OFFSET,
+                                   gParamSpecs [PROP_SCROLL_OFFSET]);
 
   gParamSpecs [PROP_SHOW_GRID_LINES] =
     g_param_spec_boolean ("show-grid-lines",
@@ -2972,4 +2994,42 @@ ide_source_view_jump (IdeSourceView     *self,
   g_return_if_fail (location);
 
   g_signal_emit (self, gSignals [JUMP], 0, location);
+}
+
+/**
+ * ide_source_view_get_scroll_offset:
+ *
+ * Gets the #IdeSourceView:scroll-offset property. This property contains the number of lines
+ * that should be kept above or below the line containing the insertion cursor relative to the
+ * top and bottom of the visible text window.
+ */
+guint
+ide_source_view_get_scroll_offset (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), 0);
+
+  return priv->scroll_offset;
+}
+
+/**
+ * ide_source_view_set_scroll_offset:
+ *
+ * Sets the #IdeSourceView:scroll-offset property. See ide_source_view_get_scroll_offset() for
+ * more information. Set to 0 to unset this property.
+ */
+void
+ide_source_view_set_scroll_offset (IdeSourceView *self,
+                                   guint          scroll_offset)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  if (scroll_offset != priv->scroll_offset)
+    {
+      priv->scroll_offset = scroll_offset;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SCROLL_OFFSET]);
+    }
 }
