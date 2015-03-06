@@ -77,15 +77,28 @@
 @binding-set builder-vim-source-view
 {
   bind "Escape" { "set-overwrite" (0)
+                  "clear-count" ()
                   "clear-selection" ()
                   "set-mode" ("vim-normal", permanent) };
   bind "<ctrl>bracketleft" { "set-overwrite" (0)
+                             "clear-count" ()
                              "clear-selection" ()
                              "set-mode" ("vim-normal", permanent) };
 }
 
 @binding-set builder-vim-source-view-normal
 {
+  /* todo: need a submode that will allow 0 to be used. */
+  bind "1" { "append-to-count" (1) };
+  bind "2" { "append-to-count" (2) };
+  bind "3" { "append-to-count" (3) };
+  bind "4" { "append-to-count" (4) };
+  bind "5" { "append-to-count" (5) };
+  bind "6" { "append-to-count" (6) };
+  bind "7" { "append-to-count" (7) };
+  bind "8" { "append-to-count" (8) };
+  bind "9" { "append-to-count" (9) };
+
   /* insert at cursor */
   bind "i" { "set-mode" ("vim-insert", permanent) };
 
