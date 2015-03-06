@@ -172,11 +172,11 @@
   bind "i" { "set-mode" ("vim-normal-c-i", transient) };
 
   bind "e" { "movement" (next-word-end, 1)
-             "copy-selection" ()
+             "copy-clipboard" ()
              "delete-selection" ()
              "set-mode" ("vim-insert", permanent) };
   bind "w" { "movement" (next-word-end, 1)
-             "copy-selection" ()
+             "copy-clipboard" ()
              "delete-selection" ()
              "set-mode" ("vim-insert", permanent) };
 }
@@ -187,7 +187,7 @@
   bind "p" { "movement" (paragraph-start, 1)
              "swap-selection-bounds" ()
              "movement" (paragraph-end, 1)
-             "copy-selection" ()
+             "copy-clipboard" ()
              "delete-selection" ()
              "set-mode" ("vim-insert", permanent) };
 }
