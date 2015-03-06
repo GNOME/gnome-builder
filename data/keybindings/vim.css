@@ -306,7 +306,7 @@
                  "copy-selection" ()
                  "delete-selection" () };
 
-  bind "Down"   { "movement" (first-char, 0, 1, 0)
+  bind "Down"  { "movement" (first-char, 0, 1, 0)
                  "movement" (next-line, 1, 0, 0)
                  "movement" (next-line, 1, 0, 1)
                  "copy-selection" ()
