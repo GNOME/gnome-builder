@@ -116,15 +116,15 @@
              "copy-selection" ()
              "delete-selection" () };
 
-  bind "Left"  { "movement" (previous-char, 0, 0, 1) };
-  bind "Right" { "movement" (next-char, 0, 0, 1) };
-  bind "Up"    { "movement" (previous-line, 0, 0, 1) };
-  bind "Down"  { "movement" (next-line, 0, 0, 1) };
+  bind "Left"  { "movement" (previous-char, 0, 1, 1) };
+  bind "Right" { "movement" (next-char, 0, 1, 1) };
+  bind "Up"    { "movement" (previous-line, 0, 1, 1) };
+  bind "Down"  { "movement" (next-line, 0, 1, 1) };
 
-  bind "h"     { "movement" (previous-char, 0, 0, 1) };
-  bind "l"     { "movement" (next-char, 0, 0, 1) };
-  bind "k"     { "movement" (previous-line, 0, 0, 1) };
-  bind "j"     { "movement" (next-line, 0, 0, 1) };
+  bind "h"     { "movement" (previous-char, 0, 1, 1) };
+  bind "l"     { "movement" (next-char, 0, 1, 1) };
+  bind "k"     { "movement" (previous-line, 0, 1, 1) };
+  bind "j"     { "movement" (next-line, 0, 1, 1) };
 
   /* move to special sub-mode 'g' */
   bind "g" { "set-mode" ("vim-normal-g", transient ) };
