@@ -182,11 +182,15 @@ ide_source_view_movements_first_nonspace_char (Movement *mv)
 {
   gunichar ch;
 
-  gtk_text_iter_set_line_offset (&mv->insert, 0);
+  if (gtk_text_iter_get_line_offset (&mv->insert) != 0)
+    gtk_text_iter_set_line_offset (&mv->insert, 0);
 
   while (!gtk_text_iter_ends_line (&mv->insert) &&
          (ch = gtk_text_iter_get_char (&mv->insert)) &&
          g_unichar_isspace (ch))
+    gtk_text_iter_forward_char (&mv->insert);
+
+  if (!mv->exclusive && !gtk_text_iter_ends_line (&mv->insert))
     gtk_text_iter_forward_char (&mv->insert);
 }
 
