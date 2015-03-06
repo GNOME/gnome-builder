@@ -169,6 +169,9 @@ ide_source_view_movements_next_char (Movement *mv)
         break;
       gtk_text_iter_forward_char (&mv->insert);
     }
+
+  if (!mv->exclusive && !gtk_text_iter_ends_line (&mv->insert))
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
