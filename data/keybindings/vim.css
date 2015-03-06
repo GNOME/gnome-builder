@@ -281,22 +281,41 @@
 
 @binding-set builder-vim-source-view-normal-d
 {
+  bind "Left"  { "movement" (previous-char, 1, 1, 1)
+                 "copy-selection" ()
+                 "delete-selection" () };
   bind "h"     { "movement" (previous-char, 1, 1, 1)
+                 "copy-selection" ()
+                 "delete-selection" () };
+
+  bind "Right" { "movement" (next-char, 1, 1, 1)
+                 "copy-selection" ()
                  "delete-selection" () };
   bind "l"     { "movement" (next-char, 1, 1, 1)
+                 "copy-selection" ()
                  "delete-selection" () };
-  bind "k"     { "movement" (previous-line, 1, 1, 1)
+
+  bind "Up"    { "movement" (line-end, 0, 0, 0)
+                 "movement" (previous-line, 1, 1, 0)
+                 "movement" (previous-line, 1, 1, 1)
+                 "copy-selection" ()
                  "delete-selection" () };
-  bind "j"     { "movement" (next-line, 1, 1, 1)
+  bind "k"     { "movement" (line-end, 0, 0, 0)
+                 "movement" (previous-line, 1, 1, 0)
+                 "movement" (previous-line, 1, 1, 1)
+                 "copy-selection" ()
                  "delete-selection" () };
-  bind "Left"  { "movement" (previous-char, 1, 1, 1)
+
+  bind "Down"   { "movement" (first-char, 0, 1, 0)
+                 "movement" (next-line, 1, 0, 0)
+                 "movement" (next-line, 1, 0, 1)
+                 "copy-selection" ()
                  "delete-selection" () };
-  bind "Right" { "movement" (next-char, 1, 1, 1)
+  bind "j"     { "movement" (first-char, 0, 1, 0)
+                 "movement" (next-line, 1, 0, 0)
+                 "movement" (next-line, 1, 0, 1)
+                 "copy-selection" ()
                  "delete-selection" () };
-  bind "Up"    { "movement" (previous-line, 1, 1, 1)
-                 "delete-selection" () };
-  bind "Down"  { "movement" (next-line, 1, 1, 1)
-                "delete-selection" () };
 
   bind "g" { "set-mode" ("vim-normal-d-g", transient) };
 
