@@ -111,6 +111,7 @@
                     "set-overwrite" (1) };
 
  /* jump to sub-mode */
+  bind "c" { "set-mode" ("vim-normal-c", transient) };
   bind "d" { "set-mode" ("vim-normal-d", transient) };
 
   /* delete to end of line */
@@ -164,6 +165,31 @@
                     "movement" (last-char, 1)
                     "set-mode" ("vim-visual-line", permanent) };
   bind "<ctrl>v" { "set-mode" ("vim-visual-block", permanent) };
+}
+
+@binding-set builder-vim-source-view-normal-c
+{
+  bind "i" { "set-mode" ("vim-normal-c-i", transient) };
+
+  bind "e" { "movement" (next-word-end, 1)
+             "copy-selection" ()
+             "delete-selection" ()
+             "set-mode" ("vim-insert", permanent) };
+  bind "w" { "movement" (next-word-end, 1)
+             "copy-selection" ()
+             "delete-selection" ()
+             "set-mode" ("vim-insert", permanent) };
+}
+
+@binding-set builder-vim-source-view-normal-c-i
+{
+  /* cip */
+  bind "p" { "movement" (paragraph-start, 1)
+             "swap-selection-bounds" ()
+             "movement" (paragraph-end, 1)
+             "copy-selection" ()
+             "delete-selection" ()
+             "set-mode" ("vim-insert", permanent) };
 }
 
 @binding-set builder-vim-source-view-normal-d
@@ -450,6 +476,16 @@ IdeSourceViewMode.default,
 IdeSourceViewMode.vim-normal {
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal;
+}
+
+IdeSourceViewMode.vim-normal-c {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-c;
+}
+
+IdeSourceViewMode.vim-normal-c-i {
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-c-i;
 }
 
 IdeSourceViewMode.vim-normal-d {
