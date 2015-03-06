@@ -130,74 +130,110 @@
              "delete-selection" ()
              "set-mode" ("vim-insert", permanent) };
 
-  bind "Left"  { "movement" (previous-char, 0, 1, 1) };
-  bind "Right" { "movement" (next-char, 0, 1, 1) };
-  bind "Up"    { "movement" (previous-line, 0, 1, 1) };
-  bind "Down"  { "movement" (next-line, 0, 1, 1) };
+  bind "Left"  { "movement" (previous-char, 0, 1, 1)
+                 "clear-count" () };
+  bind "Right" { "movement" (next-char, 0, 1, 1)
+                 "clear-count" () };
+  bind "Up"    { "movement" (previous-line, 0, 1, 1)
+                 "clear-count" () };
+  bind "Down"  { "movement" (next-line, 0, 1, 1)
+                 "clear-count" () };
 
-  bind "h"     { "movement" (previous-char, 0, 1, 1) };
-  bind "l"     { "movement" (next-char, 0, 1, 1) };
-  bind "k"     { "movement" (previous-line, 0, 1, 1) };
-  bind "j"     { "movement" (next-line, 0, 1, 1) };
+  bind "h"     { "movement" (previous-char, 0, 1, 1)
+                 "clear-count" () };
+  bind "l"     { "movement" (next-char, 0, 1, 1)
+                 "clear-count" () };
+  bind "k"     { "movement" (previous-line, 0, 1, 1)
+                 "clear-count" () };
+  bind "j"     { "movement" (next-line, 0, 1, 1)
+                 "clear-count" () };
 
   /* move to special sub-mode 'g' */
   bind "g" { "set-mode" ("vim-normal-g", transient ) };
 
   /* move by word ends */
-  bind "e"        { "movement" (next-word-end, 0, 1, 1) };
-  bind "<shift>e" { "movement" (next-full-word-end, 0, 1, 1) };
+  bind "e"        { "movement" (next-word-end, 0, 1, 1)
+                    "clear-count" () };
+  bind "<shift>e" { "movement" (next-full-word-end, 0, 1, 1)
+                    "clear-count" () };
 
   /* move to by word start */
-  bind "w"        { "movement" (next-word-start, 0, 1, 1) };
-  bind "<shift>w" { "movement" (next-full-word-start, 0, 1, 1) };
-  bind "b"        { "movement" (previous-word-start, 0, 1, 1) };
-  bind "<shift>b" { "movement" (previous-full-word-start, 0, 1, 1) };
+  bind "w"        { "movement" (next-word-start, 0, 1, 1)
+                    "clear-count" () };
+  bind "<shift>w" { "movement" (next-full-word-start, 0, 1, 1)
+                    "clear-count" () };
+  bind "b"        { "movement" (previous-word-start, 0, 1, 1)
+                    "clear-count" () };
+  bind "<shift>b" { "movement" (previous-full-word-start, 0, 1, 1)
+                    "clear-count" () };
 
   /* page movements */
-  bind "<ctrl>b" { "movement" (page-up, 0, 0, 1) };
-  bind "<ctrl>f" { "movement" (page-down, 0, 0, 1) };
-  bind "<ctrl>u" { "movement" (half-page-up, 0, 0, 1) };
-  bind "<ctrl>d" { "movement" (half-page-down, 0, 0, 1) };
+  bind "<ctrl>b" { "movement" (page-up, 0, 0, 1)
+                   "clear-count" () };
+  bind "<ctrl>f" { "movement" (page-down, 0, 0, 1)
+                   "clear-count" () };
+  bind "<ctrl>u" { "movement" (half-page-up, 0, 0, 1)
+                   "clear-count" () };
+  bind "<ctrl>d" { "movement" (half-page-down, 0, 0, 1)
+                   "clear-count" () };
 
   /* screen movements, keeping cursor locked to visible region */
-  bind "<ctrl>e" { "movement" (screen-up, 0, 0, 1) };
-  bind "<ctrl>y" { "movement" (screen-down, 0, 0, 1) };
+  bind "<ctrl>e" { "movement" (screen-up, 0, 0, 1)
+                   "clear-count" () };
+  bind "<ctrl>y" { "movement" (screen-down, 0, 0, 1)
+                   "clear-count" () };
   bind "z" { "set-mode" ("vim-normal-z", transient) };
 
   /* move by paragraph */
-  bind "braceleft" { "movement" (paragraph-start, 0, 0, 1) };
-  bind "braceright" { "movement" (paragraph-end, 0, 0, 1) };
+  bind "braceleft" { "movement" (paragraph-start, 0, 0, 1)
+                     "clear-count" () };
+  bind "braceright" { "movement" (paragraph-end, 0, 0, 1)
+                      "clear-count" () };
 
   /* move by sentence */
-  bind "parenleft" { "movement" (sentence-start, 0, 0, 1) };
-  bind "parenright" { "movement" (sentence-end, 0, 0, 1) };
+  bind "parenleft" { "movement" (sentence-start, 0, 0, 1)
+                     "clear-count" () };
+  bind "parenright" { "movement" (sentence-end, 0, 0, 1)
+                      "clear-count" () };
 
   /* move to line offset of zero, and first non-whitespace char, end of line */
-  bind "0" { "movement" (first-char, 0, 1, 0) };
-  bind "<shift>asciicircum" { "movement" (first-nonspace-char, 0, 1, 0) };
-  bind "dollar" { "movement" (last-char, 0, 1, 0) };
-  bind "bar" { "movement" (nth-char, 0, 1, 1) };
+  bind "0" { "movement" (first-char, 0, 1, 0)
+             "clear-count" () };
+  bind "<shift>asciicircum" { "movement" (first-nonspace-char, 0, 1, 0)
+                              "clear-count" () };
+  bind "dollar" { "movement" (last-char, 0, 1, 0)
+                  "clear-count" () };
+  bind "bar" { "movement" (nth-char, 0, 1, 1)
+               "clear-count" () };
 
   /* jump to match of brace/bracket/comment/etc */
-  bind "percent" { "move-to-matching-bracket" (0, 0, 1) };
+  bind "percent" { "move-to-matching-bracket" (0, 0, 1)
+                   "clear-count" () };
 
   /* move based on visible screen area */
-  bind "<shift>h" { "movement" (screen-top, 0, 0, 0) };
-  bind "<shift>m" { "movement" (screen-middle, 0, 0, 0) };
-  bind "<shift>l" { "movement" (screen-bottom, 0, 0, 0) };
+  bind "<shift>h" { "movement" (screen-top, 0, 0, 0)
+                    "clear-count" () };
+  bind "<shift>m" { "movement" (screen-middle, 0, 0, 0)
+                    "clear-count" () };
+  bind "<shift>l" { "movement" (screen-bottom, 0, 0, 0)
+                    "clear-count" () };
 
   /* move to nth line, defaults to last */
   bind "<shift>g" { "movement" (nth-line, 0, 0, 1) };
 
   /* undo - todo: how do we land cursor on right spot? */
   bind "u" { "undo" ()
+             "clear-count" ()
              "clear-selection" () };
 
   /* redo */
-  bind "<ctrl>r" { "redo" () };
+  bind "<ctrl>r" { "redo" ()
+                   "clear-count" () };
 
-  bind "p" { "paste-clipboard-extended" (1, 1, 0) };
-  bind "<shift>p" { "paste-clipboard-extended" (1, 0, 0) };
+  bind "p" { "paste-clipboard-extended" (1, 1, 1)
+             "clear-count" () };
+  bind "<shift>p" { "paste-clipboard-extended" (1, 0, 1)
+                    "clear-count" () };
 
   /* overwrite */
   bind "<shift>r" { "set-mode" ("vim-insert", permanent)
@@ -210,50 +246,63 @@
   /* delete to end of line */
   bind "<shift>d" { "movement" (last-char, 1, 0, 0)
                     "copy-clipboard" ()
-                    "delete-selection" () };
+                    "delete-selection" ()
+                    "clear-count" () };
 
   /* delete current char */
-  bind "x" { "movement" (next-char, 1, 0, 1)
+  bind "x" { "movement" (next-char, 1, 1, 1)
              "copy-clipboard" ()
-             "delete-selection" () };
+             "delete-selection" ()
+             "clear-count" () };
 
   /* delete previous char */
   bind "<shift>x" { "movement" (previous-char, 1, 1, 1)
                     "copy-clipboard" ()
-                    "delete-selection" () };
+                    "delete-selection" ()
+                    "clear-count" () };
 
   bind "greater" { "set-mode" ("vim-normal-indent", transient) };
   bind "less" { "set-mode" ("vim-normal-indent", transient) };
 
   /* join selected lines */
   bind "<shift>j" { "movement" (first-char, 0, 0, 0)
-                    "movement" (next-line, 1, 0, 0)
+                    "movement" (next-line, 1, 1, 1)
                     "join-lines" ()
-                    "movement" (last-char, 0, 0, 0) };
+                    "movement" (last-char, 0, 0, 0)
+                    "clear-count" () };
 
   /* change number */
-  bind "<ctrl>a" { "change-number" (1) };
-  bind "<ctrl>x" { "change-number" (-1) };
+  bind "<ctrl>a" { "change-number" (1)
+                   "clear-count" () };
+  bind "<ctrl>x" { "change-number" (-1)
+                   "clear-count" () };
 
   /* toggle character case */
   bind "asciitilde" { "movement" (next-char, 1, 1, 1)
-                      "change-case" (toggle) };
+                      "change-case" (toggle)
+                      "clear-count" () };
 
-  bind "BackSpace" { "move-cursor" (logical-positions, -1, 0) };
+  /* todo: not quite right, should add movement that can span lines */
+  bind "BackSpace" { "move-cursor" (logical-positions, -1, 0)
+                     "clear-count" () };
 
-  bind "KP_Enter" { "movement" (next-line, 0, 0, 0) };
-  bind "<shift>KP_Enter" { "movement" (next-line, 0, 0, 0) };
-  bind "Return" { "movement" (next-line, 0, 0, 0) };
-  bind "<shift>Return" { "movement" (next-line, 0, 0, 0) };
+  bind "KP_Enter" { "movement" (next-line, 0, 0, 1)
+                    "clear-count" () };
+  bind "<shift>KP_Enter" { "movement" (next-line, 0, 0, 1)
+                           "clear-count" () };
+  bind "Return" { "movement" (next-line, 0, 0, 1)
+                  "clear-count" () };
+  bind "<shift>Return" { "movement" (next-line, 0, 0, 0)
+                         "clear-count" () };
 
   /* copy */
   bind "y" { "set-mode" ("vim-normal-y", transient) };
   bind "<shift>y" { "save-insert-mark" ()
                     "movement" (first-char, 0, 0, 0)
-                    "movement" (last-char, 1, 0, 0)
-                    "move-cursor" (visual-positions, 1, 1)
+                    "movement" (next-line, 1, 1, 1)
                     "copy-clipboard" ()
                     "selection-theatric" (expand)
+                    "clear-count" ()
                     "clear-selection" ()
                     "restore-insert-mark" () };
 
@@ -283,13 +332,13 @@
 @binding-set builder-vim-source-view-normal-c-i
 {
   /* cip */
-  /* note: this will be the tricky one with apply count */
   bind "p" { "movement" (paragraph-start, 1, 1, 1)
              "swap-selection-bounds" ()
              "movement" (paragraph-end, 1, 1, 1)
              "copy-clipboard" ()
              "selection-theatric" (shrink)
              "delete-selection" ()
+             "clear-count" ()
              "set-mode" ("vim-insert", permanent) };
 }
 
@@ -413,23 +462,21 @@
              "restore-insert-mark" () };
 
   bind "j" { "save-insert-mark" ()
+             "movement" (line-end, 0, 1, 0)
              "movement" (first-char, 0, 1, 0)
+             "movement" (next-line, 1, 1, 0)
              "movement" (next-line, 1, 1, 1)
-             "move-cursor" (visual-positions, 1, 1)
              "copy-clipboard" ()
              "selection-theatric" (expand)
              "clear-selection" ()
              "restore-insert-mark" () };
 
-  bind "k" { "movement" (first-char, 0, 1, 0)
-             "movement" (line-end, 1, 0, 0)
-             "swap-selection-bounds" ()
-             "movement" (previous-line, 1, 0, 1)
-             "save-insert-mark" ()
+  bind "k" { "movement" (line-end, 0, 1, 0)
+             "movement" (first-char, 1, 1, 0)
+             "movement" (previous-line, 1, 1, 1)
              "copy-clipboard" ()
-             "selection-theatric" ()
+             "selection-theatric" (expand)
              "clear-selection" ()
-             "restore-insert-mark" ()
              "movement" (first-nonspace-char, 0, 1, 0) };
 }
 
