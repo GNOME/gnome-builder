@@ -63,6 +63,7 @@ typedef struct
   GtkSourceGutterRenderer     *line_change_renderer;
   GtkSourceGutterRenderer     *line_diagnostics_renderer;
   IdeSourceViewMode           *mode;
+  GQueue                      *selections;
   GQueue                      *snippets;
   GtkSourceCompletionProvider *snippets_provider;
 
@@ -123,6 +124,8 @@ enum {
   JUMP,
   MOVEMENT,
   PASTE_CLIPBOARD_EXTENDED,
+  POP_SELECTION,
+  PUSH_SELECTION,
   PUSH_SNIPPET,
   POP_SNIPPET,
   RESTORE_INSERT_MARK,
@@ -2154,6 +2157,81 @@ ide_source_view__completion_show_cb (IdeSourceView       *self,
 }
 
 static void
+ide_source_view_real_pop_selection (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextMark *selection_bound;
+  GtkTextIter insert_iter;
+  GtkTextIter selection_bound_iter;
+  gpointer *data;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  data = g_queue_pop_head (priv->selections);
+
+  if (!data)
+    {
+      g_warning ("request to pop selection that does not exist!");
+      return;
+    }
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  selection_bound = gtk_text_buffer_get_selection_bound (buffer);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &insert_iter, data [0]);
+  gtk_text_buffer_get_iter_at_mark (buffer, &selection_bound_iter, data [1]);
+
+  gtk_text_buffer_move_mark (buffer, insert, &insert_iter);
+  gtk_text_buffer_move_mark (buffer, selection_bound, &selection_bound_iter);
+
+  gtk_text_buffer_delete_mark (buffer, data [0]);
+  gtk_text_buffer_delete_mark (buffer, data [1]);
+
+  g_object_unref (data [0]);
+  g_object_unref (data [1]);
+  g_free (data);
+}
+
+static void
+ide_source_view_real_push_selection (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextMark *selection_bound;
+  GtkTextIter insert_iter;
+  GtkTextIter selection_bound_iter;
+  gpointer *data;
+  gboolean left_gravity;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &insert_iter, insert);
+
+  selection_bound = gtk_text_buffer_get_selection_bound (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &selection_bound_iter, selection_bound);
+
+  left_gravity = (gtk_text_iter_compare (&insert_iter, &selection_bound_iter) <= 0);
+  insert = gtk_text_buffer_create_mark (buffer, NULL, &insert_iter, left_gravity);
+
+  left_gravity = (gtk_text_iter_compare (&selection_bound_iter, &insert_iter) < 0);
+  selection_bound = gtk_text_buffer_create_mark (buffer, NULL, &selection_bound_iter, left_gravity);
+
+  data = g_new0 (gpointer, 2);
+  data [0] = g_object_ref (insert);
+  data [1] = g_object_ref (selection_bound);
+
+  g_queue_push_head (priv->selections, data);
+}
+
+static void
 ide_source_view_real_push_snippet (IdeSourceView           *self,
                                    IdeSourceSnippet        *snippet,
                                    IdeSourceSnippetContext *context,
@@ -2270,6 +2348,7 @@ ide_source_view_finalize (GObject *object)
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   g_clear_pointer (&priv->font_desc, pango_font_description_free);
+  g_clear_pointer (&priv->selections, g_queue_free);
   g_clear_pointer (&priv->snippets, g_queue_free);
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->finalize (object);
@@ -2404,6 +2483,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->jump = ide_source_view_real_jump;
   klass->movement = ide_source_view_real_movement;
   klass->paste_clipboard_extended = ide_source_view_real_paste_clipboard_extended;
+  klass->pop_selection = ide_source_view_real_pop_selection;
+  klass->push_selection = ide_source_view_real_push_selection;
   klass->push_snippet = ide_source_view_real_push_snippet;
   klass->restore_insert_mark = ide_source_view_real_restore_insert_mark;
   klass->save_insert_mark = ide_source_view_real_save_insert_mark;
@@ -2643,6 +2724,29 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
 
+  /**
+   * IdeSourceView::pop-selection:
+   *
+   * Reselects a previousl selected range of text that was saved using
+   * IdeSourceView::push-selection.
+   */
+  gSignals [POP_SELECTION] =
+    g_signal_new ("pop-selection",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, pop_selection),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  /**
+   * IdeSourceView::push-selection:
+   *
+   * Saves the current selection away to be restored by a call to
+   * IdeSourceView::pop-selection. You must pop the selection to keep
+   * the selection stack in consistent order.
+   */
   gSignals [POP_SNIPPET] =
     g_signal_new ("pop-snippet",
                   G_TYPE_FROM_CLASS (klass),
@@ -2653,6 +2757,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_SOURCE_SNIPPET);
+
+  gSignals [PUSH_SELECTION] =
+    g_signal_new ("push-selection",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, push_selection),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   gSignals [PUSH_SNIPPET] =
     g_signal_new ("push-snippet",
@@ -2737,6 +2851,7 @@ ide_source_view_init (IdeSourceView *self)
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   priv->snippets = g_queue_new ();
+  priv->selections = g_queue_new ();
 
   g_signal_connect (self,
                     "notify::buffer",

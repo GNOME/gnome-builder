@@ -215,6 +215,8 @@ struct _IdeSourceViewClass
                                        gboolean                 smart_lines,
                                        gboolean                 after_cursor,
                                        gboolean                 place_cursor_at_original);
+  void (*push_selection)              (IdeSourceView           *self);
+  void (*pop_selection)               (IdeSourceView           *self);
   void (*pop_snippet)                 (IdeSourceView           *self,
                                        IdeSourceSnippet        *snippet);
   void (*push_snippet)                (IdeSourceView           *self,
