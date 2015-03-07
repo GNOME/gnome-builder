@@ -28,6 +28,7 @@ typedef struct
   GtkWidget             *view;
   char                  *name;
   IdeSourceViewModeType  type;
+  guint                  coalesce_undo : 1;
 } IdeSourceViewModePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceViewMode, ide_source_view_mode, GTK_TYPE_WIDGET)
@@ -39,6 +40,16 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+gboolean
+ide_source_view_mode_get_coalesce_undo (IdeSourceViewMode *self)
+{
+  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW_MODE (self), NULL);
+
+  return priv->coalesce_undo;
+}
 
 static void
 ide_source_view_mode_finalize (GObject *object)
@@ -277,7 +288,8 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
 IdeSourceViewMode *
 _ide_source_view_mode_new (GtkWidget             *view,
                            const char            *name,
-                           IdeSourceViewModeType  type)
+                           IdeSourceViewModeType  type,
+                           gboolean               coalesce_undo)
 {
   IdeSourceViewModePrivate *priv;
   IdeSourceViewMode *mode;
@@ -288,6 +300,7 @@ _ide_source_view_mode_new (GtkWidget             *view,
   priv->view = g_object_ref (view);
   priv->name = g_strdup (name);
   priv->type = type;
+  priv->coalesce_undo = coalesce_undo;
 
   return g_object_ref_sink (mode);
 }

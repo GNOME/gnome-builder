@@ -237,7 +237,8 @@ struct _IdeSourceViewClass
                                        IdeSourceViewTheatric    theatric);
   void (*set_mode)                    (IdeSourceView           *self,
                                        const gchar             *mode,
-                                       IdeSourceViewModeType    type);
+                                       IdeSourceViewModeType    type,
+                                       gboolean                 coalesce_undo);
   void (*set_overwrite)               (IdeSourceView           *self,
                                        gboolean                 overwrite);
   void (*swap_selection_bounds)       (IdeSourceView           *self);

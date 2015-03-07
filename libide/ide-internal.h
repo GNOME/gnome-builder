@@ -67,7 +67,8 @@ gboolean           _ide_source_view_mode_do_event (IdeSourceViewMode     *mode,
                                                    gboolean              *remove);
 IdeSourceViewMode *_ide_source_view_mode_new      (GtkWidget             *view,
                                                    const char            *mode,
-                                                   IdeSourceViewModeType  type);
+                                                   IdeSourceViewModeType  type,
+                                                   gboolean               coalesce_undo);
 
 
 G_END_DECLS

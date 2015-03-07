@@ -53,6 +53,19 @@
 #define ANIMATION_X_GROW  50
 #define ANIMATION_Y_GROW  30
 
+#define BEGIN_USER_ACTION(self) \
+  G_STMT_START { \
+    GtkTextBuffer *b = gtk_text_view_get_buffer(GTK_TEXT_VIEW(self)); \
+    IDE_TRACE_MSG ("begin_user_action()"); \
+    gtk_text_buffer_begin_user_action(b); \
+  } G_STMT_END
+#define END_USER_ACTION(self) \
+  G_STMT_START { \
+    GtkTextBuffer *b = gtk_text_view_get_buffer(GTK_TEXT_VIEW(self)); \
+    IDE_TRACE_MSG ("end_user_action()"); \
+    gtk_text_buffer_end_user_action(b); \
+  } G_STMT_END
+
 typedef struct
 {
   IdeBackForwardList          *back_forward_list;
@@ -144,7 +157,8 @@ static guint       gSignals [LAST_SIGNAL];
 
 static void ide_source_view_real_set_mode (IdeSourceView         *self,
                                            const gchar           *name,
-                                           IdeSourceViewModeType  type);
+                                           IdeSourceViewModeType  type,
+                                           gboolean               coalesce_undo);
 
 static void
 activate_action (GtkWidget   *widget,
@@ -1400,7 +1414,11 @@ ide_source_view_do_mode (IdeSourceView *self,
         {
           /* only remove mode if it is still active */
           if (priv->mode == mode)
-            g_clear_object (&priv->mode);
+            {
+              if (ide_source_view_mode_get_coalesce_undo (mode))
+                END_USER_ACTION (self);
+              g_clear_object (&priv->mode);
+            }
         }
 
       g_object_unref (mode);
@@ -1410,7 +1428,7 @@ ide_source_view_do_mode (IdeSourceView *self,
     }
 
   if (!priv->mode)
-    ide_source_view_real_set_mode (self, NULL,  IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+    ide_source_view_real_set_mode (self, NULL,  IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT, FALSE);
 
   return ret;
 }
@@ -2095,7 +2113,8 @@ ide_source_view_real_selection_theatric (IdeSourceView         *self,
 static void
 ide_source_view_real_set_mode (IdeSourceView         *self,
                                const gchar           *mode,
-                               IdeSourceViewModeType  type)
+                               IdeSourceViewModeType  type,
+                               gboolean               coalesce_undo)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
@@ -2104,19 +2123,28 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  g_clear_object (&priv->mode);
+  if (priv->mode)
+    {
+      if (ide_source_view_mode_get_coalesce_undo (priv->mode))
+        END_USER_ACTION (self);
+      g_clear_object (&priv->mode);
+    }
 
   if (mode == NULL)
     {
       mode = "default";
       type = IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT;
+      coalesce_undo = FALSE;
     }
 
   /* reset the count when switching to permanent mode */
   if (type == IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT)
     priv->count = 0;
 
-  priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), mode, type);
+  if (coalesce_undo)
+    BEGIN_USER_ACTION (self);
+
+  priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), mode, type, coalesce_undo);
 
   IDE_EXIT;
 }
@@ -2350,7 +2378,7 @@ ide_source_view_constructed (GObject *object)
   G_OBJECT_CLASS (ide_source_view_parent_class)->constructed (object);
 
   if (!priv->mode)
-    ide_source_view_real_set_mode (self, "default", IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+    ide_source_view_real_set_mode (self, NULL, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT, FALSE);
 
   /*
    * Completion does not have a way to retrieve visibility, so we need to track that ourselves
@@ -2901,9 +2929,10 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_generic,
                   G_TYPE_NONE,
-                  2,
+                  3,
                   G_TYPE_STRING,
-                  IDE_TYPE_SOURCE_VIEW_MODE_TYPE);
+                  IDE_TYPE_SOURCE_VIEW_MODE_TYPE,
+                  G_TYPE_BOOLEAN);
 
   gSignals [SET_OVERWRITE] =
     g_signal_new ("set-overwrite",

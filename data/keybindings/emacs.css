@@ -46,7 +46,7 @@
 
 @binding-set builder-emacs-source-view
 {
-  bind "<ctrl>x" { "set-mode" ("emacs-x", transient) };
+  bind "<ctrl>x" { "set-mode" ("emacs-x", transient, 0) };
   bind "<ctrl>underscore" { "undo" () };
   bind "<alt>x" { "action" ("win", "show-command-bar", "") };
   bind "<ctrl>s" { "action" ("editor-frame", "find", "") };
