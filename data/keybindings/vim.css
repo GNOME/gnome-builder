@@ -395,7 +395,6 @@
                  "movement" (next-line, 1, 0, 0)
                  "movement" (next-line, 1, 0, 1)
                  "copy-clipboard" ()
-                 "selection-theatric" (shrink)
                  "delete-selection" () };
 
   bind "i" { "set-mode" ("vim-normal-d-i", transient) };
