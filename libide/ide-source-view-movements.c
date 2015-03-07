@@ -1167,13 +1167,19 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_START:
-      for (i = 0; i < MAX (1, mv.count); i++)
-        ide_source_view_movements_paragraph_start (&mv);
+      for (i = MAX (1, mv.count); i > 0; i--)
+        {
+          mv.exclusive = exclusive && i == 1;
+          ide_source_view_movements_paragraph_start (&mv);
+        }
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_END:
-      for (i = 0; i < MAX (1, mv.count); i++)
-        ide_source_view_movements_paragraph_end (&mv);
+      for (i = MAX (1, mv.count); i > 0; i--)
+        {
+          mv.exclusive = exclusive && i == 1;
+          ide_source_view_movements_paragraph_end (&mv);
+        }
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE:
