@@ -1008,6 +1008,35 @@ ide_source_view_movements_sentence_end (Movement *mv)
   _ide_vim_iter_forward_sentence_end (&mv->insert);
 }
 
+static void
+ide_source_view_movements_line_percentage (Movement *mv)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter end;
+  guint end_line;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
+  gtk_text_buffer_get_end_iter (buffer, &end);
+  end_line = gtk_text_iter_get_line (&end);
+
+  if (!mv->count)
+    {
+      gtk_text_iter_set_line (&mv->insert, 0);
+    }
+  else
+    {
+      guint line;
+
+      mv->count = MAX (1, mv->count);
+      line = (float)end_line * (mv->count / 100.0);
+      gtk_text_iter_set_line (&mv->insert, line);
+    }
+
+  mv->count = 0;
+
+  ide_source_view_movements_first_nonspace_char (mv);
+}
+
 void
 _ide_source_view_apply_movement (IdeSourceView         *self,
                                  IdeSourceViewMovement  movement,
@@ -1167,6 +1196,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_PERCENTAGE:
+      ide_source_view_movements_line_percentage (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_CHARS:

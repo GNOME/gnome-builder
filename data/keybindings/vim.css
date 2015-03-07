@@ -90,6 +90,8 @@
 {
   bind "0" { "append-to-count" (0)
              "set-mode" ("vim-normal-with-count", transient) };
+  bind "percent" { "movement" (line-percentage, 0, 1, 1)
+                   "set-mode" ("vim-normal-with-count", transient) };
 }
 
 @binding-set builder-vim-source-view-normal
