@@ -46,6 +46,7 @@ struct _IdeSourceViewModeClass
   GtkWidgetClass parent_class;
 };
 
+gboolean     ide_source_view_mode_get_block_cursor     (IdeSourceViewMode *self);
 gboolean     ide_source_view_mode_get_suppress_unbound (IdeSourceViewMode *self);
 gboolean     ide_source_view_mode_get_coalesce_undo    (IdeSourceViewMode *self);
 const gchar *ide_source_view_mode_get_name             (IdeSourceViewMode *self);

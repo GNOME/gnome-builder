@@ -84,6 +84,12 @@ ide_source_view_mode_get_suppress_unbound (IdeSourceViewMode *self)
   return get_boolean_param (self, "suppress-unbound");
 }
 
+gboolean
+ide_source_view_mode_get_block_cursor (IdeSourceViewMode *self)
+{
+  return get_boolean_param (self, "block-cursor");
+}
+
 static void
 ide_source_view_mode_finalize (GObject *object)
 {
@@ -214,6 +220,14 @@ ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
                                                                  (G_PARAM_READABLE |
                                                                   G_PARAM_STATIC_STRINGS)));
 
+  gtk_widget_class_install_style_property (GTK_WIDGET_CLASS (klass),
+                                           g_param_spec_boolean ("block-cursor",
+                                                                 _("Block Cursor"),
+                                                                 _("Use fake block cursor by "
+                                                                   "using overwrite mode."),
+                                                                 FALSE,
+                                                                 (G_PARAM_READABLE |
+                                                                  G_PARAM_STATIC_STRINGS)));
 
   /* Proxy all action signals from source view */
   type = IDE_TYPE_SOURCE_VIEW;
@@ -359,6 +373,7 @@ _ide_source_view_mode_new (GtkWidget             *view,
 
   IDE_TRACE_MSG ("coalesce_undo = %d", ide_source_view_mode_get_coalesce_undo (mode));
   IDE_TRACE_MSG ("supress_unbound = %d", ide_source_view_mode_get_suppress_unbound (mode));
+  IDE_TRACE_MSG ("block_cursor = %d", ide_source_view_mode_get_block_cursor (mode));
 
   return g_object_ref_sink (mode);
 }

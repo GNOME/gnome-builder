@@ -2118,6 +2118,7 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
                                IdeSourceViewModeType  type)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  gboolean overwrite;
 
   IDE_ENTRY;
 
@@ -2157,6 +2158,10 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
 
   if (ide_source_view_mode_get_coalesce_undo (priv->mode))
     BEGIN_USER_ACTION (self);
+
+  overwrite = ide_source_view_mode_get_block_cursor (priv->mode);
+  if (overwrite != gtk_text_view_get_overwrite (GTK_TEXT_VIEW (self)))
+    gtk_text_view_set_overwrite (GTK_TEXT_VIEW (self), overwrite);
 
   IDE_EXIT;
 }
