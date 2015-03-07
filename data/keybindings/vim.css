@@ -738,6 +738,16 @@
 
   bind "<ctrl>e" { "movement" (screen-up, 1, 0, 1) };
   bind "<ctrl>y" { "movement" (screen-down, 1, 0, 1) };
+
+  /* page movements */
+  bind "<ctrl>b" { "movement" (page-up, 1, 0, 1)
+                   "clear-count" () };
+  bind "<ctrl>f" { "movement" (page-down, 1, 0, 1)
+                   "clear-count" () };
+  bind "<ctrl>u" { "movement" (half-page-up, 1, 0, 1)
+                   "clear-count" () };
+  bind "<ctrl>d" { "movement" (half-page-down, 1, 0, 1)
+                   "clear-count" () };
 }
 
 @binding-set builder-vim-source-view-visual-block
