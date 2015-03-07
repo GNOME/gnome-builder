@@ -666,6 +666,12 @@
   bind "k" { "movement" (previous-line, 1, 0, 1) };
   bind "j" { "movement" (next-line, 1, 0, 1) };
 
+  /* just to be nice */
+  bind "h" { "clear-selection" ()
+             "set-mode" ("vim-normal", permanent) };
+  bind "l" { "clear-selection" ()
+             "set-mode" ("vim-normal", permanent) };
+
   bind "Up" { "movement" (previous-line, 1, 0, 1) };
   bind "Down" { "movement" (next-line, 1, 0, 1) };
 
