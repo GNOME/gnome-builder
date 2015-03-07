@@ -78,6 +78,7 @@ typedef struct
   gulong                       buffer_notify_highlight_diagnostics_handler;
   gulong                       buffer_notify_language_handler;
 
+  gint                         target_line_offset;
   guint                        count;
   guint                        scroll_offset;
 
@@ -2158,17 +2159,10 @@ ide_source_view_real_movement (IdeSourceView         *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (apply_count)
-    {
-      count = priv->count;
-#if 0
-      /*
-       * TODO: I think we want this in a clear-count action.
-       */
-      priv->count = 0;
-#endif
-    }
+    count = priv->count;
 
-  _ide_source_view_apply_movement (self, movement, extend_selection, exclusive, count);
+  _ide_source_view_apply_movement (self, movement, extend_selection, exclusive,
+                                   count, &priv->target_line_offset);
 }
 
 static void
@@ -2938,6 +2932,7 @@ ide_source_view_init (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
+  priv->target_line_offset = -1;
   priv->snippets = g_queue_new ();
   priv->selections = g_queue_new ();
 

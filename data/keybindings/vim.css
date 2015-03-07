@@ -324,10 +324,10 @@
                     "restore-insert-mark" () };
 
   /* visual mode transition */
-  bind "v" { "movement" (next-char, 1, 0, 1)
+  bind "v" { "movement" (next-char, 1, 1, 1)
              "set-mode" ("vim-visual", permanent) };
-  bind "<shift>v" { "movement" (first-char, 0, 0, 0)
-                    "movement" (last-char, 1, 0, 0)
+  bind "<shift>v" { "movement" (first-char, 0, 1, 0)
+                    "movement" (next-line, 1, 0, 1)
                     "set-mode" ("vim-visual-line", permanent) };
   bind "<ctrl>v" { "set-mode" ("vim-visual-block", permanent) };
 }
