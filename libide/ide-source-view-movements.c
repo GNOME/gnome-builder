@@ -325,6 +325,8 @@ ide_source_view_movements_last_line (Movement *mv)
 static void
 ide_source_view_movements_next_line (Movement *mv)
 {
+  mv->count = MAX (1, mv->count);
+
   /*
    * Try to use the normal move-cursor helpers if this is a simple movement.
    */
@@ -332,7 +334,6 @@ ide_source_view_movements_next_line (Movement *mv)
     {
       IDE_TRACE_MSG ("next-line simple");
 
-      mv->count = MAX (1, mv->count);
       mv->ignore_select = TRUE;
       g_signal_emit_by_name (mv->self,
                              "move-cursor",
@@ -344,18 +345,24 @@ ide_source_view_movements_next_line (Movement *mv)
 
   IDE_TRACE_MSG ("next-line with line-selection");
 
-  g_assert (mv->extend_selection);
-  g_assert (is_line_selection (&mv->insert, &mv->selection));
+  if (gtk_text_iter_equal (&mv->insert, &mv->selection))
+    {
+      gtk_text_iter_forward_lines (&mv->selection, mv->count);
+      gtk_text_iter_set_line_offset (&mv->selection, 0);
+      return;
+    }
 
-  if (gtk_text_iter_is_end (&mv->insert) || gtk_text_iter_is_end (&mv->selection))
-    return;
+  gtk_text_iter_forward_lines (&mv->insert, mv->count);
 
-  if (is_single_line_selection (&mv->insert, &mv->selection))
-    gtk_text_iter_order (&mv->selection, &mv->insert);
+  /* (!mv->exclusive) == LINEWISE */
 
-  gtk_text_iter_forward_line (&mv->insert);
-  if (!gtk_text_iter_ends_line (&mv->insert))
-    gtk_text_iter_forward_to_line_end (&mv->insert);
+  if (!mv->exclusive &&
+      (gtk_text_iter_get_line (&mv->insert) == gtk_text_iter_get_line (&mv->selection)))
+    {
+      gtk_text_iter_set_line_offset (&mv->insert, 0);
+      gtk_text_iter_set_line_offset (&mv->selection, 0);
+      gtk_text_iter_forward_to_line_end (&mv->selection);
+    }
 }
 
 static void
