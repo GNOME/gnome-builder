@@ -235,6 +235,8 @@ get_rect_for_iters (GtkTextView       *text_view,
 {
   GdkRectangle area;
   GdkRectangle tmp;
+  GtkTextIter begin;
+  GtkTextIter end;
   GtkTextIter iter;
 
   g_assert (GTK_IS_TEXT_VIEW (text_view));
@@ -242,12 +244,26 @@ get_rect_for_iters (GtkTextView       *text_view,
   g_assert (iter2);
   g_assert (rect);
 
-  gtk_text_view_get_iter_location (text_view, iter1, &area);
+  begin = *iter1;
+  end = *iter2;
 
-  gtk_text_iter_assign (&iter, iter1);
+  gtk_text_iter_order (&begin, &end);
+
+  gtk_text_view_get_iter_location (text_view, &begin, &area);
+
+  if (gtk_text_iter_equal (&begin, &end))
+    goto finish;
+
+  iter = begin;
 
   do
     {
+      GtkTextIter peek = iter;
+
+      /* skip trailing newline */
+      if ((gtk_text_iter_starts_line (&iter) && gtk_text_iter_equal (&iter, &end)))
+        break;
+
       gtk_text_view_get_iter_location (text_view, &iter, &tmp);
       gdk_rectangle_union (&area, &tmp, &area);
 
@@ -258,8 +274,9 @@ get_rect_for_iters (GtkTextView       *text_view,
       if (!gtk_text_iter_forward_char (&iter))
         break;
     }
-  while (gtk_text_iter_compare (&iter, iter2) <= 0);
+  while (gtk_text_iter_compare (&iter, &end) <= 0);
 
+finish:
   gtk_text_view_buffer_to_window_coords (text_view, window_type, area.x, area.y, &area.x, &area.y);
 
   *rect = area;
