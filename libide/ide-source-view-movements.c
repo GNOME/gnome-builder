@@ -305,6 +305,8 @@ ide_source_view_movements_first_nonspace_char (Movement *mv)
 static void
 ide_source_view_movements_line_chars (Movement *mv)
 {
+  GtkTextIter orig = mv->insert;
+
   /*
    * Selects the current position up to the first nonspace character.
    * If the cursor is at the line start, we will select the newline.
@@ -326,7 +328,8 @@ ide_source_view_movements_line_chars (Movement *mv)
              g_unichar_isspace (ch))
         gtk_text_iter_forward_char (&mv->insert);
 
-      if (gtk_text_iter_ends_line (&mv->insert))
+      if (gtk_text_iter_ends_line (&mv->insert) ||
+          (gtk_text_iter_compare (&orig, &mv->insert) <= 0))
         gtk_text_iter_set_line_offset (&mv->insert, 0);
     }
 
