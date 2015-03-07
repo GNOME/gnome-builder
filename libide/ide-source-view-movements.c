@@ -1040,6 +1040,80 @@ ide_source_view_movements_line_percentage (Movement *mv)
   ide_source_view_movements_first_nonspace_char (mv);
 }
 
+static void
+ide_source_view_movements_previous_unmatched (Movement *mv,
+                                              gunichar  target,
+                                              gunichar  opposite)
+{
+  guint count = 1;
+
+  g_assert (mv);
+  g_assert (target);
+  g_assert (opposite);
+
+  do
+    {
+      gunichar ch;
+
+      if (!gtk_text_iter_backward_char (&mv->insert))
+        return;
+
+      ch = gtk_text_iter_get_char (&mv->insert);
+
+      if (ch == target)
+        count--;
+      else if (ch == opposite)
+        count++;
+
+      if (!count)
+        {
+          if (!mv->exclusive)
+            gtk_text_iter_forward_char (&mv->insert);
+          return;
+        }
+    }
+  while (TRUE);
+
+  g_assert_not_reached ();
+}
+
+static void
+ide_source_view_movements_next_unmatched (Movement *mv,
+                                          gunichar  target,
+                                          gunichar  opposite)
+{
+  guint count = 1;
+
+  g_assert (mv);
+  g_assert (target);
+  g_assert (opposite);
+
+  do
+    {
+      gunichar ch;
+
+      if (!gtk_text_iter_forward_char (&mv->insert))
+        return;
+
+      ch = gtk_text_iter_get_char (&mv->insert);
+
+      if (ch == target)
+        count--;
+      else if (ch == opposite)
+        count++;
+
+      if (!count)
+        {
+          if (!mv->exclusive)
+            gtk_text_iter_forward_char (&mv->insert);
+          return;
+        }
+    }
+  while (TRUE);
+
+  g_assert_not_reached ();
+}
+
 void
 _ide_source_view_apply_movement (IdeSourceView         *self,
                                  IdeSourceViewMovement  movement,
@@ -1257,6 +1331,26 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER:
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM:
       ide_source_view_movements_scroll_center (&mv);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_UNMATCHED_BRACE:
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_previous_unmatched (&mv, '{', '}');
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_NEXT_UNMATCHED_BRACE:
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_next_unmatched (&mv, '}', '{');
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_UNMATCHED_PAREN:
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_previous_unmatched (&mv, '(', ')');
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_NEXT_UNMATCHED_PAREN:
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_next_unmatched (&mv, ')', '(');
       break;
 
     default:
