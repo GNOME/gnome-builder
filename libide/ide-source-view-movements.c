@@ -885,6 +885,14 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
   switch (movement)
     {
+    case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_OFFSET:
+      gtk_text_iter_backward_chars (&mv.insert, MAX (1, mv.count));
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_NEXT_OFFSET:
+      gtk_text_iter_forward_chars (&mv.insert, MAX (1, mv.count));
+      break;
+
     case IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR:
       ide_source_view_movements_nth_char (&mv);
       break;

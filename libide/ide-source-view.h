@@ -67,6 +67,10 @@ typedef enum
 
 /**
  * IdeSourceViewMovement:
+ * @IDE_SOURCE_VIEW_MOVEMENT_NEXT_OFFSET: move to next character in the file.
+ *   This includes line breaks.
+ * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_OFFSET: move to previous character in the file.
+ *   This includes line breaks.
  * @IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR: move to nth character in line. Use a repeat to
  *   specify the target character within the line.
  * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR: move to previous character in line.
@@ -121,7 +125,10 @@ typedef enum
  */
 typedef enum
 {
-  IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR = 1,
+  IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_OFFSET,
+  IDE_SOURCE_VIEW_MOVEMENT_NEXT_OFFSET,
+
+  IDE_SOURCE_VIEW_MOVEMENT_NTH_CHAR,
   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR,
   IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR,
   IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR,
