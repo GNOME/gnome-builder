@@ -224,7 +224,7 @@
                "clear-count" () };
 
   /* jump to match of brace/bracket/comment/etc */
-  bind "percent" { "move-to-matching-bracket" (0, 0, 1)
+  bind "percent" { "movement" (match-special, 0, 1, 1)
                    "clear-count" () };
 
   /* move based on visible screen area */
