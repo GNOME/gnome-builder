@@ -1869,14 +1869,29 @@ ide_source_view_real_join_lines (IdeSourceView *self)
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
+  guint line;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
 
+  if (gtk_text_iter_equal (&begin, &end))
+    return;
+
+  gtk_text_iter_order (&begin, &end);
+
+  line = gtk_text_iter_get_line (&begin);
+
+  if (gtk_text_iter_starts_line (&end) && !gtk_text_iter_ends_line (&end))
+    gtk_text_iter_backward_char (&end);
+
   if (GTK_SOURCE_IS_BUFFER (buffer))
     gtk_source_buffer_join_lines (GTK_SOURCE_BUFFER (buffer), &begin, &end);
+
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  gtk_text_iter_set_line (&begin, line);
+  gtk_text_buffer_select_range (buffer, &begin, &begin);
 }
 
 static void
