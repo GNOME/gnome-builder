@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-debug.h"
 #include "ide-source-view.h"
 #include "ide-source-view-mode.h"
 
@@ -28,7 +29,6 @@ typedef struct
   GtkWidget             *view;
   char                  *name;
   IdeSourceViewModeType  type;
-  guint                  coalesce_undo : 1;
 } IdeSourceViewModePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceViewMode, ide_source_view_mode, GTK_TYPE_WIDGET)
@@ -41,14 +41,47 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+static void
+get_param (IdeSourceViewMode *self,
+           const gchar       *param,
+           GValue            *value)
+{
+  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (self);
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (self));
+
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, priv->name);
+  gtk_style_context_get_style_property (context, param, value);
+  gtk_style_context_restore (context);
+}
+
+gboolean
+get_boolean_param (IdeSourceViewMode *self,
+                   const gchar       *param)
+{
+  GValue value = { 0 };
+  gboolean ret;
+
+  g_value_init (&value, G_TYPE_BOOLEAN);
+  get_param (self, param, &value);
+  ret = g_value_get_boolean (&value);
+  g_value_unset (&value);
+
+  return ret;
+}
+
 gboolean
 ide_source_view_mode_get_coalesce_undo (IdeSourceViewMode *self)
 {
-  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (self);
+  return get_boolean_param (self, "coalesce-undo");
+}
 
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW_MODE (self), NULL);
-
-  return priv->coalesce_undo;
+gboolean
+ide_source_view_mode_get_suppress_unbound (IdeSourceViewMode *self)
+{
+  return get_boolean_param (self, "suppress-unbound");
 }
 
 static void
@@ -165,6 +198,23 @@ ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_NAME, gParamSpecs [PROP_NAME]);
 
+  gtk_widget_class_install_style_property (GTK_WIDGET_CLASS (klass),
+                                           g_param_spec_boolean ("coalesce-undo",
+                                                                 _("Coalesce Undo"),
+                                                                 _("Coalesce Undo Items"),
+                                                                 FALSE,
+                                                                 (G_PARAM_READABLE |
+                                                                  G_PARAM_STATIC_STRINGS)));
+
+  gtk_widget_class_install_style_property (GTK_WIDGET_CLASS (klass),
+                                           g_param_spec_boolean ("suppress-unbound",
+                                                                 _("Supress Unbound"),
+                                                                 _("Suppress Unbound Keypresses"),
+                                                                 FALSE,
+                                                                 (G_PARAM_READABLE |
+                                                                  G_PARAM_STATIC_STRINGS)));
+
+
   /* Proxy all action signals from source view */
   type = IDE_TYPE_SOURCE_VIEW;
   while (type != G_TYPE_INVALID && type != GTK_TYPE_WIDGET)
@@ -237,6 +287,7 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
 {
   IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (mode);
   GtkStyleContext *context;
+  gboolean suppress_unbound;
   gboolean handled;
 
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW_MODE (mode), FALSE);
@@ -244,6 +295,8 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
   g_return_val_if_fail (remove, FALSE);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (mode));
+
+  suppress_unbound = ide_source_view_mode_get_suppress_unbound (mode);
 
   g_object_ref (context);
   gtk_style_context_save (context);
@@ -272,6 +325,10 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
       break;
 
     case IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT:
+      {
+        if (suppress_unbound)
+          handled = TRUE;
+      }
       break;
 
     case IDE_SOURCE_VIEW_MODE_TYPE_MODAL:
@@ -288,8 +345,7 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
 IdeSourceViewMode *
 _ide_source_view_mode_new (GtkWidget             *view,
                            const char            *name,
-                           IdeSourceViewModeType  type,
-                           gboolean               coalesce_undo)
+                           IdeSourceViewModeType  type)
 {
   IdeSourceViewModePrivate *priv;
   IdeSourceViewMode *mode;
@@ -300,7 +356,9 @@ _ide_source_view_mode_new (GtkWidget             *view,
   priv->view = g_object_ref (view);
   priv->name = g_strdup (name);
   priv->type = type;
-  priv->coalesce_undo = coalesce_undo;
+
+  IDE_TRACE_MSG ("coalesce_undo = %d", ide_source_view_mode_get_coalesce_undo (mode));
+  IDE_TRACE_MSG ("supress_unbound = %d", ide_source_view_mode_get_suppress_unbound (mode));
 
   return g_object_ref_sink (mode);
 }

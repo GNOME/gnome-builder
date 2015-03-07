@@ -157,8 +157,7 @@ static guint       gSignals [LAST_SIGNAL];
 
 static void ide_source_view_real_set_mode (IdeSourceView         *self,
                                            const gchar           *name,
-                                           IdeSourceViewModeType  type,
-                                           gboolean               coalesce_undo);
+                                           IdeSourceViewModeType  type);
 
 static void
 activate_action (GtkWidget   *widget,
@@ -941,6 +940,9 @@ ide_source_view_connect_buffer (IdeSourceView *self,
   ide_source_view__buffer_notify_language_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_file_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_highlight_diagnostics_cb (self, NULL, buffer);
+
+  if (priv->mode && ide_source_view_mode_get_coalesce_undo (priv->mode))
+    BEGIN_USER_ACTION (self);
 }
 
 static void
@@ -1428,7 +1430,7 @@ ide_source_view_do_mode (IdeSourceView *self,
     }
 
   if (!priv->mode)
-    ide_source_view_real_set_mode (self, NULL,  IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT, FALSE);
+    ide_source_view_real_set_mode (self, NULL,  IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
 
   return ret;
 }
@@ -2113,38 +2115,48 @@ ide_source_view_real_selection_theatric (IdeSourceView         *self,
 static void
 ide_source_view_real_set_mode (IdeSourceView         *self,
                                const gchar           *mode,
-                               IdeSourceViewModeType  type,
-                               gboolean               coalesce_undo)
+                               IdeSourceViewModeType  type)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   IDE_ENTRY;
-  IDE_TRACE_MSG ("mode (%s)", mode ?: "<default>");
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
+#ifndef IDE_DISABLE_TRACE
+  {
+    const gchar *old_mode = "null";
+
+    if (priv->mode)
+      old_mode = ide_source_view_mode_get_name (priv->mode);
+    IDE_TRACE_MSG ("transition from mode (%s) to (%s)", old_mode, mode ?: "<default>");
+  }
+#endif
+
   if (priv->mode)
     {
-      if (ide_source_view_mode_get_coalesce_undo (priv->mode))
-        END_USER_ACTION (self);
+      IdeSourceViewMode *old_mode = g_object_ref (priv->mode);
+
       g_clear_object (&priv->mode);
+      if (ide_source_view_mode_get_coalesce_undo (old_mode))
+        END_USER_ACTION (self);
+      g_object_unref (old_mode);
     }
 
   if (mode == NULL)
     {
       mode = "default";
       type = IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT;
-      coalesce_undo = FALSE;
     }
 
   /* reset the count when switching to permanent mode */
   if (type == IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT)
     priv->count = 0;
 
-  if (coalesce_undo)
-    BEGIN_USER_ACTION (self);
+  priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), mode, type);
 
-  priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), mode, type, coalesce_undo);
+  if (ide_source_view_mode_get_coalesce_undo (priv->mode))
+    BEGIN_USER_ACTION (self);
 
   IDE_EXIT;
 }
@@ -2377,8 +2389,7 @@ ide_source_view_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->constructed (object);
 
-  if (!priv->mode)
-    ide_source_view_real_set_mode (self, NULL, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT, FALSE);
+  ide_source_view_real_set_mode (self, NULL, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
 
   /*
    * Completion does not have a way to retrieve visibility, so we need to track that ourselves
@@ -2414,6 +2425,34 @@ ide_source_view_constructed (GObject *object)
                                                   NULL);
   g_object_ref (priv->line_diagnostics_renderer);
   gtk_source_gutter_insert (gutter, priv->line_diagnostics_renderer, -100);
+}
+
+static void
+ide_source_view_real_undo (GtkSourceView *source_view)
+{
+  IdeSourceView *self = (IdeSourceView *)source_view;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  gboolean needs_unlock = !!priv->mode;
+
+  if (needs_unlock)
+    END_USER_ACTION (self);
+  GTK_SOURCE_VIEW_CLASS (ide_source_view_parent_class)->undo (source_view);
+  if (needs_unlock)
+    BEGIN_USER_ACTION (self);
+}
+
+static void
+ide_source_view_real_redo (GtkSourceView *source_view)
+{
+  IdeSourceView *self = (IdeSourceView *)source_view;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  gboolean needs_unlock = !!priv->mode;
+
+  if (needs_unlock)
+    END_USER_ACTION (self);
+  GTK_SOURCE_VIEW_CLASS (ide_source_view_parent_class)->redo (source_view);
+  if (needs_unlock)
+    BEGIN_USER_ACTION (self);
 }
 
 static void
@@ -2559,6 +2598,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkSourceViewClass *source_view_class = GTK_SOURCE_VIEW_CLASS (klass);
 
   object_class->constructed = ide_source_view_constructed;
   object_class->dispose = ide_source_view_dispose;
@@ -2568,6 +2608,9 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
+
+  source_view_class->undo = ide_source_view_real_undo;
+  source_view_class->redo = ide_source_view_real_redo;
 
   klass->action = ide_source_view_real_action;
   klass->append_to_count = ide_source_view_real_append_to_count;
@@ -2926,13 +2969,11 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, set_mode),
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
-                  3,
+                  2,
                   G_TYPE_STRING,
-                  IDE_TYPE_SOURCE_VIEW_MODE_TYPE,
-                  G_TYPE_BOOLEAN);
+                  IDE_TYPE_SOURCE_VIEW_MODE_TYPE);
 
   gSignals [SET_OVERWRITE] =
     g_signal_new ("set-overwrite",
