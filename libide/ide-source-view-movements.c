@@ -1046,6 +1046,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
                                  gint                  *target_offset)
 {
   Movement mv = { 0 };
+  gsize i;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
@@ -1090,11 +1091,13 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR:
-      ide_source_view_movements_previous_char (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_previous_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR:
-      ide_source_view_movements_next_char (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_next_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR:
@@ -1114,73 +1117,77 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_START:
-      ide_source_view_movements_previous_full_word_start (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_previous_full_word_start (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_START:
-      ide_source_view_movements_next_full_word_start (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_next_full_word_start (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_FULL_WORD_END:
-      ide_source_view_movements_previous_full_word_end (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_previous_full_word_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_FULL_WORD_END:
-      ide_source_view_movements_next_full_word_end (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_next_full_word_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_START:
-      ide_source_view_movements_previous_word_start (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_previous_word_start (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_START:
-      ide_source_view_movements_next_word_start (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_next_word_start (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_WORD_END:
-      ide_source_view_movements_previous_word_end (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_previous_word_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_WORD_END:
-      ide_source_view_movements_next_word_end (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_next_word_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_START:
-      ide_source_view_movements_sentence_start (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_sentence_start (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SENTENCE_END:
-      ide_source_view_movements_sentence_end (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_sentence_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_START:
-      ide_source_view_movements_paragraph_start (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_paragraph_start (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PARAGRAPH_END:
-      ide_source_view_movements_paragraph_end (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_paragraph_end (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE:
-      {
-        gsize i;
-
-        mv.ignore_target_offset = TRUE;
-        mv.ignore_select = TRUE;
-        for (i = 0; i < MAX (1, mv.count); i++)
-          ide_source_view_movements_previous_line (&mv);
-      }
+      mv.ignore_target_offset = TRUE;
+      mv.ignore_select = TRUE;
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_previous_line (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_LINE:
-      {
-        gsize i;
-
-        mv.ignore_target_offset = TRUE;
-        mv.ignore_select = TRUE;
-        for (i = 0; i < MAX (1, mv.count); i++)
-          ide_source_view_movements_next_line (&mv);
-      }
+      mv.ignore_target_offset = TRUE;
+      mv.ignore_select = TRUE;
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_next_line (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE:
@@ -1211,12 +1218,14 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
     case IDE_SOURCE_VIEW_MOVEMENT_HALF_PAGE_DOWN:
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP:
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN:
-      ide_source_view_movements_move_page (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_move_page (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_DOWN:
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_UP:
-      ide_source_view_movements_scroll (&mv);
+      for (i = 0; i < MAX (1, mv.count); i++)
+        ide_source_view_movements_scroll (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCREEN_TOP:
