@@ -282,7 +282,7 @@
   bind "less" { "set-mode" ("vim-normal-indent", transient) };
 
   /* join selected lines */
-  bind "<shift>j" { "movement" (first-char, 0, 0, 0)
+  bind "<shift>j" { "movement" (first-char, 0, 1, 0)
                     "movement" (next-line, 1, 1, 1)
                     "join-lines" ()
                     "movement" (last-char, 0, 0, 0)
