@@ -141,7 +141,7 @@
 
   /* swallow the current character and go to insert */
   bind "s" { "movement" (next-char, 1, 1, 1)
-             "copy-selection" ()
+             "copy-clipboard" ()
              "delete-selection" ()
              "set-mode" ("vim-insert", permanent) };
 
@@ -362,39 +362,40 @@
 @binding-set builder-vim-source-view-normal-d
 {
   bind "Left"  { "movement" (previous-char, 1, 1, 1)
-                 "copy-selection" ()
+                 "copy-clipboard" ()
                  "delete-selection" () };
   bind "h"     { "movement" (previous-char, 1, 1, 1)
-                 "copy-selection" ()
+                 "copy-clipboard" ()
                  "delete-selection" () };
 
   bind "Right" { "movement" (next-char, 1, 1, 1)
-                 "copy-selection" ()
+                 "copy-clipboard" ()
                  "delete-selection" () };
   bind "l"     { "movement" (next-char, 1, 1, 1)
-                 "copy-selection" ()
+                 "copy-clipboard" ()
                  "delete-selection" () };
 
   bind "Up"    { "movement" (line-end, 0, 0, 0)
                  "movement" (previous-line, 1, 1, 0)
                  "movement" (previous-line, 1, 1, 1)
-                 "copy-selection" ()
+                 "copy-clipboard" ()
                  "delete-selection" () };
   bind "k"     { "movement" (line-end, 0, 0, 0)
                  "movement" (previous-line, 1, 1, 0)
                  "movement" (previous-line, 1, 1, 1)
-                 "copy-selection" ()
+                 "copy-clipboard" ()
                  "delete-selection" () };
 
   bind "Down"  { "movement" (first-char, 0, 1, 0)
                  "movement" (next-line, 1, 0, 0)
                  "movement" (next-line, 1, 0, 1)
-                 "copy-selection" ()
+                 "copy-clipboard" ()
                  "delete-selection" () };
   bind "j"     { "movement" (first-char, 0, 1, 0)
                  "movement" (next-line, 1, 0, 0)
                  "movement" (next-line, 1, 0, 1)
-                 "copy-selection" ()
+                 "copy-clipboard" ()
+                 "selection-theatric" (shrink)
                  "delete-selection" () };
 
   bind "i" { "set-mode" ("vim-normal-d-i", transient) };
@@ -521,7 +522,7 @@
   bind "u" { "movement" (first-char, 0, 1, 0)
              "movement" (next-line, 1, 1, 1)
              "swap-selection-bounds" ()
-             "selection-theatric" ()
+             "selection-theatric" (expand)
              "change-case" (lower)
              "clear-selection" ()
              "movement" (first-nonspace-char, 0, 1, 0) };
@@ -529,7 +530,7 @@
   bind "<shift>u" { "movement" (first-char, 0, 1, 0)
                     "movement" (next-line, 1, 1, 1)
                     "swap-selection-bounds" ()
-                    "selection-theatric" ()
+                    "selection-theatric" (expand)
                     "change-case" (upper)
                     "clear-selection" ()
                     "movement" (first-nonspace-char, 0, 1, 0) };
