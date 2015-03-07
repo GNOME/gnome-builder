@@ -94,7 +94,9 @@ GtkTextView {
   gtk-key-bindings: builder-emacs-text-entry, builder-emacs-text-view;
 }
 
-GtkSourceView {
+GtkSourceView,
+IdeSourceViewMode.default
+{
   gtk-key-bindings: builder-emacs-text-entry, builder-emacs-source-view, builder-emacs-text-view;
 }
 
