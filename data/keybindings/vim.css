@@ -410,6 +410,14 @@
              "delete-selection" ()
              "restore-insert-mark" () };
 
+  bind "b" { "movement" (previous-word-end, 1, 0, 1)
+             "copy-clipboard" ()
+             "delete-selection" () };
+
+  bind "<shift>b" { "movement" (previous-full-word-end, 1, 0, 1)
+                    "copy-clipboard" ()
+                    "delete-selection" () };
+
   bind "e" { "movement" (next-word-end, 1, 0, 1)
              "copy-clipboard" ()
              "delete-selection" () };
