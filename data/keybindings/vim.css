@@ -234,7 +234,9 @@
                     "clear-count" () };
 
   /* move to nth line, defaults to last */
-  bind "<shift>g" { "movement" (nth-line, 0, 0, 1) };
+  bind "<shift>g" { "movement" (nth-line, 0, 1, 1)
+                    "movement" (first-nonspace-char, 0, 1, 0)
+                    "clear-count" () };
 
   /* undo - todo: how do we land cursor on right spot? */
   bind "u" { "undo" ()
@@ -398,10 +400,13 @@
   bind "i" { "set-mode" ("vim-normal-d-i", transient) };
   bind "g" { "set-mode" ("vim-normal-d-g", transient) };
 
-  bind "d" { "movement" (first-char, 0, 0, 0)
-             "movement" (next-line, 1, 1, 1)
+  bind "d" { "save-insert-mark" ()
+             "movement" (first-char, 0, 1, 0)
+             "movement" (next-line, 1, 0, 1)
              "copy-clipboard" ()
-             "delete-selection" () };
+             "delete-selection" ()
+             "restore-insert-mark" () };
+
   bind "e" { "movement" (next-word-end, 1, 0, 1)
              "copy-clipboard" ()
              "delete-selection" () };
