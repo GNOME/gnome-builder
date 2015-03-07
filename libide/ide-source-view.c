@@ -258,8 +258,6 @@ get_rect_for_iters (GtkTextView       *text_view,
 
   do
     {
-      GtkTextIter peek = iter;
-
       /* skip trailing newline */
       if ((gtk_text_iter_starts_line (&iter) && gtk_text_iter_equal (&iter, &end)))
         break;
@@ -1988,14 +1986,18 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
 
       if (after_cursor)
         {
-          _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR, FALSE, FALSE, 0);
+          gtk_text_iter_forward_to_line_end (&iter);
+          gtk_text_buffer_select_range (buffer, &iter, &iter);
           g_signal_emit_by_name (self, "insert-at-cursor", "\n");
         }
       else
         {
-          _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR, FALSE, FALSE, 0);
+          gtk_text_iter_set_line_offset (&iter, 0);
+          gtk_text_buffer_select_range (buffer, &iter, &iter);
           g_signal_emit_by_name (self, "insert-at-cursor", "\n");
-          _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_LINE, FALSE, FALSE, 0);
+          gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+          gtk_text_iter_backward_line (&iter);
+          gtk_text_buffer_select_range (buffer, &iter, &iter);
         }
 
       if (!place_cursor_at_original)
@@ -2012,7 +2014,11 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
   else
     {
       if (after_cursor)
-        _ide_source_view_apply_movement (self, IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR, FALSE, FALSE, 0);
+        {
+          gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+          gtk_text_iter_forward_char (&iter);
+          gtk_text_buffer_select_range (buffer, &iter, &iter);
+        }
 
       GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->paste_clipboard (text_view);
 
