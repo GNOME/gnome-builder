@@ -201,6 +201,9 @@
                    "clear-count" () };
   bind "z" { "set-mode" ("vim-normal-z", transient) };
 
+  /* submode for bracket */
+  bind "bracketleft" { "set-mode" ("vim-normal-bracket", transient) };
+
   /* move by paragraph */
   bind "braceleft" { "movement" (paragraph-start, 0, 0, 1)
                      "clear-count" () };
@@ -333,6 +336,15 @@
                     "movement" (next-line, 1, 0, 1)
                     "set-mode" ("vim-visual-line", permanent) };
   bind "<ctrl>v" { "set-mode" ("vim-visual-block", permanent) };
+}
+
+@binding-set builder-vim-source-view-normal-bracket
+{
+  bind "braceleft" { "movement" (previous-unmatched-brace, 0, 1, 1) };
+  bind "braceright" { "movement" (next-unmatched-brace, 0, 1, 1) };
+
+  bind "parenleft" { "movement" (previous-unmatched-paren, 0, 1, 1) };
+  bind "parenright" { "movement" (next-unmatched-paren, 0, 1, 1) };
 }
 
 @binding-set builder-vim-source-view-normal-c
@@ -798,6 +810,15 @@ IdeSourceViewMode.vim-normal-with-count {
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal-with-count,
                     builder-vim-source-view-normal;
+}
+
+IdeSourceViewMode.vim-normal-bracket {
+  -IdeSourceViewMode-suppress-unbound: true;
+  -IdeSourceViewMode-coalesce-undo: true;
+  -IdeSourceViewMode-block-cursor: true;
+
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-bracket;
 }
 
 IdeSourceViewMode.vim-normal-c {
