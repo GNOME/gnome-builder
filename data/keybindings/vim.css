@@ -372,6 +372,26 @@
              "selection-theatric" (shrink)
              "delete-selection" ()
              "clear-count" () };
+
+  /* ciw */
+  bind "w" { "set-mode" ("vim-insert", permanent)
+             "movement" (previous-word-end, 0, 1, 1)
+             "movement" (next-word-start, 0, 1, 0)
+             "movement" (next-word-end, 1, 0, 1)
+             "copy-clipboard" ()
+             "selection-theatric" (shrink)
+             "delete-selection" ()
+             "clear-count" () };
+
+  /* ciW */
+  bind "<shift>w" { "set-mode" ("vim-insert", permanent)
+                    "movement" (previous-full-word-end, 0, 1, 1)
+                    "movement" (next-full-word-start, 0, 1, 0)
+                    "movement" (next-full-word-end, 1, 0, 1)
+                    "copy-clipboard" ()
+                    "selection-theatric" (shrink)
+                    "delete-selection" ()
+                    "clear-count" () };
 }
 
 @binding-set builder-vim-source-view-normal-d
