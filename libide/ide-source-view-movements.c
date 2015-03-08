@@ -840,7 +840,8 @@ ide_source_view_movements_next_word_end (Movement *mv)
   text_iter_forward_to_empty_line (&copy, &mv->insert);
   if (gtk_text_iter_compare (&copy, &mv->insert) < 0)
     mv->insert = copy;
-  else if (!mv->exclusive && !gtk_text_iter_ends_line (&mv->insert))
+
+  if (!mv->exclusive && !gtk_text_iter_ends_line (&mv->insert))
     gtk_text_iter_forward_char (&mv->insert);
 }
 
@@ -857,6 +858,9 @@ ide_source_view_movements_next_full_word_end (Movement *mv)
   text_iter_forward_to_empty_line (&copy, &mv->insert);
   if (gtk_text_iter_compare (&copy, &mv->insert) < 0)
     mv->insert = copy;
+
+  if (!mv->exclusive && !gtk_text_iter_ends_line (&mv->insert))
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
@@ -872,6 +876,9 @@ ide_source_view_movements_next_word_start (Movement *mv)
   text_iter_forward_to_empty_line (&copy, &mv->insert);
   if (gtk_text_iter_compare (&copy, &mv->insert) < 0)
     mv->insert = copy;
+
+  if (!mv->exclusive && !gtk_text_iter_ends_line (&mv->insert))
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
@@ -887,6 +894,9 @@ ide_source_view_movements_next_full_word_start (Movement *mv)
   text_iter_forward_to_empty_line (&copy, &mv->insert);
   if (gtk_text_iter_compare (&copy, &mv->insert) < 0)
     mv->insert = copy;
+
+  if (!mv->exclusive && !gtk_text_iter_ends_line (&mv->insert))
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
@@ -904,6 +914,9 @@ ide_source_view_movements_previous_word_start (Movement *mv)
   if (gtk_text_iter_backward_char (&copy))
     if (gtk_text_iter_get_char (&copy) == '\n')
       mv->insert = copy;
+
+  if (!mv->exclusive && !gtk_text_iter_ends_line (&mv->insert))
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
@@ -921,6 +934,9 @@ ide_source_view_movements_previous_full_word_start (Movement *mv)
   if (gtk_text_iter_backward_char (&copy))
     if (gtk_text_iter_get_char (&copy) == '\n')
       mv->insert = copy;
+
+  if (!mv->exclusive && !gtk_text_iter_ends_line (&mv->insert))
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
