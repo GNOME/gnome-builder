@@ -261,12 +261,20 @@ get_rect_for_iters (GtkTextView       *text_view,
   begin = *iter1;
   end = *iter2;
 
-  gtk_text_iter_order (&begin, &end);
-
-  gtk_text_view_get_iter_location (text_view, &begin, &area);
-
   if (gtk_text_iter_equal (&begin, &end))
     goto finish;
+
+  gtk_text_iter_order (&begin, &end);
+
+  if (gtk_text_iter_get_line (&begin) == gtk_text_iter_get_line (&end))
+    {
+      gtk_text_view_get_iter_location (text_view, &begin, &area);
+      gtk_text_view_get_iter_location (text_view, &end, &tmp);
+      gdk_rectangle_union (&area, &tmp, &area);
+      goto finish;
+    }
+
+  gtk_text_view_get_iter_location (text_view, &begin, &area);
 
   iter = begin;
 
