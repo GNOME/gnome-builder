@@ -2702,13 +2702,15 @@ ide_source_view_real_sort (IdeSourceView *self,
   qsort (parts, g_strv_length (parts), sizeof (gchar *), sort_func);
 
   text = g_strjoinv ("\n", parts);
+
+  gtk_text_buffer_begin_user_action (buffer);
   gtk_text_buffer_delete (buffer, &begin, &end);
   gtk_text_buffer_insert (buffer, &begin, text, -1);
   g_free (text);
   g_strfreev (parts);
-
   gtk_text_buffer_get_iter_at_offset (buffer, &begin, cursor_offset);
   gtk_text_buffer_select_range (buffer, &begin, &begin);
+  gtk_text_buffer_end_user_action (buffer);
 }
 
 static void
