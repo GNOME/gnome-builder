@@ -96,7 +96,6 @@
 
 @binding-set builder-vim-source-view-normal
 {
-  /* todo: need a submode that will allow 0 to be used. */
   bind "1" { "append-to-count" (1)
              "set-mode" ("vim-normal-with-count", transient) };
   bind "2" { "append-to-count" (2)
