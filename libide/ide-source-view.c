@@ -240,6 +240,81 @@ ide_source_view_unblock_handlers (IdeSourceView *self)
     }
 }
 
+static gboolean
+ide_source_view_get_at_bottom (IdeSourceView *self)
+{
+  GtkAdjustment *vadj;
+  gdouble value;
+  gdouble page_size;
+  gdouble upper;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self));
+  value = gtk_adjustment_get_value (vadj);
+  upper = gtk_adjustment_get_upper (vadj);
+  page_size = gtk_adjustment_get_page_size (vadj);
+
+  return ((value + page_size) == upper);
+}
+
+static void
+ide_source_view_scroll_to_bottom__changed_cb (GtkAdjustment *vadj,
+                                              GParamSpec    *pspec,
+                                              gpointer       user_data)
+{
+  gdouble page_size;
+  gdouble upper;
+  gdouble value;
+
+  g_assert (GTK_IS_ADJUSTMENT (vadj));
+
+  g_signal_handlers_disconnect_by_func (vadj,
+                                        G_CALLBACK (ide_source_view_scroll_to_bottom__changed_cb),
+                                        NULL);
+
+  page_size = gtk_adjustment_get_page_size (vadj);
+  upper = gtk_adjustment_get_upper (vadj);
+  value = upper - page_size;
+
+  gtk_adjustment_set_value (vadj, value);
+}
+
+static void
+ide_source_view_scroll_to_bottom (IdeSourceView *self)
+{
+  GtkAdjustment *vadj;
+  gdouble page_size;
+  gdouble upper;
+  gdouble value;
+  gdouble new_value;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self));
+  upper = gtk_adjustment_get_upper (vadj);
+  page_size = gtk_adjustment_get_page_size (vadj);
+  value = gtk_adjustment_get_value (vadj);
+  new_value = upper - page_size;
+
+  if (new_value == value)
+    {
+      /*
+       * HACK:
+       *
+       * GtkTextView wont calculate the new heights until an idle handler.
+       * So wait until that happens and then jump.
+       */
+      g_signal_connect (vadj,
+                        "notify::upper",
+                        G_CALLBACK (ide_source_view_scroll_to_bottom__changed_cb),
+                        NULL);
+      return;
+    }
+
+  gtk_adjustment_set_value (vadj, new_value);
+}
+
 static void
 get_rect_for_iters (GtkTextView       *text_view,
                     const GtkTextIter *iter1,
@@ -1332,13 +1407,18 @@ ide_source_view_do_indent (IdeSourceView *self,
   GtkWidget *widget = (GtkWidget *)self;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
+  g_autofree gchar *indent = NULL;
   GtkTextIter begin;
   GtkTextIter end;
-  gchar *indent;
+  gboolean at_bottom;
   gint cursor_offset = 0;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (event);
+
+  at_bottom = ide_source_view_get_at_bottom (self);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
@@ -1371,8 +1451,13 @@ ide_source_view_do_indent (IdeSourceView *self,
       if (!gtk_text_iter_equal (&begin, &end))
         gtk_text_buffer_delete (buffer, &begin, &end);
       gtk_text_buffer_insert (buffer, &begin, indent, -1);
-      g_free (indent);
       gtk_text_buffer_end_user_action (buffer);
+
+      /*
+       * Keep our selves pinned to the bottom of the document if that makes sense.
+       */
+      if (at_bottom)
+        ide_source_view_scroll_to_bottom (self);
 
       /*
        * Place the cursor, as it could be somewhere within our indent text.
@@ -1384,6 +1469,8 @@ ide_source_view_do_indent (IdeSourceView *self,
         gtk_text_iter_backward_chars (&begin, ABS (cursor_offset));
       gtk_text_buffer_select_range (buffer, &begin, &begin);
     }
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -1821,6 +1908,7 @@ ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextView *text_view = (GtkTextView *)self;
   GtkTextBuffer *buffer;
+  gboolean at_bottom;
   GdkEvent fake_event = { 0 };
   GString *gstr;
 
@@ -1830,6 +1918,8 @@ ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
   g_return_if_fail (str);
 
   buffer = gtk_text_view_get_buffer (text_view);
+
+  at_bottom = ide_source_view_get_at_bottom (self);
 
   /*
    * Ignore if there is nothing to do.
@@ -1843,7 +1933,7 @@ ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
   if (!priv->auto_indent || !priv->indenter)
     {
       g_signal_emit_by_name (self, "insert-at-cursor", str);
-      IDE_EXIT;
+      IDE_GOTO (maybe_scroll);
     }
 
   gtk_text_buffer_begin_user_action (buffer);
@@ -1888,6 +1978,10 @@ ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
   ide_source_view_do_indent (self, &fake_event.key);
 
   gtk_text_buffer_end_user_action (buffer);
+
+maybe_scroll:
+  if (at_bottom)
+    ide_source_view_scroll_to_bottom (self);
 
   IDE_EXIT;
 }
@@ -2477,6 +2571,25 @@ ide_source_view_real_redo (GtkSourceView *source_view)
 }
 
 static void
+ide_source_view_real_insert_at_cursor (GtkTextView *text_view,
+                                       const gchar *str)
+{
+  IdeSourceView *self = (IdeSourceView *)text_view;
+  gboolean at_bottom;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+  g_assert (str);
+
+  at_bottom = ide_source_view_get_at_bottom (self);
+
+  GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->insert_at_cursor (text_view, str);
+
+  if (at_bottom)
+    ide_source_view_scroll_to_bottom (self);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -2619,6 +2732,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
   GtkSourceViewClass *source_view_class = GTK_SOURCE_VIEW_CLASS (klass);
 
   object_class->constructed = ide_source_view_constructed;
@@ -2629,6 +2743,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
+
+  text_view_class->insert_at_cursor = ide_source_view_real_insert_at_cursor;
 
   source_view_class->undo = ide_source_view_real_undo;
   source_view_class->redo = ide_source_view_real_redo;
@@ -3239,11 +3355,14 @@ ide_source_view_push_snippet (IdeSourceView    *self,
   GtkTextIter iter;
   gboolean has_more_tab_stops;
   gboolean insert_spaces;
+  gboolean at_bottom;
   gchar *line_prefix;
   guint tab_width;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (snippet));
+
+  at_bottom = ide_source_view_get_at_bottom (self);
 
   context = ide_source_snippet_get_context (snippet);
 
@@ -3302,6 +3421,9 @@ ide_source_view_push_snippet (IdeSourceView    *self,
     ide_source_view_pop_snippet (self);
 
   ide_source_view_invalidate_window (self);
+
+  if (at_bottom)
+    ide_source_view_scroll_to_bottom (self);
 }
 
 /**
