@@ -121,7 +121,7 @@
 
   /* insert after cursor */
   bind "a" { "set-mode" ("vim-insert", permanent)
-             "movement" (next-char, 0, 0, 0) };
+             "movement" (next-char, 0, 1, 0) };
   bind "<shift>a" { "set-mode" ("vim-insert", permanent)
                     "movement" (last-char, 0, 0, 0) };
 
