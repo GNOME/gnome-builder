@@ -946,37 +946,45 @@ ide_source_view_movements_previous_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_source_iter_backward_visible_word_starts (&mv->insert, 2);
-  _ide_source_iter_forward_visible_word_end (&mv->insert);
+  _ide_vim_iter_backward_word_end (&mv->insert);
 
   /*
    * Vim treats an empty line as a word.
    */
-  if (gtk_text_iter_backward_char (&copy))
-    if (gtk_text_iter_get_char (&copy) == '\n')
-      mv->insert = copy;
+  while ((gtk_text_iter_compare (&copy, &mv->insert) > 0) &&
+         gtk_text_iter_backward_char (&copy))
+    {
+      if (gtk_text_iter_starts_line (&copy) &&
+          gtk_text_iter_ends_line (&copy))
+        mv->insert = copy;
+    }
 
-  /*
-   * Ensure we are strictly before our previous position.
-   */
-  if (gtk_text_iter_compare (&mv->insert, &copy) > 0)
-    gtk_text_buffer_get_start_iter (gtk_text_iter_get_buffer (&mv->insert), &mv->insert);
-
-  if (mv->exclusive && !gtk_text_iter_starts_line (&mv->insert))
-    gtk_text_iter_backward_char (&mv->insert);
+  if (!mv->exclusive && !gtk_text_iter_ends_line (&mv->insert))
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void
 ide_source_view_movements_previous_full_word_end (Movement *mv)
 {
-  if (!_ide_source_iter_starts_full_word (&mv->insert))
-    _ide_source_iter_backward_full_word_start (&mv->insert);
+  GtkTextIter copy;
 
-  _ide_source_iter_backward_full_word_start (&mv->insert);
-  _ide_source_iter_forward_full_word_end (&mv->insert);
+  copy = mv->insert;
 
-  if (mv->exclusive && !gtk_text_iter_starts_line (&mv->insert))
-    gtk_text_iter_backward_char (&mv->insert);
+  _ide_vim_iter_backward_WORD_end (&mv->insert);
+
+  /*
+   * Vim treats an empty line as a word.
+   */
+  while ((gtk_text_iter_compare (&copy, &mv->insert) > 0) &&
+         gtk_text_iter_backward_char (&copy))
+    {
+      if (gtk_text_iter_starts_line (&copy) &&
+          gtk_text_iter_ends_line (&copy))
+        mv->insert = copy;
+    }
+
+  if (!mv->exclusive && !gtk_text_iter_ends_line (&mv->insert))
+    gtk_text_iter_forward_char (&mv->insert);
 }
 
 static void

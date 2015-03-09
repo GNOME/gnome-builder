@@ -411,3 +411,47 @@ _ide_vim_iter_forward_WORD_end (GtkTextIter *iter)
 {
   return _ide_vim_iter_forward_classified_end (iter, _ide_vim_WORD_classify);
 }
+
+static gboolean
+_ide_vim_iter_backward_classified_end (GtkTextIter *iter,
+                                       gint (*classify) (gunichar))
+{
+  gunichar ch;
+  gint begin_class;
+  gint cur_class;
+
+  g_assert (iter);
+
+  ch = gtk_text_iter_get_char (iter);
+  begin_class = classify (ch);
+
+  for (;;)
+    {
+      if (!gtk_text_iter_backward_char (iter))
+        return FALSE;
+
+      ch = gtk_text_iter_get_char (iter);
+      cur_class = classify (ch);
+
+      /* reset begin_class if we hit space, we can take anything after that */
+      if (cur_class == CLASS_SPACE)
+        begin_class = CLASS_SPACE;
+
+      if (cur_class != begin_class && cur_class != CLASS_SPACE)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+_ide_vim_iter_backward_word_end (GtkTextIter *iter)
+{
+  return _ide_vim_iter_backward_classified_end (iter, _ide_vim_word_classify);
+}
+
+gboolean
+_ide_vim_iter_backward_WORD_end (GtkTextIter *iter)
+{
+  return _ide_vim_iter_backward_classified_end (iter, _ide_vim_WORD_classify);
+}

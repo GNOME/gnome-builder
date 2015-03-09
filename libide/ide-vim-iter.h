@@ -31,6 +31,8 @@ gboolean _ide_vim_iter_backward_paragraph_start (GtkTextIter *iter);
 gboolean _ide_vim_iter_forward_paragraph_end    (GtkTextIter *iter);
 gboolean _ide_vim_iter_backward_sentence_start  (GtkTextIter *iter);
 gboolean _ide_vim_iter_forward_sentence_end     (GtkTextIter *iter);
+gboolean _ide_vim_iter_backward_WORD_end        (GtkTextIter *iter);
+gboolean _ide_vim_iter_backward_word_end        (GtkTextIter *iter);
 
 G_END_DECLS
 
