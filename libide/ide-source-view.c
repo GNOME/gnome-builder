@@ -2087,13 +2087,21 @@ static void
 ide_source_view_real_selection_theatric (IdeSourceView         *self,
                                          IdeSourceViewTheatric  theatric)
 {
+  GtkSettings *settings;
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
+  gboolean enable_animations = TRUE;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert ((theatric == IDE_SOURCE_VIEW_THEATRIC_EXPAND) ||
             (theatric == IDE_SOURCE_VIEW_THEATRIC_SHRINK));
+
+  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (self)));
+  g_object_get (settings, "gtk-enable-animations", &enable_animations, NULL);
+
+  if (!enable_animations)
+    return;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
