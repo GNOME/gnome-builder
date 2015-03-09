@@ -36,6 +36,7 @@ static GHashTable     *gBufferToView;
 static GList          *gFilesToOpen;
 static gint            gExitCode = EXIT_SUCCESS;
 static gboolean        gDarkMode;
+static gboolean        gDebugScrollOffset;
 static gchar          *gCss = "\
 @binding-set file-keybindings { \
     bind \"<ctrl>s\" { \"action\" (\"file\", \"save\", \"\") }; \
@@ -106,6 +107,34 @@ delete_event_cb (GtkWindow *window,
   return FALSE;
 }
 
+static gboolean
+debug_draw (IdeSourceView *sv,
+            cairo_t       *cr,
+            gpointer       user_data)
+{
+  static GdkRGBA rgba;
+  static guint rgba_set;
+  GdkRectangle rect;
+
+  g_assert (IDE_IS_SOURCE_VIEW (sv));
+
+  if (G_UNLIKELY (!rgba_set))
+    {
+      gdk_rgba_parse (&rgba, "#729fcf");
+      rgba.alpha = 0.2;
+    }
+
+  ide_source_view_get_visible_rect (sv, &rect);
+  gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (sv),
+                                         GTK_TEXT_WINDOW_WIDGET,
+                                         rect.x, rect.y, &rect.x, &rect.y);
+  gdk_cairo_rectangle (cr, &rect);
+  gdk_cairo_set_source_rgba (cr, &rgba);
+  cairo_fill (cr);
+
+  return FALSE;
+}
+
 static void
 add_buffer (IdeBuffer *buffer)
 {
@@ -126,6 +155,7 @@ add_buffer (IdeBuffer *buffer)
                            "highlight-current-line", TRUE,
                            "insert-matching-brace", TRUE,
                            "overwrite-braces", TRUE,
+                           "scroll-offset", gDebugScrollOffset ? 5 : 0,
                            "sensitive", FALSE,
                            "show-grid-lines", TRUE,
                            "show-line-changes", TRUE,
@@ -134,6 +164,8 @@ add_buffer (IdeBuffer *buffer)
                            "snippet-completion", TRUE,
                            "visible", TRUE,
                            NULL);
+      if (gDebugScrollOffset)
+        g_signal_connect_after (view, "draw", G_CALLBACK (debug_draw), NULL);
       gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (view));
       gtk_container_add (GTK_CONTAINER (gDocStack), GTK_WIDGET (scroller));
       g_hash_table_insert (gBufferToView, buffer, view);
@@ -540,6 +572,8 @@ main (int argc,
     { "emacs", 'e', 0, G_OPTION_ARG_NONE, &emacs, N_("Use emacs keybindings") },
     { "vim", 'm', 0, G_OPTION_ARG_NONE, &vim, N_("Use Vim keybindings") },
     { "dark", 'd', 0, G_OPTION_ARG_NONE, &gDarkMode, N_("Use dark mode") },
+    { "debug-scroll-offset", 0, 0, G_OPTION_ARG_NONE, &gDebugScrollOffset,
+      N_("Render a rectangle over the visible region taking scroll offset into account.") },
     { NULL }
   };
 
