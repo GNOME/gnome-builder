@@ -280,6 +280,8 @@ void                        ide_source_view_set_snippet_completion    (IdeSource
                                                                        gboolean                    snippet_completion);
 void                        ide_source_view_set_back_forward_list     (IdeSourceView              *self,
                                                                        IdeBackForwardList         *back_forward_list);
+void                        ide_source_view_get_visible_rect          (IdeSourceView              *self,
+                                                                       GdkRectangle               *visible_rect);
 
 G_END_DECLS
 

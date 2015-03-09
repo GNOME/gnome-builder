@@ -93,7 +93,9 @@ typedef struct
 
   gint                         target_line_offset;
   guint                        count;
+
   guint                        scroll_offset;
+  guint                        cached_line_height;
 
   guint                        saved_line;
   guint                        saved_line_offset;
@@ -1669,6 +1671,28 @@ ide_source_view_query_tooltip (GtkWidget  *widget,
 }
 
 static void
+ide_source_view_real_style_updated (GtkWidget *widget)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  PangoContext *context;
+  PangoLayout *layout;
+  int width;
+  int height;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  GTK_WIDGET_CLASS (ide_source_view_parent_class)->style_updated (widget);
+
+  context = gtk_widget_get_pango_context (widget);
+  layout = pango_layout_new (context);
+  pango_layout_set_text (layout, "X", 1);
+  pango_layout_get_pixel_size (layout, &width, &height);
+  priv->cached_line_height = height;
+  g_object_unref (layout);
+}
+
+static void
 ide_source_view_real_action (IdeSourceView *self,
                              const gchar   *prefix,
                              const gchar   *action_name,
@@ -2743,6 +2767,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
+  widget_class->style_updated = ide_source_view_real_style_updated;
 
   text_view_class->insert_at_cursor = ide_source_view_real_insert_at_cursor;
 
@@ -3568,4 +3593,50 @@ ide_source_view_set_scroll_offset (IdeSourceView *self,
       priv->scroll_offset = scroll_offset;
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SCROLL_OFFSET]);
     }
+}
+
+/**
+ * ide_source_view_get_visible_rect:
+ * @self: An #IdeSourceView.
+ * @visible_rect: (out): A #GdkRectangle.
+ *
+ * Gets the visible region in buffer coordinates that is the visible area of the buffer. This
+ * is similar to gtk_text_view_get_visible_area() except that it takes into account the
+ * #IdeSourceView:scroll-offset property to ensure there is space above and below the
+ * visible_rect.
+ */
+void
+ide_source_view_get_visible_rect (IdeSourceView *self,
+                                  GdkRectangle  *visible_rect)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextView *text_view = (GtkTextView *)self;
+  GdkRectangle area;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (visible_rect);
+
+  gtk_text_view_get_visible_rect (text_view, &area);
+
+  /*
+   * If we don't have valid line height, not much we can do now. We can just adjust things
+   * later once it becomes available.
+   */
+  if (priv->cached_line_height)
+    {
+      gint max_scroll_offset;
+      gint scroll_offset;
+      gint visible_lines;
+      gint scroll_offset_height;
+
+      visible_lines = area.height / priv->cached_line_height;
+      max_scroll_offset = (visible_lines - 1) / 2;
+      scroll_offset = MIN (priv->scroll_offset, max_scroll_offset);
+      scroll_offset_height = priv->cached_line_height * scroll_offset;
+
+      area.y += scroll_offset_height;
+      area.height -= (2 * scroll_offset_height);
+    }
+
+  *visible_rect = area;
 }
