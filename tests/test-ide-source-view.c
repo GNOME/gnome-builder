@@ -35,6 +35,7 @@ static GtkProgressBar *gProgress;
 static GHashTable     *gBufferToView;
 static GList          *gFilesToOpen;
 static gint            gExitCode = EXIT_SUCCESS;
+static gboolean        gDarkMode;
 static gchar          *gCss = "\
 @binding-set file-keybindings { \
     bind \"<ctrl>s\" { \"action\" (\"file\", \"save\", \"\") }; \
@@ -178,9 +179,10 @@ idedit__bufmgr_load_file_cb (GObject      *object,
       GtkSourceStyleScheme *scheme;
       GtkSourceStyleSchemeManager *schememgr;
       GtkTextIter begin;
+      const gchar *name = gDarkMode ? "builder-dark" : "builder";
 
       schememgr = gtk_source_style_scheme_manager_get_default ();
-      scheme = gtk_source_style_scheme_manager_get_scheme (schememgr, "builder");
+      scheme = gtk_source_style_scheme_manager_get_scheme (schememgr, name);
       gtk_source_buffer_set_style_scheme (GTK_SOURCE_BUFFER (buf), scheme);
 
       ide_buffer_set_highlight_diagnostics (buf, TRUE);
@@ -537,6 +539,7 @@ main (int argc,
       increase_verbosity, N_("Increase logging verbosity.") },
     { "emacs", 'e', 0, G_OPTION_ARG_NONE, &emacs, N_("Use emacs keybindings") },
     { "vim", 'm', 0, G_OPTION_ARG_NONE, &vim, N_("Use Vim keybindings") },
+    { "dark", 'd', 0, G_OPTION_ARG_NONE, &gDarkMode, N_("Use dark mode") },
     { NULL }
   };
 
@@ -580,6 +583,11 @@ main (int argc,
 
   if (vim)
     load_css_resource ("/org/gnome/libide/keybindings/vim.css");
+
+  if (gDarkMode)
+    g_object_set (gtk_settings_get_default (),
+                  "gtk-application-prefer-dark-theme", TRUE,
+                  NULL);
 
   gtk_main ();
 
