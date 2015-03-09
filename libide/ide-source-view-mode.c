@@ -340,7 +340,8 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
 
     case IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT:
       {
-        if (suppress_unbound)
+        /* don't block possible accelerators, but supress others */
+        if (suppress_unbound && ((event->state & GDK_MODIFIER_MASK) == 0))
           handled = TRUE;
       }
       break;
