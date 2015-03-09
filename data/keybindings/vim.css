@@ -373,6 +373,16 @@
              "delete-selection" ()
              "clear-count" () };
 
+  /* cis */
+  bind "s" { "set-mode" ("vim-insert", permanent)
+             "movement" (sentence-start, 1, 1, 1)
+             "swap-selection-bounds" ()
+             "movement" (sentence-end, 1, 1, 1)
+             "copy-clipboard" ()
+             "selection-theatric" (shrink)
+             "delete-selection" ()
+             "clear-count" () };
+
   /* ciw */
   bind "w" { "set-mode" ("vim-insert", permanent)
              "movement" (previous-word-end, 0, 1, 1)
