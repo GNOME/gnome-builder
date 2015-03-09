@@ -246,6 +246,9 @@ struct _IdeSourceViewClass
                                        IdeSourceViewModeType    type);
   void (*set_overwrite)               (IdeSourceView           *self,
                                        gboolean                 overwrite);
+  void (*sort)                        (IdeSourceView           *self,
+                                       gboolean                 ignore_case,
+                                       gboolean                 reverse);
   void (*swap_selection_bounds)       (IdeSourceView           *self);
 };
 

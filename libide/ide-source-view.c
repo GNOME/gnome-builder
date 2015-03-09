@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-source-view"
 
 #include <glib/gi18n.h>
+#include <stdlib.h>
 
 #include "ide-animation.h"
 #include "ide-back-forward-item.h"
@@ -150,6 +151,7 @@ enum {
   SELECTION_THEATRIC,
   SET_MODE,
   SET_OVERWRITE,
+  SORT,
   SWAP_SELECTION_BOUNDS,
   LAST_SIGNAL
 };
@@ -2613,6 +2615,102 @@ ide_source_view_real_insert_at_cursor (GtkTextView *text_view,
     ide_source_view_scroll_to_bottom (self);
 }
 
+static int
+_strcasecmp_reversed (const void *aptr,
+                      const void *bptr)
+{
+  const gchar * const *a = aptr;
+  const gchar * const *b = bptr;
+
+  return -strcasecmp (*a, *b);
+}
+
+static int
+_strcasecmp_normal (const void *aptr,
+                    const void *bptr)
+{
+  const gchar * const *a = aptr;
+  const gchar * const *b = bptr;
+
+  return strcasecmp (*a, *b);
+}
+
+static int
+_strcmp_reversed (const void *aptr,
+                  const void *bptr)
+{
+  const gchar * const *a = aptr;
+  const gchar * const *b = bptr;
+
+  return -strcmp (*a, *b);
+}
+
+static int
+_strcmp_normal (const void *aptr,
+                const void *bptr)
+{
+  const gchar * const *a = aptr;
+  const gchar * const *b = bptr;
+
+  return strcmp (*a, *b);
+}
+
+static void
+ide_source_view_real_sort (IdeSourceView *self,
+                           gboolean       ignore_case,
+                           gboolean       reverse)
+{
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GtkTextIter cursor;
+  int (*sort_func) (const void *, const void *) = _strcmp_normal;
+  guint cursor_offset;
+  gchar *text;
+  gchar **parts;
+
+  g_assert (GTK_TEXT_VIEW (self));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  if (gtk_text_iter_equal (&begin, &end))
+    gtk_text_buffer_get_bounds (buffer, &begin, &end);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &cursor, insert);
+  cursor_offset = gtk_text_iter_get_offset (&cursor);
+
+  gtk_text_iter_order (&begin, &end);
+  if (gtk_text_iter_starts_line (&end))
+    gtk_text_iter_backward_char (&end);
+
+  text = gtk_text_iter_get_slice (&begin, &end);
+  parts = g_strsplit (text, "\n", 0);
+  g_free (text);
+
+  if (reverse && ignore_case)
+    sort_func = _strcasecmp_reversed;
+  else if (ignore_case)
+    sort_func = _strcasecmp_normal;
+  else
+    sort_func = _strcmp_reversed;
+
+  qsort (parts, g_strv_length (parts), sizeof (gchar *), sort_func);
+
+  text = g_strjoinv ("\n", parts);
+  gtk_text_buffer_delete (buffer, &begin, &end);
+  gtk_text_buffer_insert (buffer, &begin, text, -1);
+  g_free (text);
+  g_strfreev (parts);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &begin, cursor_offset);
+  gtk_text_buffer_select_range (buffer, &begin, &begin);
+}
+
 static void
 ide_source_view_dispose (GObject *object)
 {
@@ -2796,6 +2894,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->selection_theatric = ide_source_view_real_selection_theatric;
   klass->set_mode = ide_source_view_real_set_mode;
   klass->set_overwrite = ide_source_view_real_set_overwrite;
+  klass->sort = ide_source_view_real_sort;
   klass->swap_selection_bounds = ide_source_view_real_swap_selection_bounds;
 
   g_object_class_override_property (object_class, PROP_AUTO_INDENT, "auto-indent");
@@ -3146,6 +3245,27 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   g_cclosure_marshal_VOID__BOOLEAN,
                   G_TYPE_NONE,
                   1,
+                  G_TYPE_BOOLEAN);
+
+  /**
+   * IdeSourceView::sort:
+   * @self: an #IdeSourceView.
+   * @ignore_case: If character case should be ignored.
+   * @reverse: If the lines should be sorted in reverse order
+   *
+   * This signal is meant to be activated from keybindings to sort the currently selected lines.
+   * The lines are sorted using qsort() and either strcmp() or strcasecmp().
+   */
+  gSignals [SORT] =
+    g_signal_new ("sort",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, sort),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
 
   gSignals [SWAP_SELECTION_BOUNDS] =
