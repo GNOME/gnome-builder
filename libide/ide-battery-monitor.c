@@ -20,6 +20,8 @@
 
 #include "ide-battery-monitor.h"
 
+#define CONSERVE_THRESHOLD 50.0
+
 static GDBusProxy *gUPowerProxy;
 static GDBusProxy *gUPowerDeviceProxy;
 
@@ -115,7 +117,7 @@ ide_battery_monitor_get_on_battery (void)
 }
 
 gdouble
-ide_battery_monitor_get_energy (void)
+ide_battery_monitor_get_energy_percentage (void)
 {
   GDBusProxy *proxy;
   gdouble ret = 0.0;
@@ -126,7 +128,7 @@ ide_battery_monitor_get_energy (void)
     {
       GVariant *prop;
 
-      prop = g_dbus_proxy_get_cached_property (proxy, "Energy");
+      prop = g_dbus_proxy_get_cached_property (proxy, "Percentage");
       if (prop)
         ret = g_variant_get_double (prop);
       g_object_unref (proxy);
@@ -144,8 +146,8 @@ ide_battery_monitor_get_should_conserve (void)
     {
       gdouble energy;
 
-      energy = ide_battery_monitor_get_energy ();
-      should_conserve = (energy != 0.0) && (energy < 0.50);
+      energy = ide_battery_monitor_get_energy_percentage ();
+      should_conserve = (energy != 0.0) && (energy < CONSERVE_THRESHOLD);
     }
 
   return should_conserve;

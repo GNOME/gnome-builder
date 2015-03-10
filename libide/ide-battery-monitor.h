@@ -23,9 +23,9 @@
 
 G_BEGIN_DECLS
 
-gdouble  ide_battery_monitor_get_energy          (void);
-gboolean ide_battery_monitor_get_on_battery      (void);
-gboolean ide_battery_monitor_get_should_conserve (void);
+gdouble  ide_battery_monitor_get_energy_percentage (void);
+gboolean ide_battery_monitor_get_on_battery        (void);
+gboolean ide_battery_monitor_get_should_conserve   (void);
 
 G_END_DECLS
 
