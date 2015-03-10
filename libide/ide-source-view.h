@@ -285,6 +285,23 @@ void                        ide_source_view_set_back_forward_list     (IdeSource
                                                                        IdeBackForwardList         *back_forward_list);
 void                        ide_source_view_get_visible_rect          (IdeSourceView              *self,
                                                                        GdkRectangle               *visible_rect);
+gboolean                    ide_source_view_move_mark_onscreen        (IdeSourceView              *self,
+                                                                       GtkTextMark                *mark);
+gboolean                    ide_source_view_place_cursor_onscreen     (IdeSourceView              *self);
+void                        ide_source_view_scroll_mark_onscreen      (IdeSourceView              *self,
+                                                                       GtkTextMark                *mark);
+void                        ide_source_view_scroll_to_mark            (IdeSourceView              *self,
+                                                                       GtkTextMark                *mark,
+                                                                       gdouble                     within_margin,
+                                                                       gboolean                    use_align,
+                                                                       gdouble                     xalign,
+                                                                       gdouble                     yalign);
+void                        ide_source_view_scroll_to_iter            (IdeSourceView              *self,
+                                                                       const GtkTextIter          *iter,
+                                                                       gdouble                     within_margin,
+                                                                       gboolean                    use_align,
+                                                                       gdouble                     xalign,
+                                                                       gdouble                     yalign);
 
 G_END_DECLS
 

@@ -67,6 +67,16 @@
     gtk_text_buffer_end_user_action(b); \
   } G_STMT_END
 
+#define _GDK_RECTANGLE_X2(rect) ((rect)->x + (rect)->width)
+#define _GDK_RECTANGLE_Y2(rect) ((rect)->y + (rect)->height)
+#define _GDK_RECTANGLE_CONTAINS(rect,other) \
+  (((rect)->x <= (other)->x) && \
+   (_GDK_RECTANGLE_X2(rect) >= _GDK_RECTANGLE_X2(other)) && \
+   ((rect)->y <= (other)->y) && \
+   (_GDK_RECTANGLE_Y2(rect) >= _GDK_RECTANGLE_Y2(other)))
+#define _GDK_RECTANGLE_CENTER_X(rect) ((rect)->x + ((rect)->width/2))
+#define _GDK_RECTANGLE_CENTER_Y(rect) ((rect)->y + ((rect)->height/2))
+
 typedef struct
 {
   IdeBackForwardList          *back_forward_list;
@@ -96,7 +106,8 @@ typedef struct
   guint                        count;
 
   guint                        scroll_offset;
-  guint                        cached_line_height;
+  gint                         cached_char_height;
+  gint                         cached_char_width;
 
   guint                        saved_line;
   guint                        saved_line_offset;
@@ -1679,8 +1690,6 @@ ide_source_view_real_style_updated (GtkWidget *widget)
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   PangoContext *context;
   PangoLayout *layout;
-  int width;
-  int height;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
@@ -1689,8 +1698,7 @@ ide_source_view_real_style_updated (GtkWidget *widget)
   context = gtk_widget_get_pango_context (widget);
   layout = pango_layout_new (context);
   pango_layout_set_text (layout, "X", 1);
-  pango_layout_get_pixel_size (layout, &width, &height);
-  priv->cached_line_height = height;
+  pango_layout_get_pixel_size (layout, &priv->cached_char_width, &priv->cached_char_height);
   g_object_unref (layout);
 }
 
@@ -3744,21 +3752,219 @@ ide_source_view_get_visible_rect (IdeSourceView *self,
    * If we don't have valid line height, not much we can do now. We can just adjust things
    * later once it becomes available.
    */
-  if (priv->cached_line_height)
+  if (priv->cached_char_height)
     {
       gint max_scroll_offset;
       gint scroll_offset;
       gint visible_lines;
       gint scroll_offset_height;
 
-      visible_lines = area.height / priv->cached_line_height;
+      visible_lines = area.height / priv->cached_char_height;
       max_scroll_offset = (visible_lines - 1) / 2;
       scroll_offset = MIN (priv->scroll_offset, max_scroll_offset);
-      scroll_offset_height = priv->cached_line_height * scroll_offset;
+      scroll_offset_height = priv->cached_char_height * scroll_offset;
 
       area.y += scroll_offset_height;
       area.height -= (2 * scroll_offset_height);
+
+      /*
+       * Use a multiple of the line height so we don't jump around when
+       * focusing the last line (due to Y2 not fitting in the visible area).
+       */
+      area.height = (area.height / priv->cached_char_height) * priv->cached_char_height;
     }
 
   *visible_rect = area;
+}
+
+void
+ide_source_view_scroll_mark_onscreen (IdeSourceView *self,
+                                      GtkTextMark   *mark)
+{
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextBuffer *buffer;
+  GdkRectangle visible_rect;
+  GdkRectangle mark_rect;
+  GtkTextIter iter;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  ide_source_view_get_visible_rect (self, &visible_rect);
+
+  buffer = gtk_text_view_get_buffer (text_view);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+  gtk_text_view_get_iter_location (text_view, &iter, &mark_rect);
+
+  if (!_GDK_RECTANGLE_CONTAINS (&visible_rect, &mark_rect))
+    ide_source_view_scroll_to_mark (self, mark, 0.0, FALSE, 0.0, 0.0);
+
+  IDE_EXIT;
+}
+
+gboolean
+ide_source_view_move_mark_onscreen (IdeSourceView *self,
+                                    GtkTextMark   *mark)
+{
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextIter end;
+  GdkRectangle visible_rect;
+  GdkRectangle iter_rect;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT_MARK (mark), FALSE);
+
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+  gtk_text_buffer_get_end_iter (buffer, &end);
+
+  ide_source_view_get_visible_rect (self, &visible_rect);
+  gtk_text_view_get_iter_location (text_view, &iter, &iter_rect);
+
+  if (_GDK_RECTANGLE_CONTAINS (&visible_rect, &iter_rect))
+    return FALSE;
+
+  if (_GDK_RECTANGLE_Y2 (&iter_rect) > _GDK_RECTANGLE_Y2 (&visible_rect))
+    gtk_text_view_get_iter_at_location (text_view, &iter,
+                                        _GDK_RECTANGLE_X2 (&visible_rect),
+                                        _GDK_RECTANGLE_Y2 (&visible_rect));
+  else if (iter_rect.y < visible_rect.y)
+    gtk_text_view_get_iter_at_location (text_view, &iter, visible_rect.x, visible_rect.y);
+  else
+    return gtk_text_view_move_mark_onscreen (text_view, mark);
+
+  gtk_text_buffer_move_mark (buffer, mark, &iter);
+
+  return TRUE;
+}
+
+void
+ide_source_view_scroll_to_iter (IdeSourceView     *self,
+                                const GtkTextIter *iter,
+                                gdouble            within_margin,
+                                gboolean           use_align,
+                                gdouble            xalign,
+                                gdouble            yalign)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkAdjustment *hadj;
+  GtkAdjustment *vadj;
+  GdkRectangle real_visible_rect;
+  GdkRectangle visible_rect;
+  GdkRectangle iter_rect;
+  gdouble yvalue;
+  gdouble xvalue;
+  gint xoffset;
+  gint yoffset;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (iter);
+  g_return_if_fail (xalign >= 0.0);
+  g_return_if_fail (xalign <= 1.0);
+  g_return_if_fail (yalign >= 0.0);
+  g_return_if_fail (yalign <= 1.0);
+
+  gtk_text_view_get_visible_rect (text_view, &real_visible_rect);
+  ide_source_view_get_visible_rect (self, &visible_rect);
+
+  hadj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (self));
+  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self));
+
+  gtk_text_view_get_iter_location (text_view, iter, &iter_rect);
+
+  /* leave a character of room to the right of the screen */
+  visible_rect.width -= priv->cached_char_width;
+
+  if (use_align == FALSE)
+    {
+      if (iter_rect.y < visible_rect.y)
+        yalign = 0.0;
+      else if (_GDK_RECTANGLE_Y2 (&iter_rect) > _GDK_RECTANGLE_Y2 (&visible_rect))
+        yalign = 1.0;
+      else
+        yalign = (iter_rect.y - visible_rect.y)  / (gdouble)visible_rect.height;
+
+      if (iter_rect.x < visible_rect.x)
+        {
+          /* if we can get all the way to the line start, do so */
+          if (_GDK_RECTANGLE_X2 (&iter_rect) < visible_rect.width)
+            xalign = 1.0;
+          else
+            xalign = 0.0;
+        }
+      else if (_GDK_RECTANGLE_X2 (&iter_rect) > _GDK_RECTANGLE_X2 (&visible_rect))
+        xalign = 1.0;
+      else
+        xalign = (iter_rect.x - visible_rect.x) / (gdouble)visible_rect.width;
+    }
+
+  g_assert_cmpint (xalign, >=, 0.0);
+  g_assert_cmpint (yalign, >=, 0.0);
+  g_assert_cmpint (xalign, <=, 1.0);
+  g_assert_cmpint (yalign, <=, 1.0);
+
+  /* get the screen coordinates within the real visible area */
+  xoffset = (visible_rect.x - real_visible_rect.x) + (xalign * visible_rect.width);
+  yoffset = (visible_rect.y - real_visible_rect.y) + (yalign * visible_rect.height);
+
+  /*
+   * now convert those back to alignments in the real visible area, but leave
+   * enough space for an input character.
+   */
+  yalign = yoffset / (gdouble)real_visible_rect.height;
+  xalign = xoffset / (gdouble)real_visible_rect.width;
+
+  yvalue = iter_rect.y - (yalign * real_visible_rect.height);
+  xvalue = iter_rect.x - (xalign * real_visible_rect.width);
+
+  gtk_adjustment_set_value (hadj, xvalue);
+  gtk_adjustment_set_value (vadj, yvalue);
+
+  IDE_EXIT;
+}
+
+void
+ide_source_view_scroll_to_mark (IdeSourceView *self,
+                                GtkTextMark   *mark,
+                                gdouble        within_margin,
+                                gboolean       use_align,
+                                gdouble        xalign,
+                                gdouble        yalign)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (GTK_IS_TEXT_MARK (mark));
+  g_return_if_fail (xalign >= 0.0);
+  g_return_if_fail (xalign <= 1.0);
+  g_return_if_fail (yalign >= 0.0);
+  g_return_if_fail (yalign <= 1.0);
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+  ide_source_view_scroll_to_iter (self, &iter, within_margin, use_align, xalign, yalign);
+}
+
+gboolean
+ide_source_view_place_cursor_onscreen (IdeSourceView *self)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  insert = gtk_text_buffer_get_insert (buffer);
+
+  return ide_source_view_move_mark_onscreen (self, insert);
 }
