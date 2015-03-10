@@ -665,6 +665,11 @@
   bind "Up" { "movement" (previous-line, 1, 1, 1) };
   bind "Down" { "movement" (next-line, 1, 1, 1) };
 
+  bind "y" { "copy-clipboard" ()
+             "selection-theatric" (expand)
+             "clear-selection" ()
+             "set-mode" ("vim-normal", permanent) };
+
   bind "e" { "movement" (next-word-end, 1, 0, 1) };
   bind "<shift>e" { "movement" (next-full-word-end, 1, 0, 1) };
 
