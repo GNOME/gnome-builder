@@ -35,6 +35,7 @@ static GtkProgressBar *gProgress;
 static GHashTable     *gBufferToView;
 static GList          *gFilesToOpen;
 static gint            gExitCode = EXIT_SUCCESS;
+static gboolean        gWordCompletion;
 static gboolean        gDarkMode;
 static gboolean        gDebugScrollOffset;
 static gchar          *gCss = "\
@@ -152,6 +153,7 @@ add_buffer (IdeBuffer *buffer)
       view = g_object_new (IDE_TYPE_SOURCE_VIEW,
                            "auto-indent", TRUE,
                            "buffer", buffer,
+                           "enable-word-completion", gWordCompletion,
                            "highlight-current-line", TRUE,
                            "insert-matching-brace", TRUE,
                            "overwrite-braces", TRUE,
@@ -567,6 +569,8 @@ main (int argc,
   gboolean vim = FALSE;
   gsize i;
   const GOptionEntry entries[] = {
+    { "words", 'w', 0, G_OPTION_ARG_NONE, &gWordCompletion,
+      N_("Use words in all buffers for autocompletion") },
     { "verbose", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
       increase_verbosity, N_("Increase logging verbosity.") },
     { "emacs", 'e', 0, G_OPTION_ARG_NONE, &emacs, N_("Use emacs keybindings") },
