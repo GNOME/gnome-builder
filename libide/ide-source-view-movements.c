@@ -94,6 +94,16 @@ is_single_char_selection (const GtkTextIter *begin,
   return FALSE;
 }
 
+static gboolean
+text_iter_forward_to_nonspace_captive (GtkTextIter *iter)
+{
+  while (!gtk_text_iter_ends_line (iter) && g_unichar_isspace (gtk_text_iter_get_char (iter)))
+    if (!gtk_text_iter_forward_char (iter))
+      return FALSE;
+
+  return !g_unichar_isspace (gtk_text_iter_get_char (iter));
+}
+
 static void
 select_range (Movement    *mv,
               GtkTextIter *insert_iter,
@@ -680,26 +690,25 @@ ide_source_view_movements_move_page (Movement *mv)
   GdkRectangle rect;
   GtkTextIter iter_top;
   GtkTextIter iter_bottom;
-  GtkTextIter iter_current;
+  GtkTextIter scroll_iter;
+  gint scrolloff;
   gint half_page;
   gint line_top;
   gint line_bottom;
 
   gtk_text_view_get_visible_rect (text_view, &rect);
   gtk_text_view_get_iter_at_location (text_view, &iter_top, rect.x, rect.y);
-  gtk_text_view_get_iter_at_location (text_view, &iter_bottom, rect.x, rect.y + rect.height);
+  gtk_text_view_get_iter_at_location (text_view, &iter_bottom,
+                                      rect.x + rect.width,
+                                      rect.y + rect.height);
 
   buffer = gtk_text_view_get_buffer (text_view);
-  gtk_text_buffer_get_selection_bounds (buffer, &iter_current, NULL);
 
+  scrolloff = ide_source_view_get_scroll_offset (mv->self);
   line_top = gtk_text_iter_get_line (&iter_top);
   line_bottom = gtk_text_iter_get_line (&iter_bottom);
 
-  half_page = (line_bottom - line_top) / 2;
-
-  /*
-   * TODO: Reintroduce scroll offset.
-   */
+  half_page = MAX (1, (line_bottom - line_top) / 2);
 
   switch ((int)mv->type)
     {
@@ -714,17 +723,27 @@ ide_source_view_movements_move_page (Movement *mv)
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_UP:
-      gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, MAX (0, line_top - 1));
+      gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, MAX (0, line_top - scrolloff));
+      text_iter_forward_to_nonspace_captive (&mv->insert);
       ide_source_view_movements_select_range (mv);
-      gtk_text_view_scroll_to_iter (text_view, &mv->insert, .0, TRUE, .0, 1.0);
+
+      gtk_text_buffer_get_iter_at_line (buffer, &scroll_iter, line_top);
+      gtk_text_view_scroll_to_iter (text_view, &scroll_iter, 0.0, TRUE, 1.0, 1.0);
+
       mv->ignore_select = TRUE;
+      mv->ignore_scroll_to_insert = TRUE;
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PAGE_DOWN:
-      gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, line_bottom + 1);
+      gtk_text_buffer_get_iter_at_line (buffer, &mv->insert, line_bottom + scrolloff);
+      text_iter_forward_to_nonspace_captive (&mv->insert);
       ide_source_view_movements_select_range (mv);
-      gtk_text_view_scroll_to_iter (text_view, &mv->insert, .0, TRUE, .0, .0);
+
+      gtk_text_buffer_get_iter_at_line (buffer, &scroll_iter, line_bottom);
+      gtk_text_view_scroll_to_iter (text_view, &scroll_iter, 0.0, TRUE, 1.0, 0.0);
+
       mv->ignore_select = TRUE;
+      mv->ignore_scroll_to_insert = TRUE;
       break;
 
     default:
