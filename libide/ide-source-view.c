@@ -102,6 +102,8 @@ typedef struct
   gulong                       buffer_notify_highlight_diagnostics_handler;
   gulong                       buffer_notify_language_handler;
 
+  guint                        change_sequence;
+
   gint                         target_line_offset;
   guint                        count;
 
@@ -742,9 +744,12 @@ static void
 ide_source_view__buffer_changed_cb (IdeSourceView *self,
                                     IdeBuffer     *buffer)
 {
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
+  priv->change_sequence++;
 }
 
 static void
@@ -1469,6 +1474,11 @@ ide_source_view_do_indent (IdeSourceView *self,
       gtk_text_buffer_end_user_action (buffer);
 
       /*
+       * Make sure we stay in the visible rect.
+       */
+      ide_source_view_scroll_mark_onscreen (self, insert);
+
+      /*
        * Keep our selves pinned to the bottom of the document if that makes sense.
        */
       if (at_bottom)
@@ -1552,12 +1562,21 @@ ide_source_view_key_press_event (GtkWidget   *widget,
   IdeSourceView *self = (IdeSourceView *)widget;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextBuffer *buffer;
+  GtkTextMark *insert;
   IdeSourceSnippet *snippet;
   gboolean ret = FALSE;
+  guint change_sequence;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  insert = gtk_text_buffer_get_insert (buffer);
+
+  /*
+   * Check our current change sequence. If the buffer has changed during the
+   * key-press handler, we'll refocus our selves at the insert caret.
+   */
+  change_sequence = priv->change_sequence;
 
   /*
    * If we are in a non-default mode, dispatch the event to the mode. This allows custom
@@ -1641,6 +1660,9 @@ ide_source_view_key_press_event (GtkWidget   *widget,
 
   if (ret)
     ide_source_view_maybe_insert_match (self, event);
+
+  if (priv->change_sequence != change_sequence)
+    ide_source_view_scroll_mark_onscreen (self, insert);
 
   return ret;
 }
@@ -2014,6 +2036,7 @@ ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
   gtk_text_buffer_end_user_action (buffer);
 
 maybe_scroll:
+  ide_source_view_scroll_mark_onscreen (self, gtk_text_buffer_get_insert (buffer));
   if (at_bottom)
     ide_source_view_scroll_to_bottom (self);
 
@@ -2609,6 +2632,7 @@ ide_source_view_real_insert_at_cursor (GtkTextView *text_view,
                                        const gchar *str)
 {
   IdeSourceView *self = (IdeSourceView *)text_view;
+  GtkTextBuffer *buffer;
   gboolean at_bottom;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -2618,6 +2642,9 @@ ide_source_view_real_insert_at_cursor (GtkTextView *text_view,
   at_bottom = ide_source_view_get_at_bottom (self);
 
   GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->insert_at_cursor (text_view, str);
+
+  buffer = gtk_text_view_get_buffer (text_view);
+  ide_source_view_scroll_mark_onscreen (self, gtk_text_buffer_get_insert (buffer));
 
   if (at_bottom)
     ide_source_view_scroll_to_bottom (self);
