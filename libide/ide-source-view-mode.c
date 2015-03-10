@@ -90,6 +90,11 @@ ide_source_view_mode_get_block_cursor (IdeSourceViewMode *self)
 {
   return get_boolean_param (self, "block-cursor");
 }
+gboolean
+ide_source_view_mode_get_keep_mark_on_char (IdeSourceViewMode *self)
+{
+  return get_boolean_param (self, "keep-mark-on-char");
+}
 
 static void
 ide_source_view_mode_finalize (GObject *object)
@@ -226,6 +231,15 @@ ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
                                                                  _("Block Cursor"),
                                                                  _("Use fake block cursor by "
                                                                    "using overwrite mode."),
+                                                                 FALSE,
+                                                                 (G_PARAM_READABLE |
+                                                                  G_PARAM_STATIC_STRINGS)));
+
+  gtk_widget_class_install_style_property (GTK_WIDGET_CLASS (klass),
+                                           g_param_spec_boolean ("keep-mark-on-char",
+                                                                 _("Keep Mark on Char"),
+                                                                 _("Don't allow the cursor to "
+                                                                   "move to line end."),
                                                                  FALSE,
                                                                  (G_PARAM_READABLE |
                                                                   G_PARAM_STATIC_STRINGS)));

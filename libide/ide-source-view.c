@@ -913,21 +913,22 @@ ide_source_view__buffer_mark_set_cb (GtkTextBuffer *buffer,
   IdeSourceView *self = user_data;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
+  GtkTextMark *insert;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (iter);
   g_assert (GTK_IS_TEXT_MARK (mark));
 
-  ide_source_view_block_handlers (self);
+  insert = gtk_text_buffer_get_insert (buffer);
 
-  if (mark == gtk_text_buffer_get_insert (buffer))
+  if (mark == insert)
     {
+      ide_source_view_block_handlers (self);
       while ((snippet = g_queue_peek_head (priv->snippets)) &&
              !ide_source_snippet_insert_set (snippet, mark))
         ide_source_view_pop_snippet (self);
+      ide_source_view_unblock_handlers (self);
     }
-
-  ide_source_view_unblock_handlers (self);
 }
 
 static void
@@ -1554,6 +1555,23 @@ ide_source_view_do_mode (IdeSourceView *self,
 
   if (!priv->mode)
     ide_source_view_real_set_mode (self, NULL,  IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+
+  if (ide_source_view_mode_get_keep_mark_on_char (priv->mode))
+    {
+      GtkTextBuffer *buffer;
+      GtkTextMark *insert;
+      GtkTextIter iter;
+
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+      insert = gtk_text_buffer_get_insert (buffer);
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+      if (gtk_text_iter_ends_line (&iter) && !gtk_text_iter_starts_line (&iter))
+        {
+          gtk_text_iter_backward_char (&iter);
+          gtk_text_buffer_select_range (buffer, &iter, &iter);
+        }
+    }
 
   return ret;
 }

@@ -834,6 +834,7 @@ IdeSourceViewMode.vim-normal {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-keep-mark-on-char: true;
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal;
