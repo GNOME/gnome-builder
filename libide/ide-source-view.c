@@ -2402,7 +2402,7 @@ ide_source_view_real_restore_insert_mark (IdeSourceView *self)
   gtk_text_buffer_select_range (buffer, &iter, &iter);
 
   insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (self), insert);
+  ide_source_view_scroll_mark_onscreen (self, insert);
 }
 
 static void
