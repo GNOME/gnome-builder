@@ -499,8 +499,14 @@
 @binding-set builder-vim-source-view-normal-z
 {
   bind "z" { "movement" (scroll-screen-center, 0, 0, 0) };
+  bind "period" { "movement" (scroll-screen-center, 0, 0, 0) };
+
   bind "t" { "movement" (scroll-screen-top,    0, 0, 0) };
+  bind "Return" { "movement" (scroll-screen-top, 0, 0, 0) };
+  bind "KP_Enter" { "movement" (scroll-screen-top, 0, 0, 0) };
+
   bind "b" { "movement" (scroll-screen-bottom, 0, 0, 0) };
+  bind "minus" { "movement" (scroll-screen-bottom, 0, 0, 0) };
 }
 
 @binding-set builder-vim-source-view-visual-z
