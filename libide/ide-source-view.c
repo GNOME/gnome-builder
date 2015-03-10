@@ -970,6 +970,7 @@ ide_source_view_connect_buffer (IdeSourceView *self,
                                 IdeBuffer     *buffer)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextIter iter;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -1043,6 +1044,9 @@ ide_source_view_connect_buffer (IdeSourceView *self,
                                G_CALLBACK (ide_source_view__buffer_mark_set_cb),
                                self,
                                0);
+
+  gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buffer), &iter);
+  gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), "scroll-mark", &iter, TRUE);
 
   ide_source_view__buffer_notify_language_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_file_cb (self, NULL, buffer);

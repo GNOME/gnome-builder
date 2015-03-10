@@ -695,6 +695,7 @@ ide_source_view_movements_move_page (Movement *mv)
 {
   GtkTextView *text_view = (GtkTextView *)mv->self;
   GtkTextBuffer *buffer;
+  GtkTextMark *mark;
   GdkRectangle rect;
   GtkTextIter iter_top;
   GtkTextIter iter_bottom;
@@ -735,8 +736,10 @@ ide_source_view_movements_move_page (Movement *mv)
       text_iter_forward_to_nonspace_captive (&mv->insert);
       ide_source_view_movements_select_range (mv);
 
+      mark = gtk_text_buffer_get_mark (buffer, "scroll-mark");
       gtk_text_buffer_get_iter_at_line (buffer, &scroll_iter, line_top);
-      gtk_text_view_scroll_to_iter (text_view, &scroll_iter, 0.0, TRUE, 1.0, 1.0);
+      gtk_text_buffer_move_mark (buffer, mark, &scroll_iter);
+      gtk_text_view_scroll_to_mark (text_view, mark, 0.0, TRUE, 1.0, 1.0);
 
       mv->ignore_select = TRUE;
       mv->ignore_scroll_to_insert = TRUE;
@@ -747,8 +750,10 @@ ide_source_view_movements_move_page (Movement *mv)
       text_iter_forward_to_nonspace_captive (&mv->insert);
       ide_source_view_movements_select_range (mv);
 
+      mark = gtk_text_buffer_get_mark (buffer, "scroll-mark");
       gtk_text_buffer_get_iter_at_line (buffer, &scroll_iter, line_bottom);
-      gtk_text_view_scroll_to_iter (text_view, &scroll_iter, 0.0, TRUE, 1.0, 0.0);
+      gtk_text_buffer_move_mark (buffer, mark, &scroll_iter);
+      gtk_text_view_scroll_to_mark (text_view, mark, 0.0, TRUE, 1.0, 0.0);
 
       mv->ignore_select = TRUE;
       mv->ignore_scroll_to_insert = TRUE;
