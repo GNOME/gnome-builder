@@ -516,6 +516,10 @@ select_to_end:
       else
         gtk_text_buffer_select_range (buffer, &mv->insert, &mv->insert);
     }
+
+  /* make sure selection/insert are up to date */
+  if (!gtk_text_buffer_get_has_selection (buffer))
+    mv->selection = mv->insert;
 }
 
 static void
@@ -582,6 +586,10 @@ ide_source_view_movements_previous_line (Movement *mv)
       else
         gtk_text_buffer_select_range (buffer, &mv->insert, &mv->insert);
     }
+
+  /* make sure selection/insert are up to date */
+  if (!gtk_text_buffer_get_has_selection (buffer))
+    mv->selection = mv->insert;
 }
 
 static void
