@@ -3955,8 +3955,8 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
    * now convert those back to alignments in the real visible area, but leave
    * enough space for an input character.
    */
-  yalign = yoffset / (gdouble)real_visible_rect.height;
   xalign = xoffset / (gdouble)real_visible_rect.width;
+  yalign = yoffset / (gdouble)(real_visible_rect.height + priv->cached_char_height);
 
   yvalue = iter_rect.y - (yalign * real_visible_rect.height);
   xvalue = iter_rect.x - (xalign * real_visible_rect.width);
