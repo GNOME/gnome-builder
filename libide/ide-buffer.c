@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-battery-monitor.h"
 #include "ide-buffer.h"
 #include "ide-buffer-change-monitor.h"
 #include "ide-context.h"
@@ -34,7 +35,8 @@
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 
-#define DEFAULT_DIAGNOSE_TIMEOUT_MSEC 333
+#define DEFAULT_DIAGNOSE_TIMEOUT_MSEC          333
+#define DEFAULT_DIAGNOSE_CONSERVE_TIMEOUT_MSEC 5000
 
 #define TAG_ERROR   "diagnostician::error"
 #define TAG_WARNING "diagnostician::warning"
@@ -417,9 +419,22 @@ ide_buffer__diagnose_timeout_cb (gpointer user_data)
   return G_SOURCE_REMOVE;
 }
 
+static guint
+ide_buffer_get_diagnose_timeout_msec (void)
+{
+  guint timeout_msec = DEFAULT_DIAGNOSE_TIMEOUT_MSEC;
+
+  if (ide_battery_monitor_get_should_conserve ())
+    timeout_msec = DEFAULT_DIAGNOSE_CONSERVE_TIMEOUT_MSEC;
+
+  return timeout_msec;
+}
+
 static void
 ide_buffer_queue_diagnose (IdeBuffer *self)
 {
+  guint timeout_msec;
+
   g_assert (IDE_IS_BUFFER (self));
 
   self->diagnostics_dirty = TRUE;
@@ -430,9 +445,12 @@ ide_buffer_queue_diagnose (IdeBuffer *self)
       self->diagnose_timeout = 0;
     }
 
-  self->diagnose_timeout = g_timeout_add (DEFAULT_DIAGNOSE_TIMEOUT_MSEC,
-                                          ide_buffer__diagnose_timeout_cb,
-                                          self);
+  /*
+   * Try to real in how often we parse when on battery.
+   */
+  timeout_msec = ide_buffer_get_diagnose_timeout_msec ();
+
+  self->diagnose_timeout = g_timeout_add (timeout_msec, ide_buffer__diagnose_timeout_cb, self);
 }
 
 static void
