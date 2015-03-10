@@ -39,6 +39,8 @@ struct _IdeBufferManager
 
   IdeBuffer                *focus_buffer;
 
+  GtkSourceCompletionWords *word_completion;
+
   guint                     auto_save_timeout;
   guint                     auto_save : 1;
 };
@@ -314,6 +316,8 @@ ide_buffer_manager_add_buffer (IdeBufferManager *self,
   if (self->auto_save)
     register_auto_save (self, buffer);
 
+  gtk_source_completion_words_register (self->word_completion, GTK_TEXT_BUFFER (buffer));
+
   g_signal_connect_object (buffer,
                            "changed",
                            G_CALLBACK (ide_buffer_manager_buffer_changed),
@@ -330,6 +334,7 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
 
   if (g_ptr_array_remove_fast (self->buffers, buffer))
     {
+      gtk_source_completion_words_unregister (self->word_completion, GTK_TEXT_BUFFER (buffer));
       unregister_auto_save (self, buffer);
       g_signal_handlers_disconnect_by_func (buffer,
                                             G_CALLBACK (ide_buffer_manager_buffer_changed),
@@ -747,6 +752,8 @@ ide_buffer_manager_dispose (GObject *object)
       ide_buffer_manager_remove_buffer (self, buffer);
     }
 
+  g_clear_object (&self->word_completion);
+
   G_OBJECT_CLASS (ide_buffer_manager_parent_class)->dispose (object);
 }
 
@@ -960,6 +967,7 @@ ide_buffer_manager_init (IdeBufferManager *self)
   self->auto_save_timeout = AUTO_SAVE_TIMEOUT_DEFAULT;
   self->buffers = g_ptr_array_new ();
   self->timeouts = g_hash_table_new (g_direct_hash, g_direct_equal);
+  self->word_completion = gtk_source_completion_words_new (_("Words"), NULL);
 }
 
 static void
@@ -1036,4 +1044,21 @@ ide_buffer_manager_get_buffers (IdeBufferManager *self)
     }
 
   return ret;
+}
+
+/**
+ * ide_buffer_manager_get_word_completion:
+ * @self: A #IdeBufferManager.
+ *
+ * Gets the #GtkSourceCompletionWords completion provider that will complete
+ * words using the loaded documents.
+ *
+ * Returns: (transfer none): A #GtkSourceCompletionWords
+ */
+GtkSourceCompletionWords *
+ide_buffer_manager_get_word_completion (IdeBufferManager *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
+
+  return self->word_completion;
 }

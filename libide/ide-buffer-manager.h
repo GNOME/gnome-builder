@@ -20,6 +20,7 @@
 #define IDE_BUFFER_MANAGER_H
 
 #include <gtk/gtk.h>
+#include <gtksourceview/completion-providers/words/gtksourcecompletionwords.h>
 
 #include "ide-object.h"
 
@@ -53,6 +54,7 @@ IdeBuffer                *ide_buffer_manager_get_focus_buffer    (IdeBufferManag
 void                      ide_buffer_manager_set_focus_buffer    (IdeBufferManager     *self,
                                                                   IdeBuffer            *buffer);
 GPtrArray                *ide_buffer_manager_get_buffers         (IdeBufferManager     *self);
+GtkSourceCompletionWords *ide_buffer_manager_get_word_completion (IdeBufferManager     *self);
 
 G_END_DECLS
 
