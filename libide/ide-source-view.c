@@ -76,6 +76,9 @@
    (_GDK_RECTANGLE_Y2(rect) >= _GDK_RECTANGLE_Y2(other)))
 #define _GDK_RECTANGLE_CENTER_X(rect) ((rect)->x + ((rect)->width/2))
 #define _GDK_RECTANGLE_CENTER_Y(rect) ((rect)->y + ((rect)->height/2))
+#define TRACE_RECTANGLE(name, rect) \
+  IDE_TRACE_MSG ("%s = Rectangle(x=%d, y=%d, width=%d, height=%d)", \
+                 name, (rect)->x, (rect)->y, (rect)->width, (rect)->height)
 
 typedef struct
 {
@@ -3908,6 +3911,9 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
 
   gtk_text_view_get_iter_location (text_view, iter, &iter_rect);
 
+  TRACE_RECTANGLE ("visible_rect", &visible_rect);
+  TRACE_RECTANGLE ("iter_rect", &iter_rect);
+
   /* leave a character of room to the right of the screen */
   visible_rect.width -= priv->cached_char_width;
 
@@ -3919,6 +3925,8 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
         yalign = 1.0;
       else
         yalign = (iter_rect.y - visible_rect.y)  / (gdouble)visible_rect.height;
+
+      IDE_TRACE_MSG ("yalign = %lf", yalign);
 
       if (iter_rect.x < visible_rect.x)
         {
