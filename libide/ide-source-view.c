@@ -3997,7 +3997,7 @@ ide_source_view_place_cursor_onscreen (IdeSourceView *self)
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
 
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   insert = gtk_text_buffer_get_insert (buffer);
