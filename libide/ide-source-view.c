@@ -2184,7 +2184,8 @@ ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
 
       if (after_cursor)
         {
-          gtk_text_iter_forward_to_line_end (&iter);
+          if (!gtk_text_iter_ends_line (&iter))
+            gtk_text_iter_forward_to_line_end (&iter);
           gtk_text_buffer_select_range (buffer, &iter, &iter);
           g_signal_emit_by_name (self, "insert-at-cursor", "\n");
         }
