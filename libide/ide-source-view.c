@@ -26,6 +26,7 @@
 #include "ide-back-forward-list.h"
 #include "ide-box-theatric.h"
 #include "ide-buffer.h"
+#include "ide-buffer-manager.h"
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-diagnostic.h"
@@ -119,6 +120,7 @@ typedef struct
 
   guint                        auto_indent : 1;
   guint                        completion_visible : 1;
+  guint                        enable_word_completion : 1;
   guint                        insert_matching_brace : 1;
   guint                        overwrite_braces : 1;
   guint                        show_grid_lines : 1;
@@ -132,6 +134,7 @@ enum {
   PROP_0,
   PROP_AUTO_INDENT,
   PROP_BACK_FORWARD_LIST,
+  PROP_ENABLE_WORD_COMPLETION,
   PROP_FONT_NAME,
   PROP_FONT_DESC,
   PROP_INSERT_MATCHING_BRACE,
@@ -589,6 +592,37 @@ text_iter_get_line_prefix (const GtkTextIter *iter)
     }
 
   return g_string_free (str, FALSE);
+}
+
+static void
+ide_source_view_reload_word_completion (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  IdeContext *context;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if ((priv->buffer != NULL) && (context = ide_buffer_get_context (priv->buffer)))
+    {
+      IdeBufferManager *bufmgr;
+      GtkSourceCompletion *completion;
+      GtkSourceCompletionWords *words;
+      GList *list;
+
+      bufmgr = ide_context_get_buffer_manager (context);
+      words = ide_buffer_manager_get_word_completion (bufmgr);
+      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+      list = gtk_source_completion_get_providers (completion);
+
+      if (priv->enable_word_completion && !g_list_find (list, words))
+        gtk_source_completion_add_provider (completion,
+                                            GTK_SOURCE_COMPLETION_PROVIDER (words),
+                                            NULL);
+      else if (!priv->enable_word_completion && g_list_find (list, words))
+        gtk_source_completion_remove_provider (completion,
+                                               GTK_SOURCE_COMPLETION_PROVIDER (words),
+                                               NULL);
+    }
 }
 
 static void
@@ -1051,6 +1085,7 @@ ide_source_view_connect_buffer (IdeSourceView *self,
   ide_source_view__buffer_notify_language_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_file_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_highlight_diagnostics_cb (self, NULL, buffer);
+  ide_source_view_reload_word_completion (self);
 
   if (priv->mode && ide_source_view_mode_get_coalesce_undo (priv->mode))
     BEGIN_USER_ACTION (self);
@@ -2826,6 +2861,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, priv->auto_indent);
       break;
 
+    case PROP_ENABLE_WORD_COMPLETION:
+      g_value_set_boolean (value, ide_source_view_get_enable_word_completion (self));
+      break;
+
     case PROP_FONT_DESC:
       g_value_set_boxed (value, ide_source_view_get_font_desc (self));
       break;
@@ -2873,6 +2912,10 @@ ide_source_view_set_property (GObject      *object,
     case PROP_AUTO_INDENT:
       priv->auto_indent = !!g_value_get_boolean (value);
       ide_source_view_reload_indenter (self);
+      break;
+
+    case PROP_ENABLE_WORD_COMPLETION:
+      ide_source_view_set_enable_word_completion (self, g_value_get_boolean (value));
       break;
 
     case PROP_FONT_NAME:
@@ -2970,6 +3013,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FONT_DESC,
                                    gParamSpecs [PROP_FONT_DESC]);
+
+  gParamSpecs [PROP_ENABLE_WORD_COMPLETION] =
+    g_param_spec_boolean ("enable-word-completion",
+                          _("Enable Word Completion"),
+                          _("If words from all buffers can be used to autocomplete"),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_ENABLE_WORD_COMPLETION,
+                                   gParamSpecs [PROP_ENABLE_WORD_COMPLETION]);
 
   gParamSpecs [PROP_FONT_NAME] =
     g_param_spec_string ("font-name",
@@ -4025,4 +4077,30 @@ ide_source_view_place_cursor_onscreen (IdeSourceView *self)
   insert = gtk_text_buffer_get_insert (buffer);
 
   return ide_source_view_move_mark_onscreen (self, insert);
+}
+
+gboolean
+ide_source_view_get_enable_word_completion (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->enable_word_completion;
+}
+
+void
+ide_source_view_set_enable_word_completion (IdeSourceView *self,
+                                            gboolean       enable_word_completion)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->enable_word_completion != enable_word_completion)
+    {
+      priv->enable_word_completion = enable_word_completion;
+      ide_source_view_reload_word_completion (self);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ENABLE_WORD_COMPLETION]);
+    }
 }

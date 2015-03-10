@@ -254,6 +254,7 @@ struct _IdeSourceViewClass
 
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);
 IdeBackForwardList         *ide_source_view_get_back_forward_list     (IdeSourceView              *self);
+gboolean                    ide_source_view_get_enable_word_completion(IdeSourceView              *self);
 const PangoFontDescription *ide_source_view_get_font_desc             (IdeSourceView              *self);
 gboolean                    ide_source_view_get_insert_matching_brace (IdeSourceView              *self);
 gboolean                    ide_source_view_get_overwrite_braces      (IdeSourceView              *self);
@@ -265,6 +266,8 @@ GType                       ide_source_view_get_type                  (void);
 void                        ide_source_view_pop_snippet               (IdeSourceView              *self);
 void                        ide_source_view_push_snippet              (IdeSourceView              *self,
                                                                        IdeSourceSnippet           *snippet);
+void                        ide_source_view_set_enable_word_completion(IdeSourceView              *self,
+                                                                       gboolean                    enable_word_copletion);
 void                        ide_source_view_set_font_desc             (IdeSourceView              *self,
                                                                        const PangoFontDescription *font_desc);
 void                        ide_source_view_set_font_name             (IdeSourceView              *self,
