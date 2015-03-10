@@ -29,30 +29,30 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeBufferManager, ide_buffer_manager, IDE, BUFFER_MANAGER, IdeObject)
 
-void       ide_buffer_manager_load_file_async  (IdeBufferManager     *self,
-                                                IdeFile              *file,
-                                                gboolean              force_reload,
-                                                IdeProgress         **progress,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-IdeBuffer *ide_buffer_manager_load_file_finish (IdeBufferManager     *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
-void       ide_buffer_manager_save_file_async  (IdeBufferManager     *self,
-                                                IdeBuffer            *buffer,
-                                                IdeFile              *file,
-                                                IdeProgress         **progress,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-gboolean   ide_buffer_manager_save_file_finish (IdeBufferManager     *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
-IdeBuffer *ide_buffer_manager_get_focus_buffer (IdeBufferManager     *self);
-void       ide_buffer_manager_set_focus_buffer (IdeBufferManager     *self,
-                                                IdeBuffer            *buffer);
-GPtrArray *ide_buffer_manager_get_buffers      (IdeBufferManager     *self);
+void                      ide_buffer_manager_load_file_async     (IdeBufferManager     *self,
+                                                                  IdeFile              *file,
+                                                                  gboolean              force_reload,
+                                                                  IdeProgress         **progress,
+                                                                  GCancellable         *cancellable,
+                                                                  GAsyncReadyCallback   callback,
+                                                                  gpointer              user_data);
+IdeBuffer                *ide_buffer_manager_load_file_finish    (IdeBufferManager     *self,
+                                                                  GAsyncResult         *result,
+                                                                  GError              **error);
+void                      ide_buffer_manager_save_file_async     (IdeBufferManager     *self,
+                                                                  IdeBuffer            *buffer,
+                                                                  IdeFile              *file,
+                                                                  IdeProgress         **progress,
+                                                                  GCancellable         *cancellable,
+                                                                  GAsyncReadyCallback   callback,
+                                                                  gpointer              user_data);
+gboolean                  ide_buffer_manager_save_file_finish    (IdeBufferManager     *self,
+                                                                  GAsyncResult         *result,
+                                                                  GError              **error);
+IdeBuffer                *ide_buffer_manager_get_focus_buffer    (IdeBufferManager     *self);
+void                      ide_buffer_manager_set_focus_buffer    (IdeBufferManager     *self,
+                                                                  IdeBuffer            *buffer);
+GPtrArray                *ide_buffer_manager_get_buffers         (IdeBufferManager     *self);
 
 G_END_DECLS
 

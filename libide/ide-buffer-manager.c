@@ -32,15 +32,15 @@
 
 struct _IdeBufferManager
 {
-  IdeObject    parent_instance;
+  IdeObject                 parent_instance;
 
-  GPtrArray   *buffers;
-  GHashTable  *timeouts;
+  GPtrArray                *buffers;
+  GHashTable               *timeouts;
 
-  IdeBuffer   *focus_buffer;
+  IdeBuffer                *focus_buffer;
 
-  guint        auto_save_timeout;
-  guint        auto_save : 1;
+  guint                     auto_save_timeout;
+  guint                     auto_save : 1;
 };
 
 typedef struct
