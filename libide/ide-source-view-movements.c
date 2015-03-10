@@ -40,14 +40,15 @@ typedef struct
    * no preference.
    */
   gint                  *target_offset;
-  IdeSourceViewMovement  type;                     /* Type of movement */
-  GtkTextIter            insert;                   /* Current insert cursor location */
-  GtkTextIter            selection;                /* Current selection cursor location */
-  gint                   count;                    /* Repeat count for movement */
-  guint                  extend_selection : 1;     /* If selection should be extended */
-  guint                  exclusive : 1;            /* See ":help exclusive" in vim */
-  guint                  ignore_select : 1;        /* Don't update selection after movement */
-  guint                  ignore_target_offset : 1; /* Don't propagate new line offset */
+  IdeSourceViewMovement  type;                        /* Type of movement */
+  GtkTextIter            insert;                      /* Current insert cursor location */
+  GtkTextIter            selection;                   /* Current selection cursor location */
+  gint                   count;                       /* Repeat count for movement */
+  guint                  extend_selection : 1;        /* If selection should be extended */
+  guint                  exclusive : 1;               /* See ":help exclusive" in vim */
+  guint                  ignore_select : 1;           /* Don't update selection after movement */
+  guint                  ignore_target_offset : 1;    /* Don't propagate new line offset */
+  guint                  ignore_scroll_to_insert : 1; /* Don't scroll to insert mark */
 } Movement;
 
 typedef struct
@@ -579,7 +580,7 @@ ide_source_view_movements_screen_top (Movement *mv)
   GtkTextView *text_view = (GtkTextView *)mv->self;
   GdkRectangle rect;
 
-  gtk_text_view_get_visible_rect (text_view, &rect);
+  ide_source_view_get_visible_rect (mv->self, &rect);
   gtk_text_view_get_iter_at_location (text_view, &mv->insert, rect.x, rect.y);
   gtk_text_iter_set_line_offset (&mv->insert, 0);
 }
@@ -590,8 +591,8 @@ ide_source_view_movements_screen_middle (Movement *mv)
   GtkTextView *text_view = (GtkTextView *)mv->self;
   GdkRectangle rect;
 
-  gtk_text_view_get_visible_rect (text_view, &rect);
-  gtk_text_view_get_iter_at_location (text_view, &mv->insert, rect.x, rect.y + (rect.height/2));
+  ide_source_view_get_visible_rect (mv->self, &rect);
+  gtk_text_view_get_iter_at_location (text_view, &mv->insert, rect.x, rect.y + (rect.height / 2));
   gtk_text_iter_set_line_offset (&mv->insert, 0);
 }
 
@@ -601,8 +602,8 @@ ide_source_view_movements_screen_bottom (Movement *mv)
   GtkTextView *text_view = (GtkTextView *)mv->self;
   GdkRectangle rect;
 
-  gtk_text_view_get_visible_rect (text_view, &rect);
-  gtk_text_view_get_iter_at_location (text_view, &mv->insert, rect.x, rect.y + rect.height);
+  ide_source_view_get_visible_rect (mv->self, &rect);
+  gtk_text_view_get_iter_at_location (text_view, &mv->insert, rect.x, rect.y + rect.height - 1);
   gtk_text_iter_set_line_offset (&mv->insert, 0);
 }
 
@@ -648,12 +649,14 @@ ide_source_view_movements_scroll_by_lines (Movement *mv,
   value = gtk_adjustment_get_value (vadj);
   upper = gtk_adjustment_get_upper (vadj);
   gtk_adjustment_set_value (vadj, CLAMP (value + amount, 0, upper));
+
+  mv->ignore_scroll_to_insert = TRUE;
+  ide_source_view_place_cursor_onscreen (mv->self);
 }
 
 static void
 ide_source_view_movements_scroll (Movement *mv)
 {
-  GtkTextView *text_view = (GtkTextView *)mv->self;
   GtkTextBuffer *buffer;
   GtkTextMark *mark;
   gint count = MAX (1, mv->count);
@@ -665,8 +668,8 @@ ide_source_view_movements_scroll (Movement *mv)
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
   mark = gtk_text_buffer_get_insert (buffer);
-  gtk_text_view_move_mark_onscreen (text_view, mark);
   gtk_text_buffer_get_iter_at_mark (buffer, &mv->insert, mark);
+  ide_source_view_move_mark_onscreen (mv->self, mark);
 }
 
 static void
@@ -1147,6 +1150,8 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
                                  gint                  *target_offset)
 {
   Movement mv = { 0 };
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
   gsize i;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
@@ -1165,6 +1170,9 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
                    count);
   }
 #endif
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  insert = gtk_text_buffer_get_insert (buffer);
 
   mv.self = self;
   mv.target_offset = target_offset;
@@ -1386,4 +1394,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
   if (!mv.ignore_target_offset)
     *target_offset = gtk_text_iter_get_line_offset (&mv.insert);
+
+  if (!mv.ignore_scroll_to_insert)
+    ide_source_view_scroll_mark_onscreen (self, insert);
 }
