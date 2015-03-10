@@ -837,19 +837,24 @@ static void
 ide_source_view_movements_scroll_center (Movement *mv)
 {
   GtkTextView *text_view = (GtkTextView *)mv->self;
+  GtkTextMark *insert;
+  GtkTextBuffer *buffer;
+
+  buffer = gtk_text_view_get_buffer (text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
 
   switch ((int)mv->type)
     {
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM:
-      gtk_text_view_scroll_to_iter (text_view, &mv->insert, 0.0, TRUE, 1.0, 1.0);
+      ide_source_view_scroll_to_mark (mv->self, insert, 0.0, TRUE, 1.0, 1.0);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP:
-      gtk_text_view_scroll_to_iter (text_view, &mv->insert, 0.0, TRUE, 1.0, 0.0);
+      ide_source_view_scroll_to_mark (mv->self, insert, 0.0, TRUE, 1.0, 0.0);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER:
-      gtk_text_view_scroll_to_iter (text_view, &mv->insert, 0.0, TRUE, 1.0, 0.5);
+      ide_source_view_scroll_to_mark (mv->self, insert, 0.0, TRUE, 1.0, 0.5);
       break;
 
     default:
