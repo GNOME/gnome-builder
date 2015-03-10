@@ -425,8 +425,8 @@
                  "copy-clipboard" ()
                  "delete-selection" () };
   bind "k"     { "movement" (line-end, 0, 0, 0)
-                 "movement" (previous-line, 1, 1, 0)
-                 "movement" (previous-line, 1, 1, 1)
+                 "movement" (previous-line, 1, 0, 0)
+                 "movement" (previous-line, 1, 0, 1)
                  "copy-clipboard" ()
                  "delete-selection" () };
 
