@@ -1179,6 +1179,49 @@ ide_source_view_movements_next_unmatched (Movement *mv,
   g_assert_not_reached ();
 }
 
+static gboolean
+find_match (gunichar ch,
+            gpointer data)
+{
+  Movement *mv = data;
+
+  return (mv->modifier == ch);
+}
+
+static void
+ide_source_view_movements_next_match_modifier (Movement *mv)
+{
+  GtkTextIter insert;
+  GtkTextIter bounds;
+
+  bounds = insert = mv->insert;
+  gtk_text_iter_forward_to_line_end (&bounds);
+
+  if (gtk_text_iter_forward_find_char (&insert, find_match, mv, &bounds))
+    {
+      if (!mv->exclusive)
+        gtk_text_iter_forward_char (&insert);
+      mv->insert = insert;
+    }
+}
+
+static void
+ide_source_view_movements_previous_match_modifier (Movement *mv)
+{
+  GtkTextIter insert;
+  GtkTextIter bounds;
+
+  bounds = insert = mv->insert;
+  gtk_text_iter_set_line_offset (&bounds, 0);
+
+  if (gtk_text_iter_backward_find_char (&insert, find_match, mv, &bounds))
+    {
+      if (!mv->exclusive)
+        gtk_text_iter_forward_char (&insert);
+      mv->insert = insert;
+    }
+}
+
 void
 _ide_source_view_apply_movement (IdeSourceView         *self,
                                  IdeSourceViewMovement  movement,
@@ -1423,6 +1466,16 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_UNMATCHED_PAREN:
       for (i = MAX (1, mv.count); i > 0; i--)
         ide_source_view_movements_next_unmatched (&mv, ')', '(');
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_MODIFIER:
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_next_match_modifier (&mv);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_MODIFIER:
+      for (i = MAX (1, mv.count); i > 0; i--)
+        ide_source_view_movements_previous_match_modifier (&mv);
       break;
 
     default:
