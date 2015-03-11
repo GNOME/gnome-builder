@@ -449,6 +449,8 @@ ide_context_dispose (GObject *object)
   gpointer key;
   gpointer value;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
   g_hash_table_iter_init (&iter, self->services);
@@ -464,12 +466,16 @@ ide_context_dispose (GObject *object)
     }
 
   G_OBJECT_CLASS (ide_context_parent_class)->dispose (object);
+
+  IDE_EXIT;
 }
 
 static void
 ide_context_finalize (GObject *object)
 {
   IdeContext *self = (IdeContext *)object;
+
+  IDE_ENTRY;
 
   g_clear_pointer (&self->services, g_hash_table_unref);
   g_clear_pointer (&self->root_build_dir, g_free);
@@ -482,6 +488,8 @@ ide_context_finalize (GObject *object)
   g_clear_object (&self->vcs);
 
   G_OBJECT_CLASS (ide_context_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void
@@ -681,6 +689,8 @@ ide_context_class_init (IdeContextClass *klass)
 static void
 ide_context_init (IdeContext *self)
 {
+  IDE_ENTRY;
+
   g_autofree gchar *scriptsdir = NULL;
 
   self->root_build_dir = g_build_filename (g_get_user_cache_dir (),
@@ -729,6 +739,8 @@ ide_context_init (IdeContext *self)
                                        "context", self,
                                        "scripts-directory", scriptsdir,
                                        NULL);
+
+  IDE_EXIT;
 }
 
 static void
