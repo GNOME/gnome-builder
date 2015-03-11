@@ -312,10 +312,12 @@
   bind "less" { "set-mode" ("vim-normal-indent", transient) };
 
   /* join selected lines */
-  bind "<shift>j" { "movement" (first-char, 0, 1, 0)
-                    "movement" (next-line, 1, 1, 1)
+  /* todo: this actually grabs one more line than vim does when prefixed with
+   *       a count. 1J and 2J are both the same thing.
+   */
+  bind "<shift>j" { "movement" (first-char, 0, 0, 0)
+                    "movement" (next-line, 1, 0, 1)
                     "join-lines" ()
-                    "movement" (last-char, 0, 0, 0)
                     "clear-count" () };
 
   /* change number */
