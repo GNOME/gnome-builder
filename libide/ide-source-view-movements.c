@@ -1110,18 +1110,24 @@ ide_source_view_movements_previous_unmatched (Movement *mv,
                                               gunichar  target,
                                               gunichar  opposite)
 {
+  GtkTextIter copy;
   guint count = 1;
 
   g_assert (mv);
   g_assert (target);
   g_assert (opposite);
 
+  copy = mv->insert;
+
   do
     {
       gunichar ch;
 
       if (!gtk_text_iter_backward_char (&mv->insert))
-        return;
+        {
+          mv->insert = copy;
+          return;
+        }
 
       ch = gtk_text_iter_get_char (&mv->insert);
 
@@ -1147,18 +1153,24 @@ ide_source_view_movements_next_unmatched (Movement *mv,
                                           gunichar  target,
                                           gunichar  opposite)
 {
+  GtkTextIter copy;
   guint count = 1;
 
   g_assert (mv);
   g_assert (target);
   g_assert (opposite);
 
+  copy = mv->insert;
+
   do
     {
       gunichar ch;
 
       if (!gtk_text_iter_forward_char (&mv->insert))
-        return;
+        {
+          mv->insert = copy;
+          return;
+        }
 
       ch = gtk_text_iter_get_char (&mv->insert);
 
