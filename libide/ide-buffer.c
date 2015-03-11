@@ -24,6 +24,7 @@
 #include "ide-buffer.h"
 #include "ide-buffer-change-monitor.h"
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-diagnostic.h"
 #include "ide-diagnostician.h"
 #include "ide-diagnostics.h"
@@ -528,6 +529,8 @@ ide_buffer_dispose (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
 
+  IDE_ENTRY;
+
   if (self->diagnose_timeout)
     {
       g_source_remove (self->diagnose_timeout);
@@ -547,6 +550,8 @@ ide_buffer_dispose (GObject *object)
   g_clear_object (&self->file);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
+
+  IDE_EXIT;
 }
 
 static void
@@ -554,9 +559,13 @@ ide_buffer_finalize (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
 
+  IDE_ENTRY;
+
   ide_clear_weak_pointer (&self->context);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void
@@ -703,7 +712,11 @@ ide_buffer_class_init (IdeBufferClass *klass)
 static void
 ide_buffer_init (IdeBuffer *self)
 {
+  IDE_ENTRY;
+
   self->diagnostics_line_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  IDE_EXIT;
 }
 
 static void
