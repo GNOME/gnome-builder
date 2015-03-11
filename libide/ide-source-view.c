@@ -27,6 +27,7 @@
 #include "ide-box-theatric.h"
 #include "ide-buffer.h"
 #include "ide-buffer-manager.h"
+#include "ide-cairo.h"
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-diagnostic.h"
@@ -2810,6 +2811,232 @@ ide_source_view_real_sort (IdeSourceView *self,
   gtk_text_buffer_end_user_action (buffer);
 }
 
+static cairo_region_t *
+region_create_bounds (GtkTextView       *text_view,
+                      const GtkTextIter *begin,
+                      const GtkTextIter *end)
+{
+  cairo_rectangle_int_t r;
+  cairo_region_t *region;
+  GtkAllocation alloc;
+  GdkRectangle rect;
+  GdkRectangle rect2;
+  gint x = 0;
+
+  gtk_widget_get_allocation (GTK_WIDGET (text_view), &alloc);
+
+  gtk_text_view_get_iter_location (text_view, begin, &rect);
+  gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
+                                         rect.x, rect.y, &rect.x, &rect.y);
+
+  gtk_text_view_get_iter_location (text_view, end, &rect2);
+  gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
+                                         rect2.x, rect2.y,
+                                         &rect2.x, &rect2.y);
+
+  gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
+                                         0, 0, &x, NULL);
+
+  if (rect.y == rect2.y)
+    {
+      r.x = rect.x;
+      r.y = rect.y;
+      r.width = rect2.x - rect.x;
+      r.height = MAX (rect.height, rect2.height);
+      return cairo_region_create_rectangle (&r);
+    }
+
+  region = cairo_region_create ();
+
+  r.x = rect.x;
+  r.y = rect.y;
+  r.width = alloc.width;
+  r.height = rect.height;
+  /* ide_cairo_rounded_rectangle (cr, &r, 5, 5); */
+  cairo_region_union_rectangle (region, &r);
+
+  r.x = x;
+  r.y = rect.y + rect.height;
+  r.width = alloc.width;
+  r.height = rect2.y - rect.y - rect.height;
+  if (r.height > 0)
+    /* ide_cairo_rounded_rectangle (cr, &r, 5, 5); */
+    cairo_region_union_rectangle (region, &r);
+
+  r.x = 0;
+  r.y = rect2.y;
+  r.width = rect2.x + rect2.width;
+  r.height = rect2.height;
+  /* ide_cairo_rounded_rectangle (cr, &r, 5, 5); */
+  cairo_region_union_rectangle (region, &r);
+
+  return region;
+}
+
+static void
+ide_source_view_draw_snippet_chunks (IdeSourceView    *self,
+                                     IdeSourceSnippet *snippet,
+                                     cairo_t          *cr)
+{
+  static gboolean did_rgba;
+  static GdkRGBA rgba;
+  IdeSourceSnippetChunk *chunk;
+  GtkTextView *text_view = (GtkTextView *)self;
+  guint n_chunks;
+  guint i;
+  gint tab_stop;
+  gint current_stop;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_SOURCE_SNIPPET (snippet));
+  g_assert (cr);
+
+  cairo_save (cr);
+
+  if (!did_rgba)
+    {
+      /* TODO: get this from style scheme? */
+      gdk_rgba_parse (&rgba, "#fcaf3e");
+      did_rgba = TRUE;
+    }
+
+  n_chunks = ide_source_snippet_get_n_chunks (snippet);
+  current_stop = ide_source_snippet_get_tab_stop (snippet);
+
+  for (i = 0; i < n_chunks; i++)
+    {
+      chunk = ide_source_snippet_get_nth_chunk (snippet, i);
+      tab_stop = ide_source_snippet_chunk_get_tab_stop (chunk);
+
+      if (tab_stop > 0)
+        {
+          GtkTextIter begin;
+          GtkTextIter end;
+          cairo_region_t *region;
+
+          rgba.alpha = (tab_stop == current_stop) ? 0.7 : 0.3;
+          gdk_cairo_set_source_rgba (cr, &rgba);
+
+          ide_source_snippet_get_chunk_range (snippet, chunk, &begin, &end);
+
+          region = region_create_bounds (text_view, &begin, &end);
+          gdk_cairo_region (cr, region);
+          cairo_region_destroy (region);
+
+          cairo_fill (cr);
+        }
+    }
+
+  cairo_restore (cr);
+}
+
+static void
+ide_source_view_draw_snippet_background (IdeSourceView    *self,
+                                         cairo_t          *cr,
+                                         IdeSourceSnippet *snippet,
+                                         gint              width)
+{
+  GtkTextBuffer *buffer;
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GtkTextMark *mark_begin;
+  GtkTextMark *mark_end;
+  GdkRectangle r;
+
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (cr);
+  g_assert (IDE_IS_SOURCE_SNIPPET (snippet));
+
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  mark_begin = ide_source_snippet_get_mark_begin (snippet);
+  mark_end = ide_source_snippet_get_mark_end (snippet);
+
+  if (!mark_begin || !mark_end)
+    return;
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &begin, mark_begin);
+  gtk_text_buffer_get_iter_at_mark (buffer, &end, mark_end);
+
+  get_rect_for_iters (text_view, &begin, &end, &r, GTK_TEXT_WINDOW_TEXT);
+
+  ide_cairo_rounded_rectangle (cr, &r, 5, 5);
+
+  cairo_fill (cr);
+}
+
+static void
+ide_source_view_draw_snippets_background (IdeSourceView *self,
+                                          cairo_t       *cr)
+{
+  static GdkRGBA rgba;
+  static gboolean did_rgba;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  IdeSourceSnippet *snippet;
+  GtkTextView *text_view = GTK_TEXT_VIEW (self);
+  GdkWindow *window;
+  gint len;
+  gint i;
+  gint width;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (cr);
+
+  if (!did_rgba)
+    {
+      /* TODO: Get this from the style scheme? */
+      gdk_rgba_parse (&rgba, "#204a87");
+      rgba.alpha = 0.1;
+      did_rgba = TRUE;
+    }
+
+  window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
+  width = gdk_window_get_width (window);
+
+  gdk_cairo_set_source_rgba (cr, &rgba);
+
+  len = priv->snippets->length;
+
+  cairo_save (cr);
+
+  for (i = 0; i < len; i++)
+    {
+      snippet = g_queue_peek_nth (priv->snippets, i);
+      ide_source_view_draw_snippet_background (self, cr, snippet, width - ((len - i) * 10));
+    }
+
+  cairo_restore (cr);
+}
+
+static void
+ide_source_view_real_draw_layer (GtkTextView      *text_view,
+                                 GtkTextViewLayer  layer,
+                                 cairo_t          *cr)
+{
+  IdeSourceView *self = (IdeSourceView *)text_view;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (cr);
+
+  GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->draw_layer (text_view, layer, cr);
+
+  if (layer == GTK_TEXT_VIEW_LAYER_BELOW)
+    {
+      if (priv->snippets->length)
+        {
+          IdeSourceSnippet *snippet;
+
+          ide_source_view_draw_snippets_background (self, cr);
+          snippet = g_queue_peek_head (priv->snippets);
+          ide_source_view_draw_snippet_chunks (self, snippet, cr);
+        }
+    }
+}
+
 static void
 ide_source_view_dispose (GObject *object)
 {
@@ -2975,6 +3202,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->style_updated = ide_source_view_real_style_updated;
 
   text_view_class->insert_at_cursor = ide_source_view_real_insert_at_cursor;
+  text_view_class->draw_layer = ide_source_view_real_draw_layer;
 
   source_view_class->undo = ide_source_view_real_undo;
   source_view_class->redo = ide_source_view_real_redo;
