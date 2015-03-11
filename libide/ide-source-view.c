@@ -3281,13 +3281,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  /**
-   * IdeSourceView::push-selection:
-   *
-   * Saves the current selection away to be restored by a call to
-   * IdeSourceView::pop-selection. You must pop the selection to keep
-   * the selection stack in consistent order.
-   */
   gSignals [POP_SNIPPET] =
     g_signal_new ("pop-snippet",
                   G_TYPE_FROM_CLASS (klass),
@@ -3299,6 +3292,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   1,
                   IDE_TYPE_SOURCE_SNIPPET);
 
+  /**
+   * IdeSourceView::push-selection:
+   *
+   * Saves the current selection away to be restored by a call to
+   * IdeSourceView::pop-selection. You must pop the selection to keep
+   * the selection stack in consistent order.
+   */
   gSignals [PUSH_SELECTION] =
     g_signal_new ("push-selection",
                   G_TYPE_FROM_CLASS (klass),
