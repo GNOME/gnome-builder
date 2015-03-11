@@ -163,6 +163,7 @@ enum {
   DELETE_SELECTION,
   INDENT_SELECTION,
   INSERT_AT_CURSOR_AND_INDENT,
+  INSERT_MODIFIER,
   JOIN_LINES,
   JUMP,
   MOVEMENT,
@@ -2171,6 +2172,36 @@ maybe_scroll:
 }
 
 static void
+ide_source_view_real_insert_modifier (IdeSourceView *self,
+                                      gboolean       use_count)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextBuffer *buffer;
+  gchar str[8] = { 0 };
+  gsize i;
+  guint count = 1;
+  gint len;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (!priv->modifier)
+    return;
+
+  if (use_count)
+    count = MAX (1, priv->count);
+
+  len = g_unichar_to_utf8 (priv->modifier, str);
+  str [len] = '\0';
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
+  gtk_text_buffer_begin_user_action (buffer);
+  for (i = 0; i < count; i++)
+    gtk_text_buffer_insert_at_cursor (buffer, str, len);
+  gtk_text_buffer_end_user_action (buffer);
+}
+
+static void
 ide_source_view_real_join_lines (IdeSourceView *self)
 {
   GtkTextBuffer *buffer;
@@ -3291,6 +3322,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->delete_selection = ide_source_view_real_delete_selection;
   klass->indent_selection = ide_source_view_real_indent_selection;
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
+  klass->insert_modifier = ide_source_view_real_insert_modifier;
   klass->join_lines = ide_source_view_real_join_lines;
   klass->jump = ide_source_view_real_jump;
   klass->movement = ide_source_view_real_movement;
@@ -3548,6 +3580,26 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   G_TYPE_STRING);
+
+  /**
+   * IdeSourceView::insert-modifier:
+   * @self: An #IdeSourceView
+   * @use_count: If the count property should be used to repeat.
+   *
+   * Inserts the current modifier character at the insert mark in the buffer.
+   * If @use_count is %TRUE, then the character will be inserted
+   * #IdeSourceView:count times.
+   */
+  gSignals [INSERT_MODIFIER] =
+    g_signal_new ("insert-modifier",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, insert_modifier),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__BOOLEAN,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_BOOLEAN);
 
   gSignals [JOIN_LINES] =
     g_signal_new ("join-lines",

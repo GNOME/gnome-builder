@@ -228,6 +228,8 @@ struct _IdeSourceViewClass
                                        gboolean                 extend_selection,
                                        gboolean                 exclusive,
                                        gboolean                 apply_count);
+  void (*insert_modifier)             (IdeSourceView           *self,
+                                       gboolean                 use_count);
   void (*join_lines)                  (IdeSourceView           *self);
   void (*jump)                        (IdeSourceView           *self,
                                        const GtkTextIter       *location);
