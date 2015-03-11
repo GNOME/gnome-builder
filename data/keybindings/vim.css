@@ -79,10 +79,12 @@
   bind "Escape" { "set-overwrite" (0)
                   "clear-count" ()
                   "clear-selection" ()
+                  "clear-snippets" ()
                   "set-mode" ("vim-normal", permanent) };
   bind "<ctrl>bracketleft" { "set-overwrite" (0)
                              "clear-count" ()
                              "clear-selection" ()
+                             "clear-snippets" ()
                              "set-mode" ("vim-normal", permanent) };
 }
 
