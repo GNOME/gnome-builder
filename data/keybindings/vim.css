@@ -305,7 +305,7 @@
                       "clear-count" () };
 
   /* todo: not quite right, should add movement that can span lines */
-  bind "BackSpace" { "move-cursor" (logical-positions, -1, 0)
+  bind "BackSpace" { "movement" (previous-offset, 0, 1, 1)
                      "clear-count" () };
 
   bind "KP_Enter" { "movement" (next-line, 0, 1, 1)
