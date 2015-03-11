@@ -2202,6 +2202,31 @@ ide_source_view_real_insert_modifier (IdeSourceView *self,
   gtk_text_buffer_end_user_action (buffer);
 }
 
+static gchar **
+remove_empty_lines (gchar **lines)
+{
+  GPtrArray *ar;
+  gsize i = 0;
+
+  g_assert (lines);
+
+  ar = g_ptr_array_new ();
+
+  for (i = 0; lines [i]; i++)
+    {
+      if (lines [i][0])
+        g_ptr_array_add (ar, lines [i]);
+      else
+        g_free (lines [i]);
+    }
+
+  g_ptr_array_add (ar, NULL);
+
+  g_free (lines);
+
+  return (gchar **)g_ptr_array_free (ar, FALSE);
+}
+
 static void
 ide_source_view_real_join_lines (IdeSourceView *self)
 {
@@ -2233,6 +2258,8 @@ ide_source_view_real_join_lines (IdeSourceView *self)
 
   for (i = 1; lines [i]; i++)
     g_strstrip (lines [i]);
+
+  lines = remove_empty_lines (lines);
 
   text = g_strchomp (g_strjoinv (" ", lines));
   g_strfreev (lines);
