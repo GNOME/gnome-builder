@@ -1062,6 +1062,17 @@ IdeSourceViewMode.vim-visual {
                     builder-vim-source-view-visual;
 }
 
+IdeSourceViewMode.vim-visual-with-count {
+  -IdeSourceViewMode-suppress-unbound: true;
+  -IdeSourceViewMode-coalesce-undo: true;
+  -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-default-mode: "vim-visual";
+
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-visual-with-count,
+                    builder-vim-source-view-visual;
+}
+
 IdeSourceViewMode.vim-visual-g {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-coalesce-undo: true;

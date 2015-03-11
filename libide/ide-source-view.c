@@ -1552,6 +1552,7 @@ ide_source_view_do_mode (IdeSourceView *self,
                          GdkEventKey   *event)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autofree gchar *suggested_default = NULL;
   gboolean ret = FALSE;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -1579,6 +1580,9 @@ ide_source_view_do_mode (IdeSourceView *self,
       /* hold a reference incase binding changes mode */
       mode = g_object_ref (priv->mode);
 
+      /* lookup what this mode thinks our next default should be */
+      suggested_default = g_strdup (ide_source_view_mode_get_default_mode (priv->mode));
+
       handled = _ide_source_view_mode_do_event (priv->mode, event, &remove);
 
       if (remove)
@@ -1599,7 +1603,7 @@ ide_source_view_do_mode (IdeSourceView *self,
     }
 
   if (!priv->mode)
-    ide_source_view_real_set_mode (self, NULL,  IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+    ide_source_view_real_set_mode (self, suggested_default, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
 
   if (ide_source_view_mode_get_keep_mark_on_char (priv->mode))
     {
@@ -2409,6 +2413,7 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
                                IdeSourceViewModeType  type)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autofree gchar *suggested_default = NULL;
   gboolean overwrite;
 
   IDE_ENTRY;
@@ -2428,6 +2433,11 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
   if (priv->mode)
     {
       IdeSourceViewMode *old_mode = g_object_ref (priv->mode);
+      const gchar *str;
+
+      /* see if this mode suggested a default next mode */
+      str = ide_source_view_mode_get_default_mode (old_mode);
+      suggested_default = g_strdup (str);
 
       g_clear_object (&priv->mode);
       if (ide_source_view_mode_get_coalesce_undo (old_mode))
@@ -2437,7 +2447,7 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
 
   if (mode == NULL)
     {
-      mode = "default";
+      mode = suggested_default ?: "default";
       type = IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT;
     }
 
