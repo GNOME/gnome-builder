@@ -148,6 +148,14 @@
              "copy-clipboard" ()
              "delete-selection" () };
 
+  /* overwrite the current character with a modifier */
+  bind "r" { "capture-modifier" ()
+             "movement" (next-char, 1, 1, 1)
+             "delete-selection" ()
+             "insert-modifier" (1)
+             "clear-modifier" ()
+             "movement" (previous-char, 0, 1, 0) };
+
   bind "Left"  { "movement" (previous-char, 0, 1, 1)
                  "clear-count" () };
   bind "Right" { "movement" (next-char, 0, 1, 1)
