@@ -185,6 +185,21 @@
   bind "<shift>b" { "movement" (previous-full-word-start, 0, 1, 1)
                     "clear-count" () };
 
+  /* find matching char */
+  bind "f" { "capture-modifier" ()
+             "movement" (next-match-modifier, 0, 1, 1)
+             "clear-modifier" () };
+  bind "t" { "capture-modifier" ()
+             "movement" (next-match-modifier, 0, 1, 1)
+             "movement" (previous-char, 0, 1, 0)
+             "clear-modifier" () };
+  bind "<shift>f" { "capture-modifier" ()
+                    "movement" (previous-match-modifier, 0, 1, 1)
+                    "clear-modifier" () };
+  bind "<shift>t" { "capture-modifier" ()
+                    "movement" (previous-match-modifier, 0, 0, 1)
+                    "clear-modifier" () };
+
   /* page movements */
   bind "<ctrl>b" { "movement" (page-up, 0, 0, 1)
                    "clear-count" () };
@@ -360,6 +375,38 @@
              "movement" (next-word-end, 1, 0, 1)
              "copy-clipboard" ()
              "delete-selection" () };
+
+  bind "f" { "capture-modifier" ()
+             "set-mode" ("vim-insert", permanent)
+             "movement" (next-match-modifier, 1, 0, 1)
+             "copy-clipboard" ()
+             "selection-theatric" (shrink)
+             "delete-selection" ()
+             "clear-modifier" () };
+
+  bind "t" { "capture-modifier" ()
+             "set-mode" ("vim-insert", permanent)
+             "movement" (next-match-modifier, 1, 1, 1)
+             "copy-clipboard" ()
+             "selection-theatric" (shrink)
+             "delete-selection" ()
+             "clear-modifier" () };
+
+  bind "<shift>f" { "capture-modifier" ()
+                    "set-mode" ("vim-insert", permanent)
+                    "movement" (previous-match-modifier, 1, 1, 1)
+                    "copy-clipboard" ()
+                    "selection-theatric" (shrink)
+                    "delete-selection" ()
+                    "clear-modifier" () };
+
+  bind "<shift>t" { "capture-modifier" ()
+                    "set-mode" ("vim-insert", permanent)
+                    "movement" (previous-match-modifier, 1, 0, 1)
+                    "copy-clipboard" ()
+                    "selection-theatric" (shrink)
+                    "delete-selection" ()
+                    "clear-modifier" () };
 }
 
 @binding-set builder-vim-source-view-normal-c-i
@@ -445,6 +492,32 @@
 
   bind "i" { "set-mode" ("vim-normal-d-i", transient) };
   bind "g" { "set-mode" ("vim-normal-d-g", transient) };
+
+  bind "f" { "capture-modifier" ()
+             "movement" (next-match-modifier, 1, 0, 1)
+             "copy-clipboard" ()
+             "selection-theatric" (shrink)
+             "delete-selection" ()
+             "clear-modifier" () };
+  bind "t" { "capture-modifier" ()
+             "movement" (next-match-modifier, 1, 1, 1)
+             "copy-clipboard" ()
+             "selection-theatric" (shrink)
+             "delete-selection" ()
+             "clear-modifier" () };
+
+  bind "<shift>f" { "capture-modifier" ()
+                    "movement" (previous-match-modifier, 1, 1, 1)
+                    "copy-clipboard" ()
+                    "selection-theatric" (shrink)
+                    "delete-selection" ()
+                    "clear-modifier" () };
+  bind "<shift>t" { "capture-modifier" ()
+                    "movement" (previous-match-modifier, 1, 0, 1)
+                    "copy-clipboard" ()
+                    "selection-theatric" (shrink)
+                    "delete-selection" ()
+                    "clear-modifier" () };
 
   bind "d" { "save-insert-mark" ()
              "movement" (first-char, 0, 1, 0)
