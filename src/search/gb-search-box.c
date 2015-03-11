@@ -262,6 +262,10 @@ gb_search_box_button_toggled (GbSearchBox     *box,
       if (!gtk_widget_has_focus (GTK_WIDGET (box->priv->entry)))
         gtk_widget_grab_focus (GTK_WIDGET (box->priv->entry));
     }
+  else
+    {
+      gtk_widget_hide (GTK_WIDGET (box->priv->popover));
+    }
 }
 
 static void
