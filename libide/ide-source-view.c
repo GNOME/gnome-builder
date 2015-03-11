@@ -2208,29 +2208,44 @@ ide_source_view_real_join_lines (IdeSourceView *self)
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
-  guint line;
+  gchar *text;
+  gchar **lines;
+  gsize i;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
 
-  if (gtk_text_iter_equal (&begin, &end))
+  if (gtk_text_iter_get_line (&begin) == gtk_text_iter_get_line (&end))
     return;
 
   gtk_text_iter_order (&begin, &end);
 
-  line = gtk_text_iter_get_line (&begin);
+  gtk_text_iter_set_line_offset (&begin, 0);
+  if (!gtk_text_iter_ends_line (&end))
+    gtk_text_iter_forward_to_line_end (&end);
 
-  if (gtk_text_iter_starts_line (&end) && !gtk_text_iter_ends_line (&end))
-    gtk_text_iter_backward_char (&end);
+  text = gtk_text_iter_get_slice (&begin, &end);
+  lines = g_strsplit (text, "\n", 0);
+  g_free (text);
 
-  if (GTK_SOURCE_IS_BUFFER (buffer))
-    gtk_source_buffer_join_lines (GTK_SOURCE_BUFFER (buffer), &begin, &end);
+  for (i = 1; lines [i]; i++)
+    g_strstrip (lines [i]);
 
-  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
-  gtk_text_iter_set_line (&begin, line);
+  text = g_strchomp (g_strjoinv (" ", lines));
+  g_strfreev (lines);
+
+  gtk_text_buffer_begin_user_action (buffer);
+  gtk_text_buffer_delete (buffer, &begin, &end);
+  gtk_text_buffer_insert (buffer, &begin, text, -1);
+  if (!gtk_text_iter_ends_line (&begin))
+    gtk_text_iter_forward_to_line_end (&begin);
   gtk_text_buffer_select_range (buffer, &begin, &begin);
+  gtk_text_buffer_end_user_action (buffer);
+
+  g_free (text);
 }
 
 static void
