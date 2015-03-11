@@ -1295,13 +1295,11 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_CHAR:
-      for (i = MAX (1, mv.count); i > 0; i--)
-        ide_source_view_movements_previous_char (&mv);
+      ide_source_view_movements_previous_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_NEXT_CHAR:
-      for (i = MAX (1, mv.count); i > 0; i--)
-        ide_source_view_movements_next_char (&mv);
+      ide_source_view_movements_next_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR:
