@@ -110,6 +110,7 @@ typedef struct
   guint                        change_sequence;
 
   gint                         target_line_offset;
+  gunichar                     modifier;
   guint                        count;
 
   guint                        scroll_offset;
@@ -127,6 +128,7 @@ typedef struct
   guint                        show_grid_lines : 1;
   guint                        show_line_changes : 1;
   guint                        snippet_completion : 1;
+  guint                        waiting_for_capture : 1;
 } IdeSourceViewPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
@@ -151,8 +153,10 @@ enum {
   ACTION,
   APPEND_TO_COUNT,
   AUTO_INDENT,
+  CAPTURE_MODIFIER,
   CHANGE_CASE,
   CLEAR_COUNT,
+  CLEAR_MODIFIER,
   CLEAR_SELECTION,
   CLEAR_SNIPPETS,
   CYCLE_COMPLETION,
@@ -1618,6 +1622,33 @@ ide_source_view_do_mode (IdeSourceView *self,
 }
 
 static gboolean
+is_modifier_key (GdkEventKey *event)
+{
+  static const guint modifier_keyvals[] = {
+    GDK_KEY_Shift_L, GDK_KEY_Shift_R, GDK_KEY_Shift_Lock,
+    GDK_KEY_Caps_Lock, GDK_KEY_ISO_Lock, GDK_KEY_Control_L,
+    GDK_KEY_Control_R, GDK_KEY_Meta_L, GDK_KEY_Meta_R,
+    GDK_KEY_Alt_L, GDK_KEY_Alt_R, GDK_KEY_Super_L, GDK_KEY_Super_R,
+    GDK_KEY_Hyper_L, GDK_KEY_Hyper_R, GDK_KEY_ISO_Level3_Shift,
+    GDK_KEY_ISO_Next_Group, GDK_KEY_ISO_Prev_Group,
+    GDK_KEY_ISO_First_Group, GDK_KEY_ISO_Last_Group,
+    GDK_KEY_Mode_switch, GDK_KEY_Num_Lock, GDK_KEY_Multi_key,
+    GDK_KEY_Scroll_Lock,
+    0
+  };
+  const guint *ac_val;
+
+  ac_val = modifier_keyvals;
+  while (*ac_val)
+    {
+      if (event->keyval == *ac_val++)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 ide_source_view_key_press_event (GtkWidget   *widget,
                                  GdkEventKey *event)
 {
@@ -1630,6 +1661,13 @@ ide_source_view_key_press_event (GtkWidget   *widget,
   guint change_sequence;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->waiting_for_capture)
+    {
+      if (!is_modifier_key (event))
+        priv->modifier = gdk_keyval_to_unicode (event->keyval);
+      return TRUE;
+    }
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   insert = gtk_text_buffer_get_insert (buffer);
@@ -1886,6 +1924,19 @@ ide_source_view_real_auto_indent (IdeSourceView *self)
 }
 
 static void
+ide_source_view_real_capture_modifier (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  priv->waiting_for_capture = TRUE;
+  while ((priv->modifier == 0) && gtk_widget_has_focus (GTK_WIDGET (self)))
+    gtk_main_iteration ();
+  priv->waiting_for_capture = FALSE;
+}
+
+static void
 ide_source_view_real_change_case (IdeSourceView           *self,
                                   GtkSourceChangeCaseType  type)
 {
@@ -1910,6 +1961,16 @@ ide_source_view_real_clear_count (IdeSourceView *self)
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   priv->count = 0;
+}
+
+static void
+ide_source_view_real_clear_modifier (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  priv->modifier = 0;
 }
 
 static void
@@ -2437,7 +2498,7 @@ ide_source_view_real_movement (IdeSourceView         *self,
     count = priv->count;
 
   _ide_source_view_apply_movement (self, movement, extend_selection, exclusive,
-                                   count, &priv->target_line_offset);
+                                   count, priv->modifier, &priv->target_line_offset);
 }
 
 static void
@@ -3210,8 +3271,10 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->action = ide_source_view_real_action;
   klass->append_to_count = ide_source_view_real_append_to_count;
   klass->auto_indent = ide_source_view_real_auto_indent;
+  klass->capture_modifier = ide_source_view_real_capture_modifier;
   klass->change_case = ide_source_view_real_change_case;
   klass->clear_count = ide_source_view_real_clear_count;
+  klass->clear_modifier = ide_source_view_real_clear_modifier;
   klass->clear_snippets = ide_source_view_clear_snippets;
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
@@ -3361,6 +3424,27 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  /**
+   * IdeSourceView::capture-modifier:
+   *
+   * This signal will block the main loop in a similar fashion to how
+   * gtk_dialog_run() performs until a key-press has occurred that can be
+   * captured for use in movements.
+   *
+   * Pressing Escape or unfocusing the widget will break from this loop.
+   *
+   * Use of this signal is not recommended except in very specific cases.
+   */
+  gSignals [CAPTURE_MODIFIER] =
+    g_signal_new ("capture-modifier",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, capture_modifier),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
   gSignals [CHANGE_CASE] =
     g_signal_new ("change-case",
                   G_TYPE_FROM_CLASS (klass),
@@ -3377,6 +3461,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, clear_count),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  gSignals [CLEAR_MODIFIER] =
+    g_signal_new ("clear-modifier",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, clear_modifier),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,

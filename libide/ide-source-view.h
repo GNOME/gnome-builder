@@ -206,9 +206,11 @@ struct _IdeSourceViewClass
   void (*append_to_count)             (IdeSourceView           *self,
                                        gint                     digit);
   void (*auto_indent)                 (IdeSourceView           *self);
+  void (*capture_modifier)            (IdeSourceView           *self);
   void (*change_case)                 (IdeSourceView           *self,
                                        GtkSourceChangeCaseType  type);
   void (*clear_count)                 (IdeSourceView           *self);
+  void (*clear_modifier)              (IdeSourceView           *self);
   void (*clear_selection)             (IdeSourceView           *self);
   void (*clear_snippets)              (IdeSourceView           *self);
   void (*cycle_completion)            (IdeSourceView           *self,

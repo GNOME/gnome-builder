@@ -28,6 +28,7 @@ void _ide_source_view_apply_movement (IdeSourceView         *source_view,
                                       gboolean               extend_selection,
                                       gboolean               exclusive,
                                       guint                  count,
+                                      gunichar               modifier,
                                       gint                  *target_offset);
 
 G_END_DECLS
