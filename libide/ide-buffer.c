@@ -706,31 +706,6 @@ ide_buffer_init (IdeBuffer *self)
   self->diagnostics_line_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
-GType
-ide_buffer_line_flags_get_type (void)
-{
-  static gsize type_id;
-
-  if (g_once_init_enter (&type_id))
-    {
-      GType _type_id;
-      const static GFlagsValue values[] = {
-        { IDE_BUFFER_LINE_FLAGS_NONE, "IDE_BUFFER_LINE_FLAGS_NONE", "NONE" },
-        { IDE_BUFFER_LINE_FLAGS_ADDED, "IDE_BUFFER_LINE_FLAGS_ADDED", "ADDED" },
-        { IDE_BUFFER_LINE_FLAGS_CHANGED, "IDE_BUFFER_LINE_FLAGS_CHANGED", "CHANGED" },
-        { IDE_BUFFER_LINE_FLAGS_ERROR, "IDE_BUFFER_LINE_FLAGS_ERROR", "ERROR" },
-        { IDE_BUFFER_LINE_FLAGS_WARNING, "IDE_BUFFER_LINE_FLAGS_WARNING", "WARNING" },
-        { IDE_BUFFER_LINE_FLAGS_NOTE, "IDE_BUFFER_LINE_FLAGS_NOTE", "NOTE" },
-        { 0 }
-      };
-
-      _type_id = g_flags_register_static ("IdeBufferLineFlags", values);
-      g_once_init_leave (&type_id, _type_id);
-    }
-
-  return type_id;
-}
-
 static void
 ide_buffer_update_title (IdeBuffer *self)
 {

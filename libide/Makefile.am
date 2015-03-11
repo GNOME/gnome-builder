@@ -311,6 +311,7 @@ AM_CPPFLAGS += -DIDE_DISABLE_DEBUG
 endif
 
 libide_1_0_la_type_headers = \
+	libide/ide-buffer.h \
 	libide/ide-source-view.h \
 	$(NULL)
 

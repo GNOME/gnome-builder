@@ -33,6 +33,9 @@ G_BEGIN_DECLS
 #define IDE_IS_BUFFER_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_BUFFER))
 #define IDE_BUFFER_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_BUFFER, IdeBufferClass))
 
+#define IDE_BUFFER_LINE_FLAGS_DIAGNOSTICS_MASK \
+  ((IDE_BUFFER_LINE_FLAGS_ERROR | IDE_BUFFER_LINE_FLAGS_WARNING | IDE_BUFFER_LINE_FLAGS_NOTE))
+
 typedef enum
 {
   IDE_BUFFER_LINE_FLAGS_NONE     = 0,
@@ -41,10 +44,6 @@ typedef enum
   IDE_BUFFER_LINE_FLAGS_ERROR    = 1 << 2,
   IDE_BUFFER_LINE_FLAGS_WARNING  = 1 << 3,
   IDE_BUFFER_LINE_FLAGS_NOTE     = 1 << 4,
-
-  IDE_BUFFER_LINE_FLAGS_DIAGNOSTICS_MASK = (IDE_BUFFER_LINE_FLAGS_ERROR |
-                                            IDE_BUFFER_LINE_FLAGS_WARNING |
-                                            IDE_BUFFER_LINE_FLAGS_NOTE),
 } IdeBufferLineFlags;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeBuffer, g_object_unref)
@@ -60,7 +59,6 @@ gboolean            ide_buffer_get_highlight_diagnostics (IdeBuffer         *sel
 const gchar        *ide_buffer_get_style_scheme_name     (IdeBuffer         *self);
 const gchar        *ide_buffer_get_title                 (IdeBuffer         *self);
 GType               ide_buffer_get_type                  (void);
-GType               ide_buffer_line_flags_get_type       (void);
 void                ide_buffer_set_file                  (IdeBuffer         *self,
                                                           IdeFile           *file);
 void                ide_buffer_set_highlight_diagnostics (IdeBuffer         *self,
