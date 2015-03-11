@@ -153,6 +153,7 @@ enum {
   CHANGE_CASE,
   CLEAR_COUNT,
   CLEAR_SELECTION,
+  CLEAR_SNIPPETS,
   CYCLE_COMPLETION,
   DELETE_SELECTION,
   INDENT_SELECTION,
@@ -2983,6 +2984,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->auto_indent = ide_source_view_real_auto_indent;
   klass->change_case = ide_source_view_real_change_case;
   klass->clear_count = ide_source_view_real_clear_count;
+  klass->clear_snippets = ide_source_view_clear_snippets;
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
   klass->delete_selection = ide_source_view_real_delete_selection;
@@ -3157,6 +3159,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, clear_selection),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  gSignals [CLEAR_SNIPPETS] =
+    g_signal_new ("clear-snippets",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, clear_snippets),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
