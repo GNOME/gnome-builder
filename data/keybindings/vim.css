@@ -846,6 +846,19 @@
   bind "<shift>t" { "capture-modifier" ()
                     "movement" (previous-match-modifier, 1, 0, 1)
                     "clear-modifier" () };
+
+  bind "asciitilde" { "selection-theatric" (expand)
+                      "change-case" (toggle)
+                      "clear-selection" ()
+                      "set-mode" ("vim-normal", permanent) };
+  bind "u" { "selection-theatric" (expand)
+             "change-case" (lower)
+             "clear-selection" ()
+             "set-mode" ("vim-normal", permanent) };
+  bind "<shift>u" { "selection-theatric" (expand)
+                    "change-case" (upper)
+                    "clear-selection" ()
+                    "set-mode" ("vim-normal", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-line
