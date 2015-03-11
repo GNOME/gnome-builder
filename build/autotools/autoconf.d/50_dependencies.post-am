@@ -1,6 +1,6 @@
 m4_define([gtk_required_version], [3.15.6])
 m4_define([glib_required_version], [2.43.90])
-m4_define([gtksourceview_required_version], [3.15.4])
+m4_define([gtksourceview_required_version], [3.15.92])
 m4_define([ggit_required_version], [0.0.24])
 m4_define([gjs_required_version], [1.42.0])
 m4_define([pygobject_required_version], [3.0.0])

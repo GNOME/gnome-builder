@@ -154,7 +154,6 @@ enum {
   APPEND_TO_COUNT,
   AUTO_INDENT,
   CAPTURE_MODIFIER,
-  CHANGE_CASE,
   CLEAR_COUNT,
   CLEAR_MODIFIER,
   CLEAR_SELECTION,
@@ -164,7 +163,6 @@ enum {
   INDENT_SELECTION,
   INSERT_AT_CURSOR_AND_INDENT,
   INSERT_MODIFIER,
-  JOIN_LINES,
   JUMP,
   MOVEMENT,
   PASTE_CLIPBOARD_EXTENDED,
@@ -3313,7 +3311,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->append_to_count = ide_source_view_real_append_to_count;
   klass->auto_indent = ide_source_view_real_auto_indent;
   klass->capture_modifier = ide_source_view_real_capture_modifier;
-  klass->change_case = ide_source_view_real_change_case;
   klass->clear_count = ide_source_view_real_clear_count;
   klass->clear_modifier = ide_source_view_real_clear_modifier;
   klass->clear_snippets = ide_source_view_clear_snippets;
@@ -3323,7 +3320,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->indent_selection = ide_source_view_real_indent_selection;
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
   klass->insert_modifier = ide_source_view_real_insert_modifier;
-  klass->join_lines = ide_source_view_real_join_lines;
   klass->jump = ide_source_view_real_jump;
   klass->movement = ide_source_view_real_movement;
   klass->paste_clipboard_extended = ide_source_view_real_paste_clipboard_extended;
@@ -3487,16 +3483,9 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  gSignals [CHANGE_CASE] =
-    g_signal_new ("change-case",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (IdeSourceViewClass, change_case),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__ENUM,
-                  G_TYPE_NONE,
-                  1,
-                  GTK_SOURCE_TYPE_CHANGE_CASE_TYPE);
+  g_signal_override_class_handler ("change-case",
+                                   G_TYPE_FROM_CLASS (klass),
+                                   G_CALLBACK (ide_source_view_real_change_case));
 
   gSignals [CLEAR_COUNT] =
     g_signal_new ("clear-count",
@@ -3601,15 +3590,9 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   1,
                   G_TYPE_BOOLEAN);
 
-  gSignals [JOIN_LINES] =
-    g_signal_new ("join-lines",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (IdeSourceViewClass, join_lines),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE,
-                  0);
+  g_signal_override_class_handler ("join-lines",
+                                   G_TYPE_FROM_CLASS (klass),
+                                   G_CALLBACK (ide_source_view_real_join_lines));
 
   gSignals [JUMP] =
     g_signal_new ("jump",

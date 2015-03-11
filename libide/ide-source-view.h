@@ -210,8 +210,6 @@ struct _IdeSourceViewClass
                                        gint                     digit);
   void (*auto_indent)                 (IdeSourceView           *self);
   void (*capture_modifier)            (IdeSourceView           *self);
-  void (*change_case)                 (IdeSourceView           *self,
-                                       GtkSourceChangeCaseType  type);
   void (*clear_count)                 (IdeSourceView           *self);
   void (*clear_modifier)              (IdeSourceView           *self);
   void (*clear_selection)             (IdeSourceView           *self);
@@ -230,7 +228,6 @@ struct _IdeSourceViewClass
                                        gboolean                 apply_count);
   void (*insert_modifier)             (IdeSourceView           *self,
                                        gboolean                 use_count);
-  void (*join_lines)                  (IdeSourceView           *self);
   void (*jump)                        (IdeSourceView           *self,
                                        const GtkTextIter       *location);
   void (*paste_clipboard_extended)    (IdeSourceView           *self,
