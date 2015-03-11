@@ -365,7 +365,10 @@ get_rect_for_iters (GtkTextView       *text_view,
   end = *iter2;
 
   if (gtk_text_iter_equal (&begin, &end))
-    goto finish;
+    {
+      gtk_text_view_get_iter_location (text_view, &begin, &area);
+      goto finish;
+    }
 
   gtk_text_iter_order (&begin, &end);
 
