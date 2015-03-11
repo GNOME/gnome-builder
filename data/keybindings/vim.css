@@ -308,13 +308,13 @@
   bind "BackSpace" { "move-cursor" (logical-positions, -1, 0)
                      "clear-count" () };
 
-  bind "KP_Enter" { "movement" (next-line, 0, 0, 1)
+  bind "KP_Enter" { "movement" (next-line, 0, 1, 1)
                     "clear-count" () };
-  bind "<shift>KP_Enter" { "movement" (next-line, 0, 0, 1)
+  bind "<shift>KP_Enter" { "movement" (next-line, 0, 1, 1)
                            "clear-count" () };
-  bind "Return" { "movement" (next-line, 0, 0, 1)
+  bind "Return" { "movement" (next-line, 0, 1, 1)
                   "clear-count" () };
-  bind "<shift>Return" { "movement" (next-line, 0, 0, 0)
+  bind "<shift>Return" { "movement" (next-line, 0, 1, 0)
                          "clear-count" () };
 
   /* copy */
