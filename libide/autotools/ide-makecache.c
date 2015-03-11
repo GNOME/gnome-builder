@@ -269,6 +269,7 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
 
       g_ptr_array_add (targets, NULL);
       ret = (gchar **)g_ptr_array_free (targets, FALSE);
+      targets = NULL;
 
 #ifndef IDE_DISABLE_TRACE
       {
