@@ -331,9 +331,10 @@
                       "change-case" (toggle)
                       "clear-count" () };
 
-  /* todo: not quite right, should add movement that can span lines */
   bind "BackSpace" { "movement" (previous-offset, 0, 1, 1)
                      "clear-count" () };
+  bind "space" { "movement" (next-offset, 0, 1, 1)
+                 "clear-count" () };
 
   bind "KP_Enter" { "movement" (next-line, 0, 1, 1)
                     "clear-count" () };
@@ -782,6 +783,11 @@
   bind "Right" { "movement" (next-char, 1, 1, 1) };
   bind "Up" { "movement" (previous-line, 1, 1, 1) };
   bind "Down" { "movement" (next-line, 1, 1, 1) };
+
+  bind "BackSpace" { "movement" (previous-offset, 1, 1, 1)
+                     "clear-count" () };
+  bind "space" { "movement" (next-offset, 1, 1, 1)
+                 "clear-count" () };
 
   bind "y" { "copy-clipboard" ()
              "selection-theatric" (expand)
