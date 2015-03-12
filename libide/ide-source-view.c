@@ -2286,77 +2286,39 @@ ide_source_view_real_insert_modifier (IdeSourceView *self,
   gtk_text_buffer_end_user_action (buffer);
 }
 
-static gchar **
-remove_empty_lines (gchar **lines)
-{
-  GPtrArray *ar;
-  gsize i = 0;
-
-  g_assert (lines);
-
-  ar = g_ptr_array_new ();
-
-  for (i = 0; lines [i]; i++)
-    {
-      if (lines [i][0])
-        g_ptr_array_add (ar, lines [i]);
-      else
-        g_free (lines [i]);
-    }
-
-  g_ptr_array_add (ar, NULL);
-
-  g_free (lines);
-
-  return (gchar **)g_ptr_array_free (ar, FALSE);
-}
-
 static void
 ide_source_view_real_join_lines (IdeSourceView *self)
 {
   GtkTextBuffer *buffer;
+  GtkTextMark *mark;
   GtkTextIter begin;
   GtkTextIter end;
-  gchar *text;
-  gchar **lines;
-  gsize i;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
-  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
-
-  if (gtk_text_iter_get_line (&begin) == gtk_text_iter_get_line (&end))
+  if (!GTK_SOURCE_IS_BUFFER (buffer))
     return;
 
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
   gtk_text_iter_order (&begin, &end);
 
-  gtk_text_iter_set_line_offset (&begin, 0);
-  if (!gtk_text_iter_ends_line (&end))
-    gtk_text_iter_forward_to_line_end (&end);
+  /*
+   * We want to leave the cursor inbetween the joined lines, so lets create an
+   * insert mark and delete it later after we reposition the cursor.
+   */
+  mark = gtk_text_buffer_create_mark (buffer, NULL, &end, TRUE);
 
-  text = gtk_text_iter_get_slice (&begin, &end);
-  lines = g_strsplit (text, "\n", 0);
-  g_free (text);
-
-  for (i = 1; lines [i]; i++)
-    g_strstrip (lines [i]);
-
-  lines = remove_empty_lines (lines);
-
-  text = g_strchomp (g_strjoinv (" ", lines));
-  g_strfreev (lines);
-
+  /* join lines and restore the insert mark inbetween joined lines. */
   gtk_text_buffer_begin_user_action (buffer);
-  gtk_text_buffer_delete (buffer, &begin, &end);
-  gtk_text_buffer_insert (buffer, &begin, text, -1);
-  if (!gtk_text_iter_ends_line (&begin))
-    gtk_text_iter_forward_to_line_end (&begin);
-  gtk_text_buffer_select_range (buffer, &begin, &begin);
+  gtk_source_buffer_join_lines (GTK_SOURCE_BUFFER (buffer), &begin, &end);
+  gtk_text_buffer_get_iter_at_mark (buffer, &end, mark);
+  gtk_text_buffer_select_range (buffer, &end, &end);
   gtk_text_buffer_end_user_action (buffer);
 
-  g_free (text);
+  /* Remove our temporary mark. */
+  gtk_text_buffer_delete_mark (buffer, mark);
 }
 
 static void
