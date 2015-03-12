@@ -58,6 +58,17 @@
   bind "<shift><ctrl>j" { "action" ("editor-view", "toggle-split", "") };
   bind "<ctrl><alt>Page_Up" { "action" ("stack", "previous-document", "") };
   bind "<ctrl><alt>Page_Down" { "action" ("stack", "next-document", "") };
+
+  bind "<alt>0" { "append-to-count" (0) };
+  bind "<alt>1" { "append-to-count" (1) };
+  bind "<alt>2" { "append-to-count" (2) };
+  bind "<alt>3" { "append-to-count" (3) };
+  bind "<alt>4" { "append-to-count" (4) };
+  bind "<alt>5" { "append-to-count" (5) };
+  bind "<alt>6" { "append-to-count" (6) };
+  bind "<alt>7" { "append-to-count" (7) };
+  bind "<alt>8" { "append-to-count" (8) };
+  bind "<alt>9" { "append-to-count" (9) };
 }
 
 @binding-set builder-emacs-source-view-x
@@ -97,6 +108,8 @@ GtkTextView {
 GtkSourceView,
 IdeSourceViewMode.default
 {
+  -IdeSourceViewMode-repeat-insert-with-count: true;
+
   gtk-key-bindings: builder-emacs-text-entry, builder-emacs-source-view, builder-emacs-text-view;
 }
 
