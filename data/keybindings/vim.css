@@ -239,6 +239,9 @@
                    "clear-count" () };
   bind "z" { "set-mode" ("vim-normal-z", transient) };
 
+  /* macro recording! */
+  bind "q" { "set-mode" ("vim-normal-q", transient) };
+
   /* submode for bracket */
   bind "bracketleft" { "set-mode" ("vim-normal-bracket", transient) };
 
@@ -838,6 +841,11 @@
              "set-mode" ("vim-visual", permanent) };
 }
 
+@binding-set builder-vim-source-view-normal-q
+{
+  bind "q" { "begin-macro" () };
+}
+
 @binding-set builder-vim-source-view-visual-line-g
 {
   bind "g" { "movement" (first-line, 1, 1, 0)
@@ -1223,6 +1231,15 @@ IdeSourceViewMode.vim-normal-g-u {
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal-g-u;
+}
+
+IdeSourceViewMode.vim-normal-q {
+  -IdeSourceViewMode-suppress-unbound: true;
+  -IdeSourceViewMode-coalesce-undo: true;
+  -IdeSourceViewMode-block-cursor: true;
+
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-q;
 }
 
 IdeSourceViewMode.vim-normal-indent {
