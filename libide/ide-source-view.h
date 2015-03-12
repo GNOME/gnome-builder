@@ -244,7 +244,8 @@ struct _IdeSourceViewClass
                                        IdeSourceSnippet        *snippet,
                                        IdeSourceSnippetContext *context,
                                        const GtkTextIter       *location);
-  void (*replay_macro)                (IdeSourceView           *self);
+  void (*replay_macro)                (IdeSourceView           *self,
+                                       gboolean                 use_count);
   void (*restore_insert_mark)         (IdeSourceView           *self);
   void (*save_insert_mark)            (IdeSourceView           *self);
   void (*selection_theatric)          (IdeSourceView           *self,

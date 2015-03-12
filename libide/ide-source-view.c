@@ -3307,10 +3307,13 @@ ide_source_view_real_end_macro (IdeSourceView *self)
 }
 
 static void
-ide_source_view_real_replay_macro (IdeSourceView *self)
+ide_source_view_real_replay_macro (IdeSourceView *self,
+                                   gboolean       use_count)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceViewCapture *capture;
+  guint count = 1;
+  gsize i;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
@@ -3326,9 +3329,13 @@ ide_source_view_real_replay_macro (IdeSourceView *self)
       return;
     }
 
+  if (use_count)
+    count = MAX (1, priv->count);
+
   priv->in_replay_macro = TRUE;
   capture = priv->capture, priv->capture = NULL;
-  ide_source_view_capture_replay (capture);
+  for (i = 0; i < count; i++)
+    ide_source_view_capture_replay (capture);
   g_clear_object (&priv->capture);
   priv->capture = capture, capture = NULL;
   priv->in_replay_macro = FALSE;
@@ -3940,9 +3947,10 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, replay_macro),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  g_cclosure_marshal_VOID__BOOLEAN,
                   G_TYPE_NONE,
-                  0);
+                  1,
+                  G_TYPE_BOOLEAN);
 
   gSignals [RESTORE_INSERT_MARK] =
     g_signal_new ("restore-insert-mark",

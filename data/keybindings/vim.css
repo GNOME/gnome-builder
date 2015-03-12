@@ -120,7 +120,7 @@
              "set-mode" ("vim-normal-with-count", transient) };
 
   /* replay the last recording */
-  bind "period" { "replay-macro" () };
+  bind "period" { "replay-macro" (1) };
 
   /* insert at cursor */
   bind "i" { "begin-macro" ()
