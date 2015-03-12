@@ -37,6 +37,7 @@ static GList          *gFilesToOpen;
 static gint            gExitCode = EXIT_SUCCESS;
 static gboolean        gWordCompletion;
 static gboolean        gDarkMode;
+static gboolean        gSearchShadow;
 static gboolean        gDebugScrollOffset;
 static gchar          *gCss = "\
 @binding-set file-keybindings { \
@@ -163,6 +164,8 @@ add_buffer (IdeBuffer *buffer)
                            "show-line-changes", TRUE,
                            "show-line-numbers", TRUE,
                            "show-right-margin", TRUE,
+                           "show-search-bubbles", TRUE,
+                           "show-search-shadow", gSearchShadow,
                            "snippet-completion", TRUE,
                            "visible", TRUE,
                            NULL);
@@ -576,6 +579,7 @@ main (int argc,
     { "emacs", 'e', 0, G_OPTION_ARG_NONE, &emacs, N_("Use emacs keybindings") },
     { "vim", 'm', 0, G_OPTION_ARG_NONE, &vim, N_("Use Vim keybindings") },
     { "dark", 'd', 0, G_OPTION_ARG_NONE, &gDarkMode, N_("Use dark mode") },
+    { "shadow", 's', 0, G_OPTION_ARG_NONE, &gSearchShadow, N_("Show shadow when searching") },
     { "debug-scroll-offset", 0, 0, G_OPTION_ARG_NONE, &gDebugScrollOffset,
       N_("Render a rectangle over the visible region taking scroll offset into account.") },
     { NULL }
