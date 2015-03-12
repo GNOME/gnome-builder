@@ -812,14 +812,16 @@
 
 @binding-set builder-vim-source-view-normal-d-i
 {
-  bind "p" { "movement" (paragraph-start, 1, 1, 1)
+  bind "p" { "begin-macro" ()
+             "movement" (paragraph-start, 1, 1, 1)
              "movement" (first-char, 1, 1, 0)
              "swap-selection-bounds" ()
              "movement" (paragraph-end, 1, 1, 1)
              "movement" (last-char, 1, 1, 0)
              "copy-clipboard" ()
              "selection-theatric" (shrink)
-             "delete-selection" () };
+             "delete-selection" ()
+             "end-macro" () };
 }
 
 @binding-set builder-vim-source-view-visual-g
