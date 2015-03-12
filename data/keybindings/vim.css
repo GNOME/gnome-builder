@@ -776,16 +776,38 @@
 
 @binding-set builder-vim-source-view-normal-d-g
 {
-  bind "e" { "movement" (previous-word-end, 1, 1, 1)
-             "delete-selection" () };
-  bind "<shift>e" { "movement" (previous-full-word-end, 1, 1, 1)
-                    "delete-selection" () };
-  bind "g" { "movement" (first-line, 0, 0, 0)
-             "delete-selection" () };
-  bind "j" { "movement" (next-line, 0, 1, 1)
-             "delete-selection" () };
-  bind "m" { "movement" (middle-char, 0, 1, 0)
-             "delete-selection" () };
+  bind "e" { "begin-macro" ()
+             "movement" (previous-word-end, 1, 1, 1)
+             "copy-clipboard" ()
+             "delete-selection" ()
+             "end-macro" () };
+  bind "<shift>e" { "begin-macro" ()
+                    "movement" (previous-full-word-end, 1, 1, 1)
+                    "copy-clipboard" ()
+                    "delete-selection" ()
+                    "end-macro" () };
+  bind "g" { "begin-macro" ()
+             "movement" (first-line, 1, 1, 0)
+             "copy-clipboard" ()
+             "delete-selection" ()
+             "end-macro" () };
+  bind "k" { "begin-macro" ()
+             "movement" (next-char, 1, 1, 0)
+             "movement" (previous-line, 1, 1, 1)
+             "copy-clipboard" ()
+             "delete-selection" ()
+             "end-macro" () };
+  bind "j" { "begin-macro" ()
+             "movement" (next-char, 1, 1, 0)
+             "movement" (next-line, 1, 1, 1)
+             "copy-clipboard" ()
+             "delete-selection" ()
+             "end-macro" () };
+  bind "m" { "begin-macro" ()
+             "movement" (middle-char, 1, 1, 0)
+             "copy-clipboard" ()
+             "delete-selection" ()
+             "end-macro" () };
 }
 
 @binding-set builder-vim-source-view-normal-d-i
