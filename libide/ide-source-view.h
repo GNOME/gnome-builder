@@ -255,6 +255,9 @@ struct _IdeSourceViewClass
                                        IdeSourceViewModeType    type);
   void (*set_overwrite)               (IdeSourceView           *self,
                                        gboolean                 overwrite);
+  void (*set_search_text)             (IdeSourceView           *self,
+                                       const gchar             *search_text,
+                                       gboolean                 from_selection);
   void (*sort)                        (IdeSourceView           *self,
                                        gboolean                 ignore_case,
                                        gboolean                 reverse);

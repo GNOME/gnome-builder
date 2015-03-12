@@ -186,6 +186,7 @@ enum {
   SELECTION_THEATRIC,
   SET_MODE,
   SET_OVERWRITE,
+  SET_SEARCH_TEXT,
   SORT,
   SWAP_SELECTION_BOUNDS,
   LAST_SIGNAL
@@ -2860,6 +2861,35 @@ ide_source_view_real_push_snippet (IdeSourceView           *self,
 }
 
 static void
+ide_source_view_real_set_search_text (IdeSourceView *self,
+                                      const gchar   *search_text,
+                                      gboolean       from_selection)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autofree gchar *str = NULL;
+  GtkSourceSearchSettings *settings;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  if (!priv->search_context)
+    return;
+
+  if (from_selection)
+    {
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+      gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+      str = gtk_text_iter_get_slice (&begin, &end);
+      search_text = str;
+    }
+
+  settings = gtk_source_search_context_get_settings (priv->search_context);
+  gtk_source_search_settings_set_search_text (settings, search_text);
+}
+
+static void
 ide_source_view_constructed (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -3579,6 +3609,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->selection_theatric = ide_source_view_real_selection_theatric;
   klass->set_mode = ide_source_view_real_set_mode;
   klass->set_overwrite = ide_source_view_real_set_overwrite;
+  klass->set_search_text = ide_source_view_real_set_search_text;
   klass->sort = ide_source_view_real_sort;
   klass->swap_selection_bounds = ide_source_view_real_swap_selection_bounds;
 
@@ -4052,6 +4083,18 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   g_cclosure_marshal_VOID__BOOLEAN,
                   G_TYPE_NONE,
                   1,
+                  G_TYPE_BOOLEAN);
+
+  gSignals [SET_SEARCH_TEXT] =
+    g_signal_new ("set-search-text",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, set_search_text),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_STRING,
                   G_TYPE_BOOLEAN);
 
   /**
