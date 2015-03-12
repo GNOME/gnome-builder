@@ -753,21 +753,25 @@
 
 @binding-set builder-vim-source-view-normal-g-u
 {
-  bind "u" { "movement" (first-char, 0, 1, 0)
-             "movement" (next-line, 1, 1, 1)
+  bind "u" { "begin-macro" ()
+             "movement" (first-char, 0, 1, 0)
+             "movement" (next-line, 1, 0, 1)
              "swap-selection-bounds" ()
              "selection-theatric" (expand)
              "change-case" (lower)
              "clear-selection" ()
-             "movement" (first-nonspace-char, 0, 1, 0) };
+             "movement" (first-nonspace-char, 0, 1, 0)
+             "end-macro" () };
 
-  bind "<shift>u" { "movement" (first-char, 0, 1, 0)
-                    "movement" (next-line, 1, 1, 1)
+  bind "<shift>u" { "begin-macro" ()
+                    "movement" (first-char, 0, 1, 0)
+                    "movement" (next-line, 1, 0, 1)
                     "swap-selection-bounds" ()
                     "selection-theatric" (expand)
                     "change-case" (upper)
                     "clear-selection" ()
-                    "movement" (first-nonspace-char, 0, 1, 0) };
+                    "movement" (first-nonspace-char, 0, 1, 0)
+                    "end-macro" () };
 }
 
 @binding-set builder-vim-source-view-normal-d-g
