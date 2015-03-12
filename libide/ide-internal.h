@@ -62,6 +62,11 @@ void _ide_search_context_add_provider (IdeSearchContext  *context,
 IdeSourceRange *_ide_source_range_new (IdeSourceLocation *begin,
                                        IdeSourceLocation *end);
 
+void _ide_source_view_set_count (IdeSourceView *self,
+                                 guint          count);
+void _ide_source_view_set_modifier (IdeSourceView *self,
+                                    gunichar       modifier);
+
 gboolean           _ide_source_view_mode_do_event (IdeSourceViewMode     *mode,
                                                    GdkEventKey           *event,
                                                    gboolean              *remove);

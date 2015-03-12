@@ -187,6 +187,28 @@ static void ide_source_view_real_set_mode (IdeSourceView         *self,
                                            const gchar           *name,
                                            IdeSourceViewModeType  type);
 
+void
+_ide_source_view_set_count (IdeSourceView *self,
+                            guint          count)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  priv->count = count;
+}
+
+void
+_ide_source_view_set_modifier (IdeSourceView *self,
+                               gunichar       modifier)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  priv->modifier = modifier;
+}
+
 static void
 activate_action (GtkWidget   *widget,
                  const gchar *prefix,
