@@ -965,12 +965,18 @@
   bind "parenright" { "movement" (sentence-end, 1, 1, 1)
                       "movement" (last-char, 1, 1, 0) };
 
-  bind "greater" { "indent-selection" (1)
+  bind "greater" { "save-insert-mark" ()
+                   "indent-selection" (1)
                    "clear-selection" ()
                    "movement" (first-nonspace-char, 0, 1, 0)
+                   "restore-insert-mark" ()
+                   "movement" (first-nonspace-char, 0, 1, 0)
                    "set-mode" ("vim-normal", permanent) };
-  bind "less" { "indent-selection" (-1)
+  bind "less" { "save-insert-mark" ()
+                "indent-selection" (-1)
                 "clear-selection" ()
+                "movement" (first-nonspace-char, 0, 1, 0)
+                "restore-insert-mark" ()
                 "movement" (first-nonspace-char, 0, 1, 0)
                 "set-mode" ("vim-normal", permanent) };
 
