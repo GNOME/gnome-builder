@@ -395,7 +395,8 @@
   /* visual mode transition */
   bind "v" { "movement" (next-char, 1, 1, 1)
              "set-mode" ("vim-visual", permanent) };
-  bind "<shift>v" { "movement" (first-char, 0, 1, 0)
+  bind "<shift>v" { "begin-macro" ()
+                    "movement" (first-char, 0, 1, 0)
                     "movement" (next-line, 1, 0, 1)
                     "set-mode" ("vim-visual-line", permanent) };
   bind "<ctrl>v" { "set-mode" ("vim-visual-block", permanent) };
@@ -1029,9 +1030,11 @@
   bind "j" { "movement" (next-line, 1, 0, 1) };
 
   /* just to be nice */
-  bind "h" { "clear-selection" ()
+  bind "h" { "end-macro" ()
+             "clear-selection" ()
              "set-mode" ("vim-normal", permanent) };
-  bind "l" { "clear-selection" ()
+  bind "l" { "end-macro" ()
+             "clear-selection" ()
              "set-mode" ("vim-normal", permanent) };
 
   bind "Up" { "movement" (previous-line, 1, 0, 1) };
@@ -1045,18 +1048,23 @@
   bind "x"        { "copy-clipboard" ()
                     "delete-selection" ()
                     "delete-from-cursor" (chars, 1)
+                    "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
 
   bind "<shift>x" { "copy-clipboard" ()
                     "delete-selection" ()
                     "delete-from-cursor" (chars, 1)
+                    "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
 
+  /* TODO: this should actually cancel the macro */
   bind "y"        { "copy-clipboard" ()
                     "selection-theatric" (expand)
                     "clear-selection" ()
+                    "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
 
+  /* TODO: this should actually cancel the macro */
   bind "<shift>y" { "copy-clipboard" ()
                     "selection-theatric" (expand)
                     "clear-selection" ()
@@ -1066,20 +1074,24 @@
                     "selection-theatric" (expand)
                     "clear-selection" ()
                     "movement" (last-char, 0, 1, 0)
+                    "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
 
   bind "asciitilde" { "selection-theatric" (expand)
                       "change-case" (toggle)
                       "clear-selection" ()
+                      "end-macro" ()
                       "set-mode" ("vim-normal", permanent) };
 
   bind "<shift>u" { "selection-theatric" (expand)
                     "change-case" (upper)
                     "clear-selection" ()
+                    "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
   bind "u" { "selection-theatric" (expand)
              "change-case" (lower)
              "clear-selection" ()
+             "end-macro" ()
              "set-mode" ("vim-normal", permanent) };
 
   bind "braceleft" { "movement" (paragraph-start, 1, 1, 1)
@@ -1098,6 +1110,7 @@
                    "movement" (first-nonspace-char, 0, 1, 0)
                    "restore-insert-mark" ()
                    "movement" (first-nonspace-char, 0, 1, 0)
+                   "end-macro" ()
                    "set-mode" ("vim-normal", permanent) };
   bind "less" { "save-insert-mark" ()
                 "indent-selection" (-1)
@@ -1105,6 +1118,7 @@
                 "movement" (first-nonspace-char, 0, 1, 0)
                 "restore-insert-mark" ()
                 "movement" (first-nonspace-char, 0, 1, 0)
+                "end-macro" ()
                 "set-mode" ("vim-normal", permanent) };
 
   bind "<ctrl>e" { "movement" (screen-up, 1, 0, 1) };
