@@ -121,6 +121,8 @@ typedef struct
 
   guint                        saved_line;
   guint                        saved_line_offset;
+  guint                        saved_selection_line;
+  guint                        saved_selection_line_offset;
 
   guint                        auto_indent : 1;
   guint                        completion_visible : 1;
@@ -2657,12 +2659,14 @@ ide_source_view_real_restore_insert_mark (IdeSourceView *self)
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
+  GtkTextIter selection;
   guint line_offset;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   gtk_text_buffer_get_iter_at_line (buffer, &iter, priv->saved_line);
+  gtk_text_buffer_get_iter_at_line (buffer, &selection, priv->saved_selection_line);
 
   line_offset = priv->saved_line_offset;
 
@@ -2672,7 +2676,15 @@ ide_source_view_real_restore_insert_mark (IdeSourceView *self)
         break;
     }
 
-  gtk_text_buffer_select_range (buffer, &iter, &iter);
+  line_offset = priv->saved_selection_line_offset;
+
+  for (; line_offset; line_offset--)
+    {
+      if (gtk_text_iter_ends_line (&selection) || !gtk_text_iter_forward_char (&selection))
+        break;
+    }
+
+  gtk_text_buffer_select_range (buffer, &iter, &selection);
 
   insert = gtk_text_buffer_get_insert (buffer);
   ide_source_view_scroll_mark_onscreen (self, insert);
@@ -2684,16 +2696,23 @@ ide_source_view_real_save_insert_mark (IdeSourceView *self)
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
+  GtkTextMark *selection_bound;
   GtkTextIter iter;
+  GtkTextIter selection;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   insert = gtk_text_buffer_get_insert (buffer);
+  selection_bound = gtk_text_buffer_get_selection_bound (buffer);
+
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  gtk_text_buffer_get_iter_at_mark (buffer, &selection, selection_bound);
 
   priv->saved_line = gtk_text_iter_get_line (&iter);
   priv->saved_line_offset = gtk_text_iter_get_line_offset (&iter);
+  priv->saved_selection_line = gtk_text_iter_get_line (&selection);
+  priv->saved_selection_line_offset = gtk_text_iter_get_line_offset (&selection);
 }
 
 static void
