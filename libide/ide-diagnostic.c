@@ -136,6 +136,14 @@ ide_diagnostic_get_range (IdeDiagnostic *self,
   return NULL;
 }
 
+/**
+ * ide_diagnostic_get_location:
+ * @self: An #IdeDiagnostic.
+ *
+ * Gets the location of a diagnostic.
+ *
+ * Returns: (transfer none): Gets the location of a diagnostic.
+ */
 IdeSourceLocation *
 ide_diagnostic_get_location (IdeDiagnostic *self)
 {
