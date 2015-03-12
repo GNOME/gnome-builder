@@ -5,6 +5,7 @@
 
 #include "ide-enums.h"
 
+#include "ide-buffer.h"
 #include "ide-source-view.h"
 
 /*** END file-header ***/
