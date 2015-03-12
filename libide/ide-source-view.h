@@ -209,6 +209,7 @@ struct _IdeSourceViewClass
   void (*append_to_count)             (IdeSourceView           *self,
                                        gint                     digit);
   void (*auto_indent)                 (IdeSourceView           *self);
+  void (*begin_macro)                 (IdeSourceView           *self);
   void (*capture_modifier)            (IdeSourceView           *self);
   void (*clear_count)                 (IdeSourceView           *self);
   void (*clear_modifier)              (IdeSourceView           *self);
@@ -217,6 +218,7 @@ struct _IdeSourceViewClass
   void (*cycle_completion)            (IdeSourceView           *self,
                                        GtkDirectionType         direction);
   void (*delete_selection)            (IdeSourceView           *self);
+  void (*end_macro)                   (IdeSourceView           *self);
   void (*indent_selection)            (IdeSourceView           *self,
                                        gint                     level);
   void (*insert_at_cursor_and_indent) (IdeSourceView           *self,
@@ -242,6 +244,7 @@ struct _IdeSourceViewClass
                                        IdeSourceSnippet        *snippet,
                                        IdeSourceSnippetContext *context,
                                        const GtkTextIter       *location);
+  void (*replay_macro)                (IdeSourceView           *self);
   void (*restore_insert_mark)         (IdeSourceView           *self);
   void (*save_insert_mark)            (IdeSourceView           *self);
   void (*selection_theatric)          (IdeSourceView           *self,

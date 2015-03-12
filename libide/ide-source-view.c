@@ -49,6 +49,7 @@
 #include "ide-source-snippets-manager.h"
 #include "ide-source-location.h"
 #include "ide-source-view.h"
+#include "ide-source-view-capture.h"
 #include "ide-source-view-mode.h"
 #include "ide-source-view-movements.h"
 
@@ -91,6 +92,7 @@ typedef struct
   IdeIndenter                 *indenter;
   GtkSourceGutterRenderer     *line_change_renderer;
   GtkSourceGutterRenderer     *line_diagnostics_renderer;
+  IdeSourceViewCapture        *capture;
   IdeSourceViewMode           *mode;
   GQueue                      *selections;
   GQueue                      *snippets;
@@ -123,8 +125,10 @@ typedef struct
   guint                        auto_indent : 1;
   guint                        completion_visible : 1;
   guint                        enable_word_completion : 1;
+  guint                        in_replay_macro : 1;
   guint                        insert_matching_brace : 1;
   guint                        overwrite_braces : 1;
+  guint                        recording_macro : 1;
   guint                        show_grid_lines : 1;
   guint                        show_line_changes : 1;
   guint                        snippet_completion : 1;
@@ -153,6 +157,7 @@ enum {
   ACTION,
   APPEND_TO_COUNT,
   AUTO_INDENT,
+  BEGIN_MACRO,
   CAPTURE_MODIFIER,
   CLEAR_COUNT,
   CLEAR_MODIFIER,
@@ -160,6 +165,7 @@ enum {
   CLEAR_SNIPPETS,
   CYCLE_COMPLETION,
   DELETE_SELECTION,
+  END_MACRO,
   INDENT_SELECTION,
   INSERT_AT_CURSOR_AND_INDENT,
   INSERT_MODIFIER,
@@ -167,9 +173,10 @@ enum {
   MOVEMENT,
   PASTE_CLIPBOARD_EXTENDED,
   POP_SELECTION,
+  POP_SNIPPET,
   PUSH_SELECTION,
   PUSH_SNIPPET,
-  POP_SNIPPET,
+  REPLAY_MACRO,
   RESTORE_INSERT_MARK,
   SAVE_INSERT_MARK,
   SELECTION_THEATRIC,
@@ -207,6 +214,9 @@ _ide_source_view_set_modifier (IdeSourceView *self,
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
   priv->modifier = modifier;
+
+  if (priv->recording_macro && !priv->in_replay_macro)
+    ide_source_view_capture_record_modifier (priv->capture, modifier);
 }
 
 static void
@@ -1690,15 +1700,25 @@ ide_source_view_key_press_event (GtkWidget   *widget,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  insert = gtk_text_buffer_get_insert (buffer);
+
+  /*
+   * If we are waiting for input for a modifier key, dispatch it now.
+   */
   if (priv->waiting_for_capture)
     {
       if (!is_modifier_key (event))
-        priv->modifier = gdk_keyval_to_unicode (event->keyval);
+        _ide_source_view_set_modifier (self, gdk_keyval_to_unicode (event->keyval));
       return TRUE;
     }
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-  insert = gtk_text_buffer_get_insert (buffer);
+  /*
+   * Are we currently recording a macro? If so lets stash the event for later.
+   */
+  if (priv->recording_macro)
+    ide_source_view_capture_record_event (priv->capture, (GdkEvent *)event,
+                                          priv->count, priv->modifier);
 
   /*
    * Check our current change sequence. If the buffer has changed during the
@@ -3244,6 +3264,77 @@ ide_source_view_real_draw_layer (GtkTextView      *text_view,
 }
 
 static void
+ide_source_view_real_begin_macro (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  IdeSourceViewModeType mode_type;
+  GdkEvent *event;
+  const gchar *mode_name;
+  gunichar modifier;
+  guint count;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->in_replay_macro)
+    return;
+
+  priv->recording_macro = TRUE;
+
+  mode_type = ide_source_view_mode_get_mode_type (priv->mode);
+  mode_name = ide_source_view_mode_get_name (priv->mode);
+  modifier = priv->modifier;
+  count = priv->count;
+  event = gtk_get_current_event ();
+
+  g_clear_object (&priv->capture);
+
+  priv->capture = ide_source_view_capture_new (self, mode_name, mode_type, count, modifier);
+  ide_source_view_capture_record_event (priv->capture, event, count, modifier);
+  gdk_event_free (event);
+}
+
+static void
+ide_source_view_real_end_macro (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->in_replay_macro)
+    return;
+
+  priv->recording_macro = FALSE;
+}
+
+static void
+ide_source_view_real_replay_macro (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  IdeSourceViewCapture *capture;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->recording_macro)
+    {
+      g_warning ("Cannot playback macro while recording.");
+      return;
+    }
+
+  if (priv->in_replay_macro)
+    {
+      g_warning ("Cannot playback macro while playing back macro.");
+      return;
+    }
+
+  priv->in_replay_macro = TRUE;
+  capture = priv->capture, priv->capture = NULL;
+  ide_source_view_capture_replay (capture);
+  g_clear_object (&priv->capture);
+  priv->capture = capture, capture = NULL;
+  priv->in_replay_macro = FALSE;
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -3251,6 +3342,7 @@ ide_source_view_dispose (GObject *object)
 
   ide_source_view_clear_snippets (self);
 
+  g_clear_object (&priv->capture);
   g_clear_object (&priv->indenter);
   g_clear_object (&priv->line_change_renderer);
   g_clear_object (&priv->line_diagnostics_renderer);
@@ -3416,6 +3508,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->action = ide_source_view_real_action;
   klass->append_to_count = ide_source_view_real_append_to_count;
   klass->auto_indent = ide_source_view_real_auto_indent;
+  klass->begin_macro = ide_source_view_real_begin_macro;
   klass->capture_modifier = ide_source_view_real_capture_modifier;
   klass->clear_count = ide_source_view_real_clear_count;
   klass->clear_modifier = ide_source_view_real_clear_modifier;
@@ -3423,6 +3516,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
   klass->delete_selection = ide_source_view_real_delete_selection;
+  klass->end_macro = ide_source_view_real_end_macro;
   klass->indent_selection = ide_source_view_real_indent_selection;
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
   klass->insert_modifier = ide_source_view_real_insert_modifier;
@@ -3432,6 +3526,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->pop_selection = ide_source_view_real_pop_selection;
   klass->push_selection = ide_source_view_real_push_selection;
   klass->push_snippet = ide_source_view_real_push_snippet;
+  klass->replay_macro = ide_source_view_real_replay_macro;
   klass->restore_insert_mark = ide_source_view_real_restore_insert_mark;
   klass->save_insert_mark = ide_source_view_real_save_insert_mark;
   klass->selection_theatric = ide_source_view_real_selection_theatric;
@@ -3569,6 +3664,25 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   0);
 
   /**
+   * IdeSourceView::begin-macro:
+   *
+   * This signal will begin recording input to the #IdeSourceView. This includes the current
+   * #IdeSourceViewMode, #IdeSourceView:count and #IdeSourceView:modifier which will be used
+   * to replay the sequence starting from the correct state.
+   *
+   * Pair this with an emission of #IdeSourceView::end-macro to complete the sequence.
+   */
+  gSignals [BEGIN_MACRO] =
+    g_signal_new ("begin-macro",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, begin_macro),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  /**
    * IdeSourceView::capture-modifier:
    *
    * This signal will block the main loop in a similar fashion to how
@@ -3649,6 +3763,25 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, delete_selection),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  /**
+   * IdeSourceView::end-macro:
+   *
+   * You should call #IdeSourceView::begin-macro before emitting this signal.
+   *
+   * Complete a macro recording sequence. This may be called more times than is necessary,
+   * since #IdeSourceView will only keep the most recent macro recording. This can be
+   * helpful when implementing recording sequences such as in Vim.
+   */
+  gSignals [END_MACRO] =
+    g_signal_new ("end-macro",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, end_macro),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
@@ -3793,6 +3926,23 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   IDE_TYPE_SOURCE_SNIPPET,
                   IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
                   GTK_TYPE_TEXT_ITER);
+
+  /**
+   * IdeSourceView:replay-macro:
+   * @self: an #IdeSourceView.
+   *
+   * Replays the last series of captured events that were captured between calls
+   * to #IdeSourceView::begin-macro and #IdeSourceView::end-macro.
+   */
+  gSignals [REPLAY_MACRO] =
+    g_signal_new ("replay-macro",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, replay_macro),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   gSignals [RESTORE_INSERT_MARK] =
     g_signal_new ("restore-insert-mark",
