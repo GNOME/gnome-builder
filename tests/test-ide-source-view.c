@@ -345,8 +345,8 @@ create_window (void)
   g_clear_object (&css);
 
   gWindow = g_object_new (GTK_TYPE_WINDOW,
-                          "default-width", 800,
-                          "default-height", 600,
+                          "default-width", 1280,
+                          "default-height", 720,
                           "title", _("idedit"),
                           NULL);
   g_signal_connect (gWindow, "delete-event", G_CALLBACK (delete_event_cb), NULL);
