@@ -232,6 +232,8 @@ struct _IdeSourceViewClass
                                        gboolean                 extend_selection,
                                        gboolean                 exclusive,
                                        gboolean                 apply_count);
+  void (*move_error)                  (IdeSourceView           *self,
+                                       GtkDirectionType         dir);
   void (*move_search)                 (IdeSourceView           *self,
                                        GtkDirectionType         dir,
                                        gboolean                 extend_selection,

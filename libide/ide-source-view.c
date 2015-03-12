@@ -194,6 +194,7 @@ enum {
   INSERT_MODIFIER,
   JUMP,
   MOVEMENT,
+  MOVE_ERROR,
   MOVE_SEARCH,
   PASTE_CLIPBOARD_EXTENDED,
   POP_SELECTION,
@@ -2949,6 +2950,70 @@ ide_source_view_real_move_search (IdeSourceView    *self,
 }
 
 static void
+ide_source_view_real_move_error (IdeSourceView    *self,
+                                 GtkDirectionType  dir)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  gboolean (*movement) (GtkTextIter *) = NULL;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (!priv->buffer)
+    return;
+
+  /*
+   * TODO: This is not particularly very efficient. But I didn't feel like
+   *       plumbing access to the diagnostics set and duplicating most of
+   *       the code for getting a diagnostic at a line. Once the diagnostics
+   *       get support for fast lookups (bloom filter or something) then
+   *       we should change to that.
+   */
+
+  if ((dir == GTK_DIR_DOWN) || (dir == GTK_DIR_RIGHT))
+    movement = gtk_text_iter_forward_line;
+  else
+    movement = gtk_text_iter_backward_line;
+
+  buffer = GTK_TEXT_BUFFER (priv->buffer);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  while (movement (&iter))
+    {
+      IdeDiagnostic *diag;
+
+      diag = ide_buffer_get_diagnostic_at_iter (priv->buffer, &iter);
+
+      if (diag)
+        {
+          IdeSourceLocation *location;
+
+          location = ide_diagnostic_get_location (diag);
+
+          if (location)
+            {
+              guint line_offset;
+
+              line_offset = ide_source_location_get_line_offset (location);
+              gtk_text_iter_set_line_offset (&iter, 0);
+              for (; line_offset; line_offset--)
+                if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
+                  break;
+
+              gtk_text_buffer_select_range (buffer, &iter, &iter);
+              ide_source_view_scroll_mark_onscreen (self, insert);
+              return;
+            }
+
+          break;
+        }
+    }
+}
+
+static void
 ide_source_view_real_restore_insert_mark (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
@@ -4133,6 +4198,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
   klass->insert_modifier = ide_source_view_real_insert_modifier;
   klass->jump = ide_source_view_real_jump;
+  klass->move_error = ide_source_view_real_move_error;
   klass->move_search = ide_source_view_real_move_search;
   klass->movement = ide_source_view_real_movement;
   klass->paste_clipboard_extended = ide_source_view_real_paste_clipboard_extended;
@@ -4498,6 +4564,24 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
+
+  /**
+   * IdeSourceView::move-error:
+   * @self: An #IdeSourceView.
+   * @dir: The direction to move.
+   *
+   * Moves to the next search result either forwards or backwards.
+   */
+  gSignals [MOVE_ERROR] =
+    g_signal_new ("move-error",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, move_error),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_DIRECTION_TYPE);
 
   gSignals [MOVE_SEARCH] =
     g_signal_new ("move-search",
