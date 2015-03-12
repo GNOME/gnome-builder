@@ -1,9 +1,9 @@
 snippet fail
 - scope c, chdr
-	g_return_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (`$filename|stripsuffix|instance`)});$0
+	g_return_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)});$0
 snippet vfail
 - scope c, chdr
-	g_return_val_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (`$filename|stripsuffix|instance`)}, ${2:NULL});$0
+	g_return_val_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)}, ${2:NULL});$0
 snippet W
 - scope c, chdr
 	GtkWidget *
