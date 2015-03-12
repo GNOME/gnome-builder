@@ -2524,6 +2524,23 @@ ide_source_view_real_selection_theatric (IdeSourceView         *self,
 }
 
 static void
+ide_source_view_save_offset (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (text_view);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  priv->target_line_offset = gtk_text_iter_get_line_offset (&iter);
+}
+
+static void
 ide_source_view_real_set_mode (IdeSourceView         *self,
                                const gchar           *mode,
                                IdeSourceViewModeType  type)
@@ -2545,6 +2562,8 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
     IDE_TRACE_MSG ("transition from mode (%s) to (%s)", old_mode, mode ?: "<default>");
   }
 #endif
+
+  ide_source_view_save_offset (self);
 
   if (priv->mode)
     {
