@@ -282,6 +282,8 @@ gboolean                    ide_source_view_get_show_grid_lines       (IdeSource
 gboolean                    ide_source_view_get_show_line_changes     (IdeSourceView              *self);
 gboolean                    ide_source_view_get_snippet_completion    (IdeSourceView              *self);
 GType                       ide_source_view_get_type                  (void);
+void                        ide_source_view_get_visible_rect          (IdeSourceView              *self,
+                                                                       GdkRectangle               *visible_rect);
 void                        ide_source_view_pop_snippet               (IdeSourceView              *self);
 void                        ide_source_view_push_snippet              (IdeSourceView              *self,
                                                                        IdeSourceSnippet           *snippet);
@@ -305,8 +307,6 @@ void                        ide_source_view_set_snippet_completion    (IdeSource
                                                                        gboolean                    snippet_completion);
 void                        ide_source_view_set_back_forward_list     (IdeSourceView              *self,
                                                                        IdeBackForwardList         *back_forward_list);
-void                        ide_source_view_get_visible_rect          (IdeSourceView              *self,
-                                                                       GdkRectangle               *visible_rect);
 gboolean                    ide_source_view_move_mark_onscreen        (IdeSourceView              *self,
                                                                        GtkTextMark                *mark);
 gboolean                    ide_source_view_place_cursor_onscreen     (IdeSourceView              *self);
