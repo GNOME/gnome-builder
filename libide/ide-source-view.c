@@ -2038,14 +2038,34 @@ ide_source_view_real_delete_selection (IdeSourceView *self)
 {
   GtkTextView *text_view = (GtkTextView *)self;
   GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
   gboolean editable;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (GTK_IS_TEXT_VIEW (text_view));
 
-  editable = gtk_text_view_get_editable (text_view);
   buffer = gtk_text_view_get_buffer (text_view);
-  gtk_text_buffer_delete_selection (buffer, TRUE, editable);
+  editable = gtk_text_view_get_editable (text_view);
+
+  if (!editable)
+    return;
+
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  gtk_text_iter_order (&begin, &end);
+
+  if (gtk_text_iter_is_end (&end) && gtk_text_iter_starts_line (&begin))
+    {
+      gtk_text_buffer_begin_user_action (buffer);
+      gtk_text_iter_backward_char (&begin);
+      gtk_text_buffer_delete (buffer, &begin, &end);
+      gtk_text_buffer_end_user_action (buffer);
+    }
+  else
+    {
+      gtk_text_buffer_delete_selection (buffer, TRUE, editable);
+    }
 }
 
 static void
