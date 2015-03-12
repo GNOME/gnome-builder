@@ -869,8 +869,35 @@
                     "set-mode" ("vim-normal", permanent) };
 }
 
+@binding-set builder-vim-source-view-visual-line-with-count
+{
+  bind "0" { "append-to-count" (0)
+             "set-mode" ("vim-visual-line-with-count", transient) };
+  bind "percent" { "movement" (line-percentage, 0, 1, 1)
+                   "set-mode" ("vim-visual-line-with-count", transient) };
+}
+
 @binding-set builder-vim-source-view-visual-line
 {
+  bind "1" { "append-to-count" (1)
+             "set-mode" ("vim-visual-line-with-count", transient) };
+  bind "2" { "append-to-count" (2)
+             "set-mode" ("vim-visual-line-with-count", transient) };
+  bind "3" { "append-to-count" (3)
+             "set-mode" ("vim-visual-line-with-count", transient) };
+  bind "4" { "append-to-count" (4)
+             "set-mode" ("vim-visual-line-with-count", transient) };
+  bind "5" { "append-to-count" (5)
+             "set-mode" ("vim-visual-line-with-count", transient) };
+  bind "6" { "append-to-count" (6)
+             "set-mode" ("vim-visual-line-with-count", transient) };
+  bind "7" { "append-to-count" (7)
+             "set-mode" ("vim-visual-line-with-count", transient) };
+  bind "8" { "append-to-count" (8)
+             "set-mode" ("vim-visual-line-with-count", transient) };
+  bind "9" { "append-to-count" (9)
+             "set-mode" ("vim-visual-line-with-count", transient) };
+
   bind "k" { "movement" (previous-line, 1, 0, 1) };
   bind "j" { "movement" (next-line, 1, 0, 1) };
 
@@ -1153,6 +1180,17 @@ IdeSourceViewMode.vim-visual-line {
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-visual-line;
+}
+
+IdeSourceViewMode.vim-visual-line-with-count {
+  -IdeSourceViewMode-suppress-unbound: true;
+  -IdeSourceViewMode-coalesce-undo: true;
+  -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-default-mode: "vim-visual-line";
+
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-visual-line-with-count,
                     builder-vim-source-view-visual-line;
 }
 
