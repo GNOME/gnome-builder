@@ -243,6 +243,8 @@ libide_1_0_la_SOURCES = \
 	libide/util/ide-cairo.h \
 	libide/util/ide-pango.c \
 	libide/util/ide-pango.h \
+	libide/util/ide-rgba.c \
+	libide/util/ide-rgba.h \
 	$(NULL)
 
 libide_1_0_la_includes = \
