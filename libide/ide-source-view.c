@@ -2083,8 +2083,8 @@ ide_source_view_real_indent_selection (IdeSourceView *self,
   /*
    * Use count to increase direction.
    */
-  if (priv->count)
-    level = priv->count * ((level > 0) ? 1 : -1);
+  if (priv->count && level)
+    level *= (gint)priv->count;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
