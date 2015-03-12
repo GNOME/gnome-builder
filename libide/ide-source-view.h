@@ -268,6 +268,7 @@ const PangoFontDescription *ide_source_view_get_font_desc             (IdeSource
 gboolean                    ide_source_view_get_insert_matching_brace (IdeSourceView              *self);
 gboolean                    ide_source_view_get_overwrite_braces      (IdeSourceView              *self);
 guint                       ide_source_view_get_scroll_offset         (IdeSourceView              *self);
+GtkSourceSearchContext     *ide_source_view_get_search_context        (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_grid_lines       (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_line_changes     (IdeSourceView              *self);
 gboolean                    ide_source_view_get_snippet_completion    (IdeSourceView              *self);

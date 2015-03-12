@@ -97,6 +97,7 @@ typedef struct
   GQueue                      *selections;
   GQueue                      *snippets;
   GtkSourceCompletionProvider *snippets_provider;
+  GtkSourceSearchContext      *search_context;
 
   gulong                       buffer_changed_handler;
   gulong                       buffer_delete_range_after_handler;
@@ -149,6 +150,7 @@ enum {
   PROP_INSERT_MATCHING_BRACE,
   PROP_OVERWRITE_BRACES,
   PROP_SCROLL_OFFSET,
+  PROP_SEARCH_CONTEXT,
   PROP_SHOW_GRID_LINES,
   PROP_SHOW_LINE_CHANGES,
   PROP_SNIPPET_COMPLETION,
@@ -1046,6 +1048,7 @@ ide_source_view_connect_buffer (IdeSourceView *self,
                                 IdeBuffer     *buffer)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceSearchSettings *search_settings;
   GtkTextIter iter;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -1121,6 +1124,18 @@ ide_source_view_connect_buffer (IdeSourceView *self,
                                self,
                                0);
 
+  search_settings = g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
+                                  "wrap-around", TRUE,
+                                  "regex-enabled", FALSE,
+                                  "case-sensitive", TRUE,
+                                  NULL);
+  priv->search_context = g_object_new (GTK_SOURCE_TYPE_SEARCH_CONTEXT,
+                                       "buffer", buffer,
+                                       "highlight", TRUE,
+                                       "settings", search_settings,
+                                       NULL);
+  g_clear_object (&search_settings);
+
   gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buffer), &iter);
   gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), "scroll-mark", &iter, TRUE);
 
@@ -1150,6 +1165,8 @@ ide_source_view_disconnect_buffer (IdeSourceView *self,
   ide_clear_signal_handler (buffer, &priv->buffer_mark_set_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_notify_highlight_diagnostics_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_notify_language_handler);
+
+  g_clear_object (&priv->search_context);
 
   ide_source_view_set_indenter (self, NULL);
 }
@@ -3433,6 +3450,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_uint (value, ide_source_view_get_scroll_offset (self));
       break;
 
+    case PROP_SEARCH_CONTEXT:
+      g_value_set_object (value, ide_source_view_get_search_context (self));
+      break;
+
     case PROP_SHOW_GRID_LINES:
       g_value_set_boolean (value, ide_source_view_get_show_grid_lines (self));
       break;
@@ -3618,6 +3639,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SCROLL_OFFSET,
                                    gParamSpecs [PROP_SCROLL_OFFSET]);
+
+  gParamSpecs [PROP_SEARCH_CONTEXT] =
+    g_param_spec_object ("search-context",
+                         _("Search Context"),
+                         _("The search context for the view."),
+                         GTK_SOURCE_TYPE_SEARCH_CONTEXT,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SEARCH_CONTEXT,
+                                   gParamSpecs [PROP_SEARCH_CONTEXT]);
 
   gParamSpecs [PROP_SHOW_GRID_LINES] =
     g_param_spec_boolean ("show-grid-lines",
@@ -4765,4 +4795,22 @@ ide_source_view_set_enable_word_completion (IdeSourceView *self,
       ide_source_view_reload_word_completion (self);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ENABLE_WORD_COMPLETION]);
     }
+}
+
+/**
+ * ide_source_view_get_search_context:
+ * @self: An #IdeSourceView.
+ *
+ * Returns the #GtkSourceSearchContext for the source view if there is one.
+ *
+ * Returns: (transfer none) (nullable): A #GtkSourceSearchContext or %NULL.
+ */
+GtkSourceSearchContext *
+ide_source_view_get_search_context (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
+
+  return priv->search_context;
 }
