@@ -102,6 +102,15 @@ ide_source_view_mode_get_default_mode (IdeSourceViewMode *self)
 }
 
 gboolean
+ide_source_view_mode_get_repeat_insert_with_count (IdeSourceViewMode *self)
+{
+  /*
+   * If count is 10, and you type -, you will get ----------
+   */
+  return get_boolean_param (self, "repeat-insert-with-count");
+}
+
+gboolean
 ide_source_view_mode_get_coalesce_undo (IdeSourceViewMode *self)
 {
   /*
@@ -295,6 +304,15 @@ ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
                                                                 NULL,
                                                                 (G_PARAM_READABLE |
                                                                  G_PARAM_STATIC_STRINGS)));
+
+  gtk_widget_class_install_style_property (GTK_WIDGET_CLASS (klass),
+                                           g_param_spec_boolean ("repeat-insert-with-count",
+                                                                 "Repeat Insert with Count",
+                                                                 "Use the current count to "
+                                                                  "repeat the insertion.",
+                                                                 FALSE,
+                                                                 (G_PARAM_READABLE |
+                                                                  G_PARAM_STATIC_STRINGS)));
 
   /* Proxy all action signals from source view */
   type = IDE_TYPE_SOURCE_VIEW;

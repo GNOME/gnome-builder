@@ -1804,11 +1804,33 @@ ide_source_view_key_press_event (GtkWidget   *widget,
       return TRUE;
     }
 
-  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->key_press_event (widget, event);
+  /*
+   * If repeat-with-count is set, we need to repeat the insertion multiple times.
+   */
+  if (priv->count &&
+      priv->mode &&
+      ide_source_view_mode_get_repeat_insert_with_count (priv->mode))
+    {
+      gsize i;
 
+      for (i = MAX (1, priv->count); i > 0; i--)
+        ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->key_press_event (widget, event);
+      priv->count = 0;
+    }
+  else
+    {
+      ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->key_press_event (widget, event);
+    }
+
+  /*
+   * If we just inserted ({["', we might want to insert a matching close.
+   */
   if (ret)
     ide_source_view_maybe_insert_match (self, event);
 
+  /*
+   * Only scroll to the insert mark if we made a change.
+   */
   if (priv->change_sequence != change_sequence)
     ide_source_view_scroll_mark_onscreen (self, insert);
 
