@@ -3273,10 +3273,12 @@ ide_source_view_real_begin_macro (IdeSourceView *self)
   gunichar modifier;
   guint count;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (priv->in_replay_macro)
-    return;
+    IDE_GOTO (in_replay);
 
   priv->recording_macro = TRUE;
 
@@ -3291,6 +3293,9 @@ ide_source_view_real_begin_macro (IdeSourceView *self)
   priv->capture = ide_source_view_capture_new (self, mode_name, mode_type, count, modifier);
   ide_source_view_capture_record_event (priv->capture, event, count, modifier);
   gdk_event_free (event);
+
+in_replay:
+  IDE_EXIT;
 }
 
 static void
@@ -3298,12 +3303,17 @@ ide_source_view_real_end_macro (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (priv->in_replay_macro)
-    return;
+    IDE_GOTO (in_replay);
 
   priv->recording_macro = FALSE;
+
+in_replay:
+  IDE_EXIT;
 }
 
 static void
@@ -3315,22 +3325,26 @@ ide_source_view_real_replay_macro (IdeSourceView *self,
   guint count = 1;
   gsize i;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (priv->recording_macro)
     {
       g_warning ("Cannot playback macro while recording.");
-      return;
+      IDE_EXIT;
     }
 
   if (priv->in_replay_macro)
     {
       g_warning ("Cannot playback macro while playing back macro.");
-      return;
+      IDE_EXIT;
     }
 
   if (use_count)
     count = MAX (1, priv->count);
+
+  IDE_TRACE_MSG ("Replaying capture %d times.", count);
 
   priv->in_replay_macro = TRUE;
   capture = priv->capture, priv->capture = NULL;
@@ -3339,6 +3353,8 @@ ide_source_view_real_replay_macro (IdeSourceView *self,
   g_clear_object (&priv->capture);
   priv->capture = capture, capture = NULL;
   priv->in_replay_macro = FALSE;
+
+  IDE_EXIT;
 }
 
 static void
