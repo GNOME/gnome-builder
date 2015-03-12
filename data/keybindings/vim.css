@@ -119,6 +119,8 @@
   bind "9" { "append-to-count" (9)
              "set-mode" ("vim-normal-with-count", transient) };
 
+  bind "colon" { "action" ("workbench", "show-command-bar", "") };
+
   /* replay the last recording */
   bind "period" { "replay-macro" (1) };
 
@@ -879,6 +881,8 @@
 
 @binding-set builder-vim-source-view-visual
 {
+  bind "colon" { "action" ("workbench", "show-command-bar", "") };
+
   bind "percent" { "move-to-matching-bracket" (1) };
 
   bind "1" { "append-to-count" (1)
@@ -1020,6 +1024,8 @@
 
 @binding-set builder-vim-source-view-visual-line
 {
+  bind "colon" { "action" ("workbench", "show-command-bar", "") };
+
   bind "1" { "append-to-count" (1)
              "set-mode" ("vim-visual-line-with-count", transient) };
   bind "2" { "append-to-count" (2)
