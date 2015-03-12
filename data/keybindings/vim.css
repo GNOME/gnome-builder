@@ -224,6 +224,21 @@
                     "movement" (previous-match-modifier, 0, 0, 1)
                     "clear-modifier" () };
 
+  bind "n" { "move-search" (down, 0, 1, 1, 1) };
+  bind "<shift>n" { "move-search" (up, 0, 0, 1, 1) };
+
+  bind "numbersign" { "movement" (previous-word-end, 0, 1, 1)
+                      "movement" (next-word-start, 0, 1, 0)
+                      "movement" (next-word-end, 1, 0, 1)
+                      "set-search-text" ("", 1)
+                      "move-search" (up, 0, 0, 1, 1) };
+
+  bind "asterisk" { "movement" (previous-word-end, 0, 1, 1)
+                    "movement" (next-word-start, 0, 1, 0)
+                    "movement" (next-word-end, 1, 0, 1)
+                    "set-search-text" ("", 1)
+                    "move-search" (down, 0, 1, 1, 1) };
+
   /* page movements */
   bind "<ctrl>b" { "movement" (page-up, 0, 0, 1)
                    "clear-count" () };
@@ -940,6 +955,25 @@
   bind "<shift>w" { "movement" (next-full-word-start, 1, 1, 1) };
   bind "b" { "movement" (previous-word-start, 1, 1, 1) };
   bind "<shift>b" { "movement" (previous-full-word-start, 1, 1, 1) };
+
+  bind "n" { "move-search" (down, 1, 1, 1, 1) };
+  bind "<shift>n" { "move-search" (up, 1, 0, 1, 1) };
+
+  bind "numbersign" { "save-insert-mark" ()
+                      "movement" (previous-word-end, 0, 1, 1)
+                      "movement" (next-word-start, 0, 1, 0)
+                      "movement" (next-word-end, 1, 0, 1)
+                      "set-search-text" ("", 1)
+                      "restore-insert-mark" ()
+                      "move-search" (up, 1, 0, 1, 1) };
+
+  bind "asterisk" { "save-insert-mark" ()
+                    "movement" (previous-word-end, 0, 1, 1)
+                    "movement" (next-word-start, 0, 1, 0)
+                    "movement" (next-word-end, 1, 0, 1)
+                    "set-search-text" ("", 1)
+                    "restore-insert-mark" ()
+                    "move-search" (down, 1, 1, 1, 1) };
 
   bind "<ctrl>b" { "movement" (page-up, 1, 0, 1) };
   bind "<ctrl>f" { "movement" (page-down, 1, 0, 1) };
