@@ -446,3 +446,11 @@ _ide_source_view_mode_new (GtkWidget             *view,
 
   return g_object_ref_sink (mode);
 }
+
+IdeSourceViewModeType
+ide_source_view_mode_get_mode_type (IdeSourceViewMode *self)
+{
+  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (self);
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW_MODE (self), 0);
+  return priv->type;
+}
