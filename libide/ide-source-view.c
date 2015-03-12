@@ -5329,6 +5329,8 @@ ide_source_view_set_enable_word_completion (IdeSourceView *self,
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
+  enable_word_completion = !!enable_word_completion;
+
   if (priv->enable_word_completion != enable_word_completion)
     {
       priv->enable_word_completion = enable_word_completion;
