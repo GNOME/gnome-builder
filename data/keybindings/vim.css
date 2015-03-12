@@ -411,16 +411,19 @@
 {
   bind "i" { "set-mode" ("vim-normal-c-i", transient) };
 
-  bind "e" { "set-mode" ("vim-insert", permanent)
+  bind "e" { "begin-macro" ()
+             "set-mode" ("vim-insert", permanent)
              "movement" (next-word-end, 1, 0, 1)
              "copy-clipboard" ()
              "delete-selection" () };
-  bind "w" { "set-mode" ("vim-insert", permanent)
+  bind "w" { "begin-macro" ()
+             "set-mode" ("vim-insert", permanent)
              "movement" (next-word-end, 1, 0, 1)
              "copy-clipboard" ()
              "delete-selection" () };
 
-  bind "f" { "capture-modifier" ()
+  bind "f" { "begin-macro" ()
+             "capture-modifier" ()
              "set-mode" ("vim-insert", permanent)
              "movement" (next-match-modifier, 1, 0, 1)
              "copy-clipboard" ()
@@ -428,7 +431,8 @@
              "delete-selection" ()
              "clear-modifier" () };
 
-  bind "t" { "capture-modifier" ()
+  bind "t" { "begin-macro" ()
+             "capture-modifier" ()
              "set-mode" ("vim-insert", permanent)
              "movement" (next-match-modifier, 1, 1, 1)
              "copy-clipboard" ()
@@ -436,7 +440,8 @@
              "delete-selection" ()
              "clear-modifier" () };
 
-  bind "<shift>f" { "capture-modifier" ()
+  bind "<shift>f" { "begin-macro" ()
+                    "capture-modifier" ()
                     "set-mode" ("vim-insert", permanent)
                     "movement" (previous-match-modifier, 1, 1, 1)
                     "copy-clipboard" ()
@@ -444,7 +449,8 @@
                     "delete-selection" ()
                     "clear-modifier" () };
 
-  bind "<shift>t" { "capture-modifier" ()
+  bind "<shift>t" { "begin-macro" ()
+                    "capture-modifier" ()
                     "set-mode" ("vim-insert", permanent)
                     "movement" (previous-match-modifier, 1, 0, 1)
                     "copy-clipboard" ()
@@ -456,7 +462,8 @@
 @binding-set builder-vim-source-view-normal-c-i
 {
   /* cip */
-  bind "p" { "set-mode" ("vim-insert", permanent)
+  bind "p" { "begin-macro" ()
+             "set-mode" ("vim-insert", permanent)
              "movement" (paragraph-start, 1, 1, 1)
              "swap-selection-bounds" ()
              "movement" (paragraph-end, 1, 1, 1)
@@ -466,7 +473,8 @@
              "clear-count" () };
 
   /* cis */
-  bind "s" { "set-mode" ("vim-insert", permanent)
+  bind "s" { "begin-macro" ()
+             "set-mode" ("vim-insert", permanent)
              "movement" (sentence-start, 1, 1, 1)
              "swap-selection-bounds" ()
              "movement" (sentence-end, 1, 1, 1)
@@ -476,7 +484,8 @@
              "clear-count" () };
 
   /* ciw */
-  bind "w" { "set-mode" ("vim-insert", permanent)
+  bind "w" { "begin-macro" ()
+             "set-mode" ("vim-insert", permanent)
              "movement" (previous-word-end, 0, 1, 1)
              "movement" (next-word-start, 0, 1, 0)
              "movement" (next-word-end, 1, 0, 1)
@@ -486,7 +495,8 @@
              "clear-count" () };
 
   /* ciW */
-  bind "<shift>w" { "set-mode" ("vim-insert", permanent)
+  bind "<shift>w" { "begin-macro" ()
+                    "set-mode" ("vim-insert", permanent)
                     "movement" (previous-full-word-end, 0, 1, 1)
                     "movement" (next-full-word-start, 0, 1, 0)
                     "movement" (next-full-word-end, 1, 0, 1)
