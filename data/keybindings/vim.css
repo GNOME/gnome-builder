@@ -76,12 +76,14 @@
 
 @binding-set builder-vim-source-view
 {
-  bind "Escape" { "set-overwrite" (0)
+  bind "Escape" { "end-macro" ()
+                  "set-overwrite" (0)
                   "clear-count" ()
                   "clear-selection" ()
                   "clear-snippets" ()
                   "set-mode" ("vim-normal", permanent) };
-  bind "<ctrl>bracketleft" { "set-overwrite" (0)
+  bind "<ctrl>bracketleft" { "end-macro" ()
+                             "set-overwrite" (0)
                              "clear-count" ()
                              "clear-selection" ()
                              "clear-snippets" ()
@@ -117,44 +119,56 @@
   bind "9" { "append-to-count" (9)
              "set-mode" ("vim-normal-with-count", transient) };
 
+  /* replay the last recording */
+  bind "period" { "replay-macro" () };
+
   /* insert at cursor */
-  bind "i" { "set-mode" ("vim-insert", permanent) };
+  bind "i" { "begin-macro" ()
+             "set-mode" ("vim-insert", permanent) };
 
   /* insert after cursor */
-  bind "a" { "set-mode" ("vim-insert", permanent)
+  bind "a" { "begin-macro" ()
+             "set-mode" ("vim-insert", permanent)
              "movement" (next-char, 0, 1, 0) };
-  bind "<shift>a" { "set-mode" ("vim-insert", permanent)
+  bind "<shift>a" { "begin-macro" ()
+                    "set-mode" ("vim-insert", permanent)
                     "movement" (last-char, 0, 0, 0) };
 
   /* insert at first non-whitespace character */
-  bind "<shift>i" { "set-mode" ("vim-insert", permanent)
+  bind "<shift>i" { "begin-macro" ()
+                    "set-mode" ("vim-insert", permanent)
                     "movement" (first-nonspace-char, 0, 1, 0) };
 
   /* insert line after current, insert mode */
-  bind "o" { "set-mode" ("vim-insert", permanent)
+  bind "o" { "begin-macro" ()
+             "set-mode" ("vim-insert", permanent)
              "movement" (line-end, 0, 1, 0)
              "insert-at-cursor-and-indent" ("\n") };
 
   /* insert line before current */
-  bind "<shift>o" { "set-mode" ("vim-insert", permanent)
+  bind "<shift>o" { "begin-macro" ()
+                    "set-mode" ("vim-insert", permanent)
                     "movement" (first-char, 0, 0, 0)
                     "insert-at-cursor" ("\n")
                     "move-cursor" (display-lines, -1, 0)
                     "auto-indent" () };
 
   /* swallow the current character and go to insert */
-  bind "s" { "set-mode" ("vim-insert", permanent)
+  bind "s" { "begin-macro" ()
+             "set-mode" ("vim-insert", permanent)
              "movement" (next-char, 1, 1, 1)
              "copy-clipboard" ()
              "delete-selection" () };
 
   /* overwrite the current character with a modifier */
-  bind "r" { "capture-modifier" ()
+  bind "r" { "begin-macro" ()
+             "capture-modifier" ()
              "movement" (next-char, 1, 1, 1)
              "delete-selection" ()
              "insert-modifier" (1)
              "clear-modifier" ()
-             "movement" (previous-char, 0, 1, 0) };
+             "movement" (previous-char, 0, 1, 0)
+             "end-macro" () };
 
   bind "Left"  { "movement" (previous-char, 0, 1, 1)
                  "clear-count" () };
@@ -275,15 +289,20 @@
   /* redo */
   bind "<ctrl>r" { "redo" ()
                    "clear-count" ()
-		   "clear-selection" () };
+                   "clear-selection" () };
 
-  bind "p" { "paste-clipboard-extended" (1, 1, 1)
-             "clear-count" () };
-  bind "<shift>p" { "paste-clipboard-extended" (1, 0, 1)
-                    "clear-count" () };
+  bind "p" { "begin-macro" ()
+             "paste-clipboard-extended" (1, 1, 1)
+             "clear-count" ()
+             "end-macro" () };
+  bind "<shift>p" { "begin-macro" ()
+                    "paste-clipboard-extended" (1, 0, 1)
+                    "clear-count" ()
+                    "end-macro" () };
 
   /* overwrite */
-  bind "<shift>r" { "set-mode" ("vim-insert", permanent)
+  bind "<shift>r" { "begin-macro" ()
+                    "set-mode" ("vim-insert", permanent)
                     "set-overwrite" (1) };
 
  /* jump to sub-mode */
@@ -291,22 +310,28 @@
   bind "d" { "set-mode" ("vim-normal-d", transient) };
 
   /* delete to end of line */
-  bind "<shift>d" { "movement" (last-char, 1, 0, 0)
+  bind "<shift>d" { "begin-macro" ()
+                    "movement" (last-char, 1, 0, 0)
                     "copy-clipboard" ()
                     "delete-selection" ()
-                    "clear-count" () };
+                    "clear-count" ()
+                    "end-macro" () };
 
   /* delete current char */
-  bind "x" { "movement" (next-char, 1, 1, 1)
+  bind "x" { "begin-macro" ()
+             "movement" (next-char, 1, 1, 1)
              "copy-clipboard" ()
              "delete-selection" ()
-             "clear-count" () };
+             "clear-count" ()
+             "end-macro" () };
 
   /* delete previous char */
-  bind "<shift>x" { "movement" (previous-char, 1, 1, 1)
+  bind "<shift>x" { "begin-macro" ()
+                    "movement" (previous-char, 1, 1, 1)
                     "copy-clipboard" ()
                     "delete-selection" ()
-                    "clear-count" () };
+                    "clear-count" ()
+                    "end-macro" () };
 
   bind "greater" { "set-mode" ("vim-normal-indent", transient) };
   bind "less" { "set-mode" ("vim-normal-indent", transient) };
@@ -315,21 +340,29 @@
   /* todo: this actually grabs one more line than vim does when prefixed with
    *       a count. 1J and 2J are both the same thing.
    */
-  bind "<shift>j" { "movement" (first-char, 0, 0, 0)
+  bind "<shift>j" { "begin-macro" ()
+                    "movement" (first-char, 0, 0, 0)
                     "movement" (next-line, 1, 0, 1)
                     "join-lines" ()
-                    "clear-count" () };
+                    "clear-count" ()
+                    "end-macro" () };
 
   /* change number */
-  bind "<ctrl>a" { "change-number" (1)
-                   "clear-count" () };
-  bind "<ctrl>x" { "change-number" (-1)
-                   "clear-count" () };
+  bind "<ctrl>a" { "begin-macro" ()
+                   "change-number" (1)
+                   "clear-count" ()
+                   "end-macr" () };
+  bind "<ctrl>x" { "begin-macro" ()
+                   "change-number" (-1)
+                   "clear-count" ()
+                   "end-macro" () };
 
   /* toggle character case */
-  bind "asciitilde" { "movement" (next-char, 1, 1, 1)
+  bind "asciitilde" { "begin-macro" ()
+                      "movement" (next-char, 1, 1, 1)
                       "change-case" (toggle)
-                      "clear-count" () };
+                      "clear-count" ()
+                      "end-macro" () };
 
   bind "BackSpace" { "movement" (previous-offset, 0, 1, 1)
                      "clear-count" () };
@@ -465,107 +498,151 @@
 
 @binding-set builder-vim-source-view-normal-d
 {
-  bind "Left"  { "movement" (previous-char, 1, 1, 1)
+  bind "Left"  { "begin-macro" ()
+                 "movement" (previous-char, 1, 1, 1)
                  "copy-clipboard" ()
-                 "delete-selection" () };
-  bind "h"     { "movement" (previous-char, 1, 1, 1)
+                 "delete-selection" ()
+                 "end-macro" () };
+  bind "h"     { "begin-macro" ()
+                 "movement" (previous-char, 1, 1, 1)
                  "copy-clipboard" ()
-                 "delete-selection" () };
+                 "delete-selection" ()
+                 "end-macro" () };
 
-  bind "Right" { "movement" (next-char, 1, 1, 1)
+  bind "Right" { "begin-macro" ()
+                 "movement" (next-char, 1, 1, 1)
                  "copy-clipboard" ()
-                 "delete-selection" () };
-  bind "l"     { "movement" (next-char, 1, 1, 1)
+                 "delete-selection" ()
+                 "end-macro" () };
+  bind "l"     { "begin-macro" ()
+                 "movement" (next-char, 1, 1, 1)
                  "copy-clipboard" ()
-                 "delete-selection" () };
+                 "delete-selection" ()
+                 "end-macro" () };
 
-  bind "Up"    { "movement" (line-end, 0, 0, 0)
+  bind "Up"    { "begin-macro" ()
+                 "movement" (line-end, 0, 0, 0)
                  "movement" (previous-line, 1, 1, 0)
                  "movement" (previous-line, 1, 1, 1)
                  "copy-clipboard" ()
-                 "delete-selection" () };
-  bind "k"     { "movement" (line-end, 0, 0, 0)
+                 "delete-selection" ()
+                 "end-macro" () };
+  bind "k"     { "begin-macro" ()
+                 "movement" (line-end, 0, 0, 0)
                  "movement" (previous-line, 1, 0, 0)
                  "movement" (previous-line, 1, 0, 1)
                  "copy-clipboard" ()
-                 "delete-selection" () };
+                 "delete-selection" ()
+                 "end-macro" () };
 
-  bind "Down"  { "movement" (first-char, 0, 1, 0)
+  bind "Down"  { "begin-macro" ()
+                 "movement" (first-char, 0, 1, 0)
                  "movement" (next-line, 1, 0, 0)
                  "movement" (next-line, 1, 0, 1)
                  "copy-clipboard" ()
-                 "delete-selection" () };
-  bind "j"     { "movement" (first-char, 0, 1, 0)
+                 "delete-selection" ()
+                 "end-macro" () };
+  bind "j"     { "begin-macro" ()
+                 "movement" (first-char, 0, 1, 0)
                  "movement" (next-line, 1, 0, 0)
                  "movement" (next-line, 1, 0, 1)
                  "copy-clipboard" ()
-                 "delete-selection" () };
+                 "delete-selection" ()
+                 "end-macro" () };
 
   bind "i" { "set-mode" ("vim-normal-d-i", transient) };
   bind "g" { "set-mode" ("vim-normal-d-g", transient) };
 
-  bind "f" { "capture-modifier" ()
+  bind "f" { "begin-macro" ()
+             "capture-modifier" ()
              "movement" (next-match-modifier, 1, 0, 1)
              "copy-clipboard" ()
              "selection-theatric" (shrink)
              "delete-selection" ()
-             "clear-modifier" () };
-  bind "t" { "capture-modifier" ()
+             "clear-modifier" ()
+             "end-macro" () };
+  bind "t" { "begin-macro" ()
+             "capture-modifier" ()
              "movement" (next-match-modifier, 1, 1, 1)
              "copy-clipboard" ()
              "selection-theatric" (shrink)
              "delete-selection" ()
-             "clear-modifier" () };
+             "clear-modifier" ()
+             "end-macro" () };
 
-  bind "<shift>f" { "capture-modifier" ()
+  bind "<shift>f" { "begin-macro" ()
+                    "capture-modifier" ()
                     "movement" (previous-match-modifier, 1, 1, 1)
                     "copy-clipboard" ()
                     "selection-theatric" (shrink)
                     "delete-selection" ()
-                    "clear-modifier" () };
-  bind "<shift>t" { "capture-modifier" ()
+                    "clear-modifier" ()
+                    "end-macro" () };
+  bind "<shift>t" { "begin-macro" ()
+                    "capture-modifier" ()
                     "movement" (previous-match-modifier, 1, 0, 1)
                     "copy-clipboard" ()
                     "selection-theatric" (shrink)
                     "delete-selection" ()
-                    "clear-modifier" () };
+                    "clear-modifier" ()
+                    "end-macro" () };
 
-  bind "d" { "save-insert-mark" ()
+  bind "d" { "begin-macro" ()
+             "save-insert-mark" ()
              "movement" (first-char, 0, 1, 0)
              "movement" (next-line, 1, 0, 1)
              "copy-clipboard" ()
              "delete-selection" ()
-             "restore-insert-mark" () };
+             "restore-insert-mark" ()
+             "end-macro" () };
 
-  bind "b" { "movement" (previous-word-end, 1, 0, 1)
+  bind "b" { "begin-macro" ()
+             "movement" (previous-word-end, 1, 0, 1)
              "copy-clipboard" ()
-             "delete-selection" () };
+             "delete-selection" ()
+             "end-macro" () };
 
-  bind "<shift>b" { "movement" (previous-full-word-end, 1, 0, 1)
+  bind "<shift>b" { "begin-macro" ()
+                    "movement" (previous-full-word-end, 1, 0, 1)
                     "copy-clipboard" ()
-                    "delete-selection" () };
+                    "delete-selection" ()
+                    "end-macro" () };
 
-  bind "e" { "movement" (next-word-end, 1, 0, 1)
+  bind "e" { "begin-macro" ()
+             "movement" (next-word-end, 1, 0, 1)
              "copy-clipboard" ()
-             "delete-selection" () };
-  bind "<shift>e" { "movement" (next-full-word-end, 1, 0, 1)
+             "delete-selection" ()
+             "end-macro" () };
+  bind "<shift>e" { "begin-macro" ()
+                    "movement" (next-full-word-end, 1, 0, 1)
                     "copy-clipboard" ()
-                    "delete-selection" () };
-  bind "w" { "movement" (next-word-start, 1, 1, 1)
+                    "delete-selection" ()
+                    "end-macro" () };
+  bind "w" { "begin-macro" ()
+             "movement" (next-word-start, 1, 1, 1)
              "copy-clipboard" ()
-             "delete-selection" () };
-  bind "<shift>w" { "movement" (next-full-word-start, 1, 1, 1)
+             "delete-selection" ()
+             "end-macro" () };
+  bind "<shift>w" { "begin-macro" ()
+                    "movement" (next-full-word-start, 1, 1, 1)
                     "copy-clipboard" ()
-                    "delete-selection" () };
-  bind "0" { "movement" (first-char, 1, 0, 0)
+                    "delete-selection" ()
+                    "end-macro" () };
+  bind "0" { "begin-macro" ()
+             "movement" (first-char, 1, 0, 0)
              "copy-clipboard" ()
-             "delete-selection" () };
-  bind "<shift>asciicircum" { "movement" (first-nonspace-char, 1, 1, 1)
+             "delete-selection" ()
+             "end-macro" () };
+  bind "<shift>asciicircum" { "begin-macro" ()
+                              "movement" (first-nonspace-char, 1, 1, 1)
                               "copy-clipboard" ()
-                              "delete-selection" () };
-  bind "dollar" { "movement" (line-end, 1, 1, 0)
+                              "delete-selection" ()
+                              "end-macro" () };
+  bind "dollar" { "begin-macro" ()
+                  "movement" (line-end, 1, 1, 0)
                   "copy-clipboard" ()
-                  "delete-selection" () };
+                  "delete-selection" ()
+                  "end-macro" () };
 }
 
 @binding-set builder-vim-source-view-normal-indent
