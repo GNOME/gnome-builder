@@ -657,16 +657,20 @@
 
 @binding-set builder-vim-source-view-normal-indent
 {
-  bind "greater" { "movement" (first-char, 0, 1, 0)
+  bind "greater" { "begin-macro" ()
+                   "movement" (first-char, 0, 1, 0)
                    "movement" (line-end, 1, 1, 0)
                    "indent-selection" (1)
                    "clear-selection" ()
-                   "movement" (first-nonspace-char, 0, 1, 0) };
-  bind "less"    { "movement" (first-char, 0, 1, 0)
+                   "movement" (first-nonspace-char, 0, 1, 0)
+                   "end-macro" () };
+  bind "less"    { "begin-macro" ()
+                   "movement" (first-char, 0, 1, 0)
                    "movement" (line-end, 1, 1, 0)
                    "indent-selection" (-1)
                    "clear-selection" ()
-                   "movement" (first-nonspace-char, 0, 1, 0) };
+                   "movement" (first-nonspace-char, 0, 1, 0)
+                   "end-macro" () };
 }
 
 @binding-set builder-vim-source-view-normal-z
