@@ -223,15 +223,15 @@ struct _IdeSourceViewClass
                                        gint                     level);
   void (*insert_at_cursor_and_indent) (IdeSourceView           *self,
                                        const gchar             *str);
+  void (*insert_modifier)             (IdeSourceView           *self,
+                                       gboolean                 use_count);
+  void (*jump)                        (IdeSourceView           *self,
+                                       const GtkTextIter       *location);
   void (*movement)                    (IdeSourceView           *self,
                                        IdeSourceViewMovement    movement,
                                        gboolean                 extend_selection,
                                        gboolean                 exclusive,
                                        gboolean                 apply_count);
-  void (*insert_modifier)             (IdeSourceView           *self,
-                                       gboolean                 use_count);
-  void (*jump)                        (IdeSourceView           *self,
-                                       const GtkTextIter       *location);
   void (*paste_clipboard_extended)    (IdeSourceView           *self,
                                        gboolean                 smart_lines,
                                        gboolean                 after_cursor,
