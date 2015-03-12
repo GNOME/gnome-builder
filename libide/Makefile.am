@@ -225,6 +225,8 @@ libide_1_0_la_SOURCES = \
 	libide/ide-source-snippet-parser.c \
 	libide/ide-source-snippet-parser.h \
 	libide/ide-source-snippet-private.h \
+	libide/ide-source-view-capture.c \
+	libide/ide-source-view-capture.h \
 	libide/ide-source-view-movements.c \
 	libide/ide-source-view-movements.h \
 	libide/ide-vim-iter.c \
