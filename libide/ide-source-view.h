@@ -281,6 +281,7 @@ GtkSourceSearchContext     *ide_source_view_get_search_context        (IdeSource
 gboolean                    ide_source_view_get_show_grid_lines       (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_line_changes     (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_search_bubbles   (IdeSourceView              *self);
+gboolean                    ide_source_view_get_show_search_shadow    (IdeSourceView              *self);
 gboolean                    ide_source_view_get_snippet_completion    (IdeSourceView              *self);
 GType                       ide_source_view_get_type                  (void);
 void                        ide_source_view_get_visible_rect          (IdeSourceView              *self,
@@ -305,6 +306,8 @@ void                        ide_source_view_set_show_grid_lines       (IdeSource
 void                        ide_source_view_set_show_line_changes     (IdeSourceView              *self,
                                                                        gboolean                    show_line_changes);
 void                        ide_source_view_set_show_search_bubbles   (IdeSourceView              *self,
+                                                                       gboolean                    show_search_bubbles);
+void                        ide_source_view_set_show_search_shadow    (IdeSourceView              *self,
                                                                        gboolean                    show_search_bubbles);
 void                        ide_source_view_set_snippet_completion    (IdeSourceView              *self,
                                                                        gboolean                    snippet_completion);

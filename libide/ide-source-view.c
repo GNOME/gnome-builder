@@ -140,6 +140,7 @@ typedef struct
   guint                        show_grid_lines : 1;
   guint                        show_line_changes : 1;
   guint                        show_search_bubbles : 1;
+  guint                        show_search_shadow : 1;
   guint                        snippet_completion : 1;
   guint                        waiting_for_capture : 1;
 } IdeSourceViewPrivate;
@@ -170,6 +171,7 @@ enum {
   PROP_SHOW_GRID_LINES,
   PROP_SHOW_LINE_CHANGES,
   PROP_SHOW_SEARCH_BUBBLES,
+  PROP_SHOW_SEARCH_SHADOW,
   PROP_SNIPPET_COMPLETION,
   LAST_PROP
 };
@@ -3725,6 +3727,17 @@ ide_source_view_draw_search_bubbles (IdeSourceView *self,
 
   cairo_region_subtract (clip_region, match_region);
 
+  if (priv->show_search_shadow &&
+      ((count > 0) || gtk_source_search_context_get_occurrences_count (priv->search_context) > 0))
+    {
+      GdkRGBA shadow;
+
+      gdk_cairo_region (cr, clip_region);
+      get_shadow_color (self, &shadow);
+      gdk_cairo_set_source_rgba (cr, &shadow);
+      cairo_fill (cr);
+    }
+
   gdk_cairo_region (cr, clip_region);
   cairo_clip (cr);
 
@@ -3775,6 +3788,47 @@ ide_source_view_real_draw_layer (GtkTextView      *text_view,
           cairo_restore (cr);
         }
     }
+}
+
+static gboolean
+ide_source_view_real_draw (GtkWidget *widget,
+                           cairo_t   *cr)
+{
+  GtkTextView *text_view = (GtkTextView *)widget;
+  IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv =  ide_source_view_get_instance_private (self);
+  gboolean ret;
+
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (cr);
+
+  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->draw (widget, cr);
+
+  if (priv->show_search_shadow &&
+      priv->search_context &&
+      (gtk_source_search_context_get_occurrences_count (priv->search_context) > 0))
+    {
+      GdkWindow *window;
+      GdkRGBA shadow;
+      GdkRectangle rect;
+
+      window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_LEFT);
+
+      gdk_window_get_position (window, &rect.x, &rect.y);
+      rect.width = gdk_window_get_width (window);
+      rect.height = gdk_window_get_height (window);
+
+      cairo_save (cr);
+      gdk_cairo_rectangle (cr, &rect);
+      get_shadow_color (self, &shadow);
+      gdk_cairo_set_source_rgba (cr, &shadow);
+      cairo_fill (cr);
+      cairo_restore (cr);
+    }
+
+  return ret;
 }
 
 static void
@@ -3960,6 +4014,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_show_search_bubbles (self));
       break;
 
+    case PROP_SHOW_SEARCH_SHADOW:
+      g_value_set_boolean (value, ide_source_view_get_show_search_shadow (self));
+      break;
+
     case PROP_SNIPPET_COMPLETION:
       g_value_set_boolean (value, ide_source_view_get_snippet_completion (self));
       break;
@@ -4021,6 +4079,10 @@ ide_source_view_set_property (GObject      *object,
       ide_source_view_set_show_search_bubbles (self, g_value_get_boolean (value));
       break;
 
+    case PROP_SHOW_SEARCH_SHADOW:
+      ide_source_view_set_show_search_shadow (self, g_value_get_boolean (value));
+      break;
+
     case PROP_SNIPPET_COMPLETION:
       ide_source_view_set_snippet_completion (self, g_value_get_boolean (value));
       break;
@@ -4044,6 +4106,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   object_class->get_property = ide_source_view_get_property;
   object_class->set_property = ide_source_view_set_property;
 
+  widget_class->draw = ide_source_view_real_draw;
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
   widget_class->style_updated = ide_source_view_real_style_updated;
@@ -4179,6 +4242,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SHOW_SEARCH_BUBBLES,
                                    gParamSpecs [PROP_SHOW_SEARCH_BUBBLES]);
+
+  gParamSpecs [PROP_SHOW_SEARCH_SHADOW] =
+    g_param_spec_boolean ("show-search-shadow",
+                          _("Show Search Shadow"),
+                          _("If the shadow should be drawn when performing searches."),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SHOW_SEARCH_SHADOW,
+                                   gParamSpecs [PROP_SHOW_SEARCH_SHADOW]);
 
   gParamSpecs [PROP_SNIPPET_COMPLETION] =
     g_param_spec_boolean ("snippet-completion",
@@ -5392,6 +5464,46 @@ ide_source_view_set_show_search_bubbles (IdeSourceView *self,
     {
       priv->show_search_bubbles = show_search_bubbles;
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_SEARCH_BUBBLES]);
+      ide_source_view_invalidate_window (self);
+    }
+}
+
+/**
+ * ide_source_view_get_show_search_shadow:
+ * @self: An #IdeSourceView.
+ *
+ * Gets the #IdeSourceView:show-search-shadow property.
+ *
+ * If this property is %TRUE, then when searching, a shadow will be drawn over
+ * the portion of the visible region that does not contain a match. This can
+ * be used to help bring focus to the matches.
+ *
+ * The default is %FALSE.
+ */
+gboolean
+ide_source_view_get_show_search_shadow (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->show_search_shadow;
+}
+
+void
+ide_source_view_set_show_search_shadow (IdeSourceView *self,
+                                        gboolean       show_search_shadow)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  show_search_shadow = !!show_search_shadow;
+
+  if (show_search_shadow != priv->show_search_shadow)
+    {
+      priv->show_search_shadow = show_search_shadow;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_SEARCH_SHADOW]);
       ide_source_view_invalidate_window (self);
     }
 }
