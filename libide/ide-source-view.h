@@ -232,6 +232,12 @@ struct _IdeSourceViewClass
                                        gboolean                 extend_selection,
                                        gboolean                 exclusive,
                                        gboolean                 apply_count);
+  void (*move_search)                 (IdeSourceView           *self,
+                                       GtkDirectionType         dir,
+                                       gboolean                 extend_selection,
+                                       gboolean                 exclusive,
+                                       gboolean                 apply_count,
+                                       gboolean                 at_word_boundaries);
   void (*paste_clipboard_extended)    (IdeSourceView           *self,
                                        gboolean                 smart_lines,
                                        gboolean                 after_cursor,

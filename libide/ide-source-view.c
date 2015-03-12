@@ -138,6 +138,16 @@ typedef struct
   guint                        waiting_for_capture : 1;
 } IdeSourceViewPrivate;
 
+typedef struct
+{
+  gint              ref_count;
+  guint             count;
+  IdeSourceView    *self;
+  guint             is_forward : 1;
+  guint             extend_selection : 1;
+  guint             exclusive : 1;
+} SearchMovement;
+
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
 
 enum {
@@ -175,6 +185,7 @@ enum {
   INSERT_MODIFIER,
   JUMP,
   MOVEMENT,
+  MOVE_SEARCH,
   PASTE_CLIPBOARD_EXTENDED,
   POP_SELECTION,
   POP_SNIPPET,
@@ -198,6 +209,55 @@ static guint       gSignals [LAST_SIGNAL];
 static void ide_source_view_real_set_mode (IdeSourceView         *self,
                                            const gchar           *name,
                                            IdeSourceViewModeType  type);
+
+static SearchMovement *
+search_movement_ref (SearchMovement *movement)
+{
+  g_return_val_if_fail (movement, NULL);
+  g_return_val_if_fail (movement->ref_count > 0, NULL);
+
+  movement->ref_count++;
+  return movement;
+}
+
+static void
+search_movement_unref (SearchMovement *movement)
+{
+  g_return_if_fail (movement);
+  g_return_if_fail (movement->ref_count > 0);
+
+  if (--movement->ref_count == 0)
+    {
+      g_object_unref (movement->self);
+      g_free (movement);
+    }
+}
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (SearchMovement, search_movement_unref);
+
+static SearchMovement *
+search_movement_new (IdeSourceView *self,
+                     gboolean       is_forward,
+                     gboolean       extend_selection,
+                     gboolean       exclusive,
+                     gboolean       use_count)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  SearchMovement *mv;
+
+  mv = g_new0 (SearchMovement, 1);
+  mv->ref_count = 1;
+  mv->self = g_object_ref (self);
+  mv->is_forward = !!is_forward;
+  mv->extend_selection = !!extend_selection;
+  mv->exclusive = !!exclusive;
+  mv->count = use_count ? MAX (priv->count, 1) : 1;
+
+  g_assert_cmpint (mv->ref_count, ==, 1);
+  g_assert_cmpint (mv->count, >, 0);
+
+  return mv;
+}
 
 void
 _ide_source_view_set_count (IdeSourceView *self,
@@ -2671,6 +2731,173 @@ ide_source_view_real_movement (IdeSourceView         *self,
 }
 
 static void
+ide_source_view__search_forward_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  GtkSourceSearchContext *search_context = (GtkSourceSearchContext *)object;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter begin;
+  GtkTextIter end;
+  g_autoptr(SearchMovement) mv = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
+  g_assert (mv);
+  g_assert (IDE_IS_SOURCE_VIEW (mv->self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
+  insert = gtk_text_buffer_get_insert (buffer);
+
+  /* todo: rubberband back to start? */
+  if (!gtk_source_search_context_forward_finish (search_context, result, &begin, &end, &error))
+    return;
+
+  mv->count--;
+
+  gtk_text_iter_order (&begin, &end);
+
+  /*
+   * If we still need to move further back in the document, let's search again.
+   */
+  if (mv->count > 0)
+    {
+      gtk_source_search_context_backward_async (search_context,
+                                                &end,
+                                                NULL,
+                                                ide_source_view__search_forward_cb,
+                                                search_movement_ref (mv));
+      return;
+    }
+
+  if (!mv->exclusive)
+    gtk_text_iter_forward_char (&begin);
+
+  if (mv->extend_selection)
+    gtk_text_buffer_move_mark (buffer, insert, &begin);
+  else
+    gtk_text_buffer_select_range (buffer, &begin, &begin);
+
+  ide_source_view_scroll_mark_onscreen (mv->self, insert);
+}
+
+static void
+ide_source_view__search_backward_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  GtkSourceSearchContext *search_context = (GtkSourceSearchContext *)object;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter begin;
+  GtkTextIter end;
+  g_autoptr(SearchMovement) mv = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
+  g_assert (mv);
+  g_assert (IDE_IS_SOURCE_VIEW (mv->self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
+  insert = gtk_text_buffer_get_insert (buffer);
+
+  /* todo: rubberband back to start? */
+  if (!gtk_source_search_context_backward_finish (search_context, result, &begin, &end, &error))
+    return;
+
+  mv->count--;
+
+  gtk_text_iter_order (&begin, &end);
+
+  /*
+   * If we still need to move further back in the document, let's search again.
+   */
+  if (mv->count > 0)
+    {
+      gtk_source_search_context_backward_async (search_context,
+                                                &begin,
+                                                NULL,
+                                                ide_source_view__search_backward_cb,
+                                                search_movement_ref (mv));
+      return;
+    }
+
+  if (mv->exclusive)
+    gtk_text_iter_forward_char (&begin);
+
+  if (mv->extend_selection)
+    gtk_text_buffer_move_mark (buffer, insert, &begin);
+  else
+    gtk_text_buffer_select_range (buffer, &begin, &begin);
+
+  ide_source_view_scroll_mark_onscreen (mv->self, insert);
+}
+
+static void
+ide_source_view_real_move_search (IdeSourceView    *self,
+                                  GtkDirectionType  dir,
+                                  gboolean          extend_selection,
+                                  gboolean          exclusive,
+                                  gboolean          apply_count,
+                                  gboolean          word_boundaries)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextView *text_view = (GtkTextView *)self;
+  g_autoptr(SearchMovement) mv = NULL;
+  GtkTextBuffer *buffer;
+  GtkSourceSearchSettings *settings;
+  const gchar *search_text;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gboolean is_forward;
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail ((dir == GTK_DIR_LEFT) || (dir == GTK_DIR_RIGHT) ||
+                    (dir == GTK_DIR_UP) || (dir == GTK_DIR_DOWN));
+
+  if (!priv->search_context)
+    return;
+
+  settings = gtk_source_search_context_get_settings (priv->search_context);
+  gtk_source_search_settings_set_at_word_boundaries (settings, word_boundaries);
+
+  search_text = gtk_source_search_settings_get_search_text (settings);
+  if (search_text == NULL || search_text[0] == '\0')
+    return;
+
+  buffer = gtk_text_view_get_buffer (text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  if (!extend_selection)
+    gtk_text_iter_order (&begin, &end);
+
+  is_forward = (dir == GTK_DIR_DOWN) || (dir == GTK_DIR_RIGHT);
+
+  mv = search_movement_new (self, is_forward, extend_selection, exclusive, apply_count);
+
+  if (is_forward)
+    {
+      gtk_text_iter_forward_char (&end);
+      gtk_source_search_context_forward_async (priv->search_context,
+                                               &end,
+                                               NULL,
+                                               ide_source_view__search_forward_cb,
+                                               search_movement_ref (mv));
+    }
+  else
+    {
+      gtk_text_iter_backward_char (&begin);
+      gtk_source_search_context_backward_async (priv->search_context,
+                                                &begin,
+                                                NULL,
+                                                ide_source_view__search_backward_cb,
+                                                search_movement_ref (mv));
+    }
+}
+
+static void
 ide_source_view_real_restore_insert_mark (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
@@ -3598,6 +3825,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
   klass->insert_modifier = ide_source_view_real_insert_modifier;
   klass->jump = ide_source_view_real_jump;
+  klass->move_search = ide_source_view_real_move_search;
   klass->movement = ide_source_view_real_movement;
   klass->paste_clipboard_extended = ide_source_view_real_paste_clipboard_extended;
   klass->pop_selection = ide_source_view_real_pop_selection;
@@ -3941,6 +4169,21 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   4,
                   IDE_TYPE_SOURCE_VIEW_MOVEMENT,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN);
+
+  gSignals [MOVE_SEARCH] =
+    g_signal_new ("move-search",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, move_search),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  5,
+                  GTK_TYPE_DIRECTION_TYPE,
+                  G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
