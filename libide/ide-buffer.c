@@ -67,8 +67,9 @@ struct _IdeBuffer
   guint                   diagnose_timeout;
 
   guint                   diagnostics_dirty : 1;
-  guint                   in_diagnose : 1;
   guint                   highlight_diagnostics : 1;
+  guint                   in_diagnose : 1;
+  guint                   loading : 1;
 };
 
 G_DEFINE_TYPE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
@@ -85,6 +86,7 @@ enum {
 
 enum {
   LINE_FLAGS_CHANGED,
+  LOADED,
   LAST_SIGNAL
 };
 
@@ -699,14 +701,30 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * This signal is emitted when the calculated line flags have changed. This occurs when
    * diagnostics and line changes have been recalculated.
    */
-  gSignals [LINE_FLAGS_CHANGED] = g_signal_new ("line-flags-changed",
-                                                G_TYPE_FROM_CLASS (klass),
-                                                G_SIGNAL_RUN_LAST,
-                                                0,
-                                                NULL, NULL,
-                                                g_cclosure_marshal_VOID__VOID,
-                                                G_TYPE_NONE,
-                                                0);
+  gSignals [LINE_FLAGS_CHANGED] =
+    g_signal_new ("line-flags-changed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  /**
+   * IdeBuffer::loaded:
+   *
+   * This signal is emitted when the buffer manager has completed loading the file.
+   */
+  gSignals [LOADED] =
+    g_signal_new ("loaded",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 static void
@@ -1101,4 +1119,34 @@ ide_buffer_set_style_scheme_name (IdeBuffer   *self,
   scheme = gtk_source_style_scheme_manager_get_scheme (mgr, style_scheme_name);
   if (scheme)
     gtk_source_buffer_set_style_scheme (GTK_SOURCE_BUFFER (self), scheme);
+}
+
+gboolean
+_ide_buffer_get_loading (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
+
+  return self->loading;
+}
+
+void
+_ide_buffer_set_loading (IdeBuffer *self,
+                         gboolean   loading)
+{
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  loading = !!loading;
+
+  if (self->loading != loading)
+    {
+      self->loading = loading;
+
+      /*
+       * TODO: We probably want some sort of state rather than this boolean value.
+       *       But that can come later after we get plumbing hooked up.
+       */
+
+      if (!self->loading)
+        g_signal_emit (self, gSignals [LOADED], 0);
+    }
 }

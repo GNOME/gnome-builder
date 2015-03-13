@@ -50,6 +50,9 @@ gboolean            _ide_back_forward_list_save_finish (IdeBackForwardList    *s
                                                         GError               **error);
 IdeBackForwardItem *_ide_back_forward_list_find        (IdeBackForwardList    *self,
                                                         IdeFile               *file);
+gboolean            _ide_buffer_get_loading            (IdeBuffer             *self);
+void                _ide_buffer_set_loading            (IdeBuffer             *self,
+                                                        gboolean               loading);
 void                _ide_diagnostic_add_range          (IdeDiagnostic         *self,
                                                         IdeSourceRange        *range);
 IdeDiagnostic      *_ide_diagnostic_new                (IdeDiagnosticSeverity  severity,

@@ -405,6 +405,7 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
        */
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
         {
+          _ide_buffer_set_loading (state->buffer, FALSE);
           g_task_return_error (task, error);
           return;
         }
@@ -459,6 +460,8 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (state->buffer), &iter, &iter);
 
 emit_signal:
+  _ide_buffer_set_loading (state->buffer, FALSE);
+
   g_signal_emit (self, gSignals [BUFFER_LOADED], 0, state->buffer);
 
   g_task_return_pointer (task, g_object_ref (state->buffer), g_object_unref);
@@ -528,6 +531,8 @@ ide_buffer_manager_load_file_async  (IdeBufferManager     *self,
                                   "context", context,
                                   "file", file,
                                   NULL);
+
+  _ide_buffer_set_loading (state->buffer, TRUE);
 
   g_task_set_task_data (task, state, load_state_free);
 
