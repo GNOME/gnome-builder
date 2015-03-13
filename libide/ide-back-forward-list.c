@@ -22,6 +22,8 @@
 
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
+#include "ide-file.h"
+#include "ide-source-location.h"
 
 struct _IdeBackForwardList
 {
@@ -428,4 +430,55 @@ ide_back_forward_list_init (IdeBackForwardList *self)
 {
   self->backward = g_queue_new ();
   self->forward = g_queue_new ();
+}
+
+/**
+ * _ide_back_forward_list_find:
+ * @self: A #IdeBackForwardList.
+ * @file: The target #IdeFile
+ *
+ * This internal function will attempt to discover the most recent jump point for @file. It starts
+ * from the most recent item and works backwards until the target file is found or the list is
+ * exhausted.
+ *
+ * This is useful if you want to place the insert mark on the last used position within the buffer.
+ *
+ * Returns: (transfer none): An #IdeBackForwardItem or %NULL.
+ */
+IdeBackForwardItem *
+_ide_back_forward_list_find (IdeBackForwardList *self,
+                             IdeFile            *file)
+{
+  GList *iter;
+
+  g_return_val_if_fail (IDE_IS_BACK_FORWARD_LIST (self), NULL);
+  g_return_val_if_fail (IDE_IS_FILE (file), NULL);
+
+  for (iter = self->forward->tail; iter; iter = iter->prev)
+    {
+      IdeBackForwardItem *item = iter->data;
+      IdeSourceLocation *item_loc;
+      IdeFile *item_file;
+
+      item_loc = ide_back_forward_item_get_location (item);
+      item_file = ide_source_location_get_file (item_loc);
+
+      if (ide_file_equal (item_file, file))
+        return item;
+    }
+
+  for (iter = self->backward->head; iter; iter = iter->next)
+    {
+      IdeBackForwardItem *item = iter->data;
+      IdeSourceLocation *item_loc;
+      IdeFile *item_file;
+
+      item_loc = ide_back_forward_item_get_location (item);
+      item_file = ide_source_location_get_file (item_loc);
+
+      if (ide_file_equal (item_file, file))
+        return item;
+    }
+
+  return NULL;
 }
