@@ -21,12 +21,16 @@
 #include <gtksourceview/gtksource.h>
 #include <glib/gi18n.h>
 
+#include "ide-back-forward-item.h"
+#include "ide-back-forward-list.h"
 #include "ide-buffer.h"
 #include "ide-buffer-manager.h"
+#include "ide-context.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
 #include "ide-internal.h"
 #include "ide-progress.h"
+#include "ide-source-location.h"
 
 #define AUTO_SAVE_TIMEOUT_DEFAULT 60
 
@@ -373,7 +377,10 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
 {
   g_autoptr(GTask) task = user_data;
   GtkSourceFileLoader *loader = (GtkSourceFileLoader *)object;
+  IdeBackForwardList *back_forward_list;
+  IdeBackForwardItem *item;
   IdeBufferManager *self;
+  IdeContext *context;
   LoadState *state;
   GError *error = NULL;
   gsize i;
@@ -415,6 +422,35 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
 
   if (state->is_new)
     ide_buffer_manager_add_buffer (self, state->buffer);
+
+  /*
+   * If we have a navigation item for this buffer, restore the insert mark to
+   * the most recent navigation point.
+   */
+  context = ide_object_get_context (IDE_OBJECT (self));
+  back_forward_list = ide_context_get_back_forward_list (context);
+  item = _ide_back_forward_list_find (back_forward_list, state->file);
+  if (item != NULL)
+    {
+      IdeSourceLocation *item_loc;
+      GtkTextMark *insert;
+      GtkTextIter iter;
+      guint line;
+      guint line_offset;
+
+      item_loc = ide_back_forward_item_get_location (item);
+      line = ide_source_location_get_line (item_loc);
+      line_offset = ide_source_location_get_line_offset (item_loc);
+
+      insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (state->buffer));
+      gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (state->buffer), &iter, line);
+
+      for (; line_offset; line_offset--)
+        if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
+          break;
+
+      gtk_text_buffer_move_mark (GTK_TEXT_BUFFER (state->buffer), insert, &iter);
+    }
 
 emit_signal:
   g_signal_emit (self, gSignals [BUFFER_LOADED], 0, state->buffer);
