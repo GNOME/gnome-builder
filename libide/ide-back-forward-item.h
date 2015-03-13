@@ -27,11 +27,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeBackForwardItem, ide_back_forward_item, IDE, BACK_FORWARD_ITEM, IdeObject)
 
-struct _IdeBackForwardItem
-{
-  IdeObject parent_instance;
-};
-
 IdeBackForwardItem *ide_back_forward_item_new          (IdeContext         *context,
                                                         IdeSourceLocation  *location);
 IdeSourceLocation  *ide_back_forward_item_get_location (IdeBackForwardItem *self);

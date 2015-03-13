@@ -24,12 +24,13 @@
 
 #define NUM_LINES_CHAIN_MAX 5
 
-typedef struct
+struct _IdeBackForwardItem
 {
+  IdeObject          parent_instance;
   IdeSourceLocation *location;
-} IdeBackForwardItemPrivate;
+};
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeBackForwardItem, ide_back_forward_item, IDE_TYPE_OBJECT)
+G_DEFINE_TYPE (IdeBackForwardItem, ide_back_forward_item, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -53,7 +54,6 @@ gboolean
 ide_back_forward_item_chain (IdeBackForwardItem *self,
                              IdeBackForwardItem *other)
 {
-  IdeBackForwardItemPrivate *priv = ide_back_forward_item_get_instance_private (self);
   IdeSourceLocation *loc1;
   IdeSourceLocation *loc2;
   IdeFile *file1;
@@ -78,7 +78,7 @@ ide_back_forward_item_chain (IdeBackForwardItem *self,
 
   if (ABS (line1 - line2) <= NUM_LINES_CHAIN_MAX)
     {
-      priv->location = ide_source_location_ref (loc2);
+      self->location = ide_source_location_ref (loc2);
       ide_source_location_unref (loc1);
       return TRUE;
     }
@@ -89,30 +89,22 @@ ide_back_forward_item_chain (IdeBackForwardItem *self,
 IdeSourceLocation *
 ide_back_forward_item_get_location (IdeBackForwardItem *self)
 {
-  IdeBackForwardItemPrivate *priv;
-
   g_return_val_if_fail (IDE_IS_BACK_FORWARD_ITEM (self), NULL);
 
-  priv = ide_back_forward_item_get_instance_private (self);
-
-  return priv->location;
+  return self->location;
 }
 
 static void
 ide_back_forward_item_set_location (IdeBackForwardItem *self,
                                     IdeSourceLocation  *location)
 {
-  IdeBackForwardItemPrivate *priv;
-
   g_return_if_fail (IDE_IS_BACK_FORWARD_ITEM (self));
   g_return_if_fail (location);
 
-  priv = ide_back_forward_item_get_instance_private (self);
-
-  if (location != priv->location)
+  if (location != self->location)
     {
-      g_clear_pointer (&priv->location, ide_source_location_unref);
-      priv->location = ide_source_location_ref (location);
+      g_clear_pointer (&self->location, ide_source_location_unref);
+      self->location = ide_source_location_ref (location);
     }
 }
 
@@ -120,9 +112,8 @@ static void
 ide_back_forward_item_finalize (GObject *object)
 {
   IdeBackForwardItem *self = (IdeBackForwardItem *)object;
-  IdeBackForwardItemPrivate *priv = ide_back_forward_item_get_instance_private (self);
 
-  g_clear_pointer (&priv->location, ide_source_location_unref);
+  g_clear_pointer (&self->location, ide_source_location_unref);
 
   G_OBJECT_CLASS (ide_back_forward_item_parent_class)->finalize (object);
 }
@@ -188,8 +179,7 @@ ide_back_forward_item_class_init (IdeBackForwardItemClass *klass)
                         (G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_LOCATION,
-                                   gParamSpecs [PROP_LOCATION]);
+  g_object_class_install_property (object_class, PROP_LOCATION, gParamSpecs [PROP_LOCATION]);
 }
 
 static void
