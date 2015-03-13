@@ -781,6 +781,8 @@ ide_buffer_manager_dispose (GObject *object)
 {
   IdeBufferManager *self = (IdeBufferManager *)object;
 
+  ide_clear_weak_pointer (&self->focus_buffer);
+
   while (self->buffers->len)
     {
       IdeBuffer *buffer;
