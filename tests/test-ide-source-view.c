@@ -215,7 +215,6 @@ idedit__bufmgr_load_file_cb (GObject      *object,
     {
       GtkSourceStyleScheme *scheme;
       GtkSourceStyleSchemeManager *schememgr;
-      GtkTextIter begin;
       const gchar *name = gDarkMode ? "builder-dark" : "builder";
 
       schememgr = gtk_source_style_scheme_manager_get_default ();
@@ -225,8 +224,6 @@ idedit__bufmgr_load_file_cb (GObject      *object,
       ide_buffer_set_highlight_diagnostics (buf, TRUE);
 
       gtk_widget_set_sensitive (view, TRUE);
-      gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buf), &begin);
-      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buf), &begin, &begin);
       gtk_widget_grab_focus (view);
     }
 }
