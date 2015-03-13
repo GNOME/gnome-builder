@@ -22,7 +22,10 @@
 
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
+#include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-file.h"
+#include "ide-project.h"
 #include "ide-source-location.h"
 
 struct _IdeBackForwardList
@@ -432,6 +435,52 @@ ide_back_forward_list_init (IdeBackForwardList *self)
   self->forward = g_queue_new ();
 }
 
+static void
+_ide_back_forward_list_foreach (IdeBackForwardList *self,
+                                GFunc               callback,
+                                gpointer            user_data)
+{
+  GList *iter;
+
+  g_assert (IDE_IS_BACK_FORWARD_LIST (self));
+  g_assert (callback);
+
+  for (iter = self->forward->tail; iter; iter = iter->prev)
+    callback (iter->data, user_data);
+
+  if (self->current_item)
+    callback (self->current_item, user_data);
+
+  for (iter = self->backward->head; iter; iter = iter->next)
+    callback (iter->data, user_data);
+}
+
+static void
+find_by_file (gpointer data,
+              gpointer user_data)
+{
+  IdeBackForwardItem *item = data;
+  IdeSourceLocation *item_loc;
+  IdeFile *item_file;
+  struct {
+    IdeFile *file;
+    IdeBackForwardItem *result;
+  } *lookup = user_data;
+
+  g_assert (lookup);
+  g_assert (IDE_IS_FILE (lookup->file));
+  g_assert (IDE_IS_BACK_FORWARD_ITEM (item));
+
+  if (lookup->result)
+    return;
+
+  item_loc = ide_back_forward_item_get_location (item);
+  item_file = ide_source_location_get_file (item_loc);
+
+  if (ide_file_equal (item_file, lookup->file))
+    lookup->result = item;
+}
+
 /**
  * _ide_back_forward_list_find:
  * @self: A #IdeBackForwardList.
@@ -449,36 +498,256 @@ IdeBackForwardItem *
 _ide_back_forward_list_find (IdeBackForwardList *self,
                              IdeFile            *file)
 {
-  GList *iter;
+  struct {
+    IdeFile *file;
+    IdeBackForwardItem *result;
+  } lookup = { file, NULL };
 
   g_return_val_if_fail (IDE_IS_BACK_FORWARD_LIST (self), NULL);
   g_return_val_if_fail (IDE_IS_FILE (file), NULL);
 
-  for (iter = self->forward->tail; iter; iter = iter->prev)
+  _ide_back_forward_list_foreach (self, find_by_file, &lookup);
+
+  return lookup.result;
+}
+
+static void
+add_item_string (gpointer data,
+                 gpointer user_data)
+{
+  IdeBackForwardItem *item = data;
+  IdeSourceLocation *item_loc;
+  g_autofree gchar *uri = NULL;
+  IdeFile *file;
+  GString *str = user_data;
+  GFile *gfile;
+  guint line;
+  guint line_offset;
+
+  g_assert (IDE_IS_BACK_FORWARD_ITEM (item));
+  g_assert (str);
+
+  item_loc = ide_back_forward_item_get_location (item);
+
+  file = ide_source_location_get_file (item_loc);
+  line = ide_source_location_get_line (item_loc);
+  line_offset = ide_source_location_get_line_offset (item_loc);
+
+  gfile = ide_file_get_file (file);
+  uri = g_file_get_uri (gfile);
+
+  g_string_append_printf (str, "%u %u %s\n", line, line_offset, uri);
+}
+
+static void
+ide_back_forward_list__replace_contents_cb (GObject      *object,
+                                            GAsyncResult *result,
+                                            gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_TASK (task));
+
+  if (!g_file_replace_contents_finish (file, result, NULL, &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+void
+_ide_back_forward_list_save_async (IdeBackForwardList  *self,
+                                   GFile               *file,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GBytes) contents = NULL;
+  GString *str = NULL;
+  gsize len;
+
+  g_assert (IDE_IS_BACK_FORWARD_LIST (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  /* generate the file content */
+  str = g_string_new (NULL);
+  _ide_back_forward_list_foreach (self, add_item_string, str);
+  len = str->len;
+  contents = g_bytes_new_take (g_string_free (str, FALSE), len);
+
+  g_file_replace_contents_bytes_async (file, contents, NULL, FALSE,
+                                       G_FILE_CREATE_REPLACE_DESTINATION,
+                                       cancellable,
+                                       ide_back_forward_list__replace_contents_cb,
+                                       g_object_ref (task));
+}
+
+gboolean
+_ide_back_forward_list_save_finish (IdeBackForwardList  *self,
+                                    GAsyncResult        *result,
+                                    GError             **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_BACK_FORWARD_LIST (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+
+  return g_task_propagate_boolean (task, error);
+}
+
+static IdeSourceLocation *
+create_source_location (IdeBackForwardList *self,
+                        GFile              *gfile,
+                        guint               line,
+                        guint               line_offset)
+{
+  IdeContext *context;
+  IdeProject *project;
+  IdeFile *file;
+  IdeSourceLocation *ret;
+
+  g_assert (IDE_IS_BACK_FORWARD_LIST (self));
+  g_assert (G_IS_FILE (gfile));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  project = ide_context_get_project (context);
+  file = ide_project_get_project_file (project, gfile);
+  ret = ide_source_location_new (file, line, line_offset, 0);
+  g_clear_object (&file);
+
+  return ret;
+}
+
+static void
+ide_back_forward_list__load_contents_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  IdeBackForwardList *self;
+  g_autoptr(GTask) task = user_data;
+  g_autofree gchar *contents = NULL;
+  IdeContext *context;
+  GError *error = NULL;
+  gsize length = 0;
+  gchar **lines = NULL;
+  gssize line_count;
+  gssize i;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  if (!g_file_load_contents_finish (file, result, &contents, &length, NULL, &error))
     {
-      IdeBackForwardItem *item = iter->data;
-      IdeSourceLocation *item_loc;
-      IdeFile *item_file;
-
-      item_loc = ide_back_forward_item_get_location (item);
-      item_file = ide_source_location_get_file (item_loc);
-
-      if (ide_file_equal (item_file, file))
-        return item;
+      g_task_return_error (task, error);
+      IDE_EXIT;
     }
 
-  for (iter = self->backward->head; iter; iter = iter->next)
+  if (!g_utf8_validate (contents, length, NULL))
     {
-      IdeBackForwardItem *item = iter->data;
-      IdeSourceLocation *item_loc;
-      IdeFile *item_file;
-
-      item_loc = ide_back_forward_item_get_location (item);
-      item_file = ide_source_location_get_file (item_loc);
-
-      if (ide_file_equal (item_file, file))
-        return item;
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_DATA,
+                               _("File contained invalid UTF-8"));
+      IDE_EXIT;
     }
 
-  return NULL;
+  lines = g_strsplit (contents, "\n", 0);
+  line_count = g_strv_length (lines);
+
+  for (i = line_count - 1; i >= 0; i--)
+    {
+      gchar **parts;
+
+      g_strstrip (lines [i]);
+
+      if (!lines [i][0])
+        continue;
+
+      parts = g_strsplit (lines [i], " ", 3);
+
+      if (g_strv_length (parts) == 3)
+        {
+          if (g_str_is_ascii (parts [0]) && g_str_is_ascii (parts [1]))
+            {
+              gint64 line;
+              gint64 line_offset;
+
+              line = g_ascii_strtoll (parts [0], NULL, 10);
+              line_offset = g_ascii_strtoll (parts [1], NULL, 10);
+
+              /*
+               * g_ascii_strtoll() will return G_MAXINT64/G_MININT64 and set errno to ERANGE. We
+               * don't really care about anything other than it being out of range.
+               */
+              if ((line >= 0) && (line <= G_MAXUINT) &&
+                  (line_offset >= 0) && (line_offset <= G_MAXUINT))
+                {
+                  g_autoptr(IdeSourceLocation) srcloc = NULL;
+                  g_autoptr(IdeBackForwardItem) item = NULL;
+                  g_autoptr(GFile) file = NULL;
+
+                  file = g_file_new_for_uri (parts [2]);
+                  srcloc = create_source_location (self, file, line, line_offset);
+                  item = ide_back_forward_item_new (context, srcloc);
+
+                  ide_back_forward_list_push (self, item);
+                }
+            }
+        }
+
+      g_strfreev (parts);
+    }
+
+  g_strfreev (lines);
+
+  g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+
+void
+_ide_back_forward_list_load_async (IdeBackForwardList  *self,
+                                   GFile               *file,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_assert (IDE_IS_BACK_FORWARD_LIST (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  g_file_load_contents_async (file,
+                              cancellable,
+                              ide_back_forward_list__load_contents_cb,
+                              g_object_ref (task));
+}
+
+gboolean
+_ide_back_forward_list_load_finish (IdeBackForwardList  *self,
+                                    GAsyncResult        *result,
+                                    GError             **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_BACK_FORWARD_LIST (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+
+  return g_task_propagate_boolean (task, error);
 }

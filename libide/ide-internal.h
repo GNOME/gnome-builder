@@ -32,6 +32,14 @@
 
 G_BEGIN_DECLS
 
+void                _ide_back_forward_list_load_async  (IdeBackForwardList    *self,
+                                                        GFile                 *file,
+                                                        GCancellable          *cancellable,
+                                                        GAsyncReadyCallback    callback,
+                                                        gpointer               user_data);
+gboolean            _ide_back_forward_list_load_finish (IdeBackForwardList    *self,
+                                                        GAsyncResult          *result,
+                                                        GError               **error);
 IdeBackForwardItem *_ide_back_forward_list_find        (IdeBackForwardList    *self,
                                                         IdeFile               *file);
 void                _ide_diagnostic_add_range          (IdeDiagnostic         *self,
