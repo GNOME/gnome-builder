@@ -58,6 +58,7 @@ libide/ide-source-snippet-completion-provider.c
 libide/ide-source-snippet-parser.c
 libide/ide-source-snippet.c
 libide/ide-source-snippets-manager.c
+libide/ide-source-view-capture.c
 libide/ide-source-view-mode.c
 libide/ide-source-view.c
 libide/ide.c
