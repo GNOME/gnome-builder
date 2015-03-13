@@ -26,6 +26,7 @@
 #include "ide-buffer.h"
 #include "ide-buffer-manager.h"
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
 #include "ide-internal.h"
@@ -430,10 +431,10 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
   context = ide_object_get_context (IDE_OBJECT (self));
   back_forward_list = ide_context_get_back_forward_list (context);
   item = _ide_back_forward_list_find (back_forward_list, state->file);
+
   if (item != NULL)
     {
       IdeSourceLocation *item_loc;
-      GtkTextMark *insert;
       GtkTextIter iter;
       guint line;
       guint line_offset;
@@ -442,14 +443,14 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
       line = ide_source_location_get_line (item_loc);
       line_offset = ide_source_location_get_line_offset (item_loc);
 
-      insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (state->buffer));
-      gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (state->buffer), &iter, line);
+      IDE_TRACE_MSG ("Restoring insert mark to %u:%u", line, line_offset);
 
+      gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (state->buffer), &iter, line);
       for (; line_offset; line_offset--)
         if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
           break;
 
-      gtk_text_buffer_move_mark (GTK_TEXT_BUFFER (state->buffer), insert, &iter);
+      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (state->buffer), &iter, &iter);
     }
 
 emit_signal:
