@@ -1004,11 +1004,11 @@ ide_source_view__buffer_insert_text_cb (GtkTextBuffer *buffer,
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   ide_source_view_block_handlers (self);
-
   if ((snippet = g_queue_peek_head (priv->snippets)))
     ide_source_snippet_before_insert_text (snippet, buffer, iter, text, len);
-
   ide_source_view_unblock_handlers (self);
+
+  ide_source_view_jump (self, iter);
 }
 
 static void
@@ -1064,6 +1064,8 @@ ide_source_view__buffer_delete_range_cb (GtkTextBuffer *buffer,
       end_mark = ide_source_snippet_get_mark_end (snippet);
       ide_source_view_invalidate_range_mark (self, begin_mark, end_mark);
     }
+
+  ide_source_view_jump (self, begin);
 }
 
 static void

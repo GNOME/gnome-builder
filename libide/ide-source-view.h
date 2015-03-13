@@ -288,6 +288,8 @@ gboolean                    ide_source_view_get_snippet_completion    (IdeSource
 GType                       ide_source_view_get_type                  (void);
 void                        ide_source_view_get_visible_rect          (IdeSourceView              *self,
                                                                        GdkRectangle               *visible_rect);
+void                        ide_source_view_jump                      (IdeSourceView              *self,
+                                                                       const GtkTextIter          *location);
 void                        ide_source_view_pop_snippet               (IdeSourceView              *self);
 void                        ide_source_view_push_snippet              (IdeSourceView              *self,
                                                                        IdeSourceSnippet           *snippet);
