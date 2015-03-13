@@ -1013,6 +1013,34 @@ ide_context_init_snippets (gpointer             source_object,
 }
 
 static void
+ide_context__back_forward_list_load_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  IdeBackForwardList *back_forward_list = (IdeBackForwardList *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_BACK_FORWARD_LIST (back_forward_list));
+  g_assert (G_IS_TASK (task));
+
+  if (!_ide_back_forward_list_load_finish (back_forward_list, result, &error))
+    {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        {
+          g_clear_error (&error);
+        }
+      else
+        {
+          g_task_return_error (task, error);
+          return;
+        }
+    }
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_context_init_back_forward_list (gpointer             source_object,
                                     GCancellable        *cancellable,
                                     GAsyncReadyCallback  callback,
@@ -1020,14 +1048,34 @@ ide_context_init_back_forward_list (gpointer             source_object,
 {
   IdeContext *self = source_object;
   g_autoptr(GTask) task = NULL;
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *path = NULL;
+  g_autoptr(GFile) file = NULL;
+  const gchar *project_name;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  /* TODO: implement loading */
+  project_name = ide_project_get_name (self->project);
+  name = g_strdup_printf ("%s.back-forward-list", project_name);
+  path = g_build_filename (g_get_user_data_dir (),
+                           "gnome-builder",
+                           g_strdelimit (name, " \t\n", '_'),
+                           NULL);
+  file = g_file_new_for_path (path);
 
-  g_task_return_boolean (task, TRUE);
+  IDE_TRACE_MSG ("Loading %s", path);
+
+  _ide_back_forward_list_load_async (self->back_forward_list,
+                                     file,
+                                     cancellable,
+                                     ide_context__back_forward_list_load_cb,
+                                     g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static void
