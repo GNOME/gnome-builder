@@ -1159,6 +1159,15 @@ ide_source_view__buffer_loaded_cb (IdeSourceView *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
+  /*
+   * FIXME:
+   *
+   * This will not always scroll to the position. It used to, because textview worked hard to scroll
+   * to the target location (when using scroll_to_mark). I think during the animation work
+   * everything broke. We need to do our own scroll_to_mark that will work around this.
+   *
+   * But I'm busy, so yeah. Sometime.
+   */
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
   gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self), insert, 0.0, TRUE, 1.0, 0.5);
 }
