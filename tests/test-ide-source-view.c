@@ -323,6 +323,7 @@ save_activate (GSimpleAction *action,
 static void
 create_window (void)
 {
+  IdeBackForwardList *bflist;
   GtkHeaderBar *header;
   GtkMenuButton *docname;
   GtkMenuButton *langbtn;
@@ -393,6 +394,8 @@ create_window (void)
                         NULL);
   gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (hbox2));
 
+  bflist = ide_context_get_back_forward_list (gContext);
+
   back = g_object_new (GTK_TYPE_BUTTON,
                        "child", g_object_new (GTK_TYPE_IMAGE,
                                               "icon-name", "go-previous-symbolic",
@@ -402,6 +405,7 @@ create_window (void)
                        NULL);
   ADD_CLASS (back, "image-button");
   ADD_CLASS (back, "flat");
+  g_object_bind_property (bflist, "can-go-backward", back, "sensitive", G_BINDING_SYNC_CREATE);
   gtk_box_pack_start (hbox2, GTK_WIDGET (back), FALSE, FALSE, 0);
 
   forward = g_object_new (GTK_TYPE_BUTTON,
@@ -413,6 +417,7 @@ create_window (void)
                           NULL);
   ADD_CLASS (forward, "image-button");
   ADD_CLASS (forward, "flat");
+  g_object_bind_property (bflist, "can-go-forward", forward, "sensitive", G_BINDING_SYNC_CREATE);
   gtk_box_pack_start (hbox2, GTK_WIDGET (forward), FALSE, FALSE, 0);
 
   sep = g_object_new (GTK_TYPE_SEPARATOR,
