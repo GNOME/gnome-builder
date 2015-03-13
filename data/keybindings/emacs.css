@@ -52,8 +52,8 @@
   bind "<ctrl>s" { "action" ("editor-frame", "find", "") };
   bind "<ctrl>period" { "action" ("win", "global-search", "") };
   bind "<ctrl>comma" { "action" ("app", "preferences", "") };
-  bind "<alt>n" { "action" ("editor-frame", "next-diagnostic", "") };
-  bind "<alt>p" { "action" ("editor-frame", "previous-diagnostic", "") };
+  bind "<alt>n" { "move-error" (down) };
+  bind "<alt>p" { "move-error" (up) };
   bind "<ctrl>j" { "action" ("editor-view", "switch-pane", "") };
   bind "<shift><ctrl>j" { "action" ("editor-view", "toggle-split", "") };
   bind "<ctrl><alt>Page_Up" { "action" ("stack", "previous-document", "") };
@@ -85,6 +85,7 @@
   bind "2" { "action" ("editor-view", "toggle-split", "") };
   bind "3" { "action" ("stack", "split-document-right", "") };
   bind "o" { "action" ("stack", "focus-right", "") };
+  bind "grave" { "move-error" (down) };
 }
 
 /*
