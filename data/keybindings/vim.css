@@ -155,6 +155,13 @@
                     "move-cursor" (display-lines, -1, 0)
                     "auto-indent" () };
 
+  bind "minus" { "movement" (previous-line, 0, 1, 1)
+                 "movement" (first-nonspace-char, 0, 1, 0)
+                 "clear-count" () };
+  bind "plus" { "movement" (next-line, 0, 1, 1)
+                 "movement" (first-nonspace-char, 0, 1, 0)
+                 "clear-count" () };
+
   /* swallow the current character and go to insert */
   bind "s" { "begin-macro" ()
              "set-mode" ("vim-insert", permanent)
