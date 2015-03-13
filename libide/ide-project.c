@@ -162,6 +162,7 @@ ide_project_set_root (IdeProject     *project,
 
 /**
  * ide_project_get_file_for_path:
+ * @path: A relative path from the project root.
  *
  * Retrieves an #IdeFile for the path specified. #IdeFile provides access to
  * language specific features via ide_file_get_language().
@@ -234,6 +235,42 @@ ide_project_get_file_for_path (IdeProject  *self,
     }
 
   return file;
+}
+
+/**
+ * ide_project_get_project_file:
+ * @self: A #IdeProject.
+ * @gfile: A #GFile.
+ *
+ * Gets a new #IdeFile representing @gfile.
+ *
+ * Returns: (transfer full): An #IdeFile.
+ */
+IdeFile *
+ide_project_get_project_file (IdeProject *self,
+                              GFile      *gfile)
+{
+  g_autofree gchar *relpath = NULL;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
+
+  g_return_val_if_fail (IDE_IS_PROJECT (self), NULL);
+  g_return_val_if_fail (G_IS_FILE (gfile), NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  relpath = g_file_get_relative_path (workdir, gfile);
+  if (relpath)
+    return ide_project_get_file_for_path (self, relpath);
+
+  return g_object_new (IDE_TYPE_FILE,
+                       "context", context,
+                       "path", g_file_get_path (gfile),
+                       "file", gfile,
+                       NULL);
 }
 
 static void
