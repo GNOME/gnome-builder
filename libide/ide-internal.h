@@ -30,50 +30,40 @@
 
 G_BEGIN_DECLS
 
-void _ide_project_set_name (IdeProject  *project,
-                            const gchar *name);
-
-IdeUnsavedFile *_ide_unsaved_file_new (GFile       *file,
-                                       GBytes      *content,
-                                       const gchar *temp_path,
-                                       gint64       sequence);
-
-void _ide_diagnostician_add_provider    (IdeDiagnostician      *self,
-                                         IdeDiagnosticProvider *provider);
-void _ide_diagnostician_remove_provider (IdeDiagnostician      *self,
-                                         IdeDiagnosticProvider *provider);
-
-IdeDiagnostics *_ide_diagnostics_new (GPtrArray *ar);
-
-IdeDiagnostic *_ide_diagnostic_new        (IdeDiagnosticSeverity  severity,
-                                           const gchar           *text,
-                                           IdeSourceLocation     *location);
-void           _ide_diagnostic_take_range (IdeDiagnostic         *self,
-                                           IdeSourceRange        *range);
-void           _ide_diagnostic_add_range  (IdeDiagnostic         *self,
-                                           IdeSourceRange        *range);
-
-GtkSourceFile *_ide_file_get_source_file (IdeFile *file);
-
-void _ide_search_context_add_provider (IdeSearchContext  *context,
-                                       IdeSearchProvider *provider,
-                                       gsize              max_results);
-
-IdeSourceRange *_ide_source_range_new (IdeSourceLocation *begin,
-                                       IdeSourceLocation *end);
-
-void _ide_source_view_set_count (IdeSourceView *self,
-                                 guint          count);
-void _ide_source_view_set_modifier (IdeSourceView *self,
-                                    gunichar       modifier);
-
-gboolean           _ide_source_view_mode_do_event (IdeSourceViewMode     *mode,
-                                                   GdkEventKey           *event,
-                                                   gboolean              *remove);
-IdeSourceViewMode *_ide_source_view_mode_new      (GtkWidget             *view,
-                                                   const char            *mode,
-                                                   IdeSourceViewModeType  type);
-
+void               _ide_diagnostic_add_range          (IdeDiagnostic         *self,
+                                                       IdeSourceRange        *range);
+IdeDiagnostic     *_ide_diagnostic_new                (IdeDiagnosticSeverity  severity,
+                                                       const gchar           *text,
+                                                       IdeSourceLocation     *location);
+void               _ide_diagnostic_take_range         (IdeDiagnostic         *self,
+                                                       IdeSourceRange        *range);
+void               _ide_diagnostician_add_provider    (IdeDiagnostician      *self,
+                                                       IdeDiagnosticProvider *provider);
+void               _ide_diagnostician_remove_provider (IdeDiagnostician      *self,
+                                                       IdeDiagnosticProvider *provider);
+IdeDiagnostics    *_ide_diagnostics_new               (GPtrArray             *ar);
+GtkSourceFile     *_ide_file_get_source_file          (IdeFile               *file);
+void               _ide_project_set_name              (IdeProject            *project,
+                                                       const gchar           *name);
+void               _ide_search_context_add_provider   (IdeSearchContext      *context,
+                                                       IdeSearchProvider     *provider,
+                                                       gsize                  max_results);
+IdeSourceRange    *_ide_source_range_new              (IdeSourceLocation     *begin,
+                                                       IdeSourceLocation     *end);
+gboolean           _ide_source_view_mode_do_event     (IdeSourceViewMode     *mode,
+                                                       GdkEventKey           *event,
+                                                       gboolean              *remove);
+IdeSourceViewMode *_ide_source_view_mode_new          (GtkWidget             *view,
+                                                       const char            *mode,
+                                                       IdeSourceViewModeType  type);
+void               _ide_source_view_set_count         (IdeSourceView         *self,
+                                                       guint                  count);
+void               _ide_source_view_set_modifier      (IdeSourceView         *self,
+                                                       gunichar               modifier);
+IdeUnsavedFile    *_ide_unsaved_file_new              (GFile                 *file,
+                                                       GBytes                *content,
+                                                       const gchar           *temp_path,
+                                                       gint64                 sequence);
 
 G_END_DECLS
 
