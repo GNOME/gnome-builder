@@ -181,7 +181,10 @@ ide_back_forward_list_push (IdeBackForwardList *self,
       g_queue_push_head (self->backward, g_object_ref (self->current_item));
     }
 
-  self->current_item = g_object_ref (item);
+  if (self->backward->head && ide_back_forward_item_chain (self->backward->head->data, item))
+    self->current_item = g_queue_pop_head (self->backward);
+  else
+    self->current_item = g_object_ref (item);
 
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CAN_GO_BACKWARD]);
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CAN_GO_FORWARD]);
