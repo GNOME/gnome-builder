@@ -383,6 +383,7 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
   IdeBufferManager *self;
   IdeContext *context;
   LoadState *state;
+  GtkTextIter iter;
   GError *error = NULL;
   gsize i;
 
@@ -435,7 +436,6 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
   if (item != NULL)
     {
       IdeSourceLocation *item_loc;
-      GtkTextIter iter;
       guint line;
       guint line_offset;
 
@@ -449,9 +449,14 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
       for (; line_offset; line_offset--)
         if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
           break;
-
-      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (state->buffer), &iter, &iter);
     }
+  else
+    {
+      IDE_TRACE_MSG ("Restoring insert mark to 0:0");
+      gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (state->buffer), &iter);
+    }
+
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (state->buffer), &iter, &iter);
 
 emit_signal:
   g_signal_emit (self, gSignals [BUFFER_LOADED], 0, state->buffer);
