@@ -31,6 +31,7 @@
 static IdeContext     *gContext;
 static GtkWindow      *gWindow;
 static GtkStack       *gDocStack;
+static GtkMenuButton  *gDocname;
 static GtkProgressBar *gProgress;
 static GHashTable     *gBufferToView;
 static GList          *gFilesToOpen;
@@ -282,9 +283,13 @@ notify_visible_child_cb (GtkStack   *stack,
 
   if (child)
     {
+      const gchar *title;
+
       view = IDE_SOURCE_VIEW (gtk_bin_get_child (GTK_BIN (child)));
       buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)));
-      gtk_window_set_title (gWindow, ide_buffer_get_title (buffer));
+      title = ide_buffer_get_title (buffer);
+      gtk_window_set_title (gWindow, title);
+      gtk_button_set_label (GTK_BUTTON (gDocname), title);
     }
 }
 
@@ -420,7 +425,6 @@ create_window (void)
 {
   IdeBackForwardList *bflist;
   GtkHeaderBar *header;
-  GtkMenuButton *docname;
   GtkMenuButton *langbtn;
   GtkBox *box;
   GtkBox *hbox;
@@ -544,14 +548,14 @@ create_window (void)
   gtk_box_pack_start (hbox2, GTK_WIDGET (sep), FALSE, FALSE, 0);
 
   /* document name */
-  docname = g_object_new (GTK_TYPE_MENU_BUTTON,
+  gDocname = g_object_new (GTK_TYPE_MENU_BUTTON,
                           "label", "my-document.c",
                           "hexpand", TRUE,
                           "visible", TRUE,
                           NULL);
-  ADD_CLASS (docname, "text-button");
-  ADD_CLASS (docname, "flat");
-  gtk_box_set_center_widget (hbox2, GTK_WIDGET (docname));
+  ADD_CLASS (gDocname, "text-button");
+  ADD_CLASS (gDocname, "flat");
+  gtk_box_set_center_widget (hbox2, GTK_WIDGET (gDocname));
 
   closebtn = g_object_new (GTK_TYPE_BUTTON,
                            "child", g_object_new (GTK_TYPE_IMAGE,
