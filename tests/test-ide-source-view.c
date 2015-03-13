@@ -141,6 +141,9 @@ static void
 add_buffer (IdeBuffer *buffer)
 {
   IdeSourceView *view;
+  IdeBackForwardList *bflist;
+
+  bflist = ide_context_get_back_forward_list (gContext);
 
   view = g_hash_table_lookup (gBufferToView, buffer);
 
@@ -153,6 +156,7 @@ add_buffer (IdeBuffer *buffer)
                                NULL);
       view = g_object_new (IDE_TYPE_SOURCE_VIEW,
                            "auto-indent", TRUE,
+                           "back-forward-list", bflist,
                            "buffer", buffer,
                            "enable-word-completion", gWordCompletion,
                            "highlight-current-line", TRUE,
