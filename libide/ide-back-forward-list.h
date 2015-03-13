@@ -27,11 +27,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeBackForwardList, ide_back_forward_list, IDE, BACK_FORWARD_LIST, IdeObject)
 
-struct _IdeBackForwardList
-{
-  IdeObject parent_instance;
-};
-
 void                ide_back_forward_list_go_backward         (IdeBackForwardList *self);
 void                ide_back_forward_list_go_forward          (IdeBackForwardList *self);
 gboolean            ide_back_forward_list_get_can_go_backward (IdeBackForwardList *self);
