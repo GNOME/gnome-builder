@@ -19,7 +19,10 @@
 #include <glib/gi18n.h>
 
 #include "ide-back-forward-item.h"
+#include "ide-file.h"
 #include "ide-source-location.h"
+
+#define NUM_LINES_CHAIN_MAX 5
 
 typedef struct
 {
@@ -44,6 +47,43 @@ ide_back_forward_item_new (IdeContext        *context,
                        "context", context,
                        "location", location,
                        NULL);
+}
+
+gboolean
+ide_back_forward_item_chain (IdeBackForwardItem *self,
+                             IdeBackForwardItem *other)
+{
+  IdeBackForwardItemPrivate *priv = ide_back_forward_item_get_instance_private (self);
+  IdeSourceLocation *loc1;
+  IdeSourceLocation *loc2;
+  IdeFile *file1;
+  IdeFile *file2;
+  gint line1;
+  gint line2;
+
+  g_return_val_if_fail (IDE_IS_BACK_FORWARD_ITEM (self), FALSE);
+  g_return_val_if_fail (IDE_IS_BACK_FORWARD_ITEM (other), FALSE);
+
+  loc1 = ide_back_forward_item_get_location (self);
+  loc2 = ide_back_forward_item_get_location (other);
+
+  file1 = ide_source_location_get_file (loc1);
+  file2 = ide_source_location_get_file (loc2);
+
+  if (!ide_file_equal (file1, file2))
+    return FALSE;
+
+  line1 = ide_source_location_get_line (loc1);
+  line2 = ide_source_location_get_line (loc2);
+
+  if (ABS (line1 - line2) <= NUM_LINES_CHAIN_MAX)
+    {
+      priv->location = ide_source_location_ref (loc2);
+      ide_source_location_unref (loc1);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 IdeSourceLocation *
