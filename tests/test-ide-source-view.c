@@ -198,11 +198,37 @@ buffer_loaded_cb (IdeBufferManager *bufmgr,
 }
 
 static void
+switch_to_buffer (IdeBuffer *buffer,
+                  guint      line,
+                  guint      line_offset)
+{
+  IdeSourceView *view;
+  GtkTextIter iter;
+  GtkWidget *parent;
+
+  view = g_hash_table_lookup (gBufferToView, buffer);
+  g_assert (view);
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (view));
+  gtk_stack_set_visible_child (GTK_STACK (gDocStack), parent);
+
+  gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (buffer), &iter, line);
+  for (; line_offset; line_offset--)
+    if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
+      break;
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
+  gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (view),
+                                gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer)),
+                                0.0, TRUE, 1.0, 0.5);
+}
+
+static void
 idedit__bufmgr_load_file_cb (GObject      *object,
                              GAsyncResult *result,
                              gpointer      user_data)
 {
   g_autoptr(IdeBuffer) buf = NULL;
+  g_autoptr(IdeSourceLocation) srcloc = user_data;
   GError *error = NULL;
   GtkWidget *view;
 
@@ -212,6 +238,17 @@ idedit__bufmgr_load_file_cb (GObject      *object,
     {
       g_printerr ("%s\n", error->message);
       g_clear_error (&error);
+    }
+
+  if (srcloc)
+    {
+      guint line;
+      guint line_offset;
+
+      line = ide_source_location_get_line (srcloc);
+      line_offset = ide_source_location_get_line_offset (srcloc);
+
+      switch_to_buffer (buf, line, line_offset);
     }
 
   view = g_hash_table_lookup (gBufferToView, buf);
@@ -321,6 +358,64 @@ save_activate (GSimpleAction *action,
 }
 
 static void
+go_forward_activate (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       user_data)
+{
+  IdeBackForwardList *list;
+
+  list = ide_context_get_back_forward_list (gContext);
+
+  if (ide_back_forward_list_get_can_go_forward (list))
+    ide_back_forward_list_go_forward (list);
+}
+
+static void
+go_backward_activate (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
+{
+  IdeBackForwardList *list;
+
+  list = ide_context_get_back_forward_list (gContext);
+
+  if (ide_back_forward_list_get_can_go_backward (list))
+    ide_back_forward_list_go_backward (list);
+}
+
+
+static void
+navigate_to_cb (IdeBackForwardList *list,
+                IdeBackForwardItem *item,
+                gpointer            user_data)
+{
+  IdeBufferManager *bufmgr;
+  IdeSourceLocation *srcloc;
+  IdeBuffer *buffer;
+  IdeFile *file;
+  guint line;
+  guint line_offset;
+
+  srcloc = ide_back_forward_item_get_location (item);
+  file = ide_source_location_get_file (srcloc);
+  line = ide_source_location_get_line (srcloc);
+  line_offset = ide_source_location_get_line_offset (srcloc);
+
+  bufmgr = ide_context_get_buffer_manager (gContext);
+  buffer = ide_buffer_manager_find_buffer (bufmgr, file);
+
+  if (buffer)
+    {
+      switch_to_buffer (buffer, line, line_offset);
+      return;
+    }
+
+  ide_buffer_manager_load_file_async (bufmgr, file, FALSE, NULL, NULL,
+                                      idedit__bufmgr_load_file_cb,
+                                      ide_source_location_ref (srcloc));
+}
+
+static void
 create_window (void)
 {
   IdeBackForwardList *bflist;
@@ -340,6 +435,11 @@ create_window (void)
   static const GActionEntry entries[] = {
     { "save", save_activate },
   };
+  GSimpleActionGroup *nav_group;
+  static const GActionEntry nav_entries[] = {
+    { "go-backward", go_backward_activate },
+    { "go-forward", go_forward_activate },
+  };
 
   css = gtk_css_provider_new ();
   g_signal_connect (css, "parsing-error", G_CALLBACK (parsing_error_cb), NULL);
@@ -356,9 +456,24 @@ create_window (void)
                           NULL);
   g_signal_connect (gWindow, "delete-event", G_CALLBACK (delete_event_cb), NULL);
 
+  bflist = ide_context_get_back_forward_list (gContext);
+  g_signal_connect (bflist, "navigate-to", G_CALLBACK (navigate_to_cb), NULL);
+
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), NULL);
   gtk_widget_insert_action_group (GTK_WIDGET (gWindow), "file", G_ACTION_GROUP (group));
+
+  nav_group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (nav_group), nav_entries, G_N_ELEMENTS (nav_entries), NULL);
+  gtk_widget_insert_action_group (GTK_WIDGET (gWindow), "navigation", G_ACTION_GROUP (nav_group));
+
+  g_object_bind_property (bflist, "can-go-backward",
+                          g_action_map_lookup_action (G_ACTION_MAP (nav_group), "go-backward"), "enabled",
+                          G_BINDING_SYNC_CREATE);
+
+  g_object_bind_property (bflist, "can-go-forward",
+                          g_action_map_lookup_action (G_ACTION_MAP (nav_group), "go-forward"), "enabled",
+                          G_BINDING_SYNC_CREATE);
 
   header = g_object_new (GTK_TYPE_HEADER_BAR,
                          "show-close-button", TRUE,
@@ -394,9 +509,8 @@ create_window (void)
                         NULL);
   gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (hbox2));
 
-  bflist = ide_context_get_back_forward_list (gContext);
-
   back = g_object_new (GTK_TYPE_BUTTON,
+                       "action-name", "navigation.go-backward",
                        "child", g_object_new (GTK_TYPE_IMAGE,
                                               "icon-name", "go-previous-symbolic",
                                               "visible", TRUE,
@@ -409,6 +523,7 @@ create_window (void)
   gtk_box_pack_start (hbox2, GTK_WIDGET (back), FALSE, FALSE, 0);
 
   forward = g_object_new (GTK_TYPE_BUTTON,
+                          "action-name", "navigation.go-forward",
                           "child", g_object_new (GTK_TYPE_IMAGE,
                                                  "icon-name", "go-next-symbolic",
                                                  "visible", TRUE,
