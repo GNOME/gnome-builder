@@ -1153,6 +1153,7 @@ ide_source_view_connect_buffer (IdeSourceView *self,
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceSearchSettings *search_settings;
+  GtkTextMark *insert;
   GtkTextIter iter;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -1258,6 +1259,9 @@ ide_source_view_connect_buffer (IdeSourceView *self,
 
   if (priv->mode && ide_source_view_mode_get_coalesce_undo (priv->mode))
     BEGIN_USER_ACTION (self);
+
+  insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
+  gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self), insert, 0.0, TRUE, 1.0, 0.5);
 }
 
 static void
