@@ -573,6 +573,15 @@ _ide_back_forward_list_save_async (IdeBackForwardList  *self,
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+#ifndef IDE_DISABLE_TRACE
+  {
+    g_autofree gchar *path = NULL;
+
+    path = g_file_get_path (file);
+    IDE_TRACE_MSG ("Saving %s", path);
+  }
+#endif
+
   task = g_task_new (self, cancellable, callback, user_data);
 
   /* generate the file content */
@@ -730,6 +739,15 @@ _ide_back_forward_list_load_async (IdeBackForwardList  *self,
   g_assert (IDE_IS_BACK_FORWARD_LIST (self));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+#ifndef IDE_DISABLE_TRACE
+  {
+    g_autofree gchar *path = NULL;
+
+    path = g_file_get_path (file);
+    IDE_TRACE_MSG ("Loading %s", path);
+  }
+#endif
 
   task = g_task_new (self, cancellable, callback, user_data);
 
