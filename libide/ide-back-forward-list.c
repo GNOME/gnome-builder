@@ -28,6 +28,8 @@
 #include "ide-project.h"
 #include "ide-source-location.h"
 
+#define MAX_ITEMS_PER_FILE 10
+
 struct _IdeBackForwardList
 {
   IdeObject           parent_instance;
@@ -522,24 +524,36 @@ add_item_string (gpointer data,
   IdeSourceLocation *item_loc;
   g_autofree gchar *uri = NULL;
   IdeFile *file;
-  GString *str = user_data;
   GFile *gfile;
+  struct {
+    GHashTable *counts;
+    GString *str;
+  } *save_state = user_data;
+  guint count;
   guint line;
   guint line_offset;
 
   g_assert (IDE_IS_BACK_FORWARD_ITEM (item));
-  g_assert (str);
+  g_assert (save_state);
+  g_assert (save_state->str);
+  g_assert (save_state->counts);
 
   item_loc = ide_back_forward_item_get_location (item);
-
   file = ide_source_location_get_file (item_loc);
+
+  count = GPOINTER_TO_INT (g_hash_table_lookup (save_state->counts, file));
+  if (count >= MAX_ITEMS_PER_FILE)
+    return;
+
+  g_hash_table_replace (save_state->counts, file, GINT_TO_POINTER (++count));
+
   line = ide_source_location_get_line (item_loc);
   line_offset = ide_source_location_get_line_offset (item_loc);
 
   gfile = ide_file_get_file (file);
   uri = g_file_get_uri (gfile);
 
-  g_string_append_printf (str, "%u %u %s\n", line, line_offset, uri);
+  g_string_append_printf (save_state->str, "%u %u %s\n", line, line_offset, uri);
 }
 
 static void
@@ -569,7 +583,10 @@ _ide_back_forward_list_save_async (IdeBackForwardList  *self,
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(GBytes) contents = NULL;
-  GString *str = NULL;
+  struct {
+    GHashTable *counts;
+    GString *str;
+  } save_state;
   gsize len;
 
   g_assert (IDE_IS_BACK_FORWARD_LIST (self));
@@ -587,11 +604,13 @@ _ide_back_forward_list_save_async (IdeBackForwardList  *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  /* generate the file content */
-  str = g_string_new (NULL);
-  _ide_back_forward_list_foreach (self, add_item_string, str);
-  len = str->len;
-  contents = g_bytes_new_take (g_string_free (str, FALSE), len);
+  save_state.counts = g_hash_table_new ((GHashFunc)ide_file_hash,
+                                        (GEqualFunc)ide_file_equal);
+  save_state.str = g_string_new (NULL);
+  _ide_back_forward_list_foreach (self, add_item_string, &save_state);
+  len = save_state.str->len;
+  contents = g_bytes_new_take (g_string_free (save_state.str, FALSE), len);
+  g_hash_table_destroy (save_state.counts);
 
   g_file_replace_contents_bytes_async (file, contents, NULL, FALSE,
                                        G_FILE_CREATE_REPLACE_DESTINATION,
