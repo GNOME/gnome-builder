@@ -111,6 +111,7 @@ typedef struct
   gulong                       buffer_notify_highlight_diagnostics_handler;
   gulong                       buffer_notify_language_handler;
   gulong                       buffer_notify_style_scheme_handler;
+  gulong                       buffer_loaded_handler;
 
   guint                        change_sequence;
 
@@ -1150,6 +1151,19 @@ ide_source_view__buffer_line_flags_changed_cb (IdeSourceView *self,
 }
 
 static void
+ide_source_view__buffer_loaded_cb (IdeSourceView *self,
+                                   IdeBuffer     *buffer)
+{
+  GtkTextMark *insert;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
+  gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self), insert, 0.0, TRUE, 1.0, 0.5);
+}
+
+static void
 ide_source_view_connect_buffer (IdeSourceView *self,
                                 IdeBuffer     *buffer)
 {
@@ -1238,6 +1252,13 @@ ide_source_view_connect_buffer (IdeSourceView *self,
                                self,
                                0);
 
+  priv->buffer_loaded_handler =
+      g_signal_connect_object (buffer,
+                               "loaded",
+                               G_CALLBACK (ide_source_view__buffer_loaded_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+
   search_settings = g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
                                   "wrap-around", TRUE,
                                   "regex-enabled", FALSE,
@@ -1284,6 +1305,7 @@ ide_source_view_disconnect_buffer (IdeSourceView *self,
   ide_clear_signal_handler (buffer, &priv->buffer_notify_highlight_diagnostics_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_notify_language_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_notify_style_scheme_handler);
+  ide_clear_signal_handler (buffer, &priv->buffer_loaded_handler);
 
   g_clear_object (&priv->search_context);
 
@@ -5197,10 +5219,13 @@ void
 ide_source_view_jump (IdeSourceView     *self,
                       const GtkTextIter *location)
 {
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
   g_return_if_fail (location);
 
-  g_signal_emit (self, gSignals [JUMP], 0, location);
+  if (priv->buffer && !_ide_buffer_get_loading (priv->buffer))
+    g_signal_emit (self, gSignals [JUMP], 0, location);
 }
 
 /**
