@@ -441,6 +441,27 @@ ide_context_get_service_typed (IdeContext *self,
   return ide_context_create_service (self, service_type);
 }
 
+static GFile *
+get_back_forward_list_file (IdeContext *self)
+{
+  const gchar *project_name;
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *path = NULL;
+  GFile *file;
+
+  g_assert (IDE_IS_CONTEXT (self));
+
+  project_name = ide_project_get_name (self->project);
+  name = g_strdup_printf ("%s.back-forward-list", project_name);
+  path = g_build_filename (g_get_user_data_dir (),
+                           "gnome-builder",
+                           g_strdelimit (name, " \t\n", '_'),
+                           NULL);
+  file = g_file_new_for_path (path);
+
+  return file;
+}
+
 static void
 ide_context_dispose (GObject *object)
 {
@@ -1048,10 +1069,7 @@ ide_context_init_back_forward_list (gpointer             source_object,
 {
   IdeContext *self = source_object;
   g_autoptr(GTask) task = NULL;
-  g_autofree gchar *name = NULL;
-  g_autofree gchar *path = NULL;
   g_autoptr(GFile) file = NULL;
-  const gchar *project_name;
 
   IDE_ENTRY;
 
@@ -1059,16 +1077,7 @@ ide_context_init_back_forward_list (gpointer             source_object,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  project_name = ide_project_get_name (self->project);
-  name = g_strdup_printf ("%s.back-forward-list", project_name);
-  path = g_build_filename (g_get_user_data_dir (),
-                           "gnome-builder",
-                           g_strdelimit (name, " \t\n", '_'),
-                           NULL);
-  file = g_file_new_for_path (path);
-
-  IDE_TRACE_MSG ("Loading %s", path);
-
+  file = get_back_forward_list_file (self);
   _ide_back_forward_list_load_async (self->back_forward_list,
                                      file,
                                      cancellable,
@@ -1247,21 +1256,59 @@ async_initable_init (GAsyncInitableIface *iface)
 }
 
 static void
+ide_context_unload__back_forward_list_save_cb (GObject      *object,
+                                               GAsyncResult *result,
+                                               gpointer      user_data)
+{
+  IdeBackForwardList *back_forward_list = (IdeBackForwardList *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  IDE_ENTRY;
+
+  if (!_ide_back_forward_list_save_finish (back_forward_list, result, &error))
+    {
+      g_warning ("%s(): %s", G_STRFUNC, error->message);
+      g_clear_error (&error);
+    }
+
+  g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
 ide_context_unload__unsaved_files_save_cb (GObject      *object,
                                            GAsyncResult *result,
                                            gpointer      user_data)
 {
   IdeUnsavedFiles *unsaved_files = (IdeUnsavedFiles *)object;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GFile) file = NULL;
+  IdeContext *self;
   GError *error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_UNSAVED_FILES (unsaved_files));
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
 
   if (!ide_unsaved_files_save_finish (unsaved_files, result, &error))
     {
-      g_task_return_error (task, error);
-      return;
+      g_warning ("%s(): %s", G_STRFUNC, error->message);
+      g_clear_error (&error);
     }
 
-  g_task_return_boolean (task, TRUE);
+  file = get_back_forward_list_file (self);
+  _ide_back_forward_list_save_async (self->back_forward_list,
+                                     file,
+                                     g_task_get_cancellable (task),
+                                     ide_context_unload__back_forward_list_save_cb,
+                                     g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 /**
