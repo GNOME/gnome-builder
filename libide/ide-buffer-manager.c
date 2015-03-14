@@ -467,6 +467,57 @@ emit_signal:
   g_task_return_pointer (task, g_object_ref (state->buffer), g_object_unref);
 }
 
+static void
+ide_buffer_manager__load_file_read_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  IdeBufferManager *self;
+  GFile *file = (GFile *)object;
+  g_autoptr(GFileInputStream) stream = NULL;
+  g_autoptr(GTask) task = user_data;
+  GtkSourceFile *source_file;
+  GtkSourceFileLoader *loader;
+  LoadState *state;
+  GError *error = NULL;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_TASK (task));
+
+  state = g_task_get_task_data (task);
+  self = g_task_get_source_object (task);
+
+  g_assert (state);
+  g_assert (IDE_IS_BUFFER (state->buffer));
+  g_assert (IDE_IS_BUFFER_MANAGER (self));
+
+  stream = g_file_read_finish (file, result, &error);
+
+  if (!stream)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  source_file = _ide_file_get_source_file (state->file);
+  loader = gtk_source_file_loader_new_from_stream (GTK_SOURCE_BUFFER (state->buffer),
+                                                   source_file,
+                                                   G_INPUT_STREAM (stream));
+
+  g_signal_emit (self, gSignals [LOAD_BUFFER], 0, state->buffer);
+
+  gtk_source_file_loader_load_async (loader,
+                                     G_PRIORITY_DEFAULT,
+                                     g_task_get_cancellable (task),
+                                     ide_progress_file_progress_callback,
+                                     g_object_ref (state->progress),
+                                     g_object_unref,
+                                     ide_buffer_manager_load_file__load_cb,
+                                     g_object_ref (task));
+
+  g_clear_object (&loader);
+}
+
 /**
  * ide_buffer_manager_load_file_async:
  * @progress: (out) (nullable): A location for an #IdeProgress or %NULL.
@@ -489,8 +540,8 @@ ide_buffer_manager_load_file_async  (IdeBufferManager     *self,
   IdeContext *context;
   IdeBuffer *buffer;
   LoadState *state;
-  GtkSourceFileLoader *loader;
   GtkSourceFile *source_file;
+  GFile *gfile;
 
   if (progress)
     *progress = NULL;
@@ -539,21 +590,14 @@ ide_buffer_manager_load_file_async  (IdeBufferManager     *self,
   if (progress)
     *progress = g_object_ref (state->progress);
 
-  source_file = _ide_file_get_source_file (file);
-  loader = gtk_source_file_loader_new (GTK_SOURCE_BUFFER (state->buffer), source_file);
+  source_file = _ide_file_get_source_file (state->file);
+  gfile = gtk_source_file_get_location (source_file);
 
-  g_signal_emit (self, gSignals [LOAD_BUFFER], 0, state->buffer);
-
-  gtk_source_file_loader_load_async (loader,
-                                     G_PRIORITY_DEFAULT,
-                                     cancellable,
-                                     ide_progress_file_progress_callback,
-                                     g_object_ref (state->progress),
-                                     g_object_unref,
-                                     ide_buffer_manager_load_file__load_cb,
-                                     g_object_ref (task));
-
-  g_clear_object (&loader);
+  g_file_read_async (gfile,
+                     G_PRIORITY_DEFAULT,
+                     cancellable,
+                     ide_buffer_manager__load_file_read_cb,
+                     g_object_ref (task));
 }
 
 /**

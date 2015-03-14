@@ -6,7 +6,7 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This file is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -194,6 +194,14 @@ ide_file_set_file (IdeFile *self,
     }
 }
 
+/**
+ * _ide_file_get_source_file:
+ * @self: (in): A #IdeFile.
+ *
+ * Gets the GtkSourceFile for the #IdeFile.
+ *
+ * Returns: (transfer none): A #GtkSourceFile.
+ */
 GtkSourceFile *
 _ide_file_get_source_file (IdeFile *self)
 {
