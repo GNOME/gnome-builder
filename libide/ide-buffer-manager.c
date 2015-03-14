@@ -381,14 +381,19 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
                                        gpointer      user_data)
 {
   g_autoptr(GTask) task = user_data;
+  g_autofree gchar *guess_contents = NULL;
+  g_autofree gchar *content_type = NULL;
   GtkSourceFileLoader *loader = (GtkSourceFileLoader *)object;
   IdeBackForwardList *back_forward_list;
   IdeBackForwardItem *item;
   IdeBufferManager *self;
+  const gchar *path;
   IdeContext *context;
   LoadState *state;
   GtkTextIter iter;
+  GtkTextIter end;
   GError *error = NULL;
+  gboolean uncertain = TRUE;
   gsize i;
 
   g_assert (G_IS_TASK (task));
@@ -462,6 +467,20 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
     }
 
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (state->buffer), &iter, &iter);
+
+  /*
+   * Try to discover the content type more accurately now that we have access to the
+   * file contents inside of the IdeBuffer.
+   */
+  gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (state->buffer), &iter);
+  end = iter;
+  gtk_text_iter_forward_chars (&end, 1024);
+  guess_contents = gtk_text_iter_get_slice (&iter, &end);
+  path = ide_file_get_path (state->file);
+  content_type = g_content_type_guess (path, (const guchar *)guess_contents,
+                                       strlen (guess_contents), &uncertain);
+  if (content_type && !uncertain)
+    _ide_file_set_content_type (state->file, content_type);
 
 emit_signal:
   _ide_buffer_set_loading (state->buffer, FALSE);
