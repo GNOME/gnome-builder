@@ -65,7 +65,9 @@ void                _ide_diagnostician_add_provider    (IdeDiagnostician      *s
 void                _ide_diagnostician_remove_provider (IdeDiagnostician      *self,
                                                         IdeDiagnosticProvider *provider);
 IdeDiagnostics     *_ide_diagnostics_new               (GPtrArray             *ar);
-GtkSourceFile      *_ide_file_get_source_file          (IdeFile               *file);
+GtkSourceFile      *_ide_file_set_content_type         (IdeFile               *self,
+                                                        const gchar           *content_type);
+GtkSourceFile      *_ide_file_get_source_file          (IdeFile               *self);
 void                _ide_project_set_name              (IdeProject            *project,
                                                         const gchar           *name);
 void                _ide_search_context_add_provider   (IdeSearchContext      *context,

@@ -27,6 +27,7 @@ struct _IdeFile
 {
   IdeObject      parent_instance;
 
+  gchar         *content_type;
   GFile         *file;
   IdeLanguage   *language;
   gchar         *path;
@@ -45,6 +46,22 @@ enum
 G_DEFINE_TYPE (IdeFile, ide_file, IDE_TYPE_OBJECT)
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+void
+_ide_file_set_content_type (IdeFile     *self,
+                            const gchar *content_type)
+{
+  g_assert (IDE_IS_FILE (self));
+  g_assert (content_type);
+
+  if (0 != g_strcmp0 (self->content_type, content_type))
+    {
+      g_clear_pointer (&self->content_type, g_free);
+      g_clear_object (&self->language);
+      self->content_type = g_strdup (content_type);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_LANGUAGE]);
+    }
+}
 
 static const gchar *
 ide_file_remap_language (const gchar *lang_id)
@@ -84,6 +101,7 @@ static void
 ide_file_create_language (IdeFile *self)
 {
   g_assert (IDE_IS_FILE (self));
+  g_assert (self->path);
 
   if (g_once_init_enter (&self->language))
     {
@@ -92,16 +110,22 @@ ide_file_create_language (IdeFile *self)
       IdeLanguage *language = NULL;
       const gchar *lang_id = NULL;
       g_autofree gchar *content_type = NULL;
-      g_autofree gchar *filename = NULL;
+      const gchar *filename;
       IdeContext *context;
-      gboolean uncertain = TRUE;
+      gboolean uncertain = FALSE;
 
       context = ide_object_get_context (IDE_OBJECT (self));
       filename = g_file_get_basename (self->file);
-      content_type = g_content_type_guess (filename, NULL, 0, &uncertain);
+
+      if (self->content_type)
+        content_type = g_strdup (self->content_type);
+      else
+        content_type = g_content_type_guess (filename, NULL, 0, &uncertain);
 
       if (uncertain)
         g_clear_pointer (&content_type, g_free);
+      else if (self->content_type == NULL)
+        self->content_type = g_strdup (content_type);
 
       manager = gtk_source_language_manager_get_default ();
       srclang = gtk_source_language_manager_guess_language (manager, filename, content_type);
@@ -313,6 +337,7 @@ ide_file_finalize (GObject *object)
   g_clear_object (&self->source_file);
   g_clear_object (&self->language);
   g_clear_pointer (&self->path, g_free);
+  g_clear_pointer (&self->content_type, g_free);
 
   G_OBJECT_CLASS (ide_file_parent_class)->finalize (object);
 }
