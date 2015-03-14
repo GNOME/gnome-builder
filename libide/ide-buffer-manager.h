@@ -59,6 +59,9 @@ gboolean                  ide_buffer_manager_has_file            (IdeBufferManag
                                                                   IdeFile              *file);
 IdeBuffer                *ide_buffer_manager_find_buffer         (IdeBufferManager     *self,
                                                                   IdeFile              *file);
+gsize                     ide_buffer_manager_get_max_file_size   (IdeBufferManager     *self);
+void                      ide_buffer_manager_set_max_file_size   (IdeBufferManager     *self,
+                                                                  gsize                 max_file_size);
 
 G_END_DECLS
 

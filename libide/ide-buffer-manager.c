@@ -33,7 +33,8 @@
 #include "ide-progress.h"
 #include "ide-source-location.h"
 
-#define AUTO_SAVE_TIMEOUT_DEFAULT 60
+#define AUTO_SAVE_TIMEOUT_DEFAULT    60
+#define MAX_FILE_SIZE_BYTES_DEFAULT  (1024UL * 1024UL * 10UL)
 
 struct _IdeBufferManager
 {
@@ -41,10 +42,10 @@ struct _IdeBufferManager
 
   GPtrArray                *buffers;
   GHashTable               *timeouts;
-
   IdeBuffer                *focus_buffer;
-
   GtkSourceCompletionWords *word_completion;
+
+  gsize                     max_file_size;
 
   guint                     auto_save_timeout;
   guint                     auto_save : 1;
@@ -59,10 +60,11 @@ typedef struct
 
 typedef struct
 {
-  IdeBuffer   *buffer;
-  IdeFile     *file;
-  IdeProgress *progress;
-  guint        is_new;
+  IdeBuffer           *buffer;
+  IdeFile             *file;
+  IdeProgress         *progress;
+  GtkSourceFileLoader *loader;
+  guint                is_new : 1;
 } LoadState;
 
 typedef struct
@@ -79,6 +81,7 @@ enum {
   PROP_AUTO_SAVE,
   PROP_AUTO_SAVE_TIMEOUT,
   PROP_FOCUS_BUFFER,
+  PROP_MAX_FILE_SIZE,
   LAST_PROP
 };
 
@@ -127,6 +130,7 @@ load_state_free (gpointer data)
       g_clear_object (&state->buffer);
       g_clear_object (&state->file);
       g_clear_object (&state->progress);
+      g_clear_object (&state->loader);
       g_slice_free (LoadState, state);
     }
 }
@@ -468,18 +472,17 @@ emit_signal:
 }
 
 static void
-ide_buffer_manager__load_file_read_cb (GObject      *object,
-                                       GAsyncResult *result,
-                                       gpointer      user_data)
+ide_buffer_manager__load_file_query_info_cb (GObject      *object,
+                                             GAsyncResult *result,
+                                             gpointer      user_data)
 {
   IdeBufferManager *self;
   GFile *file = (GFile *)object;
-  g_autoptr(GFileInputStream) stream = NULL;
   g_autoptr(GTask) task = user_data;
-  GtkSourceFile *source_file;
-  GtkSourceFileLoader *loader;
+  g_autoptr(GFileInfo) file_info = NULL;
   LoadState *state;
   GError *error = NULL;
+  gsize size;
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_TASK (task));
@@ -491,6 +494,57 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
   g_assert (IDE_IS_BUFFER (state->buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (self));
 
+  file_info = g_file_query_info_finish (file, result, &error);
+
+  if (!file_info)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  size = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_STANDARD_SIZE);
+
+  if ((self->max_file_size > 0) && (size > self->max_file_size))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_DATA,
+                               _("File too large to be opened."));
+      return;
+    }
+
+  g_signal_emit (self, gSignals [LOAD_BUFFER], 0, state->buffer);
+
+  gtk_source_file_loader_load_async (state->loader,
+                                     G_PRIORITY_DEFAULT,
+                                     g_task_get_cancellable (task),
+                                     ide_progress_file_progress_callback,
+                                     g_object_ref (state->progress),
+                                     g_object_unref,
+                                     ide_buffer_manager_load_file__load_cb,
+                                     g_object_ref (task));
+}
+
+static void
+ide_buffer_manager__load_file_read_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  g_autoptr(GFileInputStream) stream = NULL;
+  g_autoptr(GTask) task = user_data;
+  GtkSourceFile *source_file;
+  LoadState *state;
+  GError *error = NULL;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_TASK (task));
+
+  state = g_task_get_task_data (task);
+
+  g_assert (state);
+  g_assert (IDE_IS_BUFFER (state->buffer));
+
   stream = g_file_read_finish (file, result, &error);
 
   if (!stream)
@@ -500,22 +554,17 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
     }
 
   source_file = _ide_file_get_source_file (state->file);
-  loader = gtk_source_file_loader_new_from_stream (GTK_SOURCE_BUFFER (state->buffer),
-                                                   source_file,
-                                                   G_INPUT_STREAM (stream));
+  state->loader = gtk_source_file_loader_new_from_stream (GTK_SOURCE_BUFFER (state->buffer),
+                                                          source_file,
+                                                          G_INPUT_STREAM (stream));
 
-  g_signal_emit (self, gSignals [LOAD_BUFFER], 0, state->buffer);
-
-  gtk_source_file_loader_load_async (loader,
-                                     G_PRIORITY_DEFAULT,
-                                     g_task_get_cancellable (task),
-                                     ide_progress_file_progress_callback,
-                                     g_object_ref (state->progress),
-                                     g_object_unref,
-                                     ide_buffer_manager_load_file__load_cb,
-                                     g_object_ref (task));
-
-  g_clear_object (&loader);
+  g_file_query_info_async (file,
+                           G_FILE_ATTRIBUTE_STANDARD_SIZE,
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           g_task_get_cancellable (task),
+                           ide_buffer_manager__load_file_query_info_cb,
+                           g_object_ref (task));
 }
 
 /**
@@ -524,6 +573,10 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
  *
  * Asynchronously requests that the file represented by @file is loaded. If the file is already
  * loaded, the previously loaded version of the file will be returned, asynchronously.
+ *
+ * Before loading the file, #IdeBufferManager will check the file size to help protect itself
+ * from the user accidentally loading very large files. You can change the maximum size of file
+ * that will be loaded with the #IdeBufferManager:max-file-size property.
  *
  * See ide_buffer_manager_load_file_finish() for how to complete this asynchronous request.
  */
@@ -1059,6 +1112,7 @@ ide_buffer_manager_init (IdeBufferManager *self)
   self->auto_save = TRUE;
   self->auto_save_timeout = AUTO_SAVE_TIMEOUT_DEFAULT;
   self->buffers = g_ptr_array_new ();
+  self->max_file_size = MAX_FILE_SIZE_BYTES_DEFAULT;
   self->timeouts = g_hash_table_new (g_direct_hash, g_direct_equal);
   self->word_completion = gtk_source_completion_words_new (_("Words"), NULL);
 }
@@ -1204,4 +1258,43 @@ ide_buffer_manager_has_file (IdeBufferManager *self,
                              IdeFile          *file)
 {
   return !!ide_buffer_manager_find_buffer (self, file);
+}
+
+/**
+ * ide_buffer_manager_get_max_file_size:
+ * @self: An #IdeBufferManager.
+ *
+ * Gets the #IdeBufferManager:max-file-size property. This contains the maximum file size in bytes
+ * that a file may be to be loaded by the #IdeBufferManager.
+ *
+ * If zero, no size limits will be enforced.
+ *
+ * Returns: A #gsize in bytes or zero.
+ */
+gsize
+ide_buffer_manager_get_max_file_size (IdeBufferManager *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), 0);
+
+  return self->max_file_size;
+}
+
+/**
+ * ide_buffer_manager_set_max_file_size:
+ * @self: An #IdeBufferManager.
+ * @max_file_size: The maximum file size in bytes, or zero for no limit.
+ *
+ * Sets the maximum file size in bytes, that will be loaded by the #IdeBufferManager.
+ */
+void
+ide_buffer_manager_set_max_file_size (IdeBufferManager *self,
+                                      gsize             max_file_size)
+{
+  g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
+
+  if (self->max_file_size != max_file_size)
+    {
+      self->max_file_size = max_file_size;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MAX_FILE_SIZE]);
+    }
 }
