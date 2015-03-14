@@ -1147,6 +1147,23 @@ _ide_buffer_set_loading (IdeBuffer *self,
        */
 
       if (!self->loading)
-        g_signal_emit (self, gSignals [LOADED], 0);
+        {
+          IdeLanguage *language;
+          GtkSourceLanguage *srclang;
+          GtkSourceLanguage *current;
+
+          /*
+           * It is possible our source language has changed since the buffer loaded (as loading
+           * contents provides us the opportunity to inspect file contents and get a more
+           * accurate content-type).
+           */
+          language = ide_file_get_language (self->file);
+          srclang = ide_language_get_source_language (language);
+          current = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self));
+          if (current != srclang)
+            gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (self), srclang);
+
+          g_signal_emit (self, gSignals [LOADED], 0);
+        }
     }
 }
