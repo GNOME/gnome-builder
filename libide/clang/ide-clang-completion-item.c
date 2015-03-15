@@ -178,3 +178,52 @@ ide_clang_completion_item_sort (gconstpointer a,
 
   return (gint)aprio - (gint)bprio;
 }
+
+gboolean
+ide_clang_completion_item_matches (IdeClangCompletionItem *self,
+                                   const gchar            *text)
+{
+  CXCompletionResult *result = get_completion_result ((GtkSourceCompletionProposal *)self);
+  enum CXAvailabilityKind availability;
+  unsigned chunks;
+  unsigned i;
+
+  g_return_val_if_fail (IDE_IS_CLANG_COMPLETION_ITEM (self), text);
+
+  availability = clang_getCompletionAvailability (result->CompletionString);
+
+  switch (availability)
+    {
+    case CXAvailability_NotAvailable:
+    case CXAvailability_NotAccessible:
+      return FALSE;
+
+    default:
+      break;
+    }
+
+  chunks = clang_getNumCompletionChunks (result->CompletionString);
+
+  for (i = 0; i < chunks; i++)
+    {
+      enum CXCompletionChunkKind kind;
+
+      kind = clang_getCompletionChunkKind (result->CompletionString, i);
+
+      if (kind == CXCompletionChunk_TypedText)
+        {
+          CXString cxstr;
+
+          cxstr = clang_getCompletionChunkText(result->CompletionString, i);
+          if (g_str_has_prefix (clang_getCString (cxstr), text))
+            {
+              clang_disposeString (cxstr);
+              return TRUE;
+            }
+
+          clang_disposeString (cxstr);
+        }
+    }
+
+  return FALSE;
+}

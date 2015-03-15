@@ -35,6 +35,8 @@ typedef struct _IdeClangCompletionItem        IdeClangCompletionItem;
 typedef struct _IdeClangCompletionItemClass   IdeClangCompletionItemClass;
 
 GType    ide_clang_completion_item_get_type (void);
+gboolean ide_clang_completion_item_matches  (IdeClangCompletionItem *self,
+                                             const gchar            *text);
 gint     ide_clang_completion_item_sort     (gconstpointer           a,
                                              gconstpointer           b);
 
