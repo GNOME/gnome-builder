@@ -214,6 +214,8 @@ libide_1_0_la_SOURCES = \
 	libide/ide-line-change-gutter-renderer.h \
 	libide/ide-line-diagnostics-gutter-renderer.c \
 	libide/ide-line-diagnostics-gutter-renderer.h \
+	libide/ide-ref-ptr.c \
+	libide/ide-ref-ptr.h \
 	libide/ide-search-reducer.c \
 	libide/ide-search-reducer.h \
 	libide/ide-source-iter.c \
