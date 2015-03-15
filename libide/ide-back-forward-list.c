@@ -640,8 +640,7 @@ create_source_location (IdeBackForwardList *self,
 {
   IdeContext *context;
   IdeProject *project;
-  IdeFile *file;
-  IdeSourceLocation *ret;
+  g_autoptr(IdeFile) file = NULL;
 
   g_assert (IDE_IS_BACK_FORWARD_LIST (self));
   g_assert (G_IS_FILE (gfile));
@@ -649,10 +648,8 @@ create_source_location (IdeBackForwardList *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   project = ide_context_get_project (context);
   file = ide_project_get_project_file (project, gfile);
-  ret = ide_source_location_new (file, line, line_offset, 0);
-  g_clear_object (&file);
 
-  return ret;
+  return ide_source_location_new (file, line, line_offset, 0);
 }
 
 static void

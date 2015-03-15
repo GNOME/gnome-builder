@@ -186,13 +186,13 @@ ide_project_get_file_for_path (IdeProject  *self,
   g_return_val_if_fail (IDE_IS_PROJECT (self), NULL);
   g_return_val_if_fail (path, NULL);
 
+  ide_project_reader_lock (self);
+
   root = ide_project_get_root (self);
-  if (!root)
-    return NULL;
+  g_assert (IDE_IS_PROJECT_ITEM (root));
 
   children = ide_project_item_get_children (root);
-  if (!children)
-    return NULL;
+  g_assert (children != NULL);
 
   for (iter = g_sequence_get_begin_iter (children);
        !g_sequence_iter_is_end (iter);
@@ -209,6 +209,8 @@ ide_project_get_file_for_path (IdeProject  *self,
           break;
         }
     }
+
+  ide_project_reader_unlock (self);
 
   if (!file)
     {

@@ -654,14 +654,22 @@ idedit__context_new_cb (GObject      *object,
 
   for (iter = gFilesToOpen; iter; iter = iter->next)
     {
+      const gchar *path = iter->data;
       IdeProject *project;
       IdeFile *file;
 
       project = ide_context_get_project (gContext);
-      file = ide_project_get_file_for_path (project, iter->data);
+      g_assert (project);
+      g_assert (IDE_IS_PROJECT (project));
+
+      file = ide_project_get_file_for_path (project, path);
+      g_assert (file);
+      g_assert (IDE_IS_FILE (file));
 
       ide_buffer_manager_load_file_async (bufmgr, file, FALSE, NULL, NULL,
                                           idedit__bufmgr_load_file_cb, NULL);
+
+      g_object_unref (file);
     }
 
   gtk_window_present (gWindow);
@@ -733,7 +741,7 @@ main (int argc,
     }
 
   for (i = 1; i < argc; i++)
-    gFilesToOpen = g_list_append (gFilesToOpen, argv [i]);
+    gFilesToOpen = g_list_append (gFilesToOpen, g_strdup (argv [i]));
 
   project_dir = g_file_new_for_path (".");
 

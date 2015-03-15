@@ -600,13 +600,13 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
  * See ide_buffer_manager_load_file_finish() for how to complete this asynchronous request.
  */
 void
-ide_buffer_manager_load_file_async  (IdeBufferManager     *self,
-                                     IdeFile              *file,
-                                     gboolean              force_reload,
-                                     IdeProgress         **progress,
-                                     GCancellable         *cancellable,
-                                     GAsyncReadyCallback   callback,
-                                     gpointer              user_data)
+ide_buffer_manager_load_file_async (IdeBufferManager     *self,
+                                    IdeFile              *file,
+                                    gboolean              force_reload,
+                                    IdeProgress         **progress,
+                                    GCancellable         *cancellable,
+                                    GAsyncReadyCallback   callback,
+                                    gpointer              user_data)
 {
   g_autoptr(GTask) task = NULL;
   IdeContext *context;
