@@ -21,19 +21,25 @@
 
 #include "ide-object.h"
 
+#include <gtk/gtk.h>
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_CLANG_TRANSLATION_UNIT (ide_clang_translation_unit_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeClangTranslationUnit, ide_clang_translation_unit, IDE, CLANG_TRANSLATION_UNIT, IdeObject)
 
-struct _IdeClangTranslationUnit
-{
-  GObject parent_instance;
-};
-
-gint64          ide_clang_translation_unit_get_sequence    (IdeClangTranslationUnit *self);
-IdeDiagnostics *ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self);
+gint64          ide_clang_translation_unit_get_sequence         (IdeClangTranslationUnit  *self);
+IdeDiagnostics *ide_clang_translation_unit_get_diagnostics      (IdeClangTranslationUnit  *self);
+void            ide_clang_translation_unit_code_complete_async  (IdeClangTranslationUnit  *self,
+                                                                 GFile                    *file,
+                                                                 const GtkTextIter        *location,
+                                                                 GCancellable             *cancellable,
+                                                                 GAsyncReadyCallback       callback,
+                                                                 gpointer                  user_data);
+GList          *ide_clang_translation_unit_code_complete_finish (IdeClangTranslationUnit  *self,
+                                                                 GAsyncResult             *result,
+                                                                 GError                  **error);
 
 G_END_DECLS
 

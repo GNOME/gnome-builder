@@ -20,23 +20,38 @@
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
+#include "ide-clang-completion-item.h"
 #include "ide-clang-translation-unit.h"
 #include "ide-diagnostic.h"
+#include "ide-diagnostics.h"
 #include "ide-file.h"
 #include "ide-internal.h"
 #include "ide-project.h"
+#include "ide-ref-ptr.h"
 #include "ide-source-location.h"
+#include "ide-unsaved-file.h"
+#include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 
-typedef struct
+struct _IdeClangTranslationUnit
 {
+  IdeObject          parent_instance;
+
   CXTranslationUnit  tu;
   gint64             sequence;
   IdeDiagnostics    *diagnostics;
   GFile             *file;
-} IdeClangTranslationUnitPrivate;
+};
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeClangTranslationUnit, ide_clang_translation_unit, IDE_TYPE_OBJECT)
+typedef struct
+{
+  GPtrArray *unsaved_files;
+  gchar     *path;
+  guint      line;
+  guint      line_offset;
+} CodeCompleteState;
+
+G_DEFINE_TYPE (IdeClangTranslationUnit, ide_clang_translation_unit, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -47,26 +62,35 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+static void
+code_complete_state_free (gpointer data)
+{
+  CodeCompleteState *state = data;
+
+  if (state)
+    {
+      g_clear_pointer (&state->unsaved_files, g_ptr_array_unref);
+      g_free (state->path);
+      g_free (state);
+    }
+}
+
 GFile *
 ide_clang_translation_unit_get_file (IdeClangTranslationUnit *self)
 {
-  IdeClangTranslationUnitPrivate *priv = ide_clang_translation_unit_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
 
-  return priv->file;
+  return self->file;
 }
 
 static void
 ide_clang_translation_unit_set_file (IdeClangTranslationUnit *self,
                                      GFile                   *file)
 {
-  IdeClangTranslationUnitPrivate *priv = ide_clang_translation_unit_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self));
   g_return_if_fail (G_IS_FILE (file));
 
-  if (g_set_object (&priv->file, file))
+  if (g_set_object (&self->file, file))
     g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
 }
 
@@ -76,7 +100,6 @@ _ide_clang_translation_unit_new (IdeContext        *context,
                                  GFile             *file,
                                  gint64             sequence)
 {
-  IdeClangTranslationUnitPrivate *priv;
   IdeClangTranslationUnit *ret;
 
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
@@ -88,10 +111,8 @@ _ide_clang_translation_unit_new (IdeContext        *context,
                       "context", context,
                       NULL);
 
-  priv = ide_clang_translation_unit_get_instance_private (ret);
-
-  priv->tu = tu;
-  priv->sequence = sequence;
+  ret->tu = tu;
+  ret->sequence = sequence;
 
   return ret;
 }
@@ -241,7 +262,6 @@ create_diagnostic (IdeClangTranslationUnit *self,
                    const gchar             *workpath,
                    CXDiagnostic            *cxdiag)
 {
-  IdeClangTranslationUnitPrivate *priv = ide_clang_translation_unit_get_instance_private (self);
   enum CXDiagnosticSeverity cxseverity;
   IdeDiagnosticSeverity severity;
   IdeDiagnostic *diag;
@@ -259,7 +279,7 @@ create_diagnostic (IdeClangTranslationUnit *self,
   cxloc = clang_getDiagnosticLocation (cxdiag);
   clang_getExpansionLocation (cxloc, &cxfile, NULL, NULL, NULL);
 
-  if (cxfile && !cxfile_equal (cxfile, priv->file))
+  if (cxfile && !cxfile_equal (cxfile, self->file))
     return NULL;
 
   cxseverity = clang_getDiagnosticSeverity (cxdiag);
@@ -298,13 +318,10 @@ create_diagnostic (IdeClangTranslationUnit *self,
 IdeDiagnostics *
 ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
 {
-  IdeClangTranslationUnitPrivate *priv;
 
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
 
-  priv = ide_clang_translation_unit_get_instance_private (self);
-
-  if (!priv->diagnostics)
+  if (!self->diagnostics)
     {
       IdeContext *context;
       IdeProject *project;
@@ -316,7 +333,7 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
       guint i;
 
       ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
-      count = clang_getNumDiagnostics (priv->tu);
+      count = clang_getNumDiagnostics (self->tu);
 
       /*
        * Acquire the reader lock for the project since we will need to do
@@ -338,7 +355,7 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
           CXDiagnostic cxdiag;
           IdeDiagnostic *diag;
 
-          cxdiag = clang_getDiagnostic (priv->tu, i);
+          cxdiag = clang_getDiagnostic (self->tu, i);
           diag = create_diagnostic (self, project, workpath, cxdiag);
           if (diag)
             g_ptr_array_add (ar, diag);
@@ -347,31 +364,28 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
 
       ide_project_reader_unlock (project);
 
-      priv->diagnostics = _ide_diagnostics_new (ar);
+      self->diagnostics = _ide_diagnostics_new (ar);
     }
 
-  return priv->diagnostics;
+  return self->diagnostics;
 }
 
 gint64
 ide_clang_translation_unit_get_sequence (IdeClangTranslationUnit *self)
 {
-  IdeClangTranslationUnitPrivate *priv;
-
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), -1);
 
-  priv = ide_clang_translation_unit_get_instance_private (self);
-
-  return priv->sequence;
+  return self->sequence;
 }
 
 static void
 ide_clang_translation_unit_finalize (GObject *object)
 {
   IdeClangTranslationUnit *self = (IdeClangTranslationUnit *)object;
-  IdeClangTranslationUnitPrivate *priv = ide_clang_translation_unit_get_instance_private (self);
 
-  clang_disposeTranslationUnit (priv->tu);
+  clang_disposeTranslationUnit (self->tu);
+  g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
+  g_clear_object (&self->file);
 
   G_OBJECT_CLASS (ide_clang_translation_unit_parent_class)->finalize (object);
 }
@@ -433,8 +447,7 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
                          _("The file used to build the translation unit."),
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE,
-                                   gParamSpecs [PROP_FILE]);
+  g_object_class_install_property (object_class, PROP_FILE, gParamSpecs [PROP_FILE]);
 
   gParamSpecs [PROP_SEQUENCE] =
     g_param_spec_int64 ("sequence",
@@ -450,4 +463,170 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
 static void
 ide_clang_translation_unit_init (IdeClangTranslationUnit *self)
 {
+}
+
+static void
+cleanup_list (gpointer data)
+{
+  g_list_free_full (data, g_object_unref);
+}
+
+static void
+ide_clang_translation_unit_code_complete_worker (GTask        *task,
+                                                 gpointer      source_object,
+                                                 gpointer      task_data,
+                                                 GCancellable *cancellable)
+{
+  IdeClangTranslationUnit *self = source_object;
+  CodeCompleteState *state = task_data;
+  CXCodeCompleteResults *results;
+  g_autoptr(IdeRefPtr) refptr = NULL;
+  struct CXUnsavedFile *ufs;
+  GList *list = NULL;
+  gsize i;
+  gsize j = 0;
+
+  g_assert (IDE_IS_CLANG_TRANSLATION_UNIT (self));
+  g_assert (state);
+  g_assert (state->unsaved_files);
+
+  /*
+   * FIXME: Not thread safe! We should probably add a "Pending" flag or something that is
+   *        similar to g_input_stream_set_pending().
+   */
+
+  if (!state->path)
+    {
+      /* implausable to reach here, anyway */
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               _("clang_codeCompleteAt() only works on local files"));
+      return;
+    }
+
+  ufs = g_new0 (struct CXUnsavedFile, state->unsaved_files->len);
+
+  for (i = 0; i < state->unsaved_files->len; i++)
+    {
+      IdeUnsavedFile *uf;
+      gchar *path;
+      GFile *file;
+
+      uf = g_ptr_array_index (state->unsaved_files, i);
+      file = ide_unsaved_file_get_file (uf);
+      path = g_file_get_path (file);
+
+      /*
+       * NOTE: Some files might not be local, and therefore return a NULL path.
+       *       Also, we will free the path from the (const char *) pointer after
+       *       executing the work.
+       */
+      if (path != NULL)
+        {
+          GBytes *content = ide_unsaved_file_get_content (uf);
+
+          ufs [j].Filename = path;
+          ufs [j].Contents = g_bytes_get_data (content, NULL);
+          ufs [j].Length = g_bytes_get_size (content);
+
+          j++;
+        }
+    }
+
+  results = clang_codeCompleteAt (self->tu,
+                                  state->path,
+                                  state->line + 1,
+                                  state->line_offset + 1,
+                                  ufs, j,
+                                  clang_defaultCodeCompleteOptions ());
+
+  /*
+   * encapsulate in refptr so we don't need to malloc lots of little strings.
+   * we will inflate result strings as necessary.
+   */
+  refptr = ide_ref_ptr_new (results, (GDestroyNotify)clang_disposeCodeCompleteResults);
+
+  for (i = 0; i < results->NumResults; i++)
+    {
+      GtkSourceCompletionProposal *proposal;
+
+      proposal = g_object_new (IDE_TYPE_CLANG_COMPLETION_ITEM,
+                               "results", ide_ref_ptr_ref (refptr),
+                               "index", (guint)i,
+                               NULL);
+      list = g_list_prepend (list, proposal);
+    }
+
+  g_task_return_pointer (task, g_list_reverse (list), cleanup_list);
+
+  /* cleanup malloc'd state */
+  for (i = 0; i < j; i++)
+    g_free ((gchar *)ufs [i].Filename);
+  g_free (ufs);
+}
+
+
+void
+ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
+                                                GFile                   *file,
+                                                const GtkTextIter       *location,
+                                                GCancellable            *cancellable,
+                                                GAsyncReadyCallback      callback,
+                                                gpointer                 user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  g_autofree gchar *path = NULL;
+  CodeCompleteState *state;
+  IdeContext *context;
+  IdeUnsavedFiles *unsaved_files;
+
+  g_return_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (location);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  unsaved_files = ide_context_get_unsaved_files (context);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  state = g_new0 (CodeCompleteState, 1);
+  state->path = g_file_get_path (file);
+  state->line = gtk_text_iter_get_line (location);
+  state->line_offset = gtk_text_iter_get_line_offset (location);
+  state->unsaved_files = ide_unsaved_files_get_unsaved_files (unsaved_files);
+
+  /*
+   * TODO: Technically it is not safe for us to go run this in a thread. We need to ensure
+   *       that only one thread is dealing with this at a time.
+   */
+
+  g_task_set_task_data (task, state, code_complete_state_free);
+  g_task_run_in_thread (task, ide_clang_translation_unit_code_complete_worker);
+}
+
+/**
+ * ide_clang_translation_unit_code_complete_finish:
+ * @self: A #IdeClangTranslationUnit.
+ * @result: A #GAsyncResult
+ * @error: (out) (nullable): A location for a #GError, or %NULL.
+ *
+ * Completes a call to ide_clang_translation_unit_code_complete_async().
+ *
+ * Returns: (transfer full) (element-type GtkSourceCompletionProposal*): A list of
+ *   #GtkSourceCompletionProposal. If this is %NULL, check @error to determine if
+ *   there was an error.
+ */
+GList *
+ide_clang_translation_unit_code_complete_finish (IdeClangTranslationUnit  *self,
+                                                 GAsyncResult             *result,
+                                                 GError                  **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (task), NULL);
+
+  return g_task_propagate_pointer (task, error);
 }

@@ -184,6 +184,10 @@ libide_1_0_la_SOURCES = \
 	libide/autotools/ide-makecache.h \
 	libide/c/c-parse-helper.c \
 	libide/c/c-parse-helper.h \
+	libide/clang/ide-clang-completion-item.c \
+	libide/clang/ide-clang-completion-item.h \
+	libide/clang/ide-clang-completion-provider.c \
+	libide/clang/ide-clang-completion-provider.h \
 	libide/ide-debug.h \
 	libide/editorconfig/editorconfig-glib.c \
 	libide/editorconfig/editorconfig-glib.h \
