@@ -1163,6 +1163,11 @@ _ide_buffer_set_loading (IdeBuffer *self,
           if (current != srclang)
             gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (self), srclang);
 
+          /*
+           * Force the views to reload language state.
+           */
+          g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+
           g_signal_emit (self, gSignals [LOADED], 0);
         }
     }
