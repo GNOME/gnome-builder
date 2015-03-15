@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-c-format-provider.h"
 #include "ide-c-indenter.h"
 #include "ide-c-language.h"
 #include "ide-clang-completion-provider.h"
@@ -46,13 +47,16 @@ G_DEFINE_TYPE_EXTENDED (IdeCLanguage, ide_c_language, IDE_TYPE_LANGUAGE, 0,
 static GList *
 ide_c_language_get_completion_providers (IdeLanguage *language)
 {
+  GList *providers = NULL;
+
   g_return_val_if_fail (IDE_IS_C_LANGUAGE (language), NULL);
 
+  providers = g_list_append (providers, g_object_new (IDE_TYPE_C_FORMAT_PROVIDER, NULL));
 #if 0
-  return g_list_append (NULL, g_object_new (IDE_TYPE_CLANG_COMPLETION_PROVIDER, NULL));
-#else
-  return NULL;
+  providers = g_list_append (providers, g_object_new (IDE_TYPE_CLANG_COMPLETION_PROVIDER, NULL));
 #endif
+
+  return providers;
 }
 
 static IdeDiagnostician *
