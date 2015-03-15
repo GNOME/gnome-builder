@@ -34,7 +34,9 @@ G_BEGIN_DECLS
 typedef struct _IdeClangCompletionItem        IdeClangCompletionItem;
 typedef struct _IdeClangCompletionItemClass   IdeClangCompletionItemClass;
 
-GType ide_clang_completion_item_get_type (void);
+GType    ide_clang_completion_item_get_type (void);
+gint     ide_clang_completion_item_sort     (gconstpointer           a,
+                                             gconstpointer           b);
 
 G_END_DECLS
 

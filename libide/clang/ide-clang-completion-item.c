@@ -161,3 +161,20 @@ completion_proposal_iface_init (GtkSourceCompletionProposalIface *iface)
 {
   iface->get_label = ide_clang_completion_item_get_label;
 }
+
+gint
+ide_clang_completion_item_sort (gconstpointer a,
+                                gconstpointer b)
+{
+  CXCompletionResult *ar = get_completion_result ((gpointer)a);
+  CXCompletionResult *br = get_completion_result ((gpointer)b);
+  unsigned aprio;
+  unsigned bprio;
+
+  aprio = clang_getCompletionPriority (ar->CompletionString);
+  bprio = clang_getCompletionPriority (br->CompletionString);
+
+  /* TODO: check that this is safe */
+
+  return (gint)aprio - (gint)bprio;
+}
