@@ -2105,6 +2105,51 @@ ide_source_view_key_press_event (GtkWidget   *widget,
 }
 
 static gboolean
+ide_source_view_real_button_press_event (GtkWidget      *widget,
+                                         GdkEventButton *event)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextView *text_view = (GtkTextView *)widget;
+  gboolean ret;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+
+  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->button_press_event (widget, event);
+
+  /*
+   * Keep mark on the last character if the sourceviewmode dictates such.
+   */
+  if (priv->mode && ide_source_view_mode_get_keep_mark_on_char (priv->mode))
+    {
+      GtkTextBuffer *buffer;
+      GtkTextMark *insert;
+      GtkTextMark *selection;
+      GtkTextIter iter;
+      GtkTextIter iter2;
+
+      buffer = gtk_text_view_get_buffer (text_view);
+      insert = gtk_text_buffer_get_insert (buffer);
+      selection = gtk_text_buffer_get_selection_bound (buffer);
+
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+      gtk_text_buffer_get_iter_at_mark (buffer, &iter2, selection);
+
+      if (gtk_text_iter_ends_line (&iter) && !gtk_text_iter_starts_line (&iter))
+        {
+          GtkTextIter prev = iter;
+
+          gtk_text_iter_backward_char (&prev);
+          if (gtk_text_iter_equal (&iter, &iter2))
+            gtk_text_buffer_select_range (buffer, &prev, &prev);
+        }
+    }
+
+  return ret;
+}
+
+static gboolean
 ide_source_view_query_tooltip (GtkWidget  *widget,
                                gint        x,
                                gint        y,
@@ -4322,6 +4367,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   object_class->get_property = ide_source_view_get_property;
   object_class->set_property = ide_source_view_set_property;
 
+  widget_class->button_press_event = ide_source_view_real_button_press_event;
   widget_class->draw = ide_source_view_real_draw;
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
