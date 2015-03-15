@@ -16,9 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-clang-completion"
+
 #include <glib/gi18n.h>
 
 #include "ide-buffer.h"
+#include "ide-clang-completion-item.h"
 #include "ide-clang-completion-provider.h"
 #include "ide-clang-service.h"
 #include "ide-clang-translation-unit.h"
@@ -34,6 +37,8 @@ struct _IdeClangCompletionProviderClass
 struct _IdeClangCompletionProvider
 {
   GObject parent_instance;
+
+  GPtrArray *last_results;
 };
 
 typedef struct
@@ -67,6 +72,78 @@ add_proposals_state_free (AddProposalsState *state)
   g_free (state);
 }
 
+static gboolean
+stop_on_predicate (gunichar ch,
+                   gpointer data)
+{
+  switch (ch)
+    {
+    case '_':
+      return FALSE;
+
+    case ')':
+    case '(':
+    case '&':
+    case '*':
+    case '{':
+    case '}':
+    case ' ':
+    case '\t':
+    case '[':
+    case ']':
+    case '=':
+    case '"':
+    case '\'':
+      return TRUE;
+
+    default:
+      return !g_unichar_isalnum (ch);
+    }
+}
+
+static gchar *
+get_word (const GtkTextIter *location)
+{
+  GtkTextIter iter = *location;
+  GtkTextBuffer *buffer;
+  GtkTextIter end;
+
+  end = iter;
+  buffer = gtk_text_iter_get_buffer (&iter);
+
+  if (!gtk_text_iter_backward_find_char (&iter, stop_on_predicate, NULL, NULL))
+    return gtk_text_buffer_get_text (buffer, &iter, &end, TRUE);
+
+  gtk_text_iter_forward_char (&iter);
+
+  return gtk_text_iter_get_text (&iter, &end);
+}
+
+static GList *
+filter_list (GPtrArray   *ar,
+             const gchar *word)
+{
+  g_autoptr(GPtrArray) matched = NULL;
+  GList *ret = NULL;
+  gsize i;
+
+  matched = g_ptr_array_new ();
+
+  for (i = 0; i < ar->len; i++)
+    {
+      IdeClangCompletionItem *item;
+
+      item = g_ptr_array_index (ar, i);
+      if (ide_clang_completion_item_matches (item, word))
+        g_ptr_array_add (matched, item);
+    }
+
+  for (i = 0; i < matched->len; i++)
+    ret = g_list_prepend (ret, g_ptr_array_index (matched, i));
+
+  return ret;
+}
+
 static void
 ide_clang_completion_provider_class_init (IdeClangCompletionProviderClass *klass)
 {
@@ -89,21 +166,41 @@ ide_clang_completion_provider_complete_cb (GObject      *object,
                                            gpointer      user_data)
 {
   IdeClangTranslationUnit *tu = (IdeClangTranslationUnit *)object;
+  IdeClangCompletionProvider *self;
   AddProposalsState *state = user_data;
+  g_autofree gchar *word = NULL;
+  g_autoptr(GPtrArray) ar = NULL;
+  GtkTextIter iter;
   GError *error = NULL;
-  GList *list;
+  GList *filtered = NULL;
 
-  list = ide_clang_translation_unit_code_complete_finish (tu, result, &error);
+  self = (IdeClangCompletionProvider *)state->provider;
 
-  if (!list && error)
+  ar = ide_clang_translation_unit_code_complete_finish (tu, result, &error);
+
+  if (!ar)
     {
       g_warning ("%s", error->message);
       g_clear_error (&error);
+      goto failure;
     }
 
+  g_clear_pointer (&self->last_results, g_ptr_array_free);
+  self->last_results = g_ptr_array_ref (ar);
+
+  gtk_source_completion_context_get_iter (state->context, &iter);
+  word = get_word (&iter);
+
+  IDE_TRACE_MSG ("Current word: %s", word ?: "(null)");
+
+  if (word)
+    filtered = filter_list (ar, word);
+
+failure:
   if (!g_cancellable_is_cancelled (state->cancellable))
-    gtk_source_completion_context_add_proposals (state->context, state->provider, list, TRUE);
-  g_list_free_full (list, g_object_unref);
+    gtk_source_completion_context_add_proposals (state->context, state->provider, filtered, TRUE);
+
+  g_list_free (filtered);
   add_proposals_state_free (state);
 }
 

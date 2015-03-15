@@ -466,12 +466,6 @@ ide_clang_translation_unit_init (IdeClangTranslationUnit *self)
 }
 
 static void
-cleanup_list (gpointer data)
-{
-  g_list_free_full (data, g_object_unref);
-}
-
-static void
 ide_clang_translation_unit_code_complete_worker (GTask        *task,
                                                  gpointer      source_object,
                                                  gpointer      task_data,
@@ -482,7 +476,7 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
   CXCodeCompleteResults *results;
   g_autoptr(IdeRefPtr) refptr = NULL;
   struct CXUnsavedFile *ufs;
-  GList *list = NULL;
+  g_autoptr(GPtrArray) ar = NULL;
   gsize i;
   gsize j = 0;
 
@@ -546,6 +540,7 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
    * we will inflate result strings as necessary.
    */
   refptr = ide_ref_ptr_new (results, (GDestroyNotify)clang_disposeCodeCompleteResults);
+  ar = g_ptr_array_new ();
 
   for (i = 0; i < results->NumResults; i++)
     {
@@ -555,10 +550,10 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
                                "results", ide_ref_ptr_ref (refptr),
                                "index", (guint)i,
                                NULL);
-      list = g_list_prepend (list, proposal);
+      g_ptr_array_add (ar, proposal);
     }
 
-  g_task_return_pointer (task, g_list_reverse (list), cleanup_list);
+  g_task_return_pointer (task, g_ptr_array_ref (ar), (GDestroyNotify)g_ptr_array_unref);
 
   /* cleanup malloc'd state */
   for (i = 0; i < j; i++)
@@ -614,11 +609,10 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
  *
  * Completes a call to ide_clang_translation_unit_code_complete_async().
  *
- * Returns: (transfer full) (element-type GtkSourceCompletionProposal*): A list of
- *   #GtkSourceCompletionProposal. If this is %NULL, check @error to determine if
- *   there was an error.
+ * Returns: (transfer container) (element-type GtkSourceCompletionProposal*): An array of
+ *   #GtkSourceCompletionProposal. Upon failure, %NULL is returned.
  */
-GList *
+GPtrArray *
 ide_clang_translation_unit_code_complete_finish (IdeClangTranslationUnit  *self,
                                                  GAsyncResult             *result,
                                                  GError                  **error)

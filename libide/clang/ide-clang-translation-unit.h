@@ -37,7 +37,7 @@ void            ide_clang_translation_unit_code_complete_async  (IdeClangTransla
                                                                  GCancellable             *cancellable,
                                                                  GAsyncReadyCallback       callback,
                                                                  gpointer                  user_data);
-GList          *ide_clang_translation_unit_code_complete_finish (IdeClangTranslationUnit  *self,
+GPtrArray      *ide_clang_translation_unit_code_complete_finish (IdeClangTranslationUnit  *self,
                                                                  GAsyncResult             *result,
                                                                  GError                  **error);
 
