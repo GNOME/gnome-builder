@@ -20,6 +20,7 @@
 
 #include "ide-c-indenter.h"
 #include "ide-c-language.h"
+#include "ide-clang-completion-provider.h"
 #include "ide-clang-diagnostic-provider.h"
 #include "ide-clang-highlighter.h"
 #include "ide-clang-symbol-resolver.h"
@@ -41,6 +42,18 @@ G_DEFINE_TYPE_EXTENDED (IdeCLanguage, ide_c_language, IDE_TYPE_LANGUAGE, 0,
                         G_ADD_PRIVATE (IdeCLanguage)
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                _g_initable_iface_init))
+
+static GList *
+ide_c_language_get_completion_providers (IdeLanguage *language)
+{
+  g_return_val_if_fail (IDE_IS_C_LANGUAGE (language), NULL);
+
+#if 0
+  return g_list_append (NULL, g_object_new (IDE_TYPE_CLANG_COMPLETION_PROVIDER, NULL));
+#else
+  return NULL;
+#endif
+}
 
 static IdeDiagnostician *
 ide_c_language_get_diagnostician (IdeLanguage *language)
@@ -124,6 +137,7 @@ ide_c_language_class_init (IdeCLanguageClass *klass)
   IdeLanguageClass *language_class = IDE_LANGUAGE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  language_class->get_completion_providers = ide_c_language_get_completion_providers;
   language_class->get_diagnostician = ide_c_language_get_diagnostician;
   language_class->get_highlighter = ide_c_language_get_highlighter;
   language_class->get_indenter = ide_c_language_get_indenter;
