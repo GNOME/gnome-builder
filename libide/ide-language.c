@@ -76,6 +76,26 @@ ide_language_get_source_language (IdeLanguage *self)
 }
 
 /**
+ * ide_language_get_completion_providers:
+ * @self: An #IdeLanguage.
+ *
+ * Gets the completion providers that can be used to autocomplete for this language.
+ *
+ * Returns: (transfer full) (element-type GtkSourceCompletionProvider*): A
+ *   #GList of #GtkSourceCompletionProvider.
+ */
+GList *
+ide_language_get_completion_providers (IdeLanguage *self)
+{
+  g_return_val_if_fail (IDE_IS_LANGUAGE (self), NULL);
+
+  if (IDE_LANGUAGE_GET_CLASS (self)->get_completion_providers)
+    return IDE_LANGUAGE_GET_CLASS (self)->get_completion_providers (self);
+
+  return NULL;
+}
+
+/**
  * ide_language_get_diagnostician:
  *
  * Returns the #IdeDiagnostician for the #IdeLanguage.

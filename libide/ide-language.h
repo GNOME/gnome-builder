@@ -34,23 +34,25 @@ struct _IdeLanguageClass
 {
   IdeObjectClass parent;
 
-  IdeDiagnostician  *(*get_diagnostician)   (IdeLanguage *self);
-  IdeHighlighter    *(*get_highlighter)     (IdeLanguage *self);
-  IdeIndenter       *(*get_indenter)        (IdeLanguage *self);
-  const gchar       *(*get_name)            (IdeLanguage *self);
-  IdeRefactory      *(*get_refactory)       (IdeLanguage *self);
-  GtkSourceLanguage *(*get_source_language) (IdeLanguage *self);
-  IdeSymbolResolver *(*get_symbol_resolver) (IdeLanguage *self);
+  IdeDiagnostician  *(*get_diagnostician)        (IdeLanguage *self);
+  IdeHighlighter    *(*get_highlighter)          (IdeLanguage *self);
+  IdeIndenter       *(*get_indenter)             (IdeLanguage *self);
+  const gchar       *(*get_name)                 (IdeLanguage *self);
+  IdeRefactory      *(*get_refactory)            (IdeLanguage *self);
+  GtkSourceLanguage *(*get_source_language)      (IdeLanguage *self);
+  IdeSymbolResolver *(*get_symbol_resolver)      (IdeLanguage *self);
+  GList             *(*get_completion_providers) (IdeLanguage *self);
 };
 
-IdeDiagnostician  *ide_language_get_diagnostician   (IdeLanguage *self);
-IdeHighlighter    *ide_language_get_highlighter     (IdeLanguage *self);
-const gchar       *ide_language_get_id              (IdeLanguage *self);
-IdeIndenter       *ide_language_get_indenter        (IdeLanguage *self);
-const gchar       *ide_language_get_name            (IdeLanguage *self);
-IdeRefactory      *ide_language_get_refactory       (IdeLanguage *self);
-IdeSymbolResolver *ide_language_get_symbol_resolver (IdeLanguage *self);
-GtkSourceLanguage *ide_language_get_source_language (IdeLanguage *self);
+IdeDiagnostician  *ide_language_get_diagnostician        (IdeLanguage *self);
+IdeHighlighter    *ide_language_get_highlighter          (IdeLanguage *self);
+const gchar       *ide_language_get_id                   (IdeLanguage *self);
+IdeIndenter       *ide_language_get_indenter             (IdeLanguage *self);
+const gchar       *ide_language_get_name                 (IdeLanguage *self);
+IdeRefactory      *ide_language_get_refactory            (IdeLanguage *self);
+IdeSymbolResolver *ide_language_get_symbol_resolver      (IdeLanguage *self);
+GtkSourceLanguage *ide_language_get_source_language      (IdeLanguage *self);
+GList             *ide_language_get_completion_providers (IdeLanguage *self);
 
 G_END_DECLS
 
