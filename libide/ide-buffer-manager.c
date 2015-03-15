@@ -766,6 +766,9 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
   g_assert (IDE_IS_FILE (state->file));
   g_assert (IDE_IS_PROGRESS (state->progress));
 
+  if (!gtk_source_file_get_location (source_file))
+    gtk_source_file_set_location (source_file, ide_file_get_file (file));
+
   saver = gtk_source_file_saver_new (GTK_SOURCE_BUFFER (state->buffer), source_file);
 
   /* set file encoding and newline style defaults */
