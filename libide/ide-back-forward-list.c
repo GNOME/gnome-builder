@@ -192,7 +192,6 @@ ide_back_forward_list_push (IdeBackForwardList *self,
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CAN_GO_FORWARD]);
 
   g_return_if_fail (self->forward->length == 0);
-  g_return_if_fail (self->backward->length > 0);
 }
 
 /**
