@@ -1111,7 +1111,6 @@
 
   bind "x"        { "copy-clipboard" ()
                     "delete-selection" ()
-                    "delete-from-cursor" (chars, 1)
                     "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
 
