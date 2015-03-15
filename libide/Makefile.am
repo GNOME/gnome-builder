@@ -184,6 +184,8 @@ libide_1_0_la_SOURCES = \
 	libide/autotools/ide-makecache.h \
 	libide/c/c-parse-helper.c \
 	libide/c/c-parse-helper.h \
+	libide/c/ide-c-format-provider.c \
+	libide/c/ide-c-format-provider.h \
 	libide/clang/ide-clang-completion-item.c \
 	libide/clang/ide-clang-completion-item.h \
 	libide/clang/ide-clang-completion-provider.c \
