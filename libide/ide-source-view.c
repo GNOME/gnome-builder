@@ -95,6 +95,7 @@ typedef struct
   GtkSourceGutterRenderer     *line_diagnostics_renderer;
   IdeSourceViewCapture        *capture;
   IdeSourceViewMode           *mode;
+  GList                       *providers;
   GQueue                      *selections;
   GQueue                      *snippets;
   GtkSourceCompletionProvider *snippets_provider;
@@ -848,14 +849,30 @@ ide_source_view_reload_file_settings (IdeSourceView *self)
 static void
 ide_source_view_reload_language (IdeSourceView *self)
 {
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceCompletion *completion;
   GtkTextBuffer *buffer;
   IdeFile *file = NULL;
   IdeLanguage *language = NULL;
   GtkSourceLanguage *source_language = NULL;
   IdeIndenter *indenter;
+  GList *list;
+  GList *iter;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
+  /*
+   * Unload any currently loaded completion providers.
+   */
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+  for (iter = priv->providers; iter; iter = iter->next)
+    gtk_source_completion_remove_provider (completion, iter->data, NULL);
+  g_list_free_full (priv->providers, g_object_unref);
+  priv->providers = NULL;
+
+  /*
+   * Update source language, indenter, etc.
+   */
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   file = ide_buffer_get_file (IDE_BUFFER (buffer));
   language = ide_file_get_language (file);
@@ -869,6 +886,14 @@ ide_source_view_reload_language (IdeSourceView *self)
 
   indenter = ide_language_get_indenter (language);
   ide_source_view_set_indenter (self, indenter);
+
+  /*
+   * Load the languages custom providers.
+   */
+  list = ide_language_get_completion_providers (language);
+  for (iter = list; iter; iter = iter->next)
+    gtk_source_completion_add_provider (completion, iter->data, NULL);
+  priv->providers = list;
 }
 
 static void
