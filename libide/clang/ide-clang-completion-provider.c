@@ -28,6 +28,8 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-file.h"
+#include "ide-source-snippet.h"
+#include "ide-source-view.h"
 
 struct _IdeClangCompletionProviderClass
 {
@@ -38,7 +40,8 @@ struct _IdeClangCompletionProvider
 {
   GObject parent_instance;
 
-  GPtrArray *last_results;
+  IdeSourceView *view;
+  GPtrArray     *last_results;
 };
 
 typedef struct
@@ -101,6 +104,16 @@ stop_on_predicate (gunichar ch,
     }
 }
 
+static gboolean
+matches (IdeClangCompletionItem *item,
+         const gchar            *word)
+{
+  const gchar *typed_text;
+
+  typed_text = ide_clang_completion_item_get_typed_text (item);
+  return !!strstr (typed_text, word);
+}
+
 static gchar *
 get_word (const GtkTextIter *location)
 {
@@ -134,7 +147,7 @@ filter_list (GPtrArray   *ar,
       IdeClangCompletionItem *item;
 
       item = g_ptr_array_index (ar, i);
-      if (ide_clang_completion_item_matches (item, word))
+      if (matches (item, word))
         g_ptr_array_add (matched, item);
     }
 
@@ -252,12 +265,17 @@ static void
 ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
                                         GtkSourceCompletionContext  *context)
 {
+  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   AddProposalsState *state;
   IdeClangService *service;
+  GtkSourceCompletion *completion;
+  GtkSourceView *view;
   GtkTextBuffer *buffer;
   IdeContext *icontext;
   GtkTextIter iter;
   IdeFile *file;
+
+  g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
 
   if (!gtk_source_completion_context_get_iter (context, &iter))
     goto failure;
@@ -265,8 +283,16 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
   buffer = gtk_text_iter_get_buffer (&iter);
   if (buffer == NULL)
     goto failure;
-
   g_assert (IDE_IS_BUFFER (buffer));
+
+  /* stash the view for later */
+  g_object_get (context, "completion", &completion, NULL);
+  g_assert (GTK_SOURCE_IS_COMPLETION (completion));
+  view = gtk_source_completion_get_view (completion);
+  g_assert (IDE_IS_SOURCE_VIEW (view));
+  g_assert ((self->view == NULL) || (self->view == (IdeSourceView *)view));
+  self->view = IDE_SOURCE_VIEW (view);
+  g_clear_object (&completion);
 
   file = ide_buffer_get_file (IDE_BUFFER (buffer));
   if (file == NULL)
@@ -321,7 +347,24 @@ ide_clang_completion_provider_activate_proposal (GtkSourceCompletionProvider *pr
                                                  GtkSourceCompletionProposal *proposal,
                                                  GtkTextIter                 *iter)
 {
-  return FALSE;
+  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
+  IdeClangCompletionItem *item = (IdeClangCompletionItem *)proposal;
+  IdeSourceSnippet *snippet;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_CLANG_COMPLETION_ITEM (item));
+
+  snippet = ide_clang_completion_item_get_snippet (item);
+
+  g_assert (snippet != NULL);
+  g_assert (IDE_IS_SOURCE_SNIPPET (snippet));
+  g_assert (IDE_IS_SOURCE_VIEW (self->view));
+
+  ide_source_view_push_snippet (self->view, snippet);
+
+  IDE_RETURN (TRUE);
 }
 
 static gint

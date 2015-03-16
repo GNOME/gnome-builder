@@ -19,7 +19,9 @@
 #ifndef IDE_CLANG_COMPLETION_ITEM_H
 #define IDE_CLANG_COMPLETION_ITEM_H
 
-#include <glib-object.h>
+#include <gtksourceview/gtksourcecompletionproposal.h>
+
+#include "ide-source-snippet.h"
 
 G_BEGIN_DECLS
 
@@ -31,14 +33,14 @@ G_BEGIN_DECLS
 #define IDE_IS_CLANG_COMPLETION_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_CLANG_COMPLETION_ITEM))
 #define IDE_CLANG_COMPLETION_ITEM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_CLANG_COMPLETION_ITEM, IdeClangCompletionItemClass))
 
-typedef struct _IdeClangCompletionItem        IdeClangCompletionItem;
-typedef struct _IdeClangCompletionItemClass   IdeClangCompletionItemClass;
+typedef struct _IdeClangCompletionItem      IdeClangCompletionItem;
+typedef struct _IdeClangCompletionItemClass IdeClangCompletionItemClass;
 
-GType    ide_clang_completion_item_get_type (void);
-gboolean ide_clang_completion_item_matches  (IdeClangCompletionItem *self,
-                                             const gchar            *text);
-gint     ide_clang_completion_item_sort     (gconstpointer           a,
-                                             gconstpointer           b);
+GType             ide_clang_completion_item_get_type          (void);
+IdeSourceSnippet *ide_clang_completion_item_get_snippet       (IdeClangCompletionItem *self);
+const gchar      *ide_clang_completion_item_get_typed_text    (IdeClangCompletionItem *self);
+guint             ide_clang_completion_item_get_priority      (IdeClangCompletionItem *self);
+const gchar      *ide_clang_completion_item_get_brief_comment (IdeClangCompletionItem *self);
 
 G_END_DECLS
 
