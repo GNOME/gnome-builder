@@ -187,15 +187,19 @@ ide_source_snippet_chunk_set_text (IdeSourceSnippetChunk *chunk,
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk));
 
-  g_free (chunk->text);
-  chunk->text = g_strdup (text);
-  g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_TEXT]);
+  if (chunk->text != text)
+    {
+      g_free (chunk->text);
+      chunk->text = g_strdup (text);
+      g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_TEXT]);
+    }
 }
 
 gboolean
 ide_source_snippet_chunk_get_text_set (IdeSourceSnippetChunk *chunk)
 {
   g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk), FALSE);
+
   return chunk->text_set;
 }
 
@@ -204,8 +208,14 @@ ide_source_snippet_chunk_set_text_set (IdeSourceSnippetChunk *chunk,
                                        gboolean               text_set)
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk));
-  chunk->text_set = !!text_set;
-  g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_TEXT_SET]);
+
+  text_set = !!text_set;
+
+  if (chunk->text_set != text_set)
+    {
+      chunk->text_set = text_set;
+      g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_TEXT_SET]);
+    }
 }
 
 static void

@@ -154,8 +154,11 @@ ide_source_snippet_set_trigger (IdeSourceSnippet *self,
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (self));
 
-  g_free (self->trigger);
-  self->trigger = g_strdup (trigger);
+  if (self->trigger != trigger)
+    {
+      g_free (self->trigger);
+      self->trigger = g_strdup (trigger);
+    }
 }
 
 const gchar *
@@ -172,8 +175,11 @@ ide_source_snippet_set_language (IdeSourceSnippet *self,
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (self));
 
-  g_free (self->language);
-  self->language = g_strdup (language);
+  if (self->language != language)
+    {
+      g_free (self->language);
+      self->language = g_strdup (language);
+    }
 }
 
 const gchar *
@@ -190,8 +196,11 @@ ide_source_snippet_set_description (IdeSourceSnippet *self,
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (self));
 
-  g_free (self->description);
-  self->description = g_strdup (description);
+  if (self->description != description)
+    {
+      g_free (self->description);
+      self->description = g_strdup (description);
+    }
 }
 
 static gint
