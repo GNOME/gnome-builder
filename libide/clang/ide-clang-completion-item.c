@@ -392,7 +392,7 @@ ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
    * Determine the index of the typed text. Each completion result should have
    * exaction one of these.
    */
-  if (self->typed_text_index == -1)
+  if (G_UNLIKELY (self->typed_text_index == -1))
     {
       guint num_chunks;
       guint i;
