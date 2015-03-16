@@ -22,6 +22,7 @@
 #include "ide-file.h"
 #include "ide-gsettings-file-settings.h"
 #include "ide-language.h"
+#include "ide-language-defaults.h"
 
 struct _IdeGsettingsFileSettings
 {
@@ -76,6 +77,50 @@ indent_style_get (GValue   *value,
 }
 
 static void
+ide_gsettings_file_settings__init_defaults_cb (GObject      *object,
+                                               GAsyncResult *result,
+                                               gpointer      user_data)
+{
+  IdeGsettingsFileSettings *self;
+  g_autoptr(GTask) task = user_data;
+  GSettings *settings;
+  GError *error = NULL;
+
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_language_defaults_init_finish (result, &error))
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_GSETTINGS_FILE_SETTINGS (self));
+
+  settings = g_task_get_task_data (task);
+  g_assert (G_IS_SETTINGS (settings));
+
+  self->settings = g_object_ref (settings);
+
+  g_settings_bind (self->settings, "indent-width", self, "indent-width",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (self->settings, "tab-width", self, "tab-width",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind_with_mapping (self->settings, "insert-spaces-instead-of-tabs",
+                                self, "indent-style", G_SETTINGS_BIND_GET,
+                                indent_style_get, NULL, NULL, NULL);
+  g_settings_bind (self->settings, "right-margin-position",
+                   self, "right-margin-position",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (self->settings, "trim-trailing-whitespace",
+                   self, "trim-trailing-whitespace",
+                   G_SETTINGS_BIND_GET);
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_gsettings_file_settings_init_async (GAsyncInitable      *initable,
                                         gint                 io_priority,
                                         GCancellable        *cancellable,
@@ -121,23 +166,11 @@ ide_gsettings_file_settings_init_async (GAsyncInitable      *initable,
   path = g_strdup_printf ("/org/gnome/builder/editor/language/%s/", lang_id);
   settings = g_settings_new_with_path ("org.gnome.builder.editor.language", path);
 
-  self->settings = g_object_ref (settings);
+  g_task_set_task_data (task, g_object_ref (settings), g_object_unref);
 
-  g_settings_bind (self->settings, "indent-width", self, "indent-width",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (self->settings, "tab-width", self, "tab-width",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind_with_mapping (self->settings, "insert-spaces-instead-of-tabs",
-                                self, "indent-style", G_SETTINGS_BIND_GET,
-                                indent_style_get, NULL, NULL, NULL);
-  g_settings_bind (self->settings, "right-margin-position",
-                   self, "right-margin-position",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (self->settings, "trim-trailing-whitespace",
-                   self, "trim-trailing-whitespace",
-                   G_SETTINGS_BIND_GET);
-
-  g_task_return_boolean (task, TRUE);
+  ide_language_defaults_init_async (cancellable,
+                                    ide_gsettings_file_settings__init_defaults_cb,
+                                    g_object_ref (task));
 }
 
 static gboolean

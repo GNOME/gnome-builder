@@ -724,6 +724,7 @@ main (int argc,
     { NULL }
   };
 
+  ide_set_program_name ("gnome-builder");
   ide_log_init (TRUE, NULL);
 
   context = g_option_context_new (_("[FILES...] - A mini editor for libide"));
