@@ -60,6 +60,7 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+static GHashTable *gIcons;
 
 static CXCompletionResult *
 ide_clang_completion_item_get_result (IdeClangCompletionItem *self)
@@ -72,11 +73,18 @@ ide_clang_completion_item_get_result (IdeClangCompletionItem *self)
   return &results->Results [self->index];
 }
 
+static GdkPixbuf *
+get_icon (const gchar *key)
+{
+  return g_hash_table_lookup (gIcons, key);
+}
+
 static void
 ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
 {
   CXCompletionResult *result;
   g_autoptr(IdeSourceSnippet) snippet = NULL;
+  GdkPixbuf *icon = NULL;
   GString *markup = NULL;
   unsigned num_chunks;
   unsigned i;
@@ -96,6 +104,79 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
   g_assert (num_chunks);
   g_assert (IDE_IS_SOURCE_SNIPPET (snippet));
   g_assert (markup);
+
+  /*
+   * Try to determine the icon to use for this result.
+   */
+  switch (result->CursorKind)
+    {
+    case CXCursor_CXXMethod:
+    case CXCursor_Constructor:
+    case CXCursor_Destructor:
+    case CXCursor_MemberRef:
+    case CXCursor_MemberRefExpr:
+    case CXCursor_ObjCClassMethodDecl:
+    case CXCursor_ObjCInstanceMethodDecl:
+      icon = get_icon ("lang-method-symbolic");
+      break;
+
+    case CXCursor_ConversionFunction:
+    case CXCursor_FunctionDecl:
+    case CXCursor_FunctionTemplate:
+      icon = get_icon ("lang-function-symbolic");
+      break;
+
+    case CXCursor_FieldDecl:
+      icon = get_icon ("struct-field-symbolic");
+      break;
+
+    case CXCursor_VarDecl:
+      /* local? */
+    case CXCursor_ParmDecl:
+    case CXCursor_ObjCIvarDecl:
+    case CXCursor_ObjCPropertyDecl:
+    case CXCursor_ObjCSynthesizeDecl:
+    case CXCursor_NonTypeTemplateParameter:
+    case CXCursor_Namespace:
+    case CXCursor_NamespaceAlias:
+    case CXCursor_NamespaceRef:
+      break;
+
+    case CXCursor_StructDecl:
+      icon = get_icon ("lang-struct-symbolic");
+      break;
+
+    case CXCursor_UnionDecl:
+    case CXCursor_ClassDecl:
+    case CXCursor_TypeRef:
+    case CXCursor_TemplateRef:
+    case CXCursor_TypedefDecl:
+    case CXCursor_ClassTemplate:
+    case CXCursor_ClassTemplatePartialSpecialization:
+    case CXCursor_ObjCClassRef:
+    case CXCursor_ObjCInterfaceDecl:
+    case CXCursor_ObjCImplementationDecl:
+    case CXCursor_ObjCCategoryDecl:
+    case CXCursor_ObjCCategoryImplDecl:
+    case CXCursor_ObjCProtocolDecl:
+    case CXCursor_ObjCProtocolRef:
+    case CXCursor_TemplateTypeParameter:
+    case CXCursor_TemplateTemplateParameter:
+      icon = get_icon ("lang-class-symbolic");
+      break;
+
+    case CXCursor_EnumConstantDecl:
+      icon = get_icon ("lang-enum-value-symbolic");
+      break;
+
+    case CXCursor_EnumDecl:
+      icon = get_icon ("lang-enum-symbolic");
+      break;
+
+    case CXCursor_NotImplemented:
+    default:
+      break;
+    }
 
   /*
    * Walk the chunks, creating our snippet for insertion as well as our markup
@@ -207,6 +288,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
 
   self->snippet = g_object_ref (snippet);
   self->markup = g_string_free (markup, FALSE);
+  self->icon = icon ? g_object_ref (icon) : NULL;
 }
 
 static gchar *
@@ -303,6 +385,17 @@ static void
 ide_clang_completion_item_class_init (IdeClangCompletionItemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  const gchar *icon_names[] = {
+    "lang-class-symbolic",
+    "lang-enum-symbolic",
+    "lang-enum-value-symbolic",
+    "lang-function-symbolic",
+    "lang-method-symbolic",
+    "lang-struct-symbolic",
+    "struct-field-symbolic",
+    NULL
+  };
+  gint i;
 
   object_class->finalize = ide_clang_completion_item_finalize;
   object_class->get_property = ide_clang_completion_item_get_property;
@@ -325,6 +418,23 @@ ide_clang_completion_item_class_init (IdeClangCompletionItemClass *klass)
                          IDE_TYPE_REF_PTR,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_RESULTS, gParamSpecs [PROP_RESULTS]);
+
+  gIcons = g_hash_table_new (g_str_hash, g_str_equal);
+
+  for (i = 0; icon_names [i]; i++)
+    {
+      g_autofree gchar *path = NULL;
+      g_autoptr(GError) error = NULL;
+      GdkPixbuf *icon;
+
+      path = g_strdup_printf ("/org/gnome/libide/icons/autocomplete/%s.svg", icon_names [i]);
+      icon = gdk_pixbuf_new_from_resource_at_scale (path, 16, 16, TRUE, &error);
+      if (error)
+        g_warning ("%s", error->message);
+      else
+        g_hash_table_insert (gIcons, (gchar *)g_intern_string (icon_names [i]), icon);
+    }
+
 }
 
 static void
