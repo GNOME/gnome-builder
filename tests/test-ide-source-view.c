@@ -152,6 +152,7 @@ add_buffer (IdeBuffer *buffer)
   if (!view)
     {
       GtkScrolledWindow *scroller;
+      GtkSourceCompletion *completion;
 
       scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
                                "visible", TRUE,
@@ -176,6 +177,8 @@ add_buffer (IdeBuffer *buffer)
                            "snippet-completion", TRUE,
                            "visible", TRUE,
                            NULL);
+      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (view));
+      g_object_set (completion, "show-headers", FALSE, NULL);
       if (gDebugScrollOffset)
         g_signal_connect_after (view, "draw", G_CALLBACK (debug_draw), NULL);
       gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (view));
