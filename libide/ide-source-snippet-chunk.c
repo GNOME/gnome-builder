@@ -191,6 +191,7 @@ ide_source_snippet_chunk_set_text (IdeSourceSnippetChunk *chunk,
     {
       g_free (chunk->text);
       chunk->text = g_strdup (text);
+      chunk->text_set = (chunk->text != NULL);
       g_object_notify_by_pspec (G_OBJECT (chunk), gParamSpecs[PROP_TEXT]);
     }
 }
