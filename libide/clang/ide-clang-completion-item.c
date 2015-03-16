@@ -208,6 +208,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           g_string_append_printf (markup, "<b>%s</b>", escaped);
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, text);
+          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
           ide_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
@@ -216,6 +217,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           g_string_append (markup, escaped);
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, text);
+          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
           ide_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
@@ -224,6 +226,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           g_string_append (markup, escaped);
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, text);
+          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
           ide_source_snippet_chunk_set_tab_stop (chunk, ++tab_stop);
           ide_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
@@ -241,6 +244,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           g_string_append (markup, " ");
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, " ");
+          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
           ide_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           /* fall through */
@@ -259,6 +263,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           g_string_append (markup, escaped);
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, text);
+          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
           ide_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
@@ -268,11 +273,13 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           /* insert the vertical space */
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, text);
+          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
           ide_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           /* now perform indentation */
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, "\t");
+          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
           ide_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
