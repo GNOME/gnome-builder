@@ -501,7 +501,9 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
   g_autoptr(GFileInfo) file_info = NULL;
   LoadState *state;
   GError *error = NULL;
-  gsize size;
+  gsize size = 0;
+
+  IDE_ENTRY;
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_TASK (task));
@@ -517,11 +519,17 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
 
   if (!file_info)
     {
-      g_task_return_error (task, error);
-      return;
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        {
+          _ide_buffer_set_loading (state->buffer, FALSE);
+          g_task_return_error (task, error);
+          IDE_EXIT;
+        }
     }
-
-  size = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_STANDARD_SIZE);
+  else
+    {
+      size = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_STANDARD_SIZE);
+    }
 
   if ((self->max_file_size > 0) && (size > self->max_file_size))
     {
@@ -529,7 +537,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
                                G_IO_ERROR,
                                G_IO_ERROR_INVALID_DATA,
                                _("File too large to be opened."));
-      return;
+      IDE_EXIT;
     }
 
   g_signal_emit (self, gSignals [LOAD_BUFFER], 0, state->buffer);
@@ -542,6 +550,8 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
                                      g_object_unref,
                                      ide_buffer_manager_load_file__load_cb,
                                      g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -554,7 +564,8 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   GtkSourceFile *source_file;
   LoadState *state;
-  GError *error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_TASK (task));
@@ -564,18 +575,16 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
   g_assert (state);
   g_assert (IDE_IS_BUFFER (state->buffer));
 
-  stream = g_file_read_finish (file, result, &error);
-
-  if (!stream)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
   source_file = _ide_file_get_source_file (state->file);
-  state->loader = gtk_source_file_loader_new_from_stream (GTK_SOURCE_BUFFER (state->buffer),
-                                                          source_file,
-                                                          G_INPUT_STREAM (stream));
+
+  stream = g_file_read_finish (file, result, NULL);
+
+  if (stream)
+    state->loader = gtk_source_file_loader_new_from_stream (GTK_SOURCE_BUFFER (state->buffer),
+                                                            source_file,
+                                                            G_INPUT_STREAM (stream));
+  else
+    state->loader = gtk_source_file_loader_new (GTK_SOURCE_BUFFER (state->buffer), source_file);
 
   g_file_query_info_async (file,
                            G_FILE_ATTRIBUTE_STANDARD_SIZE,
@@ -584,6 +593,8 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
                            g_task_get_cancellable (task),
                            ide_buffer_manager__load_file_query_info_cb,
                            g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 /**
@@ -615,6 +626,8 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
   GtkSourceFile *source_file;
   GFile *gfile;
 
+  IDE_ENTRY;
+
   if (progress)
     *progress = NULL;
 
@@ -638,7 +651,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
                                   "fraction", 1.0,
                                   NULL);
       g_task_return_pointer (task, g_object_ref (buffer), g_object_unref);
-      return;
+      IDE_EXIT;
     }
 
   state = g_slice_new0 (LoadState);
@@ -670,6 +683,8 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
                      cancellable,
                      ide_buffer_manager__load_file_read_cb,
                      g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 /**
