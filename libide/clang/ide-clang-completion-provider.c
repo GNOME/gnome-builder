@@ -334,12 +334,59 @@ failure:
 }
 
 static gboolean
+get_start_iter (GtkSourceCompletionProvider *provider,
+                const GtkTextIter           *location,
+                GtkSourceCompletionProposal *proposal,
+                GtkTextIter                 *iter)
+{
+  IdeClangCompletionItem *item = (IdeClangCompletionItem *)proposal;
+  const gchar *typed_text = ide_clang_completion_item_get_typed_text (item);
+  g_autofree gchar *text = g_strdup (typed_text);
+  gint len = g_utf8_strlen (typed_text ?: "", -1);
+  GtkTextIter begin;
+  GtkTextIter end;
+  guint offset;
+
+  end = begin = *location;
+
+  offset = gtk_text_iter_get_offset (&end);
+
+  if (offset >= len)
+    {
+      gchar *textptr = g_utf8_offset_to_pointer (text, len);
+      gchar *prevptr;
+      GtkTextIter match_start;
+      GtkTextIter match_end;
+
+      gtk_text_iter_set_offset (&begin, offset - len);
+
+      while (*text)
+        {
+          if (gtk_text_iter_forward_search (&begin, text, GTK_TEXT_SEARCH_TEXT_ONLY, &match_start, &match_end, &end))
+            {
+              *iter = match_start;
+              return TRUE;
+            }
+
+          prevptr = textptr;
+          textptr = g_utf8_find_prev_char (text, textptr);
+          *prevptr = '\0';
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
 ide_clang_completion_provider_get_start_iter (GtkSourceCompletionProvider *provider,
                                               GtkSourceCompletionContext  *context,
                                               GtkSourceCompletionProposal *proposal,
                                               GtkTextIter                 *iter)
 {
-  return FALSE;
+  GtkTextIter location;
+
+  gtk_source_completion_context_get_iter (context, &location);
+  return get_start_iter (provider, &location, proposal, iter);
 }
 
 static gboolean
@@ -350,11 +397,19 @@ ide_clang_completion_provider_activate_proposal (GtkSourceCompletionProvider *pr
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   IdeClangCompletionItem *item = (IdeClangCompletionItem *)proposal;
   IdeSourceSnippet *snippet;
+  GtkTextBuffer *buffer;
+  GtkTextIter end;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (item));
+
+  if (!get_start_iter (provider, iter, proposal, &end))
+    return FALSE;
+
+  buffer = gtk_text_iter_get_buffer (iter);
+  gtk_text_buffer_delete (buffer, iter, &end);
 
   snippet = ide_clang_completion_item_get_snippet (item);
 
