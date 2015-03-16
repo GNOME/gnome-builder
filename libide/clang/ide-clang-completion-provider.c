@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-clang-completion"
 
+#include <devhelp/dh-assistant-view.h>
+#include <devhelp/dh-book-manager.h>
 #include <glib/gi18n.h>
 
 #include "ide-buffer.h"
@@ -42,6 +44,7 @@ struct _IdeClangCompletionProvider
 
   IdeSourceView *view;
   GPtrArray     *last_results;
+  GtkWidget     *assistant;
 };
 
 typedef struct
@@ -60,6 +63,8 @@ G_DEFINE_TYPE_EXTENDED (IdeClangCompletionProvider,
                         0,
                         G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
                                                completion_provider_iface_init))
+
+static DhBookManager *gBookManager;
 
 static void
 add_proposals_state_free (AddProposalsState *state)
@@ -160,11 +165,15 @@ filter_list (GPtrArray   *ar,
 static void
 ide_clang_completion_provider_class_init (IdeClangCompletionProviderClass *klass)
 {
+  gBookManager = dh_book_manager_new ();
+  dh_book_manager_populate (gBookManager);
 }
 
 static void
 ide_clang_completion_provider_init (IdeClangCompletionProvider *provider)
 {
+  provider->assistant = dh_assistant_view_new ();
+  dh_assistant_view_set_book_manager (DH_ASSISTANT_VIEW (provider->assistant), gBookManager);
 }
 
 static gchar *
@@ -435,6 +444,36 @@ ide_clang_completion_provider_get_interactive_delay (GtkSourceCompletionProvider
 }
 
 static void
+ide_clang_completion_provider_update_info (GtkSourceCompletionProvider *provider,
+                                           GtkSourceCompletionProposal *proposal,
+                                           GtkSourceCompletionInfo     *info)
+{
+  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
+  IdeClangCompletionItem *item = (IdeClangCompletionItem *)proposal;
+  const gchar *typed_text;
+
+  typed_text = ide_clang_completion_item_get_typed_text (item);
+  dh_assistant_view_search (DH_ASSISTANT_VIEW (self->assistant), typed_text);
+
+  if (info)
+    gtk_widget_show (GTK_WIDGET (info));
+}
+
+static GtkWidget *
+ide_clang_completion_provider_get_info_widget (GtkSourceCompletionProvider *provider,
+                                               GtkSourceCompletionProposal *proposal)
+{
+  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
+
+  ide_clang_completion_provider_update_info (provider, proposal, NULL);
+  gtk_widget_show (self->assistant);
+
+  gtk_widget_set_size_request (self->assistant, 300, 200);
+
+  return self->assistant;
+}
+
+static void
 completion_provider_iface_init (GtkSourceCompletionProviderIface *iface)
 {
   iface->activate_proposal = ide_clang_completion_provider_activate_proposal;
@@ -442,4 +481,6 @@ completion_provider_iface_init (GtkSourceCompletionProviderIface *iface)
   iface->get_name = ide_clang_completion_provider_get_name;
   iface->get_start_iter = ide_clang_completion_provider_get_start_iter;
   iface->populate = ide_clang_completion_provider_populate;
+  iface->get_info_widget = ide_clang_completion_provider_get_info_widget;
+  iface->update_info = ide_clang_completion_provider_update_info;
 }
