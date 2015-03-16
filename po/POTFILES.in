@@ -31,6 +31,7 @@ libide/git/ide-git-search-provider.c
 libide/git/ide-git-vcs.c
 libide/gjs/ide-gjs-script.cpp
 libide/gsettings/ide-gsettings-file-settings.c
+libide/gsettings/ide-language-defaults.c
 libide/ide-back-forward-item.c
 libide/ide-back-forward-list.c
 libide/ide-buffer-change-monitor.c
