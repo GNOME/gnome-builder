@@ -193,6 +193,8 @@ libide_1_0_la_public_sources = \
 	libide/pygobject/ide-pygobject-script.h \
 	libide/python/ide-python-indenter.c \
 	libide/python/ide-python-indenter.h \
+	libide/python/ide-python-format-provider.c \
+	libide/python/ide-python-format-provider.h \
 	libide/python/ide-python-language.c \
 	libide/python/ide-python-language.h \
 	libide/theatrics/ide-animation.c \

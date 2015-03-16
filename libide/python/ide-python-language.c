@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-python-format-provider.h"
 #include "ide-python-indenter.h"
 #include "ide-python-language.h"
 
@@ -35,6 +36,18 @@ G_DEFINE_TYPE_EXTENDED (IdePythonLanguage,
                         0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                initable_iface_init))
+
+static GList *
+ide_python_language_get_completion_providers (IdeLanguage *language)
+{
+  GList *providers = NULL;
+
+  g_return_val_if_fail (IDE_IS_PYTHON_LANGUAGE (language), NULL);
+
+  providers = g_list_append (providers, g_object_new (IDE_TYPE_PYTHON_FORMAT_PROVIDER, NULL));
+
+  return providers;
+}
 
 static IdeIndenter *
 ide_python_language_get_indenter (IdeLanguage *language)
@@ -74,6 +87,7 @@ ide_python_language_class_init (IdePythonLanguageClass *klass)
 
   object_class->finalize = ide_python_language_finalize;
 
+  language_class->get_completion_providers = ide_python_language_get_completion_providers;
   language_class->get_indenter = ide_python_language_get_indenter;
 }
 
