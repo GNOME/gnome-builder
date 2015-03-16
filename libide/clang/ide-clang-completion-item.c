@@ -143,7 +143,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           g_string_append (markup, escaped);
           chunk = ide_source_snippet_chunk_new ();
           ide_source_snippet_chunk_set_text (chunk, text);
-          ide_source_snippet_chunk_set_tab_stop (chunk, tab_stop++);
+          ide_source_snippet_chunk_set_tab_stop (chunk, ++tab_stop);
           ide_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
