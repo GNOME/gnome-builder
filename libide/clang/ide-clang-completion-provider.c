@@ -269,6 +269,7 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
   AddProposalsState *state;
   IdeClangService *service;
   GtkSourceCompletion *completion;
+  g_autofree gchar *word = NULL;
   GtkSourceView *view;
   GtkTextBuffer *buffer;
   IdeContext *icontext;
@@ -280,19 +281,24 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
   if (!gtk_source_completion_context_get_iter (context, &iter))
     goto failure;
 
-  buffer = gtk_text_iter_get_buffer (&iter);
-  if (buffer == NULL)
+  word = get_word (&iter);
+  if (!word || !word [0] || !word [1])
     goto failure;
+
+  buffer = gtk_text_iter_get_buffer (&iter);
   g_assert (IDE_IS_BUFFER (buffer));
 
   /* stash the view for later */
-  g_object_get (context, "completion", &completion, NULL);
-  g_assert (GTK_SOURCE_IS_COMPLETION (completion));
-  view = gtk_source_completion_get_view (completion);
-  g_assert (IDE_IS_SOURCE_VIEW (view));
-  g_assert ((self->view == NULL) || (self->view == (IdeSourceView *)view));
-  self->view = IDE_SOURCE_VIEW (view);
-  g_clear_object (&completion);
+  if (G_UNLIKELY (!self->view))
+    {
+      g_object_get (context, "completion", &completion, NULL);
+      g_assert (GTK_SOURCE_IS_COMPLETION (completion));
+      view = gtk_source_completion_get_view (completion);
+      g_assert (IDE_IS_SOURCE_VIEW (view));
+      g_assert ((self->view == NULL) || (self->view == (IdeSourceView *)view));
+      self->view = IDE_SOURCE_VIEW (view);
+      g_clear_object (&completion);
+    }
 
   file = ide_buffer_get_file (IDE_BUFFER (buffer));
   if (file == NULL)
