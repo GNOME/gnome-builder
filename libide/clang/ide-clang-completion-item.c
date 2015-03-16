@@ -158,6 +158,10 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
 
         case CXCompletionChunk_LeftParen:
           g_string_append (markup, " ");
+          chunk = ide_source_snippet_chunk_new ();
+          ide_source_snippet_chunk_set_text (chunk, " ");
+          ide_source_snippet_add_chunk (snippet, chunk);
+          g_clear_object (&chunk);
           /* fall through */
         case CXCompletionChunk_RightParen:
         case CXCompletionChunk_LeftBracket:
