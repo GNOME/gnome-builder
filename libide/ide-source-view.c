@@ -193,6 +193,7 @@ enum {
   CYCLE_COMPLETION,
   DELETE_SELECTION,
   END_MACRO,
+  HIDE_COMPLETION,
   INDENT_SELECTION,
   INSERT_AT_CURSOR_AND_INDENT,
   INSERT_MODIFIER,
@@ -4130,6 +4131,17 @@ in_replay:
 }
 
 static void
+ide_source_view_real_hide_completion (IdeSourceView *self)
+{
+  GtkSourceCompletion *completion;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+  gtk_source_completion_hide (completion);
+}
+
+static void
 ide_source_view_real_replay_macro (IdeSourceView *self,
                                    gboolean       use_count)
 {
@@ -4391,6 +4403,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->cycle_completion = ide_source_view_real_cycle_completion;
   klass->delete_selection = ide_source_view_real_delete_selection;
   klass->end_macro = ide_source_view_real_end_macro;
+  klass->hide_completion = ide_source_view_real_hide_completion;
   klass->indent_selection = ide_source_view_real_indent_selection;
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
   klass->insert_modifier = ide_source_view_real_insert_modifier;
@@ -4704,6 +4717,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, end_macro),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  gSignals [HIDE_COMPLETION] =
+    g_signal_new ("hide-completion",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, hide_completion),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
