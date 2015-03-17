@@ -102,14 +102,14 @@ ide_project_files_get_file_for_path (IdeProjectFiles *self,
 {
   IdeProjectFilesPrivate *priv = ide_project_files_get_instance_private (self);
   IdeProjectItem *item = (IdeProjectItem *)self;
-  IdeFile *file;
+  IdeFile *file = NULL;
   gchar **parts;
   gsize i;
 
   g_return_val_if_fail (IDE_IS_PROJECT_FILES (self), NULL);
 
   if ((file = g_hash_table_lookup (priv->files_by_path, path)))
-    return file;
+    return g_object_ref (file);
 
   parts = g_strsplit (path, G_DIR_SEPARATOR_S, 0);
 
@@ -131,7 +131,7 @@ ide_project_files_get_file_for_path (IdeProjectFiles *self,
                            "path", path,
                            NULL);
       if (file)
-        g_hash_table_insert (priv->files_by_path, g_strdup (path), file);
+        g_hash_table_insert (priv->files_by_path, g_strdup (path), g_object_ref (file));
     }
 
   return file;
