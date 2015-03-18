@@ -117,6 +117,42 @@ gb_editor_view_grab_focus (GtkWidget *widget)
 }
 
 static void
+gb_editor_view_set_split_view (GbView   *view,
+                               gboolean  split_view)
+{
+  GbEditorView *self = (GbEditorView *)view;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  if (split_view && (self->frame2 != NULL))
+    return;
+
+  if (!split_view && (self->frame2 == NULL))
+    return;
+
+  if (split_view)
+    {
+      self->frame2 = g_object_new (GB_TYPE_EDITOR_FRAME,
+                                   "document", self->document,
+                                   "visible", TRUE,
+                                   NULL);
+      gtk_container_add_with_properties (GTK_CONTAINER (self->paned), GTK_WIDGET (self->frame2),
+                                         "shrink", FALSE,
+                                         "resize", TRUE,
+                                         NULL);
+      gtk_widget_grab_focus (GTK_WIDGET (self->frame2));
+    }
+  else
+    {
+      GtkWidget *copy = GTK_WIDGET (self->frame2);
+
+      self->frame2 = NULL;
+      gtk_container_remove (GTK_CONTAINER (self->paned), copy);
+      gtk_widget_grab_focus (GTK_WIDGET (self->frame1));
+    }
+}
+
+static void
 gb_editor_view_finalize (GObject *object)
 {
   GbEditorView *self = (GbEditorView *)object;
@@ -180,6 +216,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
 
   view_class->create_split = gb_editor_view_create_split;
   view_class->get_document = gb_editor_view_get_document;
+  view_class->set_split_view = gb_editor_view_set_split_view;
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",

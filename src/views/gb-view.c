@@ -81,6 +81,23 @@ gb_view_create_split (GbView *self)
 }
 
 /**
+ * gb_view_set_split_view:
+ * @self: A #GbView.
+ * @split_view: if the split should be enabled.
+ *
+ * Set a split view using GtkPaned style split with %GTK_ORIENTATION_VERTICAL.
+ */
+void
+gb_view_set_split_view (GbView   *self,
+                        gboolean  split_view)
+{
+  g_return_if_fail (GB_IS_VIEW (self));
+
+  if (GB_VIEW_GET_CLASS (self)->set_split_view)
+    GB_VIEW_GET_CLASS (self)->set_split_view (self, split_view);
+}
+
+/**
  * gb_view_get_controls:
  * @self: A #GbView.
  *

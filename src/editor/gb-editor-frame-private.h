@@ -29,13 +29,15 @@ G_BEGIN_DECLS
 
 struct _GbEditorFrame
 {
-  GtkBin             parent_instance;
+  GtkBin               parent_instance;
 
   NautilusFloatingBar *floating_bar;
   GtkScrolledWindow   *scrolled_window;
   GtkRevealer         *search_revealer;
   GdTaggedEntry       *search_entry;
   IdeSourceView       *source_view;
+
+  gulong               cursor_moved_handler;
 };
 
 G_END_DECLS

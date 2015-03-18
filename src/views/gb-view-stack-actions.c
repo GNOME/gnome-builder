@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gb-view-stack"
+
+#include "gb-view.h"
 #include "gb-view-stack.h"
 #include "gb-view-stack-actions.h"
 #include "gb-view-stack-private.h"
@@ -76,8 +79,19 @@ gb_view_stack_actions_split_down (GSimpleAction *action,
                                   gpointer       user_data)
 {
   GbViewStack *self = user_data;
+  GtkWidget *active_view;
+  gboolean split_view;
 
   g_assert (GB_IS_VIEW_STACK (self));
+
+  active_view = gb_view_stack_get_active_view (self);
+  if (!GB_IS_VIEW (active_view))
+    return;
+
+  split_view = g_variant_get_boolean (param);
+  gb_view_set_split_view (GB_VIEW (active_view), split_view);
+
+  g_simple_action_set_state (action, param);
 }
 
 static void
@@ -106,7 +120,7 @@ static const GActionEntry gGbViewStackActions[] = {
   { "move-right",  gb_view_stack_actions_move_right },
   { "save",        gb_view_stack_actions_save },
   { "save-as",     gb_view_stack_actions_save_as },
-  { "split-down",  gb_view_stack_actions_split_down },
+  { "split-down",  NULL, NULL, "false", gb_view_stack_actions_split_down },
   { "split-left",  gb_view_stack_actions_split_left },
   { "split-right", gb_view_stack_actions_split_right },
 };

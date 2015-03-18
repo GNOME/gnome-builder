@@ -85,12 +85,19 @@ void
 gb_editor_frame_set_document (GbEditorFrame    *self,
                               GbEditorDocument *document)
 {
+  GtkTextMark *mark;
+  GtkTextIter iter;
+
   g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
 
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->source_view), GTK_TEXT_BUFFER (document));
-  g_signal_connect (document, "cursor-moved", G_CALLBACK (on_cursor_moved), self);
+  self->cursor_moved_handler = g_signal_connect (document, "cursor-moved", G_CALLBACK (on_cursor_moved), self);
   g_object_bind_property (document, "busy", self->floating_bar, "show-spinner", G_BINDING_SYNC_CREATE);
+
+  mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (document));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (document), &iter, mark);
+  on_cursor_moved (document, &iter, self);
 }
 
 static gboolean
@@ -118,9 +125,27 @@ keybindings_changed (GSettings     *settings,
 }
 
 static void
-gb_editor_frame_finalize (GObject *object)
+gb_editor_frame_grab_focus (GtkWidget *widget)
 {
-  G_OBJECT_CLASS (gb_editor_frame_parent_class)->finalize (object);
+  GbEditorFrame *self = (GbEditorFrame *)widget;
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
+}
+
+static void
+gb_editor_frame_dispose (GObject *object)
+{
+  GbEditorFrame *self = (GbEditorFrame *)object;
+
+  if (self->source_view && self->cursor_moved_handler)
+    {
+      GtkTextBuffer *buffer;
+
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
+      ide_clear_signal_handler (buffer, &self->cursor_moved_handler);
+    }
+
+  G_OBJECT_CLASS (gb_editor_frame_parent_class)->dispose (object);
 }
 
 static void
@@ -165,10 +190,13 @@ static void
 gb_editor_frame_class_init (GbEditorFrameClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = gb_editor_frame_finalize;
+  object_class->dispose = gb_editor_frame_dispose;
   object_class->get_property = gb_editor_frame_get_property;
   object_class->set_property = gb_editor_frame_set_property;
+
+  widget_class->grab_focus = gb_editor_frame_grab_focus;
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
