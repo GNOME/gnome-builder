@@ -89,6 +89,7 @@ typedef struct
   IdeBackForwardList          *back_forward_list;
   IdeBuffer                   *buffer;
   GtkCssProvider              *css_provider;
+  IdeFileSettings             *file_settings;
   PangoFontDescription        *font_desc;
   IdeIndenter                 *indenter;
   GtkSourceGutterRenderer     *line_change_renderer;
@@ -100,6 +101,11 @@ typedef struct
   GQueue                      *snippets;
   GtkSourceCompletionProvider *snippets_provider;
   GtkSourceSearchContext      *search_context;
+
+  GBinding                    *indent_width_binding;
+  GBinding                    *tab_width_binding;
+  GBinding                    *right_margin_position_binding;
+  GBinding                    *indent_style_binding;
 
   gulong                       buffer_changed_handler;
   gulong                       buffer_delete_range_after_handler;
@@ -165,6 +171,7 @@ enum {
   PROP_AUTO_INDENT,
   PROP_BACK_FORWARD_LIST,
   PROP_ENABLE_WORD_COMPLETION,
+  PROP_FILE_SETTINGS,
   PROP_FONT_NAME,
   PROP_FONT_DESC,
   PROP_INSERT_MATCHING_BRACE,
@@ -794,6 +801,88 @@ ide_source_view_set_indenter (IdeSourceView *self,
     ide_source_view_reload_indenter (self);
 }
 
+static gboolean
+transform_indent_style_to_boolean (GBinding     *binding,
+                                   const GValue *from_value,
+                                   GValue       *to_value,
+                                   gpointer      user_data)
+{
+  IdeIndentStyle indent_style = g_value_get_enum (from_value);
+  g_value_set_boolean (to_value, indent_style == IDE_INDENT_STYLE_SPACES);
+  return TRUE;
+}
+
+static void
+ide_source_view_connect_settings (IdeSourceView   *self,
+                                  IdeFileSettings *file_settings)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_FILE_SETTINGS (file_settings));
+
+  priv->indent_width_binding = g_object_bind_property (file_settings, "indent-width", self,
+                                                       "indent-width", G_BINDING_SYNC_CREATE);
+  priv->tab_width_binding = g_object_bind_property (file_settings, "tab-width", self, "tab-width",
+                                                    G_BINDING_SYNC_CREATE);
+  priv->right_margin_position_binding = g_object_bind_property (file_settings,
+                                                                "right-margin-position", self,
+                                                                "right-margin-position",
+                                                                G_BINDING_SYNC_CREATE);
+  priv->indent_style_binding = g_object_bind_property_full (file_settings, "indent-style", self,
+                                                            "insert-spaces-instead-of-tabs",
+                                                            G_BINDING_SYNC_CREATE,
+                                                            transform_indent_style_to_boolean,
+                                                            NULL, NULL, NULL);
+}
+
+static void
+ide_source_view_disconnect_settings (IdeSourceView   *self,
+                                     IdeFileSettings *file_settings)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_FILE_SETTINGS (file_settings));
+
+  g_binding_unbind (priv->indent_width_binding);
+  g_binding_unbind (priv->tab_width_binding);
+  g_binding_unbind (priv->right_margin_position_binding);
+  g_binding_unbind (priv->indent_style_binding);
+
+  priv->indent_width_binding = NULL;
+  priv->tab_width_binding = NULL;
+  priv->right_margin_position_binding = NULL;
+  priv->indent_style_binding = NULL;
+}
+
+static void
+ide_source_view_set_file_settings (IdeSourceView   *self,
+                                   IdeFileSettings *file_settings)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_FILE_SETTINGS (file_settings));
+
+  if (file_settings != priv->file_settings)
+    {
+      if (priv->file_settings)
+        {
+          ide_source_view_disconnect_settings (self, priv->file_settings);
+          g_clear_object (&priv->file_settings);
+        }
+
+      if (file_settings)
+        {
+          priv->file_settings = g_object_ref (file_settings);
+          ide_source_view_connect_settings (self, file_settings);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE_SETTINGS]);
+    }
+}
+
 static void
 ide_source_view__file_load_settings_cb (GObject      *object,
                                         GAsyncResult *result,
@@ -803,10 +892,6 @@ ide_source_view__file_load_settings_cb (GObject      *object,
   g_autoptr(IdeFileSettings) file_settings = NULL;
   g_autoptr(GError) error = NULL;
   IdeFile *file = (IdeFile *)object;
-  IdeIndentStyle indent_style;
-  guint right_margin_position;
-  guint tab_width;
-  gint indent_width;
 
   g_assert (IDE_IS_FILE (file));
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -819,16 +904,7 @@ ide_source_view__file_load_settings_cb (GObject      *object,
       return;
     }
 
-  indent_width = ide_file_settings_get_indent_width (file_settings);
-  indent_style = ide_file_settings_get_indent_style (file_settings);
-  right_margin_position = ide_file_settings_get_right_margin_position (file_settings);
-  tab_width = ide_file_settings_get_tab_width (file_settings);
-
-  gtk_source_view_set_indent_width (GTK_SOURCE_VIEW (self), indent_width);
-  gtk_source_view_set_tab_width (GTK_SOURCE_VIEW (self), tab_width);
-  gtk_source_view_set_right_margin_position (GTK_SOURCE_VIEW (self), right_margin_position);
-  gtk_source_view_set_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (self),
-                                                     (indent_style == IDE_INDENT_STYLE_SPACES));
+  ide_source_view_set_file_settings (self, file_settings);
 }
 
 static void
@@ -4243,6 +4319,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_enable_word_completion (self));
       break;
 
+    case PROP_FILE_SETTINGS:
+      g_value_set_object (value, ide_source_view_get_file_settings (self));
+      break;
+
     case PROP_FONT_DESC:
       g_value_set_boxed (value, ide_source_view_get_font_desc (self));
       break;
@@ -4435,6 +4515,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_BACK_FORWARD_LIST,
                                    gParamSpecs [PROP_BACK_FORWARD_LIST]);
+
+  gParamSpecs [PROP_FILE_SETTINGS] =
+    g_param_spec_object ("file-settings",
+                         _("File Settings"),
+                         _("The file settings that have been loaded for the file."),
+                         IDE_TYPE_FILE_SETTINGS,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_FILE_SETTINGS,
+                                   gParamSpecs [PROP_FILE_SETTINGS]);
 
   gParamSpecs [PROP_FONT_DESC] =
     g_param_spec_boxed ("font-desc",
@@ -5858,4 +5947,24 @@ ide_source_view_set_smart_backspace (IdeSourceView *self,
       priv->smart_backspace = smart_backspace;
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SMART_BACKSPACE]);
     }
+}
+
+/**
+ * ide_source_view_get_file_settings:
+ * @self: A #IdeSourceView.
+ *
+ * Gets the #IdeSourceView:file-settings property. This contains various
+ * settings for how the file should be rendered in the view, and preferences
+ * such as spaces vs tabs.
+ *
+ * Returns: (transfer none) (nullable): An #IdeFileSettings or %NULL.
+ */
+IdeFileSettings *
+ide_source_view_get_file_settings (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
+
+  return priv->file_settings;
 }
