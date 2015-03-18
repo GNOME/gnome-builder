@@ -60,5 +60,9 @@
     <key name="style-scheme-name" type="s">
       <default>"builder"</default>
     </key>
+    <key name="scroll-offset" type="i">
+      <range min="0" max="999"/>
+      <default>0</default>
+    </key>
   </schema>
 </schemalist>

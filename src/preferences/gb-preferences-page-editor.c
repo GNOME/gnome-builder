@@ -38,8 +38,10 @@ struct _GbPreferencesPageEditorPrivate
   GtkSwitch                         *smart_backspace_switch;
   GtkSwitch                         *smart_home_end_switch;
   GtkSwitch                         *show_grid_lines_switch;
+  GtkSpinButton                     *scroll_off_spin;
   GtkFontButton                     *font_button;
   GtkSourceStyleSchemeChooserButton *style_scheme_button;
+  GtkAdjustment                     *scroll_off_adjustment;
 
   /* Template widgets used for filtering */
   GtkWidget                         *restore_insert_mark_container;
@@ -51,6 +53,7 @@ struct _GbPreferencesPageEditorPrivate
   GtkWidget                         *smart_backspace_container;
   GtkWidget                         *smart_home_end_container;
   GtkWidget                         *show_grid_lines_container;
+  GtkWidget                         *scroll_off_container;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPageEditor, gb_preferences_page_editor,
@@ -118,6 +121,9 @@ gb_preferences_page_editor_constructed (GObject *object)
   g_settings_bind (priv->settings, "show-grid-lines",
                    priv->show_grid_lines_switch, "active",
                    G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (priv->settings, "scroll-offset",
+                   priv->scroll_off_adjustment, "value",
+                   G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (priv->settings, "font-name",
                    priv->font_button, "font-name",
                    G_SETTINGS_BIND_DEFAULT);
@@ -170,6 +176,8 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
   GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, smart_home_end_switch);
   GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, smart_backspace_switch);
   GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_grid_lines_switch);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, scroll_off_spin);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, scroll_off_adjustment);
 
   GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, restore_insert_mark_container);
   GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, word_completion_container);
@@ -180,6 +188,7 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
   GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, smart_home_end_container);
   GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, smart_backspace_container);
   GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_grid_lines_container);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, scroll_off_container);
 }
 
 static void
@@ -242,8 +251,14 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
                                                self->priv->show_grid_lines_container,
                                                self->priv->show_grid_lines_switch,
                                                NULL);
-  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("lines margin scrolloff scroll off"),
+                                               self->priv->scroll_off_container,
+                                               self->priv->scroll_off_spin,
+                                               NULL);
+  /* To translators: This is a list of keywords for the preferences page */
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
                                                _("font document editor monospace"),
                                                GTK_WIDGET (self->priv->font_button),
                                                NULL);
