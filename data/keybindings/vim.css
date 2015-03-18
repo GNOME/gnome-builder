@@ -936,10 +936,12 @@
 
   bind "x" { "copy-clipboard" ()
              "delete-selection" ()
-             "end-macro" () };
+             "end-macro" ()
+             "set-mode" ("vim-normal", permanent) };
   bind "<shift>x" { "copy-clipboard" ()
                     "delete-selection" ()
-                    "end-macro" () };
+                    "end-macro" ()
+                    "set-mode" ("vim-normal", permanent) };
 
   bind "h" { "movement" (previous-char, 1, 1, 1) };
   bind "l" { "movement" (next-char, 1, 1, 1) };
