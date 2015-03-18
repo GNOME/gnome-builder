@@ -78,6 +78,7 @@ enum {
 };
 
 enum {
+  CURSOR_MOVED,
   LINE_FLAGS_CHANGED,
   LOADED,
   LAST_SIGNAL
@@ -87,6 +88,19 @@ static void ide_buffer_queue_diagnose (IdeBuffer *self);
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
+
+static void
+ide_buffer_emit_cursor_moved (IdeBuffer *self)
+{
+  GtkTextMark *mark;
+  GtkTextIter iter;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self), &iter, mark);
+  g_signal_emit (self, gSignals [CURSOR_MOVED], 0, &iter);
+}
 
 static void
 ide_buffer_get_iter_at_location (IdeBuffer         *self,
@@ -515,6 +529,36 @@ ide_buffer_changed (GtkTextBuffer *buffer)
 }
 
 static void
+ide_buffer_delete_range (GtkTextBuffer *buffer,
+                         GtkTextIter   *start,
+                         GtkTextIter   *end)
+{
+  GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->delete_range (buffer, start, end);
+  ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
+}
+
+static void
+ide_buffer_insert_text (GtkTextBuffer *buffer,
+                        GtkTextIter   *location,
+                        const gchar   *text,
+                        gint           len)
+{
+  GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->insert_text (buffer, location, text, len);
+  ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
+}
+
+static void
+ide_buffer_mark_set (GtkTextBuffer     *buffer,
+                     const GtkTextIter *iter,
+                     GtkTextMark       *mark)
+{
+  GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->mark_set (buffer, iter, mark);
+
+  if ((G_UNLIKELY (mark == gtk_text_buffer_get_insert (buffer))))
+    ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
+}
+
+static void
 ide_buffer_constructed (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
@@ -657,6 +701,9 @@ ide_buffer_class_init (IdeBufferClass *klass)
   object_class->set_property = ide_buffer_set_property;
 
   text_buffer_class->changed = ide_buffer_changed;
+  text_buffer_class->delete_range = ide_buffer_delete_range;
+  text_buffer_class->insert_text = ide_buffer_insert_text;
+  text_buffer_class->mark_set = ide_buffer_mark_set;
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
@@ -702,6 +749,26 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_TITLE, gParamSpecs [PROP_TITLE]);
+
+  /**
+   * IdeBuffer::cursor-moved:
+   * @self: An #IdeBuffer.
+   * @location: A #GtkTextIter.
+   *
+   * This signal is emitted when the insertion location has moved. You might
+   * want to attach to this signal to update the location of the insert mark in
+   * the display.
+   */
+  gSignals [CURSOR_MOVED] =
+    g_signal_new ("cursor-moved",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeBufferClass, cursor_moved),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__BOXED,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_TEXT_ITER);
 
   /**
    * IdeBuffer::line-flags-changed:

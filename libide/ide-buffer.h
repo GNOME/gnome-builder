@@ -51,6 +51,9 @@ typedef enum
 struct _IdeBufferClass
 {
   GtkSourceBufferClass parent_class;
+
+  void (*cursor_moved) (IdeBuffer         *self,
+                        const GtkTextIter *location);
 };
 
 struct _IdeBuffer
