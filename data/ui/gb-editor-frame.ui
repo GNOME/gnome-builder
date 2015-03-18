@@ -12,6 +12,18 @@
             <property name="primary_label"></property>
             <property name="valign">end</property>
             <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel" id="overwrite_label">
+                <!-- translators: OVR indicates we are in overwite mode -->
+                <property name="label" translatable="yes">OVR</property>
+                <property name="margin-start">12</property>
+                <property name="visible">false</property>
+              </object>
+              <packing>
+                <property name="pack-type">start</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
           </object>
         </child>
         <child type="overlay">

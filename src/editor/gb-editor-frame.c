@@ -209,6 +209,7 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-frame.ui");
 
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, floating_bar);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, overwrite_label);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, scrolled_window);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, search_entry);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, search_revealer);
@@ -238,4 +239,6 @@ gb_editor_frame_init (GbEditorFrame *self)
   g_settings_bind_with_mapping (settings, "smart-home-end", self->source_view, "smart-home-end", G_SETTINGS_BIND_GET, get_smart_home_end, NULL, NULL, NULL);
   g_settings_bind (settings, "word-completion", self->source_view, "enable-word-completion", G_SETTINGS_BIND_GET);
   g_signal_connect (settings, "changed::keybindings", G_CALLBACK (keybindings_changed), self);
+
+  g_object_bind_property (self->source_view, "overwrite", self->overwrite_label, "visible", G_BINDING_SYNC_CREATE);
 }

@@ -164,6 +164,7 @@ enum {
   PROP_FONT_NAME,
   PROP_FONT_DESC,
   PROP_INSERT_MATCHING_BRACE,
+  PROP_OVERWRITE,
   PROP_OVERWRITE_BRACES,
   PROP_SCROLL_OFFSET,
   PROP_SEARCH_CONTEXT,
@@ -3007,6 +3008,7 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
   overwrite = ide_source_view_mode_get_block_cursor (priv->mode);
   if (overwrite != gtk_text_view_get_overwrite (GTK_TEXT_VIEW (self)))
     gtk_text_view_set_overwrite (GTK_TEXT_VIEW (self), overwrite);
+  g_object_notify (G_OBJECT (self), "overwrite");
 
   IDE_EXIT;
 }
@@ -4296,6 +4298,22 @@ ide_source_view_end_user_action (IdeSourceView *self)
   gtk_text_buffer_end_user_action (buffer);
 }
 
+static gboolean
+ide_source_view_get_overwrite (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  if (gtk_text_view_get_overwrite (GTK_TEXT_VIEW (self)))
+    {
+      if (!priv->mode || !ide_source_view_mode_get_block_cursor (priv->mode))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 ide_source_view_dispose (GObject *object)
 {
@@ -4367,6 +4385,10 @@ ide_source_view_get_property (GObject    *object,
 
     case PROP_INSERT_MATCHING_BRACE:
       g_value_set_boolean (value, ide_source_view_get_insert_matching_brace (self));
+      break;
+
+    case PROP_OVERWRITE:
+      g_value_set_boolean (value, ide_source_view_get_overwrite (self));
       break;
 
     case PROP_OVERWRITE_BRACES:
@@ -4444,6 +4466,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_INSERT_MATCHING_BRACE:
       ide_source_view_set_insert_matching_brace (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_OVERWRITE:
+      gtk_text_view_set_overwrite (GTK_TEXT_VIEW (self), g_value_get_boolean (value));
       break;
 
     case PROP_OVERWRITE_BRACES:
@@ -4598,6 +4624,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_INSERT_MATCHING_BRACE,
                                    gParamSpecs [PROP_INSERT_MATCHING_BRACE]);
+
+  g_object_class_override_property (object_class, PROP_OVERWRITE, "overwrite");
 
   gParamSpecs [PROP_OVERWRITE_BRACES] =
     g_param_spec_boolean ("overwrite-braces",
