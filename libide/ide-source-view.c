@@ -60,19 +60,6 @@
 #define ANIMATION_X_GROW  50
 #define ANIMATION_Y_GROW  30
 
-#define BEGIN_USER_ACTION(self) \
-  G_STMT_START { \
-    GtkTextBuffer *b = gtk_text_view_get_buffer(GTK_TEXT_VIEW(self)); \
-    IDE_TRACE_MSG ("begin_user_action()"); \
-    gtk_text_buffer_begin_user_action(b); \
-  } G_STMT_END
-#define END_USER_ACTION(self) \
-  G_STMT_START { \
-    GtkTextBuffer *b = gtk_text_view_get_buffer(GTK_TEXT_VIEW(self)); \
-    IDE_TRACE_MSG ("end_user_action()"); \
-    gtk_text_buffer_end_user_action(b); \
-  } G_STMT_END
-
 #define _GDK_RECTANGLE_X2(rect) ((rect)->x + (rect)->width)
 #define _GDK_RECTANGLE_Y2(rect) ((rect)->y + (rect)->height)
 #define _GDK_RECTANGLE_CONTAINS(rect,other) \
@@ -194,6 +181,7 @@ enum {
   APPEND_TO_COUNT,
   AUTO_INDENT,
   BEGIN_MACRO,
+  BEGIN_USER_ACTION,
   CAPTURE_MODIFIER,
   CLEAR_COUNT,
   CLEAR_MODIFIER,
@@ -202,6 +190,7 @@ enum {
   CYCLE_COMPLETION,
   DELETE_SELECTION,
   END_MACRO,
+  END_USER_ACTION,
   HIDE_COMPLETION,
   INDENT_SELECTION,
   INSERT_AT_CURSOR_AND_INDENT,
@@ -1404,9 +1393,10 @@ ide_source_view_connect_buffer (IdeSourceView *self,
   ide_source_view__buffer_notify_highlight_diagnostics_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_style_scheme_cb (self, NULL, buffer);
   ide_source_view_reload_word_completion (self);
+  ide_source_view_real_set_mode (self, NULL, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
 
   if (priv->mode && ide_source_view_mode_get_coalesce_undo (priv->mode))
-    BEGIN_USER_ACTION (self);
+    g_signal_emit_by_name (self, "begin-user-action");
 
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
   gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self), insert, 0.0, TRUE, 1.0, 0.5);
@@ -1432,6 +1422,9 @@ ide_source_view_disconnect_buffer (IdeSourceView *self,
   ide_clear_signal_handler (buffer, &priv->buffer_notify_style_scheme_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_loaded_handler);
 
+  if (priv->mode && ide_source_view_mode_get_coalesce_undo (priv->mode))
+    g_signal_emit_by_name (self, "end-user-action");
+
   g_clear_object (&priv->search_context);
 
   ide_source_view_set_indenter (self, NULL);
@@ -1444,6 +1437,8 @@ ide_source_view_notify_buffer (IdeSourceView *self,
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextBuffer *buffer;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
@@ -1467,6 +1462,8 @@ ide_source_view_notify_buffer (IdeSourceView *self,
           ide_source_view_connect_buffer (self, priv->buffer);
         }
     }
+
+  IDE_EXIT;
 }
 
 static gunichar
@@ -1910,7 +1907,7 @@ ide_source_view_do_mode (IdeSourceView *self,
           if (priv->mode == mode)
             {
               if (ide_source_view_mode_get_coalesce_undo (mode))
-                END_USER_ACTION (self);
+                g_signal_emit_by_name (self, "end-user-action");
               g_clear_object (&priv->mode);
             }
         }
@@ -2303,6 +2300,8 @@ ide_source_view_real_action (IdeSourceView *self,
 {
   GVariant *variant = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
   if (*param != 0)
@@ -2320,6 +2319,8 @@ ide_source_view_real_action (IdeSourceView *self,
     }
 
   activate_action (GTK_WIDGET (self), prefix, action_name, variant);
+
+  IDE_EXIT;
 }
 
 static void
@@ -2958,6 +2959,9 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
+  if (!priv->buffer)
+    return;
+
 #ifndef IDE_DISABLE_TRACE
   {
     const gchar *old_mode = "null";
@@ -2981,7 +2985,7 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
 
       g_clear_object (&priv->mode);
       if (ide_source_view_mode_get_coalesce_undo (old_mode))
-        END_USER_ACTION (self);
+        g_signal_emit_by_name (self, "end-user-action");
       g_object_unref (old_mode);
     }
 
@@ -2998,7 +3002,7 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
   priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), mode, type);
 
   if (ide_source_view_mode_get_coalesce_undo (priv->mode))
-    BEGIN_USER_ACTION (self);
+    g_signal_emit_by_name (self, "begin-user-action");
 
   overwrite = ide_source_view_mode_get_block_cursor (priv->mode);
   if (overwrite != gtk_text_view_get_overwrite (GTK_TEXT_VIEW (self)))
@@ -3558,10 +3562,10 @@ ide_source_view_real_undo (GtkSourceView *source_view)
   gboolean needs_unlock = !!priv->mode;
 
   if (needs_unlock)
-    END_USER_ACTION (self);
+    g_signal_emit_by_name (self, "end-user-action");
   GTK_SOURCE_VIEW_CLASS (ide_source_view_parent_class)->undo (source_view);
   if (needs_unlock)
-    BEGIN_USER_ACTION (self);
+    g_signal_emit_by_name (self, "begin-user-action");
 }
 
 static void
@@ -3572,10 +3576,10 @@ ide_source_view_real_redo (GtkSourceView *source_view)
   gboolean needs_unlock = !!priv->mode;
 
   if (needs_unlock)
-    END_USER_ACTION (self);
+    g_signal_emit_by_name (self, "end-user-action");
   GTK_SOURCE_VIEW_CLASS (ide_source_view_parent_class)->redo (source_view);
   if (needs_unlock)
-    BEGIN_USER_ACTION (self);
+    g_signal_emit_by_name (self, "begin-user-action");
 }
 
 static void
@@ -4271,6 +4275,28 @@ ide_source_view_real_replay_macro (IdeSourceView *self,
 }
 
 static void
+ide_source_view_begin_user_action (IdeSourceView *self)
+{
+  GtkTextBuffer *buffer;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  gtk_text_buffer_begin_user_action (buffer);
+}
+
+static void
+ide_source_view_end_user_action (IdeSourceView *self)
+{
+  GtkTextBuffer *buffer;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  gtk_text_buffer_end_user_action (buffer);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -4718,6 +4744,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  gSignals [BEGIN_USER_ACTION] =
+    g_signal_new_class_handler ("begin-user-action",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_source_view_begin_user_action),
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__VOID,
+                                G_TYPE_NONE,
+                                0);
+
   /**
    * IdeSourceView::capture-modifier:
    *
@@ -4822,6 +4858,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+
+  gSignals [END_USER_ACTION] =
+    g_signal_new_class_handler ("end-user-action",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (ide_source_view_end_user_action),
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__VOID,
+                                G_TYPE_NONE,
+                                0);
 
   gSignals [HIDE_COMPLETION] =
     g_signal_new ("hide-completion",
