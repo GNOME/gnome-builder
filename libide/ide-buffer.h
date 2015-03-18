@@ -36,6 +36,8 @@ G_BEGIN_DECLS
 #define IDE_BUFFER_LINE_FLAGS_DIAGNOSTICS_MASK \
   ((IDE_BUFFER_LINE_FLAGS_ERROR | IDE_BUFFER_LINE_FLAGS_WARNING | IDE_BUFFER_LINE_FLAGS_NOTE))
 
+typedef struct _IdeBufferClass IdeBufferClass;
+
 typedef enum
 {
   IDE_BUFFER_LINE_FLAGS_NONE     = 0,
@@ -45,6 +47,16 @@ typedef enum
   IDE_BUFFER_LINE_FLAGS_WARNING  = 1 << 3,
   IDE_BUFFER_LINE_FLAGS_NOTE     = 1 << 4,
 } IdeBufferLineFlags;
+
+struct _IdeBufferClass
+{
+  GtkSourceBufferClass parent_class;
+};
+
+struct _IdeBuffer
+{
+  GtkSourceBuffer parent_instance;
+};
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeBuffer, g_object_unref)
 

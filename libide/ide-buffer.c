@@ -45,15 +45,8 @@
 
 #define TEXT_ITER_IS_SPACE(ptr) g_unichar_isspace(gtk_text_iter_get_char(ptr))
 
-typedef struct _IdeBufferClass
+typedef struct
 {
-  GtkSourceBufferClass parent;
-} IdeBufferClass;
-
-struct _IdeBuffer
-{
-  GtkSourceBuffer         parent_instance;
-
   IdeContext             *context;
   IdeDiagnostics         *diagnostics;
   GHashTable             *diagnostics_line_cache;
@@ -70,9 +63,9 @@ struct _IdeBuffer
   guint                   highlight_diagnostics : 1;
   guint                   in_diagnose : 1;
   guint                   loading : 1;
-};
+} IdeBufferPrivate;
 
-G_DEFINE_TYPE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
 
 enum {
   PROP_0,
@@ -123,11 +116,13 @@ static void
 ide_buffer_set_context (IdeBuffer  *self,
                         IdeContext *context)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
-  g_return_if_fail (self->context == NULL);
+  g_return_if_fail (priv->context == NULL);
 
-  ide_set_weak_pointer (&self->context, context);
+  ide_set_weak_pointer (&priv->context, context);
 }
 
 static void
@@ -144,14 +139,15 @@ ide_buffer_sync_to_unsaved_files (IdeBuffer *self)
 static void
 ide_buffer_clear_diagnostics (IdeBuffer *self)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   GtkTextBuffer *buffer = (GtkTextBuffer *)self;
   GtkTextIter begin;
   GtkTextIter end;
 
   g_assert (IDE_IS_BUFFER (self));
 
-  if (self->diagnostics_line_cache)
-    g_hash_table_remove_all (self->diagnostics_line_cache);
+  if (priv->diagnostics_line_cache)
+    g_hash_table_remove_all (priv->diagnostics_line_cache);
 
   gtk_text_buffer_get_bounds (buffer, &begin, &end);
 
@@ -166,6 +162,7 @@ ide_buffer_cache_diagnostic_line (IdeBuffer             *self,
                                   IdeSourceLocation     *end,
                                   IdeDiagnosticSeverity  severity)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   gpointer new_value = GINT_TO_POINTER (severity);
   gsize line_begin;
   gsize line_end;
@@ -175,7 +172,7 @@ ide_buffer_cache_diagnostic_line (IdeBuffer             *self,
   g_assert (begin);
   g_assert (end);
 
-  if (!self->diagnostics_line_cache)
+  if (!priv->diagnostics_line_cache)
     return;
 
   line_begin = MIN (ide_source_location_get_line (begin),
@@ -188,10 +185,10 @@ ide_buffer_cache_diagnostic_line (IdeBuffer             *self,
       gpointer old_value;
       gpointer key = GINT_TO_POINTER (i);
 
-      old_value = g_hash_table_lookup (self->diagnostics_line_cache, key);
+      old_value = g_hash_table_lookup (priv->diagnostics_line_cache, key);
 
       if (new_value > old_value)
-        g_hash_table_replace (self->diagnostics_line_cache, key, new_value);
+        g_hash_table_replace (priv->diagnostics_line_cache, key, new_value);
     }
 }
 
@@ -199,6 +196,7 @@ static void
 ide_buffer_update_diagnostic (IdeBuffer     *self,
                               IdeDiagnostic *diagnostic)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   IdeDiagnosticSeverity severity;
   const gchar *tag_name = NULL;
   IdeSourceLocation *location;
@@ -238,7 +236,7 @@ ide_buffer_update_diagnostic (IdeBuffer     *self,
 
       file = ide_source_location_get_file (location);
 
-      if (file && self->file && !ide_file_equal (file, self->file))
+      if (file && priv->file && !ide_file_equal (file, priv->file))
         {
           /* Ignore? */
         }
@@ -272,7 +270,7 @@ ide_buffer_update_diagnostic (IdeBuffer     *self,
 
       file = ide_source_location_get_file (begin);
 
-      if (file && self->file && !ide_file_equal (file, self->file))
+      if (file && priv->file && !ide_file_equal (file, priv->file))
         {
           /* Ignore */
         }
@@ -319,12 +317,14 @@ static void
 ide_buffer_set_diagnostics (IdeBuffer      *self,
                             IdeDiagnostics *diagnostics)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_assert (IDE_IS_BUFFER (self));
 
-  if (diagnostics != self->diagnostics)
+  if (diagnostics != priv->diagnostics)
     {
-      g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
-      self->diagnostics = diagnostics ? ide_diagnostics_ref (diagnostics) : NULL;
+      g_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
+      priv->diagnostics = diagnostics ? ide_diagnostics_ref (diagnostics) : NULL;
 
       ide_buffer_clear_diagnostics (self);
 
@@ -366,13 +366,14 @@ ide_buffer__diagnostician_diagnose_cb (GObject      *object,
 {
   IdeDiagnostician *diagnostician = (IdeDiagnostician *)object;
   g_autoptr(IdeBuffer) self = user_data;
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   g_autoptr(IdeDiagnostics) diagnostics = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_DIAGNOSTICIAN (diagnostician));
   g_assert (IDE_IS_BUFFER (self));
 
-  self->in_diagnose = FALSE;
+  priv->in_diagnose = FALSE;
 
   diagnostics = ide_diagnostician_diagnose_finish (diagnostician, result, &error);
 
@@ -381,7 +382,7 @@ ide_buffer__diagnostician_diagnose_cb (GObject      *object,
 
   ide_buffer_set_diagnostics (self, diagnostics);
 
-  if (self->diagnostics_dirty)
+  if (priv->diagnostics_dirty)
     ide_buffer_queue_diagnose (self);
 }
 
@@ -389,16 +390,17 @@ static gboolean
 ide_buffer__diagnose_timeout_cb (gpointer user_data)
 {
   IdeBuffer *self = user_data;
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
   g_assert (IDE_IS_BUFFER (self));
 
-  self->diagnose_timeout = 0;
+  priv->diagnose_timeout = 0;
 
-  if (self->file)
+  if (priv->file)
     {
       IdeLanguage *language;
 
-      language = ide_file_get_language (self->file);
+      language = ide_file_get_language (priv->file);
 
       if (language)
         {
@@ -408,11 +410,11 @@ ide_buffer__diagnose_timeout_cb (gpointer user_data)
 
           if (diagnostician)
             {
-              self->diagnostics_dirty = FALSE;
-              self->in_diagnose = TRUE;
+              priv->diagnostics_dirty = FALSE;
+              priv->in_diagnose = TRUE;
 
               ide_buffer_sync_to_unsaved_files (self);
-              ide_diagnostician_diagnose_async (diagnostician, self->file, NULL,
+              ide_diagnostician_diagnose_async (diagnostician, priv->file, NULL,
                                                 ide_buffer__diagnostician_diagnose_cb,
                                                 g_object_ref (self));
             }
@@ -436,16 +438,17 @@ ide_buffer_get_diagnose_timeout_msec (void)
 static void
 ide_buffer_queue_diagnose (IdeBuffer *self)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   guint timeout_msec;
 
   g_assert (IDE_IS_BUFFER (self));
 
-  self->diagnostics_dirty = TRUE;
+  priv->diagnostics_dirty = TRUE;
 
-  if (self->diagnose_timeout != 0)
+  if (priv->diagnose_timeout != 0)
     {
-      g_source_remove (self->diagnose_timeout);
-      self->diagnose_timeout = 0;
+      g_source_remove (priv->diagnose_timeout);
+      priv->diagnose_timeout = 0;
     }
 
   /*
@@ -453,7 +456,7 @@ ide_buffer_queue_diagnose (IdeBuffer *self)
    */
   timeout_msec = ide_buffer_get_diagnose_timeout_msec ();
 
-  self->diagnose_timeout = g_timeout_add (timeout_msec, ide_buffer__diagnose_timeout_cb, self);
+  priv->diagnose_timeout = g_timeout_add (timeout_msec, ide_buffer__diagnose_timeout_cb, self);
 }
 
 static void
@@ -469,22 +472,24 @@ ide_buffer__change_monitor_changed_cb (IdeBuffer              *self,
 static void
 ide_buffer_reload_change_monitor (IdeBuffer *self)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_assert (IDE_IS_BUFFER (self));
 
-  if (self->change_monitor)
+  if (priv->change_monitor)
     {
-      ide_clear_signal_handler (self->change_monitor, &self->change_monitor_changed_handler);
-      g_clear_object (&self->change_monitor);
+      ide_clear_signal_handler (priv->change_monitor, &priv->change_monitor_changed_handler);
+      g_clear_object (&priv->change_monitor);
     }
 
-  if (self->context && self->file)
+  if (priv->context && priv->file)
     {
       IdeVcs *vcs;
 
-      vcs = ide_context_get_vcs (self->context);
-      self->change_monitor = ide_vcs_get_buffer_change_monitor (vcs, self);
-      self->change_monitor_changed_handler =
-        g_signal_connect_object (self->change_monitor,
+      vcs = ide_context_get_vcs (priv->context);
+      priv->change_monitor = ide_vcs_get_buffer_change_monitor (vcs, self);
+      priv->change_monitor_changed_handler =
+        g_signal_connect_object (priv->change_monitor,
                                  "changed",
                                  G_CALLBACK (ide_buffer__change_monitor_changed_cb),
                                  self,
@@ -497,14 +502,15 @@ static void
 ide_buffer_changed (GtkTextBuffer *buffer)
 {
   IdeBuffer *self = (IdeBuffer *)buffer;
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->changed (buffer);
 
-  self->diagnostics_dirty = TRUE;
+  priv->diagnostics_dirty = TRUE;
 
-  g_clear_pointer (&self->content, g_bytes_unref);
+  g_clear_pointer (&priv->content, g_bytes_unref);
 
-  if (self->highlight_diagnostics && !self->in_diagnose)
+  if (priv->highlight_diagnostics && !priv->in_diagnose)
     ide_buffer_queue_diagnose (self);
 }
 
@@ -530,26 +536,27 @@ static void
 ide_buffer_dispose (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
   IDE_ENTRY;
 
-  if (self->diagnose_timeout)
+  if (priv->diagnose_timeout)
     {
-      g_source_remove (self->diagnose_timeout);
-      self->diagnose_timeout = 0;
+      g_source_remove (priv->diagnose_timeout);
+      priv->diagnose_timeout = 0;
     }
 
-  if (self->change_monitor)
+  if (priv->change_monitor)
     {
-      ide_clear_signal_handler (self->change_monitor, &self->change_monitor_changed_handler);
-      g_clear_object (&self->change_monitor);
+      ide_clear_signal_handler (priv->change_monitor, &priv->change_monitor_changed_handler);
+      g_clear_object (&priv->change_monitor);
     }
 
-  g_clear_pointer (&self->diagnostics_line_cache, g_hash_table_unref);
-  g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
-  g_clear_pointer (&self->content, g_bytes_unref);
-  g_clear_pointer (&self->title, g_free);
-  g_clear_object (&self->file);
+  g_clear_pointer (&priv->diagnostics_line_cache, g_hash_table_unref);
+  g_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
+  g_clear_pointer (&priv->content, g_bytes_unref);
+  g_clear_pointer (&priv->title, g_free);
+  g_clear_object (&priv->file);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
 
@@ -560,10 +567,11 @@ static void
 ide_buffer_finalize (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
   IDE_ENTRY;
 
-  ide_clear_weak_pointer (&self->context);
+  ide_clear_weak_pointer (&priv->context);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->finalize (object);
 
@@ -730,9 +738,11 @@ ide_buffer_class_init (IdeBufferClass *klass)
 static void
 ide_buffer_init (IdeBuffer *self)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   IDE_ENTRY;
 
-  self->diagnostics_line_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
+  priv->diagnostics_line_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   IDE_EXIT;
 }
@@ -740,27 +750,28 @@ ide_buffer_init (IdeBuffer *self)
 static void
 ide_buffer_update_title (IdeBuffer *self)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   g_autofree gchar *title = NULL;
 
   g_return_if_fail (IDE_IS_BUFFER (self));
 
-  if (self->file)
+  if (priv->file)
     {
       GFile *workdir;
       GFile *gfile;
       IdeVcs *vcs;
 
-      vcs = ide_context_get_vcs (self->context);
+      vcs = ide_context_get_vcs (priv->context);
       workdir = ide_vcs_get_working_directory (vcs);
-      gfile = ide_file_get_file (self->file);
+      gfile = ide_file_get_file (priv->file);
 
       title = g_file_get_relative_path (workdir, gfile);
       if (!title)
         title = g_file_get_path (gfile);
     }
 
-  g_clear_pointer (&self->title, g_free);
-  self->title = g_strdup (title);
+  g_clear_pointer (&priv->title, g_free);
+  priv->title = g_strdup (title);
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TITLE]);
 }
 
@@ -774,9 +785,11 @@ ide_buffer_update_title (IdeBuffer *self)
 IdeFile *
 ide_buffer_get_file (IdeBuffer *self)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
-  return self->file;
+  return priv->file;
 }
 
 /**
@@ -788,12 +801,14 @@ void
 ide_buffer_set_file (IdeBuffer *self,
                      IdeFile   *file)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (IDE_IS_FILE (file));
 
-  if (g_set_object (&self->file, file))
+  if (g_set_object (&priv->file, file))
     {
-      ide_file_load_settings_async (self->file,
+      ide_file_load_settings_async (priv->file,
                                     NULL,
                                     ide_buffer__file_load_settings_cb,
                                     g_object_ref (self));
@@ -813,24 +828,27 @@ ide_buffer_set_file (IdeBuffer *self,
 IdeContext *
 ide_buffer_get_context (IdeBuffer *self)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
-  return self->context;
+  return priv->context;
 }
 
 IdeBufferLineFlags
 ide_buffer_get_line_flags (IdeBuffer *self,
                            guint      line)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   IdeBufferLineFlags flags = 0;
   IdeBufferLineChange change = 0;
 
-  if (self->diagnostics_line_cache)
+  if (priv->diagnostics_line_cache)
     {
       gpointer key = GINT_TO_POINTER (line);
       gpointer value;
 
-      value = g_hash_table_lookup (self->diagnostics_line_cache, key);
+      value = g_hash_table_lookup (priv->diagnostics_line_cache, key);
 
       switch (GPOINTER_TO_INT (value))
         {
@@ -852,12 +870,12 @@ ide_buffer_get_line_flags (IdeBuffer *self,
         }
     }
 
-  if (self->change_monitor)
+  if (priv->change_monitor)
     {
       GtkTextIter iter;
 
       gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self), &iter, line);
-      change = ide_buffer_change_monitor_get_change (self->change_monitor, &iter);
+      change = ide_buffer_change_monitor_get_change (priv->change_monitor, &iter);
 
       switch (change)
         {
@@ -881,22 +899,26 @@ ide_buffer_get_line_flags (IdeBuffer *self,
 gboolean
 ide_buffer_get_highlight_diagnostics (IdeBuffer *self)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
-  return self->highlight_diagnostics;
+  return priv->highlight_diagnostics;
 }
 
 void
 ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
                                       gboolean   highlight_diagnostics)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   highlight_diagnostics = !!highlight_diagnostics;
 
-  if (highlight_diagnostics != self->highlight_diagnostics)
+  if (highlight_diagnostics != priv->highlight_diagnostics)
     {
-      self->highlight_diagnostics = highlight_diagnostics;
+      priv->highlight_diagnostics = highlight_diagnostics;
       if (!highlight_diagnostics)
         ide_buffer_clear_diagnostics (self);
       else
@@ -916,10 +938,12 @@ IdeDiagnostic *
 ide_buffer_get_diagnostic_at_iter (IdeBuffer         *self,
                                    const GtkTextIter *iter)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
   g_return_val_if_fail (iter, NULL);
 
-  if (self->diagnostics)
+  if (priv->diagnostics)
     {
       IdeDiagnostic *diagnostic = NULL;
       IdeBufferLineFlags flags;
@@ -934,7 +958,7 @@ ide_buffer_get_diagnostic_at_iter (IdeBuffer         *self,
       if ((flags & IDE_BUFFER_LINE_FLAGS_DIAGNOSTICS_MASK) == 0)
         return NULL;
 
-      size = ide_diagnostics_get_size (self->diagnostics);
+      size = ide_diagnostics_get_size (priv->diagnostics);
 
       for (i = 0; i < size; i++)
         {
@@ -942,7 +966,7 @@ ide_buffer_get_diagnostic_at_iter (IdeBuffer         *self,
           IdeSourceLocation *location;
           GtkTextIter pos;
 
-          diag = ide_diagnostics_index (self->diagnostics, i);
+          diag = ide_diagnostics_index (priv->diagnostics, i);
           location = ide_diagnostic_get_location (diag);
           if (!location)
             continue;
@@ -985,9 +1009,11 @@ ide_buffer_get_diagnostic_at_iter (IdeBuffer         *self,
 GBytes *
 ide_buffer_get_content (IdeBuffer *self)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
-  if (!self->content)
+  if (!priv->content)
     {
       IdeUnsavedFiles *unsaved_files;
       gchar *text;
@@ -1009,23 +1035,24 @@ ide_buffer_get_content (IdeBuffer *self)
       if (gtk_source_buffer_get_implicit_trailing_newline (GTK_SOURCE_BUFFER (self)))
         text [len++] = '\n';
 
-      self->content = g_bytes_new_take (text, len);
+      priv->content = g_bytes_new_take (text, len);
 
-      if ((self->context != NULL) &&
-          (self->file != NULL) &&
-          (gfile = ide_file_get_file (self->file)))
+      if ((priv->context != NULL) &&
+          (priv->file != NULL) &&
+          (gfile = ide_file_get_file (priv->file)))
         {
-          unsaved_files = ide_context_get_unsaved_files (self->context);
-          ide_unsaved_files_update (unsaved_files, gfile, self->content);
+          unsaved_files = ide_context_get_unsaved_files (priv->context);
+          ide_unsaved_files_update (unsaved_files, gfile, priv->content);
         }
     }
 
-  return g_bytes_ref (self->content);
+  return g_bytes_ref (priv->content);
 }
 
 void
 ide_buffer_trim_trailing_whitespace  (IdeBuffer *self)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   gint line;
@@ -1040,12 +1067,12 @@ ide_buffer_trim_trailing_whitespace  (IdeBuffer *self)
     {
       IdeBufferLineChange change = IDE_BUFFER_LINE_CHANGE_CHANGED;
 
-      if (self->change_monitor)
+      if (priv->change_monitor)
         {
           GtkTextIter tmp;
 
           gtk_text_buffer_get_iter_at_line (buffer, &tmp, line);
-          change = ide_buffer_change_monitor_get_change (self->change_monitor, &tmp);
+          change = ide_buffer_change_monitor_get_change (priv->change_monitor, &tmp);
         }
 
       if (change != IDE_BUFFER_LINE_CHANGE_NONE)
@@ -1086,9 +1113,11 @@ ide_buffer_trim_trailing_whitespace  (IdeBuffer *self)
 const gchar *
 ide_buffer_get_title (IdeBuffer *self)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
-  return self->title;
+  return priv->title;
 }
 
 const gchar *
@@ -1124,29 +1153,33 @@ ide_buffer_set_style_scheme_name (IdeBuffer   *self,
 gboolean
 _ide_buffer_get_loading (IdeBuffer *self)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
-  return self->loading;
+  return priv->loading;
 }
 
 void
 _ide_buffer_set_loading (IdeBuffer *self,
                          gboolean   loading)
 {
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   loading = !!loading;
 
-  if (self->loading != loading)
+  if (priv->loading != loading)
     {
-      self->loading = loading;
+      priv->loading = loading;
 
       /*
        * TODO: We probably want some sort of state rather than this boolean value.
        *       But that can come later after we get plumbing hooked up.
        */
 
-      if (!self->loading)
+      if (!priv->loading)
         {
           IdeLanguage *language;
           GtkSourceLanguage *srclang;
@@ -1157,7 +1190,7 @@ _ide_buffer_set_loading (IdeBuffer *self,
            * contents provides us the opportunity to inspect file contents and get a more
            * accurate content-type).
            */
-          language = ide_file_get_language (self->file);
+          language = ide_file_get_language (priv->file);
           srclang = ide_language_get_source_language (language);
           current = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self));
           if (current != srclang)
