@@ -309,12 +309,16 @@
                     "clear-count" () };
 
   /* undo - todo: how do we land cursor on right spot? */
-  bind "u" { "undo" ()
+  bind "u" { "end-user-action" ()
+             "undo" ()
+             "begin-user-action" ()
              "clear-count" ()
-             "clear-selection" () };
+             "clear-selection" ()};
 
   /* redo */
-  bind "<ctrl>r" { "redo" ()
+  bind "<ctrl>r" { "end-user-action" ()
+                   "redo" ()
+                   "begin-user-action" ()
                    "clear-count" ()
                    "clear-selection" () };
 
