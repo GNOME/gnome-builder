@@ -348,7 +348,7 @@ ide_file_settings_get_property (GObject    *object,
       break;
 
     case PROP_INDENT_WIDTH:
-      g_value_set_uint (value, ide_file_settings_get_indent_width (self));
+      g_value_set_int (value, ide_file_settings_get_indent_width (self));
       break;
 
     case PROP_INSERT_TRAILING_NEWLINE:
