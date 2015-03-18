@@ -54,6 +54,8 @@
 #include "ide-source-view-mode.h"
 #include "ide-source-view-movements.h"
 
+#include "modeline-parser.h"
+
 #define DEFAULT_FONT_DESC "Monospace 11"
 #define ANIMATION_X_GROW  50
 #define ANIMATION_Y_GROW  30
@@ -834,6 +836,8 @@ ide_source_view_connect_settings (IdeSourceView   *self,
                                                             G_BINDING_SYNC_CREATE,
                                                             transform_indent_style_to_boolean,
                                                             NULL, NULL, NULL);
+
+  modeline_parser_apply_modeline (GTK_SOURCE_VIEW (self));
 }
 
 static void
