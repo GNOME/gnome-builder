@@ -93,7 +93,7 @@ enum {
 static void ide_buffer_queue_diagnose (IdeBuffer *self);
 
 static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LINE_FLAGS_CHANGED];
+static guint gSignals [LAST_SIGNAL];
 
 static void
 ide_buffer_get_iter_at_location (IdeBuffer         *self,
