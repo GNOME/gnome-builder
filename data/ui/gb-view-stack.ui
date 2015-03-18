@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.15 -->
+  <template class="GbViewStack" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="notebook"/>
+              <class name="header"/>
+            </style>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="visible">true</property>
+                <property name="margin-bottom">3</property>
+                <property name="margin-end">6</property>
+                <property name="margin-start">6</property>
+                <property name="margin-top">3</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="linked"/>
+                    </style>
+                    <child>
+                      <object class="GtkButton" id="go_backward">
+                        <property name="visible">true</property>
+                        <property name="action-name">navigation.go-backward</property>
+                        <style>
+                          <class name="flat"/>
+                          <class name="image-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">go-previous-symbolic</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="go_forward">
+                        <property name="visible">true</property>
+                        <property name="action-name">navigation.go-forkward</property>
+                        <style>
+                          <class name="flat"/>
+                          <class name="image-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">go-next-symbolic</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="center">
+                  <object class="GtkMenuButton">
+                    <property name="hexpand">true</property>
+                    <property name="popover">popover</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="dim-label"/>
+                      <class name="flat"/>
+                      <class name="text-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkLabel" id="title_label">
+                        <property name="visible">true</property>
+                        <property name="width-chars">40</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="dim-label"/>
+                      <class name="image-button"/>
+                      <class name="flat"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">true</property>
+                        <property name="icon-name">window-close-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkStack" id="controls_stack">
+                    <property name="visible">true</property>
+                  </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="hexpand">true</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkPopover" id="popover">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <property name="visible">true</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-end">12</property>
+            <property name="margin-start">12</property>
+            <property name="spacing">6</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel" id="split_label">
+                <property name="label" translatable="yes">Split</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">true</property>
+                <property name="margin-start">6</property>
+                <style>
+                  <class name="linked"/>
+                </style>
+                <child>
+                  <object class="GtkButton">
+                    <property name="visible">true</property>
+                    <property name="action-name">view.split-left</property>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">true</property>
+                        <property name="icon-name">builder-split-left-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="visible">true</property>
+                    <property name="action-name">view.split-right</property>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">true</property>
+                        <property name="icon-name">builder-split-right-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">true</property>
+                <property name="action-name">view.split-down</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">true</property>
+                    <property name="icon-name">builder-split-tab-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-end">12</property>
+            <property name="margin-start">12</property>
+            <property name="spacing">6</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel" id="move_label">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Move</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="hexpand">true</property>
+                <property name="margin-start">6</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="linked"/>
+                </style>
+                <child>
+                  <object class="GtkButton">
+                    <property name="action-name">view.move-left</property>
+                    <property name="hexpand">true</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">true</property>
+                        <property name="icon-name">builder-move-left-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="action-name">view.move-right</property>
+                    <property name="hexpand">true</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">true</property>
+                        <property name="icon-name">builder-move-right-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkModelButton">
+                <property name="action-name">view.save</property>
+                <property name="halign">fill</property>
+                <property name="hexpand">true</property>
+                <property name="text" translatable="yes">Save</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="action-name">view.save-as</property>
+                <property name="halign">fill</property>
+                <property name="hexpand">true</property>
+                <property name="text" translatable="yes">Save As</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="halign">fill</property>
+            <property name="hexpand">true</property>
+            <property name="action-name">view.close</property>
+            <property name="text" translatable="yes">Close</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="split_label"/>
+      <widget name="move_label"/>
+    </widgets>
+  </object>
+</interface>

@@ -99,7 +99,7 @@ ide_log_level_str (GLogLevelFlags log_level)
  */
 static void
 ide_log_write_to_channel (GIOChannel  *channel,
-                         const gchar *message)
+                          const gchar *message)
 {
   g_io_channel_write_chars (channel, message, -1, NULL, NULL);
   g_io_channel_flush (channel, NULL);

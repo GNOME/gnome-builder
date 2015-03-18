@@ -20,11 +20,11 @@
 
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksourcefile.h>
+#include <ide.h>
 #include <webkit2/webkit2.h>
 
 #include "gb-editor-document.h"
 #include "gb-html-view.h"
-#include "gb-log.h"
 
 struct _GbHtmlViewPrivate
 {
@@ -61,7 +61,7 @@ gb_html_view_changed (GbHtmlView    *view,
   gchar *content;
   gchar *base_uri = NULL;
 
-  ENTRY;
+  IDE_ENTRY;
 
   g_return_if_fail (GB_IS_HTML_VIEW (view));
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
@@ -91,7 +91,7 @@ gb_html_view_changed (GbHtmlView    *view,
   g_free (content);
   g_free (base_uri);
 
-  EXIT;
+  IDE_EXIT;
 }
 
 static void

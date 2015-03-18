@@ -25,14 +25,15 @@
 #include "gb-string.h"
 #include "gb-widget.h"
 
-struct _GbEditorTweakWidgetPrivate
+struct _GbEditorTweakWidget
 {
+  GtkBin          parent_instance;
+
   GtkSearchEntry *entry;
   GtkListBox     *list_box;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbEditorTweakWidget, gb_editor_tweak_widget,
-                            GTK_TYPE_BIN)
+G_DEFINE_TYPE (GbEditorTweakWidget, gb_editor_tweak_widget, GTK_TYPE_BIN)
 
 static GQuark gLangQuark;
 
@@ -67,55 +68,36 @@ gb_editor_tweak_widget_filter_func (GtkListBoxRow *row,
 }
 
 static void
-gb_editor_tweak_widget_entry_changed (GbEditorTweakWidget *widget,
+gb_editor_tweak_widget_entry_changed (GbEditorTweakWidget *self,
                                       GtkEntry            *entry)
 {
   const gchar *text;
 
-  g_return_if_fail (GB_IS_EDITOR_TWEAK_WIDGET (widget));
+  g_return_if_fail (GB_IS_EDITOR_TWEAK_WIDGET (self));
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   text = gtk_entry_get_text (entry);
 
   if (gb_str_empty0 (text))
-    gtk_list_box_set_filter_func (widget->priv->list_box, NULL, NULL, NULL);
+    gtk_list_box_set_filter_func (self->list_box, NULL, NULL, NULL);
   else
-    gtk_list_box_set_filter_func (widget->priv->list_box,
+    gtk_list_box_set_filter_func (self->list_box,
                                   gb_editor_tweak_widget_filter_func,
                                   g_strdup (text),
                                   g_free);
 }
 
-static GActionGroup *
-find_action_group (GtkWidget   *widget,
-                   const gchar *name)
-{
-  GActionGroup *group = NULL;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (name, NULL);
-
-  while (!group && widget)
-    {
-      group = gtk_widget_get_action_group (widget, name);
-      widget = gtk_widget_get_parent (widget);
-    }
-
-  return group;
-}
-
 static void
-gb_editor_tweak_widget_row_activated (GbEditorTweakWidget *widget,
+gb_editor_tweak_widget_row_activated (GbEditorTweakWidget *self,
                                       GtkListBoxRow       *row,
                                       GtkListBox          *list_box)
 {
   GtkSourceLanguage *lang;
-  GActionGroup *group;
   const gchar *lang_id;
   GtkWidget *child;
   GVariant *param;
 
-  g_return_if_fail (GB_IS_EDITOR_TWEAK_WIDGET (widget));
+  g_return_if_fail (GB_IS_EDITOR_TWEAK_WIDGET (self));
   g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
 
@@ -124,23 +106,22 @@ gb_editor_tweak_widget_row_activated (GbEditorTweakWidget *widget,
 
   if (lang)
     {
-      group = find_action_group (GTK_WIDGET (widget), "editor-view");
       lang_id = gtk_source_language_get_id (lang);
       param = g_variant_new_string (lang_id);
-      g_action_group_activate_action (group, "language", param);
+      gb_widget_activate_action (GTK_WIDGET (self), "editor-view", "language", param);
     }
 }
 
 static void
 gb_editor_tweak_widget_constructed (GObject *object)
 {
-  GbEditorTweakWidget *widget = (GbEditorTweakWidget *)object;
+  GbEditorTweakWidget *self = (GbEditorTweakWidget *)object;
   GtkSourceLanguageManager *manager;
   GtkSourceLanguage *lang;
   const gchar * const *lang_ids;
   guint i;
 
-  g_return_if_fail (GB_IS_EDITOR_TWEAK_WIDGET (widget));
+  g_return_if_fail (GB_IS_EDITOR_TWEAK_WIDGET (self));
 
   G_OBJECT_CLASS (gb_editor_tweak_widget_parent_class)->constructed (object);
 
@@ -162,19 +143,19 @@ gb_editor_tweak_widget_constructed (GObject *object)
                           "margin-bottom", 3,
                           NULL);
       g_object_set_qdata (G_OBJECT (row), gLangQuark, lang);
-      gtk_list_box_insert (widget->priv->list_box, row, -1);
+      gtk_list_box_insert (self->list_box, row, -1);
     }
 
-  g_signal_connect_object (widget->priv->entry,
+  g_signal_connect_object (self->entry,
                            "changed",
                            G_CALLBACK (gb_editor_tweak_widget_entry_changed),
-                           widget,
+                           self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (widget->priv->list_box,
+  g_signal_connect_object (self->list_box,
                            "row-activated",
                            G_CALLBACK (gb_editor_tweak_widget_row_activated),
-                           widget,
+                           self,
                            G_CONNECT_SWAPPED);
 }
 
@@ -195,7 +176,5 @@ gb_editor_tweak_widget_class_init (GbEditorTweakWidgetClass *klass)
 static void
 gb_editor_tweak_widget_init (GbEditorTweakWidget *self)
 {
-  self->priv = gb_editor_tweak_widget_get_instance_private (self);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 }

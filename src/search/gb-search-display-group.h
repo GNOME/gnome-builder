@@ -20,43 +20,26 @@
 #define GB_SEARCH_DISPLAY_GROUP_H
 
 #include <gtk/gtk.h>
-
-#include "gb-search-types.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
-#define GB_SEARCH_DISPLAY_GROUP(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SEARCH_DISPLAY_GROUP, GbSearchDisplayGroup))
-#define GB_SEARCH_DISPLAY_GROUP_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SEARCH_DISPLAY_GROUP, GbSearchDisplayGroup const))
-#define GB_SEARCH_DISPLAY_GROUP_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_SEARCH_DISPLAY_GROUP, GbSearchDisplayGroupClass))
-#define GB_IS_SEARCH_DISPLAY_GROUP(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_SEARCH_DISPLAY_GROUP))
-#define GB_IS_SEARCH_DISPLAY_GROUP_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_SEARCH_DISPLAY_GROUP))
-#define GB_SEARCH_DISPLAY_GROUP_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_SEARCH_DISPLAY_GROUP, GbSearchDisplayGroupClass))
+#define GB_TYPE_SEARCH_DISPLAY_GROUP (gb_search_display_group_get_type())
 
-struct _GbSearchDisplayGroup
-{
-  GtkBox parent;
+G_DECLARE_FINAL_TYPE (GbSearchDisplayGroup, gb_search_display_group, GB, SEARCH_DISPLAY_GROUP, GtkBox)
 
-  /*< private >*/
-  GbSearchDisplayGroupPrivate *priv;
-};
-
-struct _GbSearchDisplayGroupClass
-{
-  GtkBoxClass parent;
-};
-
-void              gb_search_display_group_clear         (GbSearchDisplayGroup *group);
-GbSearchProvider *gb_search_display_group_get_provider  (GbSearchDisplayGroup *group);
-void              gb_search_display_group_add_result    (GbSearchDisplayGroup *group,
-                                                         GbSearchResult       *result);
-void              gb_search_display_group_remove_result (GbSearchDisplayGroup *group,
-                                                         GbSearchResult       *result);
-void              gb_search_display_group_set_count     (GbSearchDisplayGroup *group,
-                                                         guint64               count);
-void              gb_search_display_group_unselect      (GbSearchDisplayGroup *group);
-void              gb_search_display_group_focus_first   (GbSearchDisplayGroup *group);
-void              gb_search_display_group_focus_last    (GbSearchDisplayGroup *group);
-GbSearchResult   *gb_search_display_group_get_first     (GbSearchDisplayGroup *group);
+void               gb_search_display_group_clear         (GbSearchDisplayGroup *group);
+IdeSearchProvider *gb_search_display_group_get_provider  (GbSearchDisplayGroup *group);
+void               gb_search_display_group_add_result    (GbSearchDisplayGroup *group,
+                                                          IdeSearchResult      *result);
+void               gb_search_display_group_remove_result (GbSearchDisplayGroup *group,
+                                                          IdeSearchResult      *result);
+void               gb_search_display_group_set_count     (GbSearchDisplayGroup *group,
+                                                          guint64               count);
+void               gb_search_display_group_unselect      (GbSearchDisplayGroup *group);
+void               gb_search_display_group_focus_first   (GbSearchDisplayGroup *group);
+void               gb_search_display_group_focus_last    (GbSearchDisplayGroup *group);
+IdeSearchResult   *gb_search_display_group_get_first     (GbSearchDisplayGroup *group);
 
 G_END_DECLS
 

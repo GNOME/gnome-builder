@@ -1,6 +1,6 @@
 /* gb-editor-view.h
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,52 +19,13 @@
 #ifndef GB_EDITOR_VIEW_H
 #define GB_EDITOR_VIEW_H
 
-#include <gtk/gtk.h>
-
-#include "gb-document-view.h"
-#include "gb-editor-document.h"
-#include "gb-editor-frame.h"
+#include "gb-view.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_EDITOR_VIEW            (gb_editor_view_get_type())
-#define GB_EDITOR_VIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_EDITOR_VIEW, GbEditorView))
-#define GB_EDITOR_VIEW_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_EDITOR_VIEW, GbEditorView const))
-#define GB_EDITOR_VIEW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_EDITOR_VIEW, GbEditorViewClass))
-#define GB_IS_EDITOR_VIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_EDITOR_VIEW))
-#define GB_IS_EDITOR_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_EDITOR_VIEW))
-#define GB_EDITOR_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_EDITOR_VIEW, GbEditorViewClass))
+#define GB_TYPE_EDITOR_VIEW (gb_editor_view_get_type())
 
-typedef struct _GbEditorView        GbEditorView;
-typedef struct _GbEditorViewClass   GbEditorViewClass;
-typedef struct _GbEditorViewPrivate GbEditorViewPrivate;
-
-struct _GbEditorView
-{
-  GbDocumentView parent;
-
-  /*< private >*/
-  GbEditorViewPrivate *priv;
-};
-
-struct _GbEditorViewClass
-{
-  GbDocumentViewClass parent;
-};
-
-GType          gb_editor_view_get_type          (void);
-GtkWidget     *gb_editor_view_new               (GbEditorDocument *document);
-GbEditorFrame *gb_editor_view_get_frame1        (GbEditorView     *view);
-GbEditorFrame *gb_editor_view_get_frame2        (GbEditorView     *view);
-gboolean       gb_editor_view_get_split_enabled (GbEditorView     *view);
-void           gb_editor_view_set_split_enabled (GbEditorView     *view,
-                                                 gboolean          split_enabled);
-gboolean       gb_editor_view_get_use_spaces    (GbEditorView     *view);
-void           gb_editor_view_set_use_spaces    (GbEditorView     *view,
-                                                 gboolean          use_spaces);
-gboolean       gb_editor_view_get_auto_indent   (GbEditorView     *view);
-void           gb_editor_view_set_auto_indent   (GbEditorView     *view,
-                                                 gboolean          auto_indent);
+G_DECLARE_FINAL_TYPE (GbEditorView, gb_editor_view, GB, EDITOR_VIEW, GbView)
 
 G_END_DECLS
 

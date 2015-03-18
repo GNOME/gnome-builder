@@ -16,17 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "search-box"
+#define G_LOG_DOMAIN "ide-search-box"
 
 #include <glib/gi18n.h>
 
 #include "gb-glib.h"
 #include "gb-scrolled-window.h"
 #include "gb-search-box.h"
-#include "gb-search-context.h"
 #include "gb-search-display.h"
-#include "gb-search-manager.h"
-#include "gb-search-result.h"
 #include "gb-string.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
@@ -34,16 +31,15 @@
 #define SHORT_DELAY_TIMEOUT_MSEC 30
 #define LONG_DELAY_TIMEOUT_MSEC  30
 
-struct _GbSearchBoxPrivate
+struct _GbSearchBox
 {
-  /* References owned by instance */
-  GbSearchManager *search_manager;
+  GtkBox           parent_instance;
 
   /* Weak references */
   GbWorkbench     *workbench;
   gulong           set_focus_handler;
 
-  /* References owned by template */
+  /* Template references */
   GtkMenuButton   *button;
   GbSearchDisplay *display;
   GtkSearchEntry  *entry;
@@ -52,15 +48,7 @@ struct _GbSearchBoxPrivate
   guint            delay_timeout;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbSearchBox, gb_search_box, GTK_TYPE_BOX)
-
-enum {
-  PROP_0,
-  PROP_SEARCH_MANAGER,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
+G_DEFINE_TYPE (GbSearchBox, gb_search_box, GTK_TYPE_BOX)
 
 GtkWidget *
 gb_search_box_new (void)
@@ -68,58 +56,54 @@ gb_search_box_new (void)
   return g_object_new (GB_TYPE_SEARCH_BOX, NULL);
 }
 
-GbSearchManager *
-gb_search_box_get_search_manager (GbSearchBox *box)
+IdeSearchEngine *
+gb_search_box_get_search_engine (GbSearchBox *self)
 {
-  g_return_val_if_fail (GB_IS_SEARCH_BOX (box), NULL);
+  IdeContext *context;
+  IdeSearchEngine *search_engine;
 
-  return box->priv->search_manager;
-}
+  g_return_val_if_fail (GB_IS_SEARCH_BOX (self), NULL);
 
-void
-gb_search_box_set_search_manager (GbSearchBox     *box,
-                                  GbSearchManager *search_manager)
-{
-  g_return_if_fail (GB_IS_SEARCH_BOX (box));
-  g_return_if_fail (!search_manager || GB_IS_SEARCH_MANAGER (search_manager));
+  if (self->workbench == NULL)
+    return NULL;
 
-  if (box->priv->search_manager != search_manager)
-    {
-      g_clear_object (&box->priv->search_manager);
+  context = gb_workbench_get_context (self->workbench);
+  if (context == NULL)
+      return NULL;
 
-      if (search_manager)
-        box->priv->search_manager = g_object_ref (search_manager);
+  search_engine = ide_context_get_search_engine (context);
 
-      g_object_notify_by_pspec (G_OBJECT (box),
-                                gParamSpecs [PROP_SEARCH_MANAGER]);
-    }
+  return search_engine;
 }
 
 static gboolean
 gb_search_box_delay_cb (gpointer user_data)
 {
-  GbSearchBox *box = user_data;
-  GbSearchContext *context;
+  GbSearchBox *self = user_data;
+  IdeSearchEngine *search_engine;
+  IdeSearchContext *context;
   const gchar *search_text;
 
-  g_return_val_if_fail (GB_IS_SEARCH_BOX (box), G_SOURCE_REMOVE);
+  g_return_val_if_fail (GB_IS_SEARCH_BOX (self), G_SOURCE_REMOVE);
 
-  box->priv->delay_timeout = 0;
+  self->delay_timeout = 0;
 
-  context = gb_search_display_get_context (box->priv->display);
+  context = gb_search_display_get_context (self->display);
   if (context)
-    gb_search_context_cancel (context);
+    ide_search_context_cancel (context);
 
-  if (!box->priv->search_manager)
+  search_engine = gb_search_box_get_search_engine (self);
+  if (!search_engine)
     return G_SOURCE_REMOVE;
 
-  search_text = gtk_entry_get_text (GTK_ENTRY (box->priv->entry));
+  search_text = gtk_entry_get_text (GTK_ENTRY (self->entry));
   if (!search_text)
     return G_SOURCE_REMOVE;
 
-  context = gb_search_manager_search (box->priv->search_manager, NULL, search_text); /* TODO: Remove search text */
-  gb_search_display_set_context (box->priv->display, context);
-  gb_search_context_execute (context, search_text);
+  /* TODO: Remove search text */
+  context = ide_search_engine_search (search_engine, NULL, search_text);
+  gb_search_display_set_context (self->display, context);
+  ide_search_context_execute (context, search_text, 5);
   g_object_unref (context);
 
   return G_SOURCE_REMOVE;
@@ -135,36 +119,36 @@ gb_search_box_popover_closed (GbSearchBox *box,
 }
 
 static gboolean
-gb_search_box_entry_focus_in (GbSearchBox   *box,
+gb_search_box_entry_focus_in (GbSearchBox   *self,
                               GdkEventFocus *focus,
                               GtkWidget     *entry)
 {
   const gchar *text;
 
-  g_return_val_if_fail (GB_IS_SEARCH_BOX (box), FALSE);
+  g_return_val_if_fail (GB_IS_SEARCH_BOX (self), FALSE);
   g_return_val_if_fail (focus, FALSE);
   g_return_val_if_fail (GTK_IS_SEARCH_ENTRY (entry), FALSE);
 
-  text = gtk_entry_get_text (GTK_ENTRY (box->priv->entry));
+  text = gtk_entry_get_text (GTK_ENTRY (self->entry));
 
   if (!gb_str_empty0 (text))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (box->priv->button), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), TRUE);
 
   return GDK_EVENT_PROPAGATE;
 }
 
 static void
-gb_search_box_entry_activate (GbSearchBox    *box,
+gb_search_box_entry_activate (GbSearchBox    *self,
                               GtkSearchEntry *entry)
 {
-  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+  g_return_if_fail (GB_IS_SEARCH_BOX (self));
   g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
 
-  gb_search_display_activate (box->priv->display);
+  gb_search_display_activate (self->display);
 }
 
 static void
-gb_search_box_entry_changed (GbSearchBox    *box,
+gb_search_box_entry_changed (GbSearchBox    *self,
                              GtkSearchEntry *entry)
 {
   GtkToggleButton *button;
@@ -172,17 +156,17 @@ gb_search_box_entry_changed (GbSearchBox    *box,
   gboolean active;
   guint delay_msec = SHORT_DELAY_TIMEOUT_MSEC;
 
-  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+  g_return_if_fail (GB_IS_SEARCH_BOX (self));
   g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
 
-  button = GTK_TOGGLE_BUTTON (box->priv->button);
+  button = GTK_TOGGLE_BUTTON (self->button);
   text = gtk_entry_get_text (GTK_ENTRY (entry));
   active = !gb_str_empty0 (text);
 
   if (gtk_toggle_button_get_active (button) != active)
     gtk_toggle_button_set_active (button, active);
 
-  if (!box->priv->delay_timeout)
+  if (!self->delay_timeout)
     {
       const gchar *search_text;
 
@@ -191,19 +175,19 @@ gb_search_box_entry_changed (GbSearchBox    *box,
         {
           if (strlen (search_text) < 3)
             delay_msec = LONG_DELAY_TIMEOUT_MSEC;
-          box->priv->delay_timeout = g_timeout_add (delay_msec,
-                                                    gb_search_box_delay_cb,
-                                                    box);
+          self->delay_timeout = g_timeout_add (delay_msec,
+                                               gb_search_box_delay_cb,
+                                               self);
         }
     }
 }
 
 static gboolean
-gb_search_box_entry_key_press_event (GbSearchBox    *box,
+gb_search_box_entry_key_press_event (GbSearchBox    *self,
                                      GdkEventKey    *key,
                                      GtkSearchEntry *entry)
 {
-  g_return_val_if_fail (GB_IS_SEARCH_BOX (box), GDK_EVENT_PROPAGATE);
+  g_return_val_if_fail (GB_IS_SEARCH_BOX (self), GDK_EVENT_PROPAGATE);
   g_return_val_if_fail (key, GDK_EVENT_PROPAGATE);
   g_return_val_if_fail (GTK_IS_SEARCH_ENTRY (entry), GDK_EVENT_PROPAGATE);
 
@@ -213,7 +197,7 @@ gb_search_box_entry_key_press_event (GbSearchBox    *box,
       {
         GtkWidget *toplevel;
 
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (box->priv->button),
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button),
                                       FALSE);
 
         toplevel = gtk_widget_get_toplevel (GTK_WIDGET (entry));
@@ -227,7 +211,7 @@ gb_search_box_entry_key_press_event (GbSearchBox    *box,
     case GDK_KEY_KP_Tab:
     case GDK_KEY_Down:
     case GDK_KEY_KP_Down:
-      gtk_widget_grab_focus (GTK_WIDGET (box->priv->display));
+      gtk_widget_grab_focus (GTK_WIDGET (self->display));
       return GDK_EVENT_STOP;
 
     default:
@@ -238,71 +222,71 @@ gb_search_box_entry_key_press_event (GbSearchBox    *box,
 }
 
 static void
-gb_search_box_display_result_activated (GbSearchBox     *box,
-                                        GbSearchResult  *result,
+gb_search_box_display_result_activated (GbSearchBox     *self,
+                                        IdeSearchResult *result,
                                         GbSearchDisplay *display)
 {
-  g_return_if_fail (GB_IS_SEARCH_BOX (box));
-  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+  g_return_if_fail (GB_IS_SEARCH_BOX (self));
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (box->priv->button), FALSE);
-  gtk_entry_set_text (GTK_ENTRY (box->priv->entry), "");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), FALSE);
+  gtk_entry_set_text (GTK_ENTRY (self->entry), "");
 }
 
 static void
-gb_search_box_button_toggled (GbSearchBox     *box,
+gb_search_box_button_toggled (GbSearchBox     *self,
                               GtkToggleButton *button)
 {
-  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+  g_return_if_fail (GB_IS_SEARCH_BOX (self));
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
 
   if (gtk_toggle_button_get_active (button))
     {
-      if (!gtk_widget_has_focus (GTK_WIDGET (box->priv->entry)))
-        gtk_widget_grab_focus (GTK_WIDGET (box->priv->entry));
+      if (!gtk_widget_has_focus (GTK_WIDGET (self->entry)))
+        gtk_widget_grab_focus (GTK_WIDGET (self->entry));
     }
   else
     {
-      gtk_widget_hide (GTK_WIDGET (box->priv->popover));
+      gtk_widget_hide (GTK_WIDGET (self->popover));
     }
 }
 
 static void
 gb_search_box_grab_focus (GtkWidget *widget)
 {
-  GbSearchBox *box = (GbSearchBox *)widget;
+  GbSearchBox *self = (GbSearchBox *)widget;
 
-  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+  g_return_if_fail (GB_IS_SEARCH_BOX (self));
 
-  gtk_widget_grab_focus (GTK_WIDGET (box->priv->entry));
+  gtk_widget_grab_focus (GTK_WIDGET (self->entry));
 }
 
 static void
-gb_search_box_workbench_set_focus (GbSearchBox *box,
+gb_search_box_workbench_set_focus (GbSearchBox *self,
                                    GtkWidget   *focus,
                                    GbWorkbench *workbench)
 {
-  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+  g_return_if_fail (GB_IS_SEARCH_BOX (self));
   g_return_if_fail (!focus || GTK_IS_WIDGET (focus));
   g_return_if_fail (GB_IS_WORKBENCH (workbench));
 
   if (!focus ||
-      (!gtk_widget_is_ancestor (focus, GTK_WIDGET (box)) &&
-       !gtk_widget_is_ancestor (focus, GTK_WIDGET (box->priv->popover))))
+      (!gtk_widget_is_ancestor (focus, GTK_WIDGET (self)) &&
+       !gtk_widget_is_ancestor (focus, GTK_WIDGET (self->popover))))
     {
-      gtk_entry_set_text (GTK_ENTRY (box->priv->entry), "");
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (box->priv->button), FALSE);
+      gtk_entry_set_text (GTK_ENTRY (self->entry), "");
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), FALSE);
     }
 }
 
 static void
 gb_search_box_map (GtkWidget *widget)
 {
-  GbSearchBox *box = (GbSearchBox *)widget;
+  GbSearchBox *self = (GbSearchBox *)widget;
   GtkWidget *toplevel;
 
-  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+  g_return_if_fail (GB_IS_SEARCH_BOX (self));
 
   GTK_WIDGET_CLASS (gb_search_box_parent_class)->map (widget);
 
@@ -310,12 +294,12 @@ gb_search_box_map (GtkWidget *widget)
 
   if (GB_IS_WORKBENCH (toplevel))
     {
-      gb_set_weak_pointer (toplevel, &box->priv->workbench);
-      box->priv->set_focus_handler =
+      gb_set_weak_pointer (toplevel, &self->workbench);
+      self->set_focus_handler =
         g_signal_connect_object (toplevel,
                                  "set-focus",
                                  G_CALLBACK (gb_search_box_workbench_set_focus),
-                                 box,
+                                 self,
                                  G_CONNECT_SWAPPED | G_CONNECT_AFTER);
     }
 }
@@ -323,16 +307,14 @@ gb_search_box_map (GtkWidget *widget)
 static void
 gb_search_box_unmap (GtkWidget *widget)
 {
-  GbSearchBox *box = (GbSearchBox *)widget;
+  GbSearchBox *self = (GbSearchBox *)widget;
 
-  g_return_if_fail (GB_IS_SEARCH_BOX (box));
+  g_return_if_fail (GB_IS_SEARCH_BOX (self));
 
-  if (box->priv->workbench)
+  if (self->workbench)
     {
-      g_signal_handler_disconnect (box->priv->workbench,
-                                   box->priv->set_focus_handler);
-      box->priv->set_focus_handler = 0;
-      gb_clear_weak_pointer (&box->priv->workbench);
+      ide_clear_signal_handler (self->workbench, &self->set_focus_handler);
+      ide_clear_weak_pointer (&self->workbench);
     }
 
   GTK_WIDGET_CLASS (gb_search_box_parent_class)->unmap (widget);
@@ -341,48 +323,45 @@ gb_search_box_unmap (GtkWidget *widget)
 static void
 gb_search_box_constructed (GObject *object)
 {
-  GbSearchBoxPrivate *priv;
   GbSearchBox *self = (GbSearchBox *)object;
 
   g_return_if_fail (GB_IS_SEARCH_BOX (self));
 
-  priv = self->priv;
-
   G_OBJECT_CLASS (gb_search_box_parent_class)->constructed (object);
 
-  gtk_popover_set_relative_to (priv->popover, GTK_WIDGET (priv->entry));
+  gtk_popover_set_relative_to (self->popover, GTK_WIDGET (self->entry));
 
-  g_signal_connect_object (priv->popover,
+  g_signal_connect_object (self->popover,
                            "closed",
                            G_CALLBACK (gb_search_box_popover_closed),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (priv->entry,
+  g_signal_connect_object (self->entry,
                            "focus-in-event",
                            G_CALLBACK (gb_search_box_entry_focus_in),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (priv->entry,
+  g_signal_connect_object (self->entry,
                            "activate",
                            G_CALLBACK (gb_search_box_entry_activate),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (priv->entry,
+  g_signal_connect_object (self->entry,
                            "changed",
                            G_CALLBACK (gb_search_box_entry_changed),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (priv->entry,
+  g_signal_connect_object (self->entry,
                            "key-press-event",
                            G_CALLBACK (gb_search_box_entry_key_press_event),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (priv->display,
+  g_signal_connect_object (self->display,
                            "result-activated",
                            G_CALLBACK (gb_search_box_display_result_activated),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (priv->button,
+  g_signal_connect_object (self->button,
                            "toggled",
                            G_CALLBACK (gb_search_box_button_toggled),
                            self,
@@ -392,55 +371,15 @@ gb_search_box_constructed (GObject *object)
 static void
 gb_search_box_finalize (GObject *object)
 {
-  GbSearchBoxPrivate *priv = GB_SEARCH_BOX (object)->priv;
+  GbSearchBox *self = (GbSearchBox *)object;
 
-  if (priv->delay_timeout)
+  if (self->delay_timeout)
     {
-      g_source_remove (priv->delay_timeout);
-      priv->delay_timeout = 0;
+      g_source_remove (self->delay_timeout);
+      self->delay_timeout = 0;
     }
-
-  g_clear_object (&priv->search_manager);
 
   G_OBJECT_CLASS (gb_search_box_parent_class)->finalize (object);
-}
-
-static void
-gb_search_box_get_property (GObject    *object,
-                            guint       prop_id,
-                            GValue     *value,
-                            GParamSpec *pspec)
-{
-  GbSearchBox *self = GB_SEARCH_BOX (object);
-
-  switch (prop_id)
-    {
-    case PROP_SEARCH_MANAGER:
-      g_value_set_object (value, gb_search_box_get_search_manager (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-gb_search_box_set_property (GObject      *object,
-                            guint         prop_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
-{
-  GbSearchBox *self = GB_SEARCH_BOX (object);
-
-  switch (prop_id)
-    {
-    case PROP_SEARCH_MANAGER:
-      gb_search_box_set_search_manager (self, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
 }
 
 static void
@@ -451,21 +390,10 @@ gb_search_box_class_init (GbSearchBoxClass *klass)
 
   object_class->constructed = gb_search_box_constructed;
   object_class->finalize = gb_search_box_finalize;
-  object_class->get_property = gb_search_box_get_property;
-  object_class->set_property = gb_search_box_set_property;
 
   widget_class->grab_focus = gb_search_box_grab_focus;
   widget_class->map = gb_search_box_map;
   widget_class->unmap = gb_search_box_unmap;
-
-  gParamSpecs [PROP_SEARCH_MANAGER] =
-    g_param_spec_object ("search-manager",
-                         _("Search Manager"),
-                         _("The search manager for the search box."),
-                         GB_TYPE_SEARCH_MANAGER,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SEARCH_MANAGER,
-                                   gParamSpecs [PROP_SEARCH_MANAGER]);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-search-box.ui");
   GB_WIDGET_CLASS_BIND (klass, GbSearchBox, button);
@@ -480,8 +408,6 @@ gb_search_box_class_init (GbSearchBoxClass *klass)
 static void
 gb_search_box_init (GbSearchBox *self)
 {
-  self->priv = gb_search_box_get_instance_private (self);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   /*
@@ -494,5 +420,5 @@ gb_search_box_init (GbSearchBox *self)
    *
    * https://bugzilla.gnome.org/show_bug.cgi?id=741529
    */
-  g_object_ref (self->priv->popover);
+  g_object_ref (self->popover);
 }

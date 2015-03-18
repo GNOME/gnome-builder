@@ -20,11 +20,11 @@
 
 #include "gb-workspace.h"
 
-struct _GbWorkspacePrivate
+typedef struct
 {
   gchar *icon_name;
   gchar *title;
-};
+} GbWorkspacePrivate;
 
 enum {
   PROP_0,
@@ -38,51 +38,62 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GbWorkspace, gb_workspace, GTK_TYPE_BIN)
 static GParamSpec *gParamSpecs[LAST_PROP];
 
 const gchar *
-gb_workspace_get_icon_name (GbWorkspace *workspace)
+gb_workspace_get_icon_name (GbWorkspace *self)
 {
-  g_return_val_if_fail (GB_IS_WORKSPACE (workspace), NULL);
+  GbWorkspacePrivate *priv = gb_workspace_get_instance_private (self);
 
-  return workspace->priv->icon_name;
+  g_return_val_if_fail (GB_IS_WORKSPACE (self), NULL);
+
+  return priv->icon_name;
 }
 
 void
-gb_workspace_set_icon_name (GbWorkspace *workspace,
+gb_workspace_set_icon_name (GbWorkspace *self,
                             const gchar *icon_name)
 {
-  g_return_if_fail (GB_IS_WORKSPACE (workspace));
+  GbWorkspacePrivate *priv = gb_workspace_get_instance_private (self);
 
-  g_free (workspace->priv->icon_name);
-  workspace->priv->icon_name = g_strdup (icon_name);
-  g_object_notify_by_pspec (G_OBJECT (workspace),
-                            gParamSpecs[PROP_ICON_NAME]);
+  g_return_if_fail (GB_IS_WORKSPACE (self));
+
+  if (priv->icon_name != icon_name)
+    {
+      g_free (priv->icon_name);
+      priv->icon_name = g_strdup (icon_name);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs[PROP_ICON_NAME]);
+    }
 }
 
 const gchar *
-gb_workspace_get_title (GbWorkspace *workspace)
+gb_workspace_get_title (GbWorkspace *self)
 {
-  g_return_val_if_fail (GB_IS_WORKSPACE (workspace), NULL);
+  GbWorkspacePrivate *priv = gb_workspace_get_instance_private (self);
 
-  return workspace->priv->title;
+  g_return_val_if_fail (GB_IS_WORKSPACE (self), NULL);
+
+  return priv->title;
 }
 
 void
-gb_workspace_set_title (GbWorkspace *workspace,
+gb_workspace_set_title (GbWorkspace *self,
                         const gchar *title)
 {
-  g_return_if_fail (GB_IS_WORKSPACE (workspace));
+  GbWorkspacePrivate *priv = gb_workspace_get_instance_private (self);
 
-  g_free (workspace->priv->title);
-  workspace->priv->title = g_strdup (title);
-  g_object_notify_by_pspec (G_OBJECT (workspace),
-                            gParamSpecs[PROP_TITLE]);
+  g_return_if_fail (GB_IS_WORKSPACE (self));
+
+  if (priv->title != title)
+    {
+      g_free (priv->title);
+      priv->title = g_strdup (title);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TITLE]);
+    }
 }
 
 static void
 gb_workspace_finalize (GObject *object)
 {
-  GbWorkspacePrivate *priv;
-
-  priv = GB_WORKSPACE (object)->priv;
+  GbWorkspace *self = (GbWorkspace *)object;
+  GbWorkspacePrivate *priv = gb_workspace_get_instance_private (self);
 
   g_clear_pointer (&priv->icon_name, g_free);
   g_clear_pointer (&priv->title, g_free);
@@ -96,16 +107,16 @@ gb_workspace_get_property (GObject    *object,
                            GValue     *value,
                            GParamSpec *pspec)
 {
-  GbWorkspace *workspace = GB_WORKSPACE (object);
+  GbWorkspace *self = GB_WORKSPACE (object);
 
   switch (prop_id)
     {
     case PROP_ICON_NAME:
-      g_value_set_string (value, gb_workspace_get_icon_name (workspace));
+      g_value_set_string (value, gb_workspace_get_icon_name (self));
       break;
 
     case PROP_TITLE:
-      g_value_set_string (value, gb_workspace_get_title (workspace));
+      g_value_set_string (value, gb_workspace_get_title (self));
       break;
 
     default:
@@ -119,16 +130,16 @@ gb_workspace_set_property (GObject      *object,
                            const GValue *value,
                            GParamSpec   *pspec)
 {
-  GbWorkspace *workspace = GB_WORKSPACE (object);
+  GbWorkspace *self = GB_WORKSPACE (object);
 
   switch (prop_id)
     {
     case PROP_ICON_NAME:
-      gb_workspace_set_icon_name (workspace, g_value_get_string (value));
+      gb_workspace_set_icon_name (self, g_value_get_string (value));
       break;
 
     case PROP_TITLE:
-      gb_workspace_set_title (workspace, g_value_get_string (value));
+      gb_workspace_set_title (self, g_value_get_string (value));
       break;
 
     default:
@@ -153,8 +164,7 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TITLE,
-                                   gParamSpecs[PROP_TITLE]);
+  g_object_class_install_property (object_class, PROP_TITLE, gParamSpecs[PROP_TITLE]);
 
   gParamSpecs[PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
@@ -163,12 +173,10 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ICON_NAME,
-                                   gParamSpecs[PROP_ICON_NAME]);
+  g_object_class_install_property (object_class, PROP_ICON_NAME, gParamSpecs[PROP_ICON_NAME]);
 }
 
 static void
 gb_workspace_init (GbWorkspace *workspace)
 {
-  workspace->priv = gb_workspace_get_instance_private (workspace);
 }

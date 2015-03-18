@@ -38,7 +38,8 @@ void         ide_search_context_remove_result      (IdeSearchContext  *self,
                                                     IdeSearchResult   *result);
 void         ide_search_context_cancel             (IdeSearchContext  *self);
 void         ide_search_context_execute            (IdeSearchContext  *self,
-                                                    const gchar       *search_terms);
+                                                    const gchar       *search_terms,
+                                                    gsize              max_results);
 void         ide_search_context_set_provider_count (IdeSearchContext  *self,
                                                     IdeSearchProvider *provider,
                                                     guint64            count);

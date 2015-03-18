@@ -1,6 +1,6 @@
 /* gb-editor-workspace.h
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2014-2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,35 +23,9 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_EDITOR_WORKSPACE            (gb_editor_workspace_get_type())
-#define GB_EDITOR_WORKSPACE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_EDITOR_WORKSPACE, GbEditorWorkspace))
-#define GB_EDITOR_WORKSPACE_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_EDITOR_WORKSPACE, GbEditorWorkspace const))
-#define GB_EDITOR_WORKSPACE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_EDITOR_WORKSPACE, GbEditorWorkspaceClass))
-#define GB_IS_EDITOR_WORKSPACE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_EDITOR_WORKSPACE))
-#define GB_IS_EDITOR_WORKSPACE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_EDITOR_WORKSPACE))
-#define GB_EDITOR_WORKSPACE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_EDITOR_WORKSPACE, GbEditorWorkspaceClass))
+#define GB_TYPE_EDITOR_WORKSPACE (gb_editor_workspace_get_type())
 
-typedef struct _GbEditorWorkspace        GbEditorWorkspace;
-typedef struct _GbEditorWorkspaceClass   GbEditorWorkspaceClass;
-typedef struct _GbEditorWorkspacePrivate GbEditorWorkspacePrivate;
-
-struct _GbEditorWorkspace
-{
-  GbWorkspace parent;
-
-  /*< private >*/
-  GbEditorWorkspacePrivate *priv;
-};
-
-struct _GbEditorWorkspaceClass
-{
-  GbWorkspaceClass parent_class;
-};
-
-GType gb_editor_workspace_get_type     (void);
-void  gb_editor_workspace_new_document (GbEditorWorkspace *workspace);
-void  gb_editor_workspace_open         (GbEditorWorkspace *workspace,
-                                        GFile             *file);
+G_DECLARE_FINAL_TYPE (GbEditorWorkspace, gb_editor_workspace, GB, EDITOR_WORKSPACE, GbWorkspace)
 
 G_END_DECLS
 

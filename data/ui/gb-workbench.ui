@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.15 -->
+  <template class="GbWorkbench" parent="GtkApplicationWindow">
+    <property name="icon-name">builder</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">true</property>
+        <property name="show_close_button">true</property>
+        <child type="title">
+          <object class="GbSearchBox" id="search_box">
+            <property name="margin-end">6</property>
+            <property name="margin-start">6</property>
+            <property name="visible">true</property>
+            <property name="width_request">540</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="gear_menu_button">
+            <property name="visible">true</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="icon_name">open-menu-symbolic</property>
+                <property name="valign">baseline</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="expand">true</property>
+            <property name="transition_type">slide-up-down</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GbEditorWorkspace" id="editor_workspace">
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GbCommandBar" id="command_bar">
+            <property name="transition-type">slide-up</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

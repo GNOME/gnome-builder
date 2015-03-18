@@ -16,10 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gb-document"
+
 #include <glib/gi18n.h>
 
 #include "gb-document.h"
-#include "gb-document-view.h"
+#include "gb-view.h"
 
 G_DEFINE_INTERFACE (GbDocument, gb_document, G_TYPE_OBJECT)
 
@@ -207,6 +209,14 @@ gb_document_default_init (GbDocumentInterface *iface)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_interface_install_property (iface, gParamSpecs [PROP_READ_ONLY]);
 
+  /**
+   * GbDocument::create-view:
+   * @self: A #GbDocument.
+   *
+   * Creates a new view for the document.
+   *
+   * Returns: (ctype GbView*) (transfer full): A #GbView.
+   */
   gSignals [CREATE_VIEW] =
     g_signal_new ("create-view",
                   GB_TYPE_DOCUMENT,
@@ -215,6 +225,6 @@ gb_document_default_init (GbDocumentInterface *iface)
                   g_signal_accumulator_first_wins,
                   NULL,
                   g_cclosure_marshal_generic,
-                  GB_TYPE_DOCUMENT_VIEW,
+                  GTK_TYPE_WIDGET,
                   0);
 }

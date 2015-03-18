@@ -35,6 +35,7 @@ struct _GbPreferencesPageEditorPrivate
   GtkSwitch                         *show_line_numbers_switch;
   GtkSwitch                         *highlight_current_line_switch;
   GtkSwitch                         *highlight_matching_brackets_switch;
+  GtkSwitch                         *smart_backspace_switch;
   GtkSwitch                         *smart_home_end_switch;
   GtkSwitch                         *show_grid_lines_switch;
   GtkFontButton                     *font_button;
@@ -47,6 +48,7 @@ struct _GbPreferencesPageEditorPrivate
   GtkWidget                         *show_line_numbers_container;
   GtkWidget                         *highlight_current_line_container;
   GtkWidget                         *highlight_matching_brackets_container;
+  GtkWidget                         *smart_backspace_container;
   GtkWidget                         *smart_home_end_container;
   GtkWidget                         *show_grid_lines_container;
 };
@@ -92,7 +94,7 @@ gb_preferences_page_editor_constructed (GObject *object)
   g_settings_bind (priv->settings, "restore-insert-mark",
                    priv->restore_insert_mark_switch, "active",
                    G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->settings, "show-diff",
+  g_settings_bind (priv->settings, "show-line-changes",
                    priv->show_diff_switch, "active",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (priv->settings, "word-completion",
@@ -109,6 +111,9 @@ gb_preferences_page_editor_constructed (GObject *object)
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (priv->settings, "smart-home-end",
                    priv->smart_home_end_switch, "active",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (priv->settings, "smart-backspace",
+                   priv->smart_backspace_switch, "active",
                    G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (priv->settings, "show-grid-lines",
                    priv->show_grid_lines_switch, "active",
@@ -154,25 +159,27 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
 
   GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-preferences-page-editor.ui");
 
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, font_button);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, restore_insert_mark_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_diff_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, style_scheme_button);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, word_completion_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, highlight_current_line_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, smart_home_end_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_grid_lines_switch);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, font_button);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, restore_insert_mark_switch);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_diff_switch);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, style_scheme_button);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, word_completion_switch);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, highlight_current_line_switch);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_switch);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, smart_home_end_switch);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, smart_backspace_switch);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_grid_lines_switch);
 
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, restore_insert_mark_container);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, word_completion_container);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_diff_container);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_line_numbers_container);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, highlight_current_line_container);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_container);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, smart_home_end_container);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_grid_lines_container);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, restore_insert_mark_container);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, word_completion_container);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_diff_container);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_line_numbers_container);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, highlight_current_line_container);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_container);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, smart_home_end_container);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, smart_backspace_container);
+  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_grid_lines_container);
 }
 
 static void
@@ -223,8 +230,14 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
                                                self->priv->smart_home_end_container,
                                                self->priv->smart_home_end_switch,
                                                NULL);
-  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+                                               _("smart back backspace indent align"),
+                                               self->priv->smart_backspace_container,
+                                               self->priv->smart_backspace_switch,
+                                               NULL);
+  /* To translators: This is a list of keywords for the preferences page */
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
                                                _("show grid lines"),
                                                self->priv->show_grid_lines_container,
                                                self->priv->show_grid_lines_switch,

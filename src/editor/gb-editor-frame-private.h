@@ -1,6 +1,6 @@
 /* gb-editor-frame-private.h
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,45 +19,23 @@
 #ifndef GB_EDITOR_FRAME_PRIVATE_H
 #define GB_EDITOR_FRAME_PRIVATE_H
 
-#include "gb-editor-frame.h"
-#include "gb-source-change-gutter-renderer.h"
-#include "gb-source-code-assistant-renderer.h"
-#include "gb-source-search-highlighter.h"
-#include "gb-source-view.h"
+#include <gtk/gtk.h>
+#include <ide.h>
+
 #include "gd-tagged-entry.h"
-#include "gca-structs.h"
 #include "nautilus-floating-bar.h"
 
 G_BEGIN_DECLS
 
-struct _GbEditorFramePrivate
+struct _GbEditorFrame
 {
-  /* Widgets owned by GtkBuilder */
-  GtkSpinner                    *busy_spinner;
-  GbSourceChangeGutterRenderer  *diff_renderer;
-  GbSourceCodeAssistantRenderer *code_assistant_renderer;
-  NautilusFloatingBar           *floating_bar;
-  GtkButton                     *forward_search;
-  GtkButton                     *backward_search;
-  GtkScrolledWindow             *scrolled_window;
-  GtkRevealer                   *search_revealer;
-  GdTaggedEntry                 *search_entry;
-  GdTaggedEntryTag              *search_entry_tag;
-  GbSourceView                  *source_view;
+  GtkBin             parent_instance;
 
-  /* Objects owned by GbEditorFrame */
-  GbEditorDocument              *document;
-  GtkSourceSearchContext        *search_context;
-  GtkSourceSearchSettings       *search_settings;
-  GbSourceSearchHighlighter     *search_highlighter;
-  GtkDirectionType               search_direction;
-
-  /* Signal handler identifiers */
-  gulong                         cursor_moved_handler;
-
-  /* Tracking last cursor position when jumping */
-  guint                          saved_line;
-  guint                          saved_line_offset;
+  NautilusFloatingBar *floating_bar;
+  GtkScrolledWindow   *scrolled_window;
+  GtkRevealer         *search_revealer;
+  GdTaggedEntry       *search_entry;
+  IdeSourceView       *source_view;
 };
 
 G_END_DECLS

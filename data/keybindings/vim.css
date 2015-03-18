@@ -88,6 +88,10 @@
                              "clear-selection" ()
                              "clear-snippets" ()
                              "set-mode" ("vim-normal", permanent) };
+
+  bind "<ctrl>comma" { "action" ("app", "preferences", "") };
+  bind "<ctrl>period" { "action" ("workbench", "global-search", "") };
+  bind "<ctrl>s" { "action" ("editor-view", "save", "") };
 }
 
 @binding-set builder-vim-source-view-normal-with-count
@@ -123,6 +127,9 @@
 
   /* replay the last recording */
   bind "period" { "replay-macro" (1) };
+
+  /* start search */
+  bind "slash" { "action" ("frame", "find", "") };
 
   /* insert at cursor */
   bind "i" { "begin-macro" ()
@@ -323,9 +330,13 @@
                    "clear-selection" () };
 
   bind "p" { "begin-macro" ()
+             "save-insert-mark" ()
              "paste-clipboard-extended" (1, 1, 1)
              "clear-count" ()
-             "end-macro" () };
+             "restore-insert-mark" ()
+             "end-macro" ()
+             "movement" (next-line, 0, 0, 0)
+             "movement" (first-nonspace-char, 0, 1, 0) };
   bind "<shift>p" { "begin-macro" ()
                     "paste-clipboard-extended" (1, 0, 1)
                     "clear-count" ()

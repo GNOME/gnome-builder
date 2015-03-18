@@ -20,36 +20,13 @@
 #define GB_EDITOR_TWEAK_WIDGET_H
 
 #include <gtk/gtk.h>
+#include <ide.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_EDITOR_TWEAK_WIDGET            (gb_editor_tweak_widget_get_type())
-#define GB_EDITOR_TWEAK_WIDGET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_EDITOR_TWEAK_WIDGET, GbEditorTweakWidget))
-#define GB_EDITOR_TWEAK_WIDGET_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_EDITOR_TWEAK_WIDGET, GbEditorTweakWidget const))
-#define GB_EDITOR_TWEAK_WIDGET_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_EDITOR_TWEAK_WIDGET, GbEditorTweakWidgetClass))
-#define GB_IS_EDITOR_TWEAK_WIDGET(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_EDITOR_TWEAK_WIDGET))
-#define GB_IS_EDITOR_TWEAK_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_EDITOR_TWEAK_WIDGET))
-#define GB_EDITOR_TWEAK_WIDGET_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_EDITOR_TWEAK_WIDGET, GbEditorTweakWidgetClass))
+#define GB_TYPE_EDITOR_TWEAK_WIDGET (gb_editor_tweak_widget_get_type())
 
-typedef struct _GbEditorTweakWidget        GbEditorTweakWidget;
-typedef struct _GbEditorTweakWidgetClass   GbEditorTweakWidgetClass;
-typedef struct _GbEditorTweakWidgetPrivate GbEditorTweakWidgetPrivate;
-
-struct _GbEditorTweakWidget
-{
-  GtkBin parent;
-
-  /*< private >*/
-  GbEditorTweakWidgetPrivate *priv;
-};
-
-struct _GbEditorTweakWidgetClass
-{
-  GtkBinClass parent;
-};
-
-GType      gb_editor_tweak_widget_get_type (void);
-GtkWidget *gb_editor_tweak_widget_new      (void);
+G_DECLARE_FINAL_TYPE (GbEditorTweakWidget, gb_editor_tweak_widget, GB, EDITOR_TWEAK_WIDGET, GtkBin)
 
 G_END_DECLS
 

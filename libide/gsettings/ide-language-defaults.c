@@ -286,30 +286,30 @@ ide_language_defaults_init_worker (GTask        *task,
           g_task_return_error (task, error);
           goto failure;
         }
-    }
 
-  version_contents = g_strdup_printf ("%d", global_version);
+      version_contents = g_strdup_printf ("%d", global_version);
 
-  version_dir = g_path_get_dirname (version_path);
+      version_dir = g_path_get_dirname (version_path);
 
-  if (!g_file_test (version_dir, G_FILE_TEST_IS_DIR))
-    {
-      if (g_mkdir_with_parents (version_dir, 0750) == -1)
+      if (!g_file_test (version_dir, G_FILE_TEST_IS_DIR))
         {
-          g_task_return_new_error (task,
-                                   G_IO_ERROR,
-                                   g_io_error_from_errno (errno),
-                                   "%s", g_strerror (errno));
+          if (g_mkdir_with_parents (version_dir, 0750) == -1)
+            {
+              g_task_return_new_error (task,
+                                       G_IO_ERROR,
+                                       g_io_error_from_errno (errno),
+                                       "%s", g_strerror (errno));
+              goto failure;
+            }
+        }
+
+      IDE_TRACE_MSG ("Writing new language defaults version to \"%s\"", version_path);
+
+      if (!g_file_set_contents (version_path, version_contents, -1, &error))
+        {
+          g_task_return_error (task, error);
           goto failure;
         }
-    }
-
-  IDE_TRACE_MSG ("Writing new language defaults version to \"%s\"", version_path);
-
-  if (!g_file_set_contents (version_path, version_contents, -1, &error))
-    {
-      g_task_return_error (task, error);
-      goto failure;
     }
 
   g_task_return_boolean (task, TRUE);

@@ -44,6 +44,8 @@ gb_preferences_page_vim_constructed (GObject *object)
 {
   GbPreferencesPageVimPrivate *priv;
   GbPreferencesPageVim *vim = (GbPreferencesPageVim *)object;
+  GSimpleActionGroup *group;
+  GAction *action;
 
   g_return_if_fail (GB_IS_PREFERENCES_PAGE_VIM (vim));
 
@@ -52,12 +54,18 @@ gb_preferences_page_vim_constructed (GObject *object)
   priv->editor_settings = g_settings_new ("org.gnome.builder.editor");
   priv->vim_settings = g_settings_new ("org.gnome.builder.editor.vim");
 
-  g_settings_bind (priv->vim_settings, "scroll-off",
-                   priv->scroll_off_spin, "value",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->editor_settings, "vim-mode",
-                   priv->vim_mode_switch, "active",
-                   G_SETTINGS_BIND_DEFAULT);
+  group = g_simple_action_group_new ();
+
+  action = g_settings_create_action (priv->editor_settings, "keybindings");
+  g_action_map_add_action (G_ACTION_MAP (group), action);
+  g_clear_object (&action);
+
+  action = g_settings_create_action (priv->vim_settings, "scroll-off");
+  g_action_map_add_action (G_ACTION_MAP (group), action);
+  g_clear_object (&action);
+
+  gtk_widget_insert_action_group (GTK_WIDGET (vim), "settings", G_ACTION_GROUP (group));
+  g_clear_object (&group);
 }
 
 static void

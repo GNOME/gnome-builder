@@ -138,15 +138,6 @@ GtkEntry.gb-command-bar-entry {
 
 
 /*
- * Styling of main window header bar.
- */
-GbWorkbench GtkHeaderBar {
-    border-bottom: none;
-    box-shadow: none;
-}
-
-
-/*
  * Tab header styling.
  */
 GtkMenuButton.tab-header-first .button,
@@ -218,4 +209,8 @@ GbSearchDisplayGroup GtkListBox .list-row {
 }
 GbDocumentStack .button {
     transition: none;
+}
+
+GbViewStack GtkBox.header.notebook {
+    border-bottom: 1px solid @borders;
 }

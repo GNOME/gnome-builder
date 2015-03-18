@@ -1,9 +1,0 @@
-<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
-  "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
-<node name="/org/gnome/CodeAssist/v1/c/document">
-  <interface name="org.gnome.CodeAssist.v1.Diagnostics">
-    <method name="Diagnostics">
-      <arg direction="out" type="a(ua((x(xx)(xx))s)a(x(xx)(xx))s)" />
-    </method>
-  </interface>
-</node>

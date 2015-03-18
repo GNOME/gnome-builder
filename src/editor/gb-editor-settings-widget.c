@@ -168,14 +168,14 @@ gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
   object_class->set_property = gb_editor_settings_widget_set_property;
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-settings-widget.ui");
-  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, auto_indent);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, insert_matching_brace);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, insert_spaces_instead_of_tabs);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, right_margin_position);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, overwrite_braces);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, show_right_margin);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, tab_width);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, trim_trailing_whitespace);
+  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, auto_indent);
+  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, insert_matching_brace);
+  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, insert_spaces_instead_of_tabs);
+  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, right_margin_position);
+  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, overwrite_braces);
+  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, show_right_margin);
+  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, tab_width);
+  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, trim_trailing_whitespace);
 
   gParamSpecs [PROP_LANGUAGE] =
     g_param_spec_string ("language",

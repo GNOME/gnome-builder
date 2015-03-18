@@ -190,6 +190,12 @@ ide_git_search_provider_populate (IdeSearchProvider *provider,
                                            state);
 }
 
+static const gchar *
+ide_git_search_provider_get_verb (IdeSearchProvider *provider)
+{
+  return _("Switch To");
+}
+
 static void
 ide_git_search_provider_finalize (GObject *object)
 {
@@ -208,6 +214,7 @@ ide_git_search_provider_class_init (IdeGitSearchProviderClass *klass)
 
   object_class->finalize = ide_git_search_provider_finalize;
 
+  provider_class->get_verb = ide_git_search_provider_get_verb;
   provider_class->populate = ide_git_search_provider_populate;
 }
 

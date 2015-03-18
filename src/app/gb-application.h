@@ -23,32 +23,9 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_APPLICATION            (gb_application_get_type())
-#define GB_APPLICATION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_APPLICATION, GbApplication))
-#define GB_APPLICATION_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_APPLICATION, GbApplication const))
-#define GB_APPLICATION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_APPLICATION, GbApplicationClass))
-#define GB_IS_APPLICATION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_APPLICATION))
-#define GB_IS_APPLICATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_APPLICATION))
-#define GB_APPLICATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_APPLICATION, GbApplicationClass))
+#define GB_TYPE_APPLICATION (gb_application_get_type())
 
-typedef struct _GbApplication        GbApplication;
-typedef struct _GbApplicationClass   GbApplicationClass;
-typedef struct _GbApplicationPrivate GbApplicationPrivate;
-
-struct _GbApplication
-{
-  GtkApplication parent;
-
-  /*< private >*/
-  GbApplicationPrivate *priv;
-};
-
-struct _GbApplicationClass
-{
-  GtkApplicationClass parent_class;
-};
-
-GType gb_application_get_type (void);
+G_DECLARE_FINAL_TYPE (GbApplication, gb_application, GB, APPLICATION, GtkApplication)
 
 G_END_DECLS
 

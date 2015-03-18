@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <ide.h>
 #include <math.h>
 
-#include "gb-animation.h"
 #include "gb-cairo.h"
 #include "gb-rgba.h"
 #include "gb-widget.h"
@@ -176,14 +176,14 @@ gb_widget_fade_hide (GtkWidget *widget)
   if (gtk_widget_get_visible (widget))
     {
       frame_clock = gtk_widget_get_frame_clock (widget);
-      gb_object_animate_full (widget,
-                              GB_ANIMATION_LINEAR,
-                              1000,
-                              frame_clock,
-                              hide_callback,
-                              g_object_ref (widget),
-                              "opacity", 0.0,
-                              NULL);
+      ide_object_animate_full (widget,
+                               IDE_ANIMATION_LINEAR,
+                               1000,
+                               frame_clock,
+                               hide_callback,
+                               g_object_ref (widget),
+                               "opacity", 0.0,
+                               NULL);
     }
 }
 
@@ -199,14 +199,14 @@ gb_widget_fade_show (GtkWidget *widget)
       frame_clock = gtk_widget_get_frame_clock (widget);
       gtk_widget_set_opacity (widget, 0.0);
       gtk_widget_show (widget);
-      gb_object_animate_full (widget,
-                              GB_ANIMATION_LINEAR,
-                              500,
-                              frame_clock,
-                              NULL,
-                              NULL,
-                              "opacity", 1.0,
-                              NULL);
+      ide_object_animate_full (widget,
+                               IDE_ANIMATION_LINEAR,
+                               500,
+                               frame_clock,
+                               NULL,
+                               NULL,
+                               "opacity", 1.0,
+                               NULL);
     }
 }
 
@@ -274,74 +274,64 @@ gb_widget_get_context (GtkWidget *widget)
 }
 
 static void
-gb_widget_bind_context_notify (GtkWidget  *widget,
-                               GParamSpec *pspec,
-                               gpointer    user_data)
+gb_widget_notify_context (GtkWidget  *toplevel,
+                          GParamSpec *pspec,
+                          GtkWidget  *widget)
 {
-  GbWorkbench *workbench = (GbWorkbench *)widget;
-  GtkWidget *child = user_data;
-  IdeContext *context;
+  GbWidgetContextHandler handler;
+  IdeContext *context = NULL;
 
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (GTK_IS_WIDGET (child));
+  handler = g_object_get_data (G_OBJECT (widget), "GB_CONTEXT_HANDLER");
+  if (!handler)
+    return;
 
-  context = gb_workbench_get_context (workbench);
-  g_object_set (child, "context", context, NULL);
+  g_object_get (toplevel, "context", &context, NULL);
+  handler (widget, context);
+  g_clear_object (&context);
 }
 
 static void
-gb_widget_bind_context_hierarchy_changed (GtkWidget *widget,
-                                          GtkWidget *previous_toplevel,
-                                          gpointer   user_data)
+gb_widget_hierarchy_changed (GtkWidget *widget,
+                             GtkWidget *previous_toplevel,
+                             gpointer   user_data)
 {
-  GbWorkbench *workbench;
+  GtkWidget *toplevel;
 
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_assert (GTK_IS_WIDGET (widget));
 
-  if (GB_IS_WORKBENCH (previous_toplevel))
+  if (GTK_IS_WINDOW (previous_toplevel))
     g_signal_handlers_disconnect_by_func (previous_toplevel,
-                                          G_CALLBACK (gb_widget_bind_context_notify),
+                                          G_CALLBACK (gb_widget_notify_context),
                                           widget);
 
-  workbench = gb_widget_get_workbench (widget);
+  toplevel = gtk_widget_get_toplevel (widget);
 
-  if (workbench)
+  if (GTK_IS_WINDOW (toplevel))
     {
-      IdeContext *context;
-
-      g_signal_connect_object (workbench,
+      g_signal_connect_object (toplevel,
                                "notify::context",
-                               G_CALLBACK (gb_widget_bind_context_notify),
+                               G_CALLBACK (gb_widget_notify_context),
                                widget,
                                0);
-      context = gb_workbench_get_context (workbench);
-      g_object_set (widget, "context", context, NULL);
+      gb_widget_notify_context (toplevel, NULL, widget);
     }
 }
 
 void
-gb_widget_bind_context (GtkWidget *widget)
+gb_widget_set_context_handler (gpointer               widget,
+                               GbWidgetContextHandler handler)
 {
-  GParamSpec *pspec;
-  IdeContext *context;
+  GtkWidget *toplevel;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (widget), "context");
-
-  if (!pspec || (pspec->value_type != IDE_TYPE_CONTEXT))
-    {
-      g_warning ("%s() requires a widget with a context property named "
-                 "\"context\".", G_STRFUNC);
-      return;
-    }
+  g_object_set_data (G_OBJECT (widget), "GB_CONTEXT_HANDLER", handler);
 
   g_signal_connect (widget,
                     "hierarchy-changed",
-                    G_CALLBACK (gb_widget_bind_context_hierarchy_changed),
+                    G_CALLBACK (gb_widget_hierarchy_changed),
                     NULL);
 
-  context = gb_widget_get_context (widget);
-  if (context)
-    g_object_set (widget, "context", context, NULL);
+  if ((toplevel = gtk_widget_get_toplevel (widget)))
+    gb_widget_hierarchy_changed (widget, NULL, NULL);
 }

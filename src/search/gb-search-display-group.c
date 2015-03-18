@@ -20,27 +20,25 @@
 
 #include "gb-search-display-group.h"
 #include "gb-search-display-row.h"
-#include "gb-search-provider.h"
-#include "gb-search-result.h"
 #include "gb-widget.h"
 
-struct _GbSearchDisplayGroupPrivate
+struct _GbSearchDisplayGroup
 {
+  GtkBox             parent_instance;
+
   /* References owned by instance */
-  GbSearchProvider *provider;
+  IdeSearchProvider *provider;
 
   /* References owned by template */
-  GtkLabel         *more_label;
-  GtkListBoxRow    *more_row;
-  GtkLabel         *label;
-  GtkListBox       *rows;
+  GtkLabel          *more_label;
+  GtkListBoxRow     *more_row;
+  GtkLabel          *label;
+  GtkListBox        *rows;
 
-  guint64           count;
+  guint64            count;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbSearchDisplayGroup,
-                            gb_search_display_group,
-                            GTK_TYPE_BOX)
+G_DEFINE_TYPE (GbSearchDisplayGroup, gb_search_display_group, GTK_TYPE_BOX)
 
 enum {
   PROP_0,
@@ -60,14 +58,14 @@ static GQuark      gQuarkRow;
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
-GbSearchResult *
-gb_search_display_group_get_first (GbSearchDisplayGroup *group)
+IdeSearchResult *
+gb_search_display_group_get_first (GbSearchDisplayGroup *self)
 {
   GtkListBoxRow *row;
 
-  g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group), NULL);
+  g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self), NULL);
 
-  row = gtk_list_box_get_row_at_y (group->priv->rows, 1);
+  row = gtk_list_box_get_row_at_y (self->rows, 1);
 
   if (row)
     {
@@ -81,49 +79,49 @@ gb_search_display_group_get_first (GbSearchDisplayGroup *group)
   return NULL;
 }
 
-GbSearchProvider *
-gb_search_display_group_get_provider (GbSearchDisplayGroup *group)
+IdeSearchProvider *
+gb_search_display_group_get_provider (GbSearchDisplayGroup *self)
 {
-  g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group), NULL);
+  g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self), NULL);
 
-  return group->priv->provider;
+  return self->provider;
 }
 
 static void
-gb_search_display_group_set_provider (GbSearchDisplayGroup *group,
-                                      GbSearchProvider     *provider)
+gb_search_display_group_set_provider (GbSearchDisplayGroup *self,
+                                      IdeSearchProvider    *provider)
 {
   const gchar *verb;
 
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
-  g_return_if_fail (!provider || GB_IS_SEARCH_PROVIDER (provider));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
+  g_return_if_fail (!provider || IDE_IS_SEARCH_PROVIDER (provider));
 
   if (provider)
     {
-      group->priv->provider = g_object_ref (provider);
-      verb = gb_search_provider_get_verb (provider);
-      gtk_label_set_label (group->priv->label, verb);
+      self->provider = g_object_ref (provider);
+      verb = ide_search_provider_get_verb (provider);
+      gtk_label_set_label (self->label, verb);
     }
 }
 
 static void
-gb_search_display_group_set_size_group (GbSearchDisplayGroup *group,
+gb_search_display_group_set_size_group (GbSearchDisplayGroup *self,
                                         GtkSizeGroup         *size_group)
 {
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
   g_return_if_fail (!size_group || GTK_IS_SIZE_GROUP (size_group));
 
   if (size_group)
-    gtk_size_group_add_widget (size_group, GTK_WIDGET (group->priv->label));
+    gtk_size_group_add_widget (size_group, GTK_WIDGET (self->label));
 }
 
 GtkWidget *
-gb_search_display_group_create_row (GbSearchResult *result)
+gb_search_display_group_create_row (IdeSearchResult *result)
 {
   GtkListBoxRow *row;
   GbSearchDisplayRow *disp_row;
 
-  g_return_val_if_fail (GB_IS_SEARCH_RESULT (result), NULL);
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (result), NULL);
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "visible", TRUE,
@@ -140,53 +138,53 @@ gb_search_display_group_create_row (GbSearchResult *result)
 }
 
 void
-gb_search_display_group_remove_result (GbSearchDisplayGroup *group,
-                                       GbSearchResult       *result)
+gb_search_display_group_remove_result (GbSearchDisplayGroup *self,
+                                       IdeSearchResult      *result)
 {
   GtkWidget *row;
 
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
-  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
 
   row = g_object_get_qdata (G_OBJECT (result), gQuarkRow);
 
   if (row)
-    gtk_container_remove (GTK_CONTAINER (group->priv->rows), row);
+    gtk_container_remove (GTK_CONTAINER (self->rows), row);
 }
 
 void
-gb_search_display_group_add_result (GbSearchDisplayGroup *group,
-                                    GbSearchResult       *result)
+gb_search_display_group_add_result (GbSearchDisplayGroup *self,
+                                    IdeSearchResult      *result)
 {
   GtkWidget *row;
 
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
-  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
 
   row = gb_search_display_group_create_row (result);
-  gtk_container_add (GTK_CONTAINER (group->priv->rows), row);
+  gtk_container_add (GTK_CONTAINER (self->rows), row);
 
-  gtk_list_box_invalidate_sort (group->priv->rows);
+  gtk_list_box_invalidate_sort (self->rows);
 
-  group->priv->count++;
+  self->count++;
 }
 
 void
-gb_search_display_group_set_count (GbSearchDisplayGroup *group,
+gb_search_display_group_set_count (GbSearchDisplayGroup *self,
                                    guint64               count)
 {
   GtkWidget *parent;
   gchar *markup;
 
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
 
   markup = g_strdup_printf (_("%"G_GUINT64_FORMAT" more"), count);
-  gtk_label_set_label (group->priv->more_label, markup);
+  gtk_label_set_label (self->more_label, markup);
   g_free (markup);
 
-  parent = GTK_WIDGET (group->priv->more_row);
+  parent = GTK_WIDGET (self->more_row);
 
-  if ((count - group->priv->count) > 0)
+  if ((count - self->count) > 0)
     gtk_widget_show (parent);
   else
     gtk_widget_hide (parent);
@@ -200,8 +198,8 @@ compare_cb (GtkListBoxRow *row1,
   GtkListBoxRow *more_row = user_data;
   GtkWidget *child1;
   GtkWidget *child2;
-  GbSearchResult *result1;
-  GbSearchResult *result2;
+  IdeSearchResult *result1;
+  IdeSearchResult *result2;
   gfloat score1;
   gfloat score2;
 
@@ -216,8 +214,8 @@ compare_cb (GtkListBoxRow *row1,
   result1 = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child1));
   result2 = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child2));
 
-  score1 = gb_search_result_get_score (result1);
-  score2 = gb_search_result_get_score (result2);
+  score1 = ide_search_result_get_score (result1);
+  score2 = ide_search_result_get_score (result2);
 
   if (score1 < score2)
     return 1;
@@ -228,21 +226,21 @@ compare_cb (GtkListBoxRow *row1,
 }
 
 void
-gb_search_display_group_unselect (GbSearchDisplayGroup *group)
+gb_search_display_group_unselect (GbSearchDisplayGroup *self)
 {
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
 
-  gtk_list_box_unselect_all (group->priv->rows);
+  gtk_list_box_unselect_all (self->rows);
 }
 
 static void
-gb_search_display_group_row_activated (GbSearchDisplayGroup *group,
+gb_search_display_group_row_activated (GbSearchDisplayGroup *self,
                                        GtkListBoxRow        *row,
                                        GtkListBox           *list_box)
 {
   GtkWidget *child;
 
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
   g_return_if_fail (!row || GTK_IS_LIST_BOX_ROW (row));
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
 
@@ -250,22 +248,22 @@ gb_search_display_group_row_activated (GbSearchDisplayGroup *group,
 
   if (GB_IS_SEARCH_DISPLAY_ROW (child))
     {
-      GbSearchResult *result;
+      IdeSearchResult *result;
 
       result = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child));
       if (result)
-        g_signal_emit (group, gSignals [RESULT_ACTIVATED], 0, result);
+        g_signal_emit (self, gSignals [RESULT_ACTIVATED], 0, result);
     }
 }
 
 static void
-gb_search_display_group_row_selected (GbSearchDisplayGroup *group,
+gb_search_display_group_row_selected (GbSearchDisplayGroup *self,
                                       GtkListBoxRow        *row,
                                       GtkListBox           *list_box)
 {
   GtkWidget *child;
 
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
   g_return_if_fail (!row || GTK_IS_LIST_BOX_ROW (row));
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
 
@@ -275,46 +273,46 @@ gb_search_display_group_row_selected (GbSearchDisplayGroup *group,
 
       if (GB_IS_SEARCH_DISPLAY_ROW (child))
         {
-          GbSearchResult *result;
+          IdeSearchResult *result;
 
           result = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child));
           if (result)
-            g_signal_emit (group, gSignals [RESULT_SELECTED], 0, result);
+            g_signal_emit (self, gSignals [RESULT_SELECTED], 0, result);
         }
     }
 }
 
 void
-gb_search_display_group_focus_first (GbSearchDisplayGroup *group)
+gb_search_display_group_focus_first (GbSearchDisplayGroup *self)
 {
   GtkListBoxRow *row;
 
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
 
-  row = gtk_list_box_get_row_at_y (group->priv->rows, 1);
+  row = gtk_list_box_get_row_at_y (self->rows, 1);
 
   if (row)
     {
-      gtk_list_box_unselect_all (group->priv->rows);
-      gtk_widget_child_focus (GTK_WIDGET (group->priv->rows), GTK_DIR_DOWN);
+      gtk_list_box_unselect_all (self->rows);
+      gtk_widget_child_focus (GTK_WIDGET (self->rows), GTK_DIR_DOWN);
     }
 }
 
 void
-gb_search_display_group_focus_last (GbSearchDisplayGroup *group)
+gb_search_display_group_focus_last (GbSearchDisplayGroup *self)
 {
   GtkAllocation alloc;
   GtkListBoxRow *row;
 
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
 
-  gtk_widget_get_allocation (GTK_WIDGET (group->priv->rows), &alloc);
-  row = gtk_list_box_get_row_at_y (group->priv->rows, alloc.height - 2);
+  gtk_widget_get_allocation (GTK_WIDGET (self->rows), &alloc);
+  row = gtk_list_box_get_row_at_y (self->rows, alloc.height - 2);
 
   if (row)
     {
-      gtk_list_box_unselect_all (group->priv->rows);
-      gtk_widget_child_focus (GTK_WIDGET (group->priv->rows), GTK_DIR_UP);
+      gtk_list_box_unselect_all (self->rows);
+      gtk_widget_child_focus (GTK_WIDGET (self->rows), GTK_DIR_UP);
     }
 }
 
@@ -338,16 +336,16 @@ gb_search_display_group_header_cb (GtkListBoxRow *row,
 }
 
 static gboolean
-gb_search_display_group_keynav_failed (GbSearchDisplayGroup *group,
+gb_search_display_group_keynav_failed (GbSearchDisplayGroup *self,
                                        GtkDirectionType      dir,
                                        GtkListBox           *list_box)
 {
   gboolean ret = FALSE;
 
-  g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group), FALSE);
+  g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self), FALSE);
   g_return_val_if_fail (GTK_IS_LIST_BOX (list_box), FALSE);
 
-  g_signal_emit_by_name (group, "keynav-failed", dir, &ret);
+  g_signal_emit_by_name (self, "keynav-failed", dir, &ret);
 
   return ret;
 }
@@ -355,9 +353,9 @@ gb_search_display_group_keynav_failed (GbSearchDisplayGroup *group,
 static void
 gb_search_display_group_finalize (GObject *object)
 {
-  GbSearchDisplayGroupPrivate *priv = GB_SEARCH_DISPLAY_GROUP (object)->priv;
+  GbSearchDisplayGroup *self = (GbSearchDisplayGroup *)object;
 
-  g_clear_object (&priv->provider);
+  g_clear_object (&self->provider);
 
   G_OBJECT_CLASS (gb_search_display_group_parent_class)->finalize (object);
 }
@@ -418,10 +416,8 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
     g_param_spec_object ("provider",
                          _("Provider"),
                          _("The search provider"),
-                         GB_TYPE_SEARCH_PROVIDER,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
+                         IDE_TYPE_SEARCH_PROVIDER,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_PROVIDER,
                                    gParamSpecs [PROP_PROVIDER]);
 
@@ -430,9 +426,7 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
                          _("Size Group"),
                          _("The size group for the label."),
                          GTK_TYPE_SIZE_GROUP,
-                         (G_PARAM_WRITABLE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SIZE_GROUP,
                                    gParamSpecs [PROP_SIZE_GROUP]);
 
@@ -443,10 +437,10 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
                   0,
                   NULL,
                   NULL,
-                  g_cclosure_marshal_generic,
+                  g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1,
-                  GB_TYPE_SEARCH_RESULT);
+                  IDE_TYPE_SEARCH_RESULT);
 
   gSignals [RESULT_SELECTED] =
     g_signal_new ("result-selected",
@@ -455,10 +449,10 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
                   0,
                   NULL,
                   NULL,
-                  g_cclosure_marshal_generic,
+                  g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1,
-                  GB_TYPE_SEARCH_RESULT);
+                  IDE_TYPE_SEARCH_RESULT);
 
   GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-search-display-group.ui");
   GB_WIDGET_CLASS_BIND (widget_class, GbSearchDisplayGroup, more_label);
@@ -472,29 +466,24 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
 static void
 gb_search_display_group_init (GbSearchDisplayGroup *self)
 {
-  self->priv = gb_search_display_group_get_instance_private (self);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  gtk_list_box_set_sort_func (self->priv->rows, compare_cb,
-                              self->priv->more_row, NULL);
-
-  g_signal_connect_object (self->priv->rows,
+  g_signal_connect_object (self->rows,
                            "keynav-failed",
                            G_CALLBACK (gb_search_display_group_keynav_failed),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->priv->rows,
+  g_signal_connect_object (self->rows,
                            "row-activated",
                            G_CALLBACK (gb_search_display_group_row_activated),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->priv->rows,
+  g_signal_connect_object (self->rows,
                            "row-selected",
                            G_CALLBACK (gb_search_display_group_row_selected),
                            self,
                            G_CONNECT_SWAPPED);
-  gtk_list_box_set_header_func (self->priv->rows,
-                                gb_search_display_group_header_cb,
-                                NULL, NULL);
+
+  gtk_list_box_set_sort_func (self->rows, compare_cb, self->more_row, NULL);
+  gtk_list_box_set_header_func (self->rows, gb_search_display_group_header_cb, NULL, NULL);
 }

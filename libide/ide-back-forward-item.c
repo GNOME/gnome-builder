@@ -50,42 +50,6 @@ ide_back_forward_item_new (IdeContext        *context,
                        NULL);
 }
 
-gboolean
-ide_back_forward_item_chain (IdeBackForwardItem *self,
-                             IdeBackForwardItem *other)
-{
-  IdeSourceLocation *loc1;
-  IdeSourceLocation *loc2;
-  IdeFile *file1;
-  IdeFile *file2;
-  gint line1;
-  gint line2;
-
-  g_return_val_if_fail (IDE_IS_BACK_FORWARD_ITEM (self), FALSE);
-  g_return_val_if_fail (IDE_IS_BACK_FORWARD_ITEM (other), FALSE);
-
-  loc1 = ide_back_forward_item_get_location (self);
-  loc2 = ide_back_forward_item_get_location (other);
-
-  file1 = ide_source_location_get_file (loc1);
-  file2 = ide_source_location_get_file (loc2);
-
-  if (!ide_file_equal (file1, file2))
-    return FALSE;
-
-  line1 = ide_source_location_get_line (loc1);
-  line2 = ide_source_location_get_line (loc2);
-
-  if (ABS (line1 - line2) <= NUM_LINES_CHAIN_MAX)
-    {
-      self->location = ide_source_location_ref (loc2);
-      ide_source_location_unref (loc1);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 IdeSourceLocation *
 ide_back_forward_item_get_location (IdeBackForwardItem *self)
 {
@@ -185,4 +149,39 @@ ide_back_forward_item_class_init (IdeBackForwardItemClass *klass)
 static void
 ide_back_forward_item_init (IdeBackForwardItem *self)
 {
+}
+
+gboolean
+ide_back_forward_item_chain (IdeBackForwardItem *self,
+                             IdeBackForwardItem *other)
+{
+  IdeSourceLocation *loc1;
+  IdeSourceLocation *loc2;
+  IdeFile *file1;
+  IdeFile *file2;
+  gint line1;
+  gint line2;
+
+  g_return_val_if_fail (IDE_IS_BACK_FORWARD_ITEM (self), FALSE);
+  g_return_val_if_fail (IDE_IS_BACK_FORWARD_ITEM (other), FALSE);
+
+  loc1 = ide_back_forward_item_get_location (self);
+  loc2 = ide_back_forward_item_get_location (other);
+
+  file1 = ide_source_location_get_file (loc1);
+  file2 = ide_source_location_get_file (loc2);
+
+  if (!ide_file_equal (file1, file2))
+    return FALSE;
+
+  line1 = ide_source_location_get_line (loc1);
+  line2 = ide_source_location_get_line (loc2);
+
+  if (ABS (line1 - line2) <= NUM_LINES_CHAIN_MAX)
+    {
+      ide_back_forward_item_set_location (self, other->location);
+      return TRUE;
+    }
+
+  return FALSE;
 }

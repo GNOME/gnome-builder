@@ -35,13 +35,13 @@ struct _GbDocumentInterface
 {
   GTypeInterface parent;
 
-  GtkWidget   *(*create_view)           (GbDocument *document);
-  gboolean     (*get_modified)          (GbDocument *document);
-  gboolean     (*get_mtime)             (GbDocument *document,
-                                         GTimeVal   *mtime);
-  gboolean     (*get_read_only)         (GbDocument *document);
-  const gchar *(*get_title)             (GbDocument *document);
-  gboolean     (*is_untitled)           (GbDocument *document);
+  GtkWidget   *(*create_view)           (GbDocument           *document);
+  gboolean     (*get_modified)          (GbDocument           *document);
+  gboolean     (*get_mtime)             (GbDocument           *document,
+                                         GTimeVal             *mtime);
+  gboolean     (*get_read_only)         (GbDocument           *document);
+  const gchar *(*get_title)             (GbDocument           *document);
+  gboolean     (*is_untitled)           (GbDocument           *document);
   void         (*save_async)            (GbDocument           *document,
                                          GtkWidget            *toplevel,
                                          GCancellable         *cancellable,

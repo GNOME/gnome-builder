@@ -20,34 +20,17 @@
 #define GB_SEARCH_DISPLAY_ROW_H
 
 #include <gtk/gtk.h>
-
-#include "gb-search-types.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
-#define GB_SEARCH_DISPLAY_ROW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SEARCH_DISPLAY_ROW, GbSearchDisplayRow))
-#define GB_SEARCH_DISPLAY_ROW_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SEARCH_DISPLAY_ROW, GbSearchDisplayRow const))
-#define GB_SEARCH_DISPLAY_ROW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_SEARCH_DISPLAY_ROW, GbSearchDisplayRowClass))
-#define GB_IS_SEARCH_DISPLAY_ROW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_SEARCH_DISPLAY_ROW))
-#define GB_IS_SEARCH_DISPLAY_ROW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_SEARCH_DISPLAY_ROW))
-#define GB_SEARCH_DISPLAY_ROW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_SEARCH_DISPLAY_ROW, GbSearchDisplayRowClass))
+#define GB_TYPE_SEARCH_DISPLAY_ROW (gb_search_display_row_get_type())
 
-struct _GbSearchDisplayRow
-{
-  GtkBox parent;
+G_DECLARE_FINAL_TYPE (GbSearchDisplayRow, gb_search_display_row, GB, SEARCH_DISPLAY_ROW, GtkBox)
 
-  /*< private >*/
-  GbSearchDisplayRowPrivate *priv;
-};
-
-struct _GbSearchDisplayRowClass
-{
-  GtkBoxClass parent;
-};
-
-GbSearchResult *gb_search_display_row_get_result (GbSearchDisplayRow *row);
-void            gb_search_display_row_set_result (GbSearchDisplayRow *row,
-                                                  GbSearchResult     *result);
+IdeSearchResult *gb_search_display_row_get_result (GbSearchDisplayRow *row);
+void             gb_search_display_row_set_result (GbSearchDisplayRow *row,
+                                                   IdeSearchResult    *result);
 
 G_END_DECLS
 

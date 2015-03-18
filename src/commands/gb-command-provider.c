@@ -24,12 +24,11 @@
 struct _GbCommandProviderPrivate
 {
   GbWorkbench    *workbench;
-  GbDocumentView *active_view;
+  GbView *active_view;
   gint            priority;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbCommandProvider, gb_command_provider,
-                            G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GbCommandProvider, gb_command_provider, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -62,9 +61,9 @@ gb_command_provider_new (GbWorkbench *workbench)
  * Returns the "active-tab" property. The active-tab is the last tab that
  * was focused in the workbench.
  *
- * Returns: (transfer none): A #GbDocumentView or %NULL.
+ * Returns: (transfer none): A #GbView or %NULL.
  */
-GbDocumentView *
+GbView *
 gb_command_provider_get_active_view (GbCommandProvider *provider)
 {
   g_return_val_if_fail (GB_IS_COMMAND_PROVIDER (provider), NULL);
@@ -74,12 +73,12 @@ gb_command_provider_get_active_view (GbCommandProvider *provider)
 
 static void
 gb_command_provider_set_active_view (GbCommandProvider *provider,
-                                    GbDocumentView             *tab)
+                                    GbView             *tab)
 {
   GbCommandProviderPrivate *priv;
 
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
-  g_return_if_fail (!tab || GB_IS_DOCUMENT_VIEW (tab));
+  g_return_if_fail (!tab || GB_IS_VIEW (tab));
 
   priv = provider->priv;
 
@@ -112,13 +111,13 @@ on_workbench_set_focus (GbCommandProvider *provider,
 
   /* walk the hierarchy to find a tab */
   if (widget)
-    while (!GB_IS_DOCUMENT_VIEW (widget))
+    while (!GB_IS_VIEW (widget))
       if (!(widget = gtk_widget_get_parent (widget)))
         break;
 
-  if (GB_IS_DOCUMENT_VIEW (widget))
+  if (GB_IS_VIEW (widget))
     gb_command_provider_set_active_view (provider,
-                                         GB_DOCUMENT_VIEW (widget));
+                                         GB_VIEW (widget));
 }
 
 static void
@@ -313,13 +312,11 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
 
   gParamSpecs [PROP_ACTIVE_VIEW] =
     g_param_spec_object ("active-tab",
-                         _("Active DocumentView"),
-                         _("The last focused GbDocumentView widget."),
-                         GB_TYPE_DOCUMENT_VIEW,
-                         (G_PARAM_READABLE |
-                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ACTIVE_VIEW,
-                                   gParamSpecs [PROP_ACTIVE_VIEW]);
+                         _("Active View"),
+                         _("The last focused GbView widget."),
+                         GB_TYPE_VIEW,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_ACTIVE_VIEW, gParamSpecs [PROP_ACTIVE_VIEW]);
 
   /**
    * GbCommandProvider:priority:
@@ -341,8 +338,7 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
                       G_MAXINT,
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PRIORITY,
-                                   gParamSpecs [PROP_PRIORITY]);
+  g_object_class_install_property (object_class, PROP_PRIORITY, gParamSpecs [PROP_PRIORITY]);
 
   /**
    * GbCommandProvider:workbench:

@@ -19,21 +19,21 @@
 #include <glib/gi18n.h>
 
 #include "gb-search-display-row.h"
-#include "gb-search-result.h"
 #include "gb-widget.h"
 
-struct _GbSearchDisplayRowPrivate
+struct _GbSearchDisplayRow
 {
-  GbSearchResult *result;
+  GtkBox           parent_instance;
+
+  IdeSearchResult *result;
 
   /* References owned by template */
-  GtkLabel *title;
-  GtkLabel *subtitle;
-  GtkProgressBar *progress;
+  GtkLabel        *title;
+  GtkLabel        *subtitle;
+  GtkProgressBar  *progress;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbSearchDisplayRow, gb_search_display_row,
-                            GTK_TYPE_BOX)
+G_DEFINE_TYPE (GbSearchDisplayRow, gb_search_display_row, GTK_TYPE_BOX)
 
 enum {
   PROP_0,
@@ -45,50 +45,50 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void
 gb_search_display_row_connect (GbSearchDisplayRow *row,
-                               GbSearchResult     *result)
+                               IdeSearchResult    *result)
 {
   const gchar *title;
   const gchar *subtitle;
   gfloat fraction;
 
   g_return_if_fail (GB_IS_SEARCH_DISPLAY_ROW (row));
-  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
 
-  title = gb_search_result_get_title (result);
-  gtk_label_set_markup (row->priv->title, title);
+  title = ide_search_result_get_title (result);
+  gtk_label_set_markup (row->title, title);
 
-  subtitle = gb_search_result_get_subtitle (result);
+  subtitle = ide_search_result_get_subtitle (result);
   if (subtitle)
-    gtk_label_set_markup (row->priv->subtitle, subtitle);
-  gtk_widget_set_visible (GTK_WIDGET (row->priv->subtitle), !!subtitle);
+    gtk_label_set_markup (row->subtitle, subtitle);
+  gtk_widget_set_visible (GTK_WIDGET (row->subtitle), !!subtitle);
 
-  fraction = gb_search_result_get_score (result);
-  gtk_progress_bar_set_fraction (row->priv->progress, fraction);
-  gtk_widget_set_visible (GTK_WIDGET (row->priv->progress), (fraction > 0.0));
+  fraction = ide_search_result_get_score (result);
+  gtk_progress_bar_set_fraction (row->progress, fraction);
+  gtk_widget_set_visible (GTK_WIDGET (row->progress), (fraction > 0.0));
 }
 
-GbSearchResult *
+IdeSearchResult *
 gb_search_display_row_get_result (GbSearchDisplayRow *row)
 {
   g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_ROW (row), NULL);
 
-  return row->priv->result;
+  return row->result;
 }
 
 void
 gb_search_display_row_set_result (GbSearchDisplayRow *row,
-                                  GbSearchResult     *result)
+                                  IdeSearchResult    *result)
 {
   g_return_if_fail (GB_IS_SEARCH_DISPLAY_ROW (row));
-  g_return_if_fail (GB_IS_SEARCH_RESULT (result));
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
 
-  if (result != row->priv->result)
+  if (result != row->result)
     {
-      g_clear_object (&row->priv->result);
+      g_clear_object (&row->result);
 
       if (result)
         {
-          row->priv->result = g_object_ref (result);
+          row->result = g_object_ref (result);
           gb_search_display_row_connect (row, result);
         }
 
@@ -99,9 +99,9 @@ gb_search_display_row_set_result (GbSearchDisplayRow *row,
 static void
 gb_search_display_row_finalize (GObject *object)
 {
-  GbSearchDisplayRowPrivate *priv = GB_SEARCH_DISPLAY_ROW (object)->priv;
+  GbSearchDisplayRow *self = (GbSearchDisplayRow *)object;
 
-  g_clear_object (&priv->result);
+  g_clear_object (&self->result);
 
   G_OBJECT_CLASS (gb_search_display_row_parent_class)->finalize (object);
 }
@@ -158,11 +158,9 @@ gb_search_display_row_class_init (GbSearchDisplayRowClass *klass)
     g_param_spec_object ("result",
                          _("Result"),
                          _("Result"),
-                         GB_TYPE_SEARCH_RESULT,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_RESULT,
-                                   gParamSpecs [PROP_RESULT]);
+                         IDE_TYPE_SEARCH_RESULT,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_RESULT, gParamSpecs [PROP_RESULT]);
 
   GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-search-display-row.ui");
   GB_WIDGET_CLASS_BIND (widget_class, GbSearchDisplayRow, progress);
@@ -173,7 +171,5 @@ gb_search_display_row_class_init (GbSearchDisplayRowClass *klass)
 static void
 gb_search_display_row_init (GbSearchDisplayRow *self)
 {
-  self->priv = gb_search_display_row_get_instance_private (self);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 }

@@ -17,8 +17,8 @@
  */
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
-#include "gb-animation.h"
 #include "gb-command.h"
 #include "gb-command-bar.h"
 #include "gb-command-bar-item.h"
@@ -165,12 +165,12 @@ gb_command_bar_push_result (GbCommandBar    *bar,
   upper = gtk_adjustment_get_upper (vadj);
   frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (bar->priv->list_box));
 
-  gb_object_animate (vadj,
-                     GB_ANIMATION_EASE_IN_CUBIC,
-                     250,
-                     frame_clock,
-                     "value", upper,
-                     NULL);
+  ide_object_animate (vadj,
+                      IDE_ANIMATION_EASE_IN_CUBIC,
+                      250,
+                      frame_clock,
+                      "value", upper,
+                      NULL);
 }
 
 static void

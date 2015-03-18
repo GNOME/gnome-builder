@@ -180,6 +180,8 @@ libide_1_0_la_public_sources = \
 
 libide_1_0_la_SOURCES = \
 	$(libide_1_0_la_public_sources) \
+	cut-n-paste/trie.c \
+	cut-n-paste/trie.h \
 	libide/autotools/ide-makecache.c \
 	libide/autotools/ide-makecache.h \
 	libide/c/c-parse-helper.c \
@@ -249,8 +251,6 @@ libide_1_0_la_SOURCES = \
 	libide/theatrics/ide-box-theatric.h \
 	libide/theatrics/ide-frame-source.c \
 	libide/theatrics/ide-frame-source.h \
-	libide/trie/trie.c \
-	libide/trie/trie.h \
 	libide/util/ide-cairo.c \
 	libide/util/ide-cairo.h \
 	libide/util/ide-pango.c \
@@ -260,6 +260,7 @@ libide_1_0_la_SOURCES = \
 	$(NULL)
 
 libide_1_0_la_includes = \
+	-I$(top_srcdir)/cut-n-paste \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/libide/autotools \
 	-I$(top_srcdir)/libide/c \

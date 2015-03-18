@@ -1,0 +1,13 @@
+
+@binding-set default-ide-source-view
+{
+  bind "<ctrl>comma" { "action" ("app", "preferences", "") };
+  bind "<ctrl>f" { "action" ("frame", "find", "") };
+  bind "<ctrl>period" { "action" ("workbench", "global-search", "") };
+  bind "<ctrl>s" { "action" ("editor-view", "save", "") };
+}
+
+IdeSourceViewMode.default {
+  gtk-key-bindings: default-ide-source-view;
+}
+

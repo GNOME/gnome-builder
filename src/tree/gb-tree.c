@@ -19,8 +19,8 @@
 #define G_LOG_DOMAIN "tree"
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
-#include "gb-log.h"
 #include "gb-tree.h"
 #include "gb-tree-node.h"
 
@@ -98,14 +98,14 @@ gb_tree_unselect (GbTree *tree)
 {
   GtkTreeSelection *selection;
 
-  ENTRY;
+  IDE_ENTRY;
 
   g_return_if_fail (GB_IS_TREE (tree));
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree));
   gtk_tree_selection_unselect_all (selection);
 
-  EXIT;
+  IDE_EXIT;
 }
 
 /**
@@ -123,7 +123,7 @@ gb_tree_select (GbTree     *tree,
   GbTreePrivate *priv;
   GtkTreePath *path;
 
-  ENTRY;
+  IDE_ENTRY;
 
   g_return_if_fail (GB_IS_TREE (tree));
   g_return_if_fail (GB_IS_TREE_NODE (node));
@@ -143,7 +143,7 @@ gb_tree_select (GbTree     *tree,
   gtk_tree_selection_select_path (selection, path);
   gtk_tree_path_free (path);
 
-  EXIT;
+  IDE_EXIT;
 }
 
 static void
@@ -188,7 +188,7 @@ gb_tree_popup (GbTree         *tree,
   gboolean at_least_one_visible = FALSE;
   guint i;
 
-  ENTRY;
+  IDE_ENTRY;
 
   g_return_if_fail (GB_IS_TREE (tree));
   g_return_if_fail (GB_IS_TREE_NODE (node));
@@ -221,7 +221,7 @@ gb_tree_popup (GbTree         *tree,
                     button->button,
                     button->time);
 
-  EXIT;
+  IDE_EXIT;
 }
 
 /**
@@ -242,7 +242,7 @@ gb_tree_selection_changed (GbTree           *tree,
   GbTreeNode *unselection;
   gint i;
 
-  ENTRY;
+  IDE_ENTRY;
 
   g_return_if_fail (GB_IS_TREE (tree));
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
@@ -273,7 +273,7 @@ gb_tree_selection_changed (GbTree           *tree,
         }
     }
 
-  EXIT;
+  IDE_EXIT;
 }
 
 /**
@@ -416,7 +416,7 @@ gb_tree_add_builder_foreach_cb (GtkTreeModel *model,
   GbTreeNode *node = NULL;
   GbTreeBuilder *builder = (GbTreeBuilder *) user_data;
 
-  ENTRY;
+  IDE_ENTRY;
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL (model), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
@@ -426,7 +426,7 @@ gb_tree_add_builder_foreach_cb (GtkTreeModel *model,
   gb_tree_builder_build_node (builder, node);
   g_clear_object (&node);
 
-  RETURN (FALSE);
+  IDE_RETURN (FALSE);
 }
 
 /**
@@ -442,7 +442,7 @@ gb_tree_add_builder (GbTree        *tree,
 {
   GbTreePrivate *priv;
 
-  ENTRY;
+  IDE_ENTRY;
 
   g_return_if_fail (GB_IS_TREE (tree));
   g_return_if_fail (GB_IS_TREE_BUILDER (builder));
@@ -460,7 +460,7 @@ gb_tree_add_builder (GbTree        *tree,
   if (GB_TREE_BUILDER_GET_CLASS (builder)->added)
     GB_TREE_BUILDER_GET_CLASS (builder)->added (builder, GTK_WIDGET (tree));
 
-  EXIT;
+  IDE_EXIT;
 }
 
 /**
@@ -474,7 +474,7 @@ void
 gb_tree_remove_builder (GbTree        *tree,
                         GbTreeBuilder *builder)
 {
-  ENTRY;
+  IDE_ENTRY;
 
   g_return_if_fail (GB_IS_TREE (tree));
   g_return_if_fail (GB_IS_TREE_BUILDER (builder));
@@ -484,7 +484,7 @@ gb_tree_remove_builder (GbTree        *tree,
 
   g_ptr_array_remove (tree->priv->builders, builder);
 
-  EXIT;
+  IDE_EXIT;
 }
 
 /**
@@ -520,7 +520,7 @@ gb_tree_set_root (GbTree     *tree,
   GbTreeBuilder *builder;
   gint i;
 
-  ENTRY;
+  IDE_ENTRY;
 
   g_return_if_fail (GB_IS_TREE (tree));
 
@@ -540,7 +540,7 @@ gb_tree_set_root (GbTree     *tree,
         }
     }
 
-  EXIT;
+  IDE_EXIT;
 }
 
 void

@@ -1,6 +1,6 @@
 /* gb-keybindings.c
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,183 +16,231 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "keybindings"
+#define G_LOG_DOMAIN "gb-keybindings"
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
-#include "gb-log.h"
 #include "gb-keybindings.h"
 
-struct _GbKeybindingsPrivate
+struct _GbKeybindings
 {
-  GHashTable *keybindings;
+  GObject         parent_instance;
+
+  GtkApplication *application;
+  GtkCssProvider *css_provider;
+  gchar          *mode;
+  guint           constructed : 1;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbKeybindings, gb_keybindings, G_TYPE_OBJECT)
+enum
+{
+  PROP_0,
+  PROP_APPLICATION,
+  PROP_MODE,
+  LAST_PROP
+};
+
+G_DEFINE_TYPE (GbKeybindings, gb_keybindings, G_TYPE_OBJECT)
+
+static GParamSpec *gParamSpecs [LAST_PROP];
 
 GbKeybindings *
-gb_keybindings_new (void)
+gb_keybindings_new (GtkApplication *application,
+                    const gchar    *mode)
 {
-  return g_object_new (GB_TYPE_KEYBINDINGS, NULL);
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
+
+  return g_object_new (GB_TYPE_KEYBINDINGS,
+                       "application", application,
+                       "mode", mode,
+                       NULL);
 }
 
 static void
-gb_keybindings_load (GbKeybindings *keybindings,
-                     GKeyFile      *key_file)
+gb_keybindings_reload (GbKeybindings *self)
 {
-  GbKeybindingsPrivate *priv;
-  gchar **keys;
-  gchar **groups;
-  gchar *value;
-  guint i;
-  guint j;
+  const gchar *mode;
+  g_autofree gchar *path = NULL;
+  g_autoptr(GBytes) bytes = NULL;
+  g_autoptr(GError) error = NULL;
 
-  g_assert (GB_IS_KEYBINDINGS (keybindings));
-  g_assert (key_file);
+  IDE_ENTRY;
 
-  priv = keybindings->priv;
+  g_assert (GB_IS_KEYBINDINGS (self));
 
-  groups = g_key_file_get_groups (key_file, NULL);
+  mode = self->mode ? self->mode : "default";
+  IDE_TRACE_MSG ("Loading %s keybindings", mode);
+  path = g_strdup_printf ("/org/gnome/builder/keybindings/%s.css", mode);
+  bytes = g_resources_lookup_data (path, G_RESOURCE_LOOKUP_FLAGS_NONE, &error);
 
-  for (i = 0; groups[i]; i++)
+  if (error == NULL)
+    gtk_css_provider_load_from_data (self->css_provider,
+                                     g_bytes_get_data (bytes, NULL),
+                                     g_bytes_get_size (bytes),
+                                     &error);
+
+  if (error)
+    g_warning ("%s", error->message);
+
+  IDE_EXIT;
+}
+
+const gchar *
+gb_keybindings_get_mode (GbKeybindings *self)
+{
+  g_return_val_if_fail (GB_IS_KEYBINDINGS (self), NULL);
+
+  return self->mode;
+}
+
+void
+gb_keybindings_set_mode (GbKeybindings *self,
+                         const gchar   *mode)
+{
+  g_return_if_fail (GB_IS_KEYBINDINGS (self));
+
+  if (mode != self->mode)
     {
-      keys = g_key_file_get_keys (key_file, groups[i], NULL, NULL);
-      if (!keys)
-        continue;
+      g_free (self->mode);
+      self->mode = g_strdup (mode);
+      if (self->constructed)
+        gb_keybindings_reload (self);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MODE]);
+    }
+}
 
-      for (j = 0; keys[j]; j++)
+GtkApplication *
+gb_keybindings_get_application (GbKeybindings *self)
+{
+  g_return_val_if_fail (GB_IS_KEYBINDINGS (self), NULL);
+
+  return self->application;
+}
+
+static void
+gb_keybindings_set_application (GbKeybindings  *self,
+                                GtkApplication *application)
+{
+  g_assert (GB_IS_KEYBINDINGS (self));
+  g_assert (!application || GTK_IS_APPLICATION (application));
+
+  if (application != self->application)
+    {
+      if (self->application)
         {
-          value = g_key_file_get_string (key_file, groups[i], keys[j], NULL);
-          if (!value || !*value)
-            continue;
-
-          g_hash_table_replace (priv->keybindings,
-                                g_strdup_printf ("%s.%s", groups[i], keys[j]),
-                                value);
+          /* remove keybindings */
+          g_clear_object (&self->application);
         }
 
-      g_strfreev (keys);
-    }
-
-  g_strfreev (groups);
-}
-
-gboolean
-gb_keybindings_load_bytes (GbKeybindings *keybindings,
-                           GBytes        *bytes,
-                           GError       **error)
-{
-  gconstpointer data;
-  GKeyFile *key_file;
-  gsize len = 0;
-  gboolean ret = FALSE;
-
-  ENTRY;
-
-  g_return_val_if_fail (GB_IS_KEYBINDINGS (keybindings), FALSE);
-  g_return_val_if_fail (bytes, FALSE);
-
-  key_file = g_key_file_new ();
-  data = g_bytes_get_data (bytes, &len);
-  if (!g_key_file_load_from_data (key_file, data, len,
-                                  G_KEY_FILE_NONE, error))
-    GOTO (cleanup);
-
-  gb_keybindings_load (keybindings, key_file);
-
-  ret = TRUE;
-
-cleanup:
-  g_key_file_free (key_file);
-
-  RETURN (ret);
-}
-
-gboolean
-gb_keybindings_load_path (GbKeybindings *keybindings,
-                          const gchar   *path,
-                          GError       **error)
-{
-  GKeyFile *key_file;
-  gboolean ret = FALSE;
-
-  ENTRY;
-
-  g_return_val_if_fail (GB_IS_KEYBINDINGS (keybindings), FALSE);
-  g_return_val_if_fail (path, FALSE);
-
-  key_file = g_key_file_new ();
-
-  if (!g_key_file_load_from_file (key_file, path, G_KEY_FILE_NONE, error))
-    GOTO (cleanup);
-
-  gb_keybindings_load (keybindings, key_file);
-
-cleanup:
-  g_key_file_free (key_file);
-
-  RETURN (ret);
-}
-
-void
-gb_keybindings_register (GbKeybindings  *keybindings,
-                         GtkApplication *application)
-{
-  GbKeybindingsPrivate *priv;
-  GHashTableIter iter;
-  const gchar *action_name;
-  const gchar *accelerator;
-  gchar *accel_list[2] = { NULL };
-
-  g_return_if_fail (GB_IS_KEYBINDINGS (keybindings));
-  g_return_if_fail (GTK_IS_APPLICATION (application));
-
-  priv = keybindings->priv;
-
-  g_hash_table_iter_init (&iter, priv->keybindings);
-
-  while (g_hash_table_iter_next (&iter,
-                                 (gpointer *) &action_name,
-                                 (gpointer *) &accelerator))
-    {
-      accel_list[0] = (gchar *) accelerator;
-      gtk_application_set_accels_for_action (application,
-                                             action_name,
-                                             (const gchar* const*)accel_list);
+      if (application)
+        {
+          /* connect keybindings */
+          self->application = g_object_ref (application);
+        }
     }
 }
 
-void
-gb_keybindings_unregister (GbKeybindings  *keybindings,
-                           GtkApplication *application)
+static void
+gb_keybindings_parsing_error (GtkCssProvider *css_provider,
+                              GtkCssSection  *section,
+                              GError         *error,
+                              gpointer        user_data)
 {
-  GHashTableIter iter;
-  const gchar *action_name;
-  const gchar *accelerator;
-  gchar *accels[] = { NULL };
+  g_autofree gchar *filename = NULL;
+  GFile *file;
+  guint start_line;
+  guint end_line;
 
-  g_return_if_fail (GB_IS_KEYBINDINGS (keybindings));
-  g_return_if_fail (GTK_IS_APPLICATION (application));
+  file = gtk_css_section_get_file (section);
+  filename = g_file_get_uri (file);
+  start_line = gtk_css_section_get_start_line (section);
+  end_line = gtk_css_section_get_end_line (section);
 
-  g_hash_table_iter_init (&iter, keybindings->priv->keybindings);
+  g_warning ("CSS parsing error in %s between lines %u and %u", filename, start_line, end_line);
+}
 
-  while (g_hash_table_iter_next (&iter,
-                                 (gpointer *)&action_name,
-                                 (gpointer *)&accelerator))
-    gtk_application_set_accels_for_action (application, action_name,
-                                           (const gchar * const *)accels);
+static void
+gb_keybindings_constructed (GObject *object)
+{
+  GbKeybindings *self = (GbKeybindings *)object;
+  GdkScreen *screen;
+
+  IDE_ENTRY;
+
+  G_OBJECT_CLASS (gb_keybindings_parent_class)->constructed (object);
+
+  screen = gdk_screen_get_default ();
+  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (self->css_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  self->constructed = TRUE;
+
+  gb_keybindings_reload (self);
+
+  IDE_EXIT;
 }
 
 static void
 gb_keybindings_finalize (GObject *object)
 {
-  GbKeybindingsPrivate *priv;
+  GbKeybindings *self = (GbKeybindings *)object;
 
-  priv = GB_KEYBINDINGS (object)->priv;
+  IDE_ENTRY;
 
-  g_clear_pointer (&priv->keybindings, g_hash_table_unref);
+  g_clear_object (&self->application);
+  g_clear_object (&self->css_provider);
+  g_clear_pointer (&self->mode, g_free);
 
   G_OBJECT_CLASS (gb_keybindings_parent_class)->finalize (object);
+
+  IDE_EXIT;
+}
+
+static void
+gb_keybindings_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+  GbKeybindings *self = GB_KEYBINDINGS (object);
+
+  switch (prop_id)
+    {
+    case PROP_APPLICATION:
+      g_value_set_object (value, gb_keybindings_get_application (self));
+      break;
+
+    case PROP_MODE:
+      g_value_set_string (value, gb_keybindings_get_mode (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gb_keybindings_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  GbKeybindings *self = GB_KEYBINDINGS (object);
+
+  switch (prop_id)
+    {
+    case PROP_APPLICATION:
+      gb_keybindings_set_application (self, g_value_get_object (value));
+      break;
+
+    case PROP_MODE:
+      gb_keybindings_set_mode (self, g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -200,16 +248,35 @@ gb_keybindings_class_init (GbKeybindingsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = gb_keybindings_constructed;
   object_class->finalize = gb_keybindings_finalize;
+  object_class->get_property = gb_keybindings_get_property;
+  object_class->set_property = gb_keybindings_set_property;
+
+  gParamSpecs [PROP_APPLICATION] =
+    g_param_spec_object ("application",
+                         _("Application"),
+                         _("The application to register keybindings for."),
+                         GTK_TYPE_APPLICATION,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_APPLICATION, gParamSpecs [PROP_APPLICATION]);
+
+  gParamSpecs [PROP_MODE] =
+    g_param_spec_string ("mode",
+                         _("Mode"),
+                         _("The name of the keybindings mode."),
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_MODE, gParamSpecs [PROP_MODE]);
 }
 
 static void
-gb_keybindings_init (GbKeybindings *keybindings)
+gb_keybindings_init (GbKeybindings *self)
 {
-  keybindings->priv = gb_keybindings_get_instance_private (keybindings);
+  self->css_provider = gtk_css_provider_new ();
 
-  keybindings->priv->keybindings = g_hash_table_new_full (g_str_hash,
-                                                          g_str_equal,
-                                                          g_free,
-                                                          g_free);
+  g_signal_connect (self->css_provider,
+                    "parsing-error",
+                    G_CALLBACK (gb_keybindings_parsing_error),
+                    NULL);
 }

@@ -16,6 +16,8 @@
             <property name="column_spacing">12</property>
             <child>
               <object class="GtkSwitch" id="vim_mode_switch">
+                <property name="action-name">settings.keybindings</property>
+                <property name="action-target">'vim'</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "vim-command-provider"
 
+#if 0
+
 #include "gb-editor-view.h"
 #include "gb-editor-frame-private.h"
 #include "gb-command-vim.h"
@@ -170,3 +172,5 @@ gb_command_vim_provider_init (GbCommandVimProvider *self)
   g_object_set_data_full (G_OBJECT (self), "editor-settings", settings,
                           g_object_unref);
 }
+
+#endif

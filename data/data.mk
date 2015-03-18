@@ -16,7 +16,10 @@ CLEANFILES += $(service_DATA)
 
 # GtkSourceView Style Scheme
 styledir = $(datadir)/gtksourceview-3.0/styles/
-style_DATA = data/styles/builder.xml data/styles/builder-dark.xml
+style_DATA = \
+	data/style-schemes/builder.xml \
+	data/style-schemes/builder-dark.xml \
+	$(NULL)
 EXTRA_DIST += $(style_DATA)
 
 data/org.gnome.Builder.service: data/org.gnome.Builder.service.in

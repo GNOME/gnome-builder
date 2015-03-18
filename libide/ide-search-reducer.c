@@ -62,8 +62,7 @@ ide_search_reducer_push (IdeSearchReducer *reducer,
       /* Remove lowest score */
       iter = g_sequence_get_begin_iter (reducer->sequence);
       lowest = g_sequence_get (iter);
-      ide_search_context_remove_result (reducer->context, reducer->provider,
-                                       lowest);
+      ide_search_context_remove_result (reducer->context, reducer->provider, lowest);
       g_sequence_remove (iter);
     }
 

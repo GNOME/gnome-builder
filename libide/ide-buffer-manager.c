@@ -86,6 +86,8 @@ enum {
 };
 
 enum {
+  CREATE_BUFFER,
+
   SAVE_BUFFER,
   BUFFER_SAVED,
 
@@ -661,12 +663,29 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
                                   "context", context,
                                   NULL);
   if (buffer)
-    state->buffer = g_object_ref (buffer);
+    {
+      state->buffer = g_object_ref (buffer);
+    }
   else
-    state->buffer = g_object_new (IDE_TYPE_BUFFER,
-                                  "context", context,
-                                  "file", file,
-                                  NULL);
+    {
+      /*
+       * Allow application to specify the buffer instance which may be a
+       * decendent of IdeBuffer.
+       */
+      g_signal_emit (self, gSignals [CREATE_BUFFER], 0, file, &state->buffer);
+
+      if ((state->buffer != NULL) && !IDE_IS_BUFFER (state->buffer))
+        {
+          g_warning ("Invalid buffer type retrieved from create-buffer signal.");
+          state->buffer = NULL;
+        }
+
+      if (state->buffer == NULL)
+        state->buffer = g_object_new (IDE_TYPE_BUFFER,
+                                      "context", context,
+                                      "file", file,
+                                      NULL);
+    }
 
   _ide_buffer_set_loading (state->buffer, TRUE);
 
@@ -717,6 +736,7 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   GtkSourceFileSaver *saver = (GtkSourceFileSaver *)object;
   IdeBufferManager *self;
+  IdeFile *file;
   SaveState *state;
   GError *error = NULL;
 
@@ -738,6 +758,11 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
       g_task_return_error (task, error);
       return;
     }
+
+  /* Make the buffer as not modified if we saved it to the backing file */
+  file = ide_buffer_get_file (state->buffer);
+  if (ide_file_equal (file, state->file))
+    gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (state->buffer), FALSE);
 
   /* Notify signal handlers that the file is saved */
   g_signal_emit (self, gSignals [BUFFER_SAVED], 0, state->buffer);
@@ -1034,6 +1059,31 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                                    gParamSpecs [PROP_AUTO_SAVE_TIMEOUT]);
 
   /**
+   * IdeBufferManager::create-buffer:
+   * @self: An #IdeBufferManager
+   * @file: An #IdeFile
+   *
+   * This signal is emitted when there is a request to create a new buffer
+   * object. This allows subclasses of #IdeBuffer to be instantiated by the
+   * buffer manager.
+   *
+   * The first handler of this signal is responsible for returning an
+   * #IdeBuffer or %NULL, for which one will be created.
+   *
+   * Returns: (transfer full) (nullable): An #IdeBuffer or %NULL.
+   */
+  gSignals [CREATE_BUFFER] = g_signal_new ("create-buffer",
+                                           G_TYPE_FROM_CLASS (klass),
+                                           G_SIGNAL_RUN_LAST,
+                                           0,
+                                           g_signal_accumulator_first_wins,
+                                           NULL,
+                                           g_cclosure_marshal_generic,
+                                           IDE_TYPE_BUFFER,
+                                           1,
+                                           IDE_TYPE_FILE);
+
+  /**
    * IdeBufferManager::save-buffer:
    * @self: An #IdeBufferManager.
    * @buffer: an #IdeBuffer.
@@ -1042,7 +1092,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * if you'd like to perform mutation of the buffer before it is persisted to storage.
    */
   gSignals [SAVE_BUFFER] = g_signal_new ("save-buffer",
-                                         G_TYPE_FROM_CLASS (object_class),
+                                         G_TYPE_FROM_CLASS (klass),
                                          G_SIGNAL_RUN_LAST,
                                          0,
                                          NULL, NULL,
@@ -1061,7 +1111,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * storage.
    */
   gSignals [BUFFER_SAVED] = g_signal_new ("buffer-saved",
-                                          G_TYPE_FROM_CLASS (object_class),
+                                          G_TYPE_FROM_CLASS (klass),
                                           G_SIGNAL_RUN_LAST,
                                           0,
                                           NULL, NULL,
@@ -1079,7 +1129,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * connect to this signal to be notified when loading of a buffer has begun.
    */
   gSignals [LOAD_BUFFER] = g_signal_new ("load-buffer",
-                                         G_TYPE_FROM_CLASS (object_class),
+                                         G_TYPE_FROM_CLASS (klass),
                                          G_SIGNAL_RUN_LAST,
                                          0,
                                          NULL, NULL,
@@ -1097,7 +1147,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * signal to be notified when a buffer has completed loading.
    */
   gSignals [BUFFER_LOADED] = g_signal_new ("buffer-loaded",
-                                           G_TYPE_FROM_CLASS (object_class),
+                                           G_TYPE_FROM_CLASS (klass),
                                            G_SIGNAL_RUN_LAST,
                                            0,
                                            NULL, NULL,
@@ -1115,7 +1165,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * signal when you want to perform an operation while a buffer is in focus.
    */
   gSignals [BUFFER_FOCUS_ENTER] = g_signal_new ("buffer-focus-enter",
-                                                G_TYPE_FROM_CLASS (object_class),
+                                                G_TYPE_FROM_CLASS (klass),
                                                 G_SIGNAL_RUN_LAST,
                                                 0,
                                                 NULL, NULL,
@@ -1133,7 +1183,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * to this signal to stop any work you were performing while the buffer was focused.
    */
   gSignals [BUFFER_FOCUS_LEAVE] = g_signal_new ("buffer-focus-leave",
-                                                G_TYPE_FROM_CLASS (object_class),
+                                                G_TYPE_FROM_CLASS (klass),
                                                 G_SIGNAL_RUN_LAST,
                                                 0,
                                                 NULL, NULL,

@@ -23,46 +23,21 @@
 #include <ide.h>
 
 #include "gb-command-manager.h"
-#include "gb-document-manager.h"
-#include "gb-navigation-list.h"
 #include "gb-workbench-types.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_WORKBENCH            (gb_workbench_get_type())
-#define GB_WORKBENCH(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_WORKBENCH, GbWorkbench))
-#define GB_WORKBENCH_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_WORKBENCH, GbWorkbench const))
-#define GB_WORKBENCH_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_WORKBENCH, GbWorkbenchClass))
-#define GB_IS_WORKBENCH(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_WORKBENCH))
-#define GB_IS_WORKBENCH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_WORKBENCH))
-#define GB_WORKBENCH_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_WORKBENCH, GbWorkbenchClass))
+#define GB_TYPE_WORKBENCH (gb_workbench_get_type())
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbWorkbench, g_object_unref)
+G_DECLARE_FINAL_TYPE (GbWorkbench, gb_workbench, GB, WORKBENCH, GtkApplicationWindow)
 
-struct _GbWorkbench
-{
-  GtkApplicationWindow parent;
-
-  /*< private >*/
-  GbWorkbenchPrivate *priv;
-};
-
-struct _GbWorkbenchClass
-{
-  GtkApplicationWindowClass parent_class;
-
-  void (*workspace_changed) (GbWorkbench *workbench,
-                             GbWorkspace *workspace);
-};
-
-GType              gb_workbench_get_type             (void);
-IdeContext        *gb_workbench_get_context          (GbWorkbench *workbench);
-GbNavigationList  *gb_workbench_get_navigation_list  (GbWorkbench *workbench);
-GbDocumentManager *gb_workbench_get_document_manager (GbWorkbench *workbench);
-GbWorkspace       *gb_workbench_get_active_workspace (GbWorkbench *workbench);
-GbWorkspace       *gb_workbench_get_workspace        (GbWorkbench *workbench,
-                                                      GType        type);
-GbCommandManager  *gb_workbench_get_command_manager  (GbWorkbench *workbench);
+IdeContext       *gb_workbench_get_context          (GbWorkbench *self);
+GbWorkspace      *gb_workbench_get_active_workspace (GbWorkbench *self);
+void              gb_workbench_set_active_workspace (GbWorkbench *self,
+                                                     GbWorkspace *workspace);
+void              gb_workbench_open                 (GbWorkbench *self,
+                                                     GFile       *file);
+GbCommandManager *gb_workbench_get_command_manager  (GbWorkbench *self);
 
 G_END_DECLS
 

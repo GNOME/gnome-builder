@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
+#include "ide-debug.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
 #include "ide-language.h"
@@ -333,6 +334,8 @@ ide_file_finalize (GObject *object)
 {
   IdeFile *self = (IdeFile *)object;
 
+  IDE_ENTRY;
+
   g_clear_object (&self->file);
   g_clear_object (&self->source_file);
   g_clear_object (&self->language);
@@ -340,6 +343,8 @@ ide_file_finalize (GObject *object)
   g_clear_pointer (&self->content_type, g_free);
 
   G_OBJECT_CLASS (ide_file_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void

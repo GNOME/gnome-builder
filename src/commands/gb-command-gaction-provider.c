@@ -18,11 +18,11 @@
 
 #define G_LOG_DOMAIN "gaction-commands"
 
+#include <ide.h>
 #include <string.h>
 
 #include "gb-command-gaction-provider.h"
 #include "gb-command-gaction.h"
-#include "gb-log.h"
 
 G_DEFINE_TYPE (GbCommandGactionProvider, gb_command_gaction_provider,
                GB_TYPE_COMMAND_PROVIDER)
@@ -152,13 +152,13 @@ gb_command_gaction_provider_lookup (GbCommandProvider *provider,
   GList *iter;
   gchar *action_name = NULL;
 
-  ENTRY;
+  IDE_ENTRY;
 
   g_return_val_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (self), NULL);
   g_return_val_if_fail (command_text, NULL);
 
   if (!parse_command_text (command_text, &action_name, &params))
-    RETURN (NULL);
+    IDE_RETURN (NULL);
 
   groups = discover_groups (self);
 
@@ -181,7 +181,7 @@ gb_command_gaction_provider_lookup (GbCommandProvider *provider,
   g_list_free (groups);
   g_free (action_name);
 
-  RETURN (command);
+  IDE_RETURN (command);
 }
 
 static void
@@ -193,7 +193,7 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
   GList *groups;
   GList *iter;
 
-  ENTRY;
+  IDE_ENTRY;
 
   g_return_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (self));
   g_return_if_fail (initial_command_text);
@@ -221,7 +221,7 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
 
   g_list_free (groups);
 
-  EXIT;
+  IDE_EXIT;
 }
 
 static void

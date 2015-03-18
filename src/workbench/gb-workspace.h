@@ -25,33 +25,20 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_WORKSPACE            (gb_workspace_get_type())
-#define GB_WORKSPACE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_WORKSPACE, GbWorkspace))
-#define GB_WORKSPACE_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_WORKSPACE, GbWorkspace const))
-#define GB_WORKSPACE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_WORKSPACE, GbWorkspaceClass))
-#define GB_IS_WORKSPACE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_WORKSPACE))
-#define GB_IS_WORKSPACE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_WORKSPACE))
-#define GB_WORKSPACE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_WORKSPACE, GbWorkspaceClass))
+#define GB_TYPE_WORKSPACE (gb_workspace_get_type())
 
-struct _GbWorkspace
-{
-  GtkBin parent;
-
-  /*< private >*/
-  GbWorkspacePrivate *priv;
-};
+G_DECLARE_DERIVABLE_TYPE (GbWorkspace, gb_workspace, GB, WORKSPACE, GtkBin)
 
 struct _GbWorkspaceClass
 {
   GtkBinClass parent_class;
 };
 
-GType         gb_workspace_get_type      (void);
-const gchar  *gb_workspace_get_icon_name (GbWorkspace *workspace);
-void          gb_workspace_set_icon_name (GbWorkspace *workspace,
+const gchar  *gb_workspace_get_icon_name (GbWorkspace *self);
+void          gb_workspace_set_icon_name (GbWorkspace *self,
                                           const gchar *icon_name);
-const gchar  *gb_workspace_get_title     (GbWorkspace *workspace);
-void          gb_workspace_set_title     (GbWorkspace *workspace,
+const gchar  *gb_workspace_get_title     (GbWorkspace *self);
+void          gb_workspace_set_title     (GbWorkspace *self,
                                           const gchar *title);
 
 G_END_DECLS

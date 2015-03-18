@@ -227,12 +227,8 @@ ide_git_search_index_populate (IdeGitSearchIndex *self,
           markup = str_highlight (shortname, search_terms);
 
           /* create our search result and connect to signals */
-          result = ide_search_result_new (context,
-                                          markup,
-                                          str->str,
-                                          match->score);
-          g_object_set_qdata_full (G_OBJECT (result), gPathQuark,
-                                   g_strdup (match->value), g_free);
+          result = ide_search_result_new (context, markup, str->str, match->score);
+          g_object_set_qdata_full (G_OBJECT (result), gPathQuark, g_strdup (match->value), g_free);
 #if 0
           /* I think we might want to leave this signal on the provider */
           g_signal_connect (result, "activate", G_CALLBACK (activate_cb), NULL);

@@ -1,6 +1,6 @@
 /* gb-keybindings.h
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2014-2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,43 +23,16 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_KEYBINDINGS            (gb_keybindings_get_type())
-#define GB_KEYBINDINGS(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_KEYBINDINGS, GbKeybindings))
-#define GB_KEYBINDINGS_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_KEYBINDINGS, GbKeybindings const))
-#define GB_KEYBINDINGS_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_KEYBINDINGS, GbKeybindingsClass))
-#define GB_IS_KEYBINDINGS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_KEYBINDINGS))
-#define GB_IS_KEYBINDINGS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_KEYBINDINGS))
-#define GB_KEYBINDINGS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_KEYBINDINGS, GbKeybindingsClass))
+#define GB_TYPE_KEYBINDINGS (gb_keybindings_get_type())
 
-typedef struct _GbKeybindings        GbKeybindings;
-typedef struct _GbKeybindingsClass   GbKeybindingsClass;
-typedef struct _GbKeybindingsPrivate GbKeybindingsPrivate;
+G_DECLARE_FINAL_TYPE (GbKeybindings, gb_keybindings, GB, KEYBINDINGS, GObject)
 
-struct _GbKeybindings
-{
-  GObject parent;
-
-  /*< private >*/
-  GbKeybindingsPrivate *priv;
-};
-
-struct _GbKeybindingsClass
-{
-  GObjectClass parent_class;
-};
-
-GType          gb_keybindings_get_type   (void);
-GbKeybindings *gb_keybindings_new        (void);
-gboolean       gb_keybindings_load_bytes (GbKeybindings   *keybindings,
-                                          GBytes          *bytes,
-                                          GError         **error);
-gboolean       gb_keybindings_load_path  (GbKeybindings   *keybindings,
-                                          const gchar     *path,
-                                          GError         **error);
-void           gb_keybindings_register   (GbKeybindings   *keybindings,
-                                          GtkApplication  *application);
-void           gb_keybindings_unregister (GbKeybindings   *keybindings,
-                                          GtkApplication  *application);
+GbKeybindings  *gb_keybindings_new             (GtkApplication *application,
+                                                const gchar    *mode);
+GtkApplication *gb_keybindings_get_application (GbKeybindings *self);
+const gchar    *gb_keybindings_get_mode        (GbKeybindings  *self);
+void            gb_keybindings_set_mode        (GbKeybindings  *self,
+                                                const gchar    *name);
 
 G_END_DECLS
 

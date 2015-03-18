@@ -19,9 +19,9 @@
 #define G_LOG_DOMAIN "prefs-page"
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "gb-preferences-page.h"
-#include "gb-log.h"
 #include "gb-string.h"
 
 struct _GbPreferencesPagePrivate

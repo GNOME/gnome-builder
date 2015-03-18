@@ -95,7 +95,7 @@ context_cb (GObject      *object,
                     G_CALLBACK (on_completed_cb),
                     g_object_ref (context));
 
-  ide_search_context_execute (search_context, gSearchTerms);
+  ide_search_context_execute (search_context, gSearchTerms, 0);
 }
 
 gint

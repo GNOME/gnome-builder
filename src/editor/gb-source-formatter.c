@@ -20,8 +20,8 @@
 #define UNCRUSTIFY_CONFIG_DIRECTORY "/org/gnome/builder/editor/uncrustify/"
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
-#include "gb-log.h"
 #include "gb-source-formatter.h"
 
 struct _GbSourceFormatterPrivate
@@ -194,7 +194,7 @@ gb_source_formatter_extract_configs (void)
   gchar *target_dir;
   guint i;
 
-  ENTRY;
+  IDE_ENTRY;
 
   target_dir = g_build_filename (g_get_user_config_dir (),
                                  "gnome-builder", "uncrustify",
@@ -213,7 +213,7 @@ gb_source_formatter_extract_configs (void)
     {
       g_warning ("%s", error->message);
       g_clear_error (&error);
-      GOTO (cleanup);
+      IDE_GOTO (cleanup);
     }
 
   for (i = 0; names [i]; i++)
@@ -255,7 +255,7 @@ cleanup:
   g_strfreev (names);
   g_free (target_dir);
 
-  EXIT;
+  IDE_EXIT;
 }
 
 static void

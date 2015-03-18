@@ -1,6 +1,6 @@
 /* gb-workbench.c
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2014-2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,808 +16,129 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "workbench"
+#define G_LOG_DOMAIN "gb-workbench"
 
 #include <glib/gi18n.h>
-#include <libgit2-glib/ggit.h>
+#include <ide.h>
 
-#include "gb-command-bar.h"
-#include "gb-command-gaction-provider.h"
-#include "gb-command-manager.h"
-#include "gb-command-vim-provider.h"
-#include "gb-close-confirmation-dialog.h"
-#include "gb-credits-widget.h"
-#include "gb-document-manager.h"
-#include "gb-editor-workspace.h"
-#include "gb-git-search-provider.h"
-#include "gb-glib.h"
-#include "gb-log.h"
-#include "gb-search-box.h"
-#include "gb-search-manager.h"
 #include "gb-widget.h"
+#include "gb-workbench-actions.h"
+#include "gb-workbench-private.h"
 #include "gb-workbench.h"
-#include "gedit-menu-stack-switcher.h"
+#include "gb-workspace.h"
 
-struct _GbWorkbenchPrivate
-{
-  GbCommandManager       *command_manager;
-  GbDocumentManager      *document_manager;
-  GbNavigationList       *navigation_list;
-  GbSearchManager        *search_manager;
-  IdeContext             *context;
-
-  guint                   search_timeout;
-  guint                   disposing;
-  guint                   building : 1;
-
-  GbWorkspace            *active_workspace;
-  GbCommandBar           *command_bar;
-  GbCreditsWidget        *credits;
-  GbWorkspace            *editor;
-  GeditMenuStackSwitcher *gear_menu_button;
-  GtkHeaderBar           *header_bar;
-  GtkButton              *run_button;
-  GbSearchBox            *search_box;
-  GtkStack               *stack;
-};
-
-typedef struct
-{
-  GCancellable *cancellable;
-  gint          outstanding;
-} SavedState;
+G_DEFINE_TYPE (GbWorkbench, gb_workbench, GTK_TYPE_APPLICATION_WINDOW)
 
 enum {
   PROP_0,
+  PROP_ACTIVE_WORKSPACE,
   PROP_COMMAND_MANAGER,
   PROP_CONTEXT,
-  PROP_NAVIGATION_LIST,
   LAST_PROP
 };
 
-enum {
-  WORKSPACE_CHANGED,
-  LAST_SIGNAL
-};
-
-G_DEFINE_TYPE_WITH_PRIVATE (GbWorkbench, gb_workbench,
-                            GTK_TYPE_APPLICATION_WINDOW)
-
 static GParamSpec *gParamSpecs [LAST_PROP];
-static guint       gSignals [LAST_SIGNAL];
 
-IdeContext *
-gb_workbench_get_context (GbWorkbench *workbench)
-{
-  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
-
-  return workbench->priv->context;
-}
-
-void
-gb_workbench_set_context (GbWorkbench *workbench,
+static void
+gb_workbench_set_context (GbWorkbench *self,
                           IdeContext  *context)
 {
-  GbWorkbenchPrivate *priv;
+  g_return_if_fail (GB_IS_WORKBENCH (self));
+  g_return_if_fail (IDE_IS_CONTEXT (context));
 
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (!context || IDE_IS_CONTEXT (context));
-
-  priv = workbench->priv;
-
-  if (g_set_object (&priv->context, context))
-    g_object_notify_by_pspec (G_OBJECT (workbench), gParamSpecs [PROP_CONTEXT]);
-}
-
-/**
- * gb_workbench_get_command_manager:
- *
- * Retrieves the command manager for the workspace.
- *
- * Returns: (transfer none) (type GbCommandManager*): A #GbCommandManager.
- */
-GbCommandManager *
-gb_workbench_get_command_manager (GbWorkbench *workbench)
-{
-  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
-
-  return workbench->priv->command_manager;
-}
-
-/**
- * gb_workbench_get_document_manager:
- * @workbench: A #GbWorkbench
- *
- * Retrieves the document manager for the workbench.
- *
- * Returns: (transfer none): A #GbDocumentManager.
- */
-GbDocumentManager *
-gb_workbench_get_document_manager (GbWorkbench *workbench)
-{
-  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
-
-  return workbench->priv->document_manager;
-}
-
-/**
- * gb_workbench_get_navigation_list:
- *
- * Fetches the navigation list for the workbench. This can be used to move
- * between edit points between workspaces.
- *
- * Returns: (transfer none): A #GbNavigationlist.
- */
-GbNavigationList *
-gb_workbench_get_navigation_list (GbWorkbench *workbench)
-{
-  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
-
-  return workbench->priv->navigation_list;
-}
-
-static gboolean
-gb_workbench_key_press_event (GtkWidget   *widget,
-                              GdkEventKey *event)
-{
-  GbWorkbench *self = (GbWorkbench *)widget;
-
-  g_return_val_if_fail (GB_IS_WORKBENCH (self), FALSE);
-  g_return_val_if_fail (event, FALSE);
-
-  switch (event->keyval)
-    {
-    case GDK_KEY_KP_Enter:
-    case GDK_KEY_Return:
-    case GDK_KEY_Escape:
-    case GDK_KEY_space:
-      if (gb_credits_widget_is_rolling (self->priv->credits))
-        {
-          gb_credits_widget_stop (self->priv->credits);
-          return GDK_EVENT_STOP;
-        }
-      break;
-
-    default:
-      break;
-    }
-
-  return GTK_WIDGET_CLASS (gb_workbench_parent_class)->key_press_event (widget, event);
+  if (g_set_object (&self->context, context))
+    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CONTEXT]);
 }
 
 static void
-load_repository_func (GTask        *task,
-                      gpointer      source_object,
-                      gpointer      task_data,
-                      GCancellable *cancellable)
-{
-  GbSearchProvider *provider;
-  GgitRepository *repository;
-  GError *error = NULL;
-  GFile *file = task_data;
-
-  g_return_if_fail (G_IS_TASK (task));
-  g_return_if_fail (GB_IS_WORKBENCH (source_object));
-  g_return_if_fail (G_IS_FILE (file));
-
-  repository = ggit_repository_open (file, &error);
-
-  if (!repository)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  provider = g_object_new (GB_TYPE_GIT_SEARCH_PROVIDER,
-                           "workbench", source_object,
-                           "repository", repository,
-                           NULL);
-  g_task_return_pointer (task, provider, g_object_unref);
-  g_clear_object (&repository);
-}
-
-static void
-repository_loaded (GObject      *object,
-                   GAsyncResult *result,
-                   gpointer      unused)
-{
-  GbWorkbench *workbench = (GbWorkbench *)object;
-  GbSearchProvider *provider;
-  GError *error = NULL;
-  GTask *task = (GTask *)result;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (G_IS_TASK (task));
-
-  provider = g_task_propagate_pointer (task, &error);
-
-  if (!provider)
-    {
-      g_printerr ("%s\n", error->message);
-      g_clear_error (&error);
-    }
-  else
-    {
-      gb_search_manager_add_provider (workbench->priv->search_manager,
-                                      provider);
-      g_clear_object (&provider);
-    }
-}
-
-GbSearchManager *
-gb_workbench_get_search_manager (GbWorkbench *workbench)
-{
-  GbWorkbenchPrivate *priv;
-
-  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
-
-  priv = workbench->priv;
-
-  if (!priv->search_manager)
-    {
-      GFile *file;
-      GTask *task;
-
-      priv->search_manager = gb_search_manager_new ();
-
-      /* TODO: Keep repository in sync with loaded project */
-      file = g_file_new_for_path (".");
-      task = g_task_new (workbench, NULL, repository_loaded, NULL);
-      g_task_set_task_data (task, g_object_ref (file), g_object_unref);
-      g_task_run_in_thread (task, load_repository_func);
-      g_clear_object (&task);
-      g_clear_object (&file);
-    }
-
-  return priv->search_manager;
-}
-
-/**
- * gb_workbench_get_active_workspace:
- *
- * Retrieves the active workspace.
- *
- * Returns: (transfer none): A #GbWorkbench.
- */
-GbWorkspace *
-gb_workbench_get_active_workspace (GbWorkbench *workbench)
-{
-   GtkWidget *child;
-
-   g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
-
-   child = gtk_stack_get_visible_child (workbench->priv->stack);
-
-   return GB_WORKSPACE (child);
-}
-
-/**
- * gb_workbench_get_workspace:
- * @type: A #GType descending from #GbWorkspace
- *
- * Retrieves the workspace of type @type.
- *
- * Returns: (transfer none) (nullable): A #GbWorkspace or %NULL.
- */
-GbWorkspace *
-gb_workbench_get_workspace (GbWorkbench *workbench,
-                            GType        type)
-{
-  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), NULL);
-  g_return_val_if_fail (g_type_is_a (type, GB_TYPE_WORKSPACE), NULL);
-
-  if (type == GB_TYPE_EDITOR_WORKSPACE)
-    return GB_WORKSPACE (workbench->priv->editor);
-
-  return NULL;
-}
-
-static void
-gb_workbench_roll_credits (GbWorkbench *workbench)
-{
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-
-  gb_credits_widget_start (workbench->priv->credits);
-}
-
-static void
-gb_workbench_workspace_changed (GbWorkbench *workbench,
-                                GbWorkspace *workspace)
-{
-  GbWorkbenchPrivate *priv;
-
-  ENTRY;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (GB_IS_WORKSPACE (workspace));
-
-  priv = workbench->priv;
-
-  gb_clear_weak_pointer (&priv->active_workspace);
-
-  if (workspace)
-    {
-      gb_set_weak_pointer (workspace, &priv->active_workspace);
-      gtk_widget_grab_focus (GTK_WIDGET (workspace));
-    }
-
-  EXIT;
-}
-
-static void
-gb_workbench_stack_child_changed (GbWorkbench *workbench,
-                                  GParamSpec  *pspec,
-                                  GtkStack    *stack)
-{
-  GtkWidget *child;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (GTK_IS_STACK (stack));
-
-  child = gtk_stack_get_visible_child (stack);
-  g_assert (!child || GB_IS_WORKSPACE (child));
-
-  if (GB_IS_WORKSPACE (child))
-    {
-      GActionGroup *action_group;
-
-      /*
-       * Some actions need to be propagated from the workspace to the
-       * toplevel. This way the header bar can activate them.
-       */
-      action_group = gtk_widget_get_action_group (child, "workspace");
-      gtk_widget_insert_action_group (GTK_WIDGET (workbench),
-                                      "workspace", action_group);
-    }
-
-  if (child)
-    g_signal_emit (workbench, gSignals[WORKSPACE_CHANGED], 0, child);
-}
-
-static void
-gb_workbench_realize (GtkWidget *widget)
-{
-  GbWorkbench *workbench = (GbWorkbench *)widget;
-
-  if (GTK_WIDGET_CLASS (gb_workbench_parent_class)->realize)
-    GTK_WIDGET_CLASS (gb_workbench_parent_class)->realize (widget);
-
-  gtk_widget_grab_focus (GTK_WIDGET (workbench->priv->editor));
-}
-
-static void
-gb_workbench_action_go_forward (GSimpleAction *action,
-                                GVariant      *variant,
-                                gpointer       user_data)
-{
-  GbWorkbench *workbench = user_data;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-
-  if (gb_navigation_list_get_can_go_forward (workbench->priv->navigation_list))
-    gb_navigation_list_go_forward (workbench->priv->navigation_list);
-}
-
-static void
-gb_workbench_action_go_backward (GSimpleAction *action,
-                                 GVariant      *variant,
-                                 gpointer       user_data)
-{
-  GbWorkbench *workbench = user_data;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-
-  if (gb_navigation_list_get_can_go_backward (workbench->priv->navigation_list))
-    gb_navigation_list_go_backward (workbench->priv->navigation_list);
-}
-
-static void
-gb_workbench_action_toggle_command_bar (GSimpleAction *action,
-                                        GVariant      *parameters,
-                                        gpointer       user_data)
-{
-  GbWorkbench *workbench = user_data;
-  gboolean show = TRUE;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-
-  show = g_variant_get_boolean (parameters);
-
-  if (show)
-    gb_command_bar_show (workbench->priv->command_bar);
-  else
-    gb_command_bar_hide (workbench->priv->command_bar);
-}
-
-static void
-gb_workbench_action_show_command_bar (GSimpleAction *action,
-                                      GVariant      *parameters,
-                                      gpointer       user_data)
-{
-  GVariant *b;
-
-  g_return_if_fail (GB_IS_WORKBENCH (user_data));
-
-  b = g_variant_new_boolean (TRUE);
-  gb_workbench_action_toggle_command_bar (NULL, b, user_data);
-  g_variant_unref (b);
-}
-
-static void
-build_cb (GObject      *object,
-          GAsyncResult *result,
-          gpointer      user_data)
-{
-  IdeBuilder *builder = (IdeBuilder *)object;
-  g_autoptr(GbWorkbench) workbench = user_data;
-  g_autoptr(IdeBuildResult) build_result = NULL;
-  g_autoptr(GError) error = NULL;
-
-  g_return_if_fail (IDE_IS_BUILDER (builder));
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-
-  workbench->priv->building = FALSE;
-
-  g_print ("Build finished.\n");
-
-  build_result = ide_builder_build_finish (builder, result, &error);
-
-  if (!build_result)
-    {
-      /*
-       * TODO: Focus build output pane?
-       */
-    }
-}
-
-static void
-gb_workbench_action_build (GSimpleAction *action,
-                           GVariant      *parameters,
-                           gpointer       user_data)
-{
-  GbWorkbenchPrivate *priv;
-  GbWorkbench *workbench = user_data;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-
-  priv = workbench->priv;
-
-  if (priv->building)
-    {
-      /*
-       * TODO: Can we have multiple parallel builds? Seems okay as long as they
-       *       are for different devices.
-       */
-      g_message (_("Already building.\n"));
-      return;
-    }
-
-  if (priv->context)
-    {
-      IdeDeviceManager *device_manager;
-      IdeBuildSystem *build_system;
-      g_autoptr(IdeDevice) device = NULL;
-      GPtrArray *devices;
-      guint i;
-
-      /*
-       * TODO: Add combo to select the target device we are working with.
-       */
-
-      device_manager = ide_context_get_device_manager (priv->context);
-      build_system = ide_context_get_build_system (priv->context);
-
-      devices = ide_device_manager_get_devices (device_manager);
-      for (i = 0; i < devices->len; i++)
-        {
-          IdeDevice *item = g_ptr_array_index (devices, i);
-
-          if (IDE_IS_LOCAL_DEVICE (item))
-            {
-              device = g_object_ref (item);
-              break;
-            }
-        }
-      g_ptr_array_unref (devices);
-
-      if (device)
-        {
-          g_autoptr(IdeBuilder) builder = NULL;
-          g_autoptr(GError) error = NULL;
-          g_autoptr(GKeyFile) config = NULL;
-
-          /*
-           * TODO: This should come from the current workspace configuration
-           *       for the build. We probably need to persist this between
-           *       runs as well.
-           */
-          config = g_key_file_new ();
-
-          builder = ide_build_system_get_builder (build_system,
-                                                  config,
-                                                  device,
-                                                  &error);
-
-          if (!builder)
-            {
-              g_warning ("%s\n", error->message);
-              return;
-            }
-
-          /*
-           * TODO: We should attach to the results progress signal so that we
-           *       can proxy that to the build status in the workbench.
-           */
-          priv->building = TRUE;
-          ide_builder_build_async (builder,
-                                   NULL,
-                                   NULL,
-                                   build_cb,
-                                   g_object_ref (workbench));
-        }
-    }
-}
-
-static void
-gb_workbench_action_global_search (GSimpleAction *action,
-                                   GVariant      *parameters,
-                                   gpointer       user_data)
-{
-  GbWorkbench *workbench = user_data;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-
-  gtk_widget_grab_focus (GTK_WIDGET (workbench->priv->search_box));
-}
-
-static void
-gb_workbench_action_roll_credits (GSimpleAction *action,
-                                  GVariant      *parameters,
-                                  gpointer       user_data)
-{
-  GbWorkbench *workbench = user_data;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-
-  gb_workbench_roll_credits (workbench);
-}
-
-static void
-gb_workbench_action_save_all (GSimpleAction *action,
-                              GVariant      *parameters,
-                              gpointer       user_data)
-{
-  GbWorkbench *workbench = user_data;
-  GList *list;
-  GList *iter;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-
-  list = gb_document_manager_get_documents (workbench->priv->document_manager);
-
-  for (iter = list; iter; iter = iter->next)
-    {
-      GbDocument *document = GB_DOCUMENT (iter->data);
-
-      /* This will not save files which do not have location set */
-      if (gb_document_get_modified (document))
-        gb_document_save_async (document, GTK_WIDGET (workbench),
-                                NULL, NULL, NULL);
-    }
-
-  g_list_free (list);
-}
-
-static void
-gb_workbench_navigation_changed (GbWorkbench      *workbench,
-                                 GParamSpec       *pspec,
-                                 GbNavigationList *list)
-{
-  GbWorkbenchPrivate *priv;
-  GbNavigationItem *item;
-  GbWorkspace *workspace;
-
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (GB_IS_NAVIGATION_LIST (list));
-
-  priv = workbench->priv;
-
-  item = gb_navigation_list_get_current_item (list);
-
-  if (item)
-    {
-      workspace = gb_navigation_item_get_workspace (item);
-      if (workspace)
-        gtk_stack_set_visible_child (priv->stack, GTK_WIDGET (workspace));
-      gb_navigation_item_activate (item);
-    }
-}
-
-static void
-gb_workbench_save_cb (GObject      *object,
-                      GAsyncResult *result,
-                      gpointer      user_data)
-{
-  SavedState *state = user_data;
-
-  GbDocument *document = (GbDocument *)object;
-
-  gb_document_save_finish (document, result, NULL);
-
-  state->outstanding--;
-}
-
-static void
-gb_workbench_save_as_cb (GObject      *object,
+gb_workbench__unload_cb (GObject      *object,
                          GAsyncResult *result,
                          gpointer      user_data)
 {
-  SavedState *state = user_data;
+  IdeContext *context = (IdeContext *)object;
+  g_autoptr(GbWorkbench) self = user_data;
+  GError *error = NULL;
 
-  GbDocument *document = (GbDocument *)object;
-
-  gb_document_save_as_finish (document, result, NULL);
-
-  state->outstanding--;
-}
-
-static void
-gb_workbench_begin_save (GbWorkbench *workbench,
-                         GbDocument  *document,
-                         SavedState  *state)
-{
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (GB_IS_DOCUMENT (document));
-  g_return_if_fail (state);
-
-  state->outstanding++;
-
-  gb_document_save_async (document,
-                          GTK_WIDGET (workbench),
-                          state->cancellable,
-                          gb_workbench_save_cb,
-                          state);
-}
-
-static void
-gb_workbench_begin_save_as (GbWorkbench *workbench,
-                            GbDocument  *document,
-                            SavedState  *state)
-{
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (GB_IS_DOCUMENT (document));
-  g_return_if_fail (state);
-
-  state->outstanding++;
-
-  gb_document_save_as_async (document,
-                             GTK_WIDGET (workbench),
-                             state->cancellable,
-                             gb_workbench_save_as_cb,
-                             state);
-}
-
-static void
-gb_workbench_wait_for_saved (GbWorkbench *workbench,
-                             GtkDialog   *dialog,
-                             SavedState  *state)
-{
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (GTK_IS_DIALOG (dialog));
-  g_return_if_fail (state);
-
-  gtk_widget_set_sensitive (GTK_WIDGET (dialog), FALSE);
-  while (state->outstanding)
-    gtk_main_iteration_do (TRUE);
-  gtk_widget_set_sensitive (GTK_WIDGET (dialog), TRUE);
-}
-
-static gboolean
-gb_workbench_confirm_close (GbWorkbench *workbench)
-{
-  GbDocumentManager *document_manager;
-  gboolean ret = FALSE;
-  GList *unsaved = NULL;
-
-  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), FALSE);
-
-  document_manager = gb_workbench_get_document_manager (workbench);
-  unsaved = gb_document_manager_get_unsaved_documents (document_manager);
-
-  if (unsaved)
+  if (!ide_context_unload_finish (context, result, &error))
     {
-      GbCloseConfirmationDialog *close;
-      SavedState state = { 0 };
-      GtkWidget *dialog;
-      GList *selected;
-      GList *iter;
-      gint response_id;
-
-      dialog = gb_close_confirmation_dialog_new (GTK_WINDOW (workbench),
-                                                 unsaved);
-      close = GB_CLOSE_CONFIRMATION_DIALOG (dialog);
-      response_id = gtk_dialog_run (GTK_DIALOG (dialog));
-      selected = gb_close_confirmation_dialog_get_selected_documents (close);
-
-      switch (response_id)
-        {
-        case GTK_RESPONSE_YES:
-          state.cancellable = g_cancellable_new ();
-
-          for (iter = selected; iter; iter = iter->next)
-            {
-              GbDocument *document = GB_DOCUMENT (iter->data);
-
-              if (gb_document_is_untitled (document))
-                gb_workbench_begin_save_as (workbench, document, &state);
-              else
-                gb_workbench_begin_save (workbench, document, &state);
-            }
-
-          gb_workbench_wait_for_saved (workbench, GTK_DIALOG (dialog), &state);
-          g_clear_object (&state.cancellable);
-          break;
-
-        case GTK_RESPONSE_NO:
-          break;
-
-        case GTK_RESPONSE_DELETE_EVENT:
-        case GTK_RESPONSE_CANCEL:
-          ret = TRUE;
-          break;
-
-        default:
-          g_assert_not_reached ();
-        }
-
-      g_list_free (selected);
-      gtk_widget_hide (dialog);
-      gtk_widget_destroy (dialog);
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
     }
 
-  g_list_free (unsaved);
-
-  return ret;
+  self->unloading = FALSE;
+  g_clear_object (&self->context);
+  gtk_window_close (GTK_WINDOW (self));
 }
 
 static gboolean
 gb_workbench_delete_event (GtkWidget   *widget,
                            GdkEventAny *event)
 {
-  GbWorkbench *workbench = (GbWorkbench *)widget;
+  GbWorkbench *self = (GbWorkbench *)widget;
 
-  g_return_val_if_fail (GB_IS_WORKBENCH (workbench), FALSE);
+  g_assert (GB_IS_WORKBENCH (self));
 
-  if (!gb_workbench_confirm_close (workbench))
+  if (self->unloading)
     {
-      if (GTK_WIDGET_CLASS (gb_workbench_parent_class)->delete_event)
-        return GTK_WIDGET_CLASS (gb_workbench_parent_class)->delete_event (widget, event);
-      return FALSE;
+      /* Second attempt to kill things, cancel clean shutdown */
+      g_cancellable_cancel (self->unload_cancellable);
+      return TRUE;
     }
 
-  return TRUE;
+  if (self->context != NULL)
+    {
+      g_assert (!self->unload_cancellable);
+
+      self->unloading = TRUE;
+      self->unload_cancellable = g_cancellable_new ();
+      ide_context_unload_async (self->context,
+                                self->unload_cancellable,
+                                gb_workbench__unload_cb,
+                                g_object_ref (self));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gb_workbench_draw (GtkWidget *widget,
+                   cairo_t   *cr)
+{
+  GbWorkbench *self = (GbWorkbench *)widget;
+  GtkStyleContext *style_context;
+  gboolean ret;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  style_context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (style_context);
+  if (self->building)
+    gtk_style_context_add_class (style_context, "building");
+  ret = GTK_WIDGET_CLASS (gb_workbench_parent_class)->draw (widget, cr);
+  gtk_style_context_restore (style_context);
+
+  return ret;
 }
 
 static void
-gb_workbench_add_command_provider (GbWorkbench *workbench,
-                                   GType        type)
+gb_workbench_realize (GtkWidget *widget)
 {
-  GbCommandProvider *provider;
+  GbWorkbench *self = (GbWorkbench *)widget;
 
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
-  g_return_if_fail (g_type_is_a (type, GB_TYPE_COMMAND_PROVIDER));
+  if (GTK_WIDGET_CLASS (gb_workbench_parent_class)->realize)
+    GTK_WIDGET_CLASS (gb_workbench_parent_class)->realize (widget);
 
-  provider = g_object_new (type, "workbench", workbench, NULL);
-  gb_command_manager_add_provider (workbench->priv->command_manager, provider);
+  gtk_widget_grab_focus (GTK_WIDGET (self->editor_workspace));
 }
 
 static void
 gb_workbench_set_focus (GtkWindow *window,
                         GtkWidget *widget)
 {
-  GbWorkbench *workbench = (GbWorkbench *)window;
+  GbWorkbench *self = (GbWorkbench *)window;
 
-  g_return_if_fail (GB_IS_WORKBENCH (workbench));
+  g_return_if_fail (GB_IS_WORKBENCH (self));
 
   /*
    * The goal here is to focus the current workspace if we are trying to
@@ -826,7 +147,7 @@ gb_workbench_set_focus (GtkWindow *window,
 
   GTK_WINDOW_CLASS (gb_workbench_parent_class)->set_focus (window, widget);
 
-  if (!widget && !workbench->priv->disposing)
+  if (!widget && !self->disposing)
     {
       GbWorkspace *workspace;
 
@@ -837,131 +158,69 @@ gb_workbench_set_focus (GtkWindow *window,
        * for reentrancy later, but if that happens, we are probably doing
        * something else wrong.
        */
-      workspace = gb_workbench_get_active_workspace (workbench);
+      workspace = gb_workbench_get_active_workspace (self);
       if (workspace)
         gtk_widget_grab_focus (GTK_WIDGET (workspace));
     }
 }
 
 static void
-on_context_new_cb (GObject      *object,
-                   GAsyncResult *result,
-                   gpointer      user_data)
-{
-  g_autoptr(GbWorkbench) self = user_data;
-  g_autoptr(IdeContext) context = NULL;
-  g_autoptr(GError) error = NULL;
-
-  context = ide_context_new_finish (result, &error);
-
-  if (!context)
-    g_warning ("%s\n", error->message);
-  else
-    gb_workbench_set_context (self, context);
-}
-
-static void
 gb_workbench_constructed (GObject *object)
 {
-  static const GActionEntry actions[] = {
-    { "build",              gb_workbench_action_build },
-    { "global-search",      gb_workbench_action_global_search },
-    { "go-backward",        gb_workbench_action_go_backward },
-    { "go-forward",         gb_workbench_action_go_forward },
-    { "show-command-bar",   gb_workbench_action_show_command_bar },
-    { "toggle-command-bar", gb_workbench_action_toggle_command_bar, "b" },
-    { "save-all",           gb_workbench_action_save_all },
-    { "about",              gb_workbench_action_roll_credits },
-  };
-  GbWorkbenchPrivate *priv;
-  GbWorkbench *workbench = (GbWorkbench *)object;
-  GbSearchManager *search_manager;
+  GbWorkbench *self = (GbWorkbench *)object;
   GtkApplication *app;
-  GAction *action;
   GMenu *menu;
 
-  g_assert (GB_IS_WORKBENCH (workbench));
-
-  ENTRY;
-
-  priv = workbench->priv;
+  IDE_ENTRY;
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->constructed (object);
 
+  gb_workbench_actions_init (self);
+
   app = GTK_APPLICATION (g_application_get_default ());
   menu = gtk_application_get_menu_by_id (app, "gear-menu");
-  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (priv->gear_menu_button),
-                                  G_MENU_MODEL (menu));
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (self->gear_menu_button), G_MENU_MODEL (menu));
 
-  g_signal_connect_object (priv->stack,
-                           "notify::visible-child",
-                           G_CALLBACK (gb_workbench_stack_child_changed),
-                           workbench,
-                           (G_CONNECT_SWAPPED | G_CONNECT_AFTER));
+  if (self->active_workspace)
+    gtk_widget_grab_focus (GTK_WIDGET (self->active_workspace));
+  else
+    gtk_widget_grab_focus (GTK_WIDGET (self->editor_workspace));
 
-  g_action_map_add_action_entries (G_ACTION_MAP (workbench), actions,
-                                   G_N_ELEMENTS (actions), workbench);
-
-  g_signal_connect_object (priv->navigation_list,
-                           "notify::current-item",
-                           G_CALLBACK (gb_workbench_navigation_changed),
-                           workbench,
-                           G_CONNECT_SWAPPED);
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (workbench), "go-backward");
-  g_object_bind_property (priv->navigation_list, "can-go-backward",
-                          action, "enabled", G_BINDING_SYNC_CREATE);
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (workbench), "go-forward");
-  g_object_bind_property (priv->navigation_list, "can-go-forward",
-                          action, "enabled", G_BINDING_SYNC_CREATE);
-
-  search_manager = gb_workbench_get_search_manager (workbench);
-  gb_search_box_set_search_manager (workbench->priv->search_box,
-                                    search_manager);
-
-  gb_workbench_stack_child_changed (workbench, NULL, priv->stack);
-
-  /*
-   * TODO: Dummy code until we have real project loading.
-   */
-  {
-    g_autoptr(GFile) project_dir = g_file_new_for_path (".");
-
-    ide_context_new_async (project_dir,
-                           NULL,
-                           on_context_new_cb,
-                           g_object_ref (workbench));
-  }
-
-  EXIT;
+  IDE_EXIT;
 }
 
 static void
 gb_workbench_dispose (GObject *object)
 {
-  GbWorkbenchPrivate *priv = GB_WORKBENCH (object)->priv;
+  GbWorkbench *self = (GbWorkbench *)object;
 
-  ENTRY;
+  IDE_ENTRY;
 
-  priv->disposing++;
+  self->disposing++;
 
-  if (priv->search_timeout)
-    {
-      g_source_remove (priv->search_timeout);
-      priv->search_timeout = 0;
-    }
-
-  g_clear_object (&priv->command_manager);
-  g_clear_object (&priv->document_manager);
-  g_clear_object (&priv->navigation_list);
-  g_clear_object (&priv->search_manager);
+  g_clear_object (&self->command_manager);
+  g_clear_object (&self->unload_cancellable);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->dispose (object);
 
-  priv->disposing--;
+  self->disposing--;
 
-  EXIT;
+  IDE_EXIT;
+}
+
+static void
+gb_workbench_finalize (GObject *object)
+{
+  GbWorkbench *self = (GbWorkbench *)object;
+
+  IDE_ENTRY;
+
+  ide_clear_weak_pointer (&self->active_workspace);
+  g_clear_object (&self->context);
+
+  G_OBJECT_CLASS (gb_workbench_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void
@@ -974,16 +233,16 @@ gb_workbench_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ACTIVE_WORKSPACE:
+      g_value_set_object (value, gb_workbench_get_active_workspace (self));
+      break;
+
     case PROP_COMMAND_MANAGER:
       g_value_set_object (value, gb_workbench_get_command_manager (self));
       break;
 
     case PROP_CONTEXT:
       g_value_set_object (value, gb_workbench_get_context (self));
-      break;
-
-    case PROP_NAVIGATION_LIST:
-      g_value_set_object (value, gb_workbench_get_navigation_list (self));
       break;
 
     default:
@@ -1001,6 +260,10 @@ gb_workbench_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ACTIVE_WORKSPACE:
+      gb_workbench_set_active_workspace (self, g_value_get_object (value));
+      break;
+
     case PROP_CONTEXT:
       gb_workbench_set_context (self, g_value_get_object (value));
       break;
@@ -1019,88 +282,153 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 
   object_class->constructed = gb_workbench_constructed;
   object_class->dispose = gb_workbench_dispose;
+  object_class->finalize = gb_workbench_finalize;
   object_class->get_property = gb_workbench_get_property;
   object_class->set_property = gb_workbench_set_property;
 
+  widget_class->draw = gb_workbench_draw;
   widget_class->realize = gb_workbench_realize;
   widget_class->delete_event = gb_workbench_delete_event;
-  widget_class->key_press_event = gb_workbench_key_press_event;
 
   window_class->set_focus = gb_workbench_set_focus;
 
-  klass->workspace_changed = gb_workbench_workspace_changed;
+  gParamSpecs [PROP_ACTIVE_WORKSPACE] =
+    g_param_spec_object ("active-workspace",
+                         _("Active Workspace"),
+                         _("The active workspace"),
+                         GB_TYPE_WORKSPACE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_ACTIVE_WORKSPACE,
+                                   gParamSpecs [PROP_ACTIVE_WORKSPACE]);
 
   gParamSpecs [PROP_COMMAND_MANAGER] =
     g_param_spec_object ("command-manager",
                          _("Command Manager"),
-                         _("The command manager for the workspace."),
+                         _("The command manager for the workbench"),
                          GB_TYPE_COMMAND_MANAGER,
-                         (G_PARAM_READABLE |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_COMMAND_MANAGER,
                                    gParamSpecs [PROP_COMMAND_MANAGER]);
 
+  /**
+   * GbWorkbench:context:
+   *
+   * The "context" property is the #IdeContext that shall be worked upon in
+   * the #GbWorkbench. This must be set during workbench creation. Use
+   * another window or dialog to choose the project information before
+   * creating a workbench window.
+   */
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
                          _("Context"),
-                         _("The IDE context for the workbench."),
+                         _("The IdeContext for the workbench."),
                          IDE_TYPE_CONTEXT,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CONTEXT,
-                                   gParamSpecs [PROP_CONTEXT]);
-
-  gParamSpecs [PROP_NAVIGATION_LIST] =
-    g_param_spec_object ("navigation-list",
-                         _("Navigation List"),
-                         _("The navigation list for the workbench."),
-                         GB_TYPE_NAVIGATION_LIST,
-                         (G_PARAM_READABLE |
-                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_NAVIGATION_LIST,
-                                   gParamSpecs [PROP_NAVIGATION_LIST]);
-
-  gSignals [WORKSPACE_CHANGED] =
-    g_signal_new ("workspace-changed",
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GbWorkbenchClass, workspace_changed),
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE,
-                  1,
-                  GB_TYPE_WORKSPACE);
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_CONTEXT, gParamSpecs [PROP_CONTEXT]);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-workbench.ui");
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, command_bar);
-  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, credits);
-  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, editor);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, editor_workspace);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, gear_menu_button);
-  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, header_bar);
-  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, run_button);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_box);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, stack);
 
   g_type_ensure (GB_TYPE_COMMAND_BAR);
-  g_type_ensure (GB_TYPE_CREDITS_WIDGET);
   g_type_ensure (GB_TYPE_EDITOR_WORKSPACE);
   g_type_ensure (GB_TYPE_SEARCH_BOX);
   g_type_ensure (GEDIT_TYPE_MENU_STACK_SWITCHER);
 }
 
 static void
-gb_workbench_init (GbWorkbench *workbench)
+gb_workbench_init (GbWorkbench *self)
 {
-  workbench->priv = gb_workbench_get_instance_private (workbench);
+  IDE_ENTRY;
 
-  workbench->priv->document_manager = gb_document_manager_new ();
-  workbench->priv->command_manager = gb_command_manager_new ();
-  workbench->priv->navigation_list = gb_navigation_list_new (workbench);
+  gtk_widget_init_template (GTK_WIDGET (self));
 
-  gtk_widget_init_template (GTK_WIDGET (workbench));
+  self->command_manager = gb_command_manager_new ();
 
-  gb_workbench_add_command_provider (workbench,
-                                     GB_TYPE_COMMAND_GACTION_PROVIDER);
-  gb_workbench_add_command_provider (workbench,
-                                     GB_TYPE_COMMAND_VIM_PROVIDER);
+  IDE_EXIT;
+}
+
+/**
+ * gb_workbench_get_context:
+ * @self: A #GbWorkbench.
+ *
+ * Gets the #IdeContext for the workbench.
+ *
+ * Returns: (transfer none): An #IdeContext.
+ */
+IdeContext *
+gb_workbench_get_context (GbWorkbench *self)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
+
+  return self->context;
+}
+
+/**
+ * gb_workbench_get_active_workspace:
+ * @self: A #GbWorkbench.
+ *
+ * Gets the currently selected workspace.
+ *
+ * Returns: (transfer none): An #GbWorkspace.
+ */
+GbWorkspace *
+gb_workbench_get_active_workspace (GbWorkbench *self)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
+
+  return self->active_workspace;
+}
+
+void
+gb_workbench_set_active_workspace (GbWorkbench *self,
+                                   GbWorkspace *workspace)
+{
+  g_return_if_fail (GB_IS_WORKBENCH (self));
+  g_return_if_fail (GB_IS_WORKSPACE (workspace));
+
+  if (ide_set_weak_pointer (&self->active_workspace, workspace))
+    gtk_stack_set_visible_child (self->stack, GTK_WIDGET (workspace));
+}
+
+void
+gb_workbench_open (GbWorkbench *self,
+                   GFile       *file)
+{
+  g_autoptr(IdeFile) idefile = NULL;
+  IdeBufferManager *buffer_manager;
+  IdeProject *project;
+
+  g_return_if_fail (GB_IS_WORKBENCH (self));
+  g_return_if_fail (self->unloading == FALSE);
+  g_return_if_fail (self->context);
+
+  /*
+   * TODO: We probably want to dispatch this based on the type. But for now,
+   *       we will just try to open it with the buffer manager.
+   */
+
+  buffer_manager = ide_context_get_buffer_manager (self->context);
+  project = ide_context_get_project (self->context);
+  idefile = ide_project_get_project_file (project, file);
+  ide_buffer_manager_load_file_async (buffer_manager, idefile, FALSE, NULL, NULL, NULL, NULL);
+}
+
+/**
+ * gb_workbench_get_command_manager:
+ * @self: A #GbWorkbench.
+ *
+ * Gets the command manager for the workbench. This may be moved into libide.
+ *
+ * Returns: (transfer none): A #GbCommandManager.
+ */
+GbCommandManager *
+gb_workbench_get_command_manager (GbWorkbench *self)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
+
+  return self->command_manager;
 }

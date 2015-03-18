@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-search-context"
+
+#include "ide-debug.h"
 #include "ide-search-context.h"
 #include "ide-search-provider.h"
 #include "ide-search-result.h"
@@ -26,6 +29,7 @@ struct _IdeSearchContext
 
   GCancellable *cancellable;
   GList        *providers;
+  gsize         max_results;
   guint         in_progress;
   guint         executed : 1;
 };
@@ -115,9 +119,12 @@ ide_search_context_set_provider_count (IdeSearchContext  *self,
 
 void
 ide_search_context_execute (IdeSearchContext *self,
-                            const gchar      *search_terms)
+                            const gchar      *search_terms,
+                            gsize             max_results)
 {
   GList *iter;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (self));
   g_return_if_fail (!self->executed);
@@ -125,25 +132,24 @@ ide_search_context_execute (IdeSearchContext *self,
 
   self->executed = TRUE;
   self->in_progress = g_list_length (self->providers);
+  self->max_results = max_results;
 
   if (!self->in_progress)
     {
       g_signal_emit (self, gSignals [COMPLETED], 0);
-      return;
+      IDE_EXIT;
     }
 
   for (iter = self->providers; iter; iter = iter->next)
     {
-      gsize max_results = 0;
-
-      /* TODO: Get the max results for this provider */
-
       ide_search_provider_populate (iter->data,
                                     self,
                                     search_terms,
                                     max_results,
                                     self->cancellable);
     }
+
+  IDE_EXIT;
 }
 
 void

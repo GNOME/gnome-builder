@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.15 -->
+  <template class="GbEditorFrame" parent="GtkBin">
+    <child>
+      <object class="GtkOverlay">
+        <property name="expand">true</property>
+        <property name="visible">true</property>
+        <child type="overlay">
+          <object class="NautilusFloatingBar" id="floating_bar">
+            <property name="halign">end</property>
+            <property name="primary_label"></property>
+            <property name="valign">end</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkRevealer" id="search_revealer">
+            <property name="halign">end</property>
+            <property name="valign">start</property>
+            <property name="visible">true</property>
+            <property name="width-request">300</property>
+            <child>
+              <object class="GtkFrame">
+                <property name="visible">true</property>
+                <property name="margin-end">12</property>
+                <style>
+                  <class name="gb-search-slider"/>
+                </style>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="linked"/>
+                    </style>
+                    <child>
+                      <object class="GdTaggedEntry" id="search_entry">
+                        <property name="visible">true</property>
+                        <property name="tag-close-visible">false</property>
+                        <property name="can-focus">true</property>
+                        <property name="width-request">260</property>
+                        <property name="primary-icon-activatable">true</property>
+                        <property name="primary-icon-sensitive">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="visible">true</property>
+                        <property name="can-focus">false</property>
+                        <style>
+                          <class name="image-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">go-up-symbolic</property>
+                            <property name="icon-size">1</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="visible">true</property>
+                        <property name="can-focus">false</property>
+                        <style>
+                          <class name="image-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">go-down-symbolic</property>
+                            <property name="icon-size">1</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolled_window">
+            <property name="visible">true</property>
+            <child>
+              <object class="IdeSourceView" id="source_view">
+                <property name="auto-indent">true</property>
+                <property name="enable-word-completion">true</property>
+                <property name="highlight-current-line">true</property>
+                <property name="insert-matching-brace">true</property>
+                <property name="overwrite-braces">true</property>
+                <property name="scroll-offset">0</property>
+                <property name="show-grid-lines">true</property>
+                <property name="show-line-changes">true</property>
+                <property name="show-line-numbers">true</property>
+                <property name="show-right-margin">true</property>
+                <property name="show-search-bubbles">true</property>
+                <property name="show-search-shadow">true</property>
+                <property name="smart-backspace">true</property>
+                <property name="snippet-completion">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

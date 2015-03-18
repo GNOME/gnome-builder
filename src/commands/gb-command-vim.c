@@ -17,14 +17,14 @@
  */
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "gb-command-vim.h"
-#include "gb-source-view.h"
 
 struct _GbCommandVimPrivate
 {
-  GbSourceView *source_view;
-  gchar        *command_text;
+  IdeSourceView *source_view;
+  gchar         *command_text;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbCommandVim, gb_command_vim, GB_TYPE_COMMAND)
@@ -38,7 +38,7 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-GbSourceView *
+IdeSourceView *
 gb_command_vim_get_source_view (GbCommandVim *vim)
 {
   g_return_val_if_fail (GB_IS_COMMAND_VIM (vim), NULL);
@@ -47,11 +47,11 @@ gb_command_vim_get_source_view (GbCommandVim *vim)
 }
 
 static void
-gb_command_vim_set_source_view (GbCommandVim *vim,
-                                GbSourceView *source_view)
+gb_command_vim_set_source_view (GbCommandVim  *vim,
+                                IdeSourceView *source_view)
 {
   g_return_if_fail (GB_IS_COMMAND_VIM (vim));
-  g_return_if_fail (!source_view || GB_IS_SOURCE_VIEW (source_view));
+  g_return_if_fail (!source_view || IDE_IS_SOURCE_VIEW (source_view));
 
   if (source_view != vim->priv->source_view)
     {
@@ -106,10 +106,12 @@ gb_command_vim_execute (GbCommand *command)
 
   if (self->priv->source_view)
     {
+#if 0
       GbSourceVim *vim;
 
       vim = gb_source_view_get_vim (self->priv->source_view);
       gb_source_vim_execute_command (vim, self->priv->command_text);
+#endif
     }
 
   return NULL;
@@ -198,7 +200,7 @@ gb_command_vim_class_init (GbCommandVimClass *klass)
     g_param_spec_object ("source-view",
                          _("Source View"),
                          _("The source view to modify."),
-                         GB_TYPE_SOURCE_VIEW,
+                         IDE_TYPE_SOURCE_VIEW,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SOURCE_VIEW,

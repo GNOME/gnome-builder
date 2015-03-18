@@ -29,7 +29,6 @@
 #include <locale.h>
 
 #include "gb-application.h"
-#include "gb-log.h"
 
 int
 main (int   argc,
@@ -49,7 +48,7 @@ main (int   argc,
 
   ide_set_program_name ("gnome-builder");
 
-  gb_log_init (TRUE, NULL);
+  ide_log_init (TRUE, NULL);
 
   g_message ("Initializing with Gtk+ version %d.%d.%d.",
              gtk_get_major_version (),
@@ -64,7 +63,7 @@ main (int   argc,
   ret = g_application_run (app, argc, argv);
   g_clear_object (&app);
 
-  gb_log_shutdown ();
+  ide_log_shutdown ();
 
   return ret;
 }

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "app"
+#define G_LOG_DOMAIN "gb-application"
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -27,128 +27,56 @@
 #include <ide.h>
 
 #include "gb-application.h"
-#include "gb-editor-file-marks.h"
+#include "gb-application-actions.h"
+#include "gb-application-private.h"
+#include "gb-editor-document.h"
 #include "gb-editor-workspace.h"
 #include "gb-glib.h"
-#include "gb-log.h"
-#include "gb-keybindings.h"
-#include "gb-preferences-window.h"
-#include "gb-support.h"
 #include "gb-resources.h"
 #include "gb-workbench.h"
 
-#define ADWAITA_CSS  "resource:///org/gnome/builder/css/builder.Adwaita.css"
-#define LANGUAGE_SCHEMA "org.gnome.builder.editor.language"
-#define LANGUAGE_PATH "/org/gnome/builder/editor/language/"
-#define GSV_PATH "resource:///org/gnome/builder/styles/"
+#define ADWAITA_CSS "resource:///org/gnome/builder/css/builder.Adwaita.css"
+#define GSV_PATH    "resource:///org/gnome/builder/styles/"
 
-struct _GbApplicationPrivate
+G_DEFINE_TYPE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
+
+static void
+get_default_size (GtkRequisition *req)
 {
-  GbKeybindings       *keybindings;
-  GSettings           *editor_settings;
-  GbPreferencesWindow *preferences_window;
-};
+  GdkScreen *screen;
+  GdkRectangle rect;
+  gint primary;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
+  screen = gdk_screen_get_default ();
+  primary = gdk_screen_get_primary_monitor (screen);
+  gdk_screen_get_monitor_geometry (screen, primary, &rect);
+
+  req->width = rect.width * 0.75;
+  req->height = rect.height * 0.75;
+}
 
 static void
 gb_application_setup_search_paths (void)
 {
-  GtkSourceStyleSchemeManager *mgr;
+  GtkSourceStyleSchemeManager *style_scheme_manager;
+  static gboolean initialized;
 
-  mgr = gtk_source_style_scheme_manager_get_default ();
-  gtk_source_style_scheme_manager_append_search_path (
-      mgr, PACKAGE_DATADIR"/gtksourceview-3.0/styles/");
+  if (initialized)
+    return;
+
+  style_scheme_manager = gtk_source_style_scheme_manager_get_default ();
+  gtk_source_style_scheme_manager_append_search_path (style_scheme_manager,
+                                                      PACKAGE_DATADIR"/gtksourceview-3.0/styles/");
+  initialized = TRUE;
 }
 
-static void
-gb_application_install_language_defaults (GbApplication *self)
-{
-  gchar *defaults_installed_path;
-  gboolean exists;
-
-  g_return_if_fail (GB_IS_APPLICATION (self));
-
-  defaults_installed_path = g_build_filename (g_get_user_data_dir (),
-                                              "gnome-builder",
-                                              ".defaults-installed",
-                                              NULL);
-  exists = g_file_test (defaults_installed_path, G_FILE_TEST_EXISTS);
-
-  if (!exists)
-    {
-      GKeyFile *key_file;
-      GBytes *bytes;
-
-      key_file = g_key_file_new ();
-
-      bytes =
-        g_resources_lookup_data ("/org/gnome/builder/language/defaults.ini",
-                                 0, NULL);
-
-      if (bytes)
-        {
-          if (g_key_file_load_from_data (key_file,
-                                         g_bytes_get_data (bytes, NULL),
-                                         g_bytes_get_size (bytes),
-                                         0, NULL))
-            {
-              gchar **groups;
-              guint i;
-
-              groups = g_key_file_get_groups (key_file, NULL);
-
-              for (i = 0; groups [i]; i++)
-                {
-                  GSettings *settings;
-                  gchar *settings_path;
-                  gchar **keys;
-                  guint j;
-
-                  settings_path = g_strdup_printf (
-                      "/org/gnome/builder/editor/language/%s/", groups [i]);
-                  settings = g_settings_new_with_path (
-                      "org.gnome.builder.editor.language",
-                      settings_path);
-                  g_free (settings_path);
-
-                  keys = g_key_file_get_keys (key_file, groups [i], NULL, NULL);
-
-                  for (j = 0; keys [j]; j++)
-                    {
-                      GVariant *param;
-                      gchar *value;
-
-                      value = g_key_file_get_value (key_file, groups [i],
-                                                    keys [j], NULL);
-                      param = g_variant_parse (NULL, value, NULL, NULL, NULL);
-
-                      if (param)
-                        {
-                          g_settings_set_value (settings, keys [j], param);
-                          g_variant_unref (param);
-                        }
-
-                      g_free (value);
-                    }
-
-                  g_object_unref (settings);
-                  g_strfreev (keys);
-                }
-
-              g_strfreev (groups);
-            }
-
-          g_bytes_unref (bytes);
-        }
-
-      g_key_file_free (key_file);
-      g_file_set_contents (defaults_installed_path, "", 0, NULL);
-    }
-
-  g_free (defaults_installed_path);
-}
-
+/**
+ * gb_application_make_skeleton_dirs:
+ * @self: A #GbApplication.
+ *
+ * Creates all the directories we might need later. Simpler to just ensure they
+ * are created during startup.
+ */
 static void
 gb_application_make_skeleton_dirs (GbApplication *self)
 {
@@ -177,39 +105,36 @@ gb_application_make_skeleton_dirs (GbApplication *self)
 
   path = g_build_filename (g_get_user_config_dir (),
                            "gnome-builder",
+                           "syntax",
+                           NULL);
+  g_mkdir_with_parents (path, 0750);
+  g_free (path);
+
+  path = g_build_filename (g_get_user_config_dir (),
+                           "gnome-builder",
                            "uncrustify",
                            NULL);
   g_mkdir_with_parents (path, 0750);
   g_free (path);
 }
 
-static void
-gb_application_load_file_marks (GbApplication *application)
-{
-  GbEditorFileMarks *marks;
-  GError *error = NULL;
-
-  g_return_if_fail (GB_IS_APPLICATION (application));
-
-  marks = gb_editor_file_marks_get_default ();
-
-  if (!gb_editor_file_marks_load (marks, &error))
-    {
-      g_warning ("%s", error->message);
-      g_clear_error (&error);
-    }
-}
-
+/**
+ * gb_application_on_theme_changed:
+ * @self: A #GbApplication.
+ *
+ * Update the theme overrides when the theme changes. This includes our custom
+ * CSS for Adwaita, etc.
+ */
 static void
 gb_application_on_theme_changed (GbApplication *self,
                                  GParamSpec    *pspec,
                                  GtkSettings   *settings)
 {
-  static GtkCssProvider *provider = NULL;
+  static GtkCssProvider *provider;
   GdkScreen *screen;
   gchar *theme;
 
-  ENTRY;
+  IDE_ENTRY;
 
   g_assert (GB_IS_APPLICATION (self));
   g_assert (GTK_IS_SETTINGS (settings));
@@ -242,7 +167,7 @@ gb_application_on_theme_changed (GbApplication *self,
 
   g_free (theme);
 
-  EXIT;
+  IDE_EXIT;
 }
 
 static void
@@ -250,7 +175,7 @@ gb_application_register_theme_overrides (GbApplication *application)
 {
   GtkSettings *settings;
 
-  ENTRY;
+  IDE_ENTRY;
 
   gtk_icon_theme_add_resource_path (gtk_icon_theme_get_default (),
                                     "/org/gnome/builder/icons/");
@@ -267,190 +192,149 @@ gb_application_register_theme_overrides (GbApplication *application)
                            G_CONNECT_SWAPPED);
   gb_application_on_theme_changed (application, NULL, settings);
 
-  EXIT;
+  IDE_EXIT;
 }
 
 static void
-gb_application_load_keybindings (GbApplication *application,
-                                 const gchar   *name)
+gb_application_load_keybindings (GbApplication *self)
 {
-  GbKeybindings *keybindings = NULL;
-  GError *error = NULL;
-  GBytes *bytes = NULL;
-  gchar *path;
+  g_autoptr(GSettings) settings = NULL;
+  g_autofree gchar *name = NULL;
 
-  g_return_if_fail (GB_IS_APPLICATION (application));
+  g_assert (GB_IS_APPLICATION (self));
 
-  if (application->priv->keybindings)
-    {
-      gb_keybindings_unregister (application->priv->keybindings,
-                                 GTK_APPLICATION (application));
-      g_clear_object (&application->priv->keybindings);
-    }
-
-  path = g_strdup_printf ("/org/gnome/builder/keybindings/%s.ini", name);
-  bytes = g_resources_lookup_data (path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
-  g_free (path);
-
-  if (!bytes)
-    {
-      g_warning (_("Failed to load keybindings."));
-      return;
-    }
-
-  keybindings = gb_keybindings_new ();
-
-  if (!gb_keybindings_load_bytes (keybindings, bytes, &error))
-    {
-      g_warning (_("Failed to load keybindings: %s"), error->message);
-      goto cleanup;
-    }
-
-  path = g_build_filename (g_get_user_config_dir (),
-                           "gnome-builder",
-                           "keybindings.ini",
-                           NULL);
-
-  if (g_file_test (path, G_FILE_TEST_EXISTS) &&
-      !gb_keybindings_load_path (keybindings, path, &error))
-    {
-      g_warning (_("Failed to load local keybindings: %s"), error->message);
-      goto cleanup;
-    }
-
-  g_free (path);
-
-  gb_keybindings_register (keybindings, GTK_APPLICATION (application));
-
-  application->priv->keybindings = g_object_ref (keybindings);
-
-cleanup:
-  g_clear_object (&keybindings);
-  g_clear_error (&error);
-  g_clear_pointer (&bytes, g_bytes_unref);
-}
-
-static void
-gb_application_vim_mode_changed (GbApplication *self,
-                                 const gchar   *key,
-                                 GSettings     *settings)
-{
-  g_return_if_fail (GB_IS_APPLICATION (self));
-  g_return_if_fail (G_IS_SETTINGS (settings));
-
-  if (g_settings_get_boolean (settings, "vim-mode"))
-    {
-      g_settings_set_boolean (settings, "emacs-mode", FALSE);
-      gb_application_load_keybindings (self, "vim");
-    }
-  else
-    gb_application_load_keybindings (self, "default");
-}
-
-static void
-gb_application_emacs_mode_changed (GbApplication *self,
-                                 const gchar   *key,
-                                 GSettings     *settings)
-{
-  g_return_if_fail (GB_IS_APPLICATION (self));
-  g_return_if_fail (G_IS_SETTINGS (settings));
-
-  if (g_settings_get_boolean (settings, "emacs-mode"))
-    {
-      g_settings_set_boolean (settings, "vim-mode", FALSE);
-      gb_application_load_keybindings (self, "emacs");
-    }
-  else
-    gb_application_load_keybindings (self, "default");
-}
-
-static void
-gb_application_register_keybindings (GbApplication *self)
-{
-  g_return_if_fail (GB_IS_APPLICATION (self));
-  g_return_if_fail (!self->priv->editor_settings);
-
-  self->priv->editor_settings = g_settings_new ("org.gnome.builder.editor");
-  g_signal_connect_object (self->priv->editor_settings,
-                           "changed::vim-mode",
-                           G_CALLBACK (gb_application_vim_mode_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->priv->editor_settings,
-                           "changed::emacs-mode",
-                           G_CALLBACK (gb_application_emacs_mode_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
-  if (g_settings_get_boolean(self->priv->editor_settings, "vim-mode") == TRUE)
-    gb_application_vim_mode_changed (self, NULL, self->priv->editor_settings);
-  else if (g_settings_get_boolean(self->priv->editor_settings, "emacs-mode") == TRUE)
-    gb_application_emacs_mode_changed (self, NULL, self->priv->editor_settings);
-  else
-    gb_application_vim_mode_changed (self, NULL, self->priv->editor_settings);
-
+  settings = g_settings_new ("org.gnome.builder.editor");
+  name = g_settings_get_string (settings, "keybindings");
+  self->keybindings = gb_keybindings_new (GTK_APPLICATION (self), name);
+  g_settings_bind (settings, "keybindings", self->keybindings, "mode", G_SETTINGS_BIND_GET);
 }
 
 static GbWorkbench *
-gb_application_create_workbench (GApplication *application)
+gb_application_find_workbench_for_file (GbApplication *self,
+                                        GFile         *file)
 {
-  GtkWindow *window;
-  GdkScreen *screen;
-  GdkRectangle geom;
-  gint primary;
-  gint default_width;
-  gint default_height;
+  GList *iter;
+  GList *workbenches;
 
-  ENTRY;
+  g_assert (GB_IS_APPLICATION (self));
+  g_assert (G_IS_FILE (file));
+
+  workbenches = gtk_application_get_windows (GTK_APPLICATION (self));
 
   /*
-   * Determine 3/4's the screen width for the default size. We will maximize
-   * the window anyway, but handy when unmaximizing.
+   * Find the a project that contains this file in its working directory.
    */
-  screen = gdk_screen_get_default ();
-  primary = gdk_screen_get_primary_monitor (screen);
-  gdk_screen_get_monitor_geometry (screen, primary, &geom);
-  default_width = (geom.width / 4) * 3;
-  default_height = (geom.height / 4) * 3;
+  for (iter = workbenches; iter; iter = iter->next)
+    {
+      if (GB_IS_WORKBENCH (iter->data))
+        {
+          GbWorkbench *workbench = iter->data;
+          g_autofree gchar *relpath = NULL;
+          IdeContext *context;
+          IdeVcs *vcs;
+          GFile *workdir;
 
-  window = g_object_new (GB_TYPE_WORKBENCH,
-                         "title", _ ("Builder"),
-                         "default-width", default_width,
-                         "default-height", default_height,
-                         "window-position", GTK_WIN_POS_CENTER,
-                         NULL);
+          context = gb_workbench_get_context (workbench);
+          vcs = ide_context_get_vcs (context);
+          workdir = ide_vcs_get_working_directory (vcs);
 
-  gtk_window_maximize (window);
+          relpath = g_file_get_relative_path (workdir, file);
 
-  gtk_application_add_window (GTK_APPLICATION (application), window);
+          if (relpath != NULL)
+            return workbench;
+        }
+    }
 
-  RETURN (GB_WORKBENCH (window));
+  /*
+   * No matches found, take the first workbench we find.
+   */
+  for (iter = workbenches; iter; iter = iter->next)
+    if (GB_IS_WORKBENCH (iter->data))
+      return iter->data;
+
+  return NULL;
 }
 
 static void
 gb_application_activate (GApplication *application)
 {
+  g_warning ("TODO: Show project selection window");
+}
+
+static IdeBuffer *
+on_create_buffer (IdeBufferManager *buffer_manager,
+                  IdeFile          *file,
+                  gpointer          user_data)
+{
+  return g_object_new (GB_TYPE_EDITOR_DOCUMENT,
+                       "context", ide_object_get_context (IDE_OBJECT (buffer_manager)),
+                       "file", file,
+                       "highlight-diagnostics", TRUE,
+                       NULL);
+}
+
+static void
+gb_application__context_new_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeContext) context = NULL;
+  IdeBufferManager *bufmgr;
+  GbApplication *self;
   GbWorkbench *workbench;
-  GbWorkspace *workspace;
-  GList *list;
+  GtkRequisition req;
+  GPtrArray *ar;
+  GError *error = NULL;
+  gsize i;
 
-  g_return_if_fail (GB_IS_APPLICATION (application));
+  g_assert (G_IS_TASK (task));
 
-  list = gtk_application_get_windows (GTK_APPLICATION (application));
+  self = g_task_get_source_object (task);
+  ar = g_task_get_task_data (task);
 
-  for (; list; list = list->next)
+  g_assert (GB_IS_APPLICATION (self));
+  g_assert (ar);
+  g_assert (ar->len);
+
+  context = ide_context_new_finish (result, &error);
+
+  if (!context)
     {
-      if (GB_IS_WORKBENCH (list->data))
-        {
-          gtk_window_present (GTK_WINDOW (list->data));
-          return;
-        }
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+      goto cleanup;
     }
 
-  workbench = gb_application_create_workbench (application);
-  workspace = gb_workbench_get_workspace (workbench, GB_TYPE_EDITOR_WORKSPACE);
-  gb_editor_workspace_new_document (GB_EDITOR_WORKSPACE (workspace));
+  bufmgr = ide_context_get_buffer_manager (context);
+  g_signal_connect (bufmgr, "create-buffer", G_CALLBACK (on_create_buffer), NULL);
 
+  get_default_size (&req);
+
+  workbench = g_object_new (GB_TYPE_WORKBENCH,
+                            "application", self,
+                            "context", context,
+                            "default-width", req.width,
+                            "default-height", req.height,
+                            "title", _("Builder"),
+                            NULL);
+
+  for (i = 0; i < ar->len; i++)
+    {
+      GFile *file;
+
+      file = g_ptr_array_index (ar, i);
+      g_assert (G_IS_FILE (file));
+
+      gb_workbench_open (workbench, file);
+    }
+
+  gtk_window_maximize (GTK_WINDOW (workbench));
   gtk_window_present (GTK_WINDOW (workbench));
+
+cleanup:
+  g_task_return_boolean (task, FALSE);
+  g_application_release (G_APPLICATION (self));
 }
 
 static void
@@ -459,153 +343,65 @@ gb_application_open (GApplication   *application,
                      gint            n_files,
                      const gchar    *hint)
 {
-  GbWorkbench *workbench = NULL;
-  GbWorkspace *workspace;
-  GList *list;
+  GbApplication *self = (GbApplication *)application;
+  GbWorkbench *workbench;
+  g_autoptr(GPtrArray) ar = NULL;
   guint i;
 
-  ENTRY;
+  IDE_ENTRY;
 
-  g_assert (GB_IS_APPLICATION (application));
+  g_assert (GB_IS_APPLICATION (self));
 
-  list = gtk_application_get_windows (GTK_APPLICATION (application));
-
-  for (; list; list = list->next)
-    {
-      if (GB_IS_WORKBENCH (list->data))
-        {
-          workbench = GB_WORKBENCH (list->data);
-          break;
-        }
-    }
-
-  if (!workbench)
-    workbench = GB_WORKBENCH (gb_application_create_workbench (application));
-
-  gtk_window_present (GTK_WINDOW (workbench));
-
-  workspace = gb_workbench_get_workspace (workbench,
-                                          GB_TYPE_EDITOR_WORKSPACE);
-
-  g_assert (GB_IS_EDITOR_WORKSPACE (workspace));
-
+  /*
+   * Try to open the files using an existing workbench.
+   */
   for (i = 0; i < n_files; i++)
     {
-      g_return_if_fail (G_IS_FILE (files [i]));
-      gb_editor_workspace_open (GB_EDITOR_WORKSPACE (workspace), files [i]);
+      GFile *file = files [i];
+
+      g_assert (G_IS_FILE (file));
+
+      workbench = gb_application_find_workbench_for_file (self, file);
+
+      if (workbench != NULL)
+        {
+          gb_workbench_open (workbench, file);
+          gtk_window_present (GTK_WINDOW (workbench));
+          continue;
+        }
+
+      if (!ar)
+        ar = g_ptr_array_new_with_free_func (g_object_unref);
+      g_ptr_array_add (ar, g_object_ref (file));
     }
 
-  EXIT;
-}
-
-static void
-gb_application_activate_quit_action (GSimpleAction *action,
-                                     GVariant      *parameter,
-                                     gpointer       user_data)
-{
-  g_return_if_fail (GB_IS_APPLICATION (user_data));
-
-  g_application_quit (G_APPLICATION (user_data));
-}
-
-static void
-gb_application_activate_preferences_action (GSimpleAction *action,
-                                            GVariant      *parameter,
-                                            gpointer       user_data)
-{
-  GbApplication *application = user_data;
-  GbPreferencesWindow *window;
-  GbWorkbench *workbench = NULL;
-  GList *list;
-
-  g_return_if_fail (GB_IS_APPLICATION (application));
-
-  if (application->priv->preferences_window)
+  /*
+   * No workbench found for these files, let's create one!
+   */
+  if (ar && ar->len)
     {
-      gtk_window_present (GTK_WINDOW (application->priv->preferences_window));
-      return;
+      g_autoptr(GFile) directory = NULL;
+      g_autoptr(GTask) task = NULL;
+      GFile *file;
+
+      task = g_task_new (self, NULL, NULL, NULL);
+      g_task_set_task_data (task, g_ptr_array_ref (ar), (GDestroyNotify)g_ptr_array_unref);
+
+      file = g_ptr_array_index (ar, 0);
+
+      if (g_file_query_file_type (file, 0, NULL) == G_FILE_TYPE_DIRECTORY)
+        directory = g_object_ref (file);
+      else
+        directory = g_file_get_parent (file);
+
+      ide_context_new_async (directory,
+                             NULL,
+                             gb_application__context_new_cb,
+                             g_object_ref (task));
+      g_application_hold (G_APPLICATION (self));
     }
 
-  list = gtk_application_get_windows (GTK_APPLICATION (application));
-
-  for (; list; list = list->next)
-    if (GB_IS_WORKBENCH (list->data))
-      workbench = GB_WORKBENCH (list->data);
-
-  window = g_object_new (GB_TYPE_PREFERENCES_WINDOW,
-                         "transient-for", workbench,
-                         NULL);
-  gb_set_weak_pointer (window, &application->priv->preferences_window);
-
-  gtk_window_present (GTK_WINDOW (window));
-}
-
-static void
-gb_application_activate_support_action (GSimpleAction *action,
-                                        GVariant      *parameter,
-                                        gpointer       user_data)
-{
-  GbApplication *application = user_data;
-  GtkWidget *dialog;
-  gchar *text = NULL;
-  GList *windows;
-  GError *error = NULL;
-  gchar *str = NULL;
-  gchar *log_path = NULL;
-  gchar *name = NULL;
-
-  name = g_strdup_printf ("gnome-builder-%u.log", (int)getpid ());
-  log_path = g_build_filename (g_get_home_dir (), name, NULL);
-  g_free (name);
-
-  windows = gtk_application_get_windows (GTK_APPLICATION (application));
-
-  str = gb_get_support_log ();
-
-  if (!g_file_set_contents (log_path, str, -1, &error))
-    {
-      g_printerr ("%s\n", error->message);
-      goto cleanup;
-    }
-
-  text = g_strdup_printf (_("The support log file has been written to '%s'. "
-                            "Please provide this file as an attachment on "
-                            "your bug report or support request."),
-                            log_path);
-
-  g_message ("%s", text);
-
-  dialog = gtk_message_dialog_new (windows ? windows->data : NULL,
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_INFO,
-                                   GTK_BUTTONS_CLOSE,
-                                   "%s", text);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
-  gtk_window_present (GTK_WINDOW (dialog));
-
-cleanup:
-  g_free (text);
-  g_clear_error (&error);
-  g_free (str);
-  g_free (log_path);
-}
-
-static void
-gb_application_register_actions (GbApplication *self)
-{
-  static const GActionEntry action_entries[] = {
-    { "preferences", gb_application_activate_preferences_action },
-    { "support", gb_application_activate_support_action },
-    { "quit", gb_application_activate_quit_action },
-  };
-
-  g_return_if_fail (GB_IS_APPLICATION (self));
-
-  g_action_map_add_action_entries (G_ACTION_MAP (self),
-                                   action_entries,
-                                   G_N_ELEMENTS (action_entries),
-                                   self);
+  IDE_EXIT;
 }
 
 static void
@@ -613,7 +409,7 @@ gb_application_startup (GApplication *app)
 {
   GbApplication *self = (GbApplication *)app;
 
-  ENTRY;
+  IDE_ENTRY;
 
   g_assert (GB_IS_APPLICATION (self));
 
@@ -623,42 +419,16 @@ gb_application_startup (GApplication *app)
   G_APPLICATION_CLASS (gb_application_parent_class)->startup (app);
 
   gb_application_make_skeleton_dirs (self);
-  gb_application_install_language_defaults (self);
-  gb_application_register_actions (self);
-  gb_application_register_keybindings (self);
+  gb_application_actions_init (self);
   gb_application_register_theme_overrides (self);
-  gb_application_load_file_marks (self);
   gb_application_setup_search_paths ();
+  gb_application_load_keybindings (self);
 
-  EXIT;
-}
-
-static void
-gb_application_shutdown (GApplication *app)
-{
-  GbApplication *self = (GbApplication *)app;
-  GbEditorFileMarks *marks;
-  GError *error = NULL;
-
-  ENTRY;
-
-  g_assert (GB_IS_APPLICATION (self));
-
-  marks = gb_editor_file_marks_get_default ();
-
-  if (!gb_editor_file_marks_save (marks, NULL, &error))
-    {
-      g_warning ("%s", error->message);
-      g_clear_error (&error);
-    }
-
-  G_APPLICATION_CLASS (gb_application_parent_class)->shutdown (app);
-
-  EXIT;
+  IDE_EXIT;
 }
 
 static gboolean
-verbose_cb (void)
+gb_application_increase_verbosity (void)
 {
   ide_log_increase_verbosity ();
   return TRUE;
@@ -671,8 +441,12 @@ gb_application_local_command_line (GApplication   *app,
 {
   g_autoptr(GOptionContext) context = NULL;
   GOptionEntry entries[] = {
-    { "verbose", 'v', G_OPTION_FLAG_NO_ARG|G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_CALLBACK,
-      verbose_cb, N_("Increase verbosity. May be specified multiple times.") },
+    { "verbose",
+      'v',
+      G_OPTION_FLAG_NO_ARG|G_OPTION_FLAG_IN_MAIN,
+      G_OPTION_ARG_CALLBACK,
+      gb_application_increase_verbosity,
+      N_("Increase verbosity. May be specified multiple times.") },
     { NULL }
   };
 
@@ -682,36 +456,24 @@ gb_application_local_command_line (GApplication   *app,
   g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
   g_option_context_parse_strv (context, argv, NULL);
 
-  return G_APPLICATION_CLASS (gb_application_parent_class)->
-    local_command_line (app, argv, exit_status);
-}
-
-static void
-gb_application_constructed (GObject *object)
-{
-  ENTRY;
-
-  if (G_OBJECT_CLASS (gb_application_parent_class)->constructed)
-    G_OBJECT_CLASS (gb_application_parent_class)->constructed (object);
-
-  EXIT;
+  return G_APPLICATION_CLASS (gb_application_parent_class)->local_command_line (app,
+                                                                                argv,
+                                                                                exit_status);
 }
 
 static void
 gb_application_finalize (GObject *object)
 {
-  GbApplicationPrivate *priv;
+  GbApplication *self = (GbApplication *)object;
 
-  ENTRY;
+  IDE_ENTRY;
 
-  priv = GB_APPLICATION (object)->priv;
-
-  g_clear_object (&priv->editor_settings);
-  g_clear_object (&priv->keybindings);
+  g_clear_object (&self->keybindings);
+  g_clear_object (&self->editor_settings);
 
   G_OBJECT_CLASS (gb_application_parent_class)->finalize (object);
 
-  EXIT;
+  IDE_EXIT;
 }
 
 static void
@@ -720,24 +482,21 @@ gb_application_class_init (GbApplicationClass *klass)
   GApplicationClass *app_class = G_APPLICATION_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  ENTRY;
+  IDE_ENTRY;
 
-  object_class->constructed = gb_application_constructed;
   object_class->finalize = gb_application_finalize;
 
   app_class->activate = gb_application_activate;
   app_class->startup = gb_application_startup;
-  app_class->shutdown = gb_application_shutdown;
   app_class->open = gb_application_open;
   app_class->local_command_line = gb_application_local_command_line;
 
-  EXIT;
+  IDE_EXIT;
 }
 
 static void
 gb_application_init (GbApplication *application)
 {
-  ENTRY;
-  application->priv = gb_application_get_instance_private (application);
-  EXIT;
+  IDE_ENTRY;
+  IDE_EXIT;
 }

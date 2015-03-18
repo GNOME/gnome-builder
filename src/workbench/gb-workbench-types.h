@@ -23,13 +23,8 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GbWorkbench        GbWorkbench;
-typedef struct _GbWorkbenchClass   GbWorkbenchClass;
-typedef struct _GbWorkbenchPrivate GbWorkbenchPrivate;
-
-typedef struct _GbWorkspace        GbWorkspace;
-typedef struct _GbWorkspaceClass   GbWorkspaceClass;
-typedef struct _GbWorkspacePrivate GbWorkspacePrivate;
+typedef struct _GbWorkbench GbWorkbench;
+typedef struct _GbWorkspace GbWorkspace;
 
 G_END_DECLS
 

@@ -14,23 +14,21 @@
     <file>js/marked.js</file>
     <file>js/markdown-view.js</file>
 
-    <file>keybindings/default.ini</file>
-    <file>keybindings/emacs.ini</file>
-    <file>keybindings/vim.ini</file>
+    <file alias="keybindings/default.css">../../data/keybindings/default.css</file>
+    <file alias="keybindings/emacs.css">../../data/keybindings/emacs.css</file>
+    <file alias="keybindings/vim.css">../../data/keybindings/vim.css</file>
 
-    <file>language/defaults.ini</file>
+    <file alias="ui/gb-command-bar.ui">../../data/ui/gb-command-bar.ui</file>
+    <file alias="ui/gb-editor-frame.ui">../../data/ui/gb-editor-frame.ui</file>
+    <file alias="ui/gb-editor-settings-widget.ui">../../data/ui/gb-editor-settings-widget.ui</file>
+    <file alias="ui/gb-editor-tweak-widget.ui">../../data/ui/gb-editor-tweak-widget.ui</file>
+    <file alias="ui/gb-editor-view.ui">../../data/ui/gb-editor-view.ui</file>
+    <file alias="ui/gb-editor-workspace.ui">../../data/ui/gb-editor-workspace.ui</file>
+    <file alias="ui/gb-view-stack.ui">../../data/ui/gb-view-stack.ui</file>
+    <file alias="ui/gb-workbench.ui">../../data/ui/gb-workbench.ui</file>
 
-    <file>ui/gb-command-bar.ui</file>
     <file>ui/gb-command-bar-item.ui</file>
-    <file>ui/gb-credits-widget.ui</file>
     <file>ui/gb-devhelp-view.ui</file>
-    <file>ui/gb-document-stack.ui</file>
-    <file>ui/gb-document-menu-button.ui</file>
-    <file>ui/gb-editor-settings-widget.ui</file>
-    <file>ui/gb-editor-frame.ui</file>
-    <file>ui/gb-editor-tweak-widget.ui</file>
-    <file>ui/gb-editor-view.ui</file>
-    <file>ui/gb-editor-workspace.ui</file>
     <file>ui/gb-html-view.ui</file>
     <file>ui/gb-preferences-window.ui</file>
     <file>ui/gb-preferences-page-editor.ui</file>
@@ -41,6 +39,5 @@
     <file>ui/gb-search-box.ui</file>
     <file>ui/gb-search-display-group.ui</file>
     <file>ui/gb-search-display-row.ui</file>
-    <file>ui/gb-workbench.ui</file>
   </gresource>
 </gresources>

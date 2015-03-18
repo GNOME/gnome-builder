@@ -30,25 +30,30 @@ G_BEGIN_DECLS
   gtk_widget_class_set_template_from_resource(GTK_WIDGET_CLASS (klass), \
                                               "/org/gnome/builder/ui/"name)
 #define GB_WIDGET_CLASS_BIND(klass, TN, field) \
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (klass), \
-                                                TN, field)
+  gtk_widget_class_bind_template_child(GTK_WIDGET_CLASS (klass), TN, field)
+#define GB_WIDGET_CLASS_BIND_PRIVATE(klass, TN, field) \
+  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (klass), TN, field)
 
-void             gb_widget_bind_context    (GtkWidget    *widget);
-IdeContext      *gb_widget_get_context     (GtkWidget    *widget);
-void             gb_widget_add_style_class (gpointer      widget,
-                                            const gchar  *class_name);
-cairo_surface_t *gb_widget_snapshot        (GtkWidget    *widget,
-                                            gint          width,
-                                            gint          height,
-                                            gdouble       alpha,
-                                            gboolean      draw_border);
-GbWorkbench     *gb_widget_get_workbench   (GtkWidget    *widget);
-void             gb_widget_fade_hide       (GtkWidget    *widget);
-void             gb_widget_fade_show       (GtkWidget    *widget);
-void             gb_widget_activate_action (GtkWidget    *widget,
-                                            const gchar  *prefix,
-                                            const gchar  *action_name,
-                                            GVariant     *parameter);
+typedef void (*GbWidgetContextHandler) (GtkWidget  *widget,
+                                        IdeContext *context);
+
+IdeContext      *gb_widget_get_context         (GtkWidget    *widget);
+void             gb_widget_add_style_class     (gpointer      widget,
+                                                const gchar  *class_name);
+cairo_surface_t *gb_widget_snapshot            (GtkWidget    *widget,
+                                                gint          width,
+                                                gint          height,
+                                                gdouble       alpha,
+                                                gboolean      draw_border);
+GbWorkbench     *gb_widget_get_workbench       (GtkWidget    *widget);
+void             gb_widget_fade_hide           (GtkWidget    *widget);
+void             gb_widget_fade_show           (GtkWidget    *widget);
+void             gb_widget_activate_action     (GtkWidget    *widget,
+                                                const gchar  *prefix,
+                                                const gchar  *action_name,
+                                                GVariant     *parameter);
+void             gb_widget_set_context_handler (gpointer      widget,
+                                                GbWidgetContextHandler handler);
 
 G_END_DECLS
 

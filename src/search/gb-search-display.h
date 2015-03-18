@@ -20,39 +20,18 @@
 #define GB_SEARCH_DISPLAY_H
 
 #include <gtk/gtk.h>
-
-#include "gb-search-types.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
-#define GB_SEARCH_DISPLAY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SEARCH_DISPLAY, GbSearchDisplay))
-#define GB_SEARCH_DISPLAY_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SEARCH_DISPLAY, GbSearchDisplay const))
-#define GB_SEARCH_DISPLAY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_SEARCH_DISPLAY, GbSearchDisplayClass))
-#define GB_IS_SEARCH_DISPLAY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_SEARCH_DISPLAY))
-#define GB_IS_SEARCH_DISPLAY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_SEARCH_DISPLAY))
-#define GB_SEARCH_DISPLAY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_SEARCH_DISPLAY, GbSearchDisplayClass))
+#define GB_TYPE_SEARCH_DISPLAY (gb_search_display_get_type())
 
-struct _GbSearchDisplay
-{
-  GtkBox parent;
+G_DECLARE_FINAL_TYPE (GbSearchDisplay, gb_search_display, GB, SEARCH_DISPLAY, GtkBin)
 
-  /*< private >*/
-  GbSearchDisplayPrivate *priv;
-};
-
-struct _GbSearchDisplayClass
-{
-  GtkBoxClass parent;
-
-  void (*result_activated) (GbSearchDisplay *display,
-                            GbSearchResult  *result);
-};
-
-GtkWidget       *gb_search_display_new         (void);
-void             gb_search_display_activate    (GbSearchDisplay *display);
-GbSearchContext *gb_search_display_get_context (GbSearchDisplay *display);
-void             gb_search_display_set_context (GbSearchDisplay *display,
-                                                GbSearchContext *context);
+void              gb_search_display_activate    (GbSearchDisplay  *display);
+IdeSearchContext *gb_search_display_get_context (GbSearchDisplay  *display);
+void              gb_search_display_set_context (GbSearchDisplay  *display,
+                                                 IdeSearchContext *context);
 
 G_END_DECLS
 

@@ -22,7 +22,7 @@
 #include <gio/gio.h>
 
 #include "gb-command.h"
-#include "gb-document-view.h"
+#include "gb-view.h"
 #include "gb-workbench-types.h"
 
 G_BEGIN_DECLS
@@ -61,7 +61,7 @@ struct _GbCommandProviderClass
 GType              gb_command_provider_get_type        (void);
 GbCommandProvider *gb_command_provider_new             (GbWorkbench       *workbench);
 GbWorkbench       *gb_command_provider_get_workbench   (GbCommandProvider *provider);
-GbDocumentView    *gb_command_provider_get_active_view (GbCommandProvider *provider);
+GbView            *gb_command_provider_get_active_view (GbCommandProvider *provider);
 gint               gb_command_provider_get_priority    (GbCommandProvider *provider);
 void               gb_command_provider_set_priority    (GbCommandProvider *provider,
                                                         gint               priority);
