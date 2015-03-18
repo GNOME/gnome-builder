@@ -40,6 +40,8 @@
 #include "ide-search-provider.h"
 #include "ide-xml-language.h"
 
+#include "modeline-parser.h"
+
 static gboolean     gProgramNameRead;
 static const gchar *gProgramName = "libide";
 
@@ -156,5 +158,6 @@ ide_init_ctor (void)
                                   IDE_VCS_EXTENSION_POINT".directory",
                                   -200);
 
+  modeline_parser_init ();
   ggit_init ();
 }

@@ -241,6 +241,8 @@ libide_1_0_la_SOURCES = \
 	libide/ide-source-view-movements.h \
 	libide/ide-vim-iter.c \
 	libide/ide-vim-iter.h \
+	libide/modelines/modeline-parser.c \
+	libide/modelines/modeline-parser.h \
 	libide/tasks/ide-load-directory-task.c \
 	libide/tasks/ide-load-directory-task.h \
 	libide/theatrics/ide-box-theatric.c \
@@ -272,6 +274,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide/gjs \
 	-I$(top_srcdir)/libide/gsettings \
 	-I$(top_srcdir)/libide/local \
+	-I$(top_srcdir)/libide/modelines \
 	-I$(top_srcdir)/libide/pygobject \
 	-I$(top_srcdir)/libide/python \
 	-I$(top_srcdir)/libide/resources \
