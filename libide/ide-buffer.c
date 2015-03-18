@@ -69,6 +69,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
 
 enum {
   PROP_0,
+  PROP_BUSY,
   PROP_CONTEXT,
   PROP_FILE,
   PROP_HIGHLIGHT_DIAGNOSTICS,
@@ -88,6 +89,16 @@ static void ide_buffer_queue_diagnose (IdeBuffer *self);
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
+
+static gboolean
+ide_buffer_get_busy (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
+
+  return priv->in_diagnose;
+}
 
 static void
 ide_buffer_emit_cursor_moved (IdeBuffer *self)
@@ -388,6 +399,7 @@ ide_buffer__diagnostician_diagnose_cb (GObject      *object,
   g_assert (IDE_IS_BUFFER (self));
 
   priv->in_diagnose = FALSE;
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUSY]);
 
   diagnostics = ide_diagnostician_diagnose_finish (diagnostician, result, &error);
 
@@ -426,6 +438,7 @@ ide_buffer__diagnose_timeout_cb (gpointer user_data)
             {
               priv->diagnostics_dirty = FALSE;
               priv->in_diagnose = TRUE;
+              g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUSY]);
 
               ide_buffer_sync_to_unsaved_files (self);
               ide_diagnostician_diagnose_async (diagnostician, priv->file, NULL,
@@ -632,6 +645,10 @@ ide_buffer_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_BUSY:
+      g_value_set_boolean (value, ide_buffer_get_busy (self));
+      break;
+
     case PROP_CONTEXT:
       g_value_set_object (value, ide_buffer_get_context (self));
       break;
@@ -704,6 +721,15 @@ ide_buffer_class_init (IdeBufferClass *klass)
   text_buffer_class->delete_range = ide_buffer_delete_range;
   text_buffer_class->insert_text = ide_buffer_insert_text;
   text_buffer_class->mark_set = ide_buffer_mark_set;
+
+  gParamSpecs [PROP_BUSY] =
+    g_param_spec_boolean ("busy",
+                         _("Busy"),
+                         _("If the buffer is performing background work."),
+                         FALSE,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_BUSY,
+                                   gParamSpecs [PROP_BUSY]);
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
