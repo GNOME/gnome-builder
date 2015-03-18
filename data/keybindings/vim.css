@@ -382,7 +382,7 @@
   bind "<ctrl>a" { "begin-macro" ()
                    "change-number" (1)
                    "clear-count" ()
-                   "end-macr" () };
+                   "end-macro" () };
   bind "<ctrl>x" { "begin-macro" ()
                    "change-number" (-1)
                    "clear-count" ()
