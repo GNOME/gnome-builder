@@ -3563,7 +3563,10 @@ ide_source_view_real_undo (GtkSourceView *source_view)
 {
   IdeSourceView *self = (IdeSourceView *)source_view;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  gboolean needs_unlock = !!priv->mode;
+  gboolean needs_unlock = FALSE;
+
+  if (priv->mode && ide_source_view_mode_get_coalesce_undo (priv->mode))
+    needs_unlock = TRUE;
 
   if (needs_unlock)
     g_signal_emit_by_name (self, "end-user-action");
