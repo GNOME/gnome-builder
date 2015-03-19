@@ -209,6 +209,22 @@ gb_view_grid_focus_neighbor (GbViewGrid       *self,
 }
 
 static void
+gb_view_grid_focus_neighbor_action (GSimpleAction *action,
+                                    GVariant      *param,
+                                    gpointer       user_data)
+{
+  GbViewGrid *self = user_data;
+  GtkDirectionType dir;
+
+  g_assert (GB_IS_VIEW_GRID (self));
+
+  dir = g_variant_get_int32 (param);
+
+  if (self->last_focus)
+    gb_view_grid_focus_neighbor (self, dir, self->last_focus);
+}
+
+static void
 gb_view_grid_stack_empty (GbViewGrid  *self,
                           GbViewStack *stack)
 {
@@ -734,6 +750,10 @@ gb_view_grid_class_init (GbViewGridClass *klass)
 static void
 gb_view_grid_init (GbViewGrid *self)
 {
+  g_autoptr(GSimpleActionGroup) actions = NULL;
+  static const GActionEntry entries[] = {
+    { "focus-neighbor", gb_view_grid_focus_neighbor_action, "i" },
+  };
   GbViewStack *stack;
   GtkPaned *paned;
 
@@ -746,6 +766,10 @@ gb_view_grid_init (GbViewGrid *self)
                                      NULL);
 
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (paned));
+
+  actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "view-grid", G_ACTION_GROUP (actions));
 }
 
 GType

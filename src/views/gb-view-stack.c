@@ -118,6 +118,19 @@ gb_view_stack__notify_visible_child (GbViewStack *self,
 }
 
 static void
+gb_view_stack_grab_focus (GtkWidget *widget)
+{
+  GbViewStack *self = (GbViewStack *)widget;
+  GtkWidget *visible_child;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+
+  visible_child = gtk_stack_get_visible_child (self->stack);
+  if (visible_child)
+    gtk_widget_grab_focus (visible_child);
+}
+
+static void
 gb_view_stack_constructed (GObject *object)
 {
   GbViewStack *self = (GbViewStack *)object;
@@ -181,12 +194,15 @@ static void
 gb_view_stack_class_init (GbViewStackClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->constructed = gb_view_stack_constructed;
   object_class->finalize = gb_view_stack_finalize;
   object_class->get_property = gb_view_stack_get_property;
   object_class->set_property = gb_view_stack_set_property;
+
+  widget_class->grab_focus = gb_view_stack_grab_focus;
 
   container_class->add = gb_view_stack_add;
   container_class->remove = gb_view_stack_real_remove;
