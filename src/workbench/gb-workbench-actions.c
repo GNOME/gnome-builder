@@ -42,6 +42,34 @@ gb_workbench_actions_global_search (GSimpleAction *action,
 }
 
 static void
+gb_workbench_actions_open_uri_list (GSimpleAction *action,
+                                    GVariant      *parameter,
+                                    gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+  const gchar **uri_list;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  uri_list = g_variant_get_strv (parameter, NULL);
+
+  if (uri_list != NULL)
+    {
+      gsize i;
+
+      for (i = 0; uri_list [i]; i++)
+        {
+          g_autoptr(GFile) file = NULL;
+
+          file = g_file_new_for_uri (uri_list [i]);
+          gb_workbench_open (self, file);
+        }
+
+      g_free (uri_list);
+    }
+}
+
+static void
 gb_workbench_actions_save_all (GSimpleAction *action,
                                GVariant      *parameter,
                                gpointer       user_data)
@@ -63,6 +91,7 @@ gb_workbench_actions_show_command_bar (GSimpleAction *action,
 static const GActionEntry GbWorkbenchActions[] = {
   { "build",            gb_workbench_actions_build },
   { "global-search",    gb_workbench_actions_global_search },
+  { "open-uri-list",    gb_workbench_actions_open_uri_list, "as" },
   { "save-all",         gb_workbench_actions_save_all },
   { "show-command-bar", gb_workbench_actions_show_command_bar },
 };
