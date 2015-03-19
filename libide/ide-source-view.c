@@ -4185,6 +4185,16 @@ ide_source_view_focus_in_event (GtkWidget     *widget,
 
   ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->focus_in_event (widget, event);
 
+  /*
+   * Restore the insert mark, but ignore selections (since we cant ensure they
+   * will stay looking selected, as the other frame could be a view into our
+   * own buffer).
+   */
+  priv->saved_selection_line = priv->saved_line;
+  priv->saved_selection_line_offset = priv->saved_line_offset;
+  ide_source_view_real_restore_insert_mark (self);
+
+  /* restore line highlight if enabled */
   if (priv->highlight_current_line)
     gtk_source_view_set_highlight_current_line (GTK_SOURCE_VIEW (self), TRUE);
 
@@ -4196,15 +4206,21 @@ ide_source_view_focus_out_event (GtkWidget     *widget,
                                  GdkEventFocus *event)
 {
   IdeSourceView *self = (IdeSourceView *)widget;
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   gboolean ret;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->focus_out_event (widget, event);
 
-  if (priv->highlight_current_line)
-    gtk_source_view_set_highlight_current_line (GTK_SOURCE_VIEW (self), FALSE);
+  /* save our insert mark for when we focus back in. it could have moved if
+   * another view into the same buffer has caused the insert mark to jump.
+   */
+  ide_source_view_real_save_insert_mark (self);
+
+  /* We don't want highlight-current-line unless the widget is in focus, so
+   * disable it until we get re-focused.
+   */
+  gtk_source_view_set_highlight_current_line (GTK_SOURCE_VIEW (self), FALSE);
 
   return ret;
 }
