@@ -45,21 +45,17 @@ on_cursor_moved (GbEditorDocument  *document,
                  const GtkTextIter *location,
                  GbEditorFrame     *self)
 {
-  GtkSourceView *source_view;
-  gchar *text;
-  guint ln;
-  guint col;
+  g_autofree gchar *text = NULL;
+  guint ln = 0;
+  guint col = 0;
 
   g_return_if_fail (GB_IS_EDITOR_FRAME (self));
   g_return_if_fail (GB_IS_EDITOR_DOCUMENT (document));
 
-  source_view = GTK_SOURCE_VIEW (self->source_view);
+  ide_source_view_get_visual_position (self->source_view, &ln, &col);
 
-  ln = gtk_text_iter_get_line (location);
-  col = gtk_source_view_get_visual_column (source_view, location);
   text = g_strdup_printf (_("Line %u, Column %u"), ln + 1, col + 1);
   nautilus_floating_bar_set_primary_label (self->floating_bar, text);
-  g_free (text);
 
   //gb_editor_frame_update_search_position_label (self);
 }
