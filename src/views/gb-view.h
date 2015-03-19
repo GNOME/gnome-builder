@@ -33,6 +33,7 @@ struct _GbViewClass
 {
   GtkBinClass parent;
 
+  gboolean     (*get_can_preview) (GbView   *self);
   gboolean     (*get_can_split)   (GbView   *self);
   GbDocument  *(*get_document)    (GbView   *self);
   const gchar *(*get_title)       (GbView   *self);
@@ -42,6 +43,7 @@ struct _GbViewClass
 };
 
 GbView      *gb_view_create_split    (GbView   *self);
+gboolean     gb_view_get_can_preview (GbView   *self);
 gboolean     gb_view_get_can_split   (GbView   *self);
 GbDocument  *gb_view_get_document    (GbView   *self);
 const gchar *gb_view_get_title       (GbView   *self);

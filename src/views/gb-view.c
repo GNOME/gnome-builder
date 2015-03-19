@@ -42,6 +42,25 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 /**
+ * gb_view_get_can_preview:
+ * @self: A #GbView.
+ *
+ * Checks if @self can create a preview view (such as html, markdown, etc).
+ *
+ * Returns: %TRUE if @self can create a preview view.
+ */
+gboolean
+gb_view_get_can_preview (GbView *self)
+{
+  g_return_val_if_fail (GB_IS_VIEW (self), FALSE);
+
+  if (GB_VIEW_GET_CLASS (self)->get_can_preview)
+    return GB_VIEW_GET_CLASS (self)->get_can_preview (self);
+
+  return FALSE;
+}
+
+/**
  * gb_view_get_can_split:
  * @self: A #GbView.
  *
