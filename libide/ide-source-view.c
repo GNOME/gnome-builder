@@ -3282,11 +3282,11 @@ ide_source_view_real_move_error (IdeSourceView    *self,
 }
 
 static void
-ide_source_view_real_restore_insert_mark (IdeSourceView *self)
+ide_source_view_real_restore_insert_mark_full (IdeSourceView *self,
+                                               gboolean       move_mark)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextBuffer *buffer;
-  GtkTextMark *insert;
   GtkTextIter iter;
   GtkTextIter selection;
   guint line_offset;
@@ -3315,8 +3315,19 @@ ide_source_view_real_restore_insert_mark (IdeSourceView *self)
 
   gtk_text_buffer_select_range (buffer, &iter, &selection);
 
-  insert = gtk_text_buffer_get_insert (buffer);
-  ide_source_view_scroll_mark_onscreen (self, insert);
+  if (move_mark)
+    {
+      GtkTextMark *insert;
+
+      insert = gtk_text_buffer_get_insert (buffer);
+      ide_source_view_scroll_mark_onscreen (self, insert);
+    }
+}
+
+static void
+ide_source_view_real_restore_insert_mark (IdeSourceView *self)
+{
+  ide_source_view_real_restore_insert_mark_full (self, TRUE);
 }
 
 static void
@@ -4159,8 +4170,6 @@ ide_source_view_focus_in_event (GtkWidget     *widget,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->focus_in_event (widget, event);
-
   /*
    * Restore the completion window now that we have regained focus.
    */
@@ -4174,11 +4183,13 @@ ide_source_view_focus_in_event (GtkWidget     *widget,
    */
   priv->saved_selection_line = priv->saved_line;
   priv->saved_selection_line_offset = priv->saved_line_offset;
-  ide_source_view_real_restore_insert_mark (self);
+  ide_source_view_real_restore_insert_mark_full (self, FALSE);
 
   /* restore line highlight if enabled */
   if (priv->highlight_current_line)
     gtk_source_view_set_highlight_current_line (GTK_SOURCE_VIEW (self), TRUE);
+
+  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->focus_in_event (widget, event);
 
   return ret;
 }
