@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "gb-dnd.h"
 #include "gb-editor-document.h"
 #include "gb-editor-frame.h"
 #include "gb-editor-frame-actions.h"
@@ -31,6 +32,10 @@ enum {
   PROP_0,
   PROP_DOCUMENT,
   LAST_PROP
+};
+
+enum {
+  TARGET_URI_LIST = 100
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
@@ -133,6 +138,65 @@ gb_editor_frame_grab_focus (GtkWidget *widget)
 }
 
 static void
+gb_editor_frame__drag_data_received (GbEditorFrame    *self,
+                                     GdkDragContext   *context,
+                                     gint              x,
+                                     gint              y,
+                                     GtkSelectionData *selection_data,
+                                     guint             info,
+                                     guint             timestamp,
+                                     GtkWidget        *widget)
+{
+  gchar **uri_list;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (widget));
+
+  switch (info)
+    {
+    case TARGET_URI_LIST:
+      uri_list = gb_dnd_get_uri_list (selection_data);
+
+      if (uri_list)
+        {
+          GVariantBuilder *builder;
+          GVariant *variant;
+          guint i;
+
+          builder = g_variant_builder_new (G_VARIANT_TYPE_STRING_ARRAY);
+          for (i = 0; uri_list [i]; i++)
+            g_variant_builder_add (builder, "s", uri_list [i]);
+          variant = g_variant_builder_end (builder);
+          g_variant_builder_unref (builder);
+          g_strfreev (uri_list);
+
+          gb_widget_activate_action (GTK_WIDGET (self), "workbench", "open-uri-list", variant);
+        }
+
+      gtk_drag_finish (context, TRUE, FALSE, timestamp);
+      break;
+
+    default:
+      GTK_WIDGET_CLASS (gb_editor_frame_parent_class)->
+        drag_data_received (widget, context, x, y, selection_data, info, timestamp);
+      break;
+    }
+}
+
+static void
+gb_editor_frame_constructed (GObject *object)
+{
+  GbEditorFrame *self = (GbEditorFrame *)object;
+
+  G_OBJECT_CLASS (gb_editor_frame_parent_class)->constructed (object);
+
+  g_signal_connect_object (self->source_view,
+                           "drag-data-received",
+                           G_CALLBACK (gb_editor_frame__drag_data_received),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
 gb_editor_frame_dispose (GObject *object)
 {
   GbEditorFrame *self = (GbEditorFrame *)object;
@@ -192,6 +256,7 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = gb_editor_frame_constructed;
   object_class->dispose = gb_editor_frame_dispose;
   object_class->get_property = gb_editor_frame_get_property;
   object_class->set_property = gb_editor_frame_set_property;
@@ -223,6 +288,7 @@ static void
 gb_editor_frame_init (GbEditorFrame *self)
 {
   g_autoptr(GSettings) settings = NULL;
+  GtkTargetList *target_list;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -241,4 +307,11 @@ gb_editor_frame_init (GbEditorFrame *self)
   g_signal_connect (settings, "changed::keybindings", G_CALLBACK (keybindings_changed), self);
 
   g_object_bind_property (self->source_view, "overwrite", self->overwrite_label, "visible", G_BINDING_SYNC_CREATE);
+
+  /*
+   * Drag and drop support
+   */
+  target_list = gtk_drag_dest_get_target_list (GTK_WIDGET (self->source_view));
+  if (target_list)
+    gtk_target_list_add_uri_targets (target_list, TARGET_URI_LIST);
 }
