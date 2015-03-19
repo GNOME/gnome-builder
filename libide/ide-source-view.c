@@ -1402,9 +1402,6 @@ ide_source_view_connect_buffer (IdeSourceView *self,
   ide_source_view_reload_word_completion (self);
   ide_source_view_real_set_mode (self, NULL, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
 
-  if (priv->mode && ide_source_view_mode_get_coalesce_undo (priv->mode))
-    g_signal_emit_by_name (self, "begin-user-action");
-
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
   gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self), insert, 0.0, TRUE, 1.0, 0.5);
 }
@@ -1428,9 +1425,6 @@ ide_source_view_disconnect_buffer (IdeSourceView *self,
   ide_clear_signal_handler (buffer, &priv->buffer_notify_language_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_notify_style_scheme_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_loaded_handler);
-
-  if (priv->mode && ide_source_view_mode_get_coalesce_undo (priv->mode))
-    g_signal_emit_by_name (self, "end-user-action");
 
   g_clear_object (&priv->search_context);
 
@@ -1912,11 +1906,7 @@ ide_source_view_do_mode (IdeSourceView *self,
         {
           /* only remove mode if it is still active */
           if (priv->mode == mode)
-            {
-              if (ide_source_view_mode_get_coalesce_undo (mode))
-                g_signal_emit_by_name (self, "end-user-action");
-              g_clear_object (&priv->mode);
-            }
+            g_clear_object (&priv->mode);
         }
 
       g_object_unref (mode);
@@ -2993,8 +2983,6 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
       suggested_default = g_strdup (str);
 
       g_clear_object (&priv->mode);
-      if (ide_source_view_mode_get_coalesce_undo (old_mode))
-        g_signal_emit_by_name (self, "end-user-action");
       g_object_unref (old_mode);
     }
 
@@ -3009,9 +2997,6 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
     priv->count = 0;
 
   priv->mode = _ide_source_view_mode_new (GTK_WIDGET (self), mode, type);
-
-  if (ide_source_view_mode_get_coalesce_undo (priv->mode))
-    g_signal_emit_by_name (self, "begin-user-action");
 
   overwrite = ide_source_view_mode_get_block_cursor (priv->mode);
   if (overwrite != gtk_text_view_get_overwrite (GTK_TEXT_VIEW (self)))
@@ -3567,32 +3552,13 @@ ide_source_view_constructed (GObject *object)
 static void
 ide_source_view_real_undo (GtkSourceView *source_view)
 {
-  IdeSourceView *self = (IdeSourceView *)source_view;
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  gboolean needs_unlock = FALSE;
-
-  if (priv->mode && ide_source_view_mode_get_coalesce_undo (priv->mode))
-    needs_unlock = TRUE;
-
-  if (needs_unlock)
-    g_signal_emit_by_name (self, "end-user-action");
   GTK_SOURCE_VIEW_CLASS (ide_source_view_parent_class)->undo (source_view);
-  if (needs_unlock)
-    g_signal_emit_by_name (self, "begin-user-action");
 }
 
 static void
 ide_source_view_real_redo (GtkSourceView *source_view)
 {
-  IdeSourceView *self = (IdeSourceView *)source_view;
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  gboolean needs_unlock = !!priv->mode;
-
-  if (needs_unlock)
-    g_signal_emit_by_name (self, "end-user-action");
   GTK_SOURCE_VIEW_CLASS (ide_source_view_parent_class)->redo (source_view);
-  if (needs_unlock)
-    g_signal_emit_by_name (self, "begin-user-action");
 }
 
 static void

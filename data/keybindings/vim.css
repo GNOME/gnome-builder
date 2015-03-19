@@ -316,16 +316,12 @@
                     "clear-count" () };
 
   /* undo - todo: how do we land cursor on right spot? */
-  bind "u" { "end-user-action" ()
-             "undo" ()
-             "begin-user-action" ()
+  bind "u" { "undo" ()
              "clear-count" ()
              "clear-selection" ()};
 
   /* redo */
-  bind "<ctrl>r" { "end-user-action" ()
-                   "redo" ()
-                   "begin-user-action" ()
+  bind "<ctrl>r" { "redo" ()
                    "clear-count" ()
                    "clear-selection" () };
 
@@ -1259,7 +1255,6 @@
 IdeSourceViewMode.default,
 IdeSourceViewMode.vim-normal {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-keep-mark-on-char: true;
 
@@ -1269,7 +1264,6 @@ IdeSourceViewMode.vim-normal {
 
 IdeSourceViewMode.vim-normal-with-count {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1279,7 +1273,6 @@ IdeSourceViewMode.vim-normal-with-count {
 
 IdeSourceViewMode.vim-normal-bracket {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1288,7 +1281,6 @@ IdeSourceViewMode.vim-normal-bracket {
 
 IdeSourceViewMode.vim-normal-c {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1297,7 +1289,6 @@ IdeSourceViewMode.vim-normal-c {
 
 IdeSourceViewMode.vim-normal-c-i {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1306,7 +1297,6 @@ IdeSourceViewMode.vim-normal-c-i {
 
 IdeSourceViewMode.vim-normal-d {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1315,7 +1305,6 @@ IdeSourceViewMode.vim-normal-d {
 
 IdeSourceViewMode.vim-normal-d-g {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1324,7 +1313,6 @@ IdeSourceViewMode.vim-normal-d-g {
 
 IdeSourceViewMode.vim-normal-d-i {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1333,7 +1321,6 @@ IdeSourceViewMode.vim-normal-d-i {
 
 IdeSourceViewMode.vim-normal-g {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1342,7 +1329,6 @@ IdeSourceViewMode.vim-normal-g {
 
 IdeSourceViewMode.vim-normal-g-u {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1351,7 +1337,6 @@ IdeSourceViewMode.vim-normal-g-u {
 
 IdeSourceViewMode.vim-normal-q {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1360,7 +1345,6 @@ IdeSourceViewMode.vim-normal-q {
 
 IdeSourceViewMode.vim-normal-indent {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1369,7 +1353,6 @@ IdeSourceViewMode.vim-normal-indent {
 
 IdeSourceViewMode.vim-normal-ctrl-w {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1378,7 +1361,6 @@ IdeSourceViewMode.vim-normal-ctrl-w {
 
 IdeSourceViewMode.vim-normal-y {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1387,7 +1369,6 @@ IdeSourceViewMode.vim-normal-y {
 
 IdeSourceViewMode.vim-normal-z {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1396,7 +1377,6 @@ IdeSourceViewMode.vim-normal-z {
 
 IdeSourceViewMode.vim-insert {
   -IdeSourceViewMode-suppress-unbound: false;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: false;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1405,7 +1385,6 @@ IdeSourceViewMode.vim-insert {
 
 IdeSourceViewMode.vim-visual {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1414,7 +1393,6 @@ IdeSourceViewMode.vim-visual {
 
 IdeSourceViewMode.vim-visual-with-count {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-default-mode: "vim-visual";
 
@@ -1425,7 +1403,6 @@ IdeSourceViewMode.vim-visual-with-count {
 
 IdeSourceViewMode.vim-visual-g {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1434,7 +1411,6 @@ IdeSourceViewMode.vim-visual-g {
 
 IdeSourceViewMode.vim-visual-z {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1443,7 +1419,6 @@ IdeSourceViewMode.vim-visual-z {
 
 IdeSourceViewMode.vim-visual-line {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1452,7 +1427,6 @@ IdeSourceViewMode.vim-visual-line {
 
 IdeSourceViewMode.vim-visual-line-with-count {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-default-mode: "vim-visual-line";
 
@@ -1463,7 +1437,6 @@ IdeSourceViewMode.vim-visual-line-with-count {
 
 IdeSourceViewMode.vim-visual-line-g {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1472,7 +1445,6 @@ IdeSourceViewMode.vim-visual-line-g {
 
 IdeSourceViewMode.vim-visual-line-z {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view,
@@ -1481,7 +1453,6 @@ IdeSourceViewMode.vim-visual-line-z {
 
 IdeSourceViewMode.vim-visual-block {
   -IdeSourceViewMode-suppress-unbound: true;
-  -IdeSourceViewMode-coalesce-undo: true;
   -IdeSourceViewMode-block-cursor: true;
 
   gtk-key-bindings: builder-vim-source-view, builder-vim-source-view-visual-block;

@@ -111,16 +111,6 @@ ide_source_view_mode_get_repeat_insert_with_count (IdeSourceViewMode *self)
 }
 
 gboolean
-ide_source_view_mode_get_coalesce_undo (IdeSourceViewMode *self)
-{
-  /*
-   * try to coalesce all the undo from the mode into a single
-   * undo. not perfect, but we try hard. useful for emulating vim.
-   */
-  return get_boolean_param (self, "coalesce-undo");
-}
-
-gboolean
 ide_source_view_mode_get_suppress_unbound (IdeSourceViewMode *self)
 {
   /*
@@ -262,14 +252,6 @@ ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
                           NULL,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_NAME, gParamSpecs [PROP_NAME]);
-
-  gtk_widget_class_install_style_property (GTK_WIDGET_CLASS (klass),
-                                           g_param_spec_boolean ("coalesce-undo",
-                                                                 "Coalesce Undo",
-                                                                 "Coalesce Undo Items",
-                                                                 FALSE,
-                                                                 (G_PARAM_READABLE |
-                                                                  G_PARAM_STATIC_STRINGS)));
 
   gtk_widget_class_install_style_property (GTK_WIDGET_CLASS (klass),
                                            g_param_spec_boolean ("suppress-unbound",
@@ -462,7 +444,6 @@ _ide_source_view_mode_new (GtkWidget             *view,
   priv->type = type;
   priv->default_mode = get_string_param (mode, "default-mode");
 
-  IDE_TRACE_MSG ("coalesce_undo = %d", ide_source_view_mode_get_coalesce_undo (mode));
   IDE_TRACE_MSG ("supress_unbound = %d", ide_source_view_mode_get_suppress_unbound (mode));
   IDE_TRACE_MSG ("block_cursor = %d", ide_source_view_mode_get_block_cursor (mode));
 
