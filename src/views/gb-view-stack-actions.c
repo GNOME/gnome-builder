@@ -30,8 +30,15 @@ gb_view_stack_actions_close (GSimpleAction *action,
                              gpointer       user_data)
 {
   GbViewStack *self = user_data;
+  GtkWidget *active_view;
 
   g_assert (GB_IS_VIEW_STACK (self));
+
+  active_view = gb_view_stack_get_active_view (self);
+  if (active_view == NULL || !GB_IS_VIEW (active_view))
+    return;
+
+  gb_view_stack_remove (self, GB_VIEW (active_view));
 }
 
 static void

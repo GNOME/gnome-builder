@@ -83,6 +83,7 @@
                 </child>
                 <child>
                   <object class="GtkButton">
+                    <property name="action-name">view.close</property>
                     <property name="visible">true</property>
                     <style>
                       <class name="dim-label"/>
