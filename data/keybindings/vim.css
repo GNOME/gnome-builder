@@ -444,6 +444,9 @@
   /* navigation */
   bind "<ctrl>o" { "action" ("navigation", "go-backward", "") };
   bind "<ctrl>i" { "action" ("navigation", "go-forward", "") };
+
+  /* window controls */
+  bind "<ctrl>w" { "set-mode" ("vim-normal-ctrl-w", transient) };
 }
 
 @binding-set builder-vim-source-view-normal-bracket
@@ -889,6 +892,17 @@
 @binding-set builder-vim-source-view-normal-q
 {
   bind "q" { "begin-macro" () };
+}
+
+@binding-set builder-vim-source-view-normal-ctrl-w
+{
+  bind "v" { "action" ("view", "split-left", "") "grab_focus" () };
+  bind "<ctrl>v" { "action" ("view", "split-left", "") "grab_focus" () };
+
+  bind "c" { "action" ("view", "close", "") };
+  bind "<ctrl>c" { "action" ("view", "close", "") };
+
+  bind "s" { "action" ("view", "split-down", "true") };
 }
 
 @binding-set builder-vim-source-view-visual-line-g
@@ -1343,6 +1357,15 @@ IdeSourceViewMode.vim-normal-indent {
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal-indent;
+}
+
+IdeSourceViewMode.vim-normal-ctrl-w {
+  -IdeSourceViewMode-suppress-unbound: true;
+  -IdeSourceViewMode-coalesce-undo: true;
+  -IdeSourceViewMode-block-cursor: true;
+
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-ctrl-w;
 }
 
 IdeSourceViewMode.vim-normal-y {

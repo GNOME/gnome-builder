@@ -25,10 +25,26 @@
 #include "gb-view-stack-private.h"
 
 static void
+gb_view_stack_actions_close_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  GbViewStack *self = (GbViewStack *)object;
+  g_autoptr(GbView) view = user_data;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+  g_assert (GB_IS_VIEW (view));
+
+  gb_view_stack_remove (self, view);
+}
+
+
+static void
 gb_view_stack_actions_close (GSimpleAction *action,
                              GVariant      *param,
                              gpointer       user_data)
 {
+  g_autoptr(GTask) task = NULL;
   GbViewStack *self = user_data;
   GtkWidget *active_view;
 
@@ -38,7 +54,13 @@ gb_view_stack_actions_close (GSimpleAction *action,
   if (active_view == NULL || !GB_IS_VIEW (active_view))
     return;
 
-  gb_view_stack_remove (self, GB_VIEW (active_view));
+
+  /*
+   * Queue until we are out of this potential signalaction. (Which mucks things
+   * up since it expects the be able to continue working with the widget).
+   */
+  task = g_task_new (self, NULL, gb_view_stack_actions_close_cb, g_object_ref (active_view));
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
