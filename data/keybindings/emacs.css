@@ -54,10 +54,14 @@
   bind "<ctrl>comma" { "action" ("app", "preferences", "") };
   bind "<alt>n" { "move-error" (down) };
   bind "<alt>p" { "move-error" (up) };
-  bind "<ctrl>j" { "action" ("editor-view", "switch-pane", "") };
-  bind "<shift><ctrl>j" { "action" ("editor-view", "toggle-split", "") };
-  bind "<ctrl><alt>Page_Up" { "action" ("stack", "previous-document", "") };
-  bind "<ctrl><alt>Page_Down" { "action" ("stack", "next-document", "") };
+  bind "<ctrl>j" { "action" ("view-grid", "focus-neighbor", "3") };
+  bind "<shift><ctrl>j" { "action" ("view-stack", "split-down", "") };
+
+  /* cycle "tabs" */
+  bind "<ctrl><alt>Page_Up" { "action" ("view-stack", "previous-view", "") };
+  bind "<ctrl><alt>KP_Page_Up" { "action" ("view-stack", "previous-view", "") };
+  bind "<ctrl><alt>Page_Down" { "action" ("view-stack", "next-view", "") };
+  bind "<ctrl><alt>KP_Page_Down" { "action" ("view-stack", "next-view", "") };
 
   bind "<alt>0" { "append-to-count" (0) };
   bind "<alt>1" { "append-to-count" (1) };

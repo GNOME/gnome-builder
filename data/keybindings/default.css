@@ -7,6 +7,12 @@
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "<alt><shift>Left" { "action" ("navigation", "go-backward", "") };
   bind "<alt><shift>Right" { "action" ("navigation", "go-forward", "") };
+
+  /* cycle "tabs" */
+  bind "<ctrl>Page_Up" { "action" ("view-stack", "previous-view", "") };
+  bind "<ctrl>KP_Page_Up" { "action" ("view-stack", "previous-view", "") };
+  bind "<ctrl>Page_Down" { "action" ("view-stack", "next-view", "") };
+  bind "<ctrl>KP_Page_Down" { "action" ("view-stack", "next-view", "") };
 }
 
 IdeSourceViewMode.default {

@@ -281,7 +281,6 @@ gb_view_stack_set_active_view (GbViewStack *self,
     {
       if (self->active_view)
         {
-          self->focus_history = g_list_remove (self->focus_history, self->active_view);
           if (self->title_binding)
             g_binding_unbind (self->title_binding);
           ide_clear_weak_pointer (&self->title_binding);
@@ -296,7 +295,9 @@ gb_view_stack_set_active_view (GbViewStack *self,
           GBinding *binding;
           GActionGroup *group;
 
+          self->focus_history = g_list_remove (self->focus_history, active_view);
           self->focus_history = g_list_prepend (self->focus_history, active_view);
+
           if (active_view != gtk_stack_get_visible_child (self->stack))
             gtk_stack_set_visible_child (self->stack, active_view);
           binding = g_object_bind_property (active_view, "title",

@@ -125,6 +125,12 @@
 
   bind "colon" { "action" ("workbench", "show-command-bar", "") };
 
+  /* cycle "tabs" */
+  bind "<ctrl>Page_Up" { "action" ("view-stack", "previous-view", "") };
+  bind "<ctrl>KP_Page_Up" { "action" ("view-stack", "previous-view", "") };
+  bind "<ctrl>Page_Down" { "action" ("view-stack", "next-view", "") };
+  bind "<ctrl>KP_Page_Down" { "action" ("view-stack", "next-view", "") };
+
   /* replay the last recording */
   bind "period" { "replay-macro" (1) };
 

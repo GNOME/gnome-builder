@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "gb-view-stack"
 
+#include <ide.h>
+
 #include "gb-view.h"
 #include "gb-view-grid.h"
 #include "gb-view-stack.h"
@@ -186,15 +188,81 @@ gb_view_stack_actions_split_right (GSimpleAction *action,
   g_signal_emit_by_name (self, "split", active_view, GB_VIEW_GRID_SPLIT_RIGHT);
 }
 
+static void
+gb_view_stack_actions_next_view (GSimpleAction *action,
+                                 GVariant      *param,
+                                 gpointer       user_data)
+{
+  GbViewStack *self = user_data;
+  GtkWidget *active_view;
+  GtkWidget *new_view;
+
+  IDE_ENTRY;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+
+  active_view = gb_view_stack_get_active_view (self);
+  if (active_view == NULL || !GB_IS_VIEW (active_view))
+    return;
+
+  if (g_list_length (self->focus_history) <= 1)
+    return;
+
+  new_view = g_list_last (self->focus_history)->data;
+  g_assert (GB_IS_VIEW (new_view));
+
+  gb_view_stack_set_active_view (self, new_view);
+
+  IDE_EXIT;
+}
+
+static void
+gb_view_stack_actions_previous_view (GSimpleAction *action,
+                                     GVariant      *param,
+                                     gpointer       user_data)
+{
+  GbViewStack *self = user_data;
+  GtkWidget *active_view;
+  GtkWidget *new_view;
+
+  IDE_ENTRY;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+
+  active_view = gb_view_stack_get_active_view (self);
+  if (active_view == NULL || !GB_IS_VIEW (active_view))
+    return;
+
+  if (g_list_length (self->focus_history) <= 1)
+    return;
+
+  g_assert (active_view);
+  g_assert (self->focus_history);
+  g_assert (self->focus_history->next);
+  g_assert (active_view == self->focus_history->data);
+
+  new_view = self->focus_history->next->data;
+  g_assert (GB_IS_VIEW (new_view));
+
+  self->focus_history = g_list_remove_link (self->focus_history, self->focus_history);
+  self->focus_history = g_list_append (self->focus_history, active_view);
+
+  gb_view_stack_set_active_view (self, new_view);
+
+  IDE_EXIT;
+}
+
 static const GActionEntry gGbViewStackActions[] = {
-  { "close",       gb_view_stack_actions_close },
-  { "move-left",   gb_view_stack_actions_move_left },
-  { "move-right",  gb_view_stack_actions_move_right },
-  { "save",        gb_view_stack_actions_save },
-  { "save-as",     gb_view_stack_actions_save_as },
-  { "split-down",  NULL, NULL, "false", gb_view_stack_actions_split_down },
-  { "split-left",  gb_view_stack_actions_split_left },
-  { "split-right", gb_view_stack_actions_split_right },
+  { "close",         gb_view_stack_actions_close },
+  { "move-left",     gb_view_stack_actions_move_left },
+  { "move-right",    gb_view_stack_actions_move_right },
+  { "next-view",     gb_view_stack_actions_next_view },
+  { "previous-view", gb_view_stack_actions_previous_view},
+  { "save",          gb_view_stack_actions_save },
+  { "save-as",       gb_view_stack_actions_save_as },
+  { "split-down",    NULL, NULL, "false", gb_view_stack_actions_split_down },
+  { "split-left",    gb_view_stack_actions_split_left },
+  { "split-right",   gb_view_stack_actions_split_right },
 };
 
 void
