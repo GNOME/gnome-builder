@@ -137,18 +137,6 @@ disabled_files = \
 	src/devhelp/gb-devhelp-document.h \
 	src/devhelp/gb-devhelp-view.c \
 	src/devhelp/gb-devhelp-view.h \
-	src/documents/gb-document-grid.c \
-	src/documents/gb-document-grid.h \
-	src/documents/gb-document-private.h \
-	src/documents/gb-document-split.c \
-	src/documents/gb-document-split.h \
-	src/documents/gb-document-stack.c \
-	src/documents/gb-document-stack.h \
-	src/editor/gb-editor-frame-private.h \
-	src/editor/gb-editor-tweak-widget.c \
-	src/editor/gb-editor-tweak-widget.h \
-	src/editor/gb-editor-workspace.c \
-	src/editor/gb-editor-workspace.h \
 	src/editor/gb-source-formatter.c \
 	src/editor/gb-source-formatter.h \
 	src/editor/gb-source-highlight-menu.c \
