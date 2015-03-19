@@ -50,6 +50,29 @@ gb_editor_workspace__load_buffer_cb (GbEditorWorkspace *self,
 }
 
 static void
+gb_editor_workspace__notify_focus_buffer_cb (GbEditorWorkspace *self,
+                                             GParamSpec        *pspec,
+                                             IdeBufferManager  *buffer_manager)
+{
+  IdeBuffer *buffer;
+
+  IDE_ENTRY;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  buffer = ide_buffer_manager_get_focus_buffer (buffer_manager);
+
+  if (buffer != NULL)
+    {
+      IDE_TRACE_MSG ("Focusing %s.", ide_buffer_get_title (buffer));
+      gb_view_grid_focus_document (self->view_grid, GB_DOCUMENT (buffer));
+    }
+
+  IDE_EXIT;
+}
+
+static void
 gb_editor_workspace_context_changed (GtkWidget  *workspace,
                                      IdeContext *context)
 {
@@ -68,6 +91,11 @@ gb_editor_workspace_context_changed (GtkWidget  *workspace,
       g_signal_connect_object (bufmgr,
                                "load-buffer",
                                G_CALLBACK (gb_editor_workspace__load_buffer_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+      g_signal_connect_object (bufmgr,
+                               "notify::focus-buffer",
+                               G_CALLBACK (gb_editor_workspace__notify_focus_buffer_cb),
                                self,
                                G_CONNECT_SWAPPED);
 
