@@ -54,7 +54,7 @@
                 <property name="text" translatable="yes">Display line numbers</property>
                 <property name="role">check</property>
                 <property name="halign">fill</property>
-                <property name="action-name">editor-view.show-line-numbers</property>
+                <property name="action-name">view.show-line-numbers</property>
               </object>
             </child>
             <child>
@@ -63,7 +63,7 @@
                 <property name="text" translatable="yes">Display right margin</property>
                 <property name="role">check</property>
                 <property name="halign">fill</property>
-                <property name="action-name">editor-view.show-right-margin</property>
+                <property name="action-name">view.show-right-margin</property>
               </object>
             </child>
             <child>
@@ -72,7 +72,7 @@
                 <property name="text" translatable="yes">Highlight current line</property>
                 <property name="role">check</property>
                 <property name="halign">fill</property>
-                <property name="action-name">editor-view.highlight-current-line</property>
+                <property name="action-name">view.highlight-current-line</property>
               </object>
             </child>
             <child>
@@ -80,7 +80,7 @@
                 <property name="visible">true</property>
                 <property name="text" translatable="yes">Auto indent</property>
                 <property name="halign">fill</property>
-                <property name="action-name">editor-view.auto-indent</property>
+                <property name="action-name">view.auto-indent</property>
               </object>
             </child>
             <child>
@@ -88,7 +88,7 @@
                 <property name="visible">true</property>
                 <property name="text" translatable="yes">Smart Backspace</property>
                 <property name="halign">fill</property>
-                <property name="action-name">editor-view.smart-backspace</property>
+                <property name="action-name">view.smart-backspace</property>
               </object>
             </child>
             <child>
@@ -121,7 +121,7 @@
                         <property name="visible">true</property>
                         <property name="text" translatable="yes">Spaces</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.use-spaces</property>
+                        <property name="action-name">view.use-spaces</property>
                         <property name="action-target">true</property>
                         <property name="iconic">true</property>
                       </object>
@@ -131,7 +131,7 @@
                         <property name="visible">true</property>
                         <property name="text" translatable="yes">Tabs</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.use-spaces</property>
+                        <property name="action-name">view.use-spaces</property>
                         <property name="action-target">false</property>
                         <property name="iconic">true</property>
                       </object>
@@ -152,7 +152,7 @@
                         <property name="visible">true</property>
                         <property name="text" translatable="yes">2</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.tab-width</property>
+                        <property name="action-name">view.tab-width</property>
                         <property name="action-target">2</property>
                       </object>
                     </child>
@@ -162,7 +162,7 @@
                         <property name="visible">true</property>
                         <property name="text" translatable="yes">3</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.tab-width</property>
+                        <property name="action-name">view.tab-width</property>
                         <property name="action-target">3</property>
                       </object>
                     </child>
@@ -172,7 +172,7 @@
                         <property name="visible">true</property>
                         <property name="text" translatable="yes">4</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.tab-width</property>
+                        <property name="action-name">view.tab-width</property>
                         <property name="action-target">4</property>
                       </object>
                     </child>
@@ -182,7 +182,7 @@
                         <property name="visible">true</property>
                         <property name="text" translatable="yes">8</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">editor-view.tab-width</property>
+                        <property name="action-name">view.tab-width</property>
                         <property name="action-target">8</property>
                       </object>
                     </child>
