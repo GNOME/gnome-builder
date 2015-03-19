@@ -10,6 +10,11 @@
 
     <file alias="icons/16x16/actions/builder-split-tab-symbolic.symbolic.png">../../data/icons/hicolor/16x16/actions/builder-split-tab-symbolic.symbolic.png</file>
     <file alias="icons/32x32/actions/builder-split-tab-symbolic.symbolic.png">../../data/icons/hicolor/32x32/actions/builder-split-tab-symbolic.symbolic.png</file>
+
+    <file alias="icons/scalable/actions/builder-move-left-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-move-left-symbolic.svg</file>
+    <file alias="icons/scalable/actions/builder-move-right-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-move-right-symbolic.svg</file>
+    <file alias="icons/scalable/actions/builder-split-tab-left-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-split-tab-left-symbolic.svg</file>
+    <file alias="icons/scalable/actions/builder-split-tab-right-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-split-tab-right-symbolic.svg</file>
     
     <file>js/marked.js</file>
     <file>js/markdown-view.js</file>

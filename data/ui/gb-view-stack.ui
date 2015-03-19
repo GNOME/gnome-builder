@@ -162,7 +162,7 @@
                     <child>
                       <object class="GtkImage">
                         <property name="visible">true</property>
-                        <property name="icon-name">builder-split-left-symbolic</property>
+                        <property name="icon-name">builder-split-tab-left-symbolic</property>
                       </object>
                     </child>
                   </object>
@@ -177,7 +177,7 @@
                     <child>
                       <object class="GtkImage">
                         <property name="visible">true</property>
-                        <property name="icon-name">builder-split-right-symbolic</property>
+                        <property name="icon-name">builder-split-tab-right-symbolic</property>
                       </object>
                     </child>
                   </object>
