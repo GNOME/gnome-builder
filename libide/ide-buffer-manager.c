@@ -277,6 +277,8 @@ ide_buffer_manager_set_focus_buffer (IdeBufferManager *self,
       /* notify of the new buffer, but check for reentrancy */
       if (buffer && (buffer == self->focus_buffer))
         g_signal_emit (self, gSignals [BUFFER_FOCUS_ENTER], 0, buffer);
+
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FOCUS_BUFFER]);
     }
 }
 
@@ -487,6 +489,7 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
 emit_signal:
   _ide_buffer_set_loading (state->buffer, FALSE);
 
+  ide_buffer_manager_set_focus_buffer (self, state->buffer);
   g_signal_emit (self, gSignals [BUFFER_LOADED], 0, state->buffer);
 
   g_task_return_pointer (task, g_object_ref (state->buffer), g_object_unref);
@@ -653,6 +656,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
                                   "fraction", 1.0,
                                   NULL);
       g_task_return_pointer (task, g_object_ref (buffer), g_object_unref);
+      ide_buffer_manager_set_focus_buffer (self, buffer);
       IDE_EXIT;
     }
 
@@ -1000,6 +1004,10 @@ ide_buffer_manager_get_property (GObject    *object,
       g_value_set_uint (value, ide_buffer_manager_get_auto_save_timeout (self));
       break;
 
+    case PROP_FOCUS_BUFFER:
+      g_value_set_object (value, ide_buffer_manager_get_focus_buffer (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1021,6 +1029,10 @@ ide_buffer_manager_set_property (GObject      *object,
 
     case PROP_AUTO_SAVE_TIMEOUT:
       ide_buffer_manager_set_auto_save_timeout (self, g_value_get_uint (value));
+      break;
+
+    case PROP_FOCUS_BUFFER:
+      ide_buffer_manager_set_focus_buffer (self, g_value_get_object (value));
       break;
 
     default:
@@ -1057,6 +1069,15 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_AUTO_SAVE_TIMEOUT,
                                    gParamSpecs [PROP_AUTO_SAVE_TIMEOUT]);
+
+  gParamSpecs [PROP_FOCUS_BUFFER] =
+    g_param_spec_object ("focus-buffer",
+                         _("Focus Buffer"),
+                         _("The currently focused buffer."),
+                         IDE_TYPE_BUFFER,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_FOCUS_BUFFER,
+                                   gParamSpecs [PROP_FOCUS_BUFFER]);
 
   /**
    * IdeBufferManager::create-buffer:
