@@ -219,6 +219,10 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  TARGET_URI_LIST = 100
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
@@ -5270,6 +5274,7 @@ static void
 ide_source_view_init (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTargetList *target_list;
 
   priv->target_line_offset = -1;
   priv->snippets = g_queue_new ();
@@ -5279,6 +5284,13 @@ ide_source_view_init (IdeSourceView *self)
                     "notify::buffer",
                     G_CALLBACK (ide_source_view_notify_buffer),
                     NULL);
+
+  /*
+   * Drag and drop support
+   */
+  target_list = gtk_drag_dest_get_target_list (GTK_WIDGET (self));
+  if (target_list)
+    gtk_target_list_add_uri_targets (target_list, TARGET_URI_LIST);
 }
 
 const PangoFontDescription *
