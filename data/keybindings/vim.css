@@ -449,6 +449,9 @@
 
   /* window controls */
   bind "<ctrl>w" { "set-mode" ("vim-normal-ctrl-w", transient) };
+
+  /* not vim perse, but common mapping */
+  bind "F4" { "action" ("view", "find-other-file", "") };
 }
 
 @binding-set builder-vim-source-view-normal-bracket

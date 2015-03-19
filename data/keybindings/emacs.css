@@ -63,6 +63,8 @@
   bind "<ctrl><alt>Page_Down" { "action" ("view-stack", "next-view", "") };
   bind "<ctrl><alt>KP_Page_Down" { "action" ("view-stack", "next-view", "") };
 
+  bind "F4" { "action" ("view", "find-other-file", "") };
+
   bind "<alt>0" { "append-to-count" (0) };
   bind "<alt>1" { "append-to-count" (1) };
   bind "<alt>2" { "append-to-count" (2) };

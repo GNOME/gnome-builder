@@ -19,11 +19,13 @@
 #define G_LOG_DOMAIN "gb-editor-view"
 
 #include <ide.h>
+#include <string.h>
 
 #include "gb-editor-frame-private.h"
 #include "gb-editor-view-actions.h"
 #include "gb-editor-view-private.h"
 #include "gb-widget.h"
+#include "gb-workbench.h"
 
 static void
 gb_editor_view_actions_source_view_notify (IdeSourceView *source_view,
@@ -271,6 +273,123 @@ gb_editor_view_actions_close (GSimpleAction *action,
     }
 }
 
+static gboolean
+has_suffix (const gchar          *path,
+            const gchar * const *allowed_suffixes)
+{
+  const gchar *dot;
+  gsize i;
+
+  dot = strrchr (path, '.');
+  if (!dot)
+    return FALSE;
+
+  dot++;
+
+  for (i = 0; allowed_suffixes [i]; i++)
+    {
+      if (g_str_equal (dot, allowed_suffixes [i]))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gb_editor_view_actions_find_other_file_worker (GTask        *task,
+                                               gpointer      source_object,
+                                               gpointer      task_data,
+                                               GCancellable *cancellable)
+{
+  GbEditorView *self = source_object;
+  const gchar *src_suffixes[] = { "c", "cc", "cpp", "cxx", NULL };
+  const gchar *hdr_suffixes[] = { "h", "hh", "hpp", "hxx", NULL };
+  const gchar **target = NULL;
+  IdeFile *file;
+  g_autofree gchar *prefix = NULL;
+  const gchar *path;
+  gsize i;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  file = ide_buffer_get_file (IDE_BUFFER (self->document));
+  path = ide_file_get_path (file);
+
+  if (has_suffix (path, src_suffixes))
+    {
+      target = hdr_suffixes;
+    }
+  else if (has_suffix (path, hdr_suffixes))
+    {
+      target = src_suffixes;
+    }
+  else
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               "File is missing a suffix.");
+      return;
+    }
+
+  prefix = g_strndup (path, strrchr (path, '.') - path);
+
+  for (i = 0; target [i]; i++)
+    {
+      g_autofree gchar *new_path = NULL;
+
+      new_path = g_strdup_printf ("%s.%s", prefix, target [i]);
+
+      if (g_file_test (new_path, G_FILE_TEST_IS_REGULAR))
+        {
+          g_autoptr(GFile) gfile = NULL;
+
+          gfile = g_file_new_for_path (new_path);
+          g_task_return_pointer (task, g_object_ref (gfile), g_object_unref);
+          return;
+        }
+    }
+
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_FOUND,
+                           "Failed to locate other file.");
+}
+
+static void
+find_other_file_cb (GObject      *object,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  GbEditorView *self = (GbEditorView *)object;
+  GTask *task = (GTask *)result;
+  g_autoptr(GFile) ret = NULL;
+
+  ret = g_task_propagate_pointer (task, NULL);
+
+  if (ret)
+    {
+      GbWorkbench *workbench;
+
+      workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+      gb_workbench_open (workbench, ret);
+    }
+}
+
+static void
+gb_editor_view_actions_find_other_file (GSimpleAction *action,
+                                        GVariant      *param,
+                                        gpointer       user_data)
+{
+  GbEditorView *self = user_data;
+  g_autoptr(GTask) task = NULL;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  task = g_task_new (self, NULL, find_other_file_cb, NULL);
+  g_task_run_in_thread (task, gb_editor_view_actions_find_other_file_worker);
+}
+
 static GActionEntry GbEditorViewActions[] = {
   { "auto-indent", NULL, NULL, "false", gb_editor_view_actions_auto_indent },
   { "language", NULL, "s", "''", gb_editor_view_actions_language },
@@ -283,6 +402,7 @@ static GActionEntry GbEditorViewActions[] = {
   { "tab-width", NULL, "i", "8", gb_editor_view_actions_tab_width },
   { "use-spaces", NULL, "b", "false", gb_editor_view_actions_use_spaces },
   { "toggle-split", gb_editor_view_actions_toggle_split },
+  { "find-other-file", gb_editor_view_actions_find_other_file },
 };
 
 void
