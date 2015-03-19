@@ -153,8 +153,6 @@ disabled_files = \
 	src/editor/gb-source-formatter.h \
 	src/editor/gb-source-highlight-menu.c \
 	src/editor/gb-source-highlight-menu.h \
-	src/html/gb-html-completion-provider.c \
-	src/html/gb-html-completion-provider.h \
 	src/html/gb-html-document.c \
 	src/html/gb-html-document.h \
 	src/html/gb-html-view.c \

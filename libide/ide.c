@@ -35,6 +35,7 @@
 #include "ide-git-vcs.h"
 #include "ide-gjs-script.h"
 #include "ide-gsettings-file-settings.h"
+#include "ide-html-language.h"
 #include "ide-pygobject-script.h"
 #include "ide-python-language.h"
 #include "ide-search-provider.h"
@@ -110,6 +111,10 @@ ide_init_ctor (void)
   g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
                                   IDE_TYPE_C_LANGUAGE,
                                   IDE_LANGUAGE_EXTENSION_POINT".c",
+                                  0);
+  g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
+                                  IDE_TYPE_HTML_LANGUAGE,
+                                  IDE_LANGUAGE_EXTENSION_POINT".html",
                                   0);
   g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
                                   IDE_TYPE_PYTHON_LANGUAGE,

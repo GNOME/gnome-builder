@@ -1,4 +1,4 @@
-/* gb-html-completion-provider.c
+/* ide-html-completion-provider.c
  *
  * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
  *
@@ -18,7 +18,7 @@
 
 #include <string.h>
 
-#include "gb-html-completion-provider.h"
+#include "ide-html-completion-provider.h"
 #include "trie.h"
 
 static GHashTable *element_attrs;
@@ -42,18 +42,12 @@ typedef struct
 
 static void completion_provider_init (GtkSourceCompletionProviderIface *);
 
-G_DEFINE_TYPE_EXTENDED (GbHtmlCompletionProvider,
-                        gb_html_completion_provider,
+G_DEFINE_TYPE_EXTENDED (IdeHtmlCompletionProvider,
+                        ide_html_completion_provider,
                         G_TYPE_OBJECT,
                         0,
                         G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
                                                completion_provider_init))
-
-GtkSourceCompletionProvider *
-gb_html_completion_provider_new (void)
-{
-  return g_object_new (GB_TYPE_HTML_COMPLETION_PROVIDER, NULL);
-}
 
 static gchar *
 get_word (GtkSourceCompletionContext *context)
@@ -353,7 +347,7 @@ sort_completion_items (gconstpointer a,
 }
 
 static void
-gb_html_completion_provider_populate (GtkSourceCompletionProvider *provider,
+ide_html_completion_provider_populate (GtkSourceCompletionProvider *provider,
                                       GtkSourceCompletionContext  *context)
 {
   SearchState state = { 0 };
@@ -361,7 +355,7 @@ gb_html_completion_provider_populate (GtkSourceCompletionProvider *provider,
   gchar *word;
   gint mode;
 
-  g_return_if_fail (GB_IS_HTML_COMPLETION_PROVIDER (provider));
+  g_return_if_fail (IDE_IS_HTML_COMPLETION_PROVIDER (provider));
   g_return_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
 
   mode = get_mode (context);
@@ -439,13 +433,13 @@ gb_html_completion_provider_populate (GtkSourceCompletionProvider *provider,
 }
 
 static GdkPixbuf *
-gb_html_completion_provider_get_icon (GtkSourceCompletionProvider *provider)
+ide_html_completion_provider_get_icon (GtkSourceCompletionProvider *provider)
 {
   return NULL;
 }
 
 static void
-gb_html_completion_provider_class_init (GbHtmlCompletionProviderClass *klass)
+ide_html_completion_provider_class_init (IdeHtmlCompletionProviderClass *klass)
 {
   elements = trie_new (NULL);
   element_attrs = g_hash_table_new (g_str_hash, g_str_equal);
@@ -883,13 +877,13 @@ gb_html_completion_provider_class_init (GbHtmlCompletionProviderClass *klass)
 }
 
 static void
-gb_html_completion_provider_init (GbHtmlCompletionProvider *self)
+ide_html_completion_provider_init (IdeHtmlCompletionProvider *self)
 {
 }
 
 static void
 completion_provider_init (GtkSourceCompletionProviderIface *iface)
 {
-  iface->get_icon = gb_html_completion_provider_get_icon;
-  iface->populate = gb_html_completion_provider_populate;
+  iface->get_icon = ide_html_completion_provider_get_icon;
+  iface->populate = ide_html_completion_provider_populate;
 }
