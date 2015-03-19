@@ -275,6 +275,9 @@ struct _IdeSourceViewClass
 
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);
 IdeBackForwardList         *ide_source_view_get_back_forward_list     (IdeSourceView              *self);
+void                        ide_source_view_get_visual_position       (IdeSourceView              *self,
+                                                                       guint                      *line,
+                                                                       guint                      *line_offset);
 gboolean                    ide_source_view_get_enable_word_completion(IdeSourceView              *self);
 IdeFileSettings            *ide_source_view_get_file_settings         (IdeSourceView              *self);
 const PangoFontDescription *ide_source_view_get_font_desc             (IdeSourceView              *self);
