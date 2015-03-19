@@ -625,6 +625,29 @@ gb_view_grid_grab_focus (GtkWidget *widget)
 }
 
 static void
+gb_view_grid_set_focus (GbViewGrid  *self,
+                        GbViewStack *stack)
+{
+  if (self->last_focus)
+    {
+      GtkStyleContext *style_context;
+
+      style_context = gtk_widget_get_style_context (GTK_WIDGET (self->last_focus));
+      gtk_style_context_remove_class (style_context, "focused");
+      ide_clear_weak_pointer (&self->last_focus);
+    }
+
+  if (stack != NULL)
+    {
+      GtkStyleContext *style_context;
+
+      style_context = gtk_widget_get_style_context (GTK_WIDGET (stack));
+      gtk_style_context_add_class (style_context, "focused");
+      ide_set_weak_pointer (&self->last_focus, stack);
+    }
+}
+
+static void
 gb_view_grid_toplevel_set_focus (GtkWidget  *toplevel,
                                  GtkWidget  *focus,
                                  GbViewGrid *self)
@@ -639,7 +662,7 @@ gb_view_grid_toplevel_set_focus (GtkWidget  *toplevel,
         parent = gtk_widget_get_parent (parent);
 
       if (GB_IS_VIEW_STACK (parent))
-        ide_set_weak_pointer (&self->last_focus, GB_VIEW_STACK (parent));
+        gb_view_grid_set_focus (self, GB_VIEW_STACK (parent));
     }
 }
 

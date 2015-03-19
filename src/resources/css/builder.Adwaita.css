@@ -214,3 +214,7 @@ GbDocumentStack .button {
 GbViewStack GtkBox.header.notebook {
     border-bottom: 1px solid @borders;
 }
+
+GbViewStack:not(.focused) GtkBox.header.notebook {
+    background-color: shade (@theme_bg_color, 0.95);
+}

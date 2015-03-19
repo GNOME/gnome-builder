@@ -118,63 +118,6 @@ gb_view_stack__notify_visible_child (GbViewStack *self,
 }
 
 static void
-gb_view_stack__set_focus (GbViewStack *self,
-                          GtkWidget   *focus_widget,
-                          GtkWindow   *toplevel)
-{
-  g_assert (GB_IS_VIEW_STACK (self));
-  g_assert (!focus_widget || GTK_IS_WIDGET (focus_widget));
-  g_assert (!toplevel || GTK_IS_WIDGET (toplevel));
-
-  self->focused = focus_widget && gtk_widget_is_ancestor (GTK_WIDGET (self), focus_widget);
-}
-
-static void
-gb_view_stack_hierarchy_changed (GtkWidget *widget,
-                                 GtkWidget *previous_toplevel)
-{
-  GbViewStack *self = (GbViewStack *)widget;
-  GtkWidget *toplevel;
-
-  g_assert (GB_IS_VIEW_STACK (self));
-  g_assert (!previous_toplevel || GTK_IS_WIDGET (previous_toplevel));
-
-  if (GTK_IS_WINDOW (previous_toplevel))
-    g_signal_handlers_disconnect_by_func (previous_toplevel,
-                                          G_CALLBACK (gb_view_stack__set_focus),
-                                          self);
-
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_IS_WINDOW (toplevel))
-    g_signal_connect_object (toplevel,
-                             "set-focus",
-                             G_CALLBACK (gb_view_stack__set_focus),
-                             self,
-                             G_CONNECT_SWAPPED);
-}
-
-static gboolean
-gb_view_stack_draw (GtkWidget *widget,
-                    cairo_t   *cr)
-{
-  GbViewStack *self = (GbViewStack *)widget;
-  GtkStyleContext *style_context;
-  gboolean ret;
-
-  g_assert (GB_IS_VIEW_STACK (self));
-  g_assert (cr);
-
-  style_context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save (style_context);
-  if (self->focused)
-    gtk_style_context_add_class (style_context, "focused");
-  ret = GTK_WIDGET_CLASS (gb_view_stack_parent_class)->draw (widget, cr);
-  gtk_style_context_restore (style_context);
-
-  return ret;
-}
-
-static void
 gb_view_stack_constructed (GObject *object)
 {
   GbViewStack *self = (GbViewStack *)object;
@@ -238,16 +181,12 @@ static void
 gb_view_stack_class_init (GbViewStackClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->constructed = gb_view_stack_constructed;
   object_class->finalize = gb_view_stack_finalize;
   object_class->get_property = gb_view_stack_get_property;
   object_class->set_property = gb_view_stack_set_property;
-
-  widget_class->draw = gb_view_stack_draw;
-  widget_class->hierarchy_changed = gb_view_stack_hierarchy_changed;
 
   container_class->add = gb_view_stack_add;
   container_class->remove = gb_view_stack_real_remove;
