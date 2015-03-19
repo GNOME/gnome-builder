@@ -226,16 +226,63 @@ gb_editor_view_actions_save (GSimpleAction *action,
   g_clear_object (&progress);
 }
 
+static gboolean
+set_split_view (gpointer data)
+{
+  g_autoptr(GbEditorView) self = data;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  gb_view_set_split_view (GB_VIEW (self), (self->frame2 == NULL));
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gb_editor_view_actions_toggle_split (GSimpleAction *action,
+                                     GVariant      *param,
+                                     gpointer       user_data)
+{
+  GbEditorView *self = user_data;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  g_timeout_add (0, set_split_view, g_object_ref (self));
+}
+
+static void
+gb_editor_view_actions_close (GSimpleAction *action,
+                              GVariant      *param,
+                              gpointer       user_data)
+{
+  GbEditorView *self = user_data;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  /* just close our current frame if we have split view */
+  if (self->frame2 != NULL)
+    {
+      /* todo: swap frame1/frame2 if frame2 was last focused. */
+      g_timeout_add (0, set_split_view, g_object_ref (self));
+    }
+  else
+    {
+      gb_widget_activate_action (GTK_WIDGET (self), "view-stack", "close", NULL);
+    }
+}
+
 static GActionEntry GbEditorViewActions[] = {
   { "auto-indent", NULL, NULL, "false", gb_editor_view_actions_auto_indent },
   { "language", NULL, "s", "''", gb_editor_view_actions_language },
   { "highlight-current-line", NULL, NULL, "false", gb_editor_view_actions_highlight_current_line },
+  { "close", gb_editor_view_actions_close },
   { "save", gb_editor_view_actions_save },
   { "show-line-numbers", NULL, NULL, "false", gb_editor_view_actions_show_line_numbers },
   { "show-right-margin", NULL, NULL, "false", gb_editor_view_actions_show_right_margin },
   { "smart-backspace", NULL, NULL, "false", gb_editor_view_actions_smart_backspace },
   { "tab-width", NULL, "i", "8", gb_editor_view_actions_tab_width },
   { "use-spaces", NULL, "b", "false", gb_editor_view_actions_use_spaces },
+  { "toggle-split", gb_editor_view_actions_toggle_split },
 };
 
 void

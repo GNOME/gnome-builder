@@ -899,10 +899,10 @@
   bind "v" { "action" ("view-stack", "split-left", "") "grab_focus" () };
   bind "<ctrl>v" { "action" ("view-stack", "split-left", "") "grab_focus" () };
 
-  bind "c" { "action" ("view-stack", "close", "") };
-  bind "<ctrl>c" { "action" ("view-stack", "close", "") };
+  bind "c" { "action" ("view", "close", "") };
+  bind "<ctrl>c" { "action" ("view", "close", "") };
 
-  bind "s" { "action" ("view-stack", "split-down", "true") };
+  bind "s" { "action" ("view", "toggle-split", "") };
 }
 
 @binding-set builder-vim-source-view-visual-line-g
