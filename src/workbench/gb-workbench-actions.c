@@ -55,16 +55,7 @@ gb_workbench_actions_open_uri_list (GSimpleAction *action,
 
   if (uri_list != NULL)
     {
-      gsize i;
-
-      for (i = 0; uri_list [i]; i++)
-        {
-          g_autoptr(GFile) file = NULL;
-
-          file = g_file_new_for_uri (uri_list [i]);
-          gb_workbench_open (self, file);
-        }
-
+      gb_workbench_open_uri_list (self, (const gchar * const *)uri_list);
       g_free (uri_list);
     }
 }

@@ -22,6 +22,7 @@
 #include <ide.h>
 
 #include "gb-command-gaction-provider.h"
+#include "gb-dnd.h"
 #include "gb-widget.h"
 #include "gb-workbench-actions.h"
 #include "gb-workbench-private.h"
@@ -38,7 +39,14 @@ enum {
   LAST_PROP
 };
 
+enum {
+  TARGET_URI_LIST = 100
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
+static const GtkTargetEntry gDropTypes[] = {
+  { "text/uri-list", 0, TARGET_URI_LIST}
+};
 
 static void
 gb_workbench_set_context (GbWorkbench *self,
@@ -120,6 +128,42 @@ gb_workbench_draw (GtkWidget *widget,
   gtk_style_context_restore (style_context);
 
   return ret;
+}
+
+static void
+gb_workbench_drag_data_received (GtkWidget        *widget,
+                                 GdkDragContext   *context,
+                                 gint              x,
+                                 gint              y,
+                                 GtkSelectionData *selection_data,
+                                 guint             info,
+                                 guint             timestamp)
+{
+  GbWorkbench *self = (GbWorkbench *)widget;
+  gchar **uri_list;
+  gboolean handled = FALSE;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  switch (info)
+    {
+    case TARGET_URI_LIST:
+      uri_list = gb_dnd_get_uri_list (selection_data);
+
+      if (uri_list)
+        {
+          gb_workbench_open_uri_list (self, (const gchar * const *)uri_list);
+          g_strfreev (uri_list);
+        }
+
+      handled = TRUE;
+      break;
+
+    default:
+      break;
+    }
+
+  gtk_drag_finish (context, handled, FALSE, timestamp);
 }
 
 static void
@@ -287,6 +331,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   object_class->get_property = gb_workbench_get_property;
   object_class->set_property = gb_workbench_set_property;
 
+  widget_class->drag_data_received = gb_workbench_drag_data_received;
   widget_class->draw = gb_workbench_draw;
   widget_class->realize = gb_workbench_realize;
   widget_class->delete_event = gb_workbench_delete_event;
@@ -355,6 +400,12 @@ gb_workbench_init (GbWorkbench *self)
                                    "workbench", self,
                                    NULL);
   gb_command_manager_add_provider (self->command_manager, gaction_provider);
+
+
+  /* Drag and drop support*/
+  gtk_drag_dest_set (GTK_WIDGET (self),
+                     (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT | GTK_DEST_DEFAULT_DROP),
+                     gDropTypes, G_N_ELEMENTS (gDropTypes), GDK_ACTION_COPY);
 
   IDE_EXIT;
 }
@@ -439,4 +490,21 @@ gb_workbench_get_command_manager (GbWorkbench *self)
   g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
 
   return self->command_manager;
+}
+
+void
+gb_workbench_open_uri_list (GbWorkbench         *self,
+                            const gchar * const *uri_list)
+{
+  gsize i;
+
+  g_return_if_fail (GB_IS_WORKBENCH (self));
+
+  for (i = 0; uri_list [i]; i++)
+    {
+      g_autoptr(GFile) file = NULL;
+
+      file = g_file_new_for_uri (uri_list [i]);
+      gb_workbench_open (self, file);
+    }
 }
