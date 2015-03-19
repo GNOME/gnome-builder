@@ -82,8 +82,15 @@ gb_view_stack_remove (GbViewStack *self,
   if (controls)
     gtk_container_remove (GTK_CONTAINER (self->controls_stack), controls);
   gtk_container_remove (GTK_CONTAINER (self->stack), GTK_WIDGET (view));
+
   if (self->focus_history)
-    gtk_stack_set_visible_child (self->stack, self->focus_history->data);
+    {
+      GtkWidget *child;
+
+      child = self->focus_history->data;
+      gtk_stack_set_visible_child (self->stack, child);
+      gtk_widget_grab_focus (GTK_WIDGET (child));
+    }
   else
     g_signal_emit (self, gSignals [EMPTY], 0);
 }
