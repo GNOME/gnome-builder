@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "gb-view-stack"
 
 #include "gb-view.h"
+#include "gb-view-grid.h"
 #include "gb-view-stack.h"
 #include "gb-view-stack-actions.h"
 #include "gb-view-stack-private.h"
@@ -100,8 +101,15 @@ gb_view_stack_actions_split_left (GSimpleAction *action,
                                   gpointer       user_data)
 {
   GbViewStack *self = user_data;
+  GtkWidget *active_view;
 
   g_assert (GB_IS_VIEW_STACK (self));
+
+  active_view = gb_view_stack_get_active_view (self);
+  if (active_view == NULL || !GB_IS_VIEW (active_view))
+    return;
+
+  g_signal_emit_by_name (self, "split", active_view, GB_VIEW_GRID_SPLIT_LEFT);
 }
 
 static void
@@ -110,8 +118,15 @@ gb_view_stack_actions_split_right (GSimpleAction *action,
                                    gpointer       user_data)
 {
   GbViewStack *self = user_data;
+  GtkWidget *active_view;
 
   g_assert (GB_IS_VIEW_STACK (self));
+
+  active_view = gb_view_stack_get_active_view (self);
+  if (active_view == NULL || !GB_IS_VIEW (active_view))
+    return;
+
+  g_signal_emit_by_name (self, "split", active_view, GB_VIEW_GRID_SPLIT_RIGHT);
 }
 
 static const GActionEntry gGbViewStackActions[] = {

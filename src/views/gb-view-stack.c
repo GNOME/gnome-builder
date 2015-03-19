@@ -20,6 +20,7 @@
 #include <ide.h>
 
 #include "gb-view.h"
+#include "gb-view-grid.h"
 #include "gb-view-stack.h"
 #include "gb-view-stack-actions.h"
 #include "gb-view-stack-private.h"
@@ -35,6 +36,7 @@ enum {
 
 enum {
   EMPTY,
+  SPLIT,
   LAST_SIGNAL
 };
 
@@ -256,6 +258,17 @@ gb_view_stack_class_init (GbViewStackClass *klass)
                                    G_TYPE_NONE,
                                    0);
 
+  gSignals [SPLIT] = g_signal_new ("split",
+                                   G_TYPE_FROM_CLASS (klass),
+                                   G_SIGNAL_RUN_LAST,
+                                   0,
+                                   NULL, NULL,
+                                   g_cclosure_marshal_generic,
+                                   G_TYPE_NONE,
+                                   2,
+                                   GB_TYPE_VIEW,
+                                   GB_TYPE_VIEW_GRID_SPLIT);
+
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-view-stack.ui");
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, controls_stack);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, go_backward);
@@ -384,6 +397,7 @@ gb_view_stack_focus_document (GbViewStack *self,
   if (view != NULL && GB_IS_VIEW (view))
     {
       gb_view_stack_set_active_view (self, view);
+      gtk_widget_grab_focus (view);
       return;
     }
 

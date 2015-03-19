@@ -26,10 +26,20 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_VIEW_GRID (gb_view_grid_get_type())
+#define GB_TYPE_VIEW_GRID       (gb_view_grid_get_type())
+#define GB_TYPE_VIEW_GRID_SPLIT (gb_view_grid_split_get_type())
 
 G_DECLARE_FINAL_TYPE (GbViewGrid, gb_view_grid, GB, VIEW_GRID, GtkBin)
 
+typedef enum
+{
+  GB_VIEW_GRID_SPLIT_LEFT,
+  GB_VIEW_GRID_SPLIT_RIGHT,
+  GB_VIEW_GRID_MOVE_LEFT,
+  GB_VIEW_GRID_MOVE_RIGHT,
+} GbViewGridSplit;
+
+GType      gb_view_grid_split_get_type       (void);
 GtkWidget *gb_view_grid_new                  (void);
 GtkWidget *gb_view_grid_add_stack_after      (GbViewGrid  *grid,
                                               GbViewStack *stack);

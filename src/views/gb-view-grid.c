@@ -231,6 +231,56 @@ cleanup:
   g_list_free (stacks);
 }
 
+static void
+gb_view_grid_stack_split (GbViewGrid      *self,
+                          GbView          *view,
+                          GbViewGridSplit  split,
+                          GbViewStack     *stack)
+{
+  GbDocument *document;
+  GtkWidget *target;
+  GtkWidget *new_view;
+
+  g_assert (GB_IS_VIEW (view));
+  g_assert (GB_IS_VIEW_GRID (self));
+  g_assert (GB_IS_VIEW_STACK (stack));
+
+  document = gb_view_get_document (view);
+  if (document == NULL)
+    return;
+
+  switch (split)
+    {
+    case GB_VIEW_GRID_SPLIT_LEFT:
+      target = gb_view_grid_get_stack_before (self, stack);
+      if (target == NULL)
+        target = gb_view_grid_add_stack_before (self, stack);
+      new_view = gb_document_create_view (document);
+      if (new_view == NULL)
+        return;
+      gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
+      break;
+
+    case GB_VIEW_GRID_SPLIT_RIGHT:
+      target = gb_view_grid_get_stack_after (self, stack);
+      if (target == NULL)
+        target = gb_view_grid_add_stack_after (self, stack);
+      new_view = gb_document_create_view (document);
+      if (new_view == NULL)
+        return;
+      gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
+      break;
+
+    case GB_VIEW_GRID_MOVE_RIGHT:
+    case GB_VIEW_GRID_MOVE_LEFT:
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+}
+
 static GtkPaned *
 gb_view_grid_create_paned (GbViewGrid *self)
 {
@@ -254,6 +304,12 @@ gb_view_grid_create_stack (GbViewGrid *self)
   g_signal_connect_object (stack,
                            "empty",
                            G_CALLBACK (gb_view_grid_stack_empty),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (stack,
+                           "split",
+                           G_CALLBACK (gb_view_grid_stack_split),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -628,4 +684,26 @@ gb_view_grid_init (GbViewGrid *self)
                                      NULL);
 
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (paned));
+}
+
+GType
+gb_view_grid_split_get_type (void)
+{
+  static gsize type_id;
+
+  if (g_once_init_enter (&type_id))
+    {
+      static const GEnumValue values[] = {
+        { GB_VIEW_GRID_SPLIT_LEFT, "GB_VIEW_GRID_SPLIT_LEFT", "split-left" },
+        { GB_VIEW_GRID_SPLIT_RIGHT, "GB_VIEW_GRID_SPLIT_RIGHT", "split-right" },
+        { GB_VIEW_GRID_MOVE_LEFT, "GB_VIEW_GRID_MOVE_LEFT", "move-left" },
+        { GB_VIEW_GRID_MOVE_RIGHT, "GB_VIEW_GRID_MOVE_RIGHT", "move-right" },
+      };
+      gsize _type_id;
+
+      _type_id = g_enum_register_static ("GbViewGridSplit", values);
+      g_once_init_leave (&type_id, _type_id);
+    }
+
+  return type_id;
 }
