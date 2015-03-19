@@ -5,8 +5,8 @@
   bind "<ctrl>f" { "action" ("frame", "find", "") };
   bind "<ctrl>period" { "action" ("workbench", "global-search", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
-  bind "<alt><shift>left" { "action" ("navigation", "go-backward", "") };
-  bind "<alt><shift>right" { "action" ("navigation", "go-forward", "") };
+  bind "<alt><shift>Left" { "action" ("navigation", "go-backward", "") };
+  bind "<alt><shift>Right" { "action" ("navigation", "go-forward", "") };
 }
 
 IdeSourceViewMode.default {
