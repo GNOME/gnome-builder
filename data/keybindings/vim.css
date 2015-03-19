@@ -896,13 +896,16 @@
 
 @binding-set builder-vim-source-view-normal-ctrl-w
 {
-  bind "v" { "action" ("view-stack", "split-left", "") "grab_focus" () };
-  bind "<ctrl>v" { "action" ("view-stack", "split-left", "") "grab_focus" () };
+  bind "v" { "action" ("view-stack", "split-right", "") "grab_focus" () };
+  bind "<ctrl>v" { "action" ("view-stack", "split-right", "") "grab_focus" () };
 
   bind "c" { "action" ("view", "close", "") };
   bind "<ctrl>c" { "action" ("view", "close", "") };
 
   bind "s" { "action" ("view", "toggle-split", "") };
+
+  bind "w" { "action" ("view-grid", "focus-neighbor", "0") };
+  bind "<ctrl>w" { "action" ("view-grid", "focus-neighbor", "0") };
 
   bind "l" { "action" ("view-grid", "focus-neighbor", "5") };
   bind "h" { "action" ("view-grid", "focus-neighbor", "4") };

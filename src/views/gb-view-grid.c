@@ -180,19 +180,32 @@ gb_view_grid_focus_neighbor (GbViewGrid       *self,
                              GtkDirectionType  dir,
                              GbViewStack      *stack)
 {
-  GtkWidget *neighbor;
+  GtkWidget *active_view;
+  GtkWidget *neighbor = NULL;
 
   g_return_if_fail (GB_IS_VIEW_GRID (self));
   g_return_if_fail (GB_IS_VIEW_STACK (stack));
 
   switch ((int)dir)
     {
+    case GTK_DIR_UP:
+    case GTK_DIR_TAB_BACKWARD:
+      active_view = gb_view_stack_get_active_view (stack);
+      if (active_view && gtk_widget_child_focus (active_view, dir))
+        break;
+      /* fallthrough */
     case GTK_DIR_LEFT:
       neighbor = gb_view_grid_get_stack_before (self, stack);
       if (!neighbor)
         neighbor = gb_view_grid_get_last_stack (self);
       break;
 
+    case GTK_DIR_DOWN:
+    case GTK_DIR_TAB_FORWARD:
+      active_view = gb_view_stack_get_active_view (stack);
+      if (active_view && gtk_widget_child_focus (active_view, dir))
+        break;
+      /* fallthrough */
     case GTK_DIR_RIGHT:
       neighbor = gb_view_grid_get_stack_after (self, stack);
       if (!neighbor)
@@ -200,7 +213,6 @@ gb_view_grid_focus_neighbor (GbViewGrid       *self,
       break;
 
     default:
-      neighbor = NULL;
       break;
     }
 
