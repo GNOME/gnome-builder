@@ -904,9 +904,16 @@
   bind "<ctrl>w" { "action" ("view-grid", "focus-neighbor", "0") };
 
   bind "l" { "action" ("view-grid", "focus-neighbor", "5") };
+  bind "Right" { "action" ("view-grid", "focus-neighbor", "5") };
+
   bind "h" { "action" ("view-grid", "focus-neighbor", "4") };
+  bind "Left" { "action" ("view-grid", "focus-neighbor", "4") };
+
   bind "j" { "action" ("view-grid", "focus-neighbor", "3") };
+  bind "Down" { "action" ("view-grid", "focus-neighbor", "3") };
+
   bind "k" { "action" ("view-grid", "focus-neighbor", "2") };
+  bind "Up" { "action" ("view-grid", "focus-neighbor", "2") };
 }
 
 @binding-set builder-vim-source-view-visual-line-g
