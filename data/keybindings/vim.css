@@ -898,7 +898,7 @@
   bind "c" { "action" ("view", "close", "") };
   bind "<ctrl>c" { "action" ("view", "close", "") };
 
-  bind "s" { "action" ("view", "toggle-split", "") };
+  bind "s" { "action" ("view-stack", "split-down", "") };
 
   bind "w" { "action" ("view-grid", "focus-neighbor", "0") };
   bind "<ctrl>w" { "action" ("view-grid", "focus-neighbor", "0") };

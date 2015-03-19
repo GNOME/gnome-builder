@@ -118,13 +118,28 @@ gb_view_stack_actions_save_as (GSimpleAction *action,
 }
 
 static void
+do_split_down_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
+{
+  g_autoptr(GSimpleAction) action = user_data;
+  GTask *task = (GTask *)result;
+  GbView *view = (GbView *)object;
+  GVariant *param = g_task_get_task_data (task);
+  gboolean split_view = g_variant_get_boolean (param);
+
+  gb_view_set_split_view (view, split_view);
+  g_simple_action_set_state (action, param);
+}
+
+static void
 gb_view_stack_actions_split_down (GSimpleAction *action,
                                   GVariant      *param,
                                   gpointer       user_data)
 {
   GbViewStack *self = user_data;
   GtkWidget *active_view;
-  gboolean split_view;
+  g_autoptr(GTask) task = NULL;
 
   g_assert (GB_IS_VIEW_STACK (self));
 
@@ -132,10 +147,9 @@ gb_view_stack_actions_split_down (GSimpleAction *action,
   if (!GB_IS_VIEW (active_view))
     return;
 
-  split_view = g_variant_get_boolean (param);
-  gb_view_set_split_view (GB_VIEW (active_view), split_view);
-
-  g_simple_action_set_state (action, param);
+  task = g_task_new (active_view, NULL, do_split_down_cb, g_object_ref (action));
+  g_task_set_task_data (task, g_variant_ref (param), (GDestroyNotify)g_variant_unref);
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
