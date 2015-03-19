@@ -52,6 +52,7 @@ gb_editor_tweak_widget_filter_func (GtkListBoxRow *row,
   const gchar *needle = user_data;
   const gchar *lang_id;
   const gchar *lang_name;
+  g_autofree gchar *lang_name_cf = NULL;
 
   g_return_val_if_fail (GTK_IS_LIST_BOX_ROW (row), FALSE);
   g_return_val_if_fail (needle, FALSE);
@@ -60,8 +61,9 @@ gb_editor_tweak_widget_filter_func (GtkListBoxRow *row,
   language = g_object_get_qdata (G_OBJECT (child), gLangQuark);
   lang_id = gtk_source_language_get_id (language);
   lang_name = gtk_source_language_get_name (language);
+  lang_name_cf = g_utf8_casefold (lang_name, -1);
 
-  if (strstr (lang_id, needle) || strstr (lang_name, needle))
+  if (strstr (lang_id, needle) || strstr (lang_name, needle) || strstr (lang_name_cf, needle))
     return TRUE;
 
   return FALSE;
@@ -72,6 +74,7 @@ gb_editor_tweak_widget_entry_changed (GbEditorTweakWidget *self,
                                       GtkEntry            *entry)
 {
   const gchar *text;
+  gchar *text_cf;
 
   g_return_if_fail (GB_IS_EDITOR_TWEAK_WIDGET (self));
   g_return_if_fail (GTK_IS_ENTRY (entry));
@@ -81,10 +84,11 @@ gb_editor_tweak_widget_entry_changed (GbEditorTweakWidget *self,
   if (gb_str_empty0 (text))
     gtk_list_box_set_filter_func (self->list_box, NULL, NULL, NULL);
   else
-    gtk_list_box_set_filter_func (self->list_box,
-                                  gb_editor_tweak_widget_filter_func,
-                                  g_strdup (text),
-                                  g_free);
+    {
+      text_cf = g_utf8_casefold (text, -1);
+      gtk_list_box_set_filter_func (self->list_box, gb_editor_tweak_widget_filter_func,
+                                    text_cf, g_free);
+    }
 }
 
 static void
