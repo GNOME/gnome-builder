@@ -64,7 +64,7 @@
                   </object>
                 </child>
                 <child type="center">
-                  <object class="GtkMenuButton">
+                  <object class="GtkMenuButton" id="document_button">
                     <property name="hexpand">true</property>
                     <property name="popover">popover</property>
                     <property name="visible">true</property>
@@ -82,7 +82,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="close_button">
                     <property name="action-name">view-stack.close</property>
                     <property name="visible">true</property>
                     <style>

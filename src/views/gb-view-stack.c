@@ -55,6 +55,9 @@ gb_view_stack_add (GtkContainer *container,
     {
       GtkWidget *controls;
 
+      gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), TRUE);
+      gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), TRUE);
+
       self->focus_history = g_list_prepend (self->focus_history, child);
       controls = gb_view_get_controls (GB_VIEW (child));
       if (controls)
@@ -135,6 +138,27 @@ gb_view_stack_grab_focus (GtkWidget *widget)
   visible_child = gtk_stack_get_visible_child (self->stack);
   if (visible_child)
     gtk_widget_grab_focus (visible_child);
+}
+
+static gboolean
+gb_view_stack_is_empty (GbViewStack *self)
+{
+  g_return_val_if_fail (GB_IS_VIEW_STACK (self), FALSE);
+
+  return (self->focus_history == NULL);
+}
+
+static void
+gb_view_stack_real_empty (GbViewStack *self)
+{
+  g_assert (GB_IS_VIEW_STACK (self));
+
+  /* its possible for a widget to be added during "empty" emission. */
+  if (gb_view_stack_is_empty (self))
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), FALSE);
+      gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), FALSE);
+    }
 }
 
 static void
@@ -222,14 +246,15 @@ gb_view_stack_class_init (GbViewStackClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_ACTIVE_VIEW, gParamSpecs [PROP_ACTIVE_VIEW]);
 
-  gSignals [EMPTY] = g_signal_new ("empty",
-                                   G_TYPE_FROM_CLASS (klass),
-                                   G_SIGNAL_RUN_LAST,
-                                   0,
-                                   NULL, NULL,
-                                   g_cclosure_marshal_VOID__VOID,
-                                   G_TYPE_NONE,
-                                   0);
+  gSignals [EMPTY] =
+    g_signal_new_class_handler ("empty",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (gb_view_stack_real_empty),
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__VOID,
+                                G_TYPE_NONE,
+                                0);
 
   gSignals [SPLIT] = g_signal_new ("split",
                                    G_TYPE_FROM_CLASS (klass),
@@ -243,7 +268,9 @@ gb_view_stack_class_init (GbViewStackClass *klass)
                                    GB_TYPE_VIEW_GRID_SPLIT);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-view-stack.ui");
+  GB_WIDGET_CLASS_BIND (klass, GbViewStack, close_button);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, controls_stack);
+  GB_WIDGET_CLASS_BIND (klass, GbViewStack, document_button);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, go_backward);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, go_forward);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, popover);

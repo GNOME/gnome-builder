@@ -25,23 +25,25 @@ G_BEGIN_DECLS
 
 struct _GbViewStack
 {
-  GtkBin      parent_instance;
+  GtkBin         parent_instance;
 
-  GList      *focus_history;
+  GList         *focus_history;
 
   /* Weak references */
-  GtkWidget  *active_view;
-  GBinding   *title_binding;
+  GtkWidget     *active_view;
+  GBinding      *title_binding;
 
   /* Template references */
-  GtkStack   *controls_stack;
-  GtkButton  *go_backward;
-  GtkButton  *go_forward;
-  GtkPopover *popover;
-  GtkStack   *stack;
-  GtkLabel   *title_label;
+  GtkStack      *controls_stack;
+  GtkButton     *close_button;
+  GtkMenuButton *document_button;
+  GtkButton     *go_backward;
+  GtkButton     *go_forward;
+  GtkPopover    *popover;
+  GtkStack      *stack;
+  GtkLabel      *title_label;
 
-  guint       focused : 1;
+  guint          focused : 1;
 };
 
 G_END_DECLS
