@@ -278,6 +278,7 @@ IdeBackForwardList         *ide_source_view_get_back_forward_list     (IdeSource
 gboolean                    ide_source_view_get_enable_word_completion(IdeSourceView              *self);
 IdeFileSettings            *ide_source_view_get_file_settings         (IdeSourceView              *self);
 const PangoFontDescription *ide_source_view_get_font_desc             (IdeSourceView              *self);
+gboolean                    ide_source_view_get_highlight_current_line(IdeSourceView              *self);
 gboolean                    ide_source_view_get_insert_matching_brace (IdeSourceView              *self);
 gboolean                    ide_source_view_get_overwrite_braces      (IdeSourceView              *self);
 guint                       ide_source_view_get_scroll_offset         (IdeSourceView              *self);
@@ -302,6 +303,8 @@ void                        ide_source_view_set_font_desc             (IdeSource
                                                                        const PangoFontDescription *font_desc);
 void                        ide_source_view_set_font_name             (IdeSourceView              *self,
                                                                        const gchar                *font_name);
+void                        ide_source_view_set_highlight_current_line(IdeSourceView              *self,
+                                                                       gboolean                    highlight_current_line);
 void                        ide_source_view_set_insert_matching_brace (IdeSourceView              *self,
                                                                        gboolean                    insert_matching_brace);
 void                        ide_source_view_set_overwrite_braces      (IdeSourceView              *self,

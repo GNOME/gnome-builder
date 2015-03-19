@@ -130,6 +130,7 @@ typedef struct
   guint                        auto_indent : 1;
   guint                        completion_visible : 1;
   guint                        enable_word_completion : 1;
+  guint                        highlight_current_line : 1;
   guint                        in_replay_macro : 1;
   guint                        insert_matching_brace : 1;
   guint                        overwrite_braces : 1;
@@ -163,6 +164,7 @@ enum {
   PROP_FILE_SETTINGS,
   PROP_FONT_NAME,
   PROP_FONT_DESC,
+  PROP_HIGHLIGHT_CURRENT_LINE,
   PROP_INSERT_MATCHING_BRACE,
   PROP_OVERWRITE,
   PROP_OVERWRITE_BRACES,
@@ -4171,6 +4173,42 @@ ide_source_view_real_draw (GtkWidget *widget,
   return ret;
 }
 
+static gboolean
+ide_source_view_focus_in_event (GtkWidget     *widget,
+                                GdkEventFocus *event)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  gboolean ret;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->focus_in_event (widget, event);
+
+  if (priv->highlight_current_line)
+    gtk_source_view_set_highlight_current_line (GTK_SOURCE_VIEW (self), TRUE);
+
+  return ret;
+}
+
+static gboolean
+ide_source_view_focus_out_event (GtkWidget     *widget,
+                                 GdkEventFocus *event)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  gboolean ret;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->focus_out_event (widget, event);
+
+  if (priv->highlight_current_line)
+    gtk_source_view_set_highlight_current_line (GTK_SOURCE_VIEW (self), FALSE);
+
+  return ret;
+}
+
 static void
 ide_source_view_real_begin_macro (IdeSourceView *self)
 {
@@ -4383,6 +4421,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boxed (value, ide_source_view_get_font_desc (self));
       break;
 
+    case PROP_HIGHLIGHT_CURRENT_LINE:
+      g_value_set_boolean (value, ide_source_view_get_highlight_current_line (self));
+      break;
+
     case PROP_INSERT_MATCHING_BRACE:
       g_value_set_boolean (value, ide_source_view_get_insert_matching_brace (self));
       break;
@@ -4464,6 +4506,10 @@ ide_source_view_set_property (GObject      *object,
       ide_source_view_set_font_desc (self, g_value_get_boxed (value));
       break;
 
+    case PROP_HIGHLIGHT_CURRENT_LINE:
+      ide_source_view_set_highlight_current_line (self, g_value_get_boolean (value));
+      break;
+
     case PROP_INSERT_MATCHING_BRACE:
       ide_source_view_set_insert_matching_brace (self, g_value_get_boolean (value));
       break;
@@ -4525,6 +4571,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   widget_class->button_press_event = ide_source_view_real_button_press_event;
   widget_class->draw = ide_source_view_real_draw;
+  widget_class->focus_in_event = ide_source_view_focus_in_event;
+  widget_class->focus_out_event = ide_source_view_focus_out_event;
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
   widget_class->style_updated = ide_source_view_real_style_updated;
@@ -4615,6 +4663,10 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FONT_NAME,
                                    gParamSpecs [PROP_FONT_NAME]);
+
+  g_object_class_override_property (object_class,
+                                    PROP_HIGHLIGHT_CURRENT_LINE,
+                                    "highlight-current-line");
 
   gParamSpecs [PROP_INSERT_MATCHING_BRACE] =
     g_param_spec_boolean ("insert-matching-brace",
@@ -6053,4 +6105,38 @@ ide_source_view_get_file_settings (IdeSourceView *self)
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
 
   return priv->file_settings;
+}
+
+gboolean
+ide_source_view_get_highlight_current_line (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->highlight_current_line;
+}
+
+void
+ide_source_view_set_highlight_current_line (IdeSourceView *self,
+                                            gboolean       highlight_current_line)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  /*
+   * This overrides the default GtkSourceView::highlight-current-line so that
+   * we can turn off the line highlight when the IdeSourceView is not in focus.
+   * See ide_source_view_real_focus_in_event() and
+   * ide_source_view_real_focus_out_event() for the machinery.
+   */
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  highlight_current_line = !!highlight_current_line;
+
+  if (highlight_current_line != priv->highlight_current_line)
+    {
+      priv->highlight_current_line = highlight_current_line;
+      g_object_notify (G_OBJECT (self), "highlight-current-line");
+    }
 }
