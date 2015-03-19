@@ -61,7 +61,7 @@ gb_editor_view_actions_source_view_notify (IdeSourceView *source_view,
       gboolean highlight_current_line;
 
       action = g_action_map_lookup_action (actions, "highlight-current-line");
-      highlight_current_line = gtk_source_view_get_highlight_current_line (gsv);
+      g_object_get (gsv, "highlight-current-line", &highlight_current_line, NULL);
       param = g_variant_new_boolean (highlight_current_line);
     }
   else if (g_str_equal (pspec->name, "auto-indent"))
