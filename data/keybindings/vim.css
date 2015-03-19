@@ -91,7 +91,7 @@
 
   bind "<ctrl>comma" { "action" ("app", "preferences", "") };
   bind "<ctrl>period" { "action" ("workbench", "global-search", "") };
-  bind "<ctrl>s" { "action" ("editor-view", "save", "") };
+  bind "<ctrl>s" { "action" ("view", "save", "") };
 }
 
 @binding-set builder-vim-source-view-normal-with-count
@@ -896,13 +896,13 @@
 
 @binding-set builder-vim-source-view-normal-ctrl-w
 {
-  bind "v" { "action" ("view", "split-left", "") "grab_focus" () };
-  bind "<ctrl>v" { "action" ("view", "split-left", "") "grab_focus" () };
+  bind "v" { "action" ("view-stack", "split-left", "") "grab_focus" () };
+  bind "<ctrl>v" { "action" ("view-stack", "split-left", "") "grab_focus" () };
 
-  bind "c" { "action" ("view", "close", "") };
-  bind "<ctrl>c" { "action" ("view", "close", "") };
+  bind "c" { "action" ("view-stack", "close", "") };
+  bind "<ctrl>c" { "action" ("view-stack", "close", "") };
 
-  bind "s" { "action" ("view", "split-down", "true") };
+  bind "s" { "action" ("view-stack", "split-down", "true") };
 }
 
 @binding-set builder-vim-source-view-visual-line-g

@@ -246,9 +246,8 @@ gb_editor_view_actions_init (GbEditorView *self)
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), GbEditorViewActions,
                                    G_N_ELEMENTS (GbEditorViewActions), self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "editor-view", G_ACTION_GROUP (group));
-  gtk_widget_insert_action_group (GTK_WIDGET (self->tweak_widget), "editor-view",
-                                  G_ACTION_GROUP (group));
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "view", G_ACTION_GROUP (group));
+  gtk_widget_insert_action_group (GTK_WIDGET (self->tweak_widget), "view", G_ACTION_GROUP (group));
 
 #define WATCH_PROPERTY(name) \
   G_STMT_START { \

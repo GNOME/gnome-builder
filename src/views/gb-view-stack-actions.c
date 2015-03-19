@@ -193,5 +193,5 @@ gb_view_stack_actions_init (GbViewStack *self)
   actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (actions), gGbViewStackActions,
                                    G_N_ELEMENTS (gGbViewStackActions), self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "view", G_ACTION_GROUP (actions));
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "view-stack", G_ACTION_GROUP (actions));
 }

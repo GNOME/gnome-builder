@@ -108,7 +108,7 @@ gb_editor_tweak_widget_row_activated (GbEditorTweakWidget *self,
     {
       lang_id = gtk_source_language_get_id (lang);
       param = g_variant_new_string (lang_id);
-      gb_widget_activate_action (GTK_WIDGET (self), "editor-view", "language", param);
+      gb_widget_activate_action (GTK_WIDGET (self), "view", "language", param);
     }
 }
 

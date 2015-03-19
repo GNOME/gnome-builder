@@ -83,7 +83,7 @@
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="action-name">view.close</property>
+                    <property name="action-name">view-stack.close</property>
                     <property name="visible">true</property>
                     <style>
                       <class name="dim-label"/>
@@ -155,7 +155,7 @@
                 <child>
                   <object class="GtkButton">
                     <property name="visible">true</property>
-                    <property name="action-name">view.split-left</property>
+                    <property name="action-name">view-stack.split-left</property>
                     <style>
                       <class name="image-button"/>
                     </style>
@@ -170,7 +170,7 @@
                 <child>
                   <object class="GtkButton">
                     <property name="visible">true</property>
-                    <property name="action-name">view.split-right</property>
+                    <property name="action-name">view-stack.split-right</property>
                     <style>
                       <class name="image-button"/>
                     </style>
@@ -187,7 +187,7 @@
             <child>
               <object class="GtkToggleButton">
                 <property name="visible">true</property>
-                <property name="action-name">view.split-down</property>
+                <property name="action-name">view-stack.split-down</property>
                 <style>
                   <class name="image-button"/>
                 </style>
@@ -223,7 +223,7 @@
                 </style>
                 <child>
                   <object class="GtkButton">
-                    <property name="action-name">view.move-left</property>
+                    <property name="action-name">view-stack.move-left</property>
                     <property name="hexpand">true</property>
                     <property name="visible">true</property>
                     <style>
@@ -239,7 +239,7 @@
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="action-name">view.move-right</property>
+                    <property name="action-name">view-stack.move-right</property>
                     <property name="hexpand">true</property>
                     <property name="visible">true</property>
                     <style>
@@ -285,7 +285,7 @@
           <object class="GtkModelButton">
             <property name="halign">fill</property>
             <property name="hexpand">true</property>
-            <property name="action-name">view.close</property>
+            <property name="action-name">view-stack.close</property>
             <property name="text" translatable="yes">Close</property>
             <property name="visible">true</property>
           </object>

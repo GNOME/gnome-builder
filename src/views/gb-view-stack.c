@@ -339,6 +339,7 @@ gb_view_stack_set_active_view (GbViewStack *self,
         {
           GtkWidget *controls;
           GBinding *binding;
+          GActionGroup *group;
 
           self->focus_history = g_list_prepend (self->focus_history, active_view);
           if (active_view != gtk_stack_get_visible_child (self->stack))
@@ -354,6 +355,9 @@ gb_view_stack_set_active_view (GbViewStack *self,
               gtk_stack_set_visible_child (self->controls_stack, controls);
               gtk_widget_show (GTK_WIDGET (self->controls_stack));
             }
+          group = gtk_widget_get_action_group (active_view, "view");
+          if (group)
+            gtk_widget_insert_action_group (GTK_WIDGET (self), "view", group);
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ACTIVE_VIEW]);
