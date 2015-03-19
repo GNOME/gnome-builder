@@ -4186,11 +4186,18 @@ ide_source_view_focus_in_event (GtkWidget     *widget,
 {
   IdeSourceView *self = (IdeSourceView *)widget;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceCompletion *completion;
   gboolean ret;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->focus_in_event (widget, event);
+
+  /*
+   * Restore the completion window now that we have regained focus.
+   */
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+  gtk_source_completion_unblock_interactive (completion);
 
   /*
    * Restore the insert mark, but ignore selections (since we cant ensure they
@@ -4213,16 +4220,24 @@ ide_source_view_focus_out_event (GtkWidget     *widget,
                                  GdkEventFocus *event)
 {
   IdeSourceView *self = (IdeSourceView *)widget;
+  GtkSourceCompletion *completion;
   gboolean ret;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->focus_out_event (widget, event);
 
   /* save our insert mark for when we focus back in. it could have moved if
    * another view into the same buffer has caused the insert mark to jump.
    */
   ide_source_view_real_save_insert_mark (self);
+
+  ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->focus_out_event (widget, event);
+
+  /*
+   * Block the completion window while we are not focused. It confuses text
+   * insertion and such.
+   */
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+  gtk_source_completion_block_interactive (completion);
 
   /* We don't want highlight-current-line unless the widget is in focus, so
    * disable it until we get re-focused.
@@ -5274,6 +5289,7 @@ static void
 ide_source_view_init (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceCompletion *completion;
   GtkTargetList *target_list;
 
   priv->target_line_offset = -1;
@@ -5284,6 +5300,14 @@ ide_source_view_init (IdeSourceView *self)
                     "notify::buffer",
                     G_CALLBACK (ide_source_view_notify_buffer),
                     NULL);
+
+  /*
+   * We block completion when we are not focused so that two SourceViews
+   * viewing the same GtkTextBuffer do not both show completion
+   * windows.
+   */
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+  gtk_source_completion_block_interactive (completion);
 
   /*
    * Drag and drop support
