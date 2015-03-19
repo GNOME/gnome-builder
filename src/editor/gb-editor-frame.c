@@ -165,6 +165,12 @@ gb_editor_frame__drag_data_received (GbEditorFrame    *self,
           g_variant_builder_unref (builder);
           g_strfreev (uri_list);
 
+          /*
+           * request that we get focus first so the workbench will deliver the
+           * document to us in the case it is not already open
+           */
+          gtk_widget_grab_focus (GTK_WIDGET (self));
+
           gb_widget_activate_action (GTK_WIDGET (self), "workbench", "open-uri-list", variant);
         }
 
