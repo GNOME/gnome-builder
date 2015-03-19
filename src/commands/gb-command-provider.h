@@ -39,6 +39,8 @@ typedef struct _GbCommandProvider        GbCommandProvider;
 typedef struct _GbCommandProviderClass   GbCommandProviderClass;
 typedef struct _GbCommandProviderPrivate GbCommandProviderPrivate;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbCommandProvider, g_object_unref)
+
 struct _GbCommandProvider
 {
   GObject parent;

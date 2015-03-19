@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "gb-command-gaction-provider.h"
 #include "gb-widget.h"
 #include "gb-workbench-actions.h"
 #include "gb-workbench-private.h"
@@ -342,11 +343,18 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 static void
 gb_workbench_init (GbWorkbench *self)
 {
+  g_autoptr(GbCommandProvider) gaction_provider = NULL;
+
   IDE_ENTRY;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->command_manager = gb_command_manager_new ();
+
+  gaction_provider = g_object_new (GB_TYPE_COMMAND_GACTION_PROVIDER,
+                                   "workbench", self,
+                                   NULL);
+  gb_command_manager_add_provider (self->command_manager, gaction_provider);
 
   IDE_EXIT;
 }

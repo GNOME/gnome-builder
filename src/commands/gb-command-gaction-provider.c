@@ -23,9 +23,9 @@
 
 #include "gb-command-gaction-provider.h"
 #include "gb-command-gaction.h"
+#include "gb-view.h"
 
-G_DEFINE_TYPE (GbCommandGactionProvider, gb_command_gaction_provider,
-               GB_TYPE_COMMAND_PROVIDER)
+G_DEFINE_TYPE (GbCommandGactionProvider, gb_command_gaction_provider, GB_TYPE_COMMAND_PROVIDER)
 
 GbCommandProvider *
 gb_command_gaction_provider_new (GbWorkbench *workbench)
@@ -38,7 +38,7 @@ gb_command_gaction_provider_new (GbWorkbench *workbench)
 static GList *
 discover_groups (GbCommandGactionProvider *provider)
 {
-  GbDocumentView *view;
+  GbView *view;
   GApplication *application;
   GbWorkbench *workbench;
   GtkWidget *widget;

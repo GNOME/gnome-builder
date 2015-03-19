@@ -10,10 +10,14 @@ libgnome_builder_la_SOURCES = \
 	src/app/gb-application-actions.c \
 	src/app/gb-application-actions.h \
 	src/app/gb-application-private.h \
-	src/commands/gb-command-bar.c \
-	src/commands/gb-command-bar.h \
 	src/commands/gb-command-bar-item.c \
 	src/commands/gb-command-bar-item.h \
+	src/commands/gb-command-bar.c \
+	src/commands/gb-command-bar.h \
+	src/commands/gb-command-gaction-provider.c \
+	src/commands/gb-command-gaction-provider.h \
+	src/commands/gb-command-gaction.c \
+	src/commands/gb-command-gaction.h \
 	src/commands/gb-command-manager.c \
 	src/commands/gb-command-manager.h \
 	src/commands/gb-command-provider.c \
@@ -125,10 +129,6 @@ libgnome_builder_la_SOURCES = \
 	$(NULL)
 
 disabled_files = \
-	src/commands/gb-command-gaction-provider.c \
-	src/commands/gb-command-gaction-provider.h \
-	src/commands/gb-command-gaction.c \
-	src/commands/gb-command-gaction.h \
 	src/commands/gb-command-vim-provider.c \
 	src/commands/gb-command-vim-provider.h \
 	src/commands/gb-command-vim.c \

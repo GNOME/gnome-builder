@@ -23,9 +23,9 @@
 
 struct _GbCommandProviderPrivate
 {
-  GbWorkbench    *workbench;
-  GbView *active_view;
-  gint            priority;
+  GbWorkbench *workbench;
+  GbView      *active_view;
+  gint         priority;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbCommandProvider, gb_command_provider, G_TYPE_OBJECT)
