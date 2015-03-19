@@ -102,6 +102,7 @@
                 </child>
                 <child>
                   <object class="GtkStack" id="controls_stack">
+                    <property name="homogeneous">false</property>
                     <property name="visible">true</property>
                   </object>
                   <packing>

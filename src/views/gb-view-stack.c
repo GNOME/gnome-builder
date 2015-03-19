@@ -68,27 +68,38 @@ gb_view_stack_add (GtkContainer *container,
     }
 }
 
+void
+gb_view_stack_remove (GbViewStack *self,
+                      GbView      *view)
+{
+  GtkWidget *controls;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+  g_assert (GB_IS_VIEW (view));
+
+  self->focus_history = g_list_remove (self->focus_history, view);
+  controls = gb_view_get_controls (view);
+  if (controls)
+    gtk_container_remove (GTK_CONTAINER (self->controls_stack), controls);
+  gtk_container_remove (GTK_CONTAINER (self->stack), GTK_WIDGET (view));
+  if (self->focus_history)
+    gtk_stack_set_visible_child (self->stack, self->focus_history->data);
+  else
+    g_signal_emit (self, gSignals [EMPTY], 0);
+}
+
 static void
-gb_view_stack_remove (GtkContainer *container,
-                      GtkWidget    *child)
+gb_view_stack_real_remove (GtkContainer *container,
+                           GtkWidget    *child)
 {
   GbViewStack *self = (GbViewStack *)container;
 
   g_assert (GB_IS_VIEW_STACK (self));
 
   if (GB_IS_VIEW (child))
-    {
-      self->focus_history = g_list_remove (self->focus_history, child);
-      gtk_container_remove (GTK_CONTAINER (self->stack), child);
-      if (self->focus_history)
-        gtk_stack_set_visible_child (self->stack, self->focus_history->data);
-      else
-        g_signal_emit (self, gSignals [EMPTY], 0);
-    }
+    gb_view_stack_remove (self, GB_VIEW (child));
   else
-    {
-      GTK_CONTAINER_CLASS (gb_view_stack_parent_class)->remove (container, child);
-    }
+    GTK_CONTAINER_CLASS (gb_view_stack_parent_class)->remove (container, child);
 }
 
 static void
@@ -239,7 +250,7 @@ gb_view_stack_class_init (GbViewStackClass *klass)
   widget_class->hierarchy_changed = gb_view_stack_hierarchy_changed;
 
   container_class->add = gb_view_stack_add;
-  container_class->remove = gb_view_stack_remove;
+  container_class->remove = gb_view_stack_real_remove;
 
   gParamSpecs [PROP_ACTIVE_VIEW] =
     g_param_spec_object ("active-view",

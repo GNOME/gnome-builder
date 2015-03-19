@@ -26,7 +26,6 @@
 struct _GbPreferencesPageVimPrivate
 {
   GSettings             *editor_settings;
-  GSettings             *vim_settings;
 
   /* Widgets owned by Template */
   GtkSwitch             *vim_mode_switch;
@@ -51,7 +50,6 @@ gb_preferences_page_vim_constructed (GObject *object)
   priv = vim->priv;
 
   priv->editor_settings = g_settings_new ("org.gnome.builder.editor");
-  priv->vim_settings = g_settings_new ("org.gnome.builder.editor.vim");
 
   group = g_simple_action_group_new ();
 
@@ -69,7 +67,6 @@ gb_preferences_page_vim_finalize (GObject *object)
   GbPreferencesPageVimPrivate *priv = GB_PREFERENCES_PAGE_VIM (object)->priv;
 
   g_clear_object (&priv->editor_settings);
-  g_clear_object (&priv->vim_settings);
 
   G_OBJECT_CLASS (gb_preferences_page_vim_parent_class)->finalize (object);
 }

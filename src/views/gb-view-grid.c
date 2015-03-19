@@ -261,6 +261,17 @@ gb_view_grid_stack_split (GbViewGrid      *self,
       gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
       break;
 
+    case GB_VIEW_GRID_MOVE_LEFT:
+      target = gb_view_grid_get_stack_before (self, stack);
+      if (target == NULL)
+        target = gb_view_grid_add_stack_before (self, stack);
+      new_view = gb_document_create_view (document);
+      if (new_view == NULL)
+        return;
+      gb_view_stack_remove (stack, view);
+      gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
+      break;
+
     case GB_VIEW_GRID_SPLIT_RIGHT:
       target = gb_view_grid_get_stack_after (self, stack);
       if (target == NULL)
@@ -272,7 +283,14 @@ gb_view_grid_stack_split (GbViewGrid      *self,
       break;
 
     case GB_VIEW_GRID_MOVE_RIGHT:
-    case GB_VIEW_GRID_MOVE_LEFT:
+      target = gb_view_grid_get_stack_after (self, stack);
+      if (target == NULL)
+        target = gb_view_grid_add_stack_after (self, stack);
+      new_view = gb_document_create_view (document);
+      if (new_view == NULL)
+        return;
+      gb_view_stack_remove (stack, view);
+      gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
       break;
 
     default:
