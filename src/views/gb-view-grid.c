@@ -366,43 +366,29 @@ static void
 gb_view_grid_reposition (GbViewGrid *self)
 {
   GtkAllocation alloc;
-  GtkWidget *paned;
-  GtkWidget *stack;
-  guint count = 0;
+  GList *stacks;
+  GList *iter;
+  guint count;
   guint position;
 
   g_return_if_fail (GB_IS_VIEW_GRID (self));
 
   gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
-
-  paned = gtk_bin_get_child (GTK_BIN (self));
-
-  if (!GTK_IS_PANED (paned))
-    return;
-
-  stack = gtk_paned_get_child1 (GTK_PANED (paned));
-  g_assert (GB_IS_VIEW_STACK (stack));
-
-  do
-    {
-      count++;
-      stack = gb_view_grid_get_stack_after (self, GB_VIEW_STACK (stack));
-      g_assert (!stack || GB_IS_VIEW_STACK (stack));
-    }
-  while (stack);
-
+  stacks = gb_view_grid_get_stacks (self);
+  count = MAX (1, g_list_length (stacks));
   position = alloc.width / count;
 
-  stack = gtk_paned_get_child1 (GTK_PANED (paned));
-  g_assert (GB_IS_VIEW_STACK (stack));
-  do
+  for (iter = stacks; iter; iter = iter->next)
     {
-      paned = gtk_widget_get_parent (stack);
-      gtk_paned_set_position (GTK_PANED (paned), position);
-      stack = gb_view_grid_get_stack_after (self, GB_VIEW_STACK (stack));
-      g_assert (!stack|| GB_IS_VIEW_STACK (stack));
+      GtkWidget *parent;
+
+      parent = gtk_widget_get_parent (iter->data);
+      g_assert (GTK_IS_PANED (parent));
+
+      gtk_paned_set_position (GTK_PANED (parent), position);
     }
-  while (stack);
+
+  g_list_free (stacks);
 }
 
 /**
