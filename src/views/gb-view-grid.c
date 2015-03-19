@@ -644,6 +644,16 @@ gb_view_grid_toplevel_set_focus (GtkWidget  *toplevel,
 }
 
 static void
+gb_view_grid_toplevel_is_maximized (GtkWidget  *toplevel,
+                                    GParamSpec *pspec,
+                                    GbViewGrid *self)
+{
+  g_return_if_fail (GB_IS_VIEW_GRID (self));
+
+  gb_view_grid_reposition (self);
+}
+
+static void
 gb_view_grid_hierarchy_changed (GtkWidget *widget,
                                 GtkWidget *previous_toplevel)
 {
@@ -653,16 +663,27 @@ gb_view_grid_hierarchy_changed (GtkWidget *widget,
   g_return_if_fail (GB_IS_VIEW_GRID (self));
 
   if (GTK_IS_WINDOW (previous_toplevel))
-    g_signal_handlers_disconnect_by_func (previous_toplevel,
-                                          G_CALLBACK (gb_view_grid_toplevel_set_focus),
-                                          self);
+    {
+      g_signal_handlers_disconnect_by_func (previous_toplevel,
+                                            G_CALLBACK (gb_view_grid_toplevel_set_focus),
+                                            self);
+      g_signal_handlers_disconnect_by_func (previous_toplevel,
+                                            G_CALLBACK (gb_view_grid_toplevel_is_maximized),
+                                            self);
+    }
 
   toplevel = gtk_widget_get_toplevel (widget);
   if (GTK_IS_WINDOW (toplevel))
-    g_signal_connect (toplevel,
-                      "set-focus",
-                      G_CALLBACK (gb_view_grid_toplevel_set_focus),
-                      self);
+    {
+      g_signal_connect (toplevel,
+                        "set-focus",
+                        G_CALLBACK (gb_view_grid_toplevel_set_focus),
+                        self);
+      g_signal_connect (toplevel,
+                        "notify::is-maximized",
+                        G_CALLBACK (gb_view_grid_toplevel_is_maximized),
+                        self);
+    }
 }
 
 static void
