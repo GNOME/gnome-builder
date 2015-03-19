@@ -392,17 +392,17 @@ gb_editor_view_actions_find_other_file (GSimpleAction *action,
 
 static GActionEntry GbEditorViewActions[] = {
   { "auto-indent", NULL, NULL, "false", gb_editor_view_actions_auto_indent },
-  { "language", NULL, "s", "''", gb_editor_view_actions_language },
-  { "highlight-current-line", NULL, NULL, "false", gb_editor_view_actions_highlight_current_line },
   { "close", gb_editor_view_actions_close },
+  { "find-other-file", gb_editor_view_actions_find_other_file },
+  { "highlight-current-line", NULL, NULL, "false", gb_editor_view_actions_highlight_current_line },
+  { "language", NULL, "s", "''", gb_editor_view_actions_language },
   { "save", gb_editor_view_actions_save },
   { "show-line-numbers", NULL, NULL, "false", gb_editor_view_actions_show_line_numbers },
   { "show-right-margin", NULL, NULL, "false", gb_editor_view_actions_show_right_margin },
   { "smart-backspace", NULL, NULL, "false", gb_editor_view_actions_smart_backspace },
   { "tab-width", NULL, "i", "8", gb_editor_view_actions_tab_width },
-  { "use-spaces", NULL, "b", "false", gb_editor_view_actions_use_spaces },
   { "toggle-split", gb_editor_view_actions_toggle_split },
-  { "find-other-file", gb_editor_view_actions_find_other_file },
+  { "use-spaces", NULL, "b", "false", gb_editor_view_actions_use_spaces },
 };
 
 void
