@@ -802,6 +802,10 @@
 
   bind "u"        { "set-mode" ("vim-normal-g-u", transient) };
   bind "<shift>u" { "set-mode" ("vim-normal-g-u", transient) };
+
+  /* cycle "tabs" */
+  bind "<shift>t" { "action" ("view-stack", "previous-view", "") };
+  bind "t" { "action" ("view-stack", "next-view", "") };
 }
 
 @binding-set builder-vim-source-view-normal-g-u
