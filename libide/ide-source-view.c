@@ -2214,7 +2214,9 @@ ide_source_view_real_button_press_event (GtkWidget      *widget,
   /*
    * Keep mark on the last character if the sourceviewmode dictates such.
    */
-  if (priv->mode && ide_source_view_mode_get_keep_mark_on_char (priv->mode))
+  if (gtk_widget_has_focus (widget) &&
+      priv->mode &&
+      ide_source_view_mode_get_keep_mark_on_char (priv->mode))
     {
       GtkTextBuffer *buffer;
       GtkTextMark *insert;
