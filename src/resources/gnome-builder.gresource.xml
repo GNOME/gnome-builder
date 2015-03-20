@@ -6,7 +6,7 @@
 
     <file>editor/uncrustify/uncrustify.c.cfg</file>
 
-    <file>gtk/menus.ui</file>
+    <file alias="gtk/menus.ui">../../data/gtk/menus.ui</file>
 
     <file alias="icons/16x16/actions/builder-split-tab-symbolic.symbolic.png">../../data/icons/hicolor/16x16/actions/builder-split-tab-symbolic.symbolic.png</file>
     <file alias="icons/32x32/actions/builder-split-tab-symbolic.symbolic.png">../../data/icons/hicolor/32x32/actions/builder-split-tab-symbolic.symbolic.png</file>
