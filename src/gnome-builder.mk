@@ -55,6 +55,10 @@ libgnome_builder_la_SOURCES = \
 	src/gedit/gedit-close-button.h \
 	src/gedit/gedit-menu-stack-switcher.c \
 	src/gedit/gedit-menu-stack-switcher.h \
+	src/html/gb-html-document.c \
+	src/html/gb-html-document.h \
+	src/html/gb-html-view.c \
+	src/html/gb-html-view.h \
 	src/keybindings/gb-keybindings.c \
 	src/keybindings/gb-keybindings.h \
 	src/nautilus/nautilus-floating-bar.c \
@@ -141,10 +145,6 @@ disabled_files = \
 	src/editor/gb-source-formatter.h \
 	src/editor/gb-source-highlight-menu.c \
 	src/editor/gb-source-highlight-menu.h \
-	src/html/gb-html-document.c \
-	src/html/gb-html-document.h \
-	src/html/gb-html-view.c \
-	src/html/gb-html-view.h \
 	src/tree/gb-project-tree-builder.c \
 	src/tree/gb-project-tree-builder.h \
 	$(NULL)

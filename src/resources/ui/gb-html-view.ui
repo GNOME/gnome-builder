@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.14 -->
-  <template class="GbHtmlView" parent="GbDocumentView">
+  <template class="GbHtmlView" parent="GbView">
     <child internal-child="controls">
       <object class="GtkBox">
         <property name="visible">true</property>
@@ -14,8 +14,7 @@
             <property name="action_name">html-view.refresh</property>
             <style>
               <class name="image-button"/>
-              <class name="tab-control-first"/>
-              <class name="tab-control-last"/>
+              <class name="flat"/>
             </style>
             <child>
               <object class="GtkImage">

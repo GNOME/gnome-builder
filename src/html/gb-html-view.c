@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "html-view"
+#define G_LOG_DOMAIN "gb-html-view"
 
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksourcefile.h>
@@ -24,10 +24,14 @@
 #include <webkit2/webkit2.h>
 
 #include "gb-editor-document.h"
+#include "gb-html-document.h"
 #include "gb-html-view.h"
+#include "gb-widget.h"
 
-struct _GbHtmlViewPrivate
+struct _GbHtmlView
 {
+  GbView          parent_instance;
+
   /* Objects owned by view */
   GbHtmlDocument *document;
 
@@ -35,7 +39,7 @@ struct _GbHtmlViewPrivate
   WebKitWebView  *web_view;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbHtmlView, gb_html_view, GB_TYPE_DOCUMENT_VIEW)
+G_DEFINE_TYPE (GbHtmlView, gb_html_view, GB_TYPE_VIEW)
 
 enum {
   PROP_0,
@@ -45,48 +49,37 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-GtkWidget *
-gb_html_view_new (GbHtmlDocument *document)
-{
-  return g_object_new (GB_TYPE_HTML_VIEW,
-                       "document", document,
-                       NULL);
-}
-
 static void
-gb_html_view_changed (GbHtmlView    *view,
+gb_html_view_changed (GbHtmlView    *self,
                       GtkTextBuffer *buffer)
 {
-  GbHtmlViewPrivate *priv;
   gchar *content;
   gchar *base_uri = NULL;
 
   IDE_ENTRY;
 
-  g_return_if_fail (GB_IS_HTML_VIEW (view));
+  g_return_if_fail (GB_IS_HTML_VIEW (self));
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
-  priv = view->priv;
-
-  if (GB_IS_EDITOR_DOCUMENT (view->priv->document))
+  if (GB_IS_EDITOR_DOCUMENT (self->document))
     {
-      GtkSourceFile *file;
+      IdeFile *file;
 
-      file = gb_editor_document_get_file (GB_EDITOR_DOCUMENT (priv->document));
+      file = ide_buffer_get_file (IDE_BUFFER (self->document));
 
       if (file)
         {
           GFile *location;
 
-          location = gtk_source_file_get_location (file);
+          location = ide_file_get_file (file);
 
           if (location)
             base_uri = g_file_get_uri (location);
         }
     }
 
-  content = gb_html_document_get_content (view->priv->document);
-  webkit_web_view_load_html (view->priv->web_view, content, base_uri);
+  content = gb_html_document_get_content (self->document);
+  webkit_web_view_load_html (self->web_view, content, base_uri);
 
   g_free (content);
   g_free (base_uri);
@@ -95,12 +88,12 @@ gb_html_view_changed (GbHtmlView    *view,
 }
 
 static void
-gb_html_view_connect (GbHtmlView     *view,
+gb_html_view_connect (GbHtmlView     *self,
                       GbHtmlDocument *document)
 {
   GtkTextBuffer *buffer;
 
-  g_return_if_fail (GB_IS_HTML_VIEW (view));
+  g_return_if_fail (GB_IS_HTML_VIEW (self));
   g_return_if_fail (GB_IS_HTML_DOCUMENT (document));
 
   buffer = gb_html_document_get_buffer (document);
@@ -110,19 +103,19 @@ gb_html_view_connect (GbHtmlView     *view,
   g_signal_connect_object (buffer,
                            "changed",
                            G_CALLBACK (gb_html_view_changed),
-                           view,
+                           self,
                            G_CONNECT_SWAPPED);
 
-  gb_html_view_changed (view, buffer);
+  gb_html_view_changed (self, buffer);
 }
 
 static void
-gb_html_view_disconnect (GbHtmlView     *view,
+gb_html_view_disconnect (GbHtmlView     *self,
                          GbHtmlDocument *document)
 {
   GtkTextBuffer *buffer;
 
-  g_return_if_fail (GB_IS_HTML_VIEW (view));
+  g_return_if_fail (GB_IS_HTML_VIEW (self));
   g_return_if_fail (GB_IS_HTML_DOCUMENT (document));
 
   buffer = gb_html_document_get_buffer (document);
@@ -131,24 +124,24 @@ gb_html_view_disconnect (GbHtmlView     *view,
 
   g_signal_handlers_disconnect_by_func (buffer,
                                         G_CALLBACK (gb_html_view_changed),
-                                        view);
+                                        self);
 }
 
 static GbDocument *
-gb_html_view_get_document (GbDocumentView *view)
+gb_html_view_get_document (GbView *view)
 {
   GbHtmlView *self = (GbHtmlView *)view;
 
   g_return_val_if_fail (GB_IS_HTML_VIEW (self), NULL);
 
-  return GB_DOCUMENT (self->priv->document);
+  return GB_DOCUMENT (self->document);
 }
 
 static void
-gb_html_view_set_document (GbHtmlView *view,
+gb_html_view_set_document (GbHtmlView *self,
                            GbDocument *document)
 {
-  g_return_if_fail (GB_IS_HTML_VIEW (view));
+  g_return_if_fail (GB_IS_HTML_VIEW (self));
   g_return_if_fail (GB_IS_DOCUMENT (document));
 
   if (!GB_IS_HTML_DOCUMENT (document))
@@ -159,21 +152,21 @@ gb_html_view_set_document (GbHtmlView *view,
       return;
     }
 
-  if (document != (GbDocument *)view->priv->document)
+  if (document != (GbDocument *)self->document)
     {
-      if (view->priv->document)
+      if (self->document)
         {
-          gb_html_view_disconnect (view, view->priv->document);
-          g_clear_object (&view->priv->document);
+          gb_html_view_disconnect (self, self->document);
+          g_clear_object (&self->document);
         }
 
       if (document)
         {
-          view->priv->document = g_object_ref (document);
-          gb_html_view_connect (view, view->priv->document);
+          self->document = g_object_ref (document);
+          gb_html_view_connect (self, self->document);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (view), gParamSpecs [PROP_DOCUMENT]);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOCUMENT]);
     }
 }
 
@@ -183,26 +176,26 @@ gb_html_view_refresh (GSimpleAction *action,
                       gpointer       user_data)
 {
   GtkTextBuffer *buffer;
-  GbHtmlView *view = user_data;
+  GbHtmlView *self = user_data;
 
-  g_return_if_fail (GB_IS_HTML_VIEW (view));
+  g_return_if_fail (GB_IS_HTML_VIEW (self));
 
-  if (!view->priv->document)
+  if (!self->document)
     return;
 
-  buffer = gb_html_document_get_buffer (view->priv->document);
+  buffer = gb_html_document_get_buffer (self->document);
   if (!buffer)
     return;
 
-  gb_html_view_changed (view, buffer);
+  gb_html_view_changed (self, buffer);
 }
 
 static void
 gb_html_view_finalize (GObject *object)
 {
-  GbHtmlViewPrivate *priv = GB_HTML_VIEW (object)->priv;
+  GbHtmlView *self = (GbHtmlView *)object;
 
-  g_clear_object (&priv->document);
+  g_clear_object (&self->document);
 
   G_OBJECT_CLASS (gb_html_view_parent_class)->finalize (object);
 }
@@ -219,7 +212,7 @@ gb_html_view_get_property (GObject    *object,
     {
     case PROP_DOCUMENT:
       g_value_set_object (value,
-                          gb_html_view_get_document (GB_DOCUMENT_VIEW (self)));
+                          gb_html_view_get_document (GB_VIEW (self)));
       break;
 
     default:
@@ -250,8 +243,7 @@ static void
 gb_html_view_class_init (GbHtmlViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GbDocumentViewClass *view_class = GB_DOCUMENT_VIEW_CLASS (klass);
+  GbViewClass *view_class = GB_VIEW_CLASS (klass);
 
   object_class->finalize = gb_html_view_finalize;
   object_class->get_property = gb_html_view_get_property;
@@ -268,9 +260,8 @@ gb_html_view_class_init (GbHtmlViewClass *klass)
   g_object_class_install_property (object_class, PROP_DOCUMENT,
                                    gParamSpecs [PROP_DOCUMENT]);
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/gb-html-view.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GbHtmlView, web_view);
+  GB_WIDGET_CLASS_TEMPLATE (klass, "gb-html-view.ui");
+  GB_WIDGET_CLASS_BIND (klass, GbHtmlView, web_view);
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }
@@ -284,11 +275,9 @@ gb_html_view_init (GbHtmlView *self)
   GSimpleActionGroup *actions;
   GtkWidget *controls;
 
-  self->priv = gb_html_view_get_instance_private (self);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  controls = gb_document_view_get_controls (GB_DOCUMENT_VIEW (self));
+  controls = gb_view_get_controls (GB_VIEW (self));
 
   actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (actions), entries,

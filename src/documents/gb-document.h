@@ -31,6 +31,8 @@ G_BEGIN_DECLS
 typedef struct _GbDocument          GbDocument;
 typedef struct _GbDocumentInterface GbDocumentInterface;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbDocument, g_object_unref)
+
 struct _GbDocumentInterface
 {
   GTypeInterface parent;

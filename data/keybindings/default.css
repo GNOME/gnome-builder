@@ -16,6 +16,7 @@
 
   /* toggle header/source */
   bind "F4" { "action" ("view", "find-other-file", "") };
+  bind "F9" { "action" ("view", "preview", "") };
 }
 
 IdeSourceViewMode.default {

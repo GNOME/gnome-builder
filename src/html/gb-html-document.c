@@ -21,6 +21,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksourcefile.h>
+#include <ide.h>
 
 #include "gb-editor-document.h"
 #include "gb-html-document.h"
@@ -108,14 +109,14 @@ gb_html_document_get_title (GbDocument *document)
 static void
 gb_html_document_notify_location (GbHtmlDocument *document,
                                   GParamSpec     *pspec,
-                                  GtkSourceFile  *file)
+                                  IdeFile        *file)
 {
   GFile *location;
 
   g_return_if_fail (GB_IS_HTML_DOCUMENT (document));
-  g_return_if_fail (GTK_SOURCE_IS_FILE (file));
+  g_return_if_fail (IDE_IS_FILE (file));
 
-  location = gtk_source_file_get_location (file);
+  location = ide_file_get_file (file);
 
   g_clear_pointer (&document->priv->title, g_free);
 
@@ -139,11 +140,11 @@ gb_html_document_connect (GbHtmlDocument *document,
 
   if (GB_IS_EDITOR_DOCUMENT (buffer))
     {
-      GtkSourceFile *file;
+      IdeFile *file;
 
-      file = gb_editor_document_get_file (GB_EDITOR_DOCUMENT (buffer));
+      file = ide_buffer_get_file (IDE_BUFFER (buffer));
       g_signal_connect_object (file,
-                               "notify::location",
+                               "notify::file",
                                G_CALLBACK (gb_html_document_notify_location),
                                document,
                                G_CONNECT_SWAPPED);
@@ -160,9 +161,9 @@ gb_html_document_disconnect (GbHtmlDocument *document,
 
   if (GB_IS_EDITOR_DOCUMENT (buffer))
     {
-      GtkSourceFile *file;
+      IdeFile *file;
 
-      file = gb_editor_document_get_file (GB_EDITOR_DOCUMENT (buffer));
+      file = ide_buffer_get_file (IDE_BUFFER (buffer));
       g_signal_handlers_disconnect_by_func (file,
                                             G_CALLBACK (gb_html_document_notify_location),
                                             document);

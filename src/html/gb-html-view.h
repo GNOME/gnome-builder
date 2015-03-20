@@ -19,38 +19,13 @@
 #ifndef GB_HTML_VIEW_H
 #define GB_HTML_VIEW_H
 
-#include "gb-document-view.h"
-#include "gb-html-document.h"
+#include "gb-view.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_HTML_VIEW            (gb_html_view_get_type())
-#define GB_HTML_VIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_HTML_VIEW, GbHtmlView))
-#define GB_HTML_VIEW_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_HTML_VIEW, GbHtmlView const))
-#define GB_HTML_VIEW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_HTML_VIEW, GbHtmlViewClass))
-#define GB_IS_HTML_VIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_HTML_VIEW))
-#define GB_IS_HTML_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_HTML_VIEW))
-#define GB_HTML_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_HTML_VIEW, GbHtmlViewClass))
+#define GB_TYPE_HTML_VIEW (gb_html_view_get_type())
 
-typedef struct _GbHtmlView        GbHtmlView;
-typedef struct _GbHtmlViewClass   GbHtmlViewClass;
-typedef struct _GbHtmlViewPrivate GbHtmlViewPrivate;
-
-struct _GbHtmlView
-{
-  GbDocumentView parent;
-
-  /*< private >*/
-  GbHtmlViewPrivate *priv;
-};
-
-struct _GbHtmlViewClass
-{
-  GbDocumentViewClass parent;
-};
-
-GType      gb_html_view_get_type (void);
-GtkWidget *gb_html_view_new      (GbHtmlDocument *document);
+G_DECLARE_FINAL_TYPE (GbHtmlView, gb_html_view, GB, HTML_VIEW, GbView)
 
 G_END_DECLS
 

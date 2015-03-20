@@ -24,6 +24,8 @@
 #include "gb-editor-frame-private.h"
 #include "gb-editor-view-actions.h"
 #include "gb-editor-view-private.h"
+#include "gb-html-document.h"
+#include "gb-view-grid.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
@@ -390,12 +392,69 @@ gb_editor_view_actions_find_other_file (GSimpleAction *action,
   g_task_run_in_thread (task, gb_editor_view_actions_find_other_file_worker);
 }
 
+static void
+gb_editor_view_actions_preview (GSimpleAction *action,
+                                GVariant      *param,
+                                gpointer       user_data)
+{
+  GbEditorView *self = user_data;
+  GtkSourceLanguage *language;
+  const gchar *lang_id = NULL;
+  g_autoptr(GbDocument) document = NULL;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self->document));
+  if (!language)
+    return;
+
+  lang_id = gtk_source_language_get_id (language);
+  if (!lang_id)
+    return;
+
+  if (g_str_equal (lang_id, "html"))
+    {
+      document = g_object_new (GB_TYPE_HTML_DOCUMENT,
+                               "buffer", self->document,
+                               NULL);
+    }
+  else if (g_str_equal (lang_id, "markdown"))
+    {
+      document = g_object_new (GB_TYPE_HTML_DOCUMENT,
+                               "buffer", self->document,
+                               NULL);
+      gb_html_document_set_transform_func (GB_HTML_DOCUMENT (document),
+                                           gb_html_markdown_transform);
+    }
+
+  if (document)
+    {
+      GtkWidget *parent = gtk_widget_get_parent (GTK_WIDGET (self));
+
+      while (parent && !GB_IS_VIEW_GRID (parent))
+        parent = gtk_widget_get_parent (parent);
+
+      if (parent == NULL)
+        {
+          while (parent && !GB_IS_VIEW_STACK (parent))
+            parent = gtk_widget_get_parent (parent);
+          g_assert (GB_IS_VIEW_STACK (parent));
+          gb_view_stack_focus_document (GB_VIEW_STACK (parent), document);
+          return;
+        }
+
+      g_assert (GB_IS_VIEW_GRID (parent));
+      gb_view_grid_focus_document (GB_VIEW_GRID (parent), document);
+    }
+}
+
 static GActionEntry GbEditorViewActions[] = {
   { "auto-indent", NULL, NULL, "false", gb_editor_view_actions_auto_indent },
   { "close", gb_editor_view_actions_close },
   { "find-other-file", gb_editor_view_actions_find_other_file },
   { "highlight-current-line", NULL, NULL, "false", gb_editor_view_actions_highlight_current_line },
   { "language", NULL, "s", "''", gb_editor_view_actions_language },
+  { "preview", gb_editor_view_actions_preview },
   { "save", gb_editor_view_actions_save },
   { "show-line-numbers", NULL, NULL, "false", gb_editor_view_actions_show_line_numbers },
   { "show-right-margin", NULL, NULL, "false", gb_editor_view_actions_show_right_margin },
