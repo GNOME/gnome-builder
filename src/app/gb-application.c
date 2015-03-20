@@ -306,6 +306,18 @@ gb_application__context_new_cb (GObject      *object,
       goto cleanup;
     }
 
+  {
+    IdeVcs *vcs;
+    GFile *workdir;
+    g_autofree gchar *path = NULL;
+
+    vcs = ide_context_get_vcs (context);
+    workdir = ide_vcs_get_working_directory (vcs);
+    path = g_file_get_path (workdir);
+
+    g_debug ("Project working directory: %s", path);
+  }
+
   bufmgr = ide_context_get_buffer_manager (context);
   g_signal_connect (bufmgr, "create-buffer", G_CALLBACK (on_create_buffer), NULL);
 
