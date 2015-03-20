@@ -85,6 +85,8 @@ gb_editor_view_set_document (GbEditorView     *self,
                                    language_to_string, NULL, NULL, NULL);
 
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOCUMENT]);
+
+      gb_editor_view_actions_update (self);
     }
 }
 

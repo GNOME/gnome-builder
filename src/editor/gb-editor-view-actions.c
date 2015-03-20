@@ -129,6 +129,7 @@ gb_editor_view_actions_language (GSimpleAction *action,
     {
       language = gtk_source_language_manager_get_language (manager, name);
       gtk_source_buffer_set_language (buffer, language);
+      gb_editor_view_actions_update (self);
     }
 }
 
@@ -493,4 +494,29 @@ gb_editor_view_actions_init (GbEditorView *self)
   WATCH_PROPERTY ("tab-width");
 
 #undef WATCH_PROPERTY
+}
+
+void
+gb_editor_view_actions_update (GbEditorView *self)
+{
+  GtkSourceLanguage *language;
+  const gchar *lang_id = NULL;
+  GActionGroup *group;
+  GAction *action;
+  gboolean enabled;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (self), "view");
+  if (!G_IS_SIMPLE_ACTION_GROUP (group))
+    return;
+
+  /* update preview sensitivity */
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self->document));
+  if (language)
+    lang_id = gtk_source_language_get_id (language);
+  enabled = ((g_strcmp0 (lang_id, "html") == 0) ||
+             (g_strcmp0 (lang_id, "markdown") == 0));
+  action = g_action_map_lookup_action (G_ACTION_MAP (group), "preview");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
 }

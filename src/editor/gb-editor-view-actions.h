@@ -23,7 +23,8 @@
 
 G_BEGIN_DECLS
 
-void gb_editor_view_actions_init (GbEditorView *self);
+void gb_editor_view_actions_init   (GbEditorView *self);
+void gb_editor_view_actions_update (GbEditorView *self);
 
 G_END_DECLS
 
