@@ -305,6 +305,20 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
         gb_widget_activate_action (GTK_WIDGET (self), "frame", "previous-search-result", NULL);
       return TRUE;
     }
+  else
+    {
+      GtkSourceSearchSettings *search_settings;
+      GtkSourceSearchContext *search_context;
+
+      /*
+       * Other modes, such as Vim emulation, want word boundaries, but we do
+       * not when searching from this entry. Sort of hacky, but gets the job
+       * done to just change that setting here.
+       */
+      search_context = ide_source_view_get_search_context (self->source_view);
+      search_settings = gtk_source_search_context_get_settings (search_context);
+      gtk_source_search_settings_set_at_word_boundaries (search_settings, FALSE);
+    }
 
   return FALSE;
 }
