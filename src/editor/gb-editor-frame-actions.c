@@ -34,8 +34,36 @@ gb_editor_frame_actions_find (GSimpleAction *action,
   gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
 }
 
+static void
+gb_editor_frame_actions_next_search_result (GSimpleAction *action,
+                                            GVariant      *variant,
+                                            gpointer       user_data)
+{
+  GbEditorFrame *self = user_data;
+
+  g_assert (GB_IS_EDITOR_FRAME (self));
+
+  g_signal_emit_by_name (self->source_view, "move-search",
+                         GTK_DIR_DOWN, FALSE, FALSE, TRUE);
+}
+
+static void
+gb_editor_frame_actions_previous_search_result (GSimpleAction *action,
+                                                GVariant      *variant,
+                                                gpointer       user_data)
+{
+  GbEditorFrame *self = user_data;
+
+  g_assert (GB_IS_EDITOR_FRAME (self));
+
+  g_signal_emit_by_name (self->source_view, "move-search",
+                         GTK_DIR_UP, FALSE, FALSE, TRUE);
+}
+
 static const GActionEntry GbEditorFrameActions[] = {
-  { "find",     gb_editor_frame_actions_find },
+  { "find", gb_editor_frame_actions_find },
+  { "next-search-result", gb_editor_frame_actions_next_search_result },
+  { "previous-search-result", gb_editor_frame_actions_previous_search_result },
 };
 
 void
