@@ -195,6 +195,45 @@ gb_editor_frame__drag_data_received (GbEditorFrame    *self,
     }
 }
 
+static gboolean
+gb_editor_frame__search_key_press_event (GbEditorFrame *self,
+                                         GdkEventKey   *event,
+                                         GdTaggedEntry *entry)
+{
+  g_assert (GB_IS_EDITOR_FRAME (self));
+  g_assert (GD_IS_TAGGED_ENTRY (entry));
+
+  if (event->keyval == GDK_KEY_Escape)
+    {
+      ide_source_view_clear_search (self->source_view);
+      gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
+      return TRUE;
+    }
+  else if ((event->keyval == GDK_KEY_KP_Enter) || (event->keyval == GDK_KEY_Return))
+    {
+      if ((event->state & GDK_SHIFT_MASK) == 0)
+        gb_widget_activate_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
+      else
+        gb_widget_activate_action (GTK_WIDGET (self), "frame", "previous-search-result", NULL);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gb_editor_frame__source_view_focus_in_event (GbEditorFrame *self,
+                                             GdkEventKey   *event,
+                                             IdeSourceView *source_view)
+{
+  g_assert (GB_IS_EDITOR_FRAME (self));
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
+
+  return FALSE;
+}
+
 static void
 gb_editor_frame_constructed (GObject *object)
 {
@@ -205,6 +244,18 @@ gb_editor_frame_constructed (GObject *object)
   g_signal_connect_object (self->source_view,
                            "drag-data-received",
                            G_CALLBACK (gb_editor_frame__drag_data_received),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->source_view,
+                           "focus-in-event",
+                           G_CALLBACK (gb_editor_frame__source_view_focus_in_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->search_entry,
+                           "key-press-event",
+                           G_CALLBACK (gb_editor_frame__search_key_press_event),
                            self,
                            G_CONNECT_SWAPPED);
 }
