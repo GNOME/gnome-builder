@@ -575,14 +575,24 @@ static void
 ide_buffer_constructed (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
+#if 0
+  GdkRGBA warning_rgba;
+#endif
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->constructed (object);
+
+#if 0
+  gdk_rgba_parse (&warning_rgba, "#fcaf3e");
+#endif
 
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_ERROR,
                               "underline", PANGO_UNDERLINE_ERROR,
                               NULL);
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_WARNING,
                               "underline", PANGO_UNDERLINE_ERROR,
+#if 0
+                              "underline-rgba", &warning_rgba,
+#endif
                               NULL);
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_NOTE,
                               "underline", PANGO_UNDERLINE_SINGLE,
