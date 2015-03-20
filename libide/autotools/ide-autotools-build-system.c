@@ -126,7 +126,7 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
       return;
     }
 
-  parent = g_file_get_parent (file);
+  parent = g_object_ref (file);
 
   while (parent != NULL)
     {
@@ -157,6 +157,8 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
       parent = g_file_get_parent (parent);
       g_clear_object (&tmp);
     }
+
+  g_clear_object (&parent);
 
   g_task_return_new_error (task,
                            G_IO_ERROR,
