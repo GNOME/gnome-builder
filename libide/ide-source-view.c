@@ -3635,7 +3635,7 @@ _strcasecmp_reversed (const void *aptr,
   const gchar * const *a = aptr;
   const gchar * const *b = bptr;
 
-  return -strcasecmp (*a, *b);
+  return strcasecmp (*a, *b);
 }
 
 static int
@@ -3645,7 +3645,7 @@ _strcasecmp_normal (const void *aptr,
   const gchar * const *a = aptr;
   const gchar * const *b = bptr;
 
-  return strcasecmp (*a, *b);
+  return strcasecmp (*b, *a);
 }
 
 static int
@@ -3655,7 +3655,7 @@ _strcmp_reversed (const void *aptr,
   const gchar * const *a = aptr;
   const gchar * const *b = bptr;
 
-  return -strcmp (*a, *b);
+  return strcmp (*a, *b);
 }
 
 static int
@@ -3665,7 +3665,7 @@ _strcmp_normal (const void *aptr,
   const gchar * const *a = aptr;
   const gchar * const *b = bptr;
 
-  return strcmp (*a, *b);
+  return strcmp (*b, *a);
 }
 
 static void

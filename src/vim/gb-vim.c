@@ -485,13 +485,30 @@ gb_vim_command_syntax (GtkSourceView  *source_view,
   return TRUE;
 }
 
+static gboolean
+gb_vim_command_sort (GtkSourceView  *source_view,
+                     const gchar    *command,
+                     const gchar    *options,
+                     GError        **error)
+{
+  if (IDE_IS_SOURCE_VIEW (source_view))
+    {
+      g_signal_emit_by_name (source_view, "sort", FALSE, FALSE);
+      g_signal_emit_by_name (source_view, "clear-selection");
+      g_signal_emit_by_name (source_view, "set-mode", NULL,
+                             IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
+    }
+
+  return TRUE;
+}
+
 static const GbVimCommand vim_commands[] = {
-  //{ "sort",        gb_vim_command_sort },
   { "colorscheme", gb_vim_command_colorscheme },
   { "edit",        gb_vim_command_edit },
   { "nohl",        gb_vim_command_nohl },
   { "quit",        gb_vim_command_quit },
   { "set",         gb_vim_command_set },
+  { "sort",        gb_vim_command_sort },
   { "split",       gb_vim_command_split },
   { "syntax",      gb_vim_command_syntax },
   { "vsplit",      gb_vim_command_vsplit },
