@@ -4053,7 +4053,7 @@ ide_source_view_draw_search_bubbles (IdeSourceView *self,
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (cr);
 
-  if (!priv->search_context)
+  if (!priv->search_context || !gtk_source_search_context_get_highlight (priv->search_context))
     return;
 
   gdk_cairo_get_clip_rectangle (cr, &area);
