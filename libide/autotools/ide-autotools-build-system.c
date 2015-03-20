@@ -88,62 +88,80 @@ ide_autotools_build_system_get_builder (IdeBuildSystem  *system,
   return ret;
 }
 
-static void
-discover_query_info_cb (GObject      *object,
-                        GAsyncResult *result,
-                        gpointer      user_data)
+static gboolean
+is_configure (GFile *file)
 {
-  g_autoptr(GFileInfo) file_info = NULL;
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(GFile) child = NULL;
-  GFile *file = (GFile *)object;
-  GError *error = NULL;
-  GFileType file_type;
+  gchar *name;
+  gboolean ret;
 
-  g_return_if_fail (G_IS_FILE (file));
-  g_return_if_fail (G_IS_TASK (task));
+  g_assert (G_IS_FILE (file));
 
-  file_info = g_file_query_info_finish (file, result, &error);
+  name = g_file_get_basename (file);
+  ret = ((0 == g_strcmp0 (name, "configure.ac")) ||
+         (0 == g_strcmp0 (name, "configure.in")));
+  g_free (name);
 
-  if (!file_info)
+  return ret;
+}
+
+static void
+ide_autotools_build_system_discover_file_worker (GTask        *task,
+                                                 gpointer      source_object,
+                                                 gpointer      task_data,
+                                                 GCancellable *cancellable)
+{
+  IdeAutotoolsBuildSystem *self = source_object;
+  g_autofree gchar *name = NULL;
+  GFile *file = task_data;
+  GFile *parent;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (is_configure (file) && g_file_query_exists (file, cancellable))
     {
-      g_task_return_error (task, error);
+      g_task_return_pointer (task, g_object_ref (file), g_object_unref);
       return;
     }
 
-  file_type = g_file_info_get_file_type (file_info);
+  parent = g_file_get_parent (file);
 
-  if (file_type == G_FILE_TYPE_REGULAR)
+  while (parent != NULL)
     {
-      const gchar *name;
+      GFile *child;
+      GFile *tmp;
 
-      name = g_file_info_get_name (file_info);
-
-      if ((g_strcmp0 (name, "configure.ac") == 0) ||
-          (g_strcmp0 (name, "configure.in") == 0))
+      child = g_file_get_child (parent, "configure.ac");
+      if (g_file_query_exists (child, cancellable))
         {
-          g_task_return_pointer (task, g_object_ref (file), g_object_unref);
+          g_task_return_pointer (task, g_object_ref (child), g_object_unref);
+          g_clear_object (&child);
+          g_clear_object (&parent);
           return;
         }
-    }
-  else if (file_type != G_FILE_TYPE_DIRECTORY)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               _("Not an autotools project file."));
-      return;
+
+      child = g_file_get_child (parent, "configure.in");
+      if (g_file_query_exists (child, cancellable))
+        {
+          g_task_return_pointer (task, g_object_ref (child), g_object_unref);
+          g_clear_object (&child);
+          g_clear_object (&parent);
+          return;
+        }
+
+      g_clear_object (&child);
+
+      tmp = parent;
+      parent = g_file_get_parent (parent);
+      g_clear_object (&tmp);
     }
 
-  child = g_file_get_child (file, "configure.ac");
-  g_file_query_info_async (child,
-                           (G_FILE_ATTRIBUTE_STANDARD_TYPE","
-                            G_FILE_ATTRIBUTE_STANDARD_NAME),
-                           G_FILE_QUERY_INFO_NONE,
-                           G_PRIORITY_DEFAULT,
-                           g_task_get_cancellable (task),
-                           discover_query_info_cb,
-                           g_object_ref (task));
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_FOUND,
+                           _("Failed to locate configure.ac"));
 }
 
 static void
@@ -153,38 +171,14 @@ ide_autotools_build_system_discover_file_async (IdeAutotoolsBuildSystem *system,
                                                 GAsyncReadyCallback      callback,
                                                 gpointer                 user_data)
 {
-  g_autofree gchar *name = NULL;
   g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (system, cancellable, callback, user_data);
-  name = g_file_get_basename (file);
-
-  if (!name)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               _("Invalid file provided to discover."));
-      return;
-    }
-
-  if (g_str_equal (name, "configure.ac") || g_str_equal (name, "configure.in"))
-    {
-      g_task_return_pointer (task, g_object_ref (file), g_object_unref);
-      return;
-    }
-
-  g_file_query_info_async (file,
-                           (G_FILE_ATTRIBUTE_STANDARD_TYPE","
-                            G_FILE_ATTRIBUTE_STANDARD_NAME),
-                           G_FILE_QUERY_INFO_NONE,
-                           G_PRIORITY_DEFAULT,
-                           cancellable,
-                           discover_query_info_cb,
-                           g_object_ref (task));
+  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  g_task_run_in_thread (task, ide_autotools_build_system_discover_file_worker);
 }
 
 static GFile *
