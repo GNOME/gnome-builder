@@ -39,6 +39,7 @@ struct _GbWorkbench
   GbCommandManager       *command_manager;
   IdeContext             *context;
   GCancellable           *unload_cancellable;
+  gchar                  *current_folder_uri;
 
   /* Weak reference */
   GbWorkspace            *active_workspace;

@@ -141,6 +141,98 @@ gb_workbench_actions_open_uri_list (GSimpleAction *action,
 }
 
 static void
+gb_workbench_actions_open_response (GtkFileChooser *chooser,
+                                    gint            response_id,
+                                    gpointer        user_data)
+{
+  g_autoptr(GbWorkbench) self = user_data;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  gtk_widget_hide (GTK_WIDGET (chooser));
+
+  switch (response_id)
+    {
+    case GTK_RESPONSE_OK:
+      {
+        GSList *files;
+        GSList *iter;
+        gchar *file_uri;
+        gchar *uri;
+
+        file_uri = gtk_file_chooser_get_uri (chooser);
+        uri = g_path_get_dirname (file_uri);
+        if (g_strcmp0 (self->current_folder_uri, uri) != 0)
+          {
+            g_free (self->current_folder_uri);
+            self->current_folder_uri = uri;
+            uri = NULL;
+          }
+        g_free (uri);
+        g_free (file_uri);
+
+        files = gtk_file_chooser_get_files (chooser);
+        for (iter = files; iter; iter = iter->next)
+          {
+            gb_workbench_open (self, G_FILE (iter->data));
+            g_clear_object (&iter->data);
+          }
+        g_slist_free (files);
+      }
+      break;
+
+    case GTK_RESPONSE_CANCEL:
+    default:
+      break;
+    }
+
+  gtk_widget_destroy (GTK_WIDGET (chooser));
+}
+
+static void
+gb_workbench_actions_open (GSimpleAction *action,
+                           GVariant      *param,
+                           gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+  GtkDialog *dialog;
+  GtkWidget *suggested;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                         "action", GTK_FILE_CHOOSER_ACTION_OPEN,
+                         "local-only", FALSE,
+                         "modal", TRUE,
+                         "select-multiple", TRUE,
+                         "show-hidden", FALSE,
+                         "transient-for", self,
+                         "title", _("Open Document"),
+                         NULL);
+
+  if (self->current_folder_uri != NULL)
+    gtk_file_chooser_set_current_folder_uri  (GTK_FILE_CHOOSER (dialog), self->current_folder_uri);
+
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("Cancel"), GTK_RESPONSE_CANCEL,
+                          _("Open"), GTK_RESPONSE_OK,
+                          NULL);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
+                               GTK_STYLE_CLASS_SUGGESTED_ACTION);
+
+  g_signal_connect (dialog,
+                    "response",
+                    G_CALLBACK (gb_workbench_actions_open_response),
+                    g_object_ref (self));
+
+  gtk_window_present (GTK_WINDOW (dialog));
+}
+
+static void
 gb_workbench_actions_save_all (GSimpleAction *action,
                                GVariant      *parameter,
                                gpointer       user_data)
@@ -162,6 +254,7 @@ gb_workbench_actions_show_command_bar (GSimpleAction *action,
 static const GActionEntry GbWorkbenchActions[] = {
   { "build",            gb_workbench_actions_build },
   { "global-search",    gb_workbench_actions_global_search },
+  { "open",             gb_workbench_actions_open },
   { "open-uri-list",    gb_workbench_actions_open_uri_list, "as" },
   { "save-all",         gb_workbench_actions_save_all },
   { "show-command-bar", gb_workbench_actions_show_command_bar },

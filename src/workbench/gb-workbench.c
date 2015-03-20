@@ -263,6 +263,7 @@ gb_workbench_finalize (GObject *object)
 
   ide_clear_weak_pointer (&self->active_workspace);
   g_clear_object (&self->context);
+  g_clear_pointer (&self->current_folder_uri, g_free);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->finalize (object);
 
