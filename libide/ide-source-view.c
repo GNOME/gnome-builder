@@ -86,6 +86,7 @@ typedef struct
   IdeSourceViewCapture        *capture;
   IdeSourceViewMode           *mode;
   GList                       *providers;
+  gchar                       *saved_search_text;
   GQueue                      *selections;
   GQueue                      *snippets;
   GtkSourceCompletionProvider *snippets_provider;
@@ -3184,8 +3185,13 @@ ide_source_view_real_move_search (IdeSourceView    *self,
   gtk_source_search_settings_set_at_word_boundaries (settings, word_boundaries);
 
   search_text = gtk_source_search_settings_get_search_text (settings);
+
   if (search_text == NULL || search_text[0] == '\0')
-    return;
+    {
+      if (priv->saved_search_text == NULL)
+        return;
+      gtk_source_search_settings_set_search_text (settings, priv->saved_search_text);
+    }
 
   buffer = gtk_text_view_get_buffer (text_view);
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
@@ -6211,4 +6217,27 @@ ide_source_view_get_visual_position (IdeSourceView *self,
 
   if (column)
     *column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self), &iter);
+}
+
+void
+ide_source_view_clear_search (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceSearchSettings *search_settings;
+  const gchar *search_text;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  search_settings = gtk_source_search_context_get_settings (priv->search_context);
+  search_text = gtk_source_search_settings_get_search_text (search_settings);
+
+  if ((search_text != NULL) &&
+      (search_text [0] != 0) &&
+      (0 != g_strcmp0 (priv->saved_search_text, search_text)))
+    {
+      g_free (priv->saved_search_text);
+      priv->saved_search_text = g_strdup (search_text);
+    }
+
+  gtk_source_search_settings_set_search_text (search_settings, NULL);
 }
