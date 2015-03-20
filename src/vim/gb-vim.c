@@ -258,6 +258,7 @@ static const GbVimSetAlias vim_set_aliases[] = {
   { "ft",   "filetype" },
   { "noet", "noexpandtab" },
   { "nu",   "number" },
+  { "noai", "noautoindent" },
   { "nonu", "nonumber" },
   { "so",   "scrolloff" },
   { "sw",   "shiftwidth" },
