@@ -36,6 +36,7 @@ struct _GbEditorFrame
   GtkScrolledWindow   *scrolled_window;
   GtkRevealer         *search_revealer;
   GdTaggedEntry       *search_entry;
+  GdTaggedEntryTag    *search_entry_tag;
   IdeSourceView       *source_view;
 
   gulong               cursor_moved_handler;

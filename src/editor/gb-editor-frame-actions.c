@@ -43,7 +43,7 @@ gb_editor_frame_actions_next_search_result (GSimpleAction *action,
 
   g_assert (GB_IS_EDITOR_FRAME (self));
 
-  g_signal_emit_by_name (self->source_view, "move-search", GTK_DIR_DOWN, FALSE, FALSE, FALSE);
+  g_signal_emit_by_name (self->source_view, "move-search", GTK_DIR_DOWN, FALSE, TRUE, FALSE, FALSE);
 }
 
 static void
@@ -55,7 +55,7 @@ gb_editor_frame_actions_previous_search_result (GSimpleAction *action,
 
   g_assert (GB_IS_EDITOR_FRAME (self));
 
-  g_signal_emit_by_name (self->source_view, "move-search", GTK_DIR_UP, FALSE, FALSE, FALSE);
+  g_signal_emit_by_name (self->source_view, "move-search", GTK_DIR_UP, FALSE, TRUE, FALSE, FALSE);
 }
 
 static const GActionEntry GbEditorFrameActions[] = {

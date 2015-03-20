@@ -152,6 +152,7 @@ typedef struct
   IdeSourceView    *self;
   guint             is_forward : 1;
   guint             extend_selection : 1;
+  guint             select_match : 1;
   guint             exclusive : 1;
 } SearchMovement;
 
@@ -262,17 +263,21 @@ static SearchMovement *
 search_movement_new (IdeSourceView *self,
                      gboolean       is_forward,
                      gboolean       extend_selection,
+                     gboolean       select_match,
                      gboolean       exclusive,
                      gboolean       use_count)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   SearchMovement *mv;
 
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
   mv = g_new0 (SearchMovement, 1);
   mv->ref_count = 1;
   mv->self = g_object_ref (self);
   mv->is_forward = !!is_forward;
   mv->extend_selection = !!extend_selection;
+  mv->select_match = !!select_match;
   mv->exclusive = !!exclusive;
   mv->count = use_count ? MAX (priv->count, 1) : 1;
 
@@ -3094,11 +3099,13 @@ ide_source_view__search_forward_cb (GObject      *object,
       return;
     }
 
-  if (!mv->exclusive)
+  if (!mv->exclusive && !mv->select_match)
     gtk_text_iter_forward_char (&begin);
 
   if (mv->extend_selection)
     gtk_text_buffer_move_mark (buffer, insert, &begin);
+  else if (mv->select_match)
+    gtk_text_buffer_select_range (buffer, &begin, &end);
   else
     gtk_text_buffer_select_range (buffer, &begin, &begin);
 
@@ -3150,11 +3157,13 @@ ide_source_view__search_backward_cb (GObject      *object,
       return;
     }
 
-  if (mv->exclusive)
+  if (mv->exclusive && !mv->select_match)
     gtk_text_iter_forward_char (&begin);
 
   if (mv->extend_selection)
     gtk_text_buffer_move_mark (buffer, insert, &begin);
+  else if (mv->select_match)
+    gtk_text_buffer_select_range (buffer, &begin, &end);
   else
     gtk_text_buffer_select_range (buffer, &begin, &begin);
 
@@ -3169,6 +3178,7 @@ static void
 ide_source_view_real_move_search (IdeSourceView    *self,
                                   GtkDirectionType  dir,
                                   gboolean          extend_selection,
+                                  gboolean          select_match,
                                   gboolean          exclusive,
                                   gboolean          apply_count,
                                   gboolean          word_boundaries)
@@ -3213,7 +3223,8 @@ ide_source_view_real_move_search (IdeSourceView    *self,
 
   is_forward = (dir == GTK_DIR_DOWN) || (dir == GTK_DIR_RIGHT);
 
-  mv = search_movement_new (self, is_forward, extend_selection, exclusive, apply_count);
+  mv = search_movement_new (self, is_forward, extend_selection, select_match,
+                            exclusive, apply_count);
 
   if (is_forward)
     {
@@ -5093,8 +5104,9 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_generic,
                   G_TYPE_NONE,
-                  5,
+                  6,
                   GTK_TYPE_DIRECTION_TYPE,
+                  G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN,

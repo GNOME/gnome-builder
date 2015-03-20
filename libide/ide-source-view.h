@@ -238,6 +238,7 @@ struct _IdeSourceViewClass
   void (*move_search)                 (IdeSourceView           *self,
                                        GtkDirectionType         dir,
                                        gboolean                 extend_selection,
+                                       gboolean                 select_match,
                                        gboolean                 exclusive,
                                        gboolean                 apply_count,
                                        gboolean                 at_word_boundaries);
