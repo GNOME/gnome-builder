@@ -227,9 +227,11 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
-static void ide_source_view_real_set_mode (IdeSourceView         *self,
-                                           const gchar           *name,
-                                           IdeSourceViewModeType  type);
+static void ide_source_view_real_save_insert_mark    (IdeSourceView         *self);
+static void ide_source_view_real_restore_insert_mark (IdeSourceView         *self);
+static void ide_source_view_real_set_mode            (IdeSourceView         *self,
+                                                      const gchar           *name,
+                                                      IdeSourceViewModeType  type);
 
 static SearchMovement *
 search_movement_ref (SearchMovement *movement)
@@ -3100,6 +3102,10 @@ ide_source_view__search_forward_cb (GObject      *object,
   else
     gtk_text_buffer_select_range (buffer, &begin, &begin);
 
+  /* if we arent focused, update the saved position marker */
+  if (!gtk_widget_has_focus (GTK_WIDGET (mv->self)))
+    ide_source_view_real_save_insert_mark (mv->self);
+
   ide_source_view_scroll_mark_onscreen (mv->self, insert);
 }
 
@@ -3151,6 +3157,10 @@ ide_source_view__search_backward_cb (GObject      *object,
     gtk_text_buffer_move_mark (buffer, insert, &begin);
   else
     gtk_text_buffer_select_range (buffer, &begin, &begin);
+
+  /* if we arent focused, update the saved position marker */
+  if (!gtk_widget_has_focus (GTK_WIDGET (mv->self)))
+    ide_source_view_real_save_insert_mark (mv->self);
 
   ide_source_view_scroll_mark_onscreen (mv->self, insert);
 }
