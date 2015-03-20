@@ -47,8 +47,6 @@ gb_editor_frame_set_position_label (GbEditorFrame *self,
 {
   g_return_if_fail (GB_IS_EDITOR_FRAME (self));
 
-  g_print (">>>> update position label\n");
-
   if (!text || !*text)
     {
       if (self->search_entry_tag)
@@ -118,7 +116,8 @@ gb_editor_frame_on_search_occurrences_notify (GbEditorFrame          *self,
                                               GParamSpec             *pspec,
                                               GtkSourceSearchContext *search_context)
 {
-  g_print ("SEARCH NOTIFY\n");
+  g_assert (GB_IS_EDITOR_FRAME (self));
+  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
 
   gb_editor_frame_update_search_position_label (self);
 }
