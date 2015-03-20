@@ -67,8 +67,7 @@ ide_set_program_name (const gchar *program_name)
 {
   if (gProgramNameRead)
     {
-      g_warning (_("You must call %s() before using libide."),
-                 G_STRFUNC);
+      g_warning (_("You must call %s() before using libide."), G_STRFUNC);
       return;
     }
 
