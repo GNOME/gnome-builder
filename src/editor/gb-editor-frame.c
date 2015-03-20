@@ -24,6 +24,7 @@
 #include "gb-editor-frame.h"
 #include "gb-editor-frame-actions.h"
 #include "gb-editor-frame-private.h"
+#include "gb-string.h"
 #include "gb-widget.h"
 
 G_DEFINE_TYPE (GbEditorFrame, gb_editor_frame, GTK_TYPE_BIN)
@@ -39,6 +40,88 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+static void
+gb_editor_frame_set_position_label (GbEditorFrame *self,
+                                    const gchar   *text)
+{
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+
+  g_print (">>>> update position label\n");
+
+  if (!text || !*text)
+    {
+      if (self->search_entry_tag)
+        {
+          gd_tagged_entry_remove_tag (self->search_entry, self->search_entry_tag);
+          g_clear_object (&self->search_entry_tag);
+        }
+      return;
+    }
+
+  if (!self->search_entry_tag)
+    {
+      self->search_entry_tag = gd_tagged_entry_tag_new ("");
+      gd_tagged_entry_tag_set_style (self->search_entry_tag, "gb-search-entry-occurrences-tag");
+      gd_tagged_entry_add_tag (self->search_entry, self->search_entry_tag);
+    }
+
+  gd_tagged_entry_tag_set_label (self->search_entry_tag, text);
+}
+
+static void
+gb_editor_frame_update_search_position_label (GbEditorFrame *self)
+{
+  GtkSourceSearchContext *search_context;
+  GtkStyleContext *context;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+  const gchar *search_text;
+  gchar *text;
+  gint count;
+  gint pos;
+
+  g_return_if_fail (GB_IS_EDITOR_FRAME (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
+  search_context = ide_source_view_get_search_context (self->source_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  pos = gtk_source_search_context_get_occurrence_position (search_context, &begin, &end);
+  count = gtk_source_search_context_get_occurrences_count (search_context);
+
+  if ((pos == -1) || (count == -1))
+    {
+      /*
+       * We are not yet done scanning the buffer.
+       * We will be updated when we know more, so just hide it for now.
+       */
+      gb_editor_frame_set_position_label (self, NULL);
+      return;
+    }
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (self->search_entry));
+  search_text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
+
+  if ((count == 0) && !gb_str_empty0 (search_text))
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_ERROR);
+  else
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_ERROR);
+
+  text = g_strdup_printf (_("%u of %u"), pos, count);
+  gb_editor_frame_set_position_label (self, text);
+  g_free (text);
+}
+
+static void
+gb_editor_frame_on_search_occurrences_notify (GbEditorFrame          *self,
+                                              GParamSpec             *pspec,
+                                              GtkSourceSearchContext *search_context)
+{
+  g_print ("SEARCH NOTIFY\n");
+
+  gb_editor_frame_update_search_position_label (self);
+}
 
 static void
 on_cursor_moved (GbEditorDocument  *document,
@@ -57,7 +140,7 @@ on_cursor_moved (GbEditorDocument  *document,
   text = g_strdup_printf (_("Line %u, Column %u"), ln + 1, col + 1);
   nautilus_floating_bar_set_primary_label (self->floating_bar, text);
 
-  //gb_editor_frame_update_search_position_label (self);
+  gb_editor_frame_update_search_position_label (self);
 }
 
 /**
@@ -109,6 +192,12 @@ gb_editor_frame_set_document (GbEditorFrame    *self,
   search_settings = gtk_source_search_context_get_settings (search_context);
   g_object_bind_property (self->search_entry, "text", search_settings, "search-text",
                           (G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL));
+  g_signal_connect_object (search_context,
+                           "notify::occurrences-count",
+                           G_CALLBACK (gb_editor_frame_on_search_occurrences_notify),
+                           self,
+                           G_CONNECT_SWAPPED);
+
 
 }
 
@@ -272,6 +361,8 @@ gb_editor_frame_dispose (GObject *object)
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
       ide_clear_signal_handler (buffer, &self->cursor_moved_handler);
     }
+
+  g_clear_object (&self->search_entry_tag);
 
   G_OBJECT_CLASS (gb_editor_frame_parent_class)->dispose (object);
 }
