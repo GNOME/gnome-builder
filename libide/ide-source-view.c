@@ -3369,6 +3369,8 @@ ide_source_view_real_save_insert_mark (IdeSourceView *self)
   priv->saved_line_offset = gtk_text_iter_get_line_offset (&iter);
   priv->saved_selection_line = gtk_text_iter_get_line (&selection);
   priv->saved_selection_line_offset = gtk_text_iter_get_line_offset (&selection);
+
+  priv->target_line_offset = priv->saved_line_offset;
 }
 
 static void
