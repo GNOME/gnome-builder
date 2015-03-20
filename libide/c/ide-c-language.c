@@ -52,9 +52,9 @@ ide_c_language_get_completion_providers (IdeLanguage *language)
   g_return_val_if_fail (IDE_IS_C_LANGUAGE (language), NULL);
 
   providers = g_list_append (providers, g_object_new (IDE_TYPE_C_FORMAT_PROVIDER, NULL));
-#if 0
-  providers = g_list_append (providers, g_object_new (IDE_TYPE_CLANG_COMPLETION_PROVIDER, NULL));
-#endif
+
+  if (g_getenv ("IDE_ENABLE_EXPERIMENTAL") != NULL)
+    providers = g_list_append (providers, g_object_new (IDE_TYPE_CLANG_COMPLETION_PROVIDER, NULL));
 
   return providers;
 }
