@@ -20,6 +20,7 @@
 #include <ide.h>
 
 #include "gb-command-vim.h"
+#include "gb-vim.h"
 
 struct _GbCommandVimPrivate
 {
@@ -51,26 +52,10 @@ gb_command_vim_set_source_view (GbCommandVim  *vim,
                                 IdeSourceView *source_view)
 {
   g_return_if_fail (GB_IS_COMMAND_VIM (vim));
-  g_return_if_fail (!source_view || IDE_IS_SOURCE_VIEW (source_view));
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (source_view));
 
-  if (source_view != vim->priv->source_view)
-    {
-      if (vim->priv->source_view)
-        {
-          g_object_remove_weak_pointer (G_OBJECT (vim->priv->source_view),
-                                        (gpointer *)&vim->priv->source_view);
-          vim->priv->source_view = NULL;
-        }
-
-      if (source_view)
-        {
-          vim->priv->source_view = source_view;
-          g_object_add_weak_pointer (G_OBJECT (vim->priv->source_view),
-                                     (gpointer *)&vim->priv->source_view);
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_SOURCE_VIEW]);
-    }
+  if (ide_set_weak_pointer (&vim->priv->source_view, source_view))
+    g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_SOURCE_VIEW]);
 }
 
 const gchar *
@@ -92,8 +77,7 @@ gb_command_vim_set_command_text (GbCommandVim *vim,
     {
       g_free (vim->priv->command_text);
       vim->priv->command_text = g_strdup (command_text);
-      g_object_notify_by_pspec (G_OBJECT (vim),
-                                gParamSpecs [PROP_COMMAND_TEXT]);
+      g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_COMMAND_TEXT]);
     }
 }
 
@@ -106,12 +90,16 @@ gb_command_vim_execute (GbCommand *command)
 
   if (self->priv->source_view)
     {
-#if 0
-      GbSourceVim *vim;
+      GtkSourceView *source_view = (GtkSourceView *)self->priv->source_view;
+      GError *error = NULL;
 
-      vim = gb_source_view_get_vim (self->priv->source_view);
-      gb_source_vim_execute_command (vim, self->priv->command_text);
-#endif
+      IDE_TRACE_MSG ("Executing Vim command: %s", self->priv->command_text);
+
+      if (!gb_vim_execute (source_view, self->priv->command_text, &error))
+        {
+          g_warning ("%s", error->message);
+          g_clear_error (&error);
+        }
     }
 
   return NULL;
@@ -122,7 +110,7 @@ gb_command_vim_finalize (GObject *object)
 {
   GbCommandVimPrivate *priv = GB_COMMAND_VIM (object)->priv;
 
-  gb_command_vim_set_source_view (GB_COMMAND_VIM (object), NULL);
+  ide_clear_weak_pointer (&priv->source_view);
   g_clear_pointer (&priv->command_text, g_free);
 
   G_OBJECT_CLASS (gb_command_vim_parent_class)->finalize (object);

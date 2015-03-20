@@ -22,6 +22,7 @@
 #include <ide.h>
 
 #include "gb-command-gaction-provider.h"
+#include "gb-command-vim-provider.h"
 #include "gb-dnd.h"
 #include "gb-widget.h"
 #include "gb-workbench-actions.h"
@@ -389,6 +390,7 @@ static void
 gb_workbench_init (GbWorkbench *self)
 {
   g_autoptr(GbCommandProvider) gaction_provider = NULL;
+  g_autoptr(GbCommandProvider) vim_provider = NULL;
 
   IDE_ENTRY;
 
@@ -399,8 +401,11 @@ gb_workbench_init (GbWorkbench *self)
   gaction_provider = g_object_new (GB_TYPE_COMMAND_GACTION_PROVIDER,
                                    "workbench", self,
                                    NULL);
+  vim_provider = g_object_new (GB_TYPE_COMMAND_VIM_PROVIDER,
+                               "workbench", self,
+                               NULL);
   gb_command_manager_add_provider (self->command_manager, gaction_provider);
-
+  gb_command_manager_add_provider (self->command_manager, vim_provider);
 
   /* Drag and drop support*/
   gtk_drag_dest_set (GTK_WIDGET (self),

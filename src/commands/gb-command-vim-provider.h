@@ -23,33 +23,10 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_COMMAND_VIM_PROVIDER            (gb_command_vim_provider_get_type())
-#define GB_COMMAND_VIM_PROVIDER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND_VIM_PROVIDER, GbCommandVimProvider))
-#define GB_COMMAND_VIM_PROVIDER_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND_VIM_PROVIDER, GbCommandVimProvider const))
-#define GB_COMMAND_VIM_PROVIDER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_COMMAND_VIM_PROVIDER, GbCommandVimProviderClass))
-#define GB_IS_COMMAND_VIM_PROVIDER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_COMMAND_VIM_PROVIDER))
-#define GB_IS_COMMAND_VIM_PROVIDER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_COMMAND_VIM_PROVIDER))
-#define GB_COMMAND_VIM_PROVIDER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_COMMAND_VIM_PROVIDER, GbCommandVimProviderClass))
+#define GB_TYPE_COMMAND_VIM_PROVIDER (gb_command_vim_provider_get_type())
 
-typedef struct _GbCommandVimProvider        GbCommandVimProvider;
-typedef struct _GbCommandVimProviderClass   GbCommandVimProviderClass;
-typedef struct _GbCommandVimProviderPrivate GbCommandVimProviderPrivate;
-
-struct _GbCommandVimProvider
-{
-  GbCommandProvider parent;
-
-  /*< private >*/
-  GbCommandVimProviderPrivate *priv;
-};
-
-struct _GbCommandVimProviderClass
-{
-  GbCommandProviderClass parent;
-};
-
-GType              gb_command_vim_provider_get_type (void);
-GbCommandProvider *gb_command_vim_provider_new      (GbWorkbench *workbench);
+G_DECLARE_FINAL_TYPE (GbCommandVimProvider, gb_command_vim_provider,
+                      GB, COMMAND_VIM_PROVIDER, GbCommandProvider)
 
 G_END_DECLS
 

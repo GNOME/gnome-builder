@@ -24,6 +24,10 @@ libgnome_builder_la_SOURCES = \
 	src/commands/gb-command-provider.h \
 	src/commands/gb-command-result.c \
 	src/commands/gb-command-result.h \
+	src/commands/gb-command-vim-provider.c \
+	src/commands/gb-command-vim-provider.h \
+	src/commands/gb-command-vim.c \
+	src/commands/gb-command-vim.h \
 	src/commands/gb-command.c \
 	src/commands/gb-command.h \
 	src/documents/gb-document.c \
@@ -122,6 +126,8 @@ libgnome_builder_la_SOURCES = \
 	src/views/gb-view-stack.h \
 	src/views/gb-view.c \
 	src/views/gb-view.h \
+	src/vim/gb-vim.c \
+	src/vim/gb-vim.h \
 	src/workbench/gb-workbench-actions.c \
 	src/workbench/gb-workbench-actions.h \
 	src/workbench/gb-workbench-private.h \
@@ -133,10 +139,6 @@ libgnome_builder_la_SOURCES = \
 	$(NULL)
 
 disabled_files = \
-	src/commands/gb-command-vim-provider.c \
-	src/commands/gb-command-vim-provider.h \
-	src/commands/gb-command-vim.c \
-	src/commands/gb-command-vim.h \
 	src/devhelp/gb-devhelp-document.c \
 	src/devhelp/gb-devhelp-document.h \
 	src/devhelp/gb-devhelp-view.c \
@@ -181,6 +183,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/tree \
 	-I$(top_srcdir)/src/util \
 	-I$(top_srcdir)/src/views \
+	-I$(top_srcdir)/src/vim \
 	-I$(top_srcdir)/src/workbench
 
 if ENABLE_TRACING
