@@ -338,12 +338,8 @@ ide_context_set_project_file (IdeContext *self,
 {
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
-  if (project_file != self->project_file)
-    {
-      if (g_set_object (&self->project_file, project_file))
-        g_object_notify_by_pspec (G_OBJECT (self),
-                                  gParamSpecs [PROP_PROJECT_FILE]);
-    }
+  if (g_set_object (&self->project_file, project_file))
+    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PROJECT_FILE]);
 }
 
 /**
@@ -883,6 +879,7 @@ ide_context_init_build_system_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   IdeContext *self;
   GError *error = NULL;
+  GFile *project_file;
 
   self = g_task_get_source_object (task);
 
@@ -893,6 +890,11 @@ ide_context_init_build_system_cb (GObject      *object,
     }
 
   self->build_system = g_object_ref (build_system);
+
+  /* allow the build system to override the project file */
+  project_file = ide_build_system_get_project_file (self->build_system);
+  if (project_file != NULL)
+    ide_context_set_project_file (self, project_file);
 
   g_task_return_boolean (task, TRUE);
 }

@@ -48,6 +48,7 @@ struct _IdeBuildSystemClass
                                          GError              **error);
 };
 
+GFile          *ide_build_system_get_project_file       (IdeBuildSystem       *self);
 void            ide_build_system_get_build_flags_async  (IdeBuildSystem       *self,
                                                          IdeFile              *file,
                                                          GCancellable         *cancellable,

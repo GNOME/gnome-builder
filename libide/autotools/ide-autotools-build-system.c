@@ -25,6 +25,7 @@
 #include "ide-device.h"
 #include "ide-device-manager.h"
 #include "ide-file.h"
+#include "ide-internal.h"
 #include "ide-makecache.h"
 
 typedef struct
@@ -650,6 +651,8 @@ discover_file_cb (GObject      *object,
       g_task_return_error (task, error);
       return;
     }
+
+  _ide_build_system_set_project_file (IDE_BUILD_SYSTEM (self), file);
 
   ide_autotools_build_system_parse_async (self,
                                           file,

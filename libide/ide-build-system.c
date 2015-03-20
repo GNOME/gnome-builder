@@ -87,6 +87,14 @@ ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
   return g_new0 (gchar*, 1);
 }
 
+/**
+ * ide_build_system_get_project_file:
+ * @self: (in): A #IdeBuildSystem.
+ *
+ * Gets the #IdeBuildSystem:project-file property.
+ *
+ * Returns: (transfer none): A #GFile.
+ */
 GFile *
 ide_build_system_get_project_file (IdeBuildSystem *system)
 {
@@ -97,22 +105,17 @@ ide_build_system_get_project_file (IdeBuildSystem *system)
   return priv->project_file;
 }
 
-static void
-ide_build_system_set_project_file (IdeBuildSystem *system,
-                                   GFile          *project_file)
+void
+_ide_build_system_set_project_file (IdeBuildSystem *system,
+                                    GFile          *project_file)
 {
   IdeBuildSystemPrivate *priv = ide_build_system_get_instance_private (system);
 
   g_return_if_fail (IDE_IS_BUILD_SYSTEM (system));
   g_return_if_fail (G_IS_FILE (project_file));
 
-  if (project_file != priv->project_file)
-    {
-      g_clear_object (&priv->project_file);
-      priv->project_file = g_object_ref (project_file);
-      g_object_notify_by_pspec (G_OBJECT (system),
-                                gParamSpecs [PROP_PROJECT_FILE]);
-    }
+  if (g_set_object (&priv->project_file, project_file))
+    g_object_notify_by_pspec (G_OBJECT (system), gParamSpecs [PROP_PROJECT_FILE]);
 }
 
 static void
@@ -156,7 +159,7 @@ ide_build_system_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_PROJECT_FILE:
-      ide_build_system_set_project_file (self, g_value_get_object (value));
+      _ide_build_system_set_project_file (self, g_value_get_object (value));
       break;
 
     default:
