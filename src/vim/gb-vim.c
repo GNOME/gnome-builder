@@ -16,11 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gb-vim"
+
 #include <errno.h>
 #include <glib/gi18n.h>
 #include <ide.h>
 
 #include "gb-vim.h"
+#include "gb-widget.h"
 
 G_DEFINE_QUARK (gb-vim-error-quark, gb_vim_error)
 
@@ -398,6 +401,8 @@ gb_vim_command_quit (GtkSourceView  *source_view,
                      const gchar    *options,
                      GError        **error)
 {
+  gb_widget_activate_action (GTK_WIDGET (source_view), "view", "save", NULL);
+  gb_widget_activate_action (GTK_WIDGET (source_view), "view", "close", NULL);
   return TRUE;
 }
 
@@ -425,6 +430,7 @@ gb_vim_command_write (GtkSourceView  *source_view,
                       const gchar    *options,
                       GError        **error)
 {
+  gb_widget_activate_action (GTK_WIDGET (source_view), "view", "save", NULL);
   return TRUE;
 }
 
