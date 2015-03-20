@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-27 07:05+0000\n"
-"PO-Revision-Date: 2015-02-27 23:24+0800\n"
+"POT-Creation-Date: 2015-03-20 06:58+0000\n"
+"PO-Revision-Date: 2015-03-20 23:22+0800\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) <chinese-l10n@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: ../src/animation/gb-animation.c:681
 #, c-format
 msgid "Cannot locate property %s in class %s"
-msgstr ""
+msgstr "無法定位 %2$s 類別中的 %1$s 屬性"
 
 #: ../src/animation/gb-animation.c:817 ../src/credits/gb-credits-widget.c:275
 msgid "Duration"
@@ -34,11 +34,11 @@ msgstr "動畫的時間"
 
 #: ../src/animation/gb-animation.c:830
 msgid "Frame Clock"
-msgstr ""
+msgstr "框幀時鐘"
 
 #: ../src/animation/gb-animation.c:831
 msgid "An optional frame-clock to synchronize with."
-msgstr ""
+msgstr "選用性的同步用框幀時鐘。"
 
 #: ../src/animation/gb-animation.c:848
 msgid "Mode"
@@ -60,31 +60,31 @@ msgstr "動畫的目標"
 #: ../src/animation/gb-animation.c:1027 ../src/animation/gb-animation.c:1033
 #, c-format
 msgid "Failed to find property %s in %s"
-msgstr ""
+msgstr "%2$s 中找不到 %1$s 屬性"
 
 #: ../src/animation/gb-animation.c:1041
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
-msgstr ""
+msgstr "在 %2$s 中或 %3$s 親代中找不到 %1$s 屬性"
 
 #: ../src/animation/gb-animation.c:1051
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
-msgstr ""
+msgstr "無法擷取 va_list 數值：%s"
 
 #: ../src/app/gb-application.c:296
 msgid "Failed to load keybindings."
-msgstr ""
+msgstr "無法載入按鍵綁定。"
 
 #: ../src/app/gb-application.c:304
 #, c-format
 msgid "Failed to load keybindings: %s"
-msgstr ""
+msgstr "無法載入按鍵綁定：%s"
 
 #: ../src/app/gb-application.c:316
 #, c-format
 msgid "Failed to load local keybindings: %s"
-msgstr ""
+msgstr "無法載入本地端按鍵綁定：%s"
 
 #: ../src/app/gb-application.c:415 ../src/main.c:48
 msgid "Builder"
@@ -104,11 +104,11 @@ msgstr "名稱"
 
 #: ../src/code-assistant/gb-source-code-assistant.c:764
 msgid "Active"
-msgstr ""
+msgstr "使用中"
 
 #: ../src/code-assistant/gb-source-code-assistant.c:765
 msgid "If code assistance is currently processing."
-msgstr ""
+msgstr "是否代碼助理正在處理中。"
 
 #: ../src/code-assistant/gb-source-code-assistant.c:773
 #: ../src/editor/gb-source-change-monitor.c:867
@@ -124,24 +124,24 @@ msgstr "緩衝"
 #, c-format
 msgid ""
 "Failed to load DBus connection. Code assistance will be disabled. \"%s\" (%s)"
-msgstr ""
+msgstr "無法載入 BBus 連線。代碼助理將停用。「%s」(%s)"
 
 #: ../src/code-assistant/gb-source-code-assistant-renderer.c:319
 msgid "Code Assistant"
-msgstr ""
+msgstr "代碼助理"
 
 #: ../src/code-assistant/gb-source-code-assistant-renderer.c:320
 msgid "The code assistant to render."
-msgstr ""
+msgstr "要呈現的代碼助理。"
 
 #: ../src/commands/gb-command-bar.c:223
 #, c-format
 msgid "Command not found: %s"
-msgstr ""
+msgstr "找不到指令：%s"
 
 #: ../src/commands/gb-command-bar.c:524
 msgid "Use the entry below to execute a command"
-msgstr ""
+msgstr "使用下方的條目以執行指令"
 
 #: ../src/commands/gb-command-bar-item.c:175
 #: ../src/search/gb-search-display-row.c:159
@@ -150,8 +150,9 @@ msgid "Result"
 msgstr "結果"
 
 #: ../src/commands/gb-command-bar-item.c:176
+#, fuzzy
 msgid "The result to be visualized in the item."
-msgstr ""
+msgstr "項目中要示現的結果。"
 
 #: ../src/commands/gb-command-gaction.c:186
 msgid "Action Group"
@@ -159,7 +160,7 @@ msgstr "動作群組"
 
 #: ../src/commands/gb-command-gaction.c:187
 msgid "The GActionGroup containing the action."
-msgstr ""
+msgstr "包含該動作的 GActionGroup。"
 
 #: ../src/commands/gb-command-gaction.c:195
 msgid "Action Name"
@@ -175,15 +176,15 @@ msgstr "參數"
 
 #: ../src/commands/gb-command-gaction.c:205
 msgid "The parameters for the action."
-msgstr ""
+msgstr "動作的參數。"
 
 #: ../src/commands/gb-command-provider.c:316
 msgid "Active DocumentView"
-msgstr ""
+msgstr "使用中 DocumentView"
 
 #: ../src/commands/gb-command-provider.c:317
 msgid "The last focused GbDocumentView widget."
-msgstr ""
+msgstr "最後聚焦的 GbDocumentView 元件。"
 
 #: ../src/commands/gb-command-provider.c:338
 msgid "Priority"
@@ -200,17 +201,18 @@ msgid "Workbench"
 msgstr ""
 
 #: ../src/commands/gb-command-provider.c:357
+#, fuzzy
 msgid "The target workbench."
-msgstr ""
+msgstr "目標(_T)："
 
 #: ../src/commands/gb-command-result.c:224
 #: ../src/commands/gb-command-vim.c:189
 msgid "Command Text"
-msgstr ""
+msgstr "指令文字"
 
 #: ../src/commands/gb-command-result.c:225
 msgid "The command text if any."
-msgstr ""
+msgstr "如果有指令文字。"
 
 #: ../src/commands/gb-command-result.c:234
 msgid "Is Error"
@@ -218,7 +220,7 @@ msgstr "有錯誤"
 
 #: ../src/commands/gb-command-result.c:235
 msgid "If the result is an error."
-msgstr ""
+msgstr "是否結果有錯誤。"
 
 #: ../src/commands/gb-command-result.c:244
 msgid "Is Running"
@@ -226,7 +228,7 @@ msgstr "正執行中"
 
 #: ../src/commands/gb-command-result.c:245
 msgid "If the command is still running."
-msgstr ""
+msgstr "是否指令仍在執行中。"
 
 #: ../src/commands/gb-command-result.c:254
 msgid "Result Text"
@@ -251,7 +253,7 @@ msgstr "要修改的源碼檢視。"
 
 #: ../src/credits/gb-credits-widget.c:276
 msgid "The duration of the animation in millseconds."
-msgstr ""
+msgstr "動畫的時間，單位為毫秒。"
 
 #: ../src/credits/gb-credits-widget.c:286
 #: ../src/credits/gb-credits-widget.c:287
@@ -324,9 +326,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:363
+#, fuzzy
 msgid ""
 "If you don't save, changes from the last minute will be permanently lost."
-msgstr ""
+msgstr "如果不儲存，將會永久地失去 1 分鐘前所作的修改。"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:369
 #, c-format
@@ -350,8 +353,9 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:394
+#, fuzzy
 msgid "If you don't save, changes from the last hour will be permanently lost."
-msgstr ""
+msgstr "如果不儲存，將會永久地失去 1 小時前所作的修改。"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:400
 #, c-format
@@ -374,19 +378,20 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:459
-#, c-format
+#, fuzzy, c-format
 msgid "Changes to document “%s” will be permanently lost."
-msgstr ""
+msgstr "將會永久地失去對文件“%s”所作的修改。"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:464
-#, c-format
+#, fuzzy, c-format
 msgid "Save changes to document “%s” before closing?"
-msgstr ""
+msgstr "在關閉前將變更儲存到文件“%s”？"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:477
 #: ../src/dialogs/gb-close-confirmation-dialog.c:637
+#, fuzzy
 msgid "Saving has been disabled by the system administrator."
-msgstr ""
+msgstr "儲存功能已被系統管理員禁用。"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:585
 #, c-format
@@ -404,24 +409,28 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:613
+#, fuzzy
 msgid "Docum_ents with unsaved changes:"
-msgstr ""
+msgstr "已修改但未儲存的文件(_E):"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:617
+#, fuzzy
 msgid "S_elect the documents you want to save:"
-msgstr ""
+msgstr "請選擇需要儲存的文件(_E):"
 
 #: ../src/dialogs/gb-close-confirmation-dialog.c:641
+#, fuzzy
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
+msgstr "如果不儲存，所有已修改的部份將會永久地遺失。"
 
 #: ../src/documents/gb-document.c:188
 msgid "Modified"
 msgstr "已修改"
 
 #: ../src/documents/gb-document.c:189
+#, fuzzy
 msgid "If the document has been modified from disk."
-msgstr ""
+msgstr "文件已修改。連按兩下以儲存此文件。"
 
 #: ../src/documents/gb-document.c:196
 #: ../src/preferences/gb-preferences-page.c:214
@@ -430,16 +439,22 @@ msgid "Title"
 msgstr "標題"
 
 #: ../src/documents/gb-document.c:197
+#, fuzzy
 msgid "The title of the document."
-msgstr ""
+msgstr "插入文件標題欄位"
 
 #: ../src/documents/gb-document.c:204
 msgid "Read Only"
 msgstr "唯讀"
 
 #: ../src/documents/gb-document.c:205
+#, fuzzy
 msgid "If the document is read only."
 msgstr ""
+"文件檔案「$(ARG1)」已鎖定，供您在不同的系統中編輯 (自 $(ARG2) 開始)\n"
+"\n"
+"以唯讀模式開啟文件，或忽略自行鎖定檔案並開啟文件以進行編輯。\n"
+"\n"
 
 #: ../src/documents/gb-document-grid.c:918
 #: ../src/documents/gb-document-menu-button.c:667
@@ -448,8 +463,9 @@ msgid "Document Manager"
 msgstr "文件管理員"
 
 #: ../src/documents/gb-document-grid.c:919
+#, fuzzy
 msgid "The document manager for the document grid."
-msgstr ""
+msgstr "文件管理員"
 
 #: ../src/documents/gb-document-manager.c:300
 msgid "Count"
@@ -460,20 +476,23 @@ msgid "The number of documents in the manager."
 msgstr "管理員中的文件數。"
 
 #: ../src/documents/gb-document-menu-button.c:668
+#, fuzzy
 msgid "The document manager for the button."
-msgstr ""
+msgstr "文件管理員"
 
 #: ../src/documents/gb-document-stack.c:872
 msgid "Active View"
 msgstr "使用中檢視"
 
 #: ../src/documents/gb-document-stack.c:873
+#, fuzzy
 msgid "The active view within the stack."
-msgstr ""
+msgstr "使用中檢視"
 
 #: ../src/documents/gb-document-stack.c:882
+#, fuzzy
 msgid "The document manager for the stack."
-msgstr ""
+msgstr "文件管理員"
 
 #: ../src/documents/gb-document-view.c:185
 msgid "Can Preview"
@@ -532,8 +551,9 @@ msgid "Change Monitor"
 msgstr "變更監視器"
 
 #: ../src/editor/gb-editor-document.c:1441
+#, fuzzy
 msgid "The change monitor for the backing file."
-msgstr ""
+msgstr "備份檔案"
 
 #: ../src/editor/gb-editor-document.c:1449
 msgid "Error"
@@ -551,20 +571,24 @@ msgid "File"
 msgstr "檔案"
 
 #: ../src/editor/gb-editor-document.c:1459
+#, fuzzy
 msgid "The backing file for the document."
-msgstr ""
+msgstr "備份檔案"
 
 #: ../src/editor/gb-editor-document.c:1467
+#, fuzzy
 msgid "File Changed on Volume"
-msgstr ""
+msgstr "音量已變更"
 
 #: ../src/editor/gb-editor-document.c:1468
+#, fuzzy
 msgid "If the file has changed underneath the buffer."
-msgstr ""
+msgstr "在磁碟上的 %s 檔案在開啟之後已變更"
 
 #: ../src/editor/gb-editor-document.c:1477
+#, fuzzy
 msgid "Loading or saving progress."
-msgstr ""
+msgstr "儲存進度："
 
 #: ../src/editor/gb-editor-document.c:1487
 msgid "Style Scheme Name"
@@ -576,11 +600,11 @@ msgstr "樣式方案名稱。"
 
 #: ../src/editor/gb-editor-document.c:1496
 msgid "Trim Trailing Whitespace"
-msgstr ""
+msgstr "截去曳尾空白"
 
 #: ../src/editor/gb-editor-document.c:1497
 msgid "If whitespace should be trimmed before saving."
-msgstr ""
+msgstr "是否在儲存前應截去空白。"
 
 #: ../src/editor/gb-editor-file-mark.c:202
 msgid "Column"
@@ -591,8 +615,9 @@ msgid "The column within the line."
 msgstr "文字的行號。"
 
 #: ../src/editor/gb-editor-file-mark.c:215
+#, fuzzy
 msgid "The file for which to store the mark."
-msgstr ""
+msgstr "儲存記號的檔案。"
 
 #: ../src/editor/gb-editor-file-mark.c:224
 #: ../src/editor/gb-editor-navigation-item.c:228
@@ -623,23 +648,23 @@ msgstr "搜尋方向"
 
 #: ../src/editor/gb-editor-frame.c:1661
 msgid "The direction of the last text searched for."
-msgstr ""
+msgstr "上次文字搜尋的方向。"
 
 #: ../src/editor/gb-editor-navigation-item.c:218
 msgid "The file that is being edited."
-msgstr ""
+msgstr "檔案正在編輯中。"
 
 #: ../src/editor/gb-editor-navigation-item.c:229
 msgid "The line number within the file."
-msgstr ""
+msgstr "檔案內的列號。"
 
 #: ../src/editor/gb-editor-navigation-item.c:241
 msgid "Line Offset"
-msgstr ""
+msgstr "列偏移"
 
 #: ../src/editor/gb-editor-navigation-item.c:242
 msgid "The offset within the line."
-msgstr ""
+msgstr "列內的偏移。"
 
 #: ../src/editor/gb-editor-settings-widget.c:182
 #: ../src/editor/gb-source-formatter.c:337
@@ -649,12 +674,12 @@ msgstr "語言"
 
 #: ../src/editor/gb-editor-settings-widget.c:183
 msgid "The language to change the settings for."
-msgstr ""
+msgstr "設定值要變更成的語言。"
 
 #: ../src/editor/gb-editor-view.c:451
 #, c-format
 msgid "The file “%s” was modified outside of Builder."
-msgstr ""
+msgstr "「%s」檔案已在 Builder 外部經過修改。"
 
 #: ../src/editor/gb-editor-view.c:509
 msgid "Plain Text"
@@ -666,59 +691,59 @@ msgstr "自動縮排"
 
 #: ../src/editor/gb-editor-view.c:1072
 msgid "If we should use the auto-indentation engine."
-msgstr ""
+msgstr "是否我們應該使用自動縮排引擎。"
 
 #: ../src/editor/gb-editor-view.c:1081
 msgid "The document edited by the view."
-msgstr ""
+msgstr "該檢視之下所編輯的文件。"
 
 #: ../src/editor/gb-editor-view.c:1089
 msgid "Highlight Current Line"
-msgstr ""
+msgstr "標明目前一列"
 
 #: ../src/editor/gb-editor-view.c:1090
 msgid "If the current line should be highlighted."
-msgstr ""
+msgstr "是否應該標明目前一列。"
 
 #: ../src/editor/gb-editor-view.c:1098
 msgid "Show Line Numbers"
-msgstr ""
+msgstr "顯示列號"
 
 #: ../src/editor/gb-editor-view.c:1099
 msgid "If the line numbers should be shown."
-msgstr ""
+msgstr "是否應顯示列號。"
 
 #: ../src/editor/gb-editor-view.c:1107
 msgid "Show Right Margin"
-msgstr ""
+msgstr "顯示右側邊緣"
 
 #: ../src/editor/gb-editor-view.c:1108
 msgid "If we should show the right margin."
-msgstr ""
+msgstr "我們是否應顯示右側邊緣。"
 
 #: ../src/editor/gb-editor-view.c:1116
 msgid "Split Enabled"
-msgstr ""
+msgstr "啟用分割"
 
 #: ../src/editor/gb-editor-view.c:1117
 msgid "If the view split is enabled."
-msgstr ""
+msgstr "是否啟用分割檢視。"
 
 #: ../src/editor/gb-editor-view.c:1125
 msgid "Tab Width"
-msgstr ""
+msgstr "Tab 寬度"
 
 #: ../src/editor/gb-editor-view.c:1126
 msgid "The width a tab should be drawn as."
-msgstr ""
+msgstr "應如何描繪 Tab 的寬度。"
 
 #: ../src/editor/gb-editor-view.c:1136
 msgid "Use Spaces"
-msgstr ""
+msgstr "使用空格"
 
 #: ../src/editor/gb-editor-view.c:1137
 msgid "If spaces should be used instead of tabs."
-msgstr ""
+msgstr "是否應使用空格來代替 Tab 字元。"
 
 #: ../src/editor/gb-editor-workspace.c:279
 msgid "Open Document"
@@ -729,12 +754,14 @@ msgid "Open"
 msgstr "開啟"
 
 #: ../src/editor/gb-source-change-gutter-renderer.c:199
+#, fuzzy
 msgid "The change monitor for the gutter renderer."
-msgstr ""
+msgstr "變更監視器"
 
 #: ../src/editor/gb-source-change-monitor.c:417
+#, fuzzy
 msgid "Failed to load git blob"
-msgstr ""
+msgstr "，未能載入"
 
 #: ../src/editor/gb-source-change-monitor.c:480
 msgid "No file, cannot load git blob"
@@ -745,77 +772,85 @@ msgid "Cannot load git repository from non-local filesystem."
 msgstr ""
 
 #: ../src/editor/gb-source-change-monitor.c:577
+#, fuzzy
 msgid "No filename, cannot discover repository."
-msgstr ""
+msgstr "不能寫入軟體庫組態"
 
 #: ../src/editor/gb-source-change-monitor.c:868
+#, fuzzy
 msgid "The text buffer to monitor."
-msgstr ""
+msgstr "顯示器"
 
 #: ../src/editor/gb-source-change-monitor.c:879
+#, fuzzy
 msgid "The file for the buffer."
-msgstr ""
+msgstr "緩衝區(_B)"
 
 #: ../src/editor/gb-source-formatter.c:118
-#, c-format
+#, fuzzy, c-format
 msgid "Failed to locate uncrustify configuration."
-msgstr ""
+msgstr "IP 組態失敗"
 
 #: ../src/editor/gb-source-formatter.c:144
-#, c-format
+#, fuzzy, c-format
 msgid "uncrustify failure: %s"
-msgstr ""
+msgstr "自動調整寬度於 %s 失敗\n"
 
 #: ../src/editor/gb-source-formatter.c:241
-#, c-format
+#, fuzzy, c-format
 msgid "Failure copying to \"%s\": %s"
-msgstr ""
+msgstr "自動調整寬度於 %s 失敗\n"
 
 #: ../src/editor/gb-source-formatter.c:328
 msgid "Can Format"
 msgstr "可以格式化"
 
 #: ../src/editor/gb-source-formatter.c:329
+#, fuzzy
 msgid "If the source language can be formatted."
-msgstr ""
+msgstr "此詞彙表的源語言"
 
 #: ../src/editor/gb-source-formatter.c:338
+#, fuzzy
 msgid "The language to format."
-msgstr ""
+msgstr "語言"
 
 #: ../src/editor/gb-source-search-highlighter.c:338
 #: ../src/editor/gb-source-search-highlighter.c:339
 msgid "Search Context"
-msgstr ""
+msgstr "搜尋情境"
 
 #: ../src/editor/gb-source-search-highlighter.c:347
 #: ../src/editor/gb-source-search-highlighter.c:348
 msgid "Search Settings"
-msgstr ""
+msgstr "搜尋設定值"
 
 #: ../src/editor/gb-source-view.c:2229 ../src/editor/gb-source-view.c:2230
 msgid "Enable Word Completion"
-msgstr ""
+msgstr "啟用字詞補完"
 
 #: ../src/editor/gb-source-view.c:2238
 msgid "Font Name"
 msgstr "字型名稱"
 
 #: ../src/editor/gb-source-view.c:2239
+#, fuzzy
 msgid "The font name to apply to the widget."
-msgstr ""
+msgstr "字型選擇視窗元件"
 
 #: ../src/editor/gb-source-view.c:2247
+#, fuzzy
 msgid "Insert Matching Brace"
-msgstr ""
+msgstr "前往對應括號(_B)"
 
 #: ../src/editor/gb-source-view.c:2248
 msgid "If we should insert matching braces."
 msgstr ""
 
 #: ../src/editor/gb-source-view.c:2256
+#, fuzzy
 msgid "Overwrite Braces"
-msgstr ""
+msgstr "大括號"
 
 #: ../src/editor/gb-source-view.c:2257
 msgid "If we should overwrite braces, brackets, parenthesis and quotes."
@@ -823,35 +858,37 @@ msgstr ""
 
 #: ../src/editor/gb-source-view.c:2266
 msgid "Show Shadow"
-msgstr ""
+msgstr "顯示陰影"
 
 #: ../src/editor/gb-source-view.c:2267
 msgid "Show the search shadow"
-msgstr ""
+msgstr "顯示搜尋陰影"
 
 #: ../src/editor/gb-source-view.c:2275 ../src/editor/gb-source-view.c:2276
 msgid "Search Highlighter"
-msgstr ""
+msgstr "搜尋標明器"
 
 #: ../src/editor/gb-source-view.c:2284
 msgid "Smart Home End"
-msgstr ""
+msgstr "智慧 Home End"
 
 #: ../src/editor/gb-source-view.c:2285
 msgid "Enable smart home end in gtksourceview."
-msgstr ""
+msgstr "在 gtksourceview 中啟用智慧式 Home End。"
 
 #: ../src/editor/gb-source-view.c:2293
 msgid "Show Grid Lines"
-msgstr ""
+msgstr "顯示格線"
 
 #: ../src/editor/gb-source-view.c:2294
+#, fuzzy
 msgid "Whether to show the grid lines."
-msgstr ""
+msgstr "顯示儲存格格線。"
 
 #: ../src/gd/gd-tagged-entry.c:937
+#, fuzzy
 msgid "Tag close icon visibility"
-msgstr ""
+msgstr "<b>狀態圖示上的選單可見與否</b>"
 
 #: ../src/gd/gd-tagged-entry.c:938
 msgid "Whether the close button should be shown in tags."
@@ -859,185 +896,215 @@ msgstr ""
 
 #: ../src/gd/gd-tagged-entry.c:1031 ../src/navigation/gb-navigation-item.c:195
 msgid "Label"
-msgstr ""
+msgstr "標籤"
 
 #: ../src/gd/gd-tagged-entry.c:1032
+#, fuzzy
 msgid "Text to show on the tag."
-msgstr ""
+msgstr "文字標籤表編輯器"
 
 #: ../src/gd/gd-tagged-entry.c:1035
+#, fuzzy
 msgid "Tag has a close button"
-msgstr ""
+msgstr "此字串已有指派標籤"
 
 #: ../src/gd/gd-tagged-entry.c:1036
+#, fuzzy
 msgid "Whether the tag has a close button."
-msgstr ""
+msgstr "是否顯示視窗控制元，例如關閉按鈕。"
 
 #: ../src/gd/gd-tagged-entry.c:1039
 msgid "Style"
-msgstr ""
+msgstr "樣式"
 
 #: ../src/gd/gd-tagged-entry.c:1040
 msgid "Style of the tag."
-msgstr ""
+msgstr "標記的樣式。"
 
 #: ../src/gedit/gedit-menu-stack-switcher.c:423
 #: ../src/gedit/gedit-menu-stack-switcher.c:424
 msgid "Stack"
-msgstr ""
+msgstr "堆疊"
 
 #: ../src/git/gb-git-search-provider.c:429
 msgid "Switch To"
-msgstr ""
+msgstr "切換為"
 
 #: ../src/git/gb-git-search-provider.c:512
 msgid "Repository"
-msgstr ""
+msgstr "倉儲"
 
 #: ../src/git/gb-git-search-provider.c:513
 msgid "The repository to use for search data."
-msgstr ""
+msgstr "用於搜尋資料的倉儲"
 
 #: ../src/git/gb-git-search-provider.c:524
+#, fuzzy
 msgid "The workbench window."
-msgstr ""
+msgstr "視窗(~W)"
 
 #: ../src/html/gb-html-document.c:105
 msgid "HTML Preview"
-msgstr ""
+msgstr "HTML 預覽"
 
 #: ../src/html/gb-html-document.c:127
 #, c-format
 msgid "%s (Preview)"
-msgstr ""
+msgstr "%s (預覽)"
 
 #: ../src/html/gb-html-document.c:311
+#, fuzzy
 msgid "The buffer to monitor for changes."
-msgstr ""
+msgstr "將不會監控檔案的變更"
 
 #: ../src/html/gb-html-view.c:265
+#, fuzzy
 msgid "The document to view as HTML."
-msgstr ""
+msgstr "HTML 文件 (主文件)"
 
 #: ../src/nautilus/nautilus-floating-bar.c:314
+#, fuzzy
 msgid "Bar's primary label"
-msgstr ""
+msgstr "標籤"
 
 #: ../src/nautilus/nautilus-floating-bar.c:315
 msgid "Primary label displayed by the bar"
 msgstr ""
 
 #: ../src/nautilus/nautilus-floating-bar.c:320
+#, fuzzy
 msgid "Bar's details label"
-msgstr ""
+msgstr "%(label)s %(details)s"
 
 #: ../src/nautilus/nautilus-floating-bar.c:321
+#, fuzzy
 msgid "Details label displayed by the bar"
-msgstr ""
+msgstr "%(label)s %(details)s"
 
 #: ../src/nautilus/nautilus-floating-bar.c:326
+#, fuzzy
 msgid "Show spinner"
-msgstr ""
+msgstr "轉輪"
 
 #: ../src/nautilus/nautilus-floating-bar.c:327
 msgid "Whether a spinner should be shown in the floating bar"
 msgstr ""
 
 #: ../src/navigation/gb-navigation-item.c:196
+#, fuzzy
 msgid "The label for the navigation item."
-msgstr ""
+msgstr "控制項的枚舉項目標籤，如果有的話"
 
 #: ../src/navigation/gb-navigation-item.c:204
 msgid "Workspace"
-msgstr ""
+msgstr "工作區"
 
 #: ../src/navigation/gb-navigation-item.c:205
+#, fuzzy
 msgid "The workspace to ensure is focused."
-msgstr ""
+msgstr "Fedora 現在變得更加聚焦"
 
 #: ../src/navigation/gb-navigation-list.c:269
 msgid "Can Go Backward"
-msgstr ""
+msgstr "可以返回走"
 
 #: ../src/navigation/gb-navigation-list.c:270
 msgid "If we can go backwards in the navigation list."
-msgstr ""
+msgstr "是否我們可以在導覽清單中返回走。"
 
 #: ../src/navigation/gb-navigation-list.c:279
 msgid "Can Go Forward"
-msgstr ""
+msgstr "可以往前進"
 
 #: ../src/navigation/gb-navigation-list.c:280
 msgid "If we can go forward in the navigation list."
-msgstr ""
+msgstr "是否我們可以在導覽清單中往前進。"
 
 #: ../src/navigation/gb-navigation-list.c:289
 msgid "Current Item"
-msgstr ""
+msgstr "目前項目"
 
 #: ../src/navigation/gb-navigation-list.c:290
 msgid "The current item in the navigation list."
-msgstr ""
+msgstr "導覽清單中的目前項目"
 
 #: ../src/navigation/gb-navigation-list.c:300
+#, fuzzy
 msgid "The workbench the navigation list is for."
-msgstr ""
+msgstr "導覽"
 
 #: ../src/preferences/gb-preferences-page.c:215
 msgid "The title for the preferences page."
-msgstr ""
+msgstr "偏好設定頁面的題名。"
 
+#. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:186
+#, fuzzy
 msgid "restore insert cursor mark"
-msgstr ""
+msgstr "restore insert cursor mark"
 
+#. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:192
+#, fuzzy
 msgid "word words auto completion suggest found document"
-msgstr ""
+msgstr "word words auto completion suggest found document"
 
+#. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:198
+#, fuzzy
 msgid "diff renderer gutter changes git vcs"
-msgstr ""
+msgstr "diff renderer gutter changes git vcs"
 
+#. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:204
+#, fuzzy
 msgid "line numbers"
-msgstr ""
+msgstr "line numbers"
 
+#. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:210
+#, fuzzy
 msgid "line lines highlight current"
-msgstr ""
+msgstr "line lines highlight current"
 
+#. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:216
+#, fuzzy
 msgid "bracket brackets highlight matching"
-msgstr ""
+msgstr "bracket brackets highlight matching"
 
+#. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:222
 msgid "smart home end"
-msgstr ""
+msgstr "smart home end 智慧"
 
+#. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:228
 msgid "show grid lines"
-msgstr ""
+msgstr "show grid lines 顯示 格線"
 
+#. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:234
 msgid "font document editor monospace"
-msgstr ""
+msgstr "font document editor monospace 字型 文件 編輯器 等寬"
 
+#. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:239
+#, fuzzy
 msgid "source style scheme source tango solarized builder"
-msgstr ""
+msgstr "source style scheme source tango solarized builder 源碼 樣式 方案"
 
 #: ../src/preferences/gb-preferences-page-emacs.c:90
 msgid "emacs modal"
-msgstr ""
+msgstr "emacs 範型"
 
 #: ../src/preferences/gb-preferences-page-git.c:131
 msgid "git author name surname"
-msgstr ""
+msgstr "git 作者名字與姓氏"
 
 #: ../src/preferences/gb-preferences-page-git.c:136
 msgid "git author email mail address"
-msgstr ""
+msgstr "git 作者電子郵件位址"
 
 #: ../src/preferences/gb-preferences-page-vim.c:101
 msgid "lines margin scrolloff scroll off"
@@ -1045,7 +1112,7 @@ msgstr ""
 
 #: ../src/preferences/gb-preferences-page-vim.c:107
 msgid "vim modal"
-msgstr ""
+msgstr "vim 範型"
 
 #: ../src/resources/gtk/menus.ui.h:1
 msgid "_Preferences"
@@ -1104,12 +1171,14 @@ msgid "Move Document _Right"
 msgstr "向右移動文件(_R)"
 
 #: ../src/resources/gtk/menus.ui.h:15
+#, fuzzy
 msgid "Split Document Left"
-msgstr ""
+msgstr "向左移動文件(_L)"
 
 #: ../src/resources/gtk/menus.ui.h:16
+#, fuzzy
 msgid "Split Document Right"
-msgstr ""
+msgstr "向右移動文件(_R)"
 
 #: ../src/resources/gtk/menus.ui.h:18
 msgid "Save _As"
@@ -1287,8 +1356,9 @@ msgid "Currently parsing document"
 msgstr "目前解析的文件"
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:1
+#, fuzzy
 msgid "Display right _margin at column:"
-msgstr ""
+msgstr "顯示右邊邊界於(_M)："
 
 #: ../src/resources/ui/gb-editor-settings-widget.ui.h:2
 msgid "Trim trailing whitespace when saving document"
@@ -1398,8 +1468,9 @@ msgid "<b>Show Line Numbers</b>"
 msgstr "<b>顯示列號</b>"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:8
+#, fuzzy
 msgid "Display line numbers in the document."
-msgstr ""
+msgstr "是否顯示列號"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:9
 msgid "<b>Highlight Current Line</b>"
@@ -1407,15 +1478,17 @@ msgstr "<b>標明目前一列</b>"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:10
 msgid "Highlight the line containing the cursor."
-msgstr ""
+msgstr "標示游標目前所在的一列。"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:11
+#, fuzzy
 msgid "<b>Highlight Matching Brackets</b>"
-msgstr ""
+msgstr "加強顯示成對的括弧"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:12
+#, fuzzy
 msgid "Whether or not matching brackets should be highlighted."
-msgstr ""
+msgstr "gedit 是否應以色彩顯示與目前選取的成對的弧號。"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:13
 msgid "<b>Smart Home End</b>"
@@ -1430,16 +1503,17 @@ msgid "<b>Show Grid Lines</b>"
 msgstr "<b>顯示格線</b>"
 
 #: ../src/resources/ui/gb-preferences-page-editor.ui.h:16
+#, fuzzy
 msgid "Display a grid patten in the document."
-msgstr ""
+msgstr "格線顯示"
 
 #: ../src/resources/ui/gb-preferences-page-emacs.ui.h:1
 msgid "<b>EMACS Modal Editing</b>"
-msgstr ""
+msgstr "<b>EMACS 範型編輯</b>"
 
 #: ../src/resources/ui/gb-preferences-page-emacs.ui.h:2
 msgid "Use EMACS style modal editing in the source code editor."
-msgstr ""
+msgstr "源碼編輯器中使用 EMACS 風格範型編輯。"
 
 #: ../src/resources/ui/gb-preferences-page-git.ui.h:1
 msgid "Author Name"
@@ -1456,19 +1530,19 @@ msgstr "Git"
 
 #: ../src/resources/ui/gb-preferences-page-vim.ui.h:1
 msgid "<b>VIM Modal Editing</b>"
-msgstr ""
+msgstr "<b>VIM 範型編輯</b>"
 
 #: ../src/resources/ui/gb-preferences-page-vim.ui.h:2
 msgid "Use VIM style modal editing in the source code editor."
-msgstr ""
+msgstr "源碼編輯器中使用 VIM 風格範型編輯。"
 
 #: ../src/resources/ui/gb-preferences-page-vim.ui.h:3
 msgid "<b>Scroll Offset</b>"
-msgstr ""
+msgstr "<b>捲動偏移</b>"
 
 #: ../src/resources/ui/gb-preferences-page-vim.ui.h:4
 msgid "Minimal number of lines to keep above and below the cursor."
-msgstr ""
+msgstr "留在游標之上與之下的最小列數。"
 
 #: ../src/resources/ui/gb-preferences-window.ui.h:1
 msgid "Preferences"
@@ -1512,8 +1586,9 @@ msgid "Max Content Height"
 msgstr "最大內容高度"
 
 #: ../src/scrolledwindow/gb-scrolled-window.c:262
+#, fuzzy
 msgid "The maximum height request that can be made."
-msgstr ""
+msgstr "角色可以跑的最大步高"
 
 #: ../src/scrolledwindow/gb-scrolled-window.c:272
 msgid "Max Content Width"
@@ -1523,21 +1598,23 @@ msgstr "最大內容寬度"
 msgid "The maximum width request that can be made."
 msgstr ""
 
-#: ../src/search/gb-search-box.c:459
+#: ../src/search/gb-search-box.c:463
 msgid "Search Manager"
 msgstr "搜尋管理員"
 
-#: ../src/search/gb-search-box.c:460
+#: ../src/search/gb-search-box.c:464
+#, fuzzy
 msgid "The search manager for the search box."
-msgstr ""
+msgstr "搜尋管理員"
 
 #: ../src/search/gb-search-display.c:215
 msgid "Cannot add provider more than once."
 msgstr ""
 
 #: ../src/search/gb-search-display.c:293
+#, fuzzy
 msgid "The provider could not be found."
-msgstr ""
+msgstr "提供者"
 
 #: ../src/search/gb-search-display.c:549
 #: ../src/snippets/gb-source-snippet-chunk.c:298
@@ -1577,9 +1654,8 @@ msgid "The result match score."
 msgstr "結果比對分數。"
 
 #: ../src/search/gb-search-result.c:230
-#, fuzzy
 msgid "Subtitle"
-msgstr "字幕"
+msgstr "副題"
 
 #: ../src/search/gb-search-result.c:231 ../src/search/gb-search-result.c:242
 #, fuzzy
@@ -1587,28 +1663,32 @@ msgid "The pango markup to be rendered."
 msgstr "要算繪的 Pango 語法。"
 
 #: ../src/snippets/gb-source-snippet.c:352
+#, fuzzy
 msgid "Chunk does not belong to snippet."
-msgstr ""
+msgstr "此物不屬於您。"
 
 #: ../src/snippets/gb-source-snippet.c:1024
+#, fuzzy
 msgid "The GtkTextBuffer for the snippet."
-msgstr ""
+msgstr "加入文字片段…"
 
 #: ../src/snippets/gb-source-snippet.c:1032
 msgid "Mark Begin"
-msgstr ""
+msgstr "標記開始"
 
 #: ../src/snippets/gb-source-snippet.c:1033
+#, fuzzy
 msgid "The beginning text mark."
-msgstr ""
+msgstr "標記"
 
 #: ../src/snippets/gb-source-snippet.c:1041
 msgid "Mark End"
-msgstr ""
+msgstr "標記結束"
 
 #: ../src/snippets/gb-source-snippet.c:1042
+#, fuzzy
 msgid "The ending text mark."
-msgstr ""
+msgstr "標記"
 
 #: ../src/snippets/gb-source-snippet.c:1050
 msgid "Trigger"
@@ -1619,16 +1699,18 @@ msgid "The trigger for the snippet."
 msgstr ""
 
 #: ../src/snippets/gb-source-snippet.c:1060
+#, fuzzy
 msgid "The language for the snippet."
-msgstr ""
+msgstr "加入文字片段"
 
 #: ../src/snippets/gb-source-snippet.c:1068
 msgid "Description"
 msgstr "描述"
 
 #: ../src/snippets/gb-source-snippet.c:1069
+#, fuzzy
 msgid "The description for the snippet."
-msgstr ""
+msgstr "(無描述)"
 
 #: ../src/snippets/gb-source-snippet.c:1077
 #: ../src/snippets/gb-source-snippet-chunk.c:316
@@ -1636,12 +1718,14 @@ msgid "Tab Stop"
 msgstr "Tab 落點"
 
 #: ../src/snippets/gb-source-snippet.c:1078
+#, fuzzy
 msgid "The current tab stop."
-msgstr ""
+msgstr "Tab 落點"
 
 #: ../src/snippets/gb-source-snippet-chunk.c:299
+#, fuzzy
 msgid "The snippet context."
-msgstr ""
+msgstr "加入文字片段…"
 
 #: ../src/snippets/gb-source-snippet-chunk.c:307
 msgid "Spec"
@@ -1652,8 +1736,9 @@ msgid "The specification to expand using the contxt."
 msgstr ""
 
 #: ../src/snippets/gb-source-snippet-chunk.c:317
+#, fuzzy
 msgid "The tab stop for the chunk."
-msgstr ""
+msgstr "Tab 落點"
 
 #: ../src/snippets/gb-source-snippet-chunk.c:327
 #: ../src/tree/gb-tree-node.c:539
@@ -1665,143 +1750,147 @@ msgid "The text for the chunk."
 msgstr ""
 
 #: ../src/snippets/gb-source-snippet-chunk.c:336
+#, fuzzy
 msgid "Text Set"
-msgstr ""
+msgstr "以指定文字替換原文字，並設為已選取"
 
 #: ../src/snippets/gb-source-snippet-chunk.c:337
 msgid "If the text property has been manually set."
 msgstr ""
 
 #: ../src/snippets/gb-source-snippet-completion-item.c:134
+#, fuzzy
 msgid "Snippet"
-msgstr ""
+msgstr "加入文字片段…"
 
 #: ../src/snippets/gb-source-snippet-completion-item.c:135
 msgid "The snippet to insert."
 msgstr ""
 
 #: ../src/snippets/gb-source-snippet-completion-provider.c:169
+#, fuzzy
 msgid "The source view to insert snippet into."
-msgstr ""
+msgstr "使用觸發鍵插入文字片段"
 
 #: ../src/snippets/gb-source-snippet-completion-provider.c:177
 #: ../src/snippets/gb-source-snippet-completion-provider.c:262
+#, fuzzy
 msgid "Snippets"
-msgstr ""
+msgstr "文字片段"
 
 #: ../src/snippets/gb-source-snippet-completion-provider.c:178
+#, fuzzy
 msgid "The snippets to complete with this provider."
-msgstr ""
+msgstr "文字片段"
 
 #: ../src/snippets/gb-source-snippet-parser.c:503
-#, c-format
+#, fuzzy, c-format
 msgid "Invalid snippet at line %d: %s"
-msgstr ""
+msgstr "無效的草寫位置於 %2$s 的第 %1$d 列"
 
 #: ../src/snippets/gb-source-snippets-manager.c:92
 #, c-format
 msgid "Failed to open directory: %s"
-msgstr ""
+msgstr "無法開啟目錄：%s"
 
 #: ../src/snippets/gb-source-snippets-manager.c:107
 #, c-format
 msgid "Failed to load file: %s: %s"
-msgstr ""
+msgstr "無法載入檔案：%s：%s"
 
 #: ../src/theatrics/gb-box-theatric.c:258
 #: ../src/theatrics/gb-box-theatric.c:259
 msgid "Alpha"
-msgstr ""
+msgstr "Alpha"
 
 #: ../src/theatrics/gb-box-theatric.c:269
 #: ../src/theatrics/gb-box-theatric.c:270
 msgid "background"
-msgstr ""
+msgstr "背景"
 
 #: ../src/theatrics/gb-box-theatric.c:278
 #: ../src/theatrics/gb-box-theatric.c:279
 msgid "height"
-msgstr ""
+msgstr "高"
 
 #: ../src/theatrics/gb-box-theatric.c:300
 #: ../src/theatrics/gb-box-theatric.c:301
 msgid "width"
-msgstr ""
+msgstr "寬"
 
 #: ../src/theatrics/gb-box-theatric.c:311
 #: ../src/theatrics/gb-box-theatric.c:312
 msgid "x"
-msgstr ""
+msgstr "x"
 
 #: ../src/theatrics/gb-box-theatric.c:322
 #: ../src/theatrics/gb-box-theatric.c:323
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: ../src/tree/gb-tree-builder.c:288 ../src/tree/gb-tree-node.c:525
 msgid "Tree"
-msgstr ""
+msgstr "樹"
 
 #: ../src/tree/gb-tree-builder.c:289
 msgid "The GbTree the builder belongs to."
-msgstr ""
+msgstr "Builder 所屬的 GbTree。"
 
 #: ../src/tree/gb-tree.c:888
 msgid "Root"
-msgstr ""
+msgstr "根"
 
 #: ../src/tree/gb-tree.c:889
 msgid "The root object of the tree."
-msgstr ""
+msgstr "樹的根物件。"
 
 #: ../src/tree/gb-tree.c:897
 msgid "Selection"
-msgstr ""
+msgstr "選取項目"
 
 #: ../src/tree/gb-tree.c:898
 msgid "The node selection."
-msgstr ""
+msgstr "節點選取項目。"
 
 #: ../src/tree/gb-tree-node.c:483 ../src/workbench/gb-workspace.c:161
 msgid "Icon Name"
-msgstr ""
+msgstr "圖示名稱"
 
 #: ../src/tree/gb-tree-node.c:484
 msgid "The icon name to display."
-msgstr ""
+msgstr "要顯示的圖示名稱。"
 
 #: ../src/tree/gb-tree-node.c:497
 msgid "Item"
-msgstr ""
+msgstr "項目"
 
 #: ../src/tree/gb-tree-node.c:498
 msgid "Optional object to associate with node."
-msgstr ""
+msgstr "要與節點作關聯的選用物件。"
 
 #: ../src/tree/gb-tree-node.c:511
 msgid "Parent"
-msgstr ""
+msgstr "親代"
 
 #: ../src/tree/gb-tree-node.c:512
 msgid "The parent node."
-msgstr ""
+msgstr "親代節點。"
 
 #: ../src/tree/gb-tree-node.c:526
 msgid "The GbTree the node belongs to."
-msgstr ""
+msgstr "節點所屬的 GbTree。"
 
 #: ../src/tree/gb-tree-node.c:540
 msgid "The text of the node."
-msgstr ""
+msgstr "節點的文字。"
 
 #: ../src/tree/gb-tree-node.c:553
-#, fuzzy
 msgid "Use Markup"
-msgstr "使用"
+msgstr "使用標記"
 
 #: ../src/tree/gb-tree-node.c:554
 msgid "If text should be translated as markup."
-msgstr ""
+msgstr "是否文字應轉譯為標記。"
 
 #: ../src/trie/trie.c:790
 #, c-format
@@ -1810,24 +1899,25 @@ msgstr ""
 
 #: ../src/workbench/gb-workbench.c:854
 msgid "Command Manager"
-msgstr ""
+msgstr "指令管理員"
 
 #: ../src/workbench/gb-workbench.c:855
 msgid "The command manager for the workspace."
-msgstr ""
+msgstr "工作空間的指令管理員。"
 
 #: ../src/workbench/gb-workbench.c:864
 msgid "Navigation List"
-msgstr ""
+msgstr "導覽清單"
 
 #: ../src/workbench/gb-workbench.c:865
+#, fuzzy
 msgid "The navigation list for the workbench."
-msgstr ""
+msgstr "導覽"
 
 #: ../src/workbench/gb-workspace.c:152
 msgid "The title of the workspace."
-msgstr ""
+msgstr "工作區的題名。"
 
 #: ../src/workbench/gb-workspace.c:162
 msgid "The name of the icon to use."
-msgstr ""
+msgstr "要使用的圖示名稱"
