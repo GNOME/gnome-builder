@@ -86,6 +86,8 @@ void
 gb_editor_frame_set_document (GbEditorFrame    *self,
                               GbEditorDocument *document)
 {
+  GtkSourceSearchContext *search_context;
+  GtkSourceSearchSettings *search_settings;
   GtkTextMark *mark;
   GtkTextIter iter;
 
@@ -99,6 +101,15 @@ gb_editor_frame_set_document (GbEditorFrame    *self,
   mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (document));
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (document), &iter, mark);
   on_cursor_moved (document, &iter, self);
+
+  /*
+   * Sync search entry with the search settings.
+   */
+  search_context = ide_source_view_get_search_context (self->source_view);
+  search_settings = gtk_source_search_context_get_settings (search_context);
+  g_object_bind_property (self->search_entry, "text", search_settings, "search-text",
+                          (G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL));
+
 }
 
 static gboolean
