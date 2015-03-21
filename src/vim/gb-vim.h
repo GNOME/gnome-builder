@@ -40,7 +40,8 @@ GQuark     gb_vim_error_quark (void);
 gboolean   gb_vim_execute     (GtkSourceView  *source_view,
                                const gchar    *line,
                                GError        **error);
-gchar    **gb_vim_complete    (const gchar    *line);
+gchar    **gb_vim_complete    (GtkSourceView  *source_view,
+                               const gchar    *line);
 
 G_END_DECLS
 

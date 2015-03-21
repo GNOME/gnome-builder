@@ -690,7 +690,8 @@ gb_vim_complete_command (const gchar *line,
 }
 
 gchar **
-gb_vim_complete (const gchar *line)
+gb_vim_complete (GtkSourceView *source_view,
+                 const gchar   *line)
 {
   GPtrArray *ar;
 

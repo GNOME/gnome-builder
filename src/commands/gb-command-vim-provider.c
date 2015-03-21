@@ -36,16 +36,14 @@ struct _GbCommandVimProvider
 
 G_DEFINE_TYPE (GbCommandVimProvider, gb_command_vim_provider, GB_TYPE_COMMAND_PROVIDER)
 
-static GbCommand *
-gb_command_vim_provider_lookup (GbCommandProvider *provider,
-                                const gchar       *command_text)
+GtkWidget *
+get_source_view (GbCommandProvider *provider)
 {
-  IdeSourceView *source_view;
   GbWorkbench *workbench;
   GbView *active_view;
+  IdeSourceView *source_view;
 
-  g_return_val_if_fail (GB_IS_COMMAND_VIM_PROVIDER (provider), NULL);
-  g_return_val_if_fail (command_text, NULL);
+  g_assert (GB_IS_COMMAND_VIM_PROVIDER (provider));
 
   /* Make sure we have a workbench */
   workbench = gb_command_provider_get_workbench (provider);
@@ -62,6 +60,20 @@ gb_command_vim_provider_lookup (GbCommandProvider *provider,
   if (!IDE_IS_SOURCE_VIEW (source_view))
     return NULL;
 
+  return GTK_WIDGET (source_view);
+}
+
+static GbCommand *
+gb_command_vim_provider_lookup (GbCommandProvider *provider,
+                                const gchar       *command_text)
+{
+  GtkWidget *source_view;
+
+  g_return_val_if_fail (GB_IS_COMMAND_VIM_PROVIDER (provider), NULL);
+  g_return_val_if_fail (command_text, NULL);
+
+  source_view = get_source_view (provider);
+
   return g_object_new (GB_TYPE_COMMAND_VIM,
                        "command-text", command_text,
                        "source-view", source_view,
@@ -73,6 +85,7 @@ gb_command_vim_provider_complete (GbCommandProvider *provider,
                                   GPtrArray         *completions,
                                   const gchar       *initial_command_text)
 {
+  GtkWidget *source_view;
   gchar **results;
   gsize i;
 
@@ -80,7 +93,9 @@ gb_command_vim_provider_complete (GbCommandProvider *provider,
   g_return_if_fail (completions);
   g_return_if_fail (initial_command_text);
 
-  results = gb_vim_complete (initial_command_text);
+  source_view = get_source_view (provider);
+
+  results = gb_vim_complete (GTK_SOURCE_VIEW (source_view), initial_command_text);
   for (i = 0; results [i]; i++)
     g_ptr_array_add (completions, results [i]);
   g_free (results);
