@@ -445,8 +445,8 @@
   bind "<ctrl>v" { "set-mode" ("vim-visual-block", permanent) };
 
   /* navigation */
-  bind "<ctrl>o" { "action" ("navigation", "go-backward", "") };
-  bind "<ctrl>i" { "action" ("navigation", "go-forward", "") };
+  bind "<ctrl>o" { "action" ("view-stack", "go-backward", "") };
+  bind "<ctrl>i" { "action" ("view-stack", "go-forward", "") };
 
   /* window controls */
   bind "<ctrl>w" { "set-mode" ("vim-normal-ctrl-w", transient) };
