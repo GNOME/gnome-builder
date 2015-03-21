@@ -540,8 +540,33 @@ gb_vim_command_sort (GtkSourceView  *source_view,
   return TRUE;
 }
 
+static gboolean
+gb_vim_command_cnext (GtkSourceView  *source_view,
+                      const gchar    *command,
+                      const gchar    *options,
+                      GError        **error)
+{
+  if (IDE_IS_SOURCE_VIEW (source_view))
+    g_signal_emit_by_name (source_view, "move-error", GTK_DIR_DOWN);
+  return TRUE;
+}
+
+static gboolean
+gb_vim_command_cprevious (GtkSourceView  *source_view,
+                          const gchar    *command,
+                          const gchar    *options,
+                          GError        **error)
+{
+  if (IDE_IS_SOURCE_VIEW (source_view))
+    g_signal_emit_by_name (source_view, "move-error", GTK_DIR_UP);
+  return TRUE;
+}
+
+
 static const GbVimCommand vim_commands[] = {
+  { "cnext",       gb_vim_command_cnext },
   { "colorscheme", gb_vim_command_colorscheme },
+  { "cprevious",   gb_vim_command_cprevious },
   { "edit",        gb_vim_command_edit },
   { "nohl",        gb_vim_command_nohl },
   { "quit",        gb_vim_command_quit },
