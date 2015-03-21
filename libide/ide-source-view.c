@@ -2743,22 +2743,24 @@ ide_source_view_real_jump (IdeSourceView     *self,
   guint line_offset;
   guint offset;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (location);
 
-  if (!priv->back_forward_list)
-    return;
+  if (priv->back_forward_list == NULL)
+    IDE_EXIT;
 
-  if (!priv->buffer)
-    return;
+  if (priv->buffer == NULL)
+    IDE_EXIT;
 
   context = ide_buffer_get_context (priv->buffer);
-  if (!context)
-    return;
+  if (context == NULL)
+    IDE_EXIT;
 
   file = ide_buffer_get_file (priv->buffer);
-  if (!file)
-    return;
+  if (file == NULL)
+    IDE_EXIT;
 
   line = gtk_text_iter_get_line (location);
   line_offset = gtk_text_iter_get_line_offset (location);
@@ -2768,6 +2770,8 @@ ide_source_view_real_jump (IdeSourceView     *self,
   item = ide_back_forward_item_new (context, srcloc);
 
   ide_back_forward_list_push (priv->back_forward_list, item);
+
+  IDE_EXIT;
 }
 
 static void
