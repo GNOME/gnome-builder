@@ -95,6 +95,7 @@
   bind "3" { "action" ("stack", "split-document-right", "") };
   bind "o" { "action" ("stack", "focus-right", "") };
   bind "grave" { "move-error" (down) };
+  bind "h" { "select-all" (1) };
 }
 
 /*
