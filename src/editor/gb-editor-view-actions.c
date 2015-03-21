@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "gb-editor-view"
 
+#include <glib/gi18n.h>
 #include <ide.h>
 #include <string.h>
 
@@ -229,6 +230,121 @@ gb_editor_view_actions_save (GSimpleAction *action,
                           G_BINDING_SYNC_CREATE);
   gtk_widget_show (GTK_WIDGET (self->progress_bar));
   g_clear_object (&progress);
+}
+
+static void
+gb_editor_view_actions__save_as_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  g_autoptr(GbEditorView) self = user_data;
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  GError *error = NULL;
+
+  if (!ide_buffer_manager_save_file_finish (buffer_manager, result, &error))
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+}
+
+static void
+save_as_response (GtkWidget *widget,
+                  gint       response,
+                  gpointer   user_data)
+{
+  g_autoptr(GbEditorView) self = user_data;
+  g_autoptr(GFile) target = NULL;
+  g_autoptr(IdeProgress) progress = NULL;
+  GtkFileChooser *chooser = (GtkFileChooser *)widget;
+
+  g_assert (GTK_IS_FILE_CHOOSER (chooser));
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  switch (response)
+    {
+    case GTK_RESPONSE_OK:
+      target = gtk_file_chooser_get_file (chooser);
+      break;
+
+    case GTK_RESPONSE_CANCEL:
+    default:
+      break;
+    }
+
+  if (target != NULL)
+    {
+      IdeBufferManager *buffer_manager;
+      IdeContext *context;
+      IdeProject *project;
+      IdeBuffer *buffer = IDE_BUFFER (self->document);
+      g_autoptr(IdeFile) file = NULL;
+
+      context = ide_buffer_get_context (buffer);
+      project = ide_context_get_project (context);
+      buffer_manager = ide_context_get_buffer_manager (context);
+      file = ide_project_get_project_file (project, target);
+
+      ide_buffer_manager_save_file_async (buffer_manager,
+                                          buffer,
+                                          file,
+                                          &progress,
+                                          NULL,
+                                          gb_editor_view_actions__save_as_cb,
+                                          g_object_ref (self));
+    }
+
+  gtk_widget_destroy (widget);
+}
+
+static void
+gb_editor_view_actions_save_as (GSimpleAction *action,
+                                GVariant      *param,
+                                gpointer       user_data)
+{
+  GbEditorView *self = user_data;
+  IdeBuffer *buffer;
+  GtkWidget *suggested;
+  GtkWidget *toplevel;
+  GtkWidget *dialog;
+  IdeFile *file;
+  GFile *gfile;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                         "action", GTK_FILE_CHOOSER_ACTION_SAVE,
+                         "do-overwrite-confirmation", TRUE,
+                         "local-only", FALSE,
+                         "modal", TRUE,
+                         "select-multiple", FALSE,
+                         "show-hidden", FALSE,
+                         "transient-for", toplevel,
+                         "title", _("Save Document As"),
+                         NULL);
+
+  buffer = IDE_BUFFER (self->document);
+  file = ide_buffer_get_file (buffer);
+  gfile = ide_file_get_file (file);
+
+  if (gfile != NULL)
+    gtk_file_chooser_set_file (GTK_FILE_CHOOSER (dialog), gfile, NULL);
+
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("Cancel"), GTK_RESPONSE_CANCEL,
+                          _("Save"), GTK_RESPONSE_OK,
+                          NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog),
+                                                  GTK_RESPONSE_OK);
+  gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
+                               GTK_STYLE_CLASS_SUGGESTED_ACTION);
+
+  g_signal_connect (dialog, "response", G_CALLBACK (save_as_response), g_object_ref (self));
+
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static gboolean
@@ -457,6 +573,7 @@ static GActionEntry GbEditorViewActions[] = {
   { "language", NULL, "s", "''", gb_editor_view_actions_language },
   { "preview", gb_editor_view_actions_preview },
   { "save", gb_editor_view_actions_save },
+  { "save-as", gb_editor_view_actions_save_as },
   { "show-line-numbers", NULL, NULL, "false", gb_editor_view_actions_show_line_numbers },
   { "show-right-margin", NULL, NULL, "false", gb_editor_view_actions_show_right_margin },
   { "smart-backspace", NULL, NULL, "false", gb_editor_view_actions_smart_backspace },
