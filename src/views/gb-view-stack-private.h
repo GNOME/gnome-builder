@@ -46,6 +46,7 @@ struct _GbViewStack
   GtkStack           *stack;
   GtkLabel           *title_label;
 
+  guint               destroyed : 1;
   guint               focused : 1;
 };
 

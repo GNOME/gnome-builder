@@ -156,7 +156,7 @@ gb_view_stack_real_empty (GbViewStack *self)
   g_assert (GB_IS_VIEW_STACK (self));
 
   /* its possible for a widget to be added during "empty" emission. */
-  if (gb_view_stack_is_empty (self))
+  if (gb_view_stack_is_empty (self) && !self->destroyed)
     {
       gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), FALSE);
       gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), FALSE);
@@ -259,6 +259,16 @@ gb_view_stack_hierarchy_changed (GtkWidget *widget,
 }
 
 static void
+gb_view_stack_destroy (GtkWidget *widget)
+{
+  GbViewStack *self = (GbViewStack *)widget;
+
+  self->destroyed = TRUE;
+
+  GTK_WIDGET_CLASS (gb_view_stack_parent_class)->destroy (widget);
+}
+
+static void
 gb_view_stack_constructed (GObject *object)
 {
   GbViewStack *self = (GbViewStack *)object;
@@ -332,6 +342,7 @@ gb_view_stack_class_init (GbViewStackClass *klass)
   object_class->get_property = gb_view_stack_get_property;
   object_class->set_property = gb_view_stack_set_property;
 
+  widget_class->destroy = gb_view_stack_destroy;
   widget_class->grab_focus = gb_view_stack_grab_focus;
   widget_class->hierarchy_changed = gb_view_stack_hierarchy_changed;
 
