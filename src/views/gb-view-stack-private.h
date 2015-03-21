@@ -34,6 +34,7 @@ struct _GbViewStack
   /* Weak references */
   GtkWidget          *active_view;
   IdeContext         *context;
+  GBinding           *modified_binding;
   GBinding           *title_binding;
 
   /* Template references */
@@ -42,6 +43,7 @@ struct _GbViewStack
   GtkMenuButton      *document_button;
   GtkButton          *go_backward;
   GtkButton          *go_forward;
+  GtkLabel           *modified_label;
   GtkPopover         *popover;
   GtkStack           *stack;
   GtkLabel           *title_label;

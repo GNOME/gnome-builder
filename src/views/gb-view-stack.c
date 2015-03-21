@@ -384,6 +384,7 @@ gb_view_stack_class_init (GbViewStackClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, document_button);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, go_backward);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, go_forward);
+  GB_WIDGET_CLASS_BIND (klass, GbViewStack, modified_label);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, popover);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, stack);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, title_label);
@@ -431,6 +432,9 @@ gb_view_stack_set_active_view (GbViewStack *self,
           if (self->title_binding)
             g_binding_unbind (self->title_binding);
           ide_clear_weak_pointer (&self->title_binding);
+          if (self->modified_binding)
+            g_binding_unbind (self->modified_binding);
+          ide_clear_weak_pointer (&self->modified_binding);
           gtk_label_set_label (self->title_label, NULL);
           ide_clear_weak_pointer (&self->active_view);
           gtk_widget_hide (GTK_WIDGET (self->controls_stack));
@@ -451,6 +455,10 @@ gb_view_stack_set_active_view (GbViewStack *self,
                                             self->title_label, "label",
                                             G_BINDING_SYNC_CREATE);
           ide_set_weak_pointer (&self->title_binding, binding);
+          binding = g_object_bind_property (active_view, "modified",
+                                            self->modified_label, "visible",
+                                            G_BINDING_SYNC_CREATE);
+          ide_set_weak_pointer (&self->modified_binding, binding);
           ide_set_weak_pointer (&self->active_view, active_view);
           controls = gb_view_get_controls (GB_VIEW (active_view));
           if (controls)

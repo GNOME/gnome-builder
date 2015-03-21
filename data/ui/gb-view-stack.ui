@@ -73,9 +73,28 @@
                       <class name="text-button"/>
                     </style>
                     <child>
-                      <object class="GtkLabel" id="title_label">
+                      <object class="GtkBox">
+                        <property name="spacing">6</property>
                         <property name="visible">true</property>
-                        <property name="width-chars">30</property>
+                        <property name="width-request">300</property>
+                        <child type="center">
+                          <object class="GtkLabel" id="title_label">
+                            <property name="hexpand">false</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="modified_label">
+                            <property name="halign">fill</property>
+                            <property name="hexpand">true</property>
+                            <property name="xalign">0.0</property>
+                            <property name="label">•</property>
+                            <property name="visible">false</property>
+                          </object>
+                          <packing>
+                            <property name="pack-type">end</property>
+                          </packing>
+                        </child>
                       </object>
                     </child>
                   </object>
