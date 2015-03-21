@@ -98,6 +98,26 @@ language_to_string (GBinding     *binding,
   return TRUE;
 }
 
+static gboolean
+gb_editor_view_get_modified (GbView *view)
+{
+  GbEditorView *self = (GbEditorView *)view;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  return gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (self->document));
+}
+
+static void
+gb_editor_view__buffer_modified_changed (GbEditorView  *self,
+                                         GParamSpec    *pspec,
+                                         GtkTextBuffer *buffer)
+{
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  g_object_notify (G_OBJECT (self), "modified");
+}
+
 static void
 gb_editor_view_set_document (GbEditorView     *self,
                              GbEditorDocument *document)
@@ -123,6 +143,12 @@ gb_editor_view_set_document (GbEditorView     *self,
       g_object_bind_property_full (document, "language", self->tweak_button,
                                    "label", G_BINDING_SYNC_CREATE,
                                    language_to_string, NULL, NULL, NULL);
+
+      g_signal_connect_object (document,
+                               "modified-changed",
+                               G_CALLBACK (gb_editor_view__buffer_modified_changed),
+                               self,
+                               G_CONNECT_SWAPPED);
 
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOCUMENT]);
 
@@ -272,6 +298,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
 
   view_class->create_split = gb_editor_view_create_split;
   view_class->get_document = gb_editor_view_get_document;
+  view_class->get_modified = gb_editor_view_get_modified;
   view_class->set_split_view = gb_editor_view_set_split_view;
   view_class->set_back_forward_list = gb_editor_view_set_back_forward_list;
   view_class->navigate_to = gb_editor_view_navigate_to;
