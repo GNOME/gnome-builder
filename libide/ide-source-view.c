@@ -6203,7 +6203,7 @@ ide_source_view_get_smart_backspace (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
   return priv->smart_backspace;
 }
