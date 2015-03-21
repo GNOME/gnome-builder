@@ -164,6 +164,7 @@ enum {
   PROP_0,
   PROP_AUTO_INDENT,
   PROP_BACK_FORWARD_LIST,
+  PROP_COUNT,
   PROP_ENABLE_WORD_COMPLETION,
   PROP_FILE_SETTINGS,
   PROP_FONT_NAME,
@@ -4465,6 +4466,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_object (value, ide_source_view_get_back_forward_list (self));
       break;
 
+    case PROP_COUNT:
+      g_value_set_uint (value, ide_source_view_get_count (self));
+      break;
+
     case PROP_ENABLE_WORD_COMPLETION:
       g_value_set_boolean (value, ide_source_view_get_enable_word_completion (self));
       break;
@@ -4548,6 +4553,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_BACK_FORWARD_LIST:
       ide_source_view_set_back_forward_list (self, g_value_get_object (value));
+      break;
+
+    case PROP_COUNT:
+      ide_source_view_set_count (self, g_value_get_uint (value));
       break;
 
     case PROP_ENABLE_WORD_COMPLETION:
@@ -4683,6 +4692,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_BACK_FORWARD_LIST,
                                    gParamSpecs [PROP_BACK_FORWARD_LIST]);
+
+  gParamSpecs [PROP_COUNT] =
+    g_param_spec_uint ("count",
+                       _("Count"),
+                       _("The count for movements."),
+                       0,
+                       G_MAXINT,
+                       0,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_COUNT, gParamSpecs [PROP_COUNT]);
 
   gParamSpecs [PROP_FILE_SETTINGS] =
     g_param_spec_object ("file-settings",
@@ -6319,4 +6338,31 @@ ide_source_view_clear_search (IdeSourceView *self)
     }
 
   gtk_source_search_settings_set_search_text (search_settings, NULL);
+}
+
+guint
+ide_source_view_get_count (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), 0);
+
+  return priv->count;
+}
+
+void
+ide_source_view_set_count (IdeSourceView *self,
+                           guint          count)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (count >= 0);
+  g_return_if_fail (count <= G_MAXINT);
+
+  if (count != priv->count)
+    {
+      priv->count = count;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_COUNT]);
+    }
 }
