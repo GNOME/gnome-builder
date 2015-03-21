@@ -162,6 +162,32 @@ gb_view_stack_real_empty (GbViewStack *self)
 }
 
 static void
+gb_view_stack_context_handler (GtkWidget  *widget,
+                               IdeContext *context)
+{
+  IdeBackForwardList *back_forward;
+  GbViewStack *self = (GbViewStack *)widget;
+
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  if (context)
+    {
+      back_forward = ide_context_get_back_forward_list (context);
+
+      g_clear_object (&self->back_forward_list);
+      self->back_forward_list = ide_back_forward_list_branch (back_forward);
+
+      g_object_bind_property (self->back_forward_list, "can-go-backward",
+                              self->go_backward, "sensitive",
+                              G_BINDING_SYNC_CREATE);
+      g_object_bind_property (self->back_forward_list, "can-go-forward",
+                              self->go_forward, "sensitive",
+                              G_BINDING_SYNC_CREATE);
+    }
+}
+
+static void
 gb_view_stack_constructed (GObject *object)
 {
   GbViewStack *self = (GbViewStack *)object;
@@ -179,6 +205,7 @@ gb_view_stack_finalize (GObject *object)
   g_clear_pointer (&self->focus_history, g_list_free);
   ide_clear_weak_pointer (&self->title_binding);
   ide_clear_weak_pointer (&self->active_view);
+  g_clear_object (&self->back_forward_list);
 
   G_OBJECT_CLASS (gb_view_stack_parent_class)->finalize (object);
 }
@@ -288,6 +315,8 @@ gb_view_stack_init (GbViewStack *self)
                            G_CALLBACK (gb_view_stack__notify_visible_child),
                            self,
                            G_CONNECT_SWAPPED);
+
+  gb_widget_set_context_handler (self, gb_view_stack_context_handler);
 }
 
 GtkWidget *

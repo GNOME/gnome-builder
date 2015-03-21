@@ -34,6 +34,7 @@
                         <property name="visible">true</property>
                         <property name="action-name">navigation.go-backward</property>
                         <style>
+                          <class name="dim-label"/>
                           <class name="flat"/>
                           <class name="image-button"/>
                         </style>
@@ -48,8 +49,9 @@
                     <child>
                       <object class="GtkButton" id="go_forward">
                         <property name="visible">true</property>
-                        <property name="action-name">navigation.go-forkward</property>
+                        <property name="action-name">navigation.go-forward</property>
                         <style>
+                          <class name="dim-label"/>
                           <class name="flat"/>
                           <class name="image-button"/>
                         </style>
