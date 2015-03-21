@@ -41,10 +41,16 @@ enum {
 };
 
 enum {
+  UNLOAD,
+  LAST_SIGNAL
+};
+
+enum {
   TARGET_URI_LIST = 100
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint gSignals [LAST_SIGNAL];
 static const GtkTargetEntry gDropTypes[] = {
   { "text/uri-list", 0, TARGET_URI_LIST}
 };
@@ -101,6 +107,7 @@ gb_workbench_delete_event (GtkWidget   *widget,
 
       self->unloading = TRUE;
       self->unload_cancellable = g_cancellable_new ();
+      g_signal_emit (self, gSignals [UNLOAD], 0, self->context);
       ide_context_unload_async (self->context,
                                 self->unload_cancellable,
                                 gb_workbench__unload_cb,
@@ -373,6 +380,17 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_CONTEXT, gParamSpecs [PROP_CONTEXT]);
+
+  gSignals [UNLOAD] =
+    g_signal_new ("unload",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_CONTEXT);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-workbench.ui");
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, command_bar);

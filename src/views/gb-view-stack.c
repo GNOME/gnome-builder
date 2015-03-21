@@ -25,6 +25,7 @@
 #include "gb-view-stack-actions.h"
 #include "gb-view-stack-private.h"
 #include "gb-widget.h"
+#include "gb-workbench.h"
 
 G_DEFINE_TYPE (GbViewStack, gb_view_stack, GTK_TYPE_BIN)
 
@@ -220,6 +221,44 @@ gb_view_stack_context_handler (GtkWidget  *widget,
 }
 
 static void
+gb_view_stack_on_workbench_unload (GbWorkbench *workbench,
+                                   IdeContext  *context,
+                                   GbViewStack *self)
+{
+  IdeBackForwardList *back_forward_list;
+
+  g_assert (GB_IS_WORKBENCH (workbench));
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (GB_IS_VIEW_STACK (self));
+
+  if (self->back_forward_list)
+    {
+      back_forward_list = ide_context_get_back_forward_list (context);
+      ide_back_forward_list_merge (back_forward_list, self->back_forward_list);
+    }
+}
+
+static void
+gb_view_stack_hierarchy_changed (GtkWidget *widget,
+                                 GtkWidget *old_toplevel)
+{
+  GbViewStack *self = (GbViewStack *)widget;
+  GtkWidget *toplevel;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GB_IS_WORKBENCH (toplevel))
+    {
+      g_signal_connect (toplevel,
+                        "unload",
+                        G_CALLBACK (gb_view_stack_on_workbench_unload),
+                        self);
+    }
+}
+
+static void
 gb_view_stack_constructed (GObject *object)
 {
   GbViewStack *self = (GbViewStack *)object;
@@ -294,6 +333,7 @@ gb_view_stack_class_init (GbViewStackClass *klass)
   object_class->set_property = gb_view_stack_set_property;
 
   widget_class->grab_focus = gb_view_stack_grab_focus;
+  widget_class->hierarchy_changed = gb_view_stack_hierarchy_changed;
 
   container_class->add = gb_view_stack_add;
   container_class->remove = gb_view_stack_real_remove;
