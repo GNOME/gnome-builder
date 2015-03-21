@@ -28,7 +28,8 @@
 #include "ide-project.h"
 #include "ide-source-location.h"
 
-#define MAX_ITEMS_PER_FILE 10
+#define MAX_ITEMS_PER_FILE 5
+#define MAX_ITEMS_TOTAL    100
 
 struct _IdeBackForwardList
 {
@@ -527,6 +528,7 @@ add_item_string (gpointer data,
   struct {
     GHashTable *counts;
     GString *str;
+    guint count;
   } *save_state = user_data;
   guint count;
   guint line;
@@ -543,6 +545,11 @@ add_item_string (gpointer data,
   count = GPOINTER_TO_INT (g_hash_table_lookup (save_state->counts, file));
   if (count >= MAX_ITEMS_PER_FILE)
     return;
+
+  if (save_state->count == MAX_ITEMS_TOTAL)
+    return;
+
+  save_state->count++;
 
   g_hash_table_replace (save_state->counts, file, GINT_TO_POINTER (++count));
 
@@ -585,7 +592,8 @@ _ide_back_forward_list_save_async (IdeBackForwardList  *self,
   struct {
     GHashTable *counts;
     GString *str;
-  } save_state;
+    guint count;
+  } save_state = { 0 };
   gsize len;
 
   g_assert (IDE_IS_BACK_FORWARD_LIST (self));
