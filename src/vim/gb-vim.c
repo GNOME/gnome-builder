@@ -25,6 +25,7 @@
 #include "gb-string.h"
 #include "gb-vim.h"
 #include "gb-widget.h"
+#include "gb-workbench.h"
 
 G_DEFINE_QUARK (gb-vim-error-quark, gb_vim_error)
 
@@ -393,11 +394,38 @@ gb_vim_command_edit (GtkSourceView  *source_view,
                      const gchar    *options,
                      GError        **error)
 {
+  GbWorkbench *workbench;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
+  GFile *file = NULL;
+
   if (gb_str_empty0 (options))
     {
       gb_widget_activate_action (GTK_WIDGET (source_view), "workbench", "open", NULL);
       return TRUE;
     }
+
+  if (!(workbench = gb_widget_get_workbench (GTK_WIDGET (source_view))) ||
+      !(context = gb_workbench_get_context (workbench)) ||
+      !(vcs = ide_context_get_vcs (context)) ||
+      !(workdir = ide_vcs_get_working_directory (vcs)))
+    {
+      g_set_error (error,
+                   GB_VIM_ERROR,
+                   GB_VIM_ERROR_NOT_SOURCE_VIEW,
+                   _("Failed to locate working directory"));
+      return FALSE;
+    }
+
+  if (g_path_is_absolute (options))
+    file = g_file_new_for_path (options);
+  else
+    file = g_file_get_child (workdir, options);
+
+  gb_workbench_open (workbench, file);
+
+  g_clear_object (&file);
 
   return TRUE;
 }
