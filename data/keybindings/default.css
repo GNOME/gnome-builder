@@ -5,6 +5,7 @@
   bind "<ctrl>f" { "action" ("frame", "find", "") };
   bind "<ctrl>period" { "action" ("workbench", "global-search", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
+  bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };
   bind "<alt><shift>Left" { "action" ("navigation", "go-backward", "") };
   bind "<alt><shift>Right" { "action" ("navigation", "go-forward", "") };
 
