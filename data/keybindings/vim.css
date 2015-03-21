@@ -93,6 +93,10 @@
   bind "<ctrl>period" { "action" ("workbench", "global-search", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };
+  bind "<ctrl><shift>o" { "action" ("workbench", "open", "") };
+
+  bind "F4" { "action" ("view", "find-other-file", "") };
+  bind "F9" { "action" ("view", "preview", "") };
 }
 
 @binding-set builder-vim-source-view-normal-with-count
@@ -450,10 +454,6 @@
 
   /* window controls */
   bind "<ctrl>w" { "set-mode" ("vim-normal-ctrl-w", transient) };
-
-  /* not vim perse, but common mapping */
-  bind "F4" { "action" ("view", "find-other-file", "") };
-  bind "F9" { "action" ("view", "preview", "") };
 }
 
 @binding-set builder-vim-source-view-normal-bracket
