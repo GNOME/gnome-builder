@@ -22,6 +22,7 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "gb-string.h"
 #include "gb-vim.h"
 #include "gb-widget.h"
 
@@ -392,6 +393,12 @@ gb_vim_command_edit (GtkSourceView  *source_view,
                      const gchar    *options,
                      GError        **error)
 {
+  if (gb_str_empty0 (options))
+    {
+      gb_widget_activate_action (GTK_WIDGET (source_view), "workbench", "open", NULL);
+      return TRUE;
+    }
+
   return TRUE;
 }
 
