@@ -63,6 +63,7 @@ gb_view_stack_add (GtkContainer *container,
       if (controls)
         gtk_container_add (GTK_CONTAINER (self->controls_stack), controls);
       gtk_container_add (GTK_CONTAINER (self->stack), child);
+      gb_view_set_back_forward_list (GB_VIEW (child), self->back_forward_list);
       gtk_stack_set_visible_child (self->stack, child);
     }
   else
@@ -188,6 +189,9 @@ gb_view_stack_context_handler (GtkWidget  *widget,
 
   if (context)
     {
+      GList *children;
+      GList *iter;
+
       ide_set_weak_pointer (&self->context, context);
 
       back_forward = ide_context_get_back_forward_list (context);
@@ -207,6 +211,11 @@ gb_view_stack_context_handler (GtkWidget  *widget,
       g_object_bind_property (self->back_forward_list, "can-go-forward",
                               self->go_forward, "sensitive",
                               G_BINDING_SYNC_CREATE);
+
+      children = gtk_container_get_children (GTK_CONTAINER (self->stack));
+      for (iter = children; iter; iter = iter->next)
+        gb_view_set_back_forward_list (iter->data, self->back_forward_list);
+      g_list_free (children);
     }
 }
 
