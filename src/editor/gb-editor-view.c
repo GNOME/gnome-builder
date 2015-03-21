@@ -155,6 +155,20 @@ gb_editor_view_set_split_view (GbView   *view,
 }
 
 static void
+gb_editor_view_set_back_forward_list (GbView             *view,
+                                      IdeBackForwardList *back_forward_list)
+{
+  GbEditorView *self = (GbEditorView *)view;
+
+  g_assert (GB_IS_VIEW (view));
+  g_assert (IDE_IS_BACK_FORWARD_LIST (back_forward_list));
+
+  g_object_set (self->frame1, "back-forward-list", back_forward_list, NULL);
+  if (self->frame2)
+    g_object_set (self->frame2, "back-forward-list", back_forward_list, NULL);
+}
+
+static void
 gb_editor_view_finalize (GObject *object)
 {
   GbEditorView *self = (GbEditorView *)object;
@@ -219,6 +233,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   view_class->create_split = gb_editor_view_create_split;
   view_class->get_document = gb_editor_view_get_document;
   view_class->set_split_view = gb_editor_view_set_split_view;
+  view_class->set_back_forward_list = gb_editor_view_set_back_forward_list;
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",

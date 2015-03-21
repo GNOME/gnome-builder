@@ -26,13 +26,10 @@
                   <object class="GtkBox">
                     <property name="orientation">horizontal</property>
                     <property name="visible">true</property>
-                    <style>
-                      <class name="linked"/>
-                    </style>
                     <child>
                       <object class="GtkButton" id="go_backward">
                         <property name="visible">true</property>
-                        <property name="action-name">navigation.go-backward</property>
+                        <property name="action-name">view-stack.go-backward</property>
                         <style>
                           <class name="dim-label"/>
                           <class name="flat"/>
@@ -49,7 +46,7 @@
                     <child>
                       <object class="GtkButton" id="go_forward">
                         <property name="visible">true</property>
-                        <property name="action-name">navigation.go-forward</property>
+                        <property name="action-name">view-stack.go-forward</property>
                         <style>
                           <class name="dim-label"/>
                           <class name="flat"/>

@@ -252,8 +252,36 @@ gb_view_stack_actions_previous_view (GSimpleAction *action,
   IDE_EXIT;
 }
 
+static void
+gb_view_stack_actions_go_forward (GSimpleAction *action,
+                                  GVariant      *param,
+                                  gpointer       user_data)
+{
+  GbViewStack *self = user_data;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+
+  if (ide_back_forward_list_get_can_go_forward (self->back_forward_list))
+    ide_back_forward_list_go_forward (self->back_forward_list);
+}
+
+static void
+gb_view_stack_actions_go_backward (GSimpleAction *action,
+                                   GVariant      *param,
+                                   gpointer       user_data)
+{
+  GbViewStack *self = user_data;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+
+  if (ide_back_forward_list_get_can_go_backward (self->back_forward_list))
+    ide_back_forward_list_go_backward (self->back_forward_list);
+}
+
 static const GActionEntry gGbViewStackActions[] = {
   { "close",         gb_view_stack_actions_close },
+  { "go-forward",    gb_view_stack_actions_go_forward },
+  { "go-backward",   gb_view_stack_actions_go_backward },
   { "move-left",     gb_view_stack_actions_move_left },
   { "move-right",    gb_view_stack_actions_move_right },
   { "next-view",     gb_view_stack_actions_next_view },
