@@ -44,6 +44,46 @@ gb_editor_view_get_document (GbView *view)
   return GB_DOCUMENT (self->document);
 }
 
+static GbEditorFrame *
+gb_editor_view_get_last_focused (GbEditorView *self)
+{
+  /* TODO: track focus */
+  return self->frame1;
+}
+
+static void
+gb_editor_view_navigate_to (GbView            *view,
+                            IdeSourceLocation *location)
+{
+  GbEditorView *self = (GbEditorView *)view;
+  GbEditorFrame *frame;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  guint line;
+  guint line_offset;
+
+  IDE_ENTRY;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (location != NULL);
+
+  frame = gb_editor_view_get_last_focused (self);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (frame->source_view));
+
+  line = ide_source_location_get_line (location);
+  line_offset = ide_source_location_get_line_offset (location);
+
+  gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
+  for (; line_offset; line_offset--)
+    if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
+      break;
+
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+  ide_source_view_scroll_to_iter (frame->source_view, &iter, 0.0, TRUE, 1.0, 0.5);
+
+  IDE_EXIT;
+}
+
 static gboolean
 language_to_string (GBinding     *binding,
                     const GValue *from_value,
@@ -234,6 +274,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   view_class->get_document = gb_editor_view_get_document;
   view_class->set_split_view = gb_editor_view_set_split_view;
   view_class->set_back_forward_list = gb_editor_view_set_back_forward_list;
+  view_class->navigate_to = gb_editor_view_navigate_to;
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",

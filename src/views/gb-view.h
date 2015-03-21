@@ -43,6 +43,8 @@ struct _GbViewClass
                                          gboolean            split_view);
   void         (*set_back_forward_list) (GbView             *self,
                                          IdeBackForwardList *back_forward_list);
+  void         (*navigate_to)           (GbView             *self,
+                                         IdeSourceLocation  *location);
 };
 
 GbView      *gb_view_create_split          (GbView             *self);
@@ -55,6 +57,8 @@ void         gb_view_set_split_view        (GbView             *self,
                                             gboolean            split_view);
 void         gb_view_set_back_forward_list (GbView             *self,
                                             IdeBackForwardList *back_forward_list);
+void         gb_view_navigate_to           (GbView             *self,
+                                            IdeSourceLocation  *location);
 
 G_END_DECLS
 

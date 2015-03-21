@@ -20,6 +20,7 @@
 #define GB_VIEW_STACK_PRIVATE_H
 
 #include <gtk/gtk.h>
+#include <ide.h>
 
 G_BEGIN_DECLS
 
@@ -32,6 +33,7 @@ struct _GbViewStack
 
   /* Weak references */
   GtkWidget          *active_view;
+  IdeContext         *context;
   GBinding           *title_binding;
 
   /* Template references */

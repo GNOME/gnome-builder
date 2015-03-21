@@ -167,30 +167,13 @@ navigate_to_cb (GbViewStack        *self,
                 IdeBackForwardList *back_forward_list)
 {
   IdeSourceLocation *srcloc;
-  IdeFile *file;
-  guint line;
-  guint line_offset;
 
   g_assert (GB_IS_VIEW_STACK (self));
   g_assert (IDE_IS_BACK_FORWARD_ITEM (item));
   g_assert (IDE_IS_BACK_FORWARD_LIST (back_forward_list));
 
   srcloc = ide_back_forward_item_get_location (item);
-  file = ide_source_location_get_file (srcloc);
-  line = ide_source_location_get_line (srcloc);
-  line_offset = ide_source_location_get_line_offset (srcloc);
-
-  /* implausable ... but defensive */
-  if (file == NULL)
-    return;
-
-  /* TODO: get buffer for file, move cursor to location */
-
-  {
-    gchar *path = g_file_get_path (ide_file_get_file (file));
-    g_print (">>> Load document %s +%u:%u\n", path, line, line_offset);
-    g_free (path);
-  }
+  gb_view_stack_focus_location (self, srcloc);
 }
 
 static void
@@ -205,6 +188,8 @@ gb_view_stack_context_handler (GtkWidget  *widget,
 
   if (context)
     {
+      ide_set_weak_pointer (&self->context, context);
+
       back_forward = ide_context_get_back_forward_list (context);
 
       g_clear_object (&self->back_forward_list);
@@ -241,6 +226,7 @@ gb_view_stack_finalize (GObject *object)
   GbViewStack *self = (GbViewStack *)object;
 
   g_clear_pointer (&self->focus_history, g_list_free);
+  ide_clear_weak_pointer (&self->context);
   ide_clear_weak_pointer (&self->title_binding);
   ide_clear_weak_pointer (&self->active_view);
   g_clear_object (&self->back_forward_list);
@@ -492,4 +478,86 @@ gb_view_stack_focus_document (GbViewStack *self,
   gb_view_stack_add (GTK_CONTAINER (self), view);
   gb_view_stack_set_active_view (self, view);
   gtk_widget_grab_focus (view);
+}
+
+static void
+gb_view_stack__navigate_to_load_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  GbViewStack *self;
+  g_autoptr(GTask) task = user_data;
+  IdeSourceLocation *location;
+  g_autoptr(IdeBuffer) buffer = NULL;
+  g_autoptr(GError) error = NULL;
+  GtkWidget *active_view;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  self = g_task_get_source_object (task);
+  location = g_task_get_task_data (task);
+
+  buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error);
+
+  if (buffer == NULL)
+    {
+      /* todo: message dialog? */
+      g_warning ("%s", error->message);
+      return;
+    }
+
+  g_assert (GB_IS_DOCUMENT (buffer));
+  g_assert (location != NULL);
+
+  gb_view_stack_focus_document (self, GB_DOCUMENT (buffer));
+  active_view = gb_view_stack_get_active_view (self);
+  g_assert (GB_DOCUMENT (buffer) == gb_view_get_document (GB_VIEW (active_view)));
+  gb_view_navigate_to (GB_VIEW (active_view), location);
+
+  g_task_return_boolean (task, TRUE);
+}
+
+void
+gb_view_stack_focus_location (GbViewStack       *self,
+                              IdeSourceLocation *location)
+{
+  IdeBufferManager *buffer_manager;
+  IdeBuffer *buffer;
+  IdeFile *file;
+
+  g_return_if_fail (GB_IS_VIEW_STACK (self));
+  g_return_if_fail (location != NULL);
+
+  if (self->context == NULL)
+    return;
+
+  file = ide_source_location_get_file (location);
+
+  g_assert (file != NULL);
+  g_assert (IDE_IS_FILE (file));
+
+  buffer_manager = ide_context_get_buffer_manager (self->context);
+  buffer = ide_buffer_manager_find_buffer (buffer_manager, file);
+
+  if (buffer != NULL && GB_IS_DOCUMENT (buffer))
+    {
+      GtkWidget *active_view;
+
+      gb_view_stack_focus_document (self, GB_DOCUMENT (buffer));
+      active_view = gb_view_stack_get_active_view (self);
+      g_assert (GB_DOCUMENT (buffer) == gb_view_get_document (GB_VIEW (active_view)));
+      gb_view_navigate_to (GB_VIEW (active_view), location);
+    }
+  else
+    {
+      g_autoptr(GTask) task = NULL;
+
+      task = g_task_new (self, NULL, NULL, NULL);
+      g_task_set_task_data (task, ide_source_location_ref (location),
+                            (GDestroyNotify)ide_source_location_unref);
+      ide_buffer_manager_load_file_async (buffer_manager, file, FALSE, NULL, NULL,
+                                          gb_view_stack__navigate_to_load_cb,
+                                          g_object_ref (task));
+    }
 }

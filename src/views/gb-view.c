@@ -177,6 +177,17 @@ gb_view_set_back_forward_list (GbView             *self,
     GB_VIEW_GET_CLASS (self)->set_back_forward_list (self, back_forward_list);
 }
 
+void
+gb_view_navigate_to (GbView            *self,
+                     IdeSourceLocation *location)
+{
+  g_return_if_fail (GB_IS_VIEW (self));
+  g_return_if_fail (location != NULL);
+
+  if (GB_VIEW_GET_CLASS (self)->navigate_to)
+    GB_VIEW_GET_CLASS (self)->navigate_to (self, location);
+}
+
 static void
 gb_view_destroy (GtkWidget *widget)
 {
