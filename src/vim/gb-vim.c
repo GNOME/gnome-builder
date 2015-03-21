@@ -689,6 +689,149 @@ gb_vim_complete_command (const gchar *line,
     }
 }
 
+static void
+gb_vim_complete_edit_files (GtkSourceView *source_view,
+                            const gchar   *command,
+                            GPtrArray     *ar,
+                            const gchar   *prefix)
+{
+  GbWorkbench *workbench;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
+  g_autoptr(GFile) child = NULL;
+  g_autoptr(GFile) parent = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (command);
+  g_assert (ar);
+  g_assert (prefix);
+
+  if (!(workbench = gb_widget_get_workbench (GTK_WIDGET (source_view))) ||
+      !(context = gb_workbench_get_context (workbench)) ||
+      !(vcs = ide_context_get_vcs (context)) ||
+      !(workdir = ide_vcs_get_working_directory (vcs)))
+    IDE_EXIT;
+
+  child = g_file_get_child (workdir, prefix);
+
+  if (g_file_query_exists (child, NULL))
+    {
+      if (g_file_query_file_type (child, 0, NULL) == G_FILE_TYPE_DIRECTORY)
+        {
+          g_autoptr(GFileEnumerator) fe = NULL;
+          GFileInfo *descendent;
+
+          if (!g_str_has_suffix (prefix, "/"))
+            {
+              g_ptr_array_add (ar, g_strdup_printf ("%s %s/", command, prefix));
+              IDE_EXIT;
+            }
+
+          fe = g_file_enumerate_children (child,
+                                          G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                                          G_FILE_QUERY_INFO_NONE,
+                                          NULL, NULL);
+
+          if (fe == NULL)
+            IDE_EXIT;
+
+          while ((descendent = g_file_enumerator_next_file (fe, NULL, NULL)))
+            {
+              const gchar *name;
+
+              name = g_file_info_get_display_name (descendent);
+              g_ptr_array_add (ar, g_strdup_printf ("%s %s%s", command, prefix, name));
+              g_object_unref (descendent);
+            }
+
+          IDE_EXIT;
+        }
+    }
+
+  parent = g_file_get_parent (child);
+
+  if (parent != NULL)
+    {
+      g_autoptr(GFileEnumerator) fe = NULL;
+      g_autofree gchar *parent_path = NULL;
+      g_autofree gchar *relpath = NULL;
+      GFileInfo *descendent;
+      const gchar *slash;
+
+      parent_path = g_file_get_path (parent);
+      relpath = g_file_get_relative_path (workdir, parent);
+
+      if (relpath && g_str_has_prefix (relpath, "./"))
+        {
+          gchar *tmp = relpath;
+          relpath = g_strdup (relpath + 2);
+          g_free (tmp);
+        }
+
+      IDE_TRACE_MSG ("parent_path: %s", parent_path);
+
+      if ((slash = strrchr (prefix, G_DIR_SEPARATOR)))
+        prefix = slash + 1;
+
+      fe = g_file_enumerate_children (parent,
+                                      G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                                      G_FILE_QUERY_INFO_NONE,
+                                      NULL, NULL);
+
+      if (fe == NULL)
+        IDE_EXIT;
+
+      while ((descendent = g_file_enumerator_next_file (fe, NULL, NULL)))
+        {
+          const gchar *name;
+
+          name = g_file_info_get_display_name (descendent);
+
+          IDE_TRACE_MSG ("name=%s prefix=%s", name, prefix);
+
+          if (name && g_str_has_prefix (name, prefix))
+            {
+              gchar *path;
+
+              if (relpath)
+                path = g_strdup_printf ("%s %s/%s", command, relpath, name);
+              else
+                path = g_strdup_printf ("%s %s", command, name);
+
+              IDE_TRACE_MSG ("edit completion: %s", path);
+
+              g_ptr_array_add (ar, path);
+            }
+          g_object_unref (descendent);
+        }
+
+      IDE_EXIT;
+    }
+
+  IDE_EXIT;
+}
+
+static void
+gb_vim_complete_edit (GtkSourceView *source_view,
+                      const gchar   *line,
+                      GPtrArray     *ar)
+{
+  gchar **parts;
+
+  parts = g_strsplit (line, " ", 2);
+  if (parts [0] == NULL || parts [1] == NULL)
+    {
+      g_strfreev (parts);
+      return;
+    }
+
+  gb_vim_complete_edit_files (source_view, parts [0], ar, parts [1]);
+
+  g_strfreev (parts);
+}
+
 gchar **
 gb_vim_complete (GtkSourceView *source_view,
                  const gchar   *line)
@@ -701,6 +844,8 @@ gb_vim_complete (GtkSourceView *source_view,
     {
       if (g_str_has_prefix (line, "set "))
         gb_vim_complete_set (line, ar);
+      else if (g_str_has_prefix (line, "e ") || g_str_has_prefix (line, "edit "))
+        gb_vim_complete_edit (source_view, line, ar);
       else
         gb_vim_complete_command (line, ar);
     }
