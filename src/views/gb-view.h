@@ -37,6 +37,7 @@ struct _GbViewClass
   gboolean     (*get_can_preview)       (GbView             *self);
   gboolean     (*get_can_split)         (GbView             *self);
   GbDocument  *(*get_document)          (GbView             *self);
+  gboolean     (*get_modified)          (GbView             *self);
   const gchar *(*get_title)             (GbView             *self);
   GbView      *(*create_split)          (GbView             *self);
   void         (*set_split_view)        (GbView             *self,
@@ -53,6 +54,7 @@ gboolean     gb_view_get_can_split         (GbView             *self);
 GbDocument  *gb_view_get_document          (GbView             *self);
 const gchar *gb_view_get_title             (GbView             *self);
 GtkWidget   *gb_view_get_controls          (GbView             *self);
+gboolean     gb_view_get_modified          (GbView             *self);
 void         gb_view_set_split_view        (GbView             *self,
                                             gboolean            split_view);
 void         gb_view_set_back_forward_list (GbView             *self,

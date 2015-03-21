@@ -35,6 +35,7 @@ enum {
   PROP_0,
   PROP_CAN_SPLIT,
   PROP_DOCUMENT,
+  PROP_MODIFIED,
   PROP_TITLE,
   LAST_PROP
 };
@@ -188,6 +189,17 @@ gb_view_navigate_to (GbView            *self,
     GB_VIEW_GET_CLASS (self)->navigate_to (self, location);
 }
 
+gboolean
+gb_view_get_modified (GbView *self)
+{
+  g_return_val_if_fail (GB_IS_VIEW (self), FALSE);
+
+  if (GB_VIEW_GET_CLASS (self)->get_modified)
+    return GB_VIEW_GET_CLASS (self)->get_modified (self);
+
+  return FALSE;
+}
+
 static void
 gb_view_destroy (GtkWidget *widget)
 {
@@ -215,6 +227,10 @@ gb_view_get_property (GObject    *object,
 
     case PROP_DOCUMENT:
       g_value_set_object (value, gb_view_get_document (self));
+      break;
+
+    case PROP_MODIFIED:
+      g_value_set_boolean (value, gb_view_get_modified (self));
       break;
 
     case PROP_TITLE:
@@ -252,6 +268,15 @@ gb_view_class_init (GbViewClass *klass)
                          GB_TYPE_DOCUMENT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_DOCUMENT, gParamSpecs [PROP_DOCUMENT]);
+
+  gParamSpecs [PROP_MODIFIED] =
+    g_param_spec_boolean ("modified",
+                          _("Modified"),
+                          _("If the document has been modified."),
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_MODIFIED,
+                                   gParamSpecs [PROP_MODIFIED]);
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",
