@@ -79,7 +79,7 @@ gb_editor_view_navigate_to (GbView            *view,
       break;
 
   gtk_text_buffer_select_range (buffer, &iter, &iter);
-  ide_source_view_scroll_to_iter (frame->source_view, &iter, 0.0, TRUE, 1.0, 0.5);
+  ide_source_view_scroll_to_iter (frame->source_view, &iter, 0.0, TRUE, 1.0, 0.5, TRUE);
 
   IDE_EXIT;
 }

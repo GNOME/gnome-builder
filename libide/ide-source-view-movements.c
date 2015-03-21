@@ -852,15 +852,15 @@ ide_source_view_movements_scroll_center (Movement *mv)
   switch ((int)mv->type)
     {
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_BOTTOM:
-      ide_source_view_scroll_to_mark (mv->self, insert, 0.0, TRUE, 1.0, 1.0);
+      ide_source_view_scroll_to_mark (mv->self, insert, 0.0, TRUE, 1.0, 1.0, TRUE);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_TOP:
-      ide_source_view_scroll_to_mark (mv->self, insert, 0.0, TRUE, 1.0, 0.0);
+      ide_source_view_scroll_to_mark (mv->self, insert, 0.0, TRUE, 1.0, 0.0, TRUE);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_CENTER:
-      ide_source_view_scroll_to_mark (mv->self, insert, 0.0, TRUE, 1.0, 0.5);
+      ide_source_view_scroll_to_mark (mv->self, insert, 0.0, TRUE, 1.0, 0.5, TRUE);
       break;
 
     default:

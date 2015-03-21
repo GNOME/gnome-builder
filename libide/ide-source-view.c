@@ -59,6 +59,8 @@
 #define DEFAULT_FONT_DESC "Monospace 11"
 #define ANIMATION_X_GROW  50
 #define ANIMATION_Y_GROW  30
+#define SMALL_SCROLL_DURATION_MSEC 100
+#define LARGE_SCROLL_DURATION_MSEC 250
 
 #define _GDK_RECTANGLE_X2(rect) ((rect)->x + (rect)->width)
 #define _GDK_RECTANGLE_Y2(rect) ((rect)->y + (rect)->height)
@@ -5831,7 +5833,7 @@ ide_source_view_scroll_mark_onscreen (IdeSourceView *self,
   gtk_text_view_get_iter_location (text_view, &iter, &mark_rect);
 
   if (!_GDK_RECTANGLE_CONTAINS (&visible_rect, &mark_rect))
-    ide_source_view_scroll_to_mark (self, mark, 0.0, FALSE, 0.0, 0.0);
+    ide_source_view_scroll_to_mark (self, mark, 0.0, FALSE, 0.0, 0.0, TRUE);
 
   IDE_EXIT;
 }
@@ -5883,12 +5885,14 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
                                 gdouble            within_margin,
                                 gboolean           use_align,
                                 gdouble            xalign,
-                                gdouble            yalign)
+                                gdouble            yalign,
+                                gboolean           animate_scroll)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextView *text_view = (GtkTextView *)self;
   GtkAdjustment *hadj;
   GtkAdjustment *vadj;
+  GdkFrameClock *frame_clock;
   GdkRectangle real_visible_rect;
   GdkRectangle visible_rect;
   GdkRectangle iter_rect;
@@ -5964,8 +5968,49 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
   yvalue = iter_rect.y - (yalign * real_visible_rect.height);
   xvalue = iter_rect.x - (xalign * real_visible_rect.width);
 
-  gtk_adjustment_set_value (hadj, xvalue);
-  gtk_adjustment_set_value (vadj, yvalue);
+  frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
+
+  if (animate_scroll)
+    {
+      guint duration_msec = LARGE_SCROLL_DURATION_MSEC;
+      gdouble difference;
+      gdouble page_size;
+      gdouble current;
+
+      current = gtk_adjustment_get_value (vadj);
+      page_size = gtk_adjustment_get_page_size (vadj);
+      difference = ABS (current - yvalue);
+
+      /*
+       * Ignore animations if we are scrolling less than two full lines.  This
+       * helps when pressing up/down for key repeat.  Also, if it's a partial
+       * page scroll (less than page size), use less time to animate, so it
+       * isn't so annoying.
+       */
+      if (difference < (priv->cached_char_height * 2))
+        goto ignore_animation;
+      else if (difference <= page_size)
+        duration_msec = SMALL_SCROLL_DURATION_MSEC;
+
+      ide_object_animate (hadj,
+                          IDE_ANIMATION_EASE_IN_CUBIC,
+                          duration_msec,
+                          frame_clock,
+                          "value", xvalue,
+                          NULL);
+      ide_object_animate (vadj,
+                          IDE_ANIMATION_EASE_IN_CUBIC,
+                          duration_msec,
+                          frame_clock,
+                          "value", yvalue,
+                          NULL);
+    }
+  else
+    {
+ignore_animation:
+      gtk_adjustment_set_value (hadj, xvalue);
+      gtk_adjustment_set_value (vadj, yvalue);
+    }
 
   IDE_EXIT;
 }
@@ -5976,7 +6021,8 @@ ide_source_view_scroll_to_mark (IdeSourceView *self,
                                 gdouble        within_margin,
                                 gboolean       use_align,
                                 gdouble        xalign,
-                                gdouble        yalign)
+                                gdouble        yalign,
+                                gboolean       animate_scroll)
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;
@@ -5990,7 +6036,8 @@ ide_source_view_scroll_to_mark (IdeSourceView *self,
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
-  ide_source_view_scroll_to_iter (self, &iter, within_margin, use_align, xalign, yalign);
+  ide_source_view_scroll_to_iter (self, &iter, within_margin, use_align, xalign, yalign,
+                                  animate_scroll);
 }
 
 gboolean

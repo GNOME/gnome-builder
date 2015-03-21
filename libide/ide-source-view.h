@@ -340,13 +340,15 @@ void                        ide_source_view_scroll_to_mark            (IdeSource
                                                                        gdouble                     within_margin,
                                                                        gboolean                    use_align,
                                                                        gdouble                     xalign,
-                                                                       gdouble                     yalign);
+                                                                       gdouble                     yalign,
+                                                                       gboolean                    animate_scroll);
 void                        ide_source_view_scroll_to_iter            (IdeSourceView              *self,
                                                                        const GtkTextIter          *iter,
                                                                        gdouble                     within_margin,
                                                                        gboolean                    use_align,
                                                                        gdouble                     xalign,
-                                                                       gdouble                     yalign);
+                                                                       gdouble                     yalign,
+                                                                       gboolean                    animate_scroll);
 
 G_END_DECLS
 
