@@ -166,6 +166,17 @@ gb_view_get_title (GbView *self)
   return gb_document_get_title (document);
 }
 
+void
+gb_view_set_back_forward_list (GbView             *self,
+                               IdeBackForwardList *back_forward_list)
+{
+  g_return_if_fail (GB_IS_VIEW (self));
+  g_return_if_fail (IDE_IS_BACK_FORWARD_LIST (back_forward_list));
+
+  if (GB_VIEW_GET_CLASS (self)->set_back_forward_list)
+    GB_VIEW_GET_CLASS (self)->set_back_forward_list (self, back_forward_list);
+}
+
 static void
 gb_view_destroy (GtkWidget *widget)
 {

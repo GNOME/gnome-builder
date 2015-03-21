@@ -20,6 +20,7 @@
 #define GB_VIEW_H
 
 #include <gtk/gtk.h>
+#include <ide.h>
 
 #include "gb-document.h"
 
@@ -33,23 +34,27 @@ struct _GbViewClass
 {
   GtkBinClass parent;
 
-  gboolean     (*get_can_preview) (GbView   *self);
-  gboolean     (*get_can_split)   (GbView   *self);
-  GbDocument  *(*get_document)    (GbView   *self);
-  const gchar *(*get_title)       (GbView   *self);
-  GbView      *(*create_split)    (GbView   *self);
-  void         (*set_split_view)  (GbView   *self,
-                                   gboolean  split_view);
+  gboolean     (*get_can_preview)       (GbView             *self);
+  gboolean     (*get_can_split)         (GbView             *self);
+  GbDocument  *(*get_document)          (GbView             *self);
+  const gchar *(*get_title)             (GbView             *self);
+  GbView      *(*create_split)          (GbView             *self);
+  void         (*set_split_view)        (GbView             *self,
+                                         gboolean            split_view);
+  void         (*set_back_forward_list) (GbView             *self,
+                                         IdeBackForwardList *back_forward_list);
 };
 
-GbView      *gb_view_create_split    (GbView   *self);
-gboolean     gb_view_get_can_preview (GbView   *self);
-gboolean     gb_view_get_can_split   (GbView   *self);
-GbDocument  *gb_view_get_document    (GbView   *self);
-const gchar *gb_view_get_title       (GbView   *self);
-GtkWidget   *gb_view_get_controls    (GbView   *self);
-void         gb_view_set_split_view  (GbView   *self,
-                                      gboolean  split_view);
+GbView      *gb_view_create_split          (GbView             *self);
+gboolean     gb_view_get_can_preview       (GbView             *self);
+gboolean     gb_view_get_can_split         (GbView             *self);
+GbDocument  *gb_view_get_document          (GbView             *self);
+const gchar *gb_view_get_title             (GbView             *self);
+GtkWidget   *gb_view_get_controls          (GbView             *self);
+void         gb_view_set_split_view        (GbView             *self,
+                                            gboolean            split_view);
+void         gb_view_set_back_forward_list (GbView             *self,
+                                            IdeBackForwardList *back_forward_list);
 
 G_END_DECLS
 
