@@ -149,6 +149,20 @@ ide_back_forward_list_get_can_go_forward (IdeBackForwardList *self)
   return (self->forward->length > 0);
 }
 
+static void
+ide_back_forward_list_prune (IdeBackForwardList *self)
+{
+  g_assert (IDE_IS_BACK_FORWARD_LIST (self));
+
+  while (self->backward->length > MAX_ITEMS_TOTAL)
+    {
+      IdeBackForwardList *item;
+
+      item = g_queue_pop_tail (self->backward);
+      g_clear_object (&item);
+    }
+}
+
 void
 ide_back_forward_list_push (IdeBackForwardList *self,
                             IdeBackForwardItem *item)
@@ -188,6 +202,8 @@ ide_back_forward_list_push (IdeBackForwardList *self,
     self->current_item = g_queue_pop_head (self->backward);
   else
     self->current_item = g_object_ref (item);
+
+  ide_back_forward_list_prune (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CAN_GO_BACKWARD]);
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CAN_GO_FORWARD]);
