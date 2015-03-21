@@ -162,6 +162,38 @@ gb_view_stack_real_empty (GbViewStack *self)
 }
 
 static void
+navigate_to_cb (GbViewStack        *self,
+                IdeBackForwardItem *item,
+                IdeBackForwardList *back_forward_list)
+{
+  IdeSourceLocation *srcloc;
+  IdeFile *file;
+  guint line;
+  guint line_offset;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+  g_assert (IDE_IS_BACK_FORWARD_ITEM (item));
+  g_assert (IDE_IS_BACK_FORWARD_LIST (back_forward_list));
+
+  srcloc = ide_back_forward_item_get_location (item);
+  file = ide_source_location_get_file (srcloc);
+  line = ide_source_location_get_line (srcloc);
+  line_offset = ide_source_location_get_line_offset (srcloc);
+
+  /* implausable ... but defensive */
+  if (file == NULL)
+    return;
+
+  /* TODO: get buffer for file, move cursor to location */
+
+  {
+    gchar *path = g_file_get_path (ide_file_get_file (file));
+    g_print (">>> Load document %s +%u:%u\n", path, line, line_offset);
+    g_free (path);
+  }
+}
+
+static void
 gb_view_stack_context_handler (GtkWidget  *widget,
                                IdeContext *context)
 {
@@ -177,6 +209,12 @@ gb_view_stack_context_handler (GtkWidget  *widget,
 
       g_clear_object (&self->back_forward_list);
       self->back_forward_list = ide_back_forward_list_branch (back_forward);
+
+      g_signal_connect_object (self->back_forward_list,
+                               "navigate-to",
+                               G_CALLBACK (navigate_to_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
 
       g_object_bind_property (self->back_forward_list, "can-go-backward",
                               self->go_backward, "sensitive",
