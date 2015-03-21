@@ -40,3 +40,8 @@ EXTRA_DIST += \
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
 
+debug:
+	G_DEBUG=fatal-criticals $(LIBTOOL) --mode=execute gdb --args gnome-builder test.c
+
+valgrind:
+	G_DEBUG=fatal-criticals $(LIBTOOL) --mode=execute valgrind gnome-builder test.c
