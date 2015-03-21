@@ -368,10 +368,13 @@ gb_vim_command_colorscheme (GtkSourceView  *source_view,
   GtkSourceStyleSchemeManager *manager;
   GtkSourceStyleScheme *style_scheme;
   GtkTextBuffer *buffer;
+  g_autofree gchar *trimmed = NULL;
+
+  trimmed = g_strstrip (g_strdup (options));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
   manager = gtk_source_style_scheme_manager_get_default ();
-  style_scheme = gtk_source_style_scheme_manager_get_scheme (manager, options);
+  style_scheme = gtk_source_style_scheme_manager_get_scheme (manager, trimmed);
 
   if (style_scheme == NULL)
     {
@@ -832,6 +835,48 @@ gb_vim_complete_edit (GtkSourceView *source_view,
   g_strfreev (parts);
 }
 
+static void
+gb_vim_complete_colorscheme (const gchar *line,
+                             GPtrArray   *ar)
+{
+  GtkSourceStyleSchemeManager *manager;
+  const gchar * const *scheme_ids;
+  const gchar *tmp;
+  g_autofree gchar *prefix = NULL;
+  gsize i;
+
+  manager = gtk_source_style_scheme_manager_get_default ();
+  scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
+
+  tmp = strchr (line, ' ');
+
+  for (tmp = strchr (line, ' ');
+       tmp && *tmp && g_unichar_isspace (g_utf8_get_char (tmp));
+       tmp = g_utf8_next_char (tmp))
+    {
+      /* do nothing */
+    }
+
+  if (!tmp)
+    return;
+
+  prefix = g_strndup (line, tmp - line);
+
+  for (i = 0; scheme_ids [i]; i++)
+    {
+      const gchar *scheme_id = scheme_ids [i];
+
+      if (g_str_has_prefix (scheme_id, tmp))
+        {
+          gchar *item;
+
+          item = g_strdup_printf ("%s%s", prefix, scheme_id);
+          IDE_TRACE_MSG ("colorscheme: %s", item);
+          g_ptr_array_add (ar, item);
+        }
+    }
+}
+
 gchar **
 gb_vim_complete (GtkSourceView *source_view,
                  const gchar   *line)
@@ -846,6 +891,8 @@ gb_vim_complete (GtkSourceView *source_view,
         gb_vim_complete_set (line, ar);
       else if (g_str_has_prefix (line, "e ") || g_str_has_prefix (line, "edit "))
         gb_vim_complete_edit (source_view, line, ar);
+      else if (g_str_has_prefix (line, "colorscheme "))
+        gb_vim_complete_colorscheme (line, ar);
       else
         gb_vim_complete_command (line, ar);
     }
