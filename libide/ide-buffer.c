@@ -526,6 +526,89 @@ ide_buffer_reload_change_monitor (IdeBuffer *self)
 }
 
 static void
+ide_buffer_do_modeline (IdeBuffer *self)
+{
+  g_autofree gchar *line = NULL;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (self), &begin);
+  end = begin;
+  gtk_text_iter_forward_to_line_end (&end);
+  line = gtk_text_iter_get_slice (&begin, &end);
+
+  if (((line [0] == '#') && (line [1] == '!')) || g_str_has_prefix (line, "<?xml"))
+    {
+      GtkSourceLanguage *language;
+      const gchar *lang_id = NULL;
+      const gchar *target = NULL;
+      const gchar *tmp;
+
+      /*
+       * This is pretty hacky, but I don't want to call out to anything external either.
+       * If there is a discovery thing that does this that is simply to reuse (or port),
+       * just point me at it. I guess *one* option might be to use the content_type guessing that
+       * comes from glib, g_content_type_guess().
+       */
+
+      if (g_str_has_prefix (line, "<?xml"))
+        {
+          target = "xml";
+        }
+      else if ((tmp = strstr (line, "python")) != NULL)
+        {
+          if (strstr (tmp, "python3") != NULL)
+            target = "python3";
+          else
+            target = "python";
+        }
+      else if (strstr (line, "gjs") != NULL)
+        {
+          target = "javascript";
+        }
+      else if (strstr (line, "ruby") != NULL)
+        {
+          target = "ruby";
+        }
+      else if ((strstr (line, " sh") != NULL) ||
+               (strstr (line, " bash") != NULL) ||
+               (strstr (line, "/sh") != NULL) ||
+               (strstr (line, "/bash") != NULL))
+        {
+          target = "sh";
+        }
+      else if ((strstr (line, "perl") != NULL))
+        {
+          target = "perl";
+        }
+      else if ((strstr (line, "php") != NULL))
+        {
+          target = "php";
+        }
+      else if ((strstr (line, "graphviz") != NULL) ||
+               (strstr (line, "neato") != NULL))
+        {
+          target = "dot";
+        }
+
+      language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self));
+      if (language != NULL)
+        lang_id = gtk_source_language_get_id (language);
+
+      if (0 != g_strcmp0 (lang_id, target))
+        {
+          GtkSourceLanguageManager *manager;
+
+          manager = gtk_source_language_manager_get_default ();
+          language = gtk_source_language_manager_get_language (manager, target);
+          g_object_set (self, "language", language, NULL);
+        }
+    }
+}
+
+static void
 ide_buffer_changed (GtkTextBuffer *buffer)
 {
   IdeBuffer *self = (IdeBuffer *)buffer;
@@ -556,8 +639,28 @@ ide_buffer_insert_text (GtkTextBuffer *buffer,
                         const gchar   *text,
                         gint           len)
 {
+  gboolean check_modeline = FALSE;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (location);
+  g_assert (text);
+
+  /*
+   * If we are inserting a \n at the end of the first line, then we might want to adjust the
+   * GtkSourceBuffer:language property to reflect the format. This is similar to emacs "modelines",
+   * which is apparently a bit of an overloaded term as is not to be confused with editor setting
+   * modelines.
+   */
+  if ((gtk_text_iter_get_line (location) == 0) && gtk_text_iter_ends_line (location) &&
+      ((text [0] == '\n') || ((len > 1) && (strchr (text, '\n') != NULL))))
+    check_modeline = TRUE;
+
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->insert_text (buffer, location, text, len);
+
   ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
+
+  if (check_modeline)
+    ide_buffer_do_modeline (IDE_BUFFER (buffer));
 }
 
 static void
