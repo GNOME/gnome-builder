@@ -251,9 +251,41 @@ gb_workbench_actions_show_command_bar (GSimpleAction *action,
   gb_command_bar_show (self->command_bar);
 }
 
+static void
+gb_workbench_actions_nighthack (GSimpleAction *action,
+                                GVariant      *parameter,
+                                gpointer       user_data)
+{
+  g_autoptr(GSettings) settings = NULL;
+
+  g_object_set (gtk_settings_get_default (),
+                "gtk-application-prefer-dark-theme", TRUE,
+                NULL);
+
+  settings = g_settings_new ("org.gnome.builder.editor");
+  g_settings_set_string (settings, "style-scheme-name", "builder-dark");
+}
+
+static void
+gb_workbench_actions_dayhack (GSimpleAction *action,
+                              GVariant      *parameter,
+                              gpointer       user_data)
+{
+  g_autoptr(GSettings) settings = NULL;
+
+  g_object_set (gtk_settings_get_default (),
+                "gtk-application-prefer-dark-theme", FALSE,
+                NULL);
+
+  settings = g_settings_new ("org.gnome.builder.editor");
+  g_settings_set_string (settings, "style-scheme-name", "builder");
+}
+
 static const GActionEntry GbWorkbenchActions[] = {
   { "build",            gb_workbench_actions_build },
+  { "dayhack",          gb_workbench_actions_dayhack },
   { "global-search",    gb_workbench_actions_global_search },
+  { "nighthack",        gb_workbench_actions_nighthack },
   { "open",             gb_workbench_actions_open },
   { "open-uri-list",    gb_workbench_actions_open_uri_list, "as" },
   { "save-all",         gb_workbench_actions_save_all },
