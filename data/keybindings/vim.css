@@ -366,6 +366,14 @@
                     "clear-count" ()
                     "end-macro" () };
 
+ /* delete to end of line and go to insert */
+  bind "<shift>c" { "begin-macro" ()
+                    "movement" (last-char, 1, 0, 0)
+                    "copy-clipboard" ()
+                    "delete-selection" ()
+                    "clear-count" ()
+                    "set-mode" ("vim-insert", permanent) };
+
   /* delete current char */
   bind "x" { "begin-macro" ()
              "movement" (next-char, 1, 1, 1)
