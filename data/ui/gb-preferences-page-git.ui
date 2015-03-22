@@ -59,10 +59,6 @@
           </packing>
         </child>
       </object>
-      <packing>
-        <property name="name">git</property>
-        <property name="title" translatable="yes">Git</property>
-      </packing>
     </child>
   </template>
 </interface>
