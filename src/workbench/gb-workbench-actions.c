@@ -281,6 +281,20 @@ gb_workbench_actions_dayhack (GSimpleAction *action,
   g_settings_set_string (settings, "style-scheme-name", "builder");
 }
 
+static void
+gb_workbench_actions_search_docs (GSimpleAction *action,
+                                  GVariant      *parameter,
+                                  gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+  const gchar *str;
+
+  g_return_if_fail (GB_IS_WORKBENCH (self));
+
+  str = g_variant_get_string (parameter, NULL);
+  gb_editor_workspace_search_help (self->editor_workspace, str);
+}
+
 static const GActionEntry GbWorkbenchActions[] = {
   { "build",            gb_workbench_actions_build },
   { "dayhack",          gb_workbench_actions_dayhack },
@@ -289,6 +303,7 @@ static const GActionEntry GbWorkbenchActions[] = {
   { "open",             gb_workbench_actions_open },
   { "open-uri-list",    gb_workbench_actions_open_uri_list, "as" },
   { "save-all",         gb_workbench_actions_save_all },
+  { "search-docs",        gb_workbench_actions_search_docs, "s" },
   { "show-command-bar", gb_workbench_actions_show_command_bar },
 };
 

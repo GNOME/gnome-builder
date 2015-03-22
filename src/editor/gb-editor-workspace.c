@@ -26,6 +26,7 @@
 #include "gb-editor-workspace.h"
 #include "gb-editor-workspace-actions.h"
 #include "gb-editor-workspace-private.h"
+#include "gb-string.h"
 #include "gb-view-grid.h"
 #include "gb-widget.h"
 
@@ -190,6 +191,50 @@ gb_editor_workspace_show_help (GbEditorWorkspace *self,
   document = g_object_new (GB_TYPE_DEVHELP_DOCUMENT,
                            "uri", uri,
                            NULL);
+
+  last_focus = gb_view_grid_get_last_focus (self->view_grid);
+
+  if (last_focus == NULL)
+    {
+      gb_view_grid_focus_document (self->view_grid, document);
+      return;
+    }
+
+  after = gb_view_grid_get_stack_after (self->view_grid, GB_VIEW_STACK (last_focus));
+
+  if (after == NULL)
+    after = gb_view_grid_add_stack_after (self->view_grid, GB_VIEW_STACK (last_focus));
+
+  gb_view_stack_focus_document (GB_VIEW_STACK (after), document);
+
+  g_clear_object (&document);
+}
+
+void
+gb_editor_workspace_search_help (GbEditorWorkspace *self,
+                                 const gchar       *keywords)
+{
+  GbDocument *document;
+  GtkWidget *last_focus;
+  GtkWidget *after;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (self));
+
+  if (gb_str_empty0 (keywords))
+    return;
+
+  document = gb_view_grid_find_document_typed (self->view_grid, GB_TYPE_DEVHELP_DOCUMENT);
+
+  if (document != NULL)
+    {
+      gb_devhelp_document_set_search (GB_DEVHELP_DOCUMENT (document), keywords);
+      gb_view_grid_focus_document (self->view_grid, document);
+      return;
+    }
+
+  document = g_object_new (GB_TYPE_DEVHELP_DOCUMENT,
+                           NULL);
+  gb_devhelp_document_set_search (GB_DEVHELP_DOCUMENT (document), keywords);
 
   last_focus = gb_view_grid_get_last_focus (self->view_grid);
 

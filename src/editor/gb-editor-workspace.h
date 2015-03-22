@@ -27,8 +27,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbEditorWorkspace, gb_editor_workspace, GB, EDITOR_WORKSPACE, GbWorkspace)
 
-void gb_editor_workspace_show_help (GbEditorWorkspace *self,
-                                    const gchar       *uri);
+void gb_editor_workspace_search_help (GbEditorWorkspace *self,
+                                      const gchar       *keyword);
+void gb_editor_workspace_show_help   (GbEditorWorkspace *self,
+                                      const gchar       *uri);
 
 G_END_DECLS
 

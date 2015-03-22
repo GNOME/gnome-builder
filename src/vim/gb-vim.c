@@ -592,11 +592,25 @@ gb_vim_jump_to_line (GtkSourceView  *source_view,
   return TRUE;
 }
 
+static gboolean
+gb_vim_command_help (GtkSourceView  *source_view,
+                     const gchar    *command,
+                     const gchar    *options,
+                     GError        **error)
+{
+  GVariant *param;
+
+  param = g_variant_new_string (options);
+  gb_widget_activate_action (GTK_WIDGET (source_view), "workbench", "search-docs", param);
+  return TRUE;
+}
+
 static const GbVimCommand vim_commands[] = {
   { "cnext",       gb_vim_command_cnext },
   { "colorscheme", gb_vim_command_colorscheme },
   { "cprevious",   gb_vim_command_cprevious },
   { "edit",        gb_vim_command_edit },
+  { "help",        gb_vim_command_help },
   { "nohl",        gb_vim_command_nohl },
   { "quit",        gb_vim_command_quit },
   { "set",         gb_vim_command_set },
