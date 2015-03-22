@@ -23,6 +23,7 @@
 
 #include "ide-context.h"
 #include "ide-git-search-index.h"
+#include "ide-git-search-result.h"
 #include "ide-project.h"
 #include "ide-search-context.h"
 #include "ide-search-provider.h"
@@ -34,6 +35,7 @@ struct _IdeGitSearchIndex
   IdeObject parent_instance;
 
   GFile *location;
+  GFile *workdir;
   gchar *shorthand;
   Fuzzy *fuzzy;
 };
@@ -211,6 +213,7 @@ ide_git_search_index_populate (IdeGitSearchIndex *self,
           g_autofree gchar *shortname = NULL;
           g_autofree gchar *markup = NULL;
           g_autoptr(IdeSearchResult) result = NULL;
+          GFile *file;
           gchar **parts;
           gsize j;
 
@@ -223,18 +226,17 @@ ide_git_search_index_populate (IdeGitSearchIndex *self,
             g_string_append_printf (str, " / %s", parts [j]);
           g_strfreev (parts);
 
-          /* highlight the title string with underlines */
           markup = str_highlight (shortname, search_terms);
+          file = g_file_get_child (self->workdir, match->value);
 
-          /* create our search result and connect to signals */
-          result = ide_search_result_new (context, markup, str->str, match->score);
-          g_object_set_qdata_full (G_OBJECT (result), gPathQuark, g_strdup (match->value), g_free);
-#if 0
-          /* I think we might want to leave this signal on the provider */
-          g_signal_connect (result, "activate", G_CALLBACK (activate_cb), NULL);
-#endif
+          result = g_object_new (IDE_TYPE_GIT_SEARCH_RESULT,
+                                 "context", context,
+                                 "title", markup,
+                                 "subtitle", str->str,
+                                 "score", match->score,
+                                 "file", file,
+                                 NULL);
 
-          /* push the result through the search reducer */
           ide_search_reducer_push (&reducer, result);
         }
     }
@@ -249,6 +251,7 @@ ide_git_search_index_finalize (GObject *object)
   IdeGitSearchIndex *self = (IdeGitSearchIndex *)object;
 
   g_clear_object (&self->location);
+  g_clear_object (&self->workdir);
   g_clear_pointer (&self->shorthand, g_free);
   g_clear_pointer (&self->fuzzy, fuzzy_unref);
 
@@ -355,6 +358,8 @@ ide_git_search_index_init_worker (GTask        *task,
       g_task_return_error (task, error);
       goto cleanup;
     }
+
+  self->workdir = ggit_repository_get_workdir (repository);
 
   ref = ggit_repository_get_head (repository, NULL);
 

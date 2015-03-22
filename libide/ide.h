@@ -89,6 +89,7 @@ G_BEGIN_DECLS
 #include "autotools/ide-autotools-build-system.h"
 #include "directory/ide-directory-build-system.h"
 #include "directory/ide-directory-vcs.h"
+#include "git/ide-git-search-result.h"
 #include "git/ide-git-vcs.h"
 #include "local/ide-local-device.h"
 #include "theatrics/ide-animation.h"
