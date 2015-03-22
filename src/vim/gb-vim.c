@@ -564,6 +564,33 @@ gb_vim_command_cprevious (GtkSourceView  *source_view,
   return TRUE;
 }
 
+static gboolean
+gb_vim_jump_to_line (GtkSourceView  *source_view,
+                     const gchar    *command,
+                     const gchar    *options,
+                     GError        **error)
+{
+  GtkTextBuffer *buffer;
+  gboolean extend_selection;
+  gint line;
+
+  if (!IDE_IS_SOURCE_VIEW (source_view))
+    return TRUE;
+
+  if (!int32_parse (&line, command, 0, G_MAXINT32, "line number", error))
+    return FALSE;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
+  extend_selection = gtk_text_buffer_get_has_selection (buffer);
+  g_signal_emit_by_name (source_view,
+                         "movement",
+                         IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE,
+                         extend_selection, TRUE, TRUE);
+  ide_source_view_set_count (IDE_SOURCE_VIEW (source_view), 0);
+  g_signal_emit_by_name (source_view, "save-insert-mark");
+
+  return TRUE;
+}
 
 static const GbVimCommand vim_commands[] = {
   { "cnext",       gb_vim_command_cnext },
@@ -586,6 +613,8 @@ static const GbVimCommand vim_commands[] = {
 static const GbVimCommand *
 lookup_command (const gchar *name)
 {
+  static const GbVimCommand line_command = { "__line__", gb_vim_jump_to_line };
+  gint line;
   gsize i;
 
   g_assert (name);
@@ -595,6 +624,9 @@ lookup_command (const gchar *name)
       if (g_str_has_prefix (vim_commands [i].name, name))
         return &vim_commands [i];
     }
+
+  if (int32_parse (&line, name, 0, G_MAXINT32, "line", NULL))
+    return &line_command;
 
   return NULL;
 }
