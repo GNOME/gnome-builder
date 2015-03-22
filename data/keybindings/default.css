@@ -28,6 +28,9 @@
 
   bind "<ctrl>0" { "move-error" (down) };
   bind "<ctrl>9" { "move-error" (up) };
+
+  bind "<ctrl>Return" { "action" ("workbench", "show-command-bar", "") };
+  bind "<ctrl>KP_Enter" { "action" ("workbench", "show-command-bar", "") };
 }
 
 IdeSourceViewMode.default {
