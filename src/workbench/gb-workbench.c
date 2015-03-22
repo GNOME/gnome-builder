@@ -477,6 +477,17 @@ gb_workbench_set_active_workspace (GbWorkbench *self,
     gtk_stack_set_visible_child (self->stack, GTK_WIDGET (workspace));
 }
 
+static gboolean
+supports_content_type (const gchar *content_type)
+{
+  return (g_str_has_prefix (content_type, "text/") ||
+          g_str_equal (content_type, "application/x-ruby") ||
+          g_str_equal (content_type, "application/xml") ||
+          g_str_equal (content_type, "application/x-ruby") ||
+          g_str_equal (content_type, "application/javascript") ||
+          g_str_equal (content_type, "application/x-gtk-builder"));
+}
+
 static void
 gb_workbench__query_info_cb (GObject      *object,
                              GAsyncResult *result,
@@ -513,7 +524,7 @@ gb_workbench__query_info_cb (GObject      *object,
   g_debug ("Open with content_type=\"%s\"", content_type);
 
   /* If this doesn't look like text, let's open it with xdg-open */
-  if (!g_str_has_prefix (content_type, "text"))
+  if (!supports_content_type (content_type))
     {
       g_autofree gchar *uri = NULL;
 
