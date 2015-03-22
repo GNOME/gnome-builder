@@ -100,11 +100,6 @@ gb_search_display_real_result_activated (GbSearchDisplay *self,
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (self));
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
 
-#if 1
-  g_warning ("ACTICATE SEARCH RESULT");
-#else
-  ide_search_result_activate (result);
-#endif
 }
 
 static void
