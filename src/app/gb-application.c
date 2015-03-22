@@ -200,6 +200,11 @@ gb_application_load_keybindings (GbApplication *self)
 {
   g_autoptr(GSettings) settings = NULL;
   g_autofree gchar *name = NULL;
+  static const struct { gchar *name; gchar *binding; } shared_bindings[] = {
+    { "workbench.global-search", "<ctrl>period" },
+    { NULL }
+  };
+  gsize i;
 
   g_assert (GB_IS_APPLICATION (self));
 
@@ -207,6 +212,14 @@ gb_application_load_keybindings (GbApplication *self)
   name = g_settings_get_string (settings, "keybindings");
   self->keybindings = gb_keybindings_new (GTK_APPLICATION (self), name);
   g_settings_bind (settings, "keybindings", self->keybindings, "mode", G_SETTINGS_BIND_GET);
+
+  for (i = 0; shared_bindings [i].name; i++)
+    {
+      const gchar *accels[2] = { shared_bindings [i].binding, NULL };
+      gtk_application_set_accels_for_action (GTK_APPLICATION (self),
+                                             shared_bindings [i].name,
+                                             accels);
+    }
 }
 
 static GbWorkbench *
