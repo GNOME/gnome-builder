@@ -202,6 +202,7 @@ gb_application_load_keybindings (GbApplication *self)
   g_autofree gchar *name = NULL;
   static const struct { gchar *name; gchar *binding; } shared_bindings[] = {
     { "workbench.global-search", "<ctrl>period" },
+    { "app.preferences", "<ctrl>comma" },
     { NULL }
   };
   gsize i;
