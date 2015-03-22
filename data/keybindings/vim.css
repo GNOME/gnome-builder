@@ -96,7 +96,7 @@
   bind "<ctrl><shift>o" { "action" ("workbench", "open", "") };
 
   bind "F4" { "action" ("view", "find-other-file", "") };
-  bind "F9" { "action" ("view", "preview", "") };
+  bind "F6" { "action" ("view", "preview", "") };
 }
 
 @binding-set builder-vim-source-view-normal-with-count
