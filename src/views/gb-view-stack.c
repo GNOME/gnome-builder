@@ -248,6 +248,13 @@ gb_view_stack_hierarchy_changed (GtkWidget *widget,
 
   g_assert (GB_IS_VIEW_STACK (self));
 
+  if (GB_IS_WORKBENCH (old_toplevel))
+    {
+      g_signal_handlers_disconnect_by_func (old_toplevel,
+                                            G_CALLBACK (gb_view_stack_on_workbench_unload),
+                                            self);
+    }
+
   toplevel = gtk_widget_get_toplevel (widget);
 
   if (GB_IS_WORKBENCH (toplevel))
