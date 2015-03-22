@@ -477,14 +477,68 @@ gb_workbench_set_active_workspace (GbWorkbench *self,
     gtk_stack_set_visible_child (self->stack, GTK_WIDGET (workspace));
 }
 
+static void
+gb_workbench__query_info_cb (GObject      *object,
+                             GAsyncResult *result,
+                             gpointer      user_data)
+{
+  IdeBufferManager *buffer_manager;
+  GFile *file = (GFile *)object;
+  IdeProject *project;
+  g_autoptr(IdeFile) idefile = NULL;
+  g_autoptr(GbWorkbench) self = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFileInfo) file_info = NULL;
+  const gchar *content_type;
+
+  file_info = g_file_query_info_finish (file, result, &error);
+
+  if (error)
+    {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        goto open_buffer;
+      g_warning ("%s", error->message);
+      return;
+    }
+
+  g_assert (G_IS_FILE_INFO (file_info));
+
+  content_type = g_file_info_get_attribute_string (file_info,
+                                                   G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
+
+  /* Hrmm, what to do .. */
+  if (!content_type)
+    return;
+
+  g_debug ("Open with content_type=\"%s\"", content_type);
+
+  /* If this doesn't look like text, let's open it with xdg-open */
+  if (!g_str_has_prefix (content_type, "text"))
+    {
+      g_autofree gchar *uri = NULL;
+
+      uri = g_file_get_uri (file);
+      g_app_info_launch_default_for_uri (uri, NULL, NULL);
+      return;
+    }
+
+open_buffer:
+  if (self->context == NULL)
+    {
+      /* Must be shutting down. */
+      return;
+    }
+
+  buffer_manager = ide_context_get_buffer_manager (self->context);
+  project = ide_context_get_project (self->context);
+  idefile = ide_project_get_project_file (project, file);
+  ide_buffer_manager_load_file_async (buffer_manager, idefile, FALSE, NULL, NULL, NULL, NULL);
+}
+
 void
 gb_workbench_open (GbWorkbench *self,
                    GFile       *file)
 {
-  g_autoptr(IdeFile) idefile = NULL;
-  IdeBufferManager *buffer_manager;
-  IdeProject *project;
-
   g_return_if_fail (GB_IS_WORKBENCH (self));
   g_return_if_fail (self->unloading == FALSE);
   g_return_if_fail (self->context);
@@ -494,10 +548,13 @@ gb_workbench_open (GbWorkbench *self,
    *       we will just try to open it with the buffer manager.
    */
 
-  buffer_manager = ide_context_get_buffer_manager (self->context);
-  project = ide_context_get_project (self->context);
-  idefile = ide_project_get_project_file (project, file);
-  ide_buffer_manager_load_file_async (buffer_manager, idefile, FALSE, NULL, NULL, NULL, NULL);
+  g_file_query_info_async (file,
+                           G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           NULL,
+                           gb_workbench__query_info_cb,
+                           g_object_ref (self));
 }
 
 /**
