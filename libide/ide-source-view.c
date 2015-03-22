@@ -213,6 +213,7 @@ enum {
   PUSH_SELECTION,
   PUSH_SNIPPET,
   REPLAY_MACRO,
+  REQUEST_DOCUMENTATION,
   RESTORE_INSERT_MARK,
   SAVE_INSERT_MARK,
   SELECTION_THEATRIC,
@@ -5225,6 +5226,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   1,
                   G_TYPE_BOOLEAN);
+
+  gSignals [REQUEST_DOCUMENTATION] =
+    g_signal_new ("request-documentation",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, request_documentation),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   gSignals [RESTORE_INSERT_MARK] =
     g_signal_new ("restore-insert-mark",

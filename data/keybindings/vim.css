@@ -180,6 +180,14 @@
                  "movement" (first-nonspace-char, 0, 1, 0)
                  "clear-count" () };
 
+  bind "<shift>k" { "clear-selection" ()
+                    "movement" (previous-word-end, 0, 1, 1)
+                    "movement" (next-word-start, 0, 1, 0)
+                    "movement" (next-word-end, 1, 0, 1)
+                    "request-documentation" ()
+                    "clear-count" ()
+                    "clear-selection" () };
+
   /* swallow the current character and go to insert */
   bind "s" { "begin-macro" ()
              "set-mode" ("vim-insert", permanent)

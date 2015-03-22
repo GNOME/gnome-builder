@@ -256,6 +256,7 @@ struct _IdeSourceViewClass
                                        const GtkTextIter       *location);
   void (*replay_macro)                (IdeSourceView           *self,
                                        gboolean                 use_count);
+  void (*request_documentation)       (IdeSourceView           *self);
   void (*restore_insert_mark)         (IdeSourceView           *self);
   void (*save_insert_mark)            (IdeSourceView           *self);
   void (*selection_theatric)          (IdeSourceView           *self,

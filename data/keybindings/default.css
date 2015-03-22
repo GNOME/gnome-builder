@@ -16,7 +16,13 @@
   bind "<ctrl>Page_Down" { "action" ("view-stack", "next-view", "") };
   bind "<ctrl>KP_Page_Down" { "action" ("view-stack", "next-view", "") };
 
-  /* toggle header/source */
+  bind "F2" { "clear-selection" ()
+              "movement" (previous-word-end, 0, 1, 1)
+              "movement" (next-word-start, 0, 1, 0)
+              "movement" (next-word-end, 1, 0, 1)
+              "request-documentation" ()
+              "clear-count" ()
+              "clear-selection" () };
   bind "F4" { "action" ("view", "find-other-file", "") };
   bind "F9" { "action" ("view", "preview", "") };
 }

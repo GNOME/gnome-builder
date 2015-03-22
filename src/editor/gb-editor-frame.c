@@ -338,6 +338,27 @@ gb_editor_frame__source_view_focus_in_event (GbEditorFrame *self,
 }
 
 static void
+gb_editor_frame__source_view_request_documentation (GbEditorFrame *self,
+                                                    IdeSourceView *source_view)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+  GVariant *param;
+  g_autofree gchar *text = NULL;
+
+  g_assert (GB_IS_EDITOR_FRAME (self));
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  text = gtk_text_iter_get_slice (&begin, &end);
+
+  param = g_variant_new_string (text);
+  gb_widget_activate_action (GTK_WIDGET (self), "workbench", "search-docs", param);
+}
+
+static void
 gb_editor_frame_constructed (GObject *object)
 {
   GbEditorFrame *self = (GbEditorFrame *)object;
@@ -353,6 +374,12 @@ gb_editor_frame_constructed (GObject *object)
   g_signal_connect_object (self->source_view,
                            "focus-in-event",
                            G_CALLBACK (gb_editor_frame__source_view_focus_in_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->source_view,
+                           "request-documentation",
+                           G_CALLBACK (gb_editor_frame__source_view_request_documentation),
                            self,
                            G_CONNECT_SWAPPED);
 
