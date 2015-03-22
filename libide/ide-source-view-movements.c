@@ -422,6 +422,11 @@ ide_source_view_movements_nth_line (Movement *mv)
     gtk_text_iter_set_line (&mv->insert, mv->count - 1);
 
   gtk_text_iter_set_line_offset (&mv->insert, 0);
+
+  while (!gtk_text_iter_ends_line (&mv->insert) &&
+         g_unichar_isspace (gtk_text_iter_get_char (&mv->insert)))
+    if (!gtk_text_iter_forward_char (&mv->insert))
+      break;
 }
 
 static void
