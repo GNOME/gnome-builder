@@ -481,11 +481,16 @@ static gboolean
 supports_content_type (const gchar *content_type)
 {
   return (g_str_has_prefix (content_type, "text/") ||
-          g_str_equal (content_type, "application/x-ruby") ||
-          g_str_equal (content_type, "application/xml") ||
-          g_str_equal (content_type, "application/x-ruby") ||
           g_str_equal (content_type, "application/javascript") ||
-          g_str_equal (content_type, "application/x-gtk-builder"));
+          g_str_equal (content_type, "application/x-desktop") ||
+          g_str_equal (content_type, "application/x-gettext-translation") ||
+          g_str_equal (content_type, "application/x-gtk-builder") ||
+          g_str_equal (content_type, "application/x-m4") ||
+          g_str_equal (content_type, "application/x-pak") ||
+          g_str_equal (content_type, "application/x-perl") ||
+          g_str_equal (content_type, "application/x-ruby") ||
+          g_str_equal (content_type, "application/x-shellscript") ||
+          g_str_equal (content_type, "application/xml"));
 }
 
 static void
