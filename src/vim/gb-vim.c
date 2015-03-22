@@ -450,6 +450,7 @@ gb_vim_command_split (GtkSourceView  *source_view,
                       const gchar    *options,
                       GError        **error)
 {
+  gb_widget_activate_action (GTK_WIDGET (source_view), "view-stack", "split-down", NULL);
   return TRUE;
 }
 
@@ -459,6 +460,7 @@ gb_vim_command_vsplit (GtkSourceView  *source_view,
                        const gchar    *options,
                        GError        **error)
 {
+  gb_widget_activate_action (GTK_WIDGET (source_view), "view-stack", "split-left", NULL);
   return TRUE;
 }
 
