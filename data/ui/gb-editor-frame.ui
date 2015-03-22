@@ -115,6 +115,11 @@
                 <property name="smart-backspace">true</property>
                 <property name="snippet-completion">true</property>
                 <property name="visible">true</property>
+                <child internal-child="completion">
+                  <object class="GtkSourceCompletion">
+                    <property name="show-headers">false</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
