@@ -137,59 +137,6 @@ GtkEntry.gb-command-bar-entry {
 }
 
 
-/*
- * Tab header styling.
- */
-GtkMenuButton.tab-header-first .button,
-GtkButton.tab-header-first {
-    border-left: none;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    box-shadow: none;
-}
-GtkMenuButton.tab-header-last .button,
-GtkButton.tab-header-last {
-    border-right: none;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    box-shadow: none;
-}
-GtkMenuButton.tab-control-first .button,
-GtkButton.tab-control-first {
-    border-left: none;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    box-shadow: none;
-}
-GtkMenuButton.tab-control-last .button,
-GtkButton.tab-control-last {
-    border-right: none;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    box-shadow: none;
-}
-
-
-
-#project-title {
-    border-left: none;
-    border-right: none;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-}
-
-
-GbCreditsWidget GtkEventBox {
-    background-color: #000000;
-}
-
-GbCreditsWidget GtkLabel {
-    color: #eeeeef;
-}
-
-
 GbSourceStyleSchemeWidget GtkSourceView {
     font-family: Monospace;
 }
@@ -211,10 +158,14 @@ GbDocumentStack .button {
     transition: none;
 }
 
+
 GbViewStack GtkBox.header.notebook {
     border-bottom: 1px solid @borders;
 }
-
 GbViewStack:not(.focused) GtkBox.header.notebook {
     background-color: shade (@theme_bg_color, 0.95);
+}
+
+GbEditorWorkspace > GtkPaned > GtkBox > GtkBox.header.notebook {
+    border-bottom: 1px solid @borders;
 }
