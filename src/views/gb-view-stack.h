@@ -31,18 +31,20 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbViewStack, gb_view_stack, GB, VIEW_STACK, GtkBin)
 
-GtkWidget *gb_view_stack_new                (void);
-void       gb_view_stack_remove             (GbViewStack       *self,
-                                             GbView            *view);
-GtkWidget *gb_view_stack_get_active_view    (GbViewStack       *self);
-void       gb_view_stack_set_active_view    (GbViewStack       *self,
-                                             GtkWidget         *active_view);
-GtkWidget *gb_view_stack_find_with_document (GbViewStack       *self,
-                                             GbDocument        *document);
-void       gb_view_stack_focus_document     (GbViewStack       *self,
-                                             GbDocument        *document);
-void      gb_view_stack_focus_location      (GbViewStack       *self,
-                                             IdeSourceLocation *location);
+GtkWidget  *gb_view_stack_new                 (void);
+void        gb_view_stack_remove              (GbViewStack       *self,
+                                               GbView            *view);
+GtkWidget  *gb_view_stack_get_active_view     (GbViewStack       *self);
+void        gb_view_stack_set_active_view     (GbViewStack       *self,
+                                               GtkWidget         *active_view);
+GtkWidget  *gb_view_stack_find_with_document  (GbViewStack       *self,
+                                               GbDocument        *document);
+GbDocument *gb_view_stack_find_document_typed (GbViewStack       *self,
+                                               GType              document_type);
+void        gb_view_stack_focus_document      (GbViewStack       *self,
+                                               GbDocument        *document);
+void        gb_view_stack_focus_location      (GbViewStack       *self,
+                                               IdeSourceLocation *location);
 
 G_END_DECLS
 

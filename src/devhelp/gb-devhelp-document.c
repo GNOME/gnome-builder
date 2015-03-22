@@ -81,7 +81,7 @@ gb_devhelp_document_get_uri (GbDevhelpDocument *document)
   return document->priv->uri;
 }
 
-static void
+void
 gb_devhelp_document_set_uri (GbDevhelpDocument *document,
                              const gchar       *uri)
 {
@@ -227,12 +227,14 @@ gb_devhelp_document_set_property (GObject      *object,
                                   const GValue *value,
                                   GParamSpec   *pspec)
 {
-#if 0
   GbDevhelpDocument *self = GB_DEVHELP_DOCUMENT (object);
-#endif
 
   switch (prop_id)
     {
+    case PROP_URI:
+      gb_devhelp_document_set_uri (self, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -257,9 +259,8 @@ gb_devhelp_document_class_init (GbDevhelpDocumentClass *klass)
                          _("URI"),
                          _("The uri to load."),
                          NULL,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_URI,
-                                   gParamSpecs [PROP_URI]);
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_URI, gParamSpecs [PROP_URI]);
 }
 
 static void

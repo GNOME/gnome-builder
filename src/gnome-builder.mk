@@ -30,6 +30,10 @@ libgnome_builder_la_SOURCES = \
 	src/commands/gb-command-vim.h \
 	src/commands/gb-command.c \
 	src/commands/gb-command.h \
+	src/devhelp/gb-devhelp-document.c \
+	src/devhelp/gb-devhelp-document.h \
+	src/devhelp/gb-devhelp-view.c \
+	src/devhelp/gb-devhelp-view.h \
 	src/documents/gb-document.c \
 	src/documents/gb-document.h \
 	src/editor/gb-editor-document.c \
@@ -139,10 +143,6 @@ libgnome_builder_la_SOURCES = \
 	$(NULL)
 
 disabled_files = \
-	src/devhelp/gb-devhelp-document.c \
-	src/devhelp/gb-devhelp-document.h \
-	src/devhelp/gb-devhelp-view.c \
-	src/devhelp/gb-devhelp-view.h \
 	src/editor/gb-source-formatter.c \
 	src/editor/gb-source-formatter.h \
 	src/editor/gb-source-highlight-menu.c \

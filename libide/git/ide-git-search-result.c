@@ -88,9 +88,7 @@ ide_git_search_result_set_property (GObject      *object,
 static void
 ide_git_search_result_class_init (IdeGitSearchResultClass *klass)
 {
-  GObjectClass *object_class;
-
-  object_class = G_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = ide_git_search_result_finalize;
   object_class->get_property = ide_git_search_result_get_property;
   object_class->set_property = ide_git_search_result_set_property;

@@ -20,7 +20,7 @@
 #define GB_DEVHELP_VIEW_H
 
 #include "gb-devhelp-document.h"
-#include "gb-document-view.h"
+#include "gb-view.h"
 
 G_BEGIN_DECLS
 
@@ -38,7 +38,7 @@ typedef struct _GbDevhelpViewPrivate GbDevhelpViewPrivate;
 
 struct _GbDevhelpView
 {
-  GbDocumentView parent;
+  GbView parent;
 
   /*< private >*/
   GbDevhelpViewPrivate *priv;
@@ -46,11 +46,11 @@ struct _GbDevhelpView
 
 struct _GbDevhelpViewClass
 {
-  GbDocumentViewClass parent;
+  GbViewClass parent;
 };
 
-GType           gb_devhelp_view_get_type (void);
-GbDocumentView *gb_devhelp_view_new      (GbDevhelpDocument *document);
+GType   gb_devhelp_view_get_type (void);
+GbView *gb_devhelp_view_new      (GbDevhelpDocument *document);
 
 G_END_DECLS
 

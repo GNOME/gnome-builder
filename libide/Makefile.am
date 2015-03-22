@@ -26,6 +26,8 @@ libide_1_0_la_public_sources = \
 	libide/clang/ide-clang-translation-unit.h \
 	libide/devhelp/ide-devhelp-search-provider.c \
 	libide/devhelp/ide-devhelp-search-provider.h \
+	libide/devhelp/ide-devhelp-search-result.c \
+	libide/devhelp/ide-devhelp-search-result.h \
 	libide/directory/ide-directory-build-system.c \
 	libide/directory/ide-directory-build-system.h \
 	libide/directory/ide-directory-vcs.c \

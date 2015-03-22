@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "gb-editor-workspace.h"
 #include "gb-glib.h"
 #include "gb-scrolled-window.h"
 #include "gb-search-box.h"
@@ -251,6 +252,15 @@ gb_search_box_display_result_activated (GbSearchBox     *self,
       g_object_get (result, "file", &file, NULL);
       if (file)
         gb_workbench_open (workbench, file);
+    }
+  else if (IDE_IS_DEVHELP_SEARCH_RESULT (result))
+    {
+      g_autofree gchar *uri = NULL;
+      GbEditorWorkspace *workspace;
+
+      g_object_get (result, "uri", &uri, NULL);
+      workspace = gb_workbench_get_workspace_typed (workbench, GB_TYPE_EDITOR_WORKSPACE);
+      gb_editor_workspace_show_help (workspace, uri);
     }
   else
     {

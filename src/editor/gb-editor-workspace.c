@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "gb-devhelp-document.h"
 #include "gb-editor-document.h"
 #include "gb-editor-workspace.h"
 #include "gb-editor-workspace-actions.h"
@@ -164,4 +165,46 @@ gb_editor_workspace_init (GbEditorWorkspace *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gb_widget_set_context_handler (self, gb_editor_workspace_context_changed);
+}
+
+void
+gb_editor_workspace_show_help (GbEditorWorkspace *self,
+                               const gchar       *uri)
+{
+  GbDocument *document;
+  GtkWidget *last_focus;
+  GtkWidget *after;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (self));
+  g_return_if_fail (uri);
+
+  document = gb_view_grid_find_document_typed (self->view_grid, GB_TYPE_DEVHELP_DOCUMENT);
+
+  if (document != NULL)
+    {
+      g_object_set (document, "uri", uri, NULL);
+      gb_view_grid_focus_document (self->view_grid, document);
+      return;
+    }
+
+  document = g_object_new (GB_TYPE_DEVHELP_DOCUMENT,
+                           "uri", uri,
+                           NULL);
+
+  last_focus = gb_view_grid_get_last_focus (self->view_grid);
+
+  if (last_focus == NULL)
+    {
+      gb_view_grid_focus_document (self->view_grid, document);
+      return;
+    }
+
+  after = gb_view_grid_get_stack_after (self->view_grid, GB_VIEW_STACK (last_focus));
+
+  if (after == NULL)
+    after = gb_view_grid_add_stack_after (self->view_grid, GB_VIEW_STACK (last_focus));
+
+  gb_view_stack_focus_document (GB_VIEW_STACK (after), document);
+
+  g_clear_object (&document);
 }

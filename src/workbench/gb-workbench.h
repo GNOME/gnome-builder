@@ -40,6 +40,8 @@ void              gb_workbench_open                 (GbWorkbench         *self,
 void              gb_workbench_open_uri_list        (GbWorkbench         *self,
                                                      const gchar * const *uri_list);
 GbCommandManager *gb_workbench_get_command_manager  (GbWorkbench         *self);
+gpointer          gb_workbench_get_workspace_typed  (GbWorkbench         *self,
+                                                     GType                workspace_type);
 
 G_END_DECLS
 

@@ -87,6 +87,7 @@ G_BEGIN_DECLS
 #include "ide-vcs.h"
 
 #include "autotools/ide-autotools-build-system.h"
+#include "devhelp/ide-devhelp-search-result.h"
 #include "directory/ide-directory-build-system.h"
 #include "directory/ide-directory-vcs.h"
 #include "git/ide-git-search-result.h"

@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "gb-document.h"
 #include "gb-view.h"
 #include "gb-view-grid.h"
 #include "gb-view-stack.h"
@@ -628,4 +629,25 @@ gb_view_stack_focus_location (GbViewStack       *self,
                                           gb_view_stack__navigate_to_load_cb,
                                           g_object_ref (task));
     }
+}
+
+GbDocument *
+gb_view_stack_find_document_typed (GbViewStack *self,
+                                   GType        document_type)
+{
+  GList *iter;
+
+  g_return_val_if_fail (GB_IS_VIEW_STACK (self), NULL);
+  g_return_val_if_fail (g_type_is_a (document_type, GB_TYPE_DOCUMENT), NULL);
+
+  for (iter = self->focus_history; iter; iter = iter->next)
+    {
+      GbDocument *document;
+
+      document = gb_view_get_document (iter->data);
+      if (g_type_is_a (G_TYPE_FROM_INSTANCE (document), document_type))
+        return document;
+    }
+
+  return NULL;
 }

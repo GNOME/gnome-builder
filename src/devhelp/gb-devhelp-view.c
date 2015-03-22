@@ -22,6 +22,7 @@
 #include <webkit2/webkit2.h>
 
 #include "gb-devhelp-view.h"
+#include "gb-widget.h"
 
 struct _GbDevhelpViewPrivate
 {
@@ -32,8 +33,7 @@ struct _GbDevhelpViewPrivate
   WebKitWebView *web_view;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbDevhelpView, gb_devhelp_view,
-                            GB_TYPE_DOCUMENT_VIEW)
+G_DEFINE_TYPE_WITH_PRIVATE (GbDevhelpView, gb_devhelp_view, GB_TYPE_VIEW)
 
 enum {
   PROP_0,
@@ -43,7 +43,7 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-GbDocumentView *
+GbView *
 gb_devhelp_view_new (GbDevhelpDocument *document)
 {
   return g_object_new (GB_TYPE_DEVHELP_VIEW,
@@ -52,7 +52,7 @@ gb_devhelp_view_new (GbDevhelpDocument *document)
 }
 
 static GbDocument *
-gb_devhelp_view_get_document (GbDocumentView *view)
+gb_devhelp_view_get_document (GbView *view)
 {
   g_return_val_if_fail (GB_IS_DEVHELP_VIEW (view), NULL);
 
@@ -161,8 +161,7 @@ static void
 gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GbDocumentViewClass *view_class = GB_DOCUMENT_VIEW_CLASS (klass);
+  GbViewClass *view_class = GB_VIEW_CLASS (klass);
 
   object_class->finalize = gb_devhelp_view_finalize;
   object_class->get_property = gb_devhelp_view_get_property;
@@ -176,12 +175,10 @@ gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
                          _("The document for the devhelp view."),
                          GB_TYPE_DEVHELP_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DOCUMENT,
-                                   gParamSpecs [PROP_DOCUMENT]);
+  g_object_class_install_property (object_class, PROP_DOCUMENT, gParamSpecs [PROP_DOCUMENT]);
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/gb-devhelp-view.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GbDevhelpView, web_view);
+  GB_WIDGET_CLASS_TEMPLATE (klass, "gb-devhelp-view.ui");
+  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbDevhelpView, web_view);
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }

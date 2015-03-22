@@ -39,19 +39,22 @@ typedef enum
   GB_VIEW_GRID_MOVE_RIGHT,
 } GbViewGridSplit;
 
-GType      gb_view_grid_split_get_type       (void);
-GtkWidget *gb_view_grid_new                  (void);
-GtkWidget *gb_view_grid_add_stack_after      (GbViewGrid  *grid,
+GType       gb_view_grid_split_get_type      (void);
+GtkWidget  *gb_view_grid_new                 (void);
+GtkWidget  *gb_view_grid_add_stack_after     (GbViewGrid  *grid,
                                               GbViewStack *stack);
-GtkWidget *gb_view_grid_add_stack_before     (GbViewGrid  *grid,
+GtkWidget  *gb_view_grid_add_stack_before    (GbViewGrid  *grid,
                                               GbViewStack *stack);
-GtkWidget *gb_view_grid_get_stack_after      (GbViewGrid  *grid,
+GtkWidget  *gb_view_grid_get_stack_after     (GbViewGrid  *grid,
                                               GbViewStack *stack);
-GtkWidget *gb_view_grid_get_stack_before     (GbViewGrid  *grid,
+GtkWidget  *gb_view_grid_get_stack_before    (GbViewGrid  *grid,
                                               GbViewStack *stack);
-GList     *gb_view_grid_get_stacks           (GbViewGrid  *grid);
-void       gb_view_grid_focus_document       (GbViewGrid  *grid,
+GList      *gb_view_grid_get_stacks          (GbViewGrid  *grid);
+void        gb_view_grid_focus_document      (GbViewGrid  *grid,
                                               GbDocument  *document);
+GtkWidget  *gb_view_grid_get_last_focus      (GbViewGrid  *self);
+GbDocument *gb_view_grid_find_document_typed (GbViewGrid  *self,
+                                              GType        document_type);
 
 G_END_DECLS
 

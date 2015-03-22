@@ -24,6 +24,7 @@
 #include <glib/gi18n.h>
 #include <devhelp/devhelp.h>
 
+#include "ide-devhelp-search-result.h"
 #include "ide-search-reducer.h"
 #include "ide-search-result.h"
 #include "ide-search-context.h"
@@ -102,10 +103,14 @@ ide_devhelp_search_provider_populate (IdeSearchProvider *provider,
           name = italic_name;
         }
 
-      result = ide_search_result_new (idecontext, name, dh_link_get_book_name (link), score);
-      g_object_set_qdata_full (G_OBJECT (result), gQuarkLink, dh_link_get_uri (link), g_free);
+      result = g_object_new (IDE_TYPE_DEVHELP_SEARCH_RESULT,
+                             "context", idecontext,
+                             "title", name,
+                             "subtitle", dh_link_get_book_name (link),
+                             "score", score,
+                             "uri", dh_link_get_uri (link),
+                             NULL);
 
-      /* push the result through the search reducer */
       ide_search_reducer_push (&reducer, result);
     }
 

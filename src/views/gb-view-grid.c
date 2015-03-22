@@ -791,3 +791,40 @@ gb_view_grid_split_get_type (void)
 
   return type_id;
 }
+
+GbDocument *
+gb_view_grid_find_document_typed (GbViewGrid *self,
+                                  GType       document_type)
+{
+  GbDocument *ret = NULL;
+  GList *stacks;
+  GList *iter;
+
+  g_return_val_if_fail (GB_IS_VIEW_GRID (self), NULL);
+  g_return_val_if_fail (g_type_is_a (document_type, GB_TYPE_DOCUMENT), NULL);
+
+  stacks = gb_view_grid_get_stacks (self);
+
+  for (iter = stacks; !ret && iter; iter = iter->next)
+    ret = gb_view_stack_find_document_typed (iter->data, document_type);
+
+  g_list_free (stacks);
+
+  return ret;
+}
+
+/**
+ * gb_view_grid_get_last_focus:
+ * @self: A #GbViewGrid.
+ *
+ * Gets the last focused #GbViewStack.
+ *
+ * Returns: (transfer none) (nullable): A #GbViewStack or %NULL.
+ */
+GtkWidget *
+gb_view_grid_get_last_focus (GbViewGrid *self)
+{
+  g_return_val_if_fail (GB_IS_VIEW_GRID (self), NULL);
+
+  return GTK_WIDGET (self->last_focus);
+}

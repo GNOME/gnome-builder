@@ -24,6 +24,7 @@
     <file alias="keybindings/vim.css">../../data/keybindings/vim.css</file>
 
     <file alias="ui/gb-command-bar.ui">../../data/ui/gb-command-bar.ui</file>
+    <file alias="ui/gb-devhelp-view.ui">../../data/ui/gb-devhelp-view.ui</file>
     <file alias="ui/gb-editor-frame.ui">../../data/ui/gb-editor-frame.ui</file>
     <file alias="ui/gb-editor-settings-widget.ui">../../data/ui/gb-editor-settings-widget.ui</file>
     <file alias="ui/gb-editor-tweak-widget.ui">../../data/ui/gb-editor-tweak-widget.ui</file>
@@ -43,6 +44,5 @@
     <file alias="ui/gb-workbench.ui">../../data/ui/gb-workbench.ui</file>
 
     <file>ui/gb-command-bar-item.ui</file>
-    <file>ui/gb-devhelp-view.ui</file>
   </gresource>
 </gresources>

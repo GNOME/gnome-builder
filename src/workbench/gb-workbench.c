@@ -589,3 +589,23 @@ gb_workbench_open_uri_list (GbWorkbench         *self,
       gb_workbench_open (self, file);
     }
 }
+
+/**
+ * gb_workbench_get_workspace_typed:
+ * @self: A #GbWorkbench.
+ *
+ * Gets the workspace matching @workspace_type
+ *
+ * Returns: (transfer none): A #GbWorkspace.
+ */
+gpointer
+gb_workbench_get_workspace_typed (GbWorkbench *self,
+                                  GType        workspace_type)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
+
+  if (workspace_type == GB_TYPE_EDITOR_WORKSPACE)
+    return self->editor_workspace;
+
+  return NULL;
+}
