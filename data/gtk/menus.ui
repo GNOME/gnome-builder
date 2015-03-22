@@ -55,7 +55,7 @@
     <section>
       <item>
         <attribute name="label" translatable="yes">_New Document</attribute>
-        <attribute name="action">workspace.new-document</attribute>
+        <attribute name="action">workbench.new-document</attribute>
       </item>
     </section>
     <section>
@@ -67,7 +67,7 @@
     <section>
       <item>
         <attribute name="label" translatable="yes">Save _All</attribute>
-        <attribute name="action">win.save-all</attribute>
+        <attribute name="action">workbench.save-all</attribute>
       </item>
     </section>
     <section>

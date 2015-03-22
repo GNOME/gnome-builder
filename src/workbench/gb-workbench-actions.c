@@ -237,6 +237,29 @@ gb_workbench_actions_save_all (GSimpleAction *action,
                                GVariant      *parameter,
                                gpointer       user_data)
 {
+  GbWorkbench *self = user_data;
+  IdeBufferManager *buffer_manager;
+  g_autoptr(GPtrArray) ar = NULL;
+  gsize i;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  buffer_manager = ide_context_get_buffer_manager (self->context);
+  ar = ide_buffer_manager_get_buffers (buffer_manager);
+
+  for (i = 0; i < ar->len; i++)
+    {
+      IdeBuffer *buffer;
+      IdeFile *file;
+
+      buffer = g_ptr_array_index (ar, i);
+      file = ide_buffer_get_file (buffer);
+
+      if (file == NULL)
+        continue;
+
+      ide_buffer_manager_save_file_async (buffer_manager, buffer, file, NULL, NULL, NULL, NULL);
+    }
 }
 
 static void
@@ -303,7 +326,7 @@ static const GActionEntry GbWorkbenchActions[] = {
   { "open",             gb_workbench_actions_open },
   { "open-uri-list",    gb_workbench_actions_open_uri_list, "as" },
   { "save-all",         gb_workbench_actions_save_all },
-  { "search-docs",        gb_workbench_actions_search_docs, "s" },
+  { "search-docs",      gb_workbench_actions_search_docs, "s" },
   { "show-command-bar", gb_workbench_actions_show_command_bar },
 };
 
