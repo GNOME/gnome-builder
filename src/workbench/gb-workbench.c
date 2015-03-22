@@ -35,6 +35,7 @@ G_DEFINE_TYPE (GbWorkbench, gb_workbench, GTK_TYPE_APPLICATION_WINDOW)
 enum {
   PROP_0,
   PROP_ACTIVE_WORKSPACE,
+  PROP_BUILDING,
   PROP_COMMAND_MANAGER,
   PROP_CONTEXT,
   LAST_PROP
@@ -291,6 +292,10 @@ gb_workbench_get_property (GObject    *object,
       g_value_set_object (value, gb_workbench_get_active_workspace (self));
       break;
 
+    case PROP_BUILDING:
+      g_value_set_boolean (value, self->building);
+      break;
+
     case PROP_COMMAND_MANAGER:
       g_value_set_object (value, gb_workbench_get_command_manager (self));
       break;
@@ -355,6 +360,14 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_ACTIVE_WORKSPACE,
                                    gParamSpecs [PROP_ACTIVE_WORKSPACE]);
+
+  gParamSpecs [PROP_BUILDING] =
+    g_param_spec_boolean ("building",
+                          _("Building"),
+                          _("If the project is currently building."),
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_BUILDING, gParamSpecs [PROP_BUILDING]);
 
   gParamSpecs [PROP_COMMAND_MANAGER] =
     g_param_spec_object ("command-manager",
@@ -624,4 +637,113 @@ gb_workbench_get_workspace_typed (GbWorkbench *self,
     return self->editor_workspace;
 
   return NULL;
+}
+
+static void
+gb_workbench__builder_build_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  g_autoptr(GbWorkbench) self = user_data;
+  g_autoptr(IdeBuildResult) build_result = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeBuilder *builder = (IdeBuilder *)object;
+
+  g_assert (IDE_IS_BUILDER (builder));
+  g_assert (GB_IS_WORKBENCH (self));
+
+  self->building = FALSE;
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUILDING]);
+
+  build_result = ide_builder_build_finish (builder, result, &error);
+
+  if (error)
+    {
+      GtkWidget *dialog;
+
+      dialog = gtk_message_dialog_new (GTK_WINDOW (self),
+                                       GTK_DIALOG_MODAL | GTK_DIALOG_USE_HEADER_BAR,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       _("Build Failure"));
+      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", error->message);
+      g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      gtk_window_present (GTK_WINDOW (dialog));
+    }
+}
+
+void
+gb_workbench_build_async (GbWorkbench         *self,
+                          gboolean             force_rebuild,
+                          GCancellable        *cancellable,
+                          GAsyncReadyCallback  callback,
+                          gpointer             user_data)
+{
+  IdeDeviceManager *device_manager;
+  IdeBuildSystem *build_system;
+  IdeContext *context;
+  IdeDevice *device;
+  g_autoptr(IdeBuilder) builder = NULL;
+  g_autoptr(GKeyFile) config = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_return_if_fail (GB_IS_WORKBENCH (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  context = gb_workbench_get_context (self);
+
+  /* TODO: Get build device from workbench combo? */
+  device_manager = ide_context_get_device_manager (context);
+  device = ide_device_manager_get_device (device_manager, "local");
+
+  build_system = ide_context_get_build_system (context);
+
+  config = g_key_file_new ();
+
+  if (force_rebuild)
+    {
+      /* TODO: we should make this type of operation build system agnostic. */
+      g_key_file_set_boolean (config, "autotools", "rebuild", TRUE);
+    }
+
+  builder = ide_build_system_get_builder (build_system, config, device, &error);
+
+  if (builder == NULL)
+    {
+      GtkWidget *dialog;
+
+      dialog = gtk_message_dialog_new (GTK_WINDOW (self),
+                                       GTK_DIALOG_MODAL | GTK_DIALOG_USE_HEADER_BAR,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       _("Project build system does not support building"));
+      if (error && error->message)
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                  "%s", error->message);
+      g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      gtk_window_present (GTK_WINDOW (dialog));
+      return;
+    }
+
+  self->building = TRUE;
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUILDING]);
+
+  ide_builder_build_async (builder,
+                           NULL, /* &IdeProgress */
+                           cancellable,
+                           gb_workbench__builder_build_cb,
+                           g_object_ref (self));
+}
+
+gboolean
+gb_workbench_build_finish (GbWorkbench   *self,
+                           GAsyncResult  *result,
+                           GError       **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (GB_IS_WORKBENCH (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+
+  return g_task_propagate_boolean (task, error);
 }

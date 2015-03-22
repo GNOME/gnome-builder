@@ -89,6 +89,7 @@ gb_editor_workspace_context_changed (GtkWidget  *workspace,
   if (context)
     {
       IdeBufferManager *bufmgr;
+      IdeProject *project;
       g_autoptr(GPtrArray) buffers = NULL;
       gsize i;
 
@@ -111,6 +112,10 @@ gb_editor_workspace_context_changed (GtkWidget  *workspace,
           IdeBuffer *buffer = g_ptr_array_index (buffers, i);
           gb_editor_workspace__load_buffer_cb (self, buffer, bufmgr);
         }
+
+      project = ide_context_get_project (context);
+      g_object_bind_property (project, "name", self->project_button, "label",
+                              G_BINDING_SYNC_CREATE);
 
       root = gb_tree_get_root (self->project_tree);
       gb_tree_node_set_item (root, G_OBJECT (context));
@@ -165,6 +170,7 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-workspace.ui");
 
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_paned);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_sidebar);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_tree);

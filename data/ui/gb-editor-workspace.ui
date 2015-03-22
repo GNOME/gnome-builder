@@ -21,9 +21,9 @@
                   <class name="header"/>
                 </style>
                 <child type="center">
-                  <object class="GtkMenuButton">
-                    <property name="label">Project</property>
+                  <object class="GtkMenuButton" id="project_button">
                     <property name="margin">3</property>
+                    <property name="popover">project_popover</property>
                     <property name="visible">true</property>
                     <style>
                       <class name="dim-label"/>
@@ -56,4 +56,33 @@
       </object>
     </child>
   </template>
+  <object class="GtkPopover" id="project_popover">
+    <property name="border-width">12</property>
+    <property name="visible">true</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkModelButton">
+            <property name="action-name">workbench.build</property>
+            <property name="halign">fill</property>
+            <property name="hexpand">true</property>
+            <property name="text" translatable="yes">Build Project</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="action-name">workbench.rebuild</property>
+            <property name="halign">fill</property>
+            <property name="hexpand">true</property>
+            <property name="text" translatable="yes">Rebuild Project</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>

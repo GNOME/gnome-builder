@@ -31,6 +31,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbWorkbench, gb_workbench, GB, WORKBENCH, GtkApplicationWindow)
 
+void              gb_workbench_build_async          (GbWorkbench         *self,
+                                                     gboolean             force_rebuild,
+                                                     GCancellable        *cancellable,
+                                                     GAsyncReadyCallback  callback,
+                                                     gpointer             user_data);
+gboolean          gb_workbench_build_finish         (GbWorkbench         *self,
+                                                     GAsyncResult        *result,
+                                                     GError             **error);
 IdeContext       *gb_workbench_get_context          (GbWorkbench         *self);
 GbWorkspace      *gb_workbench_get_active_workspace (GbWorkbench         *self);
 void              gb_workbench_set_active_workspace (GbWorkbench         *self,
