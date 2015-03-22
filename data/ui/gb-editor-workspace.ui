@@ -3,12 +3,12 @@
   <!-- interface-requires gtk+ 3.15 -->
   <template class="GbEditorWorkspace" parent="GbWorkspace">
     <child>
-      <object class="GtkPaned">
+      <object class="GtkPaned" id="project_paned">
         <property name="orientation">horizontal</property>
         <property name="position">250</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="project_sidebar">
             <property name="vexpand">true</property>
             <property name="orientation">vertical</property>
             <property name="visible">true</property>
@@ -27,6 +27,7 @@
                     <property name="visible">true</property>
                     <style>
                       <class name="dim-label"/>
+                      <class name="flat"/>
                     </style>
                   </object>
                 </child>

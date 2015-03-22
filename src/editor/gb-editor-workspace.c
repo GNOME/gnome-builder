@@ -165,6 +165,8 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-workspace.ui");
 
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_paned);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_sidebar);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_tree);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, view_grid);
 

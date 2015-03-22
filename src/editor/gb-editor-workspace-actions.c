@@ -16,9 +16,55 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <ide.h>
+
 #include "gb-editor-workspace-actions.h"
+#include "gb-editor-workspace-private.h"
+
+#define ANIMATION_DURATION_MSEC 250
+
+static void
+gb_editor_workspace_actions_toggle_sidebar (GSimpleAction *action,
+                                            GVariant      *variant,
+                                            gpointer       user_data)
+{
+  GbEditorWorkspace *self = user_data;
+
+  if (gtk_widget_get_visible (GTK_WIDGET (self->project_sidebar)))
+    {
+      ide_object_animate_full (self->project_paned,
+                               IDE_ANIMATION_EASE_IN_CUBIC,
+                               ANIMATION_DURATION_MSEC,
+                               NULL,
+                               (GDestroyNotify)gtk_widget_hide,
+                               self->project_sidebar,
+                               "position", 0,
+                               NULL);
+    }
+  else
+    {
+      gtk_paned_set_position (self->project_paned, 0);
+      gtk_widget_show (GTK_WIDGET (self->project_sidebar));
+      ide_object_animate (self->project_paned,
+                          IDE_ANIMATION_EASE_IN_CUBIC,
+                          ANIMATION_DURATION_MSEC,
+                          NULL,
+                          "position", 250,
+                          NULL);
+    }
+}
+
+static const GActionEntry GbEditorWorkspaceActions[] = {
+  { "toggle-sidebar", gb_editor_workspace_actions_toggle_sidebar },
+};
 
 void
 gb_editor_workspace_actions_init (GbEditorWorkspace *self)
 {
+  g_autoptr(GSimpleActionGroup) group = NULL;
+
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group), GbEditorWorkspaceActions,
+                                   G_N_ELEMENTS (GbEditorWorkspaceActions), self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "workspace", G_ACTION_GROUP (group));
 }

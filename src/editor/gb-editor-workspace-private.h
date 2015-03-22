@@ -29,6 +29,8 @@ struct _GbEditorWorkspace
 {
   GbWorkspace  parent_instance;
 
+  GtkPaned      *project_paned;
+  GtkBox        *project_sidebar;
   GbTree        *project_tree;
   GbTreeBuilder *project_tree_builder;
   GbViewGrid    *view_grid;

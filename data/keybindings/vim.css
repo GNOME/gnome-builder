@@ -97,6 +97,7 @@
 
   bind "F4" { "action" ("view", "find-other-file", "") };
   bind "F6" { "action" ("view", "preview", "") };
+  bind "F9" { "action" ("workspace", "toggle-sidebar", "") };
 }
 
 @binding-set builder-vim-source-view-normal-with-count
