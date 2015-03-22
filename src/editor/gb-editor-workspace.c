@@ -81,7 +81,6 @@ gb_editor_workspace_context_changed (GtkWidget  *workspace,
                                      IdeContext *context)
 {
   GbEditorWorkspace *self = (GbEditorWorkspace *)workspace;
-  GbTreeNode *root;
 
   g_assert (GB_IS_EDITOR_WORKSPACE (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
@@ -90,8 +89,16 @@ gb_editor_workspace_context_changed (GtkWidget  *workspace,
     {
       IdeBufferManager *bufmgr;
       IdeProject *project;
+      GbWorkbench *workbench;
+      GbTreeNode *root;
       g_autoptr(GPtrArray) buffers = NULL;
       gsize i;
+
+      workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+      g_object_bind_property (workbench, "building", self->project_spinner, "active",
+                              G_BINDING_SYNC_CREATE);
+      g_object_bind_property (workbench, "building", self->project_spinner, "visible",
+                              G_BINDING_SYNC_CREATE);
 
       bufmgr = ide_context_get_buffer_manager (context);
       g_signal_connect_object (bufmgr,
@@ -173,6 +180,7 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_paned);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_sidebar);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_spinner);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_tree);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, view_grid);
 

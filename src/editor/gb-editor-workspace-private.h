@@ -32,6 +32,7 @@ struct _GbEditorWorkspace
   GtkPaned      *project_paned;
   GtkBox        *project_sidebar;
   GtkMenuButton *project_button;
+  GtkSpinner    *project_spinner;
   GbTree        *project_tree;
   GbTreeBuilder *project_tree_builder;
   GbViewGrid    *view_grid;
