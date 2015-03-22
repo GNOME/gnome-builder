@@ -133,21 +133,12 @@
               </packing>
             </child>
             <child>
-              <object class="GbPreferencesPageVim" id="vim_page">
+              <object class="GbPreferencesPageKeybindings" id="keybindings_page">
                 <property name="visible">True</property>
               </object>
               <packing>
-                <property name="name">vim</property>
-                <property name="title" translatable="yes">Vim</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GbPreferencesPageEmacs" id="emacs_page">
-                <property name="visible">True</property>
-              </object>
-              <packing>
-                <property name="name">emacs</property>
-                <property name="title" translatable="yes">Emacs</property>
+                <property name="name">keybindings</property>
+                <property name="title" translatable="yes">Keybindings</property>
               </packing>
             </child>
           </object>

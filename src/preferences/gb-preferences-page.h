@@ -35,6 +35,8 @@ typedef struct _GbPreferencesPage        GbPreferencesPage;
 typedef struct _GbPreferencesPageClass   GbPreferencesPageClass;
 typedef struct _GbPreferencesPagePrivate GbPreferencesPagePrivate;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbPreferencesPage, g_object_unref)
+
 struct _GbPreferencesPage
 {
   GtkBin parent;

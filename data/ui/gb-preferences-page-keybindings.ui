@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbPreferencesPageKeybindings" parent="GbPreferencesPage">
+    <child>
+      <object class="GtkBox">
+        <property name="visible">true</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox" id="box1">
+            <property name="visible">true</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkRadioButton" id="default_container">
+                <property name="action-name">settings.keybindings</property>
+                <property name="action-target">'default'</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkBox" id="box3">
+                    <property name="visible">true</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label1">
+                        <property name="visible">true</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Builder&lt;/b&gt;</property>
+                        <property name="use-markup">true</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-top">6</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label2">
+                        <property name="visible">true</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">The default keybindings for Builder.</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-bottom">6</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">false</property>
+                <property name="fill">true</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioButton" id="vim_container">
+                <property name="group">default_container</property>
+                <property name="action-name">settings.keybindings</property>
+                <property name="action-target">'vim'</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkBox" id="box2">
+                    <property name="visible">true</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label3">
+                        <property name="visible">true</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Vim Emulation&lt;/b&gt;</property>
+                        <property name="use-markup">true</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-top">6</property>
+                      </object>
+                      <packing>
+                        <property name="expand">false</property>
+                        <property name="fill">true</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">true</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Emulates keybindings from the Vim text editor.</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-bottom">6</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">false</property>
+                        <property name="fill">true</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">false</property>
+                <property name="fill">true</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioButton" id="emacs_container">
+                <property name="group">default_container</property>
+                <property name="action-name">settings.keybindings</property>
+                <property name="action-target">'emacs'</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkBox" id="box4">
+                    <property name="visible">true</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel" id="label5">
+                        <property name="visible">true</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Emacs Emulation&lt;/b&gt;</property>
+                        <property name="use-markup">true</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-top">6</property>
+                      </object>
+                      <packing>
+                        <property name="expand">false</property>
+                        <property name="fill">true</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label6">
+                        <property name="visible">true</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Emulates keybindings from the Emacs text editor.</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-bottom">6</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">false</property>
+                        <property name="fill">true</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">false</property>
+                <property name="fill">true</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

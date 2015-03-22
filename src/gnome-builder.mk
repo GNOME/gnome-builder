@@ -73,14 +73,12 @@ libgnome_builder_la_SOURCES = \
 	src/nautilus/nautilus-floating-bar.h \
 	src/preferences/gb-preferences-page-editor.c \
 	src/preferences/gb-preferences-page-editor.h \
-	src/preferences/gb-preferences-page-emacs.c \
-	src/preferences/gb-preferences-page-emacs.h \
 	src/preferences/gb-preferences-page-git.c \
 	src/preferences/gb-preferences-page-git.h \
+	src/preferences/gb-preferences-page-keybindings.c \
+	src/preferences/gb-preferences-page-keybindings.h \
 	src/preferences/gb-preferences-page-language.c \
 	src/preferences/gb-preferences-page-language.h \
-	src/preferences/gb-preferences-page-vim.c \
-	src/preferences/gb-preferences-page-vim.h \
 	src/preferences/gb-preferences-page.c \
 	src/preferences/gb-preferences-page.h \
 	src/preferences/gb-preferences-window.c \

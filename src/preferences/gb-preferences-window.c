@@ -16,19 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * TODO: We will probably have to split all the preferences stuff out into
- *       child widgets just to keep things under control.
- *       Feel free to do that if you beat me to it.
- */
-
 #include <glib/gi18n.h>
 
 #include "gb-preferences-page-editor.h"
-#include "gb-preferences-page-emacs.h"
 #include "gb-preferences-page-git.h"
+#include "gb-preferences-page-keybindings.h"
 #include "gb-preferences-page-language.h"
-#include "gb-preferences-page-vim.h"
 #include "gb-preferences-page.h"
 #include "gb-preferences-window.h"
 #include "gb-widget.h"
@@ -65,11 +58,9 @@ gb_preferences_window_notify_search_mode (GbPreferencesWindow *window,
 {
   g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
 
-  if (!gtk_search_bar_get_search_mode (search_bar) &&
-      window->priv->return_to_page)
+  if (!gtk_search_bar_get_search_mode (search_bar) && window->priv->return_to_page)
     {
-      gtk_stack_set_visible_child (window->priv->stack,
-                                   window->priv->return_to_page);
+      gtk_stack_set_visible_child (window->priv->stack, window->priv->return_to_page);
       window->priv->return_to_page = NULL;
     }
 }
@@ -334,11 +325,10 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesWindow, search_entry);
   GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesWindow, stack);
 
-  g_type_ensure (GB_TYPE_PREFERENCES_PAGE_GIT);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EDITOR);
+  g_type_ensure (GB_TYPE_PREFERENCES_PAGE_GIT);
+  g_type_ensure (GB_TYPE_PREFERENCES_PAGE_KEYBINDINGS);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_LANGUAGE);
-  g_type_ensure (GB_TYPE_PREFERENCES_PAGE_VIM);
-  g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EMACS);
 }
 
 static void

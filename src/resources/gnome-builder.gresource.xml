@@ -32,10 +32,9 @@
     <file alias="ui/gb-editor-workspace.ui">../../data/ui/gb-editor-workspace.ui</file>
     <file alias="ui/gb-html-view.ui">../../data/ui/gb-html-view.ui</file>
     <file alias="ui/gb-preferences-page-editor.ui">../../data/ui/gb-preferences-page-editor.ui</file>
-    <file alias="ui/gb-preferences-page-emacs.ui">../../data/ui/gb-preferences-page-emacs.ui</file>
     <file alias="ui/gb-preferences-page-git.ui">../../data/ui/gb-preferences-page-git.ui</file>
+    <file alias="ui/gb-preferences-page-keybindings.ui">../../data/ui/gb-preferences-page-keybindings.ui</file>
     <file alias="ui/gb-preferences-page-language.ui">../../data/ui/gb-preferences-page-language.ui</file>
-    <file alias="ui/gb-preferences-page-vim.ui">../../data/ui/gb-preferences-page-vim.ui</file>
     <file alias="ui/gb-preferences-window.ui">../../data/ui/gb-preferences-window.ui</file>
     <file alias="ui/gb-search-box.ui">../../data/ui/gb-search-box.ui</file>
     <file alias="ui/gb-search-display-group.ui">../../data/ui/gb-search-display-group.ui</file>
