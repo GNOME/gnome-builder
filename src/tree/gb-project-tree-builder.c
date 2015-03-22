@@ -45,7 +45,7 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-GbProjectTreeBuilder *
+GbTreeBuilder *
 gb_project_tree_builder_new (IdeContext *context)
 {
   g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
@@ -254,7 +254,6 @@ gb_project_tree_builder_node_activated (GbTreeBuilder *builder,
   if (IDE_IS_PROJECT_FILE (item))
     {
       GbWorkbench *workbench;
-      GbWorkspace *workspace;
       GFileInfo *file_info;
       GbTree *tree;
       GFile *file;
@@ -275,9 +274,7 @@ gb_project_tree_builder_node_activated (GbTreeBuilder *builder,
         goto failure;
 
       workbench = gb_widget_get_workbench (GTK_WIDGET (tree));
-      workspace = gb_workbench_get_workspace (workbench,
-                                              GB_TYPE_EDITOR_WORKSPACE);
-      gb_editor_workspace_open (GB_EDITOR_WORKSPACE (workspace), file);
+      gb_workbench_open (workbench, file);
 
       return TRUE;
     }

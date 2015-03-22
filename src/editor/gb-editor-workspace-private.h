@@ -19,8 +19,9 @@
 #ifndef GB_EDITOR_WORKSPACE_PRIVATE_H
 #define GB_EDITOR_WORKSPACE_PRIVATE_H
 
-#include "gb-workspace.h"
+#include "gb-tree.h"
 #include "gb-view-grid.h"
+#include "gb-workspace.h"
 
 G_BEGIN_DECLS
 
@@ -28,7 +29,9 @@ struct _GbEditorWorkspace
 {
   GbWorkspace  parent_instance;
 
-  GbViewGrid  *view_grid;
+  GbTree        *project_tree;
+  GbTreeBuilder *project_tree_builder;
+  GbViewGrid    *view_grid;
 };
 
 G_END_DECLS

@@ -3,9 +3,27 @@
   <!-- interface-requires gtk+ 3.15 -->
   <template class="GbEditorWorkspace" parent="GbWorkspace">
     <child>
-      <object class="GbViewGrid" id="view_grid">
-        <property name="expand">true</property>
+      <object class="GtkPaned">
+        <property name="orientation">horizontal</property>
+        <property name="position">250</property>
         <property name="visible">true</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">true</property>
+            <child>
+              <object class="GbTree" id="project_tree">
+                <property name="headers-visible">false</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GbViewGrid" id="view_grid">
+            <property name="expand">true</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
       </object>
     </child>
   </template>

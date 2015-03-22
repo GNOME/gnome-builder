@@ -34,10 +34,10 @@ struct _GbProjectTreeBuilderClass
   GbTreeBuilderClass parent;
 };
 
-GbProjectTreeBuilder *gb_project_tree_builder_new         (IdeContext           *context);
-IdeContext           *gb_project_tree_builder_get_context (GbProjectTreeBuilder *self);
-void                  gb_project_tree_builder_set_context (GbProjectTreeBuilder *self,
-                                                           IdeContext           *context);
+GbTreeBuilder  *gb_project_tree_builder_new         (IdeContext           *context);
+IdeContext     *gb_project_tree_builder_get_context (GbProjectTreeBuilder *self);
+void            gb_project_tree_builder_set_context (GbProjectTreeBuilder *self,
+                                                     IdeContext           *context);
 
 G_END_DECLS
 

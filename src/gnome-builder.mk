@@ -98,6 +98,8 @@ libgnome_builder_la_SOURCES = \
 	src/search/gb-search-types.h \
 	src/support/gb-support.c \
 	src/support/gb-support.h \
+	src/tree/gb-project-tree-builder.c \
+	src/tree/gb-project-tree-builder.h \
 	src/tree/gb-tree-builder.c \
 	src/tree/gb-tree-builder.h \
 	src/tree/gb-tree-node.c \
@@ -147,8 +149,6 @@ disabled_files = \
 	src/editor/gb-source-formatter.h \
 	src/editor/gb-source-highlight-menu.c \
 	src/editor/gb-source-highlight-menu.h \
-	src/tree/gb-project-tree-builder.c \
-	src/tree/gb-project-tree-builder.h \
 	$(NULL)
 
 libgnome_builder_la_LIBADD = \

@@ -26,7 +26,9 @@
 #include "gb-editor-workspace.h"
 #include "gb-editor-workspace-actions.h"
 #include "gb-editor-workspace-private.h"
+#include "gb-project-tree-builder.h"
 #include "gb-string.h"
+#include "gb-tree.h"
 #include "gb-view-grid.h"
 #include "gb-widget.h"
 
@@ -79,6 +81,7 @@ gb_editor_workspace_context_changed (GtkWidget  *workspace,
                                      IdeContext *context)
 {
   GbEditorWorkspace *self = (GbEditorWorkspace *)workspace;
+  GbTreeNode *root;
 
   g_assert (GB_IS_EDITOR_WORKSPACE (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
@@ -108,6 +111,12 @@ gb_editor_workspace_context_changed (GtkWidget  *workspace,
           IdeBuffer *buffer = g_ptr_array_index (buffers, i);
           gb_editor_workspace__load_buffer_cb (self, buffer, bufmgr);
         }
+
+      root = gb_tree_get_root (self->project_tree);
+      gb_tree_node_set_item (root, G_OBJECT (context));
+
+      gb_project_tree_builder_set_context (GB_PROJECT_TREE_BUILDER (self->project_tree_builder),
+                                           context);
     }
 }
 
@@ -155,8 +164,11 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
   widget_class->grab_focus = gb_editor_workspace_grab_focus;
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-workspace.ui");
+
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_tree);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, view_grid);
 
+  g_type_ensure (GB_TYPE_TREE);
   g_type_ensure (GB_TYPE_VIEW_GRID);
 }
 
@@ -164,6 +176,10 @@ static void
 gb_editor_workspace_init (GbEditorWorkspace *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->project_tree_builder = gb_project_tree_builder_new (NULL);
+  gb_tree_add_builder (self->project_tree, GB_TREE_BUILDER (self->project_tree_builder));
+  gb_tree_set_root (self->project_tree, gb_tree_node_new ());
 
   gb_widget_set_context_handler (self, gb_editor_workspace_context_changed);
 }
