@@ -23,6 +23,7 @@
 #include "ide-async-helper.h"
 #include "ide-back-forward-list.h"
 #include "ide-buffer-manager.h"
+#include "ide-buffer.h"
 #include "ide-build-system.h"
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -1258,23 +1259,120 @@ async_initable_init (GAsyncInitableIface *iface)
 }
 
 static void
+ide_context_unload__buffer_manager_save_file_cb (GObject      *object,
+                                                 GAsyncResult *result,
+                                                 gpointer      user_data)
+{
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  gint in_progress;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (G_IS_TASK (task));
+
+  in_progress = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (task), "IN_PROGRESS"));
+  g_assert_cmpint (in_progress, >, 0);
+  in_progress--;
+  g_object_set_data (G_OBJECT (task), "IN_PROGRESS", GINT_TO_POINTER (in_progress));
+
+  if (!ide_buffer_manager_save_file_finish (buffer_manager, result, &error))
+    g_warning ("%s", error->message);
+
+  if (in_progress == 0)
+    g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+ide_context_unload_buffer_manager (gpointer             source_object,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GPtrArray) buffers = NULL;
+  gsize i;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  buffers = ide_buffer_manager_get_buffers (self->buffer_manager);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_object_set_data (G_OBJECT (task), "IN_PROGRESS", GINT_TO_POINTER (buffers->len));
+
+  for (i = 0; i < buffers->len; i++)
+    {
+      IdeBuffer *buffer;
+      IdeFile *file;
+
+      buffer = g_ptr_array_index (buffers, i);
+      file = ide_buffer_get_file (buffer);
+      ide_buffer_manager_save_file_async (self->buffer_manager,
+                                          buffer,
+                                          file,
+                                          NULL,
+                                          cancellable,
+                                          ide_context_unload__buffer_manager_save_file_cb,
+                                          g_object_ref (task));
+    }
+
+  IDE_EXIT;
+}
+
+static void
 ide_context_unload__back_forward_list_save_cb (GObject      *object,
                                                GAsyncResult *result,
                                                gpointer      user_data)
 {
   IdeBackForwardList *back_forward_list = (IdeBackForwardList *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_BACK_FORWARD_LIST (back_forward_list));
+  g_assert (G_IS_TASK (task));
+
+  /* nice to know, but not critical to save process */
   if (!_ide_back_forward_list_save_finish (back_forward_list, result, &error))
-    {
-      g_warning ("%s(): %s", G_STRFUNC, error->message);
-      g_clear_error (&error);
-    }
+    g_warning ("%s", error->message);
 
   g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+ide_context_unload_back_forward_list (gpointer             source_object,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  file = get_back_forward_list_file (self);
+  _ide_back_forward_list_save_async (self->back_forward_list,
+                                     file,
+                                     cancellable,
+                                     ide_context_unload__back_forward_list_save_cb,
+                                     g_object_ref (task));
 
   IDE_EXIT;
 }
@@ -1286,31 +1384,36 @@ ide_context_unload__unsaved_files_save_cb (GObject      *object,
 {
   IdeUnsavedFiles *unsaved_files = (IdeUnsavedFiles *)object;
   g_autoptr(GTask) task = user_data;
-  g_autoptr(GFile) file = NULL;
-  IdeContext *self;
-  GError *error = NULL;
-
-  IDE_ENTRY;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_UNSAVED_FILES (unsaved_files));
   g_assert (G_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
-
+  /* nice to know, but not critical to rest of shutdown */
   if (!ide_unsaved_files_save_finish (unsaved_files, result, &error))
-    {
-      g_warning ("%s(): %s", G_STRFUNC, error->message);
-      g_clear_error (&error);
-    }
+    g_warning ("%s", error->message);
 
-  file = get_back_forward_list_file (self);
-  _ide_back_forward_list_save_async (self->back_forward_list,
-                                     file,
-                                     g_task_get_cancellable (task),
-                                     ide_context_unload__back_forward_list_save_cb,
-                                     g_object_ref (task));
+  g_task_return_boolean (task, TRUE);
+}
 
-  IDE_EXIT;
+static void
+ide_context_unload_unsaved_files (gpointer             source_object,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  g_autoptr(GTask) task = NULL;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  ide_unsaved_files_save_async (self->unsaved_files,
+                                cancellable,
+                                ide_context_unload__unsaved_files_save_cb,
+                                g_object_ref (task));
 }
 
 /**
@@ -1326,29 +1429,16 @@ ide_context_unload_async (IdeContext          *self,
                           GAsyncReadyCallback  callback,
                           gpointer             user_data)
 {
-  IdeUnsavedFiles *unsaved_files;
-  g_autoptr(GTask) task = NULL;
-
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  unsaved_files = ide_context_get_unsaved_files (self);
-
-  ide_unsaved_files_save_async (unsaved_files,
-                                cancellable,
-                                ide_context_unload__unsaved_files_save_cb,
-                                g_object_ref (task));
-
-  /*
-   * TODO:
-   *
-   * Detach devices?
-   * Anything else?
-   */
+  ide_async_helper_run (self, cancellable, callback, user_data,
+                        ide_context_unload_back_forward_list,
+                        ide_context_unload_buffer_manager,
+                        ide_context_unload_unsaved_files,
+                        NULL);
 
   IDE_EXIT;
 }
