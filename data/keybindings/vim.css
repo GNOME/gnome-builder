@@ -1280,8 +1280,8 @@
 
 @binding-set builder-vim-tree-view
 {
-  bind "<ctrl>n" { "move-cursor" (logical-positions, 1) };
-  bind "<ctrl>p" { "move-cursor" (logical-positions, -1) };
+  bind "<ctrl>n" { "move-cursor" (display-lines, 1) };
+  bind "<ctrl>p" { "move-cursor" (display-lines, -1) };
 }
 
 /*
