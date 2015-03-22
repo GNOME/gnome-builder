@@ -182,12 +182,14 @@
                  "clear-count" () };
 
   bind "<shift>k" { "clear-selection" ()
+                    "save-insert-mark" ()
                     "movement" (previous-word-end, 0, 1, 1)
                     "movement" (next-word-start, 0, 1, 0)
                     "movement" (next-word-end, 1, 0, 1)
                     "request-documentation" ()
                     "clear-count" ()
-                    "clear-selection" () };
+                    "clear-selection" ()
+                    "restore-insert-mark" () };
 
   /* swallow the current character and go to insert */
   bind "s" { "begin-macro" ()
