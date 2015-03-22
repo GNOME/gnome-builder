@@ -198,8 +198,7 @@ gb_search_box_entry_key_press_event (GbSearchBox    *self,
       {
         GtkWidget *toplevel;
 
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button),
-                                      FALSE);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), FALSE);
 
         toplevel = gtk_widget_get_toplevel (GTK_WIDGET (entry));
         gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);

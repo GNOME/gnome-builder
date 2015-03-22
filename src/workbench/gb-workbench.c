@@ -229,6 +229,8 @@ gb_workbench_constructed (GObject *object)
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->constructed (object);
 
+  gb_workbench_set_active_workspace (self, GB_WORKSPACE (self->editor_workspace));
+
   gb_workbench_actions_init (self);
 
   app = GTK_APPLICATION (g_application_get_default ());
