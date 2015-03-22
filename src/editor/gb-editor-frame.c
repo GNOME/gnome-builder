@@ -304,6 +304,7 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
         gb_widget_activate_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
       else
         gb_widget_activate_action (GTK_WIDGET (self), "frame", "previous-search-result", NULL);
+      gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
       return TRUE;
     }
   else
