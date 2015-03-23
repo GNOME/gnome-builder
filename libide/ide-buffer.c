@@ -1568,3 +1568,24 @@ ide_buffer_check_for_volume_change (IdeBuffer *self)
                            ide_buffer__check_for_volume_cb,
                            g_object_ref (self));
 }
+
+void
+_ide_buffer_set_mtime (IdeBuffer      *self,
+                       const GTimeVal *mtime)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  if (mtime == NULL)
+    {
+      priv->mtime_set = FALSE;
+      priv->mtime.tv_sec = 0;
+      priv->mtime.tv_usec = 0;
+    }
+  else
+    {
+      priv->mtime = *mtime;
+      priv->mtime_set = TRUE;
+    }
+}

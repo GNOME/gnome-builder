@@ -53,6 +53,8 @@ IdeBackForwardItem *_ide_back_forward_list_find        (IdeBackForwardList    *s
 gboolean            _ide_buffer_get_loading            (IdeBuffer             *self);
 void                _ide_buffer_set_loading            (IdeBuffer             *self,
                                                         gboolean               loading);
+void                _ide_buffer_set_mtime              (IdeBuffer             *self,
+                                                        const GTimeVal        *mtime);
 void                _ide_build_system_set_project_file (IdeBuildSystem        *self,
                                                         GFile                 *project_file);
 void                _ide_diagnostic_add_range          (IdeDiagnostic         *self,
