@@ -4,6 +4,7 @@
   bind "<ctrl>comma" { "action" ("app", "preferences", "") };
   bind "<ctrl>f" { "action" ("frame", "find", "") };
   bind "<ctrl>period" { "action" ("workbench", "global-search", "") };
+  bind "<ctrl>n" { "action" ("workbench", "new-document", "") };
   bind "<ctrl>o" { "action" ("workbench", "open", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };

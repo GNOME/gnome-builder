@@ -93,10 +93,10 @@
   bind "<ctrl>c" { "action" ("app", "quit", "") };
   bind "0" { "action" ("stack", "close", "") };
   bind "k" { "action" ("stack", "close", "") };
-  bind "<ctrl>f" { "action" ("workspace", "open", "") };
+  bind "<ctrl>f" { "action" ("workbench", "open", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "s" { "action" ("win", "save-all", "") };
-  bind "b" { "action" ("workspace", "new-document", "") };
+  bind "b" { "action" ("workbench", "new-document", "") };
   bind "<ctrl>w" { "action" ("view", "save-as", "") };
   bind "u" { "redo" () };
   bind "2" { "action" ("editor-view", "toggle-split", "") };

@@ -434,6 +434,20 @@ gb_vim_command_edit (GtkSourceView  *source_view,
 }
 
 static gboolean
+gb_vim_command_tabe (GtkSourceView  *source_view,
+                     const gchar    *command,
+                     const gchar    *options,
+                     GError        **error)
+{
+  if (!gb_str_empty0 (options))
+    return gb_vim_command_edit (source_view, command, options, error);
+
+  gb_widget_activate_action (GTK_WIDGET (source_view), "workbench", "new-document", NULL);
+
+  return TRUE;
+}
+
+static gboolean
 gb_vim_command_quit (GtkSourceView  *source_view,
                      const gchar    *command,
                      const gchar    *options,
@@ -628,6 +642,7 @@ static const GbVimCommand vim_commands[] = {
   { "sort",        gb_vim_command_sort },
   { "split",       gb_vim_command_split },
   { "syntax",      gb_vim_command_syntax },
+  { "tabe",        gb_vim_command_tabe },
   { "vsplit",      gb_vim_command_vsplit },
   { "w",           gb_vim_command_write },
   { "wq",          gb_vim_command_wq },
@@ -973,7 +988,9 @@ gb_vim_complete (GtkSourceView *source_view,
     {
       if (g_str_has_prefix (line, "set "))
         gb_vim_complete_set (line, ar);
-      else if (g_str_has_prefix (line, "e ") || g_str_has_prefix (line, "edit "))
+      else if (g_str_has_prefix (line, "e ") ||
+               g_str_has_prefix (line, "edit ") ||
+               g_str_has_prefix (line, "tabe "))
         gb_vim_complete_edit (source_view, line, ar);
       else if (g_str_has_prefix (line, "colorscheme "))
         gb_vim_complete_colorscheme (line, ar);
