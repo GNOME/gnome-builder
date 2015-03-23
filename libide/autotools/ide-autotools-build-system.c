@@ -111,13 +111,11 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
                                                  gpointer      task_data,
                                                  GCancellable *cancellable)
 {
-  IdeAutotoolsBuildSystem *self = source_object;
   g_autofree gchar *name = NULL;
   GFile *file = task_data;
   GFile *parent;
 
   g_assert (G_IS_TASK (task));
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
