@@ -55,6 +55,8 @@ void                _ide_buffer_set_loading            (IdeBuffer             *s
                                                         gboolean               loading);
 void                _ide_buffer_set_mtime              (IdeBuffer             *self,
                                                         const GTimeVal        *mtime);
+void                _ide_buffer_set_read_only          (IdeBuffer             *buffer,
+                                                        gboolean               read_only);
 void                _ide_build_system_set_project_file (IdeBuildSystem        *self,
                                                         GFile                 *project_file);
 void                _ide_diagnostic_add_range          (IdeDiagnostic         *self,

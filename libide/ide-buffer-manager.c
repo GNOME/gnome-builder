@@ -545,6 +545,23 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
       IDE_EXIT;
     }
 
+  if (g_file_info_has_attribute (file_info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE))
+    {
+      gboolean read_only;
+
+      read_only = !g_file_info_get_attribute_boolean (file_info,
+                                                      G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
+      _ide_buffer_set_read_only (state->buffer, read_only);
+    }
+
+  if (g_file_info_has_attribute (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED))
+    {
+      GTimeVal tv;
+
+      g_file_info_get_modification_time (file_info, &tv);
+      _ide_buffer_set_mtime (state->buffer, &tv);
+    }
+
   g_signal_emit (self, gSignals [LOAD_BUFFER], 0, state->buffer);
 
   gtk_source_file_loader_load_async (state->loader,
@@ -592,7 +609,9 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
     state->loader = gtk_source_file_loader_new (GTK_SOURCE_BUFFER (state->buffer), source_file);
 
   g_file_query_info_async (file,
-                           G_FILE_ATTRIBUTE_STANDARD_SIZE,
+                           G_FILE_ATTRIBUTE_STANDARD_SIZE","
+                           G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE","
+                           G_FILE_ATTRIBUTE_TIME_MODIFIED,
                            G_FILE_QUERY_INFO_NONE,
                            G_PRIORITY_DEFAULT,
                            g_task_get_cancellable (task),

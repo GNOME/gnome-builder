@@ -1452,9 +1452,9 @@ ide_buffer_get_read_only (IdeBuffer *self)
   return priv->read_only;
 }
 
-static void
-ide_buffer_set_read_only (IdeBuffer *self,
-                          gboolean   read_only)
+void
+_ide_buffer_set_read_only (IdeBuffer *self,
+                           gboolean   read_only)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
@@ -1529,7 +1529,7 @@ ide_buffer__check_for_volume_cb (GObject      *object,
 
           read_only = !g_file_info_get_attribute_boolean (file_info,
                                                           G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
-          ide_buffer_set_read_only (self, read_only);
+          _ide_buffer_set_read_only (self, read_only);
         }
 
       if (g_file_info_has_attribute (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED) && priv->mtime_set)
