@@ -6023,13 +6023,13 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
         duration_msec = SMALL_SCROLL_DURATION_MSEC;
 
       ide_object_animate (hadj,
-                          IDE_ANIMATION_EASE_IN_CUBIC,
+                          IDE_ANIMATION_EASE_OUT_CUBIC,
                           duration_msec,
                           frame_clock,
                           "value", xvalue,
                           NULL);
       ide_object_animate (vadj,
-                          IDE_ANIMATION_EASE_IN_CUBIC,
+                          IDE_ANIMATION_EASE_OUT_CUBIC,
                           duration_msec,
                           frame_clock,
                           "value", yvalue,
