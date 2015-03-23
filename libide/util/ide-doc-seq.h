@@ -1,4 +1,4 @@
-/* gb-doc-seq.h
+/* ide-doc-seq.h
  *
  * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
  *
@@ -16,16 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_DOC_SEQ_H
-#define GB_DOC_SEQ_H
+#ifndef IDE_DOC_SEQ_H
+#define IDE_DOC_SEQ_H
 
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-guint gb_doc_seq_acquire (void);
-void  gb_doc_seq_release (guint seq_id);
+guint ide_doc_seq_acquire (void);
+void  ide_doc_seq_release (guint seq_id);
 
 G_END_DECLS
 
-#endif /* GB_DOC_SEQ_H */
+#endif /* IDE_DOC_SEQ_H */

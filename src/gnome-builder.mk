@@ -108,8 +108,6 @@ libgnome_builder_la_SOURCES = \
 	src/util/gb-cairo.h \
 	src/util/gb-dnd.c \
 	src/util/gb-dnd.h \
-	src/util/gb-doc-seq.c \
-	src/util/gb-doc-seq.h \
 	src/util/gb-glib.h \
 	src/util/gb-gtk.c \
 	src/util/gb-gtk.h \

@@ -261,6 +261,8 @@ libide_1_0_la_SOURCES = \
 	libide/theatrics/ide-frame-source.h \
 	libide/util/ide-cairo.c \
 	libide/util/ide-cairo.h \
+	libide/util/ide-doc-seq.c \
+	libide/util/ide-doc-seq.h \
 	libide/util/ide-pango.c \
 	libide/util/ide-pango.h \
 	libide/util/ide-rgba.c \

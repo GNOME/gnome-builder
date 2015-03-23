@@ -1,4 +1,4 @@
-/* gb-doc-seq.c
+/* ide-doc-seq.c
  *
  * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
  *
@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gb-doc-seq.h"
+#include "ide-doc-seq.h"
 
 static GHashTable *seq;
 
 guint
-gb_doc_seq_acquire (void)
+ide_doc_seq_acquire (void)
 {
   guint seq_id;
 
@@ -45,7 +45,7 @@ gb_doc_seq_acquire (void)
 }
 
 void
-gb_doc_seq_release (guint seq_id)
+ide_doc_seq_release (guint seq_id)
 {
   g_hash_table_remove (seq, GINT_TO_POINTER (seq_id));
 }
