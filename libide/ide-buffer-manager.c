@@ -628,7 +628,6 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
   IdeContext *context;
   IdeBuffer *buffer;
   LoadState *state;
-  GtkSourceFile *source_file;
   GFile *gfile;
 
   IDE_ENTRY;
@@ -699,8 +698,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
   if (progress)
     *progress = g_object_ref (state->progress);
 
-  source_file = _ide_file_get_source_file (state->file);
-  gfile = gtk_source_file_get_location (source_file);
+  gfile = ide_file_get_file (file);
 
   g_file_read_async (gfile,
                      G_PRIORITY_DEFAULT,
