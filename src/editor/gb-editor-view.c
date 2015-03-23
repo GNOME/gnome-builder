@@ -188,6 +188,17 @@ gb_editor_view__buffer_changed_on_volume (GbEditorView *self,
 }
 
 static void
+gb_editor_view__buffer_notify_title (GbEditorView *self,
+                                     GParamSpec   *pspec,
+                                     IdeBuffer    *buffer)
+{
+  g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (GB_IS_EDITOR_DOCUMENT (buffer));
+
+  g_object_notify (G_OBJECT (self), "title");
+}
+
+static void
 gb_editor_view_set_document (GbEditorView     *self,
                              GbEditorDocument *document)
 {
@@ -216,6 +227,12 @@ gb_editor_view_set_document (GbEditorView     *self,
       g_signal_connect_object (document,
                                "modified-changed",
                                G_CALLBACK (gb_editor_view__buffer_modified_changed),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      g_signal_connect_object (document,
+                               "notify::title",
+                               G_CALLBACK (gb_editor_view__buffer_notify_title),
                                self,
                                G_CONNECT_SWAPPED);
 
