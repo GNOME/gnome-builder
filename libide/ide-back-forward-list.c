@@ -18,6 +18,11 @@
 
 #define G_LOG_DOMAIN "ide-back-forward-list"
 
+/*
+ * TODO: This was originally written under the assumption you can "have a current item". After
+ *       using things, I don't think this is what I want going forward.
+ */
+
 #include <glib/gi18n.h>
 
 #include "ide-back-forward-item.h"
