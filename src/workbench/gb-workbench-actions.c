@@ -50,6 +50,23 @@ gb_workbench_actions_rebuild (GSimpleAction *action,
 }
 
 static void
+gb_workbench_actions_new_document (GSimpleAction *action,
+                                   GVariant      *parameter,
+                                   gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+  IdeContext *context;
+  IdeBufferManager *buffer_manager;
+  g_autoptr(IdeBuffer) buffer = NULL;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  context = gb_workbench_get_context (self);
+  buffer_manager = ide_context_get_buffer_manager (context);
+  buffer = ide_buffer_manager_create_buffer (buffer_manager);
+}
+
+static void
 gb_workbench_actions_global_search (GSimpleAction *action,
                                     GVariant      *parameter,
                                     gpointer       user_data)
@@ -262,6 +279,7 @@ static const GActionEntry GbWorkbenchActions[] = {
   { "build",            gb_workbench_actions_build },
   { "dayhack",          gb_workbench_actions_dayhack },
   { "global-search",    gb_workbench_actions_global_search },
+  { "new-document",     gb_workbench_actions_new_document },
   { "nighthack",        gb_workbench_actions_nighthack },
   { "open",             gb_workbench_actions_open },
   { "open-uri-list",    gb_workbench_actions_open_uri_list, "as" },
