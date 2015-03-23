@@ -33,14 +33,16 @@ struct _IdeFile
   IdeLanguage   *language;
   gchar         *path;
   GtkSourceFile *source_file;
+  guint          temporary_id;
 };
 
-enum
-{
+enum {
   PROP_0,
   PROP_FILE,
+  PROP_IS_TEMPORARY,
   PROP_LANGUAGE,
   PROP_PATH,
+  PROP_TEMPORARY_ID,
   LAST_PROP
 };
 
@@ -329,6 +331,45 @@ ide_file_load_settings_finish (IdeFile              *self,
   return g_task_propagate_pointer (task, error);
 }
 
+/**
+ * ide_file_get_temporary_id:
+ * @self: (in): A #IdeFile.
+ *
+ * Gets the #IdeFile:temporary-id property for the file.
+ *
+ * Temporary files have unique identifiers associated with them so that we can
+ * display names such as "unsaved file 1" and know that it will not collide with
+ * another temporary file.
+ *
+ * Files that are not temporary, will return zero.
+ *
+ * Returns: A positive integer greater than zero if the file is a temporary file.
+ */
+guint
+ide_file_get_temporary_id (IdeFile *self)
+{
+  g_return_val_if_fail (IDE_IS_FILE (self), 0);
+
+  return self->temporary_id;
+}
+
+static void
+ide_file_set_temporary_id (IdeFile *self,
+                           guint    temporary_id)
+{
+  g_return_if_fail (IDE_IS_FILE (self));
+
+  self->temporary_id = temporary_id;
+}
+
+gboolean
+ide_file_get_is_temporary (IdeFile *self)
+{
+  g_return_val_if_fail (IDE_IS_FILE (self), FALSE);
+
+  return (self->temporary_id != 0);
+}
+
 static void
 ide_file_finalize (GObject *object)
 {
@@ -361,12 +402,20 @@ ide_file_get_property (GObject    *object,
       g_value_set_object (value, ide_file_get_file (self));
       break;
 
+    case PROP_IS_TEMPORARY:
+      g_value_set_boolean (value, ide_file_get_is_temporary (self));
+      break;
+
     case PROP_LANGUAGE:
       g_value_set_object (value, ide_file_get_language (self));
       break;
 
     case PROP_PATH:
       g_value_set_string (value, ide_file_get_path (self));
+      break;
+
+    case PROP_TEMPORARY_ID:
+      g_value_set_uint (value, ide_file_get_temporary_id (self));
       break;
 
     default:
@@ -392,6 +441,10 @@ ide_file_set_property (GObject      *object,
       ide_file_set_path (self, g_value_get_string (value));
       break;
 
+    case PROP_TEMPORARY_ID:
+      ide_file_set_temporary_id (self, g_value_get_uint (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -414,8 +467,16 @@ ide_file_class_init (IdeFileClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE,
-                                   gParamSpecs [PROP_FILE]);
+  g_object_class_install_property (object_class, PROP_FILE, gParamSpecs [PROP_FILE]);
+
+  gParamSpecs [PROP_IS_TEMPORARY] =
+    g_param_spec_boolean ("is-temporary",
+                          _("Is Temporary"),
+                          _("If the file represents a temporary file."),
+                         FALSE,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_IS_TEMPORARY,
+                                   gParamSpecs [PROP_IS_TEMPORARY]);
 
   gParamSpecs [PROP_LANGUAGE] =
     g_param_spec_object ("language",
@@ -423,19 +484,26 @@ ide_file_class_init (IdeFileClass *klass)
                          _("The file language."),
                          IDE_TYPE_LANGUAGE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_LANGUAGE,
-                                   gParamSpecs [PROP_LANGUAGE]);
+  g_object_class_install_property (object_class, PROP_LANGUAGE, gParamSpecs [PROP_LANGUAGE]);
 
   gParamSpecs [PROP_PATH] =
     g_param_spec_string ("path",
                          _("Path"),
                          _("The path within the project."),
                          NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PATH,
-                                   gParamSpecs [PROP_PATH]);
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_PATH, gParamSpecs [PROP_PATH]);
+
+  gParamSpecs [PROP_TEMPORARY_ID] =
+    g_param_spec_uint ("temporary-id",
+                       _("Temporary ID"),
+                       _("A unique identifier for temporary files."),
+                       0,
+                       G_MAXUINT,
+                       0,
+                       (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_TEMPORARY_ID,
+                                   gParamSpecs [PROP_TEMPORARY_ID]);
 }
 
 static void
