@@ -3,48 +3,101 @@
   <!-- interface-requires gtk+ 3.15 -->
   <template class="GbEditorView" parent="GbView">
     <child>
-      <object class="GtkOverlay">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <property name="visible">true</property>
-        <child type="overlay">
-          <object class="GtkProgressBar" id="progress_bar">
-            <property name="halign">fill</property>
-            <property name="orientation">horizontal</property>
-            <property name="valign">start</property>
-            <property name="visible">false</property>
-            <style>
-              <class name="osd"/>
-            </style>
-          </object>
-        </child>
         <child>
-          <object class="GtkPaned" id="paned">
-            <property name="expand">true</property>
-            <property name="orientation">vertical</property>
+          <object class="GtkRevealer" id="modified_revealer">
             <property name="visible">true</property>
+            <property name="reveal-child">false</property>
             <child>
-              <object class="GbEditorFrame" id="frame1">
+              <object class="GtkInfoBar">
                 <property name="visible">true</property>
+                <child internal-child="action_area">
+                  <object class="GtkButtonBox">
+                    <property name="spacing">6</property>
+                    <property name="layout_style">end</property>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="action-name">view.reload-buffer</property>
+                        <property name="label" translatable="yes">_Reload</property>
+                        <property name="visible">true</property>
+                        <property name="receives_default">true</property>
+                        <property name="use_underline">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="modified_cancel_button">
+                        <property name="label" translatable="yes">_Cancel</property>
+                        <property name="visible">true</property>
+                        <property name="use_underline">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child internal-child="content_area">
+                  <object class="GtkBox">
+                    <property name="spacing">16</property>
+                    <child>
+                      <object class="GtkLabel" id="modified_label">
+                        <property name="hexpand">true</property>
+                        <property name="label" translatable="yes">Builder has discovered that this file has been modified externally. Would you like to reload the file?</property>
+                        <property name="visible">true</property>
+                        <property name="wrap">true</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
-              <packing>
-                <property name="resize">true</property>
-                <property name="shrink">false</property>
-              </packing>
             </child>
           </object>
         </child>
-      </object>
-    </child>
-    <child internal-child="controls">
-      <object class="GtkBox">
         <child>
-          <object class="GtkMenuButton" id="tweak_button">
-            <property name="popover">popover</property>
+          <object class="GtkOverlay">
             <property name="visible">true</property>
-            <style>
-              <class name="dim-label"/>
-              <class name="text-button"/>
-              <class name="flat"/>
-            </style>
+            <child type="overlay">
+              <object class="GtkProgressBar" id="progress_bar">
+                <property name="halign">fill</property>
+                <property name="orientation">horizontal</property>
+                <property name="valign">start</property>
+                <property name="visible">false</property>
+                <style>
+                  <class name="osd"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkPaned" id="paned">
+                <property name="expand">true</property>
+                <property name="orientation">vertical</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GbEditorFrame" id="frame1">
+                    <property name="visible">true</property>
+                  </object>
+                  <packing>
+                    <property name="resize">true</property>
+                    <property name="shrink">false</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child internal-child="controls">
+          <object class="GtkBox">
+            <child>
+              <object class="GtkMenuButton" id="tweak_button">
+                <property name="popover">popover</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                  <class name="text-button"/>
+                  <class name="flat"/>
+                </style>
+              </object>
+            </child>
           </object>
         </child>
       </object>

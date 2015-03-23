@@ -235,6 +235,15 @@ gb_editor_view_set_back_forward_list (GbView             *view,
 }
 
 static void
+gb_editor_view_hide_reload_bar (GbEditorView *self,
+                                GtkWidget    *button)
+{
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  gtk_revealer_set_reveal_child (self->modified_revealer, FALSE);
+}
+
+static void
 gb_editor_view_finalize (GObject *object)
 {
   GbEditorView *self = (GbEditorView *)object;
@@ -314,6 +323,8 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-view.ui");
 
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, frame1);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorView, modified_cancel_button);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorView, modified_revealer);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, paned);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, progress_bar);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, tweak_button);
@@ -331,4 +342,10 @@ gb_editor_view_init (GbEditorView *self)
   self->settings = g_settings_new ("org.gnome.builder.editor");
 
   gb_editor_view_actions_init (self);
+
+  g_signal_connect_object (self->modified_cancel_button,
+                           "clicked",
+                           G_CALLBACK (gb_editor_view_hide_reload_bar),
+                           self,
+                           G_CONNECT_SWAPPED);
 }

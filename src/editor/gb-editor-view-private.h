@@ -35,6 +35,8 @@ struct _GbEditorView
 
   GbEditorFrame       *frame1;
   GbEditorFrame       *frame2;
+  GtkButton           *modified_cancel_button;
+  GtkRevealer         *modified_revealer;
   GtkPaned            *paned;
   GtkProgressBar      *progress_bar;
   GtkMenuButton       *tweak_button;

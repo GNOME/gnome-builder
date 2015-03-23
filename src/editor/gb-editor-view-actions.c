@@ -510,6 +510,70 @@ gb_editor_view_actions_find_other_file (GSimpleAction *action,
 }
 
 static void
+gb_editor_view_actions_reload_buffer_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  g_autoptr(GbEditorView) self = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(IdeBuffer) buffer = NULL;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  if (!(buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error)))
+    {
+      g_warning ("%s", error->message);
+    }
+  else
+    {
+      g_signal_emit_by_name (self->frame1->source_view, "movement",
+                             IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE, FALSE, TRUE,
+                             FALSE);
+      if (self->frame2 != NULL)
+        g_signal_emit_by_name (self->frame2->source_view, "movement",
+                               IDE_SOURCE_VIEW_MOVEMENT_FIRST_LINE, FALSE, TRUE,
+                               FALSE);
+    }
+
+  gb_widget_fade_hide (GTK_WIDGET (self->progress_bar));
+}
+
+static void
+gb_editor_view_actions_reload_buffer (GSimpleAction *action,
+                                      GVariant      *param,
+                                      gpointer       user_data)
+{
+  GbEditorView *self = user_data;
+  IdeContext *context;
+  IdeBufferManager *buffer_manager;
+  IdeFile *file;
+  g_autoptr(IdeProgress) progress = NULL;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  context = ide_buffer_get_context (IDE_BUFFER (self->document));
+  file = ide_buffer_get_file (IDE_BUFFER (self->document));
+
+  buffer_manager = ide_context_get_buffer_manager (context);
+
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (self->progress_bar), 0.0);
+  gtk_widget_show (GTK_WIDGET (self->progress_bar));
+
+  ide_buffer_manager_load_file_async (buffer_manager,
+                                      file,
+                                      TRUE,
+                                      &progress,
+                                      NULL,
+                                      gb_editor_view_actions_reload_buffer_cb,
+                                      g_object_ref (self));
+
+  g_object_bind_property (progress, "fraction", self->progress_bar, "fraction",
+                          G_BINDING_SYNC_CREATE);
+}
+
+static void
 gb_editor_view_actions_preview (GSimpleAction *action,
                                 GVariant      *param,
                                 gpointer       user_data)
@@ -572,6 +636,7 @@ static GActionEntry GbEditorViewActions[] = {
   { "highlight-current-line", NULL, NULL, "false", gb_editor_view_actions_highlight_current_line },
   { "language", NULL, "s", "''", gb_editor_view_actions_language },
   { "preview", gb_editor_view_actions_preview },
+  { "reload-buffer", gb_editor_view_actions_reload_buffer },
   { "save", gb_editor_view_actions_save },
   { "save-as", gb_editor_view_actions_save_as },
   { "show-line-numbers", NULL, NULL, "false", gb_editor_view_actions_show_line_numbers },
