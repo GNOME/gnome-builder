@@ -1,0 +1,9 @@
+<schemalist>
+  <schema id="org.gnome.builder.experimental" path="/org/gnome/builder/experimental/" gettext-domain="gnome-builder">
+    <key name="clang-autocompletion" type="b">
+      <default>false</default>
+      <summary>Clang based autocompletion.</summary>
+      <description>Use clang for autocompletion in the C and C++ languages.</description>
+    </key>
+  </schema>
+</schemalist>

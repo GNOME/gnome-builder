@@ -48,12 +48,17 @@ static GList *
 ide_c_language_get_completion_providers (IdeLanguage *language)
 {
   GList *providers = NULL;
+  g_autoptr(GSettings) settings = NULL;
 
   g_return_val_if_fail (IDE_IS_C_LANGUAGE (language), NULL);
 
   providers = g_list_append (providers, g_object_new (IDE_TYPE_C_FORMAT_PROVIDER, NULL));
 
-  if (g_getenv ("IDE_ENABLE_EXPERIMENTAL") != NULL)
+  /*
+   * Only enable clang autocompletion if the experimental feature is enabled.
+   */
+  settings = g_settings_new ("org.gnome.builder.experimental");
+  if (g_settings_get_boolean (settings, "clang-autocompletion"))
     providers = g_list_append (providers, g_object_new (IDE_TYPE_CLANG_COMPLETION_PROVIDER, NULL));
 
   return providers;

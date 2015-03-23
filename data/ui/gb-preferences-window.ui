@@ -141,6 +141,15 @@
                 <property name="title" translatable="yes">Keybindings</property>
               </packing>
             </child>
+            <child>
+              <object class="GbPreferencesPageExperimental" id="experimental_page">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="name">experimental</property>
+                <property name="title" translatable="yes">Experimental</property>
+              </packing>
+            </child>
           </object>
         </child>
       </object>

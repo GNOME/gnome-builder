@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 
 #include "gb-preferences-page-editor.h"
+#include "gb-preferences-page-experimental.h"
 #include "gb-preferences-page-git.h"
 #include "gb-preferences-page-keybindings.h"
 #include "gb-preferences-page-language.h"
@@ -326,6 +327,7 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesWindow, stack);
 
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EDITOR);
+  g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EXPERIMENTAL);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_GIT);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_KEYBINDINGS);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_LANGUAGE);
