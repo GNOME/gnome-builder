@@ -6348,7 +6348,7 @@ ide_source_view_clear_search (IdeSourceView *self)
       priv->saved_search_text = g_strdup (search_text);
     }
 
-  gtk_source_search_settings_set_search_text (search_settings, NULL);
+  gtk_source_search_settings_set_search_text (search_settings, "");
 }
 
 guint
