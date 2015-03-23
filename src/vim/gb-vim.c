@@ -180,7 +180,6 @@ gb_vim_set_nonumber (GtkSourceView  *source_view,
                      const gchar    *value,
                      GError        **error)
 {
-  g_print ("disablign line numbers\n");
   g_object_set (source_view, "show-line-numbers", FALSE, NULL);
   return TRUE;
 }
@@ -629,6 +628,218 @@ gb_vim_command_help (GtkSourceView  *source_view,
   return TRUE;
 }
 
+static gboolean
+gb_vim_match_is_selected (GtkTextBuffer *buffer,
+                          GtkTextIter   *match_begin,
+                          GtkTextIter   *match_end)
+{
+  GtkTextIter sel_begin;
+  GtkTextIter sel_end;
+
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+  g_assert (match_begin);
+  g_assert (match_end);
+
+  gtk_text_buffer_get_selection_bounds (buffer, &sel_begin, &sel_end);
+  gtk_text_iter_order (&sel_begin, &sel_end);
+
+  return ((gtk_text_iter_compare (&sel_begin, match_begin) <= 0) &&
+          (gtk_text_iter_compare (&sel_begin, match_end) < 0) &&
+          (gtk_text_iter_compare (&sel_end, match_begin) > 0) &&
+          (gtk_text_iter_compare (&sel_end, match_end) >= 0));
+}
+
+static void
+gb_vim_do_search_and_replace (GtkTextBuffer *buffer,
+                              GtkTextIter   *begin,
+                              GtkTextIter   *end,
+                              const gchar   *search_text,
+                              const gchar   *replace_text,
+                              gboolean       is_global)
+{
+  GtkSourceSearchContext *search_context;
+  GtkSourceSearchSettings *search_settings;
+  GtkTextMark *mark;
+  GtkTextIter tmp1;
+  GtkTextIter tmp2;
+  GtkTextIter match_begin;
+  GtkTextIter match_end;
+  GError *error = NULL;
+
+  g_assert (GB_IS_SOURCE_VIM (vim));
+  g_assert (search_text);
+  g_assert (replace_text);
+  g_assert ((!begin && !end) || (begin && end));
+
+  search_settings = gtk_source_search_settings_new ();
+  search_context = gtk_source_search_context_new (GTK_SOURCE_BUFFER (buffer), search_settings);
+
+  if (!begin)
+    {
+      gtk_text_buffer_get_start_iter (buffer, &tmp1);
+      begin = &tmp1;
+    }
+
+  if (!end)
+    {
+      gtk_text_buffer_get_end_iter (buffer, &tmp2);
+      end = &tmp2;
+    }
+
+  mark = gtk_text_buffer_create_mark (buffer, NULL, end, FALSE);
+
+  gtk_source_search_settings_set_search_text (search_settings, search_text);
+  gtk_source_search_settings_set_case_sensitive (search_settings, TRUE);
+
+  while (gtk_source_search_context_forward (search_context, begin, &match_begin, &match_end))
+    {
+      if (is_global || gb_vim_match_is_selected (buffer, &match_begin, &match_end))
+        {
+          GtkTextMark *mark2;
+
+          mark2 = gtk_text_buffer_create_mark (buffer, NULL, &match_end, FALSE);
+
+          if (!gtk_source_search_context_replace (search_context, &match_begin, &match_end,
+                                                  replace_text, -1, &error))
+            {
+              g_warning ("%s", error->message);
+              g_clear_error (&error);
+              gtk_text_buffer_delete_mark (buffer, mark2);
+              break;
+            }
+
+          gtk_text_buffer_get_iter_at_mark (buffer, &match_end, mark2);
+          gtk_text_buffer_delete_mark (buffer, mark2);
+        }
+
+      *begin = match_end;
+
+      gtk_text_buffer_get_iter_at_mark (buffer, end, mark);
+    }
+
+  gtk_text_buffer_delete_mark (buffer, mark);
+
+  g_clear_object (&search_settings);
+  g_clear_object (&search_context);
+}
+
+static gboolean
+gb_vim_command_search (GtkSourceView  *source_view,
+                       const gchar    *command,
+                       const gchar    *options,
+                       GError        **error)
+{
+  GtkTextBuffer *buffer;
+  const gchar *search_begin = NULL;
+  const gchar *search_end = NULL;
+  const gchar *replace_begin = NULL;
+  const gchar *replace_end = NULL;
+  gchar *search_text = NULL;
+  gchar *replace_text = NULL;
+  gunichar separator;
+
+  g_assert (g_str_has_prefix (command, "%s") || g_str_has_prefix (command, "s"));
+
+  if (*command == '%')
+    command++;
+  command++;
+
+  separator = g_utf8_get_char (command);
+  if (!separator)
+    goto invalid_request;
+
+  search_begin = command = g_utf8_next_char (command);
+
+  for (; *command; command = g_utf8_next_char (command))
+    {
+      if (*command == '\\')
+        {
+          command = g_utf8_next_char (command);
+          if (!*command)
+            goto invalid_request;
+          continue;
+        }
+
+      if (g_utf8_get_char (command) == separator)
+        {
+          search_end = command;
+          break;
+        }
+    }
+
+  if (!search_end)
+    goto invalid_request;
+
+  replace_begin = command = g_utf8_next_char (command);
+
+  for (; *command; command = g_utf8_next_char (command))
+    {
+      if (*command == '\\')
+        {
+          command = g_utf8_next_char (command);
+          if (!*command)
+            goto invalid_request;
+          continue;
+        }
+
+      if (g_utf8_get_char (command) == separator)
+        {
+          replace_end = command;
+          break;
+        }
+    }
+
+  if (!replace_end)
+    goto invalid_request;
+
+  command = g_utf8_next_char (command);
+
+  if (*command)
+    {
+      for (; *command; command++)
+        {
+          switch (*command)
+            {
+            case 'g':
+              break;
+
+            /* what other options are supported? */
+            default:
+              break;
+            }
+        }
+    }
+
+  search_text = g_strndup (search_begin, search_end - search_begin);
+  replace_text = g_strndup (replace_begin, replace_end - replace_begin);
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
+
+  if (gtk_text_buffer_get_has_selection (buffer))
+    {
+      GtkTextIter begin;
+      GtkTextIter end;
+
+      gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+      gtk_text_iter_order (&begin, &end);
+      gb_vim_do_search_and_replace (buffer, &begin, &end, search_text, replace_text, FALSE);
+    }
+  else
+    gb_vim_do_search_and_replace (buffer, NULL, NULL, search_text, replace_text, TRUE);
+
+  g_free (search_text);
+  g_free (replace_text);
+
+  return TRUE;
+
+invalid_request:
+  g_set_error (error,
+               GB_VIM_ERROR,
+               GB_VIM_ERROR_UNKNOWN_OPTION,
+               _("Invalid searcn and replace request"));
+  return FALSE;
+}
+
 static const GbVimCommand vim_commands[] = {
   { "cnext",       gb_vim_command_cnext },
   { "colorscheme", gb_vim_command_colorscheme },
@@ -650,6 +861,16 @@ static const GbVimCommand vim_commands[] = {
   { NULL }
 };
 
+static gboolean
+looks_like_search_and_replace (const gchar *line)
+{
+  g_assert (line);
+
+  if (g_str_has_prefix (line, "%s"))
+    return TRUE;
+  return *line == 's';
+}
+
 static const GbVimCommand *
 lookup_command (const gchar *name)
 {
@@ -665,7 +886,7 @@ lookup_command (const gchar *name)
         return &vim_commands [i];
     }
 
-  if (int32_parse (&line, name, 0, G_MAXINT32, "line", NULL))
+  if (g_ascii_isdigit (*name) && int32_parse (&line, name, 0, G_MAXINT32, "line", NULL))
     return &line_command;
 
   return NULL;
@@ -716,6 +937,9 @@ gb_vim_execute (GtkSourceView  *source_view,
 
   if (command == NULL)
     {
+      if (looks_like_search_and_replace (line))
+        return gb_vim_command_search (source_view, line, "", error);
+
       g_set_error (error,
                    GB_VIM_ERROR,
                    GB_VIM_ERROR_NOT_FOUND,
