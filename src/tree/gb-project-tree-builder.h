@@ -27,12 +27,8 @@ G_BEGIN_DECLS
 
 #define GB_TYPE_PROJECT_TREE_BUILDER (gb_project_tree_builder_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (GbProjectTreeBuilder, gb_project_tree_builder, GB, PROJECT_TREE_BUILDER, GbTreeBuilder)
-
-struct _GbProjectTreeBuilderClass
-{
-  GbTreeBuilderClass parent;
-};
+G_DECLARE_FINAL_TYPE (GbProjectTreeBuilder, gb_project_tree_builder,
+                      GB, PROJECT_TREE_BUILDER, GbTreeBuilder)
 
 GbTreeBuilder  *gb_project_tree_builder_new         (IdeContext           *context);
 IdeContext     *gb_project_tree_builder_get_context (GbProjectTreeBuilder *self);

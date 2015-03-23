@@ -28,14 +28,13 @@
 # define ENABLE_ICONS
 #endif
 
-typedef struct
+struct _GbProjectTreeBuilder
 {
-  IdeContext *context;
-} GbProjectTreeBuilderPrivate;
+  GbTreeBuilder  parent_instance;
+  IdeContext    *context;
+};
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbProjectTreeBuilder,
-                            gb_project_tree_builder,
-                            GB_TYPE_TREE_BUILDER)
+G_DEFINE_TYPE (GbProjectTreeBuilder, gb_project_tree_builder, GB_TYPE_TREE_BUILDER)
 
 enum {
   PROP_0,
@@ -58,23 +57,19 @@ gb_project_tree_builder_new (IdeContext *context)
 IdeContext *
 gb_project_tree_builder_get_context (GbProjectTreeBuilder *self)
 {
-  GbProjectTreeBuilderPrivate *priv = gb_project_tree_builder_get_instance_private (self);
-
   g_return_val_if_fail (GB_IS_PROJECT_TREE_BUILDER (self), NULL);
 
-  return priv->context;
+  return self->context;
 }
 
 void
 gb_project_tree_builder_set_context (GbProjectTreeBuilder *self,
                                      IdeContext           *context)
 {
-  GbProjectTreeBuilderPrivate *priv = gb_project_tree_builder_get_instance_private (self);
-
   g_return_if_fail (GB_IS_PROJECT_TREE_BUILDER (self));
   g_return_if_fail (!context || IDE_IS_CONTEXT (context));
 
-  if (g_set_object (&priv->context, context))
+  if (g_set_object (&self->context, context))
     {
       GtkWidget *tree;
 
@@ -287,9 +282,8 @@ static void
 gb_project_tree_builder_finalize (GObject *object)
 {
   GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)object;
-  GbProjectTreeBuilderPrivate *priv = gb_project_tree_builder_get_instance_private (self);
 
-  g_clear_object (&priv->context);
+  g_clear_object (&self->context);
 
   G_OBJECT_CLASS (gb_project_tree_builder_parent_class)->finalize (object);
 }
