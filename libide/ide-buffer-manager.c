@@ -545,7 +545,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  if (g_file_info_has_attribute (file_info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE))
+  if (file_info && g_file_info_has_attribute (file_info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE))
     {
       gboolean read_only;
 
@@ -554,7 +554,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
       _ide_buffer_set_read_only (state->buffer, read_only);
     }
 
-  if (g_file_info_has_attribute (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED))
+  if (file_info && g_file_info_has_attribute (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED))
     {
       GTimeVal tv;
 
