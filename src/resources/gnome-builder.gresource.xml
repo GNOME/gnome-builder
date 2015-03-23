@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/builder">
-    <file>css/builder.Adwaita.css</file>
-    <file>css/markdown.css</file>
+    <file alias="css/builder.Adwaita.css">../../data/css/builder.Adwaita.css</file>
+    <file alias="css/markdown.css">../../data/css/markdown.css</file>
 
     <file>editor/uncrustify/uncrustify.c.cfg</file>
 
@@ -14,8 +14,8 @@
     <file alias="icons/scalable/actions/builder-split-tab-right-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-split-tab-right-symbolic.svg</file>
     <file alias="icons/scalable/actions/builder-split-tab-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-split-tab-symbolic.svg</file>
     
-    <file>js/marked.js</file>
-    <file>js/markdown-view.js</file>
+    <file alias="js/marked.js">../../data/js/marked.js</file>
+    <file alias="js/markdown-view.js">../../data/js/markdown-view.js</file>
 
     <file alias="keybindings/default.css">../../data/keybindings/default.css</file>
     <file alias="keybindings/emacs.css">../../data/keybindings/emacs.css</file>
