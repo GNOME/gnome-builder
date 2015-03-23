@@ -218,7 +218,7 @@ create_range (IdeClangTranslationUnit *self,
               const gchar             *workpath,
               CXSourceRange            cxrange)
 {
-  IdeSourceRange *range;
+  IdeSourceRange *range = NULL;
   CXSourceLocation cxbegin;
   CXSourceLocation cxend;
   g_autoptr(IdeSourceLocation) begin = NULL;
@@ -232,7 +232,8 @@ create_range (IdeClangTranslationUnit *self,
   begin = create_location (self, project, workpath, cxbegin);
   end = create_location (self, project, workpath, cxend);
 
-  range = _ide_source_range_new (begin, end);
+  if ((begin != NULL) && (end != NULL))
+    range = _ide_source_range_new (begin, end);
 
   return range;
 }
@@ -302,7 +303,8 @@ create_diagnostic (IdeClangTranslationUnit *self,
 
       cxrange = clang_getDiagnosticRange (cxdiag, i);
       range = create_range (self, project, workpath, cxrange);
-      _ide_diagnostic_take_range (diag, range);
+      if (range != NULL)
+        _ide_diagnostic_take_range (diag, range);
     }
 
   return diag;
