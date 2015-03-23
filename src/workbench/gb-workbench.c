@@ -749,3 +749,17 @@ gb_workbench_build_finish (GbWorkbench   *self,
 
   return g_task_propagate_boolean (task, error);
 }
+
+void
+gb_workbench_add_temporary_buffer (GbWorkbench *self)
+{
+  IdeContext *context;
+  IdeBufferManager *buffer_manager;
+  g_autoptr(IdeBuffer) buffer = NULL;
+
+  g_return_if_fail (GB_IS_WORKBENCH (self));
+
+  context = gb_workbench_get_context (self);
+  buffer_manager = ide_context_get_buffer_manager (context);
+  buffer = ide_buffer_manager_create_buffer (buffer_manager);
+}

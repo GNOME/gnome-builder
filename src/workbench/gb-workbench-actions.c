@@ -55,15 +55,10 @@ gb_workbench_actions_new_document (GSimpleAction *action,
                                    gpointer       user_data)
 {
   GbWorkbench *self = user_data;
-  IdeContext *context;
-  IdeBufferManager *buffer_manager;
-  g_autoptr(IdeBuffer) buffer = NULL;
 
   g_assert (GB_IS_WORKBENCH (self));
 
-  context = gb_workbench_get_context (self);
-  buffer_manager = ide_context_get_buffer_manager (context);
-  buffer = ide_buffer_manager_create_buffer (buffer_manager);
+  gb_workbench_add_temporary_buffer (self);
 }
 
 static void
