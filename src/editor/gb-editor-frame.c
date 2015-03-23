@@ -165,6 +165,23 @@ gb_editor_frame_get_document (GbEditorFrame *self)
   return NULL;
 }
 
+static gboolean
+search_text_transform_to (GBinding     *binding,
+                          const GValue *from_value,
+                          GValue       *to_value,
+                          gpointer      user_data)
+{
+  g_assert (from_value != NULL);
+  g_assert (to_value != NULL);
+
+  if (g_value_get_string (from_value) == NULL)
+    g_value_set_string (to_value, "");
+  else
+    g_value_copy (from_value, to_value);
+
+  return TRUE;
+}
+
 void
 gb_editor_frame_set_document (GbEditorFrame    *self,
                               GbEditorDocument *document)
@@ -190,8 +207,9 @@ gb_editor_frame_set_document (GbEditorFrame    *self,
    */
   search_context = ide_source_view_get_search_context (self->source_view);
   search_settings = gtk_source_search_context_get_settings (search_context);
-  g_object_bind_property (self->search_entry, "text", search_settings, "search-text",
-                          (G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL));
+  g_object_bind_property_full (self->search_entry, "text", search_settings, "search-text",
+                               (G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL),
+                               search_text_transform_to, NULL, NULL, NULL);
   g_signal_connect_object (search_context,
                            "notify::occurrences-count",
                            G_CALLBACK (gb_editor_frame_on_search_occurrences_notify),
