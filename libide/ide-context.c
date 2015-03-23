@@ -1297,6 +1297,7 @@ ide_context_unload_buffer_manager (gpointer             source_object,
   g_autoptr(GTask) task = NULL;
   g_autoptr(GPtrArray) buffers = NULL;
   gsize i;
+  guint skipped = 0;
 
   IDE_ENTRY;
 
@@ -1315,6 +1316,13 @@ ide_context_unload_buffer_manager (gpointer             source_object,
 
       buffer = g_ptr_array_index (buffers, i);
       file = ide_buffer_get_file (buffer);
+
+      if (!gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)))
+        {
+          skipped++;
+          continue;
+        }
+
       ide_buffer_manager_save_file_async (self->buffer_manager,
                                           buffer,
                                           file,
@@ -1322,6 +1330,18 @@ ide_context_unload_buffer_manager (gpointer             source_object,
                                           cancellable,
                                           ide_context_unload__buffer_manager_save_file_cb,
                                           g_object_ref (task));
+    }
+
+  if (skipped > 0)
+    {
+      guint count;
+
+      count = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (task), "IN_PROGRESS"));
+      count -= skipped;
+      g_object_set_data (G_OBJECT (task), "IN_PROGRESS", GINT_TO_POINTER (count));
+
+      if (count == 0)
+        g_task_return_boolean (task, TRUE);
     }
 
   IDE_EXIT;
