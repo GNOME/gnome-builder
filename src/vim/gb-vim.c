@@ -503,6 +503,16 @@ gb_vim_command_nohl (GtkSourceView  *source_view,
 }
 
 static gboolean
+gb_vim_command_make (GtkSourceView  *source_view,
+                     const gchar    *command,
+                     const gchar    *options,
+                     GError        **error)
+{
+  gb_widget_activate_action (GTK_WIDGET (source_view), "workbench", "build", NULL);
+  return TRUE;
+}
+
+static gboolean
 gb_vim_command_syntax (GtkSourceView  *source_view,
                        const gchar    *command,
                        const gchar    *options,
@@ -612,6 +622,7 @@ static const GbVimCommand vim_commands[] = {
   { "edit",        gb_vim_command_edit },
   { "help",        gb_vim_command_help },
   { "nohl",        gb_vim_command_nohl },
+  { "make",        gb_vim_command_make },
   { "quit",        gb_vim_command_quit },
   { "set",         gb_vim_command_set },
   { "sort",        gb_vim_command_sort },
