@@ -27,11 +27,13 @@
 #include "ide-buffer-manager.h"
 #include "ide-context.h"
 #include "ide-debug.h"
+#include "ide-doc-seq.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
 #include "ide-internal.h"
 #include "ide-progress.h"
 #include "ide-source-location.h"
+#include "ide-vcs.h"
 
 #define AUTO_SAVE_TIMEOUT_DEFAULT    60
 #define MAX_FILE_SIZE_BYTES_DEFAULT  (1024UL * 1024UL * 10UL)
@@ -1427,4 +1429,51 @@ ide_buffer_manager_set_max_file_size (IdeBufferManager *self,
       self->max_file_size = max_file_size;
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MAX_FILE_SIZE]);
     }
+}
+
+/**
+ * ide_buffer_manager_create_buffer:
+ *
+ * Creates a new #IdeBuffer that does not yet have a backing file attached to it. Interfaces
+ * should perform a save-as operation to save the file to a real file.
+ *
+ * ide_file_get_file() will return %NULL to denote this type of buffer.
+ *
+ * Returns: (transfer full): A newly created #IdeBuffer
+ */
+IdeBuffer *
+ide_buffer_manager_create_buffer (IdeBufferManager *self)
+{
+  IdeBuffer *buffer = NULL;
+  g_autoptr(IdeFile) file = NULL;
+  g_autoptr(GFile) gfile = NULL;
+  g_autofree gchar *path = NULL;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
+  guint doc_seq;
+
+  g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  doc_seq = ide_doc_seq_acquire ();
+  path = g_strdup_printf (_("unsaved document %u"), doc_seq);
+  gfile = g_file_get_child (workdir, path);
+
+  file = g_object_new (IDE_TYPE_FILE,
+                       "context", context,
+                       "path", path,
+                       "file", gfile,
+                       "temporary-id", doc_seq,
+                       NULL);
+
+  g_signal_emit (self, gSignals [CREATE_BUFFER], 0, file, &buffer);
+  g_signal_emit (self, gSignals [LOAD_BUFFER], 0, buffer);
+  ide_buffer_manager_add_buffer (self, buffer);
+  g_signal_emit (self, gSignals [BUFFER_LOADED], 0, buffer);
+
+  return buffer;
 }

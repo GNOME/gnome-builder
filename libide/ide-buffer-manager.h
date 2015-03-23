@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeBufferManager, ide_buffer_manager, IDE, BUFFER_MANAGER, IdeObject)
 
+IdeBuffer                *ide_buffer_manager_create_buffer       (IdeBufferManager     *self);
 void                      ide_buffer_manager_load_file_async     (IdeBufferManager     *self,
                                                                   IdeFile              *file,
                                                                   gboolean              force_reload,
