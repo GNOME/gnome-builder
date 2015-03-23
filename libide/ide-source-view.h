@@ -287,6 +287,7 @@ const PangoFontDescription *ide_source_view_get_font_desc             (IdeSource
 gboolean                    ide_source_view_get_highlight_current_line(IdeSourceView              *self);
 gboolean                    ide_source_view_get_insert_matching_brace (IdeSourceView              *self);
 gboolean                    ide_source_view_get_overwrite_braces      (IdeSourceView              *self);
+gboolean                    ide_source_view_get_rubberband_search     (IdeSourceView              *self);
 guint                       ide_source_view_get_scroll_offset         (IdeSourceView              *self);
 GtkSourceSearchContext     *ide_source_view_get_search_context        (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_grid_lines       (IdeSourceView              *self);
@@ -303,6 +304,7 @@ void                        ide_source_view_jump                      (IdeSource
 void                        ide_source_view_pop_snippet               (IdeSourceView              *self);
 void                        ide_source_view_push_snippet              (IdeSourceView              *self,
                                                                        IdeSourceSnippet           *snippet);
+void                        ide_source_view_rollback_search           (IdeSourceView              *self);
 void                        ide_source_view_set_count                 (IdeSourceView              *self,
                                                                        guint                       count);
 void                        ide_source_view_set_enable_word_completion(IdeSourceView              *self,
@@ -317,6 +319,8 @@ void                        ide_source_view_set_insert_matching_brace (IdeSource
                                                                        gboolean                    insert_matching_brace);
 void                        ide_source_view_set_overwrite_braces      (IdeSourceView              *self,
                                                                        gboolean                    overwrite_braces);
+void                        ide_source_view_set_rubberband_search     (IdeSourceView              *self,
+                                                                       gboolean                    rubberband_search);
 void                        ide_source_view_set_scroll_offset         (IdeSourceView              *self,
                                                                        guint                       scroll_offset);
 void                        ide_source_view_set_show_grid_lines       (IdeSourceView              *self,

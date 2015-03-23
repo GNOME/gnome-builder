@@ -313,7 +313,9 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
   switch (event->keyval)
     {
     case GDK_KEY_Escape:
+      ide_source_view_rollback_search (self->source_view);
       ide_source_view_clear_search (self->source_view);
+      ide_source_view_set_rubberband_search (self->source_view, FALSE);
       gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
       return TRUE;
 
@@ -323,6 +325,7 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
         gb_widget_activate_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
       else
         gb_widget_activate_action (GTK_WIDGET (self), "frame", "previous-search-result", NULL);
+      ide_source_view_set_rubberband_search (self->source_view, FALSE);
       gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
       return TRUE;
 
@@ -338,6 +341,9 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
       {
         GtkSourceSearchSettings *search_settings;
         GtkSourceSearchContext *search_context;
+
+        if (!ide_source_view_get_rubberband_search (self->source_view))
+          ide_source_view_set_rubberband_search (self->source_view, TRUE);
 
         /*
          * Other modes, such as Vim emulation, want word boundaries, but we do
@@ -553,6 +559,14 @@ gb_editor_frame_init (GbEditorFrame *self)
   g_signal_connect (settings, "changed::keybindings", G_CALLBACK (keybindings_changed), self);
 
   g_object_bind_property (self->source_view, "overwrite", self->overwrite_label, "visible", G_BINDING_SYNC_CREATE);
+
+  /*
+   * we want to rubberbanding search until enter has been pressed or next/previous actions
+   * have been activated.
+   */
+  g_object_bind_property (self->search_revealer, "visible",
+                          self->source_view, "rubberband-search",
+                          G_BINDING_SYNC_CREATE);
 
   /*
    * Drag and drop support

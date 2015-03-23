@@ -88,6 +88,8 @@ typedef struct
   IdeSourceViewCapture        *capture;
   IdeSourceViewMode           *mode;
   GList                       *providers;
+  GtkTextMark                 *rubberband_mark;
+  GtkTextMark                 *rubberband_insert_mark;
   gchar                       *saved_search_text;
   GQueue                      *selections;
   GQueue                      *snippets;
@@ -138,6 +140,7 @@ typedef struct
   guint                        insert_matching_brace : 1;
   guint                        overwrite_braces : 1;
   guint                        recording_macro : 1;
+  guint                        rubberband_search : 1;
   guint                        show_grid_lines : 1;
   guint                        show_line_changes : 1;
   guint                        show_search_bubbles : 1;
@@ -173,6 +176,7 @@ enum {
   PROP_INSERT_MATCHING_BRACE,
   PROP_OVERWRITE,
   PROP_OVERWRITE_BRACES,
+  PROP_RUBBERBAND_SEARCH,
   PROP_SCROLL_OFFSET,
   PROP_SEARCH_CONTEXT,
   PROP_SHOW_GRID_LINES,
@@ -1055,6 +1059,40 @@ ide_source_view__buffer_changed_cb (IdeSourceView *self,
 }
 
 static void
+ide_source_view__search_settings_notify_search_text (IdeSourceView           *self,
+                                                     GParamSpec              *pspec,
+                                                     GtkSourceSearchSettings *search_settings)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  const gchar *search_text;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_SOURCE_IS_SEARCH_SETTINGS (search_settings));
+
+  search_text = gtk_source_search_settings_get_search_text (search_settings);
+
+  /*
+   * If we have IdeSourceView:rubberband-search enabled, then we should try to
+   * autoscroll to the next search result starting from our saved search mark.
+   */
+  if ((search_text != NULL) && (search_text [0] != '\0') &&
+      priv->rubberband_search && (priv->rubberband_insert_mark != NULL))
+    {
+      GtkTextBuffer *buffer;
+      GtkTextIter begin_iter;
+      GtkTextIter match_begin;
+      GtkTextIter match_end;
+
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+      gtk_text_buffer_get_iter_at_mark (buffer, &begin_iter, priv->rubberband_insert_mark);
+
+      if (gtk_source_search_context_forward (priv->search_context, &begin_iter,
+                                             &match_begin, &match_end))
+        ide_source_view_scroll_to_iter (self, &match_begin, 0.25, TRUE, 1.0, 0.5, TRUE);
+    }
+}
+
+static void
 ide_source_view_rebuild_css (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
@@ -1402,10 +1440,25 @@ ide_source_view_connect_buffer (IdeSourceView *self,
                                        "highlight", TRUE,
                                        "settings", search_settings,
                                        NULL);
+
+  g_signal_connect_object (search_settings,
+                           "notify::search-text",
+                           G_CALLBACK (ide_source_view__search_settings_notify_search_text),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   g_clear_object (&search_settings);
 
+  /* Create scroll mark used by movements */
   gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buffer), &iter);
   gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), "scroll-mark", &iter, TRUE);
+
+  /* Create rubberband mark used by search rubberbanding */
+  priv->rubberband_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer),
+                                                       "rubberband-search", &iter, TRUE);
+  priv->rubberband_insert_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer),
+                                                              "rubberband-search-insert",
+                                                              &iter, TRUE);
 
   ide_source_view__buffer_notify_language_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_file_cb (self, NULL, buffer);
@@ -3072,6 +3125,7 @@ ide_source_view__search_forward_cb (GObject      *object,
                                     gpointer      user_data)
 {
   GtkSourceSearchContext *search_context = (GtkSourceSearchContext *)object;
+  IdeSourceViewPrivate *priv;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter begin;
@@ -3083,12 +3137,23 @@ ide_source_view__search_forward_cb (GObject      *object,
   g_assert (mv);
   g_assert (IDE_IS_SOURCE_VIEW (mv->self));
 
+  priv = ide_source_view_get_instance_private (mv->self);
+
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
   insert = gtk_text_buffer_get_insert (buffer);
 
-  /* todo: rubberband back to start? */
   if (!gtk_source_search_context_forward_finish (search_context, result, &begin, &end, &error))
-    return;
+    {
+      /*
+       * If we didn't find a match, scroll back to the position when the search
+       * started.
+       */
+      if (priv->rubberband_search)
+        {
+          ide_source_view_rollback_search (mv->self);
+          return;
+        }
+    }
 
   mv->count--;
 
@@ -3130,6 +3195,7 @@ ide_source_view__search_backward_cb (GObject      *object,
                                      gpointer      user_data)
 {
   GtkSourceSearchContext *search_context = (GtkSourceSearchContext *)object;
+  IdeSourceViewPrivate *priv;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter begin;
@@ -3141,12 +3207,23 @@ ide_source_view__search_backward_cb (GObject      *object,
   g_assert (mv);
   g_assert (IDE_IS_SOURCE_VIEW (mv->self));
 
+  priv = ide_source_view_get_instance_private (mv->self);
+
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (mv->self));
   insert = gtk_text_buffer_get_insert (buffer);
 
-  /* todo: rubberband back to start? */
   if (!gtk_source_search_context_backward_finish (search_context, result, &begin, &end, &error))
-    return;
+    {
+      /*
+       * If we didn't find a match, scroll back to the position when the search
+       * started.
+       */
+      if (priv->rubberband_search)
+        {
+          ide_source_view_rollback_search (mv->self);
+          return;
+        }
+    }
 
   mv->count--;
 
@@ -4499,6 +4576,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_overwrite_braces (self));
       break;
 
+    case PROP_RUBBERBAND_SEARCH:
+      g_value_set_boolean (value, ide_source_view_get_rubberband_search (self));
+      break;
+
     case PROP_SCROLL_OFFSET:
       g_value_set_uint (value, ide_source_view_get_scroll_offset (self));
       break;
@@ -4586,6 +4667,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_OVERWRITE_BRACES:
       ide_source_view_set_overwrite_braces (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_RUBBERBAND_SEARCH:
+      ide_source_view_set_rubberband_search (self, g_value_get_boolean (value));
       break;
 
     case PROP_SCROLL_OFFSET:
@@ -4763,6 +4848,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_OVERWRITE_BRACES,
                                    gParamSpecs [PROP_OVERWRITE_BRACES]);
+
+  gParamSpecs [PROP_RUBBERBAND_SEARCH] =
+    g_param_spec_boolean ("rubberband-search",
+                          _("Rubberband Search"),
+                          _("Auto scroll to next search result without moving insertion caret."),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_RUBBERBAND_SEARCH,
+                                   gParamSpecs [PROP_RUBBERBAND_SEARCH]);
 
   gParamSpecs [PROP_SCROLL_OFFSET] =
     g_param_spec_uint ("scroll-offset",
@@ -6376,4 +6470,71 @@ ide_source_view_set_count (IdeSourceView *self,
       priv->count = count;
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_COUNT]);
     }
+}
+
+gboolean
+ide_source_view_get_rubberband_search (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->rubberband_search;
+}
+
+void
+ide_source_view_set_rubberband_search (IdeSourceView *self,
+                                       gboolean       rubberband_search)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  rubberband_search = !!rubberband_search;
+
+  if (rubberband_search != priv->rubberband_search)
+    {
+      priv->rubberband_search = rubberband_search;
+
+      if (priv->rubberband_search && (priv->rubberband_mark != NULL))
+        {
+          GtkTextBuffer *buffer;
+          GtkTextMark *insert;
+          GtkTextIter iter;
+          GdkRectangle rect;
+
+          /*
+           * The rubberbound_mark is the top-left position of the sourceview
+           * currently (for the beginning of the search). We use this so that
+           * we can restore the sourceview vadjustment to the proper position
+           * when rubberbanding back to the original position. The
+           * rubberband_insert_mark is the position after the current insert
+           * mark so that we will begin incremental searches after the current
+           * cursor.
+           */
+
+          buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+          insert = gtk_text_buffer_get_insert (buffer);
+
+          gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (self), &rect);
+          gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self), &iter, rect.x+1, rect.y+1);
+          gtk_text_buffer_move_mark (buffer, priv->rubberband_mark, &iter);
+
+          gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+          gtk_text_iter_forward_char (&iter);
+          gtk_text_buffer_move_mark (buffer, priv->rubberband_insert_mark, &iter);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_RUBBERBAND_SEARCH]);
+    }
+}
+
+void
+ide_source_view_rollback_search (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self), priv->rubberband_mark, 0.0, TRUE, 0.0, 1.0);
 }
