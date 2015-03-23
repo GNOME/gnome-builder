@@ -1051,6 +1051,7 @@ ide_buffer_set_file (IdeBuffer *self,
       ide_buffer_reload_change_monitor (self);
       ide_buffer_update_title (self);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TITLE]);
     }
 }
 

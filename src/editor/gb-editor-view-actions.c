@@ -196,6 +196,73 @@ save_file_cb (GObject      *object,
 }
 
 static void
+gb_editor_view_actions__save_temp_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  g_autoptr(GbEditorView) self = user_data;
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  GError *error = NULL;
+
+  if (!ide_buffer_manager_save_file_finish (buffer_manager, result, &error))
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+}
+
+static void
+save_temp_response (GtkWidget *widget,
+                    gint       response,
+                    gpointer   user_data)
+{
+  g_autoptr(GbEditorView) self = user_data;
+  g_autoptr(GFile) target = NULL;
+  g_autoptr(IdeProgress) progress = NULL;
+  GtkFileChooser *chooser = (GtkFileChooser *)widget;
+
+  g_assert (GTK_IS_FILE_CHOOSER (chooser));
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  switch (response)
+    {
+    case GTK_RESPONSE_OK:
+      target = gtk_file_chooser_get_file (chooser);
+      break;
+
+    case GTK_RESPONSE_CANCEL:
+    default:
+      break;
+    }
+
+  if (target != NULL)
+    {
+      IdeBufferManager *buffer_manager;
+      IdeContext *context;
+      IdeProject *project;
+      IdeBuffer *buffer = IDE_BUFFER (self->document);
+      g_autoptr(IdeFile) file = NULL;
+
+      context = ide_buffer_get_context (buffer);
+      project = ide_context_get_project (context);
+      buffer_manager = ide_context_get_buffer_manager (context);
+      file = ide_project_get_project_file (project, target);
+
+      ide_buffer_set_file (buffer, file);
+
+      ide_buffer_manager_save_file_async (buffer_manager,
+                                          buffer,
+                                          file,
+                                          &progress,
+                                          NULL,
+                                          gb_editor_view_actions__save_temp_cb,
+                                          g_object_ref (self));
+    }
+
+  gtk_widget_destroy (widget);
+}
+
+static void
 gb_editor_view_actions_save (GSimpleAction *action,
                              GVariant      *param,
                              gpointer       user_data)
@@ -205,19 +272,53 @@ gb_editor_view_actions_save (GSimpleAction *action,
   IdeBufferManager *buffer_manager;
   IdeFile *file;
   IdeProgress *progress = NULL;
+  IdeVcs *vcs;
+  GFile *workdir;
 
   g_assert (GB_IS_EDITOR_VIEW (self));
 
   file = ide_buffer_get_file (IDE_BUFFER (self->document));
   context = ide_buffer_get_context (IDE_BUFFER (self->document));
   buffer_manager = ide_context_get_buffer_manager (context);
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
 
-#if 0
-  if (!file || is_temporary (file))
+  if (ide_file_get_is_temporary (file))
     {
-      /* todo: dialog */
+      GtkDialog *dialog;
+      GtkWidget *toplevel;
+      GtkWidget *suggested;
+
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+      dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                             "action", GTK_FILE_CHOOSER_ACTION_SAVE,
+                             "do-overwrite-confirmation", TRUE,
+                             "local-only", FALSE,
+                             "modal", TRUE,
+                             "select-multiple", FALSE,
+                             "show-hidden", FALSE,
+                             "transient-for", toplevel,
+                             "title", _("Save Document"),
+                             NULL);
+
+      gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (dialog), workdir, NULL);
+
+      gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                              _("Cancel"), GTK_RESPONSE_CANCEL,
+                              _("Save"), GTK_RESPONSE_OK,
+                              NULL);
+      gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+      suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+      gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
+                                   GTK_STYLE_CLASS_SUGGESTED_ACTION);
+
+      g_signal_connect (dialog, "response", G_CALLBACK (save_temp_response), g_object_ref (self));
+
+      gtk_window_present (GTK_WINDOW (dialog));
+
+      return;
     }
-#endif
 
   ide_buffer_manager_save_file_async (buffer_manager,
                                       IDE_BUFFER (self->document),
@@ -337,8 +438,7 @@ gb_editor_view_actions_save_as (GSimpleAction *action,
                           NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
-  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog),
-                                                  GTK_RESPONSE_OK);
+  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
                                GTK_STYLE_CLASS_SUGGESTED_ACTION);
 
