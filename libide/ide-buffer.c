@@ -59,10 +59,15 @@ typedef struct
 
   guint                   diagnose_timeout;
 
+  GTimeVal                mtime;
+
+  guint                   changed_on_volume : 1;
   guint                   diagnostics_dirty : 1;
   guint                   highlight_diagnostics : 1;
   guint                   in_diagnose : 1;
   guint                   loading : 1;
+  guint                   mtime_set : 1;
+  guint                   read_only : 1;
 } IdeBufferPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
@@ -70,9 +75,11 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
 enum {
   PROP_0,
   PROP_BUSY,
+  PROP_CHANGED_ON_VOLUME,
   PROP_CONTEXT,
   PROP_FILE,
   PROP_HIGHLIGHT_DIAGNOSTICS,
+  PROP_READ_ONLY,
   PROP_STYLE_SCHEME_NAME,
   PROP_TITLE,
   LAST_PROP
@@ -762,6 +769,10 @@ ide_buffer_get_property (GObject    *object,
       g_value_set_boolean (value, ide_buffer_get_busy (self));
       break;
 
+    case PROP_CHANGED_ON_VOLUME:
+      g_value_set_boolean (value, ide_buffer_get_changed_on_volume (self));
+      break;
+
     case PROP_CONTEXT:
       g_value_set_object (value, ide_buffer_get_context (self));
       break;
@@ -772,6 +783,10 @@ ide_buffer_get_property (GObject    *object,
 
     case PROP_HIGHLIGHT_DIAGNOSTICS:
       g_value_set_boolean (value, ide_buffer_get_highlight_diagnostics (self));
+      break;
+
+    case PROP_READ_ONLY:
+      g_value_set_boolean (value, ide_buffer_get_read_only (self));
       break;
 
     case PROP_TITLE:
@@ -841,8 +856,16 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          _("If the buffer is performing background work."),
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BUSY,
-                                   gParamSpecs [PROP_BUSY]);
+  g_object_class_install_property (object_class, PROP_BUSY, gParamSpecs [PROP_BUSY]);
+
+  gParamSpecs [PROP_CHANGED_ON_VOLUME] =
+    g_param_spec_boolean ("changed-on-volume",
+                         _("Changed on Volume"),
+                         _("If the file has changed on disk and the buffer is not in sync."),
+                         FALSE,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_CHANGED_ON_VOLUME,
+                                   gParamSpecs [PROP_CHANGED_ON_VOLUME]);
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
@@ -852,8 +875,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CONTEXT,
-                                   gParamSpecs [PROP_CONTEXT]);
+  g_object_class_install_property (object_class, PROP_CONTEXT, gParamSpecs [PROP_CONTEXT]);
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
@@ -871,6 +893,14 @@ ide_buffer_class_init (IdeBufferClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_HIGHLIGHT_DIAGNOSTICS,
                                    gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS]);
+
+  gParamSpecs [PROP_READ_ONLY] =
+    g_param_spec_boolean ("read-only",
+                          _("Read Only"),
+                          _("If the underlying file is read only."),
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_READ_ONLY, gParamSpecs [PROP_READ_ONLY]);
 
   gParamSpecs [PROP_STYLE_SCHEME_NAME] =
     g_param_spec_string ("style-scheme-name",
@@ -1410,4 +1440,131 @@ _ide_buffer_set_loading (IdeBuffer *self,
           g_signal_emit (self, gSignals [LOADED], 0);
         }
     }
+}
+
+gboolean
+ide_buffer_get_read_only (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
+
+  return priv->read_only;
+}
+
+static void
+ide_buffer_set_read_only (IdeBuffer *self,
+                          gboolean   read_only)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  read_only = !!read_only;
+
+  if (read_only != priv->read_only)
+    {
+      priv->read_only = read_only;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_READ_ONLY]);
+    }
+}
+
+/**
+ * ide_buffer_get_changed_on_volume:
+ * @self: A #IdeBuffer.
+ *
+ * Gets if the file backing the buffer has changed on the underlying storage.
+ *
+ * Use ide_buffer_manager_load_file_async() to reload the buffer.
+ *
+ * Returns: %TRUE if the file has changed.
+ */
+gboolean
+ide_buffer_get_changed_on_volume (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
+
+  return priv->changed_on_volume;
+}
+
+static void
+ide_buffer_set_changed_on_volumne (IdeBuffer *self,
+                                   gboolean   changed_on_volume)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  changed_on_volume = !!changed_on_volume;
+
+  if (changed_on_volume != priv->changed_on_volume)
+    {
+      priv->changed_on_volume = changed_on_volume;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CHANGED_ON_VOLUME]);
+    }
+}
+
+static void
+ide_buffer__check_for_volume_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  g_autoptr(IdeBuffer) self = user_data;
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  g_autoptr(GFileInfo) file_info = NULL;
+  GFile *file = (GFile *)object;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (G_IS_FILE (file));
+
+  file_info = g_file_query_info_finish (file, result, NULL);
+
+  if (file_info != NULL)
+    {
+      if (g_file_info_has_attribute (file_info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE))
+        {
+          gboolean read_only;
+
+          read_only = !g_file_info_get_attribute_boolean (file_info,
+                                                          G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
+          ide_buffer_set_read_only (self, read_only);
+        }
+
+      if (g_file_info_has_attribute (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED) && priv->mtime_set)
+        {
+          GTimeVal tv;
+
+          g_file_info_get_modification_time (file_info, &tv);
+
+          if (memcmp (&tv, &priv->mtime, sizeof tv) != 0)
+            ide_buffer_set_changed_on_volumne (self, TRUE);
+        }
+    }
+}
+
+void
+ide_buffer_check_for_volume_change (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  GFile *location;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  if (priv->changed_on_volume)
+    return;
+
+  location = ide_file_get_file (priv->file);
+  if (location == NULL)
+    return;
+
+  g_file_query_info_async (location,
+                           G_FILE_ATTRIBUTE_TIME_MODIFIED ","
+                           G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE,
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           NULL, /* Plumb to shutdown cancellable? */
+                           ide_buffer__check_for_volume_cb,
+                           g_object_ref (self));
 }

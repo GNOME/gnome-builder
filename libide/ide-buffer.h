@@ -63,6 +63,7 @@ struct _IdeBuffer
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeBuffer, g_object_unref)
 
+gboolean            ide_buffer_get_changed_on_volume     (IdeBuffer         *self);
 GBytes             *ide_buffer_get_content               (IdeBuffer         *self);
 IdeContext         *ide_buffer_get_context               (IdeBuffer         *self);
 IdeDiagnostic      *ide_buffer_get_diagnostic_at_iter    (IdeBuffer         *self,
@@ -70,6 +71,7 @@ IdeDiagnostic      *ide_buffer_get_diagnostic_at_iter    (IdeBuffer         *sel
 IdeFile            *ide_buffer_get_file                  (IdeBuffer         *self);
 IdeBufferLineFlags  ide_buffer_get_line_flags            (IdeBuffer         *buffer,
                                                           guint              line);
+gboolean            ide_buffer_get_read_only             (IdeBuffer         *self);
 gboolean            ide_buffer_get_highlight_diagnostics (IdeBuffer         *self);
 const gchar        *ide_buffer_get_style_scheme_name     (IdeBuffer         *self);
 const gchar        *ide_buffer_get_title                 (IdeBuffer         *self);
@@ -81,6 +83,7 @@ void                ide_buffer_set_highlight_diagnostics (IdeBuffer         *sel
 void                ide_buffer_set_style_scheme_name     (IdeBuffer         *self,
                                                           const gchar       *style_scheme_name);
 void                ide_buffer_trim_trailing_whitespace  (IdeBuffer         *self);
+void                ide_buffer_check_for_volume_change   (IdeBuffer         *self);
 
 G_END_DECLS
 
