@@ -330,10 +330,17 @@ gb_editor_frame__source_view_focus_in_event (GbEditorFrame *self,
                                              GdkEventKey   *event,
                                              IdeSourceView *source_view)
 {
+  GtkTextBuffer *buffer;
+
   g_assert (GB_IS_EDITOR_FRAME (self));
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
   gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
+
+  if (IDE_IS_BUFFER (buffer))
+    ide_buffer_check_for_volume_change (IDE_BUFFER (buffer));
 
   return FALSE;
 }

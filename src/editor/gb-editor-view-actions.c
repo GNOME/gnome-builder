@@ -522,6 +522,8 @@ gb_editor_view_actions_reload_buffer_cb (GObject      *object,
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
   g_assert (GB_IS_EDITOR_VIEW (self));
 
+  gtk_revealer_set_reveal_child (self->modified_revealer, FALSE);
+
   if (!(buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error)))
     {
       g_warning ("%s", error->message);

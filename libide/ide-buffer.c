@@ -1489,11 +1489,13 @@ ide_buffer_get_changed_on_volume (IdeBuffer *self)
   return priv->changed_on_volume;
 }
 
-static void
-ide_buffer_set_changed_on_volumne (IdeBuffer *self,
+void
+_ide_buffer_set_changed_on_volume (IdeBuffer *self,
                                    gboolean   changed_on_volume)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BUFFER (self));
 
@@ -1504,6 +1506,8 @@ ide_buffer_set_changed_on_volumne (IdeBuffer *self,
       priv->changed_on_volume = changed_on_volume;
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CHANGED_ON_VOLUME]);
     }
+
+  IDE_EXIT;
 }
 
 static void
@@ -1539,7 +1543,7 @@ ide_buffer__check_for_volume_cb (GObject      *object,
           g_file_info_get_modification_time (file_info, &tv);
 
           if (memcmp (&tv, &priv->mtime, sizeof tv) != 0)
-            ide_buffer_set_changed_on_volumne (self, TRUE);
+            _ide_buffer_set_changed_on_volume (self, TRUE);
         }
     }
 }
@@ -1575,6 +1579,8 @@ _ide_buffer_set_mtime (IdeBuffer      *self,
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   if (mtime == NULL)
@@ -1588,4 +1594,6 @@ _ide_buffer_set_mtime (IdeBuffer      *self,
       priv->mtime = *mtime;
       priv->mtime_set = TRUE;
     }
+
+  IDE_EXIT;
 }

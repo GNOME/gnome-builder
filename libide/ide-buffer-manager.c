@@ -710,6 +710,8 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
                                       NULL);
     }
 
+  _ide_buffer_set_mtime (state->buffer, NULL);
+  _ide_buffer_set_changed_on_volume (state->buffer, FALSE);
   _ide_buffer_set_loading (state->buffer, TRUE);
 
   g_task_set_task_data (task, state, load_state_free);
@@ -874,6 +876,8 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
 
   gtk_source_file_saver_set_encoding (saver, encoding);
   gtk_source_file_saver_set_newline_type (saver, newline_type);
+
+  _ide_buffer_set_mtime (state->buffer, NULL);
 
   gtk_source_file_saver_save_async (saver,
                                     G_PRIORITY_DEFAULT,

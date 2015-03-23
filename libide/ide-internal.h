@@ -50,6 +50,8 @@ gboolean            _ide_back_forward_list_save_finish (IdeBackForwardList    *s
                                                         GError               **error);
 IdeBackForwardItem *_ide_back_forward_list_find        (IdeBackForwardList    *self,
                                                         IdeFile               *file);
+void                _ide_buffer_set_changed_on_volume  (IdeBuffer             *self,
+                                                        gboolean               changed_on_volume);
 gboolean            _ide_buffer_get_loading            (IdeBuffer             *self);
 void                _ide_buffer_set_loading            (IdeBuffer             *self,
                                                         gboolean               loading);

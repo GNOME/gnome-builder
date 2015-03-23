@@ -119,6 +119,75 @@ gb_editor_view__buffer_modified_changed (GbEditorView  *self,
 }
 
 static void
+force_scroll_to_top (IdeSourceView *source_view)
+{
+  GtkAdjustment *vadj;
+  GtkAdjustment *hadj;
+  gdouble lower;
+
+  /*
+   * FIXME:
+   *
+   * See the comment in gb_editor_view__buffer_changed_on_volume()
+   */
+
+  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (source_view));
+  hadj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (source_view));
+
+  lower = gtk_adjustment_get_lower (vadj);
+  gtk_adjustment_set_value (vadj, lower);
+
+  lower = gtk_adjustment_get_lower (hadj);
+  gtk_adjustment_set_value (hadj, lower);
+}
+
+static gboolean
+no_really_scroll_to_the_top (gpointer data)
+{
+  g_autoptr(GbEditorView) self = data;
+
+  force_scroll_to_top (self->frame1->source_view);
+  if (self->frame2 != NULL)
+    force_scroll_to_top (self->frame2->source_view);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gb_editor_view__buffer_changed_on_volume (GbEditorView *self,
+                                          GParamSpec   *pspec,
+                                          IdeBuffer    *buffer)
+{
+  g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (ide_buffer_get_changed_on_volume (buffer))
+    gtk_revealer_set_reveal_child (self->modified_revealer, TRUE);
+  else if (gtk_revealer_get_reveal_child (self->modified_revealer))
+    {
+      GtkTextIter iter;
+
+      gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buffer), &iter);
+      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
+
+      /*
+       * FIXME:
+       *
+       * Without this delay, I see a condition with split view where the
+       * non-focused split will just render blank. Well that isn't totally
+       * correct, it renders empty gutters and proper line grid background. But
+       * no textual content. And the adjustment is way out of sync. Even
+       * changing the adjustment manually doesn't help. So whatever, I'll
+       * insert a short delay and we'll pick up after the textview has
+       * stablized.
+       */
+      g_timeout_add (10, no_really_scroll_to_the_top, g_object_ref (self));
+
+      gtk_revealer_set_reveal_child (self->modified_revealer, FALSE);
+    }
+}
+
+static void
 gb_editor_view_set_document (GbEditorView     *self,
                              GbEditorDocument *document)
 {
@@ -147,6 +216,12 @@ gb_editor_view_set_document (GbEditorView     *self,
       g_signal_connect_object (document,
                                "modified-changed",
                                G_CALLBACK (gb_editor_view__buffer_modified_changed),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      g_signal_connect_object (document,
+                               "notify::changed-on-volume",
+                               G_CALLBACK (gb_editor_view__buffer_changed_on_volume),
                                self,
                                G_CONNECT_SWAPPED);
 
