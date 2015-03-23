@@ -666,7 +666,6 @@ gb_vim_do_search_and_replace (GtkTextBuffer *buffer,
   GtkTextIter match_end;
   GError *error = NULL;
 
-  g_assert (GB_IS_SOURCE_VIM (vim));
   g_assert (search_text);
   g_assert (replace_text);
   g_assert ((!begin && !end) || (begin && end));
