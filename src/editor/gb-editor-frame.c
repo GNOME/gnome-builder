@@ -310,34 +310,45 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
   g_assert (GB_IS_EDITOR_FRAME (self));
   g_assert (GD_IS_TAGGED_ENTRY (entry));
 
-  if (event->keyval == GDK_KEY_Escape)
+  switch (event->keyval)
     {
+    case GDK_KEY_Escape:
       ide_source_view_clear_search (self->source_view);
       gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
       return TRUE;
-    }
-  else if ((event->keyval == GDK_KEY_KP_Enter) || (event->keyval == GDK_KEY_Return))
-    {
+
+    case GDK_KEY_KP_Enter:
+    case GDK_KEY_Return:
       if ((event->state & GDK_SHIFT_MASK) == 0)
         gb_widget_activate_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
       else
         gb_widget_activate_action (GTK_WIDGET (self), "frame", "previous-search-result", NULL);
       gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
       return TRUE;
-    }
-  else
-    {
-      GtkSourceSearchSettings *search_settings;
-      GtkSourceSearchContext *search_context;
 
-      /*
-       * Other modes, such as Vim emulation, want word boundaries, but we do
-       * not when searching from this entry. Sort of hacky, but gets the job
-       * done to just change that setting here.
-       */
-      search_context = ide_source_view_get_search_context (self->source_view);
-      search_settings = gtk_source_search_context_get_settings (search_context);
-      gtk_source_search_settings_set_at_word_boundaries (search_settings, FALSE);
+    case GDK_KEY_Down:
+      gb_widget_activate_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
+      return TRUE;
+
+    case GDK_KEY_Up:
+      gb_widget_activate_action (GTK_WIDGET (self), "frame", "previous-search-result", NULL);
+      return TRUE;
+
+    default:
+      {
+        GtkSourceSearchSettings *search_settings;
+        GtkSourceSearchContext *search_context;
+
+        /*
+         * Other modes, such as Vim emulation, want word boundaries, but we do
+         * not when searching from this entry. Sort of hacky, but gets the job
+         * done to just change that setting here.
+         */
+        search_context = ide_source_view_get_search_context (self->source_view);
+        search_settings = gtk_source_search_context_get_settings (search_context);
+        gtk_source_search_settings_set_at_word_boundaries (search_settings, FALSE);
+      }
+      break;
     }
 
   return FALSE;
