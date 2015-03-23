@@ -207,7 +207,7 @@ gb_workbench_actions_save_all (GSimpleAction *action,
       buffer = g_ptr_array_index (ar, i);
       file = ide_buffer_get_file (buffer);
 
-      if (file == NULL)
+      if ((file == NULL) || ide_file_get_is_temporary (file))
         continue;
 
       ide_buffer_manager_save_file_async (buffer_manager, buffer, file, NULL, NULL, NULL, NULL);
