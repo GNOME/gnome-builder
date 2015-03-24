@@ -1453,7 +1453,7 @@ ide_buffer_manager_create_buffer (IdeBufferManager *self)
   GFile *workdir;
   guint doc_seq;
 
-  g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
+  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   vcs = ide_context_get_vcs (context);

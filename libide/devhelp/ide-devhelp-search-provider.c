@@ -53,7 +53,7 @@ ide_devhelp_search_provider_populate (IdeSearchProvider *provider,
   IdeContext *idecontext;
   GtkTreeIter iter;
   gboolean valid;
-  gint count = 0;;
+  gint count = 0;
   gint total;
 
   g_assert (IDE_IS_DEVHELP_SEARCH_PROVIDER (self));
