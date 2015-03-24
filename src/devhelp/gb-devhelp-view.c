@@ -30,7 +30,10 @@ struct _GbDevhelpViewPrivate
   GbDevhelpDocument *document;
 
   /* References owned by Gtk template */
-  WebKitWebView *web_view;
+  WebKitWebView     *web_view1;
+  WebKitWebView     *web_view2;
+
+  GtkPaned          *paned;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbDevhelpView, gb_devhelp_view, GB_TYPE_VIEW)
@@ -71,7 +74,12 @@ gb_devhelp_view_notify_uri (GbDevhelpView     *view,
 
   uri = gb_devhelp_document_get_uri (document);
   if (uri)
-    webkit_web_view_load_uri (view->priv->web_view, uri);
+    {
+      webkit_web_view_load_uri (view->priv->web_view1, uri);
+
+      if (view->priv->web_view2 != NULL)
+        webkit_web_view_load_uri (view->priv->web_view2, uri);
+    }
 }
 
 static void
@@ -106,6 +114,66 @@ gb_devhelp_view_set_document (GbDevhelpView     *view,
 
       gb_devhelp_view_notify_uri (view, NULL, document);
       g_object_notify (G_OBJECT (view), "document");
+    }
+}
+
+static GbView *
+gb_devhelp_view_create_split (GbView *view)
+{
+  GbDevhelpView *self = (GbDevhelpView *)view;
+  GbView *ret;
+
+  g_assert (GB_IS_DEVHELP_VIEW (self));
+
+  ret = g_object_new (GB_TYPE_DEVHELP_VIEW,
+                      "document", gb_devhelp_view_get_document (view),
+                      "visible", TRUE,
+                      NULL);
+
+  return ret;
+}
+
+static void
+gb_devhelp_view_set_split_view (GbView   *view,
+                                gboolean  split_view)
+{
+  GbDevhelpView *self = (GbDevhelpView *)view;
+  GbDevhelpViewPrivate *priv;
+
+  g_assert (GB_IS_DEVHELP_VIEW (self));
+
+  g_return_if_fail (GB_IS_DEVHELP_VIEW (view));
+
+  priv = self->priv;
+
+  if (split_view && (priv->web_view2 != NULL))
+    return;
+
+  if (!split_view && (priv->web_view2 == NULL))
+    return;
+
+  if (split_view)
+    {
+      priv->web_view2 = g_object_new (WEBKIT_TYPE_WEB_VIEW,
+                                      "visible", TRUE,
+                                      NULL);
+      gtk_container_add_with_properties (GTK_CONTAINER (priv->paned), GTK_WIDGET (priv->web_view2),
+                                         "shrink", FALSE,
+                                         "resize", TRUE,
+                                         NULL);
+      gtk_widget_grab_focus (GTK_WIDGET (priv->web_view2));
+
+      gb_devhelp_view_notify_uri (self,
+                                  NULL,
+                                  GB_DEVHELP_DOCUMENT (gb_devhelp_view_get_document (view)));
+    }
+  else
+    {
+      GtkWidget *copy = GTK_WIDGET (priv->web_view2);
+
+      priv->web_view2 = NULL;
+      gtk_container_remove (GTK_CONTAINER (priv->paned), copy);
+      gtk_widget_grab_focus (GTK_WIDGET (priv->web_view1));
     }
 }
 
@@ -168,6 +236,8 @@ gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
   object_class->set_property = gb_devhelp_view_set_property;
 
   view_class->get_document = gb_devhelp_view_get_document;
+  view_class->create_split = gb_devhelp_view_create_split;
+  view_class->set_split_view =  gb_devhelp_view_set_split_view;
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
@@ -178,7 +248,8 @@ gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
   g_object_class_install_property (object_class, PROP_DOCUMENT, gParamSpecs [PROP_DOCUMENT]);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-devhelp-view.ui");
-  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbDevhelpView, web_view);
+  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbDevhelpView, web_view1);
+  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbDevhelpView, paned);
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }
