@@ -1,4 +1,72 @@
 ==============
+Version 3.16.0
+==============
+
+It is my distinct pleasure to announce the first preview release of
+GNOME Builder!
+
+GNOME Builder is a new development environment being developed in
+conjunction with the GNOME desktop. While Builder is an alpha product,
+it is under heavy development. We look forward to early testers and
+encourage everyone to try things out and file bugs and feature requests.
+
+I'd like to thank the Gedit and GtkSourceView team for all of their hard
+work integrating features from Builder upstream as well as adding
+features we needed. Additionally the GLib and Gtk+ teams were incredibly
+helpful to keep us moving.
+
+Builder is built in conjunction with LibIDE. This new shared library
+provides the necessary abstractions to build a modern IDE. It includes
+auto-completion, auto-indenters, buffer management, a source editor,
+abstractions for build systems, version control, file settings,
+translation units, diagnostics, symbols, search engines, snippets, local
+and external devices, documentation, animations, and more.
+
+Some highlights of this release are:
+
+ · A beautiful new GtkSourceView theme influenced by design grid paper.
+ · Integrated source editor based on GtkSourceView.
+ · Live diagnostics as you type for C, C++ via Clang.
+ · Live diagnostics as you type for Python, Ruby, CSS, JavaScript, JSON,
+   Vala, Go, and others via gnome-code-assistance.
+ · Highlighting of added/changed lines within the source editor.
+ · Robust Vim and Emacs emulation.
+ · Multiple views into single file. Both horizontal and vertical splits
+   are supported.
+ · Navigation history to jump back and forward within modified files.
+ · Robust snippet engine including support for GLib 2.44 style GObjects.
+ · Quick search to locate files within your project as well as
+   documentation in devhelp.
+ · Smart backspace to simplify using spaces instead of tabs.
+ · A command bar to execute internal GActions and Vim style commands
+   with autocompletion.
+ · An implementation of Vim's scrolloffset.
+ · Restoration of insertion cursor when reloading a file.
+ · Autocompletion based on current words in loaded buffers.
+ · Experimental support for autocompletion based on clang.
+ · Support for vim, emacs, and kate style modelines.
+ · Editorconfig support.
+ · Experimental read-only support for autoconf/automake based build
+   systems.
+ · Robust auto-indenters for GNU C89, Python, and XML.
+ · Experimental project tree (available via F9).
+ · Experimental support for building automake based projects.
+ · Keybinding replay for command repeat in Vim emulation.
+ · Autosaving of modified buffers, never lose a change.
+ · Scripting via Python (CPython) or JavaScript (Gjs) and GObject
+   Introspection.
+ · Dynamic power management when running on laptop battery.
+ · HTML and Markdown live preview.
+ · Autocompletion of g_date_time_format() format parameters.
+ · Type ahead search with rubberbanding.
+
+We wont be slowing down any time soon. Thanks to everyone for your
+support, I cannot wait for what is ahead.
+
+-- Christian Hergert
+
+
+==============
 Version 3.15.4
 ==============
 

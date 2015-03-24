@@ -55,7 +55,8 @@ We hope to have VM images that can be used for testing in the near future.
 
 ----
 
-Builder is licensed under the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or (at
-your option) any later version.
+Builder is licensed under the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your option)
+any later version. Some files are individually licensed under alternative
+licenses such as LGPL-2.1+ and LGPL-3.0.
 
