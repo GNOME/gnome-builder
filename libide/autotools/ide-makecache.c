@@ -63,6 +63,13 @@ typedef struct
   gchar  *relative_path;
 } FileFlagsLookup;
 
+typedef struct
+{
+  const gchar *contents;
+  gsize        length;
+  gssize       pos;
+} ReadLines;
+
 G_DEFINE_TYPE (IdeMakecache, ide_makecache, IDE_TYPE_OBJECT)
 
 enum {
@@ -72,6 +79,60 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+static void
+read_lines_init (ReadLines   *rl,
+                 const gchar *contents,
+                 gsize        length)
+{
+  g_assert (rl);
+  g_assert (contents);
+
+  if (length < G_MAXSIZE)
+    {
+      rl->contents = contents;
+      rl->length = length;
+      rl->pos = 0;
+    }
+  else
+    {
+      rl->contents = NULL;
+      rl->length = 0;
+      rl->pos = 0;
+    }
+}
+
+static const gchar *
+read_lines_next (ReadLines *rl,
+                 gsize     *length)
+{
+  const gchar *ret = NULL;
+
+  g_assert (rl);
+  g_assert (length);
+
+  if ((rl->contents == NULL) || (rl->pos >= rl->length))
+    {
+      *length = 0;
+      return NULL;
+    }
+
+  ret = &rl->contents [rl->pos];
+
+  for (; rl->pos < rl->length; rl->pos++)
+    {
+      if (rl->contents [rl->pos] == '\n')
+        {
+          *length = &rl->contents [rl->pos] - ret;
+          rl->pos++;
+          return ret;
+        }
+    }
+
+  *length = &rl->contents [rl->pos] - ret;
+
+  return ret;
+}
 
 static void
 file_flags_lookup_free (gpointer data)
@@ -212,7 +273,10 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
   g_autoptr(GMatchInfo) match_info = NULL;
   g_autoptr(GHashTable) found = NULL;
   g_autoptr(GPtrArray) targets = NULL;
+  const gchar *line;
+  ReadLines rl = { 0 };
   gsize len;
+  gsize line_len;
 
   IDE_ENTRY;
 
@@ -222,7 +286,7 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
   escaped = g_regex_escape_string (path, -1);
   regexstr = g_strdup_printf ("^([^:\n ]+):.*\\b(%s)\\b", escaped);
 
-  regex = g_regex_new (regexstr, G_REGEX_MULTILINE, 0, NULL);
+  regex = g_regex_new (regexstr, 0, 0, NULL);
   if (!regex)
     IDE_RETURN (NULL);
 
@@ -242,22 +306,27 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
   }
 #endif
 
-  if (g_regex_match_full (regex, content, len, 0, 0, &match_info, NULL))
+  read_lines_init (&rl, content, len);
+
+  while ((line = read_lines_next (&rl, &line_len)))
     {
-      while (g_match_info_matches (match_info))
+      if (g_regex_match_full (regex, line, line_len, 0, 0, &match_info, NULL))
         {
-          g_autofree gchar *target = NULL;
-
-          target = g_match_info_fetch (match_info, 1);
-
-          if (is_target_interesting (target) && !g_hash_table_contains (found, target))
+          while (g_match_info_matches (match_info))
             {
-              g_hash_table_insert (found, target, NULL);
-              g_ptr_array_add (targets, target);
-              target = NULL;
-            }
+              g_autofree gchar *target = NULL;
 
-          g_match_info_next (match_info, NULL);
+              target = g_match_info_fetch (match_info, 1);
+
+              if (is_target_interesting (target) && !g_hash_table_contains (found, target))
+                {
+                  g_hash_table_insert (found, target, NULL);
+                  g_ptr_array_add (targets, target);
+                  target = NULL;
+                }
+
+              g_match_info_next (match_info, NULL);
+            }
         }
     }
 
