@@ -3149,10 +3149,8 @@ ide_source_view__search_forward_cb (GObject      *object,
        * started.
        */
       if (priv->rubberband_search)
-        {
-          ide_source_view_rollback_search (mv->self);
-          return;
-        }
+        ide_source_view_rollback_search (mv->self);
+      return;
     }
 
   mv->count--;
@@ -3219,10 +3217,8 @@ ide_source_view__search_backward_cb (GObject      *object,
        * started.
        */
       if (priv->rubberband_search)
-        {
-          ide_source_view_rollback_search (mv->self);
-          return;
-        }
+        ide_source_view_rollback_search (mv->self);
+      return;
     }
 
   mv->count--;
