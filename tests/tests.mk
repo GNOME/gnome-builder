@@ -50,4 +50,5 @@ test_ide_source_view_LDADD = libide-1.0.la $(LIBIDE_LIBS)
 
 EXTRA_DIST += \
 	tests/data/project1/configure.ac \
+	tests/tests.h \
 	$(NULL)

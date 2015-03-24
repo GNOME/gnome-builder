@@ -145,8 +145,10 @@ test_basic (void)
 {
   test_state_t state = { 0 };
   GFile *project_file;
+  g_autofree gchar *path = NULL;
 
-  project_file = g_file_new_for_path (TEST_DATA_DIR"/project1/configure.ac");
+  path = g_build_filename (g_get_current_dir (), TEST_DATA_DIR, "project1", "configure.ac", NULL);
+  project_file = g_file_new_for_path (path);
 
   state.main_loop = g_main_loop_new (NULL, FALSE);
   state.cancellable = g_cancellable_new ();

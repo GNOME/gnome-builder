@@ -118,6 +118,7 @@ test_buffer_manager_basic_cb1 (GObject      *object,
   g_autoptr(IdeProgress) progress = NULL;
   IdeBufferManager *buffer_manager;
   IdeProject *project;
+  g_autofree gchar *path = NULL;
 
   state->context = ide_context_new_finish (result, &state->error);
 
@@ -130,7 +131,9 @@ test_buffer_manager_basic_cb1 (GObject      *object,
   g_signal_connect (buffer_manager, "buffer-loaded", G_CALLBACK (buffer_loaded_cb), state);
 
   project = ide_context_get_project (state->context);
-  file = ide_project_get_file_for_path (project, TEST_DATA_DIR"/project1/configure.ac");
+
+  path = g_build_filename (g_get_current_dir (), TEST_DATA_DIR, "project1", "configure.ac", NULL);
+  file = ide_project_get_file_for_path (project, path);
 
   ide_buffer_manager_load_file_async (buffer_manager,
                                       file,
@@ -154,8 +157,10 @@ test_buffer_manager_basic (void)
   test_buffer_manager_basic_state state = { 0 };
   IdeBufferManager *buffer_manager;
   GFile *project_file;
+  g_autofree gchar *path = NULL;
 
-  project_file = g_file_new_for_path (TEST_DATA_DIR"/project1/configure.ac");
+  path = g_build_filename (g_get_current_dir (), TEST_DATA_DIR, "project1", "configure.ac", NULL);
+  project_file = g_file_new_for_path (path);
 
   state.main_loop = g_main_loop_new (NULL, FALSE);
   state.cancellable = g_cancellable_new ();
