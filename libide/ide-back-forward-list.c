@@ -309,6 +309,12 @@ ide_back_forward_list_merge (IdeBackForwardList *self,
   ar1 = ide_back_forward_list_to_array (self);
   ar2 = ide_back_forward_list_to_array (branch);
 
+  g_assert (ar1 != NULL);
+  g_assert (ar2 != NULL);
+
+  if (ar2->len == 0)
+    return;
+
   first = g_ptr_array_index (ar2, 0);
 
   for (i = 0; i < ar1->len; i++)
