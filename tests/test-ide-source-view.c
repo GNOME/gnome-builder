@@ -24,6 +24,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
+#include <girepository.h>
 
 #define ADD_CLASS(widget,name) \
   gtk_style_context_add_class(gtk_widget_get_style_context(GTK_WIDGET(widget)), name)
@@ -723,6 +724,10 @@ main (int argc,
       N_("Render a rectangle over the visible region taking scroll offset into account.") },
     { NULL }
   };
+
+  g_irepository_require_private (g_irepository_get_default (),
+                                 BUILDDIR,
+                                 "Ide", "1.0", 0, NULL);
 
   ide_set_program_name ("gnome-builder");
   ide_log_init (TRUE, NULL);

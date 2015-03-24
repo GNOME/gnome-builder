@@ -20,6 +20,7 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <girepository.h>
 #include <ide.h>
 
 typedef struct
@@ -195,6 +196,9 @@ main (gint   argc,
 {
   gtk_init (&argc, &argv);
   g_test_init (&argc, &argv, NULL);
+  g_irepository_require_private (g_irepository_get_default (),
+                                 BUILDDIR,
+                                 "Ide", "1.0", 0, NULL);
   g_test_add_func ("/Ide/BufferManager/basic", test_buffer_manager_basic);
   return g_test_run ();
 }

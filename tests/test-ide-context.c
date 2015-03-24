@@ -18,6 +18,7 @@
 
 #include "tests.h"
 
+#include <girepository.h>
 #include <ide.h>
 
 typedef struct
@@ -83,6 +84,9 @@ main (gint   argc,
       gchar *argv[])
 {
   g_test_init (&argc, &argv, NULL);
+  g_irepository_require_private (g_irepository_get_default (),
+                                 BUILDDIR,
+                                 "Ide", "1.0", 0, NULL);
   g_test_add_func ("/Ide/Context/new_async", test_new_async);
   return g_test_run ();
 }
