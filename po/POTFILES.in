@@ -1,4 +1,7 @@
 cut-n-paste/trie.c
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.gschema.xml.in
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.language.gschema.xml.in
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.experimental.gschema.xml.in
 [type: gettext/glade]data/gtk/menus.ui
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml
