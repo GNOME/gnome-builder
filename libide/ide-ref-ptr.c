@@ -55,8 +55,8 @@ ide_ref_ptr_ref (IdeRefPtr *self)
 void
 ide_ref_ptr_unref (IdeRefPtr *self)
 {
-  g_return_val_if_fail (self, NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
+  g_return_if_fail (self);
+  g_return_if_fail (self->ref_count > 0);
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     {

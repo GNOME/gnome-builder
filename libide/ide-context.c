@@ -707,9 +707,9 @@ ide_context_class_init (IdeContextClass *klass)
 static void
 ide_context_init (IdeContext *self)
 {
-  IDE_ENTRY;
-
   g_autofree gchar *scriptsdir = NULL;
+
+  IDE_ENTRY;
 
   self->root_build_dir = g_build_filename (g_get_user_cache_dir (),
                                            ide_get_program_name (),
