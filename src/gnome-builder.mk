@@ -9,6 +9,7 @@ libgnome_builder_la_SOURCES = \
 	src/app/gb-application.h \
 	src/app/gb-application-actions.c \
 	src/app/gb-application-actions.h \
+	src/app/gb-application-credits.h \
 	src/app/gb-application-private.h \
 	src/commands/gb-command-bar-item.c \
 	src/commands/gb-command-bar-item.h \

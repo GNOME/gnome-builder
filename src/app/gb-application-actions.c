@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 
 #include "gb-application-actions.h"
+#include "gb-application-credits.h"
 #include "gb-application-private.h"
 #include "gb-support.h"
 #include "gb-workbench.h"
@@ -138,44 +139,6 @@ gb_application_actions_about (GSimpleAction *action,
                               gpointer       user_data)
 {
   GbApplication *self = user_data;
-  const gchar *artists[] = {
-    "Allan Day",
-    "Hylke Bons",
-    "Jakub Steiner",
-    NULL };
-  const gchar *authors[] = {
-    "Alexander Larsson",
-    "Alexandre Franke",
-    "Carlos Soriano",
-    "Christian Hergert",
-    "Cosimo Cecchi",
-    "Dimitris Zenios",
-    "Fabiano Fidêncio",
-    "Florian Bäuerle",
-    "Florian Müllner",
-    "Hashem Nasarat",
-    "Hylke Bons",
-    "Igor Gnatenko",
-    "Jakub Steiner",
-    "Jasper St. Pierre",
-    "Jonathon Jongsma",
-    "Mathieu Bridon",
-    "Megh Parikh",
-    "Michael Catanzaro",
-    "Pete Travis",
-    "Ray Strode",
-    "Roberto Majadas",
-    "Ting-Wei Lan",
-    "Trinh Anh Ngoc",
-    "Yosef Or Boczko",
-    NULL };
-  const gchar *funders[] = {
-    "Aaron Hergert",
-    "Christian Hergert",
-    /* todo: load from crowdfunding */
-    NULL };
-  const gchar *documenters[] = {
-   NULL };
   GtkDialog *dialog;
   GtkWindow *parent = NULL;
   GList *iter;
@@ -195,10 +158,10 @@ gb_application_actions_about (GSimpleAction *action,
     }
 
   dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
-                         "artists", artists,
-                         "authors", authors,
+                         "artists", gb_application_credits_artists,
+                         "authors", gb_application_credits_authors,
                          "comments", _("An IDE for GNOME"),
-                         "documenters", documenters,
+                         "documenters", gb_application_credits_documenters,
                          "license-type", GTK_LICENSE_GPL_3_0,
                          "logo-icon-name", "builder",
                          "modal", FALSE,
@@ -209,7 +172,9 @@ gb_application_actions_about (GSimpleAction *action,
                          "website", "https://wiki.gnome.org/Apps/Builder",
                          "website-label", _("Learn more about GNOME Builder"),
                          NULL);
-  gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog), _("Funded By"), funders);
+  gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
+                                       _("Funded By"),
+                                       gb_application_credits_funders);
 
   g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
   gtk_window_present (GTK_WINDOW (dialog));
