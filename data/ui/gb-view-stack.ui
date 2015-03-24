@@ -62,6 +62,26 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkMenuButton" id="views_button">
+                    <property name="visible">true</property>
+                    <property name="popover">views_popover</property>
+                    <style>
+                      <class name="dim-label"/>
+                      <class name="image-button"/>
+                      <class name="flat"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">true</property>
+                        <property name="icon-name">system-file-manager-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="pack-type">start</property>
+                  </packing>
+                </child>
                 <child type="center">
                   <object class="GtkMenuButton" id="document_button">
                     <property name="hexpand">true</property>
@@ -321,6 +341,28 @@
             <property name="action-name">view-stack.close</property>
             <property name="text" translatable="yes">Close</property>
             <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkPopover" id="views_popover">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GbScrolledWindow">
+            <property name="max-content-height">400</property>
+            <property name="min-content-height">30</property>
+            <property name="min-content-width">100</property>
+            <property name="max-content-width">300</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkListBox" id="views_listbox">
+                <property name="visible">true</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

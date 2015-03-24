@@ -46,6 +46,90 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
 static void
+gb_view_stack_add_list_row (GbViewStack *self,
+                            GbView      *child)
+{
+  GtkWidget *row;
+  GtkWidget *label;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+  g_assert (GB_IS_VIEW (child));
+
+  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+                      "visible", TRUE,
+                      NULL);
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "margin-bottom", 3,
+                        "margin-end", 6,
+                        "margin-start", 6,
+                        "margin-top", 3,
+                        "visible", TRUE,
+                        "xalign", 0.0f,
+                        NULL);
+  g_object_bind_property (child, "title", label, "label", G_BINDING_SYNC_CREATE);
+  g_object_set_data (G_OBJECT (row), "GB_VIEW", child);
+  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_container_add (GTK_CONTAINER (self->views_listbox), row);
+}
+
+static void
+gb_view_stack_remove_list_row (GbViewStack *self,
+                               GbView      *child)
+{
+  GList *children;
+  GList *iter;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+  g_assert (GB_IS_VIEW (child));
+
+  children = gtk_container_get_children (GTK_CONTAINER (self->views_listbox));
+
+  for (iter = children; iter; iter = iter->next)
+    {
+      GbView *view = g_object_get_data (iter->data, "GB_VIEW");
+
+      if (view == child)
+        {
+          gtk_container_remove (GTK_CONTAINER (self->views_listbox), iter->data);
+          break;
+        }
+    }
+
+  g_list_free (children);
+}
+
+static void
+gb_view_stack_move_top_list_row (GbViewStack *self,
+                                 GbView      *view)
+{
+  GList *children;
+  GList *iter;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+  g_assert (GB_IS_VIEW (view));
+
+  children = gtk_container_get_children (GTK_CONTAINER (self->views_listbox));
+
+  for (iter = children; iter; iter = iter->next)
+    {
+      GtkWidget *row = iter->data;
+      GbView *item = g_object_get_data (G_OBJECT (row), "GB_VIEW");
+
+      if (item == view)
+        {
+          g_object_ref (row);
+          gtk_container_remove (GTK_CONTAINER (self->views_listbox), row);
+          gtk_list_box_prepend (self->views_listbox, row);
+          gtk_list_box_select_row (self->views_listbox, GTK_LIST_BOX_ROW (row));
+          g_object_unref (row);
+          break;
+        }
+    }
+
+  g_list_free (children);
+}
+
+static void
 gb_view_stack_add (GtkContainer *container,
                    GtkWidget    *child)
 {
@@ -59,6 +143,7 @@ gb_view_stack_add (GtkContainer *container,
 
       gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), TRUE);
       gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), TRUE);
+      gtk_widget_set_visible (GTK_WIDGET (self->views_button), TRUE);
 
       self->focus_history = g_list_prepend (self->focus_history, child);
       controls = gb_view_get_controls (GB_VIEW (child));
@@ -66,6 +151,7 @@ gb_view_stack_add (GtkContainer *container,
         gtk_container_add (GTK_CONTAINER (self->controls_stack), controls);
       gtk_container_add (GTK_CONTAINER (self->stack), child);
       gb_view_set_back_forward_list (GB_VIEW (child), self->back_forward_list);
+      gb_view_stack_add_list_row (self, GB_VIEW (child));
       gtk_stack_set_visible_child (self->stack, child);
     }
   else
@@ -82,6 +168,8 @@ gb_view_stack_remove (GbViewStack *self,
 
   g_assert (GB_IS_VIEW_STACK (self));
   g_assert (GB_IS_VIEW (view));
+
+  gb_view_stack_remove_list_row (self, view);
 
   self->focus_history = g_list_remove (self->focus_history, view);
   controls = gb_view_get_controls (view);
@@ -162,6 +250,7 @@ gb_view_stack_real_empty (GbViewStack *self)
       gtk_widget_set_sensitive (GTK_WIDGET (self->close_button), FALSE);
       gtk_widget_set_sensitive (GTK_WIDGET (self->document_button), FALSE);
       gtk_widget_set_visible (GTK_WIDGET (self->modified_label), FALSE);
+      gtk_widget_set_visible (GTK_WIDGET (self->views_button), FALSE);
     }
 }
 
@@ -268,6 +357,26 @@ gb_view_stack_hierarchy_changed (GtkWidget *widget,
 }
 
 static void
+gb_view_stack__views_listbox_row_activated_cb (GbViewStack   *self,
+                                               GtkListBoxRow *row,
+                                               GtkListBox    *list_box)
+{
+  GbView *view;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  view = g_object_get_data (G_OBJECT (row), "GB_VIEW");
+
+  if (GB_IS_VIEW (view))
+    {
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->views_button), FALSE);
+      gb_view_stack_set_active_view (self, GTK_WIDGET (view));
+    }
+}
+
+static void
 gb_view_stack_destroy (GtkWidget *widget)
 {
   GbViewStack *self = (GbViewStack *)widget;
@@ -283,6 +392,12 @@ gb_view_stack_constructed (GObject *object)
   GbViewStack *self = (GbViewStack *)object;
 
   G_OBJECT_CLASS (gb_view_stack_parent_class)->constructed (object);
+
+  g_signal_connect_object (self->views_listbox,
+                           "row-activated",
+                           G_CALLBACK (gb_view_stack__views_listbox_row_activated_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   gb_view_stack_actions_init (self);
 }
@@ -397,6 +512,8 @@ gb_view_stack_class_init (GbViewStackClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, popover);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, stack);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, title_label);
+  GB_WIDGET_CLASS_BIND (klass, GbViewStack, views_button);
+  GB_WIDGET_CLASS_BIND (klass, GbViewStack, views_listbox);
 }
 
 static void
@@ -455,29 +572,35 @@ gb_view_stack_set_active_view (GbViewStack *self,
           GBinding *binding;
           GActionGroup *group;
 
+          ide_set_weak_pointer (&self->active_view, active_view);
+          if (active_view != gtk_stack_get_visible_child (self->stack))
+            gtk_stack_set_visible_child (self->stack, active_view);
+
           self->focus_history = g_list_remove (self->focus_history, active_view);
           self->focus_history = g_list_prepend (self->focus_history, active_view);
 
-          if (active_view != gtk_stack_get_visible_child (self->stack))
-            gtk_stack_set_visible_child (self->stack, active_view);
           binding = g_object_bind_property (active_view, "title",
                                             self->title_label, "label",
                                             G_BINDING_SYNC_CREATE);
           ide_set_weak_pointer (&self->title_binding, binding);
+
           binding = g_object_bind_property (active_view, "modified",
                                             self->modified_label, "visible",
                                             G_BINDING_SYNC_CREATE);
           ide_set_weak_pointer (&self->modified_binding, binding);
-          ide_set_weak_pointer (&self->active_view, active_view);
+
           controls = gb_view_get_controls (GB_VIEW (active_view));
           if (controls)
             {
               gtk_stack_set_visible_child (self->controls_stack, controls);
               gtk_widget_show (GTK_WIDGET (self->controls_stack));
             }
+
           group = gtk_widget_get_action_group (active_view, "view");
           if (group)
             gtk_widget_insert_action_group (GTK_WIDGET (self), "view", group);
+
+          gb_view_stack_move_top_list_row (self, GB_VIEW (active_view));
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ACTIVE_VIEW]);
