@@ -60,8 +60,8 @@ gb_preferences_page_experimental_init (GbPreferencesPageExperimental *self)
 
   gtk_widget_insert_action_group (GTK_WIDGET (self), "settings", G_ACTION_GROUP (group));
 
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("experimental clang autocompletion auto complete"),
                                                self->clang_autocompletion_container,
                                                NULL);

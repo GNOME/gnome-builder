@@ -239,26 +239,26 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
                                                self->priv->smart_home_end_container,
                                                self->priv->smart_home_end_switch,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("smart back backspace indent align"),
                                                self->priv->smart_backspace_container,
                                                self->priv->smart_backspace_switch,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("show grid lines"),
                                                self->priv->show_grid_lines_container,
                                                self->priv->show_grid_lines_switch,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("lines margin scrolloff scroll off"),
                                                self->priv->scroll_off_container,
                                                self->priv->scroll_off_spin,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("font document editor monospace"),
                                                GTK_WIDGET (self->priv->font_button),
                                                NULL);

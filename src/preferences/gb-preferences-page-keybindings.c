@@ -91,18 +91,18 @@ gb_preferences_page_keybindings_init (GbPreferencesPageKeybindings *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("default keybindings"),
                                                self->default_container,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("emacs keybindings modal"),
                                                self->emacs_container,
                                                NULL);
-  /* To translators: This is a list of keywords for the preferences page */
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
                                                _("vim keybindings modal"),
                                                self->vim_container,
                                                NULL);
