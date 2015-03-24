@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gb-clang-service"
+
 #include <clang-c/Index.h>
 #include <glib/gi18n.h>
 
@@ -23,6 +25,7 @@
 #include "ide-clang-private.h"
 #include "ide-clang-service.h"
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-file.h"
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
@@ -193,6 +196,16 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
     }
 
   request->command_line_args = argv;
+
+#ifndef IDE_DISABLE_TRACE
+  {
+    gchar *cflags;
+
+    cflags = g_strjoinv (" ", argv);
+    IDE_TRACE_MSG ("CFLAGS = %s", cflags);
+    g_free (cflags);
+  }
+#endif
 
   g_task_run_in_thread (task, ide_clang_service_parse_worker);
 }
