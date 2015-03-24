@@ -36,7 +36,10 @@ struct _GbHtmlView
   GbHtmlDocument *document;
 
   /* References owned by Gtk template */
-  WebKitWebView  *web_view;
+  WebKitWebView  *web_view1;
+  WebKitWebView  *web_view2;
+
+  GtkPaned       *paned;
 };
 
 G_DEFINE_TYPE (GbHtmlView, gb_html_view, GB_TYPE_VIEW)
@@ -79,7 +82,9 @@ gb_html_view_changed (GbHtmlView    *self,
     }
 
   content = gb_html_document_get_content (self->document);
-  webkit_web_view_load_html (self->web_view, content, base_uri);
+  webkit_web_view_load_html (self->web_view1, content, base_uri);
+  if (self->web_view2 != NULL)
+    webkit_web_view_load_html (self->web_view2, content, base_uri);
 
   g_free (content);
   g_free (base_uri);
@@ -170,6 +175,64 @@ gb_html_view_set_document (GbHtmlView *self,
     }
 }
 
+static GbView *
+gb_html_view_create_split (GbView *view)
+{
+  GbHtmlView *self = (GbHtmlView *)view;
+  GbView *ret;
+
+  g_assert (GB_IS_HTML_VIEW (self));
+
+  ret = g_object_new (GB_TYPE_HTML_VIEW,
+                      "document", gb_html_view_get_document (view),
+                      "visible", TRUE,
+                      NULL);
+
+  return ret;
+}
+
+static void
+gb_html_view_set_split_view (GbView   *view,
+                             gboolean  split_view)
+{
+  GbHtmlView *self = (GbHtmlView *)view;
+
+  g_assert (GB_IS_HTML_VIEW (self));
+
+  g_return_if_fail (GB_IS_HTML_VIEW (view));
+
+  if (split_view && (self->web_view2 != NULL))
+    return;
+
+  if (!split_view && (self->web_view2 == NULL))
+    return;
+
+  if (split_view)
+    {
+      GtkTextBuffer *buffer = gb_html_document_get_buffer (self->document);
+      if (!buffer)
+        return;
+
+      self->web_view2 = g_object_new (WEBKIT_TYPE_WEB_VIEW,
+                                      "visible", TRUE,
+                                      NULL);
+      gtk_container_add_with_properties (GTK_CONTAINER (self->paned), GTK_WIDGET (self->web_view2),
+                                         "shrink", FALSE,
+                                         "resize", TRUE,
+                                         NULL);
+      gtk_widget_grab_focus (GTK_WIDGET (self->web_view2));
+      gb_html_view_changed (self, buffer);
+    }
+  else
+    {
+      GtkWidget *copy = GTK_WIDGET (self->web_view2);
+
+      self->web_view2 = NULL;
+      gtk_container_remove (GTK_CONTAINER (self->paned), copy);
+      gtk_widget_grab_focus (GTK_WIDGET (self->web_view1));
+    }
+}
+
 static void
 gb_html_view_refresh (GSimpleAction *action,
                       GVariant      *parameters,
@@ -250,6 +313,8 @@ gb_html_view_class_init (GbHtmlViewClass *klass)
   object_class->set_property = gb_html_view_set_property;
 
   view_class->get_document = gb_html_view_get_document;
+  view_class->create_split = gb_html_view_create_split;
+  view_class->set_split_view =  gb_html_view_set_split_view;
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
@@ -261,7 +326,8 @@ gb_html_view_class_init (GbHtmlViewClass *klass)
                                    gParamSpecs [PROP_DOCUMENT]);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-html-view.ui");
-  GB_WIDGET_CLASS_BIND (klass, GbHtmlView, web_view);
+  GB_WIDGET_CLASS_BIND (klass, GbHtmlView, web_view1);
+  GB_WIDGET_CLASS_BIND (klass, GbHtmlView, paned);
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }
