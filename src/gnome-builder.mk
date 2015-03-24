@@ -95,7 +95,6 @@ libgnome_builder_la_SOURCES = \
 	src/search/gb-search-display-row.h \
 	src/search/gb-search-display.c \
 	src/search/gb-search-display.h \
-	src/search/gb-search-types.h \
 	src/support/gb-support.c \
 	src/support/gb-support.h \
 	src/tree/gb-project-tree-builder.c \
