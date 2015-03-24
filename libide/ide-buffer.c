@@ -522,12 +522,15 @@ ide_buffer_reload_change_monitor (IdeBuffer *self)
 
       vcs = ide_context_get_vcs (priv->context);
       priv->change_monitor = ide_vcs_get_buffer_change_monitor (vcs, self);
-      priv->change_monitor_changed_handler =
-        g_signal_connect_object (priv->change_monitor,
-                                 "changed",
-                                 G_CALLBACK (ide_buffer__change_monitor_changed_cb),
-                                 self,
-                                 G_CONNECT_SWAPPED);
+      if (priv->change_monitor != NULL)
+        {
+          priv->change_monitor_changed_handler =
+            g_signal_connect_object (priv->change_monitor,
+                                     "changed",
+                                     G_CALLBACK (ide_buffer__change_monitor_changed_cb),
+                                     self,
+                                     G_CONNECT_SWAPPED);
+        }
     }
 
 }
