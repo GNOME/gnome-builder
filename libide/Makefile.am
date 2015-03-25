@@ -343,6 +343,7 @@ endif
 
 libide_1_0_la_type_headers = \
 	libide/ide-buffer.h \
+	libide/ide-diagnostic.h \
 	libide/ide-source-view.h \
 	$(NULL)
 
