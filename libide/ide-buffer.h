@@ -84,6 +84,9 @@ void                ide_buffer_set_style_scheme_name     (IdeBuffer         *sel
                                                           const gchar       *style_scheme_name);
 void                ide_buffer_trim_trailing_whitespace  (IdeBuffer         *self);
 void                ide_buffer_check_for_volume_change   (IdeBuffer         *self);
+void                ide_buffer_get_iter_at_source_location(IdeBuffer        *self,
+                                                          GtkTextIter       *iter,
+                                                          IdeSourceLocation *location);
 
 G_END_DECLS
 

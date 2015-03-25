@@ -1601,3 +1601,24 @@ _ide_buffer_set_mtime (IdeBuffer      *self,
 
   IDE_EXIT;
 }
+
+void
+ide_buffer_get_iter_at_source_location (IdeBuffer         *self,
+                                        GtkTextIter       *iter,
+                                        IdeSourceLocation *location)
+{
+  guint line;
+  guint line_offset;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (location != NULL);
+
+  line = ide_source_location_get_line (location);
+  line_offset = ide_source_location_get_line_offset (location);
+
+  gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self), iter, line);
+  for (; line_offset; line_offset--)
+    if (gtk_text_iter_ends_line (iter) || !gtk_text_iter_forward_char (iter))
+      break;
+}
