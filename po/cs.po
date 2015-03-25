@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-03-25 09:05+0000\n"
-"PO-Revision-Date: 2015-03-25 14:15+0100\n"
+"POT-Creation-Date: 2015-03-25 18:47+0000\n"
+"PO-Revision-Date: 2015-03-26 00:48+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -213,8 +213,9 @@ msgstr "Tmavý Builder"
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr "Tmavé barevné schéma pro Builder používající barevnou paletu Tango"
 
-#: ../data/style-schemes/builder.xml.h:1 ../src/app/gb-application.c:338
-#: ../src/main.c:47
+#: ../data/style-schemes/builder.xml.h:1
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:1
+#: ../src/app/gb-application.c:338 ../src/main.c:47
 msgid "Builder"
 msgstr "Builder"
 
@@ -282,7 +283,9 @@ msgstr "Zvýrazňovat aktuální řádek"
 msgid "Auto indent"
 msgstr "Automatické odsazování"
 
-#: ../data/ui/gb-editor-tweak-widget.ui.h:6 ../libide/ide-source-view.c:5122
+#: ../data/ui/gb-editor-tweak-widget.ui.h:6
+#: ../data/ui/gb-preferences-page-editor.ui.h:15
+#: ../libide/ide-source-view.c:5122
 msgid "Smart Backspace"
 msgstr "Chytrý Backaspace"
 
@@ -331,8 +334,8 @@ msgid "Rebuild Project"
 msgstr "Znovu sestavit projekt"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:1
-msgid "<b>Restore Cursor Position</b>"
-msgstr "<b>Obnovovat umístění kurzoru</b>"
+msgid "Restore Cursor Position"
+msgstr "Obnovovat umístění kurzoru"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:2
 msgid ""
@@ -342,16 +345,16 @@ msgstr ""
 "na posledy."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:3
-msgid "<b>Suggest Word Completion</b>"
-msgstr "<b>Navrhovat dokončení slov</b>"
+msgid "Suggest Word Completion"
+msgstr "Navrhovat dokončení slov"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:4
 msgid "Suggest completion of words found within the current document."
 msgstr "Navrhovat dokončení slov nalezených v rámci aktuálního dokumentu."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:5
-msgid "<b>Display Document Changes</b>"
-msgstr "<b>Zobrazovat změny v dokumentu</b>"
+msgid "Display Document Changes"
+msgstr "Zobrazovat změny v dokumentu"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:6
 msgid ""
@@ -359,40 +362,36 @@ msgid ""
 msgstr "Vedle čísla řádku zobrazovat, jestli byl řádek přidán nebo změněn."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:7
-msgid "<b>Show Line Numbers</b>"
-msgstr "<b>Zobrazovat čísla řádků</b>"
+msgid "Show Line Numbers"
+msgstr "Zobrazovat čísla řádků"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:8
 msgid "Display line numbers in the document."
 msgstr "Zobrazovat v dokumentu čísla řádků."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:9
-msgid "<b>Highlight Current Line</b>"
-msgstr "<b>Zvýrazňovat aktuální řádek</b>"
+msgid "Highlight Current Line"
+msgstr "Zvýrazňovat aktuální řádek"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:10
 msgid "Highlight the line containing the cursor."
 msgstr "Zvýrazňovat řádek obsahující kurzor."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:11
-msgid "<b>Highlight Matching Brackets</b>"
-msgstr "<b>Zvýrazňovat párové závorky</b>"
+msgid "Highlight Matching Brackets"
+msgstr "Zvýrazňovat párové závorky"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:12
 msgid "Whether or not matching brackets should be highlighted."
 msgstr "Jestli mají nebo nemají být zvýrazňovány párové závorky."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:13
-msgid "<b>Smart Home End</b>"
-msgstr "<b>Chytrý Home a End</b>"
+msgid "Smart Home End"
+msgstr "Chytrý Home a End"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:14
 msgid "Home moves to first non-space character."
 msgstr "Klávesa Home přesouvá na první nebílý znak."
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:15
-msgid "<b>Smart Backspace</b>"
-msgstr "<b>Chytrý Backspace</b>"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:16
 msgid ""
@@ -403,24 +402,26 @@ msgstr ""
 "zarovnání podle vaší šířky odsazení."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:17
-msgid "<b>Show Grid Lines</b>"
-msgstr "<b>Zobrazovat čáry mřížky</b>"
+#: ../libide/ide-source-view.c:5086
+msgid "Show Grid Lines"
+msgstr "Zobrazovat čáry mřížky"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:18
 msgid "Display a grid patten in the document."
 msgstr "Zobrazovat vzor mřížky v dokumentu."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:19
-msgid "<b>Scroll Offset</b>"
-msgstr "<b>Odsazení při posuvu</b>"
+#: ../libide/ide-source-view.c:5066
+msgid "Scroll Offset"
+msgstr "Odsazení při posuvu"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:20
 msgid "Minimal number of lines to keep above and below the cursor."
 msgstr "Minimální počet řádků, které se mají zachovat nad a pod kurzorem."
 
 #: ../data/ui/gb-preferences-page-experimental.ui.h:1
-msgid "<b>Clang Auto-Completion</b>"
-msgstr "<b>Automatické doplňování Clang</b>"
+msgid "Clang Auto-Completion"
+msgstr "Automatické doplňování Clang"
 
 #: ../data/ui/gb-preferences-page-git.ui.h:1
 msgid "Author Name"
@@ -430,25 +431,21 @@ msgstr "Jméno autora"
 msgid "Author Email"
 msgstr "E-mail autora"
 
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:1
-msgid "<b>Builder</b>"
-msgstr "<b>Builder</b>"
-
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:2
 msgid "The default keybindings for Builder."
 msgstr "Výchozí klávesové zkratky pro Builder."
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:3
-msgid "<b>Emacs Emulation</b>"
-msgstr "<b>Emulace Emacs</b>"
+msgid "Emacs Emulation"
+msgstr "Emulace Emacs"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:4
 msgid "Emulates familiar keybindings from the Emacs text editor."
 msgstr "Emuluje klávesové zkratky běžně známé z textového editoru Emacs."
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:5
-msgid "<b>Vim Emulation</b>"
-msgstr "<b>Emulace Vim</b>"
+msgid "Vim Emulation"
+msgstr "Emulace Vim"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:6
 msgid "Emulates familiar keybindings from the Vim text editor."
@@ -1662,10 +1659,6 @@ msgstr ""
 "Automaticky posouvat na následující výsledek hledání bez přesunu vkládacího "
 "kurzoru."
 
-#: ../libide/ide-source-view.c:5066
-msgid "Scroll Offset"
-msgstr "Odsazení při posuvu"
-
 #: ../libide/ide-source-view.c:5067
 msgid "The number of lines between the insertion cursor and screen boundary."
 msgstr "Počet řádků mezi vkladacím kurzorem a okrajem obrazovky."
@@ -1677,10 +1670,6 @@ msgstr "Kontext hledání"
 #: ../libide/ide-source-view.c:5078
 msgid "The search context for the view."
 msgstr "Kontext hledání pro zobrazení."
-
-#: ../libide/ide-source-view.c:5086
-msgid "Show Grid Lines"
-msgstr "Zobrazovat čáry mřížky"
 
 #: ../libide/ide-source-view.c:5087
 msgid "If the background grid should be shown."
