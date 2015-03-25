@@ -33,6 +33,7 @@
 #include "ide-debug.h"
 #include "ide-global.h"
 #include "ide-makecache.h"
+#include "ide-makecache-target.h"
 #include "ide-project.h"
 
 #define FAKE_CC  "__LIBIDE_FAKE_CC__"
@@ -59,8 +60,8 @@ struct _IdeMakecache
 
 typedef struct
 {
-  gchar **targets;
-  gchar  *relative_path;
+  GPtrArray *targets;
+  gchar     *relative_path;
 } FileFlagsLookup;
 
 typedef struct
@@ -141,7 +142,7 @@ file_flags_lookup_free (gpointer data)
 
   if (data)
     {
-      g_strfreev (lookup->targets);
+      g_ptr_array_unref (lookup->targets);
       g_free (lookup->relative_path);
       g_free (lookup);
     }
@@ -244,11 +245,11 @@ is_target_interesting (const gchar *target)
            g_str_has_suffix (target, ".o")));
 }
 
-static const gchar * const *
+static GPtrArray *
 ide_makecache_get_file_targets_cached (IdeMakecache *self,
                                        const gchar  *path)
 {
-  const gchar * const *ret;
+  GPtrArray *ret;
 
   IDE_ENTRY;
 
@@ -262,17 +263,24 @@ ide_makecache_get_file_targets_cached (IdeMakecache *self,
   IDE_RETURN (ret);
 }
 
-static const gchar * const *
+/**
+ * ide_makecache_get_file_targets_searched:
+ *
+ * Returns: (transfer container): A #GPtrArray of #IdeMakecacheTarget.
+ */
+static GPtrArray *
 ide_makecache_get_file_targets_searched (IdeMakecache *self,
                                          const gchar  *path)
 {
-  const gchar *content;
-  g_autoptr(GRegex) regex = NULL;
   g_autofree gchar *escaped = NULL;
+  g_autofree gchar *name = NULL;
   g_autofree gchar *regexstr = NULL;
-  g_autoptr(GMatchInfo) match_info = NULL;
+  g_autofree gchar *subdir = NULL;
   g_autoptr(GHashTable) found = NULL;
+  g_autoptr(GMatchInfo) match_info = NULL;
   g_autoptr(GPtrArray) targets = NULL;
+  g_autoptr(GRegex) regex = NULL;
+  const gchar *content;
   const gchar *line;
   ReadLines rl = { 0 };
   gsize len;
@@ -283,7 +291,14 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
   g_assert (IDE_IS_MAKECACHE (self));
   g_assert (path);
 
-  escaped = g_regex_escape_string (path, -1);
+  /*
+   * TODO:
+   *
+   * We can end up with the same filename in multiple subdirectories. We should be careful about
+   * that later when we extract flags to choose the best match first.
+   */
+  name = g_path_get_basename (path);
+  escaped = g_regex_escape_string (name, -1);
   regexstr = g_strdup_printf ("^([^:\n ]+):.*\\b(%s)\\b", escaped);
 
   regex = g_regex_new (regexstr, 0, 0, NULL);
@@ -293,8 +308,8 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
   content = g_mapped_file_get_contents (self->mapped);
   len = g_mapped_file_get_length (self->mapped);
 
-  targets = g_ptr_array_new_with_free_func (g_free);
-  found = g_hash_table_new (g_str_hash, g_str_equal);
+  targets = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_makecache_target_free);
+  found = g_hash_table_new (ide_makecache_target_hash, ide_makecache_target_equal);
 
 #ifndef IDE_DISABLE_TRACE
   {
@@ -310,19 +325,36 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
 
   while ((line = read_lines_next (&rl, &line_len)))
     {
+      /*
+       * Keep track of "subdir = <dir>" changes so we know what directory
+       * to launch make from.
+       */
+      if ((line_len > 9) && (memcmp (line, "subdir = ", 9) == 0))
+        {
+          g_free (subdir);
+          subdir = g_strndup (line + 9, line_len - 9);
+          continue;
+        }
+
       if (g_regex_match_full (regex, line, line_len, 0, 0, &match_info, NULL))
         {
           while (g_match_info_matches (match_info))
             {
-              g_autofree gchar *target = NULL;
+              g_autofree gchar *targetstr = NULL;
 
-              target = g_match_info_fetch (match_info, 1);
+              targetstr = g_match_info_fetch (match_info, 1);
 
-              if (is_target_interesting (target) && !g_hash_table_contains (found, target))
+              if (is_target_interesting (targetstr))
                 {
-                  g_hash_table_insert (found, target, NULL);
-                  g_ptr_array_add (targets, target);
-                  target = NULL;
+                  IdeMakecacheTarget *target;
+
+                  target = ide_makecache_target_new (subdir, targetstr);
+
+                  if (!g_hash_table_contains (found, target))
+                    {
+                      g_hash_table_insert (found, target, NULL);
+                      g_ptr_array_add (targets, target);
+                    }
                 }
 
               g_match_info_next (match_info, NULL);
@@ -332,27 +364,43 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
 
   IDE_TRACE_MSG ("Regex scan complete");
 
-  if (targets->len)
+  if (targets->len > 0)
     {
-      gchar **ret;
-
-      g_ptr_array_add (targets, NULL);
-      ret = (gchar **)g_ptr_array_free (targets, FALSE);
-      targets = NULL;
-
 #ifndef IDE_DISABLE_TRACE
       {
-        gchar *targetsstr;
+        GString *str;
+        gsize i;
 
-        targetsstr = g_strjoinv (" ", ret);
-        IDE_TRACE_MSG ("File \"%s\" found in targets: %s", path, targetsstr);
-        g_free (targetsstr);
+        str = g_string_new (NULL);
+
+        for (i = 0; i < targets->len; i++)
+          {
+            const gchar *subdir;
+            const gchar *target;
+            IdeMakecacheTarget *cur;
+
+            cur = g_ptr_array_index (targets, i);
+
+            subdir = ide_makecache_target_get_subdir (cur);
+            target = ide_makecache_target_get_target (cur);
+
+            if (subdir != NULL)
+              g_string_append_printf (str, " (%s of subdir %s)", target, subdir);
+            else
+              g_string_append_printf (str, " %s", target);
+          }
+
+
+        IDE_TRACE_MSG ("File \"%s\" found in targets: %s", path, str->str);
+        g_string_free (str, TRUE);
       }
 #endif
 
-      g_hash_table_insert (self->file_targets_cache, g_strdup (path), ret);
+      g_hash_table_insert (self->file_targets_cache, g_strdup (path), g_ptr_array_ref (targets));
 
-      IDE_RETURN ((const gchar * const *)ret);
+      g_ptr_array_ref (targets);
+
+      IDE_RETURN (targets);
     }
 
   IDE_RETURN (NULL);
@@ -733,14 +781,14 @@ ide_makecache_parse_line (IdeMakecache *self,
 
   g_assert (line);
 
-  ret = g_ptr_array_new ();
+  ret = g_ptr_array_new_with_free_func (g_free);
 
   if ((pos = strstr (line, FAKE_CXX)))
     {
       gchar **strv;
 
-      ide_makecache_parse_c_cxx (self, pos + strlen(FAKE_CXX), ret);
       g_ptr_array_add (ret, "-xc++");
+      ide_makecache_parse_c_cxx (self, pos + strlen(FAKE_CXX), ret);
       strv = (gchar **)g_ptr_array_free (ret, FALSE);
       IDE_RETURN (strv);
     }
@@ -754,6 +802,7 @@ ide_makecache_parse_line (IdeMakecache *self,
     }
 
   g_ptr_array_unref (ret);
+
   IDE_RETURN (NULL);
 }
 
@@ -765,15 +814,8 @@ ide_makecache_get_file_flags_worker (GTask        *task,
 {
   IdeMakecache *self = source_object;
   FileFlagsLookup *lookup = task_data;
-  g_autoptr(GSubprocessLauncher) launcher = NULL;
-  g_autoptr(GSubprocess) subprocess = NULL;
-  g_autofree gchar *cwd = NULL;
-  g_autoptr(GPtrArray) argv = NULL;
-  g_autofree gchar *stdoutstr = NULL;
-  GError *error = NULL;
-  gchar **lines;
-  gchar **ret = NULL;
   gsize i;
+  gsize j;
 
   IDE_ENTRY;
 
@@ -783,74 +825,109 @@ ide_makecache_get_file_flags_worker (GTask        *task,
   g_assert (lookup->relative_path);
   g_assert (lookup->targets);
 
-  cwd = g_file_get_path (self->parent);
+  for (j = 0; j < lookup->targets->len; j++)
+    {
+      IdeMakecacheTarget *target;
+      g_autoptr(GSubprocessLauncher) launcher = NULL;
+      g_autoptr(GSubprocess) subprocess = NULL;
+      g_autoptr(GPtrArray) argv = NULL;
+      g_autofree gchar *stdoutstr = NULL;
+      g_autofree gchar *cwd = NULL;
+      const gchar *subdir;
+      const gchar *targetstr;
+      const gchar *relpath;
+      GError *error = NULL;
+      gchar **lines;
+      gchar **ret = NULL;
 
-  argv = g_ptr_array_new ();
-  g_ptr_array_add (argv, "make");
-  g_ptr_array_add (argv, "-s");
-  g_ptr_array_add (argv, "-i");
-  g_ptr_array_add (argv, "-n");
-  g_ptr_array_add (argv, "-W");
-  g_ptr_array_add (argv, lookup->relative_path);
-  for (i = 0; lookup->targets [i]; i++)
-    g_ptr_array_add (argv, lookup->targets [i]);
-  g_ptr_array_add (argv, "V=1");
-  g_ptr_array_add (argv, "CC="FAKE_CC);
-  g_ptr_array_add (argv, "CXX="FAKE_CXX);
-  g_ptr_array_add (argv, NULL);
+      target = g_ptr_array_index (lookup->targets, j);
+
+      subdir = ide_makecache_target_get_subdir (target);
+      targetstr = ide_makecache_target_get_target (target);
+
+      cwd = g_file_get_path (self->parent);
+
+      if (g_str_has_prefix (lookup->relative_path, subdir))
+        relpath = lookup->relative_path + strlen (subdir);
+      else
+        relpath = lookup->relative_path;
+
+      while (*relpath == G_DIR_SEPARATOR)
+        relpath++;
+
+      argv = g_ptr_array_new ();
+      g_ptr_array_add (argv, "make");
+      g_ptr_array_add (argv, "-C");
+      g_ptr_array_add (argv, (gchar *)(subdir ?: "."));
+      g_ptr_array_add (argv, "-s");
+      g_ptr_array_add (argv, "-i");
+      g_ptr_array_add (argv, "-n");
+      g_ptr_array_add (argv, "-W");
+      g_ptr_array_add (argv, (gchar *)relpath);
+      g_ptr_array_add (argv, (gchar *)targetstr);
+      g_ptr_array_add (argv, "V=1");
+      g_ptr_array_add (argv, "CC="FAKE_CC);
+      g_ptr_array_add (argv, "CXX="FAKE_CXX);
+      g_ptr_array_add (argv, NULL);
 
 #ifndef IDE_DISABLE_TRACE
-  {
-    gchar *cmdline;
+      {
+        gchar *cmdline;
 
-    cmdline = g_strjoinv (" ", (gchar **)argv->pdata);
-    IDE_TRACE_MSG ("%s", cmdline);
-    g_free (cmdline);
-  }
+        cmdline = g_strjoinv (" ", (gchar **)argv->pdata);
+        IDE_TRACE_MSG ("%s", cmdline);
+        g_free (cmdline);
+      }
 #endif
 
-  launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
-  g_subprocess_launcher_set_cwd (launcher, cwd);
-  subprocess = g_subprocess_launcher_spawnv (launcher, (const gchar * const *)argv->pdata, &error);
+      launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+      g_subprocess_launcher_set_cwd (launcher, cwd);
+      subprocess = g_subprocess_launcher_spawnv (launcher,
+                                                 (const gchar * const *)argv->pdata,
+                                                 &error);
 
-  if (!subprocess)
-    {
-      g_task_return_error (task, error);
-      return;
+      if (!subprocess)
+        {
+          g_task_return_error (task, error);
+          IDE_EXIT;
+        }
+
+      if (!g_subprocess_communicate_utf8 (subprocess, NULL, cancellable, &stdoutstr, NULL, &error))
+        {
+          g_task_return_error (task, error);
+          IDE_EXIT;
+        }
+
+      lines = g_strsplit (stdoutstr, "\n", 0);
+
+      for (i = 0; lines [i]; i++)
+        {
+          const gchar *line = lines [i];
+
+          if ((ret = ide_makecache_parse_line (self, line)))
+            break;
+        }
+
+      g_strfreev (lines);
+
+      if (ret == NULL)
+        continue;
+
+      g_mutex_lock (&self->mutex);
+      g_hash_table_replace (self->file_flags_cache, g_strdup (lookup->relative_path), g_strdupv (ret));
+      g_mutex_unlock (&self->mutex);
+
+      g_task_return_pointer (task, ret, (GDestroyNotify)g_strfreev);
+
+      IDE_EXIT;
     }
 
-  if (!g_subprocess_communicate_utf8 (subprocess, NULL, cancellable, &stdoutstr, NULL, &error))
-    {
-      g_task_return_error (task, error);
-      return;
-    }
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_FAILED,
+                           "Failed to extract flags from make output");
 
-  lines = g_strsplit (stdoutstr, "\n", 0);
-
-  for (i = 0; lines [i]; i++)
-    {
-      const gchar *line = lines [i];
-
-      if ((ret = ide_makecache_parse_line (self, line)))
-        break;
-    }
-
-  g_strfreev (lines);
-
-  if (!ret)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to extract flags from make output");
-      return;
-    }
-
-  g_mutex_lock (&self->mutex);
-  g_hash_table_replace (self->file_flags_cache, g_strdup (lookup->relative_path), g_strdupv (ret));
-  g_mutex_unlock (&self->mutex);
-
-  g_task_return_pointer (task, ret, (GDestroyNotify)g_strfreev);
+  IDE_EXIT;
 }
 
 static void
@@ -952,7 +1029,7 @@ ide_makecache_init (IdeMakecache *self)
 {
   g_mutex_init (&self->mutex);
   self->file_targets_cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
-                                                    (GDestroyNotify)g_strfreev);
+                                                    (GDestroyNotify)g_ptr_array_unref);
   self->file_targets_neg_cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
                                                         (GDestroyNotify)g_strfreev);
   self->file_flags_cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
@@ -1036,7 +1113,7 @@ ide_makecache_get_file_targets_worker (GTask        *task,
 {
   IdeMakecache *self = source_object;
   const gchar *path = task_data;
-  const gchar * const *ret;
+  GPtrArray *ret;
 
   IDE_ENTRY;
 
@@ -1059,7 +1136,7 @@ ide_makecache_get_file_targets_worker (GTask        *task,
       IDE_EXIT;
     }
 
-  g_task_return_pointer (task, g_strdupv ((gchar **)ret), (GDestroyNotify)g_strfreev);
+  g_task_return_pointer (task, ret, (GDestroyNotify)g_ptr_array_unref);
 
   IDE_EXIT;
 }
@@ -1072,7 +1149,7 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
                                       gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
-  const gchar * const *ret;
+  GPtrArray *ret;
   gchar *path = NULL;
   gboolean neg_hit;
 
@@ -1112,7 +1189,7 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
 
   if (ret)
     {
-      g_task_return_pointer (task, g_strdupv ((gchar **)ret), (GDestroyNotify)g_strfreev);
+      g_task_return_pointer (task, g_ptr_array_ref (ret), (GDestroyNotify)g_ptr_array_unref);
       IDE_EXIT;
     }
 
@@ -1121,13 +1198,13 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
   IDE_EXIT;
 }
 
-gchar **
+GPtrArray *
 ide_makecache_get_file_targets_finish (IdeMakecache  *self,
                                        GAsyncResult  *result,
                                        GError       **error)
 {
   GTask *task = (GTask *)result;
-  gchar **ret;
+  GPtrArray *ret;
 
   IDE_ENTRY;
 
@@ -1146,7 +1223,7 @@ ide_makecache__get_targets_cb (GObject      *object,
 {
   IdeMakecache *self = (IdeMakecache *)object;
   g_autoptr(GTask) task = user_data;
-  gchar **targets;
+  g_autoptr(GPtrArray) targets = NULL;
   GError *error = NULL;
   GFile *file;
   FileFlagsLookup *lookup;
@@ -1161,13 +1238,12 @@ ide_makecache__get_targets_cb (GObject      *object,
 
   targets = ide_makecache_get_file_targets_finish (self, result, &error);
 
-  if (!targets)
+  if ((targets == NULL) || (targets->len == 0))
     {
       if (TRUE) /* TODO: Check for C/C++/Obj-C */
         {
           argv = g_new0 (gchar *, 2);
           argv [0] = g_strdup (self->llvm_flags);
-
           g_task_return_pointer (task, argv, (GDestroyNotify)g_strfreev);
           IDE_EXIT;
         }
@@ -1186,13 +1262,12 @@ ide_makecache__get_targets_cb (GObject      *object,
 
   if (argv)
     {
-      g_strfreev (targets);
       g_task_return_pointer (task, argv, (GDestroyNotify)g_strfreev);
       IDE_EXIT;
     }
 
   lookup = g_new0 (FileFlagsLookup, 1);
-  lookup->targets = targets;
+  lookup->targets = g_ptr_array_ref (targets);
   lookup->relative_path = g_strdup (relative_path);
 
   g_task_set_task_data (task, lookup, file_flags_lookup_free);

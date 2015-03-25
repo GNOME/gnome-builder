@@ -35,7 +35,7 @@ void                 ide_makecache_new_for_makefile_async  (IdeContext          
 IdeMakecache        *ide_makecache_new_for_makefile_finish (GAsyncResult         *result,
                                                             GError              **error);
 GFile               *ide_makecache_get_makefile            (IdeMakecache         *self);
-const gchar * const *ide_makecache_get_file_targets        (IdeMakecache         *self,
+GPtrArray           *ide_makecache_get_file_targets        (IdeMakecache         *self,
                                                             GFile                *file);
 void                 ide_makecache_get_file_flags_async    (IdeMakecache         *self,
                                                             GFile                *file,

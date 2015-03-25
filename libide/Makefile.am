@@ -192,6 +192,8 @@ libide_1_0_la_SOURCES = \
 	cut-n-paste/trie.h \
 	libide/autotools/ide-makecache.c \
 	libide/autotools/ide-makecache.h \
+	libide/autotools/ide-makecache-target.c \
+	libide/autotools/ide-makecache-target.h \
 	libide/c/c-parse-helper.c \
 	libide/c/c-parse-helper.h \
 	libide/c/ide-c-format-provider.c \
