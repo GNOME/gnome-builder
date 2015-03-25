@@ -188,8 +188,8 @@ _ide_diagnostic_take_fixit (IdeDiagnostic *self,
   g_return_if_fail (self);
   g_return_if_fail (fixit);
 
-  if (!self->fixits)
-    self->ranges = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_fixit_unref);
+  if (self->fixits == NULL)
+    self->fixits = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_fixit_unref);
 
   g_ptr_array_add (self->fixits, fixit);
 }
@@ -201,7 +201,7 @@ _ide_diagnostic_take_range (IdeDiagnostic  *self,
   g_return_if_fail (self);
   g_return_if_fail (range);
 
-  if (!self->ranges)
+  if (self->ranges == NULL)
     self->ranges = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_source_range_unref);
 
   g_ptr_array_add (self->ranges, range);
@@ -239,4 +239,33 @@ ide_diagnostic_severity_to_string (IdeDiagnosticSeverity severity)
     default:
       return "unknown";
     }
+}
+
+guint
+ide_diagnostic_get_num_fixits (IdeDiagnostic *self)
+{
+  g_return_val_if_fail (self, 0);
+
+  return (self->fixits != NULL) ? self->fixits->len : 0;
+}
+
+/**
+ * ide_diagnostic_get_fixit:
+ * @self: A #IdeDiagnostic.
+ * @index: The index of the fixit.
+ *
+ * Gets the fixit denoted by @index. This value should be less than the value
+ * returned from ide_diagnostic_get_num_fixits().
+ *
+ * Returns: (transfer none): An #IdeFixit.
+ */
+IdeFixit *
+ide_diagnostic_get_fixit (IdeDiagnostic *self,
+                          guint          index)
+{
+  g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (self->fixits, NULL);
+  g_return_val_if_fail (index < self->fixits->len, NULL);
+
+  return g_ptr_array_index (self->fixits, index);
 }
