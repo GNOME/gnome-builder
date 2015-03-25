@@ -231,6 +231,8 @@ libide_1_0_la_SOURCES = \
 	libide/ide-async-helper.h \
 	libide/ide-battery-monitor.c \
 	libide/ide-battery-monitor.h \
+	libide/ide-highlight-engine.c \
+	libide/ide-highlight-engine.h \
 	libide/ide-internal.h \
 	libide/ide-line-change-gutter-renderer.c \
 	libide/ide-line-change-gutter-renderer.h \
@@ -346,6 +348,7 @@ endif
 libide_1_0_la_type_headers = \
 	libide/ide-buffer.h \
 	libide/ide-diagnostic.h \
+	libide/ide-highlighter.h \
 	libide/ide-source-view.h \
 	$(NULL)
 

@@ -30,6 +30,8 @@
 #include "ide-diagnostics.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
+#include "ide-highlighter.h"
+#include "ide-highlight-engine.h"
 #include "ide-language.h"
 #include "ide-source-location.h"
 #include "ide-source-range.h"
@@ -53,6 +55,7 @@ typedef struct
   IdeFile                *file;
   GBytes                 *content;
   IdeBufferChangeMonitor *change_monitor;
+  IdeHighlightEngine     *highlight_engine;
   gchar                  *title;
 
   gulong                  change_monitor_changed_handler;
@@ -494,6 +497,27 @@ ide_buffer_queue_diagnose (IdeBuffer *self)
 }
 
 static void
+ide_buffer_reload_highlighter (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  IdeHighlighter *highlighter = NULL;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  if (priv->file != NULL)
+    {
+      IdeLanguage *language;
+
+      language = ide_file_get_language (priv->file);
+      if (language != NULL)
+        highlighter = ide_language_get_highlighter (language);
+    }
+
+  if (priv->highlight_engine != NULL)
+    ide_highlight_engine_set_highlighter (priv->highlight_engine, highlighter);
+}
+
+static void
 ide_buffer__change_monitor_changed_cb (IdeBuffer              *self,
                                        IdeBufferChangeMonitor *monitor)
 {
@@ -688,6 +712,7 @@ static void
 ide_buffer_constructed (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 #if GTK_CHECK_VERSION(3, 16, 1)
   GdkRGBA warning_rgba;
 #endif
@@ -710,6 +735,10 @@ ide_buffer_constructed (GObject *object)
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_NOTE,
                               "underline", PANGO_UNDERLINE_SINGLE,
                               NULL);
+
+  priv->highlight_engine = ide_highlight_engine_new (self);
+
+  ide_buffer_reload_highlighter (self);
 }
 
 static void
@@ -737,6 +766,7 @@ ide_buffer_dispose (GObject *object)
   g_clear_pointer (&priv->content, g_bytes_unref);
   g_clear_pointer (&priv->title, g_free);
   g_clear_object (&priv->file);
+  g_clear_object (&priv->highlight_engine);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
 
@@ -1052,6 +1082,7 @@ ide_buffer_set_file (IdeBuffer *self,
                                     ide_buffer__file_load_settings_cb,
                                     g_object_ref (self));
       ide_buffer_reload_change_monitor (self);
+      ide_buffer_reload_highlighter (self);
       ide_buffer_update_title (self);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TITLE]);

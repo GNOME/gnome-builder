@@ -29,3 +29,24 @@ static void
 ide_highlighter_init (IdeHighlighter *self)
 {
 }
+
+IdeHighlightKind
+ide_highlighter_next (IdeHighlighter    *self,
+                      const GtkTextIter *range_begin,
+                      const GtkTextIter *range_end,
+                      GtkTextIter       *match_begin,
+                      GtkTextIter       *match_end)
+{
+  g_return_val_if_fail (IDE_IS_HIGHLIGHTER (self), 0);
+  g_return_val_if_fail (range_begin, 0);
+  g_return_val_if_fail (range_end, 0);
+  g_return_val_if_fail (match_begin, 0);
+  g_return_val_if_fail (match_end, 0);
+
+  if (IDE_HIGHLIGHTER_GET_CLASS (self)->next)
+    return IDE_HIGHLIGHTER_GET_CLASS (self)->next (self,
+                                                   range_begin, range_end,
+                                                   match_begin, match_end);
+
+  return IDE_HIGHLIGHT_KIND_NONE;
+}

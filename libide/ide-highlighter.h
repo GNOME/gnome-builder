@@ -19,7 +19,11 @@
 #ifndef IDE_HIGHLIGHTER_H
 #define IDE_HIGHLIGHTER_H
 
+#include <gtk/gtk.h>
+
+#include "ide-buffer.h"
 #include "ide-object.h"
+#include "ide-source-view.h"
 
 G_BEGIN_DECLS
 
@@ -27,10 +31,34 @@ G_BEGIN_DECLS
 
 G_DECLARE_DERIVABLE_TYPE (IdeHighlighter, ide_highlighter, IDE, HIGHLIGHTER, IdeObject)
 
+typedef enum
+{
+  IDE_HIGHLIGHT_KIND_NONE,
+
+  IDE_HIGHLIGHT_KIND_TYPE_NAME,
+  IDE_HIGHLIGHT_KIND_CLASS_NAME,
+  IDE_HIGHLIGHT_KIND_FUNCTION_NAME,
+  IDE_HIGHLIGHT_KIND_MACRO_NAME,
+
+  IDE_HIGHLIGHT_KIND_LAST
+} IdeHighlightKind;
+
 struct _IdeHighlighterClass
 {
   IdeObjectClass parent;
+
+  IdeHighlightKind (*next) (IdeHighlighter    *self,
+                            const GtkTextIter *range_begin,
+                            const GtkTextIter *range_end,
+                            GtkTextIter       *match_begin,
+                            GtkTextIter       *match_end);
 };
+
+IdeHighlightKind ide_highlighter_next (IdeHighlighter    *self,
+                                       const GtkTextIter *range_begin,
+                                       const GtkTextIter *range_end,
+                                       GtkTextIter       *match_begin,
+                                       GtkTextIter       *match_end);
 
 G_END_DECLS
 
