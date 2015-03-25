@@ -847,7 +847,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
 
       cwd = g_file_get_path (self->parent);
 
-      if (g_str_has_prefix (lookup->relative_path, subdir))
+      if ((subdir != NULL) && g_str_has_prefix (lookup->relative_path, subdir))
         relpath = lookup->relative_path + strlen (subdir);
       else
         relpath = lookup->relative_path;
