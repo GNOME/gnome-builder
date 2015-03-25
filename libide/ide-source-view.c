@@ -34,6 +34,7 @@
 #include "ide-enums.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
+#include "ide-fixit.h"
 #include "ide-highlighter.h"
 #include "ide-internal.h"
 #include "ide-indenter.h"
@@ -42,6 +43,7 @@
 #include "ide-line-diagnostics-gutter-renderer.h"
 #include "ide-pango.h"
 #include "ide-rgba.h"
+#include "ide-source-range.h"
 #include "ide-source-snippet.h"
 #include "ide-source-snippet-chunk.h"
 #include "ide-source-snippet-completion-provider.h"
@@ -61,6 +63,7 @@
 #define ANIMATION_Y_GROW  30
 #define SMALL_SCROLL_DURATION_MSEC 100
 #define LARGE_SCROLL_DURATION_MSEC 250
+#define FIXIT_LABEL_LEN_MAX 30
 
 #define _GDK_RECTANGLE_X2(rect) ((rect)->x + (rect)->width)
 #define _GDK_RECTANGLE_Y2(rect) ((rect)->y + (rect)->height)
@@ -4483,6 +4486,206 @@ ide_source_view_get_overwrite (IdeSourceView *self)
   return FALSE;
 }
 
+static gchar *
+ide_source_view_get_fixit_label (IdeSourceView *self,
+                                 IdeFixit      *fixit)
+{
+  IdeSourceLocation *begin_loc;
+  IdeSourceLocation *end_loc;
+  IdeSourceRange *range;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gchar *old_text = NULL;
+  gchar *new_text = NULL;
+  gchar *tmp;
+  gchar *ret;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (fixit != NULL);
+
+  range = ide_fixit_get_range (fixit);
+  if (range == NULL)
+    return NULL;
+
+  new_text = g_strdup (ide_fixit_get_text (fixit));
+  if (new_text == NULL)
+    return NULL;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  if (!IDE_IS_BUFFER (buffer))
+    return NULL;
+
+  begin_loc = ide_source_range_get_begin (range);
+  end_loc = ide_source_range_get_end (range);
+
+  ide_buffer_get_iter_at_source_location (IDE_BUFFER (buffer), &begin, begin_loc);
+  ide_buffer_get_iter_at_source_location (IDE_BUFFER (buffer), &end, end_loc);
+
+  old_text = gtk_text_iter_get_slice (&begin, &end);
+
+  if (strlen (old_text) > FIXIT_LABEL_LEN_MAX)
+    {
+      tmp = old_text;
+      old_text = g_strndup (tmp, FIXIT_LABEL_LEN_MAX);
+      g_free (tmp);
+    }
+
+  if (strlen (new_text) > FIXIT_LABEL_LEN_MAX)
+    {
+      tmp = new_text;
+      new_text = g_strndup (tmp, FIXIT_LABEL_LEN_MAX);
+      g_free (tmp);
+    }
+
+  tmp = old_text;
+  old_text = g_markup_escape_text (old_text, -1);
+  g_free (tmp);
+
+  tmp = new_text;
+  new_text = g_markup_escape_text (new_text, -1);
+  g_free (tmp);
+
+  ret = g_strdup_printf (_("Replace \"%s\" with \"%s\""), old_text, new_text);
+
+  g_free (old_text);
+  g_free (new_text);
+
+  return ret;
+}
+
+static void
+ide_source_view__fixit_activate (IdeSourceView *self,
+                                 GtkMenuItem   *menu_item)
+{
+  IdeFixit *fixit;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_MENU_ITEM (menu_item));
+
+  fixit = g_object_get_data (G_OBJECT (menu_item), "IDE_FIXIT");
+
+  if (fixit != NULL)
+    {
+      IdeSourceLocation *srcloc;
+      IdeSourceRange *range;
+      GtkTextBuffer *buffer;
+      const gchar *text;
+      GtkTextIter begin;
+      GtkTextIter end;
+
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+      if (!IDE_IS_BUFFER (buffer))
+        return;
+
+      text = ide_fixit_get_text (fixit);
+      range = ide_fixit_get_range (fixit);
+
+      srcloc = ide_source_range_get_begin (range);
+      ide_buffer_get_iter_at_source_location (IDE_BUFFER (buffer), &begin, srcloc);
+
+      srcloc = ide_source_range_get_end (range);
+      ide_buffer_get_iter_at_source_location (IDE_BUFFER (buffer), &end, srcloc);
+
+      gtk_text_buffer_begin_user_action (buffer);
+      gtk_text_buffer_delete (buffer, &begin, &end);
+      gtk_text_buffer_insert (buffer, &begin, text, -1);
+      gtk_text_buffer_end_user_action (buffer);
+    }
+}
+
+static void
+ide_source_view_real_populate_popup (GtkTextView *text_view,
+                                     GtkWidget   *popup)
+{
+  IdeSourceView *self = (IdeSourceView *)text_view;
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  IdeDiagnostic *diagnostic;
+
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+  g_assert (GTK_IS_WIDGET (popup));
+
+  GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->populate_popup (text_view, popup);
+
+  if (!GTK_IS_MENU (popup))
+    return;
+
+  buffer = gtk_text_view_get_buffer (text_view);
+  if (!IDE_IS_BUFFER (buffer))
+    return;
+
+  /*
+   * TODO: I'm pretty sure we don't want to use the insert mark, but the
+   *       location of the button-press-event (if there was one).
+   */
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+
+  /*
+   * Check if we have a diagnostic at this position and if there are fixits associated with it.
+   * If so, display the "Apply Fixit" menu item with available fixits.
+   */
+  diagnostic = ide_buffer_get_diagnostic_at_iter (IDE_BUFFER (buffer), &iter);
+
+  if (diagnostic != NULL)
+    {
+      guint num_fixits;
+
+      num_fixits = ide_diagnostic_get_num_fixits (diagnostic);
+
+      if (num_fixits > 0)
+        {
+          GtkSeparatorMenuItem *sep;
+          GtkMenuItem *parent;
+          GtkWidget *submenu;
+          guint i;
+
+          sep = g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM,
+                              "visible", TRUE,
+                              NULL);
+          gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), GTK_WIDGET (sep));
+
+          submenu = gtk_menu_new ();
+
+          parent = g_object_new (GTK_TYPE_MENU_ITEM,
+                                 "label", _("Apply Fix-It"),
+                                 "submenu", submenu,
+                                 "visible", TRUE,
+                                 NULL);
+          gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), GTK_WIDGET (parent));
+
+          for (i = 0; i < num_fixits; i++)
+            {
+              IdeFixit *fixit;
+              GtkWidget *menu_item;
+              gchar *label;
+
+              fixit = ide_diagnostic_get_fixit (diagnostic, i);
+              label = ide_source_view_get_fixit_label (self, fixit);
+
+              menu_item = g_object_new (GTK_TYPE_MENU_ITEM,
+                                        "label", label,
+                                        "visible", TRUE,
+                                        NULL);
+              gtk_menu_shell_append (GTK_MENU_SHELL (submenu), menu_item);
+
+              g_object_set_data_full (G_OBJECT (menu_item),
+                                      "IDE_FIXIT",
+                                      ide_fixit_ref (fixit),
+                                      (GDestroyNotify)ide_fixit_unref);
+
+              g_signal_connect_object (menu_item,
+                                       "activate",
+                                       G_CALLBACK (ide_source_view__fixit_activate),
+                                       self,
+                                       G_CONNECT_SWAPPED);
+            }
+        }
+    }
+}
+
 static void
 ide_source_view_dispose (GObject *object)
 {
@@ -4724,8 +4927,9 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->query_tooltip = ide_source_view_query_tooltip;
   widget_class->style_updated = ide_source_view_real_style_updated;
 
-  text_view_class->insert_at_cursor = ide_source_view_real_insert_at_cursor;
   text_view_class->draw_layer = ide_source_view_real_draw_layer;
+  text_view_class->insert_at_cursor = ide_source_view_real_insert_at_cursor;
+  text_view_class->populate_popup = ide_source_view_real_populate_popup;
 
   source_view_class->undo = ide_source_view_real_undo;
   source_view_class->redo = ide_source_view_real_redo;
