@@ -29,6 +29,7 @@ struct _IdeDiagnostic
   IdeDiagnosticSeverity  severity;
   gchar                 *text;
   IdeSourceLocation     *location;
+  GPtrArray             *fixits;
   GPtrArray             *ranges;
 };
 
@@ -54,7 +55,8 @@ ide_diagnostic_unref (IdeDiagnostic *self)
       g_clear_pointer (&self->location, ide_source_location_unref);
       g_clear_pointer (&self->text, g_free);
       g_clear_pointer (&self->ranges, g_ptr_array_unref);
-      g_slice_free (IdeDiagnostic, self);
+      g_clear_pointer (&self->fixits, g_ptr_array_unref);
+      g_free (self);
     }
 }
 
@@ -170,13 +172,26 @@ _ide_diagnostic_new (IdeDiagnosticSeverity  severity,
 {
   IdeDiagnostic *ret;
 
-  ret = g_slice_new0 (IdeDiagnostic);
+  ret = g_new0 (IdeDiagnostic, 1);
   ret->ref_count = 1;
   ret->severity = severity;
   ret->text = g_strdup (text);
   ret->location = location ? ide_source_location_ref (location) : NULL;
 
   return ret;
+}
+
+void
+_ide_diagnostic_take_fixit (IdeDiagnostic *self,
+                            IdeFixit      *fixit)
+{
+  g_return_if_fail (self);
+  g_return_if_fail (fixit);
+
+  if (!self->fixits)
+    self->ranges = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_fixit_unref);
+
+  g_ptr_array_add (self->fixits, fixit);
 }
 
 void
@@ -187,11 +202,7 @@ _ide_diagnostic_take_range (IdeDiagnostic  *self,
   g_return_if_fail (range);
 
   if (!self->ranges)
-    {
-      self->ranges = g_ptr_array_new ();
-      g_ptr_array_set_free_func (self->ranges,
-                                 (GDestroyNotify)ide_source_range_unref);
-    }
+    self->ranges = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_source_range_unref);
 
   g_ptr_array_add (self->ranges, range);
 }

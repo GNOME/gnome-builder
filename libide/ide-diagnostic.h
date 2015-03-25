@@ -19,6 +19,7 @@
 #ifndef IDE_DIAGNOSTIC_H
 #define IDE_DIAGNOSTIC_H
 
+#include "ide-fixit.h"
 #include "ide-types.h"
 
 G_BEGIN_DECLS
@@ -35,6 +36,9 @@ typedef enum
 } IdeDiagnosticSeverity;
 
 IdeSourceLocation     *ide_diagnostic_get_location         (IdeDiagnostic *self);
+guint                  ide_diagnostic_get_num_fixits       (IdeDiagnostic *self);
+IdeFixit              *ide_diagnostic_get_fixit            (IdeDiagnostic *self,
+                                                            guint          index);
 guint                  ide_diagnostic_get_num_ranges       (IdeDiagnostic *self);
 IdeSourceRange        *ide_diagnostic_get_range            (IdeDiagnostic *self,
                                                             guint          index);

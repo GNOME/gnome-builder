@@ -92,6 +92,8 @@ libide_1_0_la_public_sources = \
 	libide/ide-file-settings.h \
 	libide/ide-file.c \
 	libide/ide-file.h \
+	libide/ide-fixit.c \
+	libide/ide-fixit.h \
 	libide/ide-global.h \
 	libide/ide-highlighter.c \
 	libide/ide-highlighter.h \

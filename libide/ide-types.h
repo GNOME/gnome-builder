@@ -84,6 +84,8 @@ typedef struct _IdeFile                        IdeFile;
 
 typedef struct _IdeFileSettings                IdeFileSettings;
 
+typedef struct _IdeFixit                       IdeFixit;
+
 typedef struct _IdeHighlighter                 IdeHighlighter;
 
 typedef struct _IdeIndenter                    IdeIndenter;
