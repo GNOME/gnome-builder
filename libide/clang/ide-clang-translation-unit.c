@@ -330,12 +330,11 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
       IdeVcs *vcs;
       g_autofree gchar *workpath = NULL;
       GFile *workdir;
-      GPtrArray *ar;
+      GPtrArray *diags;
       guint count;
       guint i;
 
-      ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
-      count = clang_getNumDiagnostics (self->tu);
+      diags = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
 
       /*
        * Acquire the reader lock for the project since we will need to do
@@ -352,6 +351,7 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
 
       ide_project_reader_lock (project);
 
+      count = clang_getNumDiagnostics (self->tu);
       for (i = 0; i < count; i++)
         {
           CXDiagnostic cxdiag;
@@ -359,14 +359,39 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
 
           cxdiag = clang_getDiagnostic (self->tu, i);
           diag = create_diagnostic (self, project, workpath, cxdiag);
-          if (diag)
-            g_ptr_array_add (ar, diag);
+
+          if (diag != NULL)
+            {
+              guint num_fixits;
+              gsize j;
+
+              num_fixits = clang_getDiagnosticNumFixIts (cxdiag);
+
+              for (j = 0; j < num_fixits; j++)
+                {
+                  IdeFixit *fixit = NULL;
+                  IdeSourceRange *range;
+                  CXSourceRange cxrange;
+                  CXString cxstr;
+
+                  cxstr = clang_getDiagnosticFixIt (cxdiag, j, &cxrange);
+                  range = create_range (self, project, workpath, cxrange);
+                  fixit = _ide_fixit_new (range, clang_getCString (cxstr));
+                  clang_disposeString (cxstr);
+
+                  if (fixit != NULL)
+                    _ide_diagnostic_take_fixit (diag, fixit);
+                }
+
+              g_ptr_array_add (diags, diag);
+            }
+
           clang_disposeDiagnostic (cxdiag);
         }
 
       ide_project_reader_unlock (project);
 
-      self->diagnostics = _ide_diagnostics_new (ar);
+      self->diagnostics = _ide_diagnostics_new (diags);
     }
 
   return self->diagnostics;
