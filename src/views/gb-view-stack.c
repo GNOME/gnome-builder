@@ -51,6 +51,7 @@ gb_view_stack_add_list_row (GbViewStack *self,
 {
   GtkWidget *row;
   GtkWidget *label;
+  GtkWidget *box;
 
   g_assert (GB_IS_VIEW_STACK (self));
   g_assert (GB_IS_VIEW (child));
@@ -58,6 +59,14 @@ gb_view_stack_add_list_row (GbViewStack *self,
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "visible", TRUE,
                       NULL);
+  g_object_set_data (G_OBJECT (row), "GB_VIEW", child);
+
+  box = g_object_new (GTK_TYPE_BOX,
+                      "orientation", GTK_ORIENTATION_HORIZONTAL,
+                      "visible", TRUE,
+                      NULL);
+  gtk_container_add (GTK_CONTAINER (row), box);
+
   label = g_object_new (GTK_TYPE_LABEL,
                         "margin-bottom", 3,
                         "margin-end", 6,
@@ -67,8 +76,17 @@ gb_view_stack_add_list_row (GbViewStack *self,
                         "xalign", 0.0f,
                         NULL);
   g_object_bind_property (child, "title", label, "label", G_BINDING_SYNC_CREATE);
-  g_object_set_data (G_OBJECT (row), "GB_VIEW", child);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_container_add (GTK_CONTAINER (box), label);
+
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "visible", FALSE,
+                        "label", "•",
+                        "margin-start", 3,
+                        "margin-end", 3,
+                        NULL);
+  g_object_bind_property (child, "modified", label, "visible", G_BINDING_SYNC_CREATE);
+  gtk_container_add (GTK_CONTAINER (box), label);
+
   gtk_container_add (GTK_CONTAINER (self->views_listbox), row);
 }
 
