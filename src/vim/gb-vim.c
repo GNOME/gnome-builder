@@ -835,7 +835,7 @@ invalid_request:
   g_set_error (error,
                GB_VIM_ERROR,
                GB_VIM_ERROR_UNKNOWN_OPTION,
-               _("Invalid searcn and replace request"));
+               _("Invalid search and replace request"));
   return FALSE;
 }
 
