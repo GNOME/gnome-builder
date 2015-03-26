@@ -95,6 +95,8 @@ libide_1_0_la_public_sources = \
 	libide/ide-fixit.c \
 	libide/ide-fixit.h \
 	libide/ide-global.h \
+	libide/ide-highlight-index.c \
+	libide/ide-highlight-index.h \
 	libide/ide-highlighter.c \
 	libide/ide-highlighter.h \
 	libide/ide-indent-style.c \
@@ -227,8 +229,6 @@ libide_1_0_la_SOURCES = \
 	libide/git/ide-git-search-index.h \
 	libide/gsettings/ide-language-defaults.c \
 	libide/gsettings/ide-language-defaults.h \
-	libide/ide-highlight-index.c \
-	libide/ide-highlight-index.h \
 	libide/ide-async-helper.c \
 	libide/ide-async-helper.h \
 	libide/ide-battery-monitor.c \
