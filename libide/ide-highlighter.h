@@ -33,33 +33,43 @@ G_DECLARE_DERIVABLE_TYPE (IdeHighlighter, ide_highlighter, IDE, HIGHLIGHTER, Ide
 
 typedef enum
 {
-  IDE_HIGHLIGHT_KIND_NONE,
+  IDE_HIGHLIGHT_STOP,
+  IDE_HIGHLIGHT_CONTINUE,
+} IdeHighlightResult;
 
-  IDE_HIGHLIGHT_KIND_TYPE_NAME,
-  IDE_HIGHLIGHT_KIND_CLASS_NAME,
-  IDE_HIGHLIGHT_KIND_FUNCTION_NAME,
-  IDE_HIGHLIGHT_KIND_MACRO_NAME,
-  IDE_HIGHLIGHT_KIND_CONSTANT,
-
-  IDE_HIGHLIGHT_KIND_LAST
-} IdeHighlightKind;
+typedef IdeHighlightResult (*IdeHighlightCallback) (const GtkTextIter *begin,
+                                                    const GtkTextIter *end,
+                                                    const gchar       *style_name);
 
 struct _IdeHighlighterClass
 {
   IdeObjectClass parent;
 
-  IdeHighlightKind (*next) (IdeHighlighter    *self,
-                            const GtkTextIter *range_begin,
-                            const GtkTextIter *range_end,
-                            GtkTextIter       *match_begin,
-                            GtkTextIter       *match_end);
+  /**
+   * IdeHighlighter::update:
+   *
+   * #IdeHighlighter should call callback() with the range and style-name of
+   * the style to apply. Callback will ensure that the style exists and style
+   * it appropriately based on the style scheme.
+   *
+   * If @callback returns %IDE_HIGHLIGHT_STOP, the caller has run out of its
+   * time slice and should yield back to the highlight engine.
+   *
+   * @location should be set to the position that the highlighter got to
+   * before yielding back to the engine.
+   */
+  void (*update) (IdeHighlighter       *self,
+                  IdeHighlightCallback  callback,
+                  const GtkTextIter    *range_begin,
+                  const GtkTextIter    *range_end,
+                  GtkTextIter          *location);
 };
 
-IdeHighlightKind ide_highlighter_next (IdeHighlighter    *self,
-                                       const GtkTextIter *range_begin,
-                                       const GtkTextIter *range_end,
-                                       GtkTextIter       *match_begin,
-                                       GtkTextIter       *match_end);
+void ide_highlighter_update (IdeHighlighter       *self,
+                             IdeHighlightCallback  callback,
+                             const GtkTextIter    *range_begin,
+                             const GtkTextIter    *range_end,
+                             GtkTextIter          *location);
 
 G_END_DECLS
 

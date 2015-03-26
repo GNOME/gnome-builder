@@ -93,20 +93,20 @@ ide_clang_service_build_index_visitor (CXCursor     cursor,
     case CXCursor_TypeAliasDecl:
       cxstr = clang_getCursorSpelling (cursor);
       word = clang_getCString (cxstr);
-      ide_highlight_index_insert (request->index, word, IDE_HIGHLIGHT_KIND_TYPE_NAME);
+      ide_highlight_index_insert (request->index, word, "def:type");
       break;
 
     case CXCursor_FunctionDecl:
       cxstr = clang_getCursorSpelling (cursor);
       word = clang_getCString (cxstr);
-      ide_highlight_index_insert (request->index, word, IDE_HIGHLIGHT_KIND_FUNCTION_NAME);
+      ide_highlight_index_insert (request->index, word, "def:function");
       break;
 
     case CXCursor_MacroDefinition:
     case CXCursor_MacroExpansion:
       cxstr = clang_getCursorSpelling (cursor);
       word = clang_getCString (cxstr);
-      ide_highlight_index_insert (request->index, word, IDE_HIGHLIGHT_KIND_MACRO_NAME);
+      ide_highlight_index_insert (request->index, word, "def:preprocessor");
       break;
 
     default:

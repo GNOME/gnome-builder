@@ -58,12 +58,12 @@ select_next_word (GtkTextIter *begin,
   return TRUE;
 }
 
-static IdeHighlightKind
-ide_clang_highlighter_real_next (IdeHighlighter    *highlighter,
-                                 const GtkTextIter *range_begin,
-                                 const GtkTextIter *range_end,
-                                 GtkTextIter       *begin,
-                                 GtkTextIter       *end)
+static void
+ide_clang_highlighter_real_update (IdeHighlighter       *highlighter,
+                                   IdeHighlightCallback  callback,
+                                   const GtkTextIter    *range_begin,
+                                   const GtkTextIter    *range_end,
+                                   GtkTextIter          *location)
 {
   IdeClangHighlighter *self = (IdeClangHighlighter *)highlighter;
   GtkTextBuffer *text_buffer;
@@ -74,18 +74,14 @@ ide_clang_highlighter_real_next (IdeHighlighter    *highlighter,
   IdeClangService *service;
   IdeBuffer *buffer;
   IdeFile *file;
-
-  /*
-   * TODO:
-   *
-   * This API has a decent bit of overhead. Instead, we should move to an API
-   * design that allows us to walk through the entire buffer, and then call a
-   * callback (back into the engine) to set the style name for the region.
-   * This would allow us to amortize the overhead cost of getting the
-   * information we need.
-   */
+  GtkTextIter begin;
+  GtkTextIter end;
 
   g_assert (IDE_IS_CLANG_HIGHLIGHTER (self));
+  g_assert (callback != NULL);
+  g_assert (range_begin != NULL);
+  g_assert (range_end != NULL);
+  g_assert (location != NULL);
 
   if (!(text_buffer = gtk_text_iter_get_buffer (range_begin)) ||
       !IDE_IS_BUFFER (text_buffer) ||
@@ -96,39 +92,46 @@ ide_clang_highlighter_real_next (IdeHighlighter    *highlighter,
       !(service = ide_context_get_service_typed (context, IDE_TYPE_CLANG_SERVICE)) ||
       !(unit = ide_clang_service_get_cached_translation_unit (service, file)) ||
       !(index = ide_clang_translation_unit_get_index (unit)))
-    return IDE_HIGHLIGHT_KIND_NONE;
+    return;
 
-  *begin = *end = *range_begin;
+  begin = end = *location = *range_begin;
 
-  while (gtk_text_iter_compare (begin, range_end) < 0)
+  while (gtk_text_iter_compare (&begin, range_end) < 0)
     {
-      if (!select_next_word (begin, end))
-        return IDE_HIGHLIGHT_KIND_NONE;
+      if (!select_next_word (&begin, &end))
+        goto completed;
 
-      if (gtk_text_iter_compare (begin, range_end) >= 0)
-        return IDE_HIGHLIGHT_KIND_NONE;
+      if (gtk_text_iter_compare (&begin, range_end) >= 0)
+        goto completed;
 
-      g_assert (!gtk_text_iter_equal (begin, end));
+      g_assert (!gtk_text_iter_equal (&begin, &end));
 
-      if (!gtk_source_buffer_iter_has_context_class (source_buffer, begin, "string") &&
-          !gtk_source_buffer_iter_has_context_class (source_buffer, begin, "path") &&
-          !gtk_source_buffer_iter_has_context_class (source_buffer, begin, "comment"))
+      if (!gtk_source_buffer_iter_has_context_class (source_buffer, &begin, "string") &&
+          !gtk_source_buffer_iter_has_context_class (source_buffer, &begin, "path") &&
+          !gtk_source_buffer_iter_has_context_class (source_buffer, &begin, "comment"))
         {
-          IdeHighlightKind ret;
+          const gchar *tag;
           gchar *word;
 
-          word = gtk_text_iter_get_slice (begin, end);
-          ret = ide_highlight_index_lookup (index, word);
+          word = gtk_text_iter_get_slice (&begin, &end);
+          tag = ide_highlight_index_lookup (index, word);
           g_free (word);
 
-          if (ret != IDE_HIGHLIGHT_KIND_NONE)
-            return ret;
+          if (tag != NULL)
+            {
+              if (callback (&begin, &end, tag) == IDE_HIGHLIGHT_STOP)
+                {
+                  *location = end;
+                  return;
+                }
+            }
         }
 
-      *begin = *end;
+      begin = end;
     }
 
-  return IDE_HIGHLIGHT_KIND_NONE;
+completed:
+  *location = *range_end;
 }
 
 static void
@@ -136,7 +139,7 @@ ide_clang_highlighter_class_init (IdeClangHighlighterClass *klass)
 {
   IdeHighlighterClass *highlighter_class = IDE_HIGHLIGHTER_CLASS (klass);
 
-  highlighter_class->next = ide_clang_highlighter_real_next;
+  highlighter_class->update = ide_clang_highlighter_real_update;
 }
 
 static void

@@ -30,23 +30,32 @@ ide_highlighter_init (IdeHighlighter *self)
 {
 }
 
-IdeHighlightKind
-ide_highlighter_next (IdeHighlighter    *self,
-                      const GtkTextIter *range_begin,
-                      const GtkTextIter *range_end,
-                      GtkTextIter       *match_begin,
-                      GtkTextIter       *match_end)
+/**
+ * ide_highlighter_update:
+ * @self: A #IdeHighlighter.
+ * @callback: (scope call): A callback to apply a given style.
+ * @range_begin: The beginning of the range to update.
+ * @range_end: The end of the range to update.
+ * @location: (out): How far the highlighter got in the update.
+ *
+ * Incrementally processes more of the buffer for highlighting.  If @callback
+ * returns %IDE_HIGHLIGHT_STOP, then this vfunc should stop processing and
+ * return, having set @location to the current position of processing.
+ *
+ * If processing the entire range was successful, then @location should be set
+ * to @range_end.
+ */
+void
+ide_highlighter_update (IdeHighlighter       *self,
+                        IdeHighlightCallback  callback,
+                        const GtkTextIter    *range_begin,
+                        const GtkTextIter    *range_end,
+                        GtkTextIter          *location)
 {
-  g_return_val_if_fail (IDE_IS_HIGHLIGHTER (self), 0);
-  g_return_val_if_fail (range_begin, 0);
-  g_return_val_if_fail (range_end, 0);
-  g_return_val_if_fail (match_begin, 0);
-  g_return_val_if_fail (match_end, 0);
+  g_return_if_fail (IDE_IS_HIGHLIGHTER (self));
+  g_return_if_fail (range_begin);
+  g_return_if_fail (range_end);
 
-  if (IDE_HIGHLIGHTER_GET_CLASS (self)->next)
-    return IDE_HIGHLIGHTER_GET_CLASS (self)->next (self,
-                                                   range_begin, range_end,
-                                                   match_begin, match_end);
-
-  return IDE_HIGHLIGHT_KIND_NONE;
+  if (IDE_HIGHLIGHTER_GET_CLASS (self)->update)
+    IDE_HIGHLIGHTER_GET_CLASS (self)->update (self, callback, range_begin, range_end, location);
 }

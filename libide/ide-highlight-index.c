@@ -52,12 +52,12 @@ ide_highlight_index_new (void)
 void
 ide_highlight_index_insert (IdeHighlightIndex *self,
                             const gchar       *word,
-                            IdeHighlightKind   kind)
+                            gpointer           tag)
 {
   gchar *key;
 
   g_assert (self);
-  g_assert (kind != IDE_HIGHLIGHT_KIND_NONE);
+  g_assert (tag != NULL);
 
   if (word == NULL || word[0] == '\0')
     return;
@@ -69,21 +69,27 @@ ide_highlight_index_insert (IdeHighlightIndex *self,
   self->chunk_size += strlen (word) + 1;
 
   key = g_string_chunk_insert (self->strings, word);
-  g_hash_table_insert (self->index, key, GINT_TO_POINTER (kind));
+  g_hash_table_insert (self->index, key, tag);
 }
 
-IdeHighlightKind
+/**
+ * ide_highlight_index_lookup:
+ * @self: An #IdeHighlightIndex.
+ *
+ * Gets the pointer tag that was registered for @word, or %NULL.  This can be
+ * any arbitrary value. Some highlight engines might use it to point at
+ * internal structures or strings they know about to optimize later work.
+ *
+ * Returns: (transfer none) (nullable): Highlighter specific tag.
+ */
+gpointer
 ide_highlight_index_lookup (IdeHighlightIndex *self,
                             const gchar       *word)
 {
-  gpointer value;
-
   g_assert (self);
   g_assert (word);
 
-  value = g_hash_table_lookup (self->index, word);
-
-  return GPOINTER_TO_INT (value);
+  return g_hash_table_lookup (self->index, word);
 }
 
 IdeHighlightIndex *

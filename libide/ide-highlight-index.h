@@ -19,7 +19,7 @@
 #ifndef IDE_HIGHLIGHT_INDEX_H
 #define IDE_HIGHLIGHT_INDEX_H
 
-#include "ide-highlighter.h"
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
@@ -33,8 +33,8 @@ IdeHighlightIndex *ide_highlight_index_ref      (IdeHighlightIndex *self);
 void               ide_highlight_index_unref    (IdeHighlightIndex *self);
 void               ide_highlight_index_insert   (IdeHighlightIndex *self,
                                                  const gchar       *word,
-                                                 IdeHighlightKind   kind);
-IdeHighlightKind   ide_highlight_index_lookup   (IdeHighlightIndex *self,
+                                                 gpointer           tag);
+gpointer           ide_highlight_index_lookup   (IdeHighlightIndex *self,
                                                  const gchar       *word);
 void               ide_highlight_index_dump     (IdeHighlightIndex *self);
 

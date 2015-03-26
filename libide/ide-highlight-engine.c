@@ -34,10 +34,12 @@ struct _IdeHighlightEngine
   IdeBuffer      *buffer;
   IdeHighlighter *highlighter;
 
-  GtkTextTag     *tags[IDE_HIGHLIGHT_KIND_LAST];
-
   GtkTextMark    *invalid_begin;
   GtkTextMark    *invalid_end;
+
+  GList          *tags;
+
+  guint64         quanta_expiration;
 
   guint           work_timeout;
 };
@@ -52,6 +54,7 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+static GQuark      gEngineQuark;
 
 static GtkTextTag *
 create_tag_from_style (IdeHighlightEngine *self,
@@ -75,7 +78,7 @@ create_tag_from_style (IdeHighlightEngine *self,
   g_assert (self->buffer != NULL);
   g_assert (IDE_IS_BUFFER (self->buffer));
 
-  tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self->buffer), NULL, NULL);
+  tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self->buffer), style_name, NULL);
 
   style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (self->buffer));
   if (style_scheme == NULL)
@@ -117,38 +120,46 @@ create_tag_from_style (IdeHighlightEngine *self,
 }
 
 static GtkTextTag *
-get_kind_tag (IdeHighlightEngine *self,
-              IdeHighlightKind    kind)
+get_style_tag (IdeHighlightEngine *self,
+               const gchar        *style_name)
 {
-  const gchar *name = NULL;
+  GtkTextTagTable *tag_table;
+  GtkTextTag *tag;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
+  g_assert (style_name != NULL);
 
-  switch (kind)
+  tag_table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self->buffer));
+  tag = gtk_text_tag_table_lookup (tag_table, style_name);
+
+  if (tag == NULL)
     {
-    case IDE_HIGHLIGHT_KIND_TYPE_NAME:
-    case IDE_HIGHLIGHT_KIND_CLASS_NAME:
-      name = "def:type";
-      break;
-
-    case IDE_HIGHLIGHT_KIND_FUNCTION_NAME:
-    case IDE_HIGHLIGHT_KIND_MACRO_NAME:
-      name = "def:function";
-      break;
-
-    case IDE_HIGHLIGHT_KIND_CONSTANT:
-      name = "def:constant";
-      break;
-
-    case IDE_HIGHLIGHT_KIND_NONE:
-    default:
-      return NULL;
+      tag = create_tag_from_style (self, style_name);
+      self->tags = g_list_prepend (self->tags, tag);
     }
 
-    if ((self->tags [kind] == NULL) && (name != NULL))
-      self->tags [kind] = create_tag_from_style (self, name);
+  return tag;
+}
 
-    return self->tags [kind];
+static IdeHighlightResult
+ide_highlight_engine_apply_style (const GtkTextIter *begin,
+                                  const GtkTextIter *end,
+                                  const gchar       *style_name)
+{
+  IdeHighlightEngine *self;
+  GtkTextBuffer *buffer;
+  GtkTextTag *tag;
+
+  buffer = gtk_text_iter_get_buffer (begin);
+  self = g_object_get_qdata (G_OBJECT (buffer), gEngineQuark);
+  tag = get_style_tag (self, style_name);
+
+  gtk_text_buffer_apply_tag (buffer, tag, begin, end);
+
+  if (g_get_monotonic_time () >= self->quanta_expiration)
+    return IDE_HIGHLIGHT_STOP;
+
+  return IDE_HIGHLIGHT_CONTINUE;
 }
 
 static gboolean
@@ -156,10 +167,8 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;
-  GtkTextIter begin;
-  GtkTextIter end;
-  guint64 quanta_expiration;
-  IdeHighlightKind kind;
+  GtkTextIter invalid_begin;
+  GtkTextIter invalid_end;
 
   IDE_PROBE;
 
@@ -169,50 +178,38 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
   g_assert (self->invalid_begin != NULL);
   g_assert (self->invalid_end != NULL);
 
-  quanta_expiration = g_get_monotonic_time () + HIGHLIGHT_QUANTA_USEC;
+  self->quanta_expiration = g_get_monotonic_time () + HIGHLIGHT_QUANTA_USEC;
 
   buffer = GTK_TEXT_BUFFER (self->buffer);
 
-  do
-    {
-      GtkTextTag *tag;
-      GtkTextIter invalid_begin;
-      GtkTextIter invalid_end;
+  gtk_text_buffer_get_iter_at_mark (buffer, &invalid_begin, self->invalid_begin);
+  gtk_text_buffer_get_iter_at_mark (buffer, &invalid_end, self->invalid_end);
 
-      gtk_text_buffer_get_iter_at_mark (buffer, &invalid_begin, self->invalid_begin);
-      gtk_text_buffer_get_iter_at_mark (buffer, &invalid_end, self->invalid_end);
+  IDE_TRACE_MSG ("Highlight Range (%u:%u <=> %u:%u)",
+                 gtk_text_iter_get_line (&invalid_begin),
+                 gtk_text_iter_get_line_offset (&invalid_begin),
+                 gtk_text_iter_get_line (&invalid_end),
+                 gtk_text_iter_get_line_offset (&invalid_end));
 
-      IDE_TRACE_MSG ("Highlight Range (%u:%u <=> %u:%u)",
-                     gtk_text_iter_get_line (&invalid_begin),
-                     gtk_text_iter_get_line_offset (&invalid_begin),
-                     gtk_text_iter_get_line (&invalid_end),
-                     gtk_text_iter_get_line_offset (&invalid_end));
+  if (gtk_text_iter_compare (&invalid_begin, &invalid_end) >= 0)
+    IDE_GOTO (up_to_date);
 
-      if (gtk_text_iter_compare (&invalid_begin, &invalid_end) >= 0)
-        IDE_GOTO (up_to_date);
+  iter = invalid_begin;
 
-      iter = invalid_begin;
+  ide_highlighter_update (self->highlighter, ide_highlight_engine_apply_style,
+                          &invalid_begin, &invalid_end, &iter);
 
-      kind = ide_highlighter_next (self->highlighter, &iter, &invalid_end, &begin, &end);
+  if (gtk_text_iter_compare (&iter, &invalid_end) >= 0)
+    IDE_GOTO (up_to_date);
 
-      if (kind == IDE_HIGHLIGHT_KIND_NONE)
-        IDE_GOTO (up_to_date);
-
-      IDE_TRACE_MSG ("Found tag of kind: %d", kind);
-
-      tag = get_kind_tag (self, kind);
-
-      gtk_text_buffer_apply_tag (buffer, tag, &begin, &end);
-      gtk_text_buffer_move_mark (buffer, self->invalid_begin, &end);
-    }
-  while (g_get_monotonic_time () < quanta_expiration);
+  gtk_text_buffer_move_mark (buffer, self->invalid_begin, &iter);
 
   return TRUE;
 
 up_to_date:
-  gtk_text_buffer_get_start_iter (buffer, &begin);
-  gtk_text_buffer_move_mark (buffer, self->invalid_begin, &begin);
-  gtk_text_buffer_move_mark (buffer, self->invalid_end, &begin);
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+  gtk_text_buffer_move_mark (buffer, self->invalid_begin, &iter);
+  gtk_text_buffer_move_mark (buffer, self->invalid_end, &iter);
 
   return FALSE;
 }
@@ -251,7 +248,7 @@ ide_highlight_engine_reload (IdeHighlightEngine *self)
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
-  gsize i;
+  GList *iter;
 
   IDE_ENTRY;
 
@@ -279,9 +276,10 @@ ide_highlight_engine_reload (IdeHighlightEngine *self)
   /*
    * Remove our highlight tags from the buffer.
    */
-  for (i = 0; i < G_N_ELEMENTS (self->tags); i++)
-    if (self->tags [i] != NULL)
-      gtk_text_buffer_remove_tag (buffer, self->tags [i], &begin, &end);
+  for (iter = self->tags; iter; iter = iter->next)
+    gtk_text_buffer_remove_tag (buffer, iter->data, &begin, &end);
+  g_list_free (self->tags);
+  self->tags = NULL;
 
   if (self->highlighter == NULL)
     IDE_EXIT;
@@ -393,6 +391,8 @@ ide_highlight_engine_connect_buffer (IdeHighlightEngine *self,
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
+  g_object_set_qdata (G_OBJECT (buffer), gEngineQuark, self);
+
   gtk_text_buffer_get_bounds (text_buffer, &begin, &end);
 
   self->invalid_begin = gtk_text_buffer_create_mark (text_buffer, NULL, &begin, TRUE);
@@ -423,7 +423,7 @@ ide_highlight_engine_disconnect_buffer (IdeHighlightEngine *self,
   GtkTextTagTable *tag_table;
   GtkTextIter begin;
   GtkTextIter end;
-  gsize i;
+  GList *iter;
 
   IDE_ENTRY;
 
@@ -435,6 +435,8 @@ ide_highlight_engine_disconnect_buffer (IdeHighlightEngine *self,
       g_source_remove (self->work_timeout);
       self->work_timeout = 0;
     }
+
+  g_object_set_qdata (G_OBJECT (buffer), gEngineQuark, NULL);
 
   g_signal_handlers_disconnect_by_func (buffer,
                                         G_CALLBACK (ide_highlight_engine__buffer_delete_range_cb),
@@ -454,15 +456,14 @@ ide_highlight_engine_disconnect_buffer (IdeHighlightEngine *self,
 
   gtk_text_buffer_get_bounds (text_buffer, &begin, &end);
 
-  for (i = 0; i < G_N_ELEMENTS (self->tags); i++)
+  for (iter = self->tags; iter; iter= iter->next)
     {
-      if (self->tags [i] != NULL)
-        {
-          gtk_text_buffer_remove_tag (text_buffer, self->tags [i], &begin, &end);
-          gtk_text_tag_table_remove (tag_table, self->tags [i]);
-          self->tags [i] = NULL;
-        }
+      gtk_text_buffer_remove_tag (text_buffer, iter->data, &begin, &end);
+      gtk_text_tag_table_remove (tag_table, iter->data);
     }
+
+  g_list_free (self->tags);
+  self->tags = NULL;
 
   IDE_EXIT;
 }
@@ -584,6 +585,8 @@ ide_highlight_engine_class_init (IdeHighlightEngineClass *klass)
                          IDE_TYPE_HIGHLIGHTER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_HIGHLIGHTER, gParamSpecs [PROP_HIGHLIGHTER]);
+
+  gEngineQuark = g_quark_from_string ("IDE_HIGHLIGHT_ENGINE");
 }
 
 static void
