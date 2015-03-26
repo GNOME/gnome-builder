@@ -33,6 +33,7 @@ IdeBuffer          *ide_highlight_engine_get_buffer      (IdeHighlightEngine *se
 IdeHighlighter     *ide_highlight_engine_get_highlighter (IdeHighlightEngine *self);
 void                ide_highlight_engine_set_highlighter (IdeHighlightEngine *self,
                                                           IdeHighlighter     *highlighter);
+void                ide_highlight_engine_rebuild         (IdeHighlightEngine *self);
 
 G_END_DECLS
 

@@ -127,10 +127,17 @@ get_kind_tag (IdeHighlightEngine *self,
   switch (kind)
     {
     case IDE_HIGHLIGHT_KIND_TYPE_NAME:
-    case IDE_HIGHLIGHT_KIND_FUNCTION_NAME:
     case IDE_HIGHLIGHT_KIND_CLASS_NAME:
-    case IDE_HIGHLIGHT_KIND_MACRO_NAME:
       name = "def:type";
+      break;
+
+    case IDE_HIGHLIGHT_KIND_FUNCTION_NAME:
+    case IDE_HIGHLIGHT_KIND_MACRO_NAME:
+      name = "def:function";
+      break;
+
+    case IDE_HIGHLIGHT_KIND_CONSTANT:
+      name = "def:constant";
       break;
 
     case IDE_HIGHLIGHT_KIND_NONE:
@@ -191,7 +198,7 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
       if (kind == IDE_HIGHLIGHT_KIND_NONE)
         IDE_GOTO (up_to_date);
 
-      IDE_TRACE_MSG ("Found tag of kind: %d\n", kind);
+      IDE_TRACE_MSG ("Found tag of kind: %d", kind);
 
       tag = get_kind_tag (self, kind);
 
@@ -636,4 +643,26 @@ ide_highlight_engine_get_buffer (IdeHighlightEngine *self)
   g_return_val_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self), NULL);
 
   return self->buffer;
+}
+
+void
+ide_highlight_engine_rebuild (IdeHighlightEngine *self)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
+
+  if (self->buffer != NULL)
+    {
+      GtkTextBuffer *buffer = GTK_TEXT_BUFFER (self->buffer);
+      GtkTextIter begin;
+      GtkTextIter end;
+
+      gtk_text_buffer_get_bounds (buffer, &begin, &end);
+      gtk_text_buffer_move_mark (buffer, self->invalid_begin, &begin);
+      gtk_text_buffer_move_mark (buffer, self->invalid_end, &end);
+      ide_highlight_engine_queue_work (self);
+    }
+
+  IDE_EXIT;
 }
