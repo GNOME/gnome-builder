@@ -75,7 +75,7 @@ create_tag_from_style (IdeHighlightEngine *self,
   g_assert (self->buffer != NULL);
   g_assert (IDE_IS_BUFFER (self->buffer));
 
-  tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self->buffer), "", NULL);
+  tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self->buffer), NULL, NULL);
 
   style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (self->buffer));
   if (style_scheme == NULL)
