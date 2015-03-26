@@ -36,6 +36,7 @@ void               ide_highlight_index_insert   (IdeHighlightIndex *self,
                                                  IdeHighlightKind   kind);
 IdeHighlightKind   ide_highlight_index_lookup   (IdeHighlightIndex *self,
                                                  const gchar       *word);
+void               ide_highlight_index_dump     (IdeHighlightIndex *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeHighlightIndex, ide_highlight_index_unref)
 
