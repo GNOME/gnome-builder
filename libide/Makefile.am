@@ -44,10 +44,10 @@ libide_1_0_la_public_sources = \
 	libide/gjs/ide-gjs-script.h \
 	libide/gsettings/ide-gsettings-file-settings.c \
 	libide/gsettings/ide-gsettings-file-settings.h \
-	libide/html/ide-html-language.c \
-	libide/html/ide-html-language.h \
 	libide/html/ide-html-completion-provider.c \
 	libide/html/ide-html-completion-provider.h \
+	libide/html/ide-html-language.c \
+	libide/html/ide-html-language.h \
 	libide/ide-back-forward-item.c \
 	libide/ide-back-forward-item.h \
 	libide/ide-back-forward-list.c \
