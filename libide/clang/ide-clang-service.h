@@ -38,6 +38,8 @@ void                     ide_clang_service_get_translation_unit_async  (IdeClang
 IdeClangTranslationUnit *ide_clang_service_get_translation_unit_finish (IdeClangService      *self,
                                                                         GAsyncResult         *result,
                                                                         GError              **error);
+IdeClangTranslationUnit *ide_clang_service_get_cached_translation_unit (IdeClangService      *self,
+                                                                        IdeFile              *file);
 
 G_END_DECLS
 

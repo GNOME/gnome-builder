@@ -19,9 +19,10 @@
 #ifndef IDE_CLANG_TRANSLATION_UNIT_H
 #define IDE_CLANG_TRANSLATION_UNIT_H
 
-#include "ide-object.h"
-
 #include <gtk/gtk.h>
+
+#include "ide-object.h"
+#include "ide-highlight-index.h"
 
 G_BEGIN_DECLS
 
@@ -40,6 +41,8 @@ void            ide_clang_translation_unit_code_complete_async  (IdeClangTransla
 GPtrArray      *ide_clang_translation_unit_code_complete_finish (IdeClangTranslationUnit  *self,
                                                                  GAsyncResult             *result,
                                                                  GError                  **error);
+IdeHighlightIndex *
+                ide_clang_translation_unit_get_index            (IdeClangTranslationUnit  *self);
 
 G_END_DECLS
 

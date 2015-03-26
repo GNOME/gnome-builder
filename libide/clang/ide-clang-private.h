@@ -25,12 +25,14 @@
 
 #include "ide-clang-service.h"
 #include "ide-clang-translation-unit.h"
+#include "ide-highlight-index.h"
 
 G_BEGIN_DECLS
 
 IdeClangTranslationUnit *_ide_clang_translation_unit_new (IdeContext        *context,
                                                           CXTranslationUnit  tu,
                                                           GFile             *file,
+                                                          IdeHighlightIndex *index,
                                                           gint64             sequence);
 
 G_END_DECLS

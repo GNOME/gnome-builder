@@ -21,6 +21,7 @@
 
 #include "ide-context.h"
 #include "ide-clang-completion-item.h"
+#include "ide-clang-private.h"
 #include "ide-clang-translation-unit.h"
 #include "ide-diagnostic.h"
 #include "ide-diagnostics.h"
@@ -41,6 +42,7 @@ struct _IdeClangTranslationUnit
   gint64             sequence;
   IdeDiagnostics    *diagnostics;
   GFile             *file;
+  IdeHighlightIndex *index;
 };
 
 typedef struct
@@ -56,6 +58,7 @@ G_DEFINE_TYPE (IdeClangTranslationUnit, ide_clang_translation_unit, IDE_TYPE_OBJ
 enum {
   PROP_0,
   PROP_FILE,
+  PROP_INDEX,
   PROP_SEQUENCE,
   LAST_PROP
 };
@@ -73,6 +76,32 @@ code_complete_state_free (gpointer data)
       g_free (state->path);
       g_free (state);
     }
+}
+
+/**
+ * ide_clang_translation_unit_get_index:
+ * @self: A #IdeClangTranslationUnit.
+ *
+ * Gets the highlight index for the translation unit.
+ *
+ * Returns: (transfer none) (nullable): An #IdeHighlightIndex or %NULL.
+ */
+IdeHighlightIndex *
+ide_clang_translation_unit_get_index (IdeClangTranslationUnit *self)
+{
+  g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
+
+  return self->index;
+}
+
+static void
+ide_clang_translation_unit_set_index (IdeClangTranslationUnit *self,
+                                      IdeHighlightIndex       *index)
+{
+  g_assert (IDE_IS_CLANG_TRANSLATION_UNIT (self));
+
+  if (index != NULL)
+    self->index = ide_highlight_index_ref (index);
 }
 
 GFile *
@@ -98,6 +127,7 @@ IdeClangTranslationUnit *
 _ide_clang_translation_unit_new (IdeContext        *context,
                                  CXTranslationUnit  tu,
                                  GFile             *file,
+                                 IdeHighlightIndex *index,
                                  gint64             sequence)
 {
   IdeClangTranslationUnit *ret;
@@ -107,8 +137,9 @@ _ide_clang_translation_unit_new (IdeContext        *context,
   g_return_val_if_fail (!file || G_IS_FILE (file), NULL);
 
   ret = g_object_new (IDE_TYPE_CLANG_TRANSLATION_UNIT,
-                      "file", file,
                       "context", context,
+                      "file", file,
+                      "index", index,
                       NULL);
 
   ret->tu = tu;
@@ -413,6 +444,7 @@ ide_clang_translation_unit_finalize (GObject *object)
   clang_disposeTranslationUnit (self->tu);
   g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
   g_clear_object (&self->file);
+  g_clear_pointer (&self->index, ide_highlight_index_unref);
 
   G_OBJECT_CLASS (ide_clang_translation_unit_parent_class)->finalize (object);
 }
@@ -429,6 +461,10 @@ ide_clang_translation_unit_get_property (GObject    *object,
     {
     case PROP_FILE:
       g_value_set_object (value, ide_clang_translation_unit_get_file (self));
+      break;
+
+    case PROP_INDEX:
+      g_value_set_boxed (value, ide_clang_translation_unit_get_index (self));
       break;
 
     case PROP_SEQUENCE:
@@ -454,6 +490,10 @@ ide_clang_translation_unit_set_property (GObject      *object,
       ide_clang_translation_unit_set_file (self, g_value_get_object (value));
       break;
 
+    case PROP_INDEX:
+      ide_clang_translation_unit_set_index (self, g_value_get_boxed (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -475,6 +515,14 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FILE, gParamSpecs [PROP_FILE]);
+
+  gParamSpecs [PROP_INDEX] =
+    g_param_spec_boxed ("index",
+                         _("Index"),
+                         _("The highlight index for the translation unit."),
+                         IDE_TYPE_HIGHLIGHT_INDEX,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_INDEX, gParamSpecs [PROP_INDEX]);
 
   gParamSpecs [PROP_SEQUENCE] =
     g_param_spec_int64 ("sequence",

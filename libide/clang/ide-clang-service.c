@@ -27,6 +27,7 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-file.h"
+#include "ide-highlight-index.h"
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
 
@@ -51,6 +52,13 @@ typedef struct
   guint       options;
 } ParseRequest;
 
+typedef struct
+{
+  IdeHighlightIndex *index;
+  CXFile             file;
+  const gchar       *filename;
+} IndexRequest;
+
 G_DEFINE_TYPE (IdeClangService, ide_clang_service, IDE_TYPE_SERVICE)
 
 static void
@@ -65,6 +73,79 @@ parse_request_free (gpointer data)
   g_slice_free (ParseRequest, request);
 }
 
+static enum CXChildVisitResult
+ide_clang_service_build_index_visitor (CXCursor     cursor,
+                                       CXCursor     parent,
+                                       CXClientData user_data)
+{
+  IndexRequest *request = user_data;
+  enum CXCursorKind kind;
+  const gchar *word;
+  CXString cxstr;
+
+  g_assert (request != NULL);
+
+  kind = clang_getCursorKind (cursor);
+
+  switch (kind)
+    {
+    case CXCursor_TypedefDecl:
+    case CXCursor_TypeAliasDecl:
+      cxstr = clang_getCursorSpelling (cursor);
+      word = clang_getCString (cxstr);
+      ide_highlight_index_insert (request->index, word, IDE_HIGHLIGHT_KIND_TYPE_NAME);
+      break;
+
+    case CXCursor_FunctionDecl:
+      cxstr = clang_getCursorSpelling (cursor);
+      word = clang_getCString (cxstr);
+      ide_highlight_index_insert (request->index, word, IDE_HIGHLIGHT_KIND_FUNCTION_NAME);
+      break;
+
+    case CXCursor_MacroDefinition:
+    case CXCursor_MacroExpansion:
+      cxstr = clang_getCursorSpelling (cursor);
+      word = clang_getCString (cxstr);
+      ide_highlight_index_insert (request->index, word, IDE_HIGHLIGHT_KIND_MACRO_NAME);
+      break;
+
+    default:
+      break;
+    }
+
+  return CXChildVisit_Continue;
+}
+
+static IdeHighlightIndex *
+ide_clang_service_build_index (IdeClangService   *self,
+                               CXTranslationUnit  tu,
+                               ParseRequest      *request)
+{
+  IdeHighlightIndex *index;
+  IndexRequest client_data;
+  CXCursor cursor;
+  CXFile file;
+
+  g_assert (IDE_IS_CLANG_SERVICE (self));
+  g_assert (tu != NULL);
+  g_assert (request != NULL);
+
+  file = clang_getFile (tu, request->source_filename);
+  if (file == NULL)
+    return NULL;
+
+  index = ide_highlight_index_new ();
+
+  client_data.index = index;
+  client_data.file = file;
+  client_data.filename = request->source_filename;
+
+  cursor = clang_getTranslationUnitCursor (tu);
+  clang_visitChildren (cursor, ide_clang_service_build_index_visitor, &client_data);
+
+  return index;
+}
+
 static void
 ide_clang_service_parse_worker (GTask        *task,
                                 gpointer      source_object,
@@ -72,6 +153,7 @@ ide_clang_service_parse_worker (GTask        *task,
                                 GCancellable *cancellable)
 {
   g_autoptr(IdeClangTranslationUnit) ret = NULL;
+  g_autoptr(IdeHighlightIndex) index = NULL;
   IdeClangService *self = source_object;
   CXTranslationUnit tu = NULL;
   ParseRequest *request = task_data;
@@ -121,6 +203,10 @@ ide_clang_service_parse_worker (GTask        *task,
   switch (code)
     {
     case CXError_Success:
+      index = ide_clang_service_build_index (self, tu, request);
+#ifndef IDE_DISABLE_TRACE
+      ide_highlight_index_dump (index);
+#endif
       break;
 
     case CXError_Failure:
@@ -155,7 +241,7 @@ ide_clang_service_parse_worker (GTask        *task,
 
   context = ide_object_get_context (source_object);
   gfile = ide_file_get_file (request->file);
-  ret = _ide_clang_translation_unit_new (context, tu, gfile, request->sequence);
+  ret = _ide_clang_translation_unit_new (context, tu, gfile, index, request->sequence);
 
   g_rw_lock_writer_lock (&self->cached_rwlock);
   g_hash_table_replace (self->cached_units,
@@ -381,4 +467,30 @@ ide_clang_service_init (IdeClangService *self)
                                               (GEqualFunc)ide_file_equal,
                                               g_object_unref,
                                               g_object_unref);
+}
+
+/**
+ * ide_clang_service_get_cached_translation_unit:
+ * @self: A #IdeClangService.
+ *
+ * Gets a cached translation unit if one exists for the file.
+ *
+ * Returns: (transfer full) (nullable): An #IdeClangTranslationUnit or %NULL.
+ */
+IdeClangTranslationUnit *
+ide_clang_service_get_cached_translation_unit (IdeClangService *self,
+                                               IdeFile         *file)
+{
+  IdeClangTranslationUnit *cached;
+
+  g_return_val_if_fail (IDE_IS_CLANG_SERVICE (self), NULL);
+  g_return_val_if_fail (IDE_IS_FILE (file), NULL);
+
+  g_rw_lock_reader_lock (&self->cached_rwlock);
+  cached = g_hash_table_lookup (self->cached_units, file);
+  if (cached)
+    g_object_ref (cached);
+  g_rw_lock_reader_unlock (&self->cached_rwlock);
+
+  return cached;
 }
