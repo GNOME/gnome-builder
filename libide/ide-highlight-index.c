@@ -20,6 +20,9 @@
 
 #include "ide-highlight-index.h"
 
+G_DEFINE_BOXED_TYPE (IdeHighlightIndex, ide_highlight_index,
+                     ide_highlight_index_ref, ide_highlight_index_unref)
+
 struct _IdeHighlightIndex
 {
   volatile gint  ref_count;
@@ -77,6 +80,8 @@ ide_highlight_index_ref (IdeHighlightIndex *self)
 {
   g_assert (self);
   g_assert_cmpint (self->ref_count, >, 0);
+
+  g_atomic_int_inc (&self->ref_count);
 
   return self;
 }

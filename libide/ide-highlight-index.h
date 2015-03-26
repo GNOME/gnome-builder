@@ -23,16 +23,21 @@
 
 G_BEGIN_DECLS
 
+#define IDE_TYPE_HIGHLIGHT_INDEX (ide_highlight_index_get_type())
+
 typedef struct _IdeHighlightIndex IdeHighlightIndex;
 
-IdeHighlightIndex *ide_highlight_index_new    (void);
-IdeHighlightIndex *ide_highlight_index_ref    (IdeHighlightIndex *self);
-void               ide_highlight_index_unref  (IdeHighlightIndex *self);
-void               ide_highlight_index_insert (IdeHighlightIndex *self,
-                                               const gchar       *word,
-                                               IdeHighlightKind   kind);
-IdeHighlightKind   ide_highlight_index_lookup (IdeHighlightIndex *self,
-                                               const gchar       *word);
+GType              ide_highlight_index_get_type (void);
+IdeHighlightIndex *ide_highlight_index_new      (void);
+IdeHighlightIndex *ide_highlight_index_ref      (IdeHighlightIndex *self);
+void               ide_highlight_index_unref    (IdeHighlightIndex *self);
+void               ide_highlight_index_insert   (IdeHighlightIndex *self,
+                                                 const gchar       *word,
+                                                 IdeHighlightKind   kind);
+IdeHighlightKind   ide_highlight_index_lookup   (IdeHighlightIndex *self,
+                                                 const gchar       *word);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeHighlightIndex, ide_highlight_index_unref)
 
 G_END_DECLS
 
