@@ -230,7 +230,7 @@ ide_highlight_engine_queue_work (IdeHighlightEngine *self)
 {
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  if (self->work_timeout != 0)
+  if ((self->highlighter == NULL) || (self->buffer == NULL) || (self->work_timeout != 0))
     return;
 
   self->work_timeout = g_timeout_add (WORK_TIMEOUT_MSEC,
@@ -250,7 +250,13 @@ ide_highlight_engine_reload (IdeHighlightEngine *self)
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  if ((self->buffer == NULL) || (self->highlighter == NULL))
+  if (self->work_timeout != 0)
+    {
+      g_source_remove (self->work_timeout);
+      self->work_timeout = 0;
+    }
+
+  if (self->buffer == NULL)
     IDE_EXIT;
 
   buffer = GTK_TEXT_BUFFER (self->buffer);
@@ -269,6 +275,9 @@ ide_highlight_engine_reload (IdeHighlightEngine *self)
   for (i = 0; i < G_N_ELEMENTS (self->tags); i++)
     if (self->tags [i] != NULL)
       gtk_text_buffer_remove_tag (buffer, self->tags [i], &begin, &end);
+
+  if (self->highlighter == NULL)
+    IDE_EXIT;
 
   ide_highlight_engine_queue_work (self);
 
