@@ -227,6 +227,8 @@ libide_1_0_la_SOURCES = \
 	libide/git/ide-git-search-index.h \
 	libide/gsettings/ide-language-defaults.c \
 	libide/gsettings/ide-language-defaults.h \
+	libide/ide-highlight-index.c \
+	libide/ide-highlight-index.h \
 	libide/ide-async-helper.c \
 	libide/ide-async-helper.h \
 	libide/ide-battery-monitor.c \
