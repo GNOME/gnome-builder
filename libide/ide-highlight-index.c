@@ -114,10 +114,14 @@ ide_highlight_index_unref (IdeHighlightIndex *self)
 void
 ide_highlight_index_dump (IdeHighlightIndex *self)
 {
+  g_autofree gchar *format = NULL;
+
   g_assert (self);
+
+  format = g_format_size (self->chunk_size);
 
   g_printerr ("IdeHighlightIndex at %p\n"
               "       Number of items in Index: %u\n"
-              "   String Chunk Size (Estimate): %"G_GSIZE_FORMAT"\n",
-              self, self->count, self->chunk_size);
+              "   String Chunk Size (Estimate): %s\n",
+              self, self->count, format);
 }
