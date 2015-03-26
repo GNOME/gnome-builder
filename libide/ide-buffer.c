@@ -1653,3 +1653,18 @@ ide_buffer_get_iter_at_source_location (IdeBuffer         *self,
     if (gtk_text_iter_ends_line (iter) || !gtk_text_iter_forward_char (iter))
       break;
 }
+
+void
+ide_buffer_rehighlight (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  if (priv->highlight_engine != NULL)
+    ide_highlight_engine_rebuild (priv->highlight_engine);
+
+  IDE_EXIT;
+}

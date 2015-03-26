@@ -87,6 +87,7 @@ void                ide_buffer_check_for_volume_change     (IdeBuffer         *s
 void                ide_buffer_get_iter_at_source_location (IdeBuffer         *self,
                                                             GtkTextIter       *iter,
                                                             IdeSourceLocation *location);
+void                ide_buffer_rehighlight                 (IdeBuffer         *self);
 
 G_END_DECLS
 

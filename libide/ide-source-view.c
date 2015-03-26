@@ -219,6 +219,7 @@ enum {
   POP_SNIPPET,
   PUSH_SELECTION,
   PUSH_SNIPPET,
+  REBUILD_HIGHLIGHT,
   REPLAY_MACRO,
   REQUEST_DOCUMENTATION,
   RESTORE_INSERT_MARK,
@@ -4690,6 +4691,21 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
 }
 
 static void
+ide_source_view_real_rebuild_highlight (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->buffer != NULL)
+    ide_buffer_rehighlight (priv->buffer);
+
+  IDE_EXIT;
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -4961,6 +4977,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->pop_selection = ide_source_view_real_pop_selection;
   klass->push_selection = ide_source_view_real_push_selection;
   klass->push_snippet = ide_source_view_real_push_snippet;
+  klass->rebuild_highlight = ide_source_view_real_rebuild_highlight;
   klass->replay_macro = ide_source_view_real_replay_macro;
   klass->restore_insert_mark = ide_source_view_real_restore_insert_mark;
   klass->save_insert_mark = ide_source_view_real_save_insert_mark;
@@ -5505,6 +5522,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   IDE_TYPE_SOURCE_SNIPPET,
                   IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
                   GTK_TYPE_TEXT_ITER);
+
+  gSignals [REBUILD_HIGHLIGHT] =
+    g_signal_new ("rebuild-highlight",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, rebuild_highlight),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  0);
 
   /**
    * IdeSourceView:replay-macro:

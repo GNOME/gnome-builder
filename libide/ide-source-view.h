@@ -254,6 +254,7 @@ struct _IdeSourceViewClass
                                        IdeSourceSnippet        *snippet,
                                        IdeSourceSnippetContext *context,
                                        const GtkTextIter       *location);
+  void (*rebuild_highlight)           (IdeSourceView           *self);
   void (*replay_macro)                (IdeSourceView           *self,
                                        gboolean                 use_count);
   void (*request_documentation)       (IdeSourceView           *self);
