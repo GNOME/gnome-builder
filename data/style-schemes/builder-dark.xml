@@ -129,9 +129,9 @@
   <style name="c:enum-name"                 foreground="#677685" bold="false"/>
   <style name="c:function-name"             foreground="#4186A8" bold="false"/>
 
-  <style name="diff:added-line"             foreground="butter2"/>
-  <style name="diff:removed-line"           foreground="skyblue1"/>
-  <style name="diff:changed-line"           foreground="plum1"/>
+  <style name="diff:added-line"             foreground="chameleon2"/>
+  <style name="diff:removed-line"           foreground="plum1"/>
+  <style name="diff:changed-line"           foreground="buffer3"/>
   <style name="diff:diff-file"              foreground="chameleon1" bold="true"/>
   <style name="diff:location"               foreground="chameleon1"/>
   <style name="diff:special-case"           foreground="white" bold="true"/>
