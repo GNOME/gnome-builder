@@ -202,6 +202,10 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
   if (gtk_text_iter_compare (&iter, &invalid_end) >= 0)
     IDE_GOTO (up_to_date);
 
+  /* Stop processing until further instruction if no movement was made */
+  if (gtk_text_iter_equal (&iter, &invalid_begin))
+    return FALSE;
+
   gtk_text_buffer_move_mark (buffer, self->invalid_begin, &iter);
 
   return TRUE;
