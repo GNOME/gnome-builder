@@ -91,8 +91,8 @@
 @binding-set builder-emacs-source-view-x
 {
   bind "<ctrl>c" { "action" ("app", "quit", "") };
-  bind "0" { "action" ("stack", "close", "") };
-  bind "k" { "action" ("stack", "close", "") };
+  bind "0" { "action" ("view", "close", "") };
+  bind "k" { "action" ("view", "close", "") };
   bind "<ctrl>f" { "action" ("workbench", "open", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "s" { "action" ("win", "save-all", "") };
