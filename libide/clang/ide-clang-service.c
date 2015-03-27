@@ -369,7 +369,16 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
   request->command_line_args = NULL;
   request->unsaved_files = ide_unsaved_files_get_unsaved_files (unsaved_files);
   request->sequence = ide_unsaved_files_get_sequence (unsaved_files);
-  request->options = clang_defaultEditingTranslationUnitOptions ();
+  /*
+   * NOTE:
+   *
+   * I'm torn on this one. It requires a bunch of extra memory, but without it
+   * we don't get information about macros.  And since we need that to provide
+   * quality highlighting, I'm going try try enabling it for now and see how
+   * things go.
+   */
+  request->options = (clang_defaultEditingTranslationUnitOptions () |
+                      CXTranslationUnit_DetailedPreprocessingRecord);
 
   g_task_set_task_data (task, request, parse_request_free);
 
