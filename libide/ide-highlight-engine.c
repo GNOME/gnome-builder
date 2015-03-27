@@ -63,6 +63,7 @@ sync_tag_style (GtkSourceStyleScheme *style_scheme,
   g_autofree gchar *foreground = NULL;
   g_autofree gchar *background = NULL;
   g_autofree gchar *style_name = NULL;
+  const gchar *colon;
   GtkSourceStyle *style;
   gboolean foreground_set = FALSE;
   gboolean background_set = FALSE;
@@ -83,10 +84,18 @@ sync_tag_style (GtkSourceStyleScheme *style_scheme,
 
   g_object_get (tag, "name", &style_name, NULL);
 
-  if ((style_name == NULL) ||
-      (style_scheme == NULL) ||
-      !(style = gtk_source_style_scheme_get_style (style_scheme, style_name)))
+  if ((style_name == NULL) || (style_scheme == NULL))
     return;
+
+  style = gtk_source_style_scheme_get_style (style_scheme, style_name);
+  if (style == NULL && (colon = strchr (style_name, ':')))
+    {
+      gchar defname[64];
+      g_snprintf (defname, sizeof defname, "def%s", colon);
+      style = gtk_source_style_scheme_get_style (style_scheme, defname);
+      if (style == NULL)
+        return;
+    }
 
   g_object_get (style,
                 "background", &background,
