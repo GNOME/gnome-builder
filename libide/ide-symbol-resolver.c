@@ -29,3 +29,52 @@ static void
 ide_symbol_resolver_init (IdeSymbolResolver *self)
 {
 }
+
+/**
+ * ide_symbol_resolver_lookup_symbol_async:
+ * @self: An #IdeSymbolResolver.
+ * @location: An #IdeSourceLocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: (scope async): A callback to execute upon completion.
+ * @user_data: user data for @callback.
+ *
+ * Asynchronously requests that @self determine the symbol existing at the source location
+ * denoted by @self. @callback should call ide_symbol_resolver_lookup_symbol_finish() to
+ * retrieve the result.
+ */
+void
+ide_symbol_resolver_lookup_symbol_async  (IdeSymbolResolver   *self,
+                                          IdeSourceLocation   *location,
+                                          GCancellable        *cancellable,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_SYMBOL_RESOLVER (self));
+  g_return_if_fail (location != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_SYMBOL_RESOLVER_GET_CLASS (self)->
+    lookup_symbol_async (self, location, cancellable, callback, user_data);
+}
+
+/**
+ * ide_symbol_resolver_lookup_symbol_finish:
+ * @self: An #IdeSymbolResolver.
+ * @result: A #GAsyncResult provided to the callback.
+ * @error: (out): A location for an @error or %NULL.
+ *
+ * Completes an asynchronous call to lookup a symbol using
+ * ide_symbol_resolver_lookup_symbol_async().
+ *
+ * Returns: (transfer full) (nullable): An #IdeSymbol if successful; otherwise %NULL.
+ */
+IdeSymbol *
+ide_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *self,
+                                          GAsyncResult       *result,
+                                          GError            **error)
+{
+  g_return_val_if_fail (IDE_IS_SYMBOL_RESOLVER (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+
+  return IDE_SYMBOL_RESOLVER_GET_CLASS (self)->lookup_symbol_finish (self, result, error);
+}

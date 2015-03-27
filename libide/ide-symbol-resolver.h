@@ -30,6 +30,15 @@ G_DECLARE_DERIVABLE_TYPE (IdeSymbolResolver, ide_symbol_resolver, IDE, SYMBOL_RE
 struct _IdeSymbolResolverClass
 {
   IdeObjectClass parent;
+
+  void       (*lookup_symbol_async)  (IdeSymbolResolver    *self,
+                                      IdeSourceLocation    *location,
+                                      GCancellable         *cancellable,
+                                      GAsyncReadyCallback   callback,
+                                      gpointer              user_data);
+  IdeSymbol *(*lookup_symbol_finish) (IdeSymbolResolver    *self,
+                                      GAsyncResult         *result,
+                                      GError              **error);
 };
 
 void       ide_symbol_resolver_lookup_symbol_async  (IdeSymbolResolver    *self,
