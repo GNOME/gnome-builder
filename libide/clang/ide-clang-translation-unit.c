@@ -707,3 +707,50 @@ ide_clang_translation_unit_code_complete_finish (IdeClangTranslationUnit  *self,
 
   return g_task_propagate_pointer (task, error);
 }
+
+IdeSymbol *
+ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
+                                          IdeSourceLocation        *location,
+                                          GError                  **error)
+{
+  g_autofree gchar *filename = NULL;
+  g_auto(CXString) cxstr = { 0 };
+  CXSourceLocation cxlocation;
+  CXCursor cursor;
+  CXFile cxfile;
+  IdeSymbol *ret = NULL;
+  IdeFile *file;
+  GFile *gfile;
+  guint line;
+  guint line_offset;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
+  g_return_val_if_fail (location != NULL, NULL);
+
+  line = ide_source_location_get_line (location);
+  line_offset = ide_source_location_get_line_offset (location);
+
+  if (!(file = ide_source_location_get_file (location)) ||
+      !(gfile = ide_file_get_file (file)) ||
+      !(filename = g_file_get_path (gfile)) ||
+      !(cxfile = clang_getFile (self->tu, filename)))
+    IDE_RETURN (NULL);
+
+  cxlocation = clang_getLocation (self->tu, cxfile, line + 1, line_offset + 1);
+
+  cursor = clang_getCursor (self->tu, cxlocation);
+  if (clang_Cursor_isNull (cursor))
+    IDE_RETURN (NULL);
+
+  cxstr = clang_getCursorDisplayName (cursor);
+  ret = _ide_symbol_new (clang_getCString (cxstr));
+
+  /*
+   * TODO: We should also get information about the defintion of the symbol.
+   *       Possibly more.
+   */
+
+  IDE_RETURN (ret);
+}

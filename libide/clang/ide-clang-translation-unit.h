@@ -43,6 +43,9 @@ GPtrArray      *ide_clang_translation_unit_code_complete_finish (IdeClangTransla
                                                                  GError                  **error);
 IdeHighlightIndex *
                 ide_clang_translation_unit_get_index            (IdeClangTranslationUnit  *self);
+IdeSymbol      *ide_clang_translation_unit_lookup_symbol        (IdeClangTranslationUnit  *self,
+                                                                 IdeSourceLocation        *location,
+                                                                 GError                  **error);
 
 G_END_DECLS
 
