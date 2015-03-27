@@ -37,8 +37,15 @@ struct _IdeClangService
 
   GHashTable   *cached_units;
   GRWLock       cached_rwlock;
+  gpointer      padding1[6];
+
   CXIndex       index;
   GCancellable *cancellable;
+  gpointer      padding2[6];
+
+  GMutex        in_flight_lock;
+  GPtrArray    *in_flight;
+  GPtrArray    *waiting;
 };
 
 typedef struct
@@ -167,6 +174,37 @@ ide_clang_service_build_index (IdeClangService   *self,
 }
 
 static void
+ide_clang_service_notify_waiters_locked (IdeClangService         *self,
+                                         IdeFile                 *file,
+                                         IdeClangTranslationUnit *result)
+{
+  GList *tasks = NULL;
+  GList *iter;
+  gsize i;
+
+  g_assert (IDE_IS_CLANG_SERVICE (self));
+  g_assert (IDE_IS_FILE (file));
+  g_assert (IDE_IS_CLANG_TRANSLATION_UNIT (result));
+
+  for (i = 0; i < self->waiting->len; i++)
+    {
+      GTask *item = g_ptr_array_index (self->waiting, i);
+      IdeFile *item_file = g_task_get_task_data (item);
+
+      if (ide_file_equal (item_file, file))
+        tasks = g_list_prepend (tasks, g_object_ref (item));
+    }
+
+  for (iter = tasks; iter; iter = iter->next)
+    g_ptr_array_remove (self->waiting, iter->data);
+
+  for (iter = tasks; iter; iter = iter->next)
+    g_task_return_pointer (iter->data, g_object_ref (result), g_object_unref);
+
+  g_list_free_full (tasks, (GDestroyNotify)g_object_unref);
+}
+
+static void
 ide_clang_service_parse_worker (GTask        *task,
                                 gpointer      source_object,
                                 gpointer      task_data,
@@ -174,6 +212,7 @@ ide_clang_service_parse_worker (GTask        *task,
 {
   g_autoptr(IdeClangTranslationUnit) ret = NULL;
   g_autoptr(IdeHighlightIndex) index = NULL;
+  g_autoptr(IdeFile) file_copy = NULL;
   IdeClangService *self = source_object;
   CXTranslationUnit tu = NULL;
   ParseRequest *request = task_data;
@@ -269,9 +308,16 @@ ide_clang_service_parse_worker (GTask        *task,
                         g_object_ref (ret));
   g_rw_lock_writer_unlock (&self->cached_rwlock);
 
+  file_copy = g_object_ref (request->file);
+
   g_task_return_pointer (task, g_object_ref (ret), g_object_unref);
 
 cleanup:
+  g_mutex_lock (&self->in_flight_lock);
+  ide_clang_service_notify_waiters_locked (self, file_copy, ret);
+  g_ptr_array_remove (self->in_flight, task);
+  g_mutex_unlock (&self->in_flight_lock);
+
   g_array_unref (ar);
 }
 
@@ -314,6 +360,40 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
 #endif
 
   g_task_run_in_thread (task, ide_clang_service_parse_worker);
+}
+
+static gboolean
+ide_clang_service_attach_in_flight (IdeClangService *self,
+                                    IdeFile         *file,
+                                    GTask           *task)
+{
+  gboolean ret = FALSE;
+  gsize i;
+
+  g_assert (IDE_IS_CLANG_SERVICE (self));
+  g_assert (IDE_IS_FILE (file));
+  g_assert (G_IS_TASK (task));
+
+  g_mutex_lock (&self->in_flight_lock);
+
+  for (i = 0; i < self->in_flight->len; i++)
+    {
+      GTask *item = g_ptr_array_index (self->in_flight, i);
+      ParseRequest *request = g_task_get_task_data (item);
+
+      if (ide_file_equal (request->file, file))
+        {
+          g_task_set_task_data (task, g_object_ref (file), g_object_unref);
+          g_ptr_array_add (self->waiting, g_object_ref (task));
+          ret = TRUE;
+          goto unlock;
+        }
+    }
+
+unlock:
+  g_mutex_unlock (&self->in_flight_lock);
+
+  return ret;
 }
 
 /**
@@ -371,6 +451,9 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
         }
     }
 
+  if (ide_clang_service_attach_in_flight (self, file, task))
+    return;
+
   gfile = ide_file_get_file (file);
 
   if (!gfile || !(path = g_file_get_path (gfile)))
@@ -401,6 +484,10 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
                       CXTranslationUnit_DetailedPreprocessingRecord);
 
   g_task_set_task_data (task, request, parse_request_free);
+
+  g_mutex_lock (&self->in_flight_lock);
+  g_ptr_array_add (self->in_flight, g_object_ref (task));
+  g_mutex_unlock (&self->in_flight_lock);
 
   /*
    * Request the build flags necessary to build this module from the build system.
@@ -469,10 +556,23 @@ ide_clang_service_dispose (GObject *object)
 {
   IdeClangService *self = (IdeClangService *)object;
 
+  g_clear_pointer (&self->in_flight, g_ptr_array_unref);
+  g_clear_pointer (&self->waiting, g_ptr_array_unref);
   g_clear_pointer (&self->index, clang_disposeIndex);
   g_clear_object (&self->cancellable);
 
   G_OBJECT_CLASS (ide_clang_service_parent_class)->dispose (object);
+}
+
+static void
+ide_clang_service_finalize (GObject *object)
+{
+  IdeClangService *self = (IdeClangService *)object;
+
+  g_rw_lock_clear (&self->cached_rwlock);
+  g_mutex_clear (&self->in_flight_lock);
+
+  G_OBJECT_CLASS (ide_clang_service_parent_class)->finalize (object);
 }
 
 static void
@@ -482,6 +582,7 @@ ide_clang_service_class_init (IdeClangServiceClass *klass)
   IdeServiceClass *service_class = IDE_SERVICE_CLASS (klass);
 
   object_class->dispose = ide_clang_service_dispose;
+  object_class->finalize = ide_clang_service_finalize;
 
   service_class->start = ide_clang_service_start;
   service_class->stop = ide_clang_service_stop;
@@ -491,11 +592,14 @@ static void
 ide_clang_service_init (IdeClangService *self)
 {
   g_rw_lock_init (&self->cached_rwlock);
+  g_mutex_init (&self->in_flight_lock);
 
   self->cached_units = g_hash_table_new_full ((GHashFunc)ide_file_hash,
                                               (GEqualFunc)ide_file_equal,
                                               g_object_unref,
                                               g_object_unref);
+  self->in_flight = g_ptr_array_new_with_free_func (g_object_unref);
+  self->waiting = g_ptr_array_new_with_free_func (g_object_unref);
 }
 
 /**
