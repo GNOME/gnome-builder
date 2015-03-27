@@ -89,6 +89,15 @@ void                ide_buffer_get_iter_at_source_location (IdeBuffer         *s
                                                             IdeSourceLocation *location);
 void                ide_buffer_rehighlight                 (IdeBuffer         *self);
 
+void                ide_buffer_get_symbol_at_location_async  (IdeBuffer            *self,
+                                                              const GtkTextIter    *location,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
+IdeSymbol          *ide_buffer_get_symbol_at_location_finish (IdeBuffer            *self,
+                                                              GAsyncResult         *result,
+                                                              GError              **error);
+
 G_END_DECLS
 
 #endif /* IDE_BUFFER_H */

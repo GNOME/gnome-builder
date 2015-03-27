@@ -35,6 +35,8 @@
 #include "ide-language.h"
 #include "ide-source-location.h"
 #include "ide-source-range.h"
+#include "ide-symbol.h"
+#include "ide-symbol-resolver.h"
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 
@@ -56,6 +58,7 @@ typedef struct
   GBytes                 *content;
   IdeBufferChangeMonitor *change_monitor;
   IdeHighlightEngine     *highlight_engine;
+  IdeSymbolResolver      *symbol_resolver;
   gchar                  *title;
 
   gulong                  change_monitor_changed_handler;
@@ -525,6 +528,26 @@ ide_buffer_reload_highlighter (IdeBuffer *self)
 }
 
 static void
+ide_buffer_reload_symbol_provider (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  IdeSymbolResolver *symbol_resolver = NULL;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  if (priv->file != NULL)
+    {
+      IdeLanguage *language;
+
+      language = ide_file_get_language (priv->file);
+      if (language != NULL)
+        symbol_resolver = ide_language_get_symbol_resolver (language);
+    }
+
+  g_set_object (&priv->symbol_resolver, symbol_resolver);
+}
+
+static void
 ide_buffer__change_monitor_changed_cb (IdeBuffer              *self,
                                        IdeBufferChangeMonitor *monitor)
 {
@@ -711,7 +734,7 @@ ide_buffer_mark_set (GtkTextBuffer     *buffer,
 {
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->mark_set (buffer, iter, mark);
 
-  if ((G_UNLIKELY (mark == gtk_text_buffer_get_insert (buffer))))
+  if (G_UNLIKELY (mark == gtk_text_buffer_get_insert (buffer)))
     ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
 }
 
@@ -794,6 +817,7 @@ ide_buffer_dispose (GObject *object)
   g_clear_pointer (&priv->title, g_free);
   g_clear_object (&priv->file);
   g_clear_object (&priv->highlight_engine);
+  g_clear_object (&priv->symbol_resolver);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
 
@@ -1110,6 +1134,7 @@ ide_buffer_set_file (IdeBuffer *self,
                                     g_object_ref (self));
       ide_buffer_reload_change_monitor (self);
       ide_buffer_reload_highlighter (self);
+      ide_buffer_reload_symbol_provider (self);
       ide_buffer_update_title (self);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TITLE]);
@@ -1694,4 +1719,89 @@ ide_buffer_rehighlight (IdeBuffer *self)
     ide_highlight_engine_rebuild (priv->highlight_engine);
 
   IDE_EXIT;
+}
+
+static void
+ide_buffer__symbol_provider_lookup_symbol_cb (GObject      *object,
+                                              GAsyncResult *result,
+                                              gpointer      user_data)
+{
+  IdeSymbolResolver *symbol_resolver = (IdeSymbolResolver *)object;
+  g_autoptr(IdeSymbol) symbol = NULL;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  g_assert (G_IS_TASK (task));
+
+  symbol = ide_symbol_resolver_lookup_symbol_finish (symbol_resolver, result, &error);
+
+  if (symbol == NULL)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_task_return_pointer (task, ide_symbol_ref (symbol), (GDestroyNotify)ide_symbol_unref);
+}
+
+void
+ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
+                                         const GtkTextIter   *location,
+                                         GCancellable        *cancellable,
+                                         GAsyncReadyCallback  callback,
+                                         gpointer             user_data)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeSourceLocation) srcloc = NULL;
+  guint line;
+  guint line_offset;
+  guint offset;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (location != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  if (priv->symbol_resolver == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               _("Failed to resolve symbol"));
+      return;
+    }
+
+  line = gtk_text_iter_get_line (location);
+  line_offset = gtk_text_iter_get_line_offset (location);
+  offset = gtk_text_iter_get_offset (location);
+
+  srcloc = ide_source_location_new (priv->file, line, line_offset, offset);
+
+  ide_symbol_resolver_lookup_symbol_async (priv->symbol_resolver,
+                                           srcloc,
+                                           cancellable,
+                                           ide_buffer__symbol_provider_lookup_symbol_cb,
+                                           g_object_ref (task));
+}
+
+/**
+ * ide_buffer_get_symbol_at_location_finish:
+ *
+ * Completes an asynchronous request to locate a symbol at a location.
+ *
+ * Returns: (transfer full): An #IdeSymbol or %NULL.
+ */
+IdeSymbol *
+ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
+                                          GAsyncResult  *result,
+                                          GError       **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (task), NULL);
+
+  return g_task_propagate_pointer (task, error);
 }
