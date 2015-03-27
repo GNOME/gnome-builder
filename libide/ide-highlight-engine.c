@@ -56,15 +56,14 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 static GQuark      gEngineQuark;
 
-static GtkTextTag *
-create_tag_from_style (IdeHighlightEngine *self,
-                       const gchar        *style_name)
+static void
+sync_tag_style (GtkSourceStyleScheme *style_scheme,
+                GtkTextTag           *tag)
 {
-  GtkSourceStyleScheme *style_scheme;
-  GtkSourceStyle *style;
-  GtkTextTag *tag;
   g_autofree gchar *foreground = NULL;
   g_autofree gchar *background = NULL;
+  g_autofree gchar *style_name = NULL;
+  GtkSourceStyle *style;
   gboolean foreground_set = FALSE;
   gboolean background_set = FALSE;
   gboolean bold = FALSE;
@@ -74,19 +73,20 @@ create_tag_from_style (IdeHighlightEngine *self,
   gboolean italic = FALSE;
   gboolean italic_set = FALSE;
 
-  g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_assert (self->buffer != NULL);
-  g_assert (IDE_IS_BUFFER (self->buffer));
+  g_object_set (tag,
+                "foreground-set", FALSE,
+                "background-set", FALSE,
+                "bold-set", FALSE,
+                "underline-set", FALSE,
+                "italic-set", FALSE,
+                NULL);
 
-  tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self->buffer), style_name, NULL);
+  g_object_get (tag, "name", &style_name, NULL);
 
-  style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (self->buffer));
-  if (style_scheme == NULL)
-    return tag;
-
-  style = gtk_source_style_scheme_get_style (style_scheme, style_name);
-  if (style == NULL)
-    return tag;
+  if ((style_name == NULL) ||
+      (style_scheme == NULL) ||
+      !(style = gtk_source_style_scheme_get_style (style_scheme, style_name)))
+    return;
 
   g_object_get (style,
                 "background", &background,
@@ -115,6 +115,22 @@ create_tag_from_style (IdeHighlightEngine *self,
 
   if (underline_set && underline)
     g_object_set (tag, "underline", PANGO_UNDERLINE_SINGLE, NULL);
+}
+
+static GtkTextTag *
+create_tag_from_style (IdeHighlightEngine *self,
+                       const gchar        *style_name)
+{
+  GtkSourceStyleScheme *style_scheme;
+  GtkTextTag *tag;
+
+  g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
+  g_assert (self->buffer != NULL);
+  g_assert (IDE_IS_BUFFER (self->buffer));
+
+  tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self->buffer), style_name, NULL);
+  style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (self->buffer));
+  sync_tag_style (style_scheme, tag);
 
   return tag;
 }
@@ -383,6 +399,23 @@ ide_highlight_engine__buffer_delete_range_cb (IdeHighlightEngine *self,
 }
 
 static void
+ide_highlight_engine__notify_style_scheme_cb (IdeHighlightEngine *self,
+                                              GParamSpec         *pspec,
+                                              IdeBuffer          *buffer)
+{
+  GtkSourceStyleScheme *style_scheme;
+  GList *iter;
+
+  g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
+
+  for (iter = self->tags; iter; iter = iter->next)
+    sync_tag_style (style_scheme, iter->data);
+}
+
+static void
 ide_highlight_engine_connect_buffer (IdeHighlightEngine *self,
                                      IdeBuffer          *buffer)
 {
@@ -411,6 +444,12 @@ ide_highlight_engine_connect_buffer (IdeHighlightEngine *self,
   g_signal_connect_object (buffer,
                            "delete-range",
                            G_CALLBACK (ide_highlight_engine__buffer_delete_range_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (buffer,
+                           "notify::style-scheme",
+                           G_CALLBACK (ide_highlight_engine__notify_style_scheme_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -445,9 +484,11 @@ ide_highlight_engine_disconnect_buffer (IdeHighlightEngine *self,
   g_signal_handlers_disconnect_by_func (buffer,
                                         G_CALLBACK (ide_highlight_engine__buffer_delete_range_cb),
                                         self);
-
   g_signal_handlers_disconnect_by_func (buffer,
                                         G_CALLBACK (ide_highlight_engine__buffer_insert_text_cb),
+                                        self);
+  g_signal_handlers_disconnect_by_func (buffer,
+                                        G_CALLBACK (ide_highlight_engine__notify_style_scheme_cb),
                                         self);
 
   tag_table = gtk_text_buffer_get_tag_table (text_buffer);
