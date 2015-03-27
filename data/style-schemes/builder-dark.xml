@@ -117,6 +117,18 @@
   -->
 
   <!-- Language specific -->
+  <style name="c:comment"                   foreground="#8b9eab"/>
+  <style name="c:preprocessor"              foreground="#8194a6" bold="false"/>
+  <style name="c:boolean"                   foreground="#0077aa"/>
+  <style name="c:keyword"                   foreground="#0077aa" bold="true"/>
+  <style name="c:string"                    foreground="#669900"/>
+  <style name="c:included-file"             foreground="orange3"/>
+  <style name="c:storage-class"             foreground="orange3" bold="true"/>
+  <style name="c:type"                      foreground="#669900" bold="true"/>
+  <style name="c:macro-name"                foreground="#677685" bold="false"/>
+  <style name="c:enum-name"                 foreground="#677685" bold="false"/>
+  <style name="c:function-name"             foreground="#4186A8" bold="false"/>
+
   <style name="diff:added-line"             foreground="butter2"/>
   <style name="diff:removed-line"           foreground="skyblue1"/>
   <style name="diff:changed-line"           foreground="plum1"/>
