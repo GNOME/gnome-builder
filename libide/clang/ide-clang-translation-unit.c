@@ -37,6 +37,7 @@
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 
+
 struct _IdeClangTranslationUnit
 {
   IdeObject          parent_instance;
@@ -218,11 +219,11 @@ create_location (IdeClangTranslationUnit *self,
 
   str = clang_getFileName (cxfile);
   cstr = clang_getCString (str);
-  if (!cstr)
-    return NULL;
-
-  path = get_path (workpath, cstr);
+  if (cstr != NULL)
+    path = get_path (workpath, cstr);
   clang_disposeString (str);
+  if (cstr == NULL)
+    return NULL;
 
   file = ide_project_get_file_for_path (project, path);
 

@@ -40,10 +40,12 @@ struct _IdeClangCompletionItem
   gint              typed_text_index;
   guint             initialized : 1;
 
+  gchar            *brief_comment;
   gchar            *markup;
   GdkPixbuf        *icon;
   IdeRefPtr        *results;
   IdeSourceSnippet *snippet;
+  gchar            *typed_text;
 };
 
 static void completion_proposal_iface_init (GtkSourceCompletionProposalIface *);
@@ -329,6 +331,8 @@ ide_clang_completion_item_finalize (GObject *object)
 
   g_clear_object (&self->icon);
   g_clear_object (&self->snippet);
+  g_clear_pointer (&self->brief_comment, g_free);
+  g_clear_pointer (&self->typed_text, g_free);
   g_clear_pointer (&self->markup, g_free);
   g_clear_pointer (&self->results, ide_ref_ptr_unref);
 
@@ -503,6 +507,9 @@ ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
 
   g_return_val_if_fail (IDE_IS_CLANG_COMPLETION_ITEM (self), NULL);
 
+  if (self->typed_text)
+    return self->typed_text;
+
   result = ide_clang_completion_item_get_result (self);
 
   /*
@@ -545,8 +552,10 @@ ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
 #endif
 
   cxstr = clang_getCompletionChunkText (result->CompletionString, self->typed_text_index);
+  self->typed_text = g_strdup (clang_getCString (cxstr));
+  clang_disposeString (cxstr);
 
-  return clang_getCString (cxstr);
+  return self->typed_text;
 }
 
 /**
@@ -562,11 +571,18 @@ const gchar *
 ide_clang_completion_item_get_brief_comment (IdeClangCompletionItem *self)
 {
   CXCompletionResult *result;
-  CXString cxstr;
 
   g_return_val_if_fail (IDE_IS_CLANG_COMPLETION_ITEM (self), NULL);
 
-  result = ide_clang_completion_item_get_result (self);
-  cxstr = clang_getCompletionBriefComment (result->CompletionString);
-  return clang_getCString (cxstr);
+  if (self->brief_comment == NULL)
+    {
+      CXString cxstr;
+
+      result = ide_clang_completion_item_get_result (self);
+      cxstr = clang_getCompletionBriefComment (result->CompletionString);
+      self->brief_comment = g_strdup (clang_getCString (cxstr));
+      clang_disposeString (cxstr);
+    }
+
+  return self->brief_comment;
 }

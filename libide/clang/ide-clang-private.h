@@ -34,6 +34,9 @@ IdeClangTranslationUnit *_ide_clang_translation_unit_new (IdeContext        *con
                                                           GFile             *file,
                                                           IdeHighlightIndex *index,
                                                           gint64             sequence);
+void                     _ide_clang_dispose_string       (CXString          *str);
+
+G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXString, _ide_clang_dispose_string)
 
 G_END_DECLS
 

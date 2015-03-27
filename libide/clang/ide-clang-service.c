@@ -80,8 +80,7 @@ ide_clang_service_build_index_visitor (CXCursor     cursor,
 {
   IndexRequest *request = user_data;
   enum CXCursorKind kind;
-  const gchar *word;
-  CXString cxstr;
+  const gchar *style_name = NULL;
 
   g_assert (request != NULL);
 
@@ -91,26 +90,35 @@ ide_clang_service_build_index_visitor (CXCursor     cursor,
     {
     case CXCursor_TypedefDecl:
     case CXCursor_TypeAliasDecl:
-      cxstr = clang_getCursorSpelling (cursor);
-      word = clang_getCString (cxstr);
-      ide_highlight_index_insert (request->index, word, "def:type");
+      style_name = "c:type";
       break;
 
     case CXCursor_FunctionDecl:
-      cxstr = clang_getCursorSpelling (cursor);
-      word = clang_getCString (cxstr);
-      ide_highlight_index_insert (request->index, word, "def:function");
+      style_name = "c:function-name";
+      break;
+
+    case CXCursor_EnumDecl:
+    case CXCursor_EnumConstantDecl:
+      style_name = "c:enum-name";
       break;
 
     case CXCursor_MacroDefinition:
-    case CXCursor_MacroExpansion:
-      cxstr = clang_getCursorSpelling (cursor);
-      word = clang_getCString (cxstr);
-      ide_highlight_index_insert (request->index, word, "def:preprocessor");
+      style_name = "c:macro-name";
       break;
 
     default:
       break;
+    }
+
+  if (style_name != NULL)
+    {
+      CXString cxstr;
+      const gchar *word;
+
+      cxstr = clang_getCursorSpelling (cursor);
+      word = clang_getCString (cxstr);
+      ide_highlight_index_insert (request->index, word, (gpointer)style_name);
+      clang_disposeString (cxstr);
     }
 
   return CXChildVisit_Continue;
@@ -121,10 +129,14 @@ ide_clang_service_build_index (IdeClangService   *self,
                                CXTranslationUnit  tu,
                                ParseRequest      *request)
 {
+  static const gchar *common_defines[] = {
+    "NULL", "MIN", "MAX", "__LINE__", "__FILE__", NULL
+  };
   IdeHighlightIndex *index;
   IndexRequest client_data;
   CXCursor cursor;
   CXFile file;
+  gsize i;
 
   g_assert (IDE_IS_CLANG_SERVICE (self));
   g_assert (tu != NULL);
@@ -139,6 +151,14 @@ ide_clang_service_build_index (IdeClangService   *self,
   client_data.index = index;
   client_data.file = file;
   client_data.filename = request->source_filename;
+
+  /*
+   * Add some common defines so they don't get changed by clang.
+   */
+  for (i = 0; common_defines [i]; i++)
+    ide_highlight_index_insert (index, common_defines [i], "c:common-defines");
+  ide_highlight_index_insert (index, "TRUE", "c:boolean");
+  ide_highlight_index_insert (index, "FALSE", "c:boolean");
 
   cursor = clang_getTranslationUnitCursor (tu);
   clang_visitChildren (cursor, ide_clang_service_build_index_visitor, &client_data);
@@ -502,4 +522,11 @@ ide_clang_service_get_cached_translation_unit (IdeClangService *self,
   g_rw_lock_reader_unlock (&self->cached_rwlock);
 
   return cached;
+}
+
+void
+_ide_clang_dispose_string (CXString *str)
+{
+  if (str != NULL && str->data != NULL)
+    clang_disposeString (*str);
 }
