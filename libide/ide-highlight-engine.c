@@ -77,9 +77,9 @@ sync_tag_style (GtkSourceStyleScheme *style_scheme,
   g_object_set (tag,
                 "foreground-set", FALSE,
                 "background-set", FALSE,
-                "weight", PANGO_WEIGHT_NORMAL,
-                "underline", PANGO_UNDERLINE_NONE,
-                "style", PANGO_STYLE_NORMAL,
+                "weight-set", FALSE,
+                "underline-set", FALSE,
+                "style-set", FALSE,
                 NULL);
 
   g_object_get (tag, "name", &style_name, NULL);
