@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-clang-translation-unit"
+
 #include <clang-c/Index.h>
 #include <glib/gi18n.h>
 
@@ -23,6 +25,7 @@
 #include "ide-clang-completion-item.h"
 #include "ide-clang-private.h"
 #include "ide-clang-translation-unit.h"
+#include "ide-debug.h"
 #include "ide-diagnostic.h"
 #include "ide-diagnostics.h"
 #include "ide-file.h"
@@ -441,12 +444,16 @@ ide_clang_translation_unit_finalize (GObject *object)
 {
   IdeClangTranslationUnit *self = (IdeClangTranslationUnit *)object;
 
+  IDE_ENTRY;
+
   clang_disposeTranslationUnit (self->tu);
   g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
   g_clear_object (&self->file);
   g_clear_pointer (&self->index, ide_highlight_index_unref);
 
   G_OBJECT_CLASS (ide_clang_translation_unit_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void
