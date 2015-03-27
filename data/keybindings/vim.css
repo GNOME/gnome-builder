@@ -297,6 +297,9 @@
   /* macro recording! */
   bind "q" { "set-mode" ("vim-normal-q", transient) };
 
+  /* goto definition (or follow-link, really) */
+  bind "<ctrl>bracketright" { "goto-definition" () };
+
   /* submode for bracket */
   bind "bracketleft" { "set-mode" ("vim-normal-bracket", transient) };
 

@@ -55,6 +55,7 @@
 #include "ide-source-view-capture.h"
 #include "ide-source-view-mode.h"
 #include "ide-source-view-movements.h"
+#include "ide-symbol.h"
 
 #include "modeline-parser.h"
 
@@ -206,6 +207,7 @@ enum {
   DELETE_SELECTION,
   END_MACRO,
   END_USER_ACTION,
+  GOTO_DEFINITION,
   HIDE_COMPLETION,
   INDENT_SELECTION,
   INSERT_AT_CURSOR_AND_INDENT,
@@ -4399,6 +4401,53 @@ in_replay:
 }
 
 static void
+ide_source_view_goto_definition_symbol_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
+{
+  IdeBuffer *buffer = (IdeBuffer *)object;
+  g_autoptr(IdeSourceView) self = user_data;
+  g_autoptr(IdeSymbol) symbol = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  symbol = ide_buffer_get_symbol_at_location_finish (buffer, result, &error);
+
+  if (symbol == NULL)
+    {
+      g_warning ("%s", error->message);
+      return;
+    }
+
+  g_print ("Symbol: %s\n", ide_symbol_get_name (symbol));
+}
+
+static void
+ide_source_view_real_goto_definition (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->buffer != NULL)
+    {
+      GtkTextMark *insert;
+      GtkTextIter iter;
+
+      insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (priv->buffer));
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &iter, insert);
+
+      ide_buffer_get_symbol_at_location_async (priv->buffer,
+                                               &iter,
+                                               NULL,
+                                               ide_source_view_goto_definition_symbol_cb,
+                                               g_object_ref (self));
+    }
+}
+
+static void
 ide_source_view_real_hide_completion (IdeSourceView *self)
 {
   GtkSourceCompletion *completion;
@@ -4966,6 +5015,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->cycle_completion = ide_source_view_real_cycle_completion;
   klass->delete_selection = ide_source_view_real_delete_selection;
   klass->end_macro = ide_source_view_real_end_macro;
+  klass->goto_definition = ide_source_view_real_goto_definition;
   klass->hide_completion = ide_source_view_real_hide_completion;
   klass->indent_selection = ide_source_view_real_indent_selection;
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
@@ -5339,6 +5389,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 g_cclosure_marshal_VOID__VOID,
                                 G_TYPE_NONE,
                                 0);
+
+  gSignals [GOTO_DEFINITION] =
+    g_signal_new ("goto-definition",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, goto_definition),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 
   gSignals [HIDE_COMPLETION] =
     g_signal_new ("hide-completion",
