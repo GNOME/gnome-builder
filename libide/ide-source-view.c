@@ -253,6 +253,7 @@ search_movement_ref (SearchMovement *movement)
   g_return_val_if_fail (movement->ref_count > 0, NULL);
 
   movement->ref_count++;
+
   return movement;
 }
 
@@ -269,7 +270,7 @@ search_movement_unref (SearchMovement *movement)
     }
 }
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (SearchMovement, search_movement_unref);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (SearchMovement, search_movement_unref)
 
 static SearchMovement *
 search_movement_new (IdeSourceView *self,
