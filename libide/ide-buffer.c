@@ -71,6 +71,7 @@ typedef struct
   guint                   loading : 1;
   guint                   mtime_set : 1;
   guint                   read_only : 1;
+  guint                   has_done_diagnostics_once : 1;
 } IdeBufferPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
@@ -420,6 +421,12 @@ ide_buffer__diagnostician_diagnose_cb (GObject      *object,
 
   if (priv->diagnostics_dirty)
     ide_buffer_queue_diagnose (self);
+
+  if (!priv->has_done_diagnostics_once)
+    {
+      priv->has_done_diagnostics_once = TRUE;
+      ide_highlight_engine_rebuild (priv->highlight_engine);
+    }
 }
 
 static gboolean
