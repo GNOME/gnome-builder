@@ -1096,7 +1096,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
 
   gParamSpecs [PROP_FOCUS_BUFFER] =
     g_param_spec_object ("focus-buffer",
-                         _("Focus Buffer"),
+                         _("Focused Buffer"),
                          _("The currently focused buffer."),
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));

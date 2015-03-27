@@ -651,7 +651,7 @@ ide_context_class_init (IdeContextClass *klass)
 
   gParamSpecs [PROP_ROOT_BUILD_DIR] =
     g_param_spec_string ("root-build-dir",
-                         _("Root Build Dir"),
+                         _("Root Build Directory"),
                          _("The root directory to perform builds within."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
@@ -696,8 +696,8 @@ ide_context_class_init (IdeContextClass *klass)
 
   gParamSpecs [PROP_VCS] =
     g_param_spec_object ("vcs",
-                         _("Vcs"),
-                         _("The vcs for the context."),
+                         _("VCS"),
+                         _("The VCS for the context."),
                          IDE_TYPE_VCS,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_VCS,

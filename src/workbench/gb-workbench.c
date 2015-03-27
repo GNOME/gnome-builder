@@ -357,7 +357,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   gParamSpecs [PROP_ACTIVE_WORKSPACE] =
     g_param_spec_object ("active-workspace",
                          _("Active Workspace"),
-                         _("The active workspace"),
+                         _("The active workspace."),
                          GB_TYPE_WORKSPACE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_ACTIVE_WORKSPACE,
@@ -374,7 +374,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   gParamSpecs [PROP_COMMAND_MANAGER] =
     g_param_spec_object ("command-manager",
                          _("Command Manager"),
-                         _("The command manager for the workbench"),
+                         _("The command manager for the workbench."),
                          GB_TYPE_COMMAND_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_COMMAND_MANAGER,

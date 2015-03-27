@@ -5081,7 +5081,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   gParamSpecs [PROP_ENABLE_WORD_COMPLETION] =
     g_param_spec_boolean ("enable-word-completion",
                           _("Enable Word Completion"),
-                          _("If words from all buffers can be used to autocomplete"),
+                          _("If words from all buffers can be used to autocomplete."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_ENABLE_WORD_COMPLETION,
@@ -5090,7 +5090,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   gParamSpecs [PROP_FONT_NAME] =
     g_param_spec_string ("font-name",
                          _("Font Name"),
-                         _("The pango font name ot use for rendering source."),
+                         _("The Pango font name to use for rendering source."),
                          "Monospace",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FONT_NAME,
@@ -5103,7 +5103,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   gParamSpecs [PROP_INSERT_MATCHING_BRACE] =
     g_param_spec_boolean ("insert-matching-brace",
                           _("Insert Matching Brace"),
-                          _("Insert a matching brace/bracket/quotation/paren."),
+                          _("Insert a matching brace/bracket/quotation/parenthesis."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_INSERT_MATCHING_BRACE,
@@ -5114,7 +5114,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   gParamSpecs [PROP_OVERWRITE_BRACES] =
     g_param_spec_boolean ("overwrite-braces",
                           _("Overwrite Braces"),
-                          _("Overwrite a matching brace/bracket/quotation/paren."),
+                          _("Overwrite a matching brace/bracket/quotation/parenthesis."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_OVERWRITE_BRACES,
@@ -5188,7 +5188,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   gParamSpecs [PROP_SMART_BACKSPACE] =
     g_param_spec_boolean ("smart-backspace",
                          _("Smart Backspace"),
-                         _("If smart backspace should be used."),
+                         _("If smart Backspace should be used."),
                          FALSE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SMART_BACKSPACE,

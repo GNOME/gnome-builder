@@ -102,7 +102,7 @@ ide_git_search_provider_get_index_async (IdeGitSearchProvider *self,
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
-                               _("Git search provider requires the Git VCS"));
+                               _("Git search provider requires the git VCS"));
       return;
     }
 

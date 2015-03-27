@@ -210,7 +210,7 @@ ide_gjs_script_init_async (GAsyncInitable      *initable,
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
-                               _("The script \"%s\" is not a javascript file."),
+                               _("The script \"%s\" is not a JavaScript file."),
                                path);
       return;
     }

@@ -240,7 +240,7 @@ ide_device_class_init (IdeDeviceClass *klass)
 
   gParamSpecs [PROP_ID] =
     g_param_spec_string ("id",
-                         _("Id"),
+                         _("ID"),
                          _("The device identifier."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));

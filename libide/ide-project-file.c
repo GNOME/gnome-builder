@@ -226,7 +226,7 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
   gParamSpecs [PROP_FILE_INFO] =
     g_param_spec_object ("file-info",
                          _("File Info"),
-                         _("The file info for the project file."),
+                         _("The file information for the project file."),
                          G_TYPE_FILE_INFO,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
@@ -237,7 +237,7 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
                          _("Name"),
-                         _("The shortname of the file."),
+                         _("The short name of the file."),
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_NAME,

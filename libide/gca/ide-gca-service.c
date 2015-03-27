@@ -113,7 +113,7 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_CONNECTED,
-                               _("Not connected to DBus."));
+                               _("Not connected to D-Bus."));
       return;
     }
 
@@ -179,7 +179,7 @@ ide_gca_service_class_init (IdeGcaServiceClass *klass)
 
   if (!gDBus)
     {
-      g_warning (_("Failed to load DBus connection to session bus. "
+      g_warning (_("Failed to load D-Bus connection to session bus. "
                    "Code assistance will be disabled. "
                    "Error was: %s"),
                  error->message);

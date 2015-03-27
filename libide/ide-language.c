@@ -361,7 +361,7 @@ ide_language_class_init (IdeLanguageClass *klass)
 
   gParamSpecs [PROP_ID] =
     g_param_spec_string ("id",
-                         _("Id"),
+                         _("ID"),
                          _("The language identifier such as \"c\"."),
                          NULL,
                          (G_PARAM_READWRITE |

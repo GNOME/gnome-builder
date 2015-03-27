@@ -614,7 +614,7 @@ ide_git_buffer_change_monitor_calculate_threaded (IdeGitBufferChangeMonitor  *se
         g_set_error (error,
                      G_IO_ERROR,
                      G_IO_ERROR_NOT_FOUND,
-                     _("The request file does not exist within the git index."));
+                     _("The requested file does not exist within the git index."));
       return FALSE;
     }
 

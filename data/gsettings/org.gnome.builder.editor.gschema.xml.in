@@ -11,47 +11,46 @@
     <key name="restore-insert-mark" type="b">
       <default>true</default>
       <summary>Restore last position</summary>
-      <summary>Jump to the last position when reopening a file.</summary>
-      <description>Whether or not VIM style keybindings should be used in the source code editor.</description>
+      <description>Jump to the last position when reopening a file</description>
     </key>
     <key name="word-completion" type="b">
       <default>true</default>
-      <summary>Enable auto-completion of words in document.</summary>
+      <summary>Enable auto-completion of words in document</summary>
       <description>If enabled, words within the current document will be available for auto-completion.</description>
     </key>
     <key name="show-line-changes" type="b">
       <default>true</default>
-      <summary>Show modified lines.</summary>
+      <summary>Show modified lines</summary>
       <description>If enabled, the editor will show line additions and changes next to the source code.</description>
     </key>
     <key name="highlight-current-line" type="b">
       <default>false</default>
-      <summary>Highlight current line.</summary>
+      <summary>Highlight current line</summary>
       <description>If enabled, the editor will highlight the line containing the cursor.</description>
     </key>
     <key name="highlight-matching-brackets" type="b">
       <default>false</default>
-      <summary>Highlight matching brackets.</summary>
-      <description>If enabled, the editor will highlight maching brackets.</description>
+      <summary>Highlight matching brackets</summary>
+      <description>If enabled, the editor will highlight matching brackets.</description>
     </key>
     <key name="show-line-numbers" type="b">
       <default>true</default>
-      <summary>Show line numbers.</summary>
+      <summary>Show line numbers</summary>
       <description>If enabled, the editor will show line numbers.</description>
     </key>
     <key name="smart-backspace" type="b">
       <default>true</default>
-      <summary>Smart backspace.</summary>
+      <summary>Smart Backspace</summary>
       <description>Backspace will remove additional spaces to keep you aligned to the indentation size.</description>
     </key>
     <key name="smart-home-end" type="b">
       <default>true</default>
-      <summary>Smart home end.</summary>
-      <description>Whether or not home moves to first non-space character.</description>
+      <summary>Smart Home and End</summary>
+      <description>Whether or not Home moves to first non-space character.</description>
     </key>
     <key name="show-grid-lines" type="b">
       <default>true</default>
-      <summary>Show grid lines.</summary>
+      <summary>Show grid lines</summary>
       <description>If enabled, the editor will show grid lines in the document.</description>
     </key>
     <key name="font-name" type="s">

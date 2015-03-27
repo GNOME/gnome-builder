@@ -540,7 +540,7 @@ gb_vim_command_syntax (GtkSourceView  *source_view,
       g_set_error (error,
                    GB_VIM_ERROR,
                    GB_VIM_ERROR_UNKNOWN_OPTION,
-                   _("Invalid :syntax subcommand : %s"),
+                   _("Invalid :syntax subcommand: %s"),
                    options);
       return FALSE;
     }
