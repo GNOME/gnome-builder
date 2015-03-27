@@ -16,9 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-highlight-index"
+
 #include <string.h>
 #include <sys/user.h>
 
+#include "ide-debug.h"
 #include "ide-highlight-index.h"
 
 G_DEFINE_BOXED_TYPE (IdeHighlightIndex, ide_highlight_index,
@@ -103,6 +106,18 @@ ide_highlight_index_ref (IdeHighlightIndex *self)
   return self;
 }
 
+static void
+ide_highlight_index_finalize (IdeHighlightIndex *self)
+{
+  IDE_ENTRY;
+
+  g_string_chunk_free (self->strings);
+  g_hash_table_unref (self->index);
+  g_free (self);
+
+  IDE_EXIT;
+}
+
 void
 ide_highlight_index_unref (IdeHighlightIndex *self)
 {
@@ -110,11 +125,7 @@ ide_highlight_index_unref (IdeHighlightIndex *self)
   g_assert_cmpint (self->ref_count, >, 0);
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
-    {
-      g_string_chunk_free (self->strings);
-      g_hash_table_unref (self->index);
-      g_free (self);
-    }
+    ide_highlight_index_finalize (self);
 }
 
 void
