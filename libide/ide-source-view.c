@@ -207,6 +207,7 @@ enum {
   DELETE_SELECTION,
   END_MACRO,
   END_USER_ACTION,
+  FOCUS_LOCATION,
   GOTO_DEFINITION,
   HIDE_COMPLETION,
   INDENT_SELECTION,
@@ -4409,6 +4410,7 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
   g_autoptr(IdeSourceView) self = user_data;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
+  IdeSourceLocation *srcloc;
 
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -4421,7 +4423,23 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
       return;
     }
 
-  g_print ("Symbol: %s\n", ide_symbol_get_name (symbol));
+  srcloc = ide_symbol_get_definition_location (symbol);
+
+  if (srcloc != NULL)
+    {
+#ifndef IDE_DISABLE_TRACE
+      guint line = ide_source_location_get_line (srcloc);
+      guint line_offset = ide_source_location_get_line_offset (srcloc);
+      IdeFile *file = ide_source_location_get_file (srcloc);
+      const gchar *filename = ide_file_get_path (file);
+
+      IDE_TRACE_MSG ("%s => %s +%u:%u",
+                     ide_symbol_get_name (symbol),
+                     filename, line+1, line_offset+1);
+#endif
+
+      g_signal_emit (self, gSignals [FOCUS_LOCATION], 0, srcloc);
+    }
 }
 
 static void
@@ -5389,6 +5407,17 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 g_cclosure_marshal_VOID__VOID,
                                 G_TYPE_NONE,
                                 0);
+
+  gSignals [FOCUS_LOCATION] =
+    g_signal_new ("focus-location",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, focus_location),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__BOXED,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_SOURCE_LOCATION);
 
   gSignals [GOTO_DEFINITION] =
     g_signal_new ("goto-definition",
