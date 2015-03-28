@@ -4511,6 +4511,9 @@ ide_source_view_real_replay_macro (IdeSourceView *self,
       IDE_EXIT;
     }
 
+  if (priv->capture == NULL)
+    return;
+
   if (use_count)
     count = MAX (1, priv->count);
 
