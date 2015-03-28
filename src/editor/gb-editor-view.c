@@ -57,6 +57,7 @@ gb_editor_view_navigate_to (GbView            *view,
 {
   GbEditorView *self = (GbEditorView *)view;
   GbEditorFrame *frame;
+  GtkTextMark *insert;
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   guint line;
@@ -79,7 +80,9 @@ gb_editor_view_navigate_to (GbView            *view,
       break;
 
   gtk_text_buffer_select_range (buffer, &iter, &iter);
-  ide_source_view_scroll_to_iter (frame->source_view, &iter, 0.0, TRUE, 1.0, 0.5, TRUE);
+
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (frame->source_view), insert, 0.0, TRUE, 1.0, 0.5);
 
   IDE_EXIT;
 }
