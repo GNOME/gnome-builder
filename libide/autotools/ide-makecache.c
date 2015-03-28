@@ -19,6 +19,10 @@
 
 #define G_LOG_DOMAIN "ide-makecache"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -631,7 +635,7 @@ ide_makecache_new_worker (GTask        *task,
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
   g_subprocess_launcher_set_cwd (launcher, workdir);
   g_subprocess_launcher_take_stdout_fd (launcher, fdcopy);
-  subprocess = g_subprocess_launcher_spawn (launcher, &error, "make", "-p", "-n", "-s", NULL);
+  subprocess = g_subprocess_launcher_spawn (launcher, &error, GNU_MAKE_NAME, "-p", "-n", "-s", NULL);
 
   if (!subprocess)
     {
@@ -854,7 +858,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
         relpath++;
 
       argv = g_ptr_array_new ();
-      g_ptr_array_add (argv, "make");
+      g_ptr_array_add (argv, GNU_MAKE_NAME);
       g_ptr_array_add (argv, "-C");
       g_ptr_array_add (argv, (gchar *)(subdir ?: "."));
       g_ptr_array_add (argv, "-s");

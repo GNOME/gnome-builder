@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-highlight-index"
 
 #include <string.h>
+#include <sys/types.h>
 #include <sys/user.h>
 
 #include "ide-debug.h"

@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <fcntl.h>
 #include <glib/gi18n.h>
 #include <unistd.h>
@@ -910,7 +914,7 @@ step_make_all  (GTask                 *task,
     {
       const gchar *target = targets [i];
 
-      process = log_and_spawn (self, launcher, &error, "make", target, state->parallel, NULL);
+      process = log_and_spawn (self, launcher, &error, GNU_MAKE_NAME, target, state->parallel, NULL);
 
       if (!process)
         {
