@@ -105,6 +105,12 @@ ide_clang_service_build_index_visitor (CXCursor     cursor,
       break;
 
     case CXCursor_EnumDecl:
+      style_name = "c:enum-name";
+      clang_visitChildren (cursor,
+                           ide_clang_service_build_index_visitor,
+                           user_data);
+      break;
+
     case CXCursor_EnumConstantDecl:
       style_name = "c:enum-name";
       break;

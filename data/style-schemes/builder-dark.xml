@@ -126,7 +126,7 @@
   <style name="c:storage-class"             foreground="orange3" bold="true"/>
   <style name="c:type"                      foreground="#669900" bold="true"/>
   <style name="c:macro-name"                foreground="#677685" bold="false"/>
-  <style name="c:enum-name"                 foreground="#677685" bold="false"/>
+  <style name="c:enum-name"                 foreground="#dd4a68" bold="false"/>
   <style name="c:function-name"             foreground="#4186A8" bold="false"/>
 
   <style name="diff:added-line"             foreground="chameleon2"/>
