@@ -50,7 +50,7 @@ get_system_type (void)
 #ifdef __GLIBC__
   return g_strdup_printf ("%s-%s-%s", u.machine, os_lower, "gnu");
 #else
-# error Your platform is not yet supported.
+  return g_strdup_printf ("%s-%s", u.machine, os_lower);
 #endif
 }
 
