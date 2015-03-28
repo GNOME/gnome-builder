@@ -452,13 +452,17 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
     {
       if (ide_clang_translation_unit_get_sequence (cached) >= min_sequence)
         {
+          IDE_TRACE_MSG ("cache hit");
           g_task_return_pointer (task, g_object_ref (cached), g_object_unref);
           return;
         }
     }
 
   if (ide_clang_service_attach_in_flight (self, file, task))
-    return;
+    {
+      IDE_TRACE_MSG ("waiting for in flight translation unit");
+      return;
+    }
 
   gfile = ide_file_get_file (file);
 
@@ -498,6 +502,8 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
   /*
    * Request the build flags necessary to build this module from the build system.
    */
+
+  IDE_TRACE_MSG ("Requesting build of translation unit");
 
   ide_build_system_get_build_flags_async (build_system,
                                           file,
