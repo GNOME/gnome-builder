@@ -51,6 +51,7 @@
   bind "<alt>x" { "action" ("win", "show-command-bar", "") };
   bind "<ctrl>s" { "action" ("editor-frame", "find", "") };
   bind "<ctrl>period" { "action" ("workbench", "global-search", "") };
+  bind "<alt>period" { "goto-definition" () };
   bind "<ctrl>comma" { "action" ("app", "preferences", "") };
   bind "<alt>n" { "move-error" (down) };
   bind "<alt>p" { "move-error" (up) };
