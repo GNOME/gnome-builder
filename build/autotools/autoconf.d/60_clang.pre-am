@@ -11,10 +11,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
 
 
 # Check clang deps for building clang support in LibIDE.
-AC_PATH_PROG([LLVM_CONFIG_3_5], [llvm-config-3.5])
-AS_IF([test "x$LLVM_CONFIG_3_5" = "x"],[
-  AC_PATH_PROG([LLVM_CONFIG], [llvm-config])
-],[LLVM_CONFIG=$LLVM_CONFIG_3_5])
+AC_CHECK_PROGS([LLVM_CONFIG], [llvm-config-3.5 llvm-config35 llvm-config], [])
 AS_IF([test "x$LLVM_CONFIG" = "x"],[
     AC_MSG_ERROR([Failed to locate the llvm-config program. Please install llvm-devel.])
 ])
