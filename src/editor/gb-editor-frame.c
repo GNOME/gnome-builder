@@ -25,6 +25,7 @@
 #include "gb-editor-frame-actions.h"
 #include "gb-editor-frame-private.h"
 #include "gb-string.h"
+#include "gb-view-stack.h"
 #include "gb-widget.h"
 
 G_DEFINE_TYPE (GbEditorFrame, gb_editor_frame, GTK_TYPE_BIN)
@@ -399,6 +400,22 @@ gb_editor_frame__source_view_focus_in_event (GbEditorFrame *self,
 }
 
 static void
+gb_editor_frame__source_view_focus_location (GbEditorFrame     *self,
+                                             IdeSourceLocation *location,
+                                             IdeSourceView     *source_view)
+{
+  GtkWidget *widget = (GtkWidget *)self;
+
+  g_assert (GB_IS_EDITOR_FRAME (self));
+  g_assert (location != NULL);
+  g_assert (IDE_IS_SOURCE_VIEW (source_view));
+
+  for (; widget && !GB_IS_VIEW_STACK (widget); widget = gtk_widget_get_parent (widget)) { }
+  if (widget && GB_IS_VIEW_STACK (widget))
+    gb_view_stack_focus_location (GB_VIEW_STACK (widget), location);
+}
+
+static void
 gb_editor_frame__source_view_request_documentation (GbEditorFrame *self,
                                                     IdeSourceView *source_view)
 {
@@ -435,6 +452,12 @@ gb_editor_frame_constructed (GObject *object)
   g_signal_connect_object (self->source_view,
                            "focus-in-event",
                            G_CALLBACK (gb_editor_frame__source_view_focus_in_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->source_view,
+                           "focus-location",
+                           G_CALLBACK (gb_editor_frame__source_view_focus_location),
                            self,
                            G_CONNECT_SWAPPED);
 
