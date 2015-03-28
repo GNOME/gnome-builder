@@ -210,7 +210,7 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
   gtk_text_buffer_get_iter_at_mark (buffer, &invalid_begin, self->invalid_begin);
   gtk_text_buffer_get_iter_at_mark (buffer, &invalid_end, self->invalid_end);
 
-  IDE_TRACE_MSG ("Highlight Range (%u:%u <=> %u:%u)",
+  IDE_TRACE_MSG ("Highlight Range [%u:%u,%u:%u)",
                  gtk_text_iter_get_line (&invalid_begin),
                  gtk_text_iter_get_line_offset (&invalid_begin),
                  gtk_text_iter_get_line (&invalid_end),
