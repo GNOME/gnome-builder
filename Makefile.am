@@ -6,7 +6,7 @@ include build/autotools/automake/AutomakeDocs.mk
 ACLOCAL_AMFLAGS = -I build/autotools/m4 ${ACLOCAL_FLAGS}
 
 AM_CPPFLAGS =
-AM_LDFLAGS = -lstdc++
+AM_LDFLAGS =
 
 include libide/Makefile.am
 include src/gnome-builder.mk
