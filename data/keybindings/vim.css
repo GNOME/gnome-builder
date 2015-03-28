@@ -821,6 +821,7 @@
 {
   bind "<shift>i" { "set-mode" ("vim-insert", permanent)
                     "movement" (first-char, 0, 1, 0) };
+  bind "d" { "goto-definition" () };
   bind "e" { "movement" (previous-word-end, 0, 1, 1) };
   bind "<shift>e" { "movement" (previous-full-word-end, 0, 1, 1) };
   bind "g" { "movement" (first-line, 0, 1, 0 ) };
