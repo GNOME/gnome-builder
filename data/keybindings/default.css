@@ -11,6 +11,7 @@
   bind "<alt><shift>Left" { "action" ("navigation", "go-backward", "") };
   bind "<alt><shift>Right" { "action" ("navigation", "go-forward", "") };
   bind "<ctrl>w" { "action" ("view", "close", "") };
+  bind "<alt>period" { "goto-definition" () };
 
   /* cycle "tabs" */
   bind "<ctrl>Page_Up" { "action" ("view-stack", "previous-view", "") };
