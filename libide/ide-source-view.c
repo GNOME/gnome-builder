@@ -2045,6 +2045,7 @@ ide_source_view_do_smart_backspace (IdeSourceView *self,
   GtkTextBuffer *buffer;
   GtkTextIter insert;
   GtkTextIter end;
+  GtkTextIter tmp;
   guint visual_column;
   gint indent_width;
   gint tab_width;
@@ -2061,6 +2062,15 @@ ide_source_view_do_smart_backspace (IdeSourceView *self,
 
   if (!gtk_text_iter_equal (&insert, &end))
     return FALSE;
+
+  /* if the line isn't empty up to our cursor, ignore */
+  tmp = insert;
+  while (!gtk_text_iter_starts_line (&tmp))
+    {
+      if (!g_unichar_isspace (gtk_text_iter_get_char (&tmp)))
+        return FALSE;
+      gtk_text_iter_backward_char (&tmp);
+    }
 
   visual_column = GET_VISUAL_COLUMN (&insert);
   indent_width = gtk_source_view_get_indent_width (GTK_SOURCE_VIEW (self));
