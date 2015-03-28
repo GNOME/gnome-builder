@@ -65,8 +65,8 @@ ide_fixit_ref (IdeFixit *self)
 void
 ide_fixit_unref (IdeFixit *self)
 {
-  g_return_val_if_fail (self, NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
+  g_return_if_fail (self);
+  g_return_if_fail (self->ref_count > 0);
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     ide_fixit_destroy (self);
