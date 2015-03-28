@@ -714,8 +714,17 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
                                           GError                  **error)
 {
   g_autofree gchar *filename = NULL;
+  g_autofree gchar *workpath = NULL;
   g_auto(CXString) cxstr = { 0 };
+  g_autoptr(IdeSourceLocation) declaration = NULL;
+  g_autoptr(IdeSourceLocation) definition = NULL;
+  g_autoptr(IdeSourceLocation) canonical = NULL;
+  IdeProject *project;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
   CXSourceLocation cxlocation;
+  CXCursor tmpcursor;
   CXCursor cursor;
   CXFile cxfile;
   IdeSymbol *ret = NULL;
@@ -729,6 +738,12 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
   g_return_val_if_fail (location != NULL, NULL);
 
+  context = ide_object_get_context (IDE_OBJECT (self));
+  project = ide_context_get_project (context);
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+  workpath = g_file_get_path (workdir);
+
   line = ide_source_location_get_line (location);
   line_offset = ide_source_location_get_line_offset (location);
 
@@ -739,13 +754,23 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
     IDE_RETURN (NULL);
 
   cxlocation = clang_getLocation (self->tu, cxfile, line + 1, line_offset + 1);
-
   cursor = clang_getCursor (self->tu, cxlocation);
   if (clang_Cursor_isNull (cursor))
     IDE_RETURN (NULL);
 
+  tmpcursor = clang_getCursorReferenced (cursor);
+  if (!clang_Cursor_isNull (tmpcursor))
+    {
+      CXSourceLocation tmploc;
+      CXSourceRange cxrange;
+
+      cxrange = clang_getCursorExtent (tmpcursor);
+      tmploc = clang_getRangeStart (cxrange);
+      definition = create_location (self, project, workpath, tmploc);
+    }
+
   cxstr = clang_getCursorDisplayName (cursor);
-  ret = _ide_symbol_new (clang_getCString (cxstr));
+  ret = _ide_symbol_new (clang_getCString (cxstr), declaration, definition, canonical);
 
   /*
    * TODO: We should also get information about the defintion of the symbol.

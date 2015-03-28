@@ -16,24 +16,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-symbol"
+
 #include "ide-symbol.h"
+#include "ide-source-location.h"
 
 struct _IdeSymbol
 {
   volatile gint ref_count;
-  gchar *name;
+
+  gchar             *name;
+  IdeSourceLocation *declaration_location;
+  IdeSourceLocation *definition_location;
+  IdeSourceLocation *canonical_location;
 };
 
 G_DEFINE_BOXED_TYPE (IdeSymbol, ide_symbol, ide_symbol_ref, ide_symbol_unref)
 
 IdeSymbol *
-_ide_symbol_new (const gchar *name)
+_ide_symbol_new (const gchar       *name,
+                 IdeSourceLocation *declaration_location,
+                 IdeSourceLocation *definition_location,
+                 IdeSourceLocation *canonical_location)
 {
   IdeSymbol *ret;
 
-  ret = g_slice_new0 (IdeSymbol);
+  ret = g_new0 (IdeSymbol, 1);
   ret->ref_count = 1;
   ret->name = g_strdup (name);
+
+  if (declaration_location)
+    ret->declaration_location = ide_source_location_ref (declaration_location);
+
+  if (definition_location)
+    ret->definition_location = ide_source_location_ref (definition_location);
+
+  if (canonical_location)
+    ret->canonical_location = ide_source_location_ref (canonical_location);
 
   return ret;
 }
@@ -44,6 +63,56 @@ ide_symbol_get_name (IdeSymbol *self)
   g_return_val_if_fail (self, NULL);
 
   return self->name;
+}
+
+/**
+ * ide_symbol_get_declaration_location:
+ *
+ * The location of a symbol equates to the declaration of the symbol. In C and C++, this would
+ * mean the header location (or forward declaration in a C file before the implementation).
+ *
+ * If the symbol provider did not register this information, %NULL will be returned.
+ *
+ * Returns: (transfer none) (nullable): An #IdeSourceLocation or %NULL.
+ */
+IdeSourceLocation *
+ide_symbol_get_declaration_location (IdeSymbol *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->declaration_location;
+}
+
+/**
+ * ide_symbol_get_definition_location:
+ *
+ * Like ide_symbol_get_declaration_location() but gets the first declaration (only one can be
+ * the definition).
+ *
+ * Returns: (transfer none) (nullable): An #IdeSourceLocation or %NULL.
+ */
+IdeSourceLocation *
+ide_symbol_get_definition_location (IdeSymbol *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->definition_location;
+}
+
+/**
+ * ide_symbol_get_canonical_location:
+ *
+ * Gets the location of the symbols "implementation". In C/C++ languages, you can have multiple
+ * declarations by only a single implementation.
+ *
+ * Returns: (transfer none) (nullable): An #IdeSourceLocation or %NULL.
+ */
+IdeSourceLocation *
+ide_symbol_get_canonical_location (IdeSymbol *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->canonical_location;
 }
 
 IdeSymbol *
@@ -65,7 +134,10 @@ ide_symbol_unref (IdeSymbol *self)
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     {
-      g_free (self->name);
-      g_slice_free (IdeSymbol, self);
+      g_clear_pointer (&self->declaration_location, ide_source_location_unref);
+      g_clear_pointer (&self->definition_location, ide_source_location_unref);
+      g_clear_pointer (&self->canonical_location, ide_source_location_unref);
+      g_clear_pointer (&self->name, g_free);
+      g_free (self);
     }
 }

@@ -25,10 +25,13 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SYMBOL (ide_symbol_get_type())
 
-GType        ide_symbol_get_type (void);
-IdeSymbol   *ide_symbol_ref      (IdeSymbol *self);
-void         ide_symbol_unref    (IdeSymbol *self);
-const gchar *ide_symbol_get_name (IdeSymbol *self);
+GType              ide_symbol_get_type                 (void);
+IdeSymbol         *ide_symbol_ref                      (IdeSymbol *self);
+void               ide_symbol_unref                    (IdeSymbol *self);
+const gchar       *ide_symbol_get_name                 (IdeSymbol *self);
+IdeSourceLocation *ide_symbol_get_canonical_location   (IdeSymbol *self);
+IdeSourceLocation *ide_symbol_get_declaration_location (IdeSymbol *self);
+IdeSourceLocation *ide_symbol_get_definition_location  (IdeSymbol *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSymbol, ide_symbol_unref)
 
