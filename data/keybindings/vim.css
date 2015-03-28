@@ -948,6 +948,9 @@
 
 @binding-set builder-vim-source-view-normal-q
 {
+  /* this is wrong, you can store in any character for recording and then
+   * replay with @char.
+   */
   bind "q" { "begin-macro" () };
 }
 
