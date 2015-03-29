@@ -88,6 +88,8 @@ gb_editor_view_navigate_to (GbView            *view,
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (frame->source_view), insert, 0.0, TRUE, 1.0, 0.5);
 
+  g_signal_emit_by_name (frame->source_view, "save-insert-mark");
+
   IDE_EXIT;
 }
 
