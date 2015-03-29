@@ -18,6 +18,9 @@
 
 #define G_LOG_DOMAIN "ide-pattern-spec"
 
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif
 #include <string.h>
 
 #include "ide-pattern-spec.h"
