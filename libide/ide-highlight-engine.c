@@ -24,8 +24,9 @@
 #include "ide-highlight-engine.h"
 #include "ide-types.h"
 
-#define HIGHLIGHT_QUANTA_USEC 1000
-#define WORK_TIMEOUT_MSEC     50
+#define HIGHLIGHT_QUANTA_USEC      2000
+#define WORK_TIMEOUT_MSEC          50
+#define REHIGHLIGHT_ADJACENT_LINES 4
 
 struct _IdeHighlightEngine
 {
@@ -345,8 +346,8 @@ ide_highlight_engine__buffer_insert_text_cb (IdeHighlightEngine *self,
       begin = *location;
       end = *location;
 
-      gtk_text_iter_backward_lines (&begin, 2);
-      gtk_text_iter_forward_lines (&end, 2);
+      gtk_text_iter_backward_lines (&begin, REHIGHLIGHT_ADJACENT_LINES);
+      gtk_text_iter_forward_lines (&end, REHIGHLIGHT_ADJACENT_LINES);
       gtk_text_buffer_move_mark (text_buffer, self->invalid_begin, &begin);
       gtk_text_buffer_move_mark (text_buffer, self->invalid_end, &end);
     }
