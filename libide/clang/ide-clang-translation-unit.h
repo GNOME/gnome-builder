@@ -46,6 +46,8 @@ IdeHighlightIndex *
 IdeSymbol      *ide_clang_translation_unit_lookup_symbol        (IdeClangTranslationUnit  *self,
                                                                  IdeSourceLocation        *location,
                                                                  GError                  **error);
+GPtrArray      *ide_clang_translation_unit_get_symbols          (IdeClangTranslationUnit  *self,
+                                                                 IdeFile                  *file);
 
 G_END_DECLS
 

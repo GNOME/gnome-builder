@@ -33,6 +33,7 @@
 #include "ide-project.h"
 #include "ide-ref-ptr.h"
 #include "ide-source-location.h"
+#include "ide-symbol.h"
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
@@ -56,6 +57,13 @@ typedef struct
   guint      line;
   guint      line_offset;
 } CodeCompleteState;
+
+typedef struct
+{
+  GPtrArray *ar;
+  IdeFile   *file;
+  gchar     *path;
+} GetSymbolsState;
 
 G_DEFINE_TYPE (IdeClangTranslationUnit, ide_clang_translation_unit, IDE_TYPE_OBJECT)
 
@@ -778,4 +786,108 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
    */
 
   IDE_RETURN (ret);
+}
+
+static IdeSymbol *
+create_symbol (CXCursor         cursor,
+               GetSymbolsState *state)
+{
+  g_auto(CXString) cxname = { 0 };
+  g_autoptr(IdeSourceLocation) srcloc = NULL;
+  CXSourceLocation cxloc;
+  const gchar *name;
+  IdeSymbol *symbol;
+  guint line;
+  guint line_offset;
+
+  cxname = clang_getCursorSpelling (cursor);
+  name = clang_getCString (cxname);
+  cxloc = clang_getCursorLocation (cursor);
+  clang_getFileLocation (cxloc, NULL, &line, &line_offset, NULL);
+  srcloc = ide_source_location_new (state->file, line-1, line_offset-1, 0);
+
+  symbol = _ide_symbol_new (name, NULL, NULL, srcloc);
+
+  return symbol;
+}
+
+static enum CXChildVisitResult
+ide_clang_translation_unit_get_symbols__visitor_cb (CXCursor     cursor,
+                                                    CXCursor     parent,
+                                                    CXClientData user_data)
+{
+  GetSymbolsState *state = user_data;
+  g_autoptr(IdeSymbol) symbol = NULL;
+  g_auto(CXString) filename = { 0 };
+  CXSourceLocation cxloc;
+  CXFile file;
+  enum CXCursorKind kind;
+
+  g_assert (state);
+
+  cxloc = clang_getCursorLocation (cursor);
+  clang_getFileLocation (cxloc, &file, NULL, NULL, NULL);
+  filename = clang_getFileName (file);
+
+  if (0 != g_strcmp0 (clang_getCString (filename), state->path))
+    return CXChildVisit_Continue;
+
+  kind = clang_getCursorKind (cursor);
+
+  switch (kind)
+    {
+    case CXCursor_FunctionDecl:
+      symbol = create_symbol (cursor, state);
+      break;
+
+    default:
+      break;
+    }
+
+  if (symbol != NULL)
+    g_ptr_array_add (state->ar, ide_symbol_ref (symbol));
+
+  return CXChildVisit_Continue;
+}
+
+static gint
+sort_symbols_by_name (gconstpointer a,
+                      gconstpointer b)
+{
+  IdeSymbol **asym = (IdeSymbol **)a;
+  IdeSymbol **bsym = (IdeSymbol **)b;
+
+  return g_strcmp0 (ide_symbol_get_name (*asym),
+                    ide_symbol_get_name (*bsym));
+}
+
+/**
+ * ide_clang_translation_unit_get_symbols:
+ *
+ * Returns: (transfer container) (element-type IdeSymbol*): An array of #IdeSymbol.
+ */
+GPtrArray *
+ide_clang_translation_unit_get_symbols (IdeClangTranslationUnit *self,
+                                        IdeFile                 *file)
+{
+  GetSymbolsState state = { 0 };
+  CXCursor cursor;
+
+  g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
+  g_return_val_if_fail (IDE_IS_FILE (file), NULL);
+
+  state.ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_symbol_unref);
+  state.file = file;
+  state.path = g_file_get_path (ide_file_get_file (file));
+
+  cursor = clang_getTranslationUnitCursor (self->tu);
+  clang_visitChildren (cursor,
+                       ide_clang_translation_unit_get_symbols__visitor_cb,
+                       &state);
+
+  g_ptr_array_sort (state.ar, sort_symbols_by_name);
+
+  g_free (state.path);
+
+  return state.ar;
 }
