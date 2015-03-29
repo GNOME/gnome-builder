@@ -715,11 +715,40 @@ ide_clang_translation_unit_code_complete_finish (IdeClangTranslationUnit  *self,
   return g_task_propagate_pointer (task, error);
 }
 
+static enum CXChildVisitResult
+find_child_type (CXCursor     cursor,
+                 CXCursor     parent,
+                 CXClientData user_data)
+{
+  enum CXCursorKind *child_kind = user_data;
+  enum CXCursorKind kind = clang_getCursorKind (cursor);
+
+  switch ((int)kind)
+    {
+    case CXCursor_StructDecl:
+    case CXCursor_UnionDecl:
+    case CXCursor_EnumDecl:
+      *child_kind = kind;
+      return CXChildVisit_Break;
+
+    case CXCursor_TypeRef:
+      cursor = clang_getCursorReferenced (cursor);
+      *child_kind = clang_getCursorKind (cursor);
+      return CXChildVisit_Break;
+
+    default:
+      break;
+    }
+
+  return CXChildVisit_Continue;
+}
+
 static IdeSymbolKind
 get_symbol_kind (CXCursor        cursor,
                  IdeSymbolFlags *flags)
 {
   enum CXAvailabilityKind availability;
+  enum CXCursorKind cxkind;
   IdeSymbolFlags local_flags = 0;
   IdeSymbolKind kind = 0;
 
@@ -727,7 +756,17 @@ get_symbol_kind (CXCursor        cursor,
   if (availability == CXAvailability_Deprecated)
     local_flags |= IDE_SYMBOL_FLAGS_IS_DEPRECATED;
 
-  switch ((int)clang_getCursorKind (cursor))
+  cxkind = clang_getCursorKind (cursor);
+
+  if (cxkind == CXCursor_TypedefDecl)
+    {
+      enum CXCursorKind child_kind = 0;
+
+      clang_visitChildren (cursor, find_child_type, &child_kind);
+      cxkind = child_kind;
+    }
+
+  switch ((int)cxkind)
     {
     case CXCursor_StructDecl:
       kind = IDE_SYMBOL_STRUCT;
