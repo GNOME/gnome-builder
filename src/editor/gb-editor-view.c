@@ -273,13 +273,19 @@ gb_editor_view_update_symbols_cb (GObject      *object,
           icon_name = "lang-function-symbolic";
           break;
 
-        case IDE_SYMBOL_SCALAR:
-        case IDE_SYMBOL_CLASS:
-        case IDE_SYMBOL_METHOD:
+        case IDE_SYMBOL_ENUM:
+          icon_name = "lang-enum-symbolic";
+          break;
+
         case IDE_SYMBOL_STRUCT:
+          icon_name = "lang-struct-symbolic";
+          break;
+
+        case IDE_SYMBOL_CLASS:
+        case IDE_SYMBOL_SCALAR:
+        case IDE_SYMBOL_METHOD:
         case IDE_SYMBOL_UNION:
         case IDE_SYMBOL_FIELD:
-        case IDE_SYMBOL_ENUM:
         case IDE_SYMBOL_ENUM_VALUE:
         case IDE_SYMBOL_NONE:
         default:
@@ -292,6 +298,7 @@ gb_editor_view_update_symbols_cb (GObject      *object,
                             "icon-name", icon_name,
                             "margin-start", 3,
                             "margin-end", 3,
+                            "width-request", 16,
                             "visible", TRUE,
                             NULL);
 
