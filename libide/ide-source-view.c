@@ -248,6 +248,7 @@ static void ide_source_view_real_restore_insert_mark (IdeSourceView         *sel
 static void ide_source_view_real_set_mode            (IdeSourceView         *self,
                                                       const gchar           *name,
                                                       IdeSourceViewModeType  type);
+static void ide_source_view_save_offset              (IdeSourceView         *self);
 
 static SearchMovement *
 search_movement_ref (SearchMovement *movement)
@@ -2614,6 +2615,8 @@ ide_source_view_real_delete_selection (IdeSourceView *self)
     {
       gtk_text_buffer_delete_selection (buffer, TRUE, editable);
     }
+
+  ide_source_view_save_offset (self);
 }
 
 static void
