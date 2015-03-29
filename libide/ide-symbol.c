@@ -25,6 +25,9 @@ struct _IdeSymbol
 {
   volatile gint ref_count;
 
+  IdeSymbolKind     kind;
+  IdeSymbolFlags    flags;
+
   gchar             *name;
   IdeSourceLocation *declaration_location;
   IdeSourceLocation *definition_location;
@@ -35,6 +38,8 @@ G_DEFINE_BOXED_TYPE (IdeSymbol, ide_symbol, ide_symbol_ref, ide_symbol_unref)
 
 IdeSymbol *
 _ide_symbol_new (const gchar       *name,
+                 IdeSymbolKind      kind,
+                 IdeSymbolFlags     flags,
                  IdeSourceLocation *declaration_location,
                  IdeSourceLocation *definition_location,
                  IdeSourceLocation *canonical_location)
@@ -43,6 +48,8 @@ _ide_symbol_new (const gchar       *name,
 
   ret = g_new0 (IdeSymbol, 1);
   ret->ref_count = 1;
+  ret->kind = kind;
+  ret->flags = flags;
   ret->name = g_strdup (name);
 
   if (declaration_location)
@@ -113,6 +120,22 @@ ide_symbol_get_canonical_location (IdeSymbol *self)
   g_return_val_if_fail (self, NULL);
 
   return self->canonical_location;
+}
+
+IdeSymbolKind
+ide_symbol_get_kind (IdeSymbol *self)
+{
+  g_return_val_if_fail (self, 0);
+
+  return self->kind;
+}
+
+IdeSymbolFlags
+ide_symbol_get_flags (IdeSymbol *self)
+{
+  g_return_val_if_fail (self, 0);
+
+  return self->flags;
 }
 
 IdeSymbol *

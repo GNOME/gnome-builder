@@ -29,6 +29,7 @@
 #include "ide-types.h"
 #include "ide-source-view.h"
 #include "ide-source-view-mode.h"
+#include "ide-symbol.h"
 
 G_BEGIN_DECLS
 
@@ -98,6 +99,8 @@ void                _ide_source_view_set_count         (IdeSourceView         *s
 void                _ide_source_view_set_modifier      (IdeSourceView         *self,
                                                         gunichar               modifier);
 IdeSymbol          *_ide_symbol_new                    (const gchar           *name,
+                                                        IdeSymbolKind          kind,
+                                                        IdeSymbolFlags         flags,
                                                         IdeSourceLocation     *declaration_location,
                                                         IdeSourceLocation     *definition_location,
                                                         IdeSourceLocation     *canonical_location);

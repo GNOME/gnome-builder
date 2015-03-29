@@ -25,9 +25,33 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SYMBOL (ide_symbol_get_type())
 
+typedef enum
+{
+  IDE_SYMBOL_NONE,
+  IDE_SYMBOL_SCALAR,
+  IDE_SYMBOL_CLASS,
+  IDE_SYMBOL_FUNCTION,
+  IDE_SYMBOL_METHOD,
+  IDE_SYMBOL_STRUCT,
+  IDE_SYMBOL_UNION,
+  IDE_SYMBOL_FIELD,
+  IDE_SYMBOL_ENUM,
+  IDE_SYMBOL_ENUM_VALUE,
+} IdeSymbolKind;
+
+typedef enum
+{
+  IDE_SYMBOL_FLAGS_NONE          = 0,
+  IDE_SYMBOL_FLAGS_IS_STATIC     = 1 << 0,
+  IDE_sYMBOL_FLAGS_IS_MEMBER     = 1 << 1,
+  IDE_SYMBOL_FLAGS_IS_DEPRECATED = 1 << 2,
+} IdeSymbolFlags;
+
 GType              ide_symbol_get_type                 (void);
 IdeSymbol         *ide_symbol_ref                      (IdeSymbol *self);
 void               ide_symbol_unref                    (IdeSymbol *self);
+IdeSymbolKind      ide_symbol_get_kind                 (IdeSymbol *self);
+IdeSymbolFlags     ide_symbol_get_flags                (IdeSymbol *self);
 const gchar       *ide_symbol_get_name                 (IdeSymbol *self);
 IdeSourceLocation *ide_symbol_get_canonical_location   (IdeSymbol *self);
 IdeSourceLocation *ide_symbol_get_declaration_location (IdeSymbol *self);

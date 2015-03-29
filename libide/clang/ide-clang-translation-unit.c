@@ -38,7 +38,6 @@
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 
-
 struct _IdeClangTranslationUnit
 {
   IdeObject          parent_instance;
@@ -716,6 +715,57 @@ ide_clang_translation_unit_code_complete_finish (IdeClangTranslationUnit  *self,
   return g_task_propagate_pointer (task, error);
 }
 
+static IdeSymbolKind
+get_symbol_kind (CXCursor        cursor,
+                 IdeSymbolFlags *flags)
+{
+  enum CXAvailabilityKind availability;
+  IdeSymbolFlags local_flags = 0;
+  IdeSymbolKind kind = 0;
+
+  availability = clang_getCursorAvailability (cursor);
+  if (availability == CXAvailability_Deprecated)
+    local_flags |= IDE_SYMBOL_FLAGS_IS_DEPRECATED;
+
+  switch ((int)clang_getCursorKind (cursor))
+    {
+    case CXCursor_StructDecl:
+      kind = IDE_SYMBOL_STRUCT;
+      break;
+
+    case CXCursor_UnionDecl:
+      kind = IDE_SYMBOL_UNION;
+      break;
+
+    case CXCursor_ClassDecl:
+      kind = IDE_SYMBOL_CLASS;
+      break;
+
+    case CXCursor_FunctionDecl:
+      kind = IDE_SYMBOL_FUNCTION;
+      break;
+
+    case CXCursor_EnumDecl:
+      kind = IDE_SYMBOL_ENUM;
+      break;
+
+    case CXCursor_EnumConstantDecl:
+      kind = IDE_SYMBOL_ENUM_VALUE;
+      break;
+
+    case CXCursor_FieldDecl:
+      kind = IDE_SYMBOL_FIELD;
+      break;
+
+    default:
+      break;
+    }
+
+  *flags = local_flags;
+
+  return kind;
+}
+
 IdeSymbol *
 ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
                                           IdeSourceLocation        *location,
@@ -727,6 +777,8 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
   g_autoptr(IdeSourceLocation) declaration = NULL;
   g_autoptr(IdeSourceLocation) definition = NULL;
   g_autoptr(IdeSourceLocation) canonical = NULL;
+  IdeSymbolKind symkind = 0;
+  IdeSymbolFlags symflags = 0;
   IdeProject *project;
   IdeContext *context;
   IdeVcs *vcs;
@@ -777,8 +829,11 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
       definition = create_location (self, project, workpath, tmploc);
     }
 
+  symkind = get_symbol_kind (cursor, &symflags);
+
   cxstr = clang_getCursorDisplayName (cursor);
-  ret = _ide_symbol_new (clang_getCString (cxstr), declaration, definition, canonical);
+  ret = _ide_symbol_new (clang_getCString (cxstr), symkind, symflags,
+                         declaration, definition, canonical);
 
   /*
    * TODO: We should also get information about the defintion of the symbol.
@@ -795,6 +850,8 @@ create_symbol (CXCursor         cursor,
   g_auto(CXString) cxname = { 0 };
   g_autoptr(IdeSourceLocation) srcloc = NULL;
   CXSourceLocation cxloc;
+  IdeSymbolKind symkind;
+  IdeSymbolFlags symflags;
   const gchar *name;
   IdeSymbol *symbol;
   guint line;
@@ -806,7 +863,9 @@ create_symbol (CXCursor         cursor,
   clang_getFileLocation (cxloc, NULL, &line, &line_offset, NULL);
   srcloc = ide_source_location_new (state->file, line-1, line_offset-1, 0);
 
-  symbol = _ide_symbol_new (name, NULL, NULL, srcloc);
+  symkind = get_symbol_kind (cursor, &symflags);
+
+  symbol = _ide_symbol_new (name, symkind, symflags, NULL, NULL, srcloc);
 
   return symbol;
 }
