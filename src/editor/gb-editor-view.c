@@ -224,6 +224,7 @@ gb_editor_view_update_symbols_cb (GObject      *object,
 
   if (ret == NULL)
     {
+      gtk_widget_hide (GTK_WIDGET (self->symbols_button));
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
         g_warning ("%s", error->message);
       return;
@@ -262,6 +263,8 @@ gb_editor_view_update_symbols_cb (GObject      *object,
       gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (self->symbols_listbox), GTK_WIDGET (row));
     }
+
+  gtk_widget_show (GTK_WIDGET (self->symbols_button));
 }
 
 static gboolean
@@ -598,6 +601,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, modified_revealer);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, paned);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, progress_bar);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorView, symbols_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, symbols_listbox);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, symbols_search_entry);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, tweak_button);

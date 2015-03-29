@@ -42,6 +42,7 @@ struct _GbEditorView
   GtkRevealer         *modified_revealer;
   GtkPaned            *paned;
   GtkProgressBar      *progress_bar;
+  GtkMenuButton       *symbols_button;
   GtkListBox          *symbols_listbox;
   GtkSearchEntry      *symbols_search_entry;
   GtkMenuButton       *tweak_button;
