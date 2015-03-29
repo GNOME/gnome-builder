@@ -89,6 +89,7 @@
           <object class="GtkBox">
             <child>
               <object class="GtkMenuButton" id="symbols_button">
+                <property name="label" translatable="yes">Symbols</property>
                 <property name="popover">symbols_popover</property>
                 <property name="visible">false</property>
                 <style>
