@@ -280,6 +280,7 @@ libide_1_0_la_SOURCES = \
 	$(NULL)
 
 libide_1_0_la_includes = \
+	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/cut-n-paste \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/libide/autotools \

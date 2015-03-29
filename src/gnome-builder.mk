@@ -161,6 +161,7 @@ libgnome_builder_la_CFLAGS = \
 	$(MAINTAINER_CFLAGS) \
 	-I$(top_builddir)/src/resources \
 	-I$(top_builddir)/src/util \
+	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/cut-n-paste \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/src/app \
