@@ -88,6 +88,17 @@
         <child internal-child="controls">
           <object class="GtkBox">
             <child>
+              <object class="GtkMenuButton" id="symbols_button">
+                <property name="popover">symbols_popover</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                  <class name="text-button"/>
+                  <class name="flat"/>
+                </style>
+              </object>
+            </child>
+            <child>
               <object class="GtkMenuButton" id="tweak_button">
                 <property name="popover">popover</property>
                 <property name="visible">true</property>
@@ -108,6 +119,38 @@
       <object class="GbEditorTweakWidget" id="tweak_widget">
         <property name="border-width">12</property>
         <property name="visible">true</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkPopover" id="symbols_popover">
+    <child>
+      <object class="GtkBox">
+        <property name="border-width">12</property>
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <style>
+          <class name="linked"/>
+        </style>
+        <child>
+          <object class="GtkSearchEntry" id="symbols_search_entry">
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GbScrolledWindow">
+            <property name="max-content-height">500</property>
+            <property name="max-content-width">400</property>
+            <property name="min-content-width">200</property>
+            <property name="min-content-height">30</property>
+            <property name="shadow-type">in</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkListBox" id="symbols_listbox">
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </object>

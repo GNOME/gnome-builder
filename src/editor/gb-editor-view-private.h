@@ -19,6 +19,8 @@
 #ifndef GB_EDITOR_VIEW_PRIVATE_H
 #define GB_EDITOR_VIEW_PRIVATE_H
 
+#include <ide.h>
+
 #include "gb-editor-document.h"
 #include "gb-editor-frame.h"
 #include "gb-editor-tweak-widget.h"
@@ -32,6 +34,7 @@ struct _GbEditorView
 
   GbEditorDocument    *document;
   GSettings           *settings;
+  IdePatternSpec      *symbol_spec;
 
   GbEditorFrame       *frame1;
   GbEditorFrame       *frame2;
@@ -39,8 +42,12 @@ struct _GbEditorView
   GtkRevealer         *modified_revealer;
   GtkPaned            *paned;
   GtkProgressBar      *progress_bar;
+  GtkListBox          *symbols_listbox;
+  GtkSearchEntry      *symbols_search_entry;
   GtkMenuButton       *tweak_button;
   GbEditorTweakWidget *tweak_widget;
+
+  guint                symbol_timeout;
 };
 
 G_END_DECLS
