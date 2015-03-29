@@ -54,6 +54,7 @@ G_BEGIN_DECLS
 #include "ide-language.h"
 #include "ide-log.h"
 #include "ide-object.h"
+#include "ide-pattern-spec.h"
 #include "ide-process.h"
 #include "ide-progress.h"
 #include "ide-project.h"
