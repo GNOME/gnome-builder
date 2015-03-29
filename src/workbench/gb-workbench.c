@@ -497,6 +497,7 @@ supports_content_type (const gchar *content_type)
 {
   return (g_str_has_prefix (content_type, "text/") ||
           g_str_equal (content_type, "application/javascript") ||
+          g_str_equal (content_type, "application/sql") ||
           g_str_equal (content_type, "application/x-desktop") ||
           g_str_equal (content_type, "application/x-gettext-translation") ||
           g_str_equal (content_type, "application/x-gtk-builder") ||
