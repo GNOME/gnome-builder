@@ -241,9 +241,17 @@ gb_editor_view_update_symbols_cb (GObject      *object,
       IdeSymbol *symbol;
       GtkListBoxRow *row;
       GtkLabel *label;
+      GtkBox *box;
+      GtkImage *image;
+      IdeSymbolKind kind;
+      IdeSymbolFlags flags;
+      const gchar *icon_name;
 
       symbol = g_ptr_array_index (ret, i);
+      kind = ide_symbol_get_kind (symbol);
+      flags = ide_symbol_get_flags (symbol);
       name = ide_symbol_get_name (symbol);
+
       row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                           "visible", TRUE,
                           NULL);
@@ -251,16 +259,66 @@ gb_editor_view_update_symbols_cb (GObject      *object,
                               "IDE_SYMBOL",
                               ide_symbol_ref (symbol),
                               (GDestroyNotify)ide_symbol_unref);
-      label = g_object_new (GTK_TYPE_LABEL,
-                            "label", name,
+
+      box = g_object_new (GTK_TYPE_BOX,
+                          "orientation", GTK_ORIENTATION_HORIZONTAL,
+                          "visible", TRUE,
+                          NULL);
+
+      switch (kind)
+        {
+        case IDE_SYMBOL_FUNCTION:
+          icon_name = "lang-function-symbolic";
+          break;
+
+        case IDE_SYMBOL_SCALAR:
+        case IDE_SYMBOL_CLASS:
+        case IDE_SYMBOL_METHOD:
+        case IDE_SYMBOL_STRUCT:
+        case IDE_SYMBOL_UNION:
+        case IDE_SYMBOL_FIELD:
+        case IDE_SYMBOL_ENUM:
+        case IDE_SYMBOL_ENUM_VALUE:
+        case IDE_SYMBOL_NONE:
+        default:
+          icon_name = NULL;
+          break;
+        }
+
+      image = g_object_new (GTK_TYPE_IMAGE,
+                            "hexpand", FALSE,
+                            "icon-name", icon_name,
+                            "margin-start", 3,
+                            "margin-end", 3,
                             "visible", TRUE,
-                            "margin-top", 3,
+                            NULL);
+
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "hexpand", TRUE,
+                            "label", name,
                             "margin-bottom", 3,
-                            "margin-start", 6,
                             "margin-end", 6,
+                            "margin-start", 6,
+                            "margin-top", 3,
+                            "visible", TRUE,
                             "xalign", 0.0f,
                             NULL);
-      gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
+
+      if ((flags & IDE_SYMBOL_FLAGS_IS_DEPRECATED) != 0)
+        {
+          gchar *name_markup;
+
+          name_markup = g_strdup_printf ("<i>%s</i>", name);
+          g_object_set (label,
+                        "label", name_markup,
+                        "use-markup", TRUE,
+                        NULL);
+          g_free (name_markup);
+        }
+
+      gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (box));
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (self->symbols_listbox), GTK_WIDGET (row));
     }
 
