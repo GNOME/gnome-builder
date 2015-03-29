@@ -4685,6 +4685,8 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
 {
   IdeSourceView *self = (IdeSourceView *)text_view;
   GtkTextBuffer *buffer;
+  GtkSeparatorMenuItem *sep;
+  GtkMenuItem *menu_item;
   GtkTextMark *insert;
   GtkTextIter iter;
   IdeDiagnostic *diagnostic;
@@ -4723,7 +4725,7 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
       if (num_fixits > 0)
         {
           GtkSeparatorMenuItem *sep;
-          GtkMenuItem *parent;
+          GtkWidget *parent;
           GtkWidget *submenu;
           guint i;
 
@@ -4739,12 +4741,11 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
                                  "submenu", submenu,
                                  "visible", TRUE,
                                  NULL);
-          gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), GTK_WIDGET (parent));
+          gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), parent);
 
           for (i = 0; i < num_fixits; i++)
             {
               IdeFixit *fixit;
-              GtkWidget *menu_item;
               gchar *label;
 
               fixit = ide_diagnostic_get_fixit (diagnostic, i);
@@ -4754,7 +4755,7 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
                                         "label", label,
                                         "visible", TRUE,
                                         NULL);
-              gtk_menu_shell_append (GTK_MENU_SHELL (submenu), menu_item);
+              gtk_menu_shell_append (GTK_MENU_SHELL (submenu), GTK_WIDGET (menu_item));
 
               g_object_set_data_full (G_OBJECT (menu_item),
                                       "IDE_FIXIT",
@@ -4769,6 +4770,21 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
             }
         }
     }
+
+  sep = g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM,
+                      "visible", TRUE,
+                      NULL);
+  gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), GTK_WIDGET (sep));
+
+  menu_item = g_object_new (GTK_TYPE_MENU_ITEM,
+                            "label", _("Goto Definition"),
+                            "visible", TRUE,
+                            NULL);
+  g_signal_connect_swapped (menu_item,
+                            "activate",
+                            G_CALLBACK (ide_source_view_real_goto_definition),
+                            self);
+  gtk_menu_shell_prepend (GTK_MENU_SHELL (popup), GTK_WIDGET (menu_item));
 }
 
 static void
