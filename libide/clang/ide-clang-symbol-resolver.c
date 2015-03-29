@@ -132,6 +132,7 @@ ide_clang_symbol_resolver_get_symbols_cb (GObject      *object,
   g_autoptr(IdeClangTranslationUnit) unit = NULL;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GPtrArray) ret = NULL;
+  IdeFile *file;
   GError *error = NULL;
 
   IDE_ENTRY;
@@ -147,7 +148,10 @@ ide_clang_symbol_resolver_get_symbols_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  ret = g_ptr_array_new ();
+  file = g_task_get_task_data (task);
+  g_assert (IDE_IS_FILE (file));
+
+  ret = ide_clang_translation_unit_get_symbols (unit, file);
 
   g_task_return_pointer (task, g_ptr_array_ref (ret), (GDestroyNotify)g_ptr_array_unref);
 
@@ -176,6 +180,7 @@ ide_clang_symbol_resolver_get_symbols_async (IdeSymbolResolver   *resolver,
   service = ide_context_get_service_typed (context, IDE_TYPE_CLANG_SERVICE);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
   ide_clang_service_get_translation_unit_async (service,
                                                 file,
