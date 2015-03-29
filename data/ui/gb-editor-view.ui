@@ -134,6 +134,7 @@
         </style>
         <child>
           <object class="GtkSearchEntry" id="symbols_search_entry">
+            <property name="placeholder-text" translatable="yes">Search Symbols</property>
             <property name="visible">true</property>
           </object>
         </child>
