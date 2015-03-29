@@ -14,6 +14,7 @@
     <file alias="icons/scalable/actions/builder-split-tab-right-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-split-tab-right-symbolic.svg</file>
     <file alias="icons/scalable/actions/builder-split-tab-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-split-tab-symbolic.svg</file>
     
+    <file alias="icons/scalable/autocomplete/lang-class-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-class-symbolic.svg</file>
     <file alias="icons/scalable/autocomplete/lang-enum-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-enum-symbolic.svg</file>
     <file alias="icons/scalable/autocomplete/lang-function-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-function-symbolic.svg</file>
     <file alias="icons/scalable/autocomplete/lang-struct-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-struct-symbolic.svg</file>

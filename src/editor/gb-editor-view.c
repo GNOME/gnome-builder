@@ -282,6 +282,9 @@ gb_editor_view_update_symbols_cb (GObject      *object,
           break;
 
         case IDE_SYMBOL_CLASS:
+          icon_name = "lang-class-symbolic";
+          break;
+
         case IDE_SYMBOL_SCALAR:
         case IDE_SYMBOL_METHOD:
         case IDE_SYMBOL_UNION:
