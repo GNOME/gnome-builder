@@ -896,6 +896,7 @@ ide_clang_translation_unit_get_symbols__visitor_cb (CXCursor     cursor,
   switch (kind)
     {
     case CXCursor_FunctionDecl:
+    case CXCursor_TypedefDecl:
       symbol = create_symbol (cursor, state);
       break;
 
