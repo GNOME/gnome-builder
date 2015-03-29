@@ -20,6 +20,7 @@
 
 #include "c-parse-helper.h"
 #include "ide-c-indenter.h"
+#include "ide-source-view.h"
 
 #define ITER_INIT_LINE_START(iter, other) \
   gtk_text_buffer_get_iter_at_line( \
@@ -35,6 +36,9 @@
 struct _IdeCIndenter
 {
   IdeIndenter parent_instance;
+
+  /* no reference */
+  IdeSourceView *view;
 
   gint  scope_indent;
   gint  condition_indent;
@@ -68,15 +72,22 @@ text_iter_peek_prev_char (const GtkTextIter *location)
 
 static inline void
 build_indent (IdeCIndenter *c,
-              guint                  line_offset,
-              GtkTextIter           *matching_line,
-              GString               *str)
+              guint         line_offset,
+              GtkTextIter  *matching_line,
+              GString      *str)
 {
+  GtkSourceView *view = (GtkSourceView *)c->view;
+  guint tab_width = gtk_source_view_get_tab_width (view);
+  gint indent_width = gtk_source_view_get_indent_width (view);
   GtkTextIter iter;
   gunichar ch;
+  guint i;
 
   if (!line_offset)
     return;
+
+  if (indent_width == -1)
+    indent_width = tab_width;
 
   gtk_text_buffer_get_iter_at_line (gtk_text_iter_get_buffer (matching_line),
                                     &iter,
@@ -88,6 +99,10 @@ build_indent (IdeCIndenter *c,
     switch (ch)
       {
       case '\t':
+        for (i = 0; i < tab_width; i++)
+          g_string_append (str, " ");
+        break;
+
       case ' ':
         g_string_append_unichar (str, ch);
         break;
@@ -102,6 +117,20 @@ build_indent (IdeCIndenter *c,
 
   while (str->len < line_offset)
     g_string_append_c (str, ' ');
+
+  if (!gtk_source_view_get_insert_spaces_instead_of_tabs (view) && (str->len >= tab_width))
+    {
+      guint n_tabs = str->len / tab_width;
+      guint n_spaces = str->len % tab_width;
+
+      g_string_truncate (str, 0);
+
+      for (i = 0; i < n_tabs; i++)
+        g_string_append (str, "\t");
+
+      for (i = 0; i < n_spaces; i++)
+        g_string_append (str, " ");
+    }
 }
 
 static gboolean
@@ -1300,8 +1329,11 @@ ide_c_indenter_format (IdeIndenter    *indenter,
   GtkTextBuffer *buffer;
 
   g_return_val_if_fail (IDE_IS_C_INDENTER (c), NULL);
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (view), NULL);
 
   buffer = gtk_text_view_get_buffer (view);
+
+  c->view = IDE_SOURCE_VIEW (view);
 
   switch (event->keyval) {
   case GDK_KEY_Return:
