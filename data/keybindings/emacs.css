@@ -134,6 +134,8 @@ IdeSourceViewMode.default
 }
 
 IdeSourceViewMode.emacs-x {
+  -IdeSourceViewMode-display-name: "C-x";
+
   gtk-key-bindings: builder-emacs-source-view-x;
 }
 
