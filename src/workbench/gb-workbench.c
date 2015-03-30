@@ -98,13 +98,21 @@ gb_workbench_delete_event (GtkWidget   *widget,
   if (self->unloading)
     {
       /* Second attempt to kill things, cancel clean shutdown */
-      g_cancellable_cancel (self->unload_cancellable);
-      return TRUE;
+      if (!g_cancellable_is_cancelled (self->unload_cancellable))
+        {
+          g_cancellable_cancel (self->unload_cancellable);
+          return TRUE;
+        }
+
+      /* third attempt, kill it */
+      return FALSE;
     }
+
+  g_assert_cmpint (self->unloading, ==, FALSE);
 
   if (self->context != NULL)
     {
-      g_assert (!self->unload_cancellable);
+      g_assert (self->unload_cancellable == NULL);
 
       self->unloading = TRUE;
       self->unload_cancellable = g_cancellable_new ();
