@@ -31,6 +31,7 @@ ide-list-devices
 ide-list-diagnostics
 ide-list-file-settings
 ide-list-files
+ide-mine-projects
 ide-search
 intltool-extract.in
 intltool-merge.in

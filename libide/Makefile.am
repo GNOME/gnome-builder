@@ -9,6 +9,8 @@ libide_1_0_la_public_sources = \
 	libide/autotools/ide-autotools-build-task.h \
 	libide/autotools/ide-autotools-builder.c \
 	libide/autotools/ide-autotools-builder.h \
+	libide/autotools/ide-autotools-project-miner.c \
+	libide/autotools/ide-autotools-project-miner.h \
 	libide/c/ide-c-indenter.c \
 	libide/c/ide-c-indenter.h \
 	libide/c/ide-c-language.c \

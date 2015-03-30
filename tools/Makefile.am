@@ -33,3 +33,8 @@ noinst_PROGRAMS += ide-search
 ide_search_SOURCES = tools/ide-search.c
 ide_search_CFLAGS = $(libide_1_0_la_CFLAGS)
 ide_search_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+
+noinst_PROGRAMS += ide-mine-projects
+ide_mine_projects_SOURCES = tools/ide-mine-projects.c
+ide_mine_projects_CFLAGS = $(libide_1_0_la_CFLAGS)
+ide_mine_projects_LDADD = libide-1.0.la $(LIBIDE_LIBS)
