@@ -190,7 +190,7 @@ ide_clang_service_notify_waiters_locked (IdeClangService         *self,
 
   g_assert (IDE_IS_CLANG_SERVICE (self));
   g_assert (IDE_IS_FILE (file));
-  g_assert (IDE_IS_CLANG_TRANSLATION_UNIT (result));
+  g_assert (!result || IDE_IS_CLANG_TRANSLATION_UNIT (result));
 
   for (i = 0; i < self->waiting->len; i++)
     {
@@ -205,7 +205,15 @@ ide_clang_service_notify_waiters_locked (IdeClangService         *self,
     g_ptr_array_remove (self->waiting, iter->data);
 
   for (iter = tasks; iter; iter = iter->next)
-    g_task_return_pointer (iter->data, g_object_ref (result), g_object_unref);
+    {
+      if (result != NULL)
+        g_task_return_pointer (iter->data, g_object_ref (result), g_object_unref);
+      else
+        g_task_return_new_error (iter->data,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 _("Failed to compile translation unit"));
+    }
 
   g_list_free_full (tasks, (GDestroyNotify)g_object_unref);
 }
