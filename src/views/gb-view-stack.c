@@ -545,6 +545,21 @@ gb_view_stack_init (GbViewStack *self)
                            self,
                            G_CONNECT_SWAPPED);
 
+  /*
+   * FIXME:
+   *
+   * https://bugzilla.gnome.org/show_bug.cgi?id=747060
+   *
+   * Setting sensitive in the template is getting changed out from under us.
+   * Likely due to the popover item being set (conflation of having a popover
+   * vs wanting sensitivity). So we will just override it here.
+   *
+   * Last tested Gtk+ was 3.16.0.
+   */
+  g_object_set (self->document_button,
+                "sensitive", FALSE,
+                NULL);
+
   gb_widget_set_context_handler (self, gb_view_stack_context_handler);
 }
 

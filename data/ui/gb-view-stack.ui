@@ -64,7 +64,7 @@
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="views_button">
-                    <property name="visible">true</property>
+                    <property name="visible">false</property>
                     <property name="popover">views_popover</property>
                     <style>
                       <class name="dim-label"/>
@@ -86,6 +86,9 @@
                   <object class="GtkMenuButton" id="document_button">
                     <property name="hexpand">true</property>
                     <property name="popover">popover</property>
+		    <!-- Sensitive is not being respected,
+                         likely due to popover being set. -->
+                    <property name="sensitive">false</property>
                     <property name="visible">true</property>
                     <style>
                       <class name="dim-label"/>
