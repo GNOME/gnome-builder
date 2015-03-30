@@ -24,13 +24,18 @@
 #define ANIMATION_DURATION_MSEC 250
 
 static void
-gb_editor_workspace_actions_toggle_sidebar (GSimpleAction *action,
-                                            GVariant      *variant,
-                                            gpointer       user_data)
+gb_editor_workspace_actions_show_sidebar (GSimpleAction *action,
+                                          GVariant      *variant,
+                                          gpointer       user_data)
 {
   GbEditorWorkspace *self = user_data;
+  gboolean visible;
 
-  if (gtk_widget_get_visible (GTK_WIDGET (self->project_sidebar)))
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+
+  visible = gtk_widget_get_visible (GTK_WIDGET (self->project_sidebar));
+
+  if (!g_variant_get_boolean (variant) && visible)
     {
       ide_object_animate_full (self->project_paned,
                                IDE_ANIMATION_EASE_IN_CUBIC,
@@ -40,8 +45,9 @@ gb_editor_workspace_actions_toggle_sidebar (GSimpleAction *action,
                                self->project_sidebar,
                                "position", 0,
                                NULL);
+      g_simple_action_set_state (action, variant);
     }
-  else
+  else if (g_variant_get_boolean (variant) && !visible)
     {
       gtk_paned_set_position (self->project_paned, 0);
       gtk_widget_show (GTK_WIDGET (self->project_sidebar));
@@ -51,10 +57,31 @@ gb_editor_workspace_actions_toggle_sidebar (GSimpleAction *action,
                           NULL,
                           "position", 250,
                           NULL);
+      g_simple_action_set_state (action, variant);
     }
 }
 
+static void
+gb_editor_workspace_actions_toggle_sidebar (GSimpleAction *action,
+                                            GVariant      *variant,
+                                            gpointer       user_data)
+{
+  GbEditorWorkspace *self = user_data;
+  GActionGroup *group;
+  GAction *show_action;
+  GVariant *state;
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (self), "workspace");
+  show_action = g_action_map_lookup_action (G_ACTION_MAP (group), "show-sidebar");
+  state = g_action_get_state (show_action);
+  gb_editor_workspace_actions_show_sidebar (G_SIMPLE_ACTION (show_action),
+                                            g_variant_new_boolean (!g_variant_get_boolean (state)),
+                                            user_data);
+  g_variant_unref (state);
+}
+
 static const GActionEntry GbEditorWorkspaceActions[] = {
+  { "show-sidebar", NULL, NULL, "false", gb_editor_workspace_actions_show_sidebar },
   { "toggle-sidebar", gb_editor_workspace_actions_toggle_sidebar },
 };
 

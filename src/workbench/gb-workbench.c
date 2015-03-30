@@ -493,11 +493,16 @@ void
 gb_workbench_set_active_workspace (GbWorkbench *self,
                                    GbWorkspace *workspace)
 {
+  GActionGroup *group;
+
   g_return_if_fail (GB_IS_WORKBENCH (self));
   g_return_if_fail (GB_IS_WORKSPACE (workspace));
 
   if (ide_set_weak_pointer (&self->active_workspace, workspace))
     gtk_stack_set_visible_child (self->stack, GTK_WIDGET (workspace));
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (workspace), "workspace");
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "workspace", group);
 }
 
 static gboolean
