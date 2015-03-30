@@ -21,7 +21,7 @@
               </object>
               <packing>
                 <property name="pack-type">start</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -32,7 +32,7 @@
               </object>
               <packing>
                 <property name="pack-type">start</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
