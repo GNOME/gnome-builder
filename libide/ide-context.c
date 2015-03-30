@@ -1307,6 +1307,13 @@ ide_context_unload_buffer_manager (gpointer             source_object,
   buffers = ide_buffer_manager_get_buffers (self->buffer_manager);
 
   task = g_task_new (self, cancellable, callback, user_data);
+
+  if (buffers->len == 0)
+    {
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
+
   g_object_set_data (G_OBJECT (task), "IN_PROGRESS", GINT_TO_POINTER (buffers->len));
 
   for (i = 0; i < buffers->len; i++)
