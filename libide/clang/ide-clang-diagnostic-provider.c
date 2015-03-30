@@ -34,9 +34,9 @@ get_translation_unit_cb (GObject      *object,
 {
   IdeClangService *service = (IdeClangService *)object;
   g_autoptr(IdeClangTranslationUnit) tu = NULL;
-  g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
   IdeDiagnostics *diagnostics;
+  GError *error = NULL;
 
   tu = ide_clang_service_get_translation_unit_finish (service, result, &error);
 
