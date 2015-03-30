@@ -25,8 +25,6 @@
 
 #include <string.h>
 
-#include <glib/gi18n.h>
-
 #include "nautilus-floating-bar.h"
 
 struct _NautilusFloatingBarDetails {
@@ -66,7 +64,7 @@ action_button_clicked_cb (GtkButton *button,
 
 	action_id = GPOINTER_TO_INT
 		(g_object_get_data (G_OBJECT (button), "action-id"));
-	
+
 	g_signal_emit (self, signals[ACTION], 0, action_id);
 }
 
@@ -215,28 +213,95 @@ nautilus_floating_bar_hide (GtkWidget *widget)
 	gtk_spinner_stop (GTK_SPINNER (self->priv->spinner));
 }
 
-static gboolean
-nautilus_floating_bar_draw (GtkWidget *widget,
-			    cairo_t *cr)
+static void
+get_padding_and_border (GtkWidget *widget,
+                        GtkBorder *border)
 {
-	GtkStyleContext *context;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  GtkBorder tmp;
 
-	context = gtk_widget_get_style_context (widget);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
-	gtk_style_context_save (context);
-	gtk_style_context_set_state (context, gtk_widget_get_state_flags (widget));
+  gtk_style_context_get_padding (context, state, border);
+  gtk_style_context_get_border (context, state, &tmp);
+  border->top += tmp.top;
+  border->right += tmp.right;
+  border->bottom += tmp.bottom;
+  border->left += tmp.left;
+}
 
-	gtk_render_background (context, cr, 0, 0,
-			       gtk_widget_get_allocated_width (widget),
-			       gtk_widget_get_allocated_height (widget));
+static void
+nautilus_floating_bar_get_preferred_width (GtkWidget *widget,
+					   gint      *minimum_size,
+					   gint      *natural_size)
+{
+	GtkBorder border;
 
-	gtk_render_frame (context, cr, 0, 0,
-			  gtk_widget_get_allocated_width (widget),
-			  gtk_widget_get_allocated_height (widget));
+	get_padding_and_border (widget, &border);
 
-	gtk_style_context_restore (context);
+	GTK_WIDGET_CLASS (nautilus_floating_bar_parent_class)->get_preferred_width (widget,
+										    minimum_size,
+										    natural_size);
 
-	return GTK_WIDGET_CLASS (nautilus_floating_bar_parent_class)->draw (widget, cr);;
+	*minimum_size += border.left + border.right;
+	*natural_size += border.left + border.right;
+}
+
+static void
+nautilus_floating_bar_get_preferred_width_for_height (GtkWidget *widget,
+						      gint       height,
+						      gint      *minimum_size,
+						      gint      *natural_size)
+{
+	GtkBorder border;
+
+	get_padding_and_border (widget, &border);
+
+	GTK_WIDGET_CLASS (nautilus_floating_bar_parent_class)->get_preferred_width_for_height (widget,
+											       height,
+											       minimum_size,
+											       natural_size);
+
+	*minimum_size += border.left + border.right;
+	*natural_size += border.left + border.right;
+}
+
+static void
+nautilus_floating_bar_get_preferred_height (GtkWidget *widget,
+					    gint      *minimum_size,
+					    gint      *natural_size)
+{
+	GtkBorder border;
+
+	get_padding_and_border (widget, &border);
+
+	GTK_WIDGET_CLASS (nautilus_floating_bar_parent_class)->get_preferred_height (widget,
+										     minimum_size,
+										     natural_size);
+
+	*minimum_size += border.top + border.bottom;
+	*natural_size += border.top + border.bottom;
+}
+
+static void
+nautilus_floating_bar_get_preferred_height_for_width (GtkWidget *widget,
+						      gint       width,
+						      gint      *minimum_size,
+						      gint      *natural_size)
+{
+	GtkBorder border;
+
+	get_padding_and_border (widget, &border);
+
+	GTK_WIDGET_CLASS (nautilus_floating_bar_parent_class)->get_preferred_height_for_width (widget,
+											       width,
+											       minimum_size,
+											       natural_size);
+
+	*minimum_size += border.top + border.bottom;
+	*natural_size += border.top + border.bottom;
 }
 
 static void
@@ -304,27 +369,30 @@ nautilus_floating_bar_class_init (NautilusFloatingBarClass *klass)
 	oclass->get_property = nautilus_floating_bar_get_property;
 	oclass->finalize = nautilus_floating_bar_finalize;
 
-	wclass->draw = nautilus_floating_bar_draw;
+	wclass->get_preferred_width = nautilus_floating_bar_get_preferred_width;
+	wclass->get_preferred_width_for_height = nautilus_floating_bar_get_preferred_width_for_height;
+	wclass->get_preferred_height = nautilus_floating_bar_get_preferred_height;
+	wclass->get_preferred_height_for_width = nautilus_floating_bar_get_preferred_height_for_width;
 	wclass->show = nautilus_floating_bar_show;
 	wclass->hide = nautilus_floating_bar_hide;
 	wclass->parent_set = nautilus_floating_bar_parent_set;
 
 	properties[PROP_PRIMARY_LABEL] =
 		g_param_spec_string ("primary-label",
-				     _("Bar's primary label"),
-				     _("Primary label displayed by the bar"),
+				     "Bar's primary label",
+				     "Primary label displayed by the bar",
 				     NULL,
 				     G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 	properties[PROP_DETAILS_LABEL] =
 		g_param_spec_string ("details-label",
-				     _("Bar's details label"),
-				     _("Details label displayed by the bar"),
+				     "Bar's details label",
+				     "Details label displayed by the bar",
 				     NULL,
 				     G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 	properties[PROP_SHOW_SPINNER] =
 		g_param_spec_boolean ("show-spinner",
-				      _("Show spinner"),
-				      _("Whether a spinner should be shown in the floating bar"),
+				      "Show spinner",
+				      "Whether a spinner should be shown in the floating bar",
 				      FALSE,
 				      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -384,6 +452,7 @@ nautilus_floating_bar_set_show_spinner (NautilusFloatingBar *self,
 {
 	if (self->priv->show_spinner != show_spinner) {
 		self->priv->show_spinner = show_spinner;
+		g_object_set (self->priv->spinner, "active", show_spinner, NULL);
 		gtk_widget_set_visible (self->priv->spinner,
 					show_spinner);
 
@@ -416,6 +485,7 @@ nautilus_floating_bar_add_action (NautilusFloatingBar *self,
 	gtk_widget_show (w);
 
 	button = gtk_button_new ();
+	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
 	gtk_button_set_image (GTK_BUTTON (button), w);
 	gtk_box_pack_end (GTK_BOX (self), button, FALSE, FALSE, 0);
 	gtk_widget_show (button);
