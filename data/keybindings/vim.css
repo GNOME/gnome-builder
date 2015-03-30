@@ -1450,6 +1450,7 @@ IdeSourceViewMode.vim-normal-z {
 IdeSourceViewMode.vim-insert {
   -IdeSourceViewMode-suppress-unbound: false;
   -IdeSourceViewMode-block-cursor: false;
+  -IdeSourceViewMode-display-name: "Insert";
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-insert;
@@ -1458,6 +1459,7 @@ IdeSourceViewMode.vim-insert {
 IdeSourceViewMode.vim-visual {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-display-name: "Visual";
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-visual;
@@ -1467,6 +1469,7 @@ IdeSourceViewMode.vim-visual-with-count {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-default-mode: "vim-visual";
+  -IdeSourceViewMode-display-name: "Visual";
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-visual-with-count,
@@ -1476,6 +1479,7 @@ IdeSourceViewMode.vim-visual-with-count {
 IdeSourceViewMode.vim-visual-g {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-display-name: "Visual";
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-visual-g;
@@ -1484,6 +1488,7 @@ IdeSourceViewMode.vim-visual-g {
 IdeSourceViewMode.vim-visual-z {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-display-name: "Visual";
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-visual-z;
@@ -1492,6 +1497,7 @@ IdeSourceViewMode.vim-visual-z {
 IdeSourceViewMode.vim-visual-line {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-display-name: "Visual Line";
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-visual-line;
@@ -1501,6 +1507,7 @@ IdeSourceViewMode.vim-visual-line-with-count {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
   -IdeSourceViewMode-default-mode: "vim-visual-line";
+  -IdeSourceViewMode-display-name: "Visual Line";
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-visual-line-with-count,
@@ -1510,6 +1517,7 @@ IdeSourceViewMode.vim-visual-line-with-count {
 IdeSourceViewMode.vim-visual-line-g {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-display-name: "Visual Line";
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-visual-line-g;
@@ -1518,6 +1526,7 @@ IdeSourceViewMode.vim-visual-line-g {
 IdeSourceViewMode.vim-visual-line-z {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-display-name: "Visual Line";
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-visual-line-z;
@@ -1526,6 +1535,7 @@ IdeSourceViewMode.vim-visual-line-z {
 IdeSourceViewMode.vim-visual-block {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-display-name: "Visual Block";
 
   gtk-key-bindings: builder-vim-source-view, builder-vim-source-view-visual-block;
 }
