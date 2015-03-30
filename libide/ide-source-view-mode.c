@@ -29,6 +29,7 @@ typedef struct
 {
   GtkWidget             *view;
   char                  *name;
+  char                  *display_name;
   gchar                 *default_mode;
   IdeSourceViewModeType  type;
 } IdeSourceViewModePrivate;
@@ -101,6 +102,14 @@ ide_source_view_mode_get_default_mode (IdeSourceViewMode *self)
   return priv->default_mode;
 }
 
+const gchar *
+ide_source_view_mode_get_display_name (IdeSourceViewMode *self)
+{
+  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (self);
+
+  return priv->display_name;
+}
+
 gboolean
 ide_source_view_mode_get_repeat_insert_with_count (IdeSourceViewMode *self)
 {
@@ -147,6 +156,7 @@ ide_source_view_mode_finalize (GObject *object)
   g_clear_object (&priv->view);
   g_clear_pointer (&priv->name, g_free);
   g_clear_pointer (&priv->default_mode, g_free);
+  g_clear_pointer (&priv->display_name, g_free);
   priv->type = 0;
 
   G_OBJECT_CLASS (ide_source_view_mode_parent_class)->finalize (object);
@@ -278,6 +288,14 @@ ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
                                                                  FALSE,
                                                                  (G_PARAM_READABLE |
                                                                   G_PARAM_STATIC_STRINGS)));
+
+  gtk_widget_class_install_style_property (GTK_WIDGET_CLASS (klass),
+                                           g_param_spec_string ("display-name",
+                                                                "Display Name",
+                                                                "Display name for mode",
+                                                                NULL,
+                                                                (G_PARAM_READABLE |
+                                                                 G_PARAM_STATIC_STRINGS)));
 
   gtk_widget_class_install_style_property (GTK_WIDGET_CLASS (klass),
                                            g_param_spec_string ("default-mode",
@@ -443,6 +461,7 @@ _ide_source_view_mode_new (GtkWidget             *view,
   priv->name = g_strdup (name);
   priv->type = type;
   priv->default_mode = get_string_param (mode, "default-mode");
+  priv->display_name = get_string_param (mode, "display-name");
 
   IDE_TRACE_MSG ("supress_unbound = %d", ide_source_view_mode_get_suppress_unbound (mode));
   IDE_TRACE_MSG ("block_cursor = %d", ide_source_view_mode_get_block_cursor (mode));

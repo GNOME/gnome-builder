@@ -289,6 +289,7 @@ IdeFileSettings            *ide_source_view_get_file_settings         (IdeSource
 const PangoFontDescription *ide_source_view_get_font_desc             (IdeSourceView              *self);
 gboolean                    ide_source_view_get_highlight_current_line(IdeSourceView              *self);
 gboolean                    ide_source_view_get_insert_matching_brace (IdeSourceView              *self);
+const gchar                *ide_source_view_get_mode_display_name     (IdeSourceView              *self);
 gboolean                    ide_source_view_get_overwrite_braces      (IdeSourceView              *self);
 gboolean                    ide_source_view_get_rubberband_search     (IdeSourceView              *self);
 guint                       ide_source_view_get_scroll_offset         (IdeSourceView              *self);

@@ -178,6 +178,7 @@ enum {
   PROP_FONT_DESC,
   PROP_HIGHLIGHT_CURRENT_LINE,
   PROP_INSERT_MATCHING_BRACE,
+  PROP_MODE_DISPLAY_NAME,
   PROP_OVERWRITE,
   PROP_OVERWRITE_BRACES,
   PROP_RUBBERBAND_SEARCH,
@@ -3093,6 +3094,8 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
     gtk_text_view_set_overwrite (GTK_TEXT_VIEW (self), overwrite);
   g_object_notify (G_OBJECT (self), "overwrite");
 
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MODE_DISPLAY_NAME]);
+
   IDE_EXIT;
 }
 
@@ -4886,6 +4889,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_insert_matching_brace (self));
       break;
 
+    case PROP_MODE_DISPLAY_NAME:
+      g_value_set_string (value, ide_source_view_get_mode_display_name (self));
+      break;
+
     case PROP_OVERWRITE:
       g_value_set_boolean (value, ide_source_view_get_overwrite (self));
       break;
@@ -5160,6 +5167,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                    gParamSpecs [PROP_INSERT_MATCHING_BRACE]);
 
   g_object_class_override_property (object_class, PROP_OVERWRITE, "overwrite");
+
+  gParamSpecs [PROP_MODE_DISPLAY_NAME] =
+    g_param_spec_string ("mode-display-name",
+                         _("Mode Display Name"),
+                         _("The display name of the keybinding mode."),
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_MODE_DISPLAY_NAME,
+                                   gParamSpecs [PROP_MODE_DISPLAY_NAME]);
 
   gParamSpecs [PROP_OVERWRITE_BRACES] =
     g_param_spec_boolean ("overwrite-braces",
@@ -5927,6 +5943,19 @@ ide_source_view_get_insert_matching_brace (IdeSourceView *self)
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
   return priv->insert_matching_brace;
+}
+
+const gchar *
+ide_source_view_get_mode_display_name (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
+
+  if (priv->mode != NULL)
+    return ide_source_view_mode_get_display_name (priv->mode);
+
+  return NULL;
 }
 
 gboolean
