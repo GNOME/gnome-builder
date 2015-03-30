@@ -102,8 +102,12 @@ language_to_string (GBinding     *binding,
   GtkSourceLanguage *language;
 
   language = g_value_get_object (from_value);
+
   if (language != NULL)
     g_value_set_string (to_value, gtk_source_language_get_name (language));
+  else
+    g_value_set_string (to_value, _("Plain Text"));
+
   return TRUE;
 }
 
