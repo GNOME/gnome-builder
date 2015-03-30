@@ -192,6 +192,14 @@ ide_clang_service_notify_waiters_locked (IdeClangService         *self,
   g_assert (IDE_IS_FILE (file));
   g_assert (!result || IDE_IS_CLANG_TRANSLATION_UNIT (result));
 
+  /*
+   * First we find all of our target tasks to complete. We store them in our own list so
+   * that we can hold onto a reference to them while we remove them from the waiters list.
+   * Then we remove them from that list (holding on to our reference). Then, we either propagate
+   * the result to the task, or set it's error condition. Once that is all done, we can release
+   * our local references and free the temporary list.
+   */
+
   for (i = 0; i < self->waiting->len; i++)
     {
       GTask *item = g_ptr_array_index (self->waiting, i);
@@ -242,6 +250,7 @@ ide_clang_service_parse_worker (GTask        *task,
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_CLANG_SERVICE (source_object));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_FILE (request->file));
 
   file_copy = g_object_ref (request->file);
 
