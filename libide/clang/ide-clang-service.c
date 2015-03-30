@@ -235,6 +235,8 @@ ide_clang_service_parse_worker (GTask        *task,
   g_assert (IDE_IS_CLANG_SERVICE (source_object));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  file_copy = g_object_ref (request->file);
+
   ar = g_array_new (FALSE, FALSE, sizeof (struct CXUnsavedFile));
 
   for (i = 0; i < request->unsaved_files->len; i++)
@@ -313,8 +315,6 @@ ide_clang_service_parse_worker (GTask        *task,
                         g_object_ref (request->file),
                         g_object_ref (ret));
   g_rw_lock_writer_unlock (&self->cached_rwlock);
-
-  file_copy = g_object_ref (request->file);
 
   g_task_return_pointer (task, g_object_ref (ret), g_object_unref);
 
