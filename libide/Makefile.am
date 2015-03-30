@@ -119,8 +119,12 @@ libide_1_0_la_public_sources = \
 	libide/ide-project-file.h \
 	libide/ide-project-files.c \
 	libide/ide-project-files.h \
+	libide/ide-project-info.c \
+	libide/ide-project-info.h \
 	libide/ide-project-item.c \
 	libide/ide-project-item.h \
+	libide/ide-project-miner.c \
+	libide/ide-project-miner.h \
 	libide/ide-project.c \
 	libide/ide-project.h \
 	libide/ide-refactory.c \
