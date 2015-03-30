@@ -32,6 +32,7 @@ struct _GbEditorFrame
   GtkBin               parent_instance;
 
   NautilusFloatingBar *floating_bar;
+  GtkLabel            *mode_name_label;
   GtkLabel            *overwrite_label;
   GtkScrolledWindow   *scrolled_window;
   GtkRevealer         *search_revealer;

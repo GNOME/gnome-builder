@@ -200,6 +200,19 @@ search_text_transform_from (GBinding     *binding,
   return TRUE;
 }
 
+static gboolean
+string_to_boolean (GBinding     *binding,
+                   const GValue *from_value,
+                   GValue       *to_value,
+                   gpointer      user_data)
+{
+  gboolean visible;
+
+  visible = !gb_str_empty0 (g_value_get_string (from_value));
+  g_value_set_boolean (to_value, visible);
+  return TRUE;
+}
+
 void
 gb_editor_frame_set_document (GbEditorFrame    *self,
                               GbEditorDocument *document)
@@ -235,7 +248,13 @@ gb_editor_frame_set_document (GbEditorFrame    *self,
                            self,
                            G_CONNECT_SWAPPED);
 
-
+  g_object_bind_property (self->source_view, "mode-display-name",
+                          self->mode_name_label, "label",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property_full (self->source_view, "mode-display-name",
+                               self->mode_name_label, "visible",
+                               G_BINDING_SYNC_CREATE, string_to_boolean, NULL,
+                               NULL, NULL);
 }
 
 static gboolean
@@ -567,6 +586,7 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-frame.ui");
 
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, floating_bar);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, mode_name_label);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, overwrite_label);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, scrolled_window);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, search_entry);

@@ -24,6 +24,17 @@
                 <property name="position">0</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkLabel" id="mode_name_label">
+                <property name="margin-start">12</property>
+                <property name="margin-end">3</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="pack-type">start</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
         </child>
         <child type="overlay">
