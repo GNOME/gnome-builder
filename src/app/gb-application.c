@@ -283,6 +283,43 @@ on_create_buffer (IdeBufferManager *buffer_manager,
 }
 
 static void
+gb_application_add_recent_project (GbApplication *self,
+                                   IdeContext    *context)
+{
+  GPtrArray *ar;
+  GSettings *settings;
+  gchar **project_history;
+  GFile *project_file;
+  gchar *uri;
+  gsize i;
+
+  g_assert (GB_IS_APPLICATION (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  project_file = ide_context_get_project_file (context);
+  uri = g_file_get_uri (project_file);
+
+  settings = g_settings_new ("org.gnome.builder");
+  project_history = g_settings_get_strv (settings, "project-history");
+
+  ar = g_ptr_array_new ();
+  g_ptr_array_add (ar, uri);
+  for (i = 0; project_history [i]; i++)
+    {
+      if (!g_str_equal (uri, project_history [i]))
+        g_ptr_array_add (ar, project_history [i]);
+    }
+  g_ptr_array_add (ar, NULL);
+
+  g_settings_set_strv (settings, "project-history", (const gchar * const *)ar->pdata);
+
+  g_ptr_array_free (ar, TRUE);
+  g_strfreev (project_history);
+  g_free (uri);
+  g_object_unref (settings);
+}
+
+static void
 gb_application__context_new_cb (GObject      *object,
                                 GAsyncResult *result,
                                 gpointer      user_data)
@@ -313,6 +350,8 @@ gb_application__context_new_cb (GObject      *object,
       g_clear_error (&error);
       goto cleanup;
     }
+
+  gb_application_add_recent_project (self, context);
 
   {
     IdeVcs *vcs;

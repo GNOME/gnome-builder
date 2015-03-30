@@ -1,4 +1,5 @@
 gsettingsschema_in_files = \
+	data/gsettings/org.gnome.builder.gschema.xml.in \
 	data/gsettings/org.gnome.builder.editor.gschema.xml.in \
 	data/gsettings/org.gnome.builder.editor.language.gschema.xml.in \
 	data/gsettings/org.gnome.builder.experimental.gschema.xml.in \
