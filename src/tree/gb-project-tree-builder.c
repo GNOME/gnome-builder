@@ -32,6 +32,7 @@ struct _GbProjectTreeBuilder
 {
   GbTreeBuilder  parent_instance;
   IdeContext    *context;
+  GSettings     *file_chooser_settings;
 };
 
 G_DEFINE_TYPE (GbProjectTreeBuilder, gb_project_tree_builder, GB_TYPE_TREE_BUILDER)
@@ -170,6 +171,46 @@ build_project (GbProjectTreeBuilder *self,
   ide_project_reader_unlock (project);
 }
 
+static gint
+sort_files (IdeProjectItem *item_a,
+            IdeProjectItem *item_b,
+            gboolean        directories_first)
+{
+  GFileInfo *file_info_a;
+  GFileInfo *file_info_b;
+  const gchar *display_name_a;
+  const gchar *display_name_b;
+  g_autofree gchar *casefold_a = NULL;
+  g_autofree gchar *casefold_b = NULL;
+
+  file_info_a = ide_project_file_get_file_info (IDE_PROJECT_FILE (item_a));
+  file_info_b = ide_project_file_get_file_info (IDE_PROJECT_FILE (item_b));
+
+  if (directories_first)
+    {
+      GFileType file_type_a;
+      GFileType file_type_b;
+
+      file_type_a = g_file_info_get_file_type (file_info_a);
+      file_type_b = g_file_info_get_file_type (file_info_b);
+
+      if (file_type_a != file_type_b &&
+          (file_type_a == G_FILE_TYPE_DIRECTORY ||
+           file_type_b == G_FILE_TYPE_DIRECTORY))
+        {
+          return file_type_a == G_FILE_TYPE_DIRECTORY ? -1 : +1;
+        }
+    }
+
+  display_name_a = g_file_info_get_display_name (file_info_a);
+  display_name_b = g_file_info_get_display_name (file_info_b);
+
+  casefold_a = g_utf8_casefold (display_name_a, -1);
+  casefold_b = g_utf8_casefold (display_name_b, -1);
+
+  return g_utf8_collate (casefold_a, casefold_b);
+}
+
 static void
 build_files (GbProjectTreeBuilder *self,
              GbTreeNode           *node)
@@ -177,6 +218,7 @@ build_files (GbProjectTreeBuilder *self,
   IdeProjectItem *files;
   GSequenceIter *iter;
   GSequence *children;
+  gboolean directories_first;
 
   g_return_if_fail (GB_IS_PROJECT_TREE_BUILDER (self));
   g_return_if_fail (GB_IS_TREE_NODE (node));
@@ -186,6 +228,12 @@ build_files (GbProjectTreeBuilder *self,
 
   if (children)
     {
+      directories_first = g_settings_get_boolean (self->file_chooser_settings,
+                                                  "sort-directories-first");
+      g_sequence_sort (children,
+                       (GCompareDataFunc) sort_files,
+                       GINT_TO_POINTER (directories_first));
+
       iter = g_sequence_get_begin_iter (children);
 
       for (iter = g_sequence_get_begin_iter (children);
@@ -284,6 +332,7 @@ gb_project_tree_builder_finalize (GObject *object)
   GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)object;
 
   g_clear_object (&self->context);
+  g_clear_object (&self->file_chooser_settings);
 
   G_OBJECT_CLASS (gb_project_tree_builder_parent_class)->finalize (object);
 }
@@ -352,4 +401,5 @@ gb_project_tree_builder_class_init (GbProjectTreeBuilderClass *klass)
 static void
 gb_project_tree_builder_init (GbProjectTreeBuilder *self)
 {
+  self->file_chooser_settings = g_settings_new ("org.gtk.Settings.FileChooser");
 }
