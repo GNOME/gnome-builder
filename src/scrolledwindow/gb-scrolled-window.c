@@ -185,7 +185,7 @@ gb_scrolled_window_get_preferred_width (GtkWidget *widget,
           gtk_style_context_get_border (style,
                                         gtk_widget_get_state_flags (widget),
                                         &border);
-          additional = border.left = border.right;
+          additional = border.left = border.right + 1;
 
           gtk_widget_get_preferred_width (child, &child_min_width,
                                            &child_nat_width);
