@@ -37,6 +37,21 @@ mine_cb (GObject      *object,
   g_main_loop_quit (main_loop);
 }
 
+static void
+discovered_cb (IdeProjectMiner *miner,
+               IdeProjectInfo  *info)
+{
+  GFile *file;
+  gchar *path;
+
+  file = ide_project_info_get_file (info);
+  path = g_file_get_path (file);
+
+  g_print ("%s (%s)\n", path, ide_project_info_get_name (info));
+
+  g_free (path);
+}
+
 static gboolean
 verbose_cb (void)
 {
@@ -72,6 +87,7 @@ main (int    argc,
   miner = g_object_new (IDE_TYPE_AUTOTOOLS_PROJECT_MINER,
                         "root-directory", NULL,
                         NULL);
+  g_signal_connect (miner, "discovered", G_CALLBACK (discovered_cb), NULL);
   main_loop = g_main_loop_new (NULL, FALSE);
   ide_project_miner_mine_async (miner, NULL, mine_cb, main_loop);
   g_main_loop_run (main_loop);
