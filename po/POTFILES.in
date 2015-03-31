@@ -27,6 +27,7 @@ data/style-schemes/builder.xml
 libide/autotools/ide-autotools-builder.c
 libide/autotools/ide-autotools-build-system.c
 libide/autotools/ide-autotools-build-task.c
+libide/autotools/ide-autotools-project-miner.c
 libide/autotools/ide-makecache.c
 libide/c/ide-c-format-provider.c
 libide/c/ide-c-language.c
@@ -68,6 +69,7 @@ libide/ide-object.c
 libide/ide-progress.c
 libide/ide-project.c
 libide/ide-project-file.c
+libide/ide-project-info.c
 libide/ide-project-item.c
 libide/ide-script.c
 libide/ide-script-manager.c
@@ -135,4 +137,5 @@ tools/ide-list-devices.c
 tools/ide-list-diagnostics.c
 tools/ide-list-files.c
 tools/ide-list-file-settings.c
+tools/ide-mine-projects.c
 tools/ide-search.c
