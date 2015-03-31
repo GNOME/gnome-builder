@@ -286,6 +286,10 @@
                    "clear-count" () };
   bind "<ctrl>d" { "movement" (half-page-down, 0, 0, 1)
                    "clear-count" () };
+  bind "Page_Up" { "movement" (page-up, 0, 0, 1)
+                   "clear-count" () };
+  bind "Page_Down" { "movement" (page-down, 0, 0, 1)
+                     "clear-count" () };
 
   /* screen movements, keeping cursor locked to visible region */
   bind "<ctrl>e" { "movement" (screen-up, 0, 0, 1)
