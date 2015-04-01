@@ -39,6 +39,21 @@ typedef struct
   gsize           current_files;
 } IdeLoadDirectoryTask;
 
+static gboolean gSpecialDirsInit;
+static const gchar *gSpecialDirs [7];
+
+static void
+load_special_dirs (void)
+{
+  gSpecialDirs [0] = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
+  gSpecialDirs [1] = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
+  gSpecialDirs [2] = g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD);
+  gSpecialDirs [3] = g_get_user_special_dir (G_USER_DIRECTORY_MUSIC);
+  gSpecialDirs [4] = g_get_user_special_dir (G_USER_DIRECTORY_PICTURES);
+  gSpecialDirs [5] = g_get_user_special_dir (G_USER_DIRECTORY_TEMPLATES);
+  gSpecialDirs [6] = g_get_user_special_dir (G_USER_DIRECTORY_VIDEOS);
+}
+
 static void
 ide_load_directory_task_free (gpointer data)
 {
@@ -61,6 +76,7 @@ is_special_directory (GFile *directory)
 {
   g_autofree gchar *path = NULL;
   g_autofree gchar *name = NULL;
+  guint i;
 
   /* ignore dot directories */
   name = g_file_get_basename (directory);
@@ -73,14 +89,11 @@ is_special_directory (GFile *directory)
     return FALSE;
 
   /* check for various xdg special dirs */
-  if (g_str_equal (path, g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP)) ||
-      g_str_equal (path, g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS)) ||
-      g_str_equal (path, g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD)) ||
-      g_str_equal (path, g_get_user_special_dir (G_USER_DIRECTORY_MUSIC)) ||
-      g_str_equal (path, g_get_user_special_dir (G_USER_DIRECTORY_PICTURES)) ||
-      g_str_equal (path, g_get_user_special_dir (G_USER_DIRECTORY_TEMPLATES)) ||
-      g_str_equal (path, g_get_user_special_dir (G_USER_DIRECTORY_VIDEOS)))
-    return TRUE;
+  for (i = 0; i < G_N_ELEMENTS (gSpecialDirs); i++)
+    {
+      if (0 == g_strcmp0 (path, gSpecialDirs [i]))
+        return TRUE;
+    }
 
   return FALSE;
 }
@@ -390,6 +403,12 @@ ide_load_directory_task_new (gpointer             source_object,
   g_return_val_if_fail (G_IS_FILE (directory), NULL);
   g_return_val_if_fail (IDE_IS_PROJECT_ITEM (parent), NULL);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
+
+  if (gSpecialDirsInit == FALSE)
+    {
+      load_special_dirs ();
+      gSpecialDirsInit = TRUE;
+    }
 
   context = ide_object_get_context (IDE_OBJECT (parent));
 
