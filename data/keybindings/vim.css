@@ -819,6 +819,20 @@
              "selection-theatric" (expand)
              "clear-selection" ()
              "movement" (first-nonspace-char, 0, 1, 0) };
+
+  bind "w" { "save-insert-mark" ()
+             "movement" (next-word-start, 1, 1, 1)
+             "copy-clipboard" ()
+             "selection-theatric" (expand)
+             "restore-insert-mark" ()
+             "clear-count" () };
+
+  bind "<shift>w" { "save-insert-mark" ()
+                    "movement" (next-full-word-start, 1, 1, 1)
+                    "copy-clipboard" ()
+                    "selection-theatric" (expand)
+                    "restore-insert-mark" ()
+                    "clear-count" () };
 }
 
 @binding-set builder-vim-source-view-normal-g
