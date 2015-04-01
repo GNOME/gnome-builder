@@ -139,5 +139,9 @@
   <style name="latex:command"               foreground="chameleon1" bold="true"/>
   <style name="latex:include"               use-style="def:preprocessor"/>
 
+  <style name="xml:comment"                 foreground="#8b9eab"/>
+  <style name="xml:attribute-name"          foreground="#orange3" bold="false"/>
+  <style name="xml:attribute-value"         foreground="#669900"/>
+
 </style-scheme>
 
