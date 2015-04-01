@@ -43,6 +43,13 @@ void             ide_file_load_settings_async  (IdeFile              *self,
 IdeFileSettings *ide_file_load_settings_finish (IdeFile              *self,
                                                 GAsyncResult         *result,
                                                 GError              **error);
+void             ide_file_find_other_async     (IdeFile              *self,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data);
+IdeFile         *ide_file_find_other_finish    (IdeFile              *self,
+                                                GAsyncResult         *result,
+                                                GError              **error);
 
 
 G_END_DECLS

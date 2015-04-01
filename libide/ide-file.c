@@ -19,10 +19,12 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
+#include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
 #include "ide-language.h"
+#include "ide-vcs.h"
 
 struct _IdeFile
 {
@@ -509,4 +511,141 @@ ide_file_class_init (IdeFileClass *klass)
 static void
 ide_file_init (IdeFile *file)
 {
+}
+
+static gboolean
+has_suffix (const gchar          *path,
+            const gchar * const *allowed_suffixes)
+{
+  const gchar *dot;
+  gsize i;
+
+  dot = strrchr (path, '.');
+  if (!dot)
+    return FALSE;
+
+  dot++;
+
+  for (i = 0; allowed_suffixes [i]; i++)
+    {
+      if (g_str_equal (dot, allowed_suffixes [i]))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+ide_file_find_other_worker (GTask        *task,
+                            gpointer      source_object,
+                            gpointer      task_data,
+                            GCancellable *cancellable)
+{
+  IdeFile *self = source_object;
+  const gchar *src_suffixes[] = { "c", "cc", "cpp", "cxx", NULL };
+  const gchar *hdr_suffixes[] = { "h", "hh", "hpp", "hxx", NULL };
+  const gchar **target = NULL;
+  g_autofree gchar *prefix = NULL;
+  g_autofree gchar *uri = NULL;
+  gsize i;
+
+  g_assert (IDE_IS_FILE (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  uri = g_file_get_uri (self->file);
+
+  if (has_suffix (uri, src_suffixes))
+    {
+      target = hdr_suffixes;
+    }
+  else if (has_suffix (uri, hdr_suffixes))
+    {
+      target = src_suffixes;
+    }
+  else
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               "File is missing a suffix.");
+      return;
+    }
+
+  prefix = g_strndup (uri, strrchr (uri, '.') - uri);
+
+  for (i = 0; target [i]; i++)
+    {
+      g_autofree gchar *new_uri = NULL;
+      g_autoptr(GFile) gfile = NULL;
+
+      new_uri = g_strdup_printf ("%s.%s", prefix, target [i]);
+      gfile = g_file_new_for_uri (new_uri);
+
+      if (g_file_query_exists (gfile, cancellable))
+        {
+          g_autofree gchar *path = NULL;
+          IdeContext *context;
+          IdeVcs *vcs;
+          IdeFile *ret;
+          GFile *workdir;
+
+          context = ide_object_get_context (IDE_OBJECT (self));
+          vcs = ide_context_get_vcs (context);
+          workdir = ide_vcs_get_working_directory (vcs);
+          path = g_file_get_relative_path (workdir, gfile);
+
+          ret = g_object_new (IDE_TYPE_FILE,
+                              "context", context,
+                              "path", path,
+                              "file", gfile,
+                              NULL);
+          g_task_return_pointer (task, ret, g_object_unref);
+          return;
+        }
+    }
+
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_FOUND,
+                           "Failed to locate other file.");
+}
+
+void
+ide_file_find_other_async (IdeFile             *self,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_FILE (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_run_in_thread (task, ide_file_find_other_worker);
+}
+
+/**
+ * ide_file_find_other_finish:
+ *
+ * Completes an asynchronous call to ide_file_find_other_async(). This function
+ * will try to find a matching file for languages where this exists. Such cases
+ * include C and C++ where a .c or .cpp file may have a .h or .hh header. Additional
+ * suffixes are implemented including (.c, .cc, .cpp, .cxx, .h, .hh, .hpp, and .hxx).
+ *
+ * Returns an #IdeFile if successful, otherwise %NULL and @error is set.
+ *
+ * Returns: (transfer full) (nullable): An #IdeFIle or %NULL.
+ */
+IdeFile *
+ide_file_find_other_finish (IdeFile       *self,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_FILE (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (task), NULL);
+
+  return g_task_propagate_pointer (task, error);
 }
