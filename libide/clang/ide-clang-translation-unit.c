@@ -44,9 +44,9 @@ struct _IdeClangTranslationUnit
 
   CXTranslationUnit  tu;
   gint64             sequence;
-  IdeDiagnostics    *diagnostics;
   GFile             *file;
   IdeHighlightIndex *index;
+  GHashTable        *diagnostics;
 };
 
 typedef struct
@@ -303,6 +303,7 @@ static IdeDiagnostic *
 create_diagnostic (IdeClangTranslationUnit *self,
                    IdeProject              *project,
                    const gchar             *workpath,
+                   GFile                   *target,
                    CXDiagnostic            *cxdiag)
 {
   enum CXDiagnosticSeverity cxseverity;
@@ -322,7 +323,7 @@ create_diagnostic (IdeClangTranslationUnit *self,
   cxloc = clang_getDiagnosticLocation (cxdiag);
   clang_getExpansionLocation (cxloc, &cxfile, NULL, NULL, NULL);
 
-  if (cxfile && !cxfile_equal (cxfile, self->file))
+  if (cxfile && !cxfile_equal (cxfile, target))
     return NULL;
 
   cxseverity = clang_getDiagnosticSeverity (cxdiag);
@@ -353,19 +354,19 @@ create_diagnostic (IdeClangTranslationUnit *self,
 }
 
 /**
- * ide_clang_translation_unit_get_diagnostics:
+ * ide_clang_translation_unit_get_diagnostics_for_file:
  *
- * Retrieves the diagnostics for the translation unit.
+ * Retrieves the diagnostics for the translation unit for a specific file.
  *
  * Returns: (transfer none) (nullable): An #IdeDiagnostics or %NULL.
  */
 IdeDiagnostics *
-ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
+ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *self,
+                                                     GFile                   *file)
 {
-
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
 
-  if (!self->diagnostics)
+  if (!g_hash_table_contains (self->diagnostics, file))
     {
       IdeContext *context;
       IdeProject *project;
@@ -400,7 +401,7 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
           IdeDiagnostic *diag;
 
           cxdiag = clang_getDiagnostic (self->tu, i);
-          diag = create_diagnostic (self, project, workpath, cxdiag);
+          diag = create_diagnostic (self, project, workpath, file, cxdiag);
 
           if (diag != NULL)
             {
@@ -433,10 +434,25 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
 
       ide_project_reader_unlock (project);
 
-      self->diagnostics = _ide_diagnostics_new (diags);
+      g_hash_table_insert (self->diagnostics,
+                           g_object_ref (file),
+                           _ide_diagnostics_new (diags));
     }
 
-  return self->diagnostics;
+  return g_hash_table_lookup (self->diagnostics, file);
+}
+
+/**
+ * ide_clang_translation_unit_get_diagnostics:
+ *
+ * Retrieves the diagnostics for the translation unit.
+ *
+ * Returns: (transfer none) (nullable): An #IdeDiagnostics or %NULL.
+ */
+IdeDiagnostics *
+ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
+{
+  return ide_clang_translation_unit_get_diagnostics_for_file (self, self->file);
 }
 
 gint64
@@ -458,6 +474,7 @@ ide_clang_translation_unit_finalize (GObject *object)
   g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
   g_clear_object (&self->file);
   g_clear_pointer (&self->index, ide_highlight_index_unref);
+  g_clear_pointer (&self->diagnostics, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_clang_translation_unit_parent_class)->finalize (object);
 
@@ -553,6 +570,10 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
 static void
 ide_clang_translation_unit_init (IdeClangTranslationUnit *self)
 {
+  self->diagnostics = g_hash_table_new_full ((GHashFunc)g_file_hash,
+                                             (GEqualFunc)g_file_equal,
+                                             g_object_unref,
+                                             (GDestroyNotify)ide_diagnostics_unref);
 }
 
 static void

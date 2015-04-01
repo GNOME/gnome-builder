@@ -30,24 +30,25 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeClangTranslationUnit, ide_clang_translation_unit, IDE, CLANG_TRANSLATION_UNIT, IdeObject)
 
-gint64          ide_clang_translation_unit_get_sequence         (IdeClangTranslationUnit  *self);
-IdeDiagnostics *ide_clang_translation_unit_get_diagnostics      (IdeClangTranslationUnit  *self);
-void            ide_clang_translation_unit_code_complete_async  (IdeClangTranslationUnit  *self,
-                                                                 GFile                    *file,
-                                                                 const GtkTextIter        *location,
-                                                                 GCancellable             *cancellable,
-                                                                 GAsyncReadyCallback       callback,
-                                                                 gpointer                  user_data);
-GPtrArray      *ide_clang_translation_unit_code_complete_finish (IdeClangTranslationUnit  *self,
-                                                                 GAsyncResult             *result,
-                                                                 GError                  **error);
-IdeHighlightIndex *
-                ide_clang_translation_unit_get_index            (IdeClangTranslationUnit  *self);
-IdeSymbol      *ide_clang_translation_unit_lookup_symbol        (IdeClangTranslationUnit  *self,
-                                                                 IdeSourceLocation        *location,
-                                                                 GError                  **error);
-GPtrArray      *ide_clang_translation_unit_get_symbols          (IdeClangTranslationUnit  *self,
-                                                                 IdeFile                  *file);
+gint64             ide_clang_translation_unit_get_sequence             (IdeClangTranslationUnit  *self);
+IdeDiagnostics    *ide_clang_translation_unit_get_diagnostics          (IdeClangTranslationUnit  *self);
+IdeDiagnostics    *ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit  *self,
+                                                                        GFile                    *file);
+void               ide_clang_translation_unit_code_complete_async      (IdeClangTranslationUnit  *self,
+                                                                        GFile                    *file,
+                                                                        const GtkTextIter        *location,
+                                                                        GCancellable             *cancellable,
+                                                                        GAsyncReadyCallback       callback,
+                                                                        gpointer                  user_data);
+GPtrArray         *ide_clang_translation_unit_code_complete_finish     (IdeClangTranslationUnit  *self,
+                                                                        GAsyncResult             *result,
+                                                                        GError                  **error);
+IdeHighlightIndex *ide_clang_translation_unit_get_index                (IdeClangTranslationUnit  *self);
+IdeSymbol         *ide_clang_translation_unit_lookup_symbol            (IdeClangTranslationUnit  *self,
+                                                                        IdeSourceLocation        *location,
+                                                                        GError                  **error);
+GPtrArray         *ide_clang_translation_unit_get_symbols              (IdeClangTranslationUnit  *self,
+                                                                        IdeFile                  *file);
 
 G_END_DECLS
 
