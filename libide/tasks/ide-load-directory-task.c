@@ -37,6 +37,7 @@ typedef struct
   int             io_priority;
   gsize           max_files;
   gsize           current_files;
+  guint           top_is_native : 1;
 } IdeLoadDirectoryTask;
 
 static gboolean gSpecialDirsInit;
@@ -175,6 +176,15 @@ ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
                    path);
       return FALSE;
     }
+
+  /*
+   * If this directory is non-native (including SSHFS FUSE mounts), don't try
+   * to enumerate the children. However, it is okay to recurse if the top-level
+   * directory is also non-native. This could easily happen in a situation like
+   * sshfs to your server with HTML files.
+   */
+  if (self->top_is_native && !g_file_is_native (directory))
+    return TRUE;
 
   /*
    * If this is a special directory (.git, Music, Pictures, etc), ignore it.
@@ -425,6 +435,7 @@ ide_load_directory_task_new (gpointer             source_object,
   state->io_priority = io_priority;
   state->max_files = max_files ?: DEFAULT_MAX_FILES;
   state->current_files = 0;
+  state->top_is_native = g_file_is_native (directory);
 
   g_task_set_task_data (task, state, ide_load_directory_task_free);
   g_task_run_in_thread (task, ide_load_directory_task_worker);
