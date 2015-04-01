@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-03-29 08:14+0000\n"
-"PO-Revision-Date: 2015-03-29 13:05+0200\n"
+"POT-Creation-Date: 2015-03-31 18:06+0000\n"
+"PO-Revision-Date: 2015-04-01 10:46+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -86,7 +86,7 @@ msgstr "Když je zapnuto, bude editor zobrazovat čísla řádků."
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:13
 #: ../data/ui/gb-editor-tweak-widget.ui.h:6
 #: ../data/ui/gb-preferences-page-editor.ui.h:15
-#: ../libide/ide-source-view.c:5237
+#: ../libide/ide-source-view.c:5256
 msgid "Smart Backspace"
 msgstr "Chytrý Backaspace"
 
@@ -164,42 +164,16 @@ msgid "Save _All"
 msgstr "Uložit _vše"
 
 #: ../data/gtk/menus.ui.h:11
-msgid "_Close All"
-msgstr "_Zavřít vše"
+msgid "_View"
+msgstr "_Zobrazit"
 
 #: ../data/gtk/menus.ui.h:12
-msgid "Move Document _Left"
-msgstr "Přesunout dokument v_levo"
+msgid "Display Side _Panel"
+msgstr "Zobrazovat postranní _panel"
 
 #: ../data/gtk/menus.ui.h:13
-msgid "Move Document _Right"
-msgstr "Přesunout dokument vp_ravo"
-
-#: ../data/gtk/menus.ui.h:14
-msgid "Split Document Left"
-msgstr "Rozdělit dokument doleva"
-
-#: ../data/gtk/menus.ui.h:15
-msgid "Split Document Right"
-msgstr "Rozdělit dokument doprava"
-
-#: ../data/gtk/menus.ui.h:16 ../data/ui/gb-view-stack.ui.h:4
-#: ../src/editor/gb-editor-view-actions.c:308
-#: ../src/editor/gb-editor-view-actions.c:437
-msgid "Save"
-msgstr "Uložit"
-
-#: ../data/gtk/menus.ui.h:17
-msgid "Save _As"
-msgstr "Uložit j_ako"
-
-#: ../data/gtk/menus.ui.h:18
-msgid "_Preview"
-msgstr "_Náhled"
-
-#: ../data/gtk/menus.ui.h:19
-msgid "_Close Document"
-msgstr "_Zavřít dokument"
+msgid "_Close All"
+msgstr "_Zavřít vše"
 
 #: ../data/style-schemes/builder-dark.xml.h:1
 msgid "Builder Dark"
@@ -211,7 +185,7 @@ msgstr "Tmavé barevné schéma pro Builder používající barevnou paletu Tang
 
 #: ../data/style-schemes/builder.xml.h:1
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:1
-#: ../src/app/gb-application.c:338 ../src/main.c:47
+#: ../src/app/gb-application.c:378 ../src/main.c:47
 msgid "Builder"
 msgstr "Builder"
 
@@ -312,8 +286,8 @@ msgstr ""
 "načíst?"
 
 #: ../data/ui/gb-editor-view.ui.h:4
-msgid "Symbols"
-msgstr "Symboly"
+msgid "Search Symbols"
+msgstr "hledat symboly"
 
 #: ../data/ui/gb-editor-workspace.ui.h:1
 msgid "Build Project"
@@ -392,7 +366,7 @@ msgstr ""
 "zarovnání podle vaší šířky odsazení."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:17
-#: ../libide/ide-source-view.c:5201
+#: ../libide/ide-source-view.c:5220
 msgid "Show Grid Lines"
 msgstr "Zobrazovat čáry mřížky"
 
@@ -401,7 +375,7 @@ msgid "Display a grid patten in the document."
 msgstr "Zobrazovat vzor mřížky v dokumentu."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:19
-#: ../libide/ide-source-view.c:5181
+#: ../libide/ide-source-view.c:5200
 msgid "Scroll Offset"
 msgstr "Odsazení při posuvu"
 
@@ -481,6 +455,11 @@ msgstr "Přesunout"
 msgid "Preview"
 msgstr "Náhled"
 
+#: ../data/ui/gb-view-stack.ui.h:4 ../src/editor/gb-editor-view-actions.c:308
+#: ../src/editor/gb-editor-view-actions.c:437
+msgid "Save"
+msgstr "Uložit"
+
 #: ../data/ui/gb-view-stack.ui.h:5
 msgid "Save As"
 msgstr "Uložit jako"
@@ -529,6 +508,7 @@ msgid "The overlay config for the compilation."
 msgstr "Překrývající konfigurace pro kompilaci."
 
 #: ../libide/autotools/ide-autotools-build-task.c:395
+#: ../libide/ide-project-info.c:218
 msgid "Directory"
 msgstr "Složka"
 
@@ -579,15 +559,23 @@ msgstr "Skript autogen.sh není spustitelný."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Skritp autogen.sh selhal při vytváření konfigurace (%s)"
 
-#: ../libide/autotools/ide-makecache.c:946
+#: ../libide/autotools/ide-autotools-project-miner.c:282
+msgid "Root Directory"
+msgstr "Kořenová složka"
+
+#: ../libide/autotools/ide-autotools-project-miner.c:283
+msgid "The root directory to scan from."
+msgstr "Kořenová složka, od které se má prohledávat."
+
+#: ../libide/autotools/ide-makecache.c:944
 msgid "Invalid makefile provided, ignoring."
 msgstr "Poskytnut neplatný Makefile, ignoruje se."
 
-#: ../libide/autotools/ide-makecache.c:1019
+#: ../libide/autotools/ide-makecache.c:1017
 msgid "Makefile"
 msgstr "Makefile"
 
-#: ../libide/autotools/ide-makecache.c:1020
+#: ../libide/autotools/ide-makecache.c:1018
 msgid "The root makefile to be cached."
 msgstr "Kořenový Makefile, který se má uložit do mezipaměti."
 
@@ -605,7 +593,7 @@ msgid "Language id does not match a C language."
 msgstr "ID jazyka neodpovídá jazyku C."
 
 #: ../libide/clang/ide-clang-completion-item.c:417
-#: ../libide/clang/ide-clang-translation-unit.c:537
+#: ../libide/clang/ide-clang-translation-unit.c:536
 msgid "Index"
 msgstr "Index"
 
@@ -625,55 +613,60 @@ msgstr "Sada výsledků překladače Clang."
 msgid "Clang"
 msgstr "Clang"
 
-#: ../libide/clang/ide-clang-service.c:278
+#: ../libide/clang/ide-clang-service.c:223
+msgid "Failed to compile translation unit"
+msgstr "Selhala kompilace překladové jednotky"
+
+#: ../libide/clang/ide-clang-service.c:297
 msgid "Unknown failure"
 msgstr "Neznámé selhání."
 
-#: ../libide/clang/ide-clang-service.c:282
+#: ../libide/clang/ide-clang-service.c:301
 msgid "Clang crashed"
 msgstr "Clang se zhroutil"
 
-#: ../libide/clang/ide-clang-service.c:286
+#: ../libide/clang/ide-clang-service.c:305
 msgid "Invalid arguments"
 msgstr "Neplatné argumenty"
 
-#: ../libide/clang/ide-clang-service.c:290
+#: ../libide/clang/ide-clang-service.c:309
 msgid "AST read error"
 msgstr "Chyba čtení AST"
 
-#: ../libide/clang/ide-clang-service.c:302
+#: ../libide/clang/ide-clang-service.c:321
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Selhalo vytvoření překladové jednotky: %s"
 
-#: ../libide/clang/ide-clang-service.c:474
+#: ../libide/clang/ide-clang-service.c:491
 msgid "File must be saved locally to parse."
 msgstr "Soubor musí být uložen místně, aby jej bylo možné zpracovat."
 
-#: ../libide/clang/ide-clang-translation-unit.c:529
+#: ../libide/clang/ide-clang-translation-unit.c:528
 #: ../libide/git/ide-git-search-result.c:98 ../libide/ide-buffer.c:966
 #: ../libide/ide-file.c:464 ../libide/ide-file-settings.c:450
-#: ../libide/ide-project-file.c:219 ../libide/ide-script.c:156
+#: ../libide/ide-project-file.c:219 ../libide/ide-project-info.c:226
+#: ../libide/ide-script.c:156
 msgid "File"
 msgstr "Soubor"
 
-#: ../libide/clang/ide-clang-translation-unit.c:530
+#: ../libide/clang/ide-clang-translation-unit.c:529
 msgid "The file used to build the translation unit."
 msgstr "Soubor použitý k sestavení překladové jednotky."
 
-#: ../libide/clang/ide-clang-translation-unit.c:538
+#: ../libide/clang/ide-clang-translation-unit.c:537
 msgid "The highlight index for the translation unit."
 msgstr "Zvýrazňovací index pro překladové jednotky."
 
-#: ../libide/clang/ide-clang-translation-unit.c:545
+#: ../libide/clang/ide-clang-translation-unit.c:544
 msgid "Sequence"
 msgstr "Pořadové číslo"
 
-#: ../libide/clang/ide-clang-translation-unit.c:546
+#: ../libide/clang/ide-clang-translation-unit.c:545
 msgid "The sequence number when created."
 msgstr "Pořadové číslo při vytvoření."
 
-#: ../libide/clang/ide-clang-translation-unit.c:589
+#: ../libide/clang/ide-clang-translation-unit.c:588
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() funguje jen na místních souborech"
 
@@ -879,7 +872,7 @@ msgstr ""
 #: ../libide/ide-source-snippet-chunk.c:314
 #: ../src/search/gb-search-display.c:560
 #: ../src/tree/gb-project-tree-builder.c:344
-#: ../src/workbench/gb-workbench.c:393
+#: ../src/workbench/gb-workbench.c:401
 msgid "Context"
 msgstr "Kontext"
 
@@ -931,7 +924,7 @@ msgid "Symbol resolver is not supported."
 msgstr "Rozpoznávání symbolů není podporováno."
 
 #: ../libide/ide-buffer-change-monitor.c:106
-#: ../libide/ide-highlight-engine.c:629 ../libide/ide-source-snippet.c:946
+#: ../libide/ide-highlight-engine.c:630 ../libide/ide-source-snippet.c:946
 #: ../src/html/gb-html-document.c:311
 msgid "Buffer"
 msgstr "Vyrovnávací paměť"
@@ -1013,8 +1006,8 @@ msgstr "%s() není podporována v systému sestavení %s"
 msgid "You must call %s() before using libide."
 msgstr "Před použitím libide musíte zavolat %s()."
 
-#: ../libide/ide-context.c:607 ../libide/ide-source-view.c:5093
-#: ../src/editor/gb-editor-frame.c:552
+#: ../libide/ide-context.c:607 ../libide/ide-source-view.c:5103
+#: ../src/editor/gb-editor-frame.c:571
 msgid "Back Forward List"
 msgstr "Seznam zpět/vpřed"
 
@@ -1270,15 +1263,15 @@ msgstr "Ořezávat koncové bílé znaky"
 msgid "If trailing whitespace should be trimmed."
 msgstr "Zda by koncové bílé znaky měly být odstraněny."
 
-#: ../libide/ide-highlight-engine.c:630
+#: ../libide/ide-highlight-engine.c:631
 msgid "The buffer to highlight."
 msgstr "Vyrovnávací paměť pro zvýrazňování."
 
-#: ../libide/ide-highlight-engine.c:637 ../libide/ide-language.c:355
+#: ../libide/ide-highlight-engine.c:638 ../libide/ide-language.c:355
 msgid "Highlighter"
 msgstr "Zvýrazňování"
 
-#: ../libide/ide-highlight-engine.c:638
+#: ../libide/ide-highlight-engine.c:639
 msgid "The highlighter to use for type information."
 msgstr "Zvýrazňování, které se má použít pro informace k psaní."
 
@@ -1307,8 +1300,8 @@ msgid "The semantic indenter for the language."
 msgstr "Sémantické odsazování pro jazyk."
 
 #: ../libide/ide-language.c:384 ../libide/ide-project.c:344
-#: ../libide/ide-project-file.c:239 ../libide/ide-service.c:138
-#: ../libide/ide-source-view-mode.c:250
+#: ../libide/ide-project-file.c:239 ../libide/ide-project-info.c:210
+#: ../libide/ide-service.c:138 ../libide/ide-source-view-mode.c:260
 msgid "Name"
 msgstr "Název"
 
@@ -1399,6 +1392,18 @@ msgstr "Krátký název souboru."
 #: ../libide/ide-project-file.c:249
 msgid "The path for the file within the project tree."
 msgstr "Cesta k souboru v rámci projektového stromu."
+
+#: ../libide/ide-project-info.c:211
+msgid "The project name"
+msgstr "Název projektu"
+
+#: ../libide/ide-project-info.c:219
+msgid "The project directory."
+msgstr "Složka s projektem."
+
+#: ../libide/ide-project-info.c:227
+msgid "The toplevel project file"
+msgstr "Projektový soubor nejvyšší úrovně"
 
 #: ../libide/ide-project-item.c:172 ../src/tree/gb-tree-node.c:526
 msgid "Parent"
@@ -1583,148 +1588,156 @@ msgstr "Selhalo otevření složky: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Selhalo načtení souboru: %s: %s"
 
-#: ../libide/ide-source-view.c:4632
+#: ../libide/ide-source-view.c:4638
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Vložit „%s“"
 
-#: ../libide/ide-source-view.c:4634
+#: ../libide/ide-source-view.c:4640
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: ../libide/ide-source-view.c:4740
+#: ../libide/ide-source-view.c:4746
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: ../libide/ide-source-view.c:4780
+#: ../libide/ide-source-view.c:4786
 msgid "Goto Definition"
 msgstr "Definice skoku"
 
-#: ../libide/ide-source-view.c:5094
+#: ../libide/ide-source-view.c:5104
 msgid "The back-forward list to track jumps."
 msgstr "Seznam zpět/vpřed pro trasování skoků."
 
-#: ../libide/ide-source-view.c:5102
+#: ../libide/ide-source-view.c:5112
 msgid "Count"
 msgstr "Počet"
 
-#: ../libide/ide-source-view.c:5103
+#: ../libide/ide-source-view.c:5113
 msgid "The count for movements."
 msgstr "Počet přesunů."
 
-#: ../libide/ide-source-view.c:5112
+#: ../libide/ide-source-view.c:5122
 msgid "File Settings"
 msgstr "Nastavení souboru"
 
-#: ../libide/ide-source-view.c:5113
+#: ../libide/ide-source-view.c:5123
 msgid "The file settings that have been loaded for the file."
 msgstr "Nastavení souboru, která byla pro soubor načtena."
 
-#: ../libide/ide-source-view.c:5121
+#: ../libide/ide-source-view.c:5131
 msgid "Font Description"
 msgstr "Definice písma"
 
-#: ../libide/ide-source-view.c:5122
+#: ../libide/ide-source-view.c:5132
 msgid "The Pango font description to use for rendering source."
 msgstr ""
 "Definice Pango pro písmo, které se má použít k vykreslení zdrojového kódu."
 
-#: ../libide/ide-source-view.c:5130
+#: ../libide/ide-source-view.c:5140
 msgid "Enable Word Completion"
 msgstr "Zapnout dokončování slov"
 
-#: ../libide/ide-source-view.c:5131
+#: ../libide/ide-source-view.c:5141
 msgid "If words from all buffers can be used to autocomplete."
 msgstr ""
 "Zda mohou být slova ze všech vyrovnávacích pamětí použita k automatickému "
 "doplňování."
 
-#: ../libide/ide-source-view.c:5139
+#: ../libide/ide-source-view.c:5149
 msgid "Font Name"
 msgstr "Název písma"
 
-#: ../libide/ide-source-view.c:5140
+#: ../libide/ide-source-view.c:5150
 msgid "The Pango font name to use for rendering source."
 msgstr "Název písma Pango, které se má použít k vykreslování zdrojového kódu."
 
-#: ../libide/ide-source-view.c:5152
+#: ../libide/ide-source-view.c:5162
 msgid "Insert Matching Brace"
 msgstr "Vkládat odpovídající závorky"
 
-#: ../libide/ide-source-view.c:5153
+#: ../libide/ide-source-view.c:5163
 msgid "Insert a matching brace/bracket/quotation/parenthesis."
 msgstr ""
 "Vkládat do páru složené závorky/hranaté závorky/kulaté závorky/uvozovky."
 
-#: ../libide/ide-source-view.c:5163
+#: ../libide/ide-source-view.c:5173
+msgid "Mode Display Name"
+msgstr "Zobrazovaný název režimu"
+
+#: ../libide/ide-source-view.c:5174
+msgid "The display name of the keybinding mode."
+msgstr "Zobrazovaný název režimu klávesových zkratek."
+
+#: ../libide/ide-source-view.c:5182
 msgid "Overwrite Braces"
 msgstr "Přepisovat závorky"
 
-#: ../libide/ide-source-view.c:5164
+#: ../libide/ide-source-view.c:5183
 msgid "Overwrite a matching brace/bracket/quotation/parenthesis."
 msgstr ""
 "Přepisovat zavírací složené závorky/hranaté závorky/kulaté závorky/uvozovky."
 
-#: ../libide/ide-source-view.c:5172
+#: ../libide/ide-source-view.c:5191
 msgid "Rubberband Search"
 msgstr "Gumové hledání"
 
-#: ../libide/ide-source-view.c:5173
+#: ../libide/ide-source-view.c:5192
 msgid "Auto scroll to next search result without moving insertion caret."
 msgstr ""
 "Automaticky posouvat na následující výsledek hledání bez přesunu vkládacího "
 "kurzoru."
 
-#: ../libide/ide-source-view.c:5182
+#: ../libide/ide-source-view.c:5201
 msgid "The number of lines between the insertion cursor and screen boundary."
 msgstr "Počet řádků mezi vkladacím kurzorem a okrajem obrazovky."
 
-#: ../libide/ide-source-view.c:5192
+#: ../libide/ide-source-view.c:5211
 msgid "Search Context"
 msgstr "Kontext hledání"
 
-#: ../libide/ide-source-view.c:5193
+#: ../libide/ide-source-view.c:5212
 msgid "The search context for the view."
 msgstr "Kontext hledání pro zobrazení."
 
-#: ../libide/ide-source-view.c:5202
+#: ../libide/ide-source-view.c:5221
 msgid "If the background grid should be shown."
 msgstr "Zda by se měla na pozadí zobrazovat mřížka."
 
-#: ../libide/ide-source-view.c:5210
+#: ../libide/ide-source-view.c:5229
 msgid "Show Line Changes"
 msgstr "Zobrazovat změny řádků"
 
-#: ../libide/ide-source-view.c:5211
+#: ../libide/ide-source-view.c:5230
 msgid "If line changes should be shown in the left gutter."
 msgstr "Zda by se měly v levém informačním pruhu zobrazovat změny řádku."
 
-#: ../libide/ide-source-view.c:5219
+#: ../libide/ide-source-view.c:5238
 msgid "Show Search Bubbles"
 msgstr "Zobrazovat vyhledávací bubliny"
 
-#: ../libide/ide-source-view.c:5220
+#: ../libide/ide-source-view.c:5239
 msgid "If search bubbles should be rendered."
 msgstr "Zda se mají vykreslovat vyhledávací bubliny."
 
-#: ../libide/ide-source-view.c:5228
+#: ../libide/ide-source-view.c:5247
 msgid "Show Search Shadow"
 msgstr "Zobrazovat stín u hledání"
 
-#: ../libide/ide-source-view.c:5229
+#: ../libide/ide-source-view.c:5248
 msgid "If the shadow should be drawn when performing searches."
 msgstr "Zda by se měl vykreslovat stín, když se provádí hledání."
 
-#: ../libide/ide-source-view.c:5238
+#: ../libide/ide-source-view.c:5257
 msgid "If smart Backspace should be used."
 msgstr "Zda by se měl používat chytrý Backspace."
 
-#: ../libide/ide-source-view.c:5246
+#: ../libide/ide-source-view.c:5265
 msgid "Snippet Completion"
 msgstr "Doplňování úryvků"
 
-#: ../libide/ide-source-view.c:5247
+#: ../libide/ide-source-view.c:5266
 msgid "If snippet expansion should be enabled via the completion window."
 msgstr "Zda by rozbalování úryvku mělo být přístupné přes doplňovací okno."
 
@@ -1736,7 +1749,7 @@ msgstr "Zobrazení"
 msgid "The source view."
 msgstr "Zobrazení zdrojového kódu."
 
-#: ../libide/ide-source-view-mode.c:251
+#: ../libide/ide-source-view-mode.c:261
 msgid "The name of the mode."
 msgstr "Název režimu."
 
@@ -1869,7 +1882,7 @@ msgstr "Zjistěte si více o aplikaci Builder GNOME"
 msgid "Funded By"
 msgstr "Financovali"
 
-#: ../src/app/gb-application.c:516
+#: ../src/app/gb-application.c:556
 msgid "Increase verbosity. May be specified multiple times."
 msgstr "Více podrobností. Může být zadáno vícekrát."
 
@@ -1990,8 +2003,8 @@ msgstr "Dokumentace (%s)"
 msgid "The uri to load."
 msgstr "Adresa URI, která se má načíst."
 
-#: ../src/devhelp/gb-devhelp-view.c:244 ../src/editor/gb-editor-frame.c:561
-#: ../src/editor/gb-editor-view.c:591 ../src/html/gb-html-view.c:321
+#: ../src/devhelp/gb-devhelp-view.c:244 ../src/editor/gb-editor-frame.c:580
+#: ../src/editor/gb-editor-view.c:665 ../src/html/gb-html-view.c:321
 #: ../src/views/gb-view.c:266
 msgid "Document"
 msgstr "Dokument"
@@ -2026,11 +2039,11 @@ msgstr "%u z %u"
 msgid "Line %u, Column %u"
 msgstr "řádek %u, sloupec %u"
 
-#: ../src/editor/gb-editor-frame.c:553
+#: ../src/editor/gb-editor-frame.c:572
 msgid "The back forward list."
 msgstr "Seznam zpět/vpřed."
 
-#: ../src/editor/gb-editor-frame.c:562 ../src/editor/gb-editor-view.c:592
+#: ../src/editor/gb-editor-frame.c:581 ../src/editor/gb-editor-view.c:666
 msgid "The editor document."
 msgstr "Dokument v editoru."
 
@@ -2051,6 +2064,10 @@ msgstr "Zrušit"
 #: ../src/editor/gb-editor-view-actions.c:425
 msgid "Save Document As"
 msgstr "Uložení dokumentu jako"
+
+#: ../src/editor/gb-editor-view.c:109
+msgid "Plain Text"
+msgstr "Prostý text"
 
 #: ../src/editor/gb-source-formatter.c:118
 #, c-format
@@ -2144,30 +2161,6 @@ msgstr "Aplikace, pro kterou se mají registrovat klávesové zkratky."
 #: ../src/keybindings/gb-keybindings.c:267
 msgid "The name of the keybindings mode."
 msgstr "Název režimu klávesových zkratek."
-
-#: ../src/nautilus/nautilus-floating-bar.c:314
-msgid "Bar's primary label"
-msgstr "Hlavní popisek lišty"
-
-#: ../src/nautilus/nautilus-floating-bar.c:315
-msgid "Primary label displayed by the bar"
-msgstr "Hlavní popisek zobrazený lištou."
-
-#: ../src/nautilus/nautilus-floating-bar.c:320
-msgid "Bar's details label"
-msgstr "Podrobný popisek lišty"
-
-#: ../src/nautilus/nautilus-floating-bar.c:321
-msgid "Details label displayed by the bar"
-msgstr "Podrobný popisek zobrazený lištou."
-
-#: ../src/nautilus/nautilus-floating-bar.c:326
-msgid "Show spinner"
-msgstr "Zobrazovat šipky"
-
-#: ../src/nautilus/nautilus-floating-bar.c:327
-msgid "Whether a spinner should be shown in the floating bar"
-msgstr "Zda mají být u plovoucí lišty zobrazeny šipky pro posun obsahu."
 
 #: ../src/preferences/gb-preferences-page.c:215
 msgid "The title for the preferences page."
@@ -2456,39 +2449,39 @@ msgstr "Otevření dokumentu"
 msgid "Open"
 msgstr "Otevřít"
 
-#: ../src/workbench/gb-workbench.c:359
+#: ../src/workbench/gb-workbench.c:367
 msgid "Active Workspace"
 msgstr "Aktivní pracovní plocha"
 
-#: ../src/workbench/gb-workbench.c:360
+#: ../src/workbench/gb-workbench.c:368
 msgid "The active workspace."
 msgstr "Právě aktivní pracovní plocha."
 
-#: ../src/workbench/gb-workbench.c:368
+#: ../src/workbench/gb-workbench.c:376
 msgid "Building"
 msgstr "Sestavuje se"
 
-#: ../src/workbench/gb-workbench.c:369
+#: ../src/workbench/gb-workbench.c:377
 msgid "If the project is currently building."
 msgstr "Zda se projekt v současnosti sestavuje."
 
-#: ../src/workbench/gb-workbench.c:376
+#: ../src/workbench/gb-workbench.c:384
 msgid "Command Manager"
 msgstr "Správa příkazů"
 
-#: ../src/workbench/gb-workbench.c:377
+#: ../src/workbench/gb-workbench.c:385
 msgid "The command manager for the workbench."
 msgstr "Správce příkazů pro pracovní místo."
 
-#: ../src/workbench/gb-workbench.c:394
+#: ../src/workbench/gb-workbench.c:402
 msgid "The IdeContext for the workbench."
 msgstr "IdeContext pro pracovní místo."
 
-#: ../src/workbench/gb-workbench.c:670
+#: ../src/workbench/gb-workbench.c:684
 msgid "Build Failure"
 msgstr "Sestavení selhalo"
 
-#: ../src/workbench/gb-workbench.c:721
+#: ../src/workbench/gb-workbench.c:735
 msgid "Project build system does not support building"
 msgstr "Systém sestavení projektu nepodporuje sestavení"
 
@@ -2628,6 +2621,10 @@ msgstr "– Vypsat soubory nalezené v projektu."
 #, c-format
 msgid "No files provided to load settings for.\n"
 msgstr "Nebyl poskytnut žádný soubor k načtení.\n"
+
+#: ../tools/ide-mine-projects.c:78
+msgid "- discover projects"
+msgstr "– vyhledat projekty"
 
 #: ../tools/ide-search.c:115
 msgid "PROJECT_FILE [SEARCH TERMS...]"
