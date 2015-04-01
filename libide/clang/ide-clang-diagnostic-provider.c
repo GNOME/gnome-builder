@@ -23,6 +23,7 @@
 #include "ide-clang-translation-unit.h"
 #include "ide-context.h"
 #include "ide-diagnostics.h"
+#include "ide-file.h"
 
 G_DEFINE_TYPE (IdeClangDiagnosticProvider, ide_clang_diagnostic_provider,
                IDE_TYPE_DIAGNOSTIC_PROVIDER)
@@ -36,6 +37,8 @@ get_translation_unit_cb (GObject      *object,
   g_autoptr(IdeClangTranslationUnit) tu = NULL;
   g_autoptr(GTask) task = user_data;
   IdeDiagnostics *diagnostics;
+  IdeFile *target;
+  GFile *gfile;
   GError *error = NULL;
 
   tu = ide_clang_service_get_translation_unit_finish (service, result, &error);
@@ -46,11 +49,61 @@ get_translation_unit_cb (GObject      *object,
       return;
     }
 
-  diagnostics = ide_clang_translation_unit_get_diagnostics (tu);
+  target = g_task_get_task_data (task);
+  g_assert (IDE_IS_FILE (target));
+
+  gfile = ide_file_get_file (target);
+  g_assert (G_IS_FILE (gfile));
+
+  diagnostics = ide_clang_translation_unit_get_diagnostics_for_file (tu, gfile);
 
   g_task_return_pointer (task,
                          ide_diagnostics_ref (diagnostics),
                          (GDestroyNotify)ide_diagnostics_unref);
+}
+
+static gboolean
+is_header (IdeFile *file)
+{
+  const gchar *path;
+
+  g_assert (IDE_IS_FILE (file));
+
+  path = ide_file_get_path (file);
+
+  return (g_str_has_suffix (path, ".h") ||
+          g_str_has_suffix (path, ".hh") ||
+          g_str_has_suffix (path, ".hxx") ||
+          g_str_has_suffix (path, ".hpp"));
+}
+
+static void
+ide_clang_diagnostic_provider_diagnose__file_find_other_cb (GObject      *object,
+                                                            GAsyncResult *result,
+                                                            gpointer      user_data)
+{
+  IdeFile *file = (IdeFile *)object;
+  g_autoptr(IdeFile) other = NULL;
+  g_autoptr(GTask) task = user_data;
+  IdeClangService *service;
+  IdeContext *context;
+
+  g_assert (IDE_IS_FILE (file));
+
+  other = ide_file_find_other_finish (file, result, NULL);
+
+  if (other != NULL)
+    file = other;
+
+  context = ide_object_get_context (IDE_OBJECT (file));
+  service = ide_context_get_service_typed (context, IDE_TYPE_CLANG_SERVICE);
+
+  ide_clang_service_get_translation_unit_async (service,
+                                                file,
+                                                0,
+                                                g_task_get_cancellable (task),
+                                                get_translation_unit_cb,
+                                                g_object_ref (task));
 }
 
 static void
@@ -62,22 +115,34 @@ ide_clang_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
 {
   IdeClangDiagnosticProvider *self = (IdeClangDiagnosticProvider *)provider;
   g_autoptr(GTask) task = NULL;
-  IdeClangService *service;
-  IdeContext *context;
 
   g_return_if_fail (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (self));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
-  context = ide_object_get_context (IDE_OBJECT (provider));
-  service = ide_context_get_service_typed (context, IDE_TYPE_CLANG_SERVICE);
+  if (is_header (file))
+    {
+      ide_file_find_other_async (file,
+                                 cancellable,
+                                 ide_clang_diagnostic_provider_diagnose__file_find_other_cb,
+                                 g_object_ref (task));
+    }
+  else
+    {
+      IdeClangService *service;
+      IdeContext *context;
 
-  ide_clang_service_get_translation_unit_async (service,
-                                                file,
-                                                0,
-                                                cancellable,
-                                                get_translation_unit_cb,
-                                                g_object_ref (task));
+      context = ide_object_get_context (IDE_OBJECT (provider));
+      service = ide_context_get_service_typed (context, IDE_TYPE_CLANG_SERVICE);
+
+      ide_clang_service_get_translation_unit_async (service,
+                                                    file,
+                                                    0,
+                                                    cancellable,
+                                                    get_translation_unit_cb,
+                                                    g_object_ref (task));
+    }
 }
 
 static IdeDiagnostics *
