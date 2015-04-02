@@ -27,15 +27,16 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeProjectInfo, ide_project_info, IDE, PROJECT_INFO, GObject)
 
-GFile       *ide_project_info_get_file      (IdeProjectInfo *self);
-GFile       *ide_project_info_get_directory (IdeProjectInfo *self);
-const gchar *ide_project_info_get_name      (IdeProjectInfo *self);
-void         ide_project_info_set_file      (IdeProjectInfo *self,
-                                             GFile          *file);
-void         ide_project_info_set_directory (IdeProjectInfo *self,
-                                             GFile          *directory);
-void         ide_project_info_set_name      (IdeProjectInfo *self,
-                                             const gchar    *name);
+GFile       *ide_project_info_get_file             (IdeProjectInfo *self);
+GFile       *ide_project_info_get_directory        (IdeProjectInfo *self);
+const gchar *ide_project_info_get_name             (IdeProjectInfo *self);
+void         ide_project_info_set_file             (IdeProjectInfo *self,
+                                                    GFile          *file);
+void         ide_project_info_set_directory        (IdeProjectInfo *self,
+                                                    GFile          *directory);
+void         ide_project_info_set_name             (IdeProjectInfo *self,
+                                                    const gchar    *name);
+GDateTime   *ide_project_info_get_last_modified_at (IdeProjectInfo *self);
 
 G_END_DECLS
 

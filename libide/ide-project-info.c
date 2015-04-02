@@ -35,9 +35,10 @@ struct _IdeProjectInfo
 {
   GObject  parent_instance;
 
-  GFile   *directory;
-  GFile   *file;
-  gchar   *name;
+  GDateTime *last_modified_at;
+  GFile     *directory;
+  GFile     *file;
+  gchar     *name;
 };
 
 G_DEFINE_TYPE (IdeProjectInfo, ide_project_info, G_TYPE_OBJECT)
@@ -46,6 +47,7 @@ enum {
   PROP_0,
   PROP_DIRECTORY,
   PROP_FILE,
+  PROP_LAST_MODIFIED_AT,
   PROP_NAME,
   LAST_PROP
 };
@@ -86,6 +88,20 @@ ide_project_info_get_file (IdeProjectInfo *self)
   return self->file;
 }
 
+/**
+ * ide_project_info_get_last_modified_at:
+ *
+ *
+ * Returns: (transfer none) (nullable): A #GDateTime or %NULL.
+ */
+GDateTime *
+ide_project_info_get_last_modified_at (IdeProjectInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
+
+  return self->last_modified_at;
+}
+
 const gchar *
 ide_project_info_get_name (IdeProjectInfo *self)
 {
@@ -117,6 +133,20 @@ ide_project_info_set_file (IdeProjectInfo *self,
 }
 
 void
+ide_project_info_set_last_modified_at (IdeProjectInfo *self,
+                                       GDateTime      *last_modified_at)
+{
+  g_assert (IDE_IS_PROJECT_INFO (self));
+
+  if (last_modified_at != self->last_modified_at)
+    {
+      g_clear_pointer (&self->last_modified_at, g_date_time_unref);
+      self->last_modified_at = last_modified_at ? g_date_time_ref (last_modified_at) : NULL;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_LAST_MODIFIED_AT]);
+    }
+}
+
+void
 ide_project_info_set_name (IdeProjectInfo *self,
                            const gchar    *name)
 {
@@ -135,6 +165,7 @@ ide_project_info_finalize (GObject *object)
 {
   IdeProjectInfo *self = (IdeProjectInfo *)object;
 
+  g_clear_pointer (&self->last_modified_at, g_date_time_unref);
   g_clear_pointer (&self->name, g_free);
   g_clear_object (&self->directory);
   g_clear_object (&self->file);
@@ -158,6 +189,10 @@ ide_project_info_get_property (GObject    *object,
 
     case PROP_FILE:
       g_value_set_object (value, ide_project_info_get_file (self));
+      break;
+
+    case PROP_LAST_MODIFIED_AT:
+      g_value_set_boxed (value, ide_project_info_get_last_modified_at (self));
       break;
 
     case PROP_NAME:
@@ -185,6 +220,10 @@ ide_project_info_set_property (GObject      *object,
 
     case PROP_FILE:
       ide_project_info_set_file (self, g_value_get_object (value));
+      break;
+
+    case PROP_LAST_MODIFIED_AT:
+      ide_project_info_set_last_modified_at (self, g_value_get_boxed (value));
       break;
 
     case PROP_NAME:
@@ -228,6 +267,15 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FILE, gParamSpecs [PROP_FILE]);
+
+  gParamSpecs [PROP_LAST_MODIFIED_AT] =
+    g_param_spec_boxed ("last-modified-at",
+                        _("Last Modified At"),
+                        _("Last Modified At"),
+                        G_TYPE_DATE_TIME,
+                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_LAST_MODIFIED_AT,
+                                   gParamSpecs [PROP_LAST_MODIFIED_AT]);
 }
 
 static void

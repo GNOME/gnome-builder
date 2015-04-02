@@ -50,7 +50,9 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   g_autofree gchar *name = NULL;
   g_autoptr(GFile) file = NULL;
   g_autoptr(IdeProjectInfo) project_info = NULL;
+  g_autoptr(GDateTime) last_modified_at = NULL;
   const gchar *filename;
+  guint64 mtime;
 
   IDE_ENTRY;
 
@@ -61,6 +63,9 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   uri = g_file_get_uri (directory);
   g_debug ("Discovered autotools project at %s", uri);
 
+  mtime = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+  last_modified_at = g_date_time_new_from_unix_local (mtime);
+
   filename = g_file_info_get_attribute_byte_string (file_info, G_FILE_ATTRIBUTE_STANDARD_NAME);
   file = g_file_get_child (directory, filename);
   name = g_file_get_basename (directory);
@@ -68,6 +73,7 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   project_info = g_object_new (IDE_TYPE_PROJECT_INFO,
                                "directory", directory,
                                "file", file,
+                               "last-modified-at", last_modified_at,
                                "name", name,
                                NULL);
 
@@ -103,7 +109,8 @@ ide_autotools_project_miner_mine_directory (IdeAutotoolsProjectMiner *self,
 
   file_enum = g_file_enumerate_children (directory,
                                          G_FILE_ATTRIBUTE_STANDARD_NAME","
-                                         G_FILE_ATTRIBUTE_STANDARD_TYPE,
+                                         G_FILE_ATTRIBUTE_STANDARD_TYPE","
+                                         G_FILE_ATTRIBUTE_TIME_MODIFIED,
                                          G_FILE_QUERY_INFO_NONE,
                                          cancellable,
                                          NULL);
