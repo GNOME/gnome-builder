@@ -83,7 +83,7 @@ ide_pattern_spec_free (IdePatternSpec *self)
 static inline gboolean
 is_word_break (gunichar ch)
 {
-  return (ch == ' ' || ch == '_');
+  return (ch == ' ' || ch == '_' || ch == '-');
 }
 
 static const gchar *
