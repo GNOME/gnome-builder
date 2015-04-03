@@ -566,6 +566,16 @@ gb_vim_command_sort (GtkSourceView  *source_view,
 }
 
 static gboolean
+gb_vim_command_bnext (GtkSourceView  *source_view,
+                      const gchar    *command,
+                      const gchar    *options,
+                      GError        **error)
+{
+  gb_widget_activate_action (GTK_WIDGET (source_view), "view-stack", "next-view", NULL);
+  return TRUE;
+}
+
+static gboolean
 gb_vim_command_cnext (GtkSourceView  *source_view,
                       const gchar    *command,
                       const gchar    *options,
@@ -840,6 +850,7 @@ invalid_request:
 }
 
 static const GbVimCommand vim_commands[] = {
+  { "bnext",       gb_vim_command_bnext },
   { "cnext",       gb_vim_command_cnext },
   { "colorscheme", gb_vim_command_colorscheme },
   { "cprevious",   gb_vim_command_cprevious },
