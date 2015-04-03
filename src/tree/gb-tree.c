@@ -196,6 +196,9 @@ gb_tree_popup (GbTree         *tree,
 
   priv = tree->priv;
 
+  if (priv->menu == NULL)
+    IDE_EXIT;
+
   menu = gtk_menu_new_from_model (G_MENU_MODEL (priv->menu));
 
   for (i = 0; i < priv->builders->len; i++)
