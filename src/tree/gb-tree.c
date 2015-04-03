@@ -251,6 +251,22 @@ gb_tree_popup (GbTree         *tree,
   IDE_EXIT;
 }
 
+static gboolean
+gb_tree_popup_menu (GtkWidget *widget)
+{
+  GbTree *tree = (GbTree *)widget;
+  GbTreeNode *node;
+
+  g_assert (GB_IS_TREE (tree));
+
+  if ((node = gb_tree_get_selected (tree)))
+    node = tree->priv->root;
+
+  gb_tree_popup (tree, node, NULL, 0, 0);
+
+  return TRUE;
+}
+
 /**
  * gb_tree_selection_changed:
  * @tree: (in): A #GbTree.
@@ -926,11 +942,15 @@ static void
 gb_tree_class_init (GbTreeClass *klass)
 {
   GObjectClass *object_class;
+  GtkWidgetClass *widget_class;
 
   object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = gb_tree_finalize;
   object_class->get_property = gb_tree_get_property;
   object_class->set_property = gb_tree_set_property;
+
+  widget_class = GTK_WIDGET_CLASS (klass);
+  widget_class->popup_menu = gb_tree_popup_menu;
 
   gParamSpecs [PROP_MENU] =
     g_param_spec_object ("menu",
