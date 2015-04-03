@@ -43,12 +43,15 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void
 ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
+                                        GCancellable             *cancellable,
                                         GFile                    *directory,
                                         GFileInfo                *file_info)
 {
   g_autofree gchar *uri = NULL;
   g_autofree gchar *name = NULL;
   g_autoptr(GFile) file = NULL;
+  g_autoptr(GFile) index_file = NULL;
+  g_autoptr(GFileInfo) index_info = NULL;
   g_autoptr(IdeProjectInfo) project_info = NULL;
   g_autoptr(GDateTime) last_modified_at = NULL;
   const gchar *filename;
@@ -64,6 +67,20 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   g_debug ("Discovered autotools project at %s", uri);
 
   mtime = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+  /*
+   * If there is a git repo, trust the .git/index file for time info,
+   * it is more reliable than our directory mtime.
+   */
+  index_file = g_file_get_child (directory, ".git/index");
+  index_info = g_file_query_info (index_file,
+                                  G_FILE_ATTRIBUTE_TIME_MODIFIED,
+                                  G_FILE_QUERY_INFO_NONE,
+                                  cancellable,
+                                  NULL);
+  if (index_info != NULL)
+    mtime = g_file_info_get_attribute_uint64 (index_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
   last_modified_at = g_date_time_new_from_unix_local (mtime);
 
   filename = g_file_info_get_attribute_byte_string (file_info, G_FILE_ATTRIBUTE_STANDARD_NAME);
@@ -142,7 +159,7 @@ ide_autotools_project_miner_mine_directory (IdeAutotoolsProjectMiner *self,
           if ((0 == g_strcmp0 (filename, "configure.ac")) ||
               (0 == g_strcmp0 (filename, "configure.in")))
             {
-              ide_autotools_project_miner_discovered (self, directory, file_info);
+              ide_autotools_project_miner_discovered (self, cancellable, directory, file_info);
               g_clear_object (&file_info);
               return;
             }
