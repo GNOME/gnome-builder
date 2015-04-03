@@ -49,6 +49,9 @@ struct _GbTree
 struct _GbTreeClass
 {
 	GtkTreeViewClass parent_class;
+
+  void (*populate_popup) (GbTree    *tree,
+                          GtkWidget *widget);
 };
 
 void          gb_tree_add_builder    (GbTree        *tree,

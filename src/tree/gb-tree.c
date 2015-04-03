@@ -44,10 +44,16 @@ enum {
   LAST_PROP
 };
 
+enum {
+  POPULATE_POPUP,
+  LAST_SIGNAL
+};
+
 extern void _gb_tree_node_set_tree (GbTreeNode *node,
                                     GbTree     *tree);
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint gSignals [LAST_SIGNAL];
 
 /**
  * gb_tree_get_menu:
@@ -177,7 +183,7 @@ check_visible_foreach (GtkWidget *widget,
 static void
 gb_tree_popup (GbTree         *tree,
                GbTreeNode     *node,
-               GdkEventButton *button,
+               GdkEventButton *event,
                gint            target_x,
                gint            target_y)
 {
@@ -187,12 +193,13 @@ gb_tree_popup (GbTree         *tree,
   GdkPoint loc = { -1, -1 };
   gboolean at_least_one_visible = FALSE;
   guint i;
+  gint button;
+  gint event_time;
 
   IDE_ENTRY;
 
   g_return_if_fail (GB_IS_TREE (tree));
   g_return_if_fail (GB_IS_TREE_NODE (node));
-  g_return_if_fail (button != NULL);
 
   priv = tree->priv;
 
@@ -201,13 +208,20 @@ gb_tree_popup (GbTree         *tree,
 
   menu = gtk_menu_new_from_model (G_MENU_MODEL (priv->menu));
 
+  if (menu == NULL)
+    IDE_EXIT;
+
+  gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (tree), NULL);
+
+  g_signal_emit (tree, gSignals [POPULATE_POPUP], 0, menu);
+
   for (i = 0; i < priv->builders->len; i++)
     {
       builder = g_ptr_array_index (priv->builders, i);
       gb_tree_builder_node_popup (builder, node);
     }
 
-  if ((target_x >= 0) &&  (target_y >= 0))
+  if ((target_x >= 0) && (target_y >= 0))
     {
       gdk_window_get_root_coords (gtk_widget_get_window (GTK_WIDGET (tree)),
                                   target_x, target_y, &loc.x, &loc.y);
@@ -218,11 +232,21 @@ gb_tree_popup (GbTree         *tree,
                          check_visible_foreach,
                          &at_least_one_visible);
 
+  if (event != NULL)
+    {
+      button = event->button;
+      event_time = event->time;
+    }
+  else
+    {
+      button = 0;
+      event_time = gtk_get_current_event_time ();
+    }
+
   if (at_least_one_visible)
     gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
                     gb_tree_menu_position_func, &loc,
-                    button->button,
-                    button->time);
+                    button, event_time);
 
   IDE_EXIT;
 }
@@ -934,6 +958,17 @@ gb_tree_class_init (GbTreeClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_SELECTION,
                                    gParamSpecs[PROP_SELECTION]);
+
+  gSignals [POPULATE_POPUP] =
+    g_signal_new ("populate-popup",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbTreeClass, populate_popup),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_WIDGET);
 }
 
 /**
