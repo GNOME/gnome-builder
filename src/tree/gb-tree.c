@@ -949,7 +949,7 @@ gb_tree_init (GbTree *tree)
   gtk_cell_layout_set_cell_data_func (column, cell, pixbuf_func, NULL, NULL);
 
   cell = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT,
-                       "ellipsize", PANGO_ELLIPSIZE_END,
+                       "ellipsize", PANGO_ELLIPSIZE_NONE,
                        NULL);
   gtk_cell_layout_pack_start (column, cell, TRUE);
   gtk_cell_layout_set_cell_data_func (column, cell, text_func, NULL, NULL);
