@@ -839,6 +839,10 @@ gb_tree_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_MENU:
+      g_value_set_object (value, tree->priv->menu);
+      break;
+
     case PROP_ROOT:
       g_value_set_object (value, tree->priv->root);
       break;
@@ -871,6 +875,10 @@ gb_tree_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_MENU:
+      gb_tree_set_menu (tree, g_value_get_object (value));
+      break;
+
     case PROP_ROOT:
       gb_tree_set_root (tree, g_value_get_object (value));
       break;
@@ -899,6 +907,15 @@ gb_tree_class_init (GbTreeClass *klass)
   object_class->finalize = gb_tree_finalize;
   object_class->get_property = gb_tree_get_property;
   object_class->set_property = gb_tree_set_property;
+
+  gParamSpecs [PROP_MENU] =
+    g_param_spec_object ("menu",
+                         _("Menu"),
+                         _("The context menu for the tree."),
+                         G_TYPE_MENU,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_MENU,
+                                   gParamSpecs [PROP_MENU]);
 
   gParamSpecs[PROP_ROOT] =
     g_param_spec_object ("root",
