@@ -80,18 +80,42 @@ gb_editor_workspace_actions_toggle_sidebar (GSimpleAction *action,
   g_variant_unref (state);
 }
 
+static void
+gb_editor_workspace_tree_actions_refresh (GSimpleAction *action,
+                                          GVariant      *variant,
+                                          gpointer       user_data)
+{
+  GbEditorWorkspace *self = user_data;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+
+  gb_tree_rebuild (self->project_tree);
+
+  /* TODO: Try to expand back to our current position */
+}
+
 static const GActionEntry GbEditorWorkspaceActions[] = {
   { "show-sidebar", NULL, NULL, "false", gb_editor_workspace_actions_show_sidebar },
   { "toggle-sidebar", gb_editor_workspace_actions_toggle_sidebar },
+};
+
+static const GActionEntry GbEditorWorkspaceTreeActions[] = {
+  { "refresh", gb_editor_workspace_tree_actions_refresh },
 };
 
 void
 gb_editor_workspace_actions_init (GbEditorWorkspace *self)
 {
   g_autoptr(GSimpleActionGroup) group = NULL;
+  g_autoptr(GSimpleActionGroup) tree_group = NULL;
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), GbEditorWorkspaceActions,
                                    G_N_ELEMENTS (GbEditorWorkspaceActions), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "workspace", G_ACTION_GROUP (group));
+
+  tree_group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group), GbEditorWorkspaceTreeActions,
+                                   G_N_ELEMENTS (GbEditorWorkspaceTreeActions), self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "project-tree", G_ACTION_GROUP (group));
 }

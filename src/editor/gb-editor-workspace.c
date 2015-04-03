@@ -146,12 +146,18 @@ static void
 gb_editor_workspace_constructed (GObject *object)
 {
   GbEditorWorkspace *self = (GbEditorWorkspace *)object;
+  GApplication *app;
+  GMenu *menu;
 
   IDE_ENTRY;
 
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->constructed (object);
 
   gb_editor_workspace_actions_init (self);
+
+  app = g_application_get_default ();
+  menu = gtk_application_get_menu_by_id (GTK_APPLICATION (app), "project-tree-menu");
+  gb_tree_set_menu (self->project_tree, menu);
 
   IDE_EXIT;
 }

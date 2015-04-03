@@ -109,4 +109,44 @@
     </section>
 -->
   </menu>
+  <menu id="project-tree-menu">
+    <section id="open-section">
+      <item>
+        <attribute name="label" translatable="yes">_Open</attribute>
+        <attribute name="action">tree.open</attribute>
+      </item>
+      <submenu>
+        <attribute name="label" translatable="yes">Open _With</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">Source Code Editor</attribute>
+            <attribute name="action">tree.open-with-editor</attribute>
+          </item>
+        </section>
+        <section id="open-by-mime-section">
+        </section>
+      </submenu>
+    </section>
+    <section id="open-containing-section">
+      <item>
+        <attribute name="label" translatable="yes">_Open Containing Folder</attribute>
+        <attribute name="action">tree.open-containing-folder</attribute>
+      </item>
+    </section>
+    <section id="display-options">
+      <submenu>
+        <attribute name="label" translatable="yes">Display Options</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">_Collapse All Nodes</attribute>
+            <attribute name="action">tree.collapse-all-nodes</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">_Refresh</attribute>
+            <attribute name="action">project-tree.refresh</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
 </interface>
