@@ -36,6 +36,27 @@ struct _IdeVcsUri
 };
 
 static gboolean
+ide_vcs_uri_validate (const IdeVcsUri *self)
+{
+  g_assert (self != NULL);
+
+  if (g_strcmp0 (self->scheme, "file") == 0)
+    return ((self->path != NULL) &&
+            (self->port == 0) &&
+            (self->host == NULL) &&
+            (self->user == NULL));
+
+  if ((g_strcmp0 (self->scheme, "http") == 0) ||
+      (g_strcmp0 (self->scheme, "ssh") == 0) ||
+      (g_strcmp0 (self->scheme, "git") == 0) ||
+      (g_strcmp0 (self->scheme, "https") == 0) ||
+      (g_strcmp0 (self->scheme, "rsync") == 0))
+    return ((self->path != NULL) && (self->host != NULL));
+
+  return TRUE;
+}
+
+static gboolean
 ide_vcs_uri_parse (IdeVcsUri   *self,
                    const gchar *str)
 {
@@ -52,11 +73,11 @@ ide_vcs_uri_parse (IdeVcsUri   *self,
 
       /* http://stackoverflow.com/questions/2514859/regular-expression-for-git-repository */
 
-      regex1 = g_regex_new ("(\\w+://)(.+@)*([\\w\\d\\.]+)(:[\\d]+){0,1}/*(.*)", 0, 0, NULL);
+      regex1 = g_regex_new ("file://(.*)", 0, 0, NULL);
       g_assert_no_error (error);
       g_assert (regex1);
 
-      regex2 = g_regex_new ("file://(.*)", 0, 0, NULL);
+      regex2 = g_regex_new ("(\\w+://)(.+@)*([\\w\\d\\.]+)(:[\\d]+){0,1}/*(.*)", 0, 0, NULL);
       g_assert_no_error (error);
       g_assert (regex2);
 
@@ -70,8 +91,29 @@ ide_vcs_uri_parse (IdeVcsUri   *self,
   if (str == NULL)
     return FALSE;
 
-  /* check for ssh:// style network uris */
+  /* check for local file:// style uris */
   g_regex_match (regex1, str, 0, &match_info);
+  if (g_match_info_matches (match_info))
+    {
+      g_autofree gchar *path = NULL;
+
+      path = g_match_info_fetch (match_info, 1);
+
+      ide_vcs_uri_set_scheme (self, "file://");
+      ide_vcs_uri_set_user (self, NULL);
+      ide_vcs_uri_set_host (self, NULL);
+      ide_vcs_uri_set_port (self, 0);
+      ide_vcs_uri_set_path (self, path);
+
+      ret = TRUE;
+    }
+  g_clear_pointer (&match_info, g_match_info_free);
+
+  if (ret)
+    return ret;
+
+  /* check for ssh:// style network uris */
+  g_regex_match (regex2, str, 0, &match_info);
   if (g_match_info_matches (match_info))
     {
       g_autofree gchar *scheme = NULL;
@@ -116,27 +158,6 @@ ide_vcs_uri_parse (IdeVcsUri   *self,
   if (ret)
     return ret;
 
-  /* check for local file:// style uris */
-  g_regex_match (regex2, str, 0, &match_info);
-  if (g_match_info_matches (match_info))
-    {
-      g_autofree gchar *path = NULL;
-
-      path = g_match_info_fetch (match_info, 1);
-
-      ide_vcs_uri_set_scheme (self, "file://");
-      ide_vcs_uri_set_user (self, NULL);
-      ide_vcs_uri_set_host (self, NULL);
-      ide_vcs_uri_set_port (self, 0);
-      ide_vcs_uri_set_path (self, path);
-
-      ret = TRUE;
-    }
-  g_clear_pointer (&match_info, g_match_info_free);
-
-  if (ret)
-    return ret;
-
   /* check for user@host style uris */
   g_regex_match (regex3, str, 0, &match_info);
   if (g_match_info_matches (match_info))
@@ -161,6 +182,10 @@ ide_vcs_uri_parse (IdeVcsUri   *self,
   if (ret)
     return ret;
 
+  /* try to avoid some in-progress schemes */
+  if (strstr (str, "://"))
+    return FALSE;
+
   ide_vcs_uri_set_scheme (self, "file://");
   ide_vcs_uri_set_user (self, NULL);
   ide_vcs_uri_set_host (self, NULL);
@@ -178,7 +203,7 @@ ide_vcs_uri_new (const gchar *uri)
   self = g_new0 (IdeVcsUri, 1);
   self->ref_count = 1;
 
-  if (ide_vcs_uri_parse (self, uri))
+  if (ide_vcs_uri_parse (self, uri) && ide_vcs_uri_validate (self))
     return self;
 
   g_free (self);
@@ -263,6 +288,9 @@ ide_vcs_uri_set_scheme (IdeVcsUri   *self,
 {
   g_return_if_fail (self);
 
+  if (ide_str_empty0 (scheme))
+    scheme = NULL;
+
   if (scheme != self->scheme)
     {
       const gchar *tmp;
@@ -303,6 +331,9 @@ ide_vcs_uri_set_host (IdeVcsUri   *self,
                       const gchar *host)
 {
   g_return_if_fail (self);
+
+  if (ide_str_empty0 (host))
+    host = NULL;
 
   if (host != self->host)
     {
