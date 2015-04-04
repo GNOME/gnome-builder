@@ -53,6 +53,15 @@ test_ide_source_view_CFLAGS = \
 test_ide_source_view_LDADD = libide-1.0.la $(LIBIDE_LIBS)
 
 
+noinst_PROGRAMS += test-ide-vcs-uri
+test_ide_vcs_uri_SOURCES = tests/test-ide-vcs-uri.c
+test_ide_vcs_uri_CFLAGS = \
+	$(libide_1_0_la_CFLAGS) \
+	-DTEST_DATA_DIR="\"$(top_srcdir)/tests/data\"" \
+	-DBUILDDIR="\"$(abs_top_builddir)\""
+test_ide_vcs_uri_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+
+
 EXTRA_DIST += \
 	tests/data/project1/configure.ac \
 	tests/tests.h \

@@ -1,0 +1,395 @@
+/* ide-vcs-uri.c
+ *
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <stdlib.h>
+#include <string.h>
+
+#include "ide-macros.h"
+#include "ide-vcs-uri.h"
+
+G_DEFINE_BOXED_TYPE (IdeVcsUri, ide_vcs_uri, ide_vcs_uri_ref, ide_vcs_uri_unref)
+
+struct _IdeVcsUri
+{
+  volatile gint ref_count;
+
+  gchar *scheme;
+  gchar *user;
+  gchar *host;
+  gchar *path;
+  guint  port;
+};
+
+static gboolean
+ide_vcs_uri_parse (IdeVcsUri   *self,
+                   const gchar *str)
+{
+  static GRegex *regex1;
+  static GRegex *regex2;
+  static GRegex *regex3;
+  static gsize initialized;
+  GMatchInfo *match_info = NULL;
+  gboolean ret = FALSE;
+
+  if (g_once_init_enter (&initialized))
+    {
+      GError *error = NULL;
+
+      /* http://stackoverflow.com/questions/2514859/regular-expression-for-git-repository */
+
+      regex1 = g_regex_new ("(\\w+://)(.+@)*([\\w\\d\\.]+)(:[\\d]+){0,1}/*(.*)", 0, 0, NULL);
+      g_assert_no_error (error);
+      g_assert (regex1);
+
+      regex2 = g_regex_new ("file://(.*)", 0, 0, NULL);
+      g_assert_no_error (error);
+      g_assert (regex2);
+
+      regex3 = g_regex_new ("(.+@)*([\\w\\d\\.]+):(.*)", 0, 0, NULL);
+      g_assert_no_error (error);
+      g_assert (regex3);
+
+      g_once_init_leave (&initialized, TRUE);
+    }
+
+  if (str == NULL)
+    return FALSE;
+
+  /* check for ssh:// style network uris */
+  g_regex_match (regex1, str, 0, &match_info);
+  if (g_match_info_matches (match_info))
+    {
+      g_autofree gchar *scheme = NULL;
+      g_autofree gchar *user = NULL;
+      g_autofree gchar *host = NULL;
+      g_autofree gchar *path = NULL;
+      g_autofree gchar *portstr = NULL;
+      gint start_pos;
+      gint end_pos;
+      guint port = 0;
+
+      scheme = g_match_info_fetch (match_info, 1);
+      user = g_match_info_fetch (match_info, 2);
+      host = g_match_info_fetch (match_info, 3);
+      portstr = g_match_info_fetch (match_info, 4);
+      path = g_match_info_fetch (match_info, 5);
+
+      g_match_info_fetch_pos (match_info, 5, &start_pos, &end_pos);
+
+      if (*path != '~' && (start_pos > 0) && str [start_pos-1] == '/')
+        {
+          gchar *tmp;
+
+          tmp = path;
+          path = g_strdup_printf ("/%s", path);
+          g_free (tmp);
+        }
+
+      if (!ide_str_empty0 (portstr) && g_ascii_isdigit (portstr [1]))
+        port = CLAMP (atoi (&portstr [1]), 1, G_MAXINT16);
+
+      ide_vcs_uri_set_scheme (self, scheme);
+      ide_vcs_uri_set_user (self, user);
+      ide_vcs_uri_set_host (self, host);
+      ide_vcs_uri_set_port (self, port);
+      ide_vcs_uri_set_path (self, path);
+
+      ret = TRUE;
+    }
+  g_clear_pointer (&match_info, g_match_info_free);
+
+  if (ret)
+    return ret;
+
+  /* check for local file:// style uris */
+  g_regex_match (regex2, str, 0, &match_info);
+  if (g_match_info_matches (match_info))
+    {
+      g_autofree gchar *path = NULL;
+
+      path = g_match_info_fetch (match_info, 1);
+
+      ide_vcs_uri_set_scheme (self, "file://");
+      ide_vcs_uri_set_user (self, NULL);
+      ide_vcs_uri_set_host (self, NULL);
+      ide_vcs_uri_set_port (self, 0);
+      ide_vcs_uri_set_path (self, path);
+
+      ret = TRUE;
+    }
+  g_clear_pointer (&match_info, g_match_info_free);
+
+  if (ret)
+    return ret;
+
+  /* check for user@host style uris */
+  g_regex_match (regex3, str, 0, &match_info);
+  if (g_match_info_matches (match_info))
+    {
+      g_autofree gchar *user = NULL;
+      g_autofree gchar *host = NULL;
+      g_autofree gchar *path = NULL;
+
+      user = g_match_info_fetch (match_info, 1);
+      host = g_match_info_fetch (match_info, 2);
+      path = g_match_info_fetch (match_info, 3);
+
+      ide_vcs_uri_set_user (self, user);
+      ide_vcs_uri_set_host (self, host);
+      ide_vcs_uri_set_path (self, path);
+      ide_vcs_uri_set_scheme (self, "ssh://");
+
+      ret = TRUE;
+    }
+  g_clear_pointer (&match_info, g_match_info_free);
+
+  if (ret)
+    return ret;
+
+  ide_vcs_uri_set_scheme (self, "file://");
+  ide_vcs_uri_set_user (self, NULL);
+  ide_vcs_uri_set_host (self, NULL);
+  ide_vcs_uri_set_port (self, 0);
+  ide_vcs_uri_set_path (self, str);
+
+  return TRUE;
+}
+
+IdeVcsUri *
+ide_vcs_uri_new (const gchar *uri)
+{
+  IdeVcsUri *self;
+
+  self = g_new0 (IdeVcsUri, 1);
+  self->ref_count = 1;
+
+  if (ide_vcs_uri_parse (self, uri))
+    return self;
+
+  g_free (self);
+
+  return NULL;
+}
+
+static void
+ide_vcs_uri_finalize (IdeVcsUri *self)
+{
+  g_free (self->scheme);
+  g_free (self->user);
+  g_free (self->host);
+  g_free (self->path);
+  g_free (self);
+}
+
+IdeVcsUri *
+ide_vcs_uri_ref (IdeVcsUri *self)
+{
+  g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
+
+  g_atomic_int_inc (&self->ref_count);
+
+  return self;
+}
+
+void
+ide_vcs_uri_unref (IdeVcsUri *self)
+{
+  g_return_if_fail (self);
+  g_return_if_fail (self->ref_count > 0);
+
+  if (g_atomic_int_dec_and_test (&self->ref_count))
+    ide_vcs_uri_finalize (self);
+}
+
+const gchar *
+ide_vcs_uri_get_scheme (const IdeVcsUri *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->scheme;
+}
+
+const gchar *
+ide_vcs_uri_get_user (const IdeVcsUri *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->user;
+}
+
+const gchar *
+ide_vcs_uri_get_host (const IdeVcsUri *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->host;
+}
+
+guint
+ide_vcs_uri_get_port (const IdeVcsUri *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->port;
+}
+
+const gchar *
+ide_vcs_uri_get_path (const IdeVcsUri *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  return self->path;
+}
+
+void
+ide_vcs_uri_set_scheme (IdeVcsUri   *self,
+                        const gchar *scheme)
+{
+  g_return_if_fail (self);
+
+  if (scheme != self->scheme)
+    {
+      const gchar *tmp;
+
+      g_clear_pointer (&self->scheme, g_free);
+
+      if (scheme != NULL && (tmp = strchr (scheme, ':')))
+        self->scheme = g_strndup (scheme, tmp - scheme);
+      else
+        self->scheme = g_strdup (scheme);
+    }
+}
+
+void
+ide_vcs_uri_set_user (IdeVcsUri   *self,
+                      const gchar *user)
+{
+  g_return_if_fail (self);
+
+  if (ide_str_empty0 (user))
+    user = NULL;
+
+  if (user != self->user)
+    {
+      const gchar *tmp;
+
+      g_clear_pointer (&self->user, g_free);
+
+      if (user != NULL && (tmp = strchr (user, '@')))
+        self->user = g_strndup (user, tmp - user);
+      else
+        self->user = g_strdup (user);
+    }
+}
+
+void
+ide_vcs_uri_set_host (IdeVcsUri   *self,
+                      const gchar *host)
+{
+  g_return_if_fail (self);
+
+  if (host != self->host)
+    {
+      g_free (self->host);
+      self->host = g_strdup (host);
+    }
+}
+
+void
+ide_vcs_uri_set_port (IdeVcsUri *self,
+                      guint      port)
+{
+  g_return_if_fail (self);
+  g_return_if_fail (port >= 0);
+  g_return_if_fail (port <= G_MAXINT16);
+
+  self->port = port;
+}
+
+void
+ide_vcs_uri_set_path (IdeVcsUri   *self,
+                      const gchar *path)
+{
+  g_return_if_fail (self);
+
+  if (ide_str_empty0 (path))
+    path = NULL;
+
+  if (path != self->path)
+    {
+      if (path != NULL && (*path == ':'))
+        path++;
+      g_free (self->path);
+      self->path = g_strdup (path);
+    }
+}
+
+gchar *
+ide_vcs_uri_to_string (const IdeVcsUri *self)
+{
+  GString *str;
+
+  g_return_if_fail (self);
+
+  str = g_string_new (NULL);
+
+  g_string_append_printf (str, "%s://", self->scheme);
+
+  if (0 == g_strcmp0 (self->scheme, "file"))
+    {
+      g_string_append (str, self->path);
+      return g_string_free (str, FALSE);
+    }
+
+  if (self->user != NULL)
+    g_string_append_printf (str, "%s@", self->user);
+
+  g_string_append (str, self->host);
+
+  if (self->port != 0)
+    g_string_append_printf (str, ":%u", self->port);
+
+  if (self->path == NULL)
+    g_string_append (str, "/");
+  else if (self->path [0] == '~')
+    g_string_append_printf (str, "/%s", self->path);
+  else if (self->path [0] != '/')
+    g_string_append_printf (str, "/%s", self->path);
+  else
+    g_string_append (str, self->path);
+
+  return g_string_free (str, FALSE);
+}
+
+gboolean
+ide_vcs_uri_is_valid (const gchar *uri_string)
+{
+  gboolean ret = FALSE;
+
+  if (uri_string != NULL)
+    {
+      IdeVcsUri *uri;
+
+      uri = ide_vcs_uri_new (uri_string);
+      ret = !!uri;
+      g_clear_pointer (&uri, ide_vcs_uri_unref);
+    }
+
+  return ret;
+}

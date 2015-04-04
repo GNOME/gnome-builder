@@ -266,6 +266,8 @@ libide_1_0_la_SOURCES = \
 	libide/ide-source-view-capture.h \
 	libide/ide-source-view-movements.c \
 	libide/ide-source-view-movements.h \
+	libide/ide-vcs-uri.c \
+	libide/ide-vcs-uri.h \
 	libide/ide-vim-iter.c \
 	libide/ide-vim-iter.h \
 	libide/modelines/modeline-parser.c \

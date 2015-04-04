@@ -87,6 +87,7 @@ G_BEGIN_DECLS
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
+#include "ide-vcs-uri.h"
 
 #include "autotools/ide-autotools-build-system.h"
 #include "autotools/ide-autotools-project-miner.h"

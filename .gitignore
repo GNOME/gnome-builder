@@ -46,5 +46,6 @@ test-ide-buffer
 test-ide-buffer-manager
 test-ide-context
 test-ide-source-view
+test-ide-vcs-uri
 test-navigation-list
 test.c
