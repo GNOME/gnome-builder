@@ -109,6 +109,7 @@ libide_1_0_la_public_sources = \
 	libide/ide-language.h \
 	libide/ide-log.c \
 	libide/ide-log.h \
+	libide/ide-macros.h \
 	libide/ide-object.c \
 	libide/ide-object.h \
 	libide/ide-pattern-spec.c \

@@ -53,6 +53,7 @@ G_BEGIN_DECLS
 #include "ide-indenter.h"
 #include "ide-language.h"
 #include "ide-log.h"
+#include "ide-macros.h"
 #include "ide-object.h"
 #include "ide-pattern-spec.h"
 #include "ide-process.h"
