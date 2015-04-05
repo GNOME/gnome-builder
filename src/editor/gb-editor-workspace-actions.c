@@ -94,6 +94,18 @@ gb_editor_workspace_tree_actions_refresh (GSimpleAction *action,
   /* TODO: Try to expand back to our current position */
 }
 
+static void
+gb_editor_workspace_tree_actions_collapse_all_nodes (GSimpleAction *action,
+                                                     GVariant      *variant,
+                                                     gpointer       user_data)
+{
+  GbEditorWorkspace *self = user_data;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+
+  gtk_tree_view_collapse_all (GTK_TREE_VIEW (self->project_tree));
+}
+
 static const GActionEntry GbEditorWorkspaceActions[] = {
   { "show-sidebar", NULL, NULL, "false", gb_editor_workspace_actions_show_sidebar },
   { "toggle-sidebar", gb_editor_workspace_actions_toggle_sidebar },
@@ -101,6 +113,7 @@ static const GActionEntry GbEditorWorkspaceActions[] = {
 
 static const GActionEntry GbEditorWorkspaceTreeActions[] = {
   { "refresh", gb_editor_workspace_tree_actions_refresh },
+  { "collapse-all-nodes", gb_editor_workspace_tree_actions_collapse_all_nodes },
 };
 
 void

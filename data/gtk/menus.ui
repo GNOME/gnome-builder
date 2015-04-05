@@ -113,14 +113,14 @@
     <section id="open-section">
       <item>
         <attribute name="label" translatable="yes">_Open</attribute>
-        <attribute name="action">tree.open</attribute>
+        <attribute name="action">project-tree.open</attribute>
       </item>
       <submenu>
         <attribute name="label" translatable="yes">Open _With</attribute>
         <section>
           <item>
             <attribute name="label" translatable="yes">Source Code Editor</attribute>
-            <attribute name="action">tree.open-with-editor</attribute>
+            <attribute name="action">project-tree.open-with-editor</attribute>
           </item>
         </section>
         <section id="open-by-mime-section">
@@ -130,7 +130,7 @@
     <section id="open-containing-section">
       <item>
         <attribute name="label" translatable="yes">_Open Containing Folder</attribute>
-        <attribute name="action">tree.open-containing-folder</attribute>
+        <attribute name="action">project-tree.open-containing-folder</attribute>
       </item>
     </section>
     <section id="display-options">
@@ -139,7 +139,7 @@
         <section>
           <item>
             <attribute name="label" translatable="yes">_Collapse All Nodes</attribute>
-            <attribute name="action">tree.collapse-all-nodes</attribute>
+            <attribute name="action">project-tree.collapse-all-nodes</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">_Refresh</attribute>
