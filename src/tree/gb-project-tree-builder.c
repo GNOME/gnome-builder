@@ -356,6 +356,20 @@ failure:
 }
 
 static void
+gb_project_tree_builder_rebuild (GSettings            *settings,
+                                 const gchar          *key,
+                                 GbProjectTreeBuilder *self)
+{
+  GtkWidget *tree;
+
+  g_assert (G_IS_SETTINGS (settings));
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+
+  if ((tree = gb_tree_builder_get_tree (GB_TREE_BUILDER (self))))
+    gb_tree_rebuild (GB_TREE (tree));
+}
+
+static void
 gb_project_tree_builder_finalize (GObject *object)
 {
   GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)object;
@@ -432,4 +446,9 @@ static void
 gb_project_tree_builder_init (GbProjectTreeBuilder *self)
 {
   self->file_chooser_settings = g_settings_new ("org.gtk.Settings.FileChooser");
+
+  g_signal_connect (self->file_chooser_settings,
+                    "changed::sort-directories-first",
+                    G_CALLBACK (gb_project_tree_builder_rebuild),
+                    self);
 }
