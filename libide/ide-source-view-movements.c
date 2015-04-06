@@ -719,11 +719,11 @@ ide_source_view_movements_move_page (Movement *mv)
 
   buffer = gtk_text_view_get_buffer (text_view);
 
-  scrolloff = ide_source_view_get_scroll_offset (mv->self);
   line_top = gtk_text_iter_get_line (&iter_top);
   line_bottom = gtk_text_iter_get_line (&iter_bottom);
 
   half_page = MAX (1, (line_bottom - line_top) / 2);
+  scrolloff = MIN (ide_source_view_get_scroll_offset (mv->self), half_page);
 
   switch ((int)mv->type)
     {
