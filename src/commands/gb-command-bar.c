@@ -25,6 +25,7 @@
 #include "gb-command-manager.h"
 #include "gb-glib.h"
 #include "gb-string.h"
+#include "gb-view-stack.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
@@ -65,6 +66,36 @@ gb_command_bar_new (void)
   return g_object_new (GB_TYPE_COMMAND_BAR, NULL);
 }
 
+static GtkWidget *
+find_alternate_focus (GtkWidget *focus)
+{
+  GtkWidget *parent;
+
+  g_assert (GTK_IS_WIDGET (focus));
+
+  /*
+   * If this widget is in a stack, it may not be the GtkStack:visible-child anymore. If so,
+   * we want to avoid refocusing this widget, but instead focus the new stack child.
+   */
+
+  for (parent = gtk_widget_get_parent (focus);
+       parent && !GTK_IS_STACK (parent);
+       parent = gtk_widget_get_parent (parent))
+    { /* Do Nothing */ }
+
+  if ((parent != NULL) && GTK_IS_STACK (parent))
+    {
+      GtkWidget *visible_child;
+
+      visible_child = gtk_stack_get_visible_child (GTK_STACK (parent));
+
+      if (!gtk_widget_is_ancestor (focus, visible_child))
+        return visible_child;
+    }
+
+  return focus;
+}
+
 /**
  * gb_command_bar_hide:
  * @bar: A #GbCommandBar
@@ -76,6 +107,7 @@ gb_command_bar_hide (GbCommandBar *bar)
 {
   GbWorkbench *workbench;
   GbWorkspace *workspace;
+  GtkWidget *focus;
 
   g_return_if_fail (GB_IS_COMMAND_BAR (bar));
 
@@ -86,11 +118,12 @@ gb_command_bar_hide (GbCommandBar *bar)
 
   workbench = gb_widget_get_workbench (GTK_WIDGET (bar));
   workspace = gb_workbench_get_active_workspace (workbench);
+  focus = GTK_WIDGET (workspace);
 
   if (bar->priv->last_focus)
-    gtk_widget_grab_focus (bar->priv->last_focus);
-  else
-    gtk_widget_grab_focus (GTK_WIDGET (workspace));
+    focus = find_alternate_focus (bar->priv->last_focus);
+
+  gtk_widget_grab_focus (focus);
 }
 
 static void
@@ -100,11 +133,7 @@ gb_command_bar_set_last_focus (GbCommandBar *bar,
   g_return_if_fail (GB_IS_COMMAND_BAR (bar));
   g_return_if_fail (!widget || GTK_IS_WIDGET (widget));
 
-  if (bar->priv->last_focus != widget)
-    {
-      gb_clear_weak_pointer (&bar->priv->last_focus);
-      gb_set_weak_pointer (widget, &bar->priv->last_focus);
-    }
+  ide_set_weak_pointer (&bar->priv->last_focus, widget);
 }
 
 /**
