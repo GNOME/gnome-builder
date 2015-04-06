@@ -153,4 +153,16 @@
       </item>
     </section>
   </menu>
+  <menu id="project-tree-build">
+    <section id="build-section">
+      <item>
+        <attribute name="label" translatable="yes">_Build</attribute>
+        <attribute name="action">workbench.build</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Rebuild</attribute>
+        <attribute name="action">workbench.rebuild</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

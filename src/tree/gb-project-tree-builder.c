@@ -289,27 +289,32 @@ gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
                                     GMenu         *menu)
 {
   GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
+  GtkApplication *app;
   GObject *item;
+  GMenu *submenu;
 
   g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
   g_assert (GB_IS_TREE_NODE (node));
   g_assert (G_IS_MENU (menu));
 
+  app = GTK_APPLICATION (g_application_get_default ());
   item = gb_tree_node_get_item (node);
+
+  if (IDE_IS_PROJECT_ITEM (item) || IDE_IS_PROJECT (item))
+    {
+      submenu = gtk_application_get_menu_by_id (app, "project-tree-build");
+      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
+    }
 
   if (IDE_IS_PROJECT_FILE (item))
     {
-      GtkApplication *app;
-      GMenu *submenu;
-
-      app = GTK_APPLICATION (g_application_get_default ());
-
       submenu = gtk_application_get_menu_by_id (app, "project-tree-open-containing");
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
 
       submenu = gtk_application_get_menu_by_id (app, "project-tree-open");
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
     }
+
 }
 
 static gboolean
