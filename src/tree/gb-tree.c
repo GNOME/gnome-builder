@@ -27,7 +27,6 @@
 struct _GbTreePrivate
 {
   GPtrArray    *builders;
-  GMenu        *menu;
   GbTreeNode   *root;
   GbTreeNode   *selection;
   GtkTreeStore *store;
@@ -38,7 +37,6 @@ G_DEFINE_TYPE_WITH_PRIVATE (GbTree, gb_tree, GTK_TYPE_TREE_VIEW)
 
 enum {
   PROP_0,
-  PROP_MENU,
   PROP_ROOT,
   PROP_SELECTION,
   LAST_PROP
@@ -54,44 +52,6 @@ extern void _gb_tree_node_set_tree (GbTreeNode *node,
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
-
-/**
- * gb_tree_get_menu:
- * @tree: (in): A #GbTree.
- *
- * Gets the #GMenu to be displayed when right clicking on an item in the tree.
- * Node's should update actions sensitivity in their selection callbacks.
- *
- * Returns: (transfer none): A #GMenu or %NULL.
- */
-GMenu *
-gb_tree_get_menu (GbTree *tree)
-{
-  g_return_val_if_fail (GB_IS_TREE (tree), NULL);
-
-  return tree->priv->menu;
-}
-
-/**
- * gb_tree_set_menu:
- * @menu: (in) (transfer none): A #GMenu or %NULL.
- *
- * Set the menu to be used when a popup is to be shown.
- */
-void
-gb_tree_set_menu (GbTree *tree,
-                  GMenu  *menu)
-{
-  g_return_if_fail (GB_IS_TREE (tree));
-  g_return_if_fail (!menu || G_IS_MENU (menu));
-
-  if (menu != tree->priv->menu)
-    {
-      g_clear_object (&tree->priv->menu);
-      tree->priv->menu = menu ? g_object_ref (menu) : NULL;
-      g_object_notify_by_pspec (G_OBJECT (tree), gParamSpecs [PROP_MENU]);
-    }
-}
 
 /**
  * gb_tree_unselect:
@@ -180,6 +140,35 @@ check_visible_foreach (GtkWidget *widget,
     *at_least_one_visible = TRUE;
 }
 
+static GMenu *
+gb_tree_create_menu (GbTree     *self,
+                     GbTreeNode *node)
+{
+  GtkApplication *app;
+  GMenu *menu;
+  GMenu *submenu;
+  guint i;
+
+  g_return_val_if_fail (GB_IS_TREE (self), NULL);
+  g_return_val_if_fail (GB_IS_TREE_NODE (node), NULL);
+
+  menu = g_menu_new ();
+  app = GTK_APPLICATION (g_application_get_default ());
+
+  submenu = gtk_application_get_menu_by_id (app, "gb-tree-display-options");
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (submenu));
+
+  for (i = 0; i < self->priv->builders->len; i++)
+    {
+      GbTreeBuilder *builder;
+
+      builder = g_ptr_array_index (self->priv->builders, i);
+      gb_tree_builder_node_popup (builder, node, menu);
+    }
+
+  return menu;
+}
+
 static void
 gb_tree_popup (GbTree         *tree,
                GbTreeNode     *node,
@@ -187,12 +176,10 @@ gb_tree_popup (GbTree         *tree,
                gint            target_x,
                gint            target_y)
 {
-  GbTreePrivate *priv;
-  GbTreeBuilder *builder;
-  GtkWidget *menu;
   GdkPoint loc = { -1, -1 };
   gboolean at_least_one_visible = FALSE;
-  guint i;
+  GtkWidget *menu_widget;
+  GMenu *menu;
   gint button;
   gint event_time;
 
@@ -201,25 +188,11 @@ gb_tree_popup (GbTree         *tree,
   g_return_if_fail (GB_IS_TREE (tree));
   g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  priv = tree->priv;
+  menu = gb_tree_create_menu (tree, node);
+  menu_widget = gtk_menu_new_from_model (G_MENU_MODEL (menu));
+  g_clear_object (&menu);
 
-  if (priv->menu == NULL)
-    IDE_EXIT;
-
-  menu = gtk_menu_new_from_model (G_MENU_MODEL (priv->menu));
-
-  if (menu == NULL)
-    IDE_EXIT;
-
-  gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (tree), NULL);
-
-  g_signal_emit (tree, gSignals [POPULATE_POPUP], 0, menu);
-
-  for (i = 0; i < priv->builders->len; i++)
-    {
-      builder = g_ptr_array_index (priv->builders, i);
-      gb_tree_builder_node_popup (builder, node);
-    }
+  g_signal_emit (tree, gSignals [POPULATE_POPUP], 0, menu_widget);
 
   if ((target_x >= 0) && (target_y >= 0))
     {
@@ -228,7 +201,7 @@ gb_tree_popup (GbTree         *tree,
       loc.x -= 12;
     }
 
-  gtk_container_foreach (GTK_CONTAINER (menu),
+  gtk_container_foreach (GTK_CONTAINER (menu_widget),
                          check_visible_foreach,
                          &at_least_one_visible);
 
@@ -244,9 +217,14 @@ gb_tree_popup (GbTree         *tree,
     }
 
   if (at_least_one_visible)
-    gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-                    gb_tree_menu_position_func, &loc,
-                    button, event_time);
+    {
+      gtk_menu_attach_to_widget (GTK_MENU (menu_widget),
+                                 GTK_WIDGET (tree),
+                                 NULL);
+      gtk_menu_popup (GTK_MENU (menu_widget), NULL, NULL,
+                      gb_tree_menu_position_func, &loc,
+                      button, event_time);
+    }
 
   IDE_EXIT;
 }
@@ -853,7 +831,6 @@ gb_tree_finalize (GObject *object)
   GbTreePrivate *priv = GB_TREE (object)->priv;
 
   g_ptr_array_unref (priv->builders);
-  g_clear_object (&priv->menu);
   g_clear_object (&priv->store);
   g_clear_object (&priv->root);
 
@@ -879,10 +856,6 @@ gb_tree_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_MENU:
-      g_value_set_object (value, tree->priv->menu);
-      break;
-
     case PROP_ROOT:
       g_value_set_object (value, tree->priv->root);
       break;
@@ -915,10 +888,6 @@ gb_tree_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_MENU:
-      gb_tree_set_menu (tree, g_value_get_object (value));
-      break;
-
     case PROP_ROOT:
       gb_tree_set_root (tree, g_value_get_object (value));
       break;
@@ -951,15 +920,6 @@ gb_tree_class_init (GbTreeClass *klass)
 
   widget_class = GTK_WIDGET_CLASS (klass);
   widget_class->popup_menu = gb_tree_popup_menu;
-
-  gParamSpecs [PROP_MENU] =
-    g_param_spec_object ("menu",
-                         _("Menu"),
-                         _("The context menu for the tree."),
-                         G_TYPE_MENU,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MENU,
-                                   gParamSpecs [PROP_MENU]);
 
   gParamSpecs[PROP_ROOT] =
     g_param_spec_object ("root",

@@ -64,7 +64,8 @@ struct _GbTreeBuilderClass
   void     (*node_unselected) (GbTreeBuilder *builder,
                                GbTreeNode    *node);
   void     (*node_popup)      (GbTreeBuilder *builder,
-                               GbTreeNode    *node);
+                               GbTreeNode    *node,
+                               GMenu         *menu);
 };
 
 GtkWidget *gb_tree_builder_get_tree        (GbTreeBuilder *builder);
@@ -74,7 +75,8 @@ void       gb_tree_builder_build_node      (GbTreeBuilder *builder,
 gboolean   gb_tree_builder_node_activated  (GbTreeBuilder *builder,
                                             GbTreeNode    *node);
 void       gb_tree_builder_node_popup      (GbTreeBuilder *builder,
-                                            GbTreeNode    *node);
+                                            GbTreeNode    *node,
+                                            GMenu         *menu);
 void       gb_tree_builder_node_selected   (GbTreeBuilder *builder,
                                             GbTreeNode    *node);
 void       gb_tree_builder_node_unselected (GbTreeBuilder *builder,

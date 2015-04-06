@@ -67,14 +67,15 @@ gb_tree_builder_node_activated (GbTreeBuilder *builder,
 
 void
 gb_tree_builder_node_popup (GbTreeBuilder *builder,
-                            GbTreeNode    *node)
+                            GbTreeNode    *node,
+                            GMenu         *menu)
 {
-   g_return_if_fail(GB_IS_TREE_BUILDER(builder));
-   g_return_if_fail(GB_IS_TREE_NODE(node));
+   g_return_if_fail (GB_IS_TREE_BUILDER (builder));
+   g_return_if_fail (GB_IS_TREE_NODE (node));
+   g_return_if_fail (G_IS_MENU (menu));
 
-   if (GB_TREE_BUILDER_GET_CLASS(builder)->node_popup) {
-      GB_TREE_BUILDER_GET_CLASS(builder)->node_popup(builder, node);
-   }
+   if (GB_TREE_BUILDER_GET_CLASS(builder)->node_popup)
+      GB_TREE_BUILDER_GET_CLASS(builder)->node_popup (builder, node, menu);
 }
 
 /**
