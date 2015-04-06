@@ -109,7 +109,24 @@
     </section>
 -->
   </menu>
-  <menu id="project-tree-menu">
+  <menu id="gb-tree-display-options">
+    <section id="display-options">
+      <submenu>
+        <attribute name="label" translatable="yes">Display Options</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">_Collapse All Nodes</attribute>
+            <attribute name="action">project-tree.collapse-all-nodes</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">_Refresh</attribute>
+            <attribute name="action">project-tree.refresh</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
+  <menu id="project-tree-open">
     <section id="open-section">
       <item>
         <attribute name="label" translatable="yes">_Open</attribute>
@@ -127,26 +144,13 @@
         </section>
       </submenu>
     </section>
+  </menu>
+  <menu id="project-tree-open-containing">
     <section id="open-containing-section">
       <item>
         <attribute name="label" translatable="yes">_Open Containing Folder</attribute>
         <attribute name="action">project-tree.open-containing-folder</attribute>
       </item>
-    </section>
-    <section id="display-options">
-      <submenu>
-        <attribute name="label" translatable="yes">Display Options</attribute>
-        <section>
-          <item>
-            <attribute name="label" translatable="yes">_Collapse All Nodes</attribute>
-            <attribute name="action">project-tree.collapse-all-nodes</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">_Refresh</attribute>
-            <attribute name="action">project-tree.refresh</attribute>
-          </item>
-        </section>
-      </submenu>
     </section>
   </menu>
 </interface>

@@ -283,6 +283,35 @@ gb_project_tree_builder_build_node (GbTreeBuilder *builder,
     build_files (self, node);
 }
 
+static void
+gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
+                                    GbTreeNode    *node,
+                                    GMenu         *menu)
+{
+  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
+  GObject *item;
+
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (GB_IS_TREE_NODE (node));
+  g_assert (G_IS_MENU (menu));
+
+  item = gb_tree_node_get_item (node);
+
+  if (IDE_IS_PROJECT_FILE (item))
+    {
+      GtkApplication *app;
+      GMenu *submenu;
+
+      app = GTK_APPLICATION (g_application_get_default ());
+
+      submenu = gtk_application_get_menu_by_id (app, "project-tree-open-containing");
+      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
+
+      submenu = gtk_application_get_menu_by_id (app, "project-tree-open");
+      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
+    }
+}
+
 static gboolean
 gb_project_tree_builder_node_activated (GbTreeBuilder *builder,
                                         GbTreeNode    *node)
@@ -387,6 +416,7 @@ gb_project_tree_builder_class_init (GbProjectTreeBuilderClass *klass)
 
   tree_builder_class->build_node = gb_project_tree_builder_build_node;
   tree_builder_class->node_activated = gb_project_tree_builder_node_activated;
+  tree_builder_class->node_popup = gb_project_tree_builder_node_popup;
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
