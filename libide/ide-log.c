@@ -24,9 +24,9 @@
 # include <sys/utsname.h>
 # include <sys/types.h>
 # include <sys/syscall.h>
-#elif defined __FreeBSD__
+#elif defined __FreeBSD__ || defined __OpenBSD__
 # include <sys/utsname.h>
-#endif /* !__linux__ && !__FreeBSD__ */
+#endif /* !__linux__ && !__FreeBSD__ && !__OpenBSD__ */
 
 #include <glib.h>
 #include <string.h>
@@ -204,7 +204,7 @@ ide_log_init (gboolean     stdout_,
           g_ptr_array_add (channels, channel);
         }
 
-#if defined __linux__ || defined __FreeBSD__
+#if defined __linux__ || defined __FreeBSD__ || defined __OpenBSD__
       uname (&u);
       memcpy (hostname, u.nodename, sizeof (hostname));
 #else
