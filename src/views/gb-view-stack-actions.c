@@ -278,6 +278,18 @@ gb_view_stack_actions_go_backward (GSimpleAction *action,
     ide_back_forward_list_go_backward (self->back_forward_list);
 }
 
+static void
+gb_view_stack_actions_show_list (GSimpleAction *action,
+                                 GVariant      *param,
+                                 gpointer       user_data)
+{
+  GbViewStack *self = user_data;
+
+  g_assert (GB_IS_VIEW_STACK (self));
+
+  g_signal_emit_by_name (self->views_button, "activate");
+}
+
 static const GActionEntry gGbViewStackActions[] = {
   { "close",         gb_view_stack_actions_close },
   { "go-forward",    gb_view_stack_actions_go_forward },
@@ -286,6 +298,7 @@ static const GActionEntry gGbViewStackActions[] = {
   { "move-right",    gb_view_stack_actions_move_right },
   { "next-view",     gb_view_stack_actions_next_view },
   { "previous-view", gb_view_stack_actions_previous_view},
+  { "show-list",     gb_view_stack_actions_show_list},
   { "save",          gb_view_stack_actions_save },
   { "save-as",       gb_view_stack_actions_save_as },
   { "split-down",    NULL, NULL, "false", gb_view_stack_actions_split_down },
