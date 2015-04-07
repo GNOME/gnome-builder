@@ -789,8 +789,8 @@ ide_makecache_parse_line (IdeMakecache *self,
     {
       gchar **strv;
 
-      g_ptr_array_add (ret, "-xc++");
-      ide_makecache_parse_c_cxx (self, pos + strlen(FAKE_CXX), ret);
+      g_ptr_array_add (ret, g_strdup ("-xc++"));
+      ide_makecache_parse_c_cxx (self, pos + strlen (FAKE_CXX), ret);
       strv = (gchar **)g_ptr_array_free (ret, FALSE);
       IDE_RETURN (strv);
     }
