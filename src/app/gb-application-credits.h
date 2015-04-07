@@ -52,6 +52,7 @@ static const gchar *gb_application_credits_authors[] = {
   "Pete Travis",
   "Ray Strode",
   "Roberto Majadas",
+  "Sebastien Lafargue",
   "Ting-Wei Lan",
   "Trinh Anh Ngoc",
   "Yosef Or Boczko",
