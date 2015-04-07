@@ -6410,6 +6410,7 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
   GdkRectangle iter_rect;
   gdouble yvalue;
   gdouble xvalue;
+  gdouble orig_yalign;
   gint xoffset;
   gint yoffset;
 
@@ -6474,11 +6475,27 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
    * now convert those back to alignments in the real visible area, but leave
    * enough space for an input character.
    */
+  orig_yalign = yalign;
   xalign = xoffset / (gdouble)real_visible_rect.width;
   yalign = yoffset / (gdouble)(real_visible_rect.height + priv->cached_char_height);
 
   yvalue = iter_rect.y - (yalign * real_visible_rect.height);
   xvalue = iter_rect.x - (xalign * real_visible_rect.width);
+
+  /*
+   * FIXME:
+   *
+   * We need to understand better why this phenomina exists.
+   *
+   * 0.0 and 1.0 at visible boundaries creates some interesting artifacts.
+   * This works around the phenomina at to ensure we are pinned inside the
+   * visible area we care about. We probably need to take this into account
+   * in the alignment calculations in a previous step.
+   */
+  if (orig_yalign == 1.0)
+    yvalue += (priv->cached_char_height / 2);
+  else if (orig_yalign == 0.0)
+    yvalue -= (priv->cached_char_height / 2);
 
   frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
 
