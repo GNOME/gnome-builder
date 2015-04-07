@@ -873,6 +873,7 @@ static const GbVimCommand vim_commands[] = {
   { "bnext",       gb_vim_command_bnext },
   { "bprevious",   gb_vim_command_bprevious },
   { "buffers",     gb_vim_command_buffers },
+  { "ls",          gb_vim_command_buffers },
   { "cnext",       gb_vim_command_cnext },
   { "colorscheme", gb_vim_command_colorscheme },
   { "cprevious",   gb_vim_command_cprevious },
