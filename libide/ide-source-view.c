@@ -6307,6 +6307,14 @@ ide_source_view_get_visible_rect (IdeSourceView *self,
       area.height -= (2 * scroll_offset_height);
 
       /*
+       * If we have an even number of visible lines and scrolloffset is less than our
+       * desired scrolloffset, we need to remove an extra line so we don't have two
+       * visible lines.
+       */
+      if ((scroll_offset < priv->scroll_offset) && (visible_lines & 1) == 0)
+        area.height -= priv->cached_char_height;
+
+      /*
        * Use a multiple of the line height so we don't jump around when
        * focusing the last line (due to Y2 not fitting in the visible area).
        */
