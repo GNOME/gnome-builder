@@ -30,6 +30,7 @@
 #include "ide-doc-seq.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
+#include "ide-global.h"
 #include "ide-internal.h"
 #include "ide-progress.h"
 #include "ide-source-location.h"
@@ -672,7 +673,6 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
     {
       if (progress)
         *progress = g_object_new (IDE_TYPE_PROGRESS,
-                                  "context", context,
                                   "fraction", 1.0,
                                   NULL);
       g_task_return_pointer (task, g_object_ref (buffer), g_object_unref);
@@ -684,9 +684,8 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
   state = g_slice_new0 (LoadState);
   state->is_new = (buffer == NULL);
   state->file = g_object_ref (file);
-  state->progress = g_object_new (IDE_TYPE_PROGRESS,
-                                  "context", context,
-                                  NULL);
+  state->progress = ide_progress_new ();
+
   if (buffer)
     {
       state->buffer = g_object_ref (buffer);
@@ -912,7 +911,6 @@ ide_buffer_manager_save_file_async  (IdeBufferManager     *self,
                                      gpointer              user_data)
 {
   g_autoptr(GTask) task = NULL;
-  IdeContext *context;
   SaveState *state;
 
   if (progress)
@@ -925,14 +923,10 @@ ide_buffer_manager_save_file_async  (IdeBufferManager     *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-
   state = g_slice_new0 (SaveState);
   state->file = g_object_ref (file);
   state->buffer = g_object_ref (buffer);
-  state->progress = g_object_new (IDE_TYPE_PROGRESS,
-                                  "context", context,
-                                  NULL);
+  state->progress = ide_progress_new ();
 
   g_task_set_task_data (task, state, save_state_free);
 

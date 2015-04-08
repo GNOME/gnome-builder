@@ -24,14 +24,14 @@
 
 struct _IdeProgress
 {
-  IdeObject  parent_instance;
+  GObject  parent_instance;
 
-  gchar     *message;
-  gdouble    fraction;
-  guint      completed : 1;
+  gchar   *message;
+  gdouble  fraction;
+  guint    completed : 1;
 };
 
-G_DEFINE_TYPE (IdeProgress, ide_progress, IDE_TYPE_OBJECT)
+G_DEFINE_TYPE (IdeProgress, ide_progress, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -238,4 +238,10 @@ ide_progress_class_init (IdeProgressClass *klass)
 static void
 ide_progress_init (IdeProgress *self)
 {
+}
+
+IdeProgress *
+ide_progress_new (void)
+{
+  return g_object_new (IDE_TYPE_PROGRESS, NULL);
 }

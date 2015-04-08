@@ -19,14 +19,15 @@
 #ifndef IDE_PROGRESS_H
 #define IDE_PROGRESS_H
 
-#include "ide-object.h"
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PROGRESS (ide_progress_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeProgress, ide_progress, IDE, PROGRESS, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeProgress, ide_progress, IDE, PROGRESS, GObject)
 
+IdeProgress *ide_progress_new                    (void);
 gdouble      ide_progress_get_fraction           (IdeProgress *self);
 const gchar *ide_progress_get_message            (IdeProgress *self);
 void         ide_progress_set_fraction           (IdeProgress *self,
