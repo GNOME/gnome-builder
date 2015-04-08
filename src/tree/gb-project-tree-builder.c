@@ -273,6 +273,62 @@ gb_project_tree_builder_build_node (GbTreeBuilder *builder,
     build_files (self, node);
 }
 
+static gchar *
+get_content_type (GFile *file)
+{
+  g_autofree gchar *name = NULL;
+
+  g_assert (G_IS_FILE (file));
+
+  name = g_file_get_basename (file);
+
+  return g_content_type_guess (name, NULL, 0, NULL);
+}
+
+static void
+populate_mime_handlers (GMenu          *menu,
+                        IdeProjectFile *project_file)
+{
+  g_autofree gchar *content_type = NULL;
+  GList *list;
+  GList *iter;
+  GFile *file;
+
+  g_assert (G_IS_MENU (menu));
+  g_assert (IDE_IS_PROJECT_FILE (project_file));
+
+  g_menu_remove_all (menu);
+
+  file = ide_project_file_get_file (project_file);
+  if (file == NULL)
+    return;
+
+  content_type = get_content_type (file);
+  if (content_type == NULL)
+    return;
+
+  list = g_app_info_get_all_for_type (content_type);
+
+  for (iter = list; iter; iter = iter->next)
+    {
+      g_autoptr(GMenuItem) menu_item = NULL;
+      g_autofree gchar *detailed_action = NULL;
+      GAppInfo *app_info = iter->data;
+      const gchar *display_name;
+      const gchar *app_id;
+
+      display_name = g_app_info_get_display_name (app_info);
+      app_id = g_app_info_get_id (app_info);
+
+      detailed_action = g_strdup_printf ("project-tree.open-with('%s')", app_id);
+      menu_item = g_menu_item_new (display_name, detailed_action);
+
+      g_menu_append_item (menu, menu_item);
+    }
+
+  g_list_free_full (list, g_object_unref);
+}
+
 static void
 gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
                                     GbTreeNode    *node,
@@ -303,6 +359,9 @@ gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
 
       submenu = gtk_application_get_menu_by_id (app, "project-tree-open");
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
+
+      submenu = gtk_application_get_menu_by_id (app, "open-by-mime-section");
+      populate_mime_handlers (submenu, IDE_PROJECT_FILE (item));
     }
 
 }

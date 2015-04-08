@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <gio/gdesktopappinfo.h>
 
 #include "gb-editor-workspace.h"
 #include "gb-editor-workspace-private.h"
@@ -164,6 +165,65 @@ gb_project_tree_actions_open (GSimpleAction *action,
 }
 
 static void
+gb_project_tree_actions_open_with (GSimpleAction *action,
+                                   GVariant      *variant,
+                                   gpointer       user_data)
+{
+  GDesktopAppInfo *app_info = NULL;
+  GbEditorWorkspace *editor = user_data;
+  GbTreeNode *selected;
+  GbWorkbench *workbench;
+  GdkAppLaunchContext *launch_context;
+  GdkDisplay *display;
+  GFileInfo *file_info;
+  GFile *file;
+  const gchar *app_id;
+  GObject *item;
+  GList *files;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (editor));
+  g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING));
+
+  workbench = gb_widget_get_workbench (GTK_WIDGET (editor));
+  if (workbench == NULL)
+    return;
+
+  selected = gb_tree_get_selected (editor->project_tree);
+  if (selected == NULL)
+    return;
+
+  item = gb_tree_node_get_item (selected);
+  if (item == NULL || !IDE_IS_PROJECT_FILE (item))
+    return;
+
+  app_id = g_variant_get_string (variant, NULL);
+  if (app_id == NULL)
+    return;
+
+  app_info = g_desktop_app_info_new (app_id);
+  if (app_info == NULL)
+    return;
+
+  file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item));
+  if (file_info == NULL)
+    return;
+
+  file = ide_project_file_get_file (IDE_PROJECT_FILE (item));
+  if (file == NULL)
+    return;
+
+  display = gtk_widget_get_display (GTK_WIDGET (editor));
+  launch_context = gdk_display_get_app_launch_context (display);
+  files = g_list_append (NULL, file);
+
+  g_app_info_launch (G_APP_INFO (app_info), files, G_APP_LAUNCH_CONTEXT (launch_context), NULL);
+
+  g_list_free (files);
+  g_object_unref (launch_context);
+  g_object_unref (app_info);
+}
+
+static void
 gb_project_tree_actions_open_with_editor (GSimpleAction *action,
                                           GVariant      *variant,
                                           gpointer       user_data)
@@ -248,6 +308,7 @@ static GActionEntry GbProjectTreeActions[] = {
   { "collapse-all-nodes",     gb_project_tree_actions_collapse_all_nodes },
   { "open",                   gb_project_tree_actions_open },
   { "open-containing-folder", gb_project_tree_actions_open_containing_folder },
+  { "open-with",              gb_project_tree_actions_open_with, "s" },
   { "open-with-editor",       gb_project_tree_actions_open_with_editor },
   { "refresh",                gb_project_tree_actions_refresh },
   { "show-icons",             NULL, NULL, "false", gb_project_tree_actions_show_icons },
