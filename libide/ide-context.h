@@ -20,6 +20,7 @@
 #define IDE_CONTEXT_H
 
 #include <gio/gio.h>
+#include <gtk/gtk.h>
 
 #include "ide-types.h"
 
@@ -35,6 +36,7 @@ IdeBufferManager         *ide_context_get_buffer_manager    (IdeContext         
 IdeBuildSystem           *ide_context_get_build_system      (IdeContext           *self);
 IdeDeviceManager         *ide_context_get_device_manager    (IdeContext           *self);
 IdeProject               *ide_context_get_project           (IdeContext           *self);
+GtkRecentManager         *ide_context_get_recent_manager    (IdeContext           *self);
 IdeScriptManager         *ide_context_get_script_manager    (IdeContext           *self);
 IdeSearchEngine          *ide_context_get_search_engine     (IdeContext           *self);
 IdeSourceSnippetsManager *ide_context_get_snippets_manager  (IdeContext           *self);

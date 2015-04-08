@@ -47,6 +47,7 @@ struct _IdeContext
   IdeBufferManager         *buffer_manager;
   IdeBuildSystem           *build_system;
   IdeDeviceManager         *device_manager;
+  GtkRecentManager         *recent_manager;
   IdeScriptManager         *script_manager;
   IdeSearchEngine          *search_engine;
   IdeSourceSnippetsManager *snippets_manager;
@@ -83,6 +84,22 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+/**
+ * ide_context_get_recent_manager:
+ *
+ * Gets the IdeContext:recent-manager property. The recent manager is a GtkRecentManager instance
+ * that should be used for the workbench.
+ *
+ * Returns: (transfer none): A #GtkRecentManager.
+ */
+GtkRecentManager *
+ide_context_get_recent_manager (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->recent_manager;
+}
 
 /**
  * ide_context_get_back_forward_list:
@@ -502,6 +519,7 @@ ide_context_finalize (GObject *object)
   g_clear_object (&self->device_manager);
   g_clear_object (&self->project);
   g_clear_object (&self->project_file);
+  g_clear_object (&self->recent_manager);
   g_clear_object (&self->unsaved_files);
   g_clear_object (&self->vcs);
 
@@ -710,6 +728,8 @@ ide_context_init (IdeContext *self)
   g_autofree gchar *scriptsdir = NULL;
 
   IDE_ENTRY;
+
+  self->recent_manager = gtk_recent_manager_new ();
 
   self->root_build_dir = g_build_filename (g_get_user_cache_dir (),
                                            ide_get_program_name (),
@@ -1210,6 +1230,40 @@ ide_context_init_search_engine (gpointer             source_object,
 }
 
 static void
+ide_context_init_add_recent (gpointer             source_object,
+                             GCancellable        *cancellable,
+                             GAsyncReadyCallback  callback,
+                             gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  GtkRecentData recent_data = { 0 };
+  const gchar *groups[] = { "X-GNOME-Builder-Project", NULL };
+  g_autoptr(GTask) task = NULL;
+  g_autofree gchar *uri = NULL;
+  g_autofree gchar *app_exec = NULL;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  uri = g_file_get_uri (self->project_file);
+  app_exec = g_strdup_printf ("%s -p %%p", ide_get_program_name ());
+
+  recent_data.display_name = (gchar *)ide_project_get_name (self->project);
+  recent_data.description = NULL;
+  recent_data.mime_type = "application/x-builder-project";
+  recent_data.app_name = (gchar *)ide_get_program_name ();
+  recent_data.app_exec = app_exec;
+  recent_data.groups = (gchar **)groups;
+  recent_data.is_private = FALSE;
+
+  gtk_recent_manager_add_full (self->recent_manager, uri, &recent_data);
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_context_init_async (GAsyncInitable      *initable,
                         int                  io_priority,
                         GCancellable        *cancellable,
@@ -1234,6 +1288,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_search_engine,
                         ide_context_init_snippets,
                         ide_context_init_scripts,
+                        ide_context_init_add_recent,
                         NULL);
 
   /* TODO: Restore buffer state? */
