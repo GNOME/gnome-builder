@@ -376,6 +376,24 @@ gb_projects_dialog__new_button_clicked (GbProjectsDialog *self,
 }
 
 static void
+gb_projects_dialog_remove_recent (GbProjectsDialog *self,
+                                  IdeProjectInfo   *project_info)
+{
+  g_autofree gchar *uri = NULL;
+  GtkRecentManager *recent_manager;
+  GFile *file;
+
+  g_assert (GB_IS_PROJECTS_DIALOG (self));
+  g_assert (IDE_IS_PROJECT_INFO (project_info));
+
+  recent_manager = gtk_recent_manager_get_default ();
+  file = ide_project_info_get_file (project_info);
+  uri = g_file_get_uri (file);
+
+  gtk_recent_manager_remove_item (recent_manager, uri, NULL);
+}
+
+static void
 gb_projects_dialog__delete_button_clicked (GbProjectsDialog *self,
                                            GtkButton        *delete_button)
 {
@@ -395,9 +413,13 @@ gb_projects_dialog__delete_button_clicked (GbProjectsDialog *self,
 
   for (iter = list; iter; iter = iter->next)
     {
-
       if (gb_recent_project_row_get_selected (iter->data))
         {
+          IdeProjectInfo *project_info;
+
+          project_info = gb_recent_project_row_get_project_info (iter->data);
+          gb_projects_dialog_remove_recent (self, project_info);
+
           gtk_container_remove (GTK_CONTAINER (self->listbox), iter->data);
         }
     }
