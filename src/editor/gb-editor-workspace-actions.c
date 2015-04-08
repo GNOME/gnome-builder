@@ -20,6 +20,9 @@
 
 #include "gb-editor-workspace-actions.h"
 #include "gb-editor-workspace-private.h"
+#include "gb-nautilus.h"
+#include "gb-widget.h"
+#include "gb-workbench.h"
 
 #define ANIMATION_DURATION_MSEC 250
 
@@ -106,12 +109,82 @@ gb_editor_workspace_tree_actions_collapse_all_nodes (GSimpleAction *action,
   gtk_tree_view_collapse_all (GTK_TREE_VIEW (self->project_tree));
 }
 
+static void
+gb_editor_workspace_tree_actions_open (GSimpleAction *action,
+                                       GVariant      *variant,
+                                       gpointer       user_data)
+{
+  GbEditorWorkspace *self = user_data;
+  GbTreeNode *selected;
+  GObject *item;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+
+  if (!(selected = gb_tree_get_selected (self->project_tree)) ||
+      !(item = gb_tree_node_get_item (selected)))
+    return;
+
+  item = gb_tree_node_get_item (selected);
+
+  if (IDE_IS_PROJECT_FILE (item))
+    {
+      GbWorkbench *workbench;
+      GFileInfo *file_info;
+      GFile *file;
+
+      file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item));
+      if (!file_info)
+        return;
+
+      if (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY)
+        return;
+
+      file = ide_project_file_get_file (IDE_PROJECT_FILE (item));
+      if (!file)
+        return;
+
+      workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+      gb_workbench_open (workbench, file);
+    }
+}
+
+static void
+gb_editor_workspace_tree_actions_open_containing_folder (GSimpleAction *action,
+                                                         GVariant      *variant,
+                                                         gpointer       user_data)
+{
+  GbEditorWorkspace *self = user_data;
+  GbTreeNode *selected;
+  GObject *item;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+
+  if (!(selected = gb_tree_get_selected (self->project_tree)) ||
+      !(item = gb_tree_node_get_item (selected)))
+    return;
+
+  item = gb_tree_node_get_item (selected);
+
+  if (IDE_IS_PROJECT_FILE (item))
+    {
+      GFile *file;
+
+      file = ide_project_file_get_file (IDE_PROJECT_FILE (item));
+      if (!file)
+        return;
+
+      gb_nautilus_select_file (GTK_WIDGET (self), file, GDK_CURRENT_TIME);
+    }
+}
+
 static const GActionEntry GbEditorWorkspaceActions[] = {
   { "show-sidebar", NULL, NULL, "false", gb_editor_workspace_actions_show_sidebar },
   { "toggle-sidebar", gb_editor_workspace_actions_toggle_sidebar },
 };
 
 static const GActionEntry GbEditorWorkspaceTreeActions[] = {
+  { "open", gb_editor_workspace_tree_actions_open },
+  { "open-containing-folder", gb_editor_workspace_tree_actions_open_containing_folder },
   { "refresh", gb_editor_workspace_tree_actions_refresh },
   { "collapse-all-nodes", gb_editor_workspace_tree_actions_collapse_all_nodes },
 };
