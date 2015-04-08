@@ -269,7 +269,7 @@ ide_vcs_uri_get_host (const IdeVcsUri *self)
 guint
 ide_vcs_uri_get_port (const IdeVcsUri *self)
 {
-  g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (self, 0);
 
   return self->port;
 }
@@ -376,7 +376,7 @@ ide_vcs_uri_to_string (const IdeVcsUri *self)
 {
   GString *str;
 
-  g_return_if_fail (self);
+  g_return_val_if_fail (self, NULL);
 
   str = g_string_new (NULL);
 
