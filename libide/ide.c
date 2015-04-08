@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 #include <libgit2-glib/ggit.h>
+#include <stdlib.h>
 
 #include "gconstructor.h"
 #include "ide.h"
@@ -79,6 +80,8 @@ ide_set_program_name (const gchar *program_name)
 static void
 ide_init_ctor (void)
 {
+  GgitFeatureFlags ggit_flags;
+
   g_type_ensure (IDE_TYPE_CONTEXT);
   g_type_ensure (IDE_TYPE_BUILD_SYSTEM);
   g_type_ensure (IDE_TYPE_VCS);
@@ -171,5 +174,20 @@ ide_init_ctor (void)
                                   -200);
 
   modeline_parser_init ();
+
   ggit_init ();
+
+  ggit_flags = ggit_get_features ();
+
+  if ((ggit_flags & GGIT_FEATURE_THREADS) == 0)
+    {
+      g_error (_("Builder requires libgit2-glib with threading support."));
+      exit (EXIT_FAILURE);
+    }
+
+  if ((ggit_flags & GGIT_FEATURE_SSH) == 0)
+    {
+      g_error (_("Builder requires libgit2-glib with SSH support."));
+      exit (EXIT_FAILURE);
+    }
 }
