@@ -23,6 +23,7 @@
 #include "ide.h"
 
 #include "ide-autotools-build-system.h"
+#include "ide-autotools-project-miner.h"
 #include "ide-c-language.h"
 #include "ide-clang-service.h"
 #include "ide-devhelp-search-provider.h"
@@ -36,6 +37,7 @@
 #include "ide-gjs-script.h"
 #include "ide-gsettings-file-settings.h"
 #include "ide-html-language.h"
+#include "ide-project-miner.h"
 #include "ide-pygobject-script.h"
 #include "ide-python-language.h"
 #include "ide-search-provider.h"
@@ -84,6 +86,7 @@ ide_init_ctor (void)
   g_io_extension_point_register (IDE_BUILD_SYSTEM_EXTENSION_POINT);
   g_io_extension_point_register (IDE_FILE_SETTINGS_EXTENSION_POINT);
   g_io_extension_point_register (IDE_LANGUAGE_EXTENSION_POINT);
+  g_io_extension_point_register (IDE_PROJECT_MINER_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SCRIPT_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SEARCH_PROVIDER_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SERVICE_EXTENSION_POINT);
@@ -122,6 +125,11 @@ ide_init_ctor (void)
   g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
                                   IDE_TYPE_XML_LANGUAGE,
                                   IDE_LANGUAGE_EXTENSION_POINT".xml",
+                                  0);
+
+  g_io_extension_point_implement (IDE_PROJECT_MINER_EXTENSION_POINT,
+                                  IDE_TYPE_AUTOTOOLS_PROJECT_MINER,
+                                  IDE_PROJECT_MINER_EXTENSION_POINT".autotools",
                                   0);
 
   g_io_extension_point_implement (IDE_SCRIPT_EXTENSION_POINT,

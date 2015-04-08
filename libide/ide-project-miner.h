@@ -25,7 +25,8 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_PROJECT_MINER (ide_project_miner_get_type())
+#define IDE_TYPE_PROJECT_MINER            (ide_project_miner_get_type())
+#define IDE_PROJECT_MINER_EXTENSION_POINT "org.gnome.builder.extensions.project-miner"
 
 G_DECLARE_DERIVABLE_TYPE (IdeProjectMiner, ide_project_miner, IDE, PROJECT_MINER, GObject)
 
