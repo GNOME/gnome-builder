@@ -36,6 +36,8 @@ libide_1_0_la_public_sources = \
 	libide/directory/ide-directory-vcs.h \
 	libide/editorconfig/ide-editorconfig-file-settings.c \
 	libide/editorconfig/ide-editorconfig-file-settings.h \
+	libide/git/ide-git-remote-callbacks.c \
+	libide/git/ide-git-remote-callbacks.h \
 	libide/git/ide-git-search-provider.c \
 	libide/git/ide-git-search-provider.h \
 	libide/git/ide-git-search-result.c \

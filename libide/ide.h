@@ -95,6 +95,7 @@ G_BEGIN_DECLS
 #include "devhelp/ide-devhelp-search-result.h"
 #include "directory/ide-directory-build-system.h"
 #include "directory/ide-directory-vcs.h"
+#include "git/ide-git-remote-callbacks.h"
 #include "git/ide-git-search-result.h"
 #include "git/ide-git-vcs.h"
 #include "local/ide-local-device.h"
