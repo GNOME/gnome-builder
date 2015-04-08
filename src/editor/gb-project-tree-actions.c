@@ -245,12 +245,12 @@ gb_project_tree_actions_show_icons (GSimpleAction *action,
 }
 
 static GActionEntry GbProjectTreeActions[] = {
+  { "collapse-all-nodes",     gb_project_tree_actions_collapse_all_nodes },
   { "open",                   gb_project_tree_actions_open },
-  { "open-with-editor",       gb_project_tree_actions_open_with_editor },
   { "open-containing-folder", gb_project_tree_actions_open_containing_folder },
+  { "open-with-editor",       gb_project_tree_actions_open_with_editor },
   { "refresh",                gb_project_tree_actions_refresh },
   { "show-icons",             NULL, NULL, "false", gb_project_tree_actions_show_icons },
-  { "collapse-all-nodes",     gb_project_tree_actions_collapse_all_nodes },
 };
 
 void
