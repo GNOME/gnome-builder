@@ -602,6 +602,24 @@ gb_workbench_open (GbWorkbench *self,
                            g_object_ref (self));
 }
 
+void
+gb_workbench_open_with_editor (GbWorkbench *self,
+                               GFile       *file)
+{
+  IdeBufferManager *buffer_manager;
+  IdeProject *project;
+  g_autoptr(IdeFile) idefile = NULL;
+
+  g_return_if_fail (GB_IS_WORKBENCH (self));
+  g_return_if_fail (self->unloading == FALSE);
+  g_return_if_fail (self->context);
+
+  buffer_manager = ide_context_get_buffer_manager (self->context);
+  project = ide_context_get_project (self->context);
+  idefile = ide_project_get_project_file (project, file);
+  ide_buffer_manager_load_file_async (buffer_manager, idefile, FALSE, NULL, NULL, NULL, NULL);
+}
+
 /**
  * gb_workbench_get_command_manager:
  * @self: A #GbWorkbench.

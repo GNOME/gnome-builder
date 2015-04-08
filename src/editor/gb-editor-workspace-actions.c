@@ -149,6 +149,45 @@ gb_editor_workspace_tree_actions_open (GSimpleAction *action,
 }
 
 static void
+gb_editor_workspace_tree_actions_open_with_editor (GSimpleAction *action,
+                                                   GVariant      *variant,
+                                                   gpointer       user_data)
+{
+  GbEditorWorkspace *self = user_data;
+  GbTreeNode *selected;
+  GObject *item;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+
+  if (!(selected = gb_tree_get_selected (self->project_tree)) ||
+      !(item = gb_tree_node_get_item (selected)))
+    return;
+
+  item = gb_tree_node_get_item (selected);
+
+  if (IDE_IS_PROJECT_FILE (item))
+    {
+      GbWorkbench *workbench;
+      GFileInfo *file_info;
+      GFile *file;
+
+      file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item));
+      if (!file_info)
+        return;
+
+      if (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY)
+        return;
+
+      file = ide_project_file_get_file (IDE_PROJECT_FILE (item));
+      if (!file)
+        return;
+
+      workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+      gb_workbench_open_with_editor (workbench, file);
+    }
+}
+
+static void
 gb_editor_workspace_tree_actions_open_containing_folder (GSimpleAction *action,
                                                          GVariant      *variant,
                                                          gpointer       user_data)
@@ -184,6 +223,7 @@ static const GActionEntry GbEditorWorkspaceActions[] = {
 
 static const GActionEntry GbEditorWorkspaceTreeActions[] = {
   { "open", gb_editor_workspace_tree_actions_open },
+  { "open-with-editor", gb_editor_workspace_tree_actions_open_with_editor },
   { "open-containing-folder", gb_editor_workspace_tree_actions_open_containing_folder },
   { "refresh", gb_editor_workspace_tree_actions_refresh },
   { "collapse-all-nodes", gb_editor_workspace_tree_actions_collapse_all_nodes },

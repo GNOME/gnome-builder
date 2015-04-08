@@ -46,6 +46,8 @@ void              gb_workbench_set_active_workspace (GbWorkbench         *self,
 void              gb_workbench_add_temporary_buffer (GbWorkbench         *self);
 void              gb_workbench_open                 (GbWorkbench         *self,
                                                      GFile               *file);
+void              gb_workbench_open_with_editor     (GbWorkbench         *self,
+                                                     GFile               *file);
 void              gb_workbench_open_uri_list        (GbWorkbench         *self,
                                                      const gchar * const *uri_list);
 GbCommandManager *gb_workbench_get_command_manager  (GbWorkbench         *self);
