@@ -294,6 +294,8 @@ gb_tree_selection_changed (GbTree           *tree,
         }
     }
 
+  g_object_notify_by_pspec (G_OBJECT (tree), gParamSpecs [PROP_SELECTION]);
+
   IDE_EXIT;
 }
 
