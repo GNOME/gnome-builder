@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-04-03 21:06+0000\n"
-"PO-Revision-Date: 2015-04-04 17:27+0200\n"
+"POT-Creation-Date: 2015-04-06 21:36+0000\n"
+"PO-Revision-Date: 2015-04-08 07:56+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -508,7 +508,7 @@ msgid "The overlay config for the compilation."
 msgstr "Překrývající konfigurace pro kompilaci."
 
 #: ../libide/autotools/ide-autotools-build-task.c:399
-#: ../libide/ide-project-info.c:218
+#: ../libide/ide-project-info.c:257
 msgid "Directory"
 msgstr "Složka"
 
@@ -559,11 +559,11 @@ msgstr "Skript autogen.sh není spustitelný."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "Skritp autogen.sh selhal při vytváření konfigurace (%s)"
 
-#: ../libide/autotools/ide-autotools-project-miner.c:282
+#: ../libide/autotools/ide-autotools-project-miner.c:306
 msgid "Root Directory"
 msgstr "Kořenová složka"
 
-#: ../libide/autotools/ide-autotools-project-miner.c:283
+#: ../libide/autotools/ide-autotools-project-miner.c:307
 msgid "The root directory to scan from."
 msgstr "Kořenová složka, od které se má prohledávat."
 
@@ -645,7 +645,7 @@ msgstr "Soubor musí být uložen místně, aby jej bylo možné zpracovat."
 #: ../libide/clang/ide-clang-translation-unit.c:545
 #: ../libide/git/ide-git-search-result.c:98 ../libide/ide-buffer.c:966
 #: ../libide/ide-file.c:466 ../libide/ide-file-settings.c:450
-#: ../libide/ide-project-file.c:219 ../libide/ide-project-info.c:226
+#: ../libide/ide-project-file.c:219 ../libide/ide-project-info.c:265
 #: ../libide/ide-script.c:156
 msgid "File"
 msgstr "Soubor"
@@ -1300,7 +1300,7 @@ msgid "The semantic indenter for the language."
 msgstr "Sémantické odsazování pro jazyk."
 
 #: ../libide/ide-language.c:384 ../libide/ide-project.c:344
-#: ../libide/ide-project-file.c:239 ../libide/ide-project-info.c:210
+#: ../libide/ide-project-file.c:239 ../libide/ide-project-info.c:249
 #: ../libide/ide-service.c:138 ../libide/ide-source-view-mode.c:260
 msgid "Name"
 msgstr "Název"
@@ -1393,17 +1393,21 @@ msgstr "Krátký název souboru."
 msgid "The path for the file within the project tree."
 msgstr "Cesta k souboru v rámci projektového stromu."
 
-#: ../libide/ide-project-info.c:211
+#: ../libide/ide-project-info.c:250
 msgid "The project name"
 msgstr "Název projektu"
 
-#: ../libide/ide-project-info.c:219
+#: ../libide/ide-project-info.c:258
 msgid "The project directory."
 msgstr "Složka s projektem."
 
-#: ../libide/ide-project-info.c:227
+#: ../libide/ide-project-info.c:266
 msgid "The toplevel project file"
 msgstr "Projektový soubor nejvyšší úrovně"
+
+#: ../libide/ide-project-info.c:273 ../libide/ide-project-info.c:274
+msgid "Last Modified At"
+msgstr "Naposledy změněno v"
 
 #: ../libide/ide-project-item.c:172 ../src/tree/gb-tree-node.c:526
 msgid "Parent"
