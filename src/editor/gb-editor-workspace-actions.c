@@ -121,6 +121,8 @@ gb_editor_workspace_actions_init (GbEditorWorkspace *self)
 {
   g_autoptr(GSimpleActionGroup) group = NULL;
   g_autoptr(GSimpleActionGroup) tree_group = NULL;
+  g_autoptr(GSettings) settings = NULL;
+  g_autoptr(GAction) action = NULL;
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), GbEditorWorkspaceActions,
@@ -128,7 +130,10 @@ gb_editor_workspace_actions_init (GbEditorWorkspace *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self), "workspace", G_ACTION_GROUP (group));
 
   tree_group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (group), GbEditorWorkspaceTreeActions,
+  settings = g_settings_new ("org.gtk.Settings.FileChooser");
+  action = g_settings_create_action (settings, "sort-directories-first");
+  g_action_map_add_action (G_ACTION_MAP (tree_group), action);
+  g_action_map_add_action_entries (G_ACTION_MAP (tree_group), GbEditorWorkspaceTreeActions,
                                    G_N_ELEMENTS (GbEditorWorkspaceTreeActions), self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "project-tree", G_ACTION_GROUP (group));
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "project-tree", G_ACTION_GROUP (tree_group));
 }

@@ -115,6 +115,12 @@
         <attribute name="label" translatable="yes">Display Options</attribute>
         <section>
           <item>
+            <attribute name="label" translatable="yes">Sort Directories First</attribute>
+            <attribute name="action">project-tree.sort-directories-first</attribute>
+          </item>
+        </section>
+        <section>
+          <item>
             <attribute name="label" translatable="yes">_Collapse All Nodes</attribute>
             <attribute name="action">project-tree.collapse-all-nodes</attribute>
           </item>
