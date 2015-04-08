@@ -77,6 +77,9 @@ GbTree       *gb_tree_node_get_tree  (GbTreeNode    *node);
 GMenu        *gb_tree_get_menu       (GbTree        *tree);
 void          gb_tree_set_menu       (GbTree        *tree,
                                       GMenu         *menu);
+void          gb_tree_set_show_icons (GbTree        *tree,
+                                      gboolean       show_icons);
+gboolean      gb_tree_get_show_icons (GbTree        *tree);
 
 G_END_DECLS
 

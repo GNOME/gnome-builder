@@ -26,11 +26,14 @@
 
 struct _GbTreePrivate
 {
-  GPtrArray    *builders;
-  GbTreeNode   *root;
-  GbTreeNode   *selection;
-  GtkTreeStore *store;
-  guint         building : 1;
+  GPtrArray         *builders;
+  GbTreeNode        *root;
+  GbTreeNode        *selection;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer   *cell_pixbuf;
+  GtkTreeStore      *store;
+  guint              building : 1;
+  guint              show_icons : 1;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbTree, gb_tree, GTK_TYPE_TREE_VIEW)
@@ -39,6 +42,7 @@ enum {
   PROP_0,
   PROP_ROOT,
   PROP_SELECTION,
+  PROP_SHOW_ICONS,
   LAST_PROP
 };
 
@@ -52,6 +56,40 @@ extern void _gb_tree_node_set_tree (GbTreeNode *node,
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
+
+gboolean
+gb_tree_get_show_icons (GbTree *tree)
+{
+  g_return_val_if_fail (GB_IS_TREE (tree), FALSE);
+
+  return tree->priv->show_icons;
+}
+
+void
+gb_tree_set_show_icons (GbTree   *tree,
+                        gboolean  show_icons)
+{
+  g_return_if_fail (GB_IS_TREE (tree));
+
+  show_icons = !!show_icons;
+
+  if (show_icons != tree->priv->show_icons)
+    {
+      tree->priv->show_icons = show_icons;
+      g_object_set (tree->priv->cell_pixbuf, "visible", show_icons, NULL);
+      /*
+       * WORKAROUND:
+       *
+       * Changing the visibility of the cell does not force a redraw of the
+       * tree view. So to force it, we will hide/show our entire pixbuf/text
+       * column.
+       */
+      gtk_tree_view_column_set_visible (tree->priv->column, FALSE);
+      gtk_tree_view_column_set_visible (tree->priv->column, TRUE);
+      g_object_notify_by_pspec (G_OBJECT (tree),
+                                gParamSpecs [PROP_SHOW_ICONS]);
+    }
+}
 
 /**
  * gb_tree_unselect:
@@ -866,6 +904,10 @@ gb_tree_get_property (GObject    *object,
       g_value_set_object (value, tree->priv->selection);
       break;
 
+    case PROP_SHOW_ICONS:
+      g_value_set_boolean (value, tree->priv->show_icons);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -896,6 +938,10 @@ gb_tree_set_property (GObject      *object,
 
     case PROP_SELECTION:
       gb_tree_select (tree, g_value_get_object (value));
+      break;
+
+    case PROP_SHOW_ICONS:
+      gb_tree_set_show_icons (tree, g_value_get_boolean (value));
       break;
 
     default:
@@ -941,6 +987,16 @@ gb_tree_class_init (GbTreeClass *klass)
   g_object_class_install_property (object_class, PROP_SELECTION,
                                    gParamSpecs[PROP_SELECTION]);
 
+  gParamSpecs [PROP_SHOW_ICONS] =
+    g_param_spec_boolean ("show-icons",
+                          _("Show Icons"),
+                          _("Show Icons"),
+                          FALSE,
+                          (G_PARAM_READWRITE |
+                           G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SHOW_ICONS,
+                                   gParamSpecs [PROP_SHOW_ICONS]);
+
   gSignals [POPULATE_POPUP] =
     g_signal_new ("populate-popup",
                   G_TYPE_FROM_CLASS (klass),
@@ -980,8 +1036,14 @@ gb_tree_init (GbTree *tree)
   column = g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
                          "title", "Node",
                          NULL);
+  tree->priv->column = GTK_TREE_VIEW_COLUMN (column);
 
-  cell = g_object_new (GTK_TYPE_CELL_RENDERER_PIXBUF, NULL);
+  cell = g_object_new (GTK_TYPE_CELL_RENDERER_PIXBUF,
+                       "xpad", 3,
+                       "visible", tree->priv->show_icons,
+                       NULL);
+  tree->priv->cell_pixbuf = cell;
+  g_object_bind_property (tree, "show-icons", cell, "visible", 0);
   gtk_cell_layout_pack_start (column, cell, FALSE);
   gtk_cell_layout_set_cell_data_func (column, cell, pixbuf_func, NULL, NULL);
 
