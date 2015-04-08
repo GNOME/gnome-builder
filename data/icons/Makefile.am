@@ -20,7 +20,15 @@ nobase_icon_DATA = \
 	hicolor/scalable/autocomplete/lang-function-symbolic.svg \
 	$(NULL)
 
+bundled_icon_sources = \
+	hicolor/scalable/vcs/builder-vcs-git-symbolic.svg \
+	hicolor/256x256/vcs/builder-vcs-git.png \
+	hicolor/48x48/vcs/builder-vcs-git.png \
+	hicolor/32x32/vcs/builder-vcs-git.png \
+	$(NULL)
+
 EXTRA_DIST = \
+	$(bundled_icon_sources) \
 	$(nobase_icon_DATA) \
 	hicolor/source.svg
 
