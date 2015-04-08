@@ -52,6 +52,17 @@ G_DEFINE_TYPE (IdeFile, ide_file, IDE_TYPE_OBJECT)
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+const gchar *
+_ide_file_get_content_type (IdeFile *self)
+{
+  g_return_val_if_fail (IDE_IS_FILE (self), NULL);
+
+  if (self->content_type != NULL)
+    return self->content_type;
+
+  return "text/plain";
+}
+
 void
 _ide_file_set_content_type (IdeFile     *self,
                             const gchar *content_type)
