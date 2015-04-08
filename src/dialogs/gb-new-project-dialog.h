@@ -1,6 +1,6 @@
-/* gb-application.h
+/* gb-new-project-dialog.h
  *
- * Copyright (C) 2014 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_APPLICATION_H
-#define GB_APPLICATION_H
+#ifndef GB_NEW_PROJECT_DIALOG_H
+#define GB_NEW_PROJECT_DIALOG_H
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_APPLICATION (gb_application_get_type())
+#define GB_TYPE_NEW_PROJECT_DIALOG (gb_new_project_dialog_get_type())
 
-G_DECLARE_FINAL_TYPE (GbApplication, gb_application, GB, APPLICATION, GtkApplication)
-
-void gb_application_open_project         (GbApplication *self,
-                                          GFile         *file,
-                                          GPtrArray     *additional_files);
-void gb_application_show_projects_window (GbApplication *self);
+G_DECLARE_FINAL_TYPE (GbNewProjectDialog, gb_new_project_dialog, GB, NEW_PROJECT_DIALOG, GtkWindow)
 
 G_END_DECLS
 
-#endif /* GB_APPLICATION_H */
+#endif /* GB_NEW_PROJECT_DIALOG_H */

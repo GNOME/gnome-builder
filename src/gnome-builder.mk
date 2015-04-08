@@ -35,6 +35,12 @@ libgnome_builder_la_SOURCES = \
 	src/devhelp/gb-devhelp-document.h \
 	src/devhelp/gb-devhelp-view.c \
 	src/devhelp/gb-devhelp-view.h \
+	src/dialogs/gb-new-project-dialog.c \
+	src/dialogs/gb-new-project-dialog.h \
+	src/dialogs/gb-projects-dialog.c \
+	src/dialogs/gb-projects-dialog.h \
+	src/dialogs/gb-recent-project-row.c \
+	src/dialogs/gb-recent-project-row.h \
 	src/documents/gb-document.c \
 	src/documents/gb-document.h \
 	src/editor/gb-editor-document.c \
@@ -168,6 +174,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/app \
 	-I$(top_srcdir)/src/commands \
 	-I$(top_srcdir)/src/devhelp \
+	-I$(top_srcdir)/src/dialogs \
 	-I$(top_srcdir)/src/documents \
 	-I$(top_srcdir)/src/editor \
 	-I$(top_srcdir)/src/gd \

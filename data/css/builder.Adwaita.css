@@ -169,3 +169,7 @@ GbViewStack:not(.focused) GtkBox.header.notebook {
 GbEditorWorkspace > GtkPaned > GtkBox > GtkBox.header.notebook {
     border-bottom: 1px solid @borders;
 }
+
+GbNewProjectDialog GtkFileChooserButton.linked-on-right .button {
+    border-radius: 3px 0 0 3px;
+}

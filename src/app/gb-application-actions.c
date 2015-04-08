@@ -27,6 +27,7 @@
 #include "gb-application-actions.h"
 #include "gb-application-credits.h"
 #include "gb-application-private.h"
+#include "gb-new-project-dialog.h"
 #include "gb-support.h"
 #include "gb-workbench.h"
 
@@ -171,11 +172,62 @@ gb_application_actions_about (GSimpleAction *action,
   gtk_window_present (GTK_WINDOW (dialog));
 }
 
+static void
+gb_application_actions_open_project (GSimpleAction *action,
+                                     GVariant      *variant,
+                                     gpointer       user_data)
+{
+  GbApplication *self = user_data;
+
+  g_assert (GB_IS_APPLICATION (self));
+
+  gb_application_show_projects_window (self);
+}
+
+static void
+gb_application_actions__window_open_project (GbApplication      *self,
+                                             GFile              *project_file,
+                                             GbNewProjectDialog *window)
+{
+  g_assert (GB_IS_APPLICATION (self));
+  g_assert (G_IS_FILE (project_file));
+  g_assert (GB_IS_NEW_PROJECT_DIALOG (window));
+
+  gb_application_open_project (self, project_file, NULL);
+  gtk_widget_destroy (GTK_WIDGET (window));
+}
+
+static void
+gb_application_actions_new_project (GSimpleAction *action,
+                                    GVariant      *variant,
+                                    gpointer       user_data)
+{
+  GbApplication *self = user_data;
+  GtkWindow *window;
+
+  g_assert (GB_IS_APPLICATION (self));
+
+  window = g_object_new (GB_TYPE_NEW_PROJECT_DIALOG,
+                         "type-hint", GDK_WINDOW_TYPE_HINT_DIALOG,
+                         "window-position", GTK_WIN_POS_CENTER,
+                         NULL);
+
+  g_signal_connect_object (window,
+                           "open-project",
+                           G_CALLBACK (gb_application_actions__window_open_project),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gtk_window_present (window);
+}
+
 static const GActionEntry GbApplicationActions[] = {
-  { "about",       gb_application_actions_about },
-  { "preferences", gb_application_actions_preferences },
-  { "quit",        gb_application_actions_quit },
-  { "support",     gb_application_actions_support },
+  { "about",        gb_application_actions_about },
+  { "open-project", gb_application_actions_open_project },
+  { "new-project",  gb_application_actions_new_project },
+  { "preferences",  gb_application_actions_preferences },
+  { "quit",         gb_application_actions_quit },
+  { "support",      gb_application_actions_support },
 };
 
 void
