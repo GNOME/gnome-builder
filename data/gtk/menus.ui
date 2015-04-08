@@ -115,6 +115,10 @@
         <attribute name="label" translatable="yes">Display Options</attribute>
         <section>
           <item>
+            <attribute name="label" translatable="yes">Show Icons</attribute>
+            <attribute name="action">project-tree.show-icons</attribute>
+          </item>
+          <item>
             <attribute name="label" translatable="yes">Sort Directories First</attribute>
             <attribute name="action">project-tree.sort-directories-first</attribute>
           </item>

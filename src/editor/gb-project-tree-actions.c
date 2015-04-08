@@ -231,11 +231,25 @@ gb_project_tree_actions_open_containing_folder (GSimpleAction *action,
     }
 }
 
+static void
+gb_project_tree_actions_show_icons (GSimpleAction *action,
+                                    GVariant      *variant,
+                                    gpointer       user_data)
+{
+  GbEditorWorkspace *editor = user_data;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (editor));
+
+  gb_tree_set_show_icons (editor->project_tree, g_variant_get_boolean (variant));
+  g_simple_action_set_state (action, variant);
+}
+
 static GActionEntry GbProjectTreeActions[] = {
   { "open",                   gb_project_tree_actions_open },
   { "open-with-editor",       gb_project_tree_actions_open_with_editor },
   { "open-containing-folder", gb_project_tree_actions_open_containing_folder },
   { "refresh",                gb_project_tree_actions_refresh },
+  { "show-icons",             NULL, NULL, "false", gb_project_tree_actions_show_icons },
   { "collapse-all-nodes",     gb_project_tree_actions_collapse_all_nodes },
 };
 
