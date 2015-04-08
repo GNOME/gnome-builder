@@ -27,6 +27,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbApplication, gb_application, GB, APPLICATION, GtkApplication)
 
+void gb_application_open_project         (GbApplication *self,
+                                          GFile         *file,
+                                          GPtrArray     *additional_files);
 G_END_DECLS
 
 #endif /* GB_APPLICATION_H */
