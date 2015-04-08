@@ -64,6 +64,8 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-editor-workspace-private.h \
 	src/editor/gb-editor-workspace.c \
 	src/editor/gb-editor-workspace.h \
+	src/editor/gb-project-tree-actions.c \
+	src/editor/gb-project-tree-actions.h \
 	src/gd/gd-tagged-entry.c \
 	src/gd/gd-tagged-entry.h \
 	src/gedit/gedit-close-button.c \

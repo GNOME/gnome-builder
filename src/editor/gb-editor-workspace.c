@@ -27,6 +27,7 @@
 #include "gb-editor-workspace-actions.h"
 #include "gb-editor-workspace-private.h"
 #include "gb-project-tree-builder.h"
+#include "gb-project-tree-actions.h"
 #include "gb-string.h"
 #include "gb-tree.h"
 #include "gb-view-grid.h"
@@ -152,6 +153,7 @@ gb_editor_workspace_constructed (GObject *object)
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->constructed (object);
 
   gb_editor_workspace_actions_init (self);
+  gb_project_tree_actions_init (self);
 
   IDE_EXIT;
 }
