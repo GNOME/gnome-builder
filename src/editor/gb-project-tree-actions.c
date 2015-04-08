@@ -26,6 +26,79 @@
 #include "gb-workbench.h"
 
 static void
+action_set (GActionGroup *group,
+            const gchar  *action_name,
+            const gchar  *first_param,
+            ...)
+{
+  GAction *action;
+  va_list args;
+
+  g_assert (G_IS_ACTION_GROUP (group));
+  g_assert (G_IS_ACTION_MAP (group));
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (group), action_name);
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+  va_start (args, first_param);
+  g_object_set_valist (G_OBJECT (action), first_param, args);
+  va_end (args);
+}
+
+static gboolean
+is_project_file_not_directory (GObject *object)
+{
+  GFileInfo *info;
+
+  g_assert (!object || G_IS_OBJECT (object));
+
+  return (IDE_IS_PROJECT_FILE (object) &&
+          (info = ide_project_file_get_file_info (IDE_PROJECT_FILE (object))) &&
+          (g_file_info_get_file_type (info) != G_FILE_TYPE_DIRECTORY));
+}
+
+static void
+gb_project_tree_actions_update_actions (GbEditorWorkspace *editor)
+{
+  GActionGroup *group;
+  GbTreeNode *selection;
+  GObject *item = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (editor));
+  group = gtk_widget_get_action_group (GTK_WIDGET (editor), "project-tree");
+  g_assert (G_IS_SIMPLE_ACTION_GROUP (group));
+
+  selection = gb_tree_get_selected (editor->project_tree);
+  if (selection != NULL)
+    item = gb_tree_node_get_item (selection);
+
+  action_set (group, "open",
+              "enabled", is_project_file_not_directory (item),
+              NULL);
+  action_set (group, "open-with-editor",
+              "enabled", is_project_file_not_directory (item),
+              NULL);
+  action_set (group, "open-containing-folder",
+              "enabled", IDE_IS_PROJECT_FILE (item),
+              NULL);
+
+  IDE_EXIT;
+}
+
+static void
+gb_project_tree_actions__notify_selection (GbTree            *tree,
+                                           GParamSpec        *pspec,
+                                           GbEditorWorkspace *editor)
+{
+  g_assert (GB_IS_TREE (tree));
+  g_assert (GB_IS_EDITOR_WORKSPACE (editor));
+
+  gb_project_tree_actions_update_actions (editor);
+}
+
+static void
 gb_project_tree_actions_refresh (GSimpleAction *action,
                                  GVariant      *variant,
                                  gpointer       user_data)
@@ -183,4 +256,11 @@ gb_project_tree_actions_init (GbEditorWorkspace *editor)
   g_action_map_add_action (G_ACTION_MAP (actions), action);
 
   gtk_widget_insert_action_group (GTK_WIDGET (editor), "project-tree", G_ACTION_GROUP (actions));
+
+  g_signal_connect (editor->project_tree,
+                    "notify::selection",
+                    G_CALLBACK (gb_project_tree_actions__notify_selection),
+                    editor);
+
+  gb_project_tree_actions_update_actions (editor);
 }
