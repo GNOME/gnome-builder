@@ -53,6 +53,12 @@ get_default_size (GtkRequisition *req)
 
   req->width = rect.width * 0.75;
   req->height = rect.height * 0.75;
+
+  if ((req->width == 0) || (req->height == 0))
+    {
+      req->width = 1080;
+      req->height = 675;
+    }
 }
 
 static void
