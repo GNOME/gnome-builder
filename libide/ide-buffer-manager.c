@@ -974,6 +974,43 @@ ide_buffer_manager_save_file_finish (IdeBufferManager  *self,
 }
 
 static void
+ide_buffer_manager_real_buffer_loaded (IdeBufferManager *self,
+                                       IdeBuffer        *buffer)
+{
+  g_autofree gchar *uri = NULL;
+  g_autofree gchar *app_exec = NULL;
+  GtkRecentManager *recent_manager;
+  IdeContext *context;
+  GtkRecentData recent_data = { 0 };
+  IdeFile *file;
+  GFile *gfile;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  file = ide_buffer_get_file (buffer);
+  if (ide_file_get_is_temporary (file))
+    return;
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  recent_manager = ide_context_get_recent_manager (context);
+
+  gfile = ide_file_get_file (file);
+  uri = g_file_get_uri (gfile);
+  app_exec = g_strdup_printf ("%s %%f", ide_get_program_name ());
+
+  recent_data.display_name = NULL;
+  recent_data.description = NULL;
+  recent_data.mime_type = (gchar *)_ide_file_get_content_type (file);
+  recent_data.app_name = (gchar *)ide_get_program_name ();
+  recent_data.app_exec = app_exec;
+  recent_data.groups = NULL;
+  recent_data.is_private = FALSE;
+
+  gtk_recent_manager_add_full (recent_manager, uri, &recent_data);
+}
+
+static void
 ide_buffer_manager_dispose (GObject *object)
 {
   IdeBufferManager *self = (IdeBufferManager *)object;
@@ -1191,15 +1228,16 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * This signal is emitted when a buffer has been successfully loaded. You might connect to this
    * signal to be notified when a buffer has completed loading.
    */
-  gSignals [BUFFER_LOADED] = g_signal_new ("buffer-loaded",
-                                           G_TYPE_FROM_CLASS (klass),
-                                           G_SIGNAL_RUN_LAST,
-                                           0,
-                                           NULL, NULL,
-                                           g_cclosure_marshal_generic,
-                                           G_TYPE_NONE,
-                                           1,
-                                           IDE_TYPE_BUFFER);
+  gSignals [BUFFER_LOADED] =
+    g_signal_new_class_handler ("buffer-loaded",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_buffer_manager_real_buffer_loaded),
+                                NULL, NULL,
+                                g_cclosure_marshal_generic,
+                                G_TYPE_NONE,
+                                1,
+                                IDE_TYPE_BUFFER);
 
   /**
    * IdeBufferManager::buffer-focus-enter:
