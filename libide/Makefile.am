@@ -130,6 +130,8 @@ libide_1_0_la_public_sources = \
 	libide/ide-project-miner.h \
 	libide/ide-project.c \
 	libide/ide-project.h \
+	libide/ide-recent-projects.c \
+	libide/ide-recent-projects.h \
 	libide/ide-refactory.c \
 	libide/ide-refactory.h \
 	libide/ide-script-manager.c \

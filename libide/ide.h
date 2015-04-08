@@ -62,6 +62,7 @@ G_BEGIN_DECLS
 #include "ide-project-file.h"
 #include "ide-project-files.h"
 #include "ide-project-item.h"
+#include "ide-recent-projects.h"
 #include "ide-refactory.h"
 #include "ide-script.h"
 #include "ide-script-manager.h"
