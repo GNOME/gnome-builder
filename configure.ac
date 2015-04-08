@@ -71,7 +71,6 @@ AC_CONFIG_FILES([
 	src/util/gb-version.h
 	data/icons/Makefile
 	data/libide-1.0.pc
-	data/gsettings/org.gnome.builder.gschema.xml
 	data/gsettings/org.gnome.builder.editor.gschema.xml
 	data/gsettings/org.gnome.builder.editor.language.gschema.xml
 	data/gsettings/org.gnome.builder.experimental.gschema.xml

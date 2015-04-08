@@ -1,9 +1,0 @@
-<schemalist>
-  <schema id="org.gnome.builder" path="/org/gnome/builder/" gettext-domain="gnome-builder">
-    <key name="project-history" type="as">
-      <default>[]</default>
-      <summary>Previously opened projects</summary>
-      <description>An array of project file paths denoting the recently opened projects</description>
-    </key>
-  </schema>
-</schemalist>
