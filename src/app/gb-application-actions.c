@@ -36,32 +36,23 @@ gb_application_actions_preferences (GSimpleAction *action,
                                     gpointer       user_data)
 {
   GbApplication *self = user_data;
-  GbPreferencesWindow *window;
-  GbWorkbench *workbench = NULL;
-  GList *list;
 
   IDE_ENTRY;
 
   g_assert (GB_IS_APPLICATION (self));
 
-  if (self->preferences_window)
+  if (self->preferences_window == NULL)
     {
-      gtk_window_present (GTK_WINDOW (self->preferences_window));
-      return;
+      GbPreferencesWindow *window;
+
+      window = g_object_new (GB_TYPE_PREFERENCES_WINDOW,
+                             "type-hint", GDK_WINDOW_TYPE_HINT_DIALOG,
+                             "window-position", GTK_WIN_POS_CENTER,
+                             NULL);
+      ide_set_weak_pointer (&self->preferences_window, window);
     }
 
-  list = gtk_application_get_windows (GTK_APPLICATION (self));
-
-  for (; list; list = list->next)
-    if (GB_IS_WORKBENCH (list->data))
-      workbench = GB_WORKBENCH (list->data);
-
-  window = g_object_new (GB_TYPE_PREFERENCES_WINDOW,
-                         "transient-for", workbench,
-                         NULL);
-  ide_set_weak_pointer (&self->preferences_window, window);
-
-  gtk_window_present (GTK_WINDOW (window));
+  gtk_window_present (GTK_WINDOW (self->preferences_window));
 
   IDE_EXIT;
 }
