@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 struct _GbEditorWorkspace
 {
   GbWorkspace    parent_instance;
+  GSettings     *editor_settings;
 
   GtkPaned      *project_paned;
   GtkBox        *project_sidebar;

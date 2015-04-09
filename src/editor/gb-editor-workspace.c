@@ -154,6 +154,7 @@ gb_editor_workspace_constructed (GObject *object)
 
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->constructed (object);
 
+  self->editor_settings = g_settings_new ("org.gnome.builder.editor");
   self->sidebar_position = gtk_paned_get_position (self->project_paned) ?: SIDEBAR_POSITION;
 
   gb_editor_workspace_actions_init (self);
@@ -165,8 +166,14 @@ gb_editor_workspace_constructed (GObject *object)
 static void
 gb_editor_workspace_finalize (GObject *object)
 {
+  GbEditorWorkspace *self = (GbEditorWorkspace *)object;
+
   IDE_ENTRY;
+
+  g_clear_object (&self->editor_settings);
+
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->finalize (object);
+
   IDE_EXIT;
 }
 

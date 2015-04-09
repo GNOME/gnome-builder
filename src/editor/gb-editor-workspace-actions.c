@@ -89,6 +89,17 @@ gb_editor_workspace_actions_toggle_sidebar (GSimpleAction *action,
   g_variant_unref (state);
 }
 
+static void
+gb_editor_workspace_actions__show_sidebar_notify_state (GbEditorWorkspace *self,
+                                                        GParamSpec        *pspec,
+                                                        GAction           *action)
+{
+  g_autoptr(GVariant) state = NULL;
+
+  state = g_action_get_state (action);
+  g_settings_set_boolean (self->editor_settings, "show-sidebar", g_variant_get_boolean (state));
+}
+
 static const GActionEntry GbEditorWorkspaceActions[] = {
   { "show-sidebar", NULL, NULL, "false", gb_editor_workspace_actions_show_sidebar },
   { "toggle-sidebar", gb_editor_workspace_actions_toggle_sidebar },
@@ -98,9 +109,26 @@ void
 gb_editor_workspace_actions_init (GbEditorWorkspace *self)
 {
   g_autoptr(GSimpleActionGroup) group = NULL;
+  GAction *action;
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), GbEditorWorkspaceActions,
                                    G_N_ELEMENTS (GbEditorWorkspaceActions), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "workspace", G_ACTION_GROUP (group));
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (group), "show-sidebar");
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+  if (g_settings_get_boolean (self->editor_settings, "show-sidebar"))
+    {
+      g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (TRUE));
+      gtk_paned_set_position (self->project_paned, self->sidebar_position);
+      gtk_widget_show (GTK_WIDGET (self->project_sidebar));
+    }
+
+  g_signal_connect_object (action,
+                           "notify::state",
+                           G_CALLBACK (gb_editor_workspace_actions__show_sidebar_notify_state),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
