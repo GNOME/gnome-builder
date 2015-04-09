@@ -45,6 +45,7 @@ test-ide-back-forward-list
 test-ide-buffer
 test-ide-buffer-manager
 test-ide-context
+test-ide-file-settings
 test-ide-source-view
 test-ide-vcs-uri
 test-navigation-list
