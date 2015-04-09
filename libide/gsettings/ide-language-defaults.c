@@ -388,7 +388,7 @@ ide_language_defaults_init_async (GCancellable        *cancellable,
     }
   else if (gInitializing)
     {
-      g_list_prepend (gTasks, g_object_ref (task));
+      gTasks = g_list_prepend (gTasks, g_object_ref (task));
     }
   else
     {
