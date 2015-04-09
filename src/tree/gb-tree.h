@@ -56,7 +56,6 @@ struct _GbTreeClass
 
 void          gb_tree_add_builder    (GbTree        *tree,
                                       GbTreeBuilder *builder);
-GtkUIManager *gb_tree_get_menu_ui    (GbTree        *tree);
 GtkTreePath  *gb_tree_get_path       (GbTree        *tree,
                                       GList         *list);
 GbTreeNode   *gb_tree_get_selected   (GbTree        *tree);
@@ -74,9 +73,6 @@ void          gb_tree_set_root       (GbTree        *tree,
                                       GbTreeNode    *node);
 GbTreeNode   *gb_tree_get_root       (GbTree        *tree);
 GbTree       *gb_tree_node_get_tree  (GbTreeNode    *node);
-GMenu        *gb_tree_get_menu       (GbTree        *tree);
-void          gb_tree_set_menu       (GbTree        *tree,
-                                      GMenu         *menu);
 void          gb_tree_set_show_icons (GbTree        *tree,
                                       gboolean       show_icons);
 gboolean      gb_tree_get_show_icons (GbTree        *tree);
