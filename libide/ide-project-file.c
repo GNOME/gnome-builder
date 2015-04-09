@@ -27,19 +27,32 @@ typedef struct
   gchar     *path;
 } IdeProjectFilePrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeProjectFile, ide_project_file,
-                            IDE_TYPE_PROJECT_ITEM)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeProjectFile, ide_project_file, IDE_TYPE_PROJECT_ITEM)
 
 enum {
   PROP_0,
   PROP_FILE,
   PROP_FILE_INFO,
+  PROP_IS_DIRECTORY,
   PROP_NAME,
   PROP_PATH,
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+gboolean
+ide_project_file_get_is_directory (IdeProjectFile *self)
+{
+  IdeProjectFilePrivate *priv = ide_project_file_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_PROJECT_FILE (self), NULL);
+
+  if (priv->file_info)
+    return (g_file_info_get_file_type (priv->file_info) == G_FILE_TYPE_DIRECTORY);
+
+  return FALSE;
+}
 
 const gchar *
 ide_project_file_get_path (IdeProjectFile *self)
@@ -165,6 +178,10 @@ ide_project_file_get_property (GObject    *object,
       g_value_set_object (value, ide_project_file_get_file_info (self));
       break;
 
+    case PROP_IS_DIRECTORY:
+      g_value_set_boolean (value, ide_project_file_get_is_directory (self));
+      break;
+
     case PROP_NAME:
       g_value_set_string (value, ide_project_file_get_name (self));
       break;
@@ -233,6 +250,15 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FILE_INFO,
                                    gParamSpecs [PROP_FILE_INFO]);
+
+  gParamSpecs [PROP_IS_DIRECTORY] =
+    g_param_spec_boolean ("is-directory",
+                          _("Is Directory"),
+                          _("Is Directory"),
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_IS_DIRECTORY,
+                                   gParamSpecs [PROP_IS_DIRECTORY]);
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",

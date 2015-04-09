@@ -35,10 +35,11 @@ struct _IdeProjectFileClass
   GObjectClass parent;
 };
 
-GFile       *ide_project_file_get_file      (IdeProjectFile *self);
-GFileInfo   *ide_project_file_get_file_info (IdeProjectFile *self);
-const gchar *ide_project_file_get_name      (IdeProjectFile *self);
-const gchar *ide_project_file_get_path      (IdeProjectFile *self);
+GFile       *ide_project_file_get_file         (IdeProjectFile *self);
+GFileInfo   *ide_project_file_get_file_info    (IdeProjectFile *self);
+const gchar *ide_project_file_get_name         (IdeProjectFile *self);
+const gchar *ide_project_file_get_path         (IdeProjectFile *self);
+gboolean     ide_project_file_get_is_directory (IdeProjectFile *self);
 
 G_END_DECLS
 
