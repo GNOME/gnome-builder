@@ -107,7 +107,7 @@ ide_editorconfig_file_settings_init_worker (GTask        *task,
 
           str = g_value_get_string (value);
 
-          if (g_strcmp0 (str, "tab"))
+          if (g_strcmp0 (str, "tab") == 0)
             indent_style = IDE_INDENT_STYLE_TABS;
 
           ide_file_settings_set_indent_style (source_object, indent_style);
