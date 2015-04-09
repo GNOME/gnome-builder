@@ -1,4 +1,4 @@
-/* gb-nautilus.h
+/* gb-file-manager.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,18 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_NAUTILUS_H
-#define GB_NAUTILUS_H
+#ifndef GB_FILE_MANAGER_H
+#define GB_FILE_MANAGER_H
 
 #include <gio/gio.h>
-#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-gboolean gb_nautilus_select_file (GtkWidget *widget,
-                                  GFile     *file,
-                                  guint32    user_time);
+gboolean gb_file_manager_show (GFile   *file,
+                               GError **error);
 
 G_END_DECLS
 
-#endif /* GB_NAUTILUS_H */
+#endif /* GB_FILE_MANAGER_H */

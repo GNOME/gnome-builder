@@ -21,7 +21,7 @@
 
 #include "gb-editor-workspace.h"
 #include "gb-editor-workspace-private.h"
-#include "gb-nautilus.h"
+#include "gb-file-manager.h"
 #include "gb-tree.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
@@ -284,7 +284,7 @@ gb_project_tree_actions_open_containing_folder (GSimpleAction *action,
       if (!file)
         return;
 
-      gb_nautilus_select_file (GTK_WIDGET (self), file, GDK_CURRENT_TIME);
+      gb_file_manager_show (file, NULL);
     }
 }
 

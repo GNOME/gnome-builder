@@ -20,7 +20,6 @@
 
 #include "gb-editor-workspace-actions.h"
 #include "gb-editor-workspace-private.h"
-#include "gb-nautilus.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
