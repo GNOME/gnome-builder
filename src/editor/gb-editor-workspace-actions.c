@@ -24,6 +24,7 @@
 #include "gb-workbench.h"
 
 #define ANIMATION_DURATION_MSEC 250
+#define MIN_PANED_SAVE_POSTION  100
 
 static void
 gb_editor_workspace_actions_show_sidebar (GSimpleAction *action,
@@ -39,6 +40,12 @@ gb_editor_workspace_actions_show_sidebar (GSimpleAction *action,
 
   if (!g_variant_get_boolean (variant) && visible)
     {
+      guint position;
+
+      position = gtk_paned_get_position (self->project_paned);
+      if (position > MIN_PANED_SAVE_POSTION)
+        self->sidebar_position = position;
+
       ide_object_animate_full (self->project_paned,
                                IDE_ANIMATION_EASE_IN_CUBIC,
                                ANIMATION_DURATION_MSEC,
@@ -57,7 +64,7 @@ gb_editor_workspace_actions_show_sidebar (GSimpleAction *action,
                           IDE_ANIMATION_EASE_IN_CUBIC,
                           ANIMATION_DURATION_MSEC,
                           NULL,
-                          "position", 250,
+                          "position", self->sidebar_position,
                           NULL);
       g_simple_action_set_state (action, variant);
     }

@@ -33,6 +33,8 @@
 #include "gb-view-grid.h"
 #include "gb-widget.h"
 
+#define SIDEBAR_POSITION 250
+
 G_DEFINE_TYPE (GbEditorWorkspace, gb_editor_workspace, GB_TYPE_WORKSPACE)
 
 static void
@@ -151,6 +153,8 @@ gb_editor_workspace_constructed (GObject *object)
   IDE_ENTRY;
 
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->constructed (object);
+
+  self->sidebar_position = gtk_paned_get_position (self->project_paned) ?: SIDEBAR_POSITION;
 
   gb_editor_workspace_actions_init (self);
   gb_project_tree_actions_init (self);

@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 struct _GbEditorWorkspace
 {
-  GbWorkspace  parent_instance;
+  GbWorkspace    parent_instance;
 
   GtkPaned      *project_paned;
   GtkBox        *project_sidebar;
@@ -36,6 +36,8 @@ struct _GbEditorWorkspace
   GbTree        *project_tree;
   GbTreeBuilder *project_tree_builder;
   GbViewGrid    *view_grid;
+
+  guint          sidebar_position;
 };
 
 G_END_DECLS
