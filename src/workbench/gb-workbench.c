@@ -70,7 +70,7 @@ gb_workbench__project_notify_name_cb (GbWorkbench *self,
   name = ide_project_get_name (project);
 
   if (!ide_str_empty0 (name))
-    title = g_strdup_printf (_("Builder - %s"), name);
+    title = g_strdup_printf (_("%s - Builder"), name);
   else
     title = g_strdup (_("Builder"));
 
