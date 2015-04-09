@@ -687,6 +687,8 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
   IdeContext *context;
   IdeUnsavedFiles *unsaved_files;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self));
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (location);
@@ -710,6 +712,8 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
 
   g_task_set_task_data (task, state, code_complete_state_free);
   g_task_run_in_thread (task, ide_clang_translation_unit_code_complete_worker);
+
+  IDE_EXIT;
 }
 
 /**
@@ -729,11 +733,16 @@ ide_clang_translation_unit_code_complete_finish (IdeClangTranslationUnit  *self,
                                                  GError                  **error)
 {
   GTask *task = (GTask *)result;
+  GPtrArray *ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (task, error);
+
+  IDE_RETURN (ret);
 }
 
 static enum CXChildVisitResult
