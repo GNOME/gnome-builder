@@ -8,6 +8,14 @@ nobase_icon_DATA = \
 	hicolor/32x32/apps/builder.png \
 	hicolor/48x48/apps/builder.png \
 	hicolor/24x24/apps/builder.png \
+  hicolor/symbolic/apps/builder-symbolic.svg \
+	$(NULL)
+
+bundled_icon_sources = \
+	hicolor/scalable/vcs/builder-vcs-git-symbolic.svg \
+	hicolor/256x256/vcs/builder-vcs-git.png \
+	hicolor/48x48/vcs/builder-vcs-git.png \
+	hicolor/32x32/vcs/builder-vcs-git.png \
 	hicolor/scalable/actions/builder-split-tab-symbolic.svg \
 	hicolor/scalable/apps/builder-documentation-symbolic.svg \
 	hicolor/scalable/apps/builder-editor-symbolic.svg \
@@ -18,13 +26,6 @@ nobase_icon_DATA = \
 	hicolor/scalable/autocomplete/lang-enum-symbolic.svg \
 	hicolor/scalable/autocomplete/lang-method-symbolic.svg \
 	hicolor/scalable/autocomplete/lang-function-symbolic.svg \
-	$(NULL)
-
-bundled_icon_sources = \
-	hicolor/scalable/vcs/builder-vcs-git-symbolic.svg \
-	hicolor/256x256/vcs/builder-vcs-git.png \
-	hicolor/48x48/vcs/builder-vcs-git.png \
-	hicolor/32x32/vcs/builder-vcs-git.png \
 	$(NULL)
 
 EXTRA_DIST = \
