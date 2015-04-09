@@ -93,28 +93,6 @@ get_icon_name (GFileInfo *file_info)
 }
 
 static void
-build_context (GbProjectTreeBuilder *self,
-               GbTreeNode           *node)
-{
-  IdeProject *project;
-  IdeContext *context;
-  GbTreeNode *child;
-
-  g_return_if_fail (GB_IS_PROJECT_TREE_BUILDER (self));
-  g_return_if_fail (GB_IS_TREE_NODE (node));
-
-  context = IDE_CONTEXT (gb_tree_node_get_item (node));
-  project = ide_context_get_project (context);
-
-  child = g_object_new (GB_TYPE_TREE_NODE,
-                        "item", project,
-                        NULL);
-  g_object_bind_property (project, "name", child, "text",
-                          G_BINDING_SYNC_CREATE);
-  gb_tree_node_append (node, child);
-}
-
-static void
 build_project (GbProjectTreeBuilder *self,
                GbTreeNode           *node)
 {
@@ -265,9 +243,7 @@ gb_project_tree_builder_build_node (GbTreeBuilder *builder,
 
   item = gb_tree_node_get_item (node);
 
-  if (IDE_IS_CONTEXT (item))
-    build_context (self, node);
-  else if (IDE_IS_PROJECT (item))
+  if (IDE_IS_PROJECT (item))
     build_project (self, node);
   else if (IDE_IS_PROJECT_FILES (item) || IDE_IS_PROJECT_FILE (item))
     build_files (self, node);

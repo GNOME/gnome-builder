@@ -126,7 +126,7 @@ gb_editor_workspace_context_changed (GtkWidget  *workspace,
                               G_BINDING_SYNC_CREATE);
 
       root = gb_tree_get_root (self->project_tree);
-      gb_tree_node_set_item (root, G_OBJECT (context));
+      gb_tree_node_set_item (root, G_OBJECT (ide_context_get_project (context)));
 
       gb_project_tree_builder_set_context (GB_PROJECT_TREE_BUILDER (self->project_tree_builder),
                                            context);
