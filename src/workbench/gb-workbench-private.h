@@ -51,6 +51,8 @@ struct _GbWorkbench
   GbSearchBox            *search_box;
   GtkStack               *stack;
 
+  gulong                  project_notify_name_handler;
+
   guint                   disposing;
   guint                   building : 1;
   guint                   unloading : 1;

@@ -3,6 +3,7 @@
   <!-- interface-requires gtk+ 3.15 -->
   <template class="GbWorkbench" parent="GtkApplicationWindow">
     <property name="icon-name">builder</property>
+    <property name="title" translatable="yes">Builder</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <property name="visible">true</property>

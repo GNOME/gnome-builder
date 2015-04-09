@@ -57,14 +57,82 @@ static const GtkTargetEntry gDropTypes[] = {
 };
 
 static void
+gb_workbench__project_notify_name_cb (GbWorkbench *self,
+                                      GParamSpec  *pspec,
+                                      IdeProject  *project)
+{
+  g_autofree gchar *title = NULL;
+  const gchar *name;
+
+  g_assert (GB_IS_WORKBENCH (self));
+  g_assert (IDE_IS_PROJECT (project));
+
+  name = ide_project_get_name (project);
+
+  if (!ide_str_empty0 (name))
+    title = g_strdup_printf (_("Builder - %s"), name);
+  else
+    title = g_strdup (_("Builder"));
+
+  gtk_window_set_title (GTK_WINDOW (self), title);
+}
+
+static void
+gb_workbench_connect_context (GbWorkbench *self,
+                              IdeContext  *context)
+{
+  IdeProject *project;
+
+  g_assert (GB_IS_WORKBENCH (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  project = ide_context_get_project (context);
+
+  self->project_notify_name_handler =
+    g_signal_connect_object (project,
+                             "notify::name",
+                             G_CALLBACK (gb_workbench__project_notify_name_cb),
+                             self,
+                             G_CONNECT_SWAPPED);
+  gb_workbench__project_notify_name_cb (self, NULL, project);
+}
+
+static void
+gb_workbench_disconnect_context (GbWorkbench *self,
+                                 IdeContext  *context)
+{
+  IdeProject *project;
+
+  g_assert (GB_IS_WORKBENCH (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  project = ide_context_get_project (context);
+  ide_clear_signal_handler (project, &self->project_notify_name_handler);
+}
+
+static void
 gb_workbench_set_context (GbWorkbench *self,
                           IdeContext  *context)
 {
   g_return_if_fail (GB_IS_WORKBENCH (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
 
-  if (g_set_object (&self->context, context))
-    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CONTEXT]);
+  if (context != self->context)
+    {
+      if (self->context != NULL)
+        {
+          gb_workbench_disconnect_context (self, context);
+          g_clear_object (&self->context);
+        }
+
+      if (context != NULL)
+        {
+          self->context = g_object_ref (context);
+          gb_workbench_connect_context (self, context);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CONTEXT]);
+    }
 }
 
 static void

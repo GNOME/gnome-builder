@@ -343,7 +343,6 @@ gb_application__context_new_cb (GObject      *object,
                             "context", context,
                             "default-width", req.width,
                             "default-height", req.height,
-                            "title", _("Builder"),
                             NULL);
 
   if (ar->len == 0)
