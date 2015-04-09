@@ -55,42 +55,6 @@ GdTaggedEntry {
 
 
 /*
- * Workspace switcher, thin-panel on left side.
- */
-GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton {
-    background-color: transparent;
-    background-image: none;
-    border-radius: 4px 4px 4px 4px;
-    border-width: 1px 1px 1px 1px;
-    border-style: none;
-    box-shadow: none;
-    -GtkButton-image-spacing: 0;
-    -GtkButton-inner-border: 0;
-    padding: 4px 1px 4px 1px;
-}
-GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:checked {
-    background-color: shade(@theme_base_color, 0.70);
-    color: #ffffff;
-}
-GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:checked:hover {
-    border-color: shade(@theme_base_color, 0.60);
-}
-GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:hover {
-    border-style: solid;
-    border-width: 1px 1px 1px 1px;
-    border-color: shade(@theme_base_color, 0.80);
-    transition-duration: 0ms;
-}
-GtkStackSwitcher.gb-workspace-switcher > GtkRadioButton:active {
-    background-color: shade(@theme_base_color, 0.80);
-    border-style: solid;
-    border-width: 1px 1px 1px 1px;
-    border-color: shade(@theme_base_color, 0.60);
-    transition-duration: 0ms;
-}
-
-
-/*
  * Preferences sidebar style.
  */
 .preferences.sidebar GtkViewport {
