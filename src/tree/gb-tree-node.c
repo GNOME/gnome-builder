@@ -225,8 +225,6 @@ gb_tree_node_get_parent (GbTreeNode *node)
  * gb_tree_node_get_icon_name:
  *
  * Fetches the icon-name of the icon to display, or NULL for no icon.
- *
- * Returns: 
  */
 const gchar *
 gb_tree_node_get_icon_name (GbTreeNode *node)
@@ -354,6 +352,39 @@ gb_tree_node_get_item (GbTreeNode *node)
   g_return_val_if_fail (GB_IS_TREE_NODE (node), NULL);
 
   return node->priv->item;
+}
+
+void
+gb_tree_node_expand (GbTreeNode *node,
+                     gboolean    expand_ancestors)
+{
+  GbTree *tree;
+  GtkTreePath *path;
+
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+
+  tree = gb_tree_node_get_tree (node);
+  path = gb_tree_node_get_path (node);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree), path, FALSE);
+  if (expand_ancestors)
+    gtk_tree_view_expand_to_path (GTK_TREE_VIEW (tree), path);
+  gtk_tree_path_free (path);
+}
+
+void
+gb_tree_node_select (GbTreeNode  *node)
+{
+  GbTree *tree;
+  GtkTreePath *path;
+  GtkTreeSelection *selection;
+
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+
+  tree = gb_tree_node_get_tree (node);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree));
+  path = gb_tree_node_get_path (node);
+  gtk_tree_selection_select_path (selection, path);
+  gtk_tree_path_free (path);
 }
 
 /**
