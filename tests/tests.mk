@@ -73,5 +73,6 @@ test_ide_vcs_uri_LDADD = libide-1.0.la $(LIBIDE_LIBS)
 
 EXTRA_DIST += \
 	tests/data/project1/configure.ac \
+	tests/data/project1/.editorconfig \
 	tests/tests.h \
 	$(NULL)
