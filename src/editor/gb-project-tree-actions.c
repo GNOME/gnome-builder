@@ -47,15 +47,12 @@ action_set (GActionGroup *group,
 }
 
 static gboolean
-is_project_file_not_directory (GObject *object)
+project_file_is_directory (GObject *object)
 {
-  GFileInfo *info;
-
   g_assert (!object || G_IS_OBJECT (object));
 
   return (IDE_IS_PROJECT_FILE (object) &&
-          (info = ide_project_file_get_file_info (IDE_PROJECT_FILE (object))) &&
-          (g_file_info_get_file_type (info) != G_FILE_TYPE_DIRECTORY));
+          ide_project_file_get_is_directory (IDE_PROJECT_FILE (object)));
 }
 
 static void
@@ -76,10 +73,10 @@ gb_project_tree_actions_update_actions (GbEditorWorkspace *editor)
     item = gb_tree_node_get_item (selection);
 
   action_set (group, "open",
-              "enabled", is_project_file_not_directory (item),
+              "enabled", !project_file_is_directory (item),
               NULL);
   action_set (group, "open-with-editor",
-              "enabled", is_project_file_not_directory (item),
+              "enabled", !project_file_is_directory (item),
               NULL);
   action_set (group, "open-containing-folder",
               "enabled", IDE_IS_PROJECT_FILE (item),
