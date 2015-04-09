@@ -111,12 +111,12 @@ typedef struct
   gulong                       buffer_insert_text_after_handler;
   gulong                       buffer_insert_text_handler;
   gulong                       buffer_line_flags_changed_handler;
+  gulong                       buffer_loaded_handler;
   gulong                       buffer_mark_set_handler;
   gulong                       buffer_notify_file_handler;
   gulong                       buffer_notify_highlight_diagnostics_handler;
   gulong                       buffer_notify_language_handler;
   gulong                       buffer_notify_style_scheme_handler;
-  gulong                       buffer_loaded_handler;
 
   guint                        change_sequence;
 
@@ -137,6 +137,7 @@ typedef struct
   GdkRGBA                      bubble_color2;
 
   guint                        auto_indent : 1;
+  guint                        completion_blocked : 1;
   guint                        completion_visible : 1;
   guint                        enable_word_completion : 1;
   guint                        highlight_current_line : 1;
@@ -1325,6 +1326,15 @@ ide_source_view__buffer_loaded_cb (IdeSourceView *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
+  if (priv->completion_blocked)
+    {
+      GtkSourceCompletion *completion;
+
+      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+      gtk_source_completion_unblock_interactive (completion);
+      priv->completion_blocked = FALSE;
+    }
+
   /*
    * FIXME:
    *
@@ -1355,6 +1365,15 @@ ide_source_view_connect_buffer (IdeSourceView *self,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
+
+  if (_ide_buffer_get_loading (buffer))
+    {
+      GtkSourceCompletion *completion;
+
+      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+      gtk_source_completion_block_interactive (completion);
+      priv->completion_blocked = TRUE;
+    }
 
   priv->buffer_changed_handler =
       g_signal_connect_object (buffer,
@@ -1500,6 +1519,15 @@ ide_source_view_disconnect_buffer (IdeSourceView *self,
   ide_clear_signal_handler (buffer, &priv->buffer_notify_language_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_notify_style_scheme_handler);
   ide_clear_signal_handler (buffer, &priv->buffer_loaded_handler);
+
+  if (priv->completion_blocked)
+    {
+      GtkSourceCompletion *completion;
+
+      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+      gtk_source_completion_unblock_interactive (completion);
+      priv->completion_blocked = FALSE;
+    }
 
   g_clear_object (&priv->search_context);
 
