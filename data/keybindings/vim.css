@@ -1444,6 +1444,7 @@ IdeSourceViewMode.vim-normal-indent {
 IdeSourceViewMode.vim-normal-ctrl-w {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-display-name: "^w";
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal-ctrl-w;
