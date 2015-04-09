@@ -209,10 +209,17 @@ gb_search_box_entry_key_press_event (GbSearchBox    *self,
 
     case GDK_KEY_Tab:
     case GDK_KEY_KP_Tab:
+      if ((key->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) != 0)
+        break;
+      /* Fall through */
     case GDK_KEY_Down:
     case GDK_KEY_KP_Down:
-      gtk_widget_grab_focus (GTK_WIDGET (self->display));
-      return GDK_EVENT_STOP;
+      if (gtk_widget_get_visible (GTK_WIDGET (self->popover)))
+        {
+          gtk_widget_grab_focus (GTK_WIDGET (self->display));
+          return GDK_EVENT_STOP;
+        }
+      break;
 
     default:
       break;
