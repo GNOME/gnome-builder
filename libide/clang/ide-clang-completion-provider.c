@@ -33,6 +33,8 @@
 #include "ide-source-snippet.h"
 #include "ide-source-view.h"
 
+#define MAX_COMPLETION_ITEMS 200
+
 struct _IdeClangCompletionProviderClass
 {
   GObjectClass parent_class;
@@ -153,7 +155,18 @@ filter_list (GPtrArray   *ar,
 
       item = g_ptr_array_index (ar, i);
       if (matches (item, word))
-        g_ptr_array_add (matched, item);
+        {
+          g_ptr_array_add (matched, item);
+
+          /*
+           * FIXME:
+           *
+           * We should be a bit more intelligent about which items we accept.
+           * The results don't come to us in "most important" order.
+           */
+          if (G_UNLIKELY (ar->len == MAX_COMPLETION_ITEMS))
+            break;
+        }
     }
 
   for (i = 0; i < matched->len; i++)
