@@ -294,7 +294,6 @@ context_cb (GObject      *object,
 {
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(IdeDevice) device = NULL;
   GPtrArray *devices;
   IdeDeviceManager *device_manager;
   guint i;

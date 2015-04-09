@@ -200,7 +200,7 @@ gb_editor_view_actions__save_temp_cb (GObject      *object,
                                       GAsyncResult *result,
                                       gpointer      user_data)
 {
-  g_autoptr(GbEditorView) self = user_data;
+  GbEditorView *self = user_data;
   IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
   GError *error = NULL;
 
@@ -209,6 +209,8 @@ gb_editor_view_actions__save_temp_cb (GObject      *object,
       g_warning ("%s", error->message);
       g_clear_error (&error);
     }
+
+  g_object_unref (self);
 }
 
 static void
@@ -338,7 +340,7 @@ gb_editor_view_actions__save_as_cb (GObject      *object,
                                     GAsyncResult *result,
                                     gpointer      user_data)
 {
-  g_autoptr(GbEditorView) self = user_data;
+  GbEditorView *self = user_data;
   IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
   GError *error = NULL;
 
@@ -347,6 +349,8 @@ gb_editor_view_actions__save_as_cb (GObject      *object,
       g_warning ("%s", error->message);
       g_clear_error (&error);
     }
+
+  g_object_unref (self);
 }
 
 static void
