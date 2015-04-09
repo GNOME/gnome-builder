@@ -132,6 +132,7 @@ src/tree/gb-project-tree-builder.c
 src/tree/gb-tree-builder.c
 src/tree/gb-tree.c
 src/tree/gb-tree-node.c
+src/util/gb-file-manager.c
 src/util/gb-glib.c
 src/views/gb-view.c
 src/views/gb-view-stack.c
