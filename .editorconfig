@@ -1,0 +1,25 @@
+[*]
+charset = utf-8
+end_of_line = lf
+
+[*.[ch]]
+tab_width = 2
+indent_size = 2
+insert_trailing_newline = true
+indent_style = space
+
+[*.py]
+indent_size = 4
+tab_size = 4
+indent_style = space
+
+[*.js]
+indent_size = 2
+tab_size = 2
+indent_style = space
+
+[*.css]
+indent_size = 4
+tab_size = 4
+indent_style = space
+
