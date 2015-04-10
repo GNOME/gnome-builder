@@ -797,7 +797,8 @@ ide_source_view_reload_snippets (IdeSourceView *self)
         snippets = ide_source_snippets_manager_get_for_language (manager, source_language);
     }
 
-  g_object_set (priv->snippets_provider, "snippets", snippets, NULL);
+  if (priv->snippets_provider != NULL)
+    g_object_set (priv->snippets_provider, "snippets", snippets, NULL);
 }
 
 static void
