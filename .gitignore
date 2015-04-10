@@ -46,6 +46,7 @@ test-ide-buffer
 test-ide-buffer-manager
 test-ide-context
 test-ide-file-settings
+test-ide-indenter
 test-ide-source-view
 test-ide-vcs-uri
 test-navigation-list

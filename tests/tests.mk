@@ -34,6 +34,7 @@ test_ide_buffer_manager_CFLAGS = \
 	-DBUILDDIR="\"$(abs_top_builddir)\""
 test_ide_buffer_manager_LDADD = libide-1.0.la $(LIBIDE_LIBS)
 
+
 noinst_PROGRAMS += test-ide-buffer
 TESTS += test-ide-buffer
 test_ide_buffer_SOURCES = tests/test-ide-buffer.c
@@ -43,6 +44,7 @@ test_ide_buffer_CFLAGS = \
 	-DBUILDDIR="\"$(abs_top_builddir)\""
 test_ide_buffer_LDADD = libide-1.0.la $(LIBIDE_LIBS)
 
+
 noinst_PROGRAMS += test-ide-file-settings
 TESTS += test-ide-file-settings
 test_ide_file_settings_SOURCES = tests/test-ide-file-settings.c
@@ -51,6 +53,16 @@ test_ide_file_settings_CFLAGS = \
 	-DTEST_DATA_DIR="\"$(top_srcdir)/tests/data\"" \
 	-DBUILDDIR="\"$(abs_top_builddir)\""
 test_ide_file_settings_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+
+
+noinst_PROGRAMS += test-ide-indenter
+TESTS += test-ide-indenter
+test_ide_indenter_SOURCES = tests/test-ide-indenter.c
+test_ide_indenter_CFLAGS = \
+	$(libide_1_0_la_CFLAGS) \
+	-DTEST_DATA_DIR="\"$(top_srcdir)/tests/data\"" \
+	-DBUILDDIR="\"$(abs_top_builddir)\""
+test_ide_indenter_LDADD = libide-1.0.la $(LIBIDE_LIBS)
 
 
 noinst_PROGRAMS += test-ide-source-view
