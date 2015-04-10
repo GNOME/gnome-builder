@@ -83,6 +83,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
+  gtk_init (&argc, &argv);
   g_test_init (&argc, &argv, NULL);
   g_irepository_require_private (g_irepository_get_default (),
                                  BUILDDIR,

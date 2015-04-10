@@ -172,6 +172,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
+  gtk_init (&argc, &argv);
   g_test_init (&argc, &argv, NULL);
   g_test_add_func ("/Ide/BackForwardList/basic", test_basic);
   return g_test_run ();
