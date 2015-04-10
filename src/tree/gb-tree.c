@@ -31,6 +31,7 @@ struct _GbTreePrivate
   GbTreeNode        *selection;
   GtkTreeViewColumn *column;
   GtkCellRenderer   *cell_pixbuf;
+  GtkCellRenderer   *cell_text;
   GtkTreeStore      *store;
   guint              building : 1;
   guint              show_icons : 1;
@@ -150,6 +151,36 @@ gb_tree_select (GbTree     *tree,
   IDE_EXIT;
 }
 
+static guint
+gb_tree_get_row_height (GbTree *tree)
+{
+  const guint extra_padding = 2;
+  gint pix_min_height;
+  gint pix_nat_height;
+  gint text_min_height;
+  gint text_nat_height;
+
+  /*
+   * TODO:
+   *
+   * Determine where extra_padding comes from.
+   * Current thought is somewhere in styling.
+   */
+
+  g_assert (GB_IS_TREE (tree));
+
+  gtk_cell_renderer_get_preferred_height (tree->priv->cell_pixbuf,
+                                          GTK_WIDGET (tree),
+                                          &pix_min_height,
+                                          &pix_nat_height);
+  gtk_cell_renderer_get_preferred_height (tree->priv->cell_text,
+                                          GTK_WIDGET (tree),
+                                          &text_min_height,
+                                          &text_nat_height);
+
+  return MAX (pix_nat_height, text_nat_height) + extra_padding;
+}
+
 static void
 gb_tree_menu_position_func (GtkMenu  *menu,
                             gint     *x,
@@ -158,13 +189,36 @@ gb_tree_menu_position_func (GtkMenu  *menu,
                             gpointer  user_data)
 {
   GdkPoint *loc = user_data;
+  GtkRequisition req;
+  GdkRectangle rect;
+  GdkScreen *screen;
+  gint monitor;
 
   g_return_if_fail (loc != NULL);
 
+  gtk_widget_get_preferred_size (GTK_WIDGET (menu), NULL, &req);
+  screen = gtk_widget_get_screen (GTK_WIDGET (menu));
+  monitor = gdk_screen_get_monitor_at_point (screen, *x, *y);
+  gdk_screen_get_monitor_geometry (screen, monitor, &rect);
+
   if ((loc->x != -1) && (loc->y != -1))
     {
-      *x = loc->x;
-      *y = loc->y;
+      if ((loc->y + req.height) <= (rect.y + rect.height))
+        {
+          *x = loc->x;
+          *y = loc->y;
+        }
+      else
+        {
+          GtkWidget *attached;
+          guint row_height;
+
+          attached = gtk_menu_get_attach_widget (menu);
+          row_height = gb_tree_get_row_height (GB_TREE (attached));
+
+          *x = loc->x;
+          *y = loc->y + row_height - req.height;
+        }
     }
 }
 
@@ -1048,6 +1102,7 @@ gb_tree_init (GbTree *tree)
   cell = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT,
                        "ellipsize", PANGO_ELLIPSIZE_NONE,
                        NULL);
+  tree->priv->cell_text = cell;
   gtk_cell_layout_pack_start (column, cell, TRUE);
   gtk_cell_layout_set_cell_data_func (column, cell, text_func, NULL, NULL);
 
