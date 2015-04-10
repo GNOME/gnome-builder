@@ -37,6 +37,7 @@
 #include "ide-makecache.h"
 #include "ide-makecache-target.h"
 #include "ide-project.h"
+#include "ide-vcs.h"
 
 #define FAKE_CC  "__LIBIDE_FAKE_CC__"
 #define FAKE_CXX "__LIBIDE_FAKE_CXX__"
@@ -148,6 +149,24 @@ file_flags_lookup_free (gpointer data)
       g_free (lookup->relative_path);
       g_free (lookup);
     }
+}
+
+static gchar *
+ide_makecache_get_relative_path (IdeMakecache *self,
+                                 GFile        *file)
+{
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
+
+  g_assert (IDE_IS_MAKECACHE (self));
+  g_assert (G_IS_FILE (file));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  return g_file_get_relative_path (workdir, file);
 }
 
 static void
@@ -711,8 +730,62 @@ ide_makecache_new_worker (GTask        *task,
 }
 
 static void
+ide_makecache_parse_c_cxx_include (IdeMakecache *self,
+                                   GPtrArray    *ret,
+                                   const gchar  *relpath,
+                                   const gchar  *part1,
+                                   const gchar  *part2)
+{
+  static const gchar *dummy = "-I";
+  gchar *adjusted = NULL;
+
+  g_assert (self != NULL);
+  g_assert (ret != NULL);
+  g_assert (relpath != NULL);
+  g_assert (part1 != NULL);
+
+  /*
+   * We will get parts either like ("-Ifoo", NULL) or ("-I", "foo").
+   * Canonicalize things so we are always dealing with something that looks
+   * like ("-I", "foo") since we might need to mutate the path.
+   */
+
+  if (part2 == NULL)
+    {
+      g_assert (strlen (part1) > 2);
+      part2 = &part1 [2];
+      part1 = dummy;
+    }
+
+  g_assert (!ide_str_empty0 (part1));
+  g_assert (!ide_str_empty0 (part2));
+
+  /*
+   * If the path is relative, then we need to adjust it to be relative to the
+   * target file rather than relative to the makefile. Clang expects the
+   * path information to be as such.
+   */
+
+  if (g_str_has_prefix (part2, "./"))
+    {
+      gchar *parent;
+
+      parent = g_file_get_path (self->parent);
+      adjusted = g_strdup_printf ("%s"G_DIR_SEPARATOR_S"%s", parent, &part2 [2]);
+      g_free (parent);
+
+      part2 = adjusted;
+    }
+
+  g_ptr_array_add (ret, g_strdup_printf ("%s%s", part1, part2));
+
+  g_free (adjusted);
+}
+
+static void
 ide_makecache_parse_c_cxx (IdeMakecache *self,
                            const gchar  *line,
+                           const gchar  *relpath,
                            GPtrArray    *ret)
 {
   gint argc = 0;
@@ -744,9 +817,14 @@ ide_makecache_parse_c_cxx (IdeMakecache *self,
       switch (flag [1])
         {
         case 'I': /* -I./includes/ -I ./includes/ */
-          g_ptr_array_add (ret, g_strdup (flag));
-          if ((strlen (flag) == 2) && (i < (argc - 1)))
-            g_ptr_array_add (ret, g_strdup (argv [++i]));
+          {
+            const gchar *part1 = flag;
+            const gchar *part2 = NULL;
+
+            if ((strlen (flag) == 2) && (i < (argc - 1)))
+              part2 = argv [++i];
+            ide_makecache_parse_c_cxx_include (self, ret, relpath, part1, part2);
+          }
           break;
 
         case 'f': /* -fPIC... */
@@ -774,7 +852,8 @@ ide_makecache_parse_c_cxx (IdeMakecache *self,
 
 static gchar **
 ide_makecache_parse_line (IdeMakecache *self,
-                          const gchar  *line)
+                          const gchar  *line,
+                          const gchar  *relpath)
 {
   GPtrArray *ret = NULL;
   const gchar *pos;
@@ -790,7 +869,7 @@ ide_makecache_parse_line (IdeMakecache *self,
       gchar **strv;
 
       g_ptr_array_add (ret, g_strdup ("-xc++"));
-      ide_makecache_parse_c_cxx (self, pos + strlen (FAKE_CXX), ret);
+      ide_makecache_parse_c_cxx (self, pos + strlen (FAKE_CXX), relpath, ret);
       strv = (gchar **)g_ptr_array_free (ret, FALSE);
       IDE_RETURN (strv);
     }
@@ -798,7 +877,7 @@ ide_makecache_parse_line (IdeMakecache *self,
     {
       gchar **strv;
 
-      ide_makecache_parse_c_cxx (self, pos + strlen(FAKE_CC), ret);
+      ide_makecache_parse_c_cxx (self, pos + strlen(FAKE_CC), relpath, ret);
       strv = (gchar **)g_ptr_array_free (ret, FALSE);
       IDE_RETURN (strv);
     }
@@ -877,7 +956,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
         gchar *cmdline;
 
         cmdline = g_strjoinv (" ", (gchar **)argv->pdata);
-        IDE_TRACE_MSG ("%s", cmdline);
+        IDE_TRACE_MSG ("subdir=%s %s", subdir ?: ".", cmdline);
         g_free (cmdline);
       }
 #endif
@@ -906,7 +985,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
         {
           const gchar *line = lines [i];
 
-          if ((ret = ide_makecache_parse_line (self, line)))
+          if ((ret = ide_makecache_parse_line (self, line, relpath)))
             break;
         }
 
@@ -1079,9 +1158,18 @@ ide_makecache_new_for_makefile_async (IdeContext          *context,
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeMakecache) self = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_CONTEXT (context));
   g_return_if_fail (G_IS_FILE (makefile));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+#ifndef IDE_DISABLE_TRACE
+  {
+    g_autofree gchar *path = g_file_get_path (makefile);
+    IDE_TRACE_MSG ("Generating makecache for %s", path);
+  }
+#endif
 
   self = g_object_new (IDE_TYPE_MAKECACHE,
                        "context", context,
@@ -1094,6 +1182,8 @@ ide_makecache_new_for_makefile_async (IdeContext          *context,
                                            cancellable,
                                            ide_makecache__discover_llvm_flags_cb,
                                            g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 IdeMakecache *
@@ -1101,10 +1191,15 @@ ide_makecache_new_for_makefile_finish (GAsyncResult  *result,
                                        GError       **error)
 {
   GTask *task = (GTask *)result;
+  IdeMakecache *ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (task, error);
+
+  IDE_RETURN (ret);
 }
 
 static void
@@ -1162,7 +1257,7 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  path = g_file_get_relative_path (self->parent, file);
+  path = ide_makecache_get_relative_path (self, file);
   g_task_set_task_data (task, path, g_free);
 
   if (!path)
@@ -1256,7 +1351,7 @@ ide_makecache__get_targets_cb (GObject      *object,
 
   file = g_task_get_task_data (task);
   path = g_file_get_path (file);
-  relative_path = g_file_get_relative_path (self->parent, file);
+  relative_path = ide_makecache_get_relative_path (self, file);
 
   g_mutex_lock (&self->mutex);
   argv = g_strdupv (g_hash_table_lookup (self->file_flags_cache, relative_path));
