@@ -25,8 +25,7 @@ struct _GbPreferencesPageExperimental
 {
   GbPreferencesPage  parent_instance;
 
-  GtkWidget         *clang_autocompletion_container;
-  GtkWidget         *clang_autocompletion_switch;
+  GtkWidget         *clang_autocompletion;
 };
 
 G_DEFINE_TYPE (GbPreferencesPageExperimental,
@@ -37,32 +36,17 @@ static void
 gb_preferences_page_experimental_class_init (GbPreferencesPageExperimentalClass *klass)
 {
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-preferences-page-experimental.ui");
-  GB_WIDGET_CLASS_BIND (klass, GbPreferencesPageExperimental, clang_autocompletion_container);
-  GB_WIDGET_CLASS_BIND (klass, GbPreferencesPageExperimental, clang_autocompletion_switch);
+  GB_WIDGET_CLASS_BIND (klass, GbPreferencesPageExperimental, clang_autocompletion);
 }
 
 static void
 gb_preferences_page_experimental_init (GbPreferencesPageExperimental *self)
 {
-  g_autoptr(GSettings) settings = NULL;
-  GAction *action;
-  GSimpleActionGroup *group;
-
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  settings = g_settings_new ("org.gnome.builder.experimental");
-
-  group = g_simple_action_group_new ();
-
-  action = g_settings_create_action (settings, "clang-autocompletion");
-  g_action_map_add_action (G_ACTION_MAP (group), action);
-  g_clear_object (&action);
-
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "settings", G_ACTION_GROUP (group));
 
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("experimental clang autocompletion auto complete"),
-                                               self->clang_autocompletion_container,
+                                               self->clang_autocompletion,
                                                NULL);
 }

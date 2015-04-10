@@ -28,12 +28,10 @@ struct _GbPreferencesPageKeybindings
 {
   GbPreferencesPage      parent_instance;
 
-  GSettings             *editor_settings;
-
   /* Template widgets used for filtering */
-  GtkWidget             *default_container;
-  GtkWidget             *emacs_container;
-  GtkWidget             *vim_container;
+  GtkWidget             *default_switch;
+  GtkWidget             *emacs_switch;
+  GtkWidget             *vim_switch;
 };
 
 G_DEFINE_TYPE (GbPreferencesPageKeybindings,
@@ -41,49 +39,15 @@ G_DEFINE_TYPE (GbPreferencesPageKeybindings,
                GB_TYPE_PREFERENCES_PAGE)
 
 static void
-gb_preferences_page_keybindings_constructed (GObject *object)
-{
-  GbPreferencesPageKeybindings *self = (GbPreferencesPageKeybindings *)object;
-  GSimpleActionGroup *group;
-  GAction *action;
-
-  g_return_if_fail (GB_IS_PREFERENCES_PAGE_KEYBINDINGS (self));
-
-  self->editor_settings = g_settings_new ("org.gnome.builder.editor");
-
-  group = g_simple_action_group_new ();
-
-  action = g_settings_create_action (self->editor_settings, "keybindings");
-  g_action_map_add_action (G_ACTION_MAP (group), action);
-  g_clear_object (&action);
-
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "settings", G_ACTION_GROUP (group));
-  g_clear_object (&group);
-}
-
-static void
-gb_preferences_page_keybindings_finalize (GObject *object)
-{
-  GbPreferencesPageKeybindings *self = (GbPreferencesPageKeybindings *)object;
-
-  g_clear_object (&self->editor_settings);
-
-  G_OBJECT_CLASS (gb_preferences_page_keybindings_parent_class)->finalize (object);
-}
-
-static void
 gb_preferences_page_keybindings_class_init (GbPreferencesPageKeybindingsClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = gb_preferences_page_keybindings_finalize;
-  object_class->constructed = gb_preferences_page_keybindings_constructed;
-
   GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-preferences-page-keybindings.ui");
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageKeybindings, vim_container);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageKeybindings, emacs_container);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageKeybindings, default_container);
+
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageKeybindings, vim_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageKeybindings, emacs_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageKeybindings, default_switch);
 }
 
 static void
@@ -93,17 +57,17 @@ gb_preferences_page_keybindings_init (GbPreferencesPageKeybindings *self)
 
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
-                                               _("default keybindings"),
-                                               self->default_container,
+                                               _("default builder keybindings"),
+                                               self->default_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("emacs keybindings modal"),
-                                               self->emacs_container,
+                                               self->emacs_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("vim keybindings modal"),
-                                               self->vim_container,
+                                               self->vim_switch,
                                                NULL);
 }

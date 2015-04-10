@@ -137,3 +137,8 @@ GbEditorWorkspace > GtkPaned > GtkBox > GtkBox.header.notebook {
 GbNewProjectDialog GtkFileChooserButton.linked-on-right .button {
     border-radius: 3px 0 0 3px;
 }
+
+
+GbPreferencesSwitch:prelight {
+    background-color: shade(@theme_bg_color, 1.01);
+}

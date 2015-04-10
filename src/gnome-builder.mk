@@ -90,6 +90,8 @@ libgnome_builder_la_SOURCES = \
 	src/preferences/gb-preferences-page-language.h \
 	src/preferences/gb-preferences-page.c \
 	src/preferences/gb-preferences-page.h \
+	src/preferences/gb-preferences-switch.c \
+	src/preferences/gb-preferences-switch.h \
 	src/preferences/gb-preferences-window.c \
 	src/preferences/gb-preferences-window.h \
 	src/project-tree/gb-project-tree.c \

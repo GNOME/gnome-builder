@@ -11,600 +11,154 @@
           <object class="GtkBox">
             <property name="visible">true</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
             <child>
-              <object class="GtkGrid" id="grid1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="row_spacing">12</property>
-                <property name="column_spacing">12</property>
-                <child>
-                  <object class="GtkSwitch" id="restore_insert_mark_switch">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="valign">center</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="word_completion_switch">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="valign">center</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="show_diff_switch">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="valign">center</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="show_line_numbers_switch">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="valign">center</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="highlight_current_line_switch">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="valign">center</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="highlight_matching_brackets_switch">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="valign">center</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">6</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="smart_home_end_switch">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="valign">center</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">7</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="smart_backspace_switch">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="valign">center</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">8</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="show_grid_lines_switch">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="valign">center</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">9</property>
-                  </packing>
-                </child>
+              <object class="GbPreferencesSwitch" id="restore_insert_mark_switch">
+                <property name="title" translatable="yes">Restore Cursor Position</property>
+                <property name="description" translatable="yes">Restore the insertion cursor to the last position when reopening a file.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">restore-insert-mark</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbPreferencesSwitch" id="word_completion_switch">
+                <property name="title" translatable="yes">Suggest Word Completion</property>
+                <property name="description" translatable="yes">Suggest completion of words found within the current document.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">word-completion</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbPreferencesSwitch" id="show_diff_switch">
+                <property name="title" translatable="yes">Display Document Changes</property>
+                <property name="description" translatable="yes">Display whether a line has been added or modified next to the line number.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">show-line-changes</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbPreferencesSwitch" id="show_line_numbers_switch">
+                <property name="title" translatable="yes">Show Line Numbers</property>
+                <property name="description" translatable="yes">Display line numbers in the document.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">show-line-numbers</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbPreferencesSwitch" id="highlight_current_line_switch">
+                <property name="title" translatable="yes">Highlight Current Line</property>
+                <property name="description" translatable="yes">Highlight the line containing the cursor.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">highlight-current-line</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbPreferencesSwitch" id="highlight_matching_brackets_switch">
+                <property name="title" translatable="yes">Highlight Matching Brackets</property>
+                <property name="description" translatable="yes">Whether or not matching brackets should be highlighted.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">highlight-matching-brackets</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbPreferencesSwitch" id="smart_home_end_switch">
+                <property name="title" translatable="yes">Smart Home End</property>
+                <property name="description" translatable="yes">Home moves to first non-space character.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">smart-home-end</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbPreferencesSwitch" id="smart_backspace_switch">
+                <property name="title" translatable="yes">Smart Backspace</property>
+                <property name="description" translatable="yes">Backspace will remove extra spaces to keep you aligned with your indentation size.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">smart-backspace</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbPreferencesSwitch" id="show_grid_lines_switch">
+                <property name="title" translatable="yes">Show Grid Lines</property>
+                <property name="description" translatable="yes">Display a grid patten in the document.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">show-grid-lines</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="scroll_off_container">
+                <property name="orientation">horizontal</property>
+                <property name="margin">6</property>
+                <property name="spacing">12</property>
+                <property name="visible">true</property>
                 <child>
                   <object class="GtkSpinButton" id="scroll_off_spin">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="visible">true</property>
                     <property name="valign">center</property>
+                    <property name="expand">false</property>
                     <property name="adjustment">scroll_off_adjustment</property>
                   </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">10</property>
-                  </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="restore_insert_mark_container">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel" id="label9">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Restore Cursor Position</property>
-                        <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label10">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Restore the insertion cursor to the last position when reopening a file.</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="word_completion_container">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel" id="label11">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Suggest Word Completion</property>
-                        <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label12">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Suggest completion of words found within the current document.</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="show_diff_container">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
+                  <object class="GtkBox">
+                    <property name="visible">true</property>
+                    <property name="hexpand">true</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Display Document Changes</property>
-                        <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Display whether a line has been added or modified next to the line number.</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="show_line_numbers_container">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Show Line Numbers</property>
-                        <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Display line numbers in the document.</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="highlight_current_line_container">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Highlight Current Line</property>
-                        <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Highlight the line containing the cursor.</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="highlight_matching_brackets_container">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Highlight Matching Brackets</property>
-                        <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Whether or not matching brackets should be highlighted.</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">6</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="smart_home_end_container">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Smart Home End</property>
-                        <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Home moves to first non-space character.</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">7</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="smart_backspace_container">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Smart Backspace</property>
-                        <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Backspace will remove extra spaces to keep you aligned with your indentation size.</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">8</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="show_grid_lines_container">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Show Grid Lines</property>
-                        <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Display a grid patten in the document.</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">9</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="scroll_off_container">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
+                        <property name="visible">true</property>
                         <property name="label" translatable="yes">Scroll Offset</property>
-                        <property name="xalign">0</property>
+                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel">
-                        <property name="visible">True</property>
+                        <property name="visible">true</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
+                        <property name="hexpand">true</property>
                         <property name="label" translatable="yes">Minimal number of lines to keep above and below the cursor.</property>
                         <property name="xalign">0</property>
+                        <attributes>
+                          <attribute name="scale" value="0.833333"/>
+                        </attributes>
                         <style>
                           <class name="dim-label"/>
                         </style>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">10</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkFontButton" id="font_button">
-                <property name="visible">True</property>
+                <property name="margin">6</property>
+                <property name="visible">true</property>
               </object>
             </child>
             <child>
               <object class="GtkSourceStyleSchemeChooserButton" id="style_scheme_button">
-                <property name="visible">True</property>
+                <property name="margin">6</property>
+                <property name="visible">true</property>
               </object>
             </child>
           </object>
@@ -618,5 +172,14 @@
     <property name="step_increment">1</property>
     <property name="page_increment">1</property>
     <property name="value">0</property>
+  </object>
+  <object class="GSettings" id="editor_settings">
+    <property name="schema-id">org.gnome.builder.editor</property>
+  </object>
+  <object class="GtkSizeGroup" id="control_group">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="scroll_off_spin"/>
+    </widgets>
   </object>
 </interface>

@@ -22,6 +22,7 @@
 #include <ide.h>
 
 #include "gb-preferences-page.h"
+#include "gb-preferences-switch.h"
 #include "gb-string.h"
 
 struct _GbPreferencesPagePrivate
@@ -106,7 +107,7 @@ gb_preferences_page_set_keywords (GbPreferencesPage   *page,
 void
 gb_preferences_page_set_keywords_for_widget (GbPreferencesPage *page,
                                              const gchar       *keywords,
-                                             GtkWidget         *first_widget,
+                                             gpointer           first_widget,
                                              ...)
 {
   GtkWidget *widget = first_widget;
@@ -218,6 +219,8 @@ gb_preferences_page_class_init (GbPreferencesPageClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_TITLE,
                                    gParamSpecs [PROP_TITLE]);
+
+  g_type_ensure (GB_TYPE_PREFERENCES_SWITCH);
 }
 
 static void

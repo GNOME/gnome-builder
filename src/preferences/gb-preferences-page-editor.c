@@ -24,11 +24,11 @@
 #include "gb-preferences-page-editor.h"
 #include "gb-widget.h"
 
-struct _GbPreferencesPageEditorPrivate
+struct _GbPreferencesPageEditor
 {
-  GSettings                         *settings;
+  GbPreferencesPage                  parent_instance;
 
-  /* Widgets owned by Template */
+  GSettings                         *editor_settings;
   GtkSwitch                         *restore_insert_mark_switch;
   GtkSwitch                         *show_diff_switch;
   GtkSwitch                         *word_completion_switch;
@@ -42,22 +42,10 @@ struct _GbPreferencesPageEditorPrivate
   GtkFontButton                     *font_button;
   GtkSourceStyleSchemeChooserButton *style_scheme_button;
   GtkAdjustment                     *scroll_off_adjustment;
-
-  /* Template widgets used for filtering */
-  GtkWidget                         *restore_insert_mark_container;
-  GtkWidget                         *word_completion_container;
-  GtkWidget                         *show_diff_container;
-  GtkWidget                         *show_line_numbers_container;
-  GtkWidget                         *highlight_current_line_container;
-  GtkWidget                         *highlight_matching_brackets_container;
-  GtkWidget                         *smart_backspace_container;
-  GtkWidget                         *smart_home_end_container;
-  GtkWidget                         *show_grid_lines_container;
-  GtkWidget                         *scroll_off_container;
+  GtkBox                            *scroll_off_container;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPageEditor, gb_preferences_page_editor,
-                            GB_TYPE_PREFERENCES_PAGE)
+G_DEFINE_TYPE (GbPreferencesPageEditor, gb_preferences_page_editor, GB_TYPE_PREFERENCES_PAGE)
 
 static void
 gb_preferences_page_editor_style_scheme_changed (GtkSourceStyleSchemeChooser *chooser,
@@ -82,76 +70,35 @@ gb_preferences_page_editor_style_scheme_changed (GtkSourceStyleSchemeChooser *ch
 static void
 gb_preferences_page_editor_constructed (GObject *object)
 {
-  GbPreferencesPageEditorPrivate *priv;
-  GbPreferencesPageEditor *editor = (GbPreferencesPageEditor *)object;
+  GbPreferencesPageEditor *self = (GbPreferencesPageEditor *)object;
   GtkSourceStyleSchemeManager *manager;
   GtkSourceStyleScheme *scheme;
   gchar *scheme_id;
 
-  g_return_if_fail (GB_IS_PREFERENCES_PAGE_EDITOR (editor));
+  g_assert (GB_IS_PREFERENCES_PAGE_EDITOR (self));
 
-  priv = editor->priv;
+  G_OBJECT_CLASS (gb_preferences_page_editor_parent_class)->constructed (object);
 
-  priv->settings = g_settings_new ("org.gnome.builder.editor");
-
-  g_settings_bind (priv->settings, "restore-insert-mark",
-                   priv->restore_insert_mark_switch, "active",
+  g_settings_bind (self->editor_settings, "scroll-offset",
+                   self->scroll_off_adjustment, "value",
                    G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->settings, "show-line-changes",
-                   priv->show_diff_switch, "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->settings, "word-completion",
-                   priv->word_completion_switch, "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->settings, "show-line-numbers",
-                   priv->show_line_numbers_switch, "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->settings, "highlight-current-line",
-                   priv->highlight_current_line_switch, "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->settings, "highlight-matching-brackets",
-                   priv->highlight_matching_brackets_switch, "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->settings, "smart-home-end",
-                   priv->smart_home_end_switch, "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->settings, "smart-backspace",
-                   priv->smart_backspace_switch, "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->settings, "show-grid-lines",
-                   priv->show_grid_lines_switch, "active",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->settings, "scroll-offset",
-                   priv->scroll_off_adjustment, "value",
-                   G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (priv->settings, "font-name",
-                   priv->font_button, "font-name",
+  g_settings_bind (self->editor_settings, "font-name",
+                   self->font_button, "font-name",
                    G_SETTINGS_BIND_DEFAULT);
 
-  scheme_id = g_settings_get_string (priv->settings, "style-scheme-name");
+  scheme_id = g_settings_get_string (self->editor_settings, "style-scheme-name");
   manager = gtk_source_style_scheme_manager_get_default ();
   scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_id);
   g_free (scheme_id);
+
   gtk_source_style_scheme_chooser_set_style_scheme (
-      GTK_SOURCE_STYLE_SCHEME_CHOOSER (priv->style_scheme_button),
+      GTK_SOURCE_STYLE_SCHEME_CHOOSER (self->style_scheme_button),
       scheme);
-  g_signal_connect_object (priv->style_scheme_button,
+  g_signal_connect_object (self->style_scheme_button,
                            "notify::style-scheme",
                            G_CALLBACK (gb_preferences_page_editor_style_scheme_changed),
-                           priv->settings,
+                           self->editor_settings,
                            0);
-
-  G_OBJECT_CLASS (gb_preferences_page_editor_parent_class)->constructed (object);
-}
-
-static void
-gb_preferences_page_editor_finalize (GObject *object)
-{
-  GbPreferencesPageEditorPrivate *priv = GB_PREFERENCES_PAGE_EDITOR (object)->priv;
-
-  g_clear_object (&priv->settings);
-
-  G_OBJECT_CLASS (gb_preferences_page_editor_parent_class)->finalize (object);
 }
 
 static void
@@ -161,110 +108,90 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gb_preferences_page_editor_constructed;
-  object_class->finalize = gb_preferences_page_editor_finalize;
 
   GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-preferences-page-editor.ui");
 
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, font_button);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, restore_insert_mark_switch);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_diff_switch);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, style_scheme_button);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, word_completion_switch);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, highlight_current_line_switch);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_switch);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, smart_home_end_switch);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, smart_backspace_switch);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_grid_lines_switch);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, scroll_off_spin);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, scroll_off_adjustment);
-
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, restore_insert_mark_container);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, word_completion_container);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_diff_container);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_line_numbers_container);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, highlight_current_line_container);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_container);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, smart_home_end_container);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, smart_backspace_container);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, show_grid_lines_container);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesPageEditor, scroll_off_container);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, editor_settings);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, font_button);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, restore_insert_mark_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_diff_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, style_scheme_button);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, word_completion_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, highlight_current_line_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, smart_home_end_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, smart_backspace_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_grid_lines_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, scroll_off_spin);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, scroll_off_adjustment);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, scroll_off_container);
 }
 
 static void
 gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
 {
-  self->priv = gb_preferences_page_editor_get_instance_private (self);
-
   gtk_widget_init_template (GTK_WIDGET (self));
+
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("restore insert cursor mark"),
-                                               self->priv->restore_insert_mark_container,
-                                               self->priv->restore_insert_mark_switch,
+                                               self->restore_insert_mark_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("word words auto completion suggest found document"),
-                                               self->priv->word_completion_container,
-                                               self->priv->word_completion_switch,
+                                               self->word_completion_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("diff renderer gutter changes git vcs"),
-                                               self->priv->show_diff_container,
-                                               self->priv->show_diff_switch,
+                                               self->show_diff_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("line numbers"),
-                                               self->priv->show_line_numbers_container,
-                                               self->priv->show_line_numbers_switch,
+                                               self->show_line_numbers_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("line lines highlight current"),
-                                               self->priv->highlight_current_line_container,
-                                               self->priv->highlight_current_line_switch,
+                                               self->highlight_current_line_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("bracket brackets highlight matching"),
-                                               self->priv->highlight_matching_brackets_container,
-                                               self->priv->highlight_matching_brackets_switch,
+                                               self->highlight_matching_brackets_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("smart home end"),
-                                               self->priv->smart_home_end_container,
-                                               self->priv->smart_home_end_switch,
+                                               self->smart_home_end_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("smart back backspace indent align"),
-                                               self->priv->smart_backspace_container,
-                                               self->priv->smart_backspace_switch,
+                                               self->smart_backspace_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("show grid lines"),
-                                               self->priv->show_grid_lines_container,
-                                               self->priv->show_grid_lines_switch,
+                                               self->show_grid_lines_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("lines margin scrolloff scroll off"),
-                                               self->priv->scroll_off_container,
-                                               self->priv->scroll_off_spin,
+                                               self->scroll_off_container,
+                                               self->scroll_off_spin,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("font document editor monospace"),
-                                               GTK_WIDGET (self->priv->font_button),
+                                               self->font_button,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
                                                _("source style scheme source tango solarized builder"),
-                                               GTK_WIDGET (self->priv->style_scheme_button),
+                                               self->style_scheme_button,
                                                NULL);
 }
