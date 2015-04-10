@@ -1,0 +1,20 @@
+<schemalist>
+  <schema id="org.gnome.builder.project-tree" path="/org/gnome/builder/project-tree/" gettext-domain="gnome-builder">
+    <key name="show" type="b">
+      <default>false</default>
+      <summary>Show Project Sidebar</summary>
+      <description>If enabled, the sidebar will be visible in the editor workspace.</description>
+    </key>
+    <key name="show-icons" type="b">
+      <default>false</default>
+      <summary>Show Icons</summary>
+      <description>If enabled, the sidebar will display icons next to each item.</description>
+    </key>
+    <key name="width" type="i">
+      <range min="1" max="1000"/>
+      <default>250</default>
+      <summary>Project Tree Width</summary>
+      <description>The width in pixels of the project tree.</description>
+    </key>
+  </schema>
+</schemalist>

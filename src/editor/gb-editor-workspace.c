@@ -35,6 +35,26 @@
 
 G_DEFINE_TYPE (GbEditorWorkspace, gb_editor_workspace, GB_TYPE_WORKSPACE)
 
+enum {
+  PROP_0,
+  PROP_SHOW_PROJECT_TREE,
+  LAST_PROP
+};
+
+static GParamSpec *gParamSpecs [LAST_PROP];
+
+gboolean
+gb_editor_workspace_get_show_project_tree (GbEditorWorkspace *self)
+{
+  return FALSE;
+}
+
+static void
+gb_editor_workspace_set_show_project_tree (GbEditorWorkspace *self,
+                                           gboolean           show_project_tree)
+{
+}
+
 static void
 gb_editor_workspace__load_buffer_cb (GbEditorWorkspace *self,
                                      IdeBuffer         *buffer,
@@ -147,9 +167,6 @@ gb_editor_workspace_constructed (GObject *object)
 
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->constructed (object);
 
-  self->editor_settings = g_settings_new ("org.gnome.builder.editor");
-  self->sidebar_position = gtk_paned_get_position (self->project_paned) ?: SIDEBAR_POSITION;
-
   gb_editor_workspace_actions_init (self);
 
   IDE_EXIT;
@@ -158,15 +175,56 @@ gb_editor_workspace_constructed (GObject *object)
 static void
 gb_editor_workspace_finalize (GObject *object)
 {
-  GbEditorWorkspace *self = (GbEditorWorkspace *)object;
-
   IDE_ENTRY;
-
-  g_clear_object (&self->editor_settings);
-
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->finalize (object);
-
   IDE_EXIT;
+}
+
+static void
+gb_editor_workspace_get_property (GObject    *object,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
+{
+  GbEditorWorkspace *self = GB_EDITOR_WORKSPACE(object);
+
+  switch (prop_id)
+    {
+    case PROP_SHOW_PROJECT_TREE:
+      g_value_set_boolean (value, gb_editor_workspace_get_show_project_tree (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
+}
+
+/**
+ * gb_editor_workspace_set_property:
+ * @object: (in): A #GObject.
+ * @prop_id: (in): The property identifier.
+ * @value: (in): The given property.
+ * @pspec: (in): A #ParamSpec.
+ *
+ * Set a given #GObject property.
+ */
+static void
+gb_editor_workspace_set_property (GObject      *object,
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
+{
+  GbEditorWorkspace *self = GB_EDITOR_WORKSPACE(object);
+
+  switch (prop_id)
+    {
+    case PROP_SHOW_PROJECT_TREE:
+      gb_editor_workspace_set_show_project_tree (self, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    }
 }
 
 static void
@@ -177,8 +235,19 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 
   object_class->constructed = gb_editor_workspace_constructed;
   object_class->finalize = gb_editor_workspace_finalize;
+  object_class->get_property = gb_editor_workspace_get_property;
+  object_class->set_property = gb_editor_workspace_set_property;
 
   widget_class->grab_focus = gb_editor_workspace_grab_focus;
+
+  gParamSpecs [PROP_SHOW_PROJECT_TREE] =
+    g_param_spec_boolean ("show-project-tree",
+                          _("Show Project Tree"),
+                          _("Show Project Tree"),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SHOW_PROJECT_TREE,
+                                   gParamSpecs [PROP_SHOW_PROJECT_TREE]);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-workspace.ui");
 
@@ -197,6 +266,8 @@ static void
 gb_editor_workspace_init (GbEditorWorkspace *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->project_tree_settings = g_settings_new ("org.gnome.builder.project-tree");
 
   gb_widget_set_context_handler (self, gb_editor_workspace_context_changed);
 }

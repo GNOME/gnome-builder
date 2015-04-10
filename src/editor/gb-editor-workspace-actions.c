@@ -24,7 +24,6 @@
 #include "gb-workbench.h"
 
 #define ANIMATION_DURATION_MSEC 250
-#define MIN_PANED_SAVE_POSTION  100
 
 static void
 gb_editor_workspace_actions_show_sidebar (GSimpleAction *action,
@@ -40,12 +39,7 @@ gb_editor_workspace_actions_show_sidebar (GSimpleAction *action,
 
   if (!g_variant_get_boolean (variant) && visible)
     {
-      guint position;
-
-      position = gtk_paned_get_position (self->project_paned);
-      if (position > MIN_PANED_SAVE_POSTION)
-        self->sidebar_position = position;
-
+      gb_project_tree_save_desired_width (self->project_tree);
       ide_object_animate_full (self->project_paned,
                                IDE_ANIMATION_EASE_IN_CUBIC,
                                ANIMATION_DURATION_MSEC,
@@ -55,18 +49,23 @@ gb_editor_workspace_actions_show_sidebar (GSimpleAction *action,
                                "position", 0,
                                NULL);
       g_simple_action_set_state (action, variant);
+      g_settings_set_boolean (self->project_tree_settings, "show", FALSE);
     }
   else if (g_variant_get_boolean (variant) && !visible)
     {
+      guint position;
+
+      position = gb_project_tree_get_desired_width (self->project_tree);
       gtk_paned_set_position (self->project_paned, 0);
       gtk_widget_show (GTK_WIDGET (self->project_sidebar));
       ide_object_animate (self->project_paned,
                           IDE_ANIMATION_EASE_IN_CUBIC,
                           ANIMATION_DURATION_MSEC,
                           NULL,
-                          "position", self->sidebar_position,
+                          "position", position,
                           NULL);
       g_simple_action_set_state (action, variant);
+      g_settings_set_boolean (self->project_tree_settings, "show", TRUE);
     }
 }
 
@@ -89,17 +88,6 @@ gb_editor_workspace_actions_toggle_sidebar (GSimpleAction *action,
   g_variant_unref (state);
 }
 
-static void
-gb_editor_workspace_actions__show_sidebar_notify_state (GbEditorWorkspace *self,
-                                                        GParamSpec        *pspec,
-                                                        GAction           *action)
-{
-  g_autoptr(GVariant) state = NULL;
-
-  state = g_action_get_state (action);
-  g_settings_set_boolean (self->editor_settings, "show-sidebar", g_variant_get_boolean (state));
-}
-
 static const GActionEntry GbEditorWorkspaceActions[] = {
   { "show-sidebar", NULL, NULL, "false", gb_editor_workspace_actions_show_sidebar },
   { "toggle-sidebar", gb_editor_workspace_actions_toggle_sidebar },
@@ -119,16 +107,13 @@ gb_editor_workspace_actions_init (GbEditorWorkspace *self)
   action = g_action_map_lookup_action (G_ACTION_MAP (group), "show-sidebar");
   g_assert (G_IS_SIMPLE_ACTION (action));
 
-  if (g_settings_get_boolean (self->editor_settings, "show-sidebar"))
+  if (g_settings_get_boolean (self->project_tree_settings, "show"))
     {
+      guint position;
+
       g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (TRUE));
-      gtk_paned_set_position (self->project_paned, self->sidebar_position);
+      position = g_settings_get_int (self->project_tree_settings, "width");
+      gtk_paned_set_position (self->project_paned, position);
       gtk_widget_show (GTK_WIDGET (self->project_sidebar));
     }
-
-  g_signal_connect_object (action,
-                           "notify::state",
-                           G_CALLBACK (gb_editor_workspace_actions__show_sidebar_notify_state),
-                           self,
-                           G_CONNECT_SWAPPED);
 }

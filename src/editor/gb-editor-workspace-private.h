@@ -29,7 +29,7 @@ struct _GbEditorWorkspace
 {
   GbWorkspace    parent_instance;
 
-  GSettings     *editor_settings;
+  GSettings     *project_tree_settings;
 
   GtkPaned      *project_paned;
   GtkBox        *project_sidebar;
@@ -37,8 +37,6 @@ struct _GbEditorWorkspace
   GtkSpinner    *project_spinner;
   GbProjectTree *project_tree;
   GbViewGrid    *view_grid;
-
-  guint          sidebar_position;
 };
 
 G_END_DECLS

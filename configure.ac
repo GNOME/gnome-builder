@@ -74,6 +74,7 @@ AC_CONFIG_FILES([
 	data/gsettings/org.gnome.builder.editor.gschema.xml
 	data/gsettings/org.gnome.builder.editor.language.gschema.xml
 	data/gsettings/org.gnome.builder.experimental.gschema.xml
+	data/gsettings/org.gnome.builder.project-tree.gschema.xml
 	po/Makefile.in
 ])
 

@@ -23,12 +23,32 @@
 #include "gb-project-tree-builder.h"
 #include "gb-project-tree-private.h"
 
+#define WIDTH_MIN 1
+#define WIDTH_MAX 1000
+
 G_DEFINE_TYPE (GbProjectTree, gb_project_tree, GB_TYPE_TREE)
 
 GtkWidget *
 gb_project_tree_new (void)
 {
   return g_object_new (GB_TYPE_PROJECT_TREE, NULL);
+}
+
+guint
+gb_project_tree_get_desired_width (GbProjectTree *self)
+{
+  return g_settings_get_int (self->settings, "width");
+}
+
+void
+gb_project_tree_save_desired_width (GbProjectTree *self)
+{
+  GtkAllocation alloc;
+  guint width;
+
+  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+  width = CLAMP (alloc.width, WIDTH_MIN, WIDTH_MAX);
+  g_settings_set_int (self->settings, "width", width);
 }
 
 IdeContext *
@@ -66,6 +86,7 @@ gb_project_tree_set_context (GbProjectTree *self,
   gb_tree_rebuild (GB_TREE (self));
 }
 
+
 static void
 gb_project_tree_notify_selection (GbProjectTree *self)
 {
@@ -99,7 +120,9 @@ gb_project_tree_init (GbProjectTree *self)
 
   gb_tree_set_root (GB_TREE (self), gb_tree_node_new ());
 
-  //self->settings = g_settings_new ("org.gnome.builder.project-tree");
+  self->settings = g_settings_new ("org.gnome.builder.project-tree");
+  g_settings_bind (self->settings, "show-icons", self, "show-icons",
+                   G_SETTINGS_BIND_DEFAULT);
 
   builder = gb_project_tree_builder_new ();
   gb_tree_add_builder (GB_TREE (self), builder);
