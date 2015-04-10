@@ -20,9 +20,10 @@
 #include <gio/gdesktopappinfo.h>
 
 #include "gb-editor-workspace.h"
-#include "gb-editor-workspace-private.h"
 #include "gb-file-manager.h"
-#include "gb-tree.h"
+#include "gb-project-tree.h"
+#include "gb-project-tree-actions.h"
+#include "gb-project-tree-private.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
@@ -56,58 +57,21 @@ project_file_is_directory (GObject *object)
 }
 
 static void
-gb_project_tree_actions_update_actions (GbEditorWorkspace *editor)
-{
-  GActionGroup *group;
-  GbTreeNode *selection;
-  GObject *item = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (GB_IS_EDITOR_WORKSPACE (editor));
-  group = gtk_widget_get_action_group (GTK_WIDGET (editor), "project-tree");
-  g_assert (G_IS_SIMPLE_ACTION_GROUP (group));
-
-  selection = gb_tree_get_selected (editor->project_tree);
-  if (selection != NULL)
-    item = gb_tree_node_get_item (selection);
-
-  action_set (group, "open",
-              "enabled", !project_file_is_directory (item),
-              NULL);
-  action_set (group, "open-with-editor",
-              "enabled", !project_file_is_directory (item),
-              NULL);
-  action_set (group, "open-containing-folder",
-              "enabled", IDE_IS_PROJECT_FILE (item),
-              NULL);
-
-  IDE_EXIT;
-}
-
-static void
-gb_project_tree_actions__notify_selection (GbTree            *tree,
-                                           GParamSpec        *pspec,
-                                           GbEditorWorkspace *editor)
-{
-  g_assert (GB_IS_TREE (tree));
-  g_assert (GB_IS_EDITOR_WORKSPACE (editor));
-
-  gb_project_tree_actions_update_actions (editor);
-}
-
-static void
 gb_project_tree_actions_refresh (GSimpleAction *action,
                                  GVariant      *variant,
                                  gpointer       user_data)
 {
-  GbEditorWorkspace *self = user_data;
+  GbProjectTree *self = user_data;
 
-  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+  g_assert (GB_IS_PROJECT_TREE (self));
 
-  gb_tree_rebuild (self->project_tree);
+  gb_tree_rebuild (GB_TREE (self));
 
-  /* TODO: Try to expand back to our current position */
+  /*
+   * TODO:
+   *
+   * Try to expand back to our current position
+   */
 }
 
 static void
@@ -115,11 +79,11 @@ gb_project_tree_actions_collapse_all_nodes (GSimpleAction *action,
                                             GVariant      *variant,
                                             gpointer       user_data)
 {
-  GbEditorWorkspace *self = user_data;
+  GbProjectTree *self = user_data;
 
-  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+  g_assert (GB_IS_PROJECT_TREE (self));
 
-  gtk_tree_view_collapse_all (GTK_TREE_VIEW (self->project_tree));
+  gtk_tree_view_collapse_all (GTK_TREE_VIEW (self));
 }
 
 static void
@@ -127,13 +91,17 @@ gb_project_tree_actions_open (GSimpleAction *action,
                               GVariant      *variant,
                               gpointer       user_data)
 {
-  GbEditorWorkspace *self = user_data;
+  GbProjectTree *self = user_data;
+  GbWorkbench *workbench;
   GbTreeNode *selected;
   GObject *item;
 
-  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+  g_assert (GB_IS_PROJECT_TREE (self));
 
-  if (!(selected = gb_tree_get_selected (self->project_tree)) ||
+  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+  g_assert (GB_IS_WORKBENCH (workbench));
+
+  if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (selected)))
     return;
 
@@ -141,7 +109,6 @@ gb_project_tree_actions_open (GSimpleAction *action,
 
   if (IDE_IS_PROJECT_FILE (item))
     {
-      GbWorkbench *workbench;
       GFileInfo *file_info;
       GFile *file;
 
@@ -156,7 +123,6 @@ gb_project_tree_actions_open (GSimpleAction *action,
       if (!file)
         return;
 
-      workbench = gb_widget_get_workbench (GTK_WIDGET (self));
       gb_workbench_open (workbench, file);
     }
 }
@@ -166,11 +132,11 @@ gb_project_tree_actions_open_with (GSimpleAction *action,
                                    GVariant      *variant,
                                    gpointer       user_data)
 {
-  GDesktopAppInfo *app_info = NULL;
-  GbEditorWorkspace *editor = user_data;
+  g_autoptr(GDesktopAppInfo) app_info = NULL;
+  g_autoptr(GdkAppLaunchContext) launch_context = NULL;
+  GbProjectTree *self = user_data;
   GbTreeNode *selected;
   GbWorkbench *workbench;
-  GdkAppLaunchContext *launch_context;
   GdkDisplay *display;
   GFileInfo *file_info;
   GFile *file;
@@ -178,46 +144,25 @@ gb_project_tree_actions_open_with (GSimpleAction *action,
   GObject *item;
   GList *files;
 
-  g_assert (GB_IS_EDITOR_WORKSPACE (editor));
+  g_assert (GB_IS_PROJECT_TREE (self));
   g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING));
 
-  workbench = gb_widget_get_workbench (GTK_WIDGET (editor));
-  if (workbench == NULL)
+  if (!(workbench = gb_widget_get_workbench (GTK_WIDGET (self))) ||
+      !(selected = gb_tree_get_selected (GB_TREE (self))) ||
+      !(item = gb_tree_node_get_item (selected)) ||
+      !IDE_IS_PROJECT_FILE (item) ||
+      !(app_id = g_variant_get_string (variant, NULL)) ||
+      !(file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item))) ||
+      !(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))) ||
+      !(app_info = g_desktop_app_info_new (app_id)))
     return;
 
-  selected = gb_tree_get_selected (editor->project_tree);
-  if (selected == NULL)
-    return;
-
-  item = gb_tree_node_get_item (selected);
-  if (item == NULL || !IDE_IS_PROJECT_FILE (item))
-    return;
-
-  app_id = g_variant_get_string (variant, NULL);
-  if (app_id == NULL)
-    return;
-
-  app_info = g_desktop_app_info_new (app_id);
-  if (app_info == NULL)
-    return;
-
-  file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item));
-  if (file_info == NULL)
-    return;
-
-  file = ide_project_file_get_file (IDE_PROJECT_FILE (item));
-  if (file == NULL)
-    return;
-
-  display = gtk_widget_get_display (GTK_WIDGET (editor));
+  display = gtk_widget_get_display (GTK_WIDGET (self));
   launch_context = gdk_display_get_app_launch_context (display);
+
   files = g_list_append (NULL, file);
-
   g_app_info_launch (G_APP_INFO (app_info), files, G_APP_LAUNCH_CONTEXT (launch_context), NULL);
-
   g_list_free (files);
-  g_object_unref (launch_context);
-  g_object_unref (app_info);
 }
 
 static void
@@ -225,38 +170,25 @@ gb_project_tree_actions_open_with_editor (GSimpleAction *action,
                                           GVariant      *variant,
                                           gpointer       user_data)
 {
-  GbEditorWorkspace *self = user_data;
+  GbWorkbench *workbench;
+  GbProjectTree *self = user_data;
+  GFileInfo *file_info;
+  GFile *file;
   GbTreeNode *selected;
   GObject *item;
 
-  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+  g_assert (GB_IS_PROJECT_TREE (self));
 
-  if (!(selected = gb_tree_get_selected (self->project_tree)) ||
-      !(item = gb_tree_node_get_item (selected)))
+  if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
+      !(item = gb_tree_node_get_item (selected)) ||
+      !IDE_IS_PROJECT_FILE (item) ||
+      !(file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item))) ||
+      (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY) ||
+      !(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))) ||
+      !(workbench = gb_widget_get_workbench (GTK_WIDGET (self))))
     return;
 
-  item = gb_tree_node_get_item (selected);
-
-  if (IDE_IS_PROJECT_FILE (item))
-    {
-      GbWorkbench *workbench;
-      GFileInfo *file_info;
-      GFile *file;
-
-      file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item));
-      if (!file_info)
-        return;
-
-      if (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY)
-        return;
-
-      file = ide_project_file_get_file (IDE_PROJECT_FILE (item));
-      if (!file)
-        return;
-
-      workbench = gb_widget_get_workbench (GTK_WIDGET (self));
-      gb_workbench_open_with_editor (workbench, file);
-    }
+  gb_workbench_open_with_editor (workbench, file);
 }
 
 static void
@@ -267,25 +199,17 @@ gb_project_tree_actions_open_containing_folder (GSimpleAction *action,
   GbEditorWorkspace *self = user_data;
   GbTreeNode *selected;
   GObject *item;
+  GFile *file;
 
-  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+  g_assert (GB_IS_PROJECT_TREE (self));
 
-  if (!(selected = gb_tree_get_selected (self->project_tree)) ||
-      !(item = gb_tree_node_get_item (selected)))
+  if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
+      !(item = gb_tree_node_get_item (selected)) ||
+      !IDE_IS_PROJECT_FILE (item) ||
+      !(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))))
     return;
 
-  item = gb_tree_node_get_item (selected);
-
-  if (IDE_IS_PROJECT_FILE (item))
-    {
-      GFile *file;
-
-      file = ide_project_file_get_file (IDE_PROJECT_FILE (item));
-      if (!file)
-        return;
-
-      gb_file_manager_show (file, NULL);
-    }
+  gb_file_manager_show (file, NULL);
 }
 
 static void
@@ -293,11 +217,14 @@ gb_project_tree_actions_show_icons (GSimpleAction *action,
                                     GVariant      *variant,
                                     gpointer       user_data)
 {
-  GbEditorWorkspace *editor = user_data;
+  GbProjectTree *self = user_data;
+  gboolean show_icons;
 
-  g_assert (GB_IS_EDITOR_WORKSPACE (editor));
+  g_assert (GB_IS_PROJECT_TREE (self));
+  g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_BOOLEAN));
 
-  gb_tree_set_show_icons (editor->project_tree, g_variant_get_boolean (variant));
+  show_icons = g_variant_get_boolean (variant);
+  gb_tree_set_show_icons (GB_TREE (self), show_icons);
   g_simple_action_set_state (action, variant);
 }
 
@@ -312,27 +239,56 @@ static GActionEntry GbProjectTreeActions[] = {
 };
 
 void
-gb_project_tree_actions_init (GbEditorWorkspace *editor)
+gb_project_tree_actions_init (GbProjectTree *self)
 {
   g_autoptr(GSettings) settings = NULL;
   g_autoptr(GSimpleActionGroup) actions = NULL;
   g_autoptr(GAction) action = NULL;
 
-  settings = g_settings_new ("org.gtk.Settings.FileChooser");
   actions = g_simple_action_group_new ();
 
-  g_action_map_add_action_entries (G_ACTION_MAP (actions), GbProjectTreeActions,
-                                   G_N_ELEMENTS (GbProjectTreeActions), editor);
-
+  settings = g_settings_new ("org.gtk.Settings.FileChooser");
   action = g_settings_create_action (settings, "sort-directories-first");
   g_action_map_add_action (G_ACTION_MAP (actions), action);
 
-  gtk_widget_insert_action_group (GTK_WIDGET (editor), "project-tree", G_ACTION_GROUP (actions));
+  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                   GbProjectTreeActions,
+                                   G_N_ELEMENTS (GbProjectTreeActions),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "project-tree",
+                                  G_ACTION_GROUP (actions));
 
-  g_signal_connect (editor->project_tree,
-                    "notify::selection",
-                    G_CALLBACK (gb_project_tree_actions__notify_selection),
-                    editor);
+  gb_project_tree_actions_update (self);
+}
 
-  gb_project_tree_actions_update_actions (editor);
+void
+gb_project_tree_actions_update (GbProjectTree *self)
+{
+  GActionGroup *group;
+  GbTreeNode *selection;
+  GObject *item = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (GB_IS_PROJECT_TREE (self));
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (self), "project-tree");
+  g_assert (G_IS_SIMPLE_ACTION_GROUP (group));
+
+  selection = gb_tree_get_selected (GB_TREE (self));
+  if (selection != NULL)
+    item = gb_tree_node_get_item (selection);
+
+  action_set (group, "open",
+              "enabled", !project_file_is_directory (item),
+              NULL);
+  action_set (group, "open-with-editor",
+              "enabled", !project_file_is_directory (item),
+              NULL);
+  action_set (group, "open-containing-folder",
+              "enabled", IDE_IS_PROJECT_FILE (item),
+              NULL);
+
+  IDE_EXIT;
 }

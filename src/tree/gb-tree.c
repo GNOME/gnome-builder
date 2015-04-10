@@ -182,19 +182,13 @@ static GMenu *
 gb_tree_create_menu (GbTree     *self,
                      GbTreeNode *node)
 {
-  GtkApplication *app;
   GMenu *menu;
-  GMenu *submenu;
   guint i;
 
   g_return_val_if_fail (GB_IS_TREE (self), NULL);
   g_return_val_if_fail (GB_IS_TREE_NODE (node), NULL);
 
   menu = g_menu_new ();
-  app = GTK_APPLICATION (g_application_get_default ());
-
-  submenu = gtk_application_get_menu_by_id (app, "gb-tree-display-options");
-  g_menu_append_section (menu, NULL, G_MENU_MODEL (submenu));
 
   for (i = 0; i < self->priv->builders->len; i++)
     {

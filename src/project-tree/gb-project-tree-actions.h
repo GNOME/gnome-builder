@@ -19,11 +19,12 @@
 #ifndef GB_PROJECT_TREE_ACTIONS_H
 #define GB_PROJECT_TREE_ACTIONS_H
 
-#include "gb-editor-workspace.h"
+#include "gb-project-tree.h"
 
 G_BEGIN_DECLS
 
-void gb_project_tree_actions_init (GbEditorWorkspace *editor);
+void gb_project_tree_actions_init   (GbProjectTree *self);
+void gb_project_tree_actions_update (GbProjectTree *self);
 
 G_END_DECLS
 

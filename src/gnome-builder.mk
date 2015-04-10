@@ -64,8 +64,6 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-editor-workspace-private.h \
 	src/editor/gb-editor-workspace.c \
 	src/editor/gb-editor-workspace.h \
-	src/editor/gb-project-tree-actions.c \
-	src/editor/gb-project-tree-actions.h \
 	src/gd/gd-tagged-entry.c \
 	src/gd/gd-tagged-entry.h \
 	src/gedit/gedit-close-button.c \
@@ -94,6 +92,13 @@ libgnome_builder_la_SOURCES = \
 	src/preferences/gb-preferences-page.h \
 	src/preferences/gb-preferences-window.c \
 	src/preferences/gb-preferences-window.h \
+	src/project-tree/gb-project-tree.c \
+	src/project-tree/gb-project-tree.h \
+	src/project-tree/gb-project-tree-actions.c \
+	src/project-tree/gb-project-tree-actions.h \
+	src/project-tree/gb-project-tree-builder.c \
+	src/project-tree/gb-project-tree-builder.h \
+	src/project-tree/gb-project-tree-private.h \
 	src/scrolledwindow/gb-scrolled-window.c \
 	src/scrolledwindow/gb-scrolled-window.h \
 	src/search/gb-search-box.c \
@@ -106,8 +111,6 @@ libgnome_builder_la_SOURCES = \
 	src/search/gb-search-display.h \
 	src/support/gb-support.c \
 	src/support/gb-support.h \
-	src/tree/gb-project-tree-builder.c \
-	src/tree/gb-project-tree-builder.h \
 	src/tree/gb-tree-builder.c \
 	src/tree/gb-tree-builder.h \
 	src/tree/gb-tree-node.c \
@@ -187,6 +190,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/src/keybindings \
 	-I$(top_srcdir)/src/nautilus \
 	-I$(top_srcdir)/src/preferences \
+	-I$(top_srcdir)/src/project-tree \
 	-I$(top_srcdir)/src/resources \
 	-I$(top_srcdir)/src/scrolledwindow \
 	-I$(top_srcdir)/src/search \

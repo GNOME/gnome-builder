@@ -38,6 +38,8 @@ typedef struct _GbTree        GbTree;
 typedef struct _GbTreeClass   GbTreeClass;
 typedef struct _GbTreePrivate GbTreePrivate;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbTree, g_object_unref)
+
 struct _GbTree
 {
 	GtkTreeView parent;

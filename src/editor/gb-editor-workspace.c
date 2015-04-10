@@ -26,8 +26,6 @@
 #include "gb-editor-workspace.h"
 #include "gb-editor-workspace-actions.h"
 #include "gb-editor-workspace-private.h"
-#include "gb-project-tree-builder.h"
-#include "gb-project-tree-actions.h"
 #include "gb-string.h"
 #include "gb-tree.h"
 #include "gb-view-grid.h"
@@ -93,7 +91,6 @@ gb_editor_workspace_context_changed (GtkWidget  *workspace,
       IdeBufferManager *bufmgr;
       IdeProject *project;
       GbWorkbench *workbench;
-      GbTreeNode *root;
       g_autoptr(GPtrArray) buffers = NULL;
       gsize i;
 
@@ -127,11 +124,7 @@ gb_editor_workspace_context_changed (GtkWidget  *workspace,
       g_object_bind_property (project, "name", self->project_button, "label",
                               G_BINDING_SYNC_CREATE);
 
-      root = gb_tree_get_root (self->project_tree);
-      gb_tree_node_set_item (root, G_OBJECT (ide_context_get_project (context)));
-
-      gb_project_tree_builder_set_context (GB_PROJECT_TREE_BUILDER (self->project_tree_builder),
-                                           context);
+      gb_project_tree_set_context (self->project_tree, context);
     }
 }
 
@@ -158,7 +151,6 @@ gb_editor_workspace_constructed (GObject *object)
   self->sidebar_position = gtk_paned_get_position (self->project_paned) ?: SIDEBAR_POSITION;
 
   gb_editor_workspace_actions_init (self);
-  gb_project_tree_actions_init (self);
 
   IDE_EXIT;
 }
@@ -197,7 +189,7 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_tree);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, view_grid);
 
-  g_type_ensure (GB_TYPE_TREE);
+  g_type_ensure (GB_TYPE_PROJECT_TREE);
   g_type_ensure (GB_TYPE_VIEW_GRID);
 }
 
@@ -205,10 +197,6 @@ static void
 gb_editor_workspace_init (GbEditorWorkspace *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  self->project_tree_builder = gb_project_tree_builder_new (NULL);
-  gb_tree_add_builder (self->project_tree, GB_TREE_BUILDER (self->project_tree_builder));
-  gb_tree_set_root (self->project_tree, gb_tree_node_new ());
 
   gb_widget_set_context_handler (self, gb_editor_workspace_context_changed);
 }

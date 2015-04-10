@@ -1,6 +1,6 @@
-/* gb-editor-workspace-private.h
+/* gb-project-tree-builder.h
  *
- * Copyright (C) 2014-2015 Christian Hergert <christian@hergert.me>
+ * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,31 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_EDITOR_WORKSPACE_PRIVATE_H
-#define GB_EDITOR_WORKSPACE_PRIVATE_H
+#ifndef GB_PROJECT_TREE_BUILDER_H
+#define GB_PROJECT_TREE_BUILDER_H
 
-#include "gb-project-tree.h"
-#include "gb-view-grid.h"
-#include "gb-workspace.h"
+#include <ide.h>
+
+#include "gb-tree-builder.h"
 
 G_BEGIN_DECLS
 
-struct _GbEditorWorkspace
-{
-  GbWorkspace    parent_instance;
+#define GB_TYPE_PROJECT_TREE_BUILDER (gb_project_tree_builder_get_type())
 
-  GSettings     *editor_settings;
+G_DECLARE_FINAL_TYPE (GbProjectTreeBuilder, gb_project_tree_builder,
+                      GB, PROJECT_TREE_BUILDER, GbTreeBuilder)
 
-  GtkPaned      *project_paned;
-  GtkBox        *project_sidebar;
-  GtkMenuButton *project_button;
-  GtkSpinner    *project_spinner;
-  GbProjectTree *project_tree;
-  GbViewGrid    *view_grid;
-
-  guint          sidebar_position;
-};
+GbTreeBuilder  *gb_project_tree_builder_new (void);
 
 G_END_DECLS
 
-#endif /* GB_EDITOR_WORKSPACE_PRIVATE_H */
+#endif /* GB_PROJECT_TREE_BUILDER_H */

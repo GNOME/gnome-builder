@@ -39,6 +39,8 @@ typedef struct _GbTreeNode        GbTreeNode;
 typedef struct _GbTreeNodeClass   GbTreeNodeClass;
 typedef struct _GbTreeNodePrivate GbTreeNodePrivate;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbTreeNode, g_object_unref)
+
 struct _GbTreeNode
 {
 	GInitiallyUnowned parent;

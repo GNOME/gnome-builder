@@ -109,8 +109,8 @@
     </section>
 -->
   </menu>
-  <menu id="gb-tree-display-options">
-    <section id="display-options">
+  <menu id="gb-project-tree-display-options">
+    <section id="gb-project-tree-display-options-section">
       <submenu>
         <attribute name="label" translatable="yes">Display Options</attribute>
         <section>
@@ -136,8 +136,8 @@
       </submenu>
     </section>
   </menu>
-  <menu id="project-tree-open">
-    <section id="open-section">
+  <menu id="gb-project-tree-open">
+    <section id="gb-project-tree-open-section">
       <item>
         <attribute name="label" translatable="yes">_Open</attribute>
         <attribute name="action">project-tree.open</attribute>
@@ -150,21 +150,21 @@
             <attribute name="action">project-tree.open-with-editor</attribute>
           </item>
         </section>
-        <section id="open-by-mime-section">
+        <section id="gb-project-tree-open-by-mime-section">
         </section>
       </submenu>
     </section>
   </menu>
-  <menu id="project-tree-open-containing">
-    <section id="open-containing-section">
+  <menu id="gb-project-tree-open-containing">
+    <section id="gb-project-tree-open-containing-section">
       <item>
         <attribute name="label" translatable="yes">_Open Containing Folder</attribute>
         <attribute name="action">project-tree.open-containing-folder</attribute>
       </item>
     </section>
   </menu>
-  <menu id="project-tree-build">
-    <section id="build-section">
+  <menu id="gb-project-tree-build">
+    <section id="gb-project-tree-build-section">
       <item>
         <attribute name="label" translatable="yes">_Build</attribute>
         <attribute name="action">workbench.build</attribute>

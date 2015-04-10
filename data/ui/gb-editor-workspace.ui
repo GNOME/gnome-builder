@@ -51,7 +51,7 @@
                 <property name="vexpand">true</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GbTree" id="project_tree">
+                  <object class="GbProjectTree" id="project_tree">
                     <property name="headers-visible">false</property>
                     <property name="visible">true</property>
                   </object>

@@ -27,54 +27,15 @@
 struct _GbProjectTreeBuilder
 {
   GbTreeBuilder  parent_instance;
-  IdeContext    *context;
   GSettings     *file_chooser_settings;
 };
 
 G_DEFINE_TYPE (GbProjectTreeBuilder, gb_project_tree_builder, GB_TYPE_TREE_BUILDER)
 
-enum {
-  PROP_0,
-  PROP_CONTEXT,
-  LAST_PROP
-};
-
-static GParamSpec *gParamSpecs [LAST_PROP];
-
 GbTreeBuilder *
-gb_project_tree_builder_new (IdeContext *context)
+gb_project_tree_builder_new (void)
 {
-  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
-
-  return g_object_new (GB_TYPE_PROJECT_TREE_BUILDER,
-                       "context", context,
-                       NULL);
-}
-
-IdeContext *
-gb_project_tree_builder_get_context (GbProjectTreeBuilder *self)
-{
-  g_return_val_if_fail (GB_IS_PROJECT_TREE_BUILDER (self), NULL);
-
-  return self->context;
-}
-
-void
-gb_project_tree_builder_set_context (GbProjectTreeBuilder *self,
-                                     IdeContext           *context)
-{
-  g_return_if_fail (GB_IS_PROJECT_TREE_BUILDER (self));
-  g_return_if_fail (!context || IDE_IS_CONTEXT (context));
-
-  if (g_set_object (&self->context, context))
-    {
-      GtkWidget *tree;
-
-      g_object_notify (G_OBJECT (self), "context");
-
-      if ((tree = gb_tree_builder_get_tree (GB_TREE_BUILDER (self))))
-        gb_tree_rebuild (GB_TREE (tree));
-    }
+  return g_object_new (GB_TYPE_PROJECT_TREE_BUILDER, NULL);
 }
 
 static const gchar *
@@ -324,22 +285,24 @@ gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
 
   if (IDE_IS_PROJECT_ITEM (item) || IDE_IS_PROJECT (item))
     {
-      submenu = gtk_application_get_menu_by_id (app, "project-tree-build");
+      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-build");
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
     }
 
   if (IDE_IS_PROJECT_FILE (item))
     {
-      submenu = gtk_application_get_menu_by_id (app, "project-tree-open-containing");
+      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-open-containing");
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
 
-      submenu = gtk_application_get_menu_by_id (app, "project-tree-open");
+      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-open");
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
 
-      submenu = gtk_application_get_menu_by_id (app, "open-by-mime-section");
+      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-open-by-mime-section");
       populate_mime_handlers (submenu, IDE_PROJECT_FILE (item));
     }
 
+  submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-display-options");
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (submenu));
 }
 
 static gboolean
@@ -404,48 +367,9 @@ gb_project_tree_builder_finalize (GObject *object)
 {
   GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)object;
 
-  g_clear_object (&self->context);
   g_clear_object (&self->file_chooser_settings);
 
   G_OBJECT_CLASS (gb_project_tree_builder_parent_class)->finalize (object);
-}
-
-static void
-gb_project_tree_builder_get_property (GObject    *object,
-                                      guint       prop_id,
-                                      GValue     *value,
-                                      GParamSpec *pspec)
-{
-  GbProjectTreeBuilder *self = GB_PROJECT_TREE_BUILDER (object);
-
-  switch (prop_id)
-    {
-    case PROP_CONTEXT:
-      g_value_set_object (value, gb_project_tree_builder_get_context (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-gb_project_tree_builder_set_property (GObject      *object,
-                                      guint         prop_id,
-                                      const GValue *value,
-                                      GParamSpec   *pspec)
-{
-  GbProjectTreeBuilder *self = GB_PROJECT_TREE_BUILDER (object);
-
-  switch (prop_id)
-    {
-    case PROP_CONTEXT:
-      gb_project_tree_builder_set_context (self, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
 }
 
 static void
@@ -455,21 +379,10 @@ gb_project_tree_builder_class_init (GbProjectTreeBuilderClass *klass)
   GbTreeBuilderClass *tree_builder_class = GB_TREE_BUILDER_CLASS (klass);
 
   object_class->finalize = gb_project_tree_builder_finalize;
-  object_class->get_property = gb_project_tree_builder_get_property;
-  object_class->set_property = gb_project_tree_builder_set_property;
 
   tree_builder_class->build_node = gb_project_tree_builder_build_node;
   tree_builder_class->node_activated = gb_project_tree_builder_node_activated;
   tree_builder_class->node_popup = gb_project_tree_builder_node_popup;
-
-  gParamSpecs [PROP_CONTEXT] =
-    g_param_spec_object ("context",
-                         _("Context"),
-                         _("The ide context for the project tree."),
-                         IDE_TYPE_CONTEXT,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CONTEXT,
-                                   gParamSpecs [PROP_CONTEXT]);
 }
 
 static void

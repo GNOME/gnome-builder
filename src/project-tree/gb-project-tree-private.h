@@ -1,4 +1,4 @@
-/* gb-project-tree-builder.h
+/* gb-project-tree-private.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,25 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_PROJECT_TREE_BUILDER_H
-#define GB_PROJECT_TREE_BUILDER_H
+#ifndef GB_PROJECT_TREE_PRIVATE_H
+#define GB_PROJECT_TREE_PRIVATE_H
 
-#include <ide.h>
-
-#include "gb-tree-builder.h"
+#include "gb-tree.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_PROJECT_TREE_BUILDER (gb_project_tree_builder_get_type())
+struct _GbProjectTree
+{
+  GbTree     parent_instance;
 
-G_DECLARE_FINAL_TYPE (GbProjectTreeBuilder, gb_project_tree_builder,
-                      GB, PROJECT_TREE_BUILDER, GbTreeBuilder)
-
-GbTreeBuilder  *gb_project_tree_builder_new         (IdeContext           *context);
-IdeContext     *gb_project_tree_builder_get_context (GbProjectTreeBuilder *self);
-void            gb_project_tree_builder_set_context (GbProjectTreeBuilder *self,
-                                                     IdeContext           *context);
+  GSettings *settings;
+};
 
 G_END_DECLS
 
-#endif /* GB_PROJECT_TREE_BUILDER_H */
+#endif /* GB_PROJECT_TREE_PRIVATE_H */
