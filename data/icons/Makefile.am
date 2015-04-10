@@ -8,7 +8,7 @@ nobase_icon_DATA = \
 	hicolor/32x32/apps/builder.png \
 	hicolor/48x48/apps/builder.png \
 	hicolor/24x24/apps/builder.png \
-  hicolor/symbolic/apps/builder-symbolic.svg \
+	hicolor/scalable/apps/builder-symbolic.svg \
 	$(NULL)
 
 bundled_icon_sources = \

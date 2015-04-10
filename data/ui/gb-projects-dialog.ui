@@ -2,7 +2,6 @@
 <interface>
   <!-- interface-requires gtk+ 3.15 -->
   <template class="GbProjectsDialog" parent="GtkApplicationWindow">
-    <property name="icon-name">builder</property>
     <property name="default-width">800</property>
     <property name="default-height">600</property>
     <child type="titlebar">
