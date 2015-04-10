@@ -110,6 +110,7 @@ src/editor/gb-editor-frame.c
 src/editor/gb-editor-settings-widget.c
 src/editor/gb-editor-view-actions.c
 src/editor/gb-editor-view.c
+src/editor/gb-editor-workspace.c
 src/editor/gb-source-formatter.c
 src/gd/gd-tagged-entry.c
 src/gedit/gedit-menu-stack-switcher.c
@@ -123,12 +124,13 @@ src/preferences/gb-preferences-page-editor.c
 src/preferences/gb-preferences-page-experimental.c
 src/preferences/gb-preferences-page-git.c
 src/preferences/gb-preferences-page-keybindings.c
+src/preferences/gb-preferences-switch.c
+src/project-tree/gb-project-tree-builder.c
 src/scrolledwindow/gb-scrolled-window.c
 src/search/gb-search-box.c
 src/search/gb-search-display.c
 src/search/gb-search-display-group.c
 src/search/gb-search-display-row.c
-src/tree/gb-project-tree-builder.c
 src/tree/gb-tree-builder.c
 src/tree/gb-tree.c
 src/tree/gb-tree-node.c
