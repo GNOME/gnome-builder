@@ -1,3 +1,4 @@
+echo ""
 echo "Developer Build Options"
 echo ""
 echo "  Debug Build .......................... : ${enable_debug}"
