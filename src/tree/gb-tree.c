@@ -1019,6 +1019,8 @@ gb_tree_init (GbTree *tree)
 
   tree->priv = gb_tree_get_instance_private (tree);
 
+  gtk_tree_view_set_fixed_height_mode (GTK_TREE_VIEW (tree), TRUE);
+
   tree->priv->builders = g_ptr_array_new ();
   g_ptr_array_set_free_func (tree->priv->builders, g_object_unref);
   tree->priv->store = gtk_tree_store_new (1, GB_TYPE_TREE_NODE);
@@ -1029,6 +1031,7 @@ gb_tree_init (GbTree *tree)
                             tree);
 
   column = g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
+                         "sizing", GTK_TREE_VIEW_COLUMN_FIXED,
                          "title", "Node",
                          NULL);
   tree->priv->column = GTK_TREE_VIEW_COLUMN (column);
