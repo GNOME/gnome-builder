@@ -823,7 +823,8 @@ gb_tree_button_press_event (GbTree         *tree,
 
   priv = tree->priv;
 
-  if ((button->type == GDK_BUTTON_PRESS) && (button->button == 3))
+  if ((button->type == GDK_BUTTON_PRESS) &&
+      (button->button == GDK_BUTTON_SECONDARY))
     {
       gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (tree),
                                      button->x,
