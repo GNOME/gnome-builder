@@ -766,12 +766,12 @@ ide_makecache_parse_c_cxx_include (IdeMakecache *self,
    * path information to be as such.
    */
 
-  if (g_str_has_prefix (part2, "./"))
+  if (!g_str_has_prefix (part2, "/"))
     {
       gchar *parent;
 
       parent = g_file_get_path (self->parent);
-      adjusted = g_strdup_printf ("%s"G_DIR_SEPARATOR_S"%s", parent, &part2 [2]);
+      adjusted = g_build_filename (parent, part2, NULL);
       g_free (parent);
 
       part2 = adjusted;
