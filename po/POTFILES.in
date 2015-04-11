@@ -13,6 +13,7 @@ data/style-schemes/builder.xml
 [type: gettext/glade]data/ui/gb-editor-view.ui
 [type: gettext/glade]data/ui/gb-editor-workspace.ui
 [type: gettext/glade]data/ui/gb-html-view.ui
+[type: gettext/glade]data/ui/gb-new-file-popover.ui
 [type: gettext/glade]data/ui/gb-new-project-dialog.ui
 [type: gettext/glade]data/ui/gb-preferences-page-editor.ui
 [type: gettext/glade]data/ui/gb-preferences-page-experimental.ui
@@ -125,6 +126,7 @@ src/preferences/gb-preferences-page-experimental.c
 src/preferences/gb-preferences-page-git.c
 src/preferences/gb-preferences-page-keybindings.c
 src/preferences/gb-preferences-switch.c
+src/project-tree/gb-new-file-popover.c
 src/project-tree/gb-project-tree-builder.c
 src/scrolledwindow/gb-scrolled-window.c
 src/search/gb-search-box.c
