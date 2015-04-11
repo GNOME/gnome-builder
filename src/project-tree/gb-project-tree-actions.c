@@ -335,7 +335,7 @@ gb_project_tree_actions_new (GbProjectTree *self,
   popover = g_object_new (GB_TYPE_NEW_FILE_POPOVER, NULL);
   gtk_popover_set_relative_to (popover, GTK_WIDGET (self));
   gtk_popover_set_pointing_to (popover, &rect);
-  gtk_popover_set_position (popover, GTK_POS_BOTTOM);
+  gtk_popover_set_position (popover, GTK_POS_RIGHT);
   gb_new_file_popover_set_file_type (GB_NEW_FILE_POPOVER (popover), file_type);
   gb_new_file_popover_set_directory (GB_NEW_FILE_POPOVER (popover), file);
   g_signal_connect_object (popover,
