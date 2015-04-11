@@ -386,8 +386,10 @@ void
 gb_project_tree_actions_init (GbProjectTree *self)
 {
   g_autoptr(GSettings) settings = NULL;
+  g_autoptr(GSettings) tree_settings = NULL;
   g_autoptr(GSimpleActionGroup) actions = NULL;
   g_autoptr(GAction) action = NULL;
+  g_autoptr(GVariant) show_icons = NULL;
 
   actions = g_simple_action_group_new ();
 
@@ -402,6 +404,12 @@ gb_project_tree_actions_init (GbProjectTree *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self),
                                   "project-tree",
                                   G_ACTION_GROUP (actions));
+
+  tree_settings = g_settings_new ("org.gnome.builder.project-tree");
+  show_icons = g_settings_get_value (tree_settings, "show-icons");
+  action_set (G_ACTION_GROUP (actions), "show-icons",
+              "state", show_icons,
+              NULL);
 
   gb_project_tree_actions_update (self);
 }
