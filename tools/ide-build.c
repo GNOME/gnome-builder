@@ -212,6 +212,7 @@ build_for_device (IdeContext *context,
   g_autoptr(IdeBuildResult) build_result = NULL;
   g_autoptr(GError) error = NULL;
   IdeBuildSystem *build_system;
+  IdeBuilderBuildFlags flags = IDE_BUILDER_BUILD_FLAGS_NONE;
   GKeyFile *config;
 
   print_build_info (context, device);
@@ -219,7 +220,7 @@ build_for_device (IdeContext *context,
   config = g_key_file_new ();
 
   if (gRebuild)
-    g_key_file_set_boolean (config, "autotools", "rebuild", TRUE);
+    flags |= IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD;
 
   if (gParallel)
     g_key_file_set_integer (config, "parallel", "workers", gParallel);
@@ -237,7 +238,7 @@ build_for_device (IdeContext *context,
 
   gBuildStart = g_get_monotonic_time ();
 
-  ide_builder_build_async (builder, &build_result, NULL, build_cb, NULL);
+  ide_builder_build_async (builder, flags, &build_result, NULL, build_cb, NULL);
 
   if (build_result)
     {

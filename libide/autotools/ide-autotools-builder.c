@@ -197,6 +197,7 @@ ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self)
 
 static void
 ide_autotools_builder_build_async (IdeBuilder           *builder,
+                                   IdeBuilderBuildFlags  flags,
                                    IdeBuildResult      **result,
                                    GCancellable         *cancellable,
                                    GAsyncReadyCallback   callback,
@@ -214,6 +215,9 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
 
   priv = ide_autotools_builder_get_instance_private (self);
+
+  if (flags & IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD)
+    g_key_file_set_boolean (priv->config, "autotools", "rebuild", TRUE);
 
   task = g_task_new (self, cancellable, callback, user_data);
 

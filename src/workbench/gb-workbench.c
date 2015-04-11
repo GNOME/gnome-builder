@@ -802,12 +802,6 @@ gb_workbench_build_async (GbWorkbench         *self,
 
   config = g_key_file_new ();
 
-  if (force_rebuild)
-    {
-      /* TODO: we should make this type of operation build system agnostic. */
-      g_key_file_set_boolean (config, "autotools", "rebuild", TRUE);
-    }
-
   builder = ide_build_system_get_builder (build_system, config, device, &error);
 
   if (builder == NULL)
@@ -831,6 +825,7 @@ gb_workbench_build_async (GbWorkbench         *self,
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUILDING]);
 
   ide_builder_build_async (builder,
+                           force_rebuild ? IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD : 0,
                            NULL, /* &IdeProgress */
                            cancellable,
                            gb_workbench__builder_build_cb,

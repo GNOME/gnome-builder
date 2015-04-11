@@ -37,6 +37,7 @@ enum {
 
 void
 ide_builder_build_async (IdeBuilder           *builder,
+                         IdeBuilderBuildFlags  flags,
                          IdeBuildResult      **result,
                          GCancellable         *cancellable,
                          GAsyncReadyCallback   callback,
@@ -54,7 +55,7 @@ ide_builder_build_async (IdeBuilder           *builder,
 
   if (klass->build_async)
     {
-      klass->build_async (builder, result, cancellable, callback, user_data);
+      klass->build_async (builder, flags, result, cancellable, callback, user_data);
       return;
     }
 

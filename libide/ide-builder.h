@@ -27,11 +27,18 @@ G_BEGIN_DECLS
 
 G_DECLARE_DERIVABLE_TYPE (IdeBuilder, ide_builder, IDE, BUILDER, IdeObject)
 
+typedef enum
+{
+  IDE_BUILDER_BUILD_FLAGS_NONE          = 0,
+  IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD = 1 << 0
+} IdeBuilderBuildFlags;
+
 struct _IdeBuilderClass
 {
   GObjectClass parent;
 
   void            (*build_async)  (IdeBuilder           *builder,
+                                   IdeBuilderBuildFlags  flags,
                                    IdeBuildResult      **result,
                                    GCancellable         *cancellable,
                                    GAsyncReadyCallback   callback,
@@ -42,6 +49,7 @@ struct _IdeBuilderClass
 };
 
 void            ide_builder_build_async  (IdeBuilder           *builder,
+                                          IdeBuilderBuildFlags  flags,
                                           IdeBuildResult      **result,
                                           GCancellable         *cancellable,
                                           GAsyncReadyCallback   callback,
