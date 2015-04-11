@@ -79,12 +79,12 @@ ide_editorconfig_file_settings_init_worker (GTask        *task,
       const GValue *value = v;
 
       if (g_str_equal (key, "indent_size"))
-        g_object_set_property (source_object, "indent_width", value);
+        g_object_set_property (source_object, "indent-width", value);
       else if (g_str_equal (key, "tab_width") ||
                g_str_equal (key, "trim_trailing_whitespace"))
         g_object_set_property (source_object, key, value);
       else if (g_str_equal (key, "insert_final_newline"))
-        g_object_set_property (source_object, "insert_trailing_newline", value);
+        g_object_set_property (source_object, "insert-trailing-newline", value);
       else if (g_str_equal (key, "charset"))
         g_object_set_property (source_object, "encoding", value);
       else if (g_str_equal (key, "max_line_length"))
