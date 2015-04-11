@@ -21,19 +21,7 @@
 #include "ide-build-result.h"
 #include "ide-builder.h"
 
-typedef struct
-{
-  void *foo;
-} IdeBuilderPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE (IdeBuilder, ide_builder, IDE_TYPE_OBJECT)
-
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-//static GParamSpec *gParamSpecs [LAST_PROP];
+G_DEFINE_ABSTRACT_TYPE (IdeBuilder, ide_builder, IDE_TYPE_OBJECT)
 
 void
 ide_builder_build_async (IdeBuilder           *builder,
@@ -99,52 +87,8 @@ ide_builder_build_finish (IdeBuilder    *builder,
 }
 
 static void
-ide_builder_finalize (GObject *object)
-{
-  //IdeBuilder *self = (IdeBuilder *)object;
-  //IdeBuilderPrivate *priv = ide_builder_get_instance_private (self);
-
-  G_OBJECT_CLASS (ide_builder_parent_class)->finalize (object);
-}
-
-static void
-ide_builder_get_property (GObject    *object,
-                          guint       prop_id,
-                          GValue     *value,
-                          GParamSpec *pspec)
-{
-  //IdeBuilder *self = IDE_BUILDER (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_builder_set_property (GObject      *object,
-                          guint         prop_id,
-                          const GValue *value,
-                          GParamSpec   *pspec)
-{
-  //IdeBuilder *self = IDE_BUILDER (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 ide_builder_class_init (IdeBuilderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = ide_builder_finalize;
-  object_class->get_property = ide_builder_get_property;
-  object_class->set_property = ide_builder_set_property;
 }
 
 static void
