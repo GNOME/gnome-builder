@@ -78,6 +78,8 @@ void           gb_tree_node_get_area      (GbTreeNode   *node,
                                            GdkRectangle *area);
 void           gb_tree_node_rebuild       (GbTreeNode   *node);
 gboolean       gb_tree_node_get_expanded  (GbTreeNode   *node);
+void           gb_tree_node_show_popover  (GbTreeNode   *node,
+                                           GtkPopover   *popover);
 
 G_END_DECLS
 

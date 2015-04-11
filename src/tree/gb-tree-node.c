@@ -33,6 +33,12 @@ struct _GbTreeNodePrivate
   guint          use_markup : 1;
 };
 
+typedef struct
+{
+  GbTreeNode *self;
+  GtkPopover *popover;
+} PopupRequest;
+
 G_DEFINE_TYPE_WITH_PRIVATE (GbTreeNode, gb_tree_node, G_TYPE_INITIALLY_UNOWNED)
 
 enum {
@@ -677,4 +683,94 @@ static void
 gb_tree_node_init (GbTreeNode *node)
 {
   node->priv = gb_tree_node_get_instance_private (node);
+}
+
+static gboolean
+gb_tree_node_show_popover_timeout_cb (gpointer data)
+{
+  PopupRequest *popreq = data;
+  GdkRectangle rect;
+  GtkAllocation alloc;
+  GbTree *tree;
+
+  g_assert (popreq);
+  g_assert (GB_IS_TREE_NODE (popreq->self));
+  g_assert (GTK_IS_POPOVER (popreq->popover));
+
+  if (!(tree = gb_tree_node_get_tree (popreq->self)))
+    goto cleanup;
+
+  gb_tree_node_get_area (popreq->self, &rect);
+  gtk_widget_get_allocation (GTK_WIDGET (tree), &alloc);
+
+  if ((rect.x + rect.width) > (alloc.x + alloc.width))
+    rect.width = (alloc.x + alloc.width) - rect.x;
+
+  gtk_popover_set_relative_to (popreq->popover, GTK_WIDGET (tree));
+  gtk_popover_set_pointing_to (popreq->popover, &rect);
+  gtk_widget_show (GTK_WIDGET (popreq->popover));
+
+cleanup:
+  g_object_unref (popreq->self);
+  g_object_unref (popreq->popover);
+  g_free (popreq);
+}
+
+void
+gb_tree_node_show_popover (GbTreeNode *self,
+                           GtkPopover *popover)
+{
+  GdkRectangle cell_area;
+  GdkRectangle visible_rect;
+  GbTree *tree;
+  PopupRequest *popreq;
+
+  g_return_if_fail (GB_IS_TREE_NODE (self));
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  tree = gb_tree_node_get_tree (self);
+  gtk_tree_view_get_visible_rect (GTK_TREE_VIEW (tree), &visible_rect);
+  gb_tree_node_get_area (self, &cell_area);
+  gtk_tree_view_convert_bin_window_to_tree_coords (GTK_TREE_VIEW (tree),
+                                                   cell_area.x,
+                                                   cell_area.y,
+                                                   &cell_area.x,
+                                                   &cell_area.y);
+
+  popreq = g_new0 (PopupRequest, 1);
+  popreq->self = g_object_ref (self);
+  popreq->popover = g_object_ref (popover);
+
+  /*
+   * If the node is not on screen, we need to animate until we get there.
+   */
+  if ((cell_area.y < visible_rect.y) ||
+      ((cell_area.y + cell_area.height) >
+       (visible_rect.y + visible_rect.height)))
+    {
+      GtkTreePath *path;
+
+      path = gb_tree_node_get_path (self);
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (tree), path, NULL, FALSE, 0, 0);
+      gtk_tree_path_free (path);
+
+      /*
+       * FIXME: Time period comes from gtk animation duration.
+       *        Not curently available in pubic API.
+       *        We need to be greater than the max timeout it
+       *        could take to move, since we must have it
+       *        on screen by then.
+       *
+       *        One alternative might be to check the result
+       *        and if we are still not on screen, then just
+       *        pin it to a row-height from the top or bottom.
+       */
+      g_timeout_add (300,
+                     gb_tree_node_show_popover_timeout_cb,
+                     popreq);
+    }
+  else
+    {
+      gb_tree_node_show_popover_timeout_cb (popreq);
+    }
 }
