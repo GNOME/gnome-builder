@@ -331,8 +331,9 @@ gb_project_tree_actions_new (GbProjectTree *self,
   GbTreeNode *selected;
   GObject *item;
   GtkPopover *popover;
-  GdkRectangle rect;
   IdeProjectFile *project_file;
+  GdkRectangle rect;
+  GtkAllocation alloc;
   GFile *file;
 
   g_assert (GB_IS_PROJECT_TREE (self));
@@ -359,7 +360,11 @@ gb_project_tree_actions_new (GbProjectTree *self,
   if ((self->expanded_in_new = !gb_tree_node_get_expanded (selected)))
     gb_tree_node_expand (selected, FALSE);
 
+  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
   gb_tree_node_get_area (selected, &rect);
+
+  if ((rect.x + rect.width) > (alloc.x + alloc.width))
+    rect.width = (alloc.x + alloc.width) - rect.x;
 
   popover = g_object_new (GB_TYPE_NEW_FILE_POPOVER, NULL);
   gtk_popover_set_relative_to (popover, GTK_WIDGET (self));
