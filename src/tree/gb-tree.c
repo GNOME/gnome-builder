@@ -882,6 +882,10 @@ gb_tree_append (GbTree     *tree,
                 GbTreeNode *node,
                 GbTreeNode *child)
 {
+  g_return_if_fail (GB_IS_TREE (tree));
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+  g_return_if_fail (GB_IS_TREE_NODE (child));
+
   gb_tree_add (tree, node, child, FALSE);
 }
 
@@ -898,6 +902,10 @@ gb_tree_prepend (GbTree     *tree,
                  GbTreeNode *node,
                  GbTreeNode *child)
 {
+  g_return_if_fail (GB_IS_TREE (tree));
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+  g_return_if_fail (GB_IS_TREE_NODE (child));
+
   gb_tree_add (tree, node, child, TRUE);
 }
 
