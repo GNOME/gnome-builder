@@ -20,6 +20,27 @@
                   <class name="notebook"/>
                   <class name="header"/>
                 </style>
+                <child>
+                  <object class="GtkButton" id="collapse_button">
+                    <property name="action-name">workspace.toggle-sidebar</property>
+                    <property name="margin">3</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="dim-label"/>
+                      <class name="flat"/>
+                      <class name="image-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">go-previous-symbolic</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="pack-type">start</property>
+                  </packing>
+                </child>
                 <child type="center">
                   <object class="GtkMenuButton" id="project_button">
                     <property name="margin">3</property>
