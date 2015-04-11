@@ -331,8 +331,6 @@ gb_project_tree_actions_new (GbProjectTree *self,
   GObject *item;
   GtkPopover *popover;
   IdeProjectFile *project_file;
-  GdkRectangle rect;
-  GtkAllocation alloc;
   GFile *file;
 
   g_assert (GB_IS_PROJECT_TREE (self));
@@ -353,26 +351,25 @@ again:
    */
   if (!project_file_is_directory (item))
     {
+      GtkTreePath *path;
+
       selected = gb_tree_node_get_parent (selected);
       gb_tree_node_select (selected);
+      path = gb_tree_node_get_path (selected);
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (self), path, NULL, FALSE, 0, 0);
+      gtk_tree_path_free (path);
+
       goto again;
     }
 
   if ((self->expanded_in_new = !gb_tree_node_get_expanded (selected)))
     gb_tree_node_expand (selected, FALSE);
 
-  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
-  gb_tree_node_get_area (selected, &rect);
-
-  if ((rect.x + rect.width) > (alloc.x + alloc.width))
-    rect.width = (alloc.x + alloc.width) - rect.x;
-
-  popover = g_object_new (GB_TYPE_NEW_FILE_POPOVER, NULL);
-  gtk_popover_set_relative_to (popover, GTK_WIDGET (self));
-  gtk_popover_set_pointing_to (popover, &rect);
-  gtk_popover_set_position (popover, GTK_POS_RIGHT);
-  gb_new_file_popover_set_file_type (GB_NEW_FILE_POPOVER (popover), file_type);
-  gb_new_file_popover_set_directory (GB_NEW_FILE_POPOVER (popover), file);
+  popover = g_object_new (GB_TYPE_NEW_FILE_POPOVER,
+                          "directory", file,
+                          "file-type", file_type,
+                          "position", GTK_POS_RIGHT,
+                          NULL);
   g_signal_connect_object (popover,
                            "create-file",
                            G_CALLBACK (gb_project_tree_actions__popover_create_file_cb),
@@ -383,7 +380,8 @@ again:
                            G_CALLBACK (gb_project_tree_actions__popover_closed_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  gtk_widget_show (GTK_WIDGET (popover));
+
+  gb_tree_node_show_popover (selected, popover);
 }
 
 static void
