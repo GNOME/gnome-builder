@@ -332,6 +332,8 @@ ide_unsaved_files_restore_worker (GTask        *task,
     }
 
   g_strfreev (lines);
+
+  g_task_return_boolean (task, TRUE);
 }
 
 void
