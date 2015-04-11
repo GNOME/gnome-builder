@@ -63,16 +63,31 @@ gb_project_tree_actions_refresh (GSimpleAction *action,
                                  gpointer       user_data)
 {
   GbProjectTree *self = user_data;
+  GbTreeNode *selected;
+  GObject *item = NULL;
 
   g_assert (GB_IS_PROJECT_TREE (self));
 
+  if ((selected = gb_tree_get_selected (GB_TREE (self))))
+    {
+      item = gb_tree_node_get_item (selected);
+      if (item != NULL)
+        g_object_ref (item);
+    }
+
   gb_tree_rebuild (GB_TREE (self));
 
-  /*
-   * TODO:
-   *
-   * Try to expand back to our current position
-   */
+  if (item != NULL)
+    {
+      selected = gb_tree_find_item (GB_TREE (self), item);
+      if (selected != NULL)
+        {
+          gb_tree_node_expand (selected, TRUE);
+          gb_tree_node_select (selected);
+          gb_tree_scroll_to_node (GB_TREE (self), selected);
+        }
+      g_object_unref (item);
+    }
 }
 
 static void
