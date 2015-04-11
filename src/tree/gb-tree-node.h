@@ -75,6 +75,7 @@ void           gb_tree_node_expand        (GbTreeNode   *node,
 void           gb_tree_node_select        (GbTreeNode   *node);
 void           gb_tree_node_get_area      (GbTreeNode   *node,
                                            GdkRectangle *area);
+void           gb_tree_node_rebuild       (GbTreeNode   *node);
 
 G_END_DECLS
 

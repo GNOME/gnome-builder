@@ -48,6 +48,9 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+extern void _gb_tree_rebuild_node (GbTree     *tree,
+                                   GbTreeNode *node);
+
 /**
  * gb_tree_node_new:
  *
@@ -403,6 +406,17 @@ gb_tree_node_get_area (GbTreeNode   *node,
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree), 0);
   gtk_tree_view_get_cell_area (GTK_TREE_VIEW (tree), path, column, area);
   gtk_tree_path_free (path);
+}
+
+void
+gb_tree_node_rebuild (GbTreeNode *self)
+{
+  GbTree *tree;
+
+  g_return_if_fail (GB_IS_TREE_NODE (self));
+
+  tree = gb_tree_node_get_tree (self);
+  _gb_tree_rebuild_node (tree, self);
 }
 
 /**
