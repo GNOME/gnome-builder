@@ -29,6 +29,7 @@
 #include "gb-application.h"
 #include "gb-application-actions.h"
 #include "gb-application-private.h"
+#include "gb-css-provider.h"
 #include "gb-editor-document.h"
 #include "gb-editor-workspace.h"
 #include "gb-glib.h"
@@ -125,79 +126,22 @@ gb_application_make_skeleton_dirs (GbApplication *self)
   g_free (path);
 }
 
-/**
- * gb_application_on_theme_changed:
- * @self: A #GbApplication.
- *
- * Update the theme overrides when the theme changes. This includes our custom
- * CSS for Adwaita, etc.
- */
-static void
-gb_application_on_theme_changed (GbApplication *self,
-                                 GParamSpec    *pspec,
-                                 GtkSettings   *settings)
-{
-  static GtkCssProvider *provider;
-  GdkScreen *screen;
-  gchar *theme;
-
-  IDE_ENTRY;
-
-  g_assert (GB_IS_APPLICATION (self));
-  g_assert (GTK_IS_SETTINGS (settings));
-
-  g_object_get (settings, "gtk-theme-name", &theme, NULL);
-  screen = gdk_screen_get_default ();
-
-  if (g_str_equal (theme, "Adwaita"))
-    {
-      if (provider == NULL)
-        {
-          GFile *file;
-
-          provider = gtk_css_provider_new ();
-          file = g_file_new_for_uri (ADWAITA_CSS);
-          gtk_css_provider_load_from_file (provider, file, NULL);
-          g_object_unref (file);
-        }
-
-      gtk_style_context_add_provider_for_screen (screen,
-                                                 GTK_STYLE_PROVIDER (provider),
-                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
-  else if (provider != NULL)
-    {
-      gtk_style_context_remove_provider_for_screen (screen,
-                                                    GTK_STYLE_PROVIDER (provider));
-      g_clear_object (&provider);
-    }
-
-  g_free (theme);
-
-  IDE_EXIT;
-}
-
 static void
 gb_application_register_theme_overrides (GbApplication *application)
 {
-  GtkSettings *settings;
+  GtkCssProvider *provider;
+  GdkScreen *screen;
 
   IDE_ENTRY;
 
   gtk_icon_theme_add_resource_path (gtk_icon_theme_get_default (),
                                     "/org/gnome/builder/icons/");
 
-  /* Set up a handler to load our custom css for Adwaita.
-   * See https://bugzilla.gnome.org/show_bug.cgi?id=732959
-   * for a more automatic solution that is still under discussion.
-   */
-  settings = gtk_settings_get_default ();
-  g_signal_connect_object (settings,
-                           "notify::gtk-theme-name",
-                           G_CALLBACK (gb_application_on_theme_changed),
-                           application,
-                           G_CONNECT_SWAPPED);
-  gb_application_on_theme_changed (application, NULL, settings);
+  provider = gb_css_provider_new ();
+  screen = gdk_screen_get_default ();
+  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  g_object_unref (provider);
 
   IDE_EXIT;
 }

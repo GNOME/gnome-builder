@@ -31,6 +31,8 @@ libgnome_builder_la_SOURCES = \
 	src/commands/gb-command-vim.h \
 	src/commands/gb-command.c \
 	src/commands/gb-command.h \
+        src/css/gb-css-provider.c \
+        src/css/gb-css-provider.h \
 	src/devhelp/gb-devhelp-document.c \
 	src/devhelp/gb-devhelp-document.h \
 	src/devhelp/gb-devhelp-view.c \
@@ -184,6 +186,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/src/app \
 	-I$(top_srcdir)/src/commands \
+	-I$(top_srcdir)/src/css \
 	-I$(top_srcdir)/src/devhelp \
 	-I$(top_srcdir)/src/dialogs \
 	-I$(top_srcdir)/src/documents \
