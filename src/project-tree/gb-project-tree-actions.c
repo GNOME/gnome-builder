@@ -305,6 +305,7 @@ gb_project_tree_actions__popover_create_file_cb (GbProjectTree    *self,
 
   self->expanded_in_new = FALSE;
 
+  gtk_widget_hide (GTK_WIDGET (popover));
   gtk_widget_destroy (GTK_WIDGET (popover));
 }
 
