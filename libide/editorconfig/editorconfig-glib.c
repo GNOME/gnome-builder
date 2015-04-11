@@ -99,6 +99,7 @@ editorconfig_glib_read (GFile         *file,
       editorconfig_handle_get_name_value (handle, i, &key, &valuestr);
 
       if ((g_strcmp0 (key, "tab_width") == 0) ||
+          (g_strcmp0 (key, "max_line_length") == 0) ||
           (g_strcmp0 (key, "indent_size") == 0))
         {
           g_value_init (value, G_TYPE_INT);
