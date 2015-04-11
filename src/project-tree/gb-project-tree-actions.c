@@ -327,7 +327,6 @@ static void
 gb_project_tree_actions_new (GbProjectTree *self,
                              GFileType      file_type)
 {
-  g_autoptr(GFile) parent = NULL;
   GbTreeNode *selected;
   GObject *item;
   GtkPopover *popover;
@@ -340,6 +339,7 @@ gb_project_tree_actions_new (GbProjectTree *self,
   g_assert ((file_type == G_FILE_TYPE_DIRECTORY) ||
             (file_type == G_FILE_TYPE_REGULAR));
 
+again:
   if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (selected)) ||
       !IDE_IS_PROJECT_FILE (item) ||
@@ -353,8 +353,9 @@ gb_project_tree_actions_new (GbProjectTree *self,
    */
   if (!project_file_is_directory (item))
     {
-      parent = g_file_get_parent (file);
-      file = parent;
+      selected = gb_tree_node_get_parent (selected);
+      gb_tree_node_select (selected);
+      goto again;
     }
 
   if ((self->expanded_in_new = !gb_tree_node_get_expanded (selected)))
