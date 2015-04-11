@@ -706,6 +706,26 @@ gb_tree_node_show_popover_timeout_cb (gpointer data)
   if ((rect.x + rect.width) > (alloc.x + alloc.width))
     rect.width = (alloc.x + alloc.width) - rect.x;
 
+  /*
+   * FIXME: Wouldn't this be better placed in a theme?
+   */
+  switch (gtk_popover_get_position (popreq->popover))
+    {
+    case GTK_POS_BOTTOM:
+    case GTK_POS_TOP:
+      rect.y += 3;
+      rect.height -= 6;
+      break;
+    case GTK_POS_RIGHT:
+    case GTK_POS_LEFT:
+      rect.x += 3;
+      rect.width -= 6;
+      break;
+
+    default:
+      break;
+    }
+
   gtk_popover_set_relative_to (popreq->popover, GTK_WIDGET (tree));
   gtk_popover_set_pointing_to (popreq->popover, &rect);
   gtk_widget_show (GTK_WIDGET (popreq->popover));
