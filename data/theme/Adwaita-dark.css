@@ -5,7 +5,7 @@
  */
 GbProjectTree.view {
   color: #eeeeec;
-  background-color: #2e3436;
+  background-color: mix(#292929, #2e3436, 0.8);
 }
 GbProjectTree.view:backdrop {
   color: #a1a1a1;
@@ -13,6 +13,6 @@ GbProjectTree.view:backdrop {
 }
 GbProjectTree.view.cell:selected {
   color: #fff;
-  background-color: #4a90d9;
+  background-color: #215d9c;
 }
 
