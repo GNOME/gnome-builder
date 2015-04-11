@@ -551,31 +551,25 @@ gb_application_increase_verbosity (void)
   return TRUE;
 }
 
-static gboolean
-gb_application_local_command_line (GApplication   *app,
-                                   gchar        ***argv,
-                                   int            *exit_status)
+static gint
+gb_application_handle_local_options (GApplication *app,
+                                     GVariantDict *options)
 {
-  g_autoptr(GOptionContext) context = NULL;
-  GOptionEntry entries[] = {
-    { "verbose",
-      'v',
-      G_OPTION_FLAG_NO_ARG|G_OPTION_FLAG_IN_MAIN,
-      G_OPTION_ARG_CALLBACK,
-      gb_application_increase_verbosity,
-      N_("Increase verbosity. May be specified multiple times.") },
-    { NULL }
-  };
+  if (g_variant_dict_contains (options, "version"))
+    {
+      g_print ("%s - Version %s\n", g_get_application_name (), VERSION);
+      return 0;
+    }
 
-  /* we dont really care about the result, just increasing verbosity */
-  context = g_option_context_new ("");
-  g_option_context_set_help_enabled (context, FALSE);
-  g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
-  g_option_context_parse_strv (context, argv, NULL);
+   if (g_variant_dict_contains (options, "standalone"))
+    {
+      GApplicationFlags flags;
 
-  return G_APPLICATION_CLASS (gb_application_parent_class)->local_command_line (app,
-                                                                                argv,
-                                                                                exit_status);
+      flags = g_application_get_flags (app);
+      g_application_set_flags (app, flags | G_APPLICATION_NON_UNIQUE);
+    }
+
+  return -1;
 }
 
 static void
@@ -606,14 +600,39 @@ gb_application_class_init (GbApplicationClass *klass)
   app_class->activate = gb_application_activate;
   app_class->startup = gb_application_startup;
   app_class->open = gb_application_open;
-  app_class->local_command_line = gb_application_local_command_line;
+  app_class->handle_local_options = gb_application_handle_local_options;
 
   IDE_EXIT;
 }
 
 static void
-gb_application_init (GbApplication *application)
+gb_application_init (GbApplication *app)
 {
+  static const GOptionEntry options[] = {
+    { "standalone",
+      's',
+      G_OPTION_FLAG_IN_MAIN,
+      G_OPTION_ARG_NONE,
+      NULL,
+      N_("Run Builder in standalone mode") },
+    { "version",
+      NULL,
+      G_OPTION_FLAG_IN_MAIN,
+      G_OPTION_ARG_NONE,
+      NULL,
+      N_("Show the application's version") },
+    { "verbose",
+      'v',
+      G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_IN_MAIN | G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_CALLBACK,
+      gb_application_increase_verbosity,
+      N_("Increase verbosity. May be specified multiple times.") },
+    { NULL }
+  };
+
   IDE_ENTRY;
+
+  g_application_add_main_option_entries (G_APPLICATION (app), options);
+
   IDE_EXIT;
 }
