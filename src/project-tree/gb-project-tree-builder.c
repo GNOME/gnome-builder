@@ -306,6 +306,14 @@ gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
       submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-new");
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
     }
+  else if (IDE_IS_PROJECT_FILES (item))
+    {
+      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-open-containing");
+      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
+
+      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-new");
+      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
+    }
 
   submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-display-options");
   g_menu_append_section (menu, NULL, G_MENU_MODEL (submenu));

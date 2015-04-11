@@ -221,9 +221,22 @@ gb_project_tree_actions_open_containing_folder (GSimpleAction *action,
 
   if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (selected)) ||
-      !IDE_IS_PROJECT_FILE (item) ||
-      !(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))))
+      !(IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)))
     return;
+
+  if (IDE_IS_PROJECT_FILES (item))
+    {
+      IdeContext *context;
+      IdeVcs *vcs;
+
+      context = ide_object_get_context (IDE_OBJECT (item));
+      vcs = ide_context_get_vcs (context);
+      file = ide_vcs_get_working_directory (vcs);
+    }
+  else if (!(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))))
+    {
+      return;
+    }
 
   gb_file_manager_show (file, NULL);
 }
@@ -347,7 +360,8 @@ gb_project_tree_actions_new (GbProjectTree *self,
   GObject *item;
   GtkPopover *popover;
   IdeProjectFile *project_file;
-  GFile *file;
+  GFile *file = NULL;
+  gboolean is_dir;
 
   g_assert (GB_IS_PROJECT_TREE (self));
   g_assert ((file_type == G_FILE_TYPE_DIRECTORY) ||
@@ -356,16 +370,34 @@ gb_project_tree_actions_new (GbProjectTree *self,
 again:
   if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (selected)) ||
-      !IDE_IS_PROJECT_FILE (item) ||
-      !(project_file = IDE_PROJECT_FILE (item)) ||
-      !(file = ide_project_file_get_file (project_file)))
+      !(IDE_IS_PROJECT_FILES (item) || IDE_IS_PROJECT_FILE (item)))
     return;
+
+  if (IDE_IS_PROJECT_FILE (item))
+    {
+      if (!(project_file = IDE_PROJECT_FILE (item)) ||
+          !(file = ide_project_file_get_file (project_file)))
+        return;
+      is_dir = project_file_is_directory (item);
+    }
+  else if (IDE_IS_PROJECT_FILES (item))
+    {
+      IdeContext *context;
+      IdeVcs *vcs;
+
+      context = ide_object_get_context (IDE_OBJECT (item));
+      vcs = ide_context_get_vcs (context);
+      file = ide_vcs_get_working_directory (vcs);
+      is_dir = TRUE;
+    }
+
+  g_assert (G_IS_FILE (file));
 
   /*
    * If this item is an IdeProjectFile and not a directory, then we really
    * want to create a sibling.
    */
-  if (!project_file_is_directory (item))
+  if (!is_dir)
     {
       GtkTreePath *path;
 
@@ -487,10 +519,10 @@ gb_project_tree_actions_update (GbProjectTree *self)
     item = gb_tree_node_get_item (selection);
 
   action_set (group, "new-file",
-              "enabled", IDE_IS_PROJECT_FILE (item),
+              "enabled", (IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)),
               NULL);
   action_set (group, "new-directory",
-              "enabled", IDE_IS_PROJECT_FILE (item),
+              "enabled", (IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)),
               NULL);
   action_set (group, "open",
               "enabled", !project_file_is_directory (item),
@@ -499,7 +531,7 @@ gb_project_tree_actions_update (GbProjectTree *self)
               "enabled", !project_file_is_directory (item),
               NULL);
   action_set (group, "open-containing-folder",
-              "enabled", IDE_IS_PROJECT_FILE (item),
+              "enabled", (IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)),
               NULL);
 
   IDE_EXIT;
