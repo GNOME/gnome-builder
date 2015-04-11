@@ -25,6 +25,11 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CLANG_HIGHLIGHTER (ide_clang_highlighter_get_type())
 
+#define IDE_CLANG_HIGHLIGHTER_TYPE          "c:type"
+#define IDE_CLANG_HIGHLIGHTER_FUNCTION_NAME "c:function-name"
+#define IDE_CLANG_HIGHLIGHTER_ENUM_NAME     "c:enum-name"
+#define IDE_CLANG_HIGHLIGHTER_MACRO_NAME    "c:macro-name"
+
 G_DECLARE_FINAL_TYPE (IdeClangHighlighter, ide_clang_highlighter,
                       IDE, CLANG_HIGHLIGHTER, IdeHighlighter)
 

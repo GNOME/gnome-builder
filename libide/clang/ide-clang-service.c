@@ -21,6 +21,7 @@
 #include <clang-c/Index.h>
 #include <glib/gi18n.h>
 
+#include "ide-clang-highlighter.h"
 #include "ide-build-system.h"
 #include "ide-clang-private.h"
 #include "ide-clang-service.h"
@@ -97,26 +98,26 @@ ide_clang_service_build_index_visitor (CXCursor     cursor,
     {
     case CXCursor_TypedefDecl:
     case CXCursor_TypeAliasDecl:
-      style_name = "c:type";
+      style_name = IDE_CLANG_HIGHLIGHTER_TYPE;
       break;
 
     case CXCursor_FunctionDecl:
-      style_name = "c:function-name";
+      style_name = IDE_CLANG_HIGHLIGHTER_FUNCTION_NAME;
       break;
 
     case CXCursor_EnumDecl:
-      style_name = "c:enum-name";
+      style_name = IDE_CLANG_HIGHLIGHTER_ENUM_NAME;
       clang_visitChildren (cursor,
                            ide_clang_service_build_index_visitor,
                            user_data);
       break;
 
     case CXCursor_EnumConstantDecl:
-      style_name = "c:enum-name";
+      style_name = IDE_CLANG_HIGHLIGHTER_ENUM_NAME;
       break;
 
     case CXCursor_MacroDefinition:
-      style_name = "c:macro-name";
+      style_name = IDE_CLANG_HIGHLIGHTER_MACRO_NAME;
       break;
 
     default:
