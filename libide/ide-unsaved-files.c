@@ -141,6 +141,18 @@ ide_unsaved_files_save_worker (GTask        *task,
   g_assert (IDE_IS_UNSAVED_FILES (source_object));
   g_assert (state);
 
+  /* ensure that the directory exists */
+  if (g_mkdir_with_parents (state->drafts_directory, 0700) != 0)
+    {
+      int errno;
+
+      error = g_error_new_literal (G_IO_ERROR,
+                                   g_io_error_from_errno (errno),
+                                   "Failed to create drafts directory");
+      g_task_return_error (task, error);
+      return;
+    }
+
   manifest = g_string_new (NULL);
   manifest_path = g_build_filename (state->drafts_directory,
                                     "manifest",
