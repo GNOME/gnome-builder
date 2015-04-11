@@ -329,6 +329,7 @@ gb_project_tree_actions_new (GbProjectTree *self,
       !(file = ide_project_file_get_file (project_file)))
     return;
 
+  gb_tree_node_expand (selected, FALSE);
   gb_tree_node_get_area (selected, &rect);
 
   popover = g_object_new (GB_TYPE_NEW_FILE_POPOVER, NULL);
