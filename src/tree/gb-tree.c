@@ -994,6 +994,20 @@ gb_tree_button_press_event (GbTree         *tree,
   return FALSE;
 }
 
+void
+gb_tree_scroll_to_node (GbTree     *tree,
+                        GbTreeNode *node)
+{
+  GtkTreePath *path;
+
+  g_return_if_fail (GB_IS_TREE (tree));
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+
+  path = gb_tree_node_get_path (node);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (tree), path, NULL, FALSE, 0, 0);
+  gtk_tree_path_free (path);
+}
+
 /**
  * gb_tree_finalize:
  * @object: (in): A #GbTree.
