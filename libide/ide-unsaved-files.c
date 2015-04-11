@@ -274,7 +274,7 @@ ide_unsaved_files_restore_worker (GTask        *task,
                                   GCancellable *cancellable)
 {
   AsyncState *state = task_data;
-  g_autofree gchar *contents = NULL;
+  g_autofree gchar *manifest_contents = NULL;
   g_autofree gchar *manifest_path = NULL;
   gchar **lines;
   GError *error = NULL;
@@ -295,18 +295,18 @@ ide_unsaved_files_restore_worker (GTask        *task,
       return;
     }
 
-  if (!g_file_get_contents (manifest_path, &contents, &len, &error))
+  if (!g_file_get_contents (manifest_path, &manifest_contents, &len, &error))
     {
       g_task_return_error (task, error);
       return;
     }
 
-  lines = g_strsplit (contents, "\n", 0);
+  lines = g_strsplit (manifest_contents, "\n", 0);
 
   for (i = 0; lines [i]; i++)
     {
       g_autoptr(GFile) file = NULL;
-      g_autofree gchar *contents = NULL;
+      gchar *contents = NULL;
       g_autofree gchar *hash = NULL;
       g_autofree gchar *path = NULL;
       UnsavedFile *unsaved;
