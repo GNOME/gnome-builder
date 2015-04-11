@@ -78,6 +78,8 @@ GbTree       *gb_tree_node_get_tree  (GbTreeNode    *node);
 void          gb_tree_set_show_icons (GbTree        *tree,
                                       gboolean       show_icons);
 gboolean      gb_tree_get_show_icons (GbTree        *tree);
+GbTreeNode   *gb_tree_find_item      (GbTree        *tree,
+                                      GObject       *item);
 void          gb_tree_scroll_to_node (GbTree        *tree,
                                       GbTreeNode    *node);
 

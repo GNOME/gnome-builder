@@ -1016,6 +1016,52 @@ gb_tree_scroll_to_node (GbTree     *tree,
   gtk_tree_path_free (path);
 }
 
+static gboolean
+gb_tree_find_item_foreach_cb (GtkTreeModel *model,
+                              GtkTreePath  *path,
+                              GtkTreeIter  *iter,
+                              gpointer      data)
+{
+  GbTreeNode *node = NULL;
+  struct {
+    GObject    *item;
+    GbTreeNode *result;
+  } *lookup = data;
+
+  gtk_tree_model_get (model, iter, 0, &node, -1);
+
+  if (node && (lookup->item == gb_tree_node_get_item (node)))
+    {
+      lookup->result = node;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+GbTreeNode *
+gb_tree_find_item (GbTree  *self,
+                   GObject *item)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
+  struct {
+    GObject    *item;
+    GbTreeNode *result;
+  } lookup;
+
+  g_return_val_if_fail (GB_IS_TREE (self), NULL);
+  g_return_val_if_fail (!item || G_IS_OBJECT (item), NULL);
+
+  lookup.item = item;
+  lookup.result = NULL;
+
+  gtk_tree_model_foreach (GTK_TREE_MODEL (priv->store),
+                          gb_tree_find_item_foreach_cb,
+                          &lookup);
+
+  return lookup.result;
+}
+
 /**
  * gb_tree_finalize:
  * @object: (in): A #GbTree.
