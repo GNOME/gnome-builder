@@ -27,7 +27,10 @@
 struct _GbProjectTreeBuilder
 {
   GbTreeBuilder  parent_instance;
+
   GSettings     *file_chooser_settings;
+
+  guint          sort_directories_first : 1;
 };
 
 G_DEFINE_TYPE (GbProjectTreeBuilder, gb_project_tree_builder, GB_TYPE_TREE_BUILDER)
@@ -357,12 +360,19 @@ gb_project_tree_builder_rebuild (GSettings            *settings,
                                  GbProjectTreeBuilder *self)
 {
   GtkWidget *tree;
+  gboolean sort_directories_first;
 
   g_assert (G_IS_SETTINGS (settings));
   g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
 
-  if ((tree = gb_tree_builder_get_tree (GB_TREE_BUILDER (self))))
-    gb_tree_rebuild (GB_TREE (tree));
+  sort_directories_first = g_settings_get_boolean (settings, "sort-directories-first");
+
+  if (sort_directories_first != self->sort_directories_first)
+    {
+      self->sort_directories_first = sort_directories_first;
+      if ((tree = gb_tree_builder_get_tree (GB_TREE_BUILDER (self))))
+        gb_tree_rebuild (GB_TREE (tree));
+    }
 }
 
 static void
@@ -392,6 +402,8 @@ static void
 gb_project_tree_builder_init (GbProjectTreeBuilder *self)
 {
   self->file_chooser_settings = g_settings_new ("org.gtk.Settings.FileChooser");
+  self->sort_directories_first = g_settings_get_boolean (self->file_chooser_settings,
+                                                         "sort-directories-first");
 
   g_signal_connect (self->file_chooser_settings,
                     "changed::sort-directories-first",
