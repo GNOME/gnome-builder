@@ -21,6 +21,7 @@
 
 #include "gb-editor-workspace.h"
 #include "gb-file-manager.h"
+#include "gb-new-file-popover.h"
 #include "gb-project-tree.h"
 #include "gb-project-tree-actions.h"
 #include "gb-project-tree-private.h"
@@ -228,8 +229,150 @@ gb_project_tree_actions_show_icons (GSimpleAction *action,
   g_simple_action_set_state (action, variant);
 }
 
+static void
+gb_project_tree_actions__make_directory_cb (GObject      *object,
+                                            GAsyncResult *result,
+                                            gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  g_autoptr(GbProjectTree) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  if (!g_file_make_directory_finish (file, result, &error))
+    {
+      /* todo: show error messsage */
+    }
+
+  /* todo: add file to project/vcs/etc */
+  /* todo: reload portion of tree */
+}
+
+static void
+gb_project_tree_actions__create_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  g_autoptr(GbProjectTree) self = user_data;
+  g_autoptr(GError) error = NULL;
+  GbWorkbench *workbench;
+
+  if (!g_file_create_finish (file, result, &error))
+    {
+      /* todo: show error messsage */
+    }
+
+  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+  gb_workbench_open (workbench, file);
+
+  /* todo: add file to project/vcs/etc */
+  /* todo: reload portion of tree */
+}
+
+static void
+gb_project_tree_actions__popover_create_file_cb (GbProjectTree    *self,
+                                                 GFile            *file,
+                                                 GFileType         file_type,
+                                                 GbNewFilePopover *popover)
+{
+  g_assert (GB_IS_PROJECT_TREE (self));
+  g_assert (G_IS_FILE (file));
+  g_assert ((file_type == G_FILE_TYPE_DIRECTORY) ||
+            (file_type == G_FILE_TYPE_REGULAR));
+  g_assert (GB_IS_NEW_FILE_POPOVER (popover));
+
+  if (file_type == G_FILE_TYPE_DIRECTORY)
+    {
+      g_file_make_directory_async (file,
+                                   G_PRIORITY_DEFAULT,
+                                   NULL, /* cancellable */
+                                   gb_project_tree_actions__make_directory_cb,
+                                   g_object_ref (self));
+    }
+  else if (file_type == G_FILE_TYPE_REGULAR)
+    {
+      g_file_create_async (file,
+                           G_FILE_CREATE_NONE,
+                           G_PRIORITY_DEFAULT,
+                           NULL, /* cancellable */
+                           gb_project_tree_actions__create_cb,
+                           g_object_ref (self));
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+
+  gtk_widget_destroy (GTK_WIDGET (popover));
+}
+
+static void
+gb_project_tree_actions_new (GbProjectTree *self,
+                             GFileType      file_type)
+{
+  GbTreeNode *selected;
+  GObject *item;
+  GtkPopover *popover;
+  GdkRectangle rect;
+  IdeProjectFile *project_file;
+  GFile *file;
+
+  g_assert (GB_IS_PROJECT_TREE (self));
+  g_assert ((file_type == G_FILE_TYPE_DIRECTORY) ||
+            (file_type == G_FILE_TYPE_REGULAR));
+
+  if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
+      !(item = gb_tree_node_get_item (selected)) ||
+      !IDE_IS_PROJECT_FILE (item) ||
+      !project_file_is_directory (item) ||
+      !(project_file = IDE_PROJECT_FILE (item)) ||
+      !(file = ide_project_file_get_file (project_file)))
+    return;
+
+  gb_tree_node_get_area (selected, &rect);
+
+  popover = g_object_new (GB_TYPE_NEW_FILE_POPOVER, NULL);
+  gtk_popover_set_relative_to (popover, GTK_WIDGET (self));
+  gtk_popover_set_pointing_to (popover, &rect);
+  gtk_popover_set_position (popover, GTK_POS_BOTTOM);
+  gb_new_file_popover_set_file_type (GB_NEW_FILE_POPOVER (popover), file_type);
+  gb_new_file_popover_set_directory (GB_NEW_FILE_POPOVER (popover), file);
+  g_signal_connect_object (popover,
+                           "create-file",
+                           G_CALLBACK (gb_project_tree_actions__popover_create_file_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_widget_show (GTK_WIDGET (popover));
+}
+
+static void
+gb_project_tree_actions_new_directory (GSimpleAction *action,
+                                       GVariant      *variant,
+                                       gpointer       user_data)
+{
+  GbProjectTree *self = user_data;
+
+  g_assert (GB_IS_PROJECT_TREE (self));
+
+  gb_project_tree_actions_new (self, G_FILE_TYPE_DIRECTORY);
+}
+
+static void
+gb_project_tree_actions_new_file (GSimpleAction *action,
+                                  GVariant      *variant,
+                                  gpointer       user_data)
+{
+  GbProjectTree *self = user_data;
+
+  g_assert (GB_IS_PROJECT_TREE (self));
+
+  gb_project_tree_actions_new (self, G_FILE_TYPE_REGULAR);
+}
+
 static GActionEntry GbProjectTreeActions[] = {
   { "collapse-all-nodes",     gb_project_tree_actions_collapse_all_nodes },
+  { "new-directory",          gb_project_tree_actions_new_directory },
+  { "new-file",               gb_project_tree_actions_new_file },
   { "open",                   gb_project_tree_actions_open },
   { "open-containing-folder", gb_project_tree_actions_open_containing_folder },
   { "open-with",              gb_project_tree_actions_open_with, "s" },
@@ -280,6 +423,9 @@ gb_project_tree_actions_update (GbProjectTree *self)
   if (selection != NULL)
     item = gb_tree_node_get_item (selection);
 
+  action_set (group, "new-file",
+              "enabled", project_file_is_directory (item),
+              NULL);
   action_set (group, "open",
               "enabled", !project_file_is_directory (item),
               NULL);

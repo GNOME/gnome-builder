@@ -55,24 +55,26 @@ struct _GbTreeNodeClass
 };
 
 GbTreeNode    *gb_tree_node_new           (void);
-void           gb_tree_node_append        (GbTreeNode  *node,
-                                           GbTreeNode  *child);
-const gchar   *gb_tree_node_get_icon_name (GbTreeNode  *node);
-GObject       *gb_tree_node_get_item      (GbTreeNode  *node);
-GbTreeNode    *gb_tree_node_get_parent    (GbTreeNode  *node);
-GtkTreePath   *gb_tree_node_get_path      (GbTreeNode  *node);
+void           gb_tree_node_append        (GbTreeNode   *node,
+                                           GbTreeNode   *child);
+const gchar   *gb_tree_node_get_icon_name (GbTreeNode   *node);
+GObject       *gb_tree_node_get_item      (GbTreeNode   *node);
+GbTreeNode    *gb_tree_node_get_parent    (GbTreeNode   *node);
+GtkTreePath   *gb_tree_node_get_path      (GbTreeNode   *node);
 GType          gb_tree_node_get_type      (void);
 void           gb_tree_node_prepend       (GbTreeNode  *node,
-                                           GbTreeNode  *child);
-void           gb_tree_node_remove        (GbTreeNode  *node,
-                                           GbTreeNode  *child);
-void           gb_tree_node_set_icon_name (GbTreeNode  *node,
-                                           const gchar *icon_name);
-void           gb_tree_node_set_item      (GbTreeNode  *node,
-                                           GObject     *item);
-void           gb_tree_node_expand        (GbTreeNode  *node,
-                                           gboolean     expand_ancestors);
-void           gb_tree_node_select        (GbTreeNode  *node);
+                                           GbTreeNode   *child);
+void           gb_tree_node_remove        (GbTreeNode   *node,
+                                           GbTreeNode   *child);
+void           gb_tree_node_set_icon_name (GbTreeNode   *node,
+                                           const gchar  *icon_name);
+void           gb_tree_node_set_item      (GbTreeNode   *node,
+                                           GObject      *item);
+void           gb_tree_node_expand        (GbTreeNode   *node,
+                                           gboolean      expand_ancestors);
+void           gb_tree_node_select        (GbTreeNode   *node);
+void           gb_tree_node_get_area      (GbTreeNode   *node,
+                                           GdkRectangle *area);
 
 G_END_DECLS
 

@@ -299,6 +299,9 @@ gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
 
       submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-open-by-mime-section");
       populate_mime_handlers (submenu, IDE_PROJECT_FILE (item));
+
+      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-new");
+      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
     }
 
   submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-display-options");

@@ -136,6 +136,25 @@
       </submenu>
     </section>
   </menu>
+  <menu id="gb-project-tree-new">
+    <section id="gb-project-tree-new-section">
+      <submenu>
+        <attribute name="label" translatable="yes">_New</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">_Empty File</attribute>
+            <attribute name="action">project-tree.new-file</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+    <section id="gb-project-tree-new-folder-section">
+      <item>
+        <attribute name="label" translatable="yes">_New Folder</attribute>
+        <attribute name="action">project-tree.new-directory</attribute>
+      </item>
+    </section>
+  </menu>
   <menu id="gb-project-tree-open">
     <section id="gb-project-tree-open-section">
       <item>

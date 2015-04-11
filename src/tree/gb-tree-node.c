@@ -387,6 +387,24 @@ gb_tree_node_select (GbTreeNode  *node)
   gtk_tree_path_free (path);
 }
 
+void
+gb_tree_node_get_area (GbTreeNode   *node,
+                       GdkRectangle *area)
+{
+  GbTree *tree;
+  GtkTreeViewColumn *column;
+  GtkTreePath *path;
+
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+  g_return_if_fail (area != NULL);
+
+  tree = gb_tree_node_get_tree (node);
+  path = gb_tree_node_get_path (node);
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree), 0);
+  gtk_tree_view_get_cell_area (GTK_TREE_VIEW (tree), path, column, area);
+  gtk_tree_path_free (path);
+}
+
 /**
  * gb_tree_node_finalize:
  * @object: (in): A #GbTreeNode.

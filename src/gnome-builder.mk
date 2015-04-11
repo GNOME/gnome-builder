@@ -94,6 +94,8 @@ libgnome_builder_la_SOURCES = \
 	src/preferences/gb-preferences-switch.h \
 	src/preferences/gb-preferences-window.c \
 	src/preferences/gb-preferences-window.h \
+	src/project-tree/gb-new-file-popover.c \
+	src/project-tree/gb-new-file-popover.h \
 	src/project-tree/gb-project-tree.c \
 	src/project-tree/gb-project-tree.h \
 	src/project-tree/gb-project-tree-actions.c \
