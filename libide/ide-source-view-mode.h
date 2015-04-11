@@ -1,4 +1,4 @@
-/* ide-key-mode.h
+/* ide-source-view-mode.h
  *
  * Copyright (C) 2015 Alexander Larsson <alexl@redhat.com>
  *
