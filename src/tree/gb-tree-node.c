@@ -375,6 +375,20 @@ gb_tree_node_expand (GbTreeNode *node,
 }
 
 void
+gb_tree_node_collapse (GbTreeNode *node)
+{
+  GbTree *tree;
+  GtkTreePath *path;
+
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+
+  tree = gb_tree_node_get_tree (node);
+  path = gb_tree_node_get_path (node);
+  gtk_tree_view_collapse_row (GTK_TREE_VIEW (tree), path);
+  gtk_tree_path_free (path);
+}
+
+void
 gb_tree_node_select (GbTreeNode  *node)
 {
   GbTree *tree;
@@ -417,6 +431,23 @@ gb_tree_node_rebuild (GbTreeNode *self)
 
   tree = gb_tree_node_get_tree (self);
   _gb_tree_rebuild_node (tree, self);
+}
+
+gboolean
+gb_tree_node_get_expanded (GbTreeNode *self)
+{
+  GbTree *tree;
+  GtkTreePath *path;
+  gboolean ret;
+
+  g_return_val_if_fail (GB_IS_TREE_NODE (self), FALSE);
+
+  tree = gb_tree_node_get_tree (self);
+  path = gb_tree_node_get_path (self);
+  ret = gtk_tree_view_row_expanded (GTK_TREE_VIEW (tree), path);
+  gtk_tree_path_free (path);
+
+  return ret;
 }
 
 /**

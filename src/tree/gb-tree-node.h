@@ -72,10 +72,12 @@ void           gb_tree_node_set_item      (GbTreeNode   *node,
                                            GObject      *item);
 void           gb_tree_node_expand        (GbTreeNode   *node,
                                            gboolean      expand_ancestors);
+void           gb_tree_node_collapse      (GbTreeNode   *node);
 void           gb_tree_node_select        (GbTreeNode   *node);
 void           gb_tree_node_get_area      (GbTreeNode   *node,
                                            GdkRectangle *area);
 void           gb_tree_node_rebuild       (GbTreeNode   *node);
+gboolean       gb_tree_node_get_expanded  (GbTreeNode   *node);
 
 G_END_DECLS
 
