@@ -327,6 +327,7 @@ static void
 gb_project_tree_actions_new (GbProjectTree *self,
                              GFileType      file_type)
 {
+  g_autoptr(GFile) parent = NULL;
   GbTreeNode *selected;
   GObject *item;
   GtkPopover *popover;
@@ -341,10 +342,19 @@ gb_project_tree_actions_new (GbProjectTree *self,
   if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (selected)) ||
       !IDE_IS_PROJECT_FILE (item) ||
-      !project_file_is_directory (item) ||
       !(project_file = IDE_PROJECT_FILE (item)) ||
       !(file = ide_project_file_get_file (project_file)))
     return;
+
+  /*
+   * If this item is an IdeProjectFile and not a directory, then we really
+   * want to create a sibling.
+   */
+  if (!project_file_is_directory (item))
+    {
+      parent = g_file_get_parent (file);
+      file = parent;
+    }
 
   if ((self->expanded_in_new = !gb_tree_node_get_expanded (selected)))
     gb_tree_node_expand (selected, FALSE);
@@ -457,10 +467,10 @@ gb_project_tree_actions_update (GbProjectTree *self)
     item = gb_tree_node_get_item (selection);
 
   action_set (group, "new-file",
-              "enabled", project_file_is_directory (item),
+              "enabled", IDE_IS_PROJECT_FILE (item),
               NULL);
   action_set (group, "new-directory",
-              "enabled", project_file_is_directory (item),
+              "enabled", IDE_IS_PROJECT_FILE (item),
               NULL);
   action_set (group, "open",
               "enabled", !project_file_is_directory (item),
