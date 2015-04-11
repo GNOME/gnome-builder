@@ -303,7 +303,24 @@ gb_project_tree_actions__popover_create_file_cb (GbProjectTree    *self,
       g_assert_not_reached ();
     }
 
+  self->expanded_in_new = FALSE;
+
   gtk_widget_destroy (GTK_WIDGET (popover));
+}
+
+static void
+gb_project_tree_actions__popover_closed_cb (GbProjectTree *self,
+                                            GtkPopover    *popover)
+{
+  GbTreeNode *selected;
+
+  g_assert (GB_IS_PROJECT_TREE (self));
+  g_assert (GTK_IS_POPOVER (popover));
+
+  if (!(selected = gb_tree_get_selected (GB_TREE (self))) || !self->expanded_in_new)
+    return;
+
+  gb_tree_node_collapse (selected);
 }
 
 static void
@@ -329,7 +346,9 @@ gb_project_tree_actions_new (GbProjectTree *self,
       !(file = ide_project_file_get_file (project_file)))
     return;
 
-  gb_tree_node_expand (selected, FALSE);
+  if ((self->expanded_in_new = !gb_tree_node_get_expanded (selected)))
+    gb_tree_node_expand (selected, FALSE);
+
   gb_tree_node_get_area (selected, &rect);
 
   popover = g_object_new (GB_TYPE_NEW_FILE_POPOVER, NULL);
@@ -341,6 +360,11 @@ gb_project_tree_actions_new (GbProjectTree *self,
   g_signal_connect_object (popover,
                            "create-file",
                            G_CALLBACK (gb_project_tree_actions__popover_create_file_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (popover,
+                           "closed",
+                           G_CALLBACK (gb_project_tree_actions__popover_closed_cb),
                            self,
                            G_CONNECT_SWAPPED);
   gtk_widget_show (GTK_WIDGET (popover));

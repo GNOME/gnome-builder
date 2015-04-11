@@ -28,6 +28,8 @@ struct _GbProjectTree
   GbTree     parent_instance;
 
   GSettings *settings;
+
+  guint      expanded_in_new : 1;
 };
 
 G_END_DECLS
