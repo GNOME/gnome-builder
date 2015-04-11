@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-unsaved-files"
 
+#include <errno.h>
 #include <glib/gstdio.h>
 #include <string.h>
 
@@ -144,8 +145,6 @@ ide_unsaved_files_save_worker (GTask        *task,
   /* ensure that the directory exists */
   if (g_mkdir_with_parents (state->drafts_directory, 0700) != 0)
     {
-      int errno;
-
       error = g_error_new_literal (G_IO_ERROR,
                                    g_io_error_from_errno (errno),
                                    "Failed to create drafts directory");
