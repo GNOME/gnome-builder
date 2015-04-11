@@ -426,6 +426,9 @@ gb_project_tree_actions_update (GbProjectTree *self)
   action_set (group, "new-file",
               "enabled", project_file_is_directory (item),
               NULL);
+  action_set (group, "new-directory",
+              "enabled", project_file_is_directory (item),
+              NULL);
   action_set (group, "open",
               "enabled", !project_file_is_directory (item),
               NULL);
