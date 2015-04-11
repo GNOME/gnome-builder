@@ -734,6 +734,8 @@ cleanup:
   g_object_unref (popreq->self);
   g_object_unref (popreq->popover);
   g_free (popreq);
+
+  return G_SOURCE_REMOVE;
 }
 
 void
