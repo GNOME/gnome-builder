@@ -75,9 +75,13 @@ unsaved_file_free (gpointer data)
     {
       g_object_unref (uf->file);
       g_bytes_unref (uf->content);
-      g_unlink (uf->temp_path);
-      g_free (uf->temp_path);
-      g_close (uf->temp_fd, NULL);
+      if (uf->temp_path)
+        {
+           g_unlink (uf->temp_path);
+           g_free (uf->temp_path);
+        }
+      if (uf->temp_fd != 0)
+        g_close (uf->temp_fd, NULL);
       g_slice_free (UnsavedFile, uf);
     }
 }
