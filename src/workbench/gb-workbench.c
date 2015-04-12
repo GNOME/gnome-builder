@@ -585,6 +585,7 @@ supports_content_type (const gchar *content_type)
           g_str_equal (content_type, "application/x-m4") ||
           g_str_equal (content_type, "application/x-pak") ||
           g_str_equal (content_type, "application/x-perl") ||
+          g_str_equal (content_type, "application/x-php") ||
           g_str_equal (content_type, "application/x-ruby") ||
           g_str_equal (content_type, "application/x-shellscript") ||
           g_str_equal (content_type, "application/xml"));
