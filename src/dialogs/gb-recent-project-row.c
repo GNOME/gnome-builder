@@ -209,8 +209,8 @@ gb_recent_project_row_class_init (GbRecentProjectRowClass *klass)
 
   gParamSpecs [PROP_PROJECT_INFO] =
     g_param_spec_object ("project-info",
-                         _("Project Info"),
-                         _("The project info for the row."),
+                         _("Project Information"),
+                         _("The project information for the row."),
                          IDE_TYPE_PROJECT_INFO,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_PROJECT_INFO,
