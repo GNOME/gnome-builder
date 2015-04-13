@@ -153,6 +153,7 @@ gb_application_load_keybindings (GbApplication *self)
   g_autofree gchar *name = NULL;
   static const struct { gchar *name; gchar *binding; } shared_bindings[] = {
     { "workspace.toggle-sidebar", "F9" },
+    { "workbench.show-gear-menu", "F10" },
     { "workbench.global-search", "<ctrl>period" },
     { "app.preferences", "<ctrl>comma" },
     { NULL }

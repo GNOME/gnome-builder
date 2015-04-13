@@ -270,6 +270,18 @@ gb_workbench_actions_search_docs (GSimpleAction *action,
   gb_editor_workspace_search_help (self->editor_workspace, str);
 }
 
+static void
+gb_workbench_actions_show_gear_menu (GSimpleAction *action,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->gear_menu_button), TRUE);
+}
+
 static const GActionEntry GbWorkbenchActions[] = {
   { "build",            gb_workbench_actions_build },
   { "dayhack",          gb_workbench_actions_dayhack },
@@ -282,6 +294,7 @@ static const GActionEntry GbWorkbenchActions[] = {
   { "save-all",         gb_workbench_actions_save_all },
   { "search-docs",      gb_workbench_actions_search_docs, "s" },
   { "show-command-bar", gb_workbench_actions_show_command_bar },
+  { "show-gear-menu",   gb_workbench_actions_show_gear_menu },
 };
 
 void
