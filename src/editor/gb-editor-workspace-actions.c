@@ -131,7 +131,36 @@ gb_editor_workspace_actions_focus_sidebar (GSimpleAction *action,
   g_timeout_add (1, focus_widget_timeout, g_object_ref (self->project_tree));
 }
 
+static void
+gb_editor_workspace_actions_focus_stack (GSimpleAction *aciton,
+                                         GVariant      *variant,
+                                         gpointer       user_data)
+{
+  GbEditorWorkspace *self = user_data;
+  GtkWidget *stack;
+  GList *stacks;
+  gint nth;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+  g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_INT32));
+
+  /* We are 1-based for this so that keybindings
+   * don't look so weird mapping 1 to 0.
+   */
+  nth = g_variant_get_int32 (variant);
+  if (nth <= 0)
+    return;
+
+  stacks = gb_view_grid_get_stacks (self->view_grid);
+  stack = g_list_nth_data (stacks, nth - 1);
+  g_list_free (stacks);
+
+  if (stack != NULL)
+    gtk_widget_grab_focus (stack);
+}
+
 static const GActionEntry GbEditorWorkspaceActions[] = {
+  { "focus-stack", gb_editor_workspace_actions_focus_stack, "i" },
   { "focus-sidebar", gb_editor_workspace_actions_focus_sidebar },
   { "show-sidebar", NULL, NULL, "false", gb_editor_workspace_actions_show_sidebar },
   { "toggle-sidebar", gb_editor_workspace_actions_toggle_sidebar },
