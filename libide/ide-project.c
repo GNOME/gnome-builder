@@ -160,6 +160,15 @@ ide_project_set_root (IdeProject     *project,
     g_object_notify_by_pspec (G_OBJECT (project), gParamSpecs [PROP_ROOT]);
 }
 
+/**
+ * ide_project_get_files:
+ * @self: A #IdeProject.
+ *
+ * Gets the #IdeProjectFiles instance within the project tree.
+ * If it has not yet been loaded, %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): An #IdeProjectFiles or %NULL.
+ */
 IdeProjectFiles *
 ide_project_get_files (IdeProject *self)
 {
