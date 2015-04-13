@@ -30,8 +30,8 @@
   bind "F6" { "action" ("view", "preview", "") };
   bind "F9" { "action" ("workspace", "toggle-sidebar", "") };
 
-  bind "<ctrl>0" { "move-error" (down) };
-  bind "<ctrl>9" { "move-error" (up) };
+  bind "<alt>n" { "move-error" (down) };
+  bind "<alt>p" { "move-error" (up) };
 
   bind "<ctrl>Return" { "action" ("workbench", "show-command-bar", "") };
   bind "<ctrl>KP_Enter" { "action" ("workbench", "show-command-bar", "") };
