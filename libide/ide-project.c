@@ -160,6 +160,34 @@ ide_project_set_root (IdeProject     *project,
     g_object_notify_by_pspec (G_OBJECT (project), gParamSpecs [PROP_ROOT]);
 }
 
+IdeProjectFiles *
+ide_project_get_files (IdeProject *self)
+{
+  GSequenceIter *iter;
+  GSequence *children;
+  IdeProjectItem *root;
+
+  g_return_val_if_fail (IDE_IS_PROJECT (self), NULL);
+
+  root = ide_project_get_root (self);
+  children = ide_project_item_get_children (root);
+
+  if (children == NULL)
+    return NULL;
+
+  for (iter = g_sequence_get_begin_iter (children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      IdeProjectItem *item = g_sequence_get (iter);
+
+      if (IDE_IS_PROJECT_FILES (item))
+        return IDE_PROJECT_FILES (item);
+    }
+
+  return NULL;
+}
+
 /**
  * ide_project_get_file_for_path:
  * @path: A relative path from the project root.
@@ -178,9 +206,7 @@ IdeFile *
 ide_project_get_file_for_path (IdeProject  *self,
                                const gchar *path)
 {
-  IdeProjectItem *root;
-  GSequenceIter *iter;
-  GSequence *children;
+  IdeProjectFiles *files;
   IdeFile *file = NULL;
 
   g_return_val_if_fail (IDE_IS_PROJECT (self), NULL);
@@ -188,27 +214,9 @@ ide_project_get_file_for_path (IdeProject  *self,
 
   ide_project_reader_lock (self);
 
-  root = ide_project_get_root (self);
-  g_assert (IDE_IS_PROJECT_ITEM (root));
-
-  children = ide_project_item_get_children (root);
-  g_assert (children != NULL);
-
-  for (iter = g_sequence_get_begin_iter (children);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
-    {
-      IdeProjectItem *item = g_sequence_get (iter);
-
-      if (IDE_IS_PROJECT_FILES (item))
-        {
-          IdeProjectFiles *files;
-
-          files = IDE_PROJECT_FILES (item);
-          file = ide_project_files_get_file_for_path (files, path);
-          break;
-        }
-    }
+  files = ide_project_get_files (self);
+  if (files != NULL)
+    file = ide_project_files_get_file_for_path (files, path);
 
   ide_project_reader_unlock (self);
 
@@ -273,6 +281,22 @@ ide_project_get_project_file (IdeProject *self,
                        "path", g_file_get_path (gfile),
                        "file", gfile,
                        NULL);
+}
+
+void
+ide_project_add_file (IdeProject     *self,
+                      IdeProjectFile *file)
+{
+  IdeProjectFiles *files;
+
+  g_return_if_fail (IDE_IS_PROJECT (self));
+  g_return_if_fail (IDE_IS_PROJECT_FILE (file));
+
+
+  ide_project_writer_lock (self);
+  files = ide_project_get_files (self);
+  ide_project_files_add_file (files, file);
+  ide_project_writer_unlock (self);
 }
 
 static void
