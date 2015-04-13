@@ -149,6 +149,27 @@ gb_editor_workspace_context_changed (GtkWidget  *workspace,
 }
 
 static void
+gb_editor_workspace__project_tree_notify_has_focus (GbEditorWorkspace *self,
+                                                    GParamSpec        *pspec,
+                                                    GbProjectTree     *project_tree)
+{
+  GtkStyleContext *style_context;
+  gboolean has_focus;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+  g_assert (GB_IS_PROJECT_TREE (project_tree));
+
+  has_focus = gtk_widget_has_focus (GTK_WIDGET (project_tree));
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self->project_sidebar_header));
+
+  if (has_focus)
+    gtk_style_context_add_class (style_context, "focused");
+  else
+    gtk_style_context_remove_class (style_context, "focused");
+}
+
+static void
 gb_editor_workspace_grab_focus (GtkWidget *widget)
 {
   GbEditorWorkspace *self = (GbEditorWorkspace *)widget;
@@ -166,6 +187,12 @@ gb_editor_workspace_constructed (GObject *object)
   IDE_ENTRY;
 
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->constructed (object);
+
+  g_signal_connect_object (self->project_tree,
+                           "notify::has-focus",
+                           G_CALLBACK (gb_editor_workspace__project_tree_notify_has_focus),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   gb_editor_workspace_actions_init (self);
 
@@ -254,6 +281,7 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_paned);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_sidebar);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_sidebar_header);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_spinner);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_tree);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, view_grid);

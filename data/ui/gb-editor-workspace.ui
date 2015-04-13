@@ -13,7 +13,8 @@
             <property name="orientation">vertical</property>
             <property name="visible">false</property>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="project_sidebar_header">
+                <property name="name">project_sidebar_header</property>
                 <property name="orientation">horizontal</property>
                 <property name="visible">true</property>
                 <style>

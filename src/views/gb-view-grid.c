@@ -668,6 +668,8 @@ gb_view_grid_toplevel_set_focus (GtkWidget  *toplevel,
 {
   g_return_if_fail (GB_IS_VIEW_GRID (self));
 
+  gb_view_grid_set_focus (self, NULL);
+
   if (focus && gtk_widget_is_ancestor (focus, GTK_WIDGET (self)))
     {
       GtkWidget *parent = focus;
