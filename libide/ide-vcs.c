@@ -32,6 +32,19 @@ ide_vcs_init (IdeVcs *self)
 {
 }
 
+gboolean
+ide_vcs_is_ignored (IdeVcs  *self,
+                    GFile   *file,
+                    GError **error)
+{
+  g_return_val_if_fail (IDE_IS_VCS (self), FALSE);
+
+  if (IDE_VCS_GET_CLASS (self)->is_ignored)
+    return IDE_VCS_GET_CLASS (self)->is_ignored (self, file, error);
+
+  return FALSE;
+}
+
 /**
  * ide_vcs_get_working_directory:
  * @self: An #IdeVcs.

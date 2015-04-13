@@ -23,6 +23,7 @@
 #include "ide-project.h"
 #include "ide-project-item.h"
 #include "ide-project-file.h"
+#include "ide-vcs.h"
 
 #define DEFAULT_MAX_FILES 10000
 
@@ -73,33 +74,6 @@ ide_load_directory_task_free (gpointer data)
 }
 
 static gboolean
-is_special_directory (GFile *directory)
-{
-  g_autofree gchar *path = NULL;
-  g_autofree gchar *name = NULL;
-  guint i;
-
-  /* ignore dot directories */
-  name = g_file_get_basename (directory);
-  if (name [0] == '.')
-    return TRUE;
-
-  /* if this is a remove uri, then its not special */
-  path = g_file_get_path (directory);
-  if (!path)
-    return FALSE;
-
-  /* check for various xdg special dirs */
-  for (i = 0; i < G_N_ELEMENTS (gSpecialDirs); i++)
-    {
-      if (0 == g_strcmp0 (path, gSpecialDirs [i]))
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
 is_home_directory (GFile *directory)
 {
   g_autofree gchar *path = NULL;
@@ -111,35 +85,6 @@ is_home_directory (GFile *directory)
 }
 
 static gboolean
-is_ignored_file (const gchar *display_name)
-{
-  g_autofree gchar *reversed = g_strreverse (g_strdup (display_name));
-
-  if (!reversed)
-    return TRUE;
-
-  /* check suffixes, in reverse */
-  if ((reversed [0] == '~') ||
-      (strncmp (reversed, "al.", 3) == 0) ||   /* .la */
-      (strncmp (reversed, "ol.", 3) == 0) ||   /* .lo */
-      (strncmp (reversed, "o.", 2) == 0) ||    /* .o */
-      (strncmp (reversed, "pws.", 4) == 0) ||  /* .swp */
-      (strncmp (reversed, "sped.", 5) == 0) || /* .deps */
-      (strncmp (reversed, "sbil.", 5) == 0) || /* .libs */
-      (strncmp (reversed, "cyp.", 4) == 0) ||  /* .pyc */
-      (strncmp (reversed, "oyp.", 4) == 0) ||  /* .pyo */
-      (strncmp (reversed, "omg.", 4) == 0) ||  /* .gmo */
-      (strncmp (reversed, "tig.", 4) == 0) ||  /* .git */
-      (strncmp (reversed, "rzb.", 4) == 0) ||  /* .bzr */
-      (strncmp (reversed, "nvs.", 4) == 0) ||  /* .svn */
-      (strncmp (reversed, "pmatsrid.", 9) == 0) ||  /* .dirstamp */
-      (strncmp (reversed, "hcg.", 4) == 0))    /* .gch */
-    return TRUE;
-
-  return FALSE;
-}
-
-static gboolean
 ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
                                         GFile                 *directory,
                                         GError               **error)
@@ -148,6 +93,7 @@ ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
   IdeProjectItem *parent = NULL;
   g_autoptr(GPtrArray) directories = NULL;
   GFileInfo *child_info;
+  IdeVcs *vcs;
   GFileType file_type;
   GError *local_error = NULL;
   gsize i;
@@ -187,12 +133,6 @@ ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
     return TRUE;
 
   /*
-   * If this is a special directory (.git, Music, Pictures, etc), ignore it.
-   */
-  if (is_special_directory (directory))
-    return TRUE;
-
-  /*
    * Get an enumerator for children in this directory.
    */
   children = g_file_enumerate_children (directory,
@@ -212,6 +152,11 @@ ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
   parent = g_hash_table_lookup (self->directories, directory) ?: self->parent;
 
   /*
+   * Get a handle to our vcs, which is used to check for ignored files.
+   */
+  vcs = ide_context_get_vcs (self->context);
+
+  /*
    * Walk the children to inflate their IdeProjectFile instances.
    */
   while ((child_info = g_file_enumerator_next_file (children, self->cancellable, &local_error)))
@@ -219,27 +164,22 @@ ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
       g_autoptr(IdeProjectItem) item = NULL;
       g_autoptr(GFile) file = NULL;
       g_autofree gchar *path = NULL;
-      gboolean can_execute;
       GFileType file_type;
-      const gchar *display_name;
       const gchar *name;
 
       name = g_file_info_get_attribute_byte_string (child_info, G_FILE_ATTRIBUTE_STANDARD_NAME);
-      display_name = g_file_info_get_attribute_string (child_info,
-                                                       G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
       file_type = g_file_info_get_attribute_uint32 (child_info, G_FILE_ATTRIBUTE_STANDARD_TYPE);
-      can_execute = g_file_info_get_attribute_boolean (child_info,
-                                                       G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE);
 
       switch (file_type)
         {
         case G_FILE_TYPE_DIRECTORY:
+          file = g_file_get_child (directory, name);
+
           /* check for known ignored files */
-          if (is_ignored_file (display_name))
+          if (ide_vcs_is_ignored (vcs, file, NULL))
             break;
 
           /* add the file item to the project tree */
-          file = g_file_get_child (directory, name);
           path = g_file_get_relative_path (self->directory, file);
           item = g_object_new (IDE_TYPE_PROJECT_FILE,
                                "context", self->context,
@@ -260,12 +200,13 @@ ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
           break;
 
         case G_FILE_TYPE_REGULAR:
-          /* ignore executables and known ignored files */
-          if (can_execute || is_ignored_file (display_name))
+          file = g_file_get_child (directory, name);
+
+          /* check for known ignored files */
+          if (ide_vcs_is_ignored (vcs, file, NULL))
             break;
 
           /* add the file item to the project tree */
-          file = g_file_get_child (directory, name);
           path = g_file_get_relative_path (self->directory, file);
           item = g_object_new (IDE_TYPE_PROJECT_FILE,
                                "context", self->context,
@@ -316,9 +257,6 @@ ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
       for (i = 0; i < directories->len; i++)
         {
           GFile *file = g_ptr_array_index (directories, i);
-
-          if (is_special_directory (file))
-            continue;
 
           if (!ide_load_directory_task_load_directory (self, file, error))
             return FALSE;

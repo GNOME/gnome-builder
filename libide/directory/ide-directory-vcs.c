@@ -22,20 +22,13 @@
 #include "ide-directory-vcs.h"
 #include "ide-project.h"
 #include "ide-project-files.h"
-#include "tasks/ide-load-directory-task.h"
-
-/*
- * TODO: This all needs to be written synchronously on a thread so that we
- *       cant hit the case of too many open files. Right now, child directories
- *       are done async, and that can fail.
- */
 
 typedef struct
 {
   GFile *working_directory;
 } IdeDirectoryVcsPrivate;
 
-#define LOAD_MAX_FILES 2000
+#define LOAD_MAX_FILES 5000
 
 static void async_initable_iface_init (GAsyncInitableIface *iface);
 
@@ -53,6 +46,41 @@ ide_directory_vcs_get_working_directory (IdeVcs *vcs)
   g_return_val_if_fail (IDE_IS_DIRECTORY_VCS (vcs), NULL);
 
   return priv->working_directory;
+}
+
+static gboolean
+ide_directory_vcs_is_ignored (IdeVcs  *vcs,
+                              GFile   *file,
+                              GError **error)
+{
+  g_autofree gchar *reversed = NULL;
+  g_autofree gchar *name = NULL;
+
+  g_assert (IDE_IS_VCS (vcs));
+  g_assert (G_IS_FILE (file));
+
+  name = g_file_get_basename (file);
+  reversed = g_strreverse (name);
+
+  /* check suffixes, in reverse */
+  if ((reversed [0] == '~') ||
+      (strncmp (reversed, "al.", 3) == 0) ||        /* .la */
+      (strncmp (reversed, "ol.", 3) == 0) ||        /* .lo */
+      (strncmp (reversed, "o.", 2) == 0) ||         /* .o */
+      (strncmp (reversed, "pws.", 4) == 0) ||       /* .swp */
+      (strncmp (reversed, "sped.", 5) == 0) ||      /* .deps */
+      (strncmp (reversed, "sbil.", 5) == 0) ||      /* .libs */
+      (strncmp (reversed, "cyp.", 4) == 0) ||       /* .pyc */
+      (strncmp (reversed, "oyp.", 4) == 0) ||       /* .pyo */
+      (strncmp (reversed, "omg.", 4) == 0) ||       /* .gmo */
+      (strncmp (reversed, "tig.", 4) == 0) ||       /* .git */
+      (strncmp (reversed, "rzb.", 4) == 0) ||       /* .bzr */
+      (strncmp (reversed, "nvs.", 4) == 0) ||       /* .svn */
+      (strncmp (reversed, "pmatsrid.", 9) == 0) ||  /* .dirstamp */
+      (strncmp (reversed, "hcg.", 4) == 0))         /* .gch */
+    return TRUE;
+
+  return FALSE;
 }
 
 static void
@@ -73,6 +101,7 @@ ide_directory_vcs_class_init (IdeDirectoryVcsClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   vcs_class->get_working_directory = ide_directory_vcs_get_working_directory;
+  vcs_class->is_ignored = ide_directory_vcs_is_ignored;
 
   object_class->dispose = ide_directory_vcs_dispose;
 }
@@ -114,9 +143,8 @@ ide_directory_vcs_init_async (GAsyncInitable      *initable,
                         NULL);
   ide_project_item_append (root, files);
 
-  task = ide_load_directory_task_new (self, directory, files, LOAD_MAX_FILES,
-                                      io_priority, cancellable, callback,
-                                      user_data);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_return_boolean (task, TRUE);
 
   g_object_unref (files);
   g_object_unref (task);

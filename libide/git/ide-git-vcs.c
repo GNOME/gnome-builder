@@ -519,11 +519,14 @@ ide_git_vcs_reload__build_tree_cb (GObject      *object,
       context = ide_object_get_context (IDE_OBJECT (self));
       project = ide_context_get_project (context);
 
-      ide_project_writer_lock (project);
-      root = ide_project_get_root (project);
-      /* TODO: Replace existing item!!! */
-      ide_project_item_append (root, IDE_PROJECT_ITEM (files));
-      ide_project_writer_unlock (project);
+      if (FALSE)
+        {
+          ide_project_writer_lock (project);
+          root = ide_project_get_root (project);
+          /* TODO: Replace existing item!!! */
+          ide_project_item_append (root, IDE_PROJECT_ITEM (files));
+          ide_project_writer_unlock (project);
+        }
 
       self->loaded_files = TRUE;
     }
@@ -651,6 +654,28 @@ ide_git_vcs_reload_finish (IdeGitVcs     *self,
   return g_task_propagate_boolean (task, error);
 }
 
+static gboolean
+ide_git_vcs_is_ignored (IdeVcs  *vcs,
+                        GFile   *file,
+                        GError **error)
+{
+  g_autofree gchar *name = NULL;
+  IdeGitVcs *self = (IdeGitVcs *)vcs;
+
+  g_assert (IDE_IS_GIT_VCS (self));
+  g_assert (G_IS_FILE (file));
+
+  name = g_file_get_relative_path (self->working_directory, file);
+
+  if (g_strcmp0 (name, ".git") == 0)
+    return TRUE;
+
+  if (name != NULL)
+    return ggit_repository_path_is_ignored (self->repository, name);
+
+  return FALSE;
+}
+
 static void
 ide_git_vcs_dispose (GObject *object)
 {
@@ -706,6 +731,7 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
 
   vcs_class->get_working_directory = ide_git_vcs_get_working_directory;
   vcs_class->get_buffer_change_monitor = ide_git_vcs_get_buffer_change_monitor;
+  vcs_class->is_ignored = ide_git_vcs_is_ignored;
 
   /**
    * IdeGitVcs:repository:

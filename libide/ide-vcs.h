@@ -34,9 +34,12 @@ struct _IdeVcsClass
 {
   IdeObjectClass parent;
 
-  GFile                  *(*get_working_directory)     (IdeVcs    *self);
-  IdeBufferChangeMonitor *(*get_buffer_change_monitor) (IdeVcs    *self,
-                                                        IdeBuffer *buffer);
+  GFile                  *(*get_working_directory)     (IdeVcs     *self);
+  IdeBufferChangeMonitor *(*get_buffer_change_monitor) (IdeVcs     *self,
+                                                        IdeBuffer  *buffer);
+  gboolean                (*is_ignored)                (IdeVcs     *self,
+                                                        GFile      *file,
+                                                        GError    **error);
 };
 
 IdeBufferChangeMonitor *ide_vcs_get_buffer_change_monitor (IdeVcs               *self,
@@ -48,6 +51,9 @@ void                    ide_vcs_new_async                 (IdeContext           
                                                            GAsyncReadyCallback   callback,
                                                            gpointer              user_data);
 IdeVcs                 *ide_vcs_new_finish                (GAsyncResult         *result,
+                                                           GError              **error);
+gboolean                ide_vcs_is_ignored                (IdeVcs               *self,
+                                                           GFile                *file,
                                                            GError              **error);
 
 G_END_DECLS

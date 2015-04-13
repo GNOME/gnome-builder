@@ -30,7 +30,10 @@
 #include "ide-device-manager.h"
 #include "ide-global.h"
 #include "ide-internal.h"
+#include "ide-load-directory-task.h"
 #include "ide-project.h"
+#include "ide-project-item.h"
+#include "ide-project-files.h"
 #include "ide-script-manager.h"
 #include "ide-search-engine.h"
 #include "ide-search-provider.h"
@@ -846,6 +849,42 @@ ide_context_init_project_name (gpointer             source_object,
 }
 
 static void
+ide_context_init_files (gpointer             source_object,
+                        GCancellable        *cancellable,
+                        GAsyncReadyCallback  callback,
+                        gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeProjectItem) files = NULL;
+  IdeContext *context = source_object;
+  IdeProject *project;
+  IdeProjectItem *root;
+  IdeVcs *vcs;
+  GFile *workdir;
+
+  g_assert (IDE_IS_CONTEXT (context));
+
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+  project = ide_context_get_project (context);
+  root = ide_project_get_root (project);
+  files = g_object_new (IDE_TYPE_PROJECT_FILES,
+                        "context", context,
+                        "parent", root,
+                        NULL);
+  ide_project_item_append (root, files);
+
+  task = ide_load_directory_task_new (context,
+                                      workdir,
+                                      files,
+                                      0,
+                                      G_PRIORITY_DEFAULT,
+                                      cancellable,
+                                      callback,
+                                      user_data);
+}
+
+static void
 ide_context_init_vcs_cb (GObject      *object,
                          GAsyncResult *result,
                          gpointer      user_data)
@@ -1282,6 +1321,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_services,
                         ide_context_init_build_system,
                         ide_context_init_vcs,
+                        ide_context_init_files,
                         ide_context_init_project_name,
                         ide_context_init_back_forward_list,
                         ide_context_init_unsaved_files,
