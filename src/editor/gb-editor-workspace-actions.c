@@ -93,7 +93,46 @@ gb_editor_workspace_actions_toggle_sidebar (GSimpleAction *action,
   g_variant_unref (state);
 }
 
+static gboolean
+focus_widget_timeout (gpointer data)
+{
+  gtk_widget_grab_focus (data);
+  g_object_unref (data);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gb_editor_workspace_actions_focus_sidebar (GSimpleAction *action,
+                                           GVariant      *variant,
+                                           gpointer       user_data)
+{
+  GbEditorWorkspace *self = user_data;
+  GActionGroup *group;
+  GAction *show_action;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+
+  group = gtk_widget_get_action_group (GTK_WIDGET (self), "workspace");
+  show_action = g_action_map_lookup_action (G_ACTION_MAP (group), "show-sidebar");
+  gb_editor_workspace_actions_show_sidebar (G_SIMPLE_ACTION (show_action),
+                                            g_variant_new_boolean (TRUE),
+                                            user_data);
+
+  /*
+   * FIXME:
+   *
+   * I don't like that we have to delay focusing the widget.
+   * We should cleanup how sidebar toggle is managed so that things
+   * can be immiediately grabbed.
+   *
+   * Additionally, why is 0 not enough delay? There must be something
+   * else that is getting done in an idle handler causing issues.
+   */
+  g_timeout_add (1, focus_widget_timeout, g_object_ref (self->project_tree));
+}
+
 static const GActionEntry GbEditorWorkspaceActions[] = {
+  { "focus-sidebar", gb_editor_workspace_actions_focus_sidebar },
   { "show-sidebar", NULL, NULL, "false", gb_editor_workspace_actions_show_sidebar },
   { "toggle-sidebar", gb_editor_workspace_actions_toggle_sidebar },
 };

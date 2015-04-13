@@ -152,6 +152,7 @@ gb_application_load_keybindings (GbApplication *self)
   g_autoptr(GSettings) settings = NULL;
   g_autofree gchar *name = NULL;
   static const struct { gchar *name; gchar *binding; } shared_bindings[] = {
+    { "workspace.focus-sidebar", "<ctrl>F9" },
     { "workspace.toggle-sidebar", "F9" },
     { "workbench.show-gear-menu", "F10" },
     { "workbench.global-search", "<ctrl>period" },
