@@ -56,6 +56,7 @@ ide_project_item_append (IdeProjectItem *item,
   if (!priv->children)
     priv->children = g_sequence_new (g_object_unref);
 
+  g_object_set (child, "parent", item, NULL);
   g_sequence_append (priv->children, g_object_ref (child));
 }
 
@@ -173,7 +174,6 @@ ide_project_item_class_init (IdeProjectItemClass *klass)
                          _("The parent project item, if not the root."),
                          IDE_TYPE_PROJECT_ITEM,
                          (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_PARENT,
                                    gParamSpecs [PROP_PARENT]);
