@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-12 00:26+0300\n"
-"PO-Revision-Date: 2015-04-12 00:36+0300\n"
+"POT-Creation-Date: 2015-04-13 23:01+0300\n"
+"PO-Revision-Date: 2015-04-13 23:03+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -354,6 +354,15 @@ msgstr "בניית מיזם"
 msgid "Rebuild Project"
 msgstr "בנייה מחדש של המיזם"
 
+#: ../data/ui/gb-new-file-popover.ui.h:1
+#: ../src/project-tree/gb-new-file-popover.c:352
+msgid "File Name"
+msgstr "שם הקובץ"
+
+#: ../data/ui/gb-new-file-popover.ui.h:2
+msgid "_Create"
+msgstr "י_צירה"
+
 #: ../data/ui/gb-new-project-dialog.ui.h:1
 #: ../src/dialogs/gb-new-project-dialog.c:348
 msgid "New Project"
@@ -372,7 +381,7 @@ msgid "From remote source code repository"
 msgstr "ממאגר קוד מקור מרוחק"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:6 ../libide/ide-language.c:384
-#: ../libide/ide-project.c:344 ../libide/ide-project-file.c:265
+#: ../libide/ide-project.c:377 ../libide/ide-project-file.c:265
 #: ../libide/ide-project-info.c:249 ../libide/ide-service.c:138
 #: ../libide/ide-source-view-mode.c:260
 msgid "Name"
@@ -415,12 +424,14 @@ msgstr "יש להזין את כתובת מאגר קוד המקור של המיז
 #: ../data/ui/gb-new-project-dialog.ui.h:14
 #: ../libide/autotools/ide-autotools-build-task.c:399
 #: ../libide/ide-project-info.c:257
+#: ../src/project-tree/gb-new-file-popover.c:268
+#: ../src/project-tree/gb-new-file-popover.c:269
 msgid "Directory"
 msgstr "תיקייה"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:15
 #: ../libide/git/ide-git-buffer-change-monitor.c:709
-#: ../libide/git/ide-git-vcs.c:722
+#: ../libide/git/ide-git-vcs.c:749
 msgid "Repository"
 msgstr "מאגר"
 
@@ -600,21 +611,21 @@ msgstr "שמירה בשם"
 msgid "Close"
 msgstr "סגירה"
 
-#: ../libide/autotools/ide-autotools-builder.c:326
+#: ../libide/autotools/ide-autotools-builder.c:330
 #: ../libide/autotools/ide-autotools-build-task.c:377
 msgid "Config"
 msgstr "Config"
 
-#: ../libide/autotools/ide-autotools-builder.c:327
+#: ../libide/autotools/ide-autotools-builder.c:331
 msgid "The configuration for the build."
 msgstr "The configuration for the build."
 
-#: ../libide/autotools/ide-autotools-builder.c:337
+#: ../libide/autotools/ide-autotools-builder.c:341
 #: ../libide/autotools/ide-autotools-build-task.c:388
 msgid "Device"
 msgstr "Device"
 
-#: ../libide/autotools/ide-autotools-builder.c:338
+#: ../libide/autotools/ide-autotools-builder.c:342
 #: ../libide/autotools/ide-autotools-build-task.c:389
 msgid "The device to build for."
 msgstr "The device to build for."
@@ -740,32 +751,32 @@ msgstr "The Clang result set."
 msgid "Clang"
 msgstr "Clang"
 
-#: ../libide/clang/ide-clang-service.c:223
+#: ../libide/clang/ide-clang-service.c:224
 msgid "Failed to compile translation unit"
 msgstr "אר כשל בהידור יחידת תרגום"
 
-#: ../libide/clang/ide-clang-service.c:297
+#: ../libide/clang/ide-clang-service.c:298
 msgid "Unknown failure"
 msgstr "כשל לא ידוע"
 
-#: ../libide/clang/ide-clang-service.c:301
+#: ../libide/clang/ide-clang-service.c:302
 msgid "Clang crashed"
 msgstr "‏Clang קרס"
 
-#: ../libide/clang/ide-clang-service.c:305
+#: ../libide/clang/ide-clang-service.c:306
 msgid "Invalid arguments"
 msgstr "פרמטרים לא תקפם"
 
-#: ../libide/clang/ide-clang-service.c:309
+#: ../libide/clang/ide-clang-service.c:310
 msgid "AST read error"
 msgstr "AST שגיאת קריאה"
 
-#: ../libide/clang/ide-clang-service.c:321
+#: ../libide/clang/ide-clang-service.c:322
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Failed to create translation unit: %s"
 
-#: ../libide/clang/ide-clang-service.c:491
+#: ../libide/clang/ide-clang-service.c:492
 msgid "File must be saved locally to parse."
 msgstr "File must be saved locally to parse."
 
@@ -864,8 +875,8 @@ msgid "Fraction"
 msgstr "Fraction"
 
 #: ../libide/git/ide-git-remote-callbacks.c:218
-msgid "A fraction containing the operatoin progress."
-msgstr "A fraction containing the operatoin progress."
+msgid "A fraction containing the operation progress."
+msgstr "A fraction containing the operation progress."
 
 #: ../libide/git/ide-git-search-index.c:313
 msgid "The location of the .git index."
@@ -887,7 +898,7 @@ msgstr "להחליף אל"
 msgid "The file to be opened."
 msgstr "The file to be opened."
 
-#: ../libide/git/ide-git-vcs.c:723
+#: ../libide/git/ide-git-vcs.c:750
 msgid "The git repository for the project."
 msgstr "The git repository for the project."
 
@@ -1093,12 +1104,12 @@ msgstr "מילים"
 msgid "unsaved document %u"
 msgstr "מסמך לא נשמר %u"
 
-#: ../libide/ide-builder.c:61
+#: ../libide/ide-builder.c:50
 #, c-format
 msgid "%s does not implement build_async()"
 msgstr "%s does not implement build_async()"
 
-#: ../libide/ide-builder.c:67
+#: ../libide/ide-builder.c:56
 msgid "No implementation of build_async()"
 msgstr "No implementation of build_async()"
 
@@ -1110,7 +1121,7 @@ msgstr "Failed to open stderr stream."
 msgid "Failed to open stdout stream."
 msgstr "Failed to open stdout stream."
 
-#: ../libide/ide-build-system.c:181 ../libide/ide-context.c:661
+#: ../libide/ide-build-system.c:181 ../libide/ide-context.c:664
 msgid "Project File"
 msgstr "Project File"
 
@@ -1136,112 +1147,112 @@ msgstr "Builder requires libgit2-glib with threading support."
 msgid "Builder requires libgit2-glib with SSH support."
 msgstr "Builder requires libgit2-glib with SSH support."
 
-#: ../libide/ide-context.c:625 ../libide/ide-source-view.c:5132
+#: ../libide/ide-context.c:628 ../libide/ide-source-view.c:5132
 #: ../src/editor/gb-editor-frame.c:571
 msgid "Back Forward List"
 msgstr "Back Forward List"
 
-#: ../libide/ide-context.c:626
+#: ../libide/ide-context.c:629
 msgid "Back/forward navigation history for the context."
 msgstr "Back/forward navigation history for the context."
 
-#: ../libide/ide-context.c:634
+#: ../libide/ide-context.c:637
 msgid "Buffer Manager"
 msgstr "Buffer Manager"
 
-#: ../libide/ide-context.c:635
+#: ../libide/ide-context.c:638
 msgid "The buffer manager for the context."
 msgstr "The buffer manager for the context."
 
-#: ../libide/ide-context.c:643
+#: ../libide/ide-context.c:646
 msgid "Build System"
 msgstr "Build System"
 
-#: ../libide/ide-context.c:644
+#: ../libide/ide-context.c:647
 msgid "The build system used by the context."
 msgstr "The build system used by the context."
 
-#: ../libide/ide-context.c:652
+#: ../libide/ide-context.c:655
 msgid "Device Manager"
 msgstr "Device Manager"
 
-#: ../libide/ide-context.c:653
+#: ../libide/ide-context.c:656
 msgid "The device manager for the context."
 msgstr "The device manager for the context."
 
-#: ../libide/ide-context.c:662
+#: ../libide/ide-context.c:665
 msgid "The project file for the context."
 msgstr "The project file for the context."
 
-#: ../libide/ide-context.c:672
+#: ../libide/ide-context.c:675
 msgid "Root Build Directory"
 msgstr "Root Build Directory"
 
-#: ../libide/ide-context.c:673
+#: ../libide/ide-context.c:676
 msgid "The root directory to perform builds within."
 msgstr "The root directory to perform builds within."
 
-#: ../libide/ide-context.c:681
+#: ../libide/ide-context.c:684
 msgid "Script Manager"
 msgstr "Script Manager"
 
-#: ../libide/ide-context.c:682
+#: ../libide/ide-context.c:685
 msgid "The script manager for the context."
 msgstr "The script manager for the context."
 
-#: ../libide/ide-context.c:690
+#: ../libide/ide-context.c:693
 msgid "Search Engine"
 msgstr "Search Engine"
 
-#: ../libide/ide-context.c:691
+#: ../libide/ide-context.c:694
 msgid "The search engine for the context."
 msgstr "The search engine for the context."
 
-#: ../libide/ide-context.c:699
+#: ../libide/ide-context.c:702
 msgid "Snippets Manager"
 msgstr "Snippets Manager"
 
-#: ../libide/ide-context.c:700
+#: ../libide/ide-context.c:703
 msgid "The snippets manager for the context."
 msgstr "The snippets manager for the context."
 
-#: ../libide/ide-context.c:708
+#: ../libide/ide-context.c:711
 msgid "Unsaved Files"
 msgstr "Unsaved Files"
 
-#: ../libide/ide-context.c:709
+#: ../libide/ide-context.c:712
 msgid "The unsaved files in the context."
 msgstr "The unsaved files in the context."
 
-#: ../libide/ide-context.c:717
+#: ../libide/ide-context.c:720
 msgid "VCS"
 msgstr "VCS"
 
-#: ../libide/ide-context.c:718
+#: ../libide/ide-context.c:721
 msgid "The VCS for the context."
 msgstr "The VCS for the context."
 
-#: ../libide/ide-context.c:1143
+#: ../libide/ide-context.c:1182
 #, c-format
 msgid "\"%s\" is not a service, ignoring extension point."
 msgstr "\"%s\" is not a service, ignoring extension point."
 
-#: ../libide/ide-context.c:1152
+#: ../libide/ide-context.c:1191
 #, c-format
 msgid "Failed to create service of type \"%s\"."
 msgstr "Failed to create service of type \"%s\"."
 
-#: ../libide/ide-context.c:1157
+#: ../libide/ide-context.c:1196
 #, c-format
 msgid "Service of type \"%s\" registered."
 msgstr "Service of type \"%s\" registered."
 
-#: ../libide/ide-context.c:1199
+#: ../libide/ide-context.c:1238
 #, c-format
 msgid "Missing extension point for %s"
 msgstr "Missing extension point for %s"
 
-#: ../libide/ide-context.c:1219
+#: ../libide/ide-context.c:1258
 #, c-format
 msgid "%s is not an IdeSearchProvider."
 msgstr "%s is not an IdeSearchProvider."
@@ -1475,15 +1486,15 @@ msgstr "Message"
 msgid "A short message for the progress."
 msgstr "A short message for the progress."
 
-#: ../libide/ide-project.c:345
+#: ../libide/ide-project.c:378
 msgid "The name of the project."
 msgstr "The name of the project."
 
-#: ../libide/ide-project.c:353 ../src/tree/gb-tree.c:1178
+#: ../libide/ide-project.c:386 ../src/tree/gb-tree.c:1178
 msgid "Root"
 msgstr "Root"
 
-#: ../libide/ide-project.c:354
+#: ../libide/ide-project.c:387
 msgid "The root object for the project."
 msgstr "The root object for the project."
 
@@ -1527,11 +1538,11 @@ msgstr "The toplevel project file"
 msgid "Last Modified At"
 msgstr "Last Modified At"
 
-#: ../libide/ide-project-item.c:172 ../src/tree/gb-tree-node.c:626
+#: ../libide/ide-project-item.c:173 ../src/tree/gb-tree-node.c:626
 msgid "Parent"
 msgstr "Parent"
 
-#: ../libide/ide-project-item.c:173
+#: ../libide/ide-project-item.c:174
 msgid "The parent project item, if not the root."
 msgstr "The parent project item, if not the root."
 
@@ -1883,7 +1894,7 @@ msgstr "Attempt to load a PyGObject script with no filename."
 msgid "The script \"%s\" is not a PyGObject file."
 msgstr "The script \"%s\" is not a PyGObject file."
 
-#: ../libide/tasks/ide-load-directory-task.c:175
+#: ../libide/tasks/ide-load-directory-task.c:121
 #, c-format
 msgid "\"%s\" is not a directory."
 msgstr "\"%s\" is not a directory."
@@ -2171,12 +2182,12 @@ msgid "(Click on items to select them)"
 msgstr "(יש ללחוץ על פריטים כדי לבחור אותם)"
 
 #: ../src/dialogs/gb-recent-project-row.c:212
-msgid "Project Info"
-msgstr "Project Info"
+msgid "Project Information"
+msgstr "Project Information"
 
 #: ../src/dialogs/gb-recent-project-row.c:213
-msgid "The project info for the row."
-msgstr "The project info for the row."
+msgid "The project information for the row."
+msgstr "The project information for the row."
 
 #: ../src/dialogs/gb-recent-project-row.c:221
 #: ../src/dialogs/gb-recent-project-row.c:222
@@ -2483,6 +2494,26 @@ msgstr "Size Group"
 msgid "The sizing group for the control."
 msgstr "The sizing group for the control."
 
+#: ../src/project-tree/gb-new-file-popover.c:124
+msgid "A folder with that name already exists."
+msgstr "תיקייה בשם זה כבר קיימת."
+
+#: ../src/project-tree/gb-new-file-popover.c:127
+msgid "A file with that name already exists."
+msgstr "קובץ בשם זה כבר קיים."
+
+#: ../src/project-tree/gb-new-file-popover.c:277
+msgid "File Type"
+msgstr "File Type"
+
+#: ../src/project-tree/gb-new-file-popover.c:278
+msgid "The file type to create."
+msgstr "The file type to create."
+
+#: ../src/project-tree/gb-new-file-popover.c:354
+msgid "Folder Name"
+msgstr "שם תיקייה"
+
 #: ../src/project-tree/gb-project-tree-builder.c:95
 msgid "Files"
 msgstr "Files"
@@ -2749,11 +2780,11 @@ msgstr "The command manager for the workbench."
 msgid "The IdeContext for the workbench."
 msgstr "The IdeContext for the workbench."
 
-#: ../src/workbench/gb-workbench.c:770
+#: ../src/workbench/gb-workbench.c:771
 msgid "Build Failure"
 msgstr "Build Failure"
 
-#: ../src/workbench/gb-workbench.c:821
+#: ../src/workbench/gb-workbench.c:816
 msgid "Project build system does not support building"
 msgstr "מערכת הבנייה של המיזם אינה תומכת בבנייה"
 
@@ -2823,37 +2854,37 @@ msgstr "    תאריך בנייה ושעה: %s\n"
 msgid "    Building for Device: %s (%s)\n"
 msgstr "    בנייה עבור התקן: %s ‏‏‏(%s)\n"
 
-#: ../tools/ide-build.c:285
+#: ../tools/ide-build.c:286
 #, c-format
 msgid "Timed out while waiting for devices to settle.\n"
 msgstr "חלף הזמן שהוקצב להמתנה עבור הגדרת התקנים.\n"
 
-#: ../tools/ide-build.c:343
+#: ../tools/ide-build.c:344
 #, c-format
 msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
 msgstr "ממתין עד ל־60 שניות עבור הסדרת ההתקן. Ctrl+C ליציאה.\n"
 
-#: ../tools/ide-build.c:352
+#: ../tools/ide-build.c:353
 msgid "The target device we are building for."
 msgstr "The target device we are building for."
 
-#: ../tools/ide-build.c:353
+#: ../tools/ide-build.c:354
 msgid "DEVICE_ID"
 msgstr "DEVICE_ID"
 
-#: ../tools/ide-build.c:356
+#: ../tools/ide-build.c:357
 msgid "Clean and rebuild the project."
 msgstr "Clean and rebuild the project."
 
-#: ../tools/ide-build.c:358
+#: ../tools/ide-build.c:359
 msgid "Increase parallelism in the build."
 msgstr "Increase parallelism in the build."
 
-#: ../tools/ide-build.c:359
+#: ../tools/ide-build.c:360
 msgid "N"
 msgstr "N"
 
-#: ../tools/ide-build.c:370
+#: ../tools/ide-build.c:371
 msgid "- Build the project."
 msgstr "- Build the project."
 
@@ -3188,9 +3219,6 @@ msgstr "PROJECT_FILE [SEARCH TERMS...]"
 
 #~ msgid "_Close Document"
 #~ msgstr "ס_גירת מסמך"
-
-#~ msgid "Created By:"
-#~ msgstr "נוצר על ידי:"
 
 #~ msgid ""
 #~ "Christian Hergert\n"
