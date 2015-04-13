@@ -154,6 +154,11 @@ gb_application_load_keybindings (GbApplication *self)
   static const struct { gchar *name; gchar *binding; } shared_bindings[] = {
     { "workspace.focus-sidebar", "<ctrl>F9" },
     { "workspace.toggle-sidebar", "F9" },
+    { "workspace.focus-stack(1)", "<ctrl>1" },
+    { "workspace.focus-stack(2)", "<ctrl>2" },
+    { "workspace.focus-stack(3)", "<ctrl>3" },
+    { "workspace.focus-stack(4)", "<ctrl>4" },
+    { "workspace.focus-stack(5)", "<ctrl>5" },
     { "workbench.show-gear-menu", "F10" },
     { "workbench.global-search", "<ctrl>period" },
     { "app.preferences", "<ctrl>comma" },
