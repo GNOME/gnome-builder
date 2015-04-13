@@ -67,6 +67,11 @@ gb_editor_workspace_actions_show_sidebar (GSimpleAction *action,
       g_simple_action_set_state (action, variant);
       g_settings_set_boolean (self->project_tree_settings, "show", TRUE);
     }
+  else
+    {
+      g_variant_ref_sink (variant);
+      g_variant_unref (variant);
+    }
 }
 
 static void
