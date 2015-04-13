@@ -370,6 +370,7 @@ main (gint   argc,
 
   context = g_option_context_new (_("- Build the project."));
   g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
+  g_option_context_add_group (context, gtk_get_option_group (TRUE));
 
   if (!g_option_context_parse (context, &argc, &argv, &error))
     {
