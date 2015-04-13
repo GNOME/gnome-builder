@@ -1,4 +1,4 @@
-m4_define([gtk_required_version], [3.16.0])
+m4_define([gtk_required_version], [3.16.1])
 m4_define([glib_required_version], [2.44.0])
 m4_define([gtksourceview_required_version], [3.16.0])
 m4_define([ggit_required_version], [0.22.5])

@@ -738,35 +738,16 @@ ide_buffer_mark_set (GtkTextBuffer     *buffer,
     ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
 }
 
-static gboolean
-ide_buffer_check_underline_rgba (void)
-{
-  static gboolean did_check;
-  static gboolean has_underline_rgba;
-
-  if (!did_check)
-    {
-      GObjectClass *type_class;
-      GParamSpec *pspec;
-
-      type_class = g_type_class_ref (GTK_TYPE_TEXT_TAG);
-      pspec = g_object_class_find_property (type_class, "underline-rgba");
-      has_underline_rgba = (pspec != NULL) && (pspec->value_type == GDK_TYPE_RGBA);
-      g_type_class_unref (type_class);
-      did_check = TRUE;
-    }
-
-  return has_underline_rgba;
-}
-
 static void
 ide_buffer_constructed (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-  GtkTextTag *warning_tag;
+  GdkRGBA warning_rgba;
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->constructed (object);
+
+  gdk_rgba_parse (&warning_rgba, "#fcaf3e");
 
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_ERROR,
                               "underline", PANGO_UNDERLINE_ERROR,
@@ -774,17 +755,10 @@ ide_buffer_constructed (GObject *object)
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_NOTE,
                               "underline", PANGO_UNDERLINE_SINGLE,
                               NULL);
-
-  warning_tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_WARNING,
-                                            "underline", PANGO_UNDERLINE_ERROR,
-                                            NULL);
-  if (ide_buffer_check_underline_rgba ())
-    {
-      GdkRGBA warning_rgba;
-
-      gdk_rgba_parse (&warning_rgba, "#fcaf3e");
-      g_object_set (warning_tag, "underline-rgba", &warning_rgba, NULL);
-    }
+  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_WARNING,
+                              "underline", PANGO_UNDERLINE_ERROR,
+                              "underline-rgba", &warning_rgba,
+                              NULL);
 
   priv->highlight_engine = ide_highlight_engine_new (self);
 
