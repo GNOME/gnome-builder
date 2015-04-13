@@ -73,6 +73,7 @@ gb_project_tree_set_context (GbProjectTree *self,
 {
   GbTreeNode *root;
   IdeProject *project = NULL;
+  GtkTreeModel *model;
 
   g_return_if_fail (GB_IS_PROJECT_TREE (self));
   g_return_if_fail (!context || IDE_IS_CONTEXT (context));
@@ -84,6 +85,24 @@ gb_project_tree_set_context (GbProjectTree *self,
   gb_tree_node_set_item (root, G_OBJECT (project));
 
   gb_tree_rebuild (GB_TREE (self));
+
+  /*
+   * If we only have one item at the root of the tree, expand it.
+   */
+  if ((model = gtk_tree_view_get_model (GTK_TREE_VIEW (self))))
+    {
+      GtkTreeIter iter;
+
+      if ((gtk_tree_model_iter_n_children (model, NULL) == 1) &&
+          gtk_tree_model_get_iter_first (model, &iter))
+        {
+          g_autoptr(GbTreeNode) node = NULL;
+
+          gtk_tree_model_get (model, &iter, 0, &node, -1);
+          if (node != NULL)
+            gb_tree_node_expand (node, FALSE);
+        }
+    }
 }
 
 
