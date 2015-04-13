@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <git2.h>
 #include <glib/gi18n.h>
 #include <libgit2-glib/ggit.h>
 
@@ -661,19 +662,19 @@ ide_git_vcs_is_ignored (IdeVcs  *vcs,
 {
   g_autofree gchar *name = NULL;
   IdeGitVcs *self = (IdeGitVcs *)vcs;
+  gboolean ret = FALSE;
 
   g_assert (IDE_IS_GIT_VCS (self));
   g_assert (G_IS_FILE (file));
 
   name = g_file_get_relative_path (self->working_directory, file);
-
   if (g_strcmp0 (name, ".git") == 0)
     return TRUE;
 
   if (name != NULL)
-    return ggit_repository_path_is_ignored (self->repository, name);
+    return ggit_repository_path_is_ignored (self->repository, name, error);
 
-  return FALSE;
+  return ret;
 }
 
 static void
