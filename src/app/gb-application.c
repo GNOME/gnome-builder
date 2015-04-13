@@ -560,7 +560,7 @@ gb_application_init (GbApplication *app)
       NULL,
       N_("Run Builder in standalone mode") },
     { "version",
-      NULL,
+      0,
       G_OPTION_FLAG_IN_MAIN,
       G_OPTION_ARG_NONE,
       NULL,
