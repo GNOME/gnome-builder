@@ -257,22 +257,88 @@ gb_project_tree_actions_show_icons (GSimpleAction *action,
   g_simple_action_set_state (action, variant);
 }
 
+static IdeProjectFile *
+create_file (IdeContext *context,
+             GFile      *file,
+             GFileType   file_type)
+{
+  g_autofree gchar *path = NULL;
+  g_autofree gchar *name = NULL;
+  g_autoptr(GFileInfo) file_info = NULL;
+  IdeVcs *vcs;
+  GFile *workdir;
+
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (G_IS_FILE (file));
+  g_assert ((file_type == G_FILE_TYPE_DIRECTORY) || (file_type == G_FILE_TYPE_REGULAR));
+
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+  path = g_file_get_relative_path (workdir, file);
+  name = g_file_get_basename (file);
+
+  file_info = g_file_info_new ();
+  g_file_info_set_file_type (file_info, file_type);
+  g_file_info_set_name (file_info, name);
+  g_file_info_set_display_name (file_info, name);
+
+  return g_object_new (IDE_TYPE_PROJECT_FILE,
+                       "context", context,
+                       "file", file,
+                       "file-info", file_info,
+                       "path", path,
+                       "parent", NULL,
+                       NULL);
+}
+
 static void
 gb_project_tree_actions__make_directory_cb (GObject      *object,
                                             GAsyncResult *result,
                                             gpointer      user_data)
 {
   GFile *file = (GFile *)object;
-  g_autoptr(GbProjectTree) self = user_data;
+  g_autoptr(GbTreeNode) node = user_data;
   g_autoptr(GError) error = NULL;
+  g_autoptr(IdeProjectFile) project_file = NULL;
+  GbProjectTree *self;
+  GbWorkbench *workbench;
+  IdeContext *context;
+  IdeProject *project;
+  GbTreeNode *created;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (GB_IS_TREE_NODE (node));
 
   if (!g_file_make_directory_finish (file, result, &error))
     {
       /* todo: show error messsage */
+      return;
     }
 
-  /* todo: add file to project/vcs/etc */
-  /* todo: reload portion of tree */
+  self = GB_PROJECT_TREE (gb_tree_node_get_tree (node));
+  if (self == NULL)
+    return;
+
+  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+  if (workbench == NULL)
+    return;
+
+  context = gb_workbench_get_context (workbench);
+  if (context == NULL)
+    return;
+
+  project = ide_context_get_project (context);
+
+  project_file = create_file (context, file, G_FILE_TYPE_DIRECTORY);
+  ide_project_add_file (project, project_file);
+
+  gb_tree_node_rebuild (node);
+  gb_tree_node_expand (node, FALSE);
+
+  created = gb_tree_find_item (GB_TREE (self), G_OBJECT (project_file));
+
+  if (created != NULL)
+    gb_tree_node_select (created);
 }
 
 static void
@@ -281,20 +347,50 @@ gb_project_tree_actions__create_cb (GObject      *object,
                                     gpointer      user_data)
 {
   GFile *file = (GFile *)object;
-  g_autoptr(GbProjectTree) self = user_data;
+  g_autoptr(IdeProjectFile) project_file = NULL;
+  g_autoptr(GbTreeNode) node = user_data;
   g_autoptr(GError) error = NULL;
+  GbProjectTree *self;
   GbWorkbench *workbench;
+  IdeContext *context;
+  IdeProject *project;
+  GbTreeNode *created;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (GB_IS_TREE_NODE (node));
 
   if (!g_file_create_finish (file, result, &error))
     {
       /* todo: show error messsage */
+      return;
     }
 
+  self = GB_PROJECT_TREE (gb_tree_node_get_tree (node));
+  if (self == NULL)
+    return;
+
   workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+  if (workbench == NULL)
+    return;
+
+  context = gb_workbench_get_context (workbench);
+  if (context == NULL)
+    return;
+
+  project = ide_context_get_project (context);
+
+  project_file = create_file (context, file, G_FILE_TYPE_REGULAR);
+  ide_project_add_file (project, project_file);
+
   gb_workbench_open (workbench, file);
 
-  /* todo: add file to project/vcs/etc */
-  /* todo: reload portion of tree */
+  gb_tree_node_rebuild (node);
+  gb_tree_node_expand (node, FALSE);
+
+  created = gb_tree_find_item (GB_TREE (self), G_OBJECT (project_file));
+
+  if (created != NULL)
+    gb_tree_node_select (created);
 }
 
 static void
@@ -303,11 +399,18 @@ gb_project_tree_actions__popover_create_file_cb (GbProjectTree    *self,
                                                  GFileType         file_type,
                                                  GbNewFilePopover *popover)
 {
+  GbTreeNode *selected;
+
   g_assert (GB_IS_PROJECT_TREE (self));
   g_assert (G_IS_FILE (file));
   g_assert ((file_type == G_FILE_TYPE_DIRECTORY) ||
             (file_type == G_FILE_TYPE_REGULAR));
   g_assert (GB_IS_NEW_FILE_POPOVER (popover));
+
+  selected = gb_tree_get_selected (GB_TREE (self));
+
+  g_assert (selected != NULL);
+  g_assert (GB_IS_TREE_NODE (selected));
 
   if (file_type == G_FILE_TYPE_DIRECTORY)
     {
@@ -315,7 +418,7 @@ gb_project_tree_actions__popover_create_file_cb (GbProjectTree    *self,
                                    G_PRIORITY_DEFAULT,
                                    NULL, /* cancellable */
                                    gb_project_tree_actions__make_directory_cb,
-                                   g_object_ref (self));
+                                   g_object_ref (selected));
     }
   else if (file_type == G_FILE_TYPE_REGULAR)
     {
@@ -324,7 +427,7 @@ gb_project_tree_actions__popover_create_file_cb (GbProjectTree    *self,
                            G_PRIORITY_DEFAULT,
                            NULL, /* cancellable */
                            gb_project_tree_actions__create_cb,
-                           g_object_ref (self));
+                           g_object_ref (selected));
     }
   else
     {
