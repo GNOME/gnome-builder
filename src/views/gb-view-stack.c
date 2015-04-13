@@ -391,6 +391,7 @@ gb_view_stack__views_listbox_row_activated_cb (GbViewStack   *self,
     {
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->views_button), FALSE);
       gb_view_stack_set_active_view (self, GTK_WIDGET (view));
+      gtk_widget_grab_focus (GTK_WIDGET (view));
     }
 }
 
