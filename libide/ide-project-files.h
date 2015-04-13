@@ -19,6 +19,7 @@
 #ifndef IDE_PROJECT_FILES_H
 #define IDE_PROJECT_FILES_H
 
+#include "ide-project-file.h"
 #include "ide-project-item.h"
 
 G_BEGIN_DECLS
@@ -35,6 +36,8 @@ struct _IdeProjectFiles
 
 IdeFile *ide_project_files_get_file_for_path (IdeProjectFiles *self,
                                               const gchar     *path);
+void     ide_project_files_add_file          (IdeProjectFiles *self,
+                                              IdeProjectFile  *file);
 
 G_END_DECLS
 
