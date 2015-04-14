@@ -50,4 +50,3 @@ test-ide-indenter
 test-ide-source-view
 test-ide-vcs-uri
 test-navigation-list
-test.c
