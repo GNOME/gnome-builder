@@ -252,6 +252,16 @@ gb_workbench_drag_data_received (GtkWidget        *widget,
 }
 
 static void
+gb_workbench_grab_focus (GtkWidget *widget)
+{
+  GbWorkbench *self = (GbWorkbench *)widget;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->editor_workspace));
+}
+
+static void
 gb_workbench_realize (GtkWidget *widget)
 {
   GbWorkbench *self = (GbWorkbench *)widget;
@@ -260,56 +270,6 @@ gb_workbench_realize (GtkWidget *widget)
     GTK_WIDGET_CLASS (gb_workbench_parent_class)->realize (widget);
 
   gtk_widget_grab_focus (GTK_WIDGET (self->editor_workspace));
-}
-
-static gboolean
-update_focus (gpointer data)
-{
-  g_autoptr(GbWorkbench) self = data;
-
-  g_assert (GB_IS_WORKBENCH (self));
-
-  if (gtk_widget_get_visible (GTK_WIDGET (self)))
-    {
-      GtkWidget *focus;
-
-      if ((focus = gtk_window_get_focus (GTK_WINDOW (self))))
-        {
-          GbWorkspace *workspace;
-
-          if ((workspace = gb_workbench_get_active_workspace (self)))
-            gtk_widget_grab_focus (GTK_WIDGET (workspace));
-        }
-    }
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-gb_workbench_set_focus (GtkWindow *window,
-                        GtkWidget *widget)
-{
-  GbWorkbench *self = (GbWorkbench *)window;
-
-  g_return_if_fail (GB_IS_WORKBENCH (self));
-
-  /*
-   * The goal here is to focus the current workspace if we are trying to
-   * clear the workbench focus (from something like the global search).
-   */
-
-  GTK_WINDOW_CLASS (gb_workbench_parent_class)->set_focus (window, widget);
-
-  if (!widget && !self->disposing)
-    {
-      /*
-       * We may go through a series of focus updates, so we cannot simply
-       * focus the current workspace here. So instead, we will queue the
-       * refocus to an idle handler so that we can check if the focus is
-       * still NULL after the series of events has settled.
-       */
-      g_idle_add (update_focus, g_object_ref (self));
-    }
 }
 
 static void
@@ -433,7 +393,6 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
 
   object_class->constructed = gb_workbench_constructed;
   object_class->dispose = gb_workbench_dispose;
@@ -441,12 +400,11 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   object_class->get_property = gb_workbench_get_property;
   object_class->set_property = gb_workbench_set_property;
 
+  widget_class->delete_event = gb_workbench_delete_event;
   widget_class->drag_data_received = gb_workbench_drag_data_received;
   widget_class->draw = gb_workbench_draw;
+  widget_class->grab_focus = gb_workbench_grab_focus;
   widget_class->realize = gb_workbench_realize;
-  widget_class->delete_event = gb_workbench_delete_event;
-
-  window_class->set_focus = gb_workbench_set_focus;
 
   gParamSpecs [PROP_ACTIVE_WORKSPACE] =
     g_param_spec_object ("active-workspace",
