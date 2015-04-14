@@ -666,16 +666,34 @@ gb_view_grid_toplevel_set_focus (GtkWidget  *toplevel,
                                  GtkWidget  *focus,
                                  GbViewGrid *self)
 {
-  g_return_if_fail (GB_IS_VIEW_GRID (self));
+  g_assert (GB_IS_VIEW_GRID (self));
+  g_assert (!focus || GTK_IS_WIDGET (focus));
+  g_assert (GTK_IS_WINDOW (toplevel));
 
-  gb_view_grid_set_focus (self, NULL);
+  /*
+   * Always remove focus style, but don't necessarily drop our last_focus
+   * pointer, since we'll need that to restore things. Style will be
+   * reapplied if we found a focus widget.
+   */
+  if (self->last_focus)
+    {
+      GtkStyleContext *style_context;
 
-  if (focus && gtk_widget_is_ancestor (focus, GTK_WIDGET (self)))
+      style_context = gtk_widget_get_style_context (GTK_WIDGET (self->last_focus));
+      gtk_style_context_remove_class (style_context, "focused");
+    }
+
+  if (focus != NULL)
     {
       GtkWidget *parent = focus;
 
       while (parent && !GB_IS_VIEW_STACK (parent))
-        parent = gtk_widget_get_parent (parent);
+        {
+          if (GTK_IS_POPOVER (parent))
+            parent = gtk_popover_get_relative_to (GTK_POPOVER (parent));
+          else
+            parent = gtk_widget_get_parent (parent);
+        }
 
       if (GB_IS_VIEW_STACK (parent))
         gb_view_grid_set_focus (self, GB_VIEW_STACK (parent));

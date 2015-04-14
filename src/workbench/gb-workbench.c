@@ -262,6 +262,29 @@ gb_workbench_realize (GtkWidget *widget)
   gtk_widget_grab_focus (GTK_WIDGET (self->editor_workspace));
 }
 
+static gboolean
+update_focus (gpointer data)
+{
+  g_autoptr(GbWorkbench) self = data;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  if (gtk_widget_get_visible (GTK_WIDGET (self)))
+    {
+      GtkWidget *focus;
+
+      if ((focus = gtk_window_get_focus (GTK_WINDOW (self))))
+        {
+          GbWorkspace *workspace;
+
+          if ((workspace = gb_workbench_get_active_workspace (self)))
+            gtk_widget_grab_focus (GTK_WIDGET (workspace));
+        }
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 gb_workbench_set_focus (GtkWindow *window,
                         GtkWidget *widget)
@@ -279,18 +302,13 @@ gb_workbench_set_focus (GtkWindow *window,
 
   if (!widget && !self->disposing)
     {
-      GbWorkspace *workspace;
-
       /*
-       * Sadly we can't just set @widget before calling the parent set_focus()
-       * implementation. It doesn't actually do anything. So instead we grab
-       * the focus of the active workspace directly. We might need to check
-       * for reentrancy later, but if that happens, we are probably doing
-       * something else wrong.
+       * We may go through a series of focus updates, so we cannot simply
+       * focus the current workspace here. So instead, we will queue the
+       * refocus to an idle handler so that we can check if the focus is
+       * still NULL after the series of events has settled.
        */
-      workspace = gb_workbench_get_active_workspace (self);
-      if (workspace)
-        gtk_widget_grab_focus (GTK_WIDGET (workspace));
+      g_idle_add (update_focus, g_object_ref (self));
     }
 }
 
