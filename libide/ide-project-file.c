@@ -80,10 +80,15 @@ const gchar *
 ide_project_file_get_name (IdeProjectFile *self)
 {
   IdeProjectFilePrivate *priv = ide_project_file_get_instance_private (self);
+  const gchar *name;
 
   g_return_val_if_fail (IDE_IS_PROJECT_FILE (self), NULL);
 
-  return g_file_info_get_name (priv->file_info);
+  name = g_file_info_get_display_name (priv->file_info);
+  if (name == NULL)
+    name = g_file_info_get_name (priv->file_info);
+
+  return name;
 }
 
 /**
