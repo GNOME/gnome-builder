@@ -5,7 +5,7 @@
   <metadata_license>CC0</metadata_license>
   <project_license>GPL-3.0+ and GPL-2.0+ and LGPL-3.0+ and LGPL-2.0+ and MIT</project_license>
   <name>Builder</name>
-  <summary>IDE for GNOME</summary>
+  <summary>An IDE for GNOME</summary>
 
   <description>
     <p>
@@ -16,10 +16,12 @@
     </p>
     <p>Features:</p>
     <ul>
-      <li>HTML/Markdown preview</li>
-      <li>Autocompletion and indentation</li>
-      <li>Code syntax highlighting</li>
-      <li>Split views of a single document</li>
+      <li>Integration with Autotools</li>
+      <li>Clang based auto-completion, semantic highlighting, and diagnostics</li>
+      <li>Auto indentation</li>
+      <li>Side-by-side code editors</li>
+      <li>Syntax highlighting</li>
+      <li>HTML/Markdown live preview</li>
       <li>Optional Vim-style editing</li>
       <li>Integration with Git</li>
     </ul>
@@ -27,11 +29,19 @@
 
   <screenshots>
     <screenshot type="default">
-      <image width="1200" height="675">https://git.gnome.org/browse/gnome-builder/plain/data/gnome-builder.png</image>
+      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/gnome-builder.png</image>
     </screenshot>
-    <screenshot>
-      <caption>HTML Preview</caption>
-      <image width="1200" height="675">https://git.gnome.org/browse/gnome-builder/plain/data/html-preview.png</image>
+    <screenshot type="default">
+      <caption>Fast global search</caption>
+      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/globa-search.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Integrated project tree</caption>
+      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/project-tree.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Side-by-side code editors</caption>
+      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/split-view.png</image>
     </screenshot>
   </screenshots>
 
