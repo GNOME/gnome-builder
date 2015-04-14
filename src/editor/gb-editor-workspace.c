@@ -160,13 +160,21 @@ gb_editor_workspace__toplevel_set_focus (GbEditorWorkspace *self,
   g_assert (GB_IS_WORKBENCH (workbench));
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self->project_sidebar_header));
+  gtk_style_context_remove_class (style_context, "focused");
 
-  if ((focus != NULL) &&
-      (gtk_widget_is_ancestor (focus, GTK_WIDGET (self->project_sidebar)) ||
-       gtk_widget_is_ancestor (focus, GTK_WIDGET (self->project_popover))))
-    gtk_style_context_add_class (style_context, "focused");
-  else
-    gtk_style_context_remove_class (style_context, "focused");
+  while (focus != NULL)
+    {
+      if (focus == GTK_WIDGET (self->project_sidebar))
+        {
+          gtk_style_context_add_class (style_context, "focused");
+          break;
+        }
+
+      if (GTK_IS_POPOVER (focus))
+        focus = gtk_popover_get_relative_to (GTK_POPOVER (focus));
+      else
+        focus = gtk_widget_get_parent (focus);
+    }
 }
 
 static void
