@@ -544,6 +544,28 @@ gb_editor_view__symbol_row_activated_cb (GbEditorView  *self,
   gb_editor_view_navigate_to (GB_VIEW (self), location);
 }
 
+static void
+gb_editor_view__symbol_entry_activate_cb (GbEditorView *self,
+                                          GtkEntry     *entry)
+{
+  GtkListBoxRow *row;
+
+  g_assert (GB_IS_EDITOR_VIEW (self));
+  g_assert (GTK_IS_ENTRY (entry));
+
+  /*
+   * FIXME:
+   *
+   * Use row_at_y() with 1, since getting from 0 does not work.
+   */
+  row = gtk_list_box_get_row_at_y (self->symbols_listbox, 1);
+  if (row != NULL)
+    {
+      g_signal_emit_by_name (row, "activate");
+      gtk_widget_hide (GTK_WIDGET (self->symbols_popover));
+    }
+}
+
 static gboolean
 gb_editor_view_symbol_filter_func (GtkListBoxRow *row,
                                    gpointer       user_data)
@@ -677,6 +699,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, progress_bar);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, symbols_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, symbols_listbox);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorView, symbols_popover);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, symbols_search_entry);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, tweak_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, tweak_widget);
@@ -703,6 +726,12 @@ gb_editor_view_init (GbEditorView *self)
   g_signal_connect_object (self->symbols_listbox,
                            "row-activated",
                            G_CALLBACK (gb_editor_view__symbol_row_activated_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->symbols_search_entry,
+                           "activate",
+                           G_CALLBACK (gb_editor_view__symbol_entry_activate_cb),
                            self,
                            G_CONNECT_SWAPPED);
 

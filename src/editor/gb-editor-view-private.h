@@ -44,6 +44,7 @@ struct _GbEditorView
   GtkProgressBar      *progress_bar;
   GtkMenuButton       *symbols_button;
   GtkListBox          *symbols_listbox;
+  GtkPopover          *symbols_popover;
   GtkSearchEntry      *symbols_search_entry;
   GtkMenuButton       *tweak_button;
   GbEditorTweakWidget *tweak_widget;
