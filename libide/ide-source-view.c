@@ -6075,14 +6075,11 @@ ide_source_view_push_snippet (IdeSourceView    *self,
   GtkTextIter iter;
   gboolean has_more_tab_stops;
   gboolean insert_spaces;
-  gboolean at_bottom;
   gchar *line_prefix;
   guint tab_width;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (snippet));
-
-  at_bottom = ide_source_view_get_at_bottom (self);
 
   context = ide_source_snippet_get_context (snippet);
 
@@ -6141,9 +6138,6 @@ ide_source_view_push_snippet (IdeSourceView    *self,
     ide_source_view_pop_snippet (self);
 
   ide_source_view_invalidate_window (self);
-
-  if (at_bottom)
-    ide_source_view_scroll_to_bottom (self);
 }
 
 /**
