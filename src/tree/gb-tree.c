@@ -977,6 +977,9 @@ gb_tree_button_press_event (GbTree         *tree,
   if ((button->type == GDK_BUTTON_PRESS) &&
       (button->button == GDK_BUTTON_SECONDARY))
     {
+      if (!gtk_widget_has_focus (GTK_WIDGET (tree)))
+        gtk_widget_grab_focus (GTK_WIDGET (tree));
+
       gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (tree),
                                      button->x,
                                      button->y,
