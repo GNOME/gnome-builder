@@ -21,7 +21,6 @@
 #include "ide-context.h"
 #include "ide-directory-vcs.h"
 #include "ide-project.h"
-#include "ide-project-files.h"
 
 typedef struct
 {
@@ -118,34 +117,20 @@ ide_directory_vcs_init_async (GAsyncInitable      *initable,
 {
   IdeDirectoryVcs *self = (IdeDirectoryVcs *)initable;
   IdeDirectoryVcsPrivate *priv = ide_directory_vcs_get_instance_private (self);
-  IdeProjectItem *root;
-  IdeProjectItem *files;
-  IdeProject *project;
+  g_autoptr(GTask) task = NULL;
   IdeContext *context;
   GFile *directory;
-  GTask *task;
 
   g_return_if_fail (IDE_IS_DIRECTORY_VCS (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (initable));
   directory = ide_context_get_project_file (context);
-  project = ide_context_get_project (context);
-  root = ide_project_get_root (project);
 
   priv->working_directory = g_object_ref (directory);
 
-  files = g_object_new (IDE_TYPE_PROJECT_FILES,
-                        "context", context,
-                        "parent", root,
-                        NULL);
-  ide_project_item_append (root, files);
-
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_return_boolean (task, TRUE);
-
-  g_object_unref (files);
-  g_object_unref (task);
 }
 
 static gboolean
