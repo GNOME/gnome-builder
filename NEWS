@@ -1,4 +1,56 @@
 ==============
+Version 3.16.1
+==============
+
+GNOME 3.16.1 is here, and so is a new release of Builder!
+
+While most projects are focused on improving stability for 3.16.1, Builder is
+quickly adding the features you need. This is only possible because we are
+still an early preview application.
+
+Some highlights of the over 300 new commits in this release:
+
+ • Improved project tree including support for creating files and folders,
+   opening with external programs based on content-type, and file-manager
+   integration. (Christian Hergert, Garrett Regier)
+ • A new incremental semantic syntax highlighting engine.
+ • Semantic highlighting for C and C++ using Clang AST.
+ • Document selection popover to ease switching between documents.
+ • Symbols navigator for C and C++ files.
+ • Apply "Fix-It" for C and C++ as provided by Clang.
+ • Highlight build warnings in squiggly yellow lines.
+ • Improvements to dark theme.
+ • Improvements to Builder's style scheme for C and C++ languages.
+ • "Jump to definition" support for C and C++ languages.
+   Ctrl+] or gd in vim mode, <alt>period in emacs mode.
+ • A new project selection and creation dialog on startup.
+ • Git clone support from new project dialog.
+ • "Find other file" similar to emacs to switch between source and header
+   files in C and C++.
+ • Improvements to scroll-offset which allows you to keep a given number
+   of lines above and below the cursor. (Carlos Soriano, Christian Hergert)
+ • Respect Gtk's "sort-directories-first" GSetting. (Garrett Regier)
+ • Improvements to VIM mode including support for :bnext, :bprevious,
+   :buffers and :ls (Alexandre Franke, Sebastien Lafargue)
+ • Split support for HTML view (Sebastien Lafargue)
+ • Build fixes for FreeBSD (Ting-Wei Lan)
+ • Build fixes for OpenBSD (Antoine Jacoutot)
+ • Support for editing "application/x-php" files.
+ • Support extraction of CFLAGS from out-of-tree, non-recursive automake.
+   (Christian Hergert, Giovanni Campagna)
+ • A new symbolic icon (Jakub Steiner)
+ • Improvements to handling of drafts (Paolo Borelli)
+ • Improvements to autotools builders (Paolo Borelli)
+ • Many translation updates including Czech, Polish, and Hebrew.
+   (Marek Černocký, Piotr Drąg, and Yosef Or Boczko)
+
+I'd like to thank everyone that filed bugs, submitted patches, translated,
+tested, or plans to test Builder.
+
+Together, great things are possible.
+
+
+==============
 Version 3.16.0
 ==============
 
