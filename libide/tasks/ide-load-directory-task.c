@@ -23,6 +23,7 @@
 #include "ide-project.h"
 #include "ide-project-item.h"
 #include "ide-project-file.h"
+#include "ide-project-files.h"
 #include "ide-vcs.h"
 
 #define DEFAULT_MAX_FILES 10000
@@ -90,7 +91,6 @@ ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
                                         GError               **error)
 {
   g_autoptr(GFileEnumerator) children = NULL;
-  IdeProjectItem *parent = NULL;
   g_autoptr(GPtrArray) directories = NULL;
   GFileInfo *child_info;
   IdeVcs *vcs;
@@ -147,11 +147,6 @@ ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
     return FALSE;
 
   /*
-   * Get the parent IdeFileItem.
-   */
-  parent = g_hash_table_lookup (self->directories, directory) ?: self->parent;
-
-  /*
    * Get a handle to our vcs, which is used to check for ignored files.
    */
   vcs = ide_context_get_vcs (self->context);
@@ -173,32 +168,6 @@ ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
       switch (file_type)
         {
         case G_FILE_TYPE_DIRECTORY:
-          file = g_file_get_child (directory, name);
-
-          /* check for known ignored files */
-          if (ide_vcs_is_ignored (vcs, file, NULL))
-            break;
-
-          /* add the file item to the project tree */
-          path = g_file_get_relative_path (self->directory, file);
-          item = g_object_new (IDE_TYPE_PROJECT_FILE,
-                               "context", self->context,
-                               "file", file,
-                               "file-info", child_info,
-                               "parent", parent,
-                               "path", path,
-                               NULL);
-          ide_project_item_append (parent, IDE_PROJECT_ITEM (item));
-          self->current_files++;
-
-          /* we want to load all children in this directory first */
-          g_hash_table_insert (self->directories, g_object_ref (file), g_object_ref (item));
-          if (!directories)
-            directories = g_ptr_array_new_with_free_func (g_object_unref);
-          g_ptr_array_add (directories, g_object_ref (file));
-
-          break;
-
         case G_FILE_TYPE_REGULAR:
           file = g_file_get_child (directory, name);
 
@@ -212,11 +181,19 @@ ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
                                "context", self->context,
                                "file", file,
                                "file-info", child_info,
-                               "parent", parent,
+                               "parent", NULL,
                                "path", path,
                                NULL);
-          ide_project_item_append (parent, IDE_PROJECT_ITEM (item));
+
+          ide_project_files_add_file (IDE_PROJECT_FILES (self->parent), IDE_PROJECT_FILE (item));
           self->current_files++;
+
+          if (file_type == G_FILE_TYPE_DIRECTORY)
+            {
+              if (directories == NULL)
+                directories = g_ptr_array_new_with_free_func (g_object_unref);
+              g_ptr_array_add (directories, g_object_ref (file));
+            }
 
           break;
 
