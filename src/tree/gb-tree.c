@@ -320,13 +320,15 @@ gb_tree_popup_menu (GtkWidget *widget)
 {
   GbTree *tree = (GbTree *)widget;
   GbTreeNode *node;
+  GdkRectangle area;
 
   g_assert (GB_IS_TREE (tree));
 
-  if ((node = gb_tree_get_selected (tree)))
-    node = tree->priv->root;
+  if (!(node = gb_tree_get_selected (tree)))
+    return FALSE;
 
-  gb_tree_popup (tree, node, NULL, 0, 0);
+  gb_tree_node_get_area (node, &area);
+  gb_tree_popup (tree, node, NULL, area.x + area.width, area.y - 1);
 
   return TRUE;
 }
