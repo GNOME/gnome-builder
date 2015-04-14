@@ -54,13 +54,11 @@ ide_directory_vcs_is_ignored (IdeVcs  *vcs,
                               GError **error)
 {
   g_autofree gchar *reversed = NULL;
-  g_autofree gchar *name = NULL;
 
   g_assert (IDE_IS_VCS (vcs));
   g_assert (G_IS_FILE (file));
 
-  name = g_file_get_basename (file);
-  reversed = g_strreverse (name);
+  reversed = g_strreverse (g_file_get_basename (file));
 
   /* check suffixes, in reverse */
   if ((reversed [0] == '~') ||
