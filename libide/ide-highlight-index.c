@@ -21,6 +21,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/user.h>
+#include <unistd.h>
 
 #include "ide-debug.h"
 #include "ide-highlight-index.h"
@@ -47,7 +48,7 @@ ide_highlight_index_new (void)
 
   ret = g_new0 (IdeHighlightIndex, 1);
   ret->ref_count = 1;
-  ret->strings = g_string_chunk_new (PAGE_SIZE);
+  ret->strings = g_string_chunk_new (sysconf (_SC_PAGE_SIZE));
   ret->index = g_hash_table_new (g_str_hash, g_str_equal);
 
   return ret;
