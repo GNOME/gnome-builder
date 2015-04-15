@@ -24,7 +24,6 @@
             <child>
               <object class="GtkImage">
                 <property name="icon_name">open-menu-symbolic</property>
-                <property name="valign">baseline</property>
                 <property name="visible">true</property>
               </object>
             </child>
