@@ -80,6 +80,27 @@ gb_projects_dialog_update_delete_sensitivity (GbProjectsDialog *self)
 }
 
 static void
+gb_projects_dialog__app_open_project_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  GbApplication *app = (GbApplication *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GbProjectsDialog) self = user_data;
+
+  g_assert (GB_IS_APPLICATION (app));
+
+  if (!gb_application_open_project_finish (app, result, &error))
+    {
+      /* todo: error message dialog */
+      g_warning ("%s", error->message);
+    }
+
+  gtk_widget_hide (GTK_WIDGET (self));
+  gtk_widget_destroy (GTK_WIDGET (self));
+}
+
+static void
 gb_projects_dialog__listbox_row_activated_cb (GbProjectsDialog *self,
                                               GtkListBoxRow    *row,
                                               GtkListBox       *listbox)
@@ -110,9 +131,9 @@ gb_projects_dialog__listbox_row_activated_cb (GbProjectsDialog *self,
   app = g_application_get_default ();
   file = ide_project_info_get_file (project_info);
 
-  gb_application_open_project (GB_APPLICATION (app), file, NULL);
-
-  gtk_widget_destroy (GTK_WIDGET (self));
+  gb_application_open_project_async (GB_APPLICATION (app), file, NULL, NULL,
+                                     gb_projects_dialog__app_open_project_cb,
+                                     g_object_ref (self));
 }
 
 static void
@@ -345,9 +366,12 @@ gb_projects_dialog__window_open_project (GbProjectsDialog   *self,
   g_assert (GB_IS_NEW_PROJECT_DIALOG (dialog));
   g_assert (GB_IS_APPLICATION (app));
 
-  gb_application_open_project (GB_APPLICATION (app), project_file, NULL);
+  gb_application_open_project_async (GB_APPLICATION (app), project_file, NULL, NULL,
+                                     gb_projects_dialog__app_open_project_cb,
+                                     g_object_ref (self));
+
+  gtk_widget_hide (GTK_WIDGET (dialog));
   gtk_widget_destroy (GTK_WIDGET (dialog));
-  gtk_widget_destroy (GTK_WIDGET (self));
 }
 
 static void

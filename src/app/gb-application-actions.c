@@ -185,6 +185,27 @@ gb_application_actions_open_project (GSimpleAction *action,
 }
 
 static void
+gb_application_actions_open_project_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  GbApplication *self = (GbApplication *)object;
+  g_autoptr(GbNewProjectDialog) window = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GB_IS_NEW_PROJECT_DIALOG (window));
+
+  if (!gb_application_open_project_finish (self, result, &error))
+    {
+      /* todo: warning message */
+      g_warning ("%s", error->message);
+    }
+
+  gtk_widget_hide (GTK_WIDGET (window));
+  gtk_widget_destroy (GTK_WIDGET (window));
+}
+
+static void
 gb_application_actions__window_open_project (GbApplication      *self,
                                              GFile              *project_file,
                                              GbNewProjectDialog *window)
@@ -193,8 +214,9 @@ gb_application_actions__window_open_project (GbApplication      *self,
   g_assert (G_IS_FILE (project_file));
   g_assert (GB_IS_NEW_PROJECT_DIALOG (window));
 
-  gb_application_open_project (self, project_file, NULL);
-  gtk_widget_destroy (GTK_WIDGET (window));
+  gb_application_open_project_async (self, project_file, NULL, NULL,
+                                     gb_application_actions_open_project_cb,
+                                     g_object_ref (window));
 }
 
 static void

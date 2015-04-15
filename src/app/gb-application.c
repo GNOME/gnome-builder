@@ -252,6 +252,7 @@ gb_application__context_new_cb (GObject      *object,
   GbWorkbench *workbench;
   GtkRequisition req;
   GPtrArray *ar;
+  gboolean ret = FALSE;
   GError *error = NULL;
   gsize i;
 
@@ -312,16 +313,21 @@ gb_application__context_new_cb (GObject      *object,
   gtk_window_maximize (GTK_WINDOW (workbench));
   gtk_window_present (GTK_WINDOW (workbench));
 
+  ret = TRUE;
+
 cleanup:
-  g_task_return_boolean (task, FALSE);
+  g_task_return_boolean (task, ret);
   g_application_unmark_busy (G_APPLICATION (self));
   g_application_release (G_APPLICATION (self));
 }
 
 void
-gb_application_open_project (GbApplication *self,
-                             GFile         *file,
-                             GPtrArray     *additional_files)
+gb_application_open_project_async (GbApplication       *self,
+                                   GFile               *file,
+                                   GPtrArray           *additional_files,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
 {
   g_autoptr(GFile) directory = NULL;
   g_autoptr(GTask) task = NULL;
@@ -331,6 +337,7 @@ gb_application_open_project (GbApplication *self,
 
   g_return_if_fail (GB_IS_APPLICATION (self));
   g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   windows = gtk_application_get_windows (GTK_APPLICATION (self));
 
@@ -357,7 +364,7 @@ gb_application_open_project (GbApplication *self,
         }
     }
 
-  task = g_task_new (self, NULL, NULL, NULL);
+  task = g_task_new (self, cancellable, callback, user_data);
 
   if (additional_files)
     ar = g_ptr_array_ref (additional_files);
@@ -378,6 +385,20 @@ gb_application_open_project (GbApplication *self,
                          NULL,
                          gb_application__context_new_cb,
                          g_object_ref (task));
+}
+
+gboolean
+gb_application_open_project_finish (GbApplication  *self,
+                                    GAsyncResult   *result,
+                                    GError        **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (GB_IS_APPLICATION (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+
+  return g_task_propagate_boolean (task, error);
 }
 
 static void
@@ -425,7 +446,7 @@ gb_application_open (GApplication   *application,
     {
       GFile *file = g_ptr_array_index (ar, 0);
 
-      gb_application_open_project (self, file, ar);
+      gb_application_open_project_async (self, file, ar, NULL, NULL, NULL);
     }
 
   IDE_EXIT;
