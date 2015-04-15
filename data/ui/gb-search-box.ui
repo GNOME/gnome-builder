@@ -18,13 +18,11 @@
         <property name="popover">popover</property>
         <style>
           <class name="image-button"/>
-          <class name="text-button"/>
         </style>
         <child>
           <object class="GtkImage">
             <property name="visible">True</property>
-            <property name="icon_name">open-menu-symbolic</property>
-            <property name="valign">baseline</property>
+            <property name="icon_name">go-down-symbolic</property>
           </object>
         </child>
       </object>
