@@ -333,13 +333,63 @@ gb_html_document_init_document (GbDocumentInterface *iface)
   iface->get_read_only = gb_html_document_get_read_only;
 }
 
+static gchar *
+escape_for_script (const gchar *str)
+{
+  GString *output;
+
+  output = g_string_sized_new (strlen (str) * 2);
+
+  for (; *str; str = g_utf8_next_char (str))
+    {
+      gunichar ch = g_utf8_get_char (str);
+
+      switch (ch)
+        {
+        case '\b':
+          g_string_append (output, "\\b");
+          break;
+
+        case '\f':
+          g_string_append (output, "\\f");
+          break;
+
+        case '\r':
+          g_string_append (output, "\\r");
+          break;
+
+        case '\n':
+          g_string_append (output, "\\n");
+          break;
+
+        case '\t':
+          g_string_append (output, "\\t");
+          break;
+
+        case '\v':
+          g_string_append (output, "\\v");
+          break;
+
+        case '\"':
+          g_string_append (output, "\\\"");
+          break;
+
+        default:
+          g_string_append_unichar (output, ch);
+          break;
+        }
+    }
+
+  return g_string_free (output, FALSE);
+}
+
 gchar *
 gb_html_markdown_transform (GbHtmlDocument *document,
                             const gchar    *content)
 {
   gchar *str;
 
-  str = g_strescape (content, NULL);
+  str = escape_for_script (content);
 
   if (str)
     {
