@@ -80,6 +80,9 @@ void          gb_tree_set_show_icons (GbTree        *tree,
 gboolean      gb_tree_get_show_icons (GbTree        *tree);
 GbTreeNode   *gb_tree_find_item      (GbTree        *tree,
                                       GObject       *item);
+GbTreeNode   *gb_tree_find_custom    (GbTree        *tree,
+                                      GEqualFunc     equal_func,
+                                      gpointer       key);
 void          gb_tree_scroll_to_node (GbTree        *tree,
                                       GbTreeNode    *node);
 

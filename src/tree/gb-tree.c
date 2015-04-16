@@ -37,6 +37,13 @@ struct _GbTreePrivate
   guint              building;
 };
 
+typedef struct
+{
+  gpointer    key;
+  GEqualFunc  equal_func;
+  GbTreeNode *result;
+} NodeLookup;
+
 G_DEFINE_TYPE_WITH_PRIVATE (GbTree, gb_tree, GTK_TYPE_TREE_VIEW)
 
 enum {
@@ -1028,20 +1035,60 @@ gb_tree_find_item_foreach_cb (GtkTreeModel *model,
                               gpointer      data)
 {
   GbTreeNode *node = NULL;
-  struct {
-    GObject    *item;
-    GbTreeNode *result;
-  } *lookup = data;
+  NodeLookup *lookup = data;
 
   gtk_tree_model_get (model, iter, 0, &node, -1);
 
-  if (node && (lookup->item == gb_tree_node_get_item (node)))
+  if (node != NULL)
     {
-      lookup->result = node;
-      return TRUE;
+      GObject *item;
+
+      item = gb_tree_node_get_item (node);
+
+      if (lookup->equal_func (lookup->key, item))
+        {
+          lookup->result = node;
+          return TRUE;
+        }
     }
 
   return FALSE;
+}
+
+/**
+ * gb_tree_find_custom:
+ * @self: A #GbTree
+ * @equal_func: A #GEqualFunc
+ * @key: the key for @equal_func
+ *
+ * Walks the entire tree looking for the first item that matches given
+ * @equal_func and @key.
+ *
+ * The first parameter to @equal_func will always be @key.
+ * The second parameter will be the nodes #GbTreeNode:item property.
+ *
+ * Returns: (nullable) (transfer none): A #GbTreeNode or %NULL.
+ */
+GbTreeNode *
+gb_tree_find_custom (GbTree     *self,
+                     GEqualFunc  equal_func,
+                     gpointer    key)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
+  NodeLookup lookup;
+
+  g_return_val_if_fail (GB_IS_TREE (self), NULL);
+  g_return_val_if_fail (equal_func != NULL, NULL);
+
+  lookup.key = key;
+  lookup.equal_func = equal_func;
+  lookup.result = NULL;
+
+  gtk_tree_model_foreach (GTK_TREE_MODEL (priv->store),
+                          gb_tree_find_item_foreach_cb,
+                          &lookup);
+
+  return lookup.result;
 }
 
 GbTreeNode *
@@ -1049,15 +1096,13 @@ gb_tree_find_item (GbTree  *self,
                    GObject *item)
 {
   GbTreePrivate *priv = gb_tree_get_instance_private (self);
-  struct {
-    GObject    *item;
-    GbTreeNode *result;
-  } lookup;
+  NodeLookup lookup;
 
   g_return_val_if_fail (GB_IS_TREE (self), NULL);
   g_return_val_if_fail (!item || G_IS_OBJECT (item), NULL);
 
-  lookup.item = item;
+  lookup.key = item;
+  lookup.equal_func = g_direct_equal;
   lookup.result = NULL;
 
   gtk_tree_model_foreach (GTK_TREE_MODEL (priv->store),
