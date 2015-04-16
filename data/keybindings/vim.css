@@ -74,6 +74,8 @@
  *   -- Christian
  */
 
+@import url("resource:///org/gnome/builder/keybindings/shared.css");
+
 @binding-set builder-vim-source-view
 {
   bind "Escape" { "end-macro" ()
@@ -1561,4 +1563,9 @@ IdeSourceViewMode.vim-visual-block {
 
 GtkTreeView {
   gtk-key-bindings: builder-vim-tree-view;
+}
+
+GbProjectTree {
+  gtk-key-bindings: builder-vim-tree-view,
+                    builder-gb-project-tree;
 }

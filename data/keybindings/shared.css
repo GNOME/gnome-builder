@@ -1,0 +1,6 @@
+@binding-set builder-gb-project-tree
+{
+  bind "Delete" { "action" ("project-tree", "move-to-trash", "") };
+  bind "F2" { "action" ("project-tree", "rename-file", "") };
+}
+

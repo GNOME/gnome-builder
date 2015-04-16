@@ -30,6 +30,7 @@
 
     <file alias="keybindings/default.css">../../data/keybindings/default.css</file>
     <file alias="keybindings/emacs.css">../../data/keybindings/emacs.css</file>
+    <file alias="keybindings/shared.css">../../data/keybindings/shared.css</file>
     <file alias="keybindings/vim.css">../../data/keybindings/vim.css</file>
 
     <file alias="theme/Adwaita.css">../../data/theme/Adwaita.css</file>

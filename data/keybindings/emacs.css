@@ -1,3 +1,5 @@
+@import url("resource:///org/gnome/builder/keybindings/shared.css");
+
 @binding-set builder-emacs-text-entry
 {
   bind "<ctrl>b" { "move-cursor" (logical-positions, -1, 0) };
@@ -141,4 +143,9 @@ IdeSourceViewMode.emacs-x {
 
 GtkTreeView {
   gtk-key-bindings: builder-emacs-tree-view;
+}
+
+GbProjectTree {
+  gtk-key-bindings: builder-emacs-tree-view,
+                    builder-gb-project-tree;
 }

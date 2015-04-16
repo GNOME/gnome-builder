@@ -1,3 +1,4 @@
+@import url("resource:///org/gnome/builder/keybindings/shared.css");
 
 @binding-set default-ide-source-view
 {
@@ -41,3 +42,6 @@ IdeSourceViewMode.default {
   gtk-key-bindings: default-ide-source-view;
 }
 
+GbProjectTree {
+  gtk-key-bindings: builder-gb-project-tree;
+}
