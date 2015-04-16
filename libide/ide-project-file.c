@@ -71,9 +71,13 @@ ide_project_file_set_path (IdeProjectFile *self,
   IdeProjectFilePrivate *priv = ide_project_file_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_PROJECT_FILE (self));
-  g_return_if_fail (!priv->path);
 
-  priv->path = g_strdup (path);
+  if (priv->path != path)
+    {
+      g_free (priv->path);
+      priv->path = g_strdup (path);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PATH]);
+    }
 }
 
 const gchar *
@@ -149,7 +153,10 @@ ide_project_file_set_file_info (IdeProjectFile *file,
   g_return_if_fail (!file_info || G_IS_FILE_INFO (file_info));
 
   if (g_set_object (&priv->file_info, file_info))
-    g_object_notify_by_pspec (G_OBJECT (file), gParamSpecs [PROP_FILE_INFO]);
+    {
+      g_object_notify_by_pspec (G_OBJECT (file), gParamSpecs [PROP_FILE_INFO]);
+      g_object_notify_by_pspec (G_OBJECT (file), gParamSpecs [PROP_NAME]);
+    }
 }
 
 static void
@@ -250,9 +257,7 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
                          _("File Info"),
                          _("The file information for the project file."),
                          G_TYPE_FILE_INFO,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FILE_INFO,
                                    gParamSpecs [PROP_FILE_INFO]);
 
@@ -279,9 +284,7 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
                          _("Path"),
                          _("The path for the file within the project tree."),
                          NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_PATH,
                                    gParamSpecs [PROP_PATH]);
 }

@@ -96,6 +96,7 @@ ide_project_files_find_child (IdeProjectItem *item,
  * @file: A #GFile.
  *
  * Tries to locate an #IdeProjectFile matching the given file.
+ * If @file is the working directory, @self is returned.
  *
  * Returns: (transfer none) (nullable): An #IdeProjectItem or %NULL.
  */
@@ -120,7 +121,7 @@ ide_project_files_find_file (IdeProjectFiles *self,
   workdir = ide_vcs_get_working_directory (vcs);
 
   if (g_file_equal (workdir, file))
-    return NULL;
+    return IDE_PROJECT_ITEM (self);
 
   path = g_file_get_relative_path (workdir, file);
   if (path == NULL)

@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-file.h"
 #include "ide-project.h"
 #include "ide-project-files.h"
@@ -31,6 +32,12 @@ typedef struct
   IdeProjectItem *root;
   gchar          *name;
 } IdeProjectPrivate;
+
+typedef struct
+{
+  GFile *orig_file;
+  GFile *new_file;
+} RenameFile;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeProject, ide_project, IDE_TYPE_OBJECT)
 
@@ -399,4 +406,152 @@ ide_project_init (IdeProject *self)
   IdeProjectPrivate *priv = ide_project_get_instance_private (self);
 
   g_rw_lock_init (&priv->rw_lock);
+}
+
+static void
+ide_project_rename_file_worker (GTask        *task,
+                                gpointer      source_object,
+                                gpointer      task_data,
+                                GCancellable *cancellable)
+{
+  IdeProject *self = source_object;
+  IdeProjectFiles *files;
+  IdeProjectItem *item;
+  IdeContext *context;
+  IdeVcs *vcs;
+  RenameFile *op = task_data;
+  g_autoptr(GFileInfo) file_info = NULL;
+  g_autofree gchar *path = NULL;
+  GError *error = NULL;
+  GFile *workdir;
+
+  g_assert (IDE_IS_PROJECT (self));
+  g_assert (op != NULL);
+  g_assert (G_IS_FILE (op->orig_file));
+  g_assert (G_IS_FILE (op->new_file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ide_project_writer_lock (self);
+
+  files = ide_project_get_files (self);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+  path = g_file_get_relative_path (workdir, op->new_file);
+
+#ifndef IDE_DISABLE_TRACE
+  {
+    gchar *old_path = g_file_get_uri (op->orig_file);
+    gchar *new_path = g_file_get_uri (op->new_file);
+    IDE_TRACE_MSG ("Renaming %s to %s", old_path, new_path);
+    g_free (old_path);
+    g_free (new_path);
+  }
+#endif
+
+  if (path == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               _("Destination file must be within the project tree."));
+      goto cleanup;
+    }
+
+  item = ide_project_files_find_file (files, op->orig_file);
+
+  if (item == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               _("Source file must be within the project tree."));
+      goto cleanup;
+    }
+
+  if (!g_file_move (op->orig_file, op->new_file, G_FILE_COPY_NONE, cancellable, NULL, NULL, &error))
+    {
+      g_task_return_error (task, error);
+      goto cleanup;
+    }
+
+  file_info = g_file_query_info (op->new_file,
+                                 G_FILE_ATTRIBUTE_STANDARD_NAME","
+                                 G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
+                                 G_FILE_ATTRIBUTE_STANDARD_TYPE,
+                                 G_FILE_QUERY_INFO_NONE,
+                                 cancellable,
+                                 &error);
+
+  if (file_info == NULL)
+    {
+      g_task_return_error (task, error);
+      goto cleanup;
+    }
+
+  g_object_ref (item);
+  ide_project_item_remove (ide_project_item_get_parent (item), item);
+  g_object_set (item,
+                "file", op->new_file,
+                "path", path,
+                "file-info", file_info,
+                NULL);
+  ide_project_files_add_file (files, IDE_PROJECT_FILE (item));
+  g_object_unref (item);
+
+  g_task_return_boolean (task, TRUE);
+
+cleanup:
+  ide_project_writer_unlock (self);
+}
+
+static void
+rename_file_free (gpointer data)
+{
+  RenameFile *op = data;
+
+  if (op != NULL)
+    {
+      g_object_unref (op->new_file);
+      g_object_unref (op->orig_file);
+      g_slice_free (RenameFile, op);
+    }
+}
+
+void
+ide_project_rename_file_async (IdeProject          *self,
+                               GFile               *orig_file,
+                               GFile               *new_file,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  RenameFile *op;
+
+  g_return_if_fail (IDE_IS_PROJECT (self));
+  g_return_if_fail (G_IS_FILE (orig_file));
+  g_return_if_fail (G_IS_FILE (new_file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  op = g_slice_new0 (RenameFile);
+  op->orig_file = g_object_ref (orig_file);
+  op->new_file = g_object_ref (new_file);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, op, rename_file_free);
+  g_task_run_in_thread (task, ide_project_rename_file_worker);
+}
+
+gboolean
+ide_project_rename_file_finish (IdeProject    *self,
+                                GAsyncResult  *result,
+                                GError       **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_PROJECT (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+
+  return g_task_propagate_boolean (task, error);
 }
