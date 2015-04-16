@@ -48,7 +48,7 @@ AM_PROG_LIBTOOL
 
 AC_C_CONST
 
-GNOME_CXX_WARNINGS([maximum])
+GNOME_COMPILE_WARNINGS([maximum])
 GNOME_MAINTAINER_MODE_DEFINES
 
 # If we are using gtk-doc, enable it.
