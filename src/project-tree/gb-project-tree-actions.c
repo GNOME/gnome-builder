@@ -25,6 +25,7 @@
 #include "gb-project-tree.h"
 #include "gb-project-tree-actions.h"
 #include "gb-project-tree-private.h"
+#include "gb-rename-file-popover.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
@@ -559,6 +560,145 @@ gb_project_tree_actions_new_file (GSimpleAction *action,
   gb_project_tree_actions_new (self, G_FILE_TYPE_REGULAR);
 }
 
+static gint
+project_item_equal_func (GFile   *key,
+                         GObject *item)
+{
+  g_assert (G_IS_FILE (key));
+  g_assert (IDE_IS_PROJECT_ITEM (item));
+
+  if (IDE_IS_PROJECT_FILE (item))
+    {
+      GFile *file;
+
+      file = ide_project_file_get_file (IDE_PROJECT_FILE (item));
+      g_assert (G_IS_FILE (file));
+
+      return g_file_equal (key, file);
+    }
+
+  return FALSE;
+}
+
+static void
+gb_project_tree_actions__project_rename_file_cb (GObject      *object,
+                                                 GAsyncResult *result,
+                                                 gpointer      user_data)
+{
+  IdeProject *project = (IdeProject *)object;
+  g_autoptr(GbRenameFilePopover) popover = user_data;
+  g_autoptr(GError) error = NULL;
+  GbTreeNode *node;
+  GFile *file;
+  GbTree *tree;
+  gboolean expanded = FALSE;
+
+  g_assert (IDE_IS_PROJECT (project));
+  g_assert (GB_IS_RENAME_FILE_POPOVER (popover));
+
+  if (!ide_project_rename_file_finish (project, result, &error))
+    {
+      /* todo: display error */
+      g_warning ("%s", error->message);
+      return;
+    }
+
+  file = g_object_get_data (G_OBJECT (popover), "G_FILE");
+  tree = GB_TREE (gtk_popover_get_relative_to (GTK_POPOVER (popover)));
+
+  g_assert (G_IS_FILE (file));
+  g_assert (GB_IS_TREE (tree));
+
+  if ((node = gb_tree_get_selected (tree)))
+    expanded = gb_tree_node_get_expanded (node);
+
+  gb_tree_rebuild (tree);
+
+  node = gb_tree_find_custom (tree,
+                              (GEqualFunc)project_item_equal_func,
+                              file);
+
+  if (node != NULL)
+    {
+      gb_tree_node_expand (node, TRUE);
+      if (!expanded)
+        gb_tree_node_collapse (node);
+      gb_tree_node_select (node);
+      gb_tree_scroll_to_node (tree, node);
+    }
+
+  gtk_widget_hide (GTK_WIDGET (popover));
+  gtk_widget_destroy (GTK_WIDGET (popover));
+}
+
+static void
+gb_project_tree_actions__rename_file_cb (GbProjectTree       *self,
+                                         GFile               *orig_file,
+                                         GFile               *new_file,
+                                         GbRenameFilePopover *popover)
+{
+  GbWorkbench *workbench;
+  IdeContext *context;
+  IdeProject *project;
+
+  g_assert (GB_IS_PROJECT_TREE (self));
+  g_assert (G_IS_FILE (orig_file));
+  g_assert (G_IS_FILE (new_file));
+  g_assert (GTK_IS_POPOVER (popover));
+
+  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+  context = gb_workbench_get_context (workbench);
+  project = ide_context_get_project (context);
+
+  /* todo: set busin spinner in popover */
+
+  g_object_set_data_full (G_OBJECT (popover),
+                          "G_FILE",
+                          g_object_ref (new_file),
+                          g_object_unref);
+
+  ide_project_rename_file_async (project, orig_file, new_file, NULL,
+                                 gb_project_tree_actions__project_rename_file_cb,
+                                 g_object_ref (popover));
+}
+
+static void
+gb_project_tree_actions_rename_file (GSimpleAction *action,
+                                     GVariant      *variant,
+                                     gpointer       user_data)
+{
+  GbProjectTree *self = user_data;
+  GbTreeNode *selected;
+  GtkPopover *popover;
+  GObject *item;
+  GFile *file;
+  GFileInfo *file_info;
+  gboolean is_dir;
+
+  g_assert (GB_IS_PROJECT_TREE (self));
+
+  if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
+      !(item = gb_tree_node_get_item (selected)) ||
+      !IDE_IS_PROJECT_FILE (item) ||
+      !(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))) ||
+      !(file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item))))
+    return;
+
+  is_dir = (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY);
+
+  popover = g_object_new (GB_TYPE_RENAME_FILE_POPOVER,
+                          "file", file,
+                          "is-directory", is_dir,
+                          "position", GTK_POS_RIGHT,
+                          NULL);
+  g_signal_connect_object (popover,
+                           "rename-file",
+                           G_CALLBACK (gb_project_tree_actions__rename_file_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gb_tree_node_show_popover (selected, popover);
+}
+
 static GActionEntry GbProjectTreeActions[] = {
   { "collapse-all-nodes",     gb_project_tree_actions_collapse_all_nodes },
   { "new-directory",          gb_project_tree_actions_new_directory },
@@ -568,6 +708,7 @@ static GActionEntry GbProjectTreeActions[] = {
   { "open-with",              gb_project_tree_actions_open_with, "s" },
   { "open-with-editor",       gb_project_tree_actions_open_with_editor },
   { "refresh",                gb_project_tree_actions_refresh },
+  { "rename-file",            gb_project_tree_actions_rename_file },
   { "show-icons",             NULL, NULL, "false", gb_project_tree_actions_show_icons },
 };
 
@@ -635,6 +776,9 @@ gb_project_tree_actions_update (GbProjectTree *self)
               NULL);
   action_set (group, "open-containing-folder",
               "enabled", (IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)),
+              NULL);
+  action_set (group, "rename-file",
+              "enabled", IDE_IS_PROJECT_FILE (item),
               NULL);
 
   IDE_EXIT;
