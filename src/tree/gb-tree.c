@@ -753,10 +753,15 @@ gb_tree_rebuild (GbTree *tree)
 {
   GbTreePrivate *priv;
   GbTreeNode *root;
+  GtkTreeSelection *selection;
 
   g_return_if_fail (GB_IS_TREE (tree));
 
   priv = tree->priv;
+
+  /* avoid dealign with selection changes while rebuilding */
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree));
+  gtk_tree_selection_unselect_all (selection);
 
   if ((root = priv->root ? g_object_ref (priv->root) : NULL))
     {
