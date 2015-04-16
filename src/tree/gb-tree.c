@@ -1326,3 +1326,21 @@ gb_tree_init (GbTree *tree)
                     G_CALLBACK (gb_tree_button_press_event),
                     NULL);
 }
+
+void
+gb_tree_expand_to_node (GbTree     *tree,
+                        GbTreeNode *node)
+{
+  g_assert (GB_IS_TREE (tree));
+  g_assert (GB_IS_TREE_NODE (node));
+
+  if (gb_tree_node_get_expanded (node))
+    {
+      gb_tree_node_expand (node, TRUE);
+    }
+  else
+    {
+      gb_tree_node_expand (node, TRUE);
+      gb_tree_node_collapse (node);
+    }
+}

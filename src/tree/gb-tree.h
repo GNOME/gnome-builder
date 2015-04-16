@@ -85,6 +85,8 @@ GbTreeNode   *gb_tree_find_custom    (GbTree        *tree,
                                       gpointer       key);
 void          gb_tree_scroll_to_node (GbTree        *tree,
                                       GbTreeNode    *node);
+void          gb_tree_expand_to_node (GbTree        *tree,
+                                      GbTreeNode    *node);
 
 G_END_DECLS
 
