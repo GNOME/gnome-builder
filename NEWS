@@ -1,4 +1,30 @@
 ==============
+Version 3.16.2
+==============
+
+Based on early feedback from 3.16.1, I'm announcing a followup release.
+This is primarily a bug-fix release.
+
+ • Fix double free in dummy vcs.
+ • Fix project tree loading in dummy vcs.
+ • Fix workbench action names in emacs mode.
+ • Improve sorting of filenames in project tree.
+ • Ensure loading of files matching content types supported by
+   GtkSourceLanguage.
+ • Enable project tree by default.
+ • Enable project tree icons by default.
+ • Add rename file in project tree.
+ • Add move to trash in project tree.
+ • Sort previously opened projects before projects discovered by miners.
+ • Use sysconf() for page size (fixes building on OpenBSD).
+ • Various clang build fixes.
+ • Use arrow down instead of hamburger for search bar.
+ • Fix unicode in markdown live preview.
+
+Thanks to everyone that tested 3.16.1 and provided feedback!
+
+
+==============
 Version 3.16.1
 ==============
 
