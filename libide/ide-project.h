@@ -55,6 +55,14 @@ void             ide_project_rename_file_async  (IdeProject           *self,
 gboolean         ide_project_rename_file_finish (IdeProject           *project,
                                                  GAsyncResult         *result,
                                                  GError              **error);
+void             ide_project_trash_file_async   (IdeProject           *self,
+                                                 GFile                *file,
+                                                 GCancellable         *cancellable,
+                                                 GAsyncReadyCallback   callback,
+                                                 gpointer              user_data);
+gboolean         ide_project_trash_file_finish  (IdeProject           *self,
+                                                 GAsyncResult         *result,
+                                                 GError              **error);
 
 G_END_DECLS
 

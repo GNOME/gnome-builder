@@ -555,3 +555,110 @@ ide_project_rename_file_finish (IdeProject    *self,
 
   return g_task_propagate_boolean (task, error);
 }
+
+static void
+ide_project_trash_file__file_trash_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  g_autoptr(GTask) task = user_data;
+  IdeProject *self;
+  IdeProjectFiles *files;
+  IdeProjectItem *item;
+  GError *error = NULL;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_PROJECT (self));
+
+  if (!g_file_trash_finish (file, result, &error))
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  ide_project_writer_lock (self);
+  files = ide_project_get_files (self);
+  item = ide_project_files_find_file (files, file);
+  if (item != NULL)
+    ide_project_item_remove (ide_project_item_get_parent (item), item);
+  ide_project_writer_unlock (self);
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static gboolean
+file_is_ancestor (GFile *file,
+                  GFile *maybe_child)
+{
+  gchar *path;
+  gboolean ret;
+
+  path = g_file_get_relative_path (file, maybe_child);
+  ret = (path != NULL);
+  g_free (path);
+
+  return ret;
+}
+
+void
+ide_project_trash_file_async (IdeProject          *self,
+                              GFile               *file,
+                              GCancellable        *cancellable,
+                              GAsyncReadyCallback  callback,
+                              gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_PROJECT (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  if (!file_is_ancestor (workdir, file))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               _("File must be within the project tree."));
+      IDE_EXIT;
+    }
+
+  g_file_trash_async (file,
+                      G_PRIORITY_DEFAULT,
+                      cancellable,
+                      ide_project_trash_file__file_trash_cb,
+                      g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+gboolean
+ide_project_trash_file_finish (IdeProject    *self,
+                               GAsyncResult  *result,
+                               GError       **error)
+{
+  GTask *task = (GTask *)result;
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_PROJECT (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+  ret = g_task_propagate_boolean (task, error);
+
+  IDE_RETURN (ret);
+}
