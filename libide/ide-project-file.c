@@ -46,7 +46,7 @@ ide_project_file_get_is_directory (IdeProjectFile *self)
 {
   IdeProjectFilePrivate *priv = ide_project_file_get_instance_private (self);
 
-  g_return_val_if_fail (IDE_IS_PROJECT_FILE (self), NULL);
+  g_return_val_if_fail (IDE_IS_PROJECT_FILE (self), FALSE);
 
   if (priv->file_info)
     return (g_file_info_get_file_type (priv->file_info) == G_FILE_TYPE_DIRECTORY);
