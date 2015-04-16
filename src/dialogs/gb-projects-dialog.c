@@ -212,6 +212,8 @@ gb_projects_dialog__listbox_sort_cb (GtkListBoxRow *row1,
   GDateTime *dt1;
   GDateTime *dt2;
   gint ret;
+  gint prio1;
+  gint prio2;
 
   g_assert (GB_IS_RECENT_PROJECT_ROW (row1));
   g_assert (GB_IS_RECENT_PROJECT_ROW (row2));
@@ -221,6 +223,12 @@ gb_projects_dialog__listbox_sort_cb (GtkListBoxRow *row1,
 
   g_assert (IDE_IS_PROJECT_INFO (info1));
   g_assert (IDE_IS_PROJECT_INFO (info2));
+
+  prio1 = ide_project_info_get_priority (info1);
+  prio2 = ide_project_info_get_priority (info2);
+
+  if (prio1 != prio2)
+    return prio1 - prio2;
 
   dt1 = ide_project_info_get_last_modified_at (info1);
   dt2 = ide_project_info_get_last_modified_at (info2);
