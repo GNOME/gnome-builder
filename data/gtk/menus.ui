@@ -187,6 +187,7 @@
       <item>
         <attribute name="label" translatable="yes">_Rename</attribute>
         <attribute name="action">project-tree.rename-file</attribute>
+        <attribute name="accel">F2</attribute>
       </item>
     </section>
   </menu>
@@ -195,6 +196,7 @@
       <item>
         <attribute name="label" translatable="yes">Mo_ve to Trash</attribute>
         <attribute name="action">project-tree.move-to-trash</attribute>
+        <attribute name="accel">Delete</attribute>
       </item>
     </section>
   </menu>
