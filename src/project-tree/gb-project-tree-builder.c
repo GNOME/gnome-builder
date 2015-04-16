@@ -137,8 +137,8 @@ sort_files (IdeProjectItem *item_a,
   display_name_a = g_file_info_get_display_name (file_info_a);
   display_name_b = g_file_info_get_display_name (file_info_b);
 
-  casefold_a = g_utf8_casefold (display_name_a, -1);
-  casefold_b = g_utf8_casefold (display_name_b, -1);
+  casefold_a = g_utf8_collate_key_for_filename (display_name_a, -1);
+  casefold_b = g_utf8_collate_key_for_filename (display_name_b, -1);
 
   return g_utf8_collate (casefold_a, casefold_b);
 }
