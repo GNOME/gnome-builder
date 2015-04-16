@@ -106,7 +106,7 @@ build_project (GbProjectTreeBuilder *self,
 static gint
 sort_files (IdeProjectItem *item_a,
             IdeProjectItem *item_b,
-            gboolean        directories_first)
+            gpointer        directories_first)
 {
   GFileInfo *file_info_a;
   GFileInfo *file_info_b;
