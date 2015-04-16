@@ -276,12 +276,8 @@ gb_tree_node_set_item (GbTreeNode *node,
   g_return_if_fail (GB_IS_TREE_NODE (node));
   g_return_if_fail (!item || G_IS_OBJECT (item));
 
-  if (item != node->priv->item)
-    {
-      g_clear_object (&node->priv->item);
-      node->priv->item = item ? g_object_ref (item) : NULL;
-      g_object_notify_by_pspec (G_OBJECT (node), gParamSpecs [PROP_ITEM]);
-    }
+  if (g_set_object (&node->priv->item, item))
+    g_object_notify_by_pspec (G_OBJECT (node), gParamSpecs [PROP_ITEM]);
 }
 
 /**
