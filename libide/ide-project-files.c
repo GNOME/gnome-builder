@@ -91,6 +91,56 @@ ide_project_files_find_child (IdeProjectItem *item,
 }
 
 /**
+ * ide_project_files_find_file:
+ * @self: (in): A #IdeProjectFiles.
+ * @file: A #GFile.
+ *
+ * Tries to locate an #IdeProjectFile matching the given file.
+ *
+ * Returns: (transfer none) (nullable): An #IdeProjectItem or %NULL.
+ */
+IdeProjectItem *
+ide_project_files_find_file (IdeProjectFiles *self,
+                             GFile           *file)
+{
+  IdeProjectItem *item;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
+  gchar **parts;
+  gchar *path;
+  gsize i;
+
+  g_return_if_fail (IDE_IS_PROJECT_FILES (self));
+  g_return_if_fail (G_IS_FILE (file));
+
+  item = IDE_PROJECT_ITEM (self);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  if (g_file_equal (workdir, file))
+    return NULL;
+
+  path = g_file_get_relative_path (workdir, file);
+  if (path == NULL)
+    return NULL;
+
+  parts = g_strsplit (path, G_DIR_SEPARATOR_S, 0);
+
+  for (i = 0; parts [i]; i++)
+    {
+      if (!(item = ide_project_files_find_child (item, parts [i])))
+        break;
+    }
+
+  g_strfreev (parts);
+  g_free (path);
+
+  return item;
+}
+
+/**
  * ide_project_files_get_file_for_path:
  *
  * Retrieves an #IdeFile for the path. If no such path exists within the

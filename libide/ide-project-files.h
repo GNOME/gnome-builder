@@ -34,10 +34,12 @@ struct _IdeProjectFiles
   IdeProjectItem parent_instance;
 };
 
-IdeFile *ide_project_files_get_file_for_path (IdeProjectFiles *self,
-                                              const gchar     *path);
-void     ide_project_files_add_file          (IdeProjectFiles *self,
-                                              IdeProjectFile  *file);
+IdeFile        *ide_project_files_get_file_for_path (IdeProjectFiles *self,
+                                                     const gchar     *path);
+void            ide_project_files_add_file          (IdeProjectFiles *self,
+                                                     IdeProjectFile  *file);
+IdeProjectItem *ide_project_files_find_file         (IdeProjectFiles *self,
+                                                     GFile           *file);
 
 G_END_DECLS
 
