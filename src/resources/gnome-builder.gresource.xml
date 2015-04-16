@@ -55,6 +55,7 @@
     <file alias="ui/gb-preferences-window.ui">../../data/ui/gb-preferences-window.ui</file>
     <file alias="ui/gb-projects-dialog.ui">../../data/ui/gb-projects-dialog.ui</file>
     <file alias="ui/gb-recent-project-row.ui">../../data/ui/gb-recent-project-row.ui</file>
+    <file alias="ui/gb-rename-file-popover.ui">../../data/ui/gb-rename-file-popover.ui</file>
     <file alias="ui/gb-search-box.ui">../../data/ui/gb-search-box.ui</file>
     <file alias="ui/gb-search-display-group.ui">../../data/ui/gb-search-display-group.ui</file>
     <file alias="ui/gb-search-display-row.ui">../../data/ui/gb-search-display-row.ui</file>

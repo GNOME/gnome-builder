@@ -105,6 +105,8 @@ libgnome_builder_la_SOURCES = \
 	src/project-tree/gb-project-tree-builder.c \
 	src/project-tree/gb-project-tree-builder.h \
 	src/project-tree/gb-project-tree-private.h \
+	src/project-tree/gb-rename-file-popover.c \
+	src/project-tree/gb-rename-file-popover.h \
 	src/scrolledwindow/gb-scrolled-window.c \
 	src/scrolledwindow/gb-scrolled-window.h \
 	src/search/gb-search-box.c \
