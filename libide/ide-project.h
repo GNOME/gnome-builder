@@ -26,24 +26,19 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT (ide_project_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeProject, ide_project, IDE, PROJECT, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeProject, ide_project, IDE, PROJECT, IdeObject)
 
-struct _IdeProjectClass
-{
-  IdeObjectClass parent;
-};
-
-IdeProjectItem  *ide_project_get_root           (IdeProject           *project);
-const gchar     *ide_project_get_name           (IdeProject           *project);
-IdeFile         *ide_project_get_file_for_path  (IdeProject           *project,
+IdeProjectItem  *ide_project_get_root           (IdeProject           *self);
+const gchar     *ide_project_get_name           (IdeProject           *self);
+IdeFile         *ide_project_get_file_for_path  (IdeProject           *self,
                                                  const gchar          *path);
 IdeFile         *ide_project_get_project_file   (IdeProject           *self,
                                                  GFile                *gfile);
-void             ide_project_reader_lock        (IdeProject           *project);
-void             ide_project_reader_unlock      (IdeProject           *project);
-void             ide_project_writer_lock        (IdeProject           *project);
-void             ide_project_writer_unlock      (IdeProject           *project);
-void             ide_project_add_file           (IdeProject           *project,
+void             ide_project_reader_lock        (IdeProject           *self);
+void             ide_project_reader_unlock      (IdeProject           *self);
+void             ide_project_writer_lock        (IdeProject           *self);
+void             ide_project_writer_unlock      (IdeProject           *self);
+void             ide_project_add_file           (IdeProject           *self,
                                                  IdeProjectFile       *file);
 IdeProjectFiles *ide_project_get_files          (IdeProject           *self);
 void             ide_project_rename_file_async  (IdeProject           *self,
@@ -52,7 +47,7 @@ void             ide_project_rename_file_async  (IdeProject           *self,
                                                  GCancellable         *cancellable,
                                                  GAsyncReadyCallback   callback,
                                                  gpointer              user_data);
-gboolean         ide_project_rename_file_finish (IdeProject           *project,
+gboolean         ide_project_rename_file_finish (IdeProject           *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);
 void             ide_project_trash_file_async   (IdeProject           *self,

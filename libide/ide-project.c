@@ -26,12 +26,14 @@
 #include "ide-project-item.h"
 #include "ide-vcs.h"
 
-typedef struct
+struct _IdeProject
 {
+  IdeObject       parent_instance;
+
   GRWLock         rw_lock;
   IdeProjectItem *root;
   gchar          *name;
-} IdeProjectPrivate;
+};
 
 typedef struct
 {
@@ -39,7 +41,7 @@ typedef struct
   GFile *new_file;
 } RenameFile;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeProject, ide_project, IDE_TYPE_OBJECT)
+G_DEFINE_TYPE (IdeProject, ide_project, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -53,66 +55,54 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 void
 ide_project_reader_lock (IdeProject *self)
 {
-  IdeProjectPrivate *priv = ide_project_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_PROJECT (self));
 
-  g_rw_lock_reader_lock (&priv->rw_lock);
+  g_rw_lock_reader_lock (&self->rw_lock);
 }
 
 void
 ide_project_reader_unlock (IdeProject *self)
 {
-  IdeProjectPrivate *priv = ide_project_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_PROJECT (self));
 
-  g_rw_lock_reader_unlock (&priv->rw_lock);
+  g_rw_lock_reader_unlock (&self->rw_lock);
 }
 
 void
 ide_project_writer_lock (IdeProject *self)
 {
-  IdeProjectPrivate *priv = ide_project_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_PROJECT (self));
 
-  g_rw_lock_writer_lock (&priv->rw_lock);
+  g_rw_lock_writer_lock (&self->rw_lock);
 }
 
 void
 ide_project_writer_unlock (IdeProject *self)
 {
-  IdeProjectPrivate *priv = ide_project_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_PROJECT (self));
 
-  g_rw_lock_writer_unlock (&priv->rw_lock);
+  g_rw_lock_writer_unlock (&self->rw_lock);
 }
 
 const gchar *
-ide_project_get_name (IdeProject *project)
+ide_project_get_name (IdeProject *self)
 {
-  IdeProjectPrivate *priv = ide_project_get_instance_private (project);
+  g_return_val_if_fail (IDE_IS_PROJECT (self), NULL);
 
-  g_return_val_if_fail (IDE_IS_PROJECT (project), NULL);
-
-  return priv->name;
+  return self->name;
 }
 
 void
-_ide_project_set_name (IdeProject  *project,
+_ide_project_set_name (IdeProject  *self,
                        const gchar *name)
 {
-  IdeProjectPrivate *priv = ide_project_get_instance_private (project);
+  g_return_if_fail (IDE_IS_PROJECT (self));
 
-  g_return_if_fail (IDE_IS_PROJECT (project));
-
-  if (priv->name != name)
+  if (self->name != name)
     {
-      g_free (priv->name);
-      priv->name = g_strdup (name);
-      g_object_notify_by_pspec (G_OBJECT (project), gParamSpecs [PROP_NAME]);
+      g_free (self->name);
+      self->name = g_strdup (name);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_NAME]);
     }
 }
 
@@ -133,27 +123,24 @@ _ide_project_set_name (IdeProject  *project,
  * Returns: (transfer none): An #IdeProjectItem.
  */
 IdeProjectItem *
-ide_project_get_root (IdeProject *project)
+ide_project_get_root (IdeProject *self)
 {
-  IdeProjectPrivate *priv = ide_project_get_instance_private (project);
+  g_return_val_if_fail (IDE_IS_PROJECT (self),  NULL);
 
-  g_return_val_if_fail (IDE_IS_PROJECT (project),  NULL);
-
-  return priv->root;
+  return self->root;
 }
 
 static void
-ide_project_set_root (IdeProject     *project,
+ide_project_set_root (IdeProject     *self,
                       IdeProjectItem *root)
 {
-  IdeProjectPrivate *priv = ide_project_get_instance_private (project);
   g_autoptr(IdeProjectItem) allocated = NULL;
   IdeContext *context;
 
-  g_return_if_fail (IDE_IS_PROJECT (project));
+  g_return_if_fail (IDE_IS_PROJECT (self));
   g_return_if_fail (!root || IDE_IS_PROJECT_ITEM (root));
 
-  context = ide_object_get_context (IDE_OBJECT (project));
+  context = ide_object_get_context (IDE_OBJECT (self));
 
   if (!root)
     {
@@ -163,8 +150,8 @@ ide_project_set_root (IdeProject     *project,
       root = allocated;
     }
 
-  if (g_set_object (&priv->root, root))
-    g_object_notify_by_pspec (G_OBJECT (project), gParamSpecs [PROP_ROOT]);
+  if (g_set_object (&self->root, root))
+    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ROOT]);
 }
 
 /**
@@ -319,11 +306,10 @@ static void
 ide_project_finalize (GObject *object)
 {
   IdeProject *self = (IdeProject *)object;
-  IdeProjectPrivate *priv = ide_project_get_instance_private (self);
 
-  g_clear_object (&priv->root);
-  g_clear_pointer (&priv->name, g_free);
-  g_rw_lock_clear (&priv->rw_lock);
+  g_clear_object (&self->root);
+  g_clear_pointer (&self->name, g_free);
+  g_rw_lock_clear (&self->rw_lock);
 
   G_OBJECT_CLASS (ide_project_parent_class)->finalize (object);
 }
@@ -403,9 +389,7 @@ ide_project_class_init (IdeProjectClass *klass)
 static void
 ide_project_init (IdeProject *self)
 {
-  IdeProjectPrivate *priv = ide_project_get_instance_private (self);
-
-  g_rw_lock_init (&priv->rw_lock);
+  g_rw_lock_init (&self->rw_lock);
 }
 
 static void
