@@ -839,10 +839,10 @@ gb_project_tree_actions_update (GbProjectTree *self)
               "enabled", (IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)),
               NULL);
   action_set (group, "open",
-              "enabled", !project_file_is_directory (item),
+              "enabled", (IDE_IS_PROJECT_FILE (item) && !project_file_is_directory (item)),
               NULL);
   action_set (group, "open-with-editor",
-              "enabled", !project_file_is_directory (item),
+              "enabled", (IDE_IS_PROJECT_FILE (item) && !project_file_is_directory (item)),
               NULL);
   action_set (group, "open-containing-folder",
               "enabled", (IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)),
@@ -851,7 +851,7 @@ gb_project_tree_actions_update (GbProjectTree *self)
               "enabled", IDE_IS_PROJECT_FILE (item),
               NULL);
   action_set (group, "move-to-trash",
-              "enabled", IDE_IS_PROJECT_FILE (item),
+              "enabled", (IDE_IS_PROJECT_FILE (item) && !project_file_is_directory (item)),
               NULL);
 
   IDE_EXIT;
