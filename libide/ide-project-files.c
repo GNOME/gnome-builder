@@ -112,8 +112,8 @@ ide_project_files_find_file (IdeProjectFiles *self,
   gchar *path;
   gsize i;
 
-  g_return_if_fail (IDE_IS_PROJECT_FILES (self));
-  g_return_if_fail (G_IS_FILE (file));
+  g_return_val_if_fail (IDE_IS_PROJECT_FILES (self), NULL);
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
 
   item = IDE_PROJECT_ITEM (self);
   context = ide_object_get_context (IDE_OBJECT (self));
