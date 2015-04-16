@@ -23,6 +23,7 @@
 
 #include "gb-tree.h"
 #include "gb-tree-node.h"
+#include "gb-widget.h"
 
 struct _GbTreePrivate
 {
@@ -55,6 +56,7 @@ enum {
 };
 
 enum {
+  ACTION,
   POPULATE_POPUP,
   LAST_SIGNAL
 };
@@ -1117,6 +1119,33 @@ gb_tree_find_item (GbTree  *self,
   return lookup.result;
 }
 
+static void
+gb_tree_real_action (GbTree      *self,
+                     const gchar *prefix,
+                     const gchar *action_name,
+                     const gchar *param)
+{
+  GVariant *variant = NULL;
+
+  g_assert (GB_IS_TREE (self));
+
+  if (*param != 0)
+    {
+      g_autoptr(GError) error = NULL;
+
+      variant = g_variant_parse (NULL, param, NULL, NULL, &error);
+
+      if (variant == NULL)
+        {
+          g_warning ("can't parse keybinding parameters \"%s\": %s",
+                     param, error->message);
+          return;
+        }
+    }
+
+  gb_widget_activate_action (GTK_WIDGET (self), prefix, action_name, variant);
+}
+
 /**
  * gb_tree_finalize:
  * @object: (in): A #GbTree.
@@ -1228,6 +1257,8 @@ gb_tree_class_init (GbTreeClass *klass)
   widget_class = GTK_WIDGET_CLASS (klass);
   widget_class->popup_menu = gb_tree_popup_menu;
 
+  klass->action = gb_tree_real_action;
+
   gParamSpecs[PROP_ROOT] =
     g_param_spec_object ("root",
                          _ ("Root"),
@@ -1255,6 +1286,19 @@ gb_tree_class_init (GbTreeClass *klass)
                            G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SHOW_ICONS,
                                    gParamSpecs [PROP_SHOW_ICONS]);
+
+  gSignals [ACTION] =
+    g_signal_new ("action",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GbTreeClass, action),
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  3,
+                  G_TYPE_STRING,
+                  G_TYPE_STRING,
+                  G_TYPE_STRING);
 
   gSignals [POPULATE_POPUP] =
     g_signal_new ("populate-popup",
