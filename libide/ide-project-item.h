@@ -35,6 +35,8 @@ struct _IdeProjectItemClass
 IdeProjectItem *ide_project_item_get_parent   (IdeProjectItem *item);
 void            ide_project_item_append       (IdeProjectItem *item,
                                                IdeProjectItem *child);
+void            ide_project_item_remove       (IdeProjectItem *item,
+                                               IdeProjectItem *child);
 GSequence      *ide_project_item_get_children (IdeProjectItem *item);
 
 G_END_DECLS

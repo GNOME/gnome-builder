@@ -60,6 +60,34 @@ ide_project_item_append (IdeProjectItem *item,
   g_sequence_append (priv->children, g_object_ref (child));
 }
 
+void
+ide_project_item_remove (IdeProjectItem *item,
+                         IdeProjectItem *child)
+{
+  IdeProjectItemPrivate *priv = ide_project_item_get_instance_private (item);
+  GSequenceIter *iter;
+
+  g_return_if_fail (IDE_IS_PROJECT_ITEM (item));
+  g_return_if_fail (IDE_IS_PROJECT_ITEM (child));
+  g_return_if_fail (item == ide_project_item_get_parent (child));
+
+  if (priv->children == NULL)
+    return;
+
+  for (iter = g_sequence_get_begin_iter (priv->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      if (g_sequence_get (iter) == child)
+        {
+          g_sequence_remove (iter);
+          g_object_set (child, "parent", NULL, NULL);
+          g_object_unref (child);
+          break;
+        }
+    }
+}
+
 /**
  * ide_project_item_get_children:
  *
