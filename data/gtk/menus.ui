@@ -182,6 +182,14 @@
       </item>
     </section>
   </menu>
+  <menu id="gb-project-tree-rename">
+    <section id="gb-project-tree-rename-section">
+      <item>
+        <attribute name="label" translatable="yes">_Rename</attribute>
+        <attribute name="action">project-tree.rename-file</attribute>
+      </item>
+    </section>
+  </menu>
   <menu id="gb-project-tree-build">
     <section id="gb-project-tree-build-section">
       <item>
