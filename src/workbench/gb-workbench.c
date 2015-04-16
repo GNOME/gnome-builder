@@ -550,8 +550,20 @@ gb_workbench_set_active_workspace (GbWorkbench *self,
 }
 
 static gboolean
-supports_content_type (const gchar *content_type)
+supports_content_type (const gchar *filename,
+                       const gchar *content_type)
 {
+  GtkSourceLanguageManager *languages;
+  GtkSourceLanguage *language;
+
+  /* TODO: This really belongs in it's own module, or as part of buffermanager */
+
+  languages = gtk_source_language_manager_get_default ();
+  language = gtk_source_language_manager_guess_language (languages, filename, content_type);
+
+  if (language != NULL)
+    return TRUE;
+
   return (g_str_has_prefix (content_type, "text/") ||
           g_str_equal (content_type, "application/javascript") ||
           g_str_equal (content_type, "application/sql") ||
@@ -580,6 +592,7 @@ gb_workbench__query_info_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   g_autoptr(GFileInfo) file_info = NULL;
   const gchar *content_type;
+  const gchar *name;
 
   file_info = g_file_query_info_finish (file, result, &error);
 
@@ -593,6 +606,7 @@ gb_workbench__query_info_cb (GObject      *object,
 
   g_assert (G_IS_FILE_INFO (file_info));
 
+  name = g_file_info_get_name (file_info);
   content_type = g_file_info_get_attribute_string (file_info,
                                                    G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
 
@@ -603,7 +617,7 @@ gb_workbench__query_info_cb (GObject      *object,
   g_debug ("Open with content_type=\"%s\"", content_type);
 
   /* If this doesn't look like text, let's open it with xdg-open */
-  if (!supports_content_type (content_type))
+  if (!supports_content_type (name, content_type))
     {
       g_autofree gchar *uri = NULL;
 
