@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gb-project-tree-actions"
+
 #include <glib/gi18n.h>
 #include <gio/gdesktopappinfo.h>
 
@@ -699,8 +701,76 @@ gb_project_tree_actions_rename_file (GSimpleAction *action,
   gb_tree_node_show_popover (selected, popover);
 }
 
+static void
+gb_project_tree_actions__trash_file_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  IdeProject *project = (IdeProject *)object;
+  g_autoptr(GbProjectTree) self = user_data;
+  g_autoptr(GError) error = NULL;
+  GbTreeNode *node;
+  GObject *item = NULL;
+
+  g_assert (IDE_IS_PROJECT (project));
+  g_assert (GB_IS_PROJECT_TREE (self));
+
+  if (!ide_project_trash_file_finish (project, result, &error))
+    {
+      /* todo: warning dialog */
+      g_warning ("%s", error->message);
+      return;
+    }
+
+  /* todo: this should be done with tree observer */
+  if ((node = gb_tree_get_selected (GB_TREE (self))))
+    {
+      if ((node = gb_tree_node_get_parent (node)))
+        item = gb_tree_node_get_item (node);
+    }
+
+  gb_tree_rebuild (GB_TREE (self));
+
+  if ((node = gb_tree_find_item (GB_TREE (self), item)))
+    gb_tree_node_expand (node, TRUE);
+}
+
+static void
+gb_project_tree_actions_move_to_trash (GSimpleAction *action,
+                                       GVariant      *param,
+                                       gpointer       user_data)
+{
+  GbProjectTree *self = user_data;
+  GbWorkbench *workbench;
+  IdeContext *context;
+  IdeProject *project;
+  GbTreeNode *node;
+  GFile *file;
+  GObject *item;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GB_IS_PROJECT_TREE (self));
+
+  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+  context = gb_workbench_get_context (workbench);
+  project = ide_context_get_project (context);
+
+  if (!(node = gb_tree_get_selected (GB_TREE (self))) ||
+      !(item = gb_tree_node_get_item (node)) ||
+      !IDE_IS_PROJECT_FILE (item) ||
+      !(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))))
+    return;
+
+  ide_project_trash_file_async (project,
+                                file,
+                                NULL,
+                                gb_project_tree_actions__trash_file_cb,
+                                g_object_ref (self));
+}
+
 static GActionEntry GbProjectTreeActions[] = {
   { "collapse-all-nodes",     gb_project_tree_actions_collapse_all_nodes },
+  { "move-to-trash",          gb_project_tree_actions_move_to_trash },
   { "new-directory",          gb_project_tree_actions_new_directory },
   { "new-file",               gb_project_tree_actions_new_file },
   { "open",                   gb_project_tree_actions_open },
@@ -778,6 +848,9 @@ gb_project_tree_actions_update (GbProjectTree *self)
               "enabled", (IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)),
               NULL);
   action_set (group, "rename-file",
+              "enabled", IDE_IS_PROJECT_FILE (item),
+              NULL);
+  action_set (group, "move-to-trash",
               "enabled", IDE_IS_PROJECT_FILE (item),
               NULL);
 

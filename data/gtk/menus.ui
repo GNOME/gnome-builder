@@ -190,6 +190,14 @@
       </item>
     </section>
   </menu>
+  <menu id="gb-project-tree-move-to-trash">
+    <section id="gb-project-tree-move-to-trash-section">
+      <item>
+        <attribute name="label" translatable="yes">Mo_ve to Trash</attribute>
+        <attribute name="action">project-tree.move-to-trash</attribute>
+      </item>
+    </section>
+  </menu>
   <menu id="gb-project-tree-build">
     <section id="gb-project-tree-build-section">
       <item>

@@ -294,6 +294,9 @@ gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
 
   if (IDE_IS_PROJECT_FILE (item))
     {
+      submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-move-to-trash");
+      g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
+
       submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-rename");
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
 
