@@ -39,6 +39,8 @@ struct _IdeProjectInfo
   GFile     *directory;
   GFile     *file;
   gchar     *name;
+
+  gint       priority;
 };
 
 G_DEFINE_TYPE (IdeProjectInfo, ide_project_info, G_TYPE_OBJECT)
@@ -49,10 +51,32 @@ enum {
   PROP_FILE,
   PROP_LAST_MODIFIED_AT,
   PROP_NAME,
+  PROP_PRIORITY,
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+gint
+ide_project_info_get_priority (IdeProjectInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), 0);
+
+  return self->priority;
+}
+
+void
+ide_project_info_set_priority (IdeProjectInfo *self,
+                               gint            priority)
+{
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+
+  if (self->priority != priority)
+    {
+      self->priority = priority;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PRIORITY]);
+    }
+}
 
 /**
  * ide_project_info_get_directory:
@@ -199,6 +223,10 @@ ide_project_info_get_property (GObject    *object,
       g_value_set_string (value, ide_project_info_get_name (self));
       break;
 
+    case PROP_PRIORITY:
+      g_value_set_int (value, ide_project_info_get_priority (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -228,6 +256,10 @@ ide_project_info_set_property (GObject      *object,
 
     case PROP_NAME:
       ide_project_info_set_name (self, g_value_get_string (value));
+      break;
+
+    case PROP_PRIORITY:
+      ide_project_info_set_priority (self, g_value_get_int (value));
       break;
 
     default:
@@ -276,6 +308,16 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_LAST_MODIFIED_AT,
                                    gParamSpecs [PROP_LAST_MODIFIED_AT]);
+
+  gParamSpecs [PROP_PRIORITY] =
+    g_param_spec_int ("priority",
+                      _("Priority"),
+                      _("The priority of the project info type."),
+                      G_MININT,
+                      G_MAXINT,
+                      0,
+                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_PRIORITY, gParamSpecs [PROP_PRIORITY]);
 }
 
 static void

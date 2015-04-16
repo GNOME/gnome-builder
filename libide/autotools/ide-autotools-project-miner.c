@@ -92,6 +92,7 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
                                "file", file,
                                "last-modified-at", last_modified_at,
                                "name", name,
+                               "priority", IDE_AUTOTOOLS_PROJECT_MINER_PRIORITY,
                                NULL);
 
   ide_project_miner_emit_discovered (IDE_PROJECT_MINER (self), project_info);

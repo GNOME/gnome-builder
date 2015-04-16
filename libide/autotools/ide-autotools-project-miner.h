@@ -23,7 +23,8 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_AUTOTOOLS_PROJECT_MINER (ide_autotools_project_miner_get_type())
+#define IDE_TYPE_AUTOTOOLS_PROJECT_MINER     (ide_autotools_project_miner_get_type())
+#define IDE_AUTOTOOLS_PROJECT_MINER_PRIORITY 100
 
 G_DECLARE_FINAL_TYPE (IdeAutotoolsProjectMiner, ide_autotools_project_miner,
                       IDE, AUTOTOOLS_PROJECT_MINER, IdeProjectMiner)
