@@ -28,11 +28,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeDirectoryVcs, ide_directory_vcs,
                       IDE, DIRECTORY_VCS, IdeVcs)
 
-struct _IdeDirectoryVcs
-{
-  GObject parent_instance;
-};
-
 G_END_DECLS
 
 #endif /* IDE_DIRECTORY_VCS_H */

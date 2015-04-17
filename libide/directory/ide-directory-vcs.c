@@ -22,17 +22,18 @@
 #include "ide-directory-vcs.h"
 #include "ide-project.h"
 
-typedef struct
+struct _IdeDirectoryVcs
 {
-  GFile *working_directory;
-} IdeDirectoryVcsPrivate;
+  IdeVcs  parent_instance;
+
+  GFile  *working_directory;
+};
 
 #define LOAD_MAX_FILES 5000
 
 static void async_initable_iface_init (GAsyncInitableIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeDirectoryVcs, ide_directory_vcs, IDE_TYPE_VCS, 0,
-                        G_ADD_PRIVATE (IdeDirectoryVcs)
                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
                                                async_initable_iface_init))
 
@@ -40,11 +41,10 @@ static GFile *
 ide_directory_vcs_get_working_directory (IdeVcs *vcs)
 {
   IdeDirectoryVcs *self = (IdeDirectoryVcs *)vcs;
-  IdeDirectoryVcsPrivate *priv = ide_directory_vcs_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_DIRECTORY_VCS (vcs), NULL);
 
-  return priv->working_directory;
+  return self->working_directory;
 }
 
 static gboolean
@@ -84,9 +84,8 @@ static void
 ide_directory_vcs_dispose (GObject *object)
 {
   IdeDirectoryVcs *self = (IdeDirectoryVcs *)object;
-  IdeDirectoryVcsPrivate *priv = ide_directory_vcs_get_instance_private (self);
 
-  g_clear_object (&priv->working_directory);
+  g_clear_object (&self->working_directory);
 
   G_OBJECT_CLASS (ide_directory_vcs_parent_class)->dispose (object);
 }
@@ -109,6 +108,43 @@ ide_directory_vcs_init (IdeDirectoryVcs *self)
 }
 
 static void
+ide_directory_vcs_init_worker (GTask        *task,
+                               gpointer      source_object,
+                               gpointer      task_data,
+                               GCancellable *cancellable)
+{
+  IdeDirectoryVcs *self = source_object;
+  g_autoptr(GFileInfo) file_info = NULL;
+  GFile *file = task_data;
+  GError *error = NULL;
+  GFileType file_type;
+
+  g_assert (IDE_IS_DIRECTORY_VCS (self));
+  g_assert (G_IS_FILE (file));
+
+  file_info = g_file_query_info (file,
+                                 G_FILE_ATTRIBUTE_STANDARD_TYPE,
+                                 G_FILE_QUERY_INFO_NONE,
+                                 cancellable,
+                                 &error);
+
+  if (file_info == NULL)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  file_type = g_file_info_get_file_type (file_info);
+
+  if (file_type == G_FILE_TYPE_DIRECTORY)
+    self->working_directory = g_object_ref (file);
+  else
+    self->working_directory = g_file_get_parent (file);
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_directory_vcs_init_async (GAsyncInitable      *initable,
                               int                  io_priority,
                               GCancellable        *cancellable,
@@ -116,21 +152,19 @@ ide_directory_vcs_init_async (GAsyncInitable      *initable,
                               gpointer             user_data)
 {
   IdeDirectoryVcs *self = (IdeDirectoryVcs *)initable;
-  IdeDirectoryVcsPrivate *priv = ide_directory_vcs_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
   IdeContext *context;
-  GFile *directory;
+  GFile *project_file;
 
   g_return_if_fail (IDE_IS_DIRECTORY_VCS (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (initable));
-  directory = ide_context_get_project_file (context);
-
-  priv->working_directory = g_object_ref (directory);
+  project_file = ide_context_get_project_file (context);
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_return_boolean (task, TRUE);
+  g_task_set_task_data (task, g_object_ref (project_file), g_object_unref);
+  g_task_run_in_thread (task, ide_directory_vcs_init_worker);
 }
 
 static gboolean
