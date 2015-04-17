@@ -27,6 +27,7 @@
 
 #include "gb-application.h"
 #include "gb-editor-document.h"
+#include "gb-gdk.h"
 #include "gb-glib.h"
 #include "gb-new-project-dialog.h"
 #include "gb-projects-dialog.h"
@@ -540,45 +541,29 @@ gb_projects_dialog_constructed (GObject *object)
 
 static gboolean
 gb_projects_dialog_key_press_event (GtkWidget   *widget,
-                                   GdkEventKey *event)
+                                    GdkEventKey *event)
 {
   GbProjectsDialog *self = (GbProjectsDialog *)widget;
-  gboolean ret;
 
-  ret = GTK_WIDGET_CLASS (gb_projects_dialog_parent_class)->key_press_event (widget, event);
+  g_assert (GB_IS_PROJECTS_DIALOG (self));
+  g_assert (event != NULL);
 
-  if (!ret)
+  if (GTK_WIDGET_CLASS (gb_projects_dialog_parent_class)->key_press_event (widget, event))
+    return TRUE;
+
+  if (!gtk_toggle_button_get_active (self->search_button))
     {
-      switch (event->keyval)
+      if (!gb_gdk_event_key_is_keynav (event) &&
+          !gb_gdk_event_key_is_space (event) &&
+          !gb_gdk_event_key_is_tab (event))
         {
-        case GDK_KEY_Escape:
-          if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->select_button)))
-            {
-              gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->select_button), FALSE);
-              ret = TRUE;
-            }
-          if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->search_button)))
-            {
-              gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), FALSE);
-              ret = TRUE;
-            }
-          break;
-
-        case GDK_KEY_f:
-          if ((event->state & GDK_CONTROL_MASK) != 0)
-            {
-              gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->search_button), TRUE);
-              ret = TRUE;
-            }
-          break;
-
-        default:
-          break;
+          gtk_toggle_button_set_active (self->search_button, TRUE);
+          gtk_search_bar_handle_event (self->search_bar, (GdkEvent *)event);
+          return TRUE;
         }
     }
 
-
-  return ret;
+  return FALSE;
 }
 
 static void
