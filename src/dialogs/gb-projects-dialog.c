@@ -558,7 +558,7 @@ gb_projects_dialog_key_press_event (GtkWidget   *widget,
           !gb_gdk_event_key_is_tab (event))
         {
           gtk_toggle_button_set_active (self->search_button, TRUE);
-          gtk_search_bar_handle_event (self->search_bar, (GdkEvent *)event);
+          gtk_widget_event (GTK_WIDGET (self->search_entry), (GdkEvent *)event);
           return TRUE;
         }
     }
