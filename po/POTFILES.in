@@ -91,6 +91,7 @@ libide/ide-source-view.c
 libide/ide-source-view-capture.c
 libide/ide-source-view-mode.c
 libide/pygobject/ide-pygobject-script.c
+libide/python/ide-python-format-provider.c
 libide/tasks/ide-load-directory-task.c
 libide/theatrics/ide-animation.c
 libide/theatrics/ide-box-theatric.c
