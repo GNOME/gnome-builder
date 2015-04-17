@@ -1335,6 +1335,11 @@
   bind "<ctrl>p" { "move-cursor" (display-lines, -1) };
 }
 
+@binding-set builder-gb-project-tree-vim
+{
+  bind "colon" { "action" ("workbench", "show-command-bar", "") };
+}
+
 /*
  * Sadly, this will draw from the middle, so it does not result in our
  * cursor being over the actual character, but between two characters.
@@ -1567,5 +1572,6 @@ GtkTreeView {
 
 GbProjectTree {
   gtk-key-bindings: builder-vim-tree-view,
+                    builder-gb-project-tree-vim,
                     builder-gb-project-tree;
 }
