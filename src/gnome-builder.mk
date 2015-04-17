@@ -131,6 +131,8 @@ libgnome_builder_la_SOURCES = \
 	src/util/gb-dnd.h \
 	src/util/gb-file-manager.c \
 	src/util/gb-file-manager.h \
+	src/util/gb-gdk.c \
+	src/util/gb-gdk.h \
 	src/util/gb-glib.c \
 	src/util/gb-glib.h \
 	src/util/gb-gtk.c \

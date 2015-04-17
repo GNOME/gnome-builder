@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 
+#include "gb-gdk.h"
 #include "gb-preferences-page-editor.h"
 #include "gb-preferences-page-experimental.h"
 #include "gb-preferences-page-git.h"
@@ -132,57 +133,6 @@ gb_preferences_window_search_changed (GbPreferencesWindow *self,
 }
 
 static gboolean
-is_escape_event (const GdkEventKey *event)
-{
-  return event->keyval == GDK_KEY_Escape;
-}
-
-static gboolean
-is_keynav_event (const GdkEventKey *event)
-{
-  switch (event->keyval)
-    {
-    case GDK_KEY_Escape:
-    case GDK_KEY_Up:
-    case GDK_KEY_KP_Up:
-    case GDK_KEY_Down:
-    case GDK_KEY_KP_Down:
-    case GDK_KEY_Left:
-    case GDK_KEY_KP_Left:
-    case GDK_KEY_Right:
-    case GDK_KEY_KP_Right:
-    case GDK_KEY_Home:
-    case GDK_KEY_KP_Home:
-    case GDK_KEY_End:
-    case GDK_KEY_KP_End:
-    case GDK_KEY_Page_Up:
-    case GDK_KEY_KP_Page_Up:
-    case GDK_KEY_Page_Down:
-    case GDK_KEY_KP_Page_Down:
-      return TRUE;
-    default:
-      break;
-    }
-
-  if ((event->state & GDK_MOD1_MASK) || (event->state & GDK_CONTROL_MASK))
-    return TRUE;
-
-  return FALSE;
-}
-
-static gboolean
-is_space_event (const GdkEventKey *event)
-{
-  return event->keyval == GDK_KEY_space;
-}
-
-static gboolean
-is_tab_event (const GdkEventKey *event)
-{
-  return (event->keyval == GDK_KEY_Tab) || (event->keyval == GDK_KEY_KP_Tab);
-}
-
-static gboolean
 gb_preferences_window_key_press_event (GtkWidget   *widget,
                                        GdkEventKey *event)
 {
@@ -206,13 +156,13 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
     {
       if (!gtk_search_bar_get_search_mode (self->search_bar))
         {
-          if (is_escape_event (event))
+          if (gb_gdk_event_key_is_escape (event))
             {
               g_signal_emit_by_name (widget, "close");
             }
-          else if (!is_keynav_event (event) &&
-                   !is_space_event (event) &&
-                   !is_tab_event (event))
+          else if (!gb_gdk_event_key_is_keynav (event) &&
+                   !gb_gdk_event_key_is_space (event) &&
+                   !gb_gdk_event_key_is_tab (event))
             {
               GtkWidget *current_page;
 
@@ -231,7 +181,7 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
       else
         {
           if (!gtk_widget_is_focus (GTK_WIDGET (self->search_bar)) &&
-              is_escape_event (event))
+              gb_gdk_event_key_is_escape (event))
             gtk_search_bar_set_search_mode (self->search_bar, FALSE);
 
           ret = TRUE;
