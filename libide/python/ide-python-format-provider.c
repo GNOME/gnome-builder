@@ -129,8 +129,6 @@ create_matches_date_time_format (const gchar *text)
   GList *list = NULL;
   gsize i;
 
-  g_print (">>>> %s\n", text);
-
   text = strstr (text, "%");
 
   if (text)
@@ -140,9 +138,6 @@ create_matches_date_time_format (const gchar *text)
           if (g_str_has_prefix (DateTimeFormats [i].format, text))
             {
               g_autofree gchar *markup = NULL;
-              const gchar *insert;
-
-              insert = DateTimeFormats [i].format + strlen (text);
 
               markup = g_strdup_printf ("%s - %s",
                                         DateTimeFormats [i].format,
@@ -150,7 +145,7 @@ create_matches_date_time_format (const gchar *text)
               list = g_list_prepend (list,
                                      g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
                                                    "markup", markup,
-                                                   "text", insert,
+                                                   "text", DateTimeFormats [i].format,
                                                    NULL));
             }
         }
@@ -234,9 +229,25 @@ ide_python_format_provider_get_name (GtkSourceCompletionProvider *provider)
   return g_strdup (_("Format Strings"));
 }
 
+static gboolean
+ide_python_format_provider_get_start_iter (GtkSourceCompletionProvider *provider,
+                                           GtkSourceCompletionContext  *context,
+                                           GtkSourceCompletionProposal *proposal,
+                                           GtkTextIter                 *iter)
+{
+  gtk_source_completion_context_get_iter (context, iter);
+
+  while (gtk_text_iter_get_char (iter) != '%')
+    if (!gtk_text_iter_backward_char (iter))
+      break;
+
+  return gtk_text_iter_get_char (iter) == '%';
+}
+
 static void
 completion_provider_iface_init (GtkSourceCompletionProviderIface *iface)
 {
   iface->populate = ide_python_format_provider_populate;
   iface->get_name = ide_python_format_provider_get_name;
+  iface->get_start_iter = ide_python_format_provider_get_start_iter;
 }
