@@ -27,8 +27,10 @@
 #include "gb-preferences-window.h"
 #include "gb-widget.h"
 
-struct _GbPreferencesWindowPrivate
+struct _GbPreferencesWindow
 {
+  GtkWindow        parent_instance;
+
   GtkWidget       *return_to_page;
   GtkHeaderBar    *right_header_bar;
   GtkSearchEntry  *search_entry;
@@ -36,8 +38,7 @@ struct _GbPreferencesWindowPrivate
   GtkStack        *stack;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesWindow, gb_preferences_window,
-                            GTK_TYPE_WINDOW)
+G_DEFINE_TYPE (GbPreferencesWindow, gb_preferences_window, GTK_TYPE_WINDOW)
 
 enum {
   CLOSE,
@@ -53,29 +54,29 @@ gb_preferences_window_new (void)
 }
 
 static void
-gb_preferences_window_notify_search_mode (GbPreferencesWindow *window,
+gb_preferences_window_notify_search_mode (GbPreferencesWindow *self,
                                           GParamSpec          *pspec,
                                           GtkSearchBar        *search_bar)
 {
-  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
+  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (self));
 
-  if (!gtk_search_bar_get_search_mode (search_bar) && window->priv->return_to_page)
+  if (!gtk_search_bar_get_search_mode (search_bar) && self->return_to_page)
     {
-      gtk_stack_set_visible_child (window->priv->stack, window->priv->return_to_page);
-      window->priv->return_to_page = NULL;
+      gtk_stack_set_visible_child (self->stack, self->return_to_page);
+      self->return_to_page = NULL;
     }
 }
 
 static void
 gb_preferences_window_section_changed (GtkStack            *stack,
                                        GParamSpec          *pspec,
-                                       GbPreferencesWindow *window)
+                                       GbPreferencesWindow *self)
 {
   GtkWidget *visible_child;
   gchar *title = NULL;
 
   g_return_if_fail (GTK_IS_STACK (stack));
-  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
+  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (self));
 
   visible_child = gtk_stack_get_visible_child (stack);
   if (visible_child)
@@ -83,21 +84,21 @@ gb_preferences_window_section_changed (GtkStack            *stack,
                              "title", &title,
                              NULL);
 
-  gtk_header_bar_set_title (window->priv->right_header_bar, title);
+  gtk_header_bar_set_title (self->right_header_bar, title);
 
   g_free (title);
 }
 
 static void
-gb_preferences_window_close (GbPreferencesWindow *window)
+gb_preferences_window_close (GbPreferencesWindow *self)
 {
-  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
+  g_assert (GB_IS_PREFERENCES_WINDOW (self));
 
-  gtk_window_close (GTK_WINDOW (window));
+  gtk_window_close (GTK_WINDOW (self));
 }
 
 static void
-gb_preferences_window_search_changed (GbPreferencesWindow *window,
+gb_preferences_window_search_changed (GbPreferencesWindow *self,
                                       GtkSearchEntry      *entry)
 {
   GList *pages;
@@ -105,7 +106,7 @@ gb_preferences_window_search_changed (GbPreferencesWindow *window,
   const gchar *text;
   gchar **keywords;
 
-  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (window));
+  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (self));
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   text = gtk_entry_get_text (GTK_ENTRY (entry));
@@ -114,7 +115,7 @@ gb_preferences_window_search_changed (GbPreferencesWindow *window,
   if (g_strv_length (keywords) == 0)
     g_clear_pointer (&keywords, g_strfreev);
 
-  pages = gtk_container_get_children (GTK_CONTAINER (window->priv->stack));
+  pages = gtk_container_get_children (GTK_CONTAINER (self->stack));
 
   for (iter = pages; iter; iter = iter->next)
     {
@@ -203,7 +204,7 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
 
   if (!ret && !editable)
     {
-      if (!gtk_search_bar_get_search_mode (self->priv->search_bar))
+      if (!gtk_search_bar_get_search_mode (self->search_bar))
         {
           if (is_escape_event (event))
             {
@@ -215,12 +216,12 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
             {
               GtkWidget *current_page;
 
-              current_page = gtk_stack_get_visible_child (self->priv->stack);
+              current_page = gtk_stack_get_visible_child (self->stack);
 
-              if (gtk_search_bar_handle_event (GTK_SEARCH_BAR (self->priv->search_bar),
+              if (gtk_search_bar_handle_event (GTK_SEARCH_BAR (self->search_bar),
                                                (GdkEvent*) event) == GDK_EVENT_STOP)
                 {
-                  self->priv->return_to_page = current_page;
+                  self->return_to_page = current_page;
                   ret = TRUE;
                 }
               else
@@ -229,9 +230,9 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
         }
       else
         {
-          if (!gtk_widget_is_focus (GTK_WIDGET (self->priv->search_bar)) &&
+          if (!gtk_widget_is_focus (GTK_WIDGET (self->search_bar)) &&
               is_escape_event (event))
-            gtk_search_bar_set_search_mode (self->priv->search_bar, FALSE);
+            gtk_search_bar_set_search_mode (self->search_bar, FALSE);
 
           ret = TRUE;
         }
@@ -243,56 +244,30 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
 static void
 gb_preferences_window_constructed (GObject *object)
 {
-  GbPreferencesWindow *window = (GbPreferencesWindow *)object;
+  GbPreferencesWindow *self = (GbPreferencesWindow *)object;
 
   G_OBJECT_CLASS (gb_preferences_window_parent_class)->constructed (object);
 
-  gtk_search_bar_connect_entry (window->priv->search_bar,
-                                GTK_ENTRY (window->priv->search_entry));
+  gtk_search_bar_connect_entry (self->search_bar,
+                                GTK_ENTRY (self->search_entry));
 
-  g_signal_connect (window->priv->stack,
+  g_signal_connect (self->stack,
                     "notify::visible-child",
                     G_CALLBACK (gb_preferences_window_section_changed),
-                    window);
-  gb_preferences_window_section_changed (window->priv->stack, NULL, window);
+                    self);
+  gb_preferences_window_section_changed (self->stack, NULL, self);
 
-  g_signal_connect_object (window->priv->search_bar,
+  g_signal_connect_object (self->search_bar,
                            "notify::search-mode-enabled",
                            G_CALLBACK (gb_preferences_window_notify_search_mode),
-                           window,
+                           self,
                            G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
-  g_signal_connect_object (window->priv->search_entry,
+  g_signal_connect_object (self->search_entry,
                            "changed",
                            G_CALLBACK (gb_preferences_window_search_changed),
-                           window,
+                           self,
                            G_CONNECT_SWAPPED);
-}
-
-static void
-gb_preferences_window_get_property (GObject    *object,
-                                    guint       prop_id,
-                                    GValue     *value,
-                                    GParamSpec *pspec)
-{
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-gb_preferences_window_set_property (GObject      *object,
-                                    guint         prop_id,
-                                    const GValue *value,
-                                    GParamSpec   *pspec)
-{
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
 }
 
 static void
@@ -302,29 +277,25 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gb_preferences_window_constructed;
-  object_class->get_property = gb_preferences_window_get_property;
-  object_class->set_property = gb_preferences_window_set_property;
 
   widget_class->key_press_event = gb_preferences_window_key_press_event;
 
-  klass->close = gb_preferences_window_close;
-
   gSignals [CLOSE] =
-    g_signal_new ("close",
-                  GB_TYPE_PREFERENCES_WINDOW,
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GbPreferencesWindowClass, close),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE,
-                  0);
+    g_signal_new_class_handler ("close",
+                                G_TYPE_FROM_CLASS (klass),
+                                (G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION),
+                                G_CALLBACK (gb_preferences_window_close),
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__VOID,
+                                G_TYPE_NONE,
+                                0);
 
   GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-preferences-window.ui");
 
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesWindow, right_header_bar);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesWindow, search_bar);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesWindow, search_entry);
-  GB_WIDGET_CLASS_BIND_PRIVATE (widget_class, GbPreferencesWindow, stack);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, right_header_bar);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, search_bar);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, search_entry);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, stack);
 
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EDITOR);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EXPERIMENTAL);
@@ -336,7 +307,5 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
 static void
 gb_preferences_window_init (GbPreferencesWindow *self)
 {
-  self->priv = gb_preferences_window_get_instance_private (self);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 }
