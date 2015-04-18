@@ -74,7 +74,7 @@
                     <child>
                       <object class="GtkImage">
                         <property name="visible">true</property>
-                        <property name="icon-name">system-file-manager-symbolic</property>
+                        <property name="icon-name">view-list-symbolic</property>
                       </object>
                     </child>
                   </object>
