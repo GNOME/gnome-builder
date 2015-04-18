@@ -33,6 +33,7 @@
 #include "gb-projects-dialog.h"
 #include "gb-recent-project-row.h"
 #include "gb-scrolled-window.h"
+#include "gb-settings.h"
 #include "gb-string.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
@@ -608,6 +609,8 @@ static void
 gb_projects_dialog_init (GbProjectsDialog *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gb_settings_init_window (GTK_WINDOW (self));
 
   self->recent_projects = ide_recent_projects_new ();
 }

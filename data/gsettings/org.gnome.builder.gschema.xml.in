@@ -1,0 +1,19 @@
+<schemalist>
+  <schema id="org.gnome.builder" path="/org/gnome/builder/" gettext-domain="gnome-builder">
+    <key name="window-size" type="(ii)">
+      <default>(-1, -1)</default>
+      <summary>Window size</summary>
+      <description>Window size (width and height).</description>
+    </key>
+    <key name="window-position" type="(ii)">
+      <default>(-1,-1)</default>
+      <summary>Window position</summary>
+      <description>Window position (x and y).</description>
+    </key>
+    <key name="window-maximized" type="b">
+      <default>true</default>
+      <summary>Window maximized</summary>
+      <description>Window maximized state</description>
+    </key>
+  </schema>
+</schemalist>

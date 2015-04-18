@@ -43,27 +43,6 @@
 G_DEFINE_TYPE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
 
 static void
-get_default_size (GtkRequisition *req)
-{
-  GdkScreen *screen;
-  GdkRectangle rect;
-  gint primary;
-
-  screen = gdk_screen_get_default ();
-  primary = gdk_screen_get_primary_monitor (screen);
-  gdk_screen_get_monitor_geometry (screen, primary, &rect);
-
-  req->width = rect.width * 0.75;
-  req->height = rect.height * 0.75;
-
-  if ((req->width == 0) || (req->height == 0))
-    {
-      req->width = 1080;
-      req->height = 675;
-    }
-}
-
-static void
 gb_application_setup_search_paths (void)
 {
   GtkSourceStyleSchemeManager *style_scheme_manager;
@@ -250,7 +229,6 @@ gb_application__context_new_cb (GObject      *object,
   IdeBufferManager *bufmgr;
   GbApplication *self;
   GbWorkbench *workbench;
-  GtkRequisition req;
   GPtrArray *ar;
   gboolean ret = FALSE;
   GError *error = NULL;
@@ -288,13 +266,9 @@ gb_application__context_new_cb (GObject      *object,
   bufmgr = ide_context_get_buffer_manager (context);
   g_signal_connect (bufmgr, "create-buffer", G_CALLBACK (on_create_buffer), NULL);
 
-  get_default_size (&req);
-
   workbench = g_object_new (GB_TYPE_WORKBENCH,
                             "application", self,
                             "context", context,
-                            "default-width", req.width,
-                            "default-height", req.height,
                             NULL);
 
   if (ar->len == 0)
@@ -310,7 +284,6 @@ gb_application__context_new_cb (GObject      *object,
       gb_workbench_open (workbench, file);
     }
 
-  gtk_window_maximize (GTK_WINDOW (workbench));
   gtk_window_present (GTK_WINDOW (workbench));
 
   ret = TRUE;
@@ -456,7 +429,6 @@ void
 gb_application_show_projects_window (GbApplication *self)
 {
   GbProjectsDialog *window;
-  GtkRequisition req;
   GList *windows;
 
   g_assert (GB_IS_APPLICATION (self));
@@ -472,14 +444,9 @@ gb_application_show_projects_window (GbApplication *self)
         }
     }
 
-  get_default_size (&req);
-
   window = g_object_new (GB_TYPE_PROJECTS_DIALOG,
                          "application", self,
-                         "default-width", req.width,
-                         "default-height", req.height,
                          NULL);
-  gtk_window_maximize (GTK_WINDOW (window));
   gtk_window_present (GTK_WINDOW (window));
 }
 

@@ -24,6 +24,7 @@
 #include "gb-command-gaction-provider.h"
 #include "gb-command-vim-provider.h"
 #include "gb-dnd.h"
+#include "gb-settings.h"
 #include "gb-widget.h"
 #include "gb-workbench-actions.h"
 #include "gb-workbench-private.h"
@@ -497,6 +498,8 @@ gb_workbench_init (GbWorkbench *self)
   gtk_drag_dest_set (GTK_WIDGET (self),
                      (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT | GTK_DEST_DEFAULT_DROP),
                      gDropTypes, G_N_ELEMENTS (gDropTypes), GDK_ACTION_COPY);
+
+  gb_settings_init_window (GTK_WINDOW (self));
 
   IDE_EXIT;
 }
