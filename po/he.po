@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-13 23:01+0300\n"
-"PO-Revision-Date: 2015-04-13 23:03+0300\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
+"POT-Creation-Date: 2015-04-19 18:21+0300\n"
+"PO-Revision-Date: 2015-04-19 18:23+0300\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -185,8 +185,8 @@ msgstr "_סגירת הכל"
 msgid "Display Options"
 msgstr "הצגת אפשרויות"
 
-#: ../data/gtk/menus.ui.h:17 ../src/tree/gb-tree.c:1196
-#: ../src/tree/gb-tree.c:1197
+#: ../data/gtk/menus.ui.h:17 ../src/tree/gb-tree.c:1312
+#: ../src/tree/gb-tree.c:1313
 msgid "Show Icons"
 msgstr "הצגת סמלילים"
 
@@ -226,11 +226,19 @@ msgstr "עורך קוד מקור"
 msgid "_Open Containing Folder"
 msgstr "_פתיחת תיקייה מכילה"
 
-#: ../data/gtk/menus.ui.h:27
+#: ../data/gtk/menus.ui.h:27 ../data/ui/gb-rename-file-popover.ui.h:2
+msgid "_Rename"
+msgstr "_שינוי שם"
+
+#: ../data/gtk/menus.ui.h:28
+msgid "Mo_ve to Trash"
+msgstr "ה_עברה לאשפה"
+
+#: ../data/gtk/menus.ui.h:29
 msgid "_Build"
 msgstr "_בנייה"
 
-#: ../data/gtk/menus.ui.h:28
+#: ../data/gtk/menus.ui.h:30
 msgid "_Rebuild"
 msgstr "בנייה מ_חדש"
 
@@ -245,7 +253,7 @@ msgstr "ערכת צבעים כהה עבור Builder המשתמשת בלוח צב
 #: ../data/style-schemes/builder.xml.h:1
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:1
 #: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:47
-#: ../src/workbench/gb-workbench.c:75
+#: ../src/workbench/gb-workbench.c:76
 msgid "Builder"
 msgstr "Builder"
 
@@ -355,7 +363,9 @@ msgid "Rebuild Project"
 msgstr "בנייה מחדש של המיזם"
 
 #: ../data/ui/gb-new-file-popover.ui.h:1
+#: ../data/ui/gb-rename-file-popover.ui.h:1
 #: ../src/project-tree/gb-new-file-popover.c:352
+#: ../src/project-tree/gb-rename-file-popover.c:99
 msgid "File Name"
 msgstr "שם הקובץ"
 
@@ -381,8 +391,8 @@ msgid "From remote source code repository"
 msgstr "ממאגר קוד מקור מרוחק"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:6 ../libide/ide-language.c:384
-#: ../libide/ide-project.c:377 ../libide/ide-project-file.c:265
-#: ../libide/ide-project-info.c:249 ../libide/ide-service.c:138
+#: ../libide/ide-project.c:370 ../libide/ide-project-file.c:275
+#: ../libide/ide-project-info.c:281 ../libide/ide-service.c:138
 #: ../libide/ide-source-view-mode.c:260
 msgid "Name"
 msgstr "Name"
@@ -423,7 +433,7 @@ msgstr "יש להזין את כתובת מאגר קוד המקור של המיז
 
 #: ../data/ui/gb-new-project-dialog.ui.h:14
 #: ../libide/autotools/ide-autotools-build-task.c:399
-#: ../libide/ide-project-info.c:257
+#: ../libide/ide-project-info.c:289
 #: ../src/project-tree/gb-new-file-popover.c:268
 #: ../src/project-tree/gb-new-file-popover.c:269
 msgid "Directory"
@@ -574,7 +584,7 @@ msgid "Experimental"
 msgstr "ניסיוני"
 
 #: ../data/ui/gb-projects-dialog.ui.h:1
-#: ../src/dialogs/gb-projects-dialog.c:277
+#: ../src/dialogs/gb-projects-dialog.c:308
 msgid "Select Project"
 msgstr "בחירת מיזם"
 
@@ -697,11 +707,11 @@ msgstr "autogen.sh is not executable."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh failed to create configure (%s)"
 
-#: ../libide/autotools/ide-autotools-project-miner.c:306
+#: ../libide/autotools/ide-autotools-project-miner.c:307
 msgid "Root Directory"
 msgstr "Root Directory"
 
-#: ../libide/autotools/ide-autotools-project-miner.c:307
+#: ../libide/autotools/ide-autotools-project-miner.c:308
 msgid "The root directory to scan from."
 msgstr "The root directory to scan from."
 
@@ -718,6 +728,7 @@ msgid "The root makefile to be cached."
 msgstr "The root makefile to be cached."
 
 #: ../libide/c/ide-c-format-provider.c:283
+#: ../libide/python/ide-python-format-provider.c:229
 msgid "Format Strings"
 msgstr "Format Strings"
 
@@ -781,10 +792,11 @@ msgid "File must be saved locally to parse."
 msgstr "File must be saved locally to parse."
 
 #: ../libide/clang/ide-clang-translation-unit.c:545
-#: ../libide/git/ide-git-search-result.c:98 ../libide/ide-buffer.c:966
+#: ../libide/git/ide-git-search-result.c:98 ../libide/ide-buffer.c:940
 #: ../libide/ide-file.c:477 ../libide/ide-file-settings.c:450
-#: ../libide/ide-project-file.c:236 ../libide/ide-project-info.c:265
-#: ../libide/ide-script.c:156
+#: ../libide/ide-project-file.c:248 ../libide/ide-project-info.c:297
+#: ../libide/ide-script.c:156 ../src/project-tree/gb-rename-file-popover.c:305
+#: ../src/project-tree/gb-rename-file-popover.c:306
 msgid "File"
 msgstr "File"
 
@@ -987,57 +999,57 @@ msgstr "The current navigation item."
 msgid "File contained invalid UTF-8"
 msgstr "File contained invalid UTF-8"
 
-#: ../libide/ide-buffer.c:939
+#: ../libide/ide-buffer.c:913
 msgid "Busy"
 msgstr "Busy"
 
-#: ../libide/ide-buffer.c:940
+#: ../libide/ide-buffer.c:914
 msgid "If the buffer is performing background work."
 msgstr "If the buffer is performing background work."
 
-#: ../libide/ide-buffer.c:947
+#: ../libide/ide-buffer.c:921
 msgid "Changed on Volume"
 msgstr "Changed on Volume"
 
-#: ../libide/ide-buffer.c:948
+#: ../libide/ide-buffer.c:922
 msgid "If the file has changed on disk and the buffer is not in sync."
 msgstr "If the file has changed on disk and the buffer is not in sync."
 
-#: ../libide/ide-buffer.c:956 ../libide/ide-object.c:143
+#: ../libide/ide-buffer.c:930 ../libide/ide-object.c:143
 #: ../libide/ide-source-snippet-chunk.c:314
-#: ../src/search/gb-search-display.c:560 ../src/workbench/gb-workbench.c:469
+#: ../src/search/gb-search-display.c:560 ../src/workbench/gb-workbench.c:446
 msgid "Context"
 msgstr "Context"
 
-#: ../libide/ide-buffer.c:957
+#: ../libide/ide-buffer.c:931
 msgid "The IdeContext for the buffer."
 msgstr "The IdeContext for the buffer."
 
-#: ../libide/ide-buffer.c:967
+#: ../libide/ide-buffer.c:941
 msgid "The file represented by the buffer."
 msgstr "The file represented by the buffer."
 
-#: ../libide/ide-buffer.c:974
+#: ../libide/ide-buffer.c:948
 msgid "Highlight Diagnostics"
 msgstr "Highlight Diagnostics"
 
-#: ../libide/ide-buffer.c:975
+#: ../libide/ide-buffer.c:949
 msgid "If diagnostic warnings and errors should be highlighted."
 msgstr "If diagnostic warnings and errors should be highlighted."
 
-#: ../libide/ide-buffer.c:983 ../src/documents/gb-document.c:206
+#: ../libide/ide-buffer.c:957 ../src/documents/gb-document.c:206
 msgid "Read Only"
 msgstr "Read Only"
 
-#: ../libide/ide-buffer.c:984
+#: ../libide/ide-buffer.c:958
 msgid "If the underlying file is read only."
 msgstr "If the underlying file is read only."
 
-#: ../libide/ide-buffer.c:991 ../libide/ide-buffer.c:992
+#: ../libide/ide-buffer.c:965 ../libide/ide-buffer.c:966
 msgid "Style Scheme Name"
 msgstr "Style Scheme Name"
 
-#: ../libide/ide-buffer.c:1000 ../libide/ide-search-result.c:234
+#: ../libide/ide-buffer.c:974 ../libide/ide-search-result.c:234
 #: ../src/documents/gb-document.c:198
 #: ../src/preferences/gb-preferences-page.c:215
 #: ../src/preferences/gb-preferences-switch.c:315 ../src/views/gb-view.c:283
@@ -1045,15 +1057,15 @@ msgstr "Style Scheme Name"
 msgid "Title"
 msgstr "Title"
 
-#: ../libide/ide-buffer.c:1001
+#: ../libide/ide-buffer.c:975
 msgid "The title of the buffer."
 msgstr "The title of the buffer."
 
-#: ../libide/ide-buffer.c:1772
+#: ../libide/ide-buffer.c:1746
 msgid "Failed to resolve symbol"
 msgstr "Failed to resolve symbol"
 
-#: ../libide/ide-buffer.c:1851
+#: ../libide/ide-buffer.c:1825
 msgid "Symbol resolver is not supported."
 msgstr "Symbol resolver is not supported."
 
@@ -1314,7 +1326,7 @@ msgstr "If the file represents a temporary file."
 msgid "The file language."
 msgstr "The file language."
 
-#: ../libide/ide-file.c:504 ../libide/ide-project-file.c:274
+#: ../libide/ide-file.c:504 ../libide/ide-project-file.c:284
 msgid "Path"
 msgstr "Path"
 
@@ -1486,63 +1498,85 @@ msgstr "Message"
 msgid "A short message for the progress."
 msgstr "A short message for the progress."
 
-#: ../libide/ide-project.c:378
+#: ../libide/ide-project.c:371
 msgid "The name of the project."
 msgstr "The name of the project."
 
-#: ../libide/ide-project.c:386 ../src/tree/gb-tree.c:1178
+#: ../libide/ide-project.c:379 ../src/tree/gb-tree.c:1294
 msgid "Root"
 msgstr "Root"
 
-#: ../libide/ide-project.c:387
+#: ../libide/ide-project.c:380
 msgid "The root object for the project."
 msgstr "The root object for the project."
 
-#: ../libide/ide-project-file.c:237
+#: ../libide/ide-project.c:441
+msgid "Destination file must be within the project tree."
+msgstr "Destination file must be within the project tree."
+
+#: ../libide/ide-project.c:452
+msgid "Source file must be within the project tree."
+msgstr "Source file must be within the project tree."
+
+#: ../libide/ide-project.c:619
+msgid "File must be within the project tree."
+msgstr "File must be within the project tree."
+
+#: ../libide/ide-project-file.c:249
 msgid "A GFile to the underlying file."
 msgstr "A GFile to the underlying file."
 
-#: ../libide/ide-project-file.c:245
+#: ../libide/ide-project-file.c:257
 msgid "File Info"
 msgstr "File Info"
 
-#: ../libide/ide-project-file.c:246
+#: ../libide/ide-project-file.c:258
 msgid "The file information for the project file."
 msgstr "The file information for the project file."
 
-#: ../libide/ide-project-file.c:256 ../libide/ide-project-file.c:257
+#: ../libide/ide-project-file.c:266 ../libide/ide-project-file.c:267
+#: ../src/project-tree/gb-rename-file-popover.c:313
+#: ../src/project-tree/gb-rename-file-popover.c:314
 msgid "Is Directory"
 msgstr "Is Directory"
 
-#: ../libide/ide-project-file.c:266
+#: ../libide/ide-project-file.c:276
 msgid "The short name of the file."
 msgstr "The short name of the file."
 
-#: ../libide/ide-project-file.c:275
+#: ../libide/ide-project-file.c:285
 msgid "The path for the file within the project tree."
 msgstr "The path for the file within the project tree."
 
-#: ../libide/ide-project-info.c:250
+#: ../libide/ide-project-info.c:282
 msgid "The project name"
 msgstr "The project name"
 
-#: ../libide/ide-project-info.c:258
+#: ../libide/ide-project-info.c:290
 msgid "The project directory."
 msgstr "The project directory."
 
-#: ../libide/ide-project-info.c:266
+#: ../libide/ide-project-info.c:298
 msgid "The toplevel project file"
 msgstr "The toplevel project file"
 
-#: ../libide/ide-project-info.c:273 ../libide/ide-project-info.c:274
+#: ../libide/ide-project-info.c:305 ../libide/ide-project-info.c:306
 msgid "Last Modified At"
 msgstr "Last Modified At"
 
-#: ../libide/ide-project-item.c:173 ../src/tree/gb-tree-node.c:626
+#: ../libide/ide-project-info.c:314 ../src/commands/gb-command-provider.c:335
+msgid "Priority"
+msgstr "Priority"
+
+#: ../libide/ide-project-info.c:315
+msgid "The priority of the project info type."
+msgstr "The priority of the project info type."
+
+#: ../libide/ide-project-item.c:201 ../src/tree/gb-tree-node.c:630
 msgid "Parent"
 msgstr "Parent"
 
-#: ../libide/ide-project-item.c:174
+#: ../libide/ide-project-item.c:202
 msgid "The parent project item, if not the root."
 msgstr "The parent project item, if not the root."
 
@@ -1663,14 +1697,14 @@ msgid "Spec"
 msgstr "Spec"
 
 #: ../libide/ide-source-snippet-chunk.c:324
-msgid "The specification to expand using the contxt."
-msgstr "The specification to expand using the contxt."
+msgid "The specification to expand using the context."
+msgstr "The specification to expand using the context."
 
 #: ../libide/ide-source-snippet-chunk.c:333
 msgid "The tab stop for the chunk."
 msgstr "The tab stop for the chunk."
 
-#: ../libide/ide-source-snippet-chunk.c:343 ../src/tree/gb-tree-node.c:654
+#: ../libide/ide-source-snippet-chunk.c:343 ../src/tree/gb-tree-node.c:658
 msgid "Text"
 msgstr "Text"
 
@@ -2014,15 +2048,15 @@ msgstr "ללמוד עוד על GNOME Builder"
 msgid "Funded By"
 msgstr "מומן על ידי"
 
-#: ../src/app/gb-application.c:561
+#: ../src/app/gb-application.c:556
 msgid "Run Builder in standalone mode"
 msgstr "Run Builder in standalone mode"
 
-#: ../src/app/gb-application.c:567
+#: ../src/app/gb-application.c:562
 msgid "Show the application's version"
 msgstr "Show the application's version"
 
-#: ../src/app/gb-application.c:573
+#: ../src/app/gb-application.c:568
 msgid "Increase verbosity. May be specified multiple times."
 msgstr "Increase verbosity. May be specified multiple times."
 
@@ -2069,17 +2103,13 @@ msgstr "Parameters"
 msgid "The parameters for the action."
 msgstr "The parameters for the action."
 
-#: ../src/commands/gb-command-provider.c:315 ../src/views/gb-view-stack.c:496
+#: ../src/commands/gb-command-provider.c:315 ../src/views/gb-view-stack.c:497
 msgid "Active View"
 msgstr "Active View"
 
 #: ../src/commands/gb-command-provider.c:316
 msgid "The last focused GbView widget."
 msgstr "The last focused GbView widget."
-
-#: ../src/commands/gb-command-provider.c:335
-msgid "Priority"
-msgstr "Priority"
 
 #: ../src/commands/gb-command-provider.c:336
 msgid "The priority of the command provider."
@@ -2144,7 +2174,7 @@ msgid "The uri to load."
 msgstr "The uri to load."
 
 #: ../src/devhelp/gb-devhelp-view.c:244 ../src/editor/gb-editor-frame.c:580
-#: ../src/editor/gb-editor-view.c:665 ../src/html/gb-html-view.c:321
+#: ../src/editor/gb-editor-view.c:687 ../src/html/gb-html-view.c:321
 #: ../src/views/gb-view.c:266
 msgid "Document"
 msgstr "Document"
@@ -2177,7 +2207,7 @@ msgstr "דרושה כתובת Git תקפה"
 msgid "Directory|Projects"
 msgstr "תיקייה|מיזם"
 
-#: ../src/dialogs/gb-projects-dialog.c:266
+#: ../src/dialogs/gb-projects-dialog.c:297
 msgid "(Click on items to select them)"
 msgstr "(יש ללחוץ על פריטים כדי לבחור אותם)"
 
@@ -2229,7 +2259,7 @@ msgstr "שורה %u, עמודה %u"
 msgid "The back forward list."
 msgstr "The back forward list."
 
-#: ../src/editor/gb-editor-frame.c:581 ../src/editor/gb-editor-view.c:666
+#: ../src/editor/gb-editor-frame.c:581 ../src/editor/gb-editor-view.c:688
 msgid "The editor document."
 msgstr "The editor document."
 
@@ -2255,8 +2285,8 @@ msgstr "שמירת מסמך בשם"
 msgid "Plain Text"
 msgstr "טקסט פשוט"
 
-#: ../src/editor/gb-editor-workspace.c:245
-#: ../src/editor/gb-editor-workspace.c:246
+#: ../src/editor/gb-editor-workspace.c:305
+#: ../src/editor/gb-editor-workspace.c:306
 msgid "Show Project Tree"
 msgstr "הצגת עץ המיזם"
 
@@ -2495,10 +2525,12 @@ msgid "The sizing group for the control."
 msgstr "The sizing group for the control."
 
 #: ../src/project-tree/gb-new-file-popover.c:124
+#: ../src/project-tree/gb-rename-file-popover.c:139
 msgid "A folder with that name already exists."
 msgstr "תיקייה בשם זה כבר קיימת."
 
 #: ../src/project-tree/gb-new-file-popover.c:127
+#: ../src/project-tree/gb-rename-file-popover.c:142
 msgid "A file with that name already exists."
 msgstr "קובץ בשם זה כבר קיים."
 
@@ -2518,6 +2550,14 @@ msgstr "שם תיקייה"
 msgid "Files"
 msgstr "Files"
 
+#: ../src/project-tree/gb-rename-file-popover.c:99
+msgid "Folder"
+msgstr "תיקייה"
+
+#: ../src/project-tree/gb-rename-file-popover.c:170
+msgid "File name must not contain subdirectories."
+msgstr "שם הקובץ לא יכול להכיל תיקייות משנה."
+
 #: ../src/scrolledwindow/gb-scrolled-window.c:261
 msgid "Max Content Height"
 msgstr "Max Content Height"
@@ -2534,7 +2574,7 @@ msgstr "Max Content Width"
 msgid "The maximum width request that can be made."
 msgstr "The maximum width request that can be made."
 
-#: ../src/search/gb-search-box.c:273
+#: ../src/search/gb-search-box.c:269
 #, c-format
 msgid "Builder does not know how to load %s"
 msgstr "Builder does not know how to load %s"
@@ -2568,7 +2608,7 @@ msgstr "The search provider"
 msgid "The size group for the label."
 msgstr "The size group for the label."
 
-#: ../src/tree/gb-tree-builder.c:289 ../src/tree/gb-tree-node.c:640
+#: ../src/tree/gb-tree-builder.c:289 ../src/tree/gb-tree-node.c:644
 msgid "Tree"
 msgstr "Tree"
 
@@ -2576,51 +2616,51 @@ msgstr "Tree"
 msgid "The GbTree the builder belongs to."
 msgstr "The GbTree the builder belongs to."
 
-#: ../src/tree/gb-tree.c:1179
+#: ../src/tree/gb-tree.c:1295
 msgid "The root object of the tree."
 msgstr "The root object of the tree."
 
-#: ../src/tree/gb-tree.c:1187
+#: ../src/tree/gb-tree.c:1303
 msgid "Selection"
 msgstr "Selection"
 
-#: ../src/tree/gb-tree.c:1188
+#: ../src/tree/gb-tree.c:1304
 msgid "The node selection."
 msgstr "The node selection."
 
-#: ../src/tree/gb-tree-node.c:598 ../src/workbench/gb-workspace.c:171
+#: ../src/tree/gb-tree-node.c:602 ../src/workbench/gb-workspace.c:171
 msgid "Icon Name"
 msgstr "Icon Name"
 
-#: ../src/tree/gb-tree-node.c:599
+#: ../src/tree/gb-tree-node.c:603
 msgid "The icon name to display."
 msgstr "The icon name to display."
 
-#: ../src/tree/gb-tree-node.c:612
+#: ../src/tree/gb-tree-node.c:616
 msgid "Item"
 msgstr "Item"
 
-#: ../src/tree/gb-tree-node.c:613
+#: ../src/tree/gb-tree-node.c:617
 msgid "Optional object to associate with node."
 msgstr "Optional object to associate with node."
 
-#: ../src/tree/gb-tree-node.c:627
+#: ../src/tree/gb-tree-node.c:631
 msgid "The parent node."
 msgstr "The parent node."
 
-#: ../src/tree/gb-tree-node.c:641
+#: ../src/tree/gb-tree-node.c:645
 msgid "The GbTree the node belongs to."
 msgstr "The GbTree the node belongs to."
 
-#: ../src/tree/gb-tree-node.c:655
+#: ../src/tree/gb-tree-node.c:659
 msgid "The text of the node."
 msgstr "The text of the node."
 
-#: ../src/tree/gb-tree-node.c:668
+#: ../src/tree/gb-tree-node.c:672
 msgid "Use Markup"
 msgstr "Use Markup"
 
-#: ../src/tree/gb-tree-node.c:669
+#: ../src/tree/gb-tree-node.c:673
 msgid "If text should be translated as markup."
 msgstr "If text should be translated as markup."
 
@@ -2690,7 +2730,7 @@ msgstr "If the document has been modified."
 msgid "The view title."
 msgstr "The view title."
 
-#: ../src/views/gb-view-stack.c:497
+#: ../src/views/gb-view-stack.c:498
 msgid "The active view."
 msgstr "The active view."
 
@@ -2747,44 +2787,44 @@ msgstr "פתיחת מסמך"
 msgid "Open"
 msgstr "פתיחה"
 
-#: ../src/workbench/gb-workbench.c:73
+#: ../src/workbench/gb-workbench.c:74
 #, c-format
 msgid "%s - Builder"
 msgstr "‏%s - ‏Builder"
 
-#: ../src/workbench/gb-workbench.c:435
+#: ../src/workbench/gb-workbench.c:412
 msgid "Active Workspace"
 msgstr "Active Workspace"
 
-#: ../src/workbench/gb-workbench.c:436
+#: ../src/workbench/gb-workbench.c:413
 msgid "The active workspace."
 msgstr "The active workspace."
 
-#: ../src/workbench/gb-workbench.c:444
+#: ../src/workbench/gb-workbench.c:421
 msgid "Building"
 msgstr "Building"
 
-#: ../src/workbench/gb-workbench.c:445
+#: ../src/workbench/gb-workbench.c:422
 msgid "If the project is currently building."
 msgstr "If the project is currently building."
 
-#: ../src/workbench/gb-workbench.c:452
+#: ../src/workbench/gb-workbench.c:429
 msgid "Command Manager"
 msgstr "Command Manager"
 
-#: ../src/workbench/gb-workbench.c:453
+#: ../src/workbench/gb-workbench.c:430
 msgid "The command manager for the workbench."
 msgstr "The command manager for the workbench."
 
-#: ../src/workbench/gb-workbench.c:470
+#: ../src/workbench/gb-workbench.c:447
 msgid "The IdeContext for the workbench."
 msgstr "The IdeContext for the workbench."
 
-#: ../src/workbench/gb-workbench.c:771
+#: ../src/workbench/gb-workbench.c:764
 msgid "Build Failure"
 msgstr "Build Failure"
 
-#: ../src/workbench/gb-workbench.c:816
+#: ../src/workbench/gb-workbench.c:809
 msgid "Project build system does not support building"
 msgstr "מערכת הבנייה של המיזם אינה תומכת בבנייה"
 
