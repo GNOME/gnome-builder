@@ -80,6 +80,9 @@ void           gb_tree_node_rebuild       (GbTreeNode   *node);
 gboolean       gb_tree_node_get_expanded  (GbTreeNode   *node);
 void           gb_tree_node_show_popover  (GbTreeNode   *node,
                                            GtkPopover   *popover);
+const gchar   *gb_tree_node_get_text      (GbTreeNode   *node);
+void           gb_tree_node_set_text      (GbTreeNode   *node,
+                                           const gchar  *text);
 
 G_END_DECLS
 

@@ -304,6 +304,14 @@ gb_tree_node_set_parent (GbTreeNode *node,
     }
 }
 
+const gchar *
+gb_tree_node_get_text (GbTreeNode *node)
+{
+  g_return_val_if_fail (GB_IS_TREE_NODE (node), NULL);
+
+  return node->priv->text;
+}
+
 /**
  * gb_tree_node_set_text:
  * @node: (in): A #GbTreeNode.
@@ -312,7 +320,7 @@ gb_tree_node_set_parent (GbTreeNode *node,
  * Sets the text of the node. This is displayed in the text
  * cell of the GbTree.
  */
-static void
+void
 gb_tree_node_set_text (GbTreeNode  *node,
                        const gchar *text)
 {
