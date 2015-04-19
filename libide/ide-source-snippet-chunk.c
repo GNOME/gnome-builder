@@ -321,7 +321,7 @@ ide_source_snippet_chunk_class_init (IdeSourceSnippetChunkClass *klass)
   gParamSpecs[PROP_SPEC] =
     g_param_spec_string ("spec",
                          _("Spec"),
-                         _("The specification to expand using the contxt."),
+                         _("The specification to expand using the context."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SPEC,
