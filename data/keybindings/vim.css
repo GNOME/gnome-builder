@@ -1020,6 +1020,14 @@
 
   bind "<ctrl>e" { "movement" (screen-up, 0, 0, 1) };
   bind "<ctrl>y" { "movement" (screen-down, 0, 0, 1) };
+
+  bind "Escape" { "end-macro" ()
+                  "set-overwrite" (0)
+                  "clear-count" ()
+                  "clear-selection" ()
+                  "clear-snippets" ()
+		  "movement" (previous-char, 0, 1, 0)
+                  "set-mode" ("vim-normal", permanent) };
 }
 
 @binding-set builder-vim-source-view-visual-with-count
@@ -1479,8 +1487,8 @@ IdeSourceViewMode.vim-insert {
   -IdeSourceViewMode-block-cursor: false;
   -IdeSourceViewMode-display-name: "Insert";
 
-  gtk-key-bindings: builder-vim-source-view,
-                    builder-vim-source-view-insert;
+  gtk-key-bindings: builder-vim-source-view-insert,
+                    builder-vim-source-view;
 }
 
 IdeSourceViewMode.vim-visual {
