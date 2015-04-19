@@ -113,6 +113,7 @@ main (gint   argc,
   g_set_prgname ("ide-search");
 
   context = g_option_context_new (_("PROJECT_FILE [SEARCH TERMS...]"));
+  g_option_context_add_group (context, gtk_get_option_group (TRUE));
 
   if (!g_option_context_parse (context, &argc, &argv, &error))
     {
