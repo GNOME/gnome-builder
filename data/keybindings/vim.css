@@ -1333,6 +1333,7 @@
 {
   bind "<ctrl>n" { "move-cursor" (display-lines, 1) };
   bind "<ctrl>p" { "move-cursor" (display-lines, -1) };
+  bind "slash" { "start-interactive-search" () };
 }
 
 @binding-set builder-gb-project-tree-vim
