@@ -207,6 +207,8 @@ libide_1_0_la_public_sources = \
 
 libide_1_0_la_SOURCES = \
 	$(libide_1_0_la_public_sources) \
+	cut-n-paste/fuzzy.c \
+	cut-n-paste/fuzzy.h \
 	cut-n-paste/trie.c \
 	cut-n-paste/trie.h \
 	libide/autotools/ide-makecache.c \
@@ -224,8 +226,6 @@ libide_1_0_la_SOURCES = \
 	libide/ide-debug.h \
 	libide/editorconfig/editorconfig-glib.c \
 	libide/editorconfig/editorconfig-glib.h \
-	libide/fuzzy/fuzzy.c \
-	libide/fuzzy/fuzzy.h \
 	libide/gca/gca-diagnostics.c \
 	libide/gca/gca-diagnostics.h \
 	libide/gca/gca-service.c \
