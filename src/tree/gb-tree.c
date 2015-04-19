@@ -1147,6 +1147,35 @@ gb_tree_real_action (GbTree      *self,
   gb_widget_activate_action (GTK_WIDGET (self), prefix, action_name, variant);
 }
 
+static gboolean
+gb_tree_default_search_equal_func (GtkTreeModel *model,
+                                   gint          column,
+                                   const gchar  *key,
+                                   GtkTreeIter  *iter,
+                                   gpointer      user_data)
+{
+  GbTreeNode *node = NULL;
+  gboolean ret = TRUE;
+
+  g_assert (GTK_IS_TREE_MODEL (model));
+  g_assert (column == 0);
+  g_assert (key != NULL);
+  g_assert (iter != NULL);
+
+  gtk_tree_model_get (model, iter, 0, &node, -1);
+
+  if (node != NULL)
+    {
+      const gchar *text;
+
+      text = gb_tree_node_get_text (node);
+      ret = !(strstr (key, text) != NULL);
+      g_object_unref (node);
+    }
+
+  return ret;
+}
+
 /**
  * gb_tree_finalize:
  * @object: (in): A #GbTree.
@@ -1363,6 +1392,11 @@ gb_tree_init (GbTree *tree)
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (tree),
                            GTK_TREE_MODEL (tree->priv->store));
+
+  gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW (tree),
+                                       gb_tree_default_search_equal_func,
+                                       NULL, NULL);
+  gtk_tree_view_set_search_column (GTK_TREE_VIEW (tree), 0);
 
   g_signal_connect (tree, "row-activated",
                     G_CALLBACK (gb_tree_row_activated),
