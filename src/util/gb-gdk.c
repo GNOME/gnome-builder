@@ -76,3 +76,33 @@ gb_gdk_event_key_is_tab (const GdkEventKey *event)
 
   return (event->keyval == GDK_KEY_Tab) || (event->keyval == GDK_KEY_KP_Tab);
 }
+
+gboolean
+gb_gdk_event_key_is_modifier_key (const GdkEventKey *event)
+{
+  static const guint modifier_keyvals[] = {
+    GDK_KEY_Shift_L, GDK_KEY_Shift_R, GDK_KEY_Shift_Lock,
+    GDK_KEY_Caps_Lock, GDK_KEY_ISO_Lock, GDK_KEY_Control_L,
+    GDK_KEY_Control_R, GDK_KEY_Meta_L, GDK_KEY_Meta_R,
+    GDK_KEY_Alt_L, GDK_KEY_Alt_R, GDK_KEY_Super_L, GDK_KEY_Super_R,
+    GDK_KEY_Hyper_L, GDK_KEY_Hyper_R, GDK_KEY_ISO_Level3_Shift,
+    GDK_KEY_ISO_Next_Group, GDK_KEY_ISO_Prev_Group,
+    GDK_KEY_ISO_First_Group, GDK_KEY_ISO_Last_Group,
+    GDK_KEY_Mode_switch, GDK_KEY_Num_Lock, GDK_KEY_Multi_key,
+    GDK_KEY_Scroll_Lock,
+    0
+  };
+  const guint *ac_val;
+
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  ac_val = modifier_keyvals;
+
+  while (*ac_val)
+    {
+      if (event->keyval == *ac_val++)
+        return TRUE;
+    }
+
+  return FALSE;
+}

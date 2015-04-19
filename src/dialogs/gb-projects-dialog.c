@@ -554,9 +554,11 @@ gb_projects_dialog_key_press_event (GtkWidget   *widget,
 
   if (!gtk_toggle_button_get_active (self->search_button))
     {
-      if (!gb_gdk_event_key_is_keynav (event) &&
-          !gb_gdk_event_key_is_space (event) &&
-          !gb_gdk_event_key_is_tab (event))
+      if ((!gb_gdk_event_key_is_keynav (event) &&
+           !gb_gdk_event_key_is_space (event) &&
+           !gb_gdk_event_key_is_tab (event) &&
+           !gb_gdk_event_key_is_modifier_key (event)) ||
+          (((event->state & GDK_CONTROL_MASK) != 0) && (event->keyval == GDK_KEY_f)))
         {
           gtk_toggle_button_set_active (self->search_button, TRUE);
           gtk_widget_event (GTK_WIDGET (self->search_entry), (GdkEvent *)event);

@@ -23,10 +23,11 @@
 
 G_BEGIN_DECLS
 
-gboolean gb_gdk_event_key_is_escape (const GdkEventKey *event);
-gboolean gb_gdk_event_key_is_keynav (const GdkEventKey *event);
-gboolean gb_gdk_event_key_is_space  (const GdkEventKey *event);
-gboolean gb_gdk_event_key_is_tab    (const GdkEventKey *event);
+gboolean gb_gdk_event_key_is_escape       (const GdkEventKey *event);
+gboolean gb_gdk_event_key_is_keynav       (const GdkEventKey *event);
+gboolean gb_gdk_event_key_is_space        (const GdkEventKey *event);
+gboolean gb_gdk_event_key_is_tab          (const GdkEventKey *event);
+gboolean gb_gdk_event_key_is_modifier_key (const GdkEventKey *event);
 
 G_END_DECLS
 
