@@ -1131,7 +1131,7 @@ gb_tree_real_action (GbTree      *self,
 
   if (*param != 0)
     {
-      g_autoptr(GError) error = NULL;
+      GError *error = NULL;
 
       variant = g_variant_parse (NULL, param, NULL, NULL, &error);
 
@@ -1139,6 +1139,7 @@ gb_tree_real_action (GbTree      *self,
         {
           g_warning ("can't parse keybinding parameters \"%s\": %s",
                      param, error->message);
+          g_clear_error (&error);
           return;
         }
     }
