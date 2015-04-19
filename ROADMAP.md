@@ -94,6 +94,11 @@
  * Add desktop entry
  * Add gsetting
  * Add dbus service
+ * Add dependency
+   - pkg-config
+   - program
+   - library
+   - header
 
 
 ## External Build Tools
@@ -123,4 +128,9 @@
  * External Dialog or integrated into GbEditorView?
  * Search options for top-right search widget
 
+
+## Global Search
+
+ * Symbol Indexing and Searching
+ * grep (-A -B)
 
