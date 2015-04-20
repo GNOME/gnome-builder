@@ -152,6 +152,8 @@ libide_1_0_la_public_sources = \
 	libide/ide-service.h \
 	libide/ide-source-location.c \
 	libide/ide-source-location.h \
+        libide/ide-source-map.c \
+        libide/ide-source-map.h \
 	libide/ide-source-range.c \
 	libide/ide-source-range.h \
 	libide/ide-source-snippet-chunk.c \

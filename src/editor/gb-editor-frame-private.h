@@ -39,6 +39,7 @@ struct _GbEditorFrame
   GdTaggedEntry       *search_entry;
   GdTaggedEntryTag    *search_entry_tag;
   IdeSourceView       *source_view;
+  IdeSourceMap        *source_map;
 
   gulong               cursor_moved_handler;
 };

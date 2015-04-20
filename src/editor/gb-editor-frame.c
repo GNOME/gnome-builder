@@ -591,6 +591,7 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, scrolled_window);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, search_entry);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, search_revealer);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, source_map);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, source_view);
 
   g_type_ensure (NAUTILUS_TYPE_FLOATING_BAR);
