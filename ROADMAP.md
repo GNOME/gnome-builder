@@ -3,6 +3,9 @@
 ## GNOME Builder 3.16.3
 
  * General bugfixes
+ * Cursor placement on file opening
+ * Improve navigation stack
+   - Drop "current item"
 
 ## GNOME Builder 3.18.0
 
@@ -42,11 +45,6 @@
 
  * Create new GtkWidget (header, source, .ui, Makefile.am)
 
-
-### Navigation
-
- * Improve navigation stack
-   - Drop "current item"
 
 ### Version Control
 
