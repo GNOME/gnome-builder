@@ -18,4 +18,18 @@ snippet class
 	class ${1:Foo}(${2:object}):
 		def __init__(self${3}):
 			$0
+snippet gobject
+- scope python, python3
+	class ${1:Foo}(${2:GObject.Object}):
+		__gtype_name__ = "$1"
 
+		def __init__(self${3}):
+			$2.__init__(self)
+			$0
+snippet gsignal
+- desc Entry in __gsignals__ dictionary
+- scope python, python3
+	"${1:signal}": (GObject.${2:SIGNAL_RUN_FIRST}, ${3:None}, (${4:int,}))$0
+snippet gproperty
+- scope python, python3
+	${1:foo} = GObject.property(type=${2:int}, default=${3:0})$0
