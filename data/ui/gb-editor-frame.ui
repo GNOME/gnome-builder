@@ -142,10 +142,16 @@
           </object>
         </child>
         <child>
-          <object class="IdeSourceMap" id="source_map">
-            <property name="width-request">100</property>
-            <property name="view">source_view</property>
+          <object class="GbScrolledWindow">
             <property name="visible">true</property>
+            <property name="min-content-width">100</property>
+            <property name="max-content-width">150</property>
+            <child>
+              <object class="IdeSourceMap" id="source_map">
+                <property name="view">source_view</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

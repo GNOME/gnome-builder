@@ -25,6 +25,7 @@
 #include "ide-source-map.h"
 
 #define DEFAULT_WIDTH 100
+#define DELAYED_DRAW_TIMEOUT_MSEC 34
 
 struct _IdeSourceMap
 {
@@ -33,6 +34,8 @@ struct _IdeSourceMap
   PangoFontDescription *font_desc;
   GtkSourceView        *view;
   GtkCssProvider       *css_provider;
+
+  guint                 delayed_draw_timeout;
 };
 
 struct _IdeSourceMapClass
@@ -65,6 +68,19 @@ ide_source_map_get_view (IdeSourceMap *self)
   return self->view;
 }
 
+static gboolean
+ide_source_map_delayed_queue_draw (gpointer data)
+{
+  IdeSourceMap *self = data;
+
+  g_assert (IDE_IS_SOURCE_MAP (self));
+
+  self->delayed_draw_timeout = 0;
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ide_source_map__view_vadj_value_changed (IdeSourceMap  *self,
                                          GtkAdjustment *vadj)
@@ -72,7 +88,13 @@ ide_source_map__view_vadj_value_changed (IdeSourceMap  *self,
   g_assert (IDE_IS_SOURCE_MAP (self));
   g_assert (GTK_IS_ADJUSTMENT (vadj));
 
-  gtk_widget_queue_draw (GTK_WIDGET (self));
+  if (self->delayed_draw_timeout != 0)
+    g_source_remove (self->delayed_draw_timeout);
+
+  self->delayed_draw_timeout =
+    g_timeout_add (DELAYED_DRAW_TIMEOUT_MSEC,
+                   ide_source_map_delayed_queue_draw,
+                   self);
 }
 
 void
@@ -209,30 +231,39 @@ ide_source_map_draw_layer (GtkTextView      *text_view,
     {
       GdkRectangle visible_rect;
       GdkRectangle my_visible_rect;
-      GdkRectangle area;
       GdkRectangle clip;
-      GtkTextIter iter;
+      GdkRectangle area1;
+      GdkRectangle area2;
+      GdkRectangle hl_area;
+      GtkTextIter iter1;
+      GtkTextIter iter2;
 
       cairo_save (cr);
 
       gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (self->view), &visible_rect);
-
       gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (self), &my_visible_rect);
       gdk_cairo_get_clip_rectangle (cr, &clip);
 
-      gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self->view), &iter, visible_rect.x, visible_rect.y);
-      gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &iter, &area);
-      cairo_move_to (cr, clip.x, area.y - my_visible_rect.y + 0.5);
-      cairo_line_to (cr, clip.x + clip.width, area.y - my_visible_rect.y + 0.5);
+      gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self->view), &iter1, visible_rect.x,
+                                          visible_rect.y);
+      gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self->view), &iter2, visible_rect.x,
+                                          visible_rect.y + visible_rect.height);
 
-      gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self->view), &iter, visible_rect.x, visible_rect.y + visible_rect.height);
-      gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &iter, &area);
-      cairo_move_to (cr, clip.x, area.y + area.height - my_visible_rect.y + 0.5);
-      cairo_line_to (cr, clip.x + clip.width, area.y + area.height - my_visible_rect.y + 0.5);
+      gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &iter1, &area1);
+      gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &iter2, &area2);
 
-      cairo_set_source_rgb (cr, .63, .63, .63);
-      cairo_set_line_width (cr, 1);
-      cairo_stroke (cr);
+      hl_area.y = area1.y;
+      hl_area.height = area2.y + area2.height - area1.y;
+      hl_area.x = clip.x;
+      hl_area.width = clip.width;
+
+      hl_area.y -= my_visible_rect.y;
+
+      gdk_cairo_rectangle (cr, &hl_area);
+
+      cairo_set_source_rgba (cr, .63, .63, .63, .2);
+
+      cairo_fill (cr);
 
       cairo_restore (cr);
     }
@@ -242,6 +273,12 @@ static void
 ide_source_map_finalize (GObject *object)
 {
   IdeSourceMap *self = (IdeSourceMap *)object;
+
+  if (self->delayed_draw_timeout != 0)
+    {
+      g_source_remove (self->delayed_draw_timeout);
+      self->delayed_draw_timeout = 0;
+    }
 
   g_clear_object (&self->css_provider);
   g_clear_pointer (&self->font_desc, pango_font_description_free);
