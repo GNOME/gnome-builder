@@ -97,3 +97,9 @@ GbSearchDisplayGroup GtkListBox .list-row {
 GbDocumentStack .button {
   transition: none;
 }
+
+
+IdeSourceMap GtkEventBox {
+  background-color: @theme_selected_bg_color;
+  opacity: 0.5;
+}

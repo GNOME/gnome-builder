@@ -640,14 +640,6 @@ ide_source_map_init (IdeSourceMap *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  {
-    /* TODO: use css or stylescheme for this */
-    GdkRGBA bg = { 0, 0, 0, .3 };
-    gtk_widget_override_background_color (GTK_WIDGET (self->overlay_box), GTK_STATE_FLAG_NORMAL, &bg);
-  }
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
   gtk_overlay_add_overlay (GTK_OVERLAY (self), GTK_WIDGET (self->overlay_box));
 
   completion = gtk_source_view_get_completion (self->child_view);
