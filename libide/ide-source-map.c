@@ -478,6 +478,7 @@ ide_source_map__overlay_box_motion_notify_event (IdeSourceMap   *self,
       GdkRectangle rect;
       GtkTextIter iter;
       gdouble ratio;
+      gint child_height;
       gint x;
       gint y;
 
@@ -488,13 +489,14 @@ ide_source_map__overlay_box_motion_notify_event (IdeSourceMap   *self,
                                         GTK_WIDGET (self->child_view),
                                         event->x, event->y, &x, &y);
 
-      y = CLAMP (y, child_alloc.y, child_alloc.y + child_alloc.height) - child_alloc.y;
-      ratio = (gdouble)y / (gdouble)child_alloc.height;
-
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->child_view));
       gtk_text_buffer_get_end_iter (buffer, &iter);
       gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self->child_view), &iter, &rect);
 
+      child_height = MIN (child_alloc.height, (rect.y + rect.height));
+
+      y = CLAMP (y, child_alloc.y, child_alloc.y + child_height) - child_alloc.y;
+      ratio = (gdouble)y / (gdouble)child_height;
       y = (rect.y + rect.height) * ratio;
 
       gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self->child_view), &iter, x, y);
