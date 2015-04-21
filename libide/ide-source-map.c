@@ -350,6 +350,31 @@ ide_source_map_get_child_position (GtkOverlay   *overlay,
   return TRUE;
 }
 
+static gboolean
+ide_source_map__child_view_button_press_event (IdeSourceMap   *self,
+                                               GdkEventButton *event,
+                                               GtkSourceView  *child_view)
+{
+  GtkTextIter iter;
+
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (event != NULL);
+  g_assert (GTK_SOURCE_IS_VIEW (child_view));
+
+  if (self->view != NULL)
+    {
+      gint x;
+      gint y;
+
+      gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (child_view), GTK_TEXT_WINDOW_WIDGET,
+                                             event->x, event->y, &x, &y);
+      gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (child_view), &iter, x, y);
+      gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self->view), &iter, 0.0, TRUE, 1.0, 0.5);
+    }
+
+  return GDK_EVENT_STOP;
+}
+
 static void
 ide_source_map_finalize (GObject *object)
 {
@@ -441,6 +466,11 @@ ide_source_map_init (IdeSourceMap *self)
                                    "show-right-margin", FALSE,
                                    "visible", TRUE,
                                    NULL);
+  g_signal_connect_object (self->child_view,
+                           "button-press-event",
+                           G_CALLBACK (ide_source_map__child_view_button_press_event),
+                           self,
+                           G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->child_view));
 
   self->overlay_box = g_object_new (GTK_TYPE_EVENT_BOX,
