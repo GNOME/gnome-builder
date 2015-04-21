@@ -376,8 +376,9 @@ ide_source_map__child_view_button_press_event (IdeSourceMap   *self,
 }
 
 static void
-ide_source_map__child_view_realize_after (GtkWidget *widget,
-                                          GtkWidget *child_view)
+ide_source_map__child_view_state_flags_changed (GtkWidget     *widget,
+                                                GtkStateFlags  flags,
+                                                GtkWidget     *child_view)
 {
   IdeSourceMap *self = (IdeSourceMap *)widget;
   GdkWindow *window;
@@ -387,6 +388,79 @@ ide_source_map__child_view_realize_after (GtkWidget *widget,
 
   window = gtk_text_view_get_window (GTK_TEXT_VIEW (child_view), GTK_TEXT_WINDOW_TEXT);
   gdk_window_set_cursor (window, NULL);
+}
+
+static void
+ide_source_map__child_view_realize_after (GtkWidget *widget,
+                                          GtkWidget *child_view)
+{
+  IdeSourceMap *self = (IdeSourceMap *)widget;
+
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (GTK_SOURCE_IS_VIEW (child_view));
+
+  ide_source_map__child_view_state_flags_changed (widget, 0, child_view);
+}
+
+static void
+ide_source_map__overlay_box_realize_after (IdeSourceMap *self,
+                                           GtkEventBox  *overlay_box)
+{
+  GdkCursor *cursor;
+  GdkDisplay *display;
+  GdkWindow *window;
+
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (GTK_IS_EVENT_BOX (overlay_box));
+
+  window = gtk_widget_get_window (GTK_WIDGET (overlay_box));
+  g_assert (window != NULL);
+
+  display = gdk_window_get_display (window);
+  g_assert (display != NULL);
+
+  cursor = gdk_cursor_new_for_display (display, GDK_DOUBLE_ARROW);
+  g_assert (cursor != NULL);
+
+  gdk_window_set_cursor (window, cursor);
+
+  g_clear_object (&cursor);
+}
+
+static gboolean
+ide_source_map__overlay_box_button_press_event (IdeSourceMap   *self,
+                                                GdkEventButton *event,
+                                                GtkEventBox    *overlay_box)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (event != NULL);
+  g_assert (GTK_IS_EVENT_BOX (overlay_box));
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+ide_source_map__overlay_box_button_release_event (IdeSourceMap   *self,
+                                                  GdkEventButton *event,
+                                                  GtkEventBox    *overlay_box)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (event != NULL);
+  g_assert (GTK_IS_EVENT_BOX (overlay_box));
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+ide_source_map__overlay_box_motion_notify_event (IdeSourceMap   *self,
+                                                 GdkEventMotion *event,
+                                                 GtkEventBox    *overlay_box)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (event != NULL);
+  g_assert (GTK_IS_EVENT_BOX (overlay_box));
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -486,6 +560,11 @@ ide_source_map_init (IdeSourceMap *self)
                            self,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (self->child_view,
+                           "state-flags-changed",
+                           G_CALLBACK (ide_source_map__child_view_state_flags_changed),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  g_signal_connect_object (self->child_view,
                            "realize",
                            G_CALLBACK (ide_source_map__child_view_realize_after),
                            self,
@@ -498,6 +577,26 @@ ide_source_map_init (IdeSourceMap *self)
                                     "height-request", 10,
                                     "width-request", 100,
                                     NULL);
+  g_signal_connect_object (self->overlay_box,
+                           "realize",
+                           G_CALLBACK (ide_source_map__overlay_box_realize_after),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  g_signal_connect_object (self->overlay_box,
+                           "button-press-event",
+                           G_CALLBACK (ide_source_map__overlay_box_button_press_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->overlay_box,
+                           "button-release-event",
+                           G_CALLBACK (ide_source_map__overlay_box_button_release_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->overlay_box,
+                           "motion-notify-event",
+                           G_CALLBACK (ide_source_map__overlay_box_motion_notify_event),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   {
