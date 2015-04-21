@@ -37,6 +37,8 @@ struct _IdeSourceMap
   GtkSourceView        *child_view;
   GtkEventBox          *overlay_box;
   GtkSourceView        *view;
+
+  guint                 in_press : 1;
 };
 
 struct _IdeSourceMapClass
@@ -436,6 +438,10 @@ ide_source_map__overlay_box_button_press_event (IdeSourceMap   *self,
   g_assert (event != NULL);
   g_assert (GTK_IS_EVENT_BOX (overlay_box));
 
+  gtk_grab_add (GTK_WIDGET (overlay_box));
+
+  self->in_press = TRUE;
+
   return GDK_EVENT_PROPAGATE;
 }
 
@@ -448,6 +454,10 @@ ide_source_map__overlay_box_button_release_event (IdeSourceMap   *self,
   g_assert (event != NULL);
   g_assert (GTK_IS_EVENT_BOX (overlay_box));
 
+  self->in_press = FALSE;
+
+  gtk_grab_remove (GTK_WIDGET (overlay_box));
+
   return GDK_EVENT_PROPAGATE;
 }
 
@@ -459,6 +469,38 @@ ide_source_map__overlay_box_motion_notify_event (IdeSourceMap   *self,
   g_assert (IDE_IS_SOURCE_MAP (self));
   g_assert (event != NULL);
   g_assert (GTK_IS_EVENT_BOX (overlay_box));
+
+  if (self->in_press && (self->view != NULL))
+    {
+      GtkAllocation alloc;
+      GtkAllocation child_alloc;
+      GtkTextBuffer *buffer;
+      GdkRectangle rect;
+      GtkTextIter iter;
+      gdouble ratio;
+      gint x;
+      gint y;
+
+      gtk_widget_get_allocation (GTK_WIDGET (overlay_box), &alloc);
+      gtk_widget_get_allocation (GTK_WIDGET (self->child_view), &child_alloc);
+
+      gtk_widget_translate_coordinates (GTK_WIDGET (overlay_box),
+                                        GTK_WIDGET (self->child_view),
+                                        event->x, event->y, &x, &y);
+
+      y = CLAMP (y, child_alloc.y, child_alloc.y + child_alloc.height) - child_alloc.y;
+      ratio = (gdouble)y / (gdouble)child_alloc.height;
+
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->child_view));
+      gtk_text_buffer_get_end_iter (buffer, &iter);
+      gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self->child_view), &iter, &rect);
+
+      y = (rect.y + rect.height) * ratio;
+
+      gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self->child_view), &iter, x, y);
+
+      gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self->view), &iter, 0.0, TRUE, 1.0, 0.5);
+    }
 
   return GDK_EVENT_PROPAGATE;
 }
