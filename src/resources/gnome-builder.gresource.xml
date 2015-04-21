@@ -36,6 +36,7 @@
     <file alias="theme/Adwaita.css">../../data/theme/Adwaita.css</file>
     <file alias="theme/Adwaita-dark.css">../../data/theme/Adwaita-dark.css</file>
     <file alias="theme/Adwaita-shared.css">../../data/theme/Adwaita-shared.css</file>
+    <file alias="theme/shared.css">../../data/theme/shared.css</file>
 
     <file alias="ui/gb-command-bar.ui">../../data/ui/gb-command-bar.ui</file>
     <file alias="ui/gb-devhelp-view.ui">../../data/ui/gb-devhelp-view.ui</file>

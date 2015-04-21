@@ -1,100 +1,15 @@
-.floating-bar {
-  padding: 2px;
-  background-color: @theme_base_color;
-  border-width: 1px;
-  border-style: solid solid none;
-  border-color: @borders;
-  border-radius: 3px 3px 0 0;
-}
-
-.floating-bar.bottom.left { /* axes left border and border radius */
-  border-left-style: none;
-  border-top-left-radius: 0;
-}
-.floating-bar.bottom.right { /* axes right border and border radius */
-  border-right-style: none;
-  border-top-right-radius: 0;
-}
-
-.floating-bar:backdrop {
-  background-color: @theme_unfocused_base_color;
-  border-color: @unfocused_borders;
-}
-
-.floating-bar .button {
-  padding: 4px;
-}
-
-
-/*
- * Editor Floating Search Entry.
- */
-GbEditorFrame .gb-search-slider {
-  background-color: @theme_base_color;
-  padding: 6px;
-  border-color: shade (@theme_base_color, 0.60);
-  border-radius: 0 0 5px 5px;
-  border-width: 0 1px 1px 1px;
-  border-style: solid;
-}
-.gb-search-entry-occurrences-tag {
-  color: shade (@theme_unfocused_fg_color, 0.8);
-  margin: 2px;
-  padding: 2px;
-}
-GdTaggedEntry {
-  color: @theme_fg_color;
-}
+@import url("resource:///org/gnome/builder/theme/shared.css");
 
 
 /*
  * Preferences styling.
  */
-.preferences.sidebar GtkViewport {
-   border: 0px;
-}
-.preferences.sidebar GtkListBox {
-  background-color: shade(@theme_bg_color, 0.99);
-}
-.preferences.sidebar GtkListBoxRow {
-  padding: 10px;
-}
 GbPreferencesPageLanguage GtkSearchEntry {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 GbPreferencesPageLanguage GtkScrolledWindow {
   border-top-width: 0;
-}
-GbPreferencesSwitch:prelight {
-  background-color: shade(@theme_bg_color, 1.01);
-}
-
-
-/*
- * Command Bar styling.
- */
-GtkBox.gb-command-bar-box {
-  border: none;
-  background-image: linear-gradient(to bottom, #2e3436, #555753 10%);
-  box-shadow: inset 0px 3px 6px #2e3436;
-}
-GtkBox.gb-command-bar-box GtkLabel {
-  color: #eeeeec;
-}
-GtkEntry.gb-command-bar-entry {
-  font-family: Monospace;
-  background-image: none;
-  padding: 6px 6px 6px 6px;
-  color: #eeeeec;
-}
-
-
-/*
- * Style selector widget.
- */
-GbSourceStyleSchemeWidget GtkSourceView {
-  font-family: Monospace;
 }
 
 
@@ -103,18 +18,6 @@ GbSourceStyleSchemeWidget GtkSourceView {
  */
 GbEditorTweakWidget GtkScrolledWindow {
   border-top: none;
-}
-
-
-/*
- * Disable various animatinos that are enabled by default and really annoying
- * to the overall flow of Builder.
- */
-GbSearchDisplayGroup GtkListBox .list-row {
-  transition: none;
-}
-GbDocumentStack .button {
-  transition: none;
 }
 
 
