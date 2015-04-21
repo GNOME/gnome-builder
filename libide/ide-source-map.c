@@ -376,6 +376,20 @@ ide_source_map__child_view_button_press_event (IdeSourceMap   *self,
 }
 
 static void
+ide_source_map__child_view_realize_after (GtkWidget *widget,
+                                          GtkWidget *child_view)
+{
+  IdeSourceMap *self = (IdeSourceMap *)widget;
+  GdkWindow *window;
+
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (GTK_SOURCE_IS_VIEW (child_view));
+
+  window = gtk_text_view_get_window (GTK_TEXT_VIEW (child_view), GTK_TEXT_WINDOW_TEXT);
+  gdk_window_set_cursor (window, NULL);
+}
+
+static void
 ide_source_map_finalize (GObject *object)
 {
   IdeSourceMap *self = (IdeSourceMap *)object;
@@ -471,6 +485,11 @@ ide_source_map_init (IdeSourceMap *self)
                            G_CALLBACK (ide_source_map__child_view_button_press_event),
                            self,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->child_view,
+                           "realize",
+                           G_CALLBACK (ide_source_map__child_view_realize_after),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->child_view));
 
   self->overlay_box = g_object_new (GTK_TYPE_EVENT_BOX,
