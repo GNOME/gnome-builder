@@ -113,6 +113,7 @@
             </child>
             <child>
               <object class="GtkScrolledWindow" id="scrolled_window">
+                <property name="expand">true</property>
                 <property name="visible">true</property>
                 <child>
                   <object class="IdeSourceView" id="source_view">
@@ -142,16 +143,9 @@
           </object>
         </child>
         <child>
-          <object class="GbScrolledWindow">
+          <object class="IdeSourceMap" id="source_map">
+            <property name="view">source_view</property>
             <property name="visible">true</property>
-            <property name="min-content-width">100</property>
-            <property name="max-content-width">150</property>
-            <child>
-              <object class="IdeSourceMap" id="source_map">
-                <property name="view">source_view</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>

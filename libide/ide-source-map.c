@@ -29,21 +29,22 @@
 
 struct _IdeSourceMap
 {
-  GtkSourceView         parent_instance;
+  GtkOverlay            parent_instance;
 
   PangoFontDescription *font_desc;
-  GtkSourceView        *view;
   GtkCssProvider       *css_provider;
 
-  guint                 delayed_draw_timeout;
+  GtkSourceView        *child_view;
+  GtkEventBox          *overlay_box;
+  GtkSourceView        *view;
 };
 
 struct _IdeSourceMapClass
 {
-  GtkSourceViewClass parent_instance;
+  GtkOverlayClass parent_class;
 };
 
-G_DEFINE_TYPE (IdeSourceMap, ide_source_map, GTK_SOURCE_TYPE_VIEW)
+G_DEFINE_TYPE (IdeSourceMap, ide_source_map, GTK_TYPE_OVERLAY)
 
 enum {
   PROP_0,
@@ -68,33 +69,103 @@ ide_source_map_get_view (IdeSourceMap *self)
   return self->view;
 }
 
-static gboolean
-ide_source_map_delayed_queue_draw (gpointer data)
+static void
+update_scrubber_height (IdeSourceMap *self)
 {
-  IdeSourceMap *self = data;
+  GtkAllocation alloc;
+  gdouble ratio;
+  gint child_height;
+  gint view_height;
+
+  g_assert (self != NULL);
+  g_assert (self->view != NULL);
+  g_assert (self->child_view != NULL);
+
+  gtk_widget_get_allocation (GTK_WIDGET (self->view), &alloc);
+  gtk_widget_get_preferred_height (GTK_WIDGET (self->view), NULL, &view_height);
+  gtk_widget_get_preferred_height (GTK_WIDGET (self->child_view), NULL, &child_height);
+
+  ratio = alloc.height / (gdouble)view_height;
+  child_height *= ratio;
+
+  if (child_height > 0)
+    g_object_set (self->overlay_box,
+                  "height-request", child_height,
+                  NULL);
+}
+
+static void
+update_child_vadjustment (IdeSourceMap *self)
+{
+  GtkAdjustment *vadj;
+  GtkAdjustment *child_vadj;
+  gdouble value;
+  gdouble upper;
+  gdouble page_size;
+  gdouble child_value;
+  gdouble child_upper;
+  gdouble child_page_size;
+  gdouble new_value = 0.0;
 
   g_assert (IDE_IS_SOURCE_MAP (self));
 
-  self->delayed_draw_timeout = 0;
-  gtk_widget_queue_draw (GTK_WIDGET (self));
+  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->view));
+  child_vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->child_view));
 
-  return G_SOURCE_REMOVE;
+  g_object_get (vadj,
+                "upper", &upper,
+                "value", &value,
+                "page-size", &page_size,
+                NULL);
+
+  g_object_get (child_vadj,
+                "upper", &child_upper,
+                "value", &child_value,
+                "page-size", &child_page_size,
+                NULL);
+
+  /*
+   * TODO: Technically we should take into account lower here, but in practice
+   *       it is always 0.0.
+   */
+
+  if (child_page_size < child_upper)
+    new_value = (value / (upper - page_size)) * (child_upper - child_page_size);
+
+  gtk_adjustment_set_value (child_vadj, new_value);
 }
 
 static void
 ide_source_map__view_vadj_value_changed (IdeSourceMap  *self,
                                          GtkAdjustment *vadj)
 {
+  gdouble page_size;
+  gdouble upper;
+  gdouble lower;
+
   g_assert (IDE_IS_SOURCE_MAP (self));
   g_assert (GTK_IS_ADJUSTMENT (vadj));
 
-  if (self->delayed_draw_timeout != 0)
-    g_source_remove (self->delayed_draw_timeout);
+  gtk_widget_queue_resize (GTK_WIDGET (self->overlay_box));
 
-  self->delayed_draw_timeout =
-    g_timeout_add (DELAYED_DRAW_TIMEOUT_MSEC,
-                   ide_source_map_delayed_queue_draw,
-                   self);
+  g_object_get (vadj,
+                "lower", &lower,
+                "page-size", &page_size,
+                "upper", &upper,
+                NULL);
+
+  update_child_vadjustment (self);
+}
+
+static void
+ide_source_map__view_vadj_notify_upper (IdeSourceMap  *self,
+                                        GParamSpec    *pspec,
+                                        GtkAdjustment *vadj)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (GTK_IS_ADJUSTMENT (vadj));
+
+  update_scrubber_height (self);
 }
 
 void
@@ -110,20 +181,27 @@ ide_source_map_set_view (IdeSourceMap  *self,
         {
           GtkAdjustment *vadj;
 
-          g_object_bind_property (view, "buffer",
-                                  self, "buffer",
+          g_object_bind_property (self->view, "buffer",
+                                  self->child_view, "buffer",
                                   G_BINDING_SYNC_CREATE);
-          g_object_bind_property (view, "indent-width",
-                                  self, "indent-width",
+          g_object_bind_property (self->view, "indent-width",
+                                  self->child_view, "indent-width",
                                   G_BINDING_SYNC_CREATE);
-          g_object_bind_property (view, "tab-width",
-                                  self, "tab-width",
+          g_object_bind_property (self->view, "tab-width",
+                                  self->child_view, "tab-width",
                                   G_BINDING_SYNC_CREATE);
 
-          vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (view));
+          vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->view));
+
           g_signal_connect_object (vadj,
                                    "value-changed",
                                    G_CALLBACK (ide_source_map__view_vadj_value_changed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+          g_signal_connect_object (vadj,
+                                   "notify::upper",
+                                   G_CALLBACK (ide_source_map__view_vadj_notify_upper),
                                    self,
                                    G_CONNECT_SWAPPED);
         }
@@ -145,7 +223,7 @@ ide_source_map_set_font_desc (IdeSourceMap               *self,
       GtkStyleContext *style_context;
 
       self->css_provider = gtk_css_provider_new ();
-      style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+      style_context = gtk_widget_get_style_context (GTK_WIDGET (self->child_view));
       gtk_style_context_add_provider (style_context,
                                       GTK_STYLE_PROVIDER (self->css_provider),
                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -158,7 +236,7 @@ ide_source_map_set_font_desc (IdeSourceMap               *self,
 
       self->font_desc = pango_font_description_copy (font_desc);
       str = ide_pango_font_description_to_css (font_desc);
-      css = g_strdup_printf ("IdeSourceMap { %s }", str ?: "");
+      css = g_strdup_printf ("GtkSourceView { %s }", str ?: "");
       gtk_css_provider_load_from_data (self->css_provider, css, -1, NULL);
     }
 }
@@ -200,85 +278,82 @@ ide_source_map_get_preferred_width (GtkWidget *widget,
       return;
     }
 
-  layout = gtk_widget_create_pango_layout (widget, "X");
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET (self->child_view), "X");
   pango_layout_get_pixel_size (layout, &width, &height);
   g_clear_object (&layout);
 
   right_margin_position = gtk_source_view_get_right_margin_position (self->view);
-
   width *= right_margin_position;
 
   *mininum_width = *natural_width = width;
 }
 
 static void
-ide_source_map_draw_layer (GtkTextView      *text_view,
-                           GtkTextViewLayer  layer,
-                           cairo_t          *cr)
+ide_source_map_get_preferred_height (GtkWidget *widget,
+                                     gint      *minimum_height,
+                                     gint      *natural_height)
 {
-  IdeSourceMap *self = (IdeSourceMap *)text_view;
+  IdeSourceMap *self = (IdeSourceMap *)widget;
 
-  g_assert (GTK_IS_TEXT_VIEW (text_view));
+  g_assert (GTK_IS_WIDGET (widget));
   g_assert (IDE_IS_SOURCE_MAP (self));
-  g_assert (cr != NULL);
+  g_assert (minimum_height != NULL);
+  g_assert (natural_height != NULL);
 
   if (self->view == NULL)
-    return;
-
-  GTK_TEXT_VIEW_CLASS (ide_source_map_parent_class)->draw_layer (text_view, layer, cr);
-
-  if (layer == GTK_TEXT_VIEW_LAYER_ABOVE)
     {
-      GdkRectangle visible_rect;
-      GdkRectangle my_visible_rect;
-      GdkRectangle clip;
-      GdkRectangle area1;
-      GdkRectangle area2;
-      GdkRectangle hl_area;
-      GtkTextIter iter1;
-      GtkTextIter iter2;
-
-      cairo_save (cr);
-
-      gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (self->view), &visible_rect);
-      gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (self), &my_visible_rect);
-      gdk_cairo_get_clip_rectangle (cr, &clip);
-
-      gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self->view), &iter1, visible_rect.x,
-                                          visible_rect.y);
-      gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self->view), &iter2, visible_rect.x,
-                                          visible_rect.y + visible_rect.height);
-
-      gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &iter1, &area1);
-      gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &iter2, &area2);
-
-      hl_area.y = area1.y;
-      hl_area.height = area2.y + area2.height - area1.y;
-      hl_area.x = clip.x;
-      hl_area.width = clip.width;
-
-      hl_area.y -= my_visible_rect.y;
-
-      gdk_cairo_rectangle (cr, &hl_area);
-
-      cairo_set_source_rgba (cr, .63, .63, .63, .2);
-
-      cairo_fill (cr);
-
-      cairo_restore (cr);
+      *minimum_height = *natural_height = 0;
+      return;
     }
+
+  gtk_widget_get_preferred_height (GTK_WIDGET (self->child_view),
+                                   minimum_height, natural_height);
+
+  *minimum_height = 0;
+}
+
+static gboolean
+ide_source_map_get_child_position (GtkOverlay   *overlay,
+                                   GtkWidget    *child,
+                                   GdkRectangle *alloc)
+{
+  IdeSourceMap *self = (IdeSourceMap *)overlay;
+  GtkTextIter iter;
+  GdkRectangle visible_area;
+  GdkRectangle loc;
+  GtkAllocation our_alloc;
+
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (GTK_IS_OVERLAY (overlay));
+  g_assert (GTK_IS_WIDGET (child));
+  g_assert (alloc != NULL);
+
+  if (self->view == NULL)
+    return FALSE;
+
+  gtk_widget_get_allocation (GTK_WIDGET (overlay), &our_alloc);
+
+  alloc->x = 0;
+  alloc->width = our_alloc.width;
+
+  gtk_widget_get_preferred_height (child, NULL, &alloc->height);
+
+  gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (self->view), &visible_area);
+  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self->view), &iter, visible_area.x,
+                                      visible_area.y);
+  gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self->child_view), &iter, &loc);
+  gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (self->child_view),
+                                         GTK_TEXT_WINDOW_WIDGET,
+                                         loc.x, loc.y,
+                                         NULL, &alloc->y);
+
+  return TRUE;
 }
 
 static void
 ide_source_map_finalize (GObject *object)
 {
   IdeSourceMap *self = (IdeSourceMap *)object;
-
-  if (self->delayed_draw_timeout != 0)
-    {
-      g_source_remove (self->delayed_draw_timeout);
-      self->delayed_draw_timeout = 0;
-    }
 
   g_clear_object (&self->css_provider);
   g_clear_pointer (&self->font_desc, pango_font_description_free);
@@ -330,15 +405,16 @@ ide_source_map_class_init (IdeSourceMapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
+  GtkOverlayClass *overlay_class = GTK_OVERLAY_CLASS (klass);
 
   object_class->finalize = ide_source_map_finalize;
   object_class->get_property = ide_source_map_get_property;
   object_class->set_property = ide_source_map_set_property;
 
+  widget_class->get_preferred_height = ide_source_map_get_preferred_height;
   widget_class->get_preferred_width = ide_source_map_get_preferred_width;
 
-  text_view_class->draw_layer = ide_source_map_draw_layer;
+  overlay_class->get_child_position = ide_source_map_get_child_position;
 
   gParamSpecs [PROP_VIEW] =
     g_param_spec_object ("view",
@@ -354,14 +430,37 @@ ide_source_map_init (IdeSourceMap *self)
 {
   GtkSourceCompletion *completion;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (self), FALSE);
-  gtk_text_view_set_editable (GTK_TEXT_VIEW (self), FALSE);
-  gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (self), FALSE);
-  gtk_source_view_set_show_line_numbers (GTK_SOURCE_VIEW (self), FALSE);
-  gtk_source_view_set_show_line_marks (GTK_SOURCE_VIEW (self), FALSE);
-  gtk_source_view_set_show_right_margin (GTK_SOURCE_VIEW (self), FALSE);
+  self->child_view = g_object_new (GTK_SOURCE_TYPE_VIEW,
+                                   "auto-indent", FALSE,
+                                   "can-focus", FALSE,
+                                   "editable", FALSE,
+                                   "expand", FALSE,
+                                   "monospace", TRUE,
+                                   "show-line-numbers", FALSE,
+                                   "show-line-marks", FALSE,
+                                   "show-right-margin", FALSE,
+                                   "visible", TRUE,
+                                   NULL);
+  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->child_view));
 
-  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+  self->overlay_box = g_object_new (GTK_TYPE_EVENT_BOX,
+                                    "opacity", 0.5,
+                                    "visible", TRUE,
+                                    "height-request", 10,
+                                    "width-request", 100,
+                                    NULL);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  {
+    /* TODO: use css or stylescheme for this */
+    GdkRGBA bg = { 0, 0, 0, .3 };
+    gtk_widget_override_background_color (GTK_WIDGET (self->overlay_box), GTK_STATE_FLAG_NORMAL, &bg);
+  }
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  gtk_overlay_add_overlay (GTK_OVERLAY (self), GTK_WIDGET (self->overlay_box));
+
+  completion = gtk_source_view_get_completion (self->child_view);
   gtk_source_completion_block_interactive (completion);
 
   ide_source_map_set_font_name (self, "Monospace 1");
