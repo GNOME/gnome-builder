@@ -262,6 +262,7 @@ static const gchar *gb_application_credits_funders[] = {
   "Pacaud Emmanuel",
   "Pakkanen Jussi T",
   "Paolo Borelli",
+  "Patrick Griffis",
   "Patrik Nilsson",
   "Paul R Martin",
   "Pedro J Ayala Gomariz",
