@@ -428,9 +428,12 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
         /* don't block possible accelerators, but supress others */
         if (!handled && suppress_unbound && ((event->state & GDK_MODIFIER_MASK) == 0))
           {
+            if (!is_modifier_key (event))
+              gdk_window_beep (event->window);
+
             /* cancel any inflight macros */
-            gdk_window_beep (event->window);
             g_signal_emit_by_name (priv->view, "end-macro");
+
             handled = TRUE;
           }
       }
