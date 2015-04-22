@@ -72,6 +72,14 @@ ide_pattern_spec_new (const gchar *needle)
   return self;
 }
 
+const gchar *
+ide_pattern_spec_get_text (IdePatternSpec *self)
+{
+  g_return_val_if_fail (self != NULL, NULL);
+
+  return self->needle;
+}
+
 static void
 ide_pattern_spec_free (IdePatternSpec *self)
 {

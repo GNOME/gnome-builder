@@ -33,6 +33,7 @@ IdePatternSpec *ide_pattern_spec_ref      (IdePatternSpec *self);
 void            ide_pattern_spec_unref    (IdePatternSpec *self);
 gboolean        ide_pattern_spec_match    (IdePatternSpec *self,
                                            const gchar     *haystack);
+const gchar    *ide_pattern_spec_get_text (IdePatternSpec *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdePatternSpec, ide_pattern_spec_unref)
 
