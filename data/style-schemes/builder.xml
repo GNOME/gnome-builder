@@ -113,7 +113,7 @@
   <style name="def:identifier"              foreground="purple1"/>
   <style name="def:keyword"                 foreground="gr1" bold="true"/>
   <style name="def:note"                    background="orange1" bold="true"/>
-  <style name="def:operator"                foreground="purple1"/>
+  <style name="def:operator"                foreground="#a67f59"/>
   <style name="def:preprocessor"            foreground="pink1"/>
   <style name="def:shebang"                 foreground="blue1" bold="true"/>
   <style name="def:special-char"            foreground="pink1"/>
