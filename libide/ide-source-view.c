@@ -148,6 +148,7 @@ typedef struct
   guint                        rubberband_search : 1;
   guint                        show_grid_lines : 1;
   guint                        show_line_changes : 1;
+  guint                        show_line_diagnostics : 1;
   guint                        show_search_bubbles : 1;
   guint                        show_search_shadow : 1;
   guint                        smart_backspace : 1;
@@ -187,6 +188,7 @@ enum {
   PROP_SEARCH_CONTEXT,
   PROP_SHOW_GRID_LINES,
   PROP_SHOW_LINE_CHANGES,
+  PROP_SHOW_LINE_DIAGNOSTICS,
   PROP_SHOW_SEARCH_BUBBLES,
   PROP_SHOW_SEARCH_SHADOW,
   PROP_SMART_BACKSPACE,
@@ -1292,11 +1294,11 @@ ide_source_view__buffer_notify_highlight_diagnostics_cb (IdeSourceView *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  if (priv->line_diagnostics_renderer)
+  if (priv->line_diagnostics_renderer != NULL)
     {
       gboolean visible;
 
-      visible = ide_buffer_get_highlight_diagnostics (buffer);
+      visible = (priv->show_line_diagnostics && ide_buffer_get_highlight_diagnostics (buffer));
       g_object_set (priv->line_diagnostics_renderer,
                     "visible", visible,
                     NULL);
@@ -3718,13 +3720,16 @@ ide_source_view_constructed (GObject *object)
   g_object_ref (priv->line_change_renderer);
   gtk_source_gutter_insert (gutter, priv->line_change_renderer, 0);
 
-  visible = priv->buffer && ide_buffer_get_highlight_diagnostics (priv->buffer);
+  visible = ((priv->buffer != NULL) &&
+             priv->show_line_diagnostics &&
+             ide_buffer_get_highlight_diagnostics (priv->buffer));
   priv->line_diagnostics_renderer = g_object_new (IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER,
                                                   "size", 16,
                                                   "visible", visible,
                                                   NULL);
   g_object_ref (priv->line_diagnostics_renderer);
   gtk_source_gutter_insert (gutter, priv->line_diagnostics_renderer, -100);
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_LINE_DIAGNOSTICS]);
 }
 
 static void
@@ -4950,6 +4955,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_show_line_changes (self));
       break;
 
+    case PROP_SHOW_LINE_DIAGNOSTICS:
+      g_value_set_boolean (value, ide_source_view_get_show_line_diagnostics (self));
+      break;
+
     case PROP_SHOW_SEARCH_BUBBLES:
       g_value_set_boolean (value, ide_source_view_get_show_search_bubbles (self));
       break;
@@ -5037,6 +5046,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_SHOW_LINE_CHANGES:
       ide_source_view_set_show_line_changes (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SHOW_LINE_DIAGNOSTICS:
+      ide_source_view_set_show_line_diagnostics (self, g_value_get_boolean (value));
       break;
 
     case PROP_SHOW_SEARCH_BUBBLES:
@@ -5261,6 +5274,23 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SHOW_LINE_CHANGES,
                                    gParamSpecs [PROP_SHOW_LINE_CHANGES]);
+
+  /**
+   * IdeSourceView:show-line-diagnostics:
+   *
+   * If the diagnostics gutter should be visible.
+   *
+   * This also requires that IdeBuffer:highlight-diagnostics is set to %TRUE
+   * to generate diagnostics.
+   */
+  gParamSpecs [PROP_SHOW_LINE_DIAGNOSTICS] =
+    g_param_spec_boolean ("show-line-diagnostics",
+                          _("Show Line Diagnostics"),
+                          _("If line changes diagnostics should be shown in the left gutter."),
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SHOW_LINE_DIAGNOSTICS,
+                                   gParamSpecs [PROP_SHOW_LINE_DIAGNOSTICS]);
 
   gParamSpecs [PROP_SHOW_SEARCH_BUBBLES] =
     g_param_spec_boolean ("show-search-bubbles",
@@ -5834,6 +5864,7 @@ ide_source_view_init (IdeSourceView *self)
   priv->target_line_offset = -1;
   priv->snippets = g_queue_new ();
   priv->selections = g_queue_new ();
+  priv->show_line_diagnostics = TRUE;
 
   g_signal_connect (self,
                     "notify::buffer",
@@ -5927,6 +5958,44 @@ ide_source_view_set_show_line_changes (IdeSourceView *self,
       priv->show_line_changes = show_line_changes;
       if (priv->line_change_renderer)
         gtk_source_gutter_renderer_set_visible (priv->line_change_renderer, show_line_changes);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_LINE_CHANGES]);
+    }
+}
+
+gboolean
+ide_source_view_get_show_line_diagnostics (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->show_line_diagnostics;
+}
+
+void
+ide_source_view_set_show_line_diagnostics (IdeSourceView *self,
+                                           gboolean       show_line_diagnostics)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  show_line_diagnostics = !!show_line_diagnostics;
+
+  if (show_line_diagnostics != priv->show_line_diagnostics)
+    {
+      gboolean visible;
+
+      priv->show_line_diagnostics = show_line_diagnostics;
+
+      if ((priv->buffer != NULL) && (priv->line_diagnostics_renderer != NULL))
+        {
+          visible = ((priv->buffer != NULL) &&
+                     priv->show_line_diagnostics &&
+                     ide_buffer_get_highlight_diagnostics (priv->buffer));
+          gtk_source_gutter_renderer_set_visible (priv->line_diagnostics_renderer, visible);
+        }
+
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_LINE_CHANGES]);
     }
 }

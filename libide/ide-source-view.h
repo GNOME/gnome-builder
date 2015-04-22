@@ -296,6 +296,7 @@ guint                       ide_source_view_get_scroll_offset         (IdeSource
 GtkSourceSearchContext     *ide_source_view_get_search_context        (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_grid_lines       (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_line_changes     (IdeSourceView              *self);
+gboolean                    ide_source_view_get_show_line_diagnostics (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_search_bubbles   (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_search_shadow    (IdeSourceView              *self);
 gboolean                    ide_source_view_get_smart_backspace       (IdeSourceView              *self);
@@ -330,6 +331,8 @@ void                        ide_source_view_set_scroll_offset         (IdeSource
 void                        ide_source_view_set_show_grid_lines       (IdeSourceView              *self,
                                                                        gboolean                    show_grid_lines);
 void                        ide_source_view_set_show_line_changes     (IdeSourceView              *self,
+                                                                       gboolean                    show_line_changes);
+void                        ide_source_view_set_show_line_diagnostics (IdeSourceView              *self,
                                                                        gboolean                    show_line_changes);
 void                        ide_source_view_set_show_search_bubbles   (IdeSourceView              *self,
                                                                        gboolean                    show_search_bubbles);
