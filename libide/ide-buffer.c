@@ -630,7 +630,7 @@ ide_buffer_do_modeline (IdeBuffer *self)
         }
       else if (strstr (line, "gjs") != NULL)
         {
-          target = "javascript";
+          target = "js";
         }
       else if (strstr (line, "ruby") != NULL)
         {
