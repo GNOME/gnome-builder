@@ -378,6 +378,30 @@ is_modifier_key (GdkEventKey *event)
   return FALSE;
 }
 
+static gboolean
+toplevel_is_offscreen (GdkWindow *window)
+{
+  /*
+   * FIXME: This function is a workaround for a segfault in gdk_window_beep()
+   *        with offscreen windows.
+   *
+   *        https://bugzilla.gnome.org/show_bug.cgi?id=748341
+   */
+  for (;
+       window != NULL;
+       window = gdk_window_get_parent (window))
+    {
+      GdkWindowType type;
+
+      type = gdk_window_get_window_type (window);
+
+      if (type == GDK_WINDOW_OFFSCREEN)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 gboolean
 _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
                                 GdkEventKey       *event,
@@ -427,7 +451,7 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
         /* don't block possible accelerators, but supress others */
         if (!handled && suppress_unbound && ((event->state & GDK_MODIFIER_MASK) == 0))
           {
-            if (!is_modifier_key (event))
+            if (!is_modifier_key (event) && !toplevel_is_offscreen (event->window))
               gdk_window_beep (event->window);
 
             /* cancel any inflight macros */
