@@ -74,10 +74,15 @@ gb_rename_file_popover_set_file (GbRenameFilePopover *self,
       if (file != NULL)
         {
           gchar *name;
+          gchar *label;
 
           name = g_file_get_basename (file);
-          gtk_entry_set_text (self->entry, name);
+          label = g_strdup_printf (_("Rename %s"), name);
+
+          gtk_label_set_label (self->label, label);
+
           g_free (name);
+          g_free (label);
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
@@ -95,8 +100,6 @@ gb_rename_file_popover_set_is_directory (GbRenameFilePopover *self,
   if (is_directory != self->is_directory)
     {
       self->is_directory = is_directory;
-      gtk_label_set_label (self->label,
-                           is_directory ? _("Folder") : _("File Name"));
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_IS_DIRECTORY]);
     }
 }
