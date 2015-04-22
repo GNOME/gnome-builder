@@ -56,6 +56,7 @@
   <color name="aluminium5"                  value="#555753"/>
   <color name="aluminium6"                  value="#2e3436"/>
   <color name="white"                       value="#ffffff"/>
+  <color name="pink1"                       value="#dd4a68"/>
 
   <!-- Global Settings -->
   <style name="text"                        foreground="aluminium3" background="aluminium6"/>
@@ -135,6 +136,12 @@
   <style name="diff:diff-file"              foreground="chameleon1" bold="true"/>
   <style name="diff:location"               foreground="chameleon1"/>
   <style name="diff:special-case"           foreground="white" bold="true"/>
+
+  <style name="js:object"                   foreground="chameleon3" bold="true"/>
+  <style name="js:constructors"             foreground="pink1"/>
+  <style name="js:keyword"                  foreground="#2b85aa"/>
+  <style name="js:string"                   foreground="#669900"/>
+  <style name="js:function"                 foreground="pink1"/>
 
   <style name="latex:command"               foreground="chameleon1" bold="true"/>
   <style name="latex:include"               use-style="def:preprocessor"/>
