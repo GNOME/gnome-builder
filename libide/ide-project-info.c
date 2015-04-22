@@ -16,9 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif
+
 #define G_LOG_DOMAIN "ide-project-info"
 
 #include <glib/gi18n.h>
+#include <string.h>
 
 #include "ide-project-info.h"
 
@@ -33,7 +38,7 @@
 
 struct _IdeProjectInfo
 {
-  GObject  parent_instance;
+  GObject    parent_instance;
 
   GDateTime *last_modified_at;
   GFile     *directory;
@@ -323,4 +328,44 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
 static void
 ide_project_info_init (IdeProjectInfo *self)
 {
+}
+
+gint
+ide_project_info_compare (IdeProjectInfo *info1,
+                          IdeProjectInfo *info2)
+{
+  const gchar *name1;
+  const gchar *name2;
+  GDateTime *dt1;
+  GDateTime *dt2;
+  gint ret;
+  gint prio1;
+  gint prio2;
+
+  g_assert (IDE_IS_PROJECT_INFO (info1));
+  g_assert (IDE_IS_PROJECT_INFO (info2));
+
+  prio1 = ide_project_info_get_priority (info1);
+  prio2 = ide_project_info_get_priority (info2);
+
+  if (prio1 != prio2)
+    return prio1 - prio2;
+
+  dt1 = ide_project_info_get_last_modified_at (info1);
+  dt2 = ide_project_info_get_last_modified_at (info2);
+
+  ret = g_date_time_compare (dt2, dt1);
+
+  if (ret != 0)
+    return ret;
+
+  name1 = ide_project_info_get_name (info1);
+  name2 = ide_project_info_get_name (info2);
+
+  if (name1 == NULL)
+    return 1;
+  else if (name2 == NULL)
+    return -1;
+  else
+    return strcasecmp (name1, name2);
 }

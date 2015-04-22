@@ -27,6 +27,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeProjectInfo, ide_project_info, IDE, PROJECT_INFO, GObject)
 
+gint         ide_project_info_compare              (IdeProjectInfo *info1,
+                                                    IdeProjectInfo *info2);
 GFile       *ide_project_info_get_file             (IdeProjectInfo *self);
 GFile       *ide_project_info_get_directory        (IdeProjectInfo *self);
 gint         ide_project_info_get_priority         (IdeProjectInfo *self);
