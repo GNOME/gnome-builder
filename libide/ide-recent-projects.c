@@ -28,7 +28,7 @@ struct _IdeRecentProjects
 
   GCancellable *cancellable;
   GPtrArray    *miners;
-  GPtrArray    *projects;
+  GSequence    *projects;
   GHashTable   *recent_uris;
 
   gint          active;
@@ -36,14 +36,11 @@ struct _IdeRecentProjects
   guint         discovered : 1;
 };
 
-G_DEFINE_TYPE (IdeRecentProjects, ide_recent_projects, G_TYPE_OBJECT)
+static void list_model_iface_init (GListModelInterface *iface);
 
-enum {
-  ADDED,
-  LAST_SIGNAL
-};
-
-static guint gSignals [LAST_SIGNAL];
+G_DEFINE_TYPE_WITH_CODE (IdeRecentProjects, ide_recent_projects, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                                list_model_iface_init))
 
 IdeRecentProjects *
 ide_recent_projects_new (void)
@@ -66,8 +63,15 @@ ide_recent_projects_added (IdeRecentProjects *self,
 
   if (!g_hash_table_contains (self->recent_uris, uri))
     {
-      g_ptr_array_add (self->projects, g_object_ref (project_info));
-      g_signal_emit (self, gSignals [ADDED], 0, project_info);
+      GSequenceIter *iter;
+      gint position;
+
+      iter = g_sequence_insert_sorted (self->projects,
+                                       g_object_ref (project_info),
+                                       (GCompareDataFunc)ide_project_info_compare,
+                                       NULL);
+      position = g_sequence_iter_get_position (iter);
+      g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
     }
 }
 
@@ -178,17 +182,56 @@ ide_recent_projects_load_recent (IdeRecentProjects *self,
   g_list_free_full (list, (GDestroyNotify)gtk_recent_info_unref);
 }
 
+static GType
+ide_recent_projects_get_item_type (GListModel *model)
+{
+  return IDE_TYPE_PROJECT_INFO;
+}
+
+static guint
+ide_recent_projects_get_n_items (GListModel *model)
+{
+  IdeRecentProjects *self = (IdeRecentProjects *)model;
+
+  g_assert (IDE_IS_RECENT_PROJECTS (self));
+
+  return g_sequence_get_length (self->projects);
+}
+
+static gpointer
+ide_recent_projects_get_item (GListModel *model,
+                              guint       position)
+{
+  IdeRecentProjects *self = (IdeRecentProjects *)model;
+  GSequenceIter *iter;
+
+  g_assert (IDE_IS_RECENT_PROJECTS (self));
+
+  if ((iter = g_sequence_get_iter_at_pos (self->projects, position)))
+    return g_object_ref (g_sequence_get (iter));
+
+  return NULL;
+}
+
 static void
 ide_recent_projects_finalize (GObject *object)
 {
   IdeRecentProjects *self = (IdeRecentProjects *)object;
 
   g_clear_pointer (&self->miners, g_ptr_array_unref);
-  g_clear_pointer (&self->projects, g_ptr_array_unref);
+  g_clear_pointer (&self->projects, g_sequence_free);
   g_clear_pointer (&self->recent_uris, g_hash_table_unref);
   g_clear_object (&self->cancellable);
 
   G_OBJECT_CLASS (ide_recent_projects_parent_class)->finalize (object);
+}
+
+static void
+list_model_iface_init (GListModelInterface *iface)
+{
+  iface->get_item_type = ide_recent_projects_get_item_type;
+  iface->get_n_items = ide_recent_projects_get_n_items;
+  iface->get_item = ide_recent_projects_get_item;
 }
 
 static void
@@ -197,24 +240,6 @@ ide_recent_projects_class_init (IdeRecentProjectsClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_recent_projects_finalize;
-
-  /**
-   * IdeRecentProjects::added:
-   * @self: An #IdeRecentProjects
-   * @project_info: An #IdeProjectInfo.
-   *
-   * The "added" signal is emitted when a new #IdeProjectInfo has been discovered.
-   */
-  gSignals [ADDED] =
-    g_signal_new ("added",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE,
-                  1,
-                  IDE_TYPE_PROJECT_INFO);
 }
 
 static void
@@ -223,7 +248,7 @@ ide_recent_projects_init (IdeRecentProjects *self)
   GIOExtensionPoint *extension_point;
   GList *extensions;
 
-  self->projects = g_ptr_array_new_with_free_func (g_object_unref);
+  self->projects = g_sequence_new (g_object_unref);
   self->miners = g_ptr_array_new_with_free_func (g_object_unref);
   self->cancellable = g_cancellable_new ();
   self->recent_uris = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
@@ -261,18 +286,20 @@ ide_recent_projects_init (IdeRecentProjects *self)
 GPtrArray *
 ide_recent_projects_get_projects (IdeRecentProjects *self)
 {
+  GSequenceIter *iter;
   GPtrArray *ret;
-  gsize i;
 
   g_return_val_if_fail (IDE_IS_RECENT_PROJECTS (self), NULL);
 
   ret = g_ptr_array_new_with_free_func (g_object_unref);
 
-  for (i = 0; i < self->projects->len; i++)
+  for (iter = g_sequence_get_begin_iter (self->projects);
+       !g_sequence_iter_is_end (iter);
+       g_sequence_iter_next (iter))
     {
       IdeProjectInfo *project_info;
 
-      project_info = g_ptr_array_index (self->projects, i);
+      project_info = g_sequence_get (iter);
       g_ptr_array_add (ret, g_object_ref (project_info));
     }
 

@@ -16,10 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GNU_SOURCE
-# define _GNU_SOURCE
-#endif
-
 #define G_LOG_DOMAIN "gb-projects-dialog"
 
 #include <glib/gi18n.h>
@@ -138,16 +134,16 @@ gb_projects_dialog__listbox_row_activated_cb (GbProjectsDialog *self,
                                      g_object_ref (self));
 }
 
-static void
-gb_projects_dialog__recent_projects_added (GbProjectsDialog  *self,
-                                           IdeProjectInfo    *project_info,
-                                           IdeRecentProjects *recent_projects)
+static GtkWidget *
+create_project_row (gpointer item,
+                    gpointer user_data)
 {
+  IdeProjectInfo *project_info = item;
+  GbProjectsDialog *self = user_data;
   GtkWidget *row;
 
-  g_assert (GB_IS_PROJECTS_DIALOG (self));
   g_assert (IDE_IS_PROJECT_INFO (project_info));
-  g_assert (IDE_IS_RECENT_PROJECTS (recent_projects));
+  g_assert (GB_IS_PROJECTS_DIALOG (self));
 
   row = g_object_new (GB_TYPE_RECENT_PROJECT_ROW,
                       "project-info", project_info,
@@ -158,9 +154,11 @@ gb_projects_dialog__recent_projects_added (GbProjectsDialog  *self,
                            G_CALLBACK (gb_projects_dialog_update_delete_sensitivity),
                            self,
                            G_CONNECT_SWAPPED);
-  g_object_bind_property (self->select_button, "active", row, "selection-mode",
+  g_object_bind_property (self->select_button, "active",
+                          row, "selection-mode",
                           G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (self->listbox), row);
+
+  return row;
 }
 
 static void
@@ -200,55 +198,6 @@ gb_projects_dialog__listbox_header_cb (GtkListBoxRow *row,
                               NULL);
       gtk_list_box_row_set_header (row, header);
     }
-}
-
-static gint
-gb_projects_dialog__listbox_sort_cb (GtkListBoxRow *row1,
-                                     GtkListBoxRow *row2,
-                                     gpointer       user_data)
-{
-  IdeProjectInfo *info1;
-  IdeProjectInfo *info2;
-  const gchar *name1;
-  const gchar *name2;
-  GDateTime *dt1;
-  GDateTime *dt2;
-  gint ret;
-  gint prio1;
-  gint prio2;
-
-  g_assert (GB_IS_RECENT_PROJECT_ROW (row1));
-  g_assert (GB_IS_RECENT_PROJECT_ROW (row2));
-
-  info1 = gb_recent_project_row_get_project_info (GB_RECENT_PROJECT_ROW (row1));
-  info2 = gb_recent_project_row_get_project_info (GB_RECENT_PROJECT_ROW (row2));
-
-  g_assert (IDE_IS_PROJECT_INFO (info1));
-  g_assert (IDE_IS_PROJECT_INFO (info2));
-
-  prio1 = ide_project_info_get_priority (info1);
-  prio2 = ide_project_info_get_priority (info2);
-
-  if (prio1 != prio2)
-    return prio1 - prio2;
-
-  dt1 = ide_project_info_get_last_modified_at (info1);
-  dt2 = ide_project_info_get_last_modified_at (info2);
-
-  ret = g_date_time_compare (dt2, dt1);
-
-  if (ret != 0)
-    return ret;
-
-  name1 = ide_project_info_get_name (info1);
-  name2 = ide_project_info_get_name (info2);
-
-  if (name1 == NULL)
-    return 1;
-  else if (name2 == NULL)
-    return -1;
-  else
-    return strcasecmp (name1, name2);
 }
 
 static gboolean
@@ -482,12 +431,6 @@ gb_projects_dialog_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (self->recent_projects,
-                           "added",
-                           G_CALLBACK (gb_projects_dialog__recent_projects_added),
-                           self,
-                           G_CONNECT_SWAPPED);
-
   g_object_bind_property (self->search_button, "active",
                           self->search_bar, "search-mode-enabled",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
@@ -526,13 +469,15 @@ gb_projects_dialog_constructed (GObject *object)
                                 gb_projects_dialog__listbox_header_cb,
                                 NULL, NULL);
 
-  gtk_list_box_set_sort_func (self->listbox,
-                              gb_projects_dialog__listbox_sort_cb,
-                              NULL, NULL);
-
   gtk_list_box_set_filter_func (self->listbox,
                                 gb_projects_dialog__listbox_filter_cb,
                                 self, NULL);
+
+  gtk_list_box_bind_model (self->listbox,
+                           G_LIST_MODEL (self->recent_projects),
+                           create_project_row,
+                           self,
+                           NULL);
 
   ide_recent_projects_discover_async (self->recent_projects,
                                       NULL, /* TODO: cancellable */
