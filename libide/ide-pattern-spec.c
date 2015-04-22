@@ -134,7 +134,8 @@ ide_pattern_spec_match (IdePatternSpec *self,
       if (haystack == NULL)
         return FALSE;
 
-      haystack = next_word_start (haystack + strlen (self->parts [i]));
+      if (self->parts [i + 1] != NULL)
+        haystack = next_word_start (haystack + strlen (self->parts [i]));
     }
 
   return TRUE;
