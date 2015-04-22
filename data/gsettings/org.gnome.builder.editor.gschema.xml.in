@@ -63,5 +63,10 @@
       <range min="0" max="999"/>
       <default>0</default>
     </key>
+    <key name="show-map" type="b">
+      <default>false</default>
+      <summary>Show overview map</summary>
+      <description>If enabled, Builder will display an overview map of the source file next to the editor.</description>
+    </key>
   </schema>
 </schemalist>

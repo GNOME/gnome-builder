@@ -143,8 +143,7 @@
           </object>
         </child>
         <child>
-          <object class="IdeSourceMap" id="source_map">
-            <property name="view">source_view</property>
+          <object class="GtkBox" id="source_map_container">
             <property name="visible">true</property>
           </object>
         </child>

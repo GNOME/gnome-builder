@@ -34,6 +34,7 @@ enum {
   PROP_0,
   PROP_BACK_FORWARD_LIST,
   PROP_DOCUMENT,
+  PROP_SHOW_MAP,
   LAST_PROP
 };
 
@@ -455,6 +456,42 @@ gb_editor_frame__source_view_request_documentation (GbEditorFrame *self,
   gb_widget_activate_action (GTK_WIDGET (self), "workbench", "search-docs", param);
 }
 
+static gboolean
+gb_editor_frame_get_show_map (GbEditorFrame *self)
+{
+  g_assert (GB_IS_EDITOR_FRAME (self));
+
+  return (self->source_map != NULL);
+}
+
+static void
+gb_editor_frame_set_show_map (GbEditorFrame *self,
+                              gboolean       show_map)
+{
+  g_assert (GB_IS_EDITOR_FRAME (self));
+
+  if (show_map != gb_editor_frame_get_show_map (self))
+    {
+      if (self->source_map != NULL)
+        {
+          gtk_container_remove (GTK_CONTAINER (self->source_map_container),
+                                GTK_WIDGET (self->source_map));
+          self->source_map = NULL;
+        }
+      else
+        {
+          self->source_map = g_object_new (IDE_TYPE_SOURCE_MAP,
+                                           "view", self->source_view,
+                                           "visible", TRUE,
+                                           NULL);
+          gtk_container_add (GTK_CONTAINER (self->source_map_container),
+                             GTK_WIDGET (self->source_map));
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_MAP]);
+    }
+}
+
 static void
 gb_editor_frame_constructed (GObject *object)
 {
@@ -525,6 +562,10 @@ gb_editor_frame_get_property (GObject    *object,
       g_value_set_object (value, gb_editor_frame_get_document (self));
       break;
 
+    case PROP_SHOW_MAP:
+      g_value_set_boolean (value, gb_editor_frame_get_show_map (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -546,6 +587,10 @@ gb_editor_frame_set_property (GObject      *object,
 
     case PROP_BACK_FORWARD_LIST:
       ide_source_view_set_back_forward_list (self->source_view, g_value_get_object (value));
+      break;
+
+    case PROP_SHOW_MAP:
+      gb_editor_frame_set_show_map (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -583,6 +628,15 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_DOCUMENT, gParamSpecs [PROP_DOCUMENT]);
 
+  gParamSpecs [PROP_SHOW_MAP] =
+    g_param_spec_boolean ("show-map",
+                          _("Show Map"),
+                          _("If the ovewview map should be shown."),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SHOW_MAP,
+                                   gParamSpecs [PROP_SHOW_MAP]);
+
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-frame.ui");
 
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, floating_bar);
@@ -590,8 +644,8 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, overwrite_label);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, scrolled_window);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, search_entry);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, source_map_container);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, search_revealer);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, source_map);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, source_view);
 
   g_type_ensure (NAUTILUS_TYPE_FLOATING_BAR);
@@ -618,6 +672,7 @@ gb_editor_frame_init (GbEditorFrame *self)
   g_settings_bind (settings, "smart-backspace", self->source_view, "smart-backspace", G_SETTINGS_BIND_GET);
   g_settings_bind_with_mapping (settings, "smart-home-end", self->source_view, "smart-home-end", G_SETTINGS_BIND_GET, get_smart_home_end, NULL, NULL, NULL);
   g_settings_bind (settings, "word-completion", self->source_view, "enable-word-completion", G_SETTINGS_BIND_GET);
+  g_settings_bind (settings, "show-map", self, "show-map", G_SETTINGS_BIND_DEFAULT);
   g_signal_connect (settings, "changed::keybindings", G_CALLBACK (keybindings_changed), self);
 
   g_object_bind_property (self->source_view, "overwrite", self->overwrite_label, "visible", G_BINDING_SYNC_CREATE);
