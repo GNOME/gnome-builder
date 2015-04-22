@@ -49,18 +49,14 @@ get_param (IdeSourceViewMode *self,
            const gchar       *param,
            GValue            *value)
 {
-  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (self);
   GtkStyleContext *context;
 
   g_assert (IDE_IS_SOURCE_VIEW_MODE (self));
   g_assert (param != NULL);
   g_assert (value != NULL);
-  context = gtk_widget_get_style_context (GTK_WIDGET (self));
 
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, priv->name);
+  context = gtk_widget_get_style_context (GTK_WIDGET (self));
   gtk_style_context_get_style_property (context, param, value);
-  gtk_style_context_restore (context);
 }
 
 gboolean
@@ -467,6 +463,15 @@ _ide_source_view_mode_new (GtkWidget             *view,
   priv->view = g_object_ref (view);
   priv->name = g_strdup (name);
   priv->type = type;
+
+  if (priv->name != NULL)
+    {
+      GtkStyleContext *context;
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (mode));
+      gtk_style_context_add_class (context, priv->name);
+    }
+
   priv->default_mode = get_string_param (mode, "default-mode");
   priv->display_name = get_string_param (mode, "display-name");
 
