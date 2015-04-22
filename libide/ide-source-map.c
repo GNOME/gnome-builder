@@ -50,6 +50,7 @@ G_DEFINE_TYPE (IdeSourceMap, ide_source_map, GTK_TYPE_OVERLAY)
 
 enum {
   PROP_0,
+  PROP_FONT_DESC,
   PROP_VIEW,
   LAST_PROP
 };
@@ -170,6 +171,28 @@ ide_source_map__view_vadj_notify_upper (IdeSourceMap  *self,
   update_scrubber_height (self);
 }
 
+static gboolean
+transform_font_desc (GBinding     *binding,
+                     const GValue *from_value,
+                     GValue       *to_value,
+                     gpointer      user_data)
+{
+  const PangoFontDescription *font_desc;
+  PangoFontDescription *copy = NULL;
+
+  font_desc = g_value_get_boxed (from_value);
+
+  if (font_desc != NULL)
+    {
+      copy = pango_font_description_copy (font_desc);
+      pango_font_description_set_size (copy, PANGO_SCALE);
+    }
+
+  g_value_take_boxed (to_value, copy);
+
+  return TRUE;
+}
+
 void
 ide_source_map_set_view (IdeSourceMap  *self,
                          GtkSourceView *view)
@@ -192,6 +215,11 @@ ide_source_map_set_view (IdeSourceMap  *self,
           g_object_bind_property (self->view, "tab-width",
                                   self->child_view, "tab-width",
                                   G_BINDING_SYNC_CREATE);
+          g_object_bind_property_full (self->view, "font-desc",
+                                       self, "font-desc",
+                                       G_BINDING_SYNC_CREATE,
+                                       transform_font_desc,
+                                       NULL, NULL, NULL);
 
           vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->view));
 
@@ -560,6 +588,10 @@ ide_source_map_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_FONT_DESC:
+      ide_source_map_set_font_desc (self, g_value_get_boxed (value));
+      break;
+
     case PROP_VIEW:
       ide_source_map_set_view (self, g_value_get_object (value));
       break;
@@ -593,6 +625,14 @@ ide_source_map_class_init (IdeSourceMapClass *klass)
                          GTK_SOURCE_TYPE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_VIEW, gParamSpecs [PROP_VIEW]);
+
+  gParamSpecs [PROP_FONT_DESC] =
+    g_param_spec_boxed ("font-desc",
+                        _("Font Description"),
+                        _("The pango font description to use."),
+                        PANGO_TYPE_FONT_DESCRIPTION,
+                        (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_FONT_DESC, gParamSpecs [PROP_FONT_DESC]);
 }
 
 static void
