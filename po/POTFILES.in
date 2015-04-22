@@ -81,6 +81,7 @@ libide/ide-script.c
 libide/ide-script-manager.c
 libide/ide-search-result.c
 libide/ide-service.c
+libide/ide-source-map.c
 libide/ide-source-snippet.c
 libide/ide-source-snippet-chunk.c
 libide/ide-source-snippet-completion-item.c
