@@ -23,6 +23,7 @@
 #include "ide-macros.h"
 #include "ide-pango.h"
 #include "ide-source-map.h"
+#include "ide-source-view.h"
 
 #define DEFAULT_WIDTH 100
 #define DELAYED_DRAW_TIMEOUT_MSEC 34
@@ -622,7 +623,7 @@ ide_source_map_class_init (IdeSourceMapClass *klass)
     g_param_spec_object ("view",
                          _("View"),
                          _("The view this widget is mapping."),
-                         GTK_SOURCE_TYPE_VIEW,
+                         IDE_TYPE_SOURCE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_VIEW, gParamSpecs [PROP_VIEW]);
 
@@ -640,12 +641,14 @@ ide_source_map_init (IdeSourceMap *self)
 {
   GtkSourceCompletion *completion;
 
-  self->child_view = g_object_new (GTK_SOURCE_TYPE_VIEW,
+  self->child_view = g_object_new (IDE_TYPE_SOURCE_VIEW,
                                    "auto-indent", FALSE,
                                    "can-focus", FALSE,
                                    "editable", FALSE,
                                    "expand", FALSE,
                                    "monospace", TRUE,
+                                   "show-line-changes", TRUE,
+                                   "show-line-diagnostics", FALSE,
                                    "show-line-numbers", FALSE,
                                    "show-line-marks", FALSE,
                                    "show-right-margin", FALSE,
