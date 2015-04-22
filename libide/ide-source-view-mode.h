@@ -47,6 +47,7 @@ struct _IdeSourceViewModeClass
   GtkWidgetClass parent_class;
 };
 
+GType                  ide_source_view_mode_get_type                     (void);
 gboolean               ide_source_view_mode_get_repeat_insert_with_count (IdeSourceViewMode *self);
 gboolean               ide_source_view_mode_get_block_cursor             (IdeSourceViewMode *self);
 gboolean               ide_source_view_mode_get_suppress_unbound         (IdeSourceViewMode *self);
