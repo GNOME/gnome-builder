@@ -469,6 +469,9 @@ _ide_source_view_mode_new (GtkWidget             *view,
 
   IDE_TRACE_MSG ("supress_unbound = %d", ide_source_view_mode_get_suppress_unbound (mode));
   IDE_TRACE_MSG ("block_cursor = %d", ide_source_view_mode_get_block_cursor (mode));
+  IDE_TRACE_MSG ("type = %d", (int)priv->type);
+  IDE_TRACE_MSG ("default_mode = %s", priv->default_mode);
+  IDE_TRACE_MSG ("display_name = %s", priv->display_name);
 
   return g_object_ref_sink (mode);
 }
