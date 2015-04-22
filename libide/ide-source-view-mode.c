@@ -52,6 +52,9 @@ get_param (IdeSourceViewMode *self,
   IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (self);
   GtkStyleContext *context;
 
+  g_assert (IDE_IS_SOURCE_VIEW_MODE (self));
+  g_assert (param != NULL);
+  g_assert (value != NULL);
   context = gtk_widget_get_style_context (GTK_WIDGET (self));
 
   gtk_style_context_save (context);
@@ -470,8 +473,8 @@ _ide_source_view_mode_new (GtkWidget             *view,
   IDE_TRACE_MSG ("supress_unbound = %d", ide_source_view_mode_get_suppress_unbound (mode));
   IDE_TRACE_MSG ("block_cursor = %d", ide_source_view_mode_get_block_cursor (mode));
   IDE_TRACE_MSG ("type = %d", (int)priv->type);
-  IDE_TRACE_MSG ("default_mode = %s", priv->default_mode);
-  IDE_TRACE_MSG ("display_name = %s", priv->display_name);
+  IDE_TRACE_MSG ("default_mode = %s", priv->default_mode ?: "(null)");
+  IDE_TRACE_MSG ("display_name = %s", priv->display_name ?: "(null)");
 
   return g_object_ref_sink (mode);
 }
