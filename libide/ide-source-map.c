@@ -389,7 +389,8 @@ ide_source_map__child_view_state_flags_changed (GtkWidget     *widget,
   g_assert (GTK_SOURCE_IS_VIEW (child_view));
 
   window = gtk_text_view_get_window (GTK_TEXT_VIEW (child_view), GTK_TEXT_WINDOW_TEXT);
-  gdk_window_set_cursor (window, NULL);
+  if (window != NULL)
+    gdk_window_set_cursor (window, NULL);
 }
 
 static void
@@ -508,6 +509,17 @@ ide_source_map__overlay_box_motion_notify_event (IdeSourceMap   *self,
 }
 
 static void
+ide_source_map_size_allocate (GtkWidget     *widget,
+                              GtkAllocation *alloc)
+{
+  IdeSourceMap *self = (IdeSourceMap *)widget;
+
+  GTK_WIDGET_CLASS (ide_source_map_parent_class)->size_allocate (widget, alloc);
+
+  update_scrubber_height (self);
+}
+
+static void
 ide_source_map_finalize (GObject *object)
 {
   IdeSourceMap *self = (IdeSourceMap *)object;
@@ -570,6 +582,7 @@ ide_source_map_class_init (IdeSourceMapClass *klass)
 
   widget_class->get_preferred_height = ide_source_map_get_preferred_height;
   widget_class->get_preferred_width = ide_source_map_get_preferred_width;
+  widget_class->size_allocate = ide_source_map_size_allocate;
 
   overlay_class->get_child_position = ide_source_map_get_child_position;
 
