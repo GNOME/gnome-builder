@@ -139,7 +139,10 @@
   <style name="xml:namespace"               bold="true"/>
 
   <style name="js:object"                   foreground="chameleon3" bold="true"/>
-  <style name="js:constructors"             foreground="chameleon3"/>
+  <style name="js:constructors"             foreground="pink1"/>
+  <style name="js:keyword"                  foreground="#0077aa"/>
+  <style name="js:string"                   foreground="#669900"/>
+  <style name="js:function"                 foreground="pink1"/>
 
   <style name="latex:display-math"          foreground="plum3"/>
   <style name="latex:command"               foreground="chameleon3" bold="true"/>
