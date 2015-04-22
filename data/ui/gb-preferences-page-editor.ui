@@ -102,6 +102,16 @@
               </object>
             </child>
             <child>
+              <object class="GbPreferencesSwitch" id="show_map_switch">
+                <property name="title" translatable="yes">Show Overview Map</property>
+                <property name="description" translatable="yes">Display an overview map next to the source code editor.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">show-map</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
               <object class="GtkBox" id="scroll_off_container">
                 <property name="orientation">horizontal</property>
                 <property name="margin">6</property>
