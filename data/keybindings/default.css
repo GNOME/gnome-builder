@@ -36,6 +36,9 @@
 
   bind "<ctrl>Return" { "action" ("workbench", "show-command-bar", "") };
   bind "<ctrl>KP_Enter" { "action" ("workbench", "show-command-bar", "") };
+
+  bind "<ctrl>g" { "move-search" (down, 0, 1, 1, 1, 1) };
+  bind "<ctrl><shift>g" { "move-search" (up, 0, 1, 0, 1, 1) };
 }
 
 IdeSourceViewMode.default {
