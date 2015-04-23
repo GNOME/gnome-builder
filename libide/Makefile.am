@@ -201,6 +201,8 @@ libide_1_0_la_public_sources = \
 	libide/python/ide-python-language.h \
 	libide/theatrics/ide-animation.c \
 	libide/theatrics/ide-animation.h \
+	libide/vala/ide-vala-language.c \
+	libide/vala/ide-vala-language.h \
 	libide/xml/ide-xml-indenter.c \
 	libide/xml/ide-xml-indenter.h \
 	libide/xml/ide-xml-language.c \
@@ -322,6 +324,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide/theatrics \
 	-I$(top_srcdir)/libide/trie \
 	-I$(top_srcdir)/libide/util \
+	-I$(top_srcdir)/libide/vala \
 	-I$(top_srcdir)/libide/xml \
 	$(CLANG_CFLAGS) \
 	$(NULL)

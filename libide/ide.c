@@ -42,6 +42,7 @@
 #include "ide-pygobject-script.h"
 #include "ide-python-language.h"
 #include "ide-search-provider.h"
+#include "ide-vala-language.h"
 #include "ide-xml-language.h"
 
 #include "modeline-parser.h"
@@ -128,6 +129,10 @@ ide_init_ctor (void)
   g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
                                   IDE_TYPE_XML_LANGUAGE,
                                   IDE_LANGUAGE_EXTENSION_POINT".xml",
+                                  0);
+  g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
+                                  IDE_TYPE_VALA_LANGUAGE,
+                                  IDE_LANGUAGE_EXTENSION_POINT".vala",
                                   0);
 
   g_io_extension_point_implement (IDE_PROJECT_MINER_EXTENSION_POINT,

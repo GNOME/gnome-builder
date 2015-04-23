@@ -29,6 +29,11 @@ indent_size = 2
 tab_size = 2
 indent_style = space
 
+[*.vala]
+indent_size = 4
+tab_size = 4
+indent_style = tab
+
 [*.{xml.in,xml}]
 indent_size = 2
 tab_size = 2
