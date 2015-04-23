@@ -65,6 +65,21 @@ test_ide_indenter_CFLAGS = \
 test_ide_indenter_LDADD = libide-1.0.la $(LIBIDE_LIBS)
 
 
+noinst_PROGRAMS += test-vim
+TESTS += test-vim
+test_vim_SOURCES = tests/test-vim.c
+test_vim_CFLAGS = \
+	-I$(top_builddir)/src/resources \
+	$(libide_1_0_la_CFLAGS) \
+	-DTEST_DATA_DIR="\"$(top_srcdir)/tests/data\"" \
+	-DBUILDDIR="\"$(abs_top_builddir)\""
+test_vim_LDADD = \
+	libide-1.0.la \
+	libgnome-builder.la \
+	$(LIBIDE_LIBS) \
+	$(NULL)
+
+
 noinst_PROGRAMS += test-ide-source-view
 test_ide_source_view_SOURCES = tests/test-ide-source-view.c
 test_ide_source_view_CFLAGS = \
