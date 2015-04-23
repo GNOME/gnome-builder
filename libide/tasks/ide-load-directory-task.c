@@ -26,7 +26,7 @@
 #include "ide-project-files.h"
 #include "ide-vcs.h"
 
-#define DEFAULT_MAX_FILES 10000
+#define DEFAULT_MAX_FILES 15000
 
 typedef struct
 {
