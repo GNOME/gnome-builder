@@ -183,9 +183,14 @@ gb_view_stack_remove (GbViewStack *self,
                       GbView      *view)
 {
   GtkWidget *controls;
+  GtkWidget *focus_after_close = NULL;
 
   g_assert (GB_IS_VIEW_STACK (self));
   g_assert (GB_IS_VIEW (view));
+
+  focus_after_close = g_list_nth_data (self->focus_history, 1);
+  if (focus_after_close != NULL)
+    g_object_ref (focus_after_close);
 
   gb_view_stack_remove_list_row (self, view);
 
@@ -195,13 +200,11 @@ gb_view_stack_remove (GbViewStack *self,
     gtk_container_remove (GTK_CONTAINER (self->controls_stack), controls);
   gtk_container_remove (GTK_CONTAINER (self->stack), GTK_WIDGET (view));
 
-  if (self->focus_history)
+  if (focus_after_close != NULL)
     {
-      GtkWidget *child;
-
-      child = self->focus_history->data;
-      gtk_stack_set_visible_child (self->stack, child);
-      gtk_widget_grab_focus (GTK_WIDGET (child));
+      gtk_stack_set_visible_child (self->stack, focus_after_close);
+      gtk_widget_grab_focus (GTK_WIDGET (focus_after_close));
+      g_clear_object (&focus_after_close);
     }
   else
     g_signal_emit (self, gSignals [EMPTY], 0);
