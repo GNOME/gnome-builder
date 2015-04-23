@@ -439,7 +439,8 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
         {
           if (!is_modifier_key (event))
             {
-              gtk_widget_error_bell (priv->view);
+              if (!toplevel_is_offscreen (event->window))
+                gtk_widget_error_bell (priv->view);
               handled = TRUE;
               *remove = TRUE;
             }
