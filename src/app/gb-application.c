@@ -312,6 +312,8 @@ gb_application_open_project_async (GbApplication       *self,
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  task = g_task_new (self, cancellable, callback, user_data);
+
   windows = gtk_application_get_windows (GTK_APPLICATION (self));
 
   for (iter = windows; iter; iter = iter->next)
@@ -331,13 +333,12 @@ gb_application_open_project_async (GbApplication       *self,
               if (g_file_equal (file, project_file))
                 {
                   gtk_window_present (iter->data);
+                  g_task_return_boolean (task, TRUE);
                   return;
                 }
             }
         }
     }
-
-  task = g_task_new (self, cancellable, callback, user_data);
 
   if (additional_files)
     ar = g_ptr_array_ref (additional_files);
