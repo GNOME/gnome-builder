@@ -261,7 +261,7 @@ ide_autotools_build_task_set_directory (IdeAutotoolsBuildTask *self,
    */
   if (directory)
     {
-      g_autofree gchar *path;
+      g_autofree gchar *path = NULL;
 
       path = g_file_get_path (directory);
 
