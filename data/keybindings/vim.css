@@ -1404,6 +1404,7 @@ IdeSourceViewMode.vim-normal-c-i {
 IdeSourceViewMode.vim-normal-d {
   -IdeSourceViewMode-suppress-unbound: true;
   -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-display-name: "Delete";
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal-d;
