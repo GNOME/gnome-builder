@@ -1,4 +1,15 @@
 <schemalist>
+
+  <flags id="org.gnome.builder.editor.DrawSpaces">
+    <value nick="space" value="1"/>
+    <value nick="tab" value="2"/>
+    <value nick="newline" value="4"/>
+    <value nick="nbsp" value="8"/>
+    <value nick="leading" value="16"/>
+    <value nick="text" value="32"/>
+    <value nick="trailing" value="64"/>
+  </flags>
+
   <schema id="org.gnome.builder.editor" path="/org/gnome/builder/editor/" gettext-domain="gnome-builder">
     <key name="keybindings" type="s">
       <choices>
@@ -67,6 +78,11 @@
       <default>false</default>
       <summary>Show overview map</summary>
       <description>If enabled, Builder will display an overview map of the source file next to the editor.</description>
+    </key>
+    <key name="draw-spaces" flags="org.gnome.builder.editor.DrawSpaces">
+      <default>[]</default>
+      <summary>Draw Spaces</summary>
+      <description>The various types of space to draw in the editor.</description>
     </key>
   </schema>
 </schemalist>

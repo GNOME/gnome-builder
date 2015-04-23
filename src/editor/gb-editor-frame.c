@@ -663,6 +663,7 @@ gb_editor_frame_init (GbEditorFrame *self)
   gb_editor_frame_actions_init (self);
 
   settings = g_settings_new ("org.gnome.builder.editor");
+  g_settings_bind (settings, "draw-spaces", self->source_view, "draw-spaces", G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (settings, "font-name", self->source_view, "font-name", G_SETTINGS_BIND_GET);
   g_settings_bind (settings, "highlight-current-line", self->source_view, "highlight-current-line", G_SETTINGS_BIND_GET);
   g_settings_bind (settings, "scroll-offset", self->source_view, "scroll-offset", G_SETTINGS_BIND_GET);
