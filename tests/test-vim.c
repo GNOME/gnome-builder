@@ -237,7 +237,18 @@ test_vim_basic_cb (IdeContext *context,
                 NULL);
 
   assert_keypress_equal (widget, "ithis is a test.\e", "this is a test.");
-  assert_keypress_equal (widget, "ithis is a test.\eI\e4x", " is a test.");
+  assert_keypress_equal (widget, "ithis is a test.\eI\e4x\e", " is a test.");
+  assert_keypress_equal (widget, "ido_something (NULL)\ea;\ehhhciwfoo\e", "do_something (foo);");
+  assert_keypress_equal (widget, "itesting.\edd\e", "");
+  assert_keypress_equal (widget, "i\n\n\edd\e", "\n");
+  assert_keypress_equal (widget, "dd\e", "");
+  assert_keypress_equal (widget, "iabcd defg hijk\e02de\e", " hijk");
+  assert_keypress_equal (widget, "iabcd defg hijk\e0d$\e", "");
+
+#if 0
+  /* this to fix in our vim */
+  assert_keypress_equal (widget, "i\nabcd\n\ekcipfoo", "\nfoo\n");
+#endif
 }
 
 static void
