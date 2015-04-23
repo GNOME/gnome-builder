@@ -29,6 +29,7 @@
 #include "ide-debug.h"
 #include "ide-file.h"
 #include "ide-highlight-index.h"
+#include "ide-thread-pool.h"
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
 
@@ -383,7 +384,9 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
   }
 #endif
 
-  g_task_run_in_thread (task, ide_clang_service_parse_worker);
+  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
+                             task,
+                             ide_clang_service_parse_worker);
 }
 
 static gboolean

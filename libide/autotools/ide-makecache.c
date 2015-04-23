@@ -37,6 +37,7 @@
 #include "ide-makecache.h"
 #include "ide-makecache-target.h"
 #include "ide-project.h"
+#include "ide-thread-pool.h"
 #include "ide-vcs.h"
 
 #define FAKE_CC  "__LIBIDE_FAKE_CC__"
@@ -234,7 +235,10 @@ ide_makecache_discover_llvm_flags_async (IdeMakecache        *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_run_in_thread (task, ide_makecache_discover_llvm_flags_worker);
+
+  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
+                             task,
+                             ide_makecache_discover_llvm_flags_worker);
 
   IDE_EXIT;
 }
@@ -1145,7 +1149,9 @@ ide_makecache__discover_llvm_flags_cb (GObject      *object,
 
   self->llvm_flags = flags;
 
-  g_task_run_in_thread (task, ide_makecache_new_worker);
+  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
+                             task,
+                             ide_makecache_new_worker);
 }
 
 void
@@ -1290,7 +1296,9 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
       IDE_EXIT;
     }
 
-  g_task_run_in_thread (task, ide_makecache_get_file_targets_worker);
+  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
+                             task,
+                             ide_makecache_get_file_targets_worker);
 
   IDE_EXIT;
 }
@@ -1368,7 +1376,10 @@ ide_makecache__get_targets_cb (GObject      *object,
   lookup->relative_path = g_strdup (relative_path);
 
   g_task_set_task_data (task, lookup, file_flags_lookup_free);
-  g_task_run_in_thread (task, ide_makecache_get_file_flags_worker);
+
+  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
+                             task,
+                             ide_makecache_get_file_flags_worker);
 
   IDE_EXIT;
 }

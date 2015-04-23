@@ -34,6 +34,7 @@
 #include "ide-ref-ptr.h"
 #include "ide-source-location.h"
 #include "ide-symbol.h"
+#include "ide-thread-pool.h"
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
@@ -711,7 +712,10 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
    */
 
   g_task_set_task_data (task, state, code_complete_state_free);
-  g_task_run_in_thread (task, ide_clang_translation_unit_code_complete_worker);
+
+  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
+                             task,
+                             ide_clang_translation_unit_code_complete_worker);
 
   IDE_EXIT;
 }

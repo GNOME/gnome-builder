@@ -105,6 +105,7 @@ IdeSymbol          *_ide_symbol_new                    (const gchar           *n
                                                         IdeSourceLocation     *declaration_location,
                                                         IdeSourceLocation     *definition_location,
                                                         IdeSourceLocation     *canonical_location);
+void                _ide_thread_pool_init              (void);
 IdeUnsavedFile     *_ide_unsaved_file_new              (GFile                 *file,
                                                         GBytes                *content,
                                                         const gchar           *temp_path,

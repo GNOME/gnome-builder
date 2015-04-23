@@ -180,6 +180,8 @@ libide_1_0_la_public_sources = \
 	libide/ide-test-case.h \
 	libide/ide-test-suite.c \
 	libide/ide-test-suite.h \
+        libide/ide-thread-pool.c \
+        libide/ide-thread-pool.h \
 	libide/ide-types.h \
 	libide/ide-unsaved-file.c \
 	libide/ide-unsaved-file.h \
@@ -375,6 +377,7 @@ libide_1_0_la_type_headers = \
 	libide/ide-diagnostic.h \
 	libide/ide-highlighter.h \
 	libide/ide-source-view.h \
+        libide/ide-thread-pool.h \
 	$(NULL)
 
 libide_1_0_la_built_sources = \

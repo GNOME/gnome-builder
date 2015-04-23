@@ -38,6 +38,7 @@
 #include "ide-gjs-script.h"
 #include "ide-gsettings-file-settings.h"
 #include "ide-html-language.h"
+#include "ide-internal.h"
 #include "ide-project-miner.h"
 #include "ide-pygobject-script.h"
 #include "ide-python-language.h"
@@ -195,4 +196,6 @@ ide_init_ctor (void)
       g_error (_("Builder requires libgit2-glib with SSH support."));
       exit (EXIT_FAILURE);
     }
+
+  _ide_thread_pool_init ();
 }
