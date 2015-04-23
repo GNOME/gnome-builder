@@ -28,6 +28,7 @@
 #include "ide-c-language.h"
 #include "ide-clang-service.h"
 #include "ide-devhelp-search-provider.h"
+#include "ide-device-provider.h"
 #include "ide-directory-build-system.h"
 #include "ide-directory-vcs.h"
 #include "ide-editorconfig-file-settings.h"
@@ -89,6 +90,7 @@ ide_init_ctor (void)
   g_type_ensure (IDE_TYPE_VCS);
 
   g_io_extension_point_register (IDE_BUILD_SYSTEM_EXTENSION_POINT);
+  g_io_extension_point_register (IDE_DEVICE_PROVIDER_EXTENSION_POINT);
   g_io_extension_point_register (IDE_FILE_SETTINGS_EXTENSION_POINT);
   g_io_extension_point_register (IDE_LANGUAGE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_PROJECT_MINER_EXTENSION_POINT);

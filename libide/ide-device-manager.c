@@ -173,6 +173,41 @@ ide_device_manager_add_provider (IdeDeviceManager  *self,
     }
 }
 
+static void
+ide_device_manager_add_providers (IdeDeviceManager *self)
+{
+  GIOExtensionPoint *extension_point;
+  IdeContext *context;
+  GList *extensions;
+  GList *iter;
+
+  g_assert (IDE_IS_DEVICE_MANAGER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  extension_point = g_io_extension_point_lookup (IDE_DEVICE_PROVIDER_EXTENSION_POINT);
+  extensions = g_io_extension_point_get_extensions (extension_point);
+
+  for (iter = extensions; iter; iter = iter->next)
+    {
+      GIOExtension *extension = iter->data;
+      g_autoptr(IdeDeviceProvider) provider = NULL;
+      GType type;
+
+      type = g_io_extension_get_type (extension);
+
+      if (!g_type_is_a (type, IDE_TYPE_DEVICE_PROVIDER))
+        {
+          g_warning (_("%s is not an IdeDeviceProvider."),
+                     g_type_name (type));
+          continue;
+        }
+
+      provider = g_object_new (type, "context", context, NULL);
+      ide_device_manager_add_provider (self, provider);
+    }
+}
+
 /**
  * ide_device_manager_get_devices:
  *
@@ -234,6 +269,7 @@ ide_device_manager_constructed (GObject *object)
   G_OBJECT_CLASS (ide_device_manager_parent_class)->constructed (object);
 
   ide_device_manager_add_local (self);
+  ide_device_manager_add_providers (self);
 }
 
 static void
