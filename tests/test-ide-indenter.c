@@ -159,6 +159,8 @@ synthesize_event (GtkTextView *text_view,
       ev->key.keyval = gdk_unicode_to_keyval (ch);
       ev->key.length = strlen (str);
       ev->key.string = g_strdup (str);
+      if (g_unichar_isupper (ch))
+        ev->key.state |= GDK_SHIFT_MASK;
       break;
     }
 

@@ -161,6 +161,8 @@ synthesize_event (GtkTextView *text_view,
       ev->key.keyval = gdk_unicode_to_keyval (ch);
       ev->key.length = strlen (str);
       ev->key.string = g_strdup (str);
+      if (g_unichar_isupper (ch))
+        ev->key.state |= GDK_SHIFT_MASK;
       break;
     }
 
@@ -235,6 +237,7 @@ test_vim_basic_cb (IdeContext *context,
                 NULL);
 
   assert_keypress_equal (widget, "ithis is a test.\e", "this is a test.");
+  assert_keypress_equal (widget, "ithis is a test.\eI\e4x", " is a test.");
 }
 
 static void
