@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-19 18:21+0300\n"
-"PO-Revision-Date: 2015-04-19 18:23+0300\n"
+"POT-Creation-Date: 2015-04-24 00:20+0300\n"
+"PO-Revision-Date: 2015-04-24 00:23+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -84,7 +84,7 @@ msgstr "If enabled, the editor will show line numbers."
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:13
 #: ../data/ui/gb-editor-tweak-widget.ui.h:6
 #: ../data/ui/gb-preferences-page-editor.ui.h:15
-#: ../libide/ide-source-view.c:5285
+#: ../libide/ide-source-view.c:5315
 msgid "Smart Backspace"
 msgstr "מקש Backspace חכם"
 
@@ -111,6 +111,26 @@ msgstr "Show grid lines"
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:18
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "If enabled, the editor will show grid lines in the document."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:19
+msgid "Show overview map"
+msgstr "Show overview map"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:20
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:21
+msgid "Draw Spaces"
+msgstr "Draw Spaces"
+
+#: ../data/gsettings/org.gnome.builder.editor.gschema.xml.in.h:22
+msgid "The various types of space to draw in the editor."
+msgstr "The various types of space to draw in the editor."
 
 #: ../data/gsettings/org.gnome.builder.experimental.gschema.xml.in.h:1
 msgid "Clang based autocompletion"
@@ -365,7 +385,6 @@ msgstr "בנייה מחדש של המיזם"
 #: ../data/ui/gb-new-file-popover.ui.h:1
 #: ../data/ui/gb-rename-file-popover.ui.h:1
 #: ../src/project-tree/gb-new-file-popover.c:352
-#: ../src/project-tree/gb-rename-file-popover.c:99
 msgid "File Name"
 msgstr "שם הקובץ"
 
@@ -392,8 +411,8 @@ msgstr "ממאגר קוד מקור מרוחק"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:6 ../libide/ide-language.c:384
 #: ../libide/ide-project.c:370 ../libide/ide-project-file.c:275
-#: ../libide/ide-project-info.c:281 ../libide/ide-service.c:138
-#: ../libide/ide-source-view-mode.c:260
+#: ../libide/ide-project-info.c:286 ../libide/ide-service.c:138
+#: ../libide/ide-source-view-mode.c:259
 msgid "Name"
 msgstr "Name"
 
@@ -433,7 +452,7 @@ msgstr "יש להזין את כתובת מאגר קוד המקור של המיז
 
 #: ../data/ui/gb-new-project-dialog.ui.h:14
 #: ../libide/autotools/ide-autotools-build-task.c:399
-#: ../libide/ide-project-info.c:289
+#: ../libide/ide-project-info.c:294
 #: ../src/project-tree/gb-new-file-popover.c:268
 #: ../src/project-tree/gb-new-file-popover.c:269
 msgid "Directory"
@@ -510,7 +529,7 @@ msgid ""
 msgstr "‏Backspace ימחק רווחים נוספים על מנת לשמור היישור עם גודל ההזחה שלך."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:17
-#: ../libide/ide-source-view.c:5249
+#: ../libide/ide-source-view.c:5262
 msgid "Show Grid Lines"
 msgstr "הצגת רשת בשורות"
 
@@ -519,11 +538,19 @@ msgid "Display a grid patten in the document."
 msgstr "הצגת רשת במסמך"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:19
-#: ../libide/ide-source-view.c:5229
+msgid "Show Overview Map"
+msgstr "הצגת מפת סקירה"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:20
+msgid "Display an overview map next to the source code editor."
+msgstr "הצגת מפת סקירה לצד עורך קוד המקור."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:21
+#: ../libide/ide-source-view.c:5242
 msgid "Scroll Offset"
 msgstr "קיזוז גלילה"
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:20
+#: ../data/ui/gb-preferences-page-editor.ui.h:22
 msgid "Minimal number of lines to keep above and below the cursor."
 msgstr "מספר מזערי של שורות להשאיר מעל ומתחת לסמן."
 
@@ -584,7 +611,7 @@ msgid "Experimental"
 msgstr "ניסיוני"
 
 #: ../data/ui/gb-projects-dialog.ui.h:1
-#: ../src/dialogs/gb-projects-dialog.c:308
+#: ../src/dialogs/gb-projects-dialog.c:257
 msgid "Select Project"
 msgstr "בחירת מיזם"
 
@@ -715,15 +742,15 @@ msgstr "Root Directory"
 msgid "The root directory to scan from."
 msgstr "The root directory to scan from."
 
-#: ../libide/autotools/ide-makecache.c:1027
+#: ../libide/autotools/ide-makecache.c:1031
 msgid "Invalid makefile provided, ignoring."
 msgstr "Invalid makefile provided, ignoring."
 
-#: ../libide/autotools/ide-makecache.c:1100
+#: ../libide/autotools/ide-makecache.c:1104
 msgid "Makefile"
 msgstr "Makefile"
 
-#: ../libide/autotools/ide-makecache.c:1101
+#: ../libide/autotools/ide-makecache.c:1105
 msgid "The root makefile to be cached."
 msgstr "The root makefile to be cached."
 
@@ -742,7 +769,7 @@ msgid "Language id does not match a C language."
 msgstr "Language id does not match a C language."
 
 #: ../libide/clang/ide-clang-completion-item.c:417
-#: ../libide/clang/ide-clang-translation-unit.c:553
+#: ../libide/clang/ide-clang-translation-unit.c:554
 msgid "Index"
 msgstr "Index"
 
@@ -762,61 +789,61 @@ msgstr "The Clang result set."
 msgid "Clang"
 msgstr "Clang"
 
-#: ../libide/clang/ide-clang-service.c:224
+#: ../libide/clang/ide-clang-service.c:225
 msgid "Failed to compile translation unit"
 msgstr "אר כשל בהידור יחידת תרגום"
 
-#: ../libide/clang/ide-clang-service.c:298
+#: ../libide/clang/ide-clang-service.c:299
 msgid "Unknown failure"
 msgstr "כשל לא ידוע"
 
-#: ../libide/clang/ide-clang-service.c:302
+#: ../libide/clang/ide-clang-service.c:303
 msgid "Clang crashed"
 msgstr "‏Clang קרס"
 
-#: ../libide/clang/ide-clang-service.c:306
+#: ../libide/clang/ide-clang-service.c:307
 msgid "Invalid arguments"
 msgstr "פרמטרים לא תקפם"
 
-#: ../libide/clang/ide-clang-service.c:310
+#: ../libide/clang/ide-clang-service.c:311
 msgid "AST read error"
 msgstr "AST שגיאת קריאה"
 
-#: ../libide/clang/ide-clang-service.c:322
+#: ../libide/clang/ide-clang-service.c:323
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Failed to create translation unit: %s"
 
-#: ../libide/clang/ide-clang-service.c:492
+#: ../libide/clang/ide-clang-service.c:495
 msgid "File must be saved locally to parse."
 msgstr "File must be saved locally to parse."
 
-#: ../libide/clang/ide-clang-translation-unit.c:545
+#: ../libide/clang/ide-clang-translation-unit.c:546
 #: ../libide/git/ide-git-search-result.c:98 ../libide/ide-buffer.c:940
 #: ../libide/ide-file.c:477 ../libide/ide-file-settings.c:450
-#: ../libide/ide-project-file.c:248 ../libide/ide-project-info.c:297
-#: ../libide/ide-script.c:156 ../src/project-tree/gb-rename-file-popover.c:305
-#: ../src/project-tree/gb-rename-file-popover.c:306
+#: ../libide/ide-project-file.c:248 ../libide/ide-project-info.c:302
+#: ../libide/ide-script.c:156 ../src/project-tree/gb-rename-file-popover.c:308
+#: ../src/project-tree/gb-rename-file-popover.c:309
 msgid "File"
 msgstr "File"
 
-#: ../libide/clang/ide-clang-translation-unit.c:546
+#: ../libide/clang/ide-clang-translation-unit.c:547
 msgid "The file used to build the translation unit."
 msgstr "The file used to build the translation unit."
 
-#: ../libide/clang/ide-clang-translation-unit.c:554
+#: ../libide/clang/ide-clang-translation-unit.c:555
 msgid "The highlight index for the translation unit."
 msgstr "The highlight index for the translation unit."
 
-#: ../libide/clang/ide-clang-translation-unit.c:561
+#: ../libide/clang/ide-clang-translation-unit.c:562
 msgid "Sequence"
 msgstr "Sequence"
 
-#: ../libide/clang/ide-clang-translation-unit.c:562
+#: ../libide/clang/ide-clang-translation-unit.c:563
 msgid "The sequence number when created."
 msgstr "The sequence number when created."
 
-#: ../libide/clang/ide-clang-translation-unit.c:609
+#: ../libide/clang/ide-clang-translation-unit.c:610
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() only works on local files"
 
@@ -1146,21 +1173,21 @@ msgstr "The project file."
 msgid "%s() is not supported on %s build system."
 msgstr "%s() אינו נתמך על מערכת הבנייה %s."
 
-#: ../libide/ide.c:73
+#: ../libide/ide.c:75
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr "You must call %s() before using libide."
 
-#: ../libide/ide.c:184
+#: ../libide/ide.c:190
 msgid "Builder requires libgit2-glib with threading support."
 msgstr "Builder requires libgit2-glib with threading support."
 
-#: ../libide/ide.c:190
+#: ../libide/ide.c:196
 msgid "Builder requires libgit2-glib with SSH support."
 msgstr "Builder requires libgit2-glib with SSH support."
 
-#: ../libide/ide-context.c:628 ../libide/ide-source-view.c:5132
-#: ../src/editor/gb-editor-frame.c:571
+#: ../libide/ide-context.c:628 ../libide/ide-source-view.c:5145
+#: ../src/editor/gb-editor-frame.c:616
 msgid "Back Forward List"
 msgstr "Back Forward List"
 
@@ -1535,8 +1562,8 @@ msgid "The file information for the project file."
 msgstr "The file information for the project file."
 
 #: ../libide/ide-project-file.c:266 ../libide/ide-project-file.c:267
-#: ../src/project-tree/gb-rename-file-popover.c:313
-#: ../src/project-tree/gb-rename-file-popover.c:314
+#: ../src/project-tree/gb-rename-file-popover.c:316
+#: ../src/project-tree/gb-rename-file-popover.c:317
 msgid "Is Directory"
 msgstr "Is Directory"
 
@@ -1548,27 +1575,27 @@ msgstr "The short name of the file."
 msgid "The path for the file within the project tree."
 msgstr "The path for the file within the project tree."
 
-#: ../libide/ide-project-info.c:282
+#: ../libide/ide-project-info.c:287
 msgid "The project name"
 msgstr "The project name"
 
-#: ../libide/ide-project-info.c:290
+#: ../libide/ide-project-info.c:295
 msgid "The project directory."
 msgstr "The project directory."
 
-#: ../libide/ide-project-info.c:298
+#: ../libide/ide-project-info.c:303
 msgid "The toplevel project file"
 msgstr "The toplevel project file"
 
-#: ../libide/ide-project-info.c:305 ../libide/ide-project-info.c:306
+#: ../libide/ide-project-info.c:310 ../libide/ide-project-info.c:311
 msgid "Last Modified At"
 msgstr "Last Modified At"
 
-#: ../libide/ide-project-info.c:314 ../src/commands/gb-command-provider.c:335
+#: ../libide/ide-project-info.c:319 ../src/commands/gb-command-provider.c:335
 msgid "Priority"
 msgstr "Priority"
 
-#: ../libide/ide-project-info.c:315
+#: ../libide/ide-project-info.c:320
 msgid "The priority of the project info type."
 msgstr "The priority of the project info type."
 
@@ -1580,7 +1607,7 @@ msgstr "Parent"
 msgid "The parent project item, if not the root."
 msgstr "The parent project item, if not the root."
 
-#: ../libide/ide-recent-projects.c:302
+#: ../libide/ide-recent-projects.c:329
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() may only be executed once"
@@ -1633,6 +1660,22 @@ msgstr "Running"
 #: ../libide/ide-service.c:148
 msgid "If the service is running."
 msgstr "If the service is running."
+
+#: ../libide/ide-source-map.c:624 ../libide/ide-source-view-capture.c:241
+msgid "View"
+msgstr "View"
+
+#: ../libide/ide-source-map.c:625
+msgid "The view this widget is mapping."
+msgstr "The view this widget is mapping."
+
+#: ../libide/ide-source-map.c:632 ../libide/ide-source-view.c:5173
+msgid "Font Description"
+msgstr "Font Description"
+
+#: ../libide/ide-source-map.c:633
+msgid "The pango font description to use."
+msgstr "The pango font description to use."
 
 #: ../libide/ide-source-snippet.c:345
 msgid "Chunk does not belong to snippet."
@@ -1761,161 +1804,161 @@ msgstr "Failed to open directory: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Failed to load file: %s: %s"
 
-#: ../libide/ide-source-view.c:4667
+#: ../libide/ide-source-view.c:4672
 #, c-format
 msgid "Insert \"%s\""
 msgstr "הכנסת „%s”"
 
-#: ../libide/ide-source-view.c:4669
+#: ../libide/ide-source-view.c:4674
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "החלפת „%s” עם „%s”"
 
-#: ../libide/ide-source-view.c:4775
+#: ../libide/ide-source-view.c:4780
 msgid "Apply Fix-It"
 msgstr "החלת לתקן את זה (Fix-It)"
 
-#: ../libide/ide-source-view.c:4815
+#: ../libide/ide-source-view.c:4820
 msgid "Goto Definition"
 msgstr "מעבר להגדרה"
 
-#: ../libide/ide-source-view.c:5133
+#: ../libide/ide-source-view.c:5146
 msgid "The back-forward list to track jumps."
 msgstr "The back-forward list to track jumps."
 
-#: ../libide/ide-source-view.c:5141
+#: ../libide/ide-source-view.c:5154
 msgid "Count"
 msgstr "Count"
 
-#: ../libide/ide-source-view.c:5142
+#: ../libide/ide-source-view.c:5155
 msgid "The count for movements."
 msgstr "The count for movements."
 
-#: ../libide/ide-source-view.c:5151
+#: ../libide/ide-source-view.c:5164
 msgid "File Settings"
 msgstr "File Settings"
 
-#: ../libide/ide-source-view.c:5152
+#: ../libide/ide-source-view.c:5165
 msgid "The file settings that have been loaded for the file."
 msgstr "The file settings that have been loaded for the file."
 
-#: ../libide/ide-source-view.c:5160
-msgid "Font Description"
-msgstr "Font Description"
-
-#: ../libide/ide-source-view.c:5161
+#: ../libide/ide-source-view.c:5174
 msgid "The Pango font description to use for rendering source."
 msgstr "The Pango font description to use for rendering source."
 
-#: ../libide/ide-source-view.c:5169
+#: ../libide/ide-source-view.c:5182
 msgid "Enable Word Completion"
 msgstr "Enable Word Completion"
 
-#: ../libide/ide-source-view.c:5170
+#: ../libide/ide-source-view.c:5183
 msgid "If words from all buffers can be used to autocomplete."
 msgstr "If words from all buffers can be used to autocomplete."
 
-#: ../libide/ide-source-view.c:5178
+#: ../libide/ide-source-view.c:5191
 msgid "Font Name"
 msgstr "Font Name"
 
-#: ../libide/ide-source-view.c:5179
+#: ../libide/ide-source-view.c:5192
 msgid "The Pango font name to use for rendering source."
 msgstr "The Pango font name to use for rendering source."
 
-#: ../libide/ide-source-view.c:5191
+#: ../libide/ide-source-view.c:5204
 msgid "Insert Matching Brace"
 msgstr "Insert Matching Brace"
 
-#: ../libide/ide-source-view.c:5192
+#: ../libide/ide-source-view.c:5205
 msgid "Insert a matching brace/bracket/quotation/parenthesis."
 msgstr "Insert a matching brace/bracket/quotation/parenthesis."
 
-#: ../libide/ide-source-view.c:5202
+#: ../libide/ide-source-view.c:5215
 msgid "Mode Display Name"
 msgstr "Mode Display Name"
 
-#: ../libide/ide-source-view.c:5203
+#: ../libide/ide-source-view.c:5216
 msgid "The display name of the keybinding mode."
 msgstr "The display name of the keybinding mode."
 
-#: ../libide/ide-source-view.c:5211
+#: ../libide/ide-source-view.c:5224
 msgid "Overwrite Braces"
 msgstr "Overwrite Braces"
 
-#: ../libide/ide-source-view.c:5212
+#: ../libide/ide-source-view.c:5225
 msgid "Overwrite a matching brace/bracket/quotation/parenthesis."
 msgstr "Overwrite a matching brace/bracket/quotation/parenthesis."
 
-#: ../libide/ide-source-view.c:5220
+#: ../libide/ide-source-view.c:5233
 msgid "Rubberband Search"
 msgstr "Rubberband Search"
 
-#: ../libide/ide-source-view.c:5221
+#: ../libide/ide-source-view.c:5234
 msgid "Auto scroll to next search result without moving insertion caret."
 msgstr "Auto scroll to next search result without moving insertion caret."
 
-#: ../libide/ide-source-view.c:5230
+#: ../libide/ide-source-view.c:5243
 msgid "The number of lines between the insertion cursor and screen boundary."
 msgstr "The number of lines between the insertion cursor and screen boundary."
 
-#: ../libide/ide-source-view.c:5240
+#: ../libide/ide-source-view.c:5253
 msgid "Search Context"
 msgstr "Search Context"
 
-#: ../libide/ide-source-view.c:5241
+#: ../libide/ide-source-view.c:5254
 msgid "The search context for the view."
 msgstr "The search context for the view."
 
-#: ../libide/ide-source-view.c:5250
+#: ../libide/ide-source-view.c:5263
 msgid "If the background grid should be shown."
 msgstr "If the background grid should be shown."
 
-#: ../libide/ide-source-view.c:5258
+#: ../libide/ide-source-view.c:5271
 msgid "Show Line Changes"
 msgstr "Show Line Changes"
 
-#: ../libide/ide-source-view.c:5259
+#: ../libide/ide-source-view.c:5272
 msgid "If line changes should be shown in the left gutter."
 msgstr "If line changes should be shown in the left gutter."
 
-#: ../libide/ide-source-view.c:5267
+#: ../libide/ide-source-view.c:5288
+msgid "Show Line Diagnostics"
+msgstr "Show Line Diagnostics"
+
+#: ../libide/ide-source-view.c:5289
+msgid "If line changes diagnostics should be shown in the left gutter."
+msgstr "If line changes diagnostics should be shown in the left gutter."
+
+#: ../libide/ide-source-view.c:5297
 msgid "Show Search Bubbles"
 msgstr "Show Search Bubbles"
 
-#: ../libide/ide-source-view.c:5268
+#: ../libide/ide-source-view.c:5298
 msgid "If search bubbles should be rendered."
 msgstr "If search bubbles should be rendered."
 
-#: ../libide/ide-source-view.c:5276
+#: ../libide/ide-source-view.c:5306
 msgid "Show Search Shadow"
 msgstr "Show Search Shadow"
 
-#: ../libide/ide-source-view.c:5277
+#: ../libide/ide-source-view.c:5307
 msgid "If the shadow should be drawn when performing searches."
 msgstr "If the shadow should be drawn when performing searches."
 
-#: ../libide/ide-source-view.c:5286
+#: ../libide/ide-source-view.c:5316
 msgid "If smart Backspace should be used."
 msgstr "If smart Backspace should be used."
 
-#: ../libide/ide-source-view.c:5294
+#: ../libide/ide-source-view.c:5324
 msgid "Snippet Completion"
 msgstr "Snippet Completion"
 
-#: ../libide/ide-source-view.c:5295
+#: ../libide/ide-source-view.c:5325
 msgid "If snippet expansion should be enabled via the completion window."
 msgstr "If snippet expansion should be enabled via the completion window."
-
-#: ../libide/ide-source-view-capture.c:241
-msgid "View"
-msgstr "View"
 
 #: ../libide/ide-source-view-capture.c:242
 msgid "The source view."
 msgstr "The source view."
 
-#: ../libide/ide-source-view-mode.c:261
+#: ../libide/ide-source-view-mode.c:260
 msgid "The name of the mode."
 msgstr "The name of the mode."
 
@@ -2173,7 +2216,7 @@ msgstr "תיעוד (%s)"
 msgid "The uri to load."
 msgstr "The uri to load."
 
-#: ../src/devhelp/gb-devhelp-view.c:244 ../src/editor/gb-editor-frame.c:580
+#: ../src/devhelp/gb-devhelp-view.c:244 ../src/editor/gb-editor-frame.c:625
 #: ../src/editor/gb-editor-view.c:687 ../src/html/gb-html-view.c:321
 #: ../src/views/gb-view.c:266
 msgid "Document"
@@ -2207,7 +2250,7 @@ msgstr "דרושה כתובת Git תקפה"
 msgid "Directory|Projects"
 msgstr "תיקייה|מיזם"
 
-#: ../src/dialogs/gb-projects-dialog.c:297
+#: ../src/dialogs/gb-projects-dialog.c:246
 msgid "(Click on items to select them)"
 msgstr "(יש ללחוץ על פריטים כדי לבחור אותם)"
 
@@ -2245,23 +2288,31 @@ msgstr "The title of the document."
 msgid "If the document is read only."
 msgstr "If the document is read only."
 
-#: ../src/editor/gb-editor-frame.c:111
+#: ../src/editor/gb-editor-frame.c:112
 #, c-format
 msgid "%u of %u"
 msgstr "%u מתוך %u"
 
-#: ../src/editor/gb-editor-frame.c:141
+#: ../src/editor/gb-editor-frame.c:142
 #, c-format
 msgid "Line %u, Column %u"
 msgstr "שורה %u, עמודה %u"
 
-#: ../src/editor/gb-editor-frame.c:572
+#: ../src/editor/gb-editor-frame.c:617
 msgid "The back forward list."
 msgstr "The back forward list."
 
-#: ../src/editor/gb-editor-frame.c:581 ../src/editor/gb-editor-view.c:688
+#: ../src/editor/gb-editor-frame.c:626 ../src/editor/gb-editor-view.c:688
 msgid "The editor document."
 msgstr "The editor document."
+
+#: ../src/editor/gb-editor-frame.c:633
+msgid "Show Map"
+msgstr "Show Map"
+
+#: ../src/editor/gb-editor-frame.c:634
+msgid "If the ovewview map should be shown."
+msgstr "If the ovewview map should be shown."
 
 #: ../src/editor/gb-editor-settings-widget.c:183
 msgid "The language to change the settings for."
@@ -2525,12 +2576,12 @@ msgid "The sizing group for the control."
 msgstr "The sizing group for the control."
 
 #: ../src/project-tree/gb-new-file-popover.c:124
-#: ../src/project-tree/gb-rename-file-popover.c:139
+#: ../src/project-tree/gb-rename-file-popover.c:142
 msgid "A folder with that name already exists."
 msgstr "תיקייה בשם זה כבר קיימת."
 
 #: ../src/project-tree/gb-new-file-popover.c:127
-#: ../src/project-tree/gb-rename-file-popover.c:142
+#: ../src/project-tree/gb-rename-file-popover.c:145
 msgid "A file with that name already exists."
 msgstr "קובץ בשם זה כבר קיים."
 
@@ -2550,11 +2601,12 @@ msgstr "שם תיקייה"
 msgid "Files"
 msgstr "Files"
 
-#: ../src/project-tree/gb-rename-file-popover.c:99
-msgid "Folder"
-msgstr "תיקייה"
+#: ../src/project-tree/gb-rename-file-popover.c:80
+#, c-format
+msgid "Rename %s"
+msgstr "שינוי שם %s"
 
-#: ../src/project-tree/gb-rename-file-popover.c:170
+#: ../src/project-tree/gb-rename-file-popover.c:173
 msgid "File name must not contain subdirectories."
 msgstr "שם הקובץ לא יכול להכיל תיקייות משנה."
 
@@ -2972,6 +3024,9 @@ msgstr "- discover projects"
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "PROJECT_FILE [SEARCH TERMS...]"
 
+#~ msgid "Folder"
+#~ msgstr "תיקייה"
+
 #~ msgid "The ide context for the project tree."
 #~ msgstr "The ide context for the project tree."
 
@@ -3206,9 +3261,6 @@ msgstr "PROJECT_FILE [SEARCH TERMS...]"
 #~ msgid "If we should overwrite braces, brackets, parenthesis and quotes."
 #~ msgstr "If we should overwrite braces, brackets, parenthesis and quotes."
 
-#~ msgid "Show Shadow"
-#~ msgstr "Show Shadow"
-
 #~ msgid "Enable smart home end in gtksourceview."
 #~ msgstr "Enable smart home end in gtksourceview."
 
@@ -3411,9 +3463,6 @@ msgstr "PROJECT_FILE [SEARCH TERMS...]"
 
 #~ msgid "<b>VIM Modal Editing</b>"
 #~ msgstr "<b>דגם עריכת VIM</b>"
-
-#~ msgid "Use VIM style modal editing in the source code editor."
-#~ msgstr "שימוש בסגנון דגם עריכת VIM בעורך קוד המקור."
 
 #~ msgid "Vim"
 #~ msgstr "Vim"
