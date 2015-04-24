@@ -217,11 +217,16 @@ ide_source_map_set_view (IdeSourceMap  *self,
           g_object_bind_property (self->view, "tab-width",
                                   self->child_view, "tab-width",
                                   G_BINDING_SYNC_CREATE);
-          g_object_bind_property_full (self->view, "font-desc",
-                                       self, "font-desc",
-                                       G_BINDING_SYNC_CREATE,
-                                       transform_font_desc,
-                                       NULL, NULL, NULL);
+
+          /*
+           * TODO: Not sure what we should do about this in terms of abstraction.
+           */
+          if (IDE_IS_SOURCE_VIEW (self->view))
+            g_object_bind_property_full (self->view, "font-desc",
+                                         self, "font-desc",
+                                         G_BINDING_SYNC_CREATE,
+                                         transform_font_desc,
+                                         NULL, NULL, NULL);
 
           vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->view));
 
