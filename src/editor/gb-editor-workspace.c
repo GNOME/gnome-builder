@@ -458,6 +458,7 @@ gb_editor_workspace_reveal_file (GbEditorWorkspace *self,
   if (node != NULL)
     {
       gb_tree_expand_to_node (GB_TREE (self->project_tree), node);
+      gb_tree_scroll_to_node (GB_TREE (self->project_tree), node);
       gb_tree_node_select (node);
     }
 }
