@@ -508,7 +508,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
 }
 
 /**
- * ide_unsaved_files_get_unsaved_files:
+ * ide_unsaved_files_to_array:
  *
  * This retrieves all of the unsaved file buffers known to the context.
  * These are handy if you need to pass modified state to parsers such as
@@ -523,7 +523,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
  *   containing #IdeUnsavedFile elements.
  */
 GPtrArray *
-ide_unsaved_files_get_unsaved_files (IdeUnsavedFiles *self)
+ide_unsaved_files_to_array (IdeUnsavedFiles *self)
 {
   IdeUnsavedFilesPrivate *priv;
   GPtrArray *ar;

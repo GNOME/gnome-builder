@@ -501,7 +501,7 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
   request->index = self->index;
   request->source_filename = g_strdup (path);
   request->command_line_args = NULL;
-  request->unsaved_files = ide_unsaved_files_get_unsaved_files (unsaved_files);
+  request->unsaved_files = ide_unsaved_files_to_array (unsaved_files);
   request->sequence = ide_unsaved_files_get_sequence (unsaved_files);
   /*
    * NOTE:

@@ -704,7 +704,7 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
   state->path = g_file_get_path (file);
   state->line = gtk_text_iter_get_line (location);
   state->line_offset = gtk_text_iter_get_line_offset (location);
-  state->unsaved_files = ide_unsaved_files_get_unsaved_files (unsaved_files);
+  state->unsaved_files = ide_unsaved_files_to_array (unsaved_files);
 
   /*
    * TODO: Technically it is not safe for us to go run this in a thread. We need to ensure
