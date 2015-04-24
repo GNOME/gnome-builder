@@ -42,21 +42,6 @@ typedef struct
   guint           top_is_native : 1;
 } IdeLoadDirectoryTask;
 
-static gboolean gSpecialDirsInit;
-static const gchar *gSpecialDirs [7];
-
-static void
-load_special_dirs (void)
-{
-  gSpecialDirs [0] = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
-  gSpecialDirs [1] = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
-  gSpecialDirs [2] = g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD);
-  gSpecialDirs [3] = g_get_user_special_dir (G_USER_DIRECTORY_MUSIC);
-  gSpecialDirs [4] = g_get_user_special_dir (G_USER_DIRECTORY_PICTURES);
-  gSpecialDirs [5] = g_get_user_special_dir (G_USER_DIRECTORY_TEMPLATES);
-  gSpecialDirs [6] = g_get_user_special_dir (G_USER_DIRECTORY_VIDEOS);
-}
-
 static void
 ide_load_directory_task_free (gpointer data)
 {
@@ -328,12 +313,6 @@ ide_load_directory_task_new (gpointer             source_object,
   g_return_val_if_fail (G_IS_FILE (directory), NULL);
   g_return_val_if_fail (IDE_IS_PROJECT_ITEM (parent), NULL);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
-
-  if (gSpecialDirsInit == FALSE)
-    {
-      load_special_dirs ();
-      gSpecialDirsInit = TRUE;
-    }
 
   context = ide_object_get_context (IDE_OBJECT (parent));
 
