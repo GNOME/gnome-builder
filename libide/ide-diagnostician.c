@@ -95,10 +95,7 @@ diagnose_cb (GObject      *object,
   ret = ide_diagnostic_provider_diagnose_finish (provider, result, &error);
 
   if (!ret)
-    {
-      g_info ("%s", error->message);
-      goto maybe_complete;
-    }
+    goto maybe_complete;
 
   ide_diagnostics_merge (state->diagnostics, ret);
   ide_diagnostics_unref (ret);
