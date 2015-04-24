@@ -43,6 +43,8 @@
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 
+#define RESTORE_FILES_MAX_FILES 20
+
 struct _IdeContext
 {
   GObject                   parent_instance;
@@ -1685,6 +1687,19 @@ ide_context_restore_async (IdeContext          *self,
 
   if (ar->len == 0)
     {
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
+
+  if (ar->len > RESTORE_FILES_MAX_FILES)
+    {
+      /*
+       * To protect from some insanity, ignore attempts to restore files if
+       * they are over RESTORE_FILES_MAX_FILES. Just prune and go back to
+       * normal.  This should help in situations where hadn't pruned the
+       * unsaved files list.
+       */
+      ide_unsaved_files_clear (self->unsaved_files);
       g_task_return_boolean (task, TRUE);
       return;
     }

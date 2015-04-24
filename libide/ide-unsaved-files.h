@@ -55,6 +55,7 @@ GPtrArray      *ide_unsaved_files_to_array          (IdeUnsavedFiles      *files
 gint64          ide_unsaved_files_get_sequence      (IdeUnsavedFiles      *files);
 IdeUnsavedFile *ide_unsaved_files_get_unsaved_file  (IdeUnsavedFiles      *self,
                                                      GFile                *file);
+void            ide_unsaved_files_clear             (IdeUnsavedFiles      *self);
 
 G_END_DECLS
 

@@ -636,3 +636,24 @@ ide_unsaved_files_init (IdeUnsavedFiles *self)
 
   priv->unsaved_files = g_ptr_array_new_with_free_func (unsaved_file_free);
 }
+
+void
+ide_unsaved_files_clear (IdeUnsavedFiles *self)
+{
+  g_autoptr(GPtrArray) ar = NULL;
+  gsize i;
+
+  g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
+
+  ar = ide_unsaved_files_to_array (self);
+
+  for (i = 0; i < ar->len; i++)
+    {
+      IdeUnsavedFile *uf;
+      GFile *file;
+
+      uf = g_ptr_array_index (ar, i);
+      file = ide_unsaved_file_get_file (uf);
+      ide_unsaved_files_remove (self, file);
+    }
+}
