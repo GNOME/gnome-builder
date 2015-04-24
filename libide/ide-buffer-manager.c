@@ -1529,11 +1529,54 @@ ide_buffer_manager_create_buffer (IdeBufferManager *self)
   return buffer;
 }
 
+static void
+ide_buffer_manager_reclaim__save_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeBufferManager *self = (IdeBufferManager *)object;
+  g_autoptr(IdeBuffer) buffer = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (!ide_buffer_manager_save_file_finish (self, result, &error))
+    {
+      g_warning (_("Failed to save buffer, ignoring reclamation."));
+      g_warning ("%s", error->message);
+      IDE_EXIT;
+    }
+
+  ide_buffer_manager_remove_buffer (self, buffer);
+
+  IDE_EXIT;
+}
+
 void
 _ide_buffer_manager_reclaim (IdeBufferManager *self,
                              IdeBuffer        *buffer)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUFFER_MANAGER (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
+  if (gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)))
+    {
+      IdeFile *file;
+
+      file = ide_buffer_get_file (buffer);
+      ide_buffer_manager_save_file_async (self, buffer, file, NULL, NULL,
+                                          ide_buffer_manager_reclaim__save_cb,
+                                          g_object_ref (buffer));
+    }
+  else
+    {
+      ide_buffer_manager_remove_buffer (self, buffer);
+    }
+
+  IDE_EXIT;
 }
