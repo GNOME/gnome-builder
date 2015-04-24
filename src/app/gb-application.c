@@ -280,9 +280,6 @@ gb_application__context_new_cb (GObject      *object,
                             "context", context,
                             NULL);
 
-  if (ar->len == 0)
-    gb_workbench_add_temporary_buffer (workbench);
-
   for (i = 0; i < ar->len; i++)
     {
       GFile *file;

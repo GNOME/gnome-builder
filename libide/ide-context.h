@@ -60,6 +60,13 @@ IdeContext               *ide_context_new_finish            (GAsyncResult       
                                                              GError              **error);
 void                      ide_context_set_root_build_dir    (IdeContext           *self,
                                                              const gchar          *root_build_dir);
+void                      ide_context_restore_async         (IdeContext           *self,
+                                                             GCancellable         *cancellable,
+                                                             GAsyncReadyCallback   callback,
+                                                             gpointer              user_data);
+gboolean                  ide_context_restore_finish        (IdeContext           *self,
+                                                             GAsyncResult         *result,
+                                                             GError              **error);
 
 G_END_DECLS
 

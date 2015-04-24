@@ -43,7 +43,7 @@
 
 #define DEFAULT_DIAGNOSE_TIMEOUT_MSEC          333
 #define DEFAULT_DIAGNOSE_CONSERVE_TIMEOUT_MSEC 5000
-#define RECLAIMATION_TIMEOUT_SECS              5
+#define RECLAIMATION_TIMEOUT_SECS              1
 
 #define TAG_ERROR   "diagnostician::error"
 #define TAG_WARNING "diagnostician::warning"

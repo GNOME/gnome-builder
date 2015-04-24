@@ -64,6 +64,7 @@ void                _ide_buffer_manager_reclaim        (IdeBufferManager      *s
                                                         IdeBuffer             *buffer);
 void                _ide_build_system_set_project_file (IdeBuildSystem        *self,
                                                         GFile                 *project_file);
+gboolean            _ide_context_is_restoring          (IdeContext            *self);
 void                _ide_diagnostic_add_range          (IdeDiagnostic         *self,
                                                         IdeSourceRange        *range);
 IdeDiagnostic      *_ide_diagnostic_new                (IdeDiagnosticSeverity  severity,

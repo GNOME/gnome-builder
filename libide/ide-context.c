@@ -39,6 +39,7 @@
 #include "ide-search-provider.h"
 #include "ide-service.h"
 #include "ide-source-snippets-manager.h"
+#include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 
@@ -62,6 +63,8 @@ struct _IdeContext
   IdeVcs                   *vcs;
 
   guint                     services_started : 1;
+  guint                     restored : 1;
+  guint                     restoring : 1;
 };
 
 static void async_initable_init (GAsyncInitableIface *);
@@ -1333,14 +1336,12 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_files,
                         ide_context_init_project_name,
                         ide_context_init_back_forward_list,
-                        ide_context_init_unsaved_files,
                         ide_context_init_search_engine,
                         ide_context_init_snippets,
                         ide_context_init_scripts,
+                        ide_context_init_unsaved_files,
                         ide_context_init_add_recent,
                         NULL);
-
-  /* TODO: Restore buffer state? */
 }
 
 static gboolean
@@ -1589,4 +1590,127 @@ ide_context_unload_finish (IdeContext    *self,
   ret = g_task_propagate_boolean (task, error);
 
   IDE_RETURN (ret);
+}
+
+static gboolean restore_in_idle (gpointer user_data);
+
+static void
+ide_context_restore__load_file_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_buffer_manager_load_file_finish (buffer_manager, result, &error))
+    {
+      g_warning ("%s", error->message);
+      /* TODO: add error into grouped error */
+    }
+
+  g_idle_add (restore_in_idle, g_object_ref (task));
+}
+
+static gboolean
+restore_in_idle (gpointer user_data)
+{
+  g_autoptr(IdeFile) ifile = NULL;
+  g_autoptr(GTask) task = user_data;
+  IdeUnsavedFile *uf;
+  IdeContext *self;
+  GPtrArray *ar;
+  GFile *file;
+
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+  ar = g_task_get_task_data (task);
+
+  if (ar == NULL || ar->len == 0)
+    {
+      self->restoring = FALSE;
+      g_task_return_boolean (task, TRUE);
+      return G_SOURCE_REMOVE;
+    }
+
+  g_assert (ar != NULL);
+  g_assert_cmpint (ar->len, >, 0);
+
+  uf = g_ptr_array_index (ar, ar->len - 1);
+  file = ide_unsaved_file_get_file (uf);
+  ifile = ide_project_get_project_file (self->project, file);
+  g_ptr_array_remove_index (ar, ar->len - 1);
+
+  ide_buffer_manager_load_file_async (self->buffer_manager,
+                                      ifile,
+                                      FALSE,
+                                      NULL,
+                                      g_task_get_cancellable (task),
+                                      ide_context_restore__load_file_cb,
+                                      g_object_ref (task));
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+ide_context_restore_async (IdeContext          *self,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GPtrArray) ar = NULL;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  if (self->restored)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               _("Context has already been restored."));
+      return;
+    }
+
+  self->restored = TRUE;
+
+  ar = ide_unsaved_files_to_array (self->unsaved_files);
+
+  if (ar->len == 0)
+    {
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
+
+  self->restoring = TRUE;
+
+  g_task_set_task_data (task, g_ptr_array_ref (ar), (GDestroyNotify)g_ptr_array_unref);
+
+  g_idle_add (restore_in_idle, g_object_ref (task));
+}
+
+gboolean
+ide_context_restore_finish (IdeContext    *self,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+
+  return g_task_propagate_boolean (task, error);
+}
+
+gboolean
+_ide_context_is_restoring (IdeContext *self)
+{
+  return self->restoring;
 }

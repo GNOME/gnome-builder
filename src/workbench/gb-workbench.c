@@ -79,6 +79,31 @@ gb_workbench__project_notify_name_cb (GbWorkbench *self,
 }
 
 static void
+gb_workbench__context_restore_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
+{
+  IdeContext *context = (IdeContext *)object;
+  g_autoptr(GbWorkbench) self = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeBufferManager *buffer_manager;
+
+  g_assert (GB_IS_WORKBENCH (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  if (!ide_context_restore_finish (context, result, &error))
+    {
+      g_warning ("%s", error->message);
+    }
+
+  buffer_manager = ide_context_get_buffer_manager (context);
+  if (ide_buffer_manager_get_n_buffers (buffer_manager) == 0)
+    gb_workbench_add_temporary_buffer (self);
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->editor_workspace));
+}
+
+static void
 gb_workbench_connect_context (GbWorkbench *self,
                               IdeContext  *context)
 {
@@ -96,6 +121,11 @@ gb_workbench_connect_context (GbWorkbench *self,
                              self,
                              G_CONNECT_SWAPPED);
   gb_workbench__project_notify_name_cb (self, NULL, project);
+
+  ide_context_restore_async (context,
+                             NULL,
+                             gb_workbench__context_restore_cb,
+                             g_object_ref (self));
 }
 
 static void

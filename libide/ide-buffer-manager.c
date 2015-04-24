@@ -430,6 +430,8 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
   g_assert (IDE_IS_BUFFER (state->buffer));
   g_assert (IDE_IS_PROGRESS (state->progress));
 
+  context = ide_object_get_context (IDE_OBJECT (self));
+
   if (!gtk_source_file_loader_load_finish (loader, result, &error))
     {
       /*
@@ -462,7 +464,6 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
    * If we have a navigation item for this buffer, restore the insert mark to
    * the most recent navigation point.
    */
-  context = ide_object_get_context (IDE_OBJECT (self));
   back_forward_list = ide_context_get_back_forward_list (context);
   item = _ide_back_forward_list_find (back_forward_list, state->file);
 
@@ -508,7 +509,9 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
 emit_signal:
   _ide_buffer_set_loading (state->buffer, FALSE);
 
-  ide_buffer_manager_set_focus_buffer (self, state->buffer);
+  if (!_ide_context_is_restoring (context))
+    ide_buffer_manager_set_focus_buffer (self, state->buffer);
+
   g_signal_emit (self, gSignals [BUFFER_LOADED], 0, state->buffer);
 
   g_task_return_pointer (task, g_object_ref (state->buffer), g_object_unref);
@@ -1594,4 +1597,12 @@ _ide_buffer_manager_reclaim (IdeBufferManager *self,
     }
 
   IDE_EXIT;
+}
+
+guint
+ide_buffer_manager_get_n_buffers (IdeBufferManager *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), 0);
+
+  return self->buffers->len;
 }

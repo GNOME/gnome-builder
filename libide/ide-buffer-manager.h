@@ -56,6 +56,7 @@ void                      ide_buffer_manager_set_focus_buffer    (IdeBufferManag
                                                                   IdeBuffer            *buffer);
 GPtrArray                *ide_buffer_manager_get_buffers         (IdeBufferManager     *self);
 GtkSourceCompletionWords *ide_buffer_manager_get_word_completion (IdeBufferManager     *self);
+guint                     ide_buffer_manager_get_n_buffers       (IdeBufferManager     *self);
 gboolean                  ide_buffer_manager_has_file            (IdeBufferManager     *self,
                                                                   IdeFile              *file);
 IdeBuffer                *ide_buffer_manager_find_buffer         (IdeBufferManager     *self,
