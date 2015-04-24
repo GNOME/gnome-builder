@@ -39,6 +39,7 @@
 #include "ide-gjs-script.h"
 #include "ide-gsettings-file-settings.h"
 #include "ide-html-language.h"
+#include "ide-mingw-device-provider.h"
 #include "ide-internal.h"
 #include "ide-project-miner.h"
 #include "ide-pygobject-script.h"
@@ -107,6 +108,11 @@ ide_init_ctor (void)
                                   IDE_TYPE_DIRECTORY_BUILD_SYSTEM,
                                   IDE_BUILD_SYSTEM_EXTENSION_POINT".directory",
                                   -200);
+
+  g_io_extension_point_implement (IDE_DEVICE_PROVIDER_EXTENSION_POINT,
+                                  IDE_TYPE_MINGW_DEVICE_PROVIDER,
+                                  IDE_BUILD_SYSTEM_EXTENSION_POINT".mingw",
+                                  0);
 
   g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
                                   IDE_TYPE_EDITORCONFIG_FILE_SETTINGS,

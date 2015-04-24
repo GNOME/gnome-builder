@@ -193,6 +193,10 @@ libide_1_0_la_public_sources = \
 	libide/ide.h \
 	libide/local/ide-local-device.c \
 	libide/local/ide-local-device.h \
+	libide/mingw/ide-mingw-device.c \
+	libide/mingw/ide-mingw-device.h \
+	libide/mingw/ide-mingw-device-provider.c \
+	libide/mingw/ide-mingw-device-provider.h \
 	libide/pygobject/ide-pygobject-script.c \
 	libide/pygobject/ide-pygobject-script.h \
 	libide/python/ide-python-indenter.c \
@@ -318,6 +322,7 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/libide/gsettings \
 	-I$(top_srcdir)/libide/html \
 	-I$(top_srcdir)/libide/local \
+	-I$(top_srcdir)/libide/mingw \
 	-I$(top_srcdir)/libide/modelines \
 	-I$(top_srcdir)/libide/pygobject \
 	-I$(top_srcdir)/libide/python \
