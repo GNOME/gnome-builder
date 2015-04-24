@@ -34,6 +34,7 @@
 #include "ide-internal.h"
 #include "ide-progress.h"
 #include "ide-source-location.h"
+#include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 
 #define AUTO_SAVE_TIMEOUT_DEFAULT    60
@@ -766,7 +767,10 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   GtkSourceFileSaver *saver = (GtkSourceFileSaver *)object;
   IdeBufferManager *self;
+  IdeUnsavedFiles *unsaved_files;
+  IdeContext *context;
   IdeFile *file;
+  GFile *gfile;
   SaveState *state;
   GError *error = NULL;
 
@@ -793,6 +797,12 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
   file = ide_buffer_get_file (state->buffer);
   if (ide_file_equal (file, state->file))
     gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (state->buffer), FALSE);
+
+  /* remove the unsaved files state */
+  context = ide_object_get_context (IDE_OBJECT (self));
+  unsaved_files = ide_context_get_unsaved_files (context);
+  gfile = ide_file_get_file (state->file);
+  ide_unsaved_files_update (unsaved_files, gfile, NULL);
 
   /* Notify signal handlers that the file is saved */
   g_signal_emit (self, gSignals [BUFFER_SAVED], 0, state->buffer);
