@@ -31,6 +31,8 @@ void gb_editor_workspace_search_help (GbEditorWorkspace *self,
                                       const gchar       *keyword);
 void gb_editor_workspace_show_help   (GbEditorWorkspace *self,
                                       const gchar       *uri);
+void gb_editor_workspace_reveal_file (GbEditorWorkspace *self,
+                                      GFile             *file);
 
 G_END_DECLS
 

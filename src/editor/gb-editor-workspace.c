@@ -419,3 +419,45 @@ gb_editor_workspace_search_help (GbEditorWorkspace *self,
 
   g_clear_object (&document);
 }
+
+static gboolean
+gb_editor_workspace_reveal_file_cb (gconstpointer a,
+                                    gconstpointer b)
+{
+  GFile *file = (GFile *)a;
+  GObject *object = (GObject *)b;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_OBJECT (object));
+
+  if (IDE_IS_PROJECT_FILE (object))
+    {
+      IdeProjectFile *pf = (IdeProjectFile *)object;
+      GFile *pf_file;
+
+      pf_file = ide_project_file_get_file (pf);
+      return g_file_equal (pf_file, file);
+    }
+
+  return FALSE;
+}
+
+void
+gb_editor_workspace_reveal_file (GbEditorWorkspace *self,
+                                 GFile             *file)
+{
+  GbTreeNode *node;
+
+  g_return_if_fail (GB_IS_EDITOR_WORKSPACE (self));
+  g_return_if_fail (G_IS_FILE (file));
+
+  node = gb_tree_find_custom (GB_TREE (self->project_tree),
+                              gb_editor_workspace_reveal_file_cb,
+                              file);
+
+  if (node != NULL)
+    {
+      gb_tree_expand_to_node (GB_TREE (self->project_tree), node);
+      gb_tree_node_select (node);
+    }
+}

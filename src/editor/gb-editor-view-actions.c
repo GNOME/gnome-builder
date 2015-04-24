@@ -25,6 +25,7 @@
 #include "gb-editor-frame-private.h"
 #include "gb-editor-view-actions.h"
 #include "gb-editor-view-private.h"
+#include "gb-editor-workspace.h"
 #include "gb-html-document.h"
 #include "gb-view-grid.h"
 #include "gb-widget.h"
@@ -668,6 +669,27 @@ gb_editor_view_actions_show_symbols (GSimpleAction *action,
     g_signal_emit_by_name (self->symbols_button, "activate");
 }
 
+static void
+gb_editor_view_actions_reveal (GSimpleAction *action,
+                               GVariant      *param,
+                               gpointer       user_data)
+{
+  GbEditorView *self = user_data;
+  GbWorkbench *workbench;
+  GbEditorWorkspace *workspace;
+  IdeFile *file;
+  GFile *gfile;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  file = ide_buffer_get_file (IDE_BUFFER (self->document));
+  gfile = ide_file_get_file (file);
+  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
+  workspace = gb_workbench_get_workspace_typed (workbench, GB_TYPE_EDITOR_WORKSPACE);
+  gb_editor_workspace_reveal_file (workspace, gfile);
+}
+
 static GActionEntry GbEditorViewActions[] = {
   { "auto-indent", NULL, NULL, "false", gb_editor_view_actions_auto_indent },
   { "close", gb_editor_view_actions_close },
@@ -676,6 +698,7 @@ static GActionEntry GbEditorViewActions[] = {
   { "language", NULL, "s", "''", gb_editor_view_actions_language },
   { "preview", gb_editor_view_actions_preview },
   { "reload-buffer", gb_editor_view_actions_reload_buffer },
+  { "reveal", gb_editor_view_actions_reveal },
   { "save", gb_editor_view_actions_save },
   { "save-as", gb_editor_view_actions_save_as },
   { "show-line-numbers", NULL, NULL, "false", gb_editor_view_actions_show_line_numbers },
