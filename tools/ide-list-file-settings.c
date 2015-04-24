@@ -164,6 +164,10 @@ main (gint   argc,
   ide_set_program_name ("gnome-builder");
   g_set_prgname ("ide-list-file-settings");
 
+  gtk_init (&argc, &argv);
+
+  ide_log_init (TRUE, NULL);
+
   context = g_option_context_new (_("- List files found in project."));
 
   if (!g_option_context_parse (context, &argc, &argv, &error))
