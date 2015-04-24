@@ -351,11 +351,26 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
 
   if (g_ptr_array_remove_fast (self->buffers, buffer))
     {
+      IdeUnsavedFiles *unsaved_files;
+      IdeContext *context;
+      IdeFile *file;
+      GFile *gfile;
+
+      file = ide_buffer_get_file (buffer);
+      gfile = ide_file_get_file (file);
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      unsaved_files = ide_context_get_unsaved_files (context);
+      ide_unsaved_files_remove (unsaved_files, gfile);
+
       gtk_source_completion_words_unregister (self->word_completion, GTK_TEXT_BUFFER (buffer));
+
       unregister_auto_save (self, buffer);
+
       g_signal_handlers_disconnect_by_func (buffer,
                                             G_CALLBACK (ide_buffer_manager_buffer_changed),
                                             self);
+
       g_object_unref (buffer);
     }
 }
@@ -802,7 +817,7 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
   context = ide_object_get_context (IDE_OBJECT (self));
   unsaved_files = ide_context_get_unsaved_files (context);
   gfile = ide_file_get_file (state->file);
-  ide_unsaved_files_update (unsaved_files, gfile, NULL);
+  ide_unsaved_files_remove (unsaved_files, gfile);
 
   /* Notify signal handlers that the file is saved */
   g_signal_emit (self, gSignals [BUFFER_SAVED], 0, state->buffer);
