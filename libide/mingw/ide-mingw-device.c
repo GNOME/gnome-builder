@@ -37,7 +37,7 @@ ide_mingw_device_new (IdeContext  *context,
   self = g_object_new (IDE_TYPE_MINGW_DEVICE,
                        "context", context,
                        "display-name", display_name,
-                       "id", system_type,
+                       "id", id,
                        NULL);
 
   self->system_type = g_strdup (system_type);
