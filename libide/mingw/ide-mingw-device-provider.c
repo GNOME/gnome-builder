@@ -62,8 +62,8 @@ ide_mingw_device_provider_discover_worker (GTask        *task,
       /* add 64-bit mingw device */
       device = ide_mingw_device_new (context,
                                      _("MinGW (64-bit)"),
-                                     "local-i686-w64-mingw32",
-                                     "i686-w64-mingw32");
+                                     "local-x86_64-w64-mingw32",
+                                     "x86_64-w64-mingw32");
       g_ptr_array_add (devices, device);
     }
 
