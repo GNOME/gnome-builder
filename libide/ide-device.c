@@ -212,7 +212,7 @@ ide_device_set_property (GObject      *object,
       break;
 
     case PROP_ID:
-      ide_device_set_id (self, ide_device_get_id (self));
+      ide_device_set_id (self, g_value_get_string (value));
       break;
 
     default:
