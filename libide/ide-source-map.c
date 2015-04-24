@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-line-change-gutter-renderer.h"
 #include "ide-macros.h"
 #include "ide-pango.h"
 #include "ide-source-map.h"
@@ -623,7 +624,7 @@ ide_source_map_class_init (IdeSourceMapClass *klass)
     g_param_spec_object ("view",
                          _("View"),
                          _("The view this widget is mapping."),
-                         IDE_TYPE_SOURCE_VIEW,
+                         GTK_SOURCE_TYPE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_VIEW, gParamSpecs [PROP_VIEW]);
 
@@ -640,15 +641,16 @@ static void
 ide_source_map_init (IdeSourceMap *self)
 {
   GtkSourceCompletion *completion;
+  GtkSourceGutter *gutter;
+  GtkSourceGutterRenderer *renderer;
 
-  self->child_view = g_object_new (IDE_TYPE_SOURCE_VIEW,
+  self->child_view = g_object_new (GTK_SOURCE_TYPE_VIEW,
                                    "auto-indent", FALSE,
                                    "can-focus", FALSE,
+                                   "draw-spaces", 0,
                                    "editable", FALSE,
                                    "expand", FALSE,
                                    "monospace", TRUE,
-                                   "show-line-changes", TRUE,
-                                   "show-line-diagnostics", FALSE,
                                    "show-line-numbers", FALSE,
                                    "show-line-marks", FALSE,
                                    "show-right-margin", FALSE,
@@ -670,6 +672,22 @@ ide_source_map_init (IdeSourceMap *self)
                            self,
                            G_CONNECT_SWAPPED | G_CONNECT_AFTER);
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->child_view));
+
+  /*
+   * TODO:
+   *
+   * nacho/pbor/gsv maintainers
+   *
+   * We should make this packable via GtkBuilder or an internal-child or something.
+   * That way, we can have GtkSourceMap in gb-editor-frame.ui and Builder can just
+   * add this there.
+   */
+  gutter = gtk_source_view_get_gutter (self->child_view, GTK_TEXT_WINDOW_LEFT);
+  renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
+                           "size", 4,
+                           "visible", TRUE,
+                           NULL);
+  gtk_source_gutter_insert (gutter, renderer, 0);
 
   self->overlay_box = g_object_new (GTK_TYPE_EVENT_BOX,
                                     "opacity", 0.5,
