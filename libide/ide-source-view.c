@@ -6963,7 +6963,6 @@ ide_source_view_set_count (IdeSourceView *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-  g_return_if_fail (count >= 0);
   g_return_if_fail (count <= G_MAXINT);
 
   if (count != priv->count)

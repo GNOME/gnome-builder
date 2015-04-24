@@ -347,7 +347,6 @@ ide_vcs_uri_set_port (IdeVcsUri *self,
                       guint      port)
 {
   g_return_if_fail (self);
-  g_return_if_fail (port >= 0);
   g_return_if_fail (port <= G_MAXINT16);
 
   self->port = port;
