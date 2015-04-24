@@ -212,11 +212,20 @@ on_create_buffer (IdeBufferManager *buffer_manager,
                   IdeFile          *file,
                   gpointer          user_data)
 {
-  return g_object_new (GB_TYPE_EDITOR_DOCUMENT,
-                       "context", ide_object_get_context (IDE_OBJECT (buffer_manager)),
-                       "file", file,
-                       "highlight-diagnostics", TRUE,
-                       NULL);
+  IdeBuffer *ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (IDE_IS_FILE (file));
+
+  ret = g_object_new (GB_TYPE_EDITOR_DOCUMENT,
+                      "context", ide_object_get_context (IDE_OBJECT (buffer_manager)),
+                      "file", file,
+                      "highlight-diagnostics", TRUE,
+                      NULL);
+
+  IDE_RETURN (ret);
 }
 
 static void
