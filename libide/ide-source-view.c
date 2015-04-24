@@ -1369,6 +1369,8 @@ ide_source_view_connect_buffer (IdeSourceView *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
+  ide_buffer_hold (buffer);
+
   if (_ide_buffer_get_loading (buffer))
     {
       GtkSourceCompletion *completion;
@@ -1535,6 +1537,8 @@ ide_source_view_disconnect_buffer (IdeSourceView *self,
   g_clear_object (&priv->search_context);
 
   ide_source_view_set_indenter (self, NULL);
+
+  ide_buffer_release (buffer);
 }
 
 static void

@@ -32,6 +32,7 @@
 #include "ide-file-settings.h"
 #include "ide-highlighter.h"
 #include "ide-highlight-engine.h"
+#include "ide-internal.h"
 #include "ide-language.h"
 #include "ide-source-location.h"
 #include "ide-source-range.h"
@@ -42,6 +43,7 @@
 
 #define DEFAULT_DIAGNOSE_TIMEOUT_MSEC          333
 #define DEFAULT_DIAGNOSE_CONSERVE_TIMEOUT_MSEC 5000
+#define RECLAIMATION_TIMEOUT_SECS              5
 
 #define TAG_ERROR   "diagnostician::error"
 #define TAG_WARNING "diagnostician::warning"
@@ -66,6 +68,9 @@ typedef struct
   guint                   diagnose_timeout;
 
   GTimeVal                mtime;
+
+  gint                    hold_count;
+  guint                   reclamation_handler;
 
   guint                   changed_on_volume : 1;
   guint                   diagnostics_dirty : 1;
@@ -805,6 +810,12 @@ ide_buffer_finalize (GObject *object)
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
   IDE_ENTRY;
+
+  if (priv->reclamation_handler != 0)
+    {
+      g_source_remove (priv->reclamation_handler);
+      priv->reclamation_handler = 0;
+    }
 
   ide_clear_weak_pointer (&priv->context);
 
@@ -1850,4 +1861,65 @@ ide_buffer_get_symbols_finish (IdeBuffer     *self,
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
   return g_task_propagate_pointer (task, error);
+}
+
+static gboolean
+ide_buffer_reclaim_timeout (gpointer data)
+{
+  IdeBuffer *self = data;
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  IdeBufferManager *buffer_manager;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  priv->reclamation_handler = 0;
+
+  buffer_manager = ide_context_get_buffer_manager (priv->context);
+
+  _ide_buffer_manager_reclaim (buffer_manager, self);
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+ide_buffer_hold (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (priv->hold_count >= 0);
+
+  priv->hold_count++;
+
+  if (priv->reclamation_handler != 0)
+    {
+      g_source_remove (priv->reclamation_handler);
+      priv->reclamation_handler = 0;
+    }
+}
+
+void
+ide_buffer_release (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (priv->hold_count >= 0);
+
+  priv->hold_count--;
+
+  /*
+   * If our hold count has reached zero, then queue the buffer for
+   * reclamation by the buffer manager after a grace period has elapsed.
+   * This helps us proactively drop buffers after there are no more views
+   * watching them, but deal with the case where we are transitioning to
+   * a new split after dropping the current split.
+   */
+
+  if ((priv->hold_count == 0) && (priv->reclamation_handler == 0))
+    {
+      priv->reclamation_handler = g_timeout_add_seconds (RECLAIMATION_TIMEOUT_SECS,
+                                                         ide_buffer_reclaim_timeout,
+                                                         self);
+    }
 }

@@ -104,6 +104,8 @@ void                ide_buffer_get_symbols_async             (IdeBuffer         
 GPtrArray          *ide_buffer_get_symbols_finish            (IdeBuffer            *self,
                                                               GAsyncResult         *result,
                                                               GError              **error);
+void                ide_buffer_hold                          (IdeBuffer            *self);
+void                ide_buffer_release                       (IdeBuffer            *self);
 
 G_END_DECLS
 

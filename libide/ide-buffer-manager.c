@@ -1518,3 +1518,12 @@ ide_buffer_manager_create_buffer (IdeBufferManager *self)
 
   return buffer;
 }
+
+void
+_ide_buffer_manager_reclaim (IdeBufferManager *self,
+                             IdeBuffer        *buffer)
+{
+  g_assert (IDE_IS_BUFFER_MANAGER (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+}
