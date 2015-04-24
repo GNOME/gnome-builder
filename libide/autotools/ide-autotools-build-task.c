@@ -438,6 +438,8 @@ gen_configure_argv (IdeAutotoolsBuildTask *self,
                     WorkerState           *state)
 {
   IdeAutotoolsBuildTaskPrivate *priv;
+  IdeDevice *device;
+  const gchar *system_type;
   GKeyFile *configs[2];
   GPtrArray *ar;
   GHashTable *ht;
@@ -509,6 +511,10 @@ gen_configure_argv (IdeAutotoolsBuildTask *self,
       g_ptr_array_add (ar, g_strdup_printf ("--prefix=%s", prefix));
       g_free (prefix);
     }
+
+  device = ide_autotools_build_task_get_device (self);
+  system_type = ide_device_get_system_type (device);
+  g_ptr_array_add (ar, g_strdup_printf ("--host=%s", system_type));
 
   g_ptr_array_add (ar, NULL);
   g_hash_table_unref (ht);
