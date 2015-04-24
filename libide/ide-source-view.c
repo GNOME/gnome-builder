@@ -3081,7 +3081,7 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (!priv->buffer)
-    return;
+    IDE_EXIT;
 
 #ifndef IDE_DISABLE_TRACE
   {

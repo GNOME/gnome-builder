@@ -289,12 +289,15 @@ ide_context_new_async (GFile               *project_file,
                        GAsyncReadyCallback  callback,
                        gpointer             user_data)
 {
-  GTask *task;
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
 
   g_return_if_fail (G_IS_FILE (project_file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (NULL, cancellable, callback, user_data);
+
   g_async_initable_new_async (IDE_TYPE_CONTEXT,
                               G_PRIORITY_DEFAULT,
                               cancellable,
@@ -302,7 +305,8 @@ ide_context_new_async (GFile               *project_file,
                               g_object_ref (task),
                               "project-file", project_file,
                               NULL);
-  g_object_unref (task);
+
+  IDE_EXIT;
 }
 
 /**
@@ -316,10 +320,15 @@ ide_context_new_finish (GAsyncResult  *result,
                         GError       **error)
 {
   GTask *task = (GTask *)result;
+  IdeContext *ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (task, error);
+
+  IDE_RETURN (ret);
 }
 
 /**
@@ -987,7 +996,7 @@ ide_context_init_unsaved_files_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
 
-  g_return_if_fail (IDE_IS_UNSAVED_FILES (unsaved_files));
+  g_assert (IDE_IS_UNSAVED_FILES (unsaved_files));
 
   if (!ide_unsaved_files_restore_finish (unsaved_files, result, &error))
     {

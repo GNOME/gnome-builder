@@ -376,6 +376,8 @@ ide_language_defaults_init_async (GCancellable        *cancellable,
 {
   g_autoptr(GTask) task = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (NULL, cancellable, callback, user_data);
@@ -397,6 +399,8 @@ ide_language_defaults_init_async (GCancellable        *cancellable,
     }
 
   G_UNLOCK (lock);
+
+  IDE_EXIT;
 }
 
 gboolean
@@ -404,8 +408,13 @@ ide_language_defaults_init_finish (GAsyncResult  *result,
                                    GError       **error)
 {
   GTask *task = (GTask *)result;
+  gboolean ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (G_IS_TASK (task), FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  ret = g_task_propagate_boolean (task, error);
+
+  IDE_RETURN (ret);
 }

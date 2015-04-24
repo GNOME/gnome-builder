@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-file"
+
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
@@ -309,6 +311,8 @@ ide_file_load_settings_async (IdeFile              *self,
   IdeContext *context;
   g_autoptr(GTask) task = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_FILE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -322,6 +326,8 @@ ide_file_load_settings_async (IdeFile              *self,
                         "context", context,
                         "file", self,
                         NULL);
+
+  IDE_EXIT;
 }
 
 /**
@@ -338,10 +344,15 @@ ide_file_load_settings_finish (IdeFile              *self,
                                GError              **error)
 {
   GTask *task = (GTask *)result;
+  IdeFileSettings *ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (task, error);
+
+  IDE_RETURN (ret);
 }
 
 /**

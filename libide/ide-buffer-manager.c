@@ -746,11 +746,16 @@ ide_buffer_manager_load_file_finish (IdeBufferManager  *self,
                                      GError           **error)
 {
   GTask *task = (GTask *)result;
+  IdeBuffer *ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  ret = g_task_propagate_pointer (task, error);
+
+  IDE_RETURN (ret);
 }
 
 static void
@@ -811,6 +816,8 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
   const gchar *charset;
   GError *error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_FILE (file));
   g_assert (G_IS_TASK (task));
 
@@ -819,7 +826,7 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
   if (!file_settings)
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   source_file = _ide_file_get_source_file (file);
@@ -890,6 +897,8 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
                                     g_object_ref (task));
 
   g_clear_object (&saver);
+
+  IDE_EXIT;
 }
 
 /**
