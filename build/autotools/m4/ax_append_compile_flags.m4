@@ -1,32 +1,31 @@
 # ===========================================================================
-#   http://www.gnu.org/software/autoconf-archive/ax_check_compile_flag.html
+#  http://www.gnu.org/software/autoconf-archive/ax_append_compile_flags.html
 # ===========================================================================
 #
 # SYNOPSIS
 #
-#   AX_CHECK_COMPILE_FLAG(FLAG, [ACTION-SUCCESS], [ACTION-FAILURE], [EXTRA-FLAGS], [INPUT])
+#   AX_APPEND_COMPILE_FLAGS([FLAG1 FLAG2 ...], [FLAGS-VARIABLE], [EXTRA-FLAGS])
 #
 # DESCRIPTION
 #
-#   Check whether the given FLAG works with the current language's compiler
-#   or gives an error.  (Warnings, however, are ignored)
+#   For every FLAG1, FLAG2 it is checked whether the compiler works with the
+#   flag.  If it does, the flag is added FLAGS-VARIABLE
 #
-#   ACTION-SUCCESS/ACTION-FAILURE are shell commands to execute on
-#   success/failure.
+#   If FLAGS-VARIABLE is not specified, the current language's flags (e.g.
+#   CFLAGS) is used.  During the check the flag is always added to the
+#   current language's flags.
 #
 #   If EXTRA-FLAGS is defined, it is added to the current language's default
 #   flags (e.g. CFLAGS) when the check is done.  The check is thus made with
 #   the flags: "CFLAGS EXTRA-FLAGS FLAG".  This can for example be used to
 #   force the compiler to issue an error when a bad flag is given.
 #
-#   INPUT gives an alternative input source to AC_COMPILE_IFELSE.
-#
-#   NOTE: Implementation based on AX_CFLAGS_GCC_OPTION. Please keep this
-#   macro in sync with AX_CHECK_{PREPROC,LINK}_FLAG.
+#   NOTE: This macro depends on the AX_APPEND_FLAG and
+#   AX_CHECK_COMPILE_FLAG. Please keep this macro in sync with
+#   AX_APPEND_LINK_FLAGS.
 #
 # LICENSE
 #
-#   Copyright (c) 2008 Guido U. Draheim <guidod@gmx.de>
 #   Copyright (c) 2011 Maarten Bosmans <mkbosmans@gmail.com>
 #
 #   This program is free software: you can redistribute it and/or modify it
@@ -57,18 +56,10 @@
 
 #serial 4
 
-AC_DEFUN([AX_CHECK_COMPILE_FLAG],
-[AC_PREREQ(2.64)dnl for _AC_LANG_PREFIX and AS_VAR_IF
-AS_VAR_PUSHDEF([CACHEVAR],[ax_cv_check_[]_AC_LANG_ABBREV[]flags_$4_$1])dnl
-AC_CACHE_CHECK([whether _AC_LANG compiler accepts $1], CACHEVAR, [
-  ax_check_save_flags=$[]_AC_LANG_PREFIX[]FLAGS
-  _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $4 $1"
-  AC_COMPILE_IFELSE([m4_default([$5],[AC_LANG_PROGRAM()])],
-    [AS_VAR_SET(CACHEVAR,[yes])],
-    [AS_VAR_SET(CACHEVAR,[no])])
-  _AC_LANG_PREFIX[]FLAGS=$ax_check_save_flags])
-AS_VAR_IF(CACHEVAR,yes,
-  [m4_default([$2], :)],
-  [m4_default([$3], :)])
-AS_VAR_POPDEF([CACHEVAR])dnl
-])dnl AX_CHECK_COMPILE_FLAGS
+AC_DEFUN([AX_APPEND_COMPILE_FLAGS],
+[AX_REQUIRE_DEFINED([AX_CHECK_COMPILE_FLAG])
+AX_REQUIRE_DEFINED([AX_APPEND_FLAG])
+for flag in $1; do
+  AX_CHECK_COMPILE_FLAG([$flag], [AX_APPEND_FLAG([$flag], [$2])], [], [$3])
+done
+])dnl AX_APPEND_COMPILE_FLAGS

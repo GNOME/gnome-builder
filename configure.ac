@@ -1,4 +1,4 @@
-AC_PREREQ(2.60)
+AC_PREREQ([2.69])
 
 m4_define([project_name],[gnome-builder])
 m4_define([project_major_version],[3])
@@ -41,15 +41,26 @@ m4_include([build/autotools/autoconf.d/post-am.m4])
 AC_PROG_CC
 AM_PROG_CC_C_O
 AC_PROG_CXX
-AC_ISC_POSIX
 AC_HEADER_STDC
 
-AM_PROG_LIBTOOL
+LT_PREREQ([2.2.0])
+LT_INIT
+
+AX_APPEND_COMPILE_FLAGS([ \
+	-Wall \
+	-Wextra \
+	-Wno-unused-parameter \
+	-Wno-sign-compare \
+	-Wno-missing-field-initializers \
+	-Wnested-externs \
+	-Wpointer-arith \
+	-Winit-self \
+	-Wdeclaration-after-statement \
+	-Werror=format-security \
+	-Werror=format=2 \
+])
 
 AC_C_CONST
-
-GNOME_COMPILE_WARNINGS([maximum])
-GNOME_MAINTAINER_MODE_DEFINES
 
 # If we are using gtk-doc, enable it.
 # We would put this in a file but gtkdocize requires it.
