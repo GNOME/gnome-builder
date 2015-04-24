@@ -23,33 +23,16 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_SCROLLED_WINDOW            (gb_scrolled_window_get_type())
-#define GB_SCROLLED_WINDOW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SCROLLED_WINDOW, GbScrolledWindow))
-#define GB_SCROLLED_WINDOW_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_SCROLLED_WINDOW, GbScrolledWindow const))
-#define GB_SCROLLED_WINDOW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_SCROLLED_WINDOW, GbScrolledWindowClass))
-#define GB_IS_SCROLLED_WINDOW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_SCROLLED_WINDOW))
-#define GB_IS_SCROLLED_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_SCROLLED_WINDOW))
-#define GB_SCROLLED_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_SCROLLED_WINDOW, GbScrolledWindowClass))
+#define GB_TYPE_SCROLLED_WINDOW (gb_scrolled_window_get_type())
 
-typedef struct _GbScrolledWindow        GbScrolledWindow;
-typedef struct _GbScrolledWindowClass   GbScrolledWindowClass;
-typedef struct _GbScrolledWindowPrivate GbScrolledWindowPrivate;
-
-struct _GbScrolledWindow
-{
-  GtkScrolledWindow parent;
-
-  /*< private >*/
-  GbScrolledWindowPrivate *priv;
-};
+G_DECLARE_DERIVABLE_TYPE (GbScrolledWindow, gb_scrolled_window, GB, SCROLLED_WINDOW, GtkScrolledWindow)
 
 struct _GbScrolledWindowClass
 {
-  GtkScrolledWindowClass parent;
+  GtkScrolledWindowClass parent_class;
 };
 
-GType      gb_scrolled_window_get_type (void);
-GtkWidget *gb_scrolled_window_new      (void);
+GtkWidget *gb_scrolled_window_new (void);
 
 G_END_DECLS
 

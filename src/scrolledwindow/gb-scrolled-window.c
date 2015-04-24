@@ -20,14 +20,13 @@
 
 #include "gb-scrolled-window.h"
 
-struct _GbScrolledWindowPrivate
+typedef struct
 {
   gint max_content_height;
   gint max_content_width;
-};
+} GbScrolledWindowPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbScrolledWindow, gb_scrolled_window,
-                            GTK_TYPE_SCROLLED_WINDOW)
+G_DEFINE_TYPE_WITH_PRIVATE (GbScrolledWindow, gb_scrolled_window, GTK_TYPE_SCROLLED_WINDOW)
 
 enum {
   PROP_0,
@@ -45,11 +44,13 @@ gb_scrolled_window_new (void)
 }
 
 gint
-gb_scrolled_window_get_max_content_height (GbScrolledWindow *window)
+gb_scrolled_window_get_max_content_height (GbScrolledWindow *self)
 {
-  g_return_val_if_fail (GB_IS_SCROLLED_WINDOW (window), -1);
+  GbScrolledWindowPrivate *priv = gb_scrolled_window_get_instance_private (self);
 
-  return window->priv->max_content_height;
+  g_return_val_if_fail (GB_IS_SCROLLED_WINDOW (self), -1);
+
+  return priv->max_content_height;
 }
 
 /**
@@ -63,26 +64,29 @@ gb_scrolled_window_get_max_content_height (GbScrolledWindow *window)
  * allocation, but only up to a certain height.
  */
 void
-gb_scrolled_window_set_max_content_height (GbScrolledWindow *window,
+gb_scrolled_window_set_max_content_height (GbScrolledWindow *self,
                                            gint              max_content_height)
 {
-  g_return_if_fail (GB_IS_SCROLLED_WINDOW (window));
+  GbScrolledWindowPrivate *priv = gb_scrolled_window_get_instance_private (self);
 
-  if (max_content_height != window->priv->max_content_height)
+  g_return_if_fail (GB_IS_SCROLLED_WINDOW (self));
+
+  if (max_content_height != priv->max_content_height)
     {
-      window->priv->max_content_height = max_content_height;
-      g_object_notify_by_pspec (G_OBJECT (window),
-                                gParamSpecs [PROP_MAX_CONTENT_HEIGHT]);
-      gtk_widget_queue_resize (GTK_WIDGET (window));
+      priv->max_content_height = max_content_height;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MAX_CONTENT_HEIGHT]);
+      gtk_widget_queue_resize (GTK_WIDGET (self));
     }
 }
 
 gint
-gb_scrolled_window_get_max_content_width (GbScrolledWindow *window)
+gb_scrolled_window_get_max_content_width (GbScrolledWindow *self)
 {
-  g_return_val_if_fail (GB_IS_SCROLLED_WINDOW (window), -1);
+  GbScrolledWindowPrivate *priv = gb_scrolled_window_get_instance_private (self);
 
-  return window->priv->max_content_width;
+  g_return_val_if_fail (GB_IS_SCROLLED_WINDOW (self), -1);
+
+  return priv->max_content_width;
 }
 
 /**
@@ -96,17 +100,18 @@ gb_scrolled_window_get_max_content_width (GbScrolledWindow *window)
  * allocation, but only up to a certain width.
  */
 void
-gb_scrolled_window_set_max_content_width (GbScrolledWindow *window,
+gb_scrolled_window_set_max_content_width (GbScrolledWindow *self,
                                           gint              max_content_width)
 {
-  g_return_if_fail (GB_IS_SCROLLED_WINDOW (window));
+  GbScrolledWindowPrivate *priv = gb_scrolled_window_get_instance_private (self);
 
-  if (max_content_width != window->priv->max_content_width)
+  g_return_if_fail (GB_IS_SCROLLED_WINDOW (self));
+
+  if (max_content_width != priv->max_content_width)
     {
-      window->priv->max_content_width = max_content_width;
-      g_object_notify_by_pspec (G_OBJECT (window),
-                                gParamSpecs [PROP_MAX_CONTENT_HEIGHT]);
-      gtk_widget_queue_resize (GTK_WIDGET (window));
+      priv->max_content_width = max_content_width;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MAX_CONTENT_HEIGHT]);
+      gtk_widget_queue_resize (GTK_WIDGET (self));
     }
 }
 
@@ -116,15 +121,15 @@ gb_scrolled_window_get_preferred_height (GtkWidget *widget,
                                          gint      *natural_height)
 {
   GbScrolledWindow *self = (GbScrolledWindow *)widget;
+  GbScrolledWindowPrivate *priv = gb_scrolled_window_get_instance_private (self);
 
   g_return_if_fail (GB_IS_SCROLLED_WINDOW (self));
 
-  GTK_WIDGET_CLASS (gb_scrolled_window_parent_class)->
-    get_preferred_height (widget, minimum_height, natural_height);
+  GTK_WIDGET_CLASS (gb_scrolled_window_parent_class)->get_preferred_height (widget, minimum_height, natural_height);
 
   if (natural_height)
     {
-      if (self->priv->max_content_height > -1)
+      if (priv->max_content_height > -1)
         {
           GtkWidget *child;
           GtkStyleContext *style;
@@ -133,23 +138,17 @@ gb_scrolled_window_get_preferred_height (GtkWidget *widget,
           gint child_nat_height;
           gint additional;
 
-          child = gtk_bin_get_child (GTK_BIN (widget));
-          if (!child)
+          if (!(child = gtk_bin_get_child (GTK_BIN (widget))))
             return;
 
           style = gtk_widget_get_style_context (widget);
-          gtk_style_context_get_border (style,
-                                        gtk_widget_get_state_flags (widget),
-                                        &border);
+          gtk_style_context_get_border (style, gtk_widget_get_state_flags (widget), &border);
           additional = border.top + border.bottom;
 
-          gtk_widget_get_preferred_height (child, &child_min_height,
-                                           &child_nat_height);
+          gtk_widget_get_preferred_height (child, &child_min_height, &child_nat_height);
 
-          if ((child_nat_height > *natural_height) &&
-              (self->priv->max_content_height > *natural_height))
-            *natural_height = MIN (self->priv->max_content_height,
-                                   child_nat_height) + additional;
+          if ((child_nat_height > *natural_height) && (priv->max_content_height > *natural_height))
+            *natural_height = MIN (priv->max_content_height, child_nat_height) + additional;
         }
     }
 }
@@ -160,15 +159,15 @@ gb_scrolled_window_get_preferred_width (GtkWidget *widget,
                                         gint      *natural_width)
 {
   GbScrolledWindow *self = (GbScrolledWindow *)widget;
+  GbScrolledWindowPrivate *priv = gb_scrolled_window_get_instance_private (self);
 
   g_return_if_fail (GB_IS_SCROLLED_WINDOW (self));
 
-  GTK_WIDGET_CLASS (gb_scrolled_window_parent_class)->
-    get_preferred_width (widget, minimum_width, natural_width);
+  GTK_WIDGET_CLASS (gb_scrolled_window_parent_class)->get_preferred_width (widget, minimum_width, natural_width);
 
   if (natural_width)
     {
-      if (self->priv->max_content_width > -1)
+      if (priv->max_content_width > -1)
         {
           GtkWidget *child;
           GtkStyleContext *style;
@@ -177,23 +176,17 @@ gb_scrolled_window_get_preferred_width (GtkWidget *widget,
           gint child_nat_width;
           gint additional;
 
-          child = gtk_bin_get_child (GTK_BIN (widget));
-          if (!child)
+          if (!(child = gtk_bin_get_child (GTK_BIN (widget))))
             return;
 
           style = gtk_widget_get_style_context (widget);
-          gtk_style_context_get_border (style,
-                                        gtk_widget_get_state_flags (widget),
-                                        &border);
+          gtk_style_context_get_border (style, gtk_widget_get_state_flags (widget), &border);
           additional = border.left = border.right + 1;
 
-          gtk_widget_get_preferred_width (child, &child_min_width,
-                                           &child_nat_width);
+          gtk_widget_get_preferred_width (child, &child_min_width, &child_nat_width);
 
-          if ((child_nat_width > *natural_width) &&
-              (self->priv->max_content_width > *natural_width))
-            *natural_width = MIN (self->priv->max_content_width,
-                                   child_nat_width) + additional;
+          if ((child_nat_width > *natural_width) && (priv->max_content_width > *natural_width))
+            *natural_width = MIN (priv->max_content_width, child_nat_width) + additional;
         }
     }
 }
@@ -282,7 +275,8 @@ gb_scrolled_window_class_init (GbScrolledWindowClass *klass)
 static void
 gb_scrolled_window_init (GbScrolledWindow *self)
 {
-  self->priv = gb_scrolled_window_get_instance_private (self);
-  self->priv->max_content_height = -1;
-  self->priv->max_content_width = -1;
+  GbScrolledWindowPrivate *priv = gb_scrolled_window_get_instance_private (self);
+
+  priv->max_content_height = -1;
+  priv->max_content_width = -1;
 }
