@@ -556,10 +556,14 @@ static void
 ide_buffer__change_monitor_changed_cb (IdeBuffer              *self,
                                        IdeBufferChangeMonitor *monitor)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_BUFFER_CHANGE_MONITOR (monitor));
 
   g_signal_emit (self, gSignals [LINE_FLAGS_CHANGED], 0);
+
+  IDE_EXIT;
 }
 
 static void

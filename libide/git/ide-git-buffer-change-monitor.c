@@ -21,6 +21,7 @@
 
 #include "ide-buffer.h"
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-file.h"
 #include "ide-git-buffer-change-monitor.h"
 #include "ide-git-vcs.h"
@@ -388,13 +389,22 @@ ide_git_buffer_change_monitor__buffer_changed_after_cb (IdeGitBufferChangeMonito
 
 static void
 ide_git_buffer_change_monitor__vcs_reloaded_cb (IdeGitBufferChangeMonitor *self,
+                                                GgitRepository            *new_repository,
                                                 IdeGitVcs                 *vcs)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
   g_assert (IDE_IS_GIT_VCS (vcs));
 
+  g_set_object (&self->repository, new_repository);
+
   /* force reload of the git object on next calculation */
   g_clear_object (&self->cached_blob);
+
+  ide_git_buffer_change_monitor_recalculate (self);
+
+  IDE_EXIT;
 }
 
 static void

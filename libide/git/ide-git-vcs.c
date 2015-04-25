@@ -16,12 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-git-vcs"
+
 #include <git2.h>
 #include <glib/gi18n.h>
 #include <libgit2-glib/ggit.h>
 
 #include "ide-async-helper.h"
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-git-buffer-change-monitor.h"
 #include "ide-git-vcs.h"
 #include "ide-project.h"
@@ -385,13 +388,14 @@ ide_git_vcs__changed_timeout_cb (gpointer user_data)
 {
   IdeGitVcs *self = user_data;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_GIT_VCS (self));
 
   self->changed_timeout = 0;
-
   ide_git_vcs_reload_async (self, NULL, ide_git_vcs__reload_cb, NULL);
 
-  return G_SOURCE_REMOVE;
+  IDE_RETURN (G_SOURCE_REMOVE);
 }
 
 static void
@@ -401,17 +405,18 @@ ide_git_vcs__monitor_changed_cb (IdeGitVcs         *self,
                                  GFileMonitorEvent  event_type,
                                  gpointer           user_data)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_GIT_VCS (self));
 
-  if (event_type == G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT)
-    {
-      if (self->changed_timeout)
-        g_source_remove (self->changed_timeout);
+  if (self->changed_timeout != 0)
+    g_source_remove (self->changed_timeout);
 
-      self->changed_timeout = g_timeout_add_seconds (DEFAULT_CHANGED_TIMEOUT_SECS,
-                                                     ide_git_vcs__changed_timeout_cb,
-                                                     self);
-    }
+  self->changed_timeout = g_timeout_add_seconds (DEFAULT_CHANGED_TIMEOUT_SECS,
+                                                 ide_git_vcs__changed_timeout_cb,
+                                                 self);
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -422,26 +427,29 @@ ide_git_vcs_load_monitor (IdeGitVcs  *self,
 
   g_assert (IDE_IS_GIT_VCS (self));
 
-  if (!self->monitor)
+  if (self->monitor == NULL)
     {
       g_autoptr(GFile) location = NULL;
       g_autoptr(GFileMonitor) monitor = NULL;
       g_autoptr(GFile) index_file = NULL;
+      GFileMonitorFlags flags = G_FILE_MONITOR_WATCH_MOUNTS;
 
       location = ggit_repository_get_location (self->repository);
       index_file = g_file_get_child (location, "index");
-      monitor = g_file_monitor_file (index_file, G_FILE_MONITOR_NONE, NULL, error);
+      monitor = g_file_monitor (index_file, flags, NULL, error);
+
+      g_object_ref (index_file);
 
       ret = !!monitor;
 
       if (monitor)
         {
+          IDE_TRACE_MSG ("Git index monitor registered.");
           g_signal_connect_object (monitor,
                                    "changed",
                                    G_CALLBACK (ide_git_vcs__monitor_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-
           self->monitor = g_object_ref (monitor);
         }
     }
@@ -616,6 +624,8 @@ ide_git_vcs_reload_async (IdeGitVcs           *self,
 {
   g_autoptr(GTask) task = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_GIT_VCS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -628,7 +638,7 @@ ide_git_vcs_reload_async (IdeGitVcs           *self,
        * reload again after the current process completes.
        */
       g_task_return_boolean (task, TRUE);
-      return;
+      IDE_EXIT;
     }
 
   self->reloading = TRUE;
@@ -637,6 +647,8 @@ ide_git_vcs_reload_async (IdeGitVcs           *self,
                                      NULL,
                                      ide_git_vcs_reload__load_repository_cb,
                                      g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -645,14 +657,17 @@ ide_git_vcs_reload_finish (IdeGitVcs     *self,
                            GError       **error)
 {
   GTask *task = (GTask *)result;
+  gboolean ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_GIT_VCS (self), FALSE);
 
   self->reloading = FALSE;
+  g_signal_emit (self, gSignals [RELOADED], 0, self->change_monitor_repository);
+  ret = g_task_propagate_boolean (task, error);
 
-  g_signal_emit (self, gSignals [RELOADED], 0);
-
-  return g_task_propagate_boolean (task, error);
+  IDE_RETURN (ret);
 }
 
 static gboolean
@@ -682,6 +697,8 @@ ide_git_vcs_dispose (GObject *object)
 {
   IdeGitVcs *self = (IdeGitVcs *)object;
 
+  IDE_ENTRY;
+
   if (self->changed_timeout)
     {
       g_source_remove (self->changed_timeout);
@@ -700,6 +717,8 @@ ide_git_vcs_dispose (GObject *object)
   g_clear_object (&self->working_directory);
 
   G_OBJECT_CLASS (ide_git_vcs_parent_class)->dispose (object);
+
+  IDE_EXIT;
 }
 
 static void
@@ -754,19 +773,26 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
 
   /**
    * IdeGitVcs::reloaded:
+   * @self: An #IdeGitVfs
+   * @repository: A #GgitRepository
    *
    * This signal is emitted when the git index has been reloaded. Various consumers may want to
    * reload their git objects upon this notification. Such an example would be the line diffs
    * that are rendered in the source view gutter.
+   *
+   * The @repository instance is to aide consumers in locating the repository and should not
+   * be used directly except in very specific situations. The gutter change renderer uses this
+   * instance in a threaded manner.
    */
   gSignals [RELOADED] = g_signal_new ("reloaded",
                                       G_TYPE_FROM_CLASS (klass),
                                       G_SIGNAL_RUN_LAST,
                                       0,
                                       NULL, NULL,
-                                      g_cclosure_marshal_VOID__VOID,
+                                      g_cclosure_marshal_VOID__OBJECT,
                                       G_TYPE_NONE,
-                                      0);
+                                      1,
+                                      GGIT_TYPE_REPOSITORY);
 }
 
 static void

@@ -1311,11 +1311,15 @@ ide_source_view__buffer_line_flags_changed_cb (IdeSourceView *self,
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   gtk_source_gutter_renderer_queue_draw (priv->line_change_renderer);
   gtk_source_gutter_renderer_queue_draw (priv->line_diagnostics_renderer);
+
+  IDE_EXIT;
 }
 
 static void
