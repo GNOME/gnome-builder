@@ -88,32 +88,31 @@ ide_source_map_rebuild_css (IdeSourceMap *self)
 
       if (style_scheme != NULL)
         {
+          g_autofree gchar *background = NULL;
           GtkSourceStyle *style;
 
-          style = gtk_source_style_scheme_get_style (style_scheme, "selection");
+          if (!(style = gtk_source_style_scheme_get_style (style_scheme, "map-overlay")) &&
+              !(style = gtk_source_style_scheme_get_style (style_scheme, "selection")))
+            return;
 
-          if (style != NULL)
+
+          g_object_get (style,
+                        "background", &background,
+                        NULL);
+
+          if (background != NULL)
             {
-              g_autofree gchar *background = NULL;
+              gchar *css;
 
-              g_object_get (style,
-                            "background", &background,
-                            NULL);
-
-              if (background != NULL)
-                {
-                  gchar *css;
-
-                  css = g_strdup_printf ("IdeSourceMap GtkEventBox { "
-                                         "  background-color: %s;"
-                                         "  opacity: 0.75;"
-                                         "  border-top: 1px solid shade(%s,0.9); "
-                                         "  border-bottom: 1px solid shade(%s,0.9); "
-                                         "}\n",
-                                         background, background, background);
-                  gtk_css_provider_load_from_data (self->box_css_provider, css, -1, NULL);
-                  g_free (css);
-                }
+              css = g_strdup_printf ("IdeSourceMap GtkEventBox { "
+                                     "  background-color: %s;"
+                                     "  opacity: 0.75;"
+                                     "  border-top: 1px solid shade(%s,0.9); "
+                                     "  border-bottom: 1px solid shade(%s,0.9); "
+                                     "}\n",
+                                     background, background, background);
+              gtk_css_provider_load_from_data (self->box_css_provider, css, -1, NULL);
+              g_free (css);
             }
         }
     }
