@@ -95,7 +95,6 @@ ide_source_map_rebuild_css (IdeSourceMap *self)
               !(style = gtk_source_style_scheme_get_style (style_scheme, "selection")))
             return;
 
-
           g_object_get (style,
                         "background", &background,
                         NULL);
@@ -104,11 +103,11 @@ ide_source_map_rebuild_css (IdeSourceMap *self)
             {
               gchar *css;
 
-              css = g_strdup_printf ("IdeSourceMap GtkEventBox { "
+              css = g_strdup_printf ("IdeSourceMap GtkEventBox {"
                                      "  background-color: %s;"
                                      "  opacity: 0.75;"
-                                     "  border-top: 1px solid shade(%s,0.9); "
-                                     "  border-bottom: 1px solid shade(%s,0.9); "
+                                     "  border-top: 1px solid shade(%s,0.9);"
+                                     "  border-bottom: 1px solid shade(%s,0.9);"
                                      "}\n",
                                      background, background, background);
               gtk_css_provider_load_from_data (self->box_css_provider, css, -1, NULL);
