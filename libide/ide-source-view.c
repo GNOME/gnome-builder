@@ -2104,10 +2104,18 @@ ide_source_view_do_smart_backspace (IdeSourceView *self,
 
   /* if the line isn't empty up to our cursor, ignore */
   tmp = insert;
-  while (!gtk_text_iter_starts_line (&tmp))
+  while (TRUE)
     {
-      if (!g_unichar_isspace (gtk_text_iter_get_char (&tmp)))
+      gunichar ch;
+
+      ch = gtk_text_iter_get_char (&tmp);
+
+      if ((ch != 0) && !g_unichar_isspace (ch))
         IDE_RETURN (FALSE);
+
+      if (gtk_text_iter_starts_line (&tmp))
+        break;
+
       gtk_text_iter_backward_char (&tmp);
     }
 
