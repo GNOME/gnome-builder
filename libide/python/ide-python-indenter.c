@@ -43,8 +43,6 @@ in_pydoc (const GtkTextIter *iter)
   GtkTextIter copy = *iter;
   GtkSourceBuffer *buffer;
 
-  gtk_text_iter_backward_char (&copy);
-
   buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (iter));
 
   if (gtk_source_buffer_iter_has_context_class (buffer, &copy, "comment") ||
