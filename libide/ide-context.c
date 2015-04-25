@@ -746,7 +746,7 @@ ide_context_init (IdeContext *self)
 
   IDE_ENTRY;
 
-  self->recent_manager = gtk_recent_manager_new ();
+  self->recent_manager = g_object_ref (gtk_recent_manager_get_default ());
 
   self->root_build_dir = g_build_filename (g_get_user_cache_dir (),
                                            ide_get_program_name (),
