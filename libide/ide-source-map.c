@@ -246,6 +246,7 @@ transform_font_desc (GBinding     *binding,
     {
       copy = pango_font_description_copy (font_desc);
       pango_font_description_set_size (copy, PANGO_SCALE);
+      pango_font_description_set_weight (copy, PANGO_WEIGHT_BOLD);
     }
 
   g_value_take_boxed (to_value, copy);
