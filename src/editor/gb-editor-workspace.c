@@ -215,6 +215,30 @@ gb_editor_workspace_hierarchy_changed (GtkWidget *widget,
     }
 }
 
+static gboolean
+save_project_tree_position_timeout (gpointer data)
+{
+  GbEditorWorkspace *self = data;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+
+  gb_project_tree_save_desired_width (self->project_tree);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gb_editor_workspace__project_paned_notify_position (GbEditorWorkspace *self,
+                                                    GParamSpec        *pspec,
+                                                    GtkPaned          *paned)
+{
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+
+  if (self->project_tree_position_timeout != 0)
+    g_source_remove (self->project_tree_position_timeout);
+  g_timeout_add_seconds (1, save_project_tree_position_timeout, self);
+}
+
 static void
 gb_editor_workspace_constructed (GObject *object)
 {
@@ -232,7 +256,15 @@ gb_editor_workspace_constructed (GObject *object)
 static void
 gb_editor_workspace_finalize (GObject *object)
 {
+  GbEditorWorkspace *self = (GbEditorWorkspace *)object;
+
   IDE_ENTRY;
+
+  if (self->project_tree_position_timeout)
+    {
+      g_source_remove (self->project_tree_position_timeout);
+      self->project_tree_position_timeout = 0;
+    }
 
   G_OBJECT_CLASS (gb_editor_workspace_parent_class)->finalize (object);
 
@@ -258,15 +290,6 @@ gb_editor_workspace_get_property (GObject    *object,
     }
 }
 
-/**
- * gb_editor_workspace_set_property:
- * @object: (in): A #GObject.
- * @prop_id: (in): The property identifier.
- * @value: (in): The given property.
- * @pspec: (in): A #ParamSpec.
- *
- * Set a given #GObject property.
- */
 static void
 gb_editor_workspace_set_property (GObject      *object,
                                   guint         prop_id,
@@ -330,6 +353,12 @@ gb_editor_workspace_init (GbEditorWorkspace *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->project_tree_settings = g_settings_new ("org.gnome.builder.project-tree");
+
+  g_signal_connect_object (self->project_paned,
+                           "notify::position",
+                           G_CALLBACK (gb_editor_workspace__project_paned_notify_position),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   gb_widget_set_context_handler (self, gb_editor_workspace_context_changed);
 }

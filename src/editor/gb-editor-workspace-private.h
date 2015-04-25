@@ -39,6 +39,8 @@ struct _GbEditorWorkspace
   GtkSpinner    *project_spinner;
   GbProjectTree *project_tree;
   GbViewGrid    *view_grid;
+
+  guint          project_tree_position_timeout;
 };
 
 G_END_DECLS
