@@ -77,6 +77,7 @@ line_starts_with (GtkTextIter *line,
   return ret;
 }
 
+#if 0
 static gboolean
 line_ends_with (const GtkTextIter *iter,
                 const gchar       *suffix)
@@ -101,6 +102,7 @@ line_ends_with (const GtkTextIter *iter,
 
   return ret;
 }
+#endif
 
 static gchar *
 copy_indent (IdePythonIndenter *python,
