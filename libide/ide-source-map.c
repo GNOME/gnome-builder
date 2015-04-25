@@ -531,31 +531,6 @@ ide_source_map__child_view_realize_after (GtkWidget *widget,
   ide_source_map__child_view_state_flags_changed (widget, 0, child_view);
 }
 
-static void
-ide_source_map__overlay_box_realize_after (IdeSourceMap *self,
-                                           GtkEventBox  *overlay_box)
-{
-  GdkCursor *cursor;
-  GdkDisplay *display;
-  GdkWindow *window;
-
-  g_assert (IDE_IS_SOURCE_MAP (self));
-  g_assert (GTK_IS_EVENT_BOX (overlay_box));
-
-  window = gtk_widget_get_window (GTK_WIDGET (overlay_box));
-  g_assert (window != NULL);
-
-  display = gdk_window_get_display (window);
-  g_assert (display != NULL);
-
-  cursor = gdk_cursor_new_for_display (display, GDK_DOUBLE_ARROW);
-  g_assert (cursor != NULL);
-
-  gdk_window_set_cursor (window, cursor);
-
-  g_clear_object (&cursor);
-}
-
 static gboolean
 ide_source_map__overlay_box_button_press_event (IdeSourceMap   *self,
                                                 GdkEventButton *event,
@@ -853,11 +828,6 @@ ide_source_map_init (IdeSourceMap *self)
                                     "height-request", 10,
                                     "width-request", 100,
                                     NULL);
-  g_signal_connect_object (self->overlay_box,
-                           "realize",
-                           G_CALLBACK (ide_source_map__overlay_box_realize_after),
-                           self,
-                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
   g_signal_connect_object (self->overlay_box,
                            "button-press-event",
                            G_CALLBACK (ide_source_map__overlay_box_button_press_event),
