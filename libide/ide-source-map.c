@@ -788,7 +788,7 @@ ide_source_map_init (IdeSourceMap *self)
    */
   gutter = gtk_source_view_get_gutter (self->child_view, GTK_TEXT_WINDOW_LEFT);
   renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
-                           "size", 4,
+                           "size", 3,
                            "visible", TRUE,
                            NULL);
   gtk_source_gutter_insert (gutter, renderer, 0);
