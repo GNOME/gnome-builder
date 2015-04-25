@@ -21,6 +21,7 @@
 #include <gtksourceview/gtksource.h>
 #include <string.h>
 
+#include "ide-debug.h"
 #include "ide-python-indenter.h"
 
 struct _IdePythonIndenter
@@ -522,59 +523,130 @@ indent_for_pair (IdePythonIndenter *python,
     return indent_colon (python, text_view, begin, end, iter);
 }
 
+static gboolean
+move_first_nonspace_char (GtkTextIter *iter)
+{
+  g_assert (iter != NULL);
+
+  gtk_text_iter_set_line_offset (iter, 0);
+
+  while (TRUE)
+    {
+      gunichar ch;
+
+      ch = gtk_text_iter_get_char (iter);
+      if (!g_unichar_isspace (ch))
+        break;
+
+      if (gtk_text_iter_ends_line (iter))
+        break;
+
+      if (!gtk_text_iter_forward_char (iter))
+        break;
+    }
+
+  return g_unichar_isspace (gtk_text_iter_get_char (iter));
+}
+
+static gboolean
+move_to_visual_column (GtkSourceView *sv,
+                       GtkTextIter   *iter,
+                       guint          line_offset)
+{
+  gtk_text_iter_set_line_offset (iter, 0);
+
+  while (line_offset > gtk_source_view_get_visual_column (sv, iter))
+    {
+      if (gtk_text_iter_ends_line (iter))
+        break;
+      gtk_text_iter_forward_char (iter);
+    }
+
+  return TRUE;
+}
+
+static gboolean
+move_previous_line (GtkSourceView *sv,
+                    GtkTextIter   *iter,
+                    guint          line_offset)
+{
+  guint line;
+
+  line = gtk_text_iter_get_line (iter);
+  if (line == 0)
+    return FALSE;
+
+  gtk_text_iter_set_line (iter, line - 1);
+
+  return move_to_visual_column (sv, iter, line_offset);
+}
+
 static gchar *
 maybe_unindent_else_or_elif (IdePythonIndenter *python,
-                             GtkTextIter                *begin,
-                             GtkTextIter                *end)
+                             GtkTextView       *tv,
+                             GtkTextIter       *begin,
+                             GtkTextIter       *end)
 {
   GtkTextIter copy = *begin;
+  GtkSourceView *sv;
   gboolean matches;
   gchar *slice;
+
+  IDE_ENTRY;
+
+  sv = GTK_SOURCE_VIEW (tv);
 
   gtk_text_iter_backward_chars (&copy, 4);
   slice = gtk_text_iter_get_slice (&copy, begin);
   matches = g_str_equal (slice, "else") || g_str_equal (slice, "elif");
 
-  /* paranoia check to make sure this isn't part of a word. */
+  /* only continue if this is the first word on the line */
   if (matches)
-    matches = (!gtk_text_iter_backward_char (&copy) ||
-               g_unichar_isspace (gtk_text_iter_get_char (&copy)));
+    {
+      guint line_offset;
+
+      line_offset = gtk_text_iter_get_line_offset (&copy);
+      move_first_nonspace_char (&copy);
+      if (line_offset != gtk_text_iter_get_line_offset (&copy))
+        IDE_GOTO (failure);
+    }
 
   if (matches)
     {
-      /*
-       * TODO: This doesn't handle unindent properly for multi line
-       *       if or for blocks.
-       */
-      while (!(line_starts_with (&copy, "if ") || line_starts_with (&copy, "for ")) ||
-             !line_ends_with (&copy, ":"))
+      guint line_offset;
+
+      line_offset = gtk_source_view_get_visual_column (sv, &copy);
+
+      while (TRUE)
         {
-          guint if_line;
+          if (!move_previous_line (sv, &copy, line_offset))
+            IDE_GOTO (failure);
 
-          if (!(if_line = gtk_text_iter_get_line (&copy)))
+          move_first_nonspace_char (&copy);
+
+          if (gtk_source_view_get_visual_column (sv, &copy) > line_offset)
+            continue;
+
+          if (line_starts_with (&copy, "if ") || line_starts_with (&copy, "for "))
             break;
-
-          gtk_text_iter_set_line_offset (&copy, 0);
-          gtk_text_iter_set_line (&copy, if_line - 1);
-
-          while (g_unichar_isspace (gtk_text_iter_get_char (&copy)) &&
-                 !gtk_text_iter_ends_line (&copy))
-            if (!gtk_text_iter_forward_char (&copy))
-              break;
         }
 
-      if ((line_starts_with (&copy, "if ") || line_starts_with (&copy, "for ")) &&
-          line_ends_with (&copy, ":"))
+      move_first_nonspace_char (&copy);
+
+      if ((line_starts_with (&copy, "if ") || line_starts_with (&copy, "for ")))
         {
-          gtk_text_iter_set_line_offset (begin,
-                                         gtk_text_iter_get_line_offset (&copy));
-          return slice;
+          guint line_offset;
+
+          line_offset = gtk_source_view_get_visual_column (sv, &copy);
+          move_to_visual_column (sv, begin, line_offset);
+          IDE_RETURN (slice);
         }
     }
 
+failure:
   g_free (slice);
 
-  return NULL;
+  IDE_RETURN (NULL);
 }
 
 static gchar *
@@ -596,7 +668,7 @@ ide_python_indenter_format (IdeIndenter *indenter,
   gtk_text_iter_backward_char (&iter);
   ch = gtk_text_iter_get_char (&iter);
   if (ch == 'e' || ch == 'f')
-    return maybe_unindent_else_or_elif (python, begin, end);
+    return maybe_unindent_else_or_elif (python, text_view, begin, end);
 
   iter = *begin;
   line = gtk_text_iter_get_line (&iter);
