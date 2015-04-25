@@ -38,12 +38,3 @@ GbNewProjectDialog GtkFileChooserButton.linked-on-right .button {
   border-radius: 3px 0 0 3px;
 }
 
-
-/*
- * Minimap highlight.
- */
-IdeSourceMap GtkEventBox {
-  background-color: #a0a3a3;
-  border-top: 1px solid #2e3436;
-  border-bottom: 1px solid #2e3436;
-}

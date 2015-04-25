@@ -34,7 +34,9 @@ struct _IdeSourceMap
   GtkOverlay            parent_instance;
 
   PangoFontDescription *font_desc;
-  GtkCssProvider       *css_provider;
+
+  GtkCssProvider       *view_css_provider;
+  GtkCssProvider       *box_css_provider;
 
   GtkSourceView        *child_view;
   GtkEventBox          *overlay_box;
@@ -58,6 +60,64 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+static void
+ide_source_map_rebuild_css (IdeSourceMap *self)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+
+  if (self->font_desc != NULL)
+    {
+      gchar *css;
+      gchar *tmp;
+
+      tmp = ide_pango_font_description_to_css (self->font_desc);
+      css = g_strdup_printf ("GtkSourceView { %s }\n", tmp ?: "");
+      gtk_css_provider_load_from_data (self->view_css_provider, css, -1, NULL);
+      g_free (css);
+      g_free (tmp);
+    }
+
+  if (self->view != NULL)
+    {
+      GtkSourceStyleScheme *style_scheme;
+      GtkTextBuffer *buffer;
+
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->view));
+      style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
+
+      if (style_scheme != NULL)
+        {
+          GtkSourceStyle *style;
+
+          style = gtk_source_style_scheme_get_style (style_scheme, "selection");
+
+          if (style != NULL)
+            {
+              g_autofree gchar *background = NULL;
+
+              g_object_get (style,
+                            "background", &background,
+                            NULL);
+
+              if (background != NULL)
+                {
+                  gchar *css;
+
+                  css = g_strdup_printf ("IdeSourceMap GtkEventBox { "
+                                         "  background-color: %s;"
+                                         "  opacity: 0.75;"
+                                         "  border-top: 1px solid shade(%s,0.9); "
+                                         "  border-bottom: 1px solid shade(%s,0.9); "
+                                         "}\n",
+                                         background, background, background);
+                  gtk_css_provider_load_from_data (self->box_css_provider, css, -1, NULL);
+                  g_free (css);
+                }
+            }
+        }
+    }
+}
 
 /**
  * ide_source_map_get_view:
@@ -195,6 +255,35 @@ transform_font_desc (GBinding     *binding,
   return TRUE;
 }
 
+static void
+ide_source_map__buffer_notify_style_scheme (IdeSourceMap  *self,
+                                            GParamSpec    *pspec,
+                                            GtkTextBuffer *buffer)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+
+  ide_source_map_rebuild_css (self);
+}
+
+static void
+ide_source_map__view_notify_buffer (IdeSourceMap  *self,
+                                    GParamSpec    *pspec,
+                                    GtkSourceView *view)
+{
+  GtkTextBuffer *buffer;
+
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (GTK_SOURCE_IS_VIEW (view));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  g_signal_connect_object (buffer,
+                           "notify::style-scheme",
+                           G_CALLBACK (ide_source_map__buffer_notify_style_scheme),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
 void
 ide_source_map_set_view (IdeSourceMap  *self,
                          GtkSourceView *view)
@@ -207,6 +296,7 @@ ide_source_map_set_view (IdeSourceMap  *self,
       if (view != NULL)
         {
           GtkAdjustment *vadj;
+          GtkTextBuffer *buffer;
 
           g_object_bind_property (self->view, "buffer",
                                   self->child_view, "buffer",
@@ -217,6 +307,15 @@ ide_source_map_set_view (IdeSourceMap  *self,
           g_object_bind_property (self->view, "tab-width",
                                   self->child_view, "tab-width",
                                   G_BINDING_SYNC_CREATE);
+
+          g_signal_connect_object (view,
+                                   "notify::buffer",
+                                   G_CALLBACK (ide_source_map__view_notify_buffer),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+          buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+          ide_source_map__buffer_notify_style_scheme (self, NULL, buffer);
 
           /*
            * TODO: Not sure what we should do about this in terms of abstraction.
@@ -241,7 +340,10 @@ ide_source_map_set_view (IdeSourceMap  *self,
                                    G_CALLBACK (ide_source_map__view_vadj_notify_upper),
                                    self,
                                    G_CONNECT_SWAPPED);
+
+          ide_source_map_rebuild_css (self);
         }
+
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_VIEW]);
     }
 }
@@ -253,29 +355,16 @@ ide_source_map_set_font_desc (IdeSourceMap               *self,
   g_assert (IDE_IS_SOURCE_MAP (self));
   g_assert (font_desc != NULL);
 
-  g_clear_pointer (&self->font_desc, pango_font_description_free);
-
-  if (!self->css_provider)
+  if (font_desc != self->font_desc)
     {
-      GtkStyleContext *style_context;
+      if (self->font_desc)
+        g_clear_pointer (&self->font_desc, pango_font_description_free);
 
-      self->css_provider = gtk_css_provider_new ();
-      style_context = gtk_widget_get_style_context (GTK_WIDGET (self->child_view));
-      gtk_style_context_add_provider (style_context,
-                                      GTK_STYLE_PROVIDER (self->css_provider),
-                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+      if (font_desc)
+        self->font_desc = pango_font_description_copy (font_desc);
     }
 
-  if (font_desc)
-    {
-      g_autofree gchar *str = NULL;
-      g_autofree gchar *css = NULL;
-
-      self->font_desc = pango_font_description_copy (font_desc);
-      str = ide_pango_font_description_to_css (font_desc);
-      css = g_strdup_printf ("GtkSourceView { %s }", str ?: "");
-      gtk_css_provider_load_from_data (self->css_provider, css, -1, NULL);
-    }
+  ide_source_map_rebuild_css (self);
 }
 
 static void
@@ -287,7 +376,7 @@ ide_source_map_set_font_name (IdeSourceMap *self,
   g_assert (IDE_IS_SOURCE_MAP (self));
 
   if (font_name == NULL)
-    font_name = "Monospace";
+    font_name = "Monospace 1";
 
   font_desc = pango_font_description_from_string (font_name);
   ide_source_map_set_font_desc (self, font_desc);
@@ -559,7 +648,8 @@ ide_source_map_finalize (GObject *object)
 {
   IdeSourceMap *self = (IdeSourceMap *)object;
 
-  g_clear_object (&self->css_provider);
+  g_clear_object (&self->box_css_provider);
+  g_clear_object (&self->view_css_provider);
   g_clear_pointer (&self->font_desc, pango_font_description_free);
   ide_clear_weak_pointer (&self->view);
 
@@ -647,7 +737,9 @@ ide_source_map_init (IdeSourceMap *self)
 {
   GtkSourceCompletion *completion;
   GtkSourceGutter *gutter;
+  GtkStyleContext *context;
   GtkSourceGutterRenderer *renderer;
+
 
   self->child_view = g_object_new (GTK_SOURCE_TYPE_VIEW,
                                    "auto-indent", FALSE,
@@ -676,6 +768,11 @@ ide_source_map_init (IdeSourceMap *self)
                            G_CALLBACK (ide_source_map__child_view_realize_after),
                            self,
                            G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  self->view_css_provider = gtk_css_provider_new ();
+  context = gtk_widget_get_style_context (GTK_WIDGET (self->child_view));
+  gtk_style_context_add_provider (context,
+                                  GTK_STYLE_PROVIDER (self->view_css_provider),
+                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->child_view));
 
   /*
@@ -720,6 +817,11 @@ ide_source_map_init (IdeSourceMap *self)
                            G_CALLBACK (ide_source_map__overlay_box_motion_notify_event),
                            self,
                            G_CONNECT_SWAPPED);
+  context = gtk_widget_get_style_context (GTK_WIDGET (self->overlay_box));
+  self->box_css_provider = gtk_css_provider_new ();
+  gtk_style_context_add_provider (context,
+                                  GTK_STYLE_PROVIDER (self->box_css_provider),
+                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (self), GTK_WIDGET (self->overlay_box));
 
