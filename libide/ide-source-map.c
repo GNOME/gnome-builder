@@ -645,6 +645,54 @@ ide_source_map_size_allocate (GtkWidget     *widget,
   update_scrubber_height (self);
 }
 
+static gboolean
+ide_source_map_do_scroll_event (IdeSourceMap   *self,
+                                GdkEventScroll *event,
+                                GtkWidget      *widget)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (event != NULL);
+  g_assert (GTK_IS_WIDGET (widget));
+
+#define SCROLL_ACCELERATION 4
+
+  /*
+   * TODO: This doesn't propagate kinetic scrolling or anything.
+   *       We should probably make something that does that.
+   */
+  if (self->view != NULL)
+    {
+      gdouble x;
+      gdouble y;
+      gint count = 0;
+
+      if (event->direction == GDK_SCROLL_UP)
+        {
+          count = -SCROLL_ACCELERATION;
+        }
+      else if (event->direction == GDK_SCROLL_DOWN)
+        {
+          count = SCROLL_ACCELERATION;
+        }
+      else
+        {
+          gdk_event_get_scroll_deltas ((GdkEvent *)event, &x, &y);
+
+          if (y > 0)
+            count = SCROLL_ACCELERATION;
+          else if (y < 0)
+            count = -SCROLL_ACCELERATION;
+        }
+
+      if (count != 0)
+        g_signal_emit_by_name (self->view, "move-viewport", GTK_SCROLL_STEPS, count);
+    }
+
+#undef SCROLL_ACCELERATION
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 static void
 ide_source_map_finalize (GObject *object)
 {
@@ -760,6 +808,12 @@ ide_source_map_init (IdeSourceMap *self)
                            G_CALLBACK (ide_source_map__child_view_button_press_event),
                            self,
                            G_CONNECT_SWAPPED);
+  gtk_widget_add_events (GTK_WIDGET (self->child_view), GDK_SCROLL_MASK);
+  g_signal_connect_object (self->child_view,
+                           "scroll-event",
+                           G_CALLBACK (ide_source_map_do_scroll_event),
+                           self,
+                           G_CONNECT_SWAPPED);
   g_signal_connect_object (self->child_view,
                            "state-flags-changed",
                            G_CALLBACK (ide_source_map__child_view_state_flags_changed),
@@ -807,6 +861,12 @@ ide_source_map_init (IdeSourceMap *self)
   g_signal_connect_object (self->overlay_box,
                            "button-press-event",
                            G_CALLBACK (ide_source_map__overlay_box_button_press_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_widget_add_events (GTK_WIDGET (self->overlay_box), GDK_SCROLL_MASK);
+  g_signal_connect_object (self->overlay_box,
+                           "scroll-event",
+                           G_CALLBACK (ide_source_map_do_scroll_event),
                            self,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (self->overlay_box,
