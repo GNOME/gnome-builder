@@ -1295,6 +1295,8 @@ ide_context_init_add_recent (gpointer             source_object,
   g_autofree gchar *uri = NULL;
   g_autofree gchar *app_exec = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CONTEXT (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -1311,9 +1313,14 @@ ide_context_init_add_recent (gpointer             source_object,
   recent_data.groups = (gchar **)groups;
   recent_data.is_private = FALSE;
 
-  gtk_recent_manager_add_full (self->recent_manager, uri, &recent_data);
+  IDE_TRACE_MSG ("Registering %s as recent project.", uri);
+
+  if (!gtk_recent_manager_add_full (self->recent_manager, uri, &recent_data))
+    g_warning ("Failed to add %s to GtkRecentManager", uri);
 
   g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 static void
