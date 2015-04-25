@@ -99,7 +99,7 @@ ide_source_map_rebuild_css (IdeSourceMap *self)
                         "background", &background,
                         NULL);
 
-          if (background != NULL)
+          if ((background != NULL) && *background == '#')
             {
               gchar *css;
 
@@ -108,7 +108,7 @@ ide_source_map_rebuild_css (IdeSourceMap *self)
                                      "  opacity: 0.75;"
                                      "  border-top: 1px solid shade(%s,0.9);"
                                      "  border-bottom: 1px solid shade(%s,0.9);"
-                                     "}\n",
+                                     " }\n",
                                      background, background, background);
               gtk_css_provider_load_from_data (self->box_css_provider, css, -1, NULL);
               g_free (css);
