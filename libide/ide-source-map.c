@@ -282,6 +282,8 @@ ide_source_map__view_notify_buffer (IdeSourceMap  *self,
                            G_CALLBACK (ide_source_map__buffer_notify_style_scheme),
                            self,
                            G_CONNECT_SWAPPED);
+
+  ide_source_map_rebuild_css (self);
 }
 
 void
