@@ -17,10 +17,12 @@
         <property name="visible">true</property>
         <property name="popover">popover</property>
         <style>
-          <class name="image-button"/>
+          <class name="button"/>
         </style>
         <child>
           <object class="GtkImage">
+            <!-- we use margin-top here because .image-button doesn't work with 10pt font -->
+            <property name="margin-top">3</property>
             <property name="visible">True</property>
             <property name="icon_name">go-down-symbolic</property>
           </object>
