@@ -2087,6 +2087,8 @@ ide_source_view_do_smart_backspace (IdeSourceView *self,
   gint indent_width;
   gint tab_width;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (event);
   g_assert (event->type == GDK_KEY_PRESS);
@@ -2098,14 +2100,14 @@ ide_source_view_do_smart_backspace (IdeSourceView *self,
   gtk_text_buffer_get_selection_bounds (buffer, &insert, &end);
 
   if (!gtk_text_iter_equal (&insert, &end))
-    return FALSE;
+    IDE_RETURN (FALSE);
 
   /* if the line isn't empty up to our cursor, ignore */
   tmp = insert;
   while (!gtk_text_iter_starts_line (&tmp))
     {
       if (!g_unichar_isspace (gtk_text_iter_get_char (&tmp)))
-        return FALSE;
+        IDE_RETURN (FALSE);
       gtk_text_iter_backward_char (&tmp);
     }
 
@@ -2116,7 +2118,7 @@ ide_source_view_do_smart_backspace (IdeSourceView *self,
     indent_width = tab_width;
 
   if (visual_column < indent_width)
-    return FALSE;
+    IDE_RETURN (FALSE);
 
   if ((visual_column % indent_width) == 0)
     {
@@ -2131,12 +2133,12 @@ ide_source_view_do_smart_backspace (IdeSourceView *self,
           ch = gtk_text_iter_get_char (&insert);
 
           if (!g_unichar_isspace (ch))
-            return FALSE;
+            IDE_RETURN (FALSE);
         }
 
       ch = gtk_text_iter_get_char (&insert);
       if (!g_unichar_isspace (ch))
-        return FALSE;
+        IDE_RETURN (FALSE);
 
       gtk_text_buffer_begin_user_action (buffer);
       gtk_text_buffer_delete (buffer, &insert, &end);
@@ -2144,12 +2146,12 @@ ide_source_view_do_smart_backspace (IdeSourceView *self,
         gtk_text_buffer_insert (buffer, &insert, " ", 1);
       gtk_text_buffer_end_user_action (buffer);
 
-      return TRUE;
+      IDE_RETURN (TRUE);
     }
 
 #undef GET_VISUAL_COLUMN
 
-  return FALSE;
+  IDE_RETURN (FALSE);
 }
 
 static gboolean
