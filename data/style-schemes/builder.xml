@@ -100,14 +100,13 @@
   <style name="c:type"                      foreground="#669900" bold="true"/>
   <style name="c:macro-name"                foreground="#677685" bold="false"/>
   <style name="c:enum-name"                 foreground="pink1" bold="false"/>
-  <style name="c:function-name"             foreground="#4186A8" bold="false"/>
 
   <style name="def:comment"                 foreground="blue1"/>
-  <style name="def:constant"                foreground="blue2"/>
+  <style name="def:constant"                foreground="pink1"/>
   <style name="def:doc-comment-element"     italic="true"/>
   <style name="def:error"                   line-background="#rgba(235,202,210,.4)" />
   <style name="def:floating-point"          foreground="blue2"/>
-  <style name="def:function"                foreground="pink1"/>
+  <style name="def:function"                foreground="#4186A8"/>
   <style name="def:decimal"                 foreground="purple1"/>
   <style name="def:base-n-integer"          foreground="blue2"/>
   <style name="def:boolean"                 foreground="pink1"/>
@@ -135,6 +134,7 @@
   <style name="python:builtin-object"       foreground="og1"/>
   <style name="python:keyword"              foreground="green1" bold="false"/>
   <style name="python:module-handler"       foreground="purple1" bold="false"/>
+  <style name="python:function-name"        foreground="pink1"/>
 
   <style name="xml:tags"                    foreground="chameleon3"/>
   <style name="xml:namespace"               bold="true"/>
