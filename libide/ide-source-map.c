@@ -460,8 +460,9 @@ ide_source_map_get_child_position (GtkOverlay   *overlay,
 
   gtk_widget_get_allocation (GTK_WIDGET (overlay), &our_alloc);
 
-  alloc->x = 0;
-  alloc->width = our_alloc.width;
+  /* adjust box to not cover line changes */
+  alloc->x = 3;
+  alloc->width = our_alloc.width - alloc->x;
 
   gtk_widget_get_preferred_height (child, NULL, &alloc->height);
 
