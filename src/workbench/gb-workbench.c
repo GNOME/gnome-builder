@@ -97,7 +97,7 @@ gb_workbench__context_restore_cb (GObject      *object,
     }
 
   buffer_manager = ide_context_get_buffer_manager (context);
-  if (ide_buffer_manager_get_n_buffers (buffer_manager) == 0)
+  if ((ide_buffer_manager_get_n_buffers (buffer_manager) == 0) && (self->has_opened == FALSE))
     gb_workbench_add_temporary_buffer (self);
 
   gtk_widget_grab_focus (GTK_WIDGET (self->editor_workspace));
@@ -121,11 +121,6 @@ gb_workbench_connect_context (GbWorkbench *self,
                              self,
                              G_CONNECT_SWAPPED);
   gb_workbench__project_notify_name_cb (self, NULL, project);
-
-  ide_context_restore_async (context,
-                             NULL,
-                             gb_workbench__context_restore_cb,
-                             g_object_ref (self));
 }
 
 static void
@@ -301,6 +296,11 @@ gb_workbench_realize (GtkWidget *widget)
     GTK_WIDGET_CLASS (gb_workbench_parent_class)->realize (widget);
 
   gtk_widget_grab_focus (GTK_WIDGET (self->editor_workspace));
+
+  ide_context_restore_async (self->context,
+                             NULL,
+                             gb_workbench__context_restore_cb,
+                             g_object_ref (self));
 }
 
 static void
@@ -679,6 +679,8 @@ gb_workbench_open (GbWorkbench *self,
   g_return_if_fail (GB_IS_WORKBENCH (self));
   g_return_if_fail (self->unloading == FALSE);
   g_return_if_fail (self->context);
+
+  self->has_opened = TRUE;
 
   /*
    * TODO: We probably want to dispatch this based on the type. But for now,

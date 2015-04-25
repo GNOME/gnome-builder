@@ -54,8 +54,10 @@ struct _GbWorkbench
   gulong                  project_notify_name_handler;
 
   guint                   disposing;
+
   guint                   building : 1;
   guint                   unloading : 1;
+  guint                   has_opened : 1;
 };
 
 G_END_DECLS
