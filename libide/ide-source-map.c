@@ -770,7 +770,7 @@ ide_source_map_class_init (IdeSourceMapClass *klass)
   gParamSpecs [PROP_FONT_DESC] =
     g_param_spec_boxed ("font-desc",
                         _("Font Description"),
-                        _("The pango font description to use."),
+                        _("The Pango font description to use."),
                         PANGO_TYPE_FONT_DESCRIPTION,
                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_FONT_DESC, gParamSpecs [PROP_FONT_DESC]);

@@ -666,7 +666,7 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
   gParamSpecs [PROP_SHOW_MAP] =
     g_param_spec_boolean ("show-map",
                           _("Show Map"),
-                          _("If the ovewview map should be shown."),
+                          _("If the overview map should be shown."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_SHOW_MAP,
