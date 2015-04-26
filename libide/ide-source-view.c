@@ -3640,32 +3640,21 @@ ide_source_view_real_push_snippet (IdeSourceView           *self,
                                    const GtkTextIter       *location)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  IdeFile *file;
+  GFile *gfile;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_SOURCE_SNIPPET (snippet));
   g_assert (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
 
-  if (priv->buffer != NULL)
+  if ((priv->buffer != NULL) &&
+      (file = ide_buffer_get_file (priv->buffer)) &&
+      (gfile = ide_file_get_file (file)))
     {
-      IdeFile *file;
+      g_autofree gchar *name = NULL;
 
-      file = ide_buffer_get_file (priv->buffer);
-
-      if (file != NULL)
-        {
-          GFile *gfile;
-
-          gfile = ide_file_get_file (file);
-
-          if (gfile != NULL)
-            {
-              gchar *name = NULL;
-
-              name = g_file_get_basename (gfile);
-              ide_source_snippet_context_add_variable (context, "filename", name);
-              g_free (name);
-            }
-        }
+      name = g_file_get_basename (gfile);
+      ide_source_snippet_context_add_variable (context, "filename", name);
     }
 }
 
