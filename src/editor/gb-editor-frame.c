@@ -24,6 +24,7 @@
 #include "gb-editor-frame.h"
 #include "gb-editor-frame-actions.h"
 #include "gb-editor-frame-private.h"
+#include "gb-editor-map-bin.h"
 #include "gb-string.h"
 #include "gb-view-stack.h"
 #include "gb-widget.h"
@@ -684,6 +685,7 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, source_view);
 
   g_type_ensure (NAUTILUS_TYPE_FLOATING_BAR);
+  g_type_ensure (GB_TYPE_EDITOR_MAP_BIN);
   g_type_ensure (GD_TYPE_TAGGED_ENTRY);
 }
 

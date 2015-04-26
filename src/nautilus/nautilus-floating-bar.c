@@ -151,6 +151,7 @@ overlay_enter_notify_cb (GtkWidget        *parent,
 			 GdkEventCrossing *event,
 			 gpointer          user_data)
 {
+#if 0
 	GtkWidget *widget = user_data;
 
 	if (event->window != gtk_widget_get_window (widget)) {
@@ -168,6 +169,7 @@ overlay_enter_notify_cb (GtkWidget        *parent,
 	}
 
 	gtk_widget_queue_resize (widget);
+#endif
 
 	return FALSE;
 }

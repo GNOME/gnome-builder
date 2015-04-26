@@ -52,6 +52,8 @@ libgnome_builder_la_SOURCES = \
 	src/editor/gb-editor-frame-actions.c \
 	src/editor/gb-editor-frame-actions.h \
 	src/editor/gb-editor-frame-private.h \
+	src/editor/gb-editor-map-bin.c \
+	src/editor/gb-editor-map-bin.h \
 	src/editor/gb-editor-settings-widget.c \
 	src/editor/gb-editor-settings-widget.h \
 	src/editor/gb-editor-tweak-widget.c \
