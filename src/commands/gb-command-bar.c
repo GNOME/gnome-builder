@@ -334,7 +334,7 @@ find_longest_common_prefix (gchar **strv)
   return g_strndup (lcp, lcp_end - lcp);
 }
 
-#define N_COMPLETION_COLUMS 3
+#define MIN_COMPLETION_COLUMS 3
 #define N_UNSCROLLED_COMPLETION_ROWS 4
 
 static void
@@ -395,8 +395,7 @@ gb_command_bar_complete (GbCommandBar *bar)
           gtk_container_foreach (GTK_CONTAINER (bar->priv->flow_box),
                                  (GtkCallback)gtk_widget_destroy, NULL);
 
-          gtk_flow_box_set_min_children_per_line (bar->priv->flow_box, N_COMPLETION_COLUMS);
-          gtk_flow_box_set_max_children_per_line (bar->priv->flow_box, N_COMPLETION_COLUMS);
+          gtk_flow_box_set_min_children_per_line (bar->priv->flow_box, MIN_COMPLETION_COLUMS);
 
           for (i = 0; completions[i] != NULL; i++)
             {
@@ -412,11 +411,11 @@ gb_command_bar_complete (GbCommandBar *bar)
               gtk_container_add (GTK_CONTAINER (bar->priv->flow_box), label);
               gtk_widget_show (label);
 
-              if (i == N_COMPLETION_COLUMS * N_UNSCROLLED_COMPLETION_ROWS - 1)
+              if (i == MIN_COMPLETION_COLUMS * N_UNSCROLLED_COMPLETION_ROWS - 1)
                 gtk_widget_get_preferred_height (GTK_WIDGET (bar->priv->flow_box), &wrapped_height, NULL);
             }
 
-          if (i < N_COMPLETION_COLUMS * N_UNSCROLLED_COMPLETION_ROWS)
+          if (i < MIN_COMPLETION_COLUMS * N_UNSCROLLED_COMPLETION_ROWS)
             {
               gtk_widget_set_size_request (GTK_WIDGET (bar->priv->completion_scroller), -1, -1);
               gtk_scrolled_window_set_policy (bar->priv->completion_scroller,

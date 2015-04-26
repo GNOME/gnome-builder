@@ -36,7 +36,8 @@
             <child>
               <object class="GtkFlowBox" id="flow_box">
                 <property name="visible">True</property>
-                <property name="column-spacing">8</property>
+                <property name="max-children-per-line">20</property>
+                <property name="column-spacing">16</property>
                 <property name="halign">start</property>
                 <property name="hexpand">False</property>
                 <property name="selection_mode">GTK_SELECTION_NONE</property>
