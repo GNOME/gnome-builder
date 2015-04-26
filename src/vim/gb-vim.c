@@ -54,6 +54,7 @@ typedef struct
 {
   gchar             *name;
   GbVimCommandFunc  func;
+  gchar            *options_sup;
 } GbVimCommand;
 
 static gboolean
@@ -630,16 +631,18 @@ gb_vim_jump_to_line (GtkSourceView  *source_view,
   if (!IDE_IS_SOURCE_VIEW (source_view))
     return TRUE;
 
-  if (!int32_parse (&line, command, 0, G_MAXINT32, "line number", error))
+  if (!int32_parse (&line, options, 0, G_MAXINT32, "line number", error))
     return FALSE;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (source_view));
   extend_selection = gtk_text_buffer_get_has_selection (buffer);
+  ide_source_view_set_count (IDE_SOURCE_VIEW (source_view), line);
+
   g_signal_emit_by_name (source_view,
                          "movement",
                          IDE_SOURCE_VIEW_MOVEMENT_NTH_LINE,
                          extend_selection, TRUE, TRUE);
-  ide_source_view_set_count (IDE_SOURCE_VIEW (source_view), 0);
+
   g_signal_emit_by_name (source_view, "save-insert-mark");
 
   return TRUE;
@@ -870,27 +873,27 @@ invalid_request:
 }
 
 static const GbVimCommand vim_commands[] = {
-  { "bnext",       gb_vim_command_bnext },
-  { "bprevious",   gb_vim_command_bprevious },
-  { "buffers",     gb_vim_command_buffers },
-  { "ls",          gb_vim_command_buffers },
-  { "cnext",       gb_vim_command_cnext },
-  { "colorscheme", gb_vim_command_colorscheme },
-  { "cprevious",   gb_vim_command_cprevious },
-  { "edit",        gb_vim_command_edit },
-  { "help",        gb_vim_command_help },
-  { "nohl",        gb_vim_command_nohl },
-  { "make",        gb_vim_command_make },
-  { "quit",        gb_vim_command_quit },
-  { "set",         gb_vim_command_set },
-  { "sort",        gb_vim_command_sort },
-  { "split",       gb_vim_command_split },
-  { "syntax",      gb_vim_command_syntax },
-  { "tabe",        gb_vim_command_tabe },
-  { "vsplit",      gb_vim_command_vsplit },
-  { "w",           gb_vim_command_write },
-  { "wq",          gb_vim_command_wq },
-  { "write",       gb_vim_command_write },
+  { "bnext",       gb_vim_command_bnext , NULL},
+  { "bprevious",   gb_vim_command_bprevious, NULL },
+  { "buffers",     gb_vim_command_buffers, NULL },
+  { "ls",          gb_vim_command_buffers, NULL },
+  { "cnext",       gb_vim_command_cnext, NULL },
+  { "colorscheme", gb_vim_command_colorscheme, NULL },
+  { "cprevious",   gb_vim_command_cprevious, NULL },
+  { "edit",        gb_vim_command_edit, NULL },
+  { "help",        gb_vim_command_help, NULL },
+  { "nohl",        gb_vim_command_nohl, NULL },
+  { "make",        gb_vim_command_make, NULL },
+  { "quit",        gb_vim_command_quit, NULL },
+  { "set",         gb_vim_command_set, NULL },
+  { "sort",        gb_vim_command_sort, NULL },
+  { "split",       gb_vim_command_split, NULL },
+  { "syntax",      gb_vim_command_syntax, NULL },
+  { "tabe",        gb_vim_command_tabe, NULL },
+  { "vsplit",      gb_vim_command_vsplit, NULL },
+  { "w",           gb_vim_command_write, NULL },
+  { "wq",          gb_vim_command_wq, NULL },
+  { "write",       gb_vim_command_write, NULL },
   { NULL }
 };
 
@@ -907,7 +910,7 @@ looks_like_search_and_replace (const gchar *line)
 static const GbVimCommand *
 lookup_command (const gchar *name)
 {
-  static const GbVimCommand line_command = { "__line__", gb_vim_jump_to_line };
+  static GbVimCommand line_command = { "__line__", gb_vim_jump_to_line, NULL };
   gint line;
   gsize i;
 
@@ -920,7 +923,10 @@ lookup_command (const gchar *name)
     }
 
   if (g_ascii_isdigit (*name) && int32_parse (&line, name, 0, G_MAXINT32, "line", NULL))
+  {
+    line_command.options_sup = strdup (name);
     return &line_command;
+  }
 
   return NULL;
 }
@@ -935,6 +941,8 @@ gb_vim_execute (GtkSourceView  *source_view,
   const GbVimCommand *command;
   const gchar *command_name = line;
   const gchar *options;
+  g_autofree gchar *all_options = NULL;
+  gboolean result;
 
   g_return_val_if_fail (GTK_SOURCE_IS_VIEW (source_view), FALSE);
   g_return_val_if_fail (line, FALSE);
@@ -981,7 +989,16 @@ gb_vim_execute (GtkSourceView  *source_view,
       return FALSE;
     }
 
-  return command->func (source_view, command_name, options, error);
+  if (command->options_sup)
+    all_options = g_strconcat (options, " ", command->options_sup, NULL);
+  else
+    all_options = g_strdup (options);
+
+  result = command->func (source_view, command_name, all_options, error);
+  if (command->options_sup)
+    g_free (command->options_sup);
+
+  return result;
 }
 
 static gchar *
