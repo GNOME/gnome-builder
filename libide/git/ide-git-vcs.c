@@ -436,9 +436,7 @@ ide_git_vcs_load_monitor (IdeGitVcs  *self,
 
       location = ggit_repository_get_location (self->repository);
       index_file = g_file_get_child (location, "index");
-      monitor = g_file_monitor (index_file, flags, NULL, error);
-
-      g_object_ref (index_file);
+      monitor = g_file_monitor_file (index_file, flags, NULL, error);
 
       ret = !!monitor;
 
