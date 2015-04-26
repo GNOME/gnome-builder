@@ -400,6 +400,7 @@ gb_command_bar_complete (GbCommandBar *bar)
               label = gtk_label_new ("");
               s = g_strdup_printf ("<b>%s</b>%s", current_prefix, completions[i] + strlen (current_prefix));
               gtk_label_set_markup (GTK_LABEL (label), s);
+              gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
               g_free (s);
 
               gtk_container_add (GTK_CONTAINER (bar->priv->flow_box), label);
