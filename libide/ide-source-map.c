@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-buffer.h"
 #include "ide-line-change-gutter-renderer.h"
 #include "ide-macros.h"
 #include "ide-pango.h"
@@ -31,18 +32,19 @@
 
 struct _IdeSourceMap
 {
-  GtkOverlay            parent_instance;
+  GtkOverlay               parent_instance;
 
-  PangoFontDescription *font_desc;
+  PangoFontDescription    *font_desc;
 
-  GtkCssProvider       *view_css_provider;
-  GtkCssProvider       *box_css_provider;
+  GtkCssProvider          *view_css_provider;
+  GtkCssProvider          *box_css_provider;
 
-  GtkSourceView        *child_view;
-  GtkEventBox          *overlay_box;
-  GtkSourceView        *view;
+  GtkSourceView           *child_view;
+  GtkEventBox             *overlay_box;
+  GtkSourceView           *view;
+  GtkSourceGutterRenderer *line_renderer;
 
-  guint                 in_press : 1;
+  guint                    in_press : 1;
 };
 
 struct _IdeSourceMapClass
@@ -266,6 +268,16 @@ ide_source_map__buffer_notify_style_scheme (IdeSourceMap  *self,
 }
 
 static void
+ide_source_map__buffer_line_flags_changed (IdeSourceMap *self,
+                                           IdeBuffer    *buffer)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  gtk_source_gutter_renderer_queue_draw (self->line_renderer);
+}
+
+static void
 ide_source_map__view_notify_buffer (IdeSourceMap  *self,
                                     GParamSpec    *pspec,
                                     GtkSourceView *view)
@@ -281,6 +293,13 @@ ide_source_map__view_notify_buffer (IdeSourceMap  *self,
                            G_CALLBACK (ide_source_map__buffer_notify_style_scheme),
                            self,
                            G_CONNECT_SWAPPED);
+
+  if (IDE_IS_BUFFER (buffer))
+    g_signal_connect_object (buffer,
+                             "line-flags-changed",
+                             G_CALLBACK (ide_source_map__buffer_line_flags_changed),
+                             self,
+                             G_CONNECT_SWAPPED);
 
   ide_source_map_rebuild_css (self);
 }
@@ -763,8 +782,6 @@ ide_source_map_init (IdeSourceMap *self)
   GtkSourceCompletion *completion;
   GtkSourceGutter *gutter;
   GtkStyleContext *context;
-  GtkSourceGutterRenderer *renderer;
-
 
   self->child_view = g_object_new (GTK_SOURCE_TYPE_VIEW,
                                    "auto-indent", FALSE,
@@ -816,11 +833,11 @@ ide_source_map_init (IdeSourceMap *self)
    * add this there.
    */
   gutter = gtk_source_view_get_gutter (self->child_view, GTK_TEXT_WINDOW_LEFT);
-  renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
-                           "size", 3,
-                           "visible", TRUE,
-                           NULL);
-  gtk_source_gutter_insert (gutter, renderer, 0);
+  self->line_renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
+                                      "size", 3,
+                                      "visible", TRUE,
+                                      NULL);
+  gtk_source_gutter_insert (gutter, self->line_renderer, 0);
 
   self->overlay_box = g_object_new (GTK_TYPE_EVENT_BOX,
                                     "opacity", 0.5,
