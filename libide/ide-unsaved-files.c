@@ -32,11 +32,12 @@
 
 typedef struct
 {
-  gint64  sequence;
-  GFile  *file;
-  GBytes *content;
-  gchar  *temp_path;
-  gint    temp_fd;
+  gint64           sequence;
+  GFile           *file;
+  GBytes          *content;
+  gchar           *temp_path;
+  gint             temp_fd;
+  IdeUnsavedFiles *backptr;
 } UnsavedFile;
 
 typedef struct
@@ -52,6 +53,22 @@ typedef struct
 } AsyncState;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeUnsavedFiles, ide_unsaved_files, IDE_TYPE_OBJECT)
+
+gchar *
+get_drafts_directory (IdeContext *context)
+{
+  IdeProject *project;
+  const gchar *project_name;
+
+  project = ide_context_get_project (context);
+  project_name = ide_project_get_name (project);
+
+  return g_build_filename (g_get_user_data_dir (),
+                           ide_get_program_name (),
+                           "drafts",
+                           project_name,
+                           NULL);
+}
 
 static void
 async_state_free (gpointer data)
@@ -73,15 +90,21 @@ unsaved_file_free (gpointer data)
 
   if (uf)
     {
-      g_object_unref (uf->file);
-      g_bytes_unref (uf->content);
-      if (uf->temp_path)
+      g_clear_object (&uf->file);
+      g_clear_pointer (&uf->content, g_bytes_unref);
+
+      if (uf->temp_path != NULL)
         {
            g_unlink (uf->temp_path);
-           g_free (uf->temp_path);
+           g_clear_pointer (&uf->temp_path, g_free);
         }
-      if (uf->temp_fd != 0)
-        g_close (uf->temp_fd, NULL);
+
+      if (uf->temp_fd != -1)
+        {
+          g_close (uf->temp_fd, NULL);
+          uf->temp_fd = -1;
+        }
+
       g_slice_free (UnsavedFile, uf);
     }
 }
@@ -202,23 +225,15 @@ static AsyncState *
 async_state_new (IdeUnsavedFiles *files)
 {
   IdeContext *context;
-  IdeProject *project;
   AsyncState *state;
-  const gchar *project_name;
 
   g_assert (IDE_IS_UNSAVED_FILES (files));
 
   context = ide_object_get_context (IDE_OBJECT (files));
-  project = ide_context_get_project (context);
-  project_name = ide_project_get_name (project);
 
   state = g_slice_new (AsyncState);
   state->unsaved_files = g_ptr_array_new_with_free_func (unsaved_file_free);
-  state->drafts_directory = g_build_filename (g_get_user_data_dir (),
-                                              ide_get_program_name (),
-                                              "drafts",
-                                              project_name,
-                                              NULL);
+  state->drafts_directory = get_drafts_directory (context);
 
   return state;
 }
@@ -281,6 +296,8 @@ ide_unsaved_files_restore_worker (GTask        *task,
   gsize len;
   gsize i;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_UNSAVED_FILES (source_object));
   g_assert (state);
@@ -288,6 +305,8 @@ ide_unsaved_files_restore_worker (GTask        *task,
   manifest_path = g_build_filename (state->drafts_directory,
                                     "manifest",
                                     NULL);
+
+  g_debug ("Loading drafts manifest %s", manifest_path);
 
   if (!g_file_test (manifest_path, G_FILE_TEST_IS_REGULAR))
     {
@@ -321,6 +340,8 @@ ide_unsaved_files_restore_worker (GTask        *task,
 
       hash = hash_uri (lines [i]);
       path = g_build_filename (state->drafts_directory, hash, NULL);
+
+      g_debug ("Loading draft for \"%s\" from \"%s\"", lines [i], path);
 
       if (!g_file_get_contents (path, &contents, &len, &error))
         {
@@ -406,6 +427,34 @@ ide_unsaved_files_move_to_front (IdeUnsavedFiles *self,
   priv->unsaved_files->pdata[index] = old_front;
 }
 
+static void
+ide_unsaved_files_remove_draft (IdeUnsavedFiles *self,
+                                GFile           *file)
+{
+  IdeContext *context;
+  g_autofree gchar *drafts_directory = NULL;
+  g_autofree gchar *uri = NULL;
+  g_autofree gchar *hash = NULL;
+  g_autofree gchar *path = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_UNSAVED_FILES (self));
+  g_assert (G_IS_FILE (file));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  drafts_directory = get_drafts_directory (context);
+  uri = g_file_get_uri (file);
+  hash = hash_uri (uri);
+  path = g_build_filename (drafts_directory, hash, NULL);
+
+  g_debug ("Removing draft for \"%s\"", uri);
+
+  g_unlink (path);
+
+  IDE_EXIT;
+}
+
 void
 ide_unsaved_files_remove (IdeUnsavedFiles *self,
                           GFile           *file)
@@ -424,6 +473,7 @@ ide_unsaved_files_remove (IdeUnsavedFiles *self,
 
       if (g_file_equal (file, unsaved->file))
         {
+          ide_unsaved_files_remove_draft (self, file);
           g_ptr_array_remove_index_fast (priv->unsaved_files, i);
           break;
         }
