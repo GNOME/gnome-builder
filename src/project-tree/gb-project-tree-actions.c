@@ -467,7 +467,7 @@ gb_project_tree_actions_new (GbProjectTree *self,
   GtkPopover *popover;
   IdeProjectFile *project_file;
   GFile *file = NULL;
-  gboolean is_dir;
+  gboolean is_dir = FALSE;
 
   g_assert (GB_IS_PROJECT_TREE (self));
   g_assert ((file_type == G_FILE_TYPE_DIRECTORY) ||
@@ -495,6 +495,11 @@ again:
       vcs = ide_context_get_vcs (context);
       file = ide_vcs_get_working_directory (vcs);
       is_dir = TRUE;
+    }
+  else
+    {
+      g_assert_not_reached ();
+      return;
     }
 
   g_assert (G_IS_FILE (file));
