@@ -542,6 +542,8 @@ ide_context_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_context_parent_class)->finalize (object);
 
+  _ide_battery_monitor_shutdown ();
+
   IDE_EXIT;
 }
 
@@ -745,6 +747,8 @@ ide_context_init (IdeContext *self)
   g_autofree gchar *scriptsdir = NULL;
 
   IDE_ENTRY;
+
+  _ide_battery_monitor_init ();
 
   self->recent_manager = g_object_ref (gtk_recent_manager_get_default ());
 

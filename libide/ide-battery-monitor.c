@@ -24,6 +24,7 @@
 
 static GDBusProxy *gUPowerProxy;
 static GDBusProxy *gUPowerDeviceProxy;
+static gint        gUPowerHold;
 
 G_LOCK_DEFINE_STATIC (proxy_lock);
 
@@ -151,4 +152,32 @@ ide_battery_monitor_get_should_conserve (void)
     }
 
   return should_conserve;
+}
+
+void
+_ide_battery_monitor_shutdown (void)
+{
+  G_LOCK (proxy_lock);
+
+  if (--gUPowerHold == 0)
+    {
+      g_clear_object (&gUPowerProxy);
+      g_clear_object (&gUPowerDeviceProxy);
+    }
+
+  G_UNLOCK (proxy_lock);
+}
+
+void
+_ide_battery_monitor_init (void)
+{
+  g_autoptr(GDBusProxy) proxy = NULL;
+  g_autoptr(GDBusProxy) device_proxy = NULL;
+
+  G_LOCK (proxy_lock);
+  gUPowerHold++;
+  G_UNLOCK (proxy_lock);
+
+  proxy = ide_battery_monitor_get_proxy ();
+  device_proxy = ide_battery_monitor_get_device_proxy ();
 }
