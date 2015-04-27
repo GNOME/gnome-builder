@@ -345,8 +345,9 @@ ide_unsaved_files_restore_worker (GTask        *task,
 
       if (!g_file_get_contents (path, &contents, &len, &error))
         {
-          g_task_return_error (task, error);
-          break;
+          g_warning ("%s", error->message);
+          g_clear_error (&error);
+          continue;
         }
 
       unsaved = g_slice_new0 (UnsavedFile);
