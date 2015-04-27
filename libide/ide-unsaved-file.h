@@ -36,6 +36,8 @@ gboolean        ide_unsaved_file_persist       (IdeUnsavedFile  *self,
                                                 GCancellable    *cancellable,
                                                 GError         **error);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeUnsavedFile, ide_unsaved_file_unref)
+
 G_END_DECLS
 
 #endif /* IDE_UNSAVED_FILE_H */
