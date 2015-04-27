@@ -239,7 +239,6 @@ gb_application__context_new_cb (GObject      *object,
   GbApplication *self;
   GbWorkbench *workbench;
   GPtrArray *ar;
-  gboolean ret = FALSE;
   GError *error = NULL;
   gsize i;
 
@@ -255,8 +254,7 @@ gb_application__context_new_cb (GObject      *object,
 
   if (!context)
     {
-      g_warning ("%s", error->message);
-      g_clear_error (&error);
+      g_task_return_error (task, error);
       goto cleanup;
     }
 
@@ -292,10 +290,9 @@ gb_application__context_new_cb (GObject      *object,
 
   gtk_window_present (GTK_WINDOW (workbench));
 
-  ret = TRUE;
+  g_task_return_boolean (task, TRUE);
 
 cleanup:
-  g_task_return_boolean (task, ret);
   g_application_unmark_busy (G_APPLICATION (self));
   g_application_release (G_APPLICATION (self));
 }
