@@ -21,6 +21,9 @@
 #include <ide.h>
 #include <string.h>
 
+#include "gb-editor-workspace.h"
+#include "gb-editor-view.h"
+
 #include "gb-command-gaction-provider.h"
 #include "gb-command-gaction.h"
 #include "gb-view.h"
@@ -43,6 +46,7 @@ discover_groups (GbCommandGactionProvider *provider)
   GbWorkbench *workbench;
   GtkWidget *widget;
   GList *list = NULL;
+  gint type;
 
   g_return_val_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (provider), NULL);
 
@@ -54,6 +58,11 @@ discover_groups (GbCommandGactionProvider *provider)
     {
       const gchar **prefixes;
       guint i;
+
+      /* We exclude these types, they're already in the widgets hierarchy */
+      type = G_OBJECT_TYPE (widget);
+      if (type == GB_TYPE_EDITOR_WORKSPACE || type == GB_TYPE_EDITOR_VIEW)
+        continue;
 
       prefixes = gtk_widget_list_action_prefixes (widget);
 
