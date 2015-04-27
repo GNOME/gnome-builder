@@ -20,6 +20,7 @@
 
 #include <ide.h>
 #include <string.h>
+#include <glib.h>
 
 #include "gb-editor-workspace.h"
 #include "gb-editor-view.h"
@@ -30,12 +31,50 @@
 
 G_DEFINE_TYPE (GbCommandGactionProvider, gb_command_gaction_provider, GB_TYPE_COMMAND_PROVIDER)
 
+typedef struct
+{
+  GActionGroup *group;
+  gchar        *prefix;
+} GbGroup;
+
+typedef struct
+{
+  const gchar *command_name;
+  const gchar *prefix;
+  const gchar *action_name;
+} GbActionCommandMap;
+
 GbCommandProvider *
 gb_command_gaction_provider_new (GbWorkbench *workbench)
 {
   return g_object_new (GB_TYPE_COMMAND_GACTION_PROVIDER,
                        "workbench", workbench,
                        NULL);
+}
+
+static GbGroup *
+gb_group_new (GActionGroup *group, const gchar *prefix)
+{
+  GbGroup *gb_group;
+
+  g_assert (group != NULL);
+  g_assert (prefix != NULL && prefix [0] != '\0');
+
+  gb_group = g_new (GbGroup, 1);
+
+  gb_group->group = group;
+  gb_group->prefix = g_strdup (prefix);
+
+  return gb_group;
+}
+
+static void
+gb_group_free (GbGroup *gb_group)
+{
+  g_assert (gb_group != NULL);
+
+  g_free (gb_group->prefix);
+  g_free (gb_group);
 }
 
 static GList *
@@ -45,6 +84,7 @@ discover_groups (GbCommandGactionProvider *provider)
   GApplication *application;
   GbWorkbench *workbench;
   GtkWidget *widget;
+  GbGroup *gb_group = NULL;
   GList *list = NULL;
   gint type;
 
@@ -68,14 +108,15 @@ discover_groups (GbCommandGactionProvider *provider)
 
       if (prefixes)
         {
-          GActionGroup *group;
-
           for (i = 0; prefixes [i]; i++)
             {
-              group = gtk_widget_get_action_group (widget, prefixes [i]);
+              GActionGroup *group = gtk_widget_get_action_group (widget, prefixes [i]);
 
               if (G_IS_ACTION_GROUP (group))
-                list = g_list_append (list, group);
+                {
+                  gb_group = gb_group_new (group, prefixes [i]);
+                  list = g_list_append (list, gb_group);
+                }
             }
 
           g_free (prefixes);
@@ -83,10 +124,12 @@ discover_groups (GbCommandGactionProvider *provider)
     }
 
   workbench = gb_command_provider_get_workbench (GB_COMMAND_PROVIDER (provider));
-  list = g_list_append (list, G_ACTION_GROUP (workbench));
+  gb_group = gb_group_new (G_ACTION_GROUP (workbench), "workbench");
+  list = g_list_append (list, gb_group);
 
   application = g_application_get_default ();
-  list = g_list_append (list, G_ACTION_GROUP (application));
+  gb_group = gb_group_new (G_ACTION_GROUP (application), "app");
+  list = g_list_append (list, gb_group);
 
   return list;
 }
@@ -150,6 +193,64 @@ failure:
   return FALSE;
 }
 
+/*
+ * Command names mapping and masking:
+ *
+ * Format: command_name, prefix, action_name
+ * command_name can be NULL so that the specific (prefix, action_name)
+ * is masked in this case.
+ *
+ * As we allow a NULL command_name, you must closed the array with a triple NULL.
+ */
+static const GbActionCommandMap action_maps [] = {
+  { NULL, NULL, NULL }
+};
+
+static gboolean
+search_command_in_maps (const gchar  *action_name,
+                        const gchar  *prefix,
+                        const gchar **command_name)
+{
+  guint i;
+
+  for (i = 0; (action_maps [i].prefix != NULL) && (action_maps [i].action_name != NULL); i++)
+    {
+      if (!g_strcmp0 (action_maps [i].prefix, prefix) &&
+           g_str_equal (action_maps [i].action_name, action_name))
+        {
+          *command_name = action_maps [i].command_name;
+          return TRUE;
+        }
+    }
+
+  *command_name = NULL;
+  return FALSE;
+}
+
+static gboolean
+search_action_in_maps (const gchar  *command_name,
+                       const gchar **action_name,
+                       const gchar **prefix)
+{
+  guint i;
+
+  for (i = 0; (action_maps [i].prefix != NULL) && (action_maps [i].action_name != NULL); i++)
+    {
+      if (action_maps [i].command_name == NULL)
+        continue;
+
+      if (!g_strcmp0 (command_name, action_maps [i].command_name))
+        {
+          *action_name = action_maps [i].action_name;
+          *prefix = action_maps [i].prefix;
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static GbCommand *
 gb_command_gaction_provider_lookup (GbCommandProvider *provider,
                                     const gchar       *command_text)
@@ -157,38 +258,78 @@ gb_command_gaction_provider_lookup (GbCommandProvider *provider,
   GbCommandGactionProvider *self = (GbCommandGactionProvider *)provider;
   GbCommand *command = NULL;
   GVariant *params = NULL;
-  GList *groups;
+  GList *gb_groups;
+  GbGroup *gb_group = NULL;
+  GActionGroup *group = NULL;
   GList *iter;
-  gchar *action_name = NULL;
+  gchar *command_name = NULL;
+  const gchar *new_command_name = NULL;
+  const gchar *action_name = NULL;
+  const gchar *prefix = NULL;
+  gboolean result = FALSE;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (self), NULL);
   g_return_val_if_fail (command_text, NULL);
 
-  if (!parse_command_text (command_text, &action_name, &params))
+  if (!parse_command_text (command_text, &command_name, &params))
     IDE_RETURN (NULL);
 
-  groups = discover_groups (self);
+  gb_groups = discover_groups (self);
 
-  for (iter = groups; iter; iter = iter->next)
+  if (search_action_in_maps (command_name, &action_name, &prefix))
     {
-      GActionGroup *group = G_ACTION_GROUP (iter->data);
-
-      if (g_action_group_has_action (group, action_name))
+      /* We double-check that the action really exist */
+      for (iter = gb_groups; iter; iter = iter->next)
         {
-          command = g_object_new (GB_TYPE_COMMAND_GACTION,
-                                  "action-group", group,
-                                  "action-name", action_name,
-                                  "parameters", params,
-                                  NULL);
-          break;
+          gb_group = (GbGroup *)iter->data;
+          group = G_ACTION_GROUP (gb_group->group);
+
+          if (g_str_equal (prefix, gb_group->prefix) && g_action_group_has_action (group, action_name))
+            {
+              result = TRUE;
+              break;
+            }
         }
     }
 
+  if (!result)
+    {
+      for (iter = gb_groups; iter; iter = iter->next)
+        {
+          gb_group = (GbGroup *)iter->data;
+          group = G_ACTION_GROUP (gb_group->group);
+
+          if (g_action_group_has_action (group, command_name))
+            {
+              /* We must be sure that the action is not masked or overridden */
+              prefix = gb_group->prefix;
+              if (search_command_in_maps (command_name, prefix, &new_command_name))
+                {
+                  result = FALSE;
+                  break;
+                }
+
+              action_name = command_name;
+              result = TRUE;
+              break;
+            }
+        }
+    }
+
+  if (result)
+    {
+      command = g_object_new (GB_TYPE_COMMAND_GACTION,
+                              "action-group", group,
+                              "action-name", action_name,
+                              "parameters", params,
+                              NULL);
+    }
+
   g_clear_pointer (&params, g_variant_unref);
-  g_list_free (groups);
-  g_free (action_name);
+  g_free (command_name);
+  g_list_free_full (gb_groups, (GDestroyNotify)gb_group_free);
 
   IDE_RETURN (command);
 }
@@ -211,8 +352,11 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
 
   for (iter = groups; iter; iter = iter->next)
     {
-      GActionGroup *group = iter->data;
+      GbGroup *gb_group = iter->data;
+      GActionGroup *group = gb_group->group;
+      gchar *prefix = gb_group->prefix;
       gchar **names;
+      const gchar *command_name;
       guint i;
 
       g_assert (G_IS_ACTION_GROUP (group));
@@ -221,6 +365,14 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
 
       for (i = 0; names [i]; i++)
         {
+          if (search_command_in_maps (names [i], prefix, &command_name))
+            {
+              if (command_name != NULL && g_str_has_prefix (command_name, initial_command_text))
+                g_ptr_array_add (completions, g_strdup (command_name));
+
+              continue;
+            }
+
           if (g_str_has_prefix (names [i], initial_command_text))
             g_ptr_array_add (completions, g_strdup (names [i]));
         }
@@ -228,7 +380,7 @@ gb_command_gaction_provider_complete (GbCommandProvider *provider,
       g_free (names);
     }
 
-  g_list_free (groups);
+  g_list_free_full (groups, (GDestroyNotify)gb_group_free);
 
   IDE_EXIT;
 }
