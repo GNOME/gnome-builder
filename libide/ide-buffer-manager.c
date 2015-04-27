@@ -346,6 +346,8 @@ static void
 ide_buffer_manager_remove_buffer (IdeBufferManager *self,
                                   IdeBuffer        *buffer)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
 
@@ -373,6 +375,8 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
 
       g_object_unref (buffer);
     }
+
+  IDE_EXIT;
 }
 
 static IdeBuffer *
