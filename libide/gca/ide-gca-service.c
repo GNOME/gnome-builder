@@ -22,17 +22,73 @@
 #include <glib/gi18n.h>
 
 #include "ide-gca-service.h"
+#include "ide-macros.h"
 
 struct _IdeGcaService
 {
-  IdeService  parent_instance;
+  IdeService       parent_instance;
 
-  GHashTable *proxy_cache;
+  gulong           bus_closed_handler;
+
+  GDBusConnection *bus;
+  GHashTable      *proxy_cache;
 };
 
-static GDBusConnection *gDBus;
-
 G_DEFINE_TYPE (IdeGcaService, ide_gca_service, IDE_TYPE_SERVICE)
+
+static void
+on_bus_closed (GDBusConnection *bus,
+               gboolean         remote_peer_vanished,
+               GError          *error,
+               gpointer         user_data)
+{
+  IdeGcaService *self = user_data;
+
+  g_assert (G_IS_DBUS_CONNECTION (bus));
+  g_assert (IDE_IS_GCA_SERVICE (self));
+
+  if (self->bus_closed_handler != 0)
+    ide_clear_signal_handler (bus, &self->bus_closed_handler);
+
+  g_clear_object (&self->bus);
+  g_hash_table_remove_all (self->proxy_cache);
+}
+
+static GDBusConnection *
+ide_gca_service_get_bus (IdeGcaService  *self,
+                         GCancellable   *cancellable,
+                         GError        **error)
+{
+  g_assert (IDE_IS_GCA_SERVICE (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (self->bus == NULL)
+    {
+      const GDBusConnectionFlags flags = (G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT |
+                                          G_DBUS_CONNECTION_FLAGS_MESSAGE_BUS_CONNECTION);
+      g_autofree gchar *address = NULL;
+      g_autoptr(GDBusConnection) bus = NULL;
+
+      address = g_dbus_address_get_for_bus_sync (G_BUS_TYPE_SESSION, cancellable, error);
+      if (address == NULL)
+        return NULL;
+
+      bus = g_dbus_connection_new_for_address_sync (address, flags, NULL, cancellable, error);
+      if (bus == NULL)
+        return NULL;
+
+      self->bus_closed_handler = g_signal_connect (bus,
+                                                   "closed",
+                                                   G_CALLBACK (on_bus_closed),
+                                                   self);
+
+      g_dbus_connection_set_exit_on_close (bus, FALSE);
+
+      self->bus = g_object_ref (bus);
+    }
+
+  return self->bus;
+}
 
 static const gchar *
 remap_language (const gchar *lang_id)
@@ -92,6 +148,8 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
   g_autofree gchar *name = NULL;
   g_autofree gchar *object_path = NULL;
   GcaService *proxy;
+  GDBusConnection *bus;
+  GError *error = NULL;
 
   g_return_if_fail (IDE_IS_GCA_SERVICE (self));
   g_return_if_fail (language_id);
@@ -110,12 +168,11 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
       return;
     }
 
-  if (!gDBus)
+  bus = ide_gca_service_get_bus (self, cancellable, &error);
+
+  if (bus == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_CONNECTED,
-                               _("Not connected to D-Bus."));
+      g_task_return_error (task, error);
       return;
     }
 
@@ -130,7 +187,7 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
   name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", language_id);
   object_path = g_strdup_printf ("/org/gnome/CodeAssist/v1/%s", language_id);
 
-  gca_service_proxy_new (gDBus,
+  gca_service_proxy_new (bus,
                          G_DBUS_PROXY_FLAGS_NONE,
                          name,
                          object_path,
@@ -164,6 +221,12 @@ ide_gca_service_finalize (GObject *object)
 {
   IdeGcaService *self = (IdeGcaService *)object;
 
+  if (self->bus != NULL)
+    {
+      ide_clear_signal_handler (self->bus, &self->bus_closed_handler);
+      g_clear_object (&self->bus);
+    }
+
   g_clear_pointer (&self->proxy_cache, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_gca_service_parent_class)->finalize (object);
@@ -173,20 +236,8 @@ static void
 ide_gca_service_class_init (IdeGcaServiceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GError *error = NULL;
 
   object_class->finalize = ide_gca_service_finalize;
-
-  gDBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
-
-  if (!gDBus)
-    {
-      g_warning (_("Failed to load D-Bus connection to session bus. "
-                   "Code assistance will be disabled. "
-                   "Error was: %s"),
-                 error->message);
-      g_clear_error (&error);
-    }
 }
 
 static void
