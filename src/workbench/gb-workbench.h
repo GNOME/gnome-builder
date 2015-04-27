@@ -53,6 +53,7 @@ void              gb_workbench_open_uri_list        (GbWorkbench         *self,
 GbCommandManager *gb_workbench_get_command_manager  (GbWorkbench         *self);
 gpointer          gb_workbench_get_workspace_typed  (GbWorkbench         *self,
                                                      GType                workspace_type);
+gboolean          gb_workbench_get_closing          (GbWorkbench         *self);
 
 G_END_DECLS
 

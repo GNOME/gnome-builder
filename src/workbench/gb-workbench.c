@@ -884,3 +884,11 @@ gb_workbench_add_temporary_buffer (GbWorkbench *self)
   buffer_manager = ide_context_get_buffer_manager (context);
   buffer = ide_buffer_manager_create_buffer (buffer_manager);
 }
+
+gboolean
+gb_workbench_get_closing (GbWorkbench *self)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (self), FALSE);
+
+  return (self->unloading || (self->disposing > 0));
+}

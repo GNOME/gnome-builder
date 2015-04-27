@@ -117,11 +117,17 @@ gb_command_bar_hide (GbCommandBar *bar)
   gtk_revealer_set_reveal_child (GTK_REVEALER (bar), FALSE);
 
   workbench = gb_widget_get_workbench (GTK_WIDGET (bar));
+  if ((workbench == NULL) || gb_workbench_get_closing (workbench))
+    return;
+
   workspace = gb_workbench_get_active_workspace (workbench);
-  focus = GTK_WIDGET (workspace);
+  if (workspace == NULL)
+    return;
 
   if (bar->priv->last_focus)
     focus = find_alternate_focus (bar->priv->last_focus);
+  else
+    focus = GTK_WIDGET (workspace);
 
   gtk_widget_grab_focus (focus);
 }
