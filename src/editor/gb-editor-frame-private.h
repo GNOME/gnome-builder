@@ -22,6 +22,7 @@
 #include <gtk/gtk.h>
 #include <ide.h>
 
+#include "gb-editor-map-bin.h"
 #include "gd-tagged-entry.h"
 #include "nautilus-floating-bar.h"
 
@@ -33,14 +34,18 @@ struct _GbEditorFrame
 
   NautilusFloatingBar *floating_bar;
   GtkLabel            *mode_name_label;
+  GtkAdjustment       *overlay_adj;
   GtkLabel            *overwrite_label;
   GtkScrolledWindow   *scrolled_window;
   GtkRevealer         *search_revealer;
   GdTaggedEntry       *search_entry;
   GdTaggedEntryTag    *search_entry_tag;
   IdeSourceView       *source_view;
-  GtkBox              *source_map_container;
+  GbEditorMapBin      *source_map_container;
   IdeSourceMap        *source_map;
+  GtkOverlay          *source_overlay;
+
+  IdeAnimation        *map_animation;
 
   gulong               cursor_moved_handler;
 };

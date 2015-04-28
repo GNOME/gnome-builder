@@ -29,6 +29,9 @@
 #include "gb-view-stack.h"
 #include "gb-widget.h"
 
+#define MINIMAP_HIDE_DURATION 500
+#define MINIMAP_SHOW_DURATION 250
+
 G_DEFINE_TYPE (GbEditorFrame, gb_editor_frame, GTK_TYPE_BIN)
 
 enum {
@@ -44,6 +47,57 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+static void
+gb_editor_frame_animate_map (GbEditorFrame *self,
+                             gboolean       visible)
+{
+  IdeAnimation *animation;
+  GdkFrameClock *frame_clock;
+  gdouble value;
+  guint duration;
+
+  g_assert (GB_IS_EDITOR_FRAME (self));
+
+  if (self->map_animation)
+    {
+      animation = self->map_animation;
+      ide_clear_weak_pointer (&self->map_animation);
+      ide_animation_stop (animation);
+    }
+
+  frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (self->source_map_container));
+  duration = visible ? MINIMAP_SHOW_DURATION : MINIMAP_HIDE_DURATION;
+  value = visible ? 0.0 : 1.0;
+
+  animation = ide_object_animate (self->overlay_adj,
+                                  IDE_ANIMATION_EASE_IN_OUT_QUAD,
+                                  duration,
+                                  frame_clock,
+                                  "value", value,
+                                  NULL);
+  ide_set_weak_pointer (&self->map_animation, animation);
+}
+
+static void
+gb_editor_frame_show_map (GbEditorFrame *self,
+                          IdeSourceMap  *source_map)
+{
+  g_assert (GB_IS_EDITOR_FRAME (self));
+  g_assert (IDE_IS_SOURCE_MAP (source_map));
+
+  gb_editor_frame_animate_map (self, TRUE);
+}
+
+static void
+gb_editor_frame_hide_map (GbEditorFrame *self,
+                          IdeSourceMap  *source_map)
+{
+  g_assert (GB_IS_EDITOR_FRAME (self));
+  g_assert (IDE_IS_SOURCE_MAP (source_map));
+
+  gb_editor_frame_animate_map (self, FALSE);
+}
 
 static void
 gb_editor_frame_set_position_label (GbEditorFrame *self,
@@ -485,6 +539,16 @@ gb_editor_frame_set_show_map (GbEditorFrame *self,
                                            "view", self->source_view,
                                            "visible", TRUE,
                                            NULL);
+          g_signal_connect_object (self->source_map,
+                                   "show-map",
+                                   G_CALLBACK (gb_editor_frame_show_map),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+          g_signal_connect_object (self->source_map,
+                                   "hide-map",
+                                   G_CALLBACK (gb_editor_frame_hide_map),
+                                   self,
+                                   G_CONNECT_SWAPPED);
           gtk_container_add (GTK_CONTAINER (self->source_map_container),
                              GTK_WIDGET (self->source_map));
         }
@@ -520,6 +584,42 @@ gb_editor_frame__source_view_populate_popup (GbEditorFrame *self,
                            NULL);
       gtk_menu_shell_append (GTK_MENU_SHELL (popup), item);
     }
+}
+
+static gboolean
+gb_editor_frame__source_overlay_get_child_position (GbEditorFrame *self,
+                                                   GtkWidget     *widget,
+                                                   GtkAllocation *alloc,
+                                                   GtkOverlay    *overlay)
+{
+  GtkAllocation main_alloc;
+  GtkRequisition req;
+
+  g_assert (GTK_IS_OVERLAY (overlay));
+  g_assert (GB_IS_EDITOR_FRAME (self));
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (alloc != NULL);
+
+  if (widget == (GtkWidget *)self->source_map_container)
+    {
+      gdouble value;
+
+      gtk_widget_get_allocation (GTK_WIDGET (self), &main_alloc);
+      gtk_widget_get_preferred_size (widget, &req, NULL);
+
+      alloc->x = main_alloc.x + main_alloc.width - req.width;
+      alloc->width = req.width;
+      alloc->y = main_alloc.y;
+      alloc->height = main_alloc.height;
+
+      /* adjust for animation */
+      value = gtk_adjustment_get_value (self->overlay_adj);
+      alloc->x += (value * alloc->width);
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -570,6 +670,8 @@ static void
 gb_editor_frame_dispose (GObject *object)
 {
   GbEditorFrame *self = (GbEditorFrame *)object;
+
+  ide_clear_weak_pointer (&self->map_animation);
 
   if (self->source_view && self->cursor_moved_handler)
     {
@@ -677,11 +779,13 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
 
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, floating_bar);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, mode_name_label);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, overlay_adj);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, overwrite_label);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, scrolled_window);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, search_entry);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, source_map_container);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, search_revealer);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, source_map_container);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, source_overlay);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, source_view);
 
   g_type_ensure (NAUTILUS_TYPE_FLOATING_BAR);
@@ -714,6 +818,18 @@ gb_editor_frame_init (GbEditorFrame *self)
   g_signal_connect (settings, "changed::keybindings", G_CALLBACK (keybindings_changed), self);
 
   g_object_bind_property (self->source_view, "overwrite", self->overwrite_label, "visible", G_BINDING_SYNC_CREATE);
+
+  g_signal_connect_object (self->source_overlay,
+                           "get-child-position",
+                           G_CALLBACK (gb_editor_frame__source_overlay_get_child_position),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->overlay_adj,
+                           "value-changed",
+                           G_CALLBACK (gtk_widget_queue_resize),
+                           self->source_map_container,
+                           G_CONNECT_SWAPPED);
 
   /*
    * we want to rubberbanding search until enter has been pressed or next/previous actions
