@@ -32,7 +32,7 @@ G_DECLARE_DERIVABLE_TYPE (IdeProjectFile, ide_project_file, IDE, PROJECT_FILE, I
 
 struct _IdeProjectFileClass
 {
-  GObjectClass parent;
+  IdeProjectItemClass parent;
 };
 
 GFile       *ide_project_file_get_file         (IdeProjectFile *self);

@@ -35,7 +35,7 @@ typedef enum
 
 struct _IdeBuilderClass
 {
-  GObjectClass parent;
+  IdeObjectClass parent;
 
   void            (*build_async)  (IdeBuilder           *builder,
                                    IdeBuilderBuildFlags  flags,

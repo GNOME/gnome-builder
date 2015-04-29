@@ -32,7 +32,7 @@ G_DECLARE_DERIVABLE_TYPE (IdeDeviceProvider, ide_device_provider,
 
 struct _IdeDeviceProviderClass
 {
-  GObjectClass parent;
+  IdeObjectClass parent;
 
   void     (*device_added)   (IdeDeviceProvider *provider,
                               IdeDevice         *device);

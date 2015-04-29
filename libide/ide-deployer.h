@@ -29,7 +29,7 @@ G_DECLARE_DERIVABLE_TYPE (IdeDeployer, ide_deployer, IDE, DEPLOYER, IdeObject)
 
 struct _IdeDeployerClass
 {
-  GObjectClass parent;
+  IdeObjectClass parent;
 };
 
 G_END_DECLS
