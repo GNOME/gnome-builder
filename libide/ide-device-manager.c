@@ -32,7 +32,11 @@ struct _IdeDeviceManager
   GPtrArray *providers;
 };
 
-G_DEFINE_TYPE (IdeDeviceManager, ide_device_manager, IDE_TYPE_OBJECT)
+static void list_model_init_interface (GListModelInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (IdeDeviceManager, ide_device_manager, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                                list_model_init_interface))
 
 enum {
   PROP_0,
@@ -81,6 +85,20 @@ ide_device_manager_device_notify_settled (IdeDeviceManager  *self,
 }
 
 static void
+ide_device_manager_do_add_device (IdeDeviceManager *self,
+                                  IdeDevice        *device)
+{
+  guint position;
+
+  g_assert (IDE_IS_DEVICE_MANAGER (self));
+  g_assert (IDE_IS_DEVICE (device));
+
+  position = self->devices->len;
+  g_ptr_array_add (self->devices, g_object_ref (device));
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+}
+
+static void
 ide_device_manager_device_added (IdeDeviceManager  *self,
                                  IdeDevice         *device,
                                  IdeDeviceProvider *provider)
@@ -89,16 +107,17 @@ ide_device_manager_device_added (IdeDeviceManager  *self,
   g_return_if_fail (IDE_IS_DEVICE (device));
   g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
 
-  g_ptr_array_add (self->devices, g_object_ref (device));
-
+  ide_device_manager_do_add_device (self, device);
   g_signal_emit (self, gSignals [DEVICE_ADDED], 0, provider, device);
 }
 
 static void
 ide_device_manager_device_removed (IdeDeviceManager  *self,
-                                  IdeDevice         *device,
-                                  IdeDeviceProvider *provider)
+                                   IdeDevice         *device,
+                                   IdeDeviceProvider *provider)
 {
+  guint i;
+
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
   g_return_if_fail (IDE_IS_DEVICE (device));
   g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
@@ -113,8 +132,21 @@ ide_device_manager_device_removed (IdeDeviceManager  *self,
                                         G_CALLBACK (ide_device_manager_device_removed),
                                         self);
 
-  if (g_ptr_array_remove (self->devices, device))
-    g_signal_emit (self, gSignals [DEVICE_REMOVED], 0, provider, device);
+  for (i = 0; i < self->devices->len; i++)
+    {
+      IdeDevice *iter;
+
+      iter = g_ptr_array_index (self->devices, i);
+
+      if (iter == device)
+        {
+          g_ptr_array_remove_index (self->devices, i);
+          g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
+          g_signal_emit (self, gSignals [DEVICE_REMOVED], 0, provider, device);
+
+          break;
+        }
+    }
 }
 
 void
@@ -234,8 +266,8 @@ ide_device_manager_get_devices (IdeDeviceManager *self)
 static void
 ide_device_manager_add_local (IdeDeviceManager *self)
 {
+  g_autoptr(IdeDevice) device = NULL;
   IdeContext *context;
-  IdeDevice *device;
 
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
 
@@ -243,8 +275,35 @@ ide_device_manager_add_local (IdeDeviceManager *self)
   device = g_object_new (IDE_TYPE_LOCAL_DEVICE,
                          "context", context,
                          NULL);
-  g_ptr_array_add (self->devices, g_object_ref (device));
-  g_clear_object (&device);
+  ide_device_manager_do_add_device (self, device);
+}
+
+static GType
+ide_device_manager_get_item_type (GListModel *list_model)
+{
+  return IDE_TYPE_DEVICE;
+}
+
+static guint
+ide_device_manager_get_n_items (GListModel *list_model)
+{
+  IdeDeviceManager *self = (IdeDeviceManager *)list_model;
+
+  g_assert (IDE_IS_DEVICE_MANAGER (self));
+
+  return self->devices->len;
+}
+
+gpointer
+ide_device_manager_get_item (GListModel *list_model,
+                             guint       position)
+{
+  IdeDeviceManager *self = (IdeDeviceManager *)list_model;
+
+  g_assert (IDE_IS_DEVICE_MANAGER (self));
+  g_assert (position < self->devices->len);
+
+  return g_object_ref (g_ptr_array_index (self->devices, position));
 }
 
 static void
@@ -333,6 +392,14 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
                   2,
                   IDE_TYPE_DEVICE_PROVIDER,
                   IDE_TYPE_DEVICE);
+}
+
+static void
+list_model_init_interface (GListModelInterface *iface)
+{
+  iface->get_item_type = ide_device_manager_get_item_type;
+  iface->get_n_items = ide_device_manager_get_n_items;
+  iface->get_item = ide_device_manager_get_item;
 }
 
 static void
