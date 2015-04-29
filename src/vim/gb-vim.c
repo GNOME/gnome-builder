@@ -995,8 +995,7 @@ gb_vim_execute (GtkSourceView  *source_view,
     all_options = g_strdup (options);
 
   result = command->func (source_view, command_name, all_options, error);
-  if (command->options_sup)
-    g_free (command->options_sup);
+  g_free (command->options_sup);
 
   return result;
 }
