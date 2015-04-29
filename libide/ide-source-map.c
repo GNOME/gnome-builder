@@ -28,8 +28,7 @@
 #include "ide-source-view.h"
 
 #define DEFAULT_WIDTH        100
-#define DELAYED_HIDE_TIMEOUT 2000
-#define DELAYED_SHOW_TIMEOUT 50
+#define CONCEAL_TIMEOUT      2000
 
 struct _IdeSourceMap
 {
@@ -45,10 +44,9 @@ struct _IdeSourceMap
   GtkSourceView           *view;
   GtkSourceGutterRenderer *line_renderer;
 
-  guint                    delayed_reveal_timeout;
+  guint                    delayed_conceal_timeout;
 
   guint                    in_press : 1;
-  guint                    is_hiding : 1;
   guint                    show_map : 1;
 };
 
@@ -76,24 +74,19 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
 
 static gboolean
-ide_source_map_do_reveal (gpointer data)
+ide_source_map_do_conceal (gpointer data)
 {
   IdeSourceMap *self = data;
 
   g_assert (IDE_IS_SOURCE_MAP (self));
 
-  self->delayed_reveal_timeout = 0;
+  self->delayed_conceal_timeout = 0;
 
-  /* ignore if we are already at this state */
-  if ((!self->is_hiding) == self->show_map)
-    return G_SOURCE_REMOVE;
-
-  self->show_map = !self->is_hiding;
-
-  if (self->is_hiding)
-    g_signal_emit (self, gSignals [HIDE_MAP], 0);
-  else
-    g_signal_emit (self, gSignals [SHOW_MAP], 0);
+  if (self->show_map == TRUE)
+    {
+      self->show_map = FALSE;
+      g_signal_emit (self, gSignals [HIDE_MAP], 0);
+    }
 
   return G_SOURCE_REMOVE;
 }
@@ -107,16 +100,32 @@ ide_source_map__enter_notify_event (IdeSourceMap     *self,
   g_assert (event != NULL);
   g_assert (GTK_IS_WIDGET (widget));
 
-  self->is_hiding = FALSE;
-
-  if (self->delayed_reveal_timeout != 0)
-    g_source_remove (self->delayed_reveal_timeout);
-
-  self->delayed_reveal_timeout = g_timeout_add (DELAYED_SHOW_TIMEOUT,
-                                                ide_source_map_do_reveal,
-                                                self);
+  if (self->show_map == FALSE)
+    {
+      self->show_map = TRUE;
+      g_signal_emit (self, gSignals [SHOW_MAP], 0);
+    }
 
   return GDK_EVENT_PROPAGATE;
+}
+
+static void
+ide_source_map_show_map_and_queue_fade (IdeSourceMap *self)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+
+  if (self->delayed_conceal_timeout != 0)
+    g_source_remove (self->delayed_conceal_timeout);
+
+  self->delayed_conceal_timeout = g_timeout_add (CONCEAL_TIMEOUT,
+                                                 ide_source_map_do_conceal,
+                                                 self);
+
+  if (self->show_map == FALSE)
+    {
+      self->show_map = TRUE;
+      g_signal_emit (self, gSignals [SHOW_MAP], 0);
+    }
 }
 
 static gboolean
@@ -128,14 +137,35 @@ ide_source_map__leave_notify_event (IdeSourceMap     *self,
   g_assert (event != NULL);
   g_assert (GTK_IS_WIDGET (widget));
 
-  self->is_hiding = TRUE;
+  ide_source_map_show_map_and_queue_fade (self);
 
-  if (self->delayed_reveal_timeout != 0)
-    g_source_remove (self->delayed_reveal_timeout);
+  return GDK_EVENT_PROPAGATE;
+}
 
-  self->delayed_reveal_timeout = g_timeout_add (DELAYED_HIDE_TIMEOUT,
-                                                ide_source_map_do_reveal,
-                                                self);
+static gboolean
+ide_source_map__motion_notify_event (IdeSourceMap   *self,
+                                     GdkEventMotion *motion,
+                                     GtkWidget      *widget)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (motion != NULL);
+  g_assert (GTK_IS_WIDGET (widget));
+
+  ide_source_map_show_map_and_queue_fade (self);
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+ide_source_map__scroll_event (IdeSourceMap   *self,
+                              GdkEventScroll *scroll,
+                              GtkWidget      *widget)
+{
+  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (scroll != NULL);
+  g_assert (GTK_IS_WIDGET (widget));
+
+  ide_source_map_show_map_and_queue_fade (self);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -410,16 +440,24 @@ ide_source_map_set_view (IdeSourceMap  *self,
                                    G_CALLBACK (ide_source_map__view_notify_buffer),
                                    self,
                                    G_CONNECT_SWAPPED);
-
           g_signal_connect_object (view,
                                    "enter-notify-event",
                                    G_CALLBACK (ide_source_map__enter_notify_event),
                                    self,
                                    G_CONNECT_SWAPPED);
-
           g_signal_connect_object (view,
                                    "leave-notify-event",
                                    G_CALLBACK (ide_source_map__leave_notify_event),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+          g_signal_connect_object (view,
+                                   "motion-notify-event",
+                                   G_CALLBACK (ide_source_map__motion_notify_event),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+          g_signal_connect_object (view,
+                                   "scroll-event",
+                                   G_CALLBACK (ide_source_map__scroll_event),
                                    self,
                                    G_CONNECT_SWAPPED);
 
@@ -787,10 +825,10 @@ ide_source_map_destroy (GtkWidget *widget)
 {
   IdeSourceMap *self = (IdeSourceMap *)widget;
 
-  if (self->delayed_reveal_timeout)
+  if (self->delayed_conceal_timeout)
     {
-      g_source_remove (self->delayed_reveal_timeout);
-      self->delayed_reveal_timeout = 0;
+      g_source_remove (self->delayed_conceal_timeout);
+      self->delayed_conceal_timeout = 0;
     }
 
   g_clear_object (&self->box_css_provider);
@@ -1014,6 +1052,16 @@ ide_source_map_init (IdeSourceMap *self)
                            G_CALLBACK (ide_source_map__leave_notify_event),
                            self,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->overlay_box,
+                           "motion-notify-event",
+                           G_CALLBACK (ide_source_map__motion_notify_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->overlay_box,
+                           "scroll-event",
+                           G_CALLBACK (ide_source_map__scroll_event),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->child_view,
                            "enter-notify-event",
@@ -1023,6 +1071,16 @@ ide_source_map_init (IdeSourceMap *self)
   g_signal_connect_object (self->child_view,
                            "leave-notify-event",
                            G_CALLBACK (ide_source_map__leave_notify_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->child_view,
+                           "motion-notify-event",
+                           G_CALLBACK (ide_source_map__motion_notify_event),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->child_view,
+                           "scroll-event",
+                           G_CALLBACK (ide_source_map__scroll_event),
                            self,
                            G_CONNECT_SWAPPED);
 }
