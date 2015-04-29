@@ -24,13 +24,15 @@
 
 #include "local/ide-local-device.h"
 
-typedef struct
+struct _IdeDeviceManager
 {
+  IdeObject  parent_instance;
+
   GPtrArray *devices;
   GPtrArray *providers;
-} IdeDeviceManagerPrivate;
+};
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeDeviceManager, ide_device_manager, IDE_TYPE_OBJECT)
+G_DEFINE_TYPE (IdeDeviceManager, ide_device_manager, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -50,18 +52,15 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 gboolean
 ide_device_manager_get_settled (IdeDeviceManager *self)
 {
-  IdeDeviceManagerPrivate *priv;
   gsize i;
 
   g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), FALSE);
 
-  priv = ide_device_manager_get_instance_private (self);
-
-  for (i = 0; i < priv->providers->len; i++)
+  for (i = 0; i < self->providers->len; i++)
     {
       IdeDeviceProvider *provider;
 
-      provider = g_ptr_array_index (priv->providers, i);
+      provider = g_ptr_array_index (self->providers, i);
       if (!ide_device_provider_get_settled (provider))
         return FALSE;
     }
@@ -86,13 +85,11 @@ ide_device_manager_device_added (IdeDeviceManager  *self,
                                  IdeDevice         *device,
                                  IdeDeviceProvider *provider)
 {
-  IdeDeviceManagerPrivate *priv = ide_device_manager_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
   g_return_if_fail (IDE_IS_DEVICE (device));
   g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
 
-  g_ptr_array_add (priv->devices, g_object_ref (device));
+  g_ptr_array_add (self->devices, g_object_ref (device));
 
   g_signal_emit (self, gSignals [DEVICE_ADDED], 0, provider, device);
 }
@@ -102,8 +99,6 @@ ide_device_manager_device_removed (IdeDeviceManager  *self,
                                   IdeDevice         *device,
                                   IdeDeviceProvider *provider)
 {
-  IdeDeviceManagerPrivate *priv = ide_device_manager_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
   g_return_if_fail (IDE_IS_DEVICE (device));
   g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
@@ -118,7 +113,7 @@ ide_device_manager_device_removed (IdeDeviceManager  *self,
                                         G_CALLBACK (ide_device_manager_device_removed),
                                         self);
 
-  if (g_ptr_array_remove (priv->devices, device))
+  if (g_ptr_array_remove (self->devices, device))
     g_signal_emit (self, gSignals [DEVICE_REMOVED], 0, provider, device);
 }
 
@@ -126,23 +121,22 @@ void
 ide_device_manager_add_provider (IdeDeviceManager  *self,
                                  IdeDeviceProvider *provider)
 {
-  IdeDeviceManagerPrivate *priv = ide_device_manager_get_instance_private (self);
   GPtrArray *devices;
   guint i;
 
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
   g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
 
-  for (i = 0; i < priv->providers->len; i++)
+  for (i = 0; i < self->providers->len; i++)
     {
-      if (provider == g_ptr_array_index (priv->providers, i))
+      if (provider == g_ptr_array_index (self->providers, i))
         {
           g_warning ("Cannot add provider, already registered.");
           return;
         }
     }
 
-  g_ptr_array_add (priv->providers, g_object_ref (provider));
+  g_ptr_array_add (self->providers, g_object_ref (provider));
 
   g_signal_connect_object (provider,
                            "notify::settled",
@@ -219,21 +213,18 @@ ide_device_manager_add_providers (IdeDeviceManager *self)
 GPtrArray *
 ide_device_manager_get_devices (IdeDeviceManager *self)
 {
-  IdeDeviceManagerPrivate *priv;
   GPtrArray *ret;
   guint i;
 
   g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), NULL);
 
-  priv = ide_device_manager_get_instance_private (self);
-
   ret = g_ptr_array_new_with_free_func (g_object_unref);
 
-  for (i = 0; i < priv->devices->len; i++)
+  for (i = 0; i < self->devices->len; i++)
     {
       IdeDevice *device;
 
-      device = g_ptr_array_index (priv->devices, i);
+      device = g_ptr_array_index (self->devices, i);
       g_ptr_array_add (ret, g_object_ref (device));
     }
 
@@ -241,21 +232,18 @@ ide_device_manager_get_devices (IdeDeviceManager *self)
 }
 
 static void
-ide_device_manager_add_local (IdeDeviceManager *manager)
+ide_device_manager_add_local (IdeDeviceManager *self)
 {
-  IdeDeviceManagerPrivate *priv;
   IdeContext *context;
   IdeDevice *device;
 
-  g_return_if_fail (IDE_IS_DEVICE_MANAGER (manager));
+  g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
 
-  priv = ide_device_manager_get_instance_private (manager);
-
-  context = ide_object_get_context (IDE_OBJECT (manager));
+  context = ide_object_get_context (IDE_OBJECT (self));
   device = g_object_new (IDE_TYPE_LOCAL_DEVICE,
                          "context", context,
                          NULL);
-  g_ptr_array_add (priv->devices, g_object_ref (device));
+  g_ptr_array_add (self->devices, g_object_ref (device));
   g_clear_object (&device);
 }
 
@@ -276,10 +264,9 @@ static void
 ide_device_manager_finalize (GObject *object)
 {
   IdeDeviceManager *self = (IdeDeviceManager *)object;
-  IdeDeviceManagerPrivate *priv = ide_device_manager_get_instance_private (self);
 
-  g_clear_pointer (&priv->devices, g_ptr_array_unref);
-  g_clear_pointer (&priv->providers, g_ptr_array_unref);
+  g_clear_pointer (&self->devices, g_ptr_array_unref);
+  g_clear_pointer (&self->providers, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_device_manager_parent_class)->finalize (object);
 }
@@ -351,10 +338,8 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
 static void
 ide_device_manager_init (IdeDeviceManager *self)
 {
-  IdeDeviceManagerPrivate *priv = ide_device_manager_get_instance_private (self);
-
-  priv->devices = g_ptr_array_new_with_free_func (g_object_unref);
-  priv->providers = g_ptr_array_new_with_free_func (g_object_unref);
+  self->devices = g_ptr_array_new_with_free_func (g_object_unref);
+  self->providers = g_ptr_array_new_with_free_func (g_object_unref);
 }
 
 /**
@@ -369,17 +354,16 @@ IdeDevice *
 ide_device_manager_get_device (IdeDeviceManager *self,
                                const gchar      *device_id)
 {
-  IdeDeviceManagerPrivate *priv = ide_device_manager_get_instance_private (self);
   gsize i;
 
   g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), NULL);
 
-  for (i = 0; i < priv->devices->len; i++)
+  for (i = 0; i < self->devices->len; i++)
     {
       IdeDevice *device;
       const gchar *id;
 
-      device = g_ptr_array_index (priv->devices, i);
+      device = g_ptr_array_index (self->devices, i);
       id = ide_device_get_id (device);
 
       if (0 == g_strcmp0 (id, device_id))

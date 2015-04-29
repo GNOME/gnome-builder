@@ -28,11 +28,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeDeviceManager, ide_device_manager, IDE, DEVICE_MANAGER, IdeObject)
 
-struct _IdeDeviceManager
-{
-  IdeObject parent_instance;
-};
-
 void       ide_device_manager_add_provider    (IdeDeviceManager  *self,
                                                IdeDeviceProvider *provider);
 GPtrArray *ide_device_manager_get_devices     (IdeDeviceManager  *self);
