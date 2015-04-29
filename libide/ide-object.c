@@ -16,14 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-object"
+
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-object.h"
 
 typedef struct
 {
   IdeContext *context;
+  guint       is_destroyed : 1;
 } IdeObjectPrivate;
 
 typedef struct
@@ -44,7 +48,41 @@ enum {
   LAST_PROP
 };
 
+enum {
+  DESTROY,
+  LAST_SIGNAL
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint gSignals [LAST_SIGNAL];
+
+static void
+ide_object_destroy (IdeObject *self)
+{
+  IdeObjectPrivate *priv = ide_object_get_instance_private (self);
+
+  g_assert (IDE_IS_OBJECT (self));
+
+  if (!priv->is_destroyed)
+    {
+      priv->is_destroyed = TRUE;
+      g_signal_emit (self, gSignals [DESTROY], 0);
+    }
+}
+
+static void
+ide_object_release_context (gpointer  data,
+                            GObject  *where_the_object_was)
+{
+  IdeObject *self = data;
+  IdeObjectPrivate *priv = ide_object_get_instance_private (self);
+
+  g_assert (IDE_IS_OBJECT (self));
+
+  priv->context = NULL;
+
+  ide_object_destroy (self);
+}
 
 /**
  * ide_object_get_context:
@@ -64,31 +102,53 @@ ide_object_get_context (IdeObject *object)
 }
 
 static void
-ide_object_set_context (IdeObject  *object,
+ide_object_set_context (IdeObject  *self,
                         IdeContext *context)
 {
-  IdeObjectPrivate *priv = ide_object_get_instance_private (object);
+  IdeObjectPrivate *priv = ide_object_get_instance_private (self);
 
-  g_return_if_fail (IDE_IS_OBJECT (object));
-  g_return_if_fail (IDE_IS_CONTEXT (context));
+  g_assert (IDE_IS_OBJECT (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
 
-  ide_set_weak_pointer (&priv->context, context);
+  if (context != priv->context)
+    {
+      if (priv->context != NULL)
+        {
+          g_object_weak_unref (G_OBJECT (priv->context),
+                               ide_object_release_context,
+                               self);
+          priv->context = NULL;
+        }
+
+      if (context != NULL)
+        {
+          priv->context = context;
+          g_object_weak_ref (G_OBJECT (priv->context),
+                             ide_object_release_context,
+                             self);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CONTEXT]);
+    }
 }
 
 static void
-ide_object_finalize (GObject *object)
+ide_object_dispose (GObject *object)
 {
   IdeObject *self = (IdeObject *)object;
   IdeObjectPrivate *priv = ide_object_get_instance_private (self);
 
-  if (priv->context)
-    {
-      g_object_remove_weak_pointer (G_OBJECT (priv->context),
-                                    (gpointer *)&priv->context);
-      priv->context = NULL;
-    }
+  G_OBJECT_CLASS (ide_object_parent_class)->dispose (object);
 
-  G_OBJECT_CLASS (ide_object_parent_class)->finalize (object);
+  IDE_TRACE_MSG ("%s (%p)",
+                 g_type_name (G_TYPE_FROM_INSTANCE (object)),
+                 object);
+
+  if (priv->context != NULL)
+    ide_object_set_context (self, NULL);
+
+  if (!priv->is_destroyed)
+    ide_object_destroy (self);
 }
 
 static void
@@ -134,7 +194,7 @@ ide_object_class_init (IdeObjectClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_object_finalize;
+  object_class->dispose = ide_object_dispose;
   object_class->get_property = ide_object_get_property;
   object_class->set_property = ide_object_set_property;
 
@@ -148,6 +208,16 @@ ide_object_class_init (IdeObjectClass *klass)
                           G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_CONTEXT,
                                    gParamSpecs [PROP_CONTEXT]);
+
+  gSignals [DESTROY] =
+    g_signal_new ("destroy",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeObjectClass, destroy),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 static void

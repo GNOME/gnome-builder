@@ -32,6 +32,8 @@ G_DECLARE_DERIVABLE_TYPE (IdeObject, ide_object, IDE, OBJECT, GObject)
 struct _IdeObjectClass
 {
   GObjectClass parent;
+
+  void (*destroy) (IdeObject *self);
 };
 
 IdeContext *ide_object_get_context (IdeObject            *object);
