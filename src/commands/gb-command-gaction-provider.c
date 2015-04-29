@@ -156,7 +156,7 @@ discover_groups (GbCommandGactionProvider *provider)
   GtkWidget *widget;
   GbGroup *gb_group = NULL;
   GList *list = NULL;
-  gint type;
+  GType type;
 
   g_return_val_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (provider), NULL);
 
@@ -281,7 +281,7 @@ static const GbActionCommandMap action_maps [] = {
   { NULL,       "view",  "close" },
   { NULL,       "view",  "save" },
   { NULL,       "view",  "save-as" },
-  { NULL,       NULL,    NULL }
+  { NULL }
 };
 
 static gboolean
