@@ -782,6 +782,9 @@ ide_buffer_dispose (GObject *object)
 
   IDE_ENTRY;
 
+  if (priv->highlight_engine != NULL)
+    g_object_run_dispose (G_OBJECT (priv->highlight_engine));
+
   if (priv->diagnose_timeout)
     {
       g_source_remove (priv->diagnose_timeout);
