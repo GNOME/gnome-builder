@@ -198,7 +198,11 @@ failure:
  * As we allow a NULL command_name, you must closed the array with a triple NULL.
  */
 static const GbActionCommandMap action_maps [] = {
-  { NULL, NULL, NULL }
+  { "quitall",  "app",   "quit"  },
+  { NULL,       "view",  "close" },
+  { NULL,       "view",  "save" },
+  { NULL,       "view",  "save-as" },
+  { NULL,       NULL,    NULL }
 };
 
 static gboolean
