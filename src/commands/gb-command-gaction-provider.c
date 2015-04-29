@@ -82,7 +82,6 @@ discover_groups (GbCommandGactionProvider *provider)
 {
   GbView *view;
   GApplication *application;
-  GbWorkbench *workbench;
   GtkWidget *widget;
   GbGroup *gb_group = NULL;
   GList *list = NULL;
@@ -122,10 +121,6 @@ discover_groups (GbCommandGactionProvider *provider)
           g_free (prefixes);
         }
     }
-
-  workbench = gb_command_provider_get_workbench (GB_COMMAND_PROVIDER (provider));
-  gb_group = gb_group_new (G_ACTION_GROUP (workbench), "workbench");
-  list = g_list_append (list, gb_group);
 
   application = g_application_get_default ();
   gb_group = gb_group_new (G_ACTION_GROUP (application), "app");
