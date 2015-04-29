@@ -29,7 +29,7 @@
 #include "gb-view-stack.h"
 #include "gb-widget.h"
 
-#define MINIMAP_HIDE_DURATION 500
+#define MINIMAP_HIDE_DURATION 1000
 #define MINIMAP_SHOW_DURATION 250
 
 G_DEFINE_TYPE (GbEditorFrame, gb_editor_frame, GTK_TYPE_BIN)

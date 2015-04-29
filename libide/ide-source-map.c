@@ -28,7 +28,7 @@
 #include "ide-source-view.h"
 
 #define DEFAULT_WIDTH        100
-#define DELAYED_HIDE_TIMEOUT 1000
+#define DELAYED_HIDE_TIMEOUT 2000
 #define DELAYED_SHOW_TIMEOUT 50
 
 struct _IdeSourceMap
