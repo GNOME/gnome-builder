@@ -31,6 +31,16 @@
 
 G_DEFINE_TYPE (GbCommandGactionProvider, gb_command_gaction_provider, GB_TYPE_COMMAND_PROVIDER)
 
+/* Set this to 1 to enable the debug helper which prints the
+ * content of Action groups to standard output :
+ *
+ * it's triggered by going to the command bar then hitting 'tab'
+ */
+
+#if 0
+#define GB_DEBUG_ACTIONS
+#endif
+
 typedef struct
 {
   GActionGroup *group;
@@ -43,6 +53,67 @@ typedef struct
   const gchar *prefix;
   const gchar *action_name;
 } GbActionCommandMap;
+
+/* Used to print discovered prefixes and GActions for a GObject */
+G_GNUC_UNUSED static void
+show_prefix_actions (GObject *object)
+{
+  const gchar **prefixes;
+  gchar **names;
+  guint i, n;
+  GActionGroup *group;
+
+  if (GTK_IS_WIDGET (object))
+    printf ("type: GtkWidget\n");
+  else if (G_IS_OBJECT (object))
+    printf ("type: GObject\n");
+  else
+    {
+      printf ("type: Unknow\n");
+      return;
+    }
+
+    printf ("  type name: %s\n", G_OBJECT_TYPE_NAME (object));
+
+    if (GTK_IS_WIDGET (object))
+      {
+        prefixes = gtk_widget_list_action_prefixes (GTK_WIDGET (object));
+        if (prefixes [0] != NULL)
+          printf ("  prefixes:\n");
+
+        for (i = 0; prefixes [i]; i++)
+          {
+            printf ("    - %s:\n", prefixes [i]);
+            group = gtk_widget_get_action_group (GTK_WIDGET (object), prefixes [i]);
+            if (group)
+              {
+                names = g_action_group_list_actions (group);
+                if (names [0] != NULL)
+                  printf ("        names:\n");
+
+                for (n = 0; names [n]; n++)
+                  printf ("          - %s\n", names [n]);
+
+                printf ("\n");
+              }
+            else
+              {
+                printf ("        names: no names - group is NULL\n");
+              }
+          }
+
+        printf ("\n");
+      }
+    else
+      {
+        names = g_action_group_list_actions (G_ACTION_GROUP (object));
+        if (names [0] != NULL)
+          printf ("        names:\n");
+
+        for (n = 0; names [n]; n++)
+          printf ("          - %s\n", names [n]);
+      }
+}
 
 GbCommandProvider *
 gb_command_gaction_provider_new (GbWorkbench *workbench)
@@ -98,6 +169,10 @@ discover_groups (GbCommandGactionProvider *provider)
       const gchar **prefixes;
       guint i;
 
+#ifdef GB_DEBUG_ACTIONS
+      show_prefix_actions (G_OBJECT (widget));
+#endif
+
       /* We exclude these types, they're already in the widgets hierarchy */
       type = G_OBJECT_TYPE (widget);
       if (type == GB_TYPE_EDITOR_WORKSPACE || type == GB_TYPE_EDITOR_VIEW)
@@ -125,6 +200,10 @@ discover_groups (GbCommandGactionProvider *provider)
   application = g_application_get_default ();
   gb_group = gb_group_new (G_ACTION_GROUP (application), "app");
   list = g_list_append (list, gb_group);
+
+#ifdef GB_DEBUG_ACTIONS
+  show_prefix_actions (G_OBJECT (application));
+#endif
 
   return list;
 }
