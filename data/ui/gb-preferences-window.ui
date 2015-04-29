@@ -22,6 +22,9 @@
               <object class="GtkToggleButton" id="search_toggle">
                 <property name="visible">True</property>
                 <property name="valign">baseline</property>
+                <style>
+                  <class name="image-button" />
+                </style>
                 <child>
                   <object class="GtkImage" id="search_toggle_image">
                     <property name="visible">True</property>
@@ -30,9 +33,6 @@
                   </object>
                 </child>
               </object>
-              <style>
-                <class name="image-button" />
-              </style>
               <packing>
                 <property name="pack_type">start</property>
               </packing>
