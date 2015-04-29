@@ -110,7 +110,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
   /*
    * Try to determine the icon to use for this result.
    */
-  switch (result->CursorKind)
+  switch ((int)result->CursorKind)
     {
     case CXCursor_CXXMethod:
     case CXCursor_Constructor:

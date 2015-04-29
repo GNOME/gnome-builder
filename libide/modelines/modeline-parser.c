@@ -655,6 +655,7 @@ check_previous (GtkSourceView   *view,
 			                                       previous->language_id) == 0);
 		}
 		break;
+                case MODELINE_SET_NONE:
 		default:
 			return FALSE;
 		break;

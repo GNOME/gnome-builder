@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2011-2012 EditorConfig Team
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -100,7 +100,7 @@ static void reset_special_property_name_value_pointers(
         array_editorconfig_name_value* aenv)
 {
     int         i;
-    
+
     for (i = 0; i < aenv->current_value_count; ++ i)
         set_special_property_name_value_pointers(
                 &aenv->name_values[i], &aenv->spnvp);
@@ -259,12 +259,12 @@ static int ini_handler(void* hfp, const char* section, const char* name,
     return 1;
 }
 
-/* 
+/*
  * Split an absolute file path into directory and filename parts.
  *
  * If absolute_path does not contain a path separator, set directory and
  * filename to NULL pointers.
- */ 
+ */
 static void split_file_path(char** directory, char** filename,
         const char* absolute_path)
 {
@@ -376,12 +376,14 @@ const char* editorconfig_get_error_msg(int err_num)
         return "Memory error.";
     case EDITORCONFIG_PARSE_VERSION_TOO_NEW:
         return "Required version is greater than the current version.";
+    default:
+        break;
     }
 
     return "Unknown error.";
 }
 
-/* 
+/*
  * See the header file for the use of this function
  */
 EDITORCONFIG_EXPORT

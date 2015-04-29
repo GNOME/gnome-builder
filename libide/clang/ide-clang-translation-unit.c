@@ -966,7 +966,7 @@ ide_clang_translation_unit_get_symbols__visitor_cb (CXCursor     cursor,
 
   kind = clang_getCursorKind (cursor);
 
-  switch (kind)
+  switch ((int)kind)
     {
     case CXCursor_FunctionDecl:
     case CXCursor_TypedefDecl:

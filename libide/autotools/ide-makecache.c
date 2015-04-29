@@ -283,7 +283,7 @@ ide_makecache_get_file_targets_cached (IdeMakecache *self,
 
   ret = g_hash_table_lookup (self->file_targets_cache, path);
 
-  IDE_DEBUG ("File targets cache %s for %s.", ret ? "hit" : "miss", path);
+  g_debug ("File targets cache %s for %s.", ret ? "hit" : "miss", path);
 
   IDE_RETURN (ret);
 }
@@ -444,7 +444,7 @@ ide_makecache_validate_mapped_file (GMappedFile  *mapped,
   g_assert (error);
   g_assert (!*error);
 
-  IDE_DEBUG ("Validating makecache");
+  g_debug ("Validating makecache");
 
   contents = g_mapped_file_get_contents (mapped);
 
@@ -510,7 +510,7 @@ ide_makecache_open_temp (IdeMakecache  *self,
                                 "makecache",
                                 NULL);
 
-  IDE_DEBUG ("Using \"%s\" for makecache directory", directory);
+  g_debug ("Using \"%s\" for makecache directory", directory);
 
   if (g_mkdir_with_parents (directory, 0700) != 0)
     {
@@ -525,7 +525,7 @@ ide_makecache_open_temp (IdeMakecache  *self,
   name = g_strdup_printf ("%s.makecache.tmp-%u", project_name, (guint)now);
   path = g_build_filename (directory, name, NULL);
 
-  IDE_DEBUG ("Creating temporary makecache at \"%s\"", path);
+  g_debug ("Creating temporary makecache at \"%s\"", path);
 
   fd = g_open (path, O_CREAT|O_RDWR, 0600);
 

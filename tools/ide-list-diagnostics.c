@@ -125,11 +125,11 @@ print_diagnostic (IdeDiagnostic *diag)
 
   if (linestr)
     {
-      gsize i;
+      gsize j;
 
       g_print ("%s\n", linestr);
 
-      for (i = 0; i < column; i++)
+      for (j = 0; j < column; j++)
         g_print (" ");
 
       if (isatty (STDOUT_FILENO))
@@ -278,6 +278,8 @@ main (gint   argc,
 
   ide_set_program_name ("gnome-builder");
   g_set_prgname ("ide-list-diagnostics");
+
+  gtk_init (&argc, &argv);
 
   context = g_option_context_new (_("- List diagnostics for a file."));
 

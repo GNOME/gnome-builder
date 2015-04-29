@@ -75,15 +75,18 @@ ide_project_files_find_child (IdeProjectItem *item,
        !g_sequence_iter_is_end (iter);
        iter = g_sequence_iter_next (iter))
     {
-      IdeProjectItem *item = g_sequence_get (iter);
+      IdeProjectItem *current_item = g_sequence_get (iter);
 
-      if (IDE_IS_PROJECT_FILE (item))
+      if (IDE_IS_PROJECT_FILE (current_item))
         {
-          IdeProjectFile *file = IDE_PROJECT_FILE (item);
-          const gchar *name = ide_project_file_get_name (file);
+          IdeProjectFile *file;
+          const gchar *name;
+
+          file = IDE_PROJECT_FILE (current_item);
+          name = ide_project_file_get_name (file);
 
           if (g_strcmp0 (name, child) == 0)
-            return item;
+            return current_item;
         }
     }
 
@@ -172,19 +175,19 @@ ide_project_files_get_file_for_path (IdeProjectFiles *self,
   if (item)
     {
       IdeContext *context;
-      const gchar *path;
+      const gchar *file_path;
       GFile *gfile;
 
       context = ide_object_get_context (IDE_OBJECT (self));
       gfile = ide_project_file_get_file (IDE_PROJECT_FILE (item));
-      path = ide_project_file_get_path (IDE_PROJECT_FILE (item));
+      file_path = ide_project_file_get_path (IDE_PROJECT_FILE (item));
       file = g_object_new (IDE_TYPE_FILE,
                            "context", context,
                            "file", gfile,
-                           "path", path,
+                           "path", file_path,
                            NULL);
       if (file)
-        g_hash_table_insert (priv->files_by_path, g_strdup (path), g_object_ref (file));
+        g_hash_table_insert (priv->files_by_path, g_strdup (file_path), g_object_ref (file));
     }
 
   return file;

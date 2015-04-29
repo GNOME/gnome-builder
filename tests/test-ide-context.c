@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tests.h"
-
 #include <girepository.h>
 #include <ide.h>
 

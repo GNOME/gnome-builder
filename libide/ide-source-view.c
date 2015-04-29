@@ -4731,8 +4731,8 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
                                      GtkWidget   *popup)
 {
   IdeSourceView *self = (IdeSourceView *)text_view;
-  GtkTextBuffer *buffer;
   GtkSeparatorMenuItem *sep;
+  GtkTextBuffer *buffer;
   GtkMenuItem *menu_item;
   GtkTextMark *insert;
   GtkTextIter iter;
@@ -4771,7 +4771,6 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
 
       if (num_fixits > 0)
         {
-          GtkSeparatorMenuItem *sep;
           GtkWidget *parent;
           GtkWidget *submenu;
           guint i;

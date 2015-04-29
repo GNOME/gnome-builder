@@ -144,7 +144,6 @@ ide_load_directory_task_load_directory (IdeLoadDirectoryTask  *self,
       g_autoptr(IdeProjectItem) item = NULL;
       g_autoptr(GFile) file = NULL;
       g_autofree gchar *path = NULL;
-      GFileType file_type;
       const gchar *name;
 
       name = g_file_info_get_attribute_byte_string (child_info, G_FILE_ATTRIBUTE_STANDARD_NAME);

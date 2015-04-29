@@ -95,7 +95,7 @@ ide_clang_service_build_index_visitor (CXCursor     cursor,
 
   kind = clang_getCursorKind (cursor);
 
-  switch (kind)
+  switch ((int)kind)
     {
     case CXCursor_TypedefDecl:
     case CXCursor_TypeAliasDecl:

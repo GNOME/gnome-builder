@@ -761,10 +761,10 @@ ide_back_forward_list__load_contents_cb (GObject      *object,
                 {
                   g_autoptr(IdeSourceLocation) srcloc = NULL;
                   g_autoptr(IdeBackForwardItem) item = NULL;
-                  g_autoptr(GFile) file = NULL;
+                  g_autoptr(GFile) jump_file = NULL;
 
-                  file = g_file_new_for_uri (parts [2]);
-                  srcloc = create_source_location (self, file, line, line_offset);
+                  jump_file = g_file_new_for_uri (parts [2]);
+                  srcloc = create_source_location (self, jump_file, line, line_offset);
                   item = ide_back_forward_item_new (context, srcloc);
 
                   ide_back_forward_list_push (self, item);

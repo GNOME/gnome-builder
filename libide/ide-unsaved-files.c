@@ -329,7 +329,7 @@ ide_unsaved_files_restore_worker (GTask        *task,
       g_autofree gchar *hash = NULL;
       g_autofree gchar *path = NULL;
       UnsavedFile *unsaved;
-      gsize len;
+      gsize data_len;
 
       if (!*lines [i])
         continue;
@@ -343,7 +343,7 @@ ide_unsaved_files_restore_worker (GTask        *task,
 
       g_debug ("Loading draft for \"%s\" from \"%s\"", lines [i], path);
 
-      if (!g_file_get_contents (path, &contents, &len, &error))
+      if (!g_file_get_contents (path, &contents, &data_len, &error))
         {
           g_warning ("%s", error->message);
           g_clear_error (&error);
@@ -352,7 +352,7 @@ ide_unsaved_files_restore_worker (GTask        *task,
 
       unsaved = g_slice_new0 (UnsavedFile);
       unsaved->file = g_object_ref (file);
-      unsaved->content = g_bytes_new_take (contents, len);
+      unsaved->content = g_bytes_new_take (contents, data_len);
 
       g_ptr_array_add (state->unsaved_files, unsaved);
     }

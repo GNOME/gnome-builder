@@ -635,8 +635,6 @@ maybe_unindent_else_or_elif (IdePythonIndenter *python,
 
       if ((line_starts_with (&copy, "if ") || line_starts_with (&copy, "for ")))
         {
-          guint line_offset;
-
           line_offset = gtk_source_view_get_visual_column (sv, &copy);
           move_to_visual_column (sv, begin, line_offset);
           IDE_RETURN (slice);
