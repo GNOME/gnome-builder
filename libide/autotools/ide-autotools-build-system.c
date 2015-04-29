@@ -248,7 +248,7 @@ ide_autotools_build_system_get_local_makefile_async (IdeAutotoolsBuildSystem *se
   config = g_key_file_new ();
   builder = ide_autotools_build_system_get_builder (IDE_BUILD_SYSTEM (self), config, device, &error);
 
-  if (!builder)
+  if (builder == NULL)
     {
       g_task_return_error (task, error);
       return;

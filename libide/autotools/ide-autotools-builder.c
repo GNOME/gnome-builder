@@ -397,6 +397,8 @@ ide_autotools_builder_bootstrap_async (IdeAutotoolsBuilder *self,
   task = g_task_new (self, cancellable, callback, user_data);
 
   g_key_file_set_boolean (priv->config, "autotools", "bootstrap", TRUE);
+
+  g_task_return_boolean (task, TRUE);
 }
 
 gboolean
