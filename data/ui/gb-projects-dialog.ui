@@ -88,7 +88,7 @@
           </object>
         </child>
         <child>
-          <object class="GbScrolledWindow">
+          <object class="GtkScrolledWindow">
             <property name="expand">true</property>
             <property name="visible">true</property>
             <child>
