@@ -157,6 +157,33 @@ ide_buffer_get_iter_at_location (IdeBuffer         *self,
 }
 
 static void
+ide_buffer_release_context (gpointer  data,
+                            GObject  *where_the_object_was)
+{
+  IdeBuffer *self = data;
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  priv->context = NULL;
+
+  /*
+   * If the context was just lost, we handled reclamation in the buffer
+   * manager while shutting down. We can safely drop our reclamation_handler
+   * since it can no longer be run anyway.
+   */
+  if (priv->reclamation_handler != 0)
+    {
+      g_source_remove (priv->reclamation_handler);
+      priv->reclamation_handler = 0;
+    }
+
+  IDE_EXIT;
+}
+
+static void
 ide_buffer_set_context (IdeBuffer  *self,
                         IdeContext *context)
 {
@@ -166,7 +193,11 @@ ide_buffer_set_context (IdeBuffer  *self,
   g_return_if_fail (IDE_IS_CONTEXT (context));
   g_return_if_fail (priv->context == NULL);
 
-  ide_set_weak_pointer (&priv->context, context);
+  priv->context = context;
+
+  g_object_weak_ref (G_OBJECT (context),
+                     ide_buffer_release_context,
+                     self);
 }
 
 static void
@@ -1898,6 +1929,9 @@ ide_buffer_hold (IdeBuffer *self)
 
   priv->hold_count++;
 
+  if (priv->context == NULL)
+    return;
+
   if (priv->reclamation_handler != 0)
     {
       g_source_remove (priv->reclamation_handler);
@@ -1914,6 +1948,9 @@ ide_buffer_release (IdeBuffer *self)
   g_return_if_fail (priv->hold_count >= 0);
 
   priv->hold_count--;
+
+  if (priv->context == NULL)
+    return;
 
   /*
    * If our hold count has reached zero, then queue the buffer for
