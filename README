@@ -1,12 +1,11 @@
 Builder - Develop software for GNOME
 ====================================
 
-Bugs: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder
-Design: https://live.gnome.org/Design/Apps/Builder
-Download: https://download.gnome.org/sources/gnome-builder/
-Git: http://git.gnome.org/browse/gnome-builder
-Website: https://wiki.gnome.org/Apps/Builder
-IRC: irc.gimp.net #gnome-builder
+     Bugs: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder
+ Download: https://download.gnome.org/sources/gnome-builder/
+      Git: http://git.gnome.org/browse/gnome-builder
+  Website: https://wiki.gnome.org/Apps/Builder
+      IRC: irc.gimp.net #gnome-builder
 
 ----
 
@@ -30,6 +29,13 @@ modules.
 
 Builder can be built from tarball releases using the traditional autotools
 manner.
+
+If you checked the code out from git, you will need to bootstrap the build
+system like so:
+
+  ./autogen.sh
+
+Then, a typical build might look like so:
 
   ./configure --prefix=/usr
   make
