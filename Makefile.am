@@ -70,7 +70,7 @@ dist-hook:
 
 run:
 	GI_TYPELIB_PATH=libide \
-	$(LIBTOOL) --mode=execute gdb --args src/gnome-builder
+	$(LIBTOOL) --mode=execute gdb --args src/gnome-builder -vvvv
 
 debug:
 	GI_TYPELIB_PATH=libide \
