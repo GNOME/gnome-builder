@@ -401,16 +401,16 @@ gb_html_markdown_transform (GbHtmlDocument *document,
       GBytes *markdown_view;
       gchar *tmp;
 
-      css = g_resources_lookup_data ("/org/gnome/builder/css/markdown.css",
+      css = g_resources_lookup_data ("/org/gnome/builder/markdown/markdown.css",
                                      0, NULL);
       css_data = g_bytes_get_data (css, NULL);
 
-      marked = g_resources_lookup_data ("/org/gnome/builder/js/marked.js",
+      marked = g_resources_lookup_data ("/org/gnome/builder/markdown/marked.js",
                                         0, NULL);
       marked_data = g_bytes_get_data (marked, NULL);
 
       markdown_view = g_resources_lookup_data (
-                      "/org/gnome/builder/js/markdown-view.js", 0, NULL);
+                      "/org/gnome/builder/markdown/markdown-view.js", 0, NULL);
       markdown_view_data = g_bytes_get_data (markdown_view, NULL);
 
       tmp = g_strdup_printf ("<html>\n"
