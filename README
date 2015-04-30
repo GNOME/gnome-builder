@@ -57,8 +57,6 @@ unfamiliar with jhbuild, the following will help you get started.
 If you have problems building or running Builder, please contact us on IRC
 (link is at the top of this file) and we will help you out.
 
-We hope to have VM images that can be used for testing in the near future.
-
 ----
 
 Builder is licensed under the GNU General Public License as published by the
