@@ -41,7 +41,7 @@ dnl ***********************************************************************
 dnl Initialize Automake
 dnl ***********************************************************************
 AM_SILENT_RULES([yes])
-AM_INIT_AUTOMAKE([foreign subdir-objects tar-ustar no-dist-gzip dist-xz])
+AM_INIT_AUTOMAKE([1.11 foreign subdir-objects tar-ustar no-dist-gzip dist-xz])
 AM_MAINTAINER_MODE([enable])
 
 
@@ -67,7 +67,7 @@ AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
 AC_PATH_PROG([GLIB_COMPILE_RESOURCES], [glib-compile-resources])
 AM_PATH_GLIB_2_0
 AC_HEADER_STDC
-
+PKG_PROG_PKG_CONFIG([0.22])
 
 dnl ***********************************************************************
 dnl Find Path of GNU Make

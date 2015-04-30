@@ -10,16 +10,23 @@ test -z "$srcdir" && srcdir=.
     exit 1
 }
 
-which gnome-autogen.sh || {
-    echo "You need to install gnome-common from the GNOME git"
-    exit 1
-}
 
 touch ChangeLog
 touch INSTALL
 
-REQUIRED_AUTOCONF_VERSION=2.59
-REQUIRED_AUTOMAKE_VERSION=1.9
-REQUIRED_INTLTOOL_VERSION=0.40.0
-REQUIRED_PKG_CONFIG_VERSION=0.22
-. gnome-autogen.sh
+aclocal --install -I build/autotools || exit 1
+glib-gettextize --force --copy || exit 1
+intltoolize --force --copy --automake || exit 1
+autoreconf --force --install -Wno-portability || exit 1
+
+if [ "$NOCONFIGURE" = "" ]; then
+        $srcdir/configure "$@" || exit 1
+
+        if [ "$1" = "--help" ]; then exit 0 else
+                echo "Now type \`make\' to compile" || exit 1
+        fi
+else
+        echo "Skipping configure process."
+fi
+
+set +x
