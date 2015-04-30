@@ -738,7 +738,8 @@ ide_makecache_parse_c_cxx_include (IdeMakecache *self,
                                    GPtrArray    *ret,
                                    const gchar  *relpath,
                                    const gchar  *part1,
-                                   const gchar  *part2)
+                                   const gchar  *part2,
+                                   const gchar  *subdir)
 {
   static const gchar *dummy = "-I";
   gchar *adjusted = NULL;
@@ -747,6 +748,7 @@ ide_makecache_parse_c_cxx_include (IdeMakecache *self,
   g_assert (ret != NULL);
   g_assert (relpath != NULL);
   g_assert (part1 != NULL);
+  g_assert (subdir != NULL);
 
   /*
    * We will get parts either like ("-Ifoo", NULL) or ("-I", "foo").
@@ -770,12 +772,12 @@ ide_makecache_parse_c_cxx_include (IdeMakecache *self,
    * path information to be as such.
    */
 
-  if (!g_str_has_prefix (part2, "/"))
+  if (part2 [0] != '/')
     {
       gchar *parent;
 
       parent = g_file_get_path (self->parent);
-      adjusted = g_build_filename (parent, part2, NULL);
+      adjusted = g_build_filename (parent, subdir, part2, NULL);
       g_free (parent);
 
       part2 = adjusted;
@@ -790,6 +792,7 @@ static void
 ide_makecache_parse_c_cxx (IdeMakecache *self,
                            const gchar  *line,
                            const gchar  *relpath,
+                           const gchar  *subdir,
                            GPtrArray    *ret)
 {
   gint argc = 0;
@@ -797,8 +800,9 @@ ide_makecache_parse_c_cxx (IdeMakecache *self,
   gboolean in_expand = FALSE;
   gsize i;
 
-  g_assert (line);
-  g_assert (ret);
+  g_assert (line != NULL);
+  g_assert (ret != NULL);
+  g_assert (subdir != NULL);
 
   while (isspace (*line))
     line++;
@@ -827,7 +831,7 @@ ide_makecache_parse_c_cxx (IdeMakecache *self,
 
             if ((strlen (flag) == 2) && (i < (argc - 1)))
               part2 = argv [++i];
-            ide_makecache_parse_c_cxx_include (self, ret, relpath, part1, part2);
+            ide_makecache_parse_c_cxx_include (self, ret, relpath, part1, part2, subdir);
           }
           break;
 
@@ -857,14 +861,18 @@ ide_makecache_parse_c_cxx (IdeMakecache *self,
 static gchar **
 ide_makecache_parse_line (IdeMakecache *self,
                           const gchar  *line,
-                          const gchar  *relpath)
+                          const gchar  *relpath,
+                          const gchar  *subdir)
 {
   GPtrArray *ret = NULL;
   const gchar *pos;
 
   IDE_ENTRY;
 
-  g_assert (line);
+  g_assert (IDE_IS_MAKECACHE (self));
+  g_assert (line != NULL);
+  g_assert (relpath != NULL);
+  g_assert (subdir != NULL);
 
   ret = g_ptr_array_new_with_free_func (g_free);
 
@@ -873,7 +881,7 @@ ide_makecache_parse_line (IdeMakecache *self,
       gchar **strv;
 
       g_ptr_array_add (ret, g_strdup ("-xc++"));
-      ide_makecache_parse_c_cxx (self, pos + strlen (FAKE_CXX), relpath, ret);
+      ide_makecache_parse_c_cxx (self, pos + strlen (FAKE_CXX), relpath, subdir, ret);
       strv = (gchar **)g_ptr_array_free (ret, FALSE);
       IDE_RETURN (strv);
     }
@@ -881,7 +889,7 @@ ide_makecache_parse_line (IdeMakecache *self,
     {
       gchar **strv;
 
-      ide_makecache_parse_c_cxx (self, pos + strlen(FAKE_CC), relpath, ret);
+      ide_makecache_parse_c_cxx (self, pos + strlen(FAKE_CC), relpath, subdir, ret);
       strv = (gchar **)g_ptr_array_free (ret, FALSE);
       IDE_RETURN (strv);
     }
@@ -989,7 +997,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
         {
           const gchar *line = lines [i];
 
-          if ((ret = ide_makecache_parse_line (self, line, relpath)))
+          if ((ret = ide_makecache_parse_line (self, line, relpath, subdir)))
             break;
         }
 
