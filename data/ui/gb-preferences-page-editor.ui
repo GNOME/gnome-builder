@@ -112,6 +112,16 @@
               </object>
             </child>
             <child>
+              <object class="GbPreferencesSwitch" id="auto_hide_map_switch">
+                <property name="title" translatable="yes">Auto Hide Map</property>
+		<property name="description" translatable="yes">Automatically hide the overview map during inactivity.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">auto-hide-map</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
               <object class="GtkBox" id="scroll_off_container">
                 <property name="orientation">horizontal</property>
                 <property name="margin">6</property>

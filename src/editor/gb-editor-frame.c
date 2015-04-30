@@ -36,6 +36,7 @@ G_DEFINE_TYPE (GbEditorFrame, gb_editor_frame, GTK_TYPE_BIN)
 
 enum {
   PROP_0,
+  PROP_AUTO_HIDE_MAP,
   PROP_BACK_FORWARD_LIST,
   PROP_DOCUMENT,
   PROP_SHOW_MAP,
@@ -95,6 +96,10 @@ gb_editor_frame_hide_map (GbEditorFrame *self,
 {
   g_assert (GB_IS_EDITOR_FRAME (self));
   g_assert (IDE_IS_SOURCE_MAP (source_map));
+
+  /* ignore hide request if auto-hide is disabled */
+  if ((self->source_map != NULL) && !self->auto_hide_map)
+    return;
 
   gb_editor_frame_animate_map (self, FALSE);
 }
@@ -558,6 +563,23 @@ gb_editor_frame_set_show_map (GbEditorFrame *self,
 }
 
 static void
+gb_editor_frame_set_auto_hide_map (GbEditorFrame *self,
+                                   gboolean       auto_hide_map)
+{
+  g_assert (GB_IS_EDITOR_FRAME (self));
+
+  g_print ("SET AUTO HIDE MAP\n");
+
+  auto_hide_map = !!auto_hide_map;
+
+  if (auto_hide_map != self->auto_hide_map)
+    {
+      self->auto_hide_map = auto_hide_map;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_AUTO_HIDE_MAP]);
+    }
+}
+
+static void
 gb_editor_frame__source_view_populate_popup (GbEditorFrame *self,
                                              GtkWidget     *popup,
                                              IdeSourceView *source_view)
@@ -696,6 +718,10 @@ gb_editor_frame_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_AUTO_HIDE_MAP:
+      g_value_set_boolean (value, self->auto_hide_map);
+      break;
+
     case PROP_DOCUMENT:
       g_value_set_object (value, gb_editor_frame_get_document (self));
       break;
@@ -719,6 +745,10 @@ gb_editor_frame_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_AUTO_HIDE_MAP:
+      gb_editor_frame_set_auto_hide_map (self, g_value_get_boolean (value));
+      break;
+
     case PROP_DOCUMENT:
       gb_editor_frame_set_document (self, g_value_get_object (value));
       break;
@@ -748,6 +778,15 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
   object_class->set_property = gb_editor_frame_set_property;
 
   widget_class->grab_focus = gb_editor_frame_grab_focus;
+
+  gParamSpecs [PROP_AUTO_HIDE_MAP] =
+    g_param_spec_boolean ("auto-hide-map",
+                          _("Auto Hide Map"),
+                          _("Auto Hide Map"),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_AUTO_HIDE_MAP,
+                                   gParamSpecs [PROP_AUTO_HIDE_MAP]);
 
   gParamSpecs [PROP_BACK_FORWARD_LIST] =
     g_param_spec_object ("back-forward-list",
@@ -814,7 +853,8 @@ gb_editor_frame_init (GbEditorFrame *self)
   g_settings_bind (settings, "smart-backspace", self->source_view, "smart-backspace", G_SETTINGS_BIND_GET);
   g_settings_bind_with_mapping (settings, "smart-home-end", self->source_view, "smart-home-end", G_SETTINGS_BIND_GET, get_smart_home_end, NULL, NULL, NULL);
   g_settings_bind (settings, "word-completion", self->source_view, "enable-word-completion", G_SETTINGS_BIND_GET);
-  g_settings_bind (settings, "show-map", self, "show-map", G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (settings, "show-map", self, "show-map", G_SETTINGS_BIND_GET);
+  g_settings_bind (settings, "auto-hide-map", self, "auto-hide-map", G_SETTINGS_BIND_GET);
   g_signal_connect (settings, "changed::keybindings", G_CALLBACK (keybindings_changed), self);
 
   g_object_bind_property (self->source_view, "overwrite", self->overwrite_label, "visible", G_BINDING_SYNC_CREATE);

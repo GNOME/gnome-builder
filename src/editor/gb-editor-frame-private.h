@@ -48,6 +48,8 @@ struct _GbEditorFrame
   IdeAnimation        *map_animation;
 
   gulong               cursor_moved_handler;
+
+  guint                auto_hide_map : 1;
 };
 
 G_END_DECLS
