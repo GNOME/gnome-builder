@@ -45,7 +45,7 @@
 
 struct _IdeMakecache
 {
-  IdeObject parent_instance;
+  IdeObject    parent_instance;
 
   /* Immutable after instance creation */
   GFile       *makefile;
@@ -798,6 +798,7 @@ ide_makecache_parse_c_cxx (IdeMakecache *self,
   gint argc = 0;
   gchar **argv = NULL;
   gboolean in_expand = FALSE;
+  GError *error = NULL;
   gsize i;
 
   g_assert (line != NULL);
@@ -807,8 +808,12 @@ ide_makecache_parse_c_cxx (IdeMakecache *self,
   while (isspace (*line))
     line++;
 
-  if (!g_shell_parse_argv (line, &argc, &argv, NULL))
-    return;
+  if (!g_shell_parse_argv (line, &argc, &argv, &error))
+    {
+      g_warning ("Failed to parse line: %s", error->message);
+      g_clear_error (&error);
+      return;
+    }
 
   g_ptr_array_add (ret, g_strdup (self->llvm_flags));
 
@@ -995,7 +1000,16 @@ ide_makecache_get_file_flags_worker (GTask        *task,
 
       for (i = 0; lines [i]; i++)
         {
-          const gchar *line = lines [i];
+          gchar *line = lines [i];
+          gsize linelen;
+
+          if (line [0] == '\0')
+            continue;
+
+          linelen = strlen (line);
+
+          if (line [linelen - 1] == '\\')
+            line [linelen - 1] = '\0';
 
           if ((ret = ide_makecache_parse_line (self, line, relpath, subdir ?: ".")))
             break;
