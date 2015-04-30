@@ -163,9 +163,9 @@ dnl ***********************************************************************
 dnl Check for Required Python
 dnl ***********************************************************************
 AC_PATH_TOOL(PYTHON3_CONFIG, "python3-config")
-if test -z "${PYTHON3_CONFIG}"; then
+AS_IF([test -z "${PYTHON3_CONFIG}"],[
   AC_MSG_ERROR([Failed to locate python3-config.])
-fi
+])
 LIBIDE_CFLAGS="${LIBIDE_CFLAGS} `${PYTHON3_CONFIG} --cflags`"
 LIBIDE_LIBS="${LIBIDE_LIBS} `${PYTHON3_CONFIG} --libs`"
 LIBIDE_LDFLAGS="${LIBIDE_LDFLAGS} `${PYTHON3_CONFIG} --ldflags`"
