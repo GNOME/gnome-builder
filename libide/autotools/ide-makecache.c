@@ -400,17 +400,17 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
 
         for (i = 0; i < targets->len; i++)
           {
-            const gchar *subdir;
+            const gchar *target_subdir;
             const gchar *target;
             IdeMakecacheTarget *cur;
 
             cur = g_ptr_array_index (targets, i);
 
-            subdir = ide_makecache_target_get_subdir (cur);
+            target_subdir = ide_makecache_target_get_subdir (cur);
             target = ide_makecache_target_get_target (cur);
 
-            if (subdir != NULL)
-              g_string_append_printf (str, " (%s of subdir %s)", target, subdir);
+            if (target_subdir != NULL)
+              g_string_append_printf (str, " (%s of subdir %s)", target, target_subdir);
             else
               g_string_append_printf (str, " %s", target);
           }
