@@ -1255,7 +1255,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     GEnumValue *enum_value;
     GEnumClass *enum_class;

@@ -423,7 +423,7 @@ ide_project_rename_file_worker (GTask        *task,
   workdir = ide_vcs_get_working_directory (vcs);
   path = g_file_get_relative_path (workdir, op->new_file);
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     gchar *old_path = g_file_get_uri (op->orig_file);
     gchar *new_path = g_file_get_uri (op->new_file);

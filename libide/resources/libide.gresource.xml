@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/libide">
-    <file alias="snippets/c-sharp.snippets">../../data/snippets/c-sharp.snippets</file>
     <file alias="snippets/c.snippets">../../data/snippets/c.snippets</file>
     <file alias="snippets/chdr.snippets">../../data/snippets/chdr.snippets</file>
     <file alias="snippets/gobject.snippets">../../data/snippets/gobject.snippets</file>

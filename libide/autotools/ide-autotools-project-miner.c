@@ -116,7 +116,7 @@ ide_autotools_project_miner_mine_directory (IdeAutotoolsProjectMiner *self,
   if (depth == MAX_MINE_DEPTH)
     return;
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     g_autofree gchar *uri = NULL;
 

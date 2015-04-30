@@ -1,9 +1,0 @@
-# Define the minimum version of GCC.
-m4_define(gcc_major_required_version, 4)
-m4_define(gcc_minor_required_version, 1)
-
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
-#if !(defined(__GNUC__) && ((__GNUC__ > gcc_major_required_version) || ((__GNUC__ == gcc_major_required_version) && (__GNUC_MINOR__ >= gcc_minor_required_version))))
-#error Not a supported GCC compiler
-#endif
-])], [c_compiler="gcc"], [])

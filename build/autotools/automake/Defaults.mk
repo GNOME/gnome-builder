@@ -1,3 +1,0 @@
-bin_PROGRAMS =
-lib_LTLIBRARIES =
-TEST_PROGS =

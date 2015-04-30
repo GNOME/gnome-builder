@@ -1,339 +1,339 @@
-include libide/editorconfig/libeditorconfig/Makefile.am
+CLEANFILES =
+DISTCLEANFILES =
+BUILT_SOURCES =
+EXTRA_DIST =
 
-lib_LTLIBRARIES += libide-1.0.la
+lib_LTLIBRARIES = libide-1.0.la
 
 libide_1_0_la_public_sources = \
-	libide/autotools/ide-autotools-build-system.c \
-	libide/autotools/ide-autotools-build-system.h \
-	libide/autotools/ide-autotools-build-task.c \
-	libide/autotools/ide-autotools-build-task.h \
-	libide/autotools/ide-autotools-builder.c \
-	libide/autotools/ide-autotools-builder.h \
-	libide/autotools/ide-autotools-project-miner.c \
-	libide/autotools/ide-autotools-project-miner.h \
-	libide/c/ide-c-indenter.c \
-	libide/c/ide-c-indenter.h \
-	libide/c/ide-c-language.c \
-	libide/c/ide-c-language.h \
-	libide/clang/ide-clang-diagnostic-provider.c \
-	libide/clang/ide-clang-diagnostic-provider.h \
-	libide/clang/ide-clang-highlighter.c \
-	libide/clang/ide-clang-highlighter.h \
-	libide/clang/ide-clang-private.h \
-	libide/clang/ide-clang-service.c \
-	libide/clang/ide-clang-service.h \
-	libide/clang/ide-clang-symbol-resolver.c \
-	libide/clang/ide-clang-symbol-resolver.h \
-	libide/clang/ide-clang-translation-unit.c \
-	libide/clang/ide-clang-translation-unit.h \
-	libide/devhelp/ide-devhelp-search-provider.c \
-	libide/devhelp/ide-devhelp-search-provider.h \
-	libide/devhelp/ide-devhelp-search-result.c \
-	libide/devhelp/ide-devhelp-search-result.h \
-	libide/directory/ide-directory-build-system.c \
-	libide/directory/ide-directory-build-system.h \
-	libide/directory/ide-directory-vcs.c \
-	libide/directory/ide-directory-vcs.h \
-	libide/editorconfig/ide-editorconfig-file-settings.c \
-	libide/editorconfig/ide-editorconfig-file-settings.h \
-	libide/git/ide-git-remote-callbacks.c \
-	libide/git/ide-git-remote-callbacks.h \
-	libide/git/ide-git-search-provider.c \
-	libide/git/ide-git-search-provider.h \
-	libide/git/ide-git-search-result.c \
-	libide/git/ide-git-search-result.h \
-	libide/git/ide-git-vcs.c \
-	libide/git/ide-git-vcs.h \
-	libide/gjs/ide-gjs-script.cpp \
-	libide/gjs/ide-gjs-script.h \
-	libide/gsettings/ide-gsettings-file-settings.c \
-	libide/gsettings/ide-gsettings-file-settings.h \
-	libide/html/ide-html-completion-provider.c \
-	libide/html/ide-html-completion-provider.h \
-	libide/html/ide-html-language.c \
-	libide/html/ide-html-language.h \
-	libide/ide-back-forward-item.c \
-	libide/ide-back-forward-item.h \
-	libide/ide-back-forward-list.c \
-	libide/ide-back-forward-list.h \
-	libide/ide-buffer-change-monitor.c \
-	libide/ide-buffer-change-monitor.h \
-	libide/ide-buffer-manager.c \
-	libide/ide-buffer-manager.h \
-	libide/ide-buffer.c \
-	libide/ide-buffer.h \
-	libide/ide-build-result.c \
-	libide/ide-build-result.h \
-	libide/ide-build-system.c \
-	libide/ide-build-system.h \
-	libide/ide-builder.c \
-	libide/ide-builder.h \
-	libide/ide-context.c \
-	libide/ide-context.h \
-	libide/ide-debugger.c \
-	libide/ide-debugger.h \
-	libide/ide-deployer.c \
-	libide/ide-deployer.h \
-	libide/ide-device-manager.c \
-	libide/ide-device-manager.h \
-	libide/ide-device-provider.c \
-	libide/ide-device-provider.h \
-	libide/ide-device.c \
-	libide/ide-device.h \
-	libide/ide-diagnostic-provider.c \
-	libide/ide-diagnostic-provider.h \
-	libide/ide-diagnostic.c \
-	libide/ide-diagnostic.h \
-	libide/ide-diagnostician.c \
-	libide/ide-diagnostician.h \
-	libide/ide-diagnostics.c \
-	libide/ide-diagnostics.h \
-	libide/ide-executable.c \
-	libide/ide-executable.h \
-	libide/ide-executer.c \
-	libide/ide-executer.h \
-	libide/ide-file-settings.c \
-	libide/ide-file-settings.h \
-	libide/ide-file.c \
-	libide/ide-file.h \
-	libide/ide-fixit.c \
-	libide/ide-fixit.h \
-	libide/ide-global.h \
-	libide/ide-highlight-index.c \
-	libide/ide-highlight-index.h \
-	libide/ide-highlighter.c \
-	libide/ide-highlighter.h \
-	libide/ide-indent-style.c \
-	libide/ide-indent-style.h \
-	libide/ide-indenter.c \
-	libide/ide-indenter.h \
-	libide/ide-language.c \
-	libide/ide-language.h \
-	libide/ide-log.c \
-	libide/ide-log.h \
-	libide/ide-macros.h \
-	libide/ide-object.c \
-	libide/ide-object.h \
-	libide/ide-pattern-spec.c \
-	libide/ide-pattern-spec.h \
-	libide/ide-process.c \
-	libide/ide-process.h \
-	libide/ide-progress.c \
-	libide/ide-progress.h \
-	libide/ide-project-file.c \
-	libide/ide-project-file.h \
-	libide/ide-project-files.c \
-	libide/ide-project-files.h \
-	libide/ide-project-info.c \
-	libide/ide-project-info.h \
-	libide/ide-project-item.c \
-	libide/ide-project-item.h \
-	libide/ide-project-miner.c \
-	libide/ide-project-miner.h \
-	libide/ide-project.c \
-	libide/ide-project.h \
-	libide/ide-recent-projects.c \
-	libide/ide-recent-projects.h \
-	libide/ide-refactory.c \
-	libide/ide-refactory.h \
-	libide/ide-script-manager.c \
-	libide/ide-script-manager.h \
-	libide/ide-script.c \
-	libide/ide-script.h \
-	libide/ide-search-context.c \
-	libide/ide-search-context.h \
-	libide/ide-search-engine.c \
-	libide/ide-search-engine.h \
-	libide/ide-search-provider.c \
-	libide/ide-search-provider.h \
-	libide/ide-search-result.c \
-	libide/ide-search-result.h \
-	libide/ide-service.c \
-	libide/ide-service.h \
-	libide/ide-source-location.c \
-	libide/ide-source-location.h \
-        libide/ide-source-map.c \
-        libide/ide-source-map.h \
-	libide/ide-source-range.c \
-	libide/ide-source-range.h \
-	libide/ide-source-snippet-chunk.c \
-	libide/ide-source-snippet-chunk.h \
-	libide/ide-source-snippet-context.c \
-	libide/ide-source-snippet-context.h \
-	libide/ide-source-snippet.c \
-	libide/ide-source-snippet.h \
-	libide/ide-source-snippets-manager.c \
-	libide/ide-source-snippets-manager.h \
-	libide/ide-source-snippets.c \
-	libide/ide-source-snippets.h \
-	libide/ide-source-view-mode.c \
-	libide/ide-source-view-mode.h \
-	libide/ide-source-view.c \
-	libide/ide-source-view.h \
-	libide/ide-symbol-resolver.c \
-	libide/ide-symbol-resolver.h \
-	libide/ide-symbol.c \
-	libide/ide-symbol.h \
-	libide/ide-target.c \
-	libide/ide-target.h \
-	libide/ide-test-case.c \
-	libide/ide-test-case.h \
-	libide/ide-test-suite.c \
-	libide/ide-test-suite.h \
-        libide/ide-thread-pool.c \
-        libide/ide-thread-pool.h \
-	libide/ide-types.h \
-	libide/ide-unsaved-file.c \
-	libide/ide-unsaved-file.h \
-	libide/ide-unsaved-files.c \
-	libide/ide-unsaved-files.h \
-	libide/ide-vcs.c \
-	libide/ide-vcs.h \
-	libide/ide.c \
-	libide/ide.h \
-	libide/local/ide-local-device.c \
-	libide/local/ide-local-device.h \
-	libide/mingw/ide-mingw-device.c \
-	libide/mingw/ide-mingw-device.h \
-	libide/mingw/ide-mingw-device-provider.c \
-	libide/mingw/ide-mingw-device-provider.h \
-	libide/pygobject/ide-pygobject-script.c \
-	libide/pygobject/ide-pygobject-script.h \
-	libide/python/ide-python-indenter.c \
-	libide/python/ide-python-indenter.h \
-	libide/python/ide-python-format-provider.c \
-	libide/python/ide-python-format-provider.h \
-	libide/python/ide-python-language.c \
-	libide/python/ide-python-language.h \
-	libide/theatrics/ide-animation.c \
-	libide/theatrics/ide-animation.h \
-	libide/vala/ide-vala-language.c \
-	libide/vala/ide-vala-language.h \
-	libide/xml/ide-xml-indenter.c \
-	libide/xml/ide-xml-indenter.h \
-	libide/xml/ide-xml-language.c \
-	libide/xml/ide-xml-language.h \
+	autotools/ide-autotools-build-system.c \
+	autotools/ide-autotools-build-system.h \
+	autotools/ide-autotools-build-task.c \
+	autotools/ide-autotools-build-task.h \
+	autotools/ide-autotools-builder.c \
+	autotools/ide-autotools-builder.h \
+	autotools/ide-autotools-project-miner.c \
+	autotools/ide-autotools-project-miner.h \
+	c/ide-c-indenter.c \
+	c/ide-c-indenter.h \
+	c/ide-c-language.c \
+	c/ide-c-language.h \
+	clang/ide-clang-diagnostic-provider.c \
+	clang/ide-clang-diagnostic-provider.h \
+	clang/ide-clang-highlighter.c \
+	clang/ide-clang-highlighter.h \
+	clang/ide-clang-private.h \
+	clang/ide-clang-service.c \
+	clang/ide-clang-service.h \
+	clang/ide-clang-symbol-resolver.c \
+	clang/ide-clang-symbol-resolver.h \
+	clang/ide-clang-translation-unit.c \
+	clang/ide-clang-translation-unit.h \
+	devhelp/ide-devhelp-search-provider.c \
+	devhelp/ide-devhelp-search-provider.h \
+	devhelp/ide-devhelp-search-result.c \
+	devhelp/ide-devhelp-search-result.h \
+	directory/ide-directory-build-system.c \
+	directory/ide-directory-build-system.h \
+	directory/ide-directory-vcs.c \
+	directory/ide-directory-vcs.h \
+	editorconfig/ide-editorconfig-file-settings.c \
+	editorconfig/ide-editorconfig-file-settings.h \
+	git/ide-git-remote-callbacks.c \
+	git/ide-git-remote-callbacks.h \
+	git/ide-git-search-provider.c \
+	git/ide-git-search-provider.h \
+	git/ide-git-search-result.c \
+	git/ide-git-search-result.h \
+	git/ide-git-vcs.c \
+	git/ide-git-vcs.h \
+	gjs/ide-gjs-script.cpp \
+	gjs/ide-gjs-script.h \
+	gsettings/ide-gsettings-file-settings.c \
+	gsettings/ide-gsettings-file-settings.h \
+	html/ide-html-completion-provider.c \
+	html/ide-html-completion-provider.h \
+	html/ide-html-language.c \
+	html/ide-html-language.h \
+	ide-back-forward-item.c \
+	ide-back-forward-item.h \
+	ide-back-forward-list.c \
+	ide-back-forward-list.h \
+	ide-buffer-change-monitor.c \
+	ide-buffer-change-monitor.h \
+	ide-buffer-manager.c \
+	ide-buffer-manager.h \
+	ide-buffer.c \
+	ide-buffer.h \
+	ide-build-result.c \
+	ide-build-result.h \
+	ide-build-system.c \
+	ide-build-system.h \
+	ide-builder.c \
+	ide-builder.h \
+	ide-context.c \
+	ide-context.h \
+	ide-debugger.c \
+	ide-debugger.h \
+	ide-deployer.c \
+	ide-deployer.h \
+	ide-device-manager.c \
+	ide-device-manager.h \
+	ide-device-provider.c \
+	ide-device-provider.h \
+	ide-device.c \
+	ide-device.h \
+	ide-diagnostic-provider.c \
+	ide-diagnostic-provider.h \
+	ide-diagnostic.c \
+	ide-diagnostic.h \
+	ide-diagnostician.c \
+	ide-diagnostician.h \
+	ide-diagnostics.c \
+	ide-diagnostics.h \
+	ide-enums.c \
+	ide-enums.h \
+	ide-executable.c \
+	ide-executable.h \
+	ide-executer.c \
+	ide-executer.h \
+	ide-file-settings.c \
+	ide-file-settings.h \
+	ide-file.c \
+	ide-file.h \
+	ide-fixit.c \
+	ide-fixit.h \
+	ide-global.h \
+	ide-highlight-index.c \
+	ide-highlight-index.h \
+	ide-highlighter.c \
+	ide-highlighter.h \
+	ide-indent-style.c \
+	ide-indent-style.h \
+	ide-indenter.c \
+	ide-indenter.h \
+	ide-language.c \
+	ide-language.h \
+	ide-log.c \
+	ide-log.h \
+	ide-macros.h \
+	ide-object.c \
+	ide-object.h \
+	ide-pattern-spec.c \
+	ide-pattern-spec.h \
+	ide-process.c \
+	ide-process.h \
+	ide-progress.c \
+	ide-progress.h \
+	ide-project-file.c \
+	ide-project-file.h \
+	ide-project-files.c \
+	ide-project-files.h \
+	ide-project-info.c \
+	ide-project-info.h \
+	ide-project-item.c \
+	ide-project-item.h \
+	ide-project-miner.c \
+	ide-project-miner.h \
+	ide-project.c \
+	ide-project.h \
+	ide-recent-projects.c \
+	ide-recent-projects.h \
+	ide-refactory.c \
+	ide-refactory.h \
+	ide-script-manager.c \
+	ide-script-manager.h \
+	ide-script.c \
+	ide-script.h \
+	ide-search-context.c \
+	ide-search-context.h \
+	ide-search-engine.c \
+	ide-search-engine.h \
+	ide-search-provider.c \
+	ide-search-provider.h \
+	ide-search-result.c \
+	ide-search-result.h \
+	ide-service.c \
+	ide-service.h \
+	ide-source-location.c \
+	ide-source-location.h \
+	ide-source-range.c \
+	ide-source-range.h \
+	ide-source-snippet-chunk.c \
+	ide-source-snippet-chunk.h \
+	ide-source-snippet-context.c \
+	ide-source-snippet-context.h \
+	ide-source-snippet.c \
+	ide-source-snippet.h \
+	ide-source-snippets-manager.c \
+	ide-source-snippets-manager.h \
+	ide-source-snippets.c \
+	ide-source-snippets.h \
+	ide-source-view-mode.c \
+	ide-source-view-mode.h \
+	ide-source-view.c \
+	ide-source-view.h \
+	ide-symbol-resolver.c \
+	ide-symbol-resolver.h \
+	ide-symbol.c \
+	ide-symbol.h \
+	ide-target.c \
+	ide-target.h \
+	ide-test-case.c \
+	ide-test-case.h \
+	ide-test-suite.c \
+	ide-test-suite.h \
+	ide-types.h \
+	ide-unsaved-file.c \
+	ide-unsaved-file.h \
+	ide-unsaved-files.c \
+	ide-unsaved-files.h \
+	ide-vcs.c \
+	ide-vcs.h \
+	ide.c \
+	ide.h \
+	local/ide-local-device.c \
+	local/ide-local-device.h \
+	mingw/ide-mingw-device-provider.c \
+	mingw/ide-mingw-device-provider.h \
+	mingw/ide-mingw-device.c \
+	mingw/ide-mingw-device.h \
+	pygobject/ide-pygobject-script.c \
+	pygobject/ide-pygobject-script.h \
+	python/ide-python-format-provider.c \
+	python/ide-python-format-provider.h \
+	python/ide-python-indenter.c \
+	python/ide-python-indenter.h \
+	python/ide-python-language.c \
+	python/ide-python-language.h \
+	theatrics/ide-animation.c \
+	theatrics/ide-animation.h \
+	vala/ide-vala-language.c \
+	vala/ide-vala-language.h \
+	xml/ide-xml-indenter.c \
+	xml/ide-xml-indenter.h \
+	xml/ide-xml-language.c \
+	xml/ide-xml-language.h \
+        ide-source-map.c \
+        ide-source-map.h \
+        ide-thread-pool.c \
+        ide-thread-pool.h \
 	$(NULL)
 
 libide_1_0_la_SOURCES = \
 	$(libide_1_0_la_public_sources) \
-	cut-n-paste/fuzzy.c \
-	cut-n-paste/fuzzy.h \
-	cut-n-paste/trie.c \
-	cut-n-paste/trie.h \
-	libide/autotools/ide-makecache.c \
-	libide/autotools/ide-makecache.h \
-	libide/autotools/ide-makecache-target.c \
-	libide/autotools/ide-makecache-target.h \
-	libide/c/c-parse-helper.c \
-	libide/c/c-parse-helper.h \
-	libide/c/ide-c-format-provider.c \
-	libide/c/ide-c-format-provider.h \
-	libide/clang/ide-clang-completion-item.c \
-	libide/clang/ide-clang-completion-item.h \
-	libide/clang/ide-clang-completion-provider.c \
-	libide/clang/ide-clang-completion-provider.h \
-	libide/ide-debug.h \
-	libide/editorconfig/editorconfig-glib.c \
-	libide/editorconfig/editorconfig-glib.h \
-	libide/gca/gca-diagnostics.c \
-	libide/gca/gca-diagnostics.h \
-	libide/gca/gca-service.c \
-	libide/gca/gca-service.h \
-	libide/gca/gca-structs.c \
-	libide/gca/gca-structs.h \
-	libide/gca/ide-gca-diagnostic-provider.c \
-	libide/gca/ide-gca-diagnostic-provider.h \
-	libide/gca/ide-gca-service.c \
-	libide/gca/ide-gca-service.h \
-	libide/gca/ide-gca-service.h \
-	libide/gconstructor.h \
-	libide/git/ide-git-buffer-change-monitor.c \
-	libide/git/ide-git-buffer-change-monitor.h \
-	libide/git/ide-git-search-index.c \
-	libide/git/ide-git-search-index.h \
-	libide/gsettings/ide-language-defaults.c \
-	libide/gsettings/ide-language-defaults.h \
-	libide/ide-async-helper.c \
-	libide/ide-async-helper.h \
-	libide/ide-battery-monitor.c \
-	libide/ide-battery-monitor.h \
-	libide/ide-highlight-engine.c \
-	libide/ide-highlight-engine.h \
-	libide/ide-internal.h \
-	libide/ide-line-change-gutter-renderer.c \
-	libide/ide-line-change-gutter-renderer.h \
-	libide/ide-line-diagnostics-gutter-renderer.c \
-	libide/ide-line-diagnostics-gutter-renderer.h \
-	libide/ide-ref-ptr.c \
-	libide/ide-ref-ptr.h \
-	libide/ide-search-reducer.c \
-	libide/ide-search-reducer.h \
-	libide/ide-source-iter.c \
-	libide/ide-source-iter.h \
-	libide/ide-source-snippet-completion-item.c \
-	libide/ide-source-snippet-completion-item.h \
-	libide/ide-source-snippet-completion-provider.c \
-	libide/ide-source-snippet-completion-provider.h \
-	libide/ide-source-snippet-parser.c \
-	libide/ide-source-snippet-parser.h \
-	libide/ide-source-snippet-private.h \
-	libide/ide-source-view-capture.c \
-	libide/ide-source-view-capture.h \
-	libide/ide-source-view-movements.c \
-	libide/ide-source-view-movements.h \
-	libide/ide-vcs-uri.c \
-	libide/ide-vcs-uri.h \
-	libide/ide-vim-iter.c \
-	libide/ide-vim-iter.h \
-	libide/modelines/modeline-parser.c \
-	libide/modelines/modeline-parser.h \
-	libide/tasks/ide-load-directory-task.c \
-	libide/tasks/ide-load-directory-task.h \
-	libide/theatrics/ide-box-theatric.c \
-	libide/theatrics/ide-box-theatric.h \
-	libide/theatrics/ide-frame-source.c \
-	libide/theatrics/ide-frame-source.h \
-	libide/util/ide-cairo.c \
-	libide/util/ide-cairo.h \
-	libide/util/ide-doc-seq.c \
-	libide/util/ide-doc-seq.h \
-	libide/util/ide-pango.c \
-	libide/util/ide-pango.h \
-	libide/util/ide-rgba.c \
-	libide/util/ide-rgba.h \
+	autotools/ide-makecache-target.c \
+	autotools/ide-makecache-target.h \
+	autotools/ide-makecache.c \
+	autotools/ide-makecache.h \
+	c/c-parse-helper.c \
+	c/c-parse-helper.h \
+	c/ide-c-format-provider.c \
+	c/ide-c-format-provider.h \
+	clang/ide-clang-completion-item.c \
+	clang/ide-clang-completion-item.h \
+	clang/ide-clang-completion-provider.c \
+	clang/ide-clang-completion-provider.h \
+	editorconfig/editorconfig-glib.c \
+	editorconfig/editorconfig-glib.h \
+	gca/gca-diagnostics.c \
+	gca/gca-diagnostics.h \
+	gca/gca-service.c \
+	gca/gca-service.h \
+	gca/gca-structs.c \
+	gca/gca-structs.h \
+	gca/ide-gca-diagnostic-provider.c \
+	gca/ide-gca-diagnostic-provider.h \
+	gca/ide-gca-service.c \
+	gca/ide-gca-service.h \
+	gca/ide-gca-service.h \
+	gconstructor.h \
+	git/ide-git-buffer-change-monitor.c \
+	git/ide-git-buffer-change-monitor.h \
+	git/ide-git-search-index.c \
+	git/ide-git-search-index.h \
+	gsettings/ide-language-defaults.c \
+	gsettings/ide-language-defaults.h \
+	ide-async-helper.c \
+	ide-async-helper.h \
+	ide-battery-monitor.c \
+	ide-battery-monitor.h \
+	ide-debug.h \
+	ide-highlight-engine.c \
+	ide-highlight-engine.h \
+	ide-internal.h \
+	ide-line-change-gutter-renderer.c \
+	ide-line-change-gutter-renderer.h \
+	ide-line-diagnostics-gutter-renderer.c \
+	ide-line-diagnostics-gutter-renderer.h \
+	ide-ref-ptr.c \
+	ide-ref-ptr.h \
+	ide-search-reducer.c \
+	ide-search-reducer.h \
+	ide-source-iter.c \
+	ide-source-iter.h \
+	ide-source-snippet-completion-item.c \
+	ide-source-snippet-completion-item.h \
+	ide-source-snippet-completion-provider.c \
+	ide-source-snippet-completion-provider.h \
+	ide-source-snippet-parser.c \
+	ide-source-snippet-parser.h \
+	ide-source-snippet-private.h \
+	ide-source-view-capture.c \
+	ide-source-view-capture.h \
+	ide-source-view-movements.c \
+	ide-source-view-movements.h \
+	ide-vcs-uri.c \
+	ide-vcs-uri.h \
+	ide-vim-iter.c \
+	ide-vim-iter.h \
+	modelines/modeline-parser.c \
+	modelines/modeline-parser.h \
+	tasks/ide-load-directory-task.c \
+	tasks/ide-load-directory-task.h \
+	theatrics/ide-box-theatric.c \
+	theatrics/ide-box-theatric.h \
+	theatrics/ide-frame-source.c \
+	theatrics/ide-frame-source.h \
+	util/ide-cairo.c \
+	util/ide-cairo.h \
+	util/ide-doc-seq.c \
+	util/ide-doc-seq.h \
+	util/ide-pango.c \
+	util/ide-pango.h \
+	util/ide-rgba.c \
+	util/ide-rgba.h \
 	$(NULL)
 
 libide_1_0_la_includes = \
-	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/cut-n-paste \
-	-I$(top_srcdir)/libide \
-	-I$(top_srcdir)/libide/autotools \
-	-I$(top_srcdir)/libide/c \
-	-I$(top_srcdir)/libide/clang \
-	-I$(top_srcdir)/libide/devhelp \
-	-I$(top_srcdir)/libide/directory \
-	-I$(top_srcdir)/libide/fuzzy \
-	-I$(top_srcdir)/libide/gca \
-	-I$(top_srcdir)/libide/editorconfig \
-	-I$(top_srcdir)/libide/editorconfig/libeditorconfig \
-	-I$(top_srcdir)/libide/git \
-	-I$(top_srcdir)/libide/gjs \
-	-I$(top_srcdir)/libide/gsettings \
-	-I$(top_srcdir)/libide/html \
-	-I$(top_srcdir)/libide/local \
-	-I$(top_srcdir)/libide/mingw \
-	-I$(top_srcdir)/libide/modelines \
-	-I$(top_srcdir)/libide/pygobject \
-	-I$(top_srcdir)/libide/python \
-	-I$(top_srcdir)/libide/resources \
-	-I$(top_srcdir)/libide/tasks \
-	-I$(top_srcdir)/libide/theatrics \
-	-I$(top_srcdir)/libide/trie \
-	-I$(top_srcdir)/libide/util \
-	-I$(top_srcdir)/libide/vala \
-	-I$(top_srcdir)/libide/xml \
+	$(DEBUG_CFLAGS) \
 	$(CLANG_CFLAGS) \
+	-I$(top_builddir)/libide \
+	-I$(top_srcdir)/contrib/search \
+	-I$(top_srcdir)/contrib/libeditorconfig \
+	-I$(srcdir) \
+	-I$(srcdir)/autotools \
+	-I$(srcdir)/c \
+	-I$(srcdir)/clang \
+	-I$(srcdir)/devhelp \
+	-I$(srcdir)/directory \
+	-I$(srcdir)/editorconfig \
+	-I$(srcdir)/gca \
+	-I$(srcdir)/git \
+	-I$(srcdir)/gjs \
+	-I$(srcdir)/gsettings \
+	-I$(srcdir)/html \
+	-I$(srcdir)/local \
+	-I$(srcdir)/mingw \
+	-I$(srcdir)/modelines \
+	-I$(srcdir)/pygobject \
+	-I$(srcdir)/python \
+	-I$(srcdir)/resources \
+	-I$(srcdir)/tasks \
+	-I$(srcdir)/theatrics \
+	-I$(srcdir)/util \
+	-I$(srcdir)/vala \
+	-I$(srcdir)/xml \
 	$(NULL)
 
 libide_1_0_la_CPPFLAGS = \
@@ -344,6 +344,8 @@ libide_1_0_la_CPPFLAGS = \
 libide_1_0_la_CFLAGS = \
 	$(AM_CFLAGS) \
 	$(LIBIDE_CFLAGS) \
+	$(OPTIMIZE_CFLAGS) \
+	$(DEBUG_CFLAGS) \
 	$(libide_1_0_la_includes) \
 	$(NULL)
 
@@ -351,9 +353,11 @@ libide_1_0_la_CXXFLAGS = \
 	$(AM_CXXFLAGS) \
 	$(LIBIDE_CFLAGS) \
 	$(libide_1_0_la_includes) \
+	$(OPTIMIZE_CFLAGS) \
 	$(NULL)
 
 libide_1_0_la_LDFLAGS = \
+	$(OPTIMIZE_LDFLAGS) \
 	-avoid-version \
 	-no-undefined \
 	-export-symbols-regex '^ide_.*' \
@@ -364,75 +368,49 @@ libide_1_0_la_LIBADD = \
 	$(LIBIDE_LIBS) \
 	-lclang \
 	-lm \
-	libeditorconfig.la \
-	$(NULL)
-
-if ENABLE_TRACING
-else
-AM_CPPFLAGS += -DIDE_DISABLE_TRACING
-endif
-
-if ENABLE_DEBUG
-else
-AM_CPPFLAGS += -DIDE_DISABLE_DEBUG
-endif
-
-libide_1_0_la_type_headers = \
-	libide/ide-buffer.h \
-	libide/ide-diagnostic.h \
-	libide/ide-highlighter.h \
-	libide/ide-source-view.h \
-        libide/ide-thread-pool.h \
+	$(top_builddir)/contrib/libeditorconfig/libeditorconfig.la \
+	$(top_builddir)/contrib/search/libsearch.la \
 	$(NULL)
 
 libide_1_0_la_built_sources = \
-	libide/resources/ide-resources.c \
-	libide/resources/ide-resources.h \
-	libide/ide-enums.c \
-	libide/ide-enums.h \
+	resources/ide-resources.c \
+	resources/ide-resources.h \
 	$(NULL)
 
-libide_resource_files = $(shell glib-compile-resources --sourcedir=$(top_srcdir)/libide/resources --generate-dependencies $(top_srcdir)/libide/resources/libide.gresource.xml)
-libide/resources/ide-resources.c: libide/resources/libide.gresource.xml $(libide_resource_files)
-	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/libide/resources --generate-source --c-name ide $(top_srcdir)/libide/resources/libide.gresource.xml
-libide/resources/ide-resources.h: libide/resources/libide.gresource.xml $(libide_resource_files)
-	$(AM_V_GEN)glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/libide/resources --generate-header --c-name ide $(top_srcdir)/libide/resources/libide.gresource.xml
 
-libide/ide-enums.h: $(libide_1_0_la_type_headers) libide/ide-enums.h.template
-	$(AM_V_GEN) ( cd $(srcdir) && glib-mkenums --template libide/ide-enums.h.template $(libide_1_0_la_type_headers) ) > libide/ide-enums.h.tmp
-	@ mv libide/ide-enums.h.tmp libide/ide-enums.h
-libide/ide-enums.c: $(libide_1_0_la_type_headers) libide/ide-enums.c.template
-	$(AM_V_GEN) ( cd $(srcdir) && glib-mkenums --template libide/ide-enums.c.template $(libide_1_0_la_type_headers) ) > libide/ide-enums.c.tmp
-	@ mv libide/ide-enums.c.tmp libide/ide-enums.c
+glib_enum_h = ide-enums.h
+glib_enum_c = ide-enums.c
+glib_enum_headers =  \
+	ide-buffer.h \
+	ide-diagnostic.h \
+	ide-highlighter.h \
+	ide-source-view.h \
+        ide-thread-pool.h \
+	$(NULL)
+include $(top_srcdir)/build/autotools/Makefile.am.enums
+
+
+glib_resources_c = resources/ide-resources.c
+glib_resources_h = resources/ide-resources.h
+glib_resources_xml = resources/libide.gresource.xml
+glib_resources_namespace = ide
+include $(top_srcdir)/build/autotools/Makefile.am.gresources
 
 nodist_libide_1_0_la_SOURCES = \
-	$(libide_1_0_la_built_sources) \
-	$(NULL)
-
-BUILT_SOURCES += $(libide_1_0_la_built_sources)
-
-DISTCLEANFILES += $(libide_1_0_la_built_sources)
-
-EXTRA_DIST += \
-	$(libide_resource_files) \
-	libide/resources/libide.gresource.xml \
-	libide/ide-enums.c.template \
-	libide/ide-enums.h.template \
-	$(libide_1_0_la_built_sources) \
+	resources/ide-resources.c \
+	resources/ide-resources.h \
 	$(NULL)
 
 
 -include $(INTROSPECTION_MAKEFILE)
 
 INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ARGS = --add-include-path=$(top_srcdir)/libide --warn-all
-INTROSPECTION_COMPILER_ARGS = --includedir=$(top_srcdir)/libide
+INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --warn-all
+INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 
 if HAVE_INTROSPECTION
 introspection_sources = \
 	$(libide_1_0_la_public_sources) \
-	libide/ide-enums.c \
-	libide/ide-enums.h \
 	$(NULL)
 
 Ide-1.0.gir: libide-1.0.la
@@ -454,3 +432,5 @@ typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
 CLEANFILES += $(gir_DATA) $(typelib_DATA)
 endif
+
+-include $(top_srcdir)/git.mk

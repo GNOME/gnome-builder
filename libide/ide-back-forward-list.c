@@ -627,7 +627,7 @@ _ide_back_forward_list_save_async (IdeBackForwardList  *self,
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     g_autofree gchar *path = NULL;
 
@@ -796,7 +796,7 @@ _ide_back_forward_list_load_async (IdeBackForwardList  *self,
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     g_autofree gchar *path = NULL;
 

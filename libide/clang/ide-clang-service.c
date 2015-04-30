@@ -290,7 +290,7 @@ ide_clang_service_parse_worker (GTask        *task,
     {
     case CXError_Success:
       index = ide_clang_service_build_index (self, tu, request);
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
       ide_highlight_index_dump (index);
 #endif
       break;
@@ -374,7 +374,7 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
 
   request->command_line_args = argv;
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     gchar *cflags;
 

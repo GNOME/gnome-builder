@@ -1994,7 +1994,7 @@ ide_source_view_do_mode (IdeSourceView *self,
       gboolean handled;
       gboolean remove = FALSE;
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
       {
         gunichar ch = 0;
         gchar *name = NULL;
@@ -3101,7 +3101,7 @@ ide_source_view_real_set_mode (IdeSourceView         *self,
   if (!priv->buffer)
     IDE_EXIT;
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     const gchar *old_mode = "null";
 
@@ -4484,7 +4484,7 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
 
   if (srcloc != NULL)
     {
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
       guint line = ide_source_location_get_line (srcloc);
       guint line_offset = ide_source_location_get_line_offset (srcloc);
       IdeFile *file = ide_source_location_get_file (srcloc);

@@ -1,3 +1,0 @@
-AC_PROG_INSTALL
-AC_CHECK_PROG([GMAKE], [gmake], [gmake], [make])
-AC_DEFINE_UNQUOTED([GNU_MAKE_NAME], ["$GMAKE"], [Name of GNU make on this system])

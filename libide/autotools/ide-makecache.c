@@ -336,7 +336,7 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
   targets = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_makecache_target_free);
   found = g_hash_table_new (ide_makecache_target_hash, ide_makecache_target_equal);
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     gchar *fmtsize;
 
@@ -391,7 +391,7 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
 
   if (targets->len > 0)
     {
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
       {
         GString *str;
         gsize i;
@@ -955,7 +955,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
       g_ptr_array_add (argv, "CXX="FAKE_CXX);
       g_ptr_array_add (argv, NULL);
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
       {
         gchar *cmdline;
 
@@ -1170,7 +1170,7 @@ ide_makecache_new_for_makefile_async (IdeContext          *context,
   g_return_if_fail (G_IS_FILE (makefile));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     g_autofree gchar *path = g_file_get_path (makefile);
     IDE_TRACE_MSG ("Generating makecache for %s", path);

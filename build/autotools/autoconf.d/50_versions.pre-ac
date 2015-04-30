@@ -1,7 +1,0 @@
-m4_define([project_version], [project_major_version.project_minor_version.project_micro_version])
-
-m4_define([project_binary_age], [m4_eval(100 * project_minor_version + project_micro_version)])
-
-m4_define([lt_current], [m4_eval(100 * project_minor_version + project_micro_version - project_interface_age)])
-m4_define([lt_revision], [project_interface_age])
-m4_define([lt_age], [m4_eval(project_binary_age - project_interface_age)])

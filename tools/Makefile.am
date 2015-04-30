@@ -1,40 +1,54 @@
+noinst_PROGRAMS =
+
+tools_cflags = \
+	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
+	$(LIBIDE_CFLAGS) \
+	$(NULL)
+
+tools_libs = \
+	$(LIBIDE_LIBS) \
+	$(top_builddir)/libide/libide-1.0.la \
+	$(NULL)
 
 noinst_PROGRAMS += ide-build
-ide_build_SOURCES = tools/ide-build.c
-ide_build_CFLAGS = $(libide_1_0_la_CFLAGS)
-ide_build_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+ide_build_SOURCES = ide-build.c
+ide_build_CFLAGS = $(tools_cflags)
+ide_build_LDADD = $(tools_libs)
 
 noinst_PROGRAMS += ide-list-build-flags
-ide_list_build_flags_SOURCES = tools/ide-list-build-flags.c
-ide_list_build_flags_CFLAGS = $(libide_1_0_la_CFLAGS)
-ide_list_build_flags_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+ide_list_build_flags_SOURCES = ide-list-build-flags.c
+ide_list_build_flags_CFLAGS = $(tools_cflags)
+ide_list_build_flags_LDADD = $(tools_libs)
 
 noinst_PROGRAMS += ide-list-file-settings
-ide_list_file_settings_SOURCES = tools/ide-list-file-settings.c
-ide_list_file_settings_CFLAGS = $(libide_1_0_la_CFLAGS)
-ide_list_file_settings_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+ide_list_file_settings_SOURCES = ide-list-file-settings.c
+ide_list_file_settings_CFLAGS = $(tools_cflags)
+ide_list_file_settings_LDADD = $(tools_libs)
 
 noinst_PROGRAMS += ide-list-devices
-ide_list_devices_SOURCES = tools/ide-list-devices.c
-ide_list_devices_CFLAGS = $(libide_1_0_la_CFLAGS)
-ide_list_devices_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+ide_list_devices_SOURCES = ide-list-devices.c
+ide_list_devices_CFLAGS = $(tools_cflags)
+ide_list_devices_LDADD = $(tools_libs)
 
 noinst_PROGRAMS += ide-list-diagnostics
-ide_list_diagnostics_SOURCES = tools/ide-list-diagnostics.c
-ide_list_diagnostics_CFLAGS = $(libide_1_0_la_CFLAGS)
-ide_list_diagnostics_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+ide_list_diagnostics_SOURCES = ide-list-diagnostics.c
+ide_list_diagnostics_CFLAGS = $(tools_cflags)
+ide_list_diagnostics_LDADD = $(tools_libs)
 
 noinst_PROGRAMS += ide-list-files
-ide_list_files_SOURCES = tools/ide-list-files.c
-ide_list_files_CFLAGS = $(libide_1_0_la_CFLAGS)
-ide_list_files_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+ide_list_files_SOURCES = ide-list-files.c
+ide_list_files_CFLAGS = $(tools_cflags)
+ide_list_files_LDADD = $(tools_libs)
 
 noinst_PROGRAMS += ide-search
-ide_search_SOURCES = tools/ide-search.c
-ide_search_CFLAGS = $(libide_1_0_la_CFLAGS)
-ide_search_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+ide_search_SOURCES = ide-search.c
+ide_search_CFLAGS = $(tools_cflags)
+ide_search_LDADD = $(tools_libs)
 
 noinst_PROGRAMS += ide-mine-projects
-ide_mine_projects_SOURCES = tools/ide-mine-projects.c
-ide_mine_projects_CFLAGS = $(libide_1_0_la_CFLAGS)
-ide_mine_projects_LDADD = libide-1.0.la $(LIBIDE_LIBS)
+ide_mine_projects_SOURCES = ide-mine-projects.c
+ide_mine_projects_CFLAGS = $(tools_cflags)
+ide_mine_projects_LDADD = $(tools_libs)
+
+-include $(top_srcdir)/git.mk

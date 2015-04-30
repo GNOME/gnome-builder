@@ -547,7 +547,7 @@ ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
       return g_strdup ("");
     }
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     enum CXCompletionChunkKind kind;
     unsigned num_chunks;

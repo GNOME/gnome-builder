@@ -621,7 +621,7 @@ ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
 
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), NULL);
 
-#ifndef IDE_DISABLE_TRACE
+#ifdef IDE_ENABLE_TRACE
   {
     gchar *path;
 

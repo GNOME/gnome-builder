@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/builder">
-    <file alias="css/markdown.css">../../data/css/markdown.css</file>
-
-    <file>editor/uncrustify/uncrustify.c.cfg</file>
-
     <file alias="gtk/menus.ui">../../data/gtk/menus.ui</file>
 
     <!-- Scalable icons all go into actions/ since gtk+ will ignore our directory scheme -->
@@ -25,8 +21,9 @@
     <file alias="icons/48x48/actions/builder-vcs-git.png">../../data/icons/hicolor/48x48/vcs/builder-vcs-git.png</file>
     <file alias="icons/32x32/actions/builder-vcs-git.png">../../data/icons/hicolor/32x32/vcs/builder-vcs-git.png</file>
 
-    <file alias="js/marked.js">../../data/js/marked.js</file>
-    <file alias="js/markdown-view.js">../../data/js/markdown-view.js</file>
+    <file alias="markdown/markdown.css">../../data/markdown/markdown.css</file>
+    <file alias="markdown/marked.js">../../data/markdown/marked.js</file>
+    <file alias="markdown/markdown-view.js">../../data/markdown/markdown-view.js</file>
 
     <file alias="keybindings/default.css">../../data/keybindings/default.css</file>
     <file alias="keybindings/emacs.css">../../data/keybindings/emacs.css</file>

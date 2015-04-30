@@ -1,44 +1,25 @@
 #!/bin/sh
+# Run this to generate all the initial makefiles, etc.
 
-#
-# Run this to generate all of the initial configure scripts and Makefiles.
-#
+srcdir=`dirname $0`
+test -z "$srcdir" && srcdir=.
 
-# Switch to the source directory to initialize autoconf.
-olddir=`pwd`
-test -n "${srcdir}" || srcdir=`dirname "$0"`
-test -n "${srcdir}" || srcdir=.
-cd "${srcdir}"
-
-# Load all of our autogen scripts for various features.
-for script in build/autotools/autogen.d/*.sh; do
-    . "${script}"
-done
-
-# Discover the location of autoconf.
-AUTORECONF=`which autoreconf`
-if test -z "${AUTORECONF}"; then
-    echo "*** No autoreconf found, please install it ***"
+(test -f $srcdir/src/main.c) || {
+    echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
+    echo " top-level gnome-builder directory"
     exit 1
-fi
+}
 
-# Generate m4 sub-configure scripts for inclusion by configure.ac.
-for group in ac am config lt output print; do
-    for mode in pre post; do
-        FILE="build/autotools/autoconf.d/${mode}-${group}.m4"
-        cat build/autotools/autoconf.d/*.${mode}-${group} 2>/dev/null> ${FILE}
-    done
-done
+which gnome-autogen.sh || {
+    echo "You need to install gnome-common from the GNOME git"
+    exit 1
+}
 
-# Run autoconf to build configure.
-intltoolize --automake --copy
-autoreconf --force --install --verbose -I build/autotools ${ACLOCAL_FLAGS} || exit $?
+touch ChangeLog
+touch INSTALL
 
-# Remove that pesky autom4te.cache
-rm -rf autom4te.cache
-
-# Return to the original directory.
-cd "$olddir"
-
-# Unless NOCONFIGURE is set, run configure too.
-test -n "$NOCONFIGURE" || "$srcdir/configure" "$@"
+REQUIRED_AUTOCONF_VERSION=2.59
+REQUIRED_AUTOMAKE_VERSION=1.9
+REQUIRED_INTLTOOL_VERSION=0.40.0
+REQUIRED_PKG_CONFIG_VERSION=0.22
+. gnome-autogen.sh

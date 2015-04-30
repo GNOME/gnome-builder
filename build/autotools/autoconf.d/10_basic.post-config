@@ -1,4 +1,0 @@
-echo "Build Options"
-echo ""
-echo "  prefix ............................... : ${prefix}"
-echo "  libdir ............................... : ${libdir}"

@@ -1,8 +1,0 @@
-# Define the minimum version of Sun C compiler.
-m4_define(sunpro_c_required_version, 0x570)
-
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
-#if !(defined(__SUNPRO_C) && __SUNPRO_C >= sunpro_c_required_version)
-#error Not a supported Sun compiler
-#endif
-])], [c_compiler="sunpro_c"], [])
