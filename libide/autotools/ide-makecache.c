@@ -997,7 +997,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
         {
           const gchar *line = lines [i];
 
-          if ((ret = ide_makecache_parse_line (self, line, relpath, subdir)))
+          if ((ret = ide_makecache_parse_line (self, line, relpath, subdir ?: ".")))
             break;
         }
 
