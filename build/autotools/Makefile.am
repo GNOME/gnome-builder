@@ -16,6 +16,9 @@ EXTRA_DIST = \
 	$(NULL)
 
 GITIGNOREFILES = \
+	glib-2.0.m4 \
+	glib-gettext.m4 \
+	gsettings.m4 \
 	gtk-doc.m4 \
 	intltool.m4 \
 	libtool.m4 \
@@ -23,6 +26,7 @@ GITIGNOREFILES = \
 	ltsugar.m4 \
 	ltversion.m4 \
 	lt~obsolete.m4 \
+	nls.m4 \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
