@@ -28,6 +28,7 @@ DISTCHECK_CONFIGURE_FLAGS = \
 	$(NULL)
 
 GITIGNOREFILES = \
+	**/*.swp \
 	*.o \
 	aclocal.m4 \
 	build-aux \
