@@ -84,6 +84,28 @@ egg_signal_group__target_weak_notify (gpointer  data,
 }
 
 static void
+egg_signal_group_bind_handler (EggSignalGroup *self,
+                               SignalHandler  *handler)
+{
+  gsize i;
+
+  g_assert (self != NULL);
+  g_assert (self->target != NULL);
+  g_assert (handler != NULL);
+  g_assert (handler->detailed_signal != NULL);
+  g_assert (handler->closure != NULL);
+  g_assert_cmpint (handler->handler_id, ==, 0);
+
+  handler->handler_id =  g_signal_connect_closure (self->target,
+                                                   handler->detailed_signal,
+                                                   handler->closure,
+                                                   handler->connect_after);
+
+  for (i = 0; i < self->block_count; i++)
+    g_signal_handler_block (self->target, handler->handler_id);
+}
+
+static void
 egg_signal_group_bind (EggSignalGroup *self,
                        GObject        *target)
 {
@@ -103,22 +125,9 @@ egg_signal_group_bind (EggSignalGroup *self,
       for (i = 0; i < self->handlers->len; i++)
         {
           SignalHandler *handler;
-          gint j;
 
           handler = g_ptr_array_index (self->handlers, i);
-
-          g_assert (handler != NULL);
-          g_assert (handler->detailed_signal != NULL);
-          g_assert (handler->closure != NULL);
-          g_assert_cmpint (handler->handler_id, ==, 0);
-
-          handler->handler_id =  g_signal_connect_closure (target,
-                                                           handler->detailed_signal,
-                                                           handler->closure,
-                                                           handler->connect_after);
-
-          for (j = 0; j < self->block_count; j++)
-            g_signal_handler_block (target, handler->handler_id);
+          egg_signal_group_bind_handler (self, handler);
         }
     }
 }
@@ -413,4 +422,7 @@ egg_signal_group_connect_object (EggSignalGroup *self,
   g_closure_sink (closure);
 
   g_ptr_array_add (self->handlers, handler);
+
+  if (self->target != NULL)
+    egg_signal_group_bind_handler (self, handler);
 }
