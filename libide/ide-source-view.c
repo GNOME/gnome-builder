@@ -1338,8 +1338,9 @@ ide_source_view__buffer_loaded_cb (IdeSourceView *self,
 }
 
 static void
-ide_source_view_connect_buffer (IdeSourceView *self,
-                                IdeBuffer     *buffer)
+ide_source_view_bind_buffer (IdeSourceView  *self,
+                             IdeBuffer      *buffer,
+                             EggSignalGroup *group)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceSearchSettings *search_settings;
@@ -1348,6 +1349,9 @@ ide_source_view_connect_buffer (IdeSourceView *self,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (EGG_IS_SIGNAL_GROUP (group));
+
+  priv->buffer = buffer;
 
   ide_buffer_hold (buffer);
 
@@ -1402,13 +1406,16 @@ ide_source_view_connect_buffer (IdeSourceView *self,
 }
 
 static void
-ide_source_view_disconnect_buffer (IdeSourceView *self,
-                                   IdeBuffer     *buffer)
+ide_source_view_unbind_buffer (IdeSourceView  *self,
+                               EggSignalGroup *group)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (EGG_IS_SIGNAL_GROUP (group));
+
+  if (priv->buffer == NULL)
+    return;
 
   if (priv->completion_blocked)
     {
@@ -1423,43 +1430,7 @@ ide_source_view_disconnect_buffer (IdeSourceView *self,
 
   ide_source_view_set_indenter (self, NULL);
 
-  ide_buffer_release (buffer);
-}
-
-static void
-ide_source_view_notify_buffer (IdeSourceView *self,
-                               GParamSpec    *pspec,
-                               gpointer       user_data)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkTextBuffer *buffer;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-
-  if (priv->buffer != (IdeBuffer *)buffer)
-    {
-      if (priv->buffer != NULL)
-        {
-          ide_source_view_disconnect_buffer (self, priv->buffer);
-          g_clear_object (&priv->buffer);
-        }
-
-      /*
-       * Only enable IdeSourceView features if this is an IdeBuffer.
-       * Ignore for GtkSourceBuffer, and GtkTextBuffer.
-       */
-      if (IDE_IS_BUFFER (buffer))
-        {
-          priv->buffer = g_object_ref (buffer);
-          ide_source_view_connect_buffer (self, priv->buffer);
-        }
-    }
-
-  IDE_EXIT;
+  ide_buffer_release (priv->buffer);
 }
 
 static gunichar
@@ -4729,6 +4700,30 @@ ide_source_view_real_rebuild_highlight (IdeSourceView *self)
   IDE_EXIT;
 }
 
+static gboolean
+ignore_invalid_buffers (GBinding     *binding,
+                        const GValue *from_value,
+                        GValue       *to_value,
+                        gpointer      user_data)
+{
+  if (G_VALUE_HOLDS (from_value, GTK_TYPE_TEXT_BUFFER))
+    {
+      GtkTextBuffer *buffer;
+
+      buffer = g_value_get_object (from_value);
+
+      if (IDE_IS_BUFFER (buffer))
+        {
+          g_value_set_object (to_value, buffer);
+          return TRUE;
+        }
+    }
+
+  g_value_set_object (to_value, NULL);
+
+  return TRUE;
+}
+
 static void
 ide_source_view_dispose (GObject *object)
 {
@@ -4745,12 +4740,6 @@ ide_source_view_dispose (GObject *object)
   g_clear_object (&priv->css_provider);
   g_clear_object (&priv->mode);
   g_clear_object (&priv->buffer_signals);
-
-  if (priv->buffer)
-    {
-      ide_source_view_disconnect_buffer (self, priv->buffer);
-      g_clear_object (&priv->buffer);
-    }
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->dispose (object);
 }
@@ -5761,79 +5750,74 @@ ide_source_view_init (IdeSourceView *self)
                                    G_CALLBACK (ide_source_view__buffer_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "line-flags-changed",
                                    G_CALLBACK (ide_source_view__buffer_line_flags_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "notify::highlight-diagnostics",
                                    G_CALLBACK (ide_source_view__buffer_notify_highlight_diagnostics_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "notify::file",
                                    G_CALLBACK (ide_source_view__buffer_notify_file_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "notify::language",
                                    G_CALLBACK (ide_source_view__buffer_notify_language_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "notify::style-scheme",
                                    G_CALLBACK (ide_source_view__buffer_notify_style_scheme_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "insert-text",
                                    G_CALLBACK (ide_source_view__buffer_insert_text_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "insert-text",
                                    G_CALLBACK (ide_source_view__buffer_insert_text_after_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "delete-range",
                                    G_CALLBACK (ide_source_view__buffer_delete_range_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "delete-range",
                                    G_CALLBACK (ide_source_view__buffer_delete_range_after_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "mark-set",
                                    G_CALLBACK (ide_source_view__buffer_mark_set_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "loaded",
                                    G_CALLBACK (ide_source_view__buffer_loaded_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->buffer_signals,
+                           "bind",
+                           G_CALLBACK (ide_source_view_bind_buffer),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (priv->buffer_signals,
+                           "unbind",
+                           G_CALLBACK (ide_source_view_unbind_buffer),
+                           self,
+                           G_CONNECT_SWAPPED);
 
-  g_object_bind_property (self, "buffer", priv->buffer_signals, "target", 0);
-
-  g_signal_connect (self,
-                    "notify::buffer",
-                    G_CALLBACK (ide_source_view_notify_buffer),
-                    NULL);
+  g_object_bind_property_full (self, "buffer", priv->buffer_signals, "target", 0,
+                               ignore_invalid_buffers, NULL, NULL, NULL);
 
   /*
    * We block completion when we are not focused so that two SourceViews
