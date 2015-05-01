@@ -405,12 +405,12 @@ egg_signal_group_connect_object (EggSignalGroup *self,
   else
     closure = g_cclosure_new_object (callback, data);
 
-  g_closure_sink (closure);
-
   handler = g_slice_new0 (SignalHandler);
   handler->detailed_signal = g_intern_string (detailed_signal);
-  handler->closure = closure;
+  handler->closure = g_closure_ref (closure);
   handler->connect_after = ((flags & G_CONNECT_AFTER) != 0);
+
+  g_closure_sink (closure);
 
   g_ptr_array_add (self->handlers, handler);
 }
