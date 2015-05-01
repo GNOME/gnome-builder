@@ -568,8 +568,6 @@ gb_editor_frame_set_auto_hide_map (GbEditorFrame *self,
 {
   g_assert (GB_IS_EDITOR_FRAME (self));
 
-  g_print ("SET AUTO HIDE MAP\n");
-
   auto_hide_map = !!auto_hide_map;
 
   if (auto_hide_map != self->auto_hide_map)
