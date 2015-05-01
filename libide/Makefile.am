@@ -309,8 +309,9 @@ libide_1_0_la_includes = \
 	$(DEBUG_CFLAGS) \
 	$(CLANG_CFLAGS) \
 	-I$(top_builddir)/libide \
-	-I$(top_srcdir)/contrib/search \
+	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/libeditorconfig \
+	-I$(top_srcdir)/contrib/search \
 	-I$(srcdir) \
 	-I$(srcdir)/autotools \
 	-I$(srcdir)/c \
@@ -368,6 +369,7 @@ libide_1_0_la_LIBADD = \
 	$(LIBIDE_LIBS) \
 	-lclang \
 	-lm \
+	$(top_builddir)/contrib/egg/libegg.la \
 	$(top_builddir)/contrib/libeditorconfig/libeditorconfig.la \
 	$(top_builddir)/contrib/search/libsearch.la \
 	$(NULL)
