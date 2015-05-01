@@ -81,7 +81,14 @@ enum {
   LAST_PROP
 };
 
+enum {
+  BIND,
+  UNBIND,
+  LAST_SIGNAL
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint gSignals [LAST_SIGNAL];
 
 static void
 egg_signal_group__target_weak_notify (gpointer  data,
@@ -102,6 +109,7 @@ egg_signal_group__target_weak_notify (gpointer  data,
       handler->handler_id = 0;
     }
 
+  g_signal_emit (self, gSignals [UNBIND], 0);
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TARGET]);
 }
 
@@ -144,6 +152,8 @@ egg_signal_group_bind (EggSignalGroup *self,
                          egg_signal_group__target_weak_notify,
                          self);
 
+      g_object_ref (target);
+
       for (i = 0; i < self->handlers->len; i++)
         {
           SignalHandler *handler;
@@ -151,6 +161,9 @@ egg_signal_group_bind (EggSignalGroup *self,
           handler = g_ptr_array_index (self->handlers, i);
           egg_signal_group_bind_handler (self, handler);
         }
+
+      g_signal_emit (self, gSignals [BIND], 0, target);
+      g_object_unref (target);
     }
 }
 
@@ -188,6 +201,8 @@ egg_signal_group_unbind (EggSignalGroup *self)
 
           g_signal_handler_disconnect (target, handler_id);
         }
+
+      g_signal_emit (self, gSignals [UNBIND], 0);
     }
 }
 
@@ -400,6 +415,44 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
                         G_TYPE_OBJECT,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_TARGET_TYPE, gParamSpecs [PROP_TARGET_TYPE]);
+
+  /**
+   * EggSignalGroup::bind:
+   * @self: An #EggSignalGroup.
+   * @instance: A #GObject
+   *
+   * This signal is emitted when the #EggSignalGroup:target property is set to a new #GObject.
+   *
+   * This signal will only be emitted if #EggSignalGroup:target is non-%NULL.
+   */
+  gSignals [BIND] =
+    g_signal_new ("bind",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_OBJECT);
+
+  /**
+   * EggSignalGroup::unbind:
+   * @self: An #EggSignalGroup.
+   *
+   * This signal is emitted when the #EggSignalGroup:target property is set to a new #GObject.
+   *
+   * This signal will only be emitted if the previous value of #EggSignalGroup:target is non-%NULL.
+   */
+  gSignals [UNBIND] =
+    g_signal_new ("unbind",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }
 
 static void
