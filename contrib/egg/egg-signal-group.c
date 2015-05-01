@@ -22,6 +22,28 @@
 
 #include "egg-signal-group.h"
 
+/**
+ * SECTION:egg-signal-group
+ * @title: EggSignalGroup
+ * @short_description: Manage collections of signals on an object
+ *
+ * #EggSignalGroup manages to simplify the process of connecting many signals
+ * to a #GObject as a set.
+ *
+ * In particular, this allows you to:
+ *
+ *  - Block and unblock signals as a group
+ *  - Change the target instance, by disconnecting signals from the old
+ *    instance and connecting to the new instance.
+ *  - Ensuring that blocked signal state transfers across target instances.
+ *
+ * One place you might want to use such a structure is with #GtkTextView and
+ * #GtkTextBuffer. Often times, you'll need to connect to many signals on
+ * #GtkTextBuffer from a #GtkTextView subclass. This allows you to create a
+ * signal group during your instance init function, and simply bind the
+ * #GtkTextView:buffer property to #EggSignalGroup:target.
+ */
+
 struct _EggSignalGroup
 {
   GObject    parent_instance;
