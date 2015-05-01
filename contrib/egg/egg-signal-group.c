@@ -391,14 +391,14 @@ egg_signal_group_connect_object (EggSignalGroup *self,
                                  const gchar    *detailed_signal,
                                  GCallback       callback,
                                  gpointer        data,
-                                 GSignalFlags    flags)
+                                 GConnectFlags   flags)
 {
   SignalHandler *handler;
   GClosure *closure;
 
-  g_return_val_if_fail (EGG_IS_SIGNAL_GROUP (self), 0);
-  g_return_val_if_fail (detailed_signal != NULL, 0);
-  g_return_val_if_fail (callback != NULL, 0);
+  g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
+  g_return_if_fail (detailed_signal != NULL);
+  g_return_if_fail (callback != NULL);
 
   if ((flags & G_CONNECT_SWAPPED) != 0)
     closure = g_cclosure_new_object_swap (callback, data);

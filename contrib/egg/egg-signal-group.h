@@ -32,7 +32,7 @@ void            egg_signal_group_connect_object (EggSignalGroup *self,
                                                  const gchar    *detailed_signal,
                                                  GCallback       c_handler,
                                                  gpointer        data,
-                                                 GSignalFlags    flags);
+                                                 GConnectFlags   flags);
 void            egg_signal_group_set_target     (EggSignalGroup *self,
                                                  gpointer        target);
 gpointer        egg_signal_group_get_target     (EggSignalGroup *self);
