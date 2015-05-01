@@ -21,6 +21,8 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
+#include "egg-signal-group.h"
+
 #include "ide-animation.h"
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
@@ -105,18 +107,7 @@ typedef struct
   GBinding                    *right_margin_position_binding;
   GBinding                    *indent_style_binding;
 
-  gulong                       buffer_changed_handler;
-  gulong                       buffer_delete_range_after_handler;
-  gulong                       buffer_delete_range_handler;
-  gulong                       buffer_insert_text_after_handler;
-  gulong                       buffer_insert_text_handler;
-  gulong                       buffer_line_flags_changed_handler;
-  gulong                       buffer_loaded_handler;
-  gulong                       buffer_mark_set_handler;
-  gulong                       buffer_notify_file_handler;
-  gulong                       buffer_notify_highlight_diagnostics_handler;
-  gulong                       buffer_notify_language_handler;
-  gulong                       buffer_notify_style_scheme_handler;
+  EggSignalGroup              *buffer_signals;
 
   guint                        change_sequence;
 
@@ -387,14 +378,7 @@ ide_source_view_block_handlers (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  if (priv->buffer)
-    {
-      g_signal_handler_block (priv->buffer, priv->buffer_insert_text_handler);
-      g_signal_handler_block (priv->buffer, priv->buffer_insert_text_after_handler);
-      g_signal_handler_block (priv->buffer, priv->buffer_delete_range_handler);
-      g_signal_handler_block (priv->buffer, priv->buffer_delete_range_after_handler);
-      g_signal_handler_block (priv->buffer, priv->buffer_mark_set_handler);
-    }
+  egg_signal_group_block (priv->buffer_signals);
 }
 
 static void
@@ -404,14 +388,7 @@ ide_source_view_unblock_handlers (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  if (priv->buffer)
-    {
-      g_signal_handler_unblock (priv->buffer, priv->buffer_insert_text_handler);
-      g_signal_handler_unblock (priv->buffer, priv->buffer_insert_text_after_handler);
-      g_signal_handler_unblock (priv->buffer, priv->buffer_delete_range_handler);
-      g_signal_handler_unblock (priv->buffer, priv->buffer_delete_range_after_handler);
-      g_signal_handler_unblock (priv->buffer, priv->buffer_mark_set_handler);
-    }
+  egg_signal_group_unblock (priv->buffer_signals);
 }
 
 static gboolean
@@ -1160,13 +1137,12 @@ ide_source_view_invalidate_range_mark (IdeSourceView *self,
 }
 
 static void
-ide_source_view__buffer_insert_text_cb (GtkTextBuffer *buffer,
+ide_source_view__buffer_insert_text_cb (IdeSourceView *self,
                                         GtkTextIter   *iter,
                                         gchar         *text,
                                         gint           len,
-                                        gpointer       user_data)
+                                        GtkTextBuffer *buffer)
 {
-  IdeSourceView *self= user_data;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
 
@@ -1181,17 +1157,17 @@ ide_source_view__buffer_insert_text_cb (GtkTextBuffer *buffer,
 }
 
 static void
-ide_source_view__buffer_insert_text_after_cb (GtkTextBuffer *buffer,
+ide_source_view__buffer_insert_text_after_cb (IdeSourceView *self,
                                               GtkTextIter   *iter,
                                               gchar         *text,
                                               gint           len,
-                                              gpointer       user_data)
+                                              GtkTextBuffer *buffer)
 {
-  IdeSourceView *self = user_data;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
   if ((snippet = g_queue_peek_head (priv->snippets)))
     {
@@ -1209,16 +1185,16 @@ ide_source_view__buffer_insert_text_after_cb (GtkTextBuffer *buffer,
 }
 
 static void
-ide_source_view__buffer_delete_range_cb (GtkTextBuffer *buffer,
+ide_source_view__buffer_delete_range_cb (IdeSourceView *self,
                                          GtkTextIter   *begin,
                                          GtkTextIter   *end,
-                                         gpointer       user_data)
+                                         GtkTextBuffer *buffer)
 {
-  IdeSourceView *self = user_data;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
   if ((snippet = g_queue_peek_head (priv->snippets)))
     {
@@ -1238,16 +1214,16 @@ ide_source_view__buffer_delete_range_cb (GtkTextBuffer *buffer,
 }
 
 static void
-ide_source_view__buffer_delete_range_after_cb (GtkTextBuffer *buffer,
+ide_source_view__buffer_delete_range_after_cb (IdeSourceView *self,
                                                GtkTextIter   *begin,
                                                GtkTextIter   *end,
-                                               gpointer       user_data)
+                                               GtkTextBuffer *buffer)
 {
-  IdeSourceView *self = user_data;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
   ide_source_view_block_handlers (self);
 
@@ -1258,19 +1234,19 @@ ide_source_view__buffer_delete_range_after_cb (GtkTextBuffer *buffer,
 }
 
 static void
-ide_source_view__buffer_mark_set_cb (GtkTextBuffer *buffer,
+ide_source_view__buffer_mark_set_cb (IdeSourceView *self,
                                      GtkTextIter   *iter,
                                      GtkTextMark   *mark,
-                                     gpointer       user_data)
+                                     GtkTextBuffer *buffer)
 {
-  IdeSourceView *self = user_data;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   IdeSourceSnippet *snippet;
   GtkTextMark *insert;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (iter);
+  g_assert (iter != NULL);
   g_assert (GTK_IS_TEXT_MARK (mark));
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
   insert = gtk_text_buffer_get_insert (buffer);
 
@@ -1384,90 +1360,6 @@ ide_source_view_connect_buffer (IdeSourceView *self,
       priv->completion_blocked = TRUE;
     }
 
-  priv->buffer_changed_handler =
-      g_signal_connect_object (buffer,
-                               "changed",
-                               G_CALLBACK (ide_source_view__buffer_changed_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
-
-  priv->buffer_line_flags_changed_handler =
-      g_signal_connect_object (buffer,
-                               "line-flags-changed",
-                               G_CALLBACK (ide_source_view__buffer_line_flags_changed_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
-
-  priv->buffer_notify_highlight_diagnostics_handler =
-      g_signal_connect_object (buffer,
-                               "notify::highlight-diagnostics",
-                               G_CALLBACK (ide_source_view__buffer_notify_highlight_diagnostics_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
-
-  priv->buffer_notify_file_handler =
-      g_signal_connect_object (buffer,
-                               "notify::file",
-                               G_CALLBACK (ide_source_view__buffer_notify_file_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
-
-  priv->buffer_notify_language_handler =
-      g_signal_connect_object (buffer,
-                               "notify::language",
-                               G_CALLBACK (ide_source_view__buffer_notify_language_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
-
-  priv->buffer_notify_style_scheme_handler =
-      g_signal_connect_object (buffer,
-                               "notify::style-scheme",
-                               G_CALLBACK (ide_source_view__buffer_notify_style_scheme_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
-
-  priv->buffer_insert_text_handler =
-      g_signal_connect_object (buffer,
-                               "insert-text",
-                               G_CALLBACK (ide_source_view__buffer_insert_text_cb),
-                               self,
-                               0);
-
-  priv->buffer_insert_text_after_handler =
-      g_signal_connect_object (buffer,
-                               "insert-text",
-                               G_CALLBACK (ide_source_view__buffer_insert_text_after_cb),
-                               self,
-                               G_CONNECT_AFTER);
-
-  priv->buffer_delete_range_handler =
-      g_signal_connect_object (buffer,
-                               "delete-range",
-                               G_CALLBACK (ide_source_view__buffer_delete_range_cb),
-                               self,
-                               0);
-
-  priv->buffer_delete_range_after_handler =
-      g_signal_connect_object (buffer,
-                               "delete-range",
-                               G_CALLBACK (ide_source_view__buffer_delete_range_after_cb),
-                               self,
-                               G_CONNECT_AFTER);
-
-  priv->buffer_mark_set_handler =
-      g_signal_connect_object (buffer,
-                               "mark-set",
-                               G_CALLBACK (ide_source_view__buffer_mark_set_cb),
-                               self,
-                               0);
-
-  priv->buffer_loaded_handler =
-      g_signal_connect_object (buffer,
-                               "loaded",
-                               G_CALLBACK (ide_source_view__buffer_loaded_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
-
   search_settings = g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
                                   "wrap-around", TRUE,
                                   "regex-enabled", FALSE,
@@ -1517,17 +1409,6 @@ ide_source_view_disconnect_buffer (IdeSourceView *self,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
-
-  ide_clear_signal_handler (buffer, &priv->buffer_delete_range_after_handler);
-  ide_clear_signal_handler (buffer, &priv->buffer_delete_range_handler);
-  ide_clear_signal_handler (buffer, &priv->buffer_insert_text_after_handler);
-  ide_clear_signal_handler (buffer, &priv->buffer_insert_text_handler);
-  ide_clear_signal_handler (buffer, &priv->buffer_line_flags_changed_handler);
-  ide_clear_signal_handler (buffer, &priv->buffer_mark_set_handler);
-  ide_clear_signal_handler (buffer, &priv->buffer_notify_highlight_diagnostics_handler);
-  ide_clear_signal_handler (buffer, &priv->buffer_notify_language_handler);
-  ide_clear_signal_handler (buffer, &priv->buffer_notify_style_scheme_handler);
-  ide_clear_signal_handler (buffer, &priv->buffer_loaded_handler);
 
   if (priv->completion_blocked)
     {
@@ -4863,6 +4744,7 @@ ide_source_view_dispose (GObject *object)
   g_clear_object (&priv->snippets_provider);
   g_clear_object (&priv->css_provider);
   g_clear_object (&priv->mode);
+  g_clear_object (&priv->buffer_signals);
 
   if (priv->buffer)
     {
@@ -5871,6 +5753,82 @@ ide_source_view_init (IdeSourceView *self)
   priv->snippets = g_queue_new ();
   priv->selections = g_queue_new ();
   priv->show_line_diagnostics = TRUE;
+
+  priv->buffer_signals = egg_signal_group_new (IDE_TYPE_BUFFER);
+
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "changed",
+                                   G_CALLBACK (ide_source_view__buffer_changed_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "line-flags-changed",
+                                   G_CALLBACK (ide_source_view__buffer_line_flags_changed_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "notify::highlight-diagnostics",
+                                   G_CALLBACK (ide_source_view__buffer_notify_highlight_diagnostics_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "notify::file",
+                                   G_CALLBACK (ide_source_view__buffer_notify_file_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "notify::language",
+                                   G_CALLBACK (ide_source_view__buffer_notify_language_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "notify::style-scheme",
+                                   G_CALLBACK (ide_source_view__buffer_notify_style_scheme_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "insert-text",
+                                   G_CALLBACK (ide_source_view__buffer_insert_text_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "insert-text",
+                                   G_CALLBACK (ide_source_view__buffer_insert_text_after_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "delete-range",
+                                   G_CALLBACK (ide_source_view__buffer_delete_range_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "delete-range",
+                                   G_CALLBACK (ide_source_view__buffer_delete_range_after_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "mark-set",
+                                   G_CALLBACK (ide_source_view__buffer_mark_set_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "loaded",
+                                   G_CALLBACK (ide_source_view__buffer_loaded_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  g_object_bind_property (self, "buffer", priv->buffer_signals, "target", 0);
 
   g_signal_connect (self,
                     "notify::buffer",
