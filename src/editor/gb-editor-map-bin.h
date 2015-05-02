@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define GB_TYPE_EDITOR_MAP_BIN (gb_editor_map_bin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbEditorMapBin, gb_editor_map_bin, GB, EDITOR_MAP_BIN, GtkBin)
+G_DECLARE_FINAL_TYPE (GbEditorMapBin, gb_editor_map_bin, GB, EDITOR_MAP_BIN, GtkBox)
 
 G_END_DECLS
 

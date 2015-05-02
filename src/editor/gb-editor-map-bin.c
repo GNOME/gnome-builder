@@ -23,13 +23,14 @@
 
 struct _GbEditorMapBin
 {
-  GtkBin     parent_instance;
+  GtkBox     parent_instance;
   gint       cached_height;
   gulong     size_allocate_handler;
   GtkWidget *floating_bar;
+  GtkWidget *separator;
 };
 
-G_DEFINE_TYPE (GbEditorMapBin, gb_editor_map_bin, GTK_TYPE_BIN)
+G_DEFINE_TYPE (GbEditorMapBin, gb_editor_map_bin, GTK_TYPE_BOX)
 
 enum {
   PROP_0,
@@ -98,10 +99,36 @@ gb_editor_map_bin_size_allocate (GtkWidget     *widget,
 }
 
 static void
+gb_editor_map_bin_add (GtkContainer *container,
+                       GtkWidget    *child)
+{
+  GbEditorMapBin *self = (GbEditorMapBin *)container;
+
+  if (IDE_IS_SOURCE_MAP (child) && (self->separator != NULL))
+    gtk_widget_show (GTK_WIDGET (self->separator));
+
+  GTK_CONTAINER_CLASS (gb_editor_map_bin_parent_class)->add (container, child);
+}
+
+static void
+gb_editor_map_bin_remove (GtkContainer *container,
+                          GtkWidget    *child)
+{
+  GbEditorMapBin *self = (GbEditorMapBin *)container;
+
+  if (IDE_IS_SOURCE_MAP (child) && (self->separator != NULL))
+    gtk_widget_hide (GTK_WIDGET (self->separator));
+
+  GTK_CONTAINER_CLASS (gb_editor_map_bin_parent_class)->remove (container, child);
+}
+
+static void
 gb_editor_map_bin_finalize (GObject *object)
 {
   GbEditorMapBin *self = (GbEditorMapBin *)object;
 
+  if (self->separator != NULL)
+    g_object_remove_weak_pointer (G_OBJECT (self->separator), (gpointer *)&self->separator);
   ide_clear_signal_handler (self->floating_bar, &self->size_allocate_handler);
   ide_clear_weak_pointer (&self->floating_bar);
 
@@ -132,11 +159,16 @@ gb_editor_map_bin_class_init (GbEditorMapBinClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->finalize = gb_editor_map_bin_finalize;
   object_class->set_property = gb_editor_map_bin_set_property;
 
   widget_class->size_allocate = gb_editor_map_bin_size_allocate;
+
+  container_class = GTK_CONTAINER_CLASS (klass);
+  container_class->add = gb_editor_map_bin_add;
+  container_class->remove = gb_editor_map_bin_remove;
 
   gParamSpecs [PROP_FLOATING_BAR] =
     g_param_spec_object ("floating-bar",
@@ -151,4 +183,11 @@ gb_editor_map_bin_class_init (GbEditorMapBinClass *klass)
 static void
 gb_editor_map_bin_init (GbEditorMapBin *self)
 {
+  self->separator = g_object_new (GTK_TYPE_SEPARATOR,
+                                  "orientation", GTK_ORIENTATION_VERTICAL,
+                                  "hexpand", FALSE,
+                                  "visible", FALSE,
+                                  NULL);
+  g_object_add_weak_pointer (G_OBJECT (self->separator), (gpointer *)&self->separator);
+  gtk_container_add (GTK_CONTAINER (self), self->separator);
 }
