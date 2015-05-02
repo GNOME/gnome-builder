@@ -5746,7 +5746,7 @@ ide_source_view_init (IdeSourceView *self)
   egg_binding_set_bind (priv->file_setting_bindings, "tab-width",
                         self, "tab-width", G_BINDING_SYNC_CREATE);
   egg_binding_set_bind (priv->file_setting_bindings, "right-margin-position",
-                        self, "right-margin-postion", G_BINDING_SYNC_CREATE);
+                        self, "right-margin-position", G_BINDING_SYNC_CREATE);
   egg_binding_set_bind (priv->file_setting_bindings, "indent-style",
                         self, "indent-style", G_BINDING_SYNC_CREATE);
 
