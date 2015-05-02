@@ -556,6 +556,7 @@ gb_editor_frame_set_show_map (GbEditorFrame *self,
                                    G_CONNECT_SWAPPED);
           gtk_container_add (GTK_CONTAINER (self->source_map_container),
                              GTK_WIDGET (self->source_map));
+          g_signal_emit_by_name (self->source_map, "show-map");
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_MAP]);
