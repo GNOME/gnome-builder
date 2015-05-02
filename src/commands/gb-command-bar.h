@@ -23,39 +23,13 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_COMMAND_BAR            (gb_command_bar_get_type())
-#define GB_COMMAND_BAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND_BAR, GbCommandBar))
-#define GB_COMMAND_BAR_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND_BAR, GbCommandBar const))
-#define GB_COMMAND_BAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_COMMAND_BAR, GbCommandBarClass))
-#define GB_IS_COMMAND_BAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_COMMAND_BAR))
-#define GB_IS_COMMAND_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_COMMAND_BAR))
-#define GB_COMMAND_BAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_COMMAND_BAR, GbCommandBarClass))
+#define GB_TYPE_COMMAND_BAR (gb_command_bar_get_type())
 
-typedef struct _GbCommandBar        GbCommandBar;
-typedef struct _GbCommandBarClass   GbCommandBarClass;
-typedef struct _GbCommandBarPrivate GbCommandBarPrivate;
+G_DECLARE_FINAL_TYPE (GbCommandBar, gb_command_bar, GB, COMMAND_BAR, GtkRevealer)
 
-struct _GbCommandBar
-{
-  GtkRevealer parent;
-
-  /*< private >*/
-  GbCommandBarPrivate *priv;
-};
-
-struct _GbCommandBarClass
-{
-  GtkRevealerClass parent;
-
-  void (*complete) (GbCommandBar *bar);
-  void (*move_history) (GbCommandBar *bar,
-                        GtkDirectionType dir);
-};
-
-GType      gb_command_bar_get_type (void);
-GtkWidget *gb_command_bar_new      (void);
-void       gb_command_bar_show     (GbCommandBar *bar);
-void       gb_command_bar_hide     (GbCommandBar *bar);
+GtkWidget *gb_command_bar_new  (void);
+void       gb_command_bar_show (GbCommandBar *bar);
+void       gb_command_bar_hide (GbCommandBar *bar);
 
 G_END_DECLS
 

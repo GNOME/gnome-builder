@@ -29,8 +29,10 @@
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
-struct _GbCommandBarPrivate
+struct _GbCommandBar
 {
+  GtkRevealer        parent_instance;
+
   GtkSizeGroup      *result_size_group;
   GtkEntry          *entry;
   GtkListBox        *list_box;
@@ -48,7 +50,7 @@ struct _GbCommandBarPrivate
   gboolean           saved_position_valid;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbCommandBar, gb_command_bar, GTK_TYPE_REVEALER)
+G_DEFINE_TYPE (GbCommandBar, gb_command_bar, GTK_TYPE_REVEALER)
 
 #define HISTORY_LENGTH 30
 
@@ -58,7 +60,7 @@ enum {
   LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint gSignals [LAST_SIGNAL];
 
 GtkWidget *
 gb_command_bar_new (void)
@@ -103,20 +105,20 @@ find_alternate_focus (GtkWidget *focus)
  * Hides the command bar in an animated fashion.
  */
 void
-gb_command_bar_hide (GbCommandBar *bar)
+gb_command_bar_hide (GbCommandBar *self)
 {
   GbWorkbench *workbench;
   GbWorkspace *workspace;
   GtkWidget *focus;
 
-  g_return_if_fail (GB_IS_COMMAND_BAR (bar));
+  g_return_if_fail (GB_IS_COMMAND_BAR (self));
 
-  if (!gtk_revealer_get_reveal_child (GTK_REVEALER (bar)))
+  if (!gtk_revealer_get_reveal_child (GTK_REVEALER (self)))
     return;
 
-  gtk_revealer_set_reveal_child (GTK_REVEALER (bar), FALSE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self), FALSE);
 
-  workbench = gb_widget_get_workbench (GTK_WIDGET (bar));
+  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
   if ((workbench == NULL) || gb_workbench_get_closing (workbench))
     return;
 
@@ -124,8 +126,8 @@ gb_command_bar_hide (GbCommandBar *bar)
   if (workspace == NULL)
     return;
 
-  if (bar->priv->last_focus)
-    focus = find_alternate_focus (bar->priv->last_focus);
+  if (self->last_focus)
+    focus = find_alternate_focus (self->last_focus);
   else
     focus = GTK_WIDGET (workspace);
 
@@ -133,13 +135,13 @@ gb_command_bar_hide (GbCommandBar *bar)
 }
 
 static void
-gb_command_bar_set_last_focus (GbCommandBar *bar,
+gb_command_bar_set_last_focus (GbCommandBar *self,
                                GtkWidget    *widget)
 {
-  g_return_if_fail (GB_IS_COMMAND_BAR (bar));
+  g_return_if_fail (GB_IS_COMMAND_BAR (self));
   g_return_if_fail (!widget || GTK_IS_WIDGET (widget));
 
-  ide_set_weak_pointer (&bar->priv->last_focus, widget);
+  ide_set_weak_pointer (&self->last_focus, widget);
 }
 
 /**
@@ -149,33 +151,33 @@ gb_command_bar_set_last_focus (GbCommandBar *bar,
  * Shows the command bar in an animated fashion.
  */
 void
-gb_command_bar_show (GbCommandBar *bar)
+gb_command_bar_show (GbCommandBar *self)
 {
   GtkWidget *toplevel;
   GtkWidget *focus;
 
-  g_return_if_fail (GB_IS_COMMAND_BAR (bar));
+  g_return_if_fail (GB_IS_COMMAND_BAR (self));
 
-  if (gtk_revealer_get_reveal_child (GTK_REVEALER (bar)))
+  if (gtk_revealer_get_reveal_child (GTK_REVEALER (self)))
     return;
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (bar));
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
   focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
-  gb_command_bar_set_last_focus (bar, focus);
+  gb_command_bar_set_last_focus (self, focus);
 
-  gtk_widget_hide (GTK_WIDGET (bar->priv->completion_scroller));
+  gtk_widget_hide (GTK_WIDGET (self->completion_scroller));
 
-  bar->priv->history_current = NULL;
-  g_clear_pointer (&bar->priv->saved_text, g_free);
-  bar->priv->saved_position_valid = FALSE;
+  self->history_current = NULL;
+  g_clear_pointer (&self->saved_text, g_free);
+  self->saved_position_valid = FALSE;
 
-  gtk_revealer_set_reveal_child (GTK_REVEALER (bar), TRUE);
-  gtk_entry_set_text (bar->priv->entry, "");
-  gtk_widget_grab_focus (GTK_WIDGET (bar->priv->entry));
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self), TRUE);
+  gtk_entry_set_text (self->entry, "");
+  gtk_widget_grab_focus (GTK_WIDGET (self->entry));
 }
 
 static void
-gb_command_bar_push_result (GbCommandBar    *bar,
+gb_command_bar_push_result (GbCommandBar    *self,
                             GbCommandResult *result)
 {
   GtkAdjustment *vadj;
@@ -184,21 +186,21 @@ gb_command_bar_push_result (GbCommandBar    *bar,
   GtkWidget *result_widget;
   gdouble upper;
 
-  g_return_if_fail (GB_IS_COMMAND_BAR (bar));
+  g_return_if_fail (GB_IS_COMMAND_BAR (self));
   g_return_if_fail (GB_IS_COMMAND_RESULT (result));
 
   item = g_object_new (GB_TYPE_COMMAND_BAR_ITEM,
                        "result", result,
                        "visible", TRUE,
                        NULL);
-  gtk_container_add (GTK_CONTAINER (bar->priv->list_box), item);
+  gtk_container_add (GTK_CONTAINER (self->list_box), item);
 
   result_widget = gb_command_bar_item_get_result (GB_COMMAND_BAR_ITEM (item));
-  gtk_size_group_add_widget (bar->priv->result_size_group, result_widget);
+  gtk_size_group_add_widget (self->result_size_group, result_widget);
 
-  vadj = gtk_list_box_get_adjustment (bar->priv->list_box);
+  vadj = gtk_list_box_get_adjustment (self->list_box);
   upper = gtk_adjustment_get_upper (vadj);
-  frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (bar->priv->list_box));
+  frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (self->list_box));
 
   ide_object_animate (vadj,
                       IDE_ANIMATION_EASE_IN_CUBIC,
@@ -209,22 +211,22 @@ gb_command_bar_push_result (GbCommandBar    *bar,
 }
 
 static void
-gb_command_bar_on_entry_activate (GbCommandBar *bar,
+gb_command_bar_on_entry_activate (GbCommandBar *self,
                                   GtkEntry     *entry)
 {
   GbWorkbench *workbench = NULL;
   const gchar *text;
 
-  g_return_if_fail (GB_IS_COMMAND_BAR (bar));
-  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_assert (GB_IS_COMMAND_BAR (self));
+  g_assert (GTK_IS_ENTRY (entry));
 
   text = gtk_entry_get_text (entry);
 
-  workbench = GB_WORKBENCH (gtk_widget_get_toplevel (GTK_WIDGET (bar)));
+  workbench = GB_WORKBENCH (gtk_widget_get_toplevel (GTK_WIDGET (self)));
   if (!workbench)
     return;
 
-  gtk_widget_hide (GTK_WIDGET (bar->priv->completion_scroller));
+  gtk_widget_hide (GTK_WIDGET (self->completion_scroller));
 
   if (!gb_str_empty0 (text))
     {
@@ -232,8 +234,8 @@ gb_command_bar_on_entry_activate (GbCommandBar *bar,
       GbCommandResult *result = NULL;
       GbCommand *command = NULL;
 
-      g_queue_push_head (bar->priv->history, g_strdup (text));
-      g_free (g_queue_pop_nth (bar->priv->history, HISTORY_LENGTH));
+      g_queue_push_head (self->history, g_strdup (text));
+      g_free (g_queue_pop_nth (self->history, HISTORY_LENGTH));
 
       manager = gb_workbench_get_command_manager (workbench);
       command = gb_command_manager_lookup (manager, text);
@@ -247,9 +249,9 @@ gb_command_bar_on_entry_activate (GbCommandBar *bar,
            * ported to Popover.) Otherwise, just hide the command bar.
            */
           if (result)
-            gb_command_bar_push_result (bar, result);
+            gb_command_bar_push_result (self, result);
           else
-            gb_command_bar_hide (bar);
+            gb_command_bar_hide (self);
         }
       else
         {
@@ -260,7 +262,7 @@ gb_command_bar_on_entry_activate (GbCommandBar *bar,
                                  "is-error", TRUE,
                                  "command-text", errmsg,
                                  NULL);
-          gb_command_bar_push_result (bar, result);
+          gb_command_bar_push_result (self, result);
           g_object_unref (result);
           g_free (errmsg);
         }
@@ -269,22 +271,22 @@ gb_command_bar_on_entry_activate (GbCommandBar *bar,
       g_clear_object (&command);
     }
   else
-    gb_command_bar_hide (bar);
+    gb_command_bar_hide (self);
 
-  bar->priv->history_current = NULL;
-  gtk_entry_set_text (bar->priv->entry, "");
+  self->history_current = NULL;
+  gtk_entry_set_text (self->entry, "");
 }
 
 static gboolean
-gb_command_bar_on_entry_focus_out_event (GbCommandBar *bar,
+gb_command_bar_on_entry_focus_out_event (GbCommandBar *self,
                                          GdkEventKey  *event,
                                          GtkEntry     *entry)
 {
-  g_return_val_if_fail (GB_IS_COMMAND_BAR (bar), FALSE);
-  g_return_val_if_fail (event, FALSE);
-  g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
+  g_assert (GB_IS_COMMAND_BAR (self));
+  g_assert (event != NULL);
+  g_assert (GTK_IS_ENTRY (entry));
 
-  gb_command_bar_hide (bar);
+  gb_command_bar_hide (self);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -292,11 +294,11 @@ gb_command_bar_on_entry_focus_out_event (GbCommandBar *bar,
 static void
 gb_command_bar_grab_focus (GtkWidget *widget)
 {
-  GbCommandBar *bar = (GbCommandBar *)widget;
+  GbCommandBar *self = (GbCommandBar *)widget;
 
-  g_return_if_fail (GB_IS_COMMAND_BAR (bar));
+  g_assert (GB_IS_COMMAND_BAR (self));
 
-  gtk_widget_grab_focus (GTK_WIDGET (bar->priv->entry));
+  gtk_widget_grab_focus (GTK_WIDGET (self->entry));
 }
 
 static gchar *
@@ -338,17 +340,17 @@ find_longest_common_prefix (gchar **strv)
 #define N_UNSCROLLED_COMPLETION_ROWS 4
 
 static void
-gb_command_bar_complete (GbCommandBar *bar)
+gb_command_bar_complete (GbCommandBar *self)
 {
-  GtkEditable *editable = GTK_EDITABLE (bar->priv->entry);
-  GtkWidget *viewport = gtk_bin_get_child (GTK_BIN (bar->priv->completion_scroller));
+  GtkEditable *editable = GTK_EDITABLE (self->entry);
+  GtkWidget *viewport = gtk_bin_get_child (GTK_BIN (self->completion_scroller));
   GbWorkbench *workbench;
   GbCommandManager *manager;
   gchar **completions;
   int pos, i;
   gchar *current_prefix, *expanded_prefix;
 
-  workbench = GB_WORKBENCH (gtk_widget_get_toplevel (GTK_WIDGET (bar)));
+  workbench = GB_WORKBENCH (gtk_widget_get_toplevel (GTK_WIDGET (self)));
   if (!workbench)
     return;
 
@@ -356,11 +358,11 @@ gb_command_bar_complete (GbCommandBar *bar)
   current_prefix = gtk_editable_get_chars (editable, 0, pos);
 
   /* If we complete again with the same data we scroll the completion instead */
-  if (gtk_widget_is_visible (GTK_WIDGET (bar->priv->completion_scroller)) &&
-      bar->priv->last_completion != NULL &&
-      strcmp (bar->priv->last_completion, current_prefix) == 0)
+  if (gtk_widget_is_visible (GTK_WIDGET (self->completion_scroller)) &&
+      self->last_completion != NULL &&
+      strcmp (self->last_completion, current_prefix) == 0)
     {
-      GtkAdjustment *vadj = gtk_scrolled_window_get_vadjustment (bar->priv->completion_scroller);
+      GtkAdjustment *vadj = gtk_scrolled_window_get_vadjustment (self->completion_scroller);
       int viewport_height = gtk_widget_get_allocated_height (viewport);
       int y = gtk_adjustment_get_value (vadj);
       int max = gtk_adjustment_get_upper (vadj);
@@ -373,7 +375,7 @@ gb_command_bar_complete (GbCommandBar *bar)
     }
   else
     {
-      g_clear_pointer (&bar->priv->last_completion, g_free);
+      g_clear_pointer (&self->last_completion, g_free);
 
       manager = gb_workbench_get_command_manager (workbench);
       completions = gb_command_manager_complete (manager, current_prefix);
@@ -382,20 +384,20 @@ gb_command_bar_complete (GbCommandBar *bar)
 
       if (strlen (expanded_prefix) > strlen (current_prefix))
         {
-          gtk_widget_hide (GTK_WIDGET (bar->priv->completion_scroller));
+          gtk_widget_hide (GTK_WIDGET (self->completion_scroller));
           gtk_editable_insert_text (editable, expanded_prefix + strlen (current_prefix), -1, &pos);
           gtk_editable_set_position (editable, pos);
         }
       else if (g_strv_length (completions) > 1)
         {
           gint wrapped_height = 0;
-          bar->priv->last_completion = g_strdup (current_prefix);
+          self->last_completion = g_strdup (current_prefix);
 
-          gtk_widget_show (GTK_WIDGET (bar->priv->completion_scroller));
-          gtk_container_foreach (GTK_CONTAINER (bar->priv->flow_box),
+          gtk_widget_show (GTK_WIDGET (self->completion_scroller));
+          gtk_container_foreach (GTK_CONTAINER (self->flow_box),
                                  (GtkCallback)gtk_widget_destroy, NULL);
 
-          gtk_flow_box_set_min_children_per_line (bar->priv->flow_box, MIN_COMPLETION_COLUMS);
+          gtk_flow_box_set_min_children_per_line (self->flow_box, MIN_COMPLETION_COLUMS);
 
           for (i = 0; completions[i] != NULL; i++)
             {
@@ -408,28 +410,28 @@ gb_command_bar_complete (GbCommandBar *bar)
               gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
               g_free (s);
 
-              gtk_container_add (GTK_CONTAINER (bar->priv->flow_box), label);
+              gtk_container_add (GTK_CONTAINER (self->flow_box), label);
               gtk_widget_show (label);
 
               if (i == MIN_COMPLETION_COLUMS * N_UNSCROLLED_COMPLETION_ROWS - 1)
-                gtk_widget_get_preferred_height (GTK_WIDGET (bar->priv->flow_box), &wrapped_height, NULL);
+                gtk_widget_get_preferred_height (GTK_WIDGET (self->flow_box), &wrapped_height, NULL);
             }
 
           if (i < MIN_COMPLETION_COLUMS * N_UNSCROLLED_COMPLETION_ROWS)
             {
-              gtk_widget_set_size_request (GTK_WIDGET (bar->priv->completion_scroller), -1, -1);
-              gtk_scrolled_window_set_policy (bar->priv->completion_scroller,
+              gtk_widget_set_size_request (GTK_WIDGET (self->completion_scroller), -1, -1);
+              gtk_scrolled_window_set_policy (self->completion_scroller,
                                               GTK_POLICY_NEVER, GTK_POLICY_NEVER);
             }
           else
             {
-              gtk_widget_set_size_request (GTK_WIDGET (bar->priv->completion_scroller), -1, wrapped_height);
-              gtk_scrolled_window_set_policy (bar->priv->completion_scroller,
+              gtk_widget_set_size_request (GTK_WIDGET (self->completion_scroller), -1, wrapped_height);
+              gtk_scrolled_window_set_policy (self->completion_scroller,
                                               GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
             }
         }
       else
-        gtk_widget_hide (GTK_WIDGET (bar->priv->completion_scroller));
+        gtk_widget_hide (GTK_WIDGET (self->completion_scroller));
 
       g_free (expanded_prefix);
       g_strfreev (completions);
@@ -439,23 +441,23 @@ gb_command_bar_complete (GbCommandBar *bar)
 }
 
 static void
-gb_command_bar_move_history (GbCommandBar *bar,
-                             GtkDirectionType dir)
+gb_command_bar_move_history (GbCommandBar     *self,
+                             GtkDirectionType  dir)
 {
   GList *l;
 
   switch (dir)
     {
     case GTK_DIR_UP:
-      l = bar->priv->history_current;
+      l = self->history_current;
       if (l == NULL)
-        l = bar->priv->history->head;
+        l = self->history->head;
       else
         l = l->next;
 
       if (l == NULL)
         {
-          gtk_widget_error_bell (GTK_WIDGET (bar));
+          gtk_widget_error_bell (GTK_WIDGET (self));
           return;
         }
 
@@ -463,10 +465,10 @@ gb_command_bar_move_history (GbCommandBar *bar,
 
     case GTK_DIR_DOWN:
 
-      l = bar->priv->history_current;
+      l = self->history_current;
       if (l == NULL)
         {
-          gtk_widget_error_bell (GTK_WIDGET (bar));
+          gtk_widget_error_bell (GTK_WIDGET (self));
           return;
         }
 
@@ -482,33 +484,35 @@ gb_command_bar_move_history (GbCommandBar *bar,
       return;
     }
 
-  if (bar->priv->history_current == NULL)
+  if (self->history_current == NULL)
     {
-      g_clear_pointer (&bar->priv->saved_text, g_free);
-      bar->priv->saved_text = g_strdup (gtk_entry_get_text (bar->priv->entry));
+      g_clear_pointer (&self->saved_text, g_free);
+      self->saved_text = g_strdup (gtk_entry_get_text (self->entry));
     }
-  bar->priv->history_current = l;
+  self->history_current = l;
 
-  if (!bar->priv->saved_position_valid)
+  if (!self->saved_position_valid)
     {
-      bar->priv->saved_position = gtk_editable_get_position (GTK_EDITABLE (bar->priv->entry));
-      if (bar->priv->saved_position == gtk_entry_get_text_length (bar->priv->entry))
-        bar->priv->saved_position = -1;
+      self->saved_position = gtk_editable_get_position (GTK_EDITABLE (self->entry));
+      if (self->saved_position == gtk_entry_get_text_length (self->entry))
+        self->saved_position = -1;
     }
 
   if (l == NULL)
-    gtk_entry_set_text (bar->priv->entry, bar->priv->saved_text ? bar->priv->saved_text : "");
+    gtk_entry_set_text (self->entry, self->saved_text ? self->saved_text : "");
   else
-    gtk_entry_set_text (bar->priv->entry, l->data);
+    gtk_entry_set_text (self->entry, l->data);
 
-  gtk_editable_set_position (GTK_EDITABLE (bar->priv->entry), bar->priv->saved_position);
-  bar->priv->saved_position_valid = TRUE;
+  gtk_editable_set_position (GTK_EDITABLE (self->entry), self->saved_position);
+  self->saved_position_valid = TRUE;
 }
 
 static void
-gb_command_bar_on_entry_cursor_changed (GbCommandBar *bar)
+gb_command_bar_on_entry_cursor_changed (GbCommandBar *self)
 {
-  bar->priv->saved_position_valid = FALSE;
+  g_assert (GB_IS_COMMAND_BAR (self));
+
+  self->saved_position_valid = FALSE;
 }
 
 static gboolean
@@ -549,7 +553,7 @@ update_header_func (GtkListBoxRow *row,
 static void
 gb_command_bar_constructed (GObject *object)
 {
-  GbCommandBar *bar = (GbCommandBar *)object;
+  GbCommandBar *self = (GbCommandBar *)object;
   GtkWidget *placeholder;
 
   G_OBJECT_CLASS (gb_command_bar_parent_class)->constructed (object);
@@ -560,45 +564,45 @@ gb_command_bar_constructed (GObject *object)
                               NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (placeholder),
                                "gb-command-bar-placeholder");
-  gtk_list_box_set_placeholder (bar->priv->list_box, placeholder);
+  gtk_list_box_set_placeholder (self->list_box, placeholder);
 
-  g_signal_connect_object (bar->priv->entry,
+  g_signal_connect_object (self->entry,
                            "activate",
                            G_CALLBACK (gb_command_bar_on_entry_activate),
-                           bar,
+                           self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (bar->priv->entry,
+  g_signal_connect_object (self->entry,
                            "focus-out-event",
                            G_CALLBACK (gb_command_bar_on_entry_focus_out_event),
-                           bar,
+                           self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (bar->priv->entry,
+  g_signal_connect_object (self->entry,
                            "key-press-event",
                            G_CALLBACK (gb_command_bar_on_entry_key_press_event),
-                           bar,
+                           self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (bar->priv->entry,
+  g_signal_connect_object (self->entry,
                            "notify::cursor-position",
                            G_CALLBACK (gb_command_bar_on_entry_cursor_changed),
-                           bar,
+                           self,
                            G_CONNECT_SWAPPED);
 
-  gtk_list_box_set_header_func (bar->priv->list_box, update_header_func,
+  gtk_list_box_set_header_func (self->list_box, update_header_func,
                                 NULL, NULL);
 }
 
 static void
 gb_command_bar_finalize (GObject *object)
 {
-  GbCommandBar *bar = (GbCommandBar *)object;
+  GbCommandBar *self = (GbCommandBar *)object;
 
-  g_clear_pointer (&bar->priv->last_completion, g_free);
-  g_clear_pointer (&bar->priv->saved_text, g_free);
-  g_queue_free_full (bar->priv->history, g_free);
-  gb_clear_weak_pointer (&bar->priv->last_focus);
+  g_clear_pointer (&self->last_completion, g_free);
+  g_clear_pointer (&self->saved_text, g_free);
+  g_queue_free_full (self->history, g_free);
+  gb_clear_weak_pointer (&self->last_focus);
 
   G_OBJECT_CLASS (gb_command_bar_parent_class)->finalize (object);
 }
@@ -615,49 +619,35 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
 
   widget_class->grab_focus = gb_command_bar_grab_focus;
 
-  klass->complete = gb_command_bar_complete;
-  klass->move_history = gb_command_bar_move_history;
-
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/gb-command-bar.ui");
-
-  gtk_widget_class_bind_template_child_private (widget_class, GbCommandBar, entry);
-  gtk_widget_class_bind_template_child_private (widget_class, GbCommandBar, list_box);
-  gtk_widget_class_bind_template_child_private (widget_class, GbCommandBar, scroller);
-  gtk_widget_class_bind_template_child_private (widget_class, GbCommandBar, result_size_group);
-  gtk_widget_class_bind_template_child_private (widget_class, GbCommandBar, completion_scroller);
-  gtk_widget_class_bind_template_child_private (widget_class, GbCommandBar, flow_box);
-
-
   /**
    * GbCommandBar::complete:
    * @bar: the object which received the signal.
    */
-  signals[COMPLETE] =
-    g_signal_new ("complete",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GbCommandBarClass, complete),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE,
-                  0);
+  gSignals [COMPLETE] =
+    g_signal_new_class_handler ("complete",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gb_command_bar_complete),
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__VOID,
+                                G_TYPE_NONE,
+                                0);
 
   /**
    * GbCommandBar::move-history:
    * @bar: the object which received the signal.
    * @direction: direction to move
    */
-  signals[MOVE_HISTORY] =
-    g_signal_new ("move-history",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GbCommandBarClass, move_history),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__ENUM,
-                  G_TYPE_NONE,
-                  1,
-                  GTK_TYPE_DIRECTION_TYPE);
+  gSignals [MOVE_HISTORY] =
+    g_signal_new_class_handler ("move-history",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gb_command_bar_move_history),
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__ENUM,
+                                G_TYPE_NONE,
+                                1,
+                                GTK_TYPE_DIRECTION_TYPE);
 
   binding_set = gtk_binding_set_by_class (klass);
 
@@ -673,12 +663,22 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
                                 GDK_KEY_Down, 0,
                                 "move-history", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_DOWN);
+
+  gtk_widget_class_set_template_from_resource (widget_class,
+                                               "/org/gnome/builder/ui/gb-command-bar.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, GbCommandBar, entry);
+  gtk_widget_class_bind_template_child (widget_class, GbCommandBar, list_box);
+  gtk_widget_class_bind_template_child (widget_class, GbCommandBar, scroller);
+  gtk_widget_class_bind_template_child (widget_class, GbCommandBar, result_size_group);
+  gtk_widget_class_bind_template_child (widget_class, GbCommandBar, completion_scroller);
+  gtk_widget_class_bind_template_child (widget_class, GbCommandBar, flow_box);
 }
 
 static void
 gb_command_bar_init (GbCommandBar *self)
 {
-  self->priv = gb_command_bar_get_instance_private (self);
   gtk_widget_init_template (GTK_WIDGET (self));
-  self->priv->history = g_queue_new ();
+
+  self->history = g_queue_new ();
 }
