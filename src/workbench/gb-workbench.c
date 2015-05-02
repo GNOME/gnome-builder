@@ -588,6 +588,7 @@ supports_content_type (const gchar *filename,
 {
   GtkSourceLanguageManager *languages;
   GtkSourceLanguage *language;
+  g_autofree gchar *text_type = NULL;
 
   /* TODO: This really belongs in it's own module, or as part of buffermanager */
 
@@ -597,19 +598,8 @@ supports_content_type (const gchar *filename,
   if (language != NULL)
     return TRUE;
 
-  return (g_str_has_prefix (content_type, "text/") ||
-          g_str_equal (content_type, "application/javascript") ||
-          g_str_equal (content_type, "application/sql") ||
-          g_str_equal (content_type, "application/x-desktop") ||
-          g_str_equal (content_type, "application/x-gettext-translation") ||
-          g_str_equal (content_type, "application/x-gtk-builder") ||
-          g_str_equal (content_type, "application/x-m4") ||
-          g_str_equal (content_type, "application/x-pak") ||
-          g_str_equal (content_type, "application/x-perl") ||
-          g_str_equal (content_type, "application/x-php") ||
-          g_str_equal (content_type, "application/x-ruby") ||
-          g_str_equal (content_type, "application/x-shellscript") ||
-          g_str_equal (content_type, "application/xml"));
+  text_type = g_content_type_from_mime_type ("text/plain");
+  return g_content_type_is_a (content_type, text_type);
 }
 
 static void
