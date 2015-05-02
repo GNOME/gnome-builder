@@ -20,10 +20,10 @@
                 <property name="visible">True</property>
                 <property name="expand">True</property>
                 <property name="selection_mode">GTK_SELECTION_NONE</property>
+                <style>
+                  <class name="view"/>
+                </style>
               </object>
-              <style>
-                <class name="view"/>
-              </style>
             </child>
           </object>
         </child>
