@@ -170,6 +170,7 @@ enum {
   PROP_FONT_NAME,
   PROP_FONT_DESC,
   PROP_HIGHLIGHT_CURRENT_LINE,
+  PROP_INDENT_STYLE,
   PROP_INSERT_MATCHING_BRACE,
   PROP_MODE_DISPLAY_NAME,
   PROP_OVERWRITE,
@@ -4725,6 +4726,20 @@ ignore_invalid_buffers (GBinding     *binding,
 }
 
 static void
+ide_source_view_set_indent_style (IdeSourceView  *self,
+                                  IdeIndentStyle  indent_style)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert ((indent_style == IDE_INDENT_STYLE_SPACES) ||
+            (indent_style == IDE_INDENT_STYLE_TABS));
+
+  if (indent_style == IDE_INDENT_STYLE_SPACES)
+    gtk_source_view_set_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (self), TRUE);
+  else
+    gtk_source_view_set_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (self), FALSE);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -4895,6 +4910,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_HIGHLIGHT_CURRENT_LINE:
       ide_source_view_set_highlight_current_line (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_INDENT_STYLE:
+      ide_source_view_set_indent_style (self, g_value_get_enum (value));
       break;
 
     case PROP_INSERT_MATCHING_BRACE:
@@ -5075,6 +5094,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   g_object_class_override_property (object_class,
                                     PROP_HIGHLIGHT_CURRENT_LINE,
                                     "highlight-current-line");
+
+  gParamSpecs [PROP_INDENT_STYLE] =
+    g_param_spec_enum ("indent-style",
+                       _("Indent Style"),
+                       _("Indent Style"),
+                       IDE_TYPE_INDENT_STYLE,
+                       IDE_INDENT_STYLE_TABS,
+                       (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_INDENT_STYLE,
+                                   gParamSpecs [PROP_INDENT_STYLE]);
 
   gParamSpecs [PROP_INSERT_MATCHING_BRACE] =
     g_param_spec_boolean ("insert-matching-brace",
