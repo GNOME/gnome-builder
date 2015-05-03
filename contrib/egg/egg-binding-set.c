@@ -273,6 +273,26 @@ egg_binding_set_get_source (EggBindingSet *self)
   return self->source;
 }
 
+static gboolean
+egg_binding_set_check_source (EggBindingSet *self,
+                              gpointer       source)
+{
+  gsize i;
+
+  for (i = 0; i < self->lazy_bindings->len; i++)
+    {
+      LazyBinding *lazy_binding;
+
+      lazy_binding = g_ptr_array_index (self->lazy_bindings, i);
+
+      g_return_val_if_fail (g_object_class_find_property (G_OBJECT_GET_CLASS (source),
+                                                          lazy_binding->source_property) != NULL,
+                            FALSE);
+    }
+
+  return TRUE;
+}
+
 void
 egg_binding_set_set_source (EggBindingSet *self,
                             gpointer       source)
@@ -302,7 +322,7 @@ egg_binding_set_set_source (EggBindingSet *self,
         }
     }
 
-  if (source != NULL)
+  if (source != NULL && egg_binding_set_check_source (self, source))
     {
       gsize i;
 
