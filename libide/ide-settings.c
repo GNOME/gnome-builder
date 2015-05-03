@@ -256,14 +256,19 @@ ide_settings_class_init (IdeSettingsClass *klass)
   object_class->get_property = ide_settings_get_property;
   object_class->set_property = ide_settings_set_property;
 
+  gParamSpecs [PROP_IS_GLOBAL] =
+    g_param_spec_boolean ("is-global",
+                         _("Is Global"),
+                         _("If project settings should be ignored."),
+                         FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   gParamSpecs [PROP_RELATIVE_PATH] =
     g_param_spec_string ("relative-path",
                          _("Relative Path"),
                          _("Relative Path"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_RELATIVE_PATH,
-                                   gParamSpecs [PROP_RELATIVE_PATH]);
 
   gParamSpecs [PROP_SCHEMA_ID] =
     g_param_spec_string ("schema-id",
@@ -271,7 +276,8 @@ ide_settings_class_init (IdeSettingsClass *klass)
                          _("Schema Id"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SCHEMA_ID, gParamSpecs [PROP_SCHEMA_ID]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [CHANGED] =
     g_signal_new_class_handler ("changed",
