@@ -155,6 +155,8 @@ libide_1_0_la_public_sources = \
 	ide-search-result.h \
 	ide-service.c \
 	ide-service.h \
+        ide-settings.c \
+        ide-settings.h \
 	ide-source-location.c \
 	ide-source-location.h \
 	ide-source-range.c \

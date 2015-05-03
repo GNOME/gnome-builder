@@ -27,6 +27,7 @@
 #include "ide-clang-translation-unit.h"
 #include "ide-diagnostic.h"
 #include "ide-types.h"
+#include "ide-settings.h"
 #include "ide-source-view.h"
 #include "ide-source-view-mode.h"
 #include "ide-symbol.h"
@@ -92,6 +93,9 @@ void                _ide_project_set_name              (IdeProject            *p
 void                _ide_search_context_add_provider   (IdeSearchContext      *context,
                                                         IdeSearchProvider     *provider,
                                                         gsize                  max_results);
+IdeSettings        *_ide_settings_new                  (IdeContext            *context,
+                                                        const gchar           *schema_id,
+                                                        const gchar           *relative_path);
 IdeSourceRange     *_ide_source_range_new              (IdeSourceLocation     *begin,
                                                         IdeSourceLocation     *end);
 gboolean            _ide_source_view_mode_do_event     (IdeSourceViewMode     *mode,

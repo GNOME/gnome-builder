@@ -38,6 +38,7 @@
 #include "ide-search-engine.h"
 #include "ide-search-provider.h"
 #include "ide-service.h"
+#include "ide-settings.h"
 #include "ide-source-snippets-manager.h"
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
@@ -1739,4 +1740,25 @@ gboolean
 _ide_context_is_restoring (IdeContext *self)
 {
   return self->restoring;
+}
+
+/**
+ * ide_context_get_settings:
+ *
+ * Gets an #IdeSettings representing the given #GSettingsSchema.
+ *
+ * relative_path will be used to apply multiple layers of settings. Project settings will be
+ * applied to first, followed by global settings.
+ *
+ * Returns: (transfer full): An #IdeSettings.
+ */
+IdeSettings *
+ide_context_get_settings (IdeContext  *self,
+                          const gchar *schema_id,
+                          const gchar *relative_path)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+  g_return_val_if_fail (schema_id != NULL, NULL);
+
+  return  _ide_settings_new (self, schema_id, relative_path);
 }
