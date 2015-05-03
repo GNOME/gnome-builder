@@ -40,7 +40,7 @@ G_BEGIN_DECLS
 static inline gboolean
 ide_str_empty0 (const gchar *str)
 {
-  return (str != NULL) && (str[0] != '\0');
+  return (str == NULL) || (str[0] == '\0');
 }
 
 static inline gboolean
