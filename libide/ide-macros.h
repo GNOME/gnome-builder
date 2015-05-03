@@ -37,8 +37,18 @@ G_BEGIN_DECLS
     } \
   } G_STMT_END
 
-#define ide_str_empty0(str) (((str) == NULL)||(*(str) == 0))
-#define ide_str_equal0(a,b) (g_strcmp0((a),(b)) == 0)
+static inline gboolean
+ide_str_empty0 (const gchar *str)
+{
+  return (str != NULL) && (str[0] != '\0');
+}
+
+static inline gboolean
+ide_str_equal0 (gconstpointer a,
+                gconstpointer b)
+{
+  return (g_strcmp0 ((const gchar *)a, (const gchar *)b) == 0);
+}
 
 G_END_DECLS
 
