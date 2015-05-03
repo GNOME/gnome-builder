@@ -116,6 +116,10 @@ ide_gsettings_file_settings__init_defaults_cb (GObject      *object,
   g_settings_bind (self->settings, "trim-trailing-whitespace",
                    self, "trim-trailing-whitespace",
                    G_SETTINGS_BIND_GET);
+  g_settings_bind (self->settings, "show-right-margin",
+                   self, "show-right-margin",
+                   G_SETTINGS_BIND_GET);
+
 
   g_task_return_boolean (task, TRUE);
 }

@@ -5749,6 +5749,8 @@ ide_source_view_init (IdeSourceView *self)
                         self, "right-margin-position", G_BINDING_SYNC_CREATE);
   egg_binding_set_bind (priv->file_setting_bindings, "indent-style",
                         self, "indent-style", G_BINDING_SYNC_CREATE);
+  egg_binding_set_bind (priv->file_setting_bindings, "show-right-margin",
+                        self, "show-right-margin", G_BINDING_SYNC_CREATE);
 
   priv->buffer_signals = egg_signal_group_new (IDE_TYPE_BUFFER);
 

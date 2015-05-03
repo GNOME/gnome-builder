@@ -79,6 +79,11 @@ test_filesettings (void)
   ide_file_settings_set_trim_trailing_whitespace (settings, FALSE);
   g_assert_cmpint (ide_file_settings_get_trim_trailing_whitespace (settings), ==, FALSE);
 
+  ide_file_settings_set_show_right_margin (settings, TRUE);
+  g_assert_cmpint (ide_file_settings_get_show_right_margin (settings), ==, TRUE);
+  ide_file_settings_set_show_right_margin (settings, FALSE);
+  g_assert_cmpint (ide_file_settings_get_show_right_margin (settings), ==, FALSE);
+
   g_object_unref (settings);
   g_assert (settings == NULL);
   g_clear_object (&file);

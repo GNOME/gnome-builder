@@ -34,6 +34,7 @@ typedef struct
   guint                 tab_width : 6;
   guint                 trim_trailing_whitespace : 1;
   guint                 right_margin_position : 10;
+  guint                 show_right_margin: 1;
   GtkSourceNewlineType  newline_type : 2;
 } IdeFileSettingsPrivate;
 
@@ -50,6 +51,7 @@ enum {
   PROP_RIGHT_MARGIN_POSITION,
   PROP_TAB_WIDTH,
   PROP_TRIM_TRAILING_WHITESPACE,
+  PROP_SHOW_RIGHT_MARGIN,
   LAST_PROP
 };
 
@@ -201,6 +203,34 @@ ide_file_settings_set_insert_trailing_newline (IdeFileSettings *self,
       priv->insert_trailing_newline = insert_trailing_newline;
       g_object_notify_by_pspec (G_OBJECT (self),
                                 gParamSpecs [PROP_INSERT_TRAILING_NEWLINE]);
+    }
+}
+
+gboolean
+ide_file_settings_get_show_right_margin (IdeFileSettings *self)
+{
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), FALSE);
+
+  return priv->show_right_margin;
+}
+
+void
+ide_file_settings_set_show_right_margin (IdeFileSettings *self,
+                                         gboolean         show_right_margin)
+{
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
+
+  show_right_margin = !!show_right_margin;
+
+  if (priv->show_right_margin != show_right_margin)
+    {
+      priv->show_right_margin = show_right_margin;
+      g_object_notify_by_pspec (G_OBJECT (self),
+                                gParamSpecs [PROP_SHOW_RIGHT_MARGIN]);
     }
 }
 
@@ -373,6 +403,10 @@ ide_file_settings_get_property (GObject    *object,
       g_value_set_boolean (value, ide_file_settings_get_trim_trailing_whitespace (self));
       break;
 
+    case PROP_SHOW_RIGHT_MARGIN:
+      g_value_set_boolean (value, ide_file_settings_get_show_right_margin (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -423,6 +457,11 @@ ide_file_settings_set_property (GObject      *object,
     case PROP_TRIM_TRAILING_WHITESPACE:
       ide_file_settings_set_trim_trailing_whitespace (self, g_value_get_boolean (value));
       break;
+
+    case PROP_SHOW_RIGHT_MARGIN:
+      ide_file_settings_set_show_right_margin (self, g_value_get_boolean (value));
+      break;
+
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -525,6 +564,15 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_TRIM_TRAILING_WHITESPACE,
                                    gParamSpecs [PROP_TRIM_TRAILING_WHITESPACE]);
+
+  gParamSpecs [PROP_SHOW_RIGHT_MARGIN] =
+    g_param_spec_boolean ("show-right-margin",
+                          _("Show Right Margin"),
+                          _("If right margin should be shown."),
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_SHOW_RIGHT_MARGIN,
+                                   gParamSpecs [PROP_SHOW_RIGHT_MARGIN]);
 }
 
 static void
