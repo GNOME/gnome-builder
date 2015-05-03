@@ -836,6 +836,14 @@ ide_buffer_dispose (GObject *object)
   g_clear_object (&priv->highlight_engine);
   g_clear_object (&priv->symbol_resolver);
 
+  if (priv->context != NULL)
+    {
+      g_object_weak_unref (G_OBJECT (priv->context),
+                           ide_buffer_release_context,
+                           self);
+      priv->context = NULL;
+    }
+
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
 
   IDE_EXIT;
