@@ -588,6 +588,9 @@ gb_view_stack_set_active_view (GbViewStack *self,
   g_return_if_fail (GB_IS_VIEW_STACK (self));
   g_return_if_fail (!active_view || GB_IS_VIEW (active_view));
 
+  if (self->destroyed)
+    return;
+
   if (self->active_view != active_view)
     {
       if (self->active_view)
