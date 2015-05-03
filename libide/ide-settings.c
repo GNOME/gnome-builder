@@ -77,7 +77,7 @@ ide_settings_set_relative_path (IdeSettings *self,
   g_assert (IDE_IS_SETTINGS (self));
   g_assert (relative_path != NULL);
 
-  if (relative_path != self->relative_path)
+  if (!ide_str_equal0 (relative_path, self->relative_path))
     {
       g_free (self->relative_path);
       self->relative_path = g_strdup (relative_path);
@@ -92,7 +92,7 @@ ide_settings_set_schema_id (IdeSettings *self,
   g_assert (IDE_IS_SETTINGS (self));
   g_assert (schema_id != NULL);
 
-  if (schema_id != self->schema_id)
+  if (!ide_str_equal0 (schema_id, self->schema_id))
     {
       g_free (self->schema_id);
       self->schema_id = g_strdup (schema_id);
@@ -230,11 +230,11 @@ ide_settings_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_SCHEMA_ID:
-      ide_settings_set_schema_id (self, g_value_get_object (value));
+      ide_settings_set_schema_id (self, g_value_get_string (value));
       break;
 
     case PROP_RELATIVE_PATH:
-      ide_settings_set_relative_path (self, g_value_get_object (value));
+      ide_settings_set_relative_path (self, g_value_get_string (value));
       break;
 
     case PROP_IS_GLOBAL:
@@ -284,8 +284,7 @@ ide_settings_class_init (IdeSettingsClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
                                 0,
-                                NULL, NULL,
-                                g_cclosure_marshal_VOID__STRING,
+                                NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 1,
                                 G_TYPE_STRING);
