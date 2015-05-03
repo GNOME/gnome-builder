@@ -31,7 +31,7 @@ EggSignalGroup *egg_signal_group_new            (GType           target_type);
 void            egg_signal_group_connect_object (EggSignalGroup *self,
                                                  const gchar    *detailed_signal,
                                                  GCallback       c_handler,
-                                                 gpointer        data,
+                                                 gpointer        object,
                                                  GConnectFlags   flags);
 void            egg_signal_group_set_target     (EggSignalGroup *self,
                                                  gpointer        target);

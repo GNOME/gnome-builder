@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "egg-binding-set"
+
 #include <glib/gi18n.h>
 
 #include "egg-binding-set.h"
@@ -42,6 +44,7 @@ struct _EggBindingSet
 
 typedef struct
 {
+  EggBindingSet *set;
   const gchar   *source_property;
   const gchar   *target_property;
   GObject       *target;
@@ -66,26 +69,6 @@ egg_binding_set_new (void)
 }
 
 static void
-lazy_binding_free (gpointer data)
-{
-  LazyBinding *lazy_binding = data;
-
-  if (lazy_binding != NULL)
-    {
-      if (lazy_binding->binding != NULL)
-        {
-          g_binding_unbind (lazy_binding->binding);
-          lazy_binding->binding = NULL;
-        }
-
-      g_assert (lazy_binding->target == NULL);
-
-      lazy_binding->source_property = NULL;
-      lazy_binding->target_property = NULL;
-    }
-}
-
-static void
 egg_binding_set_connect (EggBindingSet *self,
                          LazyBinding   *lazy_binding)
 {
@@ -105,20 +88,14 @@ egg_binding_set_connect (EggBindingSet *self,
 }
 
 static void
-egg_binding_set_disconnect (EggBindingSet *self,
-                            LazyBinding   *lazy_binding)
+egg_binding_set_disconnect (LazyBinding *lazy_binding)
 {
-  GBinding *binding;
-
-  g_assert (EGG_IS_BINDING_SET (self));
   g_assert (lazy_binding != NULL);
 
-  binding = lazy_binding->binding;
-
-  if (binding != NULL)
+  if (lazy_binding->binding != NULL)
     {
+      g_binding_unbind (lazy_binding->binding);
       lazy_binding->binding = NULL;
-      g_binding_unbind (binding);
     }
 }
 
@@ -169,10 +146,30 @@ egg_binding_set__target_weak_notify (gpointer  data,
 }
 
 static void
+lazy_binding_free (gpointer data)
+{
+  LazyBinding *lazy_binding = data;
+
+  if (lazy_binding->target != NULL)
+    {
+      g_object_weak_unref (lazy_binding->target,
+                           egg_binding_set__target_weak_notify,
+                           lazy_binding->set);
+      lazy_binding->target = NULL;
+    }
+
+  egg_binding_set_disconnect (lazy_binding);
+
+  lazy_binding->set = NULL;
+  lazy_binding->source_property = NULL;
+  lazy_binding->target_property = NULL;
+  g_slice_free (LazyBinding, lazy_binding);
+}
+
+static void
 egg_binding_set_dispose (GObject *object)
 {
   EggBindingSet *self = (EggBindingSet *)object;
-  gsize i;
 
   g_assert (EGG_IS_BINDING_SET (self));
 
@@ -182,23 +179,6 @@ egg_binding_set_dispose (GObject *object)
                            egg_binding_set__source_weak_notify,
                            self);
       self->source = NULL;
-    }
-
-  for (i = 0; i < self->lazy_bindings->len; i++)
-    {
-      LazyBinding *lazy_binding;
-
-      lazy_binding = g_ptr_array_index (self->lazy_bindings, i);
-
-      egg_binding_set_disconnect (self, lazy_binding);
-
-      if (lazy_binding->target != NULL)
-        {
-          g_object_weak_unref (lazy_binding->target,
-                               egg_binding_set__target_weak_notify,
-                               self);
-          lazy_binding->target = NULL;
-        }
     }
 
   if (self->lazy_bindings->len != 0)
@@ -275,7 +255,8 @@ egg_binding_set_class_init (EggBindingSetClass *klass)
                          _("The source GObject."),
                          G_TYPE_OBJECT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SOURCE, gParamSpecs [PROP_SOURCE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void
@@ -284,7 +265,7 @@ egg_binding_set_init (EggBindingSet *self)
   self->lazy_bindings = g_ptr_array_new_with_free_func (lazy_binding_free);
 }
 
-gpointer
+GObject *
 egg_binding_set_get_source (EggBindingSet *self)
 {
   g_return_val_if_fail (EGG_IS_BINDING_SET (self), NULL);
@@ -300,46 +281,46 @@ egg_binding_set_set_source (EggBindingSet *self,
   g_return_if_fail (!source || G_IS_OBJECT (source));
   g_return_if_fail (source != (gpointer)self);
 
-  if (source != (gpointer)self->source)
+  if (source == (gpointer)self->source)
+    return;
+
+  if (self->source != NULL)
     {
-      if (self->source != NULL)
+      gsize i;
+
+      g_object_weak_unref (self->source,
+                           egg_binding_set__source_weak_notify,
+                           self);
+      self->source = NULL;
+
+      for (i = 0; i < self->lazy_bindings->len; i++)
         {
-          gsize i;
+          LazyBinding *lazy_binding;
 
-          g_object_weak_unref (self->source,
-                               egg_binding_set__source_weak_notify,
-                               self);
-          self->source = NULL;
-
-          for (i = 0; i < self->lazy_bindings->len; i++)
-            {
-              LazyBinding *lazy_binding;
-
-              lazy_binding = g_ptr_array_index (self->lazy_bindings, i);
-              egg_binding_set_disconnect (self, lazy_binding);
-            }
+          lazy_binding = g_ptr_array_index (self->lazy_bindings, i);
+          egg_binding_set_disconnect (lazy_binding);
         }
-
-      if (source != NULL)
-        {
-          gsize i;
-
-          self->source = source;
-          g_object_weak_ref (self->source,
-                             egg_binding_set__source_weak_notify,
-                             self);
-
-          for (i = 0; i < self->lazy_bindings->len; i++)
-            {
-              LazyBinding *lazy_binding;
-
-              lazy_binding = g_ptr_array_index (self->lazy_bindings, i);
-              egg_binding_set_connect (self, lazy_binding);
-            }
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SOURCE]);
     }
+
+  if (source != NULL)
+    {
+      gsize i;
+
+      self->source = source;
+      g_object_weak_ref (self->source,
+                         egg_binding_set__source_weak_notify,
+                         self);
+
+      for (i = 0; i < self->lazy_bindings->len; i++)
+        {
+          LazyBinding *lazy_binding;
+
+          lazy_binding = g_ptr_array_index (self->lazy_bindings, i);
+          egg_binding_set_connect (self, lazy_binding);
+        }
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SOURCE]);
 }
 
 void
@@ -353,11 +334,17 @@ egg_binding_set_bind (EggBindingSet *self,
 
   g_return_if_fail (EGG_IS_BINDING_SET (self));
   g_return_if_fail (source_property != NULL);
+  g_return_if_fail (self->source == NULL ||
+                    g_object_class_find_property (G_OBJECT_GET_CLASS (self->source),
+                                                  source_property) != NULL);
   g_return_if_fail (G_IS_OBJECT (target));
   g_return_if_fail (target_property != NULL);
+  g_return_if_fail (g_object_class_find_property (G_OBJECT_GET_CLASS (target),
+                                                  target_property) != NULL);
   g_return_if_fail (target != (gpointer)self);
 
   lazy_binding = g_slice_new0 (LazyBinding);
+  lazy_binding->set = self;
   lazy_binding->source_property = g_intern_string (source_property);
   lazy_binding->target_property = g_intern_string (target_property);
   lazy_binding->target = target;

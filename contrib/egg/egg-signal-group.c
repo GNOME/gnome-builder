@@ -51,7 +51,7 @@ struct _EggSignalGroup
   GObject   *target;
   GPtrArray *handlers;
   GType      target_type;
-  gint       block_count;
+  gsize      block_count;
 };
 
 struct _EggSignalGroupClass
@@ -139,124 +139,141 @@ static void
 egg_signal_group_bind (EggSignalGroup *self,
                        GObject        *target)
 {
+  gsize i;
+
   g_assert (EGG_IS_SIGNAL_GROUP (self));
   g_assert (self->target == NULL);
   g_assert (!target || G_IS_OBJECT (target));
 
-  if (target != NULL)
+  if (target == NULL)
+    return;
+
+  self->target = target;
+  g_object_weak_ref (self->target,
+                     egg_signal_group__target_weak_notify,
+                     self);
+
+  g_object_ref (target);
+
+  for (i = 0; i < self->handlers->len; i++)
     {
-      gsize i;
+      SignalHandler *handler;
 
-      self->target = target;
-      g_object_weak_ref (self->target,
-                         egg_signal_group__target_weak_notify,
-                         self);
-
-      g_object_ref (target);
-
-      for (i = 0; i < self->handlers->len; i++)
-        {
-          SignalHandler *handler;
-
-          handler = g_ptr_array_index (self->handlers, i);
-          egg_signal_group_bind_handler (self, handler);
-        }
-
-      g_signal_emit (self, gSignals [BIND], 0, target);
-      g_object_unref (target);
+      handler = g_ptr_array_index (self->handlers, i);
+      egg_signal_group_bind_handler (self, handler);
     }
+
+  g_signal_emit (self, gSignals [BIND], 0, target);
+  g_object_unref (target);
 }
 
 static void
 egg_signal_group_unbind (EggSignalGroup *self)
 {
+  GObject *target;
+  gsize i;
+
   g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
 
-  if (self->target != NULL)
+  if (self->target == NULL)
+    return;
+
+  target = self->target;
+  self->target = NULL;
+
+  g_object_weak_unref (target,
+                       egg_signal_group__target_weak_notify,
+                       self);
+
+  for (i = 0; i < self->handlers->len; i++)
     {
-      GObject *target;
-      gsize i;
+      SignalHandler *handler;
+      gulong handler_id;
 
-      target = self->target;
-      self->target = NULL;
+      handler = g_ptr_array_index (self->handlers, i);
 
-      g_object_weak_unref (target,
-                           egg_signal_group__target_weak_notify,
-                           self);
+      g_assert (handler != NULL);
+      g_assert (handler->detailed_signal != NULL);
+      g_assert (handler->closure != NULL);
+      g_assert_cmpint (handler->handler_id, !=, 0);
 
-      for (i = 0; i < self->handlers->len; i++)
-        {
-          SignalHandler *handler;
-          gulong handler_id;
+      handler_id = handler->handler_id;
+      handler->handler_id = 0;
 
-          handler = g_ptr_array_index (self->handlers, i);
-
-          g_assert (handler != NULL);
-          g_assert (handler->detailed_signal != NULL);
-          g_assert (handler->closure != NULL);
-          g_assert_cmpint (handler->handler_id, !=, 0);
-
-          handler_id = handler->handler_id;
-          handler->handler_id = 0;
-
-          g_signal_handler_disconnect (target, handler_id);
-        }
-
-      g_signal_emit (self, gSignals [UNBIND], 0);
+      g_signal_handler_disconnect (target, handler_id);
     }
+
+  g_signal_emit (self, gSignals [UNBIND], 0);
+}
+
+static gboolean
+egg_signal_group_check_target_type (EggSignalGroup *self,
+                                    gpointer        target)
+{
+  if ((target != NULL) &&
+      !g_type_is_a (G_OBJECT_TYPE (target), self->target_type))
+    {
+      g_warning ("Attempt to set EggSignalGroup:target to something other than %s",
+                 g_type_name (self->target_type));
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 void
 egg_signal_group_block (EggSignalGroup *self)
 {
+  gsize i;
+
   g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
+  g_return_if_fail (self->block_count != G_MAXSIZE);
 
   self->block_count++;
 
-  if (self->target != NULL)
+  if (self->target == NULL)
+    return;
+
+  for (i = 0; i < self->handlers->len; i++)
     {
-      gsize i;
+      SignalHandler *handler;
 
-      for (i = 0; i < self->handlers->len; i++)
-        {
-          SignalHandler *handler;
+      handler = g_ptr_array_index (self->handlers, i);
 
-          handler = g_ptr_array_index (self->handlers, i);
+      g_assert (handler != NULL);
+      g_assert (handler->detailed_signal != NULL);
+      g_assert (handler->closure != NULL);
+      g_assert_cmpint (handler->handler_id, !=, 0);
 
-          g_assert (handler != NULL);
-          g_assert (handler->detailed_signal != NULL);
-          g_assert (handler->closure != NULL);
-          g_assert_cmpint (handler->handler_id, !=, 0);
-
-          g_signal_handler_block (self->target, handler->handler_id);
-        }
+      g_signal_handler_block (self->target, handler->handler_id);
     }
 }
 
 void
 egg_signal_group_unblock (EggSignalGroup *self)
 {
+  gsize i;
+
   g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
+  g_return_if_fail (self->block_count != 0);
 
   self->block_count--;
 
-  if (self->target != NULL)
+  if (self->target == NULL)
+    return;
+
+  for (i = 0; i < self->handlers->len; i++)
     {
-      gsize i;
+      SignalHandler *handler;
 
-      for (i = 0; i < self->handlers->len; i++)
-        {
-          SignalHandler *handler;
+      handler = g_ptr_array_index (self->handlers, i);
 
-          handler = g_ptr_array_index (self->handlers, i);
+      g_assert (handler != NULL);
+      g_assert (handler->detailed_signal != NULL);
+      g_assert (handler->closure != NULL);
+      g_assert_cmpint (handler->handler_id, !=, 0);
 
-          g_assert (handler != NULL);
-          g_assert (handler->detailed_signal != NULL);
-          g_assert (handler->closure != NULL);
-          g_assert_cmpint (handler->handler_id, !=, 0);
-
-          g_signal_handler_unblock (self->target, handler->handler_id);
-        }
+      g_signal_handler_unblock (self->target, handler->handler_id);
     }
 }
 
@@ -268,7 +285,7 @@ egg_signal_group_unblock (EggSignalGroup *self)
  * All signals that are registered will be connected
  * or disconnected when this property changes.
  *
- * Returns: (transfer none): The #EggSignalGroup:target property.
+ * Returns: (nullable) (transfer none) (type GObject): The #EggSignalGroup:target property.
  */
 gpointer
 egg_signal_group_get_target (EggSignalGroup *self)
@@ -281,7 +298,7 @@ egg_signal_group_get_target (EggSignalGroup *self)
 /**
  * egg_signal_group_set_target:
  * @self: An #EggSignalGroup.
- * @target: (nullable) (ctype GObject*): The instance for which to connect signals.
+ * @target: (nullable) (type GObject): The instance for which to connect signals.
  *
  * Sets the target instance to connect signals to. Any signal that has been registered
  * with egg_signal_group_connect_object() or similar functions will be connected to this
@@ -295,23 +312,11 @@ egg_signal_group_set_target (EggSignalGroup *self,
                              gpointer        target)
 {
   g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
-  g_return_if_fail (!target || G_IS_OBJECT (target));
 
-  /*
-   * We cannot give meaningful warnings if EggSignalGroup:target is set before
-   * EggSignalGroup:target-type. We might be able to delay some of this until
-   * constructed, but that is more effort than it is worth right now.
-   */
-  if ((target != NULL) &&
-      (self->target_type != G_TYPE_NONE) &&
-      !g_type_is_a (G_OBJECT_TYPE (target), self->target_type))
-    {
-      g_warning ("Attempt to set EggSignalGroup:target to something other than %s",
-                 g_type_name (self->target_type));
-      return;
-    }
+  if (!egg_signal_group_check_target_type (self, target))
+    return;
 
-  if (target != self->target)
+  if (target != (gpointer)self->target)
     {
       egg_signal_group_unbind (self);
       egg_signal_group_bind (self, target);
@@ -324,14 +329,22 @@ signal_handler_free (gpointer data)
 {
   SignalHandler *handler = data;
 
-  if (handler != NULL)
-    {
-      g_clear_pointer (&handler->closure, g_closure_unref);
-      handler->handler_id = 0;
-      handler->detailed_signal = NULL;
-      handler->connect_after = FALSE;
-      g_slice_free (SignalHandler, handler);
-    }
+  g_clear_pointer (&handler->closure, g_closure_unref);
+  handler->handler_id = 0;
+  handler->detailed_signal = NULL;
+  handler->connect_after = FALSE;
+  g_slice_free (SignalHandler, handler);
+}
+
+static void
+egg_signal_group_constructed (GObject *object)
+{
+  EggSignalGroup *self = (EggSignalGroup *)object;
+
+  if (!egg_signal_group_check_target_type (self, self->target))
+    egg_signal_group_set_target (self, NULL);
+
+  G_OBJECT_CLASS (egg_signal_group_parent_class)->constructed (object);
 }
 
 static void
@@ -396,6 +409,7 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = egg_signal_group_constructed;
   object_class->dispose = egg_signal_group_dispose;
   object_class->get_property = egg_signal_group_get_property;
   object_class->set_property = egg_signal_group_set_property;
@@ -406,7 +420,6 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
                          _("The target instance for which to connect signals."),
                          G_TYPE_OBJECT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TARGET, gParamSpecs [PROP_TARGET]);
 
   gParamSpecs [PROP_TARGET_TYPE] =
     g_param_spec_gtype ("target-type",
@@ -414,7 +427,8 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
                         _("The GType of the target property."),
                         G_TYPE_OBJECT,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TARGET_TYPE, gParamSpecs [PROP_TARGET_TYPE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   /**
    * EggSignalGroup::bind:
@@ -430,8 +444,7 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_OBJECT);
@@ -449,8 +462,7 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 }
@@ -459,12 +471,14 @@ static void
 egg_signal_group_init (EggSignalGroup *self)
 {
   self->handlers = g_ptr_array_new_with_free_func (signal_handler_free);
-  self->target_type = G_TYPE_NONE;
+  self->target_type = G_TYPE_OBJECT;
 }
 
 EggSignalGroup *
 egg_signal_group_new (GType target_type)
 {
+  g_return_val_if_fail (g_type_is_a (target_type, G_TYPE_OBJECT), NULL);
+
   return g_object_new (EGG_TYPE_SIGNAL_GROUP,
                        "target-type", target_type,
                        NULL);
@@ -474,7 +488,7 @@ void
 egg_signal_group_connect_object (EggSignalGroup *self,
                                  const gchar    *detailed_signal,
                                  GCallback       callback,
-                                 gpointer        data,
+                                 gpointer        object,
                                  GConnectFlags   flags)
 {
   SignalHandler *handler;
@@ -483,11 +497,12 @@ egg_signal_group_connect_object (EggSignalGroup *self,
   g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
   g_return_if_fail (detailed_signal != NULL);
   g_return_if_fail (callback != NULL);
+  g_return_if_fail (G_IS_OBJECT (object));
 
   if ((flags & G_CONNECT_SWAPPED) != 0)
-    closure = g_cclosure_new_object_swap (callback, data);
+    closure = g_cclosure_new_object_swap (callback, object);
   else
-    closure = g_cclosure_new_object (callback, data);
+    closure = g_cclosure_new_object (callback, object);
 
   handler = g_slice_new0 (SignalHandler);
   handler->detailed_signal = g_intern_string (detailed_signal);

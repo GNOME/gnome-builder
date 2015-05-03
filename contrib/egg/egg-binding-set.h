@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (EggBindingSet, egg_binding_set, EGG, BINDING_SET, GObject)
 
 EggBindingSet *egg_binding_set_new        (void);
-gpointer       egg_binding_set_get_source (EggBindingSet *self);
+GObject       *egg_binding_set_get_source (EggBindingSet *self);
 void           egg_binding_set_set_source (EggBindingSet *self,
                                            gpointer       source);
 void           egg_binding_set_bind       (EggBindingSet *self,
