@@ -88,7 +88,10 @@ ide_editorconfig_file_settings_init_worker (GTask        *task,
       else if (g_str_equal (key, "charset"))
         g_object_set_property (source_object, "encoding", value);
       else if (g_str_equal (key, "max_line_length"))
-        g_object_set_property (source_object, "right-margin-position", value);
+        {
+          g_object_set_property (source_object, "right-margin-position", value);
+          g_object_set (source_object, "show-right-margin", TRUE, NULL);
+        }
       else if (g_str_equal (key, "end_of_line"))
         {
           GtkSourceNewlineType newline_type = GTK_SOURCE_NEWLINE_TYPE_LF;
