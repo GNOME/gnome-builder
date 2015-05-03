@@ -528,7 +528,7 @@ ide_highlight_engine_set_buffer (IdeHighlightEngine *self,
                                  IdeBuffer          *buffer)
 {
   g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_return_if_fail (IDE_IS_BUFFER (buffer));
+  g_return_if_fail (!buffer || IDE_IS_BUFFER (buffer));
 
   if (self->buffer != buffer)
     {
