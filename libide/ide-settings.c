@@ -48,6 +48,8 @@ struct _IdeSettings
 
   GSettings *global_settings;
   GSettings *project_settings;
+
+  guint      is_global : 1;
 };
 
 G_DEFINE_TYPE (IdeSettings, ide_settings, IDE_TYPE_OBJECT)
@@ -56,6 +58,7 @@ enum {
   PROP_0,
   PROP_RELATIVE_PATH,
   PROP_SCHEMA_ID,
+  PROP_IS_GLOBAL,
   LAST_PROP
 };
 
@@ -118,7 +121,8 @@ ide_settings__project_settings_changed (IdeSettings *self,
   g_assert (key != NULL);
   g_assert (G_IS_SETTINGS (project_settings));
 
-  g_signal_emit (self, gSignals [CHANGED], g_quark_from_string (key), key);
+  if (self->is_global == FALSE)
+    g_signal_emit (self, gSignals [CHANGED], g_quark_from_string (key), key);
 }
 
 static void
@@ -206,6 +210,10 @@ ide_settings_get_property (GObject    *object,
       g_value_set_string (value, ide_settings_get_relative_path (self));
       break;
 
+    case PROP_IS_GLOBAL:
+      g_value_set_boolean (value, ide_settings_get_is_global (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -227,6 +235,10 @@ ide_settings_set_property (GObject      *object,
 
     case PROP_RELATIVE_PATH:
       ide_settings_set_relative_path (self, g_value_get_object (value));
+      break;
+
+    case PROP_IS_GLOBAL:
+      ide_settings_set_is_global (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -314,16 +326,32 @@ GVariant *
 ide_settings_get_value (IdeSettings *self,
                         const gchar *key)
 {
-  GVariant *ret;
+  GVariant *ret = NULL;
 
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  ret = g_settings_get_user_value (self->project_settings, key);
+  if (self->is_global == FALSE)
+    ret = g_settings_get_user_value (self->project_settings, key);
+
   if (ret == NULL)
     ret = g_settings_get_value (self->global_settings, key);
 
   return ret;
+}
+
+void
+ide_settings_set_value (IdeSettings *self,
+                        const gchar *key,
+                        GVariant    *value)
+{
+  g_return_if_fail (IDE_IS_SETTINGS (self));
+  g_return_if_fail (key != NULL);
+
+  if (self->is_global)
+    g_settings_set_value (self->global_settings, key, value);
+  else
+    g_settings_set_value (self->project_settings, key, value);
 }
 
 GVariant *
@@ -395,3 +423,25 @@ DEFINE_SETTER (guint, uint, new_uint32)
 DEFINE_SETTER (double, double, new_double)
 DEFINE_SETTER (const gchar *, string, new_string)
 
+gboolean
+ide_settings_get_is_global (IdeSettings *self)
+{
+  g_return_val_if_fail (IDE_IS_SETTINGS (self), FALSE);
+
+  return self->is_global;
+}
+
+void
+ide_settings_set_is_global (IdeSettings *self,
+                            gboolean     is_global)
+{
+  g_return_if_fail (IDE_IS_SETTINGS (self));
+
+  is_global = !!is_global;
+
+  if (is_global != self->is_global)
+    {
+      self->is_global = is_global;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_IS_GLOBAL]);
+    }
+}

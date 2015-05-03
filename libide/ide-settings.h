@@ -27,24 +27,27 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeSettings, ide_settings, IDE, SETTINGS, IdeObject)
 
-const gchar *ide_settings_get_relative_path (IdeSettings *self);
-const gchar *ide_settings_get_schema_id     (IdeSettings *self);
-GVariant    *ide_settings_get_value         (IdeSettings *self,
-                                             const gchar *key);
-GVariant    *ide_settings_get_default_value (IdeSettings *self,
-                                             const gchar *key);
-GVariant    *ide_settings_get_user_value    (IdeSettings *self,
-                                             const gchar *key);
-guint        ide_settings_get_uint          (IdeSettings *self,
-                                             const gchar *key);
-gint         ide_settings_get_int           (IdeSettings *self,
-                                             const gchar *key);
-gboolean     ide_settings_get_gboolean      (IdeSettings *self,
-                                             const gchar *key);
-gchar       *ide_settings_get_string        (IdeSettings *self,
-                                             const gchar *key);
-gdouble      ide_settings_get_double        (IdeSettings *self,
-                                             const gchar *key);
+const gchar *ide_settings_get_relative_path     (IdeSettings *self);
+const gchar *ide_settings_get_schema_id         (IdeSettings *self);
+GVariant    *ide_settings_get_value             (IdeSettings *self,
+                                                 const gchar *key);
+GVariant    *ide_settings_get_default_value     (IdeSettings *self,
+                                                 const gchar *key);
+GVariant    *ide_settings_get_user_value        (IdeSettings *self,
+                                                 const gchar *key);
+guint        ide_settings_get_uint              (IdeSettings *self,
+                                                 const gchar *key);
+gint         ide_settings_get_int               (IdeSettings *self,
+                                                 const gchar *key);
+gboolean     ide_settings_get_gboolean          (IdeSettings *self,
+                                                 const gchar *key);
+gchar       *ide_settings_get_string            (IdeSettings *self,
+                                                 const gchar *key);
+gdouble      ide_settings_get_double            (IdeSettings *self,
+                                                 const gchar *key);
+gboolean     ide_settings_get_is_global         (IdeSettings *self);
+void         ide_settings_set_is_global         (IdeSettings *self,
+                                                 gboolean     is_global);
 
 G_END_DECLS
 
