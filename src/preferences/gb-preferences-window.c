@@ -194,5 +194,13 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
 static void
 gb_preferences_window_init (GbPreferencesWindow *self)
 {
+  GtkAccelGroup *accel_group;
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  accel_group = gtk_accel_group_new ();
+  gtk_widget_add_accelerator (GTK_WIDGET (self->search_bar), "reveal",
+                              accel_group, GDK_KEY_f, GDK_CONTROL_MASK, 0);
+  gtk_window_add_accel_group (GTK_WINDOW (self), accel_group);
+  g_clear_object (&accel_group);
 }
