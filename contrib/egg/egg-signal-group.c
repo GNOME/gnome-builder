@@ -496,6 +496,8 @@ egg_signal_group_connect_object (EggSignalGroup *self,
 
   g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
   g_return_if_fail (detailed_signal != NULL);
+  g_return_if_fail (g_signal_parse_name (detailed_signal, self->target_type,
+                                         NULL, NULL, FALSE) != 0);
   g_return_if_fail (callback != NULL);
   g_return_if_fail (G_IS_OBJECT (object));
 
