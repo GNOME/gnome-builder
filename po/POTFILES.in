@@ -80,6 +80,7 @@ libide/ide-script-manager.c
 libide/ide-script.c
 libide/ide-search-result.c
 libide/ide-service.c
+libide/ide-settings.c
 libide/ide-source-map.c
 libide/ide-source-snippet-chunk.c
 libide/ide-source-snippet-completion-item.c
@@ -98,6 +99,7 @@ libide/tasks/ide-load-directory-task.c
 libide/theatrics/ide-animation.c
 libide/theatrics/ide-box-theatric.c
 contrib/egg/egg-binding-set.c
+contrib/egg/egg-search-bar.c
 contrib/egg/egg-signal-group.c
 contrib/search/trie.c
 src/app/gb-application-actions.c
