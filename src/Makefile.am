@@ -183,6 +183,7 @@ libgnome_builder_la_LIBADD = \
 	$(BUILDER_LIBS) \
 	$(OPTIMIZE_LDFLAGS) \
 	$(top_builddir)/libide/libide-1.0.la \
+	$(top_builddir)/contrib/egg/libegg.la \
 	-lm
 
 libgnome_builder_la_CFLAGS = \
@@ -218,6 +219,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(srcdir)/workbench \
 	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/libide \
+	-I$(top_srcdir)/contrib/egg \
 	$(NULL)
 
 gnome_builder_SOURCES = main.c

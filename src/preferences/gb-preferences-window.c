@@ -18,6 +18,8 @@
 
 #include <glib/gi18n.h>
 
+#include "egg-search-bar.h"
+
 #include "gb-gdk.h"
 #include "gb-preferences-page-editor.h"
 #include "gb-preferences-page-experimental.h"
@@ -35,7 +37,7 @@ struct _GbPreferencesWindow
   GtkWidget       *return_to_page;
   GtkHeaderBar    *right_header_bar;
   GtkSearchEntry  *search_entry;
-  GtkSearchBar    *search_bar;
+  EggSearchBar    *search_bar;
   GtkStack        *stack;
 };
 
@@ -52,20 +54,6 @@ GtkWidget *
 gb_preferences_window_new (void)
 {
   return g_object_new (GB_TYPE_PREFERENCES_WINDOW, NULL);
-}
-
-static void
-gb_preferences_window_notify_search_mode (GbPreferencesWindow *self,
-                                          GParamSpec          *pspec,
-                                          GtkSearchBar        *search_bar)
-{
-  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (self));
-
-  if (!gtk_search_bar_get_search_mode (search_bar) && self->return_to_page)
-    {
-      gtk_stack_set_visible_child (self->stack, self->return_to_page);
-      self->return_to_page = NULL;
-    }
 }
 
 static void
@@ -138,7 +126,6 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
 {
   GbPreferencesWindow *self = (GbPreferencesWindow *)widget;
   gboolean ret;
-  gboolean editable = FALSE;
 
   g_return_val_if_fail (GB_IS_PREFERENCES_WINDOW (self), FALSE);
 
@@ -146,47 +133,6 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
    * Try to propagate the event to any widget that wants to swallow it.
    */
   ret = GTK_WIDGET_CLASS (gb_preferences_window_parent_class)->key_press_event (widget, event);
-
-  /*
-   * Check if the focus widget is a GtkEditable.
-   */
-  editable = GTK_IS_EDITABLE (gtk_window_get_focus (GTK_WINDOW (widget)));
-
-  if (!ret && !editable)
-    {
-      if (!gtk_search_bar_get_search_mode (self->search_bar))
-        {
-          if (gb_gdk_event_key_is_escape (event))
-            {
-              g_signal_emit_by_name (widget, "close");
-            }
-          else if (!gb_gdk_event_key_is_keynav (event) &&
-                   !gb_gdk_event_key_is_space (event) &&
-                   !gb_gdk_event_key_is_tab (event))
-            {
-              GtkWidget *current_page;
-
-              current_page = gtk_stack_get_visible_child (self->stack);
-
-              if (gtk_search_bar_handle_event (GTK_SEARCH_BAR (self->search_bar),
-                                               (GdkEvent*) event) == GDK_EVENT_STOP)
-                {
-                  self->return_to_page = current_page;
-                  ret = TRUE;
-                }
-              else
-                ret = FALSE;
-            }
-        }
-      else
-        {
-          if (!gtk_widget_is_focus (GTK_WIDGET (self->search_bar)) &&
-              gb_gdk_event_key_is_escape (event))
-            gtk_search_bar_set_search_mode (self->search_bar, FALSE);
-
-          ret = TRUE;
-        }
-    }
 
   return ret;
 }
@@ -198,20 +144,11 @@ gb_preferences_window_constructed (GObject *object)
 
   G_OBJECT_CLASS (gb_preferences_window_parent_class)->constructed (object);
 
-  gtk_search_bar_connect_entry (self->search_bar,
-                                GTK_ENTRY (self->search_entry));
-
   g_signal_connect (self->stack,
                     "notify::visible-child",
                     G_CALLBACK (gb_preferences_window_section_changed),
                     self);
   gb_preferences_window_section_changed (self->stack, NULL, self);
-
-  g_signal_connect_object (self->search_bar,
-                           "notify::search-mode-enabled",
-                           G_CALLBACK (gb_preferences_window_notify_search_mode),
-                           self,
-                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_object (self->search_entry,
                            "changed",
@@ -247,6 +184,7 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, search_entry);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, stack);
 
+  g_type_ensure (EGG_TYPE_SEARCH_BAR);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EDITOR);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EXPERIMENTAL);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_GIT);
