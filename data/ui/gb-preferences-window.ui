@@ -100,7 +100,6 @@
         </child>
         <child>
           <object class="GtkStack" id="stack">
-            <property name="border_width">12</property>
             <property name="visible">True</property>
             <property name="expand">True</property>
             <property name="visible-child">editor_page</property>
@@ -117,6 +116,7 @@
             <child>
               <object class="GbPreferencesPageLanguage" id="language_page">
                 <property name="visible">True</property>
+                <property name="border_width">12</property>
               </object>
               <packing>
                 <property name="name">language</property>
@@ -126,6 +126,7 @@
             <child>
               <object class="GbPreferencesPageGit" id="git_page">
                 <property name="visible">True</property>
+                <property name="border_width">12</property>
               </object>
               <packing>
                 <property name="name">git</property>
@@ -135,6 +136,7 @@
             <child>
               <object class="GbPreferencesPageKeybindings" id="keybindings_page">
                 <property name="visible">True</property>
+                <property name="border_width">12</property>
               </object>
               <packing>
                 <property name="name">keybindings</property>
@@ -144,6 +146,7 @@
             <child>
               <object class="GbPreferencesPageExperimental" id="experimental_page">
                 <property name="visible">True</property>
+                <property name="border_width">12</property>
               </object>
               <packing>
                 <property name="name">experimental</property>
