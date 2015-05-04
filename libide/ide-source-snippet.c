@@ -947,8 +947,6 @@ ide_source_snippet_class_init (IdeSourceSnippetClass *klass)
                          _("The GtkTextBuffer for the snippet."),
                          GTK_TYPE_TEXT_BUFFER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BUFFER,
-                                   gParamSpecs[PROP_BUFFER]);
 
   gParamSpecs[PROP_MARK_BEGIN] =
     g_param_spec_object ("mark-begin",
@@ -956,8 +954,6 @@ ide_source_snippet_class_init (IdeSourceSnippetClass *klass)
                          _("The beginning text mark."),
                          GTK_TYPE_TEXT_MARK,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MARK_BEGIN,
-                                   gParamSpecs[PROP_MARK_BEGIN]);
 
   gParamSpecs[PROP_MARK_END] =
     g_param_spec_object ("mark-end",
@@ -965,8 +961,6 @@ ide_source_snippet_class_init (IdeSourceSnippetClass *klass)
                          _("The ending text mark."),
                          GTK_TYPE_TEXT_MARK,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MARK_END,
-                                   gParamSpecs[PROP_MARK_END]);
 
   gParamSpecs[PROP_TRIGGER] =
     g_param_spec_string ("trigger",
@@ -974,8 +968,6 @@ ide_source_snippet_class_init (IdeSourceSnippetClass *klass)
                          _("The trigger for the snippet."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TRIGGER,
-                                   gParamSpecs[PROP_TRIGGER]);
 
   gParamSpecs[PROP_LANGUAGE] =
     g_param_spec_string ("language",
@@ -983,8 +975,6 @@ ide_source_snippet_class_init (IdeSourceSnippetClass *klass)
                          _("The language for the snippet."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_LANGUAGE,
-                                   gParamSpecs[PROP_LANGUAGE]);
 
   gParamSpecs[PROP_DESCRIPTION] =
     g_param_spec_string ("description",
@@ -992,8 +982,6 @@ ide_source_snippet_class_init (IdeSourceSnippetClass *klass)
                          _("The description for the snippet."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DESCRIPTION,
-                                   gParamSpecs[PROP_DESCRIPTION]);
 
   gParamSpecs[PROP_TAB_STOP] =
     g_param_spec_int ("tab-stop",
@@ -1003,8 +991,8 @@ ide_source_snippet_class_init (IdeSourceSnippetClass *klass)
                       G_MAXINT,
                       -1,
                       (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TAB_STOP,
-                                   gParamSpecs[PROP_TAB_STOP]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

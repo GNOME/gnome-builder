@@ -249,8 +249,6 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
                          _("A GFile to the underlying file."),
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE,
-                                   gParamSpecs [PROP_FILE]);
 
   gParamSpecs [PROP_FILE_INFO] =
     g_param_spec_object ("file-info",
@@ -258,8 +256,6 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
                          _("The file information for the project file."),
                          G_TYPE_FILE_INFO,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE_INFO,
-                                   gParamSpecs [PROP_FILE_INFO]);
 
   gParamSpecs [PROP_IS_DIRECTORY] =
     g_param_spec_boolean ("is-directory",
@@ -267,8 +263,6 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
                           _("Is Directory"),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_IS_DIRECTORY,
-                                   gParamSpecs [PROP_IS_DIRECTORY]);
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
@@ -276,8 +270,6 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
                          _("The short name of the file."),
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_NAME,
-                                   gParamSpecs [PROP_NAME]);
 
   gParamSpecs [PROP_PATH] =
     g_param_spec_string ("path",
@@ -285,8 +277,8 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
                          _("The path for the file within the project tree."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PATH,
-                                   gParamSpecs [PROP_PATH]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

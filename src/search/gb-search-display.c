@@ -561,15 +561,15 @@ gb_search_display_class_init (GbSearchDisplayClass *klass)
                          _("The active search context."),
                          IDE_TYPE_SEARCH_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CONTEXT, gParamSpecs [PROP_CONTEXT]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [RESULT_ACTIVATED] =
     g_signal_new_class_handler ("result-activated",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (gb_search_display_real_result_activated),
-                                NULL, NULL,
-                                g_cclosure_marshal_VOID__OBJECT,
+                                NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 1,
                                 IDE_TYPE_SEARCH_RESULT);

@@ -85,7 +85,6 @@ enum {
   PROP_AUTO_SAVE,
   PROP_AUTO_SAVE_TIMEOUT,
   PROP_FOCUS_BUFFER,
-  PROP_MAX_FILE_SIZE,
   LAST_PROP
 };
 
@@ -1152,8 +1151,6 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                           _("If the documents should auto save after a configured timeout."),
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_AUTO_SAVE,
-                                   gParamSpecs [PROP_AUTO_SAVE]);
 
   gParamSpecs [PROP_AUTO_SAVE_TIMEOUT] =
     g_param_spec_uint ("auto-save-timeout",
@@ -1163,8 +1160,6 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                        G_MAXUINT,
                        AUTO_SAVE_TIMEOUT_DEFAULT,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_AUTO_SAVE_TIMEOUT,
-                                   gParamSpecs [PROP_AUTO_SAVE_TIMEOUT]);
 
   gParamSpecs [PROP_FOCUS_BUFFER] =
     g_param_spec_object ("focus-buffer",
@@ -1172,8 +1167,8 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                          _("The currently focused buffer."),
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FOCUS_BUFFER,
-                                   gParamSpecs [PROP_FOCUS_BUFFER]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   /**
    * IdeBufferManager::create-buffer:
@@ -1194,8 +1189,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                                            G_SIGNAL_RUN_LAST,
                                            0,
                                            g_signal_accumulator_first_wins,
-                                           NULL,
-                                           g_cclosure_marshal_generic,
+                                           NULL, NULL,
                                            IDE_TYPE_BUFFER,
                                            1,
                                            IDE_TYPE_FILE);
@@ -1212,8 +1206,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                                          G_TYPE_FROM_CLASS (klass),
                                          G_SIGNAL_RUN_LAST,
                                          0,
-                                         NULL, NULL,
-                                         g_cclosure_marshal_generic,
+                                         NULL, NULL, NULL,
                                          G_TYPE_NONE,
                                          1,
                                          IDE_TYPE_BUFFER);
@@ -1231,8 +1224,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                                           G_TYPE_FROM_CLASS (klass),
                                           G_SIGNAL_RUN_LAST,
                                           0,
-                                          NULL, NULL,
-                                          g_cclosure_marshal_generic,
+                                          NULL, NULL, NULL,
                                           G_TYPE_NONE,
                                           1,
                                           IDE_TYPE_BUFFER);
@@ -1249,8 +1241,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                                          G_TYPE_FROM_CLASS (klass),
                                          G_SIGNAL_RUN_LAST,
                                          0,
-                                         NULL, NULL,
-                                         g_cclosure_marshal_generic,
+                                         NULL, NULL, NULL,
                                          G_TYPE_NONE,
                                          1,
                                          IDE_TYPE_BUFFER);
@@ -1268,8 +1259,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (ide_buffer_manager_real_buffer_loaded),
-                                NULL, NULL,
-                                g_cclosure_marshal_generic,
+                                NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 1,
                                 IDE_TYPE_BUFFER);
@@ -1286,8 +1276,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                                                 G_TYPE_FROM_CLASS (klass),
                                                 G_SIGNAL_RUN_LAST,
                                                 0,
-                                                NULL, NULL,
-                                                g_cclosure_marshal_generic,
+                                                NULL, NULL, NULL,
                                                 G_TYPE_NONE,
                                                 1,
                                                 IDE_TYPE_BUFFER);
@@ -1304,8 +1293,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                                                 G_TYPE_FROM_CLASS (klass),
                                                 G_SIGNAL_RUN_LAST,
                                                 0,
-                                                NULL, NULL,
-                                                g_cclosure_marshal_generic,
+                                                NULL, NULL, NULL,
                                                 G_TYPE_NONE,
                                                 1,
                                                 IDE_TYPE_BUFFER);
@@ -1498,10 +1486,7 @@ ide_buffer_manager_set_max_file_size (IdeBufferManager *self,
   g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
 
   if (self->max_file_size != max_file_size)
-    {
-      self->max_file_size = max_file_size;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_MAX_FILE_SIZE]);
-    }
+    self->max_file_size = max_file_size;
 }
 
 /**

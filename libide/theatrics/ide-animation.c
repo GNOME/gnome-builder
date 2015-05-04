@@ -822,8 +822,6 @@ ide_animation_class_init (IdeAnimationClass *klass)
                        (G_PARAM_WRITABLE |
                         G_PARAM_CONSTRUCT_ONLY |
                         G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DURATION,
-                                   gParamSpecs[PROP_DURATION]);
 
   gParamSpecs[PROP_FRAME_CLOCK] =
     g_param_spec_object ("frame-clock",
@@ -833,8 +831,6 @@ ide_animation_class_init (IdeAnimationClass *klass)
                          (G_PARAM_WRITABLE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FRAME_CLOCK,
-                                   gParamSpecs[PROP_FRAME_CLOCK]);
 
   /**
    * IdeAnimation:mode:
@@ -852,8 +848,6 @@ ide_animation_class_init (IdeAnimationClass *klass)
                        (G_PARAM_WRITABLE |
                         G_PARAM_CONSTRUCT_ONLY |
                         G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MODE,
-                                   gParamSpecs[PROP_MODE]);
 
   /**
    * IdeAnimation:target:
@@ -869,8 +863,8 @@ ide_animation_class_init (IdeAnimationClass *klass)
                          (G_PARAM_WRITABLE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TARGET,
-                                   gParamSpecs[PROP_TARGET]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   /**
    * IdeAnimation::tick:
@@ -881,9 +875,7 @@ ide_animation_class_init (IdeAnimationClass *klass)
                                  IDE_TYPE_ANIMATION,
                                  G_SIGNAL_RUN_FIRST,
                                  0,
-                                 NULL,
-                                 NULL,
-                                 g_cclosure_marshal_VOID__VOID,
+                                 NULL, NULL, NULL,
                                  G_TYPE_NONE,
                                  0);
 

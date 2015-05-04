@@ -172,8 +172,7 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 (G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION),
                                 G_CALLBACK (gb_preferences_window_close),
-                                NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
+                                NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 0);
 

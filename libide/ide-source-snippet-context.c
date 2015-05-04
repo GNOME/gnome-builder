@@ -649,9 +649,7 @@ ide_source_snippet_context_class_init (IdeSourceSnippetContextClass *klass)
                                     IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
                                     G_SIGNAL_RUN_FIRST,
                                     0,
-                                    NULL,
-                                    NULL,
-                                    g_cclosure_marshal_VOID__VOID,
+                                    NULL, NULL, NULL,
                                     G_TYPE_NONE,
                                     0);
 

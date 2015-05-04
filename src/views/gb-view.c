@@ -259,7 +259,6 @@ gb_view_class_init (GbViewClass *klass)
                           _("If the view can be split."),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CAN_SPLIT, gParamSpecs [PROP_CAN_SPLIT]);
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
@@ -267,7 +266,6 @@ gb_view_class_init (GbViewClass *klass)
                          _("The underlying document."),
                          GB_TYPE_DOCUMENT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DOCUMENT, gParamSpecs [PROP_DOCUMENT]);
 
   gParamSpecs [PROP_MODIFIED] =
     g_param_spec_boolean ("modified",
@@ -275,8 +273,6 @@ gb_view_class_init (GbViewClass *klass)
                           _("If the document has been modified."),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MODIFIED,
-                                   gParamSpecs [PROP_MODIFIED]);
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",
@@ -284,7 +280,8 @@ gb_view_class_init (GbViewClass *klass)
                          _("The view title."),
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TITLE, gParamSpecs [PROP_TITLE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

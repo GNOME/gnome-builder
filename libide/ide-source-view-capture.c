@@ -244,7 +244,8 @@ ide_source_view_capture_class_init (IdeSourceViewCaptureClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_VIEW, gParamSpecs [PROP_VIEW]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

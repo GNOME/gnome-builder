@@ -235,8 +235,6 @@ ide_device_class_init (IdeDeviceClass *klass)
                          _("The display name of the device."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DISPLAY_NAME,
-                                   gParamSpecs [PROP_DISPLAY_NAME]);
 
   gParamSpecs [PROP_ID] =
     g_param_spec_string ("id",
@@ -244,8 +242,6 @@ ide_device_class_init (IdeDeviceClass *klass)
                          _("The device identifier."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ID,
-                                   gParamSpecs [PROP_ID]);
 
   gParamSpecs [PROP_SYSTEM_TYPE] =
     g_param_spec_string ("system-type",
@@ -253,8 +249,8 @@ ide_device_class_init (IdeDeviceClass *klass)
                          _("The system type for which to compile."),
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SYSTEM_TYPE,
-                                   gParamSpecs [PROP_SYSTEM_TYPE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

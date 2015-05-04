@@ -631,7 +631,6 @@ ide_highlight_engine_class_init (IdeHighlightEngineClass *klass)
                          _("The buffer to highlight."),
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BUFFER, gParamSpecs [PROP_BUFFER]);
 
   gParamSpecs [PROP_HIGHLIGHTER] =
     g_param_spec_object ("highlighter",
@@ -639,7 +638,8 @@ ide_highlight_engine_class_init (IdeHighlightEngineClass *klass)
                          _("The highlighter to use for type information."),
                          IDE_TYPE_HIGHLIGHTER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_HIGHLIGHTER, gParamSpecs [PROP_HIGHLIGHTER]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gEngineQuark = g_quark_from_string ("IDE_HIGHLIGHT_ENGINE");
 }

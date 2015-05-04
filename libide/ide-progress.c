@@ -211,8 +211,6 @@ ide_progress_class_init (IdeProgressClass *klass)
                           _("If the progress has completed."),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_COMPLETED,
-                                   gParamSpecs [PROP_COMPLETED]);
 
   gParamSpecs [PROP_FRACTION] =
     g_param_spec_double ("fraction",
@@ -222,8 +220,6 @@ ide_progress_class_init (IdeProgressClass *klass)
                          1.0,
                          0.0,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FRACTION,
-                                   gParamSpecs [PROP_FRACTION]);
 
   gParamSpecs [PROP_MESSAGE] =
     g_param_spec_string ("message",
@@ -231,8 +227,8 @@ ide_progress_class_init (IdeProgressClass *klass)
                          _("A short message for the progress."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MESSAGE,
-                                   gParamSpecs [PROP_MESSAGE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

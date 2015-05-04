@@ -483,8 +483,6 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                          _("The file encoding to use."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ENCODING,
-                                   gParamSpecs [PROP_ENCODING]);
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
@@ -494,8 +492,6 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE,
-                                   gParamSpecs [PROP_FILE]);
 
   gParamSpecs [PROP_INDENT_STYLE] =
     g_param_spec_enum ("indent-style",
@@ -504,8 +500,6 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                        IDE_TYPE_INDENT_STYLE,
                        IDE_INDENT_STYLE_SPACES,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_INDENT_STYLE,
-                                   gParamSpecs [PROP_INDENT_STYLE]);
 
   gParamSpecs [PROP_INDENT_WIDTH] =
     g_param_spec_int ("indent-width",
@@ -513,8 +507,6 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                       _("The width to use when indenting."),
                       -1, 32, -1,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_INDENT_WIDTH,
-                                   gParamSpecs [PROP_INDENT_WIDTH]);
 
   gParamSpecs [PROP_INSERT_TRAILING_NEWLINE] =
     g_param_spec_boolean ("insert-trailing-newline",
@@ -523,8 +515,6 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                             "when saving the file."),
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_INSERT_TRAILING_NEWLINE,
-                                   gParamSpecs [PROP_INSERT_TRAILING_NEWLINE]);
 
   gParamSpecs [PROP_NEWLINE_TYPE] =
     g_param_spec_enum ("newline-type",
@@ -533,8 +523,6 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                        GTK_SOURCE_TYPE_NEWLINE_TYPE,
                        GTK_SOURCE_NEWLINE_TYPE_LF,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_NEWLINE_TYPE,
-                                   gParamSpecs [PROP_NEWLINE_TYPE]);
 
   gParamSpecs [PROP_RIGHT_MARGIN_POSITION] =
     g_param_spec_uint ("right-margin-position",
@@ -544,8 +532,6 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                        1000,
                        80,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_RIGHT_MARGIN_POSITION,
-                                   gParamSpecs [PROP_RIGHT_MARGIN_POSITION]);
 
   gParamSpecs [PROP_TAB_WIDTH] =
     g_param_spec_uint ("tab-width",
@@ -553,8 +539,6 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                        _("The width in characters to represent a tab."),
                        1, 32, 8,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TAB_WIDTH,
-                                   gParamSpecs [PROP_TAB_WIDTH]);
 
   gParamSpecs [PROP_TRIM_TRAILING_WHITESPACE] =
     g_param_spec_boolean ("trim-trailing-whitespace",
@@ -562,8 +546,6 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                           _("If trailing whitespace should be trimmed."),
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TRIM_TRAILING_WHITESPACE,
-                                   gParamSpecs [PROP_TRIM_TRAILING_WHITESPACE]);
 
   gParamSpecs [PROP_SHOW_RIGHT_MARGIN] =
     g_param_spec_boolean ("show-right-margin",
@@ -571,8 +553,8 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                           _("If right margin should be shown."),
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SHOW_RIGHT_MARGIN,
-                                   gParamSpecs [PROP_SHOW_RIGHT_MARGIN]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

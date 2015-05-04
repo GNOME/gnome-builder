@@ -364,17 +364,15 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
                           _("If the device providers have settled."),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SETTLED,
-                                   gParamSpecs [PROP_SETTLED]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [DEVICE_ADDED] =
     g_signal_new ("device-added",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   2,
                   IDE_TYPE_DEVICE_PROVIDER,
@@ -385,9 +383,7 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   2,
                   IDE_TYPE_DEVICE_PROVIDER,

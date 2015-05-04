@@ -259,7 +259,6 @@ gb_keybindings_class_init (GbKeybindingsClass *klass)
                          _("The application to register keybindings for."),
                          GTK_TYPE_APPLICATION,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_APPLICATION, gParamSpecs [PROP_APPLICATION]);
 
   gParamSpecs [PROP_MODE] =
     g_param_spec_string ("mode",
@@ -267,7 +266,8 @@ gb_keybindings_class_init (GbKeybindingsClass *klass)
                          _("The name of the keybindings mode."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MODE, gParamSpecs [PROP_MODE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

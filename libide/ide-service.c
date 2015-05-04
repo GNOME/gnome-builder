@@ -139,8 +139,6 @@ ide_service_class_init (IdeServiceClass *klass)
                          _("The name of the service."),
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_NAME,
-                                   gParamSpecs [PROP_NAME]);
 
   gParamSpecs [PROP_RUNNING] =
     g_param_spec_boolean ("running",
@@ -148,16 +146,15 @@ ide_service_class_init (IdeServiceClass *klass)
                           _("If the service is running."),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_RUNNING,
-                                   gParamSpecs [PROP_RUNNING]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [START] =
     g_signal_new ("start",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeServiceClass, start),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -166,8 +163,7 @@ ide_service_class_init (IdeServiceClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeServiceClass, stop),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 }

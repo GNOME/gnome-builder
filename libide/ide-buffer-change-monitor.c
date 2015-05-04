@@ -107,14 +107,14 @@ ide_buffer_change_monitor_class_init (IdeBufferChangeMonitorClass *klass)
                          _("The IdeBuffer to be monitored."),
                          IDE_TYPE_BUFFER,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BUFFER, gParamSpecs [PROP_BUFFER]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [CHANGED] = g_signal_new ("changed",
                                      G_TYPE_FROM_CLASS (klass),
                                      G_SIGNAL_RUN_LAST,
                                      0,
-                                     NULL, NULL,
-                                     g_cclosure_marshal_VOID__VOID,
+                                     NULL, NULL, NULL,
                                      G_TYPE_NONE,
                                      0);
 }

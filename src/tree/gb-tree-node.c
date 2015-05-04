@@ -603,8 +603,6 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
                          _("The icon name to display."),
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_ICON_NAME,
-                                   gParamSpecs[PROP_ICON_NAME]);
 
   /**
    * GbTreeNode:item:
@@ -617,8 +615,6 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
                          _("Optional object to associate with node."),
                          G_TYPE_OBJECT,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_ITEM,
-                                   gParamSpecs[PROP_ITEM]);
 
   /**
    * GbTreeNode:parent:
@@ -631,8 +627,6 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
                          _("The parent node."),
                          GB_TYPE_TREE_NODE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_PARENT,
-                                   gParamSpecs[PROP_PARENT]);
 
   /**
    * GbTreeNode:tree:
@@ -645,8 +639,6 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
                          _("The GbTree the node belongs to."),
                          GB_TYPE_TREE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_TREE,
-                                   gParamSpecs[PROP_TREE]);
 
   /**
    * GbTreeNode:text:
@@ -659,8 +651,6 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
                          _("The text of the node."),
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_TEXT,
-                                   gParamSpecs[PROP_TEXT]);
 
   /**
    * GbTreeNode:use-markup:
@@ -673,8 +663,8 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
                           _("If text should be translated as markup."),
                           FALSE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_USE_MARKUP,
-                                   gParamSpecs[PROP_USE_MARKUP]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 /**

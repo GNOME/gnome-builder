@@ -156,17 +156,15 @@ ide_device_provider_class_init (IdeDeviceProviderClass *klass)
                           _("If device probing has settled."),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SETTLED,
-                                   gParamSpecs [PROP_SETTLED]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [DEVICE_ADDED] =
     g_signal_new ("device-added",
                   IDE_TYPE_DEVICE_PROVIDER,
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeDeviceProviderClass, device_added),
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_DEVICE);
@@ -176,9 +174,7 @@ ide_device_provider_class_init (IdeDeviceProviderClass *klass)
                   IDE_TYPE_DEVICE_PROVIDER,
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeDeviceProviderClass, device_removed),
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_DEVICE);

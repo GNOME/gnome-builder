@@ -530,8 +530,7 @@ gb_new_project_dialog_class_init (GbNewProjectDialogClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gb_new_project_dialog_back),
-                                NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
+                                NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 0);
 
@@ -540,8 +539,7 @@ gb_new_project_dialog_class_init (GbNewProjectDialogClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gb_new_project_dialog_close),
-                                NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
+                                NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 0);
 
@@ -550,8 +548,7 @@ gb_new_project_dialog_class_init (GbNewProjectDialogClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_FILE);

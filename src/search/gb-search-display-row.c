@@ -160,7 +160,8 @@ gb_search_display_row_class_init (GbSearchDisplayRowClass *klass)
                          _("Result"),
                          IDE_TYPE_SEARCH_RESULT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_RESULT, gParamSpecs [PROP_RESULT]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-search-display-row.ui");
   GB_WIDGET_CLASS_BIND (widget_class, GbSearchDisplayRow, progress);

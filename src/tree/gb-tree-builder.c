@@ -290,8 +290,8 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
 		                    _("The GbTree the builder belongs to."),
 		                    GB_TYPE_TREE,
 		                    G_PARAM_READWRITE);
-	g_object_class_install_property(object_class, PROP_TREE,
-	                                gParamSpecs[PROP_TREE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 /**

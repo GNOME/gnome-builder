@@ -269,8 +269,6 @@ gb_new_file_popover_class_init (GbNewFilePopoverClass *klass)
                          _("Directory"),
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DIRECTORY,
-                                   gParamSpecs [PROP_DIRECTORY]);
 
   gParamSpecs [PROP_FILE_TYPE] =
     g_param_spec_enum ("file-type",
@@ -279,16 +277,15 @@ gb_new_file_popover_class_init (GbNewFilePopoverClass *klass)
                        G_TYPE_FILE_TYPE,
                        G_FILE_TYPE_REGULAR,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE_TYPE,
-                                   gParamSpecs [PROP_FILE_TYPE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [CREATE_FILE] =
     g_signal_new ("create-file",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_FIRST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   2,
                   G_TYPE_FILE,

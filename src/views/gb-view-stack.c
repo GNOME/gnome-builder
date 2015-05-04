@@ -501,15 +501,15 @@ gb_view_stack_class_init (GbViewStackClass *klass)
                          _("The active view."),
                          GB_TYPE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ACTIVE_VIEW, gParamSpecs [PROP_ACTIVE_VIEW]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [EMPTY] =
     g_signal_new_class_handler ("empty",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (gb_view_stack_real_empty),
-                                NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
+                                NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 0);
 
@@ -517,8 +517,7 @@ gb_view_stack_class_init (GbViewStackClass *klass)
                                    G_TYPE_FROM_CLASS (klass),
                                    G_SIGNAL_RUN_LAST,
                                    0,
-                                   NULL, NULL,
-                                   g_cclosure_marshal_generic,
+                                   NULL, NULL, NULL,
                                    G_TYPE_NONE,
                                    2,
                                    GB_TYPE_VIEW,

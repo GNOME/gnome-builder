@@ -767,7 +767,8 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
                          _("The git repository for the project."),
                          GGIT_TYPE_REPOSITORY,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_REPOSITORY, gParamSpecs [PROP_REPOSITORY]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   /**
    * IdeGitVcs::reloaded:
@@ -786,8 +787,7 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
                                       G_TYPE_FROM_CLASS (klass),
                                       G_SIGNAL_RUN_LAST,
                                       0,
-                                      NULL, NULL,
-                                      g_cclosure_marshal_VOID__OBJECT,
+                                      NULL, NULL, NULL,
                                       G_TYPE_NONE,
                                       1,
                                       GGIT_TYPE_REPOSITORY);

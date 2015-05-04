@@ -329,8 +329,8 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
                           _("Show Project Tree"),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SHOW_PROJECT_TREE,
-                                   gParamSpecs [PROP_SHOW_PROJECT_TREE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-workspace.ui");
 

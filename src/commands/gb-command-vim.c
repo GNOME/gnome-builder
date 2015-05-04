@@ -183,8 +183,6 @@ gb_command_vim_class_init (GbCommandVimClass *klass)
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_COMMAND_TEXT,
-                                   gParamSpecs [PROP_COMMAND_TEXT]);
 
   gParamSpecs [PROP_SOURCE_VIEW] =
     g_param_spec_object ("source-view",
@@ -193,8 +191,8 @@ gb_command_vim_class_init (GbCommandVimClass *klass)
                          IDE_TYPE_SOURCE_VIEW,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SOURCE_VIEW,
-                                   gParamSpecs [PROP_SOURCE_VIEW]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

@@ -245,7 +245,8 @@ gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
                          _("The document for the devhelp view."),
                          GB_TYPE_DEVHELP_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DOCUMENT, gParamSpecs [PROP_DOCUMENT]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-devhelp-view.ui");
   GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbDevhelpView, web_view1);

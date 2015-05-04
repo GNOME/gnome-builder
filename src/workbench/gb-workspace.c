@@ -164,7 +164,6 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TITLE, gParamSpecs[PROP_TITLE]);
 
   gParamSpecs[PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
@@ -173,7 +172,8 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ICON_NAME, gParamSpecs[PROP_ICON_NAME]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

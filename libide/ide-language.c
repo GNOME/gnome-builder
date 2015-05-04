@@ -347,8 +347,6 @@ ide_language_class_init (IdeLanguageClass *klass)
                          _("The diagnostician for the language."),
                          IDE_TYPE_DIAGNOSTICIAN,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DIAGNOSTICIAN,
-                                   gParamSpecs [PROP_DIAGNOSTICIAN]);
 
   gParamSpecs [PROP_HIGHLIGHTER] =
     g_param_spec_object ("highlighter",
@@ -356,8 +354,6 @@ ide_language_class_init (IdeLanguageClass *klass)
                          _("The semantic highlighter for the language."),
                          IDE_TYPE_HIGHLIGHTER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_HIGHLIGHTER,
-                                   gParamSpecs [PROP_HIGHLIGHTER]);
 
   gParamSpecs [PROP_ID] =
     g_param_spec_string ("id",
@@ -367,8 +363,6 @@ ide_language_class_init (IdeLanguageClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ID,
-                                   gParamSpecs [PROP_ID]);
 
   gParamSpecs [PROP_INDENTER] =
     g_param_spec_object ("indenter",
@@ -376,8 +370,6 @@ ide_language_class_init (IdeLanguageClass *klass)
                          _("The semantic indenter for the language."),
                          IDE_TYPE_INDENTER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_INDENTER,
-                                   gParamSpecs [PROP_INDENTER]);
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
@@ -385,8 +377,6 @@ ide_language_class_init (IdeLanguageClass *klass)
                          _("The name of the language."),
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_NAME,
-                                   gParamSpecs [PROP_NAME]);
 
   gParamSpecs [PROP_REFACTORY] =
     g_param_spec_object ("refactory",
@@ -394,8 +384,6 @@ ide_language_class_init (IdeLanguageClass *klass)
                          _("The refactory engine for the language."),
                          IDE_TYPE_REFACTORY,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_REFACTORY,
-                                   gParamSpecs [PROP_REFACTORY]);
 
   gParamSpecs [PROP_SYMBOL_RESOLVER] =
     g_param_spec_object ("symbol-resolver",
@@ -403,8 +391,8 @@ ide_language_class_init (IdeLanguageClass *klass)
                          _("The symbol resolver for the language."),
                          IDE_TYPE_SYMBOL_RESOLVER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SYMBOL_RESOLVER,
-                                   gParamSpecs [PROP_SYMBOL_RESOLVER]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

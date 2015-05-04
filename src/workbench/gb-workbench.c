@@ -443,8 +443,6 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
                          _("The active workspace."),
                          GB_TYPE_WORKSPACE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ACTIVE_WORKSPACE,
-                                   gParamSpecs [PROP_ACTIVE_WORKSPACE]);
 
   gParamSpecs [PROP_BUILDING] =
     g_param_spec_boolean ("building",
@@ -452,7 +450,6 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
                           _("If the project is currently building."),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BUILDING, gParamSpecs [PROP_BUILDING]);
 
   gParamSpecs [PROP_COMMAND_MANAGER] =
     g_param_spec_object ("command-manager",
@@ -460,8 +457,6 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
                          _("The command manager for the workbench."),
                          GB_TYPE_COMMAND_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_COMMAND_MANAGER,
-                                   gParamSpecs [PROP_COMMAND_MANAGER]);
 
   /**
    * GbWorkbench:context:
@@ -477,15 +472,15 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
                          _("The IdeContext for the workbench."),
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CONTEXT, gParamSpecs [PROP_CONTEXT]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [UNLOAD] =
     g_signal_new ("unload",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_CONTEXT);

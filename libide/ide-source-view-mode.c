@@ -260,7 +260,8 @@ ide_source_view_mode_class_init (IdeSourceViewModeClass *klass)
                           _("The name of the mode."),
                           NULL,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_NAME, gParamSpecs [PROP_NAME]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gtk_widget_class_install_style_property (GTK_WIDGET_CLASS (klass),
                                            g_param_spec_boolean ("suppress-unbound",

@@ -566,8 +566,8 @@ ide_autotools_build_system_class_init (IdeAutotoolsBuildSystemClass *klass)
                          _("The name of the project tarball."),
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TARBALL_NAME,
-                                   gParamSpecs [PROP_TARBALL_NAME]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

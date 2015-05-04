@@ -220,7 +220,8 @@ ide_git_remote_callbacks_class_init (IdeGitRemoteCallbacksClass *klass)
                          1.0,
                          0.0,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FRACTION, gParamSpecs [PROP_FRACTION]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

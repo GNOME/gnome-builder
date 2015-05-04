@@ -131,9 +131,7 @@ ide_search_engine_class_init (IdeSearchEngineClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_SEARCH_PROVIDER);

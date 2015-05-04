@@ -176,8 +176,8 @@ gb_editor_map_bin_class_init (GbEditorMapBinClass *klass)
                          "The floating bar to use for relative allocation size.",
                          GTK_TYPE_WIDGET,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FLOATING_BAR,
-                                   gParamSpecs [PROP_FLOATING_BAR]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

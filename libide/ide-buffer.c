@@ -971,7 +971,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          _("If the buffer is performing background work."),
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BUSY, gParamSpecs [PROP_BUSY]);
 
   gParamSpecs [PROP_CHANGED_ON_VOLUME] =
     g_param_spec_boolean ("changed-on-volume",
@@ -979,8 +978,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          _("If the file has changed on disk and the buffer is not in sync."),
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CHANGED_ON_VOLUME,
-                                   gParamSpecs [PROP_CHANGED_ON_VOLUME]);
 
   gParamSpecs [PROP_CONTEXT] =
     g_param_spec_object ("context",
@@ -990,7 +987,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CONTEXT, gParamSpecs [PROP_CONTEXT]);
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
@@ -998,7 +994,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          _("The file represented by the buffer."),
                          IDE_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE, gParamSpecs [PROP_FILE]);
 
   gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS] =
     g_param_spec_boolean ("highlight-diagnostics",
@@ -1006,8 +1001,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
                           _("If diagnostic warnings and errors should be highlighted."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_HIGHLIGHT_DIAGNOSTICS,
-                                   gParamSpecs [PROP_HIGHLIGHT_DIAGNOSTICS]);
 
   gParamSpecs [PROP_READ_ONLY] =
     g_param_spec_boolean ("read-only",
@@ -1015,7 +1008,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
                           _("If the underlying file is read only."),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_READ_ONLY, gParamSpecs [PROP_READ_ONLY]);
 
   gParamSpecs [PROP_STYLE_SCHEME_NAME] =
     g_param_spec_string ("style-scheme-name",
@@ -1023,8 +1015,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          _("Style Scheme Name"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_STYLE_SCHEME_NAME,
-                                   gParamSpecs [PROP_STYLE_SCHEME_NAME]);
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",
@@ -1032,7 +1022,8 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          _("The title of the buffer."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TITLE, gParamSpecs [PROP_TITLE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   /**
    * IdeBuffer::cursor-moved:
@@ -1048,8 +1039,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeBufferClass, cursor_moved),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__BOXED,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_TEXT_ITER);
@@ -1065,8 +1055,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -1080,8 +1069,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 }

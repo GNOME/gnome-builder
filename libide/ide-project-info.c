@@ -287,7 +287,6 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                          _("The project name"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_NAME, gParamSpecs [PROP_NAME]);
 
   gParamSpecs [PROP_DIRECTORY] =
     g_param_spec_object ("directory",
@@ -295,7 +294,6 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                          _("The project directory."),
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DIRECTORY, gParamSpecs [PROP_DIRECTORY]);
 
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
@@ -303,7 +301,6 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                          _("The toplevel project file"),
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE, gParamSpecs [PROP_FILE]);
 
   gParamSpecs [PROP_LAST_MODIFIED_AT] =
     g_param_spec_boxed ("last-modified-at",
@@ -311,8 +308,6 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                         _("Last Modified At"),
                         G_TYPE_DATE_TIME,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_LAST_MODIFIED_AT,
-                                   gParamSpecs [PROP_LAST_MODIFIED_AT]);
 
   gParamSpecs [PROP_PRIORITY] =
     g_param_spec_int ("priority",
@@ -322,7 +317,8 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                       G_MAXINT,
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PRIORITY, gParamSpecs [PROP_PRIORITY]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

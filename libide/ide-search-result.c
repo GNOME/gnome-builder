@@ -237,8 +237,6 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TITLE,
-                                   gParamSpecs [PROP_TITLE]);
 
   gParamSpecs [PROP_SUBTITLE] =
     g_param_spec_string ("subtitle",
@@ -248,8 +246,6 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SUBTITLE,
-                                   gParamSpecs [PROP_SUBTITLE]);
 
   gParamSpecs [PROP_SCORE] =
     g_param_spec_float ("score",
@@ -261,8 +257,8 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
                         (G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SCORE,
-                                   gParamSpecs [PROP_SCORE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

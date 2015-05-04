@@ -784,8 +784,6 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
                           _("Auto Hide Map"),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_AUTO_HIDE_MAP,
-                                   gParamSpecs [PROP_AUTO_HIDE_MAP]);
 
   gParamSpecs [PROP_BACK_FORWARD_LIST] =
     g_param_spec_object ("back-forward-list",
@@ -793,8 +791,6 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
                          _("The back forward list."),
                          IDE_TYPE_BACK_FORWARD_LIST,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BACK_FORWARD_LIST,
-                                   gParamSpecs [PROP_BACK_FORWARD_LIST]);
 
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
@@ -802,7 +798,6 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
                          _("The editor document."),
                          GB_TYPE_EDITOR_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DOCUMENT, gParamSpecs [PROP_DOCUMENT]);
 
   gParamSpecs [PROP_SHOW_MAP] =
     g_param_spec_boolean ("show-map",
@@ -810,8 +805,8 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
                           _("If the overview map should be shown."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SHOW_MAP,
-                                   gParamSpecs [PROP_SHOW_MAP]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-frame.ui");
 

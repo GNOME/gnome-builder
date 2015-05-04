@@ -628,8 +628,7 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gb_command_bar_complete),
-                                NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
+                                NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 0);
 
@@ -643,8 +642,7 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gb_command_bar_move_history),
-                                NULL, NULL,
-                                g_cclosure_marshal_VOID__ENUM,
+                                NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 1,
                                 GTK_TYPE_DIRECTION_TYPE);

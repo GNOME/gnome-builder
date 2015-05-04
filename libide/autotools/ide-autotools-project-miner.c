@@ -308,8 +308,8 @@ ide_autotools_project_miner_class_init (IdeAutotoolsProjectMinerClass *klass)
                          _("The root directory to scan from."),
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ROOT_DIRECTORY,
-                                   gParamSpecs [PROP_ROOT_DIRECTORY]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

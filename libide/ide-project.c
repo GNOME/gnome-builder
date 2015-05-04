@@ -371,8 +371,6 @@ ide_project_class_init (IdeProjectClass *klass)
                          _("The name of the project."),
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_NAME,
-                                   gParamSpecs [PROP_NAME]);
 
   gParamSpecs [PROP_ROOT] =
     g_param_spec_object ("root",
@@ -382,8 +380,8 @@ ide_project_class_init (IdeProjectClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ROOT,
-                                   gParamSpecs [PROP_ROOT]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

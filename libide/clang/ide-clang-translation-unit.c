@@ -547,7 +547,6 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
                          _("The file used to build the translation unit."),
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE, gParamSpecs [PROP_FILE]);
 
   gParamSpecs [PROP_INDEX] =
     g_param_spec_boxed ("index",
@@ -555,7 +554,6 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
                          _("The highlight index for the translation unit."),
                          IDE_TYPE_HIGHLIGHT_INDEX,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_INDEX, gParamSpecs [PROP_INDEX]);
 
   gParamSpecs [PROP_SEQUENCE] =
     g_param_spec_int64 ("sequence",
@@ -565,7 +563,8 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
                         G_MAXINT64,
                         0,
                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SEQUENCE, gParamSpecs [PROP_SEQUENCE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

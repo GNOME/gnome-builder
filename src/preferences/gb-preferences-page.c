@@ -217,8 +217,8 @@ gb_preferences_page_class_init (GbPreferencesPageClass *klass)
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TITLE,
-                                   gParamSpecs [PROP_TITLE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   g_type_ensure (GB_TYPE_PREFERENCES_SWITCH);
 }

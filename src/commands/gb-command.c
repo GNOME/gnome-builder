@@ -59,8 +59,7 @@ gb_command_class_init (GbCommandClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GbCommandClass, execute),
                   g_signal_accumulator_first_wins,
-                  NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL,
                   GB_TYPE_COMMAND_RESULT,
                   0);
 }

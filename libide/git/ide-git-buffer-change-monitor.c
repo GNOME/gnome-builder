@@ -720,7 +720,8 @@ ide_git_buffer_change_monitor_class_init (IdeGitBufferChangeMonitorClass *klass)
                          _("The repository to use for calculating diffs."),
                          GGIT_TYPE_REPOSITORY,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_REPOSITORY, gParamSpecs [PROP_REPOSITORY]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gWorkQueue = g_async_queue_new ();
   gWorkThread = g_thread_new ("IdeGitBufferChangeMonitorWorker",

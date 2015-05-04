@@ -315,8 +315,6 @@ ide_source_snippet_chunk_class_init (IdeSourceSnippetChunkClass *klass)
                          _("The snippet context."),
                          IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CONTEXT,
-                                   gParamSpecs[PROP_CONTEXT]);
 
   gParamSpecs[PROP_SPEC] =
     g_param_spec_string ("spec",
@@ -324,8 +322,6 @@ ide_source_snippet_chunk_class_init (IdeSourceSnippetChunkClass *klass)
                          _("The specification to expand using the context."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SPEC,
-                                   gParamSpecs[PROP_SPEC]);
 
   gParamSpecs[PROP_TAB_STOP] =
     g_param_spec_int ("tab-stop",
@@ -335,8 +331,6 @@ ide_source_snippet_chunk_class_init (IdeSourceSnippetChunkClass *klass)
                       G_MAXINT,
                       -1,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TAB_STOP,
-                                   gParamSpecs[PROP_TAB_STOP]);
 
   gParamSpecs[PROP_TEXT] =
     g_param_spec_string ("text",
@@ -344,8 +338,6 @@ ide_source_snippet_chunk_class_init (IdeSourceSnippetChunkClass *klass)
                          _("The text for the chunk."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TEXT,
-                                   gParamSpecs[PROP_TEXT]);
 
   gParamSpecs[PROP_TEXT_SET] =
     g_param_spec_boolean ("text-set",
@@ -353,8 +345,8 @@ ide_source_snippet_chunk_class_init (IdeSourceSnippetChunkClass *klass)
                           _("If the text property has been manually set."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TEXT_SET,
-                                   gParamSpecs[PROP_TEXT_SET]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

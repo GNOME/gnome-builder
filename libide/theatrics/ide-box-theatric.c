@@ -261,8 +261,6 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                          1.0,
                          1.0,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ALPHA,
-                                   gParamSpecs[PROP_ALPHA]);
 
   gParamSpecs[PROP_BACKGROUND] =
     g_param_spec_string ("background",
@@ -270,8 +268,6 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                          _("background"),
                          "#000000",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BACKGROUND,
-                                   gParamSpecs[PROP_BACKGROUND]);
 
   gParamSpecs[PROP_HEIGHT] =
     g_param_spec_int ("height",
@@ -281,8 +277,6 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                       G_MAXINT,
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_HEIGHT,
-                                   gParamSpecs[PROP_HEIGHT]);
 
   gParamSpecs[PROP_TARGET] =
     g_param_spec_object ("target",
@@ -292,8 +286,6 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TARGET,
-                                   gParamSpecs[PROP_TARGET]);
 
   gParamSpecs[PROP_WIDTH] =
     g_param_spec_int ("width",
@@ -303,8 +295,6 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                       G_MAXINT,
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_WIDTH,
-                                   gParamSpecs[PROP_WIDTH]);
 
   gParamSpecs[PROP_X] =
     g_param_spec_int ("x",
@@ -314,8 +304,6 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                       G_MAXINT,
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_X,
-                                   gParamSpecs[PROP_X]);
 
   gParamSpecs[PROP_Y] =
     g_param_spec_int ("y",
@@ -325,8 +313,8 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
                       G_MAXINT,
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_Y,
-                                   gParamSpecs[PROP_Y]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

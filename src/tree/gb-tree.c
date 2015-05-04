@@ -1295,8 +1295,6 @@ gb_tree_class_init (GbTreeClass *klass)
                          _ ("The root object of the tree."),
                          GB_TYPE_TREE_NODE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_ROOT,
-                                   gParamSpecs[PROP_ROOT]);
 
   gParamSpecs[PROP_SELECTION] =
     g_param_spec_object ("selection",
@@ -1304,8 +1302,6 @@ gb_tree_class_init (GbTreeClass *klass)
                          _ ("The node selection."),
                          GB_TYPE_TREE_NODE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_SELECTION,
-                                   gParamSpecs[PROP_SELECTION]);
 
   gParamSpecs [PROP_SHOW_ICONS] =
     g_param_spec_boolean ("show-icons",
@@ -1314,16 +1310,15 @@ gb_tree_class_init (GbTreeClass *klass)
                           FALSE,
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SHOW_ICONS,
-                                   gParamSpecs [PROP_SHOW_ICONS]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [ACTION] =
     g_signal_new ("action",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GbTreeClass, action),
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   3,
                   G_TYPE_STRING,
@@ -1335,8 +1330,7 @@ gb_tree_class_init (GbTreeClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GbTreeClass, populate_popup),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_WIDGET);

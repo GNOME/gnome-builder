@@ -159,18 +159,15 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW
 
 enum {
   PROP_0,
-  PROP_AUTO_INDENT,
   PROP_BACK_FORWARD_LIST,
   PROP_COUNT,
   PROP_ENABLE_WORD_COMPLETION,
   PROP_FILE_SETTINGS,
   PROP_FONT_NAME,
   PROP_FONT_DESC,
-  PROP_HIGHLIGHT_CURRENT_LINE,
   PROP_INDENT_STYLE,
   PROP_INSERT_MATCHING_BRACE,
   PROP_MODE_DISPLAY_NAME,
-  PROP_OVERWRITE,
   PROP_OVERWRITE_BRACES,
   PROP_RUBBERBAND_SEARCH,
   PROP_SCROLL_OFFSET,
@@ -182,7 +179,12 @@ enum {
   PROP_SHOW_SEARCH_SHADOW,
   PROP_SMART_BACKSPACE,
   PROP_SNIPPET_COMPLETION,
-  LAST_PROP
+  LAST_PROP,
+
+  /* These are overridden */
+  PROP_AUTO_INDENT,
+  PROP_HIGHLIGHT_CURRENT_LINE,
+  PROP_OVERWRITE
 };
 
 enum {
@@ -5010,8 +5012,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          _("The back-forward list to track jumps."),
                          IDE_TYPE_BACK_FORWARD_LIST,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BACK_FORWARD_LIST,
-                                   gParamSpecs [PROP_BACK_FORWARD_LIST]);
 
   gParamSpecs [PROP_COUNT] =
     g_param_spec_uint ("count",
@@ -5021,7 +5021,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                        G_MAXINT,
                        0,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_COUNT, gParamSpecs [PROP_COUNT]);
 
   gParamSpecs [PROP_FILE_SETTINGS] =
     g_param_spec_object ("file-settings",
@@ -5029,8 +5028,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          _("The file settings that have been loaded for the file."),
                          IDE_TYPE_FILE_SETTINGS,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE_SETTINGS,
-                                   gParamSpecs [PROP_FILE_SETTINGS]);
 
   gParamSpecs [PROP_FONT_DESC] =
     g_param_spec_boxed ("font-desc",
@@ -5038,8 +5035,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                         _("The Pango font description to use for rendering source."),
                         PANGO_TYPE_FONT_DESCRIPTION,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FONT_DESC,
-                                   gParamSpecs [PROP_FONT_DESC]);
 
   gParamSpecs [PROP_ENABLE_WORD_COMPLETION] =
     g_param_spec_boolean ("enable-word-completion",
@@ -5047,8 +5042,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           _("If words from all buffers can be used to autocomplete."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ENABLE_WORD_COMPLETION,
-                                   gParamSpecs [PROP_ENABLE_WORD_COMPLETION]);
 
   gParamSpecs [PROP_FONT_NAME] =
     g_param_spec_string ("font-name",
@@ -5056,8 +5049,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          _("The Pango font name to use for rendering source."),
                          "Monospace",
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FONT_NAME,
-                                   gParamSpecs [PROP_FONT_NAME]);
 
   g_object_class_override_property (object_class,
                                     PROP_HIGHLIGHT_CURRENT_LINE,
@@ -5070,8 +5061,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                        IDE_TYPE_INDENT_STYLE,
                        IDE_INDENT_STYLE_TABS,
                        (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_INDENT_STYLE,
-                                   gParamSpecs [PROP_INDENT_STYLE]);
 
   gParamSpecs [PROP_INSERT_MATCHING_BRACE] =
     g_param_spec_boolean ("insert-matching-brace",
@@ -5079,8 +5068,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           _("Insert a matching brace/bracket/quotation/parenthesis."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_INSERT_MATCHING_BRACE,
-                                   gParamSpecs [PROP_INSERT_MATCHING_BRACE]);
 
   g_object_class_override_property (object_class, PROP_OVERWRITE, "overwrite");
 
@@ -5090,8 +5077,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          _("The display name of the keybinding mode."),
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MODE_DISPLAY_NAME,
-                                   gParamSpecs [PROP_MODE_DISPLAY_NAME]);
 
   gParamSpecs [PROP_OVERWRITE_BRACES] =
     g_param_spec_boolean ("overwrite-braces",
@@ -5099,8 +5084,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           _("Overwrite a matching brace/bracket/quotation/parenthesis."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_OVERWRITE_BRACES,
-                                   gParamSpecs [PROP_OVERWRITE_BRACES]);
 
   gParamSpecs [PROP_RUBBERBAND_SEARCH] =
     g_param_spec_boolean ("rubberband-search",
@@ -5108,8 +5091,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           _("Auto scroll to next search result without moving insertion caret."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_RUBBERBAND_SEARCH,
-                                   gParamSpecs [PROP_RUBBERBAND_SEARCH]);
 
   gParamSpecs [PROP_SCROLL_OFFSET] =
     g_param_spec_uint ("scroll-offset",
@@ -5119,8 +5100,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                        G_MAXUINT,
                        0,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SCROLL_OFFSET,
-                                   gParamSpecs [PROP_SCROLL_OFFSET]);
 
   gParamSpecs [PROP_SEARCH_CONTEXT] =
     g_param_spec_object ("search-context",
@@ -5128,8 +5107,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          _("The search context for the view."),
                          GTK_SOURCE_TYPE_SEARCH_CONTEXT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SEARCH_CONTEXT,
-                                   gParamSpecs [PROP_SEARCH_CONTEXT]);
 
   gParamSpecs [PROP_SHOW_GRID_LINES] =
     g_param_spec_boolean ("show-grid-lines",
@@ -5137,8 +5114,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           _("If the background grid should be shown."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SHOW_GRID_LINES,
-                                   gParamSpecs [PROP_SHOW_GRID_LINES]);
 
   gParamSpecs [PROP_SHOW_LINE_CHANGES] =
     g_param_spec_boolean ("show-line-changes",
@@ -5146,8 +5121,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           _("If line changes should be shown in the left gutter."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SHOW_LINE_CHANGES,
-                                   gParamSpecs [PROP_SHOW_LINE_CHANGES]);
 
   /**
    * IdeSourceView:show-line-diagnostics:
@@ -5163,8 +5136,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           _("If line changes diagnostics should be shown in the left gutter."),
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SHOW_LINE_DIAGNOSTICS,
-                                   gParamSpecs [PROP_SHOW_LINE_DIAGNOSTICS]);
 
   gParamSpecs [PROP_SHOW_SEARCH_BUBBLES] =
     g_param_spec_boolean ("show-search-bubbles",
@@ -5172,8 +5143,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           _("If search bubbles should be rendered."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SHOW_SEARCH_BUBBLES,
-                                   gParamSpecs [PROP_SHOW_SEARCH_BUBBLES]);
 
   gParamSpecs [PROP_SHOW_SEARCH_SHADOW] =
     g_param_spec_boolean ("show-search-shadow",
@@ -5181,8 +5150,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           _("If the shadow should be drawn when performing searches."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SHOW_SEARCH_SHADOW,
-                                   gParamSpecs [PROP_SHOW_SEARCH_SHADOW]);
 
   gParamSpecs [PROP_SMART_BACKSPACE] =
     g_param_spec_boolean ("smart-backspace",
@@ -5190,8 +5157,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          _("If smart Backspace should be used."),
                          FALSE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SMART_BACKSPACE,
-                                   gParamSpecs [PROP_SMART_BACKSPACE]);
 
   gParamSpecs [PROP_SNIPPET_COMPLETION] =
     g_param_spec_boolean ("snippet-completion",
@@ -5199,16 +5164,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           _("If snippet expansion should be enabled via the completion window."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SNIPPET_COMPLETION,
-                                   gParamSpecs [PROP_SNIPPET_COMPLETION]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [ACTION] =
     g_signal_new ("action",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, action),
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   3,
                   G_TYPE_STRING,
@@ -5220,8 +5184,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, append_to_count),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__INT,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_INT);
@@ -5240,8 +5203,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, auto_indent),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5259,8 +5221,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, begin_macro),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5269,8 +5230,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (ide_source_view_begin_user_action),
-                                NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
+                                NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 0);
 
@@ -5290,8 +5250,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, capture_modifier),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5304,8 +5263,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, clear_count),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5314,8 +5272,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, clear_modifier),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5324,8 +5281,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, clear_selection),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5334,8 +5290,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, clear_snippets),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5344,8 +5299,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, cycle_completion),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__ENUM,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_DIRECTION_TYPE);
@@ -5355,8 +5309,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, delete_selection),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5374,8 +5327,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, end_macro),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5384,8 +5336,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (ide_source_view_end_user_action),
-                                NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
+                                NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 0);
 
@@ -5394,8 +5345,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeSourceViewClass, focus_location),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__BOXED,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_SOURCE_LOCATION);
@@ -5405,8 +5355,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, goto_definition),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5415,8 +5364,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, hide_completion),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5425,8 +5373,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, indent_selection),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__INT,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_INT);
@@ -5436,8 +5383,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, insert_at_cursor_and_indent),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__STRING,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_STRING);
@@ -5456,8 +5402,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, insert_modifier),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__BOOLEAN,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_BOOLEAN);
@@ -5471,8 +5416,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeSourceViewClass, jump),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__BOXED,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_TEXT_ITER);
@@ -5482,8 +5426,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, movement),
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   4,
                   IDE_TYPE_SOURCE_VIEW_MOVEMENT,
@@ -5503,8 +5446,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, move_error),
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_DIRECTION_TYPE);
@@ -5514,8 +5456,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, move_search),
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   6,
                   GTK_TYPE_DIRECTION_TYPE,
@@ -5530,8 +5471,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, paste_clipboard_extended),
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   3,
                   G_TYPE_BOOLEAN,
@@ -5549,8 +5489,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, pop_selection),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5559,8 +5498,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeSourceViewClass, pop_snippet),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_SOURCE_SNIPPET);
@@ -5577,8 +5515,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, push_selection),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5615,8 +5552,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, replay_macro),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__BOOLEAN,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_BOOLEAN);
@@ -5626,8 +5562,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, request_documentation),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5636,8 +5571,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, restore_insert_mark),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5646,8 +5580,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, save_insert_mark),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -5656,8 +5589,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, selection_theatric),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__ENUM,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_SOURCE_VIEW_THEATRIC);
@@ -5678,8 +5610,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, set_overwrite),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__BOOLEAN,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_BOOLEAN);
@@ -5689,8 +5620,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, set_search_text),
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   2,
                   G_TYPE_STRING,
@@ -5710,8 +5640,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, sort),
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   2,
                   G_TYPE_BOOLEAN,
@@ -5722,8 +5651,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, swap_selection_bounds),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 }

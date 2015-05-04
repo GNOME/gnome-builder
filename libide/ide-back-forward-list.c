@@ -427,8 +427,6 @@ ide_back_forward_list_class_init (IdeBackForwardListClass *klass)
                           _("If there are more backward navigation items."),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CAN_GO_BACKWARD,
-                                   gParamSpecs [PROP_CAN_GO_BACKWARD]);
 
   gParamSpecs [PROP_CAN_GO_FORWARD] =
     g_param_spec_boolean ("can-go-forward",
@@ -436,8 +434,6 @@ ide_back_forward_list_class_init (IdeBackForwardListClass *klass)
                           _("If there are more forward navigation items."),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CAN_GO_FORWARD,
-                                   gParamSpecs [PROP_CAN_GO_FORWARD]);
 
   gParamSpecs [PROP_CURRENT_ITEM] =
     g_param_spec_object ("current-item",
@@ -445,16 +441,15 @@ ide_back_forward_list_class_init (IdeBackForwardListClass *klass)
                          _("The current navigation item."),
                          IDE_TYPE_BACK_FORWARD_ITEM,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CURRENT_ITEM,
-                                   gParamSpecs [PROP_CURRENT_ITEM]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [NAVIGATE_TO] =
     g_signal_new ("navigate-to",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_BACK_FORWARD_ITEM);

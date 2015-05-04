@@ -322,8 +322,8 @@ gb_html_view_class_init (GbHtmlViewClass *klass)
                          _("The document to view as HTML."),
                          GB_TYPE_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DOCUMENT,
-                                   gParamSpecs [PROP_DOCUMENT]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-html-view.ui");
   GB_WIDGET_CLASS_BIND (klass, GbHtmlView, web_view1);

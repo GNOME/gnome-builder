@@ -226,8 +226,6 @@ gb_command_result_class_init (GbCommandResultClass *klass)
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_COMMAND_TEXT,
-                                   gParamSpecs [PROP_COMMAND_TEXT]);
 
   gParamSpecs [PROP_IS_ERROR] =
     g_param_spec_boolean ("is-error",
@@ -236,8 +234,6 @@ gb_command_result_class_init (GbCommandResultClass *klass)
                           FALSE,
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_IS_ERROR,
-                                   gParamSpecs [PROP_IS_ERROR]);
 
   gParamSpecs [PROP_IS_RUNNING] =
     g_param_spec_boolean ("is-running",
@@ -246,8 +242,6 @@ gb_command_result_class_init (GbCommandResultClass *klass)
                           FALSE,
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_IS_RUNNING,
-                                   gParamSpecs [PROP_IS_RUNNING]);
 
   gParamSpecs [PROP_RESULT_TEXT] =
     g_param_spec_string ("result-text",
@@ -256,8 +250,8 @@ gb_command_result_class_init (GbCommandResultClass *klass)
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_RESULT_TEXT,
-                                   gParamSpecs [PROP_RESULT_TEXT]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

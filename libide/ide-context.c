@@ -646,8 +646,6 @@ ide_context_class_init (IdeContextClass *klass)
                          _("Back/forward navigation history for the context."),
                          IDE_TYPE_BACK_FORWARD_LIST,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BACK_FORWARD_LIST,
-                                   gParamSpecs [PROP_BACK_FORWARD_LIST]);
 
   gParamSpecs [PROP_BUFFER_MANAGER] =
     g_param_spec_object ("buffer-manager",
@@ -655,8 +653,6 @@ ide_context_class_init (IdeContextClass *klass)
                          _("The buffer manager for the context."),
                          IDE_TYPE_BUFFER_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BUFFER_MANAGER,
-                                   gParamSpecs [PROP_BUFFER_MANAGER]);
 
   gParamSpecs [PROP_BUILD_SYSTEM] =
     g_param_spec_object ("build-system",
@@ -664,8 +660,6 @@ ide_context_class_init (IdeContextClass *klass)
                          _("The build system used by the context."),
                          IDE_TYPE_BUILD_SYSTEM,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BUILD_SYSTEM,
-                                   gParamSpecs [PROP_BUILD_SYSTEM]);
 
   gParamSpecs [PROP_DEVICE_MANAGER] =
     g_param_spec_object ("device-manager",
@@ -673,8 +667,6 @@ ide_context_class_init (IdeContextClass *klass)
                          _("The device manager for the context."),
                          IDE_TYPE_DEVICE_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DEVICE_MANAGER,
-                                   gParamSpecs [PROP_DEVICE_MANAGER]);
 
   gParamSpecs [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
@@ -684,8 +676,6 @@ ide_context_class_init (IdeContextClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PROJECT_FILE,
-                                   gParamSpecs [PROP_PROJECT_FILE]);
 
   gParamSpecs [PROP_ROOT_BUILD_DIR] =
     g_param_spec_string ("root-build-dir",
@@ -693,8 +683,6 @@ ide_context_class_init (IdeContextClass *klass)
                          _("The root directory to perform builds within."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ROOT_BUILD_DIR,
-                                   gParamSpecs [PROP_ROOT_BUILD_DIR]);
 
   gParamSpecs [PROP_SCRIPT_MANAGER] =
     g_param_spec_object ("script-manager",
@@ -702,8 +690,6 @@ ide_context_class_init (IdeContextClass *klass)
                          _("The script manager for the context."),
                          IDE_TYPE_SCRIPT_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SCRIPT_MANAGER,
-                                   gParamSpecs [PROP_SCRIPT_MANAGER]);
 
   gParamSpecs [PROP_SEARCH_ENGINE] =
     g_param_spec_object ("search-engine",
@@ -711,8 +697,6 @@ ide_context_class_init (IdeContextClass *klass)
                          _("The search engine for the context."),
                          IDE_TYPE_SEARCH_ENGINE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SEARCH_ENGINE,
-                                   gParamSpecs [PROP_SEARCH_ENGINE]);
 
   gParamSpecs [PROP_SNIPPETS_MANAGER] =
     g_param_spec_object ("snippets-manager",
@@ -720,8 +704,6 @@ ide_context_class_init (IdeContextClass *klass)
                          _("The snippets manager for the context."),
                          IDE_TYPE_SOURCE_SNIPPETS_MANAGER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SNIPPETS_MANAGER,
-                                   gParamSpecs [PROP_SNIPPETS_MANAGER]);
 
   gParamSpecs [PROP_UNSAVED_FILES] =
     g_param_spec_object ("unsaved-files",
@@ -729,8 +711,6 @@ ide_context_class_init (IdeContextClass *klass)
                          _("The unsaved files in the context."),
                          IDE_TYPE_UNSAVED_FILES,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_UNSAVED_FILES,
-                                   gParamSpecs [PROP_UNSAVED_FILES]);
 
   gParamSpecs [PROP_VCS] =
     g_param_spec_object ("vcs",
@@ -738,8 +718,8 @@ ide_context_class_init (IdeContextClass *klass)
                          _("The VCS for the context."),
                          IDE_TYPE_VCS,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_VCS,
-                                   gParamSpecs [PROP_VCS]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

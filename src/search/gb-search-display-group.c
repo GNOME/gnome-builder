@@ -42,7 +42,6 @@ G_DEFINE_TYPE (GbSearchDisplayGroup, gb_search_display_group, GTK_TYPE_BOX)
 
 enum {
   PROP_0,
-  PROP_MAX_RESULTS,
   PROP_PROVIDER,
   PROP_SIZE_GROUP,
   LAST_PROP
@@ -418,8 +417,6 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
                          _("The search provider"),
                          IDE_TYPE_SEARCH_PROVIDER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PROVIDER,
-                                   gParamSpecs [PROP_PROVIDER]);
 
   gParamSpecs [PROP_SIZE_GROUP] =
     g_param_spec_object ("size-group",
@@ -427,17 +424,15 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
                          _("The size group for the label."),
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SIZE_GROUP,
-                                   gParamSpecs [PROP_SIZE_GROUP]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [RESULT_ACTIVATED] =
     g_signal_new ("result-activated",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_SEARCH_RESULT);
@@ -447,9 +442,7 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
                   IDE_TYPE_SEARCH_RESULT);

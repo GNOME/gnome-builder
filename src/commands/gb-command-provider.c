@@ -316,7 +316,6 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
                          _("The last focused GbView widget."),
                          GB_TYPE_VIEW,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ACTIVE_VIEW, gParamSpecs [PROP_ACTIVE_VIEW]);
 
   /**
    * GbCommandProvider:priority:
@@ -338,7 +337,6 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
                       G_MAXINT,
                       0,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PRIORITY, gParamSpecs [PROP_PRIORITY]);
 
   /**
    * GbCommandProvider:workbench:
@@ -355,8 +353,8 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_WORKBENCH,
-                                   gParamSpecs [PROP_WORKBENCH]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   /**
    * GbCommandProvider::lookup:

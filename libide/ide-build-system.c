@@ -184,8 +184,8 @@ ide_build_system_class_init (IdeBuildSystemClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PROJECT_FILE,
-                                   gParamSpecs [PROP_PROJECT_FILE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

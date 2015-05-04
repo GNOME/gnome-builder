@@ -187,8 +187,6 @@ gb_command_gaction_class_init (GbCommandGactionClass *klass)
                          _("The GActionGroup containing the action."),
                          G_TYPE_ACTION_GROUP,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ACTION_GROUP,
-                                   gParamSpecs [PROP_ACTION_GROUP]);
 
   gParamSpecs [PROP_ACTION_NAME] =
     g_param_spec_string ("action-name",
@@ -196,8 +194,6 @@ gb_command_gaction_class_init (GbCommandGactionClass *klass)
                          _("The name of the action to execute."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ACTION_NAME,
-                                   gParamSpecs [PROP_ACTION_NAME]);
 
   gParamSpecs [PROP_PARAMETERS] =
     g_param_spec_variant ("parameters",
@@ -206,8 +202,8 @@ gb_command_gaction_class_init (GbCommandGactionClass *klass)
                           G_VARIANT_TYPE_ANY,
                           NULL,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PARAMETERS,
-                                   gParamSpecs [PROP_PARAMETERS]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

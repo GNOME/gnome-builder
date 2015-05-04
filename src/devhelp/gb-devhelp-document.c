@@ -44,11 +44,13 @@ G_DEFINE_TYPE_EXTENDED (GbDevhelpDocument,
 
 enum {
   PROP_0,
+  PROP_URI,
+  LAST_PROP,
+
+  /* These are overridden */
   PROP_MODIFIED,
   PROP_READ_ONLY,
-  PROP_TITLE,
-  PROP_URI,
-  LAST_PROP
+  PROP_TITLE
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
@@ -260,7 +262,8 @@ gb_devhelp_document_class_init (GbDevhelpDocumentClass *klass)
                          _("The uri to load."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_URI, gParamSpecs [PROP_URI]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

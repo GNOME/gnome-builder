@@ -903,7 +903,6 @@ ide_source_map_class_init (IdeSourceMapClass *klass)
                          _("The view this widget is mapping."),
                          GTK_SOURCE_TYPE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_VIEW, gParamSpecs [PROP_VIEW]);
 
   gParamSpecs [PROP_FONT_DESC] =
     g_param_spec_boxed ("font-desc",
@@ -911,7 +910,8 @@ ide_source_map_class_init (IdeSourceMapClass *klass)
                         _("The Pango font description to use."),
                         PANGO_TYPE_FONT_DESCRIPTION,
                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FONT_DESC, gParamSpecs [PROP_FONT_DESC]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [HIDE_MAP] =
     g_signal_new ("hide-map",

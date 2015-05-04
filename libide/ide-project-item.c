@@ -203,8 +203,8 @@ ide_project_item_class_init (IdeProjectItemClass *klass)
                          IDE_TYPE_PROJECT_ITEM,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PARENT,
-                                   gParamSpecs [PROP_PARENT]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

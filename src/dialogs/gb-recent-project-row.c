@@ -213,8 +213,6 @@ gb_recent_project_row_class_init (GbRecentProjectRowClass *klass)
                          _("The project information for the row."),
                          IDE_TYPE_PROJECT_INFO,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PROJECT_INFO,
-                                   gParamSpecs [PROP_PROJECT_INFO]);
 
   gParamSpecs [PROP_SELECTED] =
     g_param_spec_boolean ("selected",
@@ -222,7 +220,6 @@ gb_recent_project_row_class_init (GbRecentProjectRowClass *klass)
                           _("Selected"),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SELECTED, gParamSpecs [PROP_SELECTED]);
 
   gParamSpecs [PROP_SELECTION_MODE] =
     g_param_spec_boolean ("selection-mode",
@@ -230,8 +227,8 @@ gb_recent_project_row_class_init (GbRecentProjectRowClass *klass)
                           _("Selection Mode"),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SELECTION_MODE,
-                                   gParamSpecs [PROP_SELECTION_MODE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

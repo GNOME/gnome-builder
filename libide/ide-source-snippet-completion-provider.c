@@ -169,8 +169,6 @@ ide_source_snippet_completion_provider_class_init (IdeSourceSnippetCompletionPro
                          _("The source view to insert snippet into."),
                          IDE_TYPE_SOURCE_VIEW,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SOURCE_VIEW,
-                                   gParamSpecs[PROP_SOURCE_VIEW]);
 
   gParamSpecs[PROP_SNIPPETS] =
     g_param_spec_object ("snippets",
@@ -178,8 +176,8 @@ ide_source_snippet_completion_provider_class_init (IdeSourceSnippetCompletionPro
                          _("The snippets to complete with this provider."),
                          IDE_TYPE_SOURCE_SNIPPETS,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SNIPPETS,
-                                   gParamSpecs[PROP_SNIPPETS]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

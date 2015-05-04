@@ -257,8 +257,6 @@ gb_scrolled_window_class_init (GbScrolledWindowClass *klass)
                       G_MAXINT,
                       -1,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MAX_CONTENT_HEIGHT,
-                                   gParamSpecs [PROP_MAX_CONTENT_HEIGHT]);
 
   gParamSpecs [PROP_MAX_CONTENT_WIDTH] =
     g_param_spec_int ("max-content-width",
@@ -268,8 +266,8 @@ gb_scrolled_window_class_init (GbScrolledWindowClass *klass)
                       G_MAXINT,
                       -1,
                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MAX_CONTENT_WIDTH,
-                                   gParamSpecs [PROP_MAX_CONTENT_WIDTH]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

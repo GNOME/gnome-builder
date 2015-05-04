@@ -309,7 +309,6 @@ gb_rename_file_popover_class_init (GbRenameFilePopoverClass *klass)
                          _("File"),
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE, gParamSpecs [PROP_FILE]);
 
   gParamSpecs [PROP_IS_DIRECTORY] =
     g_param_spec_boolean ("is-directory",
@@ -317,16 +316,15 @@ gb_rename_file_popover_class_init (GbRenameFilePopoverClass *klass)
                           _("Is Directory"),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_IS_DIRECTORY,
-                                   gParamSpecs [PROP_IS_DIRECTORY]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [RENAME_FILE] =
     g_signal_new ("rename-file",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   2,
                   G_TYPE_FILE,

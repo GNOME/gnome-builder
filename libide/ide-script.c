@@ -159,17 +159,15 @@ ide_script_class_init (IdeScriptClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE,
-                                   gParamSpecs [PROP_FILE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [LOAD] =
     g_signal_new ("load",
                   IDE_TYPE_SCRIPT,
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeScriptClass, load),
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -178,9 +176,7 @@ ide_script_class_init (IdeScriptClass *klass)
                   IDE_TYPE_SCRIPT,
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeScriptClass, unload),
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
 }

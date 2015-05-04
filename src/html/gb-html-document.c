@@ -44,10 +44,12 @@ G_DEFINE_TYPE_EXTENDED (GbHtmlDocument, gb_html_document, G_TYPE_OBJECT, 0,
 enum {
   PROP_0,
   PROP_BUFFER,
+  LAST_PROP,
+
+  /* These are overridden */
   PROP_MODIFIED,
   PROP_READ_ONLY,
-  PROP_TITLE,
-  LAST_PROP
+  PROP_TITLE
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
@@ -314,8 +316,8 @@ gb_html_document_class_init (GbHtmlDocumentClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_BUFFER,
-                                   gParamSpecs [PROP_BUFFER]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

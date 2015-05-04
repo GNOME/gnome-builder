@@ -491,7 +491,6 @@ ide_file_class_init (IdeFileClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_FILE, gParamSpecs [PROP_FILE]);
 
   gParamSpecs [PROP_IS_TEMPORARY] =
     g_param_spec_boolean ("is-temporary",
@@ -499,8 +498,6 @@ ide_file_class_init (IdeFileClass *klass)
                           _("If the file represents a temporary file."),
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_IS_TEMPORARY,
-                                   gParamSpecs [PROP_IS_TEMPORARY]);
 
   gParamSpecs [PROP_LANGUAGE] =
     g_param_spec_object ("language",
@@ -508,7 +505,6 @@ ide_file_class_init (IdeFileClass *klass)
                          _("The file language."),
                          IDE_TYPE_LANGUAGE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_LANGUAGE, gParamSpecs [PROP_LANGUAGE]);
 
   gParamSpecs [PROP_PATH] =
     g_param_spec_string ("path",
@@ -516,7 +512,6 @@ ide_file_class_init (IdeFileClass *klass)
                          _("The path within the project."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PATH, gParamSpecs [PROP_PATH]);
 
   gParamSpecs [PROP_TEMPORARY_ID] =
     g_param_spec_uint ("temporary-id",
@@ -526,8 +521,8 @@ ide_file_class_init (IdeFileClass *klass)
                        G_MAXUINT,
                        0,
                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TEMPORARY_ID,
-                                   gParamSpecs [PROP_TEMPORARY_ID]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

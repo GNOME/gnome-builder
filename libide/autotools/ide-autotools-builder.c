@@ -333,8 +333,6 @@ ide_autotools_builder_class_init (IdeAutotoolsBuilderClass *klass)
                         (G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CONFIG,
-                                   gParamSpecs [PROP_CONFIG]);
 
   gParamSpecs [PROP_DEVICE] =
     g_param_spec_object ("device",
@@ -344,8 +342,8 @@ ide_autotools_builder_class_init (IdeAutotoolsBuilderClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DEVICE,
-                                   gParamSpecs [PROP_DEVICE]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void

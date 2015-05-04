@@ -316,8 +316,6 @@ gb_preferences_switch_class_init (GbPreferencesSwitchClass *klass)
                          _("The title of the switch."),
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TITLE,
-                                   gParamSpecs [PROP_TITLE]);
 
   gParamSpecs [PROP_DESCRIPTION] =
     g_param_spec_string ("description",
@@ -325,8 +323,6 @@ gb_preferences_switch_class_init (GbPreferencesSwitchClass *klass)
                          _("The description for the switch."),
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DESCRIPTION,
-                                   gParamSpecs [PROP_DESCRIPTION]);
 
   gParamSpecs [PROP_IS_RADIO] =
     g_param_spec_boolean ("is-radio",
@@ -334,8 +330,6 @@ gb_preferences_switch_class_init (GbPreferencesSwitchClass *klass)
                           _("If a radio button should be used."),
                           FALSE,
                           (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_IS_RADIO,
-                                   gParamSpecs [PROP_IS_RADIO]);
 
   gParamSpecs [PROP_SETTINGS] =
     g_param_spec_object ("settings",
@@ -343,8 +337,6 @@ gb_preferences_switch_class_init (GbPreferencesSwitchClass *klass)
                          _("The GSettings for the setting."),
                          G_TYPE_SETTINGS,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SETTINGS,
-                                   gParamSpecs [PROP_SETTINGS]);
 
   gParamSpecs [PROP_SETTINGS_SCHEMA_KEY] =
     g_param_spec_string ("settings-schema-key",
@@ -352,8 +344,6 @@ gb_preferences_switch_class_init (GbPreferencesSwitchClass *klass)
                          _("The settings schema key."),
                          NULL,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SETTINGS_SCHEMA_KEY,
-                                   gParamSpecs [PROP_SETTINGS_SCHEMA_KEY]);
 
   gParamSpecs [PROP_SETTINGS_SCHEMA_VALUE] =
     g_param_spec_variant ("settings-schema-value",
@@ -362,8 +352,6 @@ gb_preferences_switch_class_init (GbPreferencesSwitchClass *klass)
                           G_VARIANT_TYPE_ANY,
                           NULL,
                           (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SETTINGS_SCHEMA_VALUE,
-                                   gParamSpecs [PROP_SETTINGS_SCHEMA_VALUE]);
 
   gParamSpecs [PROP_SIZE_GROUP] =
     g_param_spec_object ("size-group",
@@ -371,8 +359,8 @@ gb_preferences_switch_class_init (GbPreferencesSwitchClass *klass)
                          _("The sizing group for the control."),
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SIZE_GROUP,
-                                   gParamSpecs [PROP_SIZE_GROUP]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-preferences-switch.ui");
 
