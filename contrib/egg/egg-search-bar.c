@@ -213,15 +213,6 @@ egg_search_bar_get_internal_child (GtkBuildable *buildable,
 }
 
 static void
-egg_search_bar_finalize (GObject *object)
-{
-  EggSearchBar *self = (EggSearchBar *)object;
-  EggSearchBarPrivate *priv = egg_search_bar_get_instance_private (self);
-
-  G_OBJECT_CLASS (egg_search_bar_parent_class)->finalize (object);
-}
-
-static void
 egg_search_bar_get_property (GObject    *object,
                              guint       prop_id,
                              GValue     *value,
@@ -273,7 +264,6 @@ egg_search_bar_class_init (EggSearchBarClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = egg_search_bar_finalize;
   object_class->get_property = egg_search_bar_get_property;
   object_class->set_property = egg_search_bar_set_property;
 
