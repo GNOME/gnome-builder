@@ -80,6 +80,17 @@ egg_binding_set_connect (EggBindingSet *self,
   g_assert (lazy_binding->target_property != NULL);
   g_assert (lazy_binding->source_property != NULL);
 
+#if 0
+  g_print ("Binding %s(%p):%s to %s(%p):%s (flags=%d)\n",
+           g_type_name (G_TYPE_FROM_INSTANCE (self->source)),
+           self->source,
+           lazy_binding->source_property,
+           g_type_name (G_TYPE_FROM_INSTANCE (lazy_binding->target)),
+           lazy_binding->target,
+           lazy_binding->target_property,
+           lazy_binding->binding_flags);
+#endif
+
   lazy_binding->binding = g_object_bind_property (self->source,
                                                   lazy_binding->source_property,
                                                   lazy_binding->target,
