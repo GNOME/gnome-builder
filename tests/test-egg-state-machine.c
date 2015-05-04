@@ -180,6 +180,20 @@ assert_prop_equal (gpointer     obja,
   g_value_unset (&vb);
 }
 
+static EggStateTransition
+transition_cb (EggStateMachine *machine,
+               const gchar     *old_state,
+               const gchar     *new_state,
+               gpointer         user_data)
+{
+  /* allow any state to state3, except state2 */
+
+  if ((g_strcmp0 (old_state, "state2") == 0) && (g_strcmp0 (new_state, "state3") == 0))
+    return EGG_STATE_TRANSITION_INVALID;
+
+  return EGG_STATE_TRANSITION_IGNORED;
+}
+
 static void
 test_state_machine_basic (void)
 {
@@ -206,6 +220,8 @@ test_state_machine_basic (void)
 
   egg_state_machine_bind (machine, "state1", obj1, "string", dummy, "string", 0);
   egg_state_machine_bind (machine, "state2", obj2, "string", dummy, "string", 0);
+
+  g_signal_connect (machine, "transition", G_CALLBACK (transition_cb), NULL);
 
   ret = egg_state_machine_transition (machine, "state1", &error);
   g_assert_no_error (error);
@@ -237,6 +253,12 @@ test_state_machine_basic (void)
   g_object_set (obj1, "string", "obj1", NULL);
   assert_prop_equal (obj2, dummy, "string");
 
+  /* state2 -> state3 should fail */
+  ret = egg_state_machine_transition (machine, "state3", &error);
+  g_assert (ret == EGG_STATE_TRANSITION_INVALID);
+  g_assert (error != NULL);
+  g_clear_error (&error);
+
   ret = egg_state_machine_transition (machine, "state1", &error);
   g_assert_no_error (error);
   g_assert_cmpint (ret, ==, EGG_STATE_TRANSITION_SUCCESS);
@@ -246,6 +268,11 @@ test_state_machine_basic (void)
   assert_prop_equal (obj1, dummy, "string");
   g_object_set (obj2, "string", "obj2-1", NULL);
   assert_prop_equal (obj1, dummy, "string");
+
+  /* state1 -> state3 should succeed */
+  ret = egg_state_machine_transition (machine, "state3", &error);
+  g_assert_no_error (error);
+  g_assert_cmpint (ret, ==, EGG_STATE_TRANSITION_SUCCESS);
 
   g_object_unref (machine);
   g_assert (machine == NULL);
