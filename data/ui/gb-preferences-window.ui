@@ -73,6 +73,7 @@
                 <property name="search-mode-enabled" bind-source="search_toggle" bind-property="active" bind-flags="bidirectional">False</property>
                 <child internal-child="entry">
                   <object class="GtkEntry" id="search_entry">
+                    <property name="primary-icon-name"></property>
                     <property name="placeholder-text" translatable="yes">Search Preferences…</property>
                     <property name="visible">True</property>
                   </object>

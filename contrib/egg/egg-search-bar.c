@@ -26,7 +26,7 @@ typedef struct
 {
   GtkRevealer    *revealer;
   GtkBox         *box;
-  GtkEntry       *entry;
+  GtkSearchEntry *entry;
   GtkButton      *close_button;
 
   gulong          key_press_event_handler;
@@ -57,11 +57,11 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
 static void
-egg_search_bar__entry_activate (EggSearchBar *self,
-                                GtkEntry     *entry)
+egg_search_bar__entry_activate (EggSearchBar   *self,
+                                GtkSearchEntry *entry)
 {
   g_assert (EGG_IS_SEARCH_BAR (self));
-  g_assert (GTK_IS_ENTRY (entry));
+  g_assert (GTK_IS_SEARCH_ENTRY (entry));
 
   g_signal_emit (self, gSignals [ACTIVATE], 0);
 }
@@ -322,7 +322,7 @@ egg_search_bar_init (EggSearchBar *self)
                   "visible", TRUE,
                   NULL);
   priv->entry =
-    g_object_connect (g_object_new (GTK_TYPE_ENTRY,
+    g_object_connect (g_object_new (GTK_TYPE_SEARCH_ENTRY,
                                     "placeholder-text", _("Search"),
                                     "visible", TRUE,
                                     NULL),
@@ -388,7 +388,7 @@ egg_search_bar_set_search_mode_enabled (EggSearchBar *self,
     {
       priv->search_mode_enabled = search_mode_enabled;
       gtk_revealer_set_reveal_child (priv->revealer, search_mode_enabled);
-      gtk_entry_set_text (priv->entry, "");
+      gtk_entry_set_text (GTK_ENTRY (priv->entry), "");
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SEARCH_MODE_ENABLED]);
     }
 }
