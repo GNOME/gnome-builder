@@ -3,6 +3,8 @@ noinst_LTLIBRARIES = libegg.la
 libegg_la_SOURCES = \
         egg-binding-set.c \
         egg-binding-set.h \
+        egg-search-bar.c \
+        egg-search-bar.h \
 	egg-signal-group.c \
 	egg-signal-group.h \
 	$(NULL)
