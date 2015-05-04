@@ -7,6 +7,8 @@ libegg_la_SOURCES = \
         egg-search-bar.h \
 	egg-signal-group.c \
 	egg-signal-group.h \
+        egg-state-machine.c \
+        egg-state-machine.h \
 	$(NULL)
 
 libegg_la_CFLAGS = $(EGG_CFLAGS)

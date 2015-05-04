@@ -96,6 +96,12 @@ test_ide_source_view_CFLAGS = $(tests_cflags)
 test_ide_source_view_LDADD = $(tests_libs)
 
 
+noinst_PROGRAMS += test-egg-state-machine
+test_egg_state_machine_SOURCES = test-egg-state-machine.c
+test_egg_state_machine_CFLAGS = $(tests_cflags) -I$(top_srcdir)/contrib/egg
+test_egg_state_machine_LDADD = $(tests_libs) $(top_builddir)/contrib/egg/libegg.la
+
+
 EXTRA_DIST += \
 	data/project1/configure.ac \
 	data/project1/.editorconfig \
