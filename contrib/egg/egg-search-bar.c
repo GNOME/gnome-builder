@@ -50,6 +50,7 @@ enum {
 
 enum {
   ACTIVATE,
+  REVEAL,
   LAST_SIGNAL
 };
 
@@ -191,6 +192,17 @@ egg_search_bar_hierarchy_changed (GtkWidget *widget,
     }
 }
 
+static void
+egg_search_bar_reveal (EggSearchBar *self)
+{
+  EggSearchBarPrivate *priv = egg_search_bar_get_instance_private (self);
+
+  g_assert (EGG_IS_SEARCH_BAR (self));
+
+  gtk_revealer_set_reveal_child (priv->revealer, TRUE);
+  gtk_widget_grab_focus (GTK_WIDGET (priv->entry));
+}
+
 static GObject *
 egg_search_bar_get_internal_child (GtkBuildable *buildable,
                                    GtkBuilder   *builder,
@@ -290,6 +302,13 @@ egg_search_bar_class_init (EggSearchBarClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  gSignals [REVEAL] =
+    g_signal_new_class_handler ("reveal",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (egg_search_bar_reveal),
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
 }
 
 static void
