@@ -23,15 +23,11 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_INDENT_STYLE (ide_indent_style_get_type())
-
 typedef enum
 {
   IDE_INDENT_STYLE_SPACES = 1,
   IDE_INDENT_STYLE_TABS   = 2,
 } IdeIndentStyle;
-
-GType ide_indent_style_get_type (void);
 
 G_END_DECLS
 

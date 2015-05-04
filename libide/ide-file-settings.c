@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
+#include "ide-enums.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
 

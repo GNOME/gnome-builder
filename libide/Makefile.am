@@ -108,7 +108,6 @@ libide_1_0_la_public_sources = \
 	ide-highlight-index.h \
 	ide-highlighter.c \
 	ide-highlighter.h \
-	ide-indent-style.c \
 	ide-indent-style.h \
 	ide-indenter.c \
 	ide-indenter.h \
@@ -388,6 +387,7 @@ glib_enum_headers =  \
 	ide-buffer.h \
 	ide-diagnostic.h \
 	ide-highlighter.h \
+	ide-indent-style.h \
 	ide-source-view.h \
         ide-thread-pool.h \
 	$(NULL)
