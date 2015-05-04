@@ -72,8 +72,6 @@ libgnome_builder_la_SOURCES = \
 	editor/gb-editor-workspace.h \
 	gd/gd-tagged-entry.c \
 	gd/gd-tagged-entry.h \
-	gedit/gedit-close-button.c \
-	gedit/gedit-close-button.h \
 	gedit/gedit-menu-stack-switcher.c \
 	gedit/gedit-menu-stack-switcher.h \
 	html/gb-html-document.c \
