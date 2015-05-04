@@ -485,35 +485,6 @@ gb_projects_dialog_constructed (GObject *object)
                                       g_object_ref (self));
 }
 
-static gboolean
-gb_projects_dialog_key_press_event (GtkWidget   *widget,
-                                    GdkEventKey *event)
-{
-  GbProjectsDialog *self = (GbProjectsDialog *)widget;
-
-  g_assert (GB_IS_PROJECTS_DIALOG (self));
-  g_assert (event != NULL);
-
-  if (GTK_WIDGET_CLASS (gb_projects_dialog_parent_class)->key_press_event (widget, event))
-    return TRUE;
-
-  if (!gtk_toggle_button_get_active (self->search_button))
-    {
-      if ((!gb_gdk_event_key_is_keynav (event) &&
-           !gb_gdk_event_key_is_space (event) &&
-           !gb_gdk_event_key_is_tab (event) &&
-           !gb_gdk_event_key_is_modifier_key (event)) ||
-          (((event->state & GDK_CONTROL_MASK) != 0) && (event->keyval == GDK_KEY_f)))
-        {
-          gtk_toggle_button_set_active (self->search_button, TRUE);
-          gtk_widget_event (GTK_WIDGET (self->search_entry), (GdkEvent *)event);
-          return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
 static void
 gb_projects_dialog_finalize (GObject *object)
 {
@@ -529,12 +500,9 @@ static void
 gb_projects_dialog_class_init (GbProjectsDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gb_projects_dialog_constructed;
   object_class->finalize = gb_projects_dialog_finalize;
-
-  widget_class->key_press_event = gb_projects_dialog_key_press_event;
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-projects-dialog.ui");
 
@@ -555,9 +523,17 @@ gb_projects_dialog_class_init (GbProjectsDialogClass *klass)
 static void
 gb_projects_dialog_init (GbProjectsDialog *self)
 {
+  GtkAccelGroup *accel_group;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gb_settings_init_window (GTK_WINDOW (self));
 
   self->recent_projects = ide_recent_projects_new ();
+
+  accel_group = gtk_accel_group_new ();
+  gtk_widget_add_accelerator (GTK_WIDGET (self->search_bar), "reveal",
+                              accel_group, GDK_KEY_f, GDK_CONTROL_MASK, 0);
+  gtk_window_add_accel_group (GTK_WINDOW (self), accel_group);
+  g_clear_object (&accel_group);
 }
