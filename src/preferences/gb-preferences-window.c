@@ -39,6 +39,11 @@ struct _GbPreferencesWindow
   GtkSearchEntry  *search_entry;
   EggSearchBar    *search_bar;
   GtkStack        *stack;
+  GtkStack        *controls_stack;
+  GtkWidget       *visible_child;
+  GBinding        *title_binding;
+
+  guint            destroyed : 1;
 };
 
 G_DEFINE_TYPE (GbPreferencesWindow, gb_preferences_window, GTK_TYPE_WINDOW)
@@ -62,20 +67,44 @@ gb_preferences_window_section_changed (GtkStack            *stack,
                                        GbPreferencesWindow *self)
 {
   GtkWidget *visible_child;
-  gchar *title = NULL;
 
   g_return_if_fail (GTK_IS_STACK (stack));
   g_return_if_fail (GB_IS_PREFERENCES_WINDOW (self));
 
+  if (self->destroyed)
+    return;
+
   visible_child = gtk_stack_get_visible_child (stack);
-  if (visible_child)
-    gtk_container_child_get (GTK_CONTAINER (stack), visible_child,
-                             "title", &title,
-                             NULL);
+  if (self->visible_child != visible_child)
+    {
+      if (self->visible_child)
+        {
+          if (self->title_binding)
+            g_binding_unbind (self->title_binding);
+          ide_clear_weak_pointer (&self->title_binding);
+          gtk_header_bar_set_title (self->right_header_bar, NULL);
+          ide_clear_weak_pointer (&self->visible_child);
+          gtk_widget_hide (GTK_WIDGET (self->controls_stack));
+        }
+      if (visible_child)
+        {
+          GtkWidget *controls;
+          GBinding *binding;
 
-  gtk_header_bar_set_title (self->right_header_bar, title);
+          ide_set_weak_pointer (&self->visible_child, visible_child);
+          binding = g_object_bind_property (visible_child, "title",
+                                            self->right_header_bar, "title",
+                                            G_BINDING_SYNC_CREATE);
+          ide_set_weak_pointer (&self->title_binding, binding);
 
-  g_free (title);
+          controls = gb_preferences_page_get_controls (GB_PREFERENCES_PAGE (visible_child));
+          if (controls)
+            {
+              gtk_stack_set_visible_child (self->controls_stack, controls);
+              gtk_widget_show (GTK_WIDGET (self->controls_stack));
+            }
+        }
+    }
 }
 
 static void
@@ -138,6 +167,17 @@ gb_preferences_window_key_press_event (GtkWidget   *widget,
 }
 
 static void
+gb_preferences_window_finalize (GObject *object)
+{
+  GbPreferencesWindow *self = (GbPreferencesWindow *)object;
+
+  ide_clear_weak_pointer (&self->title_binding);
+  ide_clear_weak_pointer (&self->visible_child);
+
+  G_OBJECT_CLASS (gb_preferences_window_parent_class)->finalize (object);
+}
+
+static void
 gb_preferences_window_constructed (GObject *object)
 {
   GbPreferencesWindow *self = (GbPreferencesWindow *)object;
@@ -158,13 +198,27 @@ gb_preferences_window_constructed (GObject *object)
 }
 
 static void
+gb_preferences_window_destroy (GtkWidget *widget)
+{
+  GbPreferencesWindow *self = (GbPreferencesWindow *)widget;
+
+  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (self));
+
+  self->destroyed = TRUE;
+
+  GTK_WIDGET_CLASS (gb_preferences_window_parent_class)->destroy (widget);
+}
+
+static void
 gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gb_preferences_window_constructed;
+  object_class->finalize = gb_preferences_window_finalize;
 
+  widget_class->destroy = gb_preferences_window_destroy;
   widget_class->key_press_event = gb_preferences_window_key_press_event;
 
   gSignals [CLOSE] =
@@ -182,6 +236,7 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, search_bar);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, search_entry);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, stack);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesWindow, controls_stack);
 
   g_type_ensure (EGG_TYPE_SEARCH_BAR);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EDITOR);
@@ -194,6 +249,9 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
 static void
 gb_preferences_window_init (GbPreferencesWindow *self)
 {
+  GList *pages;
+  GList *iter;
+  GtkWidget *controls;
   GtkAccelGroup *accel_group;
 
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -203,4 +261,17 @@ gb_preferences_window_init (GbPreferencesWindow *self)
                               accel_group, GDK_KEY_f, GDK_CONTROL_MASK, 0);
   gtk_window_add_accel_group (GTK_WINDOW (self), accel_group);
   g_clear_object (&accel_group);
+
+  pages = gtk_container_get_children (GTK_CONTAINER (self->stack));
+
+  for (iter = pages; iter; iter = iter->next)
+    {
+      GbPreferencesPage *page = GB_PREFERENCES_PAGE (iter->data);
+
+      controls = gb_preferences_page_get_controls (page);
+      if (controls)
+        gtk_container_add (GTK_CONTAINER (self->controls_stack), controls);
+    }
+
+  g_list_free (pages);
 }

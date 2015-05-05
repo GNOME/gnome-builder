@@ -2,6 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.8 -->
   <template class="GbPreferencesPageKeybindings" parent="GbPreferencesPage">
+    <property name="title" translatable="yes">Keybindings</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>

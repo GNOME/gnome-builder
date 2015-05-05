@@ -50,13 +50,17 @@ struct _GbPreferencesPageClass
   GtkBinClass parent;
 };
 
-GType    gb_preferences_page_get_type                (void);
-guint    gb_preferences_page_set_keywords            (GbPreferencesPage   *page,
-                                                      const gchar * const *keywords);
-void     gb_preferences_page_set_keywords_for_widget (GbPreferencesPage   *page,
-                                                      const gchar         *keywords,
-                                                      gpointer             first_widget,
-                                                      ...) G_GNUC_NULL_TERMINATED;
+GType        gb_preferences_page_get_type                (void);
+guint        gb_preferences_page_set_keywords            (GbPreferencesPage   *page,
+                                                          const gchar * const *keywords);
+void         gb_preferences_page_set_keywords_for_widget (GbPreferencesPage   *page,
+                                                          const gchar         *keywords,
+                                                          gpointer             first_widget,
+                                                          ...) G_GNUC_NULL_TERMINATED;
+void         gb_preferences_page_set_title               (GbPreferencesPage *page,
+                                                          const gchar       *title);
+void         gb_preferences_page_reset_title             (GbPreferencesPage *page);
+GtkWidget   *gb_preferences_page_get_controls            (GbPreferencesPage *page);
 
 G_END_DECLS
 

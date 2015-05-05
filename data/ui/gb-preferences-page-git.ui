@@ -2,6 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.8 -->
   <template class="GbPreferencesPageGit" parent="GbPreferencesPage">
+    <property name="title" translatable="yes">Git</property>
     <child>
       <object class="GtkGrid">
         <property name="visible">True</property>

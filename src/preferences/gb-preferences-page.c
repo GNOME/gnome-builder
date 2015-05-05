@@ -28,11 +28,20 @@
 struct _GbPreferencesPagePrivate
 {
   GHashTable *widgets;
+  GtkBox     *controls;
   gchar      *title;
+  gchar      *default_title;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPage, gb_preferences_page,
-                            GTK_TYPE_BIN)
+static void buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_EXTENDED (GbPreferencesPage,
+                        gb_preferences_page,
+                        GTK_TYPE_BIN,
+                        0,
+                        G_ADD_PRIVATE (GbPreferencesPage)
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                               buildable_iface_init))
 
 enum {
   PROP_0,
@@ -129,12 +138,21 @@ gb_preferences_page_set_keywords_for_widget (GbPreferencesPage *page,
   va_end (args);
 }
 
-const gchar *
-gb_preferences_page_get_title (GbPreferencesPage *page)
+/**
+ * gb_preferences_page_get_controls:
+ * @self: A #GbPreferencesPage.
+ *
+ * Gets the controls for the preferences page.
+ *
+ * Returns: (transfer none) (nullable): A #GtkWidget.
+ */
+GtkWidget *
+gb_preferences_page_get_controls (GbPreferencesPage *page)
 {
+
   g_return_val_if_fail (GB_IS_PREFERENCES_PAGE (page), NULL);
 
-  return page->priv->title;
+  return GTK_WIDGET (page->priv->controls);
 }
 
 void
@@ -152,13 +170,41 @@ gb_preferences_page_set_title (GbPreferencesPage *page,
     }
 }
 
+void
+gb_preferences_page_reset_title (GbPreferencesPage *page)
+{
+  g_return_if_fail (GB_IS_PREFERENCES_PAGE (page));
+
+  gb_preferences_page_set_title (page, page->priv->default_title);
+}
+
+static const gchar *
+gb_preferences_page_get_title (GbPreferencesPage *page)
+{
+  g_return_val_if_fail (GB_IS_PREFERENCES_PAGE (page), NULL);
+
+  return page->priv->title;
+}
+
+static void
+gb_preferences_page_constructed (GObject *object)
+{
+  GbPreferencesPagePrivate *priv = GB_PREFERENCES_PAGE (object)->priv;
+
+  g_object_get (object, "title", &priv->default_title, NULL);
+
+  G_OBJECT_CLASS (gb_preferences_page_parent_class)->constructed (object);
+}
+
 static void
 gb_preferences_page_finalize (GObject *object)
 {
   GbPreferencesPagePrivate *priv = GB_PREFERENCES_PAGE (object)->priv;
 
   g_clear_pointer (&priv->title, g_free);
+  g_clear_pointer (&priv->default_title, g_free);
   g_clear_pointer (&priv->widgets, g_hash_table_unref);
+  g_clear_object  (&priv->controls);
 
   G_OBJECT_CLASS (gb_preferences_page_parent_class)->finalize (object);
 }
@@ -206,6 +252,7 @@ gb_preferences_page_class_init (GbPreferencesPageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = gb_preferences_page_constructed;
   object_class->finalize = gb_preferences_page_finalize;
   object_class->get_property = gb_preferences_page_get_property;
   object_class->set_property = gb_preferences_page_set_property;
@@ -226,7 +273,38 @@ gb_preferences_page_class_init (GbPreferencesPageClass *klass)
 static void
 gb_preferences_page_init (GbPreferencesPage *self)
 {
+  GtkBox *controls;
+
   self->priv = gb_preferences_page_get_instance_private (self);
   self->priv->widgets = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                                                NULL, NULL);
+
+  controls = g_object_new (GTK_TYPE_BOX,
+                           "orientation", GTK_ORIENTATION_HORIZONTAL,
+                           "visible", TRUE,
+                           NULL);
+  self->priv->controls = g_object_ref_sink (controls);
+}
+
+static GObject *
+gb_preferences_page_get_internal_child (GtkBuildable *buildable,
+                                        GtkBuilder   *builder,
+                                        const gchar  *childname)
+{
+  GbPreferencesPage *self = (GbPreferencesPage *)buildable;
+  GbPreferencesPagePrivate *priv = gb_preferences_page_get_instance_private (self);
+
+  g_assert (GB_IS_PREFERENCES_PAGE (self));
+
+  if (g_strcmp0 (childname, "controls") == 0)
+    return G_OBJECT (priv->controls);
+
+  return NULL;
+}
+
+
+static void
+buildable_iface_init (GtkBuildableIface *iface)
+{
+  iface->get_internal_child = gb_preferences_page_get_internal_child;
 }

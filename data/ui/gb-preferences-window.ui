@@ -52,6 +52,15 @@
             <property name="title" translatable="yes"></property>
             <property name="show-close-button">True</property>
             <property name="decoration_layout">:close</property>
+            <child>
+              <object class="GtkStack" id="controls_stack">
+                <property name="homogeneous">false</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="pack-type">end</property>
+              </packing>
+            </child>
           </object>
         </child>
       </object>

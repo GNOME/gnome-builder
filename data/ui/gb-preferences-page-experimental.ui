@@ -2,6 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.8 -->
   <template class="GbPreferencesPageExperimental" parent="GbPreferencesPage">
+    <property name="title" translatable="yes">Experimental</property>
     <child>
       <object class="GtkBox">
         <property name="visible">true</property>

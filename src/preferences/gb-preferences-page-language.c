@@ -27,8 +27,13 @@
 
 struct _GbPreferencesPageLanguagePrivate
 {
+  GtkStack       *stack;
   GtkListBox     *language_list_box;
   GtkSearchEntry *search_entry;
+  GtkBox         *language_selection;
+  GtkWidget      *language_settings;
+  GtkBox         *language_settings_box;
+  GtkButton      *back_button;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbPreferencesPageLanguage,
@@ -133,9 +138,6 @@ row_selected (GtkListBox                *list_box,
   GtkSourceLanguage *lang;
   GbEditorSettingsWidget *widget;
   const gchar *lang_id;
-  GtkDialog *dialog;
-  GtkWidget *toplevel;
-  GtkWidget *content_area;
 
   g_assert (GTK_IS_LIST_BOX (list_box));
   g_assert (!row || GTK_IS_LIST_BOX_ROW (row));
@@ -150,26 +152,55 @@ row_selected (GtkListBox                *list_box,
 
   lang_id = gtk_source_language_get_id (lang);
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (list_box));
-
-  dialog = g_object_new (GTK_TYPE_DIALOG,
-                         "transient-for", toplevel,
-                         "title", gtk_source_language_get_name (lang),
-                         "use-header-bar", TRUE,
-                         NULL);
-
-  content_area = gtk_dialog_get_content_area (dialog);
   widget = g_object_new (GB_TYPE_EDITOR_SETTINGS_WIDGET,
                          "border-width", 12,
                          "language", lang_id,
                          "visible", TRUE,
                          NULL);
-  gtk_container_add (GTK_CONTAINER (content_area), GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (page->priv->language_settings_box), GTK_WIDGET (widget));
+  gtk_stack_set_visible_child (page->priv->stack,GTK_WIDGET (page->priv->language_settings));
+  gb_preferences_page_set_title (GB_PREFERENCES_PAGE (page), gtk_source_language_get_name (lang));
+}
 
-  gtk_dialog_run (dialog);
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+static void
+stack_notify_visible_child (GbPreferencesPageLanguage *page,
+                            GParamSpec                *pspec,
+                            GtkStack                  *stack)
+{
+  GtkWidget *visible_child;
 
-  gtk_list_box_unselect_row (list_box, row);
+  g_assert (GB_IS_PREFERENCES_PAGE_LANGUAGE (page));
+  g_assert (GTK_IS_STACK (stack));
+
+  visible_child = gtk_stack_get_visible_child (stack);
+  if (visible_child == GTK_WIDGET (page->priv->language_selection))
+    {
+      GList *children;
+      GList *iter;
+
+      children = gtk_container_get_children (GTK_CONTAINER (page->priv->language_settings_box));
+      for(iter = children; iter != NULL; iter = g_list_next (iter))
+        gtk_widget_destroy (GTK_WIDGET (iter->data));
+      g_list_free (children);
+
+      gtk_list_box_unselect_all (page->priv->language_list_box);
+      gtk_widget_hide (GTK_WIDGET (page->priv->back_button));
+      gb_preferences_page_reset_title (GB_PREFERENCES_PAGE (page));
+    }
+  else if (visible_child == GTK_WIDGET (page->priv->language_settings))
+    {
+      gtk_widget_show (GTK_WIDGET (page->priv->back_button));
+    }
+}
+
+static void
+back_button_clicked_cb (GbPreferencesPageLanguage *page,
+                        GtkButton                 *back_button)
+{
+  g_assert (GB_IS_PREFERENCES_PAGE_LANGUAGE (page));
+  g_assert (GTK_IS_BUTTON (back_button));
+
+  gtk_stack_set_visible_child (page->priv->stack, GTK_WIDGET (page->priv->language_selection));
 }
 
 static void
@@ -195,6 +226,20 @@ gb_preferences_page_language_constructed (GObject *object)
                     "row-selected",
                     G_CALLBACK (row_selected),
                     page);
+
+  g_signal_connect_object (page->priv->back_button,
+                          "clicked",
+                           G_CALLBACK (back_button_clicked_cb),
+                           page,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (page->priv->stack,
+                           "notify::visible-child",
+                           G_CALLBACK (stack_notify_visible_child),
+                           page,
+                           G_CONNECT_SWAPPED);
+
+
 
   manager = gtk_source_language_manager_get_default ();
   lang_ids = gtk_source_language_manager_get_language_ids (manager);
@@ -242,13 +287,27 @@ gb_preferences_page_language_class_init (GbPreferencesPageLanguageClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-preferences-page-language.ui");
-
+  gtk_widget_class_bind_template_child_private (widget_class,
+                                                GbPreferencesPageLanguage,
+                                                stack);
   gtk_widget_class_bind_template_child_private (widget_class,
                                                 GbPreferencesPageLanguage,
                                                 language_list_box);
   gtk_widget_class_bind_template_child_private (widget_class,
                                                 GbPreferencesPageLanguage,
                                                 search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class,
+                                                GbPreferencesPageLanguage,
+                                                language_selection);
+  gtk_widget_class_bind_template_child_private (widget_class,
+                                                GbPreferencesPageLanguage,
+                                                language_settings);
+  gtk_widget_class_bind_template_child_private (widget_class,
+                                                GbPreferencesPageLanguage,
+                                                language_settings_box);
+  gtk_widget_class_bind_template_child_private (widget_class,
+                                                GbPreferencesPageLanguage,
+                                                back_button);
 
   g_type_ensure (GB_TYPE_EDITOR_SETTINGS_WIDGET);
 }

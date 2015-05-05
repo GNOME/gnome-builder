@@ -2,6 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.8 -->
   <template class="GbPreferencesPageEditor" parent="GbPreferencesPage">
+    <property name="title" translatable="yes">Editor</property>
     <child>
       <object class="GtkScrolledWindow">
         <property name="min-content-height">500</property>
