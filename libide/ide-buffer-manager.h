@@ -51,6 +51,13 @@ void                      ide_buffer_manager_save_file_async     (IdeBufferManag
 gboolean                  ide_buffer_manager_save_file_finish    (IdeBufferManager     *self,
                                                                   GAsyncResult         *result,
                                                                   GError              **error);
+void                      ide_buffer_manager_save_all_async      (IdeBufferManager     *self,
+                                                                  GCancellable         *cancellable,
+                                                                  GAsyncReadyCallback   callback,
+                                                                  gpointer              user_data);
+gboolean                  ide_buffer_manager_save_all_finish     (IdeBufferManager     *self,
+                                                                  GAsyncResult         *result,
+                                                                  GError              **error);
 IdeBuffer                *ide_buffer_manager_get_focus_buffer    (IdeBufferManager     *self);
 void                      ide_buffer_manager_set_focus_buffer    (IdeBufferManager     *self,
                                                                   IdeBuffer            *buffer);

@@ -1595,3 +1595,81 @@ ide_buffer_manager_get_n_buffers (IdeBufferManager *self)
 
   return self->buffers->len;
 }
+
+static void
+ide_buffer_manager_save_all__save_file_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
+{
+  IdeBufferManager *self = (IdeBufferManager *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+  guint *count;
+
+  if (!ide_buffer_manager_save_file_finish (self, result, &error))
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+
+  count = g_task_get_task_data (task);
+  if (--(*count) == 0)
+    g_task_return_boolean (task, TRUE);
+}
+
+void
+ide_buffer_manager_save_all_async (IdeBufferManager    *self,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  gsize i;
+  guint *count;
+
+  g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  count = g_new0 (guint, 1);
+  *count = self->buffers->len;
+  g_task_set_task_data (task, count, g_free);
+
+  for (i = 0; i < self->buffers->len; i++)
+    {
+      IdeBuffer *buffer;
+
+      buffer = g_ptr_array_index (self->buffers, i);
+
+      if (!gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)))
+        {
+          (*count)--;
+          continue;
+        }
+
+      ide_buffer_manager_save_file_async (self,
+                                          buffer,
+                                          ide_buffer_get_file (buffer),
+                                          NULL,
+                                          cancellable,
+                                          ide_buffer_manager_save_all__save_file_cb,
+                                          g_object_ref (task));
+
+    }
+
+  if (*count == 0)
+    g_task_return_boolean (task, TRUE);
+}
+
+gboolean
+ide_buffer_manager_save_all_finish (IdeBufferManager  *self,
+                                    GAsyncResult      *result,
+                                    GError           **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), FALSE);
+
+  return g_task_propagate_boolean (task, error);
+}
