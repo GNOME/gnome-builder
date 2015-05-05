@@ -51,14 +51,15 @@ get_property (GObject    *object,
 {
   TestObject *obj = (TestObject *)object;
 
-  switch (prop_id) {
-  case PROP_STRING:
-    g_value_set_string (value, obj->str);
-    break;
+  switch (prop_id)
+    {
+    case PROP_STRING:
+      g_value_set_string (value, obj->str);
+      break;
 
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-  }
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -69,16 +70,17 @@ set_property (GObject      *object,
 {
   TestObject *obj = (TestObject *)object;
 
-  switch (prop_id) {
-  case PROP_STRING:
-    g_free (obj->str);
-    obj->str = g_value_dup_string (value);
-    g_object_notify_by_pspec (object, pspec);
-    break;
+  switch (prop_id)
+    {
+    case PROP_STRING:
+      g_free (obj->str);
+      obj->str = g_value_dup_string (value);
+      g_object_notify_by_pspec (object, pspec);
+      break;
 
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-  }
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -96,8 +98,6 @@ test_object_class_init (TestObjectClass *klass)
 {
   GObjectClass *obj_class = G_OBJECT_CLASS (klass);
 
-  g_signal_new ("frobnicate", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL, G_TYPE_NONE, 0);
-
   obj_class->finalize = finalize;
   obj_class->get_property = get_property;
   obj_class->set_property = set_property;
@@ -110,6 +110,14 @@ test_object_class_init (TestObjectClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (obj_class, LAST_PROP, gParamSpecs);
+
+  g_signal_new ("frobnicate",
+                G_TYPE_FROM_CLASS (klass),
+                G_SIGNAL_RUN_LAST,
+                0,
+                NULL, NULL, NULL,
+                G_TYPE_NONE,
+                0);
 }
 
 static void
@@ -143,8 +151,8 @@ assert_prop_equal (gpointer     obja,
                    const gchar *propname)
 {
   GParamSpec *pspec;
-  GValue va = { 0 };
-  GValue vb = { 0 };
+  GValue va = G_VALUE_INIT;
+  GValue vb = G_VALUE_INIT;
 
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (obja), propname);
   g_assert (pspec != NULL);
@@ -157,7 +165,7 @@ assert_prop_equal (gpointer     obja,
 
 #define ADD_NUMBER_CHECK(NAME, name) \
   case G_TYPE_##NAME: \
-    g_assert_cmpint(g_value_get_##name(&va), ==, g_value_get_##name(&vb)); \
+    g_assert_cmpint (g_value_get_##name (&va), ==, g_value_get_##name (&vb)); \
     break
 
   switch (pspec->value_type)
@@ -215,8 +223,10 @@ test_state_machine_basic (void)
   g_print ("obj1=%p  obj2=%p  dummy=%p\n", obj1, obj2, dummy);
 #endif
 
-  egg_state_machine_connect_object (machine, "state1", obj1, "frobnicate", G_CALLBACK (obj1_frobnicate), dummy, G_CONNECT_SWAPPED);
-  egg_state_machine_connect_object (machine, "state2", obj2, "frobnicate", G_CALLBACK (obj2_frobnicate), dummy, G_CONNECT_SWAPPED);
+  egg_state_machine_connect_object (machine, "state1", obj1, "frobnicate",
+                                    G_CALLBACK (obj1_frobnicate), dummy, G_CONNECT_SWAPPED);
+  egg_state_machine_connect_object (machine, "state2", obj2, "frobnicate",
+                                    G_CALLBACK (obj2_frobnicate), dummy, G_CONNECT_SWAPPED);
 
   egg_state_machine_bind (machine, "state1", obj1, "string", dummy, "string", 0);
   egg_state_machine_bind (machine, "state2", obj2, "string", dummy, "string", 0);
@@ -255,8 +265,9 @@ test_state_machine_basic (void)
 
   /* state2 -> state3 should fail */
   ret = egg_state_machine_transition (machine, "state3", &error);
-  g_assert (ret == EGG_STATE_TRANSITION_INVALID);
-  g_assert (error != NULL);
+  g_assert_error (error, EGG_STATE_MACHINE_ERROR,
+                  EGG_STATE_MACHINE_ERROR_INVALID_TRANSITION);
+  g_assert_cmpint (ret, ==, EGG_STATE_TRANSITION_INVALID);
   g_clear_error (&error);
 
   ret = egg_state_machine_transition (machine, "state1", &error);
