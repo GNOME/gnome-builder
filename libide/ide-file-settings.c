@@ -38,6 +38,8 @@
 
 typedef struct
 {
+  GPtrArray *children;
+
   IdeFile *file;
 
 #define IDE_FILE_SETTINGS_PROPERTY(_1, name, field_type, _3, _pname, _4, _5, _6) \
@@ -70,7 +72,17 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 ret_type ide_file_settings_get_##name (IdeFileSettings *self) \
 { \
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self); \
+  gsize i; \
   g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), (ret_type)0); \
+  if (priv->children != NULL) \
+    { \
+      for (i = 0; i < priv->children->len; i++) \
+        { \
+          IdeFileSettings *child = g_ptr_array_index (priv->children, i); \
+          if (ide_file_settings_get_##name##_set (child)) \
+            return ide_file_settings_get_##name (child); \
+        } \
+    } \
   return priv->name; \
 }
 # include "ide-file-settings.defs"
@@ -95,6 +107,7 @@ void ide_file_settings_set_##name (IdeFileSettings *self, \
   assign_stmt \
   priv->name##_set = TRUE; \
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_##NAME]); \
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_##NAME##_SET]); \
 }
 # include "ide-file-settings.defs"
 #undef IDE_FILE_SETTINGS_PROPERTY
@@ -156,6 +169,7 @@ ide_file_settings_finalize (GObject *object)
   IdeFileSettings *self = (IdeFileSettings *)object;
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
 
+  g_clear_pointer (&priv->children, g_ptr_array_unref);
   g_clear_pointer (&priv->encoding, g_free);
   ide_clear_weak_pointer (&priv->file);
 
@@ -274,4 +288,82 @@ ide_file_settings_init (IdeFileSettings *self)
   priv->right_margin_position = 80;
   priv->tab_width = 8;
   priv->trim_trailing_whitespace = TRUE;
+}
+
+static void
+ide_file_settings_child_notify (IdeFileSettings *self,
+                                GParamSpec      *pspec,
+                                IdeFileSettings *child)
+{
+  g_assert (IDE_IS_FILE_SETTINGS (self));
+  g_assert (pspec != NULL);
+  g_assert (IDE_IS_FILE_SETTINGS (child));
+
+  if (pspec->owner_type == IDE_TYPE_FILE_SETTINGS)
+    g_object_notify_by_pspec (G_OBJECT (self), pspec);
+}
+
+void
+_ide_file_settings_prepend (IdeFileSettings *self,
+                            IdeFileSettings *child)
+{
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
+  g_return_if_fail (IDE_IS_FILE_SETTINGS (child));
+
+  g_signal_connect_object (child,
+                           "notify",
+                           G_CALLBACK (ide_file_settings_child_notify),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  if (priv->children == NULL)
+    priv->children = g_ptr_array_new_with_free_func (g_object_unref);
+
+  g_ptr_array_insert (priv->children, 0, g_object_ref (child));
+}
+
+IdeFileSettings *
+ide_file_settings_new (IdeFile *file)
+{
+  GIOExtensionPoint *extension_point;
+  IdeFileSettings *ret;
+  IdeContext *context;
+  GList *list;
+
+  g_return_val_if_fail (IDE_IS_FILE (file), NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (file));
+  ret = g_object_new (IDE_TYPE_FILE_SETTINGS,
+                      "context", context,
+                      "file", file,
+                      NULL);
+
+  extension_point = g_io_extension_point_lookup (IDE_FILE_SETTINGS_EXTENSION_POINT);
+  list = g_io_extension_point_get_extensions (extension_point);
+
+  for (; list; list = list->next)
+    {
+      GIOExtension *extension = list->data;
+      g_autoptr(IdeFileSettings) child = NULL;
+      GType gtype;
+
+      gtype = g_io_extension_get_type (extension);
+
+      if (!g_type_is_a (gtype, IDE_TYPE_FILE_SETTINGS))
+        {
+          g_warning ("%s is not an IdeFileSettings", g_type_name (gtype));
+          continue;
+        }
+
+      child = g_object_new (gtype,
+                            "file", file,
+                            "context", context,
+                            NULL);
+
+      _ide_file_settings_prepend (ret, child);
+    }
+
+  return ret;
 }

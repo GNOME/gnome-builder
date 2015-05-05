@@ -37,7 +37,8 @@ struct _IdeFileSettingsClass
   IdeObjectClass parent;
 };
 
-IdeFile *ide_file_settings_get_file (IdeFileSettings *self);
+IdeFileSettings *ide_file_settings_new      (IdeFile         *file);
+IdeFile         *ide_file_settings_get_file (IdeFileSettings *self);
 
 #define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, ret_type, _3, _4, _5, _6) \
   ret_type ide_file_settings_get_##name (IdeFileSettings *self);
