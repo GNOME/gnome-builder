@@ -299,6 +299,7 @@
   bind "<ctrl>y" { "movement" (screen-down, 0, 0, 1)
                    "clear-count" () };
   bind "z" { "set-mode" ("vim-normal-z", transient) };
+  bind "<shift>z" { "set-mode" ("vim-normal-Z", transient) };
 
   /* macro recording! */
   bind "q" { "set-mode" ("vim-normal-q", transient) };
@@ -772,6 +773,11 @@
 
   bind "b" { "movement" (scroll-screen-bottom, 0, 0, 0) };
   bind "minus" { "movement" (scroll-screen-bottom, 0, 0, 0) };
+}
+
+@binding-set builder-vim-source-view-normal-Z
+{
+  bind "<shift>z" { "action" ("workbench", "save-all-quit", "") };
 }
 
 @binding-set builder-vim-source-view-visual-z
@@ -1481,6 +1487,15 @@ IdeSourceViewMode.vim-normal-z {
 
   gtk-key-bindings: builder-vim-source-view,
                     builder-vim-source-view-normal-z;
+}
+
+IdeSourceViewMode.vim-normal-Z {
+  -IdeSourceViewMode-suppress-unbound: true;
+  -IdeSourceViewMode-block-cursor: true;
+  -IdeSourceViewMode-display-name: "Z";
+
+  gtk-key-bindings: builder-vim-source-view,
+                    builder-vim-source-view-normal-Z;
 }
 
 IdeSourceViewMode.vim-insert {
