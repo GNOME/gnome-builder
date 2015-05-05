@@ -77,6 +77,10 @@ get_mapped_name (const gchar *name)
       if (ide_str_equal0 (name, gMappings [i].source_property))
         return gMappings [i].target_property;
     }
+
+  g_assert_not_reached ();
+
+  return NULL;
 }
 
 static void
@@ -105,27 +109,22 @@ static void
 ide_gsettings_file_settings_bind (IdeGsettingsFileSettings *self,
                                   GSettings                *settings,
                                   const gchar              *source_name,
-                                  GSettingsBindGetMapping   mapping)
+                                  const gchar              *target_name,
+                                  GSettingsBindGetMapping   get_mapping)
 {
   g_autofree gchar *set_name = NULL;
   g_autofree gchar *changed_name = NULL;
   g_autoptr(GVariant) value = NULL;
-  const gchar *mapped;
 
   g_assert (IDE_IS_GSETTINGS_FILE_SETTINGS (self));
   g_assert (G_IS_SETTINGS (settings));
   g_assert (source_name != NULL);
 
-  mapped = get_mapped_name (source_name);
-
-  if (mapping)
-    g_settings_bind (settings, source_name, self, mapped, G_SETTINGS_BIND_GET);
-  else
-    g_settings_bind_with_mapping (settings, source_name, self, mapped, G_SETTINGS_BIND_GET,
-                                  mapping, NULL, NULL, NULL);
+  g_settings_bind_with_mapping (settings, source_name, self, target_name, G_SETTINGS_BIND_GET,
+                                get_mapping, NULL, NULL, NULL);
 
   value = g_settings_get_user_value (settings, source_name);
-  set_name = g_strdup_printf ("%s-set", mapped);
+  set_name = g_strdup_printf ("%s-set", target_name);
   g_object_set (self, set_name, !!value, NULL);
 
   changed_name = g_strdup_printf ("changed::%s", source_name);
@@ -141,15 +140,19 @@ static void
 ide_gsettings_file_settings_connect (IdeGsettingsFileSettings *self,
                                      GSettings                *settings)
 {
+  gsize i;
+
   g_assert (IDE_IS_GSETTINGS_FILE_SETTINGS (self));
   g_assert (G_IS_SETTINGS (settings));
 
-  ide_gsettings_file_settings_bind (self, settings, "indent-width", NULL);
-  ide_gsettings_file_settings_bind (self, settings, "insert-spaces-instead-of-tabs", indent_style_get);
-  ide_gsettings_file_settings_bind (self, settings, "right-margin-position", NULL);
-  ide_gsettings_file_settings_bind (self, settings, "show-right-margin", NULL);
-  ide_gsettings_file_settings_bind (self, settings, "tab-width", NULL);
-  ide_gsettings_file_settings_bind (self, settings, "trim-trailing-whitespace", NULL);
+  for (i = 0; gMappings [i].source_property != NULL; i++)
+    {
+      ide_gsettings_file_settings_bind (self,
+                                        settings,
+                                        gMappings [i].source_property,
+                                        gMappings [i].target_property,
+                                        gMappings [i].mapping);
+    }
 }
 
 static void
