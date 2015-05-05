@@ -71,12 +71,12 @@ dist-hook:
 
 run:
 	GI_TYPELIB_PATH=libide \
-	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv
+	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
 debug:
 	GI_TYPELIB_PATH=libide \
 	G_DEBUG=fatal-criticals \
-	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv
+	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
 valgrind:
 	GI_TYPELIB_PATH=libide \
