@@ -304,8 +304,8 @@ ide_file_settings_child_notify (IdeFileSettings *self,
 }
 
 void
-_ide_file_settings_prepend (IdeFileSettings *self,
-                            IdeFileSettings *child)
+_ide_file_settings_append (IdeFileSettings *self,
+                           IdeFileSettings *child)
 {
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
 
@@ -321,7 +321,7 @@ _ide_file_settings_prepend (IdeFileSettings *self,
   if (priv->children == NULL)
     priv->children = g_ptr_array_new_with_free_func (g_object_unref);
 
-  g_ptr_array_insert (priv->children, 0, g_object_ref (child));
+  g_ptr_array_add (priv->children, g_object_ref (child));
 }
 
 IdeFileSettings *
@@ -362,7 +362,7 @@ ide_file_settings_new (IdeFile *file)
                             "context", context,
                             NULL);
 
-      _ide_file_settings_prepend (ret, child);
+      _ide_file_settings_append (ret, child);
     }
 
   return ret;
