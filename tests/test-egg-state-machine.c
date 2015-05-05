@@ -207,6 +207,7 @@ test_state_machine_basic (void)
 {
   EggStateMachine *machine;
   EggStateTransition ret;
+  GSimpleAction *action;
   TestObject *dummy;
   TestObject *obj1;
   TestObject *obj2;
@@ -215,6 +216,7 @@ test_state_machine_basic (void)
   machine = egg_state_machine_new ();
   g_object_add_weak_pointer (G_OBJECT (machine), (gpointer *)&machine);
 
+  action = g_simple_action_new ("my-action", NULL);
   dummy = g_object_new (TEST_TYPE_OBJECT, NULL);
   obj1 = g_object_new (TEST_TYPE_OBJECT, NULL);
   obj2 = g_object_new (TEST_TYPE_OBJECT, NULL);
@@ -231,13 +233,19 @@ test_state_machine_basic (void)
   egg_state_machine_bind (machine, "state1", obj1, "string", dummy, "string", 0);
   egg_state_machine_bind (machine, "state2", obj2, "string", dummy, "string", 0);
 
+  egg_state_machine_add_action (machine, "state1", action, FALSE);
+
   g_signal_connect (machine, "transition", G_CALLBACK (transition_cb), NULL);
+
+  g_assert_cmpint (g_action_get_enabled (G_ACTION (action)), ==, FALSE);
 
   ret = egg_state_machine_transition (machine, "state1", &error);
   g_assert_no_error (error);
   g_assert_cmpint (ret, ==, EGG_STATE_TRANSITION_SUCCESS);
   g_assert_cmpint (dummy->obj1_count, ==, 0);
   g_assert_cmpint (dummy->obj2_count, ==, 0);
+
+  g_assert_cmpint (g_action_get_enabled (G_ACTION (action)), ==, TRUE);
 
   g_signal_emit_by_name (obj1, "frobnicate");
   g_assert_cmpint (dummy->obj1_count, ==, 1);
@@ -250,6 +258,8 @@ test_state_machine_basic (void)
   ret = egg_state_machine_transition (machine, "state2", &error);
   g_assert_no_error (error);
   g_assert_cmpint (ret, ==, EGG_STATE_TRANSITION_SUCCESS);
+
+  g_assert_cmpint (g_action_get_enabled (G_ACTION (action)), ==, FALSE);
 
   g_signal_emit_by_name (obj1, "frobnicate");
   g_assert_cmpint (dummy->obj1_count, ==, 1);
@@ -287,6 +297,8 @@ test_state_machine_basic (void)
 
   g_object_unref (machine);
   g_assert (machine == NULL);
+
+  g_clear_object (&action);
 }
 
 gint

@@ -19,7 +19,7 @@
 #ifndef EGG_STATE_MACHINE_H
 #define EGG_STATE_MACHINE_H
 
-#include <glib-object.h>
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
@@ -74,6 +74,10 @@ void                egg_state_machine_connect_object (EggStateMachine  *self,
                                                       GCallback         callback,
                                                       gpointer          user_data,
                                                       GConnectFlags     flags);
+void                egg_state_machine_add_action     (EggStateMachine  *self,
+                                                      const gchar      *state,
+                                                      GSimpleAction    *action,
+                                                      gboolean          invert_sensitive);
 
 G_END_DECLS
 

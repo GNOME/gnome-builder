@@ -29,14 +29,27 @@ typedef struct
   /*
    * Containers for lazily bound signals and bindings.
    *
-   * Each is a GHashTable indexed by state name, containing another
-   * GHashTable indexed by source object.
+   * Each is a GHashTable indexed by state name, containing another GHashTable indexed by
+   * source object.
    */
   GHashTable *binding_sets_by_state;
   GHashTable *signal_groups_by_state;
 
+  /*
+   * Container for actions which should have sensitivity mutated during state transitions.
+   *
+   * GHashTable of GPtrArray of ActionState.
+   */
+  GHashTable *actions_by_state;
+
   gsize       sequence;
 } EggStateMachinePrivate;
+
+typedef struct
+{
+  GSimpleAction *action;
+  guint          invert_enabled : 1;
+} ActionState;
 
 G_DEFINE_TYPE_WITH_PRIVATE (EggStateMachine, egg_state_machine, G_TYPE_OBJECT)
 G_DEFINE_QUARK (EggStateMachineError, egg_state_machine_error)
@@ -54,6 +67,18 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
+
+static void
+action_state_free (gpointer data)
+{
+  ActionState *state = data;
+
+  if (state != NULL)
+    {
+      g_clear_object (&state->action);
+      g_slice_free (ActionState, state);
+    }
+}
 
 static gboolean
 egg_state_transition_accumulator (GSignalInvocationHint *hint,
@@ -91,7 +116,9 @@ egg_state_machine_do_transition (EggStateMachine *self,
   EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
   GHashTableIter iter;
   const gchar *key;
+  GPtrArray *action_states;
   GHashTable *value;
+  gsize i;
 
   g_assert (EGG_IS_STATE_MACHINE (self));
   g_assert (new_state != NULL);
@@ -138,6 +165,35 @@ egg_state_machine_do_transition (EggStateMachine *self,
           g_assert (EGG_IS_BINDING_SET (binding_set));
 
           egg_binding_set_set_source (binding_set, enabled ? instance : NULL);
+        }
+    }
+
+  /* apply GSimpleAction:enabled to non-matching states */
+  g_hash_table_iter_init (&iter, priv->actions_by_state);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&action_states))
+    {
+      if (g_strcmp0 (key, priv->state) == 0)
+        continue;
+
+      for (i = 0; i < action_states->len; i++)
+        {
+          ActionState *action_state;
+
+          action_state = g_ptr_array_index (action_states, i);
+          g_simple_action_set_enabled (action_state->action, action_state->invert_enabled);
+        }
+    }
+
+  /* apply GSimpleAction:enabled to matching state */
+  action_states = g_hash_table_lookup (priv->actions_by_state, priv->state);
+  if (action_states != NULL)
+    {
+      for (i = 0; i < action_states->len; i++)
+        {
+          ActionState *action_state;
+
+          action_state = g_ptr_array_index (action_states, i);
+          g_simple_action_set_enabled (action_state->action, !action_state->invert_enabled);
         }
     }
 }
@@ -222,6 +278,7 @@ egg_state_machine_finalize (GObject *object)
   g_clear_pointer (&priv->state, g_free);
   g_clear_pointer (&priv->binding_sets_by_state, g_hash_table_unref);
   g_clear_pointer (&priv->signal_groups_by_state, g_hash_table_unref);
+  g_clear_pointer (&priv->actions_by_state, g_hash_table_unref);
 
   G_OBJECT_CLASS (egg_state_machine_parent_class)->finalize (object);
 }
@@ -328,6 +385,12 @@ egg_state_machine_init (EggStateMachine *self)
                            g_str_equal,
                            g_free,
                            (GDestroyNotify)g_hash_table_destroy);
+
+  priv->actions_by_state =
+    g_hash_table_new_full (g_str_hash,
+                           g_str_equal,
+                           g_free,
+                           (GDestroyNotify)g_ptr_array_unref);
 }
 
 static void
@@ -489,6 +552,42 @@ egg_state_machine_bind (EggStateMachine *self,
 
   if ((created == TRUE) && (g_strcmp0 (state, priv->state) == 0))
     egg_binding_set_set_source (binding_set, source);
+}
+
+void
+egg_state_machine_add_action (EggStateMachine *self,
+                              const gchar     *state,
+                              GSimpleAction   *action,
+                              gboolean         invert_enabled)
+{
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
+  ActionState *action_state;
+  GPtrArray *actions;
+  gboolean enabled;
+
+  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (G_IS_SIMPLE_ACTION (action));
+
+  action_state = g_slice_new0 (ActionState);
+  action_state->action = g_object_ref (action);
+  action_state->invert_enabled = invert_enabled;
+
+  actions = g_hash_table_lookup (priv->actions_by_state, state);
+
+  if (actions == NULL)
+    {
+      actions = g_ptr_array_new_with_free_func (action_state_free);
+      g_hash_table_insert (priv->actions_by_state, g_strdup (state), actions);
+    }
+
+  g_ptr_array_add (actions, action_state);
+
+  enabled = (g_strcmp0 (state, priv->state) == 0);
+  if (invert_enabled)
+    enabled = !enabled;
+
+  g_simple_action_set_enabled (action, enabled);
 }
 
 EggStateMachine *
