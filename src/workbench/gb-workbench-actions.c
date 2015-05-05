@@ -191,27 +191,44 @@ gb_workbench_actions_save_all (GSimpleAction *action,
 {
   GbWorkbench *self = user_data;
   IdeBufferManager *buffer_manager;
-  g_autoptr(GPtrArray) ar = NULL;
-  gsize i;
 
   g_assert (GB_IS_WORKBENCH (self));
 
   buffer_manager = ide_context_get_buffer_manager (self->context);
-  ar = ide_buffer_manager_get_buffers (buffer_manager);
+  ide_buffer_manager_save_all_async (buffer_manager, NULL, NULL, NULL);
+}
 
-  for (i = 0; i < ar->len; i++)
-    {
-      IdeBuffer *buffer;
-      IdeFile *file;
+static void
+save_all_quit_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
+{
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  g_autoptr(GbWorkbench) self = user_data;
 
-      buffer = g_ptr_array_index (ar, i);
-      file = ide_buffer_get_file (buffer);
+  g_assert (GB_IS_WORKBENCH (self));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
-      if ((file == NULL) || ide_file_get_is_temporary (file))
-        continue;
+  /* TODO: We should find a way to propagate error info back.
+   *       Right now, save_all doesn't.
+   */
 
-      ide_buffer_manager_save_file_async (buffer_manager, buffer, file, NULL, NULL, NULL, NULL);
-    }
+  ide_buffer_manager_save_all_finish (buffer_manager, result, NULL);
+  gtk_window_close (GTK_WINDOW (self));
+}
+
+static void
+gb_workbench_actions_save_all_quit (GSimpleAction *action,
+                                    GVariant      *parameter,
+                                    gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+  IdeBufferManager *buffer_manager;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  buffer_manager = ide_context_get_buffer_manager (self->context);
+  ide_buffer_manager_save_all_async (buffer_manager, NULL, save_all_quit_cb, g_object_ref (self));
 }
 
 static void
@@ -292,6 +309,7 @@ static const GActionEntry GbWorkbenchActions[] = {
   { "open-uri-list",    gb_workbench_actions_open_uri_list, "as" },
   { "rebuild",          gb_workbench_actions_rebuild },
   { "save-all",         gb_workbench_actions_save_all },
+  { "save-all-quit",    gb_workbench_actions_save_all_quit },
   { "search-docs",      gb_workbench_actions_search_docs, "s" },
   { "show-command-bar", gb_workbench_actions_show_command_bar },
   { "show-gear-menu",   gb_workbench_actions_show_gear_menu },
