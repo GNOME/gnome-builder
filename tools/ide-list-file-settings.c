@@ -69,6 +69,43 @@ indent_style_string (IdeIndentStyle style)
 }
 
 static void
+print_settings (IdeFileSettings *settings)
+{
+  IdeFile *file = ide_file_settings_get_file (settings);
+
+  g_print ("# %s (%s)\n",
+           ide_file_get_path (file),
+           g_type_name (G_TYPE_FROM_INSTANCE (settings)));
+  g_print ("encoding = %s\n", ide_file_settings_get_encoding (settings) ?: "default");
+  g_print ("indent_width = %d\n", ide_file_settings_get_indent_width (settings));
+  g_print ("tab_width = %u\n", ide_file_settings_get_tab_width (settings));
+  g_print ("insert_trailing_newline = %s\n", ide_file_settings_get_insert_trailing_newline (settings) ? "true" : "false");
+  g_print ("trim_trailing_whitespace = %s\n", ide_file_settings_get_trim_trailing_whitespace (settings) ? "true" : "false");
+  g_print ("newline_type = %s\n", newline_string (ide_file_settings_get_newline_type (settings)));
+  g_print ("indent_sytle = %s\n", indent_style_string (ide_file_settings_get_indent_style (settings)));
+  g_print ("right_margin_position = %u\n", ide_file_settings_get_right_margin_position (settings));
+  g_print ("show_right_margin = %s\n", ide_file_settings_get_show_right_margin (settings) ? "true" : "false");
+}
+
+static void
+unref_job (void)
+{
+  if (!--gActive)
+    quit (gExitCode);
+}
+
+static void
+settled_cb (IdeFileSettings *file_settings,
+            GParamSpec      *pspec,
+            gpointer         data)
+{
+  g_signal_handlers_disconnect_by_func (file_settings, settled_cb, NULL);
+  print_settings (file_settings);
+  g_clear_object (&file_settings);
+  unref_job ();
+}
+
+static void
 load_settings_cb (GObject      *object,
                   GAsyncResult *result,
                   gpointer      user_data)
@@ -87,24 +124,20 @@ load_settings_cb (GObject      *object,
       goto cleanup;
     }
 
-  g_print ("# %s (%s)\n",
-           ide_file_get_path (file),
-           g_type_name (G_TYPE_FROM_INSTANCE (settings)));
-  g_print ("encoding = %s\n", ide_file_settings_get_encoding (settings) ?: "default");
-  g_print ("indent_width = %d\n", ide_file_settings_get_indent_width (settings));
-  g_print ("tab_width = %u\n", ide_file_settings_get_tab_width (settings));
-  g_print ("insert_trailing_newline = %s\n", ide_file_settings_get_insert_trailing_newline (settings) ? "true" : "false");
-  g_print ("trim_trailing_whitespace = %s\n", ide_file_settings_get_trim_trailing_whitespace (settings) ? "true" : "false");
-  g_print ("newline_type = %s\n", newline_string (ide_file_settings_get_newline_type (settings)));
-  g_print ("indent_sytle = %s\n", indent_style_string (ide_file_settings_get_indent_style (settings)));
-  g_print ("right_margin_position = %u\n", ide_file_settings_get_right_margin_position (settings));
-  g_print ("show_right_margin = %s\n", ide_file_settings_get_show_right_margin (settings) ? "true" : "false");
+  if (!ide_file_settings_get_settled (settings))
+    {
+      g_signal_connect (settings,
+                        "notify::settled",
+                        G_CALLBACK (settled_cb),
+                        NULL);
+      return;
+    }
 
+  print_settings (settings);
   g_clear_object (&settings);
 
 cleanup:
-  if (!--gActive)
-    quit (gExitCode);
+  unref_job ();
 }
 
 static void
@@ -179,12 +212,12 @@ main (gint   argc,
 
   gMainLoop = g_main_loop_new (NULL, FALSE);
 
-  if (argc > 1)
-    project_path = argv [1];
+  project_path = argv [1];
+
   project_file = g_file_new_for_path (project_path);
 
   strv = g_ptr_array_new ();
-  for (i = 2; i < argc; i++)
+  for (i = 1; i < argc; i++)
     g_ptr_array_add (strv, g_strdup (argv [i]));
   g_ptr_array_add (strv, NULL);
 
