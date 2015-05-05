@@ -39,8 +39,8 @@
 typedef struct
 {
   GPtrArray *children;
-
-  IdeFile *file;
+  IdeFile   *file;
+  guint      unsettled_count;
 
 #define IDE_FILE_SETTINGS_PROPERTY(_1, name, field_type, _3, _pname, _4, _5, _6) \
   field_type name;
@@ -58,6 +58,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeFileSettings, ide_file_settings, IDE_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_FILE,
+  PROP_SETTLED,
 #define IDE_FILE_SETTINGS_PROPERTY(NAME, _1, _2, _3, _pname, _4, _5, _6) \
   PROP_##NAME, \
   PROP_##NAME##_SET,
@@ -163,6 +164,35 @@ ide_file_settings_set_file (IdeFileSettings *self,
     }
 }
 
+/**
+ * ide_file_settings_get_settled:
+ * @self: An #IdeFileSettings.
+ *
+ * Gets the #IdeFileSettings:settled property.
+ *
+ * This property is %TRUE when all of the children file settings have completed loading.
+ *
+ * Some file setting implementations require that various I/O be performed on disk in
+ * the background. This property will change to %TRUE when all of the settings have
+ * been loaded.
+ *
+ * Normally, this is not a problem, since the editor will respond to changes and update them
+ * accordingly. However, if you are writing a tool that prints the file settings
+ * (such as ide-list-file-settings), you probably want to wait until the values have
+ * settled.
+ *
+ * Returns: %TRUE if all the settings have loaded.
+ */
+gboolean
+ide_file_settings_get_settled (IdeFileSettings *self)
+{
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), FALSE);
+
+  return (priv->unsettled_count == 0);
+}
+
 static void
 ide_file_settings_finalize (GObject *object)
 {
@@ -188,6 +218,10 @@ ide_file_settings_get_property (GObject    *object,
     {
     case PROP_FILE:
       g_value_set_object (value, ide_file_settings_get_file (self));
+      break;
+
+    case PROP_SETTLED:
+      g_value_set_boolean (value, ide_file_settings_get_settled (self));
       break;
 
 #define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _2, _3, _4, _5, _6, value_type) \
@@ -258,6 +292,13 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
                          IDE_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  gParamSpecs [PROP_SETTLED] =
+    g_param_spec_boolean ("settled",
+                          _("Settled"),
+                          _("If the file settings implementations have settled."),
+                          FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
 #define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _1, _2, _pname, pspec, _4, _5) \
   gParamSpecs [PROP_##NAME] = pspec;
 # include "ide-file-settings.defs"
@@ -324,9 +365,33 @@ _ide_file_settings_append (IdeFileSettings *self,
   g_ptr_array_add (priv->children, g_object_ref (child));
 }
 
+static void
+ide_file_settings__init_cb (GObject      *object,
+                            GAsyncResult *result,
+                            gpointer      user_data)
+{
+  g_autoptr(IdeFileSettings) self = user_data;
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
+  GAsyncInitable *initable = (GAsyncInitable *)object;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_FILE_SETTINGS (self));
+  g_assert (G_IS_ASYNC_INITABLE (initable));
+
+  if (!g_async_initable_init_finish (initable, result, &error))
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+
+  if (--priv->unsettled_count == 0)
+    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SETTLED]);
+}
+
 IdeFileSettings *
 ide_file_settings_new (IdeFile *file)
 {
+  IdeFileSettingsPrivate *priv;
   GIOExtensionPoint *extension_point;
   IdeFileSettings *ret;
   IdeContext *context;
@@ -339,9 +404,15 @@ ide_file_settings_new (IdeFile *file)
                       "context", context,
                       "file", file,
                       NULL);
+  priv = ide_file_settings_get_instance_private (ret);
 
   extension_point = g_io_extension_point_lookup (IDE_FILE_SETTINGS_EXTENSION_POINT);
   list = g_io_extension_point_get_extensions (extension_point);
+
+  /*
+   * Don't allow our unsettled count to hit zero until we are finished.
+   */
+  priv->unsettled_count++;
 
   for (; list; list = list->next)
     {
@@ -362,8 +433,31 @@ ide_file_settings_new (IdeFile *file)
                             "context", context,
                             NULL);
 
+      if (G_IS_INITABLE (child))
+        {
+          GError *error = NULL;
+
+          if (!g_initable_init (G_INITABLE (child), NULL, &error))
+            {
+              g_warning ("%s", error->message);
+              g_clear_error (&error);
+            }
+        }
+      else if (G_IS_ASYNC_INITABLE (child))
+        {
+          priv->unsettled_count++;
+          g_async_initable_init_async (G_ASYNC_INITABLE (child),
+                                       G_PRIORITY_DEFAULT,
+                                       NULL,
+                                       ide_file_settings__init_cb,
+                                       g_object_ref (ret));
+        }
+
       _ide_file_settings_append (ret, child);
     }
+
+  if (--priv->unsettled_count == 0)
+    g_object_notify_by_pspec (G_OBJECT (ret), gParamSpecs [PROP_SETTLED]);
 
   return ret;
 }
