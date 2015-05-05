@@ -21,6 +21,7 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-file.h"
 #include "ide-indent-style.h"
 #include "ide-object.h"
 
@@ -29,42 +30,36 @@ G_BEGIN_DECLS
 #define IDE_TYPE_FILE_SETTINGS            (ide_file_settings_get_type())
 #define IDE_FILE_SETTINGS_EXTENSION_POINT "org.gnome.libide.extensions.file-settings"
 
-G_DECLARE_DERIVABLE_TYPE (IdeFileSettings, ide_file_settings,
-                          IDE, FILE_SETTINGS, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeFileSettings, ide_file_settings, IDE, FILE_SETTINGS, IdeObject)
 
 struct _IdeFileSettingsClass
 {
   IdeObjectClass parent;
 };
 
-const gchar          *ide_file_settings_get_encoding                 (IdeFileSettings      *self);
-IdeFile              *ide_file_settings_get_file                     (IdeFileSettings      *self);
-IdeIndentStyle        ide_file_settings_get_indent_style             (IdeFileSettings      *self);
-gint                  ide_file_settings_get_indent_width             (IdeFileSettings      *self);
-gboolean              ide_file_settings_get_insert_trailing_newline  (IdeFileSettings      *self);
-GtkSourceNewlineType  ide_file_settings_get_newline_type             (IdeFileSettings      *self);
-guint                 ide_file_settings_get_right_margin_position    (IdeFileSettings      *self);
-guint                 ide_file_settings_get_tab_width                (IdeFileSettings      *self);
-gboolean              ide_file_settings_get_trim_trailing_whitespace (IdeFileSettings      *self);
-gboolean              ide_file_settings_get_show_right_margin        (IdeFileSettings      *self);
-void                  ide_file_settings_set_encoding                 (IdeFileSettings      *self,
-                                                                      const gchar          *encoding);
-void                  ide_file_settings_set_indent_style             (IdeFileSettings      *self,
-                                                                      IdeIndentStyle        indent_style);
-void                  ide_file_settings_set_indent_width             (IdeFileSettings      *self,
-                                                                      gint                  indent_width);
-void                  ide_file_settings_set_insert_trailing_newline  (IdeFileSettings      *self,
-                                                                      gboolean              insert_trailing_newline);
-void                  ide_file_settings_set_newline_type             (IdeFileSettings      *self,
-                                                                      GtkSourceNewlineType  newline_type);
-void                  ide_file_settings_set_right_margin_position    (IdeFileSettings      *self,
-                                                                      guint                 right_margin_position);
-void                  ide_file_settings_set_tab_width                (IdeFileSettings      *self,
-                                                                      guint                 tab_width);
-void                  ide_file_settings_set_trim_trailing_whitespace (IdeFileSettings      *self,
-                                                                      gboolean              trim_trailing_whitespace);
-void                  ide_file_settings_set_show_right_margin        (IdeFileSettings      *self,
-                                                                      gboolean              show_right_margin);
+IdeFile *ide_file_settings_get_file (IdeFileSettings *self);
+
+#define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, ret_type, _3, _4, _5, _6) \
+  ret_type ide_file_settings_get_##name (IdeFileSettings *self);
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
+
+#define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, ret_type, _3, _4, _5, _6) \
+  void ide_file_settings_set_##name (IdeFileSettings *self, \
+                                     ret_type         name);
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
+
+#define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, _3, _4, _5, _6, _7) \
+  gboolean ide_file_settings_get_##name##_set (IdeFileSettings *self);
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
+
+#define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, _3, _4, _5, _6, _7) \
+  void ide_file_settings_set_##name##_set (IdeFileSettings *self, \
+                                           gboolean         name##_set);
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
 
 G_END_DECLS
 

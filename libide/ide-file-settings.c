@@ -25,64 +25,91 @@
 #include "ide-file.h"
 #include "ide-file-settings.h"
 
+/*
+ * WARNING: This file heavily uses XMACROS.
+ *
+ * XMACROS are not as difficult as you might imagine. It's basically just an inverstion
+ * of macros. We have a defs file (in this case ide-file-settings.defs) which defines
+ * information we need about properties. Then we define the macro called from that defs file
+ * to do something we need, then include the .defs file.
+ *
+ * We do that over and over again until we have all the aspects of the object defined.
+ */
+
 typedef struct
 {
-  gchar                *encoding;
-  IdeFile              *file;
-  gint                  indent_width : 7;
-  IdeIndentStyle        indent_style : 2;
-  guint                 insert_trailing_newline : 1;
-  guint                 tab_width : 6;
-  guint                 trim_trailing_whitespace : 1;
-  guint                 right_margin_position : 10;
-  guint                 show_right_margin: 1;
-  GtkSourceNewlineType  newline_type : 2;
+  IdeFile *file;
+
+#define IDE_FILE_SETTINGS_PROPERTY(_1, name, field_type, _3, _pname, _4, _5, _6) \
+  field_type name;
+#include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
+
+#define IDE_FILE_SETTINGS_PROPERTY(_1, name, field_type, _3, _pname, _4, _5, _6) \
+  guint name##_set : 1;
+#include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
 } IdeFileSettingsPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeFileSettings, ide_file_settings, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
-  PROP_ENCODING,
   PROP_FILE,
-  PROP_INDENT_STYLE,
-  PROP_INDENT_WIDTH,
-  PROP_INSERT_TRAILING_NEWLINE,
-  PROP_NEWLINE_TYPE,
-  PROP_RIGHT_MARGIN_POSITION,
-  PROP_TAB_WIDTH,
-  PROP_TRIM_TRAILING_WHITESPACE,
-  PROP_SHOW_RIGHT_MARGIN,
+#define IDE_FILE_SETTINGS_PROPERTY(NAME, _1, _2, _3, _pname, _4, _5, _6) \
+  PROP_##NAME, \
+  PROP_##NAME##_SET,
+#include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
-const gchar *
-ide_file_settings_get_encoding (IdeFileSettings *self)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), NULL);
-
-  return priv->encoding;
+#define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, ret_type, _pname, _3, _4, _5) \
+ret_type ide_file_settings_get_##name (IdeFileSettings *self) \
+{ \
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self); \
+  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), (ret_type)0); \
+  return priv->name; \
 }
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
 
-void
-ide_file_settings_set_encoding (IdeFileSettings *self,
-                                const gchar     *encoding)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
-
-  if (priv->encoding != encoding)
-    {
-      g_free (priv->encoding);
-      priv->encoding = g_strdup (encoding);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ENCODING]);
-    }
+#define IDE_FILE_SETTINGS_PROPERTY(_1, name, field_name, ret_type, _pname, _3, _4, _5) \
+gboolean ide_file_settings_get_##name##_set (IdeFileSettings *self) \
+{ \
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self); \
+  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), FALSE); \
+  return priv->name##_set; \
 }
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
+
+#define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _1, ret_type, _pname, _3, assign_stmt, _4) \
+void ide_file_settings_set_##name (IdeFileSettings *self, \
+                                   ret_type         name) \
+{ \
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self); \
+  g_return_if_fail (IDE_IS_FILE_SETTINGS (self)); \
+  assign_stmt \
+  priv->name##_set = TRUE; \
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_##NAME]); \
+}
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
+
+#define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _1, _2, _pname, _3, _4, _5) \
+void ide_file_settings_set_##name##_set (IdeFileSettings *self, \
+                                         gboolean         name##_set) \
+{ \
+  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self); \
+  g_return_if_fail (IDE_IS_FILE_SETTINGS (self)); \
+  priv->name##_set = !!name##_set; \
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_##NAME##_SET]); \
+}
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
 
 /**
  * ide_file_settings_get_file:
@@ -123,229 +150,6 @@ ide_file_settings_set_file (IdeFileSettings *self,
     }
 }
 
-IdeIndentStyle
-ide_file_settings_get_indent_style (IdeFileSettings *self)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), 0);
-
-  return priv->indent_style;
-}
-
-void
-ide_file_settings_set_indent_style (IdeFileSettings *self,
-                                    IdeIndentStyle   indent_style)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
-  g_return_if_fail (indent_style >= IDE_INDENT_STYLE_SPACES);
-  g_return_if_fail (indent_style <= IDE_INDENT_STYLE_TABS);
-
-  if (priv->indent_style != indent_style)
-    {
-      priv->indent_style = indent_style;
-      g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_INDENT_STYLE]);
-    }
-}
-
-gint
-ide_file_settings_get_indent_width (IdeFileSettings *self)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), -1);
-
-  return priv->indent_width;
-}
-
-void
-ide_file_settings_set_indent_width (IdeFileSettings *self,
-                                    gint             indent_width)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
-  g_return_if_fail (indent_width >= -1);
-  g_return_if_fail (indent_width < 32);
-
-  if (priv->indent_width != indent_width)
-    {
-      priv->indent_width = indent_width;
-      g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_INDENT_WIDTH]);
-    }
-}
-
-gboolean
-ide_file_settings_get_insert_trailing_newline (IdeFileSettings *self)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), FALSE);
-
-  return priv->insert_trailing_newline;
-}
-
-void
-ide_file_settings_set_insert_trailing_newline (IdeFileSettings *self,
-                                               gboolean         insert_trailing_newline)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
-
-  insert_trailing_newline = !!insert_trailing_newline;
-
-  if (priv->insert_trailing_newline != insert_trailing_newline)
-    {
-      priv->insert_trailing_newline = insert_trailing_newline;
-      g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_INSERT_TRAILING_NEWLINE]);
-    }
-}
-
-gboolean
-ide_file_settings_get_show_right_margin (IdeFileSettings *self)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), FALSE);
-
-  return priv->show_right_margin;
-}
-
-void
-ide_file_settings_set_show_right_margin (IdeFileSettings *self,
-                                         gboolean         show_right_margin)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
-
-  show_right_margin = !!show_right_margin;
-
-  if (priv->show_right_margin != show_right_margin)
-    {
-      priv->show_right_margin = show_right_margin;
-      g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_SHOW_RIGHT_MARGIN]);
-    }
-}
-
-GtkSourceNewlineType
-ide_file_settings_get_newline_type (IdeFileSettings *self)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), 0);
-
-  return priv->newline_type;
-}
-
-void
-ide_file_settings_set_newline_type (IdeFileSettings      *self,
-                                    GtkSourceNewlineType  newline_type)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
-  g_return_if_fail (newline_type >= GTK_SOURCE_NEWLINE_TYPE_LF);
-  g_return_if_fail (newline_type <= GTK_SOURCE_NEWLINE_TYPE_CR_LF);
-
-  if (priv->newline_type != newline_type)
-    {
-      priv->newline_type = newline_type;
-      g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_NEWLINE_TYPE]);
-    }
-}
-
-guint
-ide_file_settings_get_right_margin_position (IdeFileSettings *self)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), 80);
-
-  return priv->right_margin_position;
-}
-
-void
-ide_file_settings_set_right_margin_position (IdeFileSettings *self,
-                                             guint            right_margin_position)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
-  g_return_if_fail (right_margin_position > 0);
-  g_return_if_fail (right_margin_position <= 1000);
-
-  if (priv->right_margin_position != right_margin_position)
-    {
-      priv->right_margin_position = right_margin_position;
-      g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_RIGHT_MARGIN_POSITION]);
-    }
-}
-
-guint
-ide_file_settings_get_tab_width (IdeFileSettings *self)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), 0);
-
-  return priv->tab_width;
-}
-
-void
-ide_file_settings_set_tab_width (IdeFileSettings *self,
-                                 guint            tab_width)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
-  g_return_if_fail (tab_width > 0);
-  g_return_if_fail (tab_width < 32);
-
-  if (priv->tab_width != tab_width)
-    {
-      priv->tab_width = tab_width;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TAB_WIDTH]);
-    }
-}
-
-gboolean
-ide_file_settings_get_trim_trailing_whitespace (IdeFileSettings *self)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_FILE_SETTINGS (self), FALSE);
-
-  return priv->trim_trailing_whitespace;
-}
-
-void
-ide_file_settings_set_trim_trailing_whitespace (IdeFileSettings *self,
-                                                gboolean         trim_trailing_whitespace)
-{
-  IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
-
-  trim_trailing_whitespace = !!trim_trailing_whitespace;
-
-  if (priv->trim_trailing_whitespace != trim_trailing_whitespace)
-    {
-      priv->trim_trailing_whitespace = trim_trailing_whitespace;
-      g_object_notify_by_pspec (G_OBJECT (self),
-                                gParamSpecs [PROP_TRIM_TRAILING_WHITESPACE]);
-    }
-}
-
 static void
 ide_file_settings_finalize (GObject *object)
 {
@@ -368,45 +172,23 @@ ide_file_settings_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ENCODING:
-      g_value_set_string (value, ide_file_settings_get_encoding (self));
-      break;
-
     case PROP_FILE:
       g_value_set_object (value, ide_file_settings_get_file (self));
       break;
 
-    case PROP_INDENT_STYLE:
-      g_value_set_enum (value, ide_file_settings_get_indent_style (self));
+#define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _2, _3, _4, _5, _6, value_type) \
+    case PROP_##NAME: \
+      g_value_set_##value_type (value, ide_file_settings_get_##name (self)); \
       break;
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
 
-    case PROP_INDENT_WIDTH:
-      g_value_set_int (value, ide_file_settings_get_indent_width (self));
+#define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _1, _2, _pname, _3, _4, _5) \
+    case PROP_##NAME##_SET: \
+      g_value_set_boolean (value, ide_file_settings_get_##name##_set (self)); \
       break;
-
-    case PROP_INSERT_TRAILING_NEWLINE:
-      g_value_set_boolean (value, ide_file_settings_get_insert_trailing_newline (self));
-      break;
-
-    case PROP_NEWLINE_TYPE:
-      g_value_set_enum (value, ide_file_settings_get_newline_type (self));
-      break;
-
-    case PROP_RIGHT_MARGIN_POSITION:
-      g_value_set_uint (value, ide_file_settings_get_right_margin_position (self));
-      break;
-
-    case PROP_TAB_WIDTH:
-      g_value_set_uint (value, ide_file_settings_get_tab_width (self));
-      break;
-
-    case PROP_TRIM_TRAILING_WHITESPACE:
-      g_value_set_boolean (value, ide_file_settings_get_trim_trailing_whitespace (self));
-      break;
-
-    case PROP_SHOW_RIGHT_MARGIN:
-      g_value_set_boolean (value, ide_file_settings_get_show_right_margin (self));
-      break;
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -423,46 +205,23 @@ ide_file_settings_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ENCODING:
-      ide_file_settings_set_encoding (self, g_value_get_string (value));
-      break;
-
     case PROP_FILE:
       ide_file_settings_set_file (self, g_value_get_object (value));
       break;
 
-    case PROP_INDENT_STYLE:
-      ide_file_settings_set_indent_style (self, g_value_get_enum (value));
+#define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _2, _3, _4, _5, _6, value_type) \
+    case PROP_##NAME: \
+      ide_file_settings_set_##name (self, g_value_get_##value_type (value)); \
       break;
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
 
-    case PROP_INDENT_WIDTH:
-      ide_file_settings_set_indent_width (self, g_value_get_int (value));
+#define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _1, _2, _pname, _3, _4, _5) \
+    case PROP_##NAME##_SET: \
+      ide_file_settings_set_##name##_set (self, g_value_get_boolean (value)); \
       break;
-
-    case PROP_INSERT_TRAILING_NEWLINE:
-      ide_file_settings_set_insert_trailing_newline (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_NEWLINE_TYPE:
-      ide_file_settings_set_newline_type (self, g_value_get_enum (value));
-      break;
-
-    case PROP_RIGHT_MARGIN_POSITION:
-      ide_file_settings_set_right_margin_position (self, g_value_get_uint (value));
-      break;
-
-    case PROP_TAB_WIDTH:
-      ide_file_settings_set_tab_width (self, g_value_get_uint (value));
-      break;
-
-    case PROP_TRIM_TRAILING_WHITESPACE:
-      ide_file_settings_set_trim_trailing_whitespace (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_SHOW_RIGHT_MARGIN:
-      ide_file_settings_set_show_right_margin (self, g_value_get_boolean (value));
-      break;
-
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -478,82 +237,27 @@ ide_file_settings_class_init (IdeFileSettingsClass *klass)
   object_class->get_property = ide_file_settings_get_property;
   object_class->set_property = ide_file_settings_set_property;
 
-  gParamSpecs [PROP_ENCODING] =
-    g_param_spec_string ("encoding",
-                         _("Encoding"),
-                         _("The file encoding to use."),
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
                          _("File"),
                          _("The IdeFile the settings represent."),
                          IDE_TYPE_FILE,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_INDENT_STYLE] =
-    g_param_spec_enum ("indent-style",
-                       _("Indent Style"),
-                       _("The indent style to use."),
-                       IDE_TYPE_INDENT_STYLE,
-                       IDE_INDENT_STYLE_SPACES,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+#define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _1, _2, _pname, pspec, _4, _5) \
+  gParamSpecs [PROP_##NAME] = pspec;
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
 
-  gParamSpecs [PROP_INDENT_WIDTH] =
-    g_param_spec_int ("indent-width",
-                      _("Indent Width"),
-                      _("The width to use when indenting."),
-                      -1, 32, -1,
-                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  gParamSpecs [PROP_INSERT_TRAILING_NEWLINE] =
-    g_param_spec_boolean ("insert-trailing-newline",
-                          _("Insert Trailing Newline"),
-                          _("If a trailing newline should be implicitly added "
-                            "when saving the file."),
-                          TRUE,
+#define IDE_FILE_SETTINGS_PROPERTY(NAME, name, _1, _2, _pname, pspec, _4, _5) \
+  gParamSpecs [PROP_##NAME##_SET] = \
+    g_param_spec_boolean (_pname"-set", \
+                          _pname"-set", \
+                          "If IdeFileSettings:"_pname" is set.", \
+                          FALSE, \
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  gParamSpecs [PROP_NEWLINE_TYPE] =
-    g_param_spec_enum ("newline-type",
-                       _("Newline Type"),
-                       _("The type of newlines to use."),
-                       GTK_SOURCE_TYPE_NEWLINE_TYPE,
-                       GTK_SOURCE_NEWLINE_TYPE_LF,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  gParamSpecs [PROP_RIGHT_MARGIN_POSITION] =
-    g_param_spec_uint ("right-margin-position",
-                       _("Right Margin Position"),
-                       _("The position of the right margin guide."),
-                       1,
-                       1000,
-                       80,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  gParamSpecs [PROP_TAB_WIDTH] =
-    g_param_spec_uint ("tab-width",
-                       _("Tab Width"),
-                       _("The width in characters to represent a tab."),
-                       1, 32, 8,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  gParamSpecs [PROP_TRIM_TRAILING_WHITESPACE] =
-    g_param_spec_boolean ("trim-trailing-whitespace",
-                          _("Trim Trailing Whitespace"),
-                          _("If trailing whitespace should be trimmed."),
-                          TRUE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  gParamSpecs [PROP_SHOW_RIGHT_MARGIN] =
-    g_param_spec_boolean ("show-right-margin",
-                          _("Show Right Margin"),
-                          _("If right margin should be shown."),
-                          TRUE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+# include "ide-file-settings.defs"
+#undef IDE_FILE_SETTINGS_PROPERTY
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
