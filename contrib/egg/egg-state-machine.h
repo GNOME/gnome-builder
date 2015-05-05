@@ -77,7 +77,7 @@ void                egg_state_machine_connect_object (EggStateMachine  *self,
 void                egg_state_machine_add_action     (EggStateMachine  *self,
                                                       const gchar      *state,
                                                       GSimpleAction    *action,
-                                                      gboolean          invert_sensitive);
+                                                      gboolean          invert_enabled);
 
 G_END_DECLS
 

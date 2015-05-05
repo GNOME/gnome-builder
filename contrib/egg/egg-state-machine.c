@@ -73,11 +73,8 @@ action_state_free (gpointer data)
 {
   ActionState *state = data;
 
-  if (state != NULL)
-    {
-      g_clear_object (&state->action);
-      g_slice_free (ActionState, state);
-    }
+  g_clear_object (&state->action);
+  g_slice_free (ActionState, state);
 }
 
 static gboolean
