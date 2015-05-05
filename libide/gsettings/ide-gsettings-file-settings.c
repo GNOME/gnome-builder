@@ -26,19 +26,153 @@
 
 struct _IdeGsettingsFileSettings
 {
-  IdeFileSettings parent_instance;
-
-  GSettings *settings;
+  IdeFileSettings  parent_instance;
+  GSettings       *settings;
 };
 
-static void async_initable_iface_init (GAsyncInitableIface *iface);
+typedef struct
+{
+  const gchar             *source_property;
+  const gchar             *target_property;
+  GSettingsBindGetMapping  mapping;
+} SettingsMapping;
 
-G_DEFINE_TYPE_EXTENDED (IdeGsettingsFileSettings,
-                        ide_gsettings_file_settings,
-                        IDE_TYPE_FILE_SETTINGS,
-                        0,
-                        G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
-                                               async_initable_iface_init))
+G_DEFINE_TYPE (IdeGsettingsFileSettings, ide_gsettings_file_settings, IDE_TYPE_FILE_SETTINGS)
+
+static gboolean indent_style_get (GValue   *value,
+                                  GVariant *variant,
+                                  gpointer  user_data);
+
+static GSettings *gEditorSettings;
+static SettingsMapping gMappings[] = {
+  { "indent-width", "indent-width" },
+  { "insert-spaces-instead-of-tabs", "indent-style", indent_style_get },
+  { "right-margin-position", "right-margin-position" },
+  { "show-right-margin", "show-right-margin" },
+  { "tab-width", "tab-width" },
+  { "trim-trailing-whitespace", "trim-trailing-whitespace" },
+};
+
+static gboolean
+indent_style_get (GValue   *value,
+                  GVariant *variant,
+                  gpointer  user_data)
+{
+  if (g_variant_get_boolean (variant))
+    g_value_set_enum (value, IDE_INDENT_STYLE_SPACES);
+  else
+    g_value_set_enum (value, IDE_INDENT_STYLE_TABS);
+  return TRUE;
+}
+
+static const gchar *
+get_mapped_name (const gchar *name)
+{
+  gsize i;
+
+  g_assert (name != NULL);
+
+  for (i = 0; gMappings [i].source_property; i++)
+    {
+      if (ide_str_equal0 (name, gMappings [i].source_property))
+        return gMappings [i].target_property;
+    }
+}
+
+static void
+ide_gsettings_file_settings_changed (IdeGsettingsFileSettings *self,
+                                     const gchar              *key,
+                                     GSettings                *settings)
+{
+  g_autoptr(GVariant) value = NULL;
+  g_autofree gchar *set_name = NULL;
+  const gchar *mapped;
+
+  g_assert (IDE_IS_GSETTINGS_FILE_SETTINGS (self));
+  g_assert (key != NULL);
+  g_assert (G_IS_SETTINGS (settings));
+
+  mapped = get_mapped_name (key);
+  if (mapped == NULL)
+    return;
+
+  set_name = g_strdup_printf ("%s-set", mapped);
+  value = g_settings_get_user_value (settings, key);
+  g_object_set (self, set_name, !!value, NULL);
+}
+
+static void
+ide_gsettings_file_settings_bind (IdeGsettingsFileSettings *self,
+                                  GSettings                *settings,
+                                  const gchar              *source_name,
+                                  GSettingsBindGetMapping   mapping)
+{
+  g_autofree gchar *set_name = NULL;
+  g_autofree gchar *changed_name = NULL;
+  g_autoptr(GVariant) value = NULL;
+  const gchar *mapped;
+
+  g_assert (IDE_IS_GSETTINGS_FILE_SETTINGS (self));
+  g_assert (G_IS_SETTINGS (settings));
+  g_assert (source_name != NULL);
+
+  mapped = get_mapped_name (source_name);
+
+  if (mapping)
+    g_settings_bind (settings, source_name, self, mapped, G_SETTINGS_BIND_GET);
+  else
+    g_settings_bind_with_mapping (settings, source_name, self, mapped, G_SETTINGS_BIND_GET,
+                                  mapping, NULL, NULL, NULL);
+
+  value = g_settings_get_user_value (settings, source_name);
+  set_name = g_strdup_printf ("%s-set", mapped);
+  g_object_set (self, set_name, !!value, NULL);
+
+  changed_name = g_strdup_printf ("changed::%s", source_name);
+
+  g_signal_connect_object (settings,
+                           changed_name,
+                           G_CALLBACK (ide_gsettings_file_settings_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
+ide_gsettings_file_settings_connect (IdeGsettingsFileSettings *self,
+                                     GSettings                *settings)
+{
+  g_assert (IDE_IS_GSETTINGS_FILE_SETTINGS (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  ide_gsettings_file_settings_bind (self, settings, "indent-width", NULL);
+  ide_gsettings_file_settings_bind (self, settings, "insert-spaces-instead-of-tabs", indent_style_get);
+  ide_gsettings_file_settings_bind (self, settings, "right-margin-position", NULL);
+  ide_gsettings_file_settings_bind (self, settings, "show-right-margin", NULL);
+  ide_gsettings_file_settings_bind (self, settings, "tab-width", NULL);
+  ide_gsettings_file_settings_bind (self, settings, "trim-trailing-whitespace", NULL);
+}
+
+static void
+ide_gsettings_file_settings_constructed (GObject *object)
+{
+  IdeGsettingsFileSettings *self = (IdeGsettingsFileSettings *)object;
+  g_autoptr(GSettings) settings = NULL;
+  g_autofree gchar *path = NULL;
+  const gchar *lang_id;
+  IdeLanguage *language;
+  IdeFile *file;
+
+  G_OBJECT_CLASS (ide_gsettings_file_settings_parent_class)->constructed (object);
+
+  file = ide_file_settings_get_file (IDE_FILE_SETTINGS (self));
+  language = ide_file_get_language (file);
+  lang_id = ide_language_get_id (language);
+
+  path = g_strdup_printf ("/org/gnome/builder/editor/language/%s/", lang_id);
+  settings = g_settings_new_with_path ("org.gnome.builder.editor.language", path);
+
+  ide_gsettings_file_settings_connect (self, settings);
+}
 
 static void
 ide_gsettings_file_settings_finalize (GObject *object)
@@ -55,144 +189,13 @@ ide_gsettings_file_settings_class_init (IdeGsettingsFileSettingsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ide_gsettings_file_settings_constructed;
   object_class->finalize = ide_gsettings_file_settings_finalize;
+
+  gEditorSettings = g_settings_new ("org.gnome.builder.editor");
 }
 
 static void
 ide_gsettings_file_settings_init (IdeGsettingsFileSettings *self)
 {
-}
-
-static gboolean
-indent_style_get (GValue   *value,
-                  GVariant *variant,
-                  gpointer  user_data)
-{
-  if (g_variant_get_boolean (variant))
-    g_value_set_enum (value, IDE_INDENT_STYLE_SPACES);
-  else
-    g_value_set_enum (value, IDE_INDENT_STYLE_TABS);
-
-  return TRUE;
-}
-
-static void
-ide_gsettings_file_settings__init_defaults_cb (GObject      *object,
-                                               GAsyncResult *result,
-                                               gpointer      user_data)
-{
-  IdeGsettingsFileSettings *self;
-  g_autoptr(GTask) task = user_data;
-  GSettings *settings;
-  GError *error = NULL;
-
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
-
-  if (!ide_language_defaults_init_finish (result, &error))
-    {
-      g_warning ("%s", error->message);
-      g_clear_error (&error);
-    }
-
-  self = g_task_get_source_object (task);
-  g_assert (IDE_IS_GSETTINGS_FILE_SETTINGS (self));
-
-  settings = g_task_get_task_data (task);
-  g_assert (G_IS_SETTINGS (settings));
-
-  self->settings = g_object_ref (settings);
-
-  g_settings_bind (self->settings, "indent-width", self, "indent-width",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (self->settings, "tab-width", self, "tab-width",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind_with_mapping (self->settings, "insert-spaces-instead-of-tabs",
-                                self, "indent-style", G_SETTINGS_BIND_GET,
-                                indent_style_get, NULL, NULL, NULL);
-  g_settings_bind (self->settings, "right-margin-position",
-                   self, "right-margin-position",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (self->settings, "trim-trailing-whitespace",
-                   self, "trim-trailing-whitespace",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (self->settings, "show-right-margin",
-                   self, "show-right-margin",
-                   G_SETTINGS_BIND_GET);
-
-
-  g_task_return_boolean (task, TRUE);
-}
-
-static void
-ide_gsettings_file_settings_init_async (GAsyncInitable      *initable,
-                                        gint                 io_priority,
-                                        GCancellable        *cancellable,
-                                        GAsyncReadyCallback  callback,
-                                        gpointer             user_data)
-{
-  IdeGsettingsFileSettings *self = (IdeGsettingsFileSettings *)initable;
-  g_autoptr(GSettings) settings = NULL;
-  g_autoptr(GTask) task = NULL;
-  g_autofree gchar *path = NULL;
-  IdeLanguage *language;
-  IdeFile *file;
-  const gchar *lang_id;
-
-  g_return_if_fail (IDE_IS_GSETTINGS_FILE_SETTINGS (self));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  file = ide_file_settings_get_file (IDE_FILE_SETTINGS (self));
-
-  if (!file)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_FOUND,
-                               _("No file was provided"));
-      return;
-    }
-
-  language = ide_file_get_language (file);
-
-  if (!language)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               _("Failed to retrieve langauge for file."));
-      return;
-    }
-
-  lang_id = ide_language_get_id (language);
-
-  path = g_strdup_printf ("/org/gnome/builder/editor/language/%s/", lang_id);
-  settings = g_settings_new_with_path ("org.gnome.builder.editor.language", path);
-
-  g_task_set_task_data (task, g_object_ref (settings), g_object_unref);
-
-  ide_language_defaults_init_async (cancellable,
-                                    ide_gsettings_file_settings__init_defaults_cb,
-                                    g_object_ref (task));
-}
-
-static gboolean
-ide_gsettings_file_settings_init_finish (GAsyncInitable  *initable,
-                                         GAsyncResult    *result,
-                                         GError         **error)
-{
-  GTask *task = (GTask *)result;
-
-  g_return_val_if_fail (IDE_IS_GSETTINGS_FILE_SETTINGS (initable), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
-
-  return g_task_propagate_boolean (task, error);
-}
-
-static void
-async_initable_iface_init (GAsyncInitableIface *iface)
-{
-  iface->init_async = ide_gsettings_file_settings_init_async;
-  iface->init_finish = ide_gsettings_file_settings_init_finish;
 }
