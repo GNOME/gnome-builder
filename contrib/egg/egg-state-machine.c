@@ -169,11 +169,12 @@ egg_state_machine_transition (EggStateMachine  *self,
   g_autoptr(GError) local_error = NULL;
   gsize sequence;
 
-  g_return_val_if_fail (EGG_IS_STATE_MACHINE (self), FALSE);
-  g_return_val_if_fail (new_state != NULL, FALSE);
+  g_return_val_if_fail (EGG_IS_STATE_MACHINE (self), EGG_STATE_TRANSITION_INVALID);
+  g_return_val_if_fail (new_state != NULL, EGG_STATE_TRANSITION_INVALID);
+  g_return_val_if_fail (error == NULL || *error == NULL, EGG_STATE_TRANSITION_INVALID);
 
   if (g_strcmp0 (new_state, priv->state) == 0)
-    return TRUE;
+    return EGG_STATE_TRANSITION_SUCCESS;
 
   /* Be careful with reentrancy. */
 
@@ -347,6 +348,9 @@ egg_state_machine_connect_object (EggStateMachine *self,
   g_return_if_fail (state != NULL);
   g_return_if_fail (G_IS_OBJECT (instance));
   g_return_if_fail (detailed_signal != NULL);
+  g_return_if_fail (g_signal_parse_name (detailed_signal,
+                                         G_TYPE_FROM_INSTANCE (instance),
+                                         NULL, NULL, FALSE) != 0);
   g_return_if_fail (callback != NULL);
 
   signal_groups = g_hash_table_lookup (priv->signal_groups_by_state, state);
@@ -395,8 +399,12 @@ egg_state_machine_bind (EggStateMachine *self,
   g_return_if_fail (state != NULL);
   g_return_if_fail (G_IS_OBJECT (source));
   g_return_if_fail (source_property != NULL);
+  g_return_if_fail (g_object_class_find_property (G_OBJECT_GET_CLASS (source),
+                                                  source_property) != NULL);
   g_return_if_fail (G_IS_OBJECT (target));
   g_return_if_fail (target_property != NULL);
+  g_return_if_fail (g_object_class_find_property (G_OBJECT_GET_CLASS (target),
+                                                  target_property) != NULL);
 
   /* Use G_BINDING_SYNC_CREATE as we lazily connect them. */
   flags |= G_BINDING_SYNC_CREATE;
