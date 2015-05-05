@@ -280,36 +280,14 @@ ide_file_set_path (IdeFile     *self,
   self->path = g_strdup (path);
 }
 
-static void
-ide_file_load_settings_cb (GObject      *object,
-                           GAsyncResult *result,
-                           gpointer      user_data)
-{
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(IdeObject) ret = NULL;
-  GError *error = NULL;
-
-  g_return_if_fail (G_IS_TASK (task));
-
-  ret = ide_object_new_finish (result, &error);
-
-  if (!ret)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  g_task_return_pointer (task, g_object_ref (ret), g_object_unref);
-}
-
 void
 ide_file_load_settings_async (IdeFile              *self,
                               GCancellable         *cancellable,
                               GAsyncReadyCallback   callback,
                               gpointer              user_data)
 {
-  IdeContext *context;
   g_autoptr(GTask) task = NULL;
+  IdeFileSettings *file_settings;
 
   IDE_ENTRY;
 
@@ -317,15 +295,9 @@ ide_file_load_settings_async (IdeFile              *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  context = ide_object_get_context (IDE_OBJECT (self));
-  ide_object_new_async (IDE_FILE_SETTINGS_EXTENSION_POINT,
-                        G_PRIORITY_DEFAULT,
-                        cancellable,
-                        ide_file_load_settings_cb,
-                        g_object_ref (task),
-                        "context", context,
-                        "file", self,
-                        NULL);
+
+  file_settings = ide_file_settings_new (self);
+  g_task_return_pointer (task, file_settings, g_object_unref);
 
   IDE_EXIT;
 }
