@@ -26,6 +26,11 @@
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.language.gschema.xml
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.experimental.gschema.xml
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.project-tree.gschema.xml
+contrib/egg/egg-binding-set.c
+contrib/egg/egg-search-bar.c
+contrib/egg/egg-signal-group.c
+contrib/egg/egg-state-machine.c
+contrib/search/trie.c
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml
 libide/autotools/ide-autotools-build-system.c
@@ -98,10 +103,6 @@ libide/python/ide-python-format-provider.c
 libide/tasks/ide-load-directory-task.c
 libide/theatrics/ide-animation.c
 libide/theatrics/ide-box-theatric.c
-contrib/egg/egg-binding-set.c
-contrib/egg/egg-search-bar.c
-contrib/egg/egg-signal-group.c
-contrib/search/trie.c
 src/app/gb-application-actions.c
 src/app/gb-application.c
 src/commands/gb-command-bar-item.c
