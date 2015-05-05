@@ -330,6 +330,28 @@ egg_state_machine_init (EggStateMachine *self)
                            (GDestroyNotify)g_hash_table_destroy);
 }
 
+static void
+egg_state_machine__connect_object_weak_notify (gpointer  data,
+                                               GObject  *where_object_was)
+{
+  EggStateMachine *self = data;
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
+  GHashTableIter iter;
+  const gchar *key;
+  GHashTable *value;
+
+  g_assert (EGG_IS_STATE_MACHINE (self));
+  g_assert (where_object_was != NULL);
+
+  g_hash_table_iter_init (&iter, priv->signal_groups_by_state);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
+    {
+      GHashTable *signal_groups = value;
+
+      g_hash_table_remove (signal_groups, where_object_was);
+    }
+}
+
 void
 egg_state_machine_connect_object (EggStateMachine *self,
                                   const gchar     *state,
@@ -370,15 +392,40 @@ egg_state_machine_connect_object (EggStateMachine *self,
 
   if (signal_group == NULL)
     {
+      created = TRUE;
       signal_group = egg_signal_group_new (G_TYPE_FROM_INSTANCE (instance));
       g_hash_table_insert (signal_groups, instance, signal_group);
-      created = TRUE;
+      g_object_weak_ref (instance,
+                         (GWeakNotify)egg_state_machine__connect_object_weak_notify,
+                         self);
     }
 
   egg_signal_group_connect_object (signal_group, detailed_signal, callback, user_data, flags);
 
   if ((created == TRUE) && (g_strcmp0 (state, priv->state) == 0))
     egg_signal_group_set_target (signal_group, instance);
+}
+
+static void
+egg_state_machine__bind_source_weak_notify (gpointer  data,
+                                            GObject  *where_object_was)
+{
+  EggStateMachine *self = data;
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
+  GHashTableIter iter;
+  const gchar *key;
+  GHashTable *value;
+
+  g_assert (EGG_IS_STATE_MACHINE (self));
+  g_assert (where_object_was != NULL);
+
+  g_hash_table_iter_init (&iter, priv->binding_sets_by_state);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
+    {
+      GHashTable *binding_sets = value;
+
+      g_hash_table_remove (binding_sets, where_object_was);
+    }
 }
 
 void
@@ -426,9 +473,12 @@ egg_state_machine_bind (EggStateMachine *self,
 
   if (binding_set == NULL)
     {
+      created = TRUE;
       binding_set = egg_binding_set_new ();
       g_hash_table_insert (binding_sets, source, binding_set);
-      created = TRUE;
+      g_object_weak_ref (source,
+                         (GWeakNotify)egg_state_machine__bind_source_weak_notify,
+                         self);
     }
 
   egg_binding_set_bind (binding_set,
