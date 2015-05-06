@@ -1308,6 +1308,16 @@ ide_source_view__buffer_loaded_cb (IdeSourceView *self,
 }
 
 static void
+ide_source_view__buffer_saved_cb (IdeSourceView *self,
+                                  IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  modeline_parser_apply_modeline (GTK_SOURCE_VIEW (self));
+}
+
+static void
 ide_source_view_bind_buffer (IdeSourceView  *self,
                              IdeBuffer      *buffer,
                              EggSignalGroup *group)
@@ -5740,6 +5750,11 @@ ide_source_view_init (IdeSourceView *self)
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "loaded",
                                    G_CALLBACK (ide_source_view__buffer_loaded_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  egg_signal_group_connect_object (priv->buffer_signals,
+                                   "saved",
+                                   G_CALLBACK (ide_source_view__buffer_saved_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
   g_signal_connect_object (priv->buffer_signals,
