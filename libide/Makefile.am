@@ -200,6 +200,8 @@ libide_1_0_la_public_sources = \
 	mingw/ide-mingw-device-provider.h \
 	mingw/ide-mingw-device.c \
 	mingw/ide-mingw-device.h \
+	modelines/ide-modelines-file-settings.c \
+	modelines/ide-modelines-file-settings.h \
 	pygobject/ide-pygobject-script.c \
 	pygobject/ide-pygobject-script.h \
 	python/ide-python-format-provider.c \

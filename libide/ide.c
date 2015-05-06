@@ -40,6 +40,7 @@
 #include "ide-gsettings-file-settings.h"
 #include "ide-html-language.h"
 #include "ide-mingw-device-provider.h"
+#include "ide-modelines-file-settings.h"
 #include "ide-internal.h"
 #include "ide-project-miner.h"
 #include "ide-pygobject-script.h"
@@ -115,13 +116,17 @@ ide_init_ctor (void)
                                   0);
 
   g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
+                                  IDE_TYPE_MODELINES_FILE_SETTINGS,
+                                  IDE_FILE_SETTINGS_EXTENSION_POINT".modelines",
+                                  -100);
+  g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
                                   IDE_TYPE_EDITORCONFIG_FILE_SETTINGS,
                                   IDE_FILE_SETTINGS_EXTENSION_POINT".editorconfig",
-                                  -100);
+                                  -200);
   g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
                                   IDE_TYPE_GSETTINGS_FILE_SETTINGS,
                                   IDE_FILE_SETTINGS_EXTENSION_POINT".gsettings",
-                                  -200);
+                                  -300);
 
   g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
                                   IDE_TYPE_C_LANGUAGE,
