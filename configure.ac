@@ -65,7 +65,6 @@ AC_PROG_CXX
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
 AC_PATH_PROG([GLIB_COMPILE_RESOURCES], [glib-compile-resources])
-AM_PATH_GLIB_2_0
 AC_HEADER_STDC
 PKG_PROG_PKG_CONFIG([0.22])
 
@@ -226,9 +225,14 @@ GOBJECT_INTROSPECTION_CHECK([1.30.0])
 
 
 dnl ***********************************************************************
-dnl GLib Unit Testing Support
+dnl Always build tests
 dnl ***********************************************************************
-GLIB_TESTS
+AC_ARG_ENABLE([tests],
+              AS_HELP_STRING([--enable-tests],
+                             [Enable always building tests during 'make all' [default=no]]),
+              [enable_tests=$enableval], [enable_tests=no])
+
+AM_CONDITIONAL([ENABLE_TESTS], test "$enable_tests" = "yes")
 
 
 dnl ***********************************************************************
@@ -331,5 +335,5 @@ echo ""
 echo "  Enable Debug ......................... : ${enable_debug}"
 echo "  Enable Tracing ....................... : ${enable_tracing}"
 echo "  Build API reference ...................: ${enable_gtk_doc}"
-echo "  Enable Test Suite .....................: ${enable_glibtest}"
+echo "  Build Test Suite ......................: ${enable_tests}"
 echo ""

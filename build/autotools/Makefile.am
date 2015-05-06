@@ -8,10 +8,8 @@ EXTRA_DIST = \
 	ax_check_compile_flag.m4 \
 	ax_check_link_flag.m4 \
 	ax_require_defined.m4 \
-	glibtests.m4 \
 	introspection.m4 \
 	pkg.m4 \
-	tap-driver.sh \
 	tap-test \
 	$(NULL)
 
