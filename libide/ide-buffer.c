@@ -101,6 +101,7 @@ enum {
   CURSOR_MOVED,
   LINE_FLAGS_CHANGED,
   LOADED,
+  SAVED,
   LAST_SIGNAL
 };
 
@@ -1066,6 +1067,20 @@ ide_buffer_class_init (IdeBufferClass *klass)
    */
   gSignals [LOADED] =
     g_signal_new ("loaded",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  0);
+
+  /**
+   * IdeBuffer::saved:
+   *
+   * This signal is emitted when the buffer manager has completed saving the file.
+   */
+  gSignals [SAVED] =
+    g_signal_new ("saved",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,

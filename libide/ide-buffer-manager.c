@@ -827,6 +827,7 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
 
   /* Notify signal handlers that the file is saved */
   g_signal_emit (self, gSignals [BUFFER_SAVED], 0, state->buffer);
+  g_signal_emit_by_name (state->buffer, "saved");
 
   g_task_return_boolean (task, TRUE);
 }
