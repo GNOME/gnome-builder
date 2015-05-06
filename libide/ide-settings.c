@@ -21,7 +21,10 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
+#include "egg-settings-sandwich.h"
+
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-project.h"
 #include "ide-settings.h"
 
@@ -41,15 +44,12 @@
 
 struct _IdeSettings
 {
-  IdeObject  parent_instance;
+  IdeObject            parent_instance;
 
-  gchar     *relative_path;
-  gchar     *schema_id;
-
-  GSettings *global_settings;
-  GSettings *project_settings;
-
-  guint      ignore_project_settings : 1;
+  EggSettingsSandwich *settings_sandwich;
+  gchar               *relative_path;
+  gchar               *schema_id;
+  guint                ignore_project_settings : 1;
 };
 
 G_DEFINE_TYPE (IdeSettings, ide_settings, IDE_TYPE_OBJECT)
@@ -69,6 +69,21 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
+
+static void
+ide_settings_set_ignore_project_settings (IdeSettings *self,
+                                          gboolean     ignore_project_settings)
+{
+  g_return_if_fail (IDE_IS_SETTINGS (self));
+
+  ignore_project_settings = !!ignore_project_settings;
+
+  if (ignore_project_settings != self->ignore_project_settings)
+    {
+      self->ignore_project_settings = ignore_project_settings;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_IGNORE_PROJECT_SETTINGS]);
+    }
+}
 
 static void
 ide_settings_set_relative_path (IdeSettings *self,
@@ -104,84 +119,86 @@ ide_settings_set_schema_id (IdeSettings *self,
 }
 
 static void
-ide_settings__global_settings_changed (IdeSettings *self,
-                                       const gchar *key,
-                                       GSettings   *global_settings)
-{
-  g_assert (IDE_IS_SETTINGS (self));
-  g_assert (key != NULL);
-  g_assert (G_IS_SETTINGS (global_settings));
-
-  g_signal_emit (self, gSignals [CHANGED], g_quark_from_string (key), key);
-}
-
-static void
-ide_settings__project_settings_changed (IdeSettings *self,
-                                        const gchar *key,
-                                        GSettings   *project_settings)
-{
-  g_assert (IDE_IS_SETTINGS (self));
-  g_assert (key != NULL);
-  g_assert (G_IS_SETTINGS (project_settings));
-
-  if (self->ignore_project_settings == FALSE)
-    g_signal_emit (self, gSignals [CHANGED], g_quark_from_string (key), key);
-}
-
-static void
 ide_settings_constructed (GObject *object)
 {
   IdeSettings *self = (IdeSettings *)object;
+  g_autofree gchar *full_path = NULL;
+  const gchar *project_name;
   IdeContext *context;
   IdeProject *project;
-  const gchar *project_name;
+  GSettings *settings;
   gchar *path;
+
+  IDE_ENTRY;
 
   G_OBJECT_CLASS (ide_settings_parent_class)->constructed (object);
 
+  if (self->schema_id == NULL)
+    {
+      g_error ("You must provide IdeSettings:schema-id");
+      abort ();
+    }
+
   if (self->relative_path == NULL)
     {
-      g_autoptr(GSettingsSchema) settings_schema = NULL;
-      g_autoptr(GSettings) settings = NULL;
+      g_autoptr(GSettingsSchema) schema = NULL;
+      GSettingsSchemaSource *source;
       const gchar *schema_path;
 
-      settings = g_settings_new (self->schema_id);
-      g_object_get (settings, "settings-schema", &settings_schema, NULL);
-      schema_path = g_settings_schema_get_path (settings_schema);
+      source = g_settings_schema_source_get_default ();
+      schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE);
 
-      if (!g_str_has_prefix (schema_path, "/org/gnome/builder/"))
+      if (schema == NULL)
         {
-          g_error ("Settings schema %s is not under path /org/gnome/builder/",
-                   self->schema_id);
+          g_error ("Could not locate schema %s", self->schema_id);
           abort ();
         }
 
-      self->relative_path = g_strdup (schema_path + strlen ("/org/gnome/builder/"));
+      schema_path = g_settings_schema_get_path (schema);
+
+      if ((schema_path != NULL) && !g_str_has_prefix (schema_path, "/org/gnome/builder/"))
+        {
+          g_error ("Schema path MUST be under /org/gnome/builder/");
+          abort ();
+        }
+      else if (schema_path == NULL)
+        {
+          self->relative_path = g_strdup ("");
+        }
+      else
+        {
+          self->relative_path = g_strdup (schema_path + strlen ("/org/gnome/builder/"));
+        }
     }
 
-  path = g_strdup_printf ("/org/gnome/builder/%s", self->relative_path);
-  self->global_settings = g_settings_new_with_path (self->schema_id, path);
-  g_free (path);
+  g_assert (self->relative_path != NULL);
+  g_assert (self->relative_path [0] != '/');
+  g_assert ((self->relative_path [0] == 0) || g_str_has_suffix (self->relative_path, "/"));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   project = ide_context_get_project (context);
   project_name = ide_project_get_name (project);
 
-  path = g_strdup_printf ("/org/gnome/builder/projects/%s/%s", project_name, self->relative_path);
-  self->project_settings = g_settings_new_with_path (self->schema_id, path);
-  g_free (path);
+  full_path = g_strdup_printf ("/org/gnome/builder/%s", self->relative_path);
+  self->settings_sandwich = egg_settings_sandwich_new (self->schema_id, full_path);
 
-  g_signal_connect_object (self->global_settings,
-                           "changed",
-                           G_CALLBACK (ide_settings__global_settings_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
+  /* Add our project relative settings */
+  if (self->ignore_project_settings == FALSE)
+    {
+      path = g_strdup_printf ("/org/gnome/builder/projects/%s/%s",
+                              project_name, self->relative_path);
+      settings = g_settings_new_with_path (self->schema_id, path);
+      egg_settings_sandwich_append (self->settings_sandwich, settings);
+      g_clear_object (&settings);
+      g_free (path);
+    }
 
-  g_signal_connect_object (self->project_settings,
-                           "changed",
-                           G_CALLBACK (ide_settings__project_settings_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
+  /* Add our application global (user defaults) settings */
+  settings = g_settings_new_with_path (self->schema_id, full_path);
+  egg_settings_sandwich_append (self->settings_sandwich, settings);
+  g_clear_object (&settings);
+
+  IDE_EXIT;
 }
 
 static void
@@ -189,6 +206,7 @@ ide_settings_finalize (GObject *object)
 {
   IdeSettings *self = (IdeSettings *)object;
 
+  g_clear_object (&self->settings_sandwich);
   g_clear_pointer (&self->relative_path, g_free);
   g_clear_pointer (&self->schema_id, g_free);
 
@@ -264,7 +282,7 @@ ide_settings_class_init (IdeSettingsClass *klass)
                          _("Ignore Project Settings"),
                          _("If project settings should be ignored."),
                          FALSE,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_RELATIVE_PATH] =
     g_param_spec_string ("relative-path",
@@ -283,14 +301,14 @@ ide_settings_class_init (IdeSettingsClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [CHANGED] =
-    g_signal_new_class_handler ("changed",
-                                G_TYPE_FROM_CLASS (klass),
-                                G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
-                                0,
-                                NULL, NULL, NULL,
-                                G_TYPE_NONE,
-                                1,
-                                G_TYPE_STRING);
+    g_signal_new ("changed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_STRING);
 }
 
 static void
@@ -301,17 +319,25 @@ ide_settings_init (IdeSettings *self)
 IdeSettings *
 _ide_settings_new (IdeContext  *context,
                    const gchar *schema_id,
-                   const gchar *relative_path)
+                   const gchar *relative_path,
+                   gboolean     ignore_project_settings)
 {
+  IdeSettings *ret;
+
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (schema_id != NULL);
   g_assert (relative_path != NULL);
 
-  return g_object_new (IDE_TYPE_SETTINGS,
-                       "context", context,
-                       "schema-id", schema_id,
-                       "relative-path", relative_path,
-                       NULL);
+  ret = g_object_new (IDE_TYPE_SETTINGS,
+                      "context", context,
+                      "ignore-project-settings", ignore_project_settings,
+                      "relative-path", relative_path,
+                      "schema-id", schema_id,
+                      NULL);
+
+  IDE_RETURN (ret);
 }
 
 const gchar *
@@ -330,22 +356,42 @@ ide_settings_get_relative_path (IdeSettings *self)
   return self->relative_path;
 }
 
+gboolean
+ide_settings_get_ignore_project_settings (IdeSettings *self)
+{
+  g_return_val_if_fail (IDE_IS_SETTINGS (self), FALSE);
+
+  return self->ignore_project_settings;
+}
+
+GVariant *
+ide_settings_get_default_value (IdeSettings *self,
+                                const gchar *key)
+{
+  g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+
+  return egg_settings_sandwich_get_default_value (self->settings_sandwich, key);
+}
+
+GVariant *
+ide_settings_get_user_value (IdeSettings *self,
+                             const gchar *key)
+{
+  g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+
+  return egg_settings_sandwich_get_user_value (self->settings_sandwich, key);
+}
+
 GVariant *
 ide_settings_get_value (IdeSettings *self,
                         const gchar *key)
 {
-  GVariant *ret = NULL;
-
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  if (self->ignore_project_settings == FALSE)
-    ret = g_settings_get_user_value (self->project_settings, key);
-
-  if (ret == NULL)
-    ret = g_settings_get_value (self->global_settings, key);
-
-  return ret;
+  return egg_settings_sandwich_get_value (self->settings_sandwich, key);
 }
 
 void
@@ -356,100 +402,172 @@ ide_settings_set_value (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  if (self->ignore_project_settings)
-    g_settings_set_value (self->global_settings, key, value);
-  else
-    g_settings_set_value (self->project_settings, key, value);
+  return egg_settings_sandwich_set_value (self->settings_sandwich, key, value);
 }
-
-GVariant *
-ide_settings_get_user_value (IdeSettings *self,
-                             const gchar *key)
-{
-  GVariant *ret;
-
-  g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
-  g_return_val_if_fail (key != NULL, NULL);
-
-  ret = g_settings_get_user_value (self->project_settings, key);
-  if (ret == NULL)
-    ret = g_settings_get_user_value (self->global_settings, key);
-
-  return ret;
-}
-
-GVariant *
-ide_settings_get_default_value (IdeSettings *self,
-                                const gchar *key)
-{
-  g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
-  g_return_val_if_fail (key != NULL, NULL);
-
-  return g_settings_get_default_value (self->global_settings, key);
-}
-
-#define DEFINE_GETTER(type, name, func_name, ...) \
-type \
-ide_settings_get_##name (IdeSettings *self, \
-                         const gchar *key) \
-{ \
-  GVariant *value; \
-  type ret; \
- \
-  g_return_val_if_fail (IDE_IS_SETTINGS (self), (type)0); \
- \
-  value = ide_settings_get_value (self, key); \
-  ret = g_variant_##func_name (value, ##__VA_ARGS__); \
-  g_variant_unref (value); \
- \
-  return ret; \
-}
-
-DEFINE_GETTER (gboolean, boolean, get_boolean)
-DEFINE_GETTER (gint, int, get_int32)
-DEFINE_GETTER (guint, uint, get_uint32)
-DEFINE_GETTER (double, double, get_double)
-DEFINE_GETTER (gchar *, string, dup_string, NULL)
-
-#define DEFINE_SETTER(type, name, new_func, ...) \
-void \
-ide_settings_set_##name (IdeSettings *self, \
-                         const gchar *key, \
-                         type value) \
-{ \
-  GVariant *variant; \
- \
-  g_return_if_fail (IDE_IS_SETTINGS (self)); \
- \
-  variant = g_variant_##new_func (value, ##__VA_ARGS__); \
-  g_settings_set_value (self->project_settings, key, variant); \
-}
-
-DEFINE_SETTER (gboolean, boolean, new_boolean)
-DEFINE_SETTER (gint, int, new_int32)
-DEFINE_SETTER (guint, uint, new_uint32)
-DEFINE_SETTER (double, double, new_double)
-DEFINE_SETTER (const gchar *, string, new_string)
 
 gboolean
-ide_settings_get_ignore_project_settings (IdeSettings *self)
+ide_settings_get_boolean (IdeSettings *self,
+                          const gchar *key)
 {
   g_return_val_if_fail (IDE_IS_SETTINGS (self), FALSE);
+  g_return_val_if_fail (key != NULL, FALSE);
 
-  return self->ignore_project_settings;
+  return egg_settings_sandwich_get_boolean (self->settings_sandwich, key);
+}
+
+gdouble
+ide_settings_get_double (IdeSettings *self,
+                         const gchar *key)
+{
+  g_return_val_if_fail (IDE_IS_SETTINGS (self), 0.0);
+  g_return_val_if_fail (key != NULL, 0.0);
+
+  return egg_settings_sandwich_get_double (self->settings_sandwich, key);
+}
+
+gint
+ide_settings_get_int (IdeSettings *self,
+                      const gchar *key)
+{
+  g_return_val_if_fail (IDE_IS_SETTINGS (self), 0);
+  g_return_val_if_fail (key != NULL, 0);
+
+  return egg_settings_sandwich_get_int (self->settings_sandwich, key);
+}
+
+gchar *
+ide_settings_get_string (IdeSettings *self,
+                         const gchar *key)
+{
+  g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+
+  return egg_settings_sandwich_get_string (self->settings_sandwich, key);
+}
+
+guint
+ide_settings_get_uint (IdeSettings *self,
+                       const gchar *key)
+{
+  g_return_val_if_fail (IDE_IS_SETTINGS (self), 0);
+  g_return_val_if_fail (key != NULL, 0);
+
+  return egg_settings_sandwich_get_uint (self->settings_sandwich, key);
 }
 
 void
-ide_settings_set_ignore_project_settings (IdeSettings *self,
-                            gboolean     ignore_project_settings)
+ide_settings_set_boolean (IdeSettings *self,
+                          const gchar *key,
+                          gboolean     val)
 {
   g_return_if_fail (IDE_IS_SETTINGS (self));
+  g_return_if_fail (key != NULL);
 
-  ignore_project_settings = !!ignore_project_settings;
+  egg_settings_sandwich_set_boolean (self->settings_sandwich, key, val);
+}
 
-  if (ignore_project_settings != self->ignore_project_settings)
-    {
-      self->ignore_project_settings = ignore_project_settings;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_IGNORE_PROJECT_SETTINGS]);
-    }
+void
+ide_settings_set_double (IdeSettings *self,
+                         const gchar *key,
+                         gdouble      val)
+{
+  g_return_if_fail (IDE_IS_SETTINGS (self));
+  g_return_if_fail (key != NULL);
+
+  egg_settings_sandwich_set_double (self->settings_sandwich, key, val);
+}
+
+void
+ide_settings_set_int (IdeSettings *self,
+                      const gchar *key,
+                      gint         val)
+{
+  g_return_if_fail (IDE_IS_SETTINGS (self));
+  g_return_if_fail (key != NULL);
+
+  egg_settings_sandwich_set_int (self->settings_sandwich, key, val);
+}
+
+void
+ide_settings_set_string (IdeSettings *self,
+                         const gchar *key,
+                         const gchar *val)
+{
+  g_return_if_fail (IDE_IS_SETTINGS (self));
+  g_return_if_fail (key != NULL);
+
+  egg_settings_sandwich_set_string (self->settings_sandwich, key, val);
+}
+
+void
+ide_settings_set_uint (IdeSettings *self,
+                       const gchar *key,
+                       guint        val)
+{
+  g_return_if_fail (IDE_IS_SETTINGS (self));
+  g_return_if_fail (key != NULL);
+
+  egg_settings_sandwich_set_uint (self->settings_sandwich, key, val);
+}
+
+void
+ide_settings_bind (IdeSettings        *self,
+                   const gchar        *key,
+                   gpointer            object,
+                   const gchar        *property,
+                   GSettingsBindFlags  flags)
+{
+  g_return_if_fail (IDE_IS_SETTINGS (self));
+  g_return_if_fail (key != NULL);
+  g_return_if_fail (G_IS_OBJECT (object));
+  g_return_if_fail (property != NULL);
+
+  egg_settings_sandwich_bind (self->settings_sandwich, key, object, property, flags);
+}
+
+/**
+ * ide_settings_bind_with_mapping:
+ * @self: An #IdeSettings
+ * @key: The settings key
+ * @object: the object to bind to
+ * @property: the property of @object to bind to
+ * @flags: flags for the binding
+ * @get_mapping: (allow-none) (scope async): variant to value mapping
+ * @set_mapping: (allow-none) (scope async): value to variant mapping
+ * @user_data: user data for @get_mapping and @set_mapping
+ * @destroy: (scope async): destroy function to cleanup @user_data.
+ *
+ * Like ide_settings_bind() but allows transforming to and from settings storage using
+ * @get_mapping and @set_mapping transformation functions.
+ *
+ * Call ide_settings_unbind() to unbind the mapping.
+ */
+void
+ide_settings_bind_with_mapping (IdeSettings             *self,
+                                const gchar             *key,
+                                gpointer                 object,
+                                const gchar             *property,
+                                GSettingsBindFlags       flags,
+                                GSettingsBindGetMapping  get_mapping,
+                                GSettingsBindSetMapping  set_mapping,
+                                gpointer                 user_data,
+                                GDestroyNotify           destroy)
+{
+  g_return_if_fail (IDE_IS_SETTINGS (self));
+  g_return_if_fail (key != NULL);
+  g_return_if_fail (G_IS_OBJECT (object));
+  g_return_if_fail (property != NULL);
+
+  egg_settings_sandwich_bind_with_mapping (self->settings_sandwich, key, object, property, flags,
+                                           get_mapping, set_mapping, user_data, destroy);
+}
+
+void
+ide_settings_unbind (IdeSettings *self,
+                     const gchar *property)
+{
+  g_return_if_fail (IDE_IS_SETTINGS (self));
+  g_return_if_fail (property != NULL);
+
+  egg_settings_sandwich_unbind (self->settings_sandwich, property);
 }

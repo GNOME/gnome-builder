@@ -326,19 +326,19 @@ DEFINE_GETTER (int,     gint,     get_int32)
 DEFINE_GETTER (string,  gchar *,  dup_string, NULL)
 DEFINE_GETTER (uint,    guint,    get_uint32)
 
-#define DEFINE_SETTER(name, param_type, func)                          \
-void                                                                   \
-egg_settings_sandwich_set_##name (EggSettingsSandwich *self,           \
-                                  const gchar         *key,            \
-                                  param_type           val)            \
-{                                                                      \
-  GVariant *value;                                                     \
-                                                                       \
-  g_return_if_fail (EGG_IS_SETTINGS_SANDWICH (self));                  \
-  g_return_if_fail (key != NULL);                                      \
-                                                                       \
-  value = g_variant_##func (val);                                      \
-  egg_settings_sandwich_set_value (self, key, value);                  \
+#define DEFINE_SETTER(name, param_type, func)                           \
+void                                                                    \
+egg_settings_sandwich_set_##name (EggSettingsSandwich *self,            \
+                                  const gchar         *key,             \
+                                  param_type           val)             \
+{                                                                       \
+  GVariant *value;                                                      \
+                                                                        \
+  g_return_if_fail (EGG_IS_SETTINGS_SANDWICH (self));                   \
+  g_return_if_fail (key != NULL);                                       \
+                                                                        \
+  value = g_variant_##func (val);                                       \
+  egg_settings_sandwich_set_value (self, key, value);                   \
 }
 
 DEFINE_SETTER (boolean, gboolean,      new_boolean)
