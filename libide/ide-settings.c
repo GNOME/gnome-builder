@@ -77,6 +77,9 @@ ide_settings_set_relative_path (IdeSettings *self,
   g_assert (IDE_IS_SETTINGS (self));
   g_assert (relative_path != NULL);
 
+  if (*relative_path == '/')
+    relative_path++;
+
   if (!ide_str_equal0 (relative_path, self->relative_path))
     {
       g_free (self->relative_path);

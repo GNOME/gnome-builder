@@ -39,6 +39,9 @@ IdeProject               *ide_context_get_project           (IdeContext         
 GtkRecentManager         *ide_context_get_recent_manager    (IdeContext           *self);
 IdeScriptManager         *ide_context_get_script_manager    (IdeContext           *self);
 IdeSearchEngine          *ide_context_get_search_engine     (IdeContext           *self);
+IdeSettings              *ide_context_get_settings          (IdeContext           *self,
+                                                             const gchar          *schema_id,
+                                                             const gchar          *relative_path);
 IdeSourceSnippetsManager *ide_context_get_snippets_manager  (IdeContext           *self);
 IdeUnsavedFiles          *ide_context_get_unsaved_files     (IdeContext           *self);
 IdeVcs                   *ide_context_get_vcs               (IdeContext           *self);

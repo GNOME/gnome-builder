@@ -112,6 +112,8 @@ typedef struct _IdeSearchResult                IdeSearchResult;
 
 typedef struct _IdeService                     IdeService;
 
+typedef struct _IdeSettings                    IdeSettings;
+
 typedef struct _IdeSourceLocation              IdeSourceLocation;
 
 typedef struct _IdeSourceRange                 IdeSourceRange;
