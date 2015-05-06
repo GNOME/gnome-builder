@@ -49,7 +49,7 @@ struct _IdeSettings
   GSettings *global_settings;
   GSettings *project_settings;
 
-  guint      is_global : 1;
+  guint      ignore_project_settings : 1;
 };
 
 G_DEFINE_TYPE (IdeSettings, ide_settings, IDE_TYPE_OBJECT)
@@ -58,7 +58,7 @@ enum {
   PROP_0,
   PROP_RELATIVE_PATH,
   PROP_SCHEMA_ID,
-  PROP_IS_GLOBAL,
+  PROP_IGNORE_PROJECT_SETTINGS,
   LAST_PROP
 };
 
@@ -124,7 +124,7 @@ ide_settings__project_settings_changed (IdeSettings *self,
   g_assert (key != NULL);
   g_assert (G_IS_SETTINGS (project_settings));
 
-  if (self->is_global == FALSE)
+  if (self->ignore_project_settings == FALSE)
     g_signal_emit (self, gSignals [CHANGED], g_quark_from_string (key), key);
 }
 
@@ -213,8 +213,8 @@ ide_settings_get_property (GObject    *object,
       g_value_set_string (value, ide_settings_get_relative_path (self));
       break;
 
-    case PROP_IS_GLOBAL:
-      g_value_set_boolean (value, ide_settings_get_is_global (self));
+    case PROP_IGNORE_PROJECT_SETTINGS:
+      g_value_set_boolean (value, ide_settings_get_ignore_project_settings (self));
       break;
 
     default:
@@ -240,8 +240,8 @@ ide_settings_set_property (GObject      *object,
       ide_settings_set_relative_path (self, g_value_get_string (value));
       break;
 
-    case PROP_IS_GLOBAL:
-      ide_settings_set_is_global (self, g_value_get_boolean (value));
+    case PROP_IGNORE_PROJECT_SETTINGS:
+      ide_settings_set_ignore_project_settings (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -259,9 +259,9 @@ ide_settings_class_init (IdeSettingsClass *klass)
   object_class->get_property = ide_settings_get_property;
   object_class->set_property = ide_settings_set_property;
 
-  gParamSpecs [PROP_IS_GLOBAL] =
-    g_param_spec_boolean ("is-global",
-                         _("Is Global"),
+  gParamSpecs [PROP_IGNORE_PROJECT_SETTINGS] =
+    g_param_spec_boolean ("ignore-project-settings",
+                         _("Ignore Project Settings"),
                          _("If project settings should be ignored."),
                          FALSE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
@@ -339,7 +339,7 @@ ide_settings_get_value (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  if (self->is_global == FALSE)
+  if (self->ignore_project_settings == FALSE)
     ret = g_settings_get_user_value (self->project_settings, key);
 
   if (ret == NULL)
@@ -356,7 +356,7 @@ ide_settings_set_value (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  if (self->is_global)
+  if (self->ignore_project_settings)
     g_settings_set_value (self->global_settings, key, value);
   else
     g_settings_set_value (self->project_settings, key, value);
@@ -432,24 +432,24 @@ DEFINE_SETTER (double, double, new_double)
 DEFINE_SETTER (const gchar *, string, new_string)
 
 gboolean
-ide_settings_get_is_global (IdeSettings *self)
+ide_settings_get_ignore_project_settings (IdeSettings *self)
 {
   g_return_val_if_fail (IDE_IS_SETTINGS (self), FALSE);
 
-  return self->is_global;
+  return self->ignore_project_settings;
 }
 
 void
-ide_settings_set_is_global (IdeSettings *self,
-                            gboolean     is_global)
+ide_settings_set_ignore_project_settings (IdeSettings *self,
+                            gboolean     ignore_project_settings)
 {
   g_return_if_fail (IDE_IS_SETTINGS (self));
 
-  is_global = !!is_global;
+  ignore_project_settings = !!ignore_project_settings;
 
-  if (is_global != self->is_global)
+  if (ignore_project_settings != self->ignore_project_settings)
     {
-      self->is_global = is_global;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_IS_GLOBAL]);
+      self->ignore_project_settings = ignore_project_settings;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_IGNORE_PROJECT_SETTINGS]);
     }
 }
