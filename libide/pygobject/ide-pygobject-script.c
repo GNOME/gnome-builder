@@ -19,11 +19,14 @@
 #include "ide-context.h"
 #include "ide-pygobject-script.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wswitch-default"
 /* _POSIX_C_SOURCE is defined in Python.h and in limits.h included by
  * glib-object.h, so we unset it here to avoid a warning. Yep, that's bad.
  */
 #undef _POSIX_C_SOURCE
 #include <pygobject.h>
+#pragma GCC diagnostic pop
 
 #include <glib/gi18n.h>
 
