@@ -606,62 +606,6 @@ parse_modeline (gchar           *s,
 	}
 }
 
-static gboolean
-check_previous (GtkSourceView   *view,
-                ModelineOptions *previous,
-                ModelineSet      set)
-{
-	GtkSourceBuffer *buffer = GTK_SOURCE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)));
-
-	/* Do not restore default when this is the first time */
-	if (!previous)
-		return FALSE;
-
-	/* Do not restore default when previous was not set */
-	if (!(previous->set & set))
-		return FALSE;
-
-	/* Only restore default when setting has not changed */
-	switch (set)
-	{
-		case MODELINE_SET_INSERT_SPACES:
-			return gtk_source_view_get_insert_spaces_instead_of_tabs (view) ==
-			       previous->insert_spaces;
-		break;
-		case MODELINE_SET_TAB_WIDTH:
-			return gtk_source_view_get_tab_width (view) == previous->tab_width;
-		break;
-		case MODELINE_SET_INDENT_WIDTH:
-			return gtk_source_view_get_indent_width (view) == previous->indent_width;
-		break;
-		case MODELINE_SET_WRAP_MODE:
-			return gtk_text_view_get_wrap_mode (GTK_TEXT_VIEW (view)) ==
-			       previous->wrap_mode;
-		break;
-		case MODELINE_SET_RIGHT_MARGIN_POSITION:
-			return gtk_source_view_get_right_margin_position (view) ==
-			       previous->right_margin_position;
-		break;
-		case MODELINE_SET_SHOW_RIGHT_MARGIN:
-			return gtk_source_view_get_show_right_margin (view) ==
-			       previous->display_right_margin;
-		break;
-		case MODELINE_SET_LANGUAGE:
-		{
-			GtkSourceLanguage *language = gtk_source_buffer_get_language (buffer);
-
-			return (language == NULL && previous->language_id == NULL) ||
-			       (language != NULL && g_strcmp0 (gtk_source_language_get_id (language),
-			                                       previous->language_id) == 0);
-		}
-		break;
-                case MODELINE_SET_NONE:
-		default:
-			return FALSE;
-		break;
-	}
-}
-
 static void
 free_modeline_options (ModelineOptions *options)
 {
@@ -670,21 +614,17 @@ free_modeline_options (ModelineOptions *options)
 }
 
 void
-modeline_parser_apply_modeline (GtkSourceView *view)
+modeline_parser_apply_modeline (GtkTextBuffer   *buffer,
+                                IdeFileSettings *file_settings)
 {
 	ModelineOptions options;
-	GtkTextBuffer *buffer;
 	GtkTextIter iter, liter;
 	gint line_count;
-#if 0
-	GSettings *settings;
-#endif
 	ModelineOptions *previous;
 
 	options.language_id = NULL;
 	options.set = MODELINE_SET_NONE;
 
-	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	gtk_text_buffer_get_start_iter (buffer, &iter);
 
 	line_count = gtk_text_buffer_get_line_count (buffer);
@@ -778,96 +718,67 @@ modeline_parser_apply_modeline (GtkSourceView *view)
 	previous = g_object_get_data (G_OBJECT (buffer),
 	                              MODELINE_OPTIONS_DATA_KEY);
 
-#if 0
-	settings = g_settings_new ("org.gnome.gedit.preferences.editor");
-#endif
-
 	/* Apply the options we got from modelines and restore defaults if
 	   we set them before */
 	if (has_option (&options, MODELINE_SET_INSERT_SPACES))
 	{
-		gtk_source_view_set_insert_spaces_instead_of_tabs
-							(view, options.insert_spaces);
+		ide_file_settings_set_indent_style (file_settings, IDE_INDENT_STYLE_SPACES);
 	}
-	else if (check_previous (view, previous, MODELINE_SET_INSERT_SPACES))
+        else
 	{
-#if 0
-		gboolean insert_spaces;
-
-		insert_spaces = g_settings_get_boolean (settings, GEDIT_SETTINGS_INSERT_SPACES);
-
-		gtk_source_view_set_insert_spaces_instead_of_tabs (view, insert_spaces);
-#endif
+		ide_file_settings_set_indent_style_set (file_settings, FALSE);
 	}
 
 	if (has_option (&options, MODELINE_SET_TAB_WIDTH))
 	{
-		gtk_source_view_set_tab_width (view, options.tab_width);
+		ide_file_settings_set_tab_width (file_settings, options.tab_width);
 	}
-	else if (check_previous (view, previous, MODELINE_SET_TAB_WIDTH))
+        else
 	{
-#if 0
-		guint tab_width;
-
-		g_settings_get (settings, GEDIT_SETTINGS_TABS_SIZE, "u", &tab_width);
-
-		gtk_source_view_set_tab_width (view, tab_width);
-#endif
+		ide_file_settings_set_tab_width_set (file_settings, FALSE);
 	}
 
 	if (has_option (&options, MODELINE_SET_INDENT_WIDTH))
 	{
-		gtk_source_view_set_indent_width (view, options.indent_width);
+		ide_file_settings_set_indent_width (file_settings, options.indent_width);
 	}
-	else if (check_previous (view, previous, MODELINE_SET_INDENT_WIDTH))
+        else
 	{
-		gtk_source_view_set_indent_width (view, -1);
+		ide_file_settings_set_indent_width_set (file_settings, FALSE);
 	}
 
+	/* XXX: no wrap mode support in IdeFileSettings yet */
+#if 0
 	if (has_option (&options, MODELINE_SET_WRAP_MODE))
 	{
 		gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), options.wrap_mode);
 	}
 	else if (check_previous (view, previous, MODELINE_SET_WRAP_MODE))
 	{
-#if 0
 		GtkWrapMode mode;
 
 		mode = g_settings_get_enum (settings,
 					    GEDIT_SETTINGS_WRAP_MODE);
 		gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), mode);
-#endif
 	}
+#endif
 
 	if (has_option (&options, MODELINE_SET_RIGHT_MARGIN_POSITION))
 	{
-		gtk_source_view_set_right_margin_position (view, options.right_margin_position);
+		ide_file_settings_set_right_margin_position (file_settings, options.right_margin_position);
 	}
-	else if (check_previous (view, previous, MODELINE_SET_RIGHT_MARGIN_POSITION))
+        else
 	{
-#if 0
-		guint right_margin_pos;
-
-		g_settings_get (settings, GEDIT_SETTINGS_RIGHT_MARGIN_POSITION, "u",
-				&right_margin_pos);
-		gtk_source_view_set_right_margin_position (view,
-		                                           right_margin_pos);
-#endif
+		ide_file_settings_set_right_margin_position_set (file_settings, FALSE);
 	}
 
 	if (has_option (&options, MODELINE_SET_SHOW_RIGHT_MARGIN))
 	{
-		gtk_source_view_set_show_right_margin (view, options.display_right_margin);
+		ide_file_settings_set_show_right_margin (file_settings, options.display_right_margin);
 	}
-	else if (check_previous (view, previous, MODELINE_SET_SHOW_RIGHT_MARGIN))
+        else
 	{
-#if 0
-		gboolean display_right_margin;
-
-		display_right_margin = g_settings_get_boolean (settings,
-							       GEDIT_SETTINGS_DISPLAY_RIGHT_MARGIN);
-		gtk_source_view_set_show_right_margin (view, display_right_margin);
-#endif
+		ide_file_settings_set_show_right_margin_set (file_settings, FALSE);
 	}
 
 	if (previous)
@@ -888,9 +799,6 @@ modeline_parser_apply_modeline (GtkSourceView *view)
 		                        (GDestroyNotify)free_modeline_options);
 	}
 
-#if 0
-	g_object_unref (settings);
-#endif
 	g_free (options.language_id);
 }
 

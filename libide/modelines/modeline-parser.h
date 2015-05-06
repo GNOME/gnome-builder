@@ -24,11 +24,14 @@
 #include <glib.h>
 #include <gtksourceview/gtksource.h>
 
+#include "ide-file-settings.h"
+
 G_BEGIN_DECLS
 
-void	modeline_parser_init		(void);
-void	modeline_parser_shutdown	(void);
-void	modeline_parser_apply_modeline	(GtkSourceView *view);
+void modeline_parser_init           (void);
+void modeline_parser_shutdown       (void);
+void modeline_parser_apply_modeline (GtkTextBuffer   *buffer,
+                                     IdeFileSettings *file_settings);
 
 G_END_DECLS
 
