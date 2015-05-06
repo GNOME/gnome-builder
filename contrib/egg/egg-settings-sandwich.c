@@ -356,6 +356,18 @@ egg_settings_sandwich_append (EggSettingsSandwich *self,
 
   g_ptr_array_add (self->settings, g_object_ref (settings));
 
+#if 0
+  {
+    g_autofree gchar *schema_id = NULL;
+    g_autofree gchar *path = NULL;
+
+    g_object_get (settings,
+                  "schema-id", &schema_id,
+                  "path", &path,
+                  NULL);
+  }
+#endif
+
   g_signal_connect_object (settings,
                            "changed",
                            G_CALLBACK (egg_settings_sandwich__settings_changed),
