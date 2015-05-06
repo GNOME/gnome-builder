@@ -81,6 +81,7 @@ debug:
 valgrind:
 	GI_TYPELIB_PATH=libide \
 	G_DEBUG=fatal-criticals \
-	$(LIBTOOL) --mode=execute valgrind src/gnome-builder
+	G_SLICE=always-malloc \
+	$(LIBTOOL) --mode=execute valgrind src/gnome-builder -vvvv -s
 
 -include $(top_srcdir)/git.mk
