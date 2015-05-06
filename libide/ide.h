@@ -96,10 +96,13 @@ G_BEGIN_DECLS
 #include "devhelp/ide-devhelp-search-result.h"
 #include "directory/ide-directory-build-system.h"
 #include "directory/ide-directory-vcs.h"
+#include "editorconfig/ide-editorconfig-file-settings.h"
 #include "git/ide-git-remote-callbacks.h"
 #include "git/ide-git-search-result.h"
 #include "git/ide-git-vcs.h"
+#include "gsettings/ide-gsettings-file-settings.h"
 #include "local/ide-local-device.h"
+#include "modelines/ide-modelines-file-settings.h"
 #include "theatrics/ide-animation.h"
 
 #undef IDE_INSIDE
