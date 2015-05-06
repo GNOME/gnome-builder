@@ -60,8 +60,6 @@
 #include "ide-source-view-movements.h"
 #include "ide-symbol.h"
 
-#include "modeline-parser.h"
-
 #define DEFAULT_FONT_DESC "Monospace 11"
 #define ANIMATION_X_GROW  50
 #define ANIMATION_Y_GROW  30
@@ -817,8 +815,6 @@ ide_source_view_connect_settings (IdeSourceView   *self,
   g_assert (IDE_IS_FILE_SETTINGS (file_settings));
 
   egg_binding_set_set_source (priv->file_setting_bindings, file_settings);
-
-  modeline_parser_apply_modeline (GTK_SOURCE_VIEW (self));
 }
 
 static void
@@ -1305,16 +1301,6 @@ ide_source_view__buffer_loaded_cb (IdeSourceView *self,
    */
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &iter, insert);
   priv->target_line_offset = gtk_text_iter_get_line_offset (&iter);
-}
-
-static void
-ide_source_view__buffer_saved_cb (IdeSourceView *self,
-                                  IdeBuffer     *buffer)
-{
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  modeline_parser_apply_modeline (GTK_SOURCE_VIEW (self));
 }
 
 static void
@@ -5750,11 +5736,6 @@ ide_source_view_init (IdeSourceView *self)
   egg_signal_group_connect_object (priv->buffer_signals,
                                    "loaded",
                                    G_CALLBACK (ide_source_view__buffer_loaded_cb),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-  egg_signal_group_connect_object (priv->buffer_signals,
-                                   "saved",
-                                   G_CALLBACK (ide_source_view__buffer_saved_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
   g_signal_connect_object (priv->buffer_signals,
