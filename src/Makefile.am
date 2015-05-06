@@ -166,10 +166,10 @@ libgnome_builder_la_SOURCES = \
 	workbench/gb-workbench.h \
 	workbench/gb-workspace.c \
 	workbench/gb-workspace.h \
-        css/gb-css-provider.c \
-        css/gb-css-provider.h \
-        util/gb-settings.c \
-        util/gb-settings.h \
+	css/gb-css-provider.c \
+	css/gb-css-provider.h \
+	util/gb-settings.c \
+	util/gb-settings.h \
 	$(NULL)
 
 nodist_libgnome_builder_la_SOURCES = \

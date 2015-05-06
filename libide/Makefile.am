@@ -155,8 +155,8 @@ libide_1_0_la_public_sources = \
 	ide-search-result.h \
 	ide-service.c \
 	ide-service.h \
-        ide-settings.c \
-        ide-settings.h \
+	ide-settings.c \
+	ide-settings.h \
 	ide-source-location.c \
 	ide-source-location.h \
 	ide-source-range.c \
@@ -216,10 +216,10 @@ libide_1_0_la_public_sources = \
 	xml/ide-xml-indenter.h \
 	xml/ide-xml-language.c \
 	xml/ide-xml-language.h \
-        ide-source-map.c \
-        ide-source-map.h \
-        ide-thread-pool.c \
-        ide-thread-pool.h \
+	ide-source-map.c \
+	ide-source-map.h \
+	ide-thread-pool.c \
+	ide-thread-pool.h \
 	$(NULL)
 
 libide_1_0_la_SOURCES = \
@@ -390,7 +390,7 @@ glib_enum_headers =  \
 	ide-highlighter.h \
 	ide-indent-style.h \
 	ide-source-view.h \
-        ide-thread-pool.h \
+	ide-thread-pool.h \
 	$(NULL)
 include $(top_srcdir)/build/autotools/Makefile.am.enums
 
