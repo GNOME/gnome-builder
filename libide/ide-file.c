@@ -30,14 +30,15 @@
 
 struct _IdeFile
 {
-  IdeObject      parent_instance;
+  IdeObject        parent_instance;
 
-  gchar         *content_type;
-  GFile         *file;
-  IdeLanguage   *language;
-  gchar         *path;
-  GtkSourceFile *source_file;
-  guint          temporary_id;
+  gchar           *content_type;
+  GFile           *file;
+  IdeFileSettings *file_settings;
+  IdeLanguage     *language;
+  gchar           *path;
+  GtkSourceFile   *source_file;
+  guint            temporary_id;
 };
 
 enum {
@@ -285,16 +286,22 @@ ide_file__file_settings_settled_cb (IdeFileSettings *file_settings,
                                     GParamSpec      *pspec,
                                     GTask           *task)
 {
+  IdeFile *self;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_FILE_SETTINGS (file_settings));
   g_assert (G_IS_TASK (task));
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_FILE (self));
 
   if (ide_file_settings_get_settled (file_settings))
     {
       g_signal_handlers_disconnect_by_func (file_settings,
                                             G_CALLBACK (ide_file__file_settings_settled_cb),
                                             task);
+      if (self->file_settings == NULL)
+        self->file_settings = g_object_ref (file_settings);
       g_task_return_pointer (task, file_settings, g_object_unref);
       g_object_unref (task);
       IDE_EXIT;
@@ -319,14 +326,31 @@ ide_file_load_settings_async (IdeFile              *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  file_settings = ide_file_settings_new (self);
-
-  if (ide_file_settings_get_settled (file_settings))
+  /* Use shared instance if available */
+  if (self->file_settings != NULL)
     {
-      g_task_return_pointer (task, file_settings, g_object_unref);
+      g_task_return_pointer (task, g_object_ref (self->file_settings), g_object_unref);
       IDE_EXIT;
     }
 
+  /* Create our new settings instance, races are okay */
+  file_settings = ide_file_settings_new (self);
+
+  /* If this is settled immediately (not using editorconfig), then we can use this now
+   * and cache the result for later
+   */
+  if (ide_file_settings_get_settled (file_settings))
+    {
+      self->file_settings = file_settings;
+      g_task_return_pointer (task, g_object_ref (file_settings), g_object_unref);
+      IDE_EXIT;
+    }
+
+  /*
+   * We need to wait until the settings have settled. editorconfig may need to
+   * background load a bunch of .editorconfig files off of disk/sshfs/etc to
+   * determine the settings.
+   */
   g_signal_connect (file_settings,
                     "notify::settled",
                     G_CALLBACK (ide_file__file_settings_settled_cb),
@@ -406,6 +430,7 @@ ide_file_finalize (GObject *object)
 
   IDE_ENTRY;
 
+  g_clear_object (&self->file_settings);
   g_clear_object (&self->file);
   g_clear_object (&self->source_file);
   g_clear_object (&self->language);
