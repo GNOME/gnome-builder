@@ -101,7 +101,7 @@ IdeHighlightIndex *
 ide_highlight_index_ref (IdeHighlightIndex *self)
 {
   g_assert (self);
-  g_assert_cmpint (self->ref_count, >, 0);
+  g_assert (self->ref_count > 0);
 
   g_atomic_int_inc (&self->ref_count);
 
@@ -124,7 +124,7 @@ void
 ide_highlight_index_unref (IdeHighlightIndex *self)
 {
   g_assert (self);
-  g_assert_cmpint (self->ref_count, >, 0);
+  g_assert (self->ref_count > 0);
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     ide_highlight_index_finalize (self);

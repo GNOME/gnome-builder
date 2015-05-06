@@ -44,9 +44,9 @@ ide_language_defaults_migrate (GKeyFile  *key_file,
   gsize i;
 
   g_assert (key_file);
-  g_assert_cmpint (current_version, >=, 0);
-  g_assert_cmpint (current_version, >=, 0);
-  g_assert_cmpint (new_version, >, current_version);
+  g_assert (current_version >= 0);
+  g_assert (current_version >= 0);
+  g_assert (new_version > current_version);
 
   groups = g_key_file_get_groups (key_file, NULL);
 

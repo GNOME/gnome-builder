@@ -552,13 +552,13 @@ ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
     enum CXCompletionChunkKind kind;
     unsigned num_chunks;
 
-    g_assert_cmpint (self->typed_text_index, >=, 0);
+    g_assert (self->typed_text_index >= 0);
 
     num_chunks = clang_getNumCompletionChunks (result->CompletionString);
-    g_assert_cmpint (num_chunks, >, self->typed_text_index);
+    g_assert (num_chunks > self->typed_text_index);
 
     kind = clang_getCompletionChunkKind (result->CompletionString, self->typed_text_index);
-    g_assert_cmpint (kind, ==, CXCompletionChunk_TypedText);
+    g_assert (kind == CXCompletionChunk_TypedText);
   }
 #endif
 

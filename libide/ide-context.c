@@ -1373,7 +1373,7 @@ ide_context_unload__buffer_manager_save_file_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   in_progress = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (task), "IN_PROGRESS"));
-  g_assert_cmpint (in_progress, >, 0);
+  g_assert (in_progress > 0);
   in_progress--;
   g_object_set_data (G_OBJECT (task), "IN_PROGRESS", GINT_TO_POINTER (in_progress));
 
@@ -1632,7 +1632,7 @@ restore_in_idle (gpointer user_data)
     }
 
   g_assert (ar != NULL);
-  g_assert_cmpint (ar->len, >, 0);
+  g_assert (ar->len > 0);
 
   uf = g_ptr_array_index (ar, ar->len - 1);
   file = ide_unsaved_file_get_file (uf);

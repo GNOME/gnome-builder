@@ -293,8 +293,8 @@ search_movement_new (IdeSourceView *self,
   mv->exclusive = !!exclusive;
   mv->count = use_count ? MAX (priv->count, 1) : 1;
 
-  g_assert_cmpint (mv->ref_count, ==, 1);
-  g_assert_cmpint (mv->count, >, 0);
+  g_assert (mv->ref_count == 1);
+  g_assert (mv->count > 0);
 
   return mv;
 }
@@ -1686,7 +1686,7 @@ ide_source_view_maybe_delete_match (IdeSourceView *self,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (event);
-  g_assert_cmpint (event->keyval, ==, GDK_KEY_BackSpace);
+  g_assert (event->keyval == GDK_KEY_BackSpace);
 
   if (!priv->insert_matching_brace)
     return FALSE;
@@ -1959,7 +1959,7 @@ ide_source_view_do_smart_backspace (IdeSourceView *self,
       gint target_column = visual_column - indent_width;
       gunichar ch;
 
-      g_assert_cmpint (target_column, >=, 0);
+      g_assert (target_column >= 0);
 
       while (GET_VISUAL_COLUMN (&insert) > target_column)
         {
@@ -6439,10 +6439,10 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
         xalign = (iter_rect.x - visible_rect.x) / (gdouble)visible_rect.width;
     }
 
-  g_assert_cmpint (xalign, >=, 0.0);
-  g_assert_cmpint (yalign, >=, 0.0);
-  g_assert_cmpint (xalign, <=, 1.0);
-  g_assert_cmpint (yalign, <=, 1.0);
+  g_assert (xalign >= 0.0);
+  g_assert (yalign >= 0.0);
+  g_assert (xalign <= 1.0);
+  g_assert (yalign <= 1.0);
 
   /* get the screen coordinates within the real visible area */
   xoffset = (visible_rect.x - real_visible_rect.x) + (xalign * visible_rect.width);

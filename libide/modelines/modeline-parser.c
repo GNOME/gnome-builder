@@ -138,7 +138,7 @@ load_language_mappings (void)
 
 	data = g_bytes_get_data (bytes, &len);
 	g_assert (data);
-	g_assert_cmpint (len, >, 0);
+	g_assert (len > 0);
 
 	mappings = g_key_file_new ();
 
