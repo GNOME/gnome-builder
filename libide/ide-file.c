@@ -280,6 +280,29 @@ ide_file_set_path (IdeFile     *self,
   self->path = g_strdup (path);
 }
 
+static void
+ide_file__file_settings_settled_cb (IdeFileSettings *file_settings,
+                                    GParamSpec      *pspec,
+                                    GTask           *task)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_FILE_SETTINGS (file_settings));
+  g_assert (G_IS_TASK (task));
+
+  if (ide_file_settings_get_settled (file_settings))
+    {
+      g_signal_handlers_disconnect_by_func (file_settings,
+                                            G_CALLBACK (ide_file__file_settings_settled_cb),
+                                            task);
+      g_task_return_pointer (task, file_settings, g_object_unref);
+      g_object_unref (task);
+      IDE_EXIT;
+    }
+
+  IDE_EXIT;
+}
+
 void
 ide_file_load_settings_async (IdeFile              *self,
                               GCancellable         *cancellable,
@@ -297,7 +320,17 @@ ide_file_load_settings_async (IdeFile              *self,
   task = g_task_new (self, cancellable, callback, user_data);
 
   file_settings = ide_file_settings_new (self);
-  g_task_return_pointer (task, file_settings, g_object_unref);
+
+  if (ide_file_settings_get_settled (file_settings))
+    {
+      g_task_return_pointer (task, file_settings, g_object_unref);
+      IDE_EXIT;
+    }
+
+  g_signal_connect (file_settings,
+                    "notify::settled",
+                    G_CALLBACK (ide_file__file_settings_settled_cb),
+                    g_object_ref (task));
 
   IDE_EXIT;
 }
