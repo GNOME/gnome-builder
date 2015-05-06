@@ -1,0 +1,10 @@
+contrib/egg/egg-binding-set.c
+contrib/egg/egg-binding-set.h
+contrib/egg/egg-search-bar.c
+contrib/egg/egg-search-bar.h
+contrib/egg/egg-settings-sandwich.c
+contrib/egg/egg-settings-sandwich.h
+contrib/egg/egg-signal-group.c
+contrib/egg/egg-signal-group.h
+contrib/egg/egg-state-machine.c
+contrib/egg/egg-state-machine.h

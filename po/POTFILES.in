@@ -26,10 +26,6 @@
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.language.gschema.xml
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.experimental.gschema.xml
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.project-tree.gschema.xml
-contrib/egg/egg-binding-set.c
-contrib/egg/egg-search-bar.c
-contrib/egg/egg-signal-group.c
-contrib/egg/egg-state-machine.c
 contrib/search/trie.c
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml
