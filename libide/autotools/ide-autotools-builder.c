@@ -26,20 +26,15 @@
 #include "ide-project.h"
 #include "ide-vcs.h"
 
-typedef struct
-{
-  GKeyFile  *config;
-  IdeDevice *device;
-} IdeAutotoolsBuilderPrivate;
-
 struct _IdeAutotoolsBuilder
 {
-  IdeObject parent_instance;
+  IdeObject  parent_instance;
 
-  /* TODO: Move private to instance fields */
+  GKeyFile  *config;
+  IdeDevice *device;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeAutotoolsBuilder, ide_autotools_builder, IDE_TYPE_BUILDER)
+G_DEFINE_TYPE (IdeAutotoolsBuilder, ide_autotools_builder, IDE_TYPE_BUILDER)
 
 enum {
   PROP_0,
@@ -51,63 +46,46 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 GKeyFile *
-ide_autotools_builder_get_config (IdeAutotoolsBuilder *builder)
+ide_autotools_builder_get_config (IdeAutotoolsBuilder *self)
 {
-  IdeAutotoolsBuilderPrivate *priv;
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self), NULL);
 
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (builder), NULL);
-
-  priv = ide_autotools_builder_get_instance_private (builder);
-
-  return priv->config;
+  return self->config;
 }
 
 static void
-ide_autotools_builder_set_config (IdeAutotoolsBuilder *builder,
+ide_autotools_builder_set_config (IdeAutotoolsBuilder *self,
                                   GKeyFile            *config)
 {
-  IdeAutotoolsBuilderPrivate *priv;
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
 
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (builder));
-
-  priv = ide_autotools_builder_get_instance_private (builder);
-
-  if (priv->config != config)
+  if (self->config != config)
     {
-      g_clear_pointer (&priv->config, g_key_file_unref);
+      g_clear_pointer (&self->config, g_key_file_unref);
       if (config)
-        priv->config = g_key_file_ref (config);
-      g_object_notify_by_pspec (G_OBJECT (builder),
-                                gParamSpecs [PROP_CONFIG]);
+        self->config = g_key_file_ref (config);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_CONFIG]);
     }
 }
 
 IdeDevice *
-ide_autotools_builder_get_device (IdeAutotoolsBuilder *builder)
+ide_autotools_builder_get_device (IdeAutotoolsBuilder *self)
 {
-  IdeAutotoolsBuilderPrivate *priv;
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self), NULL);
 
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (builder), NULL);
-
-  priv = ide_autotools_builder_get_instance_private (builder);
-
-  return priv->device;
+  return self->device;
 }
 
 static void
-ide_autotools_builder_set_device (IdeAutotoolsBuilder *builder,
+ide_autotools_builder_set_device (IdeAutotoolsBuilder *self,
                                   IdeDevice           *device)
 {
-  IdeAutotoolsBuilderPrivate *priv;
-
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (builder));
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
   g_return_if_fail (!device || IDE_IS_DEVICE (device));
 
-  priv = ide_autotools_builder_get_instance_private (builder);
-
-  if (priv->device != device)
-    if (g_set_object (&priv->device, device))
-      g_object_notify_by_pspec (G_OBJECT (builder), gParamSpecs [PROP_DEVICE]);
+  if (self->device != device)
+    if (g_set_object (&self->device, device))
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DEVICE]);
 }
 
 static void
@@ -141,7 +119,6 @@ ide_autotools_builder_build_cb (GObject      *object,
 GFile *
 ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self)
 {
-  IdeAutotoolsBuilderPrivate *priv = ide_autotools_builder_get_instance_private (self);
   g_autofree gchar *path = NULL;
   IdeContext *context;
   IdeProject *project;
@@ -153,7 +130,7 @@ ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self)
   g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self), NULL);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  device_id = ide_device_get_id (priv->device);
+  device_id = ide_device_get_id (self->device);
 
   /*
    * If this is the local device, we have a special workaround for building within the project
@@ -188,7 +165,7 @@ ide_autotools_builder_get_build_directory (IdeAutotoolsBuilder *self)
 
   project = ide_context_get_project (context);
   root_build_dir = ide_context_get_root_build_dir (context);
-  system_type = ide_device_get_system_type (priv->device);
+  system_type = ide_device_get_system_type (self->device);
   project_name = ide_project_get_name (project);
   path = g_build_filename (root_build_dir, project_name, device_id, system_type, NULL);
 
@@ -203,7 +180,6 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
                                    GAsyncReadyCallback   callback,
                                    gpointer              user_data)
 {
-  IdeAutotoolsBuilderPrivate *priv;
   IdeAutotoolsBuilder *self = (IdeAutotoolsBuilder *)builder;
   g_autoptr(IdeAutotoolsBuildTask) build_result = NULL;
   g_autoptr(GTask) task = NULL;
@@ -214,10 +190,8 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (builder));
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
 
-  priv = ide_autotools_builder_get_instance_private (self);
-
   if (flags & IDE_BUILDER_BUILD_FLAGS_FORCE_REBUILD)
-    g_key_file_set_boolean (priv->config, "autotools", "rebuild", TRUE);
+    g_key_file_set_boolean (self->config, "autotools", "rebuild", TRUE);
 
   task = g_task_new (self, cancellable, callback, user_data);
 
@@ -227,7 +201,7 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
 
   build_result = g_object_new (IDE_TYPE_AUTOTOOLS_BUILD_TASK,
                                "context", context,
-                               "config", priv->config,
+                               "config", self->config,
                                "device", device,
                                "directory", directory,
                                NULL);
@@ -258,10 +232,9 @@ static void
 ide_autotools_builder_finalize (GObject *object)
 {
   IdeAutotoolsBuilder *self = (IdeAutotoolsBuilder *)object;
-  IdeAutotoolsBuilderPrivate *priv = ide_autotools_builder_get_instance_private (self);
 
-  g_clear_pointer (&priv->config, g_key_file_unref);
-  g_clear_object (&priv->device);
+  g_clear_pointer (&self->config, g_key_file_unref);
+  g_clear_object (&self->device);
 
   G_OBJECT_CLASS (ide_autotools_builder_parent_class)->finalize (object);
 }
@@ -386,7 +359,6 @@ ide_autotools_builder_bootstrap_async (IdeAutotoolsBuilder *self,
                                        GAsyncReadyCallback  callback,
                                        gpointer             user_data)
 {
-  IdeAutotoolsBuilderPrivate *priv = ide_autotools_builder_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILDER (self));
@@ -394,7 +366,7 @@ ide_autotools_builder_bootstrap_async (IdeAutotoolsBuilder *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  g_key_file_set_boolean (priv->config, "autotools", "bootstrap", TRUE);
+  g_key_file_set_boolean (self->config, "autotools", "bootstrap", TRUE);
 
   g_task_return_boolean (task, TRUE);
 }
