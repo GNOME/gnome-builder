@@ -83,6 +83,7 @@ enum {
   PROP_BUILD_SYSTEM,
   PROP_DEVICE_MANAGER,
   PROP_PROJECT_FILE,
+  PROP_PROJECT,
   PROP_ROOT_BUILD_DIR,
   PROP_SCRIPT_MANAGER,
   PROP_SEARCH_ENGINE,
@@ -574,6 +575,10 @@ ide_context_get_property (GObject    *object,
       g_value_set_object (value, ide_context_get_device_manager (self));
       break;
 
+    case PROP_PROJECT:
+      g_value_set_object (value, ide_context_get_project (self));
+      break;
+
     case PROP_PROJECT_FILE:
       g_value_set_object (value, ide_context_get_project_file (self));
       break;
@@ -666,6 +671,13 @@ ide_context_class_init (IdeContextClass *klass)
                          _("Device Manager"),
                          _("The device manager for the context."),
                          IDE_TYPE_DEVICE_MANAGER,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  gParamSpecs [PROP_PROJECT] =
+    g_param_spec_object ("project",
+                         _("Project"),
+                         _("The project for the context."),
+                         IDE_TYPE_PROJECT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PROJECT_FILE] =
