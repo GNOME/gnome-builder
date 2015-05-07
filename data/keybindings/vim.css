@@ -1255,6 +1255,11 @@
                     "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
 
+  bind "d"        { "copy-clipboard" ()
+                    "delete-selection" ()
+                    "end-macro" ()
+                    "set-mode" ("vim-normal", permanent) };
+
   bind "<shift>x" { "copy-clipboard" ()
                     "delete-selection" ()
                     "delete-from-cursor" (chars, 1)
