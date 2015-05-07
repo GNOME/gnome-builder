@@ -27,6 +27,7 @@
 #include "ide-debug.h"
 #include "ide-project.h"
 #include "ide-settings.h"
+#include "ide-internal.h"
 
 /**
  * SECTION:ide-settings

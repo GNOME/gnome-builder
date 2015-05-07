@@ -1752,5 +1752,5 @@ ide_context_get_settings (IdeContext  *self,
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
   g_return_val_if_fail (schema_id != NULL, NULL);
 
-  return  _ide_settings_new (self, schema_id, relative_path);
+  return  _ide_settings_new (self, schema_id, relative_path, FALSE);
 }

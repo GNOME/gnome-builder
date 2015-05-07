@@ -97,7 +97,8 @@ void                _ide_search_context_add_provider   (IdeSearchContext      *c
                                                         gsize                  max_results);
 IdeSettings        *_ide_settings_new                  (IdeContext            *context,
                                                         const gchar           *schema_id,
-                                                        const gchar           *relative_path);
+                                                        const gchar           *relative_path,
+                                                        gboolean               ignore_project_settings);
 IdeSourceRange     *_ide_source_range_new              (IdeSourceLocation     *begin,
                                                         IdeSourceLocation     *end);
 gboolean            _ide_source_view_mode_do_event     (IdeSourceViewMode     *mode,
