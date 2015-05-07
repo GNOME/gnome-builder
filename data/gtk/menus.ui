@@ -160,6 +160,7 @@
       <item>
         <attribute name="label" translatable="yes">_Open</attribute>
         <attribute name="action">project-tree.open</attribute>
+        <attribute name="accel">Return</attribute>
       </item>
       <submenu>
         <attribute name="label" translatable="yes">Open _With</attribute>
