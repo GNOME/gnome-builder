@@ -180,6 +180,10 @@
         <attribute name="label" translatable="yes">_Open Containing Folder</attribute>
         <attribute name="action">project-tree.open-containing-folder</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">_Open in Terminal</attribute>
+        <attribute name="action">project-tree.open-in-terminal</attribute>
+      </item>
     </section>
   </menu>
   <menu id="gb-project-tree-rename">

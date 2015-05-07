@@ -245,6 +245,82 @@ gb_project_tree_actions_open_containing_folder (GSimpleAction *action,
 }
 
 static void
+gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
+                                          GVariant      *variant,
+                                          gpointer       user_data)
+{
+  const gchar *argv[] = { "gnome-terminal", NULL };
+  GbEditorWorkspace *self = user_data;
+  GbTreeNode *selected;
+  g_autofree gchar *workdir = NULL;
+  GObject *item;
+  GError *error = NULL;
+  GFile *file;
+
+  g_assert (GB_IS_PROJECT_TREE (self));
+
+  /*
+   * XXX:
+   *
+   * This is horrible code. Somebody please fix it for me.
+   *
+   * 1) We don't use the same display/screen for launching.
+   *    GdkAppLaunchContext would solve this.
+   * 2) We should find a way to use GAppInfo if we can.
+   *    I didn't see a way set the CWD for that.
+   * 3) xdg-terminal is a thing yet?
+   * 4) We don't spawn gnome-terminal right, so we get sh$ instead of user shell.
+   */
+
+  if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
+      !(item = gb_tree_node_get_item (selected)) ||
+      !(IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)))
+    return;
+
+  if (IDE_IS_PROJECT_FILES (item))
+    {
+      IdeContext *context;
+      IdeVcs *vcs;
+
+      context = ide_object_get_context (IDE_OBJECT (item));
+      vcs = ide_context_get_vcs (context);
+      file = ide_vcs_get_working_directory (vcs);
+    }
+  else if (!(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))))
+    {
+      return;
+    }
+
+  if (!g_file_is_native (file))
+    {
+      g_warning ("Cannot load non-native file in terminal.");
+      return;
+    }
+
+  if (g_file_query_file_type (file, G_FILE_QUERY_INFO_NONE, NULL) != G_FILE_TYPE_DIRECTORY)
+    {
+      GFile *parent;
+
+      parent = g_file_get_parent (file);
+      workdir = g_file_get_path (parent);
+      g_clear_object (&parent);
+    }
+  else
+    {
+      workdir = g_file_get_path (file);
+    }
+
+  if (!g_spawn_async (workdir, (gchar **)argv, NULL,
+                      (G_SPAWN_SEARCH_PATH | G_SPAWN_SEARCH_PATH | G_SPAWN_STDERR_TO_DEV_NULL),
+                      NULL, NULL, NULL, &error))
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+      return;
+    }
+}
+
+static void
 gb_project_tree_actions_show_icons (GSimpleAction *action,
                                     GVariant      *variant,
                                     gpointer       user_data)
@@ -780,6 +856,7 @@ static GActionEntry GbProjectTreeActions[] = {
   { "new-file",               gb_project_tree_actions_new_file },
   { "open",                   gb_project_tree_actions_open },
   { "open-containing-folder", gb_project_tree_actions_open_containing_folder },
+  { "open-in-terminal",       gb_project_tree_actions_open_in_terminal },
   { "open-with",              gb_project_tree_actions_open_with, "s" },
   { "open-with-editor",       gb_project_tree_actions_open_with_editor },
   { "refresh",                gb_project_tree_actions_refresh },
@@ -851,6 +928,9 @@ gb_project_tree_actions_update (GbProjectTree *self)
               NULL);
   action_set (group, "open-containing-folder",
               "enabled", (IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)),
+              NULL);
+  action_set (group, "open-in-terminal",
+              "enabled", IDE_IS_PROJECT_FILE (item),
               NULL);
   action_set (group, "rename-file",
               "enabled", IDE_IS_PROJECT_FILE (item),
