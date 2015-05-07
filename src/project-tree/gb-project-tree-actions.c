@@ -244,33 +244,59 @@ gb_project_tree_actions_open_containing_folder (GSimpleAction *action,
   gb_file_manager_show (file, NULL);
 }
 
+/* Based on gdesktopappinfo.c in GIO */
+static gchar *
+find_terminal_executable (void)
+{
+  gsize i;
+  gchar *path = NULL;
+  g_autoptr(GSettings) terminal_settings = NULL;
+  g_autofree gchar *gsettings_terminal = NULL;
+  const gchar *terminals[] = {
+    NULL,                     /* GSettings */
+    "x-terminal-emulator",    /* Debian's alternative system */
+    "gnome-terminal",
+    NULL,                     /* getenv ("TERM") */
+    "nxterm", "color-xterm",
+    "rxvt", "xterm", "dtterm"
+  };
+
+  /* This is deprecated, but at least the user can specify it! */
+  terminal_settings = g_settings_new ("org.gnome.desktop.default-applications.terminal");
+  gsettings_terminal = g_settings_get_string (terminal_settings, "exec");
+  terminals[0] = gsettings_terminal;
+
+  /* This is generally one of the fallback terminals */
+  terminals[3] = g_getenv ("TERM");
+
+  for (i = 0; i < G_N_ELEMENTS (terminals) && path == NULL; ++i)
+    {
+      if (terminals[i] != NULL)
+        {
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+          path = g_find_program_in_path (terminals[i]);
+          G_GNUC_END_IGNORE_DEPRECATIONS
+        }
+    }
+
+  return path;
+}
+
 static void
 gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
                                           GVariant      *variant,
                                           gpointer       user_data)
 {
-  const gchar *argv[] = { "gnome-terminal", NULL };
   GbEditorWorkspace *self = user_data;
   GbTreeNode *selected;
-  g_autofree gchar *workdir = NULL;
   GObject *item;
-  GError *error = NULL;
   GFile *file;
+  g_autofree gchar *workdir = NULL;
+  g_autofree gchar *terminal_executable = NULL;
+  const gchar *argv[] = { NULL, NULL };
+  GError *error = NULL;
 
   g_assert (GB_IS_PROJECT_TREE (self));
-
-  /*
-   * XXX:
-   *
-   * This is horrible code. Somebody please fix it for me.
-   *
-   * 1) We don't use the same display/screen for launching.
-   *    GdkAppLaunchContext would solve this.
-   * 2) We should find a way to use GAppInfo if we can.
-   *    I didn't see a way set the CWD for that.
-   * 3) xdg-terminal is a thing yet?
-   * 4) We don't spawn gnome-terminal right, so we get sh$ instead of user shell.
-   */
 
   if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (selected)) ||
@@ -291,27 +317,33 @@ gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
       return;
     }
 
-  if (!g_file_is_native (file))
-    {
-      g_warning ("Cannot load non-native file in terminal.");
-      return;
-    }
-
   if (g_file_query_file_type (file, G_FILE_QUERY_INFO_NONE, NULL) != G_FILE_TYPE_DIRECTORY)
     {
-      GFile *parent;
+      g_autoptr(GFile) parent;
 
       parent = g_file_get_parent (file);
       workdir = g_file_get_path (parent);
-      g_clear_object (&parent);
     }
   else
     {
       workdir = g_file_get_path (file);
     }
 
+  if (workdir == NULL)
+    {
+      g_warning ("Cannot load non-native file in terminal.");
+      return;
+    }
+
+  terminal_executable = find_terminal_executable ();
+  argv[0] = terminal_executable;
+  g_return_if_fail (terminal_executable != NULL);
+
+  /* Can't use GdkAppLaunchContext as
+   * we cannot set the working directory.
+   */
   if (!g_spawn_async (workdir, (gchar **)argv, NULL,
-                      (G_SPAWN_SEARCH_PATH | G_SPAWN_SEARCH_PATH | G_SPAWN_STDERR_TO_DEV_NULL),
+                      G_SPAWN_STDERR_TO_DEV_NULL,
                       NULL, NULL, NULL, &error))
     {
       g_warning ("%s", error->message);
