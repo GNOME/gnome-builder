@@ -123,7 +123,7 @@ ide_settings_constructed (GObject *object)
 {
   IdeSettings *self = (IdeSettings *)object;
   g_autofree gchar *full_path = NULL;
-  const gchar *project_name;
+  const gchar *project_id;
   IdeContext *context;
   IdeProject *project;
   GSettings *settings;
@@ -177,7 +177,7 @@ ide_settings_constructed (GObject *object)
 
   context = ide_object_get_context (IDE_OBJECT (self));
   project = ide_context_get_project (context);
-  project_name = ide_project_get_name (project);
+  project_id = ide_project_get_id (project);
 
   full_path = g_strdup_printf ("/org/gnome/builder/%s", self->relative_path);
   self->settings_sandwich = egg_settings_sandwich_new (self->schema_id, full_path);
@@ -186,7 +186,7 @@ ide_settings_constructed (GObject *object)
   if (self->ignore_project_settings == FALSE)
     {
       path = g_strdup_printf ("/org/gnome/builder/projects/%s/%s",
-                              project_name, self->relative_path);
+                              project_id, self->relative_path);
       settings = g_settings_new_with_path (self->schema_id, path);
       egg_settings_sandwich_append (self->settings_sandwich, settings);
       g_clear_object (&settings);
