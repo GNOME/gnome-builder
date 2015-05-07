@@ -202,7 +202,7 @@ gb_workbench_delete_event (GtkWidget   *widget,
       return FALSE;
     }
 
-  g_assert_cmpint (self->unloading, ==, FALSE);
+  g_assert (self->unloading == FALSE);
 
   if (self->context != NULL)
     {

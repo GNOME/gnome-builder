@@ -70,7 +70,7 @@ egg_settings_sandwich_update_cache (EggSettingsSandwich *self,
 
   g_assert (EGG_IS_SETTINGS_SANDWICH (self));
   g_assert (key != NULL);
-  g_assert_cmpint (self->settings->len, >, 0);
+  g_assert (self->settings->len > 0);
 
   for (i = 0; i < self->settings->len; i++)
     {

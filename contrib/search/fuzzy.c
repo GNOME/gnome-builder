@@ -300,7 +300,7 @@ fuzzy_insert (Fuzzy       *fuzzy,
    offset = fuzzy_heap_insert(fuzzy, key);
    g_array_append_val(fuzzy->id_to_text_offset, offset);
    g_ptr_array_add(fuzzy->id_to_value, value);
-   g_assert_cmpint(fuzzy->id_to_value->len, ==, fuzzy->id_to_text_offset->len);
+   g_assert(fuzzy->id_to_value->len == fuzzy->id_to_text_offset->len);
 
    id = fuzzy->id_to_text_offset->len - 1;
 

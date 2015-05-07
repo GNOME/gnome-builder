@@ -69,7 +69,7 @@ int32_parse (gint         *value,
 
   g_assert (value);
   g_assert (str);
-  g_assert_cmpint (lower, <=, upper);
+  g_assert (lower <= upper);
   g_assert (param_name);
 
   v64 = g_ascii_strtoll (str, NULL, 10);

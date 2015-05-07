@@ -124,7 +124,7 @@ egg_signal_group_bind_handler (EggSignalGroup *self,
   g_assert (handler != NULL);
   g_assert (handler->detailed_signal != NULL);
   g_assert (handler->closure != NULL);
-  g_assert_cmpint (handler->handler_id, ==, 0);
+  g_assert (handler->handler_id == 0);
 
   handler->handler_id =  g_signal_connect_closure (self->target,
                                                    handler->detailed_signal,
@@ -195,7 +195,7 @@ egg_signal_group_unbind (EggSignalGroup *self)
       g_assert (handler != NULL);
       g_assert (handler->detailed_signal != NULL);
       g_assert (handler->closure != NULL);
-      g_assert_cmpint (handler->handler_id, !=, 0);
+      g_assert (handler->handler_id != 0);
 
       handler_id = handler->handler_id;
       handler->handler_id = 0;
@@ -243,7 +243,7 @@ egg_signal_group_block (EggSignalGroup *self)
       g_assert (handler != NULL);
       g_assert (handler->detailed_signal != NULL);
       g_assert (handler->closure != NULL);
-      g_assert_cmpint (handler->handler_id, !=, 0);
+      g_assert (handler->handler_id != 0);
 
       g_signal_handler_block (self->target, handler->handler_id);
     }
@@ -271,7 +271,7 @@ egg_signal_group_unblock (EggSignalGroup *self)
       g_assert (handler != NULL);
       g_assert (handler->detailed_signal != NULL);
       g_assert (handler->closure != NULL);
-      g_assert_cmpint (handler->handler_id, !=, 0);
+      g_assert (handler->handler_id != 0);
 
       g_signal_handler_unblock (self->target, handler->handler_id);
     }

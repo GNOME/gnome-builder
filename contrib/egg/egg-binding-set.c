@@ -204,7 +204,7 @@ egg_binding_set_finalize (GObject *object)
   EggBindingSet *self = (EggBindingSet *)object;
 
   g_assert (self->lazy_bindings != NULL);
-  g_assert_cmpint (self->lazy_bindings->len, ==, 0);
+  g_assert (self->lazy_bindings->len == 0);
 
   g_clear_pointer (&self->lazy_bindings, g_ptr_array_unref);
   g_clear_object (&self->source);
