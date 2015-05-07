@@ -30,6 +30,7 @@ G_DECLARE_FINAL_TYPE (IdeProject, ide_project, IDE, PROJECT, IdeObject)
 
 IdeProjectItem  *ide_project_get_root           (IdeProject           *self);
 const gchar     *ide_project_get_name           (IdeProject           *self);
+const gchar     *ide_project_get_id             (IdeProject           *self);
 IdeFile         *ide_project_get_file_for_path  (IdeProject           *self,
                                                  const gchar          *path);
 IdeFile         *ide_project_get_project_file   (IdeProject           *self,

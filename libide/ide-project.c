@@ -33,6 +33,7 @@ struct _IdeProject
   GRWLock         rw_lock;
   IdeProjectItem *root;
   gchar          *name;
+  gchar          *id;
 };
 
 typedef struct
@@ -45,6 +46,7 @@ G_DEFINE_TYPE (IdeProject, ide_project, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_ID,
   PROP_NAME,
   PROP_ROOT,
   LAST_PROP
@@ -84,6 +86,43 @@ ide_project_writer_unlock (IdeProject *self)
   g_rw_lock_writer_unlock (&self->rw_lock);
 }
 
+static gchar *
+ide_project_create_id (IdeProject *self)
+{
+  GChecksum *checksum;
+  IdeContext *context;
+  GFile *project_file;
+  gchar *ret;
+  gchar *project_uri;
+  gchar *input;
+
+  g_assert (IDE_IS_PROJECT (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  project_file = ide_context_get_project_file (context);
+
+  project_uri = g_file_get_uri (project_file);
+  input = g_strdup_printf ("%s:%s", self->name, project_uri);
+  checksum = g_checksum_new (G_CHECKSUM_SHA1);
+
+  g_checksum_update (checksum, (const guchar *)input, -1);
+  ret = g_strdup (g_checksum_get_string (checksum));
+
+  g_checksum_free (checksum);
+  g_free (project_uri);
+  g_free (input);
+
+  return ret;
+}
+
+const gchar *
+ide_project_get_id (IdeProject *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT (self), NULL);
+
+  return self->id;
+}
+
 const gchar *
 ide_project_get_name (IdeProject *self)
 {
@@ -102,6 +141,7 @@ _ide_project_set_name (IdeProject  *self,
     {
       g_free (self->name);
       self->name = g_strdup (name);
+      self->id = ide_project_create_id (self);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_NAME]);
     }
 }
@@ -324,6 +364,10 @@ ide_project_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ID:
+      g_value_set_string (value, ide_project_get_id (self));
+      break;
+
     case PROP_NAME:
       g_value_set_string (value, ide_project_get_name (self));
       break;
@@ -364,6 +408,13 @@ ide_project_class_init (IdeProjectClass *klass)
   object_class->finalize = ide_project_finalize;
   object_class->get_property = ide_project_get_property;
   object_class->set_property = ide_project_set_property;
+
+  gParamSpecs [PROP_ID] =
+    g_param_spec_string ("id",
+                         _("Id"),
+                         _("The unique project identifier."),
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
