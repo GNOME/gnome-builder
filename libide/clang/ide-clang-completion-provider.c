@@ -220,8 +220,7 @@ ide_clang_completion_provider_complete_cb (GObject      *object,
       goto failure;
     }
 
-  if (self->last_results != NULL)
-    g_ptr_array_free (self->last_results, TRUE);
+  g_ptr_array_free (self->last_results, TRUE);
   self->last_results = g_ptr_array_ref (ar);
 
   gtk_source_completion_context_get_iter (state->context, &iter);
