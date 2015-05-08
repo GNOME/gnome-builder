@@ -9,8 +9,8 @@
   bind "<ctrl>o" { "action" ("workbench", "open", "") };
   bind "<ctrl>s" { "action" ("view", "save", "") };
   bind "<ctrl><shift>s" { "action" ("view", "save-as", "") };
-  bind "<alt><shift>Left" { "action" ("navigation", "go-backward", "") };
-  bind "<alt><shift>Right" { "action" ("navigation", "go-forward", "") };
+  bind "<alt><shift>Left" { "action" ("view-stack", "go-backward", "") };
+  bind "<alt><shift>Right" { "action" ("view-stack", "go-forward", "") };
   bind "<ctrl>w" { "action" ("view", "close", "") };
   bind "<alt>period" { "goto-definition" () };
 
