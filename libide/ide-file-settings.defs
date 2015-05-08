@@ -58,7 +58,7 @@ IDE_FILE_SETTINGS_PROPERTY (NEWLINE_TYPE, newline_type,
                             enum)
 
 IDE_FILE_SETTINGS_PROPERTY (RIGHT_MARGIN_POSITION, right_margin_position,
-                            uint, uint,
+                            guint, guint,
                             "right-margin-position",
                             g_param_spec_uint ("right-margin-position",
                                                "Right Margin Position",
