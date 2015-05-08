@@ -295,13 +295,9 @@ AS_IF([test "$enable_optimizations" != "no"],
       [AX_CHECK_LINK_FLAG([-Wl,-Bsymbolic],
                           [OPTIMIZE_LDFLAGS="$OPTIMIZE_LDFLAGS -Wl,-Bsymbolic"])])
 # Enable Link-Time-Optimization
-AS_IF([test "$enable_lto" = "yes"],
-      [AS_IF([test "$c_compiler" = "gcc"],
-             [
-                 AX_CHECK_COMPILE_FLAG([-flto], [OPTIMIZE_CFLAGS="$OPTIMIZE_CFLAGS -flto"])
-                 AX_CHECK_LINK_FLAG([-flto], [OPTIMIZE_LDFLAGS="$OPTIMIZE_LDFLAGS -flto"])
-             ],
-             [AC_MSG_WARN([LTO is not yet available on your compiler.])])])
+AS_IF([test "$enable_lto" = "yes"], [
+	AX_CHECK_COMPILE_FLAG([-flto], [OPTIMIZE_CFLAGS="$OPTIMIZE_CFLAGS -flto"], [enable_lto=no])
+])
 AC_SUBST(OPTIMIZE_CFLAGS)
 AC_SUBST(OPTIMIZE_LDFLAGS)
 
