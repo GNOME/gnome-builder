@@ -3599,7 +3599,7 @@ _strcasecmp_reversed (const void *aptr,
   const gchar * const *a = aptr;
   const gchar * const *b = bptr;
 
-  return strcasecmp (*a, *b);
+  return g_ascii_strcasecmp (*a, *b);
 }
 
 static int
@@ -3609,7 +3609,7 @@ _strcasecmp_normal (const void *aptr,
   const gchar * const *a = aptr;
   const gchar * const *b = bptr;
 
-  return strcasecmp (*b, *a);
+  return g_ascii_strcasecmp (*b, *a);
 }
 
 static int

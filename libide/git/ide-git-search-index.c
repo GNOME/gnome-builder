@@ -16,6 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* for isascii in ctype */
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif
+
 #include <ctype.h>
 #include <fuzzy.h>
 #include <glib/gi18n.h>
