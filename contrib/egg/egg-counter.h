@@ -72,7 +72,7 @@
  * would need to do for readback.
  *
  * EggCounterArena provides a helper to walk through the counters in the
- * shared memory zone. egg_counter_foreach().
+ * shared memory zone. egg_counter_arena_foreach().
  *
  * You cannot remove a counter once it has been registered.
  *
