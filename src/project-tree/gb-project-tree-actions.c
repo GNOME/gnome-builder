@@ -28,6 +28,7 @@
 #include "gb-project-tree-actions.h"
 #include "gb-project-tree-private.h"
 #include "gb-rename-file-popover.h"
+#include "gb-view-stack.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
@@ -848,18 +849,58 @@ gb_project_tree_actions__trash_file_cb (GObject      *object,
     gb_tree_node_expand (node, TRUE);
 }
 
+static GbViewStack *
+get_view_stack (GbView *view)
+{
+  GtkWidget *widget = (GtkWidget *)view;
+
+  while ((widget != NULL) && !GB_IS_VIEW_STACK (widget))
+    widget = gtk_widget_get_parent (widget);
+
+  return (GbViewStack *)widget;
+}
+
+typedef struct
+{
+  GbDocument *document;
+  GList      *views;
+} ViewsRemoval;
+
+static void
+gb_project_tree_actions_close_views_cb (GtkWidget *widget,
+                                        gpointer   user_data)
+{
+  GbDocument *document;
+  ViewsRemoval *removal = user_data;
+  GbView *view = (GbView *)widget;
+
+  g_assert (GB_IS_VIEW (view));
+  g_assert (removal != NULL);
+  g_assert (GB_IS_DOCUMENT (removal->document));
+
+  document = gb_view_get_document (view);
+
+  if (document == removal->document)
+    removal->views = g_list_prepend (removal->views, g_object_ref (view));
+}
+
 static void
 gb_project_tree_actions_move_to_trash (GSimpleAction *action,
                                        GVariant      *param,
                                        gpointer       user_data)
 {
   GbProjectTree *self = user_data;
+  IdeBufferManager *buffer_manager;
   GbWorkbench *workbench;
   IdeContext *context;
+  ViewsRemoval removal = { 0 };
+  IdeBuffer *buffer;
   IdeProject *project;
   GbTreeNode *node;
   GFile *file;
+  IdeFile *ifile;
   GObject *item;
+  GList *iter;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GB_IS_PROJECT_TREE (self));
@@ -867,6 +908,7 @@ gb_project_tree_actions_move_to_trash (GSimpleAction *action,
   workbench = gb_widget_get_workbench (GTK_WIDGET (self));
   context = gb_workbench_get_context (workbench);
   project = ide_context_get_project (context);
+  buffer_manager = ide_context_get_buffer_manager (context);
 
   if (!(node = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (node)) ||
@@ -874,6 +916,34 @@ gb_project_tree_actions_move_to_trash (GSimpleAction *action,
       !(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))))
     return;
 
+  /*
+   * Find all of the views that contain this file.
+   * We do not close them until we leave the foreach callback.
+   */
+  ifile = ide_project_get_project_file (project, file);
+  buffer = ide_buffer_manager_find_buffer (buffer_manager, ifile);
+  removal.document = GB_DOCUMENT (buffer);
+  gb_workbench_views_foreach (workbench,
+                              gb_project_tree_actions_close_views_cb,
+                              &removal);
+
+  /*
+   * Close all of the views that match the document.
+   */
+  for (iter = removal.views; iter; iter = iter->next)
+    {
+      GbViewStack *stack;
+
+      stack = get_view_stack (iter->data);
+      if (stack != NULL)
+        gb_view_stack_remove (stack, iter->data);
+    }
+
+  g_list_free_full (removal.views, g_object_unref);
+
+  /*
+   * Now move the file to the trash.
+   */
   ide_project_trash_file_async (project,
                                 file,
                                 NULL,
