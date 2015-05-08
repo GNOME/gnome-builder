@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-thread-pool"
 
+#include "egg-counter.h"
+
 #include "ide-debug.h"
 #include "ide-thread-pool.h"
 
@@ -28,6 +30,9 @@ typedef struct
   GTask           *task;
   GTaskThreadFunc  func;
 } WorkItem;
+
+EGG_DEFINE_COUNTER (TotalTasks, "ThreadPool", "Total Tasks", "Total number of tasks processed.")
+EGG_DEFINE_COUNTER (QueuedTasks, "ThreadPool", "Queued Tasks", "Current number of pending tasks.")
 
 static GThreadPool *gThreadPools [IDE_THREAD_POOL_LAST];
 
@@ -60,6 +65,8 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
   g_return_if_fail (G_IS_TASK (task));
   g_return_if_fail (func != NULL);
 
+  EGG_COUNTER_INC (TotalTasks);
+
   pool = ide_thread_pool_get_pool (kind);
 
   if (pool != NULL)
@@ -69,6 +76,8 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
       work_item = g_slice_new0 (WorkItem);
       work_item->task = g_object_ref (task);
       work_item->func = func;
+
+      EGG_COUNTER_INC (QueuedTasks);
 
       g_thread_pool_push (pool, work_item, NULL);
     }
@@ -90,6 +99,8 @@ ide_thread_pool_worker (gpointer data,
   GCancellable *cancellable;
 
   g_assert (work_item != NULL);
+
+  EGG_COUNTER_DEC (QueuedTasks);
 
   source_object = g_task_get_source_object (work_item->task);
   task_data = g_task_get_task_data (work_item->task);
