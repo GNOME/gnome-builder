@@ -924,7 +924,7 @@ lookup_command (const gchar *name)
 
   if (g_ascii_isdigit (*name) && int32_parse (&line, name, 0, G_MAXINT32, "line", NULL))
   {
-    line_command.options_sup = strdup (name);
+    line_command.options_sup = g_strdup (name);
     return &line_command;
   }
 
