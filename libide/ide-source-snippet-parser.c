@@ -25,10 +25,10 @@
 #include "ide-source-snippet-parser.h"
 #include "ide-source-snippet-private.h"
 
-G_DEFINE_TYPE (IdeSourceSnippetParser, ide_source_snippet_parser, G_TYPE_OBJECT)
-
-struct _IdeSourceSnippetParserPrivate
+struct _IdeSourceSnippetParser
 {
+  GObject  parent_instance;
+
   GList   *snippets;
 
   gint     lineno;
@@ -39,6 +39,10 @@ struct _IdeSourceSnippetParserPrivate
   GString *cur_text;
 };
 
+
+G_DEFINE_TYPE (IdeSourceSnippetParser, ide_source_snippet_parser, G_TYPE_OBJECT)
+
+
 IdeSourceSnippetParser *
 ide_source_snippet_parser_new (void)
 {
@@ -48,37 +52,35 @@ ide_source_snippet_parser_new (void)
 static void
 ide_source_snippet_parser_flush_chunk (IdeSourceSnippetParser *parser)
 {
-  IdeSourceSnippetParserPrivate *priv = parser->priv;
   IdeSourceSnippetChunk *chunk;
 
-  if (priv->cur_text->len)
+  if (parser->cur_text->len)
     {
       chunk = ide_source_snippet_chunk_new ();
-      ide_source_snippet_chunk_set_spec (chunk, priv->cur_text->str);
-      priv->chunks = g_list_append (priv->chunks, chunk);
-      g_string_truncate (priv->cur_text, 0);
+      ide_source_snippet_chunk_set_spec (chunk, parser->cur_text->str);
+      parser->chunks = g_list_append (parser->chunks, chunk);
+      g_string_truncate (parser->cur_text, 0);
     }
 }
 
 static void
 ide_source_snippet_parser_store (IdeSourceSnippetParser *parser)
 {
-  IdeSourceSnippetParserPrivate *priv = parser->priv;
   IdeSourceSnippet *snippet;
   GList *scope_iter;
   GList *chunck_iter;
 
   ide_source_snippet_parser_flush_chunk (parser);
-  for (scope_iter = priv->scope; scope_iter; scope_iter = scope_iter->next)
+  for (scope_iter = parser->scope; scope_iter; scope_iter = scope_iter->next)
     {
-      snippet = ide_source_snippet_new (priv->cur_name, g_strdup(scope_iter->data));
-      ide_source_snippet_set_description(snippet, priv->cur_desc);
+      snippet = ide_source_snippet_new (parser->cur_name, g_strdup(scope_iter->data));
+      ide_source_snippet_set_description(snippet, parser->cur_desc);
 
-      for (chunck_iter = priv->chunks; chunck_iter; chunck_iter = chunck_iter->next)
+      for (chunck_iter = parser->chunks; chunck_iter; chunck_iter = chunck_iter->next)
         {
         #if 0
           g_printerr ("%s:  Tab: %02d  Link: %02d  Text: %s\n",
-                      parser->priv->cur_name,
+                      parser->cur_name,
                       ide_source_snippet_chunk_get_tab_stop (chunck_iter->data),
                       ide_source_snippet_chunk_get_linked_chunk (chunck_iter->data),
                       ide_source_snippet_chunk_get_text (chunck_iter->data));
@@ -86,48 +88,45 @@ ide_source_snippet_parser_store (IdeSourceSnippetParser *parser)
           ide_source_snippet_add_chunk (snippet, chunck_iter->data);
         }
 
-      priv->snippets = g_list_append (priv->snippets, snippet);
+      parser->snippets = g_list_append (parser->snippets, snippet);
     }
 }
 
 static void
 ide_source_snippet_parser_finish (IdeSourceSnippetParser *parser)
 {
-  IdeSourceSnippetParserPrivate *priv = parser->priv;
-
-  if (priv->cur_name)
+  if (parser->cur_name)
     {
       ide_source_snippet_parser_store(parser);
     }
 
-  g_clear_pointer (&priv->cur_name, g_free);
+  g_clear_pointer (&parser->cur_name, g_free);
 
-  g_string_truncate (priv->cur_text, 0);
+  g_string_truncate (parser->cur_text, 0);
 
-  g_list_foreach (priv->chunks, (GFunc) g_object_unref, NULL);
-  g_list_free (priv->chunks);
-  priv->chunks = NULL;
+  g_list_foreach (parser->chunks, (GFunc) g_object_unref, NULL);
+  g_list_free (parser->chunks);
+  parser->chunks = NULL;
 
-  g_list_free_full(priv->scope, g_free);
-  priv->scope = NULL;
+  g_list_free_full(parser->scope, g_free);
+  parser->scope = NULL;
 
-  g_free(priv->cur_desc);
-  priv->cur_desc = NULL;
+  g_free(parser->cur_desc);
+  parser->cur_desc = NULL;
 }
 
 static void
 ide_source_snippet_parser_do_part_simple (IdeSourceSnippetParser *parser,
-                                         const gchar           *line)
+                                          const gchar            *line)
 {
-  g_string_append (parser->priv->cur_text, line);
+  g_string_append (parser->cur_text, line);
 }
 
 static void
 ide_source_snippet_parser_do_part_n (IdeSourceSnippetParser *parser,
-                                    gint                   n,
-                                    const gchar           *inner)
+                                     gint                    n,
+                                     const gchar            *inner)
 {
-  IdeSourceSnippetParserPrivate *priv = parser->priv;
   IdeSourceSnippetChunk *chunk;
 
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET_PARSER (parser));
@@ -137,14 +136,13 @@ ide_source_snippet_parser_do_part_n (IdeSourceSnippetParser *parser,
   chunk = ide_source_snippet_chunk_new ();
   ide_source_snippet_chunk_set_spec (chunk, n ? inner : "");
   ide_source_snippet_chunk_set_tab_stop (chunk, n);
-  priv->chunks = g_list_append (priv->chunks, chunk);
+  parser->chunks = g_list_append (parser->chunks, chunk);
 }
 
 static void
 ide_source_snippet_parser_do_part_linked (IdeSourceSnippetParser *parser,
-                                         gint                   n)
+                                          gint                    n)
 {
-  IdeSourceSnippetParserPrivate *priv = parser->priv;
   IdeSourceSnippetChunk *chunk;
   gchar text[12];
 
@@ -160,14 +158,13 @@ ide_source_snippet_parser_do_part_linked (IdeSourceSnippetParser *parser,
       ide_source_snippet_chunk_set_spec (chunk, "");
       ide_source_snippet_chunk_set_tab_stop (chunk, 0);
     }
-  priv->chunks = g_list_append (priv->chunks, chunk);
+  parser->chunks = g_list_append (parser->chunks, chunk);
 }
 
 static void
 ide_source_snippet_parser_do_part_named (IdeSourceSnippetParser *parser,
-                                        const gchar           *name)
+                                         const gchar            *name)
 {
-  IdeSourceSnippetParserPrivate *priv = parser->priv;
   IdeSourceSnippetChunk *chunk;
   gchar *spec;
 
@@ -175,7 +172,7 @@ ide_source_snippet_parser_do_part_named (IdeSourceSnippetParser *parser,
   spec = g_strdup_printf ("$%s", name);
   ide_source_snippet_chunk_set_spec (chunk, spec);
   ide_source_snippet_chunk_set_tab_stop (chunk, -1);
-  priv->chunks = g_list_append (priv->chunks, chunk);
+  parser->chunks = g_list_append (parser->chunks, chunk);
   g_free (spec);
 }
 
@@ -281,7 +278,7 @@ parse_variable (const gchar  *line,
 
 static void
 ide_source_snippet_parser_do_part (IdeSourceSnippetParser *parser,
-                                  const gchar           *line)
+                                   const gchar            *line)
 {
   const gchar *dollar;
   gchar *str;
@@ -364,16 +361,15 @@ parse_dollar:
 
 static void
 ide_source_snippet_parser_do_snippet (IdeSourceSnippetParser *parser,
-                                     const gchar           *line)
+                                      const gchar            *line)
 {
-  parser->priv->cur_name = g_strstrip (g_strdup (&line[8]));
+  parser->cur_name = g_strstrip (g_strdup (&line[8]));
 }
 
 static void
 ide_source_snippet_parser_do_snippet_scope (IdeSourceSnippetParser *parser,
-                                           const gchar           *line)
+                                            const gchar            *line)
 {
-  IdeSourceSnippetParserPrivate *priv = parser->priv;
   gchar **scope_list;
   GList *iter;
   gint i;
@@ -384,7 +380,7 @@ ide_source_snippet_parser_do_snippet_scope (IdeSourceSnippetParser *parser,
   for (i = 0; scope_list[i]; i++)
     {
       add_scope = TRUE;
-      for (iter = priv->scope; iter; iter = iter->next)
+      for (iter = parser->scope; iter; iter = iter->next)
         {
           if (g_strcmp0(iter->data, scope_list[i]) == 0)
               add_scope = FALSE;
@@ -392,7 +388,7 @@ ide_source_snippet_parser_do_snippet_scope (IdeSourceSnippetParser *parser,
         }
 
       if (add_scope)
-        priv->scope = g_list_append(priv->scope,
+        parser->scope = g_list_append(parser->scope,
                                     g_strstrip (g_strdup (scope_list[i])));
     }
 
@@ -401,48 +397,44 @@ ide_source_snippet_parser_do_snippet_scope (IdeSourceSnippetParser *parser,
 
 static void
 ide_source_snippet_parser_do_snippet_description (IdeSourceSnippetParser *parser,
-                                                 const gchar           *line)
+                                                  const gchar            *line)
 {
-  IdeSourceSnippetParserPrivate *priv = parser->priv;
-
-  if (priv->cur_desc)
+  if (parser->cur_desc)
     {
-      g_free(priv->cur_desc);
-      priv->cur_desc = NULL;
+      g_free(parser->cur_desc);
+      parser->cur_desc = NULL;
     }
 
-  priv->cur_desc = g_strstrip (g_strdup (&line[7]));
+  parser->cur_desc = g_strstrip (g_strdup (&line[7]));
 }
 
 static void
 ide_source_snippet_parser_feed_line (IdeSourceSnippetParser *parser,
-                                    gchar                 *basename,
-                                    const gchar           *line)
+                                     gchar                  *basename,
+                                     const gchar            *line)
 {
-  IdeSourceSnippetParserPrivate *priv = parser->priv;
-
   g_assert (parser);
   g_assert (basename);
   g_assert (line);
 
-  priv->lineno++;
+  parser->lineno++;
 
   switch (*line)
     {
     case '\0':
-      if (priv->cur_name)
-        g_string_append_c (priv->cur_text, '\n');
+      if (parser->cur_name)
+        g_string_append_c (parser->cur_text, '\n');
       break;
 
     case '#':
       break;
 
     case '\t':
-      if (priv->cur_name)
+      if (parser->cur_name)
         {
           GList *iter;
           gboolean add_default_scope = TRUE;
-          for (iter = priv->scope; iter; iter = iter->next)
+          for (iter = parser->scope; iter; iter = iter->next)
             {
               if (g_strcmp0(iter->data, basename) == 0)
                 {
@@ -452,11 +444,11 @@ ide_source_snippet_parser_feed_line (IdeSourceSnippetParser *parser,
             }
 
           if (add_default_scope)
-            priv->scope = g_list_append(priv->scope,
+            parser->scope = g_list_append(parser->scope,
                                         g_strstrip (g_strdup (basename)));
 
-          if (priv->cur_text->len || priv->chunks)
-            g_string_append_c (priv->cur_text, '\n');
+          if (parser->cur_text->len || parser->chunks)
+            g_string_append_c (parser->cur_text, '\n');
           ide_source_snippet_parser_do_part (parser, line);
         }
       break;
@@ -470,18 +462,18 @@ ide_source_snippet_parser_feed_line (IdeSourceSnippetParser *parser,
         }
 
     case '-':
-      if (priv->cur_text->len || priv->chunks)
+      if (parser->cur_text->len || parser->chunks)
         {
           ide_source_snippet_parser_store(parser);
 
-          g_string_truncate (priv->cur_text, 0);
+          g_string_truncate (parser->cur_text, 0);
 
-          g_list_foreach (priv->chunks, (GFunc) g_object_unref, NULL);
-          g_list_free (priv->chunks);
-          priv->chunks = NULL;
+          g_list_foreach (parser->chunks, (GFunc) g_object_unref, NULL);
+          g_list_free (parser->chunks);
+          parser->chunks = NULL;
 
-          g_list_free_full(priv->scope, g_free);
-          priv->scope = NULL;
+          g_list_free_full(parser->scope, g_free);
+          parser->scope = NULL;
         }
 
       if (g_str_has_prefix(line, "- scope"))
@@ -498,15 +490,15 @@ ide_source_snippet_parser_feed_line (IdeSourceSnippetParser *parser,
 
     /* Fall through */
     default:
-      g_warning (_("Invalid snippet at line %d: %s"), priv->lineno, line);
+      g_warning (_("Invalid snippet at line %d: %s"), parser->lineno, line);
       break;
     }
 }
 
 gboolean
 ide_source_snippet_parser_load_from_file (IdeSourceSnippetParser *parser,
-                                         GFile                 *file,
-                                         GError               **error)
+                                          GFile                  *file,
+                                          GError                **error)
 {
   GFileInputStream *file_stream;
   GDataInputStream *data_stream;
@@ -556,37 +548,35 @@ GList *
 ide_source_snippet_parser_get_snippets (IdeSourceSnippetParser *parser)
 {
   g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET_PARSER (parser), NULL);
-  return parser->priv->snippets;
+  return parser->snippets;
 }
 
 static void
 ide_source_snippet_parser_finalize (GObject *object)
 {
-  IdeSourceSnippetParserPrivate *priv;
+  IdeSourceSnippetParser *self = IDE_SOURCE_SNIPPET_PARSER (object);
 
-  priv = IDE_SOURCE_SNIPPET_PARSER (object)->priv;
+  g_list_foreach (self->snippets, (GFunc) g_object_unref, NULL);
+  g_list_free (self->snippets);
+  self->snippets = NULL;
 
-  g_list_foreach (priv->snippets, (GFunc) g_object_unref, NULL);
-  g_list_free (priv->snippets);
-  priv->snippets = NULL;
+  g_list_foreach (self->chunks, (GFunc) g_object_unref, NULL);
+  g_list_free (self->chunks);
+  self->chunks = NULL;
 
-  g_list_foreach (priv->chunks, (GFunc) g_object_unref, NULL);
-  g_list_free (priv->chunks);
-  priv->chunks = NULL;
+  g_list_free_full(self->scope, g_free);
+  self->scope = NULL;
 
-  g_list_free_full(priv->scope, g_free);
-  priv->scope = NULL;
+  if (self->cur_text)
+    g_string_free (self->cur_text, TRUE);
 
-  if (priv->cur_text)
-    g_string_free (priv->cur_text, TRUE);
+  g_free (self->cur_name);
+  self->cur_name = NULL;
 
-  g_free (priv->cur_name);
-  priv->cur_name = NULL;
-
-  if (priv->cur_desc)
+  if (self->cur_desc)
     {
-      g_free (priv->cur_desc);
-      priv->cur_desc = NULL;
+      g_free (self->cur_desc);
+      self->cur_desc = NULL;
     }
 
   G_OBJECT_CLASS (ide_source_snippet_parser_parent_class)->finalize (object);
@@ -599,18 +589,13 @@ ide_source_snippet_parser_class_init (IdeSourceSnippetParserClass *klass)
 
   object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = ide_source_snippet_parser_finalize;
-  g_type_class_add_private (object_class,
-                            sizeof (IdeSourceSnippetParserPrivate));
 }
 
 static void
 ide_source_snippet_parser_init (IdeSourceSnippetParser *parser)
 {
-  parser->priv = G_TYPE_INSTANCE_GET_PRIVATE (parser,
-                                              IDE_TYPE_SOURCE_SNIPPET_PARSER,
-                                              IdeSourceSnippetParserPrivate);
-  parser->priv->lineno = -1;
-  parser->priv->cur_text = g_string_new (NULL);
-  parser->priv->scope = NULL;
-  parser->priv->cur_desc = NULL;
+  parser->lineno = -1;
+  parser->cur_text = g_string_new (NULL);
+  parser->scope = NULL;
+  parser->cur_desc = NULL;
 }

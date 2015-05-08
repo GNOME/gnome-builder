@@ -24,8 +24,10 @@
 #include "ide-box-theatric.h"
 #include "ide-cairo.h"
 
-struct _IdeBoxTheatricPrivate
+struct _IdeBoxTheatric
 {
+  GObject      parent_instance;
+
   GtkWidget   *target;
   GtkWidget   *toplevel;
   GdkRectangle area;
@@ -47,7 +49,7 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeBoxTheatric, ide_box_theatric, G_TYPE_OBJECT)
+G_DEFINE_TYPE (IdeBoxTheatric, ide_box_theatric, G_TYPE_OBJECT)
 
 static GParamSpec *gParamSpecs[LAST_PROP];
 
@@ -55,14 +57,12 @@ static void
 get_toplevel_rect (IdeBoxTheatric *theatric,
                    GdkRectangle  *area)
 {
-  IdeBoxTheatricPrivate *priv = theatric->priv;
-
-  gtk_widget_translate_coordinates (priv->target, priv->toplevel,
-                                    priv->area.x, priv->area.y,
+  gtk_widget_translate_coordinates (theatric->target, theatric->toplevel,
+                                    theatric->area.x, theatric->area.y,
                                     &area->x, &area->y);
 
-  area->width = priv->area.width;
-  area->height = priv->area.height;
+  area->width = theatric->area.width;
+  area->height = theatric->area.height;
 }
 
 static gboolean
@@ -70,7 +70,6 @@ on_toplevel_draw (GtkWidget     *widget,
                   cairo_t       *cr,
                   IdeBoxTheatric *theatric)
 {
-  IdeBoxTheatricPrivate *priv = theatric->priv;
   GdkRectangle area;
 
   get_toplevel_rect (theatric, &area);
@@ -82,10 +81,10 @@ on_toplevel_draw (GtkWidget     *widget,
 #endif
 
   ide_cairo_rounded_rectangle (cr, &area, 3, 3);
-  gdk_cairo_set_source_rgba (cr, &priv->background_rgba);
+  gdk_cairo_set_source_rgba (cr, &theatric->background_rgba);
   cairo_fill (cr);
 
-  priv->last_area = area;
+  theatric->last_area = area;
 
   return FALSE;
 }
@@ -94,12 +93,12 @@ static void
 ide_box_theatric_notify (GObject    *object,
                         GParamSpec *pspec)
 {
-  IdeBoxTheatricPrivate *priv = IDE_BOX_THEATRIC (object)->priv;
+  IdeBoxTheatric *self = IDE_BOX_THEATRIC (object);
 
   if (G_OBJECT_CLASS (ide_box_theatric_parent_class)->notify)
     G_OBJECT_CLASS (ide_box_theatric_parent_class)->notify (object, pspec);
 
-  if (priv->target && priv->toplevel)
+  if (self->target && self->toplevel)
     {
       GdkWindow *window;
       GdkRectangle area;
@@ -111,9 +110,9 @@ ide_box_theatric_notify (GObject    *object,
                area.x, area.y, area.width, area.height);
 #endif
 
-      window = gtk_widget_get_window (priv->toplevel);
+      window = gtk_widget_get_window (self->toplevel);
 
-      gdk_window_invalidate_rect (window, &priv->last_area, TRUE);
+      gdk_window_invalidate_rect (window, &self->last_area, TRUE);
       gdk_window_invalidate_rect (window, &area, TRUE);
     }
 }
@@ -121,18 +120,18 @@ ide_box_theatric_notify (GObject    *object,
 static void
 ide_box_theatric_dispose (GObject *object)
 {
-  IdeBoxTheatricPrivate *priv =  IDE_BOX_THEATRIC (object)->priv;
+  IdeBoxTheatric *self =  IDE_BOX_THEATRIC (object);
 
-  if (priv->target)
+  if (self->target)
     {
-      if (priv->draw_handler && priv->toplevel)
+      if (self->draw_handler && self->toplevel)
         {
-          g_signal_handler_disconnect (priv->toplevel, priv->draw_handler);
-          priv->draw_handler = 0;
+          g_signal_handler_disconnect (self->toplevel, self->draw_handler);
+          self->draw_handler = 0;
         }
-      g_object_remove_weak_pointer (G_OBJECT (priv->target),
-                                    (gpointer *) &priv->target);
-      priv->target = NULL;
+      g_object_remove_weak_pointer (G_OBJECT (self->target),
+                                    (gpointer *) &self->target);
+      self->target = NULL;
     }
 
   G_OBJECT_CLASS (ide_box_theatric_parent_class)->dispose (object);
@@ -140,41 +139,41 @@ ide_box_theatric_dispose (GObject *object)
 
 static void
 ide_box_theatric_get_property (GObject    *object,
-                              guint       prop_id,
-                              GValue     *value,
-                              GParamSpec *pspec)
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
 {
   IdeBoxTheatric *theatric = IDE_BOX_THEATRIC (object);
 
   switch (prop_id)
     {
     case PROP_ALPHA:
-      g_value_set_double (value, theatric->priv->background_rgba.alpha);
+      g_value_set_double (value, theatric->background_rgba.alpha);
       break;
 
     case PROP_BACKGROUND:
       g_value_take_string (value,
-                           gdk_rgba_to_string (&theatric->priv->background_rgba));
+                           gdk_rgba_to_string (&theatric->background_rgba));
       break;
 
     case PROP_HEIGHT:
-      g_value_set_int (value, theatric->priv->area.height);
+      g_value_set_int (value, theatric->area.height);
       break;
 
     case PROP_TARGET:
-      g_value_set_object (value, theatric->priv->target);
+      g_value_set_object (value, theatric->target);
       break;
 
     case PROP_WIDTH:
-      g_value_set_int (value, theatric->priv->area.width);
+      g_value_set_int (value, theatric->area.width);
       break;
 
     case PROP_X:
-      g_value_set_int (value, theatric->priv->area.x);
+      g_value_set_int (value, theatric->area.x);
       break;
 
     case PROP_Y:
-      g_value_set_int (value, theatric->priv->area.y);
+      g_value_set_int (value, theatric->area.y);
       break;
 
     default:
@@ -193,46 +192,45 @@ ide_box_theatric_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ALPHA:
-      theatric->priv->background_rgba.alpha = g_value_get_double (value);
+      theatric->background_rgba.alpha = g_value_get_double (value);
       break;
 
     case PROP_BACKGROUND:
       {
-        gdouble old_alpha = theatric->priv->background_rgba.alpha;
+        gdouble old_alpha = theatric->background_rgba.alpha;
 
-        gdk_rgba_parse (&theatric->priv->background_rgba,
+        gdk_rgba_parse (&theatric->background_rgba,
                         g_value_get_string (value));
-        theatric->priv->background_rgba.alpha = old_alpha;
+        theatric->background_rgba.alpha = old_alpha;
       }
       break;
 
     case PROP_HEIGHT:
-      theatric->priv->area.height = g_value_get_int (value);
+      theatric->area.height = g_value_get_int (value);
       break;
 
     case PROP_TARGET:
-      theatric->priv->target = g_value_get_object (value);
-      theatric->priv->toplevel =
-        gtk_widget_get_toplevel (theatric->priv->target);
-      g_object_add_weak_pointer (G_OBJECT (theatric->priv->target),
-                                 (gpointer *) &theatric->priv->target);
-      theatric->priv->draw_handler =
-        g_signal_connect_after (theatric->priv->toplevel,
+      theatric->target = g_value_get_object (value);
+      theatric->toplevel = gtk_widget_get_toplevel (theatric->target);
+      g_object_add_weak_pointer (G_OBJECT (theatric->target),
+                                 (gpointer *) &theatric->target);
+      theatric->draw_handler =
+        g_signal_connect_after (theatric->toplevel,
                                 "draw",
                                 G_CALLBACK (on_toplevel_draw),
                                 theatric);
       break;
 
     case PROP_WIDTH:
-      theatric->priv->area.width = g_value_get_int (value);
+      theatric->area.width = g_value_get_int (value);
       break;
 
     case PROP_X:
-      theatric->priv->area.x = g_value_get_int (value);
+      theatric->area.x = g_value_get_int (value);
       break;
 
     case PROP_Y:
-      theatric->priv->area.y = g_value_get_int (value);
+      theatric->area.y = g_value_get_int (value);
       break;
 
     default:
@@ -320,5 +318,4 @@ ide_box_theatric_class_init (IdeBoxTheatricClass *klass)
 static void
 ide_box_theatric_init (IdeBoxTheatric *theatric)
 {
-  theatric->priv = ide_box_theatric_get_instance_private (theatric);
 }

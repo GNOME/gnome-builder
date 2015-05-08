@@ -25,18 +25,11 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CLANG_COMPLETION_ITEM            (ide_clang_completion_item_get_type())
-#define IDE_CLANG_COMPLETION_ITEM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_CLANG_COMPLETION_ITEM, IdeClangCompletionItem))
-#define IDE_CLANG_COMPLETION_ITEM_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_CLANG_COMPLETION_ITEM, IdeClangCompletionItem const))
-#define IDE_CLANG_COMPLETION_ITEM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_CLANG_COMPLETION_ITEM, IdeClangCompletionItemClass))
-#define IDE_IS_CLANG_COMPLETION_ITEM(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_CLANG_COMPLETION_ITEM))
-#define IDE_IS_CLANG_COMPLETION_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_CLANG_COMPLETION_ITEM))
-#define IDE_CLANG_COMPLETION_ITEM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_CLANG_COMPLETION_ITEM, IdeClangCompletionItemClass))
+#define IDE_TYPE_CLANG_COMPLETION_ITEM (ide_clang_completion_item_get_type())
 
-typedef struct _IdeClangCompletionItem      IdeClangCompletionItem;
-typedef struct _IdeClangCompletionItemClass IdeClangCompletionItemClass;
+G_DECLARE_FINAL_TYPE (IdeClangCompletionItem, ide_clang_completion_item,
+                     IDE, CLANG_COMPLETION_ITEM, GObject)
 
-GType             ide_clang_completion_item_get_type          (void);
 IdeSourceSnippet *ide_clang_completion_item_get_snippet       (IdeClangCompletionItem *self);
 const gchar      *ide_clang_completion_item_get_typed_text    (IdeClangCompletionItem *self);
 guint             ide_clang_completion_item_get_priority      (IdeClangCompletionItem *self);

@@ -25,30 +25,10 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SOURCE_SNIPPETS            (ide_source_snippets_get_type())
-#define IDE_SOURCE_SNIPPETS(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SOURCE_SNIPPETS, IdeSourceSnippets))
-#define IDE_SOURCE_SNIPPETS_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SOURCE_SNIPPETS, IdeSourceSnippets const))
-#define IDE_SOURCE_SNIPPETS_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_SOURCE_SNIPPETS, IdeSourceSnippetsClass))
-#define IDE_IS_SOURCE_SNIPPETS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_SOURCE_SNIPPETS))
-#define IDE_IS_SOURCE_SNIPPETS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_SOURCE_SNIPPETS))
-#define IDE_SOURCE_SNIPPETS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_SOURCE_SNIPPETS, IdeSourceSnippetsClass))
+#define IDE_TYPE_SOURCE_SNIPPETS (ide_source_snippets_get_type())
 
-typedef struct _IdeSourceSnippets        IdeSourceSnippets;
-typedef struct _IdeSourceSnippetsClass   IdeSourceSnippetsClass;
-typedef struct _IdeSourceSnippetsPrivate IdeSourceSnippetsPrivate;
-
-struct _IdeSourceSnippets
-{
-  GObject parent;
-
-  /*< private >*/
-  IdeSourceSnippetsPrivate *priv;
-};
-
-struct _IdeSourceSnippetsClass
-{
-  GObjectClass parent_class;
-};
+G_DECLARE_FINAL_TYPE (IdeSourceSnippets, ide_source_snippets,
+                      IDE, SOURCE_SNIPPETS, GObject)
 
 void              ide_source_snippets_add            (IdeSourceSnippets *snippets,
                                                      IdeSourceSnippet  *snippet);
@@ -56,7 +36,6 @@ void              ide_source_snippets_clear          (IdeSourceSnippets *snippet
 void              ide_source_snippets_merge          (IdeSourceSnippets *snippets,
                                                      IdeSourceSnippets *other);
 IdeSourceSnippets *ide_source_snippets_new            (void);
-GType             ide_source_snippets_get_type       (void);
 void              ide_source_snippets_foreach        (IdeSourceSnippets *snippets,
                                                      const gchar      *prefix,
                                                      GFunc             foreach_func,

@@ -23,18 +23,10 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CLANG_COMPLETION_PROVIDER            (ide_clang_completion_provider_get_type())
-#define IDE_CLANG_COMPLETION_PROVIDER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_CLANG_COMPLETION_PROVIDER, IdeClangCompletionProvider))
-#define IDE_CLANG_COMPLETION_PROVIDER_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_CLANG_COMPLETION_PROVIDER, IdeClangCompletionProvider const))
-#define IDE_CLANG_COMPLETION_PROVIDER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_CLANG_COMPLETION_PROVIDER, IdeClangCompletionProviderClass))
-#define IDE_IS_CLANG_COMPLETION_PROVIDER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_CLANG_COMPLETION_PROVIDER))
-#define IDE_IS_CLANG_COMPLETION_PROVIDER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_CLANG_COMPLETION_PROVIDER))
-#define IDE_CLANG_COMPLETION_PROVIDER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_CLANG_COMPLETION_PROVIDER, IdeClangCompletionProviderClass))
+#define IDE_TYPE_CLANG_COMPLETION_PROVIDER (ide_clang_completion_provider_get_type())
 
-typedef struct _IdeClangCompletionProvider        IdeClangCompletionProvider;
-typedef struct _IdeClangCompletionProviderClass   IdeClangCompletionProviderClass;
-
-GType ide_clang_completion_provider_get_type (void);
+G_DECLARE_FINAL_TYPE (IdeClangCompletionProvider, ide_clang_completion_provider,
+                      IDE, CLANG_COMPLETION_PROVIDER, GObject)
 
 G_END_DECLS
 

@@ -22,20 +22,22 @@
 #include "ide-source-snippet-completion-item.h"
 #include "ide-source-snippet-completion-provider.h"
 
-static void init_provider (GtkSourceCompletionProviderIface *iface);
-
-G_DEFINE_TYPE_EXTENDED (IdeSourceSnippetCompletionProvider,
-                        ide_source_snippet_completion_provider,
-                        G_TYPE_OBJECT,
-                        0,
-                        G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
-                                               init_provider))
-
-struct _IdeSourceSnippetCompletionProviderPrivate
+struct _IdeSourceSnippetCompletionProvider
 {
+  GObject            parent_instance;
+
   IdeSourceView     *source_view;
   IdeSourceSnippets *snippets;
 };
+
+
+static void init_provider (GtkSourceCompletionProviderIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (IdeSourceSnippetCompletionProvider,
+                        ide_source_snippet_completion_provider,
+                        G_TYPE_OBJECT,
+                        G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
+                                               init_provider))
 
 typedef struct
 {
@@ -68,7 +70,7 @@ ide_source_snippet_completion_provider_get_snippets (IdeSourceSnippetCompletionP
 {
   g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET_COMPLETION_PROVIDER (provider), NULL);
 
-  return provider->priv->snippets;
+  return provider->snippets;
 }
 
 void
@@ -77,23 +79,21 @@ ide_source_snippet_completion_provider_set_snippets (IdeSourceSnippetCompletionP
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET_COMPLETION_PROVIDER (provider));
 
-  g_clear_object (&provider->priv->snippets);
-  provider->priv->snippets = snippets ? g_object_ref (snippets) : NULL;
+  g_clear_object (&provider->snippets);
+  provider->snippets = snippets ? g_object_ref (snippets) : NULL;
   g_object_notify_by_pspec (G_OBJECT (provider), gParamSpecs[PROP_SNIPPETS]);
 }
 
 static void
 ide_source_snippet_completion_provider_finalize (GObject *object)
 {
-  IdeSourceSnippetCompletionProviderPrivate *priv;
+  IdeSourceSnippetCompletionProvider *self = IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER (object);
 
-  priv = IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER (object)->priv;
+  g_clear_object (&self->snippets);
 
-  g_clear_object (&priv->snippets);
-
-  if (priv->source_view)
-    g_object_remove_weak_pointer (G_OBJECT (priv->source_view),
-                                  (gpointer *) &priv->source_view);
+  if (self->source_view)
+    g_object_remove_weak_pointer (G_OBJECT (self->source_view),
+                                  (gpointer *) &self->source_view);
 
   G_OBJECT_CLASS (ide_source_snippet_completion_provider_parent_class)->finalize (object);
 }
@@ -109,7 +109,7 @@ ide_source_snippet_completion_provider_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_SOURCE_VIEW:
-      g_value_set_object (value, provider->priv->source_view);
+      g_value_set_object (value, provider->source_view);
       break;
 
     case PROP_SNIPPETS:
@@ -132,15 +132,15 @@ ide_source_snippet_completion_provider_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_SOURCE_VIEW:
-      if (provider->priv->source_view)
+      if (provider->source_view)
         {
-          g_object_remove_weak_pointer (G_OBJECT (provider->priv->source_view),
-                                        (gpointer *) &provider->priv->source_view);
-          provider->priv->source_view = NULL;
+          g_object_remove_weak_pointer (G_OBJECT (provider->source_view),
+                                        (gpointer *) &provider->source_view);
+          provider->source_view = NULL;
         }
-      if ((provider->priv->source_view = g_value_get_object (value)))
-        g_object_add_weak_pointer (G_OBJECT (provider->priv->source_view),
-                                   (gpointer *) &provider->priv->source_view);
+      if ((provider->source_view = g_value_get_object (value)))
+        g_object_add_weak_pointer (G_OBJECT (provider->source_view),
+                                   (gpointer *) &provider->source_view);
       break;
 
     case PROP_SNIPPETS:
@@ -161,7 +161,6 @@ ide_source_snippet_completion_provider_class_init (IdeSourceSnippetCompletionPro
   object_class->finalize = ide_source_snippet_completion_provider_finalize;
   object_class->get_property = ide_source_snippet_completion_provider_get_property;
   object_class->set_property = ide_source_snippet_completion_provider_set_property;
-  g_type_class_add_private (object_class, sizeof (IdeSourceSnippetCompletionProviderPrivate));
 
   gParamSpecs[PROP_SOURCE_VIEW] =
     g_param_spec_object ("source-view",
@@ -183,10 +182,6 @@ ide_source_snippet_completion_provider_class_init (IdeSourceSnippetCompletionPro
 static void
 ide_source_snippet_completion_provider_init (IdeSourceSnippetCompletionProvider *provider)
 {
-  provider->priv =
-    G_TYPE_INSTANCE_GET_PRIVATE (provider,
-                                 IDE_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER,
-                                 IdeSourceSnippetCompletionProviderPrivate);
 }
 
 static gboolean
@@ -281,13 +276,11 @@ static void
 provider_populate (GtkSourceCompletionProvider *provider,
                    GtkSourceCompletionContext  *context)
 {
-  IdeSourceSnippetCompletionProviderPrivate *priv;
   SearchState state = { 0 };
   GtkTextIter iter;
+  IdeSourceSnippetCompletionProvider *self = IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER (provider);
 
-  priv = IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER (provider)->priv;
-
-  if (!priv->snippets)
+  if (!self->snippets)
     {
       gtk_source_completion_context_add_proposals (context, provider, NULL, TRUE);
       return;
@@ -300,7 +293,7 @@ provider_populate (GtkSourceCompletionProvider *provider,
   state.word = get_word (provider, &iter);
 
   if (state.word && *state.word)
-    ide_source_snippets_foreach (priv->snippets, state.word, foreach_snippet,
+    ide_source_snippets_foreach (self->snippets, state.word, foreach_snippet,
                                 &state);
 
   /*
@@ -319,16 +312,14 @@ provider_activate_proposal (GtkSourceCompletionProvider *provider,
                             GtkSourceCompletionProposal *proposal,
                             GtkTextIter                 *iter)
 {
-  IdeSourceSnippetCompletionProviderPrivate *priv;
   IdeSourceSnippetCompletionItem *item;
   IdeSourceSnippet *snippet;
   GtkTextBuffer *buffer;
   GtkTextIter end;
   gchar *word;
+  IdeSourceSnippetCompletionProvider *self = IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER (provider);
 
-  priv = IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER (provider)->priv;
-
-  if (priv->source_view)
+  if (self->source_view)
     {
       item = IDE_SOURCE_SNIPPET_COMPLETION_ITEM (proposal);
       snippet = ide_source_snippet_completion_item_get_snippet (item);
@@ -352,7 +343,7 @@ provider_activate_proposal (GtkSourceCompletionProvider *provider,
            * Now push snippet onto the snippet stack of the view.
            */
           snippet = ide_source_snippet_copy (snippet);
-          ide_source_view_push_snippet (IDE_SOURCE_VIEW (priv->source_view),
+          ide_source_view_push_snippet (IDE_SOURCE_VIEW (self->source_view),
                                        snippet);
           g_object_unref (snippet);
 

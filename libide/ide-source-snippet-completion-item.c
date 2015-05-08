@@ -21,8 +21,10 @@
 
 #include "ide-source-snippet-completion-item.h"
 
-struct _IdeSourceSnippetCompletionItemPrivate
+struct _IdeSourceSnippetCompletionItem
 {
+  GObject           parent_instance;
+
   IdeSourceSnippet *snippet;
 };
 
@@ -36,13 +38,11 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void init_proposal_iface (GtkSourceCompletionProposalIface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeSourceSnippetCompletionItem,
+G_DEFINE_TYPE_WITH_CODE (IdeSourceSnippetCompletionItem,
                         ide_source_snippet_completion_item,
                         G_TYPE_OBJECT,
-                        0,
                         G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL,
-                                               init_proposal_iface)
-                        G_ADD_PRIVATE (IdeSourceSnippetCompletionItem))
+                                               init_proposal_iface))
 
 GtkSourceCompletionProposal *
 ide_source_snippet_completion_item_new (IdeSourceSnippet *snippet)
@@ -58,7 +58,7 @@ IdeSourceSnippet *
 ide_source_snippet_completion_item_get_snippet (IdeSourceSnippetCompletionItem *item)
 {
   g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET_COMPLETION_ITEM (item), NULL);
-  return item->priv->snippet;
+  return item->snippet;
 }
 
 void
@@ -66,18 +66,16 @@ ide_source_snippet_completion_item_set_snippet (IdeSourceSnippetCompletionItem *
                                                IdeSourceSnippet               *snippet)
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET_COMPLETION_ITEM (item));
-  g_clear_object (&item->priv->snippet);
-  item->priv->snippet = g_object_ref (snippet);
+  g_clear_object (&item->snippet);
+  item->snippet = g_object_ref (snippet);
 }
 
 static void
 ide_source_snippet_completion_item_finalize (GObject *object)
 {
-  IdeSourceSnippetCompletionItemPrivate *priv;
+  IdeSourceSnippetCompletionItem *self = IDE_SOURCE_SNIPPET_COMPLETION_ITEM (object);
 
-  priv = IDE_SOURCE_SNIPPET_COMPLETION_ITEM (object)->priv;
-
-  g_clear_object (&priv->snippet);
+  g_clear_object (&self->snippet);
 
   G_OBJECT_CLASS (ide_source_snippet_completion_item_parent_class)->finalize (object);
 }
@@ -142,7 +140,6 @@ ide_source_snippet_completion_item_class_init (IdeSourceSnippetCompletionItemCla
 static void
 ide_source_snippet_completion_item_init (IdeSourceSnippetCompletionItem *item)
 {
-  item->priv = ide_source_snippet_completion_item_get_instance_private (item);
 }
 
 static gchar *
@@ -152,10 +149,10 @@ get_label (GtkSourceCompletionProposal *p)
   const gchar *trigger = NULL;
   const gchar *description = NULL;
 
-  if (item->priv->snippet)
+  if (item->snippet)
     {
-      trigger = ide_source_snippet_get_trigger (item->priv->snippet);
-      description = ide_source_snippet_get_description (item->priv->snippet);
+      trigger = ide_source_snippet_get_trigger (item->snippet);
+      description = ide_source_snippet_get_description (item->snippet);
     }
 
   if (description) 

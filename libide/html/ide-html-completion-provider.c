@@ -40,14 +40,18 @@ typedef struct
   gint mode;
 } SearchState;
 
+struct _IdeHtmlCompletionProvider
+{
+  GObject parent_instance;
+};
+
 static void completion_provider_init (GtkSourceCompletionProviderIface *);
 
-G_DEFINE_TYPE_EXTENDED (IdeHtmlCompletionProvider,
-                        ide_html_completion_provider,
-                        G_TYPE_OBJECT,
-                        0,
-                        G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
-                                               completion_provider_init))
+G_DEFINE_TYPE_WITH_CODE (IdeHtmlCompletionProvider,
+                         ide_html_completion_provider,
+                         G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
+                                                completion_provider_init))
 
 static gchar *
 get_word (GtkSourceCompletionContext *context)

@@ -25,16 +25,18 @@
 #include "ide-source-view.h"
 #include "ide-source-view-mode.h"
 
-typedef struct
+struct _IdeSourceViewMode
 {
+  GtkWidget              parent_instance;
+
   GtkWidget             *view;
   char                  *name;
   char                  *display_name;
   gchar                 *default_mode;
   IdeSourceViewModeType  type;
-} IdeSourceViewModePrivate;
+};
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceViewMode, ide_source_view_mode, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE (IdeSourceViewMode, ide_source_view_mode, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,
@@ -92,21 +94,17 @@ get_string_param (IdeSourceViewMode *self,
 const gchar *
 ide_source_view_mode_get_default_mode (IdeSourceViewMode *self)
 {
-  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (self);
-
   /*
    * instead of switching back to "default" mode, use this mode instead
    * if no other mode is specified.
    */
-  return priv->default_mode;
+  return self->default_mode;
 }
 
 const gchar *
 ide_source_view_mode_get_display_name (IdeSourceViewMode *self)
 {
-  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (self);
-
-  return priv->display_name;
+  return self->display_name;
 }
 
 gboolean
@@ -149,14 +147,13 @@ ide_source_view_mode_get_keep_mark_on_char (IdeSourceViewMode *self)
 static void
 ide_source_view_mode_finalize (GObject *object)
 {
-  IdeSourceViewMode *self = (IdeSourceViewMode *)object;
-  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (self);
+  IdeSourceViewMode *self = IDE_SOURCE_VIEW_MODE (object);
 
-  g_clear_object (&priv->view);
-  g_clear_pointer (&priv->name, g_free);
-  g_clear_pointer (&priv->default_mode, g_free);
-  g_clear_pointer (&priv->display_name, g_free);
-  priv->type = 0;
+  g_clear_object (&self->view);
+  g_clear_pointer (&self->name, g_free);
+  g_clear_pointer (&self->default_mode, g_free);
+  g_clear_pointer (&self->display_name, g_free);
+  self->type = 0;
 
   G_OBJECT_CLASS (ide_source_view_mode_parent_class)->finalize (object);
 }
@@ -169,16 +166,12 @@ proxy_closure_marshal (GClosure     *closure,
                        gpointer      invocation_hint,
                        gpointer      marshal_data)
 {
-  IdeSourceViewMode *mode;
-  IdeSourceViewModePrivate *priv;
   GValue *param_copy;
-
-  mode = IDE_SOURCE_VIEW_MODE (g_value_get_object (&param_values[0]));
-  priv = ide_source_view_mode_get_instance_private (mode);
+  IdeSourceViewMode *mode = IDE_SOURCE_VIEW_MODE (g_value_get_object (&param_values[0]));
 
   param_copy = g_memdup (param_values, sizeof (GValue) * n_param_values);
 
-  param_copy[0].data[0].v_pointer = priv->view;
+  param_copy[0].data[0].v_pointer = mode->view;
   g_signal_emitv (param_copy,
                   GPOINTER_TO_INT (closure->data),
                   0,
@@ -218,11 +211,9 @@ proxy_all_action_signals (GType type)
 const gchar *
 ide_source_view_mode_get_name (IdeSourceViewMode *mode)
 {
-  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (mode);
-
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW_MODE (mode), NULL);
 
-  return priv->name;
+  return mode->name;
 }
 
 static void
@@ -408,7 +399,6 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
                                 GdkEventKey       *event,
                                 gboolean          *remove)
 {
-  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (mode);
   GtkStyleContext *context;
   gboolean suppress_unbound;
   gboolean handled;
@@ -423,13 +413,13 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
 
   g_object_ref (context);
   gtk_style_context_save (context);
-  gtk_style_context_add_class (context, priv->name);
+  gtk_style_context_add_class (context, mode->name);
   handled = gtk_bindings_activate_event (G_OBJECT (mode), event);
   gtk_style_context_restore (context);
   g_object_unref (context);
 
   *remove = FALSE;
-  switch (priv->type)
+  switch (mode->type)
     {
     case IDE_SOURCE_VIEW_MODE_TYPE_TRANSIENT:
       if (handled)
@@ -441,7 +431,7 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
           if (!is_modifier_key (event))
             {
               if (!toplevel_is_offscreen (event->window))
-                gtk_widget_error_bell (priv->view);
+                gtk_widget_error_bell (mode->view);
               handled = TRUE;
               *remove = TRUE;
             }
@@ -457,7 +447,7 @@ _ide_source_view_mode_do_event (IdeSourceViewMode *mode,
               gdk_window_beep (event->window);
 
             /* cancel any inflight macros */
-            g_signal_emit_by_name (priv->view, "end-macro");
+            g_signal_emit_by_name (mode->view, "end-macro");
 
             handled = TRUE;
           }
@@ -480,32 +470,30 @@ _ide_source_view_mode_new (GtkWidget             *view,
                            const char            *name,
                            IdeSourceViewModeType  type)
 {
-  IdeSourceViewModePrivate *priv;
   IdeSourceViewMode *mode;
 
   mode = g_object_new (IDE_TYPE_SOURCE_VIEW_MODE, NULL);
-  priv = ide_source_view_mode_get_instance_private (mode);
 
-  priv->view = g_object_ref (view);
-  priv->name = g_strdup (name);
-  priv->type = type;
+  mode->view = g_object_ref (view);
+  mode->name = g_strdup (name);
+  mode->type = type;
 
-  if (priv->name != NULL)
+  if (mode->name != NULL)
     {
       GtkStyleContext *context;
 
       context = gtk_widget_get_style_context (GTK_WIDGET (mode));
-      gtk_style_context_add_class (context, priv->name);
+      gtk_style_context_add_class (context, mode->name);
     }
 
-  priv->default_mode = get_string_param (mode, "default-mode");
-  priv->display_name = get_string_param (mode, "display-name");
+  mode->default_mode = get_string_param (mode, "default-mode");
+  mode->display_name = get_string_param (mode, "display-name");
 
   IDE_TRACE_MSG ("supress_unbound = %d", ide_source_view_mode_get_suppress_unbound (mode));
   IDE_TRACE_MSG ("block_cursor = %d", ide_source_view_mode_get_block_cursor (mode));
-  IDE_TRACE_MSG ("type = %d", (int)priv->type);
-  IDE_TRACE_MSG ("default_mode = %s", priv->default_mode ?: "(null)");
-  IDE_TRACE_MSG ("display_name = %s", priv->display_name ?: "(null)");
+  IDE_TRACE_MSG ("type = %d", (int)mode->type);
+  IDE_TRACE_MSG ("default_mode = %s", mode->default_mode ?: "(null)");
+  IDE_TRACE_MSG ("display_name = %s", mode->display_name ?: "(null)");
 
   return g_object_ref_sink (mode);
 }
@@ -513,7 +501,6 @@ _ide_source_view_mode_new (GtkWidget             *view,
 IdeSourceViewModeType
 ide_source_view_mode_get_mode_type (IdeSourceViewMode *self)
 {
-  IdeSourceViewModePrivate *priv = ide_source_view_mode_get_instance_private (self);
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW_MODE (self), 0);
-  return priv->type;
+  return self->type;
 }

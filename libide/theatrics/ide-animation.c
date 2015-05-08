@@ -26,8 +26,6 @@
 
 #define FALLBACK_FRAME_RATE 60
 
-G_DEFINE_TYPE (IdeAnimation, ide_animation, G_TYPE_INITIALLY_UNOWNED)
-
 typedef gdouble (*AlphaFunc) (gdouble       offset);
 typedef void    (*TweenFunc) (const GValue *begin,
                               const GValue *end,
@@ -43,17 +41,20 @@ typedef struct
 } Tween;
 
 
-struct _IdeAnimationPrivate
+struct _IdeAnimation
 {
-  gpointer       target;         /* Target object to animate */
-  guint64        begin_msec;     /* Time in which animation started */
-  guint          duration_msec;  /* Duration of animation */
-  guint          mode;           /* Tween mode */
-  guint          tween_handler;  /* GSource performing tweens */
-  GArray        *tweens;         /* Array of tweens to perform */
-  GdkFrameClock *frame_clock;     /* An optional frame-clock for sync. */
+  GInitiallyUnowned  parent_instance;
+
+  gpointer           target;         /* Target object to animate */
+  guint64            begin_msec;     /* Time in which animation started */
+  guint              duration_msec;  /* Duration of animation */
+  guint              mode;           /* Tween mode */
+  guint              tween_handler;  /* GSource performing tweens */
+  GArray            *tweens;         /* Array of tweens to perform */
+  GdkFrameClock     *frame_clock;     /* An optional frame-clock for sync. */
 };
 
+G_DEFINE_TYPE (IdeAnimation, ide_animation, G_TYPE_INITIALLY_UNOWNED)
 
 enum {
   PROP_0,
@@ -222,30 +223,27 @@ ide_animation_alpha_ease_in_out_quad (gdouble offset)
 static void
 ide_animation_load_begin_values (IdeAnimation *animation)
 {
-  IdeAnimationPrivate *priv;
   GtkContainer *container;
   Tween *tween;
   gint i;
 
   g_return_if_fail (IDE_IS_ANIMATION (animation));
 
-  priv = animation->priv;
-
-  for (i = 0; i < priv->tweens->len; i++)
+  for (i = 0; i < animation->tweens->len; i++)
     {
-      tween = &g_array_index (priv->tweens, Tween, i);
+      tween = &g_array_index (animation->tweens, Tween, i);
       g_value_reset (&tween->begin);
       if (tween->is_child)
         {
-          container = GTK_CONTAINER (gtk_widget_get_parent (priv->target));
+          container = GTK_CONTAINER (gtk_widget_get_parent (animation->target));
           gtk_container_child_get_property (container,
-                                            priv->target,
+                                            animation->target,
                                             tween->pspec->name,
                                             &tween->begin);
         }
       else
         {
-          g_object_get_property (priv->target,
+          g_object_get_property (animation->target,
                                  tween->pspec->name,
                                  &tween->begin);
         }
@@ -266,17 +264,14 @@ ide_animation_load_begin_values (IdeAnimation *animation)
 static void
 ide_animation_unload_begin_values (IdeAnimation *animation)
 {
-  IdeAnimationPrivate *priv;
   Tween *tween;
   gint i;
 
   g_return_if_fail (IDE_IS_ANIMATION (animation));
 
-  priv = animation->priv;
-
-  for (i = 0; i < priv->tweens->len; i++)
+  for (i = 0; i < animation->tweens->len; i++)
     {
-      tween = &g_array_index (priv->tweens, Tween, i);
+      tween = &g_array_index (animation->tweens, Tween, i);
       g_value_reset (&tween->begin);
     }
 }
@@ -296,23 +291,20 @@ ide_animation_unload_begin_values (IdeAnimation *animation)
 static gdouble
 ide_animation_get_offset (IdeAnimation *animation)
 {
-  IdeAnimationPrivate *priv;
   GdkFrameClock *frame_clock;
   gdouble offset;
   gint64 frame_msec;
 
   g_return_val_if_fail (IDE_IS_ANIMATION (animation), 0.0);
 
-  priv = animation->priv;
-
-  if (GTK_IS_WIDGET (priv->target) &&
-      (frame_clock = gtk_widget_get_frame_clock (priv->target)))
+  if (GTK_IS_WIDGET (animation->target) &&
+      (frame_clock = gtk_widget_get_frame_clock (animation->target)))
     frame_msec = gdk_frame_clock_get_frame_time (frame_clock) / 1000UL;
   else
     frame_msec = g_get_monotonic_time () / 1000UL;
 
-  offset = (gdouble) (frame_msec - priv->begin_msec) /
-           (gdouble) priv->duration_msec;
+  offset = (gdouble) (frame_msec - animation->begin_msec) /
+           (gdouble) animation->duration_msec;
 
   return CLAMP (offset, 0.0, 1.0);
 }
@@ -424,12 +416,10 @@ static void
 ide_animation_set_frame_clock (IdeAnimation  *animation,
                                GdkFrameClock *frame_clock)
 {
-  IdeAnimationPrivate *priv = animation->priv;
-
-  if (priv->frame_clock != frame_clock)
+  if (animation->frame_clock != frame_clock)
     {
-      g_clear_object (&priv->frame_clock);
-      priv->frame_clock = frame_clock ? g_object_ref (frame_clock) : NULL;
+      g_clear_object (&animation->frame_clock);
+      animation->frame_clock = frame_clock ? g_object_ref (frame_clock) : NULL;
     }
 }
 
@@ -437,15 +427,13 @@ static void
 ide_animation_set_target (IdeAnimation *animation,
                           gpointer      target)
 {
-  IdeAnimationPrivate *priv = animation->priv;
+  g_assert (!animation->target);
 
-  g_assert (!priv->target);
+  animation->target = g_object_ref (target);
 
-  priv->target = g_object_ref (target);
-
-  if (GTK_IS_WIDGET (priv->target))
+  if (GTK_IS_WIDGET (animation->target))
     ide_animation_set_frame_clock (animation,
-                                  gtk_widget_get_frame_clock (priv->target));
+                                  gtk_widget_get_frame_clock (animation->target));
 }
 
 
@@ -461,7 +449,6 @@ ide_animation_set_target (IdeAnimation *animation,
 static gboolean
 ide_animation_tick (IdeAnimation *animation)
 {
-  IdeAnimationPrivate *priv;
   gdouble offset;
   gdouble alpha;
   GValue value = { 0 };
@@ -470,30 +457,28 @@ ide_animation_tick (IdeAnimation *animation)
 
   g_return_val_if_fail (IDE_IS_ANIMATION (animation), FALSE);
 
-  priv = animation->priv;
-
   offset = ide_animation_get_offset (animation);
-  alpha = gAlphaFuncs[priv->mode](offset);
+  alpha = gAlphaFuncs[animation->mode](offset);
 
   /*
    * Update property values.
    */
-  for (i = 0; i < priv->tweens->len; i++)
+  for (i = 0; i < animation->tweens->len; i++)
     {
-      tween = &g_array_index (priv->tweens, Tween, i);
+      tween = &g_array_index (animation->tweens, Tween, i);
       g_value_init (&value, tween->pspec->value_type);
       ide_animation_get_value_at_offset (animation, alpha, tween, &value);
       if (!tween->is_child)
         {
           ide_animation_update_property (animation,
-                                        priv->target,
+                                        animation->target,
                                         tween,
                                         &value);
         }
       else
         {
           ide_animation_update_child_property (animation,
-                                              priv->target,
+                                              animation->target,
                                               tween,
                                               &value);
         }
@@ -509,11 +494,11 @@ ide_animation_tick (IdeAnimation *animation)
    * Flush any outstanding events to the graphics server (in the case of X).
    */
 #if !GTK_CHECK_VERSION (3, 13, 0)
-  if (GTK_IS_WIDGET (priv->target))
+  if (GTK_IS_WIDGET (animation->target))
     {
       GdkWindow *window;
 
-      if ((window = gtk_widget_get_window (GTK_WIDGET (priv->target))))
+      if ((window = gtk_widget_get_window (GTK_WIDGET (animation->target))))
         gdk_window_flush (window);
     }
 #endif
@@ -553,7 +538,7 @@ ide_animation_widget_tick_cb (GdkFrameClock *frame_clock,
   g_assert (GDK_IS_FRAME_CLOCK (frame_clock));
   g_assert (IDE_IS_ANIMATION (animation));
 
-  if (animation->priv->tween_handler)
+  if (animation->tween_handler)
     if (!(ret = ide_animation_tick (animation)))
       ide_animation_stop (animation);
 
@@ -574,30 +559,26 @@ ide_animation_widget_tick_cb (GdkFrameClock *frame_clock,
 void
 ide_animation_start (IdeAnimation *animation)
 {
-  IdeAnimationPrivate *priv;
-
   g_return_if_fail (IDE_IS_ANIMATION (animation));
-  g_return_if_fail (!animation->priv->tween_handler);
-
-  priv = animation->priv;
+  g_return_if_fail (!animation->tween_handler);
 
   g_object_ref_sink (animation);
   ide_animation_load_begin_values (animation);
 
-  if (priv->frame_clock)
+  if (animation->frame_clock)
     {
-      priv->begin_msec = gdk_frame_clock_get_frame_time (priv->frame_clock) / 1000UL;
-      priv->tween_handler =
-        g_signal_connect (priv->frame_clock,
+      animation->begin_msec = gdk_frame_clock_get_frame_time (animation->frame_clock) / 1000UL;
+      animation->tween_handler =
+        g_signal_connect (animation->frame_clock,
                           "update",
                           G_CALLBACK (ide_animation_widget_tick_cb),
                           animation);
-      gdk_frame_clock_begin_updating (priv->frame_clock);
+      gdk_frame_clock_begin_updating (animation->frame_clock);
     }
   else
     {
-      priv->begin_msec = g_get_monotonic_time () / 1000UL;
-      priv->tween_handler = ide_frame_source_add (FALLBACK_FRAME_RATE,
+      animation->begin_msec = g_get_monotonic_time () / 1000UL;
+      animation->tween_handler = ide_frame_source_add (FALLBACK_FRAME_RATE,
                                                  ide_animation_timeout_cb,
                                                  animation);
     }
@@ -617,24 +598,20 @@ ide_animation_start (IdeAnimation *animation)
 void
 ide_animation_stop (IdeAnimation *animation)
 {
-  IdeAnimationPrivate *priv;
-
   g_return_if_fail (IDE_IS_ANIMATION (animation));
 
-  priv = animation->priv;
-
-  if (priv->tween_handler)
+  if (animation->tween_handler)
     {
-      if (priv->frame_clock)
+      if (animation->frame_clock)
         {
-          gdk_frame_clock_end_updating (priv->frame_clock);
-          g_signal_handler_disconnect (priv->frame_clock, priv->tween_handler);
-          priv->tween_handler = 0;
+          gdk_frame_clock_end_updating (animation->frame_clock);
+          g_signal_handler_disconnect (animation->frame_clock, animation->tween_handler);
+          animation->tween_handler = 0;
         }
       else
         {
-          g_source_remove (priv->tween_handler);
-          priv->tween_handler = 0;
+          g_source_remove (animation->tween_handler);
+          animation->tween_handler = 0;
         }
       ide_animation_unload_begin_values (animation);
       g_object_unref (animation);
@@ -659,7 +636,6 @@ ide_animation_add_property (IdeAnimation *animation,
                             GParamSpec   *pspec,
                             const GValue *value)
 {
-  IdeAnimationPrivate *priv;
   Tween tween = { 0 };
   GType type;
 
@@ -667,16 +643,14 @@ ide_animation_add_property (IdeAnimation *animation,
   g_return_if_fail (pspec != NULL);
   g_return_if_fail (value != NULL);
   g_return_if_fail (value->g_type);
-  g_return_if_fail (animation->priv->target);
-  g_return_if_fail (!animation->priv->tween_handler);
+  g_return_if_fail (animation->target);
+  g_return_if_fail (!animation->tween_handler);
 
-  priv = animation->priv;
-
-  type = G_TYPE_FROM_INSTANCE (priv->target);
+  type = G_TYPE_FROM_INSTANCE (animation->target);
   tween.is_child = !g_type_is_a (type, pspec->owner_type);
   if (tween.is_child)
     {
-      if (!GTK_IS_WIDGET (priv->target))
+      if (!GTK_IS_WIDGET (animation->target))
         {
           g_critical (_("Cannot locate property %s in class %s"),
                       pspec->name, g_type_name (type));
@@ -688,7 +662,7 @@ ide_animation_add_property (IdeAnimation *animation,
   g_value_init (&tween.begin, pspec->value_type);
   g_value_init (&tween.end, pspec->value_type);
   g_value_copy (value, &tween.end);
-  g_array_append_val (priv->tweens, tween);
+  g_array_append_val (animation->tweens, tween);
 }
 
 
@@ -704,10 +678,10 @@ ide_animation_add_property (IdeAnimation *animation,
 static void
 ide_animation_dispose (GObject *object)
 {
-  IdeAnimationPrivate *priv = IDE_ANIMATION (object)->priv;
+  IdeAnimation *self = IDE_ANIMATION (object);
 
-  g_clear_object (&priv->target);
-  g_clear_object (&priv->frame_clock);
+  g_clear_object (&self->target);
+  g_clear_object (&self->frame_clock);
 
   G_OBJECT_CLASS (ide_animation_parent_class)->dispose (object);
 }
@@ -725,19 +699,19 @@ ide_animation_dispose (GObject *object)
 static void
 ide_animation_finalize (GObject *object)
 {
-  IdeAnimationPrivate *priv = IDE_ANIMATION (object)->priv;
+  IdeAnimation *self = IDE_ANIMATION (object);
   Tween *tween;
   gint i;
 
-  for (i = 0; i < priv->tweens->len; i++)
+  for (i = 0; i < self->tweens->len; i++)
     {
-      tween = &g_array_index (priv->tweens, Tween, i);
+      tween = &g_array_index (self->tweens, Tween, i);
       g_value_unset (&tween->begin);
       g_value_unset (&tween->end);
       g_param_spec_unref (tween->pspec);
     }
 
-  g_array_unref (priv->tweens);
+  g_array_unref (self->tweens);
 
   G_OBJECT_CLASS (ide_animation_parent_class)->finalize (object);
 }
@@ -763,7 +737,7 @@ ide_animation_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_DURATION:
-      animation->priv->duration_msec = g_value_get_uint (value);
+      animation->duration_msec = g_value_get_uint (value);
       break;
 
     case PROP_FRAME_CLOCK:
@@ -771,7 +745,7 @@ ide_animation_set_property (GObject      *object,
       break;
 
     case PROP_MODE:
-      animation->priv->mode = g_value_get_enum (value);
+      animation->mode = g_value_get_enum (value);
       break;
 
     case PROP_TARGET:
@@ -804,7 +778,6 @@ ide_animation_class_init (IdeAnimationClass *klass)
   object_class->dispose = ide_animation_dispose;
   object_class->finalize = ide_animation_finalize;
   object_class->set_property = ide_animation_set_property;
-  g_type_class_add_private (object_class, sizeof (IdeAnimationPrivate));
 
   /**
    * IdeAnimation:duration:
@@ -916,15 +889,9 @@ ide_animation_class_init (IdeAnimationClass *klass)
 static void
 ide_animation_init (IdeAnimation *animation)
 {
-  IdeAnimationPrivate *priv;
-
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (animation, IDE_TYPE_ANIMATION, IdeAnimationPrivate);
-
-  animation->priv = priv;
-
-  priv->duration_msec = 250;
-  priv->mode = IDE_ANIMATION_EASE_IN_OUT_QUAD;
-  priv->tweens = g_array_new (FALSE, FALSE, sizeof (Tween));
+  animation->duration_msec = 250;
+  animation->mode = IDE_ANIMATION_EASE_IN_OUT_QUAD;
+  animation->tweens = g_array_new (FALSE, FALSE, sizeof (Tween));
 }
 
 

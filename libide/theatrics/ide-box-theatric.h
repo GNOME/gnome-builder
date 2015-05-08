@@ -23,32 +23,10 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_BOX_THEATRIC            (ide_box_theatric_get_type())
-#define IDE_BOX_THEATRIC(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_BOX_THEATRIC, IdeBoxTheatric))
-#define IDE_BOX_THEATRIC_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_BOX_THEATRIC, IdeBoxTheatric const))
-#define IDE_BOX_THEATRIC_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_BOX_THEATRIC, IdeBoxTheatricClass))
-#define IDE_IS_BOX_THEATRIC(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_BOX_THEATRIC))
-#define IDE_IS_BOX_THEATRIC_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_BOX_THEATRIC))
-#define IDE_BOX_THEATRIC_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_BOX_THEATRIC, IdeBoxTheatricClass))
+#define IDE_TYPE_BOX_THEATRIC (ide_box_theatric_get_type())
 
-typedef struct _IdeBoxTheatric        IdeBoxTheatric;
-typedef struct _IdeBoxTheatricClass   IdeBoxTheatricClass;
-typedef struct _IdeBoxTheatricPrivate IdeBoxTheatricPrivate;
-
-struct _IdeBoxTheatric
-{
-  GObject parent;
-
-  /*< private >*/
-  IdeBoxTheatricPrivate *priv;
-};
-
-struct _IdeBoxTheatricClass
-{
-  GObjectClass parent_class;
-};
-
-GType ide_box_theatric_get_type (void);
+G_DECLARE_FINAL_TYPE (IdeBoxTheatric, ide_box_theatric,
+                      IDE, BOX_THEATRIC, GObject)
 
 G_END_DECLS
 

@@ -24,19 +24,10 @@
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_MAP            (ide_source_map_get_type())
-#define IDE_SOURCE_MAP(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SOURCE_MAP, IdeSourceMap))
-#define IDE_SOURCE_MAP_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SOURCE_MAP, IdeSourceMap const))
-#define IDE_SOURCE_MAP_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_SOURCE_MAP, IdeSourceMapClass))
-#define IDE_IS_SOURCE_MAP(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_SOURCE_MAP))
-#define IDE_IS_SOURCE_MAP_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_SOURCE_MAP))
-#define IDE_SOURCE_MAP_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_SOURCE_MAP, IdeSourceMapClass))
 
-typedef struct _IdeSourceMap      IdeSourceMap;
-typedef struct _IdeSourceMapClass IdeSourceMapClass;
+G_DECLARE_FINAL_TYPE (IdeSourceMap, ide_source_map,
+                      IDE, SOURCE_MAP, GtkOverlay)
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceMap, g_object_unref)
-
-GType          ide_source_map_get_type (void);
 GtkSourceView *ide_source_map_get_view (IdeSourceMap  *self);
 void           ide_source_map_set_view (IdeSourceMap  *self,
                                         GtkSourceView *view);

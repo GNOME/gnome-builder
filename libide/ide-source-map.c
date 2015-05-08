@@ -50,11 +50,6 @@ struct _IdeSourceMap
   guint                    show_map : 1;
 };
 
-struct _IdeSourceMapClass
-{
-  GtkOverlayClass parent_class;
-};
-
 G_DEFINE_TYPE (IdeSourceMap, ide_source_map, GTK_TYPE_OVERLAY)
 
 enum {

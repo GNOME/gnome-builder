@@ -35,10 +35,6 @@
 
 #define MAX_COMPLETION_ITEMS 200
 
-struct _IdeClangCompletionProviderClass
-{
-  GObjectClass parent_class;
-};
 
 struct _IdeClangCompletionProvider
 {

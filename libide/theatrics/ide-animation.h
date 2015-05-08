@@ -23,18 +23,12 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_ANIMATION            (ide_animation_get_type())
-#define IDE_TYPE_ANIMATION_MODE       (ide_animation_mode_get_type())
-#define IDE_ANIMATION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_ANIMATION, IdeAnimation))
-#define IDE_ANIMATION_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_ANIMATION, IdeAnimation const))
-#define IDE_ANIMATION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_ANIMATION, IdeAnimationClass))
-#define IDE_IS_ANIMATION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_ANIMATION))
-#define IDE_IS_ANIMATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_ANIMATION))
-#define IDE_ANIMATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_ANIMATION, IdeAnimationClass))
+#define IDE_TYPE_ANIMATION      (ide_animation_get_type())
+#define IDE_TYPE_ANIMATION_MODE (ide_animation_mode_get_type())
 
-typedef struct _IdeAnimation        IdeAnimation;
-typedef struct _IdeAnimationClass   IdeAnimationClass;
-typedef struct _IdeAnimationPrivate IdeAnimationPrivate;
+G_DECLARE_FINAL_TYPE (IdeAnimation, ide_animation,
+                      IDE, ANIMATION, GInitiallyUnowned)
+
 typedef enum   _IdeAnimationMode    IdeAnimationMode;
 
 enum _IdeAnimationMode
@@ -49,20 +43,6 @@ enum _IdeAnimationMode
   IDE_ANIMATION_LAST
 };
 
-struct _IdeAnimation
-{
-  GInitiallyUnowned parent;
-
-  /*< private >*/
-  IdeAnimationPrivate *priv;
-};
-
-struct _IdeAnimationClass
-{
-  GInitiallyUnownedClass parent_class;
-};
-
-GType         ide_animation_get_type      (void);
 GType         ide_animation_mode_get_type (void);
 void          ide_animation_start         (IdeAnimation      *animation);
 void          ide_animation_stop          (IdeAnimation      *animation);

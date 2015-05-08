@@ -26,12 +26,16 @@
 
 #include "trie.h"
 
+struct _IdeSourceSnippets
+{
+  GObject  parent_instance;
+
+  Trie    *snippets;
+};
+
+
 G_DEFINE_TYPE (IdeSourceSnippets, ide_source_snippets, G_TYPE_OBJECT)
 
-struct _IdeSourceSnippetsPrivate
-{
-  Trie *snippets;
-};
 
 IdeSourceSnippets *
 ide_source_snippets_new (void)
@@ -43,14 +47,10 @@ ide_source_snippets_new (void)
 void
 ide_source_snippets_clear (IdeSourceSnippets *snippets)
 {
-  IdeSourceSnippetsPrivate *priv;
-
   g_return_if_fail (IDE_IS_SOURCE_SNIPPETS (snippets));
 
-  priv = snippets->priv;
-
-  trie_destroy (priv->snippets);
-  priv->snippets = trie_new (g_object_unref);
+  trie_destroy (snippets->snippets);
+  snippets->snippets = trie_new (g_object_unref);
 }
 
 static gboolean
@@ -72,18 +72,18 @@ copy_into (Trie        *trie,
 
 void
 ide_source_snippets_merge (IdeSourceSnippets *snippets,
-                          IdeSourceSnippets *other)
+                           IdeSourceSnippets *other)
 {
   g_return_if_fail (IDE_IS_SOURCE_SNIPPETS (snippets));
   g_return_if_fail (IDE_IS_SOURCE_SNIPPETS (other));
 
-  trie_traverse (other->priv->snippets,
+  trie_traverse (other->snippets,
                  "",
                  G_PRE_ORDER,
                  G_TRAVERSE_LEAVES,
                  -1,
                  copy_into,
-                 snippets->priv->snippets);
+                 snippets->snippets);
 }
 
 void
@@ -96,7 +96,7 @@ ide_source_snippets_add (IdeSourceSnippets *snippets,
   g_return_if_fail (IDE_IS_SOURCE_SNIPPET (snippet));
 
   trigger = ide_source_snippet_get_trigger (snippet);
-  trie_insert (snippets->priv->snippets, trigger, g_object_ref (snippet));
+  trie_insert (snippets->snippets, trigger, g_object_ref (snippet));
 }
 
 gboolean
@@ -123,18 +123,15 @@ ide_source_snippets_foreach (IdeSourceSnippets *snippets,
                              GFunc              foreach_func,
                              gpointer           user_data)
 {
-  IdeSourceSnippetsPrivate *priv;
   gpointer closure[2] = { foreach_func, user_data };
 
   g_return_if_fail (IDE_IS_SOURCE_SNIPPETS (snippets));
   g_return_if_fail (foreach_func);
 
-  priv = snippets->priv;
-
   if (!prefix)
     prefix = "";
 
-  trie_traverse (priv->snippets,
+  trie_traverse (snippets->snippets,
                  prefix,
                  G_PRE_ORDER,
                  G_TRAVERSE_LEAVES,
@@ -146,11 +143,9 @@ ide_source_snippets_foreach (IdeSourceSnippets *snippets,
 static void
 ide_source_snippets_finalize (GObject *object)
 {
-  IdeSourceSnippetsPrivate *priv;
+  IdeSourceSnippets *self = IDE_SOURCE_SNIPPETS (object);
 
-  priv = IDE_SOURCE_SNIPPETS (object)->priv;
-
-  g_clear_pointer (&priv->snippets, (GDestroyNotify) trie_destroy);
+  g_clear_pointer (&self->snippets, (GDestroyNotify) trie_destroy);
 
   G_OBJECT_CLASS (ide_source_snippets_parent_class)->finalize (object);
 }
@@ -162,15 +157,10 @@ ide_source_snippets_class_init (IdeSourceSnippetsClass *klass)
 
   object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = ide_source_snippets_finalize;
-  g_type_class_add_private (object_class, sizeof (IdeSourceSnippetsPrivate));
 }
 
 static void
 ide_source_snippets_init (IdeSourceSnippets *snippets)
 {
-  snippets->priv = G_TYPE_INSTANCE_GET_PRIVATE (snippets,
-                                                IDE_TYPE_SOURCE_SNIPPETS,
-                                                IdeSourceSnippetsPrivate);
-
-  snippets->priv->snippets = trie_new (g_object_unref);
+  snippets->snippets = trie_new (g_object_unref);
 }

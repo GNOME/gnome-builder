@@ -23,37 +23,16 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SOURCE_SNIPPET_PARSER            (ide_source_snippet_parser_get_type())
-#define IDE_SOURCE_SNIPPET_PARSER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SOURCE_SNIPPET_PARSER, IdeSourceSnippetParser))
-#define IDE_SOURCE_SNIPPET_PARSER_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SOURCE_SNIPPET_PARSER, IdeSourceSnippetParser const))
-#define IDE_SOURCE_SNIPPET_PARSER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_SOURCE_SNIPPET_PARSER, IdeSourceSnippetParserClass))
-#define IDE_IS_SOURCE_SNIPPET_PARSER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_SOURCE_SNIPPET_PARSER))
-#define IDE_IS_SOURCE_SNIPPET_PARSER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_SOURCE_SNIPPET_PARSER))
-#define IDE_SOURCE_SNIPPET_PARSER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_SOURCE_SNIPPET_PARSER, IdeSourceSnippetParserClass))
+#define IDE_TYPE_SOURCE_SNIPPET_PARSER (ide_source_snippet_parser_get_type())
 
-typedef struct _IdeSourceSnippetParser        IdeSourceSnippetParser;
-typedef struct _IdeSourceSnippetParserClass   IdeSourceSnippetParserClass;
-typedef struct _IdeSourceSnippetParserPrivate IdeSourceSnippetParserPrivate;
+G_DECLARE_FINAL_TYPE (IdeSourceSnippetParser, ide_source_snippet_parser,
+                      IDE, SOURCE_SNIPPET_PARSER, GObject)
 
-struct _IdeSourceSnippetParser
-{
-  GObject parent;
-
-  /*< private >*/
-  IdeSourceSnippetParserPrivate *priv;
-};
-
-struct _IdeSourceSnippetParserClass
-{
-  GObjectClass parent_class;
-};
-
-GType                  ide_source_snippet_parser_get_type       (void);
 IdeSourceSnippetParser *ide_source_snippet_parser_new            (void);
-gboolean               ide_source_snippet_parser_load_from_file (IdeSourceSnippetParser  *parser,
-                                                                GFile                  *file,
-                                                                GError                **error);
-GList                 *ide_source_snippet_parser_get_snippets   (IdeSourceSnippetParser  *parser);
+gboolean                ide_source_snippet_parser_load_from_file (IdeSourceSnippetParser  *parser,
+                                                                  GFile                   *file,
+                                                                  GError                 **error);
+GList                  *ide_source_snippet_parser_get_snippets   (IdeSourceSnippetParser  *parser);
 
 G_END_DECLS
 

@@ -23,33 +23,10 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_HTML_COMPLETION_PROVIDER            (ide_html_completion_provider_get_type())
-#define IDE_HTML_COMPLETION_PROVIDER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_HTML_COMPLETION_PROVIDER, IdeHtmlCompletionProvider))
-#define IDE_HTML_COMPLETION_PROVIDER_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_HTML_COMPLETION_PROVIDER, IdeHtmlCompletionProvider const))
-#define IDE_HTML_COMPLETION_PROVIDER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_HTML_COMPLETION_PROVIDER, IdeHtmlCompletionProviderClass))
-#define IDE_IS_HTML_COMPLETION_PROVIDER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_HTML_COMPLETION_PROVIDER))
-#define IDE_IS_HTML_COMPLETION_PROVIDER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_HTML_COMPLETION_PROVIDER))
-#define IDE_HTML_COMPLETION_PROVIDER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_HTML_COMPLETION_PROVIDER, IdeHtmlCompletionProviderClass))
+#define IDE_TYPE_HTML_COMPLETION_PROVIDER (ide_html_completion_provider_get_type())
 
-typedef struct _IdeHtmlCompletionProvider        IdeHtmlCompletionProvider;
-typedef struct _IdeHtmlCompletionProviderClass   IdeHtmlCompletionProviderClass;
-typedef struct _IdeHtmlCompletionProviderPrivate IdeHtmlCompletionProviderPrivate;
-
-struct _IdeHtmlCompletionProvider
-{
-  GObject parent;
-
-  /*< private >*/
-  IdeHtmlCompletionProviderPrivate *priv;
-};
-
-struct _IdeHtmlCompletionProviderClass
-{
-  GObjectClass parent;
-};
-
-GType ide_html_completion_provider_get_type (void);
-
+G_DECLARE_FINAL_TYPE (IdeHtmlCompletionProvider, ide_html_completion_provider,
+                      IDE, HTML_COMPLETION_PROVIDER, GObject)
 G_END_DECLS
 
 #endif /* IDE_HTML_COMPLETION_PROVIDER_H */

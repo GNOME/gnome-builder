@@ -26,28 +26,11 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SOURCE_VIEW_MODE            (ide_source_view_mode_get_type())
-#define IDE_SOURCE_VIEW_MODE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SOURCE_VIEW_MODE, IdeSourceViewMode))
-#define IDE_SOURCE_VIEW_MODE_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SOURCE_VIEW_MODE, IdeSourceViewMode const))
-#define IDE_SOURCE_VIEW_MODE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_SOURCE_VIEW_MODE, IdeSourceViewModeClass))
-#define IDE_IS_SOURCE_VIEW_MODE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_SOURCE_VIEW_MODE))
-#define IDE_IS_SOURCE_VIEW_MODE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_SOURCE_VIEW_MODE))
-#define IDE_SOURCE_VIEW_MODE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_SOURCE_VIEW_MODE, IdeSourceViewModeClass))
+#define IDE_TYPE_SOURCE_VIEW_MODE (ide_source_view_mode_get_type())
 
-typedef struct _IdeSourceViewMode        IdeSourceViewMode;
-typedef struct _IdeSourceViewModeClass   IdeSourceViewModeClass;
+G_DECLARE_FINAL_TYPE (IdeSourceViewMode, ide_source_view_mode,
+                      IDE, SOURCE_VIEW_MODE, GtkWidget)
 
-struct _IdeSourceViewMode
-{
-  GtkWidget parent;
-};
-
-struct _IdeSourceViewModeClass
-{
-  GtkWidgetClass parent_class;
-};
-
-GType                  ide_source_view_mode_get_type                     (void);
 gboolean               ide_source_view_mode_get_repeat_insert_with_count (IdeSourceViewMode *self);
 gboolean               ide_source_view_mode_get_block_cursor             (IdeSourceViewMode *self);
 gboolean               ide_source_view_mode_get_suppress_unbound         (IdeSourceViewMode *self);

@@ -26,32 +26,11 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER            (ide_source_snippet_completion_provider_get_type())
-#define IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER, IdeSourceSnippetCompletionProvider))
-#define IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER, IdeSourceSnippetCompletionProvider const))
-#define IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER, IdeSourceSnippetCompletionProviderClass))
-#define IDE_IS_SOURCE_SNIPPET_COMPLETION_PROVIDER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER))
-#define IDE_IS_SOURCE_SNIPPET_COMPLETION_PROVIDER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER))
-#define IDE_SOURCE_SNIPPET_COMPLETION_PROVIDER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER, IdeSourceSnippetCompletionProviderClass))
+#define IDE_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER (ide_source_snippet_completion_provider_get_type())
 
-typedef struct _IdeSourceSnippetCompletionProvider        IdeSourceSnippetCompletionProvider;
-typedef struct _IdeSourceSnippetCompletionProviderClass   IdeSourceSnippetCompletionProviderClass;
-typedef struct _IdeSourceSnippetCompletionProviderPrivate IdeSourceSnippetCompletionProviderPrivate;
+G_DECLARE_FINAL_TYPE (IdeSourceSnippetCompletionProvider, ide_source_snippet_completion_provider,
+                      IDE, SOURCE_SNIPPET_COMPLETION_PROVIDER, GObject)
 
-struct _IdeSourceSnippetCompletionProvider
-{
-  GObject parent;
-
-  /*< private >*/
-  IdeSourceSnippetCompletionProviderPrivate *priv;
-};
-
-struct _IdeSourceSnippetCompletionProviderClass
-{
-  GObjectClass parent_class;
-};
-
-GType                        ide_source_snippet_completion_provider_get_type (void);
 GtkSourceCompletionProvider *ide_source_snippet_completion_provider_new      (IdeSourceView     *source_view,
                                                                              IdeSourceSnippets *snippets);
 

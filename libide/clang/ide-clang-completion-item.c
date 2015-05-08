@@ -27,10 +27,6 @@
 #include "ide-source-snippet.h"
 #include "ide-source-snippet-chunk.h"
 
-struct _IdeClangCompletionItemClass
-{
-  GObjectClass parent_class;
-};
 
 struct _IdeClangCompletionItem
 {
