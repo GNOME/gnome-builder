@@ -71,11 +71,13 @@ dist-hook:
 
 run:
 	GI_TYPELIB_PATH=libide \
+	GOBJECT_DEBUG=instance-count \
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
 debug:
 	GI_TYPELIB_PATH=libide \
 	G_DEBUG=fatal-criticals \
+	GOBJECT_DEBUG=instance-count \
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
 valgrind:
