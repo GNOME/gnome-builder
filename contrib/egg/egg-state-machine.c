@@ -217,7 +217,6 @@ egg_state_machine_transition (EggStateMachine  *self,
 {
   EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
   g_autofree gchar *old_state = NULL;
-  g_autofree gchar *new_state_copy = NULL;
   EggStateTransition ret = EGG_STATE_TRANSITION_IGNORED;
   g_autoptr(GError) local_error = NULL;
   gsize sequence;
@@ -232,7 +231,6 @@ egg_state_machine_transition (EggStateMachine  *self,
   /* Be careful with reentrancy. */
 
   old_state = g_strdup (priv->state);
-  new_state_copy = g_strdup (new_state);
   sequence = priv->sequence;
 
   g_signal_emit (self, gSignals [TRANSITION], 0, old_state, new_state, &local_error, &ret);

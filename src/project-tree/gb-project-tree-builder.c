@@ -77,8 +77,6 @@ build_project (GbProjectTreeBuilder *self,
 
   if (children)
     {
-      iter = g_sequence_get_begin_iter (children);
-
       for (iter = g_sequence_get_begin_iter (children);
            !g_sequence_iter_is_end (iter);
            iter = g_sequence_iter_next (iter))
@@ -165,8 +163,6 @@ build_files (GbProjectTreeBuilder *self,
       g_sequence_sort (children,
                        (GCompareDataFunc) sort_files,
                        GINT_TO_POINTER (directories_first));
-
-      iter = g_sequence_get_begin_iter (children);
 
       for (iter = g_sequence_get_begin_iter (children);
            !g_sequence_iter_is_end (iter);
