@@ -21,8 +21,10 @@
 #include "gb-editor-settings-widget.h"
 #include "gb-widget.h"
 
-struct _GbEditorSettingsWidgetPrivate
+struct _GbEditorSettingsWidget
 {
+  GtkGrid         parent_instance;
+
   GSettings      *settings;
   gchar          *language;
 
@@ -36,8 +38,7 @@ struct _GbEditorSettingsWidgetPrivate
   GtkCheckButton *trim_trailing_whitespace;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbEditorSettingsWidget, gb_editor_settings_widget,
-                            GTK_TYPE_GRID)
+G_DEFINE_TYPE (GbEditorSettingsWidget, gb_editor_settings_widget, GTK_TYPE_GRID)
 
 enum {
   PROP_0,
@@ -52,57 +53,53 @@ gb_editor_settings_widget_get_language (GbEditorSettingsWidget *widget)
 {
   g_return_val_if_fail (GB_IS_EDITOR_SETTINGS_WIDGET (widget), NULL);
 
-  return widget->priv->language;
+  return widget->language;
 }
 
 void
 gb_editor_settings_widget_set_language (GbEditorSettingsWidget *widget,
                                         const gchar            *language)
 {
-  GbEditorSettingsWidgetPrivate *priv;
-
   g_return_if_fail (GB_IS_EDITOR_SETTINGS_WIDGET (widget));
 
-  priv = widget->priv;
-
-  if (language != priv->language)
+  if (language != widget->language)
     {
       gchar *path;
 
-      g_free (priv->language);
-      priv->language = g_strdup (language);
+      g_free (widget->language);
+      widget->language = g_strdup (language);
 
-      g_clear_object (&priv->settings);
+      g_clear_object (&widget->settings);
 
       path = g_strdup_printf ("/org/gnome/builder/editor/language/%s/",
                               language);
-      priv->settings = g_settings_new_with_path (
+      widget->settings = g_settings_new_with_path (
         "org.gnome.builder.editor.language", path);
       g_free (path);
 
-      g_settings_bind (priv->settings, "auto-indent",
-                       priv->auto_indent, "active",
+      g_settings_bind (widget->settings, "auto-indent",
+                       widget->auto_indent, "active",
                        G_SETTINGS_BIND_DEFAULT);
-      g_settings_bind (priv->settings, "insert-matching-brace",
-                       priv->insert_matching_brace, "active",
+      g_settings_bind (widget->settings, "insert-matching-brace",
+                       widget->insert_matching_brace, "active",
                        G_SETTINGS_BIND_DEFAULT);
-      g_settings_bind (priv->settings, "insert-spaces-instead-of-tabs",
-                       priv->insert_spaces_instead_of_tabs, "active",
+      g_settings_bind (widget->settings, "insert-spaces-instead-of-tabs",
+                       widget->insert_spaces_instead_of_tabs, "active",
                        G_SETTINGS_BIND_DEFAULT);
-      g_settings_bind (priv->settings, "overwrite-braces",
-                       priv->overwrite_braces, "active",
+      g_settings_bind (widget->settings, "overwrite-braces",
+                       widget->overwrite_braces, "active",
                        G_SETTINGS_BIND_DEFAULT);
-      g_settings_bind (priv->settings, "show-right-margin",
-                       priv->show_right_margin, "active",
+      g_settings_bind (widget->settings, "show-right-margin",
+                       widget->show_right_margin, "active",
                        G_SETTINGS_BIND_DEFAULT);
-      g_settings_bind (priv->settings, "right-margin-position",
-                       priv->right_margin_position, "value",
+      g_settings_bind (widget->settings, "right-margin-position",
+                       widget->right_margin_position, "value",
                        G_SETTINGS_BIND_DEFAULT);
-      g_settings_bind (priv->settings, "tab-width",
-                       priv->tab_width, "value",
+      g_settings_bind (widget->settings, "tab-width",
+                       widget->tab_width, "value",
                        G_SETTINGS_BIND_DEFAULT);
-      g_settings_bind (priv->settings, "trim-trailing-whitespace",
-                       priv->trim_trailing_whitespace, "active",
+      g_settings_bind (widget->settings, "trim-trailing-whitespace",
+                       widget->trim_trailing_whitespace, "active",
                        G_SETTINGS_BIND_DEFAULT);
 
       g_object_notify_by_pspec (G_OBJECT (widget), gParamSpecs [PROP_LANGUAGE]);
@@ -112,10 +109,10 @@ gb_editor_settings_widget_set_language (GbEditorSettingsWidget *widget,
 static void
 gb_editor_settings_widget_finalize (GObject *object)
 {
-  GbEditorSettingsWidgetPrivate *priv = GB_EDITOR_SETTINGS_WIDGET (object)->priv;
+  GbEditorSettingsWidget *self = GB_EDITOR_SETTINGS_WIDGET (object);
 
-  g_clear_pointer (&priv->language, g_free);
-  g_clear_object (&priv->settings);
+  g_clear_pointer (&self->language, g_free);
+  g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (gb_editor_settings_widget_parent_class)->finalize (object);
 }
@@ -168,14 +165,14 @@ gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
   object_class->set_property = gb_editor_settings_widget_set_property;
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-settings-widget.ui");
-  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, auto_indent);
-  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, insert_matching_brace);
-  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, insert_spaces_instead_of_tabs);
-  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, right_margin_position);
-  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, overwrite_braces);
-  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, show_right_margin);
-  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, tab_width);
-  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbEditorSettingsWidget, trim_trailing_whitespace);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, auto_indent);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, insert_matching_brace);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, insert_spaces_instead_of_tabs);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, right_margin_position);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, overwrite_braces);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, show_right_margin);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, tab_width);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorSettingsWidget, trim_trailing_whitespace);
 
   gParamSpecs [PROP_LANGUAGE] =
     g_param_spec_string ("language",
@@ -190,7 +187,5 @@ gb_editor_settings_widget_class_init (GbEditorSettingsWidgetClass *klass)
 static void
 gb_editor_settings_widget_init (GbEditorSettingsWidget *self)
 {
-  self->priv = gb_editor_settings_widget_get_instance_private (self);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 }

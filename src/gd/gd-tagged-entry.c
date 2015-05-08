@@ -28,7 +28,9 @@
 
 #define BUTTON_INTERNAL_SPACING 6
 
-struct _GdTaggedEntryTagPrivate {
+struct _GdTaggedEntryTag {
+  GObject parent_instance;
+
   GdTaggedEntry *entry;
   GdkWindow *window;
   PangoLayout *layout;
@@ -41,7 +43,9 @@ struct _GdTaggedEntryTagPrivate {
   GtkStateFlags last_button_state;
 };
 
-struct _GdTaggedEntryPrivate {
+struct _GdTaggedEntry {
+  GtkSearchEntry parent_instance;
+
   GList *tags;
 
   GdTaggedEntryTag *in_child;
@@ -109,12 +113,12 @@ gd_tagged_entry_tag_ensure_close_surface (GdTaggedEntryTag *tag,
   gint icon_size;
   gint scale_factor;
 
-  if (tag->priv->close_surface != NULL)
+  if (tag->close_surface != NULL)
     return;
 
   gtk_icon_size_lookup (GTK_ICON_SIZE_MENU,
                         &icon_size, NULL);
-  scale_factor = gtk_widget_get_scale_factor (GTK_WIDGET (tag->priv->entry));
+  scale_factor = gtk_widget_get_scale_factor (GTK_WIDGET (tag->entry));
 
   info = gtk_icon_theme_lookup_icon_for_scale (gtk_icon_theme_get_default (),
                                                "window-close-symbolic",
@@ -123,7 +127,7 @@ gd_tagged_entry_tag_ensure_close_surface (GdTaggedEntryTag *tag,
 
   /* FIXME: we need a fallback icon in case the icon is not found */
   pixbuf = gtk_icon_info_load_symbolic_for_context (info, context, NULL, NULL);
-  tag->priv->close_surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale_factor, tag->priv->window);
+  tag->close_surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale_factor, tag->window);
 
   g_object_unref (info);
   g_object_unref (pixbuf);
@@ -182,7 +186,7 @@ gd_tagged_entry_tag_panel_get_width (GdTaggedEntry *self)
 
   width = 0;
 
-  for (l = self->priv->tags; l != NULL; l = l->next)
+  for (l = self->tags; l != NULL; l = l->next)
     {
       tag = l->data;
       width += gd_tagged_entry_tag_get_width (tag, self);
@@ -195,11 +199,11 @@ static void
 gd_tagged_entry_tag_ensure_layout (GdTaggedEntryTag *tag,
                                    GdTaggedEntry *entry)
 {
-  if (tag->priv->layout != NULL)
+  if (tag->layout != NULL)
     return;
 
-  tag->priv->layout = pango_layout_new (gtk_widget_get_pango_context (GTK_WIDGET (entry)));
-  pango_layout_set_text (tag->priv->layout, tag->priv->label, -1);
+  tag->layout = pango_layout_new (gtk_widget_get_pango_context (GTK_WIDGET (entry)));
+  pango_layout_set_text (tag->layout, tag->label, -1);
 }
 
 static GtkStateFlags
@@ -208,10 +212,10 @@ gd_tagged_entry_tag_get_state (GdTaggedEntryTag *tag,
 {
   GtkStateFlags state = GTK_STATE_FLAG_NORMAL;
 
-  if (entry->priv->in_child == tag)
+  if (entry->in_child == tag)
     state |= GTK_STATE_FLAG_PRELIGHT;
 
-  if (entry->priv->in_child_active)
+  if (entry->in_child_active)
     state |= GTK_STATE_FLAG_ACTIVE;
 
   return state;
@@ -223,12 +227,12 @@ gd_tagged_entry_tag_get_button_state (GdTaggedEntryTag *tag,
 {
   GtkStateFlags state = GTK_STATE_FLAG_NORMAL;
 
-  if (entry->priv->in_child == tag)
+  if (entry->in_child == tag)
     {
-      if (entry->priv->in_child_button_active)
+      if (entry->in_child_button_active)
         state |= GTK_STATE_FLAG_ACTIVE;
 
-      else if (entry->priv->in_child_button)
+      else if (entry->in_child_button)
         state |= GTK_STATE_FLAG_PRELIGHT;
     }
 
@@ -248,7 +252,7 @@ gd_tagged_entry_tag_get_context (GdTaggedEntryTag *tag,
   path = gtk_widget_path_copy (gtk_widget_get_path (widget));
 
   pos = gtk_widget_path_append_type (path, GD_TYPE_TAGGED_ENTRY);
-  gtk_widget_path_iter_add_class (path, pos, tag->priv->style);
+  gtk_widget_path_iter_add_class (path, pos, tag->style);
 
   gtk_style_context_set_path (retval, path);
 
@@ -269,7 +273,7 @@ gd_tagged_entry_tag_get_width (GdTaggedEntryTag *tag,
   gint scale_factor;
 
   gd_tagged_entry_tag_ensure_layout (tag, entry);
-  pango_layout_get_pixel_size (tag->priv->layout, &layout_width, NULL);
+  pango_layout_get_pixel_size (tag->layout, &layout_width, NULL);
 
   context = gd_tagged_entry_tag_get_context (tag, entry);
   state = gd_tagged_entry_tag_get_state (tag, entry);
@@ -283,10 +287,10 @@ gd_tagged_entry_tag_get_width (GdTaggedEntryTag *tag,
   g_object_unref (context);
 
   button_width = 0;
-  if (entry->priv->button_visible && tag->priv->has_close_button)
+  if (entry->button_visible && tag->has_close_button)
     {
       scale_factor = gtk_widget_get_scale_factor (GTK_WIDGET (entry));
-      button_width = cairo_image_surface_get_width (tag->priv->close_surface) / scale_factor +
+      button_width = cairo_image_surface_get_width (tag->close_surface) / scale_factor +
         BUTTON_INTERNAL_SPACING;
     }
 
@@ -328,9 +332,9 @@ gd_tagged_entry_tag_get_relative_allocations (GdTaggedEntryTag *tag,
   GtkBorder padding, border;
   GtkStateFlags state;
 
-  width = gdk_window_get_width (tag->priv->window);
-  height = gdk_window_get_height (tag->priv->window);
-  scale_factor = gdk_window_get_scale_factor (tag->priv->window);
+  width = gdk_window_get_width (tag->window);
+  height = gdk_window_get_height (tag->window);
+  scale_factor = gdk_window_get_scale_factor (tag->window);
 
   state = gd_tagged_entry_tag_get_state (tag, entry);
   gtk_style_context_get_margin (context, state, &padding);
@@ -351,15 +355,15 @@ gd_tagged_entry_tag_get_relative_allocations (GdTaggedEntryTag *tag,
   gtk_style_context_get_border (context, state, &border);  
 
   gd_tagged_entry_tag_ensure_layout (tag, entry);
-  pango_layout_get_pixel_size (tag->priv->layout, &layout_width, &layout_height);
+  pango_layout_get_pixel_size (tag->layout, &layout_width, &layout_height);
 
   layout_allocation.x += border.left + padding.left;
   layout_allocation.y += (layout_allocation.height - layout_height) / 2;
 
-  if (entry->priv->button_visible && tag->priv->has_close_button)
+  if (entry->button_visible && tag->has_close_button)
     {
-      pix_width = cairo_image_surface_get_width (tag->priv->close_surface) / scale_factor;
-      pix_height = cairo_image_surface_get_height (tag->priv->close_surface) / scale_factor;
+      pix_width = cairo_image_surface_get_width (tag->close_surface) / scale_factor;
+      pix_height = cairo_image_surface_get_height (tag->close_surface) / scale_factor;
     }
   else
     {
@@ -389,7 +393,7 @@ gd_tagged_entry_tag_event_is_button (GdTaggedEntryTag *tag,
   GtkAllocation button_allocation;
   GtkStyleContext *context;
 
-  if (!entry->priv->button_visible || !tag->priv->has_close_button)
+  if (!entry->button_visible || !tag->has_close_button)
     return FALSE;
 
   context = gd_tagged_entry_tag_get_context (tag, entry);
@@ -419,10 +423,10 @@ gd_tagged_entry_tag_get_area (GdTaggedEntryTag      *tag,
   g_return_val_if_fail (GD_IS_TAGGED_ENTRY_TAG (tag), FALSE);
   g_return_val_if_fail (rect != NULL, FALSE);
 
-  gdk_window_get_position (tag->priv->window, &window_x, &window_y);
-  gtk_widget_get_allocation (GTK_WIDGET (tag->priv->entry), &alloc);
-  context = gd_tagged_entry_tag_get_context (tag, tag->priv->entry);
-  gd_tagged_entry_tag_get_relative_allocations (tag, tag->priv->entry, context,
+  gdk_window_get_position (tag->window, &window_x, &window_y);
+  gtk_widget_get_allocation (GTK_WIDGET (tag->entry), &alloc);
+  context = gd_tagged_entry_tag_get_context (tag, tag->entry);
+  gd_tagged_entry_tag_get_relative_allocations (tag, tag->entry, context,
                                                 &background_allocation,
                                                 NULL, NULL);
 
@@ -450,7 +454,7 @@ gd_tagged_entry_tag_draw (GdTaggedEntryTag *tag,
                                                 &button_allocation);
 
   cairo_save (cr);
-  gtk_cairo_transform_to_window (cr, GTK_WIDGET (entry), tag->priv->window);
+  gtk_cairo_transform_to_window (cr, GTK_WIDGET (entry), tag->window);
 
   gtk_style_context_save (context);
 
@@ -465,11 +469,11 @@ gd_tagged_entry_tag_draw (GdTaggedEntryTag *tag,
 
   gtk_render_layout (context, cr,
                      layout_allocation.x, layout_allocation.y,
-                     tag->priv->layout);
+                     tag->layout);
 
   gtk_style_context_restore (context);
 
-  if (!entry->priv->button_visible || !tag->priv->has_close_button)
+  if (!entry->button_visible || !tag->has_close_button)
     goto done;
 
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
@@ -479,12 +483,12 @@ gd_tagged_entry_tag_draw (GdTaggedEntryTag *tag,
   /* if the state changed since last time we draw the pixbuf,
    * clear and redraw it.
    */
-  if (state != tag->priv->last_button_state)
+  if (state != tag->last_button_state)
     {
-      g_clear_pointer (&tag->priv->close_surface, cairo_surface_destroy);
+      g_clear_pointer (&tag->close_surface, cairo_surface_destroy);
       gd_tagged_entry_tag_ensure_close_surface (tag, context);
 
-      tag->priv->last_button_state = state;
+      tag->last_button_state = state;
     }
 
   gtk_render_background (context, cr,
@@ -495,7 +499,7 @@ gd_tagged_entry_tag_draw (GdTaggedEntryTag *tag,
                          button_allocation.width, button_allocation.height);
 
   gtk_render_icon_surface (context, cr,
-                           tag->priv->close_surface,
+                           tag->close_surface,
                            button_allocation.x, button_allocation.y);
 
 done:
@@ -507,12 +511,12 @@ done:
 static void
 gd_tagged_entry_tag_unrealize (GdTaggedEntryTag *tag)
 {
-  if (tag->priv->window == NULL)
+  if (tag->window == NULL)
     return;
 
-  gdk_window_set_user_data (tag->priv->window, NULL);
-  gdk_window_destroy (tag->priv->window);
-  tag->priv->window = NULL;
+  gdk_window_set_user_data (tag->window, NULL);
+  gdk_window_destroy (tag->window);
+  tag->window = NULL;
 }
 
 static void
@@ -524,7 +528,7 @@ gd_tagged_entry_tag_realize (GdTaggedEntryTag *tag,
   gint attributes_mask;
   gint tag_width, tag_height;
 
-  if (tag->priv->window != NULL)
+  if (tag->window != NULL)
     return;
 
   attributes.window_type = GDK_WINDOW_CHILD;
@@ -542,9 +546,9 @@ gd_tagged_entry_tag_realize (GdTaggedEntryTag *tag,
 
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
-  tag->priv->window = gdk_window_new (gtk_widget_get_window (widget),
+  tag->window = gdk_window_new (gtk_widget_get_window (widget),
                                 &attributes, attributes_mask);
-  gdk_window_set_user_data (tag->priv->window, widget);
+  gdk_window_set_user_data (tag->window, widget);
 }
 
 static gboolean
@@ -557,7 +561,7 @@ gd_tagged_entry_draw (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (gd_tagged_entry_parent_class)->draw (widget, cr);
 
-  for (l = self->priv->tags; l != NULL; l = l->next)
+  for (l = self->tags; l != NULL; l = l->next)
     {
       tag = l->data;
       gd_tagged_entry_tag_draw (tag, cr, self);
@@ -577,10 +581,10 @@ gd_tagged_entry_map (GtkWidget *widget)
     {
       GTK_WIDGET_CLASS (gd_tagged_entry_parent_class)->map (widget);
 
-      for (l = self->priv->tags; l != NULL; l = l->next)
+      for (l = self->tags; l != NULL; l = l->next)
         {
           tag = l->data;
-          gdk_window_show (tag->priv->window);
+          gdk_window_show (tag->window);
         }
     }
 }
@@ -594,10 +598,10 @@ gd_tagged_entry_unmap (GtkWidget *widget)
 
   if (gtk_widget_get_mapped (widget))
     {
-      for (l = self->priv->tags; l != NULL; l = l->next)
+      for (l = self->tags; l != NULL; l = l->next)
         {
           tag = l->data;
-          gdk_window_hide (tag->priv->window);
+          gdk_window_hide (tag->window);
         }
 
       GTK_WIDGET_CLASS (gd_tagged_entry_parent_class)->unmap (widget);
@@ -613,7 +617,7 @@ gd_tagged_entry_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gd_tagged_entry_parent_class)->realize (widget);
 
-  for (l = self->priv->tags; l != NULL; l = l->next)
+  for (l = self->tags; l != NULL; l = l->next)
     {
       tag = l->data;
       gd_tagged_entry_tag_realize (tag, self);
@@ -629,7 +633,7 @@ gd_tagged_entry_unrealize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gd_tagged_entry_parent_class)->unrealize (widget);
 
-  for (l = self->priv->tags; l != NULL; l = l->next)
+  for (l = self->tags; l != NULL; l = l->next)
     {
       tag = l->data;
       gd_tagged_entry_tag_unrealize (tag);
@@ -670,14 +674,14 @@ gd_tagged_entry_size_allocate (GtkWidget *widget,
     {
       gd_tagged_entry_tag_panel_get_position (self, &x, &y);
 
-      for (l = self->priv->tags; l != NULL; l = l->next)
+      for (l = self->tags; l != NULL; l = l->next)
         {
           GtkBorder margin;
 
           tag = l->data;
           gd_tagged_entry_tag_get_size (tag, self, &width, &height);
           gd_tagged_entry_tag_get_margin (tag, self, &margin);
-          gdk_window_move_resize (tag->priv->window, x, y + margin.top, width, height);
+          gdk_window_move_resize (tag->window, x, y + margin.top, width, height);
 
           x += width;
         }
@@ -709,10 +713,10 @@ gd_tagged_entry_finalize (GObject *obj)
 {
   GdTaggedEntry *self = GD_TAGGED_ENTRY (obj);
 
-  if (self->priv->tags != NULL)
+  if (self->tags != NULL)
     {
-      g_list_free_full (self->priv->tags, g_object_unref);
-      self->priv->tags = NULL;
+      g_list_free_full (self->tags, g_object_unref);
+      self->tags = NULL;
     }
 
   G_OBJECT_CLASS (gd_tagged_entry_parent_class)->finalize (obj);
@@ -725,10 +729,10 @@ gd_tagged_entry_find_tag_by_window (GdTaggedEntry *self,
   GdTaggedEntryTag *tag = NULL, *elem;
   GList *l;
 
-  for (l = self->priv->tags; l != NULL; l = l->next)
+  for (l = self->tags; l != NULL; l = l->next)
     {
       elem = l->data;
-      if (elem->priv->window == window)
+      if (elem->window == window)
         {
           tag = elem;
           break;
@@ -749,7 +753,7 @@ gd_tagged_entry_enter_notify (GtkWidget        *widget,
 
   if (tag != NULL)
     {
-      self->priv->in_child = tag;
+      self->in_child = tag;
       gtk_widget_queue_draw (widget);
     }
 
@@ -762,9 +766,9 @@ gd_tagged_entry_leave_notify (GtkWidget        *widget,
 {
   GdTaggedEntry *self = GD_TAGGED_ENTRY (widget);
 
-  if (self->priv->in_child != NULL)
+  if (self->in_child != NULL)
     {
-      self->priv->in_child = NULL;
+      self->in_child = NULL;
       gtk_widget_queue_draw (widget);
     }
 
@@ -784,8 +788,8 @@ gd_tagged_entry_motion_notify (GtkWidget      *widget,
     {
       gdk_event_request_motions (event);
 
-      self->priv->in_child = tag;
-      self->priv->in_child_button = gd_tagged_entry_tag_event_is_button (tag, self, event->x, event->y);
+      self->in_child = tag;
+      self->in_child_button = gd_tagged_entry_tag_event_is_button (tag, self, event->x, event->y);
       gtk_widget_queue_draw (widget);
 
       return FALSE;
@@ -805,11 +809,11 @@ gd_tagged_entry_button_release_event (GtkWidget *widget,
 
   if (tag != NULL)
     {
-      self->priv->in_child_active = FALSE;
+      self->in_child_active = FALSE;
 
       if (gd_tagged_entry_tag_event_is_button (tag, self, event->x, event->y))
         {
-          self->priv->in_child_button_active = FALSE;
+          self->in_child_button_active = FALSE;
           g_signal_emit (self, signals[SIGNAL_TAG_BUTTON_CLICKED], 0, tag);
         }
       else
@@ -837,9 +841,9 @@ gd_tagged_entry_button_press_event (GtkWidget *widget,
   if (tag != NULL)
     {
       if (gd_tagged_entry_tag_event_is_button (tag, self, event->x, event->y))
-        self->priv->in_child_button_active = TRUE;
+        self->in_child_button_active = TRUE;
       else
-        self->priv->in_child_active = TRUE;
+        self->in_child_active = TRUE;
 
       gtk_widget_queue_draw (widget);
 
@@ -852,8 +856,7 @@ gd_tagged_entry_button_press_event (GtkWidget *widget,
 static void
 gd_tagged_entry_init (GdTaggedEntry *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GD_TYPE_TAGGED_ENTRY, GdTaggedEntryPrivate);
-  self->priv->button_visible = TRUE;
+  self->button_visible = TRUE;
 }
 
 static void
@@ -938,34 +941,27 @@ gd_tagged_entry_class_init (GdTaggedEntryClass *klass)
                           _("Whether the close button should be shown in tags."), TRUE,
                           G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
-  g_type_class_add_private (klass, sizeof (GdTaggedEntryPrivate));
   g_object_class_install_properties (oclass, NUM_PROPERTIES, properties);
 }
 
 static void
 gd_tagged_entry_tag_init (GdTaggedEntryTag *self)
 {
-  GdTaggedEntryTagPrivate *priv;
-
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GD_TYPE_TAGGED_ENTRY_TAG, GdTaggedEntryTagPrivate);
-  priv = self->priv;
-
-  priv->last_button_state = GTK_STATE_FLAG_NORMAL;
+  self->last_button_state = GTK_STATE_FLAG_NORMAL;
 }
 
 static void
 gd_tagged_entry_tag_finalize (GObject *obj)
 {
   GdTaggedEntryTag *tag = GD_TAGGED_ENTRY_TAG (obj);
-  GdTaggedEntryTagPrivate *priv = tag->priv;
 
-  if (priv->window != NULL)
+  if (tag->window != NULL)
     gd_tagged_entry_tag_unrealize (tag);
 
-  g_clear_object (&priv->layout);
-  g_clear_pointer (&priv->close_surface, cairo_surface_destroy);
-  g_free (priv->label);
-  g_free (priv->style);
+  g_clear_object (&tag->layout);
+  g_clear_pointer (&tag->close_surface, cairo_surface_destroy);
+  g_free (tag->label);
+  g_free (tag->style);
 
   G_OBJECT_CLASS (gd_tagged_entry_tag_parent_class)->finalize (obj);
 }
@@ -1040,7 +1036,6 @@ gd_tagged_entry_tag_class_init (GdTaggedEntryTagClass *klass)
                          _("Style of the tag."), "documents-entry-tag",
                          G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_type_class_add_private (klass, sizeof (GdTaggedEntryTagPrivate));
   g_object_class_install_properties (oclass, NUM_TAG_PROPERTIES, tag_properties);
 }
 
@@ -1055,18 +1050,18 @@ gd_tagged_entry_insert_tag (GdTaggedEntry    *self,
                             GdTaggedEntryTag *tag,
                             gint              position)
 {
-  if (g_list_find (self->priv->tags, tag) != NULL)
+  if (g_list_find (self->tags, tag) != NULL)
     return FALSE;
 
-  tag->priv->entry = self;
+  tag->entry = self;
 
-  self->priv->tags = g_list_insert (self->priv->tags, g_object_ref (tag), position);
+  self->tags = g_list_insert (self->tags, g_object_ref (tag), position);
 
   if (gtk_widget_get_realized (GTK_WIDGET (self)))
     gd_tagged_entry_tag_realize (tag, self);
 
   if (gtk_widget_get_mapped (GTK_WIDGET (self)))
-    gdk_window_show_unraised (tag->priv->window);
+    gdk_window_show_unraised (tag->window);
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
 
@@ -1084,12 +1079,12 @@ gboolean
 gd_tagged_entry_remove_tag (GdTaggedEntry    *self,
                             GdTaggedEntryTag *tag)
 {
-  if (!g_list_find (self->priv->tags, tag))
+  if (!g_list_find (self->tags, tag))
     return FALSE;
 
   gd_tagged_entry_tag_unrealize (tag);
 
-  self->priv->tags = g_list_remove (self->priv->tags, tag);
+  self->tags = g_list_remove (self->tags, tag);
   g_object_unref (tag);
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
@@ -1107,21 +1102,17 @@ void
 gd_tagged_entry_tag_set_label (GdTaggedEntryTag *tag,
                                const gchar *label)
 {
-  GdTaggedEntryTagPrivate *priv;
-
   g_return_if_fail (GD_IS_TAGGED_ENTRY_TAG (tag));
 
-  priv = tag->priv;
-
-  if (g_strcmp0 (priv->label, label) != 0)
+  if (g_strcmp0 (tag->label, label) != 0)
     {
       GtkWidget *entry;
 
-      g_free (priv->label);
-      priv->label = g_strdup (label);
-      g_clear_object (&priv->layout);
+      g_free (tag->label);
+      tag->label = g_strdup (label);
+      g_clear_object (&tag->layout);
 
-      entry = GTK_WIDGET (tag->priv->entry);
+      entry = GTK_WIDGET (tag->entry);
       if (entry)
         gtk_widget_queue_resize (entry);
     }
@@ -1132,28 +1123,24 @@ gd_tagged_entry_tag_get_label (GdTaggedEntryTag *tag)
 {
   g_return_val_if_fail (GD_IS_TAGGED_ENTRY_TAG (tag), NULL);
 
-  return tag->priv->label;
+  return tag->label;
 }
 
 void
 gd_tagged_entry_tag_set_has_close_button (GdTaggedEntryTag *tag,
                                           gboolean has_close_button)
 {
-  GdTaggedEntryTagPrivate *priv;
-
   g_return_if_fail (GD_IS_TAGGED_ENTRY_TAG (tag));
 
-  priv = tag->priv;
-
   has_close_button = has_close_button != FALSE;
-  if (priv->has_close_button != has_close_button)
+  if (tag->has_close_button != has_close_button)
     {
       GtkWidget *entry;
 
-      priv->has_close_button = has_close_button;
-      g_clear_object (&priv->layout);
+      tag->has_close_button = has_close_button;
+      g_clear_object (&tag->layout);
 
-      entry = GTK_WIDGET (priv->entry);
+      entry = GTK_WIDGET (tag->entry);
       if (entry)
         gtk_widget_queue_resize (entry);
     }
@@ -1164,28 +1151,24 @@ gd_tagged_entry_tag_get_has_close_button (GdTaggedEntryTag *tag)
 {
   g_return_val_if_fail (GD_IS_TAGGED_ENTRY_TAG (tag), FALSE);
 
-  return tag->priv->has_close_button;
+  return tag->has_close_button;
 }
 
 void
 gd_tagged_entry_tag_set_style (GdTaggedEntryTag *tag,
                                const gchar *style)
 {
-  GdTaggedEntryTagPrivate *priv;
-
   g_return_if_fail (GD_IS_TAGGED_ENTRY_TAG (tag));
 
-  priv = tag->priv;
-
-  if (g_strcmp0 (priv->style, style) != 0)
+  if (g_strcmp0 (tag->style, style) != 0)
     {
       GtkWidget *entry;
 
-      g_free (priv->style);
-      priv->style = g_strdup (style);
-      g_clear_object (&priv->layout);
+      g_free (tag->style);
+      tag->style = g_strdup (style);
+      g_clear_object (&tag->layout);
 
-      entry = GTK_WIDGET (tag->priv->entry);
+      entry = GTK_WIDGET (tag->entry);
       if (entry)
         gtk_widget_queue_resize (entry);
     }
@@ -1196,7 +1179,7 @@ gd_tagged_entry_tag_get_style (GdTaggedEntryTag *tag)
 {
   g_return_val_if_fail (GD_IS_TAGGED_ENTRY_TAG (tag), NULL);
 
-  return tag->priv->style;
+  return tag->style;
 }
 
 void
@@ -1205,10 +1188,10 @@ gd_tagged_entry_set_tag_button_visible (GdTaggedEntry *self,
 {
   g_return_if_fail (GD_IS_TAGGED_ENTRY (self));
 
-  if (self->priv->button_visible == visible)
+  if (self->button_visible == visible)
     return;
 
-  self->priv->button_visible = visible;
+  self->button_visible = visible;
   gtk_widget_queue_resize (GTK_WIDGET (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TAG_BUTTON_VISIBLE]);
@@ -1219,5 +1202,5 @@ gd_tagged_entry_get_tag_button_visible (GdTaggedEntry *self)
 {
   g_return_val_if_fail (GD_IS_TAGGED_ENTRY (self), FALSE);
 
-  return self->priv->button_visible;
+  return self->button_visible;
 }

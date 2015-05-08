@@ -24,13 +24,15 @@
 #include "gb-command-vim.h"
 #include "gb-vim.h"
 
-struct _GbCommandVimPrivate
+struct _GbCommandVim
 {
+  GbCommand      parent_instance;
+
   IdeSourceView *source_view;
   gchar         *command_text;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbCommandVim, gb_command_vim, GB_TYPE_COMMAND)
+G_DEFINE_TYPE (GbCommandVim, gb_command_vim, GB_TYPE_COMMAND)
 
 enum {
   PROP_0,
@@ -46,7 +48,7 @@ gb_command_vim_get_source_view (GbCommandVim *vim)
 {
   g_return_val_if_fail (GB_IS_COMMAND_VIM (vim), NULL);
 
-  return vim->priv->source_view;
+  return vim->source_view;
 }
 
 static void
@@ -56,7 +58,7 @@ gb_command_vim_set_source_view (GbCommandVim  *vim,
   g_return_if_fail (GB_IS_COMMAND_VIM (vim));
   g_return_if_fail (IDE_IS_SOURCE_VIEW (source_view));
 
-  if (ide_set_weak_pointer (&vim->priv->source_view, source_view))
+  if (ide_set_weak_pointer (&vim->source_view, source_view))
     g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_SOURCE_VIEW]);
 }
 
@@ -65,7 +67,7 @@ gb_command_vim_get_command_text (GbCommandVim *vim)
 {
   g_return_val_if_fail (GB_IS_COMMAND_VIM (vim), NULL);
 
-  return vim->priv->command_text;
+  return vim->command_text;
 }
 
 void
@@ -75,10 +77,10 @@ gb_command_vim_set_command_text (GbCommandVim *vim,
   g_return_if_fail (GB_IS_COMMAND_VIM (vim));
   g_return_if_fail (command_text);
 
-  if (command_text != vim->priv->command_text)
+  if (command_text != vim->command_text)
     {
-      g_free (vim->priv->command_text);
-      vim->priv->command_text = g_strdup (command_text);
+      g_free (vim->command_text);
+      vim->command_text = g_strdup (command_text);
       g_object_notify_by_pspec (G_OBJECT (vim), gParamSpecs [PROP_COMMAND_TEXT]);
     }
 }
@@ -90,14 +92,14 @@ gb_command_vim_execute (GbCommand *command)
 
   g_return_val_if_fail (GB_IS_COMMAND_VIM (self), NULL);
 
-  if (self->priv->source_view)
+  if (self->source_view)
     {
-      GtkSourceView *source_view = (GtkSourceView *)self->priv->source_view;
+      GtkSourceView *source_view = (GtkSourceView *)self->source_view;
       GError *error = NULL;
 
-      IDE_TRACE_MSG ("Executing Vim command: %s", self->priv->command_text);
+      IDE_TRACE_MSG ("Executing Vim command: %s", self->command_text);
 
-      if (!gb_vim_execute (source_view, self->priv->command_text, &error))
+      if (!gb_vim_execute (source_view, self->command_text, &error))
         {
           g_warning ("%s", error->message);
           g_clear_error (&error);
@@ -110,10 +112,10 @@ gb_command_vim_execute (GbCommand *command)
 static void
 gb_command_vim_finalize (GObject *object)
 {
-  GbCommandVimPrivate *priv = GB_COMMAND_VIM (object)->priv;
+  GbCommandVim *self = GB_COMMAND_VIM (object);
 
-  ide_clear_weak_pointer (&priv->source_view);
-  g_clear_pointer (&priv->command_text, g_free);
+  ide_clear_weak_pointer (&self->source_view);
+  g_clear_pointer (&self->command_text, g_free);
 
   G_OBJECT_CLASS (gb_command_vim_parent_class)->finalize (object);
 }
@@ -198,5 +200,4 @@ gb_command_vim_class_init (GbCommandVimClass *klass)
 static void
 gb_command_vim_init (GbCommandVim *self)
 {
-  self->priv = gb_command_vim_get_instance_private (self);
 }

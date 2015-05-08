@@ -23,32 +23,11 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_COMMAND_RESULT            (gb_command_result_get_type())
-#define GB_COMMAND_RESULT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND_RESULT, GbCommandResult))
-#define GB_COMMAND_RESULT_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND_RESULT, GbCommandResult const))
-#define GB_COMMAND_RESULT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_COMMAND_RESULT, GbCommandResultClass))
-#define GB_IS_COMMAND_RESULT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_COMMAND_RESULT))
-#define GB_IS_COMMAND_RESULT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_COMMAND_RESULT))
-#define GB_COMMAND_RESULT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_COMMAND_RESULT, GbCommandResultClass))
+#define GB_TYPE_COMMAND_RESULT (gb_command_result_get_type())
 
-typedef struct _GbCommandResult        GbCommandResult;
-typedef struct _GbCommandResultClass   GbCommandResultClass;
-typedef struct _GbCommandResultPrivate GbCommandResultPrivate;
+G_DECLARE_FINAL_TYPE (GbCommandResult, gb_command_result,
+                      GB, COMMAND_RESULT, GObject)
 
-struct _GbCommandResult
-{
-  GObject parent;
-
-  /*< private >*/
-  GbCommandResultPrivate *priv;
-};
-
-struct _GbCommandResultClass
-{
-  GObjectClass parent;
-};
-
-GType            gb_command_result_get_type         (void);
 GbCommandResult *gb_command_result_new              (void);
 gboolean         gb_command_result_get_is_running   (GbCommandResult *result);
 void             gb_command_result_set_is_running   (GbCommandResult *result,

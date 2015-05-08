@@ -20,15 +20,17 @@
 
 #include "gb-command-result.h"
 
-struct _GbCommandResultPrivate
+struct _GbCommandResult
 {
-  gchar *command_text;
-  gchar *result_text;
-  guint is_error : 1;
-  guint is_running : 1;
+  GObject  parent_instance;
+
+  gchar   *command_text;
+  gchar   *result_text;
+  guint    is_error : 1;
+  guint    is_running : 1;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbCommandResult, gb_command_result, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GbCommandResult, gb_command_result, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -52,7 +54,7 @@ gb_command_result_get_command_text (GbCommandResult *result)
 {
   g_return_val_if_fail (GB_IS_COMMAND_RESULT (result), NULL);
 
-  return result->priv->command_text;
+  return result->command_text;
 }
 
 void
@@ -61,10 +63,10 @@ gb_command_result_set_command_text (GbCommandResult *result,
 {
   g_return_if_fail (GB_IS_COMMAND_RESULT (result));
 
-  if (result->priv->command_text != command_text)
+  if (result->command_text != command_text)
     {
-      g_free (result->priv->command_text);
-      result->priv->command_text = g_strdup (command_text);
+      g_free (result->command_text);
+      result->command_text = g_strdup (command_text);
       g_object_notify_by_pspec (G_OBJECT (result),
                                 gParamSpecs [PROP_COMMAND_TEXT]);
     }
@@ -75,7 +77,7 @@ gb_command_result_get_result_text (GbCommandResult *result)
 {
   g_return_val_if_fail (GB_IS_COMMAND_RESULT (result), NULL);
 
-  return result->priv->result_text;
+  return result->result_text;
 }
 
 void
@@ -84,10 +86,10 @@ gb_command_result_set_result_text (GbCommandResult *result,
 {
   g_return_if_fail (GB_IS_COMMAND_RESULT (result));
 
-  if (result->priv->result_text != result_text)
+  if (result->result_text != result_text)
     {
-      g_free (result->priv->result_text);
-      result->priv->result_text = g_strdup (result_text);
+      g_free (result->result_text);
+      result->result_text = g_strdup (result_text);
       g_object_notify_by_pspec (G_OBJECT (result),
                                 gParamSpecs [PROP_RESULT_TEXT]);
     }
@@ -98,7 +100,7 @@ gb_command_result_get_is_running (GbCommandResult *result)
 {
   g_return_val_if_fail (GB_IS_COMMAND_RESULT (result), FALSE);
 
-  return result->priv->is_running;
+  return result->is_running;
 }
 
 void
@@ -107,9 +109,9 @@ gb_command_result_set_is_running (GbCommandResult *result,
 {
   g_return_if_fail (GB_IS_COMMAND_RESULT (result));
 
-  if (result->priv->is_running != is_running)
+  if (result->is_running != is_running)
     {
-      result->priv->is_running = !!is_running;
+      result->is_running = !!is_running;
       g_object_notify_by_pspec (G_OBJECT (result),
                                 gParamSpecs [PROP_IS_RUNNING]);
     }
@@ -120,7 +122,7 @@ gb_command_result_get_is_error (GbCommandResult *result)
 {
   g_return_val_if_fail (GB_IS_COMMAND_RESULT (result), FALSE);
 
-  return result->priv->is_error;
+  return result->is_error;
 }
 
 void
@@ -129,9 +131,9 @@ gb_command_result_set_is_error (GbCommandResult *result,
 {
   g_return_if_fail (GB_IS_COMMAND_RESULT (result));
 
-  if (result->priv->is_error != is_error)
+  if (result->is_error != is_error)
     {
-      result->priv->is_error = !!is_error;
+      result->is_error = !!is_error;
       g_object_notify_by_pspec (G_OBJECT (result),
                                 gParamSpecs [PROP_IS_ERROR]);
     }
@@ -140,10 +142,10 @@ gb_command_result_set_is_error (GbCommandResult *result,
 static void
 gb_command_result_finalize (GObject *object)
 {
-  GbCommandResultPrivate *priv = GB_COMMAND_RESULT (object)->priv;
+  GbCommandResult *self = GB_COMMAND_RESULT (object);
 
-  g_clear_pointer (&priv->command_text, g_free);
-  g_clear_pointer (&priv->result_text, g_free);
+  g_clear_pointer (&self->command_text, g_free);
+  g_clear_pointer (&self->result_text, g_free);
 
   G_OBJECT_CLASS (gb_command_result_parent_class)->finalize (object);
 }
@@ -257,5 +259,4 @@ gb_command_result_class_init (GbCommandResultClass *klass)
 static void
 gb_command_result_init (GbCommandResult *self)
 {
-  self->priv = gb_command_result_get_instance_private (self);
 }

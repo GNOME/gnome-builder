@@ -24,32 +24,10 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_DEVHELP_VIEW            (gb_devhelp_view_get_type())
-#define GB_DEVHELP_VIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_DEVHELP_VIEW, GbDevhelpView))
-#define GB_DEVHELP_VIEW_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_DEVHELP_VIEW, GbDevhelpView const))
-#define GB_DEVHELP_VIEW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_DEVHELP_VIEW, GbDevhelpViewClass))
-#define GB_IS_DEVHELP_VIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_DEVHELP_VIEW))
-#define GB_IS_DEVHELP_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_DEVHELP_VIEW))
-#define GB_DEVHELP_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_DEVHELP_VIEW, GbDevhelpViewClass))
+#define GB_TYPE_DEVHELP_VIEW (gb_devhelp_view_get_type())
 
-typedef struct _GbDevhelpView        GbDevhelpView;
-typedef struct _GbDevhelpViewClass   GbDevhelpViewClass;
-typedef struct _GbDevhelpViewPrivate GbDevhelpViewPrivate;
+G_DECLARE_FINAL_TYPE (GbDevhelpView, gb_devhelp_view, GB, DEVHELP_VIEW, GbView)
 
-struct _GbDevhelpView
-{
-  GbView parent;
-
-  /*< private >*/
-  GbDevhelpViewPrivate *priv;
-};
-
-struct _GbDevhelpViewClass
-{
-  GbViewClass parent;
-};
-
-GType   gb_devhelp_view_get_type (void);
 GbView *gb_devhelp_view_new      (GbDevhelpDocument *document);
 
 G_END_DECLS

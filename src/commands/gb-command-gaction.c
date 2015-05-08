@@ -23,15 +23,16 @@
 
 #include "gb-command-gaction.h"
 
-struct _GbCommandGactionPrivate
+struct _GbCommandGaction
 {
+  GbCommand     parent_instance;
+
   GActionGroup *action_group;
   gchar        *action_name;
   GVariant     *parameters;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbCommandGaction, gb_command_gaction,
-                            GB_TYPE_COMMAND)
+G_DEFINE_TYPE (GbCommandGaction, gb_command_gaction, GB_TYPE_COMMAND)
 
 enum {
   PROP_0,
@@ -50,10 +51,10 @@ gb_command_gaction_set_action_group (GbCommandGaction *gaction,
   g_return_if_fail (GB_IS_COMMAND_GACTION (gaction));
   g_return_if_fail (G_IS_ACTION_GROUP (action_group));
 
-  if (gaction->priv->action_group != action_group)
+  if (gaction->action_group != action_group)
     {
-      g_clear_object (&gaction->priv->action_group);
-      gaction->priv->action_group = g_object_ref (action_group);
+      g_clear_object (&gaction->action_group);
+      gaction->action_group = g_object_ref (action_group);
     }
 }
 
@@ -63,10 +64,10 @@ gb_command_gaction_set_action_name (GbCommandGaction *gaction,
 {
   g_return_if_fail (GB_IS_COMMAND_GACTION (gaction));
 
-  if (gaction->priv->action_name != action_name)
+  if (gaction->action_name != action_name)
     {
-      g_clear_pointer (&gaction->priv->action_name, g_free);
-      gaction->priv->action_name = g_strdup (action_name);
+      g_clear_pointer (&gaction->action_name, g_free);
+      gaction->action_name = g_strdup (action_name);
     }
 }
 
@@ -76,10 +77,10 @@ gb_command_gaction_set_parameters (GbCommandGaction *gaction,
 {
   g_return_if_fail (GB_IS_COMMAND_GACTION (gaction));
 
-  if (gaction->priv->parameters != variant)
+  if (gaction->parameters != variant)
     {
-      g_clear_pointer (&gaction->priv->parameters, g_variant_unref);
-      gaction->priv->parameters = g_variant_ref (variant);
+      g_clear_pointer (&gaction->parameters, g_variant_unref);
+      gaction->parameters = g_variant_ref (variant);
     }
 }
 
@@ -90,14 +91,14 @@ gb_command_gaction_execute (GbCommand *command)
 
   g_return_val_if_fail (GB_IS_COMMAND_GACTION (self), NULL);
 
-  if (self->priv->action_group &&
-      self->priv->action_name &&
-      g_action_group_has_action (self->priv->action_group,
-                                 self->priv->action_name))
+  if (self->action_group &&
+      self->action_name &&
+      g_action_group_has_action (self->action_group,
+                                 self->action_name))
     {
-      g_action_group_activate_action (self->priv->action_group,
-                                      self->priv->action_name,
-                                      self->priv->parameters);
+      g_action_group_activate_action (self->action_group,
+                                      self->action_name,
+                                      self->parameters);
     }
 
   return NULL;
@@ -106,11 +107,11 @@ gb_command_gaction_execute (GbCommand *command)
 static void
 gb_command_gaction_finalize (GObject *object)
 {
-  GbCommandGactionPrivate *priv = GB_COMMAND_GACTION (object)->priv;
+  GbCommandGaction *self = GB_COMMAND_GACTION (object);
 
-  g_clear_object (&priv->action_group);
-  g_clear_pointer (&priv->action_name, g_free);
-  g_clear_pointer (&priv->parameters, g_variant_unref);
+  g_clear_object (&self->action_group);
+  g_clear_pointer (&self->action_name, g_free);
+  g_clear_pointer (&self->parameters, g_variant_unref);
 
   G_OBJECT_CLASS (gb_command_gaction_parent_class)->finalize (object);
 }
@@ -126,15 +127,15 @@ gb_command_gaction_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_ACTION_GROUP:
-      g_value_set_object (value, self->priv->action_group);
+      g_value_set_object (value, self->action_group);
       break;
 
     case PROP_ACTION_NAME:
-      g_value_set_string (value, self->priv->action_name);
+      g_value_set_string (value, self->action_name);
       break;
 
     case PROP_PARAMETERS:
-      g_value_set_variant (value, self->priv->parameters);
+      g_value_set_variant (value, self->parameters);
       break;
 
     default:
@@ -209,5 +210,4 @@ gb_command_gaction_class_init (GbCommandGactionClass *klass)
 static void
 gb_command_gaction_init (GbCommandGaction *self)
 {
-  self->priv = gb_command_gaction_get_instance_private (self);
 }

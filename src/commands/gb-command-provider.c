@@ -21,12 +21,12 @@
 #include "gb-command-provider.h"
 #include "gb-workbench.h"
 
-struct _GbCommandProviderPrivate
+typedef struct
 {
   GbWorkbench *workbench;
   GbView      *active_view;
   gint         priority;
-};
+} GbCommandProviderPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbCommandProvider, gb_command_provider, G_TYPE_OBJECT)
 
@@ -66,21 +66,21 @@ gb_command_provider_new (GbWorkbench *workbench)
 GbView *
 gb_command_provider_get_active_view (GbCommandProvider *provider)
 {
+  GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
+
   g_return_val_if_fail (GB_IS_COMMAND_PROVIDER (provider), NULL);
 
-  return provider->priv->active_view;
+  return priv->active_view;
 }
 
 static void
 gb_command_provider_set_active_view (GbCommandProvider *provider,
                                     GbView             *tab)
 {
-  GbCommandProviderPrivate *priv;
+  GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
 
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
   g_return_if_fail (!tab || GB_IS_VIEW (tab));
-
-  priv = provider->priv;
 
   if (priv->active_view)
     {
@@ -149,21 +149,21 @@ gb_command_provider_disconnect (GbCommandProvider *provider,
 GbWorkbench *
 gb_command_provider_get_workbench (GbCommandProvider *provider)
 {
+  GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
+
   g_return_val_if_fail (GB_IS_COMMAND_PROVIDER (provider), NULL);
 
-  return provider->priv->workbench;
+  return priv->workbench;
 }
 
 static void
 gb_command_provider_set_workbench (GbCommandProvider *provider,
                                    GbWorkbench       *workbench)
 {
-  GbCommandProviderPrivate *priv;
+  GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
 
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
   g_return_if_fail (!workbench || GB_IS_WORKBENCH (workbench));
-
-  priv = provider->priv;
 
   if (priv->workbench != workbench)
     {
@@ -191,20 +191,24 @@ gb_command_provider_set_workbench (GbCommandProvider *provider,
 gint
 gb_command_provider_get_priority (GbCommandProvider *provider)
 {
+  GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
+
   g_return_val_if_fail (GB_IS_COMMAND_PROVIDER (provider), 0);
 
-  return provider->priv->priority;
+  return priv->priority;
 }
 
 void
 gb_command_provider_set_priority (GbCommandProvider *provider,
                                   gint               priority)
 {
+  GbCommandProviderPrivate *priv = gb_command_provider_get_instance_private (provider);
+
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
 
-  if (provider->priv->priority != priority)
+  if (priv->priority != priority)
     {
-      provider->priv->priority = priority;
+      priv->priority = priority;
       g_object_notify_by_pspec (G_OBJECT (provider),
                                 gParamSpecs [PROP_PRIORITY]);
     }
@@ -406,5 +410,4 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
 static void
 gb_command_provider_init (GbCommandProvider *self)
 {
-  self->priv = gb_command_provider_get_instance_private (self);
 }

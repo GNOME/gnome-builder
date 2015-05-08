@@ -25,13 +25,13 @@
 #include "gb-preferences-switch.h"
 #include "gb-string.h"
 
-struct _GbPreferencesPagePrivate
+typedef struct
 {
   GHashTable *widgets;
   GtkBox     *controls;
   gchar      *title;
   gchar      *default_title;
-};
+} GbPreferencesPagePrivate;
 
 static void buildable_iface_init (GtkBuildableIface *iface);
 
@@ -69,12 +69,13 @@ gb_preferences_page_set_keywords (GbPreferencesPage   *page,
   gsize size;
   guint count = 0;
   guint i;
+  GbPreferencesPagePrivate *priv = gb_preferences_page_get_instance_private (page);
 
   g_return_val_if_fail (GB_IS_PREFERENCES_PAGE (page), 0);
 
   if (!keywords || (g_strv_length ((gchar **)keywords) == 0))
     {
-      g_hash_table_foreach (page->priv->widgets, (GHFunc)gtk_widget_show, NULL);
+      g_hash_table_foreach (priv->widgets, (GHFunc)gtk_widget_show, NULL);
       return G_MAXUINT;
     }
 
@@ -84,7 +85,7 @@ gb_preferences_page_set_keywords (GbPreferencesPage   *page,
   for (i = 0; keywords [i]; i++)
     needle [i] = g_utf8_strdown (keywords [i], -1);
 
-  g_hash_table_iter_init (&iter, page->priv->widgets);
+  g_hash_table_iter_init (&iter, priv->widgets);
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
@@ -123,6 +124,7 @@ gb_preferences_page_set_keywords_for_widget (GbPreferencesPage *page,
   va_list args;
   GQuark q;
   gchar *downcase;
+  GbPreferencesPagePrivate *priv = gb_preferences_page_get_instance_private (page);
 
   g_return_if_fail (GB_IS_PREFERENCES_PAGE (page));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -133,7 +135,7 @@ gb_preferences_page_set_keywords_for_widget (GbPreferencesPage *page,
 
   va_start (args, first_widget);
   do
-    g_hash_table_insert (page->priv->widgets, widget, GINT_TO_POINTER (q));
+    g_hash_table_insert (priv->widgets, widget, GINT_TO_POINTER (q));
   while ((widget = va_arg (args, GtkWidget *)));
   va_end (args);
 }
@@ -149,22 +151,25 @@ gb_preferences_page_set_keywords_for_widget (GbPreferencesPage *page,
 GtkWidget *
 gb_preferences_page_get_controls (GbPreferencesPage *page)
 {
+  GbPreferencesPagePrivate *priv = gb_preferences_page_get_instance_private (page);
 
   g_return_val_if_fail (GB_IS_PREFERENCES_PAGE (page), NULL);
 
-  return GTK_WIDGET (page->priv->controls);
+  return GTK_WIDGET (priv->controls);
 }
 
 void
 gb_preferences_page_set_title (GbPreferencesPage *page,
                                const gchar       *title)
 {
+  GbPreferencesPagePrivate *priv = gb_preferences_page_get_instance_private (page);
+
   g_return_if_fail (GB_IS_PREFERENCES_PAGE (page));
 
-  if (!gb_str_equal0 (title, page->priv->title))
+  if (!gb_str_equal0 (title, priv->title))
     {
-      g_free (page->priv->title);
-      page->priv->title = g_strdup (title);
+      g_free (priv->title);
+      priv->title = g_strdup (title);
       g_object_notify_by_pspec (G_OBJECT (page),
                                 gParamSpecs [PROP_TITLE]);
     }
@@ -173,23 +178,28 @@ gb_preferences_page_set_title (GbPreferencesPage *page,
 void
 gb_preferences_page_reset_title (GbPreferencesPage *page)
 {
+  GbPreferencesPagePrivate *priv = gb_preferences_page_get_instance_private (page);
+
   g_return_if_fail (GB_IS_PREFERENCES_PAGE (page));
 
-  gb_preferences_page_set_title (page, page->priv->default_title);
+  gb_preferences_page_set_title (page, priv->default_title);
 }
 
 static const gchar *
 gb_preferences_page_get_title (GbPreferencesPage *page)
 {
+  GbPreferencesPagePrivate *priv = gb_preferences_page_get_instance_private (page);
+
   g_return_val_if_fail (GB_IS_PREFERENCES_PAGE (page), NULL);
 
-  return page->priv->title;
+  return priv->title;
 }
 
 static void
 gb_preferences_page_constructed (GObject *object)
 {
-  GbPreferencesPagePrivate *priv = GB_PREFERENCES_PAGE (object)->priv;
+  GbPreferencesPage *self = GB_PREFERENCES_PAGE (object);
+  GbPreferencesPagePrivate *priv = gb_preferences_page_get_instance_private (self);
 
   g_object_get (object, "title", &priv->default_title, NULL);
 
@@ -199,7 +209,8 @@ gb_preferences_page_constructed (GObject *object)
 static void
 gb_preferences_page_finalize (GObject *object)
 {
-  GbPreferencesPagePrivate *priv = GB_PREFERENCES_PAGE (object)->priv;
+  GbPreferencesPage *self = GB_PREFERENCES_PAGE (object);
+  GbPreferencesPagePrivate *priv = gb_preferences_page_get_instance_private (self);
 
   g_clear_pointer (&priv->title, g_free);
   g_clear_pointer (&priv->default_title, g_free);
@@ -273,17 +284,17 @@ gb_preferences_page_class_init (GbPreferencesPageClass *klass)
 static void
 gb_preferences_page_init (GbPreferencesPage *self)
 {
+  GbPreferencesPagePrivate *priv = gb_preferences_page_get_instance_private (self);
   GtkBox *controls;
 
-  self->priv = gb_preferences_page_get_instance_private (self);
-  self->priv->widgets = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+  priv->widgets = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                                                NULL, NULL);
 
   controls = g_object_new (GTK_TYPE_BOX,
                            "orientation", GTK_ORIENTATION_HORIZONTAL,
                            "visible", TRUE,
                            NULL);
-  self->priv->controls = g_object_ref_sink (controls);
+  priv->controls = g_object_ref_sink (controls);
 }
 
 static GObject *

@@ -23,34 +23,15 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_PREFERENCES_PAGE            (gb_preferences_page_get_type())
-#define GB_PREFERENCES_PAGE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_PREFERENCES_PAGE, GbPreferencesPage))
-#define GB_PREFERENCES_PAGE_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_PREFERENCES_PAGE, GbPreferencesPage const))
-#define GB_PREFERENCES_PAGE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_PREFERENCES_PAGE, GbPreferencesPageClass))
-#define GB_IS_PREFERENCES_PAGE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_PREFERENCES_PAGE))
-#define GB_IS_PREFERENCES_PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_PREFERENCES_PAGE))
-#define GB_PREFERENCES_PAGE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_PREFERENCES_PAGE, GbPreferencesPageClass))
+#define GB_TYPE_PREFERENCES_PAGE (gb_preferences_page_get_type())
 
-typedef struct _GbPreferencesPage        GbPreferencesPage;
-typedef struct _GbPreferencesPageClass   GbPreferencesPageClass;
-typedef struct _GbPreferencesPagePrivate GbPreferencesPagePrivate;
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbPreferencesPage, g_object_unref)
-
-struct _GbPreferencesPage
-{
-  GtkBin parent;
-
-  /*< private >*/
-  GbPreferencesPagePrivate *priv;
-};
+G_DECLARE_DERIVABLE_TYPE (GbPreferencesPage, gb_preferences_page, GB, PREFERENCES_PAGE, GtkBin)
 
 struct _GbPreferencesPageClass
 {
   GtkBinClass parent;
 };
 
-GType        gb_preferences_page_get_type                (void);
 guint        gb_preferences_page_set_keywords            (GbPreferencesPage   *page,
                                                           const gchar * const *keywords);
 void         gb_preferences_page_set_keywords_for_widget (GbPreferencesPage   *page,

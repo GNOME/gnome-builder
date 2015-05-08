@@ -23,35 +23,12 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_COMMAND_GACTION_PROVIDER            (gb_command_gaction_provider_get_type())
-#define GB_COMMAND_GACTION_PROVIDER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND_GACTION_PROVIDER, GbCommandGactionProvider))
-#define GB_COMMAND_GACTION_PROVIDER_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND_GACTION_PROVIDER, GbCommandGactionProvider const))
-#define GB_COMMAND_GACTION_PROVIDER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_COMMAND_GACTION_PROVIDER, GbCommandGactionProviderClass))
-#define GB_IS_COMMAND_GACTION_PROVIDER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_COMMAND_GACTION_PROVIDER))
-#define GB_IS_COMMAND_GACTION_PROVIDER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_COMMAND_GACTION_PROVIDER))
-#define GB_COMMAND_GACTION_PROVIDER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_COMMAND_GACTION_PROVIDER, GbCommandGactionProviderClass))
+#define GB_TYPE_COMMAND_GACTION_PROVIDER (gb_command_gaction_provider_get_type())
 
-typedef struct _GbCommandGactionProvider        GbCommandGactionProvider;
-typedef struct _GbCommandGactionProviderClass   GbCommandGactionProviderClass;
-typedef struct _GbCommandGactionProviderPrivate GbCommandGactionProviderPrivate;
+G_DECLARE_FINAL_TYPE (GbCommandGactionProvider, gb_command_gaction_provider,
+                      GB, COMMAND_GACTION_PROVIDER, GbCommandProvider)
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbCommandGactionProvider, g_object_unref)
-
-struct _GbCommandGactionProvider
-{
-  GbCommandProvider parent;
-
-  /*< private >*/
-  GbCommandGactionProviderPrivate *priv;
-};
-
-struct _GbCommandGactionProviderClass
-{
-  GbCommandProviderClass parent;
-};
-
-GType              gb_command_gaction_provider_get_type (void);
-GbCommandProvider *gb_command_gaction_provider_new      (GbWorkbench *workbench);
+GbCommandProvider *gb_command_gaction_provider_new (GbWorkbench *workbench);
 
 G_END_DECLS
 

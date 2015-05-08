@@ -24,31 +24,9 @@
 G_BEGIN_DECLS
 
 #define GB_TYPE_EDITOR_SETTINGS_WIDGET            (gb_editor_settings_widget_get_type())
-#define GB_EDITOR_SETTINGS_WIDGET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_EDITOR_SETTINGS_WIDGET, GbEditorSettingsWidget))
-#define GB_EDITOR_SETTINGS_WIDGET_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_EDITOR_SETTINGS_WIDGET, GbEditorSettingsWidget const))
-#define GB_EDITOR_SETTINGS_WIDGET_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_EDITOR_SETTINGS_WIDGET, GbEditorSettingsWidgetClass))
-#define GB_IS_EDITOR_SETTINGS_WIDGET(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_EDITOR_SETTINGS_WIDGET))
-#define GB_IS_EDITOR_SETTINGS_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_EDITOR_SETTINGS_WIDGET))
-#define GB_EDITOR_SETTINGS_WIDGET_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_EDITOR_SETTINGS_WIDGET, GbEditorSettingsWidgetClass))
 
-typedef struct _GbEditorSettingsWidget        GbEditorSettingsWidget;
-typedef struct _GbEditorSettingsWidgetClass   GbEditorSettingsWidgetClass;
-typedef struct _GbEditorSettingsWidgetPrivate GbEditorSettingsWidgetPrivate;
-
-struct _GbEditorSettingsWidget
-{
-  GtkGrid parent;
-
-  /*< private >*/
-  GbEditorSettingsWidgetPrivate *priv;
-};
-
-struct _GbEditorSettingsWidgetClass
-{
-  GtkGridClass parent;
-};
-
-GType gb_editor_settings_widget_get_type (void);
+G_DECLARE_FINAL_TYPE (GbEditorSettingsWidget, gb_editor_settings_widget,
+                      GB, EDITOR_SETTINGS_WIDGET, GtkGrid)
 
 G_END_DECLS
 

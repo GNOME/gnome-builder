@@ -23,32 +23,10 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_PREFERENCES_PAGE_GIT            (gb_preferences_page_git_get_type())
-#define GB_PREFERENCES_PAGE_GIT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_PREFERENCES_PAGE_GIT, GbPreferencesPageGit))
-#define GB_PREFERENCES_PAGE_GIT_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_PREFERENCES_PAGE_GIT, GbPreferencesPageGit const))
-#define GB_PREFERENCES_PAGE_GIT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_PREFERENCES_PAGE_GIT, GbPreferencesPageGitClass))
-#define GB_IS_PREFERENCES_PAGE_GIT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_PREFERENCES_PAGE_GIT))
-#define GB_IS_PREFERENCES_PAGE_GIT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_PREFERENCES_PAGE_GIT))
-#define GB_PREFERENCES_PAGE_GIT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_PREFERENCES_PAGE_GIT, GbPreferencesPageGitClass))
+#define GB_TYPE_PREFERENCES_PAGE_GIT (gb_preferences_page_git_get_type())
 
-typedef struct _GbPreferencesPageGit        GbPreferencesPageGit;
-typedef struct _GbPreferencesPageGitClass   GbPreferencesPageGitClass;
-typedef struct _GbPreferencesPageGitPrivate GbPreferencesPageGitPrivate;
-
-struct _GbPreferencesPageGit
-{
-  GbPreferencesPage parent;
-
-  /*< private >*/
-  GbPreferencesPageGitPrivate *priv;
-};
-
-struct _GbPreferencesPageGitClass
-{
-  GbPreferencesPageClass parent;
-};
-
-GType gb_preferences_page_git_get_type (void);
+G_DECLARE_FINAL_TYPE (GbPreferencesPageGit, gb_preferences_page_git,
+                      GB, PREFERENCES_PAGE_GIT, GbPreferencesPage)
 
 G_END_DECLS
 

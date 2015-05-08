@@ -27,8 +27,10 @@
 #include "gb-html-document.h"
 #include "gb-html-view.h"
 
-struct _GbHtmlDocumentPrivate
+struct _GbHtmlDocument
 {
+  GObject                  parent_instance;
+
   GtkTextBuffer           *buffer;
   gchar                   *title;
   GbHtmlDocumentTransform  transform;
@@ -36,10 +38,9 @@ struct _GbHtmlDocumentPrivate
 
 static void gb_html_document_init_document (GbDocumentInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GbHtmlDocument, gb_html_document, G_TYPE_OBJECT, 0,
-                        G_ADD_PRIVATE (GbHtmlDocument)
-                        G_IMPLEMENT_INTERFACE (GB_TYPE_DOCUMENT,
-                                               gb_html_document_init_document))
+G_DEFINE_TYPE_WITH_CODE (GbHtmlDocument, gb_html_document, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GB_TYPE_DOCUMENT,
+                                                gb_html_document_init_document))
 
 enum {
   PROP_0,
@@ -66,7 +67,7 @@ gb_html_document_set_transform_func (GbHtmlDocument          *document,
 {
   g_return_if_fail (GB_IS_HTML_DOCUMENT (document));
 
-  document->priv->transform = transform;
+  document->transform = transform;
 }
 
 gchar *
@@ -79,15 +80,15 @@ gb_html_document_get_content (GbHtmlDocument *document)
 
   g_return_val_if_fail (GB_IS_HTML_DOCUMENT (document), NULL);
 
-  if (!document->priv->buffer)
+  if (!document->buffer)
     return NULL;
 
-  gtk_text_buffer_get_bounds (document->priv->buffer, &begin, &end);
+  gtk_text_buffer_get_bounds (document->buffer, &begin, &end);
   str = gtk_text_iter_get_slice (&begin, &end);
 
-  if (document->priv->transform)
+  if (document->transform)
     {
-      tmp = document->priv->transform (document, str);
+      tmp = document->transform (document, str);
       g_free (str);
       str = tmp;
     }
@@ -102,8 +103,8 @@ gb_html_document_get_title (GbDocument *document)
 
   g_return_val_if_fail (GB_IS_HTML_DOCUMENT (self), NULL);
 
-  if (self->priv->title)
-    return self->priv->title;
+  if (self->title)
+    return self->title;
 
   return _("HTML Preview");
 }
@@ -120,14 +121,14 @@ gb_html_document_notify_location (GbHtmlDocument *document,
 
   location = ide_file_get_file (file);
 
-  g_clear_pointer (&document->priv->title, g_free);
+  g_clear_pointer (&document->title, g_free);
 
   if (location)
     {
       gchar *filename;
 
       filename = g_file_get_basename (location);
-      document->priv->title = g_strdup_printf (_("%s (Preview)"), filename);
+      document->title = g_strdup_printf (_("%s (Preview)"), filename);
     }
 
   g_object_notify (G_OBJECT (document), "title");
@@ -177,7 +178,7 @@ gb_html_document_get_buffer (GbHtmlDocument *document)
 {
   g_return_val_if_fail (GB_IS_HTML_DOCUMENT (document), NULL);
 
-  return document->priv->buffer;
+  return document->buffer;
 }
 
 static void
@@ -189,17 +190,17 @@ gb_html_document_set_buffer (GbHtmlDocument *document,
   g_return_if_fail (GB_IS_HTML_DOCUMENT (self));
   g_return_if_fail (!buffer || GTK_IS_TEXT_BUFFER (buffer));
 
-  if (buffer != self->priv->buffer)
+  if (buffer != self->buffer)
     {
-      if (self->priv->buffer)
+      if (self->buffer)
         {
           gb_html_document_disconnect (self, buffer);
-          g_clear_object (&self->priv->buffer);
+          g_clear_object (&self->buffer);
         }
 
       if (buffer)
         {
-          self->priv->buffer = g_object_ref (buffer);
+          self->buffer = g_object_ref (buffer);
           gb_html_document_connect (self, buffer);
         }
 
@@ -235,10 +236,10 @@ gb_html_document_get_read_only (GbDocument *document)
 static void
 gb_html_document_finalize (GObject *object)
 {
-  GbHtmlDocumentPrivate *priv = GB_HTML_DOCUMENT (object)->priv;
+  GbHtmlDocument *self = GB_HTML_DOCUMENT (object);
 
-  g_clear_pointer (&priv->title, g_free);
-  g_clear_object (&priv->buffer);
+  g_clear_pointer (&self->title, g_free);
+  g_clear_object (&self->buffer);
 
   G_OBJECT_CLASS (gb_html_document_parent_class)->finalize (object);
 }
@@ -323,7 +324,6 @@ gb_html_document_class_init (GbHtmlDocumentClass *klass)
 static void
 gb_html_document_init (GbHtmlDocument *self)
 {
-  self->priv = gb_html_document_get_instance_private (self);
 }
 
 static void

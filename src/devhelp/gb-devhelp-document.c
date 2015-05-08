@@ -24,22 +24,20 @@
 #include "gb-devhelp-document.h"
 #include "gb-devhelp-view.h"
 
-struct _GbDevhelpDocumentPrivate
+struct _GbDevhelpDocument
 {
-  DhBookManager *book_manager;
+  GObjectClass    parent_instance;
+
+  DhBookManager  *book_manager;
   DhKeywordModel *model;
-  gchar *title;
-  gchar *uri;
+  gchar          *title;
+  gchar          *uri;
 };
 
 static void gb_document_init (GbDocumentInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GbDevhelpDocument,
-                        gb_devhelp_document,
-                        G_TYPE_OBJECT,
-                        0,
-                        G_ADD_PRIVATE (GbDevhelpDocument)
-                        G_IMPLEMENT_INTERFACE (GB_TYPE_DOCUMENT,
+G_DEFINE_TYPE_WITH_CODE (GbDevhelpDocument, gb_devhelp_document, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GB_TYPE_DOCUMENT,
                                                gb_document_init))
 
 enum {
@@ -67,10 +65,10 @@ gb_devhelp_document_set_title (GbDevhelpDocument *document,
 {
   g_return_if_fail (GB_IS_DEVHELP_DOCUMENT (document));
 
-  if (document->priv->title != title)
+  if (document->title != title)
     {
-      g_clear_pointer (&document->priv->title, g_free);
-      document->priv->title = g_strdup_printf (_("Documentation (%s)"), title);
+      g_clear_pointer (&document->title, g_free);
+      document->title = g_strdup_printf (_("Documentation (%s)"), title);
       g_object_notify (G_OBJECT (document), "title");
     }
 }
@@ -80,7 +78,7 @@ gb_devhelp_document_get_uri (GbDevhelpDocument *document)
 {
   g_return_val_if_fail (GB_IS_DEVHELP_DOCUMENT (document), NULL);
 
-  return document->priv->uri;
+  return document->uri;
 }
 
 void
@@ -90,10 +88,10 @@ gb_devhelp_document_set_uri (GbDevhelpDocument *document,
   g_return_if_fail (GB_IS_DEVHELP_DOCUMENT (document));
   g_return_if_fail (uri);
 
-  if (document->priv->uri != uri)
+  if (document->uri != uri)
     {
-      g_clear_pointer (&document->priv->uri, g_free);
-      document->priv->uri = g_strdup (uri);
+      g_clear_pointer (&document->uri, g_free);
+      document->uri = g_strdup (uri);
       g_object_notify_by_pspec (G_OBJECT (document), gParamSpecs [PROP_URI]);
     }
 }
@@ -102,17 +100,14 @@ void
 gb_devhelp_document_set_search (GbDevhelpDocument *document,
                                 const gchar       *search)
 {
-  GbDevhelpDocumentPrivate *priv;
   GtkTreeIter iter;
 
   g_return_if_fail (GB_IS_DEVHELP_DOCUMENT (document));
 
-  priv = document->priv;
-
   /* TODO: Filter books/language based on project? */
-  dh_keyword_model_filter (priv->model, search, NULL, NULL);
+  dh_keyword_model_filter (document->model, search, NULL, NULL);
 
-  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->model), &iter))
+  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (document->model), &iter))
     {
       DhLink *link_ = NULL;
       gchar *name = NULL;
@@ -124,7 +119,7 @@ gb_devhelp_document_set_search (GbDevhelpDocument *document,
        * G_TYPE_POINTER so dh_link_unref() does not need to be called
        * on the resulting structure.
        */
-      gtk_tree_model_get (GTK_TREE_MODEL (priv->model), &iter,
+      gtk_tree_model_get (GTK_TREE_MODEL (document->model), &iter,
                           DH_KEYWORD_MODEL_COL_NAME, &name,
                           DH_KEYWORD_MODEL_COL_LINK, &link_,
                           -1);
@@ -147,8 +142,8 @@ gb_devhelp_document_get_title (GbDocument *document)
 
   g_return_val_if_fail (GB_IS_DEVHELP_DOCUMENT (self), NULL);
 
-  if (self->priv->title)
-    return self->priv->title;
+  if (self->title)
+    return self->title;
 
   return _("Documentation");
 }
@@ -175,10 +170,10 @@ gb_devhelp_document_create_view (GbDocument *document)
 static void
 gb_devhelp_document_constructed (GObject *object)
 {
-  GbDevhelpDocumentPrivate *priv = GB_DEVHELP_DOCUMENT (object)->priv;
+  GbDevhelpDocument *self = GB_DEVHELP_DOCUMENT (object);
 
-  dh_book_manager_populate (priv->book_manager);
-  dh_keyword_model_set_words (priv->model, priv->book_manager);
+  dh_book_manager_populate (self->book_manager);
+  dh_keyword_model_set_words (self->model, self->book_manager);
 
   G_OBJECT_CLASS (gb_devhelp_document_parent_class)->constructed (object);
 }
@@ -186,10 +181,10 @@ gb_devhelp_document_constructed (GObject *object)
 static void
 gb_devhelp_document_finalize (GObject *object)
 {
-  GbDevhelpDocumentPrivate *priv = GB_DEVHELP_DOCUMENT (object)->priv;
+  GbDevhelpDocument *self = GB_DEVHELP_DOCUMENT (object);
 
-  g_clear_pointer (&priv->title, g_free);
-  g_clear_object (&priv->book_manager);
+  g_clear_pointer (&self->title, g_free);
+  g_clear_object (&self->book_manager);
 
   G_OBJECT_CLASS (gb_devhelp_document_parent_class)->finalize (object);
 }
@@ -269,9 +264,8 @@ gb_devhelp_document_class_init (GbDevhelpDocumentClass *klass)
 static void
 gb_devhelp_document_init (GbDevhelpDocument *self)
 {
-  self->priv = gb_devhelp_document_get_instance_private (self);
-  self->priv->book_manager = dh_book_manager_new ();
-  self->priv->model = dh_keyword_model_new ();
+  self->book_manager = dh_book_manager_new ();
+  self->model = dh_keyword_model_new ();
 }
 
 static void

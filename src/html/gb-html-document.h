@@ -23,35 +23,13 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_HTML_DOCUMENT            (gb_html_document_get_type())
-#define GB_HTML_DOCUMENT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_HTML_DOCUMENT, GbHtmlDocument))
-#define GB_HTML_DOCUMENT_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_HTML_DOCUMENT, GbHtmlDocument const))
-#define GB_HTML_DOCUMENT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_HTML_DOCUMENT, GbHtmlDocumentClass))
-#define GB_IS_HTML_DOCUMENT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_HTML_DOCUMENT))
-#define GB_IS_HTML_DOCUMENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_HTML_DOCUMENT))
-#define GB_HTML_DOCUMENT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_HTML_DOCUMENT, GbHtmlDocumentClass))
+#define GB_TYPE_HTML_DOCUMENT (gb_html_document_get_type())
 
-typedef struct _GbHtmlDocument        GbHtmlDocument;
-typedef struct _GbHtmlDocumentClass   GbHtmlDocumentClass;
-typedef struct _GbHtmlDocumentPrivate GbHtmlDocumentPrivate;
-
-struct _GbHtmlDocument
-{
-  GObject parent;
-
-  /*< private >*/
-  GbHtmlDocumentPrivate *priv;
-};
-
-struct _GbHtmlDocumentClass
-{
-  GObjectClass parent;
-};
+G_DECLARE_FINAL_TYPE (GbHtmlDocument, gb_html_document, GB, HTML_DOCUMENT, GObject)
 
 typedef gchar *(*GbHtmlDocumentTransform) (GbHtmlDocument *document,
                                            const gchar    *content);
 
-GType          gb_html_document_get_type           (void);
 GtkTextBuffer *gb_html_document_get_buffer         (GbHtmlDocument          *document);
 void           gb_html_document_set_transform_func (GbHtmlDocument          *document,
                                                     GbHtmlDocumentTransform  transform);

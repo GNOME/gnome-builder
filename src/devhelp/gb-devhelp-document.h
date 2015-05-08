@@ -23,32 +23,10 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_DEVHELP_DOCUMENT            (gb_devhelp_document_get_type())
-#define GB_DEVHELP_DOCUMENT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_DEVHELP_DOCUMENT, GbDevhelpDocument))
-#define GB_DEVHELP_DOCUMENT_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_DEVHELP_DOCUMENT, GbDevhelpDocument const))
-#define GB_DEVHELP_DOCUMENT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_DEVHELP_DOCUMENT, GbDevhelpDocumentClass))
-#define GB_IS_DEVHELP_DOCUMENT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_DEVHELP_DOCUMENT))
-#define GB_IS_DEVHELP_DOCUMENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_DEVHELP_DOCUMENT))
-#define GB_DEVHELP_DOCUMENT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_DEVHELP_DOCUMENT, GbDevhelpDocumentClass))
+#define GB_TYPE_DEVHELP_DOCUMENT (gb_devhelp_document_get_type())
 
-typedef struct _GbDevhelpDocument        GbDevhelpDocument;
-typedef struct _GbDevhelpDocumentClass   GbDevhelpDocumentClass;
-typedef struct _GbDevhelpDocumentPrivate GbDevhelpDocumentPrivate;
+G_DECLARE_FINAL_TYPE (GbDevhelpDocument, gb_devhelp_document, GB, DEVHELP_DOCUMENT, GObject)
 
-struct _GbDevhelpDocument
-{
-  GObject parent;
-
-  /*< private >*/
-  GbDevhelpDocumentPrivate *priv;
-};
-
-struct _GbDevhelpDocumentClass
-{
-  GObjectClass parent;
-};
-
-GType              gb_devhelp_document_get_type   (void);
 GbDevhelpDocument *gb_devhelp_document_new        (void);
 void               gb_devhelp_document_set_search (GbDevhelpDocument *document,
                                                    const gchar       *search);

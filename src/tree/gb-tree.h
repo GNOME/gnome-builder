@@ -26,27 +26,9 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_TREE            (gb_tree_get_type())
-#define GB_TREE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_TREE, GbTree))
-#define GB_TREE_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_TREE, GbTree const))
-#define GB_TREE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_TREE, GbTreeClass))
-#define GB_IS_TREE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_TREE))
-#define GB_IS_TREE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_TREE))
-#define GB_TREE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_TREE, GbTreeClass))
+#define GB_TYPE_TREE (gb_tree_get_type())
 
-typedef struct _GbTree        GbTree;
-typedef struct _GbTreeClass   GbTreeClass;
-typedef struct _GbTreePrivate GbTreePrivate;
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbTree, g_object_unref)
-
-struct _GbTree
-{
-	GtkTreeView parent;
-
-	/*< private >*/
-	GbTreePrivate *priv;
-};
+G_DECLARE_DERIVABLE_TYPE (GbTree, gb_tree, GB, TREE, GtkTreeView)
 
 struct _GbTreeClass
 {
@@ -65,7 +47,6 @@ void          gb_tree_add_builder    (GbTree        *tree,
 GtkTreePath  *gb_tree_get_path       (GbTree        *tree,
                                       GList         *list);
 GbTreeNode   *gb_tree_get_selected   (GbTree        *tree);
-GType         gb_tree_get_type       (void);
 void          gb_tree_rebuild        (GbTree        *tree);
 void          gb_tree_remove_builder (GbTree        *tree,
                                       GbTreeBuilder *builder);

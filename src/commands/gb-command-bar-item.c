@@ -19,17 +19,19 @@
 #include <glib/gi18n.h>
 
 #include "gb-command-bar-item.h"
+#include "gb-widget.h"
 
-struct _GbCommandBarItemPrivate
+struct _GbCommandBarItem
 {
+  GtkBin           parent_instance;
   GbCommandResult *result;
 
-  GtkWidget *command_text;
-  GtkWidget *result_text;
-  GtkWidget *equal_label;
+  GtkWidget       *command_text;
+  GtkWidget       *result_text;
+  GtkWidget       *equal_label;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbCommandBarItem, gb_command_bar_item, GTK_TYPE_BIN)
+G_DEFINE_TYPE (GbCommandBarItem, gb_command_bar_item, GTK_TYPE_BIN)
 
 enum {
   PROP_0,
@@ -61,7 +63,7 @@ gb_command_bar_item_get_result (GbCommandBarItem *item)
 {
   g_return_val_if_fail (GB_IS_COMMAND_BAR_ITEM (item), NULL);
 
-  return item->priv->result_text;
+  return item->result_text;
 }
 
 static gboolean
@@ -81,21 +83,21 @@ gb_command_bar_item_set_result (GbCommandBarItem *item,
   g_return_if_fail (GB_IS_COMMAND_BAR_ITEM (item));
   g_return_if_fail (GB_IS_COMMAND_RESULT (result));
 
-  if (item->priv->result != result)
+  if (item->result != result)
     {
-      g_clear_object (&item->priv->result);
+      g_clear_object (&item->result);
 
       if (result)
         {
-          item->priv->result = g_object_ref (result);
+          item->result = g_object_ref (result);
           g_object_bind_property (result, "command-text",
-                                  item->priv->command_text, "label",
+                                  item->command_text, "label",
                                   G_BINDING_SYNC_CREATE);
           g_object_bind_property (result, "result-text",
-                                  item->priv->result_text, "label",
+                                  item->result_text, "label",
                                   G_BINDING_SYNC_CREATE);
           g_object_bind_property_full (result, "result-text",
-                                       item->priv->equal_label, "visible",
+                                       item->equal_label, "visible",
                                        G_BINDING_SYNC_CREATE,
                                        string_to_boolean,
                                        NULL, NULL, NULL);
@@ -108,9 +110,9 @@ gb_command_bar_item_set_result (GbCommandBarItem *item,
 static void
 gb_command_bar_item_dispose (GObject *object)
 {
-  GbCommandBarItemPrivate *priv = GB_COMMAND_BAR_ITEM (object)->priv;
+  GbCommandBarItem *self = GB_COMMAND_BAR_ITEM (object);
 
-  g_clear_object (&priv->result);
+  g_clear_object (&self->result);
 
   G_OBJECT_CLASS (gb_command_bar_item_parent_class)->dispose (object);
 }
@@ -166,9 +168,9 @@ gb_command_bar_item_class_init (GbCommandBarItemClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-command-bar-item.ui");
 
-  gtk_widget_class_bind_template_child_private (widget_class, GbCommandBarItem, command_text);
-  gtk_widget_class_bind_template_child_private (widget_class, GbCommandBarItem, result_text);
-  gtk_widget_class_bind_template_child_private (widget_class, GbCommandBarItem, equal_label);
+  GB_WIDGET_CLASS_BIND (widget_class, GbCommandBarItem, command_text);
+  GB_WIDGET_CLASS_BIND (widget_class, GbCommandBarItem, result_text);
+  GB_WIDGET_CLASS_BIND (widget_class, GbCommandBarItem, equal_label);
 
   gParamSpecs [PROP_RESULT] =
     g_param_spec_object ("result",
@@ -185,7 +187,5 @@ gb_command_bar_item_class_init (GbCommandBarItemClass *klass)
 static void
 gb_command_bar_item_init (GbCommandBarItem *self)
 {
-  self->priv = gb_command_bar_item_get_instance_private (self);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 }

@@ -30,52 +30,15 @@
 G_BEGIN_DECLS
 
 #define GD_TYPE_TAGGED_ENTRY gd_tagged_entry_get_type()
-#define GD_TAGGED_ENTRY(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GD_TYPE_TAGGED_ENTRY, GdTaggedEntry))
-#define GD_TAGGED_ENTRY_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GD_TYPE_TAGGED_ENTRY, GdTaggedEntryClass))
-#define GD_IS_TAGGED_ENTRY(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GD_TYPE_TAGGED_ENTRY))
-#define GD_IS_TAGGED_ENTRY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GD_TYPE_TAGGED_ENTRY))
-#define GD_TAGGED_ENTRY_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GD_TYPE_TAGGED_ENTRY, GdTaggedEntryClass))
 
-typedef struct _GdTaggedEntry GdTaggedEntry;
-typedef struct _GdTaggedEntryClass GdTaggedEntryClass;
-typedef struct _GdTaggedEntryPrivate GdTaggedEntryPrivate;
-
-typedef struct _GdTaggedEntryTag GdTaggedEntryTag;
-typedef struct _GdTaggedEntryTagClass GdTaggedEntryTagClass;
-typedef struct _GdTaggedEntryTagPrivate GdTaggedEntryTagPrivate;
-
-struct _GdTaggedEntry
-{
-  GtkSearchEntry parent;
-
-  GdTaggedEntryPrivate *priv;
-};
-
-struct _GdTaggedEntryClass
-{
-  GtkSearchEntryClass parent_class;
-};
+G_DECLARE_FINAL_TYPE (GdTaggedEntry, gd_tagged_entry,
+                      GD, TAGGED_ENTRY, GtkSearchEntry)
 
 #define GD_TYPE_TAGGED_ENTRY_TAG gd_tagged_entry_tag_get_type()
-#define GD_TAGGED_ENTRY_TAG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GD_TYPE_TAGGED_ENTRY_TAG, GdTaggedEntryTag))
-#define GD_TAGGED_ENTRY_TAG_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GD_TYPE_TAGGED_ENTRY_TAG, GdTaggedEntryTagClass))
-#define GD_IS_TAGGED_ENTRY_TAG(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GD_TYPE_TAGGED_ENTRY_TAG))
-#define GD_IS_TAGGED_ENTRY_TAG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GD_TYPE_TAGGED_ENTRY_TAG))
-#define GD_TAGGED_ENTRY_TAG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GD_TYPE_TAGGED_ENTRY_TAG, GdTaggedEntryTagClass))
 
-struct _GdTaggedEntryTag
-{
-  GObject parent;
+G_DECLARE_FINAL_TYPE (GdTaggedEntryTag, gd_tagged_entry_tag,
+                      GD, TAGGED_ENTRY_TAG, GObject)
 
-  GdTaggedEntryTagPrivate *priv;
-};
-
-struct _GdTaggedEntryTagClass
-{
-  GObjectClass parent_class;
-};
-
-GType gd_tagged_entry_get_type (void);
 
 GdTaggedEntry *gd_tagged_entry_new (void);
 
@@ -93,7 +56,6 @@ gboolean gd_tagged_entry_add_tag (GdTaggedEntry    *self,
 gboolean gd_tagged_entry_remove_tag (GdTaggedEntry *self,
                                      GdTaggedEntryTag *tag);
 
-GType gd_tagged_entry_tag_get_type (void);
 
 GdTaggedEntryTag *gd_tagged_entry_tag_new (const gchar *label);
 

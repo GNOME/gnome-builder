@@ -29,6 +29,11 @@
 #include "gb-command-gaction.h"
 #include "gb-view.h"
 
+struct _GbCommandGactionProvider
+{
+  GbCommandProvider parent_instance;
+};
+
 G_DEFINE_TYPE (GbCommandGactionProvider, gb_command_gaction_provider, GB_TYPE_COMMAND_PROVIDER)
 
 /* Set this to 1 to enable the debug helper which prints the

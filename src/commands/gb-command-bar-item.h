@@ -25,32 +25,11 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_COMMAND_BAR_ITEM            (gb_command_bar_item_get_type())
-#define GB_COMMAND_BAR_ITEM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND_BAR_ITEM, GbCommandBarItem))
-#define GB_COMMAND_BAR_ITEM_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND_BAR_ITEM, GbCommandBarItem const))
-#define GB_COMMAND_BAR_ITEM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_COMMAND_BAR_ITEM, GbCommandBarItemClass))
-#define GB_IS_COMMAND_BAR_ITEM(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_COMMAND_BAR_ITEM))
-#define GB_IS_COMMAND_BAR_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_COMMAND_BAR_ITEM))
-#define GB_COMMAND_BAR_ITEM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_COMMAND_BAR_ITEM, GbCommandBarItemClass))
+#define GB_TYPE_COMMAND_BAR_ITEM (gb_command_bar_item_get_type())
 
-typedef struct _GbCommandBarItem        GbCommandBarItem;
-typedef struct _GbCommandBarItemClass   GbCommandBarItemClass;
-typedef struct _GbCommandBarItemPrivate GbCommandBarItemPrivate;
+G_DECLARE_FINAL_TYPE (GbCommandBarItem, gb_command_bar_item,
+                      GB, COMMAND_BAR_ITEM, GtkBin)
 
-struct _GbCommandBarItem
-{
-  GtkBin parent;
-
-  /*< private >*/
-  GbCommandBarItemPrivate *priv;
-};
-
-struct _GbCommandBarItemClass
-{
-  GtkBinClass parent;
-};
-
-GType      gb_command_bar_item_get_type   (void);
 GtkWidget *gb_command_bar_item_new        (GbCommandResult  *result);
 GtkWidget *gb_command_bar_item_get_result (GbCommandBarItem *item);
 

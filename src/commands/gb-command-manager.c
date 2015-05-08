@@ -23,12 +23,14 @@
 #include "gb-command-manager.h"
 #include "gb-workbench.h"
 
-struct _GbCommandManagerPrivate
+struct _GbCommandManager
 {
+  GObject    parent_instance;
+
   GPtrArray *providers;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbCommandManager, gb_command_manager, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GbCommandManager, gb_command_manager, G_TYPE_OBJECT)
 
 GbCommandManager *
 gb_command_manager_new (void)
@@ -70,7 +72,7 @@ on_notify_priority_cb (GbCommandProvider *provider,
   g_return_if_fail (GB_IS_COMMAND_PROVIDER (provider));
   g_return_if_fail (GB_IS_COMMAND_MANAGER (manager));
 
-  g_ptr_array_sort (manager->priv->providers, provider_compare_func);
+  g_ptr_array_sort (manager->providers, provider_compare_func);
 }
 
 void
@@ -84,8 +86,8 @@ gb_command_manager_add_provider (GbCommandManager  *manager,
                            G_CALLBACK (on_notify_priority_cb),
                            manager, 0);
 
-  g_ptr_array_add (manager->priv->providers, g_object_ref (provider));
-  g_ptr_array_sort (manager->priv->providers, provider_compare_func);
+  g_ptr_array_add (manager->providers, g_object_ref (provider));
+  g_ptr_array_sort (manager->providers, provider_compare_func);
 }
 
 GbCommand *
@@ -98,11 +100,11 @@ gb_command_manager_lookup (GbCommandManager *manager,
   g_return_val_if_fail (GB_IS_COMMAND_MANAGER (manager), NULL);
   g_return_val_if_fail (command_text, NULL);
 
-  for (i = 0; i < manager->priv->providers->len; i++)
+  for (i = 0; i < manager->providers->len; i++)
     {
       GbCommandProvider *provider;
 
-      provider = g_ptr_array_index (manager->priv->providers, i);
+      provider = g_ptr_array_index (manager->providers, i);
       ret = gb_command_provider_lookup (provider, command_text);
 
       if (ret)
@@ -131,11 +133,11 @@ gb_command_manager_complete (GbCommandManager *manager,
 
   completions = g_ptr_array_new ();
 
-  for (i = 0; i < manager->priv->providers->len; i++)
+  for (i = 0; i < manager->providers->len; i++)
     {
       GbCommandProvider *provider;
 
-      provider = g_ptr_array_index (manager->priv->providers, i);
+      provider = g_ptr_array_index (manager->providers, i);
       gb_command_provider_complete (provider, completions, initial_command_text);
     }
 
@@ -150,9 +152,9 @@ gb_command_manager_complete (GbCommandManager *manager,
 static void
 gb_command_manager_finalize (GObject *object)
 {
-  GbCommandManagerPrivate *priv = GB_COMMAND_MANAGER (object)->priv;
+  GbCommandManager *self = GB_COMMAND_MANAGER (object);
 
-  g_clear_pointer (&priv->providers, g_ptr_array_unref);
+  g_clear_pointer (&self->providers, g_ptr_array_unref);
 
   G_OBJECT_CLASS (gb_command_manager_parent_class)->finalize (object);
 }
@@ -168,7 +170,5 @@ gb_command_manager_class_init (GbCommandManagerClass *klass)
 static void
 gb_command_manager_init (GbCommandManager *self)
 {
-  self->priv = gb_command_manager_get_instance_private (self);
-
-  self->priv->providers = g_ptr_array_new_with_free_func (g_object_unref);
+  self->providers = g_ptr_array_new_with_free_func (g_object_unref);
 }

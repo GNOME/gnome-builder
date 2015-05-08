@@ -26,24 +26,8 @@
 G_BEGIN_DECLS
 
 #define GB_TYPE_COMMAND            (gb_command_get_type())
-#define GB_COMMAND(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND, GbCommand))
-#define GB_COMMAND_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND, GbCommand const))
-#define GB_COMMAND_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_COMMAND, GbCommandClass))
-#define GB_IS_COMMAND(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_COMMAND))
-#define GB_IS_COMMAND_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_COMMAND))
-#define GB_COMMAND_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_COMMAND, GbCommandClass))
 
-typedef struct _GbCommand        GbCommand;
-typedef struct _GbCommandClass   GbCommandClass;
-typedef struct _GbCommandPrivate GbCommandPrivate;
-
-struct _GbCommand
-{
-  GObject parent;
-
-  /*< private >*/
-  GbCommandPrivate *priv;
-};
+G_DECLARE_DERIVABLE_TYPE (GbCommand, gb_command, GB, COMMAND, GObject)
 
 struct _GbCommandClass
 {
@@ -52,7 +36,6 @@ struct _GbCommandClass
   GbCommandResult *(*execute) (GbCommand *command);
 };
 
-GType            gb_command_get_type (void);
 GbCommand       *gb_command_new      (void);
 GbCommandResult *gb_command_execute  (GbCommand *command);
 

@@ -23,14 +23,16 @@
 #include "gb-tree.h"
 #include "gb-tree-node.h"
 
-struct _GbTreeNodePrivate
+struct _GbTreeNode
 {
-  GObject       *item;
-  GbTreeNode    *parent;
-  gchar         *text;
-  GbTree        *tree;
-  GQuark         icon_name;
-  guint          use_markup : 1;
+  GInitiallyUnowned  parent_instance;
+
+  GObject           *item;
+  GbTreeNode        *parent;
+  gchar             *text;
+  GbTree            *tree;
+  GQuark             icon_name;
+  guint              use_markup : 1;
 };
 
 typedef struct
@@ -39,7 +41,7 @@ typedef struct
   GtkPopover *popover;
 } PopupRequest;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbTreeNode, gb_tree_node, G_TYPE_INITIALLY_UNOWNED)
+G_DEFINE_TYPE (GbTreeNode, gb_tree_node, G_TYPE_INITIALLY_UNOWNED)
 
 enum {
   PROP_0,
@@ -84,9 +86,9 @@ gb_tree_node_get_tree (GbTreeNode *node)
 {
   g_return_val_if_fail (GB_IS_TREE_NODE (node), NULL);
 
-  for (; node->priv->parent; node = node->priv->parent) { }
+  for (; node->parent; node = node->parent) { }
 
-  return node->priv->tree;
+  return node->tree;
 }
 
 /**
@@ -102,10 +104,10 @@ _gb_tree_node_set_tree (GbTreeNode *node,
 {
   g_return_if_fail (GB_IS_TREE_NODE (node));
   g_return_if_fail (GB_IS_TREE (tree));
-  g_return_if_fail ((node->priv->tree == NULL) ||
-                    (node->priv->tree == tree));
+  g_return_if_fail ((node->tree == NULL) ||
+                    (node->tree == tree));
 
-  node->priv->tree = tree;
+  node->tree = tree;
 }
 
 /**
@@ -199,15 +201,15 @@ gb_tree_node_get_path (GbTreeNode *node)
 
   do
     list = g_list_prepend (list, node);
-  while ((node = node->priv->parent));
+  while ((node = node->parent));
 
   toplevel = list->data;
 
   g_assert (toplevel);
-  g_assert (toplevel->priv->tree);
+  g_assert (toplevel->tree);
 
   list = g_list_remove_link (list, list);
-  path = gb_tree_get_path (toplevel->priv->tree, list);
+  path = gb_tree_get_path (toplevel->tree, list);
 
   g_list_free (list);
 
@@ -227,7 +229,7 @@ gb_tree_node_get_parent (GbTreeNode *node)
 {
   g_return_val_if_fail (GB_IS_TREE_NODE (node), NULL);
 
-  return node->priv->parent;
+  return node->parent;
 }
 
 /**
@@ -240,7 +242,7 @@ gb_tree_node_get_icon_name (GbTreeNode *node)
 {
   g_return_val_if_fail (GB_IS_TREE_NODE (node), NULL);
 
-  return g_quark_to_string (node->priv->icon_name);
+  return g_quark_to_string (node->icon_name);
 }
 
 /**
@@ -257,7 +259,7 @@ gb_tree_node_set_icon_name (GbTreeNode  *node,
 {
   g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  node->priv->icon_name = g_quark_from_string (icon_name);
+  node->icon_name = g_quark_from_string (icon_name);
   g_object_notify_by_pspec (G_OBJECT (node), gParamSpecs [PROP_ICON_NAME]);
 }
 
@@ -276,7 +278,7 @@ gb_tree_node_set_item (GbTreeNode *node,
   g_return_if_fail (GB_IS_TREE_NODE (node));
   g_return_if_fail (!item || G_IS_OBJECT (item));
 
-  if (g_set_object (&node->priv->item, item))
+  if (g_set_object (&node->item, item))
     g_object_notify_by_pspec (G_OBJECT (node), gParamSpecs [PROP_ITEM]);
 }
 
@@ -293,14 +295,14 @@ gb_tree_node_set_parent (GbTreeNode *node,
                          GbTreeNode *parent)
 {
   g_return_if_fail (GB_IS_TREE_NODE (node));
-  g_return_if_fail (node->priv->parent == NULL);
+  g_return_if_fail (node->parent == NULL);
   g_return_if_fail (!parent || GB_IS_TREE_NODE (parent));
 
   if (parent)
     {
-      node->priv->parent = parent;
-      g_object_add_weak_pointer (G_OBJECT (node->priv->parent),
-                                 (gpointer *)&node->priv->parent);
+      node->parent = parent;
+      g_object_add_weak_pointer (G_OBJECT (node->parent),
+                                 (gpointer *)&node->parent);
     }
 }
 
@@ -309,7 +311,7 @@ gb_tree_node_get_text (GbTreeNode *node)
 {
   g_return_val_if_fail (GB_IS_TREE_NODE (node), NULL);
 
-  return node->priv->text;
+  return node->text;
 }
 
 /**
@@ -326,10 +328,10 @@ gb_tree_node_set_text (GbTreeNode  *node,
 {
   g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  if (text != node->priv->text)
+  if (text != node->text)
     {
-      g_free (node->priv->text);
-      node->priv->text = g_strdup (text);
+      g_free (node->text);
+      node->text = g_strdup (text);
       g_object_notify_by_pspec (G_OBJECT (node), gParamSpecs [PROP_TEXT]);
     }
 }
@@ -347,7 +349,7 @@ gb_tree_node_set_use_markup (GbTreeNode *node,
 {
   g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  node->priv->use_markup = !!use_markup;
+  node->use_markup = !!use_markup;
   g_object_notify_by_pspec (G_OBJECT (node), gParamSpecs [PROP_USE_MARKUP]);
 }
 
@@ -364,7 +366,7 @@ gb_tree_node_get_item (GbTreeNode *node)
 {
   g_return_val_if_fail (GB_IS_TREE_NODE (node), NULL);
 
-  return node->priv->item;
+  return node->item;
 }
 
 void
@@ -470,16 +472,16 @@ gb_tree_node_get_expanded (GbTreeNode *self)
 static void
 gb_tree_node_finalize (GObject *object)
 {
-  GbTreeNodePrivate *priv = GB_TREE_NODE (object)->priv;
+  GbTreeNode *self = GB_TREE_NODE (object);
 
-  g_clear_object (&priv->item);
-  g_clear_pointer (&priv->text, g_free);
+  g_clear_object (&self->item);
+  g_clear_pointer (&self->text, g_free);
 
-  if (priv->parent)
+  if (self->parent)
     {
-      g_object_remove_weak_pointer (G_OBJECT (priv->parent),
-                                    (gpointer *)&priv->parent);
-      priv->parent = NULL;
+      g_object_remove_weak_pointer (G_OBJECT (self->parent),
+                                    (gpointer *)&self->parent);
+      self->parent = NULL;
     }
 
   G_OBJECT_CLASS (gb_tree_node_parent_class)->finalize (object);
@@ -505,19 +507,19 @@ gb_tree_node_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_ICON_NAME:
-      g_value_set_string (value, g_quark_to_string (node->priv->icon_name));
+      g_value_set_string (value, g_quark_to_string (node->icon_name));
       break;
 
     case PROP_ITEM:
-      g_value_set_object (value, node->priv->item);
+      g_value_set_object (value, node->item);
       break;
 
     case PROP_PARENT:
-      g_value_set_object (value, node->priv->parent);
+      g_value_set_object (value, node->parent);
       break;
 
     case PROP_TEXT:
-      g_value_set_string (value, node->priv->text);
+      g_value_set_string (value, node->text);
       break;
 
     case PROP_TREE:
@@ -525,7 +527,7 @@ gb_tree_node_get_property (GObject    *object,
       break;
 
     case PROP_USE_MARKUP:
-      g_value_set_boolean (value, node->priv->use_markup);
+      g_value_set_boolean (value, node->use_markup);
       break;
 
     default:
@@ -676,7 +678,6 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
 static void
 gb_tree_node_init (GbTreeNode *node)
 {
-  node->priv = gb_tree_node_get_instance_private (node);
 }
 
 static gboolean

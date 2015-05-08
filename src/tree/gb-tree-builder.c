@@ -23,12 +23,12 @@
 #include "gb-tree.h"
 #include "gb-tree-builder.h"
 
-G_DEFINE_TYPE(GbTreeBuilder, gb_tree_builder, G_TYPE_INITIALLY_UNOWNED)
-
-struct _GbTreeBuilderPrivate
+typedef struct
 {
 	GbTree *tree;
-};
+} GbTreeBuilderPrivate;
+
+G_DEFINE_TYPE_WITH_PRIVATE(GbTreeBuilder, gb_tree_builder, G_TYPE_INITIALLY_UNOWNED)
 
 enum
 {
@@ -162,13 +162,11 @@ static void
 gb_tree_builder_set_tree (GbTreeBuilder *builder,
                           GbTree        *tree)
 {
-	GbTreeBuilderPrivate *priv;
+	GbTreeBuilderPrivate *priv = gb_tree_builder_get_instance_private (builder);
 
 	g_return_if_fail(GB_IS_TREE_BUILDER(builder));
-	g_return_if_fail(builder->priv->tree == NULL);
+	g_return_if_fail(priv->tree == NULL);
 	g_return_if_fail(GB_IS_TREE(tree));
-
-	priv = builder->priv;
 
 	if (tree) {
 		priv->tree = tree;
@@ -188,8 +186,11 @@ gb_tree_builder_set_tree (GbTreeBuilder *builder,
 GtkWidget *
 gb_tree_builder_get_tree (GbTreeBuilder *builder)
 {
-   g_return_val_if_fail(GB_IS_TREE_BUILDER(builder), NULL);
-   return GTK_WIDGET(builder->priv->tree);
+  GbTreeBuilderPrivate *priv = gb_tree_builder_get_instance_private (builder);
+
+  g_return_val_if_fail(GB_IS_TREE_BUILDER(builder), NULL);
+
+  return GTK_WIDGET(priv->tree);
 }
 
 /**
@@ -201,7 +202,8 @@ gb_tree_builder_get_tree (GbTreeBuilder *builder)
 static void
 gb_tree_builder_finalize (GObject *object)
 {
-	GbTreeBuilderPrivate *priv = GB_TREE_BUILDER(object)->priv;
+	GbTreeBuilder *builder = GB_TREE_BUILDER (object);
+	GbTreeBuilderPrivate *priv = gb_tree_builder_get_instance_private (builder);
 
 	if (priv->tree) {
 		g_object_remove_weak_pointer(G_OBJECT(priv->tree),
@@ -227,11 +229,12 @@ gb_tree_builder_get_property (GObject    *object,
                               GValue     *value,
                               GParamSpec *pspec)
 {
-	GbTreeBuilder *builder = GB_TREE_BUILDER(object);
+	GbTreeBuilder *builder = GB_TREE_BUILDER (object);
+  	GbTreeBuilderPrivate *priv = gb_tree_builder_get_instance_private (builder);
 
 	switch (prop_id) {
 	case PROP_TREE:
-		g_value_set_object(value, builder->priv->tree);
+		g_value_set_object(value, priv->tree);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -282,7 +285,6 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
 	object_class->finalize = gb_tree_builder_finalize;
 	object_class->get_property = gb_tree_builder_get_property;
 	object_class->set_property = gb_tree_builder_set_property;
-	g_type_class_add_private(object_class, sizeof(GbTreeBuilderPrivate));
 
 	gParamSpecs[PROP_TREE] =
 		g_param_spec_object("tree",
@@ -306,8 +308,4 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
 static void
 gb_tree_builder_init (GbTreeBuilder *builder)
 {
-	builder->priv =
-		G_TYPE_INSTANCE_GET_PRIVATE(builder,
-		                            GB_TYPE_TREE_BUILDER,
-		                            GbTreeBuilderPrivate);
 }

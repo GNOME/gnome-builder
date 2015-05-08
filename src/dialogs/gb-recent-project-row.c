@@ -36,11 +36,6 @@ struct _GbRecentProjectRow
   GtkRevealer    *revealer;
 };
 
-struct _GbRecentProjectRowClass
-{
-  GtkListBoxRowClass parent_class;
-};
-
 enum
 {
   PROP_0,

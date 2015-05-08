@@ -21,38 +21,12 @@
 
 #include <gtk/gtk.h>
 
-#if 0
-#include "gb-project-item.h"
-#endif
-
 G_BEGIN_DECLS
 
 #define GB_TYPE_TREE_NODE            (gb_tree_node_get_type())
-#define GB_TREE_NODE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_TREE_NODE, GbTreeNode))
-#define GB_TREE_NODE_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_TREE_NODE, GbTreeNode const))
-#define GB_TREE_NODE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_TREE_NODE, GbTreeNodeClass))
-#define GB_IS_TREE_NODE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_TREE_NODE))
-#define GB_IS_TREE_NODE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_TREE_NODE))
-#define GB_TREE_NODE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_TREE_NODE, GbTreeNodeClass))
 
-typedef struct _GbTreeNode        GbTreeNode;
-typedef struct _GbTreeNodeClass   GbTreeNodeClass;
-typedef struct _GbTreeNodePrivate GbTreeNodePrivate;
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbTreeNode, g_object_unref)
-
-struct _GbTreeNode
-{
-	GInitiallyUnowned parent;
-
-	/*< private >*/
-	GbTreeNodePrivate *priv;
-};
-
-struct _GbTreeNodeClass
-{
-	GInitiallyUnownedClass parent_class;
-};
+G_DECLARE_FINAL_TYPE (GbTreeNode, gb_tree_node,
+                      GB, TREE_NODE, GInitiallyUnowned)
 
 GbTreeNode    *gb_tree_node_new           (void);
 void           gb_tree_node_append        (GbTreeNode   *node,
@@ -61,7 +35,6 @@ const gchar   *gb_tree_node_get_icon_name (GbTreeNode   *node);
 GObject       *gb_tree_node_get_item      (GbTreeNode   *node);
 GbTreeNode    *gb_tree_node_get_parent    (GbTreeNode   *node);
 GtkTreePath   *gb_tree_node_get_path      (GbTreeNode   *node);
-GType          gb_tree_node_get_type      (void);
 void           gb_tree_node_prepend       (GbTreeNode  *node,
                                            GbTreeNode   *child);
 void           gb_tree_node_remove        (GbTreeNode   *node,

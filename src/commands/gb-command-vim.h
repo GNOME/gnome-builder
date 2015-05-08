@@ -23,32 +23,11 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_COMMAND_VIM            (gb_command_vim_get_type())
-#define GB_COMMAND_VIM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND_VIM, GbCommandVim))
-#define GB_COMMAND_VIM_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_COMMAND_VIM, GbCommandVim const))
-#define GB_COMMAND_VIM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_COMMAND_VIM, GbCommandVimClass))
-#define GB_IS_COMMAND_VIM(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_COMMAND_VIM))
-#define GB_IS_COMMAND_VIM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_COMMAND_VIM))
-#define GB_COMMAND_VIM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_COMMAND_VIM, GbCommandVimClass))
+#define GB_TYPE_COMMAND_VIM (gb_command_vim_get_type())
 
-typedef struct _GbCommandVim        GbCommandVim;
-typedef struct _GbCommandVimClass   GbCommandVimClass;
-typedef struct _GbCommandVimPrivate GbCommandVimPrivate;
+G_DECLARE_FINAL_TYPE (GbCommandVim, gb_command_vim,
+                      GB, COMMAND_VIM, GbCommand)
 
-struct _GbCommandVim
-{
-  GbCommand parent;
-
-  /*< private >*/
-  GbCommandVimPrivate *priv;
-};
-
-struct _GbCommandVimClass
-{
-  GbCommandClass parent;
-};
-
-GType gb_command_vim_get_type (void);
 
 G_END_DECLS
 

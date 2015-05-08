@@ -27,14 +27,16 @@
 #include <gtk/gtk.h>
 #include "gedit-menu-stack-switcher.h"
 
-struct _GeditMenuStackSwitcherPrivate
+struct _GeditMenuStackSwitcher
 {
-  GtkStack *stack;
-  GtkWidget *label;
-  GtkWidget *button_box;
-  GtkWidget *popover;
-  GHashTable *buttons;
-  gboolean in_child_changed;
+  GtkMenuButton  parent_instance;
+
+  GtkStack      *stack;
+  GtkWidget     *label;
+  GtkWidget     *button_box;
+  GtkWidget     *popover;
+  GHashTable    *buttons;
+  gboolean       in_child_changed;
 };
 
 enum {
@@ -42,18 +44,14 @@ enum {
   PROP_STACK
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GeditMenuStackSwitcher, gedit_menu_stack_switcher, GTK_TYPE_MENU_BUTTON)
+G_DEFINE_TYPE (GeditMenuStackSwitcher, gedit_menu_stack_switcher, GTK_TYPE_MENU_BUTTON)
 
 static void
 gedit_menu_stack_switcher_init (GeditMenuStackSwitcher *switcher)
 {
-  GeditMenuStackSwitcherPrivate *priv;
   GtkWidget *box;
   GtkWidget *arrow;
   GtkStyleContext *context;
-
-  priv = gedit_menu_stack_switcher_get_instance_private (switcher);
-  switcher->priv = priv;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
@@ -61,55 +59,52 @@ gedit_menu_stack_switcher_init (GeditMenuStackSwitcher *switcher)
   gtk_box_pack_end (GTK_BOX (box), arrow, FALSE, TRUE, 6);
   gtk_widget_set_valign (arrow, GTK_ALIGN_BASELINE);
 
-  priv->label = gtk_label_new (NULL);
-  gtk_widget_set_valign (priv->label, GTK_ALIGN_BASELINE);
-  gtk_box_pack_start (GTK_BOX (box), priv->label, TRUE, TRUE, 6);
+  switcher->label = gtk_label_new (NULL);
+  gtk_widget_set_valign (switcher->label, GTK_ALIGN_BASELINE);
+  gtk_box_pack_start (GTK_BOX (box), switcher->label, TRUE, TRUE, 6);
 
   // FIXME: this is not correct if this widget becomes more generic
   // and used also outside the header bar, but for now we just want
   // the same style as title labels
-  context = gtk_widget_get_style_context (priv->label);
+  context = gtk_widget_get_style_context (switcher->label);
   gtk_style_context_add_class (context, "title");
 
   gtk_widget_show_all (box);
   gtk_container_add (GTK_CONTAINER (switcher), box);
 
-  priv->popover = gtk_popover_new (GTK_WIDGET (switcher));
-  gtk_popover_set_position (GTK_POPOVER (priv->popover), GTK_POS_BOTTOM);
-  context = gtk_widget_get_style_context (priv->popover);
+  switcher->popover = gtk_popover_new (GTK_WIDGET (switcher));
+  gtk_popover_set_position (GTK_POPOVER (switcher->popover), GTK_POS_BOTTOM);
+  context = gtk_widget_get_style_context (switcher->popover);
   gtk_style_context_add_class (context, "gedit-menu-stack-switcher");
 
-  priv->button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+  switcher->button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 
-  gtk_widget_show (priv->button_box);
+  gtk_widget_show (switcher->button_box);
 
-  gtk_container_add (GTK_CONTAINER (priv->popover), priv->button_box);
+  gtk_container_add (GTK_CONTAINER (switcher->popover), switcher->button_box);
 
-  gtk_menu_button_set_popover (GTK_MENU_BUTTON (switcher), priv->popover);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (switcher), switcher->popover);
 
-  priv->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
+  switcher->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 static void
 clear_popover (GeditMenuStackSwitcher *switcher)
 {
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
-
-  gtk_container_foreach (GTK_CONTAINER (priv->button_box), (GtkCallback) gtk_widget_destroy, switcher);
+  gtk_container_foreach (GTK_CONTAINER (switcher->button_box), (GtkCallback) gtk_widget_destroy, switcher);
 }
 
 static void
 on_button_clicked (GtkWidget              *widget,
                    GeditMenuStackSwitcher *switcher)
 {
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
   GtkWidget *child;
 
-  if (!priv->in_child_changed)
+  if (!switcher->in_child_changed)
     {
       child = g_object_get_data (G_OBJECT (widget), "stack-child");
-      gtk_stack_set_visible_child (priv->stack, child);
-      gtk_widget_hide (priv->popover);
+      gtk_stack_set_visible_child (switcher->stack, child);
+      gtk_widget_hide (switcher->popover);
     }
 }
 
@@ -118,18 +113,17 @@ update_button (GeditMenuStackSwitcher *switcher,
                GtkWidget              *widget,
                GtkWidget              *button)
 {
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
   GList *children;
 
   /* We get spurious notifications while the stack is being
    * destroyed, so for now check the child actually exists
    */
-  children = gtk_container_get_children (GTK_CONTAINER (priv->stack));
+  children = gtk_container_get_children (GTK_CONTAINER (switcher->stack));
   if (g_list_index (children, widget) >= 0)
     {
       gchar *title;
 
-      gtk_container_child_get (GTK_CONTAINER (priv->stack), widget,
+      gtk_container_child_get (GTK_CONTAINER (switcher->stack), widget,
                                "title", &title,
                                NULL);
 
@@ -137,9 +131,9 @@ update_button (GeditMenuStackSwitcher *switcher,
       gtk_widget_set_visible (button, gtk_widget_get_visible (widget) && (title != NULL));
       gtk_widget_set_size_request (button, 100, -1);
 
-      if (widget == gtk_stack_get_visible_child (priv->stack))
+      if (widget == gtk_stack_get_visible_child (switcher->stack))
         {
-          gtk_label_set_label (GTK_LABEL (priv->label), title);
+          gtk_label_set_label (GTK_LABEL (switcher->label), title);
         }
 
       g_free (title);
@@ -153,10 +147,9 @@ on_title_icon_visible_updated (GtkWidget              *widget,
                                GParamSpec             *pspec,
                                GeditMenuStackSwitcher *switcher)
 {
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
   GtkWidget *button;
 
-  button = g_hash_table_lookup (priv->buttons, widget);
+  button = g_hash_table_lookup (switcher->buttons, widget);
   update_button (switcher, widget, button);
 }
 
@@ -165,24 +158,23 @@ on_position_updated (GtkWidget        *widget,
                      GParamSpec       *pspec,
                      GeditMenuStackSwitcher *switcher)
 {
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
   GtkWidget *button;
   gint position;
 
-  button = g_hash_table_lookup (priv->buttons, widget);
+  button = g_hash_table_lookup (switcher->buttons, widget);
 
-  gtk_container_child_get (GTK_CONTAINER (priv->stack), widget,
+  gtk_container_child_get (GTK_CONTAINER (switcher->stack), widget,
                            "position", &position,
                            NULL);
 
-  gtk_box_reorder_child (GTK_BOX (priv->button_box), button, position);
+  gtk_box_reorder_child (GTK_BOX (switcher->button_box), button, position);
 }
 
 static void
 add_child (GeditMenuStackSwitcher *switcher,
            GtkWidget              *widget)
 {
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
+
   GtkWidget *button;
   GList *group;
 
@@ -192,14 +184,14 @@ add_child (GeditMenuStackSwitcher *switcher,
 
   update_button (switcher, widget, button);
 
-  group = gtk_container_get_children (GTK_CONTAINER (priv->button_box));
+  group = gtk_container_get_children (GTK_CONTAINER (switcher->button_box));
   if (group != NULL)
     {
       gtk_radio_button_join_group (GTK_RADIO_BUTTON (button), GTK_RADIO_BUTTON (group->data));
       g_list_free (group);
     }
 
-  gtk_container_add (GTK_CONTAINER (priv->button_box), button);
+  gtk_container_add (GTK_CONTAINER (switcher->button_box), button);
 
   g_object_set_data (G_OBJECT (button), "stack-child", widget);
   g_signal_connect (button, "clicked", G_CALLBACK (on_button_clicked), switcher);
@@ -208,7 +200,7 @@ add_child (GeditMenuStackSwitcher *switcher,
   g_signal_connect (widget, "child-notify::icon-name", G_CALLBACK (on_title_icon_visible_updated), switcher);
   g_signal_connect (widget, "child-notify::position", G_CALLBACK (on_position_updated), switcher);
 
-  g_hash_table_insert (priv->buttons, widget, button);
+  g_hash_table_insert (switcher->buttons, widget, button);
 }
 
 static void
@@ -221,9 +213,7 @@ foreach_stack (GtkWidget              *widget,
 static void
 populate_popover (GeditMenuStackSwitcher *switcher)
 {
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
-
-  gtk_container_foreach (GTK_CONTAINER (priv->stack), (GtkCallback)foreach_stack, switcher);
+  gtk_container_foreach (GTK_CONTAINER (switcher->stack), (GtkCallback)foreach_stack, switcher);
 }
 
 static void
@@ -231,7 +221,6 @@ on_child_changed (GtkWidget              *widget,
                   GParamSpec             *pspec,
                   GeditMenuStackSwitcher *switcher)
 {
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
   GtkWidget *child;
   GtkWidget *button;
 
@@ -240,20 +229,20 @@ on_child_changed (GtkWidget              *widget,
     {
       gchar *title;
 
-      gtk_container_child_get (GTK_CONTAINER (priv->stack), child,
+      gtk_container_child_get (GTK_CONTAINER (switcher->stack), child,
                                "title", &title,
                                NULL);
 
-      gtk_label_set_label (GTK_LABEL (priv->label), title);
+      gtk_label_set_label (GTK_LABEL (switcher->label), title);
       g_free (title);
     }
 
-  button = g_hash_table_lookup (priv->buttons, child);
+  button = g_hash_table_lookup (switcher->buttons, child);
   if (button != NULL)
     {
-      priv->in_child_changed = TRUE;
+      switcher->in_child_changed = TRUE;
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-      priv->in_child_changed = FALSE;
+      switcher->in_child_changed = FALSE;
     }
 }
 
@@ -270,37 +259,32 @@ on_stack_child_removed (GtkStack               *stack,
                         GtkWidget              *widget,
                         GeditMenuStackSwitcher *switcher)
 {
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
   GtkWidget *button;
 
-  button = g_hash_table_lookup (priv->buttons, widget);
-  gtk_container_remove (GTK_CONTAINER (priv->button_box), button);
-  g_hash_table_remove (priv->buttons, widget);
+  button = g_hash_table_lookup (switcher->buttons, widget);
+  gtk_container_remove (GTK_CONTAINER (switcher->button_box), button);
+  g_hash_table_remove (switcher->buttons, widget);
 }
 
 static void
 disconnect_stack_signals (GeditMenuStackSwitcher *switcher)
 {
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
-
-  g_signal_handlers_disconnect_by_func (priv->stack, on_stack_child_added, switcher);
-  g_signal_handlers_disconnect_by_func (priv->stack, on_stack_child_removed, switcher);
-  g_signal_handlers_disconnect_by_func (priv->stack, on_child_changed, switcher);
-  g_signal_handlers_disconnect_by_func (priv->stack, disconnect_stack_signals, switcher);
+  g_signal_handlers_disconnect_by_func (switcher->stack, on_stack_child_added, switcher);
+  g_signal_handlers_disconnect_by_func (switcher->stack, on_stack_child_removed, switcher);
+  g_signal_handlers_disconnect_by_func (switcher->stack, on_child_changed, switcher);
+  g_signal_handlers_disconnect_by_func (switcher->stack, disconnect_stack_signals, switcher);
 }
 
 static void
 connect_stack_signals (GeditMenuStackSwitcher *switcher)
 {
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
-
-  g_signal_connect (priv->stack, "add",
+  g_signal_connect (switcher->stack, "add",
                     G_CALLBACK (on_stack_child_added), switcher);
-  g_signal_connect (priv->stack, "remove",
+  g_signal_connect (switcher->stack, "remove",
                     G_CALLBACK (on_stack_child_removed), switcher);
-  g_signal_connect (priv->stack, "notify::visible-child",
+  g_signal_connect (switcher->stack, "notify::visible-child",
                     G_CALLBACK (on_child_changed), switcher);
-  g_signal_connect_swapped (priv->stack, "destroy",
+  g_signal_connect_swapped (switcher->stack, "destroy",
                             G_CALLBACK (disconnect_stack_signals), switcher);
 }
 
@@ -308,26 +292,22 @@ void
 gedit_menu_stack_switcher_set_stack (GeditMenuStackSwitcher *switcher,
                                      GtkStack               *stack)
 {
-  GeditMenuStackSwitcherPrivate *priv;
-
   g_return_if_fail (GEDIT_IS_MENU_STACK_SWITCHER (switcher));
   g_return_if_fail (stack == NULL || GTK_IS_STACK (stack));
 
-  priv = switcher->priv;
-
-  if (priv->stack == stack)
+  if (switcher->stack == stack)
     return;
 
-  if (priv->stack)
+  if (switcher->stack)
     {
       disconnect_stack_signals (switcher);
       clear_popover (switcher);
-      g_clear_object (&priv->stack);
+      g_clear_object (&switcher->stack);
     }
 
   if (stack)
     {
-      priv->stack = g_object_ref (stack);
+      switcher->stack = g_object_ref (stack);
       populate_popover (switcher);
       connect_stack_signals (switcher);
     }
@@ -342,7 +322,7 @@ gedit_menu_stack_switcher_get_stack (GeditMenuStackSwitcher *switcher)
 {
   g_return_val_if_fail (GEDIT_IS_MENU_STACK_SWITCHER (switcher), NULL);
 
-  return switcher->priv->stack;
+  return switcher->stack;
 }
 
 static void
@@ -352,12 +332,11 @@ gedit_menu_stack_switcher_get_property (GObject    *object,
                                         GParamSpec *pspec)
 {
   GeditMenuStackSwitcher *switcher = GEDIT_MENU_STACK_SWITCHER (object);
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
 
   switch (prop_id)
     {
     case PROP_STACK:
-      g_value_set_object (value, priv->stack);
+      g_value_set_object (value, switcher->stack);
       break;
 
     default:
@@ -400,9 +379,8 @@ static void
 gedit_menu_stack_switcher_finalize (GObject *object)
 {
   GeditMenuStackSwitcher *switcher = GEDIT_MENU_STACK_SWITCHER (object);
-  GeditMenuStackSwitcherPrivate *priv = switcher->priv;
 
-  g_hash_table_destroy (priv->buttons);
+  g_hash_table_destroy (switcher->buttons);
 
   G_OBJECT_CLASS (gedit_menu_stack_switcher_parent_class)->finalize (object);
 }

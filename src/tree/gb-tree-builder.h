@@ -26,26 +26,8 @@
 G_BEGIN_DECLS
 
 #define GB_TYPE_TREE_BUILDER            (gb_tree_builder_get_type())
-#define GB_TREE_BUILDER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_TREE_BUILDER, GbTreeBuilder))
-#define GB_TREE_BUILDER_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_TREE_BUILDER, GbTreeBuilder const))
-#define GB_TREE_BUILDER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_TREE_BUILDER, GbTreeBuilderClass))
-#define GB_IS_TREE_BUILDER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_TREE_BUILDER))
-#define GB_IS_TREE_BUILDER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_TREE_BUILDER))
-#define GB_TREE_BUILDER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_TREE_BUILDER, GbTreeBuilderClass))
 
-typedef struct _GbTreeBuilder        GbTreeBuilder;
-typedef struct _GbTreeBuilderClass   GbTreeBuilderClass;
-typedef struct _GbTreeBuilderPrivate GbTreeBuilderPrivate;
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbTreeBuilder, g_object_unref)
-
-struct _GbTreeBuilder
-{
-	GInitiallyUnowned parent;
-
-	/*< private >*/
-	GbTreeBuilderPrivate *priv;
-};
+G_DECLARE_DERIVABLE_TYPE (GbTreeBuilder, gb_tree_builder, GB, TREE_BUILDER, GInitiallyUnowned)
 
 struct _GbTreeBuilderClass
 {
@@ -69,7 +51,6 @@ struct _GbTreeBuilderClass
 };
 
 GtkWidget *gb_tree_builder_get_tree        (GbTreeBuilder *builder);
-GType      gb_tree_builder_get_type        (void);
 void       gb_tree_builder_build_node      (GbTreeBuilder *builder,
                                             GbTreeNode    *node);
 gboolean   gb_tree_builder_node_activated  (GbTreeBuilder *builder,

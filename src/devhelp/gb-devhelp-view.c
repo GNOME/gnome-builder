@@ -24,8 +24,9 @@
 #include "gb-devhelp-view.h"
 #include "gb-widget.h"
 
-struct _GbDevhelpViewPrivate
+struct _GbDevhelpView
 {
+  GbView             parent_instance;
   /* References owned by view */
   GbDevhelpDocument *document;
 
@@ -36,7 +37,7 @@ struct _GbDevhelpViewPrivate
   GtkPaned          *paned;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbDevhelpView, gb_devhelp_view, GB_TYPE_VIEW)
+G_DEFINE_TYPE (GbDevhelpView, gb_devhelp_view, GB_TYPE_VIEW)
 
 enum {
   PROP_0,
@@ -59,7 +60,7 @@ gb_devhelp_view_get_document (GbView *view)
 {
   g_return_val_if_fail (GB_IS_DEVHELP_VIEW (view), NULL);
 
-  return GB_DOCUMENT (GB_DEVHELP_VIEW (view)->priv->document);
+  return GB_DOCUMENT (GB_DEVHELP_VIEW (view)->document);
 }
 
 static void
@@ -75,10 +76,10 @@ gb_devhelp_view_notify_uri (GbDevhelpView     *view,
   uri = gb_devhelp_document_get_uri (document);
   if (uri)
     {
-      webkit_web_view_load_uri (view->priv->web_view1, uri);
+      webkit_web_view_load_uri (view->web_view1, uri);
 
-      if (view->priv->web_view2 != NULL)
-        webkit_web_view_load_uri (view->priv->web_view2, uri);
+      if (view->web_view2 != NULL)
+        webkit_web_view_load_uri (view->web_view2, uri);
     }
 }
 
@@ -86,26 +87,23 @@ static void
 gb_devhelp_view_set_document (GbDevhelpView     *view,
                               GbDevhelpDocument *document)
 {
-  GbDevhelpViewPrivate *priv;
-
   g_return_if_fail (GB_IS_DEVHELP_VIEW (view));
 
-  priv = view->priv;
 
-  if (priv->document != document)
+  if (view->document != document)
     {
-      if (priv->document)
+      if (view->document)
         {
-          g_signal_handlers_disconnect_by_func (priv->document,
+          g_signal_handlers_disconnect_by_func (view->document,
                                                 G_CALLBACK (gb_devhelp_view_notify_uri),
                                                 view);
-          g_clear_object (&priv->document);
+          g_clear_object (&view->document);
         }
 
       if (document)
         {
-          priv->document = g_object_ref (document);
-          g_signal_connect_object (priv->document,
+          view->document = g_object_ref (document);
+          g_signal_connect_object (view->document,
                                    "notify::uri",
                                    G_CALLBACK (gb_devhelp_view_notify_uri),
                                    view,
@@ -138,30 +136,27 @@ gb_devhelp_view_set_split_view (GbView   *view,
                                 gboolean  split_view)
 {
   GbDevhelpView *self = (GbDevhelpView *)view;
-  GbDevhelpViewPrivate *priv;
 
   g_assert (GB_IS_DEVHELP_VIEW (self));
 
   g_return_if_fail (GB_IS_DEVHELP_VIEW (view));
 
-  priv = self->priv;
-
-  if (split_view && (priv->web_view2 != NULL))
+  if (split_view && (self->web_view2 != NULL))
     return;
 
-  if (!split_view && (priv->web_view2 == NULL))
+  if (!split_view && (self->web_view2 == NULL))
     return;
 
   if (split_view)
     {
-      priv->web_view2 = g_object_new (WEBKIT_TYPE_WEB_VIEW,
+      self->web_view2 = g_object_new (WEBKIT_TYPE_WEB_VIEW,
                                       "visible", TRUE,
                                       NULL);
-      gtk_container_add_with_properties (GTK_CONTAINER (priv->paned), GTK_WIDGET (priv->web_view2),
+      gtk_container_add_with_properties (GTK_CONTAINER (self->paned), GTK_WIDGET (self->web_view2),
                                          "shrink", FALSE,
                                          "resize", TRUE,
                                          NULL);
-      gtk_widget_grab_focus (GTK_WIDGET (priv->web_view2));
+      gtk_widget_grab_focus (GTK_WIDGET (self->web_view2));
 
       gb_devhelp_view_notify_uri (self,
                                   NULL,
@@ -169,20 +164,20 @@ gb_devhelp_view_set_split_view (GbView   *view,
     }
   else
     {
-      GtkWidget *copy = GTK_WIDGET (priv->web_view2);
+      GtkWidget *copy = GTK_WIDGET (self->web_view2);
 
-      priv->web_view2 = NULL;
-      gtk_container_remove (GTK_CONTAINER (priv->paned), copy);
-      gtk_widget_grab_focus (GTK_WIDGET (priv->web_view1));
+      self->web_view2 = NULL;
+      gtk_container_remove (GTK_CONTAINER (self->paned), copy);
+      gtk_widget_grab_focus (GTK_WIDGET (self->web_view1));
     }
 }
 
 static void
 gb_devhelp_view_finalize (GObject *object)
 {
-  GbDevhelpViewPrivate *priv = GB_DEVHELP_VIEW (object)->priv;
+  GbDevhelpView *self = GB_DEVHELP_VIEW (object);
 
-  g_clear_object (&priv->document);
+  g_clear_object (&self->document);
 
   G_OBJECT_CLASS (gb_devhelp_view_parent_class)->finalize (object);
 }
@@ -198,7 +193,7 @@ gb_devhelp_view_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_DOCUMENT:
-      g_value_set_object (value, self->priv->document);
+      g_value_set_object (value, self->document);
       break;
 
     default:
@@ -249,8 +244,8 @@ gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-devhelp-view.ui");
-  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbDevhelpView, web_view1);
-  GB_WIDGET_CLASS_BIND_PRIVATE (klass, GbDevhelpView, paned);
+  GB_WIDGET_CLASS_BIND (klass, GbDevhelpView, web_view1);
+  GB_WIDGET_CLASS_BIND (klass, GbDevhelpView, paned);
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }
@@ -258,7 +253,5 @@ gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
 static void
 gb_devhelp_view_init (GbDevhelpView *self)
 {
-  self->priv = gb_devhelp_view_get_instance_private (self);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 }

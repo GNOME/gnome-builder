@@ -24,18 +24,11 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_RECENT_PROJECT_ROW            (gb_recent_project_row_get_type())
-#define GB_RECENT_PROJECT_ROW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_RECENT_PROJECT_ROW, GbRecentProjectRow))
-#define GB_RECENT_PROJECT_ROW_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_RECENT_PROJECT_ROW, GbRecentProjectRow const))
-#define GB_RECENT_PROJECT_ROW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GB_TYPE_RECENT_PROJECT_ROW, GbRecentProjectRowClass))
-#define GB_IS_RECENT_PROJECT_ROW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_RECENT_PROJECT_ROW))
-#define GB_IS_RECENT_PROJECT_ROW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GB_TYPE_RECENT_PROJECT_ROW))
-#define GB_RECENT_PROJECT_ROW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GB_TYPE_RECENT_PROJECT_ROW, GbRecentProjectRowClass))
+#define GB_TYPE_RECENT_PROJECT_ROW (gb_recent_project_row_get_type())
 
-typedef struct _GbRecentProjectRow      GbRecentProjectRow;
-typedef struct _GbRecentProjectRowClass GbRecentProjectRowClass;
+G_DECLARE_FINAL_TYPE (GbRecentProjectRow, gb_recent_project_row,
+                      GB, RECENT_PROJECT_ROW, GtkListBoxRow)
 
-GType           gb_recent_project_row_get_type         (void);
 GtkWidget      *gb_recent_project_row_new              (IdeProjectInfo     *project_info);
 IdeProjectInfo *gb_recent_project_row_get_project_info (GbRecentProjectRow *self);
 gboolean        gb_recent_project_row_get_selected     (GbRecentProjectRow *self);
