@@ -23,6 +23,8 @@
 #include "config.h"
 #endif
 
+#include "egg-counter.h"
+
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -42,6 +44,11 @@
 
 #define FAKE_CC  "__LIBIDE_FAKE_CC__"
 #define FAKE_CXX "__LIBIDE_FAKE_CXX__"
+
+EGG_DEFINE_COUNTER (TargetHit, "Makecache", "Target Cache Hits", "Number of target cache hits")
+EGG_DEFINE_COUNTER (TargetMiss, "Makecache", "Target Cache Misses", "Number of target cache misses")
+EGG_DEFINE_COUNTER (FlagHit, "Makecache", "Flag Cache Hits", "Number of flag cache hits")
+EGG_DEFINE_COUNTER (FlagMiss, "Makecache", "Flag Cache Misses", "Number of flag cache misses")
 
 struct _IdeMakecache
 {
@@ -1303,6 +1310,7 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
 
   if (neg_hit)
     {
+      EGG_COUNTER_INC (TargetHit);
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_FOUND,
@@ -1314,9 +1322,12 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
 
   if (ret)
     {
+      EGG_COUNTER_INC (TargetHit);
       g_task_return_pointer (task, g_ptr_array_ref (ret), (GDestroyNotify)g_ptr_array_unref);
       IDE_EXIT;
     }
+
+  EGG_COUNTER_INC (TargetMiss);
 
   ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
                              task,
@@ -1389,9 +1400,12 @@ ide_makecache__get_targets_cb (GObject      *object,
 
   if (argv)
     {
+      EGG_COUNTER_INC (FlagHit);
       g_task_return_pointer (task, argv, (GDestroyNotify)g_strfreev);
       IDE_EXIT;
     }
+
+  EGG_COUNTER_INC (FlagMiss);
 
   lookup = g_new0 (FileFlagsLookup, 1);
   lookup->targets = g_ptr_array_ref (targets);
