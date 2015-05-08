@@ -88,6 +88,9 @@ void                ide_buffer_get_iter_at_source_location   (IdeBuffer         
                                                               GtkTextIter          *iter,
                                                               IdeSourceLocation    *location);
 void                ide_buffer_rehighlight                   (IdeBuffer            *self);
+void                ide_buffer_get_selection_bounds          (IdeBuffer            *self,
+                                                              GtkTextIter          *insert,
+                                                              GtkTextIter          *selection);
 void                ide_buffer_get_symbol_at_location_async  (IdeBuffer            *self,
                                                               const GtkTextIter    *location,
                                                               GCancellable         *cancellable,

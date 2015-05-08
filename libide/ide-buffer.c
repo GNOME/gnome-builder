@@ -1979,3 +1979,35 @@ ide_buffer_release (IdeBuffer *self)
                                                          self);
     }
 }
+
+/**
+ * ide_buffer_get_selection_bounds:
+ *
+ * This function acts like gtk_text_buffer_get_selection_bounds() except that it always
+ * places the location of the insert mark at @insert and the location of the selection
+ * mark at @selection.
+ *
+ * Calling gtk_text_iter_order() with the results of this function would be equivalent
+ * to calling gtk_text_buffer_get_selection_bounds().
+ */
+void
+ide_buffer_get_selection_bounds (IdeBuffer   *self,
+                                 GtkTextIter *insert,
+                                 GtkTextIter *selection)
+{
+  GtkTextMark *mark;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  if (insert != NULL)
+    {
+      mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self));
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self), insert, mark);
+    }
+
+  if (selection != NULL)
+    {
+      mark = gtk_text_buffer_get_selection_bound (GTK_TEXT_BUFFER (self));
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self), selection, mark);
+    }
+}
