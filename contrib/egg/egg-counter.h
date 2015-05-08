@@ -182,7 +182,7 @@ G_BEGIN_DECLS
  }
 
 /**
- * EGG_COUNTER_ADD:
+ * EGG_COUNTER_INC:
  * @Identifier: The identifier of the counter.
  *
  * Increments the counter @Identifier by 1.
