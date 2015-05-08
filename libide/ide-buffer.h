@@ -63,32 +63,31 @@ struct _IdeBuffer
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeBuffer, g_object_unref)
 
-gboolean            ide_buffer_get_changed_on_volume       (IdeBuffer         *self);
-GBytes             *ide_buffer_get_content                 (IdeBuffer         *self);
-IdeContext         *ide_buffer_get_context                 (IdeBuffer         *self);
-IdeDiagnostic      *ide_buffer_get_diagnostic_at_iter      (IdeBuffer         *self,
-                                                            const GtkTextIter *iter);
-IdeFile            *ide_buffer_get_file                    (IdeBuffer         *self);
-IdeBufferLineFlags  ide_buffer_get_line_flags              (IdeBuffer         *buffer,
-                                                            guint              line);
-gboolean            ide_buffer_get_read_only               (IdeBuffer         *self);
-gboolean            ide_buffer_get_highlight_diagnostics   (IdeBuffer         *self);
-const gchar        *ide_buffer_get_style_scheme_name       (IdeBuffer         *self);
-const gchar        *ide_buffer_get_title                   (IdeBuffer         *self);
-GType               ide_buffer_get_type                    (void);
-void                ide_buffer_set_file                    (IdeBuffer         *self,
-                                                            IdeFile           *file);
-void                ide_buffer_set_highlight_diagnostics   (IdeBuffer         *self,
-                                                            gboolean           highlight_diagnostics);
-void                ide_buffer_set_style_scheme_name       (IdeBuffer         *self,
-                                                            const gchar       *style_scheme_name);
-void                ide_buffer_trim_trailing_whitespace    (IdeBuffer         *self);
-void                ide_buffer_check_for_volume_change     (IdeBuffer         *self);
-void                ide_buffer_get_iter_at_source_location (IdeBuffer         *self,
-                                                            GtkTextIter       *iter,
-                                                            IdeSourceLocation *location);
-void                ide_buffer_rehighlight                 (IdeBuffer         *self);
-
+gboolean            ide_buffer_get_changed_on_volume         (IdeBuffer            *self);
+GBytes             *ide_buffer_get_content                   (IdeBuffer            *self);
+IdeContext         *ide_buffer_get_context                   (IdeBuffer            *self);
+IdeDiagnostic      *ide_buffer_get_diagnostic_at_iter        (IdeBuffer            *self,
+                                                              const GtkTextIter    *iter);
+IdeFile            *ide_buffer_get_file                      (IdeBuffer            *self);
+IdeBufferLineFlags  ide_buffer_get_line_flags                (IdeBuffer            *buffer,
+                                                              guint                 line);
+gboolean            ide_buffer_get_read_only                 (IdeBuffer            *self);
+gboolean            ide_buffer_get_highlight_diagnostics     (IdeBuffer            *self);
+const gchar        *ide_buffer_get_style_scheme_name         (IdeBuffer            *self);
+const gchar        *ide_buffer_get_title                     (IdeBuffer            *self);
+GType               ide_buffer_get_type                      (void);
+void                ide_buffer_set_file                      (IdeBuffer            *self,
+                                                              IdeFile              *file);
+void                ide_buffer_set_highlight_diagnostics     (IdeBuffer            *self,
+                                                              gboolean              highlight_diagnostics);
+void                ide_buffer_set_style_scheme_name         (IdeBuffer            *self,
+                                                              const gchar          *style_scheme_name);
+void                ide_buffer_trim_trailing_whitespace      (IdeBuffer            *self);
+void                ide_buffer_check_for_volume_change       (IdeBuffer            *self);
+void                ide_buffer_get_iter_at_source_location   (IdeBuffer            *self,
+                                                              GtkTextIter          *iter,
+                                                              IdeSourceLocation    *location);
+void                ide_buffer_rehighlight                   (IdeBuffer            *self);
 void                ide_buffer_get_symbol_at_location_async  (IdeBuffer            *self,
                                                               const GtkTextIter    *location,
                                                               GCancellable         *cancellable,
