@@ -1915,14 +1915,32 @@ ide_source_view_do_smart_backspace (IdeSourceView *self,
   g_assert (event);
   g_assert (event->type == GDK_KEY_PRESS);
 
-#define GET_VISUAL_COLUMN(iter) gtk_source_view_get_visual_column(GTK_SOURCE_VIEW(self),iter)
-
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
-  gtk_text_buffer_get_selection_bounds (buffer, &insert, &end);
+  ide_buffer_get_selection_bounds (IDE_BUFFER (buffer), &insert, &end);
 
   if (!gtk_text_iter_equal (&insert, &end))
     IDE_RETURN (FALSE);
+
+  if ((event->state & GDK_CONTROL_MASK) != 0)
+    {
+      /*
+       * A <Control>BackSpace at the beginning of the line should only move us to the
+       * end of the previous line. Anything more than that is non-obvious because it requires
+       * looking in a position other than where the cursor is.
+       */
+      if ((gtk_text_iter_get_line_offset (&insert) == 0) && (gtk_text_iter_get_line (&insert) > 0))
+        {
+          gtk_text_buffer_begin_user_action (buffer);
+          gtk_text_iter_backward_char (&insert);
+          gtk_text_buffer_delete (buffer, &insert, &end);
+          gtk_text_buffer_end_user_action (buffer);
+
+          IDE_RETURN (TRUE);
+        }
+    }
+
+#define GET_VISUAL_COLUMN(iter) gtk_source_view_get_visual_column(GTK_SOURCE_VIEW(self),iter)
 
   /* if the line isn't empty up to our cursor, ignore */
   tmp = insert;
@@ -1939,6 +1957,19 @@ ide_source_view_do_smart_backspace (IdeSourceView *self,
         break;
 
       gtk_text_iter_backward_char (&tmp);
+    }
+
+  /*
+   * If <Control>BackSpace was specified, delete up to the zero position.
+   */
+  if ((event->state & GDK_CONTROL_MASK) != 0)
+    {
+      gtk_text_buffer_begin_user_action (buffer);
+      gtk_text_iter_set_line_offset (&insert, 0);
+      gtk_text_buffer_delete (buffer, &insert, &end);
+      gtk_text_buffer_end_user_action (buffer);
+
+      IDE_RETURN (TRUE);
     }
 
   visual_column = GET_VISUAL_COLUMN (&insert);
