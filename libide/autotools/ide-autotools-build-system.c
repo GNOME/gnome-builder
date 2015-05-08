@@ -111,7 +111,6 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
                                                  gpointer      task_data,
                                                  GCancellable *cancellable)
 {
-  g_autofree gchar *name = NULL;
   GFile *file = task_data;
   GFile *parent;
 
