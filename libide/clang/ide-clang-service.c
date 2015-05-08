@@ -21,6 +21,8 @@
 #include <clang-c/Index.h>
 #include <glib/gi18n.h>
 
+#include "egg-counter.h"
+
 #include "ide-clang-highlighter.h"
 #include "ide-build-system.h"
 #include "ide-clang-private.h"
@@ -69,6 +71,11 @@ typedef struct
 } IndexRequest;
 
 G_DEFINE_TYPE (IdeClangService, ide_clang_service, IDE_TYPE_SERVICE)
+
+EGG_DEFINE_COUNTER (ParseAttempts,
+                    "Clang",
+                    "Total Parse Attempts",
+                    "Total number of attempts to create a translation unit.")
 
 static void
 parse_request_free (gpointer data)
@@ -278,6 +285,7 @@ ide_clang_service_parse_worker (GTask        *task,
   argv = (const gchar * const *)request->command_line_args;
   argc = argv ? g_strv_length (request->command_line_args) : 0;
 
+  EGG_COUNTER_INC (ParseAttempts);
   code = clang_parseTranslationUnit2 (request->index,
                                       request->source_filename,
                                       argv, argc,
