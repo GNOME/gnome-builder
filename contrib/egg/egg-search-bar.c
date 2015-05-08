@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "egg-signal-group.h"
 #include "egg-search-bar.h"
 
 typedef struct
@@ -29,7 +30,7 @@ typedef struct
   GtkSearchEntry *entry;
   GtkButton      *close_button;
 
-  gulong          key_press_event_handler;
+  EggSignalGroup *window_signals;
 
   guint           search_mode_enabled : 1;
 } EggSearchBarPrivate;
@@ -98,23 +99,46 @@ is_modifier_key (const GdkEventKey *event)
 }
 
 static gboolean
-egg_search_bar__toplevel_key_press_event (EggSearchBar *self,
-                                          GdkEventKey  *event,
-                                          GtkWindow    *toplevel)
+toplevel_key_press_event_before (EggSearchBar *self,
+                                 GdkEventKey  *event,
+                                 GtkWindow    *toplevel)
 {
   EggSearchBarPrivate *priv = egg_search_bar_get_instance_private (self);
-  GtkWidget *entry;
-  GtkWidget *focus;
 
   g_assert (EGG_IS_SEARCH_BAR (self));
   g_assert (event != NULL);
   g_assert (GTK_IS_WINDOW (toplevel));
 
-  focus = gtk_window_get_focus (toplevel);
-  entry = GTK_WIDGET (priv->entry);
+  switch (event->keyval)
+    {
+    case GDK_KEY_Escape:
+      if (gtk_widget_has_focus (GTK_WIDGET (priv->entry)))
+        {
+          egg_search_bar_set_search_mode_enabled (self, FALSE);
+          return GDK_EVENT_STOP;
+        }
+      break;
 
-  if (GTK_IS_EDITABLE (focus) && (focus != entry))
-    return GDK_EVENT_PROPAGATE;
+    default:
+      break;
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+toplevel_key_press_event_after (EggSearchBar *self,
+                                GdkEventKey  *event,
+                                GtkWindow    *toplevel)
+{
+  EggSearchBarPrivate *priv = egg_search_bar_get_instance_private (self);
+  GtkWidget *entry;
+
+  g_assert (EGG_IS_SEARCH_BAR (self));
+  g_assert (event != NULL);
+  g_assert (GTK_IS_WINDOW (toplevel));
+
+  entry = GTK_WIDGET (priv->entry);
 
   switch (event->keyval)
     {
@@ -175,21 +199,10 @@ egg_search_bar_hierarchy_changed (GtkWidget *widget,
 
   toplevel = gtk_widget_get_toplevel (widget);
 
-  if (GTK_IS_WINDOW (old_toplevel))
-    {
-      g_signal_handler_disconnect (old_toplevel, priv->key_press_event_handler);
-      priv->key_press_event_handler = 0;
-    }
-
   if (GTK_IS_WINDOW (toplevel))
-    {
-      priv->key_press_event_handler =
-        g_signal_connect_object (toplevel,
-                                 "key-press-event",
-                                 G_CALLBACK (egg_search_bar__toplevel_key_press_event),
-                                 self,
-                                 G_CONNECT_SWAPPED);
-    }
+    egg_signal_group_set_target (priv->window_signals, toplevel);
+  else
+    egg_signal_group_set_target (priv->window_signals, NULL);
 }
 
 static void
@@ -271,11 +284,23 @@ egg_search_bar_set_property (GObject      *object,
 }
 
 static void
+egg_search_bar_finalize (GObject *object)
+{
+  EggSearchBar *self = (EggSearchBar *)object;
+  EggSearchBarPrivate *priv = egg_search_bar_get_instance_private (self);
+
+  g_clear_object (&priv->window_signals);
+
+  G_OBJECT_CLASS (egg_search_bar_parent_class)->finalize (object);
+}
+
+static void
 egg_search_bar_class_init (EggSearchBarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->finalize = egg_search_bar_finalize;
   object_class->get_property = egg_search_bar_get_property;
   object_class->set_property = egg_search_bar_set_property;
 
@@ -324,6 +349,18 @@ egg_search_bar_init (EggSearchBar *self)
   GtkStyleContext *style_context;
   GtkBox *vbox;
   GtkSeparator *sep;
+
+  priv->window_signals = egg_signal_group_new (GTK_TYPE_WINDOW);
+  egg_signal_group_connect_object (priv->window_signals,
+                                   "key-press-event",
+                                   G_CALLBACK (toplevel_key_press_event_before),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  egg_signal_group_connect_object (priv->window_signals,
+                                   "key-press-event",
+                                   G_CALLBACK (toplevel_key_press_event_after),
+                                   self,
+                                   G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   priv->revealer =
     g_object_new (GTK_TYPE_REVEALER,
