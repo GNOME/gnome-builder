@@ -78,14 +78,16 @@ build_indent (IdeCIndenter *c,
 {
   GtkSourceView *view = (GtkSourceView *)c->view;
   guint tab_width = gtk_source_view_get_tab_width (view);
+  gint indent_width = gtk_source_view_get_indent_width (view);
   GtkTextIter iter;
   gunichar ch;
   guint i;
 
-  g_assert (tab_width > 0);
-
   if (!line_offset)
     return;
+
+  if (indent_width == -1)
+    indent_width = tab_width;
 
   gtk_text_buffer_get_iter_at_line (gtk_text_iter_get_buffer (matching_line),
                                     &iter,
@@ -557,6 +559,11 @@ c_indenter_indent (IdeCIndenter *c,
       GOTO (cleanup);
 
   /*
+   * Get our last non \n character entered.
+   */
+  ch = gtk_text_iter_get_char (iter);
+
+  /*
    * If we are in a c89 multi-line comment, try to match the previous comment
    * line. Function will leave iter at original position unless it matched.
    * If so, it will be at the beginning of the comment.
@@ -1000,6 +1007,8 @@ format_parameters (GtkTextIter *begin,
       if (p->type)
         max_type = MAX (max_type, strlen (p->type));
     }
+
+  str = g_string_new (NULL);
 
   ITER_INIT_LINE_START (&line_start, begin);
 

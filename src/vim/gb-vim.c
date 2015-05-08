@@ -1130,10 +1130,12 @@ gb_vim_complete_edit_files (GtkSourceView *source_view,
   if (parent != NULL)
     {
       g_autoptr(GFileEnumerator) fe = NULL;
+      g_autofree gchar *parent_path = NULL;
       g_autofree gchar *relpath = NULL;
       GFileInfo *descendent;
       const gchar *slash;
 
+      parent_path = g_file_get_path (parent);
       relpath = g_file_get_relative_path (workdir, parent);
 
       if (relpath && g_str_has_prefix (relpath, "./"))
@@ -1143,12 +1145,7 @@ gb_vim_complete_edit_files (GtkSourceView *source_view,
           g_free (tmp);
         }
 
-#ifdef IDE_ENABLE_TRACE
-      {
-        g_autofree gchar *parent_path = g_file_get_path (parent);
-        IDE_TRACE_MSG ("parent_path: %s", parent_path);
-      }
-#endif
+      IDE_TRACE_MSG ("parent_path: %s", parent_path);
 
       if ((slash = strrchr (prefix, G_DIR_SEPARATOR)))
         prefix = slash + 1;
@@ -1222,6 +1219,8 @@ gb_vim_complete_colorscheme (const gchar *line,
 
   manager = gtk_source_style_scheme_manager_get_default ();
   scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
+
+  tmp = strchr (line, ' ');
 
   for (tmp = strchr (line, ' ');
        tmp && *tmp && g_unichar_isspace (g_utf8_get_char (tmp));

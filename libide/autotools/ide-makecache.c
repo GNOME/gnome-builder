@@ -1365,6 +1365,7 @@ ide_makecache__get_targets_cb (GObject      *object,
   GError *error = NULL;
   GFile *file;
   FileFlagsLookup *lookup;
+  g_autofree gchar *path = NULL;
   g_autofree gchar *relative_path = NULL;
   gchar **argv;
 
@@ -1390,6 +1391,7 @@ ide_makecache__get_targets_cb (GObject      *object,
     }
 
   file = g_task_get_task_data (task);
+  path = g_file_get_path (file);
   relative_path = ide_makecache_get_relative_path (self, file);
 
   g_mutex_lock (&self->mutex);

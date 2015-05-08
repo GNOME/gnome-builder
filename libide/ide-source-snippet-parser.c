@@ -355,6 +355,7 @@ parse_dollar:
     {
       if (*line == '$')
         {
+          dollar = line;
           goto parse_dollar;
         }
       else

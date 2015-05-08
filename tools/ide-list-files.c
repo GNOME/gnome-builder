@@ -69,6 +69,8 @@ walk_tree (IdeProjectItem *item,
 
   if (children)
     {
+      iter = g_sequence_get_begin_iter (children);
+
       for (iter = g_sequence_get_begin_iter (children);
            !g_sequence_iter_is_end (iter);
            iter = g_sequence_iter_next (iter))

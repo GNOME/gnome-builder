@@ -758,9 +758,9 @@ gb_workbench__builder_build_cb (GObject      *object,
                                 gpointer      user_data)
 {
   g_autoptr(GbWorkbench) self = user_data;
+  g_autoptr(IdeBuildResult) build_result = NULL;
   g_autoptr(GError) error = NULL;
   IdeBuilder *builder = (IdeBuilder *)object;
-  IdeBuildResult *build_result;
 
   g_assert (IDE_IS_BUILDER (builder));
   g_assert (GB_IS_WORKBENCH (self));
@@ -783,8 +783,6 @@ gb_workbench__builder_build_cb (GObject      *object,
       g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
       gtk_window_present (GTK_WINDOW (dialog));
     }
-
-  g_clear_object (&build_result);
 }
 
 void
@@ -863,15 +861,13 @@ gb_workbench_add_temporary_buffer (GbWorkbench *self)
 {
   IdeContext *context;
   IdeBufferManager *buffer_manager;
-  IdeBuffer *buffer;
+  g_autoptr(IdeBuffer) buffer = NULL;
 
   g_return_if_fail (GB_IS_WORKBENCH (self));
 
   context = gb_workbench_get_context (self);
   buffer_manager = ide_context_get_buffer_manager (context);
   buffer = ide_buffer_manager_create_buffer (buffer_manager);
-
-  g_clear_object (&buffer);
 }
 
 gboolean
