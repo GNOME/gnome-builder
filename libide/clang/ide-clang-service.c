@@ -289,7 +289,7 @@ ide_clang_service_parse_worker (GTask        *task,
   code = clang_parseTranslationUnit2 (request->index,
                                       request->source_filename,
                                       argv, argc,
-                                      (struct CXUnsavedFile *)ar->data,
+                                      (struct CXUnsavedFile *)(void *)ar->data,
                                       ar->len,
                                       request->options,
                                       &tu);

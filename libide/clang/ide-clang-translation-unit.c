@@ -682,7 +682,6 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
                                                 gpointer                 user_data)
 {
   g_autoptr(GTask) task = NULL;
-  g_autofree gchar *path = NULL;
   CodeCompleteState *state;
   IdeContext *context;
   IdeUnsavedFiles *unsaved_files;
