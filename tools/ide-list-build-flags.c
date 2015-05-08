@@ -105,10 +105,13 @@ main (gint   argc,
   g_autoptr(GFile) project_file = NULL;
   const gchar *project_path = ".";
 
+  ide_log_init (TRUE, NULL);
+
   ide_set_program_name ("gnome-builder");
   g_set_prgname ("ide-build");
 
   context = g_option_context_new (_("- Get build flags for a project file"));
+  g_option_context_add_group (context, gtk_get_option_group (TRUE));
 
   if (!g_option_context_parse (context, &argc, &argv, &error))
     {
