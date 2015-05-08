@@ -166,7 +166,6 @@ gb_editor_map_bin_class_init (GbEditorMapBinClass *klass)
 
   widget_class->size_allocate = gb_editor_map_bin_size_allocate;
 
-  container_class = GTK_CONTAINER_CLASS (klass);
   container_class->add = gb_editor_map_bin_add;
   container_class->remove = gb_editor_map_bin_remove;
 

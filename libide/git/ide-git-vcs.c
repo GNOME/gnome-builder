@@ -519,6 +519,7 @@ ide_git_vcs_reload__build_tree_cb (GObject      *object,
    */
   if (!self->loaded_files)
     {
+#if 0
       IdeContext *context;
       IdeProject *project;
       IdeProjectItem *root;
@@ -534,7 +535,7 @@ ide_git_vcs_reload__build_tree_cb (GObject      *object,
           ide_project_item_append (root, IDE_PROJECT_ITEM (files));
           ide_project_writer_unlock (project);
         }
-
+#endif
       self->loaded_files = TRUE;
     }
 
