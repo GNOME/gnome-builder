@@ -240,6 +240,35 @@ gb_editor_workspace__project_paned_notify_position (GbEditorWorkspace *self,
 }
 
 static void
+gb_editor_workspace_views_foreach (GbWorkspace *workspace,
+                                   GtkCallback  callback,
+                                   gpointer     callback_data)
+{
+  GbEditorWorkspace *self = (GbEditorWorkspace *)workspace;
+  GList *stacks;
+  GList *stack;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+
+  stacks = gb_view_grid_get_stacks (self->view_grid);
+
+  for (stack = stacks; stack; stack = stack->next)
+    {
+      GList *views;
+      GList *iter;
+
+      views = gb_view_stack_get_views (stack->data);
+
+      for (iter = views; iter; iter = iter->next)
+        callback (iter->data, callback_data);
+
+      g_list_free (views);
+    }
+
+  g_list_free (stacks);
+}
+
+static void
 gb_editor_workspace_constructed (GObject *object)
 {
   GbEditorWorkspace *self = (GbEditorWorkspace *)object;
@@ -314,6 +343,7 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GbWorkspaceClass *workspace_class = GB_WORKSPACE_CLASS (klass);
 
   object_class->constructed = gb_editor_workspace_constructed;
   object_class->finalize = gb_editor_workspace_finalize;
@@ -322,6 +352,8 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 
   widget_class->grab_focus = gb_editor_workspace_grab_focus;
   widget_class->hierarchy_changed = gb_editor_workspace_hierarchy_changed;
+
+  workspace_class->views_foreach = gb_editor_workspace_views_foreach;
 
   gParamSpecs [PROP_SHOW_PROJECT_TREE] =
     g_param_spec_boolean ("show-project-tree",

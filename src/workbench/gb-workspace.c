@@ -180,3 +180,15 @@ static void
 gb_workspace_init (GbWorkspace *workspace)
 {
 }
+
+void
+gb_workspace_views_foreach (GbWorkspace *self,
+                            GtkCallback  callback,
+                            gpointer     callback_data)
+{
+  g_return_if_fail (GB_IS_WORKSPACE (self));
+  g_return_if_fail (callback != NULL);
+
+  if (GB_WORKSPACE_GET_CLASS (self)->views_foreach)
+    GB_WORKSPACE_GET_CLASS (self)->views_foreach (self, callback, callback_data);
+}

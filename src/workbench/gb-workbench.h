@@ -54,6 +54,9 @@ GbCommandManager *gb_workbench_get_command_manager  (GbWorkbench         *self);
 gpointer          gb_workbench_get_workspace_typed  (GbWorkbench         *self,
                                                      GType                workspace_type);
 gboolean          gb_workbench_get_closing          (GbWorkbench         *self);
+void              gb_workbench_views_foreach        (GbWorkbench         *self,
+                                                     GtkCallback          callback,
+                                                     gpointer             callback_data);
 
 G_END_DECLS
 

@@ -32,6 +32,10 @@ G_DECLARE_DERIVABLE_TYPE (GbWorkspace, gb_workspace, GB, WORKSPACE, GtkBin)
 struct _GbWorkspaceClass
 {
   GtkBinClass parent_class;
+
+  void (*views_foreach) (GbWorkspace *workspace,
+                         GtkCallback  callback,
+                         gpointer     callback_data);
 };
 
 const gchar  *gb_workspace_get_icon_name (GbWorkspace *self);
@@ -40,6 +44,9 @@ void          gb_workspace_set_icon_name (GbWorkspace *self,
 const gchar  *gb_workspace_get_title     (GbWorkspace *self);
 void          gb_workspace_set_title     (GbWorkspace *self,
                                           const gchar *title);
+void          gb_workspace_views_foreach (GbWorkspace *self,
+                                          GtkCallback  callback,
+                                          gpointer     callback_data);
 
 G_END_DECLS
 

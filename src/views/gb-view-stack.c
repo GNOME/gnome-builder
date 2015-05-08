@@ -821,3 +821,18 @@ gb_view_stack_find_document_typed (GbViewStack *self,
 
   return NULL;
 }
+
+/**
+ * gb_view_stack_get_views:
+ *
+ * Gets the views belonging to this #GbViewStack.
+ *
+ * Returns: (transfer container): A #GList of #GbView.
+ */
+GList *
+gb_view_stack_get_views (GbViewStack *self)
+{
+  g_return_val_if_fail (GB_IS_VIEW_STACK (self), NULL);
+
+  return gtk_container_get_children (GTK_CONTAINER (self->stack));
+}

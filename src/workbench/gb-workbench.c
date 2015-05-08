@@ -877,3 +877,14 @@ gb_workbench_get_closing (GbWorkbench *self)
 
   return (self->unloading || (self->disposing > 0));
 }
+
+void
+gb_workbench_views_foreach (GbWorkbench *self,
+                            GtkCallback  callback,
+                            gpointer     callback_data)
+{
+  g_return_if_fail (GB_IS_WORKBENCH (self));
+  g_return_if_fail (callback != NULL);
+
+  gb_workspace_views_foreach (GB_WORKSPACE (self->editor_workspace), callback, callback_data);
+}
