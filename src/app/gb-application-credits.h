@@ -102,6 +102,7 @@ static const gchar *gb_application_credits_funders[] = {
   "Cedric Briner",
   "Centricular Ltd",
   "Cheng-Chia Tseng",
+  "Chris Kühl",
   "Christian Hergert",
   "Christopher Brian Sherlock",
   "Christopher Horton",
