@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2015-05-07 01:09+0000\n"
-"PO-Revision-Date: 2015-05-08 10:29+0200\n"
+"PO-Revision-Date: 2015-05-08 18:50+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -430,14 +430,13 @@ msgstr "Vedle editoru zdrojového kódu zobrazovat mapu s přehledem."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:21
 #: ../src/editor/gb-editor-frame.c:783 ../src/editor/gb-editor-frame.c:784
-#, fuzzy
 #| msgid "Auto indent"
 msgid "Auto Hide Map"
-msgstr "Automatické odsazování"
+msgstr "Automaticky skrývat mapu"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:22
 msgid "Automatically hide the overview map during inactivity."
-msgstr ""
+msgstr "Automaticky skrývat přehledovou mapu při nečinnosti."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:23
 #: ../libide/ide-source-view.c:5093
@@ -517,10 +516,9 @@ msgstr "Experimentální"
 
 #: ../data/ui/gb-projects-dialog.ui.h:1
 #: ../src/dialogs/gb-projects-dialog.c:257
-#, fuzzy
 #| msgid "Rebuild Project"
 msgid "Select Project"
-msgstr "Znovu sestavit projekt"
+msgstr "Výběr projektu"
 
 #: ../data/ui/gb-projects-dialog.ui.h:2
 msgid "New"
@@ -647,10 +645,9 @@ msgstr ""
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:21
 msgid "Automatically Hide Overview Map"
-msgstr ""
+msgstr "Automaticky skrývat přehledovou mapu"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:22
-#, fuzzy
 #| msgid ""
 #| "If enabled, Builder will display an overview map of the source file next "
 #| "to the editor."
@@ -658,8 +655,8 @@ msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
 msgstr ""
-"Když je zapnuto, bude Builder vedle editoru zobrazovat mapu s přehledem "
-"zdrojového souboru."
+"Když je zapnuto, bude Builder automaticky skrývat přehledovou mapu, když "
+"zaměření myší opustí editor nebo když vyprší časový limit."
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:23
 msgid "Draw Spaces"
@@ -1118,10 +1115,9 @@ msgid "unsaved document %u"
 msgstr "neuložený dokument %u"
 
 #: ../libide/ide-buffer-manager.c:1556
-#, fuzzy
 #| msgid "Failed to locate working directory"
 msgid "Failed to save buffer, ignoring reclamation."
-msgstr "Selhalo vyhledání pracovní složky"
+msgstr "Selhalo uložení vyrovnávací paměti, ignoruje se opětovné použití."
 
 #: ../libide/ide-buffer.c:971
 msgid "Busy"
@@ -2353,10 +2349,9 @@ msgid "Line %u, Column %u"
 msgstr "řádek %u, sloupec %u"
 
 #: ../src/editor/gb-editor-frame.c:602
-#, fuzzy
 #| msgid "Project File"
 msgid "Re_veal in Project Tree"
-msgstr "Projektový soubor"
+msgstr "Ukázat v projekto_vém stromu"
 
 #: ../src/editor/gb-editor-frame.c:791
 msgid "The back forward list."
@@ -2371,10 +2366,9 @@ msgid "Show Map"
 msgstr "Zobrazovat mapu"
 
 #: ../src/editor/gb-editor-frame.c:805
-#, fuzzy
 #| msgid "If the ovewview map should be shown."
 msgid "If the overview map should be shown."
-msgstr "Zda by se měla zobrazovat mapa s přehledem."
+msgstr "Zda by se měla zobrazovat přehledová mapa."
 
 #: ../src/editor/gb-editor-settings-widget.c:183
 msgid "The language to change the settings for."
