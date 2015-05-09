@@ -413,7 +413,9 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
   switch (event->keyval)
     {
     case GDK_KEY_Escape:
-      self->previous_search_string = g_strdup (gtk_entry_get_text (GTK_ENTRY (self->search_entry)));
+      /* stash the search string for later */
+      g_free (self->previous_search_string);
+      g_object_get (self->search_entry, "text", &self->previous_search_string, NULL);
       ide_source_view_clear_search (self->source_view);
       ide_source_view_set_rubberband_search (self->source_view, FALSE);
       gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
@@ -690,6 +692,8 @@ static void
 gb_editor_frame_dispose (GObject *object)
 {
   GbEditorFrame *self = (GbEditorFrame *)object;
+
+  g_clear_pointer (&self->previous_search_string, g_free);
 
   ide_clear_weak_pointer (&self->map_animation);
 
