@@ -419,7 +419,8 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
       ide_source_view_clear_search (self->source_view);
       ide_source_view_set_rubberband_search (self->source_view, FALSE);
       gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
-      return TRUE;
+
+      return GDK_EVENT_STOP;
 
     case GDK_KEY_KP_Enter:
     case GDK_KEY_Return:
@@ -427,15 +428,15 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
         gb_widget_activate_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
       else
         gb_widget_activate_action (GTK_WIDGET (self), "frame", "previous-search-result", NULL);
-      return TRUE;
+      return GDK_EVENT_STOP;
 
     case GDK_KEY_Down:
       gb_widget_activate_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
-      return TRUE;
+      return GDK_EVENT_STOP;
 
     case GDK_KEY_Up:
       gb_widget_activate_action (GTK_WIDGET (self), "frame", "previous-search-result", NULL);
-      return TRUE;
+      return GDK_EVENT_STOP;
 
     default:
       {
@@ -457,7 +458,7 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
       break;
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
