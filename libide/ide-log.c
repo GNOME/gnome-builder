@@ -36,10 +36,13 @@
 #include "ide-debug.h"
 #include "ide-log.h"
 
-static GPtrArray *channels = NULL;
-static gchar hostname[64] = "";
-static GLogFunc last_handler = NULL;
-static int log_verbosity = 0;
+typedef const gchar *(*IdeLogLevelStrFunc) (GLogLevelFlags log_level);
+
+static GPtrArray          *channels;
+static gchar               hostname[64];
+static GLogFunc            last_handler;
+static int                 log_verbosity;
+static IdeLogLevelStrFunc  log_level_str_func;
 
 G_LOCK_DEFINE (channels_lock);
 
@@ -70,24 +73,40 @@ ide_log_get_thread (void)
  * Returns: A string which shouldn't be modified or freed.
  * Side effects: None.
  */
-static inline const gchar *
+static const gchar *
 ide_log_level_str (GLogLevelFlags log_level)
 {
-#define CASE_LEVEL_STR(_l) case G_LOG_LEVEL_ ## _l: return #_l
   switch (((gulong)log_level & G_LOG_LEVEL_MASK))
     {
-    CASE_LEVEL_STR (ERROR);
-    CASE_LEVEL_STR (CRITICAL);
-    CASE_LEVEL_STR (WARNING);
-    CASE_LEVEL_STR (MESSAGE);
-    CASE_LEVEL_STR (INFO);
-    CASE_LEVEL_STR (DEBUG);
-    CASE_LEVEL_STR (TRACE);
+    case G_LOG_LEVEL_ERROR:    return "   ERROR";
+    case G_LOG_LEVEL_CRITICAL: return "CRITICAL";
+    case G_LOG_LEVEL_WARNING:  return " WARNING";
+    case G_LOG_LEVEL_MESSAGE:  return " MESSAGE";
+    case G_LOG_LEVEL_INFO:     return "    INFO";
+    case G_LOG_LEVEL_DEBUG:    return "   DEBUG";
+    case G_LOG_LEVEL_TRACE:    return "   TRACE";
 
     default:
-      return "UNKNOWN";
+      return " UNKNOWN";
     }
-#undef CASE_LEVEL_STR
+}
+
+static const gchar *
+ide_log_level_str_with_color (GLogLevelFlags log_level)
+{
+  switch (((gulong)log_level & G_LOG_LEVEL_MASK))
+    {
+    case G_LOG_LEVEL_ERROR:    return "   \033[1;31mERROR\033[0m";
+    case G_LOG_LEVEL_CRITICAL: return "\033[1;35mCRITICAL\033[0m";
+    case G_LOG_LEVEL_WARNING:  return " \033[1;33mWARNING\033[0m";
+    case G_LOG_LEVEL_MESSAGE:  return " \033[1;32mMESSAGE\033[0m";
+    case G_LOG_LEVEL_INFO:     return "    \033[1;32mINFO\033[0m";
+    case G_LOG_LEVEL_DEBUG:    return "   \033[1;32mDEBUG\033[0m";
+    case G_LOG_LEVEL_TRACE:    return "   \033[1;36mTRACE\033[0m";
+
+    default:
+      return " UNKNOWN";
+    }
 }
 
 /**
@@ -119,10 +138,10 @@ ide_log_write_to_channel (GIOChannel  *channel,
  * Side effects: None.
  */
 static void
-ide_log_handler (const gchar   *log_domain,
-                GLogLevelFlags log_level,
-                const gchar   *message,
-                gpointer       user_data)
+ide_log_handler (const gchar    *log_domain,
+                 GLogLevelFlags  log_level,
+                 const gchar    *message,
+                 gpointer        user_data)
 {
   struct timespec ts;
   struct tm tt;
@@ -159,12 +178,12 @@ ide_log_handler (const gchar   *log_domain,
           break;
         }
 
-      level = ide_log_level_str (log_level);
+      level = log_level_str_func (log_level);
       clock_gettime (CLOCK_REALTIME, &ts);
       t = (time_t) ts.tv_sec;
       tt = *localtime (&t);
       strftime (ftime, sizeof (ftime), "%Y/%m/%d %H:%M:%S", &tt);
-      buffer = g_strdup_printf ("%s.%04ld  %s: %30s[%d]: %8s: %s\n",
+      buffer = g_strdup_printf ("%s.%04ld  %s: %30s[%d]: %s: %s\n",
                                 ftime, ts.tv_nsec / 100000,
                                 hostname, log_domain,
                                 ide_log_get_thread (), level, message);
@@ -192,6 +211,7 @@ ide_log_init (gboolean     stdout_,
 
   if (g_once_init_enter (&initialized))
     {
+      log_level_str_func = ide_log_level_str;
       channels = g_ptr_array_new ();
       if (filename)
         {
@@ -202,6 +222,8 @@ ide_log_init (gboolean     stdout_,
         {
           channel = g_io_channel_unix_new (STDOUT_FILENO);
           g_ptr_array_add (channels, channel);
+          if ((filename == NULL) && isatty (STDOUT_FILENO))
+            log_level_str_func = ide_log_level_str_with_color;
         }
 
 #if defined __linux__ || defined __FreeBSD__ || defined __OpenBSD__
