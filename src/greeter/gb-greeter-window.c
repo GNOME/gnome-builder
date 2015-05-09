@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 
+#include "gb-greeter-project-row.h"
 #include "gb-greeter-window.h"
 #include "gb-scrolled-window.h"
 
@@ -25,7 +26,9 @@ struct _GbGreeterWindow
 {
   GtkApplicationWindow parent_instance;
 
-  GtkWidget *header_bar;
+  GtkWidget  *header_bar;
+  GtkListBox *my_projects_list_box;
+  GtkListBox *other_projects_list_box;
 };
 
 G_DEFINE_TYPE (GbGreeterWindow, gb_greeter_window, GTK_TYPE_APPLICATION_WINDOW)
@@ -36,6 +39,25 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+static void
+gb_greeter_window_row_header_cb (GtkListBoxRow *row,
+                                 GtkListBoxRow *before,
+                                 gpointer       user_data)
+{
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+
+  if (before != NULL)
+    {
+      GtkWidget *header;
+
+      header = g_object_new (GTK_TYPE_SEPARATOR,
+                             "orientation", GTK_ORIENTATION_HORIZONTAL,
+                             "visible", TRUE,
+                             NULL);
+      gtk_list_box_row_set_header (row, header);
+    }
+}
 
 static void
 gb_greeter_window_finalize (GObject *object)
@@ -87,7 +109,10 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-greeter-window.ui");
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, my_projects_list_box);
+  gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, other_projects_list_box);
 
+  g_type_ensure (GB_TYPE_GREETER_PROJECT_ROW);
   g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
 }
 
@@ -95,4 +120,8 @@ static void
 gb_greeter_window_init (GbGreeterWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gtk_list_box_set_header_func (self->my_projects_list_box,
+                                gb_greeter_window_row_header_cb,
+                                NULL, NULL);
 }

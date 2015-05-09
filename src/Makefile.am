@@ -72,6 +72,8 @@ libgnome_builder_la_SOURCES = \
 	editor/gb-editor-workspace.h \
 	gd/gd-tagged-entry.c \
 	gd/gd-tagged-entry.h \
+	greeter/gb-greeter-project-row.c \
+	greeter/gb-greeter-project-row.h \
 	greeter/gb-greeter-window.c \
 	greeter/gb-greeter-window.h \
 	html/gb-html-document.c \
