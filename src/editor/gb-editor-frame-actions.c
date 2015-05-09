@@ -27,8 +27,31 @@ gb_editor_frame_actions_find (GSimpleAction *action,
                               gpointer       user_data)
 {
   GbEditorFrame *self = user_data;
+  GtkTextIter start_sel, end_sel;
+  GtkTextBuffer *buffer;
 
+  gchar *selected_text;
   g_assert (GB_IS_EDITOR_FRAME (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
+
+  if (gtk_text_buffer_get_has_selection (buffer))
+  {
+    gtk_text_buffer_get_selection_bounds (buffer, &start_sel, &end_sel);
+
+    if(gtk_text_iter_get_line (&start_sel) == gtk_text_iter_get_line (&end_sel))
+    {
+      selected_text = gtk_text_buffer_get_text(buffer, &start_sel, &end_sel, FALSE);
+      gtk_entry_set_text (GTK_ENTRY (self->search_entry), selected_text);
+    }
+  }
+  else
+  {
+    if(self->previous_search_string != NULL)
+    {
+      gtk_entry_set_text (GTK_ENTRY (self->search_entry), self->previous_search_string);
+    }
+  }
 
   gtk_revealer_set_reveal_child (self->search_revealer, TRUE);
   gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));

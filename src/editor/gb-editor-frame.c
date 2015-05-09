@@ -1,3 +1,4 @@
+
 /* gb-editor-frame.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
@@ -412,7 +413,7 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
   switch (event->keyval)
     {
     case GDK_KEY_Escape:
-      ide_source_view_rollback_search (self->source_view);
+      self->previous_search_string = g_strdup (gtk_entry_get_text (GTK_ENTRY (self->search_entry)));
       ide_source_view_clear_search (self->source_view);
       ide_source_view_set_rubberband_search (self->source_view, FALSE);
       gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
@@ -424,8 +425,6 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
         gb_widget_activate_action (GTK_WIDGET (self), "frame", "next-search-result", NULL);
       else
         gb_widget_activate_action (GTK_WIDGET (self), "frame", "previous-search-result", NULL);
-      ide_source_view_set_rubberband_search (self->source_view, FALSE);
-      gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
       return TRUE;
 
     case GDK_KEY_Down:

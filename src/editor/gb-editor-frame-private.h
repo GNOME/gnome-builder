@@ -50,6 +50,8 @@ struct _GbEditorFrame
   gulong               cursor_moved_handler;
 
   guint                auto_hide_map : 1;
+
+  gchar               *previous_search_string;
 };
 
 G_END_DECLS
