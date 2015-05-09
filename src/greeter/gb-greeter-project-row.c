@@ -21,6 +21,8 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "egg-binding-set.h"
+
 #include "gb-greeter-project-row.h"
 
 struct _GbGreeterProjectRow
@@ -28,11 +30,12 @@ struct _GbGreeterProjectRow
   GtkListBoxRow   parent_instance;
 
   IdeProjectInfo *project_info;
+  EggBindingSet  *bindings;
 
-  GtkLabel *date_label;
-  GtkLabel *description_label;
-  GtkLabel *location_label;
-  GtkLabel *title_label;
+  GtkLabel       *date_label;
+  GtkLabel       *description_label;
+  GtkLabel       *location_label;
+  GtkLabel       *title_label;
 };
 
 G_DEFINE_TYPE (GbGreeterProjectRow, gb_greeter_project_row, GTK_TYPE_LIST_BOX_ROW)
@@ -62,6 +65,7 @@ gb_greeter_project_row_set_project_info (GbGreeterProjectRow *self,
 
   if (g_set_object (&self->project_info, project_info))
     {
+      egg_binding_set_set_source (self->bindings, project_info);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PROJECT_INFO]);
     }
 }
@@ -144,4 +148,13 @@ static void
 gb_greeter_project_row_init (GbGreeterProjectRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->bindings = egg_binding_set_new ();
+
+  egg_binding_set_bind (self->bindings, "name", self->title_label, "label", 0);
+#if 0
+  egg_binding_set_bind (self->bindings, "directory", self->location_label, "label", 0);
+  egg_binding_set_bind (self->bindings, "description", self->description_label, "label", 0);
+  egg_binding_set_bind (self->bindings, "last-modified-at", self->date_label, "label", 0);
+#endif
 }

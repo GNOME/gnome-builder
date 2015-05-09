@@ -20,12 +20,17 @@
 #define GB_GREETER_WINDOW_H
 
 #include <gtk/gtk.h>
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 #define GB_TYPE_GREETER_WINDOW (gb_greeter_window_get_type())
 
 G_DECLARE_FINAL_TYPE (GbGreeterWindow, gb_greeter_window, GB, GREETER_WINDOW, GtkApplicationWindow)
+
+IdeRecentProjects *gb_greeter_window_get_recent_projects (GbGreeterWindow   *self);
+void               gb_greeter_window_set_recent_projects (GbGreeterWindow   *self,
+                                                          IdeRecentProjects *recent_projects);
 
 G_END_DECLS
 
