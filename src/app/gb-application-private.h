@@ -31,6 +31,7 @@ struct _GbApplication
 {
   GtkApplication       parent_instance;
 
+  GDateTime           *started_at;
   GbKeybindings       *keybindings;
   GbPreferencesWindow *preferences_window;
 };

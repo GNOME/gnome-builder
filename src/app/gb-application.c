@@ -470,6 +470,8 @@ gb_application_startup (GApplication *app)
 
   g_assert (GB_IS_APPLICATION (self));
 
+  self->started_at = g_date_time_new_now_utc ();
+
   g_resources_register (gb_get_resource ());
   g_application_set_resource_base_path (app, "/org/gnome/builder");
 
@@ -519,6 +521,7 @@ gb_application_finalize (GObject *object)
 
   IDE_ENTRY;
 
+  g_clear_pointer (&self->started_at, g_date_time_unref);
   g_clear_object (&self->keybindings);
 
   G_OBJECT_CLASS (gb_application_parent_class)->finalize (object);
@@ -574,4 +577,12 @@ gb_application_init (GbApplication *app)
   g_application_add_main_option_entries (G_APPLICATION (app), options);
 
   IDE_EXIT;
+}
+
+GDateTime *
+gb_application_get_started_at (GbApplication *self)
+{
+  g_return_val_if_fail (GB_IS_APPLICATION (self), NULL);
+
+  return self->started_at;
 }
