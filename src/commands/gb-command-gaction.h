@@ -25,8 +25,7 @@ G_BEGIN_DECLS
 
 #define GB_TYPE_COMMAND_GACTION (gb_command_gaction_get_type())
 
-G_DECLARE_FINAL_TYPE (GbCommandGaction, gb_command_gaction,
-                      GB, COMMAND_GACTION, GbCommand)
+G_DECLARE_FINAL_TYPE (GbCommandGaction, gb_command_gaction, GB, COMMAND_GACTION, GbCommand)
 
 G_END_DECLS
 

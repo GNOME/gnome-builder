@@ -23,7 +23,7 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_EDITOR_SETTINGS_WIDGET            (gb_editor_settings_widget_get_type())
+#define GB_TYPE_EDITOR_SETTINGS_WIDGET (gb_editor_settings_widget_get_type())
 
 G_DECLARE_FINAL_TYPE (GbEditorSettingsWidget, gb_editor_settings_widget,
                       GB, EDITOR_SETTINGS_WIDGET, GtkGrid)

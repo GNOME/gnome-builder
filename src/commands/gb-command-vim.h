@@ -25,8 +25,7 @@ G_BEGIN_DECLS
 
 #define GB_TYPE_COMMAND_VIM (gb_command_vim_get_type())
 
-G_DECLARE_FINAL_TYPE (GbCommandVim, gb_command_vim,
-                      GB, COMMAND_VIM, GbCommand)
+G_DECLARE_FINAL_TYPE (GbCommandVim, gb_command_vim, GB, COMMAND_VIM, GbCommand)
 
 
 G_END_DECLS

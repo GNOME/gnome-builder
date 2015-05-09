@@ -25,8 +25,7 @@ G_BEGIN_DECLS
 
 #define GB_TYPE_COMMAND_RESULT (gb_command_result_get_type())
 
-G_DECLARE_FINAL_TYPE (GbCommandResult, gb_command_result,
-                      GB, COMMAND_RESULT, GObject)
+G_DECLARE_FINAL_TYPE (GbCommandResult, gb_command_result, GB, COMMAND_RESULT, GObject)
 
 GbCommandResult *gb_command_result_new              (void);
 gboolean         gb_command_result_get_is_running   (GbCommandResult *result);

@@ -28,8 +28,7 @@ G_BEGIN_DECLS
 
 #define GB_TYPE_COMMAND_MANAGER (gb_command_manager_get_type())
 
-G_DECLARE_FINAL_TYPE (GbCommandManager, gb_command_manager,
-                      GB, COMMAND_MANAGER, GObject)
+G_DECLARE_FINAL_TYPE (GbCommandManager, gb_command_manager, GB, COMMAND_MANAGER, GObject)
 
 GbCommandManager  *gb_command_manager_new          (void);
 GbCommand         *gb_command_manager_lookup       (GbCommandManager  *manager,
