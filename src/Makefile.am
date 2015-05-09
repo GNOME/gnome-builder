@@ -39,8 +39,6 @@ libgnome_builder_la_SOURCES = \
 	devhelp/gb-devhelp-document.h \
 	devhelp/gb-devhelp-view.c \
 	devhelp/gb-devhelp-view.h \
-	dialogs/gb-greeter-window.c \
-	dialogs/gb-greeter-window.h \
 	dialogs/gb-new-project-dialog.c \
 	dialogs/gb-new-project-dialog.h \
 	dialogs/gb-projects-dialog.c \
@@ -74,6 +72,8 @@ libgnome_builder_la_SOURCES = \
 	editor/gb-editor-workspace.h \
 	gd/gd-tagged-entry.c \
 	gd/gd-tagged-entry.h \
+	greeter/gb-greeter-window.c \
+	greeter/gb-greeter-window.h \
 	html/gb-html-document.c \
 	html/gb-html-document.h \
 	html/gb-html-view.c \
@@ -200,6 +200,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(srcdir)/documents \
 	-I$(srcdir)/editor \
 	-I$(srcdir)/gd \
+	-I$(srcdir)/greeter \
 	-I$(srcdir)/html \
 	-I$(srcdir)/keybindings \
 	-I$(srcdir)/preferences \
