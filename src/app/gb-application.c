@@ -37,9 +37,6 @@
 #include "gb-resources.h"
 #include "gb-workbench.h"
 
-#define ADWAITA_CSS "resource:///org/gnome/builder/css/builder.Adwaita.css"
-#define GSV_PATH    "resource:///org/gnome/builder/styles/"
-
 G_DEFINE_TYPE (GbApplication, gb_application, GTK_TYPE_APPLICATION)
 
 static void
