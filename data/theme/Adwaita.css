@@ -15,3 +15,9 @@ GbProjectTree.view.cell:selected {
   color: #fff;
   background-color: #4a90d9;
 }
+
+
+GtkEventBox.pill-box {
+  background-color: #eeeeec;
+  border-radius: 3px;
+}

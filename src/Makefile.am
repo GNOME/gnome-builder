@@ -39,6 +39,8 @@ libgnome_builder_la_SOURCES = \
 	devhelp/gb-devhelp-document.h \
 	devhelp/gb-devhelp-view.c \
 	devhelp/gb-devhelp-view.h \
+	dialogs/gb-greeter-window.c \
+	dialogs/gb-greeter-window.h \
 	dialogs/gb-new-project-dialog.c \
 	dialogs/gb-new-project-dialog.h \
 	dialogs/gb-projects-dialog.c \

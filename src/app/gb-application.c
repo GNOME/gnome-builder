@@ -33,6 +33,7 @@
 #include "gb-editor-document.h"
 #include "gb-editor-workspace.h"
 #include "gb-glib.h"
+#include "gb-greeter-window.h"
 #include "gb-projects-dialog.h"
 #include "gb-resources.h"
 #include "gb-workbench.h"
@@ -444,6 +445,13 @@ gb_application_show_projects_window (GbApplication *self)
           return;
         }
     }
+
+#if 1
+  window = g_object_new (GB_TYPE_GREETER_WINDOW,
+                         "application", self,
+                         NULL);
+  gtk_window_present (GTK_WINDOW (window));
+#endif
 
   window = g_object_new (GB_TYPE_PROJECTS_DIALOG,
                          "application", self,
