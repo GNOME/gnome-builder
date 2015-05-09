@@ -89,30 +89,9 @@ ide_project_writer_unlock (IdeProject *self)
 static gchar *
 ide_project_create_id (IdeProject *self)
 {
-  GChecksum *checksum;
-  IdeContext *context;
-  GFile *project_file;
-  gchar *ret;
-  gchar *project_uri;
-  gchar *input;
-
   g_assert (IDE_IS_PROJECT (self));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  project_file = ide_context_get_project_file (context);
-
-  project_uri = g_file_get_uri (project_file);
-  input = g_strdup_printf ("%s:%s", self->name, project_uri);
-  checksum = g_checksum_new (G_CHECKSUM_SHA1);
-
-  g_checksum_update (checksum, (const guchar *)input, -1);
-  ret = g_strdup (g_checksum_get_string (checksum));
-
-  g_checksum_free (checksum);
-  g_free (project_uri);
-  g_free (input);
-
-  return ret;
+  return g_strdelimit (g_strdup (self->name), " /|<>", '-');
 }
 
 const gchar *
