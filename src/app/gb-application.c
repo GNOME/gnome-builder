@@ -520,7 +520,6 @@ gb_application_finalize (GObject *object)
   IDE_ENTRY;
 
   g_clear_object (&self->keybindings);
-  g_clear_object (&self->editor_settings);
 
   G_OBJECT_CLASS (gb_application_parent_class)->finalize (object);
 

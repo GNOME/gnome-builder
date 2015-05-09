@@ -31,7 +31,6 @@ struct _GbApplication
 {
   GtkApplication       parent_instance;
 
-  GSettings           *editor_settings;
   GbKeybindings       *keybindings;
   GbPreferencesWindow *preferences_window;
 };
