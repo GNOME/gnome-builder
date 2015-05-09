@@ -46,8 +46,8 @@ gb_document_is_untitled (GbDocument *document)
 {
   g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
 
-  if (GB_DOCUMENT_GET_INTERFACE (document)->is_untitled)
-    return GB_DOCUMENT_GET_INTERFACE (document)->is_untitled (document);
+  if (GB_DOCUMENT_GET_IFACE (document)->is_untitled)
+    return GB_DOCUMENT_GET_IFACE (document)->is_untitled (document);
   return FALSE;
 }
 
@@ -58,8 +58,8 @@ gb_document_get_mtime (GbDocument *document,
   g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
   g_return_val_if_fail (mtime, FALSE);
 
-  if (GB_DOCUMENT_GET_INTERFACE (document)->get_mtime)
-    return GB_DOCUMENT_GET_INTERFACE (document)->get_mtime (document, mtime);
+  if (GB_DOCUMENT_GET_IFACE (document)->get_mtime)
+    return GB_DOCUMENT_GET_IFACE (document)->get_mtime (document, mtime);
   return FALSE;
 }
 
@@ -83,7 +83,7 @@ gb_document_get_modified (GbDocument *document)
 {
   g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
 
-  return GB_DOCUMENT_GET_INTERFACE (document)->get_modified (document);
+  return GB_DOCUMENT_GET_IFACE (document)->get_modified (document);
 }
 
 gboolean
@@ -91,8 +91,8 @@ gb_document_get_read_only (GbDocument *document)
 {
   g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
 
-  if (GB_DOCUMENT_GET_INTERFACE (document)->get_read_only)
-    return GB_DOCUMENT_GET_INTERFACE (document)->get_read_only (document);
+  if (GB_DOCUMENT_GET_IFACE (document)->get_read_only)
+    return GB_DOCUMENT_GET_IFACE (document)->get_read_only (document);
   return FALSE;
 }
 
@@ -101,7 +101,7 @@ gb_document_get_title (GbDocument *document)
 {
   g_return_val_if_fail (GB_IS_DOCUMENT (document), NULL);
 
-  return GB_DOCUMENT_GET_INTERFACE (document)->get_title (document);
+  return GB_DOCUMENT_GET_IFACE (document)->get_title (document);
 }
 
 GtkWidget *
@@ -131,9 +131,9 @@ gb_document_save_async (GbDocument          *document,
   g_return_if_fail (!toplevel || GTK_IS_WIDGET (toplevel));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (GB_DOCUMENT_GET_INTERFACE (document)->save_async)
-    GB_DOCUMENT_GET_INTERFACE (document)->
-      save_async (document, toplevel, cancellable, callback, user_data);
+  if (GB_DOCUMENT_GET_IFACE (document)->save_async)
+    GB_DOCUMENT_GET_IFACE (document)->save_async (document, toplevel,
+                                                  cancellable, callback, user_data);
 }
 
 gboolean
@@ -144,9 +144,8 @@ gb_document_save_finish (GbDocument    *document,
   g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
-  if (GB_DOCUMENT_GET_INTERFACE (document)->save_finish)
-    return GB_DOCUMENT_GET_INTERFACE (document)->
-      save_finish (document, result, error);
+  if (GB_DOCUMENT_GET_IFACE (document)->save_finish)
+    return GB_DOCUMENT_GET_IFACE (document)->save_finish (document, result, error);
 
   return TRUE;
 }
@@ -162,9 +161,9 @@ gb_document_save_as_async (GbDocument          *document,
   g_return_if_fail (GTK_IS_WIDGET (toplevel));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (GB_DOCUMENT_GET_INTERFACE (document)->save_as_async)
-    GB_DOCUMENT_GET_INTERFACE (document)->
-      save_as_async (document, toplevel, cancellable, callback, user_data);
+  if (GB_DOCUMENT_GET_IFACE (document)->save_as_async)
+    GB_DOCUMENT_GET_IFACE (document)->save_as_async (document, toplevel,
+                                                     cancellable, callback, user_data);
 }
 
 gboolean
@@ -175,9 +174,8 @@ gb_document_save_as_finish (GbDocument    *document,
   g_return_val_if_fail (GB_IS_DOCUMENT (document), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
-  if (GB_DOCUMENT_GET_INTERFACE (document)->save_as_finish)
-    return GB_DOCUMENT_GET_INTERFACE (document)->
-      save_as_finish (document, result, error);
+  if (GB_DOCUMENT_GET_IFACE (document)->save_as_finish)
+    return GB_DOCUMENT_GET_IFACE (document)->save_as_finish (document, result, error);
 
   return TRUE;
 }

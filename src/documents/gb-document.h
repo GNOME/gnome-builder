@@ -23,15 +23,9 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_DOCUMENT               (gb_document_get_type ())
-#define GB_DOCUMENT(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GB_TYPE_DOCUMENT, GbDocument))
-#define GB_IS_DOCUMENT(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GB_TYPE_DOCUMENT))
-#define GB_DOCUMENT_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GB_TYPE_DOCUMENT, GbDocumentInterface))
+#define GB_TYPE_DOCUMENT (gb_document_get_type ())
 
-typedef struct _GbDocument          GbDocument;
-typedef struct _GbDocumentInterface GbDocumentInterface;
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GbDocument, g_object_unref)
+G_DECLARE_INTERFACE (GbDocument, gb_document, GB, DOCUMENT, GObject)
 
 struct _GbDocumentInterface
 {
@@ -68,7 +62,6 @@ gboolean     gb_document_get_mtime      (GbDocument           *document,
                                          GTimeVal             *mtime);
 gboolean     gb_document_get_read_only  (GbDocument           *document);
 const gchar *gb_document_get_title      (GbDocument           *document);
-GType        gb_document_get_type       (void);
 gboolean     gb_document_is_untitled    (GbDocument           *document);
 void         gb_document_save_async     (GbDocument           *document,
                                          GtkWidget            *toplevel,
@@ -86,7 +79,6 @@ void         gb_document_save_as_async  (GbDocument           *document,
 gboolean     gb_document_save_as_finish (GbDocument           *document,
                                          GAsyncResult         *result,
                                          GError              **error);
-
 
 G_END_DECLS
 
