@@ -20,6 +20,8 @@
 
 #include <glib/gi18n.h>
 
+#include "egg-signal-group.h"
+
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-file.h"
@@ -31,7 +33,9 @@
 struct _IdeGsettingsFileSettings
 {
   IdeFileSettings  parent_instance;
+
   IdeSettings     *language_settings;
+  EggSignalGroup  *signal_group;
 };
 
 typedef struct
@@ -65,23 +69,27 @@ static SettingsMapping gLanguageMappings [] = {
 };
 
 static void
-ide_gsettings_file_settings_constructed (GObject *object)
+file_notify_language_cb (IdeGsettingsFileSettings *self,
+                         GParamSpec               *pspec,
+                         IdeFile                  *file)
 {
-  IdeGsettingsFileSettings *self = (IdeGsettingsFileSettings *)object;
   g_autofree gchar *relative_path = NULL;
   IdeLanguage *language;
   const gchar *lang_id;
   IdeContext *context;
-  IdeFile *file;
   gsize i;
 
-  IDE_ENTRY;
+  g_assert (IDE_IS_GSETTINGS_FILE_SETTINGS (self));
+  g_assert (IDE_IS_FILE (file));
 
-  G_OBJECT_CLASS (ide_gsettings_file_settings_parent_class)->constructed (object);
+  g_clear_object (&self->language_settings);
 
-  if (!(file = ide_file_settings_get_file (IDE_FILE_SETTINGS (self))) ||
-      !(language = ide_file_get_language (file)) ||
-      !(lang_id = ide_language_get_id (language)))
+  language = ide_file_get_language (file);
+  if (language == NULL)
+    IDE_EXIT;
+
+  lang_id = ide_language_get_id (language);
+  if (lang_id == NULL)
     IDE_EXIT;
 
   context = ide_object_get_context (IDE_OBJECT (self));
@@ -107,10 +115,31 @@ ide_gsettings_file_settings_constructed (GObject *object)
 }
 
 static void
+ide_gsettings_file_settings_constructed (GObject *object)
+{
+  IdeGsettingsFileSettings *self = (IdeGsettingsFileSettings *)object;
+  IdeFile *file;
+
+  IDE_ENTRY;
+
+  G_OBJECT_CLASS (ide_gsettings_file_settings_parent_class)->constructed (object);
+
+  file = ide_file_settings_get_file (IDE_FILE_SETTINGS (self));
+  if (file == NULL)
+    IDE_EXIT;
+
+  egg_signal_group_set_target (self->signal_group, file);
+  file_notify_language_cb (self, NULL, file);
+
+  IDE_EXIT;
+}
+
+static void
 ide_gsettings_file_settings_finalize (GObject *object)
 {
   IdeGsettingsFileSettings *self = (IdeGsettingsFileSettings *)object;
 
+  g_clear_object (&self->signal_group);
   g_clear_object (&self->language_settings);
 
   G_OBJECT_CLASS (ide_gsettings_file_settings_parent_class)->finalize (object);
@@ -128,4 +157,10 @@ ide_gsettings_file_settings_class_init (IdeGsettingsFileSettingsClass *klass)
 static void
 ide_gsettings_file_settings_init (IdeGsettingsFileSettings *self)
 {
+  self->signal_group = egg_signal_group_new (IDE_TYPE_FILE);
+  egg_signal_group_connect_object (self->signal_group,
+                                   "notify::language",
+                                   G_CALLBACK (file_notify_language_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 }
