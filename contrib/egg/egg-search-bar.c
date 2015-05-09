@@ -112,7 +112,7 @@ toplevel_key_press_event_before (EggSearchBar *self,
   switch (event->keyval)
     {
     case GDK_KEY_Escape:
-      if (gtk_widget_has_focus (GTK_WIDGET (priv->entry)))
+      if (priv->search_mode_enabled && gtk_widget_has_focus (GTK_WIDGET (priv->entry)))
         {
           egg_search_bar_set_search_mode_enabled (self, FALSE);
           return GDK_EVENT_STOP;
@@ -143,13 +143,6 @@ toplevel_key_press_event_after (EggSearchBar *self,
   switch (event->keyval)
     {
     case GDK_KEY_Escape:
-      if (priv->search_mode_enabled)
-        {
-          egg_search_bar_set_search_mode_enabled (self, FALSE);
-          return GDK_EVENT_STOP;
-        }
-      break;
-
     case GDK_KEY_Up:
     case GDK_KEY_KP_Up:
     case GDK_KEY_Down:

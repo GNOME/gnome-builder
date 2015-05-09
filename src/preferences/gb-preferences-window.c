@@ -214,6 +214,7 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkBindingSet *binding_set;
 
   object_class->constructed = gb_preferences_window_constructed;
   object_class->finalize = gb_preferences_window_finalize;
@@ -229,6 +230,9 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
                                 NULL, NULL, NULL,
                                 G_TYPE_NONE,
                                 0);
+
+  binding_set = gtk_binding_set_by_class (klass);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 
   GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-preferences-window.ui");
 
