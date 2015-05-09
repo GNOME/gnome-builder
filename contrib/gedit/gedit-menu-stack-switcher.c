@@ -22,21 +22,22 @@
 #include <config.h>
 #endif
 
+#include "gedit-menu-stack-switcher.h"
+
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include "gedit-menu-stack-switcher.h"
 
 struct _GeditMenuStackSwitcher
 {
-  GtkMenuButton  parent_instance;
+  GtkMenuButton parent_instance;
 
-  GtkStack      *stack;
-  GtkWidget     *label;
-  GtkWidget     *button_box;
-  GtkWidget     *popover;
-  GHashTable    *buttons;
-  gboolean       in_child_changed;
+  GtkStack *stack;
+  GtkWidget *label;
+  GtkWidget *button_box;
+  GtkWidget *popover;
+  GHashTable *buttons;
+  gboolean in_child_changed;
 };
 
 enum {
@@ -174,7 +175,6 @@ static void
 add_child (GeditMenuStackSwitcher *switcher,
            GtkWidget              *widget)
 {
-
   GtkWidget *button;
   GList *group;
 
@@ -260,6 +260,11 @@ on_stack_child_removed (GtkStack               *stack,
                         GeditMenuStackSwitcher *switcher)
 {
   GtkWidget *button;
+
+  g_signal_handlers_disconnect_by_func (widget, on_title_icon_visible_updated, switcher);
+  g_signal_handlers_disconnect_by_func (widget, on_title_icon_visible_updated, switcher);
+  g_signal_handlers_disconnect_by_func (widget, on_title_icon_visible_updated, switcher);
+  g_signal_handlers_disconnect_by_func (widget, on_position_updated, switcher);
 
   button = g_hash_table_lookup (switcher->buttons, widget);
   gtk_container_remove (GTK_CONTAINER (switcher->button_box), button);
@@ -398,8 +403,8 @@ gedit_menu_stack_switcher_class_init (GeditMenuStackSwitcherClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_STACK,
                                    g_param_spec_object ("stack",
-                                                        _("Stack"),
-                                                        _("Stack"),
+                                                        "Stack",
+                                                        "Stack",
                                                         GTK_TYPE_STACK,
                                                         G_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT));

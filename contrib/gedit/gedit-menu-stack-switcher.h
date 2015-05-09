@@ -25,10 +25,9 @@
 
 G_BEGIN_DECLS
 
-#define GEDIT_TYPE_MENU_STACK_SWITCHER             (gedit_menu_stack_switcher_get_type())
+#define GEDIT_TYPE_MENU_STACK_SWITCHER (gedit_menu_stack_switcher_get_type())
 
-G_DECLARE_FINAL_TYPE (GeditMenuStackSwitcher, gedit_menu_stack_switcher,
-                      GEDIT, MENU_STACK_SWITCHER, GtkMenuButton)
+G_DECLARE_FINAL_TYPE (GeditMenuStackSwitcher, gedit_menu_stack_switcher, GEDIT, MENU_STACK_SWITCHER, GtkMenuButton)
 
 GtkWidget *  gedit_menu_stack_switcher_new 	      (void);
 

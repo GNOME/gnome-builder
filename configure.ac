@@ -143,22 +143,26 @@ m4_define([gjs_required_version], [1.42.0])
 m4_define([pygobject_required_version], [3.0.0])
 m4_define([devhelp_required_version], [3.16.0])
 
-PKG_CHECK_MODULES(BUILDER, [gtk+-3.0 >= gtk_required_version
-                            gio-2.0 >= glib_required_version
-                            gtksourceview-3.0 >= gtksourceview_required_version
-                            libdevhelp-3.0 >= devhelp_required_version
-                            libgit2-glib-1.0 >= ggit_required_version])
-PKG_CHECK_MODULES(EGG,     [glib-2.0 >= glib_required_version
-			    gtk+-3.0 >= gtk_required_version])
-PKG_CHECK_MODULES(LIBIDE,  [gio-2.0 >= glib_required_version
-                            gio-unix-2.0 >= glib_required_version
-                            gtksourceview-3.0 >= gtksourceview_required_version
-                            libdevhelp-3.0 >= devhelp_required_version
-                            libgit2-glib-1.0 >= ggit_required_version
-                            gjs-1.0 >= gjs_required_version
-                            gjs-internals-1.0 >= gjs_required_version
-                            pygobject-3.0 >= pygobject_required_version])
-PKG_CHECK_MODULES(SEARCH,  [glib-2.0 >= glib_required_version])
+PKG_CHECK_MODULES(BUILDER,  [gtk+-3.0 >= gtk_required_version
+                             gio-2.0 >= glib_required_version
+                             gtksourceview-3.0 >= gtksourceview_required_version
+                             libdevhelp-3.0 >= devhelp_required_version
+                             libgit2-glib-1.0 >= ggit_required_version])
+PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
+			     gtk+-3.0 >= gtk_required_version])
+PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
+                             gio-unix-2.0 >= glib_required_version
+                             gtksourceview-3.0 >= gtksourceview_required_version
+                             libdevhelp-3.0 >= devhelp_required_version
+                             libgit2-glib-1.0 >= ggit_required_version
+                             gjs-1.0 >= gjs_required_version
+                             gjs-internals-1.0 >= gjs_required_version
+                             pygobject-3.0 >= pygobject_required_version])
+PKG_CHECK_MODULES(SEARCH,   [glib-2.0 >= glib_required_version])
+PKG_CHECK_MODULES(GEDIT,    [glib-2.0 >= glib_required_version
+			     gtk+-3.0 >= gtk_required_version])
+PKG_CHECK_MODULES(NAUTILUS, [glib-2.0 >= glib_required_version
+			     gtk+-3.0 >= gtk_required_version])
 
 
 dnl ***********************************************************************
@@ -314,6 +318,8 @@ AC_CONFIG_FILES([
 	contrib/Makefile
 	contrib/egg/Makefile
 	contrib/search/Makefile
+	contrib/gedit/Makefile
+	contrib/nautilus/Makefile
 	contrib/libeditorconfig/Makefile
 
 	libide/ide-debug.h

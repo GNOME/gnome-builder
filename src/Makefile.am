@@ -72,16 +72,12 @@ libgnome_builder_la_SOURCES = \
 	editor/gb-editor-workspace.h \
 	gd/gd-tagged-entry.c \
 	gd/gd-tagged-entry.h \
-	gedit/gedit-menu-stack-switcher.c \
-	gedit/gedit-menu-stack-switcher.h \
 	html/gb-html-document.c \
 	html/gb-html-document.h \
 	html/gb-html-view.c \
 	html/gb-html-view.h \
 	keybindings/gb-keybindings.c \
 	keybindings/gb-keybindings.h \
-	nautilus/nautilus-floating-bar.c \
-	nautilus/nautilus-floating-bar.h \
 	preferences/gb-preferences-page-editor.c \
 	preferences/gb-preferences-page-editor.h \
 	preferences/gb-preferences-page-experimental.c \
@@ -182,6 +178,8 @@ libgnome_builder_la_LIBADD = \
 	$(OPTIMIZE_LDFLAGS) \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(top_builddir)/contrib/egg/libegg.la \
+	$(top_builddir)/contrib/gedit/libgedit.la \
+	$(top_builddir)/contrib/nautilus/libnautilus.la \
 	-lm
 
 libgnome_builder_la_CFLAGS = \
@@ -200,10 +198,8 @@ libgnome_builder_la_CFLAGS = \
 	-I$(srcdir)/documents \
 	-I$(srcdir)/editor \
 	-I$(srcdir)/gd \
-	-I$(srcdir)/gedit \
 	-I$(srcdir)/html \
 	-I$(srcdir)/keybindings \
-	-I$(srcdir)/nautilus \
 	-I$(srcdir)/preferences \
 	-I$(srcdir)/project-tree \
 	-I$(srcdir)/resources \
@@ -218,6 +214,8 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/egg \
+	-I$(top_srcdir)/contrib/gedit \
+	-I$(top_srcdir)/contrib/nautilus \
 	$(NULL)
 
 gnome_builder_SOURCES = main.c
