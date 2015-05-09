@@ -138,9 +138,6 @@ ide_highlight_index_dump (IdeHighlightIndex *self)
   g_assert (self);
 
   format = g_format_size (self->chunk_size);
-
-  g_printerr ("IdeHighlightIndex at %p\n"
-              "       Number of items in Index: %u\n"
-              "   String Chunk Size (Estimate): %s\n",
-              self, self->count, format);
+  g_debug ("IdeHighlightIndex (%p) contains %u items and consumes %s.",
+           self, self->count, format);
 }
