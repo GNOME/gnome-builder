@@ -294,8 +294,8 @@ ide_settings_class_init (IdeSettingsClass *klass)
 
   gParamSpecs [PROP_SCHEMA_ID] =
     g_param_spec_string ("schema-id",
-                         _("Schema Id"),
-                         _("Schema Id"),
+                         _("Schema ID"),
+                         _("Schema ID"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

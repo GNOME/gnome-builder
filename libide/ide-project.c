@@ -411,7 +411,7 @@ ide_project_class_init (IdeProjectClass *klass)
 
   gParamSpecs [PROP_ID] =
     g_param_spec_string ("id",
-                         _("Id"),
+                         _("ID"),
                          _("The unique project identifier."),
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
