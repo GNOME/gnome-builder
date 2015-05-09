@@ -407,6 +407,8 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
                                          GdkEventKey   *event,
                                          GdTaggedEntry *entry)
 {
+  GtkTextBuffer *buffer;
+
   g_assert (GB_IS_EDITOR_FRAME (self));
   g_assert (GD_IS_TAGGED_ENTRY (entry));
 
@@ -416,8 +418,17 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
       /* stash the search string for later */
       g_free (self->previous_search_string);
       g_object_get (self->search_entry, "text", &self->previous_search_string, NULL);
+
+      /* clear the highlights in the source view */
       ide_source_view_clear_search (self->source_view);
+
+      /* disable rubberbanding and ensure insert mark is on screen */
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
       ide_source_view_set_rubberband_search (self->source_view, FALSE);
+      ide_source_view_scroll_mark_onscreen (self->source_view,
+                                            gtk_text_buffer_get_insert (buffer));
+
+      /* finally we can focus the source view */
       gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
 
       return GDK_EVENT_STOP;
