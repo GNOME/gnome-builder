@@ -205,7 +205,6 @@ LT_PREREQ([2.2])
 LT_INIT
 
 
-
 dnl ***********************************************************************
 dnl Additional C Compiler Flags
 dnl ***********************************************************************
@@ -298,10 +297,13 @@ OPTIMIZE_LDFLAGS=""
 AS_IF([test "$enable_optimizations" != "no"],
       [AX_CHECK_LINK_FLAG([-Wl,-Bsymbolic],
                           [OPTIMIZE_LDFLAGS="$OPTIMIZE_LDFLAGS -Wl,-Bsymbolic"])])
+
+
 # Enable Link-Time-Optimization
-AS_IF([test "$enable_lto" = "yes"], [
-	AX_CHECK_COMPILE_FLAG([-flto], [OPTIMIZE_CFLAGS="$OPTIMIZE_CFLAGS -flto"], [enable_lto=no])
-])
+GB_ENABLE_LTO
+OPTIMIZE_CFLAGS="$OPTIMIZE_CFLAGS $LTO_CFLAGS"
+
+
 AC_SUBST(OPTIMIZE_CFLAGS)
 AC_SUBST(OPTIMIZE_LDFLAGS)
 
