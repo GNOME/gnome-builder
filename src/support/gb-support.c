@@ -19,18 +19,23 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+#include "gb-application.h"
 #include "gb-support.h"
 
 gchar *
 gb_get_support_log (void)
 {
+  GApplication *app;
   GChecksum *checksum;
   GDateTime *now;
+  GDateTime *started_at;
   GString *str;
   gchar *tmp;
   gchar **env;
   guint i;
   guint n_monitors;
+
+  app = g_application_get_default ();
 
   str = g_string_new (NULL);
 
@@ -51,11 +56,18 @@ gb_get_support_log (void)
   tmp = g_get_current_dir ();
   g_string_append_printf (str, "current_dir = \"%s\"\n", tmp);
   g_free (tmp);
+
+  started_at = gb_application_get_started_at (GB_APPLICATION (app));
+  tmp = g_date_time_format (started_at, "%FT%H:%M:%SZ");
+  g_string_append_printf (str, "started-at = \"%s\"\n", tmp);
+  g_free (tmp);
+
   now = g_date_time_new_now_utc ();
   tmp = g_date_time_format (now, "%FT%H:%M:%SZ");
   g_string_append_printf (str, "generated-at = \"%s\"\n", tmp);
   g_free (tmp);
   g_date_time_unref (now);
+
   g_string_append (str, "\n");
 
   /*
