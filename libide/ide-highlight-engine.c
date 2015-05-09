@@ -724,3 +724,59 @@ ide_highlight_engine_rebuild (IdeHighlightEngine *self)
 
   IDE_EXIT;
 }
+
+/**
+ * ide_highlight_engine_invalidate:
+ * @self: An #IdeHighlightEngine.
+ * @begin: the beginning of the range to invalidate
+ * @end: the end of the range to invalidate
+ *
+ * This function will extend the invalidated range of the buffer to include
+ * the range of @begin to @end.
+ *
+ * The highlighter will be queued to interactively update the invalidated
+ * region.
+ *
+ * Updating the invalidated region of the buffer may take some time, as it is
+ * important that the highlighter does not block for more than 1-2 milliseconds
+ * to avoid dropping frames.
+ */
+void
+ide_highlight_engine_invalidate (IdeHighlightEngine *self,
+                                 const GtkTextIter  *begin,
+                                 const GtkTextIter  *end)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter mark_begin;
+  GtkTextIter mark_end;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
+  g_return_if_fail (begin != NULL);
+  g_return_if_fail (end != NULL);
+  g_return_if_fail (gtk_text_iter_get_buffer (begin) == GTK_TEXT_BUFFER (self->buffer));
+  g_return_if_fail (gtk_text_iter_get_buffer (end) == GTK_TEXT_BUFFER (self->buffer));
+
+  buffer = GTK_TEXT_BUFFER (self->buffer);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &mark_begin, self->invalid_begin);
+  gtk_text_buffer_get_iter_at_mark (buffer, &mark_end, self->invalid_end);
+
+  if (gtk_text_iter_equal (&mark_begin, &mark_end))
+    {
+      gtk_text_buffer_move_mark (buffer, self->invalid_begin, begin);
+      gtk_text_buffer_move_mark (buffer, self->invalid_end, end);
+    }
+  else
+    {
+      if (gtk_text_iter_compare (begin, &mark_begin) < 0)
+        gtk_text_buffer_move_mark (buffer, self->invalid_begin, begin);
+      if (gtk_text_iter_compare (end, &mark_end) > 0)
+        gtk_text_buffer_move_mark (buffer, self->invalid_end, end);
+    }
+
+  ide_highlight_engine_queue_work (self);
+
+  IDE_EXIT;
+}

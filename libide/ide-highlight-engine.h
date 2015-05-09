@@ -34,6 +34,9 @@ IdeHighlighter     *ide_highlight_engine_get_highlighter (IdeHighlightEngine *se
 void                ide_highlight_engine_set_highlighter (IdeHighlightEngine *self,
                                                           IdeHighlighter     *highlighter);
 void                ide_highlight_engine_rebuild         (IdeHighlightEngine *self);
+void                ide_highlight_engine_invalidate      (IdeHighlightEngine *self,
+                                                          const GtkTextIter  *begin,
+                                                          const GtkTextIter  *end);
 
 G_END_DECLS
 
