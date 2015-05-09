@@ -32,6 +32,8 @@ struct _GbEditorFrame
 {
   GtkBin               parent_instance;
 
+  gchar               *previous_search_string;
+
   NautilusFloatingBar *floating_bar;
   GtkLabel            *mode_name_label;
   GtkAdjustment       *overlay_adj;
@@ -50,8 +52,6 @@ struct _GbEditorFrame
   gulong               cursor_moved_handler;
 
   guint                auto_hide_map : 1;
-
-  gchar               *previous_search_string;
 };
 
 G_END_DECLS
