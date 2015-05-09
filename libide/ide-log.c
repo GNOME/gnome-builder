@@ -21,12 +21,9 @@
 #endif
 
 #ifdef __linux__
-# include <sys/utsname.h>
 # include <sys/types.h>
 # include <sys/syscall.h>
-#elif defined __FreeBSD__ || defined __OpenBSD__
-# include <sys/utsname.h>
-#endif /* !__linux__ && !__FreeBSD__ && !__OpenBSD__ */
+#endif
 
 #include <glib.h>
 #include <string.h>
@@ -39,7 +36,6 @@
 typedef const gchar *(*IdeLogLevelStrFunc) (GLogLevelFlags log_level);
 
 static GPtrArray          *channels;
-static gchar               hostname[64];
 static GLogFunc            last_handler;
 static int                 log_verbosity;
 static IdeLogLevelStrFunc  log_level_str_func;
@@ -182,11 +178,14 @@ ide_log_handler (const gchar    *log_domain,
       clock_gettime (CLOCK_REALTIME, &ts);
       t = (time_t) ts.tv_sec;
       tt = *localtime (&t);
-      strftime (ftime, sizeof (ftime), "%Y/%m/%d %H:%M:%S", &tt);
-      buffer = g_strdup_printf ("%s.%04ld  %s: %30s[%d]: %s: %s\n",
-                                ftime, ts.tv_nsec / 100000,
-                                hostname, log_domain,
-                                ide_log_get_thread (), level, message);
+      strftime (ftime, sizeof (ftime), "%H:%M:%S", &tt);
+      buffer = g_strdup_printf ("%s.%04ld  %30s[%d]: %s: %s\n",
+                                ftime,
+                                ts.tv_nsec / 100000,
+                                log_domain,
+                                ide_log_get_thread (),
+                                level,
+                                message);
       G_LOCK (channels_lock);
       g_ptr_array_foreach (channels, (GFunc) ide_log_write_to_channel, buffer);
       G_UNLOCK (channels_lock);
@@ -206,7 +205,6 @@ ide_log_init (gboolean     stdout_,
               const gchar *filename)
 {
   static gsize initialized = FALSE;
-  struct utsname u;
   GIOChannel *channel;
 
   if (g_once_init_enter (&initialized))
@@ -225,17 +223,6 @@ ide_log_init (gboolean     stdout_,
           if ((filename == NULL) && isatty (STDOUT_FILENO))
             log_level_str_func = ide_log_level_str_with_color;
         }
-
-#if defined __linux__ || defined __FreeBSD__ || defined __OpenBSD__
-      uname (&u);
-      memcpy (hostname, u.nodename, sizeof (hostname));
-#else
-# ifdef __APPLE__
-      gethostname (hostname, sizeof (hostname));
-# else
-#  error "Target platform not supported"
-# endif /* __APPLE__ */
-#endif /* __linux__ */
 
       g_log_set_default_handler (ide_log_handler, NULL);
       g_once_init_leave (&initialized, TRUE);
