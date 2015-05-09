@@ -1,4 +1,3 @@
-
 /* gb-editor-frame.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
