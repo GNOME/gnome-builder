@@ -217,8 +217,5 @@ gb_greeter_project_row_init (GbGreeterProjectRow *self)
                              humanize_date_time, NULL, NULL, NULL);
   egg_binding_set_bind_full (self->bindings, "directory", self->location_label, "label", 0,
                              truncate_location, NULL, NULL, NULL);
-#if 0
-  egg_binding_set_bind (self->bindings, "directory", self->location_label, "label", 0);
   egg_binding_set_bind (self->bindings, "description", self->description_label, "label", 0);
-#endif
 }
