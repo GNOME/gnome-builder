@@ -147,6 +147,7 @@ m4_define([ggit_required_version], [0.22.6])
 m4_define([gjs_required_version], [1.42.0])
 m4_define([pygobject_required_version], [3.0.0])
 m4_define([devhelp_required_version], [3.16.0])
+m4_define([libxml_required_version], [2.9.0])
 
 PKG_CHECK_MODULES(BUILDER,  [gtk+-3.0 >= gtk_required_version
                              gio-2.0 >= glib_required_version
@@ -168,6 +169,8 @@ PKG_CHECK_MODULES(GEDIT,    [glib-2.0 >= glib_required_version
 			     gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(NAUTILUS, [glib-2.0 >= glib_required_version
 			     gtk+-3.0 >= gtk_required_version])
+PKG_CHECK_MODULES(XML,      [gio-2.0 >= glib_required_version
+			     libxml-2.0 >= libxml_required_version])
 
 
 dnl ***********************************************************************
@@ -328,6 +331,7 @@ AC_CONFIG_FILES([
 	contrib/gedit/Makefile
 	contrib/nautilus/Makefile
 	contrib/libeditorconfig/Makefile
+	contrib/xml/Makefile
 
 	libide/ide-debug.h
 	libide/Makefile
