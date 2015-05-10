@@ -21,6 +21,8 @@
 
 #include <gio/gio.h>
 
+#include "doap/ide-doap.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_INFO (ide_project_info_get_type())
@@ -30,6 +32,7 @@ G_DECLARE_FINAL_TYPE (IdeProjectInfo, ide_project_info, IDE, PROJECT_INFO, GObje
 gint         ide_project_info_compare              (IdeProjectInfo *info1,
                                                     IdeProjectInfo *info2);
 GFile       *ide_project_info_get_file             (IdeProjectInfo *self);
+IdeDoap     *ide_project_info_get_doap             (IdeProjectInfo *self);
 const gchar *ide_project_info_get_description      (IdeProjectInfo *self);
 GFile       *ide_project_info_get_directory        (IdeProjectInfo *self);
 gboolean     ide_project_info_get_is_recent        (IdeProjectInfo *self);

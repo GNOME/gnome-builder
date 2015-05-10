@@ -25,7 +25,6 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
-#include "ide-doap.h"
 #include "ide-macros.h"
 #include "ide-project-info.h"
 
@@ -71,6 +70,12 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+/**
+ * ide_project_info_get_doap:
+ *
+ *
+ * Returns: (nullable) (transfer none): An #IdeDoap or %NULL.
+ */
 IdeDoap *
 ide_project_info_get_doap (IdeProjectInfo *self)
 {
