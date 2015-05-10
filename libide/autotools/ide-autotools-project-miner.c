@@ -65,7 +65,11 @@ ide_autotools_project_miner_find_doap (IdeAutotoolsProjectMiner *self,
 
   while ((file_info = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
     {
-      const gchar *name = g_file_info_get_name (file_info);
+      g_autofree gchar *name = NULL;
+
+      name = g_file_info_get_name (file_info);
+
+      g_clear_object (&file_info);
 
       if (name != NULL && g_str_has_suffix (name, ".doap"))
         {
