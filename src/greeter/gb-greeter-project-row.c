@@ -108,18 +108,12 @@ static void
 gb_greeter_project_row_add_languages (GbGreeterProjectRow *self,
                                       IdeProjectInfo      *project_info)
 {
-  IdeDoap *doap;
   gchar **languages;
 
   g_return_if_fail (GB_IS_GREETER_PROJECT_ROW (self));
   g_return_if_fail (IDE_IS_PROJECT_INFO (project_info));
 
-  /*
-   * TODO: What should we do about doap?
-   */
-
-  if ((doap = ide_project_info_get_doap (project_info)) &&
-      (languages = ide_doap_get_languages (doap)))
+  if ((languages = ide_project_info_get_languages (project_info)))
     {
       gsize i;
 

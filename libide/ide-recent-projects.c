@@ -22,6 +22,9 @@
 #include "ide-project-miner.h"
 #include "ide-recent-projects.h"
 
+#define PROJECT_GROUP         "X-GNOME-Builder-Project"
+#define LANGUAGE_GROUP_PREFIX "X-GNOME-Builder-Language:"
+
 struct _IdeRecentProjects
 {
   GObject       parent_instance;
@@ -140,6 +143,7 @@ ide_recent_projects_load_recent (IdeRecentProjects *self,
       g_autoptr(GDateTime) last_modified_at = NULL;
       g_autoptr(GFile) project_file = NULL;
       g_autoptr(GFile) directory = NULL;
+      g_autoptr(GPtrArray) languages = NULL;
       g_autoptr(IdeProjectInfo) project_info = NULL;
       GtkRecentInfo *recent_info = iter->data;
       const gchar *description;
@@ -154,7 +158,7 @@ ide_recent_projects_load_recent (IdeRecentProjects *self,
 
       for (i = 0; i < len; i++)
         {
-          if (g_str_equal (groups [i], "X-GNOME-Builder-Project"))
+          if (g_str_equal (groups [i], PROJECT_GROUP))
             goto is_project;
         }
 
@@ -169,11 +173,20 @@ ide_recent_projects_load_recent (IdeRecentProjects *self,
       project_file = g_file_new_for_uri (uri);
       directory = g_file_get_parent (project_file);
 
+      languages = g_ptr_array_new ();
+      for (i = 0; i < len; i++)
+        {
+          if (g_str_has_prefix (groups [i], LANGUAGE_GROUP_PREFIX))
+            g_ptr_array_add (languages, groups [i] + strlen (LANGUAGE_GROUP_PREFIX));
+        }
+      g_ptr_array_add (languages, NULL);
+
       project_info = g_object_new (IDE_TYPE_PROJECT_INFO,
                                    "description", description,
                                    "directory", directory,
                                    "file", project_file,
                                    "is-recent", TRUE,
+                                   "languages", (gchar **)languages->pdata,
                                    "last-modified-at", last_modified_at,
                                    "name", name,
                                    NULL);

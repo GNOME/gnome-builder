@@ -105,6 +105,7 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   g_autoptr(IdeDoap) doap = NULL;
   const gchar *filename;
   const gchar *shortdesc = NULL;
+  gchar **languages = NULL;
   guint64 mtime;
 
   IDE_ENTRY;
@@ -150,6 +151,7 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
         }
 
       shortdesc = ide_doap_get_shortdesc (doap);
+      languages = ide_doap_get_languages (doap);
     }
 
   project_info = g_object_new (IDE_TYPE_PROJECT_INFO,
@@ -158,6 +160,7 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
                                "doap", doap,
                                "file", file,
                                "last-modified-at", last_modified_at,
+                               "languages", languages,
                                "name", name,
                                "priority", IDE_AUTOTOOLS_PROJECT_MINER_PRIORITY,
                                NULL);

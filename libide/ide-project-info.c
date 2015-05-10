@@ -39,18 +39,19 @@
 
 struct _IdeProjectInfo
 {
-  GObject    parent_instance;
+  GObject     parent_instance;
 
-  IdeDoap   *doap;
-  GDateTime *last_modified_at;
-  GFile     *directory;
-  GFile     *file;
-  gchar     *name;
-  gchar     *description;
+  IdeDoap    *doap;
+  GDateTime  *last_modified_at;
+  GFile      *directory;
+  GFile      *file;
+  gchar      *name;
+  gchar      *description;
+  gchar     **languages;
 
-  gint       priority;
+  gint        priority;
 
-  guint      is_recent : 1;
+  guint       is_recent : 1;
 };
 
 G_DEFINE_TYPE (IdeProjectInfo, ide_project_info, G_TYPE_OBJECT)
@@ -62,6 +63,7 @@ enum {
   PROP_DOAP,
   PROP_FILE,
   PROP_IS_RECENT,
+  PROP_LANGUAGES,
   PROP_LAST_MODIFIED_AT,
   PROP_NAME,
   PROP_PRIORITY,
@@ -93,6 +95,30 @@ ide_project_info_set_doap (IdeProjectInfo *self,
 
   if (g_set_object (&self->doap, doap))
     g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOAP]);
+}
+
+/**
+ * ide_project_info_get_languages:
+ *
+ * Returns: (transfer none): An array of language names.
+ */
+gchar **
+ide_project_info_get_languages (IdeProjectInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
+
+  return self->languages;
+}
+
+void
+ide_project_info_set_languages (IdeProjectInfo  *self,
+                                gchar          **languages)
+{
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+
+  g_strfreev (self->languages);
+  self->languages = g_strdupv (languages);
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_LANGUAGES]);
 }
 
 gint
@@ -311,6 +337,10 @@ ide_project_info_get_property (GObject    *object,
       g_value_set_boolean (value, ide_project_info_get_is_recent (self));
       break;
 
+    case PROP_LANGUAGES:
+      g_value_set_boxed (value, ide_project_info_get_languages (self));
+      break;
+
     case PROP_LAST_MODIFIED_AT:
       g_value_set_boxed (value, ide_project_info_get_last_modified_at (self));
       break;
@@ -356,6 +386,10 @@ ide_project_info_set_property (GObject      *object,
 
     case PROP_IS_RECENT:
       ide_project_info_set_is_recent (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_LANGUAGES:
+      ide_project_info_set_languages (self, g_value_get_boxed (value));
       break;
 
     case PROP_LAST_MODIFIED_AT:
@@ -425,6 +459,13 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                           _("Is Recent"),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  gParamSpecs [PROP_LANGUAGES] =
+    g_param_spec_boxed ("languages",
+                        _("Languages"),
+                        _("Languages"),
+                        G_TYPE_STRV,
+                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_LAST_MODIFIED_AT] =
     g_param_spec_boxed ("last-modified-at",
