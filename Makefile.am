@@ -74,6 +74,11 @@ run:
 	GOBJECT_DEBUG=instance-count \
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
+strace:
+	GI_TYPELIB_PATH=libide \
+	GOBJECT_DEBUG=instance-count \
+	$(LIBTOOL) --mode=execute strace -T src/gnome-builder -vvvv -s
+
 debug:
 	GI_TYPELIB_PATH=libide \
 	G_DEBUG=fatal-criticals \
