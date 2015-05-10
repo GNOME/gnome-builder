@@ -37,7 +37,10 @@ struct _GbGreeterWindow
   IdePatternSpec       *pattern_spec;
 
   GtkWidget            *header_bar;
+  GtkBox               *my_projects_container;
+  GtkLabel             *my_projects_placeholder;
   GtkListBox           *my_projects_list_box;
+  GtkBox               *other_projects_container;
   GtkListBox           *other_projects_list_box;
   GtkSearchEntry       *search_entry;
 };
@@ -61,10 +64,23 @@ gb_greeter_window_get_recent_projects (GbGreeterWindow *self)
 }
 
 static void
+foreach_cb (GtkWidget *widget,
+            gpointer   user_data)
+{
+  gboolean *visible = user_data;
+
+  g_assert (GB_IS_GREETER_PROJECT_ROW (widget));
+
+  if (gtk_widget_get_child_visible (widget))
+    *visible = TRUE;
+}
+
+static void
 gb_greeter_window__search_entry_changed (GbGreeterWindow *self,
                                          GtkSearchEntry  *search_entry)
 {
   const gchar *text;
+  gboolean visible;
 
   g_assert (GB_IS_GREETER_WINDOW (self));
   g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
@@ -77,7 +93,18 @@ gb_greeter_window__search_entry_changed (GbGreeterWindow *self,
     self->pattern_spec = ide_pattern_spec_new (text);
 
   gtk_list_box_invalidate_filter (self->my_projects_list_box);
+  visible = FALSE;
+  gtk_container_foreach (GTK_CONTAINER (self->my_projects_list_box),
+                         foreach_cb,
+                         &visible);
+  gtk_widget_set_visible (GTK_WIDGET (self->my_projects_container), visible);
+
   gtk_list_box_invalidate_filter (self->other_projects_list_box);
+  visible = FALSE;
+  gtk_container_foreach (GTK_CONTAINER (self->other_projects_list_box),
+                         foreach_cb,
+                         &visible);
+  gtk_widget_set_visible (GTK_WIDGET (self->other_projects_container), visible);
 }
 
 static void
@@ -251,7 +278,10 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-greeter-window.ui");
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, my_projects_container);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, my_projects_list_box);
+  gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, my_projects_placeholder);
+  gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, other_projects_container);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, other_projects_list_box);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, search_entry);
 
