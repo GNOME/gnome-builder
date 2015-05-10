@@ -186,3 +186,23 @@ gb_gtk_text_iter_get_next_char (const GtkTextIter *iter)
 
   return gtk_text_iter_get_char (&copy);
 }
+
+void
+gb_gtk_list_box_row_separator_func (GtkListBoxRow *row,
+                                    GtkListBoxRow *before,
+                                    gpointer       user_data)
+{
+  g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
+  g_return_if_fail (!before || GTK_IS_LIST_BOX_ROW (before));
+
+  if (before != NULL)
+    {
+      GtkWidget *header;
+
+      header = g_object_new (GTK_TYPE_SEPARATOR,
+                             "orientation", GTK_ORIENTATION_HORIZONTAL,
+                             "visible", TRUE,
+                             NULL);
+      gtk_list_box_row_set_header (row, header);
+    }
+}
