@@ -67,6 +67,13 @@
                 </attributes>
               </object>
             </child>
+            <child>
+              <object class="GtkBox" id="languages_box">
+                <property name="spacing">3</property>
+                <property name="orientation">horizontal</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

@@ -25,6 +25,7 @@
 
 #include "gb-glib.h"
 #include "gb-greeter-project-row.h"
+#include "gb-greeter-pill-box.h"
 
 struct _GbGreeterProjectRow
 {
@@ -36,6 +37,7 @@ struct _GbGreeterProjectRow
 
   GtkLabel       *date_label;
   GtkLabel       *description_label;
+  GtkBox         *languages_box;
   GtkLabel       *location_label;
   GtkLabel       *title_label;
 };
@@ -59,7 +61,39 @@ gb_greeter_project_row_get_project_info (GbGreeterProjectRow *self)
   return self->project_info;
 }
 
-void
+static void
+gb_greeter_project_row_add_languages (GbGreeterProjectRow *self,
+                                      IdeProjectInfo      *project_info)
+{
+  IdeDoap *doap;
+  gchar **languages;
+
+  g_return_if_fail (GB_IS_GREETER_PROJECT_ROW (self));
+  g_return_if_fail (IDE_IS_PROJECT_INFO (project_info));
+
+  /*
+   * TODO: What should we do about doap?
+   */
+
+  if ((doap = ide_project_info_get_doap (project_info)) &&
+      (languages = ide_doap_get_languages (doap)))
+    {
+      gsize i;
+
+      for (i = 0; languages [i]; i++)
+        {
+          GtkWidget *pill;
+
+          pill = g_object_new (GB_TYPE_GREETER_PILL_BOX,
+                               "visible", TRUE,
+                               "label", languages [i],
+                               NULL);
+          gtk_container_add (GTK_CONTAINER (self->languages_box), pill);
+        }
+    }
+}
+
+static void
 gb_greeter_project_row_set_project_info (GbGreeterProjectRow *self,
                                          IdeProjectInfo      *project_info)
 {
@@ -69,6 +103,8 @@ gb_greeter_project_row_set_project_info (GbGreeterProjectRow *self,
   if (g_set_object (&self->project_info, project_info))
     {
       egg_binding_set_set_source (self->bindings, project_info);
+      if (project_info != NULL)
+        gb_greeter_project_row_add_languages (self, project_info);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PROJECT_INFO]);
     }
 }
@@ -191,6 +227,7 @@ gb_greeter_project_row_class_init (GbGreeterProjectRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, date_label);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, description_label);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, location_label);
+  gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, languages_box);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, title_label);
 
   gParamSpecs [PROP_PROJECT_INFO] =
@@ -198,7 +235,7 @@ gb_greeter_project_row_class_init (GbGreeterProjectRowClass *klass)
                          _("Project Info"),
                          _("The project info to render."),
                          IDE_TYPE_PROJECT_INFO,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_PROJECT_INFO,
                                    gParamSpecs [PROP_PROJECT_INFO]);
 

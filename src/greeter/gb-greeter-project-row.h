@@ -20,12 +20,15 @@
 #define GB_GREETER_PROJECT_ROW_H
 
 #include <gtk/gtk.h>
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 #define GB_TYPE_GREETER_PROJECT_ROW (gb_greeter_project_row_get_type())
 
 G_DECLARE_FINAL_TYPE (GbGreeterProjectRow, gb_greeter_project_row, GB, GREETER_PROJECT_ROW, GtkListBoxRow)
+
+IdeProjectInfo *gb_greeter_project_row_get_project_info (GbGreeterProjectRow *self);
 
 G_END_DECLS
 
