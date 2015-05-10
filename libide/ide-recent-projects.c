@@ -142,6 +142,7 @@ ide_recent_projects_load_recent (IdeRecentProjects *self,
       g_autoptr(GFile) directory = NULL;
       g_autoptr(IdeProjectInfo) project_info = NULL;
       GtkRecentInfo *recent_info = iter->data;
+      const gchar *description;
       const gchar *uri;
       const gchar *name;
       time_t modified;
@@ -161,6 +162,7 @@ ide_recent_projects_load_recent (IdeRecentProjects *self,
 
     is_project:
       name = gtk_recent_info_get_display_name (recent_info);
+      description = gtk_recent_info_get_description (recent_info);
       modified = gtk_recent_info_get_modified (recent_info);
       last_modified_at = g_date_time_new_from_unix_local (modified);
       uri = gtk_recent_info_get_uri (recent_info);
@@ -168,6 +170,7 @@ ide_recent_projects_load_recent (IdeRecentProjects *self,
       directory = g_file_get_parent (project_file);
 
       project_info = g_object_new (IDE_TYPE_PROJECT_INFO,
+                                   "description", description,
                                    "directory", directory,
                                    "file", project_file,
                                    "is-recent", TRUE,
