@@ -96,6 +96,8 @@ G_BEGIN_DECLS
 #include "devhelp/ide-devhelp-search-result.h"
 #include "directory/ide-directory-build-system.h"
 #include "directory/ide-directory-vcs.h"
+#include "doap/ide-doap.h"
+#include "doap/ide-doap-person.h"
 #include "editorconfig/ide-editorconfig-file-settings.h"
 #include "git/ide-git-remote-callbacks.h"
 #include "git/ide-git-search-result.h"

@@ -37,6 +37,10 @@ libide_1_0_la_public_sources = \
 	directory/ide-directory-build-system.h \
 	directory/ide-directory-vcs.c \
 	directory/ide-directory-vcs.h \
+	doap/ide-doap.c \
+	doap/ide-doap.h \
+	doap/ide-doap-person.c \
+	doap/ide-doap-person.h \
 	editorconfig/ide-editorconfig-file-settings.c \
 	editorconfig/ide-editorconfig-file-settings.h \
 	git/ide-git-remote-callbacks.c \
@@ -316,12 +320,14 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/libeditorconfig \
 	-I$(top_srcdir)/contrib/search \
+	-I$(top_srcdir)/contrib/xml \
 	-I$(srcdir) \
 	-I$(srcdir)/autotools \
 	-I$(srcdir)/c \
 	-I$(srcdir)/clang \
 	-I$(srcdir)/devhelp \
 	-I$(srcdir)/directory \
+	-I$(srcdir)/doap \
 	-I$(srcdir)/editorconfig \
 	-I$(srcdir)/gca \
 	-I$(srcdir)/git \
@@ -376,6 +382,7 @@ libide_1_0_la_LIBADD = \
 	$(top_builddir)/contrib/egg/libegg.la \
 	$(top_builddir)/contrib/libeditorconfig/libeditorconfig.la \
 	$(top_builddir)/contrib/search/libsearch.la \
+	$(top_builddir)/contrib/xml/libxml.la \
 	$(NULL)
 
 libide_1_0_la_built_sources = \
@@ -387,6 +394,7 @@ libide_1_0_la_built_sources = \
 glib_enum_h = ide-enums.h
 glib_enum_c = ide-enums.c
 glib_enum_headers =  \
+	doap/ide-doap.h \
 	ide-buffer.h \
 	ide-diagnostic.h \
 	ide-highlighter.h \

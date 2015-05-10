@@ -47,6 +47,12 @@ test_ide_buffer_CFLAGS = $(tests_cflags)
 test_ide_buffer_LDADD = $(tests_libs)
 
 
+TESTS += test-ide-doap
+test_ide_doap_SOURCES = test-ide-doap.c
+test_ide_doap_CFLAGS = $(tests_cflags)
+test_ide_doap_LDADD = $(tests_libs)
+
+
 TESTS += test-ide-file-settings
 test_ide_file_settings_SOURCES = test-ide-file-settings.c
 test_ide_file_settings_CFLAGS = $(tests_cflags)
@@ -108,6 +114,7 @@ check_PROGRAMS = $(TESTS) $(misc_programs)
 EXTRA_DIST = \
 	data/project1/configure.ac \
 	data/project1/.editorconfig \
+	data/project1/project1.doap \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk

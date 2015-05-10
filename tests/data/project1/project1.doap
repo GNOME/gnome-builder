@@ -1,0 +1,29 @@
+<Project xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/"
+         xmlns:gnome="http://api.gnome.org/doap-extensions#"
+         xmlns="http://usefulinc.com/ns/doap#">
+
+  <name xml:lang="en">Project One</name>
+  <shortdesc xml:lang="en">
+    Short Description of Project1
+  </shortdesc>
+  <description xml:lang="en">
+    Long Description
+  </description>
+  <homepage rdf:resource="https://example.org/" />
+  <download-page rdf:resource="https://download.example.org/" />
+  <bug-database rdf:resource="https://bugs.example.org/" />
+
+  <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
+  <programming-language>C</programming-language>
+  <programming-language>JavaScript</programming-language>
+  <programming-language>Python</programming-language>
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Some Name</foaf:name>
+      <foaf:mbox rdf:resource="mailto:example@example.org" />
+    </foaf:Person>
+  </maintainer>
+</Project>
