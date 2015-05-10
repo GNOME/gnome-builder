@@ -439,25 +439,22 @@ gb_application_show_projects_window (GbApplication *self)
 
   for (; windows; windows = windows->next)
     {
-      if (GB_IS_PROJECTS_DIALOG (windows->data))
+      if (GB_IS_GREETER_WINDOW (windows->data))
         {
           gtk_window_present (windows->data);
           return;
         }
     }
 
-#if 1
-  IdeRecentProjects *projects = ide_recent_projects_new ();
+  if (self->recent_projects == NULL)
+    {
+      self->recent_projects = ide_recent_projects_new ();
+      ide_recent_projects_discover_async (self->recent_projects, NULL, NULL, NULL);
+    }
+
   window = g_object_new (GB_TYPE_GREETER_WINDOW,
                          "application", self,
-                         "recent-projects", projects,
-                         NULL);
-  gtk_window_present (GTK_WINDOW (window));
-  ide_recent_projects_discover_async (projects, NULL, NULL, NULL);
-#endif
-
-  window = g_object_new (GB_TYPE_PROJECTS_DIALOG,
-                         "application", self,
+                         "recent-projects", self->recent_projects,
                          NULL);
   gtk_window_present (GTK_WINDOW (window));
 }
@@ -534,6 +531,7 @@ gb_application_finalize (GObject *object)
 
   g_clear_pointer (&self->started_at, g_date_time_unref);
   g_clear_object (&self->keybindings);
+  g_clear_object (&self->recent_projects);
 
   G_OBJECT_CLASS (gb_application_parent_class)->finalize (object);
 

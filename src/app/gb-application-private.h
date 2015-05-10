@@ -21,6 +21,7 @@
 
 #include <gtk/gtk.h>
 #include <gio/gio.h>
+#include <ide.h>
 
 #include "gb-keybindings.h"
 #include "gb-preferences-window.h"
@@ -34,6 +35,7 @@ struct _GbApplication
   GDateTime           *started_at;
   GbKeybindings       *keybindings;
   GbPreferencesWindow *preferences_window;
+  IdeRecentProjects   *recent_projects;
 };
 
 
