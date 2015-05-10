@@ -101,6 +101,7 @@ IdeSettings        *_ide_settings_new                  (IdeContext            *c
                                                         gboolean               ignore_project_settings);
 IdeSourceRange     *_ide_source_range_new              (IdeSourceLocation     *begin,
                                                         IdeSourceLocation     *end);
+GtkTextMark        *_ide_source_view_get_scroll_mark   (IdeSourceView         *self);
 gboolean            _ide_source_view_mode_do_event     (IdeSourceViewMode     *mode,
                                                         GdkEventKey           *event,
                                                         gboolean              *remove);

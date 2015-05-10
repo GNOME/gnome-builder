@@ -95,6 +95,7 @@ typedef struct
   GList                       *providers;
   GtkTextMark                 *rubberband_mark;
   GtkTextMark                 *rubberband_insert_mark;
+  GtkTextMark                 *scroll_mark;
   gchar                       *saved_search_text;
   GQueue                      *selections;
   GQueue                      *snippets;
@@ -1351,7 +1352,7 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
 
   /* Create scroll mark used by movements */
   gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buffer), &iter);
-  gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), "scroll-mark", &iter, TRUE);
+  priv->scroll_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), NULL, &iter, TRUE);
 
   /* Create rubberband mark used by search rubberbanding */
   priv->rubberband_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer),
@@ -1382,6 +1383,8 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
 
   if (priv->buffer == NULL)
     return;
+
+  priv->scroll_mark = NULL;
 
   if (priv->completion_blocked)
     {
@@ -6945,4 +6948,14 @@ ide_source_view_rollback_search (IdeSourceView *self)
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
   gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self), priv->rubberband_mark, 0.0, TRUE, 0.0, 1.0);
+}
+
+GtkTextMark *
+_ide_source_view_get_scroll_mark (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
+
+  return priv->scroll_mark;
 }
