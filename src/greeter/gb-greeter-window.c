@@ -23,6 +23,7 @@
 
 #include "egg-signal-group.h"
 
+#include "gb-application.h"
 #include "gb-greeter-project-row.h"
 #include "gb-greeter-window.h"
 #include "gb-gtk.h"
@@ -222,6 +223,52 @@ gb_greeter_window_filter_row (GtkListBoxRow *row,
 }
 
 static void
+gb_greeter_window__open_project_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  GbApplication *app = (GbApplication *)object;
+  g_autoptr(GbGreeterWindow) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GB_IS_APPLICATION (app));
+
+  if (!gb_application_open_project_finish (app, result, &error))
+    {
+      g_warning ("%s\n", error->message);
+    }
+
+  gtk_widget_destroy (GTK_WIDGET (self));
+}
+
+static void
+gb_greeter_window__row_activated (GbGreeterWindow     *self,
+                                  GbGreeterProjectRow *row,
+                                  GtkListBox          *list_box)
+{
+  IdeProjectInfo *project_info;
+  GApplication *app;
+  GFile *project_file;
+
+  g_assert (GB_IS_GREETER_WINDOW (self));
+  g_assert (GB_IS_GREETER_PROJECT_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  app = g_application_get_default ();
+  project_info = gb_greeter_project_row_get_project_info (row);
+  project_file = ide_project_info_get_file (project_info);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
+
+  gb_application_open_project_async (GB_APPLICATION (app),
+                                     project_file,
+                                     NULL,
+                                     NULL,
+                                     gb_greeter_window__open_project_cb,
+                                     g_object_ref (self));
+}
+
+static void
 gb_greeter_window_finalize (GObject *object)
 {
   GbGreeterWindow *self = (GbGreeterWindow *)object;
@@ -317,6 +364,17 @@ gb_greeter_window_init (GbGreeterWindow *self)
   g_signal_connect_object (self->search_entry,
                            "changed",
                            G_CALLBACK (gb_greeter_window__search_entry_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->my_projects_list_box,
+                           "row-activated",
+                           G_CALLBACK (gb_greeter_window__row_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->other_projects_list_box,
+                           "row-activated",
+                           G_CALLBACK (gb_greeter_window__row_activated),
                            self,
                            G_CONNECT_SWAPPED);
 
