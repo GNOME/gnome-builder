@@ -23,6 +23,7 @@
 
 #include "egg-binding-set.h"
 
+#include "gb-glib.h"
 #include "gb-greeter-project-row.h"
 
 struct _GbGreeterProjectRow
@@ -31,6 +32,7 @@ struct _GbGreeterProjectRow
 
   IdeProjectInfo *project_info;
   EggBindingSet  *bindings;
+  GFile          *home_dir;
 
   GtkLabel       *date_label;
   GtkLabel       *description_label;
@@ -47,6 +49,7 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+static GFile      *gHomeDir;
 
 IdeProjectInfo *
 gb_greeter_project_row_get_project_info (GbGreeterProjectRow *self)
@@ -70,12 +73,68 @@ gb_greeter_project_row_set_project_info (GbGreeterProjectRow *self,
     }
 }
 
+static gboolean
+humanize_date_time (GBinding     *binding,
+                    const GValue *from_value,
+                    GValue       *to_value,
+                    gpointer      user_data)
+{
+  GDateTime *dt;
+  gchar *str;
+
+  g_assert (G_VALUE_HOLDS (from_value, G_TYPE_DATE_TIME));
+  g_assert (G_VALUE_HOLDS (to_value, G_TYPE_STRING));
+
+  if (!(dt = g_value_get_boxed (from_value)))
+    return FALSE;
+
+  str = gb_date_time_format_for_display (dt);
+  g_value_take_string (to_value, str);
+
+  return TRUE;
+}
+
+static gboolean
+truncate_location (GBinding     *binding,
+                   const GValue *from_value,
+                   GValue       *to_value,
+                   gpointer      user_data)
+{
+  GFile *file;
+  gchar *uri;
+
+  g_assert (G_VALUE_HOLDS (from_value, G_TYPE_FILE));
+  g_assert (G_VALUE_HOLDS (to_value, G_TYPE_STRING));
+
+  if (!(file = g_value_get_object (from_value)))
+    return FALSE;
+
+  if (g_file_is_native (file))
+    {
+      gchar *relative_path;
+
+      if ((relative_path = g_file_get_relative_path (gHomeDir, file)) ||
+          (relative_path = g_file_get_path (file)))
+        {
+          g_value_set_string (to_value, relative_path);
+          return TRUE;
+        }
+    }
+
+  uri = g_file_get_uri (file);
+  g_value_set_string (to_value, uri);
+
+  return TRUE;
+}
+
 static void
 gb_greeter_project_row_finalize (GObject *object)
 {
   GbGreeterProjectRow *self = (GbGreeterProjectRow *)object;
 
   g_clear_object (&self->project_info);
+  g_clear_object (&self->bindings);
+  g_clear_object (&self->home_dir);
 
   G_OBJECT_CLASS (gb_greeter_project_row_parent_class)->finalize (object);
 }
@@ -142,6 +201,8 @@ gb_greeter_project_row_class_init (GbGreeterProjectRowClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_PROJECT_INFO,
                                    gParamSpecs [PROP_PROJECT_INFO]);
+
+  gHomeDir = g_file_new_for_path (g_get_home_dir ());
 }
 
 static void
@@ -152,9 +213,12 @@ gb_greeter_project_row_init (GbGreeterProjectRow *self)
   self->bindings = egg_binding_set_new ();
 
   egg_binding_set_bind (self->bindings, "name", self->title_label, "label", 0);
+  egg_binding_set_bind_full (self->bindings, "last-modified-at", self->date_label, "label", 0,
+                             humanize_date_time, NULL, NULL, NULL);
+  egg_binding_set_bind_full (self->bindings, "directory", self->location_label, "label", 0,
+                             truncate_location, NULL, NULL, NULL);
 #if 0
   egg_binding_set_bind (self->bindings, "directory", self->location_label, "label", 0);
   egg_binding_set_bind (self->bindings, "description", self->description_label, "label", 0);
-  egg_binding_set_bind (self->bindings, "last-modified-at", self->date_label, "label", 0);
 #endif
 }

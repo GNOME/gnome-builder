@@ -2,6 +2,8 @@
 <interface>
   <!-- interface-requires gtk+ 3.16 -->
   <template class="GbGreeterWindow" parent="GtkApplicationWindow">
+    <property name="default-width">1280</property>
+    <property name="default-height">720</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
         <property name="show-close-button">true</property>
@@ -118,26 +120,6 @@
                               <object class="GtkListBox" id="my_projects_list_box">
                                 <property name="visible">true</property>
                                 <property name="selection-mode">none</property>
-                                <child>
-                                  <object class="GbGreeterProjectRow">
-                                    <property name="visible">true</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GbGreeterProjectRow">
-                                    <property name="visible">true</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GbGreeterProjectRow">
-                                    <property name="visible">true</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GbGreeterProjectRow">
-                                    <property name="visible">true</property>
-                                  </object>
-                                </child>
                               </object>
                             </child>
                           </object>

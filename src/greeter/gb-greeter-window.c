@@ -25,6 +25,7 @@
 
 #include "gb-greeter-project-row.h"
 #include "gb-greeter-window.h"
+#include "gb-gtk.h"
 #include "gb-scrolled-window.h"
 
 struct _GbGreeterWindow
@@ -57,6 +58,38 @@ gb_greeter_window_get_recent_projects (GbGreeterWindow *self)
   return self->recent_projects;
 }
 
+static void
+gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
+                                                  guint            position,
+                                                  guint            removed,
+                                                  guint            added,
+                                                  GListModel      *list_model)
+{
+  IdeRecentProjects *recent_projects = (IdeRecentProjects *)list_model;
+  GbGreeterProjectRow *row;
+  gsize i;
+
+  g_assert (GB_IS_GREETER_WINDOW (self));
+  g_assert (G_IS_LIST_MODEL (list_model));
+  g_assert (IDE_IS_RECENT_PROJECTS (recent_projects));
+
+  for (i = 0; i < added; i++)
+    {
+      IdeProjectInfo *project_info;
+
+      project_info = g_list_model_get_item (list_model, position + i);
+
+      if (!ide_project_info_get_is_recent (project_info))
+        continue;
+
+      row = g_object_new (GB_TYPE_GREETER_PROJECT_ROW,
+                          "visible", TRUE,
+                          "project-info", project_info,
+                          NULL);
+      gtk_list_box_insert (self->my_projects_list_box, GTK_WIDGET (row), position + i);
+    }
+}
+
 void
 gb_greeter_window_set_recent_projects (GbGreeterWindow   *self,
                                        IdeRecentProjects *recent_projects)
@@ -67,40 +100,19 @@ gb_greeter_window_set_recent_projects (GbGreeterWindow   *self,
   if (g_set_object (&self->recent_projects, recent_projects))
     {
       egg_signal_group_set_target (self->signal_group, recent_projects);
+
+      if (recent_projects != NULL)
+        {
+          GListModel *list_model;
+          guint n_items;
+
+          list_model = G_LIST_MODEL (recent_projects);
+          n_items = g_list_model_get_n_items (list_model);
+          gb_greeter_window__recent_projects_items_changed (self, 0, 0, n_items, list_model);
+        }
+
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_RECENT_PROJECTS]);
     }
-}
-
-static void
-gb_greeter_window_row_header_cb (GtkListBoxRow *row,
-                                 GtkListBoxRow *before,
-                                 gpointer       user_data)
-{
-  g_assert (GTK_IS_LIST_BOX_ROW (row));
-
-  if (before != NULL)
-    {
-      GtkWidget *header;
-
-      header = g_object_new (GTK_TYPE_SEPARATOR,
-                             "orientation", GTK_ORIENTATION_HORIZONTAL,
-                             "visible", TRUE,
-                             NULL);
-      gtk_list_box_row_set_header (row, header);
-    }
-}
-
-static void
-gb_greeter_window__recent_projects_items_changed (GListModel *list_model,
-                                                  guint       position,
-                                                  guint       removed,
-                                                  guint       added,
-                                                  gpointer    user_data)
-{
-  IdeRecentProjects *recent_projects = (IdeRecentProjects *)list_model;
-
-  g_assert (G_IS_LIST_MODEL (list_model));
-  g_assert (IDE_IS_RECENT_PROJECTS (recent_projects));
 }
 
 static void
@@ -184,7 +196,6 @@ static void
 gb_greeter_window_init (GbGreeterWindow *self)
 {
   self->signal_group = egg_signal_group_new (IDE_TYPE_RECENT_PROJECTS);
-
   egg_signal_group_connect_object (self->signal_group,
                                    "items-changed",
                                    G_CALLBACK (gb_greeter_window__recent_projects_items_changed),
@@ -194,6 +205,6 @@ gb_greeter_window_init (GbGreeterWindow *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gtk_list_box_set_header_func (self->my_projects_list_box,
-                                gb_greeter_window_row_header_cb,
+                                gb_gtk_list_box_row_separator_func,
                                 NULL, NULL);
 }

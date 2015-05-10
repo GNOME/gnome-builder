@@ -447,10 +447,13 @@ gb_application_show_projects_window (GbApplication *self)
     }
 
 #if 1
+  IdeRecentProjects *projects = ide_recent_projects_new ();
   window = g_object_new (GB_TYPE_GREETER_WINDOW,
                          "application", self,
+                         "recent-projects", projects,
                          NULL);
   gtk_window_present (GTK_WINDOW (window));
+  ide_recent_projects_discover_async (projects, NULL, NULL, NULL);
 #endif
 
   window = g_object_new (GB_TYPE_PROJECTS_DIALOG,
