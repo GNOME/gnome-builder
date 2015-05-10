@@ -221,6 +221,9 @@ gb_greeter_window_init (GbGreeterWindow *self)
   gtk_list_box_set_header_func (self->my_projects_list_box,
                                 gb_gtk_list_box_row_separator_func,
                                 NULL, NULL);
+  gtk_list_box_set_header_func (self->other_projects_list_box,
+                                gb_gtk_list_box_row_separator_func,
+                                NULL, NULL);
 
   gtk_list_box_set_sort_func (self->my_projects_list_box,
                               gb_greeter_window_sort_rows,
