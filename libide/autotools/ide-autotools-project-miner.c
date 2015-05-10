@@ -22,6 +22,8 @@
 
 #include "ide-autotools-project-miner.h"
 #include "ide-debug.h"
+#include "ide-doap.h"
+#include "ide-macros.h"
 
 #define MAX_MINE_DEPTH 5
 
@@ -41,6 +43,48 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+static IdeDoap *
+ide_autotools_project_miner_find_doap (IdeAutotoolsProjectMiner *self,
+                                       GCancellable             *cancellable,
+                                       GFile                    *directory)
+{
+  g_autoptr(GFileEnumerator) enumerator = NULL;
+  GFileInfo *file_info = NULL;
+
+  g_assert (IDE_IS_AUTOTOOLS_PROJECT_MINER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (G_IS_FILE (directory));
+
+  enumerator = g_file_enumerate_children (directory,
+                                          G_FILE_ATTRIBUTE_STANDARD_NAME,
+                                          G_FILE_QUERY_INFO_NONE,
+                                          cancellable,
+                                          NULL);
+  if (!enumerator)
+    return NULL;
+
+  while ((file_info = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
+    {
+      const gchar *name = g_file_info_get_name (file_info);
+
+      if (name != NULL && g_str_has_suffix (name, ".doap"))
+        {
+          g_autoptr(GFile) doap_file = g_file_get_child (directory, name);
+          IdeDoap *doap = doap = ide_doap_new ();
+
+          if (!ide_doap_load_from_file (doap, doap_file, cancellable, NULL))
+            {
+              g_object_unref (doap);
+              continue;
+            }
+
+          return doap;
+        }
+    }
+
+  return NULL;
+}
+
 static void
 ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
                                         GCancellable             *cancellable,
@@ -54,6 +98,7 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   g_autoptr(GFileInfo) index_info = NULL;
   g_autoptr(IdeProjectInfo) project_info = NULL;
   g_autoptr(GDateTime) last_modified_at = NULL;
+  g_autoptr(IdeDoap) doap = NULL;
   const gchar *filename;
   guint64 mtime;
 
@@ -67,6 +112,8 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   g_debug ("Discovered autotools project at %s", uri);
 
   mtime = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+  doap = ide_autotools_project_miner_find_doap (self, cancellable, directory);
 
   /*
    * If there is a git repo, trust the .git/index file for time info,
@@ -87,8 +134,20 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   file = g_file_get_child (directory, filename);
   name = g_file_get_basename (directory);
 
+  if (doap != NULL)
+    {
+      const gchar *doap_name = ide_doap_get_name (doap);
+
+      if (!ide_str_empty0 (doap_name))
+        {
+          g_free (name);
+          name = g_strdup (doap_name);
+        }
+    }
+
   project_info = g_object_new (IDE_TYPE_PROJECT_INFO,
                                "directory", directory,
+                               "doap", doap,
                                "file", file,
                                "last-modified-at", last_modified_at,
                                "name", name,

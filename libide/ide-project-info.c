@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include "ide-doap.h"
 #include "ide-project-info.h"
 
 /**
@@ -40,6 +41,7 @@ struct _IdeProjectInfo
 {
   GObject    parent_instance;
 
+  IdeDoap   *doap;
   GDateTime *last_modified_at;
   GFile     *directory;
   GFile     *file;
@@ -55,6 +57,7 @@ G_DEFINE_TYPE (IdeProjectInfo, ide_project_info, G_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_DIRECTORY,
+  PROP_DOAP,
   PROP_FILE,
   PROP_IS_RECENT,
   PROP_LAST_MODIFIED_AT,
@@ -64,6 +67,25 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
+
+IdeDoap *
+ide_project_info_get_doap (IdeProjectInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
+
+  return self->doap;
+}
+
+void
+ide_project_info_set_doap (IdeProjectInfo *self,
+                           IdeDoap        *doap)
+{
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+  g_return_if_fail (!doap || IDE_IS_DOAP (doap));
+
+  if (g_set_object (&self->doap, doap))
+    g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOAP]);
+}
 
 gint
 ide_project_info_get_priority (IdeProjectInfo *self)
@@ -242,6 +264,10 @@ ide_project_info_get_property (GObject    *object,
       g_value_set_object (value, ide_project_info_get_directory (self));
       break;
 
+    case PROP_DOAP:
+      g_value_set_object (value, ide_project_info_get_doap (self));
+      break;
+
     case PROP_FILE:
       g_value_set_object (value, ide_project_info_get_file (self));
       break;
@@ -279,6 +305,10 @@ ide_project_info_set_property (GObject      *object,
     {
     case PROP_DIRECTORY:
       ide_project_info_set_directory (self, g_value_get_object (value));
+      break;
+
+    case PROP_DOAP:
+      ide_project_info_set_doap (self, g_value_get_object (value));
       break;
 
     case PROP_FILE:
@@ -327,6 +357,13 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                          _("Directory"),
                          _("The project directory."),
                          G_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  gParamSpecs [PROP_DOAP] =
+    g_param_spec_object ("doap",
+                         _("Doap"),
+                         _("A DOAP describing the project."),
+                         IDE_TYPE_DOAP,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_FILE] =
