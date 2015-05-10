@@ -64,8 +64,8 @@ gb_greeter_window_get_recent_projects (GbGreeterWindow *self)
 }
 
 static void
-foreach_cb (GtkWidget *widget,
-            gpointer   user_data)
+gb_greeter_window_apply_filter_cb (GtkWidget *widget,
+                                   gpointer   user_data)
 {
   gboolean *visible = user_data;
 
@@ -76,35 +76,38 @@ foreach_cb (GtkWidget *widget,
 }
 
 static void
+gb_greeter_window_apply_filter (GbGreeterWindow *self,
+                                GtkListBox      *list_box,
+                                GtkContainer    *container)
+{
+  gboolean visible = FALSE;
+
+  g_assert (GB_IS_GREETER_WINDOW (self));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+  g_assert (GTK_IS_CONTAINER (container));
+
+  gtk_list_box_invalidate_filter (list_box);
+  gtk_container_foreach (container, gb_greeter_window_apply_filter_cb, &visible);
+  gtk_widget_set_visible (GTK_WIDGET (container), visible);
+}
+
+static void
 gb_greeter_window__search_entry_changed (GbGreeterWindow *self,
                                          GtkSearchEntry  *search_entry)
 {
   const gchar *text;
-  gboolean visible;
 
   g_assert (GB_IS_GREETER_WINDOW (self));
   g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
 
-  text = gtk_entry_get_text (GTK_ENTRY (search_entry));
-
   g_clear_pointer (&self->pattern_spec, ide_pattern_spec_unref);
-
-  if (text != NULL)
+  if ((text = gtk_entry_get_text (GTK_ENTRY (search_entry))))
     self->pattern_spec = ide_pattern_spec_new (text);
 
-  gtk_list_box_invalidate_filter (self->my_projects_list_box);
-  visible = FALSE;
-  gtk_container_foreach (GTK_CONTAINER (self->my_projects_list_box),
-                         foreach_cb,
-                         &visible);
-  gtk_widget_set_visible (GTK_WIDGET (self->my_projects_container), visible);
-
-  gtk_list_box_invalidate_filter (self->other_projects_list_box);
-  visible = FALSE;
-  gtk_container_foreach (GTK_CONTAINER (self->other_projects_list_box),
-                         foreach_cb,
-                         &visible);
-  gtk_widget_set_visible (GTK_WIDGET (self->other_projects_container), visible);
+  gb_greeter_window_apply_filter (self, self->my_projects_list_box,
+                                  GTK_CONTAINER (self->my_projects_container));
+  gb_greeter_window_apply_filter (self, self->other_projects_list_box,
+                                  GTK_CONTAINER (self->other_projects_container));
 }
 
 static void
