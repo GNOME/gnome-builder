@@ -61,11 +61,12 @@
 #include "ide-symbol.h"
 
 #define DEFAULT_FONT_DESC "Monospace 11"
-#define ANIMATION_X_GROW  50
-#define ANIMATION_Y_GROW  30
+#define ANIMATION_X_GROW 50
+#define ANIMATION_Y_GROW 30
 #define SMALL_SCROLL_DURATION_MSEC 100
 #define LARGE_SCROLL_DURATION_MSEC 250
 #define FIXIT_LABEL_LEN_MAX 30
+#define SCROLL_REPLAY_DELAY 1000
 
 #define _GDK_RECTANGLE_X2(rect) ((rect)->x + (rect)->width)
 #define _GDK_RECTANGLE_Y2(rect) ((rect)->y + (rect)->height)
@@ -112,6 +113,8 @@ typedef struct
   gint                         target_line_offset;
   gunichar                     modifier;
   guint                        count;
+
+  guint                        delayed_scroll_replay;
 
   guint                        scroll_offset;
   gint                         cached_char_height;
@@ -4732,6 +4735,21 @@ ide_source_view_set_indent_style (IdeSourceView  *self,
     gtk_source_view_set_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (self), FALSE);
 }
 
+static gboolean
+ide_source_view_replay_scroll (gpointer data)
+{
+  IdeSourceView *self = data;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  priv->delayed_scroll_replay = 0;
+
+  ide_source_view_scroll_mark_onscreen (self, priv->scroll_mark);
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ide_source_view_size_allocate (GtkWidget     *widget,
                                GtkAllocation *allocation)
@@ -4753,7 +4771,13 @@ ide_source_view_size_allocate (GtkWidget     *widget,
    * has not yet reached our target location.
    */
   if (priv->scrolling_to_scroll_mark)
-    ide_source_view_scroll_mark_onscreen (self, priv->scroll_mark);
+    {
+      if (priv->delayed_scroll_replay != 0)
+        g_source_remove (priv->delayed_scroll_replay);
+      priv->delayed_scroll_replay = g_timeout_add (SCROLL_REPLAY_DELAY,
+                                                   ide_source_view_replay_scroll,
+                                                   self);
+    }
 
   IDE_EXIT;
 }
@@ -4765,6 +4789,12 @@ ide_source_view_dispose (GObject *object)
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   ide_source_view_clear_snippets (self);
+
+  if (priv->delayed_scroll_replay)
+    {
+      priv->delayed_scroll_replay = 0;
+      g_source_remove (priv->delayed_scroll_replay);
+    }
 
   g_clear_object (&priv->capture);
   g_clear_object (&priv->indenter);
