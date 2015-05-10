@@ -101,6 +101,8 @@ typedef struct
   GQueue                      *snippets;
   GtkSourceCompletionProvider *snippets_provider;
   GtkSourceSearchContext      *search_context;
+  IdeAnimation                *hadj_animation;
+  IdeAnimation                *vadj_animation;
 
   EggBindingSet               *file_setting_bindings;
   EggSignalGroup              *buffer_signals;
@@ -133,6 +135,7 @@ typedef struct
   guint                        overwrite_braces : 1;
   guint                        recording_macro : 1;
   guint                        rubberband_search : 1;
+  guint                        scrolling_to_scroll_mark : 1;
   guint                        show_grid_lines : 1;
   guint                        show_line_changes : 1;
   guint                        show_line_diagnostics : 1;
@@ -1285,17 +1288,8 @@ ide_source_view__buffer_loaded_cb (IdeSourceView *self,
       priv->completion_blocked = FALSE;
     }
 
-  /*
-   * FIXME:
-   *
-   * This will not always scroll to the position. It used to, because textview worked hard to scroll
-   * to the target location (when using scroll_to_mark). I think during the animation work
-   * everything broke. We need to do our own scroll_to_mark that will work around this.
-   *
-   * But I'm busy, so yeah. Sometime.
-   */
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
-  gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self), insert, 0.0, TRUE, 1.0, 0.5);
+  ide_source_view_scroll_to_mark (self, insert, 0.0, TRUE, 1.0, 0.5, TRUE);
 
   /*
    * Store the line offset so movements are correct.
@@ -1350,7 +1344,7 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
 
   g_clear_object (&search_settings);
 
-  /* Create scroll mark used by movements */
+  /* Create scroll mark used by movements and our scrolling helper */
   gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buffer), &iter);
   priv->scroll_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), NULL, &iter, TRUE);
 
@@ -4739,6 +4733,32 @@ ide_source_view_set_indent_style (IdeSourceView  *self,
 }
 
 static void
+ide_source_view_size_allocate (GtkWidget     *widget,
+                               GtkAllocation *allocation)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (allocation != NULL);
+
+  GTK_WIDGET_CLASS (ide_source_view_parent_class)->size_allocate (widget, allocation);
+
+  /*
+   * If we were in a scroll, and we got a size-allocate, we might need to adjust how far we
+   * are scrolling. This could happen while the view is calculating text layout sizes and
+   * has not yet reached our target location.
+   */
+  if (priv->scrolling_to_scroll_mark)
+    ide_source_view_scroll_mark_onscreen (self, priv->scroll_mark);
+
+  IDE_EXIT;
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -4755,6 +4775,9 @@ ide_source_view_dispose (GObject *object)
   g_clear_object (&priv->mode);
   g_clear_object (&priv->buffer_signals);
   g_clear_object (&priv->file_setting_bindings);
+
+  ide_clear_weak_pointer (&priv->hadj_animation);
+  ide_clear_weak_pointer (&priv->vadj_animation);
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->dispose (object);
 }
@@ -4989,6 +5012,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->focus_out_event = ide_source_view_focus_out_event;
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
+  widget_class->size_allocate = ide_source_view_size_allocate;
   widget_class->style_updated = ide_source_view_real_style_updated;
 
   text_view_class->draw_layer = ide_source_view_real_draw_layer;
@@ -6398,6 +6422,48 @@ ide_source_view_move_mark_onscreen (IdeSourceView *self,
   return TRUE;
 }
 
+static gboolean
+ide_source_view_mark_is_onscreen (IdeSourceView *self,
+                                  GtkTextMark   *mark)
+{
+  GtkTextBuffer *buffer;
+  GdkRectangle visible_rect;
+  GdkRectangle mark_rect;
+  GtkTextIter iter;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_TEXT_MARK (mark));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+
+  ide_source_view_get_visible_rect (self, &visible_rect);
+  gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &iter, &mark_rect);
+
+  return (_GDK_RECTANGLE_CONTAINS (&visible_rect, &mark_rect));
+}
+
+static void
+ide_source_view__vadj_animation_completed (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  /*
+   * If the mark we were scrolling to is not yet on screen, then just wait for another size
+   * allocate so that we can continue making progress.
+   */
+  if (!ide_source_view_mark_is_onscreen (self, priv->scroll_mark))
+    IDE_EXIT;
+
+  priv->scrolling_to_scroll_mark = FALSE;
+
+  IDE_EXIT;
+}
+
 void
 ide_source_view_scroll_to_iter (IdeSourceView     *self,
                                 const GtkTextIter *iter,
@@ -6409,6 +6475,7 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextView *text_view = (GtkTextView *)self;
+  GtkTextBuffer *buffer;
   GtkAdjustment *hadj;
   GtkAdjustment *vadj;
   GdkFrameClock *frame_clock;
@@ -6429,6 +6496,10 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
   g_return_if_fail (xalign <= 1.0);
   g_return_if_fail (yalign >= 0.0);
   g_return_if_fail (yalign <= 1.0);
+
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  gtk_text_buffer_move_mark (buffer, priv->scroll_mark, iter);
 
   gtk_text_view_get_visible_rect (text_view, &real_visible_rect);
   ide_source_view_get_visible_rect (self, &visible_rect);
@@ -6528,18 +6599,41 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
       else if (difference <= page_size)
         duration_msec = SMALL_SCROLL_DURATION_MSEC;
 
-      ide_object_animate (hadj,
-                          IDE_ANIMATION_EASE_OUT_CUBIC,
-                          duration_msec,
-                          frame_clock,
-                          "value", xvalue,
-                          NULL);
-      ide_object_animate (vadj,
-                          IDE_ANIMATION_EASE_OUT_CUBIC,
-                          duration_msec,
-                          frame_clock,
-                          "value", yvalue,
-                          NULL);
+      priv->scrolling_to_scroll_mark = TRUE;
+
+      if (priv->hadj_animation != NULL)
+        {
+          ide_animation_stop (priv->hadj_animation);
+          ide_clear_weak_pointer (&priv->hadj_animation);
+        }
+
+      priv->hadj_animation =
+        ide_object_animate (hadj,
+                            IDE_ANIMATION_EASE_OUT_CUBIC,
+                            duration_msec,
+                            frame_clock,
+                            "value", xvalue,
+                            NULL);
+      g_object_add_weak_pointer (G_OBJECT (priv->hadj_animation),
+                                 (gpointer *)&priv->hadj_animation);
+
+      if (priv->vadj_animation != NULL)
+        {
+          ide_animation_stop (priv->vadj_animation);
+          ide_clear_weak_pointer (&priv->vadj_animation);
+        }
+
+      priv->vadj_animation =
+        ide_object_animate_full (vadj,
+                                 IDE_ANIMATION_EASE_OUT_CUBIC,
+                                 duration_msec,
+                                 frame_clock,
+                                 (GDestroyNotify)ide_source_view__vadj_animation_completed,
+                                 self,
+                                 "value", yvalue,
+                                 NULL);
+      g_object_add_weak_pointer (G_OBJECT (priv->vadj_animation),
+                                 (gpointer *)&priv->vadj_animation);
     }
   else
     {
