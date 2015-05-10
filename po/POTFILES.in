@@ -29,8 +29,10 @@
 contrib/gedit/gedit-menu-stack-switcher.c
 contrib/nautilus/nautilus-floating-bar.c
 contrib/search/trie.c
+contrib/xml/xml-reader.c
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml
+data/ui/gb-greeter-window.ui
 libide/autotools/ide-autotools-build-system.c
 libide/autotools/ide-autotools-build-task.c
 libide/autotools/ide-autotools-builder.c
@@ -44,6 +46,8 @@ libide/clang/ide-clang-service.c
 libide/clang/ide-clang-translation-unit.c
 libide/devhelp/ide-devhelp-search-provider.c
 libide/devhelp/ide-devhelp-search-result.c
+libide/doap/ide-doap-person.c
+libide/doap/ide-doap.c
 libide/editorconfig/ide-editorconfig-file-settings.c
 libide/gca/ide-gca-diagnostic-provider.c
 libide/gca/ide-gca-service.c
@@ -121,6 +125,8 @@ src/editor/gb-editor-view-actions.c
 src/editor/gb-editor-view.c
 src/editor/gb-editor-workspace.c
 src/gd/gd-tagged-entry.c
+src/greeter/gb-greeter-project-row.c
+src/greeter/gb-greeter-window.c
 src/html/gb-html-document.c
 src/html/gb-html-view.c
 src/keybindings/gb-keybindings.c
