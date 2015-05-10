@@ -104,6 +104,7 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   g_autoptr(GDateTime) last_modified_at = NULL;
   g_autoptr(IdeDoap) doap = NULL;
   const gchar *filename;
+  const gchar *shortdesc = NULL;
   guint64 mtime;
 
   IDE_ENTRY;
@@ -147,9 +148,12 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
           g_free (name);
           name = g_strdup (doap_name);
         }
+
+      shortdesc = ide_doap_get_shortdesc (doap);
     }
 
   project_info = g_object_new (IDE_TYPE_PROJECT_INFO,
+                               "description", shortdesc,
                                "directory", directory,
                                "doap", doap,
                                "file", file,
