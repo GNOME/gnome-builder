@@ -170,6 +170,7 @@ ide_recent_projects_load_recent (IdeRecentProjects *self,
       project_info = g_object_new (IDE_TYPE_PROJECT_INFO,
                                    "directory", directory,
                                    "file", project_file,
+                                   "is-recent", TRUE,
                                    "last-modified-at", last_modified_at,
                                    "name", name,
                                    NULL);

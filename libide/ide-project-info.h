@@ -31,17 +31,20 @@ gint         ide_project_info_compare              (IdeProjectInfo *info1,
                                                     IdeProjectInfo *info2);
 GFile       *ide_project_info_get_file             (IdeProjectInfo *self);
 GFile       *ide_project_info_get_directory        (IdeProjectInfo *self);
+gboolean     ide_project_info_get_is_recent        (IdeProjectInfo *self);
 gint         ide_project_info_get_priority         (IdeProjectInfo *self);
+GDateTime   *ide_project_info_get_last_modified_at (IdeProjectInfo *self);
 const gchar *ide_project_info_get_name             (IdeProjectInfo *self);
 void         ide_project_info_set_file             (IdeProjectInfo *self,
                                                     GFile          *file);
 void         ide_project_info_set_directory        (IdeProjectInfo *self,
                                                     GFile          *directory);
+void         ide_project_info_set_is_recent        (IdeProjectInfo *self,
+                                                    gboolean        is_recent);
 void         ide_project_info_set_name             (IdeProjectInfo *self,
                                                     const gchar    *name);
 void         ide_project_info_set_priority         (IdeProjectInfo *self,
                                                     gint            priority);
-GDateTime   *ide_project_info_get_last_modified_at (IdeProjectInfo *self);
 
 G_END_DECLS
 

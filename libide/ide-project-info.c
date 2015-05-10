@@ -46,6 +46,8 @@ struct _IdeProjectInfo
   gchar     *name;
 
   gint       priority;
+
+  guint      is_recent : 1;
 };
 
 G_DEFINE_TYPE (IdeProjectInfo, ide_project_info, G_TYPE_OBJECT)
@@ -54,6 +56,7 @@ enum {
   PROP_0,
   PROP_DIRECTORY,
   PROP_FILE,
+  PROP_IS_RECENT,
   PROP_LAST_MODIFIED_AT,
   PROP_NAME,
   PROP_PRIORITY,
@@ -189,6 +192,29 @@ ide_project_info_set_name (IdeProjectInfo *self,
     }
 }
 
+gboolean
+ide_project_info_get_is_recent (IdeProjectInfo *self)
+{
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+
+  return self->is_recent;
+}
+
+void
+ide_project_info_set_is_recent (IdeProjectInfo *self,
+                                gboolean        is_recent)
+{
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+
+  is_recent = !!is_recent;
+
+  if (self->is_recent != is_recent)
+    {
+      self->is_recent = is_recent;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_IS_RECENT]);
+    }
+}
+
 static void
 ide_project_info_finalize (GObject *object)
 {
@@ -218,6 +244,10 @@ ide_project_info_get_property (GObject    *object,
 
     case PROP_FILE:
       g_value_set_object (value, ide_project_info_get_file (self));
+      break;
+
+    case PROP_IS_RECENT:
+      g_value_set_boolean (value, ide_project_info_get_is_recent (self));
       break;
 
     case PROP_LAST_MODIFIED_AT:
@@ -253,6 +283,10 @@ ide_project_info_set_property (GObject      *object,
 
     case PROP_FILE:
       ide_project_info_set_file (self, g_value_get_object (value));
+      break;
+
+    case PROP_IS_RECENT:
+      ide_project_info_set_is_recent (self, g_value_get_boolean (value));
       break;
 
     case PROP_LAST_MODIFIED_AT:
@@ -301,6 +335,13 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
                          _("The toplevel project file"),
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  gParamSpecs [PROP_IS_RECENT] =
+    g_param_spec_boolean ("is-recent",
+                          _("Is Recent"),
+                          _("Is Recent"),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_LAST_MODIFIED_AT] =
     g_param_spec_boxed ("last-modified-at",
