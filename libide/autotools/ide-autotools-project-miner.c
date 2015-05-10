@@ -67,7 +67,7 @@ ide_autotools_project_miner_find_doap (IdeAutotoolsProjectMiner *self,
     {
       g_autofree gchar *name = NULL;
 
-      name = g_file_info_get_name (file_info);
+      name = g_strdup (g_file_info_get_name (file_info));
 
       g_clear_object (&file_info);
 
