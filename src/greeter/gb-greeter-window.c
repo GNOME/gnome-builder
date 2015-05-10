@@ -69,6 +69,11 @@ gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
   GbGreeterProjectRow *row;
   gsize i;
 
+  /*
+   * TODO: We ignore removed out of simplicity for now.
+   *       But IdeRecentProjects doesn't currently remove anything anyway.
+   */
+
   g_assert (GB_IS_GREETER_WINDOW (self));
   g_assert (G_IS_LIST_MODEL (list_model));
   g_assert (IDE_IS_RECENT_PROJECTS (recent_projects));
@@ -76,17 +81,20 @@ gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
   for (i = 0; i < added; i++)
     {
       IdeProjectInfo *project_info;
+      GtkListBox *list_box;
 
       project_info = g_list_model_get_item (list_model, position + i);
 
-      if (!ide_project_info_get_is_recent (project_info))
-        continue;
+      if (ide_project_info_get_is_recent (project_info))
+        list_box = self->my_projects_list_box;
+      else
+        list_box = self->other_projects_list_box;
 
       row = g_object_new (GB_TYPE_GREETER_PROJECT_ROW,
                           "visible", TRUE,
                           "project-info", project_info,
                           NULL);
-      gtk_list_box_insert (self->my_projects_list_box, GTK_WIDGET (row), position + i);
+      gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (row));
     }
 }
 
