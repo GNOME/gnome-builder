@@ -17,13 +17,17 @@
  */
 
 #define GLIB_DISABLE_DEPRECATION_WARNINGS
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wuninitialized"
-#pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
-#pragma clang diagnostic ignored "-Winvalid-offsetof"
+#ifdef __clang__
+# pragma clang diagnostic push
+# pragma clang diagnostic ignored "-Wuninitialized"
+# pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
+# pragma clang diagnostic ignored "-Winvalid-offsetof"
+#endif
 #include <gjs/gjs.h>
 #include <gjs/gjs-module.h>
-#pragma clang diagnostic pop
+#ifdef __clang__
+# pragma clang diagnostic pop
+#endif
 #include <gi/object.h>
 #include <glib/gi18n.h>
 #undef GLIB_DISABLE_DEPRECATION_WARNINGS
