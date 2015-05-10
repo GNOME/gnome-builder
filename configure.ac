@@ -166,9 +166,9 @@ PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              pygobject-3.0 >= pygobject_required_version])
 PKG_CHECK_MODULES(SEARCH,   [glib-2.0 >= glib_required_version])
 PKG_CHECK_MODULES(GEDIT,    [glib-2.0 >= glib_required_version
-			     gtk+-3.0 >= gtk_required_version])
+                             gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(NAUTILUS, [glib-2.0 >= glib_required_version
-			     gtk+-3.0 >= gtk_required_version])
+                             gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(XML,      [gio-2.0 >= glib_required_version
 			     libxml-2.0 >= libxml_required_version])
 
@@ -327,10 +327,10 @@ AC_CONFIG_FILES([
 
 	contrib/Makefile
 	contrib/egg/Makefile
-	contrib/search/Makefile
 	contrib/gedit/Makefile
-	contrib/nautilus/Makefile
 	contrib/libeditorconfig/Makefile
+	contrib/nautilus/Makefile
+	contrib/search/Makefile
 	contrib/xml/Makefile
 
 	libide/ide-debug.h
