@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include "ide-doap.h"
+#include "ide-macros.h"
 #include "ide-project-info.h"
 
 /**
@@ -46,6 +47,7 @@ struct _IdeProjectInfo
   GFile     *directory;
   GFile     *file;
   gchar     *name;
+  gchar     *description;
 
   gint       priority;
 
@@ -56,6 +58,7 @@ G_DEFINE_TYPE (IdeProjectInfo, ide_project_info, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_DESCRIPTION,
   PROP_DIRECTORY,
   PROP_DOAP,
   PROP_FILE,
@@ -157,11 +160,47 @@ ide_project_info_get_last_modified_at (IdeProjectInfo *self)
 }
 
 const gchar *
+ide_project_info_get_description (IdeProjectInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
+
+  return self->description;
+}
+
+void
+ide_project_info_set_description (IdeProjectInfo *self,
+                                  const gchar    *description)
+{
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+
+  if (!ide_str_equal0 (self->description, description))
+    {
+      g_free (self->description);
+      self->description = g_strdup (description);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DESCRIPTION]);
+    }
+}
+
+const gchar *
 ide_project_info_get_name (IdeProjectInfo *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
 
   return self->name;
+}
+
+void
+ide_project_info_set_name (IdeProjectInfo *self,
+                           const gchar    *name)
+{
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+
+  if (!ide_str_equal0 (self->name, name))
+    {
+      g_free (self->name);
+      self->name = g_strdup (name);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_NAME]);
+    }
 }
 
 void
@@ -200,20 +239,6 @@ ide_project_info_set_last_modified_at (IdeProjectInfo *self,
     }
 }
 
-void
-ide_project_info_set_name (IdeProjectInfo *self,
-                           const gchar    *name)
-{
-  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
-
-  if (name != self->name)
-    {
-      g_free (self->name);
-      self->name = g_strdup (name);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_NAME]);
-    }
-}
-
 gboolean
 ide_project_info_get_is_recent (IdeProjectInfo *self)
 {
@@ -243,6 +268,7 @@ ide_project_info_finalize (GObject *object)
   IdeProjectInfo *self = (IdeProjectInfo *)object;
 
   g_clear_pointer (&self->last_modified_at, g_date_time_unref);
+  g_clear_pointer (&self->description, g_free);
   g_clear_pointer (&self->name, g_free);
   g_clear_object (&self->directory);
   g_clear_object (&self->file);
@@ -260,6 +286,10 @@ ide_project_info_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_DESCRIPTION:
+      g_value_set_string (value, ide_project_info_get_description (self));
+      break;
+
     case PROP_DIRECTORY:
       g_value_set_object (value, ide_project_info_get_directory (self));
       break;
@@ -303,6 +333,10 @@ ide_project_info_set_property (GObject      *object,
 
   switch (prop_id)
     {
+      case PROP_DESCRIPTION:
+        ide_project_info_set_description (self, g_value_get_string (value));
+        break;
+
     case PROP_DIRECTORY:
       ide_project_info_set_directory (self, g_value_get_object (value));
       break;
@@ -344,6 +378,13 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
   object_class->finalize = ide_project_info_finalize;
   object_class->get_property = ide_project_info_get_property;
   object_class->set_property = ide_project_info_set_property;
+
+  gParamSpecs [PROP_DESCRIPTION] =
+    g_param_spec_string ("description",
+                         _("Description"),
+                         _("The project description"),
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
