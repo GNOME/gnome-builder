@@ -72,7 +72,7 @@
             <property name="vexpand">false</property>
             <property name="search-mode-enabled" bind-source="search_button" bind-property="active" bind-flags="bidirectional"/>
             <child internal-child="entry">
-              <object class="GtkSearchEntry">
+              <object class="GtkSearchEntry" id="search_entry">
                 <property name="placeholder-text"></property>
                 <property name="width-chars">45</property>
               </object>

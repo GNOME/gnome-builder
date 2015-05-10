@@ -34,10 +34,12 @@ struct _GbGreeterWindow
 
   EggSignalGroup       *signal_group;
   IdeRecentProjects    *recent_projects;
+  IdePatternSpec       *pattern_spec;
 
   GtkWidget            *header_bar;
   GtkListBox           *my_projects_list_box;
   GtkListBox           *other_projects_list_box;
+  GtkSearchEntry       *search_entry;
 };
 
 G_DEFINE_TYPE (GbGreeterWindow, gb_greeter_window, GTK_TYPE_APPLICATION_WINDOW)
@@ -56,6 +58,26 @@ gb_greeter_window_get_recent_projects (GbGreeterWindow *self)
   g_return_val_if_fail (GB_IS_GREETER_WINDOW (self), NULL);
 
   return self->recent_projects;
+}
+
+static void
+gb_greeter_window__search_entry_changed (GbGreeterWindow *self,
+                                         GtkSearchEntry  *search_entry)
+{
+  const gchar *text;
+
+  g_assert (GB_IS_GREETER_WINDOW (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
+
+  text = gtk_entry_get_text (GTK_ENTRY (search_entry));
+
+  g_clear_pointer (&self->pattern_spec, ide_pattern_spec_unref);
+
+  if (text != NULL)
+    self->pattern_spec = ide_pattern_spec_new (text);
+
+  gtk_list_box_invalidate_filter (self->my_projects_list_box);
+  gtk_list_box_invalidate_filter (self->other_projects_list_box);
 }
 
 static void
@@ -137,11 +159,33 @@ gb_greeter_window_set_recent_projects (GbGreeterWindow   *self,
     }
 }
 
+static gboolean
+gb_greeter_window_filter_row (GtkListBoxRow *row,
+                              gpointer       user_data)
+{
+  GbGreeterWindow *self = user_data;
+  GbGreeterProjectRow *project_row = (GbGreeterProjectRow *)row;
+  const gchar *search_text;
+  gboolean ret;
+
+  g_assert (GB_IS_GREETER_WINDOW (self));
+  g_assert (GB_IS_GREETER_PROJECT_ROW (project_row));
+
+  if (self->pattern_spec == NULL)
+    return TRUE;
+
+  search_text = gb_greeter_project_row_get_search_text (project_row);
+  ret = ide_pattern_spec_match (self->pattern_spec, search_text);
+
+  return ret;
+}
+
 static void
 gb_greeter_window_finalize (GObject *object)
 {
   GbGreeterWindow *self = (GbGreeterWindow *)object;
 
+  g_clear_pointer (&self->pattern_spec, ide_pattern_spec_unref);
   g_clear_object (&self->signal_group);
   g_clear_object (&self->recent_projects);
 
@@ -209,6 +253,7 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, header_bar);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, my_projects_list_box);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, other_projects_list_box);
+  gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, search_entry);
 
   g_type_ensure (GB_TYPE_GREETER_PROJECT_ROW);
   g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
@@ -226,6 +271,12 @@ gb_greeter_window_init (GbGreeterWindow *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  g_signal_connect_object (self->search_entry,
+                           "changed",
+                           G_CALLBACK (gb_greeter_window__search_entry_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   gtk_list_box_set_header_func (self->my_projects_list_box,
                                 gb_gtk_list_box_row_separator_func,
                                 NULL, NULL);
@@ -239,4 +290,11 @@ gb_greeter_window_init (GbGreeterWindow *self)
   gtk_list_box_set_sort_func (self->other_projects_list_box,
                               gb_greeter_window_sort_rows,
                               NULL, NULL);
+
+  gtk_list_box_set_filter_func (self->my_projects_list_box,
+                                gb_greeter_window_filter_row,
+                                self, NULL);
+  gtk_list_box_set_filter_func (self->other_projects_list_box,
+                                gb_greeter_window_filter_row,
+                                self, NULL);
 }

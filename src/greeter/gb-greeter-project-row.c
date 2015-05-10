@@ -33,7 +33,7 @@ struct _GbGreeterProjectRow
 
   IdeProjectInfo *project_info;
   EggBindingSet  *bindings;
-  GFile          *home_dir;
+  gchar          *search_text;
 
   GtkLabel       *date_label;
   GtkLabel       *description_label;
@@ -59,6 +59,49 @@ gb_greeter_project_row_get_project_info (GbGreeterProjectRow *self)
   g_return_val_if_fail (GB_IS_GREETER_PROJECT_ROW (self), NULL);
 
   return self->project_info;
+}
+
+static void
+gb_greeter_project_row_create_search_text (GbGreeterProjectRow *self,
+                                           IdeProjectInfo      *project_info)
+{
+  const gchar *tmp;
+  IdeDoap *doap;
+  GString *str;
+
+  g_assert (GB_IS_GREETER_PROJECT_ROW (self));
+
+  str = g_string_new (NULL);
+
+  if ((tmp = ide_project_info_get_name (project_info)))
+    {
+      g_autofree gchar *downcase = g_utf8_strdown (g_strdup (tmp), -1);
+
+      g_string_append (str, tmp);
+      g_string_append (str, " ");
+      g_string_append (str, downcase);
+      g_string_append (str, " ");
+    }
+
+  if ((tmp = ide_project_info_get_description (project_info)))
+    {
+      g_string_append (str, tmp);
+      g_string_append (str, " ");
+    }
+
+  doap = ide_project_info_get_doap (project_info);
+
+  if (doap != NULL)
+    {
+      if ((tmp = ide_doap_get_description (doap)))
+        {
+          g_string_append (str, tmp);
+          g_string_append (str, " ");
+        }
+    }
+
+  g_free (self->search_text);
+  self->search_text = g_strdelimit (g_string_free (str, FALSE), "\n", ' ');
 }
 
 static void
@@ -103,8 +146,13 @@ gb_greeter_project_row_set_project_info (GbGreeterProjectRow *self,
   if (g_set_object (&self->project_info, project_info))
     {
       egg_binding_set_set_source (self->bindings, project_info);
+
       if (project_info != NULL)
-        gb_greeter_project_row_add_languages (self, project_info);
+        {
+          gb_greeter_project_row_add_languages (self, project_info);
+          gb_greeter_project_row_create_search_text (self, project_info);
+        }
+
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_PROJECT_INFO]);
     }
 }
@@ -163,6 +211,14 @@ truncate_location (GBinding     *binding,
   return TRUE;
 }
 
+const gchar *
+gb_greeter_project_row_get_search_text (GbGreeterProjectRow *self)
+{
+  g_return_val_if_fail (GB_IS_GREETER_PROJECT_ROW (self), NULL);
+
+  return self->search_text;
+}
+
 static void
 gb_greeter_project_row_finalize (GObject *object)
 {
@@ -170,7 +226,7 @@ gb_greeter_project_row_finalize (GObject *object)
 
   g_clear_object (&self->project_info);
   g_clear_object (&self->bindings);
-  g_clear_object (&self->home_dir);
+  g_clear_pointer (&self->search_text, g_free);
 
   G_OBJECT_CLASS (gb_greeter_project_row_parent_class)->finalize (object);
 }
