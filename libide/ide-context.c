@@ -44,6 +44,8 @@
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
 
+#include "doap/ide-doap.h"
+
 #define RESTORE_FILES_MAX_FILES 20
 
 struct _IdeContext
@@ -54,6 +56,7 @@ struct _IdeContext
   IdeBufferManager         *buffer_manager;
   IdeBuildSystem           *build_system;
   IdeDeviceManager         *device_manager;
+  IdeDoap                  *doap;
   GtkRecentManager         *recent_manager;
   IdeScriptManager         *script_manager;
   IdeSearchEngine          *search_engine;
@@ -536,6 +539,7 @@ ide_context_finalize (GObject *object)
 
   g_clear_object (&self->build_system);
   g_clear_object (&self->device_manager);
+  g_clear_object (&self->doap);
   g_clear_object (&self->project);
   g_clear_object (&self->project_file);
   g_clear_object (&self->recent_manager);
@@ -796,40 +800,70 @@ ide_context_init (IdeContext *self)
 }
 
 static void
-ide_context_init_project_name_cb (GObject      *object,
-                                  GAsyncResult *result,
-                                  gpointer      user_data)
+ide_context_load_doap_worker (GTask        *task,
+                              gpointer      source_object,
+                              gpointer      task_data,
+                              GCancellable *cancellable)
 {
-  IdeContext *self;
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(GFileInfo) file_info = NULL;
-  GFile *file = (GFile *)object;
+  IdeContext *self = source_object;
+  g_autofree gchar *name = NULL;
+  g_autoptr(GFile) directory = NULL;
+  g_autoptr(GFileEnumerator) enumerator = NULL;
 
-  g_return_if_fail (G_IS_FILE (file));
-  g_return_if_fail (G_IS_TASK (task));
+  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_CONTEXT (self));
 
-  self = g_task_get_source_object (task);
-
-  file_info = g_file_query_info_finish (file, result, NULL);
-
-  if (file_info &&
-      (G_FILE_TYPE_DIRECTORY == g_file_info_get_file_type (file_info)))
-    {
-      g_autofree gchar *name = NULL;
-
-      name = g_file_get_basename (file);
-      _ide_project_set_name (self->project, name);
-    }
+  if (g_file_query_file_type (self->project_file, 0, cancellable) == G_FILE_TYPE_DIRECTORY)
+    directory = g_object_ref (self->project_file);
   else
+    directory = g_file_get_parent (self->project_file);
+
+  name = g_file_get_basename (directory);
+
+  enumerator = g_file_enumerate_children (directory,
+                                          G_FILE_ATTRIBUTE_STANDARD_NAME,
+                                          G_FILE_QUERY_INFO_NONE,
+                                          cancellable,
+                                          NULL);
+
+  if (enumerator != NULL)
     {
-      g_autoptr(GFile) parent = NULL;
-      g_autofree gchar *name = NULL;
+      gpointer infoptr;
 
-      parent = g_file_get_parent (file);
-      name = g_file_get_basename (parent);
+      while ((infoptr = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
+        {
+          g_autoptr(GFileInfo) file_info = infoptr;
+          const gchar *filename;
 
-      _ide_project_set_name (self->project, name);
+          filename = g_file_info_get_name (file_info);
+
+          if (!ide_str_empty0 (filename) && g_str_has_suffix (filename, ".doap"))
+            {
+              g_autoptr(GFile) file = NULL;
+              g_autoptr(IdeDoap) doap = NULL;
+
+              file = g_file_get_child (directory, filename);
+              doap = ide_doap_new ();
+
+              if (ide_doap_load_from_file (doap, file, cancellable, NULL))
+                {
+                  const gchar *doap_name;
+
+                  if ((doap_name = ide_doap_get_name (doap)))
+                    {
+                      g_free (name);
+                      name = g_strdup (doap_name);
+                    }
+
+                  self->doap = g_object_ref (doap);
+
+                  break;
+                }
+            }
+        }
     }
+
+  _ide_project_set_name (self->project, name);
 
   g_task_return_boolean (task, TRUE);
 }
@@ -846,17 +880,7 @@ ide_context_init_project_name (gpointer             source_object,
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
   task = g_task_new (source_object, cancellable, callback, user_data);
-
-  if (!ide_project_get_name (self->project))
-    g_file_query_info_async (self->project_file,
-                             G_FILE_ATTRIBUTE_STANDARD_TYPE,
-                             G_FILE_QUERY_INFO_NONE,
-                             G_PRIORITY_DEFAULT,
-                             g_task_get_cancellable (task),
-                             ide_context_init_project_name_cb,
-                             g_object_ref (task));
-  else
-    g_task_return_boolean (task, TRUE);
+  g_task_run_in_thread (task, ide_context_load_doap_worker);
 }
 
 static void
@@ -1309,6 +1333,9 @@ ide_context_init_add_recent (gpointer             source_object,
   recent_data.app_exec = app_exec;
   recent_data.groups = (gchar **)groups;
   recent_data.is_private = FALSE;
+
+  if (self->doap != NULL)
+    recent_data.description = (gchar *)ide_doap_get_shortdesc (self->doap);
 
   IDE_TRACE_MSG ("Registering %s as recent project.", uri);
 
