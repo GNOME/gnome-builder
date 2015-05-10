@@ -61,8 +61,8 @@ egg_settings_sandwich_get_primary_settings (EggSettingsSandwich *self)
 }
 
 static void
-egg_settings_sandwich_update_cache (EggSettingsSandwich *self,
-                                    const gchar         *key)
+egg_settings_sandwich_cache_key (EggSettingsSandwich *self,
+                                 const gchar         *key)
 {
   GSettings *settings;
   GVariant *value;
@@ -90,6 +90,20 @@ egg_settings_sandwich_update_cache (EggSettingsSandwich *self,
 }
 
 static void
+egg_settings_sandwich_update_cache (EggSettingsSandwich *self)
+{
+  gchar **keys;
+  gsize i;
+
+  g_assert (EGG_IS_SETTINGS_SANDWICH (self));
+
+  keys = g_settings_list_keys (self->memory_settings);
+  for (i = 0; keys [i]; i++)
+    egg_settings_sandwich_cache_key (self, keys [i]);
+  g_strfreev (keys);
+}
+
+static void
 egg_settings_sandwich__settings_changed (EggSettingsSandwich *self,
                                          const gchar         *key,
                                          GSettings           *settings)
@@ -98,7 +112,7 @@ egg_settings_sandwich__settings_changed (EggSettingsSandwich *self,
   g_assert (key != NULL);
   g_assert (G_IS_SETTINGS (settings));
 
-  egg_settings_sandwich_update_cache (self, key);
+  egg_settings_sandwich_cache_key (self, key);
 }
 
 static void
@@ -373,6 +387,8 @@ egg_settings_sandwich_append (EggSettingsSandwich *self,
                            G_CALLBACK (egg_settings_sandwich__settings_changed),
                            self,
                            G_CONNECT_SWAPPED);
+
+  egg_settings_sandwich_update_cache (self);
 }
 
 void
