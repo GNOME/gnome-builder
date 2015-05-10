@@ -90,6 +90,20 @@ gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
     }
 }
 
+static gint
+gb_greeter_window_sort_rows (GtkListBoxRow *row1,
+                             GtkListBoxRow *row2,
+                             gpointer       user_data)
+{
+  IdeProjectInfo *info1;
+  IdeProjectInfo *info2;
+
+  info1 = gb_greeter_project_row_get_project_info (GB_GREETER_PROJECT_ROW (row1));
+  info2 = gb_greeter_project_row_get_project_info (GB_GREETER_PROJECT_ROW (row2));
+
+  return ide_project_info_compare (info1, info2);
+}
+
 void
 gb_greeter_window_set_recent_projects (GbGreeterWindow   *self,
                                        IdeRecentProjects *recent_projects)
@@ -207,4 +221,11 @@ gb_greeter_window_init (GbGreeterWindow *self)
   gtk_list_box_set_header_func (self->my_projects_list_box,
                                 gb_gtk_list_box_row_separator_func,
                                 NULL, NULL);
+
+  gtk_list_box_set_sort_func (self->my_projects_list_box,
+                              gb_greeter_window_sort_rows,
+                              NULL, NULL);
+  gtk_list_box_set_sort_func (self->other_projects_list_box,
+                              gb_greeter_window_sort_rows,
+                              NULL, NULL);
 }
