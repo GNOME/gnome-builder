@@ -1311,7 +1311,7 @@ ide_context_init_add_recent (gpointer             source_object,
 {
   IdeContext *self = source_object;
   GtkRecentData recent_data = { 0 };
-  const gchar *groups[] = { "X-GNOME-Builder-Project", NULL };
+  g_autoptr(GPtrArray) groups = NULL;
   g_autoptr(GTask) task = NULL;
   g_autofree gchar *uri = NULL;
   g_autofree gchar *app_exec = NULL;
@@ -1331,11 +1331,29 @@ ide_context_init_add_recent (gpointer             source_object,
   recent_data.mime_type = "application/x-builder-project";
   recent_data.app_name = (gchar *)ide_get_program_name ();
   recent_data.app_exec = app_exec;
-  recent_data.groups = (gchar **)groups;
   recent_data.is_private = FALSE;
 
+  /* attach project description to recent info */
   if (self->doap != NULL)
     recent_data.description = (gchar *)ide_doap_get_shortdesc (self->doap);
+
+  /* attach discovered languages to recent info */
+  groups = g_ptr_array_new_with_free_func (g_free);
+  g_ptr_array_add (groups, g_strdup ("X-GNOME-Builder-Project"));
+  if (self->doap != NULL)
+    {
+      gchar **languages;
+      gsize i;
+
+      if ((languages = ide_doap_get_languages (self->doap)))
+        {
+          for (i = 0; languages [i]; i++)
+            g_ptr_array_add (groups,
+                             g_strdup_printf ("X-GNOME-Builder-Language:%s", languages [i]));
+        }
+    }
+  g_ptr_array_add (groups, NULL);
+  recent_data.groups = (gchar **)groups->pdata;
 
   IDE_TRACE_MSG ("Registering %s as recent project.", uri);
 
