@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.15 -->
+  <template class="GbGreeterPillBox" parent="GtkEventBox">
+    <style>
+      <class name="pill-box"/>
+    </style>
+    <child>
+      <object class="GtkLabel" id="label">
+        <property name="xpad">6</property>
+        <property name="ypad">3</property>
+        <property name="hexpand">false</property>
+        <property name="valign">baseline</property>
+        <property name="visible">true</property>
+        <attributes>
+          <attribute name="scale" value="0.833333"/>
+        </attributes>
+      </object>
+    </child>
+  </template>
+</interface>
