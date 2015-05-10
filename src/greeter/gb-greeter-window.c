@@ -38,7 +38,6 @@ struct _GbGreeterWindow
 
   GtkWidget            *header_bar;
   GtkBox               *my_projects_container;
-  GtkLabel             *my_projects_placeholder;
   GtkListBox           *my_projects_list_box;
   GtkBox               *other_projects_container;
   GtkListBox           *other_projects_list_box;
@@ -78,7 +77,7 @@ gb_greeter_window_apply_filter_cb (GtkWidget *widget,
 static void
 gb_greeter_window_apply_filter (GbGreeterWindow *self,
                                 GtkListBox      *list_box,
-                                GtkContainer    *container)
+                                GtkWidget       *container)
 {
   gboolean visible = FALSE;
 
@@ -87,27 +86,37 @@ gb_greeter_window_apply_filter (GbGreeterWindow *self,
   g_assert (GTK_IS_CONTAINER (container));
 
   gtk_list_box_invalidate_filter (list_box);
-  gtk_container_foreach (container, gb_greeter_window_apply_filter_cb, &visible);
+  gtk_container_foreach (GTK_CONTAINER (list_box), gb_greeter_window_apply_filter_cb, &visible);
   gtk_widget_set_visible (GTK_WIDGET (container), visible);
+}
+
+static void
+gb_greeter_window_apply_filter_all (GbGreeterWindow *self)
+{
+  const gchar *text;
+
+  g_assert (GB_IS_GREETER_WINDOW (self));
+
+  g_clear_pointer (&self->pattern_spec, ide_pattern_spec_unref);
+  if ((text = gtk_entry_get_text (GTK_ENTRY (self->search_entry))))
+    self->pattern_spec = ide_pattern_spec_new (text);
+
+  gb_greeter_window_apply_filter (self,
+                                  self->my_projects_list_box,
+                                  GTK_WIDGET (self->my_projects_container));
+  gb_greeter_window_apply_filter (self,
+                                  self->other_projects_list_box,
+                                  GTK_WIDGET (self->other_projects_container));
 }
 
 static void
 gb_greeter_window__search_entry_changed (GbGreeterWindow *self,
                                          GtkSearchEntry  *search_entry)
 {
-  const gchar *text;
-
   g_assert (GB_IS_GREETER_WINDOW (self));
   g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
 
-  g_clear_pointer (&self->pattern_spec, ide_pattern_spec_unref);
-  if ((text = gtk_entry_get_text (GTK_ENTRY (search_entry))))
-    self->pattern_spec = ide_pattern_spec_new (text);
-
-  gb_greeter_window_apply_filter (self, self->my_projects_list_box,
-                                  GTK_CONTAINER (self->my_projects_container));
-  gb_greeter_window_apply_filter (self, self->other_projects_list_box,
-                                  GTK_CONTAINER (self->other_projects_container));
+  gb_greeter_window_apply_filter_all (self);
 }
 
 static void
@@ -148,6 +157,8 @@ gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
                           NULL);
       gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (row));
     }
+
+  gb_greeter_window_apply_filter_all (self);
 }
 
 static gint
@@ -283,7 +294,6 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, header_bar);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, my_projects_container);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, my_projects_list_box);
-  gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, my_projects_placeholder);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, other_projects_container);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, other_projects_list_box);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, search_entry);

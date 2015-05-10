@@ -126,11 +126,6 @@
                                   <object class="GtkListBox" id="my_projects_list_box">
                                     <property name="visible">true</property>
                                     <property name="selection-mode">none</property>
-                                    <child type="placeholder">
-                                      <object class="GtkLabel" id="my_projects_placeholder">
-                                        <property name="visible">true</property>
-                                      </object>
-                                    </child>
                                   </object>
                                 </child>
                               </object>
