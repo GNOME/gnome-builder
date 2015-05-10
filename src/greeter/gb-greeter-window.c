@@ -28,6 +28,7 @@
 #include "gb-greeter-window.h"
 #include "gb-gtk.h"
 #include "gb-scrolled-window.h"
+#include "gb-settings.h"
 
 struct _GbGreeterWindow
 {
@@ -269,6 +270,16 @@ gb_greeter_window__row_activated (GbGreeterWindow     *self,
 }
 
 static void
+gb_greeter_window_constructed (GObject *object)
+{
+  GbGreeterWindow *self = (GbGreeterWindow *)object;
+
+  G_OBJECT_CLASS (gb_greeter_window_parent_class)->constructed (object);
+
+  gb_settings_init_window (GTK_WINDOW (self));
+}
+
+static void
 gb_greeter_window_finalize (GObject *object)
 {
   GbGreeterWindow *self = (GbGreeterWindow *)object;
@@ -324,6 +335,7 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = gb_greeter_window_constructed;
   object_class->finalize = gb_greeter_window_finalize;
   object_class->get_property = gb_greeter_window_get_property;
   object_class->set_property = gb_greeter_window_set_property;
