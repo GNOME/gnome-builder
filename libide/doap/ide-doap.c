@@ -234,7 +234,7 @@ ide_doap_set_shortdesc (IdeDoap     *self,
   if (!ide_str_equal0 (self->shortdesc, shortdesc))
     {
       g_free (self->shortdesc);
-      self->shortdesc = g_strdup (shortdesc);
+      self->shortdesc = g_strdelimit (g_strdup (shortdesc), "\n", ' ');
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHORTDESC]);
     }
 }
