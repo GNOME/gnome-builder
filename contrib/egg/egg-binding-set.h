@@ -28,14 +28,23 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (EggBindingSet, egg_binding_set, EGG, BINDING_SET, GObject)
 
 EggBindingSet *egg_binding_set_new        (void);
-GObject       *egg_binding_set_get_source (EggBindingSet *self);
-void           egg_binding_set_set_source (EggBindingSet *self,
-                                           gpointer       source);
-void           egg_binding_set_bind       (EggBindingSet *self,
-                                           const gchar   *source_property,
-                                           gpointer       target,
-                                           const gchar   *target_property,
-                                           GBindingFlags  flags);
+GObject       *egg_binding_set_get_source (EggBindingSet         *self);
+void           egg_binding_set_set_source (EggBindingSet         *self,
+                                           gpointer               source);
+void           egg_binding_set_bind       (EggBindingSet         *self,
+                                           const gchar           *source_property,
+                                           gpointer               target,
+                                           const gchar           *target_property,
+                                           GBindingFlags          flags);
+void           egg_binding_set_bind_full  (EggBindingSet         *self,
+                                           const gchar           *source_property,
+                                           gpointer               target,
+                                           const gchar           *target_property,
+                                           GBindingFlags          flags,
+                                           GBindingTransformFunc  transform_to,
+                                           GBindingTransformFunc  transform_from,
+                                           gpointer               user_data,
+                                           GDestroyNotify         notify);
 
 G_END_DECLS
 

@@ -44,12 +44,16 @@ struct _EggBindingSet
 
 typedef struct
 {
-  EggBindingSet *set;
-  const gchar   *source_property;
-  const gchar   *target_property;
-  GObject       *target;
-  GBinding      *binding;
-  GBindingFlags  binding_flags;
+  EggBindingSet         *set;
+  const gchar           *source_property;
+  const gchar           *target_property;
+  GObject               *target;
+  GBinding              *binding;
+  gpointer               user_data;
+  GDestroyNotify         user_data_destroy;
+  GBindingTransformFunc  transform_to;
+  GBindingTransformFunc  transform_from;
+  GBindingFlags          binding_flags;
 } LazyBinding;
 
 G_DEFINE_TYPE (EggBindingSet, egg_binding_set, G_TYPE_OBJECT)
@@ -91,11 +95,15 @@ egg_binding_set_connect (EggBindingSet *self,
            lazy_binding->binding_flags);
 #endif
 
-  lazy_binding->binding = g_object_bind_property (self->source,
-                                                  lazy_binding->source_property,
-                                                  lazy_binding->target,
-                                                  lazy_binding->target_property,
-                                                  lazy_binding->binding_flags);
+  lazy_binding->binding = g_object_bind_property_full (self->source,
+                                                       lazy_binding->source_property,
+                                                       lazy_binding->target,
+                                                       lazy_binding->target_property,
+                                                       lazy_binding->binding_flags,
+                                                       lazy_binding->transform_to,
+                                                       lazy_binding->transform_from,
+                                                       lazy_binding->user_data,
+                                                       NULL);
 }
 
 static void
@@ -174,6 +182,10 @@ lazy_binding_free (gpointer data)
   lazy_binding->set = NULL;
   lazy_binding->source_property = NULL;
   lazy_binding->target_property = NULL;
+
+  if (lazy_binding->user_data_destroy)
+    lazy_binding->user_data_destroy (lazy_binding->user_data);
+
   g_slice_free (LazyBinding, lazy_binding);
 }
 
@@ -361,6 +373,24 @@ egg_binding_set_bind (EggBindingSet *self,
                       const gchar   *target_property,
                       GBindingFlags  flags)
 {
+  egg_binding_set_bind_full (self, source_property,
+                             target, target_property,
+                             flags,
+                             NULL, NULL,
+                             NULL, NULL);
+}
+
+void
+egg_binding_set_bind_full (EggBindingSet         *self,
+                           const gchar           *source_property,
+                           gpointer               target,
+                           const gchar           *target_property,
+                           GBindingFlags          flags,
+                           GBindingTransformFunc  transform_to,
+                           GBindingTransformFunc  transform_from,
+                           gpointer               user_data,
+                           GDestroyNotify         user_data_destroy)
+{
   LazyBinding *lazy_binding;
 
   g_return_if_fail (EGG_IS_BINDING_SET (self));
@@ -379,7 +409,11 @@ egg_binding_set_bind (EggBindingSet *self,
   lazy_binding->source_property = g_intern_string (source_property);
   lazy_binding->target_property = g_intern_string (target_property);
   lazy_binding->target = target;
-  lazy_binding->binding_flags = flags;
+  lazy_binding->binding_flags = flags | G_BINDING_SYNC_CREATE;
+  lazy_binding->transform_to = transform_to;
+  lazy_binding->transform_from = transform_from;
+  lazy_binding->user_data = user_data;
+  lazy_binding->user_data_destroy = user_data_destroy;
 
   g_object_weak_ref (target,
                      egg_binding_set__target_weak_notify,
