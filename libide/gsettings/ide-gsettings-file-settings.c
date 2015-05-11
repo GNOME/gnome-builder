@@ -135,14 +135,14 @@ ide_gsettings_file_settings_constructed (GObject *object)
 }
 
 static void
-ide_gsettings_file_settings_finalize (GObject *object)
+ide_gsettings_file_settings_dispose (GObject *object)
 {
   IdeGsettingsFileSettings *self = (IdeGsettingsFileSettings *)object;
 
   g_clear_object (&self->signal_group);
   g_clear_object (&self->language_settings);
 
-  G_OBJECT_CLASS (ide_gsettings_file_settings_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_gsettings_file_settings_parent_class)->dispose (object);
 }
 
 static void
@@ -151,7 +151,7 @@ ide_gsettings_file_settings_class_init (IdeGsettingsFileSettingsClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = ide_gsettings_file_settings_constructed;
-  object_class->finalize = ide_gsettings_file_settings_finalize;
+  object_class->dispose = ide_gsettings_file_settings_dispose;
 }
 
 static void
