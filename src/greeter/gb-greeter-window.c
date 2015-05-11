@@ -56,6 +56,37 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+static void
+gb_greeter_window_first_visible_cb (GtkWidget *widget,
+                                    gpointer   user_data)
+{
+  GtkWidget **row = user_data;
+
+  if ((*row == NULL) && gtk_widget_get_child_visible (widget))
+    *row = widget;
+}
+
+static void
+gb_greeter_window__search_entry_activate (GbGreeterWindow *self,
+                                          GtkSearchEntry  *search_entry)
+{
+  GtkWidget *row = NULL;
+
+  g_assert (GB_IS_GREETER_WINDOW (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
+
+  gtk_container_foreach (GTK_CONTAINER (self->my_projects_list_box),
+                         gb_greeter_window_first_visible_cb,
+                         &row);
+  if (row == NULL)
+    gtk_container_foreach (GTK_CONTAINER (self->other_projects_list_box),
+                           gb_greeter_window_first_visible_cb,
+                           &row);
+
+  if (row != NULL)
+    g_signal_emit_by_name (row, "activate");
+}
+
 IdeRecentProjects *
 gb_greeter_window_get_recent_projects (GbGreeterWindow *self)
 {
@@ -372,6 +403,12 @@ gb_greeter_window_init (GbGreeterWindow *self)
                                    G_CONNECT_SWAPPED);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->search_entry,
+                           "activate",
+                           G_CALLBACK (gb_greeter_window__search_entry_activate),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->search_entry,
                            "changed",
