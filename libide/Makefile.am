@@ -222,6 +222,8 @@ libide_1_0_la_public_sources = \
 	xml/ide-xml-indenter.h \
 	xml/ide-xml-language.c \
 	xml/ide-xml-language.h \
+	xml/ide-xml-highlighter.c \
+	xml/ide-xml-highlighter.h \
 	ide-source-map.c \
 	ide-source-map.h \
 	ide-thread-pool.c \

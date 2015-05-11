@@ -18,11 +18,14 @@
 
 #include "ide-xml-language.h"
 #include "ide-xml-indenter.h"
+#include "ide-xml-highlighter.h"
 
 struct _IdeXmlLanguage
 {
-  IdeLanguage     parent_instance;
-  IdeXmlIndenter *indenter;
+  IdeLanguage        parent_instance;
+
+  IdeXmlIndenter    *indenter;
+  IdeXmlHighlighter *highlighter;
 };
 
 static void initable_iface_init (GInitableIface *iface);
@@ -51,6 +54,26 @@ ide_xml_language_get_indenter (IdeLanguage *language)
   return IDE_INDENTER (self->indenter);
 }
 
+static IdeHighlighter *
+ide_xml_language_get_highlighter (IdeLanguage *language)
+{
+  IdeXmlLanguage *self = (IdeXmlLanguage *)language;
+
+  g_return_val_if_fail (IDE_IS_XML_LANGUAGE (self), NULL);
+
+  if (!self->highlighter)
+    {
+      IdeContext *context;
+
+      context = ide_object_get_context (IDE_OBJECT (language));
+      self->highlighter = g_object_new (IDE_TYPE_XML_HIGHLIGHTER,
+                                        "context", context,
+                                        NULL);
+    }
+
+  return IDE_HIGHLIGHTER (self->highlighter);
+}
+
 static void
 ide_xml_language_finalize (GObject *object)
 {
@@ -68,7 +91,7 @@ ide_xml_language_class_init (IdeXmlLanguageClass *klass)
   IdeLanguageClass *language_class = IDE_LANGUAGE_CLASS (klass);
 
   object_class->finalize = ide_xml_language_finalize;
-
+  language_class->get_highlighter = ide_xml_language_get_highlighter;
   language_class->get_indenter = ide_xml_language_get_indenter;
 }
 

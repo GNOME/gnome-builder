@@ -138,6 +138,7 @@
 
   <style name="xml:tags"                    foreground="chameleon3"/>
   <style name="xml:namespace"               bold="true"/>
+  <style name="xml:tag-match"               underline="true"/>
 
   <style name="js:object"                   foreground="chameleon3" bold="true"/>
   <style name="js:constructors"             foreground="pink1"/>
