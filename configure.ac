@@ -122,10 +122,10 @@ AC_ARG_ENABLE(debug,
               enable_debug=builder_debug_default)
 AS_CASE(["x$enable_debug"],
         [yes],[
-            ENABLE_DEBUG=1
+            DEBUG_CFLAGS="$DEBUG_CFLAGS -O0"
+            DEBUG_CFLAGS="$DEBUG_CFLAGS -g"
         ],
         [minimum],[
-            ENABLE_DEBUG=1
             DEBUG_CFLAGS="$DEBUG_CFLAGS -DG_DISABLE_CAST_CHECKS"
         ],
         [no],[
