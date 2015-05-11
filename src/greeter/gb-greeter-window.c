@@ -38,6 +38,7 @@ struct _GbGreeterWindow
   IdeRecentProjects    *recent_projects;
   IdePatternSpec       *pattern_spec;
 
+  GtkViewport          *viewport;
   GtkWidget            *header_bar;
   GtkBox               *my_projects_container;
   GtkListBox           *my_projects_list_box;
@@ -152,6 +153,48 @@ gb_greeter_window__search_entry_changed (GbGreeterWindow *self,
   gb_greeter_window_apply_filter_all (self);
 }
 
+static gboolean
+row_focus_in_event (GbGreeterWindow     *self,
+                    GdkEventFocus       *focus,
+                    GbGreeterProjectRow *row)
+{
+  GtkAllocation alloc;
+  GtkAllocation row_alloc;
+  gint dest_x;
+  gint dest_y;
+
+  g_assert (GB_IS_GREETER_WINDOW (self));
+
+  gtk_widget_get_allocation (GTK_WIDGET (self->viewport), &alloc);
+  gtk_widget_get_allocation (GTK_WIDGET (row), &row_alloc);
+
+  if (gtk_widget_translate_coordinates (GTK_WIDGET (row), GTK_WIDGET (self->viewport), 0, 0, &dest_x, &dest_y))
+    {
+      gint distance = 0;
+
+      if (dest_y < 0)
+        {
+          distance = dest_y;
+        }
+      else if ((dest_y + row_alloc.height) > alloc.height)
+        {
+          distance = dest_y + row_alloc.height - alloc.height;
+        }
+
+      if (distance != 0)
+        {
+          GtkAdjustment *vadj;
+          gdouble value;
+
+          vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->viewport));
+          value = gtk_adjustment_get_value (vadj);
+          gtk_adjustment_set_value (vadj, value + distance);
+        }
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 static void
 gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
                                                   guint            position,
@@ -188,6 +231,11 @@ gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
                           "visible", TRUE,
                           "project-info", project_info,
                           NULL);
+      g_signal_connect_object (row,
+                               "focus-in-event",
+                               G_CALLBACK (row_focus_in_event),
+                               self,
+                               G_CONNECT_SWAPPED);
       gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (row));
     }
 
@@ -387,6 +435,7 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, other_projects_container);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, other_projects_list_box);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, viewport);
 
   g_type_ensure (GB_TYPE_GREETER_PROJECT_ROW);
   g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
@@ -421,6 +470,7 @@ gb_greeter_window_init (GbGreeterWindow *self)
                            G_CALLBACK (gb_greeter_window__row_activated),
                            self,
                            G_CONNECT_SWAPPED);
+
   g_signal_connect_object (self->other_projects_list_box,
                            "row-activated",
                            G_CALLBACK (gb_greeter_window__row_activated),

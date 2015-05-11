@@ -85,7 +85,7 @@
             <property name="expand">true</property>
             <property name="visible">true</property>
             <child>
-              <object class="GtkViewport">
+              <object class="GtkViewport" id="viewport">
                 <property name="expand">true</property>
                 <property name="visible">true</property>
                 <child>
