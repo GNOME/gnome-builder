@@ -222,6 +222,7 @@ save_project_tree_position_timeout (gpointer data)
 
   g_assert (GB_IS_EDITOR_WORKSPACE (self));
 
+  self->project_tree_position_timeout = 0;
   gb_project_tree_save_desired_width (self->project_tree);
 
   return G_SOURCE_REMOVE;
