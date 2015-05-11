@@ -4822,6 +4822,18 @@ ide_source_view_dispose (GObject *object)
   IdeSourceView *self = (IdeSourceView *)object;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
+  if (priv->hadj_animation)
+    {
+      ide_animation_stop (priv->hadj_animation);
+      ide_clear_weak_pointer (&priv->hadj_animation);
+    }
+
+  if (priv->vadj_animation)
+    {
+      ide_animation_stop (priv->vadj_animation);
+      ide_clear_weak_pointer (&priv->vadj_animation);
+    }
+
   ide_source_view_clear_snippets (self);
 
   if (priv->delayed_scroll_replay)
@@ -4839,9 +4851,6 @@ ide_source_view_dispose (GObject *object)
   g_clear_object (&priv->mode);
   g_clear_object (&priv->buffer_signals);
   g_clear_object (&priv->file_setting_bindings);
-
-  ide_clear_weak_pointer (&priv->hadj_animation);
-  ide_clear_weak_pointer (&priv->vadj_animation);
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->dispose (object);
 }
