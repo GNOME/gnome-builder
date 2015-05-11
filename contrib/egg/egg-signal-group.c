@@ -52,6 +52,7 @@ struct _EggSignalGroup
   GPtrArray *handlers;
   GType      target_type;
   gsize      block_count;
+  guint      disposing;
 };
 
 struct _EggSignalGroupClass
@@ -200,7 +201,12 @@ egg_signal_group_unbind (EggSignalGroup *self)
       handler_id = handler->handler_id;
       handler->handler_id = 0;
 
-      g_signal_handler_disconnect (target, handler_id);
+      /*
+       * If we are disposing, g_signal_connect_object() is already taking
+       * care of the disconnect for us. So ignore that case.
+       */
+      if (self->disposing == 0)
+        g_signal_handler_disconnect (target, handler_id);
     }
 
   g_signal_emit (self, gSignals [UNBIND], 0);
@@ -352,10 +358,14 @@ egg_signal_group_dispose (GObject *object)
 {
   EggSignalGroup *self = (EggSignalGroup *)object;
 
+  self->disposing++;
+
   egg_signal_group_unbind (self);
   g_clear_pointer (&self->handlers, g_ptr_array_unref);
 
   G_OBJECT_CLASS (egg_signal_group_parent_class)->dispose (object);
+
+  self->disposing--;
 }
 
 static void
