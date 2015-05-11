@@ -132,6 +132,8 @@ egg_signal_group_bind_handler (EggSignalGroup *self,
                                                    handler->closure,
                                                    handler->connect_after);
 
+  g_assert (handler->handler_id != 0);
+
   for (i = 0; i < self->block_count; i++)
     g_signal_handler_block (self->target, handler->handler_id);
 }
