@@ -23,6 +23,7 @@
 #include "ide-debug.h"
 #include "ide-highlight-engine.h"
 #include "ide-types.h"
+#include "ide-internal.h"
 
 #define HIGHLIGHT_QUANTA_USEC      2000
 #define WORK_TIMEOUT_MSEC          50
@@ -145,27 +146,6 @@ create_tag_from_style (IdeHighlightEngine *self,
   return tag;
 }
 
-static GtkTextTag *
-get_style_tag (IdeHighlightEngine *self,
-               const gchar        *style_name)
-{
-  GtkTextTagTable *tag_table;
-  GtkTextTag *tag;
-
-  g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_assert (style_name != NULL);
-
-  tag_table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self->buffer));
-  tag = gtk_text_tag_table_lookup (tag_table, style_name);
-
-  if (tag == NULL)
-    {
-      tag = create_tag_from_style (self, style_name);
-      self->tags = g_list_prepend (self->tags, tag);
-    }
-
-  return tag;
-}
 
 static IdeHighlightResult
 ide_highlight_engine_apply_style (const GtkTextIter *begin,
@@ -178,7 +158,7 @@ ide_highlight_engine_apply_style (const GtkTextIter *begin,
 
   buffer = gtk_text_iter_get_buffer (begin);
   self = g_object_get_qdata (G_OBJECT (buffer), gEngineQuark);
-  tag = get_style_tag (self, style_name);
+  tag = ide_highlight_engine_get_style (self, style_name);
 
   gtk_text_buffer_apply_tag (buffer, tag, begin, end);
 
@@ -682,6 +662,7 @@ ide_highlight_engine_set_highlighter (IdeHighlightEngine *self,
 
   if (g_set_object (&self->highlighter, highlighter))
     {
+      _ide_highlighter_set_highlighter_engine (highlighter, self);
       ide_highlight_engine_reload (self);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_HIGHLIGHTER]);
     }
@@ -779,4 +760,26 @@ ide_highlight_engine_invalidate (IdeHighlightEngine *self,
   ide_highlight_engine_queue_work (self);
 
   IDE_EXIT;
+}
+
+GtkTextTag *
+ide_highlight_engine_get_style (IdeHighlightEngine *self,
+                                const gchar        *style_name)
+{
+  GtkTextTagTable *tag_table;
+  GtkTextTag *tag;
+
+  g_return_val_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self), NULL);
+  g_return_val_if_fail (style_name != NULL, NULL);
+
+  tag_table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self->buffer));
+  tag = gtk_text_tag_table_lookup (tag_table, style_name);
+
+  if (tag == NULL)
+    {
+      tag = create_tag_from_style (self, style_name);
+      self->tags = g_list_prepend (self->tags, tag);
+    }
+
+  return tag;
 }

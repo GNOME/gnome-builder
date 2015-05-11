@@ -148,6 +148,8 @@ typedef struct _IdeUnsavedFile                 IdeUnsavedFile;
 
 typedef struct _IdeVcs                         IdeVcs;
 
+typedef struct _IdeHighlightEngine             IdeHighlightEngine;
+
 G_END_DECLS
 
 #endif /* IDE_TYPES_H */

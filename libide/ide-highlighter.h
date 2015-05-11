@@ -24,6 +24,7 @@
 #include "ide-buffer.h"
 #include "ide-object.h"
 #include "ide-source-view.h"
+#include "ide-types.h"
 
 G_BEGIN_DECLS
 
@@ -58,18 +59,20 @@ struct _IdeHighlighterClass
    * @location should be set to the position that the highlighter got to
    * before yielding back to the engine.
    */
-  void (*update) (IdeHighlighter       *self,
-                  IdeHighlightCallback  callback,
-                  const GtkTextIter    *range_begin,
-                  const GtkTextIter    *range_end,
-                  GtkTextIter          *location);
+  void (*update)     (IdeHighlighter       *self,
+                      IdeHighlightCallback  callback,
+                      const GtkTextIter    *range_begin,
+                      const GtkTextIter    *range_end,
+                      GtkTextIter          *location);
 };
 
-void ide_highlighter_update (IdeHighlighter       *self,
-                             IdeHighlightCallback  callback,
-                             const GtkTextIter    *range_begin,
-                             const GtkTextIter    *range_end,
-                             GtkTextIter          *location);
+void                 ide_highlighter_update               (IdeHighlighter       *self,
+                                                           IdeHighlightCallback  callback,
+                                                           const GtkTextIter    *range_begin,
+                                                           const GtkTextIter    *range_end,
+                                                           GtkTextIter          *location);
+
+IdeHighlightEngine  *ide_highlighter_get_highlight_engine (IdeHighlighter       *self);
 
 G_END_DECLS
 

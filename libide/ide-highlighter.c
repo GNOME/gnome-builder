@@ -15,19 +15,159 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <glib/gi18n.h>
 
 #include "ide-highlighter.h"
+#include "ide-internal.h"
 
-G_DEFINE_ABSTRACT_TYPE (IdeHighlighter, ide_highlighter, IDE_TYPE_OBJECT)
+typedef struct
+{
+  IdeHighlightEngine *engine;
+} IdeHighlighterPrivate;
+
+enum {
+  PROP_0,
+  PROP_HIGHLIGHT_ENGINE,
+  LAST_PROP
+};
+
+static GParamSpec *gParamSpecs [LAST_PROP];
+
+
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeHighlighter, ide_highlighter, IDE_TYPE_OBJECT)
+
+
+static void
+ide_highlighter_set_highlight_engine (IdeHighlighter     *self,
+                                      IdeHighlightEngine *engine)
+{
+  IdeHighlighterPrivate *priv = ide_highlighter_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_HIGHLIGHTER (self));
+  g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (engine));
+
+  if (priv->engine != engine)
+    {
+      if (priv->engine != NULL)
+        ide_clear_weak_pointer (&priv->engine);
+
+      if (engine != NULL)
+        ide_set_weak_pointer (&priv->engine, engine);
+
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_HIGHLIGHT_ENGINE]);
+    }
+}
+
+/**
+ * ide_highlighter_get_highlight_engine:
+ * @self: A #IdeHighlighter.
+ *
+ * Gets the IdeHighlightEngine property.
+ *
+ * Returns: (transfer none): An #IdeHighlightEngine.
+ */
+IdeHighlightEngine *
+ide_highlighter_get_highlight_engine (IdeHighlighter *self)
+{
+  IdeHighlighterPrivate *priv = ide_highlighter_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_HIGHLIGHTER (self), NULL);
+
+  return priv->engine;
+}
+
+
+static void
+ide_highlighter_get_property (GObject    *object,
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  IdeHighlighter *self = IDE_HIGHLIGHTER (object);
+
+  switch (prop_id)
+    {
+    case PROP_HIGHLIGHT_ENGINE:
+      g_value_set_object (value, ide_highlighter_get_highlight_engine (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_highlighter_set_property (GObject      *object,
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
+{
+  IdeHighlighter *self = IDE_HIGHLIGHTER (object);
+
+  switch (prop_id)
+    {
+    case PROP_HIGHLIGHT_ENGINE:
+      ide_highlighter_set_highlight_engine (self, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_highlighter_dispose (GObject *object)
+{
+  IdeHighlighter *self = (IdeHighlighter *)object;
+
+  ide_highlighter_set_highlight_engine (self, NULL);
+
+  G_OBJECT_CLASS (ide_highlighter_parent_class)->dispose (object);
+}
+
+static void
+ide_highlighter_finalize (GObject *object)
+{
+  IdeHighlighter *self = (IdeHighlighter *)object;
+  IdeHighlighterPrivate *priv = ide_highlighter_get_instance_private (self);
+
+  ide_clear_weak_pointer (&priv->engine);
+
+  G_OBJECT_CLASS (ide_highlighter_parent_class)->finalize (object);
+}
 
 static void
 ide_highlighter_class_init (IdeHighlighterClass *klass)
 {
+
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = ide_highlighter_dispose;
+  object_class->finalize = ide_highlighter_finalize;
+  object_class->get_property = ide_highlighter_get_property;
+  object_class->set_property = ide_highlighter_set_property;
+
+  gParamSpecs [PROP_HIGHLIGHT_ENGINE] =
+    g_param_spec_object ("highlight-engine",
+                         _("Highlight engine"),
+                         _("The highlight engine of this highlighter."),
+                         IDE_TYPE_HIGHLIGHT_ENGINE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+
 }
 
 static void
 ide_highlighter_init (IdeHighlighter *self)
 {
+}
+
+void
+_ide_highlighter_set_highlighter_engine (IdeHighlighter     *self,
+                                         IdeHighlightEngine *engine)
+{
+  ide_highlighter_set_highlight_engine (self, engine);
 }
 
 /**
