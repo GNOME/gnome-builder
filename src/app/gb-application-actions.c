@@ -193,6 +193,7 @@ gb_application_actions_open_project_cb (GObject      *object,
   GbApplication *self = (GbApplication *)object;
   g_autoptr(GbNewProjectDialog) window = user_data;
   g_autoptr(GError) error = NULL;
+  GtkWindow *transient_for;
 
   g_assert (GB_IS_NEW_PROJECT_DIALOG (window));
 
@@ -202,8 +203,20 @@ gb_application_actions_open_project_cb (GObject      *object,
       g_warning ("%s", error->message);
     }
 
-  gtk_widget_hide (GTK_WIDGET (window));
+  transient_for = gtk_window_get_transient_for (GTK_WINDOW (window));
+
+  if (GB_IS_GREETER_WINDOW (transient_for))
+    g_object_ref (transient_for);
+  else
+    transient_for = NULL;
+
   gtk_widget_destroy (GTK_WIDGET (window));
+
+  if (transient_for != NULL)
+    {
+      gtk_widget_destroy (GTK_WIDGET (transient_for));
+      g_object_unref (transient_for);
+    }
 }
 
 static void
