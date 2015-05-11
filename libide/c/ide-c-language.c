@@ -206,11 +206,13 @@ ide_c_language_initiable_init (GInitable     *initable,
 
       /*
        * Create our indenter to provide as-you-type indentation.
+       *
+       * TODO: How can we disambiguate c/c++/obj-c headers?
        */
-      /* TODO: Obviously change for C++ */
-      priv->indenter = g_object_new (IDE_TYPE_C_INDENTER,
-                                     "context", context,
-                                     NULL);
+      if (!ide_str_equal0 (id, "cpp"))
+        priv->indenter = g_object_new (IDE_TYPE_C_INDENTER,
+                                       "context", context,
+                                       NULL);
 
       /*
        * TODO: Refactory design (rename local, extract method, etc).
