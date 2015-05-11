@@ -922,11 +922,14 @@ gb_project_tree_actions_move_to_trash (GSimpleAction *action,
    */
   ifile = ide_project_get_project_file (project, file);
   buffer = ide_buffer_manager_find_buffer (buffer_manager, ifile);
-  removal.document = g_object_ref (buffer);
-  gb_workbench_views_foreach (workbench,
-                              gb_project_tree_actions_close_views_cb,
-                              &removal);
-  g_object_unref (removal.document);
+  if (buffer != NULL)
+    {
+      removal.document = g_object_ref (buffer);
+      gb_workbench_views_foreach (workbench,
+                                  gb_project_tree_actions_close_views_cb,
+                                  &removal);
+      g_object_unref (removal.document);
+    }
 
   /*
    * Close all of the views that match the document.
