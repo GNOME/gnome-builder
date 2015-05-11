@@ -50,7 +50,7 @@ _ide_symbol_new (const gchar       *name,
 {
   IdeSymbol *ret;
 
-  ret = g_new0 (IdeSymbol, 1);
+  ret = g_slice_new0 (IdeSymbol);
   ret->ref_count = 1;
   ret->kind = kind;
   ret->flags = flags;
@@ -167,7 +167,7 @@ ide_symbol_unref (IdeSymbol *self)
       g_clear_pointer (&self->definition_location, ide_source_location_unref);
       g_clear_pointer (&self->canonical_location, ide_source_location_unref);
       g_clear_pointer (&self->name, g_free);
-      g_free (self);
+      g_slice_free (IdeSymbol, self);
 
       EGG_COUNTER_DEC (instances);
     }
