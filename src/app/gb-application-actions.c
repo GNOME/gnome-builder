@@ -27,6 +27,7 @@
 #include "gb-application-actions.h"
 #include "gb-application-credits.h"
 #include "gb-application-private.h"
+#include "gb-greeter-window.h"
 #include "gb-new-project-dialog.h"
 #include "gb-support.h"
 #include "gb-workbench.h"
@@ -225,13 +226,32 @@ gb_application_actions_new_project (GSimpleAction *action,
                                     gpointer       user_data)
 {
   GbApplication *self = user_data;
+  GtkWindow *transient_for = NULL;
   GtkWindow *window;
+  GList *windows;
 
   g_assert (GB_IS_APPLICATION (self));
 
+  for (windows = gtk_window_group_list_windows (self->greeter_group);
+       windows;
+       windows = windows->next)
+    {
+      if (GB_IS_NEW_PROJECT_DIALOG (windows->data))
+        {
+          gtk_window_present (windows->data);
+          goto cleanup;
+        }
+      else if (GB_IS_GREETER_WINDOW (windows->data))
+        {
+          transient_for = windows->data;
+        }
+    }
+
   window = g_object_new (GB_TYPE_NEW_PROJECT_DIALOG,
                          "type-hint", GDK_WINDOW_TYPE_HINT_DIALOG,
-                         "window-position", GTK_WIN_POS_CENTER,
+                         "transient-for", transient_for,
+                         "window-position", transient_for ? GTK_WIN_POS_CENTER_ON_PARENT
+                                                          : GTK_WIN_POS_CENTER,
                          NULL);
 
   g_signal_connect_object (window,
@@ -240,7 +260,11 @@ gb_application_actions_new_project (GSimpleAction *action,
                            self,
                            G_CONNECT_SWAPPED);
 
+  gtk_window_group_add_window (self->greeter_group, GTK_WINDOW (window));
   gtk_window_present (window);
+
+cleanup:
+  g_list_free (windows);
 }
 
 static const GActionEntry GbApplicationActions[] = {

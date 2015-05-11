@@ -456,6 +456,7 @@ gb_application_show_projects_window (GbApplication *self)
                          "application", self,
                          "recent-projects", self->recent_projects,
                          NULL);
+  gtk_window_group_add_window (self->greeter_group, GTK_WINDOW (window));
   gtk_window_present (GTK_WINDOW (window));
 }
 
@@ -479,6 +480,7 @@ gb_application_startup (GApplication *app)
   g_assert (GB_IS_APPLICATION (self));
 
   self->started_at = g_date_time_new_now_utc ();
+  self->greeter_group = gtk_window_group_new ();
 
   g_resources_register (gb_get_resource ());
   g_application_set_resource_base_path (app, "/org/gnome/builder");
@@ -532,6 +534,7 @@ gb_application_finalize (GObject *object)
   g_clear_pointer (&self->started_at, g_date_time_unref);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);
+  g_clear_object (&self->greeter_group);
 
   G_OBJECT_CLASS (gb_application_parent_class)->finalize (object);
 

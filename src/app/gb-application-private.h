@@ -36,6 +36,7 @@ struct _GbApplication
   GbKeybindings       *keybindings;
   GbPreferencesWindow *preferences_window;
   IdeRecentProjects   *recent_projects;
+  GtkWindowGroup      *greeter_group;
 };
 
 
