@@ -3037,6 +3037,9 @@ ide_source_view_real_movement (IdeSourceView         *self,
   if (apply_count)
     count = priv->count;
 
+  if (priv->scrolling_to_scroll_mark)
+    priv->scrolling_to_scroll_mark = FALSE;
+
   _ide_source_view_apply_movement (self, movement, extend_selection, exclusive,
                                    count, priv->modifier, &priv->target_line_offset);
 }
@@ -4782,6 +4785,31 @@ ide_source_view_size_allocate (GtkWidget     *widget,
   IDE_EXIT;
 }
 
+static gboolean
+ide_source_view_scroll_event (GtkWidget      *widget,
+                              GdkEventScroll *event)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  gboolean ret = GDK_EVENT_PROPAGATE;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  /*
+   * If the user started a manual scroll while we were attempting to scroll to
+   * the target position, just abort our delayed scroll.
+   */
+  priv->scrolling_to_scroll_mark = FALSE;
+
+  /*
+   * Be forward-portable against changes underneath us.
+   */
+  if (GTK_WIDGET_CLASS (ide_source_view_parent_class)->scroll_event)
+    ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->scroll_event (widget, event);
+
+  return ret;
+}
+
 static void
 ide_source_view_dispose (GObject *object)
 {
@@ -5042,6 +5070,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->focus_out_event = ide_source_view_focus_out_event;
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->query_tooltip = ide_source_view_query_tooltip;
+  widget_class->scroll_event = ide_source_view_scroll_event;
   widget_class->size_allocate = ide_source_view_size_allocate;
   widget_class->style_updated = ide_source_view_real_style_updated;
 
