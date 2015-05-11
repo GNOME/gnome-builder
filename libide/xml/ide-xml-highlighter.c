@@ -24,7 +24,7 @@
 #include "ide-xml.h"
 #include "ide-highlight-engine.h"
 
-#define HIGHLIGH_TIMEOUT_MSEC    25
+#define HIGHLIGH_TIMEOUT_MSEC    35
 #define XML_TAG_MATCH_STYLE_NAME "xml:tag-match"
 
 struct _IdeXmlHighlighter
