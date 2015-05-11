@@ -249,13 +249,22 @@ ide_xml_find_closing_element (const GtkTextIter *start,
           if (element_name != NULL)
             {
               if(g_strcmp0 (g_queue_peek_head (element_queue), element_name) == 0)
-                 g_free (g_queue_pop_head (element_queue));
-              g_free (element_name);
+                {
+                  g_free (g_queue_pop_head (element_queue));
+                  g_free (element_name);
+                }
+              /*Unbalanced element.Stop parsing*/
+              else
+                {
+                  g_free (element_name);
+                  goto completed;
+                }
             }
         }
       end = found_element_end;
     }
 
+completed:
   element_queue_length = g_queue_get_length (element_queue);
   g_queue_free_full (element_queue, g_free);
 
@@ -303,13 +312,22 @@ ide_xml_find_opening_element (const GtkTextIter *start,
           if (element_name != NULL)
             {
               if(g_strcmp0 (g_queue_peek_head(element_queue), element_name) == 0)
-                g_free (g_queue_pop_head (element_queue));
-              g_free (element_name);
+                {
+                  g_free (g_queue_pop_head (element_queue));
+                  g_free (element_name);
+                }
+              /*Unbalanced element.Stop parsing*/
+              else
+                {
+                  g_free (element_name);
+                  goto completed;
+                }
             }
         }
       start = found_element_start;
     }
 
+completed:
   element_queue_length = g_queue_get_length (element_queue);
   g_queue_free_full (element_queue, g_free);
 
