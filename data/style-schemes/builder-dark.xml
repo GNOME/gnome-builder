@@ -149,6 +149,7 @@
   <style name="xml:comment"                 foreground="#8b9eab"/>
   <style name="xml:attribute-name"          foreground="#orange3" bold="false"/>
   <style name="xml:attribute-value"         foreground="#669900"/>
+  <style name="xml:tag-match"               underline="true"/>
 
 </style-scheme>
 
