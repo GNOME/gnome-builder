@@ -75,6 +75,7 @@ libide/ide-device.c
 libide/ide-file-settings.c
 libide/ide-file.c
 libide/ide-highlight-engine.c
+libide/ide-highlighter.c
 libide/ide-language.c
 libide/ide-object.c
 libide/ide-progress.c
