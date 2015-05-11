@@ -39,7 +39,7 @@ ide_ref_ptr_new (gpointer       data,
 {
   IdeRefPtr *self;
 
-  self = g_new0 (IdeRefPtr, 1);
+  self = g_slice_new0 (IdeRefPtr);
   self->ref_count = 1;
   self->data = data;
   self->free_func = free_func;
@@ -70,6 +70,9 @@ ide_ref_ptr_unref (IdeRefPtr *self)
     {
       if (self->free_func)
         g_clear_pointer (&self->data, self->free_func);
+
+      g_slice_free (IdeRefPtr, self);
+
       EGG_COUNTER_DEC (instances);
     }
 }
