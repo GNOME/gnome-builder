@@ -236,7 +236,9 @@ gb_editor_workspace__project_paned_notify_position (GbEditorWorkspace *self,
 
   if (self->project_tree_position_timeout != 0)
     g_source_remove (self->project_tree_position_timeout);
-  g_timeout_add_seconds (1, save_project_tree_position_timeout, self);
+
+  self->project_tree_position_timeout =
+    g_timeout_add_seconds (1, save_project_tree_position_timeout, self);
 }
 
 static void
