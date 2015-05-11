@@ -195,8 +195,6 @@
       </object>
     </child>
   </template>
-
-
   <object class="GtkSizeGroup">
     <property name="mode">horizontal</property>
     <widgets>
@@ -206,29 +204,4 @@
       <widget name="other_projects_frame"/>
     </widgets>
   </object>
-
-
-
-
-<!--
-  <object class="EggStateMachine">
-    <property name="state">default</property>
-    <state name="default">
-      <property source="action_bar_revealer" name="reveal-child">false</property>
-      <property source="selection_button" name="sensitive">true</property>
-    </state>
-    <state name="selection-mode">
-      <property source="action_bar_revealer" name="reveal-child">true</property>
-    </state>
-  </object>
--->
-
-
-
-
-
-
-
-
-
 </interface>
