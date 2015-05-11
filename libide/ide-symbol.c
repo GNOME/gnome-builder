@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-symbol"
 
+#include "egg-counter.h"
+
 #include "ide-symbol.h"
 #include "ide-source-location.h"
 
@@ -35,6 +37,8 @@ struct _IdeSymbol
 };
 
 G_DEFINE_BOXED_TYPE (IdeSymbol, ide_symbol, ide_symbol_ref, ide_symbol_unref)
+
+EGG_DEFINE_COUNTER (instances, "Instances", "IdeSymbol", "Number of symbol instances")
 
 IdeSymbol *
 _ide_symbol_new (const gchar       *name,
@@ -60,6 +64,8 @@ _ide_symbol_new (const gchar       *name,
 
   if (canonical_location)
     ret->canonical_location = ide_source_location_ref (canonical_location);
+
+  EGG_COUNTER_INC (instances);
 
   return ret;
 }
@@ -162,5 +168,7 @@ ide_symbol_unref (IdeSymbol *self)
       g_clear_pointer (&self->canonical_location, ide_source_location_unref);
       g_clear_pointer (&self->name, g_free);
       g_free (self);
+
+      EGG_COUNTER_DEC (instances);
     }
 }

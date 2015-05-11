@@ -23,11 +23,15 @@
 #include <sys/user.h>
 #include <unistd.h>
 
+#include "egg-counter.h"
+
 #include "ide-debug.h"
 #include "ide-highlight-index.h"
 
 G_DEFINE_BOXED_TYPE (IdeHighlightIndex, ide_highlight_index,
                      ide_highlight_index_ref, ide_highlight_index_unref)
+
+EGG_DEFINE_COUNTER (instances, "Instances", "IdeHighlightIndex Instances", "Number of indexes")
 
 struct _IdeHighlightIndex
 {
@@ -50,6 +54,8 @@ ide_highlight_index_new (void)
   ret->ref_count = 1;
   ret->strings = g_string_chunk_new (sysconf (_SC_PAGE_SIZE));
   ret->index = g_hash_table_new (g_str_hash, g_str_equal);
+
+  EGG_COUNTER_INC (instances);
 
   return ret;
 }
@@ -116,6 +122,8 @@ ide_highlight_index_finalize (IdeHighlightIndex *self)
   g_string_chunk_free (self->strings);
   g_hash_table_unref (self->index);
   g_free (self);
+
+  EGG_COUNTER_DEC (instances);
 
   IDE_EXIT;
 }

@@ -16,9 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-ref-ptr"
+
+#include "egg-counter.h"
+
 #include "ide-ref-ptr.h"
 
 G_DEFINE_BOXED_TYPE (IdeRefPtr, ide_ref_ptr, ide_ref_ptr_ref, ide_ref_ptr_unref)
+
+EGG_DEFINE_COUNTER (instances, "Instances", "IdeRefPtr", "Number of IdeRefPtr instances.")
 
 struct _IdeRefPtr
 {
@@ -37,6 +43,8 @@ ide_ref_ptr_new (gpointer       data,
   self->ref_count = 1;
   self->data = data;
   self->free_func = free_func;
+
+  EGG_COUNTER_INC (instances);
 
   return self;
 }
@@ -62,6 +70,7 @@ ide_ref_ptr_unref (IdeRefPtr *self)
     {
       if (self->free_func)
         g_clear_pointer (&self->data, self->free_func);
+      EGG_COUNTER_DEC (instances);
     }
 }
 

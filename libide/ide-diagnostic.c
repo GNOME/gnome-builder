@@ -16,12 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-diagnostic"
+
+#include "egg-counter.h"
+
 #include "ide-diagnostic.h"
 #include "ide-internal.h"
 #include "ide-source-location.h"
 #include "ide-source-range.h"
 
 G_DEFINE_BOXED_TYPE (IdeDiagnostic, ide_diagnostic, ide_diagnostic_ref, ide_diagnostic_unref)
+
+EGG_DEFINE_COUNTER (instances, "Instances", "IdeDiagnostic", "Number of IdeDiagnostic")
 
 struct _IdeDiagnostic
 {
@@ -57,6 +63,8 @@ ide_diagnostic_unref (IdeDiagnostic *self)
       g_clear_pointer (&self->ranges, g_ptr_array_unref);
       g_clear_pointer (&self->fixits, g_ptr_array_unref);
       g_free (self);
+
+      EGG_COUNTER_DEC (instances);
     }
 }
 
@@ -177,6 +185,8 @@ _ide_diagnostic_new (IdeDiagnosticSeverity  severity,
   ret->severity = severity;
   ret->text = g_strdup (text);
   ret->location = location ? ide_source_location_ref (location) : NULL;
+
+  EGG_COUNTER_INC (instances);
 
   return ret;
 }

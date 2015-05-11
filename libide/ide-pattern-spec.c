@@ -23,10 +23,13 @@
 #endif
 #include <string.h>
 
+#include "egg-counter.h"
+
 #include "ide-pattern-spec.h"
 
-G_DEFINE_BOXED_TYPE (IdePatternSpec, ide_pattern_spec,
-                     ide_pattern_spec_ref, ide_pattern_spec_unref)
+G_DEFINE_BOXED_TYPE (IdePatternSpec, ide_pattern_spec, ide_pattern_spec_ref, ide_pattern_spec_unref)
+
+EGG_DEFINE_COUNTER (instances, "Instances", "IdePatternSpec", "Number of IdePatternSpec")
 
 /**
  * SECTION:ide-pattern-spec:
@@ -69,6 +72,8 @@ ide_pattern_spec_new (const gchar *needle)
         }
     }
 
+  EGG_COUNTER_INC (instances);
+
   return self;
 }
 
@@ -86,6 +91,8 @@ ide_pattern_spec_free (IdePatternSpec *self)
   g_strfreev (self->parts);
   g_free (self->needle);
   g_free (self);
+
+  EGG_COUNTER_DEC (instances);
 }
 
 static inline gboolean

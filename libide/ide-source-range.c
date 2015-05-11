@@ -16,12 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-source-range"
+
+#include "egg-counter.h"
+
 #include "ide-file.h"
 #include "ide-source-location.h"
 #include "ide-source-range.h"
 
-G_DEFINE_BOXED_TYPE (IdeSourceRange, ide_source_range,
-                     ide_source_range_ref, ide_source_range_unref)
+G_DEFINE_BOXED_TYPE (IdeSourceRange, ide_source_range, ide_source_range_ref, ide_source_range_unref)
+
+EGG_DEFINE_COUNTER (instances, "Instances", "IdeSourceRange", "Number of IdeSourceRange instances.")
 
 struct _IdeSourceRange
 {
@@ -46,6 +51,8 @@ _ide_source_range_new (IdeSourceLocation *begin,
   ret->ref_count = 1;
   ret->begin = ide_source_location_ref (begin);
   ret->end = ide_source_location_ref (end);
+
+  EGG_COUNTER_INC (instances);
 
   return ret;
 }
@@ -117,5 +124,7 @@ ide_source_range_unref (IdeSourceRange *self)
       ide_source_location_unref (self->begin);
       ide_source_location_unref (self->end);
       g_slice_free (IdeSourceRange, self);
+
+      EGG_COUNTER_DEC (instances);
     }
 }

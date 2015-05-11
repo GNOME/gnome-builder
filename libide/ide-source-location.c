@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-source-location"
+
+#include "egg-counter.h"
+
 #include "ide-file.h"
 #include "ide-source-location.h"
 
@@ -30,6 +34,8 @@ struct _IdeSourceLocation
   guint          offset;
   IdeFile       *file;
 };
+
+EGG_DEFINE_COUNTER (instances, "Instances", "IdeSourceLocation", "Number of IdeSourceLocation")
 
 /**
  * ide_source_location_ref:
@@ -63,6 +69,7 @@ ide_source_location_unref (IdeSourceLocation *self)
     {
       g_clear_object (&self->file);
       g_slice_free (IdeSourceLocation, self);
+      EGG_COUNTER_DEC (instances);
     }
 }
 
@@ -154,6 +161,8 @@ ide_source_location_new (IdeFile *file,
   ret->line = line;
   ret->line_offset = line_offset;
   ret->offset = offset;
+
+  EGG_COUNTER_INC (instances);
 
   return ret;
 }
