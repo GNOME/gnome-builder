@@ -20,13 +20,15 @@
 
 #include "ide-html-completion-provider.h"
 #include "ide-html-language.h"
+#include "ide-xml-highlighter.h"
 #include "ide-xml-indenter.h"
 
 struct _IdeHtmlLanguage
 {
-  IdeLanguage     parent_instance;
+  IdeLanguage        parent_instance;
 
-  IdeXmlIndenter *indenter;
+  IdeXmlIndenter    *indenter;
+  IdeXmlHighlighter *highlighter;
 };
 
 static void initable_iface_init (GInitableIface *iface);
@@ -67,6 +69,26 @@ ide_html_language_get_indenter (IdeLanguage *language)
   return IDE_INDENTER (self->indenter);
 }
 
+static IdeHighlighter *
+ide_html_language_get_highlighter (IdeLanguage *language)
+{
+  IdeHtmlLanguage *self = (IdeHtmlLanguage *)language;
+
+  g_assert (IDE_IS_HTML_LANGUAGE (self));
+
+  if (!self->highlighter)
+    {
+      IdeContext *context;
+
+      context = ide_object_get_context (IDE_OBJECT (language));
+      self->highlighter = g_object_new (IDE_TYPE_XML_HIGHLIGHTER,
+                                        "context", context,
+                                        NULL);
+    }
+
+  return IDE_HIGHLIGHTER (self->highlighter);
+}
+
 static void
 ide_html_language_finalize (GObject *object)
 {
@@ -86,6 +108,7 @@ ide_html_language_class_init (IdeHtmlLanguageClass *klass)
   object_class->finalize = ide_html_language_finalize;
 
   language_class->get_completion_providers = ide_html_language_get_completion_providers;
+  language_class->get_highlighter = ide_html_language_get_highlighter;
   language_class->get_indenter = ide_html_language_get_indenter;
 }
 
