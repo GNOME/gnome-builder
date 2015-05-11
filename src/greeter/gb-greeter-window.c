@@ -346,6 +346,8 @@ gb_greeter_window__row_activated (GbGreeterWindow     *self,
                                      NULL,
                                      gb_greeter_window__open_project_cb,
                                      g_object_ref (self));
+
+  ide_project_info_set_is_recent (project_info, TRUE);
 }
 
 static gboolean
