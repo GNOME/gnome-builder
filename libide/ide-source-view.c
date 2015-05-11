@@ -4792,8 +4792,8 @@ ide_source_view_dispose (GObject *object)
 
   if (priv->delayed_scroll_replay)
     {
-      priv->delayed_scroll_replay = 0;
       g_source_remove (priv->delayed_scroll_replay);
+      priv->delayed_scroll_replay = 0;
     }
 
   g_clear_object (&priv->capture);
