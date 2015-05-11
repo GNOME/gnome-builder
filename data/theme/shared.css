@@ -98,3 +98,8 @@ GbDocumentStack .button {
   transition: none;
 }
 
+
+GbGreeterProjectRow,
+GtkListBoxRow.with-header {
+  border-bottom: 1px solid alpha(@borders, 0.4);
+}

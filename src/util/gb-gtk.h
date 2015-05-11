@@ -35,10 +35,6 @@ void gb_gtk_text_view_scroll_to_iter (GtkTextView *text_view,
                                       gdouble      xalign,
                                       gdouble      yalign);
 
-void gb_gtk_list_box_row_separator_func (GtkListBoxRow *row,
-                                         GtkListBoxRow *before,
-                                         gpointer       user_data);
-
 gboolean gb_gtk_text_view_get_iter_visible (GtkTextView *text_view,
                                             GtkTextIter *iter);
 

@@ -23,6 +23,7 @@
 
 #include "gb-editor-settings-widget.h"
 #include "gb-preferences-page-language.h"
+#include "gb-gtk.h"
 #include "gb-string.h"
 #include "gb-widget.h"
 
@@ -73,28 +74,12 @@ make_language_row (GtkSourceLanguage *language)
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "visible", TRUE,
                       NULL);
+  gb_widget_add_style_class (row, "with-header");
   gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (box));
 
   g_object_set_data (G_OBJECT (row), "GTK_SOURCE_LANGUAGE", language);
 
   return GTK_WIDGET (row);
-}
-
-static void
-item_header_func (GtkListBoxRow *row,
-                  GtkListBoxRow *before,
-                  gpointer       user_data)
-{
-  g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
-
-  if (before)
-    {
-      GtkWidget *sep;
-
-      sep = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_list_box_row_set_header (row, sep);
-      gtk_widget_show (sep);
-    }
 }
 
 static gboolean
@@ -213,8 +198,6 @@ gb_preferences_page_language_constructed (GObject *object)
   const gchar * const *lang_ids;
   guint i;
 
-  gtk_list_box_set_header_func (page->language_list_box,
-                                item_header_func, NULL, NULL);
   gtk_list_box_set_filter_func (page->language_list_box,
                                 item_filter_func, page->search_entry,
                                 NULL);
