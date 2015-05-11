@@ -2214,6 +2214,12 @@ ide_source_view_real_button_press_event (GtkWidget      *widget,
         }
     }
 
+  /*
+   * Update our target offset so movements don't cause us to revert
+   * to the previous offset.
+   */
+  ide_source_view_save_offset (self);
+
   return ret;
 }
 
