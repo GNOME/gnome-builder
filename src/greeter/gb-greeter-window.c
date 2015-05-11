@@ -348,6 +348,28 @@ gb_greeter_window__row_activated (GbGreeterWindow     *self,
                                      g_object_ref (self));
 }
 
+static gboolean
+gb_greeter_window__keynav_failed (GbGreeterWindow  *self,
+                                  GtkDirectionType  dir,
+                                  GtkListBox       *list_box)
+{
+  g_assert (GB_IS_GREETER_WINDOW (self));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  if ((list_box == self->my_projects_list_box) && (dir == GTK_DIR_DOWN))
+    {
+      gtk_widget_child_focus (GTK_WIDGET (self->other_projects_list_box), GTK_DIR_DOWN);
+      return GDK_EVENT_STOP;
+    }
+  else if ((list_box == self->other_projects_list_box) && (dir == GTK_DIR_UP))
+    {
+      gtk_widget_child_focus (GTK_WIDGET (self->my_projects_list_box), GTK_DIR_UP);
+      return GDK_EVENT_STOP;
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 static void
 gb_greeter_window_constructed (GObject *object)
 {
@@ -471,9 +493,21 @@ gb_greeter_window_init (GbGreeterWindow *self)
                            self,
                            G_CONNECT_SWAPPED);
 
+  g_signal_connect_object (self->my_projects_list_box,
+                           "keynav-failed",
+                           G_CALLBACK (gb_greeter_window__keynav_failed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   g_signal_connect_object (self->other_projects_list_box,
                            "row-activated",
                            G_CALLBACK (gb_greeter_window__row_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->other_projects_list_box,
+                           "keynav-failed",
+                           G_CALLBACK (gb_greeter_window__keynav_failed),
                            self,
                            G_CONNECT_SWAPPED);
 
