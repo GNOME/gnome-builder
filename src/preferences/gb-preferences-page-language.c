@@ -97,15 +97,28 @@ item_filter_func (GtkListBoxRow *row,
 
   if (gb_str_empty0 (text))
     return TRUE;
+  else
+    {
+      gchar *search_text;
+      gchar *language_name;
+      gchar *language_id;
+      gboolean found;
 
-  lang = g_object_get_data (G_OBJECT (row), "GTK_SOURCE_LANGUAGE");
-  g_assert (lang);
+      lang = g_object_get_data (G_OBJECT (row), "GTK_SOURCE_LANGUAGE");
+      g_assert (lang);
 
-  if (strstr (gtk_source_language_get_id (lang), text) ||
-      strstr (gtk_source_language_get_name (lang), text))
-    return TRUE;
+      search_text = g_utf8_strdown (text, -1);
+      language_name = g_utf8_strdown (gtk_source_language_get_name (lang), -1);
+      language_id = g_utf8_strdown (gtk_source_language_get_id (lang), -1);
 
-  return FALSE;
+      found = strstr (language_id, search_text) || strstr (language_name, search_text);
+
+      g_free(search_text);
+      g_free(language_name);
+      g_free(language_id);
+
+      return found;
+    }
 }
 
 static void
