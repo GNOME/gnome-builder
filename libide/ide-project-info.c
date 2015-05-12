@@ -273,7 +273,7 @@ ide_project_info_set_last_modified_at (IdeProjectInfo *self,
 gboolean
 ide_project_info_get_is_recent (IdeProjectInfo *self)
 {
-  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), FALSE);
 
   return self->is_recent;
 }
