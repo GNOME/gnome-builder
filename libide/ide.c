@@ -89,7 +89,6 @@ ide_init_ctor (void)
   GgitFeatureFlags ggit_flags;
 
   g_irepository_prepend_search_path (LIBDIR"/gnome-builder/girepository-1.0");
-  g_irepository_prepend_library_path (LIBDIR);
 
   g_type_ensure (IDE_TYPE_CONTEXT);
   g_type_ensure (IDE_TYPE_BUILD_SYSTEM);
