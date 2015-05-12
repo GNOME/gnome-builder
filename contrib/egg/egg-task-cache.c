@@ -41,7 +41,7 @@ EGG_DEFINE_COUNTER (in_flight,  "EggTaskCache", "In Flight",  "Number of in flig
 EGG_DEFINE_COUNTER (queued,     "EggTaskCache", "Queued",     "Number of queued operations")
 EGG_DEFINE_COUNTER (cached,     "EggTaskCache", "Cache Size", "Number of cached items")
 EGG_DEFINE_COUNTER (hits,       "EggTaskCache", "Cache Hits", "Number of cache hits")
-EGG_DEFINE_COUNTER (misses,     "EggTaskCache", "Cache Size", "Number of cache misses")
+EGG_DEFINE_COUNTER (misses,     "EggTaskCache", "Cache Miss", "Number of cache misses")
 
 static gboolean
 egg_task_cache_populate_from_cache (EggTaskCache *self,
