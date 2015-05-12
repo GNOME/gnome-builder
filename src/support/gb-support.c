@@ -19,8 +19,28 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+#include "egg-counter.h"
 #include "gb-application.h"
 #include "gb-support.h"
+
+static gchar *
+str_to_key (const gchar *str)
+{
+  return g_strdelimit (g_strdup (str), " ", '_');
+}
+
+static void
+counter_arena_foreach_cb (EggCounter *counter,
+                          gpointer    user_data)
+{
+  GString *str = (GString *)user_data;
+  g_autofree gchar *category = str_to_key (counter->category);
+  g_autofree gchar *name = str_to_key (counter->name);
+
+  g_string_append_printf (str,
+                          "%s.%s = %"G_GINT64_FORMAT"\n",
+                          category, name, egg_counter_get (counter));
+}
 
 gchar *
 gb_get_support_log (void)
@@ -127,6 +147,14 @@ gb_get_support_log (void)
       g_free (key);
     }
   g_strfreev (env);
+  g_string_append (str, "\n");
+
+  /*
+   * Log the counters.
+   */
+  g_string_append (str, "[runtime.counters]\n");
+  egg_counter_arena_foreach (egg_counter_arena_get_default (),
+                             counter_arena_foreach_cb, str);
 
   g_string_append (str, "\n\n");
 
