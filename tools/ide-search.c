@@ -61,7 +61,10 @@ static void
 on_completed_cb (IdeSearchContext *search_context,
                  IdeContext       *context)
 {
-  g_print (_("%"G_GSIZE_FORMAT" results\n"), gCount);
+  gchar *gCount_str;
+  gCount_str = g_strdup_printf ("%"G_GSIZE_FORMAT, gCount);
+  g_print (_("%s results\n"), gCount_str);
+  g_free (gCount_str);
   g_object_unref (context);
   quit (gExitCode);
 }

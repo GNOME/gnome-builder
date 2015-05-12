@@ -173,13 +173,16 @@ gb_search_display_group_set_count (GbSearchDisplayGroup *self,
                                    guint64               count)
 {
   GtkWidget *parent;
+  gchar *count_str;
   gchar *markup;
 
   g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
 
-  markup = g_strdup_printf (_("%"G_GUINT64_FORMAT" more"), count);
+  count_str = g_strdup_printf ("%"G_GUINT64_FORMAT, count);
+  markup = g_strdup_printf (_("%s more"), count_str);
   gtk_label_set_label (self->more_label, markup);
   g_free (markup);
+  g_free (count_str);
 
   parent = GTK_WIDGET (self->more_row);
 

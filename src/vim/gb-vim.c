@@ -66,6 +66,7 @@ int32_parse (gint         *value,
              GError      **error)
 {
   gint64 v64;
+  gchar *v64_str;
 
   g_assert (value);
   g_assert (str);
@@ -85,11 +86,13 @@ int32_parse (gint         *value,
 
   if ((v64 < lower) || (v64 > upper))
     {
+      v64_str = g_strdup_printf ("%"G_GINT64_FORMAT, v64);
       g_set_error (error,
                    GB_VIM_ERROR,
                    GB_VIM_ERROR_NUMBER_OUT_OF_RANGE,
-                   _("%"G_GINT64_FORMAT" is invalid for %s"),
-                   v64, param_name);
+                   _("%s is invalid for %s"),
+                   v64_str, param_name);
+      g_free (v64_str);
       return FALSE;
     }
 
