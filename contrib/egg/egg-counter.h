@@ -225,9 +225,9 @@ G_BEGIN_DECLS
  * See #EggCounter for more information.
  */
 #ifdef EGG_COUNTER_REQUIRES_ATOMIC
-# define EGG_COUNTER_ADD(Identifier, Count)                    \
-  G_STMT_START {                                               \
-    __sync_fetch_and_add8 (&Identifier.values[0], Count);      \
+# define EGG_COUNTER_ADD(Identifier, Count)                                \
+  G_STMT_START {                                                           \
+    __sync_add_and_fetch ((gint64 *)&Identifier.values[0], (gint64)Count); \
   } G_STMT_END
 #else
 # define EGG_COUNTER_ADD(Identifier, Count)                    \
