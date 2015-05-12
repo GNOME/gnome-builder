@@ -110,6 +110,8 @@ egg_signal_group__target_weak_notify (gpointer  data,
       handler->handler_id = 0;
     }
 
+  self->target = NULL;
+
   g_signal_emit (self, gSignals [UNBIND], 0);
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TARGET]);
 }
@@ -178,6 +180,8 @@ egg_signal_group_unbind (EggSignalGroup *self)
 
   g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
 
+  /* Do nothing if the target was already freed, we can't disconnect from a freed target,
+   * and since the target is gone, no signal will be emitted. */
   if (self->target == NULL)
     return;
 
