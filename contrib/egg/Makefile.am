@@ -18,6 +18,9 @@ libegg_la_SOURCES = \
 	$(NULL)
 
 libegg_la_CFLAGS = $(EGG_CFLAGS)
-libegg_la_LIBADD = $(EGG_LIBS)
+libegg_la_LIBADD = \
+	$(EGG_LIBS) \
+	$(SHM_LIB) \
+	$(NULL)
 
 -include $(top_srcdir)/git.mk

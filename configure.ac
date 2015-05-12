@@ -317,6 +317,14 @@ AC_SUBST(OPTIMIZE_LDFLAGS)
 
 
 dnl ***********************************************************************
+dnl Check if shm_open Requires a Library
+dnl ***********************************************************************
+AC_CHECK_FUNCS([shm_open], [SHM_LIB=],
+               [AC_CHECK_LIB([rt], [shm_open], [SHM_LIB=-lrt], [SHM_LIB=])])
+AC_SUBST(SHM_LIB)
+
+
+dnl ***********************************************************************
 dnl Process .in Files
 dnl ***********************************************************************
 AC_CONFIG_FILES([

@@ -383,6 +383,7 @@ libide_1_0_la_LDFLAGS = \
 libide_1_0_la_LIBADD = \
 	$(CLANG_LDFLAGS) \
 	$(LIBIDE_LIBS) \
+	$(SHM_LIB) \
 	-lclang \
 	-lm \
 	$(top_builddir)/contrib/egg/libegg.la \

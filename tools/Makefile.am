@@ -60,7 +60,7 @@ ide_list_counters_CFLAGS = \
 ide_list_counters_LDADD = \
 	$(EGG_LIBS) \
 	$(top_builddir)/contrib/egg/libegg.la \
-	-lrt \
+	$(SHM_LIB) \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
