@@ -3,7 +3,8 @@ DISTCLEANFILES =
 BUILT_SOURCES =
 EXTRA_DIST =
 
-lib_LTLIBRARIES = libide-1.0.la
+pkglibdir = $(libdir)/gnome-builder
+pkglib_LTLIBRARIES = libide-1.0.la
 
 libide_1_0_la_public_sources = \
 	autotools/ide-autotools-build-system.c \
@@ -320,6 +321,7 @@ libide_1_0_la_SOURCES = \
 libide_1_0_la_includes = \
 	$(DEBUG_CFLAGS) \
 	$(CLANG_CFLAGS) \
+	-DLIBDIR="\"$(libdir)\"" \
 	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/libeditorconfig \
@@ -446,7 +448,7 @@ INTROSPECTION_GIRS += Ide-1.0.gir
 girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)
 
-typelibdir = $(libdir)/girepository-1.0
+typelibdir = $(pkglibdir)/girepository-1.0
 typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
 CLEANFILES += $(gir_DATA) $(typelib_DATA)

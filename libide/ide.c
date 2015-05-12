@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <girepository.h>
 #include <glib/gi18n.h>
 #include <libgit2-glib/ggit.h>
 #include <stdlib.h>
@@ -86,6 +87,9 @@ static void
 ide_init_ctor (void)
 {
   GgitFeatureFlags ggit_flags;
+
+  g_irepository_prepend_search_path (LIBDIR"/gnome-builder/girepository-1.0");
+  g_irepository_prepend_library_path (LIBDIR);
 
   g_type_ensure (IDE_TYPE_CONTEXT);
   g_type_ensure (IDE_TYPE_BUILD_SYSTEM);
