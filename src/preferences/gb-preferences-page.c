@@ -185,6 +185,15 @@ gb_preferences_page_reset_title (GbPreferencesPage *page)
   gb_preferences_page_set_title (page, priv->default_title);
 }
 
+void
+gb_preferences_page_clear_search (GbPreferencesPage *page)
+{
+  g_return_if_fail (GB_IS_PREFERENCES_PAGE (page));
+
+  if (GB_PREFERENCES_PAGE_GET_CLASS (page)->clear_search)
+    return GB_PREFERENCES_PAGE_GET_CLASS (page)->clear_search (page);
+}
+
 static const gchar *
 gb_preferences_page_get_title (GbPreferencesPage *page)
 {

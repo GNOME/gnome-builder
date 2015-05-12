@@ -191,6 +191,16 @@ back_button_clicked_cb (GbPreferencesPageLanguage *page,
 }
 
 static void
+gb_preferences_page_language_clear_search (GbPreferencesPage *self)
+{
+  GbPreferencesPageLanguage *page = (GbPreferencesPageLanguage *)self;
+
+  g_assert (GB_IS_PREFERENCES_PAGE_LANGUAGE (page));
+
+  gtk_entry_set_text (GTK_ENTRY (page->search_entry), "");
+}
+
+static void
 gb_preferences_page_language_constructed (GObject *object)
 {
   GtkSourceLanguageManager *manager;
@@ -266,9 +276,11 @@ gb_preferences_page_language_class_init (GbPreferencesPageLanguageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GbPreferencesPageClass *preferences_page_class = GB_PREFERENCES_PAGE_CLASS (klass);
 
   object_class->constructed = gb_preferences_page_language_constructed;
   object_class->finalize = gb_preferences_page_language_finalize;
+  preferences_page_class->clear_search = gb_preferences_page_language_clear_search;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/ui/gb-preferences-page-language.ui");

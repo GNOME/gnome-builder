@@ -30,18 +30,28 @@ G_DECLARE_DERIVABLE_TYPE (GbPreferencesPage, gb_preferences_page, GB, PREFERENCE
 struct _GbPreferencesPageClass
 {
   GtkBinClass parent;
+
+  /**
+   * GbPreferencesPage::clear_search:
+   *
+   * Signal to let each preferences page clear
+   * its local search when a global search is
+   * about to be started
+   */
+  void (*clear_search) (GbPreferencesPage *self);
 };
 
-guint        gb_preferences_page_set_keywords            (GbPreferencesPage   *page,
-                                                          const gchar * const *keywords);
-void         gb_preferences_page_set_keywords_for_widget (GbPreferencesPage   *page,
-                                                          const gchar         *keywords,
-                                                          gpointer             first_widget,
-                                                          ...) G_GNUC_NULL_TERMINATED;
-void         gb_preferences_page_set_title               (GbPreferencesPage *page,
-                                                          const gchar       *title);
-void         gb_preferences_page_reset_title             (GbPreferencesPage *page);
-GtkWidget   *gb_preferences_page_get_controls            (GbPreferencesPage *page);
+guint                  gb_preferences_page_set_keywords            (GbPreferencesPage   *page,
+                                                                    const gchar * const *keywords);
+void                   gb_preferences_page_set_keywords_for_widget (GbPreferencesPage   *page,
+                                                                    const gchar         *keywords,
+                                                                    gpointer             first_widget,
+                                                                    ...) G_GNUC_NULL_TERMINATED;
+void                   gb_preferences_page_set_title               (GbPreferencesPage *page,
+                                                                    const gchar       *title);
+void                   gb_preferences_page_reset_title             (GbPreferencesPage *page);
+GtkWidget             *gb_preferences_page_get_controls            (GbPreferencesPage *page);
+void                   gb_preferences_page_clear_search            (GbPreferencesPage *page);
 
 G_END_DECLS
 

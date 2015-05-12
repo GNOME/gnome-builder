@@ -116,6 +116,28 @@ gb_preferences_window_close (GbPreferencesWindow *self)
 }
 
 static void
+gb_preferences_window_search_bar_enable_changed (GbPreferencesWindow *self,
+                                                 GParamSpec          *pspec,
+                                                 EggSearchBar        *search_bar)
+{
+  g_return_if_fail (GB_IS_PREFERENCES_WINDOW (self));
+  g_return_if_fail (EGG_IS_SEARCH_BAR (search_bar));
+
+  if(egg_search_bar_get_search_mode_enabled (search_bar))
+    {
+      GList *pages;
+      GList *iter;
+
+      pages = gtk_container_get_children (GTK_CONTAINER (self->stack));
+
+      for (iter = pages; iter; iter = iter->next)
+        gb_preferences_page_clear_search (GB_PREFERENCES_PAGE (iter->data));
+
+      g_list_free (pages);
+    }
+}
+
+static void
 gb_preferences_window_search_changed (GbPreferencesWindow *self,
                                       GtkSearchEntry      *entry)
 {
@@ -193,6 +215,12 @@ gb_preferences_window_constructed (GObject *object)
   g_signal_connect_object (self->search_entry,
                            "changed",
                            G_CALLBACK (gb_preferences_window_search_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->search_bar,
+                           "notify::search-mode-enabled",
+                           G_CALLBACK (gb_preferences_window_search_bar_enable_changed),
                            self,
                            G_CONNECT_SWAPPED);
 }
