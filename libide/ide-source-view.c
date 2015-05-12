@@ -304,6 +304,30 @@ search_movement_new (IdeSourceView *self,
   return mv;
 }
 
+static void
+ide_source_view_sync_rubberband_mark (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  /*
+   * Occasionally, we need to sync the rubberband mark with the insert mark so
+   * that forward searching does not jump around in the buffer. Good times to
+   * do so are when focus leaves the buffer, or when the ::set_search_text()
+   * vfunc is activated.
+   */
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  gtk_text_buffer_move_mark (buffer, priv->rubberband_mark, &iter);
+  gtk_text_buffer_move_mark (buffer, priv->rubberband_insert_mark, &iter);
+}
+
 void
 _ide_source_view_set_count (IdeSourceView *self,
                             guint          count)
@@ -3533,13 +3557,16 @@ ide_source_view_real_set_search_text (IdeSourceView *self,
   if (!priv->search_context)
     return;
 
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
   if (from_selection)
     {
-      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
       gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
       str = gtk_text_iter_get_slice (&begin, &end);
       search_text = str;
     }
+
+  ide_source_view_sync_rubberband_mark (self);
 
   settings = gtk_source_search_context_get_settings (priv->search_context);
   gtk_source_search_settings_set_search_text (settings, search_text);
@@ -4245,6 +4272,7 @@ ide_source_view_focus_out_event (GtkWidget     *widget,
    * another view into the same buffer has caused the insert mark to jump.
    */
   ide_source_view_real_save_insert_mark (self);
+  ide_source_view_sync_rubberband_mark (self);
 
   ret = GTK_WIDGET_CLASS (ide_source_view_parent_class)->focus_out_event (widget, event);
 
@@ -7083,7 +7111,7 @@ ide_source_view_set_rubberband_search (IdeSourceView *self,
           GdkRectangle rect;
 
           /*
-           * The rubberbound_mark is the top-left position of the sourceview
+           * The rubberband_mark is the top-left position of the sourceview
            * currently (for the beginning of the search). We use this so that
            * we can restore the sourceview vadjustment to the proper position
            * when rubberbanding back to the original position. The
