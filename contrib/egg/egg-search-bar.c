@@ -205,7 +205,7 @@ egg_search_bar_reveal (EggSearchBar *self)
 
   g_assert (EGG_IS_SEARCH_BAR (self));
 
-  gtk_revealer_set_reveal_child (priv->revealer, TRUE);
+  egg_search_bar_set_search_mode_enabled (self, TRUE);
   gtk_widget_grab_focus (GTK_WIDGET (priv->entry));
 }
 
