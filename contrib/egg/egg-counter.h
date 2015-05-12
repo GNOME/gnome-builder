@@ -172,13 +172,13 @@ G_BEGIN_DECLS
  * EGG_DEFINE_COUNTER (my_counter, "My", "Counter", "My Counter Description");
  * ]|
  */
-#define EGG_DEFINE_COUNTER(Identifier, Category, Name, Description)           \
- static EggCounter Identifier = { NULL, Category, Name, Description };        \
- static void Identifier##_counter_init (void) __attribute__((constructor));   \
- static void                                                                  \
- Identifier##_counter_init (void)                                             \
- {                                                                            \
-   egg_counter_arena_register (egg_counter_arena_get_default(), &Identifier); \
+#define EGG_DEFINE_COUNTER(Identifier, Category, Name, Description)                 \
+ static EggCounter Identifier##_ctr = { NULL, Category, Name, Description };        \
+ static void Identifier##_ctr_init (void) __attribute__((constructor));             \
+ static void                                                                        \
+ Identifier##_ctr_init (void)                                                       \
+ {                                                                                  \
+   egg_counter_arena_register (egg_counter_arena_get_default(), &Identifier##_ctr); \
  }
 
 /**
@@ -225,14 +225,14 @@ G_BEGIN_DECLS
  * See #EggCounter for more information.
  */
 #ifdef EGG_COUNTER_REQUIRES_ATOMIC
-# define EGG_COUNTER_ADD(Identifier, Count)                                \
-  G_STMT_START {                                                           \
-    __sync_add_and_fetch ((gint64 *)&Identifier.values[0], (gint64)Count); \
+# define EGG_COUNTER_ADD(Identifier, Count)                                      \
+  G_STMT_START {                                                                 \
+    __sync_add_and_fetch ((gint64 *)&Identifier##_ctr.values[0], (gint64)Count); \
   } G_STMT_END
 #else
-# define EGG_COUNTER_ADD(Identifier, Count)                    \
-  G_STMT_START {                                               \
-    Identifier.values[egg_get_current_cpu()].value += (Count); \
+# define EGG_COUNTER_ADD(Identifier, Count)                          \
+  G_STMT_START {                                                     \
+    Identifier##_ctr.values[egg_get_current_cpu()].value += (Count); \
   } G_STMT_END
 #endif
 

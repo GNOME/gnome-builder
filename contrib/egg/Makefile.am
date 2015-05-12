@@ -13,6 +13,8 @@ libegg_la_SOURCES = \
 	egg-signal-group.h \
 	egg-state-machine.c \
 	egg-state-machine.h \
+	egg-task-cache.c \
+	egg-task-cache.h \
 	$(NULL)
 
 libegg_la_CFLAGS = $(EGG_CFLAGS)
