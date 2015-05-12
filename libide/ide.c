@@ -214,4 +214,6 @@ ide_init_ctor (void)
     }
 
   _ide_thread_pool_init ();
+
+  _ide_battery_monitor_init ();
 }
