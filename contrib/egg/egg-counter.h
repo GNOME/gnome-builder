@@ -150,7 +150,7 @@ G_BEGIN_DECLS
     __builtin_ia32_rdtscp (&cpu);
     return cpu;
   }
-#elif defined(__linux__) || defined(__FreeBSD__)
+#elif defined(__linux__)
 # ifndef _GNU_SOURCE
 #  define _GNU_SOURCE
 # endif
