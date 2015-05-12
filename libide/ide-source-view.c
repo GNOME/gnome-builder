@@ -1076,7 +1076,10 @@ ide_source_view__search_settings_notify_search_text (IdeSourceView           *se
 
       if (gtk_source_search_context_forward (priv->search_context, &begin_iter,
                                              &match_begin, &match_end))
-        ide_source_view_scroll_to_iter (self, &match_begin, 0.25, TRUE, 1.0, 0.5, TRUE);
+        {
+          gtk_text_buffer_move_mark (buffer, priv->rubberband_mark, &match_begin);
+          ide_source_view_scroll_mark_onscreen (self, priv->rubberband_mark);
+        }
     }
 }
 
@@ -1376,11 +1379,10 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   priv->scroll_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), NULL, &iter, TRUE);
 
   /* Create rubberband mark used by search rubberbanding */
-  priv->rubberband_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer),
-                                                       "rubberband-search", &iter, TRUE);
-  priv->rubberband_insert_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer),
-                                                              "rubberband-search-insert",
-                                                              &iter, TRUE);
+  priv->rubberband_mark =
+    gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), NULL, &iter, TRUE);
+  priv->rubberband_insert_mark =
+    gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), NULL, &iter, TRUE);
 
   ide_source_view__buffer_notify_language_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_file_cb (self, NULL, buffer);
@@ -7143,7 +7145,7 @@ ide_source_view_rollback_search (IdeSourceView *self)
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
-  gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self), priv->rubberband_mark, 0.0, TRUE, 0.0, 1.0);
+  ide_source_view_scroll_mark_onscreen (self, priv->rubberband_mark);
 }
 
 GtkTextMark *
