@@ -21,6 +21,8 @@
 #include <clang-c/Index.h>
 #include <glib/gi18n.h>
 
+#include "egg-counter.h"
+
 #include "ide-context.h"
 #include "ide-clang-completion-item.h"
 #include "ide-clang-private.h"
@@ -66,6 +68,7 @@ typedef struct
 } GetSymbolsState;
 
 G_DEFINE_TYPE (IdeClangTranslationUnit, ide_clang_translation_unit, IDE_TYPE_OBJECT)
+EGG_DEFINE_COUNTER (instances, "Clang", "Translation Units", "Number of clang translation units")
 
 enum {
   PROP_0,
@@ -479,6 +482,8 @@ ide_clang_translation_unit_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_clang_translation_unit_parent_class)->finalize (object);
 
+  EGG_COUNTER_DEC (instances);
+
   IDE_EXIT;
 }
 
@@ -570,6 +575,8 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
 static void
 ide_clang_translation_unit_init (IdeClangTranslationUnit *self)
 {
+  EGG_COUNTER_INC (instances);
+
   self->diagnostics = g_hash_table_new_full ((GHashFunc)g_file_hash,
                                              (GEqualFunc)g_file_equal,
                                              g_object_unref,
