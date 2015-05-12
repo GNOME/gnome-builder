@@ -153,7 +153,16 @@ _egg_counter_arena_init_local (EggCounterArena *arena)
   gint fd;
   gchar name [32];
 
-  size = page_size = sysconf (_SC_PAGE_SIZE);
+  page_size = sysconf (_SC_PAGE_SIZE);
+
+  /*
+   * FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=749280
+   *
+   * We have some very tricky work ahead of us to add unlimited numbers
+   * of counters at runtime. We basically need to avoid placing counters
+   * that could overlap a page.
+   */
+  size = page_size * 4;
 
   arena->ref_count = 1;
   arena->is_local_arena = TRUE;
