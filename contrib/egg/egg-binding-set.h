@@ -45,6 +45,14 @@ void           egg_binding_set_bind_full  (EggBindingSet         *self,
                                            GBindingTransformFunc  transform_from,
                                            gpointer               user_data,
                                            GDestroyNotify         notify);
+void           egg_binding_set_bind_with_closures
+                                          (EggBindingSet         *self,
+                                           const gchar           *source_property,
+                                           gpointer               target,
+                                           const gchar           *target_property,
+                                           GBindingFlags          flags,
+                                           GClosure              *transform_to,
+                                           GClosure              *transform_from);
 
 G_END_DECLS
 

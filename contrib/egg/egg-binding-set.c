@@ -53,6 +53,8 @@ typedef struct
   GDestroyNotify         user_data_destroy;
   GBindingTransformFunc  transform_to;
   GBindingTransformFunc  transform_from;
+  GClosure              *transform_to_closure;
+  GClosure              *transform_from_closure;
   GBindingFlags          binding_flags;
 } LazyBinding;
 
@@ -76,6 +78,8 @@ static void
 egg_binding_set_connect (EggBindingSet *self,
                          LazyBinding   *lazy_binding)
 {
+  GBinding *binding;
+
   g_assert (EGG_IS_BINDING_SET (self));
   g_assert (self->source != NULL);
   g_assert (lazy_binding != NULL);
@@ -95,15 +99,31 @@ egg_binding_set_connect (EggBindingSet *self,
            lazy_binding->binding_flags);
 #endif
 
-  lazy_binding->binding = g_object_bind_property_full (self->source,
-                                                       lazy_binding->source_property,
-                                                       lazy_binding->target,
-                                                       lazy_binding->target_property,
-                                                       lazy_binding->binding_flags,
-                                                       lazy_binding->transform_to,
-                                                       lazy_binding->transform_from,
-                                                       lazy_binding->user_data,
-                                                       NULL);
+  if (lazy_binding->transform_to_closure == NULL &&
+      lazy_binding->transform_from_closure == NULL)
+    {
+      binding = g_object_bind_property_full (self->source,
+                                             lazy_binding->source_property,
+                                             lazy_binding->target,
+                                             lazy_binding->target_property,
+                                             lazy_binding->binding_flags,
+                                             lazy_binding->transform_to,
+                                             lazy_binding->transform_from,
+                                             lazy_binding->user_data,
+                                             NULL);
+    }
+  else
+    {
+      binding = g_object_bind_property_with_closures (self->source,
+                                                      lazy_binding->source_property,
+                                                      lazy_binding->target,
+                                                      lazy_binding->target_property,
+                                                      lazy_binding->binding_flags,
+                                                      lazy_binding->transform_to_closure,
+                                                      lazy_binding->transform_from_closure);
+    }
+
+  lazy_binding->binding = binding;
 }
 
 static void
@@ -185,6 +205,9 @@ lazy_binding_free (gpointer data)
 
   if (lazy_binding->user_data_destroy)
     lazy_binding->user_data_destroy (lazy_binding->user_data);
+
+  g_clear_pointer (&lazy_binding->transform_to_closure, g_closure_unref);
+  g_clear_pointer (&lazy_binding->transform_from_closure, g_closure_unref);
 
   g_slice_free (LazyBinding, lazy_binding);
 }
@@ -414,6 +437,54 @@ egg_binding_set_bind_full (EggBindingSet         *self,
   lazy_binding->transform_from = transform_from;
   lazy_binding->user_data = user_data;
   lazy_binding->user_data_destroy = user_data_destroy;
+
+  g_object_weak_ref (target,
+                     egg_binding_set__target_weak_notify,
+                     self);
+
+  g_ptr_array_add (self->lazy_bindings, lazy_binding);
+
+  if (self->source != NULL)
+    egg_binding_set_connect (self, lazy_binding);
+}
+
+void
+egg_binding_set_bind_with_closures (EggBindingSet *self,
+                                    const gchar   *source_property,
+                                    gpointer       target,
+                                    const gchar   *target_property,
+                                    GBindingFlags  flags,
+                                    GClosure      *transform_to,
+                                    GClosure      *transform_from)
+{
+  LazyBinding *lazy_binding;
+
+  g_return_if_fail (EGG_IS_BINDING_SET (self));
+  g_return_if_fail (source_property != NULL);
+  g_return_if_fail (self->source == NULL ||
+                    g_object_class_find_property (G_OBJECT_GET_CLASS (self->source),
+                                                  source_property) != NULL);
+  g_return_if_fail (G_IS_OBJECT (target));
+  g_return_if_fail (target_property != NULL);
+  g_return_if_fail (g_object_class_find_property (G_OBJECT_GET_CLASS (target),
+                                                  target_property) != NULL);
+  g_return_if_fail (target != (gpointer)self ||
+                    strcmp (source_property, target_property) != 0);
+
+  lazy_binding = g_slice_new0 (LazyBinding);
+  lazy_binding->set = self;
+  lazy_binding->source_property = g_intern_string (source_property);
+  lazy_binding->target_property = g_intern_string (target_property);
+  lazy_binding->target = target;
+  lazy_binding->binding_flags = flags | G_BINDING_SYNC_CREATE;
+  lazy_binding->transform_to_closure = transform_to;
+  lazy_binding->transform_from_closure = transform_from;
+
+  if (transform_to != NULL)
+    g_closure_sink (g_closure_ref (transform_to));
+
+  if (transform_from != NULL)
+    g_closure_sink (g_closure_ref (transform_from));
 
   g_object_weak_ref (target,
                      egg_binding_set__target_weak_notify,
