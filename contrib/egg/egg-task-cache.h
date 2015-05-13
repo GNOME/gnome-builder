@@ -27,15 +27,44 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EggTaskCache, egg_task_cache, EGG, TASK_CACHE, GObject)
 
-EggTaskCache *egg_task_cache_new      (void);
-void          egg_task_cache_populate (EggTaskCache    *self,
-                                       const gchar     *key,
-                                       GTask           *task,
-                                       GTaskThreadFunc  thread_func,
-                                       gpointer         task_data,
-                                       GDestroyNotify   task_data_destroy);
-gboolean      egg_task_cache_evict    (EggTaskCache    *self,
-                                       const gchar     *key);
+/**
+ * EggTaskCacheCallback:
+ * @self: An #EggTaskCache.
+ * @key: the key to fetch
+ * @task: the task to be completed
+ *
+ * #EggTaskCacheCallback is the prototype for a function to be executed to
+ * populate a an item in the cache.
+ *
+ * This function will be executed when a fault (cache miss) occurs from
+ * a caller requesting an item from the cache.
+ *
+ * The callee may complete the operation asynchronously, but MUST return
+ * either a GObject using g_task_return_pointer() or a #GError using
+ * g_task_return_error() or g_task_return_new_error().
+ */
+typedef void (*EggTaskCacheCallback) (EggTaskCache  *self,
+                                      gconstpointer  key,
+                                      GTask         *task);
+
+EggTaskCache *egg_task_cache_new        (GHashFunc              key_hash_func,
+                                         GEqualFunc             key_equal_func,
+                                         GBoxedCopyFunc         key_copy_func,
+                                         GBoxedFreeFunc         key_destroy_func,
+                                         EggTaskCacheCallback   populate_callback,
+                                         gint64                 time_to_live_msec);
+void          egg_task_cache_get_async  (EggTaskCache          *self,
+                                         gconstpointer          key,
+                                         GCancellable          *cancellable,
+                                         GAsyncReadyCallback    callback,
+                                         gpointer               user_data);
+gpointer      egg_task_cache_get_finish (EggTaskCache          *self,
+                                         GAsyncResult          *result,
+                                         GError               **error);
+gboolean      egg_task_cache_evict      (EggTaskCache          *self,
+                                         gconstpointer          key);
+gpointer      egg_task_cache_peek       (EggTaskCache          *self,
+                                         gconstpointer          key);
 
 G_END_DECLS
 
