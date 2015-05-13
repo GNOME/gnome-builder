@@ -31,7 +31,6 @@ G_DECLARE_FINAL_TYPE (IdeClangService, ide_clang_service, IDE, CLANG_SERVICE, Id
 
 void                     ide_clang_service_get_translation_unit_async  (IdeClangService      *self,
                                                                         IdeFile              *file,
-                                                                        gint64                min_sequence,
                                                                         GCancellable         *cancellable,
                                                                         GAsyncReadyCallback   callback,
                                                                         gpointer              user_data);

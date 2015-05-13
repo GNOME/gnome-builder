@@ -347,7 +347,6 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
 
   ide_clang_service_get_translation_unit_async (service,
                                                 file,
-                                                0,
                                                 NULL,
                                                 ide_clang_completion_provider_tu_cb,
                                                 state);
