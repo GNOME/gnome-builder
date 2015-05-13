@@ -132,10 +132,10 @@ egg_signal_group_bind_handler (EggSignalGroup *self,
   g_assert (handler->closure != NULL);
   g_assert (handler->handler_id == 0);
 
-  handler->handler_id =  g_signal_connect_closure (self->target,
-                                                   handler->detailed_signal,
-                                                   handler->closure,
-                                                   handler->connect_after);
+  handler->handler_id = g_signal_connect_closure (self->target,
+                                                  handler->detailed_signal,
+                                                  handler->closure,
+                                                  handler->connect_after);
 
   g_assert (handler->handler_id != 0);
 
@@ -183,8 +183,6 @@ egg_signal_group_unbind (EggSignalGroup *self)
 
   g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
 
-  /* Do nothing if the target was already freed, we can't disconnect from a freed target,
-   * and since the target is gone, no signal will be emitted. */
   if (self->target == NULL)
     return;
 
@@ -371,7 +369,6 @@ signal_handler_free (gpointer data)
   g_clear_pointer (&handler->closure, g_closure_unref);
   handler->handler_id = 0;
   handler->detailed_signal = NULL;
-  handler->connect_after = FALSE;
   g_slice_free (SignalHandler, handler);
 }
 
