@@ -285,6 +285,7 @@ egg_task_cache_propagate_error (EggTaskCache  *self,
 
   if ((queued = g_hash_table_lookup (self->queued, key)))
     {
+      gint64 count = queued->len;
       gsize i;
 
       /* we can't use steal because we want the key freed */
@@ -299,9 +300,9 @@ egg_task_cache_propagate_error (EggTaskCache  *self,
           g_task_return_error (task, g_error_copy (error));
         }
 
-      EGG_COUNTER_SUB (queued, queued->len);
-
       g_ptr_array_unref (queued);
+
+      EGG_COUNTER_SUB (queued, count);
     }
 }
 
@@ -339,6 +340,7 @@ egg_task_cache_propagate_pointer (EggTaskCache  *self,
 
   if ((queued = g_hash_table_lookup (self->queued, key)))
     {
+      gint64 count = queued->len;
       gsize i;
 
       g_ptr_array_ref (queued);
@@ -352,9 +354,9 @@ egg_task_cache_propagate_pointer (EggTaskCache  *self,
           g_task_return_pointer (task, g_object_ref (value), g_object_unref);
         }
 
-      EGG_COUNTER_SUB (queued, queued->len);
-
       g_ptr_array_unref (queued);
+
+      EGG_COUNTER_SUB (queued, count);
     }
 }
 
