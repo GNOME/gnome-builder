@@ -21,6 +21,8 @@
 
 #include "ide-object.h"
 
+#include "ide-makecache-target.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_MAKECACHE (ide_makecache_get_type())
@@ -35,8 +37,6 @@ void                 ide_makecache_new_for_makefile_async  (IdeContext          
 IdeMakecache        *ide_makecache_new_for_makefile_finish (GAsyncResult         *result,
                                                             GError              **error);
 GFile               *ide_makecache_get_makefile            (IdeMakecache         *self);
-GPtrArray           *ide_makecache_get_file_targets        (IdeMakecache         *self,
-                                                            GFile                *file);
 void                 ide_makecache_get_file_flags_async    (IdeMakecache         *self,
                                                             GFile                *file,
                                                             GCancellable         *cancellable,
@@ -45,6 +45,14 @@ void                 ide_makecache_get_file_flags_async    (IdeMakecache        
 gchar              **ide_makecache_get_file_flags_finish   (IdeMakecache         *self,
                                                             GAsyncResult         *result,
                                                             GError              **error);
+void                  ide_makecache_get_file_targets_async (IdeMakecache         *self,
+                                                            GFile                *file,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
+GPtrArray            *ide_makecache_get_file_targets_finish (IdeMakecache        *self,
+                                                             GAsyncResult        *result,
+                                                             GError             **error);
 
 G_END_DECLS
 

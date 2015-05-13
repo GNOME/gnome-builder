@@ -24,6 +24,7 @@
 #endif
 
 #include "egg-counter.h"
+#include "egg-task-cache.h"
 
 #include <ctype.h>
 #include <errno.h>
@@ -45,35 +46,31 @@
 #define FAKE_CC  "__LIBIDE_FAKE_CC__"
 #define FAKE_CXX "__LIBIDE_FAKE_CXX__"
 
-EGG_DEFINE_COUNTER (TargetHit, "Makecache", "Target Cache Hits", "Number of target cache hits")
-EGG_DEFINE_COUNTER (TargetMiss, "Makecache", "Target Cache Misses", "Number of target cache misses")
-EGG_DEFINE_COUNTER (FlagHit, "Makecache", "Flag Cache Hits", "Number of flag cache hits")
-EGG_DEFINE_COUNTER (FlagMiss, "Makecache", "Flag Cache Misses", "Number of flag cache misses")
-
 struct _IdeMakecache
 {
   IdeObject    parent_instance;
 
-  /* Immutable after instance creation */
-  GFile       *makefile;
-  GFile       *parent;
-  gchar       *llvm_flags;
-  GMappedFile *mapped;
-
-  /* Mutable, but only available from main thread */
-  GHashTable  *file_targets_cache;
-
-  /* Mutable, any thread, lock before reading or writing */
-  GMutex       mutex;
-  GHashTable  *file_flags_cache;
-  GHashTable  *file_targets_neg_cache;
+  GFile        *makefile;
+  GFile        *parent;
+  gchar        *llvm_flags;
+  GMappedFile  *mapped;
+  EggTaskCache *file_targets_cache;
+  EggTaskCache *file_flags_cache;
 };
 
 typedef struct
 {
-  GPtrArray *targets;
-  gchar     *relative_path;
+  IdeMakecache *self;
+  GFile        *file;
+  GPtrArray    *targets;
+  gchar        *relative_path;
 } FileFlagsLookup;
+
+typedef struct
+{
+  GMappedFile *mapped;
+  gchar       *path;
+} FileTargetsLookup;
 
 typedef struct
 {
@@ -151,12 +148,38 @@ file_flags_lookup_free (gpointer data)
 {
   FileFlagsLookup *lookup = data;
 
-  if (data)
-    {
-      g_ptr_array_unref (lookup->targets);
-      g_free (lookup->relative_path);
-      g_free (lookup);
-    }
+  g_object_unref (lookup->self);
+  g_object_unref (lookup->file);
+  g_ptr_array_unref (lookup->targets);
+  g_free (lookup->relative_path);
+  g_slice_free (FileFlagsLookup, lookup);
+}
+
+static void
+file_targets_lookup_free (gpointer data)
+{
+  FileTargetsLookup *lookup = data;
+
+  g_free (lookup->path);
+  g_mapped_file_unref (lookup->mapped);
+  g_slice_free (FileTargetsLookup, lookup);
+}
+
+static gboolean
+file_is_clangable (GFile *file)
+{
+  g_autofree gchar *name = NULL;
+
+  name = g_strreverse (g_file_get_basename (file));
+
+  return (g_str_has_prefix (name, "c.") ||
+          g_str_has_prefix (name, "h.") ||
+          g_str_has_prefix (name, "cc.") ||
+          g_str_has_prefix (name, "hh.") ||
+          g_str_has_prefix (name, "ppc.") ||
+          g_str_has_prefix (name, "pph.") ||
+          g_str_has_prefix (name, "xxc.") ||
+          g_str_has_prefix (name, "xxh."));
 }
 
 static gchar *
@@ -277,32 +300,14 @@ is_target_interesting (const gchar *target)
            g_str_has_suffix (target, ".o")));
 }
 
-static GPtrArray *
-ide_makecache_get_file_targets_cached (IdeMakecache *self,
-                                       const gchar  *path)
-{
-  GPtrArray *ret;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAKECACHE (self));
-  g_assert (path);
-
-  ret = g_hash_table_lookup (self->file_targets_cache, path);
-
-  g_debug ("File targets cache %s for %s.", ret ? "hit" : "miss", path);
-
-  IDE_RETURN (ret);
-}
-
 /**
  * ide_makecache_get_file_targets_searched:
  *
  * Returns: (transfer container): A #GPtrArray of #IdeMakecacheTarget.
  */
 static GPtrArray *
-ide_makecache_get_file_targets_searched (IdeMakecache *self,
-                                         const gchar  *path)
+ide_makecache_get_file_targets_searched (GMappedFile *mapped,
+                                         const gchar *path)
 {
   g_autofree gchar *escaped = NULL;
   g_autofree gchar *name = NULL;
@@ -320,7 +325,6 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_MAKECACHE (self));
   g_assert (path);
 
   /*
@@ -337,8 +341,8 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
   if (!regex)
     IDE_RETURN (NULL);
 
-  content = g_mapped_file_get_contents (self->mapped);
-  len = g_mapped_file_get_length (self->mapped);
+  content = g_mapped_file_get_contents (mapped);
+  len = g_mapped_file_get_length (mapped);
 
   targets = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_makecache_target_free);
   found = g_hash_table_new (ide_makecache_target_hash, ide_makecache_target_equal);
@@ -427,8 +431,6 @@ ide_makecache_get_file_targets_searched (IdeMakecache *self,
         g_string_free (str, TRUE);
       }
 #endif
-
-      g_hash_table_insert (self->file_targets_cache, g_strdup (path), g_ptr_array_ref (targets));
 
       g_ptr_array_ref (targets);
 
@@ -917,18 +919,20 @@ ide_makecache_get_file_flags_worker (GTask        *task,
                                      gpointer      task_data,
                                      GCancellable *cancellable)
 {
-  IdeMakecache *self = source_object;
   FileFlagsLookup *lookup = task_data;
+  EggTaskCache *cache = source_object;
   gsize i;
   gsize j;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_MAKECACHE (self));
+  g_assert (EGG_IS_TASK_CACHE (cache));
   g_assert (G_IS_TASK (task));
-  g_assert (lookup);
-  g_assert (lookup->relative_path);
-  g_assert (lookup->targets);
+  g_assert (lookup != NULL);
+  g_assert (lookup->relative_path != NULL);
+  g_assert (G_IS_FILE (lookup->file));
+  g_assert (IDE_IS_MAKECACHE (lookup->self));
+  g_assert (lookup->targets != NULL);
 
   for (j = 0; j < lookup->targets->len; j++)
     {
@@ -950,7 +954,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
       subdir = ide_makecache_target_get_subdir (target);
       targetstr = ide_makecache_target_get_target (target);
 
-      cwd = g_file_get_path (self->parent);
+      cwd = g_file_get_path (lookup->self->parent);
 
       if ((subdir != NULL) && g_str_has_prefix (lookup->relative_path, subdir))
         relpath = lookup->relative_path + strlen (subdir);
@@ -1018,7 +1022,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
           if (line [linelen - 1] == '\\')
             line [linelen - 1] = '\0';
 
-          if ((ret = ide_makecache_parse_line (self, line, relpath, subdir ?: ".")))
+          if ((ret = ide_makecache_parse_line (lookup->self, line, relpath, subdir ?: ".")))
             break;
         }
 
@@ -1026,10 +1030,6 @@ ide_makecache_get_file_flags_worker (GTask        *task,
 
       if (ret == NULL)
         continue;
-
-      g_mutex_lock (&self->mutex);
-      g_hash_table_replace (self->file_flags_cache, g_strdup (lookup->relative_path), g_strdupv (ret));
-      g_mutex_unlock (&self->mutex);
 
       g_task_return_pointer (task, ret, (GDestroyNotify)g_strfreev);
 
@@ -1066,16 +1066,159 @@ ide_makecache_set_makefile (IdeMakecache *self,
 }
 
 static void
+ide_makecache_get_file_targets_worker (GTask        *task,
+                                       gpointer      source_object,
+                                       gpointer      task_data,
+                                       GCancellable *cancellable)
+{
+  FileTargetsLookup *lookup = task_data;
+  GPtrArray *ret;
+
+  IDE_ENTRY;
+
+  g_assert (EGG_IS_TASK_CACHE (source_object));
+  g_assert (G_IS_TASK (task));
+  g_assert (lookup != NULL);
+  g_assert (lookup->mapped != NULL);
+  g_assert (lookup->path != NULL);
+
+  /* we use an empty GPtrArray to get negative cache hits. a bit heavy handed? sure. */
+  if (!(ret = ide_makecache_get_file_targets_searched (lookup->mapped, lookup->path)))
+    ret = g_ptr_array_new ();
+
+  g_task_return_pointer (task, ret, (GDestroyNotify)g_ptr_array_unref);
+
+  IDE_EXIT;
+}
+
+static void
+ide_makecache_get_file_targets_dispatch (EggTaskCache  *cache,
+                                         gconstpointer  key,
+                                         GTask         *task,
+                                         gpointer       user_data)
+{
+  IdeMakecache *self = user_data;
+  FileTargetsLookup *lookup;
+  GFile *file = (GFile *)key;
+
+  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (IDE_IS_MAKECACHE (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_TASK (task));
+
+  lookup = g_slice_new0 (FileTargetsLookup);
+  lookup->path = ide_makecache_get_relative_path (self, file);
+  lookup->mapped = g_mapped_file_ref (self->mapped);
+
+  g_task_set_task_data (task, lookup, file_targets_lookup_free);
+
+  /* throttle via the compiler thread pool */
+  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
+                             task,
+                             ide_makecache_get_file_targets_worker);
+}
+
+static void
+ide_makecache_get_file_flags__get_targets_cb (GObject      *object,
+                                              GAsyncResult *result,
+                                              gpointer      user_data)
+{
+  IdeMakecache *self = (IdeMakecache *)object;
+  g_autoptr(GPtrArray) targets = NULL;
+  g_autoptr(GTask) task = user_data;
+  FileFlagsLookup *lookup;
+  GError *error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAKECACHE (self));
+
+  if (!(targets = ide_makecache_get_file_targets_finish (self, result, &error)))
+    {
+      g_task_return_error (task, error);
+      IDE_EXIT;
+    }
+
+  lookup = g_task_get_task_data (task);
+  g_assert (IDE_IS_MAKECACHE (lookup->self));
+  g_assert (G_IS_FILE (lookup->file));
+
+  /*
+   * If we didn't discover any targets for this file, try to apply the language
+   * defaults based on the filetype.
+   */
+  if (targets->len == 0)
+    {
+      if (file_is_clangable (lookup->file))
+        {
+          gchar **ret;
+
+          ret = g_new0 (gchar *, 2);
+          ret [0] = g_strdup (self->llvm_flags);
+          ret [1] = NULL;
+
+          g_task_return_pointer (task, ret, (GDestroyNotify)g_strfreev);
+          IDE_EXIT;
+        }
+
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               "File is not included in an target.");
+      IDE_EXIT;
+    }
+
+  lookup->targets = g_ptr_array_ref (targets);
+
+  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
+                             task,
+                             ide_makecache_get_file_flags_worker);
+
+  IDE_EXIT;
+}
+
+static void
+ide_makecache_get_file_flags_dispatch (EggTaskCache  *cache,
+                                       gconstpointer  key,
+                                       GTask         *task,
+                                       gpointer       user_data)
+{
+  IdeMakecache *self = user_data;
+  FileFlagsLookup *lookup;
+  GFile *file = (GFile *)key;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_MAKECACHE (self));
+  g_assert (G_IS_FILE (file));
+
+  lookup = g_slice_new0 (FileFlagsLookup);
+  lookup->self = g_object_ref (self);
+  lookup->file = g_object_ref (file);
+  lookup->relative_path = ide_makecache_get_relative_path (self, file);
+
+  g_task_set_task_data (task, lookup, file_flags_lookup_free);
+
+  ide_makecache_get_file_targets_async (self,
+                                        file,
+                                        g_task_get_cancellable (task),
+                                        ide_makecache_get_file_flags__get_targets_cb,
+                                        g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+
+static void
 ide_makecache_finalize (GObject *object)
 {
   IdeMakecache *self = (IdeMakecache *)object;
 
-  g_mutex_clear (&self->mutex);
   g_clear_object (&self->makefile);
   g_clear_pointer (&self->mapped, g_mapped_file_unref);
-  g_clear_pointer (&self->file_targets_cache, g_hash_table_unref);
-  g_clear_pointer (&self->file_targets_neg_cache, g_hash_table_unref);
-  g_clear_pointer (&self->file_flags_cache, g_hash_table_unref);
+  g_clear_object (&self->file_targets_cache);
+  g_clear_object (&self->file_flags_cache);
   g_clear_pointer (&self->llvm_flags, g_free);
 
   G_OBJECT_CLASS (ide_makecache_parent_class)->finalize (object);
@@ -1141,13 +1284,27 @@ ide_makecache_class_init (IdeMakecacheClass *klass)
 static void
 ide_makecache_init (IdeMakecache *self)
 {
-  g_mutex_init (&self->mutex);
-  self->file_targets_cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
-                                                    (GDestroyNotify)g_ptr_array_unref);
-  self->file_targets_neg_cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
-                                                        (GDestroyNotify)g_strfreev);
-  self->file_flags_cache = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
-                                                  (GDestroyNotify)g_strfreev);
+  self->file_targets_cache = egg_task_cache_new (g_str_hash,
+                                                 g_str_equal,
+                                                 g_object_ref,
+                                                 g_object_unref,
+                                                 (GBoxedCopyFunc)g_ptr_array_ref,
+                                                 (GBoxedFreeFunc)g_ptr_array_unref,
+                                                 0,
+                                                 ide_makecache_get_file_targets_dispatch,
+                                                 self,
+                                                 NULL);
+
+  self->file_flags_cache = egg_task_cache_new (g_str_hash,
+                                               g_str_equal,
+                                               g_object_ref,
+                                               g_object_unref,
+                                               (GBoxedCopyFunc)g_strdupv,
+                                               (GBoxedFreeFunc)g_strfreev,
+                                               0,
+                                               ide_makecache_get_file_flags_dispatch,
+                                               self,
+                                               NULL);
 }
 
 GFile *
@@ -1238,39 +1395,19 @@ ide_makecache_new_for_makefile_finish (GAsyncResult  *result,
 }
 
 static void
-ide_makecache_get_file_targets_worker (GTask        *task,
-                                       gpointer      source_object,
-                                       gpointer      task_data,
-                                       GCancellable *cancellable)
+ide_makecache_get_file_targets__task_cache_get_cb (GObject      *object,
+                                                   GAsyncResult *result,
+                                                   gpointer      user_data)
 {
-  IdeMakecache *self = source_object;
-  const gchar *path = task_data;
+  EggTaskCache *cache = (EggTaskCache *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
   GPtrArray *ret;
 
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAKECACHE (self));
-  g_assert (G_IS_TASK (task));
-  g_assert (path);
-
-  ret = ide_makecache_get_file_targets_searched (self, path);
-
-  if (!ret)
-    {
-      g_mutex_lock (&self->mutex);
-      g_hash_table_insert (self->file_targets_neg_cache, g_strdup (path), NULL);
-      g_mutex_unlock (&self->mutex);
-
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_FOUND,
-                               "target was not found in project");
-      IDE_EXIT;
-    }
-
-  g_task_return_pointer (task, ret, (GDestroyNotify)g_ptr_array_unref);
-
-  IDE_EXIT;
+  if (!(ret = egg_task_cache_get_finish (cache, result, &error)))
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, ret, (GDestroyNotify)g_ptr_array_unref);
 }
 
 void
@@ -1281,61 +1418,32 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
                                       gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
-  GPtrArray *ret;
-  gchar *path = NULL;
-  gboolean neg_hit;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_MAKECACHE (self));
   g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  path = ide_makecache_get_relative_path (self, file);
-  g_task_set_task_data (task, path, g_free);
-
-  if (!path)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               "File must be in the project path.");
-      IDE_EXIT;
-    }
-
-  g_mutex_lock (&self->mutex);
-  neg_hit = g_hash_table_contains (self->file_targets_neg_cache, path);
-  g_mutex_unlock (&self->mutex);
-
-  if (neg_hit)
-    {
-      EGG_COUNTER_INC (TargetHit);
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_FOUND,
-                               "target could not be found");
-      IDE_EXIT;
-    }
-
-  ret = ide_makecache_get_file_targets_cached (self, path);
-
-  if (ret)
-    {
-      EGG_COUNTER_INC (TargetHit);
-      g_task_return_pointer (task, g_ptr_array_ref (ret), (GDestroyNotify)g_ptr_array_unref);
-      IDE_EXIT;
-    }
-
-  EGG_COUNTER_INC (TargetMiss);
-
-  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
-                             task,
-                             ide_makecache_get_file_targets_worker);
+  egg_task_cache_get_async (self->file_targets_cache,
+                            file,
+                            FALSE,
+                            cancellable,
+                            ide_makecache_get_file_targets__task_cache_get_cb,
+                            g_object_ref (task));
 
   IDE_EXIT;
 }
 
+/**
+ * ide_makecache_get_file_targets_finish:
+ *
+ * Completes an asynchronous request to ide_makecache_get_file_flags_async().
+ *
+ * Returns: (transfer container) (element-type IdeMakecacheTarget): An array of targets.
+ */
 GPtrArray *
 ide_makecache_get_file_targets_finish (IdeMakecache  *self,
                                        GAsyncResult  *result,
@@ -1355,67 +1463,19 @@ ide_makecache_get_file_targets_finish (IdeMakecache  *self,
 }
 
 static void
-ide_makecache__get_targets_cb (GObject      *object,
-                               GAsyncResult *result,
-                               gpointer      user_data)
+ide_makecache_get_file_flags__task_cache_get_cb (GObject      *object,
+                                                 GAsyncResult *result,
+                                                 gpointer      user_data)
 {
-  IdeMakecache *self = (IdeMakecache *)object;
+  EggTaskCache *cache = (EggTaskCache *)object;
   g_autoptr(GTask) task = user_data;
-  g_autoptr(GPtrArray) targets = NULL;
   GError *error = NULL;
-  GFile *file;
-  FileFlagsLookup *lookup;
-  g_autofree gchar *relative_path = NULL;
-  gchar **argv;
+  gchar **ret;
 
-  IDE_ENTRY;
-
-  g_assert (G_IS_TASK (task));
-  g_assert (IDE_IS_MAKECACHE (self));
-
-  targets = ide_makecache_get_file_targets_finish (self, result, &error);
-
-  if ((targets == NULL) || (targets->len == 0))
-    {
-      if (TRUE) /* TODO: Check for C/C++/Obj-C */
-        {
-          argv = g_new0 (gchar *, 2);
-          argv [0] = g_strdup (self->llvm_flags);
-          g_task_return_pointer (task, argv, (GDestroyNotify)g_strfreev);
-          IDE_EXIT;
-        }
-
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  file = g_task_get_task_data (task);
-  relative_path = ide_makecache_get_relative_path (self, file);
-
-  g_mutex_lock (&self->mutex);
-  argv = g_strdupv (g_hash_table_lookup (self->file_flags_cache, relative_path));
-  g_mutex_unlock (&self->mutex);
-
-  if (argv)
-    {
-      EGG_COUNTER_INC (FlagHit);
-      g_task_return_pointer (task, argv, (GDestroyNotify)g_strfreev);
-      IDE_EXIT;
-    }
-
-  EGG_COUNTER_INC (FlagMiss);
-
-  lookup = g_new0 (FileFlagsLookup, 1);
-  lookup->targets = g_ptr_array_ref (targets);
-  lookup->relative_path = g_strdup (relative_path);
-
-  g_task_set_task_data (task, lookup, file_flags_lookup_free);
-
-  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
-                             task,
-                             ide_makecache_get_file_flags_worker);
-
-  IDE_EXIT;
+  if (!(ret = egg_task_cache_get_finish (cache, result, &error)))
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, ret, (GDestroyNotify)g_strfreev);
 }
 
 void
@@ -1434,13 +1494,13 @@ ide_makecache_get_file_flags_async (IdeMakecache        *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
-  ide_makecache_get_file_targets_async (self,
-                                        file,
-                                        g_task_get_cancellable (task),
-                                        ide_makecache__get_targets_cb,
-                                        g_object_ref (task));
+  egg_task_cache_get_async (self->file_flags_cache,
+                            file,
+                            FALSE,
+                            cancellable,
+                            ide_makecache_get_file_flags__task_cache_get_cb,
+                            g_object_ref (task));
 
   IDE_EXIT;
 }
