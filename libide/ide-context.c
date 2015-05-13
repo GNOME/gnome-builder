@@ -43,6 +43,7 @@
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
 #include "ide-vcs.h"
+#include "ide-recent-projects.h"
 
 #include "doap/ide-doap.h"
 
@@ -64,6 +65,7 @@ struct _IdeContext
   IdeProject               *project;
   GFile                    *project_file;
   gchar                    *root_build_dir;
+  gchar                    *recent_projects_uri;
   GHashTable               *services;
   IdeUnsavedFiles          *unsaved_files;
   IdeVcs                   *vcs;
@@ -536,6 +538,7 @@ ide_context_finalize (GObject *object)
 
   g_clear_pointer (&self->services, g_hash_table_unref);
   g_clear_pointer (&self->root_build_dir, g_free);
+  g_clear_pointer (&self->recent_projects_uri, g_free);
 
   g_clear_object (&self->build_system);
   g_clear_object (&self->device_manager);
@@ -751,6 +754,11 @@ ide_context_init (IdeContext *self)
                                            ide_get_program_name (),
                                            "builds",
                                            NULL);
+
+  self->recent_projects_uri = g_build_filename (g_get_user_data_dir (),
+                                                ide_get_program_name (),
+                                                IDE_RECENT_PROJECTS_BOOKMARK_FILENAME,
+                                                NULL);
 
   self->back_forward_list = g_object_new (IDE_TYPE_BACK_FORWARD_LIST,
                                           "context", self,
@@ -1308,9 +1316,10 @@ ide_context_init_add_recent (gpointer             source_object,
                              gpointer             user_data)
 {
   IdeContext *self = source_object;
-  GtkRecentData recent_data = { 0 };
+  g_autoptr(GBookmarkFile) projects_file = NULL;
   g_autoptr(GPtrArray) groups = NULL;
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GError) error = NULL;
   g_autofree gchar *uri = NULL;
   g_autofree gchar *app_exec = NULL;
 
@@ -1321,23 +1330,38 @@ ide_context_init_add_recent (gpointer             source_object,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
+  projects_file = g_bookmark_file_new ();
+  g_bookmark_file_load_from_file (projects_file, self->recent_projects_uri, &error);
+  /*
+   * If there was an error loading the file and the error is not "File does not exist"
+   * then stop saving operation
+   */
+  if (error != NULL && !g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+    {
+      g_warning ("Unable to open recent projects %s file: %s", self->recent_projects_uri, error->message);
+
+      g_task_return_boolean (task, TRUE);
+
+      IDE_EXIT;
+    }
+
+
+
   uri = g_file_get_uri (self->project_file);
   app_exec = g_strdup_printf ("%s -p %%p", ide_get_program_name ());
 
-  recent_data.display_name = (gchar *)ide_project_get_name (self->project);
-  recent_data.description = NULL;
-  recent_data.mime_type = "application/x-builder-project";
-  recent_data.app_name = (gchar *)ide_get_program_name ();
-  recent_data.app_exec = app_exec;
-  recent_data.is_private = FALSE;
+  g_bookmark_file_set_title (projects_file, uri, (gchar *)ide_project_get_name (self->project));
+  g_bookmark_file_set_mime_type (projects_file, uri, "application/x-builder-project");
+  g_bookmark_file_add_application (projects_file, uri, (gchar *)ide_get_program_name (), app_exec);
+  g_bookmark_file_set_is_private (projects_file, uri, FALSE);
 
   /* attach project description to recent info */
   if (self->doap != NULL)
-    recent_data.description = (gchar *)ide_doap_get_shortdesc (self->doap);
+    g_bookmark_file_set_description (projects_file, uri, (gchar *)ide_doap_get_shortdesc (self->doap));
 
   /* attach discovered languages to recent info */
   groups = g_ptr_array_new_with_free_func (g_free);
-  g_ptr_array_add (groups, g_strdup ("X-GNOME-Builder-Project"));
+  g_ptr_array_add (groups, g_strdup (IDE_RECENT_PROJECTS_GROUP));
   if (self->doap != NULL)
     {
       gchar **languages;
@@ -1347,16 +1371,16 @@ ide_context_init_add_recent (gpointer             source_object,
         {
           for (i = 0; languages [i]; i++)
             g_ptr_array_add (groups,
-                             g_strdup_printf ("X-GNOME-Builder-Language:%s", languages [i]));
+                             g_strdup_printf ("%s%s", IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX, languages [i]));
         }
     }
-  g_ptr_array_add (groups, NULL);
-  recent_data.groups = (gchar **)groups->pdata;
+
+  g_bookmark_file_set_groups (projects_file, uri, (const gchar **)groups->pdata, groups->len);
 
   IDE_TRACE_MSG ("Registering %s as recent project.", uri);
 
-  if (!gtk_recent_manager_add_full (self->recent_manager, uri, &recent_data))
-    g_warning ("Failed to add %s to GtkRecentManager", uri);
+  if (!g_bookmark_file_to_file (projects_file, self->recent_projects_uri, &error) && error != NULL)
+     g_warning ("Unable to save recent projects %s file: %s", self->recent_projects_uri, error->message);
 
   g_task_return_boolean (task, TRUE);
 

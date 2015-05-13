@@ -19,11 +19,9 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#include "ide-global.h"
 #include "ide-project-miner.h"
 #include "ide-recent-projects.h"
-
-#define PROJECT_GROUP         "X-GNOME-Builder-Project"
-#define LANGUAGE_GROUP_PREFIX "X-GNOME-Builder-Language:"
 
 struct _IdeRecentProjects
 {
@@ -127,57 +125,74 @@ ide_recent_projects_add_miner (IdeRecentProjects *self,
 }
 
 static void
-ide_recent_projects_load_recent (IdeRecentProjects *self,
-                                 GtkRecentManager  *recent_manager)
+ide_recent_projects_load_recent (IdeRecentProjects *self)
 {
-  GList *iter;
-  GList *list;
+  g_autoptr(GBookmarkFile) projects_file;
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *file_uri = NULL;
+  gchar **uris;
+  gssize z;
+
 
   g_assert (IDE_IS_RECENT_PROJECTS (self));
-  g_assert (GTK_IS_RECENT_MANAGER (recent_manager));
 
-  list = gtk_recent_manager_get_items (recent_manager);
+  file_uri = g_build_filename (g_get_user_data_dir (),
+                               ide_get_program_name (),
+                               IDE_RECENT_PROJECTS_BOOKMARK_FILENAME,
+                               NULL);
 
-  for (iter = list; iter; iter = iter->next)
+  projects_file = g_bookmark_file_new ();
+  g_bookmark_file_load_from_file (projects_file, file_uri, &error);
+  /*
+   * If there was an error loading the file and the error is not "File does not exist"
+   * then stop saving operation
+   */
+  if (error != NULL && !g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+    {
+      g_warning ("Unable to open recent projects %s file: %s", file_uri, error->message);
+      return;
+    }
+
+  uris = g_bookmark_file_get_uris (projects_file, NULL);
+
+  for (z = 0; uris[z]; z++)
     {
       g_autoptr(GDateTime) last_modified_at = NULL;
       g_autoptr(GFile) project_file = NULL;
       g_autoptr(GFile) directory = NULL;
       g_autoptr(GPtrArray) languages = NULL;
       g_autoptr(IdeProjectInfo) project_info = NULL;
-      GtkRecentInfo *recent_info = iter->data;
       const gchar *description;
-      const gchar *uri;
+      const gchar *uri = uris[z];
       const gchar *name;
       time_t modified;
       gchar **groups;
       gsize len;
       gsize i;
 
-      groups = gtk_recent_info_get_groups (recent_info, &len);
+      groups = g_bookmark_file_get_groups (projects_file, uri, &len, NULL);
 
       for (i = 0; i < len; i++)
         {
-          if (g_str_equal (groups [i], PROJECT_GROUP))
+          if (g_str_equal (groups [i], IDE_RECENT_PROJECTS_GROUP))
             goto is_project;
         }
 
       continue;
 
     is_project:
-      name = gtk_recent_info_get_display_name (recent_info);
-      description = gtk_recent_info_get_description (recent_info);
-      modified = gtk_recent_info_get_modified (recent_info);
+      name = g_bookmark_file_get_title (projects_file, uri, NULL);
+      description = g_bookmark_file_get_description (projects_file, uri, NULL);
+      modified = g_bookmark_file_get_modified  (projects_file, uri, NULL);
       last_modified_at = g_date_time_new_from_unix_local (modified);
-      uri = gtk_recent_info_get_uri (recent_info);
       project_file = g_file_new_for_uri (uri);
       directory = g_file_get_parent (project_file);
 
       languages = g_ptr_array_new ();
       for (i = 0; i < len; i++)
         {
-          if (g_str_has_prefix (groups [i], LANGUAGE_GROUP_PREFIX))
-            g_ptr_array_add (languages, groups [i] + strlen (LANGUAGE_GROUP_PREFIX));
+          if (g_str_has_prefix (groups [i], IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX))
+            g_ptr_array_add (languages, groups [i] + strlen (IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX));
         }
       g_ptr_array_add (languages, NULL);
 
@@ -195,8 +210,7 @@ ide_recent_projects_load_recent (IdeRecentProjects *self,
 
       g_hash_table_insert (self->recent_uris, g_strdup (uri), NULL);
     }
-
-  g_list_free_full (list, (GDestroyNotify)gtk_recent_info_unref);
+  g_strfreev (uris);
 }
 
 static GType
@@ -329,7 +343,6 @@ ide_recent_projects_discover_async (IdeRecentProjects   *self,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
 {
-  GtkRecentManager *recent_manager;
   g_autoptr(GTask) task = NULL;
   gsize i;
 
@@ -350,8 +363,7 @@ ide_recent_projects_discover_async (IdeRecentProjects   *self,
 
   self->discovered = TRUE;
 
-  recent_manager = gtk_recent_manager_get_default ();
-  ide_recent_projects_load_recent (self, recent_manager);
+  ide_recent_projects_load_recent (self);
 
   self->active = self->miners->len;
 
