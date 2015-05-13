@@ -566,23 +566,14 @@ egg_signal_group_connect_full (EggSignalGroup *self,
                                          NULL, NULL, FALSE) != 0);
   g_return_if_fail (callback != NULL);
 
-  if (!is_object)
-    {
-      if ((flags & G_CONNECT_SWAPPED) != 0)
-        closure = g_cclosure_new_swap (callback, data, notify);
-      else
-        closure = g_cclosure_new (callback, data, notify);
-    }
+  if ((flags & G_CONNECT_SWAPPED) != 0)
+    closure = g_cclosure_new_swap (callback, data, notify);
   else
-    {
-      g_assert (data != NULL);
-      g_assert (notify == NULL);
+    closure = g_cclosure_new (callback, data, notify);
 
-      if ((flags & G_CONNECT_SWAPPED) != 0)
-        closure = g_cclosure_new_object_swap (callback, data);
-      else
-        closure = g_cclosure_new_object (callback, data);
-    }
+  /* This is what g_cclosure_new_object() does */
+  if (is_object)
+    g_object_watch_closure (data, closure);
 
   handler = g_slice_new0 (SignalHandler);
   handler->detailed_signal = g_intern_string (detailed_signal);
