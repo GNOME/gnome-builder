@@ -5,6 +5,8 @@ libegg_la_SOURCES = \
 	egg-binding-set.h \
 	egg-counter.c \
 	egg-counter.h \
+	egg-heap.c \
+	egg-heap.h \
 	egg-search-bar.c \
 	egg-search-bar.h \
 	egg-settings-sandwich.c \

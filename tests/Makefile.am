@@ -105,6 +105,13 @@ test_egg_state_machine_SOURCES = test-egg-state-machine.c
 test_egg_state_machine_CFLAGS = $(tests_cflags) -I$(top_srcdir)/contrib/egg
 test_egg_state_machine_LDADD = $(tests_libs) $(top_builddir)/contrib/egg/libegg.la
 
+
+TESTS += test-egg-heap
+test_egg_heap_SOURCES = test-egg-heap.c
+test_egg_heap_CFLAGS = $(tests_cflags) -I$(top_srcdir)/contrib/egg
+test_egg_heap_LDADD = $(tests_libs) $(top_builddir)/contrib/egg/libegg.la
+
+
 if ENABLE_TESTS
 noinst_PROGRAMS = $(TESTS) $(misc_programs)
 endif
