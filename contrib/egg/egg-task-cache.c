@@ -32,6 +32,8 @@ struct _EggTaskCache
   GEqualFunc            key_equal_func;
   GBoxedCopyFunc        key_copy_func;
   GBoxedFreeFunc        key_destroy_func;
+  GBoxedCopyFunc        value_copy_func;
+  GBoxedFreeFunc        value_destroy_func;
 
   EggTaskCacheCallback  populate_callback;
   gpointer              populate_callback_data;
@@ -49,9 +51,10 @@ struct _EggTaskCache
 
 typedef struct
 {
-  GObject  *item;
-  gpointer  key;
-  gint64    evict_at;
+  EggTaskCache *self;
+  gpointer      key;
+  gpointer      value;
+  gint64        evict_at;
 } CacheItem;
 
 typedef struct
@@ -79,6 +82,8 @@ enum {
   PROP_POPULATE_CALLBACK_DATA,
   PROP_POPULATE_CALLBACK_DATA_DESTROY,
   PROP_TIME_TO_LIVE,
+  PROP_VALUE_COPY_FUNC,
+  PROP_VALUE_DESTROY_FUNC,
   LAST_PROP
 };
 
@@ -168,8 +173,11 @@ cache_item_free (gpointer data)
 {
   CacheItem *item = data;
 
-  /* key is freed by g_hash_table to avoid needing self pointer. */
-  g_object_unref (item->item);
+  item->self->key_destroy_func (item->key);
+  item->self->value_destroy_func (item->value);
+  item->self = NULL;
+  item->evict_at = 0;
+
   g_slice_free (CacheItem, item);
 }
 
@@ -184,17 +192,20 @@ cache_item_compare_evict_at (gconstpointer a,
 }
 
 static CacheItem *
-cache_item_new (gpointer key,
-                GObject *item,
-                gint64   time_to_live_usec)
+cache_item_new (EggTaskCache  *self,
+                gconstpointer  key,
+                gconstpointer  value)
 {
   CacheItem *ret;
 
+  g_assert (EGG_IS_TASK_CACHE (self));
+
   ret = g_slice_new0 (CacheItem);
-  ret->key = key;
-  ret->item = item;
-  if (time_to_live_usec > 0)
-    ret->evict_at = g_get_monotonic_time () + time_to_live_usec;
+  ret->self = self;
+  ret->key = self->key_copy_func ((gpointer)key);
+  ret->value = self->value_copy_func ((gpointer)value);
+  if (self->time_to_live_usec > 0)
+    ret->evict_at = g_get_monotonic_time () + self->time_to_live_usec;
 
   return ret;
 }
@@ -267,7 +278,7 @@ egg_task_cache_peek (EggTaskCache  *self,
   if ((item = g_hash_table_lookup (self->cache, key)))
     {
       EGG_COUNTER_INC (hits);
-      return item->item;
+      return item->value;
     }
 
   return NULL;
@@ -316,12 +327,10 @@ egg_task_cache_populate (EggTaskCache  *self,
   g_assert (EGG_IS_TASK_CACHE (self));
   g_assert (G_IS_OBJECT (value));
 
+  item = cache_item_new (self, key, value);
+
   if (g_hash_table_contains (self->cache, key))
     egg_task_cache_evict (self, key);
-
-  item = cache_item_new (self->key_copy_func ((gpointer)key),
-                         g_object_ref (value),
-                         self->time_to_live_usec);
   g_hash_table_insert (self->cache, item->key, item);
   egg_heap_insert_val (self->evict_heap, item);
 
@@ -351,7 +360,9 @@ egg_task_cache_propagate_pointer (EggTaskCache  *self,
           GTask *task;
 
           task = g_ptr_array_index (queued, i);
-          g_task_return_pointer (task, g_object_ref (value), g_object_unref);
+          g_task_return_pointer (task,
+                                 self->value_copy_func (value),
+                                 self->value_destroy_func);
         }
 
       g_ptr_array_unref (queued);
@@ -391,11 +402,9 @@ egg_task_cache_fetch_cb (GObject      *object,
   g_hash_table_remove (self->in_flight, key);
   EGG_COUNTER_DEC (in_flight);
 
-  g_assert (!ret || G_IS_OBJECT (ret));
-  g_clear_object (&ret);
-
   self->key_destroy_func (key);
-  g_object_unref (task);
+  if (ret != NULL)
+    self->value_destroy_func (ret);
 }
 
 void
@@ -420,7 +429,9 @@ egg_task_cache_get_async (EggTaskCache        *self,
    */
   if (!force_update && (ret = egg_task_cache_peek (self, key)))
     {
-      g_task_return_pointer (task, g_object_ref (ret), g_object_unref);
+      g_task_return_pointer (task,
+                             self->value_copy_func (ret),
+                             self->value_destroy_func);
       return;
     }
 
@@ -515,6 +526,8 @@ egg_task_cache_constructed (GObject *object)
       (self->key_destroy_func == NULL) ||
       (self->key_equal_func == NULL) ||
       (self->key_hash_func == NULL) ||
+      (self->value_copy_func == NULL) ||
+      (self->value_destroy_func == NULL) ||
       (self->populate_callback == NULL))
     {
       g_error ("EggTaskCache was configured improperly.");
@@ -526,7 +539,7 @@ egg_task_cache_constructed (GObject *object)
    */
   self->cache = g_hash_table_new_full (self->key_hash_func,
                                        self->key_equal_func,
-                                       self->key_destroy_func,
+                                       NULL,
                                        cache_item_free);
 
   /*
@@ -676,6 +689,14 @@ egg_task_cache_set_property (GObject      *object,
       self->time_to_live_usec = (g_value_get_int64 (value) * 1000L);
       break;
 
+    case PROP_VALUE_COPY_FUNC:
+      self->value_copy_func = g_value_get_pointer (value);
+      break;
+
+    case PROP_VALUE_DESTROY_FUNC:
+      self->value_destroy_func = g_value_get_pointer (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
@@ -750,6 +771,18 @@ egg_task_cache_class_init (EggTaskCacheClass *klass)
                         30 * 1000,
                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  gParamSpecs [PROP_VALUE_COPY_FUNC] =
+    g_param_spec_pointer ("value-copy-func",
+                         _("Value Copy Func"),
+                         _("Value Copy Func"),
+                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  gParamSpecs [PROP_VALUE_DESTROY_FUNC] =
+    g_param_spec_pointer ("value-destroy-func",
+                         _("Value Destroy Func"),
+                         _("Value Destroy Func"),
+                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
@@ -767,6 +800,8 @@ egg_task_cache_new (GHashFunc            key_hash_func,
                     GEqualFunc           key_equal_func,
                     GBoxedCopyFunc       key_copy_func,
                     GBoxedFreeFunc       key_destroy_func,
+                    GBoxedCopyFunc       value_copy_func,
+                    GBoxedFreeFunc       value_destroy_func,
                     gint64               time_to_live,
                     EggTaskCacheCallback populate_callback,
                     gpointer             populate_callback_data,
@@ -787,5 +822,7 @@ egg_task_cache_new (GHashFunc            key_hash_func,
                        "populate-callback-data", populate_callback_data,
                        "populate-callback-data-destroy", populate_callback_data_destroy,
                        "time-to-live", time_to_live,
+                       "value-copy-func", value_copy_func,
+                       "value-destroy-func", value_destroy_func,
                        NULL);
 }

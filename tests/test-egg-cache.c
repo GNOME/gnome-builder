@@ -42,6 +42,8 @@ test_task_cache (void)
                               g_str_equal,
                               (GBoxedCopyFunc)g_strdup,
                               (GBoxedFreeFunc)g_free,
+                              g_object_ref,
+                              g_object_unref,
                               100 /* msec */,
                               populate_callback, NULL, NULL);
 
