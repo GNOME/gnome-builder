@@ -61,7 +61,7 @@ get_drafts_directory (IdeContext *context)
   const gchar *project_name;
 
   project = ide_context_get_project (context);
-  project_name = ide_project_get_name (project);
+  project_name = ide_project_get_id (project);
 
   return g_build_filename (g_get_user_data_dir (),
                            ide_get_program_name (),
