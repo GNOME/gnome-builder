@@ -24,7 +24,7 @@
 G_BEGIN_DECLS
 
 #define egg_heap_insert_val(h,v) egg_heap_insert_vals(h,&(v),1)
-#define egg_heap_index(h,t,i)    (((t*)(h)->data)[i])
+#define egg_heap_index(h,t,i)    (((t*)(void*)(h)->data)[i])
 #define egg_heap_peek(h,t)       egg_heap_index(h,t,0)
 
 typedef struct _EggHeap EggHeap;
