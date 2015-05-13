@@ -26,6 +26,10 @@ static void
 foreach_cb (EggCounter *counter,
             gpointer    user_data)
 {
+  guint *n_counters = user_data;
+
+  (*n_counters)++;
+
   g_print ("%-20s : %-32s : %20"G_GINT64_FORMAT" : %-s\n",
            counter->category,
            counter->name,
@@ -62,6 +66,7 @@ main (gint   argc,
       gchar *argv[])
 {
   EggCounterArena *arena;
+  guint n_counters = 0;
   gint pid;
 
   if (argc != 2)
@@ -91,11 +96,12 @@ main (gint   argc,
            "-------------------------------- : "
            "-------------------- : "
            "------------------------------------------------------------------------\n");
-  egg_counter_arena_foreach (arena, foreach_cb, NULL);
+  egg_counter_arena_foreach (arena, foreach_cb, &n_counters);
   g_print ("-------------------- : "
            "-------------------------------- : "
            "-------------------- : "
            "------------------------------------------------------------------------\n");
+  g_print ("Discovered %u counters\n", n_counters);
 
   return EXIT_SUCCESS;
 }
