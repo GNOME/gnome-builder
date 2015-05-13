@@ -219,7 +219,6 @@ egg_binding_set_finalize (GObject *object)
   g_assert (self->lazy_bindings->len == 0);
 
   g_clear_pointer (&self->lazy_bindings, g_ptr_array_unref);
-  g_clear_object (&self->source);
 
   G_OBJECT_CLASS (egg_binding_set_parent_class)->finalize (object);
 }
