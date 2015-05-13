@@ -315,6 +315,9 @@ egg_task_cache_populate (EggTaskCache  *self,
   g_assert (EGG_IS_TASK_CACHE (self));
   g_assert (G_IS_OBJECT (value));
 
+  if (g_hash_table_contains (self->cache, key))
+    egg_task_cache_evict (self, key);
+
   item = cache_item_new (self->key_copy_func ((gpointer)key),
                          g_object_ref (value),
                          self->time_to_live_usec);
@@ -396,6 +399,7 @@ egg_task_cache_fetch_cb (GObject      *object,
 void
 egg_task_cache_get_async (EggTaskCache        *self,
                           gconstpointer        key,
+                          gboolean             force_update,
                           GCancellable        *cancellable,
                           GAsyncReadyCallback  callback,
                           gpointer             user_data)
@@ -412,7 +416,7 @@ egg_task_cache_get_async (EggTaskCache        *self,
   /*
    * If we have the answer, return it now.
    */
-  if ((ret = egg_task_cache_peek (self, key)))
+  if (!force_update && (ret = egg_task_cache_peek (self, key)))
     {
       g_task_return_pointer (task, g_object_ref (ret), g_object_unref);
       return;

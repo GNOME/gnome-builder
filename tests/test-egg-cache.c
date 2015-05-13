@@ -48,7 +48,7 @@ test_task_cache (void)
   g_assert (!egg_task_cache_peek (cache, "foo"));
   g_assert (!egg_task_cache_evict (cache, "foo"));
 
-  egg_task_cache_get_async (cache, "foo", NULL, get_foo_cb, NULL);
+  egg_task_cache_get_async (cache, "foo", TRUE, NULL, get_foo_cb, NULL);
 
   g_main_loop_run (main_loop);
   g_main_loop_unref (main_loop);
