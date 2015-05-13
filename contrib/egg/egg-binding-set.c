@@ -25,13 +25,14 @@
 /**
  * SECTION:egg-binding-set
  * @title: EggBindingSet
- * @short_description: Manage multiple #GBinding as a group.
+ * @short_description: Manage multiple #GBinding as a set.
  *
  * This should not be confused with #GtkBindingSet.
  *
- * #EggBindingSet allows you to manage a set of #GBinding that you would like attached to the
- * same source object. This is convenience so that you can manage them as a set rather than
- * reconnecting them individually.
+ * #EggBindingSet allows you to manage a set of #GBindings that you
+ * would like attached to the same source object. This is convenience
+ * so that you can manage them as a set rather than reconnecting them
+ * individually.
  */
 
 struct _EggBindingSet
@@ -67,12 +68,6 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
-
-EggBindingSet *
-egg_binding_set_new (void)
-{
-  return g_object_new (EGG_TYPE_BINDING_SET, NULL);
-}
 
 static void
 egg_binding_set_connect (EggBindingSet *self,
@@ -310,6 +305,27 @@ egg_binding_set_init (EggBindingSet *self)
   self->lazy_bindings = g_ptr_array_new_with_free_func (lazy_binding_free);
 }
 
+/**
+ * egg_binding_set_new:
+ *
+ * Creates a new #EggBindingSet.
+ *
+ * Returns: a new #EggBindingSet
+ */
+EggBindingSet *
+egg_binding_set_new (void)
+{
+  return g_object_new (EGG_TYPE_BINDING_SET, NULL);
+}
+
+/**
+ * egg_binding_set_get_source:
+ * @self: the #EggBindingSet
+ *
+ * Gets the source object used for binding properties.
+ *
+ * Returns: (nullable): the source object.
+ */
 GObject *
 egg_binding_set_get_source (EggBindingSet *self)
 {
@@ -338,6 +354,17 @@ egg_binding_set_check_source (EggBindingSet *self,
   return TRUE;
 }
 
+/**
+ * egg_binding_set_set_source:
+ * @self: the #EggBindingSet
+ * @source: (type GObject) (nullable): the source #GObject
+ *
+ * Sets @source as the source object used for creating property
+ * bindings. If there is already a source object all bindings from it
+ * will be removed.
+ *
+ * Note: All properties that have been bound must exist on @source.
+ */
 void
 egg_binding_set_set_source (EggBindingSet *self,
                             gpointer       source)
@@ -388,6 +415,21 @@ egg_binding_set_set_source (EggBindingSet *self,
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SOURCE]);
 }
 
+/**
+ * egg_binding_set_bind:
+ * @self: the #EggBindingSet
+ * @source_property: the property on the source to bind
+ * @target: (type GObject): the target #GObject
+ * @target_property: the property on @target to bind
+ * @flags: the flags used to create the #GBinding
+ *
+ * Creates a binding between @source_property on the source object
+ * and @target_property on @target. Whenever the @source_property
+ * is changed the @target_property is updated using the same value.
+ * The binding flags #G_BINDING_SYNC_CREATE is automatically specified.
+ *
+ * See: g_object_bind_property().
+ */
 void
 egg_binding_set_bind (EggBindingSet *self,
                       const gchar   *source_property,
@@ -402,6 +444,29 @@ egg_binding_set_bind (EggBindingSet *self,
                              NULL, NULL);
 }
 
+/**
+ * egg_binding_set_bind_full:
+ * @self: the #EggBindingSet
+ * @source_property: the property on the source to bind
+ * @target: (type GObject): the target #GObject
+ * @target_property: the property on @target to bind
+ * @flags: the flags used to create the #GBinding
+ * @transform_to: (scope notified) (nullable): the transformation function
+ *     from the source object to the @target, or %NULL to use the default
+ * @transform_from: (scope notified) (nullable): the transformation function
+ *     from the @target to the source object, or %NULL to use the default
+ * @user_data: custom data to be passed to the transformation
+ *             functions, or %NULL
+ * @user_data_destroy: function to be called when disposing the binding,
+ *     to free the resources used by the transformation functions
+ *
+ * Creates a binding between @source_property on the source object and
+ * @target_property on @target, allowing you to set the transformation
+ * functions to be used by the binding. The binding flags
+ * #G_BINDING_SYNC_CREATE is automatically specified.
+ *
+ * See: g_object_bind_property_full().
+ */
 void
 egg_binding_set_bind_full (EggBindingSet         *self,
                            const gchar           *source_property,
@@ -448,6 +513,31 @@ egg_binding_set_bind_full (EggBindingSet         *self,
     egg_binding_set_connect (self, lazy_binding);
 }
 
+/**
+ * egg_binding_set_bind_with_closures: (rename-to egg_binding_set_bind_full)
+ * @self: the #EggBindingSet
+ * @source_property: the property on the source to bind
+ * @target: (type GObject): the target #GObject
+ * @target_property: the property on @target to bind
+ * @flags: the flags used to create the #GBinding
+ * @transform_to: (nullable): a #GClosure wrapping the
+ *     transformation function from the source object to the @target,
+ *     or %NULL to use the default
+ * @transform_from: (nullable): a #GClosure wrapping the
+ *     transformation function from the @target to the source object,
+ *     or %NULL to use the default
+ *
+ * Creates a binding between @source_property on the source object and
+ * @target_property on @target, allowing you to set the transformation
+ * functions to be used by the binding. The binding flags
+ * #G_BINDING_SYNC_CREATE is automatically specified.
+ *
+ * This function is the language bindings friendly version of
+ * egg_binding_set_bind_property_full(), using #GClosures
+ * instead of function pointers.
+ *
+ * See: g_object_bind_property_with_closures().
+ */
 void
 egg_binding_set_bind_with_closures (EggBindingSet *self,
                                     const gchar   *source_property,
