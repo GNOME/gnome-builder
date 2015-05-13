@@ -27,23 +27,38 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EggSignalGroup, egg_signal_group, EGG, SIGNAL_GROUP, GObject)
 
-EggSignalGroup *egg_signal_group_new            (GType           target_type);
-void            egg_signal_group_connect_object (EggSignalGroup *self,
-                                                 const gchar    *detailed_signal,
-                                                 GCallback       c_handler,
-                                                 gpointer        object,
-                                                 GConnectFlags   flags);
-void            egg_signal_group_connect_data   (EggSignalGroup *self,
-                                                 const gchar    *detailed_signal,
-                                                 GCallback       c_handler,
-                                                 gpointer        data,
-                                                 GClosureNotify  notify,
-                                                 GConnectFlags   flags);
-void            egg_signal_group_set_target     (EggSignalGroup *self,
-                                                 gpointer        target);
-gpointer        egg_signal_group_get_target     (EggSignalGroup *self);
-void            egg_signal_group_block          (EggSignalGroup *self);
-void            egg_signal_group_unblock        (EggSignalGroup *self);
+EggSignalGroup *egg_signal_group_new             (GType           target_type);
+
+void            egg_signal_group_set_target      (EggSignalGroup *self,
+                                                  gpointer        target);
+gpointer        egg_signal_group_get_target      (EggSignalGroup *self);
+
+void            egg_signal_group_block           (EggSignalGroup *self);
+void            egg_signal_group_unblock         (EggSignalGroup *self);
+
+void            egg_signal_group_connect_object  (EggSignalGroup *self,
+                                                  const gchar    *detailed_signal,
+                                                  GCallback       c_handler,
+                                                  gpointer        object,
+                                                  GConnectFlags   flags);
+void            egg_signal_group_connect_data    (EggSignalGroup *self,
+                                                  const gchar    *detailed_signal,
+                                                  GCallback       c_handler,
+                                                  gpointer        data,
+                                                  GClosureNotify  notify,
+                                                  GConnectFlags   flags);
+void            egg_signal_group_connect         (EggSignalGroup *self,
+                                                  const gchar    *detailed_signal,
+                                                  GCallback       c_handler,
+                                                  gpointer        data);
+void            egg_signal_group_connect_after   (EggSignalGroup *self,
+                                                  const gchar    *detailed_signal,
+                                                  GCallback       c_handler,
+                                                  gpointer        data);
+void            egg_signal_group_connect_swapped (EggSignalGroup *self,
+                                                  const gchar    *detailed_signal,
+                                                  GCallback       c_handler,
+                                                  gpointer        data);
 
 G_END_DECLS
 

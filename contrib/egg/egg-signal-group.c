@@ -501,13 +501,13 @@ egg_signal_group_new (GType target_type)
 }
 
 static void
-egg_signal_group_connect (EggSignalGroup *self,
-                          const gchar    *detailed_signal,
-                          GCallback       callback,
-                          gpointer        data,
-                          GClosureNotify  notify,
-                          GConnectFlags   flags,
-                          gboolean        is_object)
+egg_signal_group_connect_full (EggSignalGroup *self,
+                               const gchar    *detailed_signal,
+                               GCallback       callback,
+                               gpointer        data,
+                               GClosureNotify  notify,
+                               GConnectFlags   flags,
+                               gboolean        is_object)
 {
   SignalHandler *handler;
   GClosure *closure;
@@ -558,8 +558,8 @@ egg_signal_group_connect_object (EggSignalGroup *self,
 {
   g_return_if_fail (G_IS_OBJECT (object));
 
-  return egg_signal_group_connect (self, detailed_signal, callback,
-                                   object, NULL, flags, TRUE);
+  return egg_signal_group_connect_full (self, detailed_signal, callback,
+                                        object, NULL, flags, TRUE);
 }
 
 void
@@ -570,6 +570,36 @@ egg_signal_group_connect_data (EggSignalGroup *self,
                                GClosureNotify  notify,
                                GConnectFlags   flags)
 {
-  return egg_signal_group_connect (self, detailed_signal, callback,
-                                   data, notify, flags, FALSE);
+  return egg_signal_group_connect_full (self, detailed_signal, callback,
+                                        data, notify, flags, FALSE);
+}
+
+void
+egg_signal_group_connect (EggSignalGroup *self,
+                          const gchar    *detailed_signal,
+                          GCallback       callback,
+                          gpointer        data)
+{
+  return egg_signal_group_connect_full (self, detailed_signal, callback,
+                                        data, NULL, 0, FALSE);
+}
+
+void
+egg_signal_group_connect_after (EggSignalGroup *self,
+                                const gchar    *detailed_signal,
+                                GCallback       callback,
+                                gpointer        data)
+{
+  return egg_signal_group_connect_full (self, detailed_signal, callback,
+                                        data, NULL, G_CONNECT_AFTER, FALSE);
+}
+
+void
+egg_signal_group_connect_swapped (EggSignalGroup *self,
+                                  const gchar    *detailed_signal,
+                                  GCallback       callback,
+                                  gpointer        data)
+{
+  return egg_signal_group_connect_full (self, detailed_signal, callback,
+                                        data, NULL, G_CONNECT_SWAPPED, FALSE);
 }
