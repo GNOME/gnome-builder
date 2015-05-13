@@ -169,9 +169,10 @@ cache_item_new (GObject *item,
   return ret;
 }
 
-gboolean
-egg_task_cache_evict (EggTaskCache  *self,
-                      gconstpointer  key)
+static gboolean
+egg_task_cache_evict_full (EggTaskCache  *self,
+                           gconstpointer  key,
+                           gboolean       check_heap)
 {
   CacheItem *item;
 
@@ -179,14 +180,17 @@ egg_task_cache_evict (EggTaskCache  *self,
 
   if ((item = g_hash_table_lookup (self->cache, key)))
     {
-      gsize i;
-
-      for (i = 0; i < self->evict_heap->len; i++)
+      if (check_heap)
         {
-          if (item == egg_heap_index (self->evict_heap, gpointer, i))
+          gsize i;
+
+          for (i = 0; i < self->evict_heap->len; i++)
             {
-              egg_heap_extract_index (self->evict_heap, i, NULL);
-              break;
+              if (item == egg_heap_index (self->evict_heap, gpointer, i))
+                {
+                  egg_heap_extract_index (self->evict_heap, i, NULL);
+                  break;
+                }
             }
         }
 
@@ -198,6 +202,13 @@ egg_task_cache_evict (EggTaskCache  *self,
     }
 
   return FALSE;
+}
+
+gboolean
+egg_task_cache_evict (EggTaskCache  *self,
+                      gconstpointer  key)
+{
+  return egg_task_cache_evict_full (self, key, TRUE);
 }
 
 /**
@@ -418,6 +429,31 @@ egg_task_cache_get_finish (EggTaskCache  *self,
   return g_task_propagate_pointer (task, error);
 }
 
+static gboolean
+egg_task_cache_do_eviction (gpointer user_data)
+{
+  EggTaskCache *self = user_data;
+  gint64 now = g_get_monotonic_time ();
+
+  while (self->evict_heap->len > 0)
+    {
+      CacheItem *item;
+
+      item = egg_heap_peek (self->evict_heap, gpointer);
+
+      if (item->evict_at < now)
+        {
+          egg_heap_extract (self->evict_heap, NULL);
+          egg_task_cache_evict_full (self, item->item, FALSE);
+          continue;
+        }
+
+      break;
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
 static void
 egg_task_cache_constructed (GObject *object)
 {
@@ -465,14 +501,15 @@ egg_task_cache_constructed (GObject *object)
    */
   if (self->time_to_live_usec > 0)
     {
-      EvictSource *source;
+      EvictSource *ev;
       GMainContext *main_context;
 
-      source = (EvictSource *)g_source_new (&evict_source_funcs, sizeof (EvictSource));
-      source->heap = egg_heap_ref (self->evict_heap);
+      ev = (EvictSource *)g_source_new (&evict_source_funcs, sizeof (EvictSource));
+      ev->heap = egg_heap_ref (self->evict_heap);
+      g_source_set_callback ((GSource *)ev, egg_task_cache_do_eviction, self, NULL);
 
       main_context = g_main_context_get_thread_default ();
-      self->evict_source =  g_source_attach ((GSource *)source, main_context);
+      self->evict_source =  g_source_attach ((GSource *)ev, main_context);
     }
 }
 
