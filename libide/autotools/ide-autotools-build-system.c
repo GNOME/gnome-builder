@@ -19,6 +19,8 @@
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 
+#include "egg-counter.h"
+
 #include "ide-autotools-build-system.h"
 #include "ide-autotools-builder.h"
 #include "ide-context.h"
@@ -46,6 +48,8 @@ G_DEFINE_TYPE_EXTENDED (IdeAutotoolsBuildSystem,
                         G_ADD_PRIVATE (IdeAutotoolsBuildSystem)
                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
                                                async_initable_iface_init))
+
+EGG_DEFINE_COUNTER (build_flags, "Autotools", "Flags Requests", "Requests count for build flags")
 
 enum {
   PROP_0,
@@ -487,6 +491,8 @@ ide_autotools_build_system_get_build_flags_async (IdeBuildSystem      *build_sys
 
   g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
   g_assert (IDE_IS_FILE (file));
+
+  EGG_COUNTER_INC (build_flags);
 
   gfile = ide_file_get_file (file);
 
