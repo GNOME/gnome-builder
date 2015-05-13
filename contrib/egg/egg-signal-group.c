@@ -352,15 +352,15 @@ egg_signal_group_set_target (EggSignalGroup *self,
 {
   g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
 
+  if (target == (gpointer)self->target)
+    return;
+
   if (!egg_signal_group_check_target_type (self, target))
     return;
 
-  if (target != (gpointer)self->target)
-    {
-      egg_signal_group_unbind (self);
-      egg_signal_group_bind (self, target);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TARGET]);
-    }
+  egg_signal_group_unbind (self);
+  egg_signal_group_bind (self, target);
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TARGET]);
 }
 
 static void
