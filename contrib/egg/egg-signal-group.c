@@ -225,8 +225,10 @@ egg_signal_group_check_target_type (EggSignalGroup *self,
   if ((target != NULL) &&
       !g_type_is_a (G_OBJECT_TYPE (target), self->target_type))
     {
-      g_warning ("Attempt to set EggSignalGroup:target to something other than %s",
-                 g_type_name (self->target_type));
+      g_warning ("Failed to set EggSignalGroup of target type %s"
+                 "using target %p of type %s",
+                 g_type_name (self->target_type),
+                 target, G_OBJECT_TYPE_NAME (target));
       return FALSE;
     }
 
