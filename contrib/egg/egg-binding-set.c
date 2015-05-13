@@ -25,14 +25,18 @@
 /**
  * SECTION:egg-binding-set
  * @title: EggBindingSet
- * @short_description: Manage multiple #GBinding as a set.
+ * @short_description: Manage a collection of #GBindings on
+ *      a #GObject as a set.
+ *
+ * #EggBindingSet manages to simplify the process of binding
+ * many properties from a #GObject as a group. As such there is no API
+ * to unbind a property from the group.
+ *
+ * In particular, this allows you to change the source instance for the
+ * bindings. This automatically causes the unbinding of the properties
+ * from the old instance and binding to the new instance.
  *
  * This should not be confused with #GtkBindingSet.
- *
- * #EggBindingSet allows you to manage a set of #GBindings that you
- * would like attached to the same source object. This is convenience
- * so that you can manage them as a set rather than reconnecting them
- * individually.
  */
 
 struct _EggBindingSet
@@ -329,10 +333,15 @@ egg_binding_set_class_init (EggBindingSetClass *klass)
   object_class->get_property = egg_binding_set_get_property;
   object_class->set_property = egg_binding_set_set_property;
 
+  /**
+   * EggBindingSet:source
+   *
+   * The source object used for binding properties.
+   */
   gParamSpecs [PROP_SOURCE] =
     g_param_spec_object ("source",
                          _("Source"),
-                         _("The source GObject."),
+                         _("The source GObject used for binding properties."),
                          G_TYPE_OBJECT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
