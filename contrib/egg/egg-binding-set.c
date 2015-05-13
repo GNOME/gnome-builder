@@ -69,6 +69,35 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
+/*#define DEBUG_BINDINGS 1*/
+
+#ifdef DEBUG_BINDINGS
+static gchar *
+_g_flags_to_string (GFlagsClass *flags_class,
+                    guint        value)
+{
+  GString *str;
+  GFlagsValue *flags_value;
+  gboolean first = TRUE;
+
+  str = g_string_new (NULL);
+
+  while ((first || value != 0) &&
+         (flags_value = g_flags_get_first_value (flags_class, value)) != NULL)
+    {
+      if (!first)
+        g_string_append (str, " | ");
+
+      g_string_append (str, flags_value->value_name);
+
+      first = FALSE;
+      value &= ~(flags_value->value);
+    }
+
+  return g_string_free (str, FALSE);
+}
+#endif
+
 static void
 egg_binding_set_connect (EggBindingSet *self,
                          LazyBinding   *lazy_binding)
@@ -83,15 +112,26 @@ egg_binding_set_connect (EggBindingSet *self,
   g_assert (lazy_binding->target_property != NULL);
   g_assert (lazy_binding->source_property != NULL);
 
-#if 0
-  g_print ("Binding %s(%p):%s to %s(%p):%s (flags=%d)\n",
-           g_type_name (G_TYPE_FROM_INSTANCE (self->source)),
-           self->source,
-           lazy_binding->source_property,
-           g_type_name (G_TYPE_FROM_INSTANCE (lazy_binding->target)),
-           lazy_binding->target,
-           lazy_binding->target_property,
-           lazy_binding->binding_flags);
+#ifdef DEBUG_BINDINGS
+  {
+    GFlagsClass *flags_class;
+    g_autofree gchar *flags_str;
+
+    flags_class = g_type_class_ref (G_TYPE_BINDING_FLAGS);
+    flags_str = _g_flags_to_string (flags_class,
+                                    lazy_binding->binding_flags);
+
+    g_print ("Binding %s(%p):%s to %s(%p):%s (flags=%s)\n",
+             G_OBJECT_TYPE_NAME (self->source),
+             self->source,
+             lazy_binding->source_property,
+             G_OBJECT_TYPE_NAME (lazy_binding->target),
+             lazy_binding->target,
+             lazy_binding->target_property,
+             flags_str);
+
+    g_type_class_unref (flags_class);
+  }
 #endif
 
   if (lazy_binding->transform_to_closure == NULL &&
