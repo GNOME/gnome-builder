@@ -187,7 +187,7 @@ G_BEGIN_DECLS
  *
  * Increments the counter @Identifier by 1.
  */
-#define EGG_COUNTER_INC(Identifier) EGG_COUNTER_ADD(Identifier, 1)
+#define EGG_COUNTER_INC(Identifier) EGG_COUNTER_ADD(Identifier, G_GINT64_CONSTANT(1))
 
 /**
  * EGG_COUNTER_DEC:
@@ -195,7 +195,7 @@ G_BEGIN_DECLS
  *
  * Decrements the counter @Identifier by 1.
  */
-#define EGG_COUNTER_DEC(Identifier) EGG_COUNTER_SUB(Identifier, 1)
+#define EGG_COUNTER_DEC(Identifier) EGG_COUNTER_SUB(Identifier, G_GINT64_CONSTANT(1))
 
 /**
  * EGG_COUNTER_SUB:
@@ -204,7 +204,7 @@ G_BEGIN_DECLS
  *
  * Subtracts from the counter identified by @Identifier by @Count.
  */
-#define EGG_COUNTER_SUB(Identifier, Count) EGG_COUNTER_ADD(Identifier, -(Count))
+#define EGG_COUNTER_SUB(Identifier, Count) EGG_COUNTER_ADD(Identifier, (-(Count)))
 
 /**
  * EGG_COUNTER_ADD:
@@ -225,14 +225,14 @@ G_BEGIN_DECLS
  * See #EggCounter for more information.
  */
 #ifdef EGG_COUNTER_REQUIRES_ATOMIC
-# define EGG_COUNTER_ADD(Identifier, Count)                                      \
-  G_STMT_START {                                                                 \
-    __sync_add_and_fetch ((gint64 *)&Identifier##_ctr.values[0], (gint64)Count); \
+# define EGG_COUNTER_ADD(Identifier, Count)                                          \
+  G_STMT_START {                                                                     \
+    __sync_add_and_fetch ((gint64 *)&Identifier##_ctr.values[0], ((gint64)(Count))); \
   } G_STMT_END
 #else
-# define EGG_COUNTER_ADD(Identifier, Count)                          \
-  G_STMT_START {                                                     \
-    Identifier##_ctr.values[egg_get_current_cpu()].value += (Count); \
+# define EGG_COUNTER_ADD(Identifier, Count)                                    \
+  G_STMT_START {                                                               \
+    Identifier##_ctr.values[egg_get_current_cpu()].value += ((gint64)(Count)); \
   } G_STMT_END
 #endif
 
