@@ -325,7 +325,6 @@ egg_task_cache_populate (EggTaskCache  *self,
   CacheItem *item;
 
   g_assert (EGG_IS_TASK_CACHE (self));
-  g_assert (G_IS_OBJECT (value));
 
   item = cache_item_new (self, key, value);
 
@@ -345,7 +344,6 @@ egg_task_cache_propagate_pointer (EggTaskCache  *self,
   GPtrArray *queued = NULL;
 
   g_assert (EGG_IS_TASK_CACHE (self));
-  g_assert (G_IS_OBJECT (value));
 
   if ((queued = g_hash_table_lookup (self->queued, key)))
     {
@@ -394,7 +392,6 @@ egg_task_cache_fetch_cb (GObject      *object,
     }
   else
     {
-      g_assert (G_IS_OBJECT (ret));
       egg_task_cache_populate (self, key, ret);
       egg_task_cache_propagate_pointer (self, key, ret);
     }
