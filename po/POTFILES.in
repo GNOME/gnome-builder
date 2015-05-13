@@ -6,6 +6,7 @@
 [type: gettext/glade]data/ui/gb-editor-tweak-widget.ui
 [type: gettext/glade]data/ui/gb-editor-view.ui
 [type: gettext/glade]data/ui/gb-editor-workspace.ui
+[type: gettext/glade]data/ui/gb-greeter-window.ui
 [type: gettext/glade]data/ui/gb-html-view.ui
 [type: gettext/glade]data/ui/gb-new-file-popover.ui
 [type: gettext/glade]data/ui/gb-new-project-dialog.ui
@@ -32,7 +33,6 @@ contrib/search/trie.c
 contrib/xml/xml-reader.c
 data/style-schemes/builder-dark.xml
 data/style-schemes/builder.xml
-data/ui/gb-greeter-window.ui
 libide/autotools/ide-autotools-build-system.c
 libide/autotools/ide-autotools-build-task.c
 libide/autotools/ide-autotools-builder.c
