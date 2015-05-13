@@ -466,10 +466,12 @@ ide_clang_service_get_translation_unit_cb (GObject      *object,
 void
 ide_clang_service_get_translation_unit_async (IdeClangService     *self,
                                               IdeFile             *file,
+                                              gint64               min_serial,
                                               GCancellable        *cancellable,
                                               GAsyncReadyCallback  callback,
                                               gpointer             user_data)
 {
+  IdeClangTranslationUnit *cached;
   g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_CLANG_SERVICE (self));
@@ -478,8 +480,29 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
+  if (min_serial == 0)
+    {
+      IdeContext *context;
+      IdeUnsavedFiles *unsaved_files;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      unsaved_files = ide_context_get_unsaved_files (context);
+      min_serial = ide_unsaved_files_get_sequence (unsaved_files);
+    }
+
+  /*
+   * If we have a cached unit, and it is new enough, then re-use it.
+   */
+  if ((cached = egg_task_cache_peek (self->units_cache, file)) &&
+      (ide_clang_translation_unit_get_serial (cached) >= min_serial))
+    {
+      g_task_return_pointer (task, g_object_ref (cached), g_object_unref);
+      return;
+    }
+
   egg_task_cache_get_async (self->units_cache,
                             file,
+                            TRUE,
                             cancellable,
                             ide_clang_service_get_translation_unit_cb,
                             g_object_ref (task));

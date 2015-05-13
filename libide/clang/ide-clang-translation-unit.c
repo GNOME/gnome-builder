@@ -46,7 +46,7 @@ struct _IdeClangTranslationUnit
   IdeObject          parent_instance;
 
   CXTranslationUnit  tu;
-  gint64             sequence;
+  gint64             serial;
   GFile             *file;
   IdeHighlightIndex *index;
   GHashTable        *diagnostics;
@@ -74,7 +74,8 @@ enum {
   PROP_0,
   PROP_FILE,
   PROP_INDEX,
-  PROP_SEQUENCE,
+  PROP_NATIVE,
+  PROP_SERIAL,
   LAST_PROP
 };
 
@@ -143,7 +144,7 @@ _ide_clang_translation_unit_new (IdeContext        *context,
                                  CXTranslationUnit  tu,
                                  GFile             *file,
                                  IdeHighlightIndex *index,
-                                 gint64             sequence)
+                                 gint64             serial)
 {
   IdeClangTranslationUnit *ret;
 
@@ -155,10 +156,9 @@ _ide_clang_translation_unit_new (IdeContext        *context,
                       "context", context,
                       "file", file,
                       "index", index,
+                      "native", tu,
+                      "serial", serial,
                       NULL);
-
-  ret->tu = tu;
-  ret->sequence = sequence;
 
   return ret;
 }
@@ -460,11 +460,11 @@ ide_clang_translation_unit_get_diagnostics (IdeClangTranslationUnit *self)
 }
 
 gint64
-ide_clang_translation_unit_get_sequence (IdeClangTranslationUnit *self)
+ide_clang_translation_unit_get_serial (IdeClangTranslationUnit *self)
 {
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), -1);
 
-  return self->sequence;
+  return self->serial;
 }
 
 static void
@@ -505,8 +505,8 @@ ide_clang_translation_unit_get_property (GObject    *object,
       g_value_set_boxed (value, ide_clang_translation_unit_get_index (self));
       break;
 
-    case PROP_SEQUENCE:
-      g_value_set_int64 (value, ide_clang_translation_unit_get_sequence (self));
+    case PROP_SERIAL:
+      g_value_set_int64 (value, ide_clang_translation_unit_get_serial (self));
       break;
 
     default:
@@ -530,6 +530,14 @@ ide_clang_translation_unit_set_property (GObject      *object,
 
     case PROP_INDEX:
       ide_clang_translation_unit_set_index (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_SERIAL:
+      self->serial = g_value_get_int64 (value);
+      break;
+
+    case PROP_NATIVE:
+      self->tu = g_value_get_pointer (value);
       break;
 
     default:
@@ -558,16 +566,22 @@ ide_clang_translation_unit_class_init (IdeClangTranslationUnitClass *klass)
                          _("Index"),
                          _("The highlight index for the translation unit."),
                          IDE_TYPE_HIGHLIGHT_INDEX,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  gParamSpecs [PROP_SEQUENCE] =
-    g_param_spec_int64 ("sequence",
-                        _("Sequence"),
-                        _("The sequence number when created."),
-                        G_MININT64,
+  gParamSpecs [PROP_NATIVE] =
+    g_param_spec_pointer ("native",
+                          _("Native"),
+                          _("The native translation unit pointer."),
+                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  gParamSpecs [PROP_SERIAL] =
+    g_param_spec_int64 ("serial",
+                        _("Serial"),
+                        _("A sequence number for the translation unit."),
+                        0,
                         G_MAXINT64,
                         0,
-                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }

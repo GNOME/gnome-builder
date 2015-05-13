@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeClangTranslationUnit, ide_clang_translation_unit, IDE, CLANG_TRANSLATION_UNIT, IdeObject)
 
-gint64             ide_clang_translation_unit_get_sequence             (IdeClangTranslationUnit  *self);
+gint64             ide_clang_translation_unit_get_serial               (IdeClangTranslationUnit  *self);
 IdeDiagnostics    *ide_clang_translation_unit_get_diagnostics          (IdeClangTranslationUnit  *self);
 IdeDiagnostics    *ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit  *self,
                                                                         GFile                    *file);

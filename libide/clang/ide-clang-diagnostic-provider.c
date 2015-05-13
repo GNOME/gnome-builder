@@ -100,6 +100,7 @@ ide_clang_diagnostic_provider_diagnose__file_find_other_cb (GObject      *object
 
   ide_clang_service_get_translation_unit_async (service,
                                                 file,
+                                                0,
                                                 g_task_get_cancellable (task),
                                                 get_translation_unit_cb,
                                                 g_object_ref (task));
@@ -137,6 +138,7 @@ ide_clang_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
 
       ide_clang_service_get_translation_unit_async (service,
                                                     file,
+                                                    0,
                                                     cancellable,
                                                     get_translation_unit_cb,
                                                     g_object_ref (task));

@@ -97,6 +97,7 @@ ide_clang_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
 
   ide_clang_service_get_translation_unit_async (service,
                                                 file,
+                                                0,
                                                 cancellable,
                                                 ide_clang_symbol_resolver_lookup_symbol_cb,
                                                 g_object_ref (task));
@@ -183,6 +184,7 @@ ide_clang_symbol_resolver_get_symbols_async (IdeSymbolResolver   *resolver,
 
   ide_clang_service_get_translation_unit_async (service,
                                                 file,
+                                                0,
                                                 cancellable,
                                                 ide_clang_symbol_resolver_get_symbols_cb,
                                                 g_object_ref (task));
