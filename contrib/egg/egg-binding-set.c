@@ -401,7 +401,8 @@ egg_binding_set_bind_full (EggBindingSet         *self,
   g_return_if_fail (target_property != NULL);
   g_return_if_fail (g_object_class_find_property (G_OBJECT_GET_CLASS (target),
                                                   target_property) != NULL);
-  g_return_if_fail (target != (gpointer)self);
+  g_return_if_fail (target != (gpointer)self ||
+                    strcmp (source_property, target_property) != 0);
 
   lazy_binding = g_slice_new0 (LazyBinding);
   lazy_binding->set = self;
