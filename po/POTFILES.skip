@@ -8,3 +8,4 @@ contrib/egg/egg-signal-group.c
 contrib/egg/egg-signal-group.h
 contrib/egg/egg-state-machine.c
 contrib/egg/egg-state-machine.h
+contrib/egg/egg-task-cache.c
