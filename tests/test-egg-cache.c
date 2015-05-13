@@ -7,7 +7,8 @@ static GObject *foo;
 static void
 populate_callback (EggTaskCache  *self,
                    gconstpointer  key,
-                   GTask         *task)
+                   GTask         *task,
+                   gpointer       user_data)
 {
   foo = g_object_new (G_TYPE_OBJECT, NULL);
   g_object_add_weak_pointer (G_OBJECT (foo), (gpointer *)&foo);
@@ -41,8 +42,8 @@ test_task_cache (void)
                               g_str_equal,
                               (GBoxedCopyFunc)g_strdup,
                               (GBoxedFreeFunc)g_free,
-                              populate_callback,
-                              100 /* msec */);
+                              100 /* msec */,
+                              populate_callback, NULL, NULL);
 
   g_assert (!egg_task_cache_peek (cache, "foo"));
   g_assert (!egg_task_cache_evict (cache, "foo"));

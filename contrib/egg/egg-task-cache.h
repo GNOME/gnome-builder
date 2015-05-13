@@ -32,6 +32,7 @@ G_DECLARE_FINAL_TYPE (EggTaskCache, egg_task_cache, EGG, TASK_CACHE, GObject)
  * @self: An #EggTaskCache.
  * @key: the key to fetch
  * @task: the task to be completed
+ * @user_data: user_data registered at initialization.
  *
  * #EggTaskCacheCallback is the prototype for a function to be executed to
  * populate a an item in the cache.
@@ -45,14 +46,17 @@ G_DECLARE_FINAL_TYPE (EggTaskCache, egg_task_cache, EGG, TASK_CACHE, GObject)
  */
 typedef void (*EggTaskCacheCallback) (EggTaskCache  *self,
                                       gconstpointer  key,
-                                      GTask         *task);
+                                      GTask         *task,
+                                      gpointer       user_data);
 
 EggTaskCache *egg_task_cache_new        (GHashFunc              key_hash_func,
                                          GEqualFunc             key_equal_func,
                                          GBoxedCopyFunc         key_copy_func,
                                          GBoxedFreeFunc         key_destroy_func,
+                                         gint64                 time_to_live_msec,
                                          EggTaskCacheCallback   populate_callback,
-                                         gint64                 time_to_live_msec);
+                                         gpointer               populate_callback_data,
+                                         GDestroyNotify         populate_callback_data_destroy);
 void          egg_task_cache_get_async  (EggTaskCache          *self,
                                          gconstpointer          key,
                                          GCancellable          *cancellable,

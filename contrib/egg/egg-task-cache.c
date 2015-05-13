@@ -32,7 +32,10 @@ struct _EggTaskCache
   GEqualFunc            key_equal_func;
   GBoxedCopyFunc        key_copy_func;
   GBoxedFreeFunc        key_destroy_func;
+
   EggTaskCacheCallback  populate_callback;
+  gpointer              populate_callback_data;
+  GDestroyNotify        populate_callback_data_destroy;
 
   GHashTable           *cache;
   GHashTable           *in_flight;
@@ -72,6 +75,8 @@ enum {
   PROP_KEY_EQUAL_FUNC,
   PROP_KEY_HASH_FUNC,
   PROP_POPULATE_CALLBACK,
+  PROP_POPULATE_CALLBACK_DATA,
+  PROP_POPULATE_CALLBACK_DATA_DESTROY,
   PROP_TIME_TO_LIVE,
   LAST_PROP
 };
@@ -409,7 +414,7 @@ egg_task_cache_get_async (EggTaskCache        *self,
       g_hash_table_insert (self->in_flight,
                            self->key_copy_func ((gpointer)key),
                            GINT_TO_POINTER (TRUE));
-      self->populate_callback (self, key, fetch_task);
+      self->populate_callback (self, key, fetch_task, self->populate_callback_data);
 
       EGG_COUNTER_INC (in_flight);
     }
@@ -567,6 +572,12 @@ egg_task_cache_dispose (GObject *object)
       EGG_COUNTER_SUB (in_flight, count);
     }
 
+  if (self->populate_callback_data)
+    {
+      if (self->populate_callback_data_destroy)
+        self->populate_callback_data_destroy (self->populate_callback_data);
+    }
+
   G_OBJECT_CLASS (egg_task_cache_parent_class)->dispose (object);
 }
 
@@ -606,6 +617,14 @@ egg_task_cache_set_property (GObject      *object,
 
     case PROP_POPULATE_CALLBACK:
       self->populate_callback = g_value_get_pointer (value);
+      break;
+
+    case PROP_POPULATE_CALLBACK_DATA:
+      self->populate_callback_data = g_value_get_pointer (value);
+      break;
+
+    case PROP_POPULATE_CALLBACK_DATA_DESTROY:
+      self->populate_callback_data_destroy = g_value_get_pointer (value);
       break;
 
     case PROP_TIME_TO_LIVE:
@@ -657,6 +676,18 @@ egg_task_cache_class_init (EggTaskCacheClass *klass)
                          _("Populate Callback"),
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  gParamSpecs [PROP_POPULATE_CALLBACK_DATA] =
+    g_param_spec_pointer ("populate-callback-data",
+                         _("Populate Callback Data"),
+                         _("Populate Callback Data"),
+                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  gParamSpecs [PROP_POPULATE_CALLBACK_DATA_DESTROY] =
+    g_param_spec_pointer ("populate-callback-data-destroy",
+                         _("Populate Callback Data Destroy"),
+                         _("Populate Callback Data Destroy"),
+                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
   /**
    * EggTaskCache:time-to-live:
    *
@@ -691,8 +722,10 @@ egg_task_cache_new (GHashFunc            key_hash_func,
                     GEqualFunc           key_equal_func,
                     GBoxedCopyFunc       key_copy_func,
                     GBoxedFreeFunc       key_destroy_func,
+                    gint64               time_to_live,
                     EggTaskCacheCallback populate_callback,
-                    gint64               time_to_live)
+                    gpointer             populate_callback_data,
+                    GDestroyNotify       populate_callback_data_destroy)
 {
   g_return_val_if_fail (key_hash_func, NULL);
   g_return_val_if_fail (key_equal_func, NULL);
@@ -706,6 +739,8 @@ egg_task_cache_new (GHashFunc            key_hash_func,
                        "key-copy-func", key_copy_func,
                        "key-destroy-func", key_destroy_func,
                        "populate-callback", populate_callback,
+                       "populate-callback-data", populate_callback_data,
+                       "populate-callback-data-destroy", populate_callback_data_destroy,
                        "time-to-live", time_to_live,
                        NULL);
 }
