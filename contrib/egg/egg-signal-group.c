@@ -25,23 +25,26 @@
 /**
  * SECTION:egg-signal-group
  * @title: EggSignalGroup
- * @short_description: Manage collections of signals on an object
+ * @short_description: Manage a collection of signals on a #GObject
  *
- * #EggSignalGroup manages to simplify the process of connecting many signals
- * to a #GObject as a set.
+ * #EggSignalGroup manages to simplify the process of connecting
+ * many signals to a #GObject as a group. As such there is no API
+ * to disconnect a signal from the group.
  *
  * In particular, this allows you to:
  *
+ *  - Change the target instance, which automatically causes disconnection
+ *    of the signals from the old instance and connecting to the new instance.
  *  - Block and unblock signals as a group
- *  - Change the target instance, by disconnecting signals from the old
- *    instance and connecting to the new instance.
- *  - Ensuring that blocked signal state transfers across target instances.
+ *  - Ensuring that blocked state transfers across target instances.
  *
  * One place you might want to use such a structure is with #GtkTextView and
  * #GtkTextBuffer. Often times, you'll need to connect to many signals on
  * #GtkTextBuffer from a #GtkTextView subclass. This allows you to create a
- * signal group during your instance init function, and simply bind the
- * #GtkTextView:buffer property to #EggSignalGroup:target.
+ * signal group during instance construction, simply bind the
+ * #GtkTextView:buffer property to #EggSignalGroup:target and connect
+ * all the signals you need. When the #GtkTextView:buffer property changes
+ * all of the signals will be transitioned correctly.
  */
 
 struct _EggSignalGroup
@@ -235,6 +238,18 @@ egg_signal_group_check_target_type (EggSignalGroup *self,
   return TRUE;
 }
 
+/**
+ * egg_signal_group_block:
+ * @self: the #EggSignalGroup
+ *
+ * Blocks all signal handlers managed by @self so they will not
+ * be called during any signal emissions. Must be unblocked exactly
+ * the same number of times it has been blocked to become active again.
+ *
+ * This blocked state will be kept across changes of the target instance.
+ *
+ * See: g_signal_handler_block().
+ */
 void
 egg_signal_group_block (EggSignalGroup *self)
 {
@@ -263,6 +278,17 @@ egg_signal_group_block (EggSignalGroup *self)
     }
 }
 
+/**
+ * egg_signal_group_unblock:
+ * @self: the #EggSignalGroup
+ *
+ * Unblocks all signal handlers managed by @self so they will be
+ * called again during any signal emissions unless it is blocked
+ * again. Must be unblocked exactly the same number of times it
+ * has been blocked to become active again.
+ *
+ * See: g_signal_handler_unblock().
+ */
 void
 egg_signal_group_unblock (EggSignalGroup *self)
 {
@@ -293,13 +319,11 @@ egg_signal_group_unblock (EggSignalGroup *self)
 
 /**
  * egg_signal_group_get_target:
+ * @self: the #EggSignalGroup
  *
- * Gets the target instance for the signal group.
+ * Gets the target instance used when connecting signals.
  *
- * All signals that are registered will be connected
- * or disconnected when this property changes.
- *
- * Returns: (nullable) (transfer none) (type GObject): The #EggSignalGroup:target property.
+ * Returns: (nullable) (transfer none) (type GObject): The target instance.
  */
 gpointer
 egg_signal_group_get_target (EggSignalGroup *self)
@@ -311,15 +335,16 @@ egg_signal_group_get_target (EggSignalGroup *self)
 
 /**
  * egg_signal_group_set_target:
- * @self: An #EggSignalGroup.
- * @target: (nullable) (type GObject): The instance for which to connect signals.
+ * @self: the #EggSignalGroup.
+ * @target: (nullable) (type GObject): The target instance used
+ *     when connecting signals.
  *
- * Sets the target instance to connect signals to. Any signal that has been registered
- * with egg_signal_group_connect_object() or similar functions will be connected to this
- * object.
+ * Sets the target instance used when connecting signals. Any signal
+ * that has been registered with egg_signal_group_connect_object() or
+ * similar functions will be connected to this object.
  *
- * If #EggSignalGroup:target was previously set, signals will be disconnected from that
- * object prior to connecting to this object.
+ * If the target instance was previously set, signals will be
+ * disconnected from that object prior to connecting to @target.
  */
 void
 egg_signal_group_set_target (EggSignalGroup *self,
@@ -432,13 +457,23 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
   object_class->get_property = egg_signal_group_get_property;
   object_class->set_property = egg_signal_group_set_property;
 
+  /**
+   * EggSignalGroup:target
+   *
+   * The target instance used when connecting signals.
+   */
   gParamSpecs [PROP_TARGET] =
     g_param_spec_object ("target",
                          _("Target"),
-                         _("The target instance for which to connect signals."),
+                         _("The target instance used when connecting signals."),
                          G_TYPE_OBJECT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * EggSignalGroup:target-type
+   *
+   * The GType of the target property.
+   */
   gParamSpecs [PROP_TARGET_TYPE] =
     g_param_spec_gtype ("target-type",
                         _("Target Type"),
@@ -450,12 +485,13 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
 
   /**
    * EggSignalGroup::bind:
-   * @self: An #EggSignalGroup.
-   * @instance: A #GObject
+   * @self: the #EggSignalGroup
+   * @instance: a #GObject
    *
-   * This signal is emitted when the #EggSignalGroup:target property is set to a new #GObject.
+   * This signal is emitted when the target instance of @self
+   * is set to a new #GObject.
    *
-   * This signal will only be emitted if #EggSignalGroup:target is non-%NULL.
+   * This signal will only be emitted if the target of @self is non-%NULL.
    */
   gSignals [BIND] =
     g_signal_new ("bind",
@@ -469,11 +505,13 @@ egg_signal_group_class_init (EggSignalGroupClass *klass)
 
   /**
    * EggSignalGroup::unbind:
-   * @self: An #EggSignalGroup.
+   * @self: a #EggSignalGroup
    *
-   * This signal is emitted when the #EggSignalGroup:target property is set to a new #GObject.
+   * This signal is emitted when the target instance of @self
+   * is set to a new #GObject.
    *
-   * This signal will only be emitted if the previous value of #EggSignalGroup:target is non-%NULL.
+   * This signal will only be emitted if the previous target
+   * of @self is non-%NULL.
    */
   gSignals [UNBIND] =
     g_signal_new ("unbind",
@@ -492,6 +530,14 @@ egg_signal_group_init (EggSignalGroup *self)
   self->target_type = G_TYPE_OBJECT;
 }
 
+/**
+ * egg_signal_group_new:
+ * @target_type: the #GType of the target instance.
+ *
+ * Creates a new #EggSignalGroup for target instances of @target_type.
+ *
+ * Returns: a new #EggSignalGroup
+ */
 EggSignalGroup *
 egg_signal_group_new (GType target_type)
 {
@@ -551,6 +597,22 @@ egg_signal_group_connect_full (EggSignalGroup *self,
     egg_signal_group_bind_handler (self, handler);
 }
 
+/**
+ * egg_signal_group_connect_object:
+ * @self: a #EggSignalGroup
+ * @detailed_signal: a string of the form "signal-name::detail"
+ * @callback: the #GCallback to connect
+ * @object: the #GObject to pass as data to @callback calls
+ *
+ * Connects @callback to the signal @detailed_signal
+ * on the target object of @self.
+ *
+ * Ensures that the @object stays alive during the call to @callback
+ * by temporarily adding a reference count. When the @object is destroyed
+ * the signal handler will automatically be removed.
+ *
+ * See: g_signal_connect_object().
+ */
 void
 egg_signal_group_connect_object (EggSignalGroup *self,
                                  const gchar    *detailed_signal,
@@ -564,6 +626,20 @@ egg_signal_group_connect_object (EggSignalGroup *self,
                                         object, NULL, flags, TRUE);
 }
 
+/**
+ * egg_signal_group_connect_data:
+ * @self: a #EggSignalGroup
+ * @detailed_signal: a string of the form "signal-name::detail"
+ * @callback: the #GCallback to connect
+ * @data: the data to pass to @callback calls
+ * @notify: function to be called when disposing of @self
+ * @flags: the flags used to create the signal connection
+ *
+ * Connects @callback to the signal @detailed_signal
+ * on the target instance of @self.
+ *
+ * See: g_signal_connect_data().
+ */
 void
 egg_signal_group_connect_data (EggSignalGroup *self,
                                const gchar    *detailed_signal,
@@ -576,6 +652,18 @@ egg_signal_group_connect_data (EggSignalGroup *self,
                                         data, notify, flags, FALSE);
 }
 
+/**
+ * egg_signal_group_connect:
+ * @self: a #EggSignalGroup
+ * @detailed_signal: a string of the form "signal-name::detail"
+ * @callback: the #GCallback to connect
+ * @data: the data to pass to @callback calls
+ *
+ * Connects @callback to the signal @detailed_signal
+ * on the target instance of @self.
+ *
+ * See: g_signal_connect().
+ */
 void
 egg_signal_group_connect (EggSignalGroup *self,
                           const gchar    *detailed_signal,
@@ -586,6 +674,20 @@ egg_signal_group_connect (EggSignalGroup *self,
                                         data, NULL, 0, FALSE);
 }
 
+/**
+ * egg_signal_group_connect_after:
+ * @self: a #EggSignalGroup
+ * @detailed_signal: a string of the form "signal-name::detail"
+ * @callback: the #GCallback to connect
+ * @data: the data to pass to @callback calls
+ *
+ * Connects @callback to the signal @detailed_signal
+ * on the target instance of @self.
+ *
+ * The @callback will be called after the default handler of the signal.
+ *
+ * See: g_signal_connect_after().
+ */
 void
 egg_signal_group_connect_after (EggSignalGroup *self,
                                 const gchar    *detailed_signal,
@@ -596,6 +698,21 @@ egg_signal_group_connect_after (EggSignalGroup *self,
                                         data, NULL, G_CONNECT_AFTER, FALSE);
 }
 
+/**
+ * egg_signal_group_connect_swapped:
+ * @self: a #EggSignalGroup
+ * @detailed_signal: a string of the form "signal-name::detail"
+ * @callback: the #GCallback to connect
+ * @data: the data to pass to @callback calls
+ *
+ * Connects @callback to the signal @detailed_signal
+ * on the target instance of @self.
+ *
+ * The instance on which the signal is emitted and @data
+ * will be swapped when calling @callback.
+ *
+ * See: g_signal_connect_swapped().
+ */
 void
 egg_signal_group_connect_swapped (EggSignalGroup *self,
                                   const gchar    *detailed_signal,
