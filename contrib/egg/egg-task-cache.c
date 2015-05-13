@@ -49,8 +49,9 @@ struct _EggTaskCache
 
 typedef struct
 {
-  GObject *item;
-  gint64   evict_at;
+  GObject  *item;
+  gpointer  key;
+  gint64    evict_at;
 } CacheItem;
 
 typedef struct
@@ -89,17 +90,28 @@ evict_source_prepare (GSource *source,
 {
   EvictSource *ev = (EvictSource *)source;
 
+  *timeout = -1;
+
   if (ev->heap->len > 0)
     {
       CacheItem *item;
+      gint64 evict_at;
+      gint64 now;
 
+      now = g_source_get_time (source);
       item = egg_heap_peek (ev->heap, gpointer);
-      *timeout = (item->evict_at - g_get_monotonic_time ());
 
-      return (*timeout) < 0;
+      if (item->evict_at < now)
+        return TRUE;
+
+      evict_at = (item->evict_at - now) / 1000L;
+
+      if (evict_at < *timeout)
+        {
+          *timeout = evict_at;
+          return FALSE;
+        }
     }
-
-  *timeout = -1;
 
   return FALSE;
 }
@@ -108,10 +120,20 @@ static gboolean
 evict_source_check (GSource *source)
 {
   EvictSource *ev = (EvictSource *)source;
-  CacheItem *item;
 
-  if ((ev->heap->len > 0) && (item = egg_heap_peek (ev->heap, gpointer)))
-    return (g_get_monotonic_time () <= item->evict_at);
+  g_assert (ev != NULL);
+  g_assert (ev->heap != NULL);
+
+  if (ev->heap->len)
+    {
+      CacheItem *item;
+      gint64 now;
+
+      now = g_source_get_time (source);
+      item = egg_heap_peek (ev->heap, gpointer);
+      if (now >= item->evict_at)
+        return TRUE;
+    }
 
   return FALSE;
 }
@@ -146,6 +168,7 @@ cache_item_free (gpointer data)
 {
   CacheItem *item = data;
 
+  /* key is freed by g_hash_table to avoid needing self pointer. */
   g_object_unref (item->item);
   g_slice_free (CacheItem, item);
 }
@@ -161,13 +184,15 @@ cache_item_compare_evict_at (gconstpointer a,
 }
 
 static CacheItem *
-cache_item_new (GObject *item,
+cache_item_new (gpointer key,
+                GObject *item,
                 gint64   time_to_live_usec)
 {
   CacheItem *ret;
 
   ret = g_slice_new0 (CacheItem);
-  ret->item = g_object_ref (item);
+  ret->key = key;
+  ret->item = item;
   if (time_to_live_usec > 0)
     ret->evict_at = g_get_monotonic_time () + time_to_live_usec;
 
@@ -253,7 +278,7 @@ egg_task_cache_propagate_error (EggTaskCache  *self,
                                 gconstpointer  key,
                                 const GError  *error)
 {
-  g_autoptr(GPtrArray) queued = NULL;
+  GPtrArray *queued;
 
   g_assert (EGG_IS_TASK_CACHE (self));
   g_assert (error != NULL);
@@ -262,7 +287,9 @@ egg_task_cache_propagate_error (EggTaskCache  *self,
     {
       gsize i;
 
-      g_hash_table_steal (self->queued, key);
+      /* we can't use steal because we want the key freed */
+      g_ptr_array_ref (queued);
+      g_hash_table_remove (self->queued, key);
 
       for (i = 0; i < queued->len; i++)
         {
@@ -273,6 +300,8 @@ egg_task_cache_propagate_error (EggTaskCache  *self,
         }
 
       EGG_COUNTER_SUB (queued, queued->len);
+
+      g_ptr_array_unref (queued);
     }
 }
 
@@ -286,11 +315,10 @@ egg_task_cache_populate (EggTaskCache  *self,
   g_assert (EGG_IS_TASK_CACHE (self));
   g_assert (G_IS_OBJECT (value));
 
-  item = cache_item_new (value, self->time_to_live_usec);
-
-  g_hash_table_insert (self->cache,
-                       self->key_copy_func ((gpointer)key),
-                       item);
+  item = cache_item_new (self->key_copy_func ((gpointer)key),
+                         g_object_ref (value),
+                         self->time_to_live_usec);
+  g_hash_table_insert (self->cache, item->key, item);
   egg_heap_insert_val (self->evict_heap, item);
 
   EGG_COUNTER_INC (cached);
@@ -301,7 +329,7 @@ egg_task_cache_propagate_pointer (EggTaskCache  *self,
                                   gconstpointer  key,
                                   gpointer       value)
 {
-  g_autoptr(GPtrArray) queued = NULL;
+  GPtrArray *queued = NULL;
 
   g_assert (EGG_IS_TASK_CACHE (self));
   g_assert (G_IS_OBJECT (value));
@@ -310,7 +338,8 @@ egg_task_cache_propagate_pointer (EggTaskCache  *self,
     {
       gsize i;
 
-      g_hash_table_steal (self->queued, key);
+      g_ptr_array_ref (queued);
+      g_hash_table_remove (self->queued, key);
 
       for (i = 0; i < queued->len; i++)
         {
@@ -321,6 +350,8 @@ egg_task_cache_propagate_pointer (EggTaskCache  *self,
         }
 
       EGG_COUNTER_SUB (queued, queued->len);
+
+      g_ptr_array_unref (queued);
     }
 }
 
@@ -338,20 +369,25 @@ egg_task_cache_fetch_cb (GObject      *object,
   g_assert (EGG_IS_TASK_CACHE (self));
   g_assert (G_IS_TASK (task));
 
-  if (!(ret = g_task_propagate_pointer (task, &error)))
+  ret = g_task_propagate_pointer (task, &error);
+
+  if (error != NULL)
     {
       egg_task_cache_propagate_error (self, key, error);
       g_clear_error (&error);
     }
   else
     {
+      g_assert (G_IS_OBJECT (ret));
       egg_task_cache_populate (self, key, ret);
       egg_task_cache_propagate_pointer (self, key, ret);
-      g_clear_object (&ret);
     }
 
   g_hash_table_remove (self->in_flight, key);
   EGG_COUNTER_DEC (in_flight);
+
+  g_assert (!ret || G_IS_OBJECT (ret));
+  g_clear_object (&ret);
 
   self->key_destroy_func (key);
   g_object_unref (task);
@@ -403,9 +439,9 @@ egg_task_cache_get_async (EggTaskCache        *self,
    * The in_flight hashtable will have a bit set if we have queued
    * an operation for this key.
    */
-  if (!g_hash_table_lookup (self->in_flight, key))
+  if (!g_hash_table_contains (self->in_flight, key))
     {
-      GTask *fetch_task;
+      g_autoptr(GTask) fetch_task = NULL;
 
       fetch_task = g_task_new (self,
                                cancellable,
@@ -414,7 +450,10 @@ egg_task_cache_get_async (EggTaskCache        *self,
       g_hash_table_insert (self->in_flight,
                            self->key_copy_func ((gpointer)key),
                            GINT_TO_POINTER (TRUE));
-      self->populate_callback (self, key, fetch_task, self->populate_callback_data);
+      self->populate_callback (self,
+                               key,
+                               g_object_ref (fetch_task),
+                               self->populate_callback_data);
 
       EGG_COUNTER_INC (in_flight);
     }
@@ -449,7 +488,7 @@ egg_task_cache_do_eviction (gpointer user_data)
       if (item->evict_at < now)
         {
           egg_heap_extract (self->evict_heap, NULL);
-          egg_task_cache_evict_full (self, item->item, FALSE);
+          egg_task_cache_evict_full (self, item->key, FALSE);
           continue;
         }
 
