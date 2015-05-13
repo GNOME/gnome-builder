@@ -101,12 +101,12 @@ evict_source_prepare (GSource *source,
       now = g_source_get_time (source);
       item = egg_heap_peek (ev->heap, gpointer);
 
-      if (item->evict_at < now)
+      if (item->evict_at <= now)
         return TRUE;
 
       evict_at = (item->evict_at - now) / 1000L;
 
-      if (evict_at < *timeout)
+      if (*timeout == -1)
         {
           *timeout = evict_at;
           return FALSE;
@@ -491,7 +491,7 @@ egg_task_cache_do_eviction (gpointer user_data)
 
       item = egg_heap_peek (self->evict_heap, gpointer);
 
-      if (item->evict_at < now)
+      if (item->evict_at <= now)
         {
           egg_heap_extract (self->evict_heap, NULL);
           egg_task_cache_evict_full (self, item->key, FALSE);
