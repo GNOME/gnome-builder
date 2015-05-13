@@ -236,7 +236,6 @@ egg_heap_extract (EggHeap  *heap,
                   gpointer  result)
 {
   EggHeapReal *real = (EggHeapReal *)heap;
-  gboolean ret;
   gint ipos;
   gint lpos;
   gint rpos;
@@ -244,21 +243,88 @@ egg_heap_extract (EggHeap  *heap,
 
   g_return_val_if_fail (heap, FALSE);
 
-  ret = (real->len > 0);
+  if (real->len == 0)
+    return FALSE;
 
-  if (ret)
+  if (result)
+    memcpy (result, heap_index (real, 0), real->element_size);
+
+  if (--real->len > 0)
     {
-      if (result)
-        memcpy (result, heap_index (real, 0), real->element_size);
+      memmove (real->data,
+               heap_index (real, real->len),
+               real->element_size);
 
-      if (real->len && --real->len)
+      ipos = 0;
+
+      while (TRUE)
         {
-          memmove (real->data,
-                   heap_index (real, real->len),
-                   real->element_size);
+          lpos = heap_left (ipos);
+          rpos = heap_right (ipos);
 
-          ipos = 0;
+          if ((lpos < real->len) && (heap_compare (real, lpos, ipos) > 0))
+            mpos = lpos;
+          else
+            mpos = ipos;
 
+          if ((rpos < real->len) && (heap_compare (real, rpos, mpos) > 0))
+            mpos = rpos;
+
+          if (mpos == ipos)
+            break;
+
+          heap_swap (real, mpos, ipos);
+
+          ipos = mpos;
+        }
+    }
+
+  if ((real->len > MIN_HEAP_SIZE) && (real->allocated_len / 2) >= real->len)
+    egg_heap_real_shrink (real);
+
+  return TRUE;
+}
+
+gboolean
+egg_heap_extract_index (EggHeap  *heap,
+                        guint     index_,
+                        gpointer  result)
+{
+  EggHeapReal *real = (EggHeapReal *)heap;
+  gint ipos;
+  gint lpos;
+  gint mpos;
+  gint ppos;
+  gint rpos;
+
+  g_return_val_if_fail (heap, FALSE);
+
+  if (real->len == 0)
+    return FALSE;
+
+  if (result)
+    memcpy (result, heap_index (real, index_), real->element_size);
+
+  real->len--;
+
+  if (real->len && index_ != real->len)
+    {
+      memcpy (heap_index (real, index_),
+              heap_index (real, real->len),
+              real->element_size);
+
+      ipos = index_;
+      ppos = heap_parent (ipos);
+
+      while (heap_compare (real, ipos, ppos) > 0)
+        {
+          heap_swap (real, ipos, ppos);
+          ipos = ppos;
+          ppos = heap_parent (ppos);
+        }
+
+      if (ipos == index_)
+        {
           while (TRUE)
             {
               lpos = heap_left (ipos);
@@ -282,80 +348,8 @@ egg_heap_extract (EggHeap  *heap,
         }
     }
 
-  if ((real->len >= MIN_HEAP_SIZE) && (real->allocated_len / 2) >= real->len)
+  if ((real->len > MIN_HEAP_SIZE) && (real->allocated_len / 2) >= real->len)
     egg_heap_real_shrink (real);
 
-  return ret;
-}
-
-gboolean
-egg_heap_extract_index (EggHeap  *heap,
-                        guint     index_,
-                        gpointer  result)
-{
-  EggHeapReal *real = (EggHeapReal *)heap;
-  gboolean ret;
-  gint ipos;
-  gint lpos;
-  gint mpos;
-  gint ppos;
-  gint rpos;
-
-  g_return_val_if_fail (heap, FALSE);
-
-  ret = (real->len > 0);
-
-  if (real->len)
-    {
-      if (result)
-        memcpy (result, heap_index (real, 0), real->element_size);
-
-      real->len--;
-
-      if (real->len && index_ != real->len)
-        {
-          memcpy (heap_index (real, index_),
-                  heap_index (real, real->len),
-                  real->element_size);
-
-          ipos = index_;
-          ppos = heap_parent (ipos);
-
-          while (heap_compare (real, ipos, ppos) > 0)
-            {
-              heap_swap (real, ipos, ppos);
-              ipos = ppos;
-              ppos = heap_parent (ppos);
-            }
-
-          if (ipos == index_)
-            {
-              while (TRUE)
-                {
-                  lpos = heap_left (ipos);
-                  rpos = heap_right (ipos);
-
-                  if ((lpos < real->len) && (heap_compare (real, lpos, ipos) > 0))
-                    mpos = lpos;
-                  else
-                    mpos = ipos;
-
-                  if ((rpos < real->len) && (heap_compare (real, rpos, mpos) > 0))
-                    mpos = rpos;
-
-                  if (mpos == ipos)
-                    break;
-
-                  heap_swap (real, mpos, ipos);
-
-                  ipos = mpos;
-                }
-            }
-        }
-    }
-
-  if ((real->len >= MIN_HEAP_SIZE) && (real->allocated_len / 2) >= real->len)
-    egg_heap_real_shrink (real);
-
-  return ret;
+  return TRUE;
 }
