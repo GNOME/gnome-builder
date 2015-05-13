@@ -70,10 +70,12 @@ struct _EggSignalGroupClass
 
 typedef struct
 {
-  gulong       handler_id;
-  GClosure    *closure;
-  const gchar *detailed_signal;
-  guint        connect_after : 1;
+  EggSignalGroup *group;
+  gulong          handler_id;
+  GClosure       *closure;
+  GObject        *object;
+  const gchar    *detailed_signal;
+  guint           connect_after : 1;
 } SignalHandler;
 
 G_DEFINE_TYPE (EggSignalGroup, egg_signal_group, G_TYPE_OBJECT)
@@ -117,6 +119,33 @@ egg_signal_group__target_weak_notify (gpointer  data,
 
   g_signal_emit (self, gSignals [UNBIND], 0);
   g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TARGET]);
+}
+
+static void
+egg_signal_group__connect_object_weak_notify (gpointer  data,
+                                              GObject  *where_object_was)
+{
+  EggSignalGroup *self = data;
+  gsize i;
+
+  g_assert (EGG_IS_SIGNAL_GROUP (self));
+  g_assert (where_object_was != NULL);
+
+  for (i = 0; i < self->handlers->len; ++i)
+    {
+      SignalHandler *handler;
+
+      handler = g_ptr_array_index (self->handlers, i);
+
+      if (handler->object == where_object_was)
+        {
+          handler->object = NULL;
+          g_ptr_array_remove_index_fast (self->handlers, i);
+          return;
+        }
+    }
+
+  g_critical ("Failed to find handler for %p", where_object_was);
 }
 
 static void
@@ -366,6 +395,14 @@ signal_handler_free (gpointer data)
 {
   SignalHandler *handler = data;
 
+  if (handler->object != NULL)
+    {
+      g_object_weak_unref (handler->object,
+                           egg_signal_group__connect_object_weak_notify,
+                           handler->group);
+      handler->object = NULL;
+    }
+
   g_clear_pointer (&handler->closure, g_closure_unref);
   handler->handler_id = 0;
   handler->detailed_signal = NULL;
@@ -568,16 +605,24 @@ egg_signal_group_connect_full (EggSignalGroup *self,
   else
     closure = g_cclosure_new (callback, data, notify);
 
-  /* This is what g_cclosure_new_object() does */
-  if (is_object)
-    g_object_watch_closure (data, closure);
-
   handler = g_slice_new0 (SignalHandler);
+  handler->group = self;
   handler->detailed_signal = g_intern_string (detailed_signal);
   handler->closure = g_closure_ref (closure);
   handler->connect_after = ((flags & G_CONNECT_AFTER) != 0);
 
   g_closure_sink (closure);
+
+  if (is_object)
+    {
+      /* This is what g_cclosure_new_object() does */
+      g_object_watch_closure (data, closure);
+
+      handler->object = data;
+      g_object_weak_ref (data,
+                         egg_signal_group__connect_object_weak_notify,
+                         self);
+    }
 
   g_ptr_array_add (self->handlers, handler);
 
