@@ -130,7 +130,7 @@ ide_diagnostician_diagnose_async (IdeDiagnostician    *self,
     {
       g_task_return_pointer (task,
                              _ide_diagnostics_new (NULL),
-                             (GDestroyNotify)g_ptr_array_unref);
+                             (GDestroyNotify)ide_diagnostics_unref);
       return;
     }
 
