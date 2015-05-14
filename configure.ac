@@ -32,9 +32,11 @@ dnl ***********************************************************************
 MAJOR_VERSION=builder_major_version
 MINOR_VERSION=builder_minor_version
 MICRO_VERSION=builder_micro_version
+LIBIDE_VERSION=builder_version
 AC_SUBST(MAJOR_VERSION)
 AC_SUBST(MINOR_VERSION)
 AC_SUBST(MICRO_VERSION)
+AC_SUBST(LIBIDE_VERSION)
 
 
 dnl ***********************************************************************
@@ -276,7 +278,14 @@ AM_CONDITIONAL([ENABLE_TESTS], test "$enable_tests" = "yes")
 dnl ***********************************************************************
 dnl Support for gtk-doc Documentation Engine
 dnl ***********************************************************************
-GTK_DOC_CHECK
+GTK_DOC_CHECK([1.11],[--flavour no-tmpl])
+AM_CONDITIONAL(ENABLE_GTK_DOC, test "x$enable_gtk_doc" = "xyes")
+AC_ARG_ENABLE(doc-cross-references,
+              AS_HELP_STRING([--disable-doc-cross-references],
+                             [cross reference symbols from other libraries @<:@default=yes@:>@]),
+              enable_doc_cross_references=$enableval,
+              enable_doc_cross_references=yes)
+AM_CONDITIONAL(ENABLE_DOC_CROSS_REFERENCES, test x$enable_doc_cross_references != xno)
 
 
 dnl ***********************************************************************
@@ -356,6 +365,9 @@ AC_CONFIG_FILES([
 	doc/Makefile
 	doc/examples/Makefile
 	doc/examples/scripts/Makefile
+	doc/reference/Makefile
+	doc/reference/libide/Makefile
+	doc/reference/libide/version.xml
 
 	po/Makefile.in
 
@@ -383,6 +395,7 @@ echo " Development Options"
 echo ""
 echo "  Enable Debug ......................... : ${enable_debug}"
 echo "  Enable Tracing ....................... : ${enable_tracing}"
-echo "  Build API reference ...................: ${enable_gtk_doc}"
-echo "  Build Test Suite ......................: ${enable_tests}"
+echo "  Build Test Suite ..................... : ${enable_tests}"
+echo "  Build API reference .................. : ${enable_gtk_doc}"
+echo "  Use cross-referencing in API docs .... : ${enable_doc_cross_references}"
 echo ""

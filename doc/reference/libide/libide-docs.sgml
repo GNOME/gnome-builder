@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+  <!ENTITY version SYSTEM "version.xml">
+]>
+<book id="index">
+  <bookinfo>
+    <title>LibIDE Reference Manual</title>
+    <releaseinfo>
+      for LibIDE &version;
+    </releaseinfo>
+  </bookinfo>
+
+  <part label="I">
+    <title>API Reference</title>
+    <chapter>
+      <title>Core Classes</title>
+      <xi:include href="xml/ide-context.xml"/>
+      <xi:include href="xml/ide-object.xml"/>
+      <xi:include href="xml/ide-vcs.xml"/>
+      <xi:include href="xml/ide-build-system.xml"/>
+      <xi:include href="xml/ide-device.xml"/>
+      <xi:include href="xml/ide-device-manager.xml"/>
+      <xi:include href="xml/ide-file.xml"/>
+      <xi:include href="xml/ide-service.xml"/>
+      <xi:include href="xml/ide-progress.xml"/>
+      <xi:include href="xml/ide-global.xml"/>
+    </chapter>
+    <chapter>
+      <title>Semantic Language Support</title>
+      <xi:include href="xml/ide-language.xml"/>
+      <xi:include href="xml/ide-c-language.xml"/>
+      <xi:include href="xml/ide-html-language.xml"/>
+      <xi:include href="xml/ide-python-language.xml"/>
+      <xi:include href="xml/ide-vala-language.xml"/>
+      <xi:include href="xml/ide-xml-language.xml"/>
+      <section>
+        <title>Semantic Highlighting</title>
+        <xi:include href="xml/ide-highlighter.xml"/>
+        <xi:include href="xml/ide-highlight-engine.xml"/>
+        <xi:include href="xml/ide-highlight-index.xml"/>
+      </section>
+      <section>
+        <title>Auto Indentation</title>
+        <xi:include href="xml/ide-indent-style.xml"/>
+        <xi:include href="xml/ide-indenter.xml"/>
+      </section>
+    </chapter>
+    <chapter>
+      <title>Buffer Management</title>
+      <xi:include href="xml/ide-unsaved-file.xml"/>
+      <xi:include href="xml/ide-unsaved-files.xml"/>
+      <xi:include href="xml/ide-buffer-change-monitor.xml"/>
+      <xi:include href="xml/ide-buffer-manager.xml"/>
+      <xi:include href="xml/ide-buffer.xml"/>
+    </chapter>
+    <chapter>
+      <title>Source Code Editor</title>
+      <xi:include href="xml/ide-source-map.xml"/>
+      <xi:include href="xml/ide-source-view.xml"/>
+    </chapter>
+    <chapter>
+      <title>Version Control</title>
+      <xi:include href="xml/ide-vcs.xml"/>
+      <xi:include href="xml/ide-vcs-uri.xml"/>
+      <xi:include href="xml/ide-directory-vcs.xml"/>
+      <section>
+        <title>Git</title>
+        <xi:include href="xml/ide-git-vcs.xml"/>
+        <xi:include href="xml/ide-git-remote-callbacks.xml"/>
+      </section>
+    </chapter>
+    <chapter>
+      <title>Snippets</title>
+      <xi:include href="xml/ide-source-snippets-manager.xml"/>
+      <xi:include href="xml/ide-source-snippet.xml"/>
+      <xi:include href="xml/ide-source-snippet-context.xml"/>
+      <xi:include href="xml/ide-source-snippet-chunk.xml"/>
+      <xi:include href="xml/ide-source-snippets.xml"/>
+    </chapter>
+    <chapter>
+      <title>Working with Projects</title>
+      <xi:include href="xml/ide-project.xml"/>
+      <xi:include href="xml/ide-project-item.xml"/>
+      <xi:include href="xml/ide-project-files.xml"/>
+      <xi:include href="xml/ide-project-file.xml"/>
+      <section>
+        <title>Finding Recent Projects</title>
+        <xi:include href="xml/ide-project-info.xml"/>
+        <xi:include href="xml/ide-project-miner.xml"/>
+        <xi:include href="xml/ide-recent-projects.xml"/>
+        <xi:include href="xml/ide-doap-person.xml"/>
+        <xi:include href="xml/ide-doap.xml"/>
+      </section>
+    </chapter>
+    <chapter>
+      <title>Build Systems</title>
+      <xi:include href="xml/ide-build-system.xml"/>
+      <xi:include href="xml/ide-builder.xml"/>
+      <xi:include href="xml/ide-build-result.xml"/>
+      <section>
+        <title>Supported Build Systems</title>
+        <xi:include href="xml/ide-autotools-build-system.xml"/>
+        <xi:include href="xml/ide-directory-build-system.xml"/>
+      </section>
+    </chapter>
+    <chapter>
+      <title>Searching</title>
+      <xi:include href="xml/ide-pattern-spec.xml"/>
+      <xi:include href="xml/ide-search-context.xml"/>
+      <xi:include href="xml/ide-search-engine.xml"/>
+      <xi:include href="xml/ide-search-provider.xml"/>
+      <section>
+        <title>Search Results</title>
+        <xi:include href="xml/ide-search-result.xml"/>
+        <xi:include href="xml/ide-git-search-result.xml"/>
+        <xi:include href="xml/ide-devhelp-search-result.xml"/>
+      </section>
+    </chapter>
+    <chapter>
+      <title>Diagnostics</title>
+      <xi:include href="xml/ide-diagnostician.xml"/>
+      <xi:include href="xml/ide-diagnostic-provider.xml"/>
+      <xi:include href="xml/ide-diagnostics.xml"/>
+      <xi:include href="xml/ide-diagnostic.xml"/>
+      <xi:include href="xml/ide-fixit.xml"/>
+      <xi:include href="xml/ide-source-location.xml"/>
+      <xi:include href="xml/ide-source-range.xml"/>
+      <section>
+        <title>Locating a Symbol</title>
+        <xi:include href="xml/ide-symbol-resolver.xml"/>
+        <xi:include href="xml/ide-symbol.xml"/>
+      </section>
+    </chapter>
+    <chapter>
+      <title>Navigation</title>
+      <xi:include href="xml/ide-back-forward-list.xml"/>
+      <xi:include href="xml/ide-back-forward-item.xml"/>
+    </chapter>
+    <chapter>
+      <title>Devices</title>
+      <xi:include href="xml/ide-device-manager.xml"/>
+      <xi:include href="xml/ide-device-provider.xml"/>
+      <xi:include href="xml/ide-device.xml"/>
+      <section>
+        <title>Supported Devices</title>
+        <xi:include href="xml/ide-local-device.xml"/>
+        <xi:include href="xml/ide-mingw-device.xml"/>
+      </section>
+    </chapter>
+    <chapter>
+      <title>Scripting</title>
+      <xi:include href="xml/ide-script-manager.xml"/>
+      <xi:include href="xml/ide-script.xml"/>
+    </chapter>
+    <chapter>
+      <title>Settings</title>
+      <xi:include href="xml/ide-settings.xml"/>
+      <xi:include href="xml/ide-file-settings.xml"/>
+    </chapter>
+    <chapter>
+      <title>Theatrics</title>
+      <xi:include href="xml/ide-animation.xml"/>
+    </chapter>
+    <chapter>
+      <title>Threading</title>
+      <xi:include href="xml/ide-thread-pool.xml"/>
+    </chapter>
+    <chapter>
+      <title>Testing</title>
+      <xi:include href="xml/ide-test-case.xml"/>
+      <xi:include href="xml/ide-test-suite.xml"/>
+    </chapter>
+    <chapter>
+      <title>Utilities and Logging</title>
+      <xi:include href="xml/ide-log.xml"/>
+      <xi:include href="xml/ide-debug.xml"/>
+      <xi:include href="xml/ide-macros.xml"/>
+    </chapter>
+    <chapter>
+      <title>Not Implemented</title>
+      <xi:include href="xml/ide-debugger.xml"/>
+      <xi:include href="xml/ide-deployer.xml"/>
+      <xi:include href="xml/ide-executable.xml"/>
+      <xi:include href="xml/ide-executer.xml"/>
+      <xi:include href="xml/ide-refactory.xml"/>
+      <xi:include href="xml/ide-process.xml"/>
+      <xi:include href="xml/ide-target.xml"/>
+    </chapter>
+  </part>
+
+  <index id="api-index-full">
+    <title>Index</title>
+    <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
+  </index>
+
+  <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
+</book>
