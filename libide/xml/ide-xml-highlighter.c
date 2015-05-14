@@ -145,7 +145,7 @@ ide_xml_highlighter_set_buffer (IdeXmlHighlighter *highlighter,
   IdeXmlHighlighter *self = (IdeXmlHighlighter *)highlighter;
 
   g_assert (IDE_IS_HIGHLIGHTER (self));
-  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (!buffer || IDE_IS_BUFFER (buffer));
 
   if (self->buffer != buffer)
     {
