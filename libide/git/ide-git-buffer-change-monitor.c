@@ -16,8 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-git-buffer-change-monitor"
+
 #include <glib/gi18n.h>
 #include <libgit2-glib/ggit.h>
+
+#include "egg-counter.h"
+#include "egg-signal-group.h"
 
 #include "ide-buffer.h"
 #include "ide-context.h"
@@ -40,24 +45,30 @@
  *
  * Upon completion of the diff, the results will be passed back to the primary thread and the
  * state updated for use by line change renderer in the source view.
+ *
+ * TODO: Move the thread work into ide_thread_pool?
  */
 
 struct _IdeGitBufferChangeMonitor
 {
-  IdeBufferChangeMonitor parent_instance;
+  IdeBufferChangeMonitor  parent_instance;
 
-  IdeBuffer      *buffer;
-  GgitRepository *repository;
-  GHashTable     *state;
+  EggSignalGroup         *signal_group;
+  EggSignalGroup         *vcs_signal_group;
 
-  GgitBlob       *cached_blob;
+  IdeBuffer              *buffer;
 
-  guint           changed_timeout;
+  GgitRepository         *repository;
+  GHashTable             *state;
 
-  guint           state_dirty : 1;
-  guint           in_calculation : 1;
-  guint           delete_range_requires_recalculation : 1;
-  guint           is_child_of_workdir : 1;
+  GgitBlob               *cached_blob;
+
+  guint                   changed_timeout;
+
+  guint                   state_dirty : 1;
+  guint                   in_calculation : 1;
+  guint                   delete_range_requires_recalculation : 1;
+  guint                   is_child_of_workdir : 1;
 };
 
 typedef struct
@@ -73,6 +84,9 @@ typedef struct
 G_DEFINE_TYPE (IdeGitBufferChangeMonitor,
                ide_git_buffer_change_monitor,
                IDE_TYPE_BUFFER_CHANGE_MONITOR)
+
+EGG_DEFINE_COUNTER (instances, "IdeGitBufferChangeMonitor", "Instances",
+                    "The number of git buffer change monitor instances.");
 
 enum {
   PROP_0,
@@ -419,40 +433,13 @@ ide_git_buffer_change_monitor_set_buffer (IdeBufferChangeMonitor *monitor,
   g_return_if_fail (IDE_IS_BUFFER (buffer));
   g_return_if_fail (!self->buffer);
 
-  self->buffer = g_object_ref (buffer);
+  ide_set_weak_pointer (&self->buffer, buffer);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   vcs = ide_context_get_vcs (context);
 
-  g_signal_connect_object (self->buffer,
-                           "insert-text",
-                           G_CALLBACK (ide_git_buffer_change_monitor__buffer_insert_text_after_cb),
-                           self,
-                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-
-  g_signal_connect_object (self->buffer,
-                           "delete-range",
-                           G_CALLBACK (ide_git_buffer_change_monitor__buffer_delete_range_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->buffer,
-                           "delete-range",
-                           G_CALLBACK (ide_git_buffer_change_monitor__buffer_delete_range_after_cb),
-                           self,
-                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-
-  g_signal_connect_object (self->buffer,
-                           "changed",
-                           G_CALLBACK (ide_git_buffer_change_monitor__buffer_changed_after_cb),
-                           self,
-                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-
-  g_signal_connect_object (vcs,
-                           "reloaded",
-                           G_CALLBACK (ide_git_buffer_change_monitor__vcs_reloaded_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
+  egg_signal_group_set_target (self->signal_group, buffer);
+  egg_signal_group_set_target (self->vcs_signal_group, vcs);
 }
 
 static gint
@@ -676,11 +663,22 @@ ide_git_buffer_change_monitor_dispose (GObject *object)
       self->changed_timeout = 0;
     }
 
+  ide_clear_weak_pointer (&self->buffer);
+
+  g_clear_object (&self->signal_group);
+  g_clear_object (&self->vcs_signal_group);
   g_clear_object (&self->cached_blob);
-  g_clear_object (&self->buffer);
   g_clear_object (&self->repository);
 
   G_OBJECT_CLASS (ide_git_buffer_change_monitor_parent_class)->dispose (object);
+}
+
+static void
+ide_git_buffer_change_monitor_finalize (GObject *object)
+{
+  G_OBJECT_CLASS (ide_git_buffer_change_monitor_parent_class)->finalize (object);
+
+  EGG_COUNTER_DEC (instances);
 }
 
 static void
@@ -709,6 +707,7 @@ ide_git_buffer_change_monitor_class_init (IdeGitBufferChangeMonitorClass *klass)
   IdeBufferChangeMonitorClass *parent_class = IDE_BUFFER_CHANGE_MONITOR_CLASS (klass);
 
   object_class->dispose = ide_git_buffer_change_monitor_dispose;
+  object_class->finalize = ide_git_buffer_change_monitor_finalize;
   object_class->set_property = ide_git_buffer_change_monitor_set_property;
 
   parent_class->set_buffer = ide_git_buffer_change_monitor_set_buffer;
@@ -732,4 +731,34 @@ ide_git_buffer_change_monitor_class_init (IdeGitBufferChangeMonitorClass *klass)
 static void
 ide_git_buffer_change_monitor_init (IdeGitBufferChangeMonitor *self)
 {
+  EGG_COUNTER_INC (instances);
+
+  self->signal_group = egg_signal_group_new (IDE_TYPE_BUFFER);
+  egg_signal_group_connect_object (self->signal_group,
+                                   "insert-text",
+                                   G_CALLBACK (ide_git_buffer_change_monitor__buffer_insert_text_after_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  egg_signal_group_connect_object (self->signal_group,
+                                   "delete-range",
+                                   G_CALLBACK (ide_git_buffer_change_monitor__buffer_delete_range_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  egg_signal_group_connect_object (self->signal_group,
+                                   "delete-range",
+                                   G_CALLBACK (ide_git_buffer_change_monitor__buffer_delete_range_after_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  egg_signal_group_connect_object (self->signal_group,
+                                   "changed",
+                                   G_CALLBACK (ide_git_buffer_change_monitor__buffer_changed_after_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+
+  self->vcs_signal_group = egg_signal_group_new (IDE_TYPE_VCS);
+  egg_signal_group_connect_object (self->vcs_signal_group,
+                                   "reloaded",
+                                   G_CALLBACK (ide_git_buffer_change_monitor__vcs_reloaded_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 }
