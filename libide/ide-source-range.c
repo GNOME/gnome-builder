@@ -26,7 +26,7 @@
 
 G_DEFINE_BOXED_TYPE (IdeSourceRange, ide_source_range, ide_source_range_ref, ide_source_range_unref)
 
-EGG_DEFINE_COUNTER (instances, "Instances", "IdeSourceRange", "Number of IdeSourceRange instances.")
+EGG_DEFINE_COUNTER (instances, "IdeSourceRange", "Instances", "Number of IdeSourceRange instances.")
 
 struct _IdeSourceRange
 {

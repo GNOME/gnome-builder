@@ -29,7 +29,7 @@
 
 G_DEFINE_BOXED_TYPE (IdePatternSpec, ide_pattern_spec, ide_pattern_spec_ref, ide_pattern_spec_unref)
 
-EGG_DEFINE_COUNTER (instances, "Instances", "IdePatternSpec", "Number of IdePatternSpec")
+EGG_DEFINE_COUNTER (instances, "IdePatternSpec", "Instances", "Number of IdePatternSpec")
 
 /**
  * SECTION:ide-pattern-spec:

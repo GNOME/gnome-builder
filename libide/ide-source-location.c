@@ -35,7 +35,7 @@ struct _IdeSourceLocation
   IdeFile       *file;
 };
 
-EGG_DEFINE_COUNTER (instances, "Instances", "IdeSourceLocation", "Number of IdeSourceLocation")
+EGG_DEFINE_COUNTER (instances, "IdeSourceLocation", "Instances", "Number of IdeSourceLocation")
 
 /**
  * ide_source_location_ref:

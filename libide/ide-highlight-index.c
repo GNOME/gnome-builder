@@ -31,7 +31,7 @@
 G_DEFINE_BOXED_TYPE (IdeHighlightIndex, ide_highlight_index,
                      ide_highlight_index_ref, ide_highlight_index_unref)
 
-EGG_DEFINE_COUNTER (instances, "Instances", "IdeHighlightIndex Instances", "Number of indexes")
+EGG_DEFINE_COUNTER (instances, "IdeHighlightIndex", "Instances", "Number of indexes")
 
 struct _IdeHighlightIndex
 {

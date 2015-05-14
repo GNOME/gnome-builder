@@ -27,7 +27,7 @@
 
 G_DEFINE_BOXED_TYPE (IdeDiagnostic, ide_diagnostic, ide_diagnostic_ref, ide_diagnostic_unref)
 
-EGG_DEFINE_COUNTER (instances, "Instances", "IdeDiagnostic", "Number of IdeDiagnostic")
+EGG_DEFINE_COUNTER (instances, "IdeDiagnostic", "Instances", "Number of IdeDiagnostic")
 
 struct _IdeDiagnostic
 {

@@ -24,7 +24,7 @@
 
 G_DEFINE_BOXED_TYPE (IdeRefPtr, ide_ref_ptr, ide_ref_ptr_ref, ide_ref_ptr_unref)
 
-EGG_DEFINE_COUNTER (instances, "Instances", "IdeRefPtr", "Number of IdeRefPtr instances.")
+EGG_DEFINE_COUNTER (instances, "IdeRefPtr", "Instances", "Number of IdeRefPtr instances.")
 
 struct _IdeRefPtr
 {
