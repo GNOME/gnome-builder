@@ -73,6 +73,10 @@ struct _IdeContext
   guint                     services_started : 1;
   guint                     restored : 1;
   guint                     restoring : 1;
+
+  GMutex                    unload_mutex;
+  gint                      hold_count;
+  GTask                    *delayed_unload_task;
 };
 
 static void async_initable_init (GAsyncInitableIface *);
@@ -549,6 +553,8 @@ ide_context_finalize (GObject *object)
   g_clear_object (&self->unsaved_files);
   g_clear_object (&self->vcs);
 
+  g_mutex_clear (&self->unload_mutex);
+
   G_OBJECT_CLASS (ide_context_parent_class)->finalize (object);
 
   _ide_battery_monitor_shutdown ();
@@ -747,6 +753,8 @@ ide_context_init (IdeContext *self)
   g_autofree gchar *scriptsdir = NULL;
 
   IDE_ENTRY;
+
+  g_mutex_init (&self->unload_mutex);
 
   self->recent_manager = g_object_ref (gtk_recent_manager_get_default ());
 
@@ -1633,12 +1641,57 @@ ide_context_unload_unsaved_files (gpointer             source_object,
                                 g_object_ref (task));
 }
 
+static void
+ide_context_unload_cb (GObject      *object,
+                       GAsyncResult *result,
+                       gpointer      user_data)
+{
+  IdeContext *self = (IdeContext *)object;
+  GTask *unload_task = (GTask *)result;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (G_IS_TASK (task));
+
+  if (!g_task_propagate_boolean (unload_task, &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_context_do_unload_locked (IdeContext *self)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (self->delayed_unload_task != NULL);
+
+  task = self->delayed_unload_task;
+  self->delayed_unload_task = NULL;
+
+  ide_async_helper_run (self,
+                        g_task_get_cancellable (task),
+                        ide_context_unload_cb,
+                        g_object_ref (task),
+                        ide_context_unload_back_forward_list,
+                        ide_context_unload_buffer_manager,
+                        ide_context_unload_unsaved_files,
+                        NULL);
+}
+
 /**
  * ide_context_unload_async:
  *
- * This function attempts to unload various components in the #IdeContext. This should be called
- * before you dispose the context. Unsaved buffers will be persisted to the drafts directory.
- * More operations may be added in the future.
+ * This function attempts to unload various components in the #IdeContext. This
+ * should be called before you dispose the context. Unsaved buffers will be
+ * persisted to the drafts directory.  More operations may be added in the
+ * future.
+ *
+ * If there is a hold on the #IdeContext, created by ide_context_hold(), then
+ * the unload request will be delayed until the appropriate number of calls to
+ * ide_context_release() have been called.
  */
 void
 ide_context_unload_async (IdeContext          *self,
@@ -1646,16 +1699,33 @@ ide_context_unload_async (IdeContext          *self,
                           GAsyncReadyCallback  callback,
                           gpointer             user_data)
 {
+  g_autoptr(GTask) task = NULL;
+
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_async_helper_run (self, cancellable, callback, user_data,
-                        ide_context_unload_back_forward_list,
-                        ide_context_unload_buffer_manager,
-                        ide_context_unload_unsaved_files,
-                        NULL);
+  task = g_task_new (self, cancellable, callback, user_data);
+
+  g_mutex_lock (&self->unload_mutex);
+
+  if (self->delayed_unload_task != NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_PENDING,
+                               _("An unload request is already pending"));
+      IDE_GOTO (failure);
+    }
+
+  self->delayed_unload_task = g_object_ref (task);
+
+  if (self->hold_count == 0)
+    ide_context_do_unload_locked (self);
+
+failure:
+  g_mutex_unlock (&self->unload_mutex);
 
   IDE_EXIT;
 }
@@ -1832,4 +1902,51 @@ ide_context_get_settings (IdeContext  *self,
   g_return_val_if_fail (schema_id != NULL, NULL);
 
   return  _ide_settings_new (self, schema_id, relative_path, FALSE);
+}
+
+/**
+ * ide_context_hold:
+ * @self: the #IdeContext
+ *
+ * Puts a hold on the #IdeContext, preventing the context from being unloaded
+ * until a call to ide_context_release().
+ *
+ * If ide_context_unload_async() is called while a hold is in progress, the
+ * unload will be delayed until ide_context_release() has been called the
+ * same number of times as ide_context_hold().
+ */
+void
+ide_context_hold (IdeContext *self)
+{
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (self->hold_count >= 0);
+
+  g_object_ref (self);
+
+  g_mutex_lock (&self->unload_mutex);
+  self->hold_count++;
+  g_mutex_unlock (&self->unload_mutex);
+}
+
+/**
+ * ide_context_release:
+ * @self: the #IdeContext
+ *
+ * Releases a hold on the context previously created with ide_context_hold().
+ *
+ * If a pending unload of the context has been requested, it will be dispatched
+ * once the hold count reaches zero.
+ */
+void
+ide_context_release (IdeContext *self)
+{
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (self->hold_count > 0);
+
+  g_mutex_lock (&self->unload_mutex);
+  if ((--self->hold_count == 0) && (self->delayed_unload_task != NULL))
+    ide_context_do_unload_locked (self);
+  g_mutex_unlock (&self->unload_mutex);
+
+  g_object_unref (self);
 }
