@@ -18,6 +18,8 @@
 
 #include <glib/gi18n.h>
 
+#include "egg-signal-group.h"
+
 #include "ide-xml-highlighter.h"
 #include "ide-context.h"
 #include "ide-buffer.h"
@@ -31,10 +33,10 @@ struct _IdeXmlHighlighter
 {
   IdeHighlighter  parent_instance;
 
-  gboolean        has_tags;
-  guint           highlight_timeout;
+  EggSignalGroup *signal_group;
   GtkTextIter     iter;
-  IdeBuffer      *buffer;
+  guint           highlight_timeout;
+  guint           has_tags : 1;
 };
 
 G_DEFINE_TYPE (IdeXmlHighlighter, ide_xml_highlighter, IDE_TYPE_HIGHLIGHTER)
@@ -51,15 +53,20 @@ ide_xml_highlighter_highlight_timeout_handler (gpointer data)
 
   g_assert (IDE_IS_XML_HIGHLIGHTER (self));
 
+  /*
+   * If we lost our buffer handle, nothing we can do!
+   */
+  buffer = egg_signal_group_get_target (self->signal_group);
+  if (!GTK_IS_TEXT_BUFFER (buffer))
+    goto finished;
+
   engine = ide_highlighter_get_highlight_engine (IDE_HIGHLIGHTER (self));
   tag = ide_highlight_engine_get_style (engine, XML_TAG_MATCH_STYLE_NAME);
 
-  buffer = GTK_TEXT_BUFFER (self->buffer);
-
   /*
-   * Clear previous tags.We could save the previous
+   * Clear previous tags. We could save the previous
    * iters and clear only those locations but for
-   * now this should be ok
+   * now this should be ok.
    */
   if (self->has_tags)
     {
@@ -114,8 +121,9 @@ ide_xml_highlighter_highlight_timeout_handler (gpointer data)
         }
     }
 
+finished:
   self->highlight_timeout = 0;
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -125,18 +133,14 @@ ide_xml_highlighter_cursor_moved_cb (GtkTextBuffer     *buffer,
 {
   g_assert (IDE_IS_HIGHLIGHTER (self));
 
-  if (self->highlight_timeout != 0)
-    {
-      g_source_remove (self->highlight_timeout);
-      self->highlight_timeout = 0;
-    }
-
   self->iter = *iter;
+
+  if (self->highlight_timeout != 0)
+    g_source_remove (self->highlight_timeout);
   self->highlight_timeout = g_timeout_add (HIGHLIGH_TIMEOUT_MSEC,
                                            ide_xml_highlighter_highlight_timeout_handler,
                                            self);
 }
-
 
 static void
 ide_xml_highlighter_set_buffer (IdeXmlHighlighter *highlighter,
@@ -147,38 +151,21 @@ ide_xml_highlighter_set_buffer (IdeXmlHighlighter *highlighter,
   g_assert (IDE_IS_HIGHLIGHTER (self));
   g_assert (!buffer || IDE_IS_BUFFER (buffer));
 
-  if (self->buffer != buffer)
-    {
-      if (self->buffer != NULL)
-        {
-          g_signal_handlers_disconnect_by_func (self->buffer,
-                                                G_CALLBACK (ide_xml_highlighter_cursor_moved_cb),
-                                                self);
-          ide_clear_weak_pointer (&self->buffer);
-        }
-
-      if (buffer != NULL)
-        {
-          g_signal_connect (buffer,
-                            "cursor-moved",
-                            G_CALLBACK (ide_xml_highlighter_cursor_moved_cb),
-                            self);
-          ide_set_weak_pointer (&self->buffer, buffer);
-        }
-
-    }
+  egg_signal_group_set_target (self->signal_group, buffer);
 }
 
 static void
-ide_xml_highlighter_on_buffer_set (IdeHighlighter *self,
-                                   GParamSpec     *pspec,
-                                   IdeBuffer      *buffer)
+ide_xml_highlighter_on_buffer_set (IdeXmlHighlighter  *self,
+                                   GParamSpec         *pspec,
+                                   IdeHighlightEngine *engine)
 {
-  IdeXmlHighlighter *highlighter = IDE_XML_HIGHLIGHTER (self);
+  IdeBuffer *buffer;
 
-  g_assert (IDE_IS_XML_HIGHLIGHTER (highlighter));
+  g_assert (IDE_IS_XML_HIGHLIGHTER (self));
+  g_assert (IDE_IS_HIGHLIGHT_ENGINE (engine));
 
-  ide_xml_highlighter_set_buffer (highlighter, buffer);
+  buffer = ide_highlight_engine_get_buffer (engine);
+  ide_xml_highlighter_set_buffer (self, buffer);
 }
 
 static void
@@ -186,29 +173,28 @@ ide_xml_highlighter_on_highlight_engine_set (IdeHighlighter  *self,
                                              GParamSpec      *pspec,
                                              gpointer        *data)
 {
-  IdeXmlHighlighter *highlighter = IDE_XML_HIGHLIGHTER (self);
-  IdeHighlightEngine *engine = ide_highlighter_get_highlight_engine (self);
+  IdeXmlHighlighter *highlighter = (IdeXmlHighlighter *)self;
+  IdeHighlightEngine *engine;
+  IdeBuffer *buffer = NULL;
 
   g_assert (IDE_IS_XML_HIGHLIGHTER (highlighter));
-  g_assert (engine != NULL);
 
-  ide_xml_highlighter_set_buffer (highlighter, ide_highlight_engine_get_buffer (engine));
-  g_signal_connect_object (engine,
-                           "notify::buffer",
-                           G_CALLBACK (ide_xml_highlighter_on_buffer_set),
-                           self,
-                           G_CONNECT_SWAPPED);
-}
+  if ((engine = ide_highlighter_get_highlight_engine (self)))
+    {
+      buffer = ide_highlight_engine_get_buffer (engine);
+      /*
+       * TODO: technically we should connect/disconnect when the
+       *       highlighter changes. but in practice, it is set only
+       *       once.
+       */
+      g_signal_connect_object (engine,
+                               "notify::buffer",
+                               G_CALLBACK (ide_xml_highlighter_on_buffer_set),
+                               self,
+                               G_CONNECT_SWAPPED);
+    }
 
-static void
-ide_xml_highlighter_constructed (GObject *object)
-{
-  IdeXmlHighlighter *self = (IdeXmlHighlighter *)object;
-
-  g_signal_connect (self,
-                    "notify::highlight-engine",
-                    G_CALLBACK (ide_xml_highlighter_on_highlight_engine_set),
-                    NULL);
+  ide_xml_highlighter_set_buffer (highlighter, buffer);
 }
 
 static void
@@ -221,7 +207,8 @@ ide_xml_highlighter_engine_dispose (GObject *object)
       g_source_remove (self->highlight_timeout);
       self->highlight_timeout = 0;
     }
-  ide_clear_weak_pointer (&self->buffer);
+
+  g_clear_object (&self->signal_group);
 
   G_OBJECT_CLASS (ide_xml_highlighter_parent_class)->dispose (object);
 }
@@ -232,10 +219,20 @@ ide_xml_highlighter_class_init (IdeXmlHighlighterClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_xml_highlighter_engine_dispose;
-  object_class->constructed = ide_xml_highlighter_constructed;
 }
 
 static void
 ide_xml_highlighter_init (IdeXmlHighlighter *self)
 {
+  g_signal_connect (self,
+                    "notify::highlight-engine",
+                    G_CALLBACK (ide_xml_highlighter_on_highlight_engine_set),
+                    NULL);
+
+  self->signal_group = egg_signal_group_new (IDE_TYPE_BUFFER);
+  egg_signal_group_connect_object (self->signal_group,
+                                   "cursor-moved",
+                                   G_CALLBACK (ide_xml_highlighter_cursor_moved_cb),
+                                   self,
+                                   0);
 }
