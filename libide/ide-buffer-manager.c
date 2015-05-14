@@ -356,35 +356,35 @@ static void
 ide_buffer_manager_remove_buffer (IdeBufferManager *self,
                                   IdeBuffer        *buffer)
 {
+  IdeUnsavedFiles *unsaved_files;
+  IdeContext *context;
+  IdeFile *file;
+  GFile *gfile;
+
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
 
-  if (g_ptr_array_remove_fast (self->buffers, buffer))
-    {
-      IdeUnsavedFiles *unsaved_files;
-      IdeContext *context;
-      IdeFile *file;
-      GFile *gfile;
+  if (!g_ptr_array_remove_fast (self->buffers, buffer))
+    IDE_EXIT;
 
-      file = ide_buffer_get_file (buffer);
-      gfile = ide_file_get_file (file);
+  file = ide_buffer_get_file (buffer);
+  gfile = ide_file_get_file (file);
 
-      context = ide_object_get_context (IDE_OBJECT (self));
-      unsaved_files = ide_context_get_unsaved_files (context);
-      ide_unsaved_files_remove (unsaved_files, gfile);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  unsaved_files = ide_context_get_unsaved_files (context);
+  ide_unsaved_files_remove (unsaved_files, gfile);
 
-      gtk_source_completion_words_unregister (self->word_completion, GTK_TEXT_BUFFER (buffer));
+  gtk_source_completion_words_unregister (self->word_completion, GTK_TEXT_BUFFER (buffer));
 
-      unregister_auto_save (self, buffer);
+  unregister_auto_save (self, buffer);
 
-      g_signal_handlers_disconnect_by_func (buffer,
-                                            G_CALLBACK (ide_buffer_manager_buffer_changed),
-                                            self);
+  g_signal_handlers_disconnect_by_func (buffer,
+                                        G_CALLBACK (ide_buffer_manager_buffer_changed),
+                                        self);
 
-      g_object_unref (buffer);
-    }
+  g_object_unref (buffer);
 
   EGG_COUNTER_DEC (registered);
 
