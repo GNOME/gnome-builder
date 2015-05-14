@@ -100,6 +100,8 @@ main (gint   argc,
   ide_set_program_name ("gnome-builder");
   g_set_prgname ("ide-list-devices");
 
+  ide_log_init (TRUE, NULL);
+
   gtk_init (&argc, &argv);
 
   context = g_option_context_new (_("- List devices found on the system."));
