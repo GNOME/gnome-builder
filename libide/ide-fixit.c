@@ -27,7 +27,7 @@ struct _IdeFixit
 {
   volatile gint   ref_count;
   IdeSourceRange *range;
-  const gchar    *text;
+  gchar          *text;
 };
 
 EGG_DEFINE_COUNTER (instances, "IdeFixit", "Instances", "Number of fixit instances")
@@ -41,7 +41,7 @@ _ide_fixit_new (IdeSourceRange *source_range,
   g_return_val_if_fail (source_range, NULL);
   g_return_val_if_fail (replacement_text, NULL);
 
-  self = g_new0 (IdeFixit, 1);
+  self = g_slice_new0 (IdeFixit);
   self->ref_count = 1;
   self->range = ide_source_range_ref (source_range);
   self->text = g_strdup (replacement_text);
@@ -52,7 +52,9 @@ _ide_fixit_new (IdeSourceRange *source_range,
 static void
 ide_fixit_destroy (IdeFixit *self)
 {
-  g_free (self);
+  g_clear_pointer (&self->range, ide_source_range_unref);
+  g_clear_pointer (&self->text, g_free);
+  g_slice_free (IdeFixit, self);
 }
 
 IdeFixit *
