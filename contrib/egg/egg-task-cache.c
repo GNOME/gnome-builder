@@ -181,8 +181,22 @@ cache_item_compare_evict_at (gconstpointer a,
 {
   const CacheItem *ci1 = a;
   const CacheItem *ci2 = b;
+  gint64 ret;
 
-  return ci2->evict_at - ci1->evict_at;
+  /*
+   * While unlikely, but since we are working with 64-bit monotonic clock and
+   * 32-bit return values, we can't do the normal (a - b) trick. We need to
+   * ensure we are within the 32-bit boundary.
+   */
+
+  ret = ci2->evict_at - ci1->evict_at;
+
+  if (ret < 0)
+    return -1;
+  else if (ret > 0)
+    return 1;
+  else
+    return 0;
 }
 
 static CacheItem *
