@@ -73,7 +73,8 @@ typedef struct
   gulong          handler_id;
   GClosure       *closure;
   GObject        *object;
-  const gchar    *detailed_signal;
+  guint           signal_id;
+  GQuark          signal_detail;
   guint           connect_after : 1;
 } SignalHandler;
 
@@ -156,14 +157,15 @@ egg_signal_group_bind_handler (EggSignalGroup *self,
   g_assert (self != NULL);
   g_assert (self->target != NULL);
   g_assert (handler != NULL);
-  g_assert (handler->detailed_signal != NULL);
+  g_assert (handler->signal_id != 0);
   g_assert (handler->closure != NULL);
   g_assert (handler->handler_id == 0);
 
-  handler->handler_id = g_signal_connect_closure (self->target,
-                                                  handler->detailed_signal,
-                                                  handler->closure,
-                                                  handler->connect_after);
+  handler->handler_id = g_signal_connect_closure_by_id (self->target,
+                                                        handler->signal_id,
+                                                        handler->signal_detail,
+                                                        handler->closure,
+                                                        handler->connect_after);
 
   g_assert (handler->handler_id != 0);
 
@@ -229,7 +231,7 @@ egg_signal_group_unbind (EggSignalGroup *self)
       handler = g_ptr_array_index (self->handlers, i);
 
       g_assert (handler != NULL);
-      g_assert (handler->detailed_signal != NULL);
+      g_assert (handler->signal_id != 0);
       g_assert (handler->closure != NULL);
       g_assert (handler->handler_id != 0);
 
@@ -291,7 +293,7 @@ egg_signal_group_block (EggSignalGroup *self)
       handler = g_ptr_array_index (self->handlers, i);
 
       g_assert (handler != NULL);
-      g_assert (handler->detailed_signal != NULL);
+      g_assert (handler->signal_id != 0);
       g_assert (handler->closure != NULL);
       g_assert (handler->handler_id != 0);
 
@@ -330,7 +332,7 @@ egg_signal_group_unblock (EggSignalGroup *self)
       handler = g_ptr_array_index (self->handlers, i);
 
       g_assert (handler != NULL);
-      g_assert (handler->detailed_signal != NULL);
+      g_assert (handler->signal_id != 0);
       g_assert (handler->closure != NULL);
       g_assert (handler->handler_id != 0);
 
@@ -399,7 +401,8 @@ signal_handler_free (gpointer data)
 
   g_clear_pointer (&handler->closure, g_closure_unref);
   handler->handler_id = 0;
-  handler->detailed_signal = NULL;
+  handler->signal_id = 0;
+  handler->signal_detail = 0;
   g_slice_free (SignalHandler, handler);
 }
 
@@ -583,11 +586,13 @@ egg_signal_group_connect_full (EggSignalGroup *self,
 {
   SignalHandler *handler;
   GClosure *closure;
+  guint signal_id;
+  GQuark signal_detail;
 
   g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
   g_return_if_fail (detailed_signal != NULL);
   g_return_if_fail (g_signal_parse_name (detailed_signal, self->target_type,
-                                         NULL, NULL, FALSE) != 0);
+                                         &signal_id, &signal_detail, FALSE) != 0);
   g_return_if_fail (callback != NULL);
 
   if ((flags & G_CONNECT_SWAPPED) != 0)
@@ -597,7 +602,8 @@ egg_signal_group_connect_full (EggSignalGroup *self,
 
   handler = g_slice_new0 (SignalHandler);
   handler->group = self;
-  handler->detailed_signal = g_intern_string (detailed_signal);
+  handler->signal_id = signal_id;
+  handler->signal_detail = signal_detail;
   handler->closure = g_closure_ref (closure);
   handler->connect_after = ((flags & G_CONNECT_AFTER) != 0);
 
