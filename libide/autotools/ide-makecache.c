@@ -148,10 +148,10 @@ file_flags_lookup_free (gpointer data)
 {
   FileFlagsLookup *lookup = data;
 
-  g_object_unref (lookup->self);
-  g_object_unref (lookup->file);
-  g_ptr_array_unref (lookup->targets);
-  g_free (lookup->relative_path);
+  g_clear_object (&lookup->self);
+  g_clear_object (&lookup->file);
+  g_clear_pointer (&lookup->targets, g_ptr_array_unref);
+  g_clear_pointer (&lookup->relative_path, g_free);
   g_slice_free (FileFlagsLookup, lookup);
 }
 
@@ -160,8 +160,8 @@ file_targets_lookup_free (gpointer data)
 {
   FileTargetsLookup *lookup = data;
 
-  g_free (lookup->path);
-  g_mapped_file_unref (lookup->mapped);
+  g_clear_pointer (&lookup->path, g_free);
+  g_clear_pointer (&lookup->mapped, g_mapped_file_unref);
   g_slice_free (FileTargetsLookup, lookup);
 }
 
