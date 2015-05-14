@@ -755,7 +755,7 @@ ide_git_buffer_change_monitor_init (IdeGitBufferChangeMonitor *self)
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
-  self->vcs_signal_group = egg_signal_group_new (IDE_TYPE_VCS);
+  self->vcs_signal_group = egg_signal_group_new (IDE_TYPE_GIT_VCS);
   egg_signal_group_connect_object (self->vcs_signal_group,
                                    "reloaded",
                                    G_CALLBACK (ide_git_buffer_change_monitor__vcs_reloaded_cb),
