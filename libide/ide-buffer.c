@@ -20,6 +20,8 @@
 
 #include <glib/gi18n.h>
 
+#include "egg-counter.h"
+
 #include "ide-battery-monitor.h"
 #include "ide-buffer.h"
 #include "ide-buffer-change-monitor.h"
@@ -83,6 +85,8 @@ typedef struct
 } IdeBufferPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeBuffer, ide_buffer, GTK_SOURCE_TYPE_BUFFER)
+
+EGG_DEFINE_COUNTER (instances, "IdeBuffer", "Instances", "Number of IdeBuffer instances.")
 
 enum {
   PROP_0,
@@ -868,6 +872,8 @@ ide_buffer_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->finalize (object);
 
+  EGG_COUNTER_DEC (instances);
+
   IDE_EXIT;
 }
 
@@ -1097,6 +1103,8 @@ ide_buffer_init (IdeBuffer *self)
   IDE_ENTRY;
 
   priv->diagnostics_line_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  EGG_COUNTER_INC (instances);
 
   IDE_EXIT;
 }

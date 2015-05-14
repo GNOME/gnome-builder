@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "egg-counter.h"
+
 #include "ide-fixit.h"
 #include "ide-source-range.h"
 
@@ -27,6 +29,8 @@ struct _IdeFixit
   IdeSourceRange *range;
   const gchar    *text;
 };
+
+EGG_DEFINE_COUNTER (instances, "IdeFixit", "Instances", "Number of fixit instances")
 
 IdeFixit *
 _ide_fixit_new (IdeSourceRange *source_range,
