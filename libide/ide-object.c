@@ -92,11 +92,11 @@ ide_object_release_context (gpointer  data,
  * Returns: (transfer none): An #IdeContext.
  */
 IdeContext *
-ide_object_get_context (IdeObject *object)
+ide_object_get_context (IdeObject *self)
 {
-  IdeObjectPrivate *priv = ide_object_get_instance_private (object);
+  IdeObjectPrivate *priv = ide_object_get_instance_private (self);
 
-  g_return_val_if_fail (IDE_IS_OBJECT (object), NULL);
+  g_return_val_if_fail (IDE_IS_OBJECT (self), NULL);
 
   return priv->context;
 }
@@ -362,4 +362,54 @@ ide_object_new_finish  (GAsyncResult  *result,
   g_return_val_if_fail (G_IS_TASK (task), NULL);
 
   return g_task_propagate_pointer (task, error);
+}
+
+/**
+ * ide_object_hold:
+ * @self: the #IdeObject
+ *
+ * This function will acquire a reference to the IdeContext that the object
+ * is a part of. This is useful if you are going to be doing a long running
+ * task (such as something in a thread) and want to ensure the context cannot
+ * be unloaded during your operation.
+ *
+ * You should call ide_object_release() an equivalent number of times to
+ * ensure the context may be freed afterwards.
+ */
+void
+ide_object_hold (IdeObject *self)
+{
+  IdeObjectPrivate *priv = ide_object_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_OBJECT (self));
+
+  if (priv->context == NULL)
+    {
+      g_warning ("BUG: Cannot hold context, already disposed.");
+      return;
+    }
+
+  ide_context_hold (priv->context);
+}
+
+/**
+ * ide_object_release:
+ * @self: the #IdeObject.
+ *
+ * Releases a hold on the context previously called with ide_object_hold().
+ */
+void
+ide_object_release (IdeObject *self)
+{
+  IdeObjectPrivate *priv = ide_object_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_OBJECT (self));
+
+  if (priv->context == NULL)
+    {
+      g_warning ("BUG: Cannot release context, already disposed.");
+      return;
+    }
+
+  ide_context_release (priv->context);
 }

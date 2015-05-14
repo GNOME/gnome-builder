@@ -36,7 +36,7 @@ struct _IdeObjectClass
   void (*destroy) (IdeObject *self);
 };
 
-IdeContext *ide_object_get_context (IdeObject            *object);
+IdeContext *ide_object_get_context (IdeObject            *self);
 void        ide_object_new_async   (const gchar          *extension_point,
                                     int                   io_priority,
                                     GCancellable         *cancellable,
@@ -46,6 +46,8 @@ void        ide_object_new_async   (const gchar          *extension_point,
                                     ...);
 IdeObject  *ide_object_new_finish  (GAsyncResult         *result,
                                     GError              **error);
+void        ide_object_hold        (IdeObject            *self);
+void        ide_object_release     (IdeObject            *self);
 
 G_END_DECLS
 
