@@ -63,6 +63,7 @@ get_invalidation_area (GtkTextIter *begin,
 {
   GtkTextIter begin_tmp;
   GtkTextIter end_tmp;
+
   g_assert (begin != NULL);
   g_assert (end != NULL);
 
@@ -73,10 +74,10 @@ get_invalidation_area (GtkTextIter *begin,
    */
   gtk_text_iter_set_line_offset (begin, 0);
 
-  /*Move to the beginning of the next line.*/
+  /* Move to the beginning of the next line. */
   gtk_text_iter_forward_line (end);
 
-  /*Save the original locations.We will need them down the line*/
+  /* Save the original locations. We will need them down the line. */
   begin_tmp = *begin;
   end_tmp = *end;
 
@@ -251,7 +252,7 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
   gtk_text_buffer_get_iter_at_mark (buffer, &invalid_begin, self->invalid_begin);
   gtk_text_buffer_get_iter_at_mark (buffer, &invalid_end, self->invalid_end);
 
-  IDE_TRACE_MSG ("Highlight Range [%u:%u,%u:%u]\n",
+  IDE_TRACE_MSG ("Highlight Range [%u:%u,%u:%u]",
                  gtk_text_iter_get_line (&invalid_begin),
                  gtk_text_iter_get_line_offset (&invalid_begin),
                  gtk_text_iter_get_line (&invalid_end),
