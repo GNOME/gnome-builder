@@ -2,11 +2,25 @@
 <interface>
   <!-- interface-requires gtk+ 3.8 -->
   <template class="GbPreferencesPageKeybindings" parent="GbPreferencesPage">
-    <property name="title" translatable="yes">Keybindings</property>
+    <property name="title" translatable="yes">Keyboard</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="visible">true</property>
+         <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Key Binding Emulation</property>
+            <property name="xalign">0.0</property>
+            <property name="margin-bottom">6</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
         <child>
           <object class="GbPreferencesSwitch" id="default_switch">
             <property name="settings">editor_settings</property>
@@ -40,10 +54,48 @@
             <property name="visible">true</property>
           </object>
         </child>
+         <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Keyboard Movement</property>
+            <property name="xalign">0.0</property>
+            <property name="margin-top">12</property>
+            <property name="margin-bottom">6</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GbPreferencesSwitch" id="smart_home_end_switch">
+            <property name="title" translatable="yes">Smart Home End</property>
+            <property name="description" translatable="yes">Home moves to first non-space character.</property>
+            <property name="settings">editor_settings</property>
+            <property name="settings-schema-key">smart-home-end</property>
+            <property name="size-group">control_group</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GbPreferencesSwitch" id="smart_backspace_switch">
+            <property name="title" translatable="yes">Smart Backspace</property>
+            <property name="description" translatable="yes">Backspace will remove extra spaces to keep you aligned with your indentation width.</property>
+            <property name="settings">editor_settings</property>
+            <property name="settings-schema-key">smart-backspace</property>
+            <property name="size-group">control_group</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
       </object>
     </child>
   </template>
   <object class="GSettings" id="editor_settings">
     <property name="schema-id">org.gnome.builder.editor</property>
+  </object>
+  <object class="GtkSizeGroup" id="control_group">
+    <property name="mode">horizontal</property>
   </object>
 </interface>

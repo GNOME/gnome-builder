@@ -35,14 +35,15 @@ struct _GbPreferencesPageEditor
   GtkSwitch                         *show_line_numbers_switch;
   GtkSwitch                         *highlight_current_line_switch;
   GtkSwitch                         *highlight_matching_brackets_switch;
-  GtkSwitch                         *smart_backspace_switch;
-  GtkSwitch                         *smart_home_end_switch;
   GtkSwitch                         *show_grid_lines_switch;
   GtkSpinButton                     *scroll_off_spin;
   GtkFontButton                     *font_button;
-  GtkSourceStyleSchemeChooserButton *style_scheme_button;
+  GtkSourceStyleSchemeChooserWidget *style_scheme_widget;
+  GtkScrolledWindow                 *style_scheme_container;
   GtkAdjustment                     *scroll_off_adjustment;
   GtkBox                            *scroll_off_container;
+  GtkWidget                         *auto_hide_map_switch;
+  GtkWidget                         *show_map_switch;
 };
 
 G_DEFINE_TYPE (GbPreferencesPageEditor, gb_preferences_page_editor, GB_TYPE_PREFERENCES_PAGE)
@@ -92,9 +93,9 @@ gb_preferences_page_editor_constructed (GObject *object)
   g_free (scheme_id);
 
   gtk_source_style_scheme_chooser_set_style_scheme (
-      GTK_SOURCE_STYLE_SCHEME_CHOOSER (self->style_scheme_button),
+      GTK_SOURCE_STYLE_SCHEME_CHOOSER (self->style_scheme_widget),
       scheme);
-  g_signal_connect_object (self->style_scheme_button,
+  g_signal_connect_object (self->style_scheme_widget,
                            "notify::style-scheme",
                            G_CALLBACK (gb_preferences_page_editor_style_scheme_changed),
                            self->editor_settings,
@@ -111,21 +112,22 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
 
   GB_WIDGET_CLASS_TEMPLATE (widget_class, "gb-preferences-page-editor.ui");
 
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_map_switch);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, editor_settings);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, font_button);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, restore_insert_mark_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_diff_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, style_scheme_button);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, word_completion_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, highlight_current_line_switch);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, highlight_matching_brackets_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, smart_home_end_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, smart_backspace_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_grid_lines_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, scroll_off_spin);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, auto_hide_map_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, restore_insert_mark_switch);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, scroll_off_adjustment);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, scroll_off_container);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, scroll_off_spin);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_diff_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_grid_lines_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, style_scheme_container);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, style_scheme_widget);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, word_completion_switch);
 }
 
 static void
@@ -165,16 +167,6 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
-                                               _("smart home end"),
-                                               self->smart_home_end_switch,
-                                               NULL);
-  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
-  /* To translators: This is a list of keywords for the preferences page */
-                                               _("smart back backspace indent align"),
-                                               self->smart_backspace_switch,
-                                               NULL);
-  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
-  /* To translators: This is a list of keywords for the preferences page */
                                                _("show grid lines"),
                                                self->show_grid_lines_switch,
                                                NULL);
@@ -191,7 +183,13 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
-                                               _("source style scheme source tango solarized builder"),
-                                               self->style_scheme_button,
+                                               _("source style scheme source tango solarized builder syntax"),
+                                               self->style_scheme_container,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
+                                               _("minimap mini map overview over view"),
+                                               self->show_map_switch,
+                                               self->auto_hide_map_switch,
                                                NULL);
 }

@@ -32,6 +32,8 @@ struct _GbPreferencesPageKeybindings
   GtkWidget             *default_switch;
   GtkWidget             *emacs_switch;
   GtkWidget             *vim_switch;
+  GtkSwitch             *smart_backspace_switch;
+  GtkSwitch             *smart_home_end_switch;
 };
 
 G_DEFINE_TYPE (GbPreferencesPageKeybindings,
@@ -48,6 +50,8 @@ gb_preferences_page_keybindings_class_init (GbPreferencesPageKeybindingsClass *k
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageKeybindings, vim_switch);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageKeybindings, emacs_switch);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageKeybindings, default_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageKeybindings, smart_home_end_switch);
+  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageKeybindings, smart_backspace_switch);
 }
 
 static void
@@ -69,5 +73,16 @@ gb_preferences_page_keybindings_init (GbPreferencesPageKeybindings *self)
   /* To translators: This is a list of keywords for the preferences page */
                                                _("vim keybindings modal"),
                                                self->vim_switch,
+                                               NULL);
+
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
+                                               _("smart home end"),
+                                               self->smart_home_end_switch,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
+                                               _("smart back backspace indent align"),
+                                               self->smart_backspace_switch,
                                                NULL);
 }

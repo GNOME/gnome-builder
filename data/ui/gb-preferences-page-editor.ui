@@ -14,23 +14,77 @@
             <property name="visible">true</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GbPreferencesSwitch" id="restore_insert_mark_switch">
-                <property name="title" translatable="yes">Restore Cursor Position</property>
-                <property name="description" translatable="yes">Restore the insertion cursor to the last position when reopening a file.</property>
+              <object class="GtkLabel" id="font_label">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Font</property>
+                <property name="xalign">0.0</property>
+                <property name="margin-bottom">6</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+            <child>
+              <object class="GtkFontButton" id="font_button">
+                <property name="margin">6</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="style_scheme_label">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Styling</property>
+                <property name="xalign">0.0</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">6</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="style_scheme_container">
+                <property name="margin">6</property>
+                <property name="visible">true</property>
+                <property name="vexpand">true</property>
+                <property name="min-content-height">200</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkSourceStyleSchemeChooserWidget" id="style_scheme_widget">
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GbPreferencesSwitch" id="show_grid_lines_switch">
+                <property name="title" translatable="yes">Display Grid Pattern</property>
+                <property name="description" translatable="yes">Display a grid pattern under the source code.</property>
                 <property name="settings">editor_settings</property>
-                <property name="settings-schema-key">restore-insert-mark</property>
+                <property name="settings-schema-key">show-grid-lines</property>
                 <property name="size-group">control_group</property>
                 <property name="visible">true</property>
               </object>
             </child>
             <child>
-              <object class="GbPreferencesSwitch" id="word_completion_switch">
-                <property name="title" translatable="yes">Suggest Word Completion</property>
-                <property name="description" translatable="yes">Suggest completion of words found within the current document.</property>
-                <property name="settings">editor_settings</property>
-                <property name="settings-schema-key">word-completion</property>
-                <property name="size-group">control_group</property>
+              <object class="GtkLabel">
                 <property name="visible">true</property>
+                <property name="label" translatable="yes">Highlighting</property>
+                <property name="xalign">0.0</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">6</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
             <child>
@@ -45,8 +99,8 @@
             </child>
             <child>
               <object class="GbPreferencesSwitch" id="show_line_numbers_switch">
-                <property name="title" translatable="yes">Show Line Numbers</property>
-                <property name="description" translatable="yes">Display line numbers in the document.</property>
+                <property name="title" translatable="yes">Display Line Numbers</property>
+                <property name="description" translatable="yes">Display the line numbers next to each line of the document.</property>
                 <property name="settings">editor_settings</property>
                 <property name="settings-schema-key">show-line-numbers</property>
                 <property name="size-group">control_group</property>
@@ -74,38 +128,23 @@
               </object>
             </child>
             <child>
-              <object class="GbPreferencesSwitch" id="smart_home_end_switch">
-                <property name="title" translatable="yes">Smart Home End</property>
-                <property name="description" translatable="yes">Home moves to first non-space character.</property>
-                <property name="settings">editor_settings</property>
-                <property name="settings-schema-key">smart-home-end</property>
-                <property name="size-group">control_group</property>
+              <object class="GtkLabel">
                 <property name="visible">true</property>
-              </object>
-            </child>
-            <child>
-              <object class="GbPreferencesSwitch" id="smart_backspace_switch">
-                <property name="title" translatable="yes">Smart Backspace</property>
-                <property name="description" translatable="yes">Backspace will remove extra spaces to keep you aligned with your indentation size.</property>
-                <property name="settings">editor_settings</property>
-                <property name="settings-schema-key">smart-backspace</property>
-                <property name="size-group">control_group</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
-            <child>
-              <object class="GbPreferencesSwitch" id="show_grid_lines_switch">
-                <property name="title" translatable="yes">Show Grid Lines</property>
-                <property name="description" translatable="yes">Display a grid patten in the document.</property>
-                <property name="settings">editor_settings</property>
-                <property name="settings-schema-key">show-grid-lines</property>
-                <property name="size-group">control_group</property>
-                <property name="visible">true</property>
+                <property name="label" translatable="yes">Overview Map</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">6</property>
+                <property name="xalign">0.0</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
             <child>
               <object class="GbPreferencesSwitch" id="show_map_switch">
-                <property name="title" translatable="yes">Show Overview Map</property>
+                <property name="title" translatable="yes">Display Overview Map</property>
                 <property name="description" translatable="yes">Display an overview map next to the source code editor.</property>
                 <property name="settings">editor_settings</property>
                 <property name="settings-schema-key">show-map</property>
@@ -115,10 +154,60 @@
             </child>
             <child>
               <object class="GbPreferencesSwitch" id="auto_hide_map_switch">
-                <property name="title" translatable="yes">Auto Hide Map</property>
-		<property name="description" translatable="yes">Automatically hide the overview map during inactivity.</property>
+                <property name="title" translatable="yes">Auto Hide Overview Map</property>
+                <property name="description" translatable="yes">Automatically hide the overview map during periods of inactivity.</property>
                 <property name="settings">editor_settings</property>
                 <property name="settings-schema-key">auto-hide-map</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Auto Completion</property>
+                <property name="xalign">0.0</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">6</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+            <child>
+              <object class="GbPreferencesSwitch" id="word_completion_switch">
+                <property name="title" translatable="yes">Suggest Word Completion</property>
+                <property name="description" translatable="yes">Suggest completion of words found within the current document.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">word-completion</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Cursor Placement</property>
+                <property name="xalign">0.0</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">6</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+            <child>
+              <object class="GbPreferencesSwitch" id="restore_insert_mark_switch">
+                <property name="title" translatable="yes">Restore Cursor Position</property>
+                <property name="description" translatable="yes">Restore the insertion cursor to the last position when reopening a file.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">restore-insert-mark</property>
                 <property name="size-group">control_group</property>
                 <property name="visible">true</property>
               </object>
@@ -169,18 +258,6 @@
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkFontButton" id="font_button">
-                <property name="margin">6</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSourceStyleSchemeChooserButton" id="style_scheme_button">
-                <property name="margin">6</property>
-                <property name="visible">true</property>
               </object>
             </child>
           </object>

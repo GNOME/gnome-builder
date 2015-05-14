@@ -124,12 +124,12 @@ gb_preferences_page_git_init (GbPreferencesPageGit *self)
   self->config = ggit_config_new_default (NULL);
 
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
-                                               _("git author name surname"),
+                                               _("git author name surname attribution source code"),
                                                self->name_label,
                                                self->git_author_name_entry,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
-                                               _("git author email mail address"),
+                                               _("git author email mail address attribute source code"),
                                                self->email_label,
                                                self->git_author_email_entry,
                                                NULL);

@@ -131,17 +131,7 @@
               </object>
               <packing>
                 <property name="name">language</property>
-                <property name="title" translatable="yes">Language Settings</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GbPreferencesPageGit" id="git_page">
-                <property name="visible">True</property>
-                <property name="border_width">12</property>
-              </object>
-              <packing>
-                <property name="name">git</property>
-                <property name="title" translatable="yes">Git</property>
+                <property name="title" translatable="yes">Programming Languages</property>
               </packing>
             </child>
             <child>
@@ -151,7 +141,17 @@
               </object>
               <packing>
                 <property name="name">keybindings</property>
-                <property name="title" translatable="yes">Keybindings</property>
+                <property name="title" translatable="yes">Keyboard</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GbPreferencesPageGit" id="git_page">
+                <property name="visible">True</property>
+                <property name="border_width">12</property>
+              </object>
+              <packing>
+                <property name="name">git</property>
+                <property name="title" translatable="yes">Version Control</property>
               </packing>
             </child>
             <child>
