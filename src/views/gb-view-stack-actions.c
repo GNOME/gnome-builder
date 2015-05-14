@@ -100,26 +100,6 @@ gb_view_stack_actions_move_right (GSimpleAction *action,
 }
 
 static void
-gb_view_stack_actions_save (GSimpleAction *action,
-                            GVariant      *param,
-                            gpointer       user_data)
-{
-  GbViewStack *self = user_data;
-
-  g_assert (GB_IS_VIEW_STACK (self));
-}
-
-static void
-gb_view_stack_actions_save_as (GSimpleAction *action,
-                               GVariant      *param,
-                               gpointer       user_data)
-{
-  GbViewStack *self = user_data;
-
-  g_assert (GB_IS_VIEW_STACK (self));
-}
-
-static void
 do_split_down_cb (GObject      *object,
                   GAsyncResult *result,
                   gpointer      user_data)
@@ -299,8 +279,6 @@ static const GActionEntry gGbViewStackActions[] = {
   { "next-view",     gb_view_stack_actions_next_view },
   { "previous-view", gb_view_stack_actions_previous_view },
   { "show-list",     gb_view_stack_actions_show_list },
-  { "save",          gb_view_stack_actions_save },
-  { "save-as",       gb_view_stack_actions_save_as },
   { "split-down",    NULL, NULL, "false", gb_view_stack_actions_split_down },
   { "split-left",    gb_view_stack_actions_split_left },
   { "split-right",   gb_view_stack_actions_split_right },

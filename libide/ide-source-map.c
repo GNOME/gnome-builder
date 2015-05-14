@@ -654,10 +654,9 @@ ide_source_map__child_view_state_flags_changed (GtkWidget     *widget,
                                                 GtkStateFlags  flags,
                                                 GtkWidget     *child_view)
 {
-  IdeSourceMap *self = (IdeSourceMap *)widget;
   GdkWindow *window;
 
-  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (IDE_IS_SOURCE_MAP (widget));
   g_assert (GTK_SOURCE_IS_VIEW (child_view));
 
   window = gtk_text_view_get_window (GTK_TEXT_VIEW (child_view), GTK_TEXT_WINDOW_TEXT);
@@ -669,9 +668,7 @@ static void
 ide_source_map__child_view_realize_after (GtkWidget *widget,
                                           GtkWidget *child_view)
 {
-  IdeSourceMap *self = (IdeSourceMap *)widget;
-
-  g_assert (IDE_IS_SOURCE_MAP (self));
+  g_assert (IDE_IS_SOURCE_MAP (widget));
   g_assert (GTK_SOURCE_IS_VIEW (child_view));
 
   ide_source_map__child_view_state_flags_changed (widget, 0, child_view);

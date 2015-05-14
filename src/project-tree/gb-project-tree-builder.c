@@ -270,12 +270,11 @@ gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
                                     GbTreeNode    *node,
                                     GMenu         *menu)
 {
-  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
   GtkApplication *app;
   GObject *item;
   GMenu *submenu;
 
-  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (builder));
   g_assert (GB_IS_TREE_NODE (node));
   g_assert (G_IS_MENU (menu));
 
@@ -325,10 +324,9 @@ static gboolean
 gb_project_tree_builder_node_activated (GbTreeBuilder *builder,
                                         GbTreeNode    *node)
 {
-  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
   GObject *item;
 
-  g_return_val_if_fail (GB_IS_PROJECT_TREE_BUILDER (self), FALSE);
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (builder));
 
   item = gb_tree_node_get_item (node);
 

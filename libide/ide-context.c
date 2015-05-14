@@ -893,7 +893,7 @@ ide_context_init_project_name (gpointer             source_object,
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
-  task = g_task_new (source_object, cancellable, callback, user_data);
+  task = g_task_new (self, cancellable, callback, user_data);
   g_task_run_in_thread (task, ide_context_load_doap_worker);
 }
 
@@ -1646,12 +1646,11 @@ ide_context_unload_cb (GObject      *object,
                        GAsyncResult *result,
                        gpointer      user_data)
 {
-  IdeContext *self = (IdeContext *)object;
   GTask *unload_task = (GTask *)result;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
 
-  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (IDE_IS_CONTEXT (object));
   g_assert (G_IS_TASK (task));
 
   if (!g_task_propagate_boolean (unload_task, &error))

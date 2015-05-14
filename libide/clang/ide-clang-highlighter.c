@@ -65,7 +65,6 @@ ide_clang_highlighter_real_update (IdeHighlighter       *highlighter,
                                    const GtkTextIter    *range_end,
                                    GtkTextIter          *location)
 {
-  IdeClangHighlighter *self = (IdeClangHighlighter *)highlighter;
   g_autoptr(IdeClangTranslationUnit) unit = NULL;
   GtkTextBuffer *text_buffer;
   GtkSourceBuffer *source_buffer;
@@ -77,7 +76,7 @@ ide_clang_highlighter_real_update (IdeHighlighter       *highlighter,
   GtkTextIter begin;
   GtkTextIter end;
 
-  g_assert (IDE_IS_CLANG_HIGHLIGHTER (self));
+  g_assert (IDE_IS_CLANG_HIGHLIGHTER (highlighter));
   g_assert (callback != NULL);
   g_assert (range_begin != NULL);
   g_assert (range_end != NULL);

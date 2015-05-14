@@ -69,20 +69,15 @@ ide_vcs_uri_parse (IdeVcsUri   *self,
 
   if (g_once_init_enter (&initialized))
     {
-      GError *error = NULL;
-
       /* http://stackoverflow.com/questions/2514859/regular-expression-for-git-repository */
 
       regex1 = g_regex_new ("file://(.*)", 0, 0, NULL);
-      g_assert (error == NULL);
       g_assert (regex1);
 
       regex2 = g_regex_new ("(\\w+://)(.+@)*([\\w\\d\\.]+)(:[\\d]+){0,1}/*(.*)", 0, 0, NULL);
-      g_assert (error == NULL);
       g_assert (regex2);
 
       regex3 = g_regex_new ("(.+@)*([\\w\\d\\.]+):(.*)", 0, 0, NULL);
-      g_assert (error == NULL);
       g_assert (regex3);
 
       g_once_init_leave (&initialized, TRUE);

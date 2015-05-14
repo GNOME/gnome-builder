@@ -347,12 +347,11 @@ ide_clang_service_unit_completed_cb (GObject      *object,
                                      GAsyncResult *result,
                                      gpointer      user_data)
 {
-  IdeClangService *self = (IdeClangService *)object;
   g_autoptr(GTask) task = user_data;
   gpointer ret;
   GError *error = NULL;
 
-  g_assert (IDE_IS_CLANG_SERVICE (self));
+  g_assert (IDE_IS_CLANG_SERVICE (object));
   g_assert (G_IS_TASK (result));
   g_assert (G_IS_TASK (task));
 

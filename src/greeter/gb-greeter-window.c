@@ -202,7 +202,6 @@ gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
                                                   guint            added,
                                                   GListModel      *list_model)
 {
-  IdeRecentProjects *recent_projects = (IdeRecentProjects *)list_model;
   GbGreeterProjectRow *row;
   gsize i;
 
@@ -213,7 +212,7 @@ gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
 
   g_assert (GB_IS_GREETER_WINDOW (self));
   g_assert (G_IS_LIST_MODEL (list_model));
-  g_assert (IDE_IS_RECENT_PROJECTS (recent_projects));
+  g_assert (IDE_IS_RECENT_PROJECTS (list_model));
 
   for (i = 0; i < added; i++)
     {

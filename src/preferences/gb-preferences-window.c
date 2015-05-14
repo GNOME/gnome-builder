@@ -175,10 +175,9 @@ static gboolean
 gb_preferences_window_key_press_event (GtkWidget   *widget,
                                        GdkEventKey *event)
 {
-  GbPreferencesWindow *self = (GbPreferencesWindow *)widget;
   gboolean ret;
 
-  g_return_val_if_fail (GB_IS_PREFERENCES_WINDOW (self), FALSE);
+  g_assert (GB_IS_PREFERENCES_WINDOW (widget));
 
   /*
    * Try to propagate the event to any widget that wants to swallow it.

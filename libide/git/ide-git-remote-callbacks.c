@@ -143,12 +143,12 @@ ide_git_remote_callbacks_real_credentials (GgitRemoteCallbacks  *callbacks,
                                            GgitCredtype          allowed_types,
                                            GError              **error)
 {
-  IdeGitRemoteCallbacks *self = (IdeGitRemoteCallbacks *)callbacks;
   GgitCred *ret = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_GIT_REMOTE_CALLBACKS (self));
+  g_assert (IDE_IS_GIT_REMOTE_CALLBACKS (callbacks));
+  g_assert (url != NULL);
 
   IDE_TRACE_MSG ("username=%s url=%s", username_from_url ?: "", url);
 

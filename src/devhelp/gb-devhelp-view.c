@@ -118,10 +118,9 @@ gb_devhelp_view_set_document (GbDevhelpView     *view,
 static GbView *
 gb_devhelp_view_create_split (GbView *view)
 {
-  GbDevhelpView *self = (GbDevhelpView *)view;
   GbView *ret;
 
-  g_assert (GB_IS_DEVHELP_VIEW (self));
+  g_assert (GB_IS_DEVHELP_VIEW (view));
 
   ret = g_object_new (GB_TYPE_DEVHELP_VIEW,
                       "document", gb_devhelp_view_get_document (view),
