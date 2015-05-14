@@ -178,10 +178,9 @@ gb_html_view_set_document (GbHtmlView *self,
 static GbView *
 gb_html_view_create_split (GbView *view)
 {
-  GbHtmlView *self = (GbHtmlView *)view;
   GbView *ret;
 
-  g_assert (GB_IS_HTML_VIEW (self));
+  g_assert (GB_IS_HTML_VIEW (view));
 
   ret = g_object_new (GB_TYPE_HTML_VIEW,
                       "document", gb_html_view_get_document (view),
