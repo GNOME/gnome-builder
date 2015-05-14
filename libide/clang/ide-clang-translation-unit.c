@@ -473,7 +473,6 @@ ide_clang_translation_unit_finalize (GObject *object)
   IDE_ENTRY;
 
   clang_disposeTranslationUnit (self->tu);
-  g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
   g_clear_object (&self->file);
   g_clear_pointer (&self->index, ide_highlight_index_unref);
   g_clear_pointer (&self->diagnostics, g_hash_table_unref);
