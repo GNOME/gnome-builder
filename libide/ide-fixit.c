@@ -46,6 +46,8 @@ _ide_fixit_new (IdeSourceRange *source_range,
   self->range = ide_source_range_ref (source_range);
   self->text = g_strdup (replacement_text);
 
+  EGG_COUNTER_INC (instances);
+
   return self;
 }
 
@@ -55,6 +57,8 @@ ide_fixit_destroy (IdeFixit *self)
   g_clear_pointer (&self->range, ide_source_range_unref);
   g_clear_pointer (&self->text, g_free);
   g_slice_free (IdeFixit, self);
+
+  EGG_COUNTER_DEC (instances);
 }
 
 IdeFixit *
