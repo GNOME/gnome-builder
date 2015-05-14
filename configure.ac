@@ -120,7 +120,7 @@ AC_ARG_ENABLE(debug,
                              [turn on debugging @<:@default=builder_debug_default@:>@]),
               ,
               enable_debug=builder_debug_default)
-AS_CASE(["x$enable_debug"],
+AS_CASE(["$enable_debug"],
         [yes],[
             DEBUG_CFLAGS="$DEBUG_CFLAGS -O0"
             DEBUG_CFLAGS="$DEBUG_CFLAGS -g"
