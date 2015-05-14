@@ -136,6 +136,9 @@ AS_CASE(["x$enable_debug"],
         [])
 AC_SUBST(DEBUG_CFLAGS)
 
+BUGREPORT_URL=builder_bugreport_url
+AC_SUBST(BUGREPORT_URL)
+
 
 dnl ***********************************************************************
 dnl Check for Required Packages

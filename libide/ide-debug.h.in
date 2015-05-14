@@ -75,6 +75,22 @@ G_BEGIN_DECLS
 # define IDE_RETURN(_r) return _r
 #endif
 
+#define _IDE_BUG(Component, Description, File, Line, Func, ...)                         \
+  G_STMT_START {                                                                        \
+    g_printerr ("-----------------------------------------------------------------\n"); \
+    g_printerr ("You've found a bug in Builder or one of it's dependent libraries.\n"); \
+    g_printerr ("Please help us help you by filing a bug report at:\n");                \
+    g_printerr ("\n");                                                                  \
+    g_printerr ("@BUGREPORT_URL@&component=%s\n", Component);                           \
+    g_printerr ("\n");                                                                  \
+    g_printerr ("%s:%d in function %s()\n", File, Line, Func);                          \
+    g_printerr ("\n");                                                                  \
+    g_printerr (Description"\n", ##__VA_ARGS__);                                        \
+    g_printerr ("-----------------------------------------------------------------\n"); \
+  } G_STMT_END
+#define IDE_BUG(Component, Description, ...) \
+  _IDE_BUG(Component, Description, __FILE__, __LINE__, G_STRFUNC, ##__VA_ARGS__)
+
 G_END_DECLS
 
 #endif /* IDE_DEBUG_H */

@@ -385,7 +385,7 @@ ide_object_hold (IdeObject *self)
 
   if (priv->context == NULL)
     {
-      g_warning ("BUG: Cannot hold context, already disposed.");
+      IDE_BUG ("libide", "Called after context was released.");
       return;
     }
 
@@ -407,7 +407,7 @@ ide_object_release (IdeObject *self)
 
   if (priv->context == NULL)
     {
-      g_warning ("BUG: Cannot release context, already disposed.");
+      IDE_BUG ("libide", "Called after context was released.");
       return;
     }
 
