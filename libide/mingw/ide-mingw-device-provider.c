@@ -80,6 +80,8 @@ ide_mingw_device_provider_discover_worker (GTask        *task,
     }
 
   g_task_return_pointer (task, devices, (GDestroyNotify)g_ptr_array_unref);
+
+  ide_object_release (IDE_OBJECT (self));
 }
 
 static void
@@ -117,6 +119,7 @@ ide_mingw_device_provider_constructed (GObject *object)
 
   g_assert (IDE_IS_MINGW_DEVICE_PROVIDER (self));
 
+  ide_object_hold (IDE_OBJECT (self));
   task = g_task_new (self, NULL, load_cb, NULL);
   g_task_run_in_thread (task, ide_mingw_device_provider_discover_worker);
 }
