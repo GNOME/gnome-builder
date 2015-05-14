@@ -21,6 +21,8 @@
 #include <gtksourceview/gtksource.h>
 #include <glib/gi18n.h>
 
+#include "egg-counter.h"
+
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
 #include "ide-buffer.h"
@@ -79,6 +81,9 @@ typedef struct
 } SaveState;
 
 G_DEFINE_TYPE (IdeBufferManager, ide_buffer_manager, IDE_TYPE_OBJECT)
+
+EGG_DEFINE_COUNTER (registered, "IdeBufferManager", "Registered Buffers",
+                    "The number of buffers registered with the buffer manager.")
 
 enum {
   PROP_0,
@@ -324,6 +329,8 @@ static void
 ide_buffer_manager_add_buffer (IdeBufferManager *self,
                                IdeBuffer        *buffer)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
 
@@ -339,6 +346,10 @@ ide_buffer_manager_add_buffer (IdeBufferManager *self,
                            G_CALLBACK (ide_buffer_manager_buffer_changed),
                            self,
                            (G_CONNECT_SWAPPED | G_CONNECT_AFTER));
+
+  EGG_COUNTER_INC (registered);
+
+  IDE_EXIT;
 }
 
 static void
@@ -374,6 +385,8 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
 
       g_object_unref (buffer);
     }
+
+  EGG_COUNTER_DEC (registered);
 
   IDE_EXIT;
 }
