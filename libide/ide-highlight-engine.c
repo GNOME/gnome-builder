@@ -38,7 +38,7 @@ struct _IdeHighlightEngine
   GtkTextMark    *invalid_begin;
   GtkTextMark    *invalid_end;
 
-  GList          *tags;
+  GSList         *tags;
 
   guint64         quanta_expiration;
 
@@ -235,7 +235,7 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
   GtkTextIter iter;
   GtkTextIter invalid_begin;
   GtkTextIter invalid_end;
-  GList *tags_iter;
+  GSList *tags_iter;
 
   IDE_PROBE;
 
@@ -366,7 +366,7 @@ ide_highlight_engine_reload (IdeHighlightEngine *self)
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
-  GList *iter;
+  GSList *iter;
 
   IDE_ENTRY;
 
@@ -396,7 +396,7 @@ ide_highlight_engine_reload (IdeHighlightEngine *self)
    */
   for (iter = self->tags; iter; iter = iter->next)
     gtk_text_buffer_remove_tag (buffer, iter->data, &begin, &end);
-  g_list_free (self->tags);
+  g_slist_free (self->tags);
   self->tags = NULL;
 
   if (self->highlighter == NULL)
@@ -476,7 +476,7 @@ ide_highlight_engine__notify_style_scheme_cb (IdeHighlightEngine *self,
                                               IdeBuffer          *buffer)
 {
   GtkSourceStyleScheme *style_scheme;
-  GList *iter;
+  GSList *iter;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -538,7 +538,7 @@ ide_highlight_engine_disconnect_buffer (IdeHighlightEngine *self,
   GtkTextTagTable *tag_table;
   GtkTextIter begin;
   GtkTextIter end;
-  GList *iter;
+  GSList *iter;
 
   IDE_ENTRY;
 
@@ -579,7 +579,7 @@ ide_highlight_engine_disconnect_buffer (IdeHighlightEngine *self,
       gtk_text_tag_table_remove (tag_table, iter->data);
     }
 
-  g_list_free (self->tags);
+  g_slist_free (self->tags);
   self->tags = NULL;
 
   IDE_EXIT;
@@ -869,7 +869,7 @@ ide_highlight_engine_get_style (IdeHighlightEngine *self,
   if (tag == NULL)
     {
       tag = create_tag_from_style (self, style_name);
-      self->tags = g_list_prepend (self->tags, tag);
+      self->tags = g_slist_prepend (self->tags, tag);
     }
 
   return tag;
