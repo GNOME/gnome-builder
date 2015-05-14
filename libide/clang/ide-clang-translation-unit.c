@@ -438,9 +438,7 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
 
       ide_project_reader_unlock (project);
 
-      g_hash_table_insert (self->diagnostics,
-                           g_object_ref (file),
-                           _ide_diagnostics_new (diags));
+      g_hash_table_insert (self->diagnostics, g_object_ref (file), _ide_diagnostics_new (diags));
     }
 
   return g_hash_table_lookup (self->diagnostics, file);

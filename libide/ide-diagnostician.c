@@ -126,7 +126,7 @@ ide_diagnostician_diagnose_async (IdeDiagnostician    *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  if (!self->providers->len)
+  if (self->providers->len == 0)
     {
       g_task_return_pointer (task,
                              _ide_diagnostics_new (NULL),
