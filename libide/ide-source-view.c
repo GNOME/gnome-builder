@@ -304,6 +304,23 @@ search_movement_new (IdeSourceView *self,
   return mv;
 }
 
+static gboolean
+ide_source_view_can_animate (IdeSourceView *self)
+{
+  GtkSettings *settings;
+  GdkScreen *screen;
+  gboolean can_animate = FALSE;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  screen = gtk_widget_get_screen (GTK_WIDGET (self));
+  settings = gtk_settings_get_for_screen (screen);
+
+  g_object_get (settings, "gtk-enable-animations", &can_animate, NULL);
+
+  return can_animate;
+}
+
 static void
 ide_source_view_sync_rubberband_mark (IdeSourceView *self)
 {
@@ -2908,20 +2925,15 @@ static void
 ide_source_view_real_selection_theatric (IdeSourceView         *self,
                                          IdeSourceViewTheatric  theatric)
 {
-  GtkSettings *settings;
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
-  gboolean enable_animations = TRUE;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert ((theatric == IDE_SOURCE_VIEW_THEATRIC_EXPAND) ||
             (theatric == IDE_SOURCE_VIEW_THEATRIC_SHRINK));
 
-  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (self)));
-  g_object_get (settings, "gtk-enable-animations", &enable_animations, NULL);
-
-  if (!enable_animations)
+  if (!ide_source_view_can_animate (self))
     return;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
@@ -6600,6 +6612,9 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
   g_return_if_fail (xalign <= 1.0);
   g_return_if_fail (yalign >= 0.0);
   g_return_if_fail (yalign <= 1.0);
+
+  if (!ide_source_view_can_animate (self))
+    animate_scroll = FALSE;
 
   buffer = gtk_text_view_get_buffer (text_view);
 
