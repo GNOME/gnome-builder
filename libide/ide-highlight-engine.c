@@ -27,7 +27,6 @@
 
 #define HIGHLIGHT_QUANTA_USEC      2000
 #define WORK_TIMEOUT_MSEC          50
-#define REHIGHLIGHT_ADJACENT_LINES 4
 
 struct _IdeHighlightEngine
 {
@@ -57,6 +56,66 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static GQuark      gEngineQuark;
+
+static gboolean
+get_invalidation_area (GtkTextIter *begin,
+                       GtkTextIter *end)
+{
+  GtkTextIter begin_tmp;
+  GtkTextIter end_tmp;
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
+
+  /*
+   * Move to the beginning of line.We dont use gtk_text_iter_backward_line
+   * because if begin is at the beginning of the line we dont want to
+   * move to the previous line
+   */
+  gtk_text_iter_set_line_offset (begin, 0);
+
+  /*Move to the beginning of the next line.*/
+  gtk_text_iter_forward_line (end);
+
+  /*Save the original locations.We will need them down the line*/
+  begin_tmp = *begin;
+  end_tmp = *end;
+
+  /*
+   * Fordward begin iter character by character until:
+   * - We reach a non space character
+   * - We reach end iter
+   */
+  while (g_unichar_isspace (gtk_text_iter_get_char (begin)) &&
+         gtk_text_iter_compare (begin, &end_tmp) < 0)
+    gtk_text_iter_forward_char (begin);
+
+
+  /*
+   * If after moving forward the begin iter, we reached the end iter,
+   * there is no need to play with the end iter.
+   */
+  if (gtk_text_iter_compare (begin, end) < 0)
+    {
+      /*
+       * Backward end iter character by character until:
+       * - We reach a non space character
+       * - We reach begin iter
+       */
+      while (g_unichar_isspace (gtk_text_iter_get_char (end)) &&
+             gtk_text_iter_compare (end, &begin_tmp) > 0)
+        gtk_text_iter_backward_char (end);
+
+      /*
+       * If we found the character we are looking for then move one
+       * character forward in order to include it as the last
+       * character of the begin - end range.
+       */
+      if (gtk_text_iter_compare (end, &end_tmp) < 0)
+        gtk_text_iter_forward_char (end);
+    }
+
+  return gtk_text_iter_compare (begin, end) < 0;
+}
 
 static void
 sync_tag_style (GtkSourceStyleScheme *style_scheme,
@@ -175,6 +234,7 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
   GtkTextIter iter;
   GtkTextIter invalid_begin;
   GtkTextIter invalid_end;
+  GList *tags_iter;
 
   IDE_PROBE;
 
@@ -191,7 +251,7 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
   gtk_text_buffer_get_iter_at_mark (buffer, &invalid_begin, self->invalid_begin);
   gtk_text_buffer_get_iter_at_mark (buffer, &invalid_end, self->invalid_end);
 
-  IDE_TRACE_MSG ("Highlight Range [%u:%u,%u:%u)",
+  IDE_TRACE_MSG ("Highlight Range [%u:%u,%u:%u]\n",
                  gtk_text_iter_get_line (&invalid_begin),
                  gtk_text_iter_get_line_offset (&invalid_begin),
                  gtk_text_iter_get_line (&invalid_end),
@@ -199,6 +259,13 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
 
   if (gtk_text_iter_compare (&invalid_begin, &invalid_end) >= 0)
     IDE_GOTO (up_to_date);
+
+  /*Clear all our tags*/
+  for (tags_iter = self->tags; tags_iter; tags_iter = tags_iter->next)
+    gtk_text_buffer_remove_tag (buffer,
+                                GTK_TEXT_TAG (tags_iter->data),
+                                &invalid_begin,
+                                &invalid_end);
 
   iter = invalid_begin;
 
@@ -250,6 +317,46 @@ ide_highlight_engine_queue_work (IdeHighlightEngine *self)
   self->work_timeout = g_timeout_add (WORK_TIMEOUT_MSEC,
                                       ide_highlight_engine_work_timeout_handler,
                                       self);
+}
+
+static gboolean
+invalidate_and_highlight (IdeHighlightEngine *self,
+                          GtkTextIter        *begin,
+                          GtkTextIter        *end)
+{
+
+  g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
+
+  if (get_invalidation_area (begin, end))
+    {
+      GtkTextIter begin_tmp;
+      GtkTextIter end_tmp;
+      GtkTextBuffer *text_buffer = GTK_TEXT_BUFFER (self->buffer);
+
+      gtk_text_buffer_get_iter_at_mark (text_buffer, &begin_tmp, self->invalid_begin);
+      gtk_text_buffer_get_iter_at_mark (text_buffer, &end_tmp, self->invalid_end);
+
+      if (gtk_text_iter_equal (&begin_tmp, &end_tmp))
+        {
+          gtk_text_buffer_move_mark (text_buffer, self->invalid_begin, begin);
+          gtk_text_buffer_move_mark (text_buffer, self->invalid_end, end);
+        }
+      else
+        {
+          if (gtk_text_iter_compare (begin, &begin_tmp) < 0)
+            gtk_text_buffer_move_mark (text_buffer, self->invalid_begin, begin);
+          if (gtk_text_iter_compare (end, &end_tmp) > 0)
+            gtk_text_buffer_move_mark (text_buffer, self->invalid_end, end);
+        }
+
+      ide_highlight_engine_queue_work (self);
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -318,28 +425,17 @@ ide_highlight_engine__buffer_insert_text_cb (IdeHighlightEngine *self,
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (GTK_IS_TEXT_BUFFER (text_buffer));
 
-  gtk_text_buffer_get_iter_at_mark (text_buffer, &begin, self->invalid_begin);
-  gtk_text_buffer_get_iter_at_mark (text_buffer, &end, self->invalid_end);
+  /*
+   * Backward the begin iter len characters from location
+   * (location points to the end of the string) in order to get
+   * the iter position where our inserted text was started.
+   */
+  begin = *location;
+  gtk_text_iter_backward_chars (&begin, g_utf8_strlen (text, len));
 
-  if (gtk_text_iter_equal (&begin, &end))
-    {
-      begin = *location;
-      end = *location;
+  end = *location;
 
-      gtk_text_iter_backward_lines (&begin, REHIGHLIGHT_ADJACENT_LINES);
-      gtk_text_iter_forward_lines (&end, REHIGHLIGHT_ADJACENT_LINES);
-      gtk_text_buffer_move_mark (text_buffer, self->invalid_begin, &begin);
-      gtk_text_buffer_move_mark (text_buffer, self->invalid_end, &end);
-    }
-  else
-    {
-      if (gtk_text_iter_compare (location, &begin) < 0)
-        gtk_text_buffer_move_mark (text_buffer, self->invalid_begin, location);
-      if (gtk_text_iter_compare (location, &end) > 0)
-        gtk_text_buffer_move_mark (text_buffer, self->invalid_end, location);
-    }
-
-  ide_highlight_engine_queue_work (self);
+  invalidate_and_highlight (self, &begin, &end);
 
   IDE_EXIT;
 }
@@ -358,32 +454,17 @@ ide_highlight_engine__buffer_delete_range_cb (IdeHighlightEngine *self,
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (range_begin);
-  g_assert (range_end);
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (GTK_IS_TEXT_BUFFER (text_buffer));
 
-  gtk_text_buffer_get_iter_at_mark (text_buffer, &begin, self->invalid_begin);
-  gtk_text_buffer_get_iter_at_mark (text_buffer, &end, self->invalid_end);
+  /*
+   * No need to use the range_end since everything that
+   * was after range_end will now be after range_begin
+   */
+  begin = *range_begin;
+  end = *range_begin;
 
-  if (gtk_text_iter_equal (&begin, &end))
-    {
-      begin = *range_begin;
-      end = *range_end;
-
-      gtk_text_iter_backward_lines (&begin, 2);
-      gtk_text_iter_forward_lines (&end, 2);
-      gtk_text_buffer_move_mark (text_buffer, self->invalid_begin, &begin);
-      gtk_text_buffer_move_mark (text_buffer, self->invalid_end, &end);
-    }
-  else
-    {
-      if (gtk_text_iter_compare (range_begin, &begin) < 0)
-        gtk_text_buffer_move_mark (text_buffer, self->invalid_begin, range_begin);
-      if (gtk_text_iter_compare (range_end, &end) > 0)
-        gtk_text_buffer_move_mark (text_buffer, self->invalid_end, range_end);
-    }
-
-  ide_highlight_engine_queue_work (self);
+  invalidate_and_highlight (self, &begin, &end);
 
   IDE_EXIT;
 }
@@ -429,13 +510,13 @@ ide_highlight_engine_connect_buffer (IdeHighlightEngine *self,
                            "insert-text",
                            G_CALLBACK (ide_highlight_engine__buffer_insert_text_cb),
                            self,
-                           G_CONNECT_SWAPPED);
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_object (buffer,
                            "delete-range",
                            G_CALLBACK (ide_highlight_engine__buffer_delete_range_cb),
                            self,
-                           G_CONNECT_SWAPPED);
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_object (buffer,
                            "notify::style-scheme",
