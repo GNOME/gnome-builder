@@ -24,6 +24,20 @@
 #include "egg-heap.h"
 #include "egg-task-cache.h"
 
+typedef struct
+{
+  EggTaskCache *self;
+  gpointer      key;
+  gpointer      value;
+  gint64        evict_at;
+} CacheItem;
+
+typedef struct
+{
+  GSource  source;
+  EggHeap *heap;
+} EvictSource;
+
 struct _EggTaskCache
 {
   GObject               parent_instance;
@@ -44,24 +58,11 @@ struct _EggTaskCache
   GHashTable           *queued;
 
   EggHeap              *evict_heap;
-  guint                 evict_source;
+  GSource              *evict_source;
+  guint                 evict_source_id;
 
   gint64                time_to_live_usec;
 };
-
-typedef struct
-{
-  EggTaskCache *self;
-  gpointer      key;
-  gpointer      value;
-  gint64        evict_at;
-} CacheItem;
-
-typedef struct
-{
-  GSource  source;
-  EggHeap *heap;
-} EvictSource;
 
 G_DEFINE_TYPE (EggTaskCache, egg_task_cache, G_TYPE_OBJECT)
 
@@ -90,38 +91,6 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 static gboolean
-evict_source_prepare (GSource *source,
-                      gint    *timeout)
-{
-  EvictSource *ev = (EvictSource *)source;
-
-  *timeout = -1;
-
-  if (ev->heap->len > 0)
-    {
-      CacheItem *item;
-      gint64 evict_at;
-      gint64 now;
-
-      now = g_source_get_time (source);
-      item = egg_heap_peek (ev->heap, gpointer);
-
-      if (item->evict_at <= now)
-        return TRUE;
-
-      evict_at = (item->evict_at - now) / 1000L;
-
-      if (*timeout == -1)
-        {
-          *timeout = evict_at;
-          return FALSE;
-        }
-    }
-
-  return FALSE;
-}
-
-static gboolean
 evict_source_check (GSource *source)
 {
   EvictSource *ev = (EvictSource *)source;
@@ -129,18 +98,38 @@ evict_source_check (GSource *source)
   g_assert (ev != NULL);
   g_assert (ev->heap != NULL);
 
-  if (ev->heap->len)
+  if (ev->heap->len > 0)
     {
       CacheItem *item;
       gint64 now;
 
       now = g_source_get_time (source);
       item = egg_heap_peek (ev->heap, gpointer);
-      if (now >= item->evict_at)
-        return TRUE;
+
+      return (item->evict_at <= now);
     }
 
   return FALSE;
+}
+
+static void
+evict_source_rearm (GSource *source)
+{
+  EvictSource *evict_source = (EvictSource *)source;
+  gint64 ready_time = -1;
+
+  g_assert (source != NULL);
+  g_assert (evict_source != NULL);
+
+  if (evict_source->heap->len > 0)
+    {
+      CacheItem *item;
+
+      item = egg_heap_peek (evict_source->heap, gpointer);
+      ready_time = item->evict_at;
+    }
+
+  g_source_set_ready_time (source, ready_time);
 }
 
 static gboolean
@@ -148,9 +137,14 @@ evict_source_dispatch (GSource     *source,
                        GSourceFunc  callback,
                        gpointer     user_data)
 {
+  gboolean ret = G_SOURCE_CONTINUE;
+
   if (callback != NULL)
-    return callback (user_data);
-  return G_SOURCE_CONTINUE;
+    ret = callback (user_data);
+
+  evict_source_rearm (source);
+
+  return ret;
 }
 
 static void
@@ -162,7 +156,7 @@ evict_source_finalize (GSource *source)
 }
 
 static GSourceFuncs evict_source_funcs = {
-  evict_source_prepare,
+  NULL,
   evict_source_check,
   evict_source_dispatch,
   evict_source_finalize,
@@ -238,6 +232,9 @@ egg_task_cache_evict_full (EggTaskCache  *self,
       g_hash_table_remove (self->cache, key);
 
       EGG_COUNTER_DEC (cached);
+
+      if (self->evict_source != NULL)
+        evict_source_rearm (self->evict_source);
 
       return TRUE;
     }
@@ -334,6 +331,9 @@ egg_task_cache_populate (EggTaskCache  *self,
   egg_heap_insert_val (self->evict_heap, item);
 
   EGG_COUNTER_INC (cached);
+
+  if (self->evict_source != NULL)
+    evict_source_rearm (self->evict_source);
 }
 
 static void
@@ -513,6 +513,27 @@ egg_task_cache_do_eviction (gpointer user_data)
 }
 
 static void
+egg_task_cache_install_evict_source (EggTaskCache *self)
+{
+  GMainContext *main_context;
+  EvictSource *evict_source;
+  GSource *source;
+
+  main_context = g_main_context_get_thread_default ();
+
+  source = g_source_new (&evict_source_funcs, sizeof (EvictSource));
+  g_source_set_callback (source, egg_task_cache_do_eviction, self, NULL);
+  g_source_set_name (source, "EggTaskCache Eviction");
+  g_source_set_ready_time (source, -1);
+
+  evict_source = (EvictSource *)source;
+  evict_source->heap = egg_heap_ref (self->evict_heap);
+
+  self->evict_source = source;
+  self->evict_source_id = g_source_attach (source, main_context);
+}
+
+static void
 egg_task_cache_constructed (GObject *object)
 {
   EggTaskCache *self = (EggTaskCache *)object;
@@ -560,17 +581,7 @@ egg_task_cache_constructed (GObject *object)
    * Register our eviction source if we have a time_to_live.
    */
   if (self->time_to_live_usec > 0)
-    {
-      EvictSource *ev;
-      GMainContext *main_context;
-
-      ev = (EvictSource *)g_source_new (&evict_source_funcs, sizeof (EvictSource));
-      ev->heap = egg_heap_ref (self->evict_heap);
-      g_source_set_callback ((GSource *)ev, egg_task_cache_do_eviction, self, NULL);
-
-      main_context = g_main_context_get_thread_default ();
-      self->evict_source =  g_source_attach ((GSource *)ev, main_context);
-    }
+    egg_task_cache_install_evict_source (self);
 }
 
 static void
@@ -589,10 +600,11 @@ egg_task_cache_dispose (GObject *object)
 {
   EggTaskCache *self = (EggTaskCache *)object;
 
-  if (self->evict_source)
+  if (self->evict_source_id != 0)
     {
-      g_source_remove (self->evict_source);
-      self->evict_source = 0;
+      g_source_remove (self->evict_source_id);
+      self->evict_source_id = 0;
+      self->evict_source = NULL;
     }
 
   g_clear_pointer (&self->evict_heap, egg_heap_unref);
