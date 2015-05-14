@@ -762,6 +762,15 @@ ide_highlight_engine_invalidate (IdeHighlightEngine *self,
   IDE_EXIT;
 }
 
+/**
+ * ide_highlight_engine_get_style:
+ * @self: the #IdeHighlightEngine
+ * @style_name: the name of the style to retrieve
+ *
+ * A #GtkTextTag for @style_name.
+ *
+ * Returns: (transfer none): A #GtkTextTag.
+ */
 GtkTextTag *
 ide_highlight_engine_get_style (IdeHighlightEngine *self,
                                 const gchar        *style_name)

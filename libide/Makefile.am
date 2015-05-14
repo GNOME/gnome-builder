@@ -7,57 +7,24 @@ pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libide-1.0.la
 
 libide_1_0_la_public_sources = \
-	autotools/ide-autotools-build-system.c \
-	autotools/ide-autotools-build-system.h \
-	autotools/ide-autotools-build-task.c \
-	autotools/ide-autotools-build-task.h \
-	autotools/ide-autotools-builder.c \
-	autotools/ide-autotools-builder.h \
-	autotools/ide-autotools-project-miner.c \
-	autotools/ide-autotools-project-miner.h \
-	c/ide-c-indenter.c \
-	c/ide-c-indenter.h \
 	c/ide-c-language.c \
 	c/ide-c-language.h \
-	clang/ide-clang-diagnostic-provider.c \
-	clang/ide-clang-diagnostic-provider.h \
-	clang/ide-clang-highlighter.c \
-	clang/ide-clang-highlighter.h \
-	clang/ide-clang-private.h \
-	clang/ide-clang-service.c \
-	clang/ide-clang-service.h \
-	clang/ide-clang-symbol-resolver.c \
-	clang/ide-clang-symbol-resolver.h \
-	clang/ide-clang-translation-unit.c \
-	clang/ide-clang-translation-unit.h \
-	devhelp/ide-devhelp-search-provider.c \
-	devhelp/ide-devhelp-search-provider.h \
 	devhelp/ide-devhelp-search-result.c \
 	devhelp/ide-devhelp-search-result.h \
 	directory/ide-directory-build-system.c \
 	directory/ide-directory-build-system.h \
 	directory/ide-directory-vcs.c \
 	directory/ide-directory-vcs.h \
-	doap/ide-doap.c \
-	doap/ide-doap.h \
 	doap/ide-doap-person.c \
 	doap/ide-doap-person.h \
-	editorconfig/ide-editorconfig-file-settings.c \
-	editorconfig/ide-editorconfig-file-settings.h \
+	doap/ide-doap.c \
+	doap/ide-doap.h \
 	git/ide-git-remote-callbacks.c \
 	git/ide-git-remote-callbacks.h \
-	git/ide-git-search-provider.c \
-	git/ide-git-search-provider.h \
 	git/ide-git-search-result.c \
 	git/ide-git-search-result.h \
 	git/ide-git-vcs.c \
 	git/ide-git-vcs.h \
-	gjs/ide-gjs-script.cpp \
-	gjs/ide-gjs-script.h \
-	gsettings/ide-gsettings-file-settings.c \
-	gsettings/ide-gsettings-file-settings.h \
-	html/ide-html-completion-provider.c \
-	html/ide-html-completion-provider.h \
 	html/ide-html-language.c \
 	html/ide-html-language.h \
 	ide-back-forward-item.c \
@@ -110,6 +77,8 @@ libide_1_0_la_public_sources = \
 	ide-fixit.c \
 	ide-fixit.h \
 	ide-global.h \
+	ide-highlight-engine.c \
+	ide-highlight-engine.h \
 	ide-highlight-index.c \
 	ide-highlight-index.h \
 	ide-highlighter.c \
@@ -164,6 +133,8 @@ libide_1_0_la_public_sources = \
 	ide-settings.h \
 	ide-source-location.c \
 	ide-source-location.h \
+	ide-source-map.c \
+	ide-source-map.h \
 	ide-source-range.c \
 	ide-source-range.h \
 	ide-source-snippet-chunk.c \
@@ -190,49 +161,43 @@ libide_1_0_la_public_sources = \
 	ide-test-case.h \
 	ide-test-suite.c \
 	ide-test-suite.h \
+	ide-thread-pool.c \
+	ide-thread-pool.h \
 	ide-types.h \
 	ide-unsaved-file.c \
 	ide-unsaved-file.h \
 	ide-unsaved-files.c \
 	ide-unsaved-files.h \
+	ide-vcs-uri.c \
+	ide-vcs-uri.h \
 	ide-vcs.c \
 	ide-vcs.h \
 	ide.c \
 	ide.h \
 	local/ide-local-device.c \
 	local/ide-local-device.h \
-	mingw/ide-mingw-device-provider.c \
-	mingw/ide-mingw-device-provider.h \
 	mingw/ide-mingw-device.c \
 	mingw/ide-mingw-device.h \
-	modelines/ide-modelines-file-settings.c \
-	modelines/ide-modelines-file-settings.h \
-	pygobject/ide-pygobject-script.c \
-	pygobject/ide-pygobject-script.h \
-	python/ide-python-format-provider.c \
-	python/ide-python-format-provider.h \
-	python/ide-python-indenter.c \
-	python/ide-python-indenter.h \
 	python/ide-python-language.c \
 	python/ide-python-language.h \
 	theatrics/ide-animation.c \
 	theatrics/ide-animation.h \
 	vala/ide-vala-language.c \
 	vala/ide-vala-language.h \
-	xml/ide-xml-indenter.c \
-	xml/ide-xml-indenter.h \
 	xml/ide-xml-language.c \
 	xml/ide-xml-language.h \
-	xml/ide-xml-highlighter.c \
-	xml/ide-xml-highlighter.h \
-	ide-source-map.c \
-	ide-source-map.h \
-	ide-thread-pool.c \
-	ide-thread-pool.h \
 	$(NULL)
 
 libide_1_0_la_SOURCES = \
 	$(libide_1_0_la_public_sources) \
+	autotools/ide-autotools-build-system.c \
+	autotools/ide-autotools-build-system.h \
+	autotools/ide-autotools-build-task.c \
+	autotools/ide-autotools-build-task.h \
+	autotools/ide-autotools-builder.c \
+	autotools/ide-autotools-builder.h \
+	autotools/ide-autotools-project-miner.c \
+	autotools/ide-autotools-project-miner.h \
 	autotools/ide-makecache-target.c \
 	autotools/ide-makecache-target.h \
 	autotools/ide-makecache.c \
@@ -241,12 +206,29 @@ libide_1_0_la_SOURCES = \
 	c/c-parse-helper.h \
 	c/ide-c-format-provider.c \
 	c/ide-c-format-provider.h \
+	c/ide-c-indenter.c \
+	c/ide-c-indenter.h \
 	clang/ide-clang-completion-item.c \
 	clang/ide-clang-completion-item.h \
 	clang/ide-clang-completion-provider.c \
 	clang/ide-clang-completion-provider.h \
+	clang/ide-clang-diagnostic-provider.c \
+	clang/ide-clang-diagnostic-provider.h \
+	clang/ide-clang-highlighter.c \
+	clang/ide-clang-highlighter.h \
+	clang/ide-clang-private.h \
+	clang/ide-clang-service.c \
+	clang/ide-clang-service.h \
+	clang/ide-clang-symbol-resolver.c \
+	clang/ide-clang-symbol-resolver.h \
+	clang/ide-clang-translation-unit.c \
+	clang/ide-clang-translation-unit.h \
+	devhelp/ide-devhelp-search-provider.c \
+	devhelp/ide-devhelp-search-provider.h \
 	editorconfig/editorconfig-glib.c \
 	editorconfig/editorconfig-glib.h \
+	editorconfig/ide-editorconfig-file-settings.c \
+	editorconfig/ide-editorconfig-file-settings.h \
 	gca/gca-diagnostics.c \
 	gca/gca-diagnostics.h \
 	gca/gca-service.c \
@@ -263,15 +245,21 @@ libide_1_0_la_SOURCES = \
 	git/ide-git-buffer-change-monitor.h \
 	git/ide-git-search-index.c \
 	git/ide-git-search-index.h \
+	git/ide-git-search-provider.c \
+	git/ide-git-search-provider.h \
+	gjs/ide-gjs-script.cpp \
+	gjs/ide-gjs-script.h \
+	gsettings/ide-gsettings-file-settings.c \
+	gsettings/ide-gsettings-file-settings.h \
 	gsettings/ide-language-defaults.c \
 	gsettings/ide-language-defaults.h \
+	html/ide-html-completion-provider.c \
+	html/ide-html-completion-provider.h \
 	ide-async-helper.c \
 	ide-async-helper.h \
 	ide-battery-monitor.c \
 	ide-battery-monitor.h \
 	ide-debug.h \
-	ide-highlight-engine.c \
-	ide-highlight-engine.h \
 	ide-internal.h \
 	ide-line-change-gutter-renderer.c \
 	ide-line-change-gutter-renderer.h \
@@ -294,12 +282,20 @@ libide_1_0_la_SOURCES = \
 	ide-source-view-capture.h \
 	ide-source-view-movements.c \
 	ide-source-view-movements.h \
-	ide-vcs-uri.c \
-	ide-vcs-uri.h \
 	ide-vim-iter.c \
 	ide-vim-iter.h \
+	mingw/ide-mingw-device-provider.c \
+	mingw/ide-mingw-device-provider.h \
+	modelines/ide-modelines-file-settings.c \
+	modelines/ide-modelines-file-settings.h \
 	modelines/modeline-parser.c \
 	modelines/modeline-parser.h \
+	pygobject/ide-pygobject-script.c \
+	pygobject/ide-pygobject-script.h \
+	python/ide-python-format-provider.c \
+	python/ide-python-format-provider.h \
+	python/ide-python-indenter.c \
+	python/ide-python-indenter.h \
 	tasks/ide-load-directory-task.c \
 	tasks/ide-load-directory-task.h \
 	theatrics/ide-box-theatric.c \
@@ -316,6 +312,10 @@ libide_1_0_la_SOURCES = \
 	util/ide-rgba.h \
 	util/ide-xml.c \
 	util/ide-xml.h \
+	xml/ide-xml-highlighter.c \
+	xml/ide-xml-highlighter.h \
+	xml/ide-xml-indenter.c \
+	xml/ide-xml-indenter.h \
 	$(NULL)
 
 libide_1_0_la_includes = \
