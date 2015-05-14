@@ -182,7 +182,7 @@ cache_item_compare_evict_at (gconstpointer a,
   const CacheItem *ci1 = a;
   const CacheItem *ci2 = b;
 
-  return ci1->evict_at - ci2->evict_at;
+  return ci2->evict_at - ci1->evict_at;
 }
 
 static CacheItem *
