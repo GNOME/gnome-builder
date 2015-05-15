@@ -16,20 +16,51 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-makecache-target"
+
+#include "egg-counter.h"
+
 #include "ide-makecache-target.h"
+
+G_DEFINE_BOXED_TYPE (IdeMakecacheTarget, ide_makecache_target,
+                     ide_makecache_target_ref, ide_makecache_target_unref)
+
+EGG_DEFINE_COUNTER (instances, "IdeMakecacheTarget", "IdeMakecacheTarget Instances",
+                    "Number of IdeMakecacheTarget instances.")
 
 struct _IdeMakecacheTarget
 {
-  gchar *subdir;
-  gchar *target;
+  volatile gint  ref_count;
+
+  gchar         *subdir;
+  gchar         *target;
 };
 
 void
-ide_makecache_target_free (IdeMakecacheTarget *self)
+ide_makecache_target_unref (IdeMakecacheTarget *self)
 {
-  g_free (self->subdir);
-  g_free (self->target);
-  g_free (self);
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (self->ref_count > 0);
+
+  if (g_atomic_int_dec_and_test (&self->ref_count))
+    {
+      g_free (self->subdir);
+      g_free (self->target);
+      g_slice_free (IdeMakecacheTarget, self);
+
+      EGG_COUNTER_DEC (instances);
+    }
+}
+
+IdeMakecacheTarget *
+ide_makecache_target_ref (IdeMakecacheTarget *self)
+{
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
+
+  g_atomic_int_inc (&self->ref_count);
+
+  return self;
 }
 
 IdeMakecacheTarget *
@@ -43,9 +74,12 @@ ide_makecache_target_new (const gchar *subdir,
   if (subdir != NULL && (subdir [0] == '.' || subdir [0] == '\0'))
     subdir = NULL;
 
-  self = g_new0 (IdeMakecacheTarget, 1);
+  self = g_slice_new0 (IdeMakecacheTarget);
+  self->ref_count = 1;
   self->subdir = g_strdup (subdir);
   self->target = g_strdup (target);
+
+  EGG_COUNTER_INC (instances);
 
   return self;
 }

@@ -344,7 +344,7 @@ ide_makecache_get_file_targets_searched (GMappedFile *mapped,
   content = g_mapped_file_get_contents (mapped);
   len = g_mapped_file_get_length (mapped);
 
-  targets = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_makecache_target_free);
+  targets = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_makecache_target_unref);
   found = g_hash_table_new (ide_makecache_target_hash, ide_makecache_target_equal);
 
 #ifdef IDE_ENABLE_TRACE

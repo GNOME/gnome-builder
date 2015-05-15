@@ -19,15 +19,19 @@
 #ifndef IDE_MAKECACHE_TARGET_H
 #define IDE_MAKECACHE_TARGET_H
 
-#include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
+#define IDE_TYPE_MAKECACHE_TARGET (ide_makecache_target_get_type())
+
 typedef struct _IdeMakecacheTarget IdeMakecacheTarget;
 
+GType               ide_makecache_target_get_type   (void);
 IdeMakecacheTarget *ide_makecache_target_new        (const gchar        *subdir,
                                                      const gchar        *target);
-void                ide_makecache_target_free       (IdeMakecacheTarget *self);
+IdeMakecacheTarget *ide_makecache_target_ref        (IdeMakecacheTarget *self);
+void                ide_makecache_target_unref      (IdeMakecacheTarget *self);
 const gchar        *ide_makecache_target_get_target (IdeMakecacheTarget *self);
 const gchar        *ide_makecache_target_get_subdir (IdeMakecacheTarget *self);
 guint               ide_makecache_target_hash       (gconstpointer       data);
