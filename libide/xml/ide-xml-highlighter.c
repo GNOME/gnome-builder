@@ -34,7 +34,8 @@ struct _IdeXmlHighlighter
   IdeHighlighter  parent_instance;
 
   EggSignalGroup *signal_group;
-  GtkTextIter     iter;
+  GtkTextMark    *iter_mark;
+  GtkTextBuffer  *buffer;
   guint           highlight_timeout;
   guint           has_tags : 1;
 };
@@ -47,18 +48,13 @@ ide_xml_highlighter_highlight_timeout_handler (gpointer data)
   IdeXmlHighlighter *self = data;
   IdeHighlightEngine *engine;
   GtkTextTag *tag;
+  GtkTextIter iter;
   GtkTextIter start;
   GtkTextIter end;
-  GtkTextBuffer *buffer;
 
   g_assert (IDE_IS_XML_HIGHLIGHTER (self));
-
-  /*
-   * If we lost our buffer handle, nothing we can do!
-   */
-  buffer = egg_signal_group_get_target (self->signal_group);
-  if (!GTK_IS_TEXT_BUFFER (buffer))
-    goto finished;
+  g_assert (self->buffer != NULL);
+  g_assert (self->iter_mark != NULL);
 
   engine = ide_highlighter_get_highlight_engine (IDE_HIGHLIGHTER (self));
   tag = ide_highlight_engine_get_style (engine, XML_TAG_MATCH_STYLE_NAME);
@@ -70,17 +66,17 @@ ide_xml_highlighter_highlight_timeout_handler (gpointer data)
    */
   if (self->has_tags)
     {
-      gtk_text_buffer_get_start_iter (buffer, &start);
-      gtk_text_buffer_get_end_iter (buffer, &end);
-      gtk_text_buffer_remove_tag (buffer,tag,&start,&end);
+      gtk_text_buffer_get_bounds (self->buffer, &start, &end);
+      gtk_text_buffer_remove_tag (self->buffer, tag, &start, &end);
 
       self->has_tags = FALSE;
     }
 
 
-  if (ide_xml_in_element (&self->iter) && ide_xml_get_current_element (&self->iter,
-                                                                       &start,
-                                                                       &end))
+  gtk_text_buffer_get_iter_at_mark (self->buffer, &iter, self->iter_mark);
+  if (ide_xml_in_element (&iter) && ide_xml_get_current_element (&iter,
+                                                                 &start,
+                                                                 &end))
     {
       GtkTextIter next_start;
       GtkTextIter next_end;
@@ -103,7 +99,7 @@ ide_xml_highlighter_highlight_timeout_handler (gpointer data)
            * from the start iter
            */
           gtk_text_iter_forward_char (&start);
-          gtk_text_buffer_apply_tag (GTK_TEXT_BUFFER (buffer),
+          gtk_text_buffer_apply_tag (GTK_TEXT_BUFFER (self->buffer),
                                      tag,
                                      &start,
                                      &end);
@@ -111,7 +107,7 @@ ide_xml_highlighter_highlight_timeout_handler (gpointer data)
           if (tag_type != IDE_XML_ELEMENT_TAG_START_END)
             {
               gtk_text_iter_forward_char (&next_start);
-              gtk_text_buffer_apply_tag (GTK_TEXT_BUFFER (buffer),
+              gtk_text_buffer_apply_tag (GTK_TEXT_BUFFER (self->buffer),
                                          tag,
                                          &next_start,
                                          &next_end);
@@ -121,10 +117,47 @@ ide_xml_highlighter_highlight_timeout_handler (gpointer data)
         }
     }
 
-finished:
   self->highlight_timeout = 0;
   return G_SOURCE_REMOVE;
 }
+
+static void
+ide_xml_highlighter_bind_buffer_cb (IdeXmlHighlighter  *self,
+                                    IdeBuffer          *buffer,
+                                    EggSignalGroup     *group)
+{
+  GtkTextIter begin;
+
+  g_assert (IDE_IS_XML_HIGHLIGHTER (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (EGG_IS_SIGNAL_GROUP (group));
+
+  ide_set_weak_pointer (&self->buffer, GTK_TEXT_BUFFER (buffer));
+
+  gtk_text_buffer_get_start_iter (self->buffer, &begin);
+  self->iter_mark = gtk_text_buffer_create_mark (self->buffer, NULL, &begin, TRUE);
+}
+
+static void
+ide_xml_highlighter_unbind_buffer_cb (IdeXmlHighlighter  *self,
+                                      EggSignalGroup     *group)
+{
+  g_assert (IDE_IS_XML_HIGHLIGHTER (self));
+  g_assert (EGG_IS_SIGNAL_GROUP (group));
+  g_assert (self->buffer != NULL);
+
+  if (self->highlight_timeout != 0)
+    {
+      g_source_remove (self->highlight_timeout);
+      self->highlight_timeout = 0;
+    }
+
+  gtk_text_buffer_delete_mark (self->buffer, self->iter_mark);
+  self->iter_mark = NULL;
+
+  ide_clear_weak_pointer (&self->buffer);
+}
+
 
 static void
 ide_xml_highlighter_cursor_moved_cb (GtkTextBuffer     *buffer,
@@ -132,11 +165,12 @@ ide_xml_highlighter_cursor_moved_cb (GtkTextBuffer     *buffer,
                                      IdeXmlHighlighter *self)
 {
   g_assert (IDE_IS_HIGHLIGHTER (self));
-
-  self->iter = *iter;
+  g_assert (GTK_IS_TEXT_BUFFER (buffer) && self->buffer == buffer);
 
   if (self->highlight_timeout != 0)
     g_source_remove (self->highlight_timeout);
+
+  gtk_text_buffer_move_mark (buffer, self->iter_mark, iter);
   self->highlight_timeout = g_timeout_add (HIGHLIGH_TIMEOUT_MSEC,
                                            ide_xml_highlighter_highlight_timeout_handler,
                                            self);
@@ -235,4 +269,16 @@ ide_xml_highlighter_init (IdeXmlHighlighter *self)
                                    G_CALLBACK (ide_xml_highlighter_cursor_moved_cb),
                                    self,
                                    0);
+
+  g_signal_connect_object (self->signal_group,
+                           "bind",
+                           G_CALLBACK (ide_xml_highlighter_bind_buffer_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->signal_group,
+                           "unbind",
+                           G_CALLBACK (ide_xml_highlighter_unbind_buffer_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
