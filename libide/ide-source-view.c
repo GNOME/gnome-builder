@@ -1355,6 +1355,8 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   GtkTextMark *insert;
   GtkTextIter iter;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (EGG_IS_SIGNAL_GROUP (group));
@@ -1410,6 +1412,8 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
 
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
   gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self), insert, 0.0, TRUE, 1.0, 0.5);
+
+  IDE_EXIT;
 }
 
 static void
