@@ -25,7 +25,7 @@
 G_DEFINE_BOXED_TYPE (IdeMakecacheTarget, ide_makecache_target,
                      ide_makecache_target_ref, ide_makecache_target_unref)
 
-EGG_DEFINE_COUNTER (instances, "IdeMakecacheTarget", "IdeMakecacheTarget Instances",
+EGG_DEFINE_COUNTER (instances, "IdeMakecacheTarget", "Instances",
                     "Number of IdeMakecacheTarget instances.")
 
 struct _IdeMakecacheTarget

@@ -81,6 +81,8 @@ typedef struct
 
 G_DEFINE_TYPE (IdeMakecache, ide_makecache, IDE_TYPE_OBJECT)
 
+EGG_DEFINE_COUNTER (instances, "IdeMakecache", "Instances", "The number of IdeMakecache")
+
 enum {
   PROP_0,
   PROP_MAKEFILE,
@@ -1243,6 +1245,8 @@ ide_makecache_finalize (GObject *object)
   g_clear_pointer (&self->llvm_flags, g_free);
 
   G_OBJECT_CLASS (ide_makecache_parent_class)->finalize (object);
+
+  EGG_COUNTER_DEC (instances);
 }
 
 static void
@@ -1305,6 +1309,8 @@ ide_makecache_class_init (IdeMakecacheClass *klass)
 static void
 ide_makecache_init (IdeMakecache *self)
 {
+  EGG_COUNTER_INC (instances);
+
   self->file_targets_cache = egg_task_cache_new ((GHashFunc)g_file_hash,
                                                  (GEqualFunc)g_file_equal,
                                                  g_object_ref,
