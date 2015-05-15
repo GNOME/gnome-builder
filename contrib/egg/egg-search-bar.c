@@ -172,7 +172,6 @@ toplevel_key_press_event_after (EggSearchBar *self,
         break;
 
       egg_search_bar_set_search_mode_enabled (self, TRUE);
-      gtk_widget_grab_focus (entry);
 
       return GTK_WIDGET_GET_CLASS (entry)->key_press_event (entry, event);
     }
@@ -201,12 +200,9 @@ egg_search_bar_hierarchy_changed (GtkWidget *widget,
 static void
 egg_search_bar_reveal (EggSearchBar *self)
 {
-  EggSearchBarPrivate *priv = egg_search_bar_get_instance_private (self);
-
   g_assert (EGG_IS_SEARCH_BAR (self));
 
   egg_search_bar_set_search_mode_enabled (self, TRUE);
-  gtk_widget_grab_focus (GTK_WIDGET (priv->entry));
 }
 
 static GObject *
@@ -438,6 +434,9 @@ egg_search_bar_set_search_mode_enabled (EggSearchBar *self,
       priv->search_mode_enabled = search_mode_enabled;
       gtk_revealer_set_reveal_child (priv->revealer, search_mode_enabled);
       gtk_entry_set_text (GTK_ENTRY (priv->entry), "");
+      if (search_mode_enabled)
+        gtk_widget_grab_focus (GTK_WIDGET (priv->entry));
+
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SEARCH_MODE_ENABLED]);
     }
 }
