@@ -1283,8 +1283,8 @@ ide_makecache_class_init (IdeMakecacheClass *klass)
 static void
 ide_makecache_init (IdeMakecache *self)
 {
-  self->file_targets_cache = egg_task_cache_new (g_str_hash,
-                                                 g_str_equal,
+  self->file_targets_cache = egg_task_cache_new ((GHashFunc)g_file_hash,
+                                                 (GEqualFunc)g_file_equal,
                                                  g_object_ref,
                                                  g_object_unref,
                                                  (GBoxedCopyFunc)g_ptr_array_ref,
@@ -1294,8 +1294,8 @@ ide_makecache_init (IdeMakecache *self)
                                                  self,
                                                  NULL);
 
-  self->file_flags_cache = egg_task_cache_new (g_str_hash,
-                                               g_str_equal,
+  self->file_flags_cache = egg_task_cache_new ((GHashFunc)g_file_hash,
+                                               (GEqualFunc)g_file_equal,
                                                g_object_ref,
                                                g_object_unref,
                                                (GBoxedCopyFunc)g_strdupv,
