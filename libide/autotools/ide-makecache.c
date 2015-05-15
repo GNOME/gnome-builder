@@ -40,6 +40,7 @@
 #include "ide-makecache.h"
 #include "ide-makecache-target.h"
 #include "ide-project.h"
+#include "ide-line-reader.h"
 #include "ide-thread-pool.h"
 #include "ide-vcs.h"
 
@@ -72,13 +73,6 @@ typedef struct
   gchar       *path;
 } FileTargetsLookup;
 
-typedef struct
-{
-  const gchar *contents;
-  gsize        length;
-  gssize       pos;
-} ReadLines;
-
 G_DEFINE_TYPE (IdeMakecache, ide_makecache, IDE_TYPE_OBJECT)
 
 EGG_DEFINE_COUNTER (instances, "IdeMakecache", "Instances", "The number of IdeMakecache")
@@ -90,60 +84,6 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
-
-static void
-read_lines_init (ReadLines   *rl,
-                 const gchar *contents,
-                 gsize        length)
-{
-  g_assert (rl);
-  g_assert (contents);
-
-  if (length < G_MAXSIZE)
-    {
-      rl->contents = contents;
-      rl->length = length;
-      rl->pos = 0;
-    }
-  else
-    {
-      rl->contents = NULL;
-      rl->length = 0;
-      rl->pos = 0;
-    }
-}
-
-static const gchar *
-read_lines_next (ReadLines *rl,
-                 gsize     *length)
-{
-  const gchar *ret = NULL;
-
-  g_assert (rl);
-  g_assert (length);
-
-  if ((rl->contents == NULL) || (rl->pos >= rl->length))
-    {
-      *length = 0;
-      return NULL;
-    }
-
-  ret = &rl->contents [rl->pos];
-
-  for (; rl->pos < rl->length; rl->pos++)
-    {
-      if (rl->contents [rl->pos] == '\n')
-        {
-          *length = &rl->contents [rl->pos] - ret;
-          rl->pos++;
-          return ret;
-        }
-    }
-
-  *length = &rl->contents [rl->pos] - ret;
-
-  return ret;
-}
 
 static void
 file_flags_lookup_free (gpointer data)
@@ -321,7 +261,7 @@ ide_makecache_get_file_targets_searched (GMappedFile *mapped,
   g_autoptr(GRegex) regex = NULL;
   const gchar *content;
   const gchar *line;
-  ReadLines rl = { 0 };
+  IdeLineReader rl;
   gsize len;
   gsize line_len;
 
@@ -359,9 +299,12 @@ ide_makecache_get_file_targets_searched (GMappedFile *mapped,
   }
 #endif
 
-  read_lines_init (&rl, content, len);
+  if (len > G_MAXSSIZE)
+    IDE_RETURN (NULL);
 
-  while ((line = read_lines_next (&rl, &line_len)))
+  ide_line_reader_init (&rl, (gchar *)content, len);
+
+  while ((line = ide_line_reader_next (&rl, &line_len)))
     {
       /*
        * Keep track of "subdir = <dir>" changes so we know what directory
