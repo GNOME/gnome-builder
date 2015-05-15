@@ -538,6 +538,7 @@ egg_task_cache_install_evict_source (EggTaskCache *self)
   source = g_source_new (&evict_source_funcs, sizeof (EvictSource));
   g_source_set_callback (source, egg_task_cache_do_eviction, self, NULL);
   g_source_set_name (source, "EggTaskCache Eviction");
+  g_source_set_priority (source, G_PRIORITY_LOW);
   g_source_set_ready_time (source, -1);
 
   evict_source = (EvictSource *)source;
