@@ -397,25 +397,25 @@ egg_task_cache_fetch_cb (GObject      *object,
   g_assert (EGG_IS_TASK_CACHE (self));
   g_assert (G_IS_TASK (task));
 
+  g_hash_table_remove (self->in_flight, key);
+
   ret = g_task_propagate_pointer (task, &error);
 
-  if (error != NULL)
+  if (ret != NULL)
+    {
+      egg_task_cache_populate (self, key, ret);
+      egg_task_cache_propagate_pointer (self, key, ret);
+      self->value_destroy_func (ret);
+    }
+  else
     {
       egg_task_cache_propagate_error (self, key, error);
       g_clear_error (&error);
     }
-  else
-    {
-      egg_task_cache_populate (self, key, ret);
-      egg_task_cache_propagate_pointer (self, key, ret);
-    }
-
-  g_hash_table_remove (self->in_flight, key);
-  EGG_COUNTER_DEC (in_flight);
 
   self->key_destroy_func (key);
-  if (ret != NULL)
-    self->value_destroy_func (ret);
+
+  EGG_COUNTER_DEC (in_flight);
 }
 
 void
