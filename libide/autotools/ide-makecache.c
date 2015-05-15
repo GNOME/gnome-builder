@@ -1106,8 +1106,19 @@ ide_makecache_get_file_targets_dispatch (EggTaskCache  *cache,
   g_assert (G_IS_TASK (task));
 
   lookup = g_slice_new0 (FileTargetsLookup);
-  lookup->path = ide_makecache_get_relative_path (self, file);
   lookup->mapped = g_mapped_file_ref (self->mapped);
+
+  if (!(lookup->path = ide_makecache_get_relative_path (self, file)) &&
+      !(lookup->path = g_file_get_path (file)) &&
+      !(lookup->path = g_file_get_basename (file)))
+    {
+      file_targets_lookup_free (lookup);
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               "Failed to extract filename.");
+      return;
+    }
 
   g_task_set_task_data (task, lookup, file_targets_lookup_free);
 
@@ -1195,7 +1206,18 @@ ide_makecache_get_file_flags_dispatch (EggTaskCache  *cache,
   lookup = g_slice_new0 (FileFlagsLookup);
   lookup->self = g_object_ref (self);
   lookup->file = g_object_ref (file);
-  lookup->relative_path = ide_makecache_get_relative_path (self, file);
+
+  if (!(lookup->relative_path = ide_makecache_get_relative_path (self, file)) &&
+      !(lookup->relative_path = g_file_get_path (file)) &&
+      !(lookup->relative_path = g_file_get_basename (file)))
+    {
+      file_flags_lookup_free (lookup);
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_FILENAME,
+                               "Failed to extract filename.");
+      return;
+    }
 
   g_task_set_task_data (task, lookup, file_flags_lookup_free);
 
