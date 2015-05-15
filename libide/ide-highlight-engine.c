@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-highlight-engine"
 
 #include <glib/gi18n.h>
+#include <string.h>
 
 #include "ide-debug.h"
 #include "ide-highlight-engine.h"
@@ -27,6 +28,7 @@
 
 #define HIGHLIGHT_QUANTA_USEC      2000
 #define WORK_TIMEOUT_MSEC          50
+#define PRIVATE_TAG_PREFIX        "gb-private-tag"
 
 struct _IdeHighlightEngine
 {
@@ -38,7 +40,8 @@ struct _IdeHighlightEngine
   GtkTextMark    *invalid_begin;
   GtkTextMark    *invalid_end;
 
-  GSList         *tags;
+  GSList         *private_tags;
+  GSList         *public_tags;
 
   guint64         quanta_expiration;
 
@@ -124,7 +127,8 @@ sync_tag_style (GtkSourceStyleScheme *style_scheme,
 {
   g_autofree gchar *foreground = NULL;
   g_autofree gchar *background = NULL;
-  g_autofree gchar *style_name = NULL;
+  g_autofree gchar *tag_name = NULL;
+  gchar *style_name = NULL;
   const gchar *colon;
   GtkSourceStyle *style;
   gboolean foreground_set = FALSE;
@@ -135,6 +139,8 @@ sync_tag_style (GtkSourceStyleScheme *style_scheme,
   gboolean underline_set = FALSE;
   gboolean italic = FALSE;
   gboolean italic_set = FALSE;
+  gsize tag_name_len;
+  gsize prefix_len;
 
   g_object_set (tag,
                 "foreground-set", FALSE,
@@ -144,10 +150,24 @@ sync_tag_style (GtkSourceStyleScheme *style_scheme,
                 "style-set", FALSE,
                 NULL);
 
-  g_object_get (tag, "name", &style_name, NULL);
+  g_object_get (tag, "name", &tag_name, NULL);
 
-  if ((style_name == NULL) || (style_scheme == NULL))
+  if (tag_name == NULL || style_scheme == NULL)
     return;
+
+  prefix_len = strlen (PRIVATE_TAG_PREFIX);
+  tag_name_len = strlen (tag_name);
+  style_name = tag_name;
+
+  /*
+   * Check if this is a private tag.A tag is private if it starts with
+   * PRIVATE_TAG_PREFIX "gb-private-tag".
+   * ex: gb-private-tag:c:boolean
+   * If the tag is private extract the original style name by moving the string
+   * strlen (PRIVATE_TAG_PREFIX) + 1 (the colon) characters.
+   */
+  if (tag_name_len > prefix_len && memcmp (tag_name, PRIVATE_TAG_PREFIX, prefix_len) == 0)
+    style_name = tag_name + prefix_len + 1;
 
   style = gtk_source_style_scheme_get_style (style_scheme, style_name);
   if (style == NULL && (colon = strchr (style_name, ':')))
@@ -196,12 +216,50 @@ create_tag_from_style (IdeHighlightEngine *self,
   GtkTextTag *tag;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_assert (self->buffer != NULL);
   g_assert (IDE_IS_BUFFER (self->buffer));
+  g_assert (style_name != NULL);
 
   tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self->buffer), style_name, NULL);
   style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (self->buffer));
   sync_tag_style (style_scheme, tag);
+
+  return tag;
+}
+
+GtkTextTag *
+get_tag_from_style (IdeHighlightEngine *self,
+                    const gchar        *style_name,
+                    gboolean            private_tag)
+{
+  GtkTextTagTable *tag_table;
+  GtkTextTag *tag;
+  g_autofree gchar *tmp_style_name = NULL;
+
+  g_return_val_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self), NULL);
+  g_return_val_if_fail (style_name != NULL, NULL);
+
+  /*
+   * If is private tag prepend the PRIVATE_TAG_PREFIX (gb-private-tag)
+   * to the string.This is used because tag name is the key used
+   * for saving tags in GtkTextTagTable and we dont want conflicts between
+   * public and private tags.
+   */
+  if (private_tag)
+    tmp_style_name = g_strdup_printf ("%s:%s", PRIVATE_TAG_PREFIX, style_name);
+  else
+    tmp_style_name = g_strdup (style_name);
+
+  tag_table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self->buffer));
+  tag = gtk_text_tag_table_lookup (tag_table, tmp_style_name);
+
+  if (tag == NULL)
+    {
+      tag = create_tag_from_style (self, tmp_style_name);
+      if (private_tag)
+        self->private_tags = g_slist_prepend (self->private_tags, tag);
+      else
+        self->public_tags = g_slist_prepend (self->public_tags, tag);
+    }
 
   return tag;
 }
@@ -218,7 +276,7 @@ ide_highlight_engine_apply_style (const GtkTextIter *begin,
 
   buffer = gtk_text_iter_get_buffer (begin);
   self = g_object_get_qdata (G_OBJECT (buffer), gEngineQuark);
-  tag = ide_highlight_engine_get_style (self, style_name);
+  tag = get_tag_from_style (self, style_name, TRUE);
 
   gtk_text_buffer_apply_tag (buffer, tag, begin, end);
 
@@ -262,7 +320,7 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
     IDE_GOTO (up_to_date);
 
   /*Clear all our tags*/
-  for (tags_iter = self->tags; tags_iter; tags_iter = tags_iter->next)
+  for (tags_iter = self->private_tags; tags_iter; tags_iter = tags_iter->next)
     gtk_text_buffer_remove_tag (buffer,
                                 GTK_TEXT_TAG (tags_iter->data),
                                 &invalid_begin,
@@ -394,10 +452,13 @@ ide_highlight_engine_reload (IdeHighlightEngine *self)
   /*
    * Remove our highlight tags from the buffer.
    */
-  for (iter = self->tags; iter; iter = iter->next)
+  for (iter = self->private_tags; iter; iter = iter->next)
     gtk_text_buffer_remove_tag (buffer, iter->data, &begin, &end);
-  g_slist_free (self->tags);
-  self->tags = NULL;
+  g_clear_pointer (&self->private_tags, g_slist_free);
+
+  for (iter = self->public_tags; iter; iter = iter->next)
+    gtk_text_buffer_remove_tag (buffer, iter->data, &begin, &end);
+  g_clear_pointer (&self->public_tags, g_slist_free);
 
   if (self->highlighter == NULL)
     IDE_EXIT;
@@ -483,7 +544,9 @@ ide_highlight_engine__notify_style_scheme_cb (IdeHighlightEngine *self,
 
   style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
 
-  for (iter = self->tags; iter; iter = iter->next)
+  for (iter = self->private_tags; iter; iter = iter->next)
+    sync_tag_style (style_scheme, iter->data);
+  for (iter = self->public_tags; iter; iter = iter->next)
     sync_tag_style (style_scheme, iter->data);
 }
 
@@ -573,14 +636,19 @@ ide_highlight_engine_disconnect_buffer (IdeHighlightEngine *self,
 
   gtk_text_buffer_get_bounds (text_buffer, &begin, &end);
 
-  for (iter = self->tags; iter; iter= iter->next)
+  for (iter = self->private_tags; iter; iter = iter->next)
     {
       gtk_text_buffer_remove_tag (text_buffer, iter->data, &begin, &end);
       gtk_text_tag_table_remove (tag_table, iter->data);
     }
+  g_clear_pointer (&self->private_tags, g_slist_free);
 
-  g_slist_free (self->tags);
-  self->tags = NULL;
+  for (iter = self->public_tags; iter; iter = iter->next)
+    {
+      gtk_text_buffer_remove_tag (text_buffer, iter->data, &begin, &end);
+      gtk_text_tag_table_remove (tag_table, iter->data);
+    }
+  g_clear_pointer (&self->public_tags, g_slist_free);
 
   IDE_EXIT;
 }
@@ -857,20 +925,5 @@ GtkTextTag *
 ide_highlight_engine_get_style (IdeHighlightEngine *self,
                                 const gchar        *style_name)
 {
-  GtkTextTagTable *tag_table;
-  GtkTextTag *tag;
-
-  g_return_val_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self), NULL);
-  g_return_val_if_fail (style_name != NULL, NULL);
-
-  tag_table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self->buffer));
-  tag = gtk_text_tag_table_lookup (tag_table, style_name);
-
-  if (tag == NULL)
-    {
-      tag = create_tag_from_style (self, style_name);
-      self->tags = g_slist_prepend (self->tags, tag);
-    }
-
-  return tag;
+  return get_tag_from_style (self, style_name, FALSE);
 }
