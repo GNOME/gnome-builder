@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-06 16:07+0300\n"
-"PO-Revision-Date: 2015-05-06 16:12+0300\n"
+"POT-Creation-Date: 2015-05-15 08:16+0300\n"
+"PO-Revision-Date: 2015-05-15 08:46+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -85,7 +85,7 @@ msgstr "הצגת אפשרויות"
 
 #: ../data/gtk/menus.ui.h:17
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.h:3
-#: ../src/tree/gb-tree.c:1308 ../src/tree/gb-tree.c:1309
+#: ../src/tree/gb-tree.c:1303 ../src/tree/gb-tree.c:1304
 msgid "Show Icons"
 msgstr "הצגת סמלילים"
 
@@ -101,7 +101,7 @@ msgstr "_קיפול כל הצמתים"
 msgid "_Refresh"
 msgstr "_רענון"
 
-#: ../data/gtk/menus.ui.h:21
+#: ../data/gtk/menus.ui.h:21 ../data/ui/gb-greeter-window.ui.h:2
 msgid "_New"
 msgstr "_חדש"
 
@@ -125,19 +125,23 @@ msgstr "עורך קוד מקור"
 msgid "_Open Containing Folder"
 msgstr "_פתיחת תיקייה מכילה"
 
-#: ../data/gtk/menus.ui.h:27 ../data/ui/gb-rename-file-popover.ui.h:2
+#: ../data/gtk/menus.ui.h:27
+msgid "_Open in Terminal"
+msgstr "_פתיחה במסוף"
+
+#: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
 msgid "_Rename"
 msgstr "_שינוי שם"
 
-#: ../data/gtk/menus.ui.h:28
+#: ../data/gtk/menus.ui.h:29
 msgid "Mo_ve to Trash"
 msgstr "ה_עברה לאשפה"
 
-#: ../data/gtk/menus.ui.h:29
+#: ../data/gtk/menus.ui.h:30
 msgid "_Build"
 msgstr "_בנייה"
 
-#: ../data/gtk/menus.ui.h:30
+#: ../data/gtk/menus.ui.h:31
 msgid "_Rebuild"
 msgstr "בנייה מ_חדש"
 
@@ -151,7 +155,7 @@ msgstr "הצגת _שולים ימניים בעמודה:"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:2
 msgid "Trim trailing whitespace when saving document"
-msgstr "להסיר רווחים לבנים בעת שמירת מסמך"
+msgstr "להסיר רווחים לבנים בעת שמירת מסמך."
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:3
 msgid "Insert matching brace, bracket, quotation, and parenthesis."
@@ -172,7 +176,7 @@ msgstr "רוחב _טאב:"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:7
 msgid "Insert _spaces instead of tabs"
-msgstr "הכנסת _רווחים במקום טאבים"
+msgstr "הכנסת _רווחים במקום טאבים."
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:8
 msgid "_Enable automatic indentation"
@@ -200,9 +204,9 @@ msgid "Auto indent"
 msgstr "הזחה אוטומטית"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:6
-#: ../data/ui/gb-preferences-page-editor.ui.h:15
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:12
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:13
-#: ../libide/ide-source-view.c:5156
+#: ../libide/ide-source-view.c:5330
 msgid "Smart Backspace"
 msgstr "מקש Backspace חכם"
 
@@ -254,6 +258,18 @@ msgstr "בניית מיזם"
 msgid "Rebuild Project"
 msgstr "בנייה מחדש של המיזם"
 
+#: ../data/ui/gb-greeter-window.ui.h:1
+msgid "Select a Project"
+msgstr "בחירת מיזם"
+
+#: ../data/ui/gb-greeter-window.ui.h:3 ../src/greeter/gb-greeter-window.c:447
+msgid "Recent Projects"
+msgstr "מיזמים אחרונים"
+
+#: ../data/ui/gb-greeter-window.ui.h:4
+msgid "Other Projects"
+msgstr "מיזמים אחרים"
+
 #: ../data/ui/gb-new-file-popover.ui.h:1
 #: ../data/ui/gb-rename-file-popover.ui.h:1
 #: ../src/project-tree/gb-new-file-popover.c:349
@@ -281,26 +297,29 @@ msgstr "ממיזם קיים במחשב זה"
 msgid "From remote source code repository"
 msgstr "ממאגר קוד מקור מרוחק"
 
-#: ../data/ui/gb-new-project-dialog.ui.h:6 ../libide/ide-language.c:376
-#: ../libide/ide-project-file.c:269 ../libide/ide-project-info.c:286
-#: ../libide/ide-project.c:370 ../libide/ide-service.c:138
-#: ../libide/ide-source-view-mode.c:259
+#: ../data/ui/gb-new-project-dialog.ui.h:6
+#: ../data/ui/gb-preferences-page-git.ui.h:3
+#: ../libide/doap/ide-doap-person.c:168 ../libide/doap/ide-doap.c:462
+#: ../libide/doap/ide-doap.c:463 ../libide/ide-language.c:376
+#: ../libide/ide-project-file.c:269 ../libide/ide-project-info.c:430
+#: ../libide/ide-project.c:400 ../libide/ide-service.c:138
+#: ../libide/ide-source-view-mode.c:250
 msgid "Name"
-msgstr "Name"
+msgstr "שם"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:7
-#: ../libide/git/ide-git-search-index.c:312
+#: ../libide/git/ide-git-search-index.c:317
 #: ../libide/ide-back-forward-item.c:140
 msgid "Location"
-msgstr "Location"
+msgstr "מיקום"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:8
 msgid "GNOME Version"
 msgstr "גרסת GNOME"
 
-#: ../data/ui/gb-new-project-dialog.ui.h:9 ../libide/ide-file.c:476
+#: ../data/ui/gb-new-project-dialog.ui.h:9 ../libide/ide-file.c:534
 #: ../libide/ide-source-snippet.c:974
-#: ../src/editor/gb-editor-settings-widget.c:182
+#: ../src/editor/gb-editor-settings-widget.c:179
 msgid "Language"
 msgstr "שפה"
 
@@ -309,7 +328,6 @@ msgid "Pattern"
 msgstr "תבנית"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:11
-#: ../data/ui/gb-preferences-window.ui.h:5
 msgid "Git"
 msgstr "Git"
 
@@ -323,159 +341,215 @@ msgstr "יש להזין את כתובת מאגר קוד המקור של המיז
 
 #: ../data/ui/gb-new-project-dialog.ui.h:14
 #: ../libide/autotools/ide-autotools-build-task.c:395
-#: ../libide/ide-project-info.c:293
+#: ../libide/ide-project-info.c:437
 #: ../src/project-tree/gb-new-file-popover.c:268
 #: ../src/project-tree/gb-new-file-popover.c:269
 msgid "Directory"
 msgstr "תיקייה"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:15
-#: ../libide/git/ide-git-buffer-change-monitor.c:719
-#: ../libide/git/ide-git-vcs.c:766
+#: ../libide/git/ide-git-buffer-change-monitor.c:718
+#: ../libide/git/ide-git-vcs.c:767
 msgid "Repository"
 msgstr "מאגר"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:1
-msgid "Restore Cursor Position"
-msgstr "שחזור מיקום הסמן"
+#: ../data/ui/gb-preferences-window.ui.h:3
+msgid "Editor"
+msgstr "עורך"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:2
-msgid ""
-"Restore the insertion cursor to the last position when reopening a file."
-msgstr "שחזור סמן ההכנסה למיקום האחרון בעת פתיחת קובץ."
+msgid "Font"
+msgstr "גופן"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:3
-msgid "Suggest Word Completion"
-msgstr "הצעת השלמת מילים"
+msgid "Styling"
+msgstr "סגנון"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:4
-msgid "Suggest completion of words found within the current document."
-msgstr "הצעת השלמה של מילים הנמצאות במסמך הנוכחי."
+msgid "Display Grid Pattern"
+msgstr "הצגת תבנית רשת"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:5
+msgid "Display a grid pattern under the source code."
+msgstr "הצגת רשת תחת קוד המקור."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:6
+msgid "Highlighting"
+msgstr "הדגשה"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:7
 msgid "Display Document Changes"
 msgstr "הצגת שינויים במסמך"
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:6
+#: ../data/ui/gb-preferences-page-editor.ui.h:8
 msgid ""
 "Display whether a line has been added or modified next to the line number."
 msgstr "הצגת סימן לצד מספר השורה המורה אם שורה נוספה או שונתה."
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:7
-msgid "Show Line Numbers"
+#: ../data/ui/gb-preferences-page-editor.ui.h:9
+msgid "Display Line Numbers"
 msgstr "הצגת מספרי שורות"
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:8
-msgid "Display line numbers in the document."
-msgstr "הצגת מספור שורות במסמך."
+#: ../data/ui/gb-preferences-page-editor.ui.h:10
+msgid "Display the line numbers next to each line of the document."
+msgstr "הצגת מספרי השורות לאחר כל שורה במסמך."
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:9
+#: ../data/ui/gb-preferences-page-editor.ui.h:11
 msgid "Highlight Current Line"
 msgstr "הדגשת השורה הנוכחית"
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:10
+#: ../data/ui/gb-preferences-page-editor.ui.h:12
 msgid "Highlight the line containing the cursor."
 msgstr "הדגשת השורה המכילה את הסמן."
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:11
-msgid "Highlight Matching Brackets"
-msgstr "הדגשת הסוגר התואם"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:12
-msgid "Whether or not matching brackets should be highlighted."
-msgstr "אם להדגיש סוגר תואם."
-
 #: ../data/ui/gb-preferences-page-editor.ui.h:13
-msgid "Smart Home End"
-msgstr "מקשי Home ו־End חכמים"
+msgid "Highlight Matching Brackets"
+msgstr "הדגשת סוגריים תואמים"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:14
-msgid "Home moves to first non-space character."
-msgstr "בית (Home) מעביר לתו הראשון שאינו רווח."
+msgid "Whether or not matching brackets should be highlighted."
+msgstr "אם להדגיש סוגריים תואמים."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:15
+msgid "Overview Map"
+msgstr "מפת סקירה"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:16
-msgid ""
-"Backspace will remove extra spaces to keep you aligned with your indentation "
-"size."
-msgstr "‏Backspace ימחק רווחים נוספים על מנת לשמור היישור עם גודל ההזחה שלך."
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:17
-#: ../libide/ide-source-view.c:5113
-msgid "Show Grid Lines"
-msgstr "הצגת רשת בשורות"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:18
-msgid "Display a grid patten in the document."
-msgstr "הצגת רשת במסמך"
-
-#: ../data/ui/gb-preferences-page-editor.ui.h:19
-msgid "Show Overview Map"
+msgid "Display Overview Map"
 msgstr "הצגת מפת סקירה"
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:20
+#: ../data/ui/gb-preferences-page-editor.ui.h:17
 msgid "Display an overview map next to the source code editor."
 msgstr "הצגת מפת סקירה לצד עורך קוד המקור."
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:21
-#: ../src/editor/gb-editor-frame.c:783 ../src/editor/gb-editor-frame.c:784
-msgid "Auto Hide Map"
-msgstr "הסתרת המפה אוטומטית"
+#: ../data/ui/gb-preferences-page-editor.ui.h:18
+msgid "Auto Hide Overview Map"
+msgstr "הסתרה אוטומטית של מפת הסקירה"
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:22
-msgid "Automatically hide the overview map during inactivity."
+#: ../data/ui/gb-preferences-page-editor.ui.h:19
+msgid "Automatically hide the overview map during periods of inactivity."
 msgstr "הסתרה אוטומטית של מפת הסקירה בחוסר פעילות."
 
+#: ../data/ui/gb-preferences-page-editor.ui.h:20
+msgid "Auto Completion"
+msgstr "השלמה אוטומטית"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:21
+msgid "Suggest Word Completion"
+msgstr "הצעת השלמת מילים"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:22
+msgid "Suggest completion of words found within the current document."
+msgstr "הצעת השלמה של מילים הנמצאות במסמך הנוכחי."
+
 #: ../data/ui/gb-preferences-page-editor.ui.h:23
-#: ../libide/ide-source-view.c:5097
+msgid "Cursor Placement"
+msgstr "מיקום הסמן"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:24
+msgid "Restore Cursor Position"
+msgstr "שחזור מיקום הסמן"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:25
+msgid ""
+"Restore the insertion cursor to the last position when reopening a file."
+msgstr "שחזור סמן ההכנסה למיקום האחרון בעת פתיחת קובץ."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:26
+#: ../libide/ide-source-view.c:5271
 msgid "Scroll Offset"
 msgstr "קיזוז גלילה"
 
-#: ../data/ui/gb-preferences-page-editor.ui.h:24
+#: ../data/ui/gb-preferences-page-editor.ui.h:27
 msgid "Minimal number of lines to keep above and below the cursor."
-msgstr "מספר מזערי של שורות להשאיר מעל ומתחת לסמן."
+msgstr "מספר מזערי של שורות להותיר מעל ומתחת לסמן."
 
 #: ../data/ui/gb-preferences-page-experimental.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:7
+msgid "Experimental"
+msgstr "ניסיוני"
+
+#: ../data/ui/gb-preferences-page-experimental.ui.h:2
 msgid "Clang Auto-Completion"
 msgstr "‏Clang השלמה אוטומטית"
 
-#: ../data/ui/gb-preferences-page-experimental.ui.h:2
+#: ../data/ui/gb-preferences-page-experimental.ui.h:3
 #: ../data/gsettings/org.gnome.builder.experimental.gschema.xml.h:2
 msgid "Use Clang for autocompletion in the C and C++ languages."
 msgstr "שימוש ב־Clang עבור השלמה אוטומטית בשפות C ו־C++‎."
 
 #: ../data/ui/gb-preferences-page-git.ui.h:1
-msgid "Author Name"
-msgstr "שם המחבר"
+#: ../data/ui/gb-preferences-window.ui.h:6
+msgid "Version Control"
+msgstr "בקרת גרסות"
 
 #: ../data/ui/gb-preferences-page-git.ui.h:2
-msgid "Author Email"
-msgstr "דוא״ל המחבר"
+msgid "Source Code Attribution"
+msgstr "שיוך קוד מקור"
+
+#: ../data/ui/gb-preferences-page-git.ui.h:4
+#: ../libide/doap/ide-doap-person.c:161
+msgid "Email"
+msgstr "דוא״ל"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:5
+msgid "Keyboard"
+msgstr "מקלדת"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:2
+msgid "Key Binding Emulation"
+msgstr "מעטפת הדמיית מקשים"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:3
 #: ../data/ui/gb-workbench.ui.h:1 ../data/style-schemes/builder.xml.h:1
 #: ../src/main.c:47 ../src/workbench/gb-workbench.c:76
 msgid "Builder"
 msgstr "Builder"
 
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:2
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:4
 msgid "The default keybindings for Builder."
 msgstr "קיצורי מקשים בבררת מחדל עבור Builder."
 
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:3
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:5
 msgid "Emacs Emulation"
 msgstr "מדמה Emacs"
 
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:4
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:6
 msgid "Emulates familiar keybindings from the Emacs text editor."
 msgstr "מדמה קיצורי מקשים מוכרים מעורך הטקסט Emacs."
 
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:5
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:7
 msgid "Vim Emulation"
 msgstr "מדמה Vim"
 
-#: ../data/ui/gb-preferences-page-keybindings.ui.h:6
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:8
 msgid "Emulates familiar keybindings from the Vim text editor."
 msgstr "מדמה קיצורי מקשים מוכרים מעורך הטקסט Vim."
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:9
+msgid "Keyboard Movement"
+msgstr "תנועת מקשים"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:10
+msgid "Smart Home End"
+msgstr "מקשי Home ו־End חכמים"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:11
+msgid "Home moves to first non-space character."
+msgstr "בית (Home) מעביר לתו הראשון שאינו רווח."
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:13
+msgid ""
+"Backspace will remove extra spaces to keep you aligned with your indentation "
+"width."
+msgstr "‏Backspace ימחק רווחים מיותרים על מנת לשמור היישור עם רוחב ההזחה שלך."
+
+#: ../data/ui/gb-preferences-page-language.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:4
+msgid "Programming Languages"
+msgstr "שפות תכנות"
 
 #: ../data/ui/gb-preferences-window.ui.h:1
 msgid "Preferences"
@@ -484,22 +558,6 @@ msgstr "העדפות"
 #: ../data/ui/gb-preferences-window.ui.h:2
 msgid "Search Preferences…"
 msgstr "חיפוש העדפות…"
-
-#: ../data/ui/gb-preferences-window.ui.h:3
-msgid "Editor"
-msgstr "עורך"
-
-#: ../data/ui/gb-preferences-window.ui.h:4
-msgid "Language Settings"
-msgstr "הגדרות שפה"
-
-#: ../data/ui/gb-preferences-window.ui.h:6
-msgid "Keybindings"
-msgstr "קיצורי מקשים"
-
-#: ../data/ui/gb-preferences-window.ui.h:7
-msgid "Experimental"
-msgstr "ניסיוני"
 
 #: ../data/ui/gb-projects-dialog.ui.h:1
 #: ../src/dialogs/gb-projects-dialog.c:257
@@ -671,57 +729,23 @@ msgstr "Project Tree Width"
 msgid "The width in pixels of the project tree."
 msgstr "The width in pixels of the project tree."
 
-#: ../contrib/egg/egg-binding-set.c:265
-msgid "Source"
-msgstr "Source"
-
-#: ../contrib/egg/egg-binding-set.c:266
-msgid "The source GObject."
-msgstr "The source GObject."
-
-#: ../contrib/egg/egg-search-bar.c:286 ../contrib/egg/egg-search-bar.c:287
-msgid "Search Mode Enabled"
-msgstr "Search Mode Enabled"
-
-#: ../contrib/egg/egg-search-bar.c:293 ../contrib/egg/egg-search-bar.c:294
-msgid "Show Close Button"
-msgstr "Show Close Button"
-
-#: ../contrib/egg/egg-search-bar.c:345
-msgid "Search"
-msgstr "Search"
-
-#: ../contrib/egg/egg-signal-group.c:419
-#: ../libide/theatrics/ide-animation.c:860
-#: ../libide/theatrics/ide-box-theatric.c:283
-#: ../libide/theatrics/ide-box-theatric.c:284
-msgid "Target"
-msgstr "Target"
-
-#: ../contrib/egg/egg-signal-group.c:420
-msgid "The target instance for which to connect signals."
-msgstr "The target instance for which to connect signals."
-
-#: ../contrib/egg/egg-signal-group.c:426
-msgid "Target Type"
-msgstr "Target Type"
-
-#: ../contrib/egg/egg-signal-group.c:427
-msgid "The GType of the target property."
-msgstr "The GType of the target property."
-
-#: ../contrib/egg/egg-state-machine.c:335
-msgid "State"
-msgstr "State"
-
-#: ../contrib/egg/egg-state-machine.c:336
-msgid "The current state of the machine."
-msgstr "The current state of the machine."
-
 #: ../contrib/search/trie.c:790
 #, c-format
 msgid "Traversal order %u is not supported on Trie."
 msgstr "Traversal order %u is not supported on Trie."
+
+#: ../contrib/xml/xml-reader.c:180 ../contrib/xml/xml-reader.c:181
+msgid "Encoding"
+msgstr "Encoding"
+
+#: ../contrib/xml/xml-reader.c:187 ../contrib/xml/xml-reader.c:188
+msgid "Uri"
+msgstr "Uri"
+
+#: ../contrib/xml/xml-reader.c:327
+#, c-format
+msgid "Could not parse XML from stream"
+msgstr "Could not parse XML from stream"
 
 #: ../data/style-schemes/builder-dark.xml.h:1
 msgid "Builder Dark"
@@ -735,15 +759,15 @@ msgstr "ערכת צבעים כהה עבור Builder המשתמשת בלוח צב
 msgid "The default color scheme for Builder"
 msgstr "ערכת צבעים בבררת מחדל עבור Builder"
 
-#: ../libide/autotools/ide-autotools-build-system.c:165
+#: ../libide/autotools/ide-autotools-build-system.c:172
 msgid "Failed to locate configure.ac"
 msgstr "Failed to locate configure.ac"
 
-#: ../libide/autotools/ide-autotools-build-system.c:565
+#: ../libide/autotools/ide-autotools-build-system.c:638
 msgid "Tarball Name"
 msgstr "Tarball Name"
 
-#: ../libide/autotools/ide-autotools-build-system.c:566
+#: ../libide/autotools/ide-autotools-build-system.c:639
 msgid "The name of the project tarball."
 msgstr "The name of the project tarball."
 
@@ -752,7 +776,7 @@ msgid "Directory must be on a locally mounted filesystem."
 msgstr "Directory must be on a locally mounted filesystem."
 
 #: ../libide/autotools/ide-autotools-build-task.c:377
-#: ../libide/autotools/ide-autotools-builder.c:330
+#: ../libide/autotools/ide-autotools-builder.c:303
 msgid "Config"
 msgstr "Config"
 
@@ -761,12 +785,12 @@ msgid "The overlay config for the compilation."
 msgstr "The overlay config for the compilation."
 
 #: ../libide/autotools/ide-autotools-build-task.c:386
-#: ../libide/autotools/ide-autotools-builder.c:339
+#: ../libide/autotools/ide-autotools-builder.c:312
 msgid "Device"
 msgstr "Device"
 
 #: ../libide/autotools/ide-autotools-build-task.c:387
-#: ../libide/autotools/ide-autotools-builder.c:340
+#: ../libide/autotools/ide-autotools-builder.c:313
 msgid "The device to build for."
 msgstr "The device to build for."
 
@@ -817,27 +841,27 @@ msgstr "autogen.sh is not executable."
 msgid "autogen.sh failed to create configure (%s)"
 msgstr "autogen.sh failed to create configure (%s)"
 
-#: ../libide/autotools/ide-autotools-builder.c:331
+#: ../libide/autotools/ide-autotools-builder.c:304
 msgid "The configuration for the build."
 msgstr "The configuration for the build."
 
-#: ../libide/autotools/ide-autotools-project-miner.c:307
+#: ../libide/autotools/ide-autotools-project-miner.c:377
 msgid "Root Directory"
 msgstr "Root Directory"
 
-#: ../libide/autotools/ide-autotools-project-miner.c:308
+#: ../libide/autotools/ide-autotools-project-miner.c:378
 msgid "The root directory to scan from."
 msgstr "The root directory to scan from."
 
-#: ../libide/autotools/ide-makecache.c:1053
+#: ../libide/autotools/ide-makecache.c:1061
 msgid "Invalid makefile provided, ignoring."
 msgstr "Invalid makefile provided, ignoring."
 
-#: ../libide/autotools/ide-makecache.c:1126
+#: ../libide/autotools/ide-makecache.c:1301
 msgid "Makefile"
 msgstr "Makefile"
 
-#: ../libide/autotools/ide-makecache.c:1127
+#: ../libide/autotools/ide-makecache.c:1302
 msgid "The root makefile to be cached."
 msgstr "The root makefile to be cached."
 
@@ -850,103 +874,146 @@ msgstr "Format Strings"
 msgid "C"
 msgstr "C"
 
-#: ../libide/c/ide-c-language.c:233
+#: ../libide/c/ide-c-language.c:235
 #, c-format
 msgid "Language id does not match a C language."
 msgstr "Language id does not match a C language."
 
-#: ../libide/clang/ide-clang-completion-item.c:417
-#: ../libide/clang/ide-clang-translation-unit.c:553
+#: ../libide/clang/ide-clang-completion-item.c:413
+#: ../libide/clang/ide-clang-translation-unit.c:564
 msgid "Index"
 msgstr "Index"
 
-#: ../libide/clang/ide-clang-completion-item.c:418
+#: ../libide/clang/ide-clang-completion-item.c:414
 msgid "The index in the result set."
 msgstr "The index in the result set."
 
-#: ../libide/clang/ide-clang-completion-item.c:426
+#: ../libide/clang/ide-clang-completion-item.c:422
 msgid "Results"
 msgstr "Results"
 
-#: ../libide/clang/ide-clang-completion-item.c:427
+#: ../libide/clang/ide-clang-completion-item.c:423
 msgid "The Clang result set."
 msgstr "The Clang result set."
 
-#: ../libide/clang/ide-clang-completion-provider.c:195
+#: ../libide/clang/ide-clang-completion-provider.c:191
 msgid "Clang"
 msgstr "Clang"
 
-#: ../libide/clang/ide-clang-service.c:225
-msgid "Failed to compile translation unit"
-msgstr "אר כשל בהידור יחידת תרגום"
-
-#: ../libide/clang/ide-clang-service.c:299
+#: ../libide/clang/ide-clang-service.c:263
 msgid "Unknown failure"
 msgstr "כשל לא ידוע"
 
-#: ../libide/clang/ide-clang-service.c:303
+#: ../libide/clang/ide-clang-service.c:267
 msgid "Clang crashed"
 msgstr "‏Clang קרס"
 
-#: ../libide/clang/ide-clang-service.c:307
+#: ../libide/clang/ide-clang-service.c:271
 msgid "Invalid arguments"
 msgstr "פרמטרים לא תקפם"
 
-#: ../libide/clang/ide-clang-service.c:311
+#: ../libide/clang/ide-clang-service.c:275
 msgid "AST read error"
 msgstr "AST שגיאת קריאה"
 
-#: ../libide/clang/ide-clang-service.c:323
+#: ../libide/clang/ide-clang-service.c:287
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Failed to create translation unit: %s"
 
-#: ../libide/clang/ide-clang-service.c:495
+#: ../libide/clang/ide-clang-service.c:396
 msgid "File must be saved locally to parse."
 msgstr "File must be saved locally to parse."
 
-#: ../libide/clang/ide-clang-translation-unit.c:546
-#: ../libide/git/ide-git-search-result.c:98 ../libide/ide-buffer.c:993
-#: ../libide/ide-file-settings.c:290 ../libide/ide-file.c:460
-#: ../libide/ide-project-file.c:248 ../libide/ide-project-info.c:300
+#: ../libide/clang/ide-clang-translation-unit.c:557
+#: ../libide/git/ide-git-search-result.c:98 ../libide/ide-buffer.c:1000
+#: ../libide/ide-file-settings.c:290 ../libide/ide-file.c:518
+#: ../libide/ide-project-file.c:248 ../libide/ide-project-info.c:451
 #: ../libide/ide-script.c:156 ../src/project-tree/gb-rename-file-popover.c:308
 #: ../src/project-tree/gb-rename-file-popover.c:309
 msgid "File"
 msgstr "File"
 
-#: ../libide/clang/ide-clang-translation-unit.c:547
+#: ../libide/clang/ide-clang-translation-unit.c:558
 msgid "The file used to build the translation unit."
 msgstr "The file used to build the translation unit."
 
-#: ../libide/clang/ide-clang-translation-unit.c:554
+#: ../libide/clang/ide-clang-translation-unit.c:565
 msgid "The highlight index for the translation unit."
 msgstr "The highlight index for the translation unit."
 
-#: ../libide/clang/ide-clang-translation-unit.c:560
-msgid "Sequence"
-msgstr "Sequence"
+#: ../libide/clang/ide-clang-translation-unit.c:571
+msgid "Native"
+msgstr "Native"
 
-#: ../libide/clang/ide-clang-translation-unit.c:561
-msgid "The sequence number when created."
-msgstr "The sequence number when created."
+#: ../libide/clang/ide-clang-translation-unit.c:572
+msgid "The native translation unit pointer."
+msgstr "The native translation unit pointer."
 
-#: ../libide/clang/ide-clang-translation-unit.c:609
+#: ../libide/clang/ide-clang-translation-unit.c:577
+msgid "Serial"
+msgstr "Serial"
+
+#: ../libide/clang/ide-clang-translation-unit.c:578
+msgid "A sequence number for the translation unit."
+msgstr "A sequence number for the translation unit."
+
+#: ../libide/clang/ide-clang-translation-unit.c:628
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() only works on local files"
 
 #: ../libide/devhelp/ide-devhelp-search-provider.c:123
-#: ../src/devhelp/gb-devhelp-document.c:153
+#: ../src/devhelp/gb-devhelp-document.c:148
 msgid "Documentation"
 msgstr "תיעוד"
 
 #: ../libide/devhelp/ide-devhelp-search-result.c:99
-#: ../src/devhelp/gb-devhelp-document.c:261
+#: ../src/devhelp/gb-devhelp-document.c:256
 msgid "URI"
 msgstr "URI"
 
 #: ../libide/devhelp/ide-devhelp-search-result.c:100
 msgid "The URI to the Devhelp document."
 msgstr "The URI to the Devhelp document."
+
+#: ../libide/doap/ide-doap-person.c:162
+msgid "The email of the person."
+msgstr "The email of the person."
+
+#: ../libide/doap/ide-doap-person.c:169
+msgid "The name of the person."
+msgstr "The name of the person."
+
+#: ../libide/doap/ide-doap.c:420 ../libide/doap/ide-doap.c:421
+msgid "Bug Database"
+msgstr "Bug Database"
+
+#: ../libide/doap/ide-doap.c:427 ../libide/doap/ide-doap.c:428
+msgid "Category"
+msgstr "Category"
+
+#: ../libide/doap/ide-doap.c:434 ../libide/doap/ide-doap.c:435
+#: ../libide/ide-project-info.c:423 ../libide/ide-source-snippet.c:981
+#: ../src/preferences/gb-preferences-switch.c:321
+msgid "Description"
+msgstr "Description"
+
+#: ../libide/doap/ide-doap.c:441 ../libide/doap/ide-doap.c:442
+msgid "Download Page"
+msgstr "Download Page"
+
+#: ../libide/doap/ide-doap.c:448 ../libide/doap/ide-doap.c:449
+msgid "Homepage"
+msgstr "Homepage"
+
+#: ../libide/doap/ide-doap.c:455 ../libide/doap/ide-doap.c:456
+#: ../libide/ide-project-info.c:465 ../libide/ide-project-info.c:466
+msgid "Languages"
+msgstr "Languages"
+
+#: ../libide/doap/ide-doap.c:469 ../libide/doap/ide-doap.c:470
+msgid "Shortdesc"
+msgstr "Shortdesc"
 
 #: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
 msgid "No file was provided."
@@ -960,26 +1027,26 @@ msgstr "Code assistance requires a local file."
 msgid "No language specified"
 msgstr "No language specified"
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:153
+#: ../libide/git/ide-git-buffer-change-monitor.c:167
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Cannot provide diff, no backing file provided."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:550
+#: ../libide/git/ide-git-buffer-change-monitor.c:537
 #, c-format
 msgid "Repository does not have a working directory."
 msgstr "Repository does not have a working directory."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:561
+#: ../libide/git/ide-git-buffer-change-monitor.c:548
 #, c-format
 msgid "File is not under control of git working directory."
 msgstr "File is not under control of git working directory."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:627
+#: ../libide/git/ide-git-buffer-change-monitor.c:614
 #, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "The requested file does not exist within the git index."
 
-#: ../libide/git/ide-git-buffer-change-monitor.c:720
+#: ../libide/git/ide-git-buffer-change-monitor.c:719
 msgid "The repository to use for calculating diffs."
 msgstr "The repository to use for calculating diffs."
 
@@ -991,11 +1058,11 @@ msgstr "Fraction"
 msgid "A fraction containing the operation progress."
 msgstr "A fraction containing the operation progress."
 
-#: ../libide/git/ide-git-search-index.c:313
+#: ../libide/git/ide-git-search-index.c:318
 msgid "The location of the .git index."
 msgstr "The location of the .git index."
 
-#: ../libide/git/ide-git-search-index.c:350
+#: ../libide/git/ide-git-search-index.c:355
 msgid "Location must be set to .git directory."
 msgstr "Location must be set to .git directory."
 
@@ -1011,33 +1078,33 @@ msgstr "להחליף אל"
 msgid "The file to be opened."
 msgstr "The file to be opened."
 
-#: ../libide/git/ide-git-vcs.c:767
+#: ../libide/git/ide-git-vcs.c:768
 msgid "The git repository for the project."
 msgstr "The git repository for the project."
 
-#: ../libide/gjs/ide-gjs-script.cpp:67
+#: ../libide/gjs/ide-gjs-script.cpp:76
 msgid "Attempt to load a GJS script with no filename."
 msgstr "Attempt to load a GJS script with no filename."
 
-#: ../libide/gjs/ide-gjs-script.cpp:94
+#: ../libide/gjs/ide-gjs-script.cpp:103
 msgid "Failed to create JavaScript context."
 msgstr "Failed to create JavaScript context."
 
-#: ../libide/gjs/ide-gjs-script.cpp:119
+#: ../libide/gjs/ide-gjs-script.cpp:128
 msgid "Failed to set IdeContext in JavaScript runtime."
 msgstr "Failed to set IdeContext in JavaScript runtime."
 
-#: ../libide/gjs/ide-gjs-script.cpp:193
+#: ../libide/gjs/ide-gjs-script.cpp:202
 #: ../libide/pygobject/ide-pygobject-script.c:254
 msgid "The filename for the script was not provided."
 msgstr "The filename for the script was not provided."
 
-#: ../libide/gjs/ide-gjs-script.cpp:204
+#: ../libide/gjs/ide-gjs-script.cpp:213
 #: ../libide/pygobject/ide-pygobject-script.c:265
 msgid "The script must be on a local filesystem."
 msgstr "The script must be on a local filesystem."
 
-#: ../libide/gjs/ide-gjs-script.cpp:213
+#: ../libide/gjs/ide-gjs-script.cpp:222
 #, c-format
 msgid "The script \"%s\" is not a JavaScript file."
 msgstr "The script \"%s\" is not a JavaScript file."
@@ -1093,8 +1160,8 @@ msgid "File contained invalid UTF-8"
 msgstr "File contained invalid UTF-8"
 
 #: ../libide/ide-buffer-change-monitor.c:106
-#: ../libide/ide-highlight-engine.c:630 ../libide/ide-source-snippet.c:946
-#: ../src/html/gb-html-document.c:313
+#: ../libide/ide-highlight-engine.c:692 ../libide/ide-source-snippet.c:946
+#: ../src/html/gb-html-document.c:314
 msgid "Buffer"
 msgstr "Buffer"
 
@@ -1102,114 +1169,114 @@ msgstr "Buffer"
 msgid "The IdeBuffer to be monitored."
 msgstr "The IdeBuffer to be monitored."
 
-#: ../libide/ide-buffer-manager.c:569
+#: ../libide/ide-buffer-manager.c:582
 msgid "File too large to be opened."
 msgstr "File too large to be opened."
 
-#: ../libide/ide-buffer-manager.c:1150
+#: ../libide/ide-buffer-manager.c:1164
 msgid "Auto Save"
 msgstr "Auto Save"
 
-#: ../libide/ide-buffer-manager.c:1151
+#: ../libide/ide-buffer-manager.c:1165
 msgid "If the documents should auto save after a configured timeout."
 msgstr "If the documents should auto save after a configured timeout."
 
-#: ../libide/ide-buffer-manager.c:1157
+#: ../libide/ide-buffer-manager.c:1171
 msgid "Auto Save Timeout"
 msgstr "Auto Save Timeout"
 
-#: ../libide/ide-buffer-manager.c:1158
+#: ../libide/ide-buffer-manager.c:1172
 msgid "The number of seconds after modification before auto saving."
 msgstr "The number of seconds after modification before auto saving."
 
-#: ../libide/ide-buffer-manager.c:1166
+#: ../libide/ide-buffer-manager.c:1180
 msgid "Focused Buffer"
 msgstr "Focused Buffer"
 
-#: ../libide/ide-buffer-manager.c:1167
+#: ../libide/ide-buffer-manager.c:1181
 msgid "The currently focused buffer."
 msgstr "The currently focused buffer."
 
-#: ../libide/ide-buffer-manager.c:1310
+#: ../libide/ide-buffer-manager.c:1324
 msgid "Words"
 msgstr "מילים"
 
-#: ../libide/ide-buffer-manager.c:1521
+#: ../libide/ide-buffer-manager.c:1535
 #, c-format
 msgid "unsaved document %u"
 msgstr "מסמך לא נשמר %u"
 
-#: ../libide/ide-buffer-manager.c:1555
+#: ../libide/ide-buffer-manager.c:1569
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Failed to save buffer, ignoring reclamation."
 
-#: ../libide/ide-buffer.c:970
+#: ../libide/ide-buffer.c:977
 msgid "Busy"
 msgstr "Busy"
 
-#: ../libide/ide-buffer.c:971
+#: ../libide/ide-buffer.c:978
 msgid "If the buffer is performing background work."
 msgstr "If the buffer is performing background work."
 
-#: ../libide/ide-buffer.c:977
+#: ../libide/ide-buffer.c:984
 msgid "Changed on Volume"
 msgstr "Changed on Volume"
 
-#: ../libide/ide-buffer.c:978
+#: ../libide/ide-buffer.c:985
 msgid "If the file has changed on disk and the buffer is not in sync."
 msgstr "If the file has changed on disk and the buffer is not in sync."
 
-#: ../libide/ide-buffer.c:984 ../libide/ide-object.c:203
+#: ../libide/ide-buffer.c:991 ../libide/ide-object.c:203
 #: ../libide/ide-source-snippet-chunk.c:314
 #: ../src/search/gb-search-display.c:560 ../src/workbench/gb-workbench.c:471
 msgid "Context"
 msgstr "Context"
 
-#: ../libide/ide-buffer.c:985
+#: ../libide/ide-buffer.c:992
 msgid "The IdeContext for the buffer."
 msgstr "The IdeContext for the buffer."
 
-#: ../libide/ide-buffer.c:994
+#: ../libide/ide-buffer.c:1001
 msgid "The file represented by the buffer."
 msgstr "The file represented by the buffer."
 
-#: ../libide/ide-buffer.c:1000
+#: ../libide/ide-buffer.c:1007
 msgid "Highlight Diagnostics"
 msgstr "Highlight Diagnostics"
 
-#: ../libide/ide-buffer.c:1001
+#: ../libide/ide-buffer.c:1008
 msgid "If diagnostic warnings and errors should be highlighted."
 msgstr "If diagnostic warnings and errors should be highlighted."
 
-#: ../libide/ide-buffer.c:1007 ../src/documents/gb-document.c:206
+#: ../libide/ide-buffer.c:1014 ../src/documents/gb-document.c:204
 msgid "Read Only"
 msgstr "Read Only"
 
-#: ../libide/ide-buffer.c:1008
+#: ../libide/ide-buffer.c:1015
 msgid "If the underlying file is read only."
 msgstr "If the underlying file is read only."
 
-#: ../libide/ide-buffer.c:1014 ../libide/ide-buffer.c:1015
+#: ../libide/ide-buffer.c:1021 ../libide/ide-buffer.c:1022
 msgid "Style Scheme Name"
 msgstr "Style Scheme Name"
 
-#: ../libide/ide-buffer.c:1021 ../libide/ide-search-result.c:234
-#: ../src/documents/gb-document.c:198
-#: ../src/preferences/gb-preferences-page.c:215
+#: ../libide/ide-buffer.c:1028 ../libide/ide-search-result.c:234
+#: ../src/documents/gb-document.c:196
+#: ../src/preferences/gb-preferences-page.c:282
 #: ../src/preferences/gb-preferences-switch.c:314 ../src/views/gb-view.c:279
 #: ../src/workbench/gb-workspace.c:162
 msgid "Title"
 msgstr "Title"
 
-#: ../libide/ide-buffer.c:1022
+#: ../libide/ide-buffer.c:1029
 msgid "The title of the buffer."
 msgstr "The title of the buffer."
 
-#: ../libide/ide-buffer.c:1792
+#: ../libide/ide-buffer.c:1815
 msgid "Failed to resolve symbol"
 msgstr "Failed to resolve symbol"
 
-#: ../libide/ide-buffer.c:1871
+#: ../libide/ide-buffer.c:1894
 msgid "Symbol resolver is not supported."
 msgstr "Symbol resolver is not supported."
 
@@ -1221,7 +1288,7 @@ msgstr "Failed to open stderr stream."
 msgid "Failed to open stdout stream."
 msgstr "Failed to open stdout stream."
 
-#: ../libide/ide-build-system.c:181 ../libide/ide-context.c:673
+#: ../libide/ide-build-system.c:181 ../libide/ide-context.c:698
 msgid "Project File"
 msgstr "Project File"
 
@@ -1243,117 +1310,129 @@ msgstr "%s does not implement build_async()"
 msgid "No implementation of build_async()"
 msgstr "No implementation of build_async()"
 
-#: ../libide/ide-context.c:645 ../libide/ide-source-view.c:5011
-#: ../src/editor/gb-editor-frame.c:790
+#: ../libide/ide-context.c:663 ../libide/ide-source-view.c:5185
+#: ../src/editor/gb-editor-frame.c:804
 msgid "Back Forward List"
 msgstr "Back Forward List"
 
-#: ../libide/ide-context.c:646
+#: ../libide/ide-context.c:664
 msgid "Back/forward navigation history for the context."
 msgstr "Back/forward navigation history for the context."
 
-#: ../libide/ide-context.c:652
+#: ../libide/ide-context.c:670
 msgid "Buffer Manager"
 msgstr "Buffer Manager"
 
-#: ../libide/ide-context.c:653
+#: ../libide/ide-context.c:671
 msgid "The buffer manager for the context."
 msgstr "The buffer manager for the context."
 
-#: ../libide/ide-context.c:659
+#: ../libide/ide-context.c:677
 msgid "Build System"
 msgstr "Build System"
 
-#: ../libide/ide-context.c:660
+#: ../libide/ide-context.c:678
 msgid "The build system used by the context."
 msgstr "The build system used by the context."
 
-#: ../libide/ide-context.c:666
+#: ../libide/ide-context.c:684
 msgid "Device Manager"
 msgstr "Device Manager"
 
-#: ../libide/ide-context.c:667
+#: ../libide/ide-context.c:685
 msgid "The device manager for the context."
 msgstr "The device manager for the context."
 
-#: ../libide/ide-context.c:674
+#: ../libide/ide-context.c:691
+msgid "Project"
+msgstr "Project"
+
+#: ../libide/ide-context.c:692
+msgid "The project for the context."
+msgstr "The project for the context."
+
+#: ../libide/ide-context.c:699
 msgid "The project file for the context."
 msgstr "The project file for the context."
 
-#: ../libide/ide-context.c:682
+#: ../libide/ide-context.c:707
 msgid "Root Build Directory"
 msgstr "Root Build Directory"
 
-#: ../libide/ide-context.c:683
+#: ../libide/ide-context.c:708
 msgid "The root directory to perform builds within."
 msgstr "The root directory to perform builds within."
 
-#: ../libide/ide-context.c:689
+#: ../libide/ide-context.c:714
 msgid "Script Manager"
 msgstr "Script Manager"
 
-#: ../libide/ide-context.c:690
+#: ../libide/ide-context.c:715
 msgid "The script manager for the context."
 msgstr "The script manager for the context."
 
-#: ../libide/ide-context.c:696
+#: ../libide/ide-context.c:721
 msgid "Search Engine"
 msgstr "Search Engine"
 
-#: ../libide/ide-context.c:697
+#: ../libide/ide-context.c:722
 msgid "The search engine for the context."
 msgstr "The search engine for the context."
 
-#: ../libide/ide-context.c:703
+#: ../libide/ide-context.c:728
 msgid "Snippets Manager"
 msgstr "Snippets Manager"
 
-#: ../libide/ide-context.c:704
+#: ../libide/ide-context.c:729
 msgid "The snippets manager for the context."
 msgstr "The snippets manager for the context."
 
-#: ../libide/ide-context.c:710
+#: ../libide/ide-context.c:735
 msgid "Unsaved Files"
 msgstr "Unsaved Files"
 
-#: ../libide/ide-context.c:711
+#: ../libide/ide-context.c:736
 msgid "The unsaved files in the context."
 msgstr "The unsaved files in the context."
 
-#: ../libide/ide-context.c:717
+#: ../libide/ide-context.c:742
 msgid "VCS"
 msgstr "VCS"
 
-#: ../libide/ide-context.c:718
+#: ../libide/ide-context.c:743
 msgid "The VCS for the context."
 msgstr "The VCS for the context."
 
-#: ../libide/ide-context.c:1181
+#: ../libide/ide-context.c:1231
 #, c-format
 msgid "\"%s\" is not a service, ignoring extension point."
 msgstr "\"%s\" is not a service, ignoring extension point."
 
-#: ../libide/ide-context.c:1190
+#: ../libide/ide-context.c:1240
 #, c-format
 msgid "Failed to create service of type \"%s\"."
 msgstr "Failed to create service of type \"%s\"."
 
-#: ../libide/ide-context.c:1195
+#: ../libide/ide-context.c:1245
 #, c-format
 msgid "Service of type \"%s\" registered."
 msgstr "Service of type \"%s\" registered."
 
-#: ../libide/ide-context.c:1237
+#: ../libide/ide-context.c:1287
 #, c-format
 msgid "Missing extension point for %s"
 msgstr "Missing extension point for %s"
 
-#: ../libide/ide-context.c:1257
+#: ../libide/ide-context.c:1307
 #, c-format
 msgid "%s is not an IdeSearchProvider."
 msgstr "%s is not an IdeSearchProvider."
 
-#: ../libide/ide-context.c:1672
+#: ../libide/ide-context.c:1717
+msgid "An unload request is already pending"
+msgstr "An unload request is already pending"
+
+#: ../libide/ide-context.c:1832
 msgid "Context has already been restored."
 msgstr "Context has already been restored."
 
@@ -1384,6 +1463,7 @@ msgid "The display name of the device."
 msgstr "The display name of the device."
 
 #: ../libide/ide-device.c:241 ../libide/ide-language.c:360
+#: ../libide/ide-project.c:393
 msgid "ID"
 msgstr "ID"
 
@@ -1407,54 +1487,62 @@ msgstr "The IdeFile the settings represent."
 msgid "If the file settings implementations have settled."
 msgstr "If the file settings implementations have settled."
 
-#: ../libide/ide-file.c:176
+#: ../libide/ide-file.c:177
 #, c-format
 msgid "Type \"%s\" is not an IdeLanguage."
 msgstr "Type \"%s\" is not an IdeLanguage."
 
-#: ../libide/ide-file.c:461
+#: ../libide/ide-file.c:519
 msgid "The path to the underlying file."
 msgstr "The path to the underlying file."
 
-#: ../libide/ide-file.c:469
+#: ../libide/ide-file.c:527
 msgid "Is Temporary"
 msgstr "Is Temporary"
 
-#: ../libide/ide-file.c:470
+#: ../libide/ide-file.c:528
 msgid "If the file represents a temporary file."
 msgstr "If the file represents a temporary file."
 
-#: ../libide/ide-file.c:477
+#: ../libide/ide-file.c:535
 msgid "The file language."
 msgstr "The file language."
 
-#: ../libide/ide-file.c:483 ../libide/ide-project-file.c:276
+#: ../libide/ide-file.c:541 ../libide/ide-project-file.c:276
 msgid "Path"
 msgstr "Path"
 
-#: ../libide/ide-file.c:484
+#: ../libide/ide-file.c:542
 msgid "The path within the project."
 msgstr "The path within the project."
 
-#: ../libide/ide-file.c:490
+#: ../libide/ide-file.c:548
 msgid "Temporary ID"
 msgstr "Temporary ID"
 
-#: ../libide/ide-file.c:491
+#: ../libide/ide-file.c:549
 msgid "A unique identifier for temporary files."
 msgstr "A unique identifier for temporary files."
 
-#: ../libide/ide-highlight-engine.c:631
+#: ../libide/ide-highlight-engine.c:693
 msgid "The buffer to highlight."
 msgstr "The buffer to highlight."
 
-#: ../libide/ide-highlight-engine.c:637 ../libide/ide-language.c:353
+#: ../libide/ide-highlight-engine.c:699 ../libide/ide-language.c:353
 msgid "Highlighter"
 msgstr "Highlighter"
 
-#: ../libide/ide-highlight-engine.c:638
+#: ../libide/ide-highlight-engine.c:700
 msgid "The highlighter to use for type information."
 msgstr "The highlighter to use for type information."
+
+#: ../libide/ide-highlighter.c:98
+msgid "Highlight engine"
+msgstr "Highlight engine"
+
+#: ../libide/ide-highlighter.c:99
+msgid "The highlight engine of this highlighter."
+msgstr "The highlight engine of this highlighter."
 
 #: ../libide/ide-language.c:346
 msgid "Diagnostician"
@@ -1558,31 +1646,47 @@ msgstr "The short name of the file."
 msgid "The path for the file within the project tree."
 msgstr "The path for the file within the project tree."
 
-#: ../libide/ide-project-info.c:287
+#: ../libide/ide-project-info.c:424
+msgid "The project description"
+msgstr "The project description"
+
+#: ../libide/ide-project-info.c:431
 msgid "The project name"
 msgstr "The project name"
 
-#: ../libide/ide-project-info.c:294
+#: ../libide/ide-project-info.c:438
 msgid "The project directory."
 msgstr "The project directory."
 
-#: ../libide/ide-project-info.c:301
+#: ../libide/ide-project-info.c:444
+msgid "Doap"
+msgstr "Doap"
+
+#: ../libide/ide-project-info.c:445
+msgid "A DOAP describing the project."
+msgstr "A DOAP describing the project."
+
+#: ../libide/ide-project-info.c:452
 msgid "The toplevel project file"
 msgstr "The toplevel project file"
 
-#: ../libide/ide-project-info.c:307 ../libide/ide-project-info.c:308
+#: ../libide/ide-project-info.c:458 ../libide/ide-project-info.c:459
+msgid "Is Recent"
+msgstr "Is Recent"
+
+#: ../libide/ide-project-info.c:472 ../libide/ide-project-info.c:473
 msgid "Last Modified At"
 msgstr "Last Modified At"
 
-#: ../libide/ide-project-info.c:314 ../src/commands/gb-command-provider.c:334
+#: ../libide/ide-project-info.c:479 ../src/commands/gb-command-provider.c:338
 msgid "Priority"
 msgstr "Priority"
 
-#: ../libide/ide-project-info.c:315
+#: ../libide/ide-project-info.c:480
 msgid "The priority of the project info type."
 msgstr "The priority of the project info type."
 
-#: ../libide/ide-project-item.c:201 ../src/tree/gb-tree-node.c:626
+#: ../libide/ide-project-item.c:201 ../src/tree/gb-tree-node.c:628
 msgid "Parent"
 msgstr "Parent"
 
@@ -1590,31 +1694,35 @@ msgstr "Parent"
 msgid "The parent project item, if not the root."
 msgstr "The parent project item, if not the root."
 
-#: ../libide/ide-project.c:371
+#: ../libide/ide-project.c:394
+msgid "The unique project identifier."
+msgstr "The unique project identifier."
+
+#: ../libide/ide-project.c:401
 msgid "The name of the project."
 msgstr "The name of the project."
 
-#: ../libide/ide-project.c:377 ../src/tree/gb-tree.c:1294
+#: ../libide/ide-project.c:407 ../src/tree/gb-tree.c:1289
 msgid "Root"
 msgstr "Root"
 
-#: ../libide/ide-project.c:378
+#: ../libide/ide-project.c:408
 msgid "The root object for the project."
 msgstr "The root object for the project."
 
-#: ../libide/ide-project.c:439
+#: ../libide/ide-project.c:469
 msgid "Destination file must be within the project tree."
 msgstr "Destination file must be within the project tree."
 
-#: ../libide/ide-project.c:450
+#: ../libide/ide-project.c:480
 msgid "Source file must be within the project tree."
 msgstr "Source file must be within the project tree."
 
-#: ../libide/ide-project.c:617
+#: ../libide/ide-project.c:647
 msgid "File must be within the project tree."
 msgstr "File must be within the project tree."
 
-#: ../libide/ide-recent-projects.c:329
+#: ../libide/ide-recent-projects.c:359
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() may only be executed once"
@@ -1668,35 +1776,35 @@ msgstr "Running"
 msgid "If the service is running."
 msgstr "If the service is running."
 
-#: ../libide/ide-settings.c:264
-msgid "Is Global"
-msgstr "Is Global"
+#: ../libide/ide-settings.c:283
+msgid "Ignore Project Settings"
+msgstr "Ignore Project Settings"
 
-#: ../libide/ide-settings.c:265
+#: ../libide/ide-settings.c:284
 msgid "If project settings should be ignored."
 msgstr "If project settings should be ignored."
 
-#: ../libide/ide-settings.c:271 ../libide/ide-settings.c:272
+#: ../libide/ide-settings.c:290 ../libide/ide-settings.c:291
 msgid "Relative Path"
 msgstr "Relative Path"
 
-#: ../libide/ide-settings.c:278 ../libide/ide-settings.c:279
-msgid "Schema Id"
-msgstr "Schema Id"
+#: ../libide/ide-settings.c:297 ../libide/ide-settings.c:298
+msgid "Schema ID"
+msgstr "Schema ID"
 
-#: ../libide/ide-source-map.c:902 ../libide/ide-source-view-capture.c:241
+#: ../libide/ide-source-map.c:894 ../libide/ide-source-view-capture.c:241
 msgid "View"
 msgstr "View"
 
-#: ../libide/ide-source-map.c:903
+#: ../libide/ide-source-map.c:895
 msgid "The view this widget is mapping."
 msgstr "The view this widget is mapping."
 
-#: ../libide/ide-source-map.c:909 ../libide/ide-source-view.c:5034
+#: ../libide/ide-source-map.c:901 ../libide/ide-source-view.c:5208
 msgid "Font Description"
 msgstr "Font Description"
 
-#: ../libide/ide-source-map.c:910
+#: ../libide/ide-source-map.c:902
 msgid "The Pango font description to use."
 msgstr "The Pango font description to use."
 
@@ -1720,7 +1828,7 @@ msgstr "Tab Stop"
 msgid "The tab stop for the chunk."
 msgstr "The tab stop for the chunk."
 
-#: ../libide/ide-source-snippet-chunk.c:337 ../src/tree/gb-tree-node.c:650
+#: ../libide/ide-source-snippet-chunk.c:337 ../src/tree/gb-tree-node.c:652
 msgid "Text"
 msgstr "Text"
 
@@ -1736,33 +1844,33 @@ msgstr "Text Set"
 msgid "If the text property has been manually set."
 msgstr "If the text property has been manually set."
 
-#: ../libide/ide-source-snippet-completion-item.c:134
+#: ../libide/ide-source-snippet-completion-item.c:132
 msgid "Snippet"
 msgstr "Snippet"
 
-#: ../libide/ide-source-snippet-completion-item.c:135
+#: ../libide/ide-source-snippet-completion-item.c:133
 msgid "The snippet to insert."
 msgstr "The snippet to insert."
 
-#: ../libide/ide-source-snippet-completion-provider.c:168
-#: ../src/commands/gb-command-vim.c:189
+#: ../libide/ide-source-snippet-completion-provider.c:167
+#: ../src/commands/gb-command-vim.c:191
 msgid "Source View"
 msgstr "Source View"
 
-#: ../libide/ide-source-snippet-completion-provider.c:169
+#: ../libide/ide-source-snippet-completion-provider.c:168
 msgid "The source view to insert snippet into."
 msgstr "The source view to insert snippet into."
 
-#: ../libide/ide-source-snippet-completion-provider.c:175
-#: ../libide/ide-source-snippet-completion-provider.c:260
+#: ../libide/ide-source-snippet-completion-provider.c:174
+#: ../libide/ide-source-snippet-completion-provider.c:255
 msgid "Snippets"
 msgstr "Snippets"
 
-#: ../libide/ide-source-snippet-completion-provider.c:176
+#: ../libide/ide-source-snippet-completion-provider.c:175
 msgid "The snippets to complete with this provider."
 msgstr "The snippets to complete with this provider."
 
-#: ../libide/ide-source-snippet-parser.c:502
+#: ../libide/ide-source-snippet-parser.c:493
 #, c-format
 msgid "Invalid snippet at line %d: %s"
 msgstr "Invalid snippet at line %d: %s"
@@ -1803,11 +1911,6 @@ msgstr "The trigger for the snippet."
 msgid "The language for the snippet."
 msgstr "The language for the snippet."
 
-#: ../libide/ide-source-snippet.c:981
-#: ../src/preferences/gb-preferences-switch.c:321
-msgid "Description"
-msgstr "Description"
-
 #: ../libide/ide-source-snippet.c:982
 msgid "The description for the snippet."
 msgstr "The description for the snippet."
@@ -1830,174 +1933,178 @@ msgstr "Failed to load file: %s: %s"
 msgid "The source view."
 msgstr "The source view."
 
-#: ../libide/ide-source-view-mode.c:260
+#: ../libide/ide-source-view-mode.c:251
 msgid "The name of the mode."
 msgstr "The name of the mode."
 
-#: ../libide/ide-source-view.c:4501
+#: ../libide/ide-source-view.c:4583
 #, c-format
 msgid "Insert \"%s\""
 msgstr "הכנסת „%s”"
 
-#: ../libide/ide-source-view.c:4503
+#: ../libide/ide-source-view.c:4585
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "החלפת „%s” עם „%s”"
 
-#: ../libide/ide-source-view.c:4608
+#: ../libide/ide-source-view.c:4690
 msgid "Apply Fix-It"
 msgstr "החלת לתקן את זה (Fix-It)"
 
-#: ../libide/ide-source-view.c:4648
+#: ../libide/ide-source-view.c:4730
 msgid "Goto Definition"
 msgstr "מעבר להגדרה"
 
-#: ../libide/ide-source-view.c:5012
+#: ../libide/ide-source-view.c:5186
 msgid "The back-forward list to track jumps."
 msgstr "The back-forward list to track jumps."
 
-#: ../libide/ide-source-view.c:5018
+#: ../libide/ide-source-view.c:5192
 msgid "Count"
 msgstr "Count"
 
-#: ../libide/ide-source-view.c:5019
+#: ../libide/ide-source-view.c:5193
 msgid "The count for movements."
 msgstr "The count for movements."
 
-#: ../libide/ide-source-view.c:5027
+#: ../libide/ide-source-view.c:5201
 msgid "File Settings"
 msgstr "File Settings"
 
-#: ../libide/ide-source-view.c:5028
+#: ../libide/ide-source-view.c:5202
 msgid "The file settings that have been loaded for the file."
 msgstr "The file settings that have been loaded for the file."
 
-#: ../libide/ide-source-view.c:5035
+#: ../libide/ide-source-view.c:5209
 msgid "The Pango font description to use for rendering source."
 msgstr "The Pango font description to use for rendering source."
 
-#: ../libide/ide-source-view.c:5041
+#: ../libide/ide-source-view.c:5215
 msgid "Enable Word Completion"
 msgstr "Enable Word Completion"
 
-#: ../libide/ide-source-view.c:5042
+#: ../libide/ide-source-view.c:5216
 msgid "If words from all buffers can be used to autocomplete."
 msgstr "If words from all buffers can be used to autocomplete."
 
-#: ../libide/ide-source-view.c:5048
+#: ../libide/ide-source-view.c:5222
 msgid "Font Name"
 msgstr "Font Name"
 
-#: ../libide/ide-source-view.c:5049
+#: ../libide/ide-source-view.c:5223
 msgid "The Pango font name to use for rendering source."
 msgstr "The Pango font name to use for rendering source."
 
-#: ../libide/ide-source-view.c:5059 ../libide/ide-source-view.c:5060
+#: ../libide/ide-source-view.c:5233 ../libide/ide-source-view.c:5234
 msgid "Indent Style"
 msgstr "Indent Style"
 
-#: ../libide/ide-source-view.c:5067
+#: ../libide/ide-source-view.c:5241
 msgid "Insert Matching Brace"
 msgstr "Insert Matching Brace"
 
-#: ../libide/ide-source-view.c:5068
+#: ../libide/ide-source-view.c:5242
 msgid "Insert a matching brace/bracket/quotation/parenthesis."
 msgstr "Insert a matching brace/bracket/quotation/parenthesis."
 
-#: ../libide/ide-source-view.c:5076
+#: ../libide/ide-source-view.c:5250
 msgid "Mode Display Name"
 msgstr "Mode Display Name"
 
-#: ../libide/ide-source-view.c:5077
+#: ../libide/ide-source-view.c:5251
 msgid "The display name of the keybinding mode."
 msgstr "The display name of the keybinding mode."
 
-#: ../libide/ide-source-view.c:5083
+#: ../libide/ide-source-view.c:5257
 msgid "Overwrite Braces"
 msgstr "Overwrite Braces"
 
-#: ../libide/ide-source-view.c:5084
+#: ../libide/ide-source-view.c:5258
 msgid "Overwrite a matching brace/bracket/quotation/parenthesis."
 msgstr "Overwrite a matching brace/bracket/quotation/parenthesis."
 
-#: ../libide/ide-source-view.c:5090
+#: ../libide/ide-source-view.c:5264
 msgid "Rubberband Search"
 msgstr "Rubberband Search"
 
-#: ../libide/ide-source-view.c:5091
+#: ../libide/ide-source-view.c:5265
 msgid "Auto scroll to next search result without moving insertion caret."
 msgstr "Auto scroll to next search result without moving insertion caret."
 
-#: ../libide/ide-source-view.c:5098
+#: ../libide/ide-source-view.c:5272
 msgid "The number of lines between the insertion cursor and screen boundary."
 msgstr "The number of lines between the insertion cursor and screen boundary."
 
-#: ../libide/ide-source-view.c:5106
+#: ../libide/ide-source-view.c:5280
 msgid "Search Context"
 msgstr "Search Context"
 
-#: ../libide/ide-source-view.c:5107
+#: ../libide/ide-source-view.c:5281
 msgid "The search context for the view."
 msgstr "The search context for the view."
 
-#: ../libide/ide-source-view.c:5114
+#: ../libide/ide-source-view.c:5287
+msgid "Show Grid Lines"
+msgstr "הצגת רשת בשורות"
+
+#: ../libide/ide-source-view.c:5288
 msgid "If the background grid should be shown."
 msgstr "If the background grid should be shown."
 
-#: ../libide/ide-source-view.c:5120
+#: ../libide/ide-source-view.c:5294
 msgid "Show Line Changes"
 msgstr "Show Line Changes"
 
-#: ../libide/ide-source-view.c:5121
+#: ../libide/ide-source-view.c:5295
 msgid "If line changes should be shown in the left gutter."
 msgstr "If line changes should be shown in the left gutter."
 
-#: ../libide/ide-source-view.c:5135
+#: ../libide/ide-source-view.c:5309
 msgid "Show Line Diagnostics"
 msgstr "Show Line Diagnostics"
 
-#: ../libide/ide-source-view.c:5136
+#: ../libide/ide-source-view.c:5310
 msgid "If line changes diagnostics should be shown in the left gutter."
 msgstr "If line changes diagnostics should be shown in the left gutter."
 
-#: ../libide/ide-source-view.c:5142
+#: ../libide/ide-source-view.c:5316
 msgid "Show Search Bubbles"
 msgstr "Show Search Bubbles"
 
-#: ../libide/ide-source-view.c:5143
+#: ../libide/ide-source-view.c:5317
 msgid "If search bubbles should be rendered."
 msgstr "If search bubbles should be rendered."
 
-#: ../libide/ide-source-view.c:5149
+#: ../libide/ide-source-view.c:5323
 msgid "Show Search Shadow"
 msgstr "Show Search Shadow"
 
-#: ../libide/ide-source-view.c:5150
+#: ../libide/ide-source-view.c:5324
 msgid "If the shadow should be drawn when performing searches."
 msgstr "If the shadow should be drawn when performing searches."
 
-#: ../libide/ide-source-view.c:5157
+#: ../libide/ide-source-view.c:5331
 msgid "If smart Backspace should be used."
 msgstr "If smart Backspace should be used."
 
-#: ../libide/ide-source-view.c:5163
+#: ../libide/ide-source-view.c:5337
 msgid "Snippet Completion"
 msgstr "Snippet Completion"
 
-#: ../libide/ide-source-view.c:5164
+#: ../libide/ide-source-view.c:5338
 msgid "If snippet expansion should be enabled via the completion window."
 msgstr "If snippet expansion should be enabled via the completion window."
 
-#: ../libide/ide.c:77
+#: ../libide/ide.c:79
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr "You must call %s() before using libide."
 
-#: ../libide/ide.c:198
+#: ../libide/ide.c:206
 msgid "Builder requires libgit2-glib with threading support."
 msgstr "Builder requires libgit2-glib with threading support."
 
-#: ../libide/ide.c:204
+#: ../libide/ide.c:212
 msgid "Builder requires libgit2-glib with SSH support."
 msgstr "Builder requires libgit2-glib with SSH support."
 
@@ -2023,87 +2130,93 @@ msgstr "The script \"%s\" is not a PyGObject file."
 msgid "\"%s\" is not a directory."
 msgstr "\"%s\" is not a directory."
 
-#: ../libide/theatrics/ide-animation.c:681
+#: ../libide/theatrics/ide-animation.c:655
 #, c-format
 msgid "Cannot locate property %s in class %s"
 msgstr "Cannot locate property %s in class %s"
 
-#: ../libide/theatrics/ide-animation.c:817
+#: ../libide/theatrics/ide-animation.c:790
 msgid "Duration"
 msgstr "Duration"
 
-#: ../libide/theatrics/ide-animation.c:818
+#: ../libide/theatrics/ide-animation.c:791
 msgid "The duration of the animation"
 msgstr "The duration of the animation"
 
-#: ../libide/theatrics/ide-animation.c:828
+#: ../libide/theatrics/ide-animation.c:801
 msgid "Frame Clock"
 msgstr "Frame Clock"
 
-#: ../libide/theatrics/ide-animation.c:829
+#: ../libide/theatrics/ide-animation.c:802
 msgid "An optional frame-clock to synchronize with."
 msgstr "An optional frame-clock to synchronize with."
 
-#: ../libide/theatrics/ide-animation.c:844
+#: ../libide/theatrics/ide-animation.c:817
 #: ../src/keybindings/gb-keybindings.c:265
 msgid "Mode"
 msgstr "Mode"
 
-#: ../libide/theatrics/ide-animation.c:845
+#: ../libide/theatrics/ide-animation.c:818
 msgid "The animation mode"
 msgstr "The animation mode"
 
-#: ../libide/theatrics/ide-animation.c:861
+#: ../libide/theatrics/ide-animation.c:833
+#: ../libide/theatrics/ide-box-theatric.c:281
+#: ../libide/theatrics/ide-box-theatric.c:282
+msgid "Target"
+msgstr "Target"
+
+#: ../libide/theatrics/ide-animation.c:834
 msgid "The target of the animation"
 msgstr "The target of the animation"
 
-#: ../libide/theatrics/ide-animation.c:1017
-#: ../libide/theatrics/ide-animation.c:1023
+#: ../libide/theatrics/ide-animation.c:984
+#: ../libide/theatrics/ide-animation.c:990
 #, c-format
 msgid "Failed to find property %s in %s"
 msgstr "Failed to find property %s in %s"
 
-#: ../libide/theatrics/ide-animation.c:1031
+#: ../libide/theatrics/ide-animation.c:998
 #, c-format
 msgid "Failed to find property %s in %s or parent %s"
 msgstr "Failed to find property %s in %s or parent %s"
 
-#: ../libide/theatrics/ide-animation.c:1041
+#: ../libide/theatrics/ide-animation.c:1008
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Failed to retrieve va_list value: %s"
 
-#: ../libide/theatrics/ide-box-theatric.c:258
-#: ../libide/theatrics/ide-box-theatric.c:259
+#: ../libide/theatrics/ide-box-theatric.c:256
+#: ../libide/theatrics/ide-box-theatric.c:257
 msgid "Alpha"
 msgstr "Alpha"
 
-#: ../libide/theatrics/ide-box-theatric.c:267
-#: ../libide/theatrics/ide-box-theatric.c:268
+#: ../libide/theatrics/ide-box-theatric.c:265
+#: ../libide/theatrics/ide-box-theatric.c:266
 msgid "background"
 msgstr "background"
 
-#: ../libide/theatrics/ide-box-theatric.c:274
-#: ../libide/theatrics/ide-box-theatric.c:275
+#: ../libide/theatrics/ide-box-theatric.c:272
+#: ../libide/theatrics/ide-box-theatric.c:273
 msgid "height"
 msgstr "height"
 
-#: ../libide/theatrics/ide-box-theatric.c:292
-#: ../libide/theatrics/ide-box-theatric.c:293
+#: ../libide/theatrics/ide-box-theatric.c:290
+#: ../libide/theatrics/ide-box-theatric.c:291
 msgid "width"
 msgstr "width"
 
-#: ../libide/theatrics/ide-box-theatric.c:301
-#: ../libide/theatrics/ide-box-theatric.c:302
+#: ../libide/theatrics/ide-box-theatric.c:299
+#: ../libide/theatrics/ide-box-theatric.c:300
 msgid "x"
 msgstr "x"
 
-#: ../libide/theatrics/ide-box-theatric.c:310
-#: ../libide/theatrics/ide-box-theatric.c:311
+#: ../libide/theatrics/ide-box-theatric.c:308
+#: ../libide/theatrics/ide-box-theatric.c:309
 msgid "y"
 msgstr "y"
 
-#: ../src/app/gb-application-actions.c:89
+#: ../src/app/gb-application-actions.c:90
 #, c-format
 msgid ""
 "The support log file has been written to '%s'. Please provide this file as "
@@ -2112,45 +2225,45 @@ msgstr ""
 "קובץ יומן התמיכה נכתב אל '%s'. נא לספק קובץ זה כנספח בדיווח הבאג שלך או "
 "בבקשת תמיכה."
 
-#: ../src/app/gb-application-actions.c:155
+#: ../src/app/gb-application-actions.c:156
 msgid "An IDE for GNOME"
 msgstr "סביבת פיתוח משולבת עבור GNOME"
 
-#: ../src/app/gb-application-actions.c:160
+#: ../src/app/gb-application-actions.c:161
 msgid "GNOME Builder"
 msgstr "GNOME Builder"
 
-#: ../src/app/gb-application-actions.c:162
+#: ../src/app/gb-application-actions.c:163
 msgid "translator-credits"
 msgstr "יוסף אור בוצ׳קו <yoseforb@gnome.org>"
 
-#: ../src/app/gb-application-actions.c:165
+#: ../src/app/gb-application-actions.c:166
 msgid "Learn more about GNOME Builder"
 msgstr "ללמוד עוד על GNOME Builder"
 
-#: ../src/app/gb-application-actions.c:168
+#: ../src/app/gb-application-actions.c:169
 msgid "Funded By"
 msgstr "מומן על ידי"
 
-#: ../src/app/gb-application.c:560
+#: ../src/app/gb-application.c:571
 msgid "Run Builder in standalone mode"
 msgstr "Run Builder in standalone mode"
 
-#: ../src/app/gb-application.c:566
+#: ../src/app/gb-application.c:577
 msgid "Show the application's version"
 msgstr "Show the application's version"
 
-#: ../src/app/gb-application.c:572
+#: ../src/app/gb-application.c:583
 msgid "Increase verbosity. May be specified multiple times."
 msgstr "Increase verbosity. May be specified multiple times."
 
-#: ../src/commands/gb-command-bar-item.c:175
+#: ../src/commands/gb-command-bar-item.c:177
 #: ../src/search/gb-search-display-row.c:159
 #: ../src/search/gb-search-display-row.c:160
 msgid "Result"
 msgstr "Result"
 
-#: ../src/commands/gb-command-bar-item.c:176
+#: ../src/commands/gb-command-bar-item.c:178
 msgid "The result to be visualized in the item."
 msgstr "The result to be visualized in the item."
 
@@ -2163,107 +2276,107 @@ msgstr "Command not found: %s"
 msgid "Use the entry below to execute a command"
 msgstr "Use the entry below to execute a command"
 
-#: ../src/commands/gb-command-gaction.c:186
+#: ../src/commands/gb-command-gaction.c:187
 msgid "Action Group"
 msgstr "Action Group"
 
-#: ../src/commands/gb-command-gaction.c:187
+#: ../src/commands/gb-command-gaction.c:188
 msgid "The GActionGroup containing the action."
 msgstr "The GActionGroup containing the action."
 
-#: ../src/commands/gb-command-gaction.c:193
+#: ../src/commands/gb-command-gaction.c:194
 msgid "Action Name"
 msgstr "Action Name"
 
-#: ../src/commands/gb-command-gaction.c:194
+#: ../src/commands/gb-command-gaction.c:195
 msgid "The name of the action to execute."
 msgstr "The name of the action to execute."
 
-#: ../src/commands/gb-command-gaction.c:200
+#: ../src/commands/gb-command-gaction.c:201
 msgid "Parameters"
 msgstr "Parameters"
 
-#: ../src/commands/gb-command-gaction.c:201
+#: ../src/commands/gb-command-gaction.c:202
 msgid "The parameters for the action."
 msgstr "The parameters for the action."
 
-#: ../src/commands/gb-command-provider.c:315 ../src/views/gb-view-stack.c:500
+#: ../src/commands/gb-command-provider.c:319 ../src/views/gb-view-stack.c:500
 msgid "Active View"
 msgstr "Active View"
 
-#: ../src/commands/gb-command-provider.c:316
+#: ../src/commands/gb-command-provider.c:320
 msgid "The last focused GbView widget."
 msgstr "The last focused GbView widget."
 
-#: ../src/commands/gb-command-provider.c:335
+#: ../src/commands/gb-command-provider.c:339
 msgid "The priority of the command provider."
 msgstr "The priority of the command provider."
 
-#: ../src/commands/gb-command-provider.c:350
+#: ../src/commands/gb-command-provider.c:354
 msgid "Workbench"
 msgstr "Workbench"
 
-#: ../src/commands/gb-command-provider.c:351
+#: ../src/commands/gb-command-provider.c:355
 msgid "The target workbench."
 msgstr "The target workbench."
 
-#: ../src/commands/gb-command-result.c:224
-#: ../src/commands/gb-command-vim.c:181
+#: ../src/commands/gb-command-result.c:226
+#: ../src/commands/gb-command-vim.c:183
 msgid "Command Text"
 msgstr "Command Text"
 
-#: ../src/commands/gb-command-result.c:225
+#: ../src/commands/gb-command-result.c:227
 msgid "The command text if any."
 msgstr "The command text if any."
 
-#: ../src/commands/gb-command-result.c:232
+#: ../src/commands/gb-command-result.c:234
 msgid "Is Error"
 msgstr "Is Error"
 
-#: ../src/commands/gb-command-result.c:233
+#: ../src/commands/gb-command-result.c:235
 msgid "If the result is an error."
 msgstr "If the result is an error."
 
-#: ../src/commands/gb-command-result.c:240
+#: ../src/commands/gb-command-result.c:242
 msgid "Is Running"
 msgstr "Is Running"
 
-#: ../src/commands/gb-command-result.c:241
+#: ../src/commands/gb-command-result.c:243
 msgid "If the command is still running."
 msgstr "If the command is still running."
 
-#: ../src/commands/gb-command-result.c:248
+#: ../src/commands/gb-command-result.c:250
 msgid "Result Text"
 msgstr "Result Text"
 
-#: ../src/commands/gb-command-result.c:249
+#: ../src/commands/gb-command-result.c:251
 msgid "The result text if any."
 msgstr "The result text if any."
 
-#: ../src/commands/gb-command-vim.c:182
+#: ../src/commands/gb-command-vim.c:184
 msgid "The command text to execute"
 msgstr "The command text to execute"
 
-#: ../src/commands/gb-command-vim.c:190
+#: ../src/commands/gb-command-vim.c:192
 msgid "The source view to modify."
 msgstr "The source view to modify."
 
-#: ../src/devhelp/gb-devhelp-document.c:73
+#: ../src/devhelp/gb-devhelp-document.c:71
 #, c-format
 msgid "Documentation (%s)"
 msgstr "תיעוד (%s)"
 
-#: ../src/devhelp/gb-devhelp-document.c:262
+#: ../src/devhelp/gb-devhelp-document.c:257
 msgid "The uri to load."
 msgstr "The uri to load."
 
-#: ../src/devhelp/gb-devhelp-view.c:244 ../src/editor/gb-editor-frame.c:797
-#: ../src/editor/gb-editor-view.c:687 ../src/html/gb-html-view.c:321
+#: ../src/devhelp/gb-devhelp-view.c:238 ../src/editor/gb-editor-frame.c:811
+#: ../src/editor/gb-editor-view.c:687 ../src/html/gb-html-view.c:320
 #: ../src/views/gb-view.c:265
 msgid "Document"
 msgstr "Document"
 
-#: ../src/devhelp/gb-devhelp-view.c:245
+#: ../src/devhelp/gb-devhelp-view.c:239
 msgid "The document for the devhelp view."
 msgstr "The document for the devhelp view."
 
@@ -2295,37 +2408,37 @@ msgstr "תיקייה|מיזם"
 msgid "(Click on items to select them)"
 msgstr "(יש ללחוץ על פריטים כדי לבחור אותם)"
 
-#: ../src/dialogs/gb-recent-project-row.c:212
+#: ../src/dialogs/gb-recent-project-row.c:207
 msgid "Project Information"
 msgstr "Project Information"
 
-#: ../src/dialogs/gb-recent-project-row.c:213
+#: ../src/dialogs/gb-recent-project-row.c:208
 msgid "The project information for the row."
 msgstr "The project information for the row."
 
-#: ../src/dialogs/gb-recent-project-row.c:219
-#: ../src/dialogs/gb-recent-project-row.c:220
+#: ../src/dialogs/gb-recent-project-row.c:214
+#: ../src/dialogs/gb-recent-project-row.c:215
 msgid "Selected"
 msgstr "Selected"
 
-#: ../src/dialogs/gb-recent-project-row.c:226
-#: ../src/dialogs/gb-recent-project-row.c:227
+#: ../src/dialogs/gb-recent-project-row.c:221
+#: ../src/dialogs/gb-recent-project-row.c:222
 msgid "Selection Mode"
 msgstr "Selection Mode"
 
-#: ../src/documents/gb-document.c:190 ../src/views/gb-view.c:272
+#: ../src/documents/gb-document.c:188 ../src/views/gb-view.c:272
 msgid "Modified"
 msgstr "Modified"
 
-#: ../src/documents/gb-document.c:191
+#: ../src/documents/gb-document.c:189
 msgid "If the document has been modified from disk."
 msgstr "If the document has been modified from disk."
 
-#: ../src/documents/gb-document.c:199
+#: ../src/documents/gb-document.c:197
 msgid "The title of the document."
 msgstr "The title of the document."
 
-#: ../src/documents/gb-document.c:207
+#: ../src/documents/gb-document.c:205
 msgid "If the document is read only."
 msgstr "If the document is read only."
 
@@ -2339,27 +2452,31 @@ msgstr "%u מתוך %u"
 msgid "Line %u, Column %u"
 msgstr "שורה %u, עמודה %u"
 
-#: ../src/editor/gb-editor-frame.c:602
+#: ../src/editor/gb-editor-frame.c:614
 msgid "Re_veal in Project Tree"
 msgstr "ה_צגה בעץ המיזם"
 
-#: ../src/editor/gb-editor-frame.c:791
+#: ../src/editor/gb-editor-frame.c:797 ../src/editor/gb-editor-frame.c:798
+msgid "Auto Hide Map"
+msgstr "הסתרת המפה אוטומטית"
+
+#: ../src/editor/gb-editor-frame.c:805
 msgid "The back forward list."
 msgstr "The back forward list."
 
-#: ../src/editor/gb-editor-frame.c:798 ../src/editor/gb-editor-view.c:688
+#: ../src/editor/gb-editor-frame.c:812 ../src/editor/gb-editor-view.c:688
 msgid "The editor document."
 msgstr "The editor document."
 
-#: ../src/editor/gb-editor-frame.c:804
+#: ../src/editor/gb-editor-frame.c:818
 msgid "Show Map"
 msgstr "Show Map"
 
-#: ../src/editor/gb-editor-frame.c:805
+#: ../src/editor/gb-editor-frame.c:819
 msgid "If the overview map should be shown."
 msgstr "If the overview map should be shown."
 
-#: ../src/editor/gb-editor-settings-widget.c:183
+#: ../src/editor/gb-editor-settings-widget.c:180
 msgid "The language to change the settings for."
 msgstr "The language to change the settings for."
 
@@ -2381,62 +2498,73 @@ msgstr "שמירת מסמך בשם"
 msgid "Plain Text"
 msgstr "טקסט פשוט"
 
-#: ../src/editor/gb-editor-workspace.c:328
-#: ../src/editor/gb-editor-workspace.c:329
+#: ../src/editor/gb-editor-workspace.c:363
+#: ../src/editor/gb-editor-workspace.c:364
 msgid "Show Project Tree"
 msgstr "הצגת עץ המיזם"
 
-#: ../src/gd/gd-tagged-entry.c:937
+#: ../src/gd/gd-tagged-entry.c:940
 msgid "Tag close icon visibility"
 msgstr "Tag close icon visibility"
 
-#: ../src/gd/gd-tagged-entry.c:938
+#: ../src/gd/gd-tagged-entry.c:941
 msgid "Whether the close button should be shown in tags."
 msgstr "Whether the close button should be shown in tags."
 
-#: ../src/gd/gd-tagged-entry.c:1031
+#: ../src/gd/gd-tagged-entry.c:1027 ../src/greeter/gb-greeter-pill-box.c:116
 msgid "Label"
 msgstr "Label"
 
-#: ../src/gd/gd-tagged-entry.c:1032
+#: ../src/gd/gd-tagged-entry.c:1028
 msgid "Text to show on the tag."
 msgstr "Text to show on the tag."
 
-#: ../src/gd/gd-tagged-entry.c:1035
+#: ../src/gd/gd-tagged-entry.c:1031
 msgid "Tag has a close button"
 msgstr "Tag has a close button"
 
-#: ../src/gd/gd-tagged-entry.c:1036
+#: ../src/gd/gd-tagged-entry.c:1032
 msgid "Whether the tag has a close button."
 msgstr "Whether the tag has a close button."
 
-#: ../src/gd/gd-tagged-entry.c:1039
+#: ../src/gd/gd-tagged-entry.c:1035
 msgid "Style"
 msgstr "Style"
 
-#: ../src/gd/gd-tagged-entry.c:1040
+#: ../src/gd/gd-tagged-entry.c:1036
 msgid "Style of the tag."
 msgstr "Style of the tag."
 
-#: ../src/gedit/gedit-menu-stack-switcher.c:423
-#: ../src/gedit/gedit-menu-stack-switcher.c:424
-msgid "Stack"
-msgstr "Stack"
+#: ../src/greeter/gb-greeter-pill-box.c:117
+msgid "The label for the pill box."
+msgstr "The label for the pill box."
 
-#: ../src/html/gb-html-document.c:108
+#: ../src/greeter/gb-greeter-project-row.c:285
+msgid "Project Info"
+msgstr "Project Info"
+
+#: ../src/greeter/gb-greeter-project-row.c:286
+msgid "The project info to render."
+msgstr "The project info to render."
+
+#: ../src/greeter/gb-greeter-window.c:448
+msgid "The recent projects that have been mined."
+msgstr "The recent projects that have been mined."
+
+#: ../src/html/gb-html-document.c:109
 msgid "HTML Preview"
 msgstr "תצוגת HTML מקדימה"
 
-#: ../src/html/gb-html-document.c:130
+#: ../src/html/gb-html-document.c:131
 #, c-format
 msgid "%s (Preview)"
 msgstr "‏%s (תצוגה מקדימה)"
 
-#: ../src/html/gb-html-document.c:314
+#: ../src/html/gb-html-document.c:315
 msgid "The buffer to monitor for changes."
 msgstr "The buffer to monitor for changes."
 
-#: ../src/html/gb-html-view.c:322
+#: ../src/html/gb-html-view.c:321
 msgid "The document to view as HTML."
 msgstr "The document to view as HTML."
 
@@ -2453,94 +2581,99 @@ msgid "The name of the keybindings mode."
 msgstr "The name of the keybindings mode."
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:138
+#: ../src/preferences/gb-preferences-page-editor.c:140
 msgid "restore insert cursor mark"
 msgstr "שחזור הכנסה סמן ציון"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:143
+#: ../src/preferences/gb-preferences-page-editor.c:145
 msgid "word words auto completion suggest found document"
 msgstr "מילה מילים אוטומטי אוטומטית השלמה ניחוש למצוא מסמך"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:148
+#: ../src/preferences/gb-preferences-page-editor.c:150
 msgid "diff renderer gutter changes git vcs"
 msgstr "שינויים עיבוד ביב שינויים git vcs"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:153
+#: ../src/preferences/gb-preferences-page-editor.c:155
 msgid "line numbers"
 msgstr "מספר שורות"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:158
+#: ../src/preferences/gb-preferences-page-editor.c:160
 msgid "line lines highlight current"
 msgstr "שורה שורות הדגשה נוכחי"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:163
+#: ../src/preferences/gb-preferences-page-editor.c:165
 msgid "bracket brackets highlight matching"
 msgstr "סוגר סוגרים הדגשה התאמה"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:168
-msgid "smart home end"
-msgstr "חכם בית סוף"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:173
-msgid "smart back backspace indent align"
-msgstr "חכם הקודם backspace מחק הזחה יישור ישור"
-
-#. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:178
+#: ../src/preferences/gb-preferences-page-editor.c:170
 msgid "show grid lines"
 msgstr "הצגה הצגת רשת שורות"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:183
+#: ../src/preferences/gb-preferences-page-editor.c:175
 msgid "lines margin scrolloff scroll off"
 msgstr "שורות שוליים גבול גלילה סוף"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:189
+#: ../src/preferences/gb-preferences-page-editor.c:181
 msgid "font document editor monospace"
 msgstr "גופן מסמך עורך רוחב קבוע"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-editor.c:194
-msgid "source style scheme source tango solarized builder"
-msgstr "נקטר סגנון ערכה מקור טנגו Solarized בונה"
+#: ../src/preferences/gb-preferences-page-editor.c:186
+msgid "source style scheme source tango solarized builder syntax"
+msgstr "נקטר סגנון ערכה מקור טנגו Solarized builder תחביר"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:191
+msgid "minimap mini map overview over view"
+msgstr "minimap מינימאפ מיני מפה מפה סקירה תצוגה"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-experimental.c:49
 msgid "experimental clang autocompletion auto complete"
 msgstr "ניסיוני ניסיון clang השלמה אוטומטית אוטומטי"
 
-#: ../src/preferences/gb-preferences-page-git.c:131
-msgid "git author name surname"
-msgstr "git מחבר שם משפחה פרטי"
+#: ../src/preferences/gb-preferences-page-git.c:127
+msgid "git author name surname attribution source code"
+msgstr "git מחבר שם משפחה פרטי ייחוס שיוך קוד מקור"
 
-#: ../src/preferences/gb-preferences-page-git.c:136
-msgid "git author email mail address"
-msgstr "git מחבר דוא״ל דואר אלקטרוני כתובת"
+#: ../src/preferences/gb-preferences-page-git.c:132
+msgid "git author email mail address attribute source code"
+msgstr "git מחבר דוא״ל דואר אלקטרוני כתובת ייחוס שיוך קוד מקור"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:60
+#: ../src/preferences/gb-preferences-page-keybindings.c:64
 msgid "default builder keybindings"
 msgstr "בררת מחדל ברירת מחדל בונה builder בנייה קיצורי מקשים צירופי מקשים"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:65
+#: ../src/preferences/gb-preferences-page-keybindings.c:69
 msgid "emacs keybindings modal"
 msgstr "emacs מודאלי מודלי צירופי מקשים קיצורי מקשים"
 
 #. To translators: This is a list of keywords for the preferences page
-#: ../src/preferences/gb-preferences-page-keybindings.c:70
+#: ../src/preferences/gb-preferences-page-keybindings.c:74
 msgid "vim keybindings modal"
 msgstr "vim מודאלי מודלי צירופי מקשים קיצורי מקשים"
 
-#: ../src/preferences/gb-preferences-page.c:216
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:80
+msgid "smart home end"
+msgstr "חכם בית סוף"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:85
+msgid "smart back backspace indent align"
+msgstr "חכם הקודם backspace מחק הזחה יישור ישור"
+
+#: ../src/preferences/gb-preferences-page.c:283
 msgid "The title for the preferences page."
 msgstr "The title for the preferences page."
 
@@ -2585,7 +2718,7 @@ msgid "An action-target for the settings action."
 msgstr "An action-target for the settings action."
 
 #: ../src/preferences/gb-preferences-switch.c:357
-#: ../src/search/gb-search-display-group.c:423
+#: ../src/search/gb-search-display-group.c:426
 msgid "Size Group"
 msgstr "Size Group"
 
@@ -2615,7 +2748,7 @@ msgstr "The file type to create."
 msgid "Folder Name"
 msgstr "שם תיקייה"
 
-#: ../src/project-tree/gb-project-tree-builder.c:95
+#: ../src/project-tree/gb-project-tree-builder.c:93
 msgid "Files"
 msgstr "Files"
 
@@ -2649,20 +2782,20 @@ msgstr "The maximum width request that can be made."
 msgid "Builder does not know how to load %s"
 msgstr "Builder does not know how to load %s"
 
-#: ../src/search/gb-search-display-group.c:180 ../src/vim/gb-vim.c:91
-#: ../tools/ide-search.c:64
-msgid "%"
-msgstr "%"
+#: ../src/search/gb-search-display-group.c:182
+#, c-format
+msgid "%s more"
+msgstr "%s more"
 
-#: ../src/search/gb-search-display-group.c:416
+#: ../src/search/gb-search-display-group.c:419
 msgid "Provider"
 msgstr "Provider"
 
-#: ../src/search/gb-search-display-group.c:417
+#: ../src/search/gb-search-display-group.c:420
 msgid "The search provider"
 msgstr "The search provider"
 
-#: ../src/search/gb-search-display-group.c:424
+#: ../src/search/gb-search-display-group.c:427
 msgid "The size group for the label."
 msgstr "The size group for the label."
 
@@ -2678,59 +2811,59 @@ msgstr "The provider could not be found."
 msgid "The active search context."
 msgstr "The active search context."
 
-#: ../src/tree/gb-tree-builder.c:289 ../src/tree/gb-tree-node.c:638
+#: ../src/tree/gb-tree-builder.c:291 ../src/tree/gb-tree-node.c:640
 msgid "Tree"
 msgstr "Tree"
 
-#: ../src/tree/gb-tree-builder.c:290
+#: ../src/tree/gb-tree-builder.c:292
 msgid "The GbTree the builder belongs to."
 msgstr "The GbTree the builder belongs to."
 
-#: ../src/tree/gb-tree-node.c:602 ../src/workbench/gb-workspace.c:170
+#: ../src/tree/gb-tree-node.c:604 ../src/workbench/gb-workspace.c:170
 msgid "Icon Name"
 msgstr "Icon Name"
 
-#: ../src/tree/gb-tree-node.c:603
+#: ../src/tree/gb-tree-node.c:605
 msgid "The icon name to display."
 msgstr "The icon name to display."
 
-#: ../src/tree/gb-tree-node.c:614
+#: ../src/tree/gb-tree-node.c:616
 msgid "Item"
 msgstr "Item"
 
-#: ../src/tree/gb-tree-node.c:615
+#: ../src/tree/gb-tree-node.c:617
 msgid "Optional object to associate with node."
 msgstr "Optional object to associate with node."
 
-#: ../src/tree/gb-tree-node.c:627
+#: ../src/tree/gb-tree-node.c:629
 msgid "The parent node."
 msgstr "The parent node."
 
-#: ../src/tree/gb-tree-node.c:639
+#: ../src/tree/gb-tree-node.c:641
 msgid "The GbTree the node belongs to."
 msgstr "The GbTree the node belongs to."
 
-#: ../src/tree/gb-tree-node.c:651
+#: ../src/tree/gb-tree-node.c:653
 msgid "The text of the node."
 msgstr "The text of the node."
 
-#: ../src/tree/gb-tree-node.c:662
+#: ../src/tree/gb-tree-node.c:664
 msgid "Use Markup"
 msgstr "Use Markup"
 
-#: ../src/tree/gb-tree-node.c:663
+#: ../src/tree/gb-tree-node.c:665
 msgid "If text should be translated as markup."
 msgstr "If text should be translated as markup."
 
-#: ../src/tree/gb-tree.c:1295
+#: ../src/tree/gb-tree.c:1290
 msgid "The root object of the tree."
 msgstr "The root object of the tree."
 
-#: ../src/tree/gb-tree.c:1301
+#: ../src/tree/gb-tree.c:1296
 msgid "Selection"
 msgstr "Selection"
 
-#: ../src/tree/gb-tree.c:1302
+#: ../src/tree/gb-tree.c:1297
 msgid "The node selection."
 msgstr "The node selection."
 
@@ -2804,47 +2937,52 @@ msgstr "If the document has been modified."
 msgid "The view title."
 msgstr "The view title."
 
-#: ../src/vim/gb-vim.c:82
+#: ../src/vim/gb-vim.c:83
 #, c-format
 msgid "Number required"
 msgstr "Number required"
 
-#: ../src/vim/gb-vim.c:148
+#: ../src/vim/gb-vim.c:93
+#, c-format
+msgid "%s is invalid for %s"
+msgstr "%s is invalid for %s"
+
+#: ../src/vim/gb-vim.c:151
 #, c-format
 msgid "Cannot find language '%s'"
 msgstr "Cannot find language '%s'"
 
-#: ../src/vim/gb-vim.c:345
+#: ../src/vim/gb-vim.c:348
 #, c-format
 msgid "Unknown option: %s"
 msgstr "Unknown option: %s"
 
-#: ../src/vim/gb-vim.c:384
+#: ../src/vim/gb-vim.c:387
 #, c-format
 msgid "Cannot find colorscheme '%s'"
 msgstr "Cannot find colorscheme '%s'"
 
-#: ../src/vim/gb-vim.c:420
+#: ../src/vim/gb-vim.c:423
 #, c-format
 msgid "Failed to locate working directory"
 msgstr "Failed to locate working directory"
 
-#: ../src/vim/gb-vim.c:544
+#: ../src/vim/gb-vim.c:547
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Invalid :syntax subcommand: %s"
 
-#: ../src/vim/gb-vim.c:871
+#: ../src/vim/gb-vim.c:874
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "Invalid search and replace request"
 
-#: ../src/vim/gb-vim.c:957
+#: ../src/vim/gb-vim.c:960
 #, c-format
 msgid "vim mode requires GtkSourceView"
 msgstr "vim mode requires GtkSourceView"
 
-#: ../src/vim/gb-vim.c:987
+#: ../src/vim/gb-vim.c:990
 #, c-format
 msgid "Not an editor command: %s"
 msgstr "Not an editor command: %s"
@@ -2894,7 +3032,7 @@ msgstr "The IdeContext for the workbench."
 msgid "Build Failure"
 msgstr "Build Failure"
 
-#: ../src/workbench/gb-workbench.c:826
+#: ../src/workbench/gb-workbench.c:828
 msgid "Project build system does not support building"
 msgstr "מערכת הבנייה של המיזם אינה תומכת בבנייה"
 
@@ -2998,11 +3136,11 @@ msgstr "N"
 msgid "- Build the project."
 msgstr "- Build the project."
 
-#: ../tools/ide-list-build-flags.c:111
+#: ../tools/ide-list-build-flags.c:113
 msgid "- Get build flags for a project file"
 msgstr "- Get build flags for a project file"
 
-#: ../tools/ide-list-devices.c:105
+#: ../tools/ide-list-devices.c:107
 msgid "- List devices found on the system."
 msgstr "- List devices found on the system."
 
@@ -3030,7 +3168,7 @@ msgstr "- List diagnostics for a file."
 msgid "No files provided to load settings for.\n"
 msgstr "No files provided to load settings for.\n"
 
-#: ../tools/ide-list-file-settings.c:205 ../tools/ide-list-files.c:127
+#: ../tools/ide-list-file-settings.c:205 ../tools/ide-list-files.c:125
 msgid "- List files found in project."
 msgstr "- List files found in project."
 
@@ -3038,9 +3176,77 @@ msgstr "- List files found in project."
 msgid "- discover projects"
 msgstr "- discover projects"
 
-#: ../tools/ide-search.c:115
+#: ../tools/ide-search.c:66
+#, c-format
+msgid "%s results\n"
+msgstr "%s results\n"
+
+#: ../tools/ide-search.c:118
 msgid "PROJECT_FILE [SEARCH TERMS...]"
 msgstr "PROJECT_FILE [SEARCH TERMS...]"
+
+#~ msgid "Show Line Numbers"
+#~ msgstr "הצגת מספרי שורות"
+
+#~ msgid "Author Name"
+#~ msgstr "שם המחבר"
+
+#~ msgid "Author Email"
+#~ msgstr "דוא״ל המחבר"
+
+#~ msgid "Language Settings"
+#~ msgstr "הגדרות שפה"
+
+#~ msgid "Keybindings"
+#~ msgstr "קיצורי מקשים"
+
+#~ msgid "Source"
+#~ msgstr "Source"
+
+#~ msgid "The source GObject."
+#~ msgstr "The source GObject."
+
+#~ msgid "Search Mode Enabled"
+#~ msgstr "Search Mode Enabled"
+
+#~ msgid "Show Close Button"
+#~ msgstr "Show Close Button"
+
+#~ msgid "Search"
+#~ msgstr "Search"
+
+#~ msgid "The target instance for which to connect signals."
+#~ msgstr "The target instance for which to connect signals."
+
+#~ msgid "Target Type"
+#~ msgstr "Target Type"
+
+#~ msgid "The GType of the target property."
+#~ msgstr "The GType of the target property."
+
+#~ msgid "State"
+#~ msgstr "State"
+
+#~ msgid "The current state of the machine."
+#~ msgstr "The current state of the machine."
+
+#~ msgid "Failed to compile translation unit"
+#~ msgstr "אר כשל בהידור יחידת תרגום"
+
+#~ msgid "Sequence"
+#~ msgstr "Sequence"
+
+#~ msgid "The sequence number when created."
+#~ msgstr "The sequence number when created."
+
+#~ msgid "Is Global"
+#~ msgstr "Is Global"
+
+#~ msgid "Stack"
+#~ msgstr "Stack"
+
+#~ msgid "%"
+#~ msgstr "%"
 
 #~ msgid "Not connected to D-Bus."
 #~ msgstr "Not connected to D-Bus."
@@ -3057,9 +3263,6 @@ msgstr "PROJECT_FILE [SEARCH TERMS...]"
 
 #~ msgid "Failed to retrieve langauge for file."
 #~ msgstr "Failed to retrieve langauge for file."
-
-#~ msgid "Encoding"
-#~ msgstr "Encoding"
 
 #~ msgid "The file encoding to use."
 #~ msgstr "The file encoding to use."
@@ -3137,9 +3340,6 @@ msgstr "PROJECT_FILE [SEARCH TERMS...]"
 
 #~ msgid "Failed to load local keybindings: %s"
 #~ msgstr "Failed to load local keybindings: %s"
-
-#~ msgid "Active"
-#~ msgstr "Active"
 
 #~ msgid "If code assistance is currently processing."
 #~ msgstr "If code assistance is currently processing."
@@ -3290,9 +3490,6 @@ msgstr "PROJECT_FILE [SEARCH TERMS...]"
 
 #~ msgid "Error"
 #~ msgstr "Error"
-
-#~ msgid "An error that may have been loaded."
-#~ msgstr "An error that may have been loaded."
 
 #~ msgid "The backing file for the document."
 #~ msgstr "The backing file for the document."
