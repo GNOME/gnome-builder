@@ -223,6 +223,8 @@ libide_1_0_la_SOURCES = \
 	clang/ide-clang-symbol-resolver.h \
 	clang/ide-clang-translation-unit.c \
 	clang/ide-clang-translation-unit.h \
+	ctags/ide-ctags-index.c \
+	ctags/ide-ctags-index.h \
 	devhelp/ide-devhelp-search-provider.c \
 	devhelp/ide-devhelp-search-provider.h \
 	editorconfig/editorconfig-glib.c \
@@ -333,6 +335,7 @@ libide_1_0_la_includes = \
 	-I$(srcdir)/autotools \
 	-I$(srcdir)/c \
 	-I$(srcdir)/clang \
+	-I$(srcdir)/ctags \
 	-I$(srcdir)/devhelp \
 	-I$(srcdir)/directory \
 	-I$(srcdir)/doap \

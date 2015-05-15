@@ -100,6 +100,12 @@ test_ide_source_view_CFLAGS = $(tests_cflags)
 test_ide_source_view_LDADD = $(tests_libs)
 
 
+TESTS += test-ide-ctags
+test_ide_ctags_SOURCES = test-ide-ctags.c
+test_ide_ctags_CFLAGS = $(tests_cflags)
+test_ide_ctags_LDADD = $(tests_libs)
+
+
 TESTS += test-egg-state-machine
 test_egg_state_machine_SOURCES = test-egg-state-machine.c
 test_egg_state_machine_CFLAGS = $(tests_cflags) -I$(top_srcdir)/contrib/egg
@@ -128,6 +134,7 @@ EXTRA_DIST = \
 	data/project1/configure.ac \
 	data/project1/.editorconfig \
 	data/project1/project1.doap \
+	data/project1/tags \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
