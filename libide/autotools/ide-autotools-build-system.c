@@ -18,11 +18,13 @@
 
 #include <glib/gi18n.h>
 #include <gio/gio.h>
+#include <gtksourceview/gtksource.h>
 
 #include "egg-counter.h"
 
 #include "ide-autotools-build-system.h"
 #include "ide-autotools-builder.h"
+#include "ide-buffer-manager.h"
 #include "ide-context.h"
 #include "ide-device.h"
 #include "ide-device-manager.h"
@@ -519,6 +521,93 @@ ide_autotools_build_system_get_build_flags_finish (IdeBuildSystem  *build_system
 }
 
 static void
+invalidate_makecache (IdeAutotoolsBuildSystem *self)
+{
+  IdeAutotoolsBuildSystemPrivate *priv = ide_autotools_build_system_get_instance_private (self);
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+
+  g_clear_object (&priv->makecache);
+}
+
+static gboolean
+looks_like_makefile (IdeBuffer *buffer)
+{
+  GtkSourceLanguage *language;
+  const gchar *path;
+  IdeFile *file;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  file = ide_buffer_get_file (buffer);
+  path = ide_file_get_path (file);
+
+  if (path != NULL)
+    {
+      if (g_str_has_suffix (path, "Makefile.am") || g_str_has_suffix (path, ".mk"))
+        return TRUE;
+    }
+
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+
+  if (language != NULL)
+    {
+      const gchar *lang_id;
+
+      lang_id = gtk_source_language_get_id (language);
+
+      if (ide_str_equal0 (lang_id, "automake") || ide_str_equal0 (lang_id, "makefile"))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+ide_autotools_build_system__buffer_saved_cb (IdeAutotoolsBuildSystem *self,
+                                             IdeBuffer               *buffer,
+                                             IdeBufferManager        *buffer_manager)
+{
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  if (looks_like_makefile (buffer))
+    invalidate_makecache (self);
+}
+
+static void
+ide_autotools_build_system_constructed (GObject *object)
+{
+  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
+  IdeBufferManager *buffer_manager;
+  IdeContext *context;
+
+
+  G_OBJECT_CLASS (ide_autotools_build_system_parent_class)->constructed (object);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  buffer_manager = ide_context_get_buffer_manager (context);
+
+  /*
+   * FIXME:
+   *
+   * We could setup and try to track all of the makefiles in the system
+   * with inotify watches. That would require that 1) we can tell if a file
+   * is an automake file (or a dependent included file), and 2) lots of
+   * inotify watches.
+   *
+   * What is cheap, easy, and can be done right now is to just watch for save
+   * events on files that look like makefiles, and invalidate the makecache.
+   */
+  g_signal_connect_object (buffer_manager,
+                           "buffer-saved",
+                           G_CALLBACK (ide_autotools_build_system__buffer_saved_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
 ide_autotools_build_system_finalize (GObject *object)
 {
   IdeAutotoolsBuildSystemPrivate *priv;
@@ -558,6 +647,7 @@ ide_autotools_build_system_class_init (IdeAutotoolsBuildSystemClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeBuildSystemClass *build_system_class = IDE_BUILD_SYSTEM_CLASS (klass);
 
+  object_class->constructed = ide_autotools_build_system_constructed;
   object_class->finalize = ide_autotools_build_system_finalize;
   object_class->get_property = ide_autotools_build_system_get_property;
 
