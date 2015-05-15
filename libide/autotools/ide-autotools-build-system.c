@@ -16,40 +16,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-autotools-build-system"
+
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <gtksourceview/gtksource.h>
 
 #include "egg-counter.h"
+#include "egg-task-cache.h"
 
 #include "ide-autotools-build-system.h"
 #include "ide-autotools-builder.h"
 #include "ide-buffer-manager.h"
 #include "ide-context.h"
+#include "ide-debug.h"
 #include "ide-device.h"
 #include "ide-device-manager.h"
 #include "ide-file.h"
 #include "ide-internal.h"
 #include "ide-makecache.h"
 
-typedef struct
-{
-  IdeMakecache *makecache;
-  gchar        *tarball_name;
-  GPtrArray    *makecache_tasks;
+#define MAKECACHE_KEY "makecache"
+#define DEFAULT_MAKECACHE_TTL 0
 
-  guint         makecache_in_progress : 1;
-} IdeAutotoolsBuildSystemPrivate;
+struct _IdeAutotoolsBuildSystem
+{
+  IdeBuildSystem  parent_instance;
+
+  EggTaskCache   *task_cache;
+  gchar          *tarball_name;
+};
 
 static void async_initable_iface_init (GAsyncInitableIface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeAutotoolsBuildSystem,
-                        ide_autotools_build_system,
-                        IDE_TYPE_BUILD_SYSTEM,
-                        0,
-                        G_ADD_PRIVATE (IdeAutotoolsBuildSystem)
-                        G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
-                                               async_initable_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeAutotoolsBuildSystem,
+                         ide_autotools_build_system,
+                         IDE_TYPE_BUILD_SYSTEM,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
+                                                async_initable_iface_init))
 
 EGG_DEFINE_COUNTER (build_flags, "Autotools", "Flags Requests", "Requests count for build flags")
 
@@ -62,17 +66,15 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 const gchar *
-ide_autotools_build_system_get_tarball_name (IdeAutotoolsBuildSystem *system)
+ide_autotools_build_system_get_tarball_name (IdeAutotoolsBuildSystem *self)
 {
-  IdeAutotoolsBuildSystemPrivate *priv = ide_autotools_build_system_get_instance_private (system);
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self), NULL);
 
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system), NULL);
-
-  return priv->tarball_name;
+  return self->tarball_name;
 }
 
 static IdeBuilder *
-ide_autotools_build_system_get_builder (IdeBuildSystem  *system,
+ide_autotools_build_system_get_builder (IdeBuildSystem  *build_system,
                                         GKeyFile        *config,
                                         IdeDevice       *device,
                                         GError         **error)
@@ -80,11 +82,11 @@ ide_autotools_build_system_get_builder (IdeBuildSystem  *system,
   IdeBuilder *ret;
   IdeContext *context;
 
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system), NULL);
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (build_system), NULL);
   g_return_val_if_fail (config, NULL);
   g_return_val_if_fail (IDE_IS_DEVICE (device), NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (system));
+  context = ide_object_get_context (IDE_OBJECT (build_system));
 
   ret = g_object_new (IDE_TYPE_AUTOTOOLS_BUILDER,
                       "context", context,
@@ -284,64 +286,33 @@ ide_autotools_build_system_get_local_makefile_finish (IdeAutotoolsBuildSystem  *
 {
   GTask *task = (GTask *)result;
 
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self), NULL);
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (G_IS_TASK (task));
 
   return g_task_propagate_pointer (task, error);
 }
 
 static void
-ide_autotools_build_system__makecache_new_cb (GObject      *object,
-                                              GAsyncResult *result,
-                                              gpointer      user_data)
+populate_cache__new_makecache_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
 {
-  IdeAutotoolsBuildSystemPrivate *priv;
-  IdeAutotoolsBuildSystem *self;
-  g_autoptr(IdeMakecache) makecache = NULL;
   g_autoptr(GTask) task = user_data;
-  g_autoptr(GPtrArray) tasks = NULL;
+  IdeMakecache *makecache;
   GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
-  priv = ide_autotools_build_system_get_instance_private (self);
-
-  makecache = ide_makecache_new_for_makefile_finish (result, &error);
-
-  if (!makecache)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  priv->makecache = g_object_ref (makecache);
-
-  /*
-   * Complete all of the pending tasks in flight.
-   */
-
-  tasks = priv->makecache_tasks;
-  priv->makecache_tasks = g_ptr_array_new ();
-  priv->makecache_in_progress = FALSE;
-
-  g_task_return_pointer (task, g_object_ref (makecache), g_object_unref);
-
-  while (tasks->len)
-    {
-      GTask *other_task;
-      gsize i = tasks->len - 1;
-
-      other_task = g_ptr_array_index (tasks, i);
-      g_task_return_pointer (other_task, g_object_ref (makecache), g_object_unref);
-      g_ptr_array_remove_index (tasks, i);
-      g_object_unref (other_task);
-    }
+  if (!(makecache = ide_makecache_new_for_makefile_finish (result, &error)))
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, makecache, g_object_unref);
 }
 
 static void
-ide_autotools_build_system__local_makefile_cb (GObject      *object,
-                                               GAsyncResult *result,
-                                               gpointer      user_data)
+populate_cache__get_local_makefile_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
   g_autoptr(GTask) task = user_data;
@@ -349,23 +320,65 @@ ide_autotools_build_system__local_makefile_cb (GObject      *object,
   IdeContext *context;
   GError *error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
   g_assert (G_IS_TASK (task));
 
   makefile = ide_autotools_build_system_get_local_makefile_finish (self, result, &error);
 
-  if (!makefile)
+  if (makefile == NULL)
     {
       g_task_return_error (task, error);
-      return;
+      IDE_EXIT;
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
   ide_makecache_new_for_makefile_async (context,
                                         makefile,
                                         g_task_get_cancellable (task),
-                                        ide_autotools_build_system__makecache_new_cb,
+                                        populate_cache__new_makecache_cb,
                                         g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
+populate_cache_cb (EggTaskCache  *cache,
+                   gconstpointer  key,
+                   GTask         *task,
+                   gpointer       user_data)
+{
+  IdeAutotoolsBuildSystem *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (ide_str_equal0 (key, MAKECACHE_KEY));
+  g_assert (G_IS_TASK (task));
+
+  ide_autotools_build_system_get_local_makefile_async (self,
+                                                       g_task_get_cancellable (task),
+                                                       populate_cache__get_local_makefile_cb,
+                                                       g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
+ide_autotools_build_system_get_makecache_cb (GObject      *object,
+                                             GAsyncResult *result,
+                                             gpointer      user_data)
+{
+  EggTaskCache *task_cache = (EggTaskCache *)object;
+  g_autoptr(GTask) task = user_data;
+  IdeMakecache *ret;
+  GError *error = NULL;
+
+  if (!(ret = egg_task_cache_get_finish (task_cache, result, &error)))
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, ret, g_object_unref);
 }
 
 static void
@@ -374,7 +387,6 @@ ide_autotools_build_system_get_makecache_async (IdeAutotoolsBuildSystem *self,
                                                 GAsyncReadyCallback      callback,
                                                 gpointer                 user_data)
 {
-  IdeAutotoolsBuildSystemPrivate *priv = ide_autotools_build_system_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
@@ -382,33 +394,12 @@ ide_autotools_build_system_get_makecache_async (IdeAutotoolsBuildSystem *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  /*
-   * If we already have the makecache loaded, we can just return that.
-   */
-  if (priv->makecache)
-    {
-      g_task_return_pointer (task, g_object_ref (priv->makecache), g_object_unref);
-      return;
-    }
-
-  /*
-   * If we have a makecache operation in progress, we need to queue the task to be completed
-   * when that operation completes.
-   */
-  if (priv->makecache_in_progress)
-    {
-      g_ptr_array_add (priv->makecache_tasks, g_object_ref (task));
-      return;
-    }
-
-  /*
-   * Nothing else is creating the makecache, so let's go ahead and create it now.
-   */
-  priv->makecache_in_progress = TRUE;
-  ide_autotools_build_system_get_local_makefile_async (self,
-                                                       cancellable,
-                                                       ide_autotools_build_system__local_makefile_cb,
-                                                       g_object_ref (task));
+  egg_task_cache_get_async (self->task_cache,
+                            MAKECACHE_KEY,
+                            FALSE,
+                            cancellable,
+                            ide_autotools_build_system_get_makecache_cb,
+                            g_object_ref (task));
 }
 
 static IdeMakecache *
@@ -520,16 +511,6 @@ ide_autotools_build_system_get_build_flags_finish (IdeBuildSystem  *build_system
   return g_task_propagate_pointer (task, error);
 }
 
-static void
-invalidate_makecache (IdeAutotoolsBuildSystem *self)
-{
-  IdeAutotoolsBuildSystemPrivate *priv = ide_autotools_build_system_get_instance_private (self);
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-
-  g_clear_object (&priv->makecache);
-}
-
 static gboolean
 looks_like_makefile (IdeBuffer *buffer)
 {
@@ -573,7 +554,7 @@ ide_autotools_build_system__buffer_saved_cb (IdeAutotoolsBuildSystem *self,
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
   if (looks_like_makefile (buffer))
-    invalidate_makecache (self);
+    egg_task_cache_evict (self->task_cache, MAKECACHE_KEY);
 }
 
 static void
@@ -610,13 +591,10 @@ ide_autotools_build_system_constructed (GObject *object)
 static void
 ide_autotools_build_system_finalize (GObject *object)
 {
-  IdeAutotoolsBuildSystemPrivate *priv;
-  IdeAutotoolsBuildSystem *system = (IdeAutotoolsBuildSystem *)object;
+  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
 
-  priv = ide_autotools_build_system_get_instance_private (system);
-
-  g_clear_pointer (&priv->tarball_name, g_free);
-  g_clear_pointer (&priv->makecache_tasks, g_ptr_array_unref);
+  g_clear_pointer (&self->tarball_name, g_free);
+  g_clear_object (&self->task_cache);
 
   G_OBJECT_CLASS (ide_autotools_build_system_parent_class)->finalize (object);
 }
@@ -668,9 +646,25 @@ ide_autotools_build_system_class_init (IdeAutotoolsBuildSystemClass *klass)
 static void
 ide_autotools_build_system_init (IdeAutotoolsBuildSystem *self)
 {
-  IdeAutotoolsBuildSystemPrivate *priv = ide_autotools_build_system_get_instance_private (self);
-
-  priv->makecache_tasks = g_ptr_array_new ();
+  /*
+   * We actually only use this task cache for one instance, but it really
+   * makes it convenient to cache the result of even a single item so we
+   * can avoid async races in replies, as well as avoiding duplicate work.
+   *
+   * We don't require a ref/unref for the populate callback data since we
+   * will always have a GTask queued holding a reference during the lifetime
+   * of the populate callback execution.
+   */
+  self->task_cache = egg_task_cache_new (g_str_hash,
+                                         g_str_equal,
+                                         (GBoxedCopyFunc)g_strdup,
+                                         g_free,
+                                         g_object_ref,
+                                         g_object_unref,
+                                         DEFAULT_MAKECACHE_TTL,
+                                         populate_cache_cb,
+                                         self,
+                                         NULL);
 }
 
 static void

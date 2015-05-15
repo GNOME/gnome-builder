@@ -28,11 +28,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeAutotoolsBuildSystem, ide_autotools_build_system,
                       IDE, AUTOTOOLS_BUILD_SYSTEM, IdeBuildSystem)
 
-struct _IdeAutotoolsBuildSystem
-{
-  IdeBuildSystem parent;
-};
-
 const gchar *ide_autotools_build_system_get_tarball_name (IdeAutotoolsBuildSystem *self);
 
 G_END_DECLS
