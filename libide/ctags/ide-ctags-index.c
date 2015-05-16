@@ -481,18 +481,18 @@ ide_ctags_index_lookup_full (IdeCtagsIndex *self,
 }
 
 const IdeCtagsIndexEntry *
-ide_ctags_index_lookup (IdeCtagsIndex         *self,
-                        const gchar           *keyword,
-                        gsize                 *length)
+ide_ctags_index_lookup (IdeCtagsIndex *self,
+                        const gchar   *keyword,
+                        gsize         *length)
 {
   return ide_ctags_index_lookup_full (self, keyword, length,
                                       ide_ctags_index_entry_compare_keyword);
 }
 
 const IdeCtagsIndexEntry *
-ide_ctags_index_lookup_prefix (IdeCtagsIndex         *self,
-                               const gchar           *keyword,
-                               gsize                 *length)
+ide_ctags_index_lookup_prefix (IdeCtagsIndex *self,
+                               const gchar   *keyword,
+                               gsize         *length)
 {
   return ide_ctags_index_lookup_full (self, keyword, length,
                                       ide_ctags_index_entry_compare_prefix);

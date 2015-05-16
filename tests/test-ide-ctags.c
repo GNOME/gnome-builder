@@ -62,6 +62,12 @@ init_cb (GObject      *object,
   g_assert_cmpstr (entries->name, ==, "IdeDiagnosticProvider.functions");
   g_assert_cmpint (entries->kind, ==, IDE_CTAGS_INDEX_ENTRY_ANCHOR);
 
+  entries = ide_ctags_index_lookup_prefix (index, "Ide", &n_entries);
+  g_assert_cmpint (n_entries, ==, 815);
+  g_assert (entries != NULL);
+  for (i = 0; i < 815; i++)
+    g_assert (g_str_has_prefix (entries [i].name, "Ide"));
+
   g_main_loop_quit (gMainLoop);
 }
 
