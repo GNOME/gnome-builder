@@ -89,9 +89,9 @@ ide_ctags_index_entry_compare (gconstpointer a,
   gint ret;
 
   if (((ret = g_strcmp0 (entrya->name, entryb->name)) == 0) &&
-      ((ret = g_strcmp0 (entrya->path, entryb->path)) == 0) &&
+      ((ret = (entrya->kind - entryb->kind)) == 0) &&
       ((ret = g_strcmp0 (entrya->pattern, entryb->pattern)) == 0) &&
-      ((ret = (entrya->kind - entryb->kind))))
+      ((ret = g_strcmp0 (entrya->path, entryb->path)) == 0))
     return 0;
 
   return ret;
