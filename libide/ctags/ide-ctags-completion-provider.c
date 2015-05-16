@@ -93,8 +93,15 @@ ide_ctags_completion_provider_init (IdeCtagsCompletionProvider *self)
   self->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
 
   settings = gtk_settings_get_default ();
+
   g_signal_connect_object (settings,
                            "notify::gtk-theme-name",
+                           G_CALLBACK (theme_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (settings,
+                           "notify::gtk-application-prefer-dark-theme",
                            G_CALLBACK (theme_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
