@@ -844,6 +844,7 @@ static void
 gb_editor_frame_init (GbEditorFrame *self)
 {
   g_autoptr(GSettings) settings = NULL;
+  g_autoptr(GSettings) insight_settings = NULL;
   GtkTargetList *target_list;
 
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -860,10 +861,12 @@ gb_editor_frame_init (GbEditorFrame *self)
   g_settings_bind (settings, "show-line-numbers", self->source_view, "show-line-numbers", G_SETTINGS_BIND_GET);
   g_settings_bind (settings, "smart-backspace", self->source_view, "smart-backspace", G_SETTINGS_BIND_GET);
   g_settings_bind_with_mapping (settings, "smart-home-end", self->source_view, "smart-home-end", G_SETTINGS_BIND_GET, get_smart_home_end, NULL, NULL, NULL);
-  g_settings_bind (settings, "word-completion", self->source_view, "enable-word-completion", G_SETTINGS_BIND_GET);
   g_settings_bind (settings, "show-map", self, "show-map", G_SETTINGS_BIND_GET);
   g_settings_bind (settings, "auto-hide-map", self, "auto-hide-map", G_SETTINGS_BIND_GET);
   g_signal_connect (settings, "changed::keybindings", G_CALLBACK (keybindings_changed), self);
+
+  insight_settings = g_settings_new ("org.gnome.builder.code-insight");
+  g_settings_bind (insight_settings, "word-completion", self->source_view, "enable-word-completion", G_SETTINGS_BIND_GET);
 
   g_object_bind_property (self->source_view, "overwrite", self->overwrite_label, "visible", G_BINDING_SYNC_CREATE);
 

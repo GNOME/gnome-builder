@@ -26,7 +26,7 @@
           <object class="GbPreferencesSwitch" id="word_autocompletion">
             <property name="title" translatable="yes">Suggest Word Completion</property>
             <property name="description" translatable="yes">Suggest completion of words found within all open documents.</property>
-            <property name="settings">editor_settings</property>
+            <property name="settings">insight_settings</property>
             <property name="settings-schema-key">word-completion</property>
             <property name="size-group">control_group</property>
             <property name="visible">true</property>
@@ -34,7 +34,7 @@
         </child>
         <child>
           <object class="GbPreferencesSwitch" id="ctags_autocompletion">
-            <property name="settings">experimental_settings</property>
+            <property name="settings">insight_settings</property>
             <property name="settings-schema-key">ctags-autocompletion</property>
             <property name="title" translatable="yes">Suggest Completions using Ctags</property>
             <property name="description" translatable="yes">Use Ctags for completions in supported languages.</property>
@@ -44,7 +44,7 @@
         </child>
         <child>
           <object class="GbPreferencesSwitch" id="clang_autocompletion">
-            <property name="settings">experimental_settings</property>
+            <property name="settings">insight_settings</property>
             <property name="settings-schema-key">clang-autocompletion</property>
             <property name="title" translatable="yes">Suggest Completions using Clang (Experimental)</property>
             <property name="description" translatable="yes">Use Clang for completions in the C and C++ languages.</property>
@@ -55,11 +55,8 @@
       </object>
     </child>
   </template>
-  <object class="GSettings" id="experimental_settings">
-    <property name="schema-id">org.gnome.builder.experimental</property>
-  </object>
-  <object class="GSettings" id="editor_settings">
-    <property name="schema-id">org.gnome.builder.editor</property>
+  <object class="GSettings" id="insight_settings">
+    <property name="schema-id">org.gnome.builder.code-insight</property>
   </object>
   <object class="GtkSizeGroup" id="control_group">
     <property name="mode">horizontal</property>

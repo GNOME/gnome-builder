@@ -43,6 +43,7 @@ struct _IdeClangCompletionProvider
   IdeSourceView *view;
   GPtrArray     *last_results;
   GtkWidget     *assistant;
+  GSettings     *settings;
 };
 
 typedef struct
@@ -172,17 +173,32 @@ filter_list (GPtrArray   *ar,
 }
 
 static void
+ide_clang_completion_provider_finalize (GObject *object)
+{
+  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)object;
+
+  g_clear_object (&self->settings);
+
+  G_OBJECT_CLASS (ide_clang_completion_provider_parent_class)->finalize (object);
+}
+
+static void
 ide_clang_completion_provider_class_init (IdeClangCompletionProviderClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = ide_clang_completion_provider_finalize;
+
   gBookManager = dh_book_manager_new ();
   dh_book_manager_populate (gBookManager);
 }
 
 static void
-ide_clang_completion_provider_init (IdeClangCompletionProvider *provider)
+ide_clang_completion_provider_init (IdeClangCompletionProvider *self)
 {
-  provider->assistant = dh_assistant_view_new ();
-  dh_assistant_view_set_book_manager (DH_ASSISTANT_VIEW (provider->assistant), gBookManager);
+  self->settings = g_settings_new ("org.gnome.builder.code-insight");
+  self->assistant = dh_assistant_view_new ();
+  dh_assistant_view_set_book_manager (DH_ASSISTANT_VIEW (self->assistant), gBookManager);
 }
 
 static gchar *
@@ -296,6 +312,9 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
   IdeFile *file;
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
+
+  if (!g_settings_get_boolean (self->settings, "clang-autocompletion"))
+    goto failure;
 
   if (!gtk_source_completion_context_get_iter (context, &iter))
     goto failure;

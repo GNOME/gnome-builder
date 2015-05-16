@@ -89,7 +89,7 @@ ide_ctags_completion_provider_init (IdeCtagsCompletionProvider *self)
 
   self->minimum_word_size = 3;
   self->indexes = g_ptr_array_new_with_free_func (g_object_unref);
-  self->settings = g_settings_new ("org.gnome.builder.experimental");
+  self->settings = g_settings_new ("org.gnome.builder.code-insight");
   self->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
 
   settings = gtk_settings_get_default ();

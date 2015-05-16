@@ -11,7 +11,7 @@
 [type: gettext/glade]data/ui/gb-new-file-popover.ui
 [type: gettext/glade]data/ui/gb-new-project-dialog.ui
 [type: gettext/glade]data/ui/gb-preferences-page-editor.ui
-[type: gettext/glade]data/ui/gb-preferences-page-experimental.ui
+[type: gettext/glade]data/ui/gb-preferences-page-insight.ui
 [type: gettext/glade]data/ui/gb-preferences-page-git.ui
 [type: gettext/glade]data/ui/gb-preferences-page-keybindings.ui
 [type: gettext/glade]data/ui/gb-preferences-page-language.ui
@@ -25,7 +25,7 @@
 [type: gettext/glade]data/ui/gb-workbench.ui
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.gschema.xml
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.language.gschema.xml
-[type: gettext/gsettings]data/gsettings/org.gnome.builder.experimental.gschema.xml
+[type: gettext/gsettings]data/gsettings/org.gnome.builder.code-insight.gschema.xml
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.project-tree.gschema.xml
 contrib/gedit/gedit-menu-stack-switcher.c
 contrib/nautilus/nautilus-floating-bar.c
@@ -135,7 +135,7 @@ src/html/gb-html-view.c
 src/keybindings/gb-keybindings.c
 src/main.c
 src/preferences/gb-preferences-page-editor.c
-src/preferences/gb-preferences-page-experimental.c
+src/preferences/gb-preferences-page-insight.c
 src/preferences/gb-preferences-page-git.c
 src/preferences/gb-preferences-page-keybindings.c
 src/preferences/gb-preferences-page.c
