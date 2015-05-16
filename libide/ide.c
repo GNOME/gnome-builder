@@ -28,6 +28,7 @@
 #include "ide-autotools-project-miner.h"
 #include "ide-c-language.h"
 #include "ide-clang-service.h"
+#include "ide-ctags-service.h"
 #include "ide-devhelp-search-provider.h"
 #include "ide-device-provider.h"
 #include "ide-directory-build-system.h"
@@ -180,6 +181,10 @@ ide_init_ctor (void)
   g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
                                   IDE_TYPE_CLANG_SERVICE,
                                   IDE_SERVICE_EXTENSION_POINT".clang",
+                                  -100);
+  g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
+                                  IDE_TYPE_CTAGS_SERVICE,
+                                  IDE_SERVICE_EXTENSION_POINT".ctags",
                                   -100);
   g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
                                   IDE_TYPE_GCA_SERVICE,

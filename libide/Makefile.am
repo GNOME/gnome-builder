@@ -225,6 +225,8 @@ libide_1_0_la_SOURCES = \
 	clang/ide-clang-translation-unit.h \
 	ctags/ide-ctags-index.c \
 	ctags/ide-ctags-index.h \
+	ctags/ide-ctags-service.c \
+	ctags/ide-ctags-service.h \
 	devhelp/ide-devhelp-search-provider.c \
 	devhelp/ide-devhelp-search-provider.h \
 	editorconfig/editorconfig-glib.c \
