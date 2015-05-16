@@ -25,8 +25,10 @@
 
 struct _IdeCtagsCompletionItem
 {
-  GObject                   parent_instance;
-  const IdeCtagsIndexEntry *entry;
+  GObject                     parent_instance;
+  const IdeCtagsIndexEntry   *entry;
+  IdeCtagsCompletionProvider *provider;
+  GtkSourceCompletionContext *context;
 };
 
 static void proposal_iface_init (GtkSourceCompletionProposalIface *iface);
@@ -36,12 +38,21 @@ G_DEFINE_TYPE_WITH_CODE (IdeCtagsCompletionItem, ide_ctags_completion_item, G_TY
                                                 proposal_iface_init))
 
 GtkSourceCompletionProposal *
-ide_ctags_completion_item_new (const IdeCtagsIndexEntry *entry)
+ide_ctags_completion_item_new (const IdeCtagsIndexEntry   *entry,
+                               IdeCtagsCompletionProvider *provider,
+                               GtkSourceCompletionContext *context)
 {
   IdeCtagsCompletionItem *self;
 
   self= g_object_new (IDE_TYPE_CTAGS_COMPLETION_ITEM, NULL);
+
+  /*
+   * use borrowed references to avoid the massive amount of reference counting.
+   * we don't need them since we know the provider will outlast us.
+   */
   self->entry = entry;
+  self->provider = provider;
+  self->context = context;
 
   return GTK_SOURCE_COMPLETION_PROPOSAL (self);
 }
@@ -79,9 +90,20 @@ get_text (GtkSourceCompletionProposal *proposal)
   return g_strdup (self->entry->name);
 }
 
+static GdkPixbuf *
+get_icon (GtkSourceCompletionProposal *proposal)
+{
+  IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)proposal;
+
+  return ide_ctags_completion_provider_get_proposal_icon (self->provider,
+                                                          self->context,
+                                                          self->entry);
+}
+
 static void
 proposal_iface_init (GtkSourceCompletionProposalIface *iface)
 {
   iface->get_label = get_label;
   iface->get_text = get_text;
+  iface->get_icon = get_icon;
 }

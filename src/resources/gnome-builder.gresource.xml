@@ -14,6 +14,7 @@
     <file alias="icons/scalable/actions/lang-enum-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-enum-symbolic.svg</file>
     <file alias="icons/scalable/actions/lang-function-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-function-symbolic.svg</file>
     <file alias="icons/scalable/actions/lang-struct-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-struct-symbolic.svg</file>
+    <file alias="icons/scalable/actions/lang-struct-field-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/struct-field-symbolic.svg</file>
     <file alias="icons/scalable/actions/builder-vcs-git-symbolic.svg">../../data/icons/hicolor/scalable/vcs/builder-vcs-git-symbolic.svg</file>
 
     <!-- Non-scalable vcs icons -->

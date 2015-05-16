@@ -31,6 +31,7 @@ struct _IdeCtagsCompletionProvider
 
   GSettings     *settings;
   GPtrArray     *indexes;
+  GHashTable    *icons;
 
   gint           minimum_word_size;
 };
@@ -49,6 +50,17 @@ ide_ctags_completion_provider_add_index (IdeCtagsCompletionProvider *self,
   g_return_if_fail (!index || IDE_IS_CTAGS_INDEX (index));
 
   g_ptr_array_add (self->indexes, g_object_ref (index));
+}
+
+static void
+theme_changed_cb (IdeCtagsCompletionProvider *self,
+                  GParamSpec                 *pspec,
+                  GtkSettings                *settings)
+{
+  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
+  g_assert (self->icons != NULL);
+
+  g_hash_table_remove_all (self->icons);
 }
 
 static void
@@ -73,9 +85,106 @@ ide_ctags_completion_provider_class_init (IdeCtagsCompletionProviderClass *klass
 static void
 ide_ctags_completion_provider_init (IdeCtagsCompletionProvider *self)
 {
+  GtkSettings *settings;
+
   self->minimum_word_size = 3;
   self->indexes = g_ptr_array_new_with_free_func (g_object_unref);
   self->settings = g_settings_new ("org.gnome.builder.experimental");
+  self->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+
+  settings = gtk_settings_get_default ();
+  g_signal_connect_object (settings,
+                           "notify::gtk-theme-name",
+                           G_CALLBACK (theme_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static GdkPixbuf *
+load_pixbuf (IdeCtagsCompletionProvider *self,
+             GtkSourceCompletionContext *context,
+             const gchar                *icon_name,
+             guint                       size)
+{
+  GtkSourceCompletion *completion = NULL;
+  GtkSourceCompletionInfo *window;
+  GtkStyleContext *style_context;
+  GtkIconTheme *icon_theme;
+  GtkIconInfo *icon_info;
+  GdkPixbuf *ret = NULL;
+  gboolean was_symbolic;
+
+  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
+
+  g_object_get (context, "completion", &completion, NULL);
+  window = gtk_source_completion_get_info_window (completion);
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (window));
+  icon_theme = gtk_icon_theme_get_default ();
+  icon_info = gtk_icon_theme_lookup_icon (icon_theme, icon_name, size, 0);
+  if (icon_info != NULL)
+    ret = gtk_icon_info_load_symbolic_for_context (icon_info, style_context, &was_symbolic, NULL);
+  g_clear_object (&completion);
+  g_clear_object (&icon_info);
+  if (ret != NULL)
+    g_hash_table_insert (self->icons, g_strdup (icon_name), ret);
+
+  return ret;
+}
+
+static GdkPixbuf *
+get_pixbuf (IdeCtagsCompletionProvider *self,
+            GtkSourceCompletionContext *context,
+            const IdeCtagsIndexEntry   *entry)
+{
+  const gchar *icon_name = NULL;
+  GdkPixbuf *pixbuf;
+
+  switch (entry->kind)
+    {
+    case IDE_CTAGS_INDEX_ENTRY_CLASS_NAME:
+      icon_name = "lang-clang-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ENUMERATOR:
+      icon_name = "lang-enum-value-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ENUMERATION_NAME:
+      icon_name = "lang-enum-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_PROTOTYPE:
+    case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
+      icon_name = "lang-function-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_FILE_NAME:
+      icon_name = "text-x-generic-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_MEMBER:
+      icon_name = "lang-struct-field-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_UNION:
+    case IDE_CTAGS_INDEX_ENTRY_TYPEDEF:
+    case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
+      icon_name = "lang-struct-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
+    case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
+    case IDE_CTAGS_INDEX_ENTRY_DEFINE:
+    default:
+      return NULL;
+    }
+
+  pixbuf = g_hash_table_lookup (self->icons, icon_name);
+  if (!pixbuf)
+    pixbuf = load_pixbuf (self, context, icon_name, 16);
+
+  return pixbuf;
 }
 
 static gchar *
@@ -263,7 +372,21 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
 
           if (is_allowed (entry, allowed))
             {
-              item = ide_ctags_completion_item_new (entry);
+              /*
+               * NOTE:
+               *
+               * Autocompletion is very performance sensitive code. The smallest amount of
+               * extra work has a very negative impact on interactivity. We are trying to
+               * avoid a couple things here based on how completion works.
+               *
+               * 1) Avoiding referencing or copying things.
+               *    Since the provider will always outlive the completion item, we use
+               *    borrowed references for as much as we can.
+               * 2) We delay the work of looking up icons until they are requested.
+               *    No sense in doing that work before hand.
+               */
+
+              item = ide_ctags_completion_item_new (entry, self, context);
               g_ptr_array_add (ar, item);
             }
         }
@@ -281,6 +404,16 @@ failure:
   g_list_free (list);
 
   IDE_EXIT;
+}
+
+GdkPixbuf *
+ide_ctags_completion_provider_get_proposal_icon (IdeCtagsCompletionProvider *self,
+                                                 GtkSourceCompletionContext *context,
+                                                 const IdeCtagsIndexEntry   *entry)
+{
+  g_return_val_if_fail (IDE_IS_CTAGS_COMPLETION_PROVIDER (self), NULL);
+
+  return get_pixbuf (self, context, entry);
 }
 
 static void
