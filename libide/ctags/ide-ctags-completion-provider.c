@@ -245,10 +245,10 @@ static gint
 sort_wrapper (gconstpointer a,
               gconstpointer b)
 {
-  IdeCtagsCompletionItem * const *enta = a;
-  IdeCtagsCompletionItem * const *entb = b;
+  IdeCtagsIndexEntry * const *enta = a;
+  IdeCtagsIndexEntry * const *entb = b;
 
-  return ide_ctags_completion_item_compare (*enta, *entb);
+  return ide_ctags_index_entry_compare (*enta, *entb);
 }
 
 static const gchar * const *
@@ -320,6 +320,19 @@ is_allowed (const IdeCtagsIndexEntry *entry,
   return FALSE;
 }
 
+static inline gboolean
+too_similar (const IdeCtagsIndexEntry *a,
+             const IdeCtagsIndexEntry *b)
+{
+  if (a->kind == b->kind)
+    {
+      if (ide_str_equal0 (a->name, b->name))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
                                         GtkSourceCompletionContext  *context)
@@ -329,6 +342,7 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
   const IdeCtagsIndexEntry *entries;
   const gchar * const *allowed;
   g_autoptr(GPtrArray) ar = NULL;
+  IdeCtagsIndexEntry *last = NULL;
   GtkSourceBuffer *buffer;
   gsize n_entries;
   GtkTextIter iter;
@@ -360,7 +374,7 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
   if (strlen (word) < 3)
     IDE_GOTO (failure);
 
-  ar = g_ptr_array_new_with_free_func (g_object_unref);
+  ar = g_ptr_array_new ();
 
   IDE_TRACE_MSG ("Searching for %s", word);
 
@@ -374,28 +388,10 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
 
       for (i = 0; i < n_entries; i++)
         {
-          GtkSourceCompletionProposal *item;
           const IdeCtagsIndexEntry *entry = &entries [i];
 
           if (is_allowed (entry, allowed))
-            {
-              /*
-               * NOTE:
-               *
-               * Autocompletion is very performance sensitive code. The smallest amount of
-               * extra work has a very negative impact on interactivity. We are trying to
-               * avoid a couple things here based on how completion works.
-               *
-               * 1) Avoiding referencing or copying things.
-               *    Since the provider will always outlive the completion item, we use
-               *    borrowed references for as much as we can.
-               * 2) We delay the work of looking up icons until they are requested.
-               *    No sense in doing that work before hand.
-               */
-
-              item = ide_ctags_completion_item_new (entry, self, context);
-              g_ptr_array_add (ar, item);
-            }
+            g_ptr_array_add (ar, (gpointer)entry);
         }
     }
 
@@ -403,12 +399,52 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
 
   for (i = ar->len; i > 0; i--)
     {
-      list = g_list_prepend (list, g_ptr_array_index (ar, i - 1));
+      GtkSourceCompletionProposal *item;
+      IdeCtagsIndexEntry *entry = g_ptr_array_index (ar, i - 1);
+
+      /*
+       * NOTE:
+       *
+       * We walk backwards in this ptrarray so that we can use g_list_prepend() for O(1) access.
+       * I think everyone agrees that using GList for passing completion data around was not
+       * a great choice, but it is what we have to work with.
+       */
+
+      /*
+       * Ignore this item if the previous one looks really similar.
+       * We take the first item instead of the last since the first item (when walking backwards)
+       * tends to be more likely to be the one we care about (based on lexicographical
+       * ordering. For example, something in "gtk-2.0" is less useful than "gtk-3.0".
+       *
+       * This is done here instead of during our initial object creation so that
+       * we can merge items between different indexes. It often happens that the
+       * same headers are included in multiple tags files.
+       */
+      if ((last != NULL) && too_similar (entry, last))
+        continue;
+
+      /*
+       * NOTE:
+       *
+       * Autocompletion is very performance sensitive code. The smallest amount of
+       * extra work has a very negative impact on interactivity. We are trying to
+       * avoid a couple things here based on how completion works.
+       *
+       * 1) Avoiding referencing or copying things.
+       *    Since the provider will always outlive the completion item, we use
+       *    borrowed references for as much as we can.
+       * 2) We delay the work of looking up icons until they are requested.
+       *    No sense in doing that work before hand.
+       */
+      item = ide_ctags_completion_item_new (entry, self, context);
+      list = g_list_prepend (list, item);
+
+      last = entry;
     }
 
 failure:
   gtk_source_completion_context_add_proposals (context, provider, list, TRUE);
-  g_list_free (list);
+  g_list_free_full (list, g_object_unref);
 
   IDE_EXIT;
 }
