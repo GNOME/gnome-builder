@@ -188,7 +188,7 @@ ide_ctags_index_build_index (GTask        *task,
   IdeCtagsIndex *self = source_object;
   IdeLineReader reader;
   GError *error = NULL;
-  GArray *index;
+  GArray *index = NULL;
   gchar *contents = NULL;
   gchar *line;
   gsize length = 0;
