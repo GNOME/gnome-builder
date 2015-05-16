@@ -459,9 +459,16 @@ ide_ctags_completion_provider_get_proposal_icon (IdeCtagsCompletionProvider *sel
   return get_pixbuf (self, context, entry);
 }
 
+static gint
+ide_ctags_completion_provider_get_priority (GtkSourceCompletionProvider *provider)
+{
+  return IDE_CTAGS_COMPLETION_PROVIDER_PRIORITY;
+}
+
 static void
 provider_iface_init (GtkSourceCompletionProviderIface *iface)
 {
   iface->get_name = ide_ctags_completion_provider_get_name;
   iface->populate = ide_ctags_completion_provider_populate;
+  iface->get_priority = ide_ctags_completion_provider_get_priority;
 }

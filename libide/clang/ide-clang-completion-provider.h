@@ -23,6 +23,8 @@
 
 G_BEGIN_DECLS
 
+#define IDE_CLANG_COMPLETION_PROVIDER_PRIORITY 200
+
 #define IDE_TYPE_CLANG_COMPLETION_PROVIDER (ide_clang_completion_provider_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeClangCompletionProvider, ide_clang_completion_provider,

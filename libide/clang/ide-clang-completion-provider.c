@@ -502,6 +502,12 @@ ide_clang_completion_provider_get_info_widget (GtkSourceCompletionProvider *prov
   return self->assistant;
 }
 
+static gint
+ide_clang_completion_provider_get_priority (GtkSourceCompletionProvider *provider)
+{
+  return IDE_CLANG_COMPLETION_PROVIDER_PRIORITY;
+}
+
 static void
 completion_provider_iface_init (GtkSourceCompletionProviderIface *iface)
 {
@@ -512,4 +518,5 @@ completion_provider_iface_init (GtkSourceCompletionProviderIface *iface)
   iface->populate = ide_clang_completion_provider_populate;
   iface->get_info_widget = ide_clang_completion_provider_get_info_widget;
   iface->update_info = ide_clang_completion_provider_update_info;
+  iface->get_priority = ide_clang_completion_provider_get_priority;
 }

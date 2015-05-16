@@ -25,6 +25,8 @@
 
 G_BEGIN_DECLS
 
+#define IDE_CTAGS_COMPLETION_PROVIDER_PRIORITY 100
+
 #define IDE_TYPE_CTAGS_COMPLETION_PROVIDER (ide_ctags_completion_provider_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeCtagsCompletionProvider, ide_ctags_completion_provider, IDE, CTAGS_COMPLETION_PROVIDER, GObject)
