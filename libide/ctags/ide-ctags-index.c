@@ -80,7 +80,7 @@ ide_ctags_index_entry_compare_prefix (gconstpointer a,
     return g_strcmp0 (entrya->name, entryb->name);
 }
 
-static gint
+gint
 ide_ctags_index_entry_compare (gconstpointer a,
                                gconstpointer b)
 {

@@ -73,6 +73,9 @@ const IdeCtagsIndexEntry *ide_ctags_index_lookup_prefix (IdeCtagsIndex         *
                                                          const gchar           *keyword,
                                                          gsize                 *length);
 
+gint ide_ctags_index_entry_compare (gconstpointer a,
+                                    gconstpointer b);
+
 G_END_DECLS
 
 #endif /* IDE_CTAGS_INDEX_H */
