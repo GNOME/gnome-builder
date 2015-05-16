@@ -223,6 +223,10 @@ libide_1_0_la_SOURCES = \
 	clang/ide-clang-symbol-resolver.h \
 	clang/ide-clang-translation-unit.c \
 	clang/ide-clang-translation-unit.h \
+	ctags/ide-ctags-completion-item.c \
+	ctags/ide-ctags-completion-item.h \
+	ctags/ide-ctags-completion-provider.c \
+	ctags/ide-ctags-completion-provider.h \
 	ctags/ide-ctags-index.c \
 	ctags/ide-ctags-index.h \
 	ctags/ide-ctags-service.c \

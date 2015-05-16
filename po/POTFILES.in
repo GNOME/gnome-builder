@@ -44,6 +44,7 @@ libide/clang/ide-clang-completion-item.c
 libide/clang/ide-clang-completion-provider.c
 libide/clang/ide-clang-service.c
 libide/clang/ide-clang-translation-unit.c
+libide/ctags/ide-ctags-completion-provider.c
 libide/devhelp/ide-devhelp-search-provider.c
 libide/devhelp/ide-devhelp-search-result.c
 libide/doap/ide-doap-person.c
