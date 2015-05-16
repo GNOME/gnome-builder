@@ -5,5 +5,10 @@
       <summary>Clang based autocompletion</summary>
       <description>Use Clang for autocompletion in the C and C++ languages.</description>
     </key>
+    <key name="ctags-autocompletion" type="b">
+      <default>false</default>
+      <summary>Ctags based autocompletion</summary>
+      <description>Use Ctags for autocompletion.</description>
+    </key>
   </schema>
 </schemalist>

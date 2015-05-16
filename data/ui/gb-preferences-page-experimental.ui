@@ -16,6 +16,15 @@
             <property name="visible">true</property>
           </object>
         </child>
+        <child>
+          <object class="GbPreferencesSwitch" id="ctags_autocompletion">
+            <property name="settings">experimental_settings</property>
+            <property name="settings-schema-key">ctags-autocompletion</property>
+            <property name="title" translatable="yes">CTags Auto-Completion</property>
+            <property name="description" translatable="yes">Use Ctags for autocompletion in supported languages.</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
       </object>
     </child>
   </template>

@@ -26,6 +26,7 @@ struct _GbPreferencesPageExperimental
   GbPreferencesPage  parent_instance;
 
   GtkWidget         *clang_autocompletion;
+  GtkWidget         *ctags_autocompletion;
 };
 
 G_DEFINE_TYPE (GbPreferencesPageExperimental,
@@ -37,6 +38,7 @@ gb_preferences_page_experimental_class_init (GbPreferencesPageExperimentalClass 
 {
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-preferences-page-experimental.ui");
   GB_WIDGET_CLASS_BIND (klass, GbPreferencesPageExperimental, clang_autocompletion);
+  GB_WIDGET_CLASS_BIND (klass, GbPreferencesPageExperimental, ctags_autocompletion);
 }
 
 static void
@@ -48,5 +50,10 @@ gb_preferences_page_experimental_init (GbPreferencesPageExperimental *self)
   /* To translators: This is a list of keywords for the preferences page */
                                                _("experimental clang autocompletion auto complete"),
                                                self->clang_autocompletion,
+                                               NULL);
+  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
+  /* To translators: This is a list of keywords for the preferences page */
+                                               _("experimental exhuberant ctags tags autocompletion auto complete"),
+                                               self->ctags_autocompletion,
                                                NULL);
 }
