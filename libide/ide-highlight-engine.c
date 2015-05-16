@@ -573,9 +573,6 @@ ide_highlight_engine_clear (IdeHighlightEngine *self)
 
       gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
 
-      for (iter = self->private_tags; iter; iter = iter->next)
-        gtk_text_buffer_remove_tag (buffer, iter->data, &begin, &end);
-
       for (iter = self->public_tags; iter; iter = iter->next)
         gtk_text_buffer_remove_tag (buffer, iter->data, &begin, &end);
     }
