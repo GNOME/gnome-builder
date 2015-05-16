@@ -5118,6 +5118,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
   GtkSourceViewClass *source_view_class = GTK_SOURCE_VIEW_CLASS (klass);
+  GtkBindingSet *binding_set;
+  GTypeClass *completion_class;
 
   object_class->constructed = ide_source_view_constructed;
   object_class->dispose = ide_source_view_dispose;
@@ -5828,6 +5830,17 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
+
+  /*
+   * <Return> while the completion window is displayed is actually really easy
+   * to accidentally activate. Therefore, we are switching to just Tab or the
+   * <Alt>Number accelerators. For example, "void<Return>" can easily activate
+   * search results like "voidfp" or "voidId".
+   */
+  completion_class = g_type_class_ref (GTK_SOURCE_TYPE_COMPLETION);
+  binding_set = gtk_binding_set_by_class (completion_class);
+  gtk_binding_entry_remove (binding_set, GDK_KEY_Return, 0);
+  g_type_class_unref (completion_class);
 }
 
 static void
