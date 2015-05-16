@@ -29,9 +29,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCtagsCompletionItem, ide_ctags_completion_item, IDE, CTAGS_COMPLETION_ITEM, GObject)
 
-GtkSourceCompletionProposal *ide_ctags_completion_item_new     (IdeCtagsIndexEntry     *entry);
-gint                         ide_ctags_completion_item_compare (IdeCtagsCompletionItem *itema,
-                                                                IdeCtagsCompletionItem *itemb);
+GtkSourceCompletionProposal *ide_ctags_completion_item_new     (const IdeCtagsIndexEntry *entry);
+gint                         ide_ctags_completion_item_compare (IdeCtagsCompletionItem   *itema,
+                                                                IdeCtagsCompletionItem   *itemb);
 
 G_END_DECLS
 

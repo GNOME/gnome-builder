@@ -25,8 +25,8 @@
 
 struct _IdeCtagsCompletionItem
 {
-  GObject             parent_instance;
-  IdeCtagsIndexEntry *entry;
+  GObject                   parent_instance;
+  const IdeCtagsIndexEntry *entry;
 };
 
 static void proposal_iface_init (GtkSourceCompletionProposalIface *iface);
@@ -36,7 +36,7 @@ G_DEFINE_TYPE_WITH_CODE (IdeCtagsCompletionItem, ide_ctags_completion_item, G_TY
                                                 proposal_iface_init))
 
 GtkSourceCompletionProposal *
-ide_ctags_completion_item_new (IdeCtagsIndexEntry *entry)
+ide_ctags_completion_item_new (const IdeCtagsIndexEntry *entry)
 {
   IdeCtagsCompletionItem *self;
 

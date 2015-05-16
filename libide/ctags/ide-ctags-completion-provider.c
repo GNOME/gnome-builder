@@ -29,6 +29,7 @@ struct _IdeCtagsCompletionProvider
 {
   GObject        parent_instance;
 
+  GSettings     *settings;
   GPtrArray     *indexes;
 
   gint           minimum_word_size;
@@ -56,6 +57,7 @@ ide_ctags_completion_provider_finalize (GObject *object)
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)object;
 
   g_clear_pointer (&self->indexes, g_ptr_array_unref);
+  g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_ctags_completion_provider_parent_class)->finalize (object);
 }
@@ -73,6 +75,7 @@ ide_ctags_completion_provider_init (IdeCtagsCompletionProvider *self)
 {
   self->minimum_word_size = 3;
   self->indexes = g_ptr_array_new_with_free_func (g_object_unref);
+  self->settings = g_settings_new ("org.gnome.builder.experimental");
 }
 
 static gchar *
@@ -132,6 +135,75 @@ sort_wrapper (gconstpointer a,
   return ide_ctags_completion_item_compare (*enta, *entb);
 }
 
+static const gchar * const *
+get_allowed_suffixes (GtkSourceBuffer *buffer)
+{
+  static const gchar *c_languages[] = { ".c", ".h",
+                                        ".cc", ".hh",
+                                        ".cpp", ".hpp",
+                                        ".cxx", ".hxx",
+                                        NULL };
+  static const gchar *vala_languages[] = { ".vala", NULL };
+  static const gchar *python_languages[] = { ".py", NULL };
+  static const gchar *js_languages[] = { ".js", NULL };
+  static const gchar *html_languages[] = { ".html",
+                                           ".htm",
+                                           ".tmpl",
+                                           ".css",
+                                           ".js",
+                                           NULL };
+  GtkSourceLanguage *language;
+  const gchar *lang_id;
+
+  language = gtk_source_buffer_get_language (buffer);
+  if (!language)
+    return NULL;
+
+  lang_id = gtk_source_language_get_id (language);
+
+  /*
+   * NOTE:
+   *
+   * This seems like the type of thing that should be provided as a property
+   * to the ctags provider. However, I'm trying to only have one provider
+   * in process for now, so we hard code things here.
+   *
+   * If we decide to load multiple providers (that all sync with the ctags
+   * service), then we can put this in IdeLanguage:get_completion_providers()
+   * vfunc overrides.
+   */
+
+  if (ide_str_equal0 (lang_id, "c") || ide_str_equal0 (lang_id, "chdr") || ide_str_equal0 (lang_id, "cpp"))
+    return c_languages;
+  else if (ide_str_equal0 (lang_id, "vala"))
+    return vala_languages;
+  else if (ide_str_equal0 (lang_id, "python"))
+    return python_languages;
+  else if (ide_str_equal0 (lang_id, "js"))
+    return js_languages;
+  else if (ide_str_equal0 (lang_id, "html"))
+    return html_languages;
+  else
+    return NULL;
+}
+
+static gboolean
+is_allowed (const IdeCtagsIndexEntry *entry,
+            const gchar * const      *allowed)
+{
+  if (allowed)
+    {
+      const gchar *dotptr = strrchr (entry->path, '.');
+      gsize i;
+
+      for (i = 0; allowed [i]; i++)
+        if (ide_str_equal0 (dotptr, allowed [i]))
+          return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
                                         GtkSourceCompletionContext  *context)
@@ -139,7 +211,9 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
   g_autofree gchar *word = NULL;
   const IdeCtagsIndexEntry *entries;
+  const gchar * const *allowed;
   g_autoptr(GPtrArray) ar = NULL;
+  GtkSourceBuffer *buffer;
   gsize n_entries;
   GtkTextIter iter;
   GList *list = NULL;
@@ -154,8 +228,14 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
   if (self->indexes->len == 0)
     IDE_GOTO (failure);
 
+  if (!g_settings_get_boolean (self->settings, "ctags-autocompletion"))
+    IDE_GOTO (failure);
+
   if (!gtk_source_completion_context_get_iter (context, &iter))
     IDE_GOTO (failure);
+
+  buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (&iter));
+  allowed = get_allowed_suffixes (buffer);
 
   word = get_word_to_cursor (&iter);
   if (ide_str_empty0 (word) || strlen (word) < self->minimum_word_size)
@@ -166,7 +246,7 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
 
   ar = g_ptr_array_new_with_free_func (g_object_unref);
 
-  g_print ("LOOKING UP WORD: %s\n", word);
+  IDE_TRACE_MSG ("Searching for %s", word);
 
   for (j = 0; j < self->indexes->len; j++)
     {
@@ -179,9 +259,13 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
       for (i = 0; i < n_entries; i++)
         {
           GtkSourceCompletionProposal *item;
+          const IdeCtagsIndexEntry *entry = &entries [i];
 
-          item = ide_ctags_completion_item_new ((IdeCtagsIndexEntry *)&entries [i]);
-          g_ptr_array_add (ar, item);
+          if (is_allowed (entry, allowed))
+            {
+              item = ide_ctags_completion_item_new (entry);
+              g_ptr_array_add (ar, item);
+            }
         }
     }
 

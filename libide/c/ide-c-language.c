@@ -52,6 +52,11 @@ ide_c_language_get_completion_providers (IdeLanguage *language)
 
   g_return_val_if_fail (IDE_IS_C_LANGUAGE (language), NULL);
 
+  providers = IDE_LANGUAGE_CLASS (ide_c_language_parent_class)->get_completion_providers (language);
+
+  /*
+   * Our printf/strftime completion provider.
+   */
   providers = g_list_append (providers, g_object_new (IDE_TYPE_C_FORMAT_PROVIDER, NULL));
 
   /*

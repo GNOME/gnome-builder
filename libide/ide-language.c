@@ -18,6 +18,8 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-context.h"
+#include "ide-ctags-service.h"
 #include "ide-diagnostician.h"
 #include "ide-gca-diagnostic-provider.h"
 #include "ide-highlighter.h"
@@ -73,6 +75,35 @@ ide_language_get_source_language (IdeLanguage *self)
     }
 
   return language;
+}
+
+static GList *
+ide_language_real_get_completion_providers (IdeLanguage *self)
+{
+  IdeLanguagePrivate *priv = ide_language_get_instance_private (self);
+  GList *providers = NULL;
+
+  g_assert (IDE_IS_LANGUAGE (self));
+
+  if (ide_str_equal0 (priv->id, "c") ||
+      ide_str_equal0 (priv->id, "cpp") ||
+      ide_str_equal0 (priv->id, "chdr") ||
+      ide_str_equal0 (priv->id, "python") ||
+      ide_str_equal0 (priv->id, "js") ||
+      ide_str_equal0 (priv->id, "css") ||
+      ide_str_equal0 (priv->id, "html"))
+    {
+      IdeCtagsService *service;
+      GtkSourceCompletionProvider *provider;
+      IdeContext *context;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      service = ide_context_get_service_typed (context, IDE_TYPE_CTAGS_SERVICE);
+      provider = ide_ctags_service_get_provider (service);
+      providers = g_list_prepend (providers, g_object_ref (provider));
+    }
+
+  return providers;
 }
 
 /**
@@ -339,6 +370,7 @@ ide_language_class_init (IdeLanguageClass *klass)
   object_class->get_property = ide_language_get_property;
   object_class->set_property = ide_language_set_property;
 
+  klass->get_completion_providers = ide_language_real_get_completion_providers;
   klass->get_diagnostician = ide_language_real_get_diagnostician;
 
   gParamSpecs [PROP_DIAGNOSTICIAN] =

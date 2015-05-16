@@ -44,6 +44,7 @@ ide_python_language_get_completion_providers (IdeLanguage *language)
 
   g_return_val_if_fail (IDE_IS_PYTHON_LANGUAGE (language), NULL);
 
+  providers = IDE_LANGUAGE_CLASS (ide_python_language_parent_class)->get_completion_providers (language);
   providers = g_list_append (providers, g_object_new (IDE_TYPE_PYTHON_FORMAT_PROVIDER, NULL));
 
   return providers;

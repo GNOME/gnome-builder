@@ -44,6 +44,7 @@ ide_html_language_get_completion_providers (IdeLanguage *language)
 
   g_assert (IDE_IS_HTML_LANGUAGE (language));
 
+  list = IDE_LANGUAGE_CLASS (ide_html_language_parent_class)->get_completion_providers (language);
   list = g_list_append (list, g_object_new (IDE_TYPE_HTML_COMPLETION_PROVIDER, NULL));
 
   return list;
