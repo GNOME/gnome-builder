@@ -178,6 +178,11 @@ ide_ctags_service_mine_directory (IdeCtagsService *self,
     ide_ctags_service_load_tags (self, child);
   g_clear_object (&child);
 
+  child = g_file_get_child (directory, ".tags");
+  if (g_file_query_file_type (child, 0, cancellable) == G_FILE_TYPE_REGULAR)
+    ide_ctags_service_load_tags (self, child);
+  g_clear_object (&child);
+
   if (!recurse)
     return;
 
