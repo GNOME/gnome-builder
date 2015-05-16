@@ -20,8 +20,13 @@
 
 #include <glib/gi18n.h>
 
+#include "egg-counter.h"
+
 #include "ide-ctags-completion-item.h"
 #include "ide-ctags-index.h"
+
+EGG_DEFINE_COUNTER (instances, "IdeCtagsCompletionItem", "Instances",
+                    "Number of IdeCtagsCompletionItems")
 
 struct _IdeCtagsCompletionItem
 {
@@ -65,13 +70,25 @@ ide_ctags_completion_item_compare (IdeCtagsCompletionItem *itema,
 }
 
 static void
+ide_ctags_completion_item_finalize (GObject *object)
+{
+  G_OBJECT_CLASS (ide_ctags_completion_item_parent_class)->finalize (object);
+
+  EGG_COUNTER_DEC (instances);
+}
+
+static void
 ide_ctags_completion_item_class_init (IdeCtagsCompletionItemClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = ide_ctags_completion_item_finalize;
 }
 
 static void
 ide_ctags_completion_item_init (IdeCtagsCompletionItem *self)
 {
+  EGG_COUNTER_INC (instances);
 }
 
 static gchar *

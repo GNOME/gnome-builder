@@ -50,6 +50,8 @@ G_DEFINE_TYPE_WITH_CODE (IdeCtagsIndex, ide_ctags_index, IDE_TYPE_OBJECT,
                                                 async_initable_iface_init))
 
 EGG_DEFINE_COUNTER (instances, "IdeCtagsIndex", "Instances", "Number of IdeCtagsIndex instances.")
+EGG_DEFINE_COUNTER (index_entries, "IdeCtagsIndex", "N Entries", "Number of entries in indexes.")
+EGG_DEFINE_COUNTER (heap_size, "IdeCtagsIndex", "Heap Size", "Size of index string heaps.")
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
@@ -238,6 +240,9 @@ ide_ctags_index_build_index (GTask        *task,
   self->index = index;
   self->buffer = g_bytes_new_take (contents, length);
 
+  EGG_COUNTER_ADD (index_entries, (gint64)index->len);
+  EGG_COUNTER_ADD (heap_size, (gint64)length);
+
   g_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
@@ -319,11 +324,22 @@ ide_ctags_index_finalize (GObject *object)
 {
   IdeCtagsIndex *self = (IdeCtagsIndex *)object;
 
+  if (self->index != NULL)
+    EGG_COUNTER_SUB (index_entries, (gint64)self->index->len);
+
+  if (self->buffer != NULL)
+    {
+      gsize len = g_bytes_get_size (self->buffer);
+      EGG_COUNTER_SUB (heap_size, (gint64)len);
+    }
+
   g_clear_object (&self->file);
   g_clear_pointer (&self->index, g_array_unref);
   g_clear_pointer (&self->buffer, g_bytes_unref);
 
   G_OBJECT_CLASS (ide_ctags_index_parent_class)->finalize (object);
+
+  EGG_COUNTER_DEC (instances);
 }
 
 static void
