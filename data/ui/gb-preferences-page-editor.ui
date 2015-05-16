@@ -53,7 +53,7 @@
                 <property name="margin">6</property>
                 <property name="visible">true</property>
                 <property name="vexpand">true</property>
-                <property name="min-content-height">200</property>
+                <property name="min-content-height">150</property>
                 <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkSourceStyleSchemeChooserWidget" id="style_scheme_widget">
@@ -158,31 +158,6 @@
                 <property name="description" translatable="yes">Automatically hide the overview map during periods of inactivity.</property>
                 <property name="settings">editor_settings</property>
                 <property name="settings-schema-key">auto-hide-map</property>
-                <property name="size-group">control_group</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">true</property>
-                <property name="label" translatable="yes">Auto Completion</property>
-                <property name="xalign">0.0</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">6</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-            <child>
-              <object class="GbPreferencesSwitch" id="word_completion_switch">
-                <property name="title" translatable="yes">Suggest Word Completion</property>
-                <property name="description" translatable="yes">Suggest completion of words found within the current document.</property>
-                <property name="settings">editor_settings</property>
-                <property name="settings-schema-key">word-completion</property>
                 <property name="size-group">control_group</property>
                 <property name="visible">true</property>
               </object>

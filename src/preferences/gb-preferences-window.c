@@ -22,8 +22,8 @@
 
 #include "gb-gdk.h"
 #include "gb-preferences-page-editor.h"
-#include "gb-preferences-page-experimental.h"
 #include "gb-preferences-page-git.h"
+#include "gb-preferences-page-insight.h"
 #include "gb-preferences-page-keybindings.h"
 #include "gb-preferences-page-language.h"
 #include "gb-preferences-page.h"
@@ -271,8 +271,8 @@ gb_preferences_window_class_init (GbPreferencesWindowClass *klass)
 
   g_type_ensure (EGG_TYPE_SEARCH_BAR);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EDITOR);
-  g_type_ensure (GB_TYPE_PREFERENCES_PAGE_EXPERIMENTAL);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_GIT);
+  g_type_ensure (GB_TYPE_PREFERENCES_PAGE_INSIGHT);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_KEYBINDINGS);
   g_type_ensure (GB_TYPE_PREFERENCES_PAGE_LANGUAGE);
 }

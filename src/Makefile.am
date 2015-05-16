@@ -86,8 +86,8 @@ libgnome_builder_la_SOURCES = \
 	keybindings/gb-keybindings.h \
 	preferences/gb-preferences-page-editor.c \
 	preferences/gb-preferences-page-editor.h \
-	preferences/gb-preferences-page-experimental.c \
-	preferences/gb-preferences-page-experimental.h \
+	preferences/gb-preferences-page-insight.c \
+	preferences/gb-preferences-page-insight.h \
 	preferences/gb-preferences-page-git.c \
 	preferences/gb-preferences-page-git.h \
 	preferences/gb-preferences-page-keybindings.c \

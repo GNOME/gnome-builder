@@ -31,7 +31,6 @@ struct _GbPreferencesPageEditor
   GSettings                         *editor_settings;
   GtkSwitch                         *restore_insert_mark_switch;
   GtkSwitch                         *show_diff_switch;
-  GtkSwitch                         *word_completion_switch;
   GtkSwitch                         *show_line_numbers_switch;
   GtkSwitch                         *highlight_current_line_switch;
   GtkSwitch                         *highlight_matching_brackets_switch;
@@ -127,7 +126,6 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, style_scheme_container);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, style_scheme_widget);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, word_completion_switch);
 }
 
 static void
@@ -139,11 +137,6 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
   /* To translators: This is a list of keywords for the preferences page */
                                                _("restore insert cursor mark"),
                                                self->restore_insert_mark_switch,
-                                               NULL);
-  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
-  /* To translators: This is a list of keywords for the preferences page */
-                                               _("word words auto completion suggest found document"),
-                                               self->word_completion_switch,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */

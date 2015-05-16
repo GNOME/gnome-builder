@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbPreferencesPageInsight" parent="GbPreferencesPage">
+    <property name="title" translatable="yes">Code Insight</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">true</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Auto Completion</property>
+            <property name="margin-bottom">6</property>
+            <property name="xalign">0.0</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GbPreferencesSwitch" id="word_autocompletion">
+            <property name="title" translatable="yes">Suggest Word Completion</property>
+            <property name="description" translatable="yes">Suggest completion of words found within all open documents.</property>
+            <property name="settings">editor_settings</property>
+            <property name="settings-schema-key">word-completion</property>
+            <property name="size-group">control_group</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GbPreferencesSwitch" id="ctags_autocompletion">
+            <property name="settings">experimental_settings</property>
+            <property name="settings-schema-key">ctags-autocompletion</property>
+            <property name="title" translatable="yes">Suggest Completions using Ctags</property>
+            <property name="description" translatable="yes">Use Ctags for completions in supported languages.</property>
+            <property name="size-group">control_group</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GbPreferencesSwitch" id="clang_autocompletion">
+            <property name="settings">experimental_settings</property>
+            <property name="settings-schema-key">clang-autocompletion</property>
+            <property name="title" translatable="yes">Suggest Completions using Clang (Experimental)</property>
+            <property name="description" translatable="yes">Use Clang for completions in the C and C++ languages.</property>
+            <property name="size-group">control_group</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GSettings" id="experimental_settings">
+    <property name="schema-id">org.gnome.builder.experimental</property>
+  </object>
+  <object class="GSettings" id="editor_settings">
+    <property name="schema-id">org.gnome.builder.editor</property>
+  </object>
+  <object class="GtkSizeGroup" id="control_group">
+    <property name="mode">horizontal</property>
+  </object>
+</interface>

@@ -135,6 +135,16 @@
               </packing>
             </child>
             <child>
+              <object class="GbPreferencesPageInsight" id="insight_page">
+                <property name="visible">True</property>
+                <property name="border_width">12</property>
+              </object>
+              <packing>
+                <property name="name">insight</property>
+                <property name="title" translatable="yes">Code Insight</property>
+              </packing>
+            </child>
+            <child>
               <object class="GbPreferencesPageKeybindings" id="keybindings_page">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
@@ -152,16 +162,6 @@
               <packing>
                 <property name="name">git</property>
                 <property name="title" translatable="yes">Version Control</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GbPreferencesPageExperimental" id="experimental_page">
-                <property name="visible">True</property>
-                <property name="border_width">12</property>
-              </object>
-              <packing>
-                <property name="name">experimental</property>
-                <property name="title" translatable="yes">Experimental</property>
               </packing>
             </child>
           </object>

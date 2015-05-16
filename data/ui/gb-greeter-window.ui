@@ -3,7 +3,7 @@
   <!-- interface-requires gtk+ 3.16 -->
   <template class="GbGreeterWindow" parent="GtkApplicationWindow">
     <property name="default-width">1280</property>
-    <property name="default-height">720</property>
+    <property name="default-height">800</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
         <property name="show-close-button">true</property>
