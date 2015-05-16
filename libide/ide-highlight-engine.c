@@ -36,6 +36,7 @@ struct _IdeHighlightEngine
 
   IdeBuffer      *buffer;
   IdeHighlighter *highlighter;
+  GSettings      *settings;
 
   GtkTextMark    *invalid_begin;
   GtkTextMark    *invalid_end;
@@ -46,6 +47,8 @@ struct _IdeHighlightEngine
   guint64         quanta_expiration;
 
   guint           work_timeout;
+
+  guint           enabled : 1;
 };
 
 G_DEFINE_TYPE (IdeHighlightEngine, ide_highlight_engine, G_TYPE_OBJECT)
@@ -357,10 +360,12 @@ ide_highlight_engine_work_timeout_handler (gpointer data)
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  if (ide_highlight_engine_tick (self))
-    return G_SOURCE_CONTINUE;
-
-  self->work_timeout = 0;
+  if (self->enabled)
+    {
+      if (ide_highlight_engine_tick (self))
+        return G_SOURCE_CONTINUE;
+      self->work_timeout = 0;
+    }
 
   return G_SOURCE_REMOVE;
 }
@@ -387,6 +392,9 @@ invalidate_and_highlight (IdeHighlightEngine *self,
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (begin != NULL);
   g_assert (end != NULL);
+
+  if (!self->enabled)
+    return FALSE;
 
   if (get_invalidation_area (begin, end))
     {
@@ -551,6 +559,29 @@ ide_highlight_engine__notify_style_scheme_cb (IdeHighlightEngine *self,
 }
 
 static void
+ide_highlight_engine_clear (IdeHighlightEngine *self)
+{
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
+
+  if (self->buffer != NULL)
+    {
+      GtkTextBuffer *buffer = GTK_TEXT_BUFFER (self->buffer);
+      GSList *iter;
+
+      gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+
+      for (iter = self->private_tags; iter; iter = iter->next)
+        gtk_text_buffer_remove_tag (buffer, iter->data, &begin, &end);
+
+      for (iter = self->public_tags; iter; iter = iter->next)
+        gtk_text_buffer_remove_tag (buffer, iter->data, &begin, &end);
+    }
+}
+
+static void
 ide_highlight_engine_connect_buffer (IdeHighlightEngine *self,
                                      IdeBuffer          *buffer)
 {
@@ -679,6 +710,26 @@ ide_highlight_engine_set_buffer (IdeHighlightEngine *self,
 }
 
 static void
+ide_highlight_engine_settings_changed (IdeHighlightEngine *self,
+                                       const gchar        *key,
+                                       GSettings          *settings)
+{
+  g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  if (g_settings_get_boolean (settings, "semantic-highlighting"))
+    {
+      self->enabled = TRUE;
+      ide_highlight_engine_rebuild (self);
+    }
+  else
+    {
+      self->enabled = FALSE;
+      ide_highlight_engine_clear (self);
+    }
+}
+
+static void
 ide_highlight_engine_dispose (GObject *object)
 {
   IdeHighlightEngine *self = (IdeHighlightEngine *)object;
@@ -694,6 +745,7 @@ ide_highlight_engine_finalize (GObject *object)
   IdeHighlightEngine *self = (IdeHighlightEngine *)object;
 
   g_clear_object (&self->highlighter);
+  g_clear_object (&self->settings);
   ide_clear_weak_pointer (&self->buffer);
 
   G_OBJECT_CLASS (ide_highlight_engine_parent_class)->finalize (object);
@@ -777,6 +829,14 @@ ide_highlight_engine_class_init (IdeHighlightEngineClass *klass)
 static void
 ide_highlight_engine_init (IdeHighlightEngine *self)
 {
+  self->settings = g_settings_new ("org.gnome.builder.code-insight");
+  self->enabled = g_settings_get_boolean (self->settings, "semantic-highlighting");
+
+  g_signal_connect_object (self->settings,
+                           "changed::semantic-highlighting",
+                           G_CALLBACK (ide_highlight_engine_settings_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 IdeHighlightEngine *
