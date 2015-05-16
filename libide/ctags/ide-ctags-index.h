@@ -55,20 +55,23 @@ typedef struct
   guint8                  padding[3];
 } IdeCtagsIndexEntry;
 
-IdeCtagsIndex            *ide_ctags_index_new         (GFile                *file);
-void                      ide_ctags_index_load_async  (IdeCtagsIndex        *self,
-                                                       GFile                *file,
-                                                       GCancellable         *cancellable,
-                                                       GAsyncReadyCallback   callback,
-                                                       gpointer              user_data);
-gboolean                  ide_ctags_index_load_finish (IdeCtagsIndex        *index,
-                                                       GAsyncResult         *result,
-                                                       GError              **error);
-GFile                    *ide_ctags_index_get_file    (IdeCtagsIndex         *self);
-gsize                     ide_ctags_index_get_size    (IdeCtagsIndex         *self);
-const IdeCtagsIndexEntry *ide_ctags_index_lookup      (IdeCtagsIndex         *self,
-                                                       const gchar           *keyword,
-                                                       gsize                 *length);
+IdeCtagsIndex            *ide_ctags_index_new           (GFile                *file);
+void                      ide_ctags_index_load_async    (IdeCtagsIndex        *self,
+                                                         GFile                *file,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+gboolean                  ide_ctags_index_load_finish   (IdeCtagsIndex        *index,
+                                                         GAsyncResult         *result,
+                                                         GError              **error);
+GFile                    *ide_ctags_index_get_file      (IdeCtagsIndex         *self);
+gsize                     ide_ctags_index_get_size      (IdeCtagsIndex         *self);
+const IdeCtagsIndexEntry *ide_ctags_index_lookup        (IdeCtagsIndex         *self,
+                                                         const gchar           *keyword,
+                                                         gsize                 *length);
+const IdeCtagsIndexEntry *ide_ctags_index_lookup_prefix (IdeCtagsIndex         *self,
+                                                         const gchar           *keyword,
+                                                         gsize                 *length);
 
 G_END_DECLS
 

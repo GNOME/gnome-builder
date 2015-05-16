@@ -64,6 +64,23 @@ ide_ctags_index_entry_compare_keyword (gconstpointer a,
 }
 
 static gint
+ide_ctags_index_entry_compare_prefix (gconstpointer a,
+                                      gconstpointer b)
+{
+  const IdeCtagsIndexEntry *entrya = a;
+  const IdeCtagsIndexEntry *entryb = b;
+
+  /*
+   * With bsearch(), the first element is always the key.
+   */
+
+  if (g_str_has_prefix (entryb->name, entrya->name))
+    return 0;
+  else
+    return g_strcmp0 (entrya->name, entryb->name);
+}
+
+static gint
 ide_ctags_index_entry_compare (gconstpointer a,
                                gconstpointer b)
 {
@@ -401,10 +418,11 @@ ide_ctags_index_get_size (IdeCtagsIndex *self)
   return 0;
 }
 
-const IdeCtagsIndexEntry *
-ide_ctags_index_lookup (IdeCtagsIndex         *self,
-                        const gchar           *keyword,
-                        gsize                 *length)
+static const IdeCtagsIndexEntry *
+ide_ctags_index_lookup_full (IdeCtagsIndex *self,
+                             const gchar   *keyword,
+                             gsize         *length,
+                             GCompareFunc   compare_func)
 {
   IdeCtagsIndexEntry key = { 0 };
   IdeCtagsIndexEntry *ret;
@@ -424,7 +442,7 @@ ide_ctags_index_lookup (IdeCtagsIndex         *self,
                  self->index->data,
                  self->index->len,
                  sizeof (IdeCtagsIndexEntry),
-                 ide_ctags_index_entry_compare_keyword);
+                 compare_func);
 
   if (ret != NULL)
     {
@@ -441,7 +459,7 @@ ide_ctags_index_lookup (IdeCtagsIndex         *self,
        * So let's walk backwards to the first match, being careful not to access the
        * array out of bounds.
        */
-      while ((ret > first) && (ide_str_equal0 (ret[-1].name, keyword)))
+      while ((ret > first) && (compare_func (&key, &ret [-1]) == 0))
         ret--;
 
       /*
@@ -449,8 +467,10 @@ ide_ctags_index_lookup (IdeCtagsIndex         *self,
        */
       for (i = 0; &ret[i] <= last; i++)
         {
-          if (ide_str_equal0 (ret[i].name, keyword))
+          if (compare_func (&key, &ret [i]) == 0)
             count++;
+          else
+            break;
         }
 
       if (length != NULL)
@@ -458,4 +478,22 @@ ide_ctags_index_lookup (IdeCtagsIndex         *self,
     }
 
   return ret;
+}
+
+const IdeCtagsIndexEntry *
+ide_ctags_index_lookup (IdeCtagsIndex         *self,
+                        const gchar           *keyword,
+                        gsize                 *length)
+{
+  return ide_ctags_index_lookup_full (self, keyword, length,
+                                      ide_ctags_index_entry_compare_keyword);
+}
+
+const IdeCtagsIndexEntry *
+ide_ctags_index_lookup_prefix (IdeCtagsIndex         *self,
+                               const gchar           *keyword,
+                               gsize                 *length)
+{
+  return ide_ctags_index_lookup_full (self, keyword, length,
+                                      ide_ctags_index_entry_compare_prefix);
 }
