@@ -34,11 +34,8 @@ struct _GbPreferencesPageEditor
   GtkSwitch                         *show_line_numbers_switch;
   GtkSwitch                         *highlight_current_line_switch;
   GtkSwitch                         *highlight_matching_brackets_switch;
-  GtkSwitch                         *show_grid_lines_switch;
   GtkSpinButton                     *scroll_off_spin;
   GtkFontButton                     *font_button;
-  GtkSourceStyleSchemeChooserWidget *style_scheme_widget;
-  GtkScrolledWindow                 *style_scheme_container;
   GtkAdjustment                     *scroll_off_adjustment;
   GtkBox                            *scroll_off_container;
   GtkWidget                         *auto_hide_map_switch;
@@ -48,32 +45,9 @@ struct _GbPreferencesPageEditor
 G_DEFINE_TYPE (GbPreferencesPageEditor, gb_preferences_page_editor, GB_TYPE_PREFERENCES_PAGE)
 
 static void
-gb_preferences_page_editor_style_scheme_changed (GtkSourceStyleSchemeChooser *chooser,
-                                                 GParamSpec                  *pspec,
-                                                 GSettings                   *settings)
-{
-  GtkSourceStyleScheme *scheme;
-  const gchar *scheme_id;
-
-  g_return_if_fail (GTK_SOURCE_IS_STYLE_SCHEME_CHOOSER (chooser));
-  g_return_if_fail (G_IS_SETTINGS (settings));
-
-  scheme = gtk_source_style_scheme_chooser_get_style_scheme (chooser);
-
-  if (scheme)
-    {
-      scheme_id = gtk_source_style_scheme_get_id (scheme);
-      g_settings_set_string (settings, "style-scheme-name", scheme_id);
-    }
-}
-
-static void
 gb_preferences_page_editor_constructed (GObject *object)
 {
   GbPreferencesPageEditor *self = (GbPreferencesPageEditor *)object;
-  GtkSourceStyleSchemeManager *manager;
-  GtkSourceStyleScheme *scheme;
-  gchar *scheme_id;
 
   g_assert (GB_IS_PREFERENCES_PAGE_EDITOR (self));
 
@@ -85,20 +59,6 @@ gb_preferences_page_editor_constructed (GObject *object)
   g_settings_bind (self->editor_settings, "font-name",
                    self->font_button, "font-name",
                    G_SETTINGS_BIND_DEFAULT);
-
-  scheme_id = g_settings_get_string (self->editor_settings, "style-scheme-name");
-  manager = gtk_source_style_scheme_manager_get_default ();
-  scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_id);
-  g_free (scheme_id);
-
-  gtk_source_style_scheme_chooser_set_style_scheme (
-      GTK_SOURCE_STYLE_SCHEME_CHOOSER (self->style_scheme_widget),
-      scheme);
-  g_signal_connect_object (self->style_scheme_widget,
-                           "notify::style-scheme",
-                           G_CALLBACK (gb_preferences_page_editor_style_scheme_changed),
-                           self->editor_settings,
-                           0);
 }
 
 static void
@@ -122,10 +82,7 @@ gb_preferences_page_editor_class_init (GbPreferencesPageEditorClass *klass)
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, scroll_off_container);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, scroll_off_spin);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_diff_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_grid_lines_switch);
   GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, show_line_numbers_switch);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, style_scheme_container);
-  GB_WIDGET_CLASS_BIND (widget_class, GbPreferencesPageEditor, style_scheme_widget);
 }
 
 static void
@@ -160,11 +117,6 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */
-                                               _("show grid lines"),
-                                               self->show_grid_lines_switch,
-                                               NULL);
-  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
-  /* To translators: This is a list of keywords for the preferences page */
                                                _("lines margin scrolloff scroll off"),
                                                self->scroll_off_container,
                                                self->scroll_off_spin,
@@ -173,11 +125,6 @@ gb_preferences_page_editor_init (GbPreferencesPageEditor *self)
   /* To translators: This is a list of keywords for the preferences page */
                                                _("font document editor monospace"),
                                                self->font_button,
-                                               NULL);
-  gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
-  /* To translators: This is a list of keywords for the preferences page */
-                                               _("source style scheme source tango solarized builder syntax"),
-                                               self->style_scheme_container,
                                                NULL);
   gb_preferences_page_set_keywords_for_widget (GB_PREFERENCES_PAGE (self),
   /* To translators: This is a list of keywords for the preferences page */

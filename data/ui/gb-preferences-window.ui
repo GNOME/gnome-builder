@@ -155,6 +155,16 @@
               </packing>
             </child>
             <child>
+              <object class="GbPreferencesPageTheme" id="theme_page">
+                <property name="visible">True</property>
+                <property name="border_width">12</property>
+              </object>
+              <packing>
+                <property name="name">theme</property>
+                <property name="title" translatable="yes">Theme</property>
+              </packing>
+            </child>
+            <child>
               <object class="GbPreferencesPageGit" id="git_page">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbPreferencesPageTheme" parent="GbPreferencesPage">
+    <property name="title" translatable="yes">Theme</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">true</property>
+        <property name="hscrollbar-policy">never</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">true</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GbPreferencesSwitch" id="show_grid_lines_switch">
+                <property name="title" translatable="yes">Display Grid Pattern</property>
+                <property name="description" translatable="yes">Display a grid pattern under the source code.</property>
+                <property name="settings">editor_settings</property>
+                <property name="settings-schema-key">show-grid-lines</property>
+                <property name="size-group">control_group</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSourceStyleSchemeChooserWidget" id="style_scheme_widget">
+                <property name="margin-top">6</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GSettings" id="editor_settings">
+    <property name="schema-id">org.gnome.builder.editor</property>
+  </object>
+  <object class="GtkSizeGroup" id="control_group">
+    <property name="mode">horizontal</property>
+  </object>
+</interface>
