@@ -106,7 +106,9 @@ gb_application_make_skeleton_dirs (GbApplication *self)
 static void
 gb_application_register_theme_overrides (GbApplication *application)
 {
-  GtkCssProvider *provider;
+  g_autoptr(GSettings) settings = NULL;
+  g_autoptr(GtkCssProvider) provider = NULL;
+  GtkSettings *gtk_settings;
   GdkScreen *screen;
 
   IDE_ENTRY;
@@ -118,7 +120,12 @@ gb_application_register_theme_overrides (GbApplication *application)
   screen = gdk_screen_get_default ();
   gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  g_object_unref (provider);
+
+  gtk_settings = gtk_settings_get_for_screen (screen);
+  settings = g_settings_new ("org.gnome.builder");
+  g_settings_bind (settings, "night-mode",
+                   gtk_settings, "gtk-application-prefer-dark-theme",
+                   G_SETTINGS_BIND_DEFAULT);
 
   IDE_EXIT;
 }

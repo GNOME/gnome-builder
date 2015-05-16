@@ -15,5 +15,10 @@
       <summary>Window maximized</summary>
       <description>Window maximized state</description>
     </key>
+    <key name="night-mode" type="b">
+      <default>false</default>
+      <summary>Night Mode</summary>
+      <description>Prefer dark application chrome.</description>
+    </key>
   </schema>
 </schemalist>
