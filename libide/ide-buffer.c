@@ -794,27 +794,43 @@ ide_buffer_constructed (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-  GdkRGBA warning_rgba;
   GdkRGBA deprecated_rgba;
+  GdkRGBA error_rgba;
+  GdkRGBA note_rgba;
+  GdkRGBA warning_rgba;
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->constructed (object);
 
+  /*
+   * TODO: Once we bump to GtkSourceView 3.17, these should be extracted
+   *       from the style scheme (or use the style scheme directly).
+   */
+  gdk_rgba_parse (&deprecated_rgba, "#babdb6");
+  gdk_rgba_parse (&error_rgba, "#ff0000");
+  gdk_rgba_parse (&note_rgba, "#708090");
   gdk_rgba_parse (&warning_rgba, "#fcaf3e");
-  gdk_rgba_parse (&deprecated_rgba, "#f57900");
 
-  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_ERROR,
-                              "underline", PANGO_UNDERLINE_ERROR,
-                              NULL);
+  /*
+   * NOTE:
+   *
+   * The tag table assigns priority upon insert. Each successive insert
+   * is higher priority than the last.
+   */
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_NOTE,
-                              "underline", PANGO_UNDERLINE_SINGLE,
+                              "underline", PANGO_UNDERLINE_ERROR,
+                              "underline-rgba", &note_rgba,
+                              NULL);
+  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_DEPRECATED,
+                              "underline", PANGO_UNDERLINE_ERROR,
+                              "underline-rgba", &deprecated_rgba,
                               NULL);
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_WARNING,
                               "underline", PANGO_UNDERLINE_ERROR,
                               "underline-rgba", &warning_rgba,
                               NULL);
-  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_DEPRECATED,
+  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_ERROR,
                               "underline", PANGO_UNDERLINE_ERROR,
-                              "underline-rgba", &deprecated_rgba,
+                              "underline-rgba", &error_rgba,
                               NULL);
 
   priv->highlight_engine = ide_highlight_engine_new (self);
