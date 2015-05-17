@@ -425,7 +425,10 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
       ide_source_view_set_rubberband_search (self->source_view, FALSE);
       ide_source_view_scroll_mark_onscreen (self->source_view,
-                                            gtk_text_buffer_get_insert (buffer));
+                                            gtk_text_buffer_get_insert (buffer),
+                                            TRUE,
+                                            0.5,
+                                            0.5);
 
       /* finally we can focus the source view */
       gtk_widget_grab_focus (GTK_WIDGET (self->source_view));

@@ -1506,5 +1506,5 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
     *target_offset = gtk_text_iter_get_line_offset (&mv.insert);
 
   if (!mv.ignore_scroll_to_insert)
-    ide_source_view_scroll_mark_onscreen (self, insert);
+    ide_source_view_scroll_mark_onscreen (self, insert, TRUE, 0.5, 0.5);
 }

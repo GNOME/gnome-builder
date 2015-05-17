@@ -349,7 +349,10 @@ gboolean                    ide_source_view_move_mark_onscreen        (IdeSource
 gboolean                    ide_source_view_place_cursor_onscreen     (IdeSourceView              *self);
 void                        ide_source_view_clear_search              (IdeSourceView              *self);
 void                        ide_source_view_scroll_mark_onscreen      (IdeSourceView              *self,
-                                                                       GtkTextMark                *mark);
+                                                                       GtkTextMark                *mark,
+                                                                       gboolean                    use_align,
+                                                                       gdouble                     alignx,
+                                                                       gdouble                     aligny);
 void                        ide_source_view_scroll_to_mark            (IdeSourceView              *self,
                                                                        GtkTextMark                *mark,
                                                                        gdouble                     within_margin,

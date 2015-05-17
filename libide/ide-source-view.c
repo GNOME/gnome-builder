@@ -20,7 +20,6 @@
 
 #include <glib/gi18n.h>
 #include <stdlib.h>
-
 #include "egg-binding-set.h"
 #include "egg-signal-group.h"
 
@@ -708,14 +707,12 @@ ide_source_view_scroll_to_insert (IdeSourceView *self)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *mark;
-  GtkTextIter iter;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   mark = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
-  gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self), &iter, 0.0, FALSE, 0.0, 0.0);
+  ide_source_view_scroll_mark_onscreen (self, mark, 0.0, TRUE, 0.5, 0.5, TRUE);
 }
 
 static void
@@ -1095,7 +1092,7 @@ ide_source_view__search_settings_notify_search_text (IdeSourceView           *se
                                              &match_begin, &match_end))
         {
           gtk_text_buffer_move_mark (buffer, priv->rubberband_mark, &match_begin);
-          ide_source_view_scroll_mark_onscreen (self, priv->rubberband_mark);
+          ide_source_view_scroll_mark_onscreen (self, priv->rubberband_mark, TRUE, 0.5, 0.5);
         }
     }
 }
@@ -1336,7 +1333,7 @@ ide_source_view__buffer_loaded_cb (IdeSourceView *self,
     }
 
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
-  ide_source_view_scroll_to_mark (self, insert, 0.0, TRUE, 1.0, 0.5, TRUE);
+  ide_source_view_scroll_to_mark (self, insert, 0.0, TRUE, 0.5, 0.5, TRUE);
 
   /*
    * Store the line offset so movements are correct.
@@ -1411,7 +1408,7 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   ide_source_view_real_set_mode (self, NULL, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
 
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
-  gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self), insert, 0.0, TRUE, 1.0, 0.5);
+  ide_source_view_scroll_mark_onscreen (self, insert, TRUE, 0.5, 0.5);
 
   IDE_EXIT;
 }
@@ -1821,7 +1818,7 @@ ide_source_view_do_indent (IdeSourceView *self,
       /*
        * Make sure we stay in the visible rect.
        */
-      ide_source_view_scroll_mark_onscreen (self, insert);
+      ide_source_view_scroll_mark_onscreen (self, insert, FALSE, 0, 0);
 
       /*
        * Keep our selves pinned to the bottom of the document if that makes sense.
@@ -2212,7 +2209,7 @@ ide_source_view_key_press_event (GtkWidget   *widget,
    * Only scroll to the insert mark if we made a change.
    */
   if (priv->change_sequence != change_sequence)
-    ide_source_view_scroll_mark_onscreen (self, insert);
+    ide_source_view_scroll_mark_onscreen (self, insert, FALSE, 0, 0);
 
   return ret;
 }
@@ -2494,7 +2491,7 @@ ide_source_view_real_clear_selection (IdeSourceView *self)
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
   gtk_text_buffer_select_range (buffer, &iter, &iter);
-  gtk_text_view_scroll_mark_onscreen (text_view, insert);
+  ide_source_view_scroll_mark_onscreen (self, insert, FALSE, 0, 0);
 }
 
 static void
@@ -2688,7 +2685,7 @@ ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
   gtk_text_buffer_end_user_action (buffer);
 
 maybe_scroll:
-  ide_source_view_scroll_mark_onscreen (self, gtk_text_buffer_get_insert (buffer));
+  ide_source_view_scroll_mark_onscreen (self, gtk_text_buffer_get_insert (buffer), FALSE, 0, 0);
   if (at_bottom)
     ide_source_view_scroll_to_bottom (self);
 
@@ -3157,7 +3154,7 @@ ide_source_view__search_forward_cb (GObject      *object,
   if (!gtk_widget_has_focus (GTK_WIDGET (mv->self)))
     ide_source_view_real_save_insert_mark (mv->self);
 
-  ide_source_view_scroll_mark_onscreen (mv->self, insert);
+  ide_source_view_scroll_mark_onscreen (mv->self, insert, TRUE, 0.5, 0.5);
 }
 
 static void
@@ -3225,7 +3222,7 @@ ide_source_view__search_backward_cb (GObject      *object,
   if (!gtk_widget_has_focus (GTK_WIDGET (mv->self)))
     ide_source_view_real_save_insert_mark (mv->self);
 
-  ide_source_view_scroll_mark_onscreen (mv->self, insert);
+  ide_source_view_scroll_mark_onscreen (mv->self, insert, TRUE, 0.5, 0.5);
 }
 
 static void
@@ -3357,7 +3354,7 @@ ide_source_view_real_move_error (IdeSourceView    *self,
                   break;
 
               gtk_text_buffer_select_range (buffer, &iter, &iter);
-              ide_source_view_scroll_mark_onscreen (self, insert);
+              ide_source_view_scroll_mark_onscreen (self, insert, TRUE, 0.5, 0.5);
               return;
             }
 
@@ -3405,7 +3402,7 @@ ide_source_view_real_restore_insert_mark_full (IdeSourceView *self,
       GtkTextMark *insert;
 
       insert = gtk_text_buffer_get_insert (buffer);
-      ide_source_view_scroll_mark_onscreen (self, insert);
+      ide_source_view_scroll_mark_onscreen (self, insert, FALSE, 0, 0);
     }
 }
 
@@ -3671,7 +3668,7 @@ ide_source_view_real_insert_at_cursor (GtkTextView *text_view,
   GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->insert_at_cursor (text_view, str);
 
   buffer = gtk_text_view_get_buffer (text_view);
-  ide_source_view_scroll_mark_onscreen (self, gtk_text_buffer_get_insert (buffer));
+  ide_source_view_scroll_mark_onscreen (self, gtk_text_buffer_get_insert (buffer), FALSE, 0, 0);
 
   if (at_bottom)
     ide_source_view_scroll_to_bottom (self);
@@ -4800,7 +4797,7 @@ ide_source_view_replay_scroll (gpointer data)
 
   priv->delayed_scroll_replay = 0;
 
-  ide_source_view_scroll_mark_onscreen (self, priv->scroll_mark);
+  ide_source_view_scroll_mark_onscreen (self, priv->scroll_mark, TRUE, 0.5, 0.5);
 
   return G_SOURCE_REMOVE;
 }
@@ -6490,7 +6487,10 @@ ide_source_view_get_visible_rect (IdeSourceView *self,
 
 void
 ide_source_view_scroll_mark_onscreen (IdeSourceView *self,
-                                      GtkTextMark   *mark)
+                                      GtkTextMark   *mark,
+                                      gboolean       use_align,
+                                      gdouble        alignx,
+                                      gdouble        aligny)
 {
   GtkTextView *text_view = (GtkTextView *)self;
   GtkTextBuffer *buffer;
@@ -6509,7 +6509,7 @@ ide_source_view_scroll_mark_onscreen (IdeSourceView *self,
   gtk_text_view_get_iter_location (text_view, &iter, &mark_rect);
 
   if (!_GDK_RECTANGLE_CONTAINS (&visible_rect, &mark_rect))
-    ide_source_view_scroll_to_mark (self, mark, 0.0, FALSE, 0.0, 0.0, TRUE);
+    ide_source_view_scroll_to_mark (self, mark, 0.0, use_align, alignx, aligny, TRUE);
 
   IDE_EXIT;
 }
@@ -6597,6 +6597,10 @@ ide_source_view__vadj_animation_completed (IdeSourceView *self)
   IDE_EXIT;
 }
 
+/*
+ * Many parts of this function were taken from gtk_text_view_scroll_to_iter ()
+ * https://developer.gnome.org/gtk3/stable/GtkTextView.html#gtk-text-view-scroll-to-iter
+ */
 void
 ide_source_view_scroll_to_iter (IdeSourceView     *self,
                                 const GtkTextIter *iter,
@@ -6609,112 +6613,156 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextView *text_view = (GtkTextView *)self;
   GtkTextBuffer *buffer;
+  GdkRectangle rect;
+  GdkRectangle screen;
+  gint xvalue = 0;
+  gint yvalue = 0;
+  gint scroll_dest;
+  gint screen_bottom;
+  gint screen_right;
+  gint screen_xoffset;
+  gint screen_yoffset;
+  gint current_x_scroll;
+  gint current_y_scroll;
   GtkAdjustment *hadj;
   GtkAdjustment *vadj;
-  GdkFrameClock *frame_clock;
-  GdkRectangle real_visible_rect;
-  GdkRectangle visible_rect;
-  GdkRectangle iter_rect;
-  gdouble yvalue;
-  gdouble xvalue;
-  gdouble orig_yalign;
-  gint xoffset;
-  gint yoffset;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-  g_return_if_fail (iter);
-  g_return_if_fail (xalign >= 0.0);
-  g_return_if_fail (xalign <= 1.0);
-  g_return_if_fail (yalign >= 0.0);
-  g_return_if_fail (yalign <= 1.0);
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (within_margin >= 0.0 && within_margin <= 0.5);
+  g_return_if_fail (xalign >= 0.0 && xalign <= 1.0);
+  g_return_if_fail (yalign >= 0.0 && yalign <= 1.0);
 
   if (!ide_source_view_can_animate (self))
     animate_scroll = FALSE;
 
+
   buffer = gtk_text_view_get_buffer (text_view);
-
   gtk_text_buffer_move_mark (buffer, priv->scroll_mark, iter);
-
-  gtk_text_view_get_visible_rect (text_view, &real_visible_rect);
-  ide_source_view_get_visible_rect (self, &visible_rect);
 
   hadj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (self));
   vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self));
 
-  gtk_text_view_get_iter_location (text_view, iter, &iter_rect);
+  gtk_text_view_get_iter_location (text_view,
+                                   iter,
+                                   &rect);
 
-  TRACE_RECTANGLE ("visible_rect", &visible_rect);
-  TRACE_RECTANGLE ("iter_rect", &iter_rect);
+  gtk_text_view_get_visible_rect (text_view, &screen);
 
-  /* leave a character of room to the right of the screen */
-  visible_rect.width -= priv->cached_char_width;
+  current_x_scroll = screen.x;
+  current_y_scroll = screen.y;
 
-  if (use_align == FALSE)
+  screen_xoffset = screen.width * within_margin;
+  screen_yoffset = screen.height * within_margin;
+
+  screen.x += screen_xoffset;
+  screen.y += screen_yoffset;
+  screen.width -= screen_xoffset * 2;
+  screen.height -= screen_yoffset * 2;
+
+
+  /* paranoia check */
+  if (screen.width < 1)
+    screen.width = 1;
+  if (screen.height < 1)
+    screen.height = 1;
+
+  /* The -1 here ensures that we leave enough space to draw the cursor
+   * when this function is used for horizontal scrolling.
+   */
+  screen_right = screen.x + screen.width - 1;
+  screen_bottom = screen.y + screen.height;
+
+
+  /* The alignment affects the point in the target character that we
+   * choose to align. If we're doing right/bottom alignment, we align
+   * the right/bottom edge of the character the mark is at; if we're
+   * doing left/top we align the left/top edge of the character; if
+   * we're doing center alignment we align the center of the
+   * character.
+   */
+
+  /* Vertical alignment */
+  scroll_dest = current_y_scroll;
+  if (use_align)
     {
-      if (iter_rect.y < visible_rect.y)
-        yalign = 0.0;
-      else if (_GDK_RECTANGLE_Y2 (&iter_rect) > _GDK_RECTANGLE_Y2 (&visible_rect))
-        yalign = 1.0;
-      else
-        yalign = (iter_rect.y - visible_rect.y)  / (gdouble)visible_rect.height;
+      scroll_dest = rect.y + (rect.height * yalign) - (screen.height * yalign);
 
-      IDE_TRACE_MSG ("yalign = %lf", yalign);
-
-      if (iter_rect.x < visible_rect.x)
+      /* if scroll_dest < screen.y, we move a negative increment (up),
+       * else a positive increment (down)
+       */
+      yvalue = scroll_dest - screen.y + screen_yoffset;
+    }
+  else
+    {
+      /* move minimum to get onscreen */
+      if (rect.y < screen.y)
         {
-          /* if we can get all the way to the line start, do so */
-          if (_GDK_RECTANGLE_X2 (&iter_rect) < visible_rect.width)
-            xalign = 1.0;
-          else
-            xalign = 0.0;
+          scroll_dest = rect.y;
+          yvalue = scroll_dest - screen.y - screen_yoffset;
         }
-      else if (_GDK_RECTANGLE_X2 (&iter_rect) > _GDK_RECTANGLE_X2 (&visible_rect))
-        xalign = 1.0;
-      else
-        xalign = (iter_rect.x - visible_rect.x) / (gdouble)visible_rect.width;
+      else if ((rect.y + rect.height) > screen_bottom)
+        {
+          scroll_dest = rect.y + rect.height;
+          yvalue = scroll_dest - screen_bottom + screen_yoffset;
+        }
+    }
+  yvalue += current_y_scroll;
+
+  /* Scroll offset adjustment */
+  if (priv->cached_char_height)
+    {
+      gint max_scroll_offset;
+      gint visible_lines;
+      gint scroll_offset;
+      gint scroll_offset_height;
+
+      visible_lines = screen.height / priv->cached_char_height;
+      max_scroll_offset = (visible_lines - 1) / 2;
+      scroll_offset = MIN (priv->scroll_offset, max_scroll_offset);
+      scroll_offset_height = priv->cached_char_height * scroll_offset;
+
+      if (scroll_offset_height > 0)
+        {
+          if (rect.y - scroll_offset_height < yvalue)
+            yvalue -= (scroll_offset_height - (rect.y - yvalue));
+          else if (_GDK_RECTANGLE_Y2 (&rect) + scroll_offset_height > yvalue + screen.height)
+            yvalue += (_GDK_RECTANGLE_Y2 (&rect) + scroll_offset_height) - (yvalue + screen.height);
+        }
     }
 
-  g_assert (xalign >= 0.0);
-  g_assert (yalign >= 0.0);
-  g_assert (xalign <= 1.0);
-  g_assert (yalign <= 1.0);
+  /* Horizontal alignment */
+  scroll_dest = current_x_scroll;
+  if (use_align)
+    {
+      scroll_dest = rect.x + (rect.width * xalign) - (screen.width * xalign);
 
-  /* get the screen coordinates within the real visible area */
-  xoffset = (visible_rect.x - real_visible_rect.x) + (xalign * visible_rect.width);
-  yoffset = (visible_rect.y - real_visible_rect.y) + (yalign * visible_rect.height);
-
-  /*
-   * now convert those back to alignments in the real visible area, but leave
-   * enough space for an input character.
-   */
-  orig_yalign = yalign;
-  xalign = xoffset / (gdouble)real_visible_rect.width;
-  yalign = yoffset / (gdouble)(real_visible_rect.height + priv->cached_char_height);
-
-  yvalue = iter_rect.y - (yalign * real_visible_rect.height);
-  xvalue = iter_rect.x - (xalign * real_visible_rect.width);
-
-  /*
-   * FIXME:
-   *
-   * We need to understand better why this phenomina exists.
-   *
-   * 0.0 and 1.0 at visible boundaries creates some interesting artifacts.
-   * This works around the phenomina at to ensure we are pinned inside the
-   * visible area we care about. We probably need to take this into account
-   * in the alignment calculations in a previous step.
-   */
-  if (orig_yalign == 1.0)
-    yvalue += (priv->cached_char_height / 2);
-  else if (orig_yalign == 0.0)
-    yvalue -= (priv->cached_char_height / 2);
-
-  frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
+      /* if scroll_dest < screen.y, we move a negative increment (left),
+       * else a positive increment (right)
+       */
+      xvalue = scroll_dest - screen.x + screen_xoffset;
+    }
+  else
+    {
+      /* move minimum to get onscreen */
+      if (rect.x < screen.x)
+        {
+          scroll_dest = rect.x;
+          xvalue = scroll_dest - screen.x - screen_xoffset;
+        }
+      else if ((rect.x + rect.width) > screen_right)
+        {
+          scroll_dest = rect.x + rect.width;
+          xvalue = scroll_dest - screen_right + screen_xoffset;
+        }
+    }
+  xvalue += current_x_scroll;
 
   if (animate_scroll)
     {
+      GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
       guint duration_msec = LARGE_SCROLL_DURATION_MSEC;
       gdouble difference;
       gdouble page_size;
@@ -6748,7 +6796,7 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
                             IDE_ANIMATION_EASE_OUT_CUBIC,
                             duration_msec,
                             frame_clock,
-                            "value", xvalue,
+                            "value", (double)xvalue,
                             NULL);
       g_object_add_weak_pointer (G_OBJECT (priv->hadj_animation),
                                  (gpointer *)&priv->hadj_animation);
@@ -6766,7 +6814,7 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
                                  frame_clock,
                                  (GDestroyNotify)ide_source_view__vadj_animation_completed,
                                  self,
-                                 "value", yvalue,
+                                 "value", (double)yvalue,
                                  NULL);
       g_object_add_weak_pointer (G_OBJECT (priv->vadj_animation),
                                  (gpointer *)&priv->vadj_animation);
@@ -7177,7 +7225,7 @@ ide_source_view_rollback_search (IdeSourceView *self)
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
-  ide_source_view_scroll_mark_onscreen (self, priv->rubberband_mark);
+  ide_source_view_scroll_mark_onscreen (self, priv->rubberband_mark, TRUE, 0.5, 0.5);
 }
 
 GtkTextMark *
