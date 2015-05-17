@@ -421,14 +421,14 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
   gParamSpecs [PROP_DESCRIPTION] =
     g_param_spec_string ("description",
                          _("Description"),
-                         _("The project description"),
+                         _("The project description."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_NAME] =
     g_param_spec_string ("name",
                          _("Name"),
-                         _("The project name"),
+                         _("The project name."),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -441,7 +441,7 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
 
   gParamSpecs [PROP_DOAP] =
     g_param_spec_object ("doap",
-                         _("Doap"),
+                         _("DOAP"),
                          _("A DOAP describing the project."),
                          IDE_TYPE_DOAP,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
@@ -449,7 +449,7 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
   gParamSpecs [PROP_FILE] =
     g_param_spec_object ("file",
                          _("File"),
-                         _("The toplevel project file"),
+                         _("The toplevel project file."),
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -477,7 +477,7 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
   gParamSpecs [PROP_PRIORITY] =
     g_param_spec_int ("priority",
                       _("Priority"),
-                      _("The priority of the project info type."),
+                      _("The priority of the project information type."),
                       G_MININT,
                       G_MAXINT,
                       0,

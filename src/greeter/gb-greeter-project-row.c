@@ -282,8 +282,8 @@ gb_greeter_project_row_class_init (GbGreeterProjectRowClass *klass)
 
   gParamSpecs [PROP_PROJECT_INFO] =
     g_param_spec_object ("project-info",
-                         _("Project Info"),
-                         _("The project info to render."),
+                         _("Project Information"),
+                         _("The project information to render."),
                          IDE_TYPE_PROJECT_INFO,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_PROJECT_INFO,

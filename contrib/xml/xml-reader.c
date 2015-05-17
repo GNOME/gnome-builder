@@ -184,8 +184,8 @@ xml_reader_class_init (XmlReaderClass *klass)
 
   gParamSpecs [PROP_URI] =
     g_param_spec_string ("uri",
-                         _("Uri"),
-                         _("Uri"),
+                         _("URI"),
+                         _("URI"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
