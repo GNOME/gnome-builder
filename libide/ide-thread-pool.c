@@ -24,6 +24,7 @@
 #include "ide-thread-pool.h"
 
 #define COMPILER_MAX_THREADS 4
+#define INDEXER_MAX_THREADS  1
 
 typedef struct
 {
@@ -125,4 +126,14 @@ _ide_thread_pool_init (void)
                                                                COMPILER_MAX_THREADS,
                                                                TRUE,
                                                                NULL);
+
+  /*
+   * Create our pool exclusive to things like indexing. Such examples including building of
+   * ctags indexes or highlight indexes.
+   */
+  gThreadPools [IDE_THREAD_POOL_INDEXER] = g_thread_pool_new (ide_thread_pool_worker,
+                                                              NULL,
+                                                              INDEXER_MAX_THREADS,
+                                                              TRUE,
+                                                              NULL);
 }
