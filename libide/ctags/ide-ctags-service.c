@@ -24,10 +24,13 @@
 #include "egg-task-cache.h"
 
 #include "ide-context.h"
+#include "ide-ctags-builder.h"
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-service.h"
 #include "ide-ctags-index.h"
 #include "ide-debug.h"
+#include "ide-global.h"
+#include "ide-project.h"
 #include "ide-vcs.h"
 
 struct _IdeCtagsService
@@ -37,6 +40,7 @@ struct _IdeCtagsService
   GtkSourceCompletionProvider *provider;
   EggTaskCache                *indexes;
   GCancellable                *cancellable;
+  IdeCtagsBuilder             *builder;
 
   guint                        miner_ran : 1;
 };
@@ -83,7 +87,7 @@ ide_ctags_service_build_index_cb (EggTaskCache  *cache,
   index = ide_ctags_index_new (file);
 
   uri = g_file_get_uri (file);
-  g_debug ("Building ctags index for %s", uri);
+  g_debug ("Building ctags in memory index for %s", uri);
 
   g_async_initable_init_async (G_ASYNC_INITABLE (index),
                                G_PRIORITY_DEFAULT,
@@ -102,18 +106,26 @@ ide_ctags_service_tags_loaded_cb (GObject      *object,
   EggTaskCache *cache = (EggTaskCache *)object;
   g_autoptr(IdeCtagsService) self = user_data;
   g_autoptr(IdeCtagsIndex) index = NULL;
+  GError *error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (EGG_IS_TASK_CACHE (cache));
   g_assert (IDE_IS_CTAGS_SERVICE (self));
   g_assert (self->provider != NULL);
   g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self->provider));
 
-  if ((index = egg_task_cache_get_finish (cache, result, NULL)))
+  if (!(index = egg_task_cache_get_finish (cache, result, &error)))
     {
-      g_assert (IDE_IS_CTAGS_INDEX (index));
-      ide_ctags_completion_provider_add_index (IDE_CTAGS_COMPLETION_PROVIDER (self->provider),
-                                               index);
+      g_debug ("%s", error->message);
+      g_clear_error (&error);
+      IDE_EXIT;
     }
+
+  g_assert (IDE_IS_CTAGS_INDEX (index));
+  ide_ctags_completion_provider_add_index (IDE_CTAGS_COMPLETION_PROVIDER (self->provider), index);
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -218,8 +230,10 @@ ide_ctags_service_miner (GTask        *task,
                          gpointer      task_data,
                          GCancellable *cancellable)
 {
+  g_autofree gchar *project_tags = NULL;
   IdeCtagsService *self = source_object;
   IdeContext *context;
+  IdeProject *project;
   IdeVcs *vcs;
   GFile *file;
 
@@ -228,19 +242,34 @@ ide_ctags_service_miner (GTask        *task,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   vcs = ide_context_get_vcs (context);
+  project = ide_context_get_project (context);
+  project_tags = g_build_filename (g_get_user_cache_dir (),
+                                   ide_get_program_name (),
+                                   ide_project_get_id (project),
+                                   "tags",
+                                   NULL);
+
+  /* mine ~/.cache/gnome-builder/<name>/tags */
+  file = g_file_new_for_path (project_tags);
+  ide_ctags_service_load_tags (self, file);
+  g_object_unref (file);
+
+  /* mine the project tree */
   file = g_object_ref (ide_vcs_get_working_directory (vcs));
-  /* now we can release our hold on the context */
-  ide_object_release (IDE_OBJECT (self));
   ide_ctags_service_mine_directory (self, file, TRUE, cancellable);
   g_object_unref (file);
 
+  /* mine ~/.tags */
   file = g_file_new_for_path (g_get_home_dir ());
   ide_ctags_service_mine_directory (self, file, FALSE, cancellable);
   g_object_unref (file);
 
+  /* mine /usr/include */
   file = g_file_new_for_path ("/usr/include");
   ide_ctags_service_mine_directory (self, file, TRUE, cancellable);
   g_object_unref (file);
+
+  ide_object_release (IDE_OBJECT (self));
 }
 
 static void
@@ -274,6 +303,46 @@ ide_ctags_service_get_provider (IdeCtagsService *self)
 }
 
 static void
+ide_ctags_service_tags_built_cb (IdeCtagsService *self,
+                                 GFile           *tags_file,
+                                 IdeCtagsBuilder *builder)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CTAGS_SERVICE (self));
+  g_assert (G_IS_FILE (tags_file));
+  g_assert (IDE_IS_CTAGS_BUILDER (builder));
+
+  egg_task_cache_get_async (self->indexes,
+                            tags_file,
+                            TRUE,
+                            self->cancellable,
+                            ide_ctags_service_tags_loaded_cb,
+                            g_object_ref (self));
+
+  IDE_EXIT;
+}
+
+static void
+ide_ctags_service_start (IdeService *service)
+{
+  IdeCtagsService *self = (IdeCtagsService *)service;
+  IdeContext *context;
+
+  g_return_if_fail (IDE_IS_CTAGS_SERVICE (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  self->builder = g_object_new (IDE_TYPE_CTAGS_BUILDER,
+                                "context", context,
+                                NULL);
+  g_signal_connect_object (self->builder,
+                           "tags-built",
+                           G_CALLBACK (ide_ctags_service_tags_built_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
 ide_ctags_service_stop (IdeService *service)
 {
   IdeCtagsService *self = (IdeCtagsService *)service;
@@ -284,6 +353,7 @@ ide_ctags_service_stop (IdeService *service)
     g_cancellable_cancel (self->cancellable);
 
   g_clear_object (&self->cancellable);
+  g_clear_object (&self->builder);
 }
 
 static void
@@ -310,6 +380,7 @@ ide_ctags_service_class_init (IdeCtagsServiceClass *klass)
 
   object_class->finalize = ide_ctags_service_finalize;
 
+  service_class->start = ide_ctags_service_start;
   service_class->stop = ide_ctags_service_stop;
 }
 
