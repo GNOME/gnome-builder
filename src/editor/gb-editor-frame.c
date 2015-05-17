@@ -292,6 +292,7 @@ gb_editor_frame_set_document (GbEditorFrame    *self,
 
   mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (document));
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (document), &iter, mark);
+  self->search_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (document), NULL, &iter, FALSE);
   on_cursor_moved (document, &iter, self);
 
   /*
@@ -406,35 +407,43 @@ gb_editor_frame__search_key_press_event (GbEditorFrame *self,
                                          GdkEventKey   *event,
                                          GdTaggedEntry *entry)
 {
-  GtkTextBuffer *buffer;
-
   g_assert (GB_IS_EDITOR_FRAME (self));
   g_assert (GD_IS_TAGGED_ENTRY (entry));
 
   switch (event->keyval)
     {
     case GDK_KEY_Escape:
-      /* stash the search string for later */
-      g_free (self->previous_search_string);
-      g_object_get (self->search_entry, "text", &self->previous_search_string, NULL);
+      {
+        GtkTextIter iter;
+        GtkTextBuffer *buffer;
 
-      /* clear the highlights in the source view */
-      ide_source_view_clear_search (self->source_view);
+        buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
 
-      /* disable rubberbanding and ensure insert mark is on screen */
-      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
-      ide_source_view_set_rubberband_search (self->source_view, FALSE);
-      ide_source_view_scroll_mark_onscreen (self->source_view,
-                                            gtk_text_buffer_get_insert (buffer),
-                                            TRUE,
-                                            0.5,
-                                            0.5);
+        /* stash the search string for later */
+        g_free (self->previous_search_string);
+        g_object_get (self->search_entry, "text", &self->previous_search_string, NULL);
 
-      /* finally we can focus the source view */
-      gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
+        /* clear the highlights in the source view */
+        ide_source_view_clear_search (self->source_view);
 
-      return GDK_EVENT_STOP;
+        /* disable rubberbanding and ensure insert mark is on screen */
+        ide_source_view_set_rubberband_search (self->source_view, FALSE);
+        gtk_text_buffer_get_iter_at_mark (buffer, &iter, self->search_mark);
+        ide_source_view_scroll_to_iter (self->source_view, &iter, 0.0, TRUE, 0.5, 0.5, TRUE);
 
+        /* finally we can focus the source view */
+        gtk_widget_grab_focus (GTK_WIDGET (self->source_view));
+
+        /*
+         * Unfortunately We have to place the cursor after grabbing focus
+         * because ide-source-view has its own handler when focused which
+         * sets the cursor back to the insert mark which at that time points
+         * to the last search found
+         */
+        gtk_text_buffer_place_cursor (buffer, &iter);
+
+        return GDK_EVENT_STOP;
+      }
     case GDK_KEY_KP_Enter:
     case GDK_KEY_Return:
       if ((event->state & GDK_SHIFT_MASK) == 0)
@@ -711,12 +720,19 @@ gb_editor_frame_dispose (GObject *object)
 
   ide_clear_weak_pointer (&self->map_animation);
 
-  if (self->source_view && self->cursor_moved_handler)
+  if (self->source_view)
     {
       GtkTextBuffer *buffer;
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->source_view));
-      ide_clear_signal_handler (buffer, &self->cursor_moved_handler);
+      if (self->cursor_moved_handler)
+        ide_clear_signal_handler (buffer, &self->cursor_moved_handler);
+
+      if (self->search_mark != NULL)
+        {
+          gtk_text_buffer_delete_mark (buffer, self->search_mark);
+          self->search_mark = NULL;
+        }
     }
 
   g_clear_object (&self->search_entry_tag);
