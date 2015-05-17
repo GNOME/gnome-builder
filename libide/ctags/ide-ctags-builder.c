@@ -43,7 +43,11 @@ struct _IdeCtagsBuilder
   IdeObject  parent_instance;
 
   GSettings *settings;
+
+  GQuark     ctags_path;
+
   guint      build_timeout;
+
   guint      is_building : 1;
 };
 
@@ -182,7 +186,7 @@ ide_ctags_builder_build_worker (GTask        *task,
     g_unlink (tags_file);
 
   argv = g_ptr_array_new_with_free_func (g_free);
-  g_ptr_array_add (argv, g_strdup ("ctags"));
+  g_ptr_array_add (argv, g_strdup (g_quark_to_string (self->ctags_path)));
   g_ptr_array_add (argv, g_strdup ("-f"));
   g_ptr_array_add (argv, g_strdup ("-"));
   g_ptr_array_add (argv, g_strdup ("--recurse=yes"));
@@ -290,6 +294,21 @@ ide_ctags_builder__buffer_saved_cb (IdeCtagsBuilder  *self,
 }
 
 static void
+ide_ctags_builder__ctags_path_changed (IdeCtagsBuilder *self,
+                                       const gchar     *key,
+                                       GSettings       *settings)
+{
+  g_autofree gchar *ctags_path = NULL;
+
+  g_assert (IDE_IS_CTAGS_BUILDER (self));
+  g_assert (ide_str_equal0 (key, "ctags-path"));
+  g_assert (G_IS_SETTINGS (settings));
+
+  ctags_path = g_settings_get_string (settings, "ctags-path");
+  self->ctags_path = g_quark_from_string (ctags_path);
+}
+
+static void
 ide_ctags_builder_constructed (GObject *object)
 {
   IdeCtagsBuilder *self = (IdeCtagsBuilder *)object;
@@ -348,7 +367,18 @@ ide_ctags_builder_class_init (IdeCtagsBuilderClass *klass)
 static void
 ide_ctags_builder_init (IdeCtagsBuilder *self)
 {
+  g_autofree gchar *ctags_path = NULL;
+
   EGG_COUNTER_INC (instances);
 
   self->settings = g_settings_new ("org.gnome.builder.code-insight");
+
+  g_signal_connect_object (self->settings,
+                           "changed::ctags-path",
+                           G_CALLBACK (ide_ctags_builder__ctags_path_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  ctags_path = g_settings_get_string (self->settings, "ctags-path");
+  self->ctags_path = g_quark_from_string (ctags_path);
 }
