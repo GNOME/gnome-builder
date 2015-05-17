@@ -53,31 +53,9 @@ static void
 gb_editor_frame_animate_map (GbEditorFrame *self,
                              gboolean       visible)
 {
-  IdeAnimation *animation;
-  GdkFrameClock *frame_clock;
-  gdouble value;
-  guint duration;
-
   g_assert (GB_IS_EDITOR_FRAME (self));
 
-  if (self->map_animation)
-    {
-      animation = self->map_animation;
-      ide_clear_weak_pointer (&self->map_animation);
-      ide_animation_stop (animation);
-    }
-
-  frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (self->source_map_container));
-  duration = visible ? MINIMAP_SHOW_DURATION : MINIMAP_HIDE_DURATION;
-  value = visible ? 0.0 : 1.0;
-
-  animation = ide_object_animate (self->overlay_adj,
-                                  IDE_ANIMATION_EASE_IN_OUT_QUAD,
-                                  duration,
-                                  frame_clock,
-                                  "value", value,
-                                  NULL);
-  ide_set_weak_pointer (&self->map_animation, animation);
+  gtk_revealer_set_reveal_child (self->map_revealer, visible);
 }
 
 static void
@@ -622,42 +600,6 @@ gb_editor_frame__source_view_populate_popup (GbEditorFrame *self,
     }
 }
 
-static gboolean
-gb_editor_frame__source_overlay_get_child_position (GbEditorFrame *self,
-                                                   GtkWidget     *widget,
-                                                   GtkAllocation *alloc,
-                                                   GtkOverlay    *overlay)
-{
-  GtkAllocation main_alloc;
-  GtkRequisition req;
-
-  g_assert (GTK_IS_OVERLAY (overlay));
-  g_assert (GB_IS_EDITOR_FRAME (self));
-  g_assert (GTK_IS_WIDGET (widget));
-  g_assert (alloc != NULL);
-
-  if (widget == (GtkWidget *)self->source_map_container)
-    {
-      gdouble value;
-
-      gtk_widget_get_allocation (GTK_WIDGET (self), &main_alloc);
-      gtk_widget_get_preferred_size (widget, &req, NULL);
-
-      alloc->x = main_alloc.x + main_alloc.width - req.width;
-      alloc->width = req.width;
-      alloc->y = main_alloc.y;
-      alloc->height = main_alloc.height;
-
-      /* adjust for animation */
-      value = gtk_adjustment_get_value (self->overlay_adj);
-      alloc->x += (value * alloc->width);
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 static void
 gb_editor_frame_constructed (GObject *object)
 {
@@ -708,8 +650,6 @@ gb_editor_frame_dispose (GObject *object)
   GbEditorFrame *self = (GbEditorFrame *)object;
 
   g_clear_pointer (&self->previous_search_string, g_free);
-
-  ide_clear_weak_pointer (&self->map_animation);
 
   if (self->source_view && self->cursor_moved_handler)
     {
@@ -828,8 +768,8 @@ gb_editor_frame_class_init (GbEditorFrameClass *klass)
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-frame.ui");
 
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, floating_bar);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, map_revealer);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, mode_name_label);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, overlay_adj);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, overwrite_label);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, scrolled_window);
   GB_WIDGET_CLASS_BIND (klass, GbEditorFrame, search_entry);
@@ -872,18 +812,6 @@ gb_editor_frame_init (GbEditorFrame *self)
   g_settings_bind (insight_settings, "word-completion", self->source_view, "enable-word-completion", G_SETTINGS_BIND_GET);
 
   g_object_bind_property (self->source_view, "overwrite", self->overwrite_label, "visible", G_BINDING_SYNC_CREATE);
-
-  g_signal_connect_object (self->source_overlay,
-                           "get-child-position",
-                           G_CALLBACK (gb_editor_frame__source_overlay_get_child_position),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->overlay_adj,
-                           "value-changed",
-                           G_CALLBACK (gtk_widget_queue_resize),
-                           self->source_map_container,
-                           G_CONNECT_SWAPPED);
 
   /*
    * we want to rubberbanding search until enter has been pressed or next/previous actions

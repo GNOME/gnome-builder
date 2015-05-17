@@ -35,8 +35,8 @@ struct _GbEditorFrame
   gchar               *previous_search_string;
 
   NautilusFloatingBar *floating_bar;
+  GtkRevealer         *map_revealer;
   GtkLabel            *mode_name_label;
-  GtkAdjustment       *overlay_adj;
   GtkLabel            *overwrite_label;
   GtkScrolledWindow   *scrolled_window;
   GtkRevealer         *search_revealer;
@@ -46,8 +46,6 @@ struct _GbEditorFrame
   GbEditorMapBin      *source_map_container;
   IdeSourceMap        *source_map;
   GtkOverlay          *source_overlay;
-
-  IdeAnimation        *map_animation;
 
   gulong               cursor_moved_handler;
 
