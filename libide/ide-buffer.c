@@ -47,9 +47,10 @@
 #define DEFAULT_DIAGNOSE_CONSERVE_TIMEOUT_MSEC 5000
 #define RECLAIMATION_TIMEOUT_SECS              1
 
-#define TAG_ERROR   "diagnostician::error"
-#define TAG_WARNING "diagnostician::warning"
-#define TAG_NOTE    "diagnostician::note"
+#define TAG_ERROR      "diagnostician::error"
+#define TAG_WARNING    "diagnostician::warning"
+#define TAG_DEPRECATED "diagnostician::deprecated"
+#define TAG_NOTE       "diagnostician::note"
 
 #define TEXT_ITER_IS_SPACE(ptr) g_unichar_isspace(gtk_text_iter_get_char(ptr))
 
@@ -233,6 +234,7 @@ ide_buffer_clear_diagnostics (IdeBuffer *self)
 
   gtk_text_buffer_remove_tag_by_name (buffer, TAG_NOTE, &begin, &end);
   gtk_text_buffer_remove_tag_by_name (buffer, TAG_WARNING, &begin, &end);
+  gtk_text_buffer_remove_tag_by_name (buffer, TAG_DEPRECATED, &begin, &end);
   gtk_text_buffer_remove_tag_by_name (buffer, TAG_ERROR, &begin, &end);
 }
 
@@ -279,6 +281,7 @@ ide_buffer_update_diagnostic (IdeBuffer     *self,
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   IdeDiagnosticSeverity severity;
   const gchar *tag_name = NULL;
+  const gchar *text;
   IdeSourceLocation *location;
   gsize num_ranges;
   gsize i;
@@ -287,6 +290,7 @@ ide_buffer_update_diagnostic (IdeBuffer     *self,
   g_assert (diagnostic);
 
   severity = ide_diagnostic_get_severity (diagnostic);
+  text = ide_diagnostic_get_text (diagnostic);
 
   switch (severity)
     {
@@ -296,6 +300,11 @@ ide_buffer_update_diagnostic (IdeBuffer     *self,
 
     case IDE_DIAGNOSTIC_WARNING:
       tag_name = TAG_WARNING;
+      /*
+       * TODO: We should add a flags bit to diagnostics for deprecation.
+       */
+      if (text && strstr (text, "deprecated"))
+        tag_name = TAG_DEPRECATED;
       break;
 
     case IDE_DIAGNOSTIC_ERROR:
@@ -789,10 +798,12 @@ ide_buffer_constructed (GObject *object)
   IdeBuffer *self = (IdeBuffer *)object;
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   GdkRGBA warning_rgba;
+  GdkRGBA deprecated_rgba;
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->constructed (object);
 
   gdk_rgba_parse (&warning_rgba, "#fcaf3e");
+  gdk_rgba_parse (&deprecated_rgba, "#f57900");
 
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_ERROR,
                               "underline", PANGO_UNDERLINE_ERROR,
@@ -803,6 +814,10 @@ ide_buffer_constructed (GObject *object)
   gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_WARNING,
                               "underline", PANGO_UNDERLINE_ERROR,
                               "underline-rgba", &warning_rgba,
+                              NULL);
+  gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self), TAG_DEPRECATED,
+                              "underline", PANGO_UNDERLINE_ERROR,
+                              "underline-rgba", &deprecated_rgba,
                               NULL);
 
   priv->highlight_engine = ide_highlight_engine_new (self);
