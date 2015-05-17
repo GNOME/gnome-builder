@@ -177,6 +177,7 @@ ide_clang_completion_provider_finalize (GObject *object)
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)object;
 
+  g_clear_pointer (&self->last_results, g_ptr_array_unref);
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_clang_completion_provider_parent_class)->finalize (object);
@@ -233,7 +234,7 @@ ide_clang_completion_provider_complete_cb (GObject      *object,
     }
 
   if (self->last_results != NULL)
-    g_ptr_array_free (self->last_results, TRUE);
+    g_ptr_array_unref (self->last_results);
   self->last_results = g_ptr_array_ref (ar);
 
   gtk_source_completion_context_get_iter (state->context, &iter);
