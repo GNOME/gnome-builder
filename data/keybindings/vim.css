@@ -1356,6 +1356,12 @@
   bind "slash" { "start-interactive-search" () };
 }
 
+@binding-set builder-vim-list-box
+{
+  bind "<ctrl>n" { "move-cursor" (display-lines, 1) };
+  bind "<ctrl>p" { "move-cursor" (display-lines, -1) };
+}
+
 @binding-set builder-gb-project-tree-vim
 {
   bind "colon" { "action" ("workbench", "show-command-bar", "") };
@@ -1605,4 +1611,8 @@ GbProjectTree {
   gtk-key-bindings: builder-vim-tree-view,
                     builder-gb-project-tree-vim,
                     builder-gb-project-tree;
+}
+
+GtkListBox {
+  gtk-key-bindings: builder-vim-list-box;
 }
