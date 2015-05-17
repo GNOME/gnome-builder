@@ -46,7 +46,7 @@ void        ide_object_new_async   (const gchar          *extension_point,
                                     ...);
 IdeObject  *ide_object_new_finish  (GAsyncResult         *result,
                                     GError              **error);
-void        ide_object_hold        (IdeObject            *self);
+gboolean    ide_object_hold        (IdeObject            *self);
 void        ide_object_release     (IdeObject            *self);
 
 G_END_DECLS

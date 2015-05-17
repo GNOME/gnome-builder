@@ -375,28 +375,33 @@ ide_object_new_finish  (GAsyncResult  *result,
  *
  * You should call ide_object_release() an equivalent number of times to
  * ensure the context may be freed afterwards.
+ *
+ * You should check the return value of this function to ensure that the
+ * context is not already in shutdown.
+ *
+ * Returns: %TRUE if a hold was successfully created.
  */
-void
+gboolean
 ide_object_hold (IdeObject *self)
 {
   IdeObjectPrivate *priv = ide_object_get_instance_private (self);
 
-  g_return_if_fail (IDE_IS_OBJECT (self));
+  g_return_val_if_fail (IDE_IS_OBJECT (self), FALSE);
 
-  if (priv->context == NULL)
+  if (priv->context != NULL)
     {
-      IDE_BUG ("libide", "Called after context was released.");
-      return;
+      ide_context_hold (priv->context);
+      return TRUE;
     }
 
-  ide_context_hold (priv->context);
+  return FALSE;
 }
 
 /**
  * ide_object_release:
  * @self: the #IdeObject.
  *
- * Releases a hold on the context previously called with ide_object_hold().
+ * Releases a successful hold on the context previously created with ide_object_hold().
  */
 void
 ide_object_release (IdeObject *self)
