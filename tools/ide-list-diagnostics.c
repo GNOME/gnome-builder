@@ -43,11 +43,12 @@ severity_to_string (IdeDiagnosticSeverity severity)
     {
       switch (severity)
         {
-        case IDE_DIAGNOSTIC_IGNORED: return "ignored:";
-        case IDE_DIAGNOSTIC_NOTE:    return "note:";
-        case IDE_DIAGNOSTIC_WARNING: return "\033[1;35mwarning:\033[0m";
-        case IDE_DIAGNOSTIC_ERROR:   return "\033[1;31merror:\033[0m";
-        case IDE_DIAGNOSTIC_FATAL:   return "\033[1;31mfatal error:\033[0m";
+        case IDE_DIAGNOSTIC_IGNORED:    return "ignored:";
+        case IDE_DIAGNOSTIC_NOTE:       return "note:";
+        case IDE_DIAGNOSTIC_DEPRECATED: return "\033[1;35mdeprecated:\033[0m";
+        case IDE_DIAGNOSTIC_WARNING:    return "\033[1;35mwarning:\033[0m";
+        case IDE_DIAGNOSTIC_ERROR:      return "\033[1;31merror:\033[0m";
+        case IDE_DIAGNOSTIC_FATAL:      return "\033[1;31mfatal error:\033[0m";
         default: return "";
         }
     }
@@ -55,11 +56,12 @@ severity_to_string (IdeDiagnosticSeverity severity)
     {
       switch (severity)
         {
-        case IDE_DIAGNOSTIC_IGNORED: return "ignored:";
-        case IDE_DIAGNOSTIC_NOTE:    return "note:";
-        case IDE_DIAGNOSTIC_WARNING: return "warning:";
-        case IDE_DIAGNOSTIC_ERROR:   return "error:";
-        case IDE_DIAGNOSTIC_FATAL:   return "fatal error:";
+        case IDE_DIAGNOSTIC_IGNORED:    return "ignored:";
+        case IDE_DIAGNOSTIC_NOTE:       return "note:";
+        case IDE_DIAGNOSTIC_DEPRECATED: return "deprecated:";
+        case IDE_DIAGNOSTIC_WARNING:    return "warning:";
+        case IDE_DIAGNOSTIC_ERROR:      return "error:";
+        case IDE_DIAGNOSTIC_FATAL:      return "fatal error:";
         default: return "";
         }
     }

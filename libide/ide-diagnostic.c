@@ -236,6 +236,10 @@ ide_diagnostic_severity_to_string (IdeDiagnosticSeverity severity)
       return "ignored";
 
     case IDE_DIAGNOSTIC_NOTE:
+      return "note";
+
+    case IDE_DIAGNOSTIC_DEPRECATED:
+      return "deprecated";
 
     case IDE_DIAGNOSTIC_WARNING:
       return "warning";

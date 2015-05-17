@@ -281,7 +281,6 @@ ide_buffer_update_diagnostic (IdeBuffer     *self,
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   IdeDiagnosticSeverity severity;
   const gchar *tag_name = NULL;
-  const gchar *text;
   IdeSourceLocation *location;
   gsize num_ranges;
   gsize i;
@@ -290,7 +289,6 @@ ide_buffer_update_diagnostic (IdeBuffer     *self,
   g_assert (diagnostic);
 
   severity = ide_diagnostic_get_severity (diagnostic);
-  text = ide_diagnostic_get_text (diagnostic);
 
   switch (severity)
     {
@@ -298,13 +296,12 @@ ide_buffer_update_diagnostic (IdeBuffer     *self,
       tag_name = TAG_NOTE;
       break;
 
+    case IDE_DIAGNOSTIC_DEPRECATED:
+      tag_name = TAG_DEPRECATED;
+      break;
+
     case IDE_DIAGNOSTIC_WARNING:
       tag_name = TAG_WARNING;
-      /*
-       * TODO: We should add a flags bit to diagnostics for deprecation.
-       */
-      if (text && strstr (text, "deprecated"))
-        tag_name = TAG_DEPRECATED;
       break;
 
     case IDE_DIAGNOSTIC_ERROR:
@@ -1237,6 +1234,7 @@ ide_buffer_get_line_flags (IdeBuffer *self,
           flags |= IDE_BUFFER_LINE_FLAGS_ERROR;
           break;
 
+        case IDE_DIAGNOSTIC_DEPRECATED:
         case IDE_DIAGNOSTIC_WARNING:
           flags |= IDE_BUFFER_LINE_FLAGS_WARNING;
           break;

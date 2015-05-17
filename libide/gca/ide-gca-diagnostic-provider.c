@@ -33,6 +33,8 @@
 #include "ide-unsaved-file.h"
 #include "ide-unsaved-files.h"
 
+#include "gca-structs.h"
+
 struct _IdeGcaDiagnosticProvider
 {
   IdeDiagnosticProvider parent_instance;
@@ -68,8 +70,28 @@ diagnose_state_free (gpointer data)
 static IdeDiagnosticSeverity
 get_severity (guint val)
 {
-  /* these currently map one-to-one */
-  return (IdeDiagnosticSeverity)val;
+  switch (val)
+    {
+    case GCA_SEVERITY_INFO:
+      return IDE_DIAGNOSTIC_NOTE;
+
+    case GCA_SEVERITY_WARNING:
+      return IDE_DIAGNOSTIC_WARNING;
+
+    case GCA_SEVERITY_DEPRECATED:
+      return IDE_DIAGNOSTIC_DEPRECATED;
+
+    case GCA_SEVERITY_ERROR:
+      return IDE_DIAGNOSTIC_ERROR;
+
+    case GCA_SEVERITY_FATAL:
+      return IDE_DIAGNOSTIC_FATAL;
+
+    case GCA_SEVERITY_NONE:
+    default:
+      return IDE_DIAGNOSTIC_IGNORED;
+      break;
+    }
 }
 
 static IdeDiagnostics *

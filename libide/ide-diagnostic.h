@@ -28,11 +28,12 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-  IDE_DIAGNOSTIC_IGNORED  = 0,
-  IDE_DIAGNOSTIC_NOTE     = 1,
-  IDE_DIAGNOSTIC_WARNING  = 2,
-  IDE_DIAGNOSTIC_ERROR    = 3,
-  IDE_DIAGNOSTIC_FATAL    = 4,
+  IDE_DIAGNOSTIC_IGNORED    = 0,
+  IDE_DIAGNOSTIC_NOTE       = 1,
+  IDE_DIAGNOSTIC_DEPRECATED = 2,
+  IDE_DIAGNOSTIC_WARNING    = 3,
+  IDE_DIAGNOSTIC_ERROR      = 4,
+  IDE_DIAGNOSTIC_FATAL      = 5,
 } IdeDiagnosticSeverity;
 
 IdeSourceLocation     *ide_diagnostic_get_location         (IdeDiagnostic *self);

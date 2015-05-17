@@ -337,6 +337,18 @@ create_diagnostic (IdeClangTranslationUnit *self,
   spelling = g_strdup (clang_getCString (cxstr));
   clang_disposeString (cxstr);
 
+  /*
+   * I thought we could use an approach like the following to get deprecation
+   * status. However, it has so far proven ineffective.
+   *
+   *   cursor = clang_getCursor (self->tu, cxloc);
+   *   avail = clang_getCursorAvailability (cursor);
+   */
+  if ((severity == IDE_DIAGNOSTIC_WARNING) &&
+      (spelling != NULL) &&
+      (strstr (spelling, "deprecated") != NULL))
+    severity = IDE_DIAGNOSTIC_DEPRECATED;
+
   loc = create_location (self, project, workpath, cxloc);
 
   diag = _ide_diagnostic_new (severity, spelling, loc);
