@@ -120,6 +120,12 @@
   bind "<ctrl>b" { "move-cursor" (logical-positions, -1) };
 }
 
+@binding-set builder-emacs-list-box
+{
+  bind "<ctrl>f" { "move-cursor" (display-lines, 1) };
+  bind "<ctrl>b" { "move-cursor" (display-lines, -1) };
+}
+
 GtkEntry {
   gtk-key-bindings: builder-emacs-text-entry;
 }
@@ -144,6 +150,10 @@ IdeSourceViewMode.emacs-x {
 
 GtkTreeView {
   gtk-key-bindings: builder-emacs-tree-view;
+}
+
+GtkListBox {
+  gtk-key-bindings: builder-emacs-list-box;
 }
 
 GbProjectTree {
