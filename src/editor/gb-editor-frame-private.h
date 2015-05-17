@@ -46,7 +46,6 @@ struct _GbEditorFrame
   GbEditorMapBin      *source_map_container;
   IdeSourceMap        *source_map;
   GtkOverlay          *source_overlay;
-  GtkTextMark         *search_mark;
 
   IdeAnimation        *map_animation;
 

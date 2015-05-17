@@ -1091,7 +1091,6 @@ ide_source_view__search_settings_notify_search_text (IdeSourceView           *se
       if (gtk_source_search_context_forward (priv->search_context, &begin_iter,
                                              &match_begin, &match_end))
         {
-          gtk_text_buffer_select_range (buffer, &match_begin, &match_end);
           gtk_text_buffer_move_mark (buffer, priv->rubberband_mark, &match_begin);
           ide_source_view_scroll_mark_onscreen (self, priv->rubberband_mark, TRUE, 0.5, 0.5);
         }
