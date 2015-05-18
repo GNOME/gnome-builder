@@ -684,8 +684,8 @@ ide_buffer_do_modeline (IdeBuffer *self)
   if (old_lang != NULL)
     old_id = gtk_source_language_get_id (old_lang);
 
-  if (old_id == NULL || g_strcmp0 (old_id, new_id) != 0)
-      g_object_set (self, "language", new_lang, NULL);
+  if (old_id == NULL || !ide_str_equal0 (old_id, new_id))
+    _ide_file_set_content_type (ifile, content_type);
 }
 
 static void
@@ -876,6 +876,9 @@ ide_buffer__file_notify_language (IdeBuffer  *self,
                                   GParamSpec *pspec,
                                   IdeFile    *file)
 {
+  GtkSourceLanguage *source_language;
+  IdeLanguage *language;
+
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_FILE (file));
 
@@ -883,6 +886,12 @@ ide_buffer__file_notify_language (IdeBuffer  *self,
    * FIXME: Workaround for 3.16.3
    *        This should be refactored as part of the move to libpeas.
    */
+
+  if ((language = ide_file_get_language (file)))
+    {
+      source_language = ide_language_get_source_language (language);
+      gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (self), source_language);
+    }
 
   ide_file_load_settings_async (file,
                                 NULL,
