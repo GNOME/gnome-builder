@@ -199,14 +199,26 @@ get_pixbuf (IdeCtagsCompletionProvider *self,
       break;
 
     case IDE_CTAGS_INDEX_ENTRY_UNION:
+      icon_name = "lang-union-symbolic";
+      break;
+
     case IDE_CTAGS_INDEX_ENTRY_TYPEDEF:
+      icon_name = "lang-typedef-symbolic";
+      break;
+
     case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
       icon_name = "lang-struct-symbolic";
       break;
 
-    case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
     case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
+      icon_name = "lang-variable-symbolic";
+      break;
+
     case IDE_CTAGS_INDEX_ENTRY_DEFINE:
+      icon_name = "lang-define-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
     default:
       return NULL;
     }
