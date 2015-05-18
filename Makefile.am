@@ -20,9 +20,10 @@ DISTCLEANFILES = \
 	intltool-update \
 	po/.intltool-merge-cache
 
+# --disable-gtk-doc until future notice
 DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-introspection \
-	--enable-gtk-doc \
+	--disable-gtk-doc \
 	--disable-tracing \
 	--enable-appstream-util \
 	$(NULL)
