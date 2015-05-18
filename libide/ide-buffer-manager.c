@@ -888,6 +888,13 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
 
   saver = gtk_source_file_saver_new (GTK_SOURCE_BUFFER (state->buffer), source_file);
 
+  /*
+   * XXX: We need to think this through a bit more, but I think since the UI allows us to
+   *      Reload or Ignore changes, it is safe to always set this here. However, there is the
+   *      ever so slightest race condition between the mtime check and the save anyway.
+   */
+  gtk_source_file_saver_set_flags (saver, GTK_SOURCE_FILE_SAVER_FLAGS_IGNORE_MODIFICATION_TIME);
+
   /* set file encoding and newline style defaults */
   newline_type = ide_file_settings_get_newline_type (file_settings);
   encoding = gtk_source_encoding_get_utf8 ();
