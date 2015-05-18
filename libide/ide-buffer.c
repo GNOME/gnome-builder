@@ -651,8 +651,15 @@ static void
 ide_buffer_do_modeline (IdeBuffer *self)
 {
   g_autofree gchar *line = NULL;
+  IdeFile *ifile;
   GtkTextIter begin;
   GtkTextIter end;
+  GtkSourceLanguageManager *manager;
+  GtkSourceLanguage *old_lang, *new_lang;
+  const gchar *new_id, *old_id = NULL;
+  g_autofree gchar *content_type = NULL;
+  const gchar *file_path;
+  gboolean uncertain;
 
   g_assert (IDE_IS_BUFFER (self));
 
@@ -661,73 +668,24 @@ ide_buffer_do_modeline (IdeBuffer *self)
   gtk_text_iter_forward_to_line_end (&end);
   line = gtk_text_iter_get_slice (&begin, &end);
 
-  if (((line [0] == '#') && (line [1] == '!')) || g_str_has_prefix (line, "<?xml"))
-    {
-      GtkSourceLanguage *language;
-      const gchar *lang_id = NULL;
-      const gchar *target = NULL;
-      const gchar *tmp;
+  ifile = ide_buffer_get_file (self);
+  file_path = ide_file_get_path (ifile);
 
-      /*
-       * This is pretty hacky, but I don't want to call out to anything external either.
-       * If there is a discovery thing that does this that is simply to reuse (or port),
-       * just point me at it. I guess *one* option might be to use the content_type guessing that
-       * comes from glib, g_content_type_guess().
-       */
+  manager = gtk_source_language_manager_get_default ();
+  content_type = g_content_type_guess (file_path, (guchar*)line, strlen(line), &uncertain);
+  if (uncertain)
+    return;
+  new_lang = gtk_source_language_manager_guess_language (manager, file_path, content_type);
+  if (new_lang == NULL)
+    return;
+  new_id = gtk_source_language_get_id (new_lang);
 
-      if (g_str_has_prefix (line, "<?xml"))
-        {
-          target = "xml";
-        }
-      else if ((tmp = strstr (line, "python")) != NULL)
-        {
-          if (strstr (tmp, "python3") != NULL)
-            target = "python3";
-          else
-            target = "python";
-        }
-      else if (strstr (line, "gjs") != NULL)
-        {
-          target = "js";
-        }
-      else if (strstr (line, "ruby") != NULL)
-        {
-          target = "ruby";
-        }
-      else if ((strstr (line, " sh") != NULL) ||
-               (strstr (line, " bash") != NULL) ||
-               (strstr (line, "/sh") != NULL) ||
-               (strstr (line, "/bash") != NULL))
-        {
-          target = "sh";
-        }
-      else if ((strstr (line, "perl") != NULL))
-        {
-          target = "perl";
-        }
-      else if ((strstr (line, "php") != NULL))
-        {
-          target = "php";
-        }
-      else if ((strstr (line, "graphviz") != NULL) ||
-               (strstr (line, "neato") != NULL))
-        {
-          target = "dot";
-        }
+  old_lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self));
+  if (old_lang != NULL)
+    old_id = gtk_source_language_get_id (old_lang);
 
-      language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self));
-      if (language != NULL)
-        lang_id = gtk_source_language_get_id (language);
-
-      if (0 != g_strcmp0 (lang_id, target))
-        {
-          GtkSourceLanguageManager *manager;
-
-          manager = gtk_source_language_manager_get_default ();
-          language = gtk_source_language_manager_get_language (manager, target);
-          g_object_set (self, "language", language, NULL);
-        }
-    }
+  if (old_id == NULL || g_strcmp0 (old_id, new_id) != 0)
+      g_object_set (self, "language", new_lang, NULL);
 }
 
 static void
