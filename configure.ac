@@ -225,7 +225,9 @@ AX_APPEND_COMPILE_FLAGS([ \
 	-Wformat-nonliteral \
 	-Wformat-security \
 	-Winit-self \
+	-Wmisleading-indentation \
 	-Wmissing-include-dirs \
+	-Wshift-negative-value \
 	-Wnested-externs \
 	-Wno-missing-field-initializers \
 	-Wno-sign-compare \
