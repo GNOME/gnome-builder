@@ -1,14 +1,24 @@
-tests_cflags = \
-	-I$(top_srcdir)/libide \
-	-I$(top_builddir)/libide \
+egg_cflags = \
 	$(DEBUG_CFLAGS) \
 	$(LIBIDE_CFLAGS) \
+	-I$(top_srcdir)/contrib/egg \
 	-DTEST_DATA_DIR="\"$(srcdir)/data\"" \
 	-DBUILDDIR="\"$(builddir)\"" \
 	$(NULL)
 
-tests_libs = \
+egg_libs = \
 	$(LIBIDE_LIBS) \
+	$(top_builddir)/contrib/egg/libegg.la \
+	$(NULL)
+
+tests_cflags = \
+	$(egg_cflags) \
+	-I$(top_srcdir)/libide \
+	-I$(top_builddir)/libide \
+	$(NULL)
+
+tests_libs = \
+	$(egg_libs) \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)
 
@@ -108,20 +118,20 @@ test_ide_ctags_LDADD = $(tests_libs)
 
 TESTS += test-egg-state-machine
 test_egg_state_machine_SOURCES = test-egg-state-machine.c
-test_egg_state_machine_CFLAGS = $(tests_cflags) -I$(top_srcdir)/contrib/egg
-test_egg_state_machine_LDADD = $(tests_libs) $(top_builddir)/contrib/egg/libegg.la
+test_egg_state_machine_CFLAGS = $(egg_cflags)
+test_egg_state_machine_LDADD = $(egg_libs)
 
 
 TESTS += test-egg-cache
 test_egg_cache_SOURCES = test-egg-cache.c
-test_egg_cache_CFLAGS = $(tests_cflags) -I$(top_srcdir)/contrib/egg
-test_egg_cache_LDADD = $(tests_libs) $(top_builddir)/contrib/egg/libegg.la
+test_egg_cache_CFLAGS = $(egg_cflags)
+test_egg_cache_LDADD = $(egg_libs)
 
 
 TESTS += test-egg-heap
 test_egg_heap_SOURCES = test-egg-heap.c
-test_egg_heap_CFLAGS = $(tests_cflags) -I$(top_srcdir)/contrib/egg
-test_egg_heap_LDADD = $(tests_libs) $(top_builddir)/contrib/egg/libegg.la
+test_egg_heap_CFLAGS = $(egg_cflags)
+test_egg_heap_LDADD = $(egg_libs)
 
 
 if ENABLE_TESTS
