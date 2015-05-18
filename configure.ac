@@ -94,16 +94,24 @@ AC_DEFINE_UNQUOTED([GNU_MAKE_NAME], ["$GMAKE"], [Name of GNU make on this system
 dnl ***********************************************************************
 dnl Check for Helpful Intrinsics
 dnl ***********************************************************************
-AC_MSG_CHECKING([for fast counters with rdtscp])
-AC_RUN_IFELSE(
-  [AC_LANG_SOURCE([[
-   #include <x86intrin.h>
-   int main (int argc, char *argv[]) { int cpu; __builtin_ia32_rdtscp (&cpu); return 0; }]])],
-  [have_rdtscp=yes],
-  [have_rdtscp=no])
-AC_MSG_RESULT([$have_rdtscp])
-AS_IF([test "$have_rdtscp" = "yes"],
-      [CFLAGS="$CFLAGS -DHAVE_RDTSCP"])
+AC_ARG_ENABLE(rdtscp,
+              AS_HELP_STRING([--enable-rdtscp=@<:@no/yes@:>@],
+                             [use rdtscp for fast counters @<:@default=no@:>@]),
+              [
+                AC_MSG_CHECKING([for fast counters with rdtscp])
+                AC_RUN_IFELSE(
+                  [AC_LANG_SOURCE([[
+                   #include <x86intrin.h>
+                   int main (int argc, char *argv[]) { int cpu; __builtin_ia32_rdtscp (&cpu); return 0; }]])],
+                  [have_rdtscp=yes],
+                  [have_rdtscp=no])
+                AC_MSG_RESULT([$have_rdtscp])
+                AS_IF([test "$have_rdtscp" = "yes"], [
+		        CFLAGS="$CFLAGS -DHAVE_RDTSCP"
+			enable_rdtscp=yes
+		      ], [enable_rdtscp=no])
+	      ],
+              [enable_rdtscp=no])
 
 
 dnl ***********************************************************************
@@ -389,7 +397,7 @@ echo "  Prefix ............................... : ${prefix}"
 echo "  Libdir ............................... : ${libdir}"
 echo "  Optimized Build ...................... : ${enable_optimizations}"
 echo "  Link-Time-Optimization ............... : ${enable_lto}"
-echo "  rdtscp ............................... : ${have_rdtscp}"
+echo "  rdtscp ............................... : ${enable_rdtscp}"
 echo ""
 echo " Development Options"
 echo ""
