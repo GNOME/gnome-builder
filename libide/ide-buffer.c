@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 
 #include "egg-counter.h"
+#include "egg-signal-group.h"
 
 #include "ide-battery-monitor.h"
 #include "ide-buffer.h"
@@ -65,6 +66,8 @@ typedef struct
   IdeHighlightEngine     *highlight_engine;
   IdeSymbolResolver      *symbol_resolver;
   gchar                  *title;
+
+  EggSignalGroup         *file_signals;
 
   gulong                  change_monitor_changed_handler;
 
@@ -790,6 +793,27 @@ ide_buffer_mark_set (GtkTextBuffer     *buffer,
 }
 
 static void
+ide_buffer__file_notify_language (IdeBuffer  *self,
+                                  GParamSpec *pspec,
+                                  IdeFile    *file)
+{
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_FILE (file));
+
+  /*
+   * FIXME: Workaround for 3.16.3
+   *        This should be refactored as part of the move to libpeas.
+   */
+
+  ide_file_load_settings_async (file,
+                                NULL,
+                                ide_buffer__file_load_settings_cb,
+                                g_object_ref (self));
+  ide_buffer_reload_highlighter (self);
+  ide_buffer_reload_change_monitor (self);
+}
+
+static void
 ide_buffer_constructed (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
@@ -845,6 +869,8 @@ ide_buffer_dispose (GObject *object)
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
   IDE_ENTRY;
+
+  g_clear_object (&priv->file_signals);
 
   if (priv->highlight_engine != NULL)
     g_object_run_dispose (G_OBJECT (priv->highlight_engine));
@@ -1130,6 +1156,13 @@ ide_buffer_init (IdeBuffer *self)
 
   IDE_ENTRY;
 
+  priv->file_signals = egg_signal_group_new (IDE_TYPE_FILE);
+  egg_signal_group_connect_object (priv->file_signals,
+                                   "notify::language",
+                                   G_CALLBACK (ide_buffer__file_notify_language),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
   priv->diagnostics_line_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   EGG_COUNTER_INC (instances);
@@ -1198,6 +1231,7 @@ ide_buffer_set_file (IdeBuffer *self,
 
   if (g_set_object (&priv->file, file))
     {
+      egg_signal_group_set_target (priv->file_signals, file);
       ide_file_load_settings_async (priv->file,
                                     NULL,
                                     ide_buffer__file_load_settings_cb,
