@@ -18,6 +18,7 @@
 
 #include <ide.h>
 #include <string.h>
+#include <girepository.h>
 
 #include "gb-resources.h"
 
@@ -276,12 +277,10 @@ gint
 main (gint argc,
       gchar *argv[])
 {
+  g_irepository_prepend_search_path (BUILDDIR"/../libide");
   gtk_init (&argc, &argv);
-
   load_vim_css ();
-
   g_test_init (&argc, &argv, NULL);
   g_test_add_func ("/Ide/Vim/basic", test_vim_basic);
-
   return g_test_run ();
 }

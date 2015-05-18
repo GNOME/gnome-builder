@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <girepository.h>
 #include <glib.h>
 #include <ide.h>
 
@@ -170,6 +171,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
+  g_irepository_prepend_search_path (BUILDDIR"/../libide");
   gtk_init (&argc, &argv);
   g_test_init (&argc, &argv, NULL);
   g_test_add_func ("/Ide/BackForwardList/basic", test_basic);

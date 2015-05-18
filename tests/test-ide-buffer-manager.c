@@ -192,6 +192,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
+  g_irepository_prepend_search_path (BUILDDIR"/../libide");
   gtk_init (&argc, &argv);
   g_test_init (&argc, &argv, NULL);
   g_irepository_require_private (g_irepository_get_default (),
