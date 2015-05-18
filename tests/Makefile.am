@@ -122,6 +122,12 @@ test_egg_binding_set_CFLAGS = $(egg_cflags)
 test_egg_binding_set_LDADD = $(egg_libs)
 
 
+TESTS += test-egg-signal-group
+test_egg_signal_group_SOURCES = test-egg-signal-group.c
+test_egg_signal_group_CFLAGS = $(egg_cflags)
+test_egg_signal_group_LDADD = $(egg_libs)
+
+
 TESTS += test-egg-state-machine
 test_egg_state_machine_SOURCES = test-egg-state-machine.c
 test_egg_state_machine_CFLAGS = $(egg_cflags)
