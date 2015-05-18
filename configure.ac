@@ -75,9 +75,9 @@ PKG_PROG_PKG_CONFIG([0.22])
 dnl ***********************************************************************
 dnl Ensure C11 is Supported
 dnl ***********************************************************************
-AX_CHECK_COMPILE_FLAG([-std=c11],
-                      [CFLAGS="$CFLAGS -std=c11"],
-                      [AC_MSG_ERROR([C compiler cannot compile C11 code])])
+AX_CHECK_COMPILE_FLAG([-std=gnu11],
+                      [CFLAGS="$CFLAGS -std=gnu11"],
+                      [AC_MSG_ERROR([C compiler cannot compile GNU C11 code])])
 
 
 dnl ***********************************************************************
