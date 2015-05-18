@@ -308,7 +308,9 @@ OPTIMIZE_LDFLAGS=""
 # Enable -Bsymbolic
 AS_IF([test "$enable_optimizations" != "no"],
       [AX_CHECK_LINK_FLAG([-Wl,-Bsymbolic],
-                          [OPTIMIZE_LDFLAGS="$OPTIMIZE_LDFLAGS -Wl,-Bsymbolic"])])
+                          [OPTIMIZE_LDFLAGS="$OPTIMIZE_LDFLAGS -Wl,-Bsymbolic"])
+       AX_CHECK_LINK_FLAG([-fno-plt],
+                          [OPTIMIZE_LDFLAGS="$OPTIMIZE_LDFLAGS -fno-plt"])])
 
 
 # Enable Link-Time-Optimization
