@@ -138,7 +138,7 @@ dnl ***********************************************************************
 dnl Check for Required Packages
 dnl ***********************************************************************
 m4_define([gtk_required_version], [3.17.1])
-m4_define([glib_required_version], [2.45.0])
+m4_define([glib_required_version], [2.45.1])
 m4_define([gtksourceview_required_version], [3.17.2])
 m4_define([ggit_required_version], [0.22.9])
 m4_define([gjs_required_version], [1.42.0])

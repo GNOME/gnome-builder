@@ -116,6 +116,12 @@ test_ide_ctags_CFLAGS = $(tests_cflags)
 test_ide_ctags_LDADD = $(tests_libs)
 
 
+TESTS += test-egg-binding-set
+test_egg_binding_set_SOURCES = test-egg-binding-set.c
+test_egg_binding_set_CFLAGS = $(egg_cflags)
+test_egg_binding_set_LDADD = $(egg_libs)
+
+
 TESTS += test-egg-state-machine
 test_egg_state_machine_SOURCES = test-egg-state-machine.c
 test_egg_state_machine_CFLAGS = $(egg_cflags)
