@@ -47,6 +47,7 @@
 #define DEFAULT_DIAGNOSE_TIMEOUT_MSEC          333
 #define DEFAULT_DIAGNOSE_CONSERVE_TIMEOUT_MSEC 5000
 #define RECLAIMATION_TIMEOUT_SECS              1
+#define MODIFICATION_TIMEOUT_SECS              1
 
 #define TAG_ERROR      "diagnostician::error"
 #define TAG_WARNING    "diagnostician::warning"
@@ -69,9 +70,12 @@ typedef struct
 
   EggSignalGroup         *file_signals;
 
+  GFileMonitor           *file_monitor;
+
   gulong                  change_monitor_changed_handler;
 
   guint                   diagnose_timeout;
+  guint                   check_modified_timeout;
 
   GTimeVal                mtime;
 
@@ -792,6 +796,102 @@ ide_buffer_mark_set (GtkTextBuffer     *buffer,
     ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
 }
 
+static gboolean
+do_check_modified (gpointer user_data)
+{
+  IdeBuffer *self = user_data;
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  priv->check_modified_timeout = 0;
+
+  ide_buffer_check_for_volume_change (self);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_buffer_queue_modify_check (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  if (priv->check_modified_timeout != 0)
+    {
+      g_source_remove (priv->check_modified_timeout);
+      priv->check_modified_timeout = 0;
+    }
+
+  priv->check_modified_timeout = g_timeout_add_seconds (MODIFICATION_TIMEOUT_SECS,
+                                                        do_check_modified,
+                                                        self);
+}
+
+static void
+ide_buffer__file_monitor_changed (IdeBuffer         *self,
+                                  GFile             *file,
+                                  GFile             *other_file,
+                                  GFileMonitorEvent  event,
+                                  GFileMonitor      *file_monitor)
+{
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_FILE_MONITOR (file_monitor));
+
+  switch (event)
+    {
+    case G_FILE_MONITOR_EVENT_CHANGED:
+    case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
+      ide_buffer_queue_modify_check (self);
+      break;
+
+    case G_FILE_MONITOR_EVENT_DELETED:
+    case G_FILE_MONITOR_EVENT_CREATED:
+    case G_FILE_MONITOR_EVENT_RENAMED:
+    case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
+    case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
+    case G_FILE_MONITOR_EVENT_UNMOUNTED:
+    case G_FILE_MONITOR_EVENT_MOVED:
+    case G_FILE_MONITOR_EVENT_MOVED_IN:
+    case G_FILE_MONITOR_EVENT_MOVED_OUT:
+    default:
+      break;
+    }
+}
+
+static void
+ide_buffer__file_notify_file (IdeBuffer  *self,
+                              GParamSpec *pspec,
+                              IdeFile    *file)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  GFile *gfile;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_FILE (file));
+
+  gfile = ide_file_get_file (file);
+
+  if (priv->file_monitor)
+    {
+      g_file_monitor_cancel (priv->file_monitor);
+      g_clear_object (&priv->file_monitor);
+    }
+
+  if (gfile != NULL)
+    {
+      priv->file_monitor = g_file_monitor_file (gfile, G_FILE_MONITOR_NONE, NULL, NULL);
+      if (priv->file_monitor != NULL)
+        g_signal_connect_object (priv->file_monitor,
+                                 "changed",
+                                 G_CALLBACK (ide_buffer__file_monitor_changed),
+                                 self,
+                                 G_CONNECT_SWAPPED);
+    }
+}
+
 static void
 ide_buffer__file_notify_language (IdeBuffer  *self,
                                   GParamSpec *pspec,
@@ -869,6 +969,18 @@ ide_buffer_dispose (GObject *object)
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
   IDE_ENTRY;
+
+  if (priv->check_modified_timeout != 0)
+    {
+      g_source_remove (priv->check_modified_timeout);
+      priv->check_modified_timeout = 0;
+    }
+
+  if (priv->file_monitor)
+    {
+      g_file_monitor_cancel (priv->file_monitor);
+      g_clear_object (&priv->file_monitor);
+    }
 
   g_clear_object (&priv->file_signals);
 
@@ -1160,6 +1272,11 @@ ide_buffer_init (IdeBuffer *self)
   egg_signal_group_connect_object (priv->file_signals,
                                    "notify::language",
                                    G_CALLBACK (ide_buffer__file_notify_language),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  egg_signal_group_connect_object (priv->file_signals,
+                                   "notify::file",
+                                   G_CALLBACK (ide_buffer__file_notify_file),
                                    self,
                                    G_CONNECT_SWAPPED);
 
