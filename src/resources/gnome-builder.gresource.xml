@@ -9,13 +9,19 @@
     <file alias="icons/scalable/actions/builder-split-tab-left-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-split-tab-left-symbolic.svg</file>
     <file alias="icons/scalable/actions/builder-split-tab-right-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-split-tab-right-symbolic.svg</file>
     <file alias="icons/scalable/actions/builder-split-tab-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-split-tab-symbolic.svg</file>
+    <file alias="icons/scalable/actions/builder-vcs-git-symbolic.svg">../../data/icons/hicolor/scalable/vcs/builder-vcs-git-symbolic.svg</file>
 
+    <!-- Scalable autocompletion icons -->
     <file alias="icons/scalable/actions/lang-class-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-class-symbolic.svg</file>
+    <file alias="icons/scalable/actions/lang-define-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-define-symbolic.svg</file>
     <file alias="icons/scalable/actions/lang-enum-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-enum-symbolic.svg</file>
     <file alias="icons/scalable/actions/lang-function-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-function-symbolic.svg</file>
-    <file alias="icons/scalable/actions/lang-struct-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-struct-symbolic.svg</file>
+    <file alias="icons/scalable/actions/lang-include-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-include-symbolic.svg</file>
     <file alias="icons/scalable/actions/lang-struct-field-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/struct-field-symbolic.svg</file>
-    <file alias="icons/scalable/actions/builder-vcs-git-symbolic.svg">../../data/icons/hicolor/scalable/vcs/builder-vcs-git-symbolic.svg</file>
+    <file alias="icons/scalable/actions/lang-struct-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-struct-symbolic.svg</file>
+    <file alias="icons/scalable/actions/lang-typedef-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-typedef-symbolic.svg</file>
+    <file alias="icons/scalable/actions/lang-union-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-union-symbolic.svg</file>
+    <file alias="icons/scalable/actions/lang-variable-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-variable-symbolic.svg</file>
 
     <!-- Non-scalable vcs icons -->
     <file alias="icons/256x256/actions/builder-vcs-git.png">../../data/icons/hicolor/256x256/vcs/builder-vcs-git.png</file>
