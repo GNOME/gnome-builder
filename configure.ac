@@ -24,6 +24,7 @@ AC_CONFIG_SRCDIR([src/main.c])
 AC_CONFIG_MACRO_DIR([build/autotools])
 AC_CONFIG_AUX_DIR([build])
 AC_SUBST(ACLOCAL_AMFLAGS, "-I build/autotools")
+AC_CANONICAL_HOST
 
 
 dnl ***********************************************************************
@@ -112,6 +113,10 @@ AC_ARG_ENABLE(rdtscp,
 		      ], [enable_rdtscp=no])
 	      ],
               [enable_rdtscp=no])
+AS_IF([test "$enable_rdtscp" = "no"],
+      [AS_CASE(["$host"],
+	       [*-*-linux*],[CFLAGS="$CFLAGS -D_GNU_SOURCE"],
+	       [])])
 
 
 dnl ***********************************************************************
