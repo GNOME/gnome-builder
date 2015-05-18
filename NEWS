@@ -1,4 +1,69 @@
 ==============
+Version 3.16.3
+==============
+
+Your Builder development team has been working hard to build on the
+tremendous momentum of the last few months. 3.16.3 is like each of it's
+predecessors, packed with new features and bug fixes.
+
+I'd like to personally thank everyone who contributed bugs during the cycle.
+You keep us on our toes.
+
+This release shows a sharp spike in contributions from new and existing
+GNOME community members. I'm very happy to see this happening and look
+forward to building Builder together.
+
+Of note in this release:
+
+ • A new source code minimap, recently pushed upstream into GtkSourceView.
+ • A new greeter based on recent design work.
+ • A new XML highlighter to highlight matching XML elements.
+ • Support for ctags-based auto-completion.
+ • High-performance, mutli-threaded counters that can be enabled with
+   --enable-rdtscp. These are disabled by default as they require newer
+   Intel Core i[357] features. ide-list-counters can be used to extract
+   them from a running or crashed process.
+ • The preferences interface has been vastly improved.
+ • Search improvements.
+ • A strftime format completion provider for Python.
+ • Additional emacs, vim, and default keybindings.
+ • Experimental support for building autotools projects with mingw.
+ • Python auto-indenter improvements.
+ • Many CSS style improvements on Adwaita.
+ • Additional support for recursive-automake-based projects.
+ • Some features have made configurable with gsettings.
+ • Layered settings support for project vs global settings.
+ • Improved modelines support.
+ • Support for parsing DOAP files.
+ • Various memory leaks were plugged.
+ • Incremental highlighting has more aggressive invalidation.
+ • Various race conditions in autotools support were fixes.
+ • OpenBSD and FreeBSD build system fixes.
+ • Many translation improvements.
+ • libide-1.0.so and Ide-1.0.typelib are now installed to a private
+   directory.
+
+Thanks to everyone who contributed to this release!
+
+ • Alexandre Franke
+ • Carlos Soriano
+ • Christian Hergert
+ • Daniel Mustieles
+ • Elad Alfassa
+ • Erick Pérez Castellanos
+ • Garrett Regier
+ • Kalev Lember
+ • Marek Černocký
+ • Patrick Griffis
+ • Piotr Drąg
+ • Sebastien Lafargue
+ • Ting-Wei Lan
+ • TingPing
+ • Wolf Vollprecht
+ • Yosef Or Boczko
+
+
+==============
 Version 3.16.2
 ==============
 
