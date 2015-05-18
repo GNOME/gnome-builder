@@ -794,6 +794,35 @@ ide_buffer_manager_load_file_finish (IdeBufferManager  *self,
 }
 
 static void
+ide_buffer_manager__buffer_reload_mtime_cb (GObject      *object,
+                                            GAsyncResult *result,
+                                            gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  g_autoptr(GFileInfo) file_info = NULL;
+  g_autoptr(GTask) task = user_data;
+  SaveState *state;
+
+  g_assert (G_IS_TASK (task));
+
+  state = g_task_get_task_data (task);
+  g_assert (state != NULL);
+  g_assert (IDE_IS_BUFFER (state->buffer));
+
+  if ((file_info = g_file_query_info_finish (file, result, NULL)))
+    {
+      GTimeVal tv;
+
+      g_file_info_get_modification_time (file_info, &tv);
+      _ide_buffer_set_mtime (state->buffer, &tv);
+    }
+
+  _ide_buffer_set_changed_on_volume (state->buffer, FALSE);
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_buffer_manager_save_file__save_cb (GObject      *object,
                                        GAsyncResult *result,
                                        gpointer      user_data)
@@ -842,7 +871,14 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
   g_signal_emit (self, gSignals [BUFFER_SAVED], 0, state->buffer);
   g_signal_emit_by_name (state->buffer, "saved");
 
-  g_task_return_boolean (task, TRUE);
+  /* Reload the mtime for the buffer */
+  g_file_query_info_async (gfile,
+                           G_FILE_ATTRIBUTE_TIME_MODIFIED,
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           g_task_get_cancellable (task),
+                           ide_buffer_manager__buffer_reload_mtime_cb,
+                           g_object_ref (task));
 }
 
 static void

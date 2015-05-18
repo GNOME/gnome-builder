@@ -802,13 +802,15 @@ do_check_modified (gpointer user_data)
   IdeBuffer *self = user_data;
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUFFER (self));
 
   priv->check_modified_timeout = 0;
 
   ide_buffer_check_for_volume_change (self);
 
-  return G_SOURCE_REMOVE;
+  IDE_RETURN (G_SOURCE_REMOVE);
 }
 
 static void
@@ -836,6 +838,8 @@ ide_buffer__file_monitor_changed (IdeBuffer         *self,
                                   GFileMonitorEvent  event,
                                   GFileMonitor      *file_monitor)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUFFER (self));
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_FILE_MONITOR (file_monitor));
@@ -844,21 +848,24 @@ ide_buffer__file_monitor_changed (IdeBuffer         *self,
     {
     case G_FILE_MONITOR_EVENT_CHANGED:
     case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
+    case G_FILE_MONITOR_EVENT_MOVED:
+    case G_FILE_MONITOR_EVENT_RENAMED:
+    case G_FILE_MONITOR_EVENT_CREATED:
+    case G_FILE_MONITOR_EVENT_DELETED:
+      IDE_TRACE_MSG ("buffer change event = %d", (int)event);
       ide_buffer_queue_modify_check (self);
       break;
 
-    case G_FILE_MONITOR_EVENT_DELETED:
-    case G_FILE_MONITOR_EVENT_CREATED:
-    case G_FILE_MONITOR_EVENT_RENAMED:
     case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
     case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
     case G_FILE_MONITOR_EVENT_UNMOUNTED:
-    case G_FILE_MONITOR_EVENT_MOVED:
     case G_FILE_MONITOR_EVENT_MOVED_IN:
     case G_FILE_MONITOR_EVENT_MOVED_OUT:
     default:
       break;
     }
+
+  IDE_EXIT;
 }
 
 static void
@@ -882,13 +889,23 @@ ide_buffer__file_notify_file (IdeBuffer  *self,
 
   if (gfile != NULL)
     {
+      GError *error = NULL;
+
       priv->file_monitor = g_file_monitor_file (gfile, G_FILE_MONITOR_NONE, NULL, NULL);
+
       if (priv->file_monitor != NULL)
-        g_signal_connect_object (priv->file_monitor,
-                                 "changed",
-                                 G_CALLBACK (ide_buffer__file_monitor_changed),
-                                 self,
-                                 G_CONNECT_SWAPPED);
+        {
+          g_signal_connect_object (priv->file_monitor,
+                                   "changed",
+                                   G_CALLBACK (ide_buffer__file_monitor_changed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+        }
+      else
+        {
+          g_debug ("Failed to create GFileMonitor: %s", error->message);
+          g_clear_error (&error);
+        }
     }
 }
 
@@ -1356,6 +1373,12 @@ ide_buffer_set_file (IdeBuffer *self,
       ide_buffer_reload_change_monitor (self);
       ide_buffer_reload_highlighter (self);
       ide_buffer_reload_symbol_provider (self);
+      /*
+       * FIXME: More hack for 3.16.3. This all needs refactorying.
+       *        In particular, IdeFile should probably subclass GtkSourceFile.
+       */
+      if (file != NULL)
+        ide_buffer__file_notify_file (self, NULL, file);
       ide_buffer_update_title (self);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_FILE]);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_TITLE]);
