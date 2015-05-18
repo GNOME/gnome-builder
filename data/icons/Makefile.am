@@ -22,10 +22,15 @@ bundled_icon_sources = \
 	hicolor/scalable/autocomplete/lang-enum-value-symbolic.svg \
 	hicolor/scalable/autocomplete/struct-field-symbolic.svg \
 	hicolor/scalable/autocomplete/lang-class-symbolic.svg \
-	hicolor/scalable/autocomplete/lang-struct-symbolic.svg \
+	hicolor/scalable/autocomplete/lang-define-symbolic.svg \
 	hicolor/scalable/autocomplete/lang-enum-symbolic.svg \
+	hicolor/scalable/autocomplete/lang-include-symbolic.svg \
 	hicolor/scalable/autocomplete/lang-method-symbolic.svg \
 	hicolor/scalable/autocomplete/lang-function-symbolic.svg \
+	hicolor/scalable/autocomplete/lang-typedef-symbolic.svg \
+	hicolor/scalable/autocomplete/lang-struct-symbolic.svg \
+	hicolor/scalable/autocomplete/lang-variable-symbolic.svg \
+	hicolor/scalable/autocomplete/lang-union-symbolic.svg \
 	$(NULL)
 
 EXTRA_DIST = \
