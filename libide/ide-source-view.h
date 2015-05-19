@@ -25,16 +25,9 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SOURCE_VIEW            (ide_source_view_get_type())
-#define IDE_SOURCE_VIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SOURCE_VIEW, IdeSourceView))
-#define IDE_SOURCE_VIEW_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_SOURCE_VIEW, IdeSourceView const))
-#define IDE_SOURCE_VIEW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_SOURCE_VIEW, IdeSourceViewClass))
-#define IDE_IS_SOURCE_VIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_SOURCE_VIEW))
-#define IDE_IS_SOURCE_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_SOURCE_VIEW))
-#define IDE_SOURCE_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_SOURCE_VIEW, IdeSourceViewClass))
+#define IDE_TYPE_SOURCE_VIEW  (ide_source_view_get_type())
 
-typedef struct _IdeSourceView      IdeSourceView;
-typedef struct _IdeSourceViewClass IdeSourceViewClass;
+G_DECLARE_DERIVABLE_TYPE (IdeSourceView, ide_source_view, IDE, SOURCE_VIEW, GtkSourceView)
 
 /**
  * IdeSourceViewModeType:
@@ -191,13 +184,6 @@ typedef enum
   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_MODIFIER,
 } IdeSourceViewMovement;
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceView, g_object_unref)
-
-struct _IdeSourceView
-{
-  GtkSourceView parent;
-};
-
 struct _IdeSourceViewClass
 {
   GtkSourceViewClass parent_class;
@@ -301,7 +287,6 @@ gboolean                    ide_source_view_get_show_search_bubbles   (IdeSource
 gboolean                    ide_source_view_get_show_search_shadow    (IdeSourceView              *self);
 gboolean                    ide_source_view_get_smart_backspace       (IdeSourceView              *self);
 gboolean                    ide_source_view_get_snippet_completion    (IdeSourceView              *self);
-GType                       ide_source_view_get_type                  (void);
 void                        ide_source_view_get_visible_rect          (IdeSourceView              *self,
                                                                        GdkRectangle               *visible_rect);
 void                        ide_source_view_jump                      (IdeSourceView              *self,

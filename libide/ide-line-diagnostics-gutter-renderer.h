@@ -23,28 +23,10 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER            (ide_line_diagnostics_gutter_renderer_get_type())
-#define IDE_LINE_DIAGNOSTICS_GUTTER_RENDERER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER, IdeLineDiagnosticsGutterRenderer))
-#define IDE_LINE_DIAGNOSTICS_GUTTER_RENDERER_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER, IdeLineDiagnosticsGutterRenderer const))
-#define IDE_LINE_DIAGNOSTICS_GUTTER_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER, IdeLineDiagnosticsGutterRendererClass))
-#define IDE_IS_LINE_DIAGNOSTICS_GUTTER_RENDERER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER))
-#define IDE_IS_LINE_DIAGNOSTICS_GUTTER_RENDERER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER))
-#define IDE_LINE_DIAGNOSTICS_GUTTER_RENDERER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER, IdeLineDiagnosticsGutterRendererClass))
+#define IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER (ide_line_diagnostics_gutter_renderer_get_type())
 
-typedef struct _IdeLineDiagnosticsGutterRenderer      IdeLineDiagnosticsGutterRenderer;
-typedef struct _IdeLineDiagnosticsGutterRendererClass IdeLineDiagnosticsGutterRendererClass;
-
-struct _IdeLineDiagnosticsGutterRenderer
-{
-  GtkSourceGutterRendererPixbuf parent;
-};
-
-struct _IdeLineDiagnosticsGutterRendererClass
-{
-  GtkSourceGutterRendererPixbufClass parent_class;
-};
-
-GType ide_line_diagnostics_gutter_renderer_get_type (void);
+G_DECLARE_FINAL_TYPE (IdeLineDiagnosticsGutterRenderer, ide_line_diagnostics_gutter_renderer,
+                      IDE, LINE_DIAGNOSTICS_GUTTER_RENDERER, GtkSourceGutterRendererPixbuf)
 
 G_END_DECLS
 

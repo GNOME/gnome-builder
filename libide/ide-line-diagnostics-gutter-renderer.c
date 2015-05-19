@@ -19,6 +19,11 @@
 #include "ide-buffer.h"
 #include "ide-line-diagnostics-gutter-renderer.h"
 
+struct _IdeLineDiagnosticsGutterRenderer
+{
+  GtkSourceGutterRendererPixbuf parent_instance;
+};
+
 G_DEFINE_TYPE (IdeLineDiagnosticsGutterRenderer,
                ide_line_diagnostics_gutter_renderer,
                GTK_SOURCE_TYPE_GUTTER_RENDERER_PIXBUF)

@@ -26,23 +26,19 @@ struct _IdeLineChangeGutterRenderer
 {
   GtkSourceGutterRenderer parent_instance;
 
-  GtkTextView   *text_view;
-  gulong         text_view_notify_buffer;
+  GtkTextView            *text_view;
+  gulong                  text_view_notify_buffer;
 
-  GtkTextBuffer *buffer;
-  gulong         buffer_notify_style_scheme;
+  GtkTextBuffer          *buffer;
+  gulong                  buffer_notify_style_scheme;
 
-  GdkRGBA rgba_added;
-  GdkRGBA rgba_changed;
+  GdkRGBA                 rgba_added;
+  GdkRGBA                 rgba_changed;
 
-  guint rgba_added_set : 1;
-  guint rgba_changed_set : 1;
+  guint                   rgba_added_set : 1;
+  guint                   rgba_changed_set : 1;
 };
 
-struct _IdeLineChangeGutterRendererClass
-{
-  GtkSourceGutterRendererClass parent;
-};
 
 G_DEFINE_TYPE (IdeLineChangeGutterRenderer,
                ide_line_change_gutter_renderer,

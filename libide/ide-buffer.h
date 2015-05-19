@@ -19,24 +19,18 @@
 #ifndef IDE_BUFFER_H
 #define IDE_BUFFER_H
 
-#include <gtksourceview/gtksourcebuffer.h>
+#include <gtksourceview/gtksource.h>
 
 #include "ide-types.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_BUFFER             (ide_buffer_get_type ())
-#define IDE_BUFFER(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_BUFFER, IdeBuffer))
-#define IDE_BUFFER_CONST(obj)       (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_BUFFER, IdeBuffer const))
-#define IDE_BUFFER_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_BUFFER, IdeBufferClass))
-#define IDE_IS_BUFFER(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_BUFFER))
-#define IDE_IS_BUFFER_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_BUFFER))
-#define IDE_BUFFER_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_BUFFER, IdeBufferClass))
+#define IDE_TYPE_BUFFER (ide_buffer_get_type ())
 
 #define IDE_BUFFER_LINE_FLAGS_DIAGNOSTICS_MASK \
   ((IDE_BUFFER_LINE_FLAGS_ERROR | IDE_BUFFER_LINE_FLAGS_WARNING | IDE_BUFFER_LINE_FLAGS_NOTE))
 
-typedef struct _IdeBufferClass IdeBufferClass;
+G_DECLARE_DERIVABLE_TYPE (IdeBuffer, ide_buffer, IDE, BUFFER, GtkSourceBuffer)
 
 typedef enum
 {
@@ -56,13 +50,6 @@ struct _IdeBufferClass
                         const GtkTextIter *location);
 };
 
-struct _IdeBuffer
-{
-  GtkSourceBuffer parent_instance;
-};
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeBuffer, g_object_unref)
-
 gboolean            ide_buffer_get_changed_on_volume         (IdeBuffer            *self);
 GBytes             *ide_buffer_get_content                   (IdeBuffer            *self);
 IdeContext         *ide_buffer_get_context                   (IdeBuffer            *self);
@@ -75,7 +62,6 @@ gboolean            ide_buffer_get_read_only                 (IdeBuffer         
 gboolean            ide_buffer_get_highlight_diagnostics     (IdeBuffer            *self);
 const gchar        *ide_buffer_get_style_scheme_name         (IdeBuffer            *self);
 const gchar        *ide_buffer_get_title                     (IdeBuffer            *self);
-GType               ide_buffer_get_type                      (void);
 void                ide_buffer_set_file                      (IdeBuffer            *self,
                                                               IdeFile              *file);
 void                ide_buffer_set_highlight_diagnostics     (IdeBuffer            *self,

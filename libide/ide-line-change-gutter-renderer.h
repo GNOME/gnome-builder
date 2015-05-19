@@ -23,18 +23,10 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER            (ide_line_change_gutter_renderer_get_type())
-#define IDE_LINE_CHANGE_GUTTER_RENDERER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER, IdeLineChangeGutterRenderer))
-#define IDE_LINE_CHANGE_GUTTER_RENDERER_CONST(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER, IdeLineChangeGutterRenderer const))
-#define IDE_LINE_CHANGE_GUTTER_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER, IdeLineChangeGutterRendererClass))
-#define IDE_IS_LINE_CHANGE_GUTTER_RENDERER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER))
-#define IDE_IS_LINE_CHANGE_GUTTER_RENDERER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER))
-#define IDE_LINE_CHANGE_GUTTER_RENDERER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER, IdeLineChangeGutterRendererClass))
+#define IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER (ide_line_change_gutter_renderer_get_type())
 
-typedef struct _IdeLineChangeGutterRenderer      IdeLineChangeGutterRenderer;
-typedef struct _IdeLineChangeGutterRendererClass IdeLineChangeGutterRendererClass;
-
-GType ide_line_change_gutter_renderer_get_type (void);
+G_DECLARE_FINAL_TYPE (IdeLineChangeGutterRenderer, ide_line_change_gutter_renderer,
+                      IDE, LINE_CHANGE_GUTTER_RENDERER, GtkSourceGutterRenderer);
 
 G_END_DECLS
 
