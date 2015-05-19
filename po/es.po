@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2015-05-17 15:27+0000\n"
-"PO-Revision-Date: 2015-05-18 \n"
+"PO-Revision-Date: 2015-05-19 \n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -108,27 +108,27 @@ msgstr "_Nuevo"
 
 #: ../data/gtk/menus.ui.h:22
 msgid "_Empty File"
-msgstr ""
+msgstr "Archivo _vacío"
 
 #: ../data/gtk/menus.ui.h:23
 msgid "_New Folder"
-msgstr ""
+msgstr "_Nueva carpeta"
 
 #: ../data/gtk/menus.ui.h:24
 msgid "Open _With"
-msgstr ""
+msgstr "Abrir_ con"
 
 #: ../data/gtk/menus.ui.h:25
 msgid "Source Code Editor"
-msgstr ""
+msgstr "Editor de código fuente"
 
 #: ../data/gtk/menus.ui.h:26
 msgid "_Open Containing Folder"
-msgstr ""
+msgstr "_Abrir la carpeta que lo contiene"
 
 #: ../data/gtk/menus.ui.h:27
 msgid "_Open in Terminal"
-msgstr ""
+msgstr "_Abrir en una terminal"
 
 #: ../data/gtk/menus.ui.h:28 ../data/ui/gb-rename-file-popover.ui.h:2
 msgid "_Rename"
@@ -136,21 +136,20 @@ msgstr "_Renombrar"
 
 #: ../data/gtk/menus.ui.h:29
 msgid "Mo_ve to Trash"
-msgstr ""
+msgstr "Mo_ver a la papelera"
 
 #: ../data/gtk/menus.ui.h:30
-#, fuzzy
 #| msgid "Builder"
 msgid "_Build"
-msgstr "Constructor"
+msgstr "_Construir"
 
 #: ../data/gtk/menus.ui.h:31
 msgid "_Rebuild"
-msgstr ""
+msgstr "_Reconstruir"
 
 #: ../data/ui/gb-editor-frame.ui.h:1
 msgid "OVR"
-msgstr ""
+msgstr "OVR"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:1
 msgid "Display right _margin at column:"
@@ -179,11 +178,11 @@ msgstr ""
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:7
 msgid "Insert _spaces instead of tabs"
-msgstr ""
+msgstr "Insertar _espacios en lugar de tabuladores"
 
 #: ../data/ui/gb-editor-settings-widget.ui.h:8
 msgid "_Enable automatic indentation"
-msgstr ""
+msgstr "_Activar el sangrado automático"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:1
 msgid "Search highlight mode…"
@@ -195,23 +194,23 @@ msgstr "Mostrar números de líneas"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:3
 msgid "Display right margin"
-msgstr ""
+msgstr "Mostrar margen derecho"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:4
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:5
 msgid "Highlight current line"
-msgstr ""
+msgstr "Resaltar la línea actual"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:5
 msgid "Auto indent"
-msgstr ""
+msgstr "Sangrado automático"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:6
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:12
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:11
 #: ../libide/ide-source-view.c:5329
 msgid "Smart Backspace"
-msgstr ""
+msgstr "Retroceso inteligente"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:8
 msgid "Spaces"
@@ -247,10 +246,12 @@ msgid ""
 "Builder has discovered that this file has been modified externally. Would "
 "you like to reload the file?"
 msgstr ""
+"Builder ha descubierto que este archivo se ha modificado externamente. "
+"¿Quiere recargarlo?"
 
 #: ../data/ui/gb-editor-view.ui.h:4
 msgid "Search Symbols"
-msgstr ""
+msgstr "Buscar símbolos"
 
 #: ../data/ui/gb-editor-workspace.ui.h:1
 #| msgid "Builder"
@@ -259,36 +260,35 @@ msgstr "Construir proyecto"
 
 #: ../data/ui/gb-editor-workspace.ui.h:2
 msgid "Rebuild Project"
-msgstr ""
+msgstr "Reconstruir proyecto"
 
 #: ../data/ui/gb-greeter-window.ui.h:1
 msgid "Select a Project"
-msgstr ""
+msgstr "Seleccionar un proyecto"
 
 #: ../data/ui/gb-greeter-window.ui.h:3 ../src/greeter/gb-greeter-window.c:447
 msgid "Recent Projects"
-msgstr ""
+msgstr "Proyectos recientes"
 
 #: ../data/ui/gb-greeter-window.ui.h:4
 msgid "Other Projects"
-msgstr ""
+msgstr "Otros proyectos"
 
 #: ../data/ui/gb-new-file-popover.ui.h:1
 #: ../data/ui/gb-rename-file-popover.ui.h:1
 #: ../src/project-tree/gb-new-file-popover.c:349
-#, fuzzy
 #| msgid "Name"
 msgid "File Name"
-msgstr "Nombre"
+msgstr "Nombre del archivo"
 
 #: ../data/ui/gb-new-file-popover.ui.h:2
 msgid "_Create"
-msgstr ""
+msgstr "_Crear"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:1
 #: ../src/dialogs/gb-new-project-dialog.c:348
 msgid "New Project"
-msgstr ""
+msgstr "Nuevo proyecto"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:3
 msgid "_Continue"
@@ -296,11 +296,11 @@ msgstr "_Continuar"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:4
 msgid "From existing project on this computer"
-msgstr ""
+msgstr "Desde un proyecto existente en este equipo"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:5
 msgid "From remote source code repository"
-msgstr ""
+msgstr "Desde un repositorio de código fuente remoto"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:6
 #: ../data/ui/gb-preferences-page-git.ui.h:3
@@ -343,7 +343,7 @@ msgstr "usuario@equipo:repositorio.git"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:13
 msgid "Enter the URL of your project's source code repository."
-msgstr ""
+msgstr "Itroduzca el URL del repositorio de código fuente de su proyecto."
 
 #: ../data/ui/gb-new-project-dialog.ui.h:14
 #: ../libide/autotools/ide-autotools-build-task.c:395
@@ -392,11 +392,11 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:8
 msgid "Highlight Current Line"
-msgstr ""
+msgstr "Resaltar la línea actual"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:9
 msgid "Highlight the line containing the cursor."
-msgstr ""
+msgstr "Resaltar la línea que tiene el cursor."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:10
 msgid "Highlight Matching Brackets"
@@ -432,7 +432,7 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:18
 msgid "Restore Cursor Position"
-msgstr ""
+msgstr "Restaurar la posición del cursor"
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:19
 msgid ""
@@ -479,7 +479,7 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:4
 msgid "Auto Completion"
-msgstr ""
+msgstr "Autocompletado"
 
 #: ../data/ui/gb-preferences-page-insight.ui.h:5
 msgid "Suggest Word Completion"
@@ -526,7 +526,7 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:5
 msgid "Emacs Emulation"
-msgstr ""
+msgstr "Emulación de Emacs"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:6
 msgid "Emulates familiar keybindings from the Emacs text editor."
@@ -534,7 +534,7 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:7
 msgid "Vim Emulation"
-msgstr ""
+msgstr "Emulación de Vim"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:8
 msgid "Emulates familiar keybindings from the Vim text editor."
@@ -542,7 +542,7 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:9
 msgid "Keyboard Movement"
-msgstr ""
+msgstr "Movimiento con el teclado"
 
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:10
 msgid "Smart Home End"
@@ -561,7 +561,7 @@ msgstr ""
 #: ../data/ui/gb-preferences-page-language.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:4
 msgid "Programming Languages"
-msgstr ""
+msgstr "Lenguajes de programación"
 
 #: ../data/ui/gb-preferences-page-theme.ui.h:1
 #: ../data/ui/gb-preferences-window.ui.h:7
@@ -570,7 +570,7 @@ msgstr "Tema"
 
 #: ../data/ui/gb-preferences-page-theme.ui.h:2
 msgid "Night Mode"
-msgstr ""
+msgstr "Modo nocturno"
 
 #: ../data/ui/gb-preferences-page-theme.ui.h:3
 #, fuzzy
@@ -588,7 +588,7 @@ msgstr ""
 
 #: ../data/ui/gb-preferences-window.ui.h:1
 msgid "Preferences"
-msgstr ""
+msgstr "Preferencias"
 
 #: ../data/ui/gb-preferences-window.ui.h:2
 msgid "Search Preferences…"
@@ -597,7 +597,7 @@ msgstr ""
 #: ../data/ui/gb-projects-dialog.ui.h:1
 #: ../src/dialogs/gb-projects-dialog.c:257
 msgid "Select Project"
-msgstr ""
+msgstr "Seleccionar proyecto"
 
 #: ../data/ui/gb-projects-dialog.ui.h:2
 msgid "New"
@@ -605,24 +605,24 @@ msgstr "Nuevo"
 
 #: ../data/ui/gb-projects-dialog.ui.h:4
 msgid "Delete"
-msgstr ""
+msgstr "Eliminar"
 
 #: ../data/ui/gb-view-stack.ui.h:1
 msgid "Split"
-msgstr ""
+msgstr "Dividir"
 
 #: ../data/ui/gb-view-stack.ui.h:2
 msgid "Move"
-msgstr ""
+msgstr "Mover"
 
 #: ../data/ui/gb-view-stack.ui.h:3
 msgid "Preview"
-msgstr ""
+msgstr "Vista previa"
 
 #: ../data/ui/gb-view-stack.ui.h:4 ../src/editor/gb-editor-view-actions.c:311
 #: ../src/editor/gb-editor-view-actions.c:442
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: ../data/ui/gb-view-stack.ui.h:5
 #| msgid "_Save As…"
@@ -631,7 +631,7 @@ msgstr "Guardar como"
 
 #: ../data/ui/gb-view-stack.ui.h:6
 msgid "Close"
-msgstr ""
+msgstr "Cerrar"
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.h:1
 msgid "Clang based autocompletion (Experimental)"
@@ -661,7 +661,7 @@ msgstr ""
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.h:7
 msgid "Enable semantic highlighting"
-msgstr ""
+msgstr "Activar el resaltado semántico"
 
 #: ../data/gsettings/org.gnome.builder.code-insight.gschema.xml.h:8
 msgid ""
@@ -679,7 +679,7 @@ msgstr ""
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:1
 msgid "Restore last position"
-msgstr ""
+msgstr "Restaurar la última posición"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:2
 msgid "Jump to the last position when reopening a file"
@@ -687,7 +687,7 @@ msgstr ""
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:3
 msgid "Show modified lines"
-msgstr ""
+msgstr "Mostrar las líneas modificadas"
 
 #: ../data/gsettings/org.gnome.builder.editor.gschema.xml.h:4
 msgid ""
@@ -767,7 +767,7 @@ msgstr ""
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.h:1
 msgid "Show Project Sidebar"
-msgstr ""
+msgstr "Mostrar la barra lateral del proyecto"
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.h:2
 msgid "If enabled, the sidebar will be visible in the editor workspace."
@@ -783,7 +783,7 @@ msgstr ""
 
 #: ../data/gsettings/org.gnome.builder.project-tree.gschema.xml.h:6
 msgid "The width in pixels of the project tree."
-msgstr ""
+msgstr "La anchura, en píxeles, del árbol del proyecto."
 
 #: ../contrib/search/trie.c:790
 #, c-format
@@ -792,7 +792,7 @@ msgstr ""
 
 #: ../contrib/xml/xml-reader.c:180 ../contrib/xml/xml-reader.c:181
 msgid "Encoding"
-msgstr ""
+msgstr "Codificación"
 
 #: ../contrib/xml/xml-reader.c:187 ../contrib/xml/xml-reader.c:188
 #: ../libide/devhelp/ide-devhelp-search-result.c:99
@@ -840,7 +840,7 @@ msgstr ""
 #: ../libide/autotools/ide-autotools-build-task.c:377
 #: ../libide/autotools/ide-autotools-builder.c:303
 msgid "Config"
-msgstr ""
+msgstr "Configuración"
 
 #: ../libide/autotools/ide-autotools-build-task.c:378
 #, fuzzy
@@ -911,7 +911,7 @@ msgstr ""
 
 #: ../libide/autotools/ide-autotools-project-miner.c:377
 msgid "Root Directory"
-msgstr ""
+msgstr "Carpeta raíz"
 
 #: ../libide/autotools/ide-autotools-project-miner.c:378
 msgid "The root directory to scan from."
@@ -950,7 +950,7 @@ msgstr "Índice"
 
 #: ../libide/clang/ide-clang-completion-item.c:414
 msgid "The index in the result set."
-msgstr ""
+msgstr "El índice en el conjunto de resultados."
 
 #: ../libide/clang/ide-clang-completion-item.c:422
 #| msgid "Result"
@@ -967,7 +967,7 @@ msgstr "Clang"
 
 #: ../libide/clang/ide-clang-service.c:263
 msgid "Unknown failure"
-msgstr ""
+msgstr "Fallo desconocido"
 
 #: ../libide/clang/ide-clang-service.c:267
 msgid "Clang crashed"
@@ -975,7 +975,7 @@ msgstr ""
 
 #: ../libide/clang/ide-clang-service.c:271
 msgid "Invalid arguments"
-msgstr ""
+msgstr "Argumentos no válidos"
 
 #: ../libide/clang/ide-clang-service.c:275
 msgid "AST read error"
@@ -1058,7 +1058,7 @@ msgstr "El nombre de la acción que ejecutar"
 
 #: ../libide/doap/ide-doap.c:420 ../libide/doap/ide-doap.c:421
 msgid "Bug Database"
-msgstr ""
+msgstr "Base de datos de errores"
 
 #: ../libide/doap/ide-doap.c:427 ../libide/doap/ide-doap.c:428
 msgid "Category"
@@ -1072,11 +1072,11 @@ msgstr "Descripción"
 
 #: ../libide/doap/ide-doap.c:441 ../libide/doap/ide-doap.c:442
 msgid "Download Page"
-msgstr ""
+msgstr "Página de descarga"
 
 #: ../libide/doap/ide-doap.c:448 ../libide/doap/ide-doap.c:449
 msgid "Homepage"
-msgstr ""
+msgstr "Página principal"
 
 #: ../libide/doap/ide-doap.c:455 ../libide/doap/ide-doap.c:456
 #: ../libide/ide-project-info.c:465 ../libide/ide-project-info.c:466
@@ -1151,10 +1151,9 @@ msgid "Switch To"
 msgstr ""
 
 #: ../libide/git/ide-git-search-result.c:99
-#, fuzzy
 #| msgid "The title of the document."
 msgid "The file to be opened."
-msgstr "El título del documento."
+msgstr "El archivo que abrir."
 
 #: ../libide/git/ide-git-vcs.c:768
 #, fuzzy
@@ -1239,7 +1238,7 @@ msgstr ""
 
 #: ../libide/ide-back-forward-list.c:722
 msgid "File contained invalid UTF-8"
-msgstr ""
+msgstr "El archivo contiene UTF-8 no válido"
 
 #: ../libide/ide-buffer-change-monitor.c:106
 #: ../libide/ide-highlight-engine.c:809 ../libide/ide-source-snippet.c:946
@@ -1285,7 +1284,7 @@ msgstr ""
 
 #: ../libide/ide-buffer-manager.c:1324
 msgid "Words"
-msgstr ""
+msgstr "Palabras"
 
 #: ../libide/ide-buffer-manager.c:1535
 #, c-format
@@ -1298,7 +1297,7 @@ msgstr ""
 
 #: ../libide/ide-buffer.c:1005
 msgid "Busy"
-msgstr ""
+msgstr "Ocupado"
 
 #: ../libide/ide-buffer.c:1006
 msgid "If the buffer is performing background work."
@@ -1378,11 +1377,11 @@ msgstr ""
 
 #: ../libide/ide-build-system.c:181 ../libide/ide-context.c:698
 msgid "Project File"
-msgstr ""
+msgstr "Archivo de proyecto"
 
 #: ../libide/ide-build-system.c:182
 msgid "The project file."
-msgstr ""
+msgstr "El archivo del proyecto."
 
 #: ../libide/ide-build-system.c:287
 #, c-format
@@ -1430,10 +1429,9 @@ msgid "The build system used by the context."
 msgstr ""
 
 #: ../libide/ide-context.c:684
-#, fuzzy
 #| msgid "Document Manager"
 msgid "Device Manager"
-msgstr "Gestor de documentos"
+msgstr "Gestor de dispositivos"
 
 #: ../libide/ide-context.c:685
 #, fuzzy
@@ -1488,10 +1486,9 @@ msgid "The search engine for the context."
 msgstr "Los parámetros para la acción."
 
 #: ../libide/ide-context.c:728
-#, fuzzy
 #| msgid "Document Manager"
 msgid "Snippets Manager"
-msgstr "Gestor de documentos"
+msgstr "Gestor de fragmentos"
 
 #: ../libide/ide-context.c:729
 #, fuzzy
@@ -1511,7 +1508,7 @@ msgstr "El nombre de la acción que ejecutar"
 
 #: ../libide/ide-context.c:742
 msgid "VCS"
-msgstr ""
+msgstr "VCS"
 
 #: ../libide/ide-context.c:743
 #, fuzzy
@@ -1591,7 +1588,7 @@ msgstr ""
 
 #: ../libide/ide-device.c:248
 msgid "System Type"
-msgstr ""
+msgstr "Tipo de sistema"
 
 #: ../libide/ide-device.c:249
 msgid "The system type for which to compile."
@@ -1616,15 +1613,15 @@ msgstr ""
 
 #: ../libide/ide-file.c:527
 msgid "Is Temporary"
-msgstr ""
+msgstr "Es temporal"
 
 #: ../libide/ide-file.c:528
 msgid "If the file represents a temporary file."
-msgstr ""
+msgstr "Si el archivo representa un archivo temporal."
 
 #: ../libide/ide-file.c:535
 msgid "The file language."
-msgstr ""
+msgstr "El idioma del archivo."
 
 #: ../libide/ide-file.c:541 ../libide/ide-project-file.c:276
 msgid "Path"
@@ -1636,17 +1633,16 @@ msgstr ""
 
 #: ../libide/ide-file.c:548
 msgid "Temporary ID"
-msgstr ""
+msgstr "ID temporal"
 
 #: ../libide/ide-file.c:549
 msgid "A unique identifier for temporary files."
-msgstr ""
+msgstr "Un identificador único para archivos temporales."
 
 #: ../libide/ide-highlight-engine.c:810
-#, fuzzy
 #| msgid "The buffer "
 msgid "The buffer to highlight."
-msgstr "El búfer"
+msgstr "El búfer que resaltar."
 
 #: ../libide/ide-highlight-engine.c:816 ../libide/ide-language.c:385
 msgid "Highlighter"
@@ -1693,10 +1689,9 @@ msgid "The semantic indenter for the language."
 msgstr "Los parámetros para la acción."
 
 #: ../libide/ide-language.c:409
-#, fuzzy
 #| msgid "The name of the action to execute."
 msgid "The name of the language."
-msgstr "El nombre de la acción que ejecutar"
+msgstr "El nombre del idioma."
 
 #: ../libide/ide-language.c:415
 msgid "Refactory"
@@ -1728,17 +1723,16 @@ msgstr ""
 
 #: ../libide/ide-progress.c:210
 msgid "Completed"
-msgstr ""
+msgstr "Completado"
 
 #: ../libide/ide-progress.c:211
 msgid "If the progress has completed."
-msgstr ""
+msgstr "Si el progreso se ha completado."
 
 #: ../libide/ide-progress.c:218
-#, fuzzy
 #| msgid "The title of the document."
 msgid "The fraction of the progress."
-msgstr "El título del documento."
+msgstr "La fracción del progreso."
 
 #: ../libide/ide-progress.c:226
 msgid "Message"
@@ -1746,17 +1740,16 @@ msgstr "Mensaje"
 
 #: ../libide/ide-progress.c:227
 msgid "A short message for the progress."
-msgstr ""
+msgstr "Un mensaje corto del progreso."
 
 #: ../libide/ide-project-file.c:249
 msgid "A GFile to the underlying file."
 msgstr ""
 
 #: ../libide/ide-project-file.c:255
-#, fuzzy
 #| msgid "File"
 msgid "File Info"
-msgstr "Archivo"
+msgstr "Información del archivo"
 
 #: ../libide/ide-project-file.c:256
 msgid "The file information for the project file."
@@ -1766,13 +1759,12 @@ msgstr ""
 #: ../src/project-tree/gb-rename-file-popover.c:315
 #: ../src/project-tree/gb-rename-file-popover.c:316
 msgid "Is Directory"
-msgstr ""
+msgstr "Es una carpeta"
 
 #: ../libide/ide-project-file.c:270
-#, fuzzy
 #| msgid "The name of the action to execute."
 msgid "The short name of the file."
-msgstr "El nombre de la acción que ejecutar"
+msgstr "El nombre corto del archivo"
 
 #: ../libide/ide-project-file.c:277
 msgid "The path for the file within the project tree."
@@ -1780,11 +1772,11 @@ msgstr ""
 
 #: ../libide/ide-project-info.c:424
 msgid "The project description."
-msgstr ""
+msgstr "La descripción del proyecto"
 
 #: ../libide/ide-project-info.c:431
 msgid "The project name."
-msgstr ""
+msgstr "El nombre del proyecto."
 
 #: ../libide/ide-project-info.c:438
 msgid "The project directory."
@@ -1833,10 +1825,9 @@ msgid "The unique project identifier."
 msgstr ""
 
 #: ../libide/ide-project.c:401
-#, fuzzy
 #| msgid "The name of the action to execute."
 msgid "The name of the project."
-msgstr "El nombre de la acción que ejecutar"
+msgstr "El nombre del proyecto."
 
 #: ../libide/ide-project.c:407 ../src/tree/gb-tree.c:1289
 msgid "Root"
@@ -1940,7 +1931,7 @@ msgstr ""
 
 #: ../libide/ide-source-map.c:894 ../libide/ide-source-view-capture.c:241
 msgid "View"
-msgstr ""
+msgstr "Vista"
 
 #: ../libide/ide-source-map.c:895
 msgid "The view this widget is mapping."
@@ -1948,7 +1939,7 @@ msgstr ""
 
 #: ../libide/ide-source-map.c:901 ../libide/ide-source-view.c:5207
 msgid "Font Description"
-msgstr ""
+msgstr "Descripción de la tipografía"
 
 #: ../libide/ide-source-map.c:902
 #, fuzzy
@@ -1978,7 +1969,7 @@ msgstr ""
 
 #: ../libide/ide-source-snippet-chunk.c:337 ../src/tree/gb-tree-node.c:652
 msgid "Text"
-msgstr ""
+msgstr "TExto"
 
 #: ../libide/ide-source-snippet-chunk.c:338
 msgid "The text for the chunk."
@@ -1998,7 +1989,7 @@ msgstr "Fragmento"
 
 #: ../libide/ide-source-snippet-completion-item.c:133
 msgid "The snippet to insert."
-msgstr ""
+msgstr "El fragmento que insertar."
 
 #: ../libide/ide-source-snippet-completion-provider.c:167
 #: ../src/commands/gb-command-vim.c:191
@@ -2070,12 +2061,12 @@ msgstr ""
 #: ../libide/ide-source-snippets-manager.c:97
 #, c-format
 msgid "Failed to open directory: %s"
-msgstr ""
+msgstr "Falló al abrir la carpeta: %s"
 
 #: ../libide/ide-source-snippets-manager.c:110
 #, c-format
 msgid "Failed to load file: %s: %s"
-msgstr ""
+msgstr "Falló al cargar el archivo: %s: %s"
 
 #: ../libide/ide-source-view-capture.c:242
 msgid "The source view."
@@ -2114,11 +2105,11 @@ msgstr "Contador"
 
 #: ../libide/ide-source-view.c:5192
 msgid "The count for movements."
-msgstr ""
+msgstr "El contador de movimientos."
 
 #: ../libide/ide-source-view.c:5200
 msgid "File Settings"
-msgstr ""
+msgstr "Archivo de configuración"
 
 #: ../libide/ide-source-view.c:5201
 msgid "The file settings that have been loaded for the file."
@@ -2130,7 +2121,7 @@ msgstr ""
 
 #: ../libide/ide-source-view.c:5214
 msgid "Enable Word Completion"
-msgstr ""
+msgstr "Activar el completado de palabras"
 
 #: ../libide/ide-source-view.c:5215
 msgid "If words from all buffers can be used to autocomplete."
@@ -2138,15 +2129,15 @@ msgstr ""
 
 #: ../libide/ide-source-view.c:5221
 msgid "Font Name"
-msgstr ""
+msgstr "Nombre de la tipografía"
 
 #: ../libide/ide-source-view.c:5222
 msgid "The Pango font name to use for rendering source."
-msgstr ""
+msgstr "El nombre de la tipografía Pango usada para renederizar la fuente."
 
 #: ../libide/ide-source-view.c:5232 ../libide/ide-source-view.c:5233
 msgid "Indent Style"
-msgstr ""
+msgstr "Estilo de sangrado"
 
 #: ../libide/ide-source-view.c:5240
 msgid "Insert Matching Brace"
@@ -2186,13 +2177,12 @@ msgstr ""
 
 #: ../libide/ide-source-view.c:5279
 msgid "Search Context"
-msgstr ""
+msgstr "Contexto de la búsqueda"
 
 #: ../libide/ide-source-view.c:5280
-#, fuzzy
 #| msgid "The parameters for the action."
 msgid "The search context for the view."
-msgstr "Los parámetros para la acción."
+msgstr "El contexto de la búsqueda para la vista."
 
 #: ../libide/ide-source-view.c:5286
 msgid "Show Grid Lines"
@@ -2261,11 +2251,11 @@ msgstr ""
 
 #: ../libide/mingw/ide-mingw-device-provider.c:64
 msgid "MinGW (64-bit)"
-msgstr ""
+msgstr "MinGW (64-bit)"
 
 #: ../libide/mingw/ide-mingw-device-provider.c:76
 msgid "MinGW (32-bit)"
-msgstr ""
+msgstr "MinGW (32-bit)"
 
 #: ../libide/pygobject/ide-pygobject-script.c:135
 msgid "Attempt to load a PyGObject script with no filename."
@@ -2345,17 +2335,17 @@ msgstr "Alfa"
 #: ../libide/theatrics/ide-box-theatric.c:265
 #: ../libide/theatrics/ide-box-theatric.c:266
 msgid "background"
-msgstr ""
+msgstr "fondo"
 
 #: ../libide/theatrics/ide-box-theatric.c:272
 #: ../libide/theatrics/ide-box-theatric.c:273
 msgid "height"
-msgstr ""
+msgstr "altura"
 
 #: ../libide/theatrics/ide-box-theatric.c:290
 #: ../libide/theatrics/ide-box-theatric.c:291
 msgid "width"
-msgstr ""
+msgstr "anchura"
 
 #: ../libide/theatrics/ide-box-theatric.c:299
 #: ../libide/theatrics/ide-box-theatric.c:300
@@ -2376,7 +2366,7 @@ msgstr ""
 
 #: ../src/app/gb-application-actions.c:156
 msgid "An IDE for GNOME"
-msgstr ""
+msgstr "Un EID para GNOME"
 
 #: ../src/app/gb-application-actions.c:161
 msgid "GNOME Builder"
@@ -2423,7 +2413,7 @@ msgstr "Comando no encontrado: %s"
 
 #: ../src/commands/gb-command-bar.c:563
 msgid "Use the entry below to execute a command"
-msgstr ""
+msgstr "Use la siguiente entrada para ejecutar un comando"
 
 #: ../src/commands/gb-command-gaction.c:187
 msgid "Action Group"
@@ -2484,7 +2474,7 @@ msgstr ""
 
 #: ../src/commands/gb-command-result.c:235
 msgid "If the result is an error."
-msgstr ""
+msgstr "Si el resultado es un error."
 
 #: ../src/commands/gb-command-result.c:242
 msgid "Is Running"
@@ -2513,11 +2503,11 @@ msgstr ""
 #: ../src/devhelp/gb-devhelp-document.c:71
 #, c-format
 msgid "Documentation (%s)"
-msgstr ""
+msgstr "Documentación (%s)"
 
 #: ../src/devhelp/gb-devhelp-document.c:257
 msgid "The uri to load."
-msgstr ""
+msgstr "El URI que cargar."
 
 #: ../src/devhelp/gb-devhelp-view.c:238 ../src/editor/gb-editor-frame.c:814
 #: ../src/editor/gb-editor-view.c:687 ../src/html/gb-html-view.c:320
@@ -2535,7 +2525,7 @@ msgstr ""
 
 #: ../src/dialogs/gb-new-project-dialog.c:365
 msgid "Clone Repository"
-msgstr ""
+msgstr "Clonar repositorio"
 
 #: ../src/dialogs/gb-new-project-dialog.c:385
 msgid "Autotools Project (configure.ac)"
@@ -2543,7 +2533,7 @@ msgstr ""
 
 #: ../src/dialogs/gb-new-project-dialog.c:391
 msgid "Any Directory"
-msgstr ""
+msgstr "Cualquier carpeta"
 
 #: ../src/dialogs/gb-new-project-dialog.c:518
 msgid "A valid Git URL is required"
@@ -2551,7 +2541,7 @@ msgstr ""
 
 #: ../src/dialogs/gb-new-project-dialog.c:657
 msgid "Directory|Projects"
-msgstr ""
+msgstr "Carpeta|Proyectos"
 
 #: ../src/dialogs/gb-projects-dialog.c:246
 msgid "(Click on items to select them)"
@@ -2560,7 +2550,7 @@ msgstr ""
 #: ../src/dialogs/gb-recent-project-row.c:207
 #: ../src/greeter/gb-greeter-project-row.c:285
 msgid "Project Information"
-msgstr ""
+msgstr "Información del proyecto"
 
 #: ../src/dialogs/gb-recent-project-row.c:208
 #, fuzzy
@@ -2576,7 +2566,7 @@ msgstr ""
 #: ../src/dialogs/gb-recent-project-row.c:221
 #: ../src/dialogs/gb-recent-project-row.c:222
 msgid "Selection Mode"
-msgstr ""
+msgstr "Modo de selección"
 
 #: ../src/documents/gb-document.c:188 ../src/views/gb-view.c:272
 msgid "Modified"
@@ -2602,7 +2592,7 @@ msgstr "%u de %u"
 #: ../src/editor/gb-editor-frame.c:202
 #, c-format
 msgid "Line %u, Column %u"
-msgstr ""
+msgstr "Línea %u, Columna %u"
 
 #: ../src/editor/gb-editor-frame.c:617
 msgid "Re_veal in Project Tree"
