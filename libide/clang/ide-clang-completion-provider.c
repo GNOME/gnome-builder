@@ -161,7 +161,7 @@ filter_list (GPtrArray   *ar,
            * We should be a bit more intelligent about which items we accept.
            * The results don't come to us in "most important" order.
            */
-          if (G_UNLIKELY (ar->len == MAX_COMPLETION_ITEMS))
+          if (G_UNLIKELY (matched->len == MAX_COMPLETION_ITEMS))
             break;
         }
     }
