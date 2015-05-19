@@ -3674,46 +3674,6 @@ ide_source_view_real_insert_at_cursor (GtkTextView *text_view,
     ide_source_view_scroll_to_bottom (self);
 }
 
-static int
-_strcasecmp_reversed (const void *aptr,
-                      const void *bptr)
-{
-  const gchar * const *a = aptr;
-  const gchar * const *b = bptr;
-
-  return g_ascii_strcasecmp (*a, *b);
-}
-
-static int
-_strcasecmp_normal (const void *aptr,
-                    const void *bptr)
-{
-  const gchar * const *a = aptr;
-  const gchar * const *b = bptr;
-
-  return g_ascii_strcasecmp (*b, *a);
-}
-
-static int
-_strcmp_reversed (const void *aptr,
-                  const void *bptr)
-{
-  const gchar * const *a = aptr;
-  const gchar * const *b = bptr;
-
-  return strcmp (*a, *b);
-}
-
-static int
-_strcmp_normal (const void *aptr,
-                const void *bptr)
-{
-  const gchar * const *a = aptr;
-  const gchar * const *b = bptr;
-
-  return strcmp (*b, *a);
-}
-
 static void
 ide_source_view_real_sort (IdeSourceView *self,
                            gboolean       ignore_case,
@@ -3725,10 +3685,8 @@ ide_source_view_real_sort (IdeSourceView *self,
   GtkTextIter begin;
   GtkTextIter end;
   GtkTextIter cursor;
-  int (*sort_func) (const void *, const void *) = _strcmp_normal;
   guint cursor_offset;
-  gchar *text;
-  gchar **parts;
+  GtkSourceSortFlags sort_flags = GTK_SOURCE_SORT_FLAGS_NONE;
 
   g_assert (GTK_TEXT_VIEW (self));
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -3747,28 +3705,22 @@ ide_source_view_real_sort (IdeSourceView *self,
   if (gtk_text_iter_starts_line (&end))
     gtk_text_iter_backward_char (&end);
 
-  text = gtk_text_iter_get_slice (&begin, &end);
-  parts = g_strsplit (text, "\n", 0);
-  g_free (text);
+  if (!ignore_case)
+    sort_flags |= GTK_SOURCE_SORT_FLAGS_CASE_SENSITIVE;
 
-  if (reverse && ignore_case)
-    sort_func = _strcasecmp_reversed;
-  else if (ignore_case)
-    sort_func = _strcasecmp_normal;
-  else
-    sort_func = _strcmp_reversed;
-
-  qsort (parts, g_strv_length (parts), sizeof (gchar *), sort_func);
-
-  text = g_strjoinv ("\n", parts);
+  if (reverse)
+    sort_flags |= GTK_SOURCE_SORT_FLAGS_REVERSE_ORDER;
 
   gtk_text_buffer_begin_user_action (buffer);
-  gtk_text_buffer_delete (buffer, &begin, &end);
-  gtk_text_buffer_insert (buffer, &begin, text, -1);
-  g_free (text);
-  g_strfreev (parts);
+
+  gtk_source_buffer_sort_lines (GTK_SOURCE_BUFFER (buffer),
+                                &begin,
+                                &end,
+                                sort_flags,
+                                0);
   gtk_text_buffer_get_iter_at_offset (buffer, &begin, cursor_offset);
   gtk_text_buffer_select_range (buffer, &begin, &begin);
+
   gtk_text_buffer_end_user_action (buffer);
 }
 
