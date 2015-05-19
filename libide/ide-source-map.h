@@ -26,11 +26,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_SOURCE_MAP            (ide_source_map_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeSourceMap, ide_source_map,
-                      IDE, SOURCE_MAP, GtkOverlay)
-
-GtkSourceView *ide_source_map_get_view (IdeSourceMap  *self);
-void           ide_source_map_set_view (IdeSourceMap  *self,
-                                        GtkSourceView *view);
+                      IDE, SOURCE_MAP, GtkSourceMap)
 
 G_END_DECLS
 
