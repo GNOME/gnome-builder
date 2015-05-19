@@ -14,6 +14,7 @@
   bind "<ctrl>w" { "action" ("view", "close", "") };
   bind "<alt>period" { "goto-definition" () };
   bind "<ctrl>k" { "action" ("view-stack", "show-list", "") };
+  bind "<ctrl>d" { "delete-from-cursor" (paragraphs, 1) };
 
   /* cycle "tabs" */
   bind "<ctrl>Page_Up" { "action" ("view-stack", "previous-view", "") };
