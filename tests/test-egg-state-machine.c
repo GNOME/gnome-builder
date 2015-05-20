@@ -163,22 +163,22 @@ assert_prop_equal (gpointer     obja,
   g_object_get_property (obja, propname, &va);
   g_object_get_property (objb, propname, &vb);
 
-#define ADD_NUMBER_CHECK(NAME, name) \
+#define ADD_CHECK(NAME, name, cmp_type) \
   case G_TYPE_##NAME: \
-    g_assert_cmpint (g_value_get_##name (&va), ==, g_value_get_##name (&vb)); \
+    g_assert_cmp##cmp_type (g_value_get_##name (&va), ==, g_value_get_##name (&vb)); \
     break
 
   switch (pspec->value_type)
     {
-    case G_TYPE_STRING:
-      g_assert_cmpstr (g_value_get_string (&va), ==, g_value_get_string (&vb));
-      break;
+    ADD_CHECK (INT, int, int);
+    ADD_CHECK (BOOLEAN, boolean, int);
 
-    ADD_NUMBER_CHECK (INT, int);
-    ADD_NUMBER_CHECK (UINT, uint);
-    ADD_NUMBER_CHECK (FLOAT, float);
-    ADD_NUMBER_CHECK (DOUBLE, double);
-    ADD_NUMBER_CHECK (BOOLEAN, boolean);
+    ADD_CHECK (UINT, uint, uint);
+
+    ADD_CHECK (FLOAT, float, float);
+    ADD_CHECK (DOUBLE, double, float);
+
+    ADD_CHECK (STRING, string, str);
 
     default:
       g_assert_not_reached ();
