@@ -42,6 +42,17 @@ void             egg_state_machine_add_property      (EggStateMachine *self,
                                                       const gchar     *state,
                                                       gpointer         object,
                                                       const gchar     *property,
+                                                      ...);
+void             egg_state_machine_add_property_valist
+                                                     (EggStateMachine *self,
+                                                      const gchar     *state,
+                                                      gpointer         object,
+                                                      const gchar     *property,
+                                                      va_list          var_args);
+void             egg_state_machine_add_propertyv     (EggStateMachine *self,
+                                                      const gchar     *state,
+                                                      gpointer         object,
+                                                      const gchar     *property,
                                                       const GValue    *value);
 void             egg_state_machine_add_binding       (EggStateMachine *self,
                                                       const gchar     *state,

@@ -196,14 +196,6 @@ test_state_machine_basic (void)
   TestObject *dummy;
   TestObject *obj1;
   TestObject *obj2;
-  GValue vtrue = { 0 };
-  GValue vfalse = { 0 };
-
-  g_value_init (&vtrue, G_TYPE_BOOLEAN);
-  g_value_set_boolean (&vtrue, TRUE);
-
-  g_value_init (&vfalse, G_TYPE_BOOLEAN);
-  g_value_set_boolean (&vfalse, FALSE);
 
   machine = egg_state_machine_new ();
   g_object_add_weak_pointer (G_OBJECT (machine), (gpointer *)&machine);
@@ -227,9 +219,9 @@ test_state_machine_basic (void)
   egg_state_machine_add_binding (machine, "state1", obj1, "string", dummy, "string", 0);
   egg_state_machine_add_binding (machine, "state2", obj2, "string", dummy, "string", 0);
 
-  egg_state_machine_add_property (machine, "state1", action, "enabled", &vtrue);
-  egg_state_machine_add_property (machine, "state2", action, "enabled", &vfalse);
-  egg_state_machine_add_property (machine, "state3", action, "enabled", &vfalse);
+  egg_state_machine_add_property (machine, "state1", action, "enabled", TRUE);
+  egg_state_machine_add_property (machine, "state2", action, "enabled", FALSE);
+  egg_state_machine_add_property (machine, "state3", action, "enabled", FALSE);
 
   g_assert_cmpint (g_action_get_enabled (G_ACTION (action)), ==, FALSE);
 

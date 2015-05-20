@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "egg-state-machine"
 
 #include <glib/gi18n.h>
+#include <gobject/gvaluecollector.h>
 
 #include "egg-binding-set.h"
 #include "egg-signal-group.h"
@@ -353,7 +354,63 @@ egg_state_machine_add_property (EggStateMachine *self,
                                 const gchar     *state,
                                 gpointer         object,
                                 const gchar     *property,
-                                const GValue    *value)
+                                ...)
+{
+  va_list var_args;
+
+  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (property != NULL);
+
+  va_start (var_args, property);
+  egg_state_machine_add_property_valist (self, state, object,
+                                         property, var_args);
+  va_end (var_args);
+}
+
+void
+egg_state_machine_add_property_valist (EggStateMachine *self,
+                                       const gchar     *state,
+                                       gpointer         object,
+                                       const gchar     *property,
+                                       va_list          var_args)
+{
+  GParamSpec *pspec;
+  gchar *error = NULL;
+  GValue value = G_VALUE_INIT;
+
+  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (property != NULL);
+
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (object),
+                                        property);
+  g_return_if_fail (pspec != NULL);
+
+  G_VALUE_COLLECT_INIT (&value, pspec->value_type, var_args, 0, &error);
+
+  if (error != NULL)
+    {
+      g_critical ("%s: %s", G_STRFUNC, error);
+      g_free (error);
+    }
+  else
+    {
+      egg_state_machine_add_propertyv (self, state, object,
+                                       property, &value);
+    }
+
+  g_value_unset (&value);
+}
+
+void
+egg_state_machine_add_propertyv (EggStateMachine *self,
+                                 const gchar     *state,
+                                 gpointer         object,
+                                 const gchar     *property,
+                                 const GValue    *value)
 {
   EggState *state_obj;
   EggStateProperty *state_prop;
