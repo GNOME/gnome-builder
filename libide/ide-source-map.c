@@ -190,15 +190,40 @@ ide_source_map__view_notify_buffer (IdeSourceMap  *self,
     }
 }
 
+static gboolean
+shrink_font (GBinding     *binding,
+             const GValue *value,
+             GValue       *to_value,
+             gpointer      user_data)
+{
+  PangoFontDescription *font_desc;
+
+  g_assert (G_VALUE_HOLDS (value, PANGO_TYPE_FONT_DESCRIPTION));
+
+  if ((font_desc = g_value_dup_boxed (value)))
+    {
+      pango_font_description_set_size (font_desc, 1 * PANGO_SCALE);
+      g_value_take_boxed (to_value, font_desc);
+    }
+
+  return TRUE;
+}
+
 static void
 ide_source_map__view_changed (IdeSourceMap *self,
                               GParamSpec   *psepct,
                               gpointer      data)
 {
+  GtkSourceView *view;
+
   g_return_if_fail (IDE_IS_SOURCE_MAP (self));
 
-  egg_signal_group_set_target (self->signal_group,
-                               gtk_source_map_get_view (GTK_SOURCE_MAP (self)));
+  view = gtk_source_map_get_view (GTK_SOURCE_MAP (self));
+
+  g_object_bind_property_full (view, "font-desc", self, "font-desc", G_BINDING_SYNC_CREATE,
+                               shrink_font, NULL, NULL, NULL);
+
+  egg_signal_group_set_target (self->signal_group, view);
 }
 
 static void
