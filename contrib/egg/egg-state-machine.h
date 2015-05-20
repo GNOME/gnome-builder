@@ -19,65 +19,50 @@
 #ifndef EGG_STATE_MACHINE_H
 #define EGG_STATE_MACHINE_H
 
-#include <gio/gio.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define EGG_TYPE_STATE_MACHINE       (egg_state_machine_get_type())
-#define EGG_TYPE_STATE_MACHINE_ERROR (egg_state_machine_get_type())
-#define EGG_STATE_MACHINE_ERROR      (egg_state_machine_error_quark())
-#define EGG_TYPE_STATE_TRANSITION    (egg_state_transition_get_type())
+#define EGG_TYPE_STATE_MACHINE  (egg_state_machine_get_type())
 
 G_DECLARE_DERIVABLE_TYPE (EggStateMachine, egg_state_machine, EGG, STATE_MACHINE, GObject)
-
-typedef enum
-{
-  EGG_STATE_TRANSITION_IGNORED = 0,
-  EGG_STATE_TRANSITION_SUCCESS = 1,
-  EGG_STATE_TRANSITION_INVALID = 2,
-} EggStateTransition;
-
-typedef enum
-{
-  EGG_STATE_MACHINE_ERROR_INVALID_TRANSITION = 1,
-} EggStateMachineError;
 
 struct _EggStateMachineClass
 {
   GObjectClass parent;
-
-  EggStateTransition (*transition) (EggStateMachine  *self,
-                                    const gchar      *old_state,
-                                    const gchar      *new_state,
-                                    GError          **error);
 };
 
-GType               egg_state_transition_get_type    (void);
-GType               egg_state_machine_error_get_type (void);
-GQuark              egg_state_machine_error_quark    (void);
-EggStateMachine    *egg_state_machine_new            (void);
-EggStateTransition  egg_state_machine_transition     (EggStateMachine  *self,
-                                                      const gchar      *new_state,
-                                                      GError          **error);
-const gchar        *egg_state_machine_get_state      (EggStateMachine  *self);
-void                egg_state_machine_bind           (EggStateMachine  *self,
-                                                      const gchar      *state,
-                                                      gpointer          source,
-                                                      const gchar      *source_property,
-                                                      gpointer          target,
-                                                      const gchar      *target_property,
-                                                      GBindingFlags     flags);
-void                egg_state_machine_connect_object (EggStateMachine  *self,
-                                                      const gchar      *state,
-                                                      gpointer          instance,
-                                                      const gchar      *detailed_signal,
-                                                      GCallback         callback,
-                                                      gpointer          user_data,
-                                                      GConnectFlags     flags);
-void                egg_state_machine_add_action     (EggStateMachine  *self,
-                                                      const gchar      *state,
-                                                      GSimpleAction    *action,
-                                                      gboolean          invert_enabled);
+EggStateMachine *egg_state_machine_new               (void);
+const gchar     *egg_state_machine_get_state         (EggStateMachine *self);
+void             egg_state_machine_set_state         (EggStateMachine *self,
+                                                      const gchar     *state);
+GAction         *egg_state_machine_create_action     (EggStateMachine *self,
+                                                      const gchar     *name);
+void             egg_state_machine_add_property      (EggStateMachine *self,
+                                                      const gchar     *state,
+                                                      gpointer         object,
+                                                      const gchar     *property,
+                                                      const GValue    *value);
+void             egg_state_machine_add_binding       (EggStateMachine *self,
+                                                      const gchar     *state,
+                                                      gpointer         source_object,
+                                                      const gchar     *source_property,
+                                                      gpointer         target_object,
+                                                      const gchar     *target_property,
+                                                      GBindingFlags    flags);
+void             egg_state_machine_add_style         (EggStateMachine *self,
+                                                      const gchar     *state,
+                                                      GtkWidget       *widget,
+                                                      const gchar     *style);
+void             egg_state_machine_freeze            (EggStateMachine *self);
+void             egg_state_machine_thaw              (EggStateMachine *self);
+void             egg_state_machine_connect_object    (EggStateMachine *self,
+                                                      const gchar     *state,
+                                                      gpointer         source,
+                                                      const gchar     *detailed_signal,
+                                                      GCallback        callback,
+                                                      gpointer         user_data,
+                                                      GConnectFlags    flags);
 
 G_END_DECLS
 

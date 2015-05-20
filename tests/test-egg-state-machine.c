@@ -188,30 +188,22 @@ assert_prop_equal (gpointer     obja,
   g_value_unset (&vb);
 }
 
-static EggStateTransition
-transition_cb (EggStateMachine *machine,
-               const gchar     *old_state,
-               const gchar     *new_state,
-               gpointer         user_data)
-{
-  /* allow any state to state3, except state2 */
-
-  if ((g_strcmp0 (old_state, "state2") == 0) && (g_strcmp0 (new_state, "state3") == 0))
-    return EGG_STATE_TRANSITION_INVALID;
-
-  return EGG_STATE_TRANSITION_IGNORED;
-}
-
 static void
 test_state_machine_basic (void)
 {
   EggStateMachine *machine;
-  EggStateTransition ret;
   GSimpleAction *action;
   TestObject *dummy;
   TestObject *obj1;
   TestObject *obj2;
-  GError *error = NULL;
+  GValue vtrue = { 0 };
+  GValue vfalse = { 0 };
+
+  g_value_init (&vtrue, G_TYPE_BOOLEAN);
+  g_value_set_boolean (&vtrue, TRUE);
+
+  g_value_init (&vfalse, G_TYPE_BOOLEAN);
+  g_value_set_boolean (&vfalse, FALSE);
 
   machine = egg_state_machine_new ();
   g_object_add_weak_pointer (G_OBJECT (machine), (gpointer *)&machine);
@@ -220,6 +212,8 @@ test_state_machine_basic (void)
   dummy = g_object_new (TEST_TYPE_OBJECT, NULL);
   obj1 = g_object_new (TEST_TYPE_OBJECT, NULL);
   obj2 = g_object_new (TEST_TYPE_OBJECT, NULL);
+
+  g_simple_action_set_enabled (action, FALSE);
 
 #if 0
   g_print ("obj1=%p  obj2=%p  dummy=%p\n", obj1, obj2, dummy);
@@ -230,18 +224,17 @@ test_state_machine_basic (void)
   egg_state_machine_connect_object (machine, "state2", obj2, "frobnicate",
                                     G_CALLBACK (obj2_frobnicate), dummy, G_CONNECT_SWAPPED);
 
-  egg_state_machine_bind (machine, "state1", obj1, "string", dummy, "string", 0);
-  egg_state_machine_bind (machine, "state2", obj2, "string", dummy, "string", 0);
+  egg_state_machine_add_binding (machine, "state1", obj1, "string", dummy, "string", 0);
+  egg_state_machine_add_binding (machine, "state2", obj2, "string", dummy, "string", 0);
 
-  egg_state_machine_add_action (machine, "state1", action, FALSE);
-
-  g_signal_connect (machine, "transition", G_CALLBACK (transition_cb), NULL);
+  egg_state_machine_add_property (machine, "state1", action, "enabled", &vtrue);
+  egg_state_machine_add_property (machine, "state2", action, "enabled", &vfalse);
+  egg_state_machine_add_property (machine, "state3", action, "enabled", &vfalse);
 
   g_assert_cmpint (g_action_get_enabled (G_ACTION (action)), ==, FALSE);
 
-  ret = egg_state_machine_transition (machine, "state1", &error);
-  g_assert_no_error (error);
-  g_assert_cmpint (ret, ==, EGG_STATE_TRANSITION_SUCCESS);
+  egg_state_machine_set_state (machine, "state1");
+  g_assert_cmpstr (egg_state_machine_get_state (machine), ==, "state1");
   g_assert_cmpint (dummy->obj1_count, ==, 0);
   g_assert_cmpint (dummy->obj2_count, ==, 0);
 
@@ -255,9 +248,8 @@ test_state_machine_basic (void)
   g_assert_cmpint (dummy->obj1_count, ==, 1);
   g_assert_cmpint (dummy->obj2_count, ==, 0);
 
-  ret = egg_state_machine_transition (machine, "state2", &error);
-  g_assert_no_error (error);
-  g_assert_cmpint (ret, ==, EGG_STATE_TRANSITION_SUCCESS);
+  egg_state_machine_set_state (machine, "state2");
+  g_assert_cmpstr (egg_state_machine_get_state (machine), ==, "state2");
 
   g_assert_cmpint (g_action_get_enabled (G_ACTION (action)), ==, FALSE);
 
@@ -273,16 +265,8 @@ test_state_machine_basic (void)
   g_object_set (obj1, "string", "obj1", NULL);
   assert_prop_equal (obj2, dummy, "string");
 
-  /* state2 -> state3 should fail */
-  ret = egg_state_machine_transition (machine, "state3", &error);
-  g_assert_error (error, EGG_STATE_MACHINE_ERROR,
-                  EGG_STATE_MACHINE_ERROR_INVALID_TRANSITION);
-  g_assert_cmpint (ret, ==, EGG_STATE_TRANSITION_INVALID);
-  g_clear_error (&error);
-
-  ret = egg_state_machine_transition (machine, "state1", &error);
-  g_assert_no_error (error);
-  g_assert_cmpint (ret, ==, EGG_STATE_TRANSITION_SUCCESS);
+  egg_state_machine_set_state (machine, "state3");
+  egg_state_machine_set_state (machine, "state1");
 
   assert_prop_equal (obj1, dummy, "string");
   g_object_set (obj1, "string", "obj1-1", NULL);
@@ -290,10 +274,7 @@ test_state_machine_basic (void)
   g_object_set (obj2, "string", "obj2-1", NULL);
   assert_prop_equal (obj1, dummy, "string");
 
-  /* state1 -> state3 should succeed */
-  ret = egg_state_machine_transition (machine, "state3", &error);
-  g_assert_no_error (error);
-  g_assert_cmpint (ret, ==, EGG_STATE_TRANSITION_SUCCESS);
+  egg_state_machine_set_state (machine, "state3");
 
   g_object_unref (machine);
   g_assert (machine == NULL);

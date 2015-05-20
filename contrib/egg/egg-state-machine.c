@@ -16,43 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "egg-state-machine"
+
 #include <glib/gi18n.h>
 
 #include "egg-binding-set.h"
 #include "egg-signal-group.h"
+
 #include "egg-state-machine.h"
+#include "egg-state-machine-action.h"
+#include "egg-state-machine-buildable.h"
+#include "egg-state-machine-private.h"
 
-typedef struct
-{
-  gchar *state;
+G_DEFINE_QUARK (egg_state_machine_error, egg_state_machine_error)
 
-  /*
-   * Containers for lazily bound signals and bindings.
-   *
-   * Each is a GHashTable indexed by state name, containing another GHashTable indexed by
-   * source object.
-   */
-  GHashTable *binding_sets_by_state;
-  GHashTable *signal_groups_by_state;
-
-  /*
-   * Container for actions which should have sensitivity mutated during state transitions.
-   *
-   * GHashTable of GPtrArray of ActionState.
-   */
-  GHashTable *actions_by_state;
-
-  gsize       sequence;
-} EggStateMachinePrivate;
-
-typedef struct
-{
-  GSimpleAction *action;
-  guint          invert_enabled : 1;
-} ActionState;
-
-G_DEFINE_TYPE_WITH_PRIVATE (EggStateMachine, egg_state_machine, G_TYPE_OBJECT)
-G_DEFINE_QUARK (EggStateMachineError, egg_state_machine_error)
+G_DEFINE_TYPE_WITH_CODE (EggStateMachine, egg_state_machine, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (EggStateMachine)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                egg_state_machine_buildable_iface_init))
 
 enum {
   PROP_0,
@@ -60,208 +41,155 @@ enum {
   LAST_PROP
 };
 
-enum {
-  TRANSITION,
-  LAST_SIGNAL
-};
-
 static GParamSpec *gParamSpecs [LAST_PROP];
-static guint gSignals [LAST_SIGNAL];
 
 static void
-action_state_free (gpointer data)
+egg_state_free (gpointer data)
 {
-  ActionState *state = data;
+  EggState *state = data;
 
-  g_clear_object (&state->action);
-  g_slice_free (ActionState, state);
-}
-
-static gboolean
-egg_state_transition_accumulator (GSignalInvocationHint *hint,
-                                  GValue                *return_value,
-                                  const GValue          *handler_return,
-                                  gpointer               data)
-{
-  EggStateTransition ret;
-
-  ret = g_value_get_enum (handler_return);
-
-  if (ret == EGG_STATE_TRANSITION_INVALID)
-    {
-      g_value_set_enum (return_value, ret);
-      return FALSE;
-    }
-
-  return TRUE;
-}
-
-const gchar *
-egg_state_machine_get_state (EggStateMachine *self)
-{
-  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
-
-  g_return_val_if_fail (EGG_IS_STATE_MACHINE (self), NULL);
-
-  return priv->state;
+  g_free (state->name);
+  g_hash_table_unref (state->signals);
+  g_hash_table_unref (state->bindings);
+  g_ptr_array_unref (state->properties);
+  g_ptr_array_unref (state->styles);
+  g_slice_free (EggState, state);
 }
 
 static void
-egg_state_machine_do_transition (EggStateMachine *self,
-                                 const gchar     *new_state)
+egg_state_property_free (gpointer data)
 {
-  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
+  EggStateProperty *prop = data;
+
+  g_free (prop->property);
+  g_value_unset (&prop->value);
+  g_slice_free (EggStateProperty, prop);
+}
+
+static void
+egg_state_style_free (gpointer data)
+{
+  EggStateStyle *style = data;
+
+  g_free (style->name);
+  g_slice_free (EggStateStyle, style);
+}
+
+static void
+egg_state_apply (EggStateMachine *self,
+                 EggState        *state)
+{
   GHashTableIter iter;
-  const gchar *key;
-  GPtrArray *action_states;
-  GHashTable *value;
+  gpointer key;
+  gpointer value;
   gsize i;
 
   g_assert (EGG_IS_STATE_MACHINE (self));
-  g_assert (new_state != NULL);
+  g_assert (state != NULL);
 
-  priv->sequence++;
+  g_hash_table_iter_init (&iter, state->bindings);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    egg_binding_set_set_source (value, key);
 
-  g_free (priv->state);
-  priv->state = g_strdup (new_state);
+  g_hash_table_iter_init (&iter, state->signals);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    egg_signal_group_set_target (value, key);
 
-  g_hash_table_iter_init (&iter, priv->signal_groups_by_state);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
+  for (i = 0; i < state->properties->len; i++)
     {
-      GHashTable *signal_groups = value;
-      GHashTableIter groups_iter;
-      EggSignalGroup *signal_group;
-      gpointer instance;
-      gboolean enabled = (g_strcmp0 (key, new_state) == 0);
+      EggStateProperty *prop;
 
-      g_hash_table_iter_init (&groups_iter, signal_groups);
-
-      while (g_hash_table_iter_next (&groups_iter, &instance, (gpointer *)&signal_group))
-        {
-          g_assert (G_IS_OBJECT (instance));
-          g_assert (EGG_IS_SIGNAL_GROUP (signal_group));
-
-          egg_signal_group_set_target (signal_group, enabled ? instance : NULL);
-        }
+      prop = g_ptr_array_index (state->properties, i);
+      g_object_set_property (prop->object, prop->property, &prop->value);
     }
 
-  g_hash_table_iter_init (&iter, priv->binding_sets_by_state);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
+  for (i = 0; i < state->styles->len; i++)
     {
-      GHashTable *binding_sets = value;
-      GHashTableIter groups_iter;
-      EggBindingSet *binding_set;
-      gpointer instance;
-      gboolean enabled = (g_strcmp0 (key, new_state) == 0);
+      EggStateStyle *style;
+      GtkStyleContext *style_context;
 
-      g_hash_table_iter_init (&groups_iter, binding_sets);
-
-      while (g_hash_table_iter_next (&groups_iter, &instance, (gpointer *)&binding_set))
-        {
-          g_assert (G_IS_OBJECT (instance));
-          g_assert (EGG_IS_BINDING_SET (binding_set));
-
-          egg_binding_set_set_source (binding_set, enabled ? instance : NULL);
-        }
-    }
-
-  /* apply GSimpleAction:enabled to non-matching states */
-  g_hash_table_iter_init (&iter, priv->actions_by_state);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&action_states))
-    {
-      if (g_strcmp0 (key, priv->state) == 0)
-        continue;
-
-      for (i = 0; i < action_states->len; i++)
-        {
-          ActionState *action_state;
-
-          action_state = g_ptr_array_index (action_states, i);
-          g_simple_action_set_enabled (action_state->action, action_state->invert_enabled);
-        }
-    }
-
-  /* apply GSimpleAction:enabled to matching state */
-  action_states = g_hash_table_lookup (priv->actions_by_state, priv->state);
-  if (action_states != NULL)
-    {
-      for (i = 0; i < action_states->len; i++)
-        {
-          ActionState *action_state;
-
-          action_state = g_ptr_array_index (action_states, i);
-          g_simple_action_set_enabled (action_state->action, !action_state->invert_enabled);
-        }
+      style = g_ptr_array_index (state->styles, i);
+      style_context = gtk_widget_get_style_context (GTK_WIDGET (style->widget));
+      gtk_style_context_add_class (style_context, style->name);
     }
 }
 
-/**
- * egg_state_machine_transition:
- * @self: A #EggStateMachine.
- * @new_state: The name of the new state.
- * @error: A location for a #GError, or %NULL.
- *
- * Attempts to change the state of the state machine to @new_state.
- *
- * This operation can fail, in which %EGG_STATE_TRANSITION_INVALID will be
- * returned and @error will be set.
- *
- * Upon success, %EGG_STATE_TRANSITION_SUCCESS is returned.
- *
- * Returns: An #EggStateTransition.
- */
-EggStateTransition
-egg_state_machine_transition (EggStateMachine  *self,
-                              const gchar      *new_state,
-                              GError          **error)
+static void
+egg_state_unapply (EggStateMachine *self,
+                   EggState        *state)
+{
+  GHashTableIter iter;
+  gpointer key;
+  gpointer value;
+  gsize i;
+
+  g_assert (EGG_IS_STATE_MACHINE (self));
+  g_assert (state != NULL);
+
+  g_hash_table_iter_init (&iter, state->bindings);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    egg_binding_set_set_source (value, NULL);
+
+  g_hash_table_iter_init (&iter, state->signals);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    egg_signal_group_set_target (value, NULL);
+
+  for (i = 0; i < state->styles->len; i++)
+    {
+      EggStateStyle *style;
+      GtkStyleContext *style_context;
+
+      style = g_ptr_array_index (state->styles, i);
+      style_context = gtk_widget_get_style_context (GTK_WIDGET (style->widget));
+      gtk_style_context_remove_class (style_context, style->name);
+    }
+}
+
+static EggState *
+egg_state_machine_get_state_obj (EggStateMachine *self,
+                                 const gchar     *state)
 {
   EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
-  g_autofree gchar *old_state = NULL;
-  EggStateTransition ret = EGG_STATE_TRANSITION_IGNORED;
-  g_autoptr(GError) local_error = NULL;
-  gsize sequence;
+  EggState *state_obj;
 
-  g_return_val_if_fail (EGG_IS_STATE_MACHINE (self), EGG_STATE_TRANSITION_INVALID);
-  g_return_val_if_fail (new_state != NULL, EGG_STATE_TRANSITION_INVALID);
-  g_return_val_if_fail (error == NULL || *error == NULL, EGG_STATE_TRANSITION_INVALID);
+  g_assert (EGG_IS_STATE_MACHINE (self));
 
-  if (g_strcmp0 (new_state, priv->state) == 0)
-    return EGG_STATE_TRANSITION_SUCCESS;
+  state_obj = g_hash_table_lookup (priv->states, state);
 
-  /* Be careful with reentrancy. */
-
-  old_state = g_strdup (priv->state);
-  sequence = priv->sequence;
-
-  g_signal_emit (self, gSignals [TRANSITION], 0, old_state, new_state, &local_error, &ret);
-
-  if (ret == EGG_STATE_TRANSITION_INVALID)
+  if (state_obj == NULL)
     {
-      if (local_error == NULL)
-        local_error = g_error_new_literal (EGG_STATE_MACHINE_ERROR,
-                                           EGG_STATE_MACHINE_ERROR_INVALID_TRANSITION,
-                                           "Unknown error during state transition.");
-      g_propagate_error (error, local_error);
-      local_error = NULL;
-      return ret;
+      state_obj = g_slice_new0 (EggState);
+      state_obj->name = g_strdup (state);
+      state_obj->signals = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_object_unref);
+      state_obj->bindings = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_object_unref);
+      state_obj->properties = g_ptr_array_new_with_free_func (egg_state_property_free);
+      state_obj->styles = g_ptr_array_new_with_free_func (egg_state_style_free);
+      g_hash_table_insert (priv->states, g_strdup (state), state_obj);
     }
 
-  if (sequence == priv->sequence)
-    {
-      egg_state_machine_do_transition (self, new_state);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_STATE]);
-    }
-
-  return EGG_STATE_TRANSITION_SUCCESS;
+  return state_obj;
 }
 
-static EggStateTransition
-egg_state_machine_real_transition (EggStateMachine  *self,
-                                   const gchar      *old_state,
-                                   const gchar      *new_state,
-                                   GError          **error)
+static void
+egg_state_machine_transition (EggStateMachine *self,
+                              const gchar     *old_state,
+                              const gchar     *new_state)
 {
-  return EGG_STATE_TRANSITION_IGNORED;
+  EggState *state_obj;
+
+  g_assert (EGG_IS_STATE_MACHINE (self));
+
+  g_object_freeze_notify (G_OBJECT (self));
+
+  if (old_state && (state_obj = egg_state_machine_get_state_obj (self, old_state)))
+    egg_state_unapply (self, state_obj);
+
+  if (new_state && (state_obj = egg_state_machine_get_state_obj (self, new_state)))
+    egg_state_apply (self, state_obj);
+
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_STATE]);
+
+  g_object_thaw_notify (G_OBJECT (self));
 }
 
 static void
@@ -270,10 +198,8 @@ egg_state_machine_finalize (GObject *object)
   EggStateMachine *self = (EggStateMachine *)object;
   EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
 
+  g_clear_pointer (&priv->states, g_hash_table_unref);
   g_clear_pointer (&priv->state, g_free);
-  g_clear_pointer (&priv->binding_sets_by_state, g_hash_table_unref);
-  g_clear_pointer (&priv->signal_groups_by_state, g_hash_table_unref);
-  g_clear_pointer (&priv->actions_by_state, g_hash_table_unref);
 
   G_OBJECT_CLASS (egg_state_machine_parent_class)->finalize (object);
 }
@@ -304,12 +230,11 @@ egg_state_machine_set_property (GObject      *object,
                                 GParamSpec   *pspec)
 {
   EggStateMachine *self = EGG_STATE_MACHINE (object);
-  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_STATE:
-      priv->state = g_value_dup_string (value);
+      egg_state_machine_set_state (self, g_value_get_string (value));
       break;
 
     default:
@@ -326,42 +251,14 @@ egg_state_machine_class_init (EggStateMachineClass *klass)
   object_class->get_property = egg_state_machine_get_property;
   object_class->set_property = egg_state_machine_set_property;
 
-  klass->transition = egg_state_machine_real_transition;
-
   gParamSpecs [PROP_STATE] =
     g_param_spec_string ("state",
                          _("State"),
                          _("The current state of the machine."),
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
-
-  /**
-   * EggStateMachine::transition:
-   * @self: An #EggStateMachine.
-   * @old_state: The current state.
-   * @new_state: The new state.
-   * @error: (ctype GError**): A location for a #GError, or %NULL.
-   *
-   * Determines if the transition is allowed.
-   *
-   * If the state transition is invalid, @error should be set to a new #GError.
-   *
-   * Returns: %TRUE if the state transition is acceptable.
-   */
-  gSignals [TRANSITION] =
-    g_signal_new ("transition",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (EggStateMachineClass, transition),
-                  egg_state_transition_accumulator, NULL,
-                  NULL,
-                  EGG_TYPE_STATE_TRANSITION,
-                  3,
-                  G_TYPE_STRING,
-                  G_TYPE_STRING,
-                  G_TYPE_POINTER);
 }
 
 static void
@@ -369,220 +266,7 @@ egg_state_machine_init (EggStateMachine *self)
 {
   EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
 
-  priv->binding_sets_by_state =
-    g_hash_table_new_full (g_str_hash,
-                           g_str_equal,
-                           g_free,
-                           (GDestroyNotify)g_hash_table_destroy);
-
-  priv->signal_groups_by_state =
-    g_hash_table_new_full (g_str_hash,
-                           g_str_equal,
-                           g_free,
-                           (GDestroyNotify)g_hash_table_destroy);
-
-  priv->actions_by_state =
-    g_hash_table_new_full (g_str_hash,
-                           g_str_equal,
-                           g_free,
-                           (GDestroyNotify)g_ptr_array_unref);
-}
-
-static void
-egg_state_machine__connect_object_weak_notify (gpointer  data,
-                                               GObject  *where_object_was)
-{
-  EggStateMachine *self = data;
-  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
-  GHashTableIter iter;
-  const gchar *key;
-  GHashTable *value;
-
-  g_assert (EGG_IS_STATE_MACHINE (self));
-  g_assert (where_object_was != NULL);
-
-  g_hash_table_iter_init (&iter, priv->signal_groups_by_state);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
-    {
-      GHashTable *signal_groups = value;
-
-      g_hash_table_remove (signal_groups, where_object_was);
-    }
-}
-
-void
-egg_state_machine_connect_object (EggStateMachine *self,
-                                  const gchar     *state,
-                                  gpointer         instance,
-                                  const gchar     *detailed_signal,
-                                  GCallback        callback,
-                                  gpointer         user_data,
-                                  GConnectFlags    flags)
-{
-  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
-  GHashTable *signal_groups;
-  EggSignalGroup *signal_group;
-  gboolean created = FALSE;
-
-  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
-  g_return_if_fail (state != NULL);
-  g_return_if_fail (G_IS_OBJECT (instance));
-  g_return_if_fail (detailed_signal != NULL);
-  g_return_if_fail (g_signal_parse_name (detailed_signal,
-                                         G_TYPE_FROM_INSTANCE (instance),
-                                         NULL, NULL, FALSE) != 0);
-  g_return_if_fail (callback != NULL);
-
-  signal_groups = g_hash_table_lookup (priv->signal_groups_by_state, state);
-
-  if (signal_groups == NULL)
-    {
-      signal_groups = g_hash_table_new_full (g_direct_hash,
-                                             g_direct_equal,
-                                             NULL,
-                                             g_object_unref);
-      g_hash_table_insert (priv->signal_groups_by_state, g_strdup (state), signal_groups);
-    }
-
-  g_assert (signal_groups != NULL);
-
-  signal_group = g_hash_table_lookup (signal_groups, instance);
-
-  if (signal_group == NULL)
-    {
-      created = TRUE;
-      signal_group = egg_signal_group_new (G_TYPE_FROM_INSTANCE (instance));
-      g_hash_table_insert (signal_groups, instance, signal_group);
-      g_object_weak_ref (instance,
-                         (GWeakNotify)egg_state_machine__connect_object_weak_notify,
-                         self);
-    }
-
-  egg_signal_group_connect_object (signal_group, detailed_signal, callback, user_data, flags);
-
-  if ((created == TRUE) && (g_strcmp0 (state, priv->state) == 0))
-    egg_signal_group_set_target (signal_group, instance);
-}
-
-static void
-egg_state_machine__bind_source_weak_notify (gpointer  data,
-                                            GObject  *where_object_was)
-{
-  EggStateMachine *self = data;
-  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
-  GHashTableIter iter;
-  const gchar *key;
-  GHashTable *value;
-
-  g_assert (EGG_IS_STATE_MACHINE (self));
-  g_assert (where_object_was != NULL);
-
-  g_hash_table_iter_init (&iter, priv->binding_sets_by_state);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
-    {
-      GHashTable *binding_sets = value;
-
-      g_hash_table_remove (binding_sets, where_object_was);
-    }
-}
-
-void
-egg_state_machine_bind (EggStateMachine *self,
-                        const gchar     *state,
-                        gpointer         source,
-                        const gchar     *source_property,
-                        gpointer         target,
-                        const gchar     *target_property,
-                        GBindingFlags    flags)
-{
-  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
-  GHashTable *binding_sets;
-  EggBindingSet *binding_set;
-  gboolean created = FALSE;
-
-  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
-  g_return_if_fail (state != NULL);
-  g_return_if_fail (G_IS_OBJECT (source));
-  g_return_if_fail (source_property != NULL);
-  g_return_if_fail (g_object_class_find_property (G_OBJECT_GET_CLASS (source),
-                                                  source_property) != NULL);
-  g_return_if_fail (G_IS_OBJECT (target));
-  g_return_if_fail (target_property != NULL);
-  g_return_if_fail (g_object_class_find_property (G_OBJECT_GET_CLASS (target),
-                                                  target_property) != NULL);
-
-  /* Use G_BINDING_SYNC_CREATE as we lazily connect them. */
-  flags |= G_BINDING_SYNC_CREATE;
-
-  binding_sets = g_hash_table_lookup (priv->binding_sets_by_state, state);
-
-  if (binding_sets == NULL)
-    {
-      binding_sets = g_hash_table_new_full (g_direct_hash,
-                                            g_direct_equal,
-                                            NULL,
-                                            g_object_unref);
-      g_hash_table_insert (priv->binding_sets_by_state, g_strdup (state), binding_sets);
-    }
-
-  g_assert (binding_sets != NULL);
-
-  binding_set = g_hash_table_lookup (binding_sets, source);
-
-  if (binding_set == NULL)
-    {
-      created = TRUE;
-      binding_set = egg_binding_set_new ();
-      g_hash_table_insert (binding_sets, source, binding_set);
-      g_object_weak_ref (source,
-                         (GWeakNotify)egg_state_machine__bind_source_weak_notify,
-                         self);
-    }
-
-  egg_binding_set_bind (binding_set,
-                        source_property,
-                        target,
-                        target_property,
-                        flags);
-
-  if ((created == TRUE) && (g_strcmp0 (state, priv->state) == 0))
-    egg_binding_set_set_source (binding_set, source);
-}
-
-void
-egg_state_machine_add_action (EggStateMachine *self,
-                              const gchar     *state,
-                              GSimpleAction   *action,
-                              gboolean         invert_enabled)
-{
-  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
-  ActionState *action_state;
-  GPtrArray *actions;
-  gboolean enabled;
-
-  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
-  g_return_if_fail (state != NULL);
-  g_return_if_fail (G_IS_SIMPLE_ACTION (action));
-
-  action_state = g_slice_new0 (ActionState);
-  action_state->action = g_object_ref (action);
-  action_state->invert_enabled = invert_enabled;
-
-  actions = g_hash_table_lookup (priv->actions_by_state, state);
-
-  if (actions == NULL)
-    {
-      actions = g_ptr_array_new_with_free_func (action_state_free);
-      g_hash_table_insert (priv->actions_by_state, g_strdup (state), actions);
-    }
-
-  g_ptr_array_add (actions, action_state);
-
-  enabled = (g_strcmp0 (state, priv->state) == 0);
-  if (invert_enabled)
-    enabled = !enabled;
-
-  g_simple_action_set_enabled (action, enabled);
+  priv->states = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, egg_state_free);
 }
 
 EggStateMachine *
@@ -591,46 +275,223 @@ egg_state_machine_new (void)
   return g_object_new (EGG_TYPE_STATE_MACHINE, NULL);
 }
 
-GType
-egg_state_machine_error_get_type (void)
+/**
+ * egg_state_machine_get_state:
+ * @self: the #EggStateMachine.
+ *
+ * Gets the #EggStateMachine:state property. This is the name of the
+ * current state of the machine.
+ *
+ * Returns: The current state of the machine.
+ */
+const gchar *
+egg_state_machine_get_state (EggStateMachine *self)
 {
-  static gsize type_id;
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
 
-  if (g_once_init_enter (&type_id))
-    {
-      static const GEnumValue values[] = {
-        { EGG_STATE_MACHINE_ERROR_INVALID_TRANSITION,
-          "EGG_STATE_MACHINE_ERROR_INVALID_TRANSITION",
-          "invalid-transition" },
-        { 0 }
-      };
-      gsize _type_id;
+  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
 
-      _type_id = g_enum_register_static ("EggStateMachineError", values);
-      g_once_init_leave (&type_id, _type_id);
-    }
-
-  return type_id;
+  return priv->state;
 }
 
-GType
-egg_state_transition_get_type (void)
+/**
+ * egg_state_machine_set_state:
+ * @self: the #EggStateMachine @self: the #
+ *
+ * Sets the #EggStateMachine:state property.
+ *
+ * Registered state transformations will be applied during the state
+ * transformation.
+ *
+ * If the transition results in a cyclic operation, the state will stop at
+ * the last state before the cycle was detected.
+ */
+void
+egg_state_machine_set_state (EggStateMachine *self,
+                             const gchar     *state)
 {
-  static gsize type_id;
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
 
-  if (g_once_init_enter (&type_id))
+  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
+
+  if (g_strcmp0 (priv->state, state) != 0)
     {
-      static const GEnumValue values[] = {
-        { EGG_STATE_TRANSITION_IGNORED, "EGG_STATE_TRANSITION_IGNORED", "ignored" },
-        { EGG_STATE_TRANSITION_INVALID, "EGG_STATE_TRANSITION_INVALID", "invalid" },
-        { EGG_STATE_TRANSITION_SUCCESS, "EGG_STATE_TRANSITION_SUCCESS", "success" },
-        { 0 }
-      };
-      gsize _type_id;
+      gchar *old_state = priv->state;
+      gchar *new_state = g_strdup (state);
 
-      _type_id = g_enum_register_static ("EggStateTransition", values);
-      g_once_init_leave (&type_id, _type_id);
+      /*
+       * Steal ownership of old state and create a copy for new state
+       * to ensure that we own the references. State machines tend to
+       * get used in re-entrant fashion.
+       */
+
+      priv->state = g_strdup (state);
+
+      if (priv->freeze_count == 0)
+        egg_state_machine_transition (self, old_state, state);
+
+      g_free (new_state);
+      g_free (old_state);
+    }
+}
+
+GAction *
+egg_state_machine_create_action (EggStateMachine *self,
+                                 const gchar     *name)
+{
+  g_return_val_if_fail (EGG_IS_STATE_MACHINE (self), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+
+  return g_object_new (EGG_TYPE_STATE_MACHINE_ACTION,
+                       "state-machine", self,
+                       "name", name,
+                       NULL);
+}
+
+void
+egg_state_machine_add_property (EggStateMachine *self,
+                                const gchar     *state,
+                                gpointer         object,
+                                const gchar     *property,
+                                const GValue    *value)
+{
+  EggState *state_obj;
+  EggStateProperty *state_prop;
+
+  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (property != NULL);
+  g_return_if_fail (G_IS_VALUE (value));
+
+  state_obj = egg_state_machine_get_state_obj (self, state);
+
+  state_prop = g_slice_new0 (EggStateProperty);
+  state_prop->object = object;
+  state_prop->property = g_strdup (property);
+  g_value_init (&state_prop->value, G_VALUE_TYPE (value));
+  g_value_copy (value, &state_prop->value);
+
+  g_ptr_array_add (state_obj->properties, state_prop);
+}
+
+void
+egg_state_machine_add_binding (EggStateMachine *self,
+                               const gchar     *state,
+                               gpointer         source_object,
+                               const gchar     *source_property,
+                               gpointer         target_object,
+                               const gchar     *target_property,
+                               GBindingFlags    flags)
+{
+  EggBindingSet *bindings;
+  EggState *state_obj;
+
+  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (source_object != NULL);
+  g_return_if_fail (source_property != NULL);
+  g_return_if_fail (target_object != NULL);
+  g_return_if_fail (target_property != NULL);
+
+  state_obj = egg_state_machine_get_state_obj (self, state);
+
+  bindings = g_hash_table_lookup (state_obj->bindings, source_object);
+
+  if (bindings == NULL)
+    {
+      bindings = egg_binding_set_new ();
+      g_hash_table_insert (state_obj->bindings, source_object, bindings);
     }
 
-  return type_id;
+  egg_binding_set_bind (bindings, source_property, target_object, target_property, flags);
+}
+
+void
+egg_state_machine_add_style (EggStateMachine *self,
+                             const gchar     *state,
+                             GtkWidget       *widget,
+                             const gchar     *style)
+{
+  EggState *state_obj;
+  EggStateStyle *style_obj;
+
+  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (style);
+
+  state_obj = egg_state_machine_get_state_obj (self, state);
+
+  style_obj = g_slice_new0 (EggStateStyle);
+  style_obj->name = g_strdup (style);
+  style_obj->widget = widget;
+
+  g_ptr_array_add (state_obj->styles, style_obj);
+}
+
+void
+egg_state_machine_connect_object (EggStateMachine *self,
+                                  const gchar     *state,
+                                  gpointer         source,
+                                  const gchar     *detailed_signal,
+                                  GCallback        callback,
+                                  gpointer         user_data,
+                                  GConnectFlags    flags)
+{
+  EggState *state_obj;
+  EggSignalGroup *signals;
+
+  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (G_IS_OBJECT (source));
+  g_return_if_fail (detailed_signal != NULL);
+  g_return_if_fail (callback != NULL);
+
+  state_obj = egg_state_machine_get_state_obj (self, state);
+
+  if (!(signals = g_hash_table_lookup (state_obj->signals, source)))
+    {
+      signals = egg_signal_group_new (G_OBJECT_TYPE (source));
+      g_hash_table_insert (state_obj->signals, source, signals);
+    }
+
+  egg_signal_group_connect_object (signals, detailed_signal, callback, user_data, flags);
+}
+
+void
+egg_state_machine_freeze (EggStateMachine *self)
+{
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
+
+  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
+  g_return_if_fail (priv->freeze_count >= 0);
+
+  if (++priv->freeze_count == 1)
+    {
+      g_assert (priv->freeze_state == NULL);
+      priv->freeze_state = g_strdup (priv->state);
+    }
+}
+
+void
+egg_state_machine_thaw (EggStateMachine *self)
+{
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
+
+  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
+  g_return_if_fail (priv->freeze_count > 0);
+
+  if (--priv->freeze_count == 0)
+    {
+      if (g_strcmp0 (priv->freeze_state, priv->state) != 0)
+        {
+          gchar *state;
+
+          state = priv->freeze_state;
+          priv->freeze_state = NULL;
+          egg_state_machine_set_state (self, state);
+          g_free (state);
+        }
+    }
 }
