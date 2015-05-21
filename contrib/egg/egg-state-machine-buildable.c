@@ -210,11 +210,11 @@ add_state (StatesParserData  *parser_data,
                   return;
                 }
 
-              egg_state_machine_add_property (parser_data->self,
-                                              item->u.state.name,
-                                              object,
-                                              stack_prop->u.property.name,
-                                              &value);
+              egg_state_machine_add_propertyv (parser_data->self,
+                                               item->u.state.name,
+                                               object,
+                                               stack_prop->u.property.name,
+                                               &value);
 
               g_value_unset (&value);
             }
