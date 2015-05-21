@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include "egg-signal-group.h"
 #include "ide-debug.h"
 #include "ide-highlight-engine.h"
 #include "ide-types.h"
@@ -33,6 +34,7 @@ struct _IdeHighlightEngine
 {
   GObject         parent_instance;
 
+  EggSignalGroup *signal_group;
   IdeBuffer      *buffer;
   IdeHighlighter *highlighter;
   GSettings      *settings;
@@ -580,8 +582,9 @@ ide_highlight_engine_clear (IdeHighlightEngine *self)
 }
 
 static void
-ide_highlight_engine_connect_buffer (IdeHighlightEngine *self,
-                                     IdeBuffer          *buffer)
+ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
+                                      IdeBuffer          *buffer,
+                                      EggSignalGroup     *group)
 {
   GtkTextBuffer *text_buffer = (GtkTextBuffer *)buffer;
   GtkTextIter begin;
@@ -591,6 +594,9 @@ ide_highlight_engine_connect_buffer (IdeHighlightEngine *self,
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (EGG_IS_SIGNAL_GROUP (group));
+
+  ide_set_weak_pointer (&self->buffer, buffer);
 
   g_object_set_qdata (G_OBJECT (buffer), gEngineQuark, self);
 
@@ -599,34 +605,16 @@ ide_highlight_engine_connect_buffer (IdeHighlightEngine *self,
   self->invalid_begin = gtk_text_buffer_create_mark (text_buffer, NULL, &begin, TRUE);
   self->invalid_end = gtk_text_buffer_create_mark (text_buffer, NULL, &end, FALSE);
 
-  g_signal_connect_object (buffer,
-                           "insert-text",
-                           G_CALLBACK (ide_highlight_engine__buffer_insert_text_cb),
-                           self,
-                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-
-  g_signal_connect_object (buffer,
-                           "delete-range",
-                           G_CALLBACK (ide_highlight_engine__buffer_delete_range_cb),
-                           self,
-                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-
-  g_signal_connect_object (buffer,
-                           "notify::style-scheme",
-                           G_CALLBACK (ide_highlight_engine__notify_style_scheme_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
   ide_highlight_engine_reload (self);
 
   IDE_EXIT;
 }
 
 static void
-ide_highlight_engine_disconnect_buffer (IdeHighlightEngine *self,
-                                        IdeBuffer          *buffer)
+ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
+                                        EggSignalGroup      *group)
 {
-  GtkTextBuffer *text_buffer = (GtkTextBuffer *)buffer;
+  GtkTextBuffer *text_buffer;
   GtkTextTagTable *tag_table;
   GtkTextIter begin;
   GtkTextIter end;
@@ -635,7 +623,9 @@ ide_highlight_engine_disconnect_buffer (IdeHighlightEngine *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (EGG_IS_SIGNAL_GROUP (group));
+
+  text_buffer = GTK_TEXT_BUFFER (self->buffer);
 
   if (self->work_timeout)
     {
@@ -643,17 +633,7 @@ ide_highlight_engine_disconnect_buffer (IdeHighlightEngine *self,
       self->work_timeout = 0;
     }
 
-  g_object_set_qdata (G_OBJECT (buffer), gEngineQuark, NULL);
-
-  g_signal_handlers_disconnect_by_func (buffer,
-                                        G_CALLBACK (ide_highlight_engine__buffer_delete_range_cb),
-                                        self);
-  g_signal_handlers_disconnect_by_func (buffer,
-                                        G_CALLBACK (ide_highlight_engine__buffer_insert_text_cb),
-                                        self);
-  g_signal_handlers_disconnect_by_func (buffer,
-                                        G_CALLBACK (ide_highlight_engine__notify_style_scheme_cb),
-                                        self);
+  g_object_set_qdata (G_OBJECT (text_buffer), gEngineQuark, NULL);
 
   tag_table = gtk_text_buffer_get_tag_table (text_buffer);
 
@@ -679,6 +659,8 @@ ide_highlight_engine_disconnect_buffer (IdeHighlightEngine *self,
     }
   g_clear_pointer (&self->public_tags, g_slist_free);
 
+  ide_clear_weak_pointer (&self->buffer);
+
   IDE_EXIT;
 }
 
@@ -687,22 +669,11 @@ ide_highlight_engine_set_buffer (IdeHighlightEngine *self,
                                  IdeBuffer          *buffer)
 {
   g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_return_if_fail (!buffer || IDE_IS_BUFFER (buffer));
+  g_return_if_fail (IDE_IS_BUFFER (buffer));
 
   if (self->buffer != buffer)
     {
-      if (self->buffer != NULL)
-        {
-          ide_highlight_engine_disconnect_buffer (self, self->buffer);
-          ide_clear_weak_pointer (&self->buffer);
-        }
-
-      if (buffer != NULL)
-        {
-          ide_set_weak_pointer (&self->buffer, buffer);
-          ide_highlight_engine_connect_buffer (self, self->buffer);
-        }
-
+      egg_signal_group_set_target (self->signal_group, buffer);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUFFER]);
     }
 }
@@ -744,7 +715,7 @@ ide_highlight_engine_finalize (GObject *object)
 
   g_clear_object (&self->highlighter);
   g_clear_object (&self->settings);
-  ide_clear_weak_pointer (&self->buffer);
+  g_clear_object (&self->signal_group);
 
   G_OBJECT_CLASS (ide_highlight_engine_parent_class)->finalize (object);
 }
@@ -829,6 +800,37 @@ ide_highlight_engine_init (IdeHighlightEngine *self)
 {
   self->settings = g_settings_new ("org.gnome.builder.code-insight");
   self->enabled = g_settings_get_boolean (self->settings, "semantic-highlighting");
+  self->signal_group = egg_signal_group_new (IDE_TYPE_BUFFER);
+
+  egg_signal_group_connect_object (self->signal_group,
+                                   "insert-text",
+                                   G_CALLBACK (ide_highlight_engine__buffer_insert_text_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+
+  egg_signal_group_connect_object (self->signal_group,
+                                   "delete-range",
+                                   G_CALLBACK (ide_highlight_engine__buffer_delete_range_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+
+  egg_signal_group_connect_object (self->signal_group,
+                                   "notify::style-scheme",
+                                   G_CALLBACK (ide_highlight_engine__notify_style_scheme_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->signal_group,
+                           "bind",
+                           G_CALLBACK (ide_highlight_engine__bind_buffer_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->signal_group,
+                           "unbind",
+                           G_CALLBACK (ide_highlight_engine__unbind_buffer_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->settings,
                            "changed::semantic-highlighting",
