@@ -28,6 +28,7 @@
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.gschema.xml
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.language.gschema.xml
 [type: gettext/gsettings]data/gsettings/org.gnome.builder.project-tree.gschema.xml
+contrib/egg/egg-state-machine-action.c
 contrib/gedit/gedit-menu-stack-switcher.c
 contrib/nautilus/nautilus-floating-bar.c
 contrib/search/trie.c
