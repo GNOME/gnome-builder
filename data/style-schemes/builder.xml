@@ -72,7 +72,7 @@
   <!-- Global Settings -->
   <style name="text"                        foreground="text1" background="bg1"/>
   <style name="selection"                   background="selection1"/>
-  <style name="map-overlay"                 background="#rgba(193,203,210,0.45)"/>
+  <style name="map-overlay"                 background="#rgba(193,203,210,0.75)"/>
   <style name="cursor"                      foreground="aluminium4"/>
   <style name="current-line"                background="#rgba(238,238,236,.75)"/>
   <style name="current-line-number"         background="#rgba(238,238,236,.75)"/>
