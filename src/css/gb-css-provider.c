@@ -45,6 +45,8 @@ gb_css_provider_update (GbCssProvider *self)
   g_autofree gchar *theme_name = NULL;
   g_autofree gchar *resource_path = NULL;
   gboolean prefer_dark_theme = FALSE;
+  gsize len = 0;
+  guint32 flags = 0;
 
   IDE_ENTRY;
 
@@ -59,6 +61,12 @@ gb_css_provider_update (GbCssProvider *self)
   resource_path = g_strdup_printf ("/org/gnome/builder/theme/%s%s.css",
                                    theme_name,
                                    prefer_dark_theme ? "-dark" : "");
+
+  if (!g_resources_get_info (resource_path, G_RESOURCE_LOOKUP_FLAGS_NONE, &len, &flags, NULL))
+    {
+      g_free (resource_path);
+      resource_path = g_strdup ("/org/gnome/builder/theme/shared.css");
+    }
 
   gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (self), resource_path);
 
