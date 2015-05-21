@@ -35,11 +35,6 @@ struct _IdeGitRemoteCallbacks
   gdouble              fraction;
 };
 
-struct _IdeGitRemoteCallbacksClass
-{
-  GgitRemoteCallbacksClass parent_class;
-};
-
 G_DEFINE_TYPE (IdeGitRemoteCallbacks, ide_git_remote_callbacks, GGIT_TYPE_REMOTE_CALLBACKS)
 
 enum {
