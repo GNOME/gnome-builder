@@ -45,6 +45,114 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void
+egg_state_machine__property_object_weak_notify (gpointer  data,
+                                                GObject  *where_object_was)
+{
+  EggStateProperty *state_prop = data;
+  EggStateMachine *self = state_prop->state_machine;
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
+  GHashTableIter iter;
+  EggState *state;
+
+  g_assert (EGG_IS_STATE_MACHINE (self));
+  g_assert (where_object_was != NULL);
+
+  state_prop->object = NULL;
+
+  g_hash_table_iter_init (&iter, priv->states);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer)&state))
+    {
+      if (g_ptr_array_remove_fast (state->properties, state_prop))
+        return;
+    }
+
+  g_critical ("Failed to find property for %p", where_object_was);
+}
+
+static void
+egg_state_machine__style_object_weak_notify (gpointer  data,
+                                             GObject  *where_object_was)
+{
+  EggStateStyle *style_prop = data;
+  EggStateMachine *self = style_prop->state_machine;
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
+  GHashTableIter iter;
+  EggState *state;
+
+  g_assert (EGG_IS_STATE_MACHINE (self));
+  g_assert (where_object_was != NULL);
+
+  style_prop->widget = NULL;
+
+  g_hash_table_iter_init (&iter, priv->states);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer)&state))
+    {
+      if (g_ptr_array_remove_fast (state->styles, style_prop))
+        return;
+    }
+
+  g_critical ("Failed to find style for %p", where_object_was);
+}
+
+static void
+egg_state_machine__binding_source_weak_notify (gpointer  data,
+                                               GObject  *where_object_was)
+{
+  EggStateMachine *self = data;
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
+  GHashTableIter iter;
+  EggState *state;
+
+  g_assert (EGG_IS_STATE_MACHINE (self));
+  g_assert (where_object_was != NULL);
+
+  g_hash_table_iter_init (&iter, priv->states);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer)&state))
+    {
+      EggBindingSet *bindings;
+
+      bindings = g_hash_table_lookup (state->bindings, where_object_was);
+
+      if (bindings != NULL)
+        {
+          g_hash_table_remove (state->bindings, where_object_was);
+          return;
+        }
+    }
+
+  g_critical ("Failed to find bindings for %p", where_object_was);
+}
+
+static void
+egg_state_machine__signal_source_weak_notify (gpointer  data,
+                                              GObject  *where_object_was)
+{
+  EggStateMachine *self = data;
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
+  GHashTableIter iter;
+  EggState *state;
+
+  g_assert (EGG_IS_STATE_MACHINE (self));
+  g_assert (where_object_was != NULL);
+
+  g_hash_table_iter_init (&iter, priv->states);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer)&state))
+    {
+      EggSignalGroup *signals;
+
+      signals = g_hash_table_lookup (state->signals, where_object_was);
+
+      if (signals != NULL)
+        {
+          g_hash_table_remove (state->signals, where_object_was);
+          return;
+        }
+    }
+
+  g_critical ("Failed to find signals for %p", where_object_was);
+}
+
+static void
 egg_state_free (gpointer data)
 {
   EggState *state = data;
@@ -62,6 +170,14 @@ egg_state_property_free (gpointer data)
 {
   EggStateProperty *prop = data;
 
+  if (prop->object != NULL)
+    {
+      g_object_weak_unref (prop->object,
+                           egg_state_machine__property_object_weak_notify,
+                           prop);
+      prop->object = NULL;
+    }
+
   g_free (prop->property);
   g_value_unset (&prop->value);
   g_slice_free (EggStateProperty, prop);
@@ -71,6 +187,14 @@ static void
 egg_state_style_free (gpointer data)
 {
   EggStateStyle *style = data;
+
+  if (style->widget != NULL)
+    {
+      g_object_weak_unref (G_OBJECT (style->widget),
+                           egg_state_machine__style_object_weak_notify,
+                           style);
+      style->widget = NULL;
+    }
 
   g_free (style->name);
   g_slice_free (EggStateStyle, style);
@@ -198,6 +322,31 @@ egg_state_machine_finalize (GObject *object)
 {
   EggStateMachine *self = (EggStateMachine *)object;
   EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
+  GHashTableIter state_iter;
+  EggState *state;
+
+  g_hash_table_iter_init (&state_iter, priv->states);
+  while (g_hash_table_iter_next (&state_iter, NULL, (gpointer)&state))
+    {
+      GHashTableIter iter;
+      gpointer key;
+
+      g_hash_table_iter_init (&iter, state->bindings);
+      while (g_hash_table_iter_next (&iter, &key, NULL))
+        {
+          g_object_weak_unref (key,
+                               egg_state_machine__binding_source_weak_notify,
+                               self);
+        }
+
+      g_hash_table_iter_init (&iter, state->signals);
+      while (g_hash_table_iter_next (&iter, &key, NULL))
+        {
+          g_object_weak_unref (key,
+                               egg_state_machine__signal_source_weak_notify,
+                               self);
+        }
+    }
 
   g_clear_pointer (&priv->states, g_hash_table_unref);
   g_clear_pointer (&priv->state, g_free);
@@ -424,10 +573,15 @@ egg_state_machine_add_propertyv (EggStateMachine *self,
   state_obj = egg_state_machine_get_state_obj (self, state);
 
   state_prop = g_slice_new0 (EggStateProperty);
+  state_prop->state_machine = self;
   state_prop->object = object;
   state_prop->property = g_strdup (property);
   g_value_init (&state_prop->value, G_VALUE_TYPE (value));
   g_value_copy (value, &state_prop->value);
+
+  g_object_weak_ref (object,
+                     egg_state_machine__property_object_weak_notify,
+                     state_prop);
 
   g_ptr_array_add (state_obj->properties, state_prop);
 }
@@ -459,6 +613,10 @@ egg_state_machine_add_binding (EggStateMachine *self,
     {
       bindings = egg_binding_set_new ();
       g_hash_table_insert (state_obj->bindings, source_object, bindings);
+
+      g_object_weak_ref (source_object,
+                         egg_state_machine__binding_source_weak_notify,
+                         self);
     }
 
   egg_binding_set_bind (bindings, source_property, target_object, target_property, flags);
@@ -481,8 +639,13 @@ egg_state_machine_add_style (EggStateMachine *self,
   state_obj = egg_state_machine_get_state_obj (self, state);
 
   style_obj = g_slice_new0 (EggStateStyle);
+  style_obj->state_machine = self;
   style_obj->name = g_strdup (style);
   style_obj->widget = widget;
+
+  g_object_weak_ref (G_OBJECT (widget),
+                     egg_state_machine__style_object_weak_notify,
+                     style_obj);
 
   g_ptr_array_add (state_obj->styles, style_obj);
 }
@@ -511,6 +674,10 @@ egg_state_machine_connect_object (EggStateMachine *self,
     {
       signals = egg_signal_group_new (G_OBJECT_TYPE (source));
       g_hash_table_insert (state_obj->signals, source, signals);
+
+      g_object_weak_ref (source,
+                         egg_state_machine__signal_source_weak_notify,
+                         self);
     }
 
   egg_signal_group_connect_object (signals, detailed_signal, callback, user_data, flags);

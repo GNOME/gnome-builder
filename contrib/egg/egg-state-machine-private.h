@@ -43,15 +43,17 @@ typedef struct
 
 typedef struct
 {
-  gpointer  object;
-  gchar    *property;
-  GValue    value;
+  EggStateMachine *state_machine;
+  gpointer         object;
+  gchar           *property;
+  GValue           value;
 } EggStateProperty;
 
 typedef struct
 {
-  GtkWidget *widget;
-  gchar     *name;
+  EggStateMachine *state_machine;
+  GtkWidget       *widget;
+  gchar           *name;
 } EggStateStyle;
 
 G_END_DECLS

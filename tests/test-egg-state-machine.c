@@ -188,6 +188,18 @@ assert_prop_equal (gpointer     obja,
   g_value_unset (&vb);
 }
 
+#if 0
+static gboolean
+has_style_class (GtkWidget   *widget,
+                 const gchar *class_name)
+{
+  GtkStyleContext *style_context;
+
+  style_context = gtk_widget_get_style_context (widget);
+  return gtk_style_context_has_class (style_context, class_name);
+}
+#endif
+
 static void
 test_state_machine_basic (void)
 {
@@ -274,11 +286,89 @@ test_state_machine_basic (void)
   g_clear_object (&action);
 }
 
+#define assert_final_ref(o) \
+  G_STMT_START \
+    { \
+      GObject **object_ptr = (GObject **)o; \
+\
+      g_object_add_weak_pointer (*object_ptr, (gpointer *)object_ptr); \
+      g_object_unref (*object_ptr); \
+      g_assert_null (*object_ptr); \
+    } \
+  G_STMT_END
+
+
+/* This test exposed multiple bugs in GObject:
+ *   https://bugzilla.gnome.org/show_bug.cgi?id=749659
+ *   https://bugzilla.gnome.org/show_bug.cgi?id=749660
+ */
+#if 0
+static void
+test_state_machine_weak_ref_source (void)
+{
+  EggStateMachine *machine;
+  GSimpleAction *action;
+  TestObject *dummy;
+  TestObject *obj;
+  GtkWidget *widget;
+
+  machine = egg_state_machine_new ();
+
+  action = g_simple_action_new ("my-action", NULL);
+  dummy = g_object_new (TEST_TYPE_OBJECT, NULL);
+  obj = g_object_new (TEST_TYPE_OBJECT, NULL);
+  widget = g_object_ref_sink (gtk_event_box_new ());
+
+  g_simple_action_set_enabled (action, FALSE);
+
+  egg_state_machine_connect_object (machine, "state", obj, "frobnicate",
+                                    G_CALLBACK (obj1_frobnicate), dummy, G_CONNECT_SWAPPED);
+  egg_state_machine_add_binding (machine, "state", obj, "string", dummy, "string", 0);
+  egg_state_machine_add_property (machine, "state", action, "enabled", TRUE);
+  egg_state_machine_add_style (machine, "state", widget, "testing");
+
+  egg_state_machine_set_state (machine, "state");
+  g_assert_cmpstr (egg_state_machine_get_state (machine), ==, "state");
+
+  /* Check that everything is working */
+  g_signal_emit_by_name (obj, "frobnicate");
+  g_assert_cmpint (dummy->obj1_count, ==, 1);
+  g_object_set (obj, "string", "hello world", NULL);
+  assert_prop_equal (obj, dummy, "string");
+  g_assert_cmpint (g_action_get_enabled (G_ACTION (action)), ==, TRUE);
+  g_assert (has_style_class (widget, "testing"));
+
+  /* Destroy the source objects while still in the state */
+  assert_final_ref (&widget);
+  assert_final_ref (&obj);
+  assert_final_ref (&dummy);
+  assert_final_ref (&action);
+
+  /* Go back and forth between the states as this would cause
+   * a warning if the source objects did not have a weakref on them
+   */
+  egg_state_machine_set_state (machine, NULL);
+  g_assert_cmpstr (egg_state_machine_get_state (machine), ==, NULL);
+  egg_state_machine_set_state (machine, "state");
+  g_assert_cmpstr (egg_state_machine_get_state (machine), ==, "state");
+  egg_state_machine_set_state (machine, "empty");
+  g_assert_cmpstr (egg_state_machine_get_state (machine), ==, "empty");
+  egg_state_machine_set_state (machine, "state");
+  g_assert_cmpstr (egg_state_machine_get_state (machine), ==, "state");
+  egg_state_machine_set_state (machine, NULL);
+  g_assert_cmpstr (egg_state_machine_get_state (machine), ==, NULL);
+
+  assert_final_ref (&machine);
+}
+#endif
+
 gint
 main (gint argc,
       gchar *argv[])
 {
   g_test_init (&argc, &argv, NULL);
+  gtk_init (&argc, &argv);
   g_test_add_func ("/Egg/StateMachine/basic", test_state_machine_basic);
+  /*g_test_add_func ("/Egg/StateMachine/weak-ref-source", test_state_machine_weak_ref_source);*/
   return g_test_run ();
 }
