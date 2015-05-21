@@ -339,7 +339,8 @@ AC_MSG_CHECKING([for --enable-profiling])
 AC_ARG_ENABLE(profiling,
               AC_HELP_STRING([--enable-profiling],
                              [turn on runtime instrumentation [default=no]]),
-              [enable_profiling=$enableval])
+              [enable_profiling=$enableval],
+	      [enable_profiling=no])
 AS_IF([test "$enable_profiling" = "yes"],[
 	ac_save_cflags="$CFLAGS"
 	CFLAGS="$CFLAGS -pg"
