@@ -668,10 +668,13 @@ static void
 ide_highlight_engine_set_buffer (IdeHighlightEngine *self,
                                  IdeBuffer          *buffer)
 {
-  g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_return_if_fail (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
+  g_assert (!buffer || GTK_IS_TEXT_BUFFER (buffer));
 
-  if (self->buffer != buffer)
+  /*
+   * We can get GtkSourceBuffer intermittently here.
+   */
+  if (!buffer || IDE_IS_BUFFER (buffer))
     {
       egg_signal_group_set_target (self->signal_group, buffer);
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUFFER]);
