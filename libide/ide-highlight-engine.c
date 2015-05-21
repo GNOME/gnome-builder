@@ -26,8 +26,7 @@
 #include "ide-types.h"
 #include "ide-internal.h"
 
-#define HIGHLIGHT_QUANTA_USEC      2000
-#define WORK_TIMEOUT_MSEC          50
+#define HIGHLIGHT_QUANTA_USEC      5000
 #define PRIVATE_TAG_PREFIX        "gb-private-tag"
 
 struct _IdeHighlightEngine
@@ -364,8 +363,9 @@ ide_highlight_engine_work_timeout_handler (gpointer data)
     {
       if (ide_highlight_engine_tick (self))
         return G_SOURCE_CONTINUE;
-      self->work_timeout = 0;
     }
+
+  self->work_timeout = 0;
 
   return G_SOURCE_REMOVE;
 }
@@ -378,9 +378,10 @@ ide_highlight_engine_queue_work (IdeHighlightEngine *self)
   if ((self->highlighter == NULL) || (self->buffer == NULL) || (self->work_timeout != 0))
     return;
 
-  self->work_timeout = g_timeout_add (WORK_TIMEOUT_MSEC,
-                                      ide_highlight_engine_work_timeout_handler,
-                                      self);
+  self->work_timeout =  gdk_threads_add_idle_full (G_PRIORITY_LOW,
+                                                   ide_highlight_engine_work_timeout_handler,
+                                                   self,
+                                                   NULL);
 }
 
 static gboolean
