@@ -22,6 +22,7 @@
 #include <ide.h>
 
 #include "egg-signal-group.h"
+#include "egg-state-machine.h"
 
 #include "gb-application.h"
 #include "gb-greeter-project-row.h"
@@ -45,6 +46,7 @@ struct _GbGreeterWindow
   GtkBox               *other_projects_container;
   GtkListBox           *other_projects_list_box;
   GtkSearchEntry       *search_entry;
+  EggStateMachine      *state_machine;
 };
 
 G_DEFINE_TYPE (GbGreeterWindow, gb_greeter_window, GTK_TYPE_APPLICATION_WINDOW)
@@ -448,8 +450,8 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
                          _("The recent projects that have been mined."),
                          IDE_TYPE_RECENT_PROJECTS,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_RECENT_PROJECTS,
-                                   gParamSpecs [PROP_RECENT_PROJECTS]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-greeter-window.ui");
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, header_bar);
@@ -458,8 +460,10 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, other_projects_container);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, other_projects_list_box);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, state_machine);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, viewport);
 
+  g_type_ensure (EGG_TYPE_STATE_MACHINE);
   g_type_ensure (GB_TYPE_GREETER_PROJECT_ROW);
   g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
 }
@@ -467,6 +471,8 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
 static void
 gb_greeter_window_init (GbGreeterWindow *self)
 {
+  GAction *action;
+
   self->signal_group = egg_signal_group_new (IDE_TYPE_RECENT_PROJECTS);
   egg_signal_group_connect_object (self->signal_group,
                                    "items-changed",
@@ -525,4 +531,8 @@ gb_greeter_window_init (GbGreeterWindow *self)
   gtk_list_box_set_filter_func (self->other_projects_list_box,
                                 gb_greeter_window_filter_row,
                                 self, NULL);
+
+  action = egg_state_machine_create_action (self->state_machine, "state");
+  g_action_map_add_action (G_ACTION_MAP (self), action);
+  g_object_unref (action);
 }

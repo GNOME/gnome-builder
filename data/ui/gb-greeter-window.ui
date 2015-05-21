@@ -6,11 +6,27 @@
     <property name="default-height">800</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
-        <property name="show-close-button">true</property>
-        <property name="title" translatable="yes">Select a Project</property>
         <property name="visible">true</property>
+        <child type="title">
+          <object class="GtkStack" id="title_stack">
+            <property name="visible">true</property>
+            <property name="transition-type">crossfade</property>
+            <child>
+              <object class="GtkLabel" id="browse_title">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Select a Project</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="selection_title">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Click an item to select</property>
+              </object>
+            </child>
+          </object>
+        </child>
         <child>
-          <object class="GtkButton">
+          <object class="GtkButton" id="new_button">
             <property name="action-name">app.new-project</property>
             <property name="visible">true</property>
             <property name="label" translatable="yes">_New</property>
@@ -38,13 +54,14 @@
             </child>
           </object>
           <packing>
-            <property name="position">1</property>
+            <property name="position">2</property>
             <property name="pack-type">end</property>
           </packing>
         </child>
         <child>
           <object class="GtkToggleButton" id="selection_button">
-            <property name="visible">false</property>
+            <property name="action-name">win.state</property>
+            <property name="action-target">'selection'</property>
             <style>
               <class name="image-button"/>
             </style>
@@ -54,6 +71,21 @@
                 <property name="visible">true</property>
               </object>
             </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="cancel_button">
+            <property name="label" translatable="yes">_Cancel</property>
+            <property name="use-underline">true</property>
+            <property name="action-name">win.state</property>
+            <property name="action-target">'browse'</property>
+            <style>
+              <class name="text-button"/>
+            </style>
           </object>
           <packing>
             <property name="position">0</property>
@@ -195,6 +227,48 @@
       </object>
     </child>
   </template>
+  <object class="EggStateMachine" id="state_machine">
+    <property name="state">browse</property>
+    <states>
+      <state name="browse">
+        <object id="header_bar">
+          <property name="show-close-button">true</property>
+        </object>
+        <object id="title_stack">
+          <property name="visible-child">browse_title</property>
+        </object>
+        <object id="cancel_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="selection_button">
+          <property name="visible">true</property>
+        </object>
+        <object id="new_button">
+          <property name="visible">true</property>
+        </object>
+      </state>
+      <state name="selection">
+        <object id="header_bar">
+          <property name="show-close-button">false</property>
+          <style>
+            <class name="selection-mode"/>
+          </style>
+        </object>
+        <object id="title_stack">
+          <property name="visible-child">selection_title</property>
+        </object>
+        <object id="cancel_button">
+          <property name="visible">true</property>
+        </object>
+        <object id="selection_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="new_button">
+          <property name="visible">false</property>
+        </object>
+      </state>
+    </states>
+  </object>
   <object class="GtkSizeGroup">
     <property name="mode">horizontal</property>
     <widgets>
