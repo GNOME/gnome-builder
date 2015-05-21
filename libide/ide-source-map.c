@@ -168,7 +168,8 @@ ide_source_map__view_notify_buffer (IdeSourceMap  *self,
   g_assert (GTK_SOURCE_IS_VIEW (view));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-  egg_signal_group_set_target (self->buffer_signals, buffer);
+  if (IDE_IS_BUFFER (buffer))
+    egg_signal_group_set_target (self->buffer_signals, buffer);
 }
 
 static gboolean
@@ -262,7 +263,7 @@ ide_source_map_init (IdeSourceMap *self)
   GtkSourceView *child_view;
 
   /* Buffer */
-  self->buffer_signals = egg_signal_group_new (GTK_TYPE_TEXT_BUFFER);
+  self->buffer_signals = egg_signal_group_new (IDE_TYPE_BUFFER);
   egg_signal_group_connect_object (self->buffer_signals,
                                    "line-flags-changed",
                                    G_CALLBACK (ide_source_map__buffer_line_flags_changed),
