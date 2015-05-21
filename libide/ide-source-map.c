@@ -260,7 +260,6 @@ static void
 ide_source_map_init (IdeSourceMap *self)
 {
   GtkSourceGutter *gutter;
-  GtkSourceView *child_view;
 
   /* Buffer */
   self->buffer_signals = egg_signal_group_new (IDE_TYPE_BUFFER);
@@ -309,35 +308,32 @@ ide_source_map_init (IdeSourceMap *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  /* Child view */
-  child_view = gtk_source_map_get_child_view (GTK_SOURCE_MAP (self));
-
-  gutter = gtk_source_view_get_gutter (child_view, GTK_TEXT_WINDOW_LEFT);
+  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
   self->line_renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
                                       "size", 2,
                                       "visible", TRUE,
                                       NULL);
   gtk_source_gutter_insert (gutter, self->line_renderer, 0);
 
-  g_signal_connect_object (child_view,
+  g_signal_connect_object (self,
                            "enter-notify-event",
                            G_CALLBACK (ide_source_map__enter_notify_event),
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (child_view,
+  g_signal_connect_object (self,
                            "leave-notify-event",
                            G_CALLBACK (ide_source_map__leave_notify_event),
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (child_view,
+  g_signal_connect_object (self,
                            "motion-notify-event",
                            G_CALLBACK (ide_source_map__motion_notify_event),
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (child_view,
+  g_signal_connect_object (self,
                            "scroll-event",
                            G_CALLBACK (ide_source_map__scroll_event),
                            self,
