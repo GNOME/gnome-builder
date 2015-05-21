@@ -65,8 +65,6 @@ void             egg_state_machine_add_style         (EggStateMachine *self,
                                                       const gchar     *state,
                                                       GtkWidget       *widget,
                                                       const gchar     *style);
-void             egg_state_machine_freeze            (EggStateMachine *self);
-void             egg_state_machine_thaw              (EggStateMachine *self);
 void             egg_state_machine_connect_object    (EggStateMachine *self,
                                                       const gchar     *state,
                                                       gpointer         source,

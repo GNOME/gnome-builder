@@ -28,8 +28,6 @@ typedef struct
   gchar      *state;
   GPtrArray  *actions;
   GHashTable *states;
-  gchar      *freeze_state;
-  gint        freeze_count;
 } EggStateMachinePrivate;
 
 typedef struct

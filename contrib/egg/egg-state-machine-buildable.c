@@ -626,8 +626,6 @@ egg_state_machine_buildable_custom_tag_start (GtkBuildable  *buildable,
       parser_data->builder = g_object_ref (builder);
       parser_data->stack = g_queue_new ();
 
-      egg_state_machine_freeze (self);
-
       *parser = StatesParser;
       *data = parser_data;
 
@@ -653,20 +651,11 @@ egg_state_machine_buildable_custom_finished (GtkBuildable *buildable,
   if (g_strcmp0 (tagname, "states") == 0)
     {
       StatesParserData *parser_data = user_data;
-      gchar *state;
 
       g_object_unref (parser_data->self);
       g_object_unref (parser_data->builder);
       g_queue_free_full (parser_data->stack, (GDestroyNotify)stack_item_free);
       g_slice_free (StatesParserData, parser_data);
-
-      egg_state_machine_thaw (self);
-
-      /* XXX: reapply current state */
-      state = g_strdup (egg_state_machine_get_state (self));
-      egg_state_machine_set_state (self, NULL);
-      egg_state_machine_set_state (self, state);
-      g_free (state);
     }
 }
 

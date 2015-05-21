@@ -477,8 +477,7 @@ egg_state_machine_set_state (EggStateMachine *self,
 
       priv->state = g_strdup (state);
 
-      if (priv->freeze_count == 0)
-        egg_state_machine_transition (self, old_state, state);
+      egg_state_machine_transition (self, old_state, state);
 
       g_free (new_state);
       g_free (old_state);
@@ -694,41 +693,4 @@ egg_state_machine_connect_object (EggStateMachine *self,
     }
 
   egg_signal_group_connect_object (signals, detailed_signal, callback, user_data, flags);
-}
-
-void
-egg_state_machine_freeze (EggStateMachine *self)
-{
-  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
-
-  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
-  g_return_if_fail (priv->freeze_count >= 0);
-
-  if (++priv->freeze_count == 1)
-    {
-      g_assert (priv->freeze_state == NULL);
-      priv->freeze_state = g_strdup (priv->state);
-    }
-}
-
-void
-egg_state_machine_thaw (EggStateMachine *self)
-{
-  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
-
-  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
-  g_return_if_fail (priv->freeze_count > 0);
-
-  if (--priv->freeze_count == 0)
-    {
-      if (g_strcmp0 (priv->freeze_state, priv->state) != 0)
-        {
-          gchar *state;
-
-          state = priv->freeze_state;
-          priv->freeze_state = NULL;
-          egg_state_machine_set_state (self, state);
-          g_free (state);
-        }
-    }
 }
