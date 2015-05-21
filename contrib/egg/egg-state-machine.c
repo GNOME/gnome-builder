@@ -27,9 +27,38 @@
 #include "egg-state-machine.h"
 #include "egg-state-machine-action.h"
 #include "egg-state-machine-buildable.h"
-#include "egg-state-machine-private.h"
 
 G_DEFINE_QUARK (egg_state_machine_error, egg_state_machine_error)
+
+typedef struct
+{
+  gchar      *state;
+  GHashTable *states;
+} EggStateMachinePrivate;
+
+typedef struct
+{
+  gchar      *name;
+  GHashTable *signals;
+  GHashTable *bindings;
+  GPtrArray  *properties;
+  GPtrArray  *styles;
+} EggState;
+
+typedef struct
+{
+  EggStateMachine *state_machine;
+  gpointer         object;
+  gchar           *property;
+  GValue           value;
+} EggStateProperty;
+
+typedef struct
+{
+  EggStateMachine *state_machine;
+  GtkWidget       *widget;
+  gchar           *name;
+} EggStateStyle;
 
 G_DEFINE_TYPE_WITH_CODE (EggStateMachine, egg_state_machine, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (EggStateMachine)

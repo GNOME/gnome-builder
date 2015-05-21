@@ -23,7 +23,6 @@
 
 #include "egg-state-machine.h"
 #include "egg-state-machine-buildable.h"
-#include "egg-state-machine-private.h"
 
 typedef struct
 {
