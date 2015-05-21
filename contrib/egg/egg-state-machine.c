@@ -561,6 +561,7 @@ egg_state_machine_add_propertyv (EggStateMachine *self,
                                  const gchar     *property,
                                  const GValue    *value)
 {
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
   EggState *state_obj;
   EggStateProperty *state_prop;
 
@@ -584,6 +585,9 @@ egg_state_machine_add_propertyv (EggStateMachine *self,
                      state_prop);
 
   g_ptr_array_add (state_obj->properties, state_prop);
+
+  if (g_strcmp0 (state, priv->state) == 0)
+    g_object_set_property (object, property, value);
 }
 
 void
@@ -628,6 +632,7 @@ egg_state_machine_add_style (EggStateMachine *self,
                              GtkWidget       *widget,
                              const gchar     *style)
 {
+  EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
   EggState *state_obj;
   EggStateStyle *style_obj;
 
@@ -648,6 +653,14 @@ egg_state_machine_add_style (EggStateMachine *self,
                      style_obj);
 
   g_ptr_array_add (state_obj->styles, style_obj);
+
+  if (g_strcmp0 (state, priv->state) == 0)
+    {
+      GtkStyleContext *style_context;
+
+      style_context = gtk_widget_get_style_context (widget);
+      gtk_style_context_add_class (style_context, style);
+    }
 }
 
 void
