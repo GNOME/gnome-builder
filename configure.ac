@@ -333,6 +333,25 @@ AC_SUBST(SHM_LIB)
 
 
 dnl ***********************************************************************
+dnl Check if we should instrument our targets
+dnl ***********************************************************************
+AC_MSG_CHECKING([for --enable-profiling])
+AC_ARG_ENABLE(profiling,
+              AC_HELP_STRING([--enable-profiling],
+                             [turn on runtime instrumentation [default=no]]),
+              [enable_profiling=$enableval])
+AS_IF([test "$enable_profiling" = "yes"],[
+	ac_save_cflags="$CFLAGS"
+	CFLAGS="$CFLAGS -pg"
+	AC_LINK_IFELSE([AC_LANG_SOURCE([[int main() { return 0; }]])],
+	               [PROFILING_CFLAGS="-pg"],
+		       [enable_profiling=no])
+	CFLAGS="$ac_save_cflags $PROFILING_CFLAGS"
+])
+AC_MSG_RESULT([$enable_profiling])
+
+
+dnl ***********************************************************************
 dnl Process .in Files
 dnl ***********************************************************************
 AC_CONFIG_FILES([
@@ -391,6 +410,7 @@ echo " Development Options"
 echo ""
 echo "  Enable Debug ......................... : ${enable_debug}"
 echo "  Enable Tracing ....................... : ${enable_tracing}"
+echo "  Enable Profiling (-pg)................ : ${enable_profiling}"
 echo "  Build Test Suite ..................... : ${enable_tests}"
 echo "  Build API reference .................. : ${enable_gtk_doc}"
 echo "  Use cross-referencing in API docs .... : ${enable_doc_cross_references}"
