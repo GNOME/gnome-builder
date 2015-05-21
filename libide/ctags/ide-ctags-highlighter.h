@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CTAGS_HIGHLIGHTER (ide_ctags_highlighter_get_type())
 
-#define IDE_CTAGS_HIGHLIGHTER_TYPE          "c:type"
+#define IDE_CTAGS_HIGHLIGHTER_TYPE          "def:type"
 #define IDE_CTAGS_HIGHLIGHTER_FUNCTION_NAME "def:function"
 #define IDE_CTAGS_HIGHLIGHTER_ENUM_NAME     "def:constant"
 
