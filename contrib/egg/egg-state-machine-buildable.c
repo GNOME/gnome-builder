@@ -130,8 +130,13 @@ add_state (StatesParserData  *parser_data,
 
       if (object == NULL)
         {
-          g_critical ("Failed to locate object %s for binding.", stack_obj->u.object.id);
-          continue;
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Unknown object for state '%s': %s",
+                       item->u.state.name,
+                       stack_obj->u.object.id);
+          return;
         }
 
       if (GTK_IS_WIDGET (object))
@@ -182,6 +187,18 @@ add_state (StatesParserData  *parser_data,
                   GObject *relative;
 
                   relative = gtk_builder_get_object (parser_data->builder, stack_prop->u.property.text);
+
+                  if (relative == NULL)
+                    {
+                      g_set_error (error,
+                                   GTK_BUILDER_ERROR,
+                                   GTK_BUILDER_ERROR_INVALID_VALUE,
+                                   "Unknown object for property '%s': %s",
+                                   stack_prop->u.property.name,
+                                   stack_prop->u.property.text);
+                      return;
+                    }
+
                   g_value_init (&value, pspec->value_type);
                   g_value_set_object (&value, relative);
                 }
