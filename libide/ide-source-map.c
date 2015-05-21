@@ -26,14 +26,14 @@
 #include "ide-source-map.h"
 #include "ide-source-view.h"
 
-#define CONCEAL_TIMEOUT      2000
+#define CONCEAL_TIMEOUT 2000
 
 struct _IdeSourceMap
 {
   GtkSourceMap               parent_instance;
 
-  EggSignalGroup            *signal_group;
-  GtkTextBuffer             *buffer;
+  EggSignalGroup            *view_signals;
+  EggSignalGroup            *buffer_signals;
   GtkSourceGutterRenderer   *line_renderer;
   guint                      delayed_conceal_timeout;
   guint                      show_map : 1;
@@ -168,26 +168,7 @@ ide_source_map__view_notify_buffer (IdeSourceMap  *self,
   g_assert (GTK_SOURCE_IS_VIEW (view));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-  if (self->buffer != buffer)
-    {
-      if (self->buffer != NULL)
-        {
-          g_signal_handlers_disconnect_by_func (self->buffer,
-                                                G_CALLBACK (ide_source_map__buffer_line_flags_changed),
-                                                self);
-          ide_clear_weak_pointer (&self->buffer);
-        }
-
-      if (IDE_IS_BUFFER (buffer))
-        {
-          ide_set_weak_pointer (&self->buffer, buffer);
-          g_signal_connect_object (buffer,
-                                   "line-flags-changed",
-                                   G_CALLBACK (ide_source_map__buffer_line_flags_changed),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-        }
-    }
+  egg_signal_group_set_target (self->buffer_signals, buffer);
 }
 
 static gboolean
@@ -223,7 +204,7 @@ ide_source_map__view_changed (IdeSourceMap *self,
   g_object_bind_property_full (view, "font-desc", self, "font-desc", G_BINDING_SYNC_CREATE,
                                shrink_font, NULL, NULL, NULL);
 
-  egg_signal_group_set_target (self->signal_group, view);
+  egg_signal_group_set_target (self->view_signals, view);
 }
 
 static void
@@ -237,8 +218,10 @@ ide_source_map_destroy (GtkWidget *widget)
       self->delayed_conceal_timeout = 0;
     }
 
-  ide_clear_weak_pointer (&self->buffer);
-  g_clear_object (&self->signal_group);
+  self->line_renderer = NULL;
+
+  g_clear_object (&self->view_signals);
+  g_clear_object (&self->buffer_signals);
 
   GTK_WIDGET_CLASS (ide_source_map_parent_class)->destroy (widget);
 }
@@ -276,7 +259,57 @@ static void
 ide_source_map_init (IdeSourceMap *self)
 {
   GtkSourceGutter *gutter;
-  GtkSourceView *child_view = gtk_source_map_get_child_view (GTK_SOURCE_MAP (self));
+  GtkSourceView *child_view;
+
+  /* Buffer */
+  self->buffer_signals = egg_signal_group_new (GTK_TYPE_TEXT_BUFFER);
+  egg_signal_group_connect_object (self->buffer_signals,
+                                   "line-flags-changed",
+                                   G_CALLBACK (ide_source_map__buffer_line_flags_changed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  /* View */
+  self->view_signals = egg_signal_group_new (GTK_SOURCE_TYPE_VIEW);
+
+  egg_signal_group_connect_object (self->view_signals,
+                                   "notify::buffer",
+                                   G_CALLBACK (ide_source_map__view_notify_buffer),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->view_signals,
+                                   "enter-notify-event",
+                                   G_CALLBACK (ide_source_map__enter_notify_event),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->view_signals,
+                                   "leave-notify-event",
+                                   G_CALLBACK (ide_source_map__leave_notify_event),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->view_signals,
+                                   "motion-notify-event",
+                                   G_CALLBACK (ide_source_map__motion_notify_event),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  egg_signal_group_connect_object (self->view_signals,
+                                   "scroll-event",
+                                   G_CALLBACK (ide_source_map__scroll_event),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self,
+                           "notify::view",
+                           G_CALLBACK (ide_source_map__view_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  /* Child view */
+  child_view = gtk_source_map_get_child_view (GTK_SOURCE_MAP (self));
 
   gutter = gtk_source_view_get_gutter (child_view, GTK_TEXT_WINDOW_LEFT);
   self->line_renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
@@ -285,46 +318,6 @@ ide_source_map_init (IdeSourceMap *self)
                                       NULL);
   gtk_source_gutter_insert (gutter, self->line_renderer, 0);
 
-  /* View */
-  self->signal_group = egg_signal_group_new (GTK_SOURCE_TYPE_VIEW);
-
-  g_signal_connect_object (self,
-                           "notify::view",
-                           G_CALLBACK (ide_source_map__view_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  egg_signal_group_connect_object (self->signal_group,
-                                   "notify::buffer",
-                                   G_CALLBACK (ide_source_map__view_notify_buffer),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-
-  egg_signal_group_connect_object (self->signal_group,
-                                   "enter-notify-event",
-                                   G_CALLBACK (ide_source_map__enter_notify_event),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-
-  egg_signal_group_connect_object (self->signal_group,
-                                   "leave-notify-event",
-                                   G_CALLBACK (ide_source_map__leave_notify_event),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-
-  egg_signal_group_connect_object (self->signal_group,
-                                   "motion-notify-event",
-                                   G_CALLBACK (ide_source_map__motion_notify_event),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-
-  egg_signal_group_connect_object (self->signal_group,
-                                   "scroll-event",
-                                   G_CALLBACK (ide_source_map__scroll_event),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-
-  /* Child view */
   g_signal_connect_object (child_view,
                            "enter-notify-event",
                            G_CALLBACK (ide_source_map__enter_notify_event),
