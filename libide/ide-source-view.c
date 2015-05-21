@@ -4761,8 +4761,6 @@ ide_source_view_size_allocate (GtkWidget     *widget,
   IdeSourceView *self = (IdeSourceView *)widget;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
-  IDE_ENTRY;
-
   g_assert (GTK_IS_WIDGET (widget));
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (allocation != NULL);
@@ -4782,8 +4780,6 @@ ide_source_view_size_allocate (GtkWidget     *widget,
                                                    ide_source_view_replay_scroll,
                                                    self);
     }
-
-  IDE_EXIT;
 }
 
 static gboolean
