@@ -229,6 +229,8 @@ libide_1_0_la_SOURCES = \
 	ctags/ide-ctags-completion-item.h \
 	ctags/ide-ctags-completion-provider.c \
 	ctags/ide-ctags-completion-provider.h \
+	ctags/ide-ctags-highlighter.c \
+	ctags/ide-ctags-highlighter.h \
 	ctags/ide-ctags-index.c \
 	ctags/ide-ctags-index.h \
 	ctags/ide-ctags-service.c \

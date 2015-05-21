@@ -22,6 +22,7 @@
 #include <gtksourceview/gtksource.h>
 
 #include "ide-service.h"
+#include "ide-highlighter.h"
 
 G_BEGIN_DECLS
 
@@ -29,7 +30,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCtagsService, ide_ctags_service, IDE, CTAGS_SERVICE, IdeService)
 
-GtkSourceCompletionProvider *ide_ctags_service_get_provider (IdeCtagsService *self);
+GtkSourceCompletionProvider *ide_ctags_service_get_provider    (IdeCtagsService *self);
+IdeHighlighter              *ide_ctags_service_get_highlighter (IdeCtagsService *self);
 
 G_END_DECLS
 

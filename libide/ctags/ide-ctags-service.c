@@ -32,12 +32,14 @@
 #include "ide-global.h"
 #include "ide-project.h"
 #include "ide-vcs.h"
+#include "ide-ctags-highlighter.h"
 
 struct _IdeCtagsService
 {
   IdeService                   parent_instance;
 
   GtkSourceCompletionProvider *provider;
+  IdeHighlighter              *highlighter;
   EggTaskCache                *indexes;
   GCancellable                *cancellable;
   IdeCtagsBuilder             *builder;
@@ -124,6 +126,7 @@ ide_ctags_service_tags_loaded_cb (GObject      *object,
 
   g_assert (IDE_IS_CTAGS_INDEX (index));
   ide_ctags_completion_provider_add_index (IDE_CTAGS_COMPLETION_PROVIDER (self->provider), index);
+  ide_ctags_highlighter_add_index (IDE_CTAGS_HIGHLIGHTER (self->highlighter), index);
 
   IDE_EXIT;
 }
@@ -288,6 +291,20 @@ ide_ctags_service_mine (IdeCtagsService *self)
   g_task_run_in_thread (task, ide_ctags_service_miner);
 }
 
+IdeHighlighter *
+ide_ctags_service_get_highlighter (IdeCtagsService *self)
+{
+  g_return_val_if_fail (IDE_IS_CTAGS_SERVICE (self), NULL);
+
+  if (!self->miner_ran)
+    {
+      self->miner_ran = TRUE;
+      ide_ctags_service_mine (self);
+    }
+
+  return self->highlighter;
+}
+
 GtkSourceCompletionProvider *
 ide_ctags_service_get_provider (IdeCtagsService *self)
 {
@@ -365,6 +382,7 @@ ide_ctags_service_finalize (GObject *object)
 
   g_clear_object (&self->indexes);
   g_clear_object (&self->provider);
+  g_clear_object (&self->highlighter);
   g_clear_object (&self->cancellable);
 
   G_OBJECT_CLASS (ide_ctags_service_parent_class)->finalize (object);
@@ -389,6 +407,11 @@ ide_ctags_service_init (IdeCtagsService *self)
 {
   self->provider = g_object_new (IDE_TYPE_CTAGS_COMPLETION_PROVIDER,
                                  NULL);
+
+  self->highlighter = g_object_new (IDE_TYPE_CTAGS_HIGHLIGHTER,
+                                    "context",ide_object_get_context (IDE_OBJECT (self)),
+                                    NULL);
+
 
   self->indexes = egg_task_cache_new ((GHashFunc)g_file_hash,
                                       (GEqualFunc)g_file_equal,

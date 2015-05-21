@@ -173,6 +173,32 @@ ide_language_real_get_diagnostician (IdeLanguage *self)
   return gDiagnostician;
 }
 
+static IdeHighlighter *
+ide_language_real_get_highlighter (IdeLanguage *self)
+{
+  IdeLanguagePrivate *priv = ide_language_get_instance_private (self);
+
+  g_assert (IDE_IS_LANGUAGE (self));
+
+  if (ide_str_equal0 (priv->id, "c") ||
+      ide_str_equal0 (priv->id, "cpp") ||
+      ide_str_equal0 (priv->id, "chdr") ||
+      ide_str_equal0 (priv->id, "python") ||
+      ide_str_equal0 (priv->id, "js") ||
+      ide_str_equal0 (priv->id, "css") ||
+      ide_str_equal0 (priv->id, "html"))
+    {
+      IdeCtagsService *service;
+      IdeContext *context;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      service = ide_context_get_service_typed (context, IDE_TYPE_CTAGS_SERVICE);
+      return ide_ctags_service_get_highlighter (service);
+    }
+
+  return NULL;
+}
+
 /**
  * ide_language_get_highlighter:
  *
@@ -372,6 +398,7 @@ ide_language_class_init (IdeLanguageClass *klass)
 
   klass->get_completion_providers = ide_language_real_get_completion_providers;
   klass->get_diagnostician = ide_language_real_get_diagnostician;
+  klass->get_highlighter = ide_language_real_get_highlighter;
 
   gParamSpecs [PROP_DIAGNOSTICIAN] =
     g_param_spec_object ("diagnostician",
