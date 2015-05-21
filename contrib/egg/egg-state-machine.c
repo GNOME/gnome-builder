@@ -439,7 +439,7 @@ egg_state_machine_get_state (EggStateMachine *self)
 {
   EggStateMachinePrivate *priv = egg_state_machine_get_instance_private (self);
 
-  g_return_if_fail (EGG_IS_STATE_MACHINE (self));
+  g_return_val_if_fail (EGG_IS_STATE_MACHINE (self), NULL);
 
   return priv->state;
 }
@@ -566,7 +566,7 @@ egg_state_machine_add_propertyv (EggStateMachine *self,
 
   g_return_if_fail (EGG_IS_STATE_MACHINE (self));
   g_return_if_fail (state != NULL);
-  g_return_if_fail (object != NULL);
+  g_return_if_fail (G_IS_OBJECT (object));
   g_return_if_fail (property != NULL);
   g_return_if_fail (G_IS_VALUE (value));
 
@@ -600,9 +600,9 @@ egg_state_machine_add_binding (EggStateMachine *self,
 
   g_return_if_fail (EGG_IS_STATE_MACHINE (self));
   g_return_if_fail (state != NULL);
-  g_return_if_fail (source_object != NULL);
+  g_return_if_fail (G_IS_OBJECT (source_object));
   g_return_if_fail (source_property != NULL);
-  g_return_if_fail (target_object != NULL);
+  g_return_if_fail (G_IS_OBJECT (target_object));
   g_return_if_fail (target_property != NULL);
 
   state_obj = egg_state_machine_get_state_obj (self, state);
@@ -634,7 +634,7 @@ egg_state_machine_add_style (EggStateMachine *self,
   g_return_if_fail (EGG_IS_STATE_MACHINE (self));
   g_return_if_fail (state != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (style);
+  g_return_if_fail (style != NULL);
 
   state_obj = egg_state_machine_get_state_obj (self, state);
 

@@ -110,14 +110,13 @@ egg_state_machine_action_set_state_machine (EggStateMachineAction *self,
   g_return_if_fail (EGG_IS_STATE_MACHINE (state_machine));
   g_return_if_fail (self->state_machine == NULL);
 
-  if (g_set_object (&self->state_machine, state_machine))
-    {
-      g_signal_connect_object (state_machine,
-                               "notify::state",
-                               G_CALLBACK (egg_state_machine_action_state_set_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
-    }
+  self->state_machine = g_object_ref (state_machine);
+
+  g_signal_connect_object (state_machine,
+                           "notify::state",
+                           G_CALLBACK (egg_state_machine_action_state_set_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void

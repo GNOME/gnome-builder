@@ -163,7 +163,7 @@ add_state (StatesParserData  *parser_data,
           else if (stack_prop->u.property.text != NULL)
             {
               GParamSpec *pspec;
-              GValue value = { 0 };
+              GValue value = G_VALUE_INIT;
 
               pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (object), stack_prop->u.property.name);
 
