@@ -20,6 +20,8 @@
 
 #include "ide-ctags-highlighter.h"
 #include "ide-debug.h"
+#include "ide-file.h"
+#include "ide-macros.h"
 
 struct _IdeCtagsHighlighter
 {
@@ -87,11 +89,16 @@ get_tag_from_kind (IdeCtagsIndexEntryKind kind)
     }
 }
 
-static const gchar *get_tag (IdeCtagsHighlighter *self,const gchar *word)
+static const gchar *
+get_tag (IdeCtagsHighlighter *self,
+         IdeFile             *file,
+         const gchar         *word)
 {
+  const gchar *file_path = ide_file_get_path (file);
   const IdeCtagsIndexEntry *entries;
   gsize n_entries;
   gsize i;
+  gsize j;
 
   for (i = 0; i < self->indexes->len; i++)
     {
@@ -99,6 +106,10 @@ static const gchar *get_tag (IdeCtagsHighlighter *self,const gchar *word)
       entries = ide_ctags_index_lookup_prefix (item, word, &n_entries);
       if ((entries == NULL) || (n_entries == 0))
         continue;
+
+      for (j = 0; j < n_entries; j++)
+        if (ide_str_equal0 (entries[j].path, file_path))
+          return get_tag_from_kind (entries[j].kind);
 
       return get_tag_from_kind (entries[0].kind);
     }
@@ -115,6 +126,7 @@ ide_ctags_highlighter_real_update (IdeHighlighter       *highlighter,
   GtkTextBuffer *text_buffer;
   GtkSourceBuffer *source_buffer;
   IdeBuffer *buffer;
+  IdeFile *file;
   GtkTextIter begin;
   GtkTextIter end;
 
@@ -127,7 +139,8 @@ ide_ctags_highlighter_real_update (IdeHighlighter       *highlighter,
   if (!(text_buffer = gtk_text_iter_get_buffer (range_begin)) ||
       !IDE_IS_BUFFER (text_buffer) ||
       !(source_buffer = GTK_SOURCE_BUFFER (text_buffer)) ||
-      !(buffer = IDE_BUFFER (text_buffer)))
+      !(buffer = IDE_BUFFER (text_buffer)) ||
+      !(file = ide_buffer_get_file (buffer)))
     return;
 
   begin = end = *location = *range_begin;
@@ -150,7 +163,7 @@ ide_ctags_highlighter_real_update (IdeHighlighter       *highlighter,
           gchar *word;
 
           word = gtk_text_iter_get_slice (&begin, &end);
-          tag = get_tag (IDE_CTAGS_HIGHLIGHTER (highlighter), word);
+          tag = get_tag (IDE_CTAGS_HIGHLIGHTER (highlighter), file, word);
           g_free (word);
 
           if (tag != NULL)
