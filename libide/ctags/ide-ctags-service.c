@@ -374,6 +374,19 @@ ide_ctags_service_stop (IdeService *service)
 }
 
 static void
+ide_ctags_service_constructed (GObject *object)
+{
+  IdeCtagsService *self = (IdeCtagsService *)object;
+  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+
+  G_OBJECT_CLASS (ide_ctags_service_parent_class)->constructed (object);
+
+  self->highlighter = g_object_new (IDE_TYPE_CTAGS_HIGHLIGHTER,
+                                    "context", context,
+                                    NULL);
+}
+
+static void
 ide_ctags_service_finalize (GObject *object)
 {
   IdeCtagsService *self = (IdeCtagsService *)object;
@@ -396,6 +409,7 @@ ide_ctags_service_class_init (IdeCtagsServiceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeServiceClass *service_class = IDE_SERVICE_CLASS (klass);
 
+  object_class->constructed = ide_ctags_service_constructed;
   object_class->finalize = ide_ctags_service_finalize;
 
   service_class->start = ide_ctags_service_start;
@@ -407,11 +421,6 @@ ide_ctags_service_init (IdeCtagsService *self)
 {
   self->provider = g_object_new (IDE_TYPE_CTAGS_COMPLETION_PROVIDER,
                                  NULL);
-
-  self->highlighter = g_object_new (IDE_TYPE_CTAGS_HIGHLIGHTER,
-                                    "context",ide_object_get_context (IDE_OBJECT (self)),
-                                    NULL);
-
 
   self->indexes = egg_task_cache_new ((GHashFunc)g_file_hash,
                                       (GEqualFunc)g_file_equal,
