@@ -365,6 +365,15 @@ gb_greeter_window__row_activated (GbGreeterWindow     *self,
   g_assert (GB_IS_GREETER_PROJECT_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
+  if (ide_str_equal0 (egg_state_machine_get_state (self->state_machine), "selection"))
+    {
+      gboolean selected = FALSE;
+
+      g_object_get (row, "selected", &selected, NULL);
+      g_object_set (row, "selected", !selected, NULL);
+      return;
+    }
+
   app = g_application_get_default ();
   project_info = gb_greeter_project_row_get_project_info (row);
   project_file = ide_project_info_get_file (project_info);

@@ -48,6 +48,7 @@ G_DEFINE_TYPE (GbGreeterProjectRow, gb_greeter_project_row, GTK_TYPE_LIST_BOX_RO
 enum {
   PROP_0,
   PROP_PROJECT_INFO,
+  PROP_SELECTED,
   PROP_SELECTION_MODE,
   LAST_PROP
 };
@@ -250,6 +251,10 @@ gb_greeter_project_row_get_property (GObject    *object,
       g_value_set_object (value, gb_greeter_project_row_get_project_info (self));
       break;
 
+    case PROP_SELECTED:
+      g_object_get_property (G_OBJECT (self->checkbox), "active", value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -265,6 +270,10 @@ gb_greeter_project_row_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_SELECTED:
+      g_object_set_property (G_OBJECT (self->checkbox), "active", value);
+      break;
+
     case PROP_SELECTION_MODE:
       gb_greeter_project_row_set_selection_mode (self, g_value_get_boolean (value));
       break;
@@ -295,6 +304,13 @@ gb_greeter_project_row_class_init (GbGreeterProjectRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, location_label);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, languages_box);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, title_label);
+
+  gParamSpecs [PROP_SELECTED] =
+    g_param_spec_boolean ("selected",
+                          _("Selected"),
+                          _("Selected"),
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SELECTION_MODE] =
     g_param_spec_boolean ("selection-mode",
