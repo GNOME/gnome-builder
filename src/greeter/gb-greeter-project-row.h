@@ -28,8 +28,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbGreeterProjectRow, gb_greeter_project_row, GB, GREETER_PROJECT_ROW, GtkListBoxRow)
 
-IdeProjectInfo *gb_greeter_project_row_get_project_info (GbGreeterProjectRow *self);
-const gchar    *gb_greeter_project_row_get_search_text  (GbGreeterProjectRow *self);
+IdeProjectInfo *gb_greeter_project_row_get_project_info   (GbGreeterProjectRow *self);
+const gchar    *gb_greeter_project_row_get_search_text    (GbGreeterProjectRow *self);
+void            gb_greeter_project_row_set_selection_mode (GbGreeterProjectRow *self,
+                                                           gboolean             selection_mode);
 
 G_END_DECLS
 

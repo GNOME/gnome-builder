@@ -40,6 +40,7 @@ struct _GbGreeterProjectRow
   GtkBox         *languages_box;
   GtkLabel       *location_label;
   GtkLabel       *title_label;
+  GtkLabel       *checkbox;
 };
 
 G_DEFINE_TYPE (GbGreeterProjectRow, gb_greeter_project_row, GTK_TYPE_LIST_BOX_ROW)
@@ -47,11 +48,21 @@ G_DEFINE_TYPE (GbGreeterProjectRow, gb_greeter_project_row, GTK_TYPE_LIST_BOX_RO
 enum {
   PROP_0,
   PROP_PROJECT_INFO,
+  PROP_SELECTION_MODE,
   LAST_PROP
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static GFile      *gHomeDir;
+
+void
+gb_greeter_project_row_set_selection_mode (GbGreeterProjectRow *self,
+                                           gboolean             selection_mode)
+{
+  g_return_if_fail (GB_IS_GREETER_PROJECT_ROW (self));
+
+  gtk_widget_set_visible (GTK_WIDGET (self->checkbox), selection_mode);
+}
 
 IdeProjectInfo *
 gb_greeter_project_row_get_project_info (GbGreeterProjectRow *self)
@@ -254,6 +265,10 @@ gb_greeter_project_row_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_SELECTION_MODE:
+      gb_greeter_project_row_set_selection_mode (self, g_value_get_boolean (value));
+      break;
+
     case PROP_PROJECT_INFO:
       gb_greeter_project_row_set_project_info (self, g_value_get_object (value));
       break;
@@ -274,11 +289,19 @@ gb_greeter_project_row_class_init (GbGreeterProjectRowClass *klass)
   object_class->set_property = gb_greeter_project_row_set_property;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/gb-greeter-project-row.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, checkbox);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, date_label);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, description_label);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, location_label);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, languages_box);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterProjectRow, title_label);
+
+  gParamSpecs [PROP_SELECTION_MODE] =
+    g_param_spec_boolean ("selection-mode",
+                          _("Selection Mode"),
+                          _("Selection Mode"),
+                          FALSE,
+                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PROJECT_INFO] =
     g_param_spec_object ("project-info",
@@ -286,8 +309,8 @@ gb_greeter_project_row_class_init (GbGreeterProjectRowClass *klass)
                          _("The project information to render."),
                          IDE_TYPE_PROJECT_INFO,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PROJECT_INFO,
-                                   gParamSpecs [PROP_PROJECT_INFO]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gHomeDir = g_file_new_for_path (g_get_home_dir ());
 }

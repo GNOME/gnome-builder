@@ -197,6 +197,25 @@ row_focus_in_event (GbGreeterWindow     *self,
   return GDK_EVENT_PROPAGATE;
 }
 
+static gboolean
+selection_to_true (GBinding     *binding,
+                   const GValue *from_value,
+                   GValue       *to_value,
+                   gpointer      user_data)
+{
+  if (G_VALUE_HOLDS_STRING (from_value) && G_VALUE_HOLDS_BOOLEAN (to_value))
+    {
+      const gchar *str;
+
+      str = g_value_get_string (from_value);
+      g_value_set_boolean (to_value, ide_str_equal0 (str, "selection"));
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
                                                   guint            position,
@@ -223,11 +242,6 @@ gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
 
       project_info = g_list_model_get_item (list_model, position + i);
 
-      if (ide_project_info_get_is_recent (project_info))
-        list_box = self->my_projects_list_box;
-      else
-        list_box = self->other_projects_list_box;
-
       row = g_object_new (GB_TYPE_GREETER_PROJECT_ROW,
                           "visible", TRUE,
                           "project-info", project_info,
@@ -237,6 +251,22 @@ gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
                                G_CALLBACK (row_focus_in_event),
                                self,
                                G_CONNECT_SWAPPED);
+
+
+      if (ide_project_info_get_is_recent (project_info))
+        {
+          list_box = self->my_projects_list_box;
+          g_object_bind_property_full (self->state_machine, "state",
+                                       row, "selection-mode",
+                                       G_BINDING_SYNC_CREATE,
+                                       selection_to_true, NULL,
+                                       NULL, NULL);
+        }
+      else
+        {
+          list_box = self->other_projects_list_box;
+        }
+
       gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (row));
     }
 

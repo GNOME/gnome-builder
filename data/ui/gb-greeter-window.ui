@@ -113,8 +113,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="expand">true</property>
+          <object class="GtkScrolledWindow" id="scrolled_window">
             <property name="visible">true</property>
             <child>
               <object class="GtkViewport" id="viewport">
@@ -212,14 +211,30 @@
               </object>
             </child>
           </object>
+          <packing>
+            <property name="expand">true</property>
+            <property name="fill">true</property>
+          </packing>
         </child>
         <child>
           <object class="GtkRevealer" id="action_bar_revealer">
             <property name="vexpand">false</property>
             <property name="visible">true</property>
+            <property name="transition-type">slide-up</property>
             <child>
               <object class="GtkActionBar" id="action_bar">
                 <property name="visible">true</property>
+                <child>
+                  <object class="GtkButton" id="remove_button">
+                    <property name="label" translatable="yes">_Remove</property>
+                    <property name="use-underline">true</property>
+                    <property name="visible">true</property>
+                    <property name="sensitive">false</property>
+                    <style>
+                      <class name="destructive-action"/>
+                    </style>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -246,6 +261,12 @@
         <object id="new_button">
           <property name="visible">true</property>
         </object>
+        <object id="action_bar_revealer">
+          <property name="reveal-child">false</property>
+        </object>
+        <object id="other_projects_container">
+          <property name="visible">true</property>
+        </object>
       </state>
       <state name="selection">
         <object id="header_bar">
@@ -253,6 +274,9 @@
           <style>
             <class name="selection-mode"/>
           </style>
+        </object>
+        <object id="action_bar_revealer">
+          <property name="reveal-child">true</property>
         </object>
         <object id="title_stack">
           <property name="visible-child">selection_title</property>
@@ -264,6 +288,9 @@
           <property name="visible">false</property>
         </object>
         <object id="new_button">
+          <property name="visible">false</property>
+        </object>
+        <object id="other_projects_container">
           <property name="visible">false</property>
         </object>
       </state>
