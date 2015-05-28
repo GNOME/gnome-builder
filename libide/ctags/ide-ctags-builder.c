@@ -197,6 +197,7 @@ ide_ctags_builder_build_worker (GTask        *task,
   g_ptr_array_add (argv, g_strdup ("--sort=yes"));
   g_ptr_array_add (argv, g_strdup ("--languages=all"));
   g_ptr_array_add (argv, g_strdup ("--file-scope=yes"));
+  g_ptr_array_add (argv, g_strdup ("--c-kinds=+defgpstx"));
   if (g_file_test (options_path, G_FILE_TEST_IS_REGULAR))
     g_ptr_array_add (argv, g_strdup_printf ("--options=%s", options_path));
   g_ptr_array_add (argv, g_strdup ("."));
