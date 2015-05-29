@@ -45,8 +45,11 @@ struct _GbGreeterWindow
   GtkListBox           *my_projects_list_box;
   GtkBox               *other_projects_container;
   GtkListBox           *other_projects_list_box;
+  GtkButton            *remove_button;
   GtkSearchEntry       *search_entry;
   EggStateMachine      *state_machine;
+
+  gint                  selected_count;
 };
 
 G_DEFINE_TYPE (GbGreeterWindow, gb_greeter_window, GTK_TYPE_APPLICATION_WINDOW)
@@ -217,6 +220,25 @@ selection_to_true (GBinding     *binding,
 }
 
 static void
+gb_greeter_window__row_notify_selected (GbGreeterWindow     *self,
+                                        GParamSpec          *pspec,
+                                        GbGreeterProjectRow *row)
+{
+  gboolean selected = FALSE;
+  GAction *action;
+
+  g_assert (GB_IS_GREETER_WINDOW (self));
+  g_assert (pspec != NULL);
+  g_assert (GB_IS_GREETER_PROJECT_ROW (row));
+
+  g_object_get (row, "selected", &selected, NULL);
+  self->selected_count += selected ? 1 : -1;
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (self), "delete-selected-rows");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (self->selected_count > 0));
+}
+
+static void
 gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
                                                   guint            position,
                                                   guint            removed,
@@ -251,7 +273,11 @@ gb_greeter_window__recent_projects_items_changed (GbGreeterWindow *self,
                                G_CALLBACK (row_focus_in_event),
                                self,
                                G_CONNECT_SWAPPED);
-
+      g_signal_connect_object (row,
+                               "notify::selected",
+                               G_CALLBACK (gb_greeter_window__row_notify_selected),
+                               self,
+                               G_CONNECT_SWAPPED);
 
       if (ide_project_info_get_is_recent (project_info))
         {
@@ -413,6 +439,53 @@ gb_greeter_window__keynav_failed (GbGreeterWindow  *self,
 }
 
 static void
+gb_greeter_window_remove_project (GbGreeterWindow *self,
+                                  IdeProjectInfo  *info)
+{
+  g_assert (GB_IS_GREETER_WINDOW (self));
+  g_assert (IDE_IS_PROJECT_INFO (info));
+
+  /* TODO: Actually remove project from bookmarks */
+}
+
+static void
+delete_selected_rows (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
+{
+  GbGreeterWindow *self = user_data;
+  GList *rows;
+  GList *iter;
+
+  g_assert (GB_IS_GREETER_WINDOW (self));
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+  rows = gtk_container_get_children (GTK_CONTAINER (self->my_projects_list_box));
+
+  for (iter = rows; iter; iter = iter->next)
+    {
+      GbGreeterProjectRow *row = iter->data;
+      gboolean selected = FALSE;
+
+      g_object_get (row, "selected", &selected, NULL);
+
+      if (selected)
+        {
+          IdeProjectInfo *info;
+
+          info = gb_greeter_project_row_get_project_info (row);
+          gb_greeter_window_remove_project (self, info);
+          gtk_container_remove (GTK_CONTAINER (self->my_projects_list_box), iter->data);
+        }
+    }
+
+  g_list_free (rows);
+
+  self->selected_count = 0;
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+}
+
+static void
 gb_greeter_window_constructed (GObject *object)
 {
   GbGreeterWindow *self = (GbGreeterWindow *)object;
@@ -498,6 +571,7 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, my_projects_list_box);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, other_projects_container);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, other_projects_list_box);
+  gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, remove_button);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, search_entry);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, state_machine);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, viewport);
@@ -510,6 +584,9 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
 static void
 gb_greeter_window_init (GbGreeterWindow *self)
 {
+  GActionEntry actions[] = {
+    { "delete-selected-rows", delete_selected_rows },
+  };
   GAction *action;
 
   self->signal_group = egg_signal_group_new (IDE_TYPE_RECENT_PROJECTS);
@@ -574,4 +651,9 @@ gb_greeter_window_init (GbGreeterWindow *self)
   action = egg_state_machine_create_action (self->state_machine, "state");
   g_action_map_add_action (G_ACTION_MAP (self), action);
   g_object_unref (action);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (self), "delete-selected-rows");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 }
