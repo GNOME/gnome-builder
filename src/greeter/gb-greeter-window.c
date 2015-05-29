@@ -439,16 +439,6 @@ gb_greeter_window__keynav_failed (GbGreeterWindow  *self,
 }
 
 static void
-gb_greeter_window_remove_project (GbGreeterWindow *self,
-                                  IdeProjectInfo  *info)
-{
-  g_assert (GB_IS_GREETER_WINDOW (self));
-  g_assert (IDE_IS_PROJECT_INFO (info));
-
-  /* TODO: Actually remove project from bookmarks */
-}
-
-static void
 delete_selected_rows (GSimpleAction *action,
                       GVariant      *parameter,
                       gpointer       user_data)
@@ -456,6 +446,7 @@ delete_selected_rows (GSimpleAction *action,
   GbGreeterWindow *self = user_data;
   GList *rows;
   GList *iter;
+  GList *projects = NULL;
 
   g_assert (GB_IS_GREETER_WINDOW (self));
   g_assert (G_IS_SIMPLE_ACTION (action));
@@ -474,12 +465,15 @@ delete_selected_rows (GSimpleAction *action,
           IdeProjectInfo *info;
 
           info = gb_greeter_project_row_get_project_info (row);
-          gb_greeter_window_remove_project (self, info);
+          projects = g_list_prepend (projects, g_object_ref (info));
           gtk_container_remove (GTK_CONTAINER (self->my_projects_list_box), iter->data);
         }
     }
 
   g_list_free (rows);
+
+  ide_recent_projects_remove (self->recent_projects, projects);
+  g_list_free_full (projects, g_object_unref);
 
   self->selected_count = 0;
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
