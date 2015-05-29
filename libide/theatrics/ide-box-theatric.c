@@ -112,8 +112,11 @@ ide_box_theatric_notify (GObject    *object,
 
       window = gtk_widget_get_window (self->toplevel);
 
-      gdk_window_invalidate_rect (window, &self->last_area, TRUE);
-      gdk_window_invalidate_rect (window, &area, TRUE);
+      if (window != NULL)
+        {
+          gdk_window_invalidate_rect (window, &self->last_area, TRUE);
+          gdk_window_invalidate_rect (window, &area, TRUE);
+        }
     }
 }
 
