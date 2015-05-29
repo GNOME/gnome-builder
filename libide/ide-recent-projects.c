@@ -31,6 +31,7 @@ struct _IdeRecentProjects
   GPtrArray    *miners;
   GSequence    *projects;
   GHashTable   *recent_uris;
+  gchar        *file_uri;
 
   gint          active;
 
@@ -124,32 +125,44 @@ ide_recent_projects_add_miner (IdeRecentProjects *self,
   g_ptr_array_add (self->miners, g_object_ref (miner));
 }
 
+static GBookmarkFile *
+ide_recent_projects_get_bookmarks (IdeRecentProjects  *self,
+                                   GError            **error)
+{
+  GBookmarkFile *bookmarks;
+
+  g_assert (IDE_IS_RECENT_PROJECTS (self));
+  g_assert (error != NULL);
+
+  bookmarks = g_bookmark_file_new ();
+
+  if (!g_bookmark_file_load_from_file (bookmarks, self->file_uri, error))
+    {
+      if (!g_error_matches (*error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+        {
+          g_object_unref (bookmarks);
+          return NULL;
+        }
+    }
+
+  return bookmarks;
+}
+
 static void
 ide_recent_projects_load_recent (IdeRecentProjects *self)
 {
   g_autoptr(GBookmarkFile) projects_file;
   g_autoptr(GError) error = NULL;
-  g_autofree gchar *file_uri = NULL;
   gchar **uris;
   gssize z;
 
-
   g_assert (IDE_IS_RECENT_PROJECTS (self));
 
-  file_uri = g_build_filename (g_get_user_data_dir (),
-                               ide_get_program_name (),
-                               IDE_RECENT_PROJECTS_BOOKMARK_FILENAME,
-                               NULL);
+  projects_file = ide_recent_projects_get_bookmarks (self, &error);
 
-  projects_file = g_bookmark_file_new ();
-  g_bookmark_file_load_from_file (projects_file, file_uri, &error);
-  /*
-   * If there was an error loading the file and the error is not "File does not exist"
-   * then stop saving operation
-   */
-  if (error != NULL && !g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+  if (projects_file == NULL)
     {
-      g_warning ("Unable to open recent projects %s file: %s", file_uri, error->message);
+      g_warning ("Unable to open recent projects file: %s", error->message);
       return;
     }
 
@@ -253,6 +266,7 @@ ide_recent_projects_finalize (GObject *object)
   g_clear_pointer (&self->projects, g_sequence_free);
   g_clear_pointer (&self->recent_uris, g_hash_table_unref);
   g_clear_object (&self->cancellable);
+  g_clear_pointer (&self->file_uri, g_free);
 
   G_OBJECT_CLASS (ide_recent_projects_parent_class)->finalize (object);
 }
@@ -283,6 +297,11 @@ ide_recent_projects_init (IdeRecentProjects *self)
   self->miners = g_ptr_array_new_with_free_func (g_object_unref);
   self->cancellable = g_cancellable_new ();
   self->recent_uris = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  self->file_uri = g_build_filename (g_get_user_data_dir (),
+                                     ide_get_program_name (),
+                                     IDE_RECENT_PROJECTS_BOOKMARK_FILENAME,
+                                     NULL);
+
 
   extension_point = g_io_extension_point_lookup (IDE_PROJECT_MINER_EXTENSION_POINT);
   extensions = g_io_extension_point_get_extensions (extension_point);
@@ -396,4 +415,72 @@ ide_recent_projects_discover_finish (IdeRecentProjects  *self,
   g_return_val_if_fail (G_IS_TASK (task), FALSE);
 
   return g_task_propagate_boolean (task, error);
+}
+
+/**
+ * ide_recent_projects_remove:
+ * @self: An #IdeRecentProjects
+ * @project_infos: (transfer none) (element-type IdeProjectInfo): A #GList of #IdeProjectInfo.
+ *
+ * Removes the provided projects from the recent projects file.
+ */
+void
+ide_recent_projects_remove (IdeRecentProjects *self,
+                            GList             *project_infos)
+{
+  g_autoptr(GBookmarkFile) projects_file = NULL;
+  g_autoptr(GError) error = NULL;
+  GList *liter;
+
+  g_return_if_fail (IDE_IS_RECENT_PROJECTS (self));
+
+  projects_file = ide_recent_projects_get_bookmarks (self, &error);
+
+  if (projects_file == NULL)
+    {
+      g_warning ("Failed to load bookmarks file: %s", error->message);
+      return;
+    }
+
+  for (liter = project_infos; liter; liter = liter->next)
+    {
+      IdeProjectInfo *project_info = liter->data;
+      g_autofree gchar *file_uri = NULL;
+      GSequenceIter *iter;
+      GFile *file;
+
+      g_assert (IDE_IS_PROJECT_INFO (liter->data));
+
+      iter = g_sequence_lookup (self->projects,
+                                project_info,
+                                (GCompareDataFunc)ide_project_info_compare,
+                                NULL);
+
+      if (iter == NULL)
+        {
+          g_warning ("Project \"%s\" was not found, cannot remove.",
+                     ide_project_info_get_name (project_info));
+          g_clear_error (&error);
+          continue;
+        }
+
+      file = ide_project_info_get_file (project_info);
+      file_uri = g_file_get_uri (file);
+
+      if (!g_bookmark_file_remove_item (projects_file, file_uri, &error))
+        {
+          g_warning ("Failed to remove recent project: %s", error->message);
+          g_clear_error (&error);
+          continue;
+        }
+
+
+      g_sequence_remove (iter);
+    }
+
+  if (!g_bookmark_file_to_file (projects_file, self->file_uri, &error))
+    {
+      g_warning ("Failed to save recent projects file: %s", error->message);
+      return;
+    }
 }

@@ -34,6 +34,8 @@ G_DECLARE_FINAL_TYPE (IdeRecentProjects, ide_recent_projects, IDE, RECENT_PROJEC
 IdeRecentProjects *ide_recent_projects_new              (void);
 GPtrArray         *ide_recent_projects_get_projects     (IdeRecentProjects    *self);
 gboolean           ide_recent_projects_get_busy         (IdeRecentProjects    *self);
+void               ide_recent_projects_remove           (IdeRecentProjects    *self,
+                                                         GList                *project_infos);
 void               ide_recent_projects_discover_async   (IdeRecentProjects    *self,
                                                          GCancellable         *cancellable,
                                                          GAsyncReadyCallback   callback,
