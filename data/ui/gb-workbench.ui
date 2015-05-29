@@ -43,6 +43,7 @@
             <property name="expand">true</property>
             <property name="transition_type">slide-up-down</property>
             <property name="visible">true</property>
+            <property name="homogeneous">false</property>
             <child>
               <object class="GbEditorWorkspace" id="editor_workspace">
                 <property name="visible">true</property>
