@@ -89,6 +89,30 @@ gb_workspace_set_title (GbWorkspace *self,
     }
 }
 
+static GtkSizeRequestMode
+gb_workspace_get_request_mode (GtkWidget *widget)
+{
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
+static void
+gb_workspace_get_preferred_height (GtkWidget *widget,
+                                   gint      *min_height,
+                                   gint      *nat_height)
+{
+  /*
+   * FIXME: Workaround for GtkStack changes
+   *
+   * Various changes in Gtk+ is causing the stack to allocate a very large size
+   * based on the child requisitions. So we force our natural size to the
+   * minimum size so we just fill things in.
+   *
+   * This can probably be removed as soon as upstream fixes land.
+   */
+  GTK_WIDGET_CLASS (gb_workspace_parent_class)->get_preferred_height (widget, min_height, nat_height);
+  *nat_height = *min_height;
+}
+
 static void
 gb_workspace_finalize (GObject *object)
 {
@@ -150,12 +174,15 @@ gb_workspace_set_property (GObject      *object,
 static void
 gb_workspace_class_init (GbWorkspaceClass *klass)
 {
-  GObjectClass *object_class;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = gb_workspace_finalize;
   object_class->get_property = gb_workspace_get_property;
   object_class->set_property = gb_workspace_set_property;
+
+  widget_class->get_preferred_height = gb_workspace_get_preferred_height;
+  widget_class->get_request_mode = gb_workspace_get_request_mode;
 
   gParamSpecs[PROP_TITLE] =
     g_param_spec_string ("title",

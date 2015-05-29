@@ -606,6 +606,30 @@ gb_editor_view_invalidate_symbol_filter (GbEditorView *self,
   gtk_list_box_invalidate_filter (self->symbols_listbox);
 }
 
+static GtkSizeRequestMode
+gb_editor_view_get_request_mode (GtkWidget *widget)
+{
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
+static void
+gb_editor_view_get_preferred_height (GtkWidget *widget,
+                                     gint      *min_height,
+                                     gint      *nat_height)
+{
+  /*
+   * FIXME: Workaround GtkStack changes.
+   *
+   * This can probably be removed once upstream changes land.
+   *
+   * This ignores our potential giant size requests since we don't actually
+   * care about keeping our size requests between animated transitions in
+   * the stack.
+   */
+  GTK_WIDGET_CLASS (gb_editor_view_parent_class)->get_preferred_height (widget, min_height, nat_height);
+  *nat_height = *min_height;
+}
+
 static void
 gb_editor_view_finalize (GObject *object)
 {
@@ -674,6 +698,8 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   object_class->set_property = gb_editor_view_set_property;
 
   widget_class->grab_focus = gb_editor_view_grab_focus;
+  widget_class->get_request_mode = gb_editor_view_get_request_mode;
+  widget_class->get_preferred_height = gb_editor_view_get_preferred_height;
 
   view_class->create_split = gb_editor_view_create_split;
   view_class->get_document = gb_editor_view_get_document;
