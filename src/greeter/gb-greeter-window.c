@@ -477,6 +477,10 @@ delete_selected_rows (GSimpleAction *action,
 
   self->selected_count = 0;
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+
+  egg_state_machine_set_state (self->state_machine, "browse");
+
+  gb_greeter_window_apply_filter_all (self);
 }
 
 static void
