@@ -149,6 +149,8 @@ libgnome_builder_la_SOURCES = \
 	util/gb-rgba.h \
 	util/gb-string.c \
 	util/gb-string.h \
+	util/gb-webkit.c \
+	util/gb-webkit.h \
 	util/gb-widget.c \
 	util/gb-widget.h \
 	views/gb-view-grid.c \

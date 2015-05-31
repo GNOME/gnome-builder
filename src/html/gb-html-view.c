@@ -26,6 +26,7 @@
 #include "gb-editor-document.h"
 #include "gb-html-document.h"
 #include "gb-html-view.h"
+#include "gb-webkit.h"
 #include "gb-widget.h"
 
 struct _GbHtmlView
@@ -341,6 +342,9 @@ gb_html_view_init (GbHtmlView *self)
   GtkWidget *controls;
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gb_webkit_web_view_apply_settings (self->web_view1);
+  gb_webkit_web_view_apply_settings (self->web_view2);
 
   controls = gb_view_get_controls (GB_VIEW (self));
 

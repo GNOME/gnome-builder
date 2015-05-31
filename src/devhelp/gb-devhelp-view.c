@@ -22,6 +22,7 @@
 #include <webkit2/webkit2.h>
 
 #include "gb-devhelp-view.h"
+#include "gb-webkit.h"
 #include "gb-widget.h"
 
 struct _GbDevhelpView
@@ -253,4 +254,7 @@ static void
 gb_devhelp_view_init (GbDevhelpView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gb_webkit_web_view_apply_settings (self->web_view1);
+  gb_webkit_web_view_apply_settings (self->web_view2);
 }
