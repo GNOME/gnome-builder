@@ -161,6 +161,7 @@ PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              gjs-1.0 >= gjs_required_version
                              gjs-internals-1.0 >= gjs_required_version
                              pygobject-3.0 >= pygobject_required_version])
+PKG_CHECK_MODULES(RG,       [gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(SEARCH,   [glib-2.0 >= glib_required_version])
 PKG_CHECK_MODULES(GEDIT,    [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
@@ -366,6 +367,7 @@ AC_CONFIG_FILES([
 	contrib/gedit/Makefile
 	contrib/libeditorconfig/Makefile
 	contrib/nautilus/Makefile
+	contrib/rg/Makefile
 	contrib/search/Makefile
 	contrib/xml/Makefile
 

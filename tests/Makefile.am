@@ -11,6 +11,19 @@ egg_libs = \
 	$(top_builddir)/contrib/egg/libegg.la \
 	$(NULL)
 
+rg_cflags = \
+	$(DEBUG_CFLAGS) \
+	$(RG_CFLAGS) \
+	-I$(top_srcdir)/contrib/egg \
+	-I$(top_srcdir)/contrib/rg \
+	$(NULL)
+
+rg_libs = \
+	$(top_builddir)/contrib/egg/libegg.la \
+	$(top_builddir)/contrib/rg/librg.la \
+	$(RG_LIBS) \
+	$(NULL)
+
 tests_cflags = \
 	$(egg_cflags) \
 	-I$(top_srcdir)/libide \
@@ -22,6 +35,7 @@ tests_libs = \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)
 
+misc_programs =
 
 TESTS_ENVIRONMENT= \
         GI_TYPELIB_PATH="$(top_srcdir)/libide"  \
@@ -104,10 +118,16 @@ test_vim_LDADD = \
 	$(NULL)
 
 
-misc_programs = test-ide-source-view
+misc_programs += test-ide-source-view
 test_ide_source_view_SOURCES = test-ide-source-view.c
 test_ide_source_view_CFLAGS = $(tests_cflags)
 test_ide_source_view_LDADD = $(tests_libs)
+
+
+misc_programs += test-cpu-graph
+test_cpu_graph_SOURCES = test-cpu-graph.c
+test_cpu_graph_CFLAGS = $(rg_cflags)
+test_cpu_graph_LDADD = $(rg_libs)
 
 
 TESTS += test-ide-ctags
