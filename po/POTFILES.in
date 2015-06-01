@@ -31,6 +31,10 @@
 contrib/egg/egg-state-machine-action.c
 contrib/gedit/gedit-menu-stack-switcher.c
 contrib/nautilus/nautilus-floating-bar.c
+contrib/rg/rg-column.c
+contrib/rg/rg-graph.c
+contrib/rg/rg-line-renderer.c
+contrib/rg/rg-table.c
 contrib/search/trie.c
 contrib/xml/xml-reader.c
 data/style-schemes/builder-dark.xml
