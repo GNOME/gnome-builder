@@ -146,7 +146,7 @@ egg_signal_group__connect_object_weak_notify (gpointer  data,
         }
     }
 
-  g_critical ("Failed to find handler for %p", where_object_was);
+  g_critical ("Failed to find handler for %p", (void *)where_object_was);
 }
 
 static void
@@ -652,8 +652,8 @@ egg_signal_group_connect_object (EggSignalGroup *self,
 {
   g_return_if_fail (G_IS_OBJECT (object));
 
-  return egg_signal_group_connect_full (self, detailed_signal, callback,
-                                        object, NULL, flags, TRUE);
+  egg_signal_group_connect_full (self, detailed_signal, callback, object, NULL,
+                                 flags, TRUE);
 }
 
 /**
@@ -678,8 +678,8 @@ egg_signal_group_connect_data (EggSignalGroup *self,
                                GClosureNotify  notify,
                                GConnectFlags   flags)
 {
-  return egg_signal_group_connect_full (self, detailed_signal, callback,
-                                        data, notify, flags, FALSE);
+  egg_signal_group_connect_full (self, detailed_signal, callback, data, notify,
+                                 flags, FALSE);
 }
 
 /**
@@ -700,8 +700,8 @@ egg_signal_group_connect (EggSignalGroup *self,
                           GCallback       callback,
                           gpointer        data)
 {
-  return egg_signal_group_connect_full (self, detailed_signal, callback,
-                                        data, NULL, 0, FALSE);
+  egg_signal_group_connect_full (self, detailed_signal, callback, data, NULL,
+                                 0, FALSE);
 }
 
 /**
@@ -724,8 +724,8 @@ egg_signal_group_connect_after (EggSignalGroup *self,
                                 GCallback       callback,
                                 gpointer        data)
 {
-  return egg_signal_group_connect_full (self, detailed_signal, callback,
-                                        data, NULL, G_CONNECT_AFTER, FALSE);
+  egg_signal_group_connect_full (self, detailed_signal, callback,
+                                 data, NULL, G_CONNECT_AFTER, FALSE);
 }
 
 /**
@@ -749,6 +749,6 @@ egg_signal_group_connect_swapped (EggSignalGroup *self,
                                   GCallback       callback,
                                   gpointer        data)
 {
-  return egg_signal_group_connect_full (self, detailed_signal, callback,
-                                        data, NULL, G_CONNECT_SWAPPED, FALSE);
+  egg_signal_group_connect_full (self, detailed_signal, callback, data, NULL,
+                                 G_CONNECT_SWAPPED, FALSE);
 }
