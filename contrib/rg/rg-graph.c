@@ -236,7 +236,7 @@ rg_graph_draw (GtkWidget *widget,
 
   gtk_style_context_save (style_context);
   gtk_style_context_add_class (style_context, "view");
-  gtk_render_background (style_context, cr, alloc.x, alloc.y, alloc.width, alloc.height);
+  gtk_render_background (style_context, cr, 0, 0, alloc.width, alloc.height);
   gtk_style_context_restore (style_context);
 
   cairo_save (cr);
