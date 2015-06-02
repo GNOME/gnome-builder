@@ -25,6 +25,7 @@ main (int argc,
   guint max_samples;
   GOptionContext *context;
   GtkWindow *window;
+  GtkBox *box;
   RgGraph *graph;
   GtkCssProvider *provider;
   GError *error = NULL;
@@ -56,12 +57,23 @@ main (int argc,
                          "title", "CPU Graph",
                          NULL);
 
-  graph = g_object_new (RG_TYPE_CPU_GRAPH,
-                        "visible", TRUE,
-                        "timespan", timespan,
-                        "max-samples", max_samples,
-                        NULL);
-  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (graph));
+  box = g_object_new (GTK_TYPE_BOX,
+                      "orientation", GTK_ORIENTATION_VERTICAL,
+                      "visible", TRUE,
+                      "spacing", 3,
+                      NULL);
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (box));
+
+  for (int i = 0; i < 3; i++)
+    {
+      graph = g_object_new (RG_TYPE_CPU_GRAPH,
+                            "visible", TRUE,
+                            "vexpand", TRUE,
+                            "timespan", timespan,
+                            "max-samples", max_samples,
+                            NULL);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (graph));
+    }
 
   g_signal_connect (window, "delete-event", gtk_main_quit, NULL);
   gtk_window_present (window);
