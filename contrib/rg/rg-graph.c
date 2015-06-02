@@ -117,6 +117,7 @@ rg_graph_tick_cb (GtkWidget     *widget,
   gint64 frame_time;
   gint64 end_time;
   gint64 timespan;
+  gint x_offset;
 
   g_assert (RG_IS_GRAPH (self));
 
@@ -137,9 +138,13 @@ rg_graph_tick_cb (GtkWidget     *widget,
   end_time = rg_table_get_end_time (priv->table);
   timespan = rg_table_get_timespan (priv->table);
 
-  priv->x_offset = -((frame_time - end_time) / (gdouble)timespan * alloc.width);
+  x_offset = -((frame_time - end_time) / (gdouble)timespan * alloc.width);
 
-  gtk_widget_queue_draw (widget);
+  if (x_offset != priv->x_offset)
+    {
+      priv->x_offset = x_offset;
+      gtk_widget_queue_draw (widget);
+    }
 
   return G_SOURCE_CONTINUE;
 }
