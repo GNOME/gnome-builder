@@ -120,7 +120,7 @@ rg_graph_tick_cb (GtkWidget     *widget,
 
   g_assert (RG_IS_GRAPH (self));
 
-  if ((priv->surface == NULL) || (priv->table == NULL))
+  if ((priv->surface == NULL) || (priv->table == NULL) || !gtk_widget_get_visible (widget))
     {
       if (priv->tick_handler != 0)
         {
