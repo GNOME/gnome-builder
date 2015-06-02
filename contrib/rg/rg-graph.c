@@ -180,7 +180,7 @@ rg_graph_ensure_surface (RgGraph *self)
       cr = cairo_create (priv->surface);
 
       cairo_save (cr);
-      gdk_cairo_rectangle (cr, &alloc);
+      cairo_rectangle (cr, 0, 0, alloc.width, alloc.height);
       cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
       cairo_fill (cr);
       cairo_restore (cr);
@@ -241,7 +241,7 @@ rg_graph_draw (GtkWidget *widget,
 
   cairo_save (cr);
   cairo_set_source_surface (cr, priv->surface, priv->x_offset, 0);
-  gdk_cairo_rectangle (cr, &alloc);
+  cairo_rectangle (cr, 0, 0, alloc.width, alloc.height);
   cairo_fill (cr);
   cairo_restore (cr);
 
