@@ -319,7 +319,7 @@ assert_blocking (SignalTarget   *target,
       assert_signals (target, group, FALSE);
     }
 
-  /* Assert the signal is not emitted after the first unblock */
+  /* Assert that the signal is not emitted after the first unblock */
   for (i = 0; i < count; ++i)
     {
       assert_signals (target, group, FALSE);
