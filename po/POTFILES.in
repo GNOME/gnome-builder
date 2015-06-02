@@ -32,6 +32,7 @@ contrib/egg/egg-state-machine-action.c
 contrib/gedit/gedit-menu-stack-switcher.c
 contrib/nautilus/nautilus-floating-bar.c
 contrib/rg/rg-column.c
+contrib/rg/rg-cpu-graph.c
 contrib/rg/rg-graph.c
 contrib/rg/rg-line-renderer.c
 contrib/rg/rg-table.c
