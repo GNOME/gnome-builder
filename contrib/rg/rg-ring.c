@@ -88,9 +88,9 @@ rg_ring_append_vals (RgRing        *ring,
   gint x;
   gint i;
 
-  g_return_if_fail (ring_impl != NULL);
-  g_return_if_fail (len <= ring->len);
-  g_return_if_fail (len > 0);
+  g_return_val_if_fail (ring_impl != NULL, 0);
+  g_return_val_if_fail (len <= ring->len, 0);
+  g_return_val_if_fail (len > 0, 0);
 
   for (i = 0; i < len; i++)
     {

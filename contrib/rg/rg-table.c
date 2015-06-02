@@ -127,8 +127,8 @@ rg_table_add_column (RgTable  *self,
 {
   RgTablePrivate *priv = rg_table_get_instance_private (self);
 
-  g_return_if_fail (RG_IS_TABLE (self));
-  g_return_if_fail (RG_IS_COLUMN (column));
+  g_return_val_if_fail (RG_IS_TABLE (self), 0);
+  g_return_val_if_fail (RG_IS_COLUMN (column), 0);
 
   _rg_column_set_n_rows (column, priv->max_samples);
 
@@ -216,9 +216,9 @@ rg_table_get_iter_last (RgTable     *self,
   RgTablePrivate *priv = rg_table_get_instance_private (self);
   RgTableIterImpl *impl = (RgTableIterImpl *)iter;
 
-  g_return_if_fail (RG_IS_TABLE (self));
-  g_return_if_fail (iter != NULL);
-  g_return_if_fail (impl != NULL);
+  g_return_val_if_fail (RG_IS_TABLE (self), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (impl != NULL, FALSE);
 
   impl->table = self;
   impl->index = priv->last_index;
@@ -249,9 +249,9 @@ rg_table_get_iter_first (RgTable     *self,
   RgTablePrivate *priv = rg_table_get_instance_private (self);
   RgTableIterImpl *impl = (RgTableIterImpl *)iter;
 
-  g_return_if_fail (RG_IS_TABLE (self));
-  g_return_if_fail (iter != NULL);
-  g_return_if_fail (impl != NULL);
+  g_return_val_if_fail (RG_IS_TABLE (self), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (impl != NULL, FALSE);
 
   impl->table = self;
   impl->index = (priv->last_index + 1) % priv->max_samples;
