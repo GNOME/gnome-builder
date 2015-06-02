@@ -50,12 +50,13 @@
 
 struct _EggSignalGroup
 {
-  GObject    parent_instance;
+  GObject     parent_instance;
 
-  GObject   *target;
-  GPtrArray *handlers;
-  GType      target_type;
-  gsize      block_count;
+  GObject    *target;
+  GPtrArray  *handlers;
+  GTypeClass *target_type_class;
+  GType       target_type;
+  gsize       block_count;
 };
 
 struct _EggSignalGroupClass
@@ -96,6 +97,28 @@ enum {
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
+
+static void
+egg_signal_group_set_target_type (EggSignalGroup *self,
+                                  GType           target_type)
+{
+  g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
+
+  if (target_type != 0)
+    {
+      self->target_type = target_type;
+      /*
+       * FIXME:
+       *
+       * We can get into situations where the registration of a type via
+       * g_type_ensure(TYPE_FOO) is not enough to be able to parse signal
+       * names on TYPE_FOO. Therefore, we hold onto a reference to the type
+       * to ensure that the signal information has been loaded.
+       * This is released when the instance is disposed.
+       */
+      self->target_type_class = g_type_class_ref (target_type);
+    }
+}
 
 static void
 egg_signal_group__target_weak_notify (gpointer  data,
@@ -425,6 +448,7 @@ egg_signal_group_dispose (GObject *object)
 
   egg_signal_group_unbind (self);
   g_clear_pointer (&self->handlers, g_ptr_array_unref);
+  g_clear_pointer (&self->target_type_class, g_type_class_unref);
 
   G_OBJECT_CLASS (egg_signal_group_parent_class)->dispose (object);
 }
@@ -467,7 +491,7 @@ egg_signal_group_set_property (GObject      *object,
       break;
 
     case PROP_TARGET_TYPE:
-      self->target_type = g_value_get_gtype (value);
+      egg_signal_group_set_target_type (self, g_value_get_gtype (value));
       break;
 
     default:
@@ -591,6 +615,7 @@ egg_signal_group_connect_full (EggSignalGroup *self,
   GQuark signal_detail;
 
   g_return_if_fail (EGG_IS_SIGNAL_GROUP (self));
+  g_return_if_fail (self->target_type != 0);
   g_return_if_fail (detailed_signal != NULL);
   g_return_if_fail (g_signal_parse_name (detailed_signal, self->target_type,
                                          &signal_id, &signal_detail, FALSE) != 0);
