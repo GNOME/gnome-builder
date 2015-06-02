@@ -61,19 +61,31 @@ rg_cpu_graph_new (void)
 static void
 rg_cpu_graph_constructed (GObject *object)
 {
+  static RgCpuTable *table;
   RgCpuGraph *self = (RgCpuGraph *)object;
-  RgTable *table;
   guint n_cpu;
   guint i;
 
   G_OBJECT_CLASS (rg_cpu_graph_parent_class)->constructed (object);
 
-  table = g_object_new (RG_TYPE_CPU_TABLE,
-                        "timespan", self->timespan,
-                        "max-samples", self->max_samples + 1,
-                        NULL);
-  rg_graph_set_table (RG_GRAPH (self), table);
-  g_clear_object (&table);
+  /*
+   * Create a table, but allow it to be destroyed after the last
+   * graph releases it. We will recreate it on demand.
+   */
+  if (table == NULL)
+    {
+      table = g_object_new (RG_TYPE_CPU_TABLE,
+                            "timespan", self->timespan,
+                            "max-samples", self->max_samples + 1,
+                            NULL);
+      g_object_add_weak_pointer (G_OBJECT (table), (gpointer *)&table);
+      rg_graph_set_table (RG_GRAPH (self), RG_TABLE (table));
+      g_object_unref (table);
+    }
+  else
+    {
+      rg_graph_set_table (RG_GRAPH (self), RG_TABLE (table));
+    }
 
   n_cpu = g_get_num_processors ();
 
