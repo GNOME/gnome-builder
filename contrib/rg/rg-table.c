@@ -424,7 +424,7 @@ rg_table_finalize (GObject *object)
   RgTable *self = (RgTable *)object;
   RgTablePrivate *priv = rg_table_get_instance_private (self);
 
-  g_clear_pointer (&priv->columns, g_object_unref);
+  g_clear_pointer (&priv->columns, g_ptr_array_unref);
 
   G_OBJECT_CLASS (rg_table_parent_class)->finalize (object);
 }
