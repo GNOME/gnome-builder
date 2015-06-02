@@ -421,6 +421,35 @@ test_signal_group_connect_object (void)
   g_object_unref (target);
 }
 
+static void
+test_signal_group_signal_parsing (void)
+{
+  g_test_trap_subprocess ("/Egg/SignalGroup/signal-parsing/subprocess", 0,
+                          G_TEST_SUBPROCESS_INHERIT_STDERR);
+  g_test_trap_assert_passed ();
+  g_test_trap_assert_stderr ("");
+}
+
+static void
+test_signal_group_signal_parsing_subprocess (void)
+{
+  EggSignalGroup *group;
+
+  /* Check that the class has not been created and with it the
+   * signals registered. This will cause g_signal_parse_name()
+   * to fail unless EggSignalGroup calls g_type_class_ref().
+   */
+  g_assert_null (g_type_class_peek (signal_target_get_type ()));
+
+  group = egg_signal_group_new (signal_target_get_type ());
+  egg_signal_group_connect (group,
+                            "the-signal",
+                            G_CALLBACK (connect_before_cb),
+                            NULL);
+
+  g_object_unref (group);
+}
+
 gint
 main (gint   argc,
       gchar *argv[])
@@ -432,5 +461,7 @@ main (gint   argc,
   g_test_add_func ("/Egg/SignalGroup/blocking", test_signal_group_blocking);
   g_test_add_func ("/Egg/SignalGroup/weak-ref-target", test_signal_group_weak_ref_target);
   g_test_add_func ("/Egg/SignalGroup/connect-object", test_signal_group_connect_object);
+  g_test_add_func ("/Egg/SignalGroup/signal-parsing", test_signal_group_signal_parsing);
+  g_test_add_func ("/Egg/SignalGroup/signal-parsing/subprocess", test_signal_group_signal_parsing_subprocess);
   return g_test_run ();
 }
