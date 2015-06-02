@@ -114,8 +114,8 @@ connect_object_cb (SignalTarget   *target,
 }
 
 static void
-connect_data_cb (SignalTarget *target,
-                 gboolean     *weak_notify_called)
+connect_never_emitted_cb (SignalTarget *target,
+                          gboolean     *weak_notify_called)
 {
   g_error ("This signal is never emitted!");
 }
@@ -181,7 +181,7 @@ connect_all_signals (EggSignalGroup *group)
   global_weak_notify_called = FALSE;
   egg_signal_group_connect_data (group,
                                  "never-emitted",
-                                 G_CALLBACK (connect_data_cb),
+                                 G_CALLBACK (connect_never_emitted_cb),
                                  &global_weak_notify_called,
                                  (GClosureNotify)connect_data_notify_cb,
                                  0);
