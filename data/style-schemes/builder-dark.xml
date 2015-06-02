@@ -67,6 +67,7 @@
   <style name="line-numbers"                foreground="aluminium4" background="aluminium6"/>
   <style name="draw-spaces"                 foreground="aluminium4"/>
   <style name="background-pattern"          background="#32383a"/>
+  <style name="map-overlay"                 background="#rgba(136,138,133,0.25)"/>
 
   <!-- Bracket Matching -->
   <style name="bracket-match"               foreground="chocolate2" bold="true"/>
