@@ -190,6 +190,7 @@ libgnome_builder_la_LIBADD = \
 	$(top_builddir)/contrib/egg/libegg.la \
 	$(top_builddir)/contrib/gedit/libgedit.la \
 	$(top_builddir)/contrib/nautilus/libnautilus.la \
+	$(top_builddir)/contrib/rg/librg.la \
 	-lm
 
 libgnome_builder_la_CFLAGS = \
@@ -227,6 +228,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/contrib/egg \
 	-I$(top_srcdir)/contrib/gedit \
 	-I$(top_srcdir)/contrib/nautilus \
+	-I$(top_srcdir)/contrib/rg \
 	$(NULL)
 
 gnome_builder_SOURCES = main.c

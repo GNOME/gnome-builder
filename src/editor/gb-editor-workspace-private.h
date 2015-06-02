@@ -19,6 +19,8 @@
 #ifndef GB_EDITOR_WORKSPACE_PRIVATE_H
 #define GB_EDITOR_WORKSPACE_PRIVATE_H
 
+#include <realtime-graphs.h>
+
 #include "gb-project-tree.h"
 #include "gb-view-grid.h"
 #include "gb-workspace.h"
@@ -39,6 +41,8 @@ struct _GbEditorWorkspace
   GtkSpinner    *project_spinner;
   GbProjectTree *project_tree;
   GbViewGrid    *view_grid;
+  GtkSeparator  *cpu_graph_sep;
+  RgCpuGraph    *cpu_graph;
 
   guint          project_tree_position_timeout;
 };

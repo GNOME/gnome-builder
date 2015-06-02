@@ -132,7 +132,35 @@ gb_editor_workspace_actions_focus_sidebar (GSimpleAction *action,
 }
 
 static void
-gb_editor_workspace_actions_focus_stack (GSimpleAction *aciton,
+gb_editor_workspace_actions_cpu_graph (GSimpleAction *action,
+                                       GVariant      *variant,
+                                       gpointer       user_data)
+{
+  GbEditorWorkspace *self = user_data;
+
+  g_assert (GB_IS_EDITOR_WORKSPACE (self));
+
+  /*
+   * FIXME:
+   *
+   * Hi, you've found a hidden feature.
+   *
+   * I'm not sure how we want to use this long term, but I really want to start
+   * watching system performance while hacking on Builder. So, for that purpose,
+   * we'll shove this performance graph right in here.
+   *
+   * Longer term, I hope to show things like this when running applications and
+   * collection runtime statistics for later analysis. But first things first.
+   */
+
+  gtk_widget_set_visible (GTK_WIDGET (self->cpu_graph),
+                          !gtk_widget_get_visible (GTK_WIDGET (self->cpu_graph)));
+  gtk_widget_set_visible (GTK_WIDGET (self->cpu_graph_sep),
+                          !gtk_widget_get_visible (GTK_WIDGET (self->cpu_graph_sep)));
+}
+
+static void
+gb_editor_workspace_actions_focus_stack (GSimpleAction *action,
                                          GVariant      *variant,
                                          gpointer       user_data)
 {
@@ -164,6 +192,7 @@ static const GActionEntry GbEditorWorkspaceActions[] = {
   { "focus-sidebar", gb_editor_workspace_actions_focus_sidebar },
   { "show-sidebar", NULL, NULL, "false", gb_editor_workspace_actions_show_sidebar },
   { "toggle-sidebar", gb_editor_workspace_actions_toggle_sidebar },
+  { "cpu-graph", gb_editor_workspace_actions_cpu_graph },
 };
 
 void

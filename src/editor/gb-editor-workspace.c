@@ -369,6 +369,8 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-editor-workspace.ui");
 
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, cpu_graph);
+  GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, cpu_graph_sep);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_paned);
   GB_WIDGET_CLASS_BIND (klass, GbEditorWorkspace, project_popover);
@@ -380,6 +382,7 @@ gb_editor_workspace_class_init (GbEditorWorkspaceClass *klass)
 
   g_type_ensure (GB_TYPE_PROJECT_TREE);
   g_type_ensure (GB_TYPE_VIEW_GRID);
+  g_type_ensure (RG_TYPE_CPU_GRAPH);
 }
 
 static void
