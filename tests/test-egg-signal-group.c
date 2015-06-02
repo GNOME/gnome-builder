@@ -11,6 +11,9 @@ typedef struct _SignalTarget
 G_DECLARE_FINAL_TYPE (SignalTarget, signal_target, TEST, SIGNAL_TARGET, GObject)
 G_DEFINE_TYPE (SignalTarget, signal_target, G_TYPE_OBJECT)
 
+static
+G_DEFINE_QUARK (detail, signal_detail)
+
 enum {
   THE_SIGNAL,
   NEVER_EMITTED,
@@ -25,7 +28,7 @@ signal_target_class_init (SignalTargetClass *klass)
   gSignals [THE_SIGNAL] =
     g_signal_new ("the-signal",
                   G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
                   0,
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
@@ -76,7 +79,7 @@ connect_after_cb (SignalTarget   *target,
   g_assert (signal_calls != NULL);
   g_assert (signal_calls == &global_signal_calls);
 
-  g_assert_cmpint (*signal_calls, ==, 3);
+  g_assert_cmpint (*signal_calls, ==, 4);
   *signal_calls += 1;
 }
 
@@ -111,6 +114,14 @@ connect_object_cb (SignalTarget   *target,
   g_assert (signal_calls == &global_signal_calls);
 
   *signal_calls += 1;
+}
+
+static void
+connect_bad_detail_cb (SignalTarget   *target,
+                       EggSignalGroup *group,
+                       GObject        *object)
+{
+  g_error ("This detailed signal is never emitted!");
 }
 
 static void
@@ -176,6 +187,15 @@ connect_all_signals (EggSignalGroup *group)
                      (GWeakNotify)g_object_unref,
                      object);
 
+  /* Check that a detailed signal is handled correctly */
+  egg_signal_group_connect (group,
+                            "the-signal::detail",
+                            G_CALLBACK (connect_before_cb),
+                            &global_signal_calls);
+  egg_signal_group_connect (group,
+                            "the-signal::bad-detail",
+                            G_CALLBACK (connect_bad_detail_cb),
+                            NULL);
 
   /* Check that the notify is called correctly */
   global_weak_notify_called = FALSE;
@@ -199,8 +219,9 @@ assert_signals (SignalTarget   *target,
   g_assert (group == NULL || EGG_IS_SIGNAL_GROUP (group));
 
   global_signal_calls = 0;
-  g_signal_emit (target, gSignals [THE_SIGNAL], 0, group);
-  g_assert_cmpint (global_signal_calls, ==, success ? 4 : 0);
+  g_signal_emit (target, gSignals [THE_SIGNAL],
+                 signal_detail_quark (), group);
+  g_assert_cmpint (global_signal_calls, ==, success ? 5 : 0);
 }
 
 static void
