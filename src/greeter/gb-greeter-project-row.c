@@ -21,7 +21,7 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
-#include "egg-binding-set.h"
+#include "egg-binding-group.h"
 
 #include "gb-glib.h"
 #include "gb-greeter-project-row.h"
@@ -29,18 +29,18 @@
 
 struct _GbGreeterProjectRow
 {
-  GtkListBoxRow   parent_instance;
+  GtkListBoxRow    parent_instance;
 
-  IdeProjectInfo *project_info;
-  EggBindingSet  *bindings;
-  gchar          *search_text;
+  IdeProjectInfo  *project_info;
+  EggBindingGroup *bindings;
+  gchar           *search_text;
 
-  GtkLabel       *date_label;
-  GtkLabel       *description_label;
-  GtkBox         *languages_box;
-  GtkLabel       *location_label;
-  GtkLabel       *title_label;
-  GtkLabel       *checkbox;
+  GtkLabel        *date_label;
+  GtkLabel        *description_label;
+  GtkBox          *languages_box;
+  GtkLabel        *location_label;
+  GtkLabel        *title_label;
+  GtkLabel        *checkbox;
 };
 
 G_DEFINE_TYPE (GbGreeterProjectRow, gb_greeter_project_row, GTK_TYPE_LIST_BOX_ROW)
@@ -151,7 +151,7 @@ gb_greeter_project_row_set_project_info (GbGreeterProjectRow *self,
 
   if (g_set_object (&self->project_info, project_info))
     {
-      egg_binding_set_set_source (self->bindings, project_info);
+      egg_binding_group_set_source (self->bindings, project_info);
 
       if (project_info != NULL)
         {
@@ -336,12 +336,12 @@ gb_greeter_project_row_init (GbGreeterProjectRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->bindings = egg_binding_set_new ();
+  self->bindings = egg_binding_group_new ();
 
-  egg_binding_set_bind (self->bindings, "name", self->title_label, "label", 0);
-  egg_binding_set_bind_full (self->bindings, "last-modified-at", self->date_label, "label", 0,
-                             humanize_date_time, NULL, NULL, NULL);
-  egg_binding_set_bind_full (self->bindings, "directory", self->location_label, "label", 0,
-                             truncate_location, NULL, NULL, NULL);
-  egg_binding_set_bind (self->bindings, "description", self->description_label, "label", 0);
+  egg_binding_group_bind (self->bindings, "name", self->title_label, "label", 0);
+  egg_binding_group_bind_full (self->bindings, "last-modified-at", self->date_label, "label", 0,
+                               humanize_date_time, NULL, NULL, NULL);
+  egg_binding_group_bind_full (self->bindings, "directory", self->location_label, "label", 0,
+                               truncate_location, NULL, NULL, NULL);
+  egg_binding_group_bind (self->bindings, "description", self->description_label, "label", 0);
 }

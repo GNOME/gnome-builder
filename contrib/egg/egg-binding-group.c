@@ -1,4 +1,4 @@
-/* egg-binding-set.c
+/* egg-binding-group.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  * Copyright (C) 2015 Garrett Regier <garrettregier@gmail.com>
@@ -17,19 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "egg-binding-set"
+#define G_LOG_DOMAIN "egg-binding-group"
 
 #include <glib/gi18n.h>
 
-#include "egg-binding-set.h"
+#include "egg-binding-group.h"
 
 /**
- * SECTION:egg-binding-set
- * @title: EggBindingSet
+ * SECTION:egg-binding-group
+ * @title: EggBindingGroup
  * @short_description: Manage a collection of #GBindings on
- *      a #GObject as a set.
+ *      a #GObject as a group.
  *
- * #EggBindingSet manages to simplify the process of binding
+ * #EggBindingGroup manages to simplify the process of binding
  * many properties from a #GObject as a group. As such there is no API
  * to unbind a property from the group.
  *
@@ -37,10 +37,10 @@
  * bindings. This automatically causes the unbinding of the properties
  * from the old instance and binding to the new instance.
  *
- * This should not be confused with #GtkBindingSet.
+ * This should not be confused with #GtkBindingGroup.
  */
 
-struct _EggBindingSet
+struct _EggBindingGroup
 {
   GObject    parent_instance;
 
@@ -50,20 +50,20 @@ struct _EggBindingSet
 
 typedef struct
 {
-  EggBindingSet  *set;
-  const gchar    *source_property;
-  const gchar    *target_property;
-  GObject        *target;
-  GBinding       *binding;
-  gpointer        user_data;
-  GDestroyNotify  user_data_destroy;
-  gpointer        transform_to;
-  gpointer        transform_from;
-  GBindingFlags   binding_flags;
-  guint           using_closures : 1;
+  EggBindingGroup  *group;
+  const gchar      *source_property;
+  const gchar      *target_property;
+  GObject          *target;
+  GBinding         *binding;
+  gpointer          user_data;
+  GDestroyNotify    user_data_destroy;
+  gpointer          transform_to;
+  gpointer          transform_from;
+  GBindingFlags     binding_flags;
+  guint             using_closures : 1;
 } LazyBinding;
 
-G_DEFINE_TYPE (EggBindingSet, egg_binding_set, G_TYPE_OBJECT)
+G_DEFINE_TYPE (EggBindingGroup, egg_binding_group, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -103,12 +103,12 @@ _g_flags_to_string (GFlagsClass *flags_class,
 #endif
 
 static void
-egg_binding_set_connect (EggBindingSet *self,
-                         LazyBinding   *lazy_binding)
+egg_binding_group_connect (EggBindingGroup *self,
+                           LazyBinding     *lazy_binding)
 {
   GBinding *binding;
 
-  g_assert (EGG_IS_BINDING_SET (self));
+  g_assert (EGG_IS_BINDING_GROUP (self));
   g_assert (self->source != NULL);
   g_assert (lazy_binding != NULL);
   g_assert (lazy_binding->binding == NULL);
@@ -165,7 +165,7 @@ egg_binding_set_connect (EggBindingSet *self,
 }
 
 static void
-egg_binding_set_disconnect (LazyBinding *lazy_binding)
+egg_binding_group_disconnect (LazyBinding *lazy_binding)
 {
   g_assert (lazy_binding != NULL);
 
@@ -177,13 +177,13 @@ egg_binding_set_disconnect (LazyBinding *lazy_binding)
 }
 
 static void
-egg_binding_set__source_weak_notify (gpointer  data,
-                                     GObject  *where_object_was)
+egg_binding_group__source_weak_notify (gpointer  data,
+                                       GObject  *where_object_was)
 {
-  EggBindingSet *self = data;
+  EggBindingGroup *self = data;
   gsize i;
 
-  g_assert (EGG_IS_BINDING_SET (self));
+  g_assert (EGG_IS_BINDING_GROUP (self));
 
   self->source = NULL;
 
@@ -197,13 +197,13 @@ egg_binding_set__source_weak_notify (gpointer  data,
 }
 
 static void
-egg_binding_set__target_weak_notify (gpointer  data,
-                                     GObject  *where_object_was)
+egg_binding_group__target_weak_notify (gpointer  data,
+                                       GObject  *where_object_was)
 {
-  EggBindingSet *self = data;
+  EggBindingGroup *self = data;
   gsize i;
 
-  g_assert (EGG_IS_BINDING_SET (self));
+  g_assert (EGG_IS_BINDING_GROUP (self));
 
   for (i = 0; i < self->lazy_bindings->len; i++)
     {
@@ -230,14 +230,14 @@ lazy_binding_free (gpointer data)
   if (lazy_binding->target != NULL)
     {
       g_object_weak_unref (lazy_binding->target,
-                           egg_binding_set__target_weak_notify,
-                           lazy_binding->set);
+                           egg_binding_group__target_weak_notify,
+                           lazy_binding->group);
       lazy_binding->target = NULL;
     }
 
-  egg_binding_set_disconnect (lazy_binding);
+  egg_binding_group_disconnect (lazy_binding);
 
-  lazy_binding->set = NULL;
+  lazy_binding->group = NULL;
   lazy_binding->source_property = NULL;
   lazy_binding->target_property = NULL;
 
@@ -254,16 +254,16 @@ lazy_binding_free (gpointer data)
 }
 
 static void
-egg_binding_set_dispose (GObject *object)
+egg_binding_group_dispose (GObject *object)
 {
-  EggBindingSet *self = (EggBindingSet *)object;
+  EggBindingGroup *self = (EggBindingGroup *)object;
 
-  g_assert (EGG_IS_BINDING_SET (self));
+  g_assert (EGG_IS_BINDING_GROUP (self));
 
   if (self->source != NULL)
     {
       g_object_weak_unref (self->source,
-                           egg_binding_set__source_weak_notify,
+                           egg_binding_group__source_weak_notify,
                            self);
       self->source = NULL;
     }
@@ -271,34 +271,34 @@ egg_binding_set_dispose (GObject *object)
   if (self->lazy_bindings->len != 0)
     g_ptr_array_remove_range (self->lazy_bindings, 0, self->lazy_bindings->len);
 
-  G_OBJECT_CLASS (egg_binding_set_parent_class)->dispose (object);
+  G_OBJECT_CLASS (egg_binding_group_parent_class)->dispose (object);
 }
 
 static void
-egg_binding_set_finalize (GObject *object)
+egg_binding_group_finalize (GObject *object)
 {
-  EggBindingSet *self = (EggBindingSet *)object;
+  EggBindingGroup *self = (EggBindingGroup *)object;
 
   g_assert (self->lazy_bindings != NULL);
   g_assert (self->lazy_bindings->len == 0);
 
   g_clear_pointer (&self->lazy_bindings, g_ptr_array_unref);
 
-  G_OBJECT_CLASS (egg_binding_set_parent_class)->finalize (object);
+  G_OBJECT_CLASS (egg_binding_group_parent_class)->finalize (object);
 }
 
 static void
-egg_binding_set_get_property (GObject    *object,
-                              guint       prop_id,
-                              GValue     *value,
-                              GParamSpec *pspec)
+egg_binding_group_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
 {
-  EggBindingSet *self = EGG_BINDING_SET (object);
+  EggBindingGroup *self = EGG_BINDING_GROUP (object);
 
   switch (prop_id)
     {
     case PROP_SOURCE:
-      g_value_set_object (value, egg_binding_set_get_source (self));
+      g_value_set_object (value, egg_binding_group_get_source (self));
       break;
 
     default:
@@ -307,17 +307,17 @@ egg_binding_set_get_property (GObject    *object,
 }
 
 static void
-egg_binding_set_set_property (GObject      *object,
-                              guint         prop_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
+egg_binding_group_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
 {
-  EggBindingSet *self = EGG_BINDING_SET (object);
+  EggBindingGroup *self = EGG_BINDING_GROUP (object);
 
   switch (prop_id)
     {
     case PROP_SOURCE:
-      egg_binding_set_set_source (self, g_value_get_object (value));
+      egg_binding_group_set_source (self, g_value_get_object (value));
       break;
 
     default:
@@ -326,17 +326,17 @@ egg_binding_set_set_property (GObject      *object,
 }
 
 static void
-egg_binding_set_class_init (EggBindingSetClass *klass)
+egg_binding_group_class_init (EggBindingGroupClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = egg_binding_set_dispose;
-  object_class->finalize = egg_binding_set_finalize;
-  object_class->get_property = egg_binding_set_get_property;
-  object_class->set_property = egg_binding_set_set_property;
+  object_class->dispose = egg_binding_group_dispose;
+  object_class->finalize = egg_binding_group_finalize;
+  object_class->get_property = egg_binding_group_get_property;
+  object_class->set_property = egg_binding_group_set_property;
 
   /**
-   * EggBindingSet:source
+   * EggBindingGroup:source
    *
    * The source object used for binding properties.
    */
@@ -351,43 +351,43 @@ egg_binding_set_class_init (EggBindingSetClass *klass)
 }
 
 static void
-egg_binding_set_init (EggBindingSet *self)
+egg_binding_group_init (EggBindingGroup *self)
 {
   self->lazy_bindings = g_ptr_array_new_with_free_func (lazy_binding_free);
 }
 
 /**
- * egg_binding_set_new:
+ * egg_binding_group_new:
  *
- * Creates a new #EggBindingSet.
+ * Creates a new #EggBindingGroup.
  *
- * Returns: a new #EggBindingSet
+ * Returns: a new #EggBindingGroup
  */
-EggBindingSet *
-egg_binding_set_new (void)
+EggBindingGroup *
+egg_binding_group_new (void)
 {
-  return g_object_new (EGG_TYPE_BINDING_SET, NULL);
+  return g_object_new (EGG_TYPE_BINDING_GROUP, NULL);
 }
 
 /**
- * egg_binding_set_get_source:
- * @self: the #EggBindingSet
+ * egg_binding_group_get_source:
+ * @self: the #EggBindingGroup
  *
  * Gets the source object used for binding properties.
  *
  * Returns: (nullable): the source object.
  */
 GObject *
-egg_binding_set_get_source (EggBindingSet *self)
+egg_binding_group_get_source (EggBindingGroup *self)
 {
-  g_return_val_if_fail (EGG_IS_BINDING_SET (self), NULL);
+  g_return_val_if_fail (EGG_IS_BINDING_GROUP (self), NULL);
 
   return self->source;
 }
 
 static gboolean
-egg_binding_set_check_source (EggBindingSet *self,
-                              gpointer       source)
+egg_binding_group_check_source (EggBindingGroup *self,
+                                gpointer         source)
 {
   gsize i;
 
@@ -406,8 +406,8 @@ egg_binding_set_check_source (EggBindingSet *self,
 }
 
 /**
- * egg_binding_set_set_source:
- * @self: the #EggBindingSet
+ * egg_binding_group_set_source:
+ * @self: the #EggBindingGroup
  * @source: (type GObject) (nullable): the source #GObject
  *
  * Sets @source as the source object used for creating property
@@ -417,10 +417,10 @@ egg_binding_set_check_source (EggBindingSet *self,
  * Note: All properties that have been bound must exist on @source.
  */
 void
-egg_binding_set_set_source (EggBindingSet *self,
-                            gpointer       source)
+egg_binding_group_set_source (EggBindingGroup *self,
+                              gpointer         source)
 {
-  g_return_if_fail (EGG_IS_BINDING_SET (self));
+  g_return_if_fail (EGG_IS_BINDING_GROUP (self));
   g_return_if_fail (!source || G_IS_OBJECT (source));
   g_return_if_fail (source != (gpointer)self);
 
@@ -432,7 +432,7 @@ egg_binding_set_set_source (EggBindingSet *self,
       gsize i;
 
       g_object_weak_unref (self->source,
-                           egg_binding_set__source_weak_notify,
+                           egg_binding_group__source_weak_notify,
                            self);
       self->source = NULL;
 
@@ -441,17 +441,17 @@ egg_binding_set_set_source (EggBindingSet *self,
           LazyBinding *lazy_binding;
 
           lazy_binding = g_ptr_array_index (self->lazy_bindings, i);
-          egg_binding_set_disconnect (lazy_binding);
+          egg_binding_group_disconnect (lazy_binding);
         }
     }
 
-  if (source != NULL && egg_binding_set_check_source (self, source))
+  if (source != NULL && egg_binding_group_check_source (self, source))
     {
       gsize i;
 
       self->source = source;
       g_object_weak_ref (self->source,
-                         egg_binding_set__source_weak_notify,
+                         egg_binding_group__source_weak_notify,
                          self);
 
       for (i = 0; i < self->lazy_bindings->len; i++)
@@ -459,7 +459,7 @@ egg_binding_set_set_source (EggBindingSet *self,
           LazyBinding *lazy_binding;
 
           lazy_binding = g_ptr_array_index (self->lazy_bindings, i);
-          egg_binding_set_connect (self, lazy_binding);
+          egg_binding_group_connect (self, lazy_binding);
         }
     }
 
@@ -467,20 +467,20 @@ egg_binding_set_set_source (EggBindingSet *self,
 }
 
 void
-egg_binding_set_bind_helper (EggBindingSet  *self,
-                             const gchar    *source_property,
-                             gpointer        target,
-                             const gchar    *target_property,
-                             GBindingFlags   flags,
-                             gpointer        transform_to,
-                             gpointer        transform_from,
-                             gpointer        user_data,
-                             GDestroyNotify  user_data_destroy,
-                             gboolean        using_closures)
+egg_binding_group_bind_helper (EggBindingGroup  *self,
+                               const gchar      *source_property,
+                               gpointer          target,
+                               const gchar      *target_property,
+                               GBindingFlags     flags,
+                               gpointer          transform_to,
+                               gpointer          transform_from,
+                               gpointer          user_data,
+                               GDestroyNotify    user_data_destroy,
+                               gboolean          using_closures)
 {
   LazyBinding *lazy_binding;
 
-  g_return_if_fail (EGG_IS_BINDING_SET (self));
+  g_return_if_fail (EGG_IS_BINDING_GROUP (self));
   g_return_if_fail (source_property != NULL);
   g_return_if_fail (self->source == NULL ||
                     g_object_class_find_property (G_OBJECT_GET_CLASS (self->source),
@@ -493,7 +493,7 @@ egg_binding_set_bind_helper (EggBindingSet  *self,
                     strcmp (source_property, target_property) != 0);
 
   lazy_binding = g_slice_new0 (LazyBinding);
-  lazy_binding->set = self;
+  lazy_binding->group = self;
   lazy_binding->source_property = g_intern_string (source_property);
   lazy_binding->target_property = g_intern_string (target_property);
   lazy_binding->target = target;
@@ -515,18 +515,18 @@ egg_binding_set_bind_helper (EggBindingSet  *self,
     }
 
   g_object_weak_ref (target,
-                     egg_binding_set__target_weak_notify,
+                     egg_binding_group__target_weak_notify,
                      self);
 
   g_ptr_array_add (self->lazy_bindings, lazy_binding);
 
   if (self->source != NULL)
-    egg_binding_set_connect (self, lazy_binding);
+    egg_binding_group_connect (self, lazy_binding);
 }
 
 /**
- * egg_binding_set_bind:
- * @self: the #EggBindingSet
+ * egg_binding_group_bind:
+ * @self: the #EggBindingGroup
  * @source_property: the property on the source to bind
  * @target: (type GObject): the target #GObject
  * @target_property: the property on @target to bind
@@ -540,22 +540,22 @@ egg_binding_set_bind_helper (EggBindingSet  *self,
  * See: g_object_bind_property().
  */
 void
-egg_binding_set_bind (EggBindingSet *self,
-                      const gchar   *source_property,
-                      gpointer       target,
-                      const gchar   *target_property,
-                      GBindingFlags  flags)
+egg_binding_group_bind (EggBindingGroup *self,
+                        const gchar     *source_property,
+                        gpointer         target,
+                        const gchar     *target_property,
+                        GBindingFlags    flags)
 {
-  egg_binding_set_bind_full (self, source_property,
-                             target, target_property,
-                             flags,
-                             NULL, NULL,
-                             NULL, NULL);
+  egg_binding_group_bind_full (self, source_property,
+                               target, target_property,
+                               flags,
+                               NULL, NULL,
+                               NULL, NULL);
 }
 
 /**
- * egg_binding_set_bind_full:
- * @self: the #EggBindingSet
+ * egg_binding_group_bind_full:
+ * @self: the #EggBindingGroup
  * @source_property: the property on the source to bind
  * @target: (type GObject): the target #GObject
  * @target_property: the property on @target to bind
@@ -577,27 +577,27 @@ egg_binding_set_bind (EggBindingSet *self,
  * See: g_object_bind_property_full().
  */
 void
-egg_binding_set_bind_full (EggBindingSet         *self,
-                           const gchar           *source_property,
-                           gpointer               target,
-                           const gchar           *target_property,
-                           GBindingFlags          flags,
-                           GBindingTransformFunc  transform_to,
-                           GBindingTransformFunc  transform_from,
-                           gpointer               user_data,
-                           GDestroyNotify         user_data_destroy)
+egg_binding_group_bind_full (EggBindingGroup       *self,
+                             const gchar           *source_property,
+                             gpointer               target,
+                             const gchar           *target_property,
+                             GBindingFlags          flags,
+                             GBindingTransformFunc  transform_to,
+                             GBindingTransformFunc  transform_from,
+                             gpointer               user_data,
+                             GDestroyNotify         user_data_destroy)
 {
-  egg_binding_set_bind_helper (self, source_property,
-                               target, target_property,
-                               flags,
-                               transform_to, transform_from,
-                               user_data, user_data_destroy,
-                               FALSE);
+  egg_binding_group_bind_helper (self, source_property,
+                                 target, target_property,
+                                 flags,
+                                 transform_to, transform_from,
+                                 user_data, user_data_destroy,
+                                 FALSE);
 }
 
 /**
- * egg_binding_set_bind_with_closures: (rename-to egg_binding_set_bind_full)
- * @self: the #EggBindingSet
+ * egg_binding_group_bind_with_closures: (rename-to egg_binding_group_bind_full)
+ * @self: the #EggBindingGroup
  * @source_property: the property on the source to bind
  * @target: (type GObject): the target #GObject
  * @target_property: the property on @target to bind
@@ -615,24 +615,24 @@ egg_binding_set_bind_full (EggBindingSet         *self,
  * #G_BINDING_SYNC_CREATE is automatically specified.
  *
  * This function is the language bindings friendly version of
- * egg_binding_set_bind_property_full(), using #GClosures
+ * egg_binding_group_bind_property_full(), using #GClosures
  * instead of function pointers.
  *
  * See: g_object_bind_property_with_closures().
  */
 void
-egg_binding_set_bind_with_closures (EggBindingSet *self,
-                                    const gchar   *source_property,
-                                    gpointer       target,
-                                    const gchar   *target_property,
-                                    GBindingFlags  flags,
-                                    GClosure      *transform_to,
-                                    GClosure      *transform_from)
+egg_binding_group_bind_with_closures (EggBindingGroup *self,
+                                      const gchar     *source_property,
+                                      gpointer         target,
+                                      const gchar     *target_property,
+                                      GBindingFlags    flags,
+                                      GClosure        *transform_to,
+                                      GClosure        *transform_from)
 {
-  egg_binding_set_bind_helper (self, source_property,
-                               target, target_property,
-                               flags,
-                               transform_to, transform_from,
-                               NULL, NULL,
-                               TRUE);
+  egg_binding_group_bind_helper (self, source_property,
+                                 target, target_property,
+                                 flags,
+                                 transform_to, transform_from,
+                                 NULL, NULL,
+                                 TRUE);
 }

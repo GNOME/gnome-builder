@@ -136,10 +136,10 @@ test_ide_ctags_CFLAGS = $(tests_cflags)
 test_ide_ctags_LDADD = $(tests_libs)
 
 
-TESTS += test-egg-binding-set
-test_egg_binding_set_SOURCES = test-egg-binding-set.c
-test_egg_binding_set_CFLAGS = $(egg_cflags)
-test_egg_binding_set_LDADD = $(egg_libs)
+TESTS += test-egg-binding-group
+test_egg_binding_group_SOURCES = test-egg-binding-group.c
+test_egg_binding_group_CFLAGS = $(egg_cflags)
+test_egg_binding_group_LDADD = $(egg_libs)
 
 
 TESTS += test-egg-signal-group

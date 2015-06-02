@@ -20,7 +20,7 @@
 
 #include <glib/gi18n.h>
 #include <stdlib.h>
-#include "egg-binding-set.h"
+#include "egg-binding-group.h"
 #include "egg-signal-group.h"
 
 #include "ide-animation.h"
@@ -104,7 +104,7 @@ typedef struct
   IdeAnimation                *hadj_animation;
   IdeAnimation                *vadj_animation;
 
-  EggBindingSet               *file_setting_bindings;
+  EggBindingGroup             *file_setting_bindings;
   EggSignalGroup              *buffer_signals;
 
   guint                        change_sequence;
@@ -859,7 +859,7 @@ ide_source_view_connect_settings (IdeSourceView   *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_FILE_SETTINGS (file_settings));
 
-  egg_binding_set_set_source (priv->file_setting_bindings, file_settings);
+  egg_binding_group_set_source (priv->file_setting_bindings, file_settings);
 }
 
 static void
@@ -871,7 +871,7 @@ ide_source_view_disconnect_settings (IdeSourceView   *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_FILE_SETTINGS (file_settings));
 
-  egg_binding_set_set_source (priv->file_setting_bindings, NULL);
+  egg_binding_group_set_source (priv->file_setting_bindings, NULL);
 }
 
 static void
@@ -5800,17 +5800,17 @@ ide_source_view_init (IdeSourceView *self)
   priv->selections = g_queue_new ();
   priv->show_line_diagnostics = TRUE;
 
-  priv->file_setting_bindings = egg_binding_set_new ();
-  egg_binding_set_bind (priv->file_setting_bindings, "indent-width",
-                        self, "indent-width", G_BINDING_SYNC_CREATE);
-  egg_binding_set_bind (priv->file_setting_bindings, "tab-width",
-                        self, "tab-width", G_BINDING_SYNC_CREATE);
-  egg_binding_set_bind (priv->file_setting_bindings, "right-margin-position",
-                        self, "right-margin-position", G_BINDING_SYNC_CREATE);
-  egg_binding_set_bind (priv->file_setting_bindings, "indent-style",
-                        self, "indent-style", G_BINDING_SYNC_CREATE);
-  egg_binding_set_bind (priv->file_setting_bindings, "show-right-margin",
-                        self, "show-right-margin", G_BINDING_SYNC_CREATE);
+  priv->file_setting_bindings = egg_binding_group_new ();
+  egg_binding_group_bind (priv->file_setting_bindings, "indent-width",
+                          self, "indent-width", G_BINDING_SYNC_CREATE);
+  egg_binding_group_bind (priv->file_setting_bindings, "tab-width",
+                          self, "tab-width", G_BINDING_SYNC_CREATE);
+  egg_binding_group_bind (priv->file_setting_bindings, "right-margin-position",
+                          self, "right-margin-position", G_BINDING_SYNC_CREATE);
+  egg_binding_group_bind (priv->file_setting_bindings, "indent-style",
+                          self, "indent-style", G_BINDING_SYNC_CREATE);
+  egg_binding_group_bind (priv->file_setting_bindings, "show-right-margin",
+                          self, "show-right-margin", G_BINDING_SYNC_CREATE);
 
   priv->buffer_signals = egg_signal_group_new (IDE_TYPE_BUFFER);
 

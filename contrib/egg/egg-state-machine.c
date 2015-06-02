@@ -21,7 +21,7 @@
 #include <glib/gi18n.h>
 #include <gobject/gvaluecollector.h>
 
-#include "egg-binding-set.h"
+#include "egg-binding-group.h"
 #include "egg-signal-group.h"
 
 #include "egg-state-machine.h"
@@ -138,7 +138,7 @@ egg_state_machine__binding_source_weak_notify (gpointer  data,
   g_hash_table_iter_init (&iter, priv->states);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer)&state))
     {
-      EggBindingSet *bindings;
+      EggBindingGroup *bindings;
 
       bindings = g_hash_table_lookup (state->bindings, where_object_was);
 
@@ -243,7 +243,7 @@ egg_state_apply (EggStateMachine *self,
 
   g_hash_table_iter_init (&iter, state->bindings);
   while (g_hash_table_iter_next (&iter, &key, &value))
-    egg_binding_set_set_source (value, key);
+    egg_binding_group_set_source (value, key);
 
   g_hash_table_iter_init (&iter, state->signals);
   while (g_hash_table_iter_next (&iter, &key, &value))
@@ -282,7 +282,7 @@ egg_state_unapply (EggStateMachine *self,
 
   g_hash_table_iter_init (&iter, state->bindings);
   while (g_hash_table_iter_next (&iter, &key, &value))
-    egg_binding_set_set_source (value, NULL);
+    egg_binding_group_set_source (value, NULL);
 
   g_hash_table_iter_init (&iter, state->signals);
   while (g_hash_table_iter_next (&iter, &key, &value))
@@ -627,7 +627,7 @@ egg_state_machine_add_binding (EggStateMachine *self,
                                const gchar     *target_property,
                                GBindingFlags    flags)
 {
-  EggBindingSet *bindings;
+  EggBindingGroup *bindings;
   EggState *state_obj;
 
   g_return_if_fail (EGG_IS_STATE_MACHINE (self));
@@ -643,7 +643,7 @@ egg_state_machine_add_binding (EggStateMachine *self,
 
   if (bindings == NULL)
     {
-      bindings = egg_binding_set_new ();
+      bindings = egg_binding_group_new ();
       g_hash_table_insert (state_obj->bindings, source_object, bindings);
 
       g_object_weak_ref (source_object,
@@ -651,7 +651,7 @@ egg_state_machine_add_binding (EggStateMachine *self,
                          self);
     }
 
-  egg_binding_set_bind (bindings, source_property, target_object, target_property, flags);
+  egg_binding_group_bind (bindings, source_property, target_object, target_property, flags);
 }
 
 void

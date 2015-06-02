@@ -1,7 +1,7 @@
 
-#define G_LOG_DOMAIN "egg-binding-set"
+#define G_LOG_DOMAIN "egg-binding-group"
 
-#include "egg-binding-set.h"
+#include "egg-binding-group.h"
 
 /* Copied from glib */
 typedef struct _BindingSource
@@ -282,66 +282,66 @@ fahrenheit_to_celsius (GBinding     *binding,
 }
 
 static void
-test_binding_set_invalid (void)
+test_binding_group_invalid (void)
 {
-  EggBindingSet *set = egg_binding_set_new ();
+  EggBindingGroup *group = egg_binding_group_new ();
   BindingSource *source = g_object_new (binding_source_get_type (), NULL);
   BindingTarget *target = g_object_new (binding_target_get_type (), NULL);
 
   /* Invalid Target Property */
   g_test_expect_message (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,
                          "*find_property*target_property*!=*NULL*");
-  egg_binding_set_bind (set, "value",
-                        target, "does-not-exist",
-                        G_BINDING_DEFAULT);
+  egg_binding_group_bind (group, "value",
+                          target, "does-not-exist",
+                          G_BINDING_DEFAULT);
   g_test_assert_expected_messages ();
 
-  egg_binding_set_set_source (set, NULL);
+  egg_binding_group_set_source (group, NULL);
 
   /* Invalid Source Property */
   g_test_expect_message (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,
                          "*find_property*source_property*!=*NULL*");
-  egg_binding_set_set_source (set, source);
-  egg_binding_set_bind (set, "does-not-exist",
-                        target, "value",
-                        G_BINDING_DEFAULT);
+  egg_binding_group_set_source (group, source);
+  egg_binding_group_bind (group, "does-not-exist",
+                          target, "value",
+                          G_BINDING_DEFAULT);
   g_test_assert_expected_messages ();
 
-  egg_binding_set_set_source (set, NULL);
+  egg_binding_group_set_source (group, NULL);
 
   /* Invalid Source */
   g_test_expect_message (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,
                          "*find_property*->source_property*!=*NULL*");
-  egg_binding_set_bind (set, "does-not-exist",
-                        target, "value",
-                        G_BINDING_DEFAULT);
-  egg_binding_set_set_source (set, source);
+  egg_binding_group_bind (group, "does-not-exist",
+                          target, "value",
+                          G_BINDING_DEFAULT);
+  egg_binding_group_set_source (group, source);
   g_test_assert_expected_messages ();
 
   g_object_unref (target);
   g_object_unref (source);
-  g_object_unref (set);
+  g_object_unref (group);
 }
 
 static void
-test_binding_set_default (void)
+test_binding_group_default (void)
 {
   gsize i, j;
-  EggBindingSet *set = egg_binding_set_new ();
+  EggBindingGroup *group = egg_binding_group_new ();
   BindingSource *source = g_object_new (binding_source_get_type (), NULL);
   BindingTarget *targets[5];
 
   for (i = 0; i < G_N_ELEMENTS (targets); ++i)
     {
       targets[i] = g_object_new (binding_target_get_type (), NULL);
-      egg_binding_set_bind (set, "foo",
-                            targets[i], "bar",
-                            G_BINDING_DEFAULT);
+      egg_binding_group_bind (group, "foo",
+                              targets[i], "bar",
+                              G_BINDING_DEFAULT);
     }
 
-  g_assert_null (egg_binding_set_get_source (set));
-  egg_binding_set_set_source (set, source);
-  g_assert (egg_binding_set_get_source (set) == (GObject *)source);
+  g_assert_null (egg_binding_group_get_source (group));
+  egg_binding_group_set_source (group, source);
+  g_assert (egg_binding_group_get_source (group) == (GObject *)source);
 
   for (i = 0; i < 2; ++i)
     {
@@ -353,13 +353,13 @@ test_binding_set_default (void)
       g_assert_cmpint (source->foo, !=, targets[0]->bar);
 
       /* Check that we transition the source correctly */
-      egg_binding_set_set_source (set, NULL);
-      g_assert_null (egg_binding_set_get_source (set));
-      egg_binding_set_set_source (set, source);
-      g_assert (egg_binding_set_get_source (set) == (GObject *)source);
+      egg_binding_group_set_source (group, NULL);
+      g_assert_null (egg_binding_group_get_source (group));
+      egg_binding_group_set_source (group, source);
+      g_assert (egg_binding_group_get_source (group) == (GObject *)source);
     }
 
-  g_object_unref (set);
+  g_object_unref (group);
 
   g_object_set (source, "foo", 0, NULL);
   for (i = 0; i < G_N_ELEMENTS (targets); ++i)
@@ -371,24 +371,24 @@ test_binding_set_default (void)
 }
 
 static void
-test_binding_set_bidirectional (void)
+test_binding_group_bidirectional (void)
 {
   gsize i, j;
-  EggBindingSet *set = egg_binding_set_new ();
+  EggBindingGroup *group = egg_binding_group_new ();
   BindingSource *source = g_object_new (binding_source_get_type (), NULL);
   BindingTarget *targets[5];
 
   for (i = 0; i < G_N_ELEMENTS (targets); ++i)
     {
       targets[i] = g_object_new (binding_target_get_type (), NULL);
-      egg_binding_set_bind (set, "value",
-                            targets[i], "value",
-                            G_BINDING_BIDIRECTIONAL);
+      egg_binding_group_bind (group, "value",
+                              targets[i], "value",
+                              G_BINDING_BIDIRECTIONAL);
     }
 
-  g_assert_null (egg_binding_set_get_source (set));
-  egg_binding_set_set_source (set, source);
-  g_assert (egg_binding_set_get_source (set) == (GObject *)source);
+  g_assert_null (egg_binding_group_get_source (group));
+  egg_binding_group_set_source (group, source);
+  g_assert (egg_binding_group_get_source (group) == (GObject *)source);
 
   for (i = 0; i < 2; ++i)
     {
@@ -400,13 +400,13 @@ test_binding_set_bidirectional (void)
       g_assert_cmpfloat (source->value, ==, targets[0]->value);
 
       /* Check that we transition the source correctly */
-      egg_binding_set_set_source (set, NULL);
-      g_assert_null (egg_binding_set_get_source (set));
-      egg_binding_set_set_source (set, source);
-      g_assert (egg_binding_set_get_source (set) == (GObject *)source);
+      egg_binding_group_set_source (group, NULL);
+      g_assert_null (egg_binding_group_get_source (group));
+      egg_binding_group_set_source (group, source);
+      g_assert (egg_binding_group_get_source (group) == (GObject *)source);
     }
 
-  g_object_unref (set);
+  g_object_unref (group);
 
   g_object_set (targets[0], "value", 0.0, NULL);
   g_assert_cmpfloat (source->value, !=, targets[0]->value);
@@ -425,21 +425,21 @@ transform_destroy_notify (gpointer data)
 }
 
 static void
-test_binding_set_transform (void)
+test_binding_group_transform (void)
 {
   gboolean transform_destroy_called = FALSE;
-  EggBindingSet *set = egg_binding_set_new ();
+  EggBindingGroup *group = egg_binding_group_new ();
   BindingSource *source = g_object_new (binding_source_get_type (), NULL);
   BindingTarget *target = g_object_new (binding_target_get_type (), NULL);
 
-  egg_binding_set_set_source (set, source);
-  egg_binding_set_bind_full (set, "value",
-                             target, "value",
-                             G_BINDING_BIDIRECTIONAL,
-                             celsius_to_fahrenheit,
-                             fahrenheit_to_celsius,
-                             &transform_destroy_called,
-                             transform_destroy_notify);
+  egg_binding_group_set_source (group, source);
+  egg_binding_group_bind_full (group, "value",
+                               target, "value",
+                               G_BINDING_BIDIRECTIONAL,
+                               celsius_to_fahrenheit,
+                               fahrenheit_to_celsius,
+                               &transform_destroy_called,
+                               transform_destroy_notify);
 
   g_object_set (source, "value", 24.0, NULL);
   g_assert_cmpfloat (target->value, ==, ((9 * 24.0 / 5) + 32.0));
@@ -450,10 +450,10 @@ test_binding_set_transform (void)
   /* The GDestroyNotify should only be called when the
    * set is freed, not when the various GBindings are freed
    */
-  egg_binding_set_set_source (set, NULL);
+  egg_binding_group_set_source (group, NULL);
   g_assert_false (transform_destroy_called);
 
-  g_object_unref (set);
+  g_object_unref (group);
   g_assert_true (transform_destroy_called);
 
   g_object_unref (source);
@@ -461,11 +461,11 @@ test_binding_set_transform (void)
 }
 
 static void
-test_binding_set_transform_closures (void)
+test_binding_group_transform_closures (void)
 {
   gboolean transform_destroy_called_1 = FALSE;
   gboolean transform_destroy_called_2 = FALSE;
-  EggBindingSet *set = egg_binding_set_new ();
+  EggBindingGroup *group = egg_binding_group_new ();
   BindingSource *source = g_object_new (binding_source_get_type (), NULL);
   BindingTarget *target = g_object_new (binding_target_get_type (), NULL);
   GClosure *c2f_closure, *f2c_closure;
@@ -477,12 +477,12 @@ test_binding_set_transform_closures (void)
                                 &transform_destroy_called_2,
                                 (GClosureNotify) transform_destroy_notify);
 
-  egg_binding_set_set_source (set, source);
-  egg_binding_set_bind_with_closures (set, "value",
-                                      target, "value",
-                                      G_BINDING_BIDIRECTIONAL,
-                                      c2f_closure,
-                                      f2c_closure);
+  egg_binding_group_set_source (group, source);
+  egg_binding_group_bind_with_closures (group, "value",
+                                        target, "value",
+                                        G_BINDING_BIDIRECTIONAL,
+                                        c2f_closure,
+                                        f2c_closure);
 
   g_object_set (source, "value", 24.0, NULL);
   g_assert_cmpfloat (target->value, ==, ((9 * 24.0 / 5) + 32.0));
@@ -493,11 +493,11 @@ test_binding_set_transform_closures (void)
   /* The GClsoureNotify should only be called when the
    * set is freed, not when the various GBindings are freed
    */
-  egg_binding_set_set_source (set, NULL);
+  egg_binding_group_set_source (group, NULL);
   g_assert_false (transform_destroy_called_1);
   g_assert_false (transform_destroy_called_2);
 
-  g_object_unref (set);
+  g_object_unref (group);
   g_assert_true (transform_destroy_called_1);
   g_assert_true (transform_destroy_called_2);
 
@@ -506,19 +506,19 @@ test_binding_set_transform_closures (void)
 }
 
 static void
-test_binding_set_same_object (void)
+test_binding_group_same_object (void)
 {
   gsize i;
-  EggBindingSet *set = egg_binding_set_new ();
+  EggBindingGroup *group = egg_binding_group_new ();
   BindingSource *source = g_object_new (binding_source_get_type (),
                                         "foo", 100,
                                         "bar", 50,
                                         NULL);
 
-  egg_binding_set_set_source (set, source);
-  egg_binding_set_bind (set, "foo",
-                        source, "bar",
-                        G_BINDING_BIDIRECTIONAL);
+  egg_binding_group_set_source (group, source);
+  egg_binding_group_bind (group, "foo",
+                          source, "bar",
+                          G_BINDING_BIDIRECTIONAL);
 
   for (i = 0; i < 2; ++i)
     {
@@ -533,50 +533,50 @@ test_binding_set_same_object (void)
       /* Check that it is possible both when initially
        * adding the binding and when changing the source
        */
-      egg_binding_set_set_source (set, NULL);
-      egg_binding_set_set_source (set, source);
+      egg_binding_group_set_source (group, NULL);
+      egg_binding_group_set_source (group, source);
     }
 
   g_object_unref (source);
-  g_object_unref (set);
+  g_object_unref (group);
 }
 
 static void
-test_binding_set_weak_ref_source (void)
+test_binding_group_weak_ref_source (void)
 {
-  EggBindingSet *set = egg_binding_set_new ();
+  EggBindingGroup *group = egg_binding_group_new ();
   BindingSource *source = g_object_new (binding_source_get_type (), NULL);
   BindingTarget *target = g_object_new (binding_target_get_type (), NULL);
 
-  egg_binding_set_set_source (set, source);
-  egg_binding_set_bind (set, "value",
-                        target, "value",
-                        G_BINDING_BIDIRECTIONAL);
+  egg_binding_group_set_source (group, source);
+  egg_binding_group_bind (group, "value",
+                          target, "value",
+                          G_BINDING_BIDIRECTIONAL);
 
   g_object_add_weak_pointer (G_OBJECT (source), (gpointer)&source);
-  g_assert (egg_binding_set_get_source (set) == (GObject *)source);
+  g_assert (egg_binding_group_get_source (group) == (GObject *)source);
   g_object_unref (source);
   g_assert_null (source);
-  g_assert_null (egg_binding_set_get_source (set));
+  g_assert_null (egg_binding_group_get_source (group));
 
   /* Hopefully this would explode if the binding was still alive */
   g_object_set (target, "value", 0.0, NULL);
 
   g_object_unref (target);
-  g_object_unref (set);
+  g_object_unref (group);
 }
 
 static void
-test_binding_set_weak_ref_target (void)
+test_binding_group_weak_ref_target (void)
 {
-  EggBindingSet *set = egg_binding_set_new ();
+  EggBindingGroup *group = egg_binding_group_new ();
   BindingSource *source = g_object_new (binding_source_get_type (), NULL);
   BindingTarget *target = g_object_new (binding_target_get_type (), NULL);
 
-  egg_binding_set_set_source (set, source);
-  egg_binding_set_bind (set, "value",
-                        target, "value",
-                        G_BINDING_BIDIRECTIONAL);
+  egg_binding_group_set_source (group, source);
+  egg_binding_group_bind (group, "value",
+                          target, "value",
+                          G_BINDING_BIDIRECTIONAL);
 
   g_object_set (source, "value", 47.0, NULL);
   g_assert_cmpfloat (target->value, ==, 47.0);
@@ -589,7 +589,7 @@ test_binding_set_weak_ref_target (void)
   g_object_set (source, "value", 0.0, NULL);
 
   g_object_unref (source);
-  g_object_unref (set);
+  g_object_unref (group);
 }
 
 gint
@@ -597,13 +597,13 @@ main (gint   argc,
       gchar *argv[])
 {
   g_test_init (&argc, &argv, NULL);
-  g_test_add_func ("/Egg/BindingSet/invalid", test_binding_set_invalid);
-  g_test_add_func ("/Egg/BindingSet/default", test_binding_set_default);
-  g_test_add_func ("/Egg/BindingSet/bidirectional", test_binding_set_bidirectional);
-  g_test_add_func ("/Egg/BindingSet/transform", test_binding_set_transform);
-  g_test_add_func ("/Egg/BindingSet/transform-closures", test_binding_set_transform_closures);
-  g_test_add_func ("/Egg/BindingSet/same-object", test_binding_set_same_object);
-  g_test_add_func ("/Egg/BindingSet/weak-ref-source", test_binding_set_weak_ref_source);
-  g_test_add_func ("/Egg/BindingSet/weak-ref-target", test_binding_set_weak_ref_target);
+  g_test_add_func ("/Egg/BindingGroup/invalid", test_binding_group_invalid);
+  g_test_add_func ("/Egg/BindingGroup/default", test_binding_group_default);
+  g_test_add_func ("/Egg/BindingGroup/bidirectional", test_binding_group_bidirectional);
+  g_test_add_func ("/Egg/BindingGroup/transform", test_binding_group_transform);
+  g_test_add_func ("/Egg/BindingGroup/transform-closures", test_binding_group_transform_closures);
+  g_test_add_func ("/Egg/BindingGroup/same-object", test_binding_group_same_object);
+  g_test_add_func ("/Egg/BindingGroup/weak-ref-source", test_binding_group_weak_ref_source);
+  g_test_add_func ("/Egg/BindingGroup/weak-ref-target", test_binding_group_weak_ref_target);
   return g_test_run ();
 }

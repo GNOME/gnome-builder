@@ -1,8 +1,8 @@
 noinst_LTLIBRARIES = libegg.la
 
 libegg_la_SOURCES = \
-	egg-binding-set.c \
-	egg-binding-set.h \
+	egg-binding-group.c \
+	egg-binding-group.h \
 	egg-counter.c \
 	egg-counter.h \
 	egg-heap.c \
