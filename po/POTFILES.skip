@@ -1,5 +1,5 @@
-contrib/egg/egg-binding-set.c
-contrib/egg/egg-binding-set.h
+contrib/egg/egg-binding-group.c
+contrib/egg/egg-binding-group.h
 contrib/egg/egg-search-bar.c
 contrib/egg/egg-search-bar.h
 contrib/egg/egg-settings-sandwich.c
