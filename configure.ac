@@ -154,7 +154,7 @@ PKG_CHECK_MODULES(BUILDER,  [gtk+-3.0 >= gtk_required_version
                              libgit2-glib-1.0 >= ggit_required_version
                              libpeas-1.0 >= peas_required_version])
 PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
-			     gtk+-3.0 >= gtk_required_version])
+                             gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              gio-unix-2.0 >= glib_required_version
                              gtksourceview-3.0 >= gtksourceview_required_version
@@ -171,7 +171,7 @@ PKG_CHECK_MODULES(GEDIT,    [glib-2.0 >= glib_required_version
 PKG_CHECK_MODULES(NAUTILUS, [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(XML,      [gio-2.0 >= glib_required_version
-			     libxml-2.0 >= libxml_required_version])
+                             libxml-2.0 >= libxml_required_version])
 
 
 dnl ***********************************************************************
