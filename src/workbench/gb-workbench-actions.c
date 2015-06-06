@@ -278,6 +278,7 @@ gb_workbench_actions_search_docs (GSimpleAction *action,
                                   GVariant      *parameter,
                                   gpointer       user_data)
 {
+#if 0
   GbWorkbench *self = user_data;
   const gchar *str;
 
@@ -285,6 +286,7 @@ gb_workbench_actions_search_docs (GSimpleAction *action,
 
   str = g_variant_get_string (parameter, NULL);
   gb_editor_workspace_search_help (self->editor_workspace, str);
+#endif
 }
 
 static void
@@ -297,6 +299,83 @@ gb_workbench_actions_show_gear_menu (GSimpleAction *action,
   g_assert (GB_IS_WORKBENCH (self));
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->gear_menu_button), TRUE);
+}
+
+static void
+gb_workbench_actions_show_left_pane (GSimpleAction *action,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+  GtkWidget *left_pane;
+  gboolean reveal = FALSE;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  left_pane = gb_workspace_get_left_pane (self->workspace);
+  gtk_container_child_get (GTK_CONTAINER (self->workspace), left_pane,
+                           "reveal", &reveal,
+                           NULL);
+  gtk_container_child_set (GTK_CONTAINER (self->workspace), left_pane,
+                           "reveal", !reveal,
+                           NULL);
+}
+
+static void
+gb_workbench_actions_show_right_pane (GSimpleAction *action,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+  GtkWidget *right_pane;
+  gboolean reveal = FALSE;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  right_pane = gb_workspace_get_right_pane (self->workspace);
+  gtk_container_child_get (GTK_CONTAINER (self->workspace), right_pane,
+                           "reveal", &reveal,
+                           NULL);
+  gtk_container_child_set (GTK_CONTAINER (self->workspace), right_pane,
+                           "reveal", !reveal,
+                           NULL);
+}
+
+static void
+gb_workbench_actions_show_bottom_pane (GSimpleAction *action,
+                                     GVariant      *parameter,
+                                     gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+  GtkWidget *bottom_pane;
+  gboolean reveal = FALSE;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  bottom_pane = gb_workspace_get_bottom_pane (self->workspace);
+  gtk_container_child_get (GTK_CONTAINER (self->workspace), bottom_pane,
+                           "reveal", &reveal,
+                           NULL);
+  gtk_container_child_set (GTK_CONTAINER (self->workspace), bottom_pane,
+                           "reveal", !reveal,
+                           NULL);
+}
+
+static void
+sync_reveal_state (GtkWidget     *child,
+                   GParamSpec    *pspec,
+                   GSimpleAction *action)
+{
+  gboolean reveal = FALSE;
+
+  g_assert (GB_IS_WORKSPACE_PANE (child));
+  g_assert (pspec != NULL);
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+  gtk_container_child_get (GTK_CONTAINER (gtk_widget_get_parent (child)), child,
+                           "reveal", &reveal,
+                           NULL);
+  g_simple_action_set_state (action, g_variant_new_boolean (reveal));
 }
 
 static const GActionEntry GbWorkbenchActions[] = {
@@ -313,6 +392,9 @@ static const GActionEntry GbWorkbenchActions[] = {
   { "search-docs",      gb_workbench_actions_search_docs, "s" },
   { "show-command-bar", gb_workbench_actions_show_command_bar },
   { "show-gear-menu",   gb_workbench_actions_show_gear_menu },
+  { "show-left-pane",   gb_workbench_actions_show_left_pane, NULL, "true" },
+  { "show-right-pane",  gb_workbench_actions_show_right_pane, NULL, "false" },
+  { "show-bottom-pane", gb_workbench_actions_show_bottom_pane, NULL, "false" },
 };
 
 void
@@ -334,6 +416,31 @@ gb_workbench_actions_init (GbWorkbench *self)
   action = g_action_map_lookup_action (G_ACTION_MAP (actions), "rebuild");
   g_object_bind_property (self, "building", action, "enabled",
                           (G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN));
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "rebuild");
+  g_object_bind_property (self, "building", action, "enabled",
+                          (G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN));
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "show-left-pane");
+  g_signal_connect_object (gb_workspace_get_left_pane (self->workspace),
+                           "child-notify::reveal",
+                           G_CALLBACK (sync_reveal_state),
+                           action,
+                           0);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "show-right-pane");
+  g_signal_connect_object (gb_workspace_get_right_pane (self->workspace),
+                           "child-notify::reveal",
+                           G_CALLBACK (sync_reveal_state),
+                           action,
+                           0);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "show-bottom-pane");
+  g_signal_connect_object (gb_workspace_get_bottom_pane (self->workspace),
+                           "child-notify::reveal",
+                           G_CALLBACK (sync_reveal_state),
+                           action,
+                           0);
 
   gtk_widget_insert_action_group (GTK_WIDGET (self), "workbench", G_ACTION_GROUP (actions));
 }

@@ -32,6 +32,40 @@
             <property name="pack_type">end</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="visible">true</property>
+            <property name="margin-end">12</property>
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="action-name">workbench.show-left-pane</property>
+                <property name="label">L</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="action-name">workbench.show-bottom-pane</property>
+                <property name="label">B</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="action-name">workbench.show-right-pane</property>
+                <property name="label">R</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+          </packing>
+        </child>
       </object>
     </child>
     <child>
@@ -39,15 +73,60 @@
         <property name="orientation">vertical</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkStack" id="stack">
+          <object class="GbWorkspace" id="workspace">
             <property name="expand">true</property>
-            <property name="transition_type">slide-up-down</property>
             <property name="visible">true</property>
-            <property name="homogeneous">false</property>
-            <child>
-              <object class="GbEditorWorkspace" id="editor_workspace">
-                <property name="visible">true</property>
+            <child internal-child="content_pane">
+              <object class="GbWorkspacePane">
+                <child internal-child="stack_switcher">
+                  <object class="GtkStackSwitcher">
+                    <property name="visible">false</property>
+                  </object>
+                </child>
+                <child internal-child="stack">
+                  <object class="GtkStack">
+                    <child>
+                      <object class="GbViewGrid" id="view_grid">
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
+            </child>
+            <child internal-child="left_pane">
+              <object class="GbWorkspacePane">
+                <child internal-child="stack">
+                  <object class="GtkStack">
+                    <child>
+                      <object class="GbProjectTree" id="project_tree">
+                        <property name="headers-visible">false</property>
+                        <property name="vexpand">true</property>
+                        <property name="visible">true</property>
+                      </object>
+                      <packing>
+                        <property name="icon-name">folder-symbolic</property>
+                        <property name="name">project_tree</property>
+                        <property name="title" translatable="yes">Project</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child internal-child="right_pane">
+              <object class="GbWorkspacePane">
+              </object>
+              <packing>
+                <property name="reveal">false</property>
+              </packing>
+            </child>
+            <child internal-child="bottom_pane">
+              <object class="GbWorkspacePane">
+              </object>
+              <packing>
+                <property name="reveal">false</property>
+              </packing>
             </child>
           </object>
         </child>

@@ -30,6 +30,9 @@
 #include "gb-workbench-private.h"
 #include "gb-workbench.h"
 #include "gb-workspace.h"
+#include "gb-workspace-pane.h"
+#include "gb-project-tree.h"
+#include "gb-view-grid.h"
 
 G_DEFINE_TYPE (GbWorkbench, gb_workbench, GTK_TYPE_APPLICATION_WINDOW)
 
@@ -100,7 +103,7 @@ gb_workbench__context_restore_cb (GObject      *object,
   if ((ide_buffer_manager_get_n_buffers (buffer_manager) == 0) && (self->has_opened == FALSE))
     gb_workbench_add_temporary_buffer (self);
 
-  gtk_widget_grab_focus (GTK_WIDGET (self->editor_workspace));
+  gtk_widget_grab_focus (GTK_WIDGET (self->workspace));
 }
 
 static void
@@ -284,7 +287,7 @@ gb_workbench_grab_focus (GtkWidget *widget)
 
   g_assert (GB_IS_WORKBENCH (self));
 
-  gtk_widget_grab_focus (GTK_WIDGET (self->editor_workspace));
+  gtk_widget_grab_focus (GTK_WIDGET (self->workspace));
 }
 
 static void
@@ -295,7 +298,7 @@ gb_workbench_realize (GtkWidget *widget)
   if (GTK_WIDGET_CLASS (gb_workbench_parent_class)->realize)
     GTK_WIDGET_CLASS (gb_workbench_parent_class)->realize (widget);
 
-  gtk_widget_grab_focus (GTK_WIDGET (self->editor_workspace));
+  gtk_widget_grab_focus (GTK_WIDGET (self->workspace));
 
   ide_context_restore_async (self->context,
                              NULL,
@@ -314,18 +317,13 @@ gb_workbench_constructed (GObject *object)
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->constructed (object);
 
-  gb_workbench_set_active_workspace (self, GB_WORKSPACE (self->editor_workspace));
-
   gb_workbench_actions_init (self);
 
   app = GTK_APPLICATION (g_application_get_default ());
   menu = gtk_application_get_menu_by_id (app, "gear-menu");
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (self->gear_menu_button), G_MENU_MODEL (menu));
 
-  if (self->active_workspace)
-    gtk_widget_grab_focus (GTK_WIDGET (self->active_workspace));
-  else
-    gtk_widget_grab_focus (GTK_WIDGET (self->editor_workspace));
+  gtk_widget_grab_focus (GTK_WIDGET (self->workspace));
 
   IDE_EXIT;
 }
@@ -356,7 +354,6 @@ gb_workbench_finalize (GObject *object)
 
   IDE_ENTRY;
 
-  ide_clear_weak_pointer (&self->active_workspace);
   g_clear_object (&self->context);
   g_clear_pointer (&self->current_folder_uri, g_free);
 
@@ -375,10 +372,6 @@ gb_workbench_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ACTIVE_WORKSPACE:
-      g_value_set_object (value, gb_workbench_get_active_workspace (self));
-      break;
-
     case PROP_BUILDING:
       g_value_set_boolean (value, self->building);
       break;
@@ -406,10 +399,6 @@ gb_workbench_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ACTIVE_WORKSPACE:
-      gb_workbench_set_active_workspace (self, g_value_get_object (value));
-      break;
-
     case PROP_CONTEXT:
       gb_workbench_set_context (self, g_value_get_object (value));
       break;
@@ -487,14 +476,16 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-workbench.ui");
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, command_bar);
-  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, editor_workspace);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, gear_menu_button);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_box);
-  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, stack);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, workspace);
 
   g_type_ensure (GB_TYPE_COMMAND_BAR);
-  g_type_ensure (GB_TYPE_EDITOR_WORKSPACE);
+  g_type_ensure (GB_TYPE_PROJECT_TREE);
   g_type_ensure (GB_TYPE_SEARCH_BOX);
+  g_type_ensure (GB_TYPE_VIEW_GRID);
+  g_type_ensure (GB_TYPE_WORKSPACE);
+  g_type_ensure (GB_TYPE_WORKSPACE_PANE);
   g_type_ensure (GEDIT_TYPE_MENU_STACK_SWITCHER);
 }
 
@@ -543,38 +534,6 @@ gb_workbench_get_context (GbWorkbench *self)
   g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
 
   return self->context;
-}
-
-/**
- * gb_workbench_get_active_workspace:
- * @self: A #GbWorkbench.
- *
- * Gets the currently selected workspace.
- *
- * Returns: (transfer none): An #GbWorkspace.
- */
-GbWorkspace *
-gb_workbench_get_active_workspace (GbWorkbench *self)
-{
-  g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
-
-  return self->active_workspace;
-}
-
-void
-gb_workbench_set_active_workspace (GbWorkbench *self,
-                                   GbWorkspace *workspace)
-{
-  GActionGroup *group;
-
-  g_return_if_fail (GB_IS_WORKBENCH (self));
-  g_return_if_fail (GB_IS_WORKSPACE (workspace));
-
-  if (ide_set_weak_pointer (&self->active_workspace, workspace))
-    gtk_stack_set_visible_child (self->stack, GTK_WIDGET (workspace));
-
-  group = gtk_widget_get_action_group (GTK_WIDGET (workspace), "workspace");
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "workspace", group);
 }
 
 static gboolean
@@ -732,26 +691,6 @@ gb_workbench_open_uri_list (GbWorkbench         *self,
     }
 }
 
-/**
- * gb_workbench_get_workspace_typed:
- * @self: A #GbWorkbench.
- *
- * Gets the workspace matching @workspace_type
- *
- * Returns: (transfer none): A #GbWorkspace.
- */
-gpointer
-gb_workbench_get_workspace_typed (GbWorkbench *self,
-                                  GType        workspace_type)
-{
-  g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
-
-  if (workspace_type == GB_TYPE_EDITOR_WORKSPACE)
-    return self->editor_workspace;
-
-  return NULL;
-}
-
 static void
 gb_workbench__builder_build_cb (GObject      *object,
                                 GAsyncResult *result,
@@ -890,5 +829,5 @@ gb_workbench_views_foreach (GbWorkbench *self,
   g_return_if_fail (GB_IS_WORKBENCH (self));
   g_return_if_fail (callback != NULL);
 
-  gb_workspace_views_foreach (GB_WORKSPACE (self->editor_workspace), callback, callback_data);
+  //gb_workspace_views_foreach (GB_WORKSPACE (self->editor_workspace), callback, callback_data);
 }

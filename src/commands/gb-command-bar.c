@@ -108,7 +108,6 @@ void
 gb_command_bar_hide (GbCommandBar *self)
 {
   GbWorkbench *workbench;
-  GbWorkspace *workspace;
   GtkWidget *focus;
 
   g_return_if_fail (GB_IS_COMMAND_BAR (self));
@@ -122,14 +121,10 @@ gb_command_bar_hide (GbCommandBar *self)
   if ((workbench == NULL) || gb_workbench_get_closing (workbench))
     return;
 
-  workspace = gb_workbench_get_active_workspace (workbench);
-  if (workspace == NULL)
-    return;
-
   if (self->last_focus)
     focus = find_alternate_focus (self->last_focus);
   else
-    focus = GTK_WIDGET (workspace);
+    focus = GTK_WIDGET (workbench);
 
   gtk_widget_grab_focus (focus);
 }

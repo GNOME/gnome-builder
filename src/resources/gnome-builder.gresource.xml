@@ -48,7 +48,6 @@
     <file alias="ui/gb-editor-settings-widget.ui">../../data/ui/gb-editor-settings-widget.ui</file>
     <file alias="ui/gb-editor-tweak-widget.ui">../../data/ui/gb-editor-tweak-widget.ui</file>
     <file alias="ui/gb-editor-view.ui">../../data/ui/gb-editor-view.ui</file>
-    <file alias="ui/gb-editor-workspace.ui">../../data/ui/gb-editor-workspace.ui</file>
     <file alias="ui/gb-greeter-pill-box.ui">../../data/ui/gb-greeter-pill-box.ui</file>
     <file alias="ui/gb-greeter-project-row.ui">../../data/ui/gb-greeter-project-row.ui</file>
     <file alias="ui/gb-greeter-window.ui">../../data/ui/gb-greeter-window.ui</file>
@@ -71,5 +70,7 @@
     <file alias="ui/gb-search-display-row.ui">../../data/ui/gb-search-display-row.ui</file>
     <file alias="ui/gb-view-stack.ui">../../data/ui/gb-view-stack.ui</file>
     <file alias="ui/gb-workbench.ui">../../data/ui/gb-workbench.ui</file>
+    <file alias="ui/gb-workspace.ui">../../data/ui/gb-workspace.ui</file>
+    <file alias="ui/gb-workspace-pane.ui">../../data/ui/gb-workspace-pane.ui</file>
   </gresource>
 </gresources>

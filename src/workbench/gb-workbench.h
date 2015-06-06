@@ -23,7 +23,6 @@
 #include <ide.h>
 
 #include "gb-command-manager.h"
-#include "gb-workbench-types.h"
 
 G_BEGIN_DECLS
 
@@ -40,9 +39,6 @@ gboolean          gb_workbench_build_finish         (GbWorkbench         *self,
                                                      GAsyncResult        *result,
                                                      GError             **error);
 IdeContext       *gb_workbench_get_context          (GbWorkbench         *self);
-GbWorkspace      *gb_workbench_get_active_workspace (GbWorkbench         *self);
-void              gb_workbench_set_active_workspace (GbWorkbench         *self,
-                                                     GbWorkspace         *workspace);
 void              gb_workbench_add_temporary_buffer (GbWorkbench         *self);
 void              gb_workbench_open                 (GbWorkbench         *self,
                                                      GFile               *file);
@@ -51,8 +47,6 @@ void              gb_workbench_open_with_editor     (GbWorkbench         *self,
 void              gb_workbench_open_uri_list        (GbWorkbench         *self,
                                                      const gchar * const *uri_list);
 GbCommandManager *gb_workbench_get_command_manager  (GbWorkbench         *self);
-gpointer          gb_workbench_get_workspace_typed  (GbWorkbench         *self,
-                                                     GType                workspace_type);
 gboolean          gb_workbench_get_closing          (GbWorkbench         *self);
 void              gb_workbench_views_foreach        (GbWorkbench         *self,
                                                      GtkCallback          callback,

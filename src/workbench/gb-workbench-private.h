@@ -41,15 +41,11 @@ struct _GbWorkbench
   GCancellable           *unload_cancellable;
   gchar                  *current_folder_uri;
 
-  /* Weak reference */
-  GbWorkspace            *active_workspace;
-
   /* Template references */
   GbCommandBar           *command_bar;
-  GbEditorWorkspace      *editor_workspace;
   GeditMenuStackSwitcher *gear_menu_button;
   GbSearchBox            *search_box;
-  GtkStack               *stack;
+  GbWorkspace            *workspace;
 
   gulong                  project_notify_name_handler;
 

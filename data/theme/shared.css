@@ -110,3 +110,12 @@ GbGreeterWindow GtkFrame {
   border-right: 1px solid alpha(@borders, 0.4);
   border-bottom: none;
 }
+
+
+GbWorkspacePane {
+  -GbWorkspacePane-handle-size: 1;
+  -gtk-icon-source: none;
+}
+GbWorkspacePane .pane-separator {
+  background-color: @borders;
+}

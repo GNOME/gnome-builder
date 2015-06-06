@@ -31,7 +31,6 @@
 #include "gb-application-private.h"
 #include "gb-css-provider.h"
 #include "gb-editor-document.h"
-#include "gb-editor-workspace.h"
 #include "gb-glib.h"
 #include "gb-greeter-window.h"
 #include "gb-projects-dialog.h"
@@ -136,7 +135,9 @@ gb_application_load_keybindings (GbApplication *self)
   g_autoptr(GSettings) settings = NULL;
   g_autofree gchar *name = NULL;
   static const struct { gchar *name; gchar *binding; } shared_bindings[] = {
-    { "workspace.toggle-sidebar", "F9" },
+    { "workbench.show-left-pane", "F9" },
+    { "workbench.show-right-pane", "<shift>F9" },
+    { "workbench.show-bottom-pane", "<ctrl>F9" },
     { "workspace.focus-sidebar", "<ctrl>0" },
     { "workspace.focus-stack(1)", "<ctrl>1" },
     { "workspace.focus-stack(2)", "<ctrl>2" },

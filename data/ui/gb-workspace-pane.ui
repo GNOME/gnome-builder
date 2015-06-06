@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.16 -->
+  <template class="GbWorkspacePane" parent="GtkBin">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">true</property>
+            <property name="vexpand">false</property>
+            <style>
+              <class name="header"/>
+              <class name="notebook"/>
+            </style>
+            <child type="center">
+              <object class="GtkStackSwitcher" id="stack_switcher">
+                <property name="margin-top">3</property>
+                <property name="margin-bottom">3</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <property name="stack">stack</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="expand">true</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

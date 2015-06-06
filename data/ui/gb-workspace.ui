@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="GbWorkspace" parent="GtkOverlay">
+    <child type="overlay">
+      <object class="GbWorkspacePane" id="left_pane">
+        <property name="position">left</property>
+        <property name="visible">true</property>
+      </object>
+    </child>
+    <child type="overlay">
+      <object class="GbWorkspacePane" id="right_pane">
+        <property name="position">right</property>
+        <property name="visible">true</property>
+      </object>
+    </child>
+    <child type="overlay">
+      <object class="GbWorkspacePane" id="bottom_pane">
+        <property name="position">bottom</property>
+        <property name="visible">true</property>
+      </object>
+    </child>
+    <child type="overlay">
+      <object class="GbWorkspacePane" id="content_pane">
+        <property name="position">top</property>
+        <property name="visible">true</property>
+      </object>
+    </child>
+  </template>
+</interface>

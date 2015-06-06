@@ -22,7 +22,6 @@
 #include <string.h>
 #include <glib.h>
 
-#include "gb-editor-workspace.h"
 #include "gb-editor-view.h"
 
 #include "gb-command-gaction-provider.h"
@@ -180,7 +179,7 @@ discover_groups (GbCommandGactionProvider *provider)
 
       /* We exclude these types, they're already in the widgets hierarchy */
       type = G_OBJECT_TYPE (widget);
-      if (type == GB_TYPE_EDITOR_WORKSPACE || type == GB_TYPE_EDITOR_VIEW)
+      if (type == GB_TYPE_EDITOR_VIEW)
         continue;
 
       prefixes = gtk_widget_list_action_prefixes (widget);

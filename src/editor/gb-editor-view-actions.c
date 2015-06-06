@@ -31,6 +31,7 @@
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
+#if 0
 static void
 gb_editor_view_actions_source_view_notify (IdeSourceView *source_view,
                                            GParamSpec    *pspec,
@@ -709,10 +710,12 @@ static GActionEntry GbEditorViewActions[] = {
   { "toggle-split", gb_editor_view_actions_toggle_split },
   { "use-spaces", NULL, "b", "false", gb_editor_view_actions_use_spaces },
 };
+#endif
 
 void
 gb_editor_view_actions_init (GbEditorView *self)
 {
+#if 0
   g_autoptr(GSimpleActionGroup) group = NULL;
 
   group = g_simple_action_group_new ();
@@ -739,11 +742,13 @@ gb_editor_view_actions_init (GbEditorView *self)
   WATCH_PROPERTY ("tab-width");
 
 #undef WATCH_PROPERTY
+#endif
 }
 
 void
 gb_editor_view_actions_update (GbEditorView *self)
 {
+#if 0
   GtkSourceLanguage *language;
   const gchar *lang_id = NULL;
   GActionGroup *group;
@@ -764,4 +769,5 @@ gb_editor_view_actions_update (GbEditorView *self)
              (g_strcmp0 (lang_id, "markdown") == 0));
   action = g_action_map_lookup_action (G_ACTION_MAP (group), "preview");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
+#endif
 }

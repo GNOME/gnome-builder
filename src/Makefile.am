@@ -65,11 +65,6 @@ libgnome_builder_la_SOURCES = \
 	editor/gb-editor-view-private.h \
 	editor/gb-editor-view.c \
 	editor/gb-editor-view.h \
-	editor/gb-editor-workspace-actions.c \
-	editor/gb-editor-workspace-actions.h \
-	editor/gb-editor-workspace-private.h \
-	editor/gb-editor-workspace.c \
-	editor/gb-editor-workspace.h \
 	gd/gd-tagged-entry.c \
 	gd/gd-tagged-entry.h \
 	greeter/gb-greeter-pill-box.c \
@@ -167,11 +162,13 @@ libgnome_builder_la_SOURCES = \
 	workbench/gb-workbench-actions.c \
 	workbench/gb-workbench-actions.h \
 	workbench/gb-workbench-private.h \
-	workbench/gb-workbench-types.h \
 	workbench/gb-workbench.c \
 	workbench/gb-workbench.h \
-	workbench/gb-workspace.c \
-	workbench/gb-workspace.h \
+	workbench/gb-workbench-types.h \
+	workspace/gb-workspace.c \
+	workspace/gb-workspace.h \
+	workspace/gb-workspace-pane.c \
+	workspace/gb-workspace-pane.h \
 	css/gb-css-provider.c \
 	css/gb-css-provider.h \
 	util/gb-settings.c \
@@ -223,6 +220,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(srcdir)/views \
 	-I$(srcdir)/vim \
 	-I$(srcdir)/workbench \
+	-I$(srcdir)/workspace \
 	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/egg \
