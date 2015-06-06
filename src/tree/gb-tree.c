@@ -1195,6 +1195,7 @@ gb_tree_add_child (GtkBuildable *buildable,
         }
 
       gb_tree_add_builder (self, GB_TREE_BUILDER (child));
+      return;
     }
 
   gb_tree_parent_buildable_iface->add_child (buildable, builder, child, type);
