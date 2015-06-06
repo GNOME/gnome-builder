@@ -27,16 +27,16 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbWorkspacePane, gb_workspace_pane, GB, WORKSPACE_PANE, GtkBin)
 
-gboolean         gb_workspace_pane_get_floating            (GbWorkspacePane *self);
-guint            gb_workspace_pane_get_transition_duration (GbWorkspacePane *self);
-GtkWidget       *gb_workspace_pane_new                     (void);
-void             gb_workspace_pane_set_floating            (GbWorkspacePane *self,
-                                                            gboolean         floating);
-void             gb_workspace_pane_set_transition_duration (GbWorkspacePane *self,
-                                                            guint            transition_duration);
-GtkPositionType  gb_workspace_pane_get_position            (GbWorkspacePane *self);
-void             gb_workspace_pane_set_position            (GbWorkspacePane *self,
-                                                            GtkPositionType  position);
+GtkWidget       *gb_workspace_pane_new          (void);
+GtkPositionType  gb_workspace_pane_get_position (GbWorkspacePane *self);
+void             gb_workspace_pane_set_position (GbWorkspacePane *self,
+                                                 GtkPositionType  position);
+void             gb_workspace_pane_add_page     (GbWorkspacePane *self,
+                                                 GtkWidget       *page,
+                                                 const gchar     *title,
+                                                 const gchar     *icon_name);
+void             gb_workspace_pane_remove_page  (GbWorkspacePane *self,
+                                                 GtkWidget       *page);
 
 G_END_DECLS
 

@@ -273,3 +273,25 @@ gb_workspace_pane_set_position (GbWorkspacePane *self,
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_POSITION]);
     }
 }
+
+void
+gb_workspace_pane_add_page (GbWorkspacePane *self,
+                            GtkWidget       *page,
+                            const gchar     *title,
+                            const gchar     *icon_name)
+{
+  gtk_container_add_with_properties (GTK_CONTAINER (self->stack), page,
+                                     "icon-name", icon_name,
+                                     "title", title,
+                                     NULL);
+}
+
+void
+gb_workspace_pane_remove_page (GbWorkspacePane *self,
+                               GtkWidget       *page)
+{
+  g_return_if_fail (GB_IS_WORKSPACE_PANE (self));
+  g_return_if_fail (GTK_IS_WIDGET (page));
+
+  gtk_container_remove (GTK_CONTAINER (self->stack), page);
+}
