@@ -25,13 +25,11 @@
 #include "gb-editor-frame-private.h"
 #include "gb-editor-view-actions.h"
 #include "gb-editor-view-private.h"
-#include "gb-editor-workspace.h"
 #include "gb-html-document.h"
 #include "gb-view-grid.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
-#if 0
 static void
 gb_editor_view_actions_source_view_notify (IdeSourceView *source_view,
                                            GParamSpec    *pspec,
@@ -675,6 +673,7 @@ gb_editor_view_actions_reveal (GSimpleAction *action,
                                GVariant      *param,
                                gpointer       user_data)
 {
+#if 0
   GbEditorView *self = user_data;
   GbWorkbench *workbench;
   GbEditorWorkspace *workspace;
@@ -689,6 +688,7 @@ gb_editor_view_actions_reveal (GSimpleAction *action,
   workbench = gb_widget_get_workbench (GTK_WIDGET (self));
   workspace = gb_workbench_get_workspace_typed (workbench, GB_TYPE_EDITOR_WORKSPACE);
   gb_editor_workspace_reveal_file (workspace, gfile);
+#endif
 }
 
 static GActionEntry GbEditorViewActions[] = {
@@ -710,12 +710,10 @@ static GActionEntry GbEditorViewActions[] = {
   { "toggle-split", gb_editor_view_actions_toggle_split },
   { "use-spaces", NULL, "b", "false", gb_editor_view_actions_use_spaces },
 };
-#endif
 
 void
 gb_editor_view_actions_init (GbEditorView *self)
 {
-#if 0
   g_autoptr(GSimpleActionGroup) group = NULL;
 
   group = g_simple_action_group_new ();
@@ -742,7 +740,6 @@ gb_editor_view_actions_init (GbEditorView *self)
   WATCH_PROPERTY ("tab-width");
 
 #undef WATCH_PROPERTY
-#endif
 }
 
 void
