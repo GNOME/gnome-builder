@@ -115,6 +115,8 @@ gb_workbench_connect_context (GbWorkbench *self,
   g_assert (GB_IS_WORKBENCH (self));
   g_assert (IDE_IS_CONTEXT (context));
 
+  gb_project_tree_set_context (self->project_tree, context);
+
   project = ide_context_get_project (context);
 
   self->project_notify_name_handler =
