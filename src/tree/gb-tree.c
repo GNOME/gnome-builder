@@ -45,7 +45,13 @@ typedef struct
   GbTreeNode *result;
 } NodeLookup;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GbTree, gb_tree, GTK_TYPE_TREE_VIEW)
+static void gb_tree_buildable_init (GtkBuildableIface *iface);
+extern void _gb_tree_node_set_tree (GbTreeNode        *node,
+                                    GbTree            *tree);
+
+G_DEFINE_TYPE_WITH_CODE (GbTree, gb_tree, GTK_TYPE_TREE_VIEW,
+                         G_ADD_PRIVATE (GbTree)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gb_tree_buildable_init))
 
 enum {
   PROP_0,
@@ -61,9 +67,7 @@ enum {
   LAST_SIGNAL
 };
 
-extern void _gb_tree_node_set_tree (GbTreeNode *node,
-                                    GbTree     *tree);
-
+static GtkBuildableIface *gb_tree_parent_buildable_iface;
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
 
@@ -1169,13 +1173,33 @@ gb_tree_default_search_equal_func (GtkTreeModel *model,
   return ret;
 }
 
-/**
- * gb_tree_finalize:
- * @object: (in): A #GbTree.
- *
- * Finalizer for a #GbTree instance.  Frees any resources held by
- * the instance.
- */
+static void
+gb_tree_add_child (GtkBuildable *buildable,
+                   GtkBuilder   *builder,
+                   GObject      *child,
+                   const gchar  *type)
+{
+  GbTree *self = (GbTree *)buildable;
+
+  g_assert (GB_IS_TREE (self));
+  g_assert (GTK_IS_BUILDER (builder));
+  g_assert (G_IS_OBJECT (child));
+
+  if (g_strcmp0 (type, "builder") == 0)
+    {
+      if (!GB_IS_TREE_BUILDER (child))
+        {
+          g_warning ("Attempt to add invalid builder of type %s to GbTree.",
+                     g_type_name (G_OBJECT_TYPE (child)));
+          return;
+        }
+
+      gb_tree_add_builder (self, GB_TREE_BUILDER (child));
+    }
+
+  gb_tree_parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
 static void
 gb_tree_finalize (GObject *object)
 {
@@ -1189,15 +1213,6 @@ gb_tree_finalize (GObject *object)
   G_OBJECT_CLASS (gb_tree_parent_class)->finalize (object);
 }
 
-/**
- * gb_tree_get_property:
- * @object: (in): A #GObject.
- * @prop_id: (in): The property identifier.
- * @value: (out): The given property.
- * @pspec: (in): A #ParamSpec.
- *
- * Get a given #GObject property.
- */
 static void
 gb_tree_get_property (GObject    *object,
                       guint       prop_id,
@@ -1226,15 +1241,6 @@ gb_tree_get_property (GObject    *object,
     }
 }
 
-/**
- * gb_tree_set_property:
- * @object: (in): A #GObject.
- * @prop_id: (in): The property identifier.
- * @value: (in): The given property.
- * @pspec: (in): A #ParamSpec.
- *
- * Set a given #GObject property.
- */
 static void
 gb_tree_set_property (GObject      *object,
                       guint         prop_id,
@@ -1262,24 +1268,24 @@ gb_tree_set_property (GObject      *object,
     }
 }
 
-/**
- * gb_tree_class_init:
- * @klass: (in): A #GbTreeClass.
- *
- * Initializes the #GbTreeClass and prepares the vtable.
- */
+static void
+gb_tree_buildable_init (GtkBuildableIface *iface)
+{
+  gb_tree_parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gb_tree_add_child;
+}
+
 static void
 gb_tree_class_init (GbTreeClass *klass)
 {
-  GObjectClass *object_class;
-  GtkWidgetClass *widget_class;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = gb_tree_finalize;
   object_class->get_property = gb_tree_get_property;
   object_class->set_property = gb_tree_set_property;
 
-  widget_class = GTK_WIDGET_CLASS (klass);
   widget_class->popup_menu = gb_tree_popup_menu;
 
   klass->action = gb_tree_real_action;
