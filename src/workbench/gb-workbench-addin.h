@@ -21,6 +21,8 @@
 
 #include <glib-object.h>
 
+#include "gb-workbench.h"
+
 G_BEGIN_DECLS
 
 #define GB_TYPE_WORKBENCH_ADDIN (gb_workbench_addin_get_type ())
