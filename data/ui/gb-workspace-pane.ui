@@ -33,6 +33,7 @@
         <child>
           <object class="GtkStack" id="stack">
             <property name="expand">true</property>
+            <property name="homogeneous">false</property>
             <property name="visible">true</property>
           </object>
         </child>
