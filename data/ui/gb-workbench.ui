@@ -107,13 +107,13 @@
                             <property name="vexpand">true</property>
                             <property name="visible">true</property>
                           </object>
-                          <packing>
-                            <property name="icon-name">folder-symbolic</property>
-                            <property name="name">project_tree</property>
-                            <property name="title" translatable="yes">Project</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="icon-name">folder-symbolic</property>
+                        <property name="name">project_tree</property>
+                        <property name="title" translatable="yes">Project</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
