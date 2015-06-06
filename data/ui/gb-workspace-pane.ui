@@ -24,6 +24,7 @@
                 <property name="visible">true</property>
                 <style>
                   <class name="dim-label"/>
+                  <class name="flat"/>
                 </style>
               </object>
             </child>
