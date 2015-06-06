@@ -62,7 +62,10 @@ struct _GbWorkspace
   gdouble           drag_position;
 };
 
-G_DEFINE_TYPE (GbWorkspace, gb_workspace, GTK_TYPE_OVERLAY)
+static void buildable_init_iface (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GbWorkspace, gb_workspace, GTK_TYPE_OVERLAY,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_init_iface))
 
 enum {
   PROP_0,
@@ -80,6 +83,7 @@ enum {
   LAST_CHILD_PROP
 };
 
+static GtkBuildableIface *gb_workspace_parent_buildable_iface;
 static GParamSpec *gParamSpecs [LAST_PROP];
 static GParamSpec *gChildParamSpecs [LAST_CHILD_PROP];
 
@@ -918,6 +922,26 @@ gb_workspace_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gb_workspace_parent_class)->unmap (widget);
 }
 
+static GObject *
+gb_workspace_get_internal_child (GtkBuildable *buildable,
+                                 GtkBuilder   *builder,
+                                 const gchar  *childname)
+{
+  GbWorkspace *self = (GbWorkspace *)buildable;
+
+  g_assert (GB_IS_WORKSPACE (self));
+
+  /*
+   * Override default get_internal_child to handle RTL vs LTR.
+   */
+  if (ide_str_equal0 (childname, "left_pane"))
+    return G_OBJECT (gb_workspace_get_left_pane (self));
+  else if (ide_str_equal0 (childname, "right_pane"))
+    return G_OBJECT (gb_workspace_get_right_pane (self));
+
+  return gb_workspace_parent_buildable_iface->get_internal_child (buildable, builder, childname);
+}
+
 static void
 gb_workspace_finalize (GObject *object)
 {
@@ -979,6 +1003,14 @@ gb_workspace_set_property (GObject      *object,
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
+}
+
+static void
+buildable_init_iface (GtkBuildableIface *iface)
+{
+  gb_workspace_parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->get_internal_child = gb_workspace_get_internal_child;
 }
 
 static void
@@ -1109,7 +1141,10 @@ gb_workspace_get_left_pane (GbWorkspace *self)
 {
   g_return_val_if_fail (GB_IS_WORKSPACE (self), NULL);
 
-  return self->children [GTK_POS_LEFT].widget;
+  if (gtk_widget_get_state_flags (GTK_WIDGET (self)) & GTK_STATE_FLAG_DIR_RTL)
+    return self->children [GTK_POS_RIGHT].widget;
+  else
+    return self->children [GTK_POS_LEFT].widget;
 }
 
 GtkWidget *
@@ -1117,7 +1152,10 @@ gb_workspace_get_right_pane (GbWorkspace *self)
 {
   g_return_val_if_fail (GB_IS_WORKSPACE (self), NULL);
 
-  return self->children [GTK_POS_RIGHT].widget;
+  if (gtk_widget_get_state_flags (GTK_WIDGET (self)) & GTK_STATE_FLAG_DIR_RTL)
+    return self->children [GTK_POS_LEFT].widget;
+  else
+    return self->children [GTK_POS_RIGHT].widget;
 }
 
 GtkWidget *
