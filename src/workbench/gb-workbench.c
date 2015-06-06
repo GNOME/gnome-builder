@@ -943,3 +943,11 @@ gb_workbench_views_foreach (GbWorkbench *self,
 
   //gb_workspace_views_foreach (GB_WORKSPACE (self->editor_workspace), callback, callback_data);
 }
+
+GtkWidget *
+gb_workbench_get_workspace (GbWorkbench *self)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
+
+  return GTK_WIDGET (self->workspace);
+}

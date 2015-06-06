@@ -51,6 +51,7 @@ gboolean          gb_workbench_get_closing          (GbWorkbench         *self);
 void              gb_workbench_views_foreach        (GbWorkbench         *self,
                                                      GtkCallback          callback,
                                                      gpointer             callback_data);
+GtkWidget        *gb_workbench_get_workspace        (GbWorkbench         *self);
 
 G_END_DECLS
 
