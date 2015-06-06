@@ -20,6 +20,7 @@
 #define GB_WORKBENCH_PRIVATE_H
 
 #include <gtk/gtk.h>
+#include <libpeas/peas.h>
 #include <ide.h>
 
 #include "gb-command-bar.h"
@@ -42,6 +43,7 @@ struct _GbWorkbench
   IdeContext             *context;
   GCancellable           *unload_cancellable;
   gchar                  *current_folder_uri;
+  PeasExtensionSet       *extensions;
 
   /* Template references */
   GbCommandBar           *command_bar;

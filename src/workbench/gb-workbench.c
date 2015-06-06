@@ -30,6 +30,7 @@
 #include "gb-workbench-actions.h"
 #include "gb-workbench-private.h"
 #include "gb-workbench.h"
+#include "gb-workbench-addin.h"
 #include "gb-workspace.h"
 #include "gb-workspace-pane.h"
 #include "gb-project-tree.h"
@@ -566,8 +567,25 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 }
 
 static void
+gb_workbench__extension_added (PeasExtensionSet *set,
+                               PeasPluginInfo   *plugin_info,
+                               GbWorkbenchAddin *addin)
+{
+  gb_workbench_addin_load (addin);
+}
+
+static void
+gb_workbench__extension_removed (PeasExtensionSet *set,
+                                 PeasPluginInfo   *plugin_info,
+                                 GbWorkbenchAddin *addin)
+{
+  gb_workbench_addin_unload (addin);
+}
+
+static void
 gb_workbench_init (GbWorkbench *self)
 {
+  PeasEngine *engine;
   g_autoptr(GbCommandProvider) gaction_provider = NULL;
   g_autoptr(GbCommandProvider) vim_provider = NULL;
 
@@ -592,6 +610,23 @@ gb_workbench_init (GbWorkbench *self)
                      gDropTypes, G_N_ELEMENTS (gDropTypes), GDK_ACTION_COPY);
 
   gb_settings_init_window (GTK_WINDOW (self));
+
+  engine = peas_engine_get_default ();
+  self->extensions = peas_extension_set_new (engine,
+                                             GB_TYPE_WORKBENCH_ADDIN,
+                                             "workbench", self,
+                                             NULL);
+  peas_extension_set_foreach (self->extensions,
+                              (PeasExtensionSetForeachFunc)gb_workbench__extension_added,
+                              NULL);
+  g_signal_connect (self->extensions,
+                    "extension-added",
+                    G_CALLBACK (gb_workbench__extension_added),
+                    self);
+  g_signal_connect (self->extensions,
+                    "extension-removed",
+                    G_CALLBACK (gb_workbench__extension_removed),
+                    self);
 
   IDE_EXIT;
 }

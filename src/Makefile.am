@@ -161,10 +161,12 @@ libgnome_builder_la_SOURCES = \
 	vim/gb-vim.h \
 	workbench/gb-workbench-actions.c \
 	workbench/gb-workbench-actions.h \
+	workbench/gb-workbench-addin.c \
+	workbench/gb-workbench-addin.h \
 	workbench/gb-workbench-private.h \
+	workbench/gb-workbench-types.h \
 	workbench/gb-workbench.c \
 	workbench/gb-workbench.h \
-	workbench/gb-workbench-types.h \
 	workspace/gb-workspace.c \
 	workspace/gb-workspace.h \
 	workspace/gb-workspace-pane.c \
