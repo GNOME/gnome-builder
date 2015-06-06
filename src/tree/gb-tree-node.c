@@ -22,6 +22,7 @@
 
 #include "gb-tree.h"
 #include "gb-tree-node.h"
+#include "gb-tree-private.h"
 
 struct _GbTreeNode
 {
@@ -55,9 +56,6 @@ enum {
 };
 
 static GParamSpec *gParamSpecs [LAST_PROP];
-
-extern void _gb_tree_rebuild_node (GbTree     *tree,
-                                   GbTreeNode *node);
 
 /**
  * gb_tree_node_new:

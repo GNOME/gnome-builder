@@ -23,6 +23,7 @@
 
 #include "gb-tree.h"
 #include "gb-tree-node.h"
+#include "gb-tree-private.h"
 #include "gb-widget.h"
 
 typedef struct
@@ -46,8 +47,6 @@ typedef struct
 } NodeLookup;
 
 static void gb_tree_buildable_init (GtkBuildableIface *iface);
-extern void _gb_tree_node_set_tree (GbTreeNode        *node,
-                                    GbTree            *tree);
 
 G_DEFINE_TYPE_WITH_CODE (GbTree, gb_tree, GTK_TYPE_TREE_VIEW,
                          G_ADD_PRIVATE (GbTree)

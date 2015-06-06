@@ -28,7 +28,7 @@ typedef struct
 	GbTree *tree;
 } GbTreeBuilderPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE(GbTreeBuilder, gb_tree_builder, G_TYPE_INITIALLY_UNOWNED)
+G_DEFINE_TYPE_WITH_PRIVATE (GbTreeBuilder, gb_tree_builder, G_TYPE_INITIALLY_UNOWNED)
 
 enum
 {
@@ -48,19 +48,16 @@ static GParamSpec *gParamSpecs[LAST_PROP];
  * or perform an action on such an event.
  *
  * Returns: %TRUE if the node activation was handled.
- * Side effects: None.
  */
 gboolean
 gb_tree_builder_node_activated (GbTreeBuilder *builder,
                                 GbTreeNode    *node)
 {
-	g_return_val_if_fail(GB_IS_TREE_BUILDER(builder), FALSE);
-	g_return_val_if_fail(GB_IS_TREE_NODE(node), FALSE);
+	g_return_val_if_fail (GB_IS_TREE_BUILDER(builder), FALSE);
+	g_return_val_if_fail (GB_IS_TREE_NODE(node), FALSE);
 
-	if (GB_TREE_BUILDER_GET_CLASS(builder)->node_activated) {
-		return GB_TREE_BUILDER_GET_CLASS(builder)->
-			node_activated(builder, node);
-	}
+	if (GB_TREE_BUILDER_GET_CLASS (builder)->node_activated)
+		return GB_TREE_BUILDER_GET_CLASS (builder)->node_activated(builder, node);
 
 	return FALSE;
 }
@@ -70,12 +67,12 @@ gb_tree_builder_node_popup (GbTreeBuilder *builder,
                             GbTreeNode    *node,
                             GMenu         *menu)
 {
-   g_return_if_fail (GB_IS_TREE_BUILDER (builder));
-   g_return_if_fail (GB_IS_TREE_NODE (node));
-   g_return_if_fail (G_IS_MENU (menu));
+  g_return_if_fail (GB_IS_TREE_BUILDER (builder));
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+  g_return_if_fail (G_IS_MENU (menu));
 
-   if (GB_TREE_BUILDER_GET_CLASS(builder)->node_popup)
-      GB_TREE_BUILDER_GET_CLASS(builder)->node_popup (builder, node, menu);
+  if (GB_TREE_BUILDER_GET_CLASS (builder)->node_popup)
+    GB_TREE_BUILDER_GET_CLASS (builder)->node_popup (builder, node, menu);
 }
 
 /**
@@ -85,20 +82,16 @@ gb_tree_builder_node_popup (GbTreeBuilder *builder,
  *
  * Update @node for being selected and update any actions or ui based
  * on @node being selected.
- *
- * Returns: None.
- * Side effects: None.
  */
 void
 gb_tree_builder_node_selected (GbTreeBuilder *builder,
                                GbTreeNode    *node)
 {
-	g_return_if_fail(GB_IS_TREE_BUILDER(builder));
-	g_return_if_fail(GB_IS_TREE_NODE(node));
+	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
+	g_return_if_fail (GB_IS_TREE_NODE (node));
 
-	if (GB_TREE_BUILDER_GET_CLASS(builder)->node_selected) {
-		GB_TREE_BUILDER_GET_CLASS(builder)->node_selected(builder, node);
-	}
+	if (GB_TREE_BUILDER_GET_CLASS (builder)->node_selected)
+		GB_TREE_BUILDER_GET_CLASS (builder)->node_selected (builder, node);
 }
 
 /**
@@ -108,20 +101,16 @@ gb_tree_builder_node_selected (GbTreeBuilder *builder,
  *
  * Update @node and any actions that may be related to @node to account
  * for it being unselected within the #GbTree.
- *
- * Returns: None.
- * Side effects: None.
  */
 void
 gb_tree_builder_node_unselected (GbTreeBuilder *builder,
                                  GbTreeNode    *node)
 {
-	g_return_if_fail(GB_IS_TREE_BUILDER(builder));
-	g_return_if_fail(GB_IS_TREE_NODE(node));
+	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
+	g_return_if_fail (GB_IS_TREE_NODE (node));
 
-	if (GB_TREE_BUILDER_GET_CLASS(builder)->node_selected) {
-		GB_TREE_BUILDER_GET_CLASS(builder)->node_unselected(builder, node);
-	}
+	if (GB_TREE_BUILDER_GET_CLASS (builder)->node_selected)
+		GB_TREE_BUILDER_GET_CLASS (builder)->node_unselected (builder, node);
 }
 
 /**
@@ -131,21 +120,17 @@ gb_tree_builder_node_unselected (GbTreeBuilder *builder,
  *
  * Build @node by setting any needed properties for the item or
  * updating it's appearance. Additional actions may be registered
- * based on @node<!-- -->'s type if needed.
- *
- * Returns: None.
- * Side effects: None.
+ * based on @node's type if needed.
  */
 void
 gb_tree_builder_build_node (GbTreeBuilder *builder,
                             GbTreeNode    *node)
 {
-	g_return_if_fail(GB_IS_TREE_BUILDER(builder));
-	g_return_if_fail(GB_IS_TREE_NODE(node));
+	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
+	g_return_if_fail (GB_IS_TREE_NODE (node));
 
-	if (GB_TREE_BUILDER_GET_CLASS(builder)->build_node) {
-		GB_TREE_BUILDER_GET_CLASS(builder)->build_node(builder, node);
-	}
+	if (GB_TREE_BUILDER_GET_CLASS (builder)->build_node)
+		GB_TREE_BUILDER_GET_CLASS (builder)->build_node (builder, node);
 }
 
 /**
@@ -154,9 +139,6 @@ gb_tree_builder_build_node (GbTreeBuilder *builder,
  * @tree: (in): A #GbTree.
  *
  * Sets the tree the builder is associated with.
- *
- * Returns: None.
- * Side effects: None.
  */
 static void
 gb_tree_builder_set_tree (GbTreeBuilder *builder,
@@ -164,15 +146,15 @@ gb_tree_builder_set_tree (GbTreeBuilder *builder,
 {
 	GbTreeBuilderPrivate *priv = gb_tree_builder_get_instance_private (builder);
 
-	g_return_if_fail(GB_IS_TREE_BUILDER(builder));
-	g_return_if_fail(priv->tree == NULL);
-	g_return_if_fail(GB_IS_TREE(tree));
+	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
+	g_return_if_fail (priv->tree == NULL);
+	g_return_if_fail (GB_IS_TREE (tree));
 
-	if (tree) {
-		priv->tree = tree;
-		g_object_add_weak_pointer(G_OBJECT(priv->tree),
-		                          (gpointer *)&priv->tree);
-	}
+	if (tree)
+    {
+      priv->tree = tree;
+      g_object_add_weak_pointer (G_OBJECT (priv->tree), (gpointer *)&priv->tree);
+    }
 }
 
 /**
@@ -181,48 +163,33 @@ gb_tree_builder_set_tree (GbTreeBuilder *builder,
  *
  * Gets the tree that owns the builder.
  *
- * Returns: (transfer none) (type GbTree*): A #GbTree.
+ * Returns: (transfer none) (type GbTree) (nullable): A #GbTree or %NULL.
  */
 GtkWidget *
 gb_tree_builder_get_tree (GbTreeBuilder *builder)
 {
   GbTreeBuilderPrivate *priv = gb_tree_builder_get_instance_private (builder);
 
-  g_return_val_if_fail(GB_IS_TREE_BUILDER(builder), NULL);
+  g_return_val_if_fail (GB_IS_TREE_BUILDER (builder), NULL);
 
-  return GTK_WIDGET(priv->tree);
+  return (GtkWidget *)priv->tree;
 }
 
-/**
- * gb_tree_builder_finalize:
- * @object: (in): A #GbTreeBuilder.
- *
- * Finalizer for a #GbTreeBuilder instance.
- */
 static void
 gb_tree_builder_finalize (GObject *object)
 {
 	GbTreeBuilder *builder = GB_TREE_BUILDER (object);
 	GbTreeBuilderPrivate *priv = gb_tree_builder_get_instance_private (builder);
 
-	if (priv->tree) {
-		g_object_remove_weak_pointer(G_OBJECT(priv->tree),
-		                             (gpointer *)&priv->tree);
-		priv->tree = NULL;
-	}
+	if (priv->tree)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->tree), (gpointer *)&priv->tree);
+      priv->tree = NULL;
+    }
 
-	G_OBJECT_CLASS(gb_tree_builder_parent_class)->finalize(object);
+	G_OBJECT_CLASS (gb_tree_builder_parent_class)->finalize (object);
 }
 
-/**
- * gb_tree_builder_get_property:
- * @object: (in): A #GObject.
- * @prop_id: (in): The property identifier.
- * @value: (out): The given property.
- * @pspec: (in): A #ParamSpec.
- *
- * Get a given #GObject property.
- */
 static void
 gb_tree_builder_get_property (GObject    *object,
                               guint       prop_id,
@@ -230,58 +197,43 @@ gb_tree_builder_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
 	GbTreeBuilder *builder = GB_TREE_BUILDER (object);
-  	GbTreeBuilderPrivate *priv = gb_tree_builder_get_instance_private (builder);
+  GbTreeBuilderPrivate *priv = gb_tree_builder_get_instance_private (builder);
 
-	switch (prop_id) {
-	case PROP_TREE:
-		g_value_set_object(value, priv->tree);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-	}
+	switch (prop_id)
+    {
+    case PROP_TREE:
+      g_value_set_object (value, priv->tree);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
-/**
- * gb_tree_builder_set_property:
- * @object: (in): A #GObject.
- * @prop_id: (in): The property identifier.
- * @value: (in): The given property.
- * @pspec: (in): A #ParamSpec.
- *
- * Set a given #GObject property.
- */
 static void
 gb_tree_builder_set_property (GObject      *object,
                               guint         prop_id,
                               const GValue *value,
                               GParamSpec   *pspec)
 {
-	GbTreeBuilder *builder = GB_TREE_BUILDER(object);
+	GbTreeBuilder *builder = GB_TREE_BUILDER (object);
 
-	switch (prop_id) {
-	case PROP_TREE:
-		gb_tree_builder_set_tree(builder, g_value_get_object(value));
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-	}
+	switch (prop_id)
+    {
+    case PROP_TREE:
+      gb_tree_builder_set_tree (builder, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
-/**
- * gb_tree_builder_class_init:
- * @klass: (in): A #GbTreeBuilderClass.
- *
- * Initializes the #GbTreeBuilderClass and prepares the vtable.
- *
- * Returns: None.
- * Side effects: None.
- */
 static void
 gb_tree_builder_class_init (GbTreeBuilderClass *klass)
 {
-	GObjectClass *object_class;
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class = G_OBJECT_CLASS(klass);
 	object_class->finalize = gb_tree_builder_finalize;
 	object_class->get_property = gb_tree_builder_get_property;
 	object_class->set_property = gb_tree_builder_set_property;
@@ -296,15 +248,6 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
-/**
- * gb_tree_builder_init:
- * @: (in): A #GbTreeBuilder.
- *
- * Initializes the newly created #GbTreeBuilder instance.
- *
- * Returns: None.
- * Side effects: None.
- */
 static void
 gb_tree_builder_init (GbTreeBuilder *builder)
 {

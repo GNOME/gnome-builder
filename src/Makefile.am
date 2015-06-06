@@ -124,6 +124,7 @@ libgnome_builder_la_SOURCES = \
 	tree/gb-tree-builder.h \
 	tree/gb-tree-node.c \
 	tree/gb-tree-node.h \
+	tree/gb-tree-private.h \
 	tree/gb-tree.c \
 	tree/gb-tree.h \
 	util/gb-cairo.c \
