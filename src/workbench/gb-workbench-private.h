@@ -27,6 +27,7 @@
 #include "gb-editor-workspace.h"
 #include "gb-project-tree.h"
 #include "gb-search-box.h"
+#include "gb-view-grid.h"
 #include "gb-workbench-types.h"
 #include "gedit-menu-stack-switcher.h"
 
@@ -47,6 +48,7 @@ struct _GbWorkbench
   GeditMenuStackSwitcher *gear_menu_button;
   GbProjectTree          *project_tree;
   GbSearchBox            *search_box;
+  GbViewGrid             *view_grid;
   GbWorkspace            *workspace;
 
   gulong                  project_notify_name_handler;

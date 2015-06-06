@@ -24,6 +24,7 @@
 #include "gb-command-gaction-provider.h"
 #include "gb-command-vim-provider.h"
 #include "gb-dnd.h"
+#include "gb-editor-document.h"
 #include "gb-settings.h"
 #include "gb-widget.h"
 #include "gb-workbench-actions.h"
@@ -89,7 +90,6 @@ gb_workbench__context_restore_cb (GObject      *object,
   IdeContext *context = (IdeContext *)object;
   g_autoptr(GbWorkbench) self = user_data;
   g_autoptr(GError) error = NULL;
-  IdeBufferManager *buffer_manager;
 
   g_assert (GB_IS_WORKBENCH (self));
   g_assert (IDE_IS_CONTEXT (context));
@@ -99,11 +99,81 @@ gb_workbench__context_restore_cb (GObject      *object,
       g_warning ("%s", error->message);
     }
 
-  buffer_manager = ide_context_get_buffer_manager (context);
-  if ((ide_buffer_manager_get_n_buffers (buffer_manager) == 0) && (self->has_opened == FALSE))
-    gb_workbench_add_temporary_buffer (self);
-
   gtk_widget_grab_focus (GTK_WIDGET (self->workspace));
+}
+
+static void
+load_buffer_cb (GbWorkbench      *self,
+                IdeBuffer        *buffer,
+                IdeBufferManager *buffer_manager)
+{
+  IDE_ENTRY;
+
+  g_assert (GB_IS_WORKBENCH (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (GB_IS_EDITOR_DOCUMENT (buffer));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  IDE_TRACE_MSG ("Loading %s.", ide_buffer_get_title (buffer));
+
+  gb_view_grid_focus_document (self->view_grid, GB_DOCUMENT (buffer));
+
+  IDE_EXIT;
+}
+
+static void
+notify_focus_buffer_cb (GbWorkbench      *self,
+                        GParamSpec       *pspec,
+                        IdeBufferManager *buffer_manager)
+{
+  IdeBuffer *buffer;
+
+  IDE_ENTRY;
+
+  g_assert (GB_IS_WORKBENCH (self));
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+
+  buffer = ide_buffer_manager_get_focus_buffer (buffer_manager);
+
+  if (buffer != NULL)
+    {
+      IDE_TRACE_MSG ("Focusing %s.", ide_buffer_get_title (buffer));
+      gb_view_grid_focus_document (self->view_grid, GB_DOCUMENT (buffer));
+    }
+
+  IDE_EXIT;
+}
+
+static void
+gb_workbench_setup_buffers (GbWorkbench *self,
+                            IdeContext  *context)
+{
+  IdeBufferManager *bufmgr;
+  g_autoptr(GPtrArray) buffers = NULL;
+  gsize i;
+
+  g_assert (GB_IS_WORKBENCH (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  bufmgr = ide_context_get_buffer_manager (context);
+  g_signal_connect_object (bufmgr,
+                           "load-buffer",
+                           G_CALLBACK (load_buffer_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (bufmgr,
+                           "notify::focus-buffer",
+                           G_CALLBACK (notify_focus_buffer_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  buffers = ide_buffer_manager_get_buffers (bufmgr);
+
+  for (i = 0; i < buffers->len; i++)
+    {
+      IdeBuffer *buffer = g_ptr_array_index (buffers, i);
+      load_buffer_cb (self, buffer, bufmgr);
+    }
 }
 
 static void
@@ -116,6 +186,8 @@ gb_workbench_connect_context (GbWorkbench *self,
   g_assert (IDE_IS_CONTEXT (context));
 
   gb_project_tree_set_context (self->project_tree, context);
+
+  gb_workbench_setup_buffers (self, context);
 
   project = ide_context_get_project (context);
 
@@ -482,6 +554,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_box);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, workspace);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, project_tree);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, view_grid);
 
   g_type_ensure (GB_TYPE_COMMAND_BAR);
   g_type_ensure (GB_TYPE_PROJECT_TREE);
