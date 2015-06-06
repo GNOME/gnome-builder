@@ -23,10 +23,9 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_TREE_NODE            (gb_tree_node_get_type())
+#define GB_TYPE_TREE_NODE (gb_tree_node_get_type())
 
-G_DECLARE_FINAL_TYPE (GbTreeNode, gb_tree_node,
-                      GB, TREE_NODE, GInitiallyUnowned)
+G_DECLARE_FINAL_TYPE (GbTreeNode, gb_tree_node, GB, TREE_NODE, GInitiallyUnowned)
 
 GbTreeNode    *gb_tree_node_new           (void);
 void           gb_tree_node_append        (GbTreeNode   *node,
