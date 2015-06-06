@@ -25,6 +25,7 @@
 #include "gb-command-bar.h"
 #include "gb-command-manager.h"
 #include "gb-editor-workspace.h"
+#include "gb-project-tree.h"
 #include "gb-search-box.h"
 #include "gb-workbench-types.h"
 #include "gedit-menu-stack-switcher.h"
@@ -44,6 +45,7 @@ struct _GbWorkbench
   /* Template references */
   GbCommandBar           *command_bar;
   GeditMenuStackSwitcher *gear_menu_button;
+  GbProjectTree          *project_tree;
   GbSearchBox            *search_box;
   GbWorkspace            *workspace;
 

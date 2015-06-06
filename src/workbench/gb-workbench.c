@@ -479,6 +479,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, gear_menu_button);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_box);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, workspace);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, project_tree);
 
   g_type_ensure (GB_TYPE_COMMAND_BAR);
   g_type_ensure (GB_TYPE_PROJECT_TREE);

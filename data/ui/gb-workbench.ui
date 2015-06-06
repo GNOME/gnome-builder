@@ -103,6 +103,10 @@
                         <property name="headers-visible">false</property>
                         <property name="vexpand">true</property>
                         <property name="visible">true</property>
+                        <child type="builder">
+                          <object class="GbProjectTreeBuilder">
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="icon-name">folder-symbolic</property>
