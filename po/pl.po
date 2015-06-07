@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-24 19:18+0200\n"
-"PO-Revision-Date: 2015-05-24 19:21+0200\n"
+"POT-Creation-Date: 2015-06-07 18:58+0200\n"
+"PO-Revision-Date: 2015-06-07 18:59+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -273,7 +273,7 @@ msgstr "Wybór projektu"
 msgid "Click an item to select"
 msgstr "Kliknięcie elementu zaznacza go"
 
-#: ../data/ui/gb-greeter-window.ui.h:5 ../src/greeter/gb-greeter-window.c:488
+#: ../data/ui/gb-greeter-window.ui.h:5 ../src/greeter/gb-greeter-window.c:559
 msgid "Recent Projects"
 msgstr "Ostatnio używane projekty"
 
@@ -314,7 +314,7 @@ msgstr "Ze zdalnego repozytorium kodu źródłowego"
 
 #: ../data/ui/gb-new-project-dialog.ui.h:6
 #: ../data/ui/gb-preferences-page-git.ui.h:3
-#: ../contrib/egg/egg-state-machine-action.c:225
+#: ../contrib/egg/egg-state-machine-action.c:225 ../contrib/rg/rg-column.c:286
 #: ../libide/doap/ide-doap-person.c:168 ../libide/doap/ide-doap.c:462
 #: ../libide/doap/ide-doap.c:463 ../libide/ide-language.c:435
 #: ../libide/ide-project-file.c:269 ../libide/ide-project-info.c:430
@@ -816,6 +816,60 @@ msgstr "Nazwa działania"
 #: ../contrib/egg/egg-state-machine-action.c:233
 msgid "State Machine"
 msgstr "Automat stanów"
+
+#: ../contrib/rg/rg-column.c:287
+msgid "The name of the column"
+msgstr "Nazwa kolumny"
+
+#: ../contrib/rg/rg-column.c:293 ../contrib/rg/rg-column.c:294
+msgid "Value Type"
+msgstr "Typ wartości"
+
+#: ../contrib/rg/rg-cpu-graph.c:162 ../contrib/rg/rg-cpu-graph.c:163
+#: ../contrib/rg/rg-table.c:514
+msgid "Timespan"
+msgstr "Czas"
+
+#: ../contrib/rg/rg-cpu-graph.c:170 ../contrib/rg/rg-cpu-graph.c:171
+#: ../contrib/rg/rg-table.c:506 ../contrib/rg/rg-table.c:507
+msgid "Max Samples"
+msgstr "Maksymalna liczba próbek"
+
+#: ../contrib/rg/rg-graph.c:364
+msgid "Table"
+msgstr "Tablica"
+
+#: ../contrib/rg/rg-graph.c:365
+msgid "The data table for the graph."
+msgstr "Tablica danych dla wykresu."
+
+#: ../contrib/rg/rg-line-renderer.c:250 ../contrib/rg/rg-line-renderer.c:251
+msgid "Column"
+msgstr "Kolumna"
+
+#: ../contrib/rg/rg-line-renderer.c:258 ../contrib/rg/rg-line-renderer.c:259
+msgid "Line Width"
+msgstr "Szerokość wiersza"
+
+#: ../contrib/rg/rg-line-renderer.c:266 ../contrib/rg/rg-line-renderer.c:267
+msgid "Stroke Color"
+msgstr "Kolor kreski"
+
+#: ../contrib/rg/rg-line-renderer.c:273 ../contrib/rg/rg-line-renderer.c:274
+msgid "Stroke Color RGBA"
+msgstr "Kolor kreski w RGBA"
+
+#: ../contrib/rg/rg-table.c:515
+msgid "Timespan to visualize, in microseconds."
+msgstr "Wizualizowany czas w mikrosekundach."
+
+#: ../contrib/rg/rg-table.c:522 ../contrib/rg/rg-table.c:523
+msgid "Value Max"
+msgstr "Maksymalna wartość"
+
+#: ../contrib/rg/rg-table.c:530 ../contrib/rg/rg-table.c:531
+msgid "Value Min"
+msgstr "Minimalna wartość"
 
 #: ../contrib/search/trie.c:790
 #, c-format
@@ -1356,7 +1410,7 @@ msgstr "Nazwa schematu stylu"
 #: ../src/documents/gb-document.c:196
 #: ../src/preferences/gb-preferences-page.c:282
 #: ../src/preferences/gb-preferences-switch.c:314 ../src/views/gb-view.c:279
-#: ../src/workbench/gb-workspace.c:162
+#: ../src/workbench/gb-workspace.c:189
 msgid "Title"
 msgstr "Tytuł"
 
@@ -1814,7 +1868,7 @@ msgstr "Plik źródłowy musi być w drzewie projektu."
 msgid "File must be within the project tree."
 msgstr "Plik musi być w drzewie projektu."
 
-#: ../libide/ide-recent-projects.c:359
+#: ../libide/ide-recent-projects.c:378
 #, c-format
 msgid "%s() may only be executed once"
 msgstr "%s() można wykonać tylko raz"
@@ -2253,8 +2307,8 @@ msgid "The animation mode"
 msgstr "Tryb animacji"
 
 #: ../libide/theatrics/ide-animation.c:833
-#: ../libide/theatrics/ide-box-theatric.c:281
-#: ../libide/theatrics/ide-box-theatric.c:282
+#: ../libide/theatrics/ide-box-theatric.c:284
+#: ../libide/theatrics/ide-box-theatric.c:285
 msgid "Target"
 msgstr "Cel"
 
@@ -2279,33 +2333,33 @@ msgstr ""
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Pobranie wartości va_list się nie powiodło: %s"
 
-#: ../libide/theatrics/ide-box-theatric.c:256
-#: ../libide/theatrics/ide-box-theatric.c:257
+#: ../libide/theatrics/ide-box-theatric.c:259
+#: ../libide/theatrics/ide-box-theatric.c:260
 msgid "Alpha"
 msgstr "Alfa"
 
-#: ../libide/theatrics/ide-box-theatric.c:265
-#: ../libide/theatrics/ide-box-theatric.c:266
+#: ../libide/theatrics/ide-box-theatric.c:268
+#: ../libide/theatrics/ide-box-theatric.c:269
 msgid "background"
 msgstr "tło"
 
-#: ../libide/theatrics/ide-box-theatric.c:272
-#: ../libide/theatrics/ide-box-theatric.c:273
+#: ../libide/theatrics/ide-box-theatric.c:275
+#: ../libide/theatrics/ide-box-theatric.c:276
 msgid "height"
 msgstr "wysokość"
 
-#: ../libide/theatrics/ide-box-theatric.c:290
-#: ../libide/theatrics/ide-box-theatric.c:291
+#: ../libide/theatrics/ide-box-theatric.c:293
+#: ../libide/theatrics/ide-box-theatric.c:294
 msgid "width"
 msgstr "szerokość"
 
-#: ../libide/theatrics/ide-box-theatric.c:299
-#: ../libide/theatrics/ide-box-theatric.c:300
+#: ../libide/theatrics/ide-box-theatric.c:302
+#: ../libide/theatrics/ide-box-theatric.c:303
 msgid "x"
 msgstr "x"
 
-#: ../libide/theatrics/ide-box-theatric.c:308
-#: ../libide/theatrics/ide-box-theatric.c:309
+#: ../libide/theatrics/ide-box-theatric.c:311
+#: ../libide/theatrics/ide-box-theatric.c:312
 msgid "y"
 msgstr "y"
 
@@ -2465,13 +2519,13 @@ msgstr "Dokumentacja (%s)"
 msgid "The uri to load."
 msgstr "Adres URI do wczytania."
 
-#: ../src/devhelp/gb-devhelp-view.c:238 ../src/editor/gb-editor-frame.c:754
-#: ../src/editor/gb-editor-view.c:687 ../src/html/gb-html-view.c:320
+#: ../src/devhelp/gb-devhelp-view.c:239 ../src/editor/gb-editor-frame.c:754
+#: ../src/editor/gb-editor-view.c:713 ../src/html/gb-html-view.c:321
 #: ../src/views/gb-view.c:265
 msgid "Document"
 msgstr "Dokument"
 
-#: ../src/devhelp/gb-devhelp-view.c:239
+#: ../src/devhelp/gb-devhelp-view.c:240
 msgid "The document for the devhelp view."
 msgstr "Dokument dla widoku Devhelp."
 
@@ -2564,7 +2618,7 @@ msgstr "Automatyczne ukrywanie mapy"
 msgid "The back forward list."
 msgstr "Lista wstecz/dalej."
 
-#: ../src/editor/gb-editor-frame.c:755 ../src/editor/gb-editor-view.c:688
+#: ../src/editor/gb-editor-frame.c:755 ../src/editor/gb-editor-view.c:714
 msgid "The editor document."
 msgstr "Dokument edytora."
 
@@ -2643,7 +2697,7 @@ msgstr "Etykieta okna pigułki."
 msgid "The project information to render."
 msgstr "Informacje o projekcie do wyświetlenia."
 
-#: ../src/greeter/gb-greeter-window.c:489
+#: ../src/greeter/gb-greeter-window.c:560
 msgid "The recent projects that have been mined."
 msgstr "Odnalezione ostatnio używane projekty."
 
@@ -2660,7 +2714,7 @@ msgstr "%s (podgląd)"
 msgid "The buffer to monitor for changes."
 msgstr "Bufor, w którym monitorować zmiany."
 
-#: ../src/html/gb-html-view.c:321
+#: ../src/html/gb-html-view.c:322
 msgid "The document to view as HTML."
 msgstr "Dokument do wyświetlenia jako HTML."
 
@@ -2924,7 +2978,7 @@ msgstr "Drzewo"
 msgid "The GbTree the builder belongs to."
 msgstr "GbTree, do którego należy Builder."
 
-#: ../src/tree/gb-tree-node.c:604 ../src/workbench/gb-workspace.c:170
+#: ../src/tree/gb-tree-node.c:604 ../src/workbench/gb-workspace.c:197
 msgid "Icon Name"
 msgstr "Nazwa ikony"
 
@@ -3141,11 +3195,11 @@ msgstr "Niepowodzenie budowania"
 msgid "Project build system does not support building"
 msgstr "System budowania projektu nie obsługuje budowania"
 
-#: ../src/workbench/gb-workspace.c:163
+#: ../src/workbench/gb-workspace.c:190
 msgid "The title of the workspace."
 msgstr "Tytuł przestrzeni roboczej."
 
-#: ../src/workbench/gb-workspace.c:171
+#: ../src/workbench/gb-workspace.c:198
 msgid "The name of the icon to use."
 msgstr "Nazwa używanej ikony."
 
