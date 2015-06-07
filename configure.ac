@@ -379,6 +379,7 @@ AC_CONFIG_FILES([
 
 	plugins/Makefile
 	plugins/command-bar/Makefile
+	plugins/devhelp/Makefile
 	plugins/symbol-tree/Makefile
 
 	data/Makefile

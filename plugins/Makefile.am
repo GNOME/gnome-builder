@@ -1,5 +1,6 @@
 SUBDIRS = \
 	command-bar \
+	devhelp \
 	symbol-tree \
 	$(NULL)
 

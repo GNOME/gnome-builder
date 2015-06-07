@@ -25,66 +25,65 @@ PeasPluginInfo **peas_register_types (void);
 static GPtrArray *embedded_plugins;
 
 void
-gb_plugins_register (PeasPluginInfo *plugin_info)
+gb_plugins_register (GbPluginRegisterFunc callback)
 {
-  g_assert (plugin_info != NULL);
-
-  g_print ("Registering plugin \"%s\"\n", peas_plugin_info_get_module_name (plugin_info));
+  g_assert (callback != NULL);
 
   if (embedded_plugins == NULL)
     embedded_plugins = g_ptr_array_new ();
-
-  g_ptr_array_add (embedded_plugins, plugin_info);
+  g_ptr_array_add (embedded_plugins, callback);
 }
 
 PeasPluginInfo **
 peas_register_types (void)
 {
-  GPtrArray *copy;
+  GPtrArray *ar;
 
-  g_print ("peas_register_types called ...\n");
-
-  copy = g_ptr_array_new ();
+  ar = g_ptr_array_new ();
 
   if (embedded_plugins != NULL)
     {
       gsize i;
 
       for (i = 0; i < embedded_plugins->len; i++)
-        g_ptr_array_add (copy, g_ptr_array_index (embedded_plugins, i));
+        {
+          g_autoptr(PeasObjectModule) module = NULL;
+          PeasPluginInfo *plugin_info;
+          GbPluginRegisterFunc callback;
+
+          module = peas_object_module_new_embedded ();
+          callback = g_ptr_array_index (embedded_plugins, i);
+          plugin_info = callback (module);
+
+          if (plugin_info != NULL)
+            g_ptr_array_add (ar, plugin_info);
+        }
     }
 
-  g_ptr_array_add (copy, NULL);
+  g_ptr_array_add (ar, NULL);
 
-  return (PeasPluginInfo **)g_ptr_array_free (copy, FALSE);
+  return (PeasPluginInfo **)g_ptr_array_free (ar, FALSE);
 }
 
 void
 gb_plugins_load (void)
 {
   PeasEngine *engine;
-  GModule *module;
-  gpointer symbol = NULL;
-  gsize i;
-
-  g_print ("Loading plugins...\n");
-
-  module = g_module_open (NULL, G_MODULE_BIND_LAZY);
-  if (g_module_symbol (module, "peas_register_types", &symbol))
-    g_print ("Found\n");
-  else
-    g_print ("Not Found\n");
-
-  g_print ("func at %p (%p)\n", symbol, (void *)peas_register_types);
+  const GList *list;
 
   engine = peas_engine_get_default ();
-  peas_engine_add_search_path (engine, "plugins", "plugins");
-  peas_engine_rescan_plugins (engine);
+  list = peas_engine_get_plugin_list (engine);
 
-  for (i = 0; i < embedded_plugins->len; i++)
+  for (; list; list = list->next)
     {
-      PeasPluginInfo *info = g_ptr_array_index (embedded_plugins, i);
-      g_print ("Loading %s\n", peas_plugin_info_get_name (info));
-      peas_engine_load_plugin (engine, info);
+      PeasPluginInfo *plugin_info = list->data;
+
+      /*
+       * TODO: Only load embedded.
+       */
+
+      g_print ("Loading: %s\n", peas_plugin_info_get_module_name (plugin_info));
+
+      peas_engine_load_plugin (engine, plugin_info);
     }
 }

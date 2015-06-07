@@ -14,9 +14,8 @@ libsymbol_tree_la_SOURCES = \
 
 # XXX: temporary, since we need to extract lots of src/ into plugins
 libsymbol_tree_la_CFLAGS = \
-	$(LIBIDE_CFLAGS) \
+	$(BUILDER_CFLAGS) \
 	-I$(top_srcdir)/src \
-	-I$(top_srcdir)/src/commands \
 	-I$(top_srcdir)/src/documents \
 	-I$(top_srcdir)/src/views \
 	-I$(top_srcdir)/src/tree \
@@ -26,7 +25,7 @@ libsymbol_tree_la_CFLAGS = \
 	$(NULL)
 
 libsymbol_tree_la_LIBADD = \
-	$(LIBIDE_LIBS) \
+	$(BUILDER_LIBS) \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)
 
@@ -34,7 +33,6 @@ libsymbol_tree_la_LDFLAGS = \
 	-avoid-version \
 	-module \
 	$(NULL)
-
 
 glib_resources_c = symbol-tree-resources.c
 glib_resources_h = symbol-tree-resources.h

@@ -224,6 +224,7 @@ static void
 gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GbViewClass *view_class = GB_VIEW_CLASS (klass);
 
   object_class->finalize = gb_devhelp_view_finalize;
@@ -243,9 +244,9 @@ gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
-  GB_WIDGET_CLASS_TEMPLATE (klass, "gb-devhelp-view.ui");
-  GB_WIDGET_CLASS_BIND (klass, GbDevhelpView, web_view1);
-  GB_WIDGET_CLASS_BIND (klass, GbDevhelpView, paned);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/devhelp/gb-devhelp-view.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbDevhelpView, web_view1);
+  gtk_widget_class_bind_template_child (widget_class, GbDevhelpView, paned);
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }

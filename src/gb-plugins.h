@@ -26,22 +26,19 @@
 G_BEGIN_DECLS
 
 #define GB_DEFINE_EMBEDDED_PLUGIN(name, resource, plugin_path, ...)    \
+  static PeasPluginInfo *                                              \
+  name##_register (PeasObjectModule *module)                           \
+  {                                                                    \
+    g_resources_register (resource);                                   \
+    __VA_ARGS__                                                        \
+    return peas_plugin_info_new_embedded (module, plugin_path);        \
+  }                                                                    \
+                                                                       \
   G_DEFINE_CONSTRUCTOR(name##_plugin);                                 \
   static void                                                          \
   name##_plugin (void)                                                 \
   {                                                                    \
-    g_autoptr(PeasObjectModule) module = NULL;                         \
-    PeasPluginInfo *plugin_info = NULL;                                \
-                                                                       \
-    if (resource != NULL)                                              \
-      g_resources_register (resource);                                 \
-                                                                       \
-    module = peas_object_module_new_embedded ();                       \
-                                                                       \
-    __VA_ARGS__                                                        \
-                                                                       \
-    plugin_info = peas_plugin_info_new_embedded (module, plugin_path); \
-    gb_plugins_register (plugin_info);                                 \
+    gb_plugins_register (name##_register);                             \
   }
 
 #define GB_DEFINE_PLUGIN_TYPE(PLUGIN, IMPL)                            \
@@ -49,7 +46,9 @@ G_BEGIN_DECLS
     peas_object_module_register_extension_type (module, PLUGIN, IMPL); \
   } G_STMT_END;
 
-void gb_plugins_register (PeasPluginInfo *plugin_info);
+typedef PeasPluginInfo *(*GbPluginRegisterFunc) (PeasObjectModule *module);
+
+void gb_plugins_register (GbPluginRegisterFunc callback);
 void gb_plugins_load     (void);
 
 G_END_DECLS

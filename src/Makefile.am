@@ -15,10 +15,6 @@ libgnome_builder_la_SOURCES = \
 	app/gb-application-private.h \
 	app/gb-application.c \
 	app/gb-application.h \
-	devhelp/gb-devhelp-document.c \
-	devhelp/gb-devhelp-document.h \
-	devhelp/gb-devhelp-view.c \
-	devhelp/gb-devhelp-view.h \
 	dialogs/gb-new-project-dialog.c \
 	dialogs/gb-new-project-dialog.h \
 	dialogs/gb-projects-dialog.c \
@@ -182,9 +178,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(builddir)/resources \
 	-I$(builddir)/util \
 	-I$(srcdir)/app \
-	-I$(srcdir)/commands \
 	-I$(srcdir)/css \
-	-I$(srcdir)/devhelp \
 	-I$(srcdir)/dialogs \
 	-I$(srcdir)/documents \
 	-I$(srcdir)/editor \
@@ -215,6 +209,7 @@ libgnome_builder_la_CFLAGS = \
 define_plugin = -Wl,--whole-archive,$(top_builddir)/plugins/$1/.libs/lib$1.a,--no-whole-archive
 
 gnome_builder_PLUGINS = \
+	devhelp \
 	command-bar \
 	symbol-tree \
 	$(NULL)
