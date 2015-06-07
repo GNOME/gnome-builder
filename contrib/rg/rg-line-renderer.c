@@ -270,8 +270,8 @@ rg_line_renderer_class_init (RgLineRendererClass *klass)
 
   gParamSpecs [PROP_STROKE_COLOR_RGBA] =
     g_param_spec_boxed ("stroke-color-rgba",
-                        _("Stroke Color Rgba"),
-                        _("Stroke Color Rgba"),
+                        _("Stroke Color RGBA"),
+                        _("Stroke Color RGBA"),
                         GDK_TYPE_RGBA,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
