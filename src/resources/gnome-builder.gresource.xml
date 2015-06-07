@@ -42,7 +42,6 @@
     <file alias="theme/Adwaita-shared.css">../../data/theme/Adwaita-shared.css</file>
     <file alias="theme/shared.css">../../data/theme/shared.css</file>
 
-    <file alias="ui/gb-command-bar.ui">../../data/ui/gb-command-bar.ui</file>
     <file alias="ui/gb-devhelp-view.ui">../../data/ui/gb-devhelp-view.ui</file>
     <file alias="ui/gb-editor-frame.ui">../../data/ui/gb-editor-frame.ui</file>
     <file alias="ui/gb-editor-settings-widget.ui">../../data/ui/gb-editor-settings-widget.ui</file>

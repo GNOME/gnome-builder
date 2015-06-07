@@ -1,0 +1,6 @@
+[Plugin]
+Module=command-bar
+Name=Command Bar
+Description=Provides a command bar at the bottom of the workbench window.
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2015 Christian Hergert

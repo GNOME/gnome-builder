@@ -141,6 +141,17 @@ gb_workspace_pane_size_allocate (GtkWidget     *widget,
 }
 
 static void
+gb_workspace_pane_grab_focus (GtkWidget *widget)
+{
+  GbWorkspacePane *self= (GbWorkspacePane *)widget;
+  GtkWidget *child;
+
+  child = gtk_stack_get_visible_child (self->stack);
+  if (child != NULL)
+    gtk_widget_grab_focus (child);
+}
+
+static void
 gb_workspace_pane_finalize (GObject *object)
 {
   GbWorkspacePane *self = (GbWorkspacePane *)object;
@@ -200,6 +211,7 @@ gb_workspace_pane_class_init (GbWorkspacePaneClass *klass)
   object_class->set_property = gb_workspace_pane_set_property;
 
   widget_class->draw = gb_workspace_pane_draw;
+  widget_class->grab_focus = gb_workspace_pane_grab_focus;
   widget_class->size_allocate = gb_workspace_pane_size_allocate;
 
   /**

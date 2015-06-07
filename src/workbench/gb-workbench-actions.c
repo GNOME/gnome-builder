@@ -232,18 +232,6 @@ gb_workbench_actions_save_all_quit (GSimpleAction *action,
 }
 
 static void
-gb_workbench_actions_show_command_bar (GSimpleAction *action,
-                                       GVariant      *parameter,
-                                       gpointer       user_data)
-{
-  GbWorkbench *self = user_data;
-
-  g_assert (GB_IS_WORKBENCH (self));
-
-  gb_command_bar_show (self->command_bar);
-}
-
-static void
 gb_workbench_actions_nighthack (GSimpleAction *action,
                                 GVariant      *parameter,
                                 gpointer       user_data)
@@ -390,7 +378,6 @@ static const GActionEntry GbWorkbenchActions[] = {
   { "save-all",         gb_workbench_actions_save_all },
   { "save-all-quit",    gb_workbench_actions_save_all_quit },
   { "search-docs",      gb_workbench_actions_search_docs, "s" },
-  { "show-command-bar", gb_workbench_actions_show_command_bar },
   { "show-gear-menu",   gb_workbench_actions_show_gear_menu },
   { "show-left-pane",   gb_workbench_actions_show_left_pane, NULL, "true" },
   { "show-right-pane",  gb_workbench_actions_show_right_pane, NULL, "false" },

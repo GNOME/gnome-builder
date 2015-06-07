@@ -3,7 +3,7 @@
   bind "Delete" { "action" ("project-tree", "move-to-trash", "") };
   bind "F2" { "action" ("project-tree", "rename-file", "") };
 
-  bind "<ctrl>Return" { "action" ("workbench", "show-command-bar", "") };
-  bind "<ctrl>KP_Enter" { "action" ("workbench", "show-command-bar", "") };
+  bind "<ctrl>Return" { "action" ("win", "show-command-bar", "") };
+  bind "<ctrl>KP_Enter" { "action" ("win", "show-command-bar", "") };
 }
 

@@ -21,8 +21,6 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
-#include "gb-command-gaction-provider.h"
-#include "gb-command-vim-provider.h"
 #include "gb-dnd.h"
 #include "gb-editor-document.h"
 #include "gb-settings.h"
@@ -40,9 +38,7 @@ G_DEFINE_TYPE (GbWorkbench, gb_workbench, GTK_TYPE_APPLICATION_WINDOW)
 
 enum {
   PROP_0,
-  PROP_ACTIVE_WORKSPACE,
   PROP_BUILDING,
-  PROP_COMMAND_MANAGER,
   PROP_CONTEXT,
   LAST_PROP
 };
@@ -412,7 +408,6 @@ gb_workbench_dispose (GObject *object)
 
   self->disposing++;
 
-  g_clear_object (&self->command_manager);
   g_clear_object (&self->unload_cancellable);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->dispose (object);
@@ -450,10 +445,6 @@ gb_workbench_get_property (GObject    *object,
     {
     case PROP_BUILDING:
       g_value_set_boolean (value, self->building);
-      break;
-
-    case PROP_COMMAND_MANAGER:
-      g_value_set_object (value, gb_workbench_get_command_manager (self));
       break;
 
     case PROP_CONTEXT:
@@ -502,26 +493,12 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   widget_class->grab_focus = gb_workbench_grab_focus;
   widget_class->realize = gb_workbench_realize;
 
-  gParamSpecs [PROP_ACTIVE_WORKSPACE] =
-    g_param_spec_object ("active-workspace",
-                         _("Active Workspace"),
-                         _("The active workspace."),
-                         GB_TYPE_WORKSPACE,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
   gParamSpecs [PROP_BUILDING] =
     g_param_spec_boolean ("building",
                           _("Building"),
                           _("If the project is currently building."),
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-
-  gParamSpecs [PROP_COMMAND_MANAGER] =
-    g_param_spec_object ("command-manager",
-                         _("Command Manager"),
-                         _("The command manager for the workbench."),
-                         GB_TYPE_COMMAND_MANAGER,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
    * GbWorkbench:context:
@@ -551,14 +528,12 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
                   IDE_TYPE_CONTEXT);
 
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-workbench.ui");
-  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, command_bar);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, gear_menu_button);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_box);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, workspace);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, project_tree);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, view_grid);
 
-  g_type_ensure (GB_TYPE_COMMAND_BAR);
   g_type_ensure (GB_TYPE_PROJECT_TREE);
   g_type_ensure (GB_TYPE_SEARCH_BOX);
   g_type_ensure (GB_TYPE_VIEW_GRID);
@@ -572,6 +547,8 @@ gb_workbench__extension_added (PeasExtensionSet *set,
                                PeasPluginInfo   *plugin_info,
                                GbWorkbenchAddin *addin)
 {
+  g_print ("EXTENSION ADDED!!!!!\n");
+
   gb_workbench_addin_load (addin);
 }
 
@@ -586,24 +563,9 @@ gb_workbench__extension_removed (PeasExtensionSet *set,
 static void
 gb_workbench_init (GbWorkbench *self)
 {
-  PeasEngine *engine;
-  g_autoptr(GbCommandProvider) gaction_provider = NULL;
-  g_autoptr(GbCommandProvider) vim_provider = NULL;
-
   IDE_ENTRY;
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  self->command_manager = gb_command_manager_new ();
-
-  gaction_provider = g_object_new (GB_TYPE_COMMAND_GACTION_PROVIDER,
-                                   "workbench", self,
-                                   NULL);
-  vim_provider = g_object_new (GB_TYPE_COMMAND_VIM_PROVIDER,
-                               "workbench", self,
-                               NULL);
-  gb_command_manager_add_provider (self->command_manager, gaction_provider);
-  gb_command_manager_add_provider (self->command_manager, vim_provider);
 
   /* Drag and drop support*/
   gtk_drag_dest_set (GTK_WIDGET (self),
@@ -612,8 +574,7 @@ gb_workbench_init (GbWorkbench *self)
 
   gb_settings_init_window (GTK_WINDOW (self));
 
-  engine = peas_engine_get_default ();
-  self->extensions = peas_extension_set_new (engine,
+  self->extensions = peas_extension_set_new (peas_engine_get_default (),
                                              GB_TYPE_WORKBENCH_ADDIN,
                                              "workbench", self,
                                              NULL);
@@ -768,22 +729,6 @@ gb_workbench_open_with_editor (GbWorkbench *self,
   project = ide_context_get_project (self->context);
   idefile = ide_project_get_project_file (project, file);
   ide_buffer_manager_load_file_async (buffer_manager, idefile, FALSE, NULL, NULL, NULL, NULL);
-}
-
-/**
- * gb_workbench_get_command_manager:
- * @self: A #GbWorkbench.
- *
- * Gets the command manager for the workbench. This may be moved into libide.
- *
- * Returns: (transfer none): A #GbCommandManager.
- */
-GbCommandManager *
-gb_workbench_get_command_manager (GbWorkbench *self)
-{
-  g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
-
-  return self->command_manager;
 }
 
 void

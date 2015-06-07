@@ -23,8 +23,6 @@
 #include <libpeas/peas.h>
 #include <ide.h>
 
-#include "gb-command-bar.h"
-#include "gb-command-manager.h"
 #include "gb-editor-workspace.h"
 #include "gb-project-tree.h"
 #include "gb-search-box.h"
@@ -39,14 +37,12 @@ struct _GbWorkbench
   GtkApplicationWindow    parent_instance;
 
   /* Owned reference */
-  GbCommandManager       *command_manager;
   IdeContext             *context;
   GCancellable           *unload_cancellable;
   gchar                  *current_folder_uri;
   PeasExtensionSet       *extensions;
 
   /* Template references */
-  GbCommandBar           *command_bar;
   GeditMenuStackSwitcher *gear_menu_button;
   GbProjectTree          *project_tree;
   GbSearchBox            *search_box;

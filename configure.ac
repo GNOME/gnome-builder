@@ -377,6 +377,10 @@ AC_CONFIG_FILES([
 	libide/ide-debug.h
 	libide/Makefile
 
+	plugins/Makefile
+	plugins/command-bar/Makefile
+	plugins/symbol-tree/Makefile
+
 	data/Makefile
 	data/gsettings/Makefile
 	data/icons/Makefile

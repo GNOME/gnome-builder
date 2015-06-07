@@ -22,8 +22,6 @@
 #include <gtk/gtk.h>
 #include <ide.h>
 
-#include "gb-command-manager.h"
-
 G_BEGIN_DECLS
 
 #define GB_TYPE_WORKBENCH (gb_workbench_get_type())
@@ -46,7 +44,6 @@ void              gb_workbench_open_with_editor     (GbWorkbench         *self,
                                                      GFile               *file);
 void              gb_workbench_open_uri_list        (GbWorkbench         *self,
                                                      const gchar * const *uri_list);
-GbCommandManager *gb_workbench_get_command_manager  (GbWorkbench         *self);
 gboolean          gb_workbench_get_closing          (GbWorkbench         *self);
 void              gb_workbench_views_foreach        (GbWorkbench         *self,
                                                      GtkCallback          callback,

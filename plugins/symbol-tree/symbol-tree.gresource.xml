@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins/symbol-tree">
+    <file>symbol-tree.plugin</file>
+    <file>symbol-tree.ui</file>
+  </gresource>
+</gresources>

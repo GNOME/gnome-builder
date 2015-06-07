@@ -134,7 +134,7 @@
   bind "9" { "append-to-count" (9)
              "set-mode" ("vim-normal-with-count", transient) };
 
-  bind "colon" { "action" ("workbench", "show-command-bar", "") };
+  bind "colon" { "action" ("win", "show-command-bar", "") };
 
   /* cycle "tabs" */
   bind "<ctrl>Page_Up" { "action" ("view-stack", "previous-view", "") };
@@ -1047,7 +1047,7 @@
 
 @binding-set builder-vim-source-view-visual
 {
-  bind "colon" { "action" ("workbench", "show-command-bar", "") };
+  bind "colon" { "action" ("win", "show-command-bar", "") };
 
   bind "percent" { "move-to-matching-bracket" (1) };
 
@@ -1211,7 +1211,7 @@
 
 @binding-set builder-vim-source-view-visual-line
 {
-  bind "colon" { "action" ("workbench", "show-command-bar", "") };
+  bind "colon" { "action" ("win", "show-command-bar", "") };
 
   bind "1" { "append-to-count" (1)
              "set-mode" ("vim-visual-line-with-count", transient) };
@@ -1364,7 +1364,7 @@
 
 @binding-set builder-gb-project-tree-vim
 {
-  bind "colon" { "action" ("workbench", "show-command-bar", "") };
+  bind "colon" { "action" ("win", "show-command-bar", "") };
 }
 
 /*

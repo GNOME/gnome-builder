@@ -943,6 +943,14 @@ gb_workspace_get_internal_child (GtkBuildable *buildable,
 }
 
 static void
+gb_workspace_grab_focus (GtkWidget *widget)
+{
+  GbWorkspace *self = (GbWorkspace *)widget;
+
+  gtk_widget_grab_focus (self->children [GTK_POS_TOP].widget);
+}
+
+static void
 gb_workspace_finalize (GObject *object)
 {
   GbWorkspace *self = (GbWorkspace *)object;
@@ -1033,6 +1041,7 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
   widget_class->realize = gb_workspace_realize;
   widget_class->unrealize = gb_workspace_unrealize;
   widget_class->size_allocate = gb_workspace_size_allocate;
+  widget_class->grab_focus = gb_workspace_grab_focus;
 
   container_class->get_child_property = gb_workspace_get_child_property;
   container_class->set_child_property = gb_workspace_set_child_property;

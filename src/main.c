@@ -29,6 +29,7 @@
 #include <locale.h>
 
 #include "gb-application.h"
+#include "gb-plugins.h"
 
 int
 main (int   argc,
@@ -54,6 +55,8 @@ main (int   argc,
              gtk_get_major_version (),
              gtk_get_minor_version (),
              gtk_get_micro_version ());
+
+  gb_plugins_load ();
 
   app = g_object_new (GB_TYPE_APPLICATION,
                       "application-id", "org.gnome.Builder",

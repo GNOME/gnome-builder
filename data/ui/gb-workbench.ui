@@ -135,12 +135,6 @@
             </child>
           </object>
         </child>
-        <child>
-          <object class="GbCommandBar" id="command_bar">
-            <property name="transition-type">slide-up</property>
-            <property name="visible">true</property>
-          </object>
-        </child>
       </object>
     </child>
   </template>

@@ -21,17 +21,24 @@
 
 #include "gb-command.h"
 #include "gb-command-bar.h"
-#include "gb-command-bar-item.h"
+#include "gb-command-bar-resources.h"
 #include "gb-command-manager.h"
 #include "gb-glib.h"
 #include "gb-string.h"
 #include "gb-view-stack.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
+#include "gb-workbench-addin.h"
+#include "gb-plugins.h"
 
 struct _GbCommandBar
 {
   GtkRevealer        parent_instance;
+
+  GbWorkbench       *workbench;
+  GbCommandManager  *command_manager;
+
+  GSimpleAction     *show_action;
 
   GtkSizeGroup      *result_size_group;
   GtkEntry          *entry;
@@ -50,7 +57,10 @@ struct _GbCommandBar
   gboolean           saved_position_valid;
 };
 
-G_DEFINE_TYPE (GbCommandBar, gb_command_bar, GTK_TYPE_REVEALER)
+static void workbench_addin_init (GbWorkbenchAddinInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GbCommandBar, gb_command_bar, GTK_TYPE_REVEALER,
+                         G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN, workbench_addin_init))
 
 #define HISTORY_LENGTH 30
 
@@ -60,7 +70,44 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  PROP_0,
+  PROP_WORKBENCH,
+  LAST_PROP
+};
+
+static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
+
+static void
+gb_command_bar_load (GbWorkbenchAddin *addin)
+{
+  GbCommandBar *self = (GbCommandBar *)addin;
+  GtkWidget *child;
+
+  g_assert (GB_IS_COMMAND_BAR (self));
+
+  child = gtk_bin_get_child (GTK_BIN (self->workbench));
+  gtk_box_pack_end (GTK_BOX (child), GTK_WIDGET (self), FALSE, FALSE, 0);
+
+  g_action_map_add_action (G_ACTION_MAP (self->workbench), G_ACTION (self->show_action));
+}
+
+static void
+gb_command_bar_unload (GbWorkbenchAddin *addin)
+{
+  GbCommandBar *self = (GbCommandBar *)addin;
+  GtkWidget *parent;
+
+  g_assert (GB_IS_COMMAND_BAR (self));
+
+  ide_clear_weak_pointer (&self->workbench);
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (self));
+  gtk_container_remove (GTK_CONTAINER (parent), GTK_WIDGET (self));
+
+  g_action_map_remove_action (G_ACTION_MAP (self->workbench), "show-command-bar");
+}
 
 GtkWidget *
 gb_command_bar_new (void)
@@ -107,7 +154,7 @@ find_alternate_focus (GtkWidget *focus)
 void
 gb_command_bar_hide (GbCommandBar *self)
 {
-  GbWorkbench *workbench;
+  GtkWidget *toplevel;
   GtkWidget *focus;
 
   g_return_if_fail (GB_IS_COMMAND_BAR (self));
@@ -117,14 +164,14 @@ gb_command_bar_hide (GbCommandBar *self)
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (self), FALSE);
 
-  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
-  if ((workbench == NULL) || gb_workbench_get_closing (workbench))
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+  if ((toplevel == NULL) || gtk_widget_in_destruction (toplevel))
     return;
 
   if (self->last_focus)
     focus = find_alternate_focus (self->last_focus);
   else
-    focus = GTK_WIDGET (workbench);
+    focus = toplevel;
 
   gtk_widget_grab_focus (focus);
 }
@@ -175,41 +222,15 @@ static void
 gb_command_bar_push_result (GbCommandBar    *self,
                             GbCommandResult *result)
 {
-  GtkAdjustment *vadj;
-  GdkFrameClock *frame_clock;
-  GtkWidget *item;
-  GtkWidget *result_widget;
-  gdouble upper;
-
-  g_return_if_fail (GB_IS_COMMAND_BAR (self));
-  g_return_if_fail (GB_IS_COMMAND_RESULT (result));
-
-  item = g_object_new (GB_TYPE_COMMAND_BAR_ITEM,
-                       "result", result,
-                       "visible", TRUE,
-                       NULL);
-  gtk_container_add (GTK_CONTAINER (self->list_box), item);
-
-  result_widget = gb_command_bar_item_get_result (GB_COMMAND_BAR_ITEM (item));
-  gtk_size_group_add_widget (self->result_size_group, result_widget);
-
-  vadj = gtk_list_box_get_adjustment (self->list_box);
-  upper = gtk_adjustment_get_upper (vadj);
-  frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (self->list_box));
-
-  ide_object_animate (vadj,
-                      IDE_ANIMATION_EASE_IN_CUBIC,
-                      250,
-                      frame_clock,
-                      "value", upper,
-                      NULL);
+  /*
+   * TODO: if we decide to keep results visible, add them to list here.
+   */
 }
 
 static void
 gb_command_bar_on_entry_activate (GbCommandBar *self,
                                   GtkEntry     *entry)
 {
-  GbWorkbench *workbench = NULL;
   const gchar *text;
 
   g_assert (GB_IS_COMMAND_BAR (self));
@@ -217,23 +238,17 @@ gb_command_bar_on_entry_activate (GbCommandBar *self,
 
   text = gtk_entry_get_text (entry);
 
-  workbench = GB_WORKBENCH (gtk_widget_get_toplevel (GTK_WIDGET (self)));
-  if (!workbench)
-    return;
-
   gtk_widget_hide (GTK_WIDGET (self->completion_scroller));
 
   if (!gb_str_empty0 (text))
     {
-      GbCommandManager *manager;
       GbCommandResult *result = NULL;
       GbCommand *command = NULL;
 
       g_queue_push_head (self->history, g_strdup (text));
       g_free (g_queue_pop_nth (self->history, HISTORY_LENGTH));
 
-      manager = gb_workbench_get_command_manager (workbench);
-      command = gb_command_manager_lookup (manager, text);
+      command = gb_command_manager_lookup (self->command_manager, text);
 
       if (command)
         {
@@ -339,15 +354,9 @@ gb_command_bar_complete (GbCommandBar *self)
 {
   GtkEditable *editable = GTK_EDITABLE (self->entry);
   GtkWidget *viewport = gtk_bin_get_child (GTK_BIN (self->completion_scroller));
-  GbWorkbench *workbench;
-  GbCommandManager *manager;
   gchar **completions;
   int pos, i;
   gchar *current_prefix, *expanded_prefix;
-
-  workbench = GB_WORKBENCH (gtk_widget_get_toplevel (GTK_WIDGET (self)));
-  if (!workbench)
-    return;
 
   pos = gtk_editable_get_position (editable);
   current_prefix = gtk_editable_get_chars (editable, 0, pos);
@@ -372,8 +381,7 @@ gb_command_bar_complete (GbCommandBar *self)
     {
       g_clear_pointer (&self->last_completion, g_free);
 
-      manager = gb_workbench_get_command_manager (workbench);
-      completions = gb_command_manager_complete (manager, current_prefix);
+      completions = gb_command_manager_complete (self->command_manager, current_prefix);
 
       expanded_prefix = find_longest_common_prefix (completions);
 
@@ -510,6 +518,15 @@ gb_command_bar_on_entry_cursor_changed (GbCommandBar *self)
   self->saved_position_valid = FALSE;
 }
 
+static void
+show_command_bar (GSimpleAction *action,
+                  GVariant      *param,
+                  GbCommandBar  *self)
+{
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self), TRUE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->entry));
+}
+
 static gboolean
 gb_command_bar_on_entry_key_press_event (GbCommandBar *bar,
                                          GdkEventKey  *event,
@@ -594,12 +611,33 @@ gb_command_bar_finalize (GObject *object)
 {
   GbCommandBar *self = (GbCommandBar *)object;
 
+  ide_clear_weak_pointer (&self->workbench);
+
   g_clear_pointer (&self->last_completion, g_free);
   g_clear_pointer (&self->saved_text, g_free);
   g_queue_free_full (self->history, g_free);
   gb_clear_weak_pointer (&self->last_focus);
 
   G_OBJECT_CLASS (gb_command_bar_parent_class)->finalize (object);
+}
+
+static void
+gb_command_bar_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  GbCommandBar *self = (GbCommandBar *)object;
+
+  switch (prop_id)
+    {
+    case PROP_WORKBENCH:
+      ide_set_weak_pointer (&self->workbench, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -611,8 +649,18 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
 
   object_class->constructed = gb_command_bar_constructed;
   object_class->finalize = gb_command_bar_finalize;
+  object_class->set_property = gb_command_bar_set_property;
 
   widget_class->grab_focus = gb_command_bar_grab_focus;
+
+  gParamSpecs [PROP_WORKBENCH] =
+    g_param_spec_object ("workbench",
+                         _("Workbench"),
+                         _("Workbench"),
+                         GB_TYPE_WORKBENCH,
+                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   /**
    * GbCommandBar::complete:
@@ -658,7 +706,7 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_DOWN);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/ui/gb-command-bar.ui");
+                                               "/org/gnome/builder/plugins/command-bar/gb-command-bar.ui");
 
   gtk_widget_class_bind_template_child (widget_class, GbCommandBar, entry);
   gtk_widget_class_bind_template_child (widget_class, GbCommandBar, list_box);
@@ -671,7 +719,27 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
 static void
 gb_command_bar_init (GbCommandBar *self)
 {
-  gtk_widget_init_template (GTK_WIDGET (self));
-
   self->history = g_queue_new ();
+  self->command_manager = gb_command_manager_new ();
+
+  self->show_action = g_simple_action_new ("show-command-bar", NULL);
+  g_signal_connect_object (self->show_action,
+                           "activate",
+                           G_CALLBACK (show_command_bar),
+                           self,
+                           0);
+
+  gtk_widget_init_template (GTK_WIDGET (self));
 }
+
+static void
+workbench_addin_init (GbWorkbenchAddinInterface *iface)
+{
+  iface->load = gb_command_bar_load;
+  iface->unload = gb_command_bar_unload;
+}
+
+GB_DEFINE_EMBEDDED_PLUGIN (gb_command_bar,
+                           gb_command_bar_get_resource (),
+                           "resource:///org/gnome/builder/plugins/command-bar/gb-command-bar.plugin",
+                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_COMMAND_BAR))

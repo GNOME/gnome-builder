@@ -50,7 +50,7 @@
 {
   bind "<ctrl>x" { "set-mode" ("emacs-x", transient) };
   bind "<ctrl>underscore" { "undo" () };
-  bind "<alt>x" { "action" ("workbench", "show-command-bar", "") };
+  bind "<alt>x" { "action" ("win", "show-command-bar", "") };
   bind "<ctrl>s" { "action" ("frame", "find", "") };
   bind "<ctrl>period" { "action" ("workbench", "global-search", "") };
   bind "<alt>period" { "goto-definition" () };

@@ -15,26 +15,6 @@ libgnome_builder_la_SOURCES = \
 	app/gb-application-private.h \
 	app/gb-application.c \
 	app/gb-application.h \
-	commands/gb-command-bar-item.c \
-	commands/gb-command-bar-item.h \
-	commands/gb-command-bar.c \
-	commands/gb-command-bar.h \
-	commands/gb-command-gaction-provider.c \
-	commands/gb-command-gaction-provider.h \
-	commands/gb-command-gaction.c \
-	commands/gb-command-gaction.h \
-	commands/gb-command-manager.c \
-	commands/gb-command-manager.h \
-	commands/gb-command-provider.c \
-	commands/gb-command-provider.h \
-	commands/gb-command-result.c \
-	commands/gb-command-result.h \
-	commands/gb-command-vim-provider.c \
-	commands/gb-command-vim-provider.h \
-	commands/gb-command-vim.c \
-	commands/gb-command-vim.h \
-	commands/gb-command.c \
-	commands/gb-command.h \
 	devhelp/gb-devhelp-document.c \
 	devhelp/gb-devhelp-document.h \
 	devhelp/gb-devhelp-view.c \
@@ -232,12 +212,32 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/contrib/rg \
 	$(NULL)
 
-gnome_builder_SOURCES = main.c
+define_plugin = -Wl,--whole-archive,$(top_builddir)/plugins/$1/.libs/lib$1.a,--no-whole-archive
+
+gnome_builder_PLUGINS = \
+	command-bar \
+	symbol-tree \
+	$(NULL)
+
+gnome_builder_SOURCES = \
+	gb-plugins.c \
+	gb-plugins.h \
+	main.c
+
 gnome_builder_CFLAGS = $(libgnome_builder_la_CFLAGS)
+
 gnome_builder_LDADD = \
 	$(top_builddir)/libide/libide-1.0.la \
+	$(foreach plugin,$(gnome_builder_PLUGINS),$(top_builddir)/plugins/$(plugin)/lib$(plugin).la) \
 	libgnome-builder.la \
 	$(NULL)
+
+
+gnome_builder_LDFLAGS = \
+	-export-dynamic \
+	$(foreach plugin,$(gnome_builder_PLUGINS),$(call define_plugin,$(plugin))) \
+	$(NULL)
+
 
 glib_resources_c = resources/gb-resources.c
 glib_resources_h = resources/gb-resources.h
