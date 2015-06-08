@@ -50,5 +50,7 @@ GbWorkspacePane GtkStackSwitcher.flat .button {
   box-shadow: none;
   background: none;
   border-radius: 0px;
+}
+GbWorkspacePane GtkStackSwitcher .button:checked {
   border-bottom: 2px solid @theme_selected_bg_color;
 }
