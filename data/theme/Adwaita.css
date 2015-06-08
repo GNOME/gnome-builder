@@ -1,17 +1,15 @@
 @import url("resource:///org/gnome/builder/theme/Adwaita-shared.css");
 
-/*
- * Project Tree
- */
-GbProjectTree.view {
+
+GtkTreeView.view {
   color: #555753;
   background-color: #eeeeec;
 }
-GbProjectTree.view:backdrop {
+GtkTreeView.view:backdrop {
   color: #888a85;
   background-color: #efefef;
 }
-GbProjectTree.view.cell:selected {
+GtkTreeView.view.cell:selected {
   color: #fff;
   background-color: #4a90d9;
 }
@@ -21,6 +19,7 @@ GbGreeterPillBox {
   background-color: #eeeeec;
   border-radius: 3px;
 }
+
 
 RgGraph {
   background-color: #f6f7f8;

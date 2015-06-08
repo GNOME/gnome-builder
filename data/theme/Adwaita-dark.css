@@ -1,20 +1,19 @@
 @import url("resource:///org/gnome/builder/theme/Adwaita-shared.css");
 
-/*
- * Project Tree
- */
-GbProjectTree.view {
+
+GtkTreeView.view {
   color: #eeeeec;
   background-color: mix(#292929, #2e3436, 0.8);
 }
-GbProjectTree.view:backdrop {
+GtkTreeView.view:backdrop {
   color: #a1a1a1;
   background-color: #2e3436;
 }
-GbProjectTree.view.cell:selected {
+GtkTreeView.view.cell:selected {
   color: #fff;
   background-color: #215d9c;
 }
+
 
 RgGraph {
   background-color: #2e3436;
