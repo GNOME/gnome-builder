@@ -42,8 +42,12 @@ GbNewProjectDialog GtkFileChooserButton.linked-on-right .button {
 /*
  * Workspace pane header styling.
  */
-GbWorkspacePane GtkBox.header {
+GbWorkspacePane GtkBox.header.notebook {
   border-bottom: 1px solid @borders;
+}
+GbWorkspacePane:not(.focused) GtkBox.header.notebook
+{
+  background-color: shade (@theme_bg_color, 0.95);
 }
 GbWorkspacePane GtkStackSwitcher .button {
   border: none;

@@ -18,6 +18,8 @@
 
 #include <glib/gi18n.h>
 
+#include "egg-signal-group.h"
+
 #include "gb-workspace-pane.h"
 
 struct _GbWorkspacePane
@@ -27,6 +29,8 @@ struct _GbWorkspacePane
   GtkBox           *box;
   GtkStackSwitcher *stack_switcher;
   GtkStack         *stack;
+
+  EggSignalGroup   *toplevel_signals;
 
   GdkRectangle      handle_pos;
 
@@ -152,6 +156,52 @@ gb_workspace_pane_grab_focus (GtkWidget *widget)
 }
 
 static void
+workbench_focus_changed (GtkWidget       *toplevel,
+                         GtkWidget       *focus,
+                         GbWorkspacePane *self)
+{
+  GtkStyleContext *style_context;
+
+  g_assert (GTK_IS_WIDGET (toplevel));
+  g_assert (!focus || GTK_IS_WIDGET (focus));
+  g_assert (GB_IS_WORKSPACE_PANE (self));
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+
+  if ((focus == NULL) ||
+      ((focus != GTK_WIDGET (self)) && !gtk_widget_is_ancestor (focus, GTK_WIDGET (self))))
+    gtk_style_context_remove_class (style_context, "focused");
+  else
+    gtk_style_context_add_class (style_context, "focused");
+}
+
+static void
+gb_workspace_pane_hierarchy_changed (GtkWidget *widget,
+                                     GtkWidget *old_parent)
+{
+  GbWorkspacePane *self = (GbWorkspacePane *)widget;
+  GtkWidget *toplevel;
+
+  g_assert (GB_IS_WORKSPACE_PANE (self));
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+  if (!GTK_IS_WINDOW (toplevel))
+    toplevel = NULL;
+
+  egg_signal_group_set_target (self->toplevel_signals, toplevel);
+}
+
+static void
+gb_workspace_pane_dispose (GObject *object)
+{
+  GbWorkspacePane *self = (GbWorkspacePane *)object;
+
+  g_clear_object (&self->toplevel_signals);
+
+  G_OBJECT_CLASS (gb_workspace_pane_parent_class)->dispose (object);
+}
+
+static void
 gb_workspace_pane_finalize (GObject *object)
 {
   GbWorkspacePane *self = (GbWorkspacePane *)object;
@@ -206,12 +256,14 @@ gb_workspace_pane_class_init (GbWorkspacePaneClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = gb_workspace_pane_dispose;
   object_class->finalize = gb_workspace_pane_finalize;
   object_class->get_property = gb_workspace_pane_get_property;
   object_class->set_property = gb_workspace_pane_set_property;
 
   widget_class->draw = gb_workspace_pane_draw;
   widget_class->grab_focus = gb_workspace_pane_grab_focus;
+  widget_class->hierarchy_changed = gb_workspace_pane_hierarchy_changed;
   widget_class->size_allocate = gb_workspace_pane_size_allocate;
 
   /**
@@ -253,6 +305,13 @@ gb_workspace_pane_class_init (GbWorkspacePaneClass *klass)
 static void
 gb_workspace_pane_init (GbWorkspacePane *self)
 {
+  self->toplevel_signals = egg_signal_group_new (GTK_TYPE_WINDOW);
+  egg_signal_group_connect_object (self->toplevel_signals,
+                                   "set-focus",
+                                   G_CALLBACK (workbench_focus_changed),
+                                   self,
+                                   G_CONNECT_AFTER);
+
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
