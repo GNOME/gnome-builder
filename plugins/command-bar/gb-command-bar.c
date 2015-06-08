@@ -20,8 +20,9 @@
 #include <ide.h>
 
 #include "gb-command.h"
-#include "gb-command-bar.h"
 #include "gb-command-bar-resources.h"
+#include "gb-command-bar.h"
+#include "gb-command-gaction-provider.h"
 #include "gb-command-manager.h"
 #include "gb-command-vim-provider.h"
 #include "gb-glib.h"
@@ -88,6 +89,12 @@ gb_command_bar_load (GbWorkbenchAddin *addin)
   GtkWidget *child;
 
   g_assert (GB_IS_COMMAND_BAR (self));
+
+  provider = g_object_new (GB_TYPE_COMMAND_GACTION_PROVIDER,
+                           "workbench", self->workbench,
+                           NULL);
+  gb_command_manager_add_provider (self->command_manager, provider);
+  g_clear_object (&provider);
 
   provider = g_object_new (GB_TYPE_COMMAND_VIM_PROVIDER,
                            "workbench", self->workbench,
