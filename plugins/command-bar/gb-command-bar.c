@@ -23,6 +23,7 @@
 #include "gb-command-bar.h"
 #include "gb-command-bar-resources.h"
 #include "gb-command-manager.h"
+#include "gb-command-vim-provider.h"
 #include "gb-glib.h"
 #include "gb-string.h"
 #include "gb-view-stack.h"
@@ -83,9 +84,16 @@ static void
 gb_command_bar_load (GbWorkbenchAddin *addin)
 {
   GbCommandBar *self = (GbCommandBar *)addin;
+  GbCommandProvider *provider;
   GtkWidget *child;
 
   g_assert (GB_IS_COMMAND_BAR (self));
+
+  provider = g_object_new (GB_TYPE_COMMAND_VIM_PROVIDER,
+                           "workbench", self->workbench,
+                           NULL);
+  gb_command_manager_add_provider (self->command_manager, provider);
+  g_clear_object (&provider);
 
   child = gtk_bin_get_child (GTK_BIN (self->workbench));
   gtk_box_pack_end (GTK_BOX (child), GTK_WIDGET (self), FALSE, FALSE, 0);
