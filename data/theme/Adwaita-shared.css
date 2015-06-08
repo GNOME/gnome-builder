@@ -45,14 +45,19 @@ GbNewProjectDialog GtkFileChooserButton.linked-on-right .button {
 GbWorkspacePane GtkBox.header {
   border-bottom: 1px solid @borders;
 }
-GbWorkspacePane GtkStackSwitcher.flat .button {
+GbWorkspacePane GtkStackSwitcher .button {
   border: none;
   box-shadow: none;
   background: none;
+  opacity: 0.55;
   border-radius: 0px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
 }
 GbWorkspacePane GtkStackSwitcher .button:checked {
-  border-bottom: 2px solid @theme_selected_bg_color;
+  opacity: 1.0;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid @theme_selected_bg_color;
 }
 
 
