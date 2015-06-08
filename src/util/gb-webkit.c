@@ -21,6 +21,8 @@
 void
 gb_webkit_web_view_apply_settings (WebKitWebView *view)
 {
+  g_return_if_fail (WEBKIT_IS_WEB_VIEW (view));
+
   /*
    * TODO: Consider whether HTML5 local storage should be enabled. It could only
    * possibly be useful for complex web sites, but if you're building a web site

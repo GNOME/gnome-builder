@@ -152,6 +152,7 @@ gb_devhelp_view_set_split_view (GbView   *view,
       self->web_view2 = g_object_new (WEBKIT_TYPE_WEB_VIEW,
                                       "visible", TRUE,
                                       NULL);
+      gb_webkit_web_view_apply_settings (self->web_view2);
       gtk_container_add_with_properties (GTK_CONTAINER (self->paned), GTK_WIDGET (self->web_view2),
                                          "shrink", FALSE,
                                          "resize", TRUE,
@@ -257,5 +258,4 @@ gb_devhelp_view_init (GbDevhelpView *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gb_webkit_web_view_apply_settings (self->web_view1);
-  gb_webkit_web_view_apply_settings (self->web_view2);
 }
