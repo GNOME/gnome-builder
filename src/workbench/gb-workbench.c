@@ -896,3 +896,11 @@ gb_workbench_get_workspace (GbWorkbench *self)
 
   return GTK_WIDGET (self->workspace);
 }
+
+GtkWidget *
+gb_workbench_get_view_grid (GbWorkbench *self)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
+
+  return self->view_grid;
+}

@@ -49,6 +49,7 @@ void              gb_workbench_views_foreach        (GbWorkbench         *self,
                                                      GtkCallback          callback,
                                                      gpointer             callback_data);
 GtkWidget        *gb_workbench_get_workspace        (GbWorkbench         *self);
+GtkWidget        *gb_workbench_get_view_grid        (GbWorkbench         *self);
 
 G_END_DECLS
 
