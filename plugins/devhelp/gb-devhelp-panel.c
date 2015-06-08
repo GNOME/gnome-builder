@@ -64,8 +64,7 @@ gb_devhelp_panel_load (GbWorkbenchAddin *addin)
   workspace = gb_workbench_get_workspace (self->workbench);
   pane = gb_workspace_get_right_pane (GB_WORKSPACE (workspace));
   gb_workspace_pane_add_page (GB_WORKSPACE_PANE (pane), GTK_WIDGET (self),
-                              _("Documentation"),
-                              GTK_STOCK_HELP);
+                              _("Documentation"), "help-contents-symbolic");
 
   gtk_widget_show (GTK_WIDGET (self));
 }
@@ -98,8 +97,6 @@ gb_devhelp_panel_get_property (GObject    *object,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  GbDevhelpPanel *self = GB_DEVHELP_PANEL (object);
-
   switch (prop_id)
     {
     default:

@@ -64,7 +64,7 @@ symbol_tree_load (GbWorkbenchAddin *addin)
   gb_workspace_pane_add_page (GB_WORKSPACE_PANE (right_pane),
                               GTK_WIDGET (self),
                               _("Symbol Tree"),
-                              "flag-symbolic");
+                              "lang-function-symbolic");
 }
 
 static void
