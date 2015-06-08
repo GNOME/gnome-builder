@@ -43,22 +43,46 @@
             <child>
               <object class="GtkToggleButton">
                 <property name="action-name">workbench.show-left-pane</property>
-                <property name="label">L</property>
                 <property name="visible">true</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">builder-view-left-pane-symbolic</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
               <object class="GtkToggleButton">
                 <property name="action-name">workbench.show-bottom-pane</property>
-                <property name="label">B</property>
                 <property name="visible">true</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">builder-view-bottom-pane-symbolic</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
               <object class="GtkToggleButton">
                 <property name="action-name">workbench.show-right-pane</property>
-                <property name="label">R</property>
                 <property name="visible">true</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">builder-view-right-pane-symbolic</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

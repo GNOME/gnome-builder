@@ -9,6 +9,9 @@
     <file alias="icons/scalable/actions/builder-split-tab-left-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-split-tab-left-symbolic.svg</file>
     <file alias="icons/scalable/actions/builder-split-tab-right-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-split-tab-right-symbolic.svg</file>
     <file alias="icons/scalable/actions/builder-split-tab-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-split-tab-symbolic.svg</file>
+    <file alias="icons/scalable/actions/builder-view-bottom-pane-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-view-bottom-pane-symbolic.svg</file>
+    <file alias="icons/scalable/actions/builder-view-left-pane-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-view-left-pane-symbolic.svg</file>
+    <file alias="icons/scalable/actions/builder-view-right-pane-symbolic.svg">../../data/icons/hicolor/scalable/actions/builder-view-right-pane-symbolic.svg</file>
     <file alias="icons/scalable/actions/builder-vcs-git-symbolic.svg">../../data/icons/hicolor/scalable/vcs/builder-vcs-git-symbolic.svg</file>
 
     <!-- Scalable autocompletion icons -->
