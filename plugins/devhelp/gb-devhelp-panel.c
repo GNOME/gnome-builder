@@ -80,6 +80,14 @@ gb_devhelp_panel_unload (GbWorkbenchAddin *addin)
 }
 
 static void
+fixup_box_border_width (GtkWidget *widget,
+                        gpointer   user_data)
+{
+  if (GTK_IS_BOX (widget))
+    gtk_container_set_border_width (GTK_CONTAINER (widget), 0);
+}
+
+static void
 gb_devhelp_panel_finalize (GObject *object)
 {
   GbDevhelpPanel *self = (GbDevhelpPanel *)object;
@@ -149,6 +157,7 @@ gb_devhelp_panel_init (GbDevhelpPanel *self)
   dh_book_manager_populate (self->book_manager);
 
   self->sidebar = dh_sidebar_new (self->book_manager);
+  gtk_container_foreach (GTK_CONTAINER (self->sidebar), fixup_box_border_width, NULL);
   gtk_container_add (GTK_CONTAINER (self), self->sidebar);
   gtk_widget_show (self->sidebar);
 }

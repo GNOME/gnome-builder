@@ -54,3 +54,14 @@ GbWorkspacePane GtkStackSwitcher.flat .button {
 GbWorkspacePane GtkStackSwitcher .button:checked {
   border-bottom: 2px solid @theme_selected_bg_color;
 }
+
+
+/*
+ * Adjust devehlp styling.
+ */
+DhSidebar GtkSearchEntry {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-radius: 0px;
+}
