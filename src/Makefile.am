@@ -212,6 +212,7 @@ gnome_builder_PLUGINS = \
 	devhelp \
 	command-bar \
 	symbol-tree \
+	sysmon \
 	$(NULL)
 
 gnome_builder_SOURCES = \
