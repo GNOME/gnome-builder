@@ -26,6 +26,8 @@ libcommand_bar_la_SOURCES = \
 	gb-command-vim.h \
 	gb-command.c \
 	gb-command.h \
+	gb-vim.c \
+	gb-vim.h \
 	$(NULL)
 
 libcommand_bar_la_CFLAGS = \
@@ -36,7 +38,6 @@ libcommand_bar_la_CFLAGS = \
 	-I$(top_srcdir)/src/documents \
 	-I$(top_srcdir)/src/gd \
 	-I$(top_srcdir)/src/editor \
-	-I$(top_srcdir)/src/vim \
 	-I$(top_srcdir)/src/util \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/contrib/nautilus \

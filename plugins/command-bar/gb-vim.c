@@ -30,13 +30,13 @@
 G_DEFINE_QUARK (gb-vim-error-quark, gb_vim_error)
 
 typedef gboolean (*GbVimSetFunc)     (GtkSourceView  *source_view,
-                                       const gchar    *key,
-                                       const gchar    *value,
-                                       GError        **error);
+                                      const gchar    *key,
+                                      const gchar    *value,
+                                      GError        **error);
 typedef gboolean (*GbVimCommandFunc) (GtkSourceView  *source_view,
-                                       const gchar    *command,
-                                       const gchar    *options,
-                                       GError        **error);
+                                      const gchar    *command,
+                                      const gchar    *options,
+                                      GError        **error);
 
 typedef struct
 {

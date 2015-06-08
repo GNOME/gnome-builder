@@ -134,8 +134,6 @@ libgnome_builder_la_SOURCES = \
 	views/gb-view-stack.h \
 	views/gb-view.c \
 	views/gb-view.h \
-	vim/gb-vim.c \
-	vim/gb-vim.h \
 	workbench/gb-workbench-actions.c \
 	workbench/gb-workbench-actions.h \
 	workbench/gb-workbench-addin.c \
@@ -195,7 +193,6 @@ libgnome_builder_la_CFLAGS = \
 	-I$(srcdir)/tree \
 	-I$(srcdir)/util \
 	-I$(srcdir)/views \
-	-I$(srcdir)/vim \
 	-I$(srcdir)/workbench \
 	-I$(srcdir)/workspace \
 	-I$(top_builddir)/libide \
