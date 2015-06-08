@@ -547,8 +547,6 @@ gb_workbench__extension_added (PeasExtensionSet *set,
                                PeasPluginInfo   *plugin_info,
                                GbWorkbenchAddin *addin)
 {
-  g_print ("EXTENSION ADDED!!!!!\n");
-
   gb_workbench_addin_load (addin);
 }
 
@@ -902,5 +900,5 @@ gb_workbench_get_view_grid (GbWorkbench *self)
 {
   g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
 
-  return self->view_grid;
+  return GTK_WIDGET (self->view_grid);
 }
