@@ -88,7 +88,7 @@ gb_devhelp_document_set_uri (GbDevhelpDocument *document,
   g_return_if_fail (GB_IS_DEVHELP_DOCUMENT (document));
   g_return_if_fail (uri);
 
-  if (document->uri != uri)
+  if (!ide_str_equal0 (uri, document->uri))
     {
       g_clear_pointer (&document->uri, g_free);
       document->uri = g_strdup (uri);

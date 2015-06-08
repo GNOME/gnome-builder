@@ -19,21 +19,27 @@
 #include <glib/gi18n.h>
 #include <devhelp/devhelp.h>
 
+#include "gb-devhelp-document.h"
 #include "gb-devhelp-panel.h"
 #include "gb-devhelp-resources.h"
+#include "gb-devhelp-view.h"
+#include "gb-document.h"
 #include "gb-plugins.h"
+#include "gb-view.h"
+#include "gb-view-grid.h"
 #include "gb-workbench-addin.h"
 #include "gb-workbench.h"
 #include "gb-workspace.h"
 
 struct _GbDevhelpPanel
 {
-  GtkBin         parent_instance;
+  GtkBin             parent_instance;
 
-  GbWorkbench   *workbench;
-  DhBookManager *book_manager;
+  GbWorkbench       *workbench;
+  DhBookManager     *book_manager;
+  GbDevhelpDocument *document;
 
-  GtkWidget     *sidebar;
+  GtkWidget         *sidebar;
 };
 
 static void workbench_addin_iface_init (GbWorkbenchAddinInterface *iface);
@@ -80,6 +86,25 @@ gb_devhelp_panel_unload (GbWorkbenchAddin *addin)
 }
 
 static void
+link_selected_cb (GbDevhelpPanel *self,
+                  DhLink         *link,
+                  DhSidebar      *sidebar)
+{
+  GbViewGrid *view_grid;
+  gchar *uri;
+
+  g_assert (GB_IS_DEVHELP_PANEL (self));
+  g_assert (link != NULL);
+  g_assert (DH_IS_SIDEBAR (sidebar));
+
+  view_grid = GB_VIEW_GRID (gb_workbench_get_view_grid (self->workbench));
+  uri = dh_link_get_uri (link);
+  gb_devhelp_document_set_uri (GB_DEVHELP_DOCUMENT (self->document), uri);
+  gb_view_grid_focus_document (view_grid, GB_DOCUMENT (self->document));
+  g_free (uri);
+}
+
+static void
 fixup_box_border_width (GtkWidget *widget,
                         gpointer   user_data)
 {
@@ -95,6 +120,7 @@ gb_devhelp_panel_finalize (GObject *object)
   ide_clear_weak_pointer (&self->workbench);
 
   g_clear_object (&self->book_manager);
+  g_clear_object (&self->document);
 
   G_OBJECT_CLASS (gb_devhelp_panel_parent_class)->finalize (object);
 }
@@ -156,10 +182,18 @@ gb_devhelp_panel_init (GbDevhelpPanel *self)
   self->book_manager = dh_book_manager_new ();
   dh_book_manager_populate (self->book_manager);
 
+  self->document = g_object_new (GB_TYPE_DEVHELP_DOCUMENT, NULL);
+
   self->sidebar = dh_sidebar_new (self->book_manager);
   gtk_container_foreach (GTK_CONTAINER (self->sidebar), fixup_box_border_width, NULL);
   gtk_container_add (GTK_CONTAINER (self), self->sidebar);
   gtk_widget_show (self->sidebar);
+
+  g_signal_connect_object (self->sidebar,
+                           "link-selected",
+                           G_CALLBACK (link_selected_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
