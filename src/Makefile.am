@@ -11,6 +11,8 @@ libgnome_builder_la_SOURCES = \
 	$(gnome_builder_built_sources) \
 	app/gb-application-actions.c \
 	app/gb-application-actions.h \
+	app/gb-application-addin.c \
+	app/gb-application-addin.h \
 	app/gb-application-credits.h \
 	app/gb-application-private.h \
 	app/gb-application.c \

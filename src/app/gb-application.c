@@ -24,10 +24,10 @@
 
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
-#include <ide.h>
 
 #include "gb-application.h"
 #include "gb-application-actions.h"
+#include "gb-application-addin.h"
 #include "gb-application-private.h"
 #include "gb-css-provider.h"
 #include "gb-editor-document.h"
@@ -480,6 +480,58 @@ gb_application_activate (GApplication *application)
 }
 
 static void
+gb_application__extension_added (PeasExtensionSet   *extensions,
+                                 GbApplicationAddin *addin,
+                                 GbApplication      *self)
+{
+  g_assert (GB_IS_APPLICATION (self));
+  g_assert (GB_IS_APPLICATION_ADDIN (addin));
+  g_assert (PEAS_IS_EXTENSION_SET (extensions));
+
+  gb_application_addin_load (addin, self);
+}
+
+static void
+gb_application__extension_removed (PeasExtensionSet   *extensions,
+                                   GbApplicationAddin *addin,
+                                   GbApplication      *self)
+{
+  g_assert (GB_IS_APPLICATION (self));
+  g_assert (GB_IS_APPLICATION_ADDIN (addin));
+  g_assert (PEAS_IS_EXTENSION_SET (extensions));
+
+  gb_application_addin_unload (addin, self);
+}
+
+static void
+gb_application_load_extensions (GbApplication *self)
+{
+  PeasEngine *engine;
+
+  g_assert (GB_IS_APPLICATION (self));
+
+  engine = peas_engine_get_default ();
+
+  self->extensions = peas_extension_set_new (engine, GB_TYPE_APPLICATION_ADDIN, NULL);
+
+  peas_extension_set_foreach (self->extensions,
+                              (PeasExtensionSetForeachFunc)gb_application__extension_added,
+                              self);
+
+  g_signal_connect_object (self->extensions,
+                           "extension-added",
+                           G_CALLBACK (gb_application__extension_added),
+                           self,
+                           0);
+
+  g_signal_connect_object (self->extensions,
+                           "extension-removed",
+                           G_CALLBACK (gb_application__extension_removed),
+                           self,
+                           0);
+}
+
+static void
 gb_application_startup (GApplication *app)
 {
   GbApplication *self = (GbApplication *)app;
@@ -501,6 +553,7 @@ gb_application_startup (GApplication *app)
   gb_application_register_theme_overrides (self);
   gb_application_setup_search_paths ();
   gb_application_load_keybindings (self);
+  gb_application_load_extensions (self);
 
   IDE_EXIT;
 }
@@ -540,6 +593,7 @@ gb_application_finalize (GObject *object)
 
   IDE_ENTRY;
 
+  g_clear_object (&self->extensions);
   g_clear_pointer (&self->started_at, g_date_time_unref);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);

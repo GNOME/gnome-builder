@@ -22,6 +22,7 @@
 #include <gtk/gtk.h>
 #include <gio/gio.h>
 #include <ide.h>
+#include <libpeas/peas.h>
 
 #include "gb-keybindings.h"
 #include "gb-preferences-window.h"
@@ -37,6 +38,7 @@ struct _GbApplication
   GbPreferencesWindow *preferences_window;
   IdeRecentProjects   *recent_projects;
   GtkWindowGroup      *greeter_group;
+  PeasExtensionSet    *extensions;
 };
 
 
