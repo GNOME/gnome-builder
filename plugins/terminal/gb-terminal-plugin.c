@@ -18,13 +18,12 @@
 
 #include "gb-application-addin.h"
 #include "gb-plugins.h"
-#include "gb-terminal-addin.h"
 #include "gb-terminal-application-addin.h"
 #include "gb-terminal-resources.h"
-#include "gb-workbench-addin.h"
+#include "gb-terminal-workbench-addin.h"
 
 GB_DEFINE_EMBEDDED_PLUGIN (gb_terminal,
                            gb_terminal_get_resource (),
                            "resource:///org/gnome/builder/plugins/terminal/gb-terminal.plugin",
                            GB_DEFINE_PLUGIN_TYPE (GB_TYPE_APPLICATION_ADDIN, GB_TYPE_TERMINAL_APPLICATION_ADDIN)
-                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_TERMINAL_ADDIN))
+                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_TERMINAL_WORKBENCH_ADDIN))

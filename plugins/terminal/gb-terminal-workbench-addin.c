@@ -19,11 +19,11 @@
 #include <glib/gi18n.h>
 
 #include "gb-terminal.h"
-#include "gb-terminal-addin.h"
+#include "gb-terminal-workbench-addin.h"
 #include "gb-view-grid.h"
 #include "gb-workspace.h"
 
-struct _GbTerminalAddin
+struct _GbTerminalWorkbenchAddin
 {
   GObject      parent_instance;
 
@@ -33,7 +33,7 @@ struct _GbTerminalAddin
 
 static void workbench_addin_iface_init (GbWorkbenchAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbTerminalAddin, gb_terminal_addin, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GbTerminalWorkbenchAddin, gb_terminal_workbench_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN,
                                                 workbench_addin_iface_init))
 
@@ -48,14 +48,14 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 static void
 new_terminal_activate_cb (GSimpleAction   *action,
                           GVariant        *param,
-                          GbTerminalAddin *self)
+                          GbTerminalWorkbenchAddin *self)
 {
   GtkWidget *terminal;
   GtkWidget *grid;
   GtkWidget *stack;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GB_IS_TERMINAL_ADDIN (self));
+  g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
 
   grid = gb_workbench_get_view_grid (self->workbench);
   terminal = g_object_new (GB_TYPE_TERMINAL,
@@ -67,14 +67,14 @@ new_terminal_activate_cb (GSimpleAction   *action,
 }
 
 static void
-gb_terminal_addin_load (GbWorkbenchAddin *addin)
+gb_terminal_workbench_addin_load (GbWorkbenchAddin *addin)
 {
-  GbTerminalAddin *self = (GbTerminalAddin *)addin;
+  GbTerminalWorkbenchAddin *self = (GbTerminalWorkbenchAddin *)addin;
   GbWorkspace *workspace;
   GtkWidget *bottom_pane;
   g_autoptr(GSimpleAction) action = NULL;
 
-  g_assert (GB_IS_TERMINAL_ADDIN (self));
+  g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
   g_assert (GB_IS_WORKBENCH (self->workbench));
 
   action = g_simple_action_new ("new-terminal", NULL);
@@ -103,11 +103,11 @@ gb_terminal_addin_load (GbWorkbenchAddin *addin)
 }
 
 static void
-gb_terminal_addin_unload (GbWorkbenchAddin *addin)
+gb_terminal_workbench_addin_unload (GbWorkbenchAddin *addin)
 {
-  GbTerminalAddin *self = (GbTerminalAddin *)addin;
+  GbTerminalWorkbenchAddin *self = (GbTerminalWorkbenchAddin *)addin;
 
-  g_assert (GB_IS_TERMINAL_ADDIN (self));
+  g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
 
   g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal");
 
@@ -121,22 +121,22 @@ gb_terminal_addin_unload (GbWorkbenchAddin *addin)
 }
 
 static void
-gb_terminal_addin_finalize (GObject *object)
+gb_terminal_workbench_addin_finalize (GObject *object)
 {
-  GbTerminalAddin *self = (GbTerminalAddin *)object;
+  GbTerminalWorkbenchAddin *self = (GbTerminalWorkbenchAddin *)object;
 
   ide_clear_weak_pointer (&self->workbench);
 
-  G_OBJECT_CLASS (gb_terminal_addin_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gb_terminal_workbench_addin_parent_class)->finalize (object);
 }
 
 static void
-gb_terminal_addin_set_property (GObject      *object,
+gb_terminal_workbench_addin_set_property (GObject      *object,
                                 guint         prop_id,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-  GbTerminalAddin *self = GB_TERMINAL_ADDIN (object);
+  GbTerminalWorkbenchAddin *self = GB_TERMINAL_WORKBENCH_ADDIN (object);
 
   switch (prop_id)
     {
@@ -150,12 +150,12 @@ gb_terminal_addin_set_property (GObject      *object,
 }
 
 static void
-gb_terminal_addin_class_init (GbTerminalAddinClass *klass)
+gb_terminal_workbench_addin_class_init (GbTerminalWorkbenchAddinClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gb_terminal_addin_finalize;
-  object_class->set_property = gb_terminal_addin_set_property;
+  object_class->finalize = gb_terminal_workbench_addin_finalize;
+  object_class->set_property = gb_terminal_workbench_addin_set_property;
 
   gParamSpecs [PROP_WORKBENCH] =
     g_param_spec_object ("workbench",
@@ -168,13 +168,13 @@ gb_terminal_addin_class_init (GbTerminalAddinClass *klass)
 }
 
 static void
-gb_terminal_addin_init (GbTerminalAddin *self)
+gb_terminal_workbench_addin_init (GbTerminalWorkbenchAddin *self)
 {
 }
 
 static void
 workbench_addin_iface_init (GbWorkbenchAddinInterface *iface)
 {
-  iface->load = gb_terminal_addin_load;
-  iface->unload = gb_terminal_addin_unload;
+  iface->load = gb_terminal_workbench_addin_load;
+  iface->unload = gb_terminal_workbench_addin_unload;
 }

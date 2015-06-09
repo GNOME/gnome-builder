@@ -8,11 +8,11 @@ noinst_LTLIBRARIES = libterminal.la
 libterminal_la_SOURCES = \
 	gb-terminal.c \
 	gb-terminal.h \
-	gb-terminal-addin.c \
-	gb-terminal-addin.h \
 	gb-terminal-application-addin.c \
 	gb-terminal-application-addin.h \
 	gb-terminal-plugin.c \
+	gb-terminal-workbench-addin.c \
+	gb-terminal-workbench-addin.h \
 	$(NULL)
 
 nodist_libterminal_la_SOURCES = \
