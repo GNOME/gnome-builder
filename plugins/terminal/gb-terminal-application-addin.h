@@ -1,4 +1,4 @@
-/* gb-terminal.h
+/* gb-terminal-application-addin.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_H
-#define GB_TERMINAL_H
+#ifndef GB_TERMINAL_APPLICATION_ADDIN_H
+#define GB_TERMINAL_APPLICATION_ADDIN_H
 
-#include <gtk/gtk.h>
-
-#include "gb-view.h"
+#include "gb-application-addin.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_TERMINAL (gb_terminal_get_type())
+#define GB_TYPE_TERMINAL_APPLICATION_ADDIN (gb_terminal_application_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbTerminal, gb_terminal, GB, TERMINAL, GbView)
+G_DECLARE_FINAL_TYPE (GbTerminalApplicationAddin, gb_terminal_application_addin, GB, TERMINAL_APPLICATION_ADDIN, GObject)
 
 G_END_DECLS
 
-#endif /* GB_TERMINAL_H */
+#endif /* GB_TERMINAL_APPLICATION_ADDIN_H */

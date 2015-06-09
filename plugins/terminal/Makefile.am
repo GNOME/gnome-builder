@@ -10,6 +10,9 @@ libterminal_la_SOURCES = \
 	gb-terminal.h \
 	gb-terminal-addin.c \
 	gb-terminal-addin.h \
+	gb-terminal-application-addin.c \
+	gb-terminal-application-addin.h \
+	gb-terminal-plugin.c \
 	$(NULL)
 
 nodist_libterminal_la_SOURCES = \
@@ -21,6 +24,10 @@ libterminal_la_CFLAGS = \
 	$(BUILDER_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/src \
+	-I$(top_srcdir)/src/app \
+	-I$(top_srcdir)/src/documents \
+	-I$(top_srcdir)/src/util \
+	-I$(top_srcdir)/src/views \
 	-I$(top_srcdir)/src/workbench \
 	-I$(top_srcdir)/src/workspace \
 	-I$(top_srcdir)/contrib/egg \

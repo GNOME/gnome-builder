@@ -210,7 +210,7 @@ gb_widget_fade_show (GtkWidget *widget)
     }
 }
 
-void
+gboolean
 gb_widget_activate_action (GtkWidget   *widget,
                            const gchar *prefix,
                            const gchar *action_name,
@@ -220,9 +220,9 @@ gb_widget_activate_action (GtkWidget   *widget,
   GtkWidget *toplevel;
   GActionGroup *group = NULL;
 
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (prefix);
-  g_return_if_fail (action_name);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (prefix, FALSE);
+  g_return_val_if_fail (action_name, FALSE);
 
   app = g_application_get_default ();
   toplevel = gtk_widget_get_toplevel (widget);
@@ -239,13 +239,10 @@ gb_widget_activate_action (GtkWidget   *widget,
   if (!group && g_str_equal (prefix, "app") && G_IS_ACTION_GROUP (app))
     group = G_ACTION_GROUP (app);
 
-  if (group)
+  if (group && g_action_group_has_action (group, action_name))
     {
-      if (g_action_group_has_action (group, action_name))
-        {
-          g_action_group_activate_action (group, action_name, parameter);
-          return;
-        }
+      g_action_group_activate_action (group, action_name, parameter);
+      return TRUE;
     }
 
   if (parameter && g_variant_is_floating (parameter))
@@ -254,7 +251,7 @@ gb_widget_activate_action (GtkWidget   *widget,
       g_variant_unref (parameter);
     }
 
-  g_warning ("Failed to resolve action %s.%s", prefix, action_name);
+  return FALSE;
 }
 
 IdeContext *

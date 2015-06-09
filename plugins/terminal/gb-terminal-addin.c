@@ -18,10 +18,9 @@
 
 #include <glib/gi18n.h>
 
-#include "gb-plugins.h"
 #include "gb-terminal.h"
 #include "gb-terminal-addin.h"
-#include "gb-terminal-resources.h"
+#include "gb-view-grid.h"
 #include "gb-workspace.h"
 
 struct _GbTerminalAddin
@@ -47,14 +46,44 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void
+new_terminal_activate_cb (GSimpleAction   *action,
+                          GVariant        *param,
+                          GbTerminalAddin *self)
+{
+  GtkWidget *terminal;
+  GtkWidget *grid;
+  GtkWidget *stack;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GB_IS_TERMINAL_ADDIN (self));
+
+  grid = gb_workbench_get_view_grid (self->workbench);
+  terminal = g_object_new (GB_TYPE_TERMINAL,
+                           "visible", TRUE,
+                           NULL);
+  stack = gb_view_grid_get_last_focus (GB_VIEW_GRID (grid));
+  gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (terminal));
+  gtk_widget_grab_focus (GTK_WIDGET (terminal));
+}
+
+static void
 gb_terminal_addin_load (GbWorkbenchAddin *addin)
 {
   GbTerminalAddin *self = (GbTerminalAddin *)addin;
   GbWorkspace *workspace;
   GtkWidget *bottom_pane;
+  g_autoptr(GSimpleAction) action = NULL;
 
   g_assert (GB_IS_TERMINAL_ADDIN (self));
   g_assert (GB_IS_WORKBENCH (self->workbench));
+
+  action = g_simple_action_new ("new-terminal", NULL);
+  g_signal_connect_object (action,
+                           "activate",
+                           G_CALLBACK (new_terminal_activate_cb),
+                           self,
+                           0);
+  g_action_map_add_action (G_ACTION_MAP (self->workbench), G_ACTION (action));
 
   if (self->panel_terminal == NULL)
     {
@@ -79,6 +108,8 @@ gb_terminal_addin_unload (GbWorkbenchAddin *addin)
   GbTerminalAddin *self = (GbTerminalAddin *)addin;
 
   g_assert (GB_IS_TERMINAL_ADDIN (self));
+
+  g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal");
 
   if (self->panel_terminal != NULL)
     {
@@ -147,8 +178,3 @@ workbench_addin_iface_init (GbWorkbenchAddinInterface *iface)
   iface->load = gb_terminal_addin_load;
   iface->unload = gb_terminal_addin_unload;
 }
-
-GB_DEFINE_EMBEDDED_PLUGIN (gb_terminal,
-                           gb_terminal_get_resource (),
-                           "resource:///org/gnome/builder/plugins/terminal/gb-terminal.plugin",
-                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_TERMINAL_ADDIN))

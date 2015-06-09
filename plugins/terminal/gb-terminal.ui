@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.16 -->
-  <template class="GbTerminal" parent="GtkBin">
+  <template class="GbTerminal" parent="GbView">
     <property name="visible">true</property>
     <child>
       <object class="GtkBox" id="box">

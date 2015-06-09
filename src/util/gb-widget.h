@@ -48,7 +48,7 @@ cairo_surface_t *gb_widget_snapshot            (GtkWidget    *widget,
 GbWorkbench     *gb_widget_get_workbench       (GtkWidget    *widget);
 void             gb_widget_fade_hide           (GtkWidget    *widget);
 void             gb_widget_fade_show           (GtkWidget    *widget);
-void             gb_widget_activate_action     (GtkWidget    *widget,
+gboolean         gb_widget_activate_action     (GtkWidget    *widget,
                                                 const gchar  *prefix,
                                                 const gchar  *action_name,
                                                 GVariant     *parameter);

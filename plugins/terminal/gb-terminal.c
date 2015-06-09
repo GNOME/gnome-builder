@@ -21,27 +21,20 @@
 #include <vte/vte.h>
 
 #include "gb-terminal.h"
+#include "gb-view.h"
+#include "gb-widget.h"
 #include "gb-workbench.h"
 
 struct _GbTerminal
 {
-  GtkBin       parent_instance;
+  GbView       parent_instance;
 
   VteTerminal *terminal;
 
   guint        has_spawned : 1;
 };
 
-G_DEFINE_TYPE (GbTerminal, gb_terminal, GTK_TYPE_BIN)
-
-enum {
-  PROP_0,
-  LAST_PROP
-};
-
-#if 0
-static GParamSpec *gParamSpecs [LAST_PROP];
-#endif
+G_DEFINE_TYPE (GbTerminal, gb_terminal, GB_TYPE_VIEW)
 
 static void
 gb_terminal_respawn (GbTerminal *self)
@@ -102,8 +95,11 @@ child_exited_cb (VteTerminal *terminal,
   g_assert (VTE_IS_TERMINAL (terminal));
   g_assert (GB_IS_TERMINAL (self));
 
-  if (!gtk_widget_in_destruction (GTK_WIDGET (terminal)))
-    gb_terminal_respawn (self);
+  if (!gb_widget_activate_action (GTK_WIDGET (self), "view-stack", "close", NULL))
+    {
+      if (!gtk_widget_in_destruction (GTK_WIDGET (terminal)))
+        gb_terminal_respawn (self);
+    }
 }
 
 static void
@@ -194,8 +190,12 @@ gb_terminal_set_needs_attention (GbTerminal *self,
 
   parent = gtk_widget_get_parent (GTK_WIDGET (self));
 
-  if (GTK_IS_STACK (parent))
+  if (GTK_IS_STACK (parent) &&
+      !gtk_widget_in_destruction (GTK_WIDGET (self)) &&
+      !gtk_widget_in_destruction (GTK_WIDGET (self->terminal)) &&
+      !gtk_widget_in_destruction (parent))
     {
+
       gtk_container_child_set (GTK_CONTAINER (parent), GTK_WIDGET (self),
                                "needs-attention", !!needs_attention,
                                NULL);
@@ -210,8 +210,6 @@ notification_received_cb (VteTerminal *terminal,
 {
   g_assert (VTE_IS_TERMINAL (terminal));
   g_assert (GB_IS_TERMINAL (self));
-
-  g_print ("notification_received_cb: %s: %s\n", summary, body);
 
   if (!gtk_widget_has_focus (GTK_WIDGET (terminal)))
     gb_terminal_set_needs_attention (self, TRUE);
@@ -230,64 +228,48 @@ focus_in_event_cb (VteTerminal *terminal,
   return GDK_EVENT_PROPAGATE;
 }
 
-static gboolean
-focus_out_event_cb (VteTerminal *terminal,
-                    GdkEvent    *event,
-                    GbTerminal  *self)
+static const gchar *
+gb_terminal_get_title (GbView *view)
+{
+  GbTerminal *self = (GbTerminal *)view;
+
+  g_assert (GB_IS_TERMINAL (self));
+
+  return vte_terminal_get_window_title (self->terminal);
+}
+
+static void
+window_title_changed_cb (VteTerminal *terminal,
+                         GbTerminal  *self)
 {
   g_assert (VTE_IS_TERMINAL (terminal));
   g_assert (GB_IS_TERMINAL (self));
 
-  gb_terminal_set_needs_attention (self, FALSE);
-
-  return GDK_EVENT_PROPAGATE;
+  g_object_notify (G_OBJECT (self), "title");
 }
 
 static void
-gb_terminal_finalize (GObject *object)
+gb_terminal_grab_focus (GtkWidget *widget)
 {
-  G_OBJECT_CLASS (gb_terminal_parent_class)->finalize (object);
-}
+  GbTerminal *self = (GbTerminal *)widget;
 
-static void
-gb_terminal_get_property (GObject    *object,
-                          guint       prop_id,
-                          GValue     *value,
-                          GParamSpec *pspec)
-{
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
+  g_assert (GB_IS_TERMINAL (self));
 
-static void
-gb_terminal_set_property (GObject      *object,
-                          guint         prop_id,
-                          const GValue *value,
-                          GParamSpec   *pspec)
-{
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
+  gtk_widget_grab_focus (GTK_WIDGET (self->terminal));
 }
 
 static void
 gb_terminal_class_init (GbTerminalClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  object_class->finalize = gb_terminal_finalize;
-  object_class->get_property = gb_terminal_get_property;
-  object_class->set_property = gb_terminal_set_property;
+  GbViewClass *view_class = GB_VIEW_CLASS (klass);
 
   widget_class->realize = gb_terminal_realize;
   widget_class->get_preferred_width = gb_terminal_get_preferred_width;
   widget_class->get_preferred_height = gb_terminal_get_preferred_height;
+  widget_class->grab_focus = gb_terminal_grab_focus;
+
+  view_class->get_title = gb_terminal_get_title;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/terminal/gb-terminal.ui");
   gtk_widget_class_bind_template_child (widget_class, GbTerminal, terminal);
@@ -322,8 +304,8 @@ gb_terminal_init (GbTerminal *self)
                            0);
 
   g_signal_connect_object (self->terminal,
-                           "focus-out-event",
-                           G_CALLBACK (focus_out_event_cb),
+                           "window-title-changed",
+                           G_CALLBACK (window_title_changed_cb),
                            self,
                            0);
 

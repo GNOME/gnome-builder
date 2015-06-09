@@ -1,4 +1,4 @@
-/* gb-terminal.h
+/* gb-terminal-plugin.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,19 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_H
-#define GB_TERMINAL_H
+#include "gb-application-addin.h"
+#include "gb-plugins.h"
+#include "gb-terminal-addin.h"
+#include "gb-terminal-application-addin.h"
+#include "gb-terminal-resources.h"
+#include "gb-workbench-addin.h"
 
-#include <gtk/gtk.h>
-
-#include "gb-view.h"
-
-G_BEGIN_DECLS
-
-#define GB_TYPE_TERMINAL (gb_terminal_get_type())
-
-G_DECLARE_FINAL_TYPE (GbTerminal, gb_terminal, GB, TERMINAL, GbView)
-
-G_END_DECLS
-
-#endif /* GB_TERMINAL_H */
+GB_DEFINE_EMBEDDED_PLUGIN (gb_terminal,
+                           gb_terminal_get_resource (),
+                           "resource:///org/gnome/builder/plugins/terminal/gb-terminal.plugin",
+                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_APPLICATION_ADDIN, GB_TYPE_TERMINAL_APPLICATION_ADDIN)
+                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_TERMINAL_ADDIN))
