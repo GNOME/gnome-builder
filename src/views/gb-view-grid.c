@@ -267,7 +267,6 @@ gb_view_grid_stack_split (GbViewGrid      *self,
 {
   GbDocument *document;
   GtkWidget *target;
-  GtkWidget *new_view;
 
   g_assert (GB_IS_VIEW (view));
   g_assert (GB_IS_VIEW_GRID (self));
@@ -283,9 +282,6 @@ gb_view_grid_stack_split (GbViewGrid      *self,
       target = gb_view_grid_get_stack_before (self, stack);
       if (target == NULL)
         target = gb_view_grid_add_stack_before (self, stack);
-      new_view = gb_document_create_view (document);
-      if (new_view == NULL)
-        return;
       gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
       break;
 
@@ -293,9 +289,6 @@ gb_view_grid_stack_split (GbViewGrid      *self,
       target = gb_view_grid_get_stack_before (self, stack);
       if (target == NULL)
         target = gb_view_grid_add_stack_before (self, stack);
-      new_view = gb_document_create_view (document);
-      if (new_view == NULL)
-        return;
       gb_view_stack_remove (stack, view);
       gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
       break;
@@ -304,9 +297,6 @@ gb_view_grid_stack_split (GbViewGrid      *self,
       target = gb_view_grid_get_stack_after (self, stack);
       if (target == NULL)
         target = gb_view_grid_add_stack_after (self, stack);
-      new_view = gb_document_create_view (document);
-      if (new_view == NULL)
-        return;
       gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
       break;
 
@@ -314,9 +304,6 @@ gb_view_grid_stack_split (GbViewGrid      *self,
       target = gb_view_grid_get_stack_after (self, stack);
       if (target == NULL)
         target = gb_view_grid_add_stack_after (self, stack);
-      new_view = gb_document_create_view (document);
-      if (new_view == NULL)
-        return;
       gb_view_stack_remove (stack, view);
       gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
       break;
