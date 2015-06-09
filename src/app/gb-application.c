@@ -481,10 +481,12 @@ gb_application_activate (GApplication *application)
 
 static void
 gb_application__extension_added (PeasExtensionSet   *extensions,
+                                 PeasPluginInfo     *plugin_info,
                                  GbApplicationAddin *addin,
                                  GbApplication      *self)
 {
   g_assert (GB_IS_APPLICATION (self));
+  g_assert (plugin_info != NULL);
   g_assert (GB_IS_APPLICATION_ADDIN (addin));
   g_assert (PEAS_IS_EXTENSION_SET (extensions));
 
@@ -493,10 +495,12 @@ gb_application__extension_added (PeasExtensionSet   *extensions,
 
 static void
 gb_application__extension_removed (PeasExtensionSet   *extensions,
+                                   PeasPluginInfo     *plugin_info,
                                    GbApplicationAddin *addin,
                                    GbApplication      *self)
 {
   g_assert (GB_IS_APPLICATION (self));
+  g_assert (plugin_info != NULL);
   g_assert (GB_IS_APPLICATION_ADDIN (addin));
   g_assert (PEAS_IS_EXTENSION_SET (extensions));
 
