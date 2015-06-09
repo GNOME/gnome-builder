@@ -350,6 +350,65 @@ gb_workbench_actions_show_bottom_pane (GSimpleAction *action,
 }
 
 static void
+gb_workbench_actions_toggle_panels (GSimpleAction *action,
+                                    GVariant      *parameter,
+                                    gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+  GtkWidget *left;
+  GtkWidget *right;
+  GtkWidget *bottom;
+  gboolean reveal_left;
+  gboolean reveal_right;
+  gboolean reveal_bottom;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  left = gb_workspace_get_left_pane (self->workspace);
+  right = gb_workspace_get_right_pane (self->workspace);
+  bottom = gb_workspace_get_bottom_pane (self->workspace);
+
+  gtk_container_child_get (GTK_CONTAINER (self->workspace), left,
+                           "reveal", &reveal_left,
+                           NULL);
+  gtk_container_child_get (GTK_CONTAINER (self->workspace), right,
+                           "reveal", &reveal_right,
+                           NULL);
+  gtk_container_child_get (GTK_CONTAINER (self->workspace), bottom,
+                           "reveal", &reveal_bottom,
+                           NULL);
+
+  if (reveal_left || reveal_right || reveal_bottom)
+    {
+      self->reveal_left_in_show = reveal_left;
+      self->reveal_right_in_show = reveal_right;
+      self->reveal_bottom_in_show = reveal_bottom;
+
+      gtk_container_child_set (GTK_CONTAINER (self->workspace), left,
+                               "reveal", FALSE,
+                               NULL);
+      gtk_container_child_set (GTK_CONTAINER (self->workspace), right,
+                               "reveal", FALSE,
+                               NULL);
+      gtk_container_child_set (GTK_CONTAINER (self->workspace), bottom,
+                               "reveal", FALSE,
+                               NULL);
+    }
+  else
+    {
+      gtk_container_child_set (GTK_CONTAINER (self->workspace), left,
+                               "reveal", self->reveal_left_in_show,
+                               NULL);
+      gtk_container_child_set (GTK_CONTAINER (self->workspace), right,
+                               "reveal", self->reveal_right_in_show,
+                               NULL);
+      gtk_container_child_set (GTK_CONTAINER (self->workspace), bottom,
+                               "reveal", self->reveal_bottom_in_show,
+                               NULL);
+    }
+}
+
+static void
 sync_reveal_state (GtkWidget     *child,
                    GParamSpec    *pspec,
                    GSimpleAction *action)
@@ -382,6 +441,7 @@ static const GActionEntry GbWorkbenchActions[] = {
   { "show-left-pane",   gb_workbench_actions_show_left_pane, NULL, "true" },
   { "show-right-pane",  gb_workbench_actions_show_right_pane, NULL, "false" },
   { "show-bottom-pane", gb_workbench_actions_show_bottom_pane, NULL, "false" },
+  { "toggle-panels",    gb_workbench_actions_toggle_panels },
 };
 
 void

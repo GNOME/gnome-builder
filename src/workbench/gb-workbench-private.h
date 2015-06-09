@@ -56,6 +56,10 @@ struct _GbWorkbench
   guint                   building : 1;
   guint                   unloading : 1;
   guint                   has_opened : 1;
+
+  guint                   reveal_left_in_show : 1;
+  guint                   reveal_right_in_show : 1;
+  guint                   reveal_bottom_in_show : 1;
 };
 
 G_END_DECLS
