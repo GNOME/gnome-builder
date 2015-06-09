@@ -57,7 +57,12 @@ ide_ctags_completion_item_new (const IdeCtagsIndexEntry   *entry,
    */
   self->entry = entry;
   self->provider = provider;
-  self->context = context;
+
+  /*
+   * There is the slight chance the context will get disposed out of
+   * our control. I've seen this happen a few times now.
+   */
+  ide_set_weak_pointer (&self->context, context);
 
   return GTK_SOURCE_COMPLETION_PROPOSAL (self);
 }
@@ -72,6 +77,10 @@ ide_ctags_completion_item_compare (IdeCtagsCompletionItem *itema,
 static void
 ide_ctags_completion_item_finalize (GObject *object)
 {
+  IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)object;
+
+  ide_clear_weak_pointer (&self->context);
+
   G_OBJECT_CLASS (ide_ctags_completion_item_parent_class)->finalize (object);
 
   EGG_COUNTER_DEC (instances);
@@ -111,6 +120,9 @@ static GdkPixbuf *
 get_icon (GtkSourceCompletionProposal *proposal)
 {
   IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)proposal;
+
+  if (self->context == NULL)
+    return NULL;
 
   return ide_ctags_completion_provider_get_proposal_icon (self->provider,
                                                           self->context,
