@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.16 -->
+  <template class="GbTerminal" parent="GtkBin">
+    <property name="visible">true</property>
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="expand">true</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="VteTerminal" id="terminal">
+            <property name="expand">true</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

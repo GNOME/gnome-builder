@@ -425,8 +425,8 @@ gb_workbench_finalize (GObject *object)
   IDE_ENTRY;
 
   g_clear_object (&self->context);
-  g_clear_object (&self->extensions);
   g_clear_pointer (&self->current_folder_uri, g_free);
+  g_clear_object (&self->extensions);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->finalize (object);
 

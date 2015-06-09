@@ -146,13 +146,15 @@ m4_define([pygobject_required_version], [3.0.0])
 m4_define([devhelp_required_version], [3.16.0])
 m4_define([libxml_required_version], [2.9.0])
 m4_define([peas_required_version], [1.14.1])
+m4_define([vte_required_version], [0.40.2])
 
 PKG_CHECK_MODULES(BUILDER,  [gtk+-3.0 >= gtk_required_version
                              gio-2.0 >= glib_required_version
                              gtksourceview-3.0 >= gtksourceview_required_version
                              libdevhelp-3.0 >= devhelp_required_version
                              libgit2-glib-1.0 >= ggit_required_version
-                             libpeas-1.0 >= peas_required_version])
+                             libpeas-1.0 >= peas_required_version
+			     vte-2.91 >= vte_required_version])
 PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
@@ -382,6 +384,7 @@ AC_CONFIG_FILES([
 	plugins/devhelp/Makefile
 	plugins/symbol-tree/Makefile
 	plugins/sysmon/Makefile
+	plugins/terminal/Makefile
 
 	data/Makefile
 	data/gsettings/Makefile

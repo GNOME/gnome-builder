@@ -7,3 +7,12 @@
   bind "<ctrl>KP_Enter" { "action" ("win", "show-command-bar", "") };
 }
 
+@binding-set builder-vte-terminal
+{
+  bind "<ctrl><shift>c" { "copy-clipboard" () };
+  bind "<ctrl><shift>v" { "paste-clipboard" () };
+}
+
+VteTerminal {
+  gtk-key-bindings: builder-vte-terminal;
+}

@@ -210,6 +210,7 @@ gnome_builder_PLUGINS = \
 	command-bar \
 	symbol-tree \
 	sysmon \
+	terminal \
 	$(NULL)
 
 gnome_builder_SOURCES = \
