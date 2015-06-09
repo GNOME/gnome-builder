@@ -60,8 +60,6 @@ GbWorkspacePane GtkStackSwitcher .button {
 }
 GbWorkspacePane GtkStackSwitcher .button:checked {
   opacity: 1.0;
-  border-top: 1px solid transparent;
-  border-bottom: 1px solid @theme_selected_bg_color;
 }
 
 
