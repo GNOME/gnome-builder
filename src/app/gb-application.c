@@ -138,7 +138,7 @@ gb_application_load_keybindings (GbApplication *self)
     { "workbench.show-left-pane", "F9" },
     { "workbench.show-right-pane", "<shift>F9" },
     { "workbench.show-bottom-pane", "<ctrl>F9" },
-    { "workbench.toggle-panels", "<ctrl><alt>Return" },
+    { "workbench.toggle-panels", "<ctrl><shift>F9" },
     { "workspace.focus-sidebar", "<ctrl>0" },
     { "workspace.focus-stack(1)", "<ctrl>1" },
     { "workspace.focus-stack(2)", "<ctrl>2" },
