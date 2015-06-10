@@ -63,8 +63,6 @@ gb_devhelp_panel_load (GbWorkbenchAddin *addin)
   GtkWidget *workspace;
   GtkWidget *pane;
 
-  g_print ("Loading and adding panel to workbench\n");
-
   g_assert (GB_IS_DEVHELP_PANEL (self));
 
   workspace = gb_workbench_get_workspace (self->workbench);

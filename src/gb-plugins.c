@@ -82,8 +82,6 @@ gb_plugins_load (void)
        * TODO: Only load embedded.
        */
 
-      g_print ("Loading: %s\n", peas_plugin_info_get_module_name (plugin_info));
-
       peas_engine_load_plugin (engine, plugin_info);
     }
 }
