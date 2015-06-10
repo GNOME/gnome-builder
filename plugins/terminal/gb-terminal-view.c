@@ -249,6 +249,30 @@ window_title_changed_cb (VteTerminal    *terminal,
 }
 
 static void
+style_context_changed (GtkStyleContext *style_context,
+                       GbTerminalView  *self)
+{
+  GdkRGBA fg;
+  GdkRGBA bg;
+
+  g_assert (GTK_IS_STYLE_CONTEXT (style_context));
+  g_assert (GB_IS_TERMINAL_VIEW (self));
+
+  gtk_style_context_get_color (style_context, GTK_STATE_FLAG_NORMAL, &fg);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  gtk_style_context_get_background_color (style_context, GTK_STATE_FLAG_NORMAL, &bg);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  if (bg.alpha == 0.0)
+    {
+      gdk_rgba_parse (&bg, "#f6f7f8");
+    }
+
+  vte_terminal_set_color_foreground (self->terminal, &fg);
+  vte_terminal_set_color_background (self->terminal, &bg);
+}
+
+static void
 gb_terminal_grab_focus (GtkWidget *widget)
 {
   GbTerminalView *self = (GbTerminalView *)widget;
@@ -280,6 +304,7 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
 static void
 gb_terminal_view_init (GbTerminalView *self)
 {
+  GtkStyleContext *style_context;
   GQuark quark;
   guint signal_id;
 
@@ -321,4 +346,12 @@ gb_terminal_view_init (GbTerminalView *self)
                                self,
                                0);
     }
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  g_signal_connect_object (style_context,
+                           "changed",
+                           G_CALLBACK (style_context_changed),
+                           self,
+                           0);
+  style_context_changed (style_context, self);
 }

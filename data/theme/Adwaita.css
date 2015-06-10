@@ -27,3 +27,9 @@ RgGraph {
   background-image: repeating-linear-gradient(0deg, #f0f1f2, #f0f1f2 1px, transparent 1px, transparent 8px),
                     repeating-linear-gradient(-90deg, #f0f1f2, #f0f1f2 1px, transparent 1px, transparent 8px);
 }
+
+
+GbTerminalView {
+  background-color: #f6f7f8;
+  color: #4d4e53;
+}
