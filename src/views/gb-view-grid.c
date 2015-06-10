@@ -32,7 +32,7 @@ struct _GbViewGrid
 
 G_DEFINE_TYPE (GbViewGrid, gb_view_grid, GTK_TYPE_BIN)
 
-static void gb_view_grid_reposition (GbViewGrid *self);
+static void gb_view_grid_make_homogeneous (GbViewGrid *self);
 
 GtkWidget *
 gb_view_grid_new (void)
@@ -122,7 +122,7 @@ gb_view_grid_remove_stack (GbViewGrid  *self,
           else
             g_assert_not_reached ();
 
-          gb_view_grid_reposition (self);
+          gb_view_grid_make_homogeneous (self);
 
           break;
         }
@@ -350,20 +350,26 @@ gb_view_grid_create_stack (GbViewGrid *self)
 }
 
 static void
-gb_view_grid_reposition (GbViewGrid *self)
+gb_view_grid_make_homogeneous (GbViewGrid *self)
 {
-  GtkAllocation alloc;
+  GtkWidget *child;
   GList *stacks;
   GList *iter;
+  GtkAllocation alloc;
   guint count;
   guint position;
+  gint handle_size = 1;
 
   g_return_if_fail (GB_IS_VIEW_GRID (self));
 
   gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+
+  child = gtk_bin_get_child (GTK_BIN (self));
+  gtk_widget_style_get (child, "handle-size", &handle_size, NULL);
+
   stacks = gb_view_grid_get_stacks (self);
   count = MAX (1, g_list_length (stacks));
-  position = alloc.width / count;
+  position = (alloc.width - (handle_size * (count - 1))) / count;
 
   for (iter = stacks; iter; iter = iter->next)
     {
@@ -468,7 +474,7 @@ gb_view_grid_add_stack_before (GbViewGrid  *self,
   else
     g_assert_not_reached ();
 
-  gb_view_grid_reposition (self);
+  gb_view_grid_make_homogeneous (self);
 
   return GTK_WIDGET (new_stack);
 }
@@ -519,7 +525,7 @@ gb_view_grid_add_stack_after (GbViewGrid  *self,
   else
     g_assert_not_reached ();
 
-  gb_view_grid_reposition (self);
+  gb_view_grid_make_homogeneous (self);
 
   return GTK_WIDGET (new_stack);
 }
@@ -694,7 +700,7 @@ gb_view_grid_toplevel_is_maximized (GtkWidget  *toplevel,
 {
   g_return_if_fail (GB_IS_VIEW_GRID (self));
 
-  gb_view_grid_reposition (self);
+  gb_view_grid_make_homogeneous (self);
 }
 
 static void
@@ -731,6 +737,57 @@ gb_view_grid_hierarchy_changed (GtkWidget *widget,
 }
 
 static void
+gb_view_grid_size_allocate (GtkWidget     *widget,
+                            GtkAllocation *alloc)
+{
+  GbViewGrid *self = (GbViewGrid *)widget;
+  GArray *values;
+  GtkAllocation prev_alloc;
+  GList *stacks;
+  GList *iter;
+  gsize i;
+
+  g_assert (GTK_IS_WIDGET (widget));
+
+  /*
+   * The following code tries to get the width of each stack as a percentage of the
+   * view grids width. After size allocate, we attempt to place the position values
+   * at the matching percentage. This is needed since we have "recursive panes".
+   * A multi-pane would probably make this unnecessary.
+   */
+  gtk_widget_get_allocation (GTK_WIDGET (self), &prev_alloc);
+  values = g_array_new (FALSE, FALSE, sizeof (gdouble));
+  stacks = gb_view_grid_get_stacks (self);
+
+  for (iter = stacks; iter; iter = iter->next)
+    {
+      GtkWidget *parent;
+      guint position;
+      gdouble value;
+
+      parent = gtk_widget_get_parent (iter->data);
+      position = gtk_paned_get_position (GTK_PANED (parent));
+      value = position / (gdouble)prev_alloc.width;
+      g_array_append_val (values, value);
+    }
+
+  GTK_WIDGET_CLASS (gb_view_grid_parent_class)->size_allocate (widget, alloc);
+
+  for (iter = stacks, i = 0; iter; iter = iter->next, i++)
+    {
+      GtkWidget *parent;
+      gdouble value;
+
+      parent = gtk_widget_get_parent (iter->data);
+      value = g_array_index (values, gdouble, i);
+      gtk_paned_set_position (GTK_PANED (parent), value * alloc->width);
+    }
+
+  g_array_free (values, TRUE);
+  g_list_free (stacks);
+}
+
+static void
 gb_view_grid_finalize (GObject *object)
 {
   GbViewGrid *self = (GbViewGrid *)object;
@@ -750,6 +807,7 @@ gb_view_grid_class_init (GbViewGridClass *klass)
 
   widget_class->grab_focus = gb_view_grid_grab_focus;
   widget_class->hierarchy_changed = gb_view_grid_hierarchy_changed;
+  widget_class->size_allocate = gb_view_grid_size_allocate;
 }
 
 static void
