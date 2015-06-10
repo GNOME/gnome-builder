@@ -155,7 +155,6 @@ gb_group_free (GbGroup *gb_group)
 static GList *
 discover_groups (GbCommandGactionProvider *provider)
 {
-  GbView *view;
   GApplication *application;
   GtkWidget *widget;
   GbGroup *gb_group = NULL;
@@ -164,11 +163,12 @@ discover_groups (GbCommandGactionProvider *provider)
 
   g_return_val_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (provider), NULL);
 
-  view = gb_command_provider_get_active_view (GB_COMMAND_PROVIDER (provider));
+  widget = (GtkWidget *)gb_command_provider_get_active_view (GB_COMMAND_PROVIDER (provider));
 
-  for (widget = GTK_WIDGET (view);
-       widget;
-       widget = gtk_widget_get_parent (widget))
+  if (widget == NULL)
+    widget = (GtkWidget *)gb_command_provider_get_workbench (GB_COMMAND_PROVIDER (provider));
+
+  for (; widget; widget = gtk_widget_get_parent (widget))
     {
       const gchar **prefixes;
       guint i;
