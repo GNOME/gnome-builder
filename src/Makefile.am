@@ -43,8 +43,6 @@ libgnome_builder_la_SOURCES = \
 	editor/gb-editor-view-private.h \
 	editor/gb-editor-view.c \
 	editor/gb-editor-view.h \
-	gd/gd-tagged-entry.c \
-	gd/gd-tagged-entry.h \
 	greeter/gb-greeter-pill-box.c \
 	greeter/gb-greeter-pill-box.h \
 	greeter/gb-greeter-project-row.c \
@@ -164,6 +162,7 @@ libgnome_builder_la_LIBADD = \
 	$(OPTIMIZE_LDFLAGS) \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(top_builddir)/contrib/egg/libegg.la \
+	$(top_builddir)/contrib/gd/libgd.la \
 	$(top_builddir)/contrib/gedit/libgedit.la \
 	$(top_builddir)/contrib/nautilus/libnautilus.la \
 	$(top_builddir)/contrib/rg/librg.la \
@@ -182,7 +181,6 @@ libgnome_builder_la_CFLAGS = \
 	-I$(srcdir)/dialogs \
 	-I$(srcdir)/documents \
 	-I$(srcdir)/editor \
-	-I$(srcdir)/gd \
 	-I$(srcdir)/greeter \
 	-I$(srcdir)/html \
 	-I$(srcdir)/keybindings \
@@ -200,6 +198,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/egg \
+	-I$(top_srcdir)/contrib/gd \
 	-I$(top_srcdir)/contrib/gedit \
 	-I$(top_srcdir)/contrib/nautilus \
 	-I$(top_srcdir)/contrib/rg \

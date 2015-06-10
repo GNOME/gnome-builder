@@ -36,10 +36,10 @@ libcommand_bar_la_CFLAGS = \
 	-I$(top_srcdir)/src/workbench \
 	-I$(top_srcdir)/src/views \
 	-I$(top_srcdir)/src/documents \
-	-I$(top_srcdir)/src/gd \
 	-I$(top_srcdir)/src/editor \
 	-I$(top_srcdir)/src/util \
 	-I$(top_srcdir)/src \
+	-I$(top_srcdir)/contrib/gd \
 	-I$(top_srcdir)/contrib/nautilus \
 	$(BUILDER_CFLAGS) \
 	$(DEBUG_CFLAGS) \
