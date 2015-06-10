@@ -1,4 +1,4 @@
-/* gb-terminal-addin.c
+/* gb-terminal-workbench-addin.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -18,17 +18,17 @@
 
 #include <glib/gi18n.h>
 
-#include "gb-terminal.h"
+#include "gb-terminal-view.h"
 #include "gb-terminal-workbench-addin.h"
 #include "gb-view-grid.h"
 #include "gb-workspace.h"
 
 struct _GbTerminalWorkbenchAddin
 {
-  GObject      parent_instance;
+  GObject         parent_instance;
 
-  GbWorkbench *workbench;
-  GbTerminal  *panel_terminal;
+  GbWorkbench    *workbench;
+  GbTerminalView *panel_terminal;
 };
 
 static void workbench_addin_iface_init (GbWorkbenchAddinInterface *iface);
@@ -58,7 +58,7 @@ new_terminal_activate_cb (GSimpleAction   *action,
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
 
   grid = gb_workbench_get_view_grid (self->workbench);
-  terminal = g_object_new (GB_TYPE_TERMINAL,
+  terminal = g_object_new (GB_TYPE_TERMINAL_VIEW,
                            "visible", TRUE,
                            NULL);
   stack = gb_view_grid_get_last_focus (GB_VIEW_GRID (grid));
@@ -87,7 +87,7 @@ gb_terminal_workbench_addin_load (GbWorkbenchAddin *addin)
 
   if (self->panel_terminal == NULL)
     {
-      self->panel_terminal = g_object_new (GB_TYPE_TERMINAL,
+      self->panel_terminal = g_object_new (GB_TYPE_TERMINAL_VIEW,
                                            "visible", TRUE,
                                            NULL);
       g_object_add_weak_pointer (G_OBJECT (self->panel_terminal),

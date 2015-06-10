@@ -1,4 +1,4 @@
-/* gb-terminal.h
+/* gb-terminal-view.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_H
-#define GB_TERMINAL_H
-
-#include <gtk/gtk.h>
+#ifndef GB_TERMINAL_VIEW_H
+#define GB_TERMINAL_VIEW_H
 
 #include "gb-view.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_TERMINAL (gb_terminal_get_type())
+#define GB_TYPE_TERMINAL_VIEW (gb_terminal_view_get_type())
 
-G_DECLARE_FINAL_TYPE (GbTerminal, gb_terminal, GB, TERMINAL, GbView)
+G_DECLARE_FINAL_TYPE (GbTerminalView, gb_terminal_view, GB, TERMINAL_VIEW, GbView)
 
 G_END_DECLS
 
-#endif /* GB_TERMINAL_H */
+#endif /* GB_TERMINAL_VIEW_H */

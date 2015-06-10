@@ -20,12 +20,12 @@
 #include <ide.h>
 #include <vte/vte.h>
 
-#include "gb-terminal.h"
+#include "gb-terminal-view.h"
 #include "gb-view.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
-struct _GbTerminal
+struct _GbTerminalView
 {
   GbView       parent_instance;
 
@@ -34,10 +34,10 @@ struct _GbTerminal
   guint        has_spawned : 1;
 };
 
-G_DEFINE_TYPE (GbTerminal, gb_terminal, GB_TYPE_VIEW)
+G_DEFINE_TYPE (GbTerminalView, gb_terminal_view, GB_TYPE_VIEW)
 
 static void
-gb_terminal_respawn (GbTerminal *self)
+gb_terminal_respawn (GbTerminalView *self)
 {
   g_autoptr(GPtrArray) args = NULL;
   g_autofree gchar *workpath = NULL;
@@ -48,7 +48,7 @@ gb_terminal_respawn (GbTerminal *self)
   GFile *workdir;
   GPid child_pid;
 
-  g_assert (GB_IS_TERMINAL (self));
+  g_assert (GB_IS_TERMINAL_VIEW (self));
 
   vte_terminal_reset (self->terminal, TRUE, TRUE);
 
@@ -88,12 +88,12 @@ gb_terminal_respawn (GbTerminal *self)
 }
 
 static void
-child_exited_cb (VteTerminal *terminal,
-                 gint         exit_status,
-                 GbTerminal  *self)
+child_exited_cb (VteTerminal    *terminal,
+                 gint            exit_status,
+                 GbTerminalView *self)
 {
   g_assert (VTE_IS_TERMINAL (terminal));
-  g_assert (GB_IS_TERMINAL (self));
+  g_assert (GB_IS_TERMINAL_VIEW (self));
 
   if (!gb_widget_activate_action (GTK_WIDGET (self), "view-stack", "close", NULL))
     {
@@ -105,11 +105,11 @@ child_exited_cb (VteTerminal *terminal,
 static void
 gb_terminal_realize (GtkWidget *widget)
 {
-  GbTerminal *self = (GbTerminal *)widget;
+  GbTerminalView *self = (GbTerminalView *)widget;
 
-  g_assert (GB_IS_TERMINAL (self));
+  g_assert (GB_IS_TERMINAL_VIEW (self));
 
-  GTK_WIDGET_CLASS (gb_terminal_parent_class)->realize (widget);
+  GTK_WIDGET_CLASS (gb_terminal_view_parent_class)->realize (widget);
 
   if (!self->has_spawned)
     {
@@ -119,9 +119,9 @@ gb_terminal_realize (GtkWidget *widget)
 }
 
 static void
-size_allocate_cb (VteTerminal   *terminal,
-                  GtkAllocation *alloc,
-                  GbTerminal    *self)
+size_allocate_cb (VteTerminal    *terminal,
+                  GtkAllocation  *alloc,
+                  GbTerminalView *self)
 {
   glong width;
   glong height;
@@ -130,7 +130,7 @@ size_allocate_cb (VteTerminal   *terminal,
 
   g_assert (VTE_IS_TERMINAL (terminal));
   g_assert (alloc != NULL);
-  g_assert (GB_IS_TERMINAL (self));
+  g_assert (GB_IS_TERMINAL_VIEW (self));
 
   if ((alloc->width == 0) || (alloc->height == 0))
     return;
@@ -161,7 +161,7 @@ gb_terminal_get_preferred_width (GtkWidget *widget,
    * widget at it's natural size (which prevents us from getting
    * appropriate size requests.
    */
-  GTK_WIDGET_CLASS (gb_terminal_parent_class)->get_preferred_width (widget, min_width, nat_width);
+  GTK_WIDGET_CLASS (gb_terminal_view_parent_class)->get_preferred_width (widget, min_width, nat_width);
   *nat_width = *min_width;
 }
 
@@ -176,17 +176,17 @@ gb_terminal_get_preferred_height (GtkWidget *widget,
    * widget at it's natural size (which prevents us from getting
    * appropriate size requests.
    */
-  GTK_WIDGET_CLASS (gb_terminal_parent_class)->get_preferred_height (widget, min_height, nat_height);
+  GTK_WIDGET_CLASS (gb_terminal_view_parent_class)->get_preferred_height (widget, min_height, nat_height);
   *nat_height = *min_height;
 }
 
 static void
-gb_terminal_set_needs_attention (GbTerminal *self,
-                                 gboolean    needs_attention)
+gb_terminal_set_needs_attention (GbTerminalView *self,
+                                 gboolean        needs_attention)
 {
   GtkWidget *parent;
 
-  g_assert (GB_IS_TERMINAL (self));
+  g_assert (GB_IS_TERMINAL_VIEW (self));
 
   parent = gtk_widget_get_parent (GTK_WIDGET (self));
 
@@ -203,25 +203,25 @@ gb_terminal_set_needs_attention (GbTerminal *self,
 }
 
 static void
-notification_received_cb (VteTerminal *terminal,
-                          const gchar *summary,
-                          const gchar *body,
-                          GbTerminal  *self)
+notification_received_cb (VteTerminal    *terminal,
+                          const gchar    *summary,
+                          const gchar    *body,
+                          GbTerminalView *self)
 {
   g_assert (VTE_IS_TERMINAL (terminal));
-  g_assert (GB_IS_TERMINAL (self));
+  g_assert (GB_IS_TERMINAL_VIEW (self));
 
   if (!gtk_widget_has_focus (GTK_WIDGET (terminal)))
     gb_terminal_set_needs_attention (self, TRUE);
 }
 
 static gboolean
-focus_in_event_cb (VteTerminal *terminal,
-                   GdkEvent    *event,
-                   GbTerminal  *self)
+focus_in_event_cb (VteTerminal    *terminal,
+                   GdkEvent       *event,
+                   GbTerminalView *self)
 {
   g_assert (VTE_IS_TERMINAL (terminal));
-  g_assert (GB_IS_TERMINAL (self));
+  g_assert (GB_IS_TERMINAL_VIEW (self));
 
   gb_terminal_set_needs_attention (self, FALSE);
 
@@ -231,19 +231,19 @@ focus_in_event_cb (VteTerminal *terminal,
 static const gchar *
 gb_terminal_get_title (GbView *view)
 {
-  GbTerminal *self = (GbTerminal *)view;
+  GbTerminalView *self = (GbTerminalView *)view;
 
-  g_assert (GB_IS_TERMINAL (self));
+  g_assert (GB_IS_TERMINAL_VIEW (self));
 
   return vte_terminal_get_window_title (self->terminal);
 }
 
 static void
-window_title_changed_cb (VteTerminal *terminal,
-                         GbTerminal  *self)
+window_title_changed_cb (VteTerminal    *terminal,
+                         GbTerminalView *self)
 {
   g_assert (VTE_IS_TERMINAL (terminal));
-  g_assert (GB_IS_TERMINAL (self));
+  g_assert (GB_IS_TERMINAL_VIEW (self));
 
   g_object_notify (G_OBJECT (self), "title");
 }
@@ -251,15 +251,15 @@ window_title_changed_cb (VteTerminal *terminal,
 static void
 gb_terminal_grab_focus (GtkWidget *widget)
 {
-  GbTerminal *self = (GbTerminal *)widget;
+  GbTerminalView *self = (GbTerminalView *)widget;
 
-  g_assert (GB_IS_TERMINAL (self));
+  g_assert (GB_IS_TERMINAL_VIEW (self));
 
   gtk_widget_grab_focus (GTK_WIDGET (self->terminal));
 }
 
 static void
-gb_terminal_class_init (GbTerminalClass *klass)
+gb_terminal_view_class_init (GbTerminalViewClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GbViewClass *view_class = GB_VIEW_CLASS (klass);
@@ -271,14 +271,14 @@ gb_terminal_class_init (GbTerminalClass *klass)
 
   view_class->get_title = gb_terminal_get_title;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/terminal/gb-terminal.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbTerminal, terminal);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/terminal/gb-terminal-view.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbTerminalView, terminal);
 
   g_type_ensure (VTE_TYPE_TERMINAL);
 }
 
 static void
-gb_terminal_init (GbTerminal *self)
+gb_terminal_view_init (GbTerminalView *self)
 {
   GQuark quark;
   guint signal_id;

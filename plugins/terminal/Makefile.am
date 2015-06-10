@@ -6,11 +6,11 @@ EXTRA_DIST =
 noinst_LTLIBRARIES = libterminal.la
 
 libterminal_la_SOURCES = \
-	gb-terminal.c \
-	gb-terminal.h \
 	gb-terminal-application-addin.c \
 	gb-terminal-application-addin.h \
 	gb-terminal-plugin.c \
+	gb-terminal-view.c \
+	gb-terminal-view.h \
 	gb-terminal-workbench-addin.c \
 	gb-terminal-workbench-addin.h \
 	$(NULL)

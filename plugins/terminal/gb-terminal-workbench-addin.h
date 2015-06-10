@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TERMINAL_ADDIN_H
-#define GB_TERMINAL_ADDIN_H
+#ifndef GB_TERMINAL_WORKBENCH_ADDIN_H
+#define GB_TERMINAL_WORKBENCH_ADDIN_H
 
 #include "gb-workbench-addin.h"
 
@@ -31,4 +31,4 @@ G_DECLARE_FINAL_TYPE (GbTerminalWorkbenchAddin, gb_terminal_workbench_addin,
 
 G_END_DECLS
 
-#endif /* GB_TERMINAL_ADDIN_H */
+#endif /* GB_TERMINAL_WORKBENCH_ADDIN_H */

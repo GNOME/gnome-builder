@@ -2,6 +2,6 @@
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/terminal">
     <file>gb-terminal.plugin</file>
-    <file>gb-terminal.ui</file>
+    <file>gb-terminal-view.ui</file>
   </gresource>
 </gresources>
