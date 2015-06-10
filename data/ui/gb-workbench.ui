@@ -36,7 +36,7 @@
           <object class="GtkBox">
             <property name="orientation">horizontal</property>
             <property name="visible">true</property>
-            <property name="margin-end">12</property>
+            <property name="margin-end">3</property>
             <style>
               <class name="linked"/>
             </style>
