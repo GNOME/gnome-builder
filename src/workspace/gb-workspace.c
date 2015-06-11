@@ -509,15 +509,24 @@ gb_workspace_child_set_reveal (GbWorkspace *self,
 
   frame_clock = gtk_widget_get_frame_clock (child);
 
-  item->animation = ide_object_animate_full (item->adjustment,
-                                             ANIMATION_MODE,
-                                             ANIMATION_DURATION,
-                                             frame_clock,
-                                             gb_workspace_animation_cb,
-                                             g_object_ref (child),
-                                             "value", reveal ? 0.0 : 1.0,
-                                             NULL);
-  g_object_add_weak_pointer (G_OBJECT (item->animation), (gpointer *)&item->animation);
+  if (gtk_widget_get_realized (GTK_WIDGET (self)))
+    {
+      item->animation = ide_object_animate_full (item->adjustment,
+                                                 ANIMATION_MODE,
+                                                 ANIMATION_DURATION,
+                                                 frame_clock,
+                                                 gb_workspace_animation_cb,
+                                                 g_object_ref (child),
+                                                 "value", reveal ? 0.0 : 1.0,
+                                                 NULL);
+      g_object_add_weak_pointer (G_OBJECT (item->animation), (gpointer *)&item->animation);
+    }
+  else
+    {
+      item->reveal = reveal;
+      gtk_adjustment_set_value (item->adjustment, reveal ? 0.0 : 1.0);
+      gtk_container_child_notify (GTK_CONTAINER (self), item->widget, "reveal");
+    }
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
 }
