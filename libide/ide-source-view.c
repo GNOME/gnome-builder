@@ -127,7 +127,7 @@ typedef struct
   GdkRGBA                      bubble_color1;
   GdkRGBA                      bubble_color2;
 
-  gdouble                      font_scale;
+  guint                        font_scale;
 
   guint                        auto_indent : 1;
   guint                        completion_blocked : 1;
@@ -244,8 +244,25 @@ enum {
   TARGET_URI_LIST = 100
 };
 
+enum {
+  FONT_SCALE_XX_SMALL,
+  FONT_SCALE_X_SMALL,
+  FONT_SCALE_SMALL,
+  FONT_SCALE_NORMAL,
+  FONT_SCALE_LARGE,
+  FONT_SCALE_X_LARGE,
+  FONT_SCALE_XX_LARGE,
+  FONT_SCALE_XXX_LARGE,
+  LAST_FONT_SCALE
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
+static gdouble     gFontScale [LAST_FONT_SCALE] = {
+  0.57870, 0.69444, 0.83333,
+  1.0,
+  1.2, 1.44, 1.728, 2.48832,
+};
 
 static void ide_source_view_real_save_insert_mark    (IdeSourceView         *self);
 static void ide_source_view_real_restore_insert_mark (IdeSourceView         *self);
@@ -1127,13 +1144,16 @@ ide_source_view_rebuild_css (IdeSourceView *self)
       const PangoFontDescription *font_desc = priv->font_desc;
       PangoFontDescription *copy = NULL;
 
-      if (priv->font_scale != 1.0)
+      if (priv->font_scale != FONT_SCALE_NORMAL)
         {
+          gdouble font_scale;
           guint font_size;
+
+          font_scale = gFontScale [priv->font_scale];
 
           copy = pango_font_description_copy (priv->font_desc);
           font_size = pango_font_description_get_size (priv->font_desc);
-          pango_font_description_set_size (copy, font_size * priv->font_scale);
+          pango_font_description_set_size (copy, font_size * font_scale);
 
           font_desc = copy;
         }
@@ -4834,9 +4854,11 @@ ide_source_view_real_reset_font_size (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  priv->font_scale = 1.0;
-
-  ide_source_view_rebuild_css (self);
+  if (priv->font_scale != FONT_SCALE_NORMAL)
+    {
+      priv->font_scale = FONT_SCALE_NORMAL;
+      ide_source_view_rebuild_css (self);
+    }
 }
 
 static void
@@ -4846,9 +4868,11 @@ ide_source_view_real_increase_font_size (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  priv->font_scale *= PANGO_SCALE_LARGE;
-
-  ide_source_view_rebuild_css (self);
+  if (priv->font_scale < LAST_FONT_SCALE - 1)
+    {
+      priv->font_scale++;
+      ide_source_view_rebuild_css (self);
+    }
 }
 
 static void
@@ -4858,9 +4882,11 @@ ide_source_view_real_decrease_font_size (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  priv->font_scale *= PANGO_SCALE_SMALL;
-
-  ide_source_view_rebuild_css (self);
+  if (priv->font_scale > 0)
+    {
+      priv->font_scale--;
+      ide_source_view_rebuild_css (self);
+    }
 }
 
 static void
@@ -5885,7 +5911,7 @@ ide_source_view_init (IdeSourceView *self)
   priv->snippets = g_queue_new ();
   priv->selections = g_queue_new ();
   priv->show_line_diagnostics = TRUE;
-  priv->font_scale = 1.0;
+  priv->font_scale = FONT_SCALE_NORMAL;
 
   priv->file_setting_bindings = egg_binding_group_new ();
   egg_binding_group_bind (priv->file_setting_bindings, "indent-width",
@@ -6018,7 +6044,7 @@ ide_source_view_set_font_desc (IdeSourceView              *self,
       else
         priv->font_desc = pango_font_description_from_string (DEFAULT_FONT_DESC);
 
-      priv->font_scale = 1.0;
+      priv->font_scale = FONT_SCALE_NORMAL;
 
       ide_source_view_rebuild_css (self);
     }
