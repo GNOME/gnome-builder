@@ -1,3 +1,4 @@
+SUBDIRS = hicolor
 
 icondir = $(datadir)/icons
 
@@ -11,32 +12,7 @@ nobase_icon_DATA = \
 	hicolor/scalable/apps/builder-symbolic.svg \
 	$(NULL)
 
-bundled_icon_sources = \
-	hicolor/scalable/vcs/builder-vcs-git-symbolic.svg \
-	hicolor/256x256/vcs/builder-vcs-git.png \
-	hicolor/48x48/vcs/builder-vcs-git.png \
-	hicolor/32x32/vcs/builder-vcs-git.png \
-	hicolor/scalable/actions/builder-split-tab-symbolic.svg \
-	hicolor/scalable/apps/builder-documentation-symbolic.svg \
-	hicolor/scalable/apps/builder-editor-symbolic.svg \
-	hicolor/scalable/autocomplete/lang-enum-value-symbolic.svg \
-	hicolor/scalable/autocomplete/struct-field-symbolic.svg \
-	hicolor/scalable/autocomplete/lang-class-symbolic.svg \
-	hicolor/scalable/autocomplete/lang-define-symbolic.svg \
-	hicolor/scalable/autocomplete/lang-enum-symbolic.svg \
-	hicolor/scalable/autocomplete/lang-include-symbolic.svg \
-	hicolor/scalable/autocomplete/lang-method-symbolic.svg \
-	hicolor/scalable/autocomplete/lang-function-symbolic.svg \
-	hicolor/scalable/autocomplete/lang-typedef-symbolic.svg \
-	hicolor/scalable/autocomplete/lang-struct-symbolic.svg \
-	hicolor/scalable/autocomplete/lang-variable-symbolic.svg \
-	hicolor/scalable/autocomplete/lang-union-symbolic.svg \
-	$(NULL)
-
-EXTRA_DIST = \
-	$(bundled_icon_sources) \
-	$(nobase_icon_DATA) \
-	hicolor/source.svg
+EXTRA_DIST = $(nobase_icon_DATA)
 
 gtk_update_icon_cache = gtk-update-icon-cache -f -t $(datadir)/icons/hicolor
 

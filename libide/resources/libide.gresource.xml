@@ -18,13 +18,5 @@
 
     <file alias="keybindings/emacs.css">../../data/keybindings/emacs.css</file>
     <file alias="keybindings/vim.css">../../data/keybindings/vim.css</file>
-
-    <file alias="icons/autocomplete/lang-class-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-class-symbolic.svg</file>
-    <file alias="icons/autocomplete/lang-enum-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-enum-symbolic.svg</file>
-    <file alias="icons/autocomplete/lang-enum-value-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-enum-value-symbolic.svg</file>
-    <file alias="icons/autocomplete/lang-function-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-function-symbolic.svg</file>
-    <file alias="icons/autocomplete/lang-method-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-method-symbolic.svg</file>
-    <file alias="icons/autocomplete/lang-struct-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/lang-struct-symbolic.svg</file>
-    <file alias="icons/autocomplete/struct-field-symbolic.svg">../../data/icons/hicolor/scalable/autocomplete/struct-field-symbolic.svg</file>
   </gresource>
 </gresources>

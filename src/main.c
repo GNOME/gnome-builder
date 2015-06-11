@@ -29,6 +29,7 @@
 #include <locale.h>
 
 #include "gb-application.h"
+#include "gb-icons-resources.h"
 #include "gb-plugins.h"
 
 int
@@ -56,6 +57,7 @@ main (int   argc,
              gtk_get_minor_version (),
              gtk_get_micro_version ());
 
+  g_resources_register (gb_icons_get_resource ());
   gb_plugins_load ();
 
   app = g_object_new (GB_TYPE_APPLICATION,

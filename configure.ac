@@ -158,6 +158,7 @@ PKG_CHECK_MODULES(BUILDER,  [gtk+-3.0 >= gtk_required_version
 PKG_CHECK_MODULES(EGG,      [glib-2.0 >= glib_required_version
                              gtk+-3.0 >= gtk_required_version])
 PKG_CHECK_MODULES(GD,       [gtk+-3.0 >= gtk_required_version])
+PKG_CHECK_MODULES(ICONS,    [gio-2.0 >= glib_required_version])
 PKG_CHECK_MODULES(LIBIDE,   [gio-2.0 >= glib_required_version
                              gio-unix-2.0 >= glib_required_version
                              gtksourceview-3.0 >= gtksourceview_required_version
@@ -391,6 +392,7 @@ AC_CONFIG_FILES([
 	data/Makefile
 	data/gsettings/Makefile
 	data/icons/Makefile
+	data/icons/hicolor/Makefile
 	data/libide-1.0.pc
 	data/style-schemes/Makefile
 

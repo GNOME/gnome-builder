@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/icons">
+    <file>scalable/actions/builder-move-left-symbolic.svg</file>
+    <file>scalable/actions/builder-move-right-symbolic.svg</file>
+    <file>scalable/actions/builder-split-tab-left-symbolic.svg</file>
+    <file>scalable/actions/builder-split-tab-right-symbolic.svg</file>
+    <file>scalable/actions/builder-split-tab-symbolic.svg</file>
+    <file>scalable/actions/builder-vcs-git-symbolic.svg</file>
+    <file>scalable/actions/builder-view-bottom-pane-symbolic.svg</file>
+    <file>scalable/actions/builder-view-left-pane-symbolic.svg</file>
+    <file>scalable/actions/builder-view-right-pane-symbolic.svg</file>
+    <file>scalable/actions/lang-class-symbolic.svg</file>
+    <file>scalable/actions/lang-define-symbolic.svg</file>
+    <file>scalable/actions/lang-enum-symbolic.svg</file>
+    <file>scalable/actions/lang-enum-value-symbolic.svg</file>
+    <file>scalable/actions/lang-function-symbolic.svg</file>
+    <file>scalable/actions/lang-include-symbolic.svg</file>
+    <file>scalable/actions/lang-method-symbolic.svg</file>
+    <file>scalable/actions/lang-struct-symbolic.svg</file>
+    <file>scalable/actions/lang-typedef-symbolic.svg</file>
+    <file>scalable/actions/lang-union-symbolic.svg</file>
+    <file>scalable/actions/lang-variable-symbolic.svg</file>
+    <file>scalable/actions/struct-field-symbolic.svg</file>
+
+    <file>256x256/actions/builder-vcs-git.png</file>
+    <file>48x48/actions/builder-vcs-git.png</file>
+    <file>32x32/actions/builder-vcs-git.png</file>
+  </gresource>
+</gresources>
