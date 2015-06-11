@@ -457,11 +457,71 @@ gb_workbench_actions_focus_stack (GSimpleAction *action,
   g_list_free (stacks);
 }
 
+static gboolean
+delayed_focus_timeout (gpointer data)
+{
+  GtkWidget *widget = data;
+
+  if (gtk_widget_get_realized (widget))
+    gtk_widget_grab_focus (widget);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gb_workbench_actions_focus_left (GSimpleAction *action,
+                                 GVariant      *param,
+                                 gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+  GtkWidget *pane;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GB_IS_WORKBENCH (self));
+
+  pane = gb_workspace_get_left_pane (self->workspace);
+  gtk_container_child_set (GTK_CONTAINER (self->workspace), pane,
+                           "reveal", TRUE,
+                           NULL);
+
+  /* delay a bit in case widgets are in reveal */
+  g_timeout_add_full (G_PRIORITY_LOW,
+                      10,
+                      delayed_focus_timeout,
+                      g_object_ref (pane),
+                      g_object_unref);
+}
+
+static void
+gb_workbench_actions_focus_right (GSimpleAction *action,
+                                  GVariant      *param,
+                                  gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+  GtkWidget *pane;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GB_IS_WORKBENCH (self));
+
+  pane = gb_workspace_get_right_pane (self->workspace);
+  gtk_container_child_set (GTK_CONTAINER (self->workspace), pane,
+                           "reveal", TRUE,
+                           NULL);
+
+  /* delay a bit in case widgets are in reveal */
+  g_timeout_add_full (G_PRIORITY_LOW,
+                      10,
+                      delayed_focus_timeout,
+                      g_object_ref (pane),
+                      g_object_unref);
+}
 
 static const GActionEntry GbWorkbenchActions[] = {
   { "build",            gb_workbench_actions_build },
   { "dayhack",          gb_workbench_actions_dayhack },
   { "focus-stack",      gb_workbench_actions_focus_stack, "i" },
+  { "focus-left",       gb_workbench_actions_focus_left },
+  { "focus-right",      gb_workbench_actions_focus_right },
   { "global-search",    gb_workbench_actions_global_search },
   { "new-document",     gb_workbench_actions_new_document },
   { "nighthack",        gb_workbench_actions_nighthack },

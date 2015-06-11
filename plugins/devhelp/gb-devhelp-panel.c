@@ -149,6 +149,14 @@ fixup_box_border_width (GtkWidget *widget,
 }
 
 static void
+gb_devhelp_panel_grab_focus (GtkWidget *widget)
+{
+  GbDevhelpPanel *self = (GbDevhelpPanel *)widget;
+
+  dh_sidebar_set_search_focus (DH_SIDEBAR (self->sidebar));
+}
+
+static void
 gb_devhelp_panel_finalize (GObject *object)
 {
   GbDevhelpPanel *self = (GbDevhelpPanel *)object;
@@ -197,10 +205,13 @@ static void
 gb_devhelp_panel_class_init (GbDevhelpPanelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = gb_devhelp_panel_finalize;
   object_class->get_property = gb_devhelp_panel_get_property;
   object_class->set_property = gb_devhelp_panel_set_property;
+
+  widget_class->grab_focus = gb_devhelp_panel_grab_focus;
 
   gParamSpecs [PROP_WORKBENCH] =
     g_param_spec_object ("workbench",
