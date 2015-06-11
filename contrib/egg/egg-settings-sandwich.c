@@ -92,14 +92,28 @@ egg_settings_sandwich_cache_key (EggSettingsSandwich *self,
 static void
 egg_settings_sandwich_update_cache (EggSettingsSandwich *self)
 {
+  GSettingsSchemaSource *source;
+  GSettingsSchema *schema;
   gchar **keys;
   gsize i;
 
   g_assert (EGG_IS_SETTINGS_SANDWICH (self));
 
-  keys = g_settings_list_keys (self->memory_settings);
+  source = g_settings_schema_source_get_default ();
+  schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE);
+
+  if (schema == NULL)
+    {
+      g_error ("Failed to locate schema: %s", self->schema_id);
+      return;
+    }
+
+  keys = g_settings_schema_list_keys (schema);
+
   for (i = 0; keys [i]; i++)
     egg_settings_sandwich_cache_key (self, keys [i]);
+
+  g_object_unref (schema);
   g_strfreev (keys);
 }
 
