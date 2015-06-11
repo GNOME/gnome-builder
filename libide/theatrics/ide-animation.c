@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 #include <gobject/gvaluecollector.h>
+#include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <string.h>
 
@@ -45,13 +46,15 @@ struct _IdeAnimation
 {
   GInitiallyUnowned  parent_instance;
 
-  gpointer           target;         /* Target object to animate */
-  guint64            begin_msec;     /* Time in which animation started */
-  guint              duration_msec;  /* Duration of animation */
-  guint              mode;           /* Tween mode */
-  guint              tween_handler;  /* GSource performing tweens */
-  GArray            *tweens;         /* Array of tweens to perform */
-  GdkFrameClock     *frame_clock;     /* An optional frame-clock for sync. */
+  gpointer           target;              /* Target object to animate */
+  guint64            begin_msec;          /* Time in which animation started */
+  guint              duration_msec;       /* Duration of animation */
+  guint              mode;                /* Tween mode */
+  gulong             tween_handler;       /* GSource or signal handler */
+  gulong             after_paint_handler; /* signal handler */
+  gdouble            last_offset;         /* Track our last offset */
+  GArray            *tweens;              /* Array of tweens to perform */
+  GdkFrameClock     *frame_clock;         /* An optional frame-clock for sync. */
 };
 
 G_DEFINE_TYPE (IdeAnimation, ide_animation, G_TYPE_INITIALLY_UNOWNED)
@@ -279,29 +282,33 @@ ide_animation_unload_begin_values (IdeAnimation *animation)
 
 /**
  * ide_animation_get_offset:
- * @animation: (in): A #IdeAnimation.
+ * @animation: A #IdeAnimation.
+ * @frame_time: the time to present the frame, or 0 for current timing.
  *
  * Retrieves the position within the animation from 0.0 to 1.0. This
  * value is calculated using the msec of the beginning of the animation
  * and the current time.
  *
  * Returns: The offset of the animation from 0.0 to 1.0.
- * Side effects: None.
  */
 static gdouble
-ide_animation_get_offset (IdeAnimation *animation)
+ide_animation_get_offset (IdeAnimation *animation,
+                          gint64        frame_time)
 {
-  GdkFrameClock *frame_clock;
   gdouble offset;
   gint64 frame_msec;
 
   g_return_val_if_fail (IDE_IS_ANIMATION (animation), 0.0);
 
-  if (GTK_IS_WIDGET (animation->target) &&
-      (frame_clock = gtk_widget_get_frame_clock (animation->target)))
-    frame_msec = gdk_frame_clock_get_frame_time (frame_clock) / 1000UL;
-  else
-    frame_msec = g_get_monotonic_time () / 1000UL;
+  if (frame_time == 0)
+    {
+      if (animation->frame_clock != NULL)
+        frame_time = gdk_frame_clock_get_frame_time (animation->frame_clock);
+      else
+        frame_time = g_get_monotonic_time ();
+    }
+
+  frame_msec = frame_time / 1000L;
 
   offset = (gdouble) (frame_msec - animation->begin_msec) /
            (gdouble) animation->duration_msec;
@@ -447,9 +454,9 @@ ide_animation_set_target (IdeAnimation *animation,
  * Side effects: None.
  */
 static gboolean
-ide_animation_tick (IdeAnimation *animation)
+ide_animation_tick (IdeAnimation *animation,
+                    gdouble       offset)
 {
-  gdouble offset;
   gdouble alpha;
   GValue value = { 0 };
   Tween *tween;
@@ -457,7 +464,9 @@ ide_animation_tick (IdeAnimation *animation)
 
   g_return_val_if_fail (IDE_IS_ANIMATION (animation), FALSE);
 
-  offset = ide_animation_get_offset (animation);
+  if (offset == animation->last_offset)
+    return offset < 1.0;
+
   alpha = gAlphaFuncs[animation->mode](offset);
 
   /*
@@ -503,6 +512,8 @@ ide_animation_tick (IdeAnimation *animation)
     }
 #endif
 
+  animation->last_offset = offset;
+
   return offset < 1.0;
 }
 
@@ -521,8 +532,11 @@ ide_animation_timeout_cb (gpointer user_data)
 {
   IdeAnimation *animation = user_data;
   gboolean ret;
+  gdouble offset;
 
-  if (!(ret = ide_animation_tick (animation)))
+  offset = ide_animation_get_offset (animation, 0);
+
+  if (!(ret = ide_animation_tick (animation, offset)))
     ide_animation_stop (animation);
 
   return ret;
@@ -539,10 +553,37 @@ ide_animation_widget_tick_cb (GdkFrameClock *frame_clock,
   g_assert (IDE_IS_ANIMATION (animation));
 
   if (animation->tween_handler)
-    if (!(ret = ide_animation_tick (animation)))
-      ide_animation_stop (animation);
+    {
+      gdouble offset;
+
+      offset = ide_animation_get_offset (animation, 0);
+
+      if (!(ret = ide_animation_tick (animation, offset)))
+        ide_animation_stop (animation);
+    }
 
   return ret;
+}
+
+
+static void
+ide_animation_widget_after_paint_cb (GdkFrameClock *frame_clock,
+                                     IdeAnimation  *animation)
+{
+  gint64 base_time;
+  gint64 interval;
+  gint64 next_frame_time;
+  gdouble offset;
+
+  g_assert (GDK_IS_FRAME_CLOCK (frame_clock));
+  g_assert (IDE_IS_ANIMATION (animation));
+
+  base_time = gdk_frame_clock_get_frame_time (frame_clock);
+  gdk_frame_clock_get_refresh_info (frame_clock, base_time, &interval, &next_frame_time);
+
+  offset = ide_animation_get_offset (animation, next_frame_time);
+
+  ide_animation_tick (animation, offset);
 }
 
 
@@ -573,14 +614,19 @@ ide_animation_start (IdeAnimation *animation)
                           "update",
                           G_CALLBACK (ide_animation_widget_tick_cb),
                           animation);
+      animation->after_paint_handler =
+        g_signal_connect (animation->frame_clock,
+                          "after-paint",
+                          G_CALLBACK (ide_animation_widget_after_paint_cb),
+                          animation);
       gdk_frame_clock_begin_updating (animation->frame_clock);
     }
   else
     {
       animation->begin_msec = g_get_monotonic_time () / 1000UL;
       animation->tween_handler = ide_frame_source_add (FALLBACK_FRAME_RATE,
-                                                 ide_animation_timeout_cb,
-                                                 animation);
+                                                       ide_animation_timeout_cb,
+                                                       animation);
     }
 }
 
@@ -606,6 +652,7 @@ ide_animation_stop (IdeAnimation *animation)
         {
           gdk_frame_clock_end_updating (animation->frame_clock);
           g_signal_handler_disconnect (animation->frame_clock, animation->tween_handler);
+          g_signal_handler_disconnect (animation->frame_clock, animation->after_paint_handler);
           animation->tween_handler = 0;
         }
       else
@@ -892,6 +939,7 @@ ide_animation_init (IdeAnimation *animation)
   animation->duration_msec = 250;
   animation->mode = IDE_ANIMATION_EASE_IN_OUT_QUAD;
   animation->tweens = g_array_new (FALSE, FALSE, sizeof (Tween));
+  animation->last_offset = -G_MINDOUBLE;
 }
 
 
