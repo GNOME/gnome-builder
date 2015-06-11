@@ -59,6 +59,80 @@ static const GtkTargetEntry gDropTypes[] = {
 };
 
 static void
+gb_workbench_save_panel_state (GbWorkbench *self)
+{
+  g_autoptr(GSettings) settings = NULL;
+  GtkWidget *pane;
+  gboolean reveal;
+  guint position;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  settings = g_settings_new ("org.gnome.builder.workbench");
+
+  pane = gb_workspace_get_left_pane (self->workspace);
+  gtk_container_child_get (GTK_CONTAINER (self->workspace), pane,
+                           "reveal", &reveal,
+                           "position", &position,
+                           NULL);
+  g_settings_set_boolean (settings, "left-visible", reveal);
+  g_settings_set_int (settings, "left-position", position);
+
+  pane = gb_workspace_get_right_pane (self->workspace);
+  gtk_container_child_get (GTK_CONTAINER (self->workspace), pane,
+                           "reveal", &reveal,
+                           "position", &position,
+                           NULL);
+  g_settings_set_boolean (settings, "right-visible", reveal);
+  g_settings_set_int (settings, "right-position", position);
+
+  pane = gb_workspace_get_bottom_pane (self->workspace);
+  gtk_container_child_get (GTK_CONTAINER (self->workspace), pane,
+                           "reveal", &reveal,
+                           "position", &position,
+                           NULL);
+  g_settings_set_boolean (settings, "bottom-visible", reveal);
+  g_settings_set_int (settings, "bottom-position", position);
+}
+
+static void
+gb_workbench_restore_panel_state (GbWorkbench *self)
+{
+  g_autoptr(GSettings) settings = NULL;
+  GtkWidget *pane;
+  gboolean reveal;
+  guint position;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  settings = g_settings_new ("org.gnome.builder.workbench");
+
+  pane = gb_workspace_get_left_pane (self->workspace);
+  reveal = g_settings_get_boolean (settings, "left-visible");
+  position = g_settings_get_int (settings, "left-position");
+  gtk_container_child_set (GTK_CONTAINER (self->workspace), pane,
+                           "position", position,
+                           "reveal", reveal,
+                           NULL);
+
+  pane = gb_workspace_get_right_pane (self->workspace);
+  reveal = g_settings_get_boolean (settings, "right-visible");
+  position = g_settings_get_int (settings, "right-position");
+  gtk_container_child_set (GTK_CONTAINER (self->workspace), pane,
+                           "position", position,
+                           "reveal", reveal,
+                           NULL);
+
+  pane = gb_workspace_get_bottom_pane (self->workspace);
+  reveal = g_settings_get_boolean (settings, "bottom-visible");
+  position = g_settings_get_int (settings, "bottom-position");
+  gtk_container_child_set (GTK_CONTAINER (self->workspace), pane,
+                           "position", position,
+                           "reveal", reveal,
+                           NULL);
+}
+
+static void
 gb_workbench__project_notify_name_cb (GbWorkbench *self,
                                       GParamSpec  *pspec,
                                       IdeProject  *project)
@@ -292,6 +366,8 @@ gb_workbench_delete_event (GtkWidget   *widget,
       return TRUE;
     }
 
+  gb_workbench_save_panel_state (self);
+
   return FALSE;
 }
 
@@ -365,6 +441,8 @@ static void
 gb_workbench_realize (GtkWidget *widget)
 {
   GbWorkbench *self = (GbWorkbench *)widget;
+
+  gb_workbench_restore_panel_state (self);
 
   if (GTK_WIDGET_CLASS (gb_workbench_parent_class)->realize)
     GTK_WIDGET_CLASS (gb_workbench_parent_class)->realize (widget);

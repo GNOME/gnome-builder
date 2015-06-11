@@ -1,0 +1,39 @@
+<schemalist>
+  <schema id="org.gnome.builder.workbench" path="/org/gnome/builder/workbench/" gettext-domain="gnome-builder">
+    <key name="left-visible" type="b">
+      <default>true</default>
+      <summary>Show Left Panel</summary>
+      <description>If enabled, the left panel will be displayed.</description>
+    </key>
+    <key name="left-position" type="i">
+      <range min="1" max="1000"/>
+      <default>250</default>
+      <summary>Left Panel Position</summary>
+      <description>The width in pixel units of the left panel.</description>
+    </key>
+
+    <key name="right-visible" type="b">
+      <default>true</default>
+      <summary>Show Right Panel</summary>
+      <description>If enabled, the right panel will be displayed.</description>
+    </key>
+    <key name="right-position" type="i">
+      <range min="1" max="1000"/>
+      <default>250</default>
+      <summary>Right Panel Position</summary>
+      <description>The width in pixel units of the right panel.</description>
+    </key>
+
+    <key name="bottom-visible" type="b">
+      <default>true</default>
+      <summary>Show Bottom Panel</summary>
+      <description>If enabled, the bottom panel will be displayed.</description>
+    </key>
+    <key name="bottom-position" type="i">
+      <range min="1" max="1000"/>
+      <default>200</default>
+      <summary>Bottom Panel Position</summary>
+      <description>The width in pixel units of the bottom panel.</description>
+    </key>
+  </schema>
+</schemalist>

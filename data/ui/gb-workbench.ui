@@ -146,16 +146,10 @@
             <child internal-child="right_pane">
               <object class="GbWorkspacePane">
               </object>
-              <packing>
-                <property name="reveal">false</property>
-              </packing>
             </child>
             <child internal-child="bottom_pane">
               <object class="GbWorkspacePane">
               </object>
-              <packing>
-                <property name="reveal">false</property>
-              </packing>
             </child>
           </object>
         </child>
