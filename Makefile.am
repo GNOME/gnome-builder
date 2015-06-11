@@ -1,4 +1,4 @@
-SUBDIRS = . build contrib libide plugins src data po tools tests doc
+SUBDIRS = . build contrib data libide plugins src po tools tests doc
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(top_builddir)/data/libide-1.0.pc
