@@ -22,7 +22,6 @@
 #include <gio/gdesktopappinfo.h>
 #include <vte/vte.h>
 
-#include "gb-editor-workspace.h"
 #include "gb-file-manager.h"
 #include "gb-new-file-popover.h"
 #include "gb-project-tree.h"
@@ -217,7 +216,7 @@ gb_project_tree_actions_open_containing_folder (GSimpleAction *action,
                                                 GVariant      *variant,
                                                 gpointer       user_data)
 {
-  GbEditorWorkspace *self = user_data;
+  GbProjectTree *self = user_data;
   GbTreeNode *selected;
   GObject *item;
   GFile *file;
@@ -289,7 +288,7 @@ gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
                                           GVariant      *variant,
                                           gpointer       user_data)
 {
-  GbEditorWorkspace *self = user_data;
+  GbProjectTree *self = user_data;
   GbTreeNode *selected;
   GObject *item;
   GFile *file;

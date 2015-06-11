@@ -18,7 +18,6 @@
 
 #include <glib/gi18n.h>
 
-#include "gb-editor-workspace.h"
 #include "gb-project-tree-builder.h"
 #include "gb-tree.h"
 #include "gb-widget.h"

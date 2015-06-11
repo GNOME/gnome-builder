@@ -19,16 +19,16 @@
 #ifndef GB_WORKBENCH_PRIVATE_H
 #define GB_WORKBENCH_PRIVATE_H
 
+#include <gedit-menu-stack-switcher.h>
 #include <gtk/gtk.h>
 #include <libpeas/peas.h>
 #include <ide.h>
 
-#include "gb-editor-workspace.h"
 #include "gb-project-tree.h"
 #include "gb-search-box.h"
 #include "gb-view-grid.h"
 #include "gb-workbench-types.h"
-#include "gedit-menu-stack-switcher.h"
+#include "gb-workspace.h"
 
 G_BEGIN_DECLS
 
