@@ -673,10 +673,8 @@ gb_editor_view_actions_reveal (GSimpleAction *action,
                                GVariant      *param,
                                gpointer       user_data)
 {
-#if 0
   GbEditorView *self = user_data;
   GbWorkbench *workbench;
-  GbEditorWorkspace *workspace;
   IdeFile *file;
   GFile *gfile;
 
@@ -686,9 +684,7 @@ gb_editor_view_actions_reveal (GSimpleAction *action,
   file = ide_buffer_get_file (IDE_BUFFER (self->document));
   gfile = ide_file_get_file (file);
   workbench = gb_widget_get_workbench (GTK_WIDGET (self));
-  workspace = gb_workbench_get_workspace_typed (workbench, GB_TYPE_EDITOR_WORKSPACE);
-  gb_editor_workspace_reveal_file (workspace, gfile);
-#endif
+  gb_workbench_reveal_file (workbench, gfile);
 }
 
 static GActionEntry GbEditorViewActions[] = {

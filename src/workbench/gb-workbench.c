@@ -902,3 +902,46 @@ gb_workbench_get_view_grid (GbWorkbench *self)
 
   return GTK_WIDGET (self->view_grid);
 }
+
+static gboolean
+gb_workbench_reveal_file_cb (gconstpointer a,
+                             gconstpointer b)
+{
+  GFile *file = (GFile *)a;
+  GObject *object = (GObject *)b;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_OBJECT (object));
+
+  if (IDE_IS_PROJECT_FILE (object))
+    {
+      IdeProjectFile *pf = (IdeProjectFile *)object;
+      GFile *pf_file;
+
+      pf_file = ide_project_file_get_file (pf);
+      return g_file_equal (pf_file, file);
+    }
+
+  return FALSE;
+}
+
+void
+gb_workbench_reveal_file (GbWorkbench *self,
+                          GFile       *file)
+{
+  GbTreeNode *node;
+
+  g_return_if_fail (GB_IS_WORKBENCH (self));
+  g_return_if_fail (G_IS_FILE (file));
+
+  node = gb_tree_find_custom (GB_TREE (self->project_tree),
+                              gb_workbench_reveal_file_cb,
+                              file);
+
+  if (node != NULL)
+    {
+      gb_tree_expand_to_node (GB_TREE (self->project_tree), node);
+      gb_tree_scroll_to_node (GB_TREE (self->project_tree), node);
+      gb_tree_node_select (node);
+    }
+}
