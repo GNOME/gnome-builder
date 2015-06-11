@@ -16,6 +16,10 @@
   bind "<ctrl>k" { "action" ("view-stack", "show-list", "") };
   bind "<ctrl>d" { "delete-from-cursor" (paragraphs, 1) };
 
+  bind "<ctrl>minus" { "decrease-font-size" () };
+  bind "<ctrl>plus" { "increase-font-size" () };
+  bind "<ctrl>0" { "reset-font-size" () };
+
   /* cycle "tabs" */
   bind "<ctrl>Page_Up" { "action" ("view-stack", "previous-view", "") };
   bind "<ctrl>KP_Page_Up" { "action" ("view-stack", "previous-view", "") };

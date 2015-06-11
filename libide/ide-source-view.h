@@ -262,6 +262,9 @@ struct _IdeSourceViewClass
                                        gboolean                 ignore_case,
                                        gboolean                 reverse);
   void (*swap_selection_bounds)       (IdeSourceView           *self);
+  void (*increase_font_size)          (IdeSourceView           *self);
+  void (*decrease_font_size)          (IdeSourceView           *self);
+  void (*reset_font_size)             (IdeSourceView           *self);
 };
 
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);

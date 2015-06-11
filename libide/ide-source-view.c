@@ -127,6 +127,8 @@ typedef struct
   GdkRGBA                      bubble_color1;
   GdkRGBA                      bubble_color2;
 
+  gdouble                      font_scale;
+
   guint                        auto_indent : 1;
   guint                        completion_blocked : 1;
   guint                        completion_visible : 1;
@@ -203,12 +205,14 @@ enum {
   CLEAR_SELECTION,
   CLEAR_SNIPPETS,
   CYCLE_COMPLETION,
+  DECREASE_FONT_SIZE,
   DELETE_SELECTION,
   END_MACRO,
   END_USER_ACTION,
   FOCUS_LOCATION,
   GOTO_DEFINITION,
   HIDE_COMPLETION,
+  INCREASE_FONT_SIZE,
   INDENT_SELECTION,
   INSERT_AT_CURSOR_AND_INDENT,
   INSERT_MODIFIER,
@@ -224,6 +228,7 @@ enum {
   REBUILD_HIGHLIGHT,
   REPLAY_MACRO,
   REQUEST_DOCUMENTATION,
+  RESET_FONT_SIZE,
   RESTORE_INSERT_MARK,
   SAVE_INSERT_MARK,
   SELECTION_THEATRIC,
@@ -1119,10 +1124,25 @@ ide_source_view_rebuild_css (IdeSourceView *self)
     {
       g_autofree gchar *str = NULL;
       g_autofree gchar *css = NULL;
+      const PangoFontDescription *font_desc = priv->font_desc;
+      PangoFontDescription *copy = NULL;
 
-      str = ide_pango_font_description_to_css (priv->font_desc);
+      if (priv->font_scale != 1.0)
+        {
+          guint font_size;
+
+          copy = pango_font_description_copy (priv->font_desc);
+          font_size = pango_font_description_get_size (priv->font_desc);
+          pango_font_description_set_size (copy, font_size * priv->font_scale);
+
+          font_desc = copy;
+        }
+
+      str = ide_pango_font_description_to_css (font_desc);
       css = g_strdup_printf ("IdeSourceView { %s }", str ?: "");
       gtk_css_provider_load_from_data (priv->css_provider, css, -1, NULL);
+
+      g_clear_pointer (&copy, pango_font_description_free);
     }
 }
 
@@ -4808,6 +4828,42 @@ ide_source_view_scroll_event (GtkWidget      *widget,
 }
 
 static void
+ide_source_view_real_reset_font_size (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  priv->font_scale = 1.0;
+
+  ide_source_view_rebuild_css (self);
+}
+
+static void
+ide_source_view_real_increase_font_size (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  priv->font_scale *= PANGO_SCALE_LARGE;
+
+  ide_source_view_rebuild_css (self);
+}
+
+static void
+ide_source_view_real_decrease_font_size (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  priv->font_scale *= PANGO_SCALE_SMALL;
+
+  ide_source_view_rebuild_css (self);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -5096,13 +5152,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->capture_modifier = ide_source_view_real_capture_modifier;
   klass->clear_count = ide_source_view_real_clear_count;
   klass->clear_modifier = ide_source_view_real_clear_modifier;
-  klass->clear_snippets = ide_source_view_clear_snippets;
   klass->clear_selection = ide_source_view_real_clear_selection;
+  klass->clear_snippets = ide_source_view_clear_snippets;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
+  klass->decrease_font_size = ide_source_view_real_decrease_font_size;
   klass->delete_selection = ide_source_view_real_delete_selection;
   klass->end_macro = ide_source_view_real_end_macro;
   klass->goto_definition = ide_source_view_real_goto_definition;
   klass->hide_completion = ide_source_view_real_hide_completion;
+  klass->increase_font_size = ide_source_view_real_increase_font_size;
   klass->indent_selection = ide_source_view_real_indent_selection;
   klass->insert_at_cursor_and_indent = ide_source_view_real_insert_at_cursor_and_indent;
   klass->insert_modifier = ide_source_view_real_insert_modifier;
@@ -5116,6 +5174,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->push_snippet = ide_source_view_real_push_snippet;
   klass->rebuild_highlight = ide_source_view_real_rebuild_highlight;
   klass->replay_macro = ide_source_view_real_replay_macro;
+  klass->reset_font_size = ide_source_view_real_reset_font_size;
   klass->restore_insert_mark = ide_source_view_real_restore_insert_mark;
   klass->save_insert_mark = ide_source_view_real_save_insert_mark;
   klass->selection_theatric = ide_source_view_real_selection_theatric;
@@ -5425,6 +5484,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   1,
                   GTK_TYPE_DIRECTION_TYPE);
 
+  gSignals [DECREASE_FONT_SIZE] =
+    g_signal_new ("decrease-font-size",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, decrease_font_size),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  0);
+
   gSignals [DELETE_SELECTION] =
     g_signal_new ("delete-selection",
                   G_TYPE_FROM_CLASS (klass),
@@ -5485,6 +5553,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, hide_completion),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  0);
+
+  gSignals [INCREASE_FONT_SIZE] =
+    g_signal_new ("increase-font-size",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, increase_font_size),
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
@@ -5687,6 +5764,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  gSignals [RESET_FONT_SIZE] =
+    g_signal_new ("reset-font-size",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, reset_font_size),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  0);
+
   gSignals [RESTORE_INSERT_MARK] =
     g_signal_new ("restore-insert-mark",
                   G_TYPE_FROM_CLASS (klass),
@@ -5799,6 +5885,7 @@ ide_source_view_init (IdeSourceView *self)
   priv->snippets = g_queue_new ();
   priv->selections = g_queue_new ();
   priv->show_line_diagnostics = TRUE;
+  priv->font_scale = 1.0;
 
   priv->file_setting_bindings = egg_binding_group_new ();
   egg_binding_group_bind (priv->file_setting_bindings, "indent-width",
@@ -5930,6 +6017,8 @@ ide_source_view_set_font_desc (IdeSourceView              *self,
         priv->font_desc = pango_font_description_copy (font_desc);
       else
         priv->font_desc = pango_font_description_from_string (DEFAULT_FONT_DESC);
+
+      priv->font_scale = 1.0;
 
       ide_source_view_rebuild_css (self);
     }
