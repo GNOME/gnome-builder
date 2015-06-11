@@ -396,6 +396,13 @@ gb_workbench_actions_toggle_panels (GSimpleAction *action,
     }
   else
     {
+      if (!self->reveal_left_in_show && !self->reveal_right_in_show && !self->reveal_bottom_in_show)
+        {
+          self->reveal_bottom_in_show = TRUE;
+          self->reveal_left_in_show = TRUE;
+          self->reveal_right_in_show = TRUE;
+        }
+
       gtk_container_child_set (GTK_CONTAINER (self->workspace), left,
                                "reveal", self->reveal_left_in_show,
                                NULL);
