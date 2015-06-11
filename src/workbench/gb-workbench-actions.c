@@ -432,9 +432,36 @@ sync_reveal_state (GtkWidget     *child,
   g_simple_action_set_state (action, g_variant_new_boolean (reveal));
 }
 
+static void
+gb_workbench_actions_focus_stack (GSimpleAction *action,
+                                  GVariant      *variant,
+                                  gpointer       user_data)
+{
+  GbWorkbench *self = user_data;
+  GtkWidget *stack;
+  GList *stacks;
+  gint nth;
+
+  g_assert (GB_IS_WORKBENCH (self));
+  g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_INT32));
+
+  /* Our index is 1-based for the column mapping. */
+  nth = g_variant_get_int32 (variant);
+  if (nth <= 0)
+    return;
+
+  stacks = gb_view_grid_get_stacks (self->view_grid);
+  stack = g_list_nth_data (stacks, nth - 1);
+  if (stack != NULL)
+    gtk_widget_grab_focus (stack);
+  g_list_free (stacks);
+}
+
+
 static const GActionEntry GbWorkbenchActions[] = {
   { "build",            gb_workbench_actions_build },
   { "dayhack",          gb_workbench_actions_dayhack },
+  { "focus-stack",      gb_workbench_actions_focus_stack, "i" },
   { "global-search",    gb_workbench_actions_global_search },
   { "new-document",     gb_workbench_actions_new_document },
   { "nighthack",        gb_workbench_actions_nighthack },
