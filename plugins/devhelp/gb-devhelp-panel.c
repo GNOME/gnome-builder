@@ -57,11 +57,35 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void
+focus_devhelp_search_cb (GSimpleAction  *action,
+                         GVariant       *variant,
+                         GbDevhelpPanel *self)
+{
+  GtkWidget *workspace;
+  GtkWidget *pane;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GB_IS_DEVHELP_PANEL (self));
+
+  workspace = gb_workbench_get_workspace (self->workbench);
+  pane = gb_workspace_get_right_pane (GB_WORKSPACE (workspace));
+
+  gtk_container_child_set (GTK_CONTAINER (workspace), pane,
+                           "reveal", TRUE,
+                           NULL);
+
+  dh_sidebar_set_search_focus (DH_SIDEBAR (self->sidebar));
+}
+
+static void
 gb_devhelp_panel_load (GbWorkbenchAddin *addin)
 {
   GbDevhelpPanel *self = (GbDevhelpPanel *)addin;
   GtkWidget *workspace;
   GtkWidget *pane;
+  const gchar * const accels[] = { "<ctrl><shift>f", NULL };
+  GSimpleAction *action;
+  GApplication *app;
 
   g_assert (GB_IS_DEVHELP_PANEL (self));
 
@@ -69,6 +93,20 @@ gb_devhelp_panel_load (GbWorkbenchAddin *addin)
   pane = gb_workspace_get_right_pane (GB_WORKSPACE (workspace));
   gb_workspace_pane_add_page (GB_WORKSPACE_PANE (pane), GTK_WIDGET (self),
                               _("Documentation"), "help-contents-symbolic");
+
+  action = g_simple_action_new ("focus-devhelp-search", NULL);
+  g_signal_connect_object (action,
+                           "activate",
+                           G_CALLBACK (focus_devhelp_search_cb),
+                           self,
+                           0);
+  g_action_map_add_action (G_ACTION_MAP (self->workbench), G_ACTION (action));
+  g_clear_object (&action);
+
+  app = g_application_get_default ();
+  gtk_application_set_accels_for_action (GTK_APPLICATION (app),
+                                         "win.focus-devhelp-search",
+                                         accels);
 
   gtk_widget_show (GTK_WIDGET (self));
 }
