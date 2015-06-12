@@ -20,13 +20,12 @@
 
 #include "gb-devhelp-panel.h"
 #include "gb-devhelp-resources.h"
+#include "gb-devhelp-search-provider.h"
 #include "gb-plugins.h"
 #include "gb-workbench-addin.h"
-
-#include "ide-devhelp-search-provider.h"
 
 GB_DEFINE_EMBEDDED_PLUGIN (gb_devhelp,
                            gb_devhelp_get_resource (),
                            "resource:///org/gnome/builder/plugins/devhelp/gb-devhelp.plugin",
                            GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_DEVHELP_PANEL)
-                           GB_DEFINE_PLUGIN_TYPE (IDE_TYPE_SEARCH_PROVIDER, IDE_TYPE_DEVHELP_SEARCH_PROVIDER))
+                           GB_DEFINE_PLUGIN_TYPE (IDE_TYPE_SEARCH_PROVIDER, GB_TYPE_DEVHELP_SEARCH_PROVIDER))

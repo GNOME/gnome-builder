@@ -28,9 +28,6 @@
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
-/* FIXME: make search result row creation pluggable */
-#include "ide-devhelp-search-result.h"
-
 #define SHORT_DELAY_TIMEOUT_MSEC 30
 #define LONG_DELAY_TIMEOUT_MSEC  30
 
@@ -231,45 +228,9 @@ gb_search_box_display_result_activated (GbSearchBox     *self,
                                         IdeSearchResult *result,
                                         GbSearchDisplay *display)
 {
-  GbWorkbench *workbench;
-
   g_return_if_fail (GB_IS_SEARCH_BOX (self));
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (display));
-
-  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
-
-  /*
-   * FIXME:
-   *
-   * This is not ideal, but we don't have time before the 3.16 release to build
-   * the proper abstraction for us to keep the load hooks inside of the Builder
-   * code and out of the libide code.
-   *
-   * After release, we should revisit this, and probably add an extension
-   * point to register the handler for a given result type.
-   */
-  if (IDE_IS_GIT_SEARCH_RESULT (result))
-    {
-      g_autoptr(GFile) file = NULL;
-
-      g_object_get (result, "file", &file, NULL);
-      if (file)
-        gb_workbench_open (workbench, file);
-    }
-  else if (IDE_IS_DEVHELP_SEARCH_RESULT (result))
-    {
-      g_autofree gchar *uri = NULL;
-
-      g_object_get (result, "uri", &uri, NULL);
-      //workspace = gb_workbench_get_workspace_typed (workbench, GB_TYPE_EDITOR_WORKSPACE);
-      //gb_editor_workspace_show_help (workspace, uri);
-    }
-  else
-    {
-      g_warning (_("Builder does not know how to load %s"),
-                 g_type_name (G_TYPE_FROM_INSTANCE (result)));
-    }
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), FALSE);
   gtk_entry_set_text (GTK_ENTRY (self->entry), "");

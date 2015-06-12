@@ -1,4 +1,4 @@
-/* ide-devhelp-search-result.c
+/* gb-devhelp-search-result.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -18,9 +18,9 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-devhelp-search-result.h"
+#include "gb-devhelp-search-result.h"
 
-struct _IdeDevhelpSearchResult
+struct _GbDevhelpSearchResult
 {
   IdeSearchResult  parent_instance;
   gchar           *uri;
@@ -33,27 +33,27 @@ enum
   LAST_PROP
 };
 
-G_DEFINE_TYPE (IdeDevhelpSearchResult, ide_devhelp_search_result, IDE_TYPE_SEARCH_RESULT)
+G_DEFINE_TYPE (GbDevhelpSearchResult, gb_devhelp_search_result, IDE_TYPE_SEARCH_RESULT)
 
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void
-ide_devhelp_search_result_finalize (GObject *object)
+gb_devhelp_search_result_finalize (GObject *object)
 {
-  IdeDevhelpSearchResult *self = (IdeDevhelpSearchResult *)object;
+  GbDevhelpSearchResult *self = (GbDevhelpSearchResult *)object;
 
   g_clear_pointer (&self->uri, g_free);
 
-  G_OBJECT_CLASS (ide_devhelp_search_result_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gb_devhelp_search_result_parent_class)->finalize (object);
 }
 
 static void
-ide_devhelp_search_result_get_property (GObject    *object,
-                                        guint       prop_id,
-                                        GValue     *value,
-                                        GParamSpec *pspec)
+gb_devhelp_search_result_get_property (GObject    *object,
+                                       guint       prop_id,
+                                       GValue     *value,
+                                       GParamSpec *pspec)
 {
-  IdeDevhelpSearchResult *self = IDE_DEVHELP_SEARCH_RESULT (object);
+  GbDevhelpSearchResult *self = GB_DEVHELP_SEARCH_RESULT (object);
 
   switch (prop_id)
     {
@@ -67,12 +67,12 @@ ide_devhelp_search_result_get_property (GObject    *object,
 }
 
 static void
-ide_devhelp_search_result_set_property (GObject      *object,
-                                        guint         prop_id,
-                                        const GValue *value,
-                                        GParamSpec   *pspec)
+gb_devhelp_search_result_set_property (GObject      *object,
+                                       guint         prop_id,
+                                       const GValue *value,
+                                       GParamSpec   *pspec)
 {
-  IdeDevhelpSearchResult *self = IDE_DEVHELP_SEARCH_RESULT (object);
+  GbDevhelpSearchResult *self = GB_DEVHELP_SEARCH_RESULT (object);
 
   switch (prop_id)
     {
@@ -86,13 +86,13 @@ ide_devhelp_search_result_set_property (GObject      *object,
 }
 
 static void
-ide_devhelp_search_result_class_init (IdeDevhelpSearchResultClass *klass)
+gb_devhelp_search_result_class_init (GbDevhelpSearchResultClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_devhelp_search_result_finalize;
-  object_class->get_property = ide_devhelp_search_result_get_property;
-  object_class->set_property = ide_devhelp_search_result_set_property;
+  object_class->finalize = gb_devhelp_search_result_finalize;
+  object_class->get_property = gb_devhelp_search_result_get_property;
+  object_class->set_property = gb_devhelp_search_result_set_property;
 
   gParamSpecs [PROP_URI] =
     g_param_spec_string ("uri",
@@ -105,6 +105,6 @@ ide_devhelp_search_result_class_init (IdeDevhelpSearchResultClass *klass)
 }
 
 static void
-ide_devhelp_search_result_init (IdeDevhelpSearchResult *result)
+gb_devhelp_search_result_init (GbDevhelpSearchResult *result)
 {
 }

@@ -10,15 +10,15 @@ libdevhelp_la_SOURCES = \
 	gb-devhelp-document.h \
 	gb-devhelp-panel.c \
 	gb-devhelp-panel.h \
-	gb-devhelp-view.c \
-	gb-devhelp-view.h \
+	gb-devhelp-plugin.c \
 	gb-devhelp-resources.c \
 	gb-devhelp-resources.h \
-	ide-devhelp-search-provider.c \
-	ide-devhelp-search-provider.h \
-	ide-devhelp-search-result.c \
-	ide-devhelp-search-result.h \
-	gb-devhelp-plugin.c \
+	gb-devhelp-search-provider.c \
+	gb-devhelp-search-provider.h \
+	gb-devhelp-search-result.c \
+	gb-devhelp-search-result.h \
+	gb-devhelp-view.c \
+	gb-devhelp-view.h \
 	$(NULL)
 
 libdevhelp_la_CFLAGS = \

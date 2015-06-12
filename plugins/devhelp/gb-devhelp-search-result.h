@@ -1,4 +1,4 @@
-/* ide-devhelp-search-result.h
+/* gb-devhelp-search-result.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,18 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_DEVHELP_SEARCH_RESULT_H
-#define IDE_DEVHELP_SEARCH_RESULT_H
+#ifndef GB_DEVHELP_SEARCH_RESULT_H
+#define GB_DEVHELP_SEARCH_RESULT_H
 
 #include "ide-search-result.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DEVHELP_SEARCH_RESULT (ide_devhelp_search_result_get_type())
+#define GB_TYPE_DEVHELP_SEARCH_RESULT (gb_devhelp_search_result_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDevhelpSearchResult, ide_devhelp_search_result,
-                      IDE, DEVHELP_SEARCH_RESULT, IdeSearchResult)
+G_DECLARE_FINAL_TYPE (GbDevhelpSearchResult, gb_devhelp_search_result,
+                      GB, DEVHELP_SEARCH_RESULT, IdeSearchResult)
 
 G_END_DECLS
 
-#endif /* IDE_DEVHELP_SEARCH_RESULT_H */
+#endif /* GB_DEVHELP_SEARCH_RESULT_H */

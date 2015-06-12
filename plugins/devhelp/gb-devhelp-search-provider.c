@@ -1,4 +1,4 @@
-/* ide-devhelp-search-provider.c
+/* gb-devhelp-search-provider.c
  *
  * Copyright (C) 2015 Erick Pérez Castellanos <erick.red@gmail.com>
  *
@@ -23,18 +23,17 @@
 #include <devhelp/devhelp.h>
 #include <ide.h>
 
-#include "ide-devhelp-search-provider.h"
-#include "ide-devhelp-search-result.h"
-
 #include "gb-devhelp-document.h"
 #include "gb-devhelp-panel.h"
+#include "gb-devhelp-search-provider.h"
+#include "gb-devhelp-search-result.h"
 #include "gb-search-display-row.h"
 #include "gb-view-grid.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
 #include "gb-workspace.h"
 
-struct _IdeDevhelpSearchProvider
+struct _GbDevhelpSearchProvider
 {
   IdeObject          parent;
 
@@ -44,18 +43,18 @@ struct _IdeDevhelpSearchProvider
 
 static void search_provider_iface_init (IdeSearchProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeDevhelpSearchProvider, ide_devhelp_search_provider, IDE_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GbDevhelpSearchProvider, gb_devhelp_search_provider, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER,
                                                 search_provider_iface_init))
 
 static void
-ide_devhelp_search_provider_populate (IdeSearchProvider *provider,
-                                      IdeSearchContext  *context,
-                                      const gchar       *search_terms,
-                                      gsize              max_results,
-                                      GCancellable      *cancellable)
+gb_devhelp_search_provider_populate (IdeSearchProvider *provider,
+                                     IdeSearchContext  *context,
+                                     const gchar       *search_terms,
+                                     gsize              max_results,
+                                     GCancellable      *cancellable)
 {
-  IdeDevhelpSearchProvider *self = (IdeDevhelpSearchProvider *)provider;
+  GbDevhelpSearchProvider *self = (GbDevhelpSearchProvider *)provider;
   g_auto(IdeSearchReducer) reducer = { 0 };
   IdeContext *idecontext;
   GtkTreeIter iter;
@@ -63,7 +62,7 @@ ide_devhelp_search_provider_populate (IdeSearchProvider *provider,
   gint count = 0;
   gint total;
 
-  g_assert (IDE_IS_DEVHELP_SEARCH_PROVIDER (self));
+  g_assert (GB_IS_DEVHELP_SEARCH_PROVIDER (self));
   g_assert (IDE_IS_SEARCH_CONTEXT (context));
   g_assert (search_terms);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -110,7 +109,7 @@ ide_devhelp_search_provider_populate (IdeSearchProvider *provider,
           name = italic_name;
         }
 
-      result = g_object_new (IDE_TYPE_DEVHELP_SEARCH_RESULT,
+      result = g_object_new (GB_TYPE_DEVHELP_SEARCH_RESULT,
                              "context", idecontext,
                              "provider", provider,
                              "title", name,
@@ -126,23 +125,23 @@ ide_devhelp_search_provider_populate (IdeSearchProvider *provider,
 }
 
 static const gchar *
-ide_devhelp_search_provider_get_verb (IdeSearchProvider *provider)
+gb_devhelp_search_provider_get_verb (IdeSearchProvider *provider)
 {
   return _("Documentation");
 }
 
 static void
-ide_devhelp_search_provider_constructed (GObject *object)
+gb_devhelp_search_provider_constructed (GObject *object)
 {
-  IdeDevhelpSearchProvider *self = IDE_DEVHELP_SEARCH_PROVIDER (object);
+  GbDevhelpSearchProvider *self = GB_DEVHELP_SEARCH_PROVIDER (object);
 
   dh_book_manager_populate (self->book_manager);
   dh_keyword_model_set_words (self->keywords_model, self->book_manager);
 }
 
 static GtkWidget *
-ide_devhelp_search_provider_create_row (IdeSearchProvider *provider,
-                                        IdeSearchResult   *result)
+gb_devhelp_search_provider_create_row (IdeSearchProvider *provider,
+                                       IdeSearchResult   *result)
 {
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));
   g_assert (IDE_IS_SEARCH_RESULT (result));
@@ -154,18 +153,17 @@ ide_devhelp_search_provider_create_row (IdeSearchProvider *provider,
 }
 
 static void
-ide_devhelp_search_provider_activate (IdeSearchProvider *provider,
-                                      GtkWidget         *row,
-                                      IdeSearchResult   *result)
+gb_devhelp_search_provider_activate (IdeSearchProvider *provider,
+                                     GtkWidget         *row,
+                                     IdeSearchResult   *result)
 {
-  g_autoptr(GbDocument) copy = NULL;
   GbDevhelpPanel *panel;
   GtkWidget *workspace;
   GtkWidget *toplevel;
   GtkWidget *pane;
   gchar *uri;
 
-  g_return_if_fail (IDE_IS_DEVHELP_SEARCH_PROVIDER (provider));
+  g_return_if_fail (GB_IS_DEVHELP_SEARCH_PROVIDER (provider));
   g_return_if_fail (GTK_IS_WIDGET (row));
   g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
 
@@ -187,26 +185,26 @@ ide_devhelp_search_provider_activate (IdeSearchProvider *provider,
 }
 
 static void
-ide_devhelp_search_provider_finalize (GObject *object)
+gb_devhelp_search_provider_finalize (GObject *object)
 {
-  IdeDevhelpSearchProvider *self = IDE_DEVHELP_SEARCH_PROVIDER (object);
+  GbDevhelpSearchProvider *self = GB_DEVHELP_SEARCH_PROVIDER (object);
 
   g_clear_object (&self->book_manager);
 
-  G_OBJECT_CLASS (ide_devhelp_search_provider_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gb_devhelp_search_provider_parent_class)->finalize (object);
 }
 
 static void
-ide_devhelp_search_provider_class_init (IdeDevhelpSearchProviderClass *klass)
+gb_devhelp_search_provider_class_init (GbDevhelpSearchProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = ide_devhelp_search_provider_constructed;
-  object_class->finalize = ide_devhelp_search_provider_finalize;
+  object_class->constructed = gb_devhelp_search_provider_constructed;
+  object_class->finalize = gb_devhelp_search_provider_finalize;
 }
 
 static void
-ide_devhelp_search_provider_init (IdeDevhelpSearchProvider *self)
+gb_devhelp_search_provider_init (GbDevhelpSearchProvider *self)
 {
   self->book_manager = dh_book_manager_new ();
   self->keywords_model = dh_keyword_model_new ();
@@ -215,8 +213,8 @@ ide_devhelp_search_provider_init (IdeDevhelpSearchProvider *self)
 static void
 search_provider_iface_init (IdeSearchProviderInterface *iface)
 {
-  iface->create_row = ide_devhelp_search_provider_create_row;
-  iface->get_verb = ide_devhelp_search_provider_get_verb;
-  iface->populate = ide_devhelp_search_provider_populate;
-  iface->activate = ide_devhelp_search_provider_activate;
+  iface->create_row = gb_devhelp_search_provider_create_row;
+  iface->get_verb = gb_devhelp_search_provider_get_verb;
+  iface->populate = gb_devhelp_search_provider_populate;
+  iface->activate = gb_devhelp_search_provider_activate;
 }
