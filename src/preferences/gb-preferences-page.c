@@ -296,8 +296,7 @@ gb_preferences_page_init (GbPreferencesPage *self)
   GbPreferencesPagePrivate *priv = gb_preferences_page_get_instance_private (self);
   GtkBox *controls;
 
-  priv->widgets = g_hash_table_new_full (g_direct_hash, g_direct_equal,
-                                               NULL, NULL);
+  priv->widgets = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
 
   controls = g_object_new (GTK_TYPE_BOX,
                            "orientation", GTK_ORIENTATION_HORIZONTAL,
