@@ -24,6 +24,19 @@ rg_libs = \
 	$(RG_LIBS) \
 	$(NULL)
 
+search_cflags = \
+	$(DEBUG_CFLAGS) \
+	$(SEARCH_CFLAGS) \
+	-I$(top_srcdir)/contrib/search \
+	-I$(top_srcdir)/libide/util \
+	$(NULL)
+
+search_libs = \
+	$(SEARCH_LIBS) \
+	$(top_builddir)/contrib/search/libsearch.la \
+	$(top_builddir)/libide/libide-1.0.la \
+	$(NULL)
+
 tests_cflags = \
 	$(egg_cflags) \
 	-I$(top_srcdir)/libide \
@@ -128,6 +141,12 @@ misc_programs += test-cpu-graph
 test_cpu_graph_SOURCES = test-cpu-graph.c
 test_cpu_graph_CFLAGS = $(rg_cflags)
 test_cpu_graph_LDADD = $(rg_libs)
+
+
+misc_programs += test-fuzzy
+test_fuzzy_SOURCES = test-fuzzy.c
+test_fuzzy_CFLAGS = $(search_cflags)
+test_fuzzy_LDADD = $(search_libs)
 
 
 TESTS += test-ide-ctags
