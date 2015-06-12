@@ -9,6 +9,7 @@
         <property name="hscrollbar-policy">never</property>
         <child>
           <object class="GtkBox">
+            <property name="border-width">12</property>
             <property name="visible">true</property>
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>

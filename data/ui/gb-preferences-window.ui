@@ -157,7 +157,6 @@
             <child>
               <object class="GbPreferencesPageTheme" id="theme_page">
                 <property name="visible">True</property>
-                <property name="border_width">12</property>
               </object>
               <packing>
                 <property name="name">theme</property>
