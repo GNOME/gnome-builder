@@ -243,75 +243,69 @@ fuzzy_end_bulk_insert (Fuzzy *fuzzy)
 /**
  * fuzzy_insert:
  * @fuzzy: (in): A #Fuzzy.
- * @key: (in): An ASCII string.
+ * @key: (in): A UTF-8 encoded string.
  * @value: (in): A value to associate with key.
  *
  * Inserts a string into the fuzzy matcher.
- *
- * Note that @key MUST be an ascii string. UTF-8 is not supported.
  */
 void
 fuzzy_insert (Fuzzy       *fuzzy,
               const gchar *key,
               gpointer     value)
 {
-   const gchar *tmp;
-   gchar *downcase = NULL;
-   gsize offset;
-   guint id;
+  const gchar *tmp;
+  gchar *downcase = NULL;
+  gsize offset;
+  guint id;
 
-   g_assert (fuzzy != NULL);
-   g_assert (key != NULL);
+  if (G_UNLIKELY (!*key || (fuzzy->id_to_text_offset->len == G_MAXUINT)))
+    return;
 
-   if (fuzzy->id_to_text_offset->len == G_MAXUINT) {
-      return;
-   }
+  if (!fuzzy->case_sensitive)
+    downcase = g_utf8_casefold (key, -1);
 
-   if (!*key) {
-      return;
-   }
+  offset = fuzzy_heap_insert (fuzzy, key);
+  id = fuzzy->id_to_text_offset->len;
+  g_array_append_val (fuzzy->id_to_text_offset, offset);
+  g_ptr_array_add (fuzzy->id_to_value, value);
 
-   if (!fuzzy->case_sensitive) {
-      downcase = g_utf8_casefold (key, -1);
-   }
+  if (!fuzzy->case_sensitive)
+    key = downcase;
 
-   /*
-    * Insert the string into our heap.
-    * Track the offset within the heap since the heap could realloc.
-    */
-   offset = fuzzy_heap_insert (fuzzy, key);
-   id = fuzzy->id_to_text_offset->len;
-   g_array_append_val (fuzzy->id_to_text_offset, offset);
-   g_ptr_array_add (fuzzy->id_to_value, value);
-   g_assert (fuzzy->id_to_value->len == fuzzy->id_to_text_offset->len);
-
-   if (!fuzzy->case_sensitive) {
-      key = downcase;
-   }
-
-   for (tmp = key; *tmp; tmp = g_utf8_next_char (tmp)) {
+  for (tmp = key; *tmp; tmp = g_utf8_next_char (tmp))
+    {
       gunichar ch = g_utf8_get_char (tmp);
       GArray *table;
       FuzzyItem item;
 
       table = g_hash_table_lookup (fuzzy->char_tables, GINT_TO_POINTER (ch));
 
-      if (G_UNLIKELY (table == NULL)) {
-         table = g_array_new (FALSE, FALSE, sizeof (FuzzyItem));
-         g_hash_table_insert (fuzzy->char_tables, GINT_TO_POINTER (ch), table);
-      }
+      if (G_UNLIKELY (table == NULL))
+        {
+          table = g_array_new (FALSE, FALSE, sizeof (FuzzyItem));
+          g_hash_table_insert (fuzzy->char_tables, GINT_TO_POINTER (ch), table);
+        }
 
       item.id = id;
       item.pos = tmp - key;
 
       g_array_append_val (table, item);
+    }
 
-      if (!fuzzy->in_bulk_insert) {
-         g_array_sort (table, fuzzy_item_compare);
-      }
-   }
+  if (G_UNLIKELY (!fuzzy->in_bulk_insert))
+    {
+      for (tmp = key; *tmp; tmp = g_utf8_next_char (tmp))
+        {
+          GArray *table;
+          gunichar ch;
 
-   g_free (downcase);
+          ch = g_utf8_get_char (tmp);
+          table = g_hash_table_lookup (fuzzy->char_tables, GINT_TO_POINTER (ch));
+          g_array_sort (table, fuzzy_item_compare);
+        }
+    }
+
+  g_free (downcase);
 }
 
 
