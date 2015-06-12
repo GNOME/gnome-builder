@@ -47,7 +47,6 @@ GArray    *fuzzy_match              (Fuzzy          *fuzzy,
                                      const gchar    *needle,
                                      gsize           max_matches);
 Fuzzy     *fuzzy_ref                (Fuzzy          *fuzzy);
-void       fuzzy_free               (Fuzzy          *fuzzy);
 void       fuzzy_unref              (Fuzzy          *fuzzy);
 
 G_END_DECLS

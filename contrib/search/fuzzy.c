@@ -16,17 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <ctype.h>
 #include <string.h>
 
 #include "fuzzy.h"
-
-
-#ifndef FUZZY_GROW_HEAP_BY
-#define FUZZY_GROW_HEAP_BY 4096
-#endif
-
 
 /**
  * SECTION:fuzzy
@@ -40,36 +33,28 @@
  * may no longer be valid.
  */
 
-
-typedef struct _FuzzyItem   FuzzyItem;
-typedef struct _FuzzyLookup FuzzyLookup;
-
-
 struct _Fuzzy
 {
-   volatile gint   ref_count;
-   GByteArray     *heap;
-   GArray         *id_to_text_offset;
-   GPtrArray      *id_to_value;
-   GHashTable     *char_tables;
-   gboolean        in_bulk_insert;
-   gboolean        case_sensitive;
+  volatile gint   ref_count;
+  GByteArray     *heap;
+  GArray         *id_to_text_offset;
+  GPtrArray      *id_to_value;
+  GHashTable     *char_tables;
+  guint           in_bulk_insert : 1;
+  guint           case_sensitive : 1;
 };
-
 
 #pragma pack(push, 1)
-struct _FuzzyItem
+typedef struct
 {
-   guint64 id  : 36;
-   guint   pos : 12;
-};
+  guint id;
+  guint pos : 16;
+} FuzzyItem;
 #pragma pack(pop)
 
+G_STATIC_ASSERT (sizeof(FuzzyItem) == 6);
 
-G_STATIC_ASSERT(sizeof(FuzzyItem) == 6);
-
-
-struct _FuzzyLookup
+typedef struct
 {
    Fuzzy        *fuzzy;
    GArray      **tables;
@@ -78,42 +63,38 @@ struct _FuzzyLookup
    gsize         max_matches;
    const gchar  *needle;
    GHashTable   *matches;
-};
-
+} FuzzyLookup;
 
 static gint
 fuzzy_item_compare (gconstpointer a,
                     gconstpointer b)
 {
-   gint ret;
+  gint ret;
 
-   const FuzzyItem *fa = a;
-   const FuzzyItem *fb = b;
+  const FuzzyItem *fa = a;
+  const FuzzyItem *fb = b;
 
-   if ((ret = fa->id - fb->id) == 0) {
-      ret = fa->pos - fb->pos;
-   }
+  if ((ret = fa->id - fb->id) == 0)
+    ret = fa->pos - fb->pos;
 
-   return ret;
+  return ret;
 }
-
 
 static gint
 fuzzy_match_compare (gconstpointer a,
                      gconstpointer b)
 {
-   const FuzzyMatch *ma = a;
-   const FuzzyMatch *mb = b;
+  const FuzzyMatch *ma = a;
+  const FuzzyMatch *mb = b;
 
-   if (ma->score < mb->score) {
-      return 1;
-   } else if (ma->score > mb->score) {
-      return -1;
-   }
+  if (ma->score < mb->score) {
+    return 1;
+  } else if (ma->score > mb->score) {
+    return -1;
+  }
 
-   return g_strcmp0(ma->key, mb->key);
+  return strcmp (ma->key, mb->key);
 }
-
 
 Fuzzy *
 fuzzy_ref (Fuzzy *fuzzy)
@@ -126,7 +107,6 @@ fuzzy_ref (Fuzzy *fuzzy)
   return fuzzy;
 }
 
-
 /**
  * fuzzy_new:
  * @case_sensitive: %TRUE if case should be preserved.
@@ -138,59 +118,55 @@ fuzzy_ref (Fuzzy *fuzzy)
 Fuzzy *
 fuzzy_new (gboolean case_sensitive)
 {
-   Fuzzy *fuzzy;
+  Fuzzy *fuzzy;
 
-   fuzzy = g_slice_new0 (Fuzzy);
-   fuzzy->ref_count = 1;
-   fuzzy->heap = g_byte_array_new ();
-   fuzzy->id_to_value = g_ptr_array_new();
-   fuzzy->id_to_text_offset = g_array_new(FALSE, FALSE, sizeof(gsize));
-   fuzzy->char_tables = g_hash_table_new_full (g_direct_hash, NULL, NULL, (GDestroyNotify)g_array_unref);
-   fuzzy->case_sensitive = case_sensitive;
+  fuzzy = g_slice_new0 (Fuzzy);
+  fuzzy->ref_count = 1;
+  fuzzy->heap = g_byte_array_new ();
+  fuzzy->id_to_value = g_ptr_array_new ();
+  fuzzy->id_to_text_offset = g_array_new (FALSE, FALSE, sizeof (gsize));
+  fuzzy->char_tables = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify)g_array_unref);
+  fuzzy->case_sensitive = case_sensitive;
 
-   return fuzzy;
+  return fuzzy;
 }
-
 
 Fuzzy *
 fuzzy_new_with_free_func (gboolean       case_sensitive,
                           GDestroyNotify free_func)
 {
-   Fuzzy *fuzzy;
+  Fuzzy *fuzzy;
 
-   fuzzy = fuzzy_new(case_sensitive);
-   fuzzy_set_free_func(fuzzy, free_func);
+  fuzzy = fuzzy_new (case_sensitive);
+  fuzzy_set_free_func (fuzzy, free_func);
 
-   return fuzzy;
+  return fuzzy;
 }
-
 
 void
 fuzzy_set_free_func (Fuzzy          *fuzzy,
                      GDestroyNotify  free_func)
 {
-   g_return_if_fail(fuzzy);
+  g_return_if_fail (fuzzy);
 
-   g_ptr_array_set_free_func(fuzzy->id_to_value, free_func);
+  g_ptr_array_set_free_func (fuzzy->id_to_value, free_func);
 }
-
 
 static gsize
 fuzzy_heap_insert (Fuzzy       *fuzzy,
                    const gchar *text)
 {
-   gsize ret;
+  gsize ret;
 
-   g_assert(fuzzy);
-   g_assert(text);
+  g_assert (fuzzy != NULL);
+  g_assert (text != NULL);
 
-   ret = fuzzy->heap->len;
+  ret = fuzzy->heap->len;
 
-   g_byte_array_append (fuzzy->heap, (guint8 *)text, strlen (text) + 1);
+  g_byte_array_append (fuzzy->heap, (guint8 *)text, strlen (text) + 1);
 
-   return ret;
+  return ret;
 }
-
 
 /**
  * fuzzy_begin_bulk_insert:
@@ -210,7 +186,6 @@ fuzzy_begin_bulk_insert (Fuzzy *fuzzy)
 
    fuzzy->in_bulk_insert = TRUE;
 }
-
 
 /**
  * fuzzy_end_bulk_insert:
@@ -238,7 +213,6 @@ fuzzy_end_bulk_insert (Fuzzy *fuzzy)
       g_array_sort (table, fuzzy_item_compare);
    }
 }
-
 
 /**
  * fuzzy_insert:
@@ -308,7 +282,6 @@ fuzzy_insert (Fuzzy       *fuzzy,
   g_free (downcase);
 }
 
-
 /**
  * fuzzy_unref:
  * @fuzzy: A #Fuzzy.
@@ -319,10 +292,11 @@ fuzzy_insert (Fuzzy       *fuzzy,
 void
 fuzzy_unref (Fuzzy *fuzzy)
 {
-   g_return_if_fail (fuzzy);
-   g_return_if_fail (fuzzy->ref_count > 0);
+  g_return_if_fail (fuzzy);
+  g_return_if_fail (fuzzy->ref_count > 0);
 
-   if (g_atomic_int_dec_and_test (&fuzzy->ref_count)) {
+  if (g_atomic_int_dec_and_test (&fuzzy->ref_count))
+    {
       g_byte_array_unref (fuzzy->heap);
       fuzzy->heap = NULL;
 
@@ -336,17 +310,8 @@ fuzzy_unref (Fuzzy *fuzzy)
       fuzzy->char_tables = NULL;
 
       g_slice_free (Fuzzy, fuzzy);
-   }
+    }
 }
-
-
-void
-fuzzy_free (Fuzzy *fuzzy)
-{
-   if (fuzzy)
-      fuzzy_unref (fuzzy);
-}
-
 
 static gboolean
 fuzzy_do_match (FuzzyLookup *lookup,
@@ -354,66 +319,55 @@ fuzzy_do_match (FuzzyLookup *lookup,
                 gint         table_index,
                 gint         score)
 {
-   FuzzyItem *iter;
-   gpointer key;
-   GArray *table;
-   gint *state;
-   gint iter_score;
+  FuzzyItem *iter;
+  gpointer key;
+  GArray *table;
+  gint *state;
+  gint iter_score;
 
-   g_assert(lookup);
-   g_assert(item);
-   g_assert(table_index);
+  table = lookup->tables [table_index];
+  state = &lookup->state [table_index];
 
-   table = lookup->tables[table_index];
-   state = &lookup->state[table_index];
+  for (; state [0] < table->len; state [0]++)
+    {
+      iter = &g_array_index (table, FuzzyItem, state[0]);
 
-   for (; state[0] < table->len; state[0]++) {
-      iter = &g_array_index(table, FuzzyItem, state[0]);
-
-      if ((iter->id < item->id) ||
-          ((iter->id == item->id) && (iter->pos <= item->pos))) {
-         continue;
-      } else if (iter->id > item->id) {
-         break;
-      }
+      if ((iter->id < item->id) || ((iter->id == item->id) && (iter->pos <= item->pos)))
+        continue;
+      else if (iter->id > item->id)
+        break;
 
       iter_score = score + (iter->pos - item->pos);
 
-      if ((table_index + 1) < lookup->n_tables) {
-         if (fuzzy_do_match(lookup, iter, table_index + 1, iter_score)) {
+      if ((table_index + 1) < lookup->n_tables)
+        {
+          if (fuzzy_do_match(lookup, iter, table_index + 1, iter_score))
             return TRUE;
-         }
-         continue;
-      }
+          continue;
+        }
 
-      key = GINT_TO_POINTER(iter->id);
+      key = GINT_TO_POINTER (iter->id);
 
-      if (!g_hash_table_contains(lookup->matches, key) ||
-          (iter_score < GPOINTER_TO_INT(g_hash_table_lookup(lookup->matches, key)))) {
-         g_hash_table_insert(lookup->matches, key, GINT_TO_POINTER(iter_score));
-      }
+      if (!g_hash_table_contains (lookup->matches, key) ||
+          (iter_score < GPOINTER_TO_INT (g_hash_table_lookup (lookup->matches, key))))
+        g_hash_table_insert (lookup->matches, key, GINT_TO_POINTER (iter_score));
 
       return TRUE;
-   }
+    }
 
-   return FALSE;
+  return FALSE;
 }
 
-
-static const gchar *
+static inline const gchar *
 fuzzy_get_string (Fuzzy *fuzzy,
                   gint   id)
 {
-   gsize offset;
+  gsize offset;
 
-   g_assert (fuzzy);
-   g_assert (id >= 0);
+  offset = g_array_index (fuzzy->id_to_text_offset, gsize, id);
 
-   offset = g_array_index (fuzzy->id_to_text_offset, gsize, id);
-
-   return (const gchar *)&fuzzy->heap->data [offset];
+  return (const gchar *)&fuzzy->heap->data [offset];
 }
-
 
 /**
  * fuzzy_match:
