@@ -54,6 +54,8 @@ gboolean         gb_widget_activate_action     (GtkWidget    *widget,
                                                 GVariant     *parameter);
 void             gb_widget_set_context_handler (gpointer      widget,
                                                 GbWidgetContextHandler handler);
+gpointer         gb_widget_find_child_typed    (GtkWidget    *widget,
+                                                GType         child_type);
 
 G_END_DECLS
 

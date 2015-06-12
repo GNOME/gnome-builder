@@ -28,6 +28,9 @@
 #include "gb-widget.h"
 #include "gb-workbench.h"
 
+/* FIXME: make search result row creation pluggable */
+#include "ide-devhelp-search-result.h"
+
 #define SHORT_DELAY_TIMEOUT_MSEC 30
 #define LONG_DELAY_TIMEOUT_MSEC  30
 
@@ -101,7 +104,7 @@ gb_search_box_delay_cb (gpointer user_data)
     return G_SOURCE_REMOVE;
 
   /* TODO: Remove search text */
-  context = ide_search_engine_search (search_engine, NULL, search_text);
+  context = ide_search_engine_search (search_engine, search_text);
   gb_search_display_set_context (self->display, context);
   ide_search_context_execute (context, search_text, 5);
   g_object_unref (context);

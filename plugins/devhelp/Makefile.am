@@ -14,12 +14,18 @@ libdevhelp_la_SOURCES = \
 	gb-devhelp-view.h \
 	gb-devhelp-resources.c \
 	gb-devhelp-resources.h \
+	ide-devhelp-search-provider.c \
+	ide-devhelp-search-provider.h \
+	ide-devhelp-search-result.c \
+	ide-devhelp-search-result.h \
+	gb-devhelp-plugin.c \
 	$(NULL)
 
 libdevhelp_la_CFLAGS = \
 	$(BUILDER_CFLAGS) \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/documents \
+	-I$(top_srcdir)/src/search \
 	-I$(top_srcdir)/src/views \
 	-I$(top_srcdir)/src/util \
 	-I$(top_srcdir)/src/workbench \

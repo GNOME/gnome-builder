@@ -104,11 +104,13 @@ gb_search_display_real_result_activated (GbSearchDisplay *self,
 
 static void
 gb_search_display_result_activated (GbSearchDisplay      *self,
+                                    GtkWidget            *widget,
                                     IdeSearchResult      *result,
                                     GbSearchDisplayGroup *group)
 {
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (self));
-  g_return_if_fail (!result || IDE_IS_SEARCH_RESULT (result));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
   g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
 
   g_signal_emit (self, gSignals [RESULT_ACTIVATED], 0, result);

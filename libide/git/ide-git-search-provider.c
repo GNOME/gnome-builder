@@ -26,8 +26,7 @@
 
 struct _IdeGitSearchProvider
 {
-  IdeSearchProvider  parent_instance;
-
+  IdeObject          parent_instance;
   IdeGitSearchIndex *index;
 };
 
@@ -38,8 +37,13 @@ typedef struct
   gsize             max_results;
 } PopulateState;
 
-G_DEFINE_TYPE (IdeGitSearchProvider, ide_git_search_provider,
-               IDE_TYPE_SEARCH_PROVIDER)
+static void search_provider_iface_init (IdeSearchProviderInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (IdeGitSearchProvider,
+                         ide_git_search_provider,
+                         IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER,
+                                                search_provider_iface_init))
 
 static void
 ide_git_search_provider_get_index_cb (GObject      *object,
@@ -176,7 +180,7 @@ ide_git_search_provider_populate (IdeSearchProvider *provider,
 
   g_return_if_fail (IDE_IS_GIT_SEARCH_PROVIDER (self));
   g_return_if_fail (IDE_IS_SEARCH_CONTEXT (context));
-  g_return_if_fail (search_terms);
+  g_return_if_fail (search_terms != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (PopulateState);
@@ -210,15 +214,18 @@ static void
 ide_git_search_provider_class_init (IdeGitSearchProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeSearchProviderClass *provider_class = IDE_SEARCH_PROVIDER_CLASS (klass);
 
   object_class->finalize = ide_git_search_provider_finalize;
-
-  provider_class->get_verb = ide_git_search_provider_get_verb;
-  provider_class->populate = ide_git_search_provider_populate;
 }
 
 static void
 ide_git_search_provider_init (IdeGitSearchProvider *self)
 {
+}
+
+static void
+search_provider_iface_init (IdeSearchProviderInterface *iface)
+{
+  iface->get_verb = ide_git_search_provider_get_verb;
+  iface->populate = ide_git_search_provider_populate;
 }

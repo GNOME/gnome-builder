@@ -236,6 +236,7 @@ ide_git_search_index_populate (IdeGitSearchIndex *self,
 
           result = g_object_new (IDE_TYPE_GIT_SEARCH_RESULT,
                                  "context", context,
+                                 "provider", self,
                                  "title", markup,
                                  "subtitle", str->str,
                                  "score", match->score,

@@ -27,6 +27,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbDevhelpPanel, gb_devhelp_panel, GB, DEVHELP_PANEL, GtkBin)
 
+void gb_devhelp_panel_set_uri (GbDevhelpPanel *self,
+                               const gchar    *uri);
+
 G_END_DECLS
 
 #endif /* GB_DEVHELP_PANEL_H */

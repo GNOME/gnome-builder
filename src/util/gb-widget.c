@@ -332,3 +332,49 @@ gb_widget_set_context_handler (gpointer               widget,
   if ((toplevel = gtk_widget_get_toplevel (widget)))
     gb_widget_hierarchy_changed (widget, NULL, NULL);
 }
+
+static void
+gb_widget_find_child_typed_cb (GtkWidget *widget,
+                               gpointer   user_data)
+{
+  struct {
+    gpointer ret;
+    GType type;
+  } *state = user_data;
+
+  if (state->ret != NULL)
+    return;
+
+  if (g_type_is_a (G_OBJECT_TYPE (widget), state->type))
+    {
+      state->ret = widget;
+    }
+  else if (GTK_IS_CONTAINER (widget))
+    {
+      gtk_container_foreach (GTK_CONTAINER (widget),
+                             gb_widget_find_child_typed_cb,
+                             state);
+    }
+}
+
+gpointer
+gb_widget_find_child_typed (GtkWidget *widget,
+                            GType      child_type)
+{
+  struct {
+    gpointer ret;
+    GType type;
+  } state;
+
+  g_return_val_if_fail (GTK_IS_CONTAINER (widget), NULL);
+  g_return_val_if_fail (g_type_is_a (child_type, GTK_TYPE_WIDGET), NULL);
+
+  state.ret = NULL;
+  state.type = child_type;
+
+  gtk_container_foreach (GTK_CONTAINER (widget),
+                         gb_widget_find_child_typed_cb,
+                         &state);
+
+  return state.ret;
+}

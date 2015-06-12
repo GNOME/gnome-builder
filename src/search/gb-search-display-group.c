@@ -117,23 +117,16 @@ gb_search_display_group_set_size_group (GbSearchDisplayGroup *self,
 GtkWidget *
 gb_search_display_group_create_row (IdeSearchResult *result)
 {
-  GtkListBoxRow *row;
-  GbSearchDisplayRow *disp_row;
+  IdeSearchProvider *provider;
+  GtkWidget *row;
 
   g_return_val_if_fail (IDE_IS_SEARCH_RESULT (result), NULL);
 
-  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
-                      "visible", TRUE,
-                      NULL);
-  disp_row = g_object_new (GB_TYPE_SEARCH_DISPLAY_ROW,
-                           "visible", TRUE,
-                           "result", result,
-                           NULL);
-  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (disp_row));
-
+  provider = ide_search_result_get_provider (result);
+  row = ide_search_provider_create_row (provider, result);
   g_object_set_qdata (G_OBJECT (result), gQuarkRow, row);
 
-  return GTK_WIDGET (row);
+  return row;
 }
 
 void
@@ -198,8 +191,6 @@ compare_cb (GtkListBoxRow *row1,
             gpointer       user_data)
 {
   GtkListBoxRow *more_row = user_data;
-  GtkWidget *child1;
-  GtkWidget *child2;
   IdeSearchResult *result1;
   IdeSearchResult *result2;
   gfloat score1;
@@ -210,11 +201,8 @@ compare_cb (GtkListBoxRow *row1,
   else if (row2 == more_row)
     return -1;
 
-  child1 = gtk_bin_get_child (GTK_BIN (row1));
-  child2 = gtk_bin_get_child (GTK_BIN (row2));
-
-  result1 = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child1));
-  result2 = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child2));
+  result1 = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (row1));
+  result2 = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (row2));
 
   score1 = ide_search_result_get_score (result1);
   score2 = ide_search_result_get_score (result2);
@@ -225,6 +213,21 @@ compare_cb (GtkListBoxRow *row1,
     return -1;
   else
     return 0;
+}
+
+static void
+gb_search_display_group_result_activated (GbSearchDisplayGroup *self,
+                                          GtkWidget            *widget,
+                                          IdeSearchResult      *result)
+{
+  IdeSearchProvider *provider;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
+
+  provider = ide_search_result_get_provider (result);
+  ide_search_provider_activate (provider, widget, result);
 }
 
 void
@@ -240,22 +243,15 @@ gb_search_display_group_row_activated (GbSearchDisplayGroup *self,
                                        GtkListBoxRow        *row,
                                        GtkListBox           *list_box)
 {
-  GtkWidget *child;
+  IdeSearchResult *result;
 
   g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self));
-  g_return_if_fail (!row || GTK_IS_LIST_BOX_ROW (row));
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_ROW (row));
   g_return_if_fail (GTK_IS_LIST_BOX (list_box));
 
-  child = gtk_bin_get_child (GTK_BIN (row));
-
-  if (GB_IS_SEARCH_DISPLAY_ROW (child))
-    {
-      IdeSearchResult *result;
-
-      result = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child));
-      if (result)
-        g_signal_emit (self, gSignals [RESULT_ACTIVATED], 0, result);
-    }
+  result = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (row));
+  if (result)
+    g_signal_emit (self, gSignals [RESULT_ACTIVATED], 0, row, result);
 }
 
 static void
@@ -431,14 +427,15 @@ gb_search_display_group_class_init (GbSearchDisplayGroupClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gSignals [RESULT_ACTIVATED] =
-    g_signal_new ("result-activated",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  1,
-                  IDE_TYPE_SEARCH_RESULT);
+    g_signal_new_class_handler ("result-activated",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (gb_search_display_group_result_activated),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE,
+                                2,
+                                GTK_TYPE_WIDGET,
+                                IDE_TYPE_SEARCH_RESULT);
 
   gSignals [RESULT_SELECTED] =
     g_signal_new ("result-selected",

@@ -121,6 +121,21 @@ gb_devhelp_panel_unload (GbWorkbenchAddin *addin)
   ide_clear_weak_pointer (&self->workbench);
 }
 
+void
+gb_devhelp_panel_set_uri (GbDevhelpPanel *self,
+                          const gchar    *uri)
+{
+  GbViewGrid *view_grid;
+
+  g_return_if_fail (GB_IS_DEVHELP_PANEL (self));
+
+  view_grid = GB_VIEW_GRID (gb_workbench_get_view_grid (self->workbench));
+
+  dh_sidebar_select_uri (DH_SIDEBAR (self->sidebar), uri);
+  gb_devhelp_document_set_uri (GB_DEVHELP_DOCUMENT (self->document), uri);
+  gb_view_grid_focus_document (view_grid, GB_DOCUMENT (self->document));
+}
+
 static void
 link_selected_cb (GbDevhelpPanel *self,
                   DhLink         *link,
@@ -134,6 +149,7 @@ link_selected_cb (GbDevhelpPanel *self,
   g_assert (DH_IS_SIDEBAR (sidebar));
 
   view_grid = GB_VIEW_GRID (gb_workbench_get_view_grid (self->workbench));
+
   uri = dh_link_get_uri (link);
   gb_devhelp_document_set_uri (GB_DEVHELP_DOCUMENT (self->document), uri);
   gb_view_grid_focus_document (view_grid, GB_DOCUMENT (self->document));
@@ -249,8 +265,3 @@ workbench_addin_iface_init (GbWorkbenchAddinInterface *iface)
   iface->load = gb_devhelp_panel_load;
   iface->unload = gb_devhelp_panel_unload;
 }
-
-GB_DEFINE_EMBEDDED_PLUGIN (gb_devhelp,
-                           gb_devhelp_get_resource (),
-                           "resource:///org/gnome/builder/plugins/devhelp/gb-devhelp.plugin",
-                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_DEVHELP_PANEL))

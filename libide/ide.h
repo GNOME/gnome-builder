@@ -71,6 +71,7 @@ G_BEGIN_DECLS
 #include "ide-search-context.h"
 #include "ide-search-engine.h"
 #include "ide-search-provider.h"
+#include "ide-search-reducer.h"
 #include "ide-search-result.h"
 #include "ide-service.h"
 #include "ide-source-location.h"
@@ -95,7 +96,6 @@ G_BEGIN_DECLS
 
 #include "autotools/ide-autotools-build-system.h"
 #include "c/ide-c-language.h"
-#include "devhelp/ide-devhelp-search-result.h"
 #include "directory/ide-directory-build-system.h"
 #include "directory/ide-directory-vcs.h"
 #include "doap/ide-doap-person.h"

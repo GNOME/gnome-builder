@@ -9,8 +9,6 @@ pkglib_LTLIBRARIES = libide-1.0.la
 libide_1_0_la_public_sources = \
 	c/ide-c-language.c \
 	c/ide-c-language.h \
-	devhelp/ide-devhelp-search-result.c \
-	devhelp/ide-devhelp-search-result.h \
 	directory/ide-directory-build-system.c \
 	directory/ide-directory-build-system.h \
 	directory/ide-directory-vcs.c \
@@ -235,8 +233,6 @@ libide_1_0_la_SOURCES = \
 	ctags/ide-ctags-index.h \
 	ctags/ide-ctags-service.c \
 	ctags/ide-ctags-service.h \
-	devhelp/ide-devhelp-search-provider.c \
-	devhelp/ide-devhelp-search-provider.h \
 	editorconfig/editorconfig-glib.c \
 	editorconfig/editorconfig-glib.h \
 	editorconfig/ide-editorconfig-file-settings.c \
@@ -346,7 +342,6 @@ libide_1_0_la_includes = \
 	-I$(srcdir)/c \
 	-I$(srcdir)/clang \
 	-I$(srcdir)/ctags \
-	-I$(srcdir)/devhelp \
 	-I$(srcdir)/directory \
 	-I$(srcdir)/doap \
 	-I$(srcdir)/editorconfig \

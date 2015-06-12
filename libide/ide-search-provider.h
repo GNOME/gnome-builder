@@ -19,21 +19,19 @@
 #ifndef IDE_SEARCH_PROVIDER_H
 #define IDE_SEARCH_PROVIDER_H
 
+#include <gtk/gtk.h>
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_PROVIDER (ide_search_provider_get_type())
 
-#define IDE_SEARCH_PROVIDER_EXTENSION_POINT \
-  "org.gnome.libide.extensions.search-provider"
+G_DECLARE_INTERFACE (IdeSearchProvider, ide_search_provider, IDE, SEARCH_PROVIDER, IdeObject)
 
-G_DECLARE_DERIVABLE_TYPE (IdeSearchProvider, ide_search_provider,
-                          IDE, SEARCH_PROVIDER, IdeObject)
-
-struct _IdeSearchProviderClass
+struct _IdeSearchProviderInterface
 {
-  IdeObjectClass parent_class;
+  GTypeInterface parent_iface;
 
   gunichar     (*get_prefix)   (IdeSearchProvider *provider);
   gint         (*get_priority) (IdeSearchProvider *provider);
@@ -43,6 +41,11 @@ struct _IdeSearchProviderClass
                                 const gchar       *search_terms,
                                 gsize              max_results,
                                 GCancellable      *cancellable);
+  GtkWidget  *(*create_row)    (IdeSearchProvider *provider,
+                                IdeSearchResult   *result);
+  void        (*activate)      (IdeSearchProvider *provider,
+                                GtkWidget         *row,
+                                IdeSearchResult   *result);
 };
 
 gunichar     ide_search_provider_get_prefix   (IdeSearchProvider *provider);
@@ -53,6 +56,11 @@ void         ide_search_provider_populate     (IdeSearchProvider *provider,
                                                const gchar       *search_terms,
                                                gsize              max_results,
                                                GCancellable      *cancellable);
+GtkWidget   *ide_search_provider_create_row   (IdeSearchProvider *provider,
+                                               IdeSearchResult   *result);
+void         ide_search_provider_activate     (IdeSearchProvider *provider,
+                                               GtkWidget         *row,
+                                               IdeSearchResult   *result);
 
 G_END_DECLS
 

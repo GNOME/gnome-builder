@@ -25,16 +25,9 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEVHELP_SEARCH_PROVIDER (ide_devhelp_search_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDevhelpSearchProvider,
-                      ide_devhelp_search_provider,
-                      IDE,
-                      DEVHELP_SEARCH_PROVIDER,
-                      IdeSearchProvider)
-
-struct _IdeDevhelpSearchProviderClass
-{
-  IdeSearchProviderClass parent;
-};
+G_DECLARE_FINAL_TYPE (IdeDevhelpSearchProvider, ide_devhelp_search_provider,
+                      IDE, DEVHELP_SEARCH_PROVIDER,
+                      IdeObject)
 
 G_END_DECLS
 

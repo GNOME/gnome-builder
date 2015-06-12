@@ -21,6 +21,8 @@
 
 #include "ide-object.h"
 
+#include "ide-search-provider.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_RESULT (ide_search_result_get_type())
@@ -34,16 +36,17 @@ struct _IdeSearchResultClass
   void (*activate) (IdeSearchResult *result);
 };
 
-IdeSearchResult *ide_search_result_new          (IdeContext            *context,
-                                                 const gchar           *title,
-                                                 const gchar           *subtitle,
-                                                 gfloat                 score);
-gfloat           ide_search_result_get_score    (IdeSearchResult       *result);
-const gchar     *ide_search_result_get_title    (IdeSearchResult       *result);
-const gchar     *ide_search_result_get_subtitle (IdeSearchResult       *result);
-gint             ide_search_result_compare      (const IdeSearchResult *a,
-                                                 const IdeSearchResult *b);
-void             ide_search_result_activate     (IdeSearchResult       *result);
+IdeSearchResult   *ide_search_result_new          (IdeSearchProvider     *provider,
+                                                   const gchar           *title,
+                                                   const gchar           *subtitle,
+                                                   gfloat                 score);
+IdeSearchProvider *ide_search_result_get_provider (IdeSearchResult       *result);
+gfloat             ide_search_result_get_score    (IdeSearchResult       *result);
+const gchar       *ide_search_result_get_title    (IdeSearchResult       *result);
+const gchar       *ide_search_result_get_subtitle (IdeSearchResult       *result);
+gint               ide_search_result_compare      (const IdeSearchResult *a,
+                                                   const IdeSearchResult *b);
+void               ide_search_result_activate     (IdeSearchResult       *result);
 
 G_END_DECLS
 

@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
 #include "ide-internal.h"
 #include "ide-search-context.h"
@@ -26,23 +27,29 @@
 
 struct _IdeSearchEngine
 {
-  IdeObject  parent_instance;
-  GList     *providers;
+  IdeObject         parent_instance;
+
+  PeasExtensionSet *extensions;
 };
 
 G_DEFINE_TYPE (IdeSearchEngine, ide_search_engine, IDE_TYPE_OBJECT)
 
-enum {
-  PROVIDER_ADDED,
-  LAST_SIGNAL
-};
+static void
+add_provider_to_context (PeasExtensionSet *extensions,
+                         PeasPluginInfo   *plugin_info,
+                         PeasExtension    *extension,
+                         IdeSearchContext *search_context)
+{
+  g_assert (PEAS_IS_EXTENSION_SET (extensions));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_SEARCH_PROVIDER (extension));
+  g_assert (IDE_IS_SEARCH_CONTEXT (search_context));
 
-static guint gSignals [LAST_SIGNAL];
+  _ide_search_context_add_provider (search_context, IDE_SEARCH_PROVIDER (extension), 0);
+}
 
 /**
  * ide_search_engine_search:
- * @providers: (allow-none) (element-type IdeSearchProvider*): Optional list
- *   of specific providers to use when searching.
  * @search_terms: The search terms.
  *
  * Begins a query against the requested search providers.
@@ -54,67 +61,48 @@ static guint gSignals [LAST_SIGNAL];
  */
 IdeSearchContext *
 ide_search_engine_search (IdeSearchEngine *self,
-                          const GList     *providers,
                           const gchar     *search_terms)
 {
   IdeSearchContext *search_context;
   IdeContext *context;
-  const GList *iter;
 
   g_return_val_if_fail (IDE_IS_SEARCH_ENGINE (self), NULL);
   g_return_val_if_fail (search_terms, NULL);
-
-  if (!providers)
-    providers = self->providers;
 
   context = ide_object_get_context (IDE_OBJECT (self));
   search_context = g_object_new (IDE_TYPE_SEARCH_CONTEXT,
                                  "context", context,
                                  NULL);
 
-  for (iter = providers; iter; iter = iter->next)
-    _ide_search_context_add_provider (search_context, iter->data, 0);
+  peas_extension_set_foreach (self->extensions,
+                              (PeasExtensionSetForeachFunc)add_provider_to_context,
+                              search_context);
 
   return search_context;
 }
 
-/**
- * ide_search_engine_get_providers:
- *
- * Returns the list of registered search providers.
- *
- * Returns: (transfer none) (element-type IdeSearchProvider*): A #GList of
- *   #IdeSearchProvider.
- */
-GList *
-ide_search_engine_get_providers (IdeSearchEngine *self)
+static void
+ide_search_engine_constructed (GObject *object)
 {
-  g_return_val_if_fail (IDE_IS_SEARCH_ENGINE (self), NULL);
+  IdeSearchEngine *self = (IdeSearchEngine *)object;
+  IdeContext *context;
 
-  return self->providers;
-}
+  context = ide_object_get_context (IDE_OBJECT (self));
 
-void
-ide_search_engine_add_provider (IdeSearchEngine   *self,
-                                IdeSearchProvider *provider)
-{
-  g_return_if_fail (IDE_IS_SEARCH_ENGINE (self));
-  g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
+  self->extensions = peas_extension_set_new (peas_engine_get_default (),
+                                             IDE_TYPE_SEARCH_PROVIDER,
+                                             "context", context,
+                                             NULL);
 
-  self->providers = g_list_append (self->providers, g_object_ref (provider));
-  g_signal_emit (self, gSignals [PROVIDER_ADDED], 0, provider);
+  G_OBJECT_CLASS (ide_search_engine_parent_class)->constructed (object);
 }
 
 static void
 ide_search_engine_dispose (GObject *object)
 {
   IdeSearchEngine *self = (IdeSearchEngine *)object;
-  GList *copy;
 
-  copy = self->providers;
-  self->providers = NULL;
-  g_list_foreach (copy, (GFunc)g_object_unref, NULL);
-  g_list_free (copy);
+  g_clear_object (&self->extensions);
 
   G_OBJECT_CLASS (ide_search_engine_parent_class)->dispose (object);
 }
@@ -124,17 +112,8 @@ ide_search_engine_class_init (IdeSearchEngineClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ide_search_engine_constructed;
   object_class->dispose = ide_search_engine_dispose;
-
-  gSignals [PROVIDER_ADDED] =
-    g_signal_new ("provider-added",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  1,
-                  IDE_TYPE_SEARCH_PROVIDER);
 }
 
 static void

@@ -33,7 +33,7 @@ struct _GbSearchDisplayRow
   GtkProgressBar  *progress;
 };
 
-G_DEFINE_TYPE (GbSearchDisplayRow, gb_search_display_row, GTK_TYPE_BOX)
+G_DEFINE_TYPE (GbSearchDisplayRow, gb_search_display_row, GTK_TYPE_LIST_BOX_ROW)
 
 enum {
   PROP_0,

@@ -89,7 +89,7 @@ context_cb (GObject      *object,
     }
 
   search_engine = ide_context_get_search_engine (context);
-  search_context = ide_search_engine_search (search_engine, NULL, gSearchTerms);
+  search_context = ide_search_engine_search (search_engine, gSearchTerms);
   /* FIXME: ^ search terms duplicated */
 
   g_signal_connect (search_context, "result-added",

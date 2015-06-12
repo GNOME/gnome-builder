@@ -26,7 +26,9 @@ G_BEGIN_DECLS
 
 #define GB_TYPE_SEARCH_DISPLAY_ROW (gb_search_display_row_get_type())
 
-G_DECLARE_FINAL_TYPE (GbSearchDisplayRow, gb_search_display_row, GB, SEARCH_DISPLAY_ROW, GtkBox)
+G_DECLARE_FINAL_TYPE (GbSearchDisplayRow, gb_search_display_row,
+                      GB, SEARCH_DISPLAY_ROW,
+                      GtkListBoxRow)
 
 IdeSearchResult *gb_search_display_row_get_result (GbSearchDisplayRow *row);
 void             gb_search_display_row_set_result (GbSearchDisplayRow *row,

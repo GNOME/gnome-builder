@@ -196,6 +196,7 @@ libgnome_builder_la_CFLAGS = \
 	-I$(srcdir)/views \
 	-I$(srcdir)/workbench \
 	-I$(srcdir)/workspace \
+	-I$(top_builddir)/plugins/devhelp \
 	-I$(top_builddir)/data/icons/hicolor \
 	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/libide \

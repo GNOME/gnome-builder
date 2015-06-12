@@ -29,7 +29,6 @@
 #include "ide-c-language.h"
 #include "ide-clang-service.h"
 #include "ide-ctags-service.h"
-#include "ide-devhelp-search-provider.h"
 #include "ide-device-provider.h"
 #include "ide-directory-build-system.h"
 #include "ide-directory-vcs.h"
@@ -101,7 +100,6 @@ ide_init_ctor (void)
   g_io_extension_point_register (IDE_LANGUAGE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_PROJECT_MINER_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SCRIPT_EXTENSION_POINT);
-  g_io_extension_point_register (IDE_SEARCH_PROVIDER_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SERVICE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_VCS_EXTENSION_POINT);
 
@@ -168,15 +166,12 @@ ide_init_ctor (void)
                                   IDE_SCRIPT_EXTENSION_POINT".py",
                                   -100);
 
-  g_io_extension_point_implement (IDE_SEARCH_PROVIDER_EXTENSION_POINT,
-                                  IDE_TYPE_DEVHELP_SEARCH_PROVIDER,
-                                  IDE_SEARCH_PROVIDER_EXTENSION_POINT".devhelp",
-                                  -100);
-
+#if 0
   g_io_extension_point_implement (IDE_SEARCH_PROVIDER_EXTENSION_POINT,
                                   IDE_TYPE_GIT_SEARCH_PROVIDER,
                                   IDE_SEARCH_PROVIDER_EXTENSION_POINT".git",
                                   -100);
+#endif
 
   g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
                                   IDE_TYPE_CLANG_SERVICE,

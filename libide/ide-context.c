@@ -1261,63 +1261,6 @@ ide_context_init_services (gpointer             source_object,
 }
 
 static void
-ide_context_init_search_engine (gpointer             source_object,
-                                GCancellable        *cancellable,
-                                GAsyncReadyCallback  callback,
-                                gpointer             user_data)
-{
-  g_autoptr(GTask) task = NULL;
-  IdeContext *self = source_object;
-  GIOExtensionPoint *point;
-  const GList *iter;
-  const GList *list;
-
-  g_return_if_fail (IDE_IS_CONTEXT (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  point = g_io_extension_point_lookup (IDE_SEARCH_PROVIDER_EXTENSION_POINT);
-
-  if (!point)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               _("Missing extension point for %s"),
-                               IDE_SEARCH_PROVIDER_EXTENSION_POINT);
-      return;
-    }
-
-  list = g_io_extension_point_get_extensions (point);
-
-  for (iter = list; iter; iter = iter->next)
-    {
-      GIOExtension *extension = iter->data;
-      IdeSearchProvider *provider;
-      GType gtype;
-
-      gtype = g_io_extension_get_type (extension);
-
-      if (!g_type_is_a (gtype, IDE_TYPE_SEARCH_PROVIDER))
-        {
-          g_task_return_new_error (task,
-                                   G_IO_ERROR,
-                                   G_IO_ERROR_INVALID_DATA,
-                                   _("%s is not an IdeSearchProvider."),
-                                   g_type_name (gtype));
-          return;
-        }
-
-      provider = g_object_new (gtype, "context", self, NULL);
-      ide_search_engine_add_provider (self->search_engine, provider);
-      g_object_unref (provider);
-    }
-
-  g_task_return_boolean (task, TRUE);
-}
-
-static void
 ide_context_init_add_recent (gpointer             source_object,
                              GCancellable        *cancellable,
                              GAsyncReadyCallback  callback,
@@ -1429,7 +1372,6 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_files,
                         ide_context_init_project_name,
                         ide_context_init_back_forward_list,
-                        ide_context_init_search_engine,
                         ide_context_init_snippets,
                         ide_context_init_scripts,
                         ide_context_init_unsaved_files,

@@ -23,15 +23,17 @@
 
 typedef struct
 {
-  gchar  *title;
-  gchar  *subtitle;
-  gfloat  score;
+  IdeSearchProvider *provider;
+  gchar             *title;
+  gchar             *subtitle;
+  gfloat             score;
 } IdeSearchResultPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSearchResult, ide_search_result, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_PROVIDER,
   PROP_SCORE,
   PROP_SUBTITLE,
   PROP_TITLE,
@@ -41,23 +43,57 @@ enum {
 static GParamSpec *gParamSpecs [LAST_PROP];
 
 IdeSearchResult *
-ide_search_result_new (IdeContext  *context,
-                       const gchar *title,
-                       const gchar *subtitle,
-                       gfloat       score)
+ide_search_result_new (IdeSearchProvider *provider,
+                       const gchar       *title,
+                       const gchar       *subtitle,
+                       gfloat             score)
 {
   IdeSearchResult *self;
+  IdeContext *context;
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (provider), NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (provider));
 
   self = g_object_new (IDE_TYPE_SEARCH_RESULT,
                        "context", context,
-                       "title", title,
-                       "subtitle", subtitle,
+                       "provider", provider,
                        "score", score,
+                       "subtitle", subtitle,
+                       "title", title,
                        NULL);
 
   return self;
+}
+
+/**
+ * ide_search_result_get_provider:
+ * @result: A #IdeSearchResult.
+ *
+ * Gets the provider that created the search result.
+ *
+ * Returns: (transfer none): An #IdeSearchProvider.
+ */
+IdeSearchProvider *
+ide_search_result_get_provider (IdeSearchResult *self)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
+
+  return priv->provider;
+}
+
+static void
+ide_search_result_set_provider (IdeSearchResult   *self,
+                                IdeSearchProvider *provider)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
+  g_return_if_fail (!provider || IDE_IS_SEARCH_PROVIDER (provider));
+
+  g_set_object (&priv->provider, provider);
 }
 
 const gchar *
@@ -160,6 +196,7 @@ ide_search_result_finalize (GObject *object)
   IdeSearchResult *self = (IdeSearchResult *)object;
   IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
 
+  g_clear_object (&priv->provider);
   g_clear_pointer (&priv->title, g_free);
   g_clear_pointer (&priv->subtitle, g_free);
 
@@ -176,6 +213,10 @@ ide_search_result_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_PROVIDER:
+      g_value_set_object (value, ide_search_result_get_provider (self));
+      break;
+
     case PROP_TITLE:
       g_value_set_string (value, ide_search_result_get_title (self));
       break;
@@ -203,6 +244,10 @@ ide_search_result_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_PROVIDER:
+      ide_search_result_set_provider (self, g_value_get_object (value));
+      break;
+
     case PROP_TITLE:
       ide_search_result_set_title (self, g_value_get_string (value));
       break;
@@ -228,6 +273,13 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
   object_class->finalize = ide_search_result_finalize;
   object_class->get_property = ide_search_result_get_property;
   object_class->set_property = ide_search_result_set_property;
+
+  gParamSpecs [PROP_PROVIDER] =
+    g_param_spec_object ("provider",
+                         _("Provider"),
+                         _("The Search Provider"),
+                         IDE_TYPE_SEARCH_PROVIDER,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_TITLE] =
     g_param_spec_string ("title",

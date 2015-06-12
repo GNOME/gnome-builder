@@ -25,10 +25,9 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_GIT_SEARCH_PROVIDER (ide_git_search_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeGitSearchProvider,
-                      ide_git_search_provider,
+G_DECLARE_FINAL_TYPE (IdeGitSearchProvider, ide_git_search_provider,
                       IDE, GIT_SEARCH_PROVIDER,
-                      IdeSearchProvider)
+                      IdeObject)
 
 G_END_DECLS
 

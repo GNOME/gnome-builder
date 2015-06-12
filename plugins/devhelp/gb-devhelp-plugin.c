@@ -1,4 +1,4 @@
-/* ide-search-engine.h
+/* gb-devhelp-plugin.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,20 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_SEARCH_ENGINE_H
-#define IDE_SEARCH_ENGINE_H
+#include <ide.h>
 
-#include "ide-object.h"
+#include "gb-devhelp-panel.h"
+#include "gb-devhelp-resources.h"
+#include "gb-plugins.h"
+#include "gb-workbench-addin.h"
 
-G_BEGIN_DECLS
+#include "ide-devhelp-search-provider.h"
 
-#define IDE_TYPE_SEARCH_ENGINE (ide_search_engine_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeSearchEngine, ide_search_engine, IDE, SEARCH_ENGINE, IdeObject)
-
-IdeSearchContext *ide_search_engine_search (IdeSearchEngine   *self,
-                                            const gchar       *search_terms);
-
-G_END_DECLS
-
-#endif /* IDE_SEARCH_ENGINE_H */
+GB_DEFINE_EMBEDDED_PLUGIN (gb_devhelp,
+                           gb_devhelp_get_resource (),
+                           "resource:///org/gnome/builder/plugins/devhelp/gb-devhelp.plugin",
+                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_DEVHELP_PANEL)
+                           GB_DEFINE_PLUGIN_TYPE (IDE_TYPE_SEARCH_PROVIDER, IDE_TYPE_DEVHELP_SEARCH_PROVIDER))
