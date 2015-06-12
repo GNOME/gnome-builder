@@ -95,6 +95,8 @@ gb_editor_map_bin_size_allocate (GtkWidget     *widget,
 
   alloc->height -= self->cached_height;
 
+  g_print ("Size Allocate\n");
+
   GTK_WIDGET_CLASS (gb_editor_map_bin_parent_class)->size_allocate (widget, alloc);
 }
 

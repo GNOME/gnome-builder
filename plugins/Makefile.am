@@ -1,6 +1,7 @@
 SUBDIRS = \
 	command-bar \
 	devhelp \
+	file-search \
 	symbol-tree \
 	sysmon \
 	terminal \
