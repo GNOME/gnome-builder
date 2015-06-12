@@ -113,7 +113,7 @@ egg_settings_sandwich_update_cache (EggSettingsSandwich *self)
   for (i = 0; keys [i]; i++)
     egg_settings_sandwich_cache_key (self, keys [i]);
 
-  g_object_unref (schema);
+  g_settings_schema_unref (schema);
   g_strfreev (keys);
 }
 
