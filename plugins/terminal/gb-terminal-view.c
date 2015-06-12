@@ -36,6 +36,30 @@ struct _GbTerminalView
 
 G_DEFINE_TYPE (GbTerminalView, gb_terminal_view, GB_TYPE_VIEW)
 
+static const GdkRGBA solarized_palette[] =
+{
+  /*
+   * Solarized palette (1.0.0beta2):
+   * http://ethanschoonover.com/solarized
+   */
+  { 0.02745,  0.211764, 0.258823, 1 },
+  { 0.862745, 0.196078, 0.184313, 1 },
+  { 0.521568, 0.6,      0,        1 },
+  { 0.709803, 0.537254, 0,        1 },
+  { 0.149019, 0.545098, 0.823529, 1 },
+  { 0.82745,  0.211764, 0.509803, 1 },
+  { 0.164705, 0.631372, 0.596078, 1 },
+  { 0.933333, 0.909803, 0.835294, 1 },
+  { 0,        0.168627, 0.211764, 1 },
+  { 0.796078, 0.294117, 0.086274, 1 },
+  { 0.345098, 0.431372, 0.458823, 1 },
+  { 0.396078, 0.482352, 0.513725, 1 },
+  { 0.513725, 0.580392, 0.588235, 1 },
+  { 0.423529, 0.443137, 0.768627, 1 },
+  { 0.57647,  0.631372, 0.631372, 1 },
+  { 0.992156, 0.964705, 0.890196, 1 },
+};
+
 static void
 gb_terminal_respawn (GbTerminalView *self)
 {
@@ -268,8 +292,9 @@ style_context_changed (GtkStyleContext *style_context,
       gdk_rgba_parse (&bg, "#f6f7f8");
     }
 
-  vte_terminal_set_color_foreground (self->terminal, &fg);
-  vte_terminal_set_color_background (self->terminal, &bg);
+  vte_terminal_set_colors (self->terminal, &fg, &bg,
+                           solarized_palette,
+                           G_N_ELEMENTS (solarized_palette));
 }
 
 static void
