@@ -424,8 +424,6 @@ fuzzy_get_string (Fuzzy *fuzzy,
  * Fuzzy searches within @fuzzy for strings that fuzzy match @needle.
  * Only up to @max_matches will be returned.
  *
- * @needle MUST be an ascii string.
- *
  * TODO: max_matches is not yet respected.
  *
  * Returns: (transfer full) (element-type FuzzyMatch): A newly allocated
@@ -439,104 +437,92 @@ fuzzy_match (Fuzzy       *fuzzy,
              const gchar *needle,
              gsize        max_matches)
 {
-   FuzzyLookup lookup = { 0 };
-   FuzzyMatch match;
-   FuzzyItem *item;
-   GArray *matches = NULL;
-   GArray *root;
-   gchar *downcase = NULL;
-   gint i;
+  FuzzyLookup lookup = { 0 };
+  FuzzyMatch match;
+  FuzzyItem *item;
+  GHashTableIter iter;
+  gpointer key;
+  gpointer value;
+  const gchar *tmp;
+  GArray *matches = NULL;
+  GArray *root;
+  gchar *downcase = NULL;
+  gint i;
 
-   g_return_val_if_fail(fuzzy, NULL);
-   g_return_val_if_fail(!fuzzy->in_bulk_insert, NULL);
-   g_return_val_if_fail(needle, NULL);
+  g_return_val_if_fail (fuzzy, NULL);
+  g_return_val_if_fail (!fuzzy->in_bulk_insert, NULL);
+  g_return_val_if_fail (needle, NULL);
 
-   matches = g_array_new(FALSE, FALSE, sizeof(FuzzyMatch));
+  matches = g_array_new (FALSE, FALSE, sizeof (FuzzyMatch));
 
-   if (!*needle) {
-      return matches;
-   }
+  if (!*needle)
+    goto cleanup;
 
-   if (!fuzzy->case_sensitive) {
+  if (!fuzzy->case_sensitive)
+    {
       downcase = g_utf8_casefold (needle, -1);
       needle = downcase;
-   }
+    }
 
-   lookup.fuzzy = fuzzy;
-   lookup.n_tables = g_utf8_strlen (needle, -1);
-   lookup.state = g_new0 (gint, lookup.n_tables);
-   lookup.tables = g_new0 (GArray*, lookup.n_tables);
-   lookup.needle = needle;
-   lookup.max_matches = max_matches;
-   lookup.matches = g_hash_table_new(NULL, NULL);
+  lookup.fuzzy = fuzzy;
+  lookup.n_tables = g_utf8_strlen (needle, -1);
+  lookup.state = g_new0 (gint, lookup.n_tables);
+  lookup.tables = g_new0 (GArray*, lookup.n_tables);
+  lookup.needle = needle;
+  lookup.max_matches = max_matches;
+  lookup.matches = g_hash_table_new (NULL, NULL);
 
-   for (i = 0; *needle; needle = g_utf8_next_char (needle)) {
+  for (i = 0, tmp = needle; *tmp; tmp = g_utf8_next_char (tmp))
+    {
       gunichar ch;
       GArray *table;
 
       ch = g_utf8_get_char (needle);
       table = g_hash_table_lookup (fuzzy->char_tables, GINT_TO_POINTER (ch));
 
-      if (table != NULL)
-         lookup.tables [i++] = table;
-   }
+      if (table == NULL)
+        goto cleanup;
 
-   lookup.n_tables = i;
+      lookup.tables [i++] = table;
+    }
 
-   root = g_hash_table_lookup (fuzzy->char_tables,
-                               GINT_TO_POINTER (g_utf8_get_char (needle)));
+  g_assert (lookup.n_tables > 0);
+  g_assert (lookup.tables [0] != NULL);
 
-   if (root == NULL)
-      return matches;
+  lookup.n_tables = i;
+  root = lookup.tables [0];
 
-   if (G_LIKELY (lookup.n_tables > 1)) {
-      for (i = 0; i < root->len; i++) {
-         item = &g_array_index(root, FuzzyItem, i);
-         fuzzy_do_match(&lookup, item, 1, 0);
-      }
-   } else {
-      for (i = 0; i < root->len; i++) {
-         item = &g_array_index (root, FuzzyItem, i);
-         match.key = fuzzy_get_string (fuzzy, item->id);
-         match.value = g_ptr_array_index (fuzzy->id_to_value, item->id);
-         match.score = 0;
-         g_array_append_val (matches, match);
-      }
-      g_free (downcase);
-      return matches;
-   }
+  for (i = 0; i < root->len; i++)
+    {
+      item = &g_array_index (root, FuzzyItem, i);
+      fuzzy_do_match (&lookup, item, 1, 0);
+    }
 
-   {
-      GHashTableIter iter;
-      gpointer key;
-      gpointer value;
+  g_hash_table_iter_init (&iter, lookup.matches);
 
-      g_hash_table_iter_init(&iter, lookup.matches);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      match.key = fuzzy_get_string (fuzzy, GPOINTER_TO_INT (key));
+      match.score = 1.0 / (strlen (match.key) + GPOINTER_TO_INT (value));
+      match.value = g_ptr_array_index (fuzzy->id_to_value, GPOINTER_TO_INT (key));
+      g_array_append_val (matches, match);
+    }
 
-      while (g_hash_table_iter_next (&iter, &key, &value)) {
-         match.key = fuzzy_get_string (fuzzy, GPOINTER_TO_INT(key));
-         match.score = 1.0 / (strlen(match.key) + GPOINTER_TO_INT(value));
-         match.value = g_ptr_array_index(fuzzy->id_to_value,
-                                         GPOINTER_TO_INT(key));
-         g_array_append_val(matches, match);
-      }
+  g_array_sort (matches, fuzzy_match_compare);
 
-      g_array_sort(matches, fuzzy_match_compare);
+  /*
+   * TODO: We could be more clever here when inserting into the array
+   *       only if it is a lower score than the end or < max items.
+   */
 
-      /*
-       * TODO: We could be more clever here when inserting into the array
-       *       only if it is a lower score than the end or < max items.
-       */
+  if (max_matches && (matches->len > max_matches))
+    g_array_set_size (matches, max_matches);
 
-      if (max_matches && (matches->len > max_matches)) {
-         g_array_set_size(matches, max_matches);
-      }
-   }
+cleanup:
+  g_free (downcase);
+  g_free (lookup.state);
+  g_free (lookup.tables);
+  g_hash_table_unref (lookup.matches);
 
-   g_free(downcase);
-   g_free(lookup.state);
-   g_free(lookup.tables);
-   g_hash_table_unref(lookup.matches);
-
-   return matches;
+  return matches;
 }
