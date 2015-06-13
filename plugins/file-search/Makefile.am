@@ -24,6 +24,8 @@ libfile_search_la_CFLAGS = \
 	$(BUILDER_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/src \
+	-I$(top_srcdir)/src/search \
+	-I$(top_srcdir)/src/workbench \
 	-I$(top_srcdir)/contrib/search \
 	$(NULL)
 
