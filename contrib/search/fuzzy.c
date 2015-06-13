@@ -494,7 +494,7 @@ cleanup:
   g_free (downcase);
   g_free (lookup.state);
   g_free (lookup.tables);
-  g_hash_table_unref (lookup.matches);
+  g_clear_pointer (&lookup.matches, g_hash_table_unref);
 
   return matches;
 }
