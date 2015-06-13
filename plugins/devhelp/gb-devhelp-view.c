@@ -174,6 +174,14 @@ gb_devhelp_view_set_split_view (GbView   *view,
 }
 
 static void
+gb_devhelp_view_grab_focus (GtkWidget *widget)
+{
+  GbDevhelpView *self = (GbDevhelpView *)widget;
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->web_view1));
+}
+
+static void
 gb_devhelp_view_finalize (GObject *object)
 {
   GbDevhelpView *self = GB_DEVHELP_VIEW (object);
@@ -231,6 +239,8 @@ gb_devhelp_view_class_init (GbDevhelpViewClass *klass)
   object_class->finalize = gb_devhelp_view_finalize;
   object_class->get_property = gb_devhelp_view_get_property;
   object_class->set_property = gb_devhelp_view_set_property;
+
+  widget_class->grab_focus = gb_devhelp_view_grab_focus;
 
   view_class->get_document = gb_devhelp_view_get_document;
   view_class->create_split = gb_devhelp_view_create_split;

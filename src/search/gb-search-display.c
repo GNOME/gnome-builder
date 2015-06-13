@@ -191,22 +191,22 @@ gb_search_display_keynav_failed (GbSearchDisplay      *self,
 void
 gb_search_display_activate (GbSearchDisplay *self)
 {
-  IdeSearchResult *result = NULL;
-  guint i;
+  gsize i;
 
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (self));
 
-  for (i = 0; !result && i < self->providers->len; i++)
+  for (i = 0; i < self->providers->len; i++)
     {
       ProviderEntry *ptr;
 
       ptr = g_ptr_array_index (self->providers, i);
-      if (ptr->group != NULL)
-        result = gb_search_display_group_get_first (ptr->group);
-    }
 
-  if (result)
-    g_signal_emit (self, gSignals [RESULT_ACTIVATED], 0, result);
+      if (ptr->group != NULL)
+        {
+          if (gb_search_display_group_activate (ptr->group))
+            break;
+        }
+    }
 }
 
 static void

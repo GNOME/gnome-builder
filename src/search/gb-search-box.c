@@ -145,6 +145,9 @@ gb_search_box_entry_activate (GbSearchBox    *self,
   g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
 
   gb_search_display_activate (self->display);
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->button), FALSE);
+  gtk_entry_set_text (GTK_ENTRY (self->entry), "");
 }
 
 static void

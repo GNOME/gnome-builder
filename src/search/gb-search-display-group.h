@@ -40,6 +40,7 @@ void               gb_search_display_group_unselect      (GbSearchDisplayGroup *
 void               gb_search_display_group_focus_first   (GbSearchDisplayGroup *group);
 void               gb_search_display_group_focus_last    (GbSearchDisplayGroup *group);
 IdeSearchResult   *gb_search_display_group_get_first     (GbSearchDisplayGroup *group);
+gboolean           gb_search_display_group_activate      (GbSearchDisplayGroup *group);
 
 G_END_DECLS
 

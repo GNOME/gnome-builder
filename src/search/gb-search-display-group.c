@@ -71,6 +71,7 @@ IdeSearchResult *
 gb_search_display_group_get_first (GbSearchDisplayGroup *self)
 {
   GtkListBoxRow *row = NULL;
+  IdeSearchResult *ret = NULL;
 
   g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self), NULL);
 
@@ -79,9 +80,9 @@ gb_search_display_group_get_first (GbSearchDisplayGroup *self)
                          &row);
 
   if (GB_IS_SEARCH_DISPLAY_ROW (row))
-    return gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (row));
+    ret = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (row));
 
-  return NULL;
+  return ret;
 }
 
 IdeSearchProvider *
@@ -485,4 +486,30 @@ gb_search_display_group_init (GbSearchDisplayGroup *self)
 
   gtk_list_box_set_sort_func (self->rows, compare_cb, self->more_row, NULL);
   gtk_list_box_set_header_func (self->rows, gb_search_display_group_header_cb, NULL, NULL);
+}
+
+gboolean
+gb_search_display_group_activate (GbSearchDisplayGroup *group)
+{
+  GtkListBoxRow *row = NULL;
+
+  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
+
+  gtk_container_foreach (GTK_CONTAINER (group->rows),
+                         gb_search_display_group_foreach_cb,
+                         &row);
+
+  if (GB_IS_SEARCH_DISPLAY_ROW (row))
+    {
+      IdeSearchResult *result;
+      IdeSearchProvider *provider;
+
+      result = gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (row));
+      provider = ide_search_result_get_provider (result);
+      ide_search_provider_activate (provider, GTK_WIDGET (row), result);
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
