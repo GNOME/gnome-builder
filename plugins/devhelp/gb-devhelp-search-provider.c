@@ -184,6 +184,12 @@ gb_devhelp_search_provider_activate (IdeSearchProvider *provider,
   g_free (uri);
 }
 
+static gint
+gb_devhelp_search_provider_get_priority (IdeSearchProvider *provider)
+{
+  return 100;
+}
+
 static void
 gb_devhelp_search_provider_finalize (GObject *object)
 {
@@ -217,4 +223,5 @@ search_provider_iface_init (IdeSearchProviderInterface *iface)
   iface->get_verb = gb_devhelp_search_provider_get_verb;
   iface->populate = gb_devhelp_search_provider_populate;
   iface->activate = gb_devhelp_search_provider_activate;
+  iface->get_priority = gb_devhelp_search_provider_get_priority;
 }

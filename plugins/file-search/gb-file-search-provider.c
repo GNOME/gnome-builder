@@ -124,6 +124,12 @@ gb_file_search_provider_activate (IdeSearchProvider *provider,
     }
 }
 
+static gint
+gb_file_search_provider_get_priority (IdeSearchProvider *provider)
+{
+  return 0;
+}
+
 static void
 gb_file_search_provider_constructed (GObject *object)
 {
@@ -180,4 +186,5 @@ search_provider_iface_init (IdeSearchProviderInterface *iface)
   iface->get_verb = gb_file_search_provider_get_verb;
   iface->create_row = gb_file_search_provider_create_row;
   iface->activate = gb_file_search_provider_activate;
+  iface->get_priority = gb_file_search_provider_get_priority;
 }
