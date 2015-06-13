@@ -18,6 +18,7 @@
 
 #include "gb-plugins.h"
 #include "gb-device-manager-panel.h"
+#include "gb-device-manager-resources.h"
 
 GB_DEFINE_EMBEDDED_PLUGIN (gb_device_manager,
                            gb_device_manager_get_resource (),
