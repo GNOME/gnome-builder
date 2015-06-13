@@ -25,8 +25,8 @@
 
 #define ANIMATION_MODE     IDE_ANIMATION_EASE_IN_OUT_QUAD
 #define ANIMATION_DURATION 250
-#define HORIZ_GRIP_EXTRA   10
-#define VERT_GRIP_EXTRA    10
+#define HORIZ_GRIP_EXTRA   5
+#define VERT_GRIP_EXTRA    5
 #define MIN_POSITION       100
 
 typedef struct
