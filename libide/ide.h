@@ -101,7 +101,6 @@ G_BEGIN_DECLS
 #include "doap/ide-doap-person.h"
 #include "doap/ide-doap.h"
 #include "git/ide-git-remote-callbacks.h"
-#include "git/ide-git-search-result.h"
 #include "git/ide-git-vcs.h"
 #include "html/ide-html-language.h"
 #include "local/ide-local-device.h"

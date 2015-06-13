@@ -19,8 +19,6 @@ libide_1_0_la_public_sources = \
 	doap/ide-doap.h \
 	git/ide-git-remote-callbacks.c \
 	git/ide-git-remote-callbacks.h \
-	git/ide-git-search-result.c \
-	git/ide-git-search-result.h \
 	git/ide-git-vcs.c \
 	git/ide-git-vcs.h \
 	html/ide-html-language.c \
@@ -251,10 +249,6 @@ libide_1_0_la_SOURCES = \
 	gconstructor.h \
 	git/ide-git-buffer-change-monitor.c \
 	git/ide-git-buffer-change-monitor.h \
-	git/ide-git-search-index.c \
-	git/ide-git-search-index.h \
-	git/ide-git-search-provider.c \
-	git/ide-git-search-provider.h \
 	gjs/ide-gjs-script.cpp \
 	gjs/ide-gjs-script.h \
 	gsettings/ide-gsettings-file-settings.c \
