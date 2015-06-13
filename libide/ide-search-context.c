@@ -243,3 +243,11 @@ ide_search_context_init (IdeSearchContext *self)
 {
   self->cancellable = g_cancellable_new ();
 }
+
+gsize
+ide_search_context_get_max_results (IdeSearchContext *self)
+{
+  g_return_val_if_fail (IDE_IS_SEARCH_CONTEXT (self), 0);
+
+  return self->max_results;
+}

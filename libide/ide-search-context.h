@@ -43,6 +43,7 @@ void         ide_search_context_execute            (IdeSearchContext  *self,
 void         ide_search_context_set_provider_count (IdeSearchContext  *self,
                                                     IdeSearchProvider *provider,
                                                     guint64            count);
+gsize        ide_search_context_get_max_results    (IdeSearchContext  *self);
 
 G_END_DECLS
 
