@@ -477,15 +477,18 @@ fuzzy_match (Fuzzy       *fuzzy,
       g_array_append_val (matches, match);
     }
 
-  g_array_sort (matches, fuzzy_match_compare);
-
   /*
    * TODO: We could be more clever here when inserting into the array
    *       only if it is a lower score than the end or < max items.
    */
 
-  if (max_matches && (matches->len > max_matches))
-    g_array_set_size (matches, max_matches);
+  if (max_matches != 0)
+    {
+      g_array_sort (matches, fuzzy_match_compare);
+
+      if (max_matches && (matches->len > max_matches))
+        g_array_set_size (matches, max_matches);
+    }
 
 cleanup:
   g_free (downcase);
