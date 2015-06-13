@@ -261,7 +261,7 @@ fuzzy_insert (Fuzzy       *fuzzy,
         }
 
       item.id = id;
-      item.pos = tmp - key;
+      item.pos = (guint)(gsize)(tmp - key);
 
       g_array_append_val (table, item);
     }
@@ -440,16 +440,31 @@ fuzzy_match (Fuzzy       *fuzzy,
       lookup.tables [i++] = table;
     }
 
-  g_assert (lookup.n_tables > 0);
+  g_assert (lookup.n_tables == i);
   g_assert (lookup.tables [0] != NULL);
 
-  lookup.n_tables = i;
   root = lookup.tables [0];
 
-  for (i = 0; i < root->len; i++)
+  if (G_LIKELY (lookup.n_tables > 1))
     {
-      item = &g_array_index (root, FuzzyItem, i);
-      fuzzy_do_match (&lookup, item, 1, 0);
+      for (i = 0; i < root->len; i++)
+        {
+          item = &g_array_index (root, FuzzyItem, i);
+          fuzzy_do_match (&lookup, item, 1, 0);
+        }
+    }
+  else
+    {
+      for (i = 0; i < root->len; i++)
+        {
+          item = &g_array_index (root, FuzzyItem, i);
+          match.key = fuzzy_get_string (fuzzy, item->id);
+          match.value = g_ptr_array_index (fuzzy->id_to_value, item->id);
+          match.score = 0;
+          g_array_append_val (matches, match);
+        }
+
+      goto cleanup;
     }
 
   g_hash_table_iter_init (&iter, lookup.matches);
