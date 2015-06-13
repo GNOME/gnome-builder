@@ -142,9 +142,10 @@ gb_search_display_keynav_failed (GbSearchDisplay      *self,
                                  GtkDirectionType      dir,
                                  GbSearchDisplayGroup *group)
 {
-  GList *list;
+  GList *list = NULL;
   GList *iter;
   gint position = -1;
+  gboolean ret = FALSE;
 
   g_return_val_if_fail (GB_IS_SEARCH_DISPLAY (self), FALSE);
   g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group), FALSE);
@@ -157,26 +158,34 @@ gb_search_display_keynav_failed (GbSearchDisplay      *self,
     {
       list = gtk_container_get_children (GTK_CONTAINER (self));
       iter = g_list_nth (list, position + 1);
-      if (iter && (iter->data != self->last_group))
+      for (; iter; iter = iter->next)
         {
-          gb_search_display_group_unselect (group);
-          gb_search_display_group_focus_first (iter->data);
-          return TRUE;
+          if (gb_search_display_group_get_first (iter->data))
+            {
+              gb_search_display_group_unselect (group);
+              gb_search_display_group_focus_first (iter->data);
+              ret = TRUE;
+            }
         }
     }
   else if (dir == GTK_DIR_UP && position > 0)
     {
       list = gtk_container_get_children (GTK_CONTAINER (self));
       iter = g_list_nth (list, position - 1);
-      if (iter)
+      for (; iter; iter = iter->prev)
         {
-          gb_search_display_group_unselect (group);
-          gb_search_display_group_focus_last (iter->data);
-          return TRUE;
+          if (gb_search_display_group_get_first (iter->data))
+            {
+              gb_search_display_group_unselect (group);
+              gb_search_display_group_focus_last (iter->data);
+              ret = TRUE;
+            }
         }
     }
 
-  return FALSE;
+  g_list_free (list);
+
+  return ret;
 }
 
 void
@@ -483,15 +492,21 @@ static void
 gb_search_display_grab_focus (GtkWidget *widget)
 {
   GbSearchDisplay *self = (GbSearchDisplay *)widget;
+  gsize i;
 
   g_return_if_fail (GB_IS_SEARCH_DISPLAY (self));
 
-  if (self->providers->len)
+  for (i = 0; i < self->providers->len; i++)
     {
       ProviderEntry *ptr;
 
-      ptr = g_ptr_array_index (self->providers, 0);
-      gtk_widget_child_focus (GTK_WIDGET (ptr->group), GTK_DIR_DOWN);
+      ptr = g_ptr_array_index (self->providers, i);
+
+      if (gb_search_display_group_get_first (ptr->group))
+        {
+          gtk_widget_child_focus (GTK_WIDGET (ptr->group), GTK_DIR_DOWN);
+          break;
+        }
     }
 }
 

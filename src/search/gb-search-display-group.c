@@ -57,23 +57,29 @@ static GQuark      gQuarkRow;
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint       gSignals [LAST_SIGNAL];
 
+static void
+gb_search_display_group_foreach_cb (GtkWidget *widget,
+                                    gpointer   user_data)
+{
+  GtkWidget **row = user_data;
+
+  if (*row == NULL)
+    *row = widget;
+}
+
 IdeSearchResult *
 gb_search_display_group_get_first (GbSearchDisplayGroup *self)
 {
-  GtkListBoxRow *row;
+  GtkListBoxRow *row = NULL;
 
   g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (self), NULL);
 
-  row = gtk_list_box_get_row_at_y (self->rows, 1);
+  gtk_container_foreach (GTK_CONTAINER (self->rows),
+                         gb_search_display_group_foreach_cb,
+                         &row);
 
-  if (row)
-    {
-      GtkWidget *child;
-
-      child = gtk_bin_get_child (GTK_BIN (row));
-      if (GB_IS_SEARCH_DISPLAY_ROW (child))
-        return gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (child));
-    }
+  if (GB_IS_SEARCH_DISPLAY_ROW (row))
+    return gb_search_display_row_get_result (GB_SEARCH_DISPLAY_ROW (row));
 
   return NULL;
 }
