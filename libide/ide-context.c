@@ -793,10 +793,6 @@ ide_context_init (IdeContext *self)
                                       "context", self,
                                       NULL);
 
-  self->search_engine = g_object_new (IDE_TYPE_SEARCH_ENGINE,
-                                      "context", self,
-                                      NULL);
-
   self->snippets_manager = g_object_new (IDE_TYPE_SOURCE_SNIPPETS_MANAGER,
                                          "context", self,
                                          NULL);
@@ -1351,6 +1347,26 @@ ide_context_init_add_recent (gpointer             source_object,
 }
 
 static void
+ide_context_init_search_engine (gpointer             source_object,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  IdeContext *self = source_object;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  self->search_engine = g_object_new (IDE_TYPE_SEARCH_ENGINE,
+                                      "context", self,
+                                      NULL);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_context_init_async (GAsyncInitable      *initable,
                         int                  io_priority,
                         GCancellable        *cancellable,
@@ -1376,6 +1392,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_scripts,
                         ide_context_init_unsaved_files,
                         ide_context_init_add_recent,
+                        ide_context_init_search_engine,
                         NULL);
 }
 
