@@ -1,6 +1,7 @@
 SUBDIRS = \
 	command-bar \
 	devhelp \
+	device-manager \
 	file-search \
 	symbol-tree \
 	sysmon \

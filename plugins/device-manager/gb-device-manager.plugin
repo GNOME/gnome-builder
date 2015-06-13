@@ -1,0 +1,6 @@
+[Plugin]
+Module=gb-device-manager
+Name=Device Manager
+Description=Manage connected devices
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2015 Christian Hergert

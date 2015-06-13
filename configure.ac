@@ -385,6 +385,7 @@ AC_CONFIG_FILES([
 	plugins/Makefile
 	plugins/command-bar/Makefile
 	plugins/devhelp/Makefile
+	plugins/device-manager/Makefile
 	plugins/file-search/Makefile
 	plugins/symbol-tree/Makefile
 	plugins/sysmon/Makefile

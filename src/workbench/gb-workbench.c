@@ -456,6 +456,23 @@ gb_workbench_realize (GtkWidget *widget)
 }
 
 static void
+gb_workbench__extension_added (PeasExtensionSet *set,
+                               PeasPluginInfo   *plugin_info,
+                               GbWorkbenchAddin *addin)
+{
+  gb_workbench_addin_load (addin);
+}
+
+static void
+gb_workbench__extension_removed (PeasExtensionSet *set,
+                                 PeasPluginInfo   *plugin_info,
+                                 GbWorkbenchAddin *addin)
+{
+  gb_workbench_addin_unload (addin);
+}
+
+
+static void
 gb_workbench_constructed (GObject *object)
 {
   GbWorkbench *self = (GbWorkbench *)object;
@@ -471,6 +488,22 @@ gb_workbench_constructed (GObject *object)
   app = GTK_APPLICATION (g_application_get_default ());
   menu = gtk_application_get_menu_by_id (app, "gear-menu");
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (self->gear_menu_button), G_MENU_MODEL (menu));
+
+  self->extensions = peas_extension_set_new (peas_engine_get_default (),
+                                             GB_TYPE_WORKBENCH_ADDIN,
+                                             "workbench", self,
+                                             NULL);
+  peas_extension_set_foreach (self->extensions,
+                              (PeasExtensionSetForeachFunc)gb_workbench__extension_added,
+                              NULL);
+  g_signal_connect (self->extensions,
+                    "extension-added",
+                    G_CALLBACK (gb_workbench__extension_added),
+                    self);
+  g_signal_connect (self->extensions,
+                    "extension-removed",
+                    G_CALLBACK (gb_workbench__extension_removed),
+                    self);
 
   gtk_widget_grab_focus (GTK_WIDGET (self->workspace));
 
@@ -621,22 +654,6 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 }
 
 static void
-gb_workbench__extension_added (PeasExtensionSet *set,
-                               PeasPluginInfo   *plugin_info,
-                               GbWorkbenchAddin *addin)
-{
-  gb_workbench_addin_load (addin);
-}
-
-static void
-gb_workbench__extension_removed (PeasExtensionSet *set,
-                                 PeasPluginInfo   *plugin_info,
-                                 GbWorkbenchAddin *addin)
-{
-  gb_workbench_addin_unload (addin);
-}
-
-static void
 gb_workbench_init (GbWorkbench *self)
 {
   IDE_ENTRY;
@@ -649,22 +666,6 @@ gb_workbench_init (GbWorkbench *self)
                      gDropTypes, G_N_ELEMENTS (gDropTypes), GDK_ACTION_COPY);
 
   gb_settings_init_window (GTK_WINDOW (self));
-
-  self->extensions = peas_extension_set_new (peas_engine_get_default (),
-                                             GB_TYPE_WORKBENCH_ADDIN,
-                                             "workbench", self,
-                                             NULL);
-  peas_extension_set_foreach (self->extensions,
-                              (PeasExtensionSetForeachFunc)gb_workbench__extension_added,
-                              NULL);
-  g_signal_connect (self->extensions,
-                    "extension-added",
-                    G_CALLBACK (gb_workbench__extension_added),
-                    self);
-  g_signal_connect (self->extensions,
-                    "extension-removed",
-                    G_CALLBACK (gb_workbench__extension_removed),
-                    self);
 
   IDE_EXIT;
 }

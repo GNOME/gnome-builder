@@ -212,6 +212,7 @@ define_plugin = -Wl,--whole-archive,$(top_builddir)/plugins/$1/.libs/lib$1.a,--n
 gnome_builder_PLUGINS = \
 	devhelp \
 	command-bar \
+	device-manager \
 	file-search \
 	symbol-tree \
 	sysmon \
