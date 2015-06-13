@@ -431,7 +431,7 @@ fuzzy_match (Fuzzy       *fuzzy,
       gunichar ch;
       GArray *table;
 
-      ch = g_utf8_get_char (needle);
+      ch = g_utf8_get_char (tmp);
       table = g_hash_table_lookup (fuzzy->char_tables, GINT_TO_POINTER (ch));
 
       if (table == NULL)
