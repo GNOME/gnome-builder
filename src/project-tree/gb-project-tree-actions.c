@@ -454,7 +454,7 @@ gb_project_tree_actions__make_directory_cb (GObject      *object,
   project_file = create_file (context, file, G_FILE_TYPE_DIRECTORY);
   ide_project_add_file (project, project_file);
 
-  gb_tree_node_rebuild (node);
+  gb_tree_node_invalidate (node);
   gb_tree_node_expand (node, FALSE);
 
   created = gb_tree_find_item (GB_TREE (self), G_OBJECT (project_file));
@@ -506,7 +506,7 @@ gb_project_tree_actions__create_cb (GObject      *object,
 
   gb_workbench_open (workbench, file);
 
-  gb_tree_node_rebuild (node);
+  gb_tree_node_invalidate (node);
   gb_tree_node_expand (node, FALSE);
 
   created = gb_tree_find_item (GB_TREE (self), G_OBJECT (project_file));

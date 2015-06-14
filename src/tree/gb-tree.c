@@ -1408,12 +1408,13 @@ gb_tree_prepend (GbTree     *self,
 }
 
 void
-_gb_tree_rebuild_node (GbTree     *self,
-                       GbTreeNode *node)
+_gb_tree_invalidate (GbTree     *self,
+                     GbTreeNode *node)
 {
   GbTreePrivate *priv = gb_tree_get_instance_private (self);
   GtkTreeModel *model;
   GtkTreePath *path;
+  GbTreeNode *parent;
   GtkTreeIter iter;
   GtkTreeIter child;
 
@@ -1431,7 +1432,12 @@ _gb_tree_rebuild_node (GbTree     *self,
         }
     }
 
-  gb_tree_build_node (self, node);
+  _gb_tree_node_set_needs_build (node, TRUE);
+
+  parent = gb_tree_node_get_parent (node);
+
+  if ((parent == NULL) || gb_tree_node_get_expanded (parent))
+    gb_tree_build_node (self, node);
 
   gtk_tree_path_free (path);
 }

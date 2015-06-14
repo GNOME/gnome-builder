@@ -85,8 +85,6 @@ gb_tree_node_get_tree (GbTreeNode *node)
 {
   g_return_val_if_fail (GB_IS_TREE_NODE (node), NULL);
 
-  for (; node->parent; node = node->parent) { }
-
   return node->tree;
 }
 
@@ -434,14 +432,12 @@ gb_tree_node_get_area (GbTreeNode   *node,
 }
 
 void
-gb_tree_node_rebuild (GbTreeNode *self)
+gb_tree_node_invalidate (GbTreeNode *self)
 {
-  GbTree *tree;
-
   g_return_if_fail (GB_IS_TREE_NODE (self));
 
-  tree = gb_tree_node_get_tree (self);
-  _gb_tree_rebuild_node (tree, self);
+  if (self->tree != NULL)
+    _gb_tree_invalidate (self->tree, self);
 }
 
 gboolean

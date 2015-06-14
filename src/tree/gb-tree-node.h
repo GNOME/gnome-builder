@@ -44,14 +44,14 @@ void           gb_tree_node_collapse      (GbTreeNode   *node);
 void           gb_tree_node_select        (GbTreeNode   *node);
 void           gb_tree_node_get_area      (GbTreeNode   *node,
                                            GdkRectangle *area);
-void           gb_tree_node_rebuild       (GbTreeNode   *node);
+void           gb_tree_node_invalidate    (GbTreeNode   *node);
 gboolean       gb_tree_node_get_expanded  (GbTreeNode   *node);
 void           gb_tree_node_show_popover  (GbTreeNode   *node,
                                            GtkPopover   *popover);
 const gchar   *gb_tree_node_get_text      (GbTreeNode   *node);
 void           gb_tree_node_set_text      (GbTreeNode   *node,
                                            const gchar  *text);
-GbTree       *gb_tree_node_get_tree       (GbTreeNode   *node);
+GbTree        *gb_tree_node_get_tree      (GbTreeNode   *node);
 
 G_END_DECLS
 
