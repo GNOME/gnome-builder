@@ -1441,3 +1441,87 @@ _gb_tree_invalidate (GbTree     *self,
 
   gtk_tree_path_free (path);
 }
+
+/**
+ * gb_tree_find_child_node:
+ * @self: A #GbTree
+ * @node: A #GbTreeNode
+ * @find_func: (call scope): A callback to locate the child
+ * @user_data: user data for @find_func
+ *
+ * Searches through the direct children of @node for a matching child.
+ * @find_func should return %TRUE if the child matches, otherwise %FALSE.
+ *
+ * Returns: (transfer none) (nullable): A #GbTreeNode or %NULL.
+ */
+GbTreeNode *
+gb_tree_find_child_node (GbTree         *self,
+                         GbTreeNode     *node,
+                         GbTreeFindFunc  find_func,
+                         gpointer        user_data)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
+  GtkTreeModel *model;
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  GtkTreeIter children;
+
+  g_return_val_if_fail (GB_IS_TREE (self), NULL);
+  g_return_val_if_fail (!node || GB_IS_TREE_NODE (node), NULL);
+  g_return_val_if_fail (find_func, NULL);
+
+  if (node == NULL)
+    node = priv->root;
+
+  if (node == NULL)
+    {
+      g_warning ("Cannot find node. No root node has been set on %s.",
+                 g_type_name (G_OBJECT_TYPE (self)));
+      return NULL;
+    }
+
+  if (_gb_tree_node_get_needs_build (node))
+    gb_tree_build_node (self, node);
+
+  model = GTK_TREE_MODEL (priv->store);
+  path = gb_tree_node_get_path (node);
+
+  if (path != NULL)
+    {
+      if (!gtk_tree_model_get_iter (model, &iter, path))
+        goto failure;
+
+      if (!gtk_tree_model_iter_children (model, &children, &iter))
+        goto failure;
+    }
+  else
+    {
+      if (!gtk_tree_model_iter_children (model, &children, NULL))
+        goto failure;
+    }
+
+  do
+    {
+      GbTreeNode *child = NULL;
+
+      gtk_tree_model_get (model, &children, 0, &child, -1);
+
+      if (find_func (self, node, child, user_data))
+        {
+          /*
+           * We want to returned a borrowed reference to the child node.
+           * It is safe to unref the child here before we return.
+           */
+          g_object_unref (child);
+          return child;
+        }
+
+      g_clear_object (&child);
+    }
+  while (gtk_tree_model_iter_next (model, &children));
+
+failure:
+  g_clear_pointer (&path, gtk_tree_path_free);
+
+  return NULL;
+}

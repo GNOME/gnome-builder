@@ -27,6 +27,19 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GbTreeFindFunc:
+ *
+ * Callback to check @child, a child of @node, matches a lookup
+ * request. Returns %TRUE if @child matches, %FALSE if not.
+ *
+ * Returns: %TRUE if @child matched
+ */
+typedef gboolean (*GbTreeFindFunc) (GbTree     *tree,
+                                    GbTreeNode *node,
+                                    GbTreeNode *child,
+                                    gpointer    user_data);
+
 struct _GbTreeClass
 {
 	GtkTreeViewClass parent_class;
@@ -66,6 +79,10 @@ void          gb_tree_scroll_to_node (GbTree        *self,
                                       GbTreeNode    *node);
 void          gb_tree_expand_to_node (GbTree        *self,
                                       GbTreeNode    *node);
+GbTreeNode   *gb_tree_find_child_node (GbTree         *self,
+                                       GbTreeNode     *node,
+                                       GbTreeFindFunc  find_func,
+                                       gpointer        user_data);
 
 G_END_DECLS
 
