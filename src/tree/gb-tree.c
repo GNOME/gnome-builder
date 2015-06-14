@@ -70,12 +70,6 @@ static GtkBuildableIface *gb_tree_parent_buildable_iface;
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
 
-/**
- * gb_tree_unselect:
- * @tree: (in): A #GbTree.
- *
- * Unselects the current item in the tree.
- */
 static void
 gb_tree_unselect (GbTree *tree)
 {
@@ -91,13 +85,6 @@ gb_tree_unselect (GbTree *tree)
   IDE_EXIT;
 }
 
-/**
- * gb_tree_select:
- * @tree: (in): A #GbTree.
- * @node: (in): A #GbTreeNode.
- *
- * Selects @node within the tree.
- */
 static void
 gb_tree_select (GbTree     *tree,
                 GbTreeNode *node)
@@ -308,12 +295,6 @@ gb_tree_popup_menu (GtkWidget *widget)
   return TRUE;
 }
 
-/**
- * gb_tree_selection_changed:
- * @tree: (in): A #GbTree.
- *
- * Handle the selection changing.
- */
 static void
 gb_tree_selection_changed (GbTree           *tree,
                            GtkTreeSelection *selection)
@@ -360,19 +341,6 @@ gb_tree_selection_changed (GbTree           *tree,
   IDE_EXIT;
 }
 
-/**
- * gb_tree_get_iter_for_node:
- * @tree: (in): A #GbTree.
- * @parent: (in) (allow-none): A #GtkTreeIter of parent or %NULL.
- * @iter: (out): A location for a #GtkTreeIter.
- * @node: (in): A #GbTreeNode expected to be within @parent children.
- *
- * Looks for the #GtkTreeIter that contains @node within the children
- * of @parent. If that item is found, @iter is set and %TRUE is returned.
- * Otherwise, %FALSE is returned.
- *
- * Returns: %TRUE if successful; otherwise %FALSE.
- */
 static gboolean
 gb_tree_get_iter_for_node (GbTree      *tree,
                            GtkTreeIter *parent,
@@ -435,7 +403,7 @@ gb_tree_add_builder_foreach_cb (GtkTreeModel *model,
   IDE_RETURN (FALSE);
 }
 
-gboolean
+static gboolean
 gb_tree_foreach (GbTree                  *tree,
                  GtkTreeIter             *iter,
                  GtkTreeModelForeachFunc  func,
@@ -473,201 +441,6 @@ gb_tree_foreach (GbTree                  *tree,
   return FALSE;
 }
 
-void
-_gb_tree_rebuild_node (GbTree     *tree,
-                       GbTreeNode *node)
-{
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
-  GtkTreeModel *model;
-  GtkTreePath *path;
-  GtkTreeIter iter;
-  GtkTreeIter child;
-  guint i;
-
-  g_return_if_fail (GB_IS_TREE (tree));
-  g_return_if_fail (GB_IS_TREE_NODE (node));
-
-  model = GTK_TREE_MODEL (priv->store);
-  path = gb_tree_node_get_path (node);
-  gtk_tree_model_get_iter (model, &iter, path);
-
-  if (gtk_tree_model_iter_children (model, &child, &iter))
-    {
-      while (gtk_tree_store_remove (priv->store, &child))
-        { /* Do Nothing */ }
-    }
-
-  priv->building++;
-  for (i = 0; i < priv->builders->len; i++)
-    {
-      GbTreeBuilder *builder;
-
-      /*
-       * FIXME:
-       *
-       * Refactor this to do all builders when walking each node.
-       */
-
-      builder = g_ptr_array_index (priv->builders, i);
-      gb_tree_foreach (tree,
-                       &iter,
-                       gb_tree_add_builder_foreach_cb,
-                       builder);
-      priv->building--;
-    }
-
-  gtk_tree_path_free (path);
-}
-
-/**
- * gb_tree_add_builder:
- * @tree: (in): A #GbTree.
- * @builder: (in) (transfer full): A #GbTreeBuilder to add.
- *
- * Removes a builder from the tree.
- */
-void
-gb_tree_add_builder (GbTree        *tree,
-                     GbTreeBuilder *builder)
-{
-  GtkTreeIter iter;
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
-
-  IDE_ENTRY;
-
-  g_return_if_fail (GB_IS_TREE (tree));
-  g_return_if_fail (GB_IS_TREE_BUILDER (builder));
-
-  g_object_set (builder, "tree", tree, NULL);
-  g_ptr_array_add (priv->builders, g_object_ref_sink (builder));
-
-  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->store), &iter))
-    {
-      priv->building++;
-      gb_tree_foreach (tree, &iter, gb_tree_add_builder_foreach_cb, builder);
-      priv->building--;
-    }
-
-  _gb_tree_builder_added (builder, tree);
-
-  IDE_EXIT;
-}
-
-/**
- * gb_tree_remove_builder:
- * @tree: (in): A #GbTree.
- * @builder: (in): A #GbTreeBuilder to remove.
- *
- * Removes a builder from the tree.
- */
-void
-gb_tree_remove_builder (GbTree        *tree,
-                        GbTreeBuilder *builder)
-{
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
-  gsize i;
-
-  IDE_ENTRY;
-
-  g_return_if_fail (GB_IS_TREE (tree));
-  g_return_if_fail (GB_IS_TREE_BUILDER (builder));
-
-  for (i = 0; i < priv->builders->len; i++)
-    {
-      if (builder == g_ptr_array_index (priv->builders, i))
-        {
-          g_object_ref (builder);
-          g_ptr_array_remove_index (priv->builders, i);
-          _gb_tree_builder_removed (builder, tree);
-          g_object_unref (builder);
-        }
-    }
-
-  IDE_EXIT;
-}
-
-/**
- * gb_tree_get_root:
- *
- * Retrieves the root node of the tree. The root node is not a visible node
- * in the tree, but a placeholder for all other builders to build upon.
- *
- * Returns: (transfer none) (nullable): A #GbTreeNode or %NULL.
- */
-GbTreeNode *
-gb_tree_get_root (GbTree *tree)
-{
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
-
-  g_return_val_if_fail (GB_IS_TREE (tree), NULL);
-
-  return priv->root;
-}
-
-/**
- * gb_tree_set_root:
- * @tree: (in): A #GbTree.
- * @node: (in): A #GbTreeNode.
- *
- * Sets the root node of the #GbTree widget. This is used to build
- * the items within the treeview. The item itself will not be added
- * to the tree, but the direct children will be.
- */
-void
-gb_tree_set_root (GbTree     *tree,
-                  GbTreeNode *root)
-{
-  GbTreeBuilder *builder;
-  gint i;
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
-
-  IDE_ENTRY;
-
-  g_return_if_fail (GB_IS_TREE (tree));
-
-  gtk_tree_store_clear (priv->store);
-  g_clear_object (&priv->root);
-
-  if (root)
-    {
-      priv->root = g_object_ref_sink (root);
-      _gb_tree_node_set_tree (root, tree);
-      for (i = 0; i < priv->builders->len; i++)
-        {
-          builder = g_ptr_array_index (priv->builders, i);
-          _gb_tree_builder_build_node (builder, root);
-        }
-    }
-
-  IDE_EXIT;
-}
-
-void
-gb_tree_rebuild (GbTree *tree)
-{
-  GbTreeNode *root;
-  GtkTreeSelection *selection;
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
-
-  g_return_if_fail (GB_IS_TREE (tree));
-
-  /* avoid dealign with selection changes while rebuilding */
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree));
-  gtk_tree_selection_unselect_all (selection);
-
-  if ((root = priv->root ? g_object_ref (priv->root) : NULL))
-    {
-      gb_tree_set_root (tree, root);
-      g_object_unref (root);
-    }
-}
-
-/**
- * pixbuf_func:
- * @cell_layout: (in): A #GtkCellRendererPixbuf.
- *
- * Handle preparing a pixbuf cell renderer for drawing.
- */
 static void
 pixbuf_func (GtkCellLayout   *cell_layout,
              GtkCellRenderer *cell,
@@ -684,12 +457,6 @@ pixbuf_func (GtkCellLayout   *cell_layout,
   g_clear_object (&node);
 }
 
-/**
- * text_func:
- * @cell_layout: (in): A #GtkCellRendererText.
- *
- * Handle preparing a text cell renderer for drawing.
- */
 static void
 text_func (GtkCellLayout   *cell_layout,
            GtkCellRenderer *cell,
@@ -716,15 +483,6 @@ text_func (GtkCellLayout   *cell_layout,
     }
 }
 
-/**
- * gb_tree_add:
- * @tree: (in): A #GbTree.
- * @node: (in): A #GbTreeNode.
- * @child: (in): A #GbTreeNode.
- * @prepend: (in): Should we prepend instead of append?
- *
- * Prepends or appends @child to @node within the #GbTree.
- */
 static void
 gb_tree_add (GbTree     *tree,
              GbTreeNode *node,
@@ -773,53 +531,6 @@ gb_tree_add (GbTree     *tree,
     }
 }
 
-/**
- * gb_tree_append:
- * @tree: (in): A #GbTree.
- * @node: (in): A #GbTreeNode.
- * @child: (in): A #GbTreeNode.
- *
- * Appends @child to @node within the #GbTree.
- */
-void
-gb_tree_append (GbTree     *tree,
-                GbTreeNode *node,
-                GbTreeNode *child)
-{
-  g_return_if_fail (GB_IS_TREE (tree));
-  g_return_if_fail (GB_IS_TREE_NODE (node));
-  g_return_if_fail (GB_IS_TREE_NODE (child));
-
-  gb_tree_add (tree, node, child, FALSE);
-}
-
-/**
- * gb_tree_prepend:
- * @tree: (in): A #GbTree.
- * @node: (in): A #GbTreeNode.
- * @child: (in): A #GbTreeNode.
- *
- * Appends @child to @node within the #GbTree.
- */
-void
-gb_tree_prepend (GbTree     *tree,
-                 GbTreeNode *node,
-                 GbTreeNode *child)
-{
-  g_return_if_fail (GB_IS_TREE (tree));
-  g_return_if_fail (GB_IS_TREE_NODE (node));
-  g_return_if_fail (GB_IS_TREE_NODE (child));
-
-  gb_tree_add (tree, node, child, TRUE);
-}
-
-/**
- * gb_tree_row_activated:
- * @tree_view: (in): A #GbTree.
- * @path: (in): A #GtkTreePath.
- *
- * Handle the row being activated. Expand the row or collapse it.
- */
 static void
 gb_tree_row_activated (GtkTreeView *tree_view,
                        GtkTreePath *path)
@@ -931,63 +642,6 @@ gb_tree_find_item_foreach_cb (GtkTreeModel *model,
     }
 
   return FALSE;
-}
-
-/**
- * gb_tree_find_custom:
- * @self: A #GbTree
- * @equal_func: A #GEqualFunc
- * @key: the key for @equal_func
- *
- * Walks the entire tree looking for the first item that matches given
- * @equal_func and @key.
- *
- * The first parameter to @equal_func will always be @key.
- * The second parameter will be the nodes #GbTreeNode:item property.
- *
- * Returns: (nullable) (transfer none): A #GbTreeNode or %NULL.
- */
-GbTreeNode *
-gb_tree_find_custom (GbTree     *self,
-                     GEqualFunc  equal_func,
-                     gpointer    key)
-{
-  GbTreePrivate *priv = gb_tree_get_instance_private (self);
-  NodeLookup lookup;
-
-  g_return_val_if_fail (GB_IS_TREE (self), NULL);
-  g_return_val_if_fail (equal_func != NULL, NULL);
-
-  lookup.key = key;
-  lookup.equal_func = equal_func;
-  lookup.result = NULL;
-
-  gtk_tree_model_foreach (GTK_TREE_MODEL (priv->store),
-                          gb_tree_find_item_foreach_cb,
-                          &lookup);
-
-  return lookup.result;
-}
-
-GbTreeNode *
-gb_tree_find_item (GbTree  *self,
-                   GObject *item)
-{
-  GbTreePrivate *priv = gb_tree_get_instance_private (self);
-  NodeLookup lookup;
-
-  g_return_val_if_fail (GB_IS_TREE (self), NULL);
-  g_return_val_if_fail (!item || G_IS_OBJECT (item), NULL);
-
-  lookup.key = item;
-  lookup.equal_func = g_direct_equal;
-  lookup.result = NULL;
-
-  gtk_tree_model_foreach (GTK_TREE_MODEL (priv->store),
-                          gb_tree_find_item_foreach_cb,
-                          &lookup);
-
-  return lookup.result;
 }
 
 static void
@@ -1419,4 +1073,290 @@ _gb_tree_get_path (GbTree *tree,
     }
 
   return NULL;
+}
+
+/**
+ * gb_tree_add_builder:
+ * @tree: (in): A #GbTree.
+ * @builder: (in) (transfer full): A #GbTreeBuilder to add.
+ *
+ * Removes a builder from the tree.
+ */
+void
+gb_tree_add_builder (GbTree        *tree,
+                     GbTreeBuilder *builder)
+{
+  GtkTreeIter iter;
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
+
+  IDE_ENTRY;
+
+  g_return_if_fail (GB_IS_TREE (tree));
+  g_return_if_fail (GB_IS_TREE_BUILDER (builder));
+
+  g_object_set (builder, "tree", tree, NULL);
+  g_ptr_array_add (priv->builders, g_object_ref_sink (builder));
+
+  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->store), &iter))
+    {
+      priv->building++;
+      gb_tree_foreach (tree, &iter, gb_tree_add_builder_foreach_cb, builder);
+      priv->building--;
+    }
+
+  _gb_tree_builder_added (builder, tree);
+
+  IDE_EXIT;
+}
+
+/**
+ * gb_tree_remove_builder:
+ * @tree: (in): A #GbTree.
+ * @builder: (in): A #GbTreeBuilder to remove.
+ *
+ * Removes a builder from the tree.
+ */
+void
+gb_tree_remove_builder (GbTree        *tree,
+                        GbTreeBuilder *builder)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
+  gsize i;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (GB_IS_TREE (tree));
+  g_return_if_fail (GB_IS_TREE_BUILDER (builder));
+
+  for (i = 0; i < priv->builders->len; i++)
+    {
+      if (builder == g_ptr_array_index (priv->builders, i))
+        {
+          g_object_ref (builder);
+          g_ptr_array_remove_index (priv->builders, i);
+          _gb_tree_builder_removed (builder, tree);
+          g_object_unref (builder);
+        }
+    }
+
+  IDE_EXIT;
+}
+
+/**
+ * gb_tree_get_root:
+ *
+ * Retrieves the root node of the tree. The root node is not a visible node
+ * in the tree, but a placeholder for all other builders to build upon.
+ *
+ * Returns: (transfer none) (nullable): A #GbTreeNode or %NULL.
+ */
+GbTreeNode *
+gb_tree_get_root (GbTree *tree)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
+
+  g_return_val_if_fail (GB_IS_TREE (tree), NULL);
+
+  return priv->root;
+}
+
+/**
+ * gb_tree_set_root:
+ * @tree: (in): A #GbTree.
+ * @node: (in): A #GbTreeNode.
+ *
+ * Sets the root node of the #GbTree widget. This is used to build
+ * the items within the treeview. The item itself will not be added
+ * to the tree, but the direct children will be.
+ */
+void
+gb_tree_set_root (GbTree     *tree,
+                  GbTreeNode *root)
+{
+  GbTreeBuilder *builder;
+  gint i;
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
+
+  IDE_ENTRY;
+
+  g_return_if_fail (GB_IS_TREE (tree));
+
+  gtk_tree_store_clear (priv->store);
+  g_clear_object (&priv->root);
+
+  if (root)
+    {
+      priv->root = g_object_ref_sink (root);
+      _gb_tree_node_set_tree (root, tree);
+      for (i = 0; i < priv->builders->len; i++)
+        {
+          builder = g_ptr_array_index (priv->builders, i);
+          _gb_tree_builder_build_node (builder, root);
+        }
+    }
+
+  IDE_EXIT;
+}
+
+void
+gb_tree_rebuild (GbTree *tree)
+{
+  GbTreeNode *root;
+  GtkTreeSelection *selection;
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
+
+  g_return_if_fail (GB_IS_TREE (tree));
+
+  /* avoid dealign with selection changes while rebuilding */
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree));
+  gtk_tree_selection_unselect_all (selection);
+
+  if ((root = priv->root ? g_object_ref (priv->root) : NULL))
+    {
+      gb_tree_set_root (tree, root);
+      g_object_unref (root);
+    }
+}
+
+/**
+ * gb_tree_find_custom:
+ * @self: A #GbTree
+ * @equal_func: A #GEqualFunc
+ * @key: the key for @equal_func
+ *
+ * Walks the entire tree looking for the first item that matches given
+ * @equal_func and @key.
+ *
+ * The first parameter to @equal_func will always be @key.
+ * The second parameter will be the nodes #GbTreeNode:item property.
+ *
+ * Returns: (nullable) (transfer none): A #GbTreeNode or %NULL.
+ */
+GbTreeNode *
+gb_tree_find_custom (GbTree     *self,
+                     GEqualFunc  equal_func,
+                     gpointer    key)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
+  NodeLookup lookup;
+
+  g_return_val_if_fail (GB_IS_TREE (self), NULL);
+  g_return_val_if_fail (equal_func != NULL, NULL);
+
+  lookup.key = key;
+  lookup.equal_func = equal_func;
+  lookup.result = NULL;
+
+  gtk_tree_model_foreach (GTK_TREE_MODEL (priv->store),
+                          gb_tree_find_item_foreach_cb,
+                          &lookup);
+
+  return lookup.result;
+}
+
+GbTreeNode *
+gb_tree_find_item (GbTree  *self,
+                   GObject *item)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
+  NodeLookup lookup;
+
+  g_return_val_if_fail (GB_IS_TREE (self), NULL);
+  g_return_val_if_fail (!item || G_IS_OBJECT (item), NULL);
+
+  lookup.key = item;
+  lookup.equal_func = g_direct_equal;
+  lookup.result = NULL;
+
+  gtk_tree_model_foreach (GTK_TREE_MODEL (priv->store),
+                          gb_tree_find_item_foreach_cb,
+                          &lookup);
+
+  return lookup.result;
+}
+
+/**
+ * gb_tree_append:
+ * @tree: (in): A #GbTree.
+ * @node: (in): A #GbTreeNode.
+ * @child: (in): A #GbTreeNode.
+ *
+ * Appends @child to @node within the #GbTree.
+ */
+void
+gb_tree_append (GbTree     *tree,
+                GbTreeNode *node,
+                GbTreeNode *child)
+{
+  g_return_if_fail (GB_IS_TREE (tree));
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+  g_return_if_fail (GB_IS_TREE_NODE (child));
+
+  gb_tree_add (tree, node, child, FALSE);
+}
+
+/**
+ * gb_tree_prepend:
+ * @tree: (in): A #GbTree.
+ * @node: (in): A #GbTreeNode.
+ * @child: (in): A #GbTreeNode.
+ *
+ * Appends @child to @node within the #GbTree.
+ */
+void
+gb_tree_prepend (GbTree     *tree,
+                 GbTreeNode *node,
+                 GbTreeNode *child)
+{
+  g_return_if_fail (GB_IS_TREE (tree));
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+  g_return_if_fail (GB_IS_TREE_NODE (child));
+
+  gb_tree_add (tree, node, child, TRUE);
+}
+
+void
+_gb_tree_rebuild_node (GbTree     *tree,
+                       GbTreeNode *node)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
+  GtkTreeModel *model;
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  GtkTreeIter child;
+  guint i;
+
+  g_return_if_fail (GB_IS_TREE (tree));
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+
+  model = GTK_TREE_MODEL (priv->store);
+  path = gb_tree_node_get_path (node);
+  gtk_tree_model_get_iter (model, &iter, path);
+
+  if (gtk_tree_model_iter_children (model, &child, &iter))
+    {
+      while (gtk_tree_store_remove (priv->store, &child))
+        { /* Do Nothing */ }
+    }
+
+  priv->building++;
+  for (i = 0; i < priv->builders->len; i++)
+    {
+      GbTreeBuilder *builder;
+
+      /*
+       * FIXME:
+       *
+       * Refactor this to do all builders when walking each node.
+       */
+
+      builder = g_ptr_array_index (priv->builders, i);
+      gb_tree_foreach (tree,
+                       &iter,
+                       gb_tree_add_builder_foreach_cb,
+                       builder);
+      priv->building--;
+    }
+
+  gtk_tree_path_free (path);
 }
