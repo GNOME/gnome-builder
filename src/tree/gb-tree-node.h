@@ -19,13 +19,9 @@
 #ifndef GB_TREE_NODE_H
 #define GB_TREE_NODE_H
 
-#include <gtk/gtk.h>
+#include "gb-tree-types.h"
 
 G_BEGIN_DECLS
-
-#define GB_TYPE_TREE_NODE (gb_tree_node_get_type())
-
-G_DECLARE_FINAL_TYPE (GbTreeNode, gb_tree_node, GB, TREE_NODE, GInitiallyUnowned)
 
 GbTreeNode    *gb_tree_node_new           (void);
 void           gb_tree_node_append        (GbTreeNode   *node,
@@ -55,6 +51,7 @@ void           gb_tree_node_show_popover  (GbTreeNode   *node,
 const gchar   *gb_tree_node_get_text      (GbTreeNode   *node);
 void           gb_tree_node_set_text      (GbTreeNode   *node,
                                            const gchar  *text);
+GbTree       *gb_tree_node_get_tree       (GbTreeNode   *node);
 
 G_END_DECLS
 

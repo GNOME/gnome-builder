@@ -22,12 +22,9 @@
 #include <glib-object.h>
 
 #include "gb-tree-node.h"
+#include "gb-tree-types.h"
 
 G_BEGIN_DECLS
-
-#define GB_TYPE_TREE_BUILDER            (gb_tree_builder_get_type())
-
-G_DECLARE_DERIVABLE_TYPE (GbTreeBuilder, gb_tree_builder, GB, TREE_BUILDER, GInitiallyUnowned)
 
 struct _GbTreeBuilderClass
 {

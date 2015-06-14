@@ -1,4 +1,4 @@
-/* gb-tree-private.h
+/* gb-tree-types.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,20 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GB_TREE_PRIVATE_H
-#define GB_TREE_PRIVATE_H
+#ifndef GB_TREE_TYPES_H
+#define GB_TREE_TYPES_H
 
-#include "gb-tree-types.h"
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-void         _gb_tree_rebuild_node  (GbTree     *tree,
-                                     GbTreeNode *node);
-void         _gb_tree_node_set_tree (GbTreeNode *node,
-                                     GbTree     *tree);
-GtkTreePath *_gb_tree_get_path      (GbTree     *tree,
-                                     GList      *list);
+#define GB_TYPE_TREE         (gb_tree_get_type())
+#define GB_TYPE_TREE_NODE    (gb_tree_node_get_type())
+#define GB_TYPE_TREE_BUILDER (gb_tree_builder_get_type())
+
+G_DECLARE_DERIVABLE_TYPE (GbTree,        gb_tree,         GB, TREE,         GtkTreeView)
+G_DECLARE_DERIVABLE_TYPE (GbTreeBuilder, gb_tree_builder, GB, TREE_BUILDER, GInitiallyUnowned)
+G_DECLARE_FINAL_TYPE     (GbTreeNode,    gb_tree_node,    GB, TREE_NODE,    GInitiallyUnowned)
 
 G_END_DECLS
 
-#endif /* GB_TREE_PRIVATE_H */
+#endif /* GB_TREE_TYPES_H */

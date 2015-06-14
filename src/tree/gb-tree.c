@@ -361,40 +361,6 @@ gb_tree_selection_changed (GbTree           *tree,
 }
 
 /**
- * gb_tree_get_selected:
- * @tree: (in): A #GbTree.
- *
- * Gets the currently selected node in the tree.
- *
- * Returns: (transfer none): A #GbTreeNode.
- */
-GbTreeNode *
-gb_tree_get_selected (GbTree *tree)
-{
-  GtkTreeSelection *selection;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  GbTreeNode *ret = NULL;
-
-  g_return_val_if_fail (GB_IS_TREE (tree), NULL);
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree));
-  if (gtk_tree_selection_get_selected (selection, &model, &iter))
-    {
-      gtk_tree_model_get (model, &iter, 0, &ret, -1);
-
-      /*
-       * We incurred an extra reference when extracting the value from
-       * the treemodel. Since it owns the reference, we can drop it here
-       * so that we don't transfer the ownership to the caller.
-       */
-      g_object_unref (ret);
-    }
-
-  return ret;
-}
-
-/**
  * gb_tree_get_iter_for_node:
  * @tree: (in): A #GbTree.
  * @parent: (in) (allow-none): A #GtkTreeIter of parent or %NULL.
@@ -445,48 +411,6 @@ gb_tree_get_iter_for_node (GbTree      *tree,
     }
 
   return FALSE;
-}
-
-/**
- * gb_tree_get_path:
- * @tree: (in): A #GbTree.
- * @list: (in) (element-type GbTreeNode): A list of #GbTreeNode.
- *
- * Retrieves the GtkTreePath for a list of GbTreeNode.
- *
- * Returns: (transfer full): A #GtkTreePath.
- */
-GtkTreePath *
-gb_tree_get_path (GbTree *tree,
-                  GList  *list)
-{
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  GtkTreeIter old_iter;
-  GtkTreeIter *parent = NULL;
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
-
-  g_return_val_if_fail (GB_IS_TREE (tree), NULL);
-
-  model = GTK_TREE_MODEL (priv->store);
-
-  if (!list || !gtk_tree_model_get_iter_first (model, &iter))
-    return NULL;
-
-  if (list->data == priv->root)
-    list = list->next;
-
-  while (gb_tree_get_iter_for_node (tree, parent, &iter, list->data))
-    {
-      old_iter = iter;
-      parent = &old_iter;
-      if (list->next)
-        list = list->next;
-      else
-        return gtk_tree_model_get_path (model, &iter);
-    }
-
-  return NULL;
 }
 
 static gboolean
@@ -976,20 +900,6 @@ gb_tree_button_press_event (GbTree         *tree,
   return FALSE;
 }
 
-void
-gb_tree_scroll_to_node (GbTree     *tree,
-                        GbTreeNode *node)
-{
-  GtkTreePath *path;
-
-  g_return_if_fail (GB_IS_TREE (tree));
-  g_return_if_fail (GB_IS_TREE_NODE (node));
-
-  path = gb_tree_node_get_path (node);
-  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (tree), path, NULL, FALSE, 0, 0);
-  gtk_tree_path_free (path);
-}
-
 static gboolean
 gb_tree_find_item_foreach_cb (GtkTreeModel *model,
                               GtkTreePath  *path,
@@ -1413,4 +1323,94 @@ gb_tree_set_show_icons (GbTree   *tree,
       g_object_notify_by_pspec (G_OBJECT (tree),
                                 gParamSpecs [PROP_SHOW_ICONS]);
     }
+}
+
+/**
+ * gb_tree_get_selected:
+ * @tree: (in): A #GbTree.
+ *
+ * Gets the currently selected node in the tree.
+ *
+ * Returns: (transfer none): A #GbTreeNode.
+ */
+GbTreeNode *
+gb_tree_get_selected (GbTree *tree)
+{
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GbTreeNode *ret = NULL;
+
+  g_return_val_if_fail (GB_IS_TREE (tree), NULL);
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree));
+  if (gtk_tree_selection_get_selected (selection, &model, &iter))
+    {
+      gtk_tree_model_get (model, &iter, 0, &ret, -1);
+
+      /*
+       * We incurred an extra reference when extracting the value from
+       * the treemodel. Since it owns the reference, we can drop it here
+       * so that we don't transfer the ownership to the caller.
+       */
+      g_object_unref (ret);
+    }
+
+  return ret;
+}
+
+void
+gb_tree_scroll_to_node (GbTree     *tree,
+                        GbTreeNode *node)
+{
+  GtkTreePath *path;
+
+  g_return_if_fail (GB_IS_TREE (tree));
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+
+  path = gb_tree_node_get_path (node);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (tree), path, NULL, FALSE, 0, 0);
+  gtk_tree_path_free (path);
+}
+
+/**
+ * gb_tree_get_path:
+ * @tree: (in): A #GbTree.
+ * @list: (in) (element-type GbTreeNode): A list of #GbTreeNode.
+ *
+ * Retrieves the GtkTreePath for a list of GbTreeNode.
+ *
+ * Returns: (transfer full): A #GtkTreePath.
+ */
+GtkTreePath *
+_gb_tree_get_path (GbTree *tree,
+                   GList  *list)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GtkTreeIter old_iter;
+  GtkTreeIter *parent = NULL;
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
+
+  g_return_val_if_fail (GB_IS_TREE (tree), NULL);
+
+  model = GTK_TREE_MODEL (priv->store);
+
+  if (!list || !gtk_tree_model_get_iter_first (model, &iter))
+    return NULL;
+
+  if (list->data == priv->root)
+    list = list->next;
+
+  while (gb_tree_get_iter_for_node (tree, parent, &iter, list->data))
+    {
+      old_iter = iter;
+      parent = &old_iter;
+      if (list->next)
+        list = list->next;
+      else
+        return gtk_tree_model_get_path (model, &iter);
+    }
+
+  return NULL;
 }

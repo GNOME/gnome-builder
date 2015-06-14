@@ -23,12 +23,9 @@
 
 #include "gb-tree-builder.h"
 #include "gb-tree-node.h"
+#include "gb-tree-types.h"
 
 G_BEGIN_DECLS
-
-#define GB_TYPE_TREE (gb_tree_get_type())
-
-G_DECLARE_DERIVABLE_TYPE (GbTree, gb_tree, GB, TREE, GtkTreeView)
 
 struct _GbTreeClass
 {
@@ -44,12 +41,15 @@ struct _GbTreeClass
 
 void          gb_tree_add_builder    (GbTree        *tree,
                                       GbTreeBuilder *builder);
-GtkTreePath  *gb_tree_get_path       (GbTree        *tree,
-                                      GList         *list);
-GbTreeNode   *gb_tree_get_selected   (GbTree        *tree);
-void          gb_tree_rebuild        (GbTree        *tree);
 void          gb_tree_remove_builder (GbTree        *tree,
                                       GbTreeBuilder *builder);
+GbTreeNode   *gb_tree_find_item      (GbTree        *tree,
+                                      GObject       *item);
+GbTreeNode   *gb_tree_find_custom    (GbTree        *tree,
+                                      GEqualFunc     equal_func,
+                                      gpointer       key);
+GbTreeNode   *gb_tree_get_selected   (GbTree        *tree);
+void          gb_tree_rebuild        (GbTree        *tree);
 void          gb_tree_append         (GbTree        *tree,
                                       GbTreeNode    *node,
                                       GbTreeNode    *child);
@@ -59,15 +59,9 @@ void          gb_tree_prepend        (GbTree        *tree,
 void          gb_tree_set_root       (GbTree        *tree,
                                       GbTreeNode    *node);
 GbTreeNode   *gb_tree_get_root       (GbTree        *tree);
-GbTree       *gb_tree_node_get_tree  (GbTreeNode    *node);
 void          gb_tree_set_show_icons (GbTree        *tree,
                                       gboolean       show_icons);
 gboolean      gb_tree_get_show_icons (GbTree        *tree);
-GbTreeNode   *gb_tree_find_item      (GbTree        *tree,
-                                      GObject       *item);
-GbTreeNode   *gb_tree_find_custom    (GbTree        *tree,
-                                      GEqualFunc     equal_func,
-                                      gpointer       key);
 void          gb_tree_scroll_to_node (GbTree        *tree,
                                       GbTreeNode    *node);
 void          gb_tree_expand_to_node (GbTree        *tree,

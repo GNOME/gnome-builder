@@ -207,7 +207,7 @@ gb_tree_node_get_path (GbTreeNode *node)
   g_assert (toplevel->tree);
 
   list = g_list_remove_link (list, list);
-  path = gb_tree_get_path (toplevel->tree, list);
+  path = _gb_tree_get_path (toplevel->tree, list);
 
   g_list_free (list);
 
