@@ -240,8 +240,8 @@ check_visible_foreach (GtkWidget *widget,
 {
   gboolean *at_least_one_visible = user_data;
 
-  if (gtk_widget_get_visible (widget))
-    *at_least_one_visible = TRUE;
+  if (*at_least_one_visible == FALSE)
+    *at_least_one_visible = gtk_widget_get_visible (widget);
 }
 
 static GMenu *
