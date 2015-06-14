@@ -31,40 +31,40 @@ struct _GbTreeClass
 {
 	GtkTreeViewClass parent_class;
 
-  void (*action)         (GbTree      *tree,
+  void (*action)         (GbTree      *self,
                           const gchar *action_group,
                           const gchar *action_name,
                           const gchar *param);
-  void (*populate_popup) (GbTree      *tree,
+  void (*populate_popup) (GbTree      *self,
                           GtkWidget   *widget);
 };
 
-void          gb_tree_add_builder    (GbTree        *tree,
+void          gb_tree_add_builder    (GbTree        *self,
                                       GbTreeBuilder *builder);
-void          gb_tree_remove_builder (GbTree        *tree,
+void          gb_tree_remove_builder (GbTree        *self,
                                       GbTreeBuilder *builder);
-GbTreeNode   *gb_tree_find_item      (GbTree        *tree,
+GbTreeNode   *gb_tree_find_item      (GbTree        *self,
                                       GObject       *item);
-GbTreeNode   *gb_tree_find_custom    (GbTree        *tree,
+GbTreeNode   *gb_tree_find_custom    (GbTree        *self,
                                       GEqualFunc     equal_func,
                                       gpointer       key);
-GbTreeNode   *gb_tree_get_selected   (GbTree        *tree);
-void          gb_tree_rebuild        (GbTree        *tree);
-void          gb_tree_append         (GbTree        *tree,
+GbTreeNode   *gb_tree_get_selected   (GbTree        *self);
+void          gb_tree_rebuild        (GbTree        *self);
+void          gb_tree_append         (GbTree        *self,
                                       GbTreeNode    *node,
                                       GbTreeNode    *child);
-void          gb_tree_prepend        (GbTree        *tree,
+void          gb_tree_prepend        (GbTree        *self,
                                       GbTreeNode    *node,
                                       GbTreeNode    *child);
-void          gb_tree_set_root       (GbTree        *tree,
+void          gb_tree_set_root       (GbTree        *self,
                                       GbTreeNode    *node);
-GbTreeNode   *gb_tree_get_root       (GbTree        *tree);
-void          gb_tree_set_show_icons (GbTree        *tree,
+GbTreeNode   *gb_tree_get_root       (GbTree        *self);
+void          gb_tree_set_show_icons (GbTree        *self,
                                       gboolean       show_icons);
-gboolean      gb_tree_get_show_icons (GbTree        *tree);
-void          gb_tree_scroll_to_node (GbTree        *tree,
+gboolean      gb_tree_get_show_icons (GbTree        *self);
+void          gb_tree_scroll_to_node (GbTree        *self,
                                       GbTreeNode    *node);
-void          gb_tree_expand_to_node (GbTree        *tree,
+void          gb_tree_expand_to_node (GbTree        *self,
                                       GbTreeNode    *node);
 
 G_END_DECLS
