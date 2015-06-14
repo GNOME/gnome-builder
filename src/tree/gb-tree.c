@@ -168,21 +168,18 @@ gb_tree_select (GbTree     *tree,
 static guint
 gb_tree_get_row_height (GbTree *tree)
 {
-  const guint extra_padding = 2;
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
+  guint extra_padding;
   gint pix_min_height;
   gint pix_nat_height;
   gint text_min_height;
   gint text_nat_height;
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
-
-  /*
-   * TODO:
-   *
-   * Determine where extra_padding comes from.
-   * Current thought is somewhere in styling.
-   */
 
   g_assert (GB_IS_TREE (tree));
+
+  gtk_widget_style_get (GTK_WIDGET (tree),
+                        "vertical-separator", &extra_padding,
+                        NULL);
 
   gtk_cell_renderer_get_preferred_height (priv->cell_pixbuf,
                                           GTK_WIDGET (tree),
