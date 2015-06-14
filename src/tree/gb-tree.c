@@ -70,44 +70,6 @@ static GtkBuildableIface *gb_tree_parent_buildable_iface;
 static GParamSpec *gParamSpecs [LAST_PROP];
 static guint gSignals [LAST_SIGNAL];
 
-gboolean
-gb_tree_get_show_icons (GbTree *tree)
-{
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
-
-  g_return_val_if_fail (GB_IS_TREE (tree), FALSE);
-
-  return priv->show_icons;
-}
-
-void
-gb_tree_set_show_icons (GbTree   *tree,
-                        gboolean  show_icons)
-{
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
-
-  g_return_if_fail (GB_IS_TREE (tree));
-
-  show_icons = !!show_icons;
-
-  if (show_icons != priv->show_icons)
-    {
-      priv->show_icons = show_icons;
-      g_object_set (priv->cell_pixbuf, "visible", show_icons, NULL);
-      /*
-       * WORKAROUND:
-       *
-       * Changing the visibility of the cell does not force a redraw of the
-       * tree view. So to force it, we will hide/show our entire pixbuf/text
-       * column.
-       */
-      gtk_tree_view_column_set_visible (priv->column, FALSE);
-      gtk_tree_view_column_set_visible (priv->column, TRUE);
-      g_object_notify_by_pspec (G_OBJECT (tree),
-                                gParamSpecs [PROP_SHOW_ICONS]);
-    }
-}
-
 /**
  * gb_tree_unselect:
  * @tree: (in): A #GbTree.
@@ -1412,5 +1374,43 @@ gb_tree_expand_to_node (GbTree     *tree,
     {
       gb_tree_node_expand (node, TRUE);
       gb_tree_node_collapse (node);
+    }
+}
+
+gboolean
+gb_tree_get_show_icons (GbTree *tree)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
+
+  g_return_val_if_fail (GB_IS_TREE (tree), FALSE);
+
+  return priv->show_icons;
+}
+
+void
+gb_tree_set_show_icons (GbTree   *tree,
+                        gboolean  show_icons)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
+
+  g_return_if_fail (GB_IS_TREE (tree));
+
+  show_icons = !!show_icons;
+
+  if (show_icons != priv->show_icons)
+    {
+      priv->show_icons = show_icons;
+      g_object_set (priv->cell_pixbuf, "visible", show_icons, NULL);
+      /*
+       * WORKAROUND:
+       *
+       * Changing the visibility of the cell does not force a redraw of the
+       * tree view. So to force it, we will hide/show our entire pixbuf/text
+       * column.
+       */
+      gtk_tree_view_column_set_visible (priv->column, FALSE);
+      gtk_tree_view_column_set_visible (priv->column, TRUE);
+      g_object_notify_by_pspec (G_OBJECT (tree),
+                                gParamSpecs [PROP_SHOW_ICONS]);
     }
 }
