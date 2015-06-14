@@ -34,6 +34,7 @@ struct _GbTreeNode
   GbTree            *tree;
   GQuark             icon_name;
   guint              use_markup : 1;
+  guint              needs_build : 1;
 };
 
 typedef struct
@@ -280,27 +281,27 @@ gb_tree_node_set_item (GbTreeNode *node,
     g_object_notify_by_pspec (G_OBJECT (node), gParamSpecs [PROP_ITEM]);
 }
 
-/**
- * gb_tree_node_set_parent:
- * @node: (in): A #GbTreeNode.
- * @parent: (in): A #GbTreeNode.
- *
- * Sets the parent for this node. This is a weak pointer to prevent
- * cyclic references.
- */
-static void
-gb_tree_node_set_parent (GbTreeNode *node,
-                         GbTreeNode *parent)
+void
+_gb_tree_node_set_parent (GbTreeNode *node,
+                          GbTreeNode *parent)
 {
   g_return_if_fail (GB_IS_TREE_NODE (node));
   g_return_if_fail (node->parent == NULL);
   g_return_if_fail (!parent || GB_IS_TREE_NODE (parent));
 
-  if (parent)
+  if (parent != node->parent)
     {
-      node->parent = parent;
-      g_object_add_weak_pointer (G_OBJECT (node->parent),
-                                 (gpointer *)&node->parent);
+      if (node->parent != NULL)
+        {
+          g_object_remove_weak_pointer (G_OBJECT (node->parent), (gpointer *)&node->parent);
+          node->parent = NULL;
+        }
+
+      if (parent != NULL)
+        {
+          node->parent = parent;
+          g_object_add_weak_pointer (G_OBJECT (node->parent), (gpointer *)&node->parent);
+        }
     }
 }
 
@@ -446,16 +447,18 @@ gb_tree_node_rebuild (GbTreeNode *self)
 gboolean
 gb_tree_node_get_expanded (GbTreeNode *self)
 {
-  GbTree *tree;
   GtkTreePath *path;
-  gboolean ret;
+  gboolean ret = TRUE;
 
   g_return_val_if_fail (GB_IS_TREE_NODE (self), FALSE);
 
-  tree = gb_tree_node_get_tree (self);
-  path = gb_tree_node_get_path (self);
-  ret = gtk_tree_view_row_expanded (GTK_TREE_VIEW (tree), path);
-  gtk_tree_path_free (path);
+  if ((self->tree != NULL) && (self->parent != NULL) && (self->parent->parent != NULL))
+    {
+      path = gb_tree_node_get_path (self);
+      g_assert (path != NULL);
+      ret = gtk_tree_view_row_expanded (GTK_TREE_VIEW (self->tree), path);
+      gtk_tree_path_free (path);
+    }
 
   return ret;
 }
@@ -560,10 +563,6 @@ gb_tree_node_set_property (GObject      *object,
       gb_tree_node_set_item (node, g_value_get_object (value));
       break;
 
-    case PROP_PARENT:
-      gb_tree_node_set_parent (node, g_value_get_object (value));
-      break;
-
     case PROP_TEXT:
       gb_tree_node_set_text (node, g_value_get_string (value));
       break;
@@ -626,7 +625,7 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
                          _("Parent"),
                          _("The parent node."),
                          GB_TYPE_TREE_NODE,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GbTreeNode:tree:
@@ -676,6 +675,7 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
 static void
 gb_tree_node_init (GbTreeNode *node)
 {
+  node->needs_build = TRUE;
 }
 
 static gboolean
@@ -788,4 +788,21 @@ gb_tree_node_show_popover (GbTreeNode *self,
     {
       gb_tree_node_show_popover_timeout_cb (popreq);
     }
+}
+
+gboolean
+_gb_tree_node_get_needs_build (GbTreeNode *self)
+{
+  g_assert (GB_IS_TREE_NODE (self));
+
+  return self->needs_build;
+}
+
+void
+_gb_tree_node_set_needs_build (GbTreeNode *self,
+                               gboolean    needs_build)
+{
+  g_assert (GB_IS_TREE_NODE (self));
+
+  self->needs_build = !!needs_build;
 }

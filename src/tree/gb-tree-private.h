@@ -30,7 +30,14 @@ GtkTreePath *_gb_tree_get_path                (GbTree        *tree,
 
 void         _gb_tree_node_set_tree           (GbTreeNode    *node,
                                                GbTree        *tree);
+void         _gb_tree_node_set_parent         (GbTreeNode    *node,
+                                               GbTreeNode    *parent);
+gboolean     _gb_tree_node_get_needs_build    (GbTreeNode    *node);
+void         _gb_tree_node_set_needs_build    (GbTreeNode    *node,
+                                               gboolean       needs_build);
 
+void         _gb_tree_builder_set_tree        (GbTreeBuilder *builder,
+                                               GbTree        *tree);
 void         _gb_tree_builder_added           (GbTreeBuilder *builder,
                                                GbTree        *tree);
 void         _gb_tree_builder_removed         (GbTreeBuilder *builder,

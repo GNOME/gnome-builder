@@ -126,16 +126,9 @@ _gb_tree_builder_removed (GbTreeBuilder *builder,
   g_signal_emit (builder, gSignals [REMOVED], 0, tree);
 }
 
-/**
- * gb_tree_builder_set_tree:
- * @builder: (in): A #GbTreeBuilder.
- * @tree: (in): A #GbTree.
- *
- * Sets the tree the builder is associated with.
- */
-static void
-gb_tree_builder_set_tree (GbTreeBuilder *builder,
-                          GbTree        *tree)
+void
+_gb_tree_builder_set_tree (GbTreeBuilder *builder,
+                           GbTree        *tree)
 {
 	GbTreeBuilderPrivate *priv = gb_tree_builder_get_instance_private (builder);
 
@@ -143,10 +136,21 @@ gb_tree_builder_set_tree (GbTreeBuilder *builder,
 	g_return_if_fail (priv->tree == NULL);
 	g_return_if_fail (GB_IS_TREE (tree));
 
-	if (tree)
+  if (priv->tree != tree)
     {
-      priv->tree = tree;
-      g_object_add_weak_pointer (G_OBJECT (priv->tree), (gpointer *)&priv->tree);
+      if (priv->tree != NULL)
+        {
+          g_object_remove_weak_pointer (G_OBJECT (priv->tree), (gpointer *)&priv->tree);
+          priv->tree = NULL;
+        }
+
+      if (tree != NULL)
+        {
+          priv->tree = tree;
+          g_object_add_weak_pointer (G_OBJECT (priv->tree), (gpointer *)&priv->tree);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (builder), gParamSpecs [PROP_TREE]);
     }
 }
 
@@ -204,39 +208,19 @@ gb_tree_builder_get_property (GObject    *object,
 }
 
 static void
-gb_tree_builder_set_property (GObject      *object,
-                              guint         prop_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
-{
-	GbTreeBuilder *builder = GB_TREE_BUILDER (object);
-
-	switch (prop_id)
-    {
-    case PROP_TREE:
-      gb_tree_builder_set_tree (builder, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 gb_tree_builder_class_init (GbTreeBuilderClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = gb_tree_builder_finalize;
 	object_class->get_property = gb_tree_builder_get_property;
-	object_class->set_property = gb_tree_builder_set_property;
 
 	gParamSpecs[PROP_TREE] =
 		g_param_spec_object("tree",
 		                    _("Tree"),
 		                    _("The GbTree the builder belongs to."),
 		                    GB_TYPE_TREE,
-		                    G_PARAM_READWRITE);
+		                    G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
