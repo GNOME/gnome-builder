@@ -532,17 +532,18 @@ gb_tree_add (GbTree     *tree,
 }
 
 static void
-gb_tree_row_activated (GtkTreeView *tree_view,
-                       GtkTreePath *path)
+gb_tree_row_activated (GtkTreeView       *tree_view,
+                       GtkTreePath       *path,
+                       GtkTreeViewColumn *column)
 {
+  GbTree *tree = (GbTree *)tree_view;
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
   GbTreeBuilder *builder;
   GtkTreeModel *model;
   GtkTreeIter iter;
   GbTreeNode *node = NULL;
   gboolean handled = FALSE;
-  GbTree *tree = (GbTree *) tree_view;
   gint i;
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
 
   g_return_if_fail (GB_IS_TREE (tree));
   g_return_if_fail (path != NULL);
@@ -571,10 +572,10 @@ gb_tree_row_activated (GtkTreeView *tree_view,
 }
 
 static gboolean
-gb_tree_button_press_event (GbTree         *tree,
-                            GdkEventButton *button,
-                            gpointer        user_data)
+gb_tree_button_press_event (GtkWidget      *widget,
+                            GdkEventButton *button)
 {
+  GbTree *tree = (GbTree *)widget;
   GtkAllocation alloc;
   GtkTreePath *tree_path = NULL;
   GtkTreeIter iter;
@@ -611,10 +612,11 @@ gb_tree_button_press_event (GbTree         *tree,
           g_object_unref (node);
           gtk_tree_path_free (tree_path);
         }
-      return TRUE;
+
+      return GDK_EVENT_STOP;
     }
 
-  return FALSE;
+  return GTK_WIDGET_CLASS (gb_tree_parent_class)->button_press_event (widget, button);
 }
 
 static gboolean
@@ -810,12 +812,16 @@ gb_tree_class_init (GbTreeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkTreeViewClass *tree_view_class = GTK_TREE_VIEW_CLASS (klass);
 
   object_class->finalize = gb_tree_finalize;
   object_class->get_property = gb_tree_get_property;
   object_class->set_property = gb_tree_set_property;
 
   widget_class->popup_menu = gb_tree_popup_menu;
+  widget_class->button_press_event = gb_tree_button_press_event;
+
+  tree_view_class->row_activated = gb_tree_row_activated;
 
   klass->action = gb_tree_real_action;
 
@@ -920,13 +926,6 @@ gb_tree_init (GbTree *tree)
                                        gb_tree_default_search_equal_func,
                                        NULL, NULL);
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (tree), 0);
-
-  g_signal_connect (tree, "row-activated",
-                    G_CALLBACK (gb_tree_row_activated),
-                    NULL);
-  g_signal_connect (tree, "button-press-event",
-                    G_CALLBACK (gb_tree_button_press_event),
-                    NULL);
 }
 
 void
