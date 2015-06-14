@@ -89,9 +89,9 @@ static void
 gb_tree_select (GbTree     *tree,
                 GbTreeNode *node)
 {
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
   GtkTreeSelection *selection;
   GtkTreePath *path;
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
 
   IDE_ENTRY;
 
@@ -197,9 +197,9 @@ static GMenu *
 gb_tree_create_menu (GbTree     *self,
                      GbTreeNode *node)
 {
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
   GMenu *menu;
   guint i;
-  GbTreePrivate *priv = gb_tree_get_instance_private (self);
 
   g_return_val_if_fail (GB_IS_TREE (self), NULL);
   g_return_val_if_fail (GB_IS_TREE_NODE (node), NULL);
@@ -299,13 +299,13 @@ static void
 gb_tree_selection_changed (GbTree           *tree,
                            GtkTreeSelection *selection)
 {
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
   GbTreeBuilder *builder;
   GtkTreeModel *model;
   GtkTreeIter iter;
   GbTreeNode *node;
   GbTreeNode *unselection;
   gint i;
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
 
   IDE_ENTRY;
 
@@ -347,10 +347,10 @@ gb_tree_get_iter_for_node (GbTree      *tree,
                            GtkTreeIter *iter,
                            GbTreeNode  *node)
 {
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
   GtkTreeModel *model;
   GbTreeNode *that = NULL;
   gboolean ret;
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
 
   g_return_val_if_fail (GB_IS_TREE (tree), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
@@ -387,8 +387,8 @@ gb_tree_add_builder_foreach_cb (GtkTreeModel *model,
                                 GtkTreeIter  *iter,
                                 gpointer      user_data)
 {
+  GbTreeBuilder *builder = user_data;
   GbTreeNode *node = NULL;
-  GbTreeBuilder *builder = (GbTreeBuilder *) user_data;
 
   IDE_ENTRY;
 
@@ -451,6 +451,11 @@ pixbuf_func (GtkCellLayout   *cell_layout,
   const gchar *icon_name;
   GbTreeNode *node;
 
+  g_assert (GTK_IS_CELL_LAYOUT (cell_layout));
+  g_assert (GTK_IS_CELL_RENDERER_PIXBUF (cell));
+  g_assert (GTK_IS_TREE_MODEL (tree_model));
+  g_assert (iter != NULL);
+
   gtk_tree_model_get (tree_model, iter, 0, &node, -1);
   icon_name = node ? gb_tree_node_get_icon_name (node) : NULL;
   g_object_set (cell, "icon-name", icon_name, NULL);
@@ -467,6 +472,11 @@ text_func (GtkCellLayout   *cell_layout,
   gboolean use_markup = FALSE;
   GbTreeNode *node = NULL;
   gchar *text = NULL;
+
+  g_assert (GTK_IS_CELL_LAYOUT (cell_layout));
+  g_assert (GTK_IS_CELL_RENDERER_TEXT (cell));
+  g_assert (GTK_IS_TREE_MODEL (tree_model));
+  g_assert (iter != NULL);
 
   gtk_tree_model_get (tree_model, iter, 0, &node, -1);
 
@@ -489,12 +499,12 @@ gb_tree_add (GbTree     *tree,
              GbTreeNode *child,
              gboolean    prepend)
 {
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
   GbTreeBuilder *builder;
   GtkTreePath *path;
   GtkTreeIter iter;
   GtkTreeIter that;
   gint i;
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
 
   g_return_if_fail (GB_IS_TREE (tree));
   g_return_if_fail (GB_IS_TREE_NODE (node));
@@ -576,17 +586,17 @@ gb_tree_button_press_event (GtkWidget      *widget,
                             GdkEventButton *button)
 {
   GbTree *tree = (GbTree *)widget;
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
   GtkAllocation alloc;
   GtkTreePath *tree_path = NULL;
   GtkTreeIter iter;
   GbTreeNode *node = NULL;
   gint cell_y;
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
 
-  g_return_val_if_fail (GB_IS_TREE (tree), FALSE);
+  g_assert (GB_IS_TREE (tree));
+  g_assert (button != NULL);
 
-  if ((button->type == GDK_BUTTON_PRESS) &&
-      (button->button == GDK_BUTTON_SECONDARY))
+  if ((button->type == GDK_BUTTON_PRESS) && (button->button == GDK_BUTTON_SECONDARY))
     {
       if (!gtk_widget_has_focus (GTK_WIDGET (tree)))
         gtk_widget_grab_focus (GTK_WIDGET (tree));
@@ -598,8 +608,11 @@ gb_tree_button_press_event (GtkWidget      *widget,
                                      NULL,
                                      NULL,
                                      &cell_y);
+
       if (!tree_path)
-        gb_tree_unselect (tree);
+        {
+          gb_tree_unselect (tree);
+        }
       else
         {
           gtk_widget_get_allocation (GTK_WIDGET (tree), &alloc);
@@ -881,10 +894,10 @@ gb_tree_class_init (GbTreeClass *klass)
 static void
 gb_tree_init (GbTree *tree)
 {
+  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
   GtkTreeSelection *selection;
   GtkCellRenderer *cell;
   GtkCellLayout *column;
-  GbTreePrivate *priv = gb_tree_get_instance_private (tree);
 
   priv->builders = g_ptr_array_new ();
   g_ptr_array_set_free_func (priv->builders, g_object_unref);
