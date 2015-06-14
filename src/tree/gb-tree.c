@@ -885,12 +885,6 @@ gb_tree_class_init (GbTreeClass *klass)
                   GTK_TYPE_WIDGET);
 }
 
-/**
- * gb_tree_init:
- * @tree: (in): A #GbTree.
- *
- * Initializes the newly created #GbTree instance.
- */
 static void
 gb_tree_init (GbTree *tree)
 {
