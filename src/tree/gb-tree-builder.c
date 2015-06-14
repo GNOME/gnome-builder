@@ -30,107 +30,100 @@ typedef struct
 
 G_DEFINE_TYPE_WITH_PRIVATE (GbTreeBuilder, gb_tree_builder, G_TYPE_INITIALLY_UNOWNED)
 
-enum
-{
+enum {
 	PROP_0,
 	PROP_TREE,
 	LAST_PROP
 };
 
-static GParamSpec *gParamSpecs[LAST_PROP];
+enum {
+  ADDED,
+  REMOVED,
+  BUILD_NODE,
+  NODE_ACTIVATED,
+  NODE_POPUP,
+  NODE_SELECTED,
+  NODE_UNSELECTED,
+  LAST_SIGNAL
+};
 
-/**
- * gb_tree_builder_node_activated:
- * @builder: (in): A #GbTreeBuilder.
- * @node: (in): A #GbTreeNode.
- *
- * Handle @node being activated. Builders may want to open a view
- * or perform an action on such an event.
- *
- * Returns: %TRUE if the node activation was handled.
- */
+static GParamSpec *gParamSpecs [LAST_PROP];
+static guint gSignals [LAST_SIGNAL];
+
 gboolean
-gb_tree_builder_node_activated (GbTreeBuilder *builder,
-                                GbTreeNode    *node)
+_gb_tree_builder_node_activated (GbTreeBuilder *builder,
+                                 GbTreeNode    *node)
 {
+  gboolean ret = FALSE;
+
 	g_return_val_if_fail (GB_IS_TREE_BUILDER(builder), FALSE);
 	g_return_val_if_fail (GB_IS_TREE_NODE(node), FALSE);
 
-	if (GB_TREE_BUILDER_GET_CLASS (builder)->node_activated)
-		return GB_TREE_BUILDER_GET_CLASS (builder)->node_activated(builder, node);
+  g_signal_emit (builder, gSignals [NODE_ACTIVATED], 0, node, &ret);
 
-	return FALSE;
+	return ret;
 }
 
 void
-gb_tree_builder_node_popup (GbTreeBuilder *builder,
-                            GbTreeNode    *node,
-                            GMenu         *menu)
+_gb_tree_builder_node_popup (GbTreeBuilder *builder,
+                             GbTreeNode    *node,
+                             GMenu         *menu)
 {
   g_return_if_fail (GB_IS_TREE_BUILDER (builder));
   g_return_if_fail (GB_IS_TREE_NODE (node));
   g_return_if_fail (G_IS_MENU (menu));
 
-  if (GB_TREE_BUILDER_GET_CLASS (builder)->node_popup)
-    GB_TREE_BUILDER_GET_CLASS (builder)->node_popup (builder, node, menu);
+  g_signal_emit (builder, gSignals [NODE_POPUP], 0, node, menu);
 }
 
-/**
- * gb_tree_builder_node_selected:
- * @builder: (in): A #GbTreeBuilder.
- * @node: (in): A #GbTreeNode.
- *
- * Update @node for being selected and update any actions or ui based
- * on @node being selected.
- */
 void
-gb_tree_builder_node_selected (GbTreeBuilder *builder,
-                               GbTreeNode    *node)
+_gb_tree_builder_node_selected (GbTreeBuilder *builder,
+                                GbTreeNode    *node)
 {
 	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
 	g_return_if_fail (GB_IS_TREE_NODE (node));
 
-	if (GB_TREE_BUILDER_GET_CLASS (builder)->node_selected)
-		GB_TREE_BUILDER_GET_CLASS (builder)->node_selected (builder, node);
+  g_signal_emit (builder, gSignals [NODE_SELECTED], 0, node);
 }
 
-/**
- * gb_tree_builder_node_unselected:
- * @builder: (in): A #GbTreeBuilder.
- * @node: (in): A #GbTreeNode.
- *
- * Update @node and any actions that may be related to @node to account
- * for it being unselected within the #GbTree.
- */
 void
-gb_tree_builder_node_unselected (GbTreeBuilder *builder,
-                                 GbTreeNode    *node)
+_gb_tree_builder_node_unselected (GbTreeBuilder *builder,
+                                  GbTreeNode    *node)
 {
 	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
 	g_return_if_fail (GB_IS_TREE_NODE (node));
 
-	if (GB_TREE_BUILDER_GET_CLASS (builder)->node_selected)
-		GB_TREE_BUILDER_GET_CLASS (builder)->node_unselected (builder, node);
+  g_signal_emit (builder, gSignals [NODE_UNSELECTED], 0, node);
 }
 
-/**
- * gb_tree_builder_build_node:
- * @builder: (in): A #GbTreeBuilder.
- * @node: (in): A #GbTreeNode.
- *
- * Build @node by setting any needed properties for the item or
- * updating it's appearance. Additional actions may be registered
- * based on @node's type if needed.
- */
 void
-gb_tree_builder_build_node (GbTreeBuilder *builder,
-                            GbTreeNode    *node)
+_gb_tree_builder_build_node (GbTreeBuilder *builder,
+                             GbTreeNode    *node)
 {
 	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
 	g_return_if_fail (GB_IS_TREE_NODE (node));
 
-	if (GB_TREE_BUILDER_GET_CLASS (builder)->build_node)
-		GB_TREE_BUILDER_GET_CLASS (builder)->build_node (builder, node);
+  g_signal_emit (builder, gSignals [BUILD_NODE], 0, node);
+}
+
+void
+_gb_tree_builder_added (GbTreeBuilder *builder,
+                        GbTree        *tree)
+{
+	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
+	g_return_if_fail (GB_IS_TREE (tree));
+
+  g_signal_emit (builder, gSignals [ADDED], 0, tree);
+}
+
+void
+_gb_tree_builder_removed (GbTreeBuilder *builder,
+                          GbTree        *tree)
+{
+	g_return_if_fail (GB_IS_TREE_BUILDER (builder));
+	g_return_if_fail (GB_IS_TREE (tree));
+
+  g_signal_emit (builder, gSignals [REMOVED], 0, tree);
 }
 
 /**
@@ -246,6 +239,77 @@ gb_tree_builder_class_init (GbTreeBuilderClass *klass)
 		                    G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+
+  gSignals [ADDED] =
+    g_signal_new ("added",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbTreeBuilderClass, added),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  GB_TYPE_TREE);
+
+  gSignals [BUILD_NODE] =
+    g_signal_new ("build-node",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbTreeBuilderClass, build_node),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  GB_TYPE_TREE_NODE);
+
+  gSignals [NODE_ACTIVATED] =
+    g_signal_new ("node-activated",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbTreeBuilderClass, node_activated),
+                  NULL, NULL, NULL,
+                  G_TYPE_BOOLEAN,
+                  1,
+                  GB_TYPE_TREE_NODE);
+
+  gSignals [NODE_POPUP] =
+    g_signal_new ("node-popup",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbTreeBuilderClass, node_popup),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  2,
+                  GB_TYPE_TREE_NODE,
+                  G_TYPE_MENU);
+
+  gSignals [NODE_SELECTED] =
+    g_signal_new ("node-selected",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbTreeBuilderClass, node_selected),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  GB_TYPE_TREE_NODE);
+
+  gSignals [NODE_UNSELECTED] =
+    g_signal_new ("node-unselected",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbTreeBuilderClass, node_unselected),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  GB_TYPE_TREE_NODE);
+
+  gSignals [REMOVED] =
+    g_signal_new ("removed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GbTreeBuilderClass, removed),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  GB_TYPE_TREE);
 }
 
 static void

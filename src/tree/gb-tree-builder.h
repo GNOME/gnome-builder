@@ -47,18 +47,7 @@ struct _GbTreeBuilderClass
                                GMenu         *menu);
 };
 
-GtkWidget *gb_tree_builder_get_tree        (GbTreeBuilder *builder);
-void       gb_tree_builder_build_node      (GbTreeBuilder *builder,
-                                            GbTreeNode    *node);
-gboolean   gb_tree_builder_node_activated  (GbTreeBuilder *builder,
-                                            GbTreeNode    *node);
-void       gb_tree_builder_node_popup      (GbTreeBuilder *builder,
-                                            GbTreeNode    *node,
-                                            GMenu         *menu);
-void       gb_tree_builder_node_selected   (GbTreeBuilder *builder,
-                                            GbTreeNode    *node);
-void       gb_tree_builder_node_unselected (GbTreeBuilder *builder,
-                                            GbTreeNode    *node);
+GtkWidget *gb_tree_builder_get_tree (GbTreeBuilder *builder);
 
 G_END_DECLS
 

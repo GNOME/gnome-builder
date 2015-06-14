@@ -23,12 +23,29 @@
 
 G_BEGIN_DECLS
 
-void         _gb_tree_rebuild_node  (GbTree     *tree,
-                                     GbTreeNode *node);
-void         _gb_tree_node_set_tree (GbTreeNode *node,
-                                     GbTree     *tree);
-GtkTreePath *_gb_tree_get_path      (GbTree     *tree,
-                                     GList      *list);
+void         _gb_tree_rebuild_node            (GbTree        *tree,
+                                               GbTreeNode    *node);
+GtkTreePath *_gb_tree_get_path                (GbTree        *tree,
+                                               GList         *list);
+
+void         _gb_tree_node_set_tree           (GbTreeNode    *node,
+                                               GbTree        *tree);
+
+void         _gb_tree_builder_added           (GbTreeBuilder *builder,
+                                               GbTree        *tree);
+void         _gb_tree_builder_removed         (GbTreeBuilder *builder,
+                                               GbTree        *tree);
+void         _gb_tree_builder_build_node      (GbTreeBuilder *builder,
+                                               GbTreeNode    *node);
+gboolean     _gb_tree_builder_node_activated  (GbTreeBuilder *builder,
+                                               GbTreeNode    *node);
+void         _gb_tree_builder_node_popup      (GbTreeBuilder *builder,
+                                               GbTreeNode    *node,
+                                               GMenu         *menu);
+void         _gb_tree_builder_node_selected   (GbTreeBuilder *builder,
+                                               GbTreeNode    *node);
+void         _gb_tree_builder_node_unselected (GbTreeBuilder *builder,
+                                               GbTreeNode    *node);
 
 G_END_DECLS
 

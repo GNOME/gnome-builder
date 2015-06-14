@@ -224,7 +224,7 @@ gb_tree_create_menu (GbTree     *self,
       GbTreeBuilder *builder;
 
       builder = g_ptr_array_index (priv->builders, i);
-      gb_tree_builder_node_popup (builder, node, menu);
+      _gb_tree_builder_node_popup (builder, node, menu);
     }
 
   return menu;
@@ -337,7 +337,7 @@ gb_tree_selection_changed (GbTree           *tree,
       for (i = 0; i < priv->builders->len; i++)
         {
           builder = g_ptr_array_index (priv->builders, i);
-          gb_tree_builder_node_unselected (builder, unselection);
+          _gb_tree_builder_node_unselected (builder, unselection);
         }
     }
 
@@ -349,7 +349,7 @@ gb_tree_selection_changed (GbTree           *tree,
           for (i = 0; i < priv->builders->len; i++)
             {
               builder = g_ptr_array_index (priv->builders, i);
-              gb_tree_builder_node_selected (builder, node);
+              _gb_tree_builder_node_selected (builder, node);
             }
           g_object_unref (node);
         }
@@ -429,7 +429,7 @@ gb_tree_add_builder_foreach_cb (GtkTreeModel *model,
   g_return_val_if_fail (iter != NULL, FALSE);
 
   gtk_tree_model_get (model, iter, 0, &node, -1);
-  gb_tree_builder_build_node (builder, node);
+  _gb_tree_builder_build_node (builder, node);
   g_clear_object (&node);
 
   IDE_RETURN (FALSE);
@@ -548,8 +548,7 @@ gb_tree_add_builder (GbTree        *tree,
       priv->building--;
     }
 
-  if (GB_TREE_BUILDER_GET_CLASS (builder)->added)
-    GB_TREE_BUILDER_GET_CLASS (builder)->added (builder, GTK_WIDGET (tree));
+  _gb_tree_builder_added (builder, tree);
 
   IDE_EXIT;
 }
@@ -566,16 +565,23 @@ gb_tree_remove_builder (GbTree        *tree,
                         GbTreeBuilder *builder)
 {
   GbTreePrivate *priv = gb_tree_get_instance_private (tree);
+  gsize i;
 
   IDE_ENTRY;
 
   g_return_if_fail (GB_IS_TREE (tree));
   g_return_if_fail (GB_IS_TREE_BUILDER (builder));
 
-  if (GB_TREE_BUILDER_GET_CLASS (builder)->removed)
-    GB_TREE_BUILDER_GET_CLASS (builder)->removed (builder, GTK_WIDGET (tree));
-
-  g_ptr_array_remove (priv->builders, builder);
+  for (i = 0; i < priv->builders->len; i++)
+    {
+      if (builder == g_ptr_array_index (priv->builders, i))
+        {
+          g_object_ref (builder);
+          g_ptr_array_remove_index (priv->builders, i);
+          _gb_tree_builder_removed (builder, tree);
+          g_object_unref (builder);
+        }
+    }
 
   IDE_EXIT;
 }
@@ -629,7 +635,7 @@ gb_tree_set_root (GbTree     *tree,
       for (i = 0; i < priv->builders->len; i++)
         {
           builder = g_ptr_array_index (priv->builders, i);
-          gb_tree_builder_build_node (builder, root);
+          _gb_tree_builder_build_node (builder, root);
         }
     }
 
@@ -762,7 +768,7 @@ gb_tree_add (GbTree     *tree,
       for (i = 0; i < priv->builders->len; i++)
         {
           builder = g_ptr_array_index (priv->builders, i);
-          gb_tree_builder_build_node (builder, child);
+          _gb_tree_builder_build_node (builder, child);
         }
     }
 }
@@ -838,7 +844,7 @@ gb_tree_row_activated (GtkTreeView *tree_view,
       for (i = 0; i < priv->builders->len; i++)
         {
           builder = g_ptr_array_index (priv->builders, i);
-          if ((handled = gb_tree_builder_node_activated (builder, node)))
+          if ((handled = _gb_tree_builder_node_activated (builder, node)))
             break;
         }
       g_clear_object (&node);
