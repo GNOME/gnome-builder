@@ -644,6 +644,7 @@ gb_tree_row_expanded (GtkTreeView *tree_view,
     {
       gb_tree_build_node (self, node);
       gb_tree_node_expand (node, FALSE);
+      gb_tree_node_select (node);
     }
 
   g_clear_object (&node);
