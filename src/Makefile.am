@@ -75,6 +75,8 @@ libgnome_builder_la_SOURCES = \
 	preferences/gb-preferences-window.h \
 	project-tree/gb-new-file-popover.c \
 	project-tree/gb-new-file-popover.h \
+	project-tree/gb-project-file.c \
+	project-tree/gb-project-file.h \
 	project-tree/gb-project-tree-actions.c \
 	project-tree/gb-project-tree-actions.h \
 	project-tree/gb-project-tree-builder.c \
