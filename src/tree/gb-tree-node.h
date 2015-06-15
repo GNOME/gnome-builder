@@ -26,6 +26,10 @@ G_BEGIN_DECLS
 GbTreeNode    *gb_tree_node_new           (void);
 void           gb_tree_node_append        (GbTreeNode   *node,
                                            GbTreeNode   *child);
+void           gb_tree_node_insert_sorted (GbTreeNode   *node,
+                                           GbTreeNode   *child,
+                                           GbTreeNodeCompareFunc compare_func,
+                                           gpointer      user_data);
 const gchar   *gb_tree_node_get_icon_name (GbTreeNode   *node);
 GObject       *gb_tree_node_get_item      (GbTreeNode   *node);
 GbTreeNode    *gb_tree_node_get_parent    (GbTreeNode   *node);

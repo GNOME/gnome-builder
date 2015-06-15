@@ -31,6 +31,10 @@ G_DECLARE_DERIVABLE_TYPE (GbTree,        gb_tree,         GB, TREE,         GtkT
 G_DECLARE_DERIVABLE_TYPE (GbTreeBuilder, gb_tree_builder, GB, TREE_BUILDER, GInitiallyUnowned)
 G_DECLARE_FINAL_TYPE     (GbTreeNode,    gb_tree_node,    GB, TREE_NODE,    GInitiallyUnowned)
 
+typedef gint (*GbTreeNodeCompareFunc) (GbTreeNode *a,
+                                       GbTreeNode *b,
+                                       gpointer    user_data);
+
 G_END_DECLS
 
 #endif /* GB_TREE_TYPES_H */

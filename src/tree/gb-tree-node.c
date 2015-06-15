@@ -117,6 +117,18 @@ _gb_tree_node_set_tree (GbTreeNode *node,
         }
     }
 }
+
+void
+gb_tree_node_insert_sorted (GbTreeNode            *node,
+                            GbTreeNode            *child,
+                            GbTreeNodeCompareFunc  compare_func,
+                            gpointer               user_data)
+{
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+  g_return_if_fail (GB_IS_TREE_NODE (child));
+  g_return_if_fail (compare_func != NULL);
+
+  _gb_tree_insert_sorted (node->tree, node, child, compare_func, user_data);
 }
 
 /**

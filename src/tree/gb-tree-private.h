@@ -33,6 +33,11 @@ void         _gb_tree_append                  (GbTree        *self,
 void         _gb_tree_prepend                 (GbTree        *self,
                                                GbTreeNode    *node,
                                                GbTreeNode    *child);
+void         _gb_tree_insert_sorted           (GbTree        *self,
+                                               GbTreeNode    *node,
+                                               GbTreeNode    *child,
+                                               GbTreeNodeCompareFunc compare_func,
+                                               gpointer       user_data);
 
 void         _gb_tree_node_set_tree           (GbTreeNode    *node,
                                                GbTree        *tree);
