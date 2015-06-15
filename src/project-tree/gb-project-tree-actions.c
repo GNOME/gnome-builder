@@ -24,6 +24,7 @@
 
 #include "gb-file-manager.h"
 #include "gb-new-file-popover.h"
+#include "gb-project-file.h"
 #include "gb-project-tree.h"
 #include "gb-project-tree-actions.h"
 #include "gb-project-tree-private.h"
@@ -57,8 +58,8 @@ project_file_is_directory (GObject *object)
 {
   g_assert (!object || G_IS_OBJECT (object));
 
-  return (IDE_IS_PROJECT_FILE (object) &&
-          ide_project_file_get_is_directory (IDE_PROJECT_FILE (object)));
+  return (GB_IS_PROJECT_FILE (object) &&
+          gb_project_file_get_is_directory (GB_PROJECT_FILE (object)));
 }
 
 static void
@@ -127,19 +128,19 @@ gb_project_tree_actions_open (GSimpleAction *action,
 
   item = gb_tree_node_get_item (selected);
 
-  if (IDE_IS_PROJECT_FILE (item))
+  if (GB_IS_PROJECT_FILE (item))
     {
       GFileInfo *file_info;
       GFile *file;
 
-      file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item));
+      file_info = gb_project_file_get_file_info (GB_PROJECT_FILE (item));
       if (!file_info)
         return;
 
       if (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY)
         return;
 
-      file = ide_project_file_get_file (IDE_PROJECT_FILE (item));
+      file = gb_project_file_get_file (GB_PROJECT_FILE (item));
       if (!file)
         return;
 
@@ -170,10 +171,10 @@ gb_project_tree_actions_open_with (GSimpleAction *action,
   if (!(workbench = gb_widget_get_workbench (GTK_WIDGET (self))) ||
       !(selected = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (selected)) ||
-      !IDE_IS_PROJECT_FILE (item) ||
+      !GB_IS_PROJECT_FILE (item) ||
       !(app_id = g_variant_get_string (variant, NULL)) ||
-      !(file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item))) ||
-      !(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))) ||
+      !(file_info = gb_project_file_get_file_info (GB_PROJECT_FILE (item))) ||
+      !(file = gb_project_file_get_file (GB_PROJECT_FILE (item))) ||
       !(app_info = g_desktop_app_info_new (app_id)))
     return;
 
@@ -201,10 +202,10 @@ gb_project_tree_actions_open_with_editor (GSimpleAction *action,
 
   if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (selected)) ||
-      !IDE_IS_PROJECT_FILE (item) ||
-      !(file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item))) ||
+      !GB_IS_PROJECT_FILE (item) ||
+      !(file_info = gb_project_file_get_file_info (GB_PROJECT_FILE (item))) ||
       (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY) ||
-      !(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))) ||
+      !(file = gb_project_file_get_file (GB_PROJECT_FILE (item))) ||
       !(workbench = gb_widget_get_workbench (GTK_WIDGET (self))))
     return;
 
@@ -225,22 +226,10 @@ gb_project_tree_actions_open_containing_folder (GSimpleAction *action,
 
   if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (selected)) ||
-      !(IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)))
+      !GB_IS_PROJECT_FILE (item))
     return;
 
-  if (IDE_IS_PROJECT_FILES (item))
-    {
-      IdeContext *context;
-      IdeVcs *vcs;
-
-      context = ide_object_get_context (IDE_OBJECT (item));
-      vcs = ide_context_get_vcs (context);
-      file = ide_vcs_get_working_directory (vcs);
-    }
-  else if (!(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))))
-    {
-      return;
-    }
+  file = gb_project_file_get_file (GB_PROJECT_FILE (item));
 
   gb_file_manager_show (file, NULL);
 }
@@ -303,24 +292,12 @@ gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
 
   if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (selected)) ||
-      !(IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)))
+      !GB_IS_PROJECT_FILE (item))
     return;
 
-  if (IDE_IS_PROJECT_FILES (item))
-    {
-      IdeContext *context;
-      IdeVcs *vcs;
+  file = gb_project_file_get_file (GB_PROJECT_FILE (item));
 
-      context = ide_object_get_context (IDE_OBJECT (item));
-      vcs = ide_context_get_vcs (context);
-      file = ide_vcs_get_working_directory (vcs);
-    }
-  else if (!(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))))
-    {
-      return;
-    }
-
-  if (g_file_query_file_type (file, G_FILE_QUERY_INFO_NONE, NULL) != G_FILE_TYPE_DIRECTORY)
+  if (!gb_project_file_get_is_directory (GB_PROJECT_FILE (item)))
     {
       g_autoptr(GFile) parent;
 
@@ -379,45 +356,12 @@ gb_project_tree_actions_show_icons (GSimpleAction *action,
   g_simple_action_set_state (action, variant);
 }
 
-static IdeProjectFile *
-create_file (IdeContext *context,
-             GFile      *file,
-             GFileType   file_type)
-{
-  g_autofree gchar *path = NULL;
-  g_autofree gchar *name = NULL;
-  g_autoptr(GFileInfo) file_info = NULL;
-  IdeVcs *vcs;
-  GFile *workdir;
-
-  g_assert (IDE_IS_CONTEXT (context));
-  g_assert (G_IS_FILE (file));
-  g_assert ((file_type == G_FILE_TYPE_DIRECTORY) || (file_type == G_FILE_TYPE_REGULAR));
-
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
-  path = g_file_get_relative_path (workdir, file);
-  name = g_file_get_basename (file);
-
-  file_info = g_file_info_new ();
-  g_file_info_set_file_type (file_info, file_type);
-  g_file_info_set_name (file_info, name);
-  g_file_info_set_display_name (file_info, name);
-
-  return g_object_new (IDE_TYPE_PROJECT_FILE,
-                       "context", context,
-                       "file", file,
-                       "file-info", file_info,
-                       "path", path,
-                       "parent", NULL,
-                       NULL);
-}
-
 static void
 gb_project_tree_actions__make_directory_cb (GObject      *object,
                                             GAsyncResult *result,
                                             gpointer      user_data)
 {
+#if 0
   GFile *file = (GFile *)object;
   g_autoptr(GbTreeNode) node = user_data;
   g_autoptr(GError) error = NULL;
@@ -461,6 +405,7 @@ gb_project_tree_actions__make_directory_cb (GObject      *object,
 
   if (created != NULL)
     gb_tree_node_select (created);
+#endif
 }
 
 static void
@@ -468,6 +413,7 @@ gb_project_tree_actions__create_cb (GObject      *object,
                                     GAsyncResult *result,
                                     gpointer      user_data)
 {
+#if 0
   GFile *file = (GFile *)object;
   g_autoptr(IdeProjectFile) project_file = NULL;
   g_autoptr(GbTreeNode) node = user_data;
@@ -513,6 +459,11 @@ gb_project_tree_actions__create_cb (GObject      *object,
 
   if (created != NULL)
     gb_tree_node_select (created);
+#endif
+
+  /*
+   * TODO: Invalidate parent.
+   */
 }
 
 static void
@@ -584,7 +535,7 @@ gb_project_tree_actions_new (GbProjectTree *self,
   GbTreeNode *selected;
   GObject *item;
   GtkPopover *popover;
-  IdeProjectFile *project_file;
+  GbProjectFile *project_file;
   GFile *file = NULL;
   gboolean is_dir = FALSE;
 
@@ -595,36 +546,19 @@ gb_project_tree_actions_new (GbProjectTree *self,
 again:
   if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (selected)) ||
-      !(IDE_IS_PROJECT_FILES (item) || IDE_IS_PROJECT_FILE (item)))
+      !GB_IS_PROJECT_FILE (item))
     return;
 
-  if (IDE_IS_PROJECT_FILE (item))
-    {
-      if (!(project_file = IDE_PROJECT_FILE (item)) ||
-          !(file = ide_project_file_get_file (project_file)))
-        return;
-      is_dir = project_file_is_directory (item);
-    }
-  else if (IDE_IS_PROJECT_FILES (item))
-    {
-      IdeContext *context;
-      IdeVcs *vcs;
+  if (!(project_file = GB_PROJECT_FILE (item)) ||
+      !(file = gb_project_file_get_file (project_file)))
+    return;
 
-      context = ide_object_get_context (IDE_OBJECT (item));
-      vcs = ide_context_get_vcs (context);
-      file = ide_vcs_get_working_directory (vcs);
-      is_dir = TRUE;
-    }
-  else
-    {
-      g_assert_not_reached ();
-      return;
-    }
+  is_dir = project_file_is_directory (item);
 
   g_assert (G_IS_FILE (file));
 
   /*
-   * If this item is an IdeProjectFile and not a directory, then we really
+   * If this item is an GbProjectFile and not a directory, then we really
    * want to create a sibling.
    */
   if (!is_dir)
@@ -686,26 +620,6 @@ gb_project_tree_actions_new_file (GSimpleAction *action,
   gb_project_tree_actions_new (self, G_FILE_TYPE_REGULAR);
 }
 
-static gint
-project_item_equal_func (GFile   *key,
-                         GObject *item)
-{
-  g_assert (G_IS_FILE (key));
-  g_assert (IDE_IS_PROJECT_ITEM (item));
-
-  if (IDE_IS_PROJECT_FILE (item))
-    {
-      GFile *file;
-
-      file = ide_project_file_get_file (IDE_PROJECT_FILE (item));
-      g_assert (G_IS_FILE (file));
-
-      return g_file_equal (key, file);
-    }
-
-  return FALSE;
-}
-
 static void
 gb_project_tree_actions__project_rename_file_cb (GObject      *object,
                                                  GAsyncResult *result,
@@ -715,9 +629,9 @@ gb_project_tree_actions__project_rename_file_cb (GObject      *object,
   g_autoptr(GbRenameFilePopover) popover = user_data;
   g_autoptr(GError) error = NULL;
   GbTreeNode *node;
+  GbTreeNode *parent;
   GFile *file;
   GbTree *tree;
-  gboolean expanded = FALSE;
 
   g_assert (IDE_IS_PROJECT (project));
   g_assert (GB_IS_RENAME_FILE_POPOVER (popover));
@@ -735,23 +649,15 @@ gb_project_tree_actions__project_rename_file_cb (GObject      *object,
   g_assert (G_IS_FILE (file));
   g_assert (GB_IS_TREE (tree));
 
-  if ((node = gb_tree_get_selected (tree)))
-    expanded = gb_tree_node_get_expanded (node);
+  node = gb_tree_get_selected (tree);
+  parent = gb_tree_node_get_parent (node);
 
-  gb_tree_rebuild (tree);
+  gb_tree_node_invalidate (parent);
+  gb_tree_node_expand (parent, TRUE);
 
-  node = gb_tree_find_custom (tree,
-                              (GEqualFunc)project_item_equal_func,
-                              file);
-
-  if (node != NULL)
-    {
-      gb_tree_node_expand (node, TRUE);
-      if (!expanded)
-        gb_tree_node_collapse (node);
-      gb_tree_node_select (node);
-      gb_tree_scroll_to_node (tree, node);
-    }
+  /*
+   * TODO: Reselect child node.
+   */
 
   gtk_widget_hide (GTK_WIDGET (popover));
   gtk_widget_destroy (GTK_WIDGET (popover));
@@ -776,7 +682,7 @@ gb_project_tree_actions__rename_file_cb (GbProjectTree       *self,
   context = gb_workbench_get_context (workbench);
   project = ide_context_get_project (context);
 
-  /* todo: set busin spinner in popover */
+  /* todo: set busy spinner in popover */
 
   g_object_set_data_full (G_OBJECT (popover),
                           "G_FILE",
@@ -805,9 +711,9 @@ gb_project_tree_actions_rename_file (GSimpleAction *action,
 
   if (!(selected = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (selected)) ||
-      !IDE_IS_PROJECT_FILE (item) ||
-      !(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))) ||
-      !(file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item))))
+      !GB_IS_PROJECT_FILE (item) ||
+      !(file = gb_project_file_get_file (GB_PROJECT_FILE (item))) ||
+      !(file_info = gb_project_file_get_file_info (GB_PROJECT_FILE (item))))
     return;
 
   is_dir = (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY);
@@ -923,7 +829,7 @@ gb_project_tree_actions_move_to_trash (GSimpleAction *action,
   if (!(node = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (node)) ||
       !IDE_IS_PROJECT_FILE (item) ||
-      !(file = ide_project_file_get_file (IDE_PROJECT_FILE (item))))
+      !(file = gb_project_file_get_file (GB_PROJECT_FILE (item))))
     return;
 
   /*
@@ -963,6 +869,16 @@ gb_project_tree_actions_move_to_trash (GSimpleAction *action,
                                 NULL,
                                 gb_project_tree_actions__trash_file_cb,
                                 g_object_ref (self));
+}
+
+static gboolean
+is_files_node (GbTreeNode *node)
+{
+  GObject *item = gb_tree_node_get_item (node);
+  GbTreeNode *parent = gb_tree_node_get_parent (node);
+  GObject *parent_item = gb_tree_node_get_item (parent);
+
+  return (GB_IS_PROJECT_FILE (item) && !GB_IS_PROJECT_FILE (parent_item));
 }
 
 static GActionEntry GbProjectTreeActions[] = {
@@ -1031,28 +947,28 @@ gb_project_tree_actions_update (GbProjectTree *self)
     item = gb_tree_node_get_item (selection);
 
   action_set (group, "new-file",
-              "enabled", (IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)),
+              "enabled", GB_IS_PROJECT_FILE (item),
               NULL);
   action_set (group, "new-directory",
-              "enabled", (IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)),
+              "enabled", GB_IS_PROJECT_FILE (item),
               NULL);
   action_set (group, "open",
-              "enabled", (IDE_IS_PROJECT_FILE (item) && !project_file_is_directory (item)),
+              "enabled", (GB_IS_PROJECT_FILE (item) && !project_file_is_directory (item)),
               NULL);
   action_set (group, "open-with-editor",
-              "enabled", (IDE_IS_PROJECT_FILE (item) && !project_file_is_directory (item)),
+              "enabled", (GB_IS_PROJECT_FILE (item) && !project_file_is_directory (item)),
               NULL);
   action_set (group, "open-containing-folder",
-              "enabled", (IDE_IS_PROJECT_FILE (item) || IDE_IS_PROJECT_FILES (item)),
+              "enabled", GB_IS_PROJECT_FILE (item),
               NULL);
   action_set (group, "open-in-terminal",
-              "enabled", IDE_IS_PROJECT_FILE (item),
+              "enabled", GB_IS_PROJECT_FILE (item),
               NULL);
   action_set (group, "rename-file",
-              "enabled", IDE_IS_PROJECT_FILE (item),
+              "enabled", (GB_IS_PROJECT_FILE (item) && !is_files_node (selection)),
               NULL);
   action_set (group, "move-to-trash",
-              "enabled", (IDE_IS_PROJECT_FILE (item) && !project_file_is_directory (item)),
+              "enabled", (GB_IS_PROJECT_FILE (item) && !is_files_node (selection)),
               NULL);
 
   IDE_EXIT;

@@ -71,37 +71,30 @@ void
 gb_project_tree_set_context (GbProjectTree *self,
                              IdeContext    *context)
 {
-  GbTreeNode *root;
-  IdeProject *project = NULL;
   GtkTreeModel *model;
+  GtkTreeIter iter;
+  GbTreeNode *root;
 
   g_return_if_fail (GB_IS_PROJECT_TREE (self));
   g_return_if_fail (!context || IDE_IS_CONTEXT (context));
 
-  if (context != NULL)
-    project = ide_context_get_project (context);
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (self));
 
-  root = gb_tree_get_root (GB_TREE (self));
-  gb_tree_node_set_item (root, G_OBJECT (project));
-
-  gb_tree_rebuild (GB_TREE (self));
+  root = gb_tree_node_new ();
+  gb_tree_node_set_item (root, G_OBJECT (context));
+  gb_tree_set_root (GB_TREE (self), root);
 
   /*
-   * If we only have one item at the root of the tree, expand it.
+   * If we only have one toplevel item (underneath root), expand it.
    */
-  if ((model = gtk_tree_view_get_model (GTK_TREE_VIEW (self))))
+  if ((gtk_tree_model_iter_n_children (model, NULL) == 1) &&
+      gtk_tree_model_get_iter_first (model, &iter))
     {
-      GtkTreeIter iter;
+      g_autoptr(GbTreeNode) node = NULL;
 
-      if ((gtk_tree_model_iter_n_children (model, NULL) == 1) &&
-          gtk_tree_model_get_iter_first (model, &iter))
-        {
-          g_autoptr(GbTreeNode) node = NULL;
-
-          gtk_tree_model_get (model, &iter, 0, &node, -1);
-          if (node != NULL)
-            gb_tree_node_expand (node, FALSE);
-        }
+      gtk_tree_model_get (model, &iter, 0, &node, -1);
+      if (node != NULL)
+        gb_tree_node_expand (node, FALSE);
     }
 }
 
@@ -136,8 +129,6 @@ static void
 gb_project_tree_init (GbProjectTree *self)
 {
   GbTreeBuilder *builder;
-
-  gb_tree_set_root (GB_TREE (self), gb_tree_node_new ());
 
   self->settings = g_settings_new ("org.gnome.builder.project-tree");
   g_settings_bind (self->settings, "show-icons", self, "show-icons",

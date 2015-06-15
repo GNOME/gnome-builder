@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 
 #include "gb-project-tree-builder.h"
+#include "gb-project-file.h"
 #include "gb-tree.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
@@ -40,154 +41,142 @@ gb_project_tree_builder_new (void)
   return g_object_new (GB_TYPE_PROJECT_TREE_BUILDER, NULL);
 }
 
-static const gchar *
-get_icon_name (GFileInfo *file_info)
-{
-  GFileType file_type;
-
-  g_return_val_if_fail (G_IS_FILE_INFO (file_info), NULL);
-
-  file_type = g_file_info_get_file_type (file_info);
-
-  if (file_type == G_FILE_TYPE_DIRECTORY)
-    return "folder-symbolic";
-
-  return "text-x-generic-symbolic";
-}
-
 static void
-build_project (GbProjectTreeBuilder *self,
+build_context (GbProjectTreeBuilder *self,
                GbTreeNode           *node)
 {
-  IdeProjectItem *root;
-  GSequenceIter *iter;
-  IdeProject *project;
-  GSequence *children;
+  g_autoptr(GbProjectFile) item = NULL;
+  g_autoptr(GFileInfo) file_info = NULL;
+  g_autofree gchar *name = NULL;
+  GbTreeNode *child;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
 
   g_return_if_fail (GB_IS_PROJECT_TREE_BUILDER (self));
   g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  project = IDE_PROJECT (gb_tree_node_get_item (node));
+  context = IDE_CONTEXT (gb_tree_node_get_item (node));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
 
-  ide_project_reader_lock (project);
+  file_info = g_file_info_new ();
 
-  root = ide_project_get_root (project);
-  children = ide_project_item_get_children (root);
+  g_file_info_set_file_type (file_info, G_FILE_TYPE_DIRECTORY);
 
-  if (children)
-    {
-      for (iter = g_sequence_get_begin_iter (children);
-           !g_sequence_iter_is_end (iter);
-           iter = g_sequence_iter_next (iter))
-        {
-          IdeProjectItem *item = g_sequence_get (iter);
+  name = g_file_get_basename (workdir);
+  g_file_info_set_name (file_info, name);
+  g_file_info_set_display_name (file_info, name);
 
-          if (IDE_IS_PROJECT_FILES (item))
-            {
-              GbTreeNode *child;
+  item = g_object_new (GB_TYPE_PROJECT_FILE,
+                       "file", workdir,
+                       "file-info", file_info,
+                       NULL);
 
-              child = g_object_new (GB_TYPE_TREE_NODE,
-                                    "icon-name", "folder-symbolic",
-                                    "item", item,
-                                    "text", _("Files"),
-                                    NULL);
-              gb_tree_node_append (node, child);
-              break;
-            }
-        }
-    }
+  child = g_object_new (GB_TYPE_TREE_NODE,
+                        "item", item,
+                        "text", _("Files"),
+                        "icon-name", "folder-symbolic",
+                        NULL);
+  gb_tree_node_append (node, child);
+}
 
-  ide_project_reader_unlock (project);
+static IdeVcs *
+get_vcs (GbTreeNode *node)
+{
+  GbTree *tree;
+  GbTreeNode *root;
+  IdeContext *context;
+
+  g_assert (GB_IS_TREE_NODE (node));
+
+  tree = gb_tree_node_get_tree (node);
+  root = gb_tree_get_root (tree);
+  context = IDE_CONTEXT (gb_tree_node_get_item (root));
+
+  return ide_context_get_vcs (context);
 }
 
 static gint
-sort_files (IdeProjectItem *item_a,
-            IdeProjectItem *item_b,
-            gpointer        directories_first)
+compare_nodes_func (GbTreeNode *a,
+                    GbTreeNode *b,
+                    gpointer    user_data)
 {
-  GFileInfo *file_info_a;
-  GFileInfo *file_info_b;
-  const gchar *display_name_a;
-  const gchar *display_name_b;
-  g_autofree gchar *casefold_a = NULL;
-  g_autofree gchar *casefold_b = NULL;
+  GbProjectFile *file_a = GB_PROJECT_FILE (gb_tree_node_get_item (a));
+  GbProjectFile *file_b = GB_PROJECT_FILE (gb_tree_node_get_item (b));
+  GbProjectTreeBuilder *self = user_data;
 
-  file_info_a = ide_project_file_get_file_info (IDE_PROJECT_FILE (item_a));
-  file_info_b = ide_project_file_get_file_info (IDE_PROJECT_FILE (item_b));
-
-  if (directories_first)
-    {
-      GFileType file_type_a;
-      GFileType file_type_b;
-
-      file_type_a = g_file_info_get_file_type (file_info_a);
-      file_type_b = g_file_info_get_file_type (file_info_b);
-
-      if (file_type_a != file_type_b &&
-          (file_type_a == G_FILE_TYPE_DIRECTORY ||
-           file_type_b == G_FILE_TYPE_DIRECTORY))
-        {
-          return file_type_a == G_FILE_TYPE_DIRECTORY ? -1 : +1;
-        }
-    }
-
-  display_name_a = g_file_info_get_display_name (file_info_a);
-  display_name_b = g_file_info_get_display_name (file_info_b);
-
-  casefold_a = g_utf8_collate_key_for_filename (display_name_a, -1);
-  casefold_b = g_utf8_collate_key_for_filename (display_name_b, -1);
-
-  return g_utf8_collate (casefold_a, casefold_b);
+  if (self->sort_directories_first)
+    return gb_project_file_compare_directories_first (file_a, file_b);
+  else
+    return gb_project_file_compare (file_a, file_b);
 }
 
 static void
-build_files (GbProjectTreeBuilder *self,
-             GbTreeNode           *node)
+build_file (GbProjectTreeBuilder *self,
+            GbTreeNode           *node)
 {
-  IdeProjectItem *files;
-  GSequenceIter *iter;
-  GSequence *children;
-  gboolean directories_first;
+  g_autoptr(GFileEnumerator) enumerator = NULL;
+  GbProjectFile *project_file;
+  gpointer file_info_ptr;
+  IdeVcs *vcs;
+  GFile *file;
 
   g_return_if_fail (GB_IS_PROJECT_TREE_BUILDER (self));
   g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  files = IDE_PROJECT_ITEM (gb_tree_node_get_item (node));
-  children = ide_project_item_get_children (files);
+  project_file = GB_PROJECT_FILE (gb_tree_node_get_item (node));
 
-  if (children)
+  vcs = get_vcs (node);
+
+  /*
+   * TODO: Make this all async.
+   */
+
+  if (!gb_project_file_get_is_directory (project_file))
+    return;
+
+  file = gb_project_file_get_file (project_file);
+
+  enumerator = g_file_enumerate_children (file,
+                                          G_FILE_ATTRIBUTE_STANDARD_NAME","
+                                          G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
+                                          G_FILE_ATTRIBUTE_STANDARD_TYPE,
+                                          G_FILE_QUERY_INFO_NONE,
+                                          NULL,
+                                          NULL);
+
+  if (enumerator == NULL)
+    return;
+
+  while ((file_info_ptr = g_file_enumerator_next_file (enumerator, NULL, NULL)))
     {
-      directories_first = g_settings_get_boolean (self->file_chooser_settings,
-                                                  "sort-directories-first");
-      g_sequence_sort (children,
-                       (GCompareDataFunc) sort_files,
-                       GINT_TO_POINTER (directories_first));
+      g_autoptr(GFileInfo) item_file_info = file_info_ptr;
+      g_autoptr(GFile) item_file = NULL;
+      g_autoptr(GbProjectFile) item = NULL;
+      GbTreeNode *child;
+      const gchar *name;
+      const gchar *display_name;
+      const gchar *icon_name;
 
-      for (iter = g_sequence_get_begin_iter (children);
-           !g_sequence_iter_is_end (iter);
-           iter = g_sequence_iter_next (iter))
-        {
-          IdeProjectItem *item = g_sequence_get (iter);
-          const gchar *display_name;
-          const gchar *icon_name;
-          GbTreeNode *child;
-          GFileInfo *file_info;
+      name = g_file_info_get_name (item_file_info);
+      item_file = g_file_get_child (file, name);
 
-          if (!IDE_IS_PROJECT_FILE (item))
-            continue;
+      if (ide_vcs_is_ignored (vcs, item_file, NULL))
+        continue;
 
-          file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item));
+      item = gb_project_file_new (item_file, item_file_info);
 
-          display_name = g_file_info_get_display_name (file_info);
-          icon_name = get_icon_name (file_info);
+      display_name = gb_project_file_get_display_name (item);
+      icon_name = gb_project_file_get_icon_name (item);
 
-          child = g_object_new (GB_TYPE_TREE_NODE,
-                                "text", display_name,
-                                "icon-name", icon_name,
-                                "item", item,
-                                NULL);
-          gb_tree_node_append (node, child);
-        }
+      child = g_object_new (GB_TYPE_TREE_NODE,
+                            "icon-name", icon_name,
+                            "text", display_name,
+                            "item", item,
+                            NULL);
+
+      gb_tree_node_insert_sorted (node, child, compare_nodes_func, self);
     }
 }
 
@@ -202,10 +191,10 @@ gb_project_tree_builder_build_node (GbTreeBuilder *builder,
 
   item = gb_tree_node_get_item (node);
 
-  if (IDE_IS_PROJECT (item))
-    build_project (self, node);
-  else if (IDE_IS_PROJECT_FILES (item) || IDE_IS_PROJECT_FILE (item))
-    build_files (self, node);
+  if (IDE_IS_CONTEXT (item))
+    build_context (self, node);
+  else if (GB_IS_PROJECT_FILE (item))
+    build_file (self, node);
 }
 
 static gchar *
@@ -221,8 +210,8 @@ get_content_type (GFile *file)
 }
 
 static void
-populate_mime_handlers (GMenu          *menu,
-                        IdeProjectFile *project_file)
+populate_mime_handlers (GMenu         *menu,
+                        GbProjectFile *project_file)
 {
   g_autofree gchar *content_type = NULL;
   GList *list;
@@ -230,11 +219,11 @@ populate_mime_handlers (GMenu          *menu,
   GFile *file;
 
   g_assert (G_IS_MENU (menu));
-  g_assert (IDE_IS_PROJECT_FILE (project_file));
+  g_assert (GB_IS_PROJECT_FILE (project_file));
 
   g_menu_remove_all (menu);
 
-  file = ide_project_file_get_file (project_file);
+  file = gb_project_file_get_file (project_file);
   if (file == NULL)
     return;
 
@@ -272,6 +261,9 @@ gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
   GtkApplication *app;
   GObject *item;
   GMenu *submenu;
+  IdeVcs *vcs;
+  GFile *workdir;
+  GFile *file;
 
   g_assert (GB_IS_PROJECT_TREE_BUILDER (builder));
   g_assert (GB_IS_TREE_NODE (node));
@@ -280,13 +272,18 @@ gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
   app = GTK_APPLICATION (g_application_get_default ());
   item = gb_tree_node_get_item (node);
 
-  if (IDE_IS_PROJECT_ITEM (item) || IDE_IS_PROJECT (item))
+  if (GB_IS_PROJECT_FILE (item))
     {
       submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-build");
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
     }
 
-  if (IDE_IS_PROJECT_FILE (item))
+  vcs = get_vcs (node);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  if (GB_IS_PROJECT_FILE (item) &&
+      (file = gb_project_file_get_file (GB_PROJECT_FILE (item))) &&
+      !g_file_equal (file, workdir))
     {
       submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-move-to-trash");
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
@@ -301,12 +298,12 @@ gb_project_tree_builder_node_popup (GbTreeBuilder *builder,
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
 
       submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-open-by-mime-section");
-      populate_mime_handlers (submenu, IDE_PROJECT_FILE (item));
+      populate_mime_handlers (submenu, GB_PROJECT_FILE (item));
 
       submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-new");
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
     }
-  else if (IDE_IS_PROJECT_FILES (item))
+  else if (GB_IS_PROJECT_FILE (item))
     {
       submenu = gtk_application_get_menu_by_id (app, "gb-project-tree-open-containing");
       g_menu_prepend_section (menu, NULL, G_MENU_MODEL (submenu));
@@ -329,21 +326,16 @@ gb_project_tree_builder_node_activated (GbTreeBuilder *builder,
 
   item = gb_tree_node_get_item (node);
 
-  if (IDE_IS_PROJECT_FILE (item))
+  if (GB_IS_PROJECT_FILE (item))
     {
       GbWorkbench *workbench;
-      GFileInfo *file_info;
       GbTree *tree;
       GFile *file;
 
-      file_info = ide_project_file_get_file_info (IDE_PROJECT_FILE (item));
-      if (!file_info)
+      if (gb_project_file_get_is_directory (GB_PROJECT_FILE (item)))
         goto failure;
 
-      if (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY)
-        goto failure;
-
-      file = ide_project_file_get_file (IDE_PROJECT_FILE (item));
+      file = gb_project_file_get_file (GB_PROJECT_FILE (item));
       if (!file)
         goto failure;
 

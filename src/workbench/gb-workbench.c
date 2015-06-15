@@ -31,6 +31,7 @@
 #include "gb-workbench-addin.h"
 #include "gb-workspace.h"
 #include "gb-workspace-pane.h"
+#include "gb-project-file.h"
 #include "gb-project-tree.h"
 #include "gb-view-grid.h"
 
@@ -996,7 +997,7 @@ find_files_node (GbTree     *tree,
 
   item = gb_tree_node_get_item (child);
 
-  return IDE_IS_PROJECT_FILES (item);
+  return GB_IS_PROJECT_FILE (item);
 }
 
 static gboolean
@@ -1014,11 +1015,11 @@ find_child_node (GbTree     *tree,
 
   item = gb_tree_node_get_item (child);
 
-  if (IDE_IS_PROJECT_FILE (item))
+  if (GB_IS_PROJECT_FILE (item))
     {
       const gchar *item_name;
 
-      item_name = ide_project_file_get_name (IDE_PROJECT_FILE (item));
+      item_name = gb_project_file_get_display_name (GB_PROJECT_FILE (item));
       return ide_str_equal0 (item_name, name);
     }
 
