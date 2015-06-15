@@ -231,6 +231,39 @@ gb_tree_node_get_path (GbTreeNode *node)
   return path;
 }
 
+gboolean
+gb_tree_node_get_iter (GbTreeNode  *self,
+                       GtkTreeIter *iter)
+{
+  GtkTreeModel *model;
+  GtkTreePath *path;
+  gboolean ret = FALSE;
+
+  g_return_val_if_fail (GB_IS_TREE_NODE (self), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  if (self->tree != NULL)
+    {
+      model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->tree));
+      path = gb_tree_node_get_path (self);
+      ret = gtk_tree_model_get_iter (model, iter, path);
+      gtk_tree_path_free (path);
+    }
+
+#if 0
+  if (ret)
+    {
+      GbTreeNode *other = NULL;
+
+      gtk_tree_model_get (model, iter, 0, &other, -1);
+      g_assert (other == self);
+      g_clear_object (&other);
+    }
+#endif
+
+  return ret;
+}
+
 /**
  * gb_tree_node_get_parent:
  * @node: (in): A #GbTreeNode.
