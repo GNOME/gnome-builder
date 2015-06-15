@@ -46,6 +46,7 @@ void         _gb_tree_node_set_parent         (GbTreeNode    *node,
 gboolean     _gb_tree_node_get_needs_build    (GbTreeNode    *node);
 void         _gb_tree_node_set_needs_build    (GbTreeNode    *node,
                                                gboolean       needs_build);
+void         _gb_tree_node_remove_dummy_child (GbTreeNode    *node);
 
 void         _gb_tree_builder_set_tree        (GbTreeBuilder *builder,
                                                GbTree        *tree);

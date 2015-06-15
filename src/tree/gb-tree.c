@@ -80,6 +80,7 @@ gb_tree_build_node (GbTree     *self,
   g_assert (GB_IS_TREE_NODE (node));
 
   _gb_tree_node_set_needs_build (node, FALSE);
+  _gb_tree_node_remove_dummy_child (node);
 
   for (i = 0; i < priv->builders->len; i++)
     {
@@ -361,48 +362,6 @@ gb_tree_selection_changed (GbTree           *self,
   IDE_EXIT;
 }
 
-#if 0
-static gboolean
-gb_tree_get_iter_for_node (GbTree      *self,
-                           GtkTreeIter *parent,
-                           GtkTreeIter *iter,
-                           GbTreeNode  *node)
-{
-  GbTreePrivate *priv = gb_tree_get_instance_private (self);
-  GtkTreeModel *model;
-  GbTreeNode *that = NULL;
-  gboolean ret;
-
-  g_return_val_if_fail (GB_IS_TREE (self), FALSE);
-  g_return_val_if_fail (iter != NULL, FALSE);
-  g_return_val_if_fail (GB_IS_TREE_NODE (node), FALSE);
-
-  model = GTK_TREE_MODEL (priv->store);
-
-  if (parent)
-    ret = gtk_tree_model_iter_children (model, iter, parent);
-  else
-    ret = gtk_tree_model_get_iter_first (model, iter);
-
-  if (ret)
-    {
-      do
-        {
-          gtk_tree_model_get (model, iter, 0, &that, -1);
-          if (that == node)
-            {
-              g_clear_object (&that);
-              return TRUE;
-            }
-          g_clear_object (&that);
-        }
-      while (gtk_tree_model_iter_next (model, iter));
-    }
-
-  return FALSE;
-}
-#endif
-
 static gboolean
 gb_tree_add_builder_foreach_cb (GtkTreeModel *model,
                                 GtkTreePath  *path,
@@ -556,7 +515,7 @@ gb_tree_add (GbTree     *self,
 
   gtk_tree_store_set (priv->store, &iter, 0, child, -1);
 
-  if (gb_tree_node_get_expanded (node))
+  if (node == priv->root)
     gb_tree_build_node (self, child);
 
   g_object_unref (child);
@@ -613,7 +572,7 @@ _gb_tree_insert_sorted (GbTree                *self,
   gtk_tree_store_set (priv->store, &children, 0, child, -1);
 
 inserted:
-  if (gb_tree_node_get_expanded (node))
+  if (node == priv->root)
     gb_tree_build_node (self, child);
 
   g_object_unref (child);
@@ -677,42 +636,14 @@ gb_tree_row_expanded (GtkTreeView *tree_view,
 
   gtk_tree_model_get (model, iter, 0, &node, -1);
 
-  if (_gb_tree_node_get_needs_build (node))
-    gb_tree_build_node (self, node);
-
   /*
-   * The following code looks like inefficient use of GtkTreeModel as we
-   * are not using iter_children() and iter_next(). However, this is required
-   * since the tree will likely have changes since our last iteration cycle.
-   * This is due to the builders adding children for the individual nodes.
-   * Therefore, we simply require that path is still valid (since builders
-   * cannot change anything but current/child nodes).
+   * If we are expanding a row that has a dummy child, we might need to
+   * build the node immediately, and re-expand it.
    */
-
-  if (gtk_tree_model_iter_has_child (model, iter))
+  if (_gb_tree_node_get_needs_build (node))
     {
-      GtkTreeIter child_iter;
-      guint n_children;
-      guint i;
-
-      n_children = gtk_tree_model_iter_n_children (model, iter);
-
-      for (i = 0; i < n_children; i++)
-        {
-          gtk_tree_model_get_iter (model, iter, path);
-
-          if (gtk_tree_model_iter_nth_child (model, &child_iter, iter, i))
-            {
-              GbTreeNode *child;
-
-              gtk_tree_model_get (model, &child_iter, 0, &child, -1);
-
-              if (_gb_tree_node_get_needs_build (child))
-                gb_tree_build_node (self, child);
-
-              g_clear_object (&child);
-            }
-        }
+      gb_tree_build_node (self, node);
+      gb_tree_node_expand (node, FALSE);
     }
 
   g_clear_object (&node);

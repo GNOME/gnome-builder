@@ -35,6 +35,8 @@ struct _GbTreeNode
   GQuark             icon_name;
   guint              use_markup : 1;
   guint              needs_build : 1;
+  guint              is_dummy : 1;
+  guint              children_possible : 1;
 };
 
 typedef struct
@@ -814,4 +816,83 @@ _gb_tree_node_set_needs_build (GbTreeNode *self,
   g_assert (GB_IS_TREE_NODE (self));
 
   self->needs_build = !!needs_build;
+
+  if (!needs_build)
+    self->is_dummy = FALSE;
+}
+
+void
+_gb_tree_node_add_dummy_child (GbTreeNode *self)
+{
+  GtkTreeModel *model;
+  GbTreeNode *dummy;
+  GtkTreeIter iter;
+  GtkTreeIter parent;
+
+  g_assert (GB_IS_TREE_NODE (self));
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->tree));
+
+  gb_tree_node_get_iter (self, &parent);
+
+  dummy = gb_tree_node_new ();
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter, &parent);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &iter,
+                      0, g_object_ref_sink (dummy),
+                      -1);
+  g_object_unref (dummy);
+}
+
+void
+_gb_tree_node_remove_dummy_child (GbTreeNode *self)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GtkTreeIter children;
+
+  g_assert (GB_IS_TREE_NODE (self));
+
+  if (self->parent == NULL)
+    return;
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->tree));
+
+  if (gb_tree_node_get_iter (self, &iter) &&
+      gtk_tree_model_iter_children (model, &children, &iter))
+    {
+      while (gtk_tree_store_remove (GTK_TREE_STORE (model), &children))
+        {
+        }
+    }
+}
+
+/**
+ * gb_tree_node_set_children_possible:
+ * @self: A #GbTreeNode.
+ * @children_possible: If the node has children.
+ *
+ * If the node has not yet been built, setting this to %TRUE will add a
+ * dummy child node. This dummy node will be removed when when the node
+ * is built by the registered #GbTreeBuilder instances.
+ */
+void
+gb_tree_node_set_children_possible (GbTreeNode *self,
+                                    gboolean    children_possible)
+{
+  g_return_if_fail (GB_IS_TREE_NODE (self));
+
+  children_possible = !!children_possible;
+
+  if (children_possible != self->children_possible)
+    {
+      self->children_possible = children_possible;
+
+      if (self->needs_build)
+        {
+          if (self->children_possible)
+            _gb_tree_node_add_dummy_child (self);
+          else
+            _gb_tree_node_remove_dummy_child (self);
+        }
+    }
 }
