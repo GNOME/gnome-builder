@@ -100,11 +100,23 @@ _gb_tree_node_set_tree (GbTreeNode *node,
                         GbTree     *tree)
 {
   g_return_if_fail (GB_IS_TREE_NODE (node));
-  g_return_if_fail (GB_IS_TREE (tree));
-  g_return_if_fail ((node->tree == NULL) ||
-                    (node->tree == tree));
+  g_return_if_fail (!tree || GB_IS_TREE (tree));
 
-  node->tree = tree;
+  if (node->tree != tree)
+    {
+      if (node->tree != NULL)
+        {
+          g_object_remove_weak_pointer (G_OBJECT (node->tree), (gpointer *)&node->tree);
+          node->tree = NULL;
+        }
+
+      if (tree != NULL)
+        {
+          node->tree = tree;
+          g_object_add_weak_pointer (G_OBJECT (node->tree), (gpointer *)&node->tree);
+        }
+    }
+}
 }
 
 /**
