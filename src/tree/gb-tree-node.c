@@ -199,6 +199,9 @@ gb_tree_node_get_path (GbTreeNode *node)
 
   g_return_val_if_fail (GB_IS_TREE_NODE (node), NULL);
 
+  if ((node->parent == NULL) || (node->tree == NULL))
+    return NULL;
+
   do
     list = g_list_prepend (list, node);
   while ((node = node->parent));
