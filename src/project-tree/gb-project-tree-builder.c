@@ -177,6 +177,9 @@ build_file (GbProjectTreeBuilder *self,
                             NULL);
 
       gb_tree_node_insert_sorted (node, child, compare_nodes_func, self);
+
+      if (g_file_info_get_file_type (item_file_info) == G_FILE_TYPE_DIRECTORY)
+        gb_tree_node_set_children_possible (child, TRUE);
     }
 }
 
