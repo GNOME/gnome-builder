@@ -129,14 +129,9 @@ void
 gb_tree_node_append (GbTreeNode *node,
                      GbTreeNode *child)
 {
-  GbTree *tree = NULL;
-
   g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  g_object_get (node, "tree", &tree, NULL);
-  g_assert (tree);
-  gb_tree_append (tree, node, child);
-  g_clear_object (&tree);
+  _gb_tree_append (node->tree, node, child);
 }
 
 /**
@@ -149,13 +144,9 @@ void
 gb_tree_node_prepend (GbTreeNode *node,
                       GbTreeNode *child)
 {
-  GbTree *tree = NULL;
-
   g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  g_object_get (node, "tree", &tree, NULL);
-  gb_tree_prepend (tree, node, child);
-  g_clear_object (&tree);
+  _gb_tree_prepend (node->tree, node, child);
 }
 
 /**

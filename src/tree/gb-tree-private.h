@@ -27,6 +27,12 @@ void         _gb_tree_invalidate              (GbTree        *tree,
                                                GbTreeNode    *node);
 GtkTreePath *_gb_tree_get_path                (GbTree        *tree,
                                                GList         *list);
+void         _gb_tree_append                  (GbTree        *self,
+                                               GbTreeNode    *node,
+                                               GbTreeNode    *child);
+void         _gb_tree_prepend                 (GbTree        *self,
+                                               GbTreeNode    *node,
+                                               GbTreeNode    *child);
 
 void         _gb_tree_node_set_tree           (GbTreeNode    *node,
                                                GbTree        *tree);

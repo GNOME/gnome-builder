@@ -1367,18 +1367,10 @@ gb_tree_find_item (GbTree  *self,
   return lookup.result;
 }
 
-/**
- * gb_tree_append:
- * @tree: (in): A #GbTree.
- * @node: (in): A #GbTreeNode.
- * @child: (in): A #GbTreeNode.
- *
- * Appends @child to @node within the #GbTree.
- */
 void
-gb_tree_append (GbTree     *self,
-                GbTreeNode *node,
-                GbTreeNode *child)
+_gb_tree_append (GbTree     *self,
+                 GbTreeNode *node,
+                 GbTreeNode *child)
 {
   g_return_if_fail (GB_IS_TREE (self));
   g_return_if_fail (GB_IS_TREE_NODE (node));
@@ -1387,18 +1379,10 @@ gb_tree_append (GbTree     *self,
   gb_tree_add (self, node, child, FALSE);
 }
 
-/**
- * gb_tree_prepend:
- * @tree: (in): A #GbTree.
- * @node: (in): A #GbTreeNode.
- * @child: (in): A #GbTreeNode.
- *
- * Appends @child to @node within the #GbTree.
- */
 void
-gb_tree_prepend (GbTree     *self,
-                 GbTreeNode *node,
-                 GbTreeNode *child)
+_gb_tree_prepend (GbTree     *self,
+                  GbTreeNode *node,
+                  GbTreeNode *child)
 {
   g_return_if_fail (GB_IS_TREE (self));
   g_return_if_fail (GB_IS_TREE_NODE (node));

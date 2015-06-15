@@ -63,12 +63,6 @@ GbTreeNode   *gb_tree_find_custom    (GbTree        *self,
                                       gpointer       key);
 GbTreeNode   *gb_tree_get_selected   (GbTree        *self);
 void          gb_tree_rebuild        (GbTree        *self);
-void          gb_tree_append         (GbTree        *self,
-                                      GbTreeNode    *node,
-                                      GbTreeNode    *child);
-void          gb_tree_prepend        (GbTree        *self,
-                                      GbTreeNode    *node,
-                                      GbTreeNode    *child);
 void          gb_tree_set_root       (GbTree        *self,
                                       GbTreeNode    *node);
 GbTreeNode   *gb_tree_get_root       (GbTree        *self);
