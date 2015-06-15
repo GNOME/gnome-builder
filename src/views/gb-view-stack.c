@@ -392,7 +392,7 @@ gb_view_stack__views_listbox_row_activated_cb (GbViewStack   *self,
 
   if (GB_IS_VIEW (view))
     {
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->views_button), FALSE);
+      gtk_widget_hide (GTK_WIDGET (self->views_popover));
       gb_view_stack_set_active_view (self, GTK_WIDGET (view));
       gtk_widget_grab_focus (GTK_WIDGET (view));
     }
@@ -535,6 +535,7 @@ gb_view_stack_class_init (GbViewStackClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, title_label);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, views_button);
   GB_WIDGET_CLASS_BIND (klass, GbViewStack, views_listbox);
+  GB_WIDGET_CLASS_BIND (klass, GbViewStack, views_popover);
 }
 
 static void

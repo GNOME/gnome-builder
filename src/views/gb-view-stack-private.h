@@ -49,6 +49,7 @@ struct _GbViewStack
   GtkLabel           *title_label;
   GtkListBox         *views_button;
   GtkListBox         *views_listbox;
+  GtkPopover         *views_popover;
 
   guint               destroyed : 1;
   guint               focused : 1;
