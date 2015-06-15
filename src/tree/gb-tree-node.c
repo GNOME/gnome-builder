@@ -188,7 +188,7 @@ gb_tree_node_remove (GbTreeNode *node,
  *
  * Gets a #GtkTreePath for @node.
  *
- * Returns: (transfer full): A #GtkTreePath if successful; otherwise %NULL.
+ * Returns: (nullable) (transfer full): A #GtkTreePath if successful; otherwise %NULL.
  */
 GtkTreePath *
 gb_tree_node_get_path (GbTreeNode *node)
@@ -331,7 +331,7 @@ gb_tree_node_set_text (GbTreeNode  *node,
 {
   g_return_if_fail (GB_IS_TREE_NODE (node));
 
-  if (text != node->text)
+  if (g_strcmp0 (text, node->text) != 0)
     {
       g_free (node->text);
       node->text = g_strdup (text);
@@ -339,13 +339,6 @@ gb_tree_node_set_text (GbTreeNode  *node,
     }
 }
 
-/**
- * gb_tree_node_set_use_markup:
- * @node: (in): A #GbTreeNode.
- * @use_markup: (in): If we should use markup.
- *
- * Sets if the text property should be interprited as GLib markup.
- */
 static void
 gb_tree_node_set_use_markup (GbTreeNode *node,
                              gboolean    use_markup)
@@ -465,13 +458,6 @@ gb_tree_node_get_expanded (GbTreeNode *self)
   return ret;
 }
 
-/**
- * gb_tree_node_finalize:
- * @object: (in): A #GbTreeNode.
- *
- * Finalizer for a #GbTreeNode instance.  Frees any resources held by
- * the instance.
- */
 static void
 gb_tree_node_finalize (GObject *object)
 {
@@ -479,6 +465,12 @@ gb_tree_node_finalize (GObject *object)
 
   g_clear_object (&self->item);
   g_clear_pointer (&self->text, g_free);
+
+  if (self->tree)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (self->tree), (gpointer *)&self->tree);
+      self->tree = NULL;
+    }
 
   if (self->parent)
     {
@@ -490,15 +482,6 @@ gb_tree_node_finalize (GObject *object)
   G_OBJECT_CLASS (gb_tree_node_parent_class)->finalize (object);
 }
 
-/**
- * gb_tree_node_get_property:
- * @object: (in): A #GObject.
- * @prop_id: (in): The property identifier.
- * @value: (out): The given property.
- * @pspec: (in): A #ParamSpec.
- *
- * Get a given #GObject property.
- */
 static void
 gb_tree_node_get_property (GObject    *object,
                            guint       prop_id,
@@ -538,15 +521,6 @@ gb_tree_node_get_property (GObject    *object,
     }
 }
 
-/**
- * gb_tree_node_set_property:
- * @object: (in): A #GObject.
- * @prop_id: (in): The property identifier.
- * @value: (in): The given property.
- * @pspec: (in): A #ParamSpec.
- *
- * Set a given #GObject property.
- */
 static void
 gb_tree_node_set_property (GObject      *object,
                            guint         prop_id,
@@ -578,12 +552,6 @@ gb_tree_node_set_property (GObject      *object,
     }
 }
 
-/**
- * gb_tree_node_class_init:
- * @klass: (in): A #GbTreeNodeClass.
- *
- * Initializes the #GbTreeNodeClass and prepares the vtable.
- */
 static void
 gb_tree_node_class_init (GbTreeNodeClass *klass)
 {
@@ -668,12 +636,6 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
-/**
- * gb_tree_node_init:
- * @node: (in): A #GbTreeNode.
- *
- * Initializes the newly created #GbTreeNode instance.
- */
 static void
 gb_tree_node_init (GbTreeNode *node)
 {
