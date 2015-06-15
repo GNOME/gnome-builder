@@ -361,6 +361,7 @@ gb_tree_selection_changed (GbTree           *self,
   IDE_EXIT;
 }
 
+#if 0
 static gboolean
 gb_tree_get_iter_for_node (GbTree      *self,
                            GtkTreeIter *parent,
@@ -400,6 +401,7 @@ gb_tree_get_iter_for_node (GbTree      *self,
 
   return FALSE;
 }
+#endif
 
 static gboolean
 gb_tree_add_builder_foreach_cb (GtkTreeModel *model,
@@ -533,6 +535,8 @@ gb_tree_add (GbTree     *self,
   _gb_tree_node_set_tree (child, self);
   _gb_tree_node_set_parent (child, node);
 
+  g_object_ref_sink (child);
+
   if (node == priv->root)
     {
       parentptr = NULL;
@@ -554,6 +558,8 @@ gb_tree_add (GbTree     *self,
 
   if (gb_tree_node_get_expanded (node))
     gb_tree_build_node (self, child);
+
+  g_object_unref (child);
 }
 
 void
@@ -565,9 +571,9 @@ _gb_tree_insert_sorted (GbTree                *self,
 {
   GbTreePrivate *priv = gb_tree_get_instance_private (self);
   GtkTreeModel *model;
-  GtkTreePath *path;
-  GtkTreeIter iter;
-  GtkTreeIter move_iter;
+  GtkTreeIter *parent = NULL;
+  GtkTreeIter node_iter;
+  GtkTreeIter children;
 
   g_return_if_fail (GB_IS_TREE (self));
   g_return_if_fail (GB_IS_TREE_NODE (node));
@@ -576,31 +582,41 @@ _gb_tree_insert_sorted (GbTree                *self,
 
   model = GTK_TREE_MODEL (priv->store);
 
-  gb_tree_add (self, node, child, TRUE);
+  _gb_tree_node_set_tree (child, self);
+  _gb_tree_node_set_parent (child, node);
 
-  path = gb_tree_node_get_path (child);
-  gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_path_free (path);
+  g_object_ref_sink (child);
 
-  move_iter = iter;
+  if (gb_tree_node_get_iter (node, &node_iter))
+    parent = &node_iter;
 
-  while (gtk_tree_model_iter_next (model, &move_iter))
+  if (gtk_tree_model_iter_children (model, &children, parent))
     {
-      GbTreeNode *sibling = NULL;
-
-      gtk_tree_model_get (model, &move_iter, 0, &sibling, -1);
-
-      if (compare_func (child, sibling, user_data) <= 0)
+      do
         {
-          g_clear_object (&sibling);
-          return;
+          g_autoptr(GbTreeNode) sibling = NULL;
+          GtkTreeIter that;
+
+          gtk_tree_model_get (model, &children, 0, &sibling, -1);
+
+          if (compare_func (sibling, child, user_data) > 0)
+            {
+              gtk_tree_store_insert_before (priv->store, &that, parent, &children);
+              gtk_tree_store_set (priv->store, &that, 0, child, -1);
+              goto inserted;
+            }
         }
-
-      gtk_tree_store_move_after (priv->store, &iter, &move_iter);
-      move_iter = iter;
-
-      g_clear_object (&sibling);
+      while (gtk_tree_model_iter_next (model, &children));
     }
+
+  gtk_tree_store_append (priv->store, &children, parent);
+  gtk_tree_store_set (priv->store, &children, 0, child, -1);
+
+inserted:
+  if (gb_tree_node_get_expanded (node))
+    gb_tree_build_node (self, child);
+
+  g_object_unref (child);
 }
 
 static void
@@ -1332,7 +1348,7 @@ gb_tree_set_root (GbTree     *self,
 
       if (root != NULL)
         {
-          priv->root = g_object_ref (root);
+          priv->root = g_object_ref_sink (root);
           _gb_tree_node_set_parent (priv->root, NULL);
           _gb_tree_node_set_tree (priv->root, self);
           gb_tree_build_node (self, priv->root);
