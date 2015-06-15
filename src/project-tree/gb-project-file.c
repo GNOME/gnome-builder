@@ -68,11 +68,15 @@ gb_project_file_compare_directories_first (GbProjectFile *a,
 {
   GFileType file_type_a = g_file_info_get_file_type (a->file_info);
   GFileType file_type_b = g_file_info_get_file_type (b->file_info);
+  gint dir_a = (file_type_a == G_FILE_TYPE_DIRECTORY);
+  gint dir_b = (file_type_b == G_FILE_TYPE_DIRECTORY);
+  gint ret;
 
-  if (file_type_a != file_type_b)
-    return (file_type_a == G_FILE_TYPE_DIRECTORY) ? -1 : 1;
+  ret = dir_b - dir_a;
+  if (ret == 0)
+    ret = gb_project_file_compare (a, b);
 
-  return gb_project_file_compare (a, b);
+  return ret;
 }
 
 
