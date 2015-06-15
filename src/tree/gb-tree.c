@@ -1171,46 +1171,54 @@ gb_tree_scroll_to_node (GbTree     *self,
   gtk_tree_path_free (path);
 }
 
-/**
- * gb_tree_get_path:
- * @tree: (in): A #GbTree.
- * @list: (in) (element-type GbTreeNode): A list of #GbTreeNode.
- *
- * Retrieves the GtkTreePath for a list of GbTreeNode.
- *
- * Returns: (transfer full): A #GtkTreePath.
- */
 GtkTreePath *
 _gb_tree_get_path (GbTree *self,
                    GList  *list)
 {
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
   GtkTreeModel *model;
   GtkTreeIter iter;
-  GtkTreeIter old_iter;
-  GtkTreeIter *parent = NULL;
-  GbTreePrivate *priv = gb_tree_get_instance_private (self);
+  GtkTreeIter *iter_ptr;
+  GList *list_iter;
 
-  g_return_val_if_fail (GB_IS_TREE (self), NULL);
+  g_assert (GB_IS_TREE (self));
 
   model = GTK_TREE_MODEL (priv->store);
 
-  if (!list || !gtk_tree_model_get_iter_first (model, &iter))
+  if ((list == NULL) || (list->data != priv->root) || (list->next == NULL))
     return NULL;
 
-  if (list->data == priv->root)
-    list = list->next;
+  iter_ptr = NULL;
 
-  while (gb_tree_get_iter_for_node (self, parent, &iter, list->data))
+  for (list_iter = list->next; list_iter; list_iter = list_iter->next)
     {
-      old_iter = iter;
-      parent = &old_iter;
-      if (list->next)
-        list = list->next;
-      else
-        return gtk_tree_model_get_path (model, &iter);
+      GtkTreeIter children;
+
+      if (gtk_tree_model_iter_children (model, &children, iter_ptr))
+        {
+          gboolean found = FALSE;
+
+          do
+            {
+              g_autoptr(GbTreeNode) item = NULL;
+
+              gtk_tree_model_get (model, &children, 0, &item, -1);
+              found = (item == (GbTreeNode *)list_iter->data);
+            }
+          while (!found && gtk_tree_model_iter_next (model, &children));
+
+          if (found)
+            {
+              iter = children;
+              iter_ptr = &iter;
+              continue;
+            }
+        }
+
+      return NULL;
     }
 
-  return NULL;
+  return gtk_tree_model_get_path (model, &iter);
 }
 
 /**

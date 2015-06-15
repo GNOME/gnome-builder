@@ -215,7 +215,9 @@ gb_tree_node_get_path (GbTreeNode *node)
     return NULL;
 
   do
-    list = g_list_prepend (list, node);
+    {
+      list = g_list_prepend (list, node);
+    }
   while ((node = node->parent));
 
   toplevel = list->data;
@@ -223,7 +225,6 @@ gb_tree_node_get_path (GbTreeNode *node)
   g_assert (toplevel);
   g_assert (toplevel->tree);
 
-  list = g_list_remove_link (list, list);
   path = _gb_tree_get_path (toplevel->tree, list);
 
   g_list_free (list);
@@ -492,10 +493,9 @@ gb_tree_node_get_expanded (GbTreeNode *self)
 
   g_return_val_if_fail (GB_IS_TREE_NODE (self), FALSE);
 
-  if ((self->tree != NULL) && (self->parent != NULL) && (self->parent->parent != NULL))
+  if ((self->tree != NULL) && (self->parent != NULL))
     {
       path = gb_tree_node_get_path (self);
-      g_assert (path != NULL);
       ret = gtk_tree_view_row_expanded (GTK_TREE_VIEW (self->tree), path);
       gtk_tree_path_free (path);
     }
