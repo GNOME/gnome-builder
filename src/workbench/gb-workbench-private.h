@@ -26,6 +26,7 @@
 
 #include "gb-project-tree.h"
 #include "gb-search-box.h"
+#include "gb-slider.h"
 #include "gb-view-grid.h"
 #include "gb-workbench-types.h"
 #include "gb-workspace.h"
@@ -46,6 +47,7 @@ struct _GbWorkbench
   GeditMenuStackSwitcher *gear_menu_button;
   GbProjectTree          *project_tree;
   GbSearchBox            *search_box;
+  GbSlider               *slider;
   GbViewGrid             *view_grid;
   GbWorkspace            *workspace;
 

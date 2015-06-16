@@ -26,6 +26,7 @@
 #include "gb-command-manager.h"
 #include "gb-command-vim-provider.h"
 #include "gb-glib.h"
+#include "gb-slider.h"
 #include "gb-string.h"
 #include "gb-view-stack.h"
 #include "gb-widget.h"
@@ -35,7 +36,7 @@
 
 struct _GbCommandBar
 {
-  GtkRevealer        parent_instance;
+  GtkBin             parent_instance;
 
   GbWorkbench       *workbench;
   GbCommandManager  *command_manager;
@@ -61,7 +62,7 @@ struct _GbCommandBar
 
 static void workbench_addin_init (GbWorkbenchAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbCommandBar, gb_command_bar, GTK_TYPE_REVEALER,
+G_DEFINE_TYPE_WITH_CODE (GbCommandBar, gb_command_bar, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN, workbench_addin_init))
 
 #define HISTORY_LENGTH 30
@@ -86,7 +87,7 @@ gb_command_bar_load (GbWorkbenchAddin *addin)
 {
   GbCommandBar *self = (GbCommandBar *)addin;
   GbCommandProvider *provider;
-  GtkWidget *child;
+  GtkWidget *slider;
 
   g_assert (GB_IS_COMMAND_BAR (self));
 
@@ -102,10 +103,14 @@ gb_command_bar_load (GbWorkbenchAddin *addin)
   gb_command_manager_add_provider (self->command_manager, provider);
   g_clear_object (&provider);
 
-  child = gtk_bin_get_child (GTK_BIN (self->workbench));
-  gtk_box_pack_end (GTK_BOX (child), GTK_WIDGET (self), FALSE, FALSE, 0);
+  slider = gb_workbench_get_slider (self->workbench);
+  gtk_container_add_with_properties (GTK_CONTAINER (slider), GTK_WIDGET (self),
+                                     "position", GB_SLIDER_BOTTOM,
+                                     NULL);
 
   g_action_map_add_action (G_ACTION_MAP (self->workbench), G_ACTION (self->show_action));
+
+  gtk_widget_show (GTK_WIDGET (self));
 }
 
 static void
@@ -169,24 +174,21 @@ find_alternate_focus (GtkWidget *focus)
 void
 gb_command_bar_hide (GbCommandBar *self)
 {
-  GtkWidget *toplevel;
   GtkWidget *focus;
+  GbSlider *slider;
 
   g_return_if_fail (GB_IS_COMMAND_BAR (self));
 
-  if (!gtk_revealer_get_reveal_child (GTK_REVEALER (self)))
+  slider = GB_SLIDER (gb_workbench_get_slider (self->workbench));
+  if (gb_slider_get_position (slider) != GB_SLIDER_BOTTOM)
     return;
 
-  gtk_revealer_set_reveal_child (GTK_REVEALER (self), FALSE);
-
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
-  if ((toplevel == NULL) || gtk_widget_in_destruction (toplevel))
-    return;
+  gb_slider_set_position (slider, GB_SLIDER_NONE);
 
   if (self->last_focus)
     focus = find_alternate_focus (self->last_focus);
   else
-    focus = toplevel;
+    focus = GTK_WIDGET (self->workbench);
 
   gtk_widget_grab_focus (focus);
 }
@@ -210,16 +212,19 @@ gb_command_bar_set_last_focus (GbCommandBar *self,
 void
 gb_command_bar_show (GbCommandBar *self)
 {
-  GtkWidget *toplevel;
   GtkWidget *focus;
+  GbSlider *slider;
 
   g_return_if_fail (GB_IS_COMMAND_BAR (self));
 
-  if (gtk_revealer_get_reveal_child (GTK_REVEALER (self)))
+  slider = GB_SLIDER (gb_workbench_get_slider (self->workbench));
+
+  if (gb_slider_get_position (slider) == GB_SLIDER_BOTTOM)
     return;
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
-  focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+  gb_slider_set_position (slider, GB_SLIDER_BOTTOM);
+
+  focus = gtk_window_get_focus (GTK_WINDOW (self->workbench));
   gb_command_bar_set_last_focus (self, focus);
 
   gtk_widget_hide (GTK_WIDGET (self->completion_scroller));
@@ -228,7 +233,6 @@ gb_command_bar_show (GbCommandBar *self)
   g_clear_pointer (&self->saved_text, g_free);
   self->saved_position_valid = FALSE;
 
-  gtk_revealer_set_reveal_child (GTK_REVEALER (self), TRUE);
   gtk_entry_set_text (self->entry, "");
   gtk_widget_grab_focus (GTK_WIDGET (self->entry));
 }
@@ -538,8 +542,7 @@ show_command_bar (GSimpleAction *action,
                   GVariant      *param,
                   GbCommandBar  *self)
 {
-  gtk_revealer_set_reveal_child (GTK_REVEALER (self), TRUE);
-  gtk_widget_grab_focus (GTK_WIDGET (self->entry));
+  gb_command_bar_show (self);
 }
 
 static gboolean

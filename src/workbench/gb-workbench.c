@@ -642,12 +642,14 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   GB_WIDGET_CLASS_TEMPLATE (klass, "gb-workbench.ui");
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, gear_menu_button);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, search_box);
+  GB_WIDGET_CLASS_BIND (klass, GbWorkbench, slider);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, workspace);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, project_tree);
   GB_WIDGET_CLASS_BIND (klass, GbWorkbench, view_grid);
 
   g_type_ensure (GB_TYPE_PROJECT_TREE);
   g_type_ensure (GB_TYPE_SEARCH_BOX);
+  g_type_ensure (GB_TYPE_SLIDER);
   g_type_ensure (GB_TYPE_VIEW_GRID);
   g_type_ensure (GB_TYPE_WORKSPACE);
   g_type_ensure (GB_TYPE_WORKSPACE_PANE);
@@ -1066,4 +1068,12 @@ gb_workbench_reveal_file (GbWorkbench *self,
   gb_tree_expand_to_node (tree, node);
   gb_tree_scroll_to_node (tree, node);
   gb_tree_node_select (node);
+}
+
+GtkWidget *
+gb_workbench_get_slider (GbWorkbench *self)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
+
+  return GTK_WIDGET (self->slider);
 }

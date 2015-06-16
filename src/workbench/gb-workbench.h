@@ -50,6 +50,7 @@ void              gb_workbench_views_foreach        (GbWorkbench         *self,
                                                      gpointer             callback_data);
 GtkWidget        *gb_workbench_get_workspace        (GbWorkbench         *self);
 GtkWidget        *gb_workbench_get_view_grid        (GbWorkbench         *self);
+GtkWidget        *gb_workbench_get_slider           (GbWorkbench         *self);
 void              gb_workbench_reveal_file          (GbWorkbench         *self,
                                                      GFile               *file);
 

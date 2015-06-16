@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define GB_TYPE_COMMAND_BAR (gb_command_bar_get_type())
 
-G_DECLARE_FINAL_TYPE (GbCommandBar, gb_command_bar, GB, COMMAND_BAR, GtkRevealer)
+G_DECLARE_FINAL_TYPE (GbCommandBar, gb_command_bar, GB, COMMAND_BAR, GtkBin)
 
 GtkWidget *gb_command_bar_new  (void);
 void       gb_command_bar_show (GbCommandBar *bar);

@@ -93,11 +93,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
+      <object class="GtkEventBox">
         <property name="visible">true</property>
         <child>
-          <object class="GtkEventBox">
+          <object class="GbSlider" id="slider">
             <property name="visible">true</property>
             <child>
               <object class="GbWorkspace" id="workspace">

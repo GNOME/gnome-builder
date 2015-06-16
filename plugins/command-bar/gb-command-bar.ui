@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.8 -->
-  <template class="GbCommandBar" parent="GtkRevealer">
-    <property name="visible">True</property>
-    <property name="reveal-child">False</property>
-    <property name="can-focus">False</property>
-    <property name="transition-type">slide-up</property>
+  <template class="GbCommandBar" parent="GtkBin">
     <child>
       <object class="GtkBox" id="vbox1">
         <property name="visible">True</property>
