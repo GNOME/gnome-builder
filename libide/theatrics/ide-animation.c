@@ -311,7 +311,7 @@ ide_animation_get_offset (IdeAnimation *animation,
   frame_msec = frame_time / 1000L;
 
   offset = (gdouble) (frame_msec - animation->begin_msec) /
-           (gdouble) animation->duration_msec;
+           (gdouble) MAX (animation->duration_msec, 1);
 
   return CLAMP (offset, 0.0, 1.0);
 }
@@ -999,13 +999,27 @@ ide_object_animatev (gpointer          object,
   gchar *error = NULL;
   GType type;
   GType ptype;
+  gboolean enable_animations;
 
   g_return_val_if_fail (first_property != NULL, NULL);
   g_return_val_if_fail (mode < IDE_ANIMATION_LAST, NULL);
 
-  if (!frame_clock && GTK_IS_WIDGET (object))
+  if ((frame_clock != NULL) && GTK_IS_WIDGET (object))
+    frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (object));
+
+  /*
+   * If we have a frame clock, then we must be in the gtk thread and we
+   * should check GtkSettings for disabled animations. If we are disabled,
+   * we will just make the timeout immediate.
+   */
+  if (frame_clock != NULL)
     {
-      frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (object));
+      g_object_get (gtk_settings_get_default (),
+                    "gtk-enable-animations", &enable_animations,
+                    NULL);
+
+      if (enable_animations == FALSE)
+        duration_msec = 0;
     }
 
   name = first_property;
