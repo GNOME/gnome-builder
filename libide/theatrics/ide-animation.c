@@ -1004,7 +1004,7 @@ ide_object_animatev (gpointer          object,
   g_return_val_if_fail (first_property != NULL, NULL);
   g_return_val_if_fail (mode < IDE_ANIMATION_LAST, NULL);
 
-  if ((frame_clock != NULL) && GTK_IS_WIDGET (object))
+  if ((frame_clock == NULL) && GTK_IS_WIDGET (object))
     frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (object));
 
   /*
