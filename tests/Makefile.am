@@ -41,6 +41,8 @@ tests_cflags = \
 	$(egg_cflags) \
 	-I$(top_srcdir)/libide \
 	-I$(top_builddir)/libide \
+	-I$(top_srcdir)/src \
+	-I$(top_srcdir)/src/workspace \
 	$(NULL)
 
 tests_libs = \
@@ -147,6 +149,14 @@ misc_programs += test-fuzzy
 test_fuzzy_SOURCES = test-fuzzy.c
 test_fuzzy_CFLAGS = $(search_cflags)
 test_fuzzy_LDADD = $(search_libs)
+
+
+misc_programs += test-slider
+test_slider_SOURCES = test-slider.c
+test_slider_CFLAGS = $(tests_cflags)
+test_slider_LDADD = \
+	$(tests_libs) \
+	$(top_builddir)/src/libgnome-builder.la
 
 
 TESTS += test-ide-ctags

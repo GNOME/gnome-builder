@@ -149,6 +149,8 @@ libgnome_builder_la_SOURCES = \
 	workspace/gb-workspace.h \
 	workspace/gb-workspace-pane.c \
 	workspace/gb-workspace-pane.h \
+	workspace/gb-slider.c \
+	workspace/gb-slider.h \
 	css/gb-css-provider.c \
 	css/gb-css-provider.h \
 	util/gb-settings.c \
