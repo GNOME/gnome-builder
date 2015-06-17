@@ -259,11 +259,15 @@ rg_graph_size_allocate (GtkWidget     *widget,
 {
   RgGraph *self = (RgGraph *)widget;
   RgGraphPrivate *priv = rg_graph_get_instance_private (self);
+  GtkAllocation old_alloc;
 
   g_assert (RG_IS_GRAPH (self));
   g_assert (alloc != NULL);
 
-  g_clear_pointer (&priv->surface, cairo_surface_destroy);
+  gtk_widget_get_allocation (widget, &old_alloc);
+
+  if ((old_alloc.width != alloc->width) || (old_alloc.height != alloc->height))
+    g_clear_pointer (&priv->surface, cairo_surface_destroy);
 
   GTK_WIDGET_CLASS (rg_graph_parent_class)->size_allocate (widget, alloc);
 }
