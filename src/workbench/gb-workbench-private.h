@@ -43,6 +43,9 @@ struct _GbWorkbench
   gchar                  *current_folder_uri;
   PeasExtensionSet       *extensions;
 
+  /* Weak Reference */
+  GtkWidget              *active_view;
+
   /* Template references */
   GeditMenuStackSwitcher *gear_menu_button;
   GbProjectTree          *project_tree;

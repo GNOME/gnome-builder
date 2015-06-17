@@ -39,6 +39,7 @@ G_DEFINE_TYPE (GbWorkbench, gb_workbench, GTK_TYPE_APPLICATION_WINDOW)
 
 enum {
   PROP_0,
+  PROP_ACTIVE_VIEW,
   PROP_BUILDING,
   PROP_CONTEXT,
   LAST_PROP
@@ -512,6 +513,56 @@ gb_workbench_constructed (GObject *object)
 }
 
 static void
+gb_workbench_active_view_unref (gpointer  data,
+                                GObject  *where_object_was)
+{
+  GbWorkbench *self = data;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  self->active_view = NULL;
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ACTIVE_VIEW]);
+}
+
+static void
+gb_workbench_set_focus (GtkWindow *window,
+                        GtkWidget *widget)
+{
+  GbWorkbench *self = (GbWorkbench *)window;
+  GtkWidget *active_view = NULL;
+
+  g_assert (GTK_IS_WINDOW (window));
+  g_assert (!widget || GTK_IS_WIDGET (widget));
+
+  if (widget != NULL)
+    active_view = gtk_widget_get_ancestor (widget, GB_TYPE_VIEW);
+
+  if ((active_view == NULL) || (active_view == self->active_view))
+    goto chainup;
+
+  if (self->active_view != NULL)
+    {
+      g_object_weak_unref (G_OBJECT (self->active_view),
+                           gb_workbench_active_view_unref,
+                           self);
+      self->active_view = NULL;
+    }
+
+  if (active_view != NULL)
+    {
+      self->active_view = active_view;
+      g_object_weak_ref (G_OBJECT (self->active_view),
+                         gb_workbench_active_view_unref,
+                         self);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (window), gParamSpecs [PROP_ACTIVE_VIEW]);
+
+chainup:
+  GTK_WINDOW_CLASS (gb_workbench_parent_class)->set_focus (window, widget);
+}
+
+static void
 gb_workbench_dispose (GObject *object)
 {
   GbWorkbench *self = (GbWorkbench *)object;
@@ -521,6 +572,7 @@ gb_workbench_dispose (GObject *object)
   self->disposing++;
 
   g_clear_object (&self->unload_cancellable);
+  ide_clear_weak_pointer (&self->active_view);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->dispose (object);
 
@@ -555,6 +607,10 @@ gb_workbench_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ACTIVE_VIEW:
+      g_value_set_object (value, self->active_view);
+      break;
+
     case PROP_BUILDING:
       g_value_set_boolean (value, self->building);
       break;
@@ -592,6 +648,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
 
   object_class->constructed = gb_workbench_constructed;
   object_class->dispose = gb_workbench_dispose;
@@ -604,6 +661,15 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   widget_class->draw = gb_workbench_draw;
   widget_class->grab_focus = gb_workbench_grab_focus;
   widget_class->realize = gb_workbench_realize;
+
+  window_class->set_focus = gb_workbench_set_focus;
+
+  gParamSpecs [PROP_ACTIVE_VIEW] =
+    g_param_spec_object ("active-view",
+                         _("Active View"),
+                         _("Active View"),
+                         GB_TYPE_VIEW,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_BUILDING] =
     g_param_spec_boolean ("building",
@@ -1076,4 +1142,12 @@ gb_workbench_get_slider (GbWorkbench *self)
   g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
 
   return GTK_WIDGET (self->slider);
+}
+
+GtkWidget *
+gb_workbench_get_active_view (GbWorkbench *self)
+{
+  g_return_val_if_fail (GB_IS_WORKBENCH (self), NULL);
+
+  return self->active_view;
 }

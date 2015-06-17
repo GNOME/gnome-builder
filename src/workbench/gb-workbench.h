@@ -53,6 +53,7 @@ GtkWidget        *gb_workbench_get_view_grid        (GbWorkbench         *self);
 GtkWidget        *gb_workbench_get_slider           (GbWorkbench         *self);
 void              gb_workbench_reveal_file          (GbWorkbench         *self,
                                                      GFile               *file);
+GtkWidget        *gb_workbench_get_active_view      (GbWorkbench         *self);
 
 G_END_DECLS
 
