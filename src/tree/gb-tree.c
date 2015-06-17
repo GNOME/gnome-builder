@@ -1275,6 +1275,7 @@ gb_tree_set_root (GbTree     *self,
         {
           _gb_tree_node_set_parent (priv->root, NULL);
           _gb_tree_node_set_tree (priv->root, NULL);
+          gtk_tree_store_clear (priv->store);
           g_clear_object (&priv->root);
         }
 
