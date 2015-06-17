@@ -458,6 +458,18 @@ gb_workbench_realize (GtkWidget *widget)
 }
 
 static void
+gb_workbench_active_view_unref (gpointer  data,
+                                GObject  *where_object_was)
+{
+  GbWorkbench *self = data;
+
+  g_assert (GB_IS_WORKBENCH (self));
+
+  self->active_view = NULL;
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ACTIVE_VIEW]);
+}
+
+static void
 gb_workbench__extension_added (PeasExtensionSet *set,
                                PeasPluginInfo   *plugin_info,
                                GbWorkbenchAddin *addin)
@@ -472,7 +484,6 @@ gb_workbench__extension_removed (PeasExtensionSet *set,
 {
   gb_workbench_addin_unload (addin);
 }
-
 
 static void
 gb_workbench_constructed (GObject *object)
@@ -513,15 +524,21 @@ gb_workbench_constructed (GObject *object)
 }
 
 static void
-gb_workbench_active_view_unref (gpointer  data,
-                                GObject  *where_object_was)
+gb_workbench_destroy (GtkWidget *widget)
 {
-  GbWorkbench *self = data;
+  GbWorkbench *self = (GbWorkbench *)widget;
 
   g_assert (GB_IS_WORKBENCH (self));
 
-  self->active_view = NULL;
-  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_ACTIVE_VIEW]);
+  if (self->active_view)
+    {
+      g_object_weak_unref (G_OBJECT (self->active_view),
+                           gb_workbench_active_view_unref,
+                           self);
+      self->active_view = NULL;
+    }
+
+  GTK_WIDGET_CLASS (gb_workbench_parent_class)->destroy (widget);
 }
 
 static void
@@ -572,7 +589,6 @@ gb_workbench_dispose (GObject *object)
   self->disposing++;
 
   g_clear_object (&self->unload_cancellable);
-  ide_clear_weak_pointer (&self->active_view);
 
   G_OBJECT_CLASS (gb_workbench_parent_class)->dispose (object);
 
@@ -657,6 +673,7 @@ gb_workbench_class_init (GbWorkbenchClass *klass)
   object_class->set_property = gb_workbench_set_property;
 
   widget_class->delete_event = gb_workbench_delete_event;
+  widget_class->destroy = gb_workbench_destroy;
   widget_class->drag_data_received = gb_workbench_drag_data_received;
   widget_class->draw = gb_workbench_draw;
   widget_class->grab_focus = gb_workbench_grab_focus;
