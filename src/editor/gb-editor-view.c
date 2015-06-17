@@ -23,6 +23,7 @@
 #include "gb-editor-frame-private.h"
 #include "gb-editor-view.h"
 #include "gb-editor-view-actions.h"
+#include "gb-editor-view-addin.h"
 #include "gb-editor-view-private.h"
 #include "gb-widget.h"
 
@@ -631,6 +632,59 @@ gb_editor_view_get_preferred_height (GtkWidget *widget,
 }
 
 static void
+gb_editor_view__extension_added (PeasExtensionSet  *set,
+                                 PeasPluginInfo    *info,
+                                 GbEditorViewAddin *addin,
+                                 GbEditorView      *self)
+{
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (info != NULL);
+  g_assert (GB_IS_EDITOR_VIEW_ADDIN (addin));
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  gb_editor_view_addin_load (addin, self);
+}
+
+static void
+gb_editor_view__extension_removed (PeasExtensionSet  *set,
+                                   PeasPluginInfo    *info,
+                                   GbEditorViewAddin *addin,
+                                   GbEditorView      *self)
+{
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (info != NULL);
+  g_assert (GB_IS_EDITOR_VIEW_ADDIN (addin));
+  g_assert (GB_IS_EDITOR_VIEW (self));
+
+  gb_editor_view_addin_unload (addin, self);
+}
+
+static void
+gb_editor_view_constructed (GObject *object)
+{
+  GbEditorView *self = (GbEditorView *)object;
+  PeasEngine *engine;
+
+  G_OBJECT_CLASS (gb_editor_view_parent_class)->constructed (object);
+
+  engine = peas_engine_get_default ();
+  self->extensions = peas_extension_set_new (engine, GB_TYPE_EDITOR_VIEW_ADDIN, NULL);
+  g_signal_connect_object (self->extensions,
+                           "extension-added",
+                           G_CALLBACK (gb_editor_view__extension_added),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->extensions,
+                           "extension-added",
+                           G_CALLBACK (gb_editor_view__extension_removed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  peas_extension_set_foreach (self->extensions,
+                              (PeasExtensionSetForeachFunc)gb_editor_view__extension_added,
+                              self);
+}
+
+static void
 gb_editor_view_finalize (GObject *object)
 {
   GbEditorView *self = (GbEditorView *)object;
@@ -641,6 +695,7 @@ gb_editor_view_finalize (GObject *object)
       self->symbol_timeout = 0;
     }
 
+  g_clear_object (&self->extensions);
   g_clear_object (&self->document);
   g_clear_object (&self->settings);
   g_clear_pointer (&self->symbol_spec, ide_pattern_spec_unref);
@@ -693,6 +748,7 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GbViewClass *view_class = GB_VIEW_CLASS (klass);
 
+  object_class->constructed = gb_editor_view_constructed;
   object_class->finalize = gb_editor_view_finalize;
   object_class->get_property = gb_editor_view_get_property;
   object_class->set_property = gb_editor_view_set_property;

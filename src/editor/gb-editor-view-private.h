@@ -20,6 +20,7 @@
 #define GB_EDITOR_VIEW_PRIVATE_H
 
 #include <ide.h>
+#include <libpeas/peas.h>
 
 #include "gb-editor-document.h"
 #include "gb-editor-frame.h"
@@ -33,6 +34,7 @@ struct _GbEditorView
   GbView               parent_instance;
 
   GbEditorDocument    *document;
+  PeasExtensionSet    *extensions;
   GSettings           *settings;
   IdePatternSpec      *symbol_spec;
 

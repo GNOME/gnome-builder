@@ -40,6 +40,8 @@ libgnome_builder_la_SOURCES = \
 	editor/gb-editor-tweak-widget.h \
 	editor/gb-editor-view-actions.c \
 	editor/gb-editor-view-actions.h \
+	editor/gb-editor-view-addin.c \
+	editor/gb-editor-view-addin.h \
 	editor/gb-editor-view-private.h \
 	editor/gb-editor-view.c \
 	editor/gb-editor-view.h \
