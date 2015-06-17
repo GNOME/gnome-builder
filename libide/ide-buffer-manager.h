@@ -65,9 +65,9 @@ GPtrArray                *ide_buffer_manager_get_buffers         (IdeBufferManag
 GtkSourceCompletionWords *ide_buffer_manager_get_word_completion (IdeBufferManager     *self);
 guint                     ide_buffer_manager_get_n_buffers       (IdeBufferManager     *self);
 gboolean                  ide_buffer_manager_has_file            (IdeBufferManager     *self,
-                                                                  IdeFile              *file);
+                                                                  GFile                *file);
 IdeBuffer                *ide_buffer_manager_find_buffer         (IdeBufferManager     *self,
-                                                                  IdeFile              *file);
+                                                                  GFile                *file);
 gsize                     ide_buffer_manager_get_max_file_size   (IdeBufferManager     *self);
 void                      ide_buffer_manager_set_max_file_size   (IdeBufferManager     *self,
                                                                   gsize                 max_file_size);

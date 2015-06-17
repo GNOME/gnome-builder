@@ -1046,10 +1046,30 @@ gb_workbench_views_foreach (GbWorkbench *self,
                             GtkCallback  callback,
                             gpointer     callback_data)
 {
+  GList *stacks;
+  GList *iter;
+
   g_return_if_fail (GB_IS_WORKBENCH (self));
   g_return_if_fail (callback != NULL);
 
-  //gb_workspace_views_foreach (GB_WORKSPACE (self->editor_workspace), callback, callback_data);
+  stacks = gb_view_grid_get_stacks (self->view_grid);
+
+  for (iter = stacks; iter; iter = iter->next)
+    {
+      GList *views;
+      GList *views_iter;
+
+      views = gb_view_stack_get_views (iter->data);
+
+      for (views_iter = views; views_iter; views_iter = views_iter->next)
+        {
+          callback (views_iter->data, callback_data);
+        }
+
+      g_list_free (views);
+    }
+
+  g_list_free (stacks);
 }
 
 GtkWidget *

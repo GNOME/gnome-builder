@@ -361,16 +361,9 @@ gb_project_tree_actions__make_directory_cb (GObject      *object,
                                             GAsyncResult *result,
                                             gpointer      user_data)
 {
-#if 0
   GFile *file = (GFile *)object;
   g_autoptr(GbTreeNode) node = user_data;
   g_autoptr(GError) error = NULL;
-  g_autoptr(IdeProjectFile) project_file = NULL;
-  GbProjectTree *self;
-  GbWorkbench *workbench;
-  IdeContext *context;
-  IdeProject *project;
-  GbTreeNode *created;
 
   g_assert (G_IS_FILE (file));
   g_assert (GB_IS_TREE_NODE (node));
@@ -381,31 +374,9 @@ gb_project_tree_actions__make_directory_cb (GObject      *object,
       return;
     }
 
-  self = GB_PROJECT_TREE (gb_tree_node_get_tree (node));
-  if (self == NULL)
-    return;
-
-  workbench = gb_widget_get_workbench (GTK_WIDGET (self));
-  if (workbench == NULL)
-    return;
-
-  context = gb_workbench_get_context (workbench);
-  if (context == NULL)
-    return;
-
-  project = ide_context_get_project (context);
-
-  project_file = create_file (context, file, G_FILE_TYPE_DIRECTORY);
-  ide_project_add_file (project, project_file);
-
   gb_tree_node_invalidate (node);
   gb_tree_node_expand (node, FALSE);
-
-  created = gb_tree_find_item (GB_TREE (self), G_OBJECT (project_file));
-
-  if (created != NULL)
-    gb_tree_node_select (created);
-#endif
+  gb_tree_node_select (node);
 }
 
 static void
@@ -413,16 +384,11 @@ gb_project_tree_actions__create_cb (GObject      *object,
                                     GAsyncResult *result,
                                     gpointer      user_data)
 {
-#if 0
   GFile *file = (GFile *)object;
-  g_autoptr(IdeProjectFile) project_file = NULL;
   g_autoptr(GbTreeNode) node = user_data;
   g_autoptr(GError) error = NULL;
   GbProjectTree *self;
   GbWorkbench *workbench;
-  IdeContext *context;
-  IdeProject *project;
-  GbTreeNode *created;
 
   g_assert (G_IS_FILE (file));
   g_assert (GB_IS_TREE_NODE (node));
@@ -441,29 +407,11 @@ gb_project_tree_actions__create_cb (GObject      *object,
   if (workbench == NULL)
     return;
 
-  context = gb_workbench_get_context (workbench);
-  if (context == NULL)
-    return;
-
-  project = ide_context_get_project (context);
-
-  project_file = create_file (context, file, G_FILE_TYPE_REGULAR);
-  ide_project_add_file (project, project_file);
-
   gb_workbench_open (workbench, file);
 
   gb_tree_node_invalidate (node);
   gb_tree_node_expand (node, FALSE);
-
-  created = gb_tree_find_item (GB_TREE (self), G_OBJECT (project_file));
-
-  if (created != NULL)
-    gb_tree_node_select (created);
-#endif
-
-  /*
-   * TODO: Invalidate parent.
-   */
+  gb_tree_node_select (node);
 }
 
 static void
@@ -620,6 +568,24 @@ gb_project_tree_actions_new_file (GSimpleAction *action,
   gb_project_tree_actions_new (self, G_FILE_TYPE_REGULAR);
 }
 
+static gboolean
+find_child_node (GbTree     *tree,
+                 GbTreeNode *parent,
+                 GbTreeNode *child,
+                 gpointer    user_data)
+{
+  GObject *item = gb_tree_node_get_item (child);
+  GFile *target = user_data;
+  GFile *child_file;
+
+  if (GB_IS_PROJECT_FILE (item) &&
+      (child_file = gb_project_file_get_file (GB_PROJECT_FILE (item))) &&
+      g_file_equal (child_file, target))
+    return TRUE;
+
+  return FALSE;
+}
+
 static void
 gb_project_tree_actions__project_rename_file_cb (GObject      *object,
                                                  GAsyncResult *result,
@@ -653,11 +619,14 @@ gb_project_tree_actions__project_rename_file_cb (GObject      *object,
   parent = gb_tree_node_get_parent (node);
 
   gb_tree_node_invalidate (parent);
-  gb_tree_node_expand (parent, TRUE);
+  gb_tree_node_expand (parent, FALSE);
 
-  /*
-   * TODO: Reselect child node.
-   */
+  node = gb_tree_find_child_node (tree, parent, find_child_node, file);
+
+  if (node != NULL)
+    gb_tree_node_select (node);
+  else
+    gb_tree_node_select (parent);
 
   gtk_widget_hide (GTK_WIDGET (popover));
   gtk_widget_destroy (GTK_WIDGET (popover));
@@ -737,13 +706,12 @@ gb_project_tree_actions__trash_file_cb (GObject      *object,
                                         gpointer      user_data)
 {
   IdeProject *project = (IdeProject *)object;
-  g_autoptr(GbProjectTree) self = user_data;
+  g_autoptr(GbTreeNode) node = user_data;
   g_autoptr(GError) error = NULL;
-  GbTreeNode *node;
-  GObject *item = NULL;
+  GbTreeNode *parent;
 
   g_assert (IDE_IS_PROJECT (project));
-  g_assert (GB_IS_PROJECT_TREE (self));
+  g_assert (GB_IS_TREE_NODE (node));
 
   if (!ide_project_trash_file_finish (project, result, &error))
     {
@@ -752,28 +720,12 @@ gb_project_tree_actions__trash_file_cb (GObject      *object,
       return;
     }
 
-  /* todo: this should be done with tree observer */
-  if ((node = gb_tree_get_selected (GB_TREE (self))))
+  if ((parent = gb_tree_node_get_parent (node)))
     {
-      if ((node = gb_tree_node_get_parent (node)))
-        item = gb_tree_node_get_item (node);
+      gb_tree_node_invalidate (parent);
+      gb_tree_node_expand (parent, FALSE);
+      gb_tree_node_select (parent);
     }
-
-  gb_tree_rebuild (GB_TREE (self));
-
-  if ((node = gb_tree_find_item (GB_TREE (self), item)))
-    gb_tree_node_expand (node, TRUE);
-}
-
-static GbViewStack *
-get_view_stack (GbView *view)
-{
-  GtkWidget *widget = (GtkWidget *)view;
-
-  while ((widget != NULL) && !GB_IS_VIEW_STACK (widget))
-    widget = gtk_widget_get_parent (widget);
-
-  return (GbViewStack *)widget;
 }
 
 typedef struct
@@ -814,7 +766,6 @@ gb_project_tree_actions_move_to_trash (GSimpleAction *action,
   IdeProject *project;
   GbTreeNode *node;
   GFile *file;
-  IdeFile *ifile;
   GObject *item;
   GList *iter;
 
@@ -828,7 +779,7 @@ gb_project_tree_actions_move_to_trash (GSimpleAction *action,
 
   if (!(node = gb_tree_get_selected (GB_TREE (self))) ||
       !(item = gb_tree_node_get_item (node)) ||
-      !IDE_IS_PROJECT_FILE (item) ||
+      !GB_IS_PROJECT_FILE (item) ||
       !(file = gb_project_file_get_file (GB_PROJECT_FILE (item))))
     return;
 
@@ -836,9 +787,7 @@ gb_project_tree_actions_move_to_trash (GSimpleAction *action,
    * Find all of the views that contain this file.
    * We do not close them until we leave the foreach callback.
    */
-  ifile = ide_project_get_project_file (project, file);
-  buffer = ide_buffer_manager_find_buffer (buffer_manager, ifile);
-  if (buffer != NULL)
+  if ((buffer = ide_buffer_manager_find_buffer (buffer_manager, file)))
     {
       removal.document = g_object_ref (buffer);
       gb_workbench_views_foreach (workbench,
@@ -852,11 +801,11 @@ gb_project_tree_actions_move_to_trash (GSimpleAction *action,
    */
   for (iter = removal.views; iter; iter = iter->next)
     {
-      GbViewStack *stack;
+      GtkWidget *stack;
 
-      stack = get_view_stack (iter->data);
+      stack = gtk_widget_get_ancestor (iter->data, GB_TYPE_VIEW_STACK);
       if (stack != NULL)
-        gb_view_stack_remove (stack, iter->data);
+        gb_view_stack_remove (GB_VIEW_STACK (stack), iter->data);
     }
 
   g_list_free_full (removal.views, g_object_unref);
@@ -868,7 +817,7 @@ gb_project_tree_actions_move_to_trash (GSimpleAction *action,
                                 file,
                                 NULL,
                                 gb_project_tree_actions__trash_file_cb,
-                                g_object_ref (self));
+                                g_object_ref (node));
 }
 
 static gboolean

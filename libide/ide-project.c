@@ -427,12 +427,9 @@ ide_project_rename_file_worker (GTask        *task,
                                 GCancellable *cancellable)
 {
   IdeProject *self = source_object;
-  IdeProjectFiles *files;
-  IdeProjectItem *item;
   IdeContext *context;
   IdeVcs *vcs;
   RenameFile *op = task_data;
-  g_autoptr(GFileInfo) file_info = NULL;
   g_autofree gchar *path = NULL;
   GError *error = NULL;
   GFile *workdir;
@@ -443,9 +440,6 @@ ide_project_rename_file_worker (GTask        *task,
   g_assert (G_IS_FILE (op->new_file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_project_writer_lock (self);
-
-  files = ide_project_get_files (self);
   context = ide_object_get_context (IDE_OBJECT (self));
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
@@ -467,54 +461,22 @@ ide_project_rename_file_worker (GTask        *task,
                                G_IO_ERROR,
                                G_IO_ERROR_INVALID_FILENAME,
                                _("Destination file must be within the project tree."));
-      goto cleanup;
+      return;
     }
 
-  item = ide_project_files_find_file (files, op->orig_file);
-
-  if (item == NULL)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               _("Source file must be within the project tree."));
-      goto cleanup;
-    }
-
-  if (!g_file_move (op->orig_file, op->new_file, G_FILE_COPY_NONE, cancellable, NULL, NULL, &error))
+  if (!g_file_move (op->orig_file,
+                    op->new_file,
+                    G_FILE_COPY_NONE,
+                    cancellable,
+                    NULL,
+                    NULL,
+                    &error))
     {
       g_task_return_error (task, error);
-      goto cleanup;
+      return;
     }
-
-  file_info = g_file_query_info (op->new_file,
-                                 G_FILE_ATTRIBUTE_STANDARD_NAME","
-                                 G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
-                                 G_FILE_ATTRIBUTE_STANDARD_TYPE,
-                                 G_FILE_QUERY_INFO_NONE,
-                                 cancellable,
-                                 &error);
-
-  if (file_info == NULL)
-    {
-      g_task_return_error (task, error);
-      goto cleanup;
-    }
-
-  g_object_ref (item);
-  ide_project_item_remove (ide_project_item_get_parent (item), item);
-  g_object_set (item,
-                "file", op->new_file,
-                "path", path,
-                "file-info", file_info,
-                NULL);
-  ide_project_files_add_file (files, IDE_PROJECT_FILE (item));
-  g_object_unref (item);
 
   g_task_return_boolean (task, TRUE);
-
-cleanup:
-  ide_project_writer_unlock (self);
 }
 
 static void
@@ -575,31 +537,15 @@ ide_project_trash_file__file_trash_cb (GObject      *object,
 {
   GFile *file = (GFile *)object;
   g_autoptr(GTask) task = user_data;
-  IdeProject *self;
-  IdeProjectFiles *files;
-  IdeProjectItem *item;
   GError *error = NULL;
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
-  g_assert (IDE_IS_PROJECT (self));
-
   if (!g_file_trash_finish (file, result, &error))
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  ide_project_writer_lock (self);
-  files = ide_project_get_files (self);
-  item = ide_project_files_find_file (files, file);
-  if (item != NULL)
-    ide_project_item_remove (ide_project_item_get_parent (item), item);
-  ide_project_writer_unlock (self);
-
-  g_task_return_boolean (task, TRUE);
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
 }
 
 static gboolean

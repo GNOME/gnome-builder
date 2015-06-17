@@ -1465,7 +1465,7 @@ ide_buffer_manager_get_word_completion (IdeBufferManager *self)
 /**
  * ide_buffer_manager_find_buffer:
  * @self: (in): An #IdeBufferManager.
- * @file: (in): An #IdeFile.
+ * @file: (in): A #GFile.
  *
  * Gets the buffer for a given file. If it has not yet been loaded, %NULL is
  * returned.
@@ -1474,12 +1474,12 @@ ide_buffer_manager_get_word_completion (IdeBufferManager *self)
  */
 IdeBuffer *
 ide_buffer_manager_find_buffer (IdeBufferManager *self,
-                                IdeFile          *file)
+                                GFile            *file)
 {
   gsize i;
 
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
-  g_return_val_if_fail (IDE_IS_FILE (file), NULL);
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
 
   for (i = 0; i < self->buffers->len; i++)
     {
@@ -1489,7 +1489,7 @@ ide_buffer_manager_find_buffer (IdeBufferManager *self,
       buffer = g_ptr_array_index (self->buffers, i);
       buffer_file = ide_buffer_get_file (buffer);
 
-      if (ide_file_equal (buffer_file, file))
+      if (g_file_equal (file, ide_file_get_file (buffer_file)))
         return buffer;
     }
 
@@ -1507,7 +1507,7 @@ ide_buffer_manager_find_buffer (IdeBufferManager *self,
  */
 gboolean
 ide_buffer_manager_has_file (IdeBufferManager *self,
-                             IdeFile          *file)
+                             GFile            *file)
 {
   return !!ide_buffer_manager_find_buffer (self, file);
 }

@@ -404,6 +404,7 @@ navigate_to_cb (IdeBackForwardList *list,
   IdeSourceLocation *srcloc;
   IdeBuffer *buffer;
   IdeFile *file;
+  GFile *gfile;
   guint line;
   guint line_offset;
 
@@ -411,9 +412,10 @@ navigate_to_cb (IdeBackForwardList *list,
   file = ide_source_location_get_file (srcloc);
   line = ide_source_location_get_line (srcloc);
   line_offset = ide_source_location_get_line_offset (srcloc);
+  gfile = ide_file_get_file (file);
 
   bufmgr = ide_context_get_buffer_manager (gContext);
-  buffer = ide_buffer_manager_find_buffer (bufmgr, file);
+  buffer = ide_buffer_manager_find_buffer (bufmgr, gfile);
 
   if (buffer)
     {
