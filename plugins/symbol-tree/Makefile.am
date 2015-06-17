@@ -6,6 +6,8 @@ EXTRA_DIST =
 noinst_LTLIBRARIES = libsymbol-tree.la
 
 libsymbol_tree_la_SOURCES = \
+	symbol-tree-builder.c \
+	symbol-tree-builder.h \
 	symbol-tree-resources.c \
 	symbol-tree-resources.h \
 	symbol-tree.c \
@@ -17,6 +19,7 @@ libsymbol_tree_la_CFLAGS = \
 	$(BUILDER_CFLAGS) \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/documents \
+	-I$(top_srcdir)/src/editor \
 	-I$(top_srcdir)/src/views \
 	-I$(top_srcdir)/src/tree \
 	-I$(top_srcdir)/src/workbench \

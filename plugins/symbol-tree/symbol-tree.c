@@ -20,11 +20,13 @@
 #include <libpeas/peas.h>
 
 
+#include "gb-editor-view.h"
 #include "gb-plugins.h"
 #include "gb-tree.h"
 #include "gb-workspace.h"
 
 #include "symbol-tree.h"
+#include "symbol-tree-builder.h"
 #include "symbol-tree-resources.h"
 
 struct _SymbolTree
@@ -32,7 +34,6 @@ struct _SymbolTree
   GtkBox       parent_instance;
 
   GbWorkbench *workbench;
-
   GbTree      *tree;
 };
 
@@ -50,6 +51,32 @@ G_DEFINE_TYPE_WITH_CODE (SymbolTree, symbol_tree, GTK_TYPE_BOX,
                          G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN, workbench_addin_init))
 
 static void
+notify_active_view_cb (SymbolTree  *self,
+                       GParamFlags *pspec,
+                       GbWorkbench *workbench)
+{
+  GbDocument *document = NULL;
+  GtkWidget *active_view;
+  GbTreeNode *root;
+
+  g_assert (SYMBOL_IS_TREE (self));
+  g_assert (pspec != NULL);
+  g_assert (GB_IS_WORKBENCH (workbench));
+
+  if ((active_view = gb_workbench_get_active_view (workbench)) && GB_IS_EDITOR_VIEW (active_view))
+    document = gb_view_get_document (GB_VIEW (active_view));
+
+  root = gb_tree_get_root (self->tree);
+
+  if ((GObject *)document != gb_tree_node_get_item (root))
+    {
+      root = gb_tree_node_new ();
+      gb_tree_node_set_item (root, G_OBJECT (document));
+      gb_tree_set_root (self->tree, root);
+    }
+}
+
+static void
 symbol_tree_load (GbWorkbenchAddin *addin)
 {
   SymbolTree *self = (SymbolTree *)addin;
@@ -58,6 +85,12 @@ symbol_tree_load (GbWorkbenchAddin *addin)
 
   g_assert (SYMBOL_IS_TREE (self));
   g_assert (GB_IS_WORKBENCH (self->workbench));
+
+  g_signal_connect_object (self->workbench,
+                           "notify::active-view",
+                           G_CALLBACK (notify_active_view_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   workspace = GB_WORKSPACE (gb_workbench_get_workspace (self->workbench));
   right_pane = gb_workspace_get_right_pane (workspace);
@@ -155,7 +188,16 @@ symbol_tree_class_init (SymbolTreeClass *klass)
 static void
 symbol_tree_init (SymbolTree *self)
 {
+  GbTreeNode *root;
+  GbTreeBuilder *builder;
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  root = gb_tree_node_new ();
+  gb_tree_set_root (self->tree, root);
+
+  builder = g_object_new (SYMBOL_TYPE_TREE_BUILDER, NULL);
+  gb_tree_add_builder (self->tree, builder);
 }
 
 GB_DEFINE_EMBEDDED_PLUGIN (symbol_tree,
