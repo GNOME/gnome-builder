@@ -361,7 +361,7 @@ gb_project_tree_builder_rebuild (GSettings            *settings,
                                  const gchar          *key,
                                  GbProjectTreeBuilder *self)
 {
-  GtkWidget *tree;
+  GbTree *tree;
   gboolean sort_directories_first;
 
   g_assert (G_IS_SETTINGS (settings));
@@ -373,7 +373,7 @@ gb_project_tree_builder_rebuild (GSettings            *settings,
     {
       self->sort_directories_first = sort_directories_first;
       if ((tree = gb_tree_builder_get_tree (GB_TREE_BUILDER (self))))
-        gb_tree_rebuild (GB_TREE (tree));
+        gb_tree_rebuild (tree);
     }
 }
 
