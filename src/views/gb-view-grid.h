@@ -53,6 +53,9 @@ GList      *gb_view_grid_get_stacks          (GbViewGrid  *grid);
 void        gb_view_grid_focus_document      (GbViewGrid  *grid,
                                               GbDocument  *document);
 GtkWidget  *gb_view_grid_get_last_focus      (GbViewGrid  *self);
+void        gb_view_grid_raise_document      (GbViewGrid  *self,
+                                              GbDocument  *document,
+                                              gboolean     focus);
 GbDocument *gb_view_grid_find_document_typed (GbViewGrid  *self,
                                               GType        document_type);
 

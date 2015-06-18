@@ -574,9 +574,11 @@ gb_view_grid_get_stack_after (GbViewGrid  *self,
   return NULL;
 }
 
+
 void
-gb_view_grid_focus_document (GbViewGrid *self,
-                             GbDocument *document)
+gb_view_grid_raise_document (GbViewGrid *self,
+                             GbDocument *document,
+                             gboolean    focus)
 {
   GList *stacks;
   GList *iter;
@@ -595,7 +597,7 @@ gb_view_grid_focus_document (GbViewGrid *self,
 
       if (view)
         {
-          gb_view_stack_focus_document (stack, document);
+          gb_view_stack_raise_document (stack, document, focus);
           goto cleanup;
         }
     }
@@ -603,12 +605,19 @@ gb_view_grid_focus_document (GbViewGrid *self,
   g_assert (stacks);
 
   if (self->last_focus)
-    gb_view_stack_focus_document (self->last_focus, document);
+    gb_view_stack_raise_document (self->last_focus, document, focus);
   else
-    gb_view_stack_focus_document (stacks->data, document);
+    gb_view_stack_raise_document (stacks->data, document, focus);
 
 cleanup:
   g_list_free (stacks);
+}
+
+void
+gb_view_grid_focus_document (GbViewGrid *self,
+                             GbDocument *document)
+{
+  gb_view_grid_raise_document (self, document, TRUE);
 }
 
 static void

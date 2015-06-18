@@ -681,45 +681,6 @@ gb_view_stack_find_with_document (GbViewStack *self,
   return ret;
 }
 
-void
-gb_view_stack_focus_document (GbViewStack *self,
-                              GbDocument  *document)
-{
-  GtkWidget *view;
-
-  g_return_if_fail (GB_IS_VIEW_STACK (self));
-  g_return_if_fail (GB_IS_DOCUMENT (document));
-
-  view = gb_view_stack_find_with_document (self, document);
-
-  if (view != NULL && GB_IS_VIEW (view))
-    {
-      gb_view_stack_set_active_view (self, view);
-      gtk_widget_grab_focus (view);
-      return;
-    }
-
-  view = gb_document_create_view (document);
-
-  if (view == NULL)
-    {
-      g_warning ("Document %s failed to create a view",
-                 gb_document_get_title (document));
-      return;
-    }
-
-  if (!GB_IS_VIEW (view))
-    {
-      g_warning ("Document %s did not create a GbView instance.",
-                 gb_document_get_title (document));
-      return;
-    }
-
-  gb_view_stack_add (GTK_CONTAINER (self), view);
-  gb_view_stack_set_active_view (self, view);
-  gtk_widget_grab_focus (view);
-}
-
 static void
 gb_view_stack__navigate_to_load_cb (GObject      *object,
                                     GAsyncResult *result,
@@ -765,6 +726,7 @@ gb_view_stack_focus_location (GbViewStack       *self,
   IdeBufferManager *buffer_manager;
   IdeBuffer *buffer;
   IdeFile *file;
+  GFile *gfile;
 
   g_return_if_fail (GB_IS_VIEW_STACK (self));
   g_return_if_fail (location != NULL);
@@ -777,8 +739,10 @@ gb_view_stack_focus_location (GbViewStack       *self,
   g_assert (file != NULL);
   g_assert (IDE_IS_FILE (file));
 
+  gfile = ide_file_get_file (file);
+
   buffer_manager = ide_context_get_buffer_manager (self->context);
-  buffer = ide_buffer_manager_find_buffer (buffer_manager, file);
+  buffer = ide_buffer_manager_find_buffer (buffer_manager, gfile);
 
   if (buffer != NULL && GB_IS_DOCUMENT (buffer))
     {
@@ -836,4 +800,54 @@ gb_view_stack_get_views (GbViewStack *self)
   g_return_val_if_fail (GB_IS_VIEW_STACK (self), NULL);
 
   return gtk_container_get_children (GTK_CONTAINER (self->stack));
+}
+
+void
+gb_view_stack_raise_document (GbViewStack *self,
+                              GbDocument  *document,
+                              gboolean     focus)
+{
+  GtkWidget *view;
+
+  g_return_if_fail (GB_IS_VIEW_STACK (self));
+  g_return_if_fail (GB_IS_DOCUMENT (document));
+
+  view = gb_view_stack_find_with_document (self, document);
+
+  if (view != NULL && GB_IS_VIEW (view))
+    {
+      gb_view_stack_set_active_view (self, view);
+      if (focus)
+        gtk_widget_grab_focus (view);
+      return;
+    }
+
+  view = gb_document_create_view (document);
+
+  if (view == NULL)
+    {
+      g_warning ("Document %s failed to create a view",
+                 gb_document_get_title (document));
+      return;
+    }
+
+  if (!GB_IS_VIEW (view))
+    {
+      g_warning ("Document %s did not create a GbView instance.",
+                 gb_document_get_title (document));
+      return;
+    }
+
+  gb_view_stack_add (GTK_CONTAINER (self), view);
+  gb_view_stack_set_active_view (self, view);
+
+  if (focus)
+    gtk_widget_grab_focus (view);
+}
+
+void
+gb_view_stack_focus_document (GbViewStack *self,
+                              GbDocument  *document)
+{
+  gb_view_stack_raise_document (self, document, TRUE);
 }

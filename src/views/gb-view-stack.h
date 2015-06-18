@@ -46,6 +46,9 @@ void        gb_view_stack_focus_document      (GbViewStack       *self,
 void        gb_view_stack_focus_location      (GbViewStack       *self,
                                                IdeSourceLocation *location);
 GList      *gb_view_stack_get_views           (GbViewStack       *self);
+void        gb_view_stack_raise_document      (GbViewStack       *self,
+                                               GbDocument        *document,
+                                               gboolean           focus);
 
 G_END_DECLS
 
