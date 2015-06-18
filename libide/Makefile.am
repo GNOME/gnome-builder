@@ -411,6 +411,7 @@ glib_enum_headers =  \
 	ide-highlighter.h \
 	ide-indent-style.h \
 	ide-source-view.h \
+	ide-symbol.h \
 	ide-thread-pool.h \
 	$(NULL)
 include $(top_srcdir)/build/autotools/Makefile.am.enums

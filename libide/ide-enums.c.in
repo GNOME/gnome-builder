@@ -11,6 +11,7 @@
 #include "ide-highlighter.h"
 #include "ide-indent-style.h"
 #include "ide-source-view.h"
+#include "ide-symbol.h"
 #include "ide-thread-pool.h"
 
 /*** END file-header ***/
