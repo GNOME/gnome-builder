@@ -152,8 +152,9 @@ link_selected_cb (GbDevhelpPanel *self,
 
   uri = dh_link_get_uri (link);
   gb_devhelp_document_set_uri (GB_DEVHELP_DOCUMENT (self->document), uri);
-  gb_view_grid_focus_document (view_grid, GB_DOCUMENT (self->document));
   g_free (uri);
+
+  gb_view_grid_raise_document (view_grid, GB_DOCUMENT (self->document), FALSE);
 }
 
 static void
