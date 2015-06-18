@@ -1,4 +1,4 @@
-/* ide-clang-symbol-tree.h
+/* ide-clang-symbol-node.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,21 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_CLANG_SYMBOL_TREE_H
-#define IDE_CLANG_SYMBOL_TREE_H
+#ifndef IDE_CLANG_SYMBOL_NODE_H
+#define IDE_CLANG_SYMBOL_NODE_H
 
-#include <gio/gio.h>
-
-#include "ide-symbol-tree.h"
+#include "ide-symbol-node.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CLANG_SYMBOL_TREE (ide_clang_symbol_tree_get_type())
+#define IDE_TYPE_CLANG_SYMBOL_NODE (ide_clang_symbol_node_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeClangSymbolTree, ide_clang_symbol_tree, IDE, CLANG_SYMBOL_TREE, GObject)
-
-GFile *ide_clang_symbol_tree_get_file (IdeClangSymbolTree *self);
+G_DECLARE_FINAL_TYPE (IdeClangSymbolNode, ide_clang_symbol_node, IDE, CLANG_SYMBOL_NODE, IdeSymbolNode)
 
 G_END_DECLS
 
-#endif /* IDE_CLANG_SYMBOL_TREE_H */
+#endif /* IDE_CLANG_SYMBOL_NODE_H */

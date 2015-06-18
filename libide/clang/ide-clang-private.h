@@ -24,17 +24,23 @@
 #include "ide-types.h"
 
 #include "ide-clang-service.h"
+#include "ide-clang-symbol-node.h"
 #include "ide-clang-translation-unit.h"
 #include "ide-highlight-index.h"
 
 G_BEGIN_DECLS
 
-IdeClangTranslationUnit *_ide_clang_translation_unit_new (IdeContext        *context,
-                                                          CXTranslationUnit  tu,
-                                                          GFile             *file,
-                                                          IdeHighlightIndex *index,
-                                                          gint64             serial);
-void                     _ide_clang_dispose_string       (CXString          *str);
+IdeClangTranslationUnit *_ide_clang_translation_unit_new     (IdeContext        *context,
+                                                              CXTranslationUnit  tu,
+                                                              GFile             *file,
+                                                              IdeHighlightIndex *index,
+                                                              gint64             serial);
+void                     _ide_clang_dispose_string           (CXString          *str);
+IdeSymbolNode           *_ide_clang_symbol_node_new          (CXCursor           cursor);
+CXCursor                 _ide_clang_symbol_node_get_cursor   (IdeClangSymbolNode *self);
+GArray                  *_ide_clang_symbol_node_get_children (IdeClangSymbolNode *self);
+void                     _ide_clang_symbol_node_set_children (IdeClangSymbolNode *self,
+                                                              GArray             *children);
 
 G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXString, _ide_clang_dispose_string)
 

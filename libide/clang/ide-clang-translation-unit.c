@@ -26,6 +26,7 @@
 #include "ide-context.h"
 #include "ide-clang-completion-item.h"
 #include "ide-clang-private.h"
+#include "ide-clang-symbol-tree.h"
 #include "ide-clang-translation-unit.h"
 #include "ide-debug.h"
 #include "ide-diagnostic.h"
@@ -1078,22 +1079,18 @@ ide_clang_translation_unit_get_symbol_tree_async (IdeClangTranslationUnit *self,
                                                   gpointer                 user_data)
 {
   g_autoptr(GTask) task = NULL;
+  IdeSymbolTree *symbol_tree;
 
   g_return_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self));
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
-
-  /*
-   * TODO: implement IdeClangSymbolTree
-   */
-
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_SUPPORTED,
-                           "Not yet supported");
+  symbol_tree = g_object_new (IDE_TYPE_CLANG_SYMBOL_TREE,
+                              "native", self->native,
+                              "file", file,
+                              NULL);
+  g_task_return_pointer (task, symbol_tree, g_object_unref);
 }
 
 IdeSymbolTree *

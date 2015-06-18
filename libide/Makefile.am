@@ -221,6 +221,8 @@ libide_1_0_la_SOURCES = \
 	clang/ide-clang-service.h \
 	clang/ide-clang-symbol-resolver.c \
 	clang/ide-clang-symbol-resolver.h \
+	clang/ide-clang-symbol-node.c \
+	clang/ide-clang-symbol-node.h \
 	clang/ide-clang-symbol-tree.c \
 	clang/ide-clang-symbol-tree.h \
 	clang/ide-clang-translation-unit.c \
