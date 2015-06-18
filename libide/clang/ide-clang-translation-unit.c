@@ -45,7 +45,7 @@ struct _IdeClangTranslationUnit
 {
   IdeObject          parent_instance;
 
-  CXTranslationUnit  tu;
+  IdeRefPtr         *native;
   gint64             serial;
   GFile             *file;
   IdeHighlightIndex *index;
@@ -384,6 +384,7 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
 
   if (!g_hash_table_contains (self->diagnostics, file))
     {
+      CXTranslationUnit tu = ide_ref_ptr_get (self->native);
       IdeContext *context;
       IdeProject *project;
       IdeVcs *vcs;
@@ -410,13 +411,13 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
 
       ide_project_reader_lock (project);
 
-      count = clang_getNumDiagnostics (self->tu);
+      count = clang_getNumDiagnostics (tu);
       for (i = 0; i < count; i++)
         {
           CXDiagnostic cxdiag;
           IdeDiagnostic *diag;
 
-          cxdiag = clang_getDiagnostic (self->tu, i);
+          cxdiag = clang_getDiagnostic (tu, i);
           diag = create_diagnostic (self, project, workpath, file, cxdiag);
 
           if (diag != NULL)
@@ -478,13 +479,23 @@ ide_clang_translation_unit_get_serial (IdeClangTranslationUnit *self)
 }
 
 static void
+ide_clang_translation_unit_set_native (IdeClangTranslationUnit *self,
+                                       CXTranslationUnit        native)
+{
+  g_assert (IDE_IS_CLANG_TRANSLATION_UNIT (self));
+
+  if (native != NULL)
+    self->native = ide_ref_ptr_new (native, (GDestroyNotify)clang_disposeTranslationUnit);
+}
+
+static void
 ide_clang_translation_unit_finalize (GObject *object)
 {
   IdeClangTranslationUnit *self = (IdeClangTranslationUnit *)object;
 
   IDE_ENTRY;
 
-  clang_disposeTranslationUnit (self->tu);
+  g_clear_pointer (&self->native, ide_ref_ptr_unref);
   g_clear_object (&self->file);
   g_clear_pointer (&self->index, ide_highlight_index_unref);
   g_clear_pointer (&self->diagnostics, g_hash_table_unref);
@@ -546,7 +557,7 @@ ide_clang_translation_unit_set_property (GObject      *object,
       break;
 
     case PROP_NATIVE:
-      self->tu = g_value_get_pointer (value);
+      ide_clang_translation_unit_set_native (self, g_value_get_pointer (value));
       break;
 
     default:
@@ -615,6 +626,7 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
   IdeClangTranslationUnit *self = source_object;
   CodeCompleteState *state = task_data;
   CXCodeCompleteResults *results;
+  CXTranslationUnit tu;
   g_autoptr(IdeRefPtr) refptr = NULL;
   struct CXUnsavedFile *ufs;
   g_autoptr(GPtrArray) ar = NULL;
@@ -624,6 +636,8 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
   g_assert (IDE_IS_CLANG_TRANSLATION_UNIT (self));
   g_assert (state);
   g_assert (state->unsaved_files);
+
+  tu = ide_ref_ptr_get (self->native);
 
   /*
    * FIXME: Not thread safe! We should probably add a "Pending" flag or something that is
@@ -669,7 +683,7 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
         }
     }
 
-  results = clang_codeCompleteAt (self->tu,
+  results = clang_codeCompleteAt (tu,
                                   state->path,
                                   state->line + 1,
                                   state->line_offset + 1,
@@ -878,6 +892,7 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
   g_autoptr(IdeSourceLocation) declaration = NULL;
   g_autoptr(IdeSourceLocation) definition = NULL;
   g_autoptr(IdeSourceLocation) canonical = NULL;
+  CXTranslationUnit tu;
   IdeSymbolKind symkind = 0;
   IdeSymbolFlags symflags = 0;
   IdeProject *project;
@@ -899,6 +914,8 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
   g_return_val_if_fail (location != NULL, NULL);
 
+  tu = ide_ref_ptr_get (self->native);
+
   context = ide_object_get_context (IDE_OBJECT (self));
   project = ide_context_get_project (context);
   vcs = ide_context_get_vcs (context);
@@ -911,11 +928,11 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
   if (!(file = ide_source_location_get_file (location)) ||
       !(gfile = ide_file_get_file (file)) ||
       !(filename = g_file_get_path (gfile)) ||
-      !(cxfile = clang_getFile (self->tu, filename)))
+      !(cxfile = clang_getFile (tu, filename)))
     IDE_RETURN (NULL);
 
-  cxlocation = clang_getLocation (self->tu, cxfile, line + 1, line_offset + 1);
-  cursor = clang_getCursor (self->tu, cxlocation);
+  cxlocation = clang_getLocation (tu, cxfile, line + 1, line_offset + 1);
+  cursor = clang_getCursor (tu, cxlocation);
   if (clang_Cursor_isNull (cursor))
     IDE_RETURN (NULL);
 
@@ -1041,7 +1058,7 @@ ide_clang_translation_unit_get_symbols (IdeClangTranslationUnit *self,
   state.file = file;
   state.path = g_file_get_path (ide_file_get_file (file));
 
-  cursor = clang_getTranslationUnitCursor (self->tu);
+  cursor = clang_getTranslationUnitCursor (ide_ref_ptr_get (self->native));
   clang_visitChildren (cursor,
                        ide_clang_translation_unit_get_symbols__visitor_cb,
                        &state);
