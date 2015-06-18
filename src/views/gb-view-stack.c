@@ -735,6 +735,7 @@ gb_view_stack_focus_location (GbViewStack       *self,
     return;
 
   file = ide_source_location_get_file (location);
+  gfile = ide_file_get_file (file);
 
   g_assert (file != NULL);
   g_assert (IDE_IS_FILE (file));
