@@ -47,7 +47,7 @@ struct _GbTreeBuilderClass
                                GMenu         *menu);
 };
 
-GtkWidget *gb_tree_builder_get_tree (GbTreeBuilder *builder);
+GbTree *gb_tree_builder_get_tree (GbTreeBuilder *builder);
 
 G_END_DECLS
 

@@ -162,14 +162,14 @@ _gb_tree_builder_set_tree (GbTreeBuilder *builder,
  *
  * Returns: (transfer none) (type GbTree) (nullable): A #GbTree or %NULL.
  */
-GtkWidget *
+GbTree *
 gb_tree_builder_get_tree (GbTreeBuilder *builder)
 {
   GbTreeBuilderPrivate *priv = gb_tree_builder_get_instance_private (builder);
 
   g_return_val_if_fail (GB_IS_TREE_BUILDER (builder), NULL);
 
-  return (GtkWidget *)priv->tree;
+  return priv->tree;
 }
 
 static void
