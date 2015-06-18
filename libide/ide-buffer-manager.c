@@ -463,6 +463,8 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
       g_clear_error (&error);
     }
 
+  gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (state->buffer), FALSE);
+
   for (i = 0; i < self->buffers->len; i++)
     {
       IdeBuffer *cur_buffer;
