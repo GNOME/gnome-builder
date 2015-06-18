@@ -898,7 +898,17 @@ gb_view_grid_find_document_typed (GbViewGrid *self,
 GtkWidget *
 gb_view_grid_get_last_focus (GbViewGrid *self)
 {
+  GtkWidget *ret = NULL;
+  GList *list;
+
   g_return_val_if_fail (GB_IS_VIEW_GRID (self), NULL);
 
-  return GTK_WIDGET (self->last_focus);
+  if (self->last_focus != NULL)
+    return GTK_WIDGET (self->last_focus);
+
+  list = gb_view_grid_get_stacks (self);
+  ret = list ? list->data : NULL;
+  g_list_free (list);
+
+  return ret;
 }
