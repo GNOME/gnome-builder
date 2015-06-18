@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
+#include "egg-task-cache.h"
 
 #include "gb-editor-view.h"
 #include "gb-plugins.h"
@@ -31,10 +32,12 @@
 
 struct _SymbolTree
 {
-  GtkBox       parent_instance;
+  GtkBox        parent_instance;
 
-  GbWorkbench *workbench;
-  GbTree      *tree;
+  GCancellable *cancellable;
+  EggTaskCache *symbols_cache;
+  GbWorkbench  *workbench;
+  GbTree       *tree;
 };
 
 enum {
@@ -49,6 +52,34 @@ static void workbench_addin_init (GbWorkbenchAddinInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SymbolTree, symbol_tree, GTK_TYPE_BOX,
                          G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN, workbench_addin_init))
+
+static void
+get_cached_symbol_tree_cb (GObject      *object,
+                           GAsyncResult *result,
+                           gpointer      user_data)
+{
+  EggTaskCache *cache = (EggTaskCache *)object;
+  g_autoptr(SymbolTree) self = user_data;
+  g_autoptr(IdeSymbolTree) symbol_tree = NULL;
+  g_autoptr(GError) error = NULL;
+  GbTreeNode *root;
+
+  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (SYMBOL_IS_TREE (self));
+
+  if (!(symbol_tree = egg_task_cache_get_finish (cache, result, &error)))
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        g_warning ("%s", error->message);
+      return;
+    }
+
+  root = g_object_new (GB_TYPE_TREE_NODE,
+                       "item", symbol_tree,
+                       NULL);
+  gb_tree_set_root (self->tree, root);
+}
 
 static void
 notify_active_view_cb (SymbolTree  *self,
@@ -70,9 +101,87 @@ notify_active_view_cb (SymbolTree  *self,
 
   if ((GObject *)document != gb_tree_node_get_item (root))
     {
-      root = gb_tree_node_new ();
-      gb_tree_node_set_item (root, G_OBJECT (document));
-      gb_tree_set_root (self->tree, root);
+      /*
+       * First, clear the old tree items.
+       */
+      gb_tree_set_root (self->tree, gb_tree_node_new ());;
+
+      /*
+       * Fetch the symbols via the transparent cache.
+       */
+      if (document != NULL)
+        {
+          if (self->cancellable != NULL)
+            {
+              g_cancellable_cancel (self->cancellable);
+              g_clear_object (&self->cancellable);
+            }
+
+          self->cancellable = g_cancellable_new ();
+
+          egg_task_cache_get_async (self->symbols_cache,
+                                    document,
+                                    FALSE,
+                                    self->cancellable,
+                                    get_cached_symbol_tree_cb,
+                                    g_object_ref (self));
+        }
+    }
+}
+
+static void
+get_symbol_tree_cb (GObject      *object,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  IdeSymbolResolver *resolver = (IdeSymbolResolver *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeSymbolTree) symbol_tree = NULL;
+  GError *error = NULL;
+
+  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  symbol_tree = ide_symbol_resolver_get_symbol_tree_finish (resolver, result, &error);
+
+  if (!symbol_tree)
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, g_object_ref (symbol_tree), g_object_unref);
+}
+
+static void
+populate_cache_cb (EggTaskCache  *cache,
+                   gconstpointer  key,
+                   GTask         *task,
+                   gpointer       user_data)
+{
+  GbEditorDocument *document = (GbEditorDocument *)key;
+  IdeLanguage *language;
+  IdeFile *file;
+  IdeSymbolResolver *resolver;
+
+  g_assert (EGG_IS_TASK_CACHE (cache));
+  g_assert (GB_IS_EDITOR_DOCUMENT (document));
+  g_assert (G_IS_TASK (task));
+
+  if ((file = ide_buffer_get_file (IDE_BUFFER (document))) &&
+      (language = ide_file_get_language (file)) &&
+      (resolver = ide_language_get_symbol_resolver (language)))
+    {
+      ide_symbol_resolver_get_symbol_tree_async (resolver,
+                                                 ide_file_get_file (file),
+                                                 g_task_get_cancellable (task),
+                                                 get_symbol_tree_cb,
+                                                 g_object_ref (task));
+    }
+  else
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               _("Current language does not support symbol resolvers"));
     }
 }
 
@@ -150,6 +259,7 @@ symbol_tree_finalize (GObject *object)
   SymbolTree *self = (SymbolTree *)object;
 
   ide_clear_weak_pointer (&self->workbench);
+  g_clear_object (&self->cancellable);
 
   G_OBJECT_CLASS (symbol_tree_parent_class)->finalize (object);
 }
@@ -190,6 +300,17 @@ symbol_tree_init (SymbolTree *self)
 {
   GbTreeNode *root;
   GbTreeBuilder *builder;
+
+  self->symbols_cache = egg_task_cache_new (g_direct_hash,
+                                            g_direct_equal,
+                                            g_object_ref,
+                                            g_object_unref,
+                                            g_object_ref,
+                                            g_object_unref,
+                                            G_USEC_PER_SEC * 20L,
+                                            populate_cache_cb,
+                                            self,
+                                            NULL);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 

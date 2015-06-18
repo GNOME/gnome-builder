@@ -18,6 +18,8 @@
 
 #include <glib/gi18n.h>
 
+#include "gb-tree.h"
+
 #include "symbol-tree-builder.h"
 
 struct _SymbolTreeBuilder
@@ -31,24 +33,88 @@ static void
 symbol_tree_builder_build_node (GbTreeBuilder *builder,
                                 GbTreeNode    *node)
 {
+  IdeSymbolNode *parent = NULL;
+  IdeSymbolTree *symbol_tree;
+  GbTree *tree;
+  GbTreeNode *root;
   GObject *item;
+  guint n_children;
+  guint i;
 
   g_assert (GB_IS_TREE_BUILDER (builder));
   g_assert (GB_IS_TREE_NODE (node));
 
+  if (!(tree = gb_tree_builder_get_tree (builder)) ||
+      !(root = gb_tree_get_root (tree)) ||
+      !(symbol_tree = IDE_SYMBOL_TREE (gb_tree_node_get_item (root))))
+    return;
+
   item = gb_tree_node_get_item (node);
 
-  if (GB_IS_EDITOR_DOCUMENT (item))
+  if (IDE_IS_SYMBOL_NODE (item))
+    parent = IDE_SYMBOL_NODE (item);
+
+  n_children = ide_symbol_tree_get_n_children (symbol_tree, parent);
+
+  for (i = 0; i < n_children; i++)
     {
-#if 0
+      g_autoptr(IdeSymbolNode) symbol = NULL;
+      const gchar *name;
+      const gchar *icon_name = NULL;
       GbTreeNode *child;
+      IdeSymbolKind kind;
+
+      symbol = ide_symbol_tree_get_nth_child (symbol_tree, parent, i);
+      name = ide_symbol_node_get_name (symbol);
+      kind = ide_symbol_node_get_kind (symbol);
+
+      switch (kind)
+        {
+        case IDE_SYMBOL_FUNCTION:
+          icon_name = "lang-function-symbolic";
+          break;
+
+        case IDE_SYMBOL_ENUM:
+          icon_name = "lang-enum-symbolic";
+          break;
+
+        case IDE_SYMBOL_ENUM_VALUE:
+          icon_name = "lang-enum-value-symbolic";
+          break;
+
+        case IDE_SYMBOL_STRUCT:
+          icon_name = "lang-struct-symbolic";
+          break;
+
+        case IDE_SYMBOL_CLASS:
+          icon_name = "lang-class-symbolic";
+          break;
+
+        case IDE_SYMBOL_METHOD:
+          icon_name = "lang-method-symbolic";
+          break;
+
+        case IDE_SYMBOL_UNION:
+          icon_name = "lang-union-symbolic";
+          break;
+
+        case IDE_SYMBOL_SCALAR:
+        case IDE_SYMBOL_FIELD:
+          icon_name = "lang-variable-symbolic";
+          break;
+
+        case IDE_SYMBOL_NONE:
+        default:
+          icon_name = NULL;
+          break;
+        }
 
       child = g_object_new (GB_TYPE_TREE_NODE,
-                            "text", _("Symbols"),
-                            "icon-name", "lang-class-symbolic",
+                            "text", name,
+                            "icon-name", icon_name,
+                            "item", symbol,
                             NULL);
       gb_tree_node_append (node, child);
-#endif
     }
 }
 
