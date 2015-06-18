@@ -114,3 +114,34 @@ ide_symbol_resolver_get_symbols_finish (IdeSymbolResolver  *self,
 
   return IDE_SYMBOL_RESOLVER_GET_CLASS (self)->get_symbols_finish (self, result, error);
 }
+
+void
+ide_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *self,
+                                           GFile               *file,
+                                           GCancellable        *cancellable,
+                                           GAsyncReadyCallback  callback,
+                                           gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_SYMBOL_RESOLVER (self));
+  g_return_if_fail (G_IS_FILE (file));
+
+  IDE_SYMBOL_RESOLVER_GET_CLASS (self)->get_symbol_tree_async (self, file, cancellable, callback, user_data);
+}
+
+/**
+ * ide_symbol_resolver_get_symbol_tree_finish:
+ *
+ * Completes an asynchronous request to get the symbol tree for the requested file.
+ *
+ * Returns: (transfer full): An #IdeSymbolTree; otherwise %NULL and @error is set.
+ */
+IdeSymbolTree *
+ide_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *self,
+                                            GAsyncResult       *result,
+                                            GError            **error)
+{
+  g_return_val_if_fail (IDE_IS_SYMBOL_RESOLVER (self), NULL);
+  g_return_val_if_fail (!result || G_IS_ASYNC_RESULT (result), NULL);
+
+  return IDE_SYMBOL_RESOLVER_GET_CLASS (self)->get_symbol_tree_finish (self, result, error);
+}

@@ -23,6 +23,7 @@
 
 #include "ide-object.h"
 #include "ide-highlight-index.h"
+#include "ide-symbol-tree.h"
 
 G_BEGIN_DECLS
 
@@ -41,6 +42,14 @@ void               ide_clang_translation_unit_code_complete_async      (IdeClang
                                                                         GAsyncReadyCallback       callback,
                                                                         gpointer                  user_data);
 GPtrArray         *ide_clang_translation_unit_code_complete_finish     (IdeClangTranslationUnit  *self,
+                                                                        GAsyncResult             *result,
+                                                                        GError                  **error);
+void               ide_clang_translation_unit_get_symbol_tree_async    (IdeClangTranslationUnit  *self,
+                                                                        GFile                    *file,
+                                                                        GCancellable             *cancellable,
+                                                                        GAsyncReadyCallback       callback,
+                                                                        gpointer                  user_data);
+IdeSymbolTree     *ide_clang_translation_unit_get_symbol_tree_finish   (IdeClangTranslationUnit  *self,
                                                                         GAsyncResult             *result,
                                                                         GError                  **error);
 IdeHighlightIndex *ide_clang_translation_unit_get_index                (IdeClangTranslationUnit  *self);

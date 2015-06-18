@@ -151,6 +151,10 @@ libide_1_0_la_public_sources = \
 	ide-symbol-resolver.h \
 	ide-symbol.c \
 	ide-symbol.h \
+	ide-symbol-node.c \
+	ide-symbol-node.h \
+	ide-symbol-tree.c \
+	ide-symbol-tree.h \
 	ide-target.c \
 	ide-target.h \
 	ide-test-case.c \

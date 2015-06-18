@@ -21,6 +21,8 @@
 
 #include "ide-object.h"
 
+#include "ide-symbol-tree.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SYMBOL_RESOLVER (ide_symbol_resolver_get_type())
@@ -47,6 +49,15 @@ struct _IdeSymbolResolverClass
   GPtrArray *(*get_symbols_finish)   (IdeSymbolResolver    *self,
                                       GAsyncResult         *result,
                                       GError              **error);
+
+  void           (*get_symbol_tree_async)  (IdeSymbolResolver    *self,
+                                            GFile                *file,
+                                            GCancellable         *cancellable,
+                                            GAsyncReadyCallback   callback,
+                                            gpointer              user_data);
+  IdeSymbolTree *(*get_symbol_tree_finish) (IdeSymbolResolver    *self,
+                                            GAsyncResult         *result,
+                                            GError              **error);
 };
 
 void       ide_symbol_resolver_lookup_symbol_async  (IdeSymbolResolver    *self,
@@ -65,6 +76,15 @@ void       ide_symbol_resolver_get_symbols_async    (IdeSymbolResolver    *self,
 GPtrArray *ide_symbol_resolver_get_symbols_finish   (IdeSymbolResolver    *self,
                                                      GAsyncResult         *result,
                                                      GError              **error);
+
+void           ide_symbol_resolver_get_symbol_tree_async  (IdeSymbolResolver    *self,
+                                                           GFile                *file,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
+IdeSymbolTree *ide_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *self,
+                                                           GAsyncResult       *result,
+                                                           GError            **error);
 
 G_END_DECLS
 

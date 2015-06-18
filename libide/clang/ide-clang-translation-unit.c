@@ -1052,3 +1052,42 @@ ide_clang_translation_unit_get_symbols (IdeClangTranslationUnit *self,
 
   return state.ar;
 }
+
+void
+ide_clang_translation_unit_get_symbol_tree_async (IdeClangTranslationUnit *self,
+                                                  GFile                   *file,
+                                                  GCancellable            *cancellable,
+                                                  GAsyncReadyCallback      callback,
+                                                  gpointer                 user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
+
+  /*
+   * TODO: implement IdeClangSymbolTree
+   */
+
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Not yet supported");
+}
+
+IdeSymbolTree *
+ide_clang_translation_unit_get_symbol_tree_finish (IdeClangTranslationUnit  *self,
+                                                   GAsyncResult             *result,
+                                                   GError                  **error)
+{
+  GTask *task = (GTask *)result;
+
+  g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (task), NULL);
+
+  return g_task_propagate_pointer (task, error);
+}
