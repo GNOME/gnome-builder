@@ -87,18 +87,6 @@
     <section>
       <attribute name="id">edit-section-1</attribute>
     </section>
-    <section>
-      <submenu>
-        <attribute name="label" translatable="yes">_View</attribute>
-        <section>
-          <attribute name="id">view-section</attribute>
-          <item>
-            <attribute name="label" translatable="yes">Display Side _Panel</attribute>
-            <attribute name="action">workspace.show-sidebar</attribute>
-          </item>
-        </section>
-      </submenu>
-    </section>
 <!--
     <section>
       <attribute name="id">close-section</attribute>
