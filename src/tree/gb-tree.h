@@ -52,31 +52,31 @@ struct _GbTreeClass
                           GtkWidget   *widget);
 };
 
-void          gb_tree_add_builder     (GbTree        *self,
-                                       GbTreeBuilder *builder);
-void          gb_tree_remove_builder  (GbTree        *self,
-                                       GbTreeBuilder *builder);
-GbTreeNode   *gb_tree_find_item       (GbTree        *self,
-                                       GObject       *item);
-GbTreeNode   *gb_tree_find_custom     (GbTree        *self,
-                                       GEqualFunc     equal_func,
-                                       gpointer       key);
-GbTreeNode   *gb_tree_get_selected    (GbTree        *self);
-void          gb_tree_rebuild         (GbTree        *self);
-void          gb_tree_set_root        (GbTree        *self,
-                                       GbTreeNode    *node);
-GbTreeNode   *gb_tree_get_root        (GbTree        *self);
-void          gb_tree_set_show_icons  (GbTree        *self,
-                                       gboolean       show_icons);
-gboolean      gb_tree_get_show_icons  (GbTree        *self);
-void          gb_tree_scroll_to_node  (GbTree        *self,
-                                       GbTreeNode    *node);
-void          gb_tree_expand_to_node  (GbTree        *self,
-                                       GbTreeNode    *node);
-GbTreeNode   *gb_tree_find_child_node (GbTree         *self,
-                                       GbTreeNode     *node,
-                                       GbTreeFindFunc  find_func,
-                                       gpointer        user_data);
+void          gb_tree_add_builder     (GbTree           *self,
+                                       GbTreeBuilder    *builder);
+void          gb_tree_remove_builder  (GbTree           *self,
+                                       GbTreeBuilder    *builder);
+GbTreeNode   *gb_tree_find_item       (GbTree           *self,
+                                       GObject          *item);
+GbTreeNode   *gb_tree_find_custom     (GbTree           *self,
+                                       GEqualFunc        equal_func,
+                                       gpointer          key);
+GbTreeNode   *gb_tree_get_selected    (GbTree           *self);
+void          gb_tree_rebuild         (GbTree           *self);
+void          gb_tree_set_root        (GbTree           *self,
+                                       GbTreeNode       *node);
+GbTreeNode   *gb_tree_get_root        (GbTree           *self);
+void          gb_tree_set_show_icons  (GbTree           *self,
+                                       gboolean          show_icons);
+gboolean      gb_tree_get_show_icons  (GbTree           *self);
+void          gb_tree_scroll_to_node  (GbTree           *self,
+                                       GbTreeNode       *node);
+void          gb_tree_expand_to_node  (GbTree           *self,
+                                       GbTreeNode       *node);
+GbTreeNode   *gb_tree_find_child_node (GbTree           *self,
+                                       GbTreeNode       *node,
+                                       GbTreeFindFunc    find_func,
+                                       gpointer          user_data);
 
 G_END_DECLS
 
