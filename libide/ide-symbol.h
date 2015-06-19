@@ -37,6 +37,7 @@ typedef enum
   IDE_SYMBOL_FIELD,
   IDE_SYMBOL_ENUM,
   IDE_SYMBOL_ENUM_VALUE,
+  IDE_SYMBOL_VARIABLE,
 } IdeSymbolKind;
 
 typedef enum

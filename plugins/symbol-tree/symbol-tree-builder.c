@@ -102,6 +102,7 @@ symbol_tree_builder_build_node (GbTreeBuilder *builder,
 
         case IDE_SYMBOL_SCALAR:
         case IDE_SYMBOL_FIELD:
+        case IDE_SYMBOL_VARIABLE:
           icon_name = "lang-variable-symbolic";
           break;
 

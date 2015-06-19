@@ -17,6 +17,7 @@
  */
 
 #include <clang-c/Index.h>
+#include <glib/gi18n.h>
 #include <gio/gio.h>
 
 #include "ide-clang-symbol-node.h"
@@ -114,6 +115,10 @@ get_symbol_kind (CXCursor        cursor,
       kind = IDE_SYMBOL_FIELD;
       break;
 
+    case CXCursor_VarDecl:
+      kind = IDE_SYMBOL_VARIABLE;
+      break;
+
     default:
       break;
     }
@@ -131,15 +136,17 @@ _ide_clang_symbol_node_new (IdeContext *context,
   IdeSymbolFlags flags = 0;
   IdeSymbolKind kind;
   CXString cxname;
+  const gchar *name;
 
   kind = get_symbol_kind (cursor, &flags);
   cxname = clang_getCursorSpelling (cursor);
+  name = clang_getCString (cxname);
 
   self = g_object_new (IDE_TYPE_CLANG_SYMBOL_NODE,
                        "context", context,
                        "kind", kind,
                        "flags", flags,
-                       "name", clang_getCString (cxname),
+                       "name", ide_str_empty0 (name) ? _("anonymous") : name,
                        NULL);
 
   self->cursor = cursor;

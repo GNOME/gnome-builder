@@ -99,8 +99,15 @@ cursor_is_recognized (TraversalState *state,
      * TODO: Support way more CXCursorKind.
      */
 
+    case CXCursor_ClassDecl:
+    case CXCursor_EnumConstantDecl:
+    case CXCursor_EnumDecl:
+    case CXCursor_FieldDecl:
     case CXCursor_FunctionDecl:
+    case CXCursor_StructDecl:
     case CXCursor_TypedefDecl:
+    case CXCursor_UnionDecl:
+    case CXCursor_VarDecl:
       cxloc = clang_getCursorLocation (cursor);
       clang_getFileLocation (cxloc, &file, NULL, NULL, NULL);
       filename = clang_getFileName (file);
