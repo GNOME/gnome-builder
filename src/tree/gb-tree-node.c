@@ -173,27 +173,10 @@ void
 gb_tree_node_remove (GbTreeNode *node,
                      GbTreeNode *child)
 {
-  GtkTreeModel *model = NULL;
-  GtkTreePath *path;
-  GtkTreeIter iter;
-  GbTree *tree = NULL;
-
   g_return_if_fail (GB_IS_TREE_NODE (node));
+  g_return_if_fail (GB_IS_TREE_NODE (child));
 
-  tree = gb_tree_node_get_tree (node);
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree));
-  path = gb_tree_node_get_path (node);
-
-  g_object_ref (tree);
-  g_object_ref (model);
-
-  if (gtk_tree_model_get_iter (model, &iter, path))
-    gtk_tree_store_remove (GTK_TREE_STORE (model), &iter);
-
-  g_clear_object (&model);
-  g_clear_object (&tree);
-
-  gtk_tree_path_free (path);
+  _gb_tree_remove (node->tree, child);
 }
 
 /**
@@ -238,31 +221,13 @@ gboolean
 gb_tree_node_get_iter (GbTreeNode  *self,
                        GtkTreeIter *iter)
 {
-  GtkTreeModel *model;
-  GtkTreePath *path;
   gboolean ret = FALSE;
 
   g_return_val_if_fail (GB_IS_TREE_NODE (self), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
 
   if (self->tree != NULL)
-    {
-      model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->tree));
-      path = gb_tree_node_get_path (self);
-      ret = gtk_tree_model_get_iter (model, iter, path);
-      gtk_tree_path_free (path);
-    }
-
-#if 0
-  if (ret)
-    {
-      GbTreeNode *other = NULL;
-
-      gtk_tree_model_get (model, iter, 0, &other, -1);
-      g_assert (other == self);
-      g_clear_object (&other);
-    }
-#endif
+    ret = _gb_tree_get_iter (self->tree, self, iter);
 
   return ret;
 }

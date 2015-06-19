@@ -38,6 +38,11 @@ void         _gb_tree_insert_sorted           (GbTree        *self,
                                                GbTreeNode    *child,
                                                GbTreeNodeCompareFunc compare_func,
                                                gpointer       user_data);
+void         _gb_tree_remove                  (GbTree        *self,
+                                               GbTreeNode    *node);
+gboolean     _gb_tree_get_iter                (GbTree        *self,
+                                               GbTreeNode    *node,
+                                               GtkTreeIter   *iter);
 
 void         _gb_tree_node_set_tree           (GbTreeNode    *node,
                                                GbTree        *tree);

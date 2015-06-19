@@ -1513,3 +1513,43 @@ failure:
 
   return NULL;
 }
+
+void
+_gb_tree_remove (GbTree     *self,
+                 GbTreeNode *node)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
+  GtkTreePath *path;
+  GtkTreeIter iter;
+
+  g_return_if_fail (GB_IS_TREE (self));
+  g_return_if_fail (GB_IS_TREE_NODE (node));
+
+  path = gb_tree_node_get_path (node);
+
+  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->store), &iter, path))
+    gtk_tree_store_remove (priv->store, &iter);
+
+  gtk_tree_path_free (path);
+}
+
+gboolean
+_gb_tree_get_iter (GbTree      *self,
+                   GbTreeNode  *node,
+                   GtkTreeIter *iter)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
+  GtkTreePath *path;
+  gboolean ret;
+
+  g_return_val_if_fail (GB_IS_TREE (self), FALSE);
+  g_return_val_if_fail (GB_IS_TREE_NODE (node), FALSE);
+  g_return_val_if_fail (iter, FALSE);
+
+  path = gb_tree_node_get_path (node);
+  ret = gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->store), iter, path);
+  gtk_tree_path_free (path);
+
+  return ret;
+}
+
