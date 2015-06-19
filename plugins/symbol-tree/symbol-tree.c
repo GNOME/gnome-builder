@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <ide.h>
 #include <libpeas/peas.h>
 
 #include "egg-task-cache.h"
@@ -32,12 +33,13 @@
 
 struct _SymbolTree
 {
-  GtkBox        parent_instance;
+  GtkBox          parent_instance;
 
-  GCancellable *cancellable;
-  EggTaskCache *symbols_cache;
-  GbWorkbench  *workbench;
-  GbTree       *tree;
+  GCancellable   *cancellable;
+  EggTaskCache   *symbols_cache;
+  GbWorkbench    *workbench;
+  GbTree         *tree;
+  GtkSearchEntry *search_entry;
 };
 
 enum {
@@ -234,6 +236,43 @@ symbol_tree_set_workbench (SymbolTree  *self,
   ide_set_weak_pointer (&self->workbench, workbench);
 }
 
+static gboolean
+filter_symbols_cb (GbTree     *tree,
+                   GbTreeNode *node,
+                   gpointer    user_data)
+{
+  IdePatternSpec *spec = user_data;
+
+  return ide_pattern_spec_match (spec, gb_tree_node_get_text (node));
+}
+
+static void
+symbol_tree__search_entry_changed (SymbolTree     *self,
+                                   GtkSearchEntry *search_entry)
+{
+  const gchar *text;
+
+  g_return_if_fail (SYMBOL_IS_TREE (self));
+  g_return_if_fail (GTK_IS_SEARCH_ENTRY (search_entry));
+
+  text = gtk_entry_get_text (GTK_ENTRY (search_entry));
+
+  if (ide_str_empty0 (text))
+    {
+      gb_tree_set_filter (self->tree, NULL, NULL, NULL);
+    }
+  else
+    {
+      IdePatternSpec *spec;
+
+      spec = ide_pattern_spec_new (text);
+      gb_tree_set_filter (self->tree,
+                          filter_symbols_cb,
+                          spec,
+                          (GDestroyNotify)ide_pattern_spec_unref);
+    }
+}
+
 static void
 symbol_tree_set_property (GObject      *object,
                           guint         prop_id,
@@ -291,6 +330,7 @@ symbol_tree_class_init (SymbolTreeClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/symbol-tree/symbol-tree.ui");
   gtk_widget_class_bind_template_child (widget_class, SymbolTree, tree);
+  gtk_widget_class_bind_template_child (widget_class, SymbolTree, search_entry);
 
   g_type_ensure (GB_TYPE_TREE);
 }
@@ -319,6 +359,12 @@ symbol_tree_init (SymbolTree *self)
 
   builder = g_object_new (SYMBOL_TYPE_TREE_BUILDER, NULL);
   gb_tree_add_builder (self->tree, builder);
+
+  g_signal_connect_object (self->search_entry,
+                           "changed",
+                           G_CALLBACK (symbol_tree__search_entry_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 GB_DEFINE_EMBEDDED_PLUGIN (symbol_tree,

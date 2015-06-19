@@ -4,6 +4,12 @@
   <template class="SymbolTree" parent="GtkBox">
     <property name="vexpand">true</property>
     <property name="visible">true</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkSearchEntry" id="search_entry">
+        <property name="visible">true</property>
+      </object>
+    </child>
     <child>
       <object class="GtkScrolledWindow">
         <property name="expand">true</property>

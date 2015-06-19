@@ -72,3 +72,14 @@ DhSidebar GtkSearchEntry {
   border-top: none;
   border-radius: 0px;
 }
+
+
+/*
+ * Adjust symbol panel styling.
+ */
+SymbolTree GtkSearchEntry {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-radius: 0px;
+}
