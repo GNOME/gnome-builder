@@ -40,6 +40,17 @@ typedef gboolean (*GbTreeFindFunc) (GbTree     *tree,
                                     GbTreeNode *child,
                                     gpointer    user_data);
 
+/**
+ * GbTreeFilterFunc:
+ *
+ * Callback to check if @node should be visible.
+ *
+ * Returns: %TRUE if @node should be visible.
+ */
+typedef gboolean (*GbTreeFilterFunc) (GbTree     *tree,
+                                      GbTreeNode *node,
+                                      gpointer    user_data);
+
 struct _GbTreeClass
 {
 	GtkTreeViewClass parent_class;
@@ -77,6 +88,10 @@ GbTreeNode   *gb_tree_find_child_node (GbTree           *self,
                                        GbTreeNode       *node,
                                        GbTreeFindFunc    find_func,
                                        gpointer          user_data);
+void          gb_tree_set_filter      (GbTree           *self,
+                                       GbTreeFilterFunc  filter_func,
+                                       gpointer          filter_data,
+                                       GDestroyNotify    filter_data_destroy);
 
 G_END_DECLS
 

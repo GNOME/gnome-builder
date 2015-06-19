@@ -45,6 +45,14 @@ typedef struct
   GbTreeNode *result;
 } NodeLookup;
 
+typedef struct
+{
+  GbTree           *self;
+  GbTreeFilterFunc  filter_func;
+  gpointer          filter_data;
+  GDestroyNotify    filter_data_destroy;
+} FilterFunc;
+
 static void gb_tree_buildable_init (GtkBuildableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GbTree, gb_tree, GTK_TYPE_TREE_VIEW,
@@ -1553,3 +1561,63 @@ _gb_tree_get_iter (GbTree      *self,
   return ret;
 }
 
+static void
+filter_func_free (gpointer user_data)
+{
+  FilterFunc *data = user_data;
+
+  if (data->filter_data_destroy)
+    data->filter_data_destroy (data->filter_data);
+
+  g_free (data);
+}
+
+static gboolean
+gb_tree_model_filter_visible_func (GtkTreeModel *model,
+                                   GtkTreeIter  *iter,
+                                   gpointer      data)
+{
+  GbTreeNode *node = NULL;
+  FilterFunc *filter = data;
+  gboolean ret;
+
+  gtk_tree_model_get (model, iter, 0, &node, -1);
+  ret = filter->filter_func (filter->self, node, filter->filter_data);
+  g_clear_object (&node);
+
+  return ret;
+}
+
+void
+gb_tree_set_filter (GbTree           *self,
+                    GbTreeFilterFunc  filter_func,
+                    gpointer          filter_data,
+                    GDestroyNotify    filter_data_destroy)
+{
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
+
+  g_return_if_fail (GB_IS_TREE (self));
+
+  if (filter_func == NULL)
+    {
+      gtk_tree_view_set_model (GTK_TREE_VIEW (self), GTK_TREE_MODEL (priv->store));
+    }
+  else
+    {
+      FilterFunc *data;
+      GtkTreeModel *filter;
+
+      data = g_new0 (FilterFunc, 1);
+      data->filter_func = filter_func;
+      data->filter_data = filter_data;
+      data->filter_data_destroy = filter_data_destroy;
+
+      filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (priv->store), NULL);
+      gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter),
+                                              gb_tree_model_filter_visible_func,
+                                              data,
+                                              filter_func_free);
+      gtk_tree_view_set_model (GTK_TREE_VIEW (self), GTK_TREE_MODEL (filter));
+      g_clear_object (&filter);
+    }
+}
