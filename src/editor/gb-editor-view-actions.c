@@ -726,7 +726,6 @@ gb_editor_view_actions_init (GbEditorView *self)
 void
 gb_editor_view_actions_update (GbEditorView *self)
 {
-#if 0
   GtkSourceLanguage *language;
   const gchar *lang_id = NULL;
   GActionGroup *group;
@@ -747,5 +746,4 @@ gb_editor_view_actions_update (GbEditorView *self)
              (g_strcmp0 (lang_id, "markdown") == 0));
   action = g_action_map_lookup_action (G_ACTION_MAP (group), "preview");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
-#endif
 }
