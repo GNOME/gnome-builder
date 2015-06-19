@@ -213,177 +213,6 @@ gb_editor_view__buffer_notify_title (GbEditorView *self,
 }
 
 static void
-gb_editor_view_update_symbols_cb (GObject      *object,
-                                  GAsyncResult *result,
-                                  gpointer      user_data)
-{
-  IdeBuffer *buffer = (IdeBuffer *)object;
-  g_autoptr(GbEditorView) self = user_data;
-  g_autoptr(GPtrArray) ret = NULL;
-  g_autoptr(GError) error = NULL;
-  GList *children;
-  GList *iter;
-  gsize i;
-
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  ret = ide_buffer_get_symbols_finish (buffer, result, &error);
-
-  if (ret == NULL)
-    {
-      gtk_widget_hide (GTK_WIDGET (self->symbols_button));
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
-        g_warning ("%s", error->message);
-      return;
-    }
-
-  children = gtk_container_get_children (GTK_CONTAINER (self->symbols_listbox));
-  for (iter = children; iter; iter = iter->next)
-    gtk_container_remove (GTK_CONTAINER (self->symbols_listbox), iter->data);
-  g_list_free (children);
-
-  for (i = 0; i < ret->len; i++)
-    {
-      const gchar *name;
-      IdeSymbol *symbol;
-      GtkListBoxRow *row;
-      GtkLabel *label;
-      GtkBox *box;
-      GtkImage *image;
-      IdeSymbolKind kind;
-      IdeSymbolFlags flags;
-      const gchar *icon_name;
-
-      symbol = g_ptr_array_index (ret, i);
-      kind = ide_symbol_get_kind (symbol);
-      flags = ide_symbol_get_flags (symbol);
-      name = ide_symbol_get_name (symbol);
-
-      row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
-                          "visible", TRUE,
-                          NULL);
-      g_object_set_data_full (G_OBJECT (row),
-                              "IDE_SYMBOL",
-                              ide_symbol_ref (symbol),
-                              (GDestroyNotify)ide_symbol_unref);
-
-      box = g_object_new (GTK_TYPE_BOX,
-                          "orientation", GTK_ORIENTATION_HORIZONTAL,
-                          "visible", TRUE,
-                          NULL);
-
-      switch (kind)
-        {
-        case IDE_SYMBOL_FUNCTION:
-          icon_name = "lang-function-symbolic";
-          break;
-
-        case IDE_SYMBOL_ENUM:
-          icon_name = "lang-enum-symbolic";
-          break;
-
-        case IDE_SYMBOL_STRUCT:
-          icon_name = "lang-struct-symbolic";
-          break;
-
-        case IDE_SYMBOL_CLASS:
-          icon_name = "lang-class-symbolic";
-          break;
-
-        case IDE_SYMBOL_SCALAR:
-        case IDE_SYMBOL_METHOD:
-        case IDE_SYMBOL_UNION:
-        case IDE_SYMBOL_FIELD:
-        case IDE_SYMBOL_ENUM_VALUE:
-        case IDE_SYMBOL_NONE:
-        default:
-          icon_name = NULL;
-          break;
-        }
-
-      image = g_object_new (GTK_TYPE_IMAGE,
-                            "hexpand", FALSE,
-                            "icon-name", icon_name,
-                            "margin-start", 3,
-                            "margin-end", 3,
-                            "width-request", 16,
-                            "visible", TRUE,
-                            NULL);
-
-      label = g_object_new (GTK_TYPE_LABEL,
-                            "hexpand", TRUE,
-                            "label", name,
-                            "margin-bottom", 3,
-                            "margin-end", 6,
-                            "margin-start", 6,
-                            "margin-top", 3,
-                            "visible", TRUE,
-                            "xalign", 0.0f,
-                            NULL);
-
-      if ((flags & IDE_SYMBOL_FLAGS_IS_DEPRECATED) != 0)
-        {
-          gchar *name_markup;
-
-          name_markup = g_strdup_printf ("<i>%s</i>", name);
-          g_object_set (label,
-                        "label", name_markup,
-                        "use-markup", TRUE,
-                        NULL);
-          g_free (name_markup);
-        }
-
-      gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (box));
-      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
-      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
-      gtk_container_add (GTK_CONTAINER (self->symbols_listbox), GTK_WIDGET (row));
-    }
-
-  gtk_widget_show (GTK_WIDGET (self->symbols_button));
-}
-
-static gboolean
-gb_editor_view_update_symbols_timeout (gpointer user_data)
-{
-  GbEditorView *self = user_data;
-
-  g_assert (GB_IS_EDITOR_VIEW (self));
-
-  self->symbol_timeout = 0;
-
-  ide_buffer_get_symbols_async (IDE_BUFFER (self->document),
-                                NULL,
-                                gb_editor_view_update_symbols_cb,
-                                g_object_ref (self));
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-gb_editor_view_queue_symbol_update (GbEditorView *self)
-{
-  g_assert (GB_IS_EDITOR_VIEW (self));
-
-  if (self->symbol_timeout == 0)
-    {
-      self->symbol_timeout =
-        g_timeout_add_seconds (SYMBOL_UPDATE_SECS,
-                               gb_editor_view_update_symbols_timeout,
-                               self);
-    }
-}
-
-static void
-gb_editor_view__buffer_changed (GbEditorView     *self,
-                                GbEditorDocument *document)
-{
-  g_assert (GB_IS_EDITOR_VIEW (self));
-  g_assert (GB_IS_EDITOR_DOCUMENT (document));
-
-  gb_editor_view_queue_symbol_update (self);
-}
-
-static void
 gb_editor_view_set_document (GbEditorView     *self,
                              GbEditorDocument *document)
 {
@@ -416,12 +245,6 @@ gb_editor_view_set_document (GbEditorView     *self,
                                G_CONNECT_SWAPPED);
 
       g_signal_connect_object (document,
-                               "changed",
-                               G_CALLBACK (gb_editor_view__buffer_changed),
-                               self,
-                               G_CONNECT_SWAPPED);
-
-      g_signal_connect_object (document,
                                "notify::title",
                                G_CALLBACK (gb_editor_view__buffer_notify_title),
                                self,
@@ -436,7 +259,6 @@ gb_editor_view_set_document (GbEditorView     *self,
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_DOCUMENT]);
 
       gb_editor_view_actions_update (self);
-      gb_editor_view_update_symbols_timeout (self);
     }
 }
 
@@ -527,86 +349,6 @@ gb_editor_view_hide_reload_bar (GbEditorView *self,
   gtk_revealer_set_reveal_child (self->modified_revealer, FALSE);
 }
 
-static void
-gb_editor_view__symbol_row_activated_cb (GbEditorView  *self,
-                                         GtkListBoxRow *row,
-                                         GtkListBox    *list_box)
-{
-  IdeSourceLocation *location;
-  IdeSymbol *symbol;
-
-  g_assert (GB_IS_EDITOR_VIEW (self));
-  g_assert (GTK_IS_LIST_BOX_ROW (row));
-  g_assert (GTK_IS_LIST_BOX (list_box));
-
-  symbol = g_object_get_data (G_OBJECT (row), "IDE_SYMBOL");
-  location = ide_symbol_get_canonical_location (symbol);
-
-  gb_editor_view_navigate_to (GB_VIEW (self), location);
-}
-
-static void
-gb_editor_view__symbol_entry_activate_cb (GbEditorView *self,
-                                          GtkEntry     *entry)
-{
-  GtkListBoxRow *row;
-
-  g_assert (GB_IS_EDITOR_VIEW (self));
-  g_assert (GTK_IS_ENTRY (entry));
-
-  /*
-   * FIXME:
-   *
-   * Use row_at_y() with 1, since getting from 0 does not work.
-   */
-  row = gtk_list_box_get_row_at_y (self->symbols_listbox, 1);
-  if (row != NULL)
-    {
-      g_signal_emit_by_name (row, "activate");
-      gtk_widget_hide (GTK_WIDGET (self->symbols_popover));
-    }
-}
-
-static gboolean
-gb_editor_view_symbol_filter_func (GtkListBoxRow *row,
-                                   gpointer       user_data)
-{
-  GbEditorView *self = user_data;
-  IdeSymbol *symbol;
-  const gchar *name;
-
-  g_assert (GTK_IS_LIST_BOX_ROW (row));
-  g_assert (GB_IS_EDITOR_VIEW (self));
-
-  if (self->symbol_spec == NULL)
-    return TRUE;
-
-  symbol = g_object_get_data (G_OBJECT (row), "IDE_SYMBOL");
-  g_assert (symbol != NULL);
-
-  name = ide_symbol_get_name (symbol);
-
-  return ide_pattern_spec_match (self->symbol_spec, name);
-}
-
-static void
-gb_editor_view_invalidate_symbol_filter (GbEditorView *self,
-                                         GtkEntry     *entry)
-{
-  const gchar *text;
-
-  g_assert (GB_IS_EDITOR_VIEW (self));
-  g_assert (GTK_IS_ENTRY (entry));
-
-  g_clear_pointer (&self->symbol_spec, ide_pattern_spec_unref);
-
-  text = gtk_entry_get_text (entry);
-  if (text && text [0])
-    self->symbol_spec = ide_pattern_spec_new (text);
-
-  gtk_list_box_invalidate_filter (self->symbols_listbox);
-}
-
 static GtkSizeRequestMode
 gb_editor_view_get_request_mode (GtkWidget *widget)
 {
@@ -689,16 +431,9 @@ gb_editor_view_finalize (GObject *object)
 {
   GbEditorView *self = (GbEditorView *)object;
 
-  if (self->symbol_timeout)
-    {
-      g_source_remove (self->symbol_timeout);
-      self->symbol_timeout = 0;
-    }
-
   g_clear_object (&self->extensions);
   g_clear_object (&self->document);
   g_clear_object (&self->settings);
-  g_clear_pointer (&self->symbol_spec, ide_pattern_spec_unref);
 
   G_OBJECT_CLASS (gb_editor_view_parent_class)->finalize (object);
 }
@@ -780,10 +515,6 @@ gb_editor_view_class_init (GbEditorViewClass *klass)
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, modified_revealer);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, paned);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, progress_bar);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorView, symbols_button);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorView, symbols_listbox);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorView, symbols_popover);
-  GB_WIDGET_CLASS_BIND (klass, GbEditorView, symbols_search_entry);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, tweak_button);
   GB_WIDGET_CLASS_BIND (klass, GbEditorView, tweak_widget);
 
@@ -805,27 +536,4 @@ gb_editor_view_init (GbEditorView *self)
                            G_CALLBACK (gb_editor_view_hide_reload_bar),
                            self,
                            G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->symbols_listbox,
-                           "row-activated",
-                           G_CALLBACK (gb_editor_view__symbol_row_activated_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->symbols_search_entry,
-                           "activate",
-                           G_CALLBACK (gb_editor_view__symbol_entry_activate_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->symbols_search_entry,
-                           "changed",
-                           G_CALLBACK (gb_editor_view_invalidate_symbol_filter),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  gtk_list_box_set_filter_func (self->symbols_listbox,
-                                gb_editor_view_symbol_filter_func,
-                                self,
-                                NULL);
 }

@@ -36,7 +36,6 @@ struct _GbEditorView
   GbEditorDocument    *document;
   PeasExtensionSet    *extensions;
   GSettings           *settings;
-  IdePatternSpec      *symbol_spec;
 
   GbEditorFrame       *frame1;
   GbEditorFrame       *frame2;
@@ -44,14 +43,8 @@ struct _GbEditorView
   GtkRevealer         *modified_revealer;
   GtkPaned            *paned;
   GtkProgressBar      *progress_bar;
-  GtkMenuButton       *symbols_button;
-  GtkListBox          *symbols_listbox;
-  GtkPopover          *symbols_popover;
-  GtkSearchEntry      *symbols_search_entry;
   GtkMenuButton       *tweak_button;
   GbEditorTweakWidget *tweak_widget;
-
-  guint                symbol_timeout;
 };
 
 G_END_DECLS

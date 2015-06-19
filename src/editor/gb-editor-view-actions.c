@@ -655,20 +655,6 @@ gb_editor_view_actions_preview (GSimpleAction *action,
 }
 
 static void
-gb_editor_view_actions_show_symbols (GSimpleAction *action,
-                                     GVariant      *param,
-                                     gpointer       user_data)
-{
-  GbEditorView *self = user_data;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GB_IS_EDITOR_VIEW (self));
-
-  if (gtk_widget_get_visible (GTK_WIDGET (self->symbols_button)))
-    g_signal_emit_by_name (self->symbols_button, "activate");
-}
-
-static void
 gb_editor_view_actions_reveal (GSimpleAction *action,
                                GVariant      *param,
                                gpointer       user_data)
@@ -700,7 +686,6 @@ static GActionEntry GbEditorViewActions[] = {
   { "save-as", gb_editor_view_actions_save_as },
   { "show-line-numbers", NULL, NULL, "false", gb_editor_view_actions_show_line_numbers },
   { "show-right-margin", NULL, NULL, "false", gb_editor_view_actions_show_right_margin },
-  { "symbols", gb_editor_view_actions_show_symbols },
   { "smart-backspace", NULL, NULL, "false", gb_editor_view_actions_smart_backspace },
   { "tab-width", NULL, "i", "8", gb_editor_view_actions_tab_width },
   { "toggle-split", gb_editor_view_actions_toggle_split },
