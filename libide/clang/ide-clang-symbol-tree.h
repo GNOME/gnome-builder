@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CLANG_SYMBOL_TREE (ide_clang_symbol_tree_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeClangSymbolTree, ide_clang_symbol_tree, IDE, CLANG_SYMBOL_TREE, GObject)
+G_DECLARE_FINAL_TYPE (IdeClangSymbolTree, ide_clang_symbol_tree, IDE, CLANG_SYMBOL_TREE, IdeObject)
 
 GFile *ide_clang_symbol_tree_get_file (IdeClangSymbolTree *self);
 

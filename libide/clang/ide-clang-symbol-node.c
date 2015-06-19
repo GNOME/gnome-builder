@@ -17,8 +17,10 @@
  */
 
 #include <clang-c/Index.h>
+#include <gio/gio.h>
 
 #include "ide-clang-symbol-node.h"
+#include "ide-file.h"
 #include "ide-symbol.h"
 
 struct _IdeClangSymbolNode
@@ -122,21 +124,19 @@ get_symbol_kind (CXCursor        cursor,
 }
 
 IdeClangSymbolNode *
-_ide_clang_symbol_node_new (CXCursor cursor)
+_ide_clang_symbol_node_new (IdeContext *context,
+                            CXCursor    cursor)
 {
   IdeClangSymbolNode *self;
   IdeSymbolFlags flags = 0;
   IdeSymbolKind kind;
   CXString cxname;
 
-  /*
-   * TODO: Create IdeSourceLocation for cursor.
-   */
-
   kind = get_symbol_kind (cursor, &flags);
   cxname = clang_getCursorSpelling (cursor);
 
   self = g_object_new (IDE_TYPE_CLANG_SYMBOL_NODE,
+                       "context", context,
                        "kind", kind,
                        "flags", flags,
                        "name", clang_getCString (cxname),
@@ -157,9 +157,54 @@ _ide_clang_symbol_node_get_cursor (IdeClangSymbolNode *self)
   return self->cursor;
 }
 
+static IdeSourceLocation *
+ide_clang_symbol_node_get_location (IdeSymbolNode *symbol_node)
+{
+  IdeClangSymbolNode *self = (IdeClangSymbolNode *)symbol_node;
+  IdeSourceLocation *ret;
+  IdeContext *context;
+  const gchar *filename;
+  CXString cxfilename;
+  CXSourceLocation cxloc;
+  CXFile file;
+  GFile *gfile;
+  IdeFile *ifile;
+  guint line = 0;
+  guint line_offset = 0;
+
+  g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self), NULL);
+
+  cxloc = clang_getCursorLocation (self->cursor);
+  clang_getFileLocation (cxloc, &file, &line, &line_offset, NULL);
+  cxfilename = clang_getFileName (file);
+  filename = clang_getCString (cxfilename);
+
+  /*
+   * TODO: Remove IdeFile from all this junk.
+   */
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  gfile = g_file_new_for_path (filename);
+  ifile = g_object_new (IDE_TYPE_FILE,
+                        "file", gfile,
+                        "context", context,
+                        NULL);
+
+  ret = ide_source_location_new (ifile, line-1, line_offset-1, 0);
+
+  g_clear_object (&ifile);
+  g_clear_object (&gfile);
+  clang_disposeString (cxfilename);
+
+  return ret;
+}
+
 static void
 ide_clang_symbol_node_class_init (IdeClangSymbolNodeClass *klass)
 {
+  IdeSymbolNodeClass *node_class = IDE_SYMBOL_NODE_CLASS (klass);
+
+  node_class->get_location = ide_clang_symbol_node_get_location;
 }
 
 static void

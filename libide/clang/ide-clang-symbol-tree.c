@@ -42,7 +42,7 @@ typedef struct
 
 static void symbol_tree_iface_init (IdeSymbolTreeInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeClangSymbolTree, ide_clang_symbol_tree, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (IdeClangSymbolTree, ide_clang_symbol_tree, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_TREE, symbol_tree_iface_init))
 
 enum {
@@ -188,10 +188,13 @@ ide_clang_symbol_tree_get_nth_child (IdeSymbolTree *symbol_tree,
                                      guint          nth)
 {
   IdeClangSymbolTree *self = (IdeClangSymbolTree *)symbol_tree;
+  IdeContext *context;
   GArray *children;
 
   g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_TREE (self), NULL);
   g_return_val_if_fail (!parent || IDE_IS_SYMBOL_NODE (parent), NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
 
   if (parent == NULL)
     children = self->children;
@@ -205,7 +208,7 @@ ide_clang_symbol_tree_get_nth_child (IdeSymbolTree *symbol_tree,
       CXCursor cursor;
 
       cursor = g_array_index (children, CXCursor, nth);
-      return _ide_clang_symbol_node_new (cursor);
+      return _ide_clang_symbol_node_new (context, cursor);
     }
 
   g_warning ("nth child %u is out of bounds", nth);

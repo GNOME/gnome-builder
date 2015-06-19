@@ -19,6 +19,8 @@
 #include <glib/gi18n.h>
 
 #include "gb-tree.h"
+#include "gb-view-grid.h"
+#include "gb-workbench.h"
 
 #include "symbol-tree-builder.h"
 
@@ -118,12 +120,50 @@ symbol_tree_builder_build_node (GbTreeBuilder *builder,
     }
 }
 
+static gboolean
+symbol_tree_builder_node_activated (GbTreeBuilder *builder,
+                                    GbTreeNode    *node)
+{
+  SymbolTreeBuilder *self = (SymbolTreeBuilder *)builder;
+  GtkWidget *workbench;
+  GtkWidget *view_grid;
+  GtkWidget *stack;
+  GbTree *tree;
+  GObject *item;
+
+  g_assert (SYMBOL_IS_TREE_BUILDER (self));
+
+  tree = gb_tree_builder_get_tree (builder);
+  workbench = gtk_widget_get_ancestor (GTK_WIDGET (tree), GB_TYPE_WORKBENCH);
+  view_grid = gb_workbench_get_view_grid (GB_WORKBENCH (workbench));
+  stack = gb_view_grid_get_last_focus (GB_VIEW_GRID (view_grid));
+
+  item = gb_tree_node_get_item (node);
+
+  if (IDE_IS_SYMBOL_NODE (item))
+    {
+      g_autoptr(IdeSourceLocation) location = NULL;
+
+      location = ide_symbol_node_get_location (IDE_SYMBOL_NODE (item));
+      if (location != NULL)
+        {
+          gb_view_stack_focus_location (GB_VIEW_STACK (stack), location);
+          return TRUE;
+        }
+    }
+
+  g_warning ("IdeSymbolNode did not create a source location");
+
+  return FALSE;
+}
+
 static void
 symbol_tree_builder_class_init (SymbolTreeBuilderClass *klass)
 {
   GbTreeBuilderClass *builder_class = GB_TREE_BUILDER_CLASS (klass);
 
   builder_class->build_node = symbol_tree_builder_build_node;
+  builder_class->node_activated = symbol_tree_builder_node_activated;
 }
 
 static void

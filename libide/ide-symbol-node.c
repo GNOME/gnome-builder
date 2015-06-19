@@ -29,7 +29,7 @@ typedef struct
   IdeSymbolKind   kind;
 } IdeSymbolNodePrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeSymbolNode, ide_symbol_node, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeSymbolNode, ide_symbol_node, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -175,4 +175,12 @@ ide_symbol_node_get_kind (IdeSymbolNode *self)
   g_return_val_if_fail (IDE_IS_SYMBOL_NODE (self), IDE_SYMBOL_NONE);
 
   return priv->kind;
+}
+
+IdeSourceLocation *
+ide_symbol_node_get_location (IdeSymbolNode *self)
+{
+  g_return_val_if_fail (IDE_IS_SYMBOL_NODE (self), NULL);
+
+  return IDE_SYMBOL_NODE_GET_CLASS (self)->get_location (self);
 }

@@ -120,7 +120,6 @@ static void
 ide_file_create_language (IdeFile *self)
 {
   g_assert (IDE_IS_FILE (self));
-  g_assert (self->path);
 
   if (g_once_init_enter (&self->language))
     {
@@ -268,6 +267,14 @@ ide_file_get_path (IdeFile *self)
 {
   g_return_val_if_fail (IDE_IS_FILE (self), NULL);
 
+  if (g_once_init_enter (&self->path))
+    {
+      gchar *path;
+
+      path = g_file_get_path (self->file);
+      g_once_init_leave (&self->path, path);
+    }
+
   return self->path;
 }
 
@@ -278,6 +285,7 @@ ide_file_set_path (IdeFile     *self,
   g_return_if_fail (IDE_IS_FILE (self));
   g_return_if_fail (!self->path);
 
+  g_clear_pointer (&self->path, g_free);
   self->path = g_strdup (path);
 }
 

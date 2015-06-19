@@ -1080,13 +1080,17 @@ ide_clang_translation_unit_get_symbol_tree_async (IdeClangTranslationUnit *self,
 {
   g_autoptr(GTask) task = NULL;
   IdeSymbolTree *symbol_tree;
+  IdeContext *context;
 
   g_return_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self));
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
   symbol_tree = g_object_new (IDE_TYPE_CLANG_SYMBOL_TREE,
+                              "context", context,
                               "native", self->native,
                               "file", file,
                               NULL);

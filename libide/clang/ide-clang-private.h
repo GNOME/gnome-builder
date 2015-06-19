@@ -30,13 +30,14 @@
 
 G_BEGIN_DECLS
 
-IdeClangTranslationUnit *_ide_clang_translation_unit_new     (IdeContext        *context,
-                                                              CXTranslationUnit  tu,
-                                                              GFile             *file,
-                                                              IdeHighlightIndex *index,
-                                                              gint64             serial);
-void                     _ide_clang_dispose_string           (CXString          *str);
-IdeSymbolNode           *_ide_clang_symbol_node_new          (CXCursor           cursor);
+IdeClangTranslationUnit *_ide_clang_translation_unit_new     (IdeContext         *context,
+                                                              CXTranslationUnit   tu,
+                                                              GFile              *file,
+                                                              IdeHighlightIndex  *index,
+                                                              gint64              serial);
+void                     _ide_clang_dispose_string           (CXString           *str);
+IdeSymbolNode           *_ide_clang_symbol_node_new          (IdeContext         *context,
+                                                              CXCursor            cursor);
 CXCursor                 _ide_clang_symbol_node_get_cursor   (IdeClangSymbolNode *self);
 GArray                  *_ide_clang_symbol_node_get_children (IdeClangSymbolNode *self);
 void                     _ide_clang_symbol_node_set_children (IdeClangSymbolNode *self,
