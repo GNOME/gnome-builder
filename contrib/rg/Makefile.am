@@ -1,6 +1,7 @@
 noinst_LTLIBRARIES = librg.la
 
 librg_la_SOURCES = \
+	realtime-graphs.h \
 	rg-column.c \
 	rg-column.h \
 	rg-column-private.h \

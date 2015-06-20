@@ -11,7 +11,6 @@ ide_animation_stop
 ide_animation_add_property
 ide_object_animate
 ide_object_animate_full
-IdeAnimation
 <SUBSECTION Standard>
 IDE_TYPE_ANIMATION_MODE
 ide_animation_mode_get_type
@@ -20,7 +19,6 @@ ide_animation_mode_get_type
 <SECTION>
 <FILE>ide-autotools-build-system</FILE>
 IDE_TYPE_AUTOTOOLS_BUILD_SYSTEM
-IdeAutotoolsBuildSystem
 ide_autotools_build_system_get_tarball_name
 </SECTION>
 
@@ -40,7 +38,6 @@ ide_autotools_builder_get_build_directory
 ide_autotools_builder_get_needs_bootstrap
 ide_autotools_builder_bootstrap_async
 ide_autotools_builder_bootstrap_finish
-IdeAutotoolsBuilder
 </SECTION>
 
 <SECTION>
@@ -49,7 +46,6 @@ IDE_TYPE_AUTOTOOLS_PROJECT_MINER
 IDE_AUTOTOOLS_PROJECT_MINER_PRIORITY
 ide_autotools_project_miner_get_root_directory
 ide_autotools_project_miner_set_root_directory
-IdeAutotoolsProjectMiner
 </SECTION>
 
 <SECTION>
@@ -58,7 +54,6 @@ IDE_TYPE_BACK_FORWARD_ITEM
 ide_back_forward_item_new
 ide_back_forward_item_get_location
 ide_back_forward_item_chain
-IdeBackForwardItem
 </SECTION>
 
 <SECTION>
@@ -72,15 +67,15 @@ ide_back_forward_list_get_current_item
 ide_back_forward_list_push
 ide_back_forward_list_branch
 ide_back_forward_list_merge
-IdeBackForwardList
 </SECTION>
 
 <SECTION>
 <FILE>ide-buffer</FILE>
 <TITLE>IdeBuffer</TITLE>
-IDE_BUFFER_CONST
+IDE_TYPE_BUFFER
 IDE_BUFFER_LINE_FLAGS_DIAGNOSTICS_MASK
 IdeBufferLineFlags
+IdeBufferClass
 ide_buffer_get_changed_on_volume
 ide_buffer_get_content
 ide_buffer_get_context
@@ -105,16 +100,6 @@ ide_buffer_get_symbols_async
 ide_buffer_get_symbols_finish
 ide_buffer_hold
 ide_buffer_release
-<SUBSECTION Standard>
-IDE_BUFFER
-IDE_BUFFER_CLASS
-IDE_BUFFER_GET_CLASS
-IDE_IS_BUFFER
-IDE_IS_BUFFER_CLASS
-IDE_TYPE_BUFFER
-IdeBuffer
-IdeBufferClass
-ide_buffer_get_type
 </SECTION>
 
 <SECTION>
@@ -125,7 +110,6 @@ IdeBufferLineChange
 IdeBufferChangeMonitorClass
 ide_buffer_change_monitor_get_change
 ide_buffer_change_monitor_emit_changed
-IdeBufferChangeMonitor
 </SECTION>
 
 <SECTION>
@@ -147,7 +131,6 @@ ide_buffer_manager_has_file
 ide_buffer_manager_find_buffer
 ide_buffer_manager_get_max_file_size
 ide_buffer_manager_set_max_file_size
-IdeBufferManager
 </SECTION>
 
 <SECTION>
@@ -160,7 +143,6 @@ ide_build_result_get_stderr_stream
 ide_build_result_log_subprocess
 ide_build_result_log_stdout
 ide_build_result_log_stderr
-IdeBuildResult
 </SECTION>
 
 <SECTION>
@@ -175,7 +157,6 @@ ide_build_system_get_build_flags_finish
 ide_build_system_new_async
 ide_build_system_new_finish
 ide_build_system_get_builder
-IdeBuildSystem
 </SECTION>
 
 <SECTION>
@@ -186,7 +167,6 @@ IdeBuilderBuildFlags
 IdeBuilderClass
 ide_builder_build_async
 ide_builder_build_finish
-IdeBuilder
 </SECTION>
 
 <SECTION>
@@ -194,7 +174,6 @@ IdeBuilder
 <TITLE>IdeCLanguage</TITLE>
 IDE_TYPE_C_LANGUAGE
 IdeCLanguageClass
-IdeCLanguage
 </SECTION>
 
 <SECTION>
@@ -224,7 +203,49 @@ ide_context_restore_async
 ide_context_restore_finish
 ide_context_hold
 ide_context_release
-IdeContext
+</SECTION>
+
+<SECTION>
+<FILE>ide-ctags-builder</FILE>
+IDE_TYPE_CTAGS_BUILDER
+ide_ctags_builder_new
+</SECTION>
+
+<SECTION>
+<FILE>ide-ctags-completion-item</FILE>
+IDE_TYPE_CTAGS_COMPLETION_ITEM
+ide_ctags_completion_item_new
+ide_ctags_completion_item_compare
+</SECTION>
+
+<SECTION>
+<FILE>ide-ctags-highlighter</FILE>
+IDE_TYPE_CTAGS_HIGHLIGHTER
+IDE_CTAGS_HIGHLIGHTER_TYPE
+IDE_CTAGS_HIGHLIGHTER_FUNCTION_NAME
+IDE_CTAGS_HIGHLIGHTER_ENUM_NAME
+ide_ctags_highlighter_add_index
+</SECTION>
+
+<SECTION>
+<FILE>ide-ctags-index</FILE>
+IDE_TYPE_CTAGS_INDEX
+IdeCtagsIndexEntryKind
+ide_ctags_index_new
+ide_ctags_index_load_async
+ide_ctags_index_load_finish
+ide_ctags_index_get_file
+ide_ctags_index_get_size
+ide_ctags_index_lookup
+ide_ctags_index_lookup_prefix
+ide_ctags_index_entry_compare
+</SECTION>
+
+<SECTION>
+<FILE>ide-ctags-service</FILE>
+IDE_TYPE_CTAGS_SERVICE
+ide_ctags_service_get_provider
+ide_ctags_service_get_highlighter
 </SECTION>
 
 <SECTION>
@@ -258,13 +279,6 @@ ide_debugger_get_type
 <TITLE>IdeDeployer</TITLE>
 IDE_TYPE_DEPLOYER
 IdeDeployerClass
-IdeDeployer
-</SECTION>
-
-<SECTION>
-<FILE>ide-devhelp-search-result</FILE>
-IDE_TYPE_DEVHELP_SEARCH_RESULT
-IdeDevhelpSearchResult
 </SECTION>
 
 <SECTION>
@@ -278,7 +292,6 @@ ide_device_set_display_name
 ide_device_get_id
 ide_device_set_id
 ide_device_get_system_type
-IdeDevice
 </SECTION>
 
 <SECTION>
@@ -289,7 +302,6 @@ ide_device_manager_get_devices
 ide_device_manager_get_settled
 ide_device_manager_remove_provider
 ide_device_manager_get_device
-IdeDeviceManager
 </SECTION>
 
 <SECTION>
@@ -302,7 +314,6 @@ ide_device_provider_device_added
 ide_device_provider_device_removed
 ide_device_provider_get_devices
 ide_device_provider_get_settled
-IdeDeviceProvider
 </SECTION>
 
 <SECTION>
@@ -331,7 +342,6 @@ IDE_TYPE_DIAGNOSTIC_PROVIDER
 IdeDiagnosticProviderClass
 ide_diagnostic_provider_diagnose_async
 ide_diagnostic_provider_diagnose_finish
-IdeDiagnosticProvider
 </SECTION>
 
 <SECTION>
@@ -339,7 +349,6 @@ IdeDiagnosticProvider
 IDE_TYPE_DIAGNOSTICIAN
 ide_diagnostician_diagnose_async
 ide_diagnostician_diagnose_finish
-IdeDiagnostician
 </SECTION>
 
 <SECTION>
@@ -363,7 +372,6 @@ IdeDirectoryBuildSystem
 <SECTION>
 <FILE>ide-directory-vcs</FILE>
 IDE_TYPE_DIRECTORY_VCS
-IdeDirectoryVcs
 </SECTION>
 
 <SECTION>
@@ -383,7 +391,6 @@ ide_doap_get_homepage
 ide_doap_get_category
 ide_doap_get_languages
 ide_doap_get_maintainers
-IdeDoap
 </SECTION>
 
 <SECTION>
@@ -394,7 +401,6 @@ ide_doap_person_get_name
 ide_doap_person_set_name
 ide_doap_person_get_email
 ide_doap_person_set_email
-IdeDoapPerson
 </SECTION>
 
 <SECTION>
@@ -408,6 +414,8 @@ IDE_TYPE_INDENT_STYLE
 IDE_TYPE_SOURCE_VIEW_MODE_TYPE
 IDE_TYPE_SOURCE_VIEW_MOVEMENT
 IDE_TYPE_SOURCE_VIEW_THEATRIC
+IDE_TYPE_SYMBOL_FLAGS
+IDE_TYPE_SYMBOL_KIND
 IDE_TYPE_THREAD_POOL_KIND
 ide_buffer_line_flags_get_type
 ide_diagnostic_severity_get_type
@@ -417,6 +425,8 @@ ide_indent_style_get_type
 ide_source_view_mode_type_get_type
 ide_source_view_movement_get_type
 ide_source_view_theatric_get_type
+ide_symbol_flags_get_type
+ide_symbol_kind_get_type
 ide_thread_pool_kind_get_type
 </SECTION>
 
@@ -459,7 +469,6 @@ ide_file_load_settings_async
 ide_file_load_settings_finish
 ide_file_find_other_async
 ide_file_find_other_finish
-IdeFile
 </SECTION>
 
 <SECTION>
@@ -472,7 +481,6 @@ ide_file_settings_new
 ide_file_settings_get_file
 ide_file_settings_get_settled
 IDE_FILE_SETTINGS_PROPERTY
-IdeFileSettings
 </SECTION>
 
 <SECTION>
@@ -490,38 +498,20 @@ ide_fixit_get_type
 <SECTION>
 <FILE>ide-git-buffer-change-monitor</FILE>
 IDE_TYPE_GIT_BUFFER_CHANGE_MONITOR
-IdeGitBufferChangeMonitor
 </SECTION>
 
 <SECTION>
 <FILE>ide-git-remote-callbacks</FILE>
-IDE_GIT_REMOTE_CALLBACKS_CONST
+IDE_TYPE_GIT_REMOTE_CALLBACKS
 ide_git_remote_callbacks_new
 ide_git_remote_callbacks_get_fraction
 ide_git_remote_callbacks_get_progress
-<SUBSECTION Standard>
-IDE_GIT_REMOTE_CALLBACKS
-IDE_GIT_REMOTE_CALLBACKS_CLASS
-IDE_GIT_REMOTE_CALLBACKS_GET_CLASS
-IDE_IS_GIT_REMOTE_CALLBACKS
-IDE_IS_GIT_REMOTE_CALLBACKS_CLASS
-IDE_TYPE_GIT_REMOTE_CALLBACKS
-IdeGitRemoteCallbacks
-IdeGitRemoteCallbacksClass
-ide_git_remote_callbacks_get_type
-</SECTION>
-
-<SECTION>
-<FILE>ide-git-search-result</FILE>
-IDE_TYPE_GIT_SEARCH_RESULT
-IdeGitSearchResult
 </SECTION>
 
 <SECTION>
 <FILE>ide-git-vcs</FILE>
 IDE_TYPE_GIT_VCS
 ide_git_vcs_get_repository
-IdeGitVcs
 </SECTION>
 
 <SECTION>
@@ -540,7 +530,6 @@ ide_highlight_engine_set_highlighter
 ide_highlight_engine_rebuild
 ide_highlight_engine_invalidate
 ide_highlight_engine_get_style
-IdeHighlightEngine
 </SECTION>
 
 <SECTION>
@@ -566,13 +555,11 @@ IdeHighlightCallback
 IdeHighlighterClass
 ide_highlighter_update
 ide_highlighter_get_highlight_engine
-IdeHighlighter
 </SECTION>
 
 <SECTION>
 <FILE>ide-html-language</FILE>
 IDE_TYPE_HTML_LANGUAGE
-IdeHtmlLanguage
 </SECTION>
 
 <SECTION>
@@ -587,7 +574,6 @@ IDE_TYPE_INDENTER
 IdeIndenterClass
 ide_indenter_is_trigger
 ide_indenter_format
-IdeIndenter
 </SECTION>
 
 <SECTION>
@@ -605,38 +591,16 @@ ide_language_get_refactory
 ide_language_get_symbol_resolver
 ide_language_get_source_language
 ide_language_get_completion_providers
-IdeLanguage
 </SECTION>
 
 <SECTION>
 <FILE>ide-line-change-gutter-renderer</FILE>
-IDE_LINE_CHANGE_GUTTER_RENDERER_CONST
-<SUBSECTION Standard>
-IDE_IS_LINE_CHANGE_GUTTER_RENDERER
-IDE_IS_LINE_CHANGE_GUTTER_RENDERER_CLASS
-IDE_LINE_CHANGE_GUTTER_RENDERER
-IDE_LINE_CHANGE_GUTTER_RENDERER_CLASS
-IDE_LINE_CHANGE_GUTTER_RENDERER_GET_CLASS
 IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER
-IdeLineChangeGutterRenderer
-IdeLineChangeGutterRendererClass
-ide_line_change_gutter_renderer_get_type
 </SECTION>
 
 <SECTION>
 <FILE>ide-line-diagnostics-gutter-renderer</FILE>
-<TITLE>IdeLineDiagnosticsGutterRenderer</TITLE>
-IDE_LINE_DIAGNOSTICS_GUTTER_RENDERER_CONST
-<SUBSECTION Standard>
-IDE_IS_LINE_DIAGNOSTICS_GUTTER_RENDERER
-IDE_IS_LINE_DIAGNOSTICS_GUTTER_RENDERER_CLASS
-IDE_LINE_DIAGNOSTICS_GUTTER_RENDERER
-IDE_LINE_DIAGNOSTICS_GUTTER_RENDERER_CLASS
-IDE_LINE_DIAGNOSTICS_GUTTER_RENDERER_GET_CLASS
 IDE_TYPE_LINE_DIAGNOSTICS_GUTTER_RENDERER
-IdeLineDiagnosticsGutterRenderer
-IdeLineDiagnosticsGutterRendererClass
-ide_line_diagnostics_gutter_renderer_get_type
 </SECTION>
 
 <SECTION>
@@ -644,7 +608,6 @@ ide_line_diagnostics_gutter_renderer_get_type
 <TITLE>IdeLocalDevice</TITLE>
 IDE_TYPE_LOCAL_DEVICE
 IdeLocalDeviceClass
-IdeLocalDevice
 </SECTION>
 
 <SECTION>
@@ -673,25 +636,27 @@ ide_makecache_get_file_flags_async
 ide_makecache_get_file_flags_finish
 ide_makecache_get_file_targets_async
 ide_makecache_get_file_targets_finish
-IdeMakecache
 </SECTION>
 
 <SECTION>
 <FILE>ide-makecache-target</FILE>
 ide_makecache_target_new
-ide_makecache_target_free
+ide_makecache_target_ref
+ide_makecache_target_unref
 ide_makecache_target_get_target
 ide_makecache_target_get_subdir
 ide_makecache_target_hash
 ide_makecache_target_equal
+<SUBSECTION Standard>
+IDE_TYPE_MAKECACHE_TARGET
 IdeMakecacheTarget
+ide_makecache_target_get_type
 </SECTION>
 
 <SECTION>
 <FILE>ide-mingw-device</FILE>
 IDE_TYPE_MINGW_DEVICE
 ide_mingw_device_new
-IdeMingwDevice
 </SECTION>
 
 <SECTION>
@@ -704,7 +669,6 @@ ide_object_new_async
 ide_object_new_finish
 ide_object_hold
 ide_object_release
-IdeObject
 </SECTION>
 
 <SECTION>
@@ -741,7 +705,6 @@ ide_progress_get_message
 ide_progress_set_fraction
 ide_progress_set_message
 ide_progress_file_progress_callback
-IdeProgress
 </SECTION>
 
 <SECTION>
@@ -762,7 +725,6 @@ ide_project_rename_file_async
 ide_project_rename_file_finish
 ide_project_trash_file_async
 ide_project_trash_file_finish
-IdeProject
 </SECTION>
 
 <SECTION>
@@ -775,7 +737,6 @@ ide_project_file_get_file_info
 ide_project_file_get_name
 ide_project_file_get_path
 ide_project_file_get_is_directory
-IdeProjectFile
 </SECTION>
 
 <SECTION>
@@ -807,7 +768,6 @@ ide_project_info_set_is_recent
 ide_project_info_set_languages
 ide_project_info_set_name
 ide_project_info_set_priority
-IdeProjectInfo
 </SECTION>
 
 <SECTION>
@@ -819,7 +779,6 @@ ide_project_item_get_parent
 ide_project_item_append
 ide_project_item_remove
 ide_project_item_get_children
-IdeProjectItem
 </SECTION>
 
 <SECTION>
@@ -831,13 +790,11 @@ IdeProjectMinerClass
 ide_project_miner_emit_discovered
 ide_project_miner_mine_async
 ide_project_miner_mine_finish
-IdeProjectMiner
 </SECTION>
 
 <SECTION>
 <FILE>ide-python-language</FILE>
 IDE_TYPE_PYTHON_LANGUAGE
-IdePythonLanguage
 </SECTION>
 
 <SECTION>
@@ -849,9 +806,9 @@ IDE_RECENT_PROJECTS_BOOKMARK_FILENAME
 ide_recent_projects_new
 ide_recent_projects_get_projects
 ide_recent_projects_get_busy
+ide_recent_projects_remove
 ide_recent_projects_discover_async
 ide_recent_projects_discover_finish
-IdeRecentProjects
 </SECTION>
 
 <SECTION>
@@ -859,7 +816,6 @@ IdeRecentProjects
 <TITLE>IdeRefactory</TITLE>
 IDE_TYPE_REFACTORY
 IdeRefactoryClass
-IdeRefactory
 </SECTION>
 
 <SECTION>
@@ -871,7 +827,6 @@ IdeScriptClass
 ide_script_load
 ide_script_unload
 ide_script_get_file
-IdeScript
 </SECTION>
 
 <SECTION>
@@ -880,7 +835,6 @@ IDE_TYPE_SCRIPT_MANAGER
 ide_script_manager_get_scripts_directory
 ide_script_manager_load_async
 ide_script_manager_load_finish
-IdeScriptManager
 </SECTION>
 
 <SECTION>
@@ -893,29 +847,26 @@ ide_search_context_remove_result
 ide_search_context_cancel
 ide_search_context_execute
 ide_search_context_set_provider_count
-IdeSearchContext
+ide_search_context_get_max_results
 </SECTION>
 
 <SECTION>
 <FILE>ide-search-engine</FILE>
 IDE_TYPE_SEARCH_ENGINE
-ide_search_engine_get_providers
-ide_search_engine_add_provider
 ide_search_engine_search
-IdeSearchEngine
 </SECTION>
 
 <SECTION>
 <FILE>ide-search-provider</FILE>
 <TITLE>IdeSearchProvider</TITLE>
 IDE_TYPE_SEARCH_PROVIDER
-IDE_SEARCH_PROVIDER_EXTENSION_POINT
-IdeSearchProviderClass
+IdeSearchProviderInterface
 ide_search_provider_get_prefix
 ide_search_provider_get_priority
 ide_search_provider_get_verb
 ide_search_provider_populate
-IdeSearchProvider
+ide_search_provider_create_row
+ide_search_provider_activate
 </SECTION>
 
 <SECTION>
@@ -924,12 +875,12 @@ IdeSearchProvider
 IDE_TYPE_SEARCH_RESULT
 IdeSearchResultClass
 ide_search_result_new
+ide_search_result_get_provider
 ide_search_result_get_score
 ide_search_result_get_title
 ide_search_result_get_subtitle
 ide_search_result_compare
 ide_search_result_activate
-IdeSearchResult
 </SECTION>
 
 <SECTION>
@@ -942,7 +893,6 @@ ide_service_get_name
 ide_service_get_running
 ide_service_start
 ide_service_stop
-IdeService
 </SECTION>
 
 <SECTION>
@@ -968,7 +918,6 @@ ide_settings_set_uint
 ide_settings_bind
 ide_settings_bind_with_mapping
 ide_settings_unbind
-IdeSettings
 </SECTION>
 
 <SECTION>
@@ -988,9 +937,6 @@ ide_source_location_get_type
 <SECTION>
 <FILE>ide-source-map</FILE>
 IDE_TYPE_SOURCE_MAP
-ide_source_map_get_view
-ide_source_map_set_view
-IdeSourceMap
 </SECTION>
 
 <SECTION>
@@ -1023,7 +969,6 @@ ide_source_snippet_get_chunk_range
 ide_source_snippet_get_mark_begin
 ide_source_snippet_get_mark_end
 ide_source_snippet_get_context
-IdeSourceSnippet
 </SECTION>
 
 <SECTION>
@@ -1041,7 +986,6 @@ ide_source_snippet_chunk_get_text
 ide_source_snippet_chunk_set_text
 ide_source_snippet_chunk_get_text_set
 ide_source_snippet_chunk_set_text_set
-IdeSourceSnippetChunk
 </SECTION>
 
 <SECTION>
@@ -1050,7 +994,6 @@ IDE_TYPE_SOURCE_SNIPPET_COMPLETION_ITEM
 ide_source_snippet_completion_item_new
 ide_source_snippet_completion_item_get_snippet
 ide_source_snippet_completion_item_set_snippet
-IdeSourceSnippetCompletionItem
 </SECTION>
 
 <SECTION>
@@ -1066,7 +1009,6 @@ ide_source_snippet_context_set_tab_width
 ide_source_snippet_context_set_use_spaces
 ide_source_snippet_context_set_line_prefix
 ide_source_snippet_context_dump
-IdeSourceSnippetContext
 </SECTION>
 
 <SECTION>
@@ -1092,7 +1034,6 @@ ide_source_snippets_clear
 ide_source_snippets_merge
 ide_source_snippets_new
 ide_source_snippets_foreach
-IdeSourceSnippets
 </SECTION>
 
 <SECTION>
@@ -1101,16 +1042,16 @@ IDE_TYPE_SOURCE_SNIPPETS_MANAGER
 ide_source_snippets_manager_load_async
 ide_source_snippets_manager_load_finish
 ide_source_snippets_manager_get_for_language
-IdeSourceSnippetsManager
 </SECTION>
 
 <SECTION>
 <FILE>ide-source-view</FILE>
 <TITLE>IdeSourceView</TITLE>
-IDE_SOURCE_VIEW_CONST
+IDE_TYPE_SOURCE_VIEW
 IdeSourceViewModeType
 IdeSourceViewTheatric
 IdeSourceViewMovement
+IdeSourceViewClass
 ide_source_view_clear_snippets
 ide_source_view_get_back_forward_list
 ide_source_view_get_visual_position
@@ -1160,16 +1101,6 @@ ide_source_view_clear_search
 ide_source_view_scroll_mark_onscreen
 ide_source_view_scroll_to_mark
 ide_source_view_scroll_to_iter
-<SUBSECTION Standard>
-IDE_IS_SOURCE_VIEW
-IDE_IS_SOURCE_VIEW_CLASS
-IDE_SOURCE_VIEW
-IDE_SOURCE_VIEW_CLASS
-IDE_SOURCE_VIEW_GET_CLASS
-IDE_TYPE_SOURCE_VIEW
-IdeSourceView
-IdeSourceViewClass
-ide_source_view_get_type
 </SECTION>
 
 <SECTION>
@@ -1190,6 +1121,17 @@ ide_symbol_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ide-symbol-node</FILE>
+<TITLE>IdeSymbolNode</TITLE>
+IDE_TYPE_SYMBOL_NODE
+IdeSymbolNodeClass
+ide_symbol_node_get_kind
+ide_symbol_node_get_flags
+ide_symbol_node_get_name
+ide_symbol_node_get_location
+</SECTION>
+
+<SECTION>
 <FILE>ide-symbol-resolver</FILE>
 <TITLE>IdeSymbolResolver</TITLE>
 IDE_TYPE_SYMBOL_RESOLVER
@@ -1198,7 +1140,17 @@ ide_symbol_resolver_lookup_symbol_async
 ide_symbol_resolver_lookup_symbol_finish
 ide_symbol_resolver_get_symbols_async
 ide_symbol_resolver_get_symbols_finish
-IdeSymbolResolver
+ide_symbol_resolver_get_symbol_tree_async
+ide_symbol_resolver_get_symbol_tree_finish
+</SECTION>
+
+<SECTION>
+<FILE>ide-symbol-tree</FILE>
+<TITLE>IdeSymbolTree</TITLE>
+IDE_TYPE_SYMBOL_TREE
+IdeSymbolTreeInterface
+ide_symbol_tree_get_n_children
+ide_symbol_tree_get_nth_child
 </SECTION>
 
 <SECTION>
@@ -1275,7 +1227,6 @@ ide_unsaved_files_clear
 <SECTION>
 <FILE>ide-vala-language</FILE>
 IDE_TYPE_VALA_LANGUAGE
-IdeValaLanguage
 </SECTION>
 
 <SECTION>
@@ -1289,7 +1240,6 @@ ide_vcs_get_working_directory
 ide_vcs_new_async
 ide_vcs_new_finish
 ide_vcs_is_ignored
-IdeVcs
 </SECTION>
 
 <SECTION>
@@ -1318,12 +1268,10 @@ ide_vcs_uri_get_type
 <SECTION>
 <FILE>ide-xml-highlighter</FILE>
 IDE_TYPE_XML_HIGHLIGHTER
-IdeXmlHighlighter
 </SECTION>
 
 <SECTION>
 <FILE>ide-xml-language</FILE>
 IDE_TYPE_XML_LANGUAGE
-IdeXmlLanguage
 </SECTION>
 

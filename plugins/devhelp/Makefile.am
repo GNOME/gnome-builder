@@ -1,7 +1,7 @@
 DISTCLEANFILES =
 BUILT_SOURCES =
 CLEANFILES =
-EXTRA_DIST =
+EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
 plugin_LTLIBRARIES = libdevhelp.la
@@ -13,6 +13,7 @@ libdevhelp_la_SOURCES = \
 	gb-devhelp-panel.c \
 	gb-devhelp-panel.h \
 	gb-devhelp-plugin.c \
+	gb-devhelp-private.h \
 	gb-devhelp-resources.c \
 	gb-devhelp-resources.h \
 	gb-devhelp-search-provider.c \

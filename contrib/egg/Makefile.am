@@ -19,7 +19,6 @@ libegg_la_SOURCES = \
 	egg-state-machine-action.h \
 	egg-state-machine-buildable.c \
 	egg-state-machine-buildable.h \
-	egg-state-machine-private.h \
 	egg-task-cache.c \
 	egg-task-cache.h \
 	$(NULL)
