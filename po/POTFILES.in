@@ -1,13 +1,20 @@
+contrib/egg/egg-state-machine-action.c
+contrib/gd/gd-tagged-entry.c
+contrib/rg/rg-column.c
+contrib/rg/rg-cpu-graph.c
+contrib/rg/rg-graph.c
+contrib/rg/rg-line-renderer.c
+contrib/rg/rg-table.c
+contrib/search/trie.c
+contrib/xml/xml-reader.c
 [type: gettext/glade]data/gtk/menus.ui
-[type: gettext/glade]data/ui/gb-command-bar.ui
-[type: gettext/glade]data/ui/gb-devhelp-view.ui
+data/style-schemes/builder-dark.xml
+data/style-schemes/builder.xml
 [type: gettext/glade]data/ui/gb-editor-frame.ui
 [type: gettext/glade]data/ui/gb-editor-settings-widget.ui
 [type: gettext/glade]data/ui/gb-editor-tweak-widget.ui
 [type: gettext/glade]data/ui/gb-editor-view.ui
-[type: gettext/glade]data/ui/gb-editor-workspace.ui
 [type: gettext/glade]data/ui/gb-greeter-window.ui
-[type: gettext/glade]data/ui/gb-html-view.ui
 [type: gettext/glade]data/ui/gb-new-file-popover.ui
 [type: gettext/glade]data/ui/gb-new-project-dialog.ui
 [type: gettext/glade]data/ui/gb-preferences-page-editor.ui
@@ -19,27 +26,8 @@
 [type: gettext/glade]data/ui/gb-preferences-window.ui
 [type: gettext/glade]data/ui/gb-projects-dialog.ui
 [type: gettext/glade]data/ui/gb-rename-file-popover.ui
-[type: gettext/glade]data/ui/gb-search-box.ui
-[type: gettext/glade]data/ui/gb-search-display-group.ui
-[type: gettext/glade]data/ui/gb-search-display-row.ui
 [type: gettext/glade]data/ui/gb-view-stack.ui
 [type: gettext/glade]data/ui/gb-workbench.ui
-[type: gettext/gsettings]data/gsettings/org.gnome.builder.code-insight.gschema.xml
-[type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.gschema.xml
-[type: gettext/gsettings]data/gsettings/org.gnome.builder.editor.language.gschema.xml
-[type: gettext/gsettings]data/gsettings/org.gnome.builder.project-tree.gschema.xml
-contrib/egg/egg-state-machine-action.c
-contrib/gedit/gedit-menu-stack-switcher.c
-contrib/nautilus/nautilus-floating-bar.c
-contrib/rg/rg-column.c
-contrib/rg/rg-cpu-graph.c
-contrib/rg/rg-graph.c
-contrib/rg/rg-line-renderer.c
-contrib/rg/rg-table.c
-contrib/search/trie.c
-contrib/xml/xml-reader.c
-data/style-schemes/builder-dark.xml
-data/style-schemes/builder.xml
 libide/autotools/ide-autotools-build-system.c
 libide/autotools/ide-autotools-build-task.c
 libide/autotools/ide-autotools-builder.c
@@ -50,10 +38,10 @@ libide/c/ide-c-language.c
 libide/clang/ide-clang-completion-item.c
 libide/clang/ide-clang-completion-provider.c
 libide/clang/ide-clang-service.c
+libide/clang/ide-clang-symbol-node.c
+libide/clang/ide-clang-symbol-tree.c
 libide/clang/ide-clang-translation-unit.c
 libide/ctags/ide-ctags-completion-provider.c
-libide/devhelp/ide-devhelp-search-provider.c
-libide/devhelp/ide-devhelp-search-result.c
 libide/doap/ide-doap-person.c
 libide/doap/ide-doap.c
 libide/editorconfig/ide-editorconfig-file-settings.c
@@ -61,12 +49,8 @@ libide/gca/ide-gca-diagnostic-provider.c
 libide/gca/ide-gca-service.c
 libide/git/ide-git-buffer-change-monitor.c
 libide/git/ide-git-remote-callbacks.c
-libide/git/ide-git-search-index.c
-libide/git/ide-git-search-provider.c
-libide/git/ide-git-search-result.c
 libide/git/ide-git-vcs.c
 libide/gjs/ide-gjs-script.cpp
-libide/gsettings/ide-gsettings-file-settings.c
 libide/gsettings/ide-language-defaults.c
 libide/ide-back-forward-item.c
 libide/ide-back-forward-list.c
@@ -94,10 +78,10 @@ libide/ide-project.c
 libide/ide-recent-projects.c
 libide/ide-script-manager.c
 libide/ide-script.c
+libide/ide-search-provider.c
 libide/ide-search-result.c
 libide/ide-service.c
 libide/ide-settings.c
-libide/ide-source-map.c
 libide/ide-source-snippet-chunk.c
 libide/ide-source-snippet-completion-item.c
 libide/ide-source-snippet-completion-provider.c
@@ -107,6 +91,7 @@ libide/ide-source-snippets-manager.c
 libide/ide-source-view-capture.c
 libide/ide-source-view-mode.c
 libide/ide-source-view.c
+libide/ide-symbol-node.c
 libide/ide.c
 libide/mingw/ide-mingw-device-provider.c
 libide/pygobject/ide-pygobject-script.c
@@ -114,16 +99,25 @@ libide/python/ide-python-format-provider.c
 libide/tasks/ide-load-directory-task.c
 libide/theatrics/ide-animation.c
 libide/theatrics/ide-box-theatric.c
+plugins/command-bar/gb-command-bar.c
+plugins/command-bar/gb-command-gaction.c
+plugins/command-bar/gb-command-provider.c
+plugins/command-bar/gb-command-result.c
+plugins/command-bar/gb-command-vim.c
+plugins/command-bar/gb-vim.c
+plugins/devhelp/gb-devhelp-document.c
+plugins/devhelp/gb-devhelp-panel.c
+plugins/devhelp/gb-devhelp-search-provider.c
+plugins/devhelp/gb-devhelp-search-result.c
+plugins/devhelp/gb-devhelp-view.c
+plugins/device-manager/gb-device-manager-panel.c
+plugins/file-search/gb-file-search-index.c
+plugins/file-search/gb-file-search-provider.c
+plugins/symbol-tree/symbol-tree.c
+plugins/sysmon/gb-sysmon-addin.c
+plugins/terminal/gb-terminal-workbench-addin.c
 src/app/gb-application-actions.c
 src/app/gb-application.c
-src/commands/gb-command-bar-item.c
-src/commands/gb-command-bar.c
-src/commands/gb-command-gaction.c
-src/commands/gb-command-provider.c
-src/commands/gb-command-result.c
-src/commands/gb-command-vim.c
-src/devhelp/gb-devhelp-document.c
-src/devhelp/gb-devhelp-view.c
 src/dialogs/gb-new-project-dialog.c
 src/dialogs/gb-projects-dialog.c
 src/dialogs/gb-recent-project-row.c
@@ -132,8 +126,6 @@ src/editor/gb-editor-frame.c
 src/editor/gb-editor-settings-widget.c
 src/editor/gb-editor-view-actions.c
 src/editor/gb-editor-view.c
-src/editor/gb-editor-workspace.c
-src/gd/gd-tagged-entry.c
 src/greeter/gb-greeter-pill-box.c
 src/greeter/gb-greeter-project-row.c
 src/greeter/gb-greeter-window.c
@@ -149,10 +141,10 @@ src/preferences/gb-preferences-page-theme.c
 src/preferences/gb-preferences-page.c
 src/preferences/gb-preferences-switch.c
 src/project-tree/gb-new-file-popover.c
+src/project-tree/gb-project-file.c
 src/project-tree/gb-project-tree-builder.c
 src/project-tree/gb-rename-file-popover.c
 src/scrolledwindow/gb-scrolled-window.c
-src/search/gb-search-box.c
 src/search/gb-search-display-group.c
 src/search/gb-search-display-row.c
 src/search/gb-search-display.c
@@ -163,10 +155,12 @@ src/util/gb-file-manager.c
 src/util/gb-glib.c
 src/views/gb-view-stack.c
 src/views/gb-view.c
-src/vim/gb-vim.c
 src/workbench/gb-workbench-actions.c
+src/workbench/gb-workbench-addin.c
 src/workbench/gb-workbench.c
-src/workbench/gb-workspace.c
+src/workspace/gb-slider.c
+src/workspace/gb-workspace-pane.c
+src/workspace/gb-workspace.c
 tools/ide-build.c
 tools/ide-list-build-flags.c
 tools/ide-list-devices.c

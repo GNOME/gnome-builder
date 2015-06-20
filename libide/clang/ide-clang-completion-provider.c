@@ -63,7 +63,19 @@ G_DEFINE_TYPE_EXTENDED (IdeClangCompletionProvider,
                         G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
                                                completion_provider_iface_init))
 
-static DhBookManager *gBookManager;
+static DhBookManager *
+get_book_manager (void)
+{
+  static DhBookManager *instance;
+
+  if (instance == NULL)
+    {
+      instance = dh_book_manager_new ();
+      dh_book_manager_populate (instance);
+    }
+
+  return instance;
+}
 
 static void
 add_proposals_state_free (AddProposalsState *state)
@@ -189,17 +201,12 @@ ide_clang_completion_provider_class_init (IdeClangCompletionProviderClass *klass
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_clang_completion_provider_finalize;
-
-  gBookManager = dh_book_manager_new ();
-  dh_book_manager_populate (gBookManager);
 }
 
 static void
 ide_clang_completion_provider_init (IdeClangCompletionProvider *self)
 {
   self->settings = g_settings_new ("org.gnome.builder.code-insight");
-  self->assistant = dh_assistant_view_new ();
-  dh_assistant_view_set_book_manager (DH_ASSISTANT_VIEW (self->assistant), gBookManager);
 }
 
 static gchar *
@@ -494,6 +501,15 @@ ide_clang_completion_provider_get_info_widget (GtkSourceCompletionProvider *prov
                                                GtkSourceCompletionProposal *proposal)
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
+
+  if (self->assistant == NULL)
+    {
+      DhBookManager *book_manager;
+
+      book_manager = get_book_manager ();
+      self->assistant = dh_assistant_view_new ();
+      dh_assistant_view_set_book_manager (DH_ASSISTANT_VIEW (self->assistant), book_manager);
+    }
 
   ide_clang_completion_provider_update_info (provider, proposal, NULL);
   gtk_widget_show (self->assistant);
