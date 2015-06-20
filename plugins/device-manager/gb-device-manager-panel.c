@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
 #include "gb-device-manager-panel.h"
 #include "gb-device-manager-tree-builder.h"
@@ -33,9 +34,12 @@ struct _GbDeviceManagerPanel
 
 static void workbench_addin_iface_init (GbWorkbenchAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbDeviceManagerPanel, gb_device_manager_panel, GTK_TYPE_BOX,
-                         G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN,
-                                                workbench_addin_iface_init))
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbDeviceManagerPanel,
+                                gb_device_manager_panel,
+                                GTK_TYPE_BOX,
+                                0,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (GB_TYPE_WORKBENCH_ADDIN,
+                                                               workbench_addin_iface_init))
 
 enum {
   PROP_0,
@@ -138,6 +142,11 @@ gb_device_manager_panel_class_init (GbDeviceManagerPanelClass *klass)
 }
 
 static void
+gb_device_manager_panel_class_finalize (GbDeviceManagerPanelClass *klass)
+{
+}
+
+static void
 gb_device_manager_panel_init (GbDeviceManagerPanel *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -148,4 +157,14 @@ workbench_addin_iface_init (GbWorkbenchAddinInterface *iface)
 {
   iface->load = gb_device_manager_panel_load;
   iface->unload = gb_device_manager_panel_unload;
+}
+
+void
+peas_register_types (PeasObjectModule *module)
+{
+  gb_device_manager_panel_register_type (G_TYPE_MODULE (module));
+
+  peas_object_module_register_extension_type (module,
+                                              GB_TYPE_WORKBENCH_ADDIN,
+                                              GB_TYPE_DEVICE_MANAGER_PANEL);
 }

@@ -1,6 +1,8 @@
 [Plugin]
-Module=devhelp
-Name=Devhelp
-Description=Provides devhelp documentation
+Module=device-manager
+Name=Device Manager
+Description=Manage connected devices
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
+Builtin=true
+Hidden=true

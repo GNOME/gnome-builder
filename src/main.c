@@ -26,11 +26,55 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <ide.h>
+#include <libpeas/peas.h>
 #include <locale.h>
 
 #include "gb-application.h"
 #include "gb-icons-resources.h"
-#include "gb-plugins.h"
+
+static void
+load_plugins (void)
+{
+  PeasEngine *engine;
+  const GList *list;
+
+  engine = peas_engine_get_default ();
+
+  if (g_getenv ("GB_IN_TREE_PLUGINS") != NULL)
+    {
+      GDir *dir;
+
+      if ((dir = g_dir_open ("plugins", 0, NULL)))
+        {
+          const gchar *name;
+
+          while ((name = g_dir_read_name (dir)))
+            {
+              gchar *path;
+
+              path = g_build_filename ("plugins", name, NULL);
+              peas_engine_prepend_search_path (engine, path, path);
+              g_free (path);
+            }
+
+          g_dir_close (dir);
+        }
+    }
+  else
+    {
+      peas_engine_prepend_search_path (engine,
+                                       PACKAGE_LIBDIR"/gnome-builder/plugins",
+                                       PACKAGE_DATADIR"/gnome-builder/plugins");
+    }
+
+  list = peas_engine_get_plugin_list (engine);
+
+  for (; list; list = list->next)
+    {
+      if (peas_plugin_info_is_builtin (list->data))
+        peas_engine_load_plugin (engine, list->data);
+    }
+}
 
 int
 main (int   argc,
@@ -58,13 +102,12 @@ main (int   argc,
              gtk_get_micro_version ());
 
   g_resources_register (gb_icons_get_resource ());
-  gb_plugins_load ();
+  load_plugins ();
 
   app = g_object_new (GB_TYPE_APPLICATION,
                       "application-id", "org.gnome.Builder",
                       "flags", G_APPLICATION_HANDLES_OPEN,
                       NULL);
-  g_application_set_default (app);
   ret = g_application_run (app, argc, argv);
   g_clear_object (&app);
 

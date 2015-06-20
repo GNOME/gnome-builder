@@ -3,12 +3,15 @@ BUILT_SOURCES =
 CLEANFILES =
 EXTRA_DIST =
 
-noinst_LTLIBRARIES = libterminal.la
+plugindir = $(libdir)/gnome-builder/plugins
+plugin_LTLIBRARIES = libterminal.la
+plugin_DATA = terminal.plugin
 
 libterminal_la_SOURCES = \
 	gb-terminal-application-addin.c \
 	gb-terminal-application-addin.h \
 	gb-terminal-plugin.c \
+	gb-terminal-private.h \
 	gb-terminal-view.c \
 	gb-terminal-view.h \
 	gb-terminal-workbench-addin.c \
@@ -37,7 +40,10 @@ libterminal_la_LIBADD = \
 	$(BUILDER_LIBS) \
 	$(NULL)
 
-libterminal_la_LDFLAGS = -module
+libterminal_la_LDFLAGS = \
+	-avoid-version \
+	-module \
+	$(NULL)
 
 glib_resources_c = gb-terminal-resources.c
 glib_resources_h = gb-terminal-resources.h

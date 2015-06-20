@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/device-manager">
-    <file>gb-device-manager.plugin</file>
     <file>gb-device-manager-panel.ui</file>
   </gresource>
 </gresources>

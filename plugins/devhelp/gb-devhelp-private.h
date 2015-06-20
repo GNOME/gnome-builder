@@ -1,4 +1,4 @@
-/* gb-file-search-plugin.c
+/* gb-devhelp-private.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,13 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ide.h>
+#ifndef GB_DEVHELP_PRIVATE_H
+#define GB_DEVHELP_PRIVATE_H
 
-#include "gb-plugins.h"
-#include "gb-file-search-provider.h"
-#include "gb-file-search-resources.h"
+#include <glib-object.h>
 
-GB_DEFINE_EMBEDDED_PLUGIN (gb_file_search,
-                           gb_file_search_get_resource (),
-                           "resource:///org/gnome/builder/plugins/file-search/gb-file-search.plugin",
-                           GB_DEFINE_PLUGIN_TYPE (IDE_TYPE_SEARCH_PROVIDER, GB_TYPE_FILE_SEARCH_PROVIDER))
+G_BEGIN_DECLS
+
+void _gb_devhelp_panel_register_type           (GTypeModule *module);
+void _gb_devhelp_search_provider_register_type (GTypeModule *module);
+
+G_END_DECLS
+
+#endif /* GB_DEVHELP_PRIVATE_H */

@@ -18,6 +18,7 @@
 
 #include <glib/gi18n.h>
 #include <ide.h>
+#include <libpeas/peas.h>
 
 #include "gb-command.h"
 #include "gb-command-bar-resources.h"
@@ -32,7 +33,6 @@
 #include "gb-widget.h"
 #include "gb-workbench.h"
 #include "gb-workbench-addin.h"
-#include "gb-plugins.h"
 
 struct _GbCommandBar
 {
@@ -62,8 +62,9 @@ struct _GbCommandBar
 
 static void workbench_addin_init (GbWorkbenchAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbCommandBar, gb_command_bar, GTK_TYPE_BIN,
-                         G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN, workbench_addin_init))
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbCommandBar, gb_command_bar, GTK_TYPE_BIN, 0,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (GB_TYPE_WORKBENCH_ADDIN,
+                                                               workbench_addin_init))
 
 #define HISTORY_LENGTH 30
 
@@ -735,6 +736,11 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
 }
 
 static void
+gb_command_bar_class_finalize (GbCommandBarClass *klass)
+{
+}
+
+static void
 gb_command_bar_init (GbCommandBar *self)
 {
   self->history = g_queue_new ();
@@ -757,7 +763,12 @@ workbench_addin_init (GbWorkbenchAddinInterface *iface)
   iface->unload = gb_command_bar_unload;
 }
 
-GB_DEFINE_EMBEDDED_PLUGIN (gb_command_bar,
-                           gb_command_bar_get_resource (),
-                           "resource:///org/gnome/builder/plugins/command-bar/gb-command-bar.plugin",
-                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_COMMAND_BAR))
+G_MODULE_EXPORT void
+peas_register_types (PeasObjectModule *module)
+{
+  gb_command_bar_register_type (G_TYPE_MODULE (module));
+
+  peas_object_module_register_extension_type (module,
+                                              GB_TYPE_WORKBENCH_ADDIN,
+                                              GB_TYPE_COMMAND_BAR);
+}

@@ -3,7 +3,9 @@ BUILT_SOURCES =
 CLEANFILES =
 EXTRA_DIST =
 
-noinst_LTLIBRARIES = libsysmon.la
+plugindir = $(libdir)/gnome-builder/plugins
+plugin_LTLIBRARIES = libsysmon.la
+plugin_DATA = sysmon.plugin
 
 libsysmon_la_SOURCES = \
 	gb-sysmon-panel.c \

@@ -45,6 +45,8 @@ gb_sysmon_panel_class_init (GbSysmonPanelClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/sysmon/gb-sysmon-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, GbSysmonPanel, cpu_graph);
+
+  g_type_ensure (RG_TYPE_CPU_GRAPH);
 }
 
 static void

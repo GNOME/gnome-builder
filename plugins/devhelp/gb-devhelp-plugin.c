@@ -17,15 +17,23 @@
  */
 
 #include <ide.h>
+#include <libpeas/peas.h>
 
 #include "gb-devhelp-panel.h"
-#include "gb-devhelp-resources.h"
+#include "gb-devhelp-private.h"
 #include "gb-devhelp-search-provider.h"
-#include "gb-plugins.h"
 #include "gb-workbench-addin.h"
 
-GB_DEFINE_EMBEDDED_PLUGIN (gb_devhelp,
-                           gb_devhelp_get_resource (),
-                           "resource:///org/gnome/builder/plugins/devhelp/gb-devhelp.plugin",
-                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_DEVHELP_PANEL)
-                           GB_DEFINE_PLUGIN_TYPE (IDE_TYPE_SEARCH_PROVIDER, GB_TYPE_DEVHELP_SEARCH_PROVIDER))
+void
+peas_register_types (PeasObjectModule *module)
+{
+  _gb_devhelp_panel_register_type (G_TYPE_MODULE (module));
+  _gb_devhelp_search_provider_register_type (G_TYPE_MODULE (module));
+
+  peas_object_module_register_extension_type (module,
+                                              GB_TYPE_WORKBENCH_ADDIN,
+                                              GB_TYPE_DEVHELP_PANEL);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_SEARCH_PROVIDER,
+                                              GB_TYPE_DEVHELP_SEARCH_PROVIDER);
+}

@@ -16,14 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libpeas/peas.h>
+
 #include "gb-application-addin.h"
-#include "gb-plugins.h"
 #include "gb-terminal-application-addin.h"
+#include "gb-terminal-private.h"
 #include "gb-terminal-resources.h"
 #include "gb-terminal-workbench-addin.h"
+#include "gb-workbench-addin.h"
 
-GB_DEFINE_EMBEDDED_PLUGIN (gb_terminal,
-                           gb_terminal_get_resource (),
-                           "resource:///org/gnome/builder/plugins/terminal/gb-terminal.plugin",
-                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_APPLICATION_ADDIN, GB_TYPE_TERMINAL_APPLICATION_ADDIN)
-                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_TERMINAL_WORKBENCH_ADDIN))
+void
+peas_register_types (PeasObjectModule *module)
+{
+  _gb_terminal_application_addin_register_type (G_TYPE_MODULE (module));
+  _gb_terminal_workbench_addin_register_type (G_TYPE_MODULE (module));
+
+  peas_object_module_register_extension_type (module,
+                                              GB_TYPE_APPLICATION_ADDIN,
+                                              GB_TYPE_TERMINAL_APPLICATION_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              GB_TYPE_WORKBENCH_ADDIN,
+                                              GB_TYPE_TERMINAL_WORKBENCH_ADDIN);
+}

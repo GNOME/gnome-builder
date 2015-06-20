@@ -33,9 +33,12 @@ struct _GbTerminalWorkbenchAddin
 
 static void workbench_addin_iface_init (GbWorkbenchAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbTerminalWorkbenchAddin, gb_terminal_workbench_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN,
-                                                workbench_addin_iface_init))
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbTerminalWorkbenchAddin,
+                                gb_terminal_workbench_addin,
+                                G_TYPE_OBJECT,
+                                0,
+                                G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN,
+                                                       workbench_addin_iface_init))
 
 enum {
   PROP_0,
@@ -168,6 +171,11 @@ gb_terminal_workbench_addin_class_init (GbTerminalWorkbenchAddinClass *klass)
 }
 
 static void
+gb_terminal_workbench_addin_class_finalize (GbTerminalWorkbenchAddinClass *klass)
+{
+}
+
+static void
 gb_terminal_workbench_addin_init (GbTerminalWorkbenchAddin *self)
 {
 }
@@ -177,4 +185,10 @@ workbench_addin_iface_init (GbWorkbenchAddinInterface *iface)
 {
   iface->load = gb_terminal_workbench_addin_load;
   iface->unload = gb_terminal_workbench_addin_unload;
+}
+
+void
+_gb_terminal_workbench_addin_register_type (GTypeModule *module)
+{
+  gb_terminal_workbench_addin_register_type (module);
 }

@@ -17,8 +17,8 @@
  */
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
-#include "gb-plugins.h"
 #include "gb-sysmon-addin.h"
 #include "gb-sysmon-panel.h"
 #include "gb-sysmon-resources.h"
@@ -35,9 +35,9 @@ struct _GbSysmonAddin
 
 static void workbench_addin_iface_init (GbWorkbenchAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbSysmonAddin, gb_sysmon_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN,
-                                                workbench_addin_iface_init))
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbSysmonAddin, gb_sysmon_addin, G_TYPE_OBJECT, 0,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (GB_TYPE_WORKBENCH_ADDIN,
+                                                               workbench_addin_iface_init))
 
 enum {
   PROP_0,
@@ -131,11 +131,21 @@ gb_sysmon_addin_class_init (GbSysmonAddinClass *klass)
 }
 
 static void
+gb_sysmon_addin_class_finalize (GbSysmonAddinClass *klass)
+{
+}
+
+static void
 gb_sysmon_addin_init (GbSysmonAddin *self)
 {
 }
 
-GB_DEFINE_EMBEDDED_PLUGIN (gb_sysmon,
-                           gb_sysmon_get_resource (),
-                           "resource:///org/gnome/builder/plugins/sysmon/gb-sysmon.plugin",
-                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_SYSMON_ADDIN))
+void
+peas_register_types (PeasObjectModule *module)
+{
+  gb_sysmon_addin_register_type (G_TYPE_MODULE (module));
+
+  peas_object_module_register_extension_type (module,
+                                              GB_TYPE_WORKBENCH_ADDIN,
+                                              GB_TYPE_SYSMON_ADDIN);
+}

@@ -1,6 +1,8 @@
 [Plugin]
-Module=sysmon
-Name=System Monitor
-Description=Basic system information
+Module=devhelp
+Name=Devhelp
+Description=Provides devhelp documentation
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
+Builtin=true
+Hidden=true

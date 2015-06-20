@@ -3,7 +3,9 @@ BUILT_SOURCES =
 CLEANFILES =
 EXTRA_DIST =
 
-noinst_LTLIBRARIES = libcommand-bar.la
+plugindir = $(libdir)/gnome-builder/plugins
+plugin_LTLIBRARIES = libcommand-bar.la
+plugin_DATA = command-bar.plugin
 
 libcommand_bar_la_SOURCES = \
 	gb-command-bar-resources.c \
@@ -52,6 +54,8 @@ libcommand_bar_la_LIBADD = \
 
 libcommand_bar_la_LDFLAGS = \
 	$(OPTIMIZE_LDFLAGS) \
+	-avoid-version \
+	-module \
 	$(NULL)
 
 glib_resources_c = gb-command-bar-resources.c

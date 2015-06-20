@@ -1,4 +1,4 @@
-SUBDIRS = . build contrib data libide plugins src po tools tests doc
+SUBDIRS = . build contrib data libide src plugins po tools tests doc
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(top_builddir)/data/libide-1.0.pc
@@ -71,22 +71,26 @@ dist-hook:
 .PHONY: AUTHORS
 
 run:
+	GB_IN_TREE_PLUGINS=1 \
 	GI_TYPELIB_PATH=libide \
 	GOBJECT_DEBUG=instance-count \
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
 strace:
+	GB_IN_TREE_PLUGINS=1 \
 	GI_TYPELIB_PATH=libide \
 	GOBJECT_DEBUG=instance-count \
 	$(LIBTOOL) --mode=execute strace -T src/gnome-builder -vvvv -s
 
 debug:
+	GB_IN_TREE_PLUGINS=1 \
 	GI_TYPELIB_PATH=libide \
 	G_DEBUG=fatal-criticals \
 	GOBJECT_DEBUG=instance-count \
 	$(LIBTOOL) --mode=execute gdb -ex run --args src/gnome-builder -vvvv -s
 
 valgrind:
+	GB_IN_TREE_PLUGINS=1 \
 	GI_TYPELIB_PATH=libide \
 	G_DEBUG=fatal-criticals \
 	G_SLICE=always-malloc \

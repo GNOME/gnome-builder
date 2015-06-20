@@ -19,9 +19,10 @@
 #define G_LOG_DOMAIN "devhelp-search"
 
 #include <ctype.h>
-#include <glib/gi18n.h>
 #include <devhelp/devhelp.h>
+#include <glib/gi18n.h>
 #include <ide.h>
+#include <libpeas/peas.h>
 
 #include "gb-devhelp-document.h"
 #include "gb-devhelp-panel.h"
@@ -43,9 +44,12 @@ struct _GbDevhelpSearchProvider
 
 static void search_provider_iface_init (IdeSearchProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbDevhelpSearchProvider, gb_devhelp_search_provider, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER,
-                                                search_provider_iface_init))
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbDevhelpSearchProvider,
+                                gb_devhelp_search_provider,
+                                IDE_TYPE_OBJECT,
+                                0,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (IDE_TYPE_SEARCH_PROVIDER,
+                                                               search_provider_iface_init))
 
 static void
 gb_devhelp_search_provider_populate (IdeSearchProvider *provider,
@@ -210,6 +214,11 @@ gb_devhelp_search_provider_class_init (GbDevhelpSearchProviderClass *klass)
 }
 
 static void
+gb_devhelp_search_provider_class_finalize (GbDevhelpSearchProviderClass *klass)
+{
+}
+
+static void
 gb_devhelp_search_provider_init (GbDevhelpSearchProvider *self)
 {
   self->book_manager = dh_book_manager_new ();
@@ -224,4 +233,10 @@ search_provider_iface_init (IdeSearchProviderInterface *iface)
   iface->populate = gb_devhelp_search_provider_populate;
   iface->activate = gb_devhelp_search_provider_activate;
   iface->get_priority = gb_devhelp_search_provider_get_priority;
+}
+
+void
+_gb_devhelp_search_provider_register_type (GTypeModule *module)
+{
+  gb_devhelp_search_provider_register_type (module);
 }

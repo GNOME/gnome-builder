@@ -3,7 +3,9 @@ BUILT_SOURCES =
 CLEANFILES =
 EXTRA_DIST =
 
-noinst_LTLIBRARIES = libsymbol-tree.la
+plugindir = $(libdir)/gnome-builder/plugins
+plugin_LTLIBRARIES = libsymbol-tree.la
+plugin_DATA = symbol-tree.plugin
 
 libsymbol_tree_la_SOURCES = \
 	symbol-tree-builder.c \
@@ -34,6 +36,7 @@ libsymbol_tree_la_LIBADD = \
 	$(NULL)
 
 libsymbol_tree_la_LDFLAGS = \
+	$(OPTIMIZE_LDFLAGS) \
 	-avoid-version \
 	-module \
 	$(NULL)

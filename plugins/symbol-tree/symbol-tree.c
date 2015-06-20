@@ -23,7 +23,6 @@
 #include "egg-task-cache.h"
 
 #include "gb-editor-view.h"
-#include "gb-plugins.h"
 #include "gb-tree.h"
 #include "gb-workspace.h"
 
@@ -52,8 +51,9 @@ static GParamSpec *gParamSpecs [LAST_PROP];
 
 static void workbench_addin_init (GbWorkbenchAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (SymbolTree, symbol_tree, GTK_TYPE_BOX,
-                         G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN, workbench_addin_init))
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (SymbolTree, symbol_tree, GTK_TYPE_BOX, 0,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (GB_TYPE_WORKBENCH_ADDIN,
+                                                               workbench_addin_init))
 
 static void
 get_cached_symbol_tree_cb (GObject      *object,
@@ -212,6 +212,11 @@ symbol_tree_load (GbWorkbenchAddin *addin)
                               GTK_WIDGET (self),
                               _("Symbol Tree"),
                               "lang-function-symbolic");
+
+  gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (GTK_WIDGET (self))),
+                           GTK_WIDGET (self),
+                           "position", 1,
+                           NULL);
 }
 
 static void
@@ -339,6 +344,11 @@ symbol_tree_class_init (SymbolTreeClass *klass)
 }
 
 static void
+symbol_tree_class_finalize (SymbolTreeClass *klass)
+{
+}
+
+static void
 symbol_tree_init (SymbolTree *self)
 {
   GbTreeNode *root;
@@ -370,7 +380,12 @@ symbol_tree_init (SymbolTree *self)
                            G_CONNECT_SWAPPED);
 }
 
-GB_DEFINE_EMBEDDED_PLUGIN (symbol_tree,
-                           symbol_tree_get_resource (),
-                           "resource:///org/gnome/builder/plugins/symbol-tree/symbol-tree.plugin",
-                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, SYMBOL_TYPE_TREE))
+void
+peas_register_types (PeasObjectModule *module)
+{
+  symbol_tree_register_type (G_TYPE_MODULE (module));
+
+  peas_object_module_register_extension_type (module,
+                                              GB_TYPE_WORKBENCH_ADDIN,
+                                              SYMBOL_TYPE_TREE);
+}

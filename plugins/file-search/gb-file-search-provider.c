@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
 #include "gb-file-search-provider.h"
 #include "gb-file-search-index.h"
@@ -31,9 +32,12 @@ struct _GbFileSearchProvider
 
 static void search_provider_iface_init (IdeSearchProviderInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbFileSearchProvider, gb_file_search_provider, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER,
-                                                search_provider_iface_init))
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbFileSearchProvider,
+                                gb_file_search_provider,
+                                IDE_TYPE_OBJECT,
+                                0,
+                                G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER,
+                                                       search_provider_iface_init))
 
 static const gchar *
 gb_file_search_provider_get_verb (IdeSearchProvider *provider)
@@ -175,6 +179,11 @@ gb_file_search_provider_class_init (GbFileSearchProviderClass *klass)
 }
 
 static void
+gb_file_search_provider_class_finalize (GbFileSearchProviderClass *klass)
+{
+}
+
+static void
 gb_file_search_provider_init (GbFileSearchProvider *self)
 {
 }
@@ -187,4 +196,14 @@ search_provider_iface_init (IdeSearchProviderInterface *iface)
   iface->create_row = gb_file_search_provider_create_row;
   iface->activate = gb_file_search_provider_activate;
   iface->get_priority = gb_file_search_provider_get_priority;
+}
+
+void
+peas_register_types (PeasObjectModule *module)
+{
+  gb_file_search_provider_register_type (G_TYPE_MODULE (module));
+
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_SEARCH_PROVIDER,
+                                              GB_TYPE_FILE_SEARCH_PROVIDER);
 }

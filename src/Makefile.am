@@ -179,6 +179,7 @@ libgnome_builder_la_LIBADD = \
 libgnome_builder_la_CFLAGS = \
 	-DPACKAGE_DATADIR="\"${datadir}\"" \
 	-DPACKAGE_LOCALE_DIR=\""${datadir}/locale"\" \
+	-DPACKAGE_LIBDIR=\""${libdir}"\" \
 	$(BUILDER_CFLAGS) \
 	$(DEBUG_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
@@ -203,7 +204,6 @@ libgnome_builder_la_CFLAGS = \
 	-I$(srcdir)/views \
 	-I$(srcdir)/workbench \
 	-I$(srcdir)/workspace \
-	-I$(top_builddir)/plugins/devhelp \
 	-I$(top_builddir)/data/icons/hicolor \
 	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/libide \
@@ -214,35 +214,15 @@ libgnome_builder_la_CFLAGS = \
 	-I$(top_srcdir)/contrib/rg \
 	$(NULL)
 
-define_plugin = -Wl,--whole-archive,$(top_builddir)/plugins/$1/.libs/lib$1.a,--no-whole-archive
 
-gnome_builder_PLUGINS = \
-	devhelp \
-	command-bar \
-	device-manager \
-	file-search \
-	symbol-tree \
-	sysmon \
-	terminal \
-	$(NULL)
-
-gnome_builder_SOURCES = \
-	gb-plugins.c \
-	gb-plugins.h \
-	main.c
-
+gnome_builder_SOURCES = main.c
 gnome_builder_CFLAGS = $(libgnome_builder_la_CFLAGS)
-
 gnome_builder_LDADD = \
 	$(top_builddir)/libide/libide-1.0.la \
-	$(foreach plugin,$(gnome_builder_PLUGINS),$(top_builddir)/plugins/$(plugin)/lib$(plugin).la) \
 	libgnome-builder.la \
 	$(NULL)
-
-
 gnome_builder_LDFLAGS = \
 	-export-dynamic \
-	$(foreach plugin,$(gnome_builder_PLUGINS),$(call define_plugin,$(plugin))) \
 	$(NULL)
 
 
@@ -251,5 +231,6 @@ glib_resources_h = resources/gb-resources.h
 glib_resources_xml = resources/gnome-builder.gresource.xml
 glib_resources_namespace = gb
 include $(top_srcdir)/build/autotools/Makefile.am.gresources
+
 
 -include $(top_srcdir)/git.mk

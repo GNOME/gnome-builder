@@ -3,7 +3,9 @@ BUILT_SOURCES =
 CLEANFILES =
 EXTRA_DIST =
 
-noinst_LTLIBRARIES = libdevhelp.la
+plugindir = $(libdir)/gnome-builder/plugins
+plugin_LTLIBRARIES = libdevhelp.la
+plugin_DATA = devhelp.plugin
 
 libdevhelp_la_SOURCES = \
 	gb-devhelp-document.c \
@@ -39,6 +41,7 @@ libdevhelp_la_LIBADD = \
 	$(NULL)
 
 libdevhelp_la_LDFLAGS = \
+	$(OPTIMIZE_LDFLAGS) \
 	-avoid-version \
 	-module \
 	$(NULL)

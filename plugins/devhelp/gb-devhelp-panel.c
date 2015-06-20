@@ -18,13 +18,13 @@
 
 #include <glib/gi18n.h>
 #include <devhelp/devhelp.h>
+#include <libpeas/peas.h>
 
 #include "gb-devhelp-document.h"
 #include "gb-devhelp-panel.h"
 #include "gb-devhelp-resources.h"
 #include "gb-devhelp-view.h"
 #include "gb-document.h"
-#include "gb-plugins.h"
 #include "gb-view.h"
 #include "gb-view-grid.h"
 #include "gb-workbench-addin.h"
@@ -44,9 +44,9 @@ struct _GbDevhelpPanel
 
 static void workbench_addin_iface_init (GbWorkbenchAddinInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbDevhelpPanel, gb_devhelp_panel, GTK_TYPE_BIN,
-                         G_IMPLEMENT_INTERFACE (GB_TYPE_WORKBENCH_ADDIN,
-                                                workbench_addin_iface_init))
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (GbDevhelpPanel, gb_devhelp_panel, GTK_TYPE_BIN, 0,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (GB_TYPE_WORKBENCH_ADDIN,
+                                                               workbench_addin_iface_init))
 
 enum {
   PROP_0,
@@ -86,6 +86,7 @@ gb_devhelp_panel_load (GbWorkbenchAddin *addin)
   const gchar * const accels[] = { "<ctrl><shift>f", NULL };
   GSimpleAction *action;
   GApplication *app;
+  GtkWidget *parent;
 
   g_assert (GB_IS_DEVHELP_PANEL (self));
 
@@ -93,6 +94,11 @@ gb_devhelp_panel_load (GbWorkbenchAddin *addin)
   pane = gb_workspace_get_right_pane (GB_WORKSPACE (workspace));
   gb_workspace_pane_add_page (GB_WORKSPACE_PANE (pane), GTK_WIDGET (self),
                               _("Documentation"), "help-contents-symbolic");
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (self));
+  gtk_container_child_set (GTK_CONTAINER (parent), GTK_WIDGET (self),
+                           "position", 0,
+                           NULL);
 
   action = g_simple_action_new ("focus-devhelp-search", NULL);
   g_signal_connect_object (action,
@@ -109,6 +115,8 @@ gb_devhelp_panel_load (GbWorkbenchAddin *addin)
                                          accels);
 
   gtk_widget_show (GTK_WIDGET (self));
+
+  gtk_stack_set_visible_child (GTK_STACK (parent), GTK_WIDGET (self));
 }
 
 static void
@@ -241,6 +249,11 @@ gb_devhelp_panel_class_init (GbDevhelpPanelClass *klass)
 }
 
 static void
+gb_devhelp_panel_class_finalize (GbDevhelpPanelClass *klass)
+{
+}
+
+static void
 gb_devhelp_panel_init (GbDevhelpPanel *self)
 {
   self->book_manager = dh_book_manager_new ();
@@ -265,4 +278,10 @@ workbench_addin_iface_init (GbWorkbenchAddinInterface *iface)
 {
   iface->load = gb_devhelp_panel_load;
   iface->unload = gb_devhelp_panel_unload;
+}
+
+void
+_gb_devhelp_panel_register_type (GTypeModule *module)
+{
+  gb_devhelp_panel_register_type (module);
 }

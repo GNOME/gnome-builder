@@ -1,4 +1,4 @@
-/* gb-device-manager-plugin.c
+/* gb-terminal-private.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,11 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gb-plugins.h"
-#include "gb-device-manager-panel.h"
-#include "gb-device-manager-resources.h"
+#ifndef GB_TERMINAL_PRIVATE_H
+#define GB_TERMINAL_PRIVATE_H
 
-GB_DEFINE_EMBEDDED_PLUGIN (gb_device_manager,
-                           gb_device_manager_get_resource (),
-                           "resource:///org/gnome/builder/plugins/device-manager/gb-device-manager.plugin",
-                           GB_DEFINE_PLUGIN_TYPE (GB_TYPE_WORKBENCH_ADDIN, GB_TYPE_DEVICE_MANAGER_PANEL))
+#include <glib-object.h>
+
+G_BEGIN_DECLS
+
+void _gb_terminal_application_addin_register_type (GTypeModule *module);
+void _gb_terminal_workbench_addin_register_type   (GTypeModule *module);
+
+G_END_DECLS
+
+#endif /* GB_TERMINAL_PRIVATE_H */
