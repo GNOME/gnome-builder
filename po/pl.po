@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-21 14:28+0200\n"
-"PO-Revision-Date: 2015-06-21 14:30+0200\n"
+"PO-Revision-Date: 2015-06-21 14:38+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -3063,7 +3063,7 @@ msgstr "Panel treści"
 
 #: ../src/workspace/gb-workspace.c:1084
 msgid "The content workspace pane."
-msgstr "Przestrzeń robocza treści."
+msgstr "Panel przestrzeni roboczej treści."
 
 #: ../src/workspace/gb-workspace.c:1093
 msgid "The position of the pane relative to its edge."
