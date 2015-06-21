@@ -288,7 +288,6 @@ gboolean                    ide_source_view_get_show_line_changes     (IdeSource
 gboolean                    ide_source_view_get_show_line_diagnostics (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_search_bubbles   (IdeSourceView              *self);
 gboolean                    ide_source_view_get_show_search_shadow    (IdeSourceView              *self);
-gboolean                    ide_source_view_get_smart_backspace       (IdeSourceView              *self);
 gboolean                    ide_source_view_get_snippet_completion    (IdeSourceView              *self);
 void                        ide_source_view_get_visible_rect          (IdeSourceView              *self,
                                                                        GdkRectangle               *visible_rect);
@@ -326,8 +325,6 @@ void                        ide_source_view_set_show_search_bubbles   (IdeSource
                                                                        gboolean                    show_search_bubbles);
 void                        ide_source_view_set_show_search_shadow    (IdeSourceView              *self,
                                                                        gboolean                    show_search_bubbles);
-void                        ide_source_view_set_smart_backspace       (IdeSourceView              *self,
-                                                                       gboolean                    smart_backspace);
 void                        ide_source_view_set_snippet_completion    (IdeSourceView              *self,
                                                                        gboolean                    snippet_completion);
 void                        ide_source_view_set_back_forward_list     (IdeSourceView              *self,

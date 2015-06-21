@@ -145,7 +145,6 @@ typedef struct
   guint                        show_line_diagnostics : 1;
   guint                        show_search_bubbles : 1;
   guint                        show_search_shadow : 1;
-  guint                        smart_backspace : 1;
   guint                        snippet_completion : 1;
   guint                        waiting_for_capture : 1;
 } IdeSourceViewPrivate;
@@ -183,7 +182,6 @@ enum {
   PROP_SHOW_LINE_DIAGNOSTICS,
   PROP_SHOW_SEARCH_BUBBLES,
   PROP_SHOW_SEARCH_SHADOW,
-  PROP_SMART_BACKSPACE,
   PROP_SNIPPET_COMPLETION,
   LAST_PROP,
 
@@ -1982,124 +1980,6 @@ is_modifier_key (GdkEventKey *event)
 }
 
 static gboolean
-ide_source_view_do_smart_backspace (IdeSourceView *self,
-                                    GdkEventKey   *event)
-{
-  GtkTextBuffer *buffer;
-  GtkTextIter insert;
-  GtkTextIter end;
-  GtkTextIter tmp;
-  guint visual_column;
-  gint indent_width;
-  gint tab_width;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (event);
-  g_assert (event->type == GDK_KEY_PRESS);
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-
-  ide_buffer_get_selection_bounds (IDE_BUFFER (buffer), &insert, &end);
-
-  if (!gtk_text_iter_equal (&insert, &end))
-    IDE_RETURN (FALSE);
-
-  if ((event->state & GDK_CONTROL_MASK) != 0)
-    {
-      /*
-       * A <Control>BackSpace at the beginning of the line should only move us to the
-       * end of the previous line. Anything more than that is non-obvious because it requires
-       * looking in a position other than where the cursor is.
-       */
-      if ((gtk_text_iter_get_line_offset (&insert) == 0) && (gtk_text_iter_get_line (&insert) > 0))
-        {
-          gtk_text_buffer_begin_user_action (buffer);
-          gtk_text_iter_backward_char (&insert);
-          gtk_text_buffer_delete (buffer, &insert, &end);
-          gtk_text_buffer_end_user_action (buffer);
-
-          IDE_RETURN (TRUE);
-        }
-    }
-
-#define GET_VISUAL_COLUMN(iter) gtk_source_view_get_visual_column(GTK_SOURCE_VIEW(self),iter)
-
-  /* if the line isn't empty up to our cursor, ignore */
-  tmp = insert;
-  while (TRUE)
-    {
-      gunichar ch;
-
-      ch = gtk_text_iter_get_char (&tmp);
-
-      if ((ch != 0) && !g_unichar_isspace (ch))
-        IDE_RETURN (FALSE);
-
-      if (gtk_text_iter_starts_line (&tmp))
-        break;
-
-      gtk_text_iter_backward_char (&tmp);
-    }
-
-  /*
-   * If <Control>BackSpace was specified, delete up to the zero position.
-   */
-  if ((event->state & GDK_CONTROL_MASK) != 0)
-    {
-      gtk_text_buffer_begin_user_action (buffer);
-      gtk_text_iter_set_line_offset (&insert, 0);
-      gtk_text_buffer_delete (buffer, &insert, &end);
-      gtk_text_buffer_end_user_action (buffer);
-
-      IDE_RETURN (TRUE);
-    }
-
-  visual_column = GET_VISUAL_COLUMN (&insert);
-  indent_width = gtk_source_view_get_indent_width (GTK_SOURCE_VIEW (self));
-  tab_width = gtk_source_view_get_tab_width (GTK_SOURCE_VIEW (self));
-  if (indent_width <= 0)
-    indent_width = tab_width;
-
-  if (visual_column < indent_width)
-    IDE_RETURN (FALSE);
-
-  if ((visual_column % indent_width) == 0)
-    {
-      gint target_column = visual_column - indent_width;
-      gunichar ch;
-
-      g_assert (target_column >= 0);
-
-      while (GET_VISUAL_COLUMN (&insert) > target_column)
-        {
-          gtk_text_iter_backward_char (&insert);
-          ch = gtk_text_iter_get_char (&insert);
-
-          if (!g_unichar_isspace (ch))
-            IDE_RETURN (FALSE);
-        }
-
-      ch = gtk_text_iter_get_char (&insert);
-      if (!g_unichar_isspace (ch))
-        IDE_RETURN (FALSE);
-
-      gtk_text_buffer_begin_user_action (buffer);
-      gtk_text_buffer_delete (buffer, &insert, &end);
-      while (GET_VISUAL_COLUMN (&insert) < target_column)
-        gtk_text_buffer_insert (buffer, &insert, " ", 1);
-      gtk_text_buffer_end_user_action (buffer);
-
-      IDE_RETURN (TRUE);
-    }
-
-#undef GET_VISUAL_COLUMN
-
-  IDE_RETURN (FALSE);
-}
-
-static gboolean
 ide_source_view_key_press_event (GtkWidget   *widget,
                                  GdkEventKey *event)
 {
@@ -2202,8 +2082,6 @@ ide_source_view_key_press_event (GtkWidget   *widget,
   if ((event->keyval == GDK_KEY_BackSpace) && !gtk_text_buffer_get_has_selection (buffer))
     {
       if (ide_source_view_maybe_delete_match (self, event))
-        return TRUE;
-      else if (priv->smart_backspace && ide_source_view_do_smart_backspace (self, event))
         return TRUE;
     }
 
@@ -5028,10 +4906,6 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_show_search_shadow (self));
       break;
 
-    case PROP_SMART_BACKSPACE:
-      g_value_set_boolean (value, ide_source_view_get_smart_backspace (self));
-      break;
-
     case PROP_SNIPPET_COMPLETION:
       g_value_set_boolean (value, ide_source_view_get_snippet_completion (self));
       break;
@@ -5123,10 +4997,6 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_SHOW_SEARCH_SHADOW:
       ide_source_view_set_show_search_shadow (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_SMART_BACKSPACE:
-      ide_source_view_set_smart_backspace (self, g_value_get_boolean (value));
       break;
 
     case PROP_SNIPPET_COMPLETION:
@@ -5356,13 +5226,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           _("If the shadow should be drawn when performing searches."),
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  gParamSpecs [PROP_SMART_BACKSPACE] =
-    g_param_spec_boolean ("smart-backspace",
-                         _("Smart Backspace"),
-                         _("If smart Backspace should be used."),
-                         FALSE,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_SNIPPET_COMPLETION] =
     g_param_spec_boolean ("snippet-completion",
@@ -7053,33 +6916,6 @@ ide_source_view_set_show_search_shadow (IdeSourceView *self,
       priv->show_search_shadow = show_search_shadow;
       g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_SEARCH_SHADOW]);
       ide_source_view_invalidate_window (self);
-    }
-}
-
-gboolean
-ide_source_view_get_smart_backspace (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
-
-  return priv->smart_backspace;
-}
-
-void
-ide_source_view_set_smart_backspace (IdeSourceView *self,
-                                     gboolean       smart_backspace)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  smart_backspace = !!smart_backspace;
-
-  if (smart_backspace != priv->smart_backspace)
-    {
-      priv->smart_backspace = smart_backspace;
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SMART_BACKSPACE]);
     }
 }
 
