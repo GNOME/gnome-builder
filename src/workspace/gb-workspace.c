@@ -1090,7 +1090,7 @@ gb_workspace_class_init (GbWorkspaceClass *klass)
   gChildParamSpecs [CHILD_PROP_POSITION] =
     g_param_spec_uint ("position",
                        _("Position"),
-                       _("The position of the pane relative to it's edge."),
+                       _("The position of the pane relative to its edge."),
                        0, G_MAXUINT,
                        0,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
