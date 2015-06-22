@@ -27,3 +27,12 @@ GbTerminalView {
   background-color: #2e3436;
   color: #babdb6;
 }
+
+
+GbTree.dim-label {
+  color: #979a99;
+}
+
+GbTree:backdrop.dim-label {
+  color: #6d6f70;
+}

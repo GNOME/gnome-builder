@@ -37,6 +37,7 @@ struct _GbTreeNode
   guint              needs_build : 1;
   guint              is_dummy : 1;
   guint              children_possible : 1;
+  guint              use_dim_label : 1;
 };
 
 typedef struct
@@ -54,6 +55,7 @@ enum {
   PROP_PARENT,
   PROP_TEXT,
   PROP_TREE,
+  PROP_USE_DIM_LABEL,
   PROP_USE_MARKUP,
   LAST_PROP
 };
@@ -352,14 +354,27 @@ gb_tree_node_set_text (GbTreeNode  *node,
     }
 }
 
-static void
-gb_tree_node_set_use_markup (GbTreeNode *node,
+gboolean
+gb_tree_node_get_use_markup (GbTreeNode *self)
+{
+  g_return_val_if_fail (GB_IS_TREE_NODE (self), FALSE);
+
+  return self->use_markup;
+}
+
+void
+gb_tree_node_set_use_markup (GbTreeNode *self,
                              gboolean    use_markup)
 {
-  g_return_if_fail (GB_IS_TREE_NODE (node));
+  g_return_if_fail (GB_IS_TREE_NODE (self));
 
-  node->use_markup = !!use_markup;
-  g_object_notify_by_pspec (G_OBJECT (node), gParamSpecs [PROP_USE_MARKUP]);
+  use_markup = !!use_markup;
+
+  if (self->use_markup != use_markup)
+    {
+      self->use_markup = use_markup;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_USE_MARKUP]);
+    }
 }
 
 /**
@@ -524,6 +539,10 @@ gb_tree_node_get_property (GObject    *object,
       g_value_set_object (value, gb_tree_node_get_tree (node));
       break;
 
+    case PROP_USE_DIM_LABEL:
+      g_value_set_boolean (value, node->use_dim_label);
+      break;
+
     case PROP_USE_MARKUP:
       g_value_set_boolean (value, node->use_markup);
       break;
@@ -553,6 +572,10 @@ gb_tree_node_set_property (GObject      *object,
 
     case PROP_TEXT:
       gb_tree_node_set_text (node, g_value_get_string (value));
+      break;
+
+    case PROP_USE_DIM_LABEL:
+      gb_tree_node_set_use_dim_label (node, g_value_get_boolean (value));
       break;
 
     case PROP_USE_MARKUP:
@@ -643,7 +666,14 @@ gb_tree_node_class_init (GbTreeNodeClass *klass)
                           _("Use Markup"),
                           _("If text should be translated as markup."),
                           FALSE,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  gParamSpecs [PROP_USE_DIM_LABEL] =
+    g_param_spec_boolean ("use-dim-label",
+                          _("Use Dim Label"),
+                          _("If text should be rendered with a dim label."),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
@@ -859,5 +889,28 @@ gb_tree_node_set_children_possible (GbTreeNode *self,
           else
             _gb_tree_node_remove_dummy_child (self);
         }
+    }
+}
+
+gboolean
+gb_tree_node_get_use_dim_label (GbTreeNode *self)
+{
+  g_return_val_if_fail (GB_IS_TREE_NODE (self), FALSE);
+
+  return self->use_dim_label;
+}
+
+void
+gb_tree_node_set_use_dim_label (GbTreeNode *self,
+                                gboolean    use_dim_label)
+{
+  g_return_if_fail (GB_IS_TREE_NODE (self));
+
+  use_dim_label = !!use_dim_label;
+
+  if (use_dim_label != self->use_dim_label)
+    {
+      self->use_dim_label = use_dim_label;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_USE_DIM_LABEL]);
     }
 }

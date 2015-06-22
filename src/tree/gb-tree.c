@@ -35,6 +35,7 @@ typedef struct
   GtkCellRenderer   *cell_pixbuf;
   GtkCellRenderer   *cell_text;
   GtkTreeStore      *store;
+  GdkRGBA            dim_foreground;
   guint              show_icons : 1;
 } GbTreePrivate;
 
@@ -459,10 +460,11 @@ text_func (GtkCellLayout   *cell_layout,
            GtkTreeIter     *iter,
            gpointer         data)
 {
-  gboolean use_markup = FALSE;
+  GbTree *self = data;
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
   GbTreeNode *node = NULL;
-  gchar *text = NULL;
 
+  g_assert (GB_IS_TREE (self));
   g_assert (GTK_IS_CELL_LAYOUT (cell_layout));
   g_assert (GTK_IS_CELL_RENDERER_TEXT (cell));
   g_assert (GTK_IS_TREE_MODEL (tree_model));
@@ -472,14 +474,20 @@ text_func (GtkCellLayout   *cell_layout,
 
   if (node)
     {
-      g_object_get (node,
-                    "text", &text,
-                    "use-markup", &use_markup,
-                    NULL);
+      GdkRGBA *rgba = NULL;
+      const gchar *text;
+      gboolean use_markup;
+
+      text = gb_tree_node_get_text (node);
+      use_markup = gb_tree_node_get_use_markup (node);
+
+      if (gb_tree_node_get_use_dim_label (node))
+        rgba = &priv->dim_foreground;
+
       g_object_set (cell,
                     use_markup ? "markup" : "text", text,
+                    "foreground-rgba", rgba,
                     NULL);
-      g_free (text);
     }
 }
 
@@ -831,6 +839,27 @@ gb_tree_add_child (GtkBuildable *buildable,
 }
 
 static void
+gb_tree_style_updated (GtkWidget *widget)
+{
+  GbTree *self = (GbTree *)widget;
+  GbTreePrivate *priv = gb_tree_get_instance_private (self);
+  GtkStyleContext *style_context;
+  GtkStateFlags flags;
+
+  g_assert (GB_IS_TREE (self));
+
+  GTK_WIDGET_CLASS (gb_tree_parent_class)->style_updated (widget);
+
+  flags = gtk_widget_get_state_flags (widget);
+
+  style_context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (style_context);
+  gtk_style_context_add_class (style_context, "dim-label");
+  gtk_style_context_get_color (style_context, flags, &priv->dim_foreground);
+  gtk_style_context_restore (style_context);
+}
+
+static void
 gb_tree_finalize (GObject *object)
 {
   GbTree *self = GB_TREE (object);
@@ -919,6 +948,7 @@ gb_tree_class_init (GbTreeClass *klass)
 
   widget_class->popup_menu = gb_tree_popup_menu;
   widget_class->button_press_event = gb_tree_button_press_event;
+  widget_class->style_updated = gb_tree_style_updated;
 
   tree_view_class->row_activated = gb_tree_row_activated;
   tree_view_class->row_expanded = gb_tree_row_expanded;
@@ -1009,7 +1039,7 @@ gb_tree_init (GbTree *self)
                        NULL);
   priv->cell_text = cell;
   gtk_cell_layout_pack_start (column, cell, TRUE);
-  gtk_cell_layout_set_cell_data_func (column, cell, text_func, NULL, NULL);
+  gtk_cell_layout_set_cell_data_func (column, cell, text_func, self, NULL);
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (self),
                                GTK_TREE_VIEW_COLUMN (column));

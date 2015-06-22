@@ -61,6 +61,12 @@ GbTree        *gb_tree_node_get_tree      (GbTreeNode   *node);
 void           gb_tree_node_set_children_possible
                                           (GbTreeNode   *self,
                                            gboolean      children_possible);
+gboolean       gb_tree_node_get_use_markup        (GbTreeNode   *self);
+void           gb_tree_node_set_use_markup        (GbTreeNode   *self,
+                                                   gboolean      use_markup);
+gboolean       gb_tree_node_get_use_dim_label     (GbTreeNode   *self);
+void           gb_tree_node_set_use_dim_label     (GbTreeNode   *self,
+                                                   gboolean      use_dim_label);
 
 G_END_DECLS
 
