@@ -143,6 +143,7 @@ src/preferences/gb-preferences-switch.c
 src/project-tree/gb-new-file-popover.c
 src/project-tree/gb-project-file.c
 src/project-tree/gb-project-tree-builder.c
+src/project-tree/gb-project-tree.c
 src/project-tree/gb-rename-file-popover.c
 src/scrolledwindow/gb-scrolled-window.c
 src/search/gb-search-display-group.c
