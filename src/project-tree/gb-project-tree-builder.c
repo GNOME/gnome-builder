@@ -182,6 +182,7 @@ build_file (GbProjectTreeBuilder *self,
                             "icon-name", icon_name,
                             "text", display_name,
                             "item", item,
+                            "use-dim-label", ignored,
                             NULL);
 
       gb_tree_node_insert_sorted (node, child, compare_nodes_func, self);
