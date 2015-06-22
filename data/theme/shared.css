@@ -94,9 +94,6 @@ GbSourceStyleSchemeWidget GtkSourceView {
 GbSearchDisplayGroup GtkListBox .list-row {
   transition: none;
 }
-GbDocumentStack .button {
-  transition: none;
-}
 
 
 GbGreeterProjectRow,
