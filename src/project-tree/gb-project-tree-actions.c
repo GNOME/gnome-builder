@@ -341,22 +341,6 @@ gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
 }
 
 static void
-gb_project_tree_actions_show_icons (GSimpleAction *action,
-                                    GVariant      *variant,
-                                    gpointer       user_data)
-{
-  GbProjectTree *self = user_data;
-  gboolean show_icons;
-
-  g_assert (GB_IS_PROJECT_TREE (self));
-  g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_BOOLEAN));
-
-  show_icons = g_variant_get_boolean (variant);
-  gb_tree_set_show_icons (GB_TREE (self), show_icons);
-  g_simple_action_set_state (action, variant);
-}
-
-static void
 gb_project_tree_actions__make_directory_cb (GObject      *object,
                                             GAsyncResult *result,
                                             gpointer      user_data)
@@ -842,7 +826,6 @@ static GActionEntry GbProjectTreeActions[] = {
   { "open-with-editor",       gb_project_tree_actions_open_with_editor },
   { "refresh",                gb_project_tree_actions_refresh },
   { "rename-file",            gb_project_tree_actions_rename_file },
-  { "show-icons",             NULL, NULL, "false", gb_project_tree_actions_show_icons },
 };
 
 void
@@ -851,14 +834,15 @@ gb_project_tree_actions_init (GbProjectTree *self)
   g_autoptr(GSettings) settings = NULL;
   g_autoptr(GSettings) tree_settings = NULL;
   g_autoptr(GSimpleActionGroup) actions = NULL;
-  g_autoptr(GAction) action = NULL;
-  g_autoptr(GVariant) show_icons = NULL;
+  g_autoptr(GVariant) show_ignored_files = NULL;
+  GAction *action;
 
   actions = g_simple_action_group_new ();
 
   settings = g_settings_new ("org.gtk.Settings.FileChooser");
   action = g_settings_create_action (settings, "sort-directories-first");
   g_action_map_add_action (G_ACTION_MAP (actions), action);
+  g_clear_object (&action);
 
   g_action_map_add_action_entries (G_ACTION_MAP (actions),
                                    GbProjectTreeActions,
@@ -869,10 +853,14 @@ gb_project_tree_actions_init (GbProjectTree *self)
                                   G_ACTION_GROUP (actions));
 
   tree_settings = g_settings_new ("org.gnome.builder.project-tree");
-  show_icons = g_settings_get_value (tree_settings, "show-icons");
-  action_set (G_ACTION_GROUP (actions), "show-icons",
-              "state", show_icons,
-              NULL);
+
+  action = g_settings_create_action (tree_settings, "show-ignored-files");
+  g_action_map_add_action (G_ACTION_MAP (actions), action);
+  g_clear_object (&action);
+
+  action = g_settings_create_action (tree_settings, "show-icons");
+  g_action_map_add_action (G_ACTION_MAP (actions), action);
+  g_clear_object (&action);
 
   gb_project_tree_actions_update (self);
 }

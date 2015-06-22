@@ -28,27 +28,18 @@
 
 G_DEFINE_TYPE (GbProjectTree, gb_project_tree, GB_TYPE_TREE)
 
+enum {
+  PROP_0,
+  PROP_SHOW_IGNORED_FILES,
+  LAST_PROP
+};
+
+static GParamSpec *gParamSpecs [LAST_PROP];
+
 GtkWidget *
 gb_project_tree_new (void)
 {
   return g_object_new (GB_TYPE_PROJECT_TREE, NULL);
-}
-
-guint
-gb_project_tree_get_desired_width (GbProjectTree *self)
-{
-  return g_settings_get_int (self->settings, "width");
-}
-
-void
-gb_project_tree_save_desired_width (GbProjectTree *self)
-{
-  GtkAllocation alloc;
-  guint width;
-
-  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
-  width = CLAMP (alloc.width, WIDTH_MIN, WIDTH_MAX);
-  g_settings_set_int (self->settings, "width", width);
 }
 
 IdeContext *
@@ -118,11 +109,60 @@ gb_project_tree_finalize (GObject *object)
 }
 
 static void
+gb_project_tree_get_property (GObject    *object,
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  GbProjectTree *self = GB_PROJECT_TREE(object);
+
+  switch (prop_id)
+    {
+    case PROP_SHOW_IGNORED_FILES:
+      g_value_set_boolean (value, gb_project_tree_get_show_ignored_files (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gb_project_tree_set_property (GObject      *object,
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
+{
+  GbProjectTree *self = GB_PROJECT_TREE(object);
+
+  switch (prop_id)
+    {
+    case PROP_SHOW_IGNORED_FILES:
+      gb_project_tree_set_show_ignored_files (self, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gb_project_tree_class_init (GbProjectTreeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gb_project_tree_finalize;
+  object_class->get_property = gb_project_tree_get_property;
+  object_class->set_property = gb_project_tree_set_property;
+
+  gParamSpecs [PROP_SHOW_IGNORED_FILES] =
+    g_param_spec_boolean ("show-ignored-files",
+                          _("Show Ignored Files"),
+                          _("If files ignored by the VCS should be displayed."),
+                         FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 }
 
 static void
@@ -131,7 +171,12 @@ gb_project_tree_init (GbProjectTree *self)
   GbTreeBuilder *builder;
 
   self->settings = g_settings_new ("org.gnome.builder.project-tree");
-  g_settings_bind (self->settings, "show-icons", self, "show-icons",
+
+  g_settings_bind (self->settings, "show-icons",
+                   self, "show-icons",
+                   G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (self->settings, "show-ignored-files",
+                   self, "show-ignored-files",
                    G_SETTINGS_BIND_DEFAULT);
 
   builder = gb_project_tree_builder_new ();
@@ -143,4 +188,28 @@ gb_project_tree_init (GbProjectTree *self)
                     NULL);
 
   gb_project_tree_actions_init (self);
+}
+
+gboolean
+gb_project_tree_get_show_ignored_files (GbProjectTree *self)
+{
+  g_return_val_if_fail (GB_IS_PROJECT_TREE (self), FALSE);
+
+  return self->show_ignored_files;
+}
+
+void
+gb_project_tree_set_show_ignored_files (GbProjectTree *self,
+                                        gboolean       show_ignored_files)
+{
+  g_return_if_fail (GB_IS_PROJECT_TREE (self));
+
+  show_ignored_files = !!show_ignored_files;
+
+  if (show_ignored_files != self->show_ignored_files)
+    {
+      self->show_ignored_files = show_ignored_files;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_SHOW_IGNORED_FILES]);
+      gb_tree_rebuild (GB_TREE (self));
+    }
 }

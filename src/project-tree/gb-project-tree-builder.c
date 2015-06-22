@@ -18,8 +18,9 @@
 
 #include <glib/gi18n.h>
 
-#include "gb-project-tree-builder.h"
 #include "gb-project-file.h"
+#include "gb-project-tree.h"
+#include "gb-project-tree-builder.h"
 #include "gb-tree.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
@@ -121,11 +122,16 @@ build_file (GbProjectTreeBuilder *self,
   gpointer file_info_ptr;
   IdeVcs *vcs;
   GFile *file;
+  GbTree *tree;
+  gboolean show_ignored_files;
 
   g_return_if_fail (GB_IS_PROJECT_TREE_BUILDER (self));
   g_return_if_fail (GB_IS_TREE_NODE (node));
 
   project_file = GB_PROJECT_FILE (gb_tree_node_get_item (node));
+
+  tree = gb_tree_builder_get_tree (GB_TREE_BUILDER (self));
+  show_ignored_files = gb_project_tree_get_show_ignored_files (GB_PROJECT_TREE (tree));
 
   vcs = get_vcs (node);
 
@@ -158,11 +164,13 @@ build_file (GbProjectTreeBuilder *self,
       const gchar *name;
       const gchar *display_name;
       const gchar *icon_name;
+      gboolean ignored;
 
       name = g_file_info_get_name (item_file_info);
       item_file = g_file_get_child (file, name);
 
-      if (ide_vcs_is_ignored (vcs, item_file, NULL))
+      ignored = ide_vcs_is_ignored (vcs, item_file, NULL);
+      if (ignored && !show_ignored_files)
         continue;
 
       item = gb_project_file_new (item_file, item_file_info);

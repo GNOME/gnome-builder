@@ -8,13 +8,12 @@
     <key name="show-icons" type="b">
       <default>true</default>
       <summary>Show Icons</summary>
-      <description>If enabled, the sidebar will display icons next to each item.</description>
+      <description>If enabled, the project tree will display icons next to each item.</description>
     </key>
-    <key name="width" type="i">
-      <range min="1" max="1000"/>
-      <default>250</default>
-      <summary>Project Tree Width</summary>
-      <description>The width in pixels of the project tree.</description>
+    <key name="show-ignored-files" type="b">
+      <default>false</default>
+      <summary>Show Ignored Files</summary>
+      <description>If enabled, the project tree will display files that are ignored by the VCS.</description>
     </key>
   </schema>
 </schemalist>

@@ -30,6 +30,7 @@ struct _GbProjectTree
   GSettings *settings;
 
   guint      expanded_in_new : 1;
+  guint      show_ignored_files : 1;
 };
 
 G_END_DECLS

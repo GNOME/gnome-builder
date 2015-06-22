@@ -29,12 +29,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbProjectTree, gb_project_tree, GB, PROJECT_TREE, GbTree)
 
-GtkWidget  *gb_project_tree_new                (void);
-void        gb_project_tree_set_context        (GbProjectTree *self,
-                                                IdeContext    *context);
-IdeContext *gb_project_tree_get_context        (GbProjectTree *self);
-guint       gb_project_tree_get_desired_width  (GbProjectTree *self);
-void        gb_project_tree_save_desired_width (GbProjectTree *self);
+GtkWidget  *gb_project_tree_new                    (void);
+void        gb_project_tree_set_context            (GbProjectTree *self,
+                                                    IdeContext    *context);
+IdeContext *gb_project_tree_get_context            (GbProjectTree *self);
+gboolean    gb_project_tree_get_show_ignored_files (GbProjectTree *self);
+void        gb_project_tree_set_show_ignored_files (GbProjectTree *self,
+                                                    gboolean       show_ignored_files);
 
 G_END_DECLS
 
