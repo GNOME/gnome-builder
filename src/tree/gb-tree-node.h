@@ -23,44 +23,43 @@
 
 G_BEGIN_DECLS
 
-GbTreeNode    *gb_tree_node_new           (void);
-void           gb_tree_node_append        (GbTreeNode   *node,
-                                           GbTreeNode   *child);
-void           gb_tree_node_insert_sorted (GbTreeNode   *node,
-                                           GbTreeNode   *child,
-                                           GbTreeNodeCompareFunc compare_func,
-                                           gpointer      user_data);
-const gchar   *gb_tree_node_get_icon_name (GbTreeNode   *node);
-GObject       *gb_tree_node_get_item      (GbTreeNode   *node);
-GbTreeNode    *gb_tree_node_get_parent    (GbTreeNode   *node);
-GtkTreePath   *gb_tree_node_get_path      (GbTreeNode   *node);
-gboolean       gb_tree_node_get_iter      (GbTreeNode   *node,
-                                           GtkTreeIter  *iter);
-void           gb_tree_node_prepend       (GbTreeNode   *node,
-                                           GbTreeNode   *child);
-void           gb_tree_node_remove        (GbTreeNode   *node,
-                                           GbTreeNode   *child);
-void           gb_tree_node_set_icon_name (GbTreeNode   *node,
-                                           const gchar  *icon_name);
-void           gb_tree_node_set_item      (GbTreeNode   *node,
-                                           GObject      *item);
-void           gb_tree_node_expand        (GbTreeNode   *node,
-                                           gboolean      expand_ancestors);
-void           gb_tree_node_collapse      (GbTreeNode   *node);
-void           gb_tree_node_select        (GbTreeNode   *node);
-void           gb_tree_node_get_area      (GbTreeNode   *node,
-                                           GdkRectangle *area);
-void           gb_tree_node_invalidate    (GbTreeNode   *node);
-gboolean       gb_tree_node_get_expanded  (GbTreeNode   *node);
-void           gb_tree_node_show_popover  (GbTreeNode   *node,
-                                           GtkPopover   *popover);
-const gchar   *gb_tree_node_get_text      (GbTreeNode   *node);
-void           gb_tree_node_set_text      (GbTreeNode   *node,
-                                           const gchar  *text);
-GbTree        *gb_tree_node_get_tree      (GbTreeNode   *node);
-void           gb_tree_node_set_children_possible
-                                          (GbTreeNode   *self,
-                                           gboolean      children_possible);
+GbTreeNode    *gb_tree_node_new                   (void);
+void           gb_tree_node_append                (GbTreeNode   *node,
+                                                   GbTreeNode   *child);
+void           gb_tree_node_insert_sorted         (GbTreeNode   *node,
+                                                   GbTreeNode   *child,
+                                                   GbTreeNodeCompareFunc compare_func,
+                                                   gpointer      user_data);
+const gchar   *gb_tree_node_get_icon_name         (GbTreeNode   *node);
+GObject       *gb_tree_node_get_item              (GbTreeNode   *node);
+GbTreeNode    *gb_tree_node_get_parent            (GbTreeNode   *node);
+GtkTreePath   *gb_tree_node_get_path              (GbTreeNode   *node);
+gboolean       gb_tree_node_get_iter              (GbTreeNode   *node,
+                                                   GtkTreeIter  *iter);
+void           gb_tree_node_prepend               (GbTreeNode   *node,
+                                                   GbTreeNode   *child);
+void           gb_tree_node_remove                (GbTreeNode   *node,
+                                                   GbTreeNode   *child);
+void           gb_tree_node_set_icon_name         (GbTreeNode   *node,
+                                                   const gchar  *icon_name);
+void           gb_tree_node_set_item              (GbTreeNode   *node,
+                                                   GObject      *item);
+void           gb_tree_node_expand                (GbTreeNode   *node,
+                                                   gboolean      expand_ancestors);
+void           gb_tree_node_collapse              (GbTreeNode   *node);
+void           gb_tree_node_select                (GbTreeNode   *node);
+void           gb_tree_node_get_area              (GbTreeNode   *node,
+                                                   GdkRectangle *area);
+void           gb_tree_node_invalidate            (GbTreeNode   *node);
+gboolean       gb_tree_node_get_expanded          (GbTreeNode   *node);
+void           gb_tree_node_show_popover          (GbTreeNode   *node,
+                                                   GtkPopover   *popover);
+const gchar   *gb_tree_node_get_text              (GbTreeNode   *node);
+void           gb_tree_node_set_text              (GbTreeNode   *node,
+                                                   const gchar  *text);
+GbTree        *gb_tree_node_get_tree              (GbTreeNode   *node);
+void           gb_tree_node_set_children_possible (GbTreeNode   *self,
+                                                   gboolean      children_possible);
 gboolean       gb_tree_node_get_use_markup        (GbTreeNode   *self);
 void           gb_tree_node_set_use_markup        (GbTreeNode   *self,
                                                    gboolean      use_markup);
