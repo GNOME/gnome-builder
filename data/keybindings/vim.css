@@ -99,6 +99,7 @@
   bind "<ctrl>k" { "action" ("view-stack", "show-list", "") };
   bind "<ctrl>minus" { "decrease-font-size" () };
   bind "<ctrl>plus" { "increase-font-size" () };
+  bind "<ctrl>equal" { "increase-font-size" () };
   bind "<ctrl>0" { "reset-font-size" () };
 
   bind "F4" { "action" ("view", "find-other-file", "") };

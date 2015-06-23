@@ -69,6 +69,7 @@
 
   bind "<ctrl>minus" { "decrease-font-size" () };
   bind "<ctrl>plus" { "increase-font-size" () };
+  bind "<ctrl>equal" { "increase-font-size" () };
   bind "<ctrl>0" { "reset-font-size" () };
 
   /* swap between header/source */
