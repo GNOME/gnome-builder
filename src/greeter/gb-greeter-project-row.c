@@ -40,7 +40,7 @@ struct _GbGreeterProjectRow
   GtkBox          *languages_box;
   GtkLabel        *location_label;
   GtkLabel        *title_label;
-  GtkLabel        *checkbox;
+  GtkCheckButton  *checkbox;
 };
 
 G_DEFINE_TYPE (GbGreeterProjectRow, gb_greeter_project_row, GTK_TYPE_LIST_BOX_ROW)
@@ -344,4 +344,6 @@ gb_greeter_project_row_init (GbGreeterProjectRow *self)
   egg_binding_group_bind_full (self->bindings, "directory", self->location_label, "label", 0,
                                truncate_location, NULL, NULL, NULL);
   egg_binding_group_bind (self->bindings, "description", self->description_label, "label", 0);
+
+  g_object_bind_property (self->checkbox, "active", self, "selected", 0);
 }
