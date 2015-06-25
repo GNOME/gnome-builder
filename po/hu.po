@@ -1,0 +1,3440 @@
+# Hungarian translation for gnome-builder.
+# Copyright (C) 2015. Free Software Foundation, Inc.
+# This file is distributed under the same license as the gnome-builder package.
+# Balázs Meskó <meskobalazs at gmail dot com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-builder master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"builder&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2015-06-22 18:21+0000\n"
+"PO-Revision-Date: 2015-06-22 09:18+0100\n"
+"Last-Translator: Meskó Balázs <meskobalazs at gmail dot com>\n"
+"Language-Team: Hungarian <gnome-hu-list@gnome.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.1\n"
+
+#: ../contrib/egg/egg-state-machine-action.c:225 ../contrib/rg/rg-column.c:286
+#: ../data/ui/gb-new-project-dialog.ui.h:6
+#: ../data/ui/gb-preferences-page-git.ui.h:3
+#: ../libide/doap/ide-doap-person.c:168 ../libide/doap/ide-doap.c:462
+#: ../libide/doap/ide-doap.c:463 ../libide/ide-language.c:435
+#: ../libide/ide-project-file.c:269 ../libide/ide-project-info.c:430
+#: ../libide/ide-project.c:400 ../libide/ide-service.c:138
+#: ../libide/ide-source-view-mode.c:250 ../libide/ide-symbol-node.c:121
+#: ../libide/ide-symbol-node.c:122
+msgid "Name"
+msgstr "Név"
+
+#: ../contrib/egg/egg-state-machine-action.c:226
+msgid "The name of the action"
+msgstr "A művelet neve"
+
+#: ../contrib/egg/egg-state-machine-action.c:232
+#: ../contrib/egg/egg-state-machine-action.c:233
+msgid "State Machine"
+msgstr "Állapotgép"
+
+#: ../contrib/gd/gd-tagged-entry.c:940
+msgid "Tag close icon visibility"
+msgstr "Címkék bezáró gombjának láthatósága"
+
+#: ../contrib/gd/gd-tagged-entry.c:941
+msgid "Whether the close button should be shown in tags."
+msgstr "Jelenjen-e meg a bezáró gomb a címkéken."
+
+#: ../contrib/gd/gd-tagged-entry.c:1027
+#: ../src/greeter/gb-greeter-pill-box.c:116
+msgid "Label"
+msgstr "Címke"
+
+#: ../contrib/gd/gd-tagged-entry.c:1028
+msgid "Text to show on the tag."
+msgstr "A címkén megjelenítendő szöveg."
+
+#: ../contrib/gd/gd-tagged-entry.c:1031
+msgid "Tag has a close button"
+msgstr "A címkének van bezárás gombja"
+
+#: ../contrib/gd/gd-tagged-entry.c:1032
+msgid "Whether the tag has a close button."
+msgstr "Rendelkezik-e a címke bezárása gombbal."
+
+#: ../contrib/gd/gd-tagged-entry.c:1035
+msgid "Style"
+msgstr "Stílus"
+
+#: ../contrib/gd/gd-tagged-entry.c:1036
+msgid "Style of the tag."
+msgstr "A címke stílusa."
+
+#: ../contrib/rg/rg-column.c:287
+#, fuzzy
+#| msgid "The name of the action"
+msgid "The name of the column"
+msgstr "A művelet neve"
+
+#: ../contrib/rg/rg-column.c:293 ../contrib/rg/rg-column.c:294
+#, fuzzy
+#| msgid "File Type"
+msgid "Value Type"
+msgstr "Fájltípus"
+
+#: ../contrib/rg/rg-cpu-graph.c:162 ../contrib/rg/rg-cpu-graph.c:163
+#: ../contrib/rg/rg-table.c:514
+msgid "Timespan"
+msgstr ""
+
+#: ../contrib/rg/rg-cpu-graph.c:170 ../contrib/rg/rg-cpu-graph.c:171
+#: ../contrib/rg/rg-table.c:506 ../contrib/rg/rg-table.c:507
+msgid "Max Samples"
+msgstr ""
+
+#: ../contrib/rg/rg-graph.c:368
+msgid "Table"
+msgstr ""
+
+#: ../contrib/rg/rg-graph.c:369
+#, fuzzy
+#| msgid "The tab stop for the chunk."
+msgid "The data table for the graph."
+msgstr "A részlethez tartozó tabulátor"
+
+#: ../contrib/rg/rg-line-renderer.c:250 ../contrib/rg/rg-line-renderer.c:251
+msgid "Column"
+msgstr ""
+
+#: ../contrib/rg/rg-line-renderer.c:258 ../contrib/rg/rg-line-renderer.c:259
+msgid "Line Width"
+msgstr ""
+
+#: ../contrib/rg/rg-line-renderer.c:266 ../contrib/rg/rg-line-renderer.c:267
+msgid "Stroke Color"
+msgstr ""
+
+#: ../contrib/rg/rg-line-renderer.c:273 ../contrib/rg/rg-line-renderer.c:274
+msgid "Stroke Color RGBA"
+msgstr ""
+
+#: ../contrib/rg/rg-table.c:515
+msgid "Timespan to visualize, in microseconds."
+msgstr ""
+
+#: ../contrib/rg/rg-table.c:522 ../contrib/rg/rg-table.c:523
+msgid "Value Max"
+msgstr ""
+
+#: ../contrib/rg/rg-table.c:530 ../contrib/rg/rg-table.c:531
+msgid "Value Min"
+msgstr ""
+
+#: ../contrib/search/trie.c:790
+#, c-format
+msgid "Traversal order %u is not supported on Trie."
+msgstr "A(z) %u bejárási sorrend nem támogatott a Trie adatszerkezeten."
+
+#: ../contrib/xml/xml-reader.c:180 ../contrib/xml/xml-reader.c:181
+msgid "Encoding"
+msgstr "Karakterkódolás"
+
+#: ../contrib/xml/xml-reader.c:187 ../contrib/xml/xml-reader.c:188
+#: ../plugins/devhelp/gb-devhelp-document.c:256
+#: ../plugins/devhelp/gb-devhelp-search-result.c:99
+msgid "URI"
+msgstr "URI"
+
+#: ../contrib/xml/xml-reader.c:327
+#, c-format
+msgid "Could not parse XML from stream"
+msgstr "Nem sikerült az XML feldolgozása a folyamból"
+
+#: ../data/gtk/menus.ui.h:1
+msgid "_New Project"
+msgstr "Ú_j projekt"
+
+#: ../data/gtk/menus.ui.h:2
+msgid "_Open Project"
+msgstr "Projekt _megnyitása"
+
+#: ../data/gtk/menus.ui.h:3
+msgid "_Preferences"
+msgstr "_Beállítások"
+
+#: ../data/gtk/menus.ui.h:4
+msgid "Generate Support Log"
+msgstr "Támogatási naplófájl készítése"
+
+#: ../data/gtk/menus.ui.h:5
+msgid "_About"
+msgstr "_Névjegy"
+
+#: ../data/gtk/menus.ui.h:6
+msgid "_Quit"
+msgstr "_Kilépés"
+
+#: ../data/gtk/menus.ui.h:7 ../data/ui/gb-editor-view.ui.h:1
+msgid "_Reload"
+msgstr "Új_ratöltés"
+
+#: ../data/gtk/menus.ui.h:8
+msgid "_Print…"
+msgstr "_Nyomtatás…"
+
+#: ../data/gtk/menus.ui.h:9
+msgid "_Fullscreen"
+msgstr "_Teljes képernyő"
+
+#: ../data/gtk/menus.ui.h:10
+msgid "_New Document"
+msgstr "_Új dokumentum"
+
+#: ../data/gtk/menus.ui.h:11
+msgid "_Open"
+msgstr "_Megnyitás"
+
+#: ../data/gtk/menus.ui.h:12
+msgid "Save _All"
+msgstr "Összes _mentése"
+
+#: ../data/gtk/menus.ui.h:13
+msgid "_Close All"
+msgstr "Összes _bezárása"
+
+#: ../data/gtk/menus.ui.h:14
+msgid "Display Options"
+msgstr "Megjelenítési Beállítások"
+
+#: ../data/gtk/menus.ui.h:15 ../src/tree/gb-tree.c:974
+#: ../src/tree/gb-tree.c:975
+msgid "Show Icons"
+msgstr "Ikonok megjelenítése"
+
+#: ../data/gtk/menus.ui.h:16 ../src/project-tree/gb-project-tree.c:160
+#, fuzzy
+#| msgid "Show grid lines"
+msgid "Show Ignored Files"
+msgstr "Rácsvonalak megjelenítése"
+
+#: ../data/gtk/menus.ui.h:17
+msgid "Sort Directories First"
+msgstr "Mappák előre sorolása"
+
+#: ../data/gtk/menus.ui.h:18
+msgid "_Collapse All Nodes"
+msgstr "Összes elem össze_csukása"
+
+#: ../data/gtk/menus.ui.h:19
+msgid "_Refresh"
+msgstr "_Frissítés"
+
+#: ../data/gtk/menus.ui.h:20 ../data/ui/gb-greeter-window.ui.h:3
+msgid "_New"
+msgstr "Ú_j"
+
+#: ../data/gtk/menus.ui.h:21
+msgid "_Empty File"
+msgstr "Üres _fájl"
+
+#: ../data/gtk/menus.ui.h:22
+msgid "_New Folder"
+msgstr "Új _mappa"
+
+#: ../data/gtk/menus.ui.h:23
+msgid "Open _With"
+msgstr "Megnyitás _ezzel"
+
+#: ../data/gtk/menus.ui.h:24
+msgid "Source Code Editor"
+msgstr "Forráskód-szerkesztő"
+
+#: ../data/gtk/menus.ui.h:25
+msgid "_Open Containing Folder"
+msgstr "_Tartalmazó mappa megnyitása"
+
+#: ../data/gtk/menus.ui.h:26
+msgid "_Open in Terminal"
+msgstr "Megnyitás _terminálban"
+
+#: ../data/gtk/menus.ui.h:27 ../data/ui/gb-rename-file-popover.ui.h:2
+msgid "_Rename"
+msgstr "Á_tnevezés"
+
+#: ../data/gtk/menus.ui.h:28
+msgid "Mo_ve to Trash"
+msgstr "Át_helyezés a Kukába"
+
+#: ../data/gtk/menus.ui.h:29
+msgid "_Build"
+msgstr "Öss_zeállítás"
+
+#: ../data/gtk/menus.ui.h:30
+msgid "_Rebuild"
+msgstr "Projekt új_raösszeállítása"
+
+#: ../data/style-schemes/builder-dark.xml.h:1
+msgid "Builder Dark"
+msgstr "Builder sötét"
+
+#: ../data/style-schemes/builder-dark.xml.h:2
+msgid "Dark color scheme for Builder using the Tango color palette"
+msgstr "Sötét színséma a Builderhez, a Tangó színpaletta használatával"
+
+#: ../data/style-schemes/builder.xml.h:1
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:3
+#: ../data/ui/gb-workbench.ui.h:1 ../src/main.c:93
+#: ../src/workbench/gb-workbench.c:153
+msgid "Builder"
+msgstr "Builder"
+
+#: ../data/style-schemes/builder.xml.h:2
+msgid "The default color scheme for Builder"
+msgstr "A Builder alapértelmezett színsémája"
+
+#: ../data/ui/gb-editor-frame.ui.h:1
+msgid "OVR"
+msgstr "ÁTÍR"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:1
+msgid "Display right _margin at column:"
+msgstr "Jobb mar_gó ebben az oszlopban:"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:2
+msgid "Trim trailing whitespace when saving document"
+msgstr "Sorvégi szóközök törlése a dokumentum mentésekor"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:3
+msgid "Insert matching brace, bracket, quotation, and parenthesis."
+msgstr "Idéző- és zárójelek automatikus bezárása."
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:4
+msgid "Overwrite closing brace, bracket, quotation, and parenthesis."
+msgstr "Záró idéző- és zárójelek felülírása."
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:5
+#: ../data/ui/gb-editor-tweak-widget.ui.h:7
+msgid "Indentation"
+msgstr "Behúzás"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:6
+msgid "_Tab width:"
+msgstr "_Tabulátorok szélessége:"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:7
+msgid "Insert _spaces instead of tabs"
+msgstr "_Szóközök beillesztése tabulátorok helyett"
+
+#: ../data/ui/gb-editor-settings-widget.ui.h:8
+msgid "_Enable automatic indentation"
+msgstr "_Automatikus behúzás engedélyezése"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:1
+msgid "Search highlight mode…"
+msgstr "Kiemelési üzemmód keresése…"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:2
+msgid "Display line numbers"
+msgstr "Sorok számának megjelenítése"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:3
+msgid "Display right margin"
+msgstr "Jobb margó megjelenítése"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:4
+msgid "Highlight current line"
+msgstr "Jelenlegi sor kiemelése"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:5
+msgid "Auto indent"
+msgstr "Automatikus behúzás"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:6
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:12
+msgid "Smart Backspace"
+msgstr "Okos visszatörlés"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:8
+msgid "Spaces"
+msgstr "Szóközök"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:9
+msgid "Tabs"
+msgstr "Tabulátorok"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:10
+msgid "2"
+msgstr "2"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:11
+msgid "3"
+msgstr "3"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:12
+msgid "4"
+msgstr "4"
+
+#: ../data/ui/gb-editor-tweak-widget.ui.h:13
+msgid "8"
+msgstr "8"
+
+#: ../data/ui/gb-editor-view.ui.h:2 ../data/ui/gb-greeter-window.ui.h:4
+#: ../data/ui/gb-new-project-dialog.ui.h:2
+#: ../data/ui/gb-projects-dialog.ui.h:3
+msgid "_Cancel"
+msgstr "_Mégse"
+
+#: ../data/ui/gb-editor-view.ui.h:3
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+"A Builder azt észlelte, hogy a fájlt máshonnan módosították. Szeretné "
+"újratölteni a fájlt?"
+
+#: ../data/ui/gb-editor-view.ui.h:4
+msgid "Search Symbols"
+msgstr "Keresési szimbólumok"
+
+#: ../data/ui/gb-greeter-window.ui.h:1
+msgid "Select a Project"
+msgstr "Válasszon egy projektet"
+
+#: ../data/ui/gb-greeter-window.ui.h:2
+msgid "Click an item to select"
+msgstr "Kattintson a kiválasztandó elemre"
+
+#: ../data/ui/gb-greeter-window.ui.h:5 ../src/greeter/gb-greeter-window.c:559
+msgid "Recent Projects"
+msgstr "Előző projektek"
+
+#: ../data/ui/gb-greeter-window.ui.h:6
+msgid "Other Projects"
+msgstr "Más projektek"
+
+#: ../data/ui/gb-greeter-window.ui.h:7
+msgid "_Remove"
+msgstr "_Törlés"
+
+#: ../data/ui/gb-new-file-popover.ui.h:1
+#: ../data/ui/gb-rename-file-popover.ui.h:1
+#: ../src/project-tree/gb-new-file-popover.c:349
+msgid "File Name"
+msgstr "Fájlnév"
+
+#: ../data/ui/gb-new-file-popover.ui.h:2
+msgid "_Create"
+msgstr "_Létrehozás"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:1
+#: ../src/dialogs/gb-new-project-dialog.c:348
+msgid "New Project"
+msgstr "Új projekt"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:3
+msgid "_Continue"
+msgstr "_Folytatás"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:4
+msgid "From existing project on this computer"
+msgstr "A számítógépen már létező projektből"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:5
+msgid "From remote source code repository"
+msgstr "Távoli forráskód-tárolóból"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:7
+#: ../libide/ide-back-forward-item.c:140
+msgid "Location"
+msgstr "Hely"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:8
+msgid "GNOME Version"
+msgstr "GNOME verzió"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:9 ../libide/ide-file.c:542
+#: ../libide/ide-source-snippet.c:974
+#: ../src/editor/gb-editor-settings-widget.c:179
+msgid "Language"
+msgstr "Nyelv"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:10
+msgid "Pattern"
+msgstr "Minta"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:11
+msgid "Git"
+msgstr "Git"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:12
+msgid "user@host:repository.git"
+msgstr "user@host:repository.git"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:13
+msgid "Enter the URL of your project's source code repository."
+msgstr "Írja be a projekt forráskód-tárolójának URL címét."
+
+#: ../data/ui/gb-new-project-dialog.ui.h:14
+#: ../libide/autotools/ide-autotools-build-task.c:395
+#: ../libide/ide-project-info.c:437
+#: ../src/project-tree/gb-new-file-popover.c:268
+#: ../src/project-tree/gb-new-file-popover.c:269
+msgid "Directory"
+msgstr "Mappa"
+
+#: ../data/ui/gb-new-project-dialog.ui.h:15
+#: ../libide/git/ide-git-buffer-change-monitor.c:718
+#: ../libide/git/ide-git-vcs.c:388
+msgid "Repository"
+msgstr "Tároló"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:3
+msgid "Editor"
+msgstr "Szerkesztő"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:2
+msgid "Font"
+msgstr "Betűkészlet"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:3
+msgid "Highlighting"
+msgstr "Kiemelés"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:4
+msgid "Display Document Changes"
+msgstr "Dokumentum-változások megjelenítése"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:5
+msgid ""
+"Display whether a line has been added or modified next to the line number."
+msgstr "Mutassa-e az új és megváltozott sorokat a sor száma mellett."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:6
+msgid "Display Line Numbers"
+msgstr "Sorok számának megjelenítése"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:7
+msgid "Display the line numbers next to each line of the document."
+msgstr "A sorok számának megjelenítése a dokumentum minden egyes sorában."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:8
+msgid "Highlight Current Line"
+msgstr "Jelenlegi sor kiemelése"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:9
+msgid "Highlight the line containing the cursor."
+msgstr "A kurzor jelenlegi helyzetének megfelelő sor kiemelése."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:10
+msgid "Highlight Matching Brackets"
+msgstr "Zárójelpárok kiemelése"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:11
+msgid "Whether or not matching brackets should be highlighted."
+msgstr "Kiemelje-e a zárójelpárokat."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:12
+msgid "Overview Map"
+msgstr "Áttekintő térkép"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:13
+msgid "Display Overview Map"
+msgstr "Áttekintő térkép megjelenítése"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:14
+msgid "Display an overview map next to the source code editor."
+msgstr "Megjeleníti az áttekintő térképet a forráskódszerkesztő mellett."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:15
+msgid "Auto Hide Overview Map"
+msgstr "Áttekintő térkép automatikus elrejtése"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:16
+msgid "Automatically hide the overview map during periods of inactivity."
+msgstr "Az áttekintő térkép automatikus elrejtése inaktivitás esetén."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:17
+msgid "Cursor Placement"
+msgstr "Kurzor elhelyezés"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:18
+msgid "Restore Cursor Position"
+msgstr "A kurzor pozíciójának visszaállítása"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:19
+msgid ""
+"Restore the insertion cursor to the last position when reopening a file."
+msgstr ""
+"A beillesztési kurzor visszaállítása a legutóbbi helyre a fájl újranyitása "
+"során."
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:20
+#: ../libide/ide-source-view.c:5173
+msgid "Scroll Offset"
+msgstr "Görgetési eltolás"
+
+#: ../data/ui/gb-preferences-page-editor.ui.h:21
+msgid "Minimal number of lines to keep above and below the cursor."
+msgstr "A kurzor fölötti és alatti sorok minimális száma."
+
+#: ../data/ui/gb-preferences-page-git.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:8
+msgid "Version Control"
+msgstr "Verziókövetés"
+
+#: ../data/ui/gb-preferences-page-git.ui.h:2
+msgid "Source Code Attribution"
+msgstr "Forráskód megjelölése"
+
+#: ../data/ui/gb-preferences-page-git.ui.h:4
+#: ../libide/doap/ide-doap-person.c:161
+msgid "Email"
+msgstr "E-mail"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:5
+msgid "Code Insight"
+msgstr "Kódkiegészítés"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:2
+msgid "Semantic Language Highlighting"
+msgstr "Szemantikus nyelvi kiemelés"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:3
+msgid ""
+"Highlight additional syntax based upon information found in the document."
+msgstr ""
+"További szintaxiskiemelés a dokumentumban található információk alapján."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:4
+msgid "Auto Completion"
+msgstr "Automatikus kódkiegészítés"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:5
+msgid "Suggest Word Completion"
+msgstr "Szókiegészítés ajánlások"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:6
+msgid "Suggest completion of words found within all open documents."
+msgstr "Szókiegészítési ajánlásokat tesz a megnyitott dokumentumok alapján."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:7
+msgid "Suggest Completions using Ctags"
+msgstr "Kiegészítési ajánlások Ctags alapján"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:8
+msgid "Use Ctags for completions in supported languages."
+msgstr "Használja szókiegészítésre a Ctags-et, a támogatott nyelvek esetén."
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:9
+msgid "Suggest Completions using Clang (Experimental)"
+msgstr "Kiegészítési ajánlások Clang alapján (kísérleti)"
+
+#: ../data/ui/gb-preferences-page-insight.ui.h:10
+msgid "Use Clang for completions in the C and C++ languages."
+msgstr "Használja szókiegészítésre a Clang-et C és C++ nyelvek esetén."
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:6
+msgid "Keyboard"
+msgstr "Billentyűzet"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:2
+msgid "Key Binding Emulation"
+msgstr "Gyorsbillentyűk utánzása"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:4
+msgid "The default keybindings for Builder."
+msgstr "A Builder alapértelmezett gyorsbillentyűi."
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:5
+msgid "Emacs Emulation"
+msgstr "Emacs utánzás"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:6
+msgid "Emulates familiar keybindings from the Emacs text editor."
+msgstr "Az Emacs ismerős gyorsbillentyűit utánozza."
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:7
+msgid "Vim Emulation"
+msgstr "Vim utánzás"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:8
+msgid "Emulates familiar keybindings from the Vim text editor."
+msgstr "A Vim szerkesztő ismerős gyorsbillentyűit utánozza."
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:9
+msgid "Keyboard Movement"
+msgstr "Mozgás a billentyűzettel"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:10
+msgid "Smart Home End"
+msgstr "Okos Home és End"
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:11
+msgid "Home moves to first non-space character."
+msgstr "A Home az első nem szóköz karakterhez ugrik."
+
+#: ../data/ui/gb-preferences-page-keybindings.ui.h:13
+msgid ""
+"Backspace will remove extra spaces to keep you aligned with your indentation "
+"width."
+msgstr ""
+"A Visszatörlés kitörli a felesleges szóközöket a megfelelő behúzáshoz "
+"igazodva."
+
+#: ../data/ui/gb-preferences-page-language.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:4
+msgid "Programming Languages"
+msgstr "Programozási nyelvek"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:1
+#: ../data/ui/gb-preferences-window.ui.h:7
+msgid "Theme"
+msgstr "Téma"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:2
+msgid "Night Mode"
+msgstr "Éjszakai mód"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:3
+msgid "Use dark colors for the application chrome."
+msgstr "Sötét színeket használ az alkalmazás megjelenítéséhez."
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:4
+msgid "Display Grid Pattern"
+msgstr "Rácsminta megjelenítése"
+
+#: ../data/ui/gb-preferences-page-theme.ui.h:5
+msgid "Display a grid pattern under the source code."
+msgstr "Rácsmintát jelenít meg a forráskód alatt."
+
+#: ../data/ui/gb-preferences-window.ui.h:1
+msgid "Preferences"
+msgstr "Beállítások"
+
+#: ../data/ui/gb-preferences-window.ui.h:2
+msgid "Search Preferences…"
+msgstr "Beállítások keresése…"
+
+#: ../data/ui/gb-projects-dialog.ui.h:1
+#: ../src/dialogs/gb-projects-dialog.c:257
+msgid "Select Project"
+msgstr "Projekt kiválasztása"
+
+#: ../data/ui/gb-projects-dialog.ui.h:2
+msgid "New"
+msgstr "Új"
+
+#: ../data/ui/gb-projects-dialog.ui.h:4
+msgid "Delete"
+msgstr "Törlés"
+
+#: ../data/ui/gb-view-stack.ui.h:1
+msgid "Split"
+msgstr "Szétvágás"
+
+#: ../data/ui/gb-view-stack.ui.h:2
+msgid "Move"
+msgstr "Mozgatás"
+
+#: ../data/ui/gb-view-stack.ui.h:3
+msgid "Preview"
+msgstr "Előnézet"
+
+#: ../data/ui/gb-view-stack.ui.h:4 ../src/editor/gb-editor-view-actions.c:310
+#: ../src/editor/gb-editor-view-actions.c:441
+msgid "Save"
+msgstr "Mentés"
+
+#: ../data/ui/gb-view-stack.ui.h:5
+msgid "Save As"
+msgstr "Mentés másként"
+
+#: ../data/ui/gb-view-stack.ui.h:6
+msgid "Close"
+msgstr "Bezárás"
+
+#: ../data/ui/gb-workbench.ui.h:2 ../libide/ide-context.c:691
+msgid "Project"
+msgstr "Projekt"
+
+#: ../libide/autotools/ide-autotools-build-system.c:172
+msgid "Failed to locate configure.ac"
+msgstr "Nem található a „configure.ac” fájl"
+
+#: ../libide/autotools/ide-autotools-build-system.c:638
+msgid "Tarball Name"
+msgstr "Tarball neve"
+
+#: ../libide/autotools/ide-autotools-build-system.c:639
+msgid "The name of the project tarball."
+msgstr "A projekt tarball neve."
+
+#: ../libide/autotools/ide-autotools-build-task.c:270
+msgid "Directory must be on a locally mounted filesystem."
+msgstr "A mappának a helyi fájlrendszerre csatoltnak kell lennie."
+
+#: ../libide/autotools/ide-autotools-build-task.c:377
+#: ../libide/autotools/ide-autotools-builder.c:303
+msgid "Config"
+msgstr "Konfiguráció"
+
+#: ../libide/autotools/ide-autotools-build-task.c:378
+msgid "The overlay config for the compilation."
+msgstr "A fordítás konfigurációja."
+
+#: ../libide/autotools/ide-autotools-build-task.c:386
+#: ../libide/autotools/ide-autotools-builder.c:312
+#: ../plugins/device-manager/gb-device-manager-panel.c:75
+msgid "Device"
+msgstr "Eszköz"
+
+#: ../libide/autotools/ide-autotools-build-task.c:387
+#: ../libide/autotools/ide-autotools-builder.c:313
+msgid "The device to build for."
+msgstr "Az eszköz amelyre az összeállítás készül."
+
+#: ../libide/autotools/ide-autotools-build-task.c:396
+msgid "The directory to perform the build within."
+msgstr "A könyvtár, ahol az összeállítást végezzük."
+
+#: ../libide/autotools/ide-autotools-build-task.c:404
+msgid "Require Autogen"
+msgstr "Az Autogen kötelező"
+
+#: ../libide/autotools/ide-autotools-build-task.c:405
+msgid "If autogen.sh should be forced to execute."
+msgstr "Ha az autogen.sh kötelezően futtatandó."
+
+#: ../libide/autotools/ide-autotools-build-task.c:413
+msgid "Require Configure"
+msgstr "A Configure kötelező"
+
+#: ../libide/autotools/ide-autotools-build-task.c:414
+msgid "If configure should be forced to execute."
+msgstr "Ha a configure kötelezően futtatandó."
+
+#: ../libide/autotools/ide-autotools-build-task.c:641
+msgid "Cannot execute build task more than once."
+msgstr "Az összeállítási feladat nem futtatható egynél többször."
+
+#: ../libide/autotools/ide-autotools-build-task.c:726
+msgid "Failed to create build directory."
+msgstr "Az összeállítási könyvtár létrehozása meghiúsult."
+
+#: ../libide/autotools/ide-autotools-build-task.c:735
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "A(z) „%s” nem könyvtár."
+
+#: ../libide/autotools/ide-autotools-build-task.c:774
+#, c-format
+msgid "autogen.sh is missing from project directory (%s)."
+msgstr "Az autogen.sh hiányzik a projektkönyvtárból (%s)."
+
+#: ../libide/autotools/ide-autotools-build-task.c:784
+msgid "autogen.sh is not executable."
+msgstr "Az autogen.sh nem futtatható."
+
+#: ../libide/autotools/ide-autotools-build-task.c:814
+#, c-format
+msgid "autogen.sh failed to create configure (%s)"
+msgstr "Az autogen.sh nem tudta létrehozni a configure-t (%s)"
+
+#: ../libide/autotools/ide-autotools-builder.c:304
+msgid "The configuration for the build."
+msgstr "Az összeállítás beállításai."
+
+#: ../libide/autotools/ide-autotools-project-miner.c:377
+#: ../plugins/file-search/gb-file-search-index.c:121
+#: ../plugins/file-search/gb-file-search-index.c:122
+msgid "Root Directory"
+msgstr "Gyökérkönyvtár"
+
+#: ../libide/autotools/ide-autotools-project-miner.c:378
+msgid "The root directory to scan from."
+msgstr "A gyökérkönyvtár, ahonnan keresünk."
+
+#: ../libide/autotools/ide-makecache.c:1004
+msgid "Invalid makefile provided, ignoring."
+msgstr "A megadott makefile érvénytelen, figyelmen kívül hagyva."
+
+#: ../libide/autotools/ide-makecache.c:1244
+msgid "Makefile"
+msgstr "Makefile"
+
+#: ../libide/autotools/ide-makecache.c:1245
+msgid "The root makefile to be cached."
+msgstr "A gyorsítótárazandó makefile."
+
+#: ../libide/c/ide-c-format-provider.c:283
+#: ../libide/python/ide-python-format-provider.c:229
+msgid "Format Strings"
+msgstr "Formátum karakterláncok"
+
+#: ../libide/c/ide-c-language.c:119
+msgid "C"
+msgstr "C"
+
+#: ../libide/c/ide-c-language.c:229
+#, c-format
+msgid "Language id does not match a C language."
+msgstr "A nyelvazonosító nem illeszkedik a C nyelvre."
+
+#: ../libide/clang/ide-clang-completion-item.c:413
+#: ../libide/clang/ide-clang-translation-unit.c:587
+msgid "Index"
+msgstr "Index"
+
+#: ../libide/clang/ide-clang-completion-item.c:414
+msgid "The index in the result set."
+msgstr "Az eredményhalmaz indexe."
+
+#: ../libide/clang/ide-clang-completion-item.c:422
+msgid "Results"
+msgstr "Eredmények"
+
+#: ../libide/clang/ide-clang-completion-item.c:423
+msgid "The Clang result set."
+msgstr "A Clang eredményhalmaz."
+
+#: ../libide/clang/ide-clang-completion-provider.c:215
+msgid "Clang"
+msgstr "Clang"
+
+#: ../libide/clang/ide-clang-service.c:263
+msgid "Unknown failure"
+msgstr "Ismeretlen hiba"
+
+#: ../libide/clang/ide-clang-service.c:267
+msgid "Clang crashed"
+msgstr "A Clang összeomlott"
+
+#: ../libide/clang/ide-clang-service.c:271
+msgid "Invalid arguments"
+msgstr "Érvénytelen argumentumok"
+
+#: ../libide/clang/ide-clang-service.c:275
+msgid "AST read error"
+msgstr "AST olvasási hiba"
+
+#: ../libide/clang/ide-clang-service.c:287
+#, c-format
+msgid "Failed to create translation unit: %s"
+msgstr "Nem sikerült létrehozni a(z) „%s” fordítási egységet."
+
+#: ../libide/clang/ide-clang-service.c:396
+msgid "File must be saved locally to parse."
+msgstr "A fájlnak helyben mentettnek kell lennie a feldolgozáshoz."
+
+#: ../libide/clang/ide-clang-symbol-node.c:149
+msgid "anonymous"
+msgstr ""
+
+#: ../libide/clang/ide-clang-symbol-tree.c:294
+#: ../libide/clang/ide-clang-symbol-tree.c:295
+#: ../libide/clang/ide-clang-translation-unit.c:580
+#: ../libide/ide-buffer.c:1154 ../libide/ide-file-settings.c:290
+#: ../libide/ide-file.c:526 ../libide/ide-project-file.c:248
+#: ../libide/ide-project-info.c:451 ../libide/ide-script.c:156
+#: ../src/project-tree/gb-project-file.c:173
+#: ../src/project-tree/gb-project-file.c:174
+#: ../src/project-tree/gb-rename-file-popover.c:308
+#: ../src/project-tree/gb-rename-file-popover.c:309
+msgid "File"
+msgstr "Fájl"
+
+#: ../libide/clang/ide-clang-symbol-tree.c:301
+#: ../libide/clang/ide-clang-symbol-tree.c:302
+#: ../libide/clang/ide-clang-translation-unit.c:594
+msgid "Native"
+msgstr "Natív"
+
+#: ../libide/clang/ide-clang-translation-unit.c:581
+msgid "The file used to build the translation unit."
+msgstr "A fordítási egység összeállításához használt fájl."
+
+#: ../libide/clang/ide-clang-translation-unit.c:588
+msgid "The highlight index for the translation unit."
+msgstr "A fordítási egység kiemelési indexe."
+
+#: ../libide/clang/ide-clang-translation-unit.c:595
+msgid "The native translation unit pointer."
+msgstr "A natív fordítási egység mutatója."
+
+#: ../libide/clang/ide-clang-translation-unit.c:600
+msgid "Serial"
+msgstr "Sorszám"
+
+#: ../libide/clang/ide-clang-translation-unit.c:601
+msgid "A sequence number for the translation unit."
+msgstr "A fordítási egység sorszáma."
+
+#: ../libide/clang/ide-clang-translation-unit.c:654
+msgid "clang_codeCompleteAt() only works on local files"
+msgstr "A clang_codeCompleteAt() csak helyi fájlokon működik"
+
+#: ../libide/ctags/ide-ctags-completion-provider.c:236
+msgid "CTags"
+msgstr "CTags"
+
+#: ../libide/doap/ide-doap-person.c:162
+msgid "The email of the person."
+msgstr "A személy e-mail címe."
+
+#: ../libide/doap/ide-doap-person.c:169
+msgid "The name of the person."
+msgstr "A személy neve."
+
+#: ../libide/doap/ide-doap.c:420 ../libide/doap/ide-doap.c:421
+msgid "Bug Database"
+msgstr "Hibaadatbázis"
+
+#: ../libide/doap/ide-doap.c:427 ../libide/doap/ide-doap.c:428
+msgid "Category"
+msgstr "Kategória"
+
+#: ../libide/doap/ide-doap.c:434 ../libide/doap/ide-doap.c:435
+#: ../libide/ide-project-info.c:423 ../libide/ide-source-snippet.c:981
+#: ../src/preferences/gb-preferences-switch.c:321
+msgid "Description"
+msgstr "Leírás"
+
+#: ../libide/doap/ide-doap.c:441 ../libide/doap/ide-doap.c:442
+msgid "Download Page"
+msgstr "Letöltési oldal"
+
+#: ../libide/doap/ide-doap.c:448 ../libide/doap/ide-doap.c:449
+msgid "Homepage"
+msgstr "Honlap"
+
+#: ../libide/doap/ide-doap.c:455 ../libide/doap/ide-doap.c:456
+#: ../libide/ide-project-info.c:465 ../libide/ide-project-info.c:466
+msgid "Languages"
+msgstr "Nyelvek"
+
+#: ../libide/doap/ide-doap.c:469 ../libide/doap/ide-doap.c:470
+msgid "Shortdesc"
+msgstr "Rövid leírás"
+
+#: ../libide/editorconfig/ide-editorconfig-file-settings.c:153
+msgid "No file was provided."
+msgstr "Nincs fájl megadva"
+
+#: ../libide/gca/ide-gca-diagnostic-provider.c:335
+msgid "Code assistance requires a local file."
+msgstr "A kódkiegészítéshez helyi fájl szükséges"
+
+#: ../libide/gca/ide-gca-service.c:167
+msgid "No language specified"
+msgstr "Nincs nyelv megadva"
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:167
+msgid "Cannot provide diff, no backing file provided."
+msgstr "Nem adható diff kimenet, nincs mögöttes fájl megadva."
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:537
+#, c-format
+msgid "Repository does not have a working directory."
+msgstr "A tárólónak nincs munkakönyvtára."
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:548
+#, c-format
+msgid "File is not under control of git working directory."
+msgstr "A fájl nincs a git munkakönyvtár kezelése alatt."
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:614
+#, c-format
+msgid "The requested file does not exist within the git index."
+msgstr "A kért fájl nem létezik a git indexben."
+
+#: ../libide/git/ide-git-buffer-change-monitor.c:719
+msgid "The repository to use for calculating diffs."
+msgstr "A használandó tároló a diff kiszámításához."
+
+#: ../libide/git/ide-git-remote-callbacks.c:212 ../libide/ide-progress.c:217
+msgid "Fraction"
+msgstr "Hányad"
+
+#: ../libide/git/ide-git-remote-callbacks.c:213
+msgid "A fraction containing the operation progress."
+msgstr "A hányad, amely az előrehaladást tárolja."
+
+#: ../libide/git/ide-git-vcs.c:389
+msgid "The git repository for the project."
+msgstr "A projekt git tárolója."
+
+#: ../libide/gjs/ide-gjs-script.cpp:76
+msgid "Attempt to load a GJS script with no filename."
+msgstr "Fájlnév nélküli GJS parancsfájl hozzáadása."
+
+#: ../libide/gjs/ide-gjs-script.cpp:103
+msgid "Failed to create JavaScript context."
+msgstr "Nem sikerült a JavaScript környezet létrehozása."
+
+#: ../libide/gjs/ide-gjs-script.cpp:128
+msgid "Failed to set IdeContext in JavaScript runtime."
+msgstr ""
+"Nem sikerült az IdeContext beállítása a JavaScript futtatókörnyezetben."
+
+#: ../libide/gjs/ide-gjs-script.cpp:202
+#: ../libide/pygobject/ide-pygobject-script.c:254
+msgid "The filename for the script was not provided."
+msgstr "A parancsfájl neve nem lett megadva."
+
+#: ../libide/gjs/ide-gjs-script.cpp:213
+#: ../libide/pygobject/ide-pygobject-script.c:265
+msgid "The script must be on a local filesystem."
+msgstr "A parancsfájlnak a helyi fájlnak kell lennie."
+
+#: ../libide/gjs/ide-gjs-script.cpp:222
+#, c-format
+msgid "The script \"%s\" is not a JavaScript file."
+msgstr "A(z) „%s” nem JavaScript parancsfájl."
+
+#: ../libide/gsettings/ide-language-defaults.c:177
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr "%s érvénytelen ASCII karaktereket tartalmaz"
+
+#: ../libide/gsettings/ide-language-defaults.c:192
+#, c-format
+msgid "Failed to parse integer from \"%s\""
+msgstr "Nem dolgozható fel egész értékként a következő: „%s”"
+
+#: ../libide/gsettings/ide-language-defaults.c:270
+msgid "language defaults missing version in [global] group."
+msgstr "a nyelvi alapbeállítások verziója hiányzik a [global] csoportból."
+
+#: ../libide/gsettings/ide-language-defaults.c:362
+msgid "Failed to initialize defaults."
+msgstr "Az alapbeállítások előkészítése meghiúsult."
+
+#: ../libide/ide-back-forward-item.c:141
+msgid "The location of the navigation item."
+msgstr "A navigációs elem helye."
+
+#: ../libide/ide-back-forward-list.c:426
+msgid "Can Go Backward"
+msgstr "Mehet hátra"
+
+#: ../libide/ide-back-forward-list.c:427
+msgid "If there are more backward navigation items."
+msgstr "Ha van még navigációs elem visszafelé."
+
+#: ../libide/ide-back-forward-list.c:433
+msgid "Can Go Forward"
+msgstr "Mehet előre"
+
+#: ../libide/ide-back-forward-list.c:434
+msgid "If there are more forward navigation items."
+msgstr "Ha van még navigációs elem előrefelé."
+
+#: ../libide/ide-back-forward-list.c:440
+msgid "Current Item"
+msgstr "Jelenlegi elem"
+
+#: ../libide/ide-back-forward-list.c:441
+msgid "The current navigation item."
+msgstr "A jelenlegi navigációs elem."
+
+#: ../libide/ide-back-forward-list.c:722
+msgid "File contained invalid UTF-8"
+msgstr "A fájl érvénytelen UTF-8 karaktereket tartalmaz"
+
+#: ../libide/ide-buffer-change-monitor.c:106
+#: ../libide/ide-highlight-engine.c:784 ../libide/ide-source-snippet.c:946
+#: ../src/html/gb-html-document.c:314
+msgid "Buffer"
+msgstr "Puffer"
+
+#: ../libide/ide-buffer-change-monitor.c:107
+msgid "The IdeBuffer to be monitored."
+msgstr "A megfigyelni kívánt IdeBuffer."
+
+#: ../libide/ide-buffer-manager.c:584
+msgid "File too large to be opened."
+msgstr "A fájl túl nagy."
+
+#: ../libide/ide-buffer-manager.c:1209
+msgid "Auto Save"
+msgstr "Automatikus mentés"
+
+#: ../libide/ide-buffer-manager.c:1210
+msgid "If the documents should auto save after a configured timeout."
+msgstr ""
+"Ha a dokumentumok automatikusan mentésre kerüljenek a beállított idő letelte "
+"után."
+
+#: ../libide/ide-buffer-manager.c:1216
+msgid "Auto Save Timeout"
+msgstr "Automatikus mentés időköze"
+
+#: ../libide/ide-buffer-manager.c:1217
+msgid "The number of seconds after modification before auto saving."
+msgstr ""
+"Az utolsó módosítás után ennyi másodpercnek kell eltelnie az automatikus "
+"mentéshez."
+
+#: ../libide/ide-buffer-manager.c:1225
+msgid "Focused Buffer"
+msgstr "Fókuszban lévő puffer"
+
+#: ../libide/ide-buffer-manager.c:1226
+msgid "The currently focused buffer."
+msgstr "A jelenleg fókuszban lévő puffer"
+
+#: ../libide/ide-buffer-manager.c:1369
+msgid "Words"
+msgstr "Szavak"
+
+#: ../libide/ide-buffer-manager.c:1580
+#, c-format
+msgid "unsaved document %u"
+msgstr "mentetlen dokumentum %u"
+
+#: ../libide/ide-buffer-manager.c:1614
+msgid "Failed to save buffer, ignoring reclamation."
+msgstr "Nem sikerült a puffer mentése, a helyreállítás figyelmen kívül hagyva."
+
+#: ../libide/ide-buffer.c:1131
+msgid "Busy"
+msgstr "Elfoglalt"
+
+#: ../libide/ide-buffer.c:1132
+msgid "If the buffer is performing background work."
+msgstr "Ha a puffer munkát végez a háttérben."
+
+#: ../libide/ide-buffer.c:1138
+msgid "Changed on Volume"
+msgstr "Megváltozott a köteten"
+
+#: ../libide/ide-buffer.c:1139
+msgid "If the file has changed on disk and the buffer is not in sync."
+msgstr "A fájl megváltozott-e a lemezen és a puffer nincs-e szinkronban."
+
+#: ../libide/ide-buffer.c:1145 ../libide/ide-object.c:203
+#: ../libide/ide-search-provider.c:71 ../libide/ide-search-provider.c:72
+#: ../libide/ide-source-snippet-chunk.c:314
+#: ../src/search/gb-search-display.c:577 ../src/workbench/gb-workbench.c:708
+msgid "Context"
+msgstr "Környezet"
+
+#: ../libide/ide-buffer.c:1146
+msgid "The IdeContext for the buffer."
+msgstr "Az IdeContext ehhez a pufferhez."
+
+#: ../libide/ide-buffer.c:1155
+msgid "The file represented by the buffer."
+msgstr "A puffer által képviselt fájl."
+
+#: ../libide/ide-buffer.c:1161
+msgid "Highlight Diagnostics"
+msgstr "Diagnosztika kiemelése"
+
+#: ../libide/ide-buffer.c:1162
+msgid "If diagnostic warnings and errors should be highlighted."
+msgstr "A diagnosztikai figyelmeztetéseket és hibákat ki kell-e emelni."
+
+#: ../libide/ide-buffer.c:1168 ../src/documents/gb-document.c:204
+msgid "Read Only"
+msgstr "Csak olvasható"
+
+#: ../libide/ide-buffer.c:1169
+msgid "If the underlying file is read only."
+msgstr "A mögöttes fájl csak olvasható-e."
+
+#: ../libide/ide-buffer.c:1175 ../libide/ide-buffer.c:1176
+msgid "Style Scheme Name"
+msgstr "Stílusséma neve"
+
+#: ../libide/ide-buffer.c:1182 ../libide/ide-search-result.c:286
+#: ../src/documents/gb-document.c:196
+#: ../src/preferences/gb-preferences-page.c:282
+#: ../src/preferences/gb-preferences-switch.c:314 ../src/views/gb-view.c:279
+msgid "Title"
+msgstr "Cím"
+
+#: ../libide/ide-buffer.c:1183
+msgid "The title of the buffer."
+msgstr "A puffer címe."
+
+#: ../libide/ide-buffer.c:1989
+msgid "Failed to resolve symbol"
+msgstr "Nem sikerült feloldani a szimbólumot"
+
+#: ../libide/ide-buffer.c:2068
+msgid "Symbol resolver is not supported."
+msgstr "A szimbólumfeloldó nem támogatott."
+
+#: ../libide/ide-build-result.c:156
+msgid "Failed to open stderr stream."
+msgstr "Az stderr hibafolyam megnyitása meghiúsult."
+
+#: ../libide/ide-build-result.c:186
+msgid "Failed to open stdout stream."
+msgstr "Az stdout adatfolyam megnyitása meghiúsult."
+
+#: ../libide/ide-build-system.c:181 ../libide/ide-context.c:698
+msgid "Project File"
+msgstr "Projektfájl"
+
+#: ../libide/ide-build-system.c:182
+msgid "The project file."
+msgstr "A projektfájl."
+
+#: ../libide/ide-build-system.c:287
+#, c-format
+msgid "%s() is not supported on %s build system."
+msgstr "A(z) %s() nem támogatott a(z) %s összeállítási rendszeren."
+
+#: ../libide/ide-builder.c:50
+#, c-format
+msgid "%s does not implement build_async()"
+msgstr "A(z) %s nem valósítja meg a build_async() függvényt"
+
+#: ../libide/ide-builder.c:56
+msgid "No implementation of build_async()"
+msgstr "A build_async() függvény nincs megvalósítva"
+
+#: ../libide/ide-context.c:663 ../libide/ide-source-view.c:5087
+#: ../src/editor/gb-editor-frame.c:747
+msgid "Back Forward List"
+msgstr "Előre-hátra lista"
+
+#: ../libide/ide-context.c:664
+msgid "Back/forward navigation history for the context."
+msgstr "A környezet előre/hátra navigációs előzményei."
+
+#: ../libide/ide-context.c:670
+msgid "Buffer Manager"
+msgstr "Pufferkezelő"
+
+#: ../libide/ide-context.c:671
+msgid "The buffer manager for the context."
+msgstr "A környezet pufferkezelője."
+
+#: ../libide/ide-context.c:677
+msgid "Build System"
+msgstr "Összeállítási rendszer"
+
+#: ../libide/ide-context.c:678
+msgid "The build system used by the context."
+msgstr "A környezet összeállítási rendszere."
+
+#: ../libide/ide-context.c:684
+msgid "Device Manager"
+msgstr "Eszközkezelő"
+
+#: ../libide/ide-context.c:685
+msgid "The device manager for the context."
+msgstr "A környezet eszközkezelője."
+
+#: ../libide/ide-context.c:692
+msgid "The project for the context."
+msgstr "A környezet projektje."
+
+#: ../libide/ide-context.c:699
+msgid "The project file for the context."
+msgstr "A környezet projektfájlja."
+
+#: ../libide/ide-context.c:707
+msgid "Root Build Directory"
+msgstr "Gyökér összeállítási könyvtár"
+
+#: ../libide/ide-context.c:708
+msgid "The root directory to perform builds within."
+msgstr "A gyökérkönyvtár ahol az összeállítást végezzük."
+
+#: ../libide/ide-context.c:714
+msgid "Script Manager"
+msgstr "Parancsfájl-kezelő"
+
+#: ../libide/ide-context.c:715
+msgid "The script manager for the context."
+msgstr "A környezet parancsfájl-kezelője"
+
+#: ../libide/ide-context.c:721
+msgid "Search Engine"
+msgstr "Keresőmotor"
+
+#: ../libide/ide-context.c:722
+msgid "The search engine for the context."
+msgstr "A környezet keresőmotorja."
+
+#: ../libide/ide-context.c:728
+msgid "Snippets Manager"
+msgstr "Töredékkezelő"
+
+#: ../libide/ide-context.c:729
+msgid "The snippets manager for the context."
+msgstr "A környezet töredékkezelője"
+
+#: ../libide/ide-context.c:735
+msgid "Unsaved Files"
+msgstr "Mentetlen fájlok"
+
+#: ../libide/ide-context.c:736
+msgid "The unsaved files in the context."
+msgstr "A környezet mentetlen fájljai."
+
+#: ../libide/ide-context.c:742
+msgid "VCS"
+msgstr "Verziókövető"
+
+#: ../libide/ide-context.c:743
+msgid "The VCS for the context."
+msgstr "A környezet verziókövetője."
+
+#: ../libide/ide-context.c:1191
+#, c-format
+msgid "\"%s\" is not a service, ignoring extension point."
+msgstr ""
+"A(z) „%s” nem szolgáltatás, a kiegészítési pont figyelmen kívül hagyva."
+
+#: ../libide/ide-context.c:1200
+#, c-format
+msgid "Failed to create service of type \"%s\"."
+msgstr "Nem sikerült a(z) „%s” típusú szolgáltatás létrehozása."
+
+#: ../libide/ide-context.c:1205
+#, c-format
+msgid "Service of type \"%s\" registered."
+msgstr "A(z) „%s” típusú szolgáltatás regisztrálva."
+
+#: ../libide/ide-context.c:1639
+msgid "An unload request is already pending"
+msgstr "Egy lecsatolási kérés már várakozik"
+
+#: ../libide/ide-context.c:1754
+msgid "Context has already been restored."
+msgstr "A környezet már vissza lett állítva."
+
+#: ../libide/ide-device-manager.c:227
+#, c-format
+msgid "%s is not an IdeDeviceProvider."
+msgstr "A(z) „%s” nem egy IdeDeviceProvider."
+
+#: ../libide/ide-device-manager.c:363 ../libide/ide-device-provider.c:155
+#: ../libide/ide-file-settings.c:297
+msgid "Settled"
+msgstr "Befejezett"
+
+#: ../libide/ide-device-manager.c:364
+msgid "If the device providers have settled."
+msgstr "Az eszközszolgáltatók betöltődtek-e."
+
+#: ../libide/ide-device-provider.c:156
+msgid "If device probing has settled."
+msgstr "Az eszközkeresés befejeződött-e."
+
+#: ../libide/ide-device.c:234 ../src/project-tree/gb-project-file.c:159
+#: ../src/project-tree/gb-project-file.c:160
+msgid "Display Name"
+msgstr "Megjelenítendő név"
+
+#: ../libide/ide-device.c:235
+msgid "The display name of the device."
+msgstr "Az eszköz megjelenítendő neve."
+
+#: ../libide/ide-device.c:241 ../libide/ide-language.c:419
+#: ../libide/ide-project.c:393
+msgid "ID"
+msgstr "ID"
+
+#: ../libide/ide-device.c:242
+msgid "The device identifier."
+msgstr "Az eszközazonosító."
+
+#: ../libide/ide-device.c:248
+msgid "System Type"
+msgstr "Rendszertípus"
+
+#: ../libide/ide-device.c:249
+msgid "The system type for which to compile."
+msgstr "A rendszertípus, amelyre fordítani kell."
+
+#: ../libide/ide-file-settings.c:291
+msgid "The IdeFile the settings represent."
+msgstr "Az IdeFile amit a beállítások képviselnek."
+
+#: ../libide/ide-file-settings.c:298
+msgid "If the file settings implementations have settled."
+msgstr "Ha a fájlbeállítás megvalósítások betöltődtek."
+
+#: ../libide/ide-file.c:176
+#, c-format
+msgid "Type \"%s\" is not an IdeLanguage."
+msgstr "A(z) „%s” nem egy IdeLanguage."
+
+#: ../libide/ide-file.c:527
+msgid "The path to the underlying file."
+msgstr "Útvonal a mögöttes fájlhoz."
+
+#: ../libide/ide-file.c:535
+msgid "Is Temporary"
+msgstr "Átmeneti"
+
+#: ../libide/ide-file.c:536
+msgid "If the file represents a temporary file."
+msgstr "Ha a fájl egy átmeneti fájlt képvisel."
+
+#: ../libide/ide-file.c:543
+msgid "The file language."
+msgstr "A fájl nyelve."
+
+#: ../libide/ide-file.c:549 ../libide/ide-project-file.c:276
+msgid "Path"
+msgstr "Útvonal"
+
+#: ../libide/ide-file.c:550
+msgid "The path within the project."
+msgstr "A projekten belüli útvonal."
+
+#: ../libide/ide-file.c:556
+msgid "Temporary ID"
+msgstr "Átmeneti ID"
+
+#: ../libide/ide-file.c:557
+msgid "A unique identifier for temporary files."
+msgstr "Az ideiglenes fájlok egyedi azonosítója."
+
+#: ../libide/ide-highlight-engine.c:785
+msgid "The buffer to highlight."
+msgstr "A kiemelendő puffer."
+
+#: ../libide/ide-highlight-engine.c:791 ../libide/ide-language.c:412
+msgid "Highlighter"
+msgstr "Kiemelő"
+
+#: ../libide/ide-highlight-engine.c:792
+msgid "The highlighter to use for type information."
+msgstr "A típusinformációkhoz használt kiemelő."
+
+#: ../libide/ide-highlighter.c:98
+msgid "Highlight engine"
+msgstr "Kiemelőmotor"
+
+#: ../libide/ide-highlighter.c:99
+msgid "The highlight engine of this highlighter."
+msgstr "A kijelölő által használt motor."
+
+#: ../libide/ide-language.c:405
+msgid "Diagnostician"
+msgstr "Elemző"
+
+#: ../libide/ide-language.c:406
+msgid "The diagnostician for the language."
+msgstr "A nyelvhez tartozó elemző."
+
+#: ../libide/ide-language.c:413
+msgid "The semantic highlighter for the language."
+msgstr "A nyelvhez tartozó szemantikus kiemelő."
+
+#: ../libide/ide-language.c:420
+msgid "The language identifier such as \"c\"."
+msgstr "A nyelv azonosítója, mint például a \"c\"."
+
+#: ../libide/ide-language.c:428
+msgid "Indenter"
+msgstr "Behúzó"
+
+#: ../libide/ide-language.c:429
+msgid "The semantic indenter for the language."
+msgstr "A nyelvhez tartozó szemantikus kiemelő."
+
+#: ../libide/ide-language.c:436
+msgid "The name of the language."
+msgstr "A nyelv neve."
+
+#: ../libide/ide-language.c:442
+msgid "Refactory"
+msgstr "Kódátalakító\t"
+
+#: ../libide/ide-language.c:443
+msgid "The refactory engine for the language."
+msgstr "A nyelvhez tartozó kódátalakító motor."
+
+#: ../libide/ide-language.c:449
+msgid "Symbol Resolver"
+msgstr "Szimbólumfeloldó"
+
+#: ../libide/ide-language.c:450
+msgid "The symbol resolver for the language."
+msgstr "A nyelvhez tartozó szimbólumfeloldó."
+
+#: ../libide/ide-object.c:204
+msgid "The context that owns the object."
+msgstr "A környezet, amely az objektum tulajdonosa."
+
+#: ../libide/ide-object.c:274 ../libide/ide-object.c:323
+msgid "No implementations of extension point."
+msgstr "A kiegészítési pont nincs megvalósítva."
+
+#: ../libide/ide-object.c:313
+msgid "No such extension point."
+msgstr "Nincs ilyen kiegészítési pont."
+
+#: ../libide/ide-progress.c:210
+msgid "Completed"
+msgstr "Befejezve"
+
+#: ../libide/ide-progress.c:211
+msgid "If the progress has completed."
+msgstr "A folyamat befejeződött-e."
+
+#: ../libide/ide-progress.c:218
+msgid "The fraction of the progress."
+msgstr "Az előrehaladás hányada."
+
+#: ../libide/ide-progress.c:226
+msgid "Message"
+msgstr "Üzenet"
+
+#: ../libide/ide-progress.c:227
+msgid "A short message for the progress."
+msgstr "Rövid üzenet az előrehaladásról."
+
+#: ../libide/ide-project-file.c:249
+msgid "A GFile to the underlying file."
+msgstr "A mögöttes fájlhoz tartozó GFile"
+
+#: ../libide/ide-project-file.c:255 ../src/project-tree/gb-project-file.c:180
+#: ../src/project-tree/gb-project-file.c:181
+msgid "File Info"
+msgstr "Fájlinformáció"
+
+#: ../libide/ide-project-file.c:256
+msgid "The file information for the project file."
+msgstr "A projektfájl fájlinformációi."
+
+#: ../libide/ide-project-file.c:262 ../libide/ide-project-file.c:263
+#: ../src/project-tree/gb-rename-file-popover.c:315
+#: ../src/project-tree/gb-rename-file-popover.c:316
+msgid "Is Directory"
+msgstr "Könyvtár"
+
+#: ../libide/ide-project-file.c:270
+msgid "The short name of the file."
+msgstr "A fájl rövid neve"
+
+#: ../libide/ide-project-file.c:277
+msgid "The path for the file within the project tree."
+msgstr "A fájl projekten belüli útvonala."
+
+#: ../libide/ide-project-info.c:424
+msgid "The project description."
+msgstr "A projektleírás."
+
+#: ../libide/ide-project-info.c:431
+msgid "The project name."
+msgstr "A projektnév."
+
+#: ../libide/ide-project-info.c:438
+msgid "The project directory."
+msgstr "A projektkönyvtár."
+
+#: ../libide/ide-project-info.c:444
+msgid "DOAP"
+msgstr "DOAP"
+
+#: ../libide/ide-project-info.c:445
+msgid "A DOAP describing the project."
+msgstr "A DOAP projektleírás"
+
+#: ../libide/ide-project-info.c:452
+msgid "The toplevel project file."
+msgstr "A felsőszintű projektfájl."
+
+#: ../libide/ide-project-info.c:458 ../libide/ide-project-info.c:459
+msgid "Is Recent"
+msgstr "Friss"
+
+#: ../libide/ide-project-info.c:472 ../libide/ide-project-info.c:473
+msgid "Last Modified At"
+msgstr "Utoljára módosítva"
+
+#: ../libide/ide-project-info.c:479
+#: ../plugins/command-bar/gb-command-provider.c:338
+msgid "Priority"
+msgstr "Prioritás"
+
+#: ../libide/ide-project-info.c:480
+msgid "The priority of the project information type."
+msgstr "A projektinformáció típusának prioritása."
+
+#: ../libide/ide-project-item.c:201 ../src/tree/gb-tree-node.c:630
+msgid "Parent"
+msgstr "Szülő"
+
+#: ../libide/ide-project-item.c:202
+msgid "The parent project item, if not the root."
+msgstr "A szülőprojekt, ha nem gyökérelem."
+
+#: ../libide/ide-project.c:394
+msgid "The unique project identifier."
+msgstr "Az egyedi projektazonosító."
+
+#: ../libide/ide-project.c:401
+msgid "The name of the project."
+msgstr "A projektnév."
+
+#: ../libide/ide-project.c:407 ../src/tree/gb-tree.c:960
+msgid "Root"
+msgstr "Gyökér"
+
+#: ../libide/ide-project.c:408
+msgid "The root object for the project."
+msgstr "A projekt gyökéreleme."
+
+#: ../libide/ide-project.c:463
+msgid "Destination file must be within the project tree."
+msgstr "A célfájlnak a projektfán belül kell lennie."
+
+#: ../libide/ide-project.c:593
+msgid "File must be within the project tree."
+msgstr "A fájlnak a projektfán belül kell lennie."
+
+#: ../libide/ide-recent-projects.c:378
+#, c-format
+msgid "%s() may only be executed once"
+msgstr "A(z) %s() csak egyszer hajtható végre"
+
+#: ../libide/ide-script-manager.c:128
+msgid "Scripts Directory"
+msgstr "Parancsfájl-könyvtár"
+
+#: ../libide/ide-script-manager.c:129
+msgid "The local path to the directory containing scripts."
+msgstr "A parancsfájlokat tartalmazó könyvtár helyi útvonala."
+
+#: ../libide/ide-script.c:157
+msgid "The file containing the script."
+msgstr "A parancsfájlt tartalmazó fájl."
+
+#: ../libide/ide-script.c:205
+#, c-format
+msgid "%s has not implemented GAsyncInitable."
+msgstr "A(z) „%s” nem valósítja meg a GAsyncInitable-t."
+
+#: ../libide/ide-search-result.c:279
+#: ../src/search/gb-search-display-group.c:422
+msgid "Provider"
+msgstr "Szolgáltató"
+
+#: ../libide/ide-search-result.c:280
+#, fuzzy
+#| msgid "The search provider"
+msgid "The Search Provider"
+msgstr "A keresési szolgáltató"
+
+#: ../libide/ide-search-result.c:287
+msgid "The title of the search result."
+msgstr "A keresési találat címe."
+
+#: ../libide/ide-search-result.c:295
+msgid "Subtitle"
+msgstr "Felirat"
+
+#: ../libide/ide-search-result.c:296
+msgid "The subtitle of the search result."
+msgstr "A keresési találat felirata."
+
+#: ../libide/ide-search-result.c:304
+msgid "Score"
+msgstr "Pontszám"
+
+#: ../libide/ide-search-result.c:305
+msgid "The score of the search result."
+msgstr "A keresési találat pontszáma."
+
+#: ../libide/ide-service.c:139
+msgid "The name of the service."
+msgstr "A szolgáltatás neve."
+
+#: ../libide/ide-service.c:145
+msgid "Running"
+msgstr "Fut"
+
+#: ../libide/ide-service.c:146
+msgid "If the service is running."
+msgstr "Ha fut a szolgáltatás."
+
+#: ../libide/ide-settings.c:283
+msgid "Ignore Project Settings"
+msgstr "Projektbeállítások figyelmen kívül hagyása"
+
+#: ../libide/ide-settings.c:284
+msgid "If project settings should be ignored."
+msgstr "Ha a projektbeállítások figyelmen kívül kell hagyni"
+
+#: ../libide/ide-settings.c:290 ../libide/ide-settings.c:291
+msgid "Relative Path"
+msgstr "Relatív útvonal"
+
+#: ../libide/ide-settings.c:297 ../libide/ide-settings.c:298
+msgid "Schema ID"
+msgstr "Séma ID"
+
+#: ../libide/ide-source-snippet-chunk.c:315
+msgid "The snippet context."
+msgstr "A töredék környezete."
+
+#: ../libide/ide-source-snippet-chunk.c:321
+msgid "Spec"
+msgstr "Specifikáció"
+
+#: ../libide/ide-source-snippet-chunk.c:322
+msgid "The specification to expand using the context."
+msgstr "A specifikáció bővítése a környezet használatával."
+
+#: ../libide/ide-source-snippet-chunk.c:328 ../libide/ide-source-snippet.c:988
+msgid "Tab Stop"
+msgstr "Tabulátor"
+
+#: ../libide/ide-source-snippet-chunk.c:329
+msgid "The tab stop for the chunk."
+msgstr "A részlethez tartozó tabulátor"
+
+#: ../libide/ide-source-snippet-chunk.c:337 ../src/tree/gb-tree-node.c:654
+msgid "Text"
+msgstr "Szöveg"
+
+#: ../libide/ide-source-snippet-chunk.c:338
+msgid "The text for the chunk."
+msgstr "A részlet szövege."
+
+#: ../libide/ide-source-snippet-chunk.c:344
+msgid "Text Set"
+msgstr "Szöveg beállítva"
+
+#: ../libide/ide-source-snippet-chunk.c:345
+msgid "If the text property has been manually set."
+msgstr "A szöveg tulajdonság kézzel van-e beállítva."
+
+#: ../libide/ide-source-snippet-completion-item.c:132
+msgid "Snippet"
+msgstr "Töredék"
+
+#: ../libide/ide-source-snippet-completion-item.c:133
+msgid "The snippet to insert."
+msgstr "A beillesztendő töredék."
+
+#: ../libide/ide-source-snippet-completion-provider.c:167
+#: ../plugins/command-bar/gb-command-vim.c:191
+msgid "Source View"
+msgstr "Forrásnézet"
+
+#: ../libide/ide-source-snippet-completion-provider.c:168
+msgid "The source view to insert snippet into."
+msgstr "A forrásnézet, ahova a töredék beszúrásra kerül."
+
+#: ../libide/ide-source-snippet-completion-provider.c:174
+#: ../libide/ide-source-snippet-completion-provider.c:255
+msgid "Snippets"
+msgstr "Töredékek"
+
+#: ../libide/ide-source-snippet-completion-provider.c:175
+msgid "The snippets to complete with this provider."
+msgstr "Azok a töredékek, amelyeket ez a szolgáltató egészítsen ki."
+
+#: ../libide/ide-source-snippet-parser.c:493
+#, c-format
+msgid "Invalid snippet at line %d: %s"
+msgstr "Érvénytelen töredék a(z) %d. sorban: %s"
+
+#: ../libide/ide-source-snippet.c:345
+msgid "Chunk does not belong to snippet."
+msgstr "A részlet nem tartozik a töredékhez."
+
+#: ../libide/ide-source-snippet.c:947
+msgid "The GtkTextBuffer for the snippet."
+msgstr "A töredékhez tartozó GtkTextBuffer objektum."
+
+#: ../libide/ide-source-snippet.c:953
+msgid "Mark Begin"
+msgstr "Kezdet jele"
+
+#: ../libide/ide-source-snippet.c:954
+msgid "The beginning text mark."
+msgstr "A kezdeti írásjel."
+
+#: ../libide/ide-source-snippet.c:960
+msgid "Mark End"
+msgstr "Zárás jele"
+
+#: ../libide/ide-source-snippet.c:961
+msgid "The ending text mark."
+msgstr "A záró írásjel."
+
+#: ../libide/ide-source-snippet.c:967
+msgid "Trigger"
+msgstr "Aktiváló"
+
+#: ../libide/ide-source-snippet.c:968
+msgid "The trigger for the snippet."
+msgstr "A töredékhez tartozó aktiváló."
+
+#: ../libide/ide-source-snippet.c:975
+msgid "The language for the snippet."
+msgstr "A töredék nyelve."
+
+#: ../libide/ide-source-snippet.c:982
+msgid "The description for the snippet."
+msgstr "A töredék leírása."
+
+#: ../libide/ide-source-snippet.c:989
+msgid "The current tab stop."
+msgstr "A jelenlegi tabulátor."
+
+#: ../libide/ide-source-snippets-manager.c:97
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr "A(z) „%s” könyvtár megnyitása meghiúsult."
+
+#: ../libide/ide-source-snippets-manager.c:110
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "Nem sikerült a(z) „%s” fájlt megnyitni: %s"
+
+#: ../libide/ide-source-view-capture.c:241
+msgid "View"
+msgstr "Nézet"
+
+#: ../libide/ide-source-view-capture.c:242
+msgid "The source view."
+msgstr "A forrásnézet."
+
+#: ../libide/ide-source-view-mode.c:251
+msgid "The name of the mode."
+msgstr "A mód neve."
+
+#: ../libide/ide-source-view.c:4450
+#, c-format
+msgid "Insert \"%s\""
+msgstr "A(z) „%s” beszúrása"
+
+#: ../libide/ide-source-view.c:4452
+#, c-format
+msgid "Replace \"%s\" with \"%s\""
+msgstr "A(z) „%s” cseréje ezzel: „%s”"
+
+#: ../libide/ide-source-view.c:4557
+msgid "Apply Fix-It"
+msgstr "Javítás érvényesítése"
+
+#: ../libide/ide-source-view.c:4597
+msgid "Goto Definition"
+msgstr "Ugrások megadása"
+
+#: ../libide/ide-source-view.c:5088
+msgid "The back-forward list to track jumps."
+msgstr "Az előre-hátra lista, amely az ugrásokat követi."
+
+#: ../libide/ide-source-view.c:5094
+msgid "Count"
+msgstr "Szám"
+
+#: ../libide/ide-source-view.c:5095
+msgid "The count for movements."
+msgstr "A mozgások száma."
+
+#: ../libide/ide-source-view.c:5103
+msgid "File Settings"
+msgstr "Fájlbeállítások"
+
+#: ../libide/ide-source-view.c:5104
+msgid "The file settings that have been loaded for the file."
+msgstr "A betöltött fájlbeállítások az aktuális fájlhoz."
+
+#: ../libide/ide-source-view.c:5110
+msgid "Font Description"
+msgstr "Betűkészlet-leírás"
+
+#: ../libide/ide-source-view.c:5111
+msgid "The Pango font description to use for rendering source."
+msgstr "A források megjelenítéséhez használt Pango betűkészlet-leírás."
+
+#: ../libide/ide-source-view.c:5117
+msgid "Enable Word Completion"
+msgstr "Szókiegészítés engedélyezése"
+
+#: ../libide/ide-source-view.c:5118
+msgid "If words from all buffers can be used to autocomplete."
+msgstr ""
+"A szavak minden pufferből használhatóak-e az automatikus kiegészítéshez."
+
+#: ../libide/ide-source-view.c:5124
+msgid "Font Name"
+msgstr "Betűkészlet neve"
+
+#: ../libide/ide-source-view.c:5125
+msgid "The Pango font name to use for rendering source."
+msgstr "A források megjelenítéséhez használt Pango betűkészlet neve."
+
+#: ../libide/ide-source-view.c:5135 ../libide/ide-source-view.c:5136
+msgid "Indent Style"
+msgstr "Behúzás stílusa"
+
+#: ../libide/ide-source-view.c:5143
+msgid "Insert Matching Brace"
+msgstr "Megfelelő írásjelpárok beszúrása"
+
+#: ../libide/ide-source-view.c:5144
+msgid "Insert a matching brace/bracket/quotation/parenthesis."
+msgstr "Megfelelő idéző- és zárójelpárok beszúrása."
+
+#: ../libide/ide-source-view.c:5152
+msgid "Mode Display Name"
+msgstr "A mód megjelenítendő neve"
+
+#: ../libide/ide-source-view.c:5153
+msgid "The display name of the keybinding mode."
+msgstr "A billentyűkombináció mód megjelenítendő neve."
+
+#: ../libide/ide-source-view.c:5159
+msgid "Overwrite Braces"
+msgstr "Zárójelek felülírása"
+
+#: ../libide/ide-source-view.c:5160
+msgid "Overwrite a matching brace/bracket/quotation/parenthesis."
+msgstr "Felülírja a megfelelő idéző- és zárójelpárokat."
+
+#: ../libide/ide-source-view.c:5166
+msgid "Rubberband Search"
+msgstr "Rugalmas keresés"
+
+#: ../libide/ide-source-view.c:5167
+msgid "Auto scroll to next search result without moving insertion caret."
+msgstr "Automatikus görgetés a következő találatra, a kurzor mozgatása nélkül."
+
+#: ../libide/ide-source-view.c:5174
+msgid "The number of lines between the insertion cursor and screen boundary."
+msgstr "A sorok száma a kurzor és az ablakkeret között."
+
+#: ../libide/ide-source-view.c:5182
+msgid "Search Context"
+msgstr "Keresési környezet"
+
+#: ../libide/ide-source-view.c:5183
+msgid "The search context for the view."
+msgstr "A nézet keresési környezete."
+
+#: ../libide/ide-source-view.c:5189
+msgid "Show Grid Lines"
+msgstr "Rácsvonalak megjelenítése"
+
+#: ../libide/ide-source-view.c:5190
+msgid "If the background grid should be shown."
+msgstr "Megjelenjenek-e a rácsvonalak a háttérben."
+
+#: ../libide/ide-source-view.c:5196
+msgid "Show Line Changes"
+msgstr "Megváltozott sorok mutatása"
+
+#: ../libide/ide-source-view.c:5197
+msgid "If line changes should be shown in the left gutter."
+msgstr "A megváltozott sorokat jelezze-e a bal margónál."
+
+#: ../libide/ide-source-view.c:5211
+msgid "Show Line Diagnostics"
+msgstr "Megváltozott sorok elemzése"
+
+#: ../libide/ide-source-view.c:5212
+msgid "If line changes diagnostics should be shown in the left gutter."
+msgstr "A megváltozott sorok részleteit jelezze-e a bal margónál."
+
+#: ../libide/ide-source-view.c:5218
+msgid "Show Search Bubbles"
+msgstr "Keresési buborékok mutatása"
+
+#: ../libide/ide-source-view.c:5219
+msgid "If search bubbles should be rendered."
+msgstr "Szükséges-e a keresési buborékok megjelenítése"
+
+#: ../libide/ide-source-view.c:5225
+msgid "Show Search Shadow"
+msgstr "A keresés árnyékolása"
+
+#: ../libide/ide-source-view.c:5226
+msgid "If the shadow should be drawn when performing searches."
+msgstr "Legyen-e megjelenítve árnyékolás a keresls során."
+
+#: ../libide/ide-source-view.c:5232
+msgid "Snippet Completion"
+msgstr "Töredékkiegészítés"
+
+#: ../libide/ide-source-view.c:5233
+msgid "If snippet expansion should be enabled via the completion window."
+msgstr "Legyen-e elérhető a töredékkiegészítés a kiegészítés ablakban."
+
+#: ../libide/ide-symbol-node.c:128 ../libide/ide-symbol-node.c:129
+msgid "Kind"
+msgstr ""
+
+#: ../libide/ide-symbol-node.c:136 ../libide/ide-symbol-node.c:137
+msgid "Flags"
+msgstr ""
+
+#: ../libide/ide.c:78
+#, c-format
+msgid "You must call %s() before using libide."
+msgstr "A libide használata előtt meg kell hívni a(z) %s() függvényt."
+
+#: ../libide/ide.c:198
+msgid "Builder requires libgit2-glib with threading support."
+msgstr "A Builderhez szükséges a szálak támogatása a ligbit2-glib csomagban."
+
+#: ../libide/ide.c:204
+msgid "Builder requires libgit2-glib with SSH support."
+msgstr "A Builderhez szükséges az SSH támogatás a libgit2-glib csomagban."
+
+#: ../libide/mingw/ide-mingw-device-provider.c:64
+msgid "MinGW (64-bit)"
+msgstr "MinGW (64-bit)"
+
+#: ../libide/mingw/ide-mingw-device-provider.c:76
+msgid "MinGW (32-bit)"
+msgstr "MinGW (32-bit)"
+
+#: ../libide/pygobject/ide-pygobject-script.c:135
+msgid "Attempt to load a PyGObject script with no filename."
+msgstr "Fájlnév nélküli PyGObject parancsfájl hozzáadása."
+
+#: ../libide/pygobject/ide-pygobject-script.c:274
+#, c-format
+msgid "The script \"%s\" is not a PyGObject file."
+msgstr "A(z) „%s” nem egy PyGObject parancsfájl."
+
+#: ../libide/tasks/ide-load-directory-task.c:106
+#, c-format
+msgid "\"%s\" is not a directory."
+msgstr "A(z) „%s” nem könyvtár."
+
+#: ../libide/theatrics/ide-animation.c:702
+#, c-format
+msgid "Cannot locate property %s in class %s"
+msgstr "A(z) %s tulajdonság nem található az %s objektumosztályban"
+
+#: ../libide/theatrics/ide-animation.c:837
+msgid "Duration"
+msgstr "Időtartam"
+
+#: ../libide/theatrics/ide-animation.c:838
+msgid "The duration of the animation"
+msgstr "Az animáció időtartama"
+
+#: ../libide/theatrics/ide-animation.c:848
+msgid "Frame Clock"
+msgstr ""
+
+#: ../libide/theatrics/ide-animation.c:849
+msgid "An optional frame-clock to synchronize with."
+msgstr ""
+
+#: ../libide/theatrics/ide-animation.c:864
+#: ../src/keybindings/gb-keybindings.c:265
+msgid "Mode"
+msgstr "Mód"
+
+#: ../libide/theatrics/ide-animation.c:865
+msgid "The animation mode"
+msgstr "Az animáció megjelenítési módja"
+
+#: ../libide/theatrics/ide-animation.c:880
+#: ../libide/theatrics/ide-box-theatric.c:284
+#: ../libide/theatrics/ide-box-theatric.c:285
+msgid "Target"
+msgstr "Cél"
+
+#: ../libide/theatrics/ide-animation.c:881
+msgid "The target of the animation"
+msgstr "Az animáció célja"
+
+#: ../libide/theatrics/ide-animation.c:1046
+#: ../libide/theatrics/ide-animation.c:1052
+#, c-format
+msgid "Failed to find property %s in %s"
+msgstr "Nem található a(z) %s tulajdonság itt: %s"
+
+#: ../libide/theatrics/ide-animation.c:1060
+#, c-format
+msgid "Failed to find property %s in %s or parent %s"
+msgstr "Nem található a(z) %s tulajdonság itt: %s, vagy a szülőben: %s"
+
+#: ../libide/theatrics/ide-animation.c:1070
+#, c-format
+msgid "Failed to retrieve va_list value: %s"
+msgstr "A va_list érték lekérése meghiúsult: %s"
+
+#: ../libide/theatrics/ide-box-theatric.c:259
+#: ../libide/theatrics/ide-box-theatric.c:260
+msgid "Alpha"
+msgstr "Alfa"
+
+#: ../libide/theatrics/ide-box-theatric.c:268
+#: ../libide/theatrics/ide-box-theatric.c:269
+msgid "background"
+msgstr "háttér"
+
+#: ../libide/theatrics/ide-box-theatric.c:275
+#: ../libide/theatrics/ide-box-theatric.c:276
+msgid "height"
+msgstr "magasság"
+
+#: ../libide/theatrics/ide-box-theatric.c:293
+#: ../libide/theatrics/ide-box-theatric.c:294
+msgid "width"
+msgstr "szélesség"
+
+#: ../libide/theatrics/ide-box-theatric.c:302
+#: ../libide/theatrics/ide-box-theatric.c:303
+msgid "x"
+msgstr "x"
+
+#: ../libide/theatrics/ide-box-theatric.c:311
+#: ../libide/theatrics/ide-box-theatric.c:312
+msgid "y"
+msgstr "y"
+
+#: ../plugins/command-bar/gb-command-bar.c:290
+#, c-format
+msgid "Command not found: %s"
+msgstr "A parancs nem található: %s"
+
+#: ../plugins/command-bar/gb-command-bar.c:594
+msgid "Use the entry below to execute a command"
+msgstr "Használja a lenti bemeneti mezőt a parancsok végrehajtásához"
+
+#: ../plugins/command-bar/gb-command-bar.c:677
+#: ../plugins/command-bar/gb-command-bar.c:678
+#: ../plugins/command-bar/gb-command-provider.c:354
+#: ../plugins/devhelp/gb-devhelp-panel.c:243
+#: ../plugins/devhelp/gb-devhelp-panel.c:244
+#: ../plugins/symbol-tree/symbol-tree.c:332
+#: ../plugins/symbol-tree/symbol-tree.c:333
+#: ../plugins/sysmon/gb-sysmon-addin.c:125
+#: ../plugins/sysmon/gb-sysmon-addin.c:126
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:165
+#: ../src/workbench/gb-workbench-addin.c:46
+msgid "Workbench"
+msgstr "Munkaterület"
+
+#: ../plugins/command-bar/gb-command-gaction.c:187
+msgid "Action Group"
+msgstr "Műveletcsoport"
+
+#: ../plugins/command-bar/gb-command-gaction.c:188
+msgid "The GActionGroup containing the action."
+msgstr "A GActionGroup, amely a műveletet tartalmazza."
+
+#: ../plugins/command-bar/gb-command-gaction.c:194
+msgid "Action Name"
+msgstr "Műveletnév"
+
+#: ../plugins/command-bar/gb-command-gaction.c:195
+msgid "The name of the action to execute."
+msgstr "A végrehajtandó művelet neve"
+
+#: ../plugins/command-bar/gb-command-gaction.c:201
+msgid "Parameters"
+msgstr "Paraméterek"
+
+#: ../plugins/command-bar/gb-command-gaction.c:202
+msgid "The parameters for the action."
+msgstr "A műveletek paraméterei"
+
+#: ../plugins/command-bar/gb-command-provider.c:319
+#: ../src/views/gb-view-stack.c:500 ../src/workbench/gb-workbench.c:686
+#: ../src/workbench/gb-workbench.c:687
+msgid "Active View"
+msgstr "Aktív nézet"
+
+#: ../plugins/command-bar/gb-command-provider.c:320
+msgid "The last focused GbView widget."
+msgstr "Az utoljára fókuszban lévő GbView felületi elem."
+
+#: ../plugins/command-bar/gb-command-provider.c:339
+msgid "The priority of the command provider."
+msgstr "A parancskiszolgáló prioritása"
+
+#: ../plugins/command-bar/gb-command-provider.c:355
+msgid "The target workbench."
+msgstr "A cél munkaterület."
+
+#: ../plugins/command-bar/gb-command-result.c:226
+#: ../plugins/command-bar/gb-command-vim.c:183
+msgid "Command Text"
+msgstr "Parancsszöveg"
+
+#: ../plugins/command-bar/gb-command-result.c:227
+msgid "The command text if any."
+msgstr "A parancs szövege (ha van)."
+
+#: ../plugins/command-bar/gb-command-result.c:234
+msgid "Is Error"
+msgstr "Hiba-e"
+
+#: ../plugins/command-bar/gb-command-result.c:235
+msgid "If the result is an error."
+msgstr "A visszakapott eredmény egy hiba."
+
+#: ../plugins/command-bar/gb-command-result.c:242
+msgid "Is Running"
+msgstr "Fut"
+
+#: ../plugins/command-bar/gb-command-result.c:243
+msgid "If the command is still running."
+msgstr "Mutatja hogy fut-e még a program."
+
+#: ../plugins/command-bar/gb-command-result.c:250
+msgid "Result Text"
+msgstr "Válaszszöveg"
+
+#: ../plugins/command-bar/gb-command-result.c:251
+msgid "The result text if any."
+msgstr "A válasz szövege (ha van)."
+
+#: ../plugins/command-bar/gb-command-vim.c:184
+msgid "The command text to execute"
+msgstr "A végrehajtandó parancsszöveg"
+
+#: ../plugins/command-bar/gb-command-vim.c:192
+msgid "The source view to modify."
+msgstr "A módosítandó forrásnézet."
+
+#: ../plugins/command-bar/gb-vim.c:83
+#, c-format
+msgid "Number required"
+msgstr "Szám szükséges"
+
+#: ../plugins/command-bar/gb-vim.c:93
+#, c-format
+msgid "%s is invalid for %s"
+msgstr "A(z) „%s” érvénytelen ehhez: „%s”"
+
+#: ../plugins/command-bar/gb-vim.c:151
+#, c-format
+msgid "Cannot find language '%s'"
+msgstr "A(z) „%s” nyelv nem található"
+
+#: ../plugins/command-bar/gb-vim.c:348
+#, c-format
+msgid "Unknown option: %s"
+msgstr "Ismeretlen opció: %s"
+
+#: ../plugins/command-bar/gb-vim.c:387
+#, c-format
+msgid "Cannot find colorscheme '%s'"
+msgstr "A(z) „%s” színséma nem található."
+
+#: ../plugins/command-bar/gb-vim.c:423
+#, c-format
+msgid "Failed to locate working directory"
+msgstr "A munkakönyvtár nem található"
+
+#: ../plugins/command-bar/gb-vim.c:547
+#, c-format
+msgid "Invalid :syntax subcommand: %s"
+msgstr "Érvénytelen :syntax parancsrészlet: %s"
+
+#: ../plugins/command-bar/gb-vim.c:874
+#, c-format
+msgid "Invalid search and replace request"
+msgstr "Érvénytelen keresés és csere kérés"
+
+#: ../plugins/command-bar/gb-vim.c:960
+#, c-format
+msgid "vim mode requires GtkSourceView"
+msgstr "A vim módhoz szükséges a GtkSourceView"
+
+#: ../plugins/command-bar/gb-vim.c:990
+#, c-format
+msgid "Not an editor command: %s"
+msgstr "Nem szerkesztőparancs: %s"
+
+#: ../plugins/devhelp/gb-devhelp-document.c:71
+#, c-format
+msgid "Documentation (%s)"
+msgstr "Dokumentáció (%s)"
+
+#: ../plugins/devhelp/gb-devhelp-document.c:148
+#: ../plugins/devhelp/gb-devhelp-panel.c:96
+#: ../plugins/devhelp/gb-devhelp-search-provider.c:134
+msgid "Documentation"
+msgstr "Dokumentáció"
+
+#: ../plugins/devhelp/gb-devhelp-document.c:257
+msgid "The uri to load."
+msgstr "A betöltendő URI."
+
+#: ../plugins/devhelp/gb-devhelp-search-result.c:100
+msgid "The URI to the Devhelp document."
+msgstr "A Devhelp dokumentum URI címe."
+
+#: ../plugins/devhelp/gb-devhelp-view.c:251
+#: ../src/editor/gb-editor-frame.c:754 ../src/editor/gb-editor-view.c:504
+#: ../src/html/gb-html-view.c:321 ../src/views/gb-view.c:265
+msgid "Document"
+msgstr "Dokumentum"
+
+#: ../plugins/devhelp/gb-devhelp-view.c:252
+msgid "The document for the devhelp view."
+msgstr "A devhelp nézet dokumentuma."
+
+#: ../plugins/file-search/gb-file-search-provider.c:45
+msgid "Switch To"
+msgstr "Átváltás"
+
+#: ../plugins/symbol-tree/symbol-tree.c:189
+msgid "Current language does not support symbol resolvers"
+msgstr ""
+
+#: ../plugins/symbol-tree/symbol-tree.c:213
+#, fuzzy
+#| msgid "Symbol Resolver"
+msgid "Symbol Tree"
+msgstr "Szimbólumfeloldó"
+
+#: ../plugins/sysmon/gb-sysmon-addin.c:64
+msgid "System Monitor"
+msgstr ""
+
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:104
+#, fuzzy
+#| msgid "_Open in Terminal"
+msgid "Terminal"
+msgstr "Megnyitás _terminálban"
+
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:166
+#: ../src/workbench/gb-workbench-addin.c:47
+#, fuzzy
+#| msgid "The target workbench."
+msgid "The workbench window."
+msgstr "A cél munkaterület."
+
+#: ../src/app/gb-application-actions.c:90
+#, c-format
+msgid ""
+"The support log file has been written to '%s'. Please provide this file as "
+"an attachment on your bug report or support request."
+msgstr ""
+"A támogatási naplófájl kiírásra került ide: „%s”. Kérjük csatolja ezt a "
+"fájlt a hibabejelentéséhez vagy támogatási kéréséhez."
+
+#: ../src/app/gb-application-actions.c:156
+msgid "An IDE for GNOME"
+msgstr "Egy integrált fejlesztői környezet a GNOME-hoz"
+
+#: ../src/app/gb-application-actions.c:161
+msgid "GNOME Builder"
+msgstr "GNOME Builder"
+
+#: ../src/app/gb-application-actions.c:163
+msgid "translator-credits"
+msgstr "Meskó Balázs <meskobalazs at gmail dot com>"
+
+#: ../src/app/gb-application-actions.c:166
+msgid "Learn more about GNOME Builder"
+msgstr "Tudjon meg többet a GNOME Builderről"
+
+#: ../src/app/gb-application-actions.c:169
+msgid "Funded By"
+msgstr "Támogatta"
+
+#: ../src/app/gb-application.c:639
+msgid "Run Builder in standalone mode"
+msgstr "A Builder futtatása önálló módban"
+
+#: ../src/app/gb-application.c:645
+msgid "Show the application's version"
+msgstr "Az alkalmazás verziójának megjelenítése"
+
+#: ../src/app/gb-application.c:651
+msgid "Increase verbosity. May be specified multiple times."
+msgstr "Beszédesség növelése. Többször is megadható."
+
+#: ../src/dialogs/gb-new-project-dialog.c:341
+msgid "Select Project File"
+msgstr "Válasszon egy projektfájlt"
+
+#: ../src/dialogs/gb-new-project-dialog.c:365
+msgid "Clone Repository"
+msgstr "Tároló klónozása"
+
+#: ../src/dialogs/gb-new-project-dialog.c:385
+msgid "Autotools Project (configure.ac)"
+msgstr "Autotools projekt (configure.ac)"
+
+#: ../src/dialogs/gb-new-project-dialog.c:391
+msgid "Any Directory"
+msgstr "Bármely könyvtár"
+
+#: ../src/dialogs/gb-new-project-dialog.c:518
+msgid "A valid Git URL is required"
+msgstr "Egy érvényes Git URL szükséges"
+
+#: ../src/dialogs/gb-new-project-dialog.c:657
+msgid "Directory|Projects"
+msgstr "Könyvtár|Projektek"
+
+#: ../src/dialogs/gb-projects-dialog.c:246
+msgid "(Click on items to select them)"
+msgstr "(Kattintson az elemekre a kiválasztásukhoz)"
+
+#: ../src/dialogs/gb-recent-project-row.c:207
+#: ../src/greeter/gb-greeter-project-row.c:324
+msgid "Project Information"
+msgstr "Projektinformációk"
+
+#: ../src/dialogs/gb-recent-project-row.c:208
+msgid "The project information for the row."
+msgstr "A sorhoz tartozó projektinformációk."
+
+#: ../src/dialogs/gb-recent-project-row.c:214
+#: ../src/dialogs/gb-recent-project-row.c:215
+#: ../src/greeter/gb-greeter-project-row.c:310
+#: ../src/greeter/gb-greeter-project-row.c:311
+msgid "Selected"
+msgstr "Kijelölve"
+
+#: ../src/dialogs/gb-recent-project-row.c:221
+#: ../src/dialogs/gb-recent-project-row.c:222
+#: ../src/greeter/gb-greeter-project-row.c:317
+#: ../src/greeter/gb-greeter-project-row.c:318
+msgid "Selection Mode"
+msgstr "Kijelölési mód"
+
+#: ../src/documents/gb-document.c:188 ../src/views/gb-view.c:272
+msgid "Modified"
+msgstr "Módosítva"
+
+#: ../src/documents/gb-document.c:189
+msgid "If the document has been modified from disk."
+msgstr "A dokumentum megváltozott-e a lemezen."
+
+#: ../src/documents/gb-document.c:197
+msgid "The title of the document."
+msgstr "A dokumentum címe."
+
+#: ../src/documents/gb-document.c:205
+msgid "If the document is read only."
+msgstr "A dokumentum írásvédett-e."
+
+#: ../src/editor/gb-editor-frame.c:150
+#, c-format
+msgid "%u of %u"
+msgstr "%u / %u"
+
+#: ../src/editor/gb-editor-frame.c:180
+#, c-format
+msgid "Line %u, Column %u"
+msgstr "%u. sor, %u. oszlop"
+
+#: ../src/editor/gb-editor-frame.c:595
+msgid "Re_veal in Project Tree"
+msgstr "Meg_jelenítés a projektfában"
+
+#: ../src/editor/gb-editor-frame.c:740 ../src/editor/gb-editor-frame.c:741
+msgid "Auto Hide Map"
+msgstr "Áttekintő térkép automatikus elrejtése"
+
+#: ../src/editor/gb-editor-frame.c:748
+msgid "The back forward list."
+msgstr "Az előre-hátra lista."
+
+#: ../src/editor/gb-editor-frame.c:755 ../src/editor/gb-editor-view.c:505
+msgid "The editor document."
+msgstr "A szerkesztő dokumentum."
+
+#: ../src/editor/gb-editor-frame.c:761
+msgid "Show Map"
+msgstr "Térkép megjelenítése"
+
+#: ../src/editor/gb-editor-frame.c:762
+msgid "If the overview map should be shown."
+msgstr "Jelenjen-e meg az áttekintő térkép."
+
+#: ../src/editor/gb-editor-settings-widget.c:180
+msgid "The language to change the settings for."
+msgstr "A nyelv, amelynél módosítja a beállításokat."
+
+#: ../src/editor/gb-editor-view-actions.c:303
+msgid "Save Document"
+msgstr "Dokumentum mentése"
+
+#: ../src/editor/gb-editor-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:440
+#: ../src/workbench/gb-workbench-actions.c:169
+msgid "Cancel"
+msgstr "Mégse"
+
+#: ../src/editor/gb-editor-view-actions.c:429
+msgid "Save Document As"
+msgstr "Dokumentum mentése más néven"
+
+#: ../src/editor/gb-editor-view.c:110
+msgid "Plain Text"
+msgstr "Egyszerű szöveg"
+
+#: ../src/greeter/gb-greeter-pill-box.c:117
+#, fuzzy
+msgid "The label for the pill box."
+msgstr "A címkedoboz címkéje."
+
+#: ../src/greeter/gb-greeter-project-row.c:325
+msgid "The project information to render."
+msgstr "A megjelenítendő projektinformációk."
+
+#: ../src/greeter/gb-greeter-window.c:560
+msgid "The recent projects that have been mined."
+msgstr "Előző projektek, amelyek már fel lettek dolgozva."
+
+#: ../src/html/gb-html-document.c:109
+msgid "HTML Preview"
+msgstr "HTML előnézet"
+
+#: ../src/html/gb-html-document.c:131
+#, c-format
+msgid "%s (Preview)"
+msgstr "%s (Előnézet)"
+
+#: ../src/html/gb-html-document.c:315
+msgid "The buffer to monitor for changes."
+msgstr "A puffer, amelynek a változásait követjük."
+
+#: ../src/html/gb-html-view.c:322
+msgid "The document to view as HTML."
+msgstr "A HTML-ként megtekintendő dokumentum."
+
+#: ../src/keybindings/gb-keybindings.c:258
+msgid "Application"
+msgstr "Alkalmazás"
+
+#: ../src/keybindings/gb-keybindings.c:259
+msgid "The application to register keybindings for."
+msgstr "Az alkalmazás, amelyhez gyorsbillentyűt rendelünk."
+
+#: ../src/keybindings/gb-keybindings.c:266
+msgid "The name of the keybindings mode."
+msgstr "A gyorsbillentyű mód neve."
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:95
+msgid "restore insert cursor mark"
+msgstr "visszaállítás beillesztés kurzor"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:100
+msgid "diff renderer gutter changes git vcs"
+msgstr "diff renderer gutter változások git vcs"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:105
+msgid "line numbers"
+msgstr "sorok száma"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:110
+msgid "line lines highlight current"
+msgstr "sor sorok kiemelés jelenlegi"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:115
+msgid "bracket brackets highlight matching"
+msgstr "zárójel zárójelek zárójelpár zárójelpárok kiemelés lezárás"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:120
+msgid "lines margin scrolloff scroll off"
+msgstr "sor sorok margó görgetés eltolás"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:126
+msgid "font document editor monospace"
+msgstr "betűkészlet dokumentum szerkesztő fix szélességű"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-editor.c:131
+msgid "minimap mini map overview over view"
+msgstr "térkép áttekintő nézet"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-git.c:128
+msgid "git author name surname attribution source code"
+msgstr "git szerző név vezetéknév utónév forráskód forrás kód megjelölés"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-git.c:134
+msgid "git author email mail address attribute source code"
+msgstr "git szerző email mail levél cím forráskód forrás kód"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:54
+msgid "word words auto completion suggest found document"
+msgstr "szó szavak automatikus kiegészítés javaslat dokumentum található"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:59
+msgid "experimental clang autocompletion auto complete"
+msgstr "kisérleti clang automatikus kiegészítés"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-insight.c:64
+msgid "exhuberant ctags tags autocompletion auto complete"
+msgstr "ctags címkék atumatikus kiegészítés"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:64
+msgid "default builder keybindings"
+msgstr "alapértelmezett builder billentyűkombináció billentyű kombináció"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:69
+msgid "emacs keybindings modal"
+msgstr "emacs billentyűkombináció billentyű kombináció mód"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:74
+msgid "vim keybindings modal"
+msgstr "vim billentyűkombináció billentyű kombináció mód"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:80
+msgid "smart home end"
+msgstr "okos home end"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-keybindings.c:85
+msgid "smart back backspace indent align"
+msgstr "okos vissza visszatörlés behúzás igazítás"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-theme.c:114
+msgid "show grid lines"
+msgstr "rácsvonalak rács vonalak megjelenítés"
+
+#. To translators: This is a list of keywords for the preferences page
+#: ../src/preferences/gb-preferences-page-theme.c:119
+msgid "source style scheme source tango solarized builder syntax"
+msgstr ""
+"forrás stílus séma forráskód tango solarized builder szintaxis szintaktika"
+
+#: ../src/preferences/gb-preferences-page.c:283
+msgid "The title for the preferences page."
+msgstr "A beállítások oldal címe."
+
+#: ../src/preferences/gb-preferences-switch.c:315
+msgid "The title of the switch."
+msgstr "A kapcsoló címe."
+
+#: ../src/preferences/gb-preferences-switch.c:322
+msgid "The description for the switch."
+msgstr "A kapcsoló leírása."
+
+#: ../src/preferences/gb-preferences-switch.c:328
+msgid "Is Radio"
+msgstr "Választógomb"
+
+#: ../src/preferences/gb-preferences-switch.c:329
+msgid "If a radio button should be used."
+msgstr "Választógombot kell-e használni."
+
+#: ../src/preferences/gb-preferences-switch.c:335
+msgid "Settings"
+msgstr "Beállítások"
+
+#: ../src/preferences/gb-preferences-switch.c:336
+msgid "The GSettings for the setting."
+msgstr "A beállításhoz használt GSettings."
+
+#: ../src/preferences/gb-preferences-switch.c:342
+msgid "Settings Schema Key"
+msgstr "Beállítások sémakulcsa"
+
+#: ../src/preferences/gb-preferences-switch.c:343
+msgid "The settings schema key."
+msgstr "A beállítások sémakulcsa."
+
+#: ../src/preferences/gb-preferences-switch.c:349
+msgid "Settings Schema Value"
+msgstr "Beállítások sémaértéke"
+
+#: ../src/preferences/gb-preferences-switch.c:350
+msgid "An action-target for the settings action."
+msgstr "A művelet célpontja (action-target) a beállítások művelethez."
+
+#: ../src/preferences/gb-preferences-switch.c:357
+#: ../src/search/gb-search-display-group.c:429
+msgid "Size Group"
+msgstr "Méretcsoport"
+
+#: ../src/preferences/gb-preferences-switch.c:358
+msgid "The sizing group for the control."
+msgstr "A méretezési csoport a vezérlőelemhez."
+
+#: ../src/project-tree/gb-new-file-popover.c:124
+#: ../src/project-tree/gb-rename-file-popover.c:142
+msgid "A folder with that name already exists."
+msgstr "Már létezik ilyen nevű mappa."
+
+#: ../src/project-tree/gb-new-file-popover.c:127
+#: ../src/project-tree/gb-rename-file-popover.c:145
+msgid "A file with that name already exists."
+msgstr "Már létezik egy ugyanilyen nevű fájl."
+
+#: ../src/project-tree/gb-new-file-popover.c:275
+msgid "File Type"
+msgstr "Fájltípus"
+
+#: ../src/project-tree/gb-new-file-popover.c:276
+msgid "The file type to create."
+msgstr "A létrehozandó fájltípus."
+
+#: ../src/project-tree/gb-new-file-popover.c:351
+msgid "Folder Name"
+msgstr "Mappa neve"
+
+#: ../src/project-tree/gb-project-file.c:166
+#: ../src/project-tree/gb-project-file.c:167 ../src/tree/gb-tree-node.c:606
+msgid "Icon Name"
+msgstr "Ikonnév"
+
+#: ../src/project-tree/gb-project-tree-builder.c:79
+msgid "Files"
+msgstr "Fájlok"
+
+#: ../src/project-tree/gb-project-tree.c:161
+msgid "If files ignored by the VCS should be displayed."
+msgstr ""
+
+#: ../src/project-tree/gb-rename-file-popover.c:80
+#, c-format
+msgid "Rename %s"
+msgstr "A(z) „%s” átnevezése"
+
+#: ../src/project-tree/gb-rename-file-popover.c:173
+msgid "File name must not contain subdirectories."
+msgstr "A fájlnév nem tartalmazhat alkönyvtárakat."
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:254
+msgid "Max Content Height"
+msgstr "Tartalom maximális magassága"
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:255
+msgid "The maximum height request that can be made."
+msgstr "A maximális elérhető magasságkérés."
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:263
+msgid "Max Content Width"
+msgstr "Tartalom maximális szélessége"
+
+#: ../src/scrolledwindow/gb-scrolled-window.c:264
+msgid "The maximum width request that can be made."
+msgstr "A maximális elérhető szélességkérés."
+
+#: ../src/search/gb-search-display-group.c:182
+#, c-format
+msgid "%s more"
+msgstr "még %s"
+
+#: ../src/search/gb-search-display-group.c:423
+msgid "The search provider"
+msgstr "A keresési szolgáltató"
+
+#: ../src/search/gb-search-display-group.c:430
+msgid "The size group for the label."
+msgstr "A címkéhez használt méretcsoport."
+
+#: ../src/search/gb-search-display-row.c:159
+#: ../src/search/gb-search-display-row.c:160
+msgid "Result"
+msgstr "Eredmény"
+
+#: ../src/search/gb-search-display.c:234
+msgid "Cannot add provider more than once."
+msgstr "A szolgáltató nem adható hozzá egynél többször."
+
+#: ../src/search/gb-search-display.c:316
+msgid "The provider could not be found."
+msgstr "A szolgáltató nem található."
+
+#: ../src/search/gb-search-display.c:578
+msgid "The active search context."
+msgstr "Az aktív keresési környezet"
+
+#: ../src/tree/gb-tree-builder.c:220 ../src/tree/gb-tree-node.c:642
+msgid "Tree"
+msgstr "Fa"
+
+#: ../src/tree/gb-tree-builder.c:221
+msgid "The GbTree the builder belongs to."
+msgstr "A GbTree, amelyhez az építő tartozik."
+
+#: ../src/tree/gb-tree-node.c:607
+msgid "The icon name to display."
+msgstr "A megjelenítendő ikon neve."
+
+#: ../src/tree/gb-tree-node.c:618
+msgid "Item"
+msgstr "Elem"
+
+#: ../src/tree/gb-tree-node.c:619
+msgid "Optional object to associate with node."
+msgstr "Opcionális objektum, amely a csomóponthoz kapcsolódik."
+
+#: ../src/tree/gb-tree-node.c:631
+msgid "The parent node."
+msgstr "A szülő csomópont."
+
+#: ../src/tree/gb-tree-node.c:643
+msgid "The GbTree the node belongs to."
+msgstr "A GbTree, amelyhez a csomópont tartozik."
+
+#: ../src/tree/gb-tree-node.c:655
+msgid "The text of the node."
+msgstr "A csomópont szövege."
+
+#: ../src/tree/gb-tree-node.c:666
+msgid "Use Markup"
+msgstr "Jelölőkód használata"
+
+#: ../src/tree/gb-tree-node.c:667
+msgid "If text should be translated as markup."
+msgstr "A szöveget jelölőkódként kell-e értelmezni."
+
+#: ../src/tree/gb-tree-node.c:673
+msgid "Use Dim Label"
+msgstr ""
+
+#: ../src/tree/gb-tree-node.c:674
+#, fuzzy
+#| msgid "If text should be translated as markup."
+msgid "If text should be rendered with a dim label."
+msgstr "A szöveget jelölőkódként kell-e értelmezni."
+
+#: ../src/tree/gb-tree.c:961
+msgid "The root object of the tree."
+msgstr "A fa gyökéreleme."
+
+#: ../src/tree/gb-tree.c:967
+msgid "Selection"
+msgstr "Kijelölés"
+
+#: ../src/tree/gb-tree.c:968
+msgid "The node selection."
+msgstr "A kijelölt csomópontok."
+
+#: ../src/util/gb-file-manager.c:64
+msgid "File path is NULL"
+msgstr "A fájl útvonala NULL"
+
+#: ../src/util/gb-file-manager.c:73 ../src/util/gb-file-manager.c:84
+msgid "Error converting UTF-8 filename to wide char"
+msgstr "Hiba az UTF-8 fájlnév széles karakterekre konvertálása során"
+
+#: ../src/util/gb-file-manager.c:92
+msgid "ILCreateFromPath() failed"
+msgstr "Az ILCreateFromPath() sikertelen"
+
+#: ../src/util/gb-file-manager.c:129
+#, c-format
+msgid "Cannot convert '%s' into a valid NSURL."
+msgstr "A(z) „%s” nem konvertálható érvényes NSURL-re."
+
+#: ../src/util/gb-file-manager.c:157
+msgid "Connecting to org.freedesktop.FileManager1 failed: "
+msgstr "Kapcsolódás az org.freedesktop.FileManager1 címhez sikertelen:"
+
+#: ../src/util/gb-file-manager.c:181
+msgid "Calling ShowItems failed: "
+msgstr "A ShowItems meghívása sikertelen:"
+
+#: ../src/util/gb-glib.c:55
+msgid "Just now"
+msgstr "Épp most"
+
+#: ../src/util/gb-glib.c:57
+msgid "An hour ago"
+msgstr "Egy órája"
+
+#: ../src/util/gb-glib.c:59
+msgid "Yesterday"
+msgstr "Tegnap"
+
+#: ../src/util/gb-glib.c:65
+msgid "About a year ago"
+msgstr "Körülbelül egy éve"
+
+#: ../src/util/gb-glib.c:69
+#, c-format
+msgid "About %u years ago"
+msgstr "Körülbelül %u éve"
+
+#: ../src/views/gb-view-stack.c:501
+msgid "The active view."
+msgstr "Az aktív nézet."
+
+#: ../src/views/gb-view.c:258
+msgid "Can Split"
+msgstr "Felosztható"
+
+#: ../src/views/gb-view.c:259
+msgid "If the view can be split."
+msgstr "A nézet felosztható-e."
+
+#: ../src/views/gb-view.c:266
+msgid "The underlying document."
+msgstr "A mögöttes dokumentum."
+
+#: ../src/views/gb-view.c:273
+msgid "If the document has been modified."
+msgstr "A mögöttes dokumentum módosult-e."
+
+#: ../src/views/gb-view.c:280
+msgid "The view title."
+msgstr "A nézet címe."
+
+#: ../src/workbench/gb-workbench-actions.c:162
+msgid "Open Document"
+msgstr "Dokumentum megnyitása"
+
+#: ../src/workbench/gb-workbench-actions.c:170
+msgid "Open"
+msgstr "Megnyitás"
+
+#: ../src/workbench/gb-workbench.c:151
+#, c-format
+msgid "%s - Builder"
+msgstr "%s - Builder"
+
+#: ../src/workbench/gb-workbench.c:693
+msgid "Building"
+msgstr "Összeállítás alatt"
+
+#: ../src/workbench/gb-workbench.c:694
+msgid "If the project is currently building."
+msgstr "A projekt pillanatnyilag összeállítás alatt van-e."
+
+#: ../src/workbench/gb-workbench.c:709
+msgid "The IdeContext for the workbench."
+msgstr "A munkaterülethez használt IdeContext."
+
+#: ../src/workbench/gb-workbench.c:940
+msgid "Build Failure"
+msgstr "Sikertelen összeállítás"
+
+#: ../src/workbench/gb-workbench.c:987
+msgid "Project build system does not support building"
+msgstr "A projekt összeállító rendszere nem támogatja az összeállítást"
+
+#: ../src/workspace/gb-slider.c:756 ../src/workspace/gb-workspace-pane.c:281
+#: ../src/workspace/gb-workspace.c:1092
+#, fuzzy
+#| msgid "Description"
+msgid "Position"
+msgstr "Leírás"
+
+#: ../src/workspace/gb-slider.c:757
+msgid "Which slider child is visible."
+msgstr ""
+
+#: ../src/workspace/gb-workspace-pane.c:282
+#, fuzzy
+#| msgid "The location of the .git index."
+msgid "The position of the pane."
+msgstr "A .git index helye."
+
+#: ../src/workspace/gb-workspace.c:1062
+msgid "Left Pane"
+msgstr ""
+
+#: ../src/workspace/gb-workspace.c:1063
+#, fuzzy
+#| msgid "The title of the workspace."
+msgid "The left workspace pane."
+msgstr "A munkaterület címe."
+
+#: ../src/workspace/gb-workspace.c:1069
+#, fuzzy
+#| msgid "Night Mode"
+msgid "Right Pane"
+msgstr "Éjszakai mód"
+
+#: ../src/workspace/gb-workspace.c:1070
+#, fuzzy
+#| msgid "The active workspace."
+msgid "The right workspace pane."
+msgstr "Az aktív munkaterület."
+
+#: ../src/workspace/gb-workspace.c:1076
+msgid "Bottom Pane"
+msgstr ""
+
+#: ../src/workspace/gb-workspace.c:1077
+#, fuzzy
+#| msgid "The active workspace."
+msgid "The bottom workspace pane."
+msgstr "Az aktív munkaterület."
+
+#: ../src/workspace/gb-workspace.c:1083
+#, fuzzy
+#| msgid "Context"
+msgid "Content Pane"
+msgstr "Környezet"
+
+#: ../src/workspace/gb-workspace.c:1084
+#, fuzzy
+#| msgid "The active workspace."
+msgid "The content workspace pane."
+msgstr "Az aktív munkaterület."
+
+#: ../src/workspace/gb-workspace.c:1093
+#, fuzzy
+#| msgid "The location of the navigation item."
+msgid "The position of the pane relative to its edge."
+msgstr "A navigációs elem helye."
+
+#: ../src/workspace/gb-workspace.c:1102
+msgid "Reveal"
+msgstr ""
+
+#: ../src/workspace/gb-workspace.c:1103
+#, fuzzy
+#| msgid "If smart Backspace should be used."
+msgid "If the pane should be revealed."
+msgstr "Legyen-e az okos visszatörlés használatban."
+
+#: ../tools/ide-build.c:79 ../tools/ide-build.c:83
+#, c-format
+msgid "===============\n"
+msgstr "=============================\n"
+
+#: ../tools/ide-build.c:80
+#, c-format
+msgid " Build Failure: %s\n"
+msgstr "Sikertelen összeállítás: %s\n"
+
+#: ../tools/ide-build.c:81
+msgid " Build ran for: %"
+msgstr "Az összeállítás futási ideje: %"
+
+#: ../tools/ide-build.c:88 ../tools/ide-build.c:92
+#, c-format
+msgid "=================\n"
+msgstr "=================================\n"
+
+#: ../tools/ide-build.c:89
+#, c-format
+msgid " Build Successful\n"
+msgstr "Sikeres összeállítás\n"
+
+#: ../tools/ide-build.c:90
+msgid "   Build ran for: %"
+msgstr "    Az összeállítás futási ideje: %"
+
+#: ../tools/ide-build.c:198 ../tools/ide-build.c:204
+#, c-format
+msgid "========================\n"
+msgstr "==============================\n"
+
+#: ../tools/ide-build.c:199
+#, c-format
+msgid "           Project Name: %s\n"
+msgstr "                   Projektnév: %s\n"
+
+#: ../tools/ide-build.c:200
+#, c-format
+msgid " Version Control System: %s\n"
+msgstr "        Verziókezelő rendszer: %s\n"
+
+#: ../tools/ide-build.c:201
+#, c-format
+msgid "           Build System: %s\n"
+msgstr "       Összeállítási rendszer: %s\n"
+
+#: ../tools/ide-build.c:202
+#, c-format
+msgid "    Build Date and Time: %s\n"
+msgstr " Összeállítás dátuma és ideje: %s \n"
+
+#: ../tools/ide-build.c:203
+#, c-format
+msgid "    Building for Device: %s (%s)\n"
+msgstr "    Összeállítás az eszközhöz: %s (%s)\n"
+
+#: ../tools/ide-build.c:286
+#, c-format
+msgid "Timed out while waiting for devices to settle.\n"
+msgstr "Időtúllépés az eszközre várakozás során.\n"
+
+#: ../tools/ide-build.c:344
+#, c-format
+msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
+msgstr "Várakozás az eszközre 60 másodpercig. Ctrl+C a kilépéshez.\n"
+
+#: ../tools/ide-build.c:353
+msgid "The target device we are building for."
+msgstr "A céleszköz, amelyre az összeállítás készül."
+
+#: ../tools/ide-build.c:354
+msgid "DEVICE_ID"
+msgstr "DEVICE_ID"
+
+#: ../tools/ide-build.c:357
+msgid "Clean and rebuild the project."
+msgstr "Projekt tisztítása és újraépítése."
+
+#: ../tools/ide-build.c:359
+msgid "Increase parallelism in the build."
+msgstr "Párhuzamosság növelése az építés során."
+
+#: ../tools/ide-build.c:360
+msgid "N"
+msgstr "N"
+
+#: ../tools/ide-build.c:371
+msgid "- Build the project."
+msgstr "- Projekt összeállítása."
+
+#: ../tools/ide-list-build-flags.c:113
+#, fuzzy
+msgid "- Get build flags for a project file"
+msgstr "- Az építési jelzők lekérése a projektfájlhoz"
+
+#: ../tools/ide-list-devices.c:107
+msgid "- List devices found on the system."
+msgstr "- A rendszerben található eszközök listázása."
+
+#: ../tools/ide-list-diagnostics.c:185
+#, c-format
+msgid "Failed to diagnose: %s\n"
+msgstr "Nem sikerült elemezni: %s\n"
+
+#: ../tools/ide-list-diagnostics.c:248
+#, c-format
+msgid "No such file in project: %s\n"
+msgstr "Nincs ilyen fájl a projektben: %s\n"
+
+#: ../tools/ide-list-diagnostics.c:258
+#, c-format
+msgid "No diagnostician for language \"%s\"\n"
+msgstr "Nincs a(z) „%s” nyelvhez tartozó elemző\n"
+
+#: ../tools/ide-list-diagnostics.c:286
+msgid "- List diagnostics for a file."
+msgstr "- Elemzés egy fájlhoz."
+
+#: ../tools/ide-list-file-settings.c:180
+#, c-format
+msgid "No files provided to load settings for.\n"
+msgstr ""
+"Nincsenek fájlok megadva, amelyekhez be kellene tölteni a beállításokat.\n"
+
+#: ../tools/ide-list-file-settings.c:205 ../tools/ide-list-files.c:125
+msgid "- List files found in project."
+msgstr "- Talált fájlok listázása a projektben."
+
+#: ../tools/ide-mine-projects.c:78
+msgid "- discover projects"
+msgstr "- Projektek feltérképezése"
+
+#: ../tools/ide-search.c:66
+#, fuzzy, c-format
+msgid "%s results\n"
+msgstr "%s találat\n"
+
+#: ../tools/ide-search.c:118
+msgid "PROJECT_FILE [SEARCH TERMS...]"
+msgstr "PROJEKT_FAJL [KERESESI KIFEJEZESEK...]"
+
+#~ msgid "_View"
+#~ msgstr "_Nézet"
+
+#~ msgid "Display Side _Panel"
+#~ msgstr "_Oldalpanel megjelenítése"
+
+#~ msgid "Build Project"
+#~ msgstr "Projekt összeállítása"
+
+#~ msgid "Rebuild Project"
+#~ msgstr "Projekt újraösszeállítása"
+
+#~ msgid "Clang based autocompletion (Experimental)"
+#~ msgstr "Clang-alapú kódkiegészítés (kísérleti)"
+
+#~ msgid "Use Clang for autocompletion in the C and C++ languages."
+#~ msgstr "Használja kódkiegészítésre a Clang-et C és C++ nyelvek esetén."
+
+#~ msgid "Ctags based autocompletion"
+#~ msgstr "Ctags-alapú kódkiegészítés"
+
+#~ msgid "Use Ctags for autocompletion."
+#~ msgstr "Használja a Ctags-ot kódkiegészítésre."
+
+#~ msgid "Enable auto-completion of words in document"
+#~ msgstr "A szavak automaikus kiegészítésének bekapcsolása a dokumentumban"
+
+#~ msgid ""
+#~ "If enabled, words within the current document will be available for auto-"
+#~ "completion."
+#~ msgstr ""
+#~ "Ha be van kapcsolva, akkor a jelenlegi dokumentum szavai elérhetőek "
+#~ "lesznek a szókiegészítés számára."
+
+#~ msgid "Enable semantic highlighting"
+#~ msgstr "Szemantikus kiemelés bekapcsolása"
+
+#~ msgid ""
+#~ "If enabled, additional highlighting will be provided in supported "
+#~ "languages based on information extracted from the source code."
+#~ msgstr ""
+#~ "Ha be van kapcsolva, akkor a forráskódból kinyert információt további "
+#~ "kiemelés céljából használja fel a támogatott nyelvekben."
+
+#~ msgid "Path to ctags executable"
+#~ msgstr "Útvonal a ctags binárisához"
+
+#~ msgid "The path to the ctags executable on the system."
+#~ msgstr "A rendszer útvonala a ctags bináris állományához."
+
+#~ msgid "Restore last position"
+#~ msgstr "Az utolsó pozíció helyreállítása"
+
+#~ msgid "Jump to the last position when reopening a file"
+#~ msgstr "A legutóbbi pozícióra ugrás a fájl újranyitása során"
+
+#~ msgid "Show modified lines"
+#~ msgstr "A változott sorok mutatása"
+
+#~ msgid ""
+#~ "If enabled, the editor will show line additions and changes next to the "
+#~ "source code."
+#~ msgstr ""
+#~ "Ha be van kapcsolva, akkor a szerkesztő jelzi a hozzáadott és a "
+#~ "változtatott sorokat a forráskód mellett."
+
+#~ msgid ""
+#~ "If enabled, the editor will highlight the line containing the cursor."
+#~ msgstr ""
+#~ "Ha be van kapcsolva, akkor a szerkesztő kiemeli a sort, ahol a kurzor "
+#~ "található."
+
+#~ msgid "Highlight matching brackets"
+#~ msgstr "Zárójelpárok kiemelése"
+
+#~ msgid "If enabled, the editor will highlight matching brackets."
+#~ msgstr "Ha be van kapcsolva, akkor a szerkesztő kiemeli a zárójelpárokat."
+
+#~ msgid "Show line numbers"
+#~ msgstr "Sorok számának megjelenítése"
+
+#~ msgid "If enabled, the editor will show line numbers."
+#~ msgstr "Ha be van kapcsolva, akkor a szerkesztő megjeleníti a sorok számát."
+
+#~ msgid ""
+#~ "Backspace will remove additional spaces to keep you aligned to the "
+#~ "indentation size."
+#~ msgstr ""
+#~ "A Visszatörlés kitörli a felesleges szóközöket a behúzásnak megfelelően."
+
+#~ msgid "Smart Home and End"
+#~ msgstr "Okos Home és End"
+
+#~ msgid "Whether or not Home moves to first non-space character."
+#~ msgstr "A Home billentyű az első nem szóköz karakterre ugrik-e vagy sem."
+
+#~ msgid "If enabled, the editor will show grid lines in the document."
+#~ msgstr ""
+#~ "Ha be van kapcsolva, akkor a forráskód mögött rácsvonalakat rajzol a "
+#~ "szerkesztő."
+
+#~ msgid "Show overview map"
+#~ msgstr "Áttekintő térkép"
+
+#~ msgid ""
+#~ "If enabled, Builder will display an overview map of the source file next "
+#~ "to the editor."
+#~ msgstr ""
+#~ "Ha be van kapcsolva, akkor a Builder megjeleníti az áttekintő térképet a "
+#~ "forráskód mellett."
+
+#~ msgid "Automatically Hide Overview Map"
+#~ msgstr "Áttekintő térkép automatikus elrejtése"
+
+#~ msgid ""
+#~ "If enabled, Builder will automatically hide the overview map when mouse "
+#~ "focus leaves the editor, or a timeout occurs."
+#~ msgstr ""
+#~ "Ha be van kapcsolva, akkor a Builder bizonyos inaktivitás után, vagy ha  "
+#~ "az egér elhagyja a szerkesztőt, automatikusan elrejti az áttekintő "
+#~ "térképet."
+
+#~ msgid "Draw Spaces"
+#~ msgstr "Szóközök kirajzolása"
+
+#~ msgid "The various types of space to draw in the editor."
+#~ msgstr "A különböző szóközök kirajzolása a szerkesztőben."
+
+#~ msgid "Show Project Sidebar"
+#~ msgstr "Mutassa a projekt oldalsávját"
+
+#~ msgid "If enabled, the sidebar will be visible in the editor workspace."
+#~ msgstr ""
+#~ "Ha be van kapcsolva, akkor az oldalsáv látható lesz a szerkesztő "
+#~ "munkaterületen."
+
+#~ msgid "If enabled, the sidebar will display icons next to each item."
+#~ msgstr ""
+#~ "Ha be van kapcsolva, akkor az oldalsávon minden elem mellett megjeleníti "
+#~ "az ikonját."
+
+#~ msgid "Project Tree Width"
+#~ msgstr "Projektfa szélessége"
+
+#~ msgid "The width in pixels of the project tree."
+#~ msgstr "A projektfa szélessége pixelekben megadva."
+
+#~ msgid "Location must be set to .git directory."
+#~ msgstr "A .git könyvtár útvonalát be kell állítani."
+
+#~ msgid "Git search provider requires the git VCS"
+#~ msgstr "A Git kereséshez szükséges a git verziókövető."
+
+#~ msgid "The file to be opened."
+#~ msgstr "A megnyitandó fájl."
+
+#~ msgid "Missing extension point for %s"
+#~ msgstr "Hiányzik a kiegészítési pont a következőhöz: „%s”"
+
+#~ msgid "%s is not an IdeSearchProvider."
+#~ msgstr "A(z) „%s” nem egy IdeSearchProvider."
+
+#~ msgid "Source file must be within the project tree."
+#~ msgstr "A forrásfájlnak a projektfán belül kell lennie."
+
+#~ msgid "The result to be visualized in the item."
+#~ msgstr "Az elemben megjelenítendő eredmény."
+
+#~ msgid "Show Project Tree"
+#~ msgstr "Projektfa mutatása"
+
+#~ msgid "Builder does not know how to load %s"
+#~ msgstr "A Builder nem tudja hogy töltse be a következőt: %s"
+
+#~ msgid "Active Workspace"
+#~ msgstr "Aktív munkaterület"
+
+#~ msgid "Command Manager"
+#~ msgstr "Parancskezelő"
+
+#~ msgid "The command manager for the workbench."
+#~ msgstr "A munkaterülethez használt parancskezelő."
+
+#~ msgid "The name of the icon to use."
+#~ msgstr "A használni kívánt ikon neve."
