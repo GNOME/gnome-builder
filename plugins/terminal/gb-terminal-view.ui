@@ -4,21 +4,14 @@
   <template class="GbTerminalView" parent="GbView">
     <property name="visible">true</property>
     <child>
-      <object class="GtkBox" id="box">
-        <property name="margin">4</property>
+      <object class="GtkScrolledWindow" id="scrolled_window">
         <property name="expand">true</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkScrolledWindow" id="scrolled_window">
+          <object class="VteTerminal" id="terminal">
+            <property name="audible-bell">false</property>
             <property name="expand">true</property>
             <property name="visible">true</property>
-            <child>
-              <object class="VteTerminal" id="terminal">
-                <property name="audible-bell">false</property>
-                <property name="expand">true</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>
