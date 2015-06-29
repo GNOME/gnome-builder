@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-21 14:28+0200\n"
-"PO-Revision-Date: 2015-06-21 14:38+0200\n"
+"POT-Creation-Date: 2015-06-29 22:58+0200\n"
+"PO-Revision-Date: 2015-06-29 23:00+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -207,64 +207,68 @@ msgstr "Z_amknij wszystko"
 msgid "Display Options"
 msgstr "Opcje wyświetlania"
 
-#: ../data/gtk/menus.ui.h:15 ../src/tree/gb-tree.c:944
-#: ../src/tree/gb-tree.c:945
+#: ../data/gtk/menus.ui.h:15 ../src/tree/gb-tree.c:974
+#: ../src/tree/gb-tree.c:975
 msgid "Show Icons"
 msgstr "Ikony"
 
-#: ../data/gtk/menus.ui.h:16
+#: ../data/gtk/menus.ui.h:16 ../src/project-tree/gb-project-tree.c:157
+msgid "Show Ignored Files"
+msgstr "Ignorowane pliki"
+
+#: ../data/gtk/menus.ui.h:17
 msgid "Sort Directories First"
 msgstr "Najpierw katalogi"
 
-#: ../data/gtk/menus.ui.h:17
+#: ../data/gtk/menus.ui.h:18
 msgid "_Collapse All Nodes"
 msgstr "_Zwiń wszystkie węzły"
 
-#: ../data/gtk/menus.ui.h:18
+#: ../data/gtk/menus.ui.h:19
 msgid "_Refresh"
 msgstr "_Odśwież"
 
-#: ../data/gtk/menus.ui.h:19 ../data/ui/gb-greeter-window.ui.h:3
+#: ../data/gtk/menus.ui.h:20 ../data/ui/gb-greeter-window.ui.h:3
 msgid "_New"
 msgstr "_Nowy"
 
-#: ../data/gtk/menus.ui.h:20
+#: ../data/gtk/menus.ui.h:21
 msgid "_Empty File"
 msgstr "_Pusty plik"
 
-#: ../data/gtk/menus.ui.h:21
+#: ../data/gtk/menus.ui.h:22
 msgid "_New Folder"
 msgstr "_Nowy katalog"
 
-#: ../data/gtk/menus.ui.h:22
+#: ../data/gtk/menus.ui.h:23
 msgid "Open _With"
 msgstr "O_twórz za pomocą"
 
-#: ../data/gtk/menus.ui.h:23
+#: ../data/gtk/menus.ui.h:24
 msgid "Source Code Editor"
 msgstr "Edytor kodu źródłowego"
 
-#: ../data/gtk/menus.ui.h:24
+#: ../data/gtk/menus.ui.h:25
 msgid "_Open Containing Folder"
 msgstr "_Otwórz katalog zawierający"
 
-#: ../data/gtk/menus.ui.h:25
+#: ../data/gtk/menus.ui.h:26
 msgid "_Open in Terminal"
 msgstr "_Otwórz w terminalu"
 
-#: ../data/gtk/menus.ui.h:26 ../data/ui/gb-rename-file-popover.ui.h:2
+#: ../data/gtk/menus.ui.h:27 ../data/ui/gb-rename-file-popover.ui.h:2
 msgid "_Rename"
 msgstr "Z_mień nazwę"
 
-#: ../data/gtk/menus.ui.h:27
+#: ../data/gtk/menus.ui.h:28
 msgid "Mo_ve to Trash"
 msgstr "Przenieś do _kosza"
 
-#: ../data/gtk/menus.ui.h:28
+#: ../data/gtk/menus.ui.h:29
 msgid "_Build"
 msgstr "Z_buduj"
 
-#: ../data/gtk/menus.ui.h:29
+#: ../data/gtk/menus.ui.h:30
 msgid "_Rebuild"
 msgstr "P_rzebuduj"
 
@@ -350,7 +354,6 @@ msgstr "Automatyczne wcięcia"
 
 #: ../data/ui/gb-editor-tweak-widget.ui.h:6
 #: ../data/ui/gb-preferences-page-keybindings.ui.h:12
-#: ../libide/ide-source-view.c:5362
 msgid "Smart Backspace"
 msgstr "Inteligentny klawisz Backspace"
 
@@ -402,7 +405,7 @@ msgstr "Wybór projektu"
 msgid "Click an item to select"
 msgstr "Kliknięcie elementu zaznacza go"
 
-#: ../data/ui/gb-greeter-window.ui.h:5 ../src/greeter/gb-greeter-window.c:559
+#: ../data/ui/gb-greeter-window.ui.h:5 ../src/greeter/gb-greeter-window.c:560
 msgid "Recent Projects"
 msgstr "Ostatnio używane projekty"
 
@@ -569,7 +572,7 @@ msgstr ""
 "otwierania pliku."
 
 #: ../data/ui/gb-preferences-page-editor.ui.h:20
-#: ../libide/ide-source-view.c:5303
+#: ../libide/ide-source-view.c:5173
 msgid "Scroll Offset"
 msgstr "Offset przewijania"
 
@@ -1298,7 +1301,7 @@ msgstr "Funkcja build_async() nie jest zaimplementowana w %s"
 msgid "No implementation of build_async()"
 msgstr "Brak implementacji funkcji build_async()"
 
-#: ../libide/ide-context.c:663 ../libide/ide-source-view.c:5217
+#: ../libide/ide-context.c:663 ../libide/ide-source-view.c:5087
 #: ../src/editor/gb-editor-frame.c:747
 msgid "Back Forward List"
 msgstr "Lista wstecz/dalej"
@@ -1381,11 +1384,11 @@ msgstr "Niezapisane pliki w kontekście."
 
 #: ../libide/ide-context.c:742
 msgid "VCS"
-msgstr "VCS"
+msgstr "System kontroli wersji"
 
 #: ../libide/ide-context.c:743
 msgid "The VCS for the context."
-msgstr "VCS dla kontekstu."
+msgstr "System kontroli wersji dla kontekstu."
 
 #: ../libide/ide-context.c:1191
 #, c-format
@@ -1663,7 +1666,7 @@ msgstr "Priorytet"
 msgid "The priority of the project information type."
 msgstr "Priorytet typu informacji o projekcie."
 
-#: ../libide/ide-project-item.c:201 ../src/tree/gb-tree-node.c:607
+#: ../libide/ide-project-item.c:201 ../src/tree/gb-tree-node.c:630
 msgid "Parent"
 msgstr "Element nadrzędny"
 
@@ -1679,7 +1682,7 @@ msgstr "Unikalny identyfikator projektu."
 msgid "The name of the project."
 msgstr "Nazwa projektu."
 
-#: ../libide/ide-project.c:407 ../src/tree/gb-tree.c:930
+#: ../libide/ide-project.c:407 ../src/tree/gb-tree.c:960
 msgid "Root"
 msgstr "Root"
 
@@ -1794,7 +1797,7 @@ msgstr "Zatrzymanie tabulacji"
 msgid "The tab stop for the chunk."
 msgstr "Zatrzymanie tabulacji dla fragmentu."
 
-#: ../libide/ide-source-snippet-chunk.c:337 ../src/tree/gb-tree-node.c:631
+#: ../libide/ide-source-snippet-chunk.c:337 ../src/tree/gb-tree-node.c:654
 msgid "Text"
 msgstr "Tekst"
 
@@ -1907,172 +1910,168 @@ msgstr "Widok źródła."
 msgid "The name of the mode."
 msgstr "Nazwa trybu."
 
-#: ../libide/ide-source-view.c:4572
+#: ../libide/ide-source-view.c:4450
 #, c-format
 msgid "Insert \"%s\""
 msgstr "Wstaw \"%s\""
 
-#: ../libide/ide-source-view.c:4574
+#: ../libide/ide-source-view.c:4452
 #, c-format
 msgid "Replace \"%s\" with \"%s\""
 msgstr "Zmień \"%s\" na \"%s\""
 
-#: ../libide/ide-source-view.c:4679
+#: ../libide/ide-source-view.c:4557
 msgid "Apply Fix-It"
 msgstr "Zastosuj \"Fix-It\""
 
-#: ../libide/ide-source-view.c:4719
+#: ../libide/ide-source-view.c:4597
 msgid "Goto Definition"
 msgstr "Definicja instrukcji skoku"
 
-#: ../libide/ide-source-view.c:5218
+#: ../libide/ide-source-view.c:5088
 msgid "The back-forward list to track jumps."
 msgstr "Lista wstecz/dalej do śledzenia przejść."
 
-#: ../libide/ide-source-view.c:5224
+#: ../libide/ide-source-view.c:5094
 msgid "Count"
 msgstr "Liczba"
 
-#: ../libide/ide-source-view.c:5225
+#: ../libide/ide-source-view.c:5095
 msgid "The count for movements."
 msgstr "Liczba ruchów."
 
-#: ../libide/ide-source-view.c:5233
+#: ../libide/ide-source-view.c:5103
 msgid "File Settings"
 msgstr "Ustawienia pliku"
 
-#: ../libide/ide-source-view.c:5234
+#: ../libide/ide-source-view.c:5104
 msgid "The file settings that have been loaded for the file."
 msgstr "Ustawienia wczytane dla pliku."
 
-#: ../libide/ide-source-view.c:5240
+#: ../libide/ide-source-view.c:5110
 msgid "Font Description"
 msgstr "Opis czcionki"
 
-#: ../libide/ide-source-view.c:5241
+#: ../libide/ide-source-view.c:5111
 msgid "The Pango font description to use for rendering source."
 msgstr ""
 "Opis czcionki biblioteki Pango używanej do wyświetlania kodu źródłowego."
 
-#: ../libide/ide-source-view.c:5247
+#: ../libide/ide-source-view.c:5117
 msgid "Enable Word Completion"
 msgstr "Uzupełnianie wyrazów"
 
-#: ../libide/ide-source-view.c:5248
+#: ../libide/ide-source-view.c:5118
 msgid "If words from all buffers can be used to autocomplete."
 msgstr ""
 "Czy używać wyrazów ze wszystkich buforów do automatycznego uzupełniania."
 
-#: ../libide/ide-source-view.c:5254
+#: ../libide/ide-source-view.c:5124
 msgid "Font Name"
 msgstr "Nazwa czcionki"
 
-#: ../libide/ide-source-view.c:5255
+#: ../libide/ide-source-view.c:5125
 msgid "The Pango font name to use for rendering source."
 msgstr ""
 "Nazwa czcionki biblioteki Pango używanej do wyświetlania kodu źródłowego."
 
-#: ../libide/ide-source-view.c:5265 ../libide/ide-source-view.c:5266
+#: ../libide/ide-source-view.c:5135 ../libide/ide-source-view.c:5136
 msgid "Indent Style"
 msgstr "Styl wcięć"
 
-#: ../libide/ide-source-view.c:5273
+#: ../libide/ide-source-view.c:5143
 msgid "Insert Matching Brace"
 msgstr "Wstawianie pasujących nawiasów"
 
-#: ../libide/ide-source-view.c:5274
+#: ../libide/ide-source-view.c:5144
 msgid "Insert a matching brace/bracket/quotation/parenthesis."
 msgstr ""
 "Wstawianie pasujących nawiasów klamrowych/kwadratowych/okrągłych/cytatów."
 
-#: ../libide/ide-source-view.c:5282
+#: ../libide/ide-source-view.c:5152
 msgid "Mode Display Name"
 msgstr "Wyświetlana nazwa trybu"
 
-#: ../libide/ide-source-view.c:5283
+#: ../libide/ide-source-view.c:5153
 msgid "The display name of the keybinding mode."
 msgstr "Wyświetlana nazwa trybu skrótów klawiszowych."
 
-#: ../libide/ide-source-view.c:5289
+#: ../libide/ide-source-view.c:5159
 msgid "Overwrite Braces"
 msgstr "Zastępowanie nawiasów"
 
-#: ../libide/ide-source-view.c:5290
+#: ../libide/ide-source-view.c:5160
 msgid "Overwrite a matching brace/bracket/quotation/parenthesis."
 msgstr ""
 "Zastępowanie pasujących nawiasów klamrowych/kwadratowych/okrągłych/cytatów."
 
-#: ../libide/ide-source-view.c:5296
+#: ../libide/ide-source-view.c:5166
 msgid "Rubberband Search"
 msgstr "Wyszukiwanie \"rubberband\""
 
-#: ../libide/ide-source-view.c:5297
+#: ../libide/ide-source-view.c:5167
 msgid "Auto scroll to next search result without moving insertion caret."
 msgstr ""
 "Automatyczne przewijanie do następnego wyniku wyszukiwania bez przesuwania "
 "kursora wstawiania."
 
-#: ../libide/ide-source-view.c:5304
+#: ../libide/ide-source-view.c:5174
 msgid "The number of lines between the insertion cursor and screen boundary."
 msgstr "Liczba wierszy między kursorem wstawiania i granicą ekranu."
 
-#: ../libide/ide-source-view.c:5312
+#: ../libide/ide-source-view.c:5182
 msgid "Search Context"
 msgstr "Kontekst wyszukiwania"
 
-#: ../libide/ide-source-view.c:5313
+#: ../libide/ide-source-view.c:5183
 msgid "The search context for the view."
 msgstr "Kontekst wyszukiwania dla widoku."
 
-#: ../libide/ide-source-view.c:5319
+#: ../libide/ide-source-view.c:5189
 msgid "Show Grid Lines"
 msgstr "Linie siatki"
 
-#: ../libide/ide-source-view.c:5320
+#: ../libide/ide-source-view.c:5190
 msgid "If the background grid should be shown."
 msgstr "Czy wyświetlać siatkę w tle."
 
-#: ../libide/ide-source-view.c:5326
+#: ../libide/ide-source-view.c:5196
 msgid "Show Line Changes"
 msgstr "Zmiany wierszy"
 
-#: ../libide/ide-source-view.c:5327
+#: ../libide/ide-source-view.c:5197
 msgid "If line changes should be shown in the left gutter."
 msgstr "Czy wyświetlać zmiany wierszy w lewym \"gutter\"."
 
-#: ../libide/ide-source-view.c:5341
+#: ../libide/ide-source-view.c:5211
 msgid "Show Line Diagnostics"
 msgstr "Diagnostyka wierszy"
 
-#: ../libide/ide-source-view.c:5342
+#: ../libide/ide-source-view.c:5212
 msgid "If line changes diagnostics should be shown in the left gutter."
 msgstr "Czy wyświetlać diagnostykę zmian wierszy w lewym \"gutter\"."
 
-#: ../libide/ide-source-view.c:5348
+#: ../libide/ide-source-view.c:5218
 msgid "Show Search Bubbles"
 msgstr "Okienka wyszukiwania"
 
-#: ../libide/ide-source-view.c:5349
+#: ../libide/ide-source-view.c:5219
 msgid "If search bubbles should be rendered."
 msgstr "Czy wyświetlać okienka wyszukiwania."
 
-#: ../libide/ide-source-view.c:5355
+#: ../libide/ide-source-view.c:5225
 msgid "Show Search Shadow"
 msgstr "Cień wyszukiwania"
 
-#: ../libide/ide-source-view.c:5356
+#: ../libide/ide-source-view.c:5226
 msgid "If the shadow should be drawn when performing searches."
 msgstr "Czy wyświetlać cień podczas wyszukiwania."
 
-#: ../libide/ide-source-view.c:5363
-msgid "If smart Backspace should be used."
-msgstr "Czy używać inteligentnego klawisza Backspace."
-
-#: ../libide/ide-source-view.c:5369
+#: ../libide/ide-source-view.c:5232
 msgid "Snippet Completion"
 msgstr "Uzupełnianie wstawek"
 
-#: ../libide/ide-source-view.c:5370
+#: ../libide/ide-source-view.c:5233
 msgid "If snippet expansion should be enabled via the completion window."
 msgstr "Czy włączyć rozszerzenie wstawek przez okno uzupełniania."
 
@@ -2591,7 +2590,7 @@ msgstr "Etykieta okna pigułki."
 msgid "The project information to render."
 msgstr "Informacje o projekcie do wyświetlenia."
 
-#: ../src/greeter/gb-greeter-window.c:560
+#: ../src/greeter/gb-greeter-window.c:561
 msgid "The recent projects that have been mined."
 msgstr "Odnalezione ostatnio używane projekty."
 
@@ -2632,7 +2631,7 @@ msgstr "przywróć wstaw kursor znacznik"
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:100
 msgid "diff renderer gutter changes git vcs"
-msgstr "różnica diff renderer gutter zmiany git vcs"
+msgstr "różnica diff renderer gutter zmiany git vcs system kontroli wersji"
 
 #. To translators: This is a list of keywords for the preferences page
 #: ../src/preferences/gb-preferences-page-editor.c:105
@@ -2802,13 +2801,17 @@ msgid "Folder Name"
 msgstr "Nazwa katalogu"
 
 #: ../src/project-tree/gb-project-file.c:166
-#: ../src/project-tree/gb-project-file.c:167 ../src/tree/gb-tree-node.c:583
+#: ../src/project-tree/gb-project-file.c:167 ../src/tree/gb-tree-node.c:606
 msgid "Icon Name"
 msgstr "Nazwa ikony"
 
-#: ../src/project-tree/gb-project-tree-builder.c:78
+#: ../src/project-tree/gb-project-tree-builder.c:79
 msgid "Files"
 msgstr "Pliki"
+
+#: ../src/project-tree/gb-project-tree.c:158
+msgid "If files ignored by the VCS should be displayed."
+msgstr "Czy wyświetlać pliki ignorowane przez system kontroli wersji."
 
 #: ../src/project-tree/gb-rename-file-popover.c:80
 #, c-format
@@ -2865,7 +2868,7 @@ msgstr "Nie można odnaleźć dostawcy."
 msgid "The active search context."
 msgstr "Kontekst aktywnego wyszukiwania."
 
-#: ../src/tree/gb-tree-builder.c:220 ../src/tree/gb-tree-node.c:619
+#: ../src/tree/gb-tree-builder.c:220 ../src/tree/gb-tree-node.c:642
 msgid "Tree"
 msgstr "Drzewo"
 
@@ -2873,47 +2876,55 @@ msgstr "Drzewo"
 msgid "The GbTree the builder belongs to."
 msgstr "GbTree, do którego należy Builder."
 
-#: ../src/tree/gb-tree-node.c:584
+#: ../src/tree/gb-tree-node.c:607
 msgid "The icon name to display."
 msgstr "Nazwa wyświetlanej ikony."
 
-#: ../src/tree/gb-tree-node.c:595
+#: ../src/tree/gb-tree-node.c:618
 msgid "Item"
 msgstr "Element"
 
-#: ../src/tree/gb-tree-node.c:596
+#: ../src/tree/gb-tree-node.c:619
 msgid "Optional object to associate with node."
 msgstr "Opcjonalny obiekt do powiązania z węzłem."
 
-#: ../src/tree/gb-tree-node.c:608
+#: ../src/tree/gb-tree-node.c:631
 msgid "The parent node."
 msgstr "Węzeł nadrzędny."
 
-#: ../src/tree/gb-tree-node.c:620
+#: ../src/tree/gb-tree-node.c:643
 msgid "The GbTree the node belongs to."
 msgstr "GbTree, do którego należy węzeł."
 
-#: ../src/tree/gb-tree-node.c:632
+#: ../src/tree/gb-tree-node.c:655
 msgid "The text of the node."
 msgstr "Tekst węzła."
 
-#: ../src/tree/gb-tree-node.c:643
+#: ../src/tree/gb-tree-node.c:666
 msgid "Use Markup"
 msgstr "Użycie znaczników"
 
-#: ../src/tree/gb-tree-node.c:644
+#: ../src/tree/gb-tree-node.c:667
 msgid "If text should be translated as markup."
 msgstr "Czy tekst powinien być tłumaczony jako zawierający znaczniki."
 
-#: ../src/tree/gb-tree.c:931
+#: ../src/tree/gb-tree-node.c:673
+msgid "Use Dim Label"
+msgstr "Użycie przyciemnionej etykiety"
+
+#: ../src/tree/gb-tree-node.c:674
+msgid "If text should be rendered with a dim label."
+msgstr "Czy tekst powinien być wyświetlany z przyciemnioną etykietą."
+
+#: ../src/tree/gb-tree.c:961
 msgid "The root object of the tree."
 msgstr "Obiekt root drzewa."
 
-#: ../src/tree/gb-tree.c:937
+#: ../src/tree/gb-tree.c:967
 msgid "Selection"
 msgstr "Wybór"
 
-#: ../src/tree/gb-tree.c:938
+#: ../src/tree/gb-tree.c:968
 msgid "The node selection."
 msgstr "Wybór węzła."
 
