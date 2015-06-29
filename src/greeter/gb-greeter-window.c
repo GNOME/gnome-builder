@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "egg-search-bar.h"
 #include "egg-signal-group.h"
 #include "egg-state-machine.h"
 
@@ -574,6 +575,7 @@ gb_greeter_window_class_init (GbGreeterWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, state_machine);
   gtk_widget_class_bind_template_child (widget_class, GbGreeterWindow, viewport);
 
+  g_type_ensure (EGG_TYPE_SEARCH_BAR);
   g_type_ensure (EGG_TYPE_STATE_MACHINE);
   g_type_ensure (GB_TYPE_GREETER_PROJECT_ROW);
   g_type_ensure (GB_TYPE_SCROLLED_WINDOW);
