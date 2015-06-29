@@ -23,9 +23,6 @@
 #include "gb-project-tree-builder.h"
 #include "gb-project-tree-private.h"
 
-#define WIDTH_MIN 1
-#define WIDTH_MAX 1000
-
 G_DEFINE_TYPE (GbProjectTree, gb_project_tree, GB_TYPE_TREE)
 
 enum {
