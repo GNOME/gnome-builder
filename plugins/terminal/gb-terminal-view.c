@@ -36,6 +36,13 @@ struct _GbTerminalView
 
 G_DEFINE_TYPE (GbTerminalView, gb_terminal_view, GB_TYPE_VIEW)
 
+enum {
+  PROP_0,
+  PROP_FONT_NAME,
+  LAST_PROP
+};
+
+static GParamSpec *gParamSpecs [LAST_PROP];
 static const GdkRGBA solarized_palette[] =
 {
   /*
@@ -308,10 +315,50 @@ gb_terminal_grab_focus (GtkWidget *widget)
 }
 
 static void
+gb_terminal_view_set_font_name (GbTerminalView *self,
+                                const gchar    *font_name)
+{
+  PangoFontDescription *font_desc = NULL;
+
+  g_assert (GB_IS_TERMINAL_VIEW (self));
+
+  if (font_name != NULL)
+    font_desc = pango_font_description_from_string (font_name);
+
+  if (font_desc != NULL)
+    {
+      vte_terminal_set_font (self->terminal, font_desc);
+      pango_font_description_free (font_desc);
+    }
+}
+
+static void
+gb_terminal_view_set_property (GObject      *object,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  GbTerminalView *self = (GbTerminalView *)object;
+
+  switch (prop_id)
+    {
+    case PROP_FONT_NAME:
+      gb_terminal_view_set_font_name (self, g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gb_terminal_view_class_init (GbTerminalViewClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GbViewClass *view_class = GB_VIEW_CLASS (klass);
+
+  object_class->set_property = gb_terminal_view_set_property;
 
   widget_class->realize = gb_terminal_realize;
   widget_class->get_preferred_width = gb_terminal_get_preferred_width;
@@ -319,6 +366,15 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
   widget_class->grab_focus = gb_terminal_grab_focus;
 
   view_class->get_title = gb_terminal_get_title;
+
+  gParamSpecs [PROP_FONT_NAME] =
+    g_param_spec_string ("font-name",
+                         _("Font Name"),
+                         _("Font Name"),
+                         NULL,
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/terminal/gb-terminal-view.ui");
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, terminal);
@@ -330,6 +386,7 @@ static void
 gb_terminal_view_init (GbTerminalView *self)
 {
   GtkStyleContext *style_context;
+  g_autoptr(GSettings) settings = NULL;
   GQuark quark;
   guint signal_id;
 
@@ -371,6 +428,12 @@ gb_terminal_view_init (GbTerminalView *self)
                                self,
                                0);
     }
+
+  /*
+   * FIXME: Should we allow setting the terminal font independently from editor?
+   */
+  settings = g_settings_new ("org.gnome.builder.editor");
+  g_settings_bind (settings, "font-name", self, "font-name", G_SETTINGS_BIND_GET);
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
   g_signal_connect_object (style_context,
