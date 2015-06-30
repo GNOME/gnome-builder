@@ -621,7 +621,7 @@ gb_view_stack_set_active_view (GbViewStack *self,
 
           binding = g_object_bind_property (active_view, "title",
                                             self->title_label, "label",
-                                            G_BINDING_SYNC_CREATE);
+                                            G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
           ide_set_weak_pointer (&self->title_binding, binding);
 
           binding = g_object_bind_property (active_view, "modified",

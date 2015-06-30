@@ -19,6 +19,7 @@
 #include <glib/gi18n.h>
 
 #include "gb-terminal-view.h"
+#include "gb-terminal-document.h"
 #include "gb-terminal-workbench-addin.h"
 #include "gb-view-grid.h"
 #include "gb-workspace.h"
@@ -53,20 +54,16 @@ new_terminal_activate_cb (GSimpleAction   *action,
                           GVariant        *param,
                           GbTerminalWorkbenchAddin *self)
 {
-  GtkWidget *terminal;
-  GtkWidget *grid;
-  GtkWidget *stack;
+  GbTerminalDocument *document;
+  GbViewGrid *view_grid;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
 
-  grid = gb_workbench_get_view_grid (self->workbench);
-  terminal = g_object_new (GB_TYPE_TERMINAL_VIEW,
-                           "visible", TRUE,
-                           NULL);
-  stack = gb_view_grid_get_last_focus (GB_VIEW_GRID (grid));
-  gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (terminal));
-  gtk_widget_grab_focus (GTK_WIDGET (terminal));
+  view_grid = GB_VIEW_GRID (gb_workbench_get_view_grid (self->workbench));
+
+  document = g_object_new (GB_TYPE_TERMINAL_DOCUMENT, NULL);
+  gb_view_grid_focus_document (view_grid, GB_DOCUMENT (document));
 }
 
 static void
