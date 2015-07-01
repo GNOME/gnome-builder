@@ -115,6 +115,7 @@ plugins/file-search/gb-file-search-index.c
 plugins/file-search/gb-file-search-provider.c
 plugins/symbol-tree/symbol-tree.c
 plugins/sysmon/gb-sysmon-addin.c
+plugins/terminal/gb-terminal-view.c
 plugins/terminal/gb-terminal-workbench-addin.c
 src/app/gb-application-actions.c
 src/app/gb-application.c
