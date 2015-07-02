@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ttFont sfntVersion="\x00\x01\x00\x00" ttLibVersion="2.4">
+
+  <GlyphOrder>
+    <!-- The 'id' attribute is only for humans; it is ignored when parsed. -->
+    <GlyphID id="0" name=".notdef"/>
+    <GlyphID id="1" name="block"/>
+    <GlyphID id="2" name="empty"/>
+  </GlyphOrder>
+
+  <head>
+    <!-- Most of this table will be recalculated by the compiler -->
+    <tableVersion value="1.0"/>
+    <fontRevision value="1.0"/>
+    <checkSumAdjustment value="0x2a3f4cae"/>
+    <magicNumber value="0x5f0f3cf5"/>
+    <flags value="00000000 00000010"/>
+    <unitsPerEm value="2048"/>
+    <created value="Mon Oct  7 00:00:00 2013"/>
+    <modified value="Fri Jan 31 15:45:50 2014"/>
+    <xMin value="0"/>
+    <yMin value="0"/>
+    <xMax value="0"/>
+    <yMax value="0"/>
+    <macStyle value="00000000 00000000"/>
+    <lowestRecPPEM value="1"/>
+    <fontDirectionHint value="2"/>
+    <indexToLocFormat value="0"/>
+    <glyphDataFormat value="0"/>
+  </head>
+
+  <hhea>
+    <tableVersion value="1.0"/>
+    <ascent value="2048"/>
+    <descent value="0"/>
+    <lineGap value="0"/>
+    <advanceWidthMax value="20480"/>
+    <minLeftSideBearing value="0"/>
+    <minRightSideBearing value="0"/>
+    <xMaxExtent value="0"/>
+    <caretSlopeRise value="1"/>
+    <caretSlopeRun value="0"/>
+    <caretOffset value="0"/>
+    <reserved0 value="0"/>
+    <reserved1 value="0"/>
+    <reserved2 value="0"/>
+    <reserved3 value="0"/>
+    <metricDataFormat value="0"/>
+    <numberOfHMetrics value="2"/>
+  </hhea>
+
+  <maxp>
+    <!-- Most of this table will be recalculated by the compiler -->
+    <tableVersion value="0x10000"/>
+    <numGlyphs value="2"/>
+    <maxPoints value="0"/>
+    <maxContours value="0"/>
+    <maxCompositePoints value="0"/>
+    <maxCompositeContours value="0"/>
+    <maxZones value="1"/>
+    <maxTwilightPoints value="0"/>
+    <maxStorage value="0"/>
+    <maxFunctionDefs value="0"/>
+    <maxInstructionDefs value="0"/>
+    <maxStackElements value="0"/>
+    <maxSizeOfInstructions value="0"/>
+    <maxComponentElements value="0"/>
+    <maxComponentDepth value="0"/>
+  </maxp>
+
+  <hmtx>
+    <mtx name=".notdef" width="1024" lsb="0"/>
+    <mtx name="block" width="1024" lsb="0"/>
+    <mtx name="empty" width="1024" lsb="0"/>
+  </hmtx>
+
+  <loca>
+  </loca>
+
+  <glyf> <!-- Will result in empty table -->
+    <TTGlyph name=".notdef"/>
+    <TTGlyph name="empty"/>
+    <TTGlyph name="block">
+      <contour>
+        <pt x="0" y="0" on="1"/>
+        <pt x="1024" y="0" on="1"/>
+        <pt x="1024" y="2048" on="1"/>
+        <pt x="0" y="2048" on="1"/>
+      </contour>
+      <instructions><assembly></assembly></instructions>
+    </TTGlyph>
+  </glyf>
+
+  <cmap ERROR="">
+    <!-- Hand-coded format13 table mapping all Unicode
+         characters to glyph00001. -->
+    <hexdata>
+      0000 0001 <!-- version numTables -->
+        0003 000A <!-- platformID encodingID -->
+        0000000C  <!-- offset -->
+          000D 0000 <!-- format reserved -->
+          00000028  <!-- length -->
+          00000000  <!-- language -->
+          00000002  <!-- nGroups -->
+            00000001  <!-- startCharCode -->
+            00000020  <!-- endCharCode -->
+            00000002  <!-- glyphID -->
+            00000021  <!-- startCharCode -->
+            0010FFFE  <!-- endCharCode -->
+            00000001  <!-- glyphID -->
+    </hexdata>
+  </cmap>
+
+</ttFont>
