@@ -55,6 +55,8 @@ struct _GbViewStack
   guint               focused : 1;
 };
 
+void   gb_view_stack_add (GtkContainer *container, GtkWidget *child);
+
 G_END_DECLS
 
 #endif /* GB_VIEW_STACK_PRIVATE_H */

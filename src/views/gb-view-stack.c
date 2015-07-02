@@ -147,7 +147,7 @@ gb_view_stack_move_top_list_row (GbViewStack *self,
   g_list_free (children);
 }
 
-static void
+void
 gb_view_stack_add (GtkContainer *container,
                    GtkWidget    *child)
 {

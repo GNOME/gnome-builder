@@ -22,6 +22,7 @@
 
 #include "gb-view.h"
 #include "gb-view-grid.h"
+#include "gb-view-stack-private.h"
 #include "gb-widget.h"
 
 struct _GbViewGrid
@@ -289,7 +290,12 @@ gb_view_grid_stack_split (GbViewGrid      *self,
       target = gb_view_grid_get_stack_before (self, stack);
       if (target == NULL)
         target = gb_view_grid_add_stack_before (self, stack);
+
+      g_object_ref (view);
       gb_view_stack_remove (stack, view);
+      gb_view_stack_add (GTK_CONTAINER (target), GTK_WIDGET (view));
+      g_object_unref (view);
+
       gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
       break;
 
@@ -304,7 +310,12 @@ gb_view_grid_stack_split (GbViewGrid      *self,
       target = gb_view_grid_get_stack_after (self, stack);
       if (target == NULL)
         target = gb_view_grid_add_stack_after (self, stack);
+
+      g_object_ref (view);
       gb_view_stack_remove (stack, view);
+      gb_view_stack_add (GTK_CONTAINER (target), GTK_WIDGET (view));
+      g_object_unref (view);
+
       gb_view_stack_focus_document (GB_VIEW_STACK (target), document);
       break;
 
