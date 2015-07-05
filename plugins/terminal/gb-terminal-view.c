@@ -1,4 +1,4 @@
-/* gb-terminal.c
+/* gb-terminal-view.c
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -22,28 +22,11 @@
 
 #include "gb-terminal-document.h"
 #include "gb-terminal-view.h"
+#include "gb-terminal-view-private.h"
+#include "gb-terminal-view-actions.h"
 #include "gb-view.h"
 #include "gb-widget.h"
 #include "gb-workbench.h"
-
-struct _GbTerminalView
-{
-  GbView               parent_instance;
-
-  GbTerminalDocument  *document;
-
-  VteTerminal         *terminal_top;
-  VteTerminal         *terminal_bottom;
-
-  GtkWidget           *scrolled_window_bottom;
-
-  guint                top_has_spawned : 1;
-  guint                bottom_has_spawned : 1;
-  guint                bottom_has_focus : 1;
-
-  guint                top_has_needs_attention : 1;
-  guint                bottom_has_needs_attention : 1;
-};
 
 G_DEFINE_TYPE (GbTerminalView, gb_terminal_view, GB_TYPE_VIEW)
 
@@ -477,7 +460,10 @@ gb_terminal_set_split_view (GbView   *view,
       gtk_widget_hide (self->scrolled_window_bottom);
 
       self->terminal_bottom = NULL;
+      self->bottom_has_focus = FALSE;
       self->bottom_has_spawned = FALSE;
+      self->bottom_has_needs_attention = FALSE;
+      g_clear_object (&self->save_as_file_bottom);
       gtk_widget_grab_focus (GTK_WIDGET (self->terminal_top));
     }
 }
@@ -546,6 +532,9 @@ gb_terminal_view_finalize (GObject *object)
   GbTerminalView *self = GB_TERMINAL_VIEW (object);
 
   g_clear_object (&self->document);
+  g_clear_object (&self->save_as_file_top);
+  g_clear_object (&self->save_as_file_bottom);
+  g_clear_pointer (&self->selection_buffer, g_free);
 
   G_OBJECT_CLASS (gb_terminal_view_parent_class)->finalize (object);
 }
@@ -645,6 +634,7 @@ gb_terminal_view_init (GbTerminalView *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gb_terminal_view_connect_terminal (self, self->terminal_top);
+  gb_terminal_view_actions_init (self);
 
   /*
    * FIXME: Should we allow setting the terminal font independently from editor?

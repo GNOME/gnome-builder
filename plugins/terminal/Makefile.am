@@ -16,6 +16,9 @@ libterminal_la_SOURCES = \
 	gb-terminal-private.h \
 	gb-terminal-view.c \
 	gb-terminal-view.h \
+	gb-terminal-view-private.h \
+	gb-terminal-view-actions.c \
+	gb-terminal-view-actions.h \
 	gb-terminal-workbench-addin.c \
 	gb-terminal-workbench-addin.h \
 	$(NULL)
