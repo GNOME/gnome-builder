@@ -177,7 +177,8 @@ ide_autotools_project_miner_mine_directory (IdeAutotoolsProjectMiner *self,
                                             GCancellable             *cancellable)
 {
   g_autoptr(GFileEnumerator) file_enum = NULL;
-  GFileInfo *file_info;
+  g_autoptr(GPtrArray) directories = NULL;
+  gpointer file_info_ptr;
 
   g_assert (IDE_IS_AUTOTOOLS_PROJECT_MINER (self));
   g_assert (G_IS_FILE (directory));
@@ -206,8 +207,9 @@ ide_autotools_project_miner_mine_directory (IdeAutotoolsProjectMiner *self,
   if (file_enum == NULL)
     return;
 
-  while ((file_info = g_file_enumerator_next_file (file_enum, cancellable, NULL)))
+  while ((file_info_ptr = g_file_enumerator_next_file (file_enum, cancellable, NULL)))
     {
+      g_autoptr(GFileInfo) file_info = file_info_ptr;
       const gchar *filename;
       GFileType file_type;
       GFile *child;
@@ -216,14 +218,15 @@ ide_autotools_project_miner_mine_directory (IdeAutotoolsProjectMiner *self,
       filename = g_file_info_get_attribute_byte_string (file_info, G_FILE_ATTRIBUTE_STANDARD_NAME);
 
       if (filename && filename [0] == '.')
-        goto cleanup;
+        continue;
 
       switch (file_type)
         {
         case G_FILE_TYPE_DIRECTORY:
+          if (directories == NULL)
+            directories = g_ptr_array_new_with_free_func (g_object_unref);
           child = g_file_get_child (directory, filename);
-          ide_autotools_project_miner_mine_directory (self, child, depth + 1, cancellable);
-          g_clear_object (&child);
+          g_ptr_array_add (directories, child);
           break;
 
         case G_FILE_TYPE_REGULAR:
@@ -244,9 +247,17 @@ ide_autotools_project_miner_mine_directory (IdeAutotoolsProjectMiner *self,
         default:
           break;
         }
+    }
 
-    cleanup:
-      g_object_unref (file_info);
+  if (directories != NULL)
+    {
+      gsize i;
+
+      for (i = 0; i < directories->len; i++)
+        {
+          GFile *child = g_ptr_array_index (directories, i);
+          ide_autotools_project_miner_mine_directory (self, child, depth + 1, cancellable);
+        }
     }
 }
 
