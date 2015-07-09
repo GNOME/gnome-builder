@@ -245,7 +245,6 @@ gb_slider_create_child_window (GbSlider      *self,
 
   window = gdk_window_new (gtk_widget_get_window (widget), &attributes, attributes_mask);
   gtk_widget_register_window (widget, window);
-  gtk_style_context_set_background (gtk_widget_get_style_context (widget), window);
 
   gtk_widget_set_parent_window (child->widget, window);
 
