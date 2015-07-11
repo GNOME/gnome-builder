@@ -493,7 +493,7 @@ gb_search_display_group_activate (GbSearchDisplayGroup *group)
 {
   GtkListBoxRow *row = NULL;
 
-  g_return_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group));
+  g_return_val_if_fail (GB_IS_SEARCH_DISPLAY_GROUP (group), FALSE);
 
   gtk_container_foreach (GTK_CONTAINER (group->rows),
                          gb_search_display_group_foreach_cb,

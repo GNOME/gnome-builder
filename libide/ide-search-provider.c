@@ -141,9 +141,9 @@ ide_search_provider_activate (IdeSearchProvider *self,
                               GtkWidget         *row,
                               IdeSearchResult   *result)
 {
-  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (self), NULL);
-  g_return_val_if_fail (GTK_IS_WIDGET (row), NULL);
-  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (result), NULL);
+  g_return_if_fail (IDE_IS_SEARCH_PROVIDER (self));
+  g_return_if_fail (GTK_IS_WIDGET (row));
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (result));
 
   return IDE_SEARCH_PROVIDER_GET_IFACE (self)->activate (self, row, result);
 }
