@@ -21,7 +21,7 @@
       <description>If enabled, additional highlighting will be provided in supported languages based on information extracted from the source code.</description>
     </key>
     <key name="ctags-path" type="s">
-      <default>'ctags'</default>
+      <default>'@ECTAGS@'</default>
       <summary>Path to ctags executable</summary>
       <description>The path to the ctags executable on the system.</description>
     </key>

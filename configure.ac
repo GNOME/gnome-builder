@@ -91,6 +91,11 @@ dnl ***********************************************************************
 AC_CHECK_PROG([GMAKE], [gmake], [gmake], [make])
 AC_DEFINE_UNQUOTED([GNU_MAKE_NAME], ["$GMAKE"], [Name of GNU make on this system])
 
+dnl ***********************************************************************
+dnl Find Path of Exuberant Ctags
+dnl ***********************************************************************
+AC_CHECK_PROGS([ECTAGS], [ctags-exuberant exctags ectags], [ctags])
+
 
 dnl ***********************************************************************
 dnl Enable high-performance counters
@@ -406,6 +411,7 @@ AC_CONFIG_FILES([
 	plugins/xml-pack/Makefile
 
 	data/Makefile
+	data/gsettings/org.gnome.builder.code-insight.gschema.xml
 	data/gsettings/Makefile
 	data/icons/Makefile
 	data/icons/hicolor/Makefile
