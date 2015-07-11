@@ -16,12 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __linux__
-# error "This file only supports Linux."
+#if !defined(__linux__) && !defined(__FreeBSD__)
+# error "This file only supports Linux and FreeBSD."
 #endif
 
 #include <ctype.h>
 #include <stdio.h>
+#ifdef __FreeBSD__
+# include <errno.h>
+# include <sys/resource.h>
+# include <sys/sysctl.h>
+# include <sys/types.h>
+#endif
 
 #include "rg-cpu-table.h"
 
@@ -151,12 +157,67 @@ rg_cpu_table_poll (RgCpuTable *self)
 
   g_free (buf);
 }
+#elif defined(__FreeBSD__)
+static void
+rg_cpu_table_poll (RgCpuTable *self)
+{
+  static gint mib_cp_times[2];
+  static gsize len_cp_times = 2;
+
+  if (mib_cp_times[0] == 0 || mib_cp_times[1] == 0)
+    {
+      if (sysctlnametomib ("kern.cp_times", mib_cp_times, &len_cp_times) == -1)
+        {
+          g_critical ("Cannot convert sysctl name kern.cp_times to a mib array: %s",
+                      g_strerror (errno));
+          return;
+        }
+    }
+
+  gsize cp_times_size = sizeof (glong) * CPUSTATES * self->n_cpu;
+  glong *cp_times = g_malloc (cp_times_size);
+
+  if (sysctl (mib_cp_times, 2, cp_times, &cp_times_size, NULL, 0) == -1)
+    {
+      g_critical ("Cannot get CPU usage by sysctl kern.cp_times: %s",
+                  g_strerror (errno));
+      g_free (cp_times);
+      return;
+    }
+
+  for (guint i = 0, j = 0; i < self->n_cpu; i++, j += CPUSTATES)
+    {
+      CpuInfo *cpu_info = &g_array_index (self->cpu_info, CpuInfo, i);
+
+      glong user = cp_times[j + CP_USER];
+      glong nice = cp_times[j + CP_NICE];
+      glong sys = cp_times[j + CP_SYS];
+      glong irq = cp_times[j + CP_INTR];
+      glong idle = cp_times[j + CP_IDLE];
+
+      glong user_calc = user - cpu_info->last_user;
+      glong nice_calc = nice - cpu_info->last_nice;
+      glong system_calc = sys - cpu_info->last_system;
+      glong irq_calc = irq - cpu_info->last_irq;
+      glong idle_calc = idle - cpu_info->last_idle;
+
+      glong total = user_calc + nice_calc + system_calc + irq_calc + idle_calc;
+      cpu_info->total = ((total - idle_calc) / (gdouble)total) * 100.0;
+
+      cpu_info->last_user = user;
+      cpu_info->last_nice = nice;
+      cpu_info->last_system = sys;
+      cpu_info->last_irq = irq;
+      cpu_info->last_idle = idle;
+    }
+  g_free (cp_times);
+}
 #else
 static void
 rg_cpu_table_poll (RgCpuTable *self)
 {
   /*
-   * TODO: calculate cpu info for FreeBSD/OpenBSD/etc.
+   * TODO: calculate cpu info for OpenBSD/etc.
    *
    * While we are at it, we should make the Linux code above non-shitty.
    */
