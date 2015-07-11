@@ -221,6 +221,11 @@ LT_INIT
 dnl ***********************************************************************
 dnl Additional C Compiler Flags
 dnl ***********************************************************************
+AX_CHECK_COMPILE_FLAG([-Werror=unknown-warning-option], [
+	ax_compiler_flags_test="-Werror=unknown-warning-option"
+], [
+	ax_compiler_flags_test=""
+])
 AX_APPEND_COMPILE_FLAGS([ \
 	-Wall \
 	-Wcast-align \
@@ -250,7 +255,7 @@ AX_APPEND_COMPILE_FLAGS([ \
 	-Wswitch-enum \
 	-Wundef \
 	-Wuninitialized \
-])
+], [], [$ax_compiler_flags_test])
 AC_C_CONST
 
 
