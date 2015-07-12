@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-29 22:58+0200\n"
-"PO-Revision-Date: 2015-06-29 23:00+0200\n"
+"POT-Creation-Date: 2015-07-12 16:47+0200\n"
+"PO-Revision-Date: 2015-07-12 16:48+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -748,7 +748,9 @@ msgstr "Przenieś"
 msgid "Preview"
 msgstr "Podgląd"
 
-#: ../data/ui/gb-view-stack.ui.h:4 ../src/editor/gb-editor-view-actions.c:310
+#: ../data/ui/gb-view-stack.ui.h:4
+#: ../plugins/terminal/gb-terminal-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:310
 #: ../src/editor/gb-editor-view-actions.c:441
 msgid "Save"
 msgstr "Zapisz"
@@ -1966,7 +1968,8 @@ msgid "If words from all buffers can be used to autocomplete."
 msgstr ""
 "Czy używać wyrazów ze wszystkich buforów do automatycznego uzupełniania."
 
-#: ../libide/ide-source-view.c:5124
+#: ../libide/ide-source-view.c:5124 ../plugins/terminal/gb-terminal-view.c:620
+#: ../plugins/terminal/gb-terminal-view.c:621
 msgid "Font Name"
 msgstr "Nazwa czcionki"
 
@@ -2224,7 +2227,7 @@ msgstr "Można wykonać polecenie za pomocą pola poniżej"
 #: ../plugins/symbol-tree/symbol-tree.c:333
 #: ../plugins/sysmon/gb-sysmon-addin.c:125
 #: ../plugins/sysmon/gb-sysmon-addin.c:126
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:165
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:162
 #: ../src/workbench/gb-workbench-addin.c:46
 msgid "Workbench"
 msgstr "Stanowisko pracy"
@@ -2382,6 +2385,7 @@ msgid "The URI to the Devhelp document."
 msgstr "Adres URI dokumentu programu Devhelp."
 
 #: ../plugins/devhelp/gb-devhelp-view.c:251
+#: ../plugins/terminal/gb-terminal-view.c:613
 #: ../src/editor/gb-editor-frame.c:754 ../src/editor/gb-editor-view.c:504
 #: ../src/html/gb-html-view.c:321 ../src/views/gb-view.c:265
 msgid "Document"
@@ -2407,11 +2411,32 @@ msgstr "Drzewo symboli"
 msgid "System Monitor"
 msgstr "Monitor systemu"
 
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:104
-msgid "Terminal"
-msgstr "Terminalu"
+#: ../plugins/terminal/gb-terminal-document.c:64
+#, c-format
+msgid "Terminal (%s)"
+msgstr "Terminal (%s)"
 
-#: ../plugins/terminal/gb-terminal-workbench-addin.c:166
+#: ../plugins/terminal/gb-terminal-document.c:87
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:101
+msgid "Terminal"
+msgstr "Terminal"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:300
+msgid "Save Terminal Content As"
+msgstr "Zapis zawartości terminala jako"
+
+#: ../plugins/terminal/gb-terminal-view-actions.c:308
+#: ../src/editor/gb-editor-view-actions.c:309
+#: ../src/editor/gb-editor-view-actions.c:440
+#: ../src/workbench/gb-workbench-actions.c:169
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: ../plugins/terminal/gb-terminal-view.c:614
+msgid "The document for the VTE terminal view."
+msgstr "Dokument dla widoku terminala VTE."
+
+#: ../plugins/terminal/gb-terminal-workbench-addin.c:163
 #: ../src/workbench/gb-workbench-addin.c:47
 msgid "The workbench window."
 msgstr "Okno stanowiska pracy."
@@ -2567,12 +2592,6 @@ msgstr "Język, dla którego zmienić ustawienia."
 #: ../src/editor/gb-editor-view-actions.c:303
 msgid "Save Document"
 msgstr "Zapis dokumentu"
-
-#: ../src/editor/gb-editor-view-actions.c:309
-#: ../src/editor/gb-editor-view-actions.c:440
-#: ../src/workbench/gb-workbench-actions.c:169
-msgid "Cancel"
-msgstr "Anuluj"
 
 #: ../src/editor/gb-editor-view-actions.c:429
 msgid "Save Document As"
