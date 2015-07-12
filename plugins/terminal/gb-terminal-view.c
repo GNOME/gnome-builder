@@ -611,7 +611,7 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
   gParamSpecs [PROP_DOCUMENT] =
     g_param_spec_object ("document",
                          _("Document"),
-                         _("The document for the Vte Terminal view."),
+                         _("The document for the VTE terminal view."),
                          GB_TYPE_TERMINAL_DOCUMENT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

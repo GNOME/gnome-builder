@@ -297,7 +297,7 @@ gb_terminal_view_actions_save_as (GSimpleAction *action,
                          "select-multiple", FALSE,
                          "show-hidden", FALSE,
                          "transient-for", toplevel,
-                         "title", _("Save Terminal content As"),
+                         "title", _("Save Terminal Content As"),
                          NULL);
 
   file = get_last_focused_terminal_file (view);
