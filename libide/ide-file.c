@@ -99,36 +99,33 @@ ide_file_equal (IdeFile *self,
   return g_file_equal (self->file, other->file);
 }
 
-static void
+static GtkSourceLanguage *
 ide_file_create_language (IdeFile *self)
 {
+  GtkSourceLanguageManager *manager;
+  GtkSourceLanguage *srclang;
+  g_autofree gchar *content_type = NULL;
+  const gchar *filename;
+  gboolean uncertain = FALSE;
+
   g_assert (IDE_IS_FILE (self));
 
-  if (g_once_init_enter (&self->language))
-    {
-      GtkSourceLanguageManager *manager;
-      GtkSourceLanguage *srclang;
-      g_autofree gchar *content_type = NULL;
-      const gchar *filename;
-      gboolean uncertain = FALSE;
+  filename = g_file_get_basename (self->file);
 
-      filename = g_file_get_basename (self->file);
+  if (self->content_type)
+    content_type = g_strdup (self->content_type);
+  else
+    content_type = g_content_type_guess (filename, NULL, 0, &uncertain);
 
-      if (self->content_type)
-        content_type = g_strdup (self->content_type);
-      else
-        content_type = g_content_type_guess (filename, NULL, 0, &uncertain);
+  if (uncertain)
+    g_clear_pointer (&content_type, g_free);
+  else if (self->content_type == NULL)
+    self->content_type = g_strdup (content_type);
 
-      if (uncertain)
-        g_clear_pointer (&content_type, g_free);
-      else if (self->content_type == NULL)
-        self->content_type = g_strdup (content_type);
+  manager = gtk_source_language_manager_get_default ();
+  srclang = gtk_source_language_manager_guess_language (manager, filename, content_type);
 
-      manager = gtk_source_language_manager_get_default ();
-      srclang = gtk_source_language_manager_guess_language (manager, filename, content_type);
-
-      g_once_init_leave (&self->language, srclang);
-    }
+  return srclang;
 }
 
 /**
@@ -144,7 +141,12 @@ ide_file_get_language (IdeFile *self)
   g_return_val_if_fail (IDE_IS_FILE (self), NULL);
 
   if (self->language == NULL)
-    ide_file_create_language (self);
+    {
+      GtkSourceLanguage *language;
+
+      language = ide_file_create_language (self);
+      self->language = language ? g_object_ref (language) : NULL;
+    }
 
   return self->language;
 }
