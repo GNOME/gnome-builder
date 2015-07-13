@@ -850,3 +850,35 @@ egg_task_cache_new (GHashFunc            key_hash_func,
                        "value-destroy-func", value_destroy_func,
                        NULL);
 }
+
+/**
+ * egg_task_cache_get_values:
+ *
+ * Gets all the values in the cache.
+ *
+ * The caller owns the resulting GPtrArray, which itself owns a reference to the children.
+ *
+ * Returns: (transfer container) (element-type gpointer): The values.
+ */
+GPtrArray *
+egg_task_cache_get_values (EggTaskCache *self)
+{
+  GPtrArray *ar;
+  GHashTableIter iter;
+  gpointer value;
+
+  g_return_val_if_fail (EGG_IS_TASK_CACHE (self), NULL);
+
+  ar = g_ptr_array_new_with_free_func (self->value_destroy_func);
+
+  g_hash_table_iter_init (&iter, self->cache);
+
+  while (g_hash_table_iter_next (&iter, NULL, &value))
+    {
+      CacheItem *item = value;
+
+      g_ptr_array_add (ar, self->value_copy_func (item->value));
+    }
+
+  return ar;
+}

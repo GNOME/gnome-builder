@@ -77,6 +77,7 @@ void                ide_buffer_rehighlight                   (IdeBuffer         
 void                ide_buffer_get_selection_bounds          (IdeBuffer            *self,
                                                               GtkTextIter          *insert,
                                                               GtkTextIter          *selection);
+IdeSymbolResolver  *ide_buffer_get_symbol_resolver           (IdeBuffer            *self);
 void                ide_buffer_get_symbol_at_location_async  (IdeBuffer            *self,
                                                               const GtkTextIter    *location,
                                                               GCancellable         *cancellable,

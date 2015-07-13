@@ -19,6 +19,8 @@
 #ifndef IDE_FILE_H
 #define IDE_FILE_H
 
+#include <gtksourceview/gtksourcelanguage.h>
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -27,29 +29,29 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeFile, ide_file, IDE, FILE, IdeObject)
 
-gboolean         ide_file_get_is_temporary     (IdeFile              *self);
-guint            ide_file_get_temporary_id     (IdeFile              *self);
-IdeLanguage     *ide_file_get_language         (IdeFile              *self);
-GFile           *ide_file_get_file             (IdeFile              *self);
-const gchar     *ide_file_get_project_path     (IdeFile              *self);
-guint            ide_file_hash                 (IdeFile              *self);
-gboolean         ide_file_equal                (IdeFile              *self,
-                                                IdeFile              *other);
-const gchar     *ide_file_get_path             (IdeFile              *self);
-void             ide_file_load_settings_async  (IdeFile              *self,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-IdeFileSettings *ide_file_load_settings_finish (IdeFile              *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
-void             ide_file_find_other_async     (IdeFile              *self,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-IdeFile         *ide_file_find_other_finish    (IdeFile              *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
+gboolean           ide_file_get_is_temporary     (IdeFile              *self);
+guint              ide_file_get_temporary_id     (IdeFile              *self);
+GtkSourceLanguage *ide_file_get_language         (IdeFile              *self);
+GFile             *ide_file_get_file             (IdeFile              *self);
+const gchar       *ide_file_get_project_path     (IdeFile              *self);
+guint              ide_file_hash                 (IdeFile              *self);
+gboolean           ide_file_equal                (IdeFile              *self,
+                                                  IdeFile              *other);
+const gchar       *ide_file_get_path             (IdeFile              *self);
+void               ide_file_load_settings_async  (IdeFile              *self,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
+IdeFileSettings   *ide_file_load_settings_finish (IdeFile              *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
+void               ide_file_find_other_async     (IdeFile              *self,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
+IdeFile           *ide_file_find_other_finish    (IdeFile              *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
 
 
 G_END_DECLS

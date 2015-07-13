@@ -163,17 +163,15 @@ populate_cache_cb (EggTaskCache  *cache,
                    gpointer       user_data)
 {
   GbEditorDocument *document = (GbEditorDocument *)key;
-  IdeLanguage *language;
-  IdeFile *file;
   IdeSymbolResolver *resolver;
+  IdeFile *file;
 
   g_assert (EGG_IS_TASK_CACHE (cache));
   g_assert (GB_IS_EDITOR_DOCUMENT (document));
   g_assert (G_IS_TASK (task));
 
-  if ((file = ide_buffer_get_file (IDE_BUFFER (document))) &&
-      (language = ide_file_get_language (file)) &&
-      (resolver = ide_language_get_symbol_resolver (language)))
+  if ((resolver = ide_buffer_get_symbol_resolver (IDE_BUFFER (document))) &&
+      (file = ide_buffer_get_file (IDE_BUFFER (document))))
     {
       ide_symbol_resolver_get_symbol_tree_async (resolver,
                                                  ide_file_get_file (file),

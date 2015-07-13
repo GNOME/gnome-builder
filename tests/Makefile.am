@@ -110,14 +110,14 @@ test_ide_vcs_uri_CFLAGS = $(tests_cflags)
 test_ide_vcs_uri_LDADD = $(tests_libs)
 
 
-TESTS += test-c-parse-helper
-test_c_parse_helper_SOURCES = test-c-parse-helper.c
-test_c_parse_helper_CFLAGS = \
-	$(tests_cflags) \
-	-include $(top_srcdir)/libide/c/c-parse-helper.c \
-	-include $(top_srcdir)/libide/c/c-parse-helper.h \
-	$(NULL)
-test_c_parse_helper_LDADD = $(tests_libs)
+#TESTS += test-c-parse-helper
+#test_c_parse_helper_SOURCES = test-c-parse-helper.c
+#test_c_parse_helper_CFLAGS = \
+#	$(tests_cflags) \
+#	-include $(top_srcdir)/libide/c/c-parse-helper.c \
+#	-include $(top_srcdir)/libide/c/c-parse-helper.h \
+#	$(NULL)
+#test_c_parse_helper_LDADD = $(tests_libs)
 
 
 TESTS += test-vim
@@ -159,10 +159,10 @@ test_slider_LDADD = \
 	$(top_builddir)/src/libgnome-builder.la
 
 
-TESTS += test-ide-ctags
-test_ide_ctags_SOURCES = test-ide-ctags.c
-test_ide_ctags_CFLAGS = $(tests_cflags)
-test_ide_ctags_LDADD = $(tests_libs)
+#TESTS += test-ide-ctags
+#test_ide_ctags_SOURCES = test-ide-ctags.c
+#test_ide_ctags_CFLAGS = $(tests_cflags)
+#test_ide_ctags_LDADD = $(tests_libs)
 
 
 TESTS += test-egg-binding-group

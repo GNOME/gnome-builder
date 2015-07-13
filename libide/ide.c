@@ -26,28 +26,18 @@
 
 #include "ide-autotools-build-system.h"
 #include "ide-autotools-project-miner.h"
-#include "ide-c-language.h"
-#include "ide-clang-service.h"
-#include "ide-ctags-service.h"
-#include "ide-device-provider.h"
 #include "ide-directory-build-system.h"
 #include "ide-directory-vcs.h"
 #include "ide-editorconfig-file-settings.h"
 #include "ide-file-settings.h"
-#include "ide-gca-service.h"
 #include "ide-git-vcs.h"
 #include "ide-gjs-script.h"
 #include "ide-gsettings-file-settings.h"
-#include "ide-html-language.h"
-#include "ide-mingw-device-provider.h"
 #include "ide-modelines-file-settings.h"
 #include "ide-internal.h"
 #include "ide-project-miner.h"
 #include "ide-pygobject-script.h"
-#include "ide-python-language.h"
 #include "ide-search-provider.h"
-#include "ide-vala-language.h"
-#include "ide-xml-language.h"
 
 #include "modeline-parser.h"
 
@@ -94,12 +84,9 @@ ide_init_ctor (void)
   g_type_ensure (IDE_TYPE_VCS);
 
   g_io_extension_point_register (IDE_BUILD_SYSTEM_EXTENSION_POINT);
-  g_io_extension_point_register (IDE_DEVICE_PROVIDER_EXTENSION_POINT);
   g_io_extension_point_register (IDE_FILE_SETTINGS_EXTENSION_POINT);
-  g_io_extension_point_register (IDE_LANGUAGE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_PROJECT_MINER_EXTENSION_POINT);
   g_io_extension_point_register (IDE_SCRIPT_EXTENSION_POINT);
-  g_io_extension_point_register (IDE_SERVICE_EXTENSION_POINT);
   g_io_extension_point_register (IDE_VCS_EXTENSION_POINT);
 
   g_io_extension_point_implement (IDE_BUILD_SYSTEM_EXTENSION_POINT,
@@ -110,11 +97,6 @@ ide_init_ctor (void)
                                   IDE_TYPE_DIRECTORY_BUILD_SYSTEM,
                                   IDE_BUILD_SYSTEM_EXTENSION_POINT".directory",
                                   -200);
-
-  g_io_extension_point_implement (IDE_DEVICE_PROVIDER_EXTENSION_POINT,
-                                  IDE_TYPE_MINGW_DEVICE_PROVIDER,
-                                  IDE_BUILD_SYSTEM_EXTENSION_POINT".mingw",
-                                  0);
 
   g_io_extension_point_implement (IDE_FILE_SETTINGS_EXTENSION_POINT,
                                   IDE_TYPE_MODELINES_FILE_SETTINGS,
@@ -128,27 +110,6 @@ ide_init_ctor (void)
                                   IDE_TYPE_GSETTINGS_FILE_SETTINGS,
                                   IDE_FILE_SETTINGS_EXTENSION_POINT".gsettings",
                                   -300);
-
-  g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
-                                  IDE_TYPE_C_LANGUAGE,
-                                  IDE_LANGUAGE_EXTENSION_POINT".c",
-                                  0);
-  g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
-                                  IDE_TYPE_HTML_LANGUAGE,
-                                  IDE_LANGUAGE_EXTENSION_POINT".html",
-                                  0);
-  g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
-                                  IDE_TYPE_PYTHON_LANGUAGE,
-                                  IDE_LANGUAGE_EXTENSION_POINT".python",
-                                  0);
-  g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
-                                  IDE_TYPE_XML_LANGUAGE,
-                                  IDE_LANGUAGE_EXTENSION_POINT".xml",
-                                  0);
-  g_io_extension_point_implement (IDE_LANGUAGE_EXTENSION_POINT,
-                                  IDE_TYPE_VALA_LANGUAGE,
-                                  IDE_LANGUAGE_EXTENSION_POINT".vala",
-                                  0);
 
   g_io_extension_point_implement (IDE_PROJECT_MINER_EXTENSION_POINT,
                                   IDE_TYPE_AUTOTOOLS_PROJECT_MINER,
@@ -164,19 +125,6 @@ ide_init_ctor (void)
                                   IDE_TYPE_PYGOBJECT_SCRIPT,
                                   IDE_SCRIPT_EXTENSION_POINT".py",
                                   -100);
-
-  g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
-                                  IDE_TYPE_CLANG_SERVICE,
-                                  IDE_SERVICE_EXTENSION_POINT".clang",
-                                  -100);
-  g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
-                                  IDE_TYPE_CTAGS_SERVICE,
-                                  IDE_SERVICE_EXTENSION_POINT".ctags",
-                                  -100);
-  g_io_extension_point_implement (IDE_SERVICE_EXTENSION_POINT,
-                                  IDE_TYPE_GCA_SERVICE,
-                                  IDE_SERVICE_EXTENSION_POINT".gca",
-                                  -200);
 
   g_io_extension_point_implement (IDE_VCS_EXTENSION_POINT,
                                   IDE_TYPE_GIT_VCS,

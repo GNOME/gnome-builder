@@ -1,0 +1,9 @@
+[Plugin]
+Module=html-completion-plugin
+Name=HTML Auto-Completion
+Description=Provides auto-completion when authoring HTML documents.
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2015 Christian Hergert
+Builtin=true
+Hidden=true
+X-Completion-Provider-Languages=asp,html,php

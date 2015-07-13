@@ -19,6 +19,8 @@
 #ifndef IDE_DIAGNOSTICIAN_H
 #define IDE_DIAGNOSTICIAN_H
 
+#include <gtksourceview/gtksource.h>
+
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -27,14 +29,17 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeDiagnostician, ide_diagnostician, IDE, DIAGNOSTICIAN, IdeObject)
 
-void            ide_diagnostician_diagnose_async  (IdeDiagnostician     *diagnostician,
-                                                   IdeFile              *file,
-                                                   GCancellable         *cancellable,
-                                                   GAsyncReadyCallback   callback,
-                                                   gpointer              user_data);
-IdeDiagnostics *ide_diagnostician_diagnose_finish (IdeDiagnostician     *diagnostician,
-                                                   GAsyncResult         *result,
-                                                   GError              **error);
+GtkSourceLanguage *ide_diagnostician_get_language    (IdeDiagnostician     *self);
+void               ide_diagnostician_set_language    (IdeDiagnostician     *self,
+                                                      GtkSourceLanguage    *language);
+void               ide_diagnostician_diagnose_async  (IdeDiagnostician     *diagnostician,
+                                                      IdeFile              *file,
+                                                      GCancellable         *cancellable,
+                                                      GAsyncReadyCallback   callback,
+                                                      gpointer              user_data);
+IdeDiagnostics    *ide_diagnostician_diagnose_finish (IdeDiagnostician     *diagnostician,
+                                                      GAsyncResult         *result,
+                                                      GError              **error);
 
 G_END_DECLS
 

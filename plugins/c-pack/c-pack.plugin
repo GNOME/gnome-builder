@@ -1,0 +1,12 @@
+[Plugin]
+Module=c-pack-plugin
+Name=C Language Enablement
+Description=Provides language support for the C programming language.
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2015 Christian Hergert
+Builtin=true
+Hidden=true
+X-Indenter-Languages=c,chdr
+X-Indenter-Languages-Priority=0
+X-Completion-Provider-Languages=c,chdr
+X-Completion-Provider-Languages-Priority=0

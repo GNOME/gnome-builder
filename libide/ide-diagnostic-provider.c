@@ -16,21 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-diagnostic-provider"
+
+#include "ide-context.h"
 #include "ide-diagnostic-provider.h"
 #include "ide-file.h"
 
-G_DEFINE_ABSTRACT_TYPE (IdeDiagnosticProvider,
-                        ide_diagnostic_provider,
-                        IDE_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, IDE_TYPE_OBJECT)
 
 static void
-ide_diagnostic_provider_class_init (IdeDiagnosticProviderClass *klass)
+ide_diagnostic_provider_default_init (IdeDiagnosticProviderInterface *iface)
 {
-}
-
-static void
-ide_diagnostic_provider_init (IdeDiagnosticProvider *self)
-{
+  g_object_interface_install_property (iface,
+                                       g_param_spec_object ("context",
+                                                            "Context",
+                                                            "Context",
+                                                            IDE_TYPE_CONTEXT,
+                                                            (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 }
 
 void
@@ -44,10 +46,16 @@ ide_diagnostic_provider_diagnose_async  (IdeDiagnosticProvider *self,
   g_return_if_fail (IDE_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (IDE_DIAGNOSTIC_PROVIDER_GET_CLASS (self)->diagnose_async)
-    IDE_DIAGNOSTIC_PROVIDER_GET_CLASS (self)->diagnose_async (self, file, cancellable, callback, user_data);
+  IDE_DIAGNOSTIC_PROVIDER_GET_IFACE (self)->diagnose_async (self, file, cancellable, callback, user_data);
 }
 
+/**
+ * ide_diagnostic_provider_diagnose_finish:
+ *
+ * Completes an asynchronous call to ide_diagnostic_provider_diagnose_async().
+ *
+ * Returns: (transfer full): #IdeDiagnostics or %NULL and @error is set.
+ */
 IdeDiagnostics *
 ide_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *self,
                                          GAsyncResult           *result,
@@ -56,8 +64,5 @@ ide_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *self,
   g_return_val_if_fail (IDE_IS_DIAGNOSTIC_PROVIDER (self), NULL);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
-  if (IDE_DIAGNOSTIC_PROVIDER_GET_CLASS (self)->diagnose_finish)
-    return IDE_DIAGNOSTIC_PROVIDER_GET_CLASS (self)->diagnose_finish (self, result, error);
-
-  return NULL;
+  return IDE_DIAGNOSTIC_PROVIDER_GET_IFACE (self)->diagnose_finish (self, result, error);
 }

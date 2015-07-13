@@ -7,8 +7,6 @@ pkglibdir = $(libdir)/gnome-builder
 pkglib_LTLIBRARIES = libide-1.0.la
 
 libide_1_0_la_public_sources = \
-	c/ide-c-language.c \
-	c/ide-c-language.h \
 	directory/ide-directory-build-system.c \
 	directory/ide-directory-build-system.h \
 	directory/ide-directory-vcs.c \
@@ -21,8 +19,6 @@ libide_1_0_la_public_sources = \
 	git/ide-git-remote-callbacks.h \
 	git/ide-git-vcs.c \
 	git/ide-git-vcs.h \
-	html/ide-html-language.c \
-	html/ide-html-language.h \
 	ide-back-forward-item.c \
 	ide-back-forward-item.h \
 	ide-back-forward-list.c \
@@ -39,6 +35,8 @@ libide_1_0_la_public_sources = \
 	ide-build-system.h \
 	ide-builder.c \
 	ide-builder.h \
+	ide-completion-provider.c \
+	ide-completion-provider.h \
 	ide-context.c \
 	ide-context.h \
 	ide-debugger.c \
@@ -65,6 +63,10 @@ libide_1_0_la_public_sources = \
 	ide-executable.h \
 	ide-executer.c \
 	ide-executer.h \
+	ide-extension-adapter.c \
+	ide-extension-adapter.h \
+	ide-extension-set-adapter.c \
+	ide-extension-set-adapter.h \
 	ide-file-settings.c \
 	ide-file-settings.defs \
 	ide-file-settings.h \
@@ -82,8 +84,6 @@ libide_1_0_la_public_sources = \
 	ide-indent-style.h \
 	ide-indenter.c \
 	ide-indenter.h \
-	ide-language.c \
-	ide-language.h \
 	ide-log.c \
 	ide-log.h \
 	ide-macros.h \
@@ -176,16 +176,8 @@ libide_1_0_la_public_sources = \
 	ide.h \
 	local/ide-local-device.c \
 	local/ide-local-device.h \
-	mingw/ide-mingw-device.c \
-	mingw/ide-mingw-device.h \
-	python/ide-python-language.c \
-	python/ide-python-language.h \
 	theatrics/ide-animation.c \
 	theatrics/ide-animation.h \
-	vala/ide-vala-language.c \
-	vala/ide-vala-language.h \
-	xml/ide-xml-language.c \
-	xml/ide-xml-language.h \
 	$(NULL)
 
 libide_1_0_la_SOURCES = \
@@ -202,58 +194,10 @@ libide_1_0_la_SOURCES = \
 	autotools/ide-makecache-target.h \
 	autotools/ide-makecache.c \
 	autotools/ide-makecache.h \
-	c/c-parse-helper.c \
-	c/c-parse-helper.h \
-	c/ide-c-format-provider.c \
-	c/ide-c-format-provider.h \
-	c/ide-c-indenter.c \
-	c/ide-c-indenter.h \
-	clang/ide-clang-completion-item.c \
-	clang/ide-clang-completion-item.h \
-	clang/ide-clang-completion-provider.c \
-	clang/ide-clang-completion-provider.h \
-	clang/ide-clang-diagnostic-provider.c \
-	clang/ide-clang-diagnostic-provider.h \
-	clang/ide-clang-highlighter.c \
-	clang/ide-clang-highlighter.h \
-	clang/ide-clang-private.h \
-	clang/ide-clang-service.c \
-	clang/ide-clang-service.h \
-	clang/ide-clang-symbol-resolver.c \
-	clang/ide-clang-symbol-resolver.h \
-	clang/ide-clang-symbol-node.c \
-	clang/ide-clang-symbol-node.h \
-	clang/ide-clang-symbol-tree.c \
-	clang/ide-clang-symbol-tree.h \
-	clang/ide-clang-translation-unit.c \
-	clang/ide-clang-translation-unit.h \
-	ctags/ide-ctags-builder.c \
-	ctags/ide-ctags-builder.h \
-	ctags/ide-ctags-completion-item.c \
-	ctags/ide-ctags-completion-item.h \
-	ctags/ide-ctags-completion-provider.c \
-	ctags/ide-ctags-completion-provider.h \
-	ctags/ide-ctags-highlighter.c \
-	ctags/ide-ctags-highlighter.h \
-	ctags/ide-ctags-index.c \
-	ctags/ide-ctags-index.h \
-	ctags/ide-ctags-service.c \
-	ctags/ide-ctags-service.h \
 	editorconfig/editorconfig-glib.c \
 	editorconfig/editorconfig-glib.h \
 	editorconfig/ide-editorconfig-file-settings.c \
 	editorconfig/ide-editorconfig-file-settings.h \
-	gca/gca-diagnostics.c \
-	gca/gca-diagnostics.h \
-	gca/gca-service.c \
-	gca/gca-service.h \
-	gca/gca-structs.c \
-	gca/gca-structs.h \
-	gca/ide-gca-diagnostic-provider.c \
-	gca/ide-gca-diagnostic-provider.h \
-	gca/ide-gca-service.c \
-	gca/ide-gca-service.h \
-	gca/ide-gca-service.h \
 	gconstructor.h \
 	git/ide-git-buffer-change-monitor.c \
 	git/ide-git-buffer-change-monitor.h \
@@ -263,13 +207,13 @@ libide_1_0_la_SOURCES = \
 	gsettings/ide-gsettings-file-settings.h \
 	gsettings/ide-language-defaults.c \
 	gsettings/ide-language-defaults.h \
-	html/ide-html-completion-provider.c \
-	html/ide-html-completion-provider.h \
 	ide-async-helper.c \
 	ide-async-helper.h \
 	ide-battery-monitor.c \
 	ide-battery-monitor.h \
 	ide-debug.h \
+	ide-extension-util.c \
+	ide-extension-util.h \
 	ide-internal.h \
 	ide-line-change-gutter-renderer.c \
 	ide-line-change-gutter-renderer.h \
@@ -294,20 +238,12 @@ libide_1_0_la_SOURCES = \
 	ide-source-view-movements.h \
 	ide-vim-iter.c \
 	ide-vim-iter.h \
-	mingw/ide-mingw-device-provider.c \
-	mingw/ide-mingw-device-provider.h \
 	modelines/ide-modelines-file-settings.c \
 	modelines/ide-modelines-file-settings.h \
 	modelines/modeline-parser.c \
 	modelines/modeline-parser.h \
 	pygobject/ide-pygobject-script.c \
 	pygobject/ide-pygobject-script.h \
-	python/ide-python-format-provider.c \
-	python/ide-python-format-provider.h \
-	python/ide-python-indenter.c \
-	python/ide-python-indenter.h \
-	tasks/ide-load-directory-task.c \
-	tasks/ide-load-directory-task.h \
 	theatrics/ide-box-theatric.c \
 	theatrics/ide-box-theatric.h \
 	theatrics/ide-frame-source.c \
@@ -322,17 +258,10 @@ libide_1_0_la_SOURCES = \
 	util/ide-pango.h \
 	util/ide-rgba.c \
 	util/ide-rgba.h \
-	util/ide-xml.c \
-	util/ide-xml.h \
-	xml/ide-xml-highlighter.c \
-	xml/ide-xml-highlighter.h \
-	xml/ide-xml-indenter.c \
-	xml/ide-xml-indenter.h \
 	$(NULL)
 
 libide_1_0_la_includes = \
 	$(DEBUG_CFLAGS) \
-	$(CLANG_CFLAGS) \
 	-DLIBDIR="\"$(libdir)\"" \
 	-I$(top_builddir)/libide \
 	-I$(top_srcdir)/contrib/egg \
@@ -341,28 +270,18 @@ libide_1_0_la_includes = \
 	-I$(top_srcdir)/contrib/xml \
 	-I$(srcdir) \
 	-I$(srcdir)/autotools \
-	-I$(srcdir)/c \
-	-I$(srcdir)/clang \
-	-I$(srcdir)/ctags \
 	-I$(srcdir)/directory \
 	-I$(srcdir)/doap \
 	-I$(srcdir)/editorconfig \
-	-I$(srcdir)/gca \
 	-I$(srcdir)/git \
 	-I$(srcdir)/gjs \
 	-I$(srcdir)/gsettings \
-	-I$(srcdir)/html \
 	-I$(srcdir)/local \
-	-I$(srcdir)/mingw \
 	-I$(srcdir)/modelines \
 	-I$(srcdir)/pygobject \
-	-I$(srcdir)/python \
 	-I$(srcdir)/resources \
-	-I$(srcdir)/tasks \
 	-I$(srcdir)/theatrics \
 	-I$(srcdir)/util \
-	-I$(srcdir)/vala \
-	-I$(srcdir)/xml \
 	$(NULL)
 
 libide_1_0_la_CPPFLAGS = \
@@ -393,10 +312,8 @@ libide_1_0_la_LDFLAGS = \
 	$(NULL)
 
 libide_1_0_la_LIBADD = \
-	$(CLANG_LDFLAGS) \
 	$(LIBIDE_LIBS) \
 	$(SHM_LIB) \
-	-lclang \
 	-lm \
 	$(top_builddir)/contrib/egg/libegg.la \
 	$(top_builddir)/contrib/libeditorconfig/libeditorconfig.la \
@@ -449,7 +366,7 @@ introspection_sources = \
 	$(NULL)
 
 Ide-1.0.gir: libide-1.0.la
-Ide_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Ggit-1.0
+Ide_1_0_gir_INCLUDES = Gio-2.0 GtkSource-3.0 Ggit-1.0 Peas-1.0
 Ide_1_0_gir_CFLAGS = $(libide_1_0_la_CFLAGS)
 Ide_1_0_gir_LIBS = libide-1.0.la
 Ide_1_0_gir_FILES = $(introspection_sources)

@@ -24,29 +24,24 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DEVICE_PROVIDER            (ide_device_provider_get_type())
-#define IDE_DEVICE_PROVIDER_EXTENSION_POINT "org.gnome.libide.extensions.device-provider"
+#define IDE_TYPE_DEVICE_PROVIDER (ide_device_provider_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeDeviceProvider, ide_device_provider,
-                          IDE, DEVICE_PROVIDER, IdeObject)
+G_DECLARE_INTERFACE (IdeDeviceProvider, ide_device_provider, IDE, DEVICE_PROVIDER, IdeObject)
 
-struct _IdeDeviceProviderClass
+struct _IdeDeviceProviderInterface
 {
-  IdeObjectClass parent;
+  GTypeInterface parent_interface;
 
-  void     (*device_added)   (IdeDeviceProvider *provider,
-                              IdeDevice         *device);
-  void     (*device_removed) (IdeDeviceProvider *provider,
-                              IdeDevice         *device);
-  gboolean (*get_settled)    (IdeDeviceProvider *provider);
+  gboolean   (*get_settled) (IdeDeviceProvider *provider);
+  GPtrArray *(*get_devices) (IdeDeviceProvider *provider);
 };
 
-void       ide_device_provider_device_added   (IdeDeviceProvider *provider,
-                                               IdeDevice         *device);
-void       ide_device_provider_device_removed (IdeDeviceProvider *provider,
-                                               IdeDevice         *device);
-GPtrArray *ide_device_provider_get_devices    (IdeDeviceProvider *provider);
-gboolean   ide_device_provider_get_settled    (IdeDeviceProvider *provider);
+void       ide_device_provider_emit_device_added   (IdeDeviceProvider *provider,
+                                                    IdeDevice         *device);
+void       ide_device_provider_emit_device_removed (IdeDeviceProvider *provider,
+                                                    IdeDevice         *device);
+GPtrArray *ide_device_provider_get_devices         (IdeDeviceProvider *provider);
+gboolean   ide_device_provider_get_settled         (IdeDeviceProvider *provider);
 
 G_END_DECLS
 

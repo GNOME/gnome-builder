@@ -1,0 +1,12 @@
+[Plugin]
+Module=python-pack-plugin
+Name=Python Enablement
+Description=Provides support for the Python programming language.
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2015 Christian Hergert
+Builtin=true
+Hidden=true
+X-Indenter-Languages=python,python3
+X-Indenter-Languages-Priority=0
+X-Completion-Provider-Languages=python,python3
+X-Completion-Provider-Languages-Priority=0

@@ -20,19 +20,18 @@
 #define IDE_HIGHLIGHT_ENGINE_H
 
 #include "ide-buffer.h"
+#include "ide-object.h"
 #include "ide-highlighter.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_HIGHLIGHT_ENGINE (ide_highlight_engine_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeHighlightEngine, ide_highlight_engine, IDE, HIGHLIGHT_ENGINE, GObject)
+G_DECLARE_FINAL_TYPE (IdeHighlightEngine, ide_highlight_engine, IDE, HIGHLIGHT_ENGINE, IdeObject)
 
 IdeHighlightEngine *ide_highlight_engine_new             (IdeBuffer          *buffer);
 IdeBuffer          *ide_highlight_engine_get_buffer      (IdeHighlightEngine *self);
 IdeHighlighter     *ide_highlight_engine_get_highlighter (IdeHighlightEngine *self);
-void                ide_highlight_engine_set_highlighter (IdeHighlightEngine *self,
-                                                          IdeHighlighter     *highlighter);
 void                ide_highlight_engine_rebuild         (IdeHighlightEngine *self);
 void                ide_highlight_engine_invalidate      (IdeHighlightEngine *self,
                                                           const GtkTextIter  *begin,

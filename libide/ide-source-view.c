@@ -30,17 +30,19 @@
 #include "ide-buffer.h"
 #include "ide-buffer-manager.h"
 #include "ide-cairo.h"
+#include "ide-completion-provider.h"
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-diagnostic.h"
 #include "ide-enums.h"
+#include "ide-extension-adapter.h"
+#include "ide-extension-set-adapter.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
 #include "ide-fixit.h"
 #include "ide-highlighter.h"
 #include "ide-internal.h"
 #include "ide-indenter.h"
-#include "ide-language.h"
 #include "ide-line-change-gutter-renderer.h"
 #include "ide-line-diagnostics-gutter-renderer.h"
 #include "ide-pango.h"
@@ -87,7 +89,7 @@ typedef struct
   GtkCssProvider              *css_provider;
   IdeFileSettings             *file_settings;
   PangoFontDescription        *font_desc;
-  IdeIndenter                 *indenter;
+  IdeExtensionAdapter         *indenter_adapter;
   GtkSourceGutterRenderer     *line_change_renderer;
   GtkSourceGutterRenderer     *line_diagnostics_renderer;
   IdeSourceViewCapture        *capture;
@@ -103,6 +105,9 @@ typedef struct
   GtkSourceSearchContext      *search_context;
   IdeAnimation                *hadj_animation;
   IdeAnimation                *vadj_animation;
+
+  IdeExtensionSetAdapter      *completion_providers;
+  EggSignalGroup              *completion_providers_signals;
 
   EggBindingGroup             *file_setting_bindings;
   EggSignalGroup              *buffer_signals;
@@ -170,6 +175,7 @@ enum {
   PROP_FILE_SETTINGS,
   PROP_FONT_NAME,
   PROP_FONT_DESC,
+  PROP_INDENTER,
   PROP_INDENT_STYLE,
   PROP_INSERT_MATCHING_BRACE,
   PROP_MODE_DISPLAY_NAME,
@@ -387,6 +393,19 @@ _ide_source_view_set_modifier (IdeSourceView *self,
 
   if (priv->recording_macro && !priv->in_replay_macro)
     ide_source_view_capture_record_modifier (priv->capture, modifier);
+}
+
+static IdeIndenter *
+ide_source_view_get_indenter (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (priv->indenter_adapter != NULL)
+    return ide_extension_adapter_get_extension (priv->indenter_adapter);
+
+  return NULL;
 }
 
 static void
@@ -844,31 +863,20 @@ ide_source_view_reload_snippets (IdeSourceView *self)
 }
 
 static void
-ide_source_view_reload_indenter (IdeSourceView *self)
+ide_source_view_update_auto_indent_override (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  IdeIndenter *indenter;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  if (priv->auto_indent && !priv->indenter)
+  indenter = ide_source_view_get_indenter (self);
+
+  if (priv->auto_indent && (indenter == NULL))
     gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (self), TRUE);
   else
     gtk_source_view_set_auto_indent (GTK_SOURCE_VIEW (self), FALSE);
 }
-
-static void
-ide_source_view_set_indenter (IdeSourceView *self,
-                              IdeIndenter   *indenter)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (!indenter || IDE_IS_INDENTER (indenter));
-
-  if (g_set_object (&priv->indenter, indenter))
-    ide_source_view_reload_indenter (self);
-}
-
 
 static void
 ide_source_view_connect_settings (IdeSourceView   *self,
@@ -966,29 +974,14 @@ ide_source_view_reload_file_settings (IdeSourceView *self)
 static void
 ide_source_view_reload_language (IdeSourceView *self)
 {
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkSourceCompletion *completion;
+  GtkSourceLanguage *language;
   GtkTextBuffer *buffer;
   IdeFile *file = NULL;
-  IdeLanguage *language = NULL;
-  GtkSourceLanguage *source_language = NULL;
-  IdeIndenter *indenter;
-  GList *list;
-  GList *iter;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   /*
-   * Unload any currently loaded completion providers.
-   */
-  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
-  for (iter = priv->providers; iter; iter = iter->next)
-    gtk_source_completion_remove_provider (completion, iter->data, NULL);
-  g_list_free_full (priv->providers, g_object_unref);
-  priv->providers = NULL;
-
-  /*
-   * Update source language, indenter, etc.
+   * Update source language, etc.
    */
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   file = ide_buffer_get_file (IDE_BUFFER (buffer));
@@ -996,21 +989,9 @@ ide_source_view_reload_language (IdeSourceView *self)
 
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_FILE (file));
-  g_assert (IDE_IS_LANGUAGE (language));
+  g_assert (!language || GTK_SOURCE_IS_LANGUAGE (language));
 
-  source_language = ide_language_get_source_language (language);
-  gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), source_language);
-
-  indenter = ide_language_get_indenter (language);
-  ide_source_view_set_indenter (self, indenter);
-
-  /*
-   * Load the languages custom providers.
-   */
-  list = ide_language_get_completion_providers (language);
-  for (iter = list; iter; iter = iter->next)
-    gtk_source_completion_add_provider (completion, iter->data, NULL);
-  priv->providers = list;
+  gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), language);
 }
 
 static void
@@ -1031,8 +1012,29 @@ ide_source_view__buffer_notify_language_cb (IdeSourceView *self,
                                             GParamSpec    *pspec,
                                             IdeBuffer     *buffer)
 {
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceLanguage *language;
+  const gchar *lang_id = NULL;
+
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
+
+  if ((language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))))
+    lang_id = gtk_source_language_get_id (language);
+
+  /*
+   * Update the indenter, which is provided by a plugin.
+   */
+  if (priv->indenter_adapter != NULL)
+    ide_extension_adapter_set_value (priv->indenter_adapter, lang_id);
+  ide_source_view_update_auto_indent_override (self);
+  g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_INDENTER]);
+
+  /*
+   * Update the completion providers, which are provided by plugins.
+   */
+  if (priv->completion_providers != NULL)
+    ide_extension_set_adapter_set_value (priv->completion_providers, lang_id);
 }
 
 static void
@@ -1381,6 +1383,46 @@ ide_source_view__buffer_loaded_cb (IdeSourceView *self,
 }
 
 static void
+ide_source_view__completion_provider_added (IdeExtensionSetAdapter *adapter,
+                                            PeasPluginInfo         *plugin_info,
+                                            PeasExtension          *extension,
+                                            IdeSourceView          *self)
+{
+  GtkSourceCompletion *completion;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_COMPLETION_PROVIDER (extension));
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+
+  gtk_source_completion_add_provider (completion,
+                                      GTK_SOURCE_COMPLETION_PROVIDER (extension),
+                                      NULL);
+}
+
+static void
+ide_source_view__completion_provider_removed (IdeExtensionSetAdapter *adapter,
+                                              PeasPluginInfo         *plugin_info,
+                                              PeasExtension          *extension,
+                                              IdeSourceView          *self)
+{
+  GtkSourceCompletion *completion;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_COMPLETION_PROVIDER (extension));
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
+
+  gtk_source_completion_remove_provider (completion,
+                                         GTK_SOURCE_COMPLETION_PROVIDER (extension),
+                                         NULL);
+}
+
+static void
 ide_source_view_bind_buffer (IdeSourceView  *self,
                              IdeBuffer      *buffer,
                              EggSignalGroup *group)
@@ -1389,6 +1431,7 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   GtkSourceSearchSettings *search_settings;
   GtkTextMark *insert;
   GtkTextIter iter;
+  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -1408,6 +1451,27 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
       gtk_source_completion_block_interactive (completion);
       priv->completion_blocked = TRUE;
     }
+
+  context = ide_buffer_get_context (buffer);
+
+  priv->indenter_adapter = ide_extension_adapter_new (context,
+                                                      peas_engine_get_default (),
+                                                      IDE_TYPE_INDENTER,
+                                                      "Indenter-Languages",
+                                                      NULL);
+
+  priv->completion_providers = ide_extension_set_adapter_new (context,
+                                                              peas_engine_get_default (),
+                                                              IDE_TYPE_COMPLETION_PROVIDER,
+                                                              "Completion-Provider-Languages",
+                                                              NULL);
+
+  egg_signal_group_set_target (priv->completion_providers_signals,
+                               priv->completion_providers);
+
+  ide_extension_set_adapter_foreach (priv->completion_providers,
+                                     (IdeExtensionSetAdapterForeachFunc)ide_source_view__completion_provider_added,
+                                     self);
 
   search_settings = g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
                                   "wrap-around", TRUE,
@@ -1474,9 +1538,15 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
       priv->completion_blocked = FALSE;
     }
 
-  g_clear_object (&priv->search_context);
+  ide_extension_set_adapter_foreach (priv->completion_providers,
+                                     (IdeExtensionSetAdapterForeachFunc)ide_source_view__completion_provider_removed,
+                                     self);
 
-  ide_source_view_set_indenter (self, NULL);
+  egg_signal_group_set_target (priv->completion_providers_signals, NULL);
+
+  g_clear_object (&priv->search_context);
+  g_clear_object (&priv->indenter_adapter);
+  g_clear_object (&priv->completion_providers);
 
   ide_buffer_release (priv->buffer);
 }
@@ -1801,10 +1871,12 @@ ide_source_view_maybe_delete_match (IdeSourceView *self,
 
 static void
 ide_source_view_do_indent (IdeSourceView *self,
-                           GdkEventKey   *event)
+                           GdkEventKey   *event,
+                           IdeIndenter   *indenter)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkWidget *widget = (GtkWidget *)self;
+  GtkTextView *text_view = (GtkTextView *)self;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   g_autofree gchar *indent = NULL;
@@ -1817,10 +1889,11 @@ ide_source_view_do_indent (IdeSourceView *self,
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (event);
+  g_assert (!indenter || IDE_IS_INDENTER (indenter));
 
   at_bottom = ide_source_view_get_at_bottom (self);
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  buffer = gtk_text_view_get_buffer (text_view);
 
   /*
    * Insert into the buffer so the auto-indenter can see it. If
@@ -1836,11 +1909,13 @@ ide_source_view_do_indent (IdeSourceView *self,
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &begin, insert);
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (priv->buffer), &end, insert);
 
+  if (indenter == NULL)
+    IDE_EXIT;
+
   /*
    * Let the formatter potentially set the replacement text.
    */
-  indent = ide_indenter_format (priv->indenter, GTK_TEXT_VIEW (self), &begin, &end,
-                                &cursor_offset, event);
+  indent = ide_indenter_format (indenter, text_view, &begin, &end, &cursor_offset, event);
 
   if (indent)
     {
@@ -1988,6 +2063,7 @@ ide_source_view_key_press_event (GtkWidget   *widget,
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   IdeSourceSnippet *snippet;
+  IdeIndenter *indenter;
   gboolean ret = FALSE;
   guint change_sequence;
 
@@ -2092,10 +2168,10 @@ ide_source_view_key_press_event (GtkWidget   *widget,
    */
   if ((priv->buffer != NULL) &&
       (priv->auto_indent != FALSE) &&
-      (priv->indenter != NULL) &&
-      ide_indenter_is_trigger (priv->indenter, event))
+      (indenter = ide_source_view_get_indenter (self)) &&
+      ide_indenter_is_trigger (indenter, event))
     {
-      ide_source_view_do_indent (self, event);
+      ide_source_view_do_indent (self, event, indenter);
       return TRUE;
     }
 
@@ -2291,12 +2367,14 @@ static void
 ide_source_view_real_auto_indent (IdeSourceView *self)
 {
   GtkTextView *text_view = (GtkTextView *)self;
+  IdeIndenter *indenter;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
+  indenter = ide_source_view_get_indenter (self);
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   insert = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
@@ -2341,7 +2419,7 @@ ide_source_view_real_auto_indent (IdeSourceView *self)
       else
         fake_event.key.keyval = gdk_unicode_to_keyval (ch);
 
-      ide_source_view_do_indent (self, &fake_event.key);
+      ide_source_view_do_indent (self, &fake_event.key, indenter);
     }
 }
 
@@ -2531,6 +2609,7 @@ ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextView *text_view = (GtkTextView *)self;
   GtkTextBuffer *buffer;
+  IdeIndenter *indenter;
   gboolean at_bottom;
   GdkEvent fake_event = { 0 };
   GString *gstr;
@@ -2553,7 +2632,8 @@ ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
   /*
    * If we do not have an indenter registered, just go ahead and insert text.
    */
-  if (!priv->auto_indent || !priv->indenter)
+  indenter = ide_source_view_get_indenter (self);
+  if (!priv->auto_indent || (indenter == NULL))
     {
       g_signal_emit_by_name (self, "insert-at-cursor", str);
       IDE_GOTO (maybe_scroll);
@@ -2598,7 +2678,7 @@ ide_source_view_real_insert_at_cursor_and_indent (IdeSourceView *self,
   else
     fake_event.key.keyval = gdk_unicode_to_keyval (g_utf8_get_char (str));
 
-  ide_source_view_do_indent (self, &fake_event.key);
+  ide_source_view_do_indent (self, &fake_event.key, indenter);
 
   gtk_text_buffer_end_user_action (buffer);
 
@@ -4794,7 +4874,7 @@ ide_source_view_dispose (GObject *object)
     }
 
   g_clear_object (&priv->capture);
-  g_clear_object (&priv->indenter);
+  g_clear_object (&priv->indenter_adapter);
   g_clear_object (&priv->line_change_renderer);
   g_clear_object (&priv->line_diagnostics_renderer);
   g_clear_object (&priv->snippets_provider);
@@ -4812,6 +4892,7 @@ ide_source_view_finalize (GObject *object)
   IdeSourceView *self = (IdeSourceView *)object;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
+  g_clear_object (&priv->completion_providers_signals);
   g_clear_pointer (&priv->font_desc, pango_font_description_free);
   g_clear_pointer (&priv->selections, g_queue_free);
   g_clear_pointer (&priv->snippets, g_queue_free);
@@ -4856,6 +4937,10 @@ ide_source_view_get_property (GObject    *object,
 
     case PROP_HIGHLIGHT_CURRENT_LINE:
       g_value_set_boolean (value, ide_source_view_get_highlight_current_line (self));
+      break;
+
+    case PROP_INDENTER:
+      g_value_set_object (value, ide_source_view_get_indenter (self));
       break;
 
     case PROP_INSERT_MATCHING_BRACE:
@@ -4928,7 +5013,7 @@ ide_source_view_set_property (GObject      *object,
     {
     case PROP_AUTO_INDENT:
       priv->auto_indent = !!g_value_get_boolean (value);
-      ide_source_view_reload_indenter (self);
+      ide_source_view_update_auto_indent_override (self);
       break;
 
     case PROP_BACK_FORWARD_LIST:
@@ -5129,6 +5214,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   g_object_class_override_property (object_class,
                                     PROP_HIGHLIGHT_CURRENT_LINE,
                                     "highlight-current-line");
+
+  gParamSpecs [PROP_INDENTER] =
+    g_param_spec_object ("indenter",
+                         _("Indenter"),
+                         _("Indenter"),
+                         IDE_TYPE_INDENTER,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_INDENT_STYLE] =
     g_param_spec_enum ("indent-style",
@@ -5775,6 +5867,20 @@ ide_source_view_init (IdeSourceView *self)
   priv->selections = g_queue_new ();
   priv->show_line_diagnostics = TRUE;
   priv->font_scale = FONT_SCALE_NORMAL;
+
+  priv->completion_providers_signals = egg_signal_group_new (IDE_TYPE_EXTENSION_SET_ADAPTER);
+
+  egg_signal_group_connect_object (priv->completion_providers_signals,
+                                   "extension-added",
+                                   G_CALLBACK (ide_source_view__completion_provider_added),
+                                   self,
+                                   0);
+
+  egg_signal_group_connect_object (priv->completion_providers_signals,
+                                   "extension-removed",
+                                   G_CALLBACK (ide_source_view__completion_provider_removed),
+                                   self,
+                                   0);
 
   priv->file_setting_bindings = egg_binding_group_new ();
   egg_binding_group_bind (priv->file_setting_bindings, "indent-width",

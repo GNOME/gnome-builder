@@ -25,13 +25,11 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DIAGNOSTIC_PROVIDER (ide_diagnostic_provider_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeDiagnosticProvider, ide_diagnostic_provider,
-                          IDE, DIAGNOSTIC_PROVIDER,
-                          IdeObject)
+G_DECLARE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, IDE, DIAGNOSTIC_PROVIDER, IdeObject)
 
-struct _IdeDiagnosticProviderClass
+struct _IdeDiagnosticProviderInterface
 {
-  IdeObjectClass parent;
+  GTypeInterface parent_interface;
 
   void            (*diagnose_async)  (IdeDiagnosticProvider  *self,
                                       IdeFile                *file,

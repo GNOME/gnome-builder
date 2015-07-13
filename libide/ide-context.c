@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-context"
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
 #include "ide-async-helper.h"
 #include "ide-back-forward-list.h"
@@ -30,7 +31,6 @@
 #include "ide-device-manager.h"
 #include "ide-global.h"
 #include "ide-internal.h"
-#include "ide-load-directory-task.h"
 #include "ide-project.h"
 #include "ide-project-item.h"
 #include "ide-project-files.h"
@@ -66,11 +66,11 @@ struct _IdeContext
   GFile                    *project_file;
   gchar                    *root_build_dir;
   gchar                    *recent_projects_path;
-  GHashTable               *services;
+  PeasExtensionSet         *services;
+  GHashTable               *services_by_gtype;
   IdeUnsavedFiles          *unsaved_files;
   IdeVcs                   *vcs;
 
-  guint                     services_started : 1;
   guint                     restored : 1;
   guint                     restoring : 1;
 
@@ -102,7 +102,13 @@ enum {
   LAST_PROP
 };
 
+enum {
+  LOADED,
+  LAST_SIGNAL
+};
+
 static GParamSpec *gParamSpecs [LAST_PROP];
+static guint gSignals [LAST_SIGNAL];
 
 /**
  * ide_context_get_recent_manager:
@@ -418,29 +424,6 @@ ide_context_get_search_engine (IdeContext *self)
   return self->search_engine;
 }
 
-static gpointer
-ide_context_create_service (IdeContext *self,
-                            GType       service_type)
-{
-  IdeService *service;
-
-  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
-  g_return_val_if_fail (g_type_is_a (service_type, IDE_TYPE_SERVICE), NULL);
-
-  service = g_object_new (service_type,
-                          "context", self,
-                          NULL);
-
-  g_hash_table_insert (self->services,
-                       GINT_TO_POINTER (service_type),
-                       service);
-
-  if (self->services_started)
-    ide_service_start (service);
-
-  return service;
-}
-
 /**
  * ide_context_get_service_typed:
  * @service_type: A #GType of the service desired.
@@ -464,23 +447,19 @@ ide_context_get_service_typed (IdeContext *self,
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
   g_return_val_if_fail (g_type_is_a (service_type, IDE_TYPE_SERVICE), NULL);
 
-  service = g_hash_table_lookup (self->services,
-                                 GINT_TO_POINTER (service_type));
-
-  if (service)
+  service = g_hash_table_lookup (self->services_by_gtype, GSIZE_TO_POINTER (service_type));
+  if (service != NULL)
     return service;
 
-  g_hash_table_iter_init (&iter, self->services);
+  g_hash_table_iter_init (&iter, self->services_by_gtype);
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      IdeService *item = value;
-
-      if (g_type_is_a (G_TYPE_FROM_INSTANCE (item), service_type))
-        return item;
+      if (g_type_is_a (service_type, GPOINTER_TO_SIZE (key)))
+        return value;
     }
 
-  return ide_context_create_service (self, service_type);
+  return NULL;
 }
 
 static GFile *
@@ -505,28 +484,38 @@ get_back_forward_list_file (IdeContext *self)
 }
 
 static void
+ide_context_service_notify_loaded (PeasExtensionSet *set,
+                                   PeasPluginInfo   *plugin_info,
+                                   PeasExtension    *exten,
+                                   gpointer          user_data)
+{
+  g_assert (IDE_IS_SERVICE (exten));
+
+  _ide_service_emit_loaded (IDE_SERVICE (exten));
+}
+
+static void
+ide_context_loaded (IdeContext *self)
+{
+  g_assert (IDE_IS_CONTEXT (self));
+
+  peas_extension_set_foreach (self->services,
+                              ide_context_service_notify_loaded,
+                              self);
+}
+
+static void
 ide_context_dispose (GObject *object)
 {
   IdeContext *self = (IdeContext *)object;
-  GHashTableIter iter;
-  gpointer key;
-  gpointer value;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
-  g_hash_table_iter_init (&iter, self->services);
-
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      IdeService *service = value;
-
-      g_assert (IDE_IS_SERVICE (service));
-
-      if (ide_service_get_running (service))
-        ide_service_stop (service);
-    }
+  /*
+   * TODO: Shutdown services.
+   */
 
   G_OBJECT_CLASS (ide_context_parent_class)->dispose (object);
 
@@ -745,6 +734,22 @@ ide_context_class_init (IdeContextClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
+
+  /**
+   * IdeContext::loaded:
+   *
+   * This signal is emitted when loading of the context has completed.
+   * Plugins and services might want to get notified of this to perform
+   * work that requires subsystems that may not be loaded during context
+   * startup.
+   */
+  gSignals [LOADED] =
+    g_signal_new_class_handler ("loaded",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_context_loaded),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE, 0);
 }
 
 static void
@@ -783,11 +788,6 @@ ide_context_init (IdeContext *self)
   self->project = g_object_new (IDE_TYPE_PROJECT,
                                 "context", self,
                                 NULL);
-
-  self->services = g_hash_table_new_full (g_direct_hash,
-                                          g_direct_equal,
-                                          NULL,
-                                          g_object_unref);
 
   self->unsaved_files = g_object_new (IDE_TYPE_UNSAVED_FILES,
                                       "context", self,
@@ -1159,63 +1159,75 @@ ide_context_init_back_forward_list (gpointer             source_object,
 }
 
 static void
+ide_context_service_added (PeasExtensionSet *set,
+                           PeasPluginInfo   *info,
+                           PeasExtension    *exten,
+                           gpointer          user_data)
+{
+  IdeContext *self = user_data;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (IDE_IS_SERVICE (exten));
+
+
+  g_hash_table_insert (self->services_by_gtype,
+                       GSIZE_TO_POINTER (G_OBJECT_TYPE (exten)),
+                       exten);
+
+  ide_service_start (IDE_SERVICE (exten));
+}
+
+static void
+ide_context_service_removed (PeasExtensionSet *set,
+                             PeasPluginInfo   *info,
+                             PeasExtension    *exten,
+                             gpointer          user_data)
+{
+  IdeContext *self = user_data;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (IDE_IS_SERVICE (exten));
+
+  ide_service_stop (IDE_SERVICE (exten));
+
+  g_hash_table_remove (self->services_by_gtype,
+                       GSIZE_TO_POINTER (G_OBJECT_TYPE (exten)));
+}
+
+static void
 ide_context_init_services (gpointer             source_object,
                            GCancellable        *cancellable,
                            GAsyncReadyCallback  callback,
                            gpointer             user_data)
 {
-  GIOExtensionPoint *point;
   IdeContext *self = source_object;
   g_autoptr(GTask) task = NULL;
-  const GList *extensions;
-  const GList *iter;
-  GHashTableIter hiter;
-  gpointer v;
 
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  point = g_io_extension_point_lookup (IDE_SERVICE_EXTENSION_POINT);
-  extensions = g_io_extension_point_get_extensions (point);
 
-  for (iter = extensions; iter; iter = iter->next)
-    {
-      GIOExtension *extension = iter->data;
-      IdeService *service;
-      GType type_id;
+  self->services_by_gtype = g_hash_table_new (NULL, NULL);
+  self->services = peas_extension_set_new (peas_engine_get_default (),
+                                           IDE_TYPE_SERVICE,
+                                           "context", self,
+                                           NULL);
 
-      type_id = g_io_extension_get_type (extension);
+  g_signal_connect_object (self->services,
+                           "extension-added",
+                           G_CALLBACK (ide_context_service_added),
+                           self,
+                           G_CONNECT_SWAPPED);
 
-      if (!g_type_is_a (type_id, IDE_TYPE_SERVICE))
-        {
-          g_warning (_("\"%s\" is not a service, ignoring extension point."),
-                     g_type_name (type_id));
-          continue;
-        }
+  g_signal_connect_object (self->services,
+                           "extension-removed",
+                           G_CALLBACK (ide_context_service_removed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
-      service = ide_context_get_service_typed (self, type_id);
-
-      if (!service)
-        {
-          g_warning (_("Failed to create service of type \"%s\"."),
-                     g_type_name (type_id));
-          continue;
-        }
-
-      g_debug (_("Service of type \"%s\" registered."), g_type_name (type_id));
-    }
-
-  self->services_started = TRUE;
-
-  g_hash_table_iter_init (&hiter, self->services);
-
-  while (g_hash_table_iter_next (&hiter, NULL, &v))
-    {
-      IdeService *service = v;
-
-      if (!ide_service_get_running (service))
-        ide_service_start (service);
-    }
+  peas_extension_set_foreach (self->services,
+                              (PeasExtensionSetForeachFunc)ide_context_service_added,
+                              self);
 
   g_task_return_boolean (task, TRUE);
 }
@@ -1331,6 +1343,24 @@ ide_context_init_search_engine (gpointer             source_object,
 }
 
 static void
+ide_context_init_loaded (gpointer             source_object,
+                         GCancellable        *cancellable,
+                         GAsyncReadyCallback  callback,
+                         gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  IdeContext *self = source_object;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  g_signal_emit (self, gSignals [LOADED], 0);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
 ide_context_init_async (GAsyncInitable      *initable,
                         int                  io_priority,
                         GCancellable        *cancellable,
@@ -1356,6 +1386,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_unsaved_files,
                         ide_context_init_add_recent,
                         ide_context_init_search_engine,
+                        ide_context_init_loaded,
                         NULL);
 }
 

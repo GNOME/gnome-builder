@@ -22,7 +22,9 @@
 #include <string.h>
 
 #include "egg-signal-group.h"
+
 #include "ide-debug.h"
+#include "ide-extension-adapter.h"
 #include "ide-highlight-engine.h"
 #include "ide-types.h"
 #include "ide-internal.h"
@@ -32,12 +34,14 @@
 
 struct _IdeHighlightEngine
 {
-  GObject         parent_instance;
+  IdeObject       parent_instance;
 
   EggSignalGroup *signal_group;
   IdeBuffer      *buffer;
   IdeHighlighter *highlighter;
   GSettings      *settings;
+
+  IdeExtensionAdapter *extension;
 
   GtkTextMark    *invalid_begin;
   GtkTextMark    *invalid_end;
@@ -52,7 +56,7 @@ struct _IdeHighlightEngine
   guint           enabled : 1;
 };
 
-G_DEFINE_TYPE (IdeHighlightEngine, ide_highlight_engine, G_TYPE_OBJECT)
+G_DEFINE_TYPE (IdeHighlightEngine, ide_highlight_engine, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -314,11 +318,12 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
   gtk_text_buffer_get_iter_at_mark (buffer, &invalid_begin, self->invalid_begin);
   gtk_text_buffer_get_iter_at_mark (buffer, &invalid_end, self->invalid_end);
 
-  IDE_TRACE_MSG ("Highlight Range [%u:%u,%u:%u]",
+  IDE_TRACE_MSG ("Highlight Range [%u:%u,%u:%u] (%s)",
                  gtk_text_iter_get_line (&invalid_begin),
                  gtk_text_iter_get_line_offset (&invalid_begin),
                  gtk_text_iter_get_line (&invalid_end),
-                 gtk_text_iter_get_line_offset (&invalid_end));
+                 gtk_text_iter_get_line_offset (&invalid_end),
+                 G_OBJECT_TYPE_NAME (self->highlighter));
 
   if (gtk_text_iter_compare (&invalid_begin, &invalid_end) >= 0)
     IDE_GOTO (up_to_date);
@@ -480,6 +485,22 @@ ide_highlight_engine_reload (IdeHighlightEngine *self)
 }
 
 static void
+ide_highlight_engine_set_highlighter (IdeHighlightEngine *self,
+                                      IdeHighlighter     *highlighter)
+{
+  g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
+  g_return_if_fail (!highlighter || IDE_IS_HIGHLIGHTER (highlighter));
+
+  if (g_set_object (&self->highlighter, highlighter))
+    {
+      if (highlighter != NULL)
+        IDE_HIGHLIGHTER_GET_IFACE (highlighter)->set_engine (highlighter, self);
+      ide_highlight_engine_reload (self);
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_HIGHLIGHTER]);
+    }
+}
+
+static void
 ide_highlight_engine__buffer_insert_text_cb (IdeHighlightEngine *self,
                                              GtkTextIter        *location,
                                              gchar              *text,
@@ -540,6 +561,23 @@ ide_highlight_engine__buffer_delete_range_cb (IdeHighlightEngine *self,
   invalidate_and_highlight (self, &begin, &end);
 
   IDE_EXIT;
+}
+
+static void
+ide_highlight_engine__notify_language_cb (IdeHighlightEngine *self,
+                                          GParamSpec         *pspec,
+                                          IdeBuffer          *buffer)
+{
+  GtkSourceLanguage *language;
+  const gchar *lang_id = NULL;
+
+  g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if ((language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))))
+    lang_id = gtk_source_language_get_id (language);
+
+  ide_extension_adapter_set_value (self->extension, lang_id);
 }
 
 static void
@@ -702,6 +740,37 @@ ide_highlight_engine_settings_changed (IdeHighlightEngine *self,
 }
 
 static void
+ide_highlight_engine__notify_extension (IdeHighlightEngine  *self,
+                                        GParamSpec          *pspec,
+                                        IdeExtensionAdapter *adapter)
+{
+  g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
+  g_assert (IDE_IS_EXTENSION_ADAPTER (adapter));
+
+  ide_highlight_engine_set_highlighter (self, ide_extension_adapter_get_extension (adapter));
+}
+
+static void
+ide_highlight_engine_constructed (GObject *object)
+{
+  IdeHighlightEngine *self = (IdeHighlightEngine *)object;
+
+  G_OBJECT_CLASS (ide_highlight_engine_parent_class)->constructed (object);
+
+  self->extension = ide_extension_adapter_new (ide_object_get_context (IDE_OBJECT (self)),
+                                               NULL,
+                                               IDE_TYPE_HIGHLIGHTER,
+                                               "Highlighter-Languages",
+                                               NULL);
+
+  g_signal_connect_object (self->extension,
+                           "notify::extension",
+                           G_CALLBACK (ide_highlight_engine__notify_extension),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
 ide_highlight_engine_dispose (GObject *object)
 {
   IdeHighlightEngine *self = (IdeHighlightEngine *)object;
@@ -716,6 +785,7 @@ ide_highlight_engine_finalize (GObject *object)
 {
   IdeHighlightEngine *self = (IdeHighlightEngine *)object;
 
+  g_clear_object (&self->extension);
   g_clear_object (&self->highlighter);
   g_clear_object (&self->settings);
   g_clear_object (&self->signal_group);
@@ -760,10 +830,6 @@ ide_highlight_engine_set_property (GObject      *object,
       ide_highlight_engine_set_buffer (self, g_value_get_object (value));
       break;
 
-    case PROP_HIGHLIGHTER:
-      ide_highlight_engine_set_highlighter (self, g_value_get_object (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -774,6 +840,7 @@ ide_highlight_engine_class_init (IdeHighlightEngineClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ide_highlight_engine_constructed;
   object_class->dispose = ide_highlight_engine_dispose;
   object_class->finalize = ide_highlight_engine_finalize;
   object_class->get_property = ide_highlight_engine_get_property;
@@ -791,7 +858,7 @@ ide_highlight_engine_class_init (IdeHighlightEngineClass *klass)
                          _("Highlighter"),
                          _("The highlighter to use for type information."),
                          IDE_TYPE_HIGHLIGHTER,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, gParamSpecs);
 
@@ -816,6 +883,12 @@ ide_highlight_engine_init (IdeHighlightEngine *self)
                                    G_CALLBACK (ide_highlight_engine__buffer_delete_range_cb),
                                    self,
                                    G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+
+  egg_signal_group_connect_object (self->signal_group,
+                                   "notify::language",
+                                   G_CALLBACK (ide_highlight_engine__notify_language_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 
   egg_signal_group_connect_object (self->signal_group,
                                    "notify::style-scheme",
@@ -845,8 +918,15 @@ ide_highlight_engine_init (IdeHighlightEngine *self)
 IdeHighlightEngine *
 ide_highlight_engine_new (IdeBuffer *buffer)
 {
+  IdeContext *context;
+
+  g_return_val_if_fail (IDE_IS_BUFFER (buffer), NULL);
+
+  context = ide_buffer_get_context (buffer);
+
   return g_object_new (IDE_TYPE_HIGHLIGHT_ENGINE,
                        "buffer", buffer,
+                       "context", context,
                        NULL);
 }
 
@@ -864,21 +944,6 @@ ide_highlight_engine_get_highlighter (IdeHighlightEngine *self)
   g_return_val_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self), NULL);
 
   return self->highlighter;
-}
-
-void
-ide_highlight_engine_set_highlighter (IdeHighlightEngine *self,
-                                      IdeHighlighter     *highlighter)
-{
-  g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_return_if_fail (!highlighter || IDE_IS_HIGHLIGHTER (highlighter));
-
-  if (g_set_object (&self->highlighter, highlighter))
-    {
-      _ide_highlighter_set_highlighter_engine (highlighter, self);
-      ide_highlight_engine_reload (self);
-      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_HIGHLIGHTER]);
-    }
 }
 
 /**

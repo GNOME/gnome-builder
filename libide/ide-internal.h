@@ -19,12 +19,10 @@
 #ifndef IDE_PRIVATE_H
 #define IDE_PRIVATE_H
 
-#include <clang-c/Index.h>
 #include <gtksourceview/gtksource.h>
 
 #include "ide-back-forward-item.h"
 #include "ide-back-forward-list.h"
-#include "ide-clang-translation-unit.h"
 #include "ide-diagnostic.h"
 #include "ide-types.h"
 #include "ide-settings.h"
@@ -78,10 +76,6 @@ void                _ide_diagnostic_take_fixit              (IdeDiagnostic      
                                                              IdeFixit              *fixit);
 void                _ide_diagnostic_take_range              (IdeDiagnostic         *self,
                                                              IdeSourceRange        *range);
-void                _ide_diagnostician_add_provider         (IdeDiagnostician      *self,
-                                                             IdeDiagnosticProvider *provider);
-void                _ide_diagnostician_remove_provider      (IdeDiagnostician      *self,
-                                                             IdeDiagnosticProvider *provider);
 IdeDiagnostics     *_ide_diagnostics_new                    (GPtrArray             *ar);
 const gchar        *_ide_file_get_content_type              (IdeFile               *self);
 GtkSourceFile      *_ide_file_set_content_type              (IdeFile               *self,
@@ -96,6 +90,7 @@ void                _ide_project_set_name                   (IdeProject         
 void                _ide_search_context_add_provider        (IdeSearchContext      *context,
                                                              IdeSearchProvider     *provider,
                                                              gsize                  max_results);
+void                _ide_service_emit_loaded                (IdeService            *service);
 IdeSettings        *_ide_settings_new                       (IdeContext            *context,
                                                              const gchar           *schema_id,
                                                              const gchar           *relative_path,

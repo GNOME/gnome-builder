@@ -53,7 +53,6 @@ G_BEGIN_DECLS
 #include "ide-highlight-engine.h"
 #include "ide-highlighter.h"
 #include "ide-indenter.h"
-#include "ide-language.h"
 #include "ide-log.h"
 #include "ide-macros.h"
 #include "ide-object.h"
@@ -95,20 +94,14 @@ G_BEGIN_DECLS
 #include "ide-vcs-uri.h"
 
 #include "autotools/ide-autotools-build-system.h"
-#include "c/ide-c-language.h"
 #include "directory/ide-directory-build-system.h"
 #include "directory/ide-directory-vcs.h"
 #include "doap/ide-doap-person.h"
 #include "doap/ide-doap.h"
 #include "git/ide-git-remote-callbacks.h"
 #include "git/ide-git-vcs.h"
-#include "html/ide-html-language.h"
 #include "local/ide-local-device.h"
-#include "mingw/ide-mingw-device.h"
-#include "python/ide-python-language.h"
 #include "theatrics/ide-animation.h"
-#include "vala/ide-vala-language.h"
-#include "xml/ide-xml-language.h"
 
 #undef IDE_INSIDE
 

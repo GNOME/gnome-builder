@@ -4,10 +4,10 @@ CLEANFILES =
 EXTRA_DIST = $(plugin_DATA)
 
 plugindir = $(libdir)/gnome-builder/plugins
-plugin_LTLIBRARIES = libdevhelp.la
+plugin_LTLIBRARIES = libdevhelp-plugin.la
 plugin_DATA = devhelp.plugin
 
-libdevhelp_la_SOURCES = \
+libdevhelp_plugin_la_SOURCES = \
 	gb-devhelp-document.c \
 	gb-devhelp-document.h \
 	gb-devhelp-panel.c \
@@ -24,7 +24,7 @@ libdevhelp_la_SOURCES = \
 	gb-devhelp-view.h \
 	$(NULL)
 
-libdevhelp_la_CFLAGS = \
+libdevhelp_plugin_la_CFLAGS = \
 	$(BUILDER_CFLAGS) \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/documents \
@@ -36,12 +36,12 @@ libdevhelp_la_CFLAGS = \
 	-I$(top_srcdir)/libide \
 	$(NULL)
 
-libdevhelp_la_LIBADD = \
+libdevhelp_plugin_la_LIBADD = \
 	$(BUILDER_LIBS) \
 	$(top_builddir)/libide/libide-1.0.la \
 	$(NULL)
 
-libdevhelp_la_LDFLAGS = \
+libdevhelp_plugin_la_LDFLAGS = \
 	$(OPTIMIZE_LDFLAGS) \
 	-avoid-version \
 	-module \

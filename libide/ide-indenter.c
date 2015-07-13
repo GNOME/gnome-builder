@@ -16,18 +16,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-indenter"
+
+#include "ide-context.h"
 #include "ide-indenter.h"
 
-G_DEFINE_ABSTRACT_TYPE (IdeIndenter, ide_indenter, IDE_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeIndenter, ide_indenter, IDE_TYPE_OBJECT)
 
-static void
-ide_indenter_class_init (IdeIndenterClass *klass)
+static gchar *
+ide_indenter_default_format (IdeIndenter *self,
+                             GtkTextView *text_view,
+                             GtkTextIter *begin,
+                             GtkTextIter *end,
+                             gint        *cursor_offset,
+                             GdkEventKey *event)
 {
+  return NULL;
+}
+
+static gboolean
+ide_indenter_default_is_trigger (IdeIndenter *self,
+                                 GdkEventKey *event)
+{
+  return FALSE;
 }
 
 static void
-ide_indenter_init (IdeIndenter *self)
+ide_indenter_default_init (IdeIndenterInterface *iface)
 {
+  iface->format = ide_indenter_default_format;
+  iface->is_trigger = ide_indenter_default_is_trigger;
+
+  g_object_interface_install_property (iface,
+                                       g_param_spec_object ("context",
+                                                            "Context",
+                                                            "Context",
+                                                            IDE_TYPE_CONTEXT,
+                                                            (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 }
 
 /**
@@ -64,15 +89,7 @@ ide_indenter_format (IdeIndenter *self,
   g_return_val_if_fail (cursor_offset, NULL);
   g_return_val_if_fail (event, NULL);
 
-  if (IDE_INDENTER_GET_CLASS (self)->format)
-    return IDE_INDENTER_GET_CLASS (self)->format (self,
-                                                  text_view,
-                                                  begin,
-                                                  end,
-                                                  cursor_offset,
-                                                  event);
-
-  return NULL;
+  return IDE_INDENTER_GET_IFACE (self)->format (self, text_view, begin, end, cursor_offset, event);
 }
 
 /**
@@ -92,8 +109,5 @@ ide_indenter_is_trigger (IdeIndenter *self,
   g_return_val_if_fail (IDE_IS_INDENTER (self), FALSE);
   g_return_val_if_fail (event, FALSE);
 
-  if (IDE_INDENTER_GET_CLASS (self)->is_trigger)
-    return IDE_INDENTER_GET_CLASS (self)->is_trigger (self, event);
-
-  return FALSE;
+  return IDE_INDENTER_GET_IFACE (self)->is_trigger (self, event);
 }

@@ -26,7 +26,6 @@
 #include "ide-debug.h"
 #include "ide-file.h"
 #include "ide-gsettings-file-settings.h"
-#include "ide-language.h"
 #include "ide-language-defaults.h"
 #include "ide-settings.h"
 
@@ -74,7 +73,7 @@ file_notify_language_cb (IdeGsettingsFileSettings *self,
                          IdeFile                  *file)
 {
   g_autofree gchar *relative_path = NULL;
-  IdeLanguage *language;
+  GtkSourceLanguage *language;
   const gchar *lang_id;
   IdeContext *context;
   gsize i;
@@ -88,7 +87,7 @@ file_notify_language_cb (IdeGsettingsFileSettings *self,
   if (language == NULL)
     IDE_EXIT;
 
-  lang_id = ide_language_get_id (language);
+  lang_id = gtk_source_language_get_id (language);
   if (lang_id == NULL)
     IDE_EXIT;
 

@@ -217,8 +217,8 @@ context_cb (GObject      *object,
 {
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GError) error = NULL;
-  IdeDiagnostician *diagnostician;
-  IdeLanguage *language;
+  g_autoptr(IdeDiagnostician) diagnostician = NULL;
+  GtkSourceLanguage *language;
   IdeProject *project;
   IdeFile *file;
   IdeVcs *vcs;
@@ -251,15 +251,11 @@ context_cb (GObject      *object,
     }
 
   language = ide_file_get_language (file);
-  diagnostician = ide_language_get_diagnostician (language);
 
-  if (!diagnostician)
-    {
-      g_printerr (_("No diagnostician for language \"%s\"\n"),
-                  ide_language_get_name (language));
-      quit (EXIT_FAILURE);
-      return;
-    }
+  diagnostician = g_object_new (IDE_TYPE_DIAGNOSTICIAN,
+                                "context", context,
+                                "language", language,
+                                NULL);
 
   ide_diagnostician_diagnose_async (diagnostician,
                                     file,

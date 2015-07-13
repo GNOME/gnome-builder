@@ -1,5 +1,5 @@
 [Plugin]
-Module=devhelp
+Module=devhelp-plugin
 Name=Devhelp
 Description=Provides devhelp documentation
 Authors=Christian Hergert <christian@hergert.me>

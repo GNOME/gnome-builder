@@ -27,11 +27,11 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_INDENTER (ide_indenter_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeIndenter, ide_indenter, IDE, INDENTER, IdeObject)
+G_DECLARE_INTERFACE (IdeIndenter, ide_indenter, IDE, INDENTER, IdeObject)
 
-struct _IdeIndenterClass
+struct _IdeIndenterInterface
 {
-  IdeObjectClass parent;
+  GTypeInterface parent;
 
   gchar    *(*format)     (IdeIndenter   *self,
                            GtkTextView   *text_view,

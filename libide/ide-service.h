@@ -23,24 +23,23 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SERVICE            (ide_service_get_type())
-#define IDE_SERVICE_EXTENSION_POINT "org.gnome.libide.extensions.service"
+#define IDE_TYPE_SERVICE (ide_service_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeService, ide_service, IDE, SERVICE, IdeObject)
+G_DECLARE_INTERFACE (IdeService, ide_service, IDE, SERVICE, IdeObject)
 
-struct _IdeServiceClass
+struct _IdeServiceInterface
 {
-  IdeObjectClass parent;
+  GTypeInterface parent_interface;
 
   const gchar *(*get_name) (IdeService *service);
+  void         (*loaded)   (IdeService *service);
   void         (*start)    (IdeService *service);
   void         (*stop)     (IdeService *service);
 };
 
-const gchar *ide_service_get_name    (IdeService *self);
-gboolean     ide_service_get_running (IdeService *self);
-void         ide_service_start       (IdeService *self);
-void         ide_service_stop        (IdeService *self);
+const gchar *ide_service_get_name (IdeService *self);
+void         ide_service_start    (IdeService *self);
+void         ide_service_stop     (IdeService *self);
 
 G_END_DECLS
 

@@ -31,12 +31,12 @@
 #include "ide-diagnostic.h"
 #include "ide-diagnostician.h"
 #include "ide-diagnostics.h"
+#include "ide-extension-adapter.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
 #include "ide-highlighter.h"
 #include "ide-highlight-engine.h"
 #include "ide-internal.h"
-#include "ide-language.h"
 #include "ide-source-location.h"
 #include "ide-source-range.h"
 #include "ide-symbol.h"
@@ -64,8 +64,9 @@ typedef struct
   IdeFile                *file;
   GBytes                 *content;
   IdeBufferChangeMonitor *change_monitor;
+  IdeDiagnostician       *diagnostician;
   IdeHighlightEngine     *highlight_engine;
-  IdeSymbolResolver      *symbol_resolver;
+  IdeExtensionAdapter    *symbol_resolver_adapter;
   gchar                  *title;
 
   EggSignalGroup         *file_signals;
@@ -496,30 +497,18 @@ ide_buffer__diagnose_timeout_cb (gpointer user_data)
 
   priv->diagnose_timeout = 0;
 
-  if (priv->file)
+  if (priv->file != NULL)
     {
-      IdeLanguage *language;
+      priv->diagnostics_dirty = FALSE;
+      priv->in_diagnose = TRUE;
+      g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUSY]);
 
-      language = ide_file_get_language (priv->file);
-
-      if (language)
-        {
-          IdeDiagnostician *diagnostician;
-
-          diagnostician = ide_language_get_diagnostician (language);
-
-          if (diagnostician)
-            {
-              priv->diagnostics_dirty = FALSE;
-              priv->in_diagnose = TRUE;
-              g_object_notify_by_pspec (G_OBJECT (self), gParamSpecs [PROP_BUSY]);
-
-              ide_buffer_sync_to_unsaved_files (self);
-              ide_diagnostician_diagnose_async (diagnostician, priv->file, NULL,
-                                                ide_buffer__diagnostician_diagnose_cb,
-                                                g_object_ref (self));
-            }
-        }
+      ide_buffer_sync_to_unsaved_files (self);
+      ide_diagnostician_diagnose_async (priv->diagnostician,
+                                        priv->file,
+                                        NULL,
+                                        ide_buffer__diagnostician_diagnose_cb,
+                                        g_object_ref (self));
     }
 
   return G_SOURCE_REMOVE;
@@ -558,47 +547,6 @@ ide_buffer_queue_diagnose (IdeBuffer *self)
   timeout_msec = ide_buffer_get_diagnose_timeout_msec ();
 
   priv->diagnose_timeout = g_timeout_add (timeout_msec, ide_buffer__diagnose_timeout_cb, self);
-}
-
-static void
-ide_buffer_reload_highlighter (IdeBuffer *self)
-{
-  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-  IdeHighlighter *highlighter = NULL;
-
-  g_assert (IDE_IS_BUFFER (self));
-
-  if (priv->file != NULL)
-    {
-      IdeLanguage *language;
-
-      language = ide_file_get_language (priv->file);
-      if (language != NULL)
-        highlighter = ide_language_get_highlighter (language);
-    }
-
-  if (priv->highlight_engine != NULL)
-    ide_highlight_engine_set_highlighter (priv->highlight_engine, highlighter);
-}
-
-static void
-ide_buffer_reload_symbol_provider (IdeBuffer *self)
-{
-  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-  IdeSymbolResolver *symbol_resolver = NULL;
-
-  g_assert (IDE_IS_BUFFER (self));
-
-  if (priv->file != NULL)
-    {
-      IdeLanguage *language;
-
-      language = ide_file_get_language (priv->file);
-      if (language != NULL)
-        symbol_resolver = ide_language_get_symbol_resolver (language);
-    }
-
-  g_set_object (&priv->symbol_resolver, symbol_resolver);
 }
 
 static void
@@ -876,8 +824,7 @@ ide_buffer__file_notify_language (IdeBuffer  *self,
                                   GParamSpec *pspec,
                                   IdeFile    *file)
 {
-  GtkSourceLanguage *source_language;
-  IdeLanguage *language;
+  GtkSourceLanguage *language;
 
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_FILE (file));
@@ -887,18 +834,35 @@ ide_buffer__file_notify_language (IdeBuffer  *self,
    *        This should be refactored as part of the move to libpeas.
    */
 
-  if ((language = ide_file_get_language (file)))
-    {
-      source_language = ide_language_get_source_language (language);
-      gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (self), source_language);
-    }
+  language = ide_file_get_language (file);
+  gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (self), language);
 
   ide_file_load_settings_async (file,
                                 NULL,
                                 ide_buffer__file_load_settings_cb,
                                 g_object_ref (self));
-  ide_buffer_reload_highlighter (self);
+
   ide_buffer_reload_change_monitor (self);
+}
+
+static void
+ide_buffer_notify_language (IdeBuffer  *self,
+                            GParamSpec *pspec,
+                            gpointer    unused)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  GtkSourceLanguage *language;
+  const gchar *lang_id = NULL;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (pspec != NULL);
+
+  if ((language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self))))
+    lang_id = gtk_source_language_get_id (language);
+
+  ide_extension_adapter_set_value (priv->symbol_resolver_adapter, lang_id);
+
+  ide_diagnostician_set_language (priv->diagnostician, language);
 }
 
 static void
@@ -947,7 +911,22 @@ ide_buffer_constructed (GObject *object)
 
   priv->highlight_engine = ide_highlight_engine_new (self);
 
-  ide_buffer_reload_highlighter (self);
+  priv->symbol_resolver_adapter = ide_extension_adapter_new (priv->context,
+                                                             NULL,
+                                                             IDE_TYPE_SYMBOL_RESOLVER,
+                                                             "Symbol-Resolver-Languages",
+                                                             NULL);
+
+  priv->diagnostician = g_object_new (IDE_TYPE_DIAGNOSTICIAN,
+                                      "context", priv->context,
+                                      NULL);
+
+  g_signal_connect (self,
+                    "notify::language",
+                    G_CALLBACK (ide_buffer_notify_language),
+                    NULL);
+
+  g_object_notify (G_OBJECT (self), "language");
 }
 
 static void
@@ -991,9 +970,10 @@ ide_buffer_dispose (GObject *object)
   g_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
   g_clear_pointer (&priv->content, g_bytes_unref);
   g_clear_pointer (&priv->title, g_free);
+  g_clear_object (&priv->diagnostician);
   g_clear_object (&priv->file);
   g_clear_object (&priv->highlight_engine);
-  g_clear_object (&priv->symbol_resolver);
+  g_clear_object (&priv->symbol_resolver_adapter);
 
   if (priv->context != NULL)
     {
@@ -1342,8 +1322,6 @@ ide_buffer_set_file (IdeBuffer *self,
                                     ide_buffer__file_load_settings_cb,
                                     g_object_ref (self));
       ide_buffer_reload_change_monitor (self);
-      ide_buffer_reload_highlighter (self);
-      ide_buffer_reload_symbol_provider (self);
       /*
        * FIXME: More hack for 3.16.3. This all needs refactorying.
        *        In particular, IdeFile should probably subclass GtkSourceFile.
@@ -1721,8 +1699,7 @@ _ide_buffer_set_loading (IdeBuffer *self,
 
       if (!priv->loading)
         {
-          IdeLanguage *language;
-          GtkSourceLanguage *srclang;
+          GtkSourceLanguage *language;
           GtkSourceLanguage *current;
 
           /*
@@ -1731,10 +1708,9 @@ _ide_buffer_set_loading (IdeBuffer *self,
            * accurate content-type).
            */
           language = ide_file_get_language (priv->file);
-          srclang = ide_language_get_source_language (language);
           current = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self));
-          if (current != srclang)
-            gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (self), srclang);
+          if (current != language)
+            gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (self), language);
 
           /*
            * Force the views to reload language state.
@@ -1969,6 +1945,7 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
                                          gpointer             user_data)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  IdeSymbolResolver *symbol_resolver;
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeSourceLocation) srcloc = NULL;
   guint line;
@@ -1981,12 +1958,14 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  if (priv->symbol_resolver == NULL)
+  symbol_resolver = ide_buffer_get_symbol_resolver (self);
+
+  if (symbol_resolver == NULL)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               _("Failed to resolve symbol"));
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               _("The current language lacks a symbol resolver."));
       return;
     }
 
@@ -1996,7 +1975,7 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
 
   srcloc = ide_source_location_new (priv->file, line, line_offset, offset);
 
-  ide_symbol_resolver_lookup_symbol_async (priv->symbol_resolver,
+  ide_symbol_resolver_lookup_symbol_async (symbol_resolver,
                                            srcloc,
                                            cancellable,
                                            ide_buffer__symbol_provider_lookup_symbol_cb,
@@ -2054,13 +2033,16 @@ ide_buffer_get_symbols_async (IdeBuffer           *self,
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
+  IdeSymbolResolver *symbol_resolver;
 
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  if (priv->symbol_resolver == NULL)
+  symbol_resolver = ide_buffer_get_symbol_resolver (self);
+
+  if (symbol_resolver == NULL)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
@@ -2069,7 +2051,7 @@ ide_buffer_get_symbols_async (IdeBuffer           *self,
       return;
     }
 
-  ide_symbol_resolver_get_symbols_async (priv->symbol_resolver,
+  ide_symbol_resolver_get_symbols_async (symbol_resolver,
                                          priv->file,
                                          cancellable,
                                          ide_buffer__symbol_provider_get_symbols_cb,
@@ -2192,4 +2174,24 @@ ide_buffer_get_selection_bounds (IdeBuffer   *self,
       mark = gtk_text_buffer_get_selection_bound (GTK_TEXT_BUFFER (self));
       gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self), selection, mark);
     }
+}
+
+/**
+ * ide_buffer_get_symbol_resolver:
+ *
+ * Gets the symbol resolver for the buffer based on the current language.
+ *
+ * Returns: (nullable) (transfer none): An #IdeSymbolResolver or %NULL.
+ */
+IdeSymbolResolver *
+ide_buffer_get_symbol_resolver (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  if (priv->symbol_resolver_adapter != NULL)
+    return ide_extension_adapter_get_extension (priv->symbol_resolver_adapter);
+
+  return NULL;
 }

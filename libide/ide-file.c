@@ -25,20 +25,19 @@
 #include "ide-debug.h"
 #include "ide-file.h"
 #include "ide-file-settings.h"
-#include "ide-language.h"
 #include "ide-vcs.h"
 
 struct _IdeFile
 {
-  IdeObject        parent_instance;
+  IdeObject          parent_instance;
 
-  gchar           *content_type;
-  GFile           *file;
-  IdeFileSettings *file_settings;
-  IdeLanguage     *language;
-  gchar           *path;
-  GtkSourceFile   *source_file;
-  guint            temporary_id;
+  gchar             *content_type;
+  GFile             *file;
+  IdeFileSettings   *file_settings;
+  GtkSourceLanguage *language;
+  gchar             *path;
+  GtkSourceFile     *source_file;
+  guint              temporary_id;
 };
 
 enum {
@@ -82,22 +81,6 @@ _ide_file_set_content_type (IdeFile     *self,
     }
 }
 
-static const gchar *
-ide_file_remap_language (const gchar *lang_id)
-{
-  if (!lang_id)
-    return NULL;
-
-  if (g_str_equal (lang_id, "chdr") ||
-      g_str_equal (lang_id, "cpp"))
-    return "c";
-
-  if (g_str_equal (lang_id, "python3"))
-    return "python";
-
-  return lang_id;
-}
-
 guint
 ide_file_hash (IdeFile *self)
 {
@@ -125,14 +108,10 @@ ide_file_create_language (IdeFile *self)
     {
       GtkSourceLanguageManager *manager;
       GtkSourceLanguage *srclang;
-      IdeLanguage *language = NULL;
-      const gchar *lang_id = NULL;
       g_autofree gchar *content_type = NULL;
       const gchar *filename;
-      IdeContext *context;
       gboolean uncertain = FALSE;
 
-      context = ide_object_get_context (IDE_OBJECT (self));
       filename = g_file_get_basename (self->file);
 
       if (self->content_type)
@@ -148,60 +127,23 @@ ide_file_create_language (IdeFile *self)
       manager = gtk_source_language_manager_get_default ();
       srclang = gtk_source_language_manager_guess_language (manager, filename, content_type);
 
-      if (srclang)
-        {
-          g_autofree gchar *ext_name = NULL;
-          GIOExtension *extension;
-          GIOExtensionPoint *point;
-          const gchar *lookup_id;
-
-          lang_id = gtk_source_language_get_id (srclang);
-          lookup_id = ide_file_remap_language (lang_id);
-          ext_name = g_strdup_printf (IDE_LANGUAGE_EXTENSION_POINT".%s", lookup_id);
-          point = g_io_extension_point_lookup (IDE_LANGUAGE_EXTENSION_POINT);
-          extension = g_io_extension_point_get_extension_by_name (point, ext_name);
-
-          if (extension)
-            {
-              GType type_id;
-
-              type_id = g_io_extension_get_type (extension);
-
-              if (g_type_is_a (type_id, IDE_TYPE_LANGUAGE))
-                language = g_initable_new (type_id, NULL, NULL,
-                                           "context", context,
-                                           "id", lang_id,
-                                           NULL);
-              else
-                g_warning (_("Type \"%s\" is not an IdeLanguage."),
-                           g_type_name (type_id));
-            }
-        }
-
-      if (!language)
-        language = g_object_new (IDE_TYPE_LANGUAGE,
-                                 "context", context,
-                                 "id", lang_id,
-                                 NULL);
-
-      g_once_init_leave (&self->language, language);
+      g_once_init_leave (&self->language, srclang);
     }
 }
 
 /**
  * ide_file_get_language:
  *
- * Retrieves the #IdeLanguage that was discovered for the file. In some cases,
- * this will be a subclass of #IdeLanguage, such as #IdeCLanguage.
+ * Retrieves the #GtkSourceLanguage that was discovered for the file.
  *
- * Returns: (transfer none): An #IdeLanguage
+ * Returns: (nullable) (transfer none): A #GtkSourceLanguage or %NULL.
  */
-IdeLanguage *
+GtkSourceLanguage *
 ide_file_get_language (IdeFile *self)
 {
   g_return_val_if_fail (IDE_IS_FILE (self), NULL);
 
-  if (!self->language)
+  if (self->language == NULL)
     ide_file_create_language (self);
 
   return self->language;
@@ -541,7 +483,7 @@ ide_file_class_init (IdeFileClass *klass)
     g_param_spec_object ("language",
                          _("Language"),
                          _("The file language."),
-                         IDE_TYPE_LANGUAGE,
+                         GTK_SOURCE_TYPE_LANGUAGE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gParamSpecs [PROP_PATH] =
