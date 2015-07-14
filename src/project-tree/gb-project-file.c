@@ -54,7 +54,7 @@ gb_project_file_compare (GbProjectFile *a,
   casefold_a = g_utf8_collate_key_for_filename (display_name_a, -1);
   casefold_b = g_utf8_collate_key_for_filename (display_name_b, -1);
 
-  ret = g_utf8_collate (casefold_a, casefold_b);
+  ret = strcmp (casefold_a, casefold_b);
 
   g_free (casefold_a);
   g_free (casefold_b);
