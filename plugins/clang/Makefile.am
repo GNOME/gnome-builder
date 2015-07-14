@@ -29,6 +29,7 @@ libclang_plugin_la_SOURCES = \
 
 libclang_plugin_la_CFLAGS = \
 	$(BUILDER_CFLAGS) \
+	$(CLANG_CFLAGS) \
 	-I$(top_srcdir)/libide \
 	-I$(top_srcdir)/contrib/egg \
 	$(NULL)
