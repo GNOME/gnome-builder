@@ -392,6 +392,7 @@ AC_CONFIG_FILES([
 	plugins/file-search/Makefile
 	plugins/gnome-code-assistance/Makefile
 	plugins/html-completion/Makefile
+	plugins/jedi/Makefile
 	plugins/mingw/Makefile
 	plugins/python-pack/Makefile
 	plugins/symbol-tree/Makefile

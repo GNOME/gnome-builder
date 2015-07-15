@@ -8,6 +8,7 @@ SUBDIRS = \
 	file-search \
 	gnome-code-assistance \
 	html-completion \
+	jedi \
 	mingw \
 	python-pack \
 	symbol-tree \
