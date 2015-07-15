@@ -40,6 +40,8 @@ load_plugins (void)
 
   engine = peas_engine_get_default ();
 
+  peas_engine_enable_loader (engine, "python3");
+
   if (g_getenv ("GB_IN_TREE_PLUGINS") != NULL)
     {
       GDir *dir;
