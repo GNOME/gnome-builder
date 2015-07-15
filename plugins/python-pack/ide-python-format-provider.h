@@ -22,12 +22,13 @@
 #include <gtksourceview/gtksourcecompletionprovider.h>
 
 #include "ide-completion-provider.h"
+#include "ide-object.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PYTHON_FORMAT_PROVIDER (ide_python_format_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdePythonFormatProvider, ide_python_format_provider, IDE, PYTHON_FORMAT_PROVIDER, GObject)
+G_DECLARE_FINAL_TYPE (IdePythonFormatProvider, ide_python_format_provider, IDE, PYTHON_FORMAT_PROVIDER, IdeObject)
 
 G_END_DECLS
 

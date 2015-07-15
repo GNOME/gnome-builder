@@ -24,7 +24,7 @@
 
 struct _IdePythonFormatProvider
 {
-  GObject parent_instance;
+  IdeObject parent_instance;
 };
 
 enum {
@@ -43,7 +43,7 @@ static void completion_provider_iface_init (GtkSourceCompletionProviderIface *);
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdePythonFormatProvider,
                                 ide_python_format_provider,
-                                G_TYPE_OBJECT,
+                                IDE_TYPE_OBJECT,
                                 0,
                                 G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
                                                        completion_provider_iface_init)
