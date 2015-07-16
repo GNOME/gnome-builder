@@ -564,6 +564,29 @@ ide_ctags_index_resolve_path (IdeCtagsIndex *self,
   return g_build_filename (self->path_root, relative_path, NULL);
 }
 
+IdeCtagsIndexEntry *
+ide_ctags_index_entry_copy (const IdeCtagsIndexEntry *entry)
+{
+  IdeCtagsIndexEntry *copy;
+
+  copy = g_slice_new0 (IdeCtagsIndexEntry);
+  copy->name = g_strdup (entry->name);
+  copy->path = g_strdup (entry->path);
+  copy->pattern = g_strdup (entry->pattern);
+  copy->kind = entry->kind;
+
+  return copy;
+}
+
+void
+ide_ctags_index_entry_free (IdeCtagsIndexEntry *entry)
+{
+  g_free ((gchar *)entry->name);
+  g_free ((gchar *)entry->path);
+  g_free ((gchar *)entry->pattern);
+  g_slice_free (IdeCtagsIndexEntry, entry);
+}
+
 const IdeCtagsIndexEntry *
 ide_ctags_index_lookup (IdeCtagsIndex *self,
                         const gchar   *keyword,
