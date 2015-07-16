@@ -84,40 +84,6 @@ ide_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *self,
 }
 
 void
-ide_symbol_resolver_get_symbols_async (IdeSymbolResolver   *self,
-                                       IdeFile             *file,
-                                       GCancellable        *cancellable,
-                                       GAsyncReadyCallback  callback,
-                                       gpointer             user_data)
-{
-  g_return_if_fail (IDE_IS_SYMBOL_RESOLVER (self));
-  g_return_if_fail (IDE_IS_FILE (file));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  IDE_SYMBOL_RESOLVER_GET_IFACE (self)->get_symbols_async (self, file, cancellable, callback, user_data);
-}
-
-/**
- * ide_symbol_resolver_get_symbols_finish:
- * @self: An #IdeSymbolResolver.
- * @result: A #GAsyncResult.
- * @error: (out): A location for a #GError or %NULL.
- *
- *
- * Returns: (transfer container) (element-type IdeSymbol*): A #GPtrArray if successful.
- */
-GPtrArray *
-ide_symbol_resolver_get_symbols_finish (IdeSymbolResolver  *self,
-                                        GAsyncResult       *result,
-                                        GError            **error)
-{
-  g_return_val_if_fail (IDE_IS_SYMBOL_RESOLVER (self), NULL);
-  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
-
-  return IDE_SYMBOL_RESOLVER_GET_IFACE (self)->get_symbols_finish (self, result, error);
-}
-
-void
 ide_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *self,
                                            GFile               *file,
                                            GCancellable        *cancellable,

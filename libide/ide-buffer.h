@@ -86,13 +86,6 @@ void                ide_buffer_get_symbol_at_location_async  (IdeBuffer         
 IdeSymbol          *ide_buffer_get_symbol_at_location_finish (IdeBuffer            *self,
                                                               GAsyncResult         *result,
                                                               GError              **error);
-void                ide_buffer_get_symbols_async             (IdeBuffer            *self,
-                                                              GCancellable         *cancellable,
-                                                              GAsyncReadyCallback   callback,
-                                                              gpointer              user_data);
-GPtrArray          *ide_buffer_get_symbols_finish            (IdeBuffer            *self,
-                                                              GAsyncResult         *result,
-                                                              GError              **error);
 void                ide_buffer_hold                          (IdeBuffer            *self);
 void                ide_buffer_release                       (IdeBuffer            *self);
 

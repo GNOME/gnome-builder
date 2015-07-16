@@ -15,6 +15,8 @@ libctags_plugin_la_SOURCES = \
 	ide-ctags-index.h \
 	ide-ctags-service.c \
 	ide-ctags-service.h \
+	ide-ctags-symbol-resolver.c \
+	ide-ctags-symbol-resolver.h \
 	ctags-plugin.c \
 	$(NULL)
 

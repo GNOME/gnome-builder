@@ -2002,62 +2002,6 @@ ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
   return g_task_propagate_pointer (task, error);
 }
 
-static void
-ide_buffer__symbol_provider_get_symbols_cb (GObject      *object,
-                                            GAsyncResult *result,
-                                            gpointer      user_data)
-{
-  IdeSymbolResolver *symbol_resolver = (IdeSymbolResolver *)object;
-  g_autoptr(GPtrArray) symbols = NULL;
-  g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
-
-  g_assert (G_IS_TASK (task));
-
-  symbols = ide_symbol_resolver_get_symbols_finish (symbol_resolver, result, &error);
-
-  if (symbols == NULL)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  g_task_return_pointer (task, g_ptr_array_ref (symbols), (GDestroyNotify)g_ptr_array_unref);
-}
-
-void
-ide_buffer_get_symbols_async (IdeBuffer           *self,
-                              GCancellable        *cancellable,
-                              GAsyncReadyCallback  callback,
-                              gpointer             user_data)
-{
-  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
-  IdeSymbolResolver *symbol_resolver;
-
-  g_return_if_fail (IDE_IS_BUFFER (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-
-  symbol_resolver = ide_buffer_get_symbol_resolver (self);
-
-  if (symbol_resolver == NULL)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               _("Symbol resolver is not supported."));
-      return;
-    }
-
-  ide_symbol_resolver_get_symbols_async (symbol_resolver,
-                                         priv->file,
-                                         cancellable,
-                                         ide_buffer__symbol_provider_get_symbols_cb,
-                                         g_object_ref (task));
-}
-
 /**
  * ide_buffer_get_symbols_finish:
  *

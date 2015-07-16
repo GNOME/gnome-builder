@@ -41,6 +41,8 @@ void ide_ctags_service_register_completion    (IdeCtagsService            *self,
 void ide_ctags_service_unregister_completion  (IdeCtagsService            *self,
                                                IdeCtagsCompletionProvider *completion);
 
+GPtrArray *ide_ctags_service_get_indexes (IdeCtagsService *self);
+
 G_END_DECLS
 
 #endif /* IDE_CTAGS_SERVICE_H */

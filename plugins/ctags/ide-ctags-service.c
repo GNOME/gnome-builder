@@ -428,6 +428,23 @@ _ide_ctags_service_register_type (GTypeModule *module)
   ide_ctags_service_register_type (module);
 }
 
+/**
+ * ide_ctags_service_get_indexes:
+ *
+ * Gets a new #GPtrArray containing elements of #IdeCtagsIndex.
+ *
+ * Note: this does not sort the indexes by importance.
+ *
+ * Returns: (transfer container) (element-type Ide.CtagsIndex): An array of indexes.
+ */
+GPtrArray *
+ide_ctags_service_get_indexes (IdeCtagsService *self)
+{
+  g_return_val_if_fail (IDE_IS_CTAGS_SERVICE (self), NULL);
+
+  return egg_task_cache_get_values (self->indexes);
+}
+
 void
 ide_ctags_service_register_highlighter (IdeCtagsService     *self,
                                         IdeCtagsHighlighter *highlighter)

@@ -40,15 +40,6 @@ struct _IdeSymbolResolverInterface
   IdeSymbol     *(*lookup_symbol_finish)   (IdeSymbolResolver    *self,
                                             GAsyncResult         *result,
                                             GError              **error);
-  void           (*get_symbols_async)      (IdeSymbolResolver    *self,
-                                            IdeFile              *file,
-                                            GCancellable         *cancellable,
-                                            GAsyncReadyCallback   callback,
-                                            gpointer              user_data);
-  GPtrArray     *(*get_symbols_finish)     (IdeSymbolResolver    *self,
-                                            GAsyncResult         *result,
-                                            GError              **error);
-
   void           (*get_symbol_tree_async)  (IdeSymbolResolver    *self,
                                             GFile                *file,
                                             GCancellable         *cancellable,
@@ -67,15 +58,6 @@ void           ide_symbol_resolver_lookup_symbol_async    (IdeSymbolResolver    
 IdeSymbol     *ide_symbol_resolver_lookup_symbol_finish   (IdeSymbolResolver    *self,
                                                            GAsyncResult         *result,
                                                            GError              **error);
-void           ide_symbol_resolver_get_symbols_async      (IdeSymbolResolver    *self,
-                                                           IdeFile              *file,
-                                                           GCancellable         *cancellable,
-                                                           GAsyncReadyCallback   callback,
-                                                           gpointer              user_data);
-GPtrArray     *ide_symbol_resolver_get_symbols_finish     (IdeSymbolResolver    *self,
-                                                           GAsyncResult         *result,
-                                                           GError              **error);
-
 void           ide_symbol_resolver_get_symbol_tree_async  (IdeSymbolResolver    *self,
                                                            GFile                *file,
                                                            GCancellable         *cancellable,
