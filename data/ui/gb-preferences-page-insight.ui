@@ -63,11 +63,25 @@
             <property name="visible">true</property>
           </object>
         </child>
+        <child>
+          <object class="GbPreferencesSwitch" id="jedi_autocompletion">
+            <property name="settings">jedi_settings</property>
+            <property name="settings-schema-key">enabled</property>
+            <property name="title" translatable="yes">Suggest Completions using Jedi</property>
+            <property name="description" translatable="yes">Use Jedi for completions in the Python language.</property>
+            <property name="size-group">control_group</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
       </object>
     </child>
   </template>
   <object class="GSettings" id="insight_settings">
     <property name="schema-id">org.gnome.builder.code-insight</property>
+  </object>
+  <object class="GSettings" id="jedi_settings">
+    <property name="path">/org/gnome/builder/extension-types/jedi_plugin/IdeCompletionProvider/</property>
+    <property name="schema-id">org.gnome.builder.extension-type</property>
   </object>
   <object class="GtkSizeGroup" id="control_group">
     <property name="mode">horizontal</property>
