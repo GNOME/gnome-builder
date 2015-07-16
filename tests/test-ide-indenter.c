@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <libpeas/peas.h>
 #include <girepository.h>
 #include <ide.h>
 #include <string.h>
@@ -28,6 +29,46 @@ typedef struct
   IndentTestFunc  func;
   gchar          *path;
 } IndentTest;
+
+static void
+load_plugins (void)
+{
+  PeasEngine *engine;
+  const GList *list;
+  GDir *dir;
+
+  engine = peas_engine_get_default ();
+
+  if ((dir = g_dir_open ("../plugins", 0, NULL)))
+    {
+      const gchar *name;
+
+      while ((name = g_dir_read_name (dir)))
+        {
+          gchar *path;
+
+          path = g_build_filename ("..", "plugins", name, NULL);
+          peas_engine_prepend_search_path (engine, path, path);
+          g_free (path);
+        }
+
+      g_dir_close (dir);
+    }
+
+  peas_engine_rescan_plugins (engine);
+  list = peas_engine_get_plugin_list (engine);
+
+  for (; list; list = list->next)
+    {
+      PeasPluginInfo *info = list->data;
+
+      if (g_strcmp0 (peas_plugin_info_get_module_name (info), "c-pack-plugin") == 0)
+        {
+          if (!peas_plugin_info_is_loaded (info))
+            peas_engine_load_plugin (engine, info);
+        }
+    }
+}
 
 static void
 new_context_cb (GObject      *object,
@@ -246,6 +287,8 @@ test_cindenter_basic_cb (IdeContext *context,
 static void
 test_cindenter_basic (void)
 {
+  load_plugins ();
+
   run_test ("test.c", test_cindenter_basic_cb);
 }
 
